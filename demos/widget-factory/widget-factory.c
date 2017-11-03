@@ -80,7 +80,7 @@ get_busy (GSimpleAction *action,
   GtkApplication *app = gtk_window_get_application (GTK_WINDOW (window));
 
   g_application_mark_busy (G_APPLICATION (app));
-  cursor = gdk_cursor_new_from_name (gtk_widget_get_display (window), "wait");
+  cursor = gdk_cursor_new_from_name ("wait", NULL);
   gdk_window_set_cursor (gtk_widget_get_window (window), cursor);
   g_object_unref (cursor);
   g_timeout_add (5000, get_idle, window);

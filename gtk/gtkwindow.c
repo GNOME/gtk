@@ -1843,8 +1843,7 @@ captured_event_cb (GtkWidget *widget,
     {
       if (edge_under_coordinates (GTK_WINDOW (widget), x, y, i))
         {
-          cursor = gdk_cursor_new_from_name (gtk_widget_get_display (widget),
-                                             cursor_names[i]);
+          cursor = gdk_cursor_new_from_name (cursor_names[i], NULL);
           break;
         }
     }

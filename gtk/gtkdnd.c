@@ -147,7 +147,6 @@ static void          gtk_drag_get_event_actions (const GdkEvent  *event,
                                                  GdkDragAction   *suggested_action,
                                                  GdkDragAction   *possible_actions);
 static GdkCursor *   gtk_drag_get_cursor         (GtkWidget      *widget,
-                                                  GdkDisplay     *display,
                                                   GdkDragAction   action,
                                                   GtkDragSourceInfo *info);
 static void          gtk_drag_update_cursor      (GtkDragSourceInfo *info);
@@ -465,7 +464,6 @@ ensure_drag_cursor_pixbuf (int i)
 
 static GdkCursor *
 gtk_drag_get_cursor (GtkWidget         *widget,
-                     GdkDisplay        *display,
                      GdkDragAction      action,
                      GtkDragSourceInfo *info)
 {
@@ -484,19 +482,13 @@ gtk_drag_get_cursor (GtkWidget         *widget,
     if (drag_cursors[i].action == action)
       break;
 
-  if (drag_cursors[i].cursor != NULL)
-    {
-      if (display != gdk_cursor_get_display (drag_cursors[i].cursor))
-        g_clear_object (&drag_cursors[i].cursor);
-    }
-
   if (drag_cursors[i].cursor == NULL)
-    drag_cursors[i].cursor = gdk_cursor_new_from_name (display, drag_cursors[i].name);
+    drag_cursors[i].cursor = gdk_cursor_new_from_name (drag_cursors[i].name, NULL);
 
   if (drag_cursors[i].cursor == NULL)
     {
       ensure_drag_cursor_pixbuf (i);
-      drag_cursors[i].cursor = gdk_cursor_new_from_pixbuf (display, drag_cursors[i].pixbuf, 0, 0);
+      drag_cursors[i].cursor = gdk_cursor_new_from_pixbuf (drag_cursors[i].pixbuf, 0, 0, NULL);
     }
 
   return drag_cursors[i].cursor;
@@ -519,7 +511,6 @@ gtk_drag_update_cursor (GtkDragSourceInfo *info)
     return;
 
   cursor = gtk_drag_get_cursor (info->widget,
-                                gdk_cursor_get_display (info->cursor),
                                 drag_cursors[i].action, info);
 
   if (cursor != info->cursor)
@@ -1220,7 +1211,6 @@ gtk_drag_begin_internal (GtkWidget          *widget,
                               &suggested_action, &possible_actions);
   
   cursor = gtk_drag_get_cursor (widget,
-                                gtk_widget_get_display (widget), 
                                 suggested_action,
                                 NULL);
   
@@ -1762,7 +1752,6 @@ _gtk_drag_source_handle_event (GtkWidget *widget,
         if (info->have_grab)
           {
             cursor = gtk_drag_get_cursor (widget, 
-                                          gtk_widget_get_display (widget),
                                           gdk_drag_context_get_selected_action (context),
                                           info);
             if (info->cursor != cursor)

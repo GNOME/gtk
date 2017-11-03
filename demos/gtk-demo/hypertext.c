@@ -254,11 +254,9 @@ do_hypertext (GtkWidget *do_widget)
       GtkWidget *view;
       GtkWidget *sw;
       GtkTextBuffer *buffer;
-      GdkDisplay *display;
 
-      display = gtk_widget_get_display (do_widget);
-      hand_cursor = gdk_cursor_new_from_name (display, "pointer");
-      regular_cursor = gdk_cursor_new_from_name (display, "text");
+      hand_cursor = gdk_cursor_new_from_name ("pointer", NULL);
+      regular_cursor = gdk_cursor_new_from_name ("text", NULL);
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_title (GTK_WINDOW (window), "Hypertext");

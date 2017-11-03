@@ -852,13 +852,11 @@ gtk_about_dialog_realize (GtkWidget *widget)
 {
   GtkAboutDialog *about = GTK_ABOUT_DIALOG (widget);
   GtkAboutDialogPrivate *priv = about->priv;
-  GdkDisplay *display;
 
   GTK_WIDGET_CLASS (gtk_about_dialog_parent_class)->realize (widget);
 
-  display = gtk_widget_get_display (widget);
-  priv->hand_cursor = gdk_cursor_new_from_name (display, "pointer");
-  priv->regular_cursor = gdk_cursor_new_from_name (display, "text");
+  priv->hand_cursor = gdk_cursor_new_from_name ("pointer", NULL);
+  priv->regular_cursor = gdk_cursor_new_from_name ("text", NULL);
 }
 
 static void

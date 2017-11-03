@@ -509,7 +509,7 @@ gdk_wayland_device_set_window_cursor (GdkDevice *device,
     g_object_unref (pointer->cursor);
 
   if (cursor == NULL)
-    pointer->cursor = gdk_cursor_new_from_name (seat->display, "default");
+    pointer->cursor = gdk_cursor_new_from_name ("default", NULL);
   else
     pointer->cursor = g_object_ref (cursor);
 

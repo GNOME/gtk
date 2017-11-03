@@ -309,14 +309,12 @@ static void
 set_hand_cursor (GtkWidget *widget,
 		 gboolean   show_hand)
 {
-  GdkDisplay *display;
   GdkCursor *cursor;
 
-  display = gtk_widget_get_display (widget);
-
-  cursor = NULL;
   if (show_hand)
-    cursor = gdk_cursor_new_from_name (display, "pointer");
+    cursor = gdk_cursor_new_from_name ("pointer", NULL);
+  else
+    cursor = NULL;
 
   gtk_widget_set_cursor (widget, cursor);
 

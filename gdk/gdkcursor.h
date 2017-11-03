@@ -46,20 +46,19 @@ GDK_AVAILABLE_IN_ALL
 GType      gdk_cursor_get_type           (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GdkCursor* gdk_cursor_new_from_pixbuf	 (GdkDisplay      *display,
-					  GdkPixbuf       *pixbuf,
+GdkCursor* gdk_cursor_new_from_pixbuf	 (GdkPixbuf       *pixbuf,
 					  gint             x,
-					  gint             y);
+					  gint             y,
+                                          GdkCursor       *fallback);
 GDK_AVAILABLE_IN_3_94
-GdkCursor* gdk_cursor_new_from_texture   (GdkDisplay      *display,
-					  GdkTexture      *texture,
+GdkCursor* gdk_cursor_new_from_texture   (GdkTexture      *texture,
 					  int              hotspot_x,
-					  int              hotspot_y);
+					  int              hotspot_y,
+                                          GdkCursor       *fallback);
 GDK_AVAILABLE_IN_ALL
-GdkCursor*  gdk_cursor_new_from_name	 (GdkDisplay      *display,
-					  const gchar     *name);
-GDK_AVAILABLE_IN_ALL
-GdkDisplay* gdk_cursor_get_display	 (GdkCursor	  *cursor);
+GdkCursor*  gdk_cursor_new_from_name	 (const gchar     *name,
+                                          GdkCursor       *fallback);
+					  
 GDK_AVAILABLE_IN_3_94
 GdkCursor * gdk_cursor_get_fallback      (GdkCursor	  *cursor);
 GDK_AVAILABLE_IN_3_94

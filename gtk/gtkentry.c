@@ -2806,7 +2806,7 @@ set_text_cursor (GtkWidget *widget)
 {
   GdkCursor *cursor;
 
-  cursor = gdk_cursor_new_from_name (gtk_widget_get_display (widget), "text");
+  cursor = gdk_cursor_new_from_name ("text", NULL);
   gtk_widget_set_cursor (widget, cursor);
   g_clear_object (&cursor);
 }
@@ -2817,11 +2817,8 @@ update_cursors (GtkWidget *widget)
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
   EntryIconInfo *icon_info = NULL;
-  GdkDisplay *display;
   GdkCursor *cursor;
   gint i;
-
-  display = gtk_widget_get_display (widget);
 
   for (i = 0; i < MAX_ICONS; i++)
     {
@@ -2832,7 +2829,7 @@ update_cursors (GtkWidget *widget)
               (gtk_widget_get_sensitive (icon_info->widget) ||
                (icon_info->nonactivatable && icon_info->target_list == NULL)))
             {
-              cursor = gdk_cursor_new_from_name (display, "default");
+              cursor = gdk_cursor_new_from_name ("default", NULL);
               gtk_widget_set_cursor (icon_info->widget, cursor);
               g_clear_object (&cursor);
             }
@@ -4031,7 +4028,7 @@ set_invisible_cursor (GtkWidget *widget)
 {
   GdkCursor *cursor;
 
-  cursor = gdk_cursor_new_from_name (gtk_widget_get_display (widget), "none");
+  cursor = gdk_cursor_new_from_name ("none", NULL);
   gtk_widget_set_cursor (widget, cursor);
   g_object_unref (cursor);
 }

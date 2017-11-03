@@ -4325,7 +4325,7 @@ set_busy_cursor (GtkFileChooserWidget *impl,
   display = gtk_widget_get_display (widget);
 
   if (busy)
-    cursor = gdk_cursor_new_from_name (display, "progress");
+    cursor = gdk_cursor_new_from_name ("progress", NULL);
   else
     cursor = NULL;
 

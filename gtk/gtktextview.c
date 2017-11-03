@@ -4710,7 +4710,7 @@ gtk_text_view_map (GtkWidget *widget)
   if (priv->bottom_window)
     text_window_map (priv->bottom_window);
 
-  cursor = gdk_cursor_new_from_name (gtk_widget_get_display (widget), "text");
+  cursor = gdk_cursor_new_from_name ("text", NULL);
   gtk_widget_set_cursor (widget, cursor);
   g_object_unref (cursor);
 
@@ -4843,7 +4843,7 @@ gtk_text_view_state_flags_changed (GtkWidget     *widget,
   if (gtk_widget_get_realized (widget))
     {
       if (gtk_widget_is_sensitive (widget))
-        cursor = gdk_cursor_new_from_name (gtk_widget_get_display (widget), "text");
+        cursor = gdk_cursor_new_from_name ("text", NULL);
       else
         cursor = NULL;
 
@@ -4882,11 +4882,9 @@ gtk_text_view_state_flags_changed (GtkWidget     *widget,
 static void
 set_invisible_cursor (GdkWindow *window)
 {
-  GdkDisplay *display;
   GdkCursor *cursor;
 
-  display = gdk_window_get_display (window);
-  cursor = gdk_cursor_new_from_name (display, "none");
+  cursor = gdk_cursor_new_from_name ("none", NULL);
  
   gdk_window_set_cursor (window, cursor);
   
@@ -4909,11 +4907,9 @@ gtk_text_view_unobscure_mouse_cursor (GtkTextView *text_view)
 {
   if (text_view->priv->mouse_cursor_obscured)
     {
-      GdkDisplay *display;
       GdkCursor *cursor;
 
-      display = gtk_widget_get_display (GTK_WIDGET (text_view));
-      cursor = gdk_cursor_new_from_name (display, "text");
+      cursor = gdk_cursor_new_from_name ("text", NULL);
       gdk_window_set_cursor (text_view->priv->text_window->bin_window, cursor);
       g_object_unref (cursor);
       text_view->priv->mouse_cursor_obscured = FALSE;
@@ -9739,7 +9735,6 @@ text_window_realize (GtkTextWindow *win,
                      GtkWidget     *widget)
 {
   GdkWindow *window;
-  GdkDisplay *display;
   GdkCursor *cursor;
 
   window = gtk_widget_get_window (widget);
@@ -9764,8 +9759,7 @@ text_window_realize (GtkTextWindow *win,
   if (win->type == GTK_TEXT_WINDOW_TEXT &&
       gtk_widget_is_sensitive (widget))
     {
-      display = gdk_window_get_display (window);
-      cursor = gdk_cursor_new_from_name (display, "text");
+      cursor = gdk_cursor_new_from_name ("text", NULL);
       gdk_window_set_cursor (win->bin_window, cursor);
       g_clear_object (&cursor);
 

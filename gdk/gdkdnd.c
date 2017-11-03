@@ -762,8 +762,8 @@ gdk_drag_get_cursor (GdkDragContext *context,
       break;
 
   if (drag_cursors[i].cursor == NULL)
-    drag_cursors[i].cursor = gdk_cursor_new_from_name (context->display,
-                                                       drag_cursors[i].name);
+    drag_cursors[i].cursor = gdk_cursor_new_from_name (drag_cursors[i].name, NULL);
+                                                       
   return drag_cursors[i].cursor;
 }
 

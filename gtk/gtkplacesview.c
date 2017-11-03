@@ -324,7 +324,6 @@ set_busy_cursor (GtkPlacesView *view,
 {
   GtkWidget *widget;
   GtkWindow *toplevel;
-  GdkDisplay *display;
   GdkCursor *cursor;
 
   toplevel = get_toplevel (GTK_WIDGET (view));
@@ -332,15 +331,12 @@ set_busy_cursor (GtkPlacesView *view,
   if (!toplevel || !gtk_widget_get_realized (widget))
     return;
 
-  display = gtk_widget_get_display (widget);
-
   if (busy)
-    cursor = gdk_cursor_new_from_name (display, "progress");
+    cursor = gdk_cursor_new_from_name ("progress", NULL);
   else
     cursor = NULL;
 
   gdk_window_set_cursor (gtk_widget_get_window (widget), cursor);
-  gdk_display_flush (display);
 
   if (cursor)
     g_object_unref (cursor);

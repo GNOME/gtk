@@ -43,11 +43,9 @@ add_button (GtkWidget   *section,
             const gchar *css_name)
 {
   GtkWidget *image, *button;
-  GdkDisplay *display;
   GdkCursor *cursor;
 
-  display = gtk_widget_get_display (section);
-  cursor = gdk_cursor_new_from_name (display, css_name);
+  cursor = gdk_cursor_new_from_name (css_name, NULL);
   if (cursor == NULL)
     image = gtk_image_new_from_icon_name ("image-missing", GTK_ICON_SIZE_MENU);
   else

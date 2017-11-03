@@ -123,7 +123,7 @@ query_for_toplevel (GdkDisplay *display,
   gtk_container_add (GTK_CONTAINER (frame), label);
 
   gtk_widget_show (popup);
-  cursor = gdk_cursor_new_from_name (display, "crosshair");
+  cursor = gdk_cursor_new_from_name ("crosshair", NULL);
   device = gtk_get_current_event_device ();
 
   if (gdk_seat_grab (gdk_device_get_seat (device),

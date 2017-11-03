@@ -3194,11 +3194,9 @@ gtk_scrolled_window_allocate_scrollbar (GtkScrolledWindow *scrolled_window,
 static void
 install_scroll_cursor (GtkScrolledWindow *scrolled_window)
 {
-  GdkDisplay *display;
   GdkCursor *cursor;
 
-  display = gtk_widget_get_display (GTK_WIDGET (scrolled_window));
-  cursor = gdk_cursor_new_from_name (display, "all-scroll");
+  cursor = gdk_cursor_new_from_name ("all-scroll", NULL);
   gtk_widget_set_cursor (GTK_WIDGET (scrolled_window), cursor);
   g_clear_object (&cursor);
 }

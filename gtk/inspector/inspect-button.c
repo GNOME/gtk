@@ -283,7 +283,7 @@ gtk_inspector_on_inspect (GtkWidget          *button,
     }
 
   display = gdk_display_get_default ();
-  cursor = gdk_cursor_new_from_name (display, "crosshair");
+  cursor = gdk_cursor_new_from_name ("crosshair", NULL);
   status = gdk_seat_grab (gdk_display_get_default_seat (display),
                           gtk_widget_get_window (iw->invisible),
                           GDK_SEAT_CAPABILITY_ALL_POINTING, TRUE,

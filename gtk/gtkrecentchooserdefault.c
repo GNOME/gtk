@@ -636,7 +636,7 @@ set_busy_cursor (GtkRecentChooserDefault *impl,
   display = gtk_widget_get_display (GTK_WIDGET (toplevel));
 
   if (busy)
-    cursor = gdk_cursor_new_from_name (display, "progress");
+    cursor = gdk_cursor_new_from_name ("progress", NULL);
   else
     cursor = NULL;
 

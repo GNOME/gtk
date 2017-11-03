@@ -3756,17 +3756,14 @@ gtk_label_update_cursor (GtkLabel *label)
 
   if (gtk_widget_get_realized (widget))
     {
-      GdkDisplay *display;
       GdkCursor *cursor;
 
       if (gtk_widget_is_sensitive (widget))
         {
-          display = gtk_widget_get_display (widget);
-
           if (priv->select_info->active_link)
-            cursor = gdk_cursor_new_from_name (display, "pointer");
+            cursor = gdk_cursor_new_from_name ("pointer", NULL);
           else if (priv->select_info->selectable)
-            cursor = gdk_cursor_new_from_name (display, "text");
+            cursor = gdk_cursor_new_from_name ("text", NULL);
           else
             cursor = NULL;
         }
@@ -4960,7 +4957,7 @@ gtk_label_set_selectable_hint (GtkLabel *label)
     {
       GdkCursor *cursor;
 
-      cursor = gdk_cursor_new_from_name (gtk_widget_get_display (widget), "text");
+      cursor = gdk_cursor_new_from_name ("text", NULL);
       gtk_widget_set_cursor (widget, cursor);
       g_object_unref (cursor);
     }
