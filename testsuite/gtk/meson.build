@@ -16,7 +16,6 @@ tests = [
   ['builderparser'],
   ['cellarea'],
   ['check-icon-names'],
-  ['check-cursor-names'],
   ['clipboard'],
   ['cssprovider'],
   ['entry'],
