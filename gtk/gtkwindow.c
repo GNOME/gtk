@@ -2008,7 +2008,7 @@ gtk_window_set_property (GObject      *object,
       break;
     case PROP_ICON:
       gtk_window_set_icon (window,
-                           g_value_get_object (value));
+                           g_value_get_boxed (value));
       break;
     case PROP_ICON_NAME:
       gtk_window_set_icon_name (window, g_value_get_string (value));
@@ -2118,7 +2118,7 @@ gtk_window_get_property (GObject      *object,
       g_value_set_boolean (value, priv->destroy_with_parent);
       break;
     case PROP_ICON:
-      g_value_set_object (value, gtk_window_get_icon (window));
+      g_value_set_boxed (value, gtk_window_get_icon (window));
       break;
     case PROP_ICON_NAME:
       g_value_set_string (value, gtk_window_get_icon_name (window));
@@ -4574,7 +4574,7 @@ icon_from_list (GtkWindow *window,
     }
 
   if (best == NULL && list != NULL)
-    best = (cairo_surface_t *)list->data;
+    best = cairo_surface_reference ((cairo_surface_t *)list->data);
 
   
   if (best)
@@ -4781,7 +4781,7 @@ gtk_window_set_icon (GtkWindow  *window,
   GList *list;
   
   g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (icon == NULL);
+  g_return_if_fail (icon == NULL || cairo_surface_get_type (icon) == CAIRO_SURFACE_TYPE_IMAGE);
 
   list = NULL;
 
