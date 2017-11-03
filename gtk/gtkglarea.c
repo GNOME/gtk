@@ -433,8 +433,8 @@ gtk_gl_area_allocate_buffers (GtkGLArea *area)
     return;
 
   scale = gtk_widget_get_scale_factor (widget);
-  width = gtk_widget_get_allocated_width (widget) * scale;
-  height = gtk_widget_get_allocated_height (widget) * scale;
+  width = gtk_widget_get_width (widget) * scale;
+  height = gtk_widget_get_height (widget) * scale;
 
   if (priv->texture)
     {
@@ -632,8 +632,8 @@ gtk_gl_area_draw (GtkWidget *widget,
     {
       gtk_gl_area_draw_error_screen (area,
                                      cr,
-                                     gtk_widget_get_allocated_width (widget),
-                                     gtk_widget_get_allocated_height (widget));
+                                     gtk_widget_get_width (widget),
+                                     gtk_widget_get_height (widget));
       return FALSE;
     }
 
@@ -650,8 +650,8 @@ gtk_gl_area_draw (GtkWidget *widget,
    glDisable (GL_DEPTH_TEST);
 
   scale = gtk_widget_get_scale_factor (widget);
-  w = gtk_widget_get_allocated_width (widget) * scale;
-  h = gtk_widget_get_allocated_height (widget) * scale;
+  w = gtk_widget_get_width (widget) * scale;
+  h = gtk_widget_get_height (widget) * scale;
 
   status = glCheckFramebufferStatusEXT (GL_FRAMEBUFFER_EXT);
   if (status == GL_FRAMEBUFFER_COMPLETE_EXT)
