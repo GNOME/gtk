@@ -57,6 +57,5 @@ void main() {
     // Use red for debugging missing blend modes
     res = vec3(1.0, 0.0, 0.0);
   }
-
-  setOutputColor(vec4(res, Cs.a * uAlpha));
+  setOutputColor(vec4(res, Cs.a) * uAlpha);
 }

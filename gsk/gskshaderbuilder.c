@@ -41,8 +41,6 @@ shader_program_free (gpointer data)
   g_clear_pointer (&p->uniform_locations, g_hash_table_unref);
   g_clear_pointer (&p->attribute_locations, g_hash_table_unref);
 
-  glDeleteProgram (p->program_id);
-
   g_slice_free (ShaderProgram, data);
 }
 

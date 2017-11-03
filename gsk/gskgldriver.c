@@ -520,7 +520,7 @@ int
 gsk_gl_driver_create_vao_for_quad (GskGLDriver   *driver,
                                    int            position_id,
                                    int            uv_id,
-                                   int            n_quads,
+                                   int            n_vertices,
                                    GskQuadVertex *quads)
 
 {
@@ -530,7 +530,7 @@ gsk_gl_driver_create_vao_for_quad (GskGLDriver   *driver,
   g_return_val_if_fail (GSK_IS_GL_DRIVER (driver), -1);
   g_return_val_if_fail (driver->in_frame, -1);
 
-  v = find_vao (driver->vaos, position_id, uv_id, n_quads, quads);
+  v = find_vao (driver->vaos, position_id, uv_id, n_vertices, quads);
   if (v != NULL && !v->in_use)
     {
       GSK_NOTE (OPENGL, g_print ("Reusing VAO(%d)\n", v->vao_id));
@@ -543,17 +543,20 @@ gsk_gl_driver_create_vao_for_quad (GskGLDriver   *driver,
 
   glGenBuffers (1, &buffer_id);
   glBindBuffer (GL_ARRAY_BUFFER, buffer_id);
-  glBufferData (GL_ARRAY_BUFFER, sizeof (GskQuadVertex) * n_quads, quads, GL_STATIC_DRAW);
+  glBufferData (GL_ARRAY_BUFFER, sizeof (GskQuadVertex) * n_vertices, quads, GL_STATIC_DRAW);
 
   glEnableVertexAttribArray (position_id);
   glVertexAttribPointer (position_id, 2, GL_FLOAT, GL_FALSE,
                          sizeof (GskQuadVertex),
                          (void *) G_STRUCT_OFFSET (GskQuadVertex, position));
 
-  glEnableVertexAttribArray (uv_id);
-  glVertexAttribPointer (uv_id, 2, GL_FLOAT, GL_FALSE,
-                         sizeof (GskQuadVertex),
-                         (void *) G_STRUCT_OFFSET (GskQuadVertex, uv));
+  if (uv_id != -1)
+    {
+      glEnableVertexAttribArray (uv_id);
+      glVertexAttribPointer (uv_id, 2, GL_FLOAT, GL_FALSE,
+                             sizeof (GskQuadVertex),
+                             (void *) G_STRUCT_OFFSET (GskQuadVertex, uv));
+    }
 
   glBindBuffer (GL_ARRAY_BUFFER, 0);
   glBindVertexArray (0);
@@ -563,8 +566,8 @@ gsk_gl_driver_create_vao_for_quad (GskGLDriver   *driver,
   v->buffer_id =  buffer_id;
   v->position_id = position_id;
   v->uv_id = uv_id;
-  v->n_quads = n_quads;
-  v->quads = g_memdup (quads, sizeof (GskQuadVertex) * n_quads);
+  v->n_quads = n_vertices;
+  v->quads = g_memdup (quads, sizeof (GskQuadVertex) * n_vertices);
   v->in_use = TRUE;
   g_hash_table_insert (driver->vaos, GINT_TO_POINTER (vao_id), v);
 
@@ -572,8 +575,8 @@ gsk_gl_driver_create_vao_for_quad (GskGLDriver   *driver,
   if (GSK_DEBUG_CHECK (OPENGL))
     {
       int i;
-      g_print ("New VAO(%d) for quad[%d] : {\n", v->vao_id, n_quads);
-      for (i = 0; i < n_quads; i++)
+      g_print ("New VAO(%d) for quad[%d] : {\n", v->vao_id, n_vertices);
+      for (i = 0; i < n_vertices; i++)
         {
           g_print ("  { x:%.2f, y:%.2f } { u:%.2f, v:%.2f }\n",
                   quads[i].position[0], quads[i].position[1],
@@ -640,6 +643,8 @@ gsk_gl_driver_create_render_target (GskGLDriver *driver,
   f.depth_stencil_id = depth_stencil_buffer_id;
 
   g_array_append_val (t->fbos, f);
+
+  g_assert (glCheckFramebufferStatus (GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
 
   glBindFramebuffer (GL_FRAMEBUFFER, driver->default_fbo.fbo_id);
 
@@ -719,7 +724,9 @@ gsk_gl_driver_bind_vao (GskGLDriver *driver,
       glBindVertexArray (v->vao_id);
       glBindBuffer (GL_ARRAY_BUFFER, v->buffer_id);
       glEnableVertexAttribArray (v->position_id);
-      glEnableVertexAttribArray (v->uv_id);
+
+      if (v->uv_id != -1)
+        glEnableVertexAttribArray (v->uv_id);
 
       driver->bound_vao = v;
     }
@@ -757,9 +764,14 @@ gsk_gl_driver_bind_render_target (GskGLDriver *driver,
     }
 
 out:
-  status = glCheckFramebufferStatus (GL_FRAMEBUFFER);
 
-  return status == GL_FRAMEBUFFER_COMPLETE;
+  if (texture_id != 0)
+    {
+      status = glCheckFramebufferStatus (GL_FRAMEBUFFER);
+      g_assert_cmpint (status, ==, GL_FRAMEBUFFER_COMPLETE);
+    }
+
+  return TRUE;
 }
 
 void
@@ -856,6 +868,4 @@ gsk_gl_driver_init_texture_with_surface (GskGLDriver     *driver,
 
   if (t->min_filter != GL_NEAREST)
     glGenerateMipmap (GL_TEXTURE_2D);
-
-  glBindTexture (GL_TEXTURE_2D, 0);
 }
