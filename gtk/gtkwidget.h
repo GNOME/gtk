@@ -937,6 +937,15 @@ GDK_AVAILABLE_IN_ALL
 void	     gtk_widget_input_shape_combine_region (GtkWidget *widget,
                                                     cairo_region_t *region);
 
+GDK_AVAILABLE_IN_3_94
+void                    gtk_widget_set_cursor                   (GtkWidget              *widget,
+                                                                 GdkCursor              *cursor);
+GDK_AVAILABLE_IN_3_94
+void                    gtk_widget_set_cursor_from_name         (GtkWidget              *widget,
+                                                                 const char             *name);
+GDK_AVAILABLE_IN_3_94
+GdkCursor *             gtk_widget_get_cursor                   (GtkWidget              *widget);
+
 GDK_AVAILABLE_IN_ALL
 GList* gtk_widget_list_mnemonic_labels  (GtkWidget *widget);
 GDK_AVAILABLE_IN_ALL

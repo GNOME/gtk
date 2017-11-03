@@ -326,10 +326,6 @@ void              gtk_widget_get_window_allocation         (GtkWidget *widget,
 GtkWidget *       gtk_widget_common_ancestor               (GtkWidget *widget_a,
                                                             GtkWidget *widget_b);
 
-void              gtk_widget_set_cursor                    (GtkWidget *widget,
-                                                            GdkCursor *cursor);
-GdkCursor *       gtk_widget_get_cursor                    (GtkWidget *widget);
-
 void              gtk_widget_set_pass_through              (GtkWidget *widget,
                                                             gboolean   pass_through);
 gboolean          gtk_widget_get_pass_through              (GtkWidget *widget);

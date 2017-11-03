@@ -565,6 +565,7 @@ enum {
   PROP_CAN_DEFAULT,
   PROP_HAS_DEFAULT,
   PROP_RECEIVES_DEFAULT,
+  PROP_CURSOR,
   PROP_HAS_TOOLTIP,
   PROP_TOOLTIP_MARKUP,
   PROP_TOOLTIP_TEXT,
@@ -1187,6 +1188,20 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                             P_("If TRUE, the widget will receive the default action when it is focused"),
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+/**
+ * GtkWidget:cursor:
+ *
+ * The cursor used by @widget. See gtk_widget_set_cursor() for details.
+ *
+ * Since: 3.94
+ */
+  widget_props[PROP_CURSOR] =
+      g_param_spec_object("cursor",
+                          P_("Cursor"),
+                          P_("The cursor to show when hoving above widget"),
+                          GDK_TYPE_CURSOR,
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
 /**
  * GtkWidget:has-tooltip:
@@ -3205,6 +3220,9 @@ gtk_widget_set_property (GObject         *object,
     case PROP_RECEIVES_DEFAULT:
       gtk_widget_set_receives_default (widget, g_value_get_boolean (value));
       break;
+    case PROP_CURSOR:
+      gtk_widget_set_cursor (widget, g_value_get_object (value));
+      break;
     case PROP_HAS_TOOLTIP:
       gtk_widget_real_set_has_tooltip (widget,
 				       g_value_get_boolean (value), FALSE);
@@ -3370,6 +3388,9 @@ gtk_widget_get_property (GObject         *object,
       break;
     case PROP_RECEIVES_DEFAULT:
       g_value_set_boolean (value, gtk_widget_get_receives_default (widget));
+      break;
+    case PROP_CURSOR:
+      g_value_set_object (value, gtk_widget_get_cursor (widget));
       break;
     case PROP_HAS_TOOLTIP:
       g_value_set_boolean (value, gtk_widget_get_has_tooltip (widget));
@@ -15457,11 +15478,28 @@ gtk_widget_get_focus_child (GtkWidget *widget)
   return priv->focus_child;
 }
 
+/**
+ * gtk_widget_set_cursor:
+ * @widget: a #GtkWidget
+ * @cursor: (allow-none): the new cursor or %NULL to use the default
+ *     cursor
+ *
+ * Sets the cursor to be shown when pointer devices point towards @widget.
+ *
+ * If the @cursor is NULL, @widget will use the cursor specified via CSS
+ * or the parent widget. If neither specifies a cursor, the default cursor
+ * will be shown. This is the default behavior.
+ *
+ * Since: 3.94
+ **/
 void
 gtk_widget_set_cursor (GtkWidget *widget,
                        GdkCursor *cursor)
 {
   GtkWidget *toplevel;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (cursor == NULL || GDK_IS_CURSOR (cursor));
 
   if (!g_set_object (&widget->priv->cursor, cursor))
     return;
@@ -15469,11 +15507,64 @@ gtk_widget_set_cursor (GtkWidget *widget,
   toplevel = gtk_widget_get_toplevel (widget);
   if (GTK_IS_WINDOW (toplevel))
     gtk_window_maybe_update_cursor (GTK_WINDOW (toplevel), widget, NULL);
+
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_CURSOR]);
 }
 
+/**
+ * gtk_widget_set_cursor_from_name:
+ * @widget: a #GtkWidget
+ * @name: (allow-none): The name of the cursor or %NULL to use the default
+ *     cursor
+ *
+ * Sets a named cursor to be shown when pointer devices point towards @widget.
+ *
+ * This is a utility function that calls creates a cursor via
+ * gdk_cursor_new_from_name() and then sets it on @widget with
+ * gtk_widget_set_cursor(). See those 2 functions for details.
+ *
+ * On top of that, this function allows @name to be %NULL, which will
+ * do the same as calling gtk_widget_set_cursor() with a %NULL cursor.
+ *
+ * Since: 3.94
+ **/
+void
+gtk_widget_set_cursor_from_name (GtkWidget  *widget,
+                                 const char *name)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (name)
+    {
+      GdkCursor *cursor;
+
+      cursor = gdk_cursor_new_from_name (name, NULL);
+      gtk_widget_set_cursor (widget, cursor);
+      g_object_unref (cursor);
+    }
+  else
+    {
+      gtk_widget_set_cursor (widget, NULL);
+    }
+}
+
+/**
+ * gtk_widget_get_cursor:
+ * @widget: a #GtkWidget
+ *
+ * Queries the cursor set via gtk_widget_set_cursor(). See that function for
+ * details.
+ *
+ * Returns: (nullable) (transfer none): the cursor curently in use or %NULL
+ *     to use the default.
+ *
+ * Since: 3.94
+ **/
 GdkCursor *
 gtk_widget_get_cursor (GtkWidget *widget)
 {
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
   return widget->priv->cursor;
 }
 
