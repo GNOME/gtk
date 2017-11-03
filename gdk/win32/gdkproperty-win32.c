@@ -31,6 +31,7 @@
 #include "gdkscreen.h"
 #include "gdkproperty.h"
 #include "gdkselection.h"
+#include "gdkdisplayprivate.h"
 #include "gdkprivate-win32.h"
 #include "gdkwin32.h"
 

@@ -92,33 +92,8 @@ gdk_device_virtual_set_window_cursor (GdkDevice *device,
 				      GdkWindow *window,
 				      GdkCursor *cursor)
 {
-  GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
-  GdkCursor *previous_cursor = impl->cursor;
-
   if (cursor != NULL && GDK_WIN32_CURSOR (cursor)->hcursor != NULL)
-    {
-      SetCursor (GDK_WIN32_CURSOR (cursor)->hcursor);
-    }
-  else if (previous_cursor != NULL &&
-           GetCursor () == GDK_WIN32_CURSOR (previous_cursor)->hcursor)
-    {
-      /* The caller will unref previous_cursor shortly,
-       * but it holds the handle to currently-used cursor,
-       * and we can't call SetCursor(NULL).
-       */
-      g_warning (G_STRLOC ": Refusing to replace cursor %p (handle %p) with NULL. "
-                 "Expect ugly results.",
-                 previous_cursor, GDK_WIN32_CURSOR (previous_cursor)->hcursor);
-    }
-  else
-    {
-      /* Up the stack all effors were made already to ensure that
-       * the "cursor" argument is non-NULL.
-       * If it is, calling SetCursor(NULL) is absolutely not
-       * the right decision, so we just warn and bail out.
-       */
-      g_warning (G_STRLOC ": Refusing to set NULL cursor");
-    }
+    SetCursor (GDK_WIN32_CURSOR (cursor)->hcursor);
 }
 
 static void
@@ -171,8 +146,6 @@ gdk_device_virtual_grab (GdkDevice    *device,
 
       if (_gdk_win32_grab_cursor != NULL)
 	SetCursor (GDK_WIN32_CURSOR (_gdk_win32_grab_cursor)->hcursor);
-      else if (impl->cursor != NULL)
-	SetCursor (GDK_WIN32_CURSOR (impl->cursor)->hcursor);
       else
 	SetCursor (LoadCursor (NULL, IDC_ARROW));
 

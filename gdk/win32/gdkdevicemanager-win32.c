@@ -961,7 +961,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 G_GNUC_END_IGNORE_DEPRECATIONS;
   window = gdk_device_get_window_at_position (device_manager->core_pointer, &x, &y);
   if (window == NULL)
-    window = gdk_get_default_root_window ();
+    window = gdk_display_get_root_window (gdk_display_get_default ());
 
   g_object_ref (window);
 
@@ -1004,7 +1004,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
           window = g_object_ref (last_grab->window);
         }
 
-      if (window == gdk_get_default_root_window ())
+      if (window == gdk_display_get_root_window (gdk_display_get_default ()))
         {
           GDK_NOTE (EVENTS_OR_INPUT, g_print ("... is root\n"));
           return FALSE;
@@ -1081,7 +1081,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
         {
           GDK_NOTE (EVENTS_OR_INPUT, g_print ("... not selected\n"));
 
-          if (window->parent == gdk_get_default_root_window () || window->parent == NULL)
+          if (window->parent == gdk_display_get_root_window (gdk_display_get_default ()) ||
+              window->parent == NULL)
             return FALSE;
 
           impl = GDK_WINDOW_IMPL_WIN32 (window->impl);

@@ -466,7 +466,6 @@ GdkKeymap *_gdk_win32_display_get_keymap (GdkDisplay *display);
 void       _gdk_win32_display_create_window_impl   (GdkDisplay    *display,
                                                     GdkWindow     *window,
                                                     GdkWindow     *real_parent,
-                                                    GdkScreen     *screen,
                                                     GdkEventMask   event_mask,
                                                     GdkWindowAttr *attributes);
 
@@ -529,8 +528,6 @@ gboolean _gdk_win32_window_lacks_wm_decorations (GdkWindow *window);
 
 BOOL WINAPI GtkShowWindow (GdkWindow *window,
                            int        cmd_show);
-
-void     _gdk_win32_screen_set_font_resolution (GdkWin32Screen *win32_screen);
 
 /* Initialization */
 void _gdk_win32_windowing_init (void);

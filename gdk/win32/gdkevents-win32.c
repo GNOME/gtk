@@ -673,7 +673,6 @@ _gdk_win32_print_event (const GdkEvent *event)
     CASE (GDK_DROP_START);
     CASE (GDK_DROP_FINISHED);
     CASE (GDK_CLIENT_EVENT);
-    CASE (GDK_VISIBILITY_NOTIFY);
     CASE (GDK_SCROLL);
     CASE (GDK_WINDOW_STATE);
     CASE (GDK_OWNER_CHANGE);
@@ -1356,7 +1355,8 @@ propagate (GdkWindow  **window,
 	{
 	  /* Owner doesn't want it, propagate to parent. */
 	  GdkWindow *parent = gdk_window_get_parent (*window);
-	  if (parent == gdk_get_default_root_window () || parent == NULL)
+	  if (parent == gdk_display_get_root_window (gdk_display_get_default ()) ||
+	      parent == NULL)
 	    {
 	      /* No parent; check if grabbed */
 	      if (grab_window != NULL)
@@ -1434,7 +1434,7 @@ _gdk_win32_get_window_rect (GdkWindow *window,
   point.y = client_rect.top;
 
   /* top level windows need screen coords */
-  if (gdk_window_get_parent (window) == gdk_get_default_root_window ())
+  if (gdk_window_get_parent (window) == gdk_display_get_root_window (gdk_display_get_default ()))
     {
       ClientToScreen (hwnd, &point);
       point.x += _gdk_offset_x * window_impl->window_scale;
@@ -1692,7 +1692,6 @@ handle_dpi_changed (GdkWindow *window,
   GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
   GdkDisplay *display = gdk_display_get_default ();
   GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (display);
-  GdkScreen *screen = gdk_window_get_screen (window);
   GdkDevice *device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
   RECT *rect = (RECT *)msg->lParam;
   GdkEvent *event;
@@ -1710,9 +1709,6 @@ handle_dpi_changed (GdkWindow *window,
   /* Don't bother if scales did not change in the end */
   if (old_scale == impl->window_scale)
     return;
-
-  _gdk_screen_set_resolution (screen,
-                              impl->window_scale >= 2 ? USER_DEFAULT_SCREEN_DPI : dpi);
 
   if (!IsIconic (msg->hwnd) &&
       !GDK_WINDOW_DESTROYED (window))
@@ -3070,8 +3066,6 @@ gdk_event_translate (MSG  *msg,
 
       if (grab_window != NULL && _gdk_win32_grab_cursor != NULL)
 	cursor = _gdk_win32_grab_cursor;
-      else if (!GDK_WINDOW_DESTROYED (window) && GDK_WINDOW_IMPL_WIN32 (window->impl)->cursor != NULL)
-	cursor = GDK_WINDOW_IMPL_WIN32 (window->impl)->cursor;
       else
 	cursor = NULL;
 

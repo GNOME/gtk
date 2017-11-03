@@ -36,7 +36,6 @@
 #include "gdkenumtypes.h"
 #include "gdkwin32.h"
 #include "gdkdisplayprivate.h"
-#include "gdkvisualprivate.h"
 #include "gdkmonitorprivate.h"
 #include "gdkwin32window.h"
 #include "gdkglcontext-win32.h"
@@ -449,7 +448,6 @@ gboolean
 _gdk_win32_window_enable_transparency (GdkWindow *window)
 {
   GdkWindowImplWin32 *impl;
-  GdkScreen *screen;
   DWM_BLURBEHIND blur_behind;
   HRGN empty_region;
   HRESULT call_result;
@@ -463,8 +461,6 @@ _gdk_win32_window_enable_transparency (GdkWindow *window)
   /* layered windows don't need blurbehind for transparency */
   if (impl->layered)
     return TRUE;
-
-  screen = gdk_window_get_screen (window);
 
   if (!gdk_display_is_composited (gdk_window_get_display (window)))
     return FALSE;
@@ -748,7 +744,7 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
 
     case GDK_WINDOW_TEMP:
       /* A temp window is not necessarily a top level window */
-      dwStyle = (gdk_screen_get_root_window (screen) == real_parent ? WS_POPUP : WS_CHILDWINDOW);
+      dwStyle = (gdk_display_get_root_window (display) == real_parent ? WS_POPUP : WS_CHILDWINDOW);
       dwStyle |= WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
       dwExStyle |= WS_EX_TOOLWINDOW | WS_EX_TOPMOST;
       offset_x = _gdk_offset_x;
@@ -897,7 +893,7 @@ gdk_win32_window_foreign_new_for_display (GdkDisplay *display,
   parent = GetParent (anid);
 
   /* Always treat foreigns as toplevels */
-  window->parent = gdk_get_default_root_window ();
+  window->parent = gdk_display_get_root_window (gdk_display_get_default ());
 
   window->parent->children = g_list_concat (&window->children_list_node, window->parent->children);
 
@@ -1999,18 +1995,18 @@ gdk_win32_window_get_geometry (GdkWindow *window,
 			       gint      *width,
 			       gint      *height)
 {
-  GdkScreen *screen;
+  GdkDisplay *display;
   gboolean window_is_root;
 
-  screen = gdk_window_get_screen (window);
+  display = gdk_window_get_display (window);
 
   if (!window)
     {
-      window = gdk_screen_get_root_window (screen);
+      window = gdk_display_get_root_window (display);
       window_is_root = TRUE;
     }
   else
-    window_is_root = (gdk_screen_get_root_window (screen) == window);
+    window_is_root = (gdk_display_get_root_window (display) == window);
 
   if (!GDK_WINDOW_DESTROYED (window))
     {
@@ -2038,7 +2034,7 @@ gdk_win32_window_get_geometry (GdkWindow *window,
 	  rect.right = pt.x;
 	  rect.bottom = pt.y;
 
-	  if (gdk_screen_get_root_window (screen) == parent)
+	  if (gdk_display_get_root_window (display) == parent)
 	    {
 	      rect.left += _gdk_offset_x * impl->window_scale;
 	      rect.top += _gdk_offset_y * impl->window_scale;
@@ -5830,7 +5826,6 @@ gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass)
   impl_class->lower = gdk_win32_window_lower;
   impl_class->restack_toplevel = gdk_win32_window_restack_toplevel;
   impl_class->move_resize = gdk_win32_window_move_resize;
-  impl_class->set_device_cursor = gdk_win32_window_set_device_cursor;
   impl_class->get_geometry = gdk_win32_window_get_geometry;
   impl_class->get_device_state = gdk_window_win32_get_device_state;
   impl_class->get_root_coords = gdk_win32_window_get_root_coords;

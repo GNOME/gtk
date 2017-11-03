@@ -24,6 +24,7 @@
 
 #include "gdkwin32.h"
 #include "gdkdevice-wintab.h"
+#include "gdkdisplayprivate.h"
 
 G_DEFINE_TYPE (GdkDeviceWintab, gdk_device_wintab, GDK_TYPE_DEVICE)
 
@@ -122,7 +123,7 @@ gdk_device_wintab_query_state (GdkDevice        *device,
 
   device_wintab = GDK_DEVICE_WINTAB (device);
   if (window == NULL)
-    window = gdk_get_default_root_window ();
+    window = gdk_display_get_root_window (gdk_display_get_default ());
   impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
   hwnd = GDK_WINDOW_HWND (window);
@@ -142,7 +143,7 @@ gdk_device_wintab_query_state (GdkDevice        *device,
   if (win_y)
     *win_y = point.y / impl->window_scale;
 
-  if (window == gdk_get_default_root_window ())
+  if (window == gdk_display_get_root_window (gdk_display_get_default ()))
     {
       if (win_x)
         *win_x += _gdk_offset_x;

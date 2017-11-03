@@ -127,7 +127,6 @@ static void
 gdk_win32_screen_init (GdkWin32Screen *win32_screen)
 {
   GdkScreen *screen = GDK_SCREEN (win32_screen);
-  _gdk_win32_screen_set_font_resolution (win32_screen);
 
   _gdk_win32_display_init_monitors (GDK_WIN32_DISPLAY (_gdk_display));
   init_root_window (win32_screen);
@@ -139,37 +138,6 @@ _gdk_win32_screen_on_displaychange_event (GdkWin32Screen *screen)
   _gdk_win32_display_init_monitors (GDK_WIN32_DISPLAY (_gdk_display));
 
   init_root_window_size (screen);
-}
-
-void
-_gdk_win32_screen_set_font_resolution (GdkWin32Screen *win32_screen)
-{
-  GdkScreen *screen = GDK_SCREEN (win32_screen);
-  int logpixelsx = -1;
-  const gchar *font_resolution;
-
-  font_resolution = g_getenv ("GDK_WIN32_FONT_RESOLUTION");
-  if (font_resolution)
-    {
-      int env_logpixelsx = atol (font_resolution);
-      if (env_logpixelsx > 0)
-        logpixelsx = env_logpixelsx;
-    }
-  else
-    {
-      gint dpi = -1;
-      GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (screen->display);
-      guint scale = _gdk_win32_display_get_monitor_scale_factor (win32_display, NULL, NULL, &dpi);
-
-      /* If we have a scale that is at least 2, don't scale up the fonts */
-      if (scale >= 2)
-        logpixelsx = USER_DEFAULT_SCREEN_DPI;
-      else
-        logpixelsx = dpi;
-    }
-
-  if (logpixelsx > 0)
-    _gdk_screen_set_resolution (screen, logpixelsx);
 }
 
 GdkWindow *
