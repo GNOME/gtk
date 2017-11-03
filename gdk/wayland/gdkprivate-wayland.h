@@ -62,15 +62,6 @@ void       _gdk_wayland_display_finalize_cursors (GdkWaylandDisplay *display);
 struct wl_cursor_theme * _gdk_wayland_display_get_scaled_cursor_theme (GdkWaylandDisplay *display_wayland,
                                                                        guint              scale);
 
-GdkCursor *_gdk_wayland_display_get_cursor_for_name_with_scale (GdkDisplay    *display,
-                                                                const char    *name,
-                                                                guint          scale);
-GdkCursor *_gdk_wayland_display_get_cursor_for_name (GdkDisplay  *display,
-						     const gchar *name);
-GdkCursor *_gdk_wayland_display_get_cursor_for_texture (GdkDisplay *display,
-                                                        GdkTexture *texture,
-                                                        int         x,
-                                                        int         y);
 void       _gdk_wayland_display_get_default_cursor_size (GdkDisplay *display,
 							 guint       *width,
 							 guint       *height);

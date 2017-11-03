@@ -340,7 +340,10 @@ gdk_cursor_new_from_name (GdkDisplay  *display,
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (name != NULL, NULL);
 
-  return GDK_DISPLAY_GET_CLASS (display)->get_cursor_for_name (display, name);
+  return g_object_new (GDK_TYPE_CURSOR,
+                       "display", display,
+                       "name", name,
+                       NULL);
 }
 
 /**
@@ -455,9 +458,12 @@ gdk_cursor_new_from_texture (GdkDisplay *display,
   g_return_val_if_fail (0 <= hotspot_x && hotspot_x < gdk_texture_get_width (texture), NULL);
   g_return_val_if_fail (0 <= hotspot_y && hotspot_y < gdk_texture_get_height (texture), NULL);
 
-  return GDK_DISPLAY_GET_CLASS (display)->get_cursor_for_texture (display,
-								  texture,
-                                                                  hotspot_x, hotspot_y);
+  return g_object_new (GDK_TYPE_CURSOR, 
+                       "display", display,
+                       "texture", texture,
+                       "hotspot-x", hotspot_x,
+                       "hotspot-y", hotspot_y,
+                       NULL);
 }
 
 /**

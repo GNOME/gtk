@@ -48,30 +48,6 @@ _gdk_broadway_cursor_update_theme (GdkCursor *cursor)
   g_return_if_fail (cursor != NULL);
 }
 
-GdkCursor *
-_gdk_broadway_display_get_cursor_for_texture (GdkDisplay *display,
-					      GdkTexture *texture,
-					      int         x,
-					      int         y)
-{
-  return g_object_new (GDK_TYPE_CURSOR, 
-                       "display", display,
-                       "texture", texture,
-                       "x", x,
-                       "y", y,
-                       NULL);
-}
-
-GdkCursor*
-_gdk_broadway_display_get_cursor_for_name (GdkDisplay  *display,
-					   const gchar *name)
-{
-  return g_object_new (GDK_TYPE_CURSOR,
-                       "display", display,
-                       "name", name,
-                       NULL);
-}
-
 gboolean
 _gdk_broadway_display_supports_cursor_alpha (GdkDisplay *display)
 {

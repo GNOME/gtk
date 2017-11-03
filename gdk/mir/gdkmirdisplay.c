@@ -429,29 +429,6 @@ gdk_mir_display_get_maximal_cursor_size (GdkDisplay *display,
   *width = *height = 32; // FIXME: Random value
 }
 
-static GdkCursor *
-gdk_mir_display_get_cursor_for_type (GdkDisplay    *display,
-                                     GdkCursorType  cursor_type)
-{
-  return _gdk_mir_cursor_new_for_type (display, cursor_type);
-}
-
-static GdkCursor *
-gdk_mir_display_get_cursor_for_name (GdkDisplay  *display,
-                                     const gchar *name)
-{
-  return _gdk_mir_cursor_new_for_name (display, name);
-}
-
-static GdkCursor *
-gdk_mir_display_get_cursor_for_surface (GdkDisplay      *display,
-                                        cairo_surface_t *surface,
-                                        gdouble          x,
-                                        gdouble          y)
-{
-  return NULL;
-}
-
 static GdkAppLaunchContext *
 gdk_mir_display_get_app_launch_context (GdkDisplay *display)
 {
@@ -1222,9 +1199,6 @@ gdk_mir_display_class_init (GdkMirDisplayClass *klass)
   display_class->store_clipboard = gdk_mir_display_store_clipboard;
   display_class->get_default_cursor_size = gdk_mir_display_get_default_cursor_size;
   display_class->get_maximal_cursor_size = gdk_mir_display_get_maximal_cursor_size;
-  display_class->get_cursor_for_type = gdk_mir_display_get_cursor_for_type;
-  display_class->get_cursor_for_name = gdk_mir_display_get_cursor_for_name;
-  display_class->get_cursor_for_surface = gdk_mir_display_get_cursor_for_surface;
   display_class->get_app_launch_context = gdk_mir_display_get_app_launch_context;
   display_class->get_next_serial = gdk_mir_display_get_next_serial;
   display_class->notify_startup_complete = gdk_mir_display_notify_startup_complete;

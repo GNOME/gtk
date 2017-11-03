@@ -404,14 +404,6 @@ void              win32_cursor_theme_destroy          (Win32CursorTheme *theme);
 Win32CursorTheme *_gdk_win32_display_get_cursor_theme (GdkWin32Display  *win32_display);
 
 /* GdkDisplay member functions */
-GdkCursor *_gdk_win32_display_get_cursor_for_type (GdkDisplay   *display,
-						   GdkCursorType cursor_type);
-GdkCursor *_gdk_win32_display_get_cursor_for_name (GdkDisplay  *display,
-						   const gchar *name);
-GdkCursor *_gdk_win32_display_get_cursor_for_surface (GdkDisplay *display,
-						     cairo_surface_t  *surface,
-						     gdouble          x,
-						     gdouble          y);
 void     _gdk_win32_display_get_default_cursor_size (GdkDisplay  *display,
 						     guint       *width,
 						     guint       *height);

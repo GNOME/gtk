@@ -143,30 +143,6 @@ static const struct {
   { NULL, NULL, XC_X_cursor }
 };
 
-GdkCursor*
-_gdk_x11_display_get_cursor_for_name (GdkDisplay  *display,
-                                      const gchar *name)
-{
-  return g_object_new (GDK_TYPE_CURSOR,
-                       "display", display,
-                       "name", name,
-                       NULL);
-}
-
-GdkCursor *
-_gdk_x11_display_get_cursor_for_texture (GdkDisplay *display,
-                                         GdkTexture *texture,
-                                         int         x,
-                                         int         y)
-{
-  return g_object_new (GDK_TYPE_CURSOR, 
-                       "display", display,
-                       "texture", texture,
-                       "x", x,
-                       "y", y,
-                       NULL);
-}
-
 #ifdef HAVE_XCURSOR
 
 static XcursorImage*

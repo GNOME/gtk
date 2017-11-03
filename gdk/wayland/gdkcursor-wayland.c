@@ -306,30 +306,6 @@ _gdk_wayland_cursor_get_next_image_index (GdkWaylandDisplay *display,
   return current_image_index;
 }
 
-GdkCursor *
-_gdk_wayland_display_get_cursor_for_name (GdkDisplay  *display,
-                                          const gchar *name)
-{
-  return g_object_new (GDK_TYPE_CURSOR,
-                       "display", display,
-                       "name", name,
-                       NULL);
-}
-
-GdkCursor *
-_gdk_wayland_display_get_cursor_for_texture (GdkDisplay *display,
-                                             GdkTexture *texture,
-                                             int         x,
-                                             int         y)
-{
-  return g_object_new (GDK_TYPE_CURSOR,
-                       "display", display,
-                       "texture", texture,
-                       "x", x,
-                       "y", y,
-                       NULL);
-}
-
 void
 _gdk_wayland_display_get_default_cursor_size (GdkDisplay *display,
 					      guint       *width,

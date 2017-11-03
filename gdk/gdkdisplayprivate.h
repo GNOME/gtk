@@ -145,12 +145,6 @@ struct _GdkDisplayClass
   void                       (*get_maximal_cursor_size) (GdkDisplay *display,
                                                          guint      *width,
                                                          guint      *height);
-  GdkCursor *                (*get_cursor_for_name)     (GdkDisplay    *display,
-                                                         const gchar   *name);
-  GdkCursor *                (*get_cursor_for_texture)  (GdkDisplay    *display,
-                                                         GdkTexture    *texture,
-                                                         int            x,
-                                                         int            y);
 
   GdkAppLaunchContext *      (*get_app_launch_context) (GdkDisplay *display);
 
