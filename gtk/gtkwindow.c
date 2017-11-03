@@ -7569,7 +7569,7 @@ static gboolean
 gtk_window_event (GtkWidget *widget,
                   GdkEvent  *event)
 {
-  if (widget != gtk_get_event_widget (event))
+  if (widget != gtk_get_event_target (event))
     return gtk_window_handle_wm_event (GTK_WINDOW (widget), event, FALSE);
 
   return GDK_EVENT_PROPAGATE;
