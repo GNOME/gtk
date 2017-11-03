@@ -93,7 +93,7 @@ enum {
   PROP_TEXTURE,
 };
 
-G_DEFINE_ABSTRACT_TYPE (GdkCursor, gdk_cursor, G_TYPE_OBJECT)
+G_DEFINE_TYPE (GdkCursor, gdk_cursor, G_TYPE_OBJECT)
 
 static void
 gdk_cursor_get_property (GObject    *object,

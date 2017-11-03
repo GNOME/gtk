@@ -34,33 +34,6 @@
 #include "gdkprivate-broadway.h"
 #include "gdkdisplay-broadway.h"
 
-#include <string.h>
-#include <errno.h>
-
-struct _GdkBroadwayCursor
-{
-  GdkCursor cursor;
-};
-
-struct _GdkBroadwayCursorClass
-{
-  GdkCursorClass cursor_class;
-};
-
-/*** GdkBroadwayCursor ***/
-
-G_DEFINE_TYPE (GdkBroadwayCursor, gdk_broadway_cursor, GDK_TYPE_CURSOR)
-
-static void
-gdk_broadway_cursor_class_init (GdkBroadwayCursorClass *xcursor_class)
-{
-}
-
-static void
-gdk_broadway_cursor_init (GdkBroadwayCursor *cursor)
-{
-}
-
 /* Called by gdk_display_broadway_finalize to flush any cached cursors
  * for a dead display.
  */
@@ -81,32 +54,22 @@ _gdk_broadway_display_get_cursor_for_texture (GdkDisplay *display,
 					      int         x,
 					      int         y)
 {
-  GdkBroadwayCursor *private;
-  GdkCursor *cursor;
-
-  private = g_object_new (GDK_TYPE_BROADWAY_CURSOR, 
-                          "display", display,
-                          "texture", texture,
-                          "x", x,
-                          "y", y,
-                          NULL);
-  cursor = (GdkCursor *) private;
-
-  return cursor;
+  return g_object_new (GDK_TYPE_CURSOR, 
+                       "display", display,
+                       "texture", texture,
+                       "x", x,
+                       "y", y,
+                       NULL);
 }
 
 GdkCursor*
 _gdk_broadway_display_get_cursor_for_name (GdkDisplay  *display,
 					   const gchar *name)
 {
-  GdkBroadwayCursor *private;
-
-  private = g_object_new (GDK_TYPE_BROADWAY_CURSOR,
-                          "display", display,
-                          "name", name,
-                          NULL);
-
-  return GDK_CURSOR (private);
+  return g_object_new (GDK_TYPE_CURSOR,
+                       "display", display,
+                       "name", name,
+                       NULL);
 }
 
 gboolean
