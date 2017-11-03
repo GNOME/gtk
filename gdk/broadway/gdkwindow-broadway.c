@@ -197,7 +197,7 @@ _gdk_broadway_display_init_root_window (GdkDisplay *display)
 
   g_assert (broadway_display->root_window == NULL);
 
-  broadway_display->root_window = g_object_new (GDK_TYPE_BROADWAY_WINDOW, NULL);
+  broadway_display->root_window = _gdk_display_create_window (display);
 
   window = broadway_display->root_window;
   window->impl = g_object_new (GDK_TYPE_WINDOW_IMPL_BROADWAY, NULL);
