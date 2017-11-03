@@ -232,8 +232,8 @@ gtk_render_node_view_snapshot (GtkWidget   *widget,
     return;
 
   gtk_render_node_view_get_effective_viewport (view, &viewport);
-  width = gtk_widget_get_allocated_width (widget);
-  height = gtk_widget_get_allocated_height (widget);
+  width = gtk_widget_get_width (widget);
+  height = gtk_widget_get_height (widget);
 
   graphene_rect_init (&rect, 0, 0, width, height);
   cr = gtk_snapshot_append_cairo (snapshot,
