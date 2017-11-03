@@ -50,11 +50,11 @@ GdkCursor* gdk_cursor_new_from_pixbuf	 (GdkDisplay      *display,
 					  GdkPixbuf       *pixbuf,
 					  gint             x,
 					  gint             y);
-GDK_AVAILABLE_IN_3_10
-GdkCursor* gdk_cursor_new_from_surface	 (GdkDisplay      *display,
-					  cairo_surface_t *surface,
-					  gdouble          x,
-					  gdouble          y);
+GDK_AVAILABLE_IN_3_94
+GdkCursor* gdk_cursor_new_from_texture   (GdkDisplay      *display,
+					  GdkTexture      *texture,
+					  int              hotspot_x,
+					  int              hotspot_y);
 GDK_AVAILABLE_IN_ALL
 GdkCursor*  gdk_cursor_new_from_name	 (GdkDisplay      *display,
 					  const gchar     *name);
@@ -62,6 +62,12 @@ GDK_AVAILABLE_IN_ALL
 GdkDisplay* gdk_cursor_get_display	 (GdkCursor	  *cursor);
 GDK_AVAILABLE_IN_3_94
 const char *gdk_cursor_get_name          (GdkCursor       *cursor);
+GDK_AVAILABLE_IN_3_94
+GdkTexture *gdk_cursor_get_texture       (GdkCursor       *cursor);
+GDK_AVAILABLE_IN_3_94
+int         gdk_cursor_get_hotspot_x     (GdkCursor       *cursor);
+GDK_AVAILABLE_IN_3_94
+int         gdk_cursor_get_hotspot_y     (GdkCursor       *cursor);
 
 
 G_END_DECLS

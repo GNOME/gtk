@@ -373,68 +373,31 @@ _gdk_x11_cursor_update_theme (GdkCursor *cursor)
 
 #ifdef HAVE_XCURSOR
 
-static void
-get_surface_size (cairo_surface_t *surface,
-		  int *width,
-		  int *height)
-{
-  double x_scale, y_scale;
-
-  x_scale = y_scale = 1;
-
-  cairo_surface_get_device_scale (surface, &x_scale, &y_scale);
-
-  /* Assume any set scaling is icon scale */
-  *width =
-    ceil (cairo_image_surface_get_width (surface) / x_scale);
-  *height =
-    ceil (cairo_image_surface_get_height (surface) / y_scale);
-}
-
 static XcursorImage*
-create_cursor_image (cairo_surface_t *source_surface,
-                     gint       x,
-                     gint       y,
-		     gint       scale)
+create_cursor_image (GdkTexture *texture,
+                     gint        x,
+                     gint        y,
+		     gint        scale)
 {
-  gint width, height;
   XcursorImage *xcimage;
-  cairo_surface_t *surface;
-  cairo_t *cr;
 
-  get_surface_size (source_surface, &width, &height);
+  xcimage = XcursorImageCreate (gdk_texture_get_width (texture), gdk_texture_get_height (texture));
 
-  width *= scale;
-  height *= scale;
-  
-  xcimage = XcursorImageCreate (width, height);
+  xcimage->xhot = x;
+  xcimage->yhot = y;
 
-  xcimage->xhot = x * scale;
-  xcimage->yhot = y * scale;
-
-  surface = cairo_image_surface_create_for_data ((guchar *) xcimage->pixels,
-                                                 CAIRO_FORMAT_ARGB32,
-                                                 width,
-                                                 height,
-                                                 width * 4);
-
-  cairo_surface_set_device_scale (surface, scale, scale);
-
-  cr = cairo_create (surface);
-  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-  cairo_set_source_surface (cr, source_surface, 0, 0);
-  cairo_paint (cr);
-  cairo_destroy (cr);
-  cairo_surface_destroy (surface);
+  gdk_texture_download (texture,
+                        (guchar *) xcimage->pixels,
+                        gdk_texture_get_width (texture) * 4);
 
   return xcimage;
 }
 
 GdkCursor *
-_gdk_x11_display_get_cursor_for_surface (GdkDisplay *display,
-					 cairo_surface_t *surface,
-					 gdouble     x,
-					 gdouble     y)
+_gdk_x11_display_get_cursor_for_texture (GdkDisplay *display,
+                                         GdkTexture *texture,
+                                         int         x,
+                                         int         y)
 {
   XcursorImage *xcimage;
   Cursor xcursor;
@@ -449,13 +412,16 @@ _gdk_x11_display_get_cursor_for_surface (GdkDisplay *display,
     {
       target_scale =
         gdk_monitor_get_scale_factor (gdk_display_get_primary_monitor (display));
-      xcimage = create_cursor_image (surface, x, y, target_scale);
+      xcimage = create_cursor_image (texture, x, y, target_scale);
       xcursor = XcursorImageLoadCursor (GDK_DISPLAY_XDISPLAY (display), xcimage);
       XcursorImageDestroy (xcimage);
     }
 
   private = g_object_new (GDK_TYPE_X11_CURSOR, 
                           "display", display,
+                          "texture", texture,
+                          "x", x,
+                          "y", y,
                           NULL);
   private->xcursor = xcursor;
   private->serial = theme_serial;

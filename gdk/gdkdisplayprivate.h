@@ -147,10 +147,10 @@ struct _GdkDisplayClass
                                                          guint      *height);
   GdkCursor *                (*get_cursor_for_name)     (GdkDisplay    *display,
                                                          const gchar   *name);
-  GdkCursor *                (*get_cursor_for_surface)  (GdkDisplay    *display,
-                                                         cairo_surface_t *surface,
-                                                         gdouble          x,
-                                                         gdouble          y);
+  GdkCursor *                (*get_cursor_for_texture)  (GdkDisplay    *display,
+                                                         GdkTexture    *texture,
+                                                         int            x,
+                                                         int            y);
 
   GdkAppLaunchContext *      (*get_app_launch_context) (GdkDisplay *display);
 

@@ -101,10 +101,10 @@ GdkDragProtocol _gdk_broadway_window_get_drag_protocol (GdkWindow *window,
 							GdkWindow **target);
 GdkCursor*_gdk_broadway_display_get_cursor_for_name (GdkDisplay  *display,
 						     const gchar *name);
-GdkCursor *_gdk_broadway_display_get_cursor_for_surface (GdkDisplay *display,
-							 cairo_surface_t *surface,
-							 gdouble     x,
-							 gdouble     y);
+GdkCursor *_gdk_broadway_display_get_cursor_for_texture (GdkDisplay *display,
+                                                         GdkTexture *texture,
+                                                         int         x,
+                                                         int         y);
 gboolean _gdk_broadway_display_supports_cursor_alpha (GdkDisplay *display);
 gboolean _gdk_broadway_display_supports_cursor_color (GdkDisplay *display);
 void _gdk_broadway_display_get_default_cursor_size (GdkDisplay *display,

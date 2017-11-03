@@ -1037,7 +1037,7 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
   display_class->get_default_cursor_size = _gdk_wayland_display_get_default_cursor_size;
   display_class->get_maximal_cursor_size = _gdk_wayland_display_get_maximal_cursor_size;
   display_class->get_cursor_for_name = _gdk_wayland_display_get_cursor_for_name;
-  display_class->get_cursor_for_surface = _gdk_wayland_display_get_cursor_for_surface;
+  display_class->get_cursor_for_texture = _gdk_wayland_display_get_cursor_for_texture;
   display_class->supports_cursor_alpha = _gdk_wayland_display_supports_cursor_alpha;
   display_class->supports_cursor_color = _gdk_wayland_display_supports_cursor_color;
   display_class->get_next_serial = gdk_wayland_display_get_next_serial;

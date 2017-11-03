@@ -66,7 +66,10 @@
 enum {
   PROP_0,
   PROP_DISPLAY,
-  PROP_NAME
+  PROP_HOTSPOT_X,
+  PROP_HOTSPOT_Y,
+  PROP_NAME,
+  PROP_TEXTURE,
 };
 
 G_DEFINE_ABSTRACT_TYPE (GdkCursor, gdk_cursor, G_TYPE_OBJECT)
@@ -84,8 +87,17 @@ gdk_cursor_get_property (GObject    *object,
     case PROP_DISPLAY:
       g_value_set_object (value, cursor->display);
       break;
+    case PROP_HOTSPOT_X:
+      g_value_set_int (value, cursor->hotspot_x);
+      break;
+    case PROP_HOTSPOT_Y:
+      g_value_set_int (value, cursor->hotspot_y);
+      break;
     case PROP_NAME:
       g_value_set_string (value, cursor->name);
+      break;
+    case PROP_TEXTURE:
+      g_value_set_object (value, cursor->texture);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -108,8 +120,17 @@ gdk_cursor_set_property (GObject      *object,
       /* check that implementations actually provide the display when constructing */
       g_assert (cursor->display != NULL);
       break;
+    case PROP_HOTSPOT_X:
+      cursor->hotspot_x = g_value_get_int (value);
+      break;
+    case PROP_HOTSPOT_Y:
+      cursor->hotspot_y = g_value_get_int (value);
+      break;
     case PROP_NAME:
       cursor->name = g_value_dup_string (value);
+      break;
+    case PROP_TEXTURE:
+      cursor->texture = g_value_dup_object (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -123,6 +144,7 @@ gdk_cursor_finalize (GObject *object)
   GdkCursor *cursor = GDK_CURSOR (object);
 
   g_free (cursor->name);
+  g_clear_object (&cursor->texture);
 
   G_OBJECT_CLASS (gdk_cursor_parent_class)->finalize (object);
 }
@@ -144,11 +166,32 @@ gdk_cursor_class_init (GdkCursorClass *cursor_class)
                                                         GDK_TYPE_DISPLAY,
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
   g_object_class_install_property (object_class,
+				   PROP_HOTSPOT_X,
+				   g_param_spec_int ("hotspot-x",
+                                                     P_("Hotspot X"),
+                                                     P_("Horizontal offset of the cursor hotspot"),
+                                                     0, G_MAXINT, 0,
+                                                     G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+  g_object_class_install_property (object_class,
+				   PROP_HOTSPOT_Y,
+				   g_param_spec_int ("hotspot-y",
+                                                     P_("Hotspot Y"),
+                                                     P_("Vertical offset of the cursor hotspot"),
+                                                     0, G_MAXINT, 0,
+                                                     G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+  g_object_class_install_property (object_class,
 				   PROP_NAME,
 				   g_param_spec_string ("name",
                                                         P_("Name"),
                                                         P_("Name of this cursor"),
                                                         NULL,
+                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+  g_object_class_install_property (object_class,
+				   PROP_TEXTURE,
+				   g_param_spec_object ("texture",
+                                                        P_("Texture"),
+                                                        P_("The texture displayed by this cursor"),
+                                                        GDK_TYPE_TEXTURE,
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 }
 
@@ -255,7 +298,7 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
                             gint        x,
                             gint        y)
 {
-  cairo_surface_t *surface;
+  GdkTexture *texture;
   const char *option;
   char *end;
   gint64 value;
@@ -286,23 +329,23 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
         y = (gint) value;
     }
 
-  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, NULL);
+  texture = gdk_texture_new_for_pixbuf (pixbuf);
   
-  cursor = GDK_DISPLAY_GET_CLASS (display)->get_cursor_for_surface (display, surface, x, y);
+  cursor = gdk_cursor_new_from_texture (display, texture, x, y);
 
-  cairo_surface_destroy (surface);
+  g_object_unref (texture);
 
   return cursor;
 }
 
 /**
- * gdk_cursor_new_from_surface:
+ * gdk_cursor_new_from_texture:
  * @display: the #GdkDisplay for which the cursor will be created
- * @surface: the cairo image surface containing the cursor pixel data
- * @x: the horizontal offset of the “hotspot” of the cursor
- * @y: the vertical offset of the “hotspot” of the cursor
+ * @texture: the texture providing the pixel data
+ * @hotspot_x: the horizontal offset of the “hotspot” of the cursor
+ * @hotspot_y: the vertical offset of the “hotspot” of the cursor
  *
- * Creates a new cursor from a cairo image surface.
+ * Creates a new cursor from a #GdkTexture.
  *
  * Not all GDK backends support RGBA cursors. If they are not
  * supported, a monochrome approximation will be displayed.
@@ -318,22 +361,22 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
  *
  * Returns: a new #GdkCursor.
  *
- * Since: 3.10
+ * Since: 3.94
  */
 GdkCursor *
-gdk_cursor_new_from_surface (GdkDisplay      *display,
-			     cairo_surface_t *surface,
-			     gdouble          x,
-			     gdouble          y)
+gdk_cursor_new_from_texture (GdkDisplay *display,
+			     GdkTexture *texture,
+			     int         hotspot_x,
+			     int         hotspot_y)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  g_return_val_if_fail (surface != NULL, NULL);
-  g_return_val_if_fail (cairo_surface_get_type (surface) == CAIRO_SURFACE_TYPE_IMAGE, NULL);
-  g_return_val_if_fail (0 <= x && x < cairo_image_surface_get_width (surface), NULL);
-  g_return_val_if_fail (0 <= y && y < cairo_image_surface_get_height (surface), NULL);
+  g_return_val_if_fail (GDK_IS_TEXTURE (texture), NULL);
+  g_return_val_if_fail (0 <= hotspot_x && hotspot_x < gdk_texture_get_width (texture), NULL);
+  g_return_val_if_fail (0 <= hotspot_y && hotspot_y < gdk_texture_get_height (texture), NULL);
 
-  return GDK_DISPLAY_GET_CLASS (display)->get_cursor_for_surface (display,
-								  surface, x, y);
+  return GDK_DISPLAY_GET_CLASS (display)->get_cursor_for_texture (display,
+								  texture,
+                                                                  hotspot_x, hotspot_y);
 }
 
 /**
@@ -359,7 +402,7 @@ gdk_cursor_get_display (GdkCursor *cursor)
  * @cursor: a #GdkCursor.
  *
  * Returns the name of the cursor. If the cursor is not a named cursor, %NULL
- * will be returned and the surface property will be set.
+ * will be returned and the GdkCursor::texture property will be set.
  *
  * Returns: (transfer none): the name of the cursor or %NULL if it is not
  *     a named cursor
@@ -372,5 +415,83 @@ gdk_cursor_get_name (GdkCursor *cursor)
   g_return_val_if_fail (GDK_IS_CURSOR (cursor), NULL);
 
   return cursor->name;
+}
+
+/**
+ * gdk_cursor_get_texture:
+ * @cursor: a #GdkCursor.
+ *
+ * Returns the texture shown by the cursor. If the cursor is a named cursor,
+ * %NULL will be returned and the GdkCursor::name property will be set.
+ *
+ * Returns: (transfer none): the texture of the cursor or %NULL if it is
+ *     a named cursor
+ *
+ * Since: 3.94
+ */
+GdkTexture *
+gdk_cursor_get_texture (GdkCursor *cursor)
+{
+  g_return_val_if_fail (GDK_IS_CURSOR (cursor), NULL);
+
+  return cursor->texture;
+}
+
+/**
+ * gdk_cursor_get_texture:
+ * @cursor: a #GdkCursor.
+ *
+ * Returns the texture for the cursor. If the cursor is a named cursor, %NULL
+ * will be returned and the GdkCursor::name property will be set.
+ *
+ * Returns: (transfer none): the texture for cursor or %NULL if it is a
+ *     named cursor
+ *
+ * Since: 3.94
+ */
+GdkTexture *
+gdk_cursor_get_texture (GdkCursor *cursor)
+{
+  g_return_val_if_fail (GDK_IS_CURSOR (cursor), NULL);
+
+  return cursor->texture;
+}
+
+/**
+ * gdk_cursor_get_hotspot_x:
+ * @cursor: a #GdkCursor.
+ *
+ * Returns the horizontal offset of the hotspot. The hotspot indicates the
+ * pixel that will be directly above the cursor.
+ *
+ * Returns: the horizontal offset of the hotspot or 0 for named cursors
+ *
+ * Since: 3.94
+ */
+int
+gdk_cursor_get_hotspot_x (GdkCursor *cursor)
+{
+  g_return_val_if_fail (GDK_IS_CURSOR (cursor), 0);
+
+  return cursor->hotspot_x;
+}
+
+/**
+ * gdk_cursor_get_hotspot_y:
+ * @cursor: a #GdkCursor.
+ *
+ * Returns the vertical offset of the hotspot. The hotspot indicates the
+ * pixel that will be directly above the cursor.
+ *
+ * Returns: the vertical offset of the hotspot or 0 for named cursors
+ *
+ * Since: 3.94
+ */
+int
+gdk_cursor_get_hotspot_y (GdkCursor *cursor)
+{
+  g_return_val_if_fail (GDK_IS_CURSOR (cursor), 0);
+
+  return cursor->hotspot_y;
 }
 

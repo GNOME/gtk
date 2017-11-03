@@ -829,6 +829,9 @@ gdk_cursor_new_from_surface
 gdk_cursor_new_from_name
 gdk_cursor_get_display
 gdk_cursor_get_name
+gdk_cursor_get_hotspot_x
+gdk_cursor_get_hotspot_y
+gdk_cursor_get_texture
 
 <SUBSECTION Standard>
 GDK_TYPE_CURSOR_TYPE

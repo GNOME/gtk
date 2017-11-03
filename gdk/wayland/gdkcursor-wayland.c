@@ -52,7 +52,6 @@ struct _GdkWaylandCursor
 
   struct
   {
-    int hotspot_x, hotspot_y;
     int width, height, scale;
     cairo_surface_t *cairo_surface;
   } surface;
@@ -239,9 +238,9 @@ _gdk_wayland_cursor_get_buffer (GdkCursor *cursor,
   else if (gdk_cursor_get_name (cursor) == NULL) /* From surface */
     {
       *hotspot_x =
-        wayland_cursor->surface.hotspot_x / wayland_cursor->surface.scale;
+        gdk_cursor_get_hotspot_x (cursor) / wayland_cursor->surface.scale;
       *hotspot_y =
-        wayland_cursor->surface.hotspot_y / wayland_cursor->surface.scale;
+        gdk_cursor_get_hotspot_y (cursor) / wayland_cursor->surface.scale;
 
       *w = wayland_cursor->surface.width / wayland_cursor->surface.scale;
       *h = wayland_cursor->surface.height / wayland_cursor->surface.scale;
@@ -384,37 +383,25 @@ static const struct wl_buffer_listener buffer_listener = {
 };
 
 GdkCursor *
-_gdk_wayland_display_get_cursor_for_surface (GdkDisplay *display,
-					     cairo_surface_t *surface,
-					     gdouble     x,
-					     gdouble     y)
+_gdk_wayland_display_get_cursor_for_texture (GdkDisplay *display,
+                                             GdkTexture *texture,
+                                             int         x,
+                                             int         y)
 {
   GdkWaylandCursor *cursor;
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   struct wl_buffer *buffer;
-  cairo_t *cr;
 
   cursor = g_object_new (GDK_TYPE_WAYLAND_CURSOR,
 			 "display", display_wayland,
+                         "texture", texture,
+                         "x", x,
+                         "y", y,
 			 NULL);
-  cursor->surface.hotspot_x = x;
-  cursor->surface.hotspot_y = y;
 
   cursor->surface.scale = 1;
-
-  if (surface)
-    {
-      double sx, sy;
-      cairo_surface_get_device_scale (surface, &sx, &sy);
-      cursor->surface.scale = (int)sx;
-      cursor->surface.width = cairo_image_surface_get_width (surface);
-      cursor->surface.height = cairo_image_surface_get_height (surface);
-    }
-  else
-    {
-      cursor->surface.width = 1;
-      cursor->surface.height = 1;
-    }
+  cursor->surface.width = gdk_texture_get_width (texture);
+  cursor->surface.height = gdk_texture_get_height (texture);
 
   cursor->surface.cairo_surface =
     _gdk_wayland_display_create_shm_surface (display_wayland,
@@ -425,13 +412,10 @@ _gdk_wayland_display_get_cursor_for_surface (GdkDisplay *display,
   buffer = _gdk_wayland_shm_surface_get_wl_buffer (cursor->surface.cairo_surface);
   wl_buffer_add_listener (buffer, &buffer_listener, cursor->surface.cairo_surface);
 
-  if (surface)
-    {
-      cr = cairo_create (cursor->surface.cairo_surface);
-      cairo_set_source_surface (cr, surface, 0, 0);
-      cairo_paint (cr);
-      cairo_destroy (cr);
-    }
+  gdk_texture_download (texture,
+                        cairo_image_surface_get_data (cursor->surface.cairo_surface),
+                        cairo_image_surface_get_stride (cursor->surface.cairo_surface));
+  cairo_surface_mark_dirty (cursor->surface.cairo_surface);
 
   return GDK_CURSOR (cursor);
 }

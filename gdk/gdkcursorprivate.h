@@ -41,6 +41,9 @@ struct _GdkCursor
 
   GdkDisplay *display;
   char *name;
+  GdkTexture *texture;
+  int hotspot_x;
+  int hotspot_y;
 };
 
 struct _GdkCursorClass

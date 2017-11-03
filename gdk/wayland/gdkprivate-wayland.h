@@ -68,10 +68,10 @@ GdkCursor *_gdk_wayland_display_get_cursor_for_name_with_scale (GdkDisplay    *d
                                                                 guint          scale);
 GdkCursor *_gdk_wayland_display_get_cursor_for_name (GdkDisplay  *display,
 						     const gchar *name);
-GdkCursor *_gdk_wayland_display_get_cursor_for_surface (GdkDisplay *display,
-							cairo_surface_t *surface,
-							gdouble     x,
-							gdouble     y);
+GdkCursor *_gdk_wayland_display_get_cursor_for_texture (GdkDisplay *display,
+                                                        GdkTexture *texture,
+                                                        int         x,
+                                                        int         y);
 void       _gdk_wayland_display_get_default_cursor_size (GdkDisplay *display,
 							 guint       *width,
 							 guint       *height);

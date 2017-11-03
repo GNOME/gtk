@@ -76,16 +76,19 @@ _gdk_broadway_cursor_update_theme (GdkCursor *cursor)
 }
 
 GdkCursor *
-_gdk_broadway_display_get_cursor_for_surface (GdkDisplay *display,
-					      cairo_surface_t *surface,
-					      gdouble     x,
-					      gdouble     y)
+_gdk_broadway_display_get_cursor_for_texture (GdkDisplay *display,
+					      GdkTexture *texture,
+					      int         x,
+					      int         y)
 {
   GdkBroadwayCursor *private;
   GdkCursor *cursor;
 
   private = g_object_new (GDK_TYPE_BROADWAY_CURSOR, 
                           "display", display,
+                          "texture", texture,
+                          "x", x,
+                          "y", y,
                           NULL);
   cursor = (GdkCursor *) private;
 
