@@ -112,7 +112,7 @@ struct _GdkWaylandDisplay
   struct wl_cursor_theme *scaled_cursor_themes[GDK_WAYLAND_THEME_SCALES_COUNT];
   gchar *cursor_theme_name;
   int cursor_theme_size;
-  GHashTable *cursor_cache;
+  GHashTable *cursor_surface_cache;
 
   GSource *event_source;
 

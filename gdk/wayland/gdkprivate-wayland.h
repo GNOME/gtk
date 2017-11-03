@@ -58,7 +58,6 @@ gboolean           _gdk_wayland_keymap_key_is_modifier (GdkKeymap *keymap,
 
 void       _gdk_wayland_display_init_cursors (GdkWaylandDisplay *display);
 void       _gdk_wayland_display_finalize_cursors (GdkWaylandDisplay *display);
-void       _gdk_wayland_display_update_cursors (GdkWaylandDisplay *display);
 
 struct wl_cursor_theme * _gdk_wayland_display_get_scaled_cursor_theme (GdkWaylandDisplay *display_wayland,
                                                                        guint              scale);
@@ -84,19 +83,20 @@ gboolean   _gdk_wayland_display_supports_cursor_color (GdkDisplay *display);
 void       gdk_wayland_display_system_bell (GdkDisplay *display,
                                             GdkWindow  *window);
 
-struct wl_buffer *_gdk_wayland_cursor_get_buffer (GdkCursor *cursor,
-                                                  guint      image_index,
-                                                  int       *hotspot_x,
-                                                  int       *hotspot_y,
-                                                  int       *w,
-                                                  int       *h,
-						  int       *scale);
-guint      _gdk_wayland_cursor_get_next_image_index (GdkCursor *cursor,
-                                                     guint      current_image_index,
-                                                     guint     *next_image_delay);
-
-void       _gdk_wayland_cursor_set_scale (GdkCursor *cursor,
-                                          guint      scale);
+struct wl_buffer *_gdk_wayland_cursor_get_buffer (GdkWaylandDisplay *display,
+                                                  GdkCursor         *cursor,
+                                                  guint              desired_scale,
+                                                  guint              image_index,
+                                                  int               *hotspot_x,
+                                                  int               *hotspot_y,
+                                                  int               *w,
+                                                  int               *h,
+						  int               *scale);
+guint      _gdk_wayland_cursor_get_next_image_index (GdkWaylandDisplay *display,
+                                                     GdkCursor         *cursor,
+                                                     guint              scale,
+                                                     guint              current_image_index,
+                                                     guint             *next_image_delay);
 
 void       gdk_wayland_window_sync (GdkWindow *window);
 GdkDragProtocol _gdk_wayland_window_get_drag_protocol (GdkWindow *window,

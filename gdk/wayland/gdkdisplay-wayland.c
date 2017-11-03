@@ -1107,8 +1107,6 @@ gdk_wayland_display_set_cursor_theme (GdkDisplay  *display,
     g_free (display_wayland->cursor_theme_name);
   display_wayland->cursor_theme_name = g_strdup (name);
   display_wayland->cursor_theme_size = size;
-
-  _gdk_wayland_display_update_cursors (display_wayland);
 }
 
 struct wl_cursor_theme *

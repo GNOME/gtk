@@ -407,7 +407,9 @@ gdk_wayland_device_update_window_cursor (GdkDevice *device)
 
   if (pointer->cursor)
     {
-      buffer = _gdk_wayland_cursor_get_buffer (pointer->cursor,
+      buffer = _gdk_wayland_cursor_get_buffer (GDK_WAYLAND_DISPLAY (seat->display),
+                                               pointer->cursor,
+                                               pointer->current_output_scale,
                                                pointer->cursor_image_index,
                                                &x, &y, &w, &h, &scale);
     }
@@ -451,7 +453,9 @@ gdk_wayland_device_update_window_cursor (GdkDevice *device)
     }
 
   next_image_index =
-    _gdk_wayland_cursor_get_next_image_index (pointer->cursor,
+    _gdk_wayland_cursor_get_next_image_index (GDK_WAYLAND_DISPLAY (seat->display),
+                                              pointer->cursor,
+                                              pointer->current_output_scale,
                                               pointer->cursor_image_index,
                                               &next_image_delay);
 
@@ -496,17 +500,6 @@ gdk_wayland_device_set_window_cursor (GdkDevice *device,
   if (seat->grab_cursor)
     cursor = seat->grab_cursor;
 
-  /* Setting the cursor to NULL means that we should use
-   * the default cursor
-   */
-  if (!cursor)
-    {
-      guint scale = pointer->current_output_scale;
-      cursor = _gdk_wayland_display_get_cursor_for_name_with_scale (seat->display, "default", scale);
-    }
-  else
-    _gdk_wayland_cursor_set_scale (cursor, pointer->current_output_scale);
-
   if (cursor == pointer->cursor)
     return;
 
@@ -515,7 +508,10 @@ gdk_wayland_device_set_window_cursor (GdkDevice *device,
   if (pointer->cursor)
     g_object_unref (pointer->cursor);
 
-  pointer->cursor = g_object_ref (cursor);
+  if (cursor == NULL)
+    pointer->cursor = gdk_cursor_new_from_name (seat->display, "default");
+  else
+    pointer->cursor = g_object_ref (cursor);
 
   gdk_wayland_device_update_window_cursor (device);
 }
@@ -4522,9 +4518,6 @@ pointer_surface_update_scale (GdkDevice *device)
     }
 
   pointer->current_output_scale = scale;
-
-  if (pointer->cursor)
-    _gdk_wayland_cursor_set_scale (pointer->cursor, scale);
 
   gdk_wayland_device_update_window_cursor (device);
 }
