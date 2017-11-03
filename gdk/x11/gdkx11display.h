@@ -62,6 +62,9 @@ GDK_AVAILABLE_IN_3_94
 Screen *      gdk_x11_display_get_xscreen      (GdkDisplay  *display);
 GDK_AVAILABLE_IN_3_94
 Window        gdk_x11_display_get_xrootwindow  (GdkDisplay  *display);
+GDK_AVAILABLE_IN_3_94
+Cursor        gdk_x11_display_get_xcursor      (GdkDisplay  *display,
+                                                GdkCursor   *cursor);
 
 #define GDK_DISPLAY_XDISPLAY(display) (gdk_x11_display_get_xdisplay (display))
 

@@ -31,7 +31,6 @@ gdk_x11_sources = files([
 gdk_x11_public_headers = files([
   'gdkx-autocleanups.h',
   'gdkx11applaunchcontext.h',
-  'gdkx11cursor.h',
   'gdkx11device-core.h',
   'gdkx11device-xi2.h',
   'gdkx11device.h',

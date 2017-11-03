@@ -835,7 +835,6 @@ gdk_cursor_get_hotspot_y
 gdk_cursor_get_texture
 
 <SUBSECTION Standard>
-GDK_TYPE_CURSOR_TYPE
 GDK_TYPE_CURSOR
 
 <SUBSECTION Private>
@@ -899,8 +898,6 @@ gdk_drag_context_get_type
 <FILE>x_interaction</FILE>
 GDK_WINDOW_XID
 GDK_DISPLAY_XDISPLAY
-GDK_CURSOR_XCURSOR
-GDK_CURSOR_XDISPLAY
 GDK_POINTER_TO_XID
 GDK_XID_TO_POINTER
 gdk_x11_lookup_xdisplay
@@ -915,6 +912,7 @@ gdk_x11_display_set_startup_notification_id
 gdk_x11_display_get_xdisplay
 gdk_x11_display_get_xscreen
 gdk_x11_display_get_xrootwindow
+gdk_x11_display_get_xcursor
 gdk_x11_display_grab
 gdk_x11_display_ungrab
 gdk_x11_display_error_trap_push
@@ -944,8 +942,6 @@ gdk_x11_window_get_desktop
 gdk_x11_window_set_utf8_property
 gdk_x11_window_set_frame_extents
 gdk_x11_window_set_frame_sync_enabled
-gdk_x11_cursor_get_xcursor
-gdk_x11_cursor_get_xdisplay
 gdk_x11_keymap_get_group_for_state
 gdk_x11_keymap_key_is_modifier
 gdk_x11_visual_get_xvisual
@@ -971,12 +967,6 @@ GDK_X11_APP_LAUNCH_CONTEXT_CLASS
 GDK_IS_X11_APP_LAUNCH_CONTEXT
 GDK_IS_X11_APP_LAUNCH_CONTEXT_CLASS
 GDK_X11_APP_LAUNCH_CONTEXT_GET_CLASS
-GDK_TYPE_X11_CURSOR
-GDK_X11_CURSOR
-GDK_X11_CURSOR_CLASS
-GDK_IS_X11_CURSOR
-GDK_IS_X11_CURSOR_CLASS
-GDK_X11_CURSOR_GET_CLASS
 GDK_TYPE_X11_DEVICE_CORE
 GDK_X11_DEVICE_CORE
 GDK_X11_DEVICE_CORE_CLASS

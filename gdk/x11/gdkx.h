@@ -33,7 +33,6 @@
 #define __GDKX_H_INSIDE__
 
 #include <gdk/x11/gdkx11applaunchcontext.h>
-#include <gdk/x11/gdkx11cursor.h>
 #include <gdk/x11/gdkx11device.h>
 #include <gdk/x11/gdkx11device-core.h>
 #include <gdk/x11/gdkx11device-xi2.h>

@@ -105,6 +105,9 @@ struct _GdkX11Display
   /* input GdkWindow list */
   GList *input_windows;
 
+  /* GdkCursor => XCursor */
+  GHashTable *cursors;
+
   GPtrArray *monitors;
   int primary_monitor;
 

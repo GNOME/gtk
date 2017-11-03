@@ -109,7 +109,6 @@ main (int argc, char **argv)
 	  !G_TYPE_IS_ABSTRACT (all_types[i]) &&
 #ifdef GDK_WINDOWING_X11
 	  all_types[i] != GDK_TYPE_X11_WINDOW &&
-	  all_types[i] != GDK_TYPE_X11_CURSOR &&
 	  all_types[i] != GDK_TYPE_X11_SCREEN &&
 	  all_types[i] != GDK_TYPE_X11_DISPLAY &&
 	  all_types[i] != GDK_TYPE_X11_DEVICE_MANAGER_CORE &&

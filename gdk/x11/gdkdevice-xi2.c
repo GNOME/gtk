@@ -290,7 +290,7 @@ gdk_x11_device_xi2_set_window_cursor (GdkDevice *device,
     XIDefineCursor (GDK_WINDOW_XDISPLAY (window),
                     device_xi2->device_id,
                     GDK_WINDOW_XID (window),
-                    gdk_x11_cursor_get_xcursor (cursor));
+                    gdk_x11_display_get_xcursor (GDK_WINDOW_DISPLAY (window), cursor));
   else
     XIUndefineCursor (GDK_WINDOW_XDISPLAY (window),
                       device_xi2->device_id,
@@ -439,8 +439,7 @@ gdk_x11_device_xi2_grab (GdkDevice    *device,
     xcursor = None;
   else
     {
-      _gdk_x11_cursor_update_theme (cursor);
-      xcursor = gdk_x11_cursor_get_xcursor (cursor);
+      xcursor = gdk_x11_display_get_xcursor (display, cursor);
     }
 
   mask.deviceid = device_xi2->device_id;
