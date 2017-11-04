@@ -2074,13 +2074,13 @@ gtk_entry_set_property (GObject         *object,
     case PROP_TEXTURE_PRIMARY:
       gtk_entry_set_icon_from_texture (entry,
                                        GTK_ENTRY_ICON_PRIMARY,
-                                       g_value_get_boxed (value));
+                                       g_value_get_object (value));
       break;
 
     case PROP_TEXTURE_SECONDARY:
       gtk_entry_set_icon_from_texture (entry,
                                        GTK_ENTRY_ICON_SECONDARY,
-                                       g_value_get_boxed (value));
+                                       g_value_get_object (value));
       break;
 
     case PROP_ICON_NAME_PRIMARY:
@@ -2327,15 +2327,15 @@ gtk_entry_get_property (GObject         *object,
       break;
 
     case PROP_TEXTURE_PRIMARY:
-      g_value_set_boxed (value,
-                         gtk_entry_get_icon_texture (entry,
-                                                     GTK_ENTRY_ICON_PRIMARY));
+      g_value_set_object (value,
+                          gtk_entry_get_icon_texture (entry,
+                                                      GTK_ENTRY_ICON_PRIMARY));
       break;
 
     case PROP_TEXTURE_SECONDARY:
-      g_value_set_boxed (value,
-                         gtk_entry_get_icon_texture (entry,
-                                                     GTK_ENTRY_ICON_SECONDARY));
+      g_value_set_object (value,
+                          gtk_entry_get_icon_texture (entry,
+                                                      GTK_ENTRY_ICON_SECONDARY));
       break;
 
     case PROP_ICON_NAME_PRIMARY:
