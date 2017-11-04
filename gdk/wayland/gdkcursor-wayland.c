@@ -99,8 +99,7 @@ static const struct {
   { "nesw-resize",  "fd_double_arrow" },
   { "nwse-resize",  "bd_double_arrow" },
   { "zoom-in",      "left_ptr" },
-  { "zoom-out",     "left_ptr" },
-  { NULL, NULL }
+  { "zoom-out",     "left_ptr" }
 };
 
 static const gchar *
@@ -108,7 +107,7 @@ name_fallback (const gchar *name)
 {
   gint i;
 
-  for (i = 0; name_map[i].css_name; i++)
+  for (i = 0; i < G_N_ELEMENTS (name_map); i++)
     {
       if (g_str_equal (name_map[i].css_name, name))
         return name_map[i].traditional_name;

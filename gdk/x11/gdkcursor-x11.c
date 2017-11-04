@@ -140,8 +140,7 @@ static const struct {
   { "nesw-resize",  "fd_double_arrow",     XC_X_cursor },
   { "nwse-resize",  "bd_double_arrow",     XC_X_cursor },
   { "zoom-in",      "left_ptr",            XC_draped_box },
-  { "zoom-out",     "left_ptr",            XC_draped_box },
-  { NULL, NULL, XC_X_cursor }
+  { "zoom-out",     "left_ptr",            XC_draped_box }
 };
 
 #ifdef HAVE_XCURSOR
