@@ -951,29 +951,28 @@ gtk_widget_real_contains (GtkWidget *widget,
 static GtkWidget *
 gtk_widget_real_pick (GtkWidget *widget,
                       gdouble    x,
-                      gdouble    y,
-                      gdouble   *x_out,
-                      gdouble   *y_out)
+                      gdouble    y)
 {
   GtkWidget *child;
+
+  if (!gtk_widget_contains (widget, x, y))
+    return NULL;
 
   for (child = _gtk_widget_get_last_child (widget);
        child;
        child = _gtk_widget_get_prev_sibling (child))
     {
+      GtkWidget *picked;
       int dx, dy;
 
       gtk_widget_get_origin_relative_to_parent (child, &dx, &dy);
 
-      if (gtk_widget_contains (child, x - dx, y - dy))
-        {
-          *x_out = x - dx;
-          *y_out = y - dy;
-          return child;
-        }
+      picked = gtk_widget_pick (child, x - dx, y - dy);
+      if (picked)
+        return picked;
     }
 
-  return NULL;
+  return widget;
 }
 
 static void
@@ -13154,6 +13153,40 @@ gtk_widget_contains (GtkWidget  *widget,
     return FALSE;
 
   return GTK_WIDGET_GET_CLASS (widget)->contains (widget, x, y);
+}
+
+/**
+ * gtk_widget_pick:
+ * @widget: the widget to query
+ * @x: X coordinate to test, relative to @widget's origin
+ * @y: Y coordinate to test, relative to @widget's origin
+ *
+ * Finds the descendant of widget (including widget itself) closest
+ * to the screen at the point (@x, @y). The point must be given in
+ * widget coordinates, so (0, 0) is assumed to be the top left of
+ * @widget's content area.
+ *
+ * Usually widgets will return %NULL if the given coordinate is not
+ * contained in @widget checked via gtk_widget_contains(). Otherwise
+ * they will recursively try to find a child that does not return %NULL.
+ * Widgets are however free to customize their picking algorithm.
+ *
+ * This function is used on the toplevel to determine the widget below
+ * the mouse cursor for purposes of hover hilighting and delivering events.
+ *
+ * Returns: (nullable) (transfer none): The widget descendant at the given
+ *     coordinate or %NULL if none.
+ *
+ * Since: 3.94
+ **/
+GtkWidget *
+gtk_widget_pick (GtkWidget *widget,
+                 gdouble    x,
+                 gdouble    y)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  return GTK_WIDGET_GET_CLASS (widget)->pick (widget, x, y);
 }
 
 void

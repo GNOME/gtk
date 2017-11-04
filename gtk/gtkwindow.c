@@ -742,9 +742,7 @@ static void popover_get_rect (GtkWindowPopover      *popover,
 static GtkWidget *
 gtk_window_pick (GtkWidget *widget,
                  gdouble    x,
-                 gdouble    y,
-                 gdouble   *x_out,
-                 gdouble   *y_out)
+                 gdouble    y)
 {
   GtkWindow *window = GTK_WINDOW (widget);
   GList *popovers;
@@ -752,33 +750,19 @@ gtk_window_pick (GtkWidget *widget,
   for (popovers = window->priv->popovers.tail; popovers; popovers = popovers->prev)
     {
       GtkWindowPopover *popover = popovers->data;
-      cairo_rectangle_int_t rect;
+      int dest_x, dest_y;
+      GtkWidget *picked;
 
-      if (!gtk_widget_is_sensitive (popover->widget) ||
-          !gtk_widget_is_drawable (popover->widget))
-        continue;
+      gtk_widget_translate_coordinates (widget, popover->widget,
+                                        x, y,
+                                        &dest_x, &dest_y);
 
-      gtk_widget_get_outer_allocation (popover->widget, &rect);
-
-      if (gdk_rectangle_contains_point (&rect, x, y))
-        {
-          if (x_out && y_out)
-            {
-              int dest_x, dest_y;
-              gtk_widget_translate_coordinates (widget, popover->widget,
-                                                x, y,
-                                                &dest_x, &dest_y);
-
-              *x_out = dest_x;
-              *y_out = dest_y;
-            }
-
-          return popover->widget;
-        }
+      picked = gtk_widget_pick (popover->widget, dest_x, dest_y);
+      if (picked)
+        return picked;
     }
 
-  return GTK_WIDGET_CLASS (gtk_window_parent_class)->pick (widget, x, y,
-                                                           x_out, y_out);
+  return GTK_WIDGET_CLASS (gtk_window_parent_class)->pick (widget, x, y);
 }
 
 static void

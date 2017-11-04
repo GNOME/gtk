@@ -4592,6 +4592,7 @@ gtk_widget_get_width
 gtk_widget_get_height
 gtk_widget_get_clip
 gtk_widget_contains
+gtk_widget_pick
 gtk_widget_get_can_default
 gtk_widget_set_can_default
 gtk_widget_get_can_focus

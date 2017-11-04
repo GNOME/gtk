@@ -1509,7 +1509,9 @@ handle_pointing_event (GdkEvent *event)
     case GDK_TOUCH_BEGIN:
     case GDK_TOUCH_UPDATE:
     case GDK_MOTION_NOTIFY:
-      target = _gtk_toplevel_pick (toplevel, x, y, NULL, NULL);
+      target = gtk_widget_pick (GTK_WIDGET (toplevel), x, y);
+      if (target == NULL)
+        target = GTK_WIDGET (toplevel);
       old_target = update_pointer_focus_state (toplevel, event, target);
 
       if (event->type == GDK_MOTION_NOTIFY || event->type == GDK_ENTER_NOTIFY)
@@ -1544,7 +1546,9 @@ handle_pointing_event (GdkEvent *event)
       if (event->type == GDK_BUTTON_RELEASE)
         {
           old_target = target;
-          target = _gtk_toplevel_pick (toplevel, x, y, NULL, NULL);
+          target = gtk_widget_pick (GTK_WIDGET (toplevel), x, y);
+          if (target == NULL)
+            target = GTK_WIDGET (toplevel);
           gtk_synthesize_crossing_events (toplevel, old_target, target, event,
                                           GDK_CROSSING_UNGRAB);
           gtk_window_maybe_update_cursor (toplevel, NULL, device);
@@ -2616,27 +2620,4 @@ gtk_propagate_event (GtkWidget *widget,
     topmost = gtk_window_group_get_current_grab (window_group);
 
   gtk_propagate_event_internal (widget, event, topmost);
-}
-
-GtkWidget *
-_gtk_toplevel_pick (GtkWindow *toplevel,
-                    gdouble    x,
-                    gdouble    y,
-                    gdouble   *x_out,
-                    gdouble   *y_out)
-{
-  GtkWidget *target = NULL, *widget = GTK_WIDGET (toplevel);
-
-  while (widget)
-    {
-      target = widget;
-      widget = GTK_WIDGET_GET_CLASS (target)->pick (widget, x, y, &x, &y);
-    }
-
-  if (x_out)
-    *x_out = x;
-  if (y_out)
-    *y_out = y;
-
-  return target;
 }
