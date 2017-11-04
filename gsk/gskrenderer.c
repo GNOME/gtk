@@ -170,7 +170,9 @@ gsk_renderer_dispose (GObject *gobject)
   GskRenderer *self = GSK_RENDERER (gobject);
   GskRendererPrivate *priv = gsk_renderer_get_instance_private (self);
 
-  gsk_renderer_unrealize (self);
+  /* We can't just unrealize here because superclasses have already run dispose.
+   * So we insist that unrealize must be called before unreffing. */
+  g_assert (!priv->is_realized);
 
   g_clear_object (&priv->profiler);
   g_clear_object (&priv->display);
