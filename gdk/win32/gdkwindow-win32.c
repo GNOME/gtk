@@ -2251,9 +2251,9 @@ gdk_win32_window_set_focus_on_map (GdkWindow *window,
 
 static void
 gdk_win32_window_set_icon_list (GdkWindow *window,
-                                GList     *surfaces)
+                                GList     *textures)
 {
-  cairo_surface_t *surface, *big_surface, *small_surface;
+  GdkTexture *big_texture, *small_texture;
   GdkPixbuf *big_pixbuf, *small_pixbuf;
   gint big_diff, small_diff;
   gint big_w, big_h, small_w, small_h;
@@ -2264,7 +2264,7 @@ gdk_win32_window_set_icon_list (GdkWindow *window,
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  if (GDK_WINDOW_DESTROYED (window) || surfaces == NULL)
+  if (GDK_WINDOW_DESTROYED (window) || textures == NULL)
     return;
 
   impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
@@ -2276,48 +2276,42 @@ gdk_win32_window_set_icon_list (GdkWindow *window,
   small_h = GetSystemMetrics (SM_CYSMICON);
 
   /* find closest sized icons in the list */
-  big_surface = NULL;
-  small_surface = NULL;
+  big_texture = NULL;
+  small_texture = NULL;
   big_diff = 0;
   small_diff = 0;
 
-  while (surfaces)
+  for (l = textures; l; l = l->next)
     {
-      surface = surfaces->data;
-      w = cairo_image_surface_get_width (surface);
-      h = cairo_image_surface_get_height (surface);
+      texture = l->data;
+      w = gdk_texture_get_width (texture);
+      h = gdk_texture_get_height (texture);
 
       dw = ABS (w - big_w);
       dh = ABS (h - big_h);
       diff = dw*dw + dh*dh;
-      if (big_surface == NULL || diff < big_diff)
+      if (big_texture == NULL || diff < big_diff)
         {
-          big_surface = surface;
+          big_texture = texture;
           big_diff = diff;
         }
 
       dw = ABS (w - small_w);
       dh = ABS (h - small_h);
       diff = dw*dw + dh*dh;
-      if (small_surface == NULL || diff < small_diff)
+      if (small_texture == NULL || diff < small_diff)
         {
-          small_surface = surface;
+          small_texture = texture;
           small_diff = diff;
         }
 
-      surfaces = surfaces->next;
+      textures = textures->next;
     }
 
   /* Create the icons */
-  big_pixbuf = gdk_pixbuf_get_from_surface (big_surface, 0, 0,
-                                            cairo_image_surface_get_width (big_surface),
-                                            cairo_image_surface_get_height (big_surface));
-  big_hicon = _gdk_win32_pixbuf_to_hicon (big_pixbuf);
+  big_hicon = gdk_win32_texture_to_hicon (big_texture);
   g_object_unref (big_pixbuf);
-  small_pixbuf = gdk_pixbuf_get_from_surface (small_surface, 0, 0,
-                                              cairo_image_surface_get_width (small_surface),
-                                              cairo_image_surface_get_height (small_surface));
-  small_hicon = _gdk_win32_pixbuf_to_hicon (small_pixbuf);
+  small_hicon = _gdk_win32_texture_to_hicon (small_texture);
   g_object_unref (small_pixbuf);
 
   /* Set the icons */
@@ -2337,7 +2331,7 @@ gdk_win32_window_set_icon_list (GdkWindow *window,
 
 static void
 gdk_win32_window_set_icon_name (GdkWindow   *window,
-			  const gchar *name)
+                                const gchar *name)
 {
   /* In case I manage to confuse this again (or somebody else does):
    * Please note that "icon name" here really *does* mean the name or

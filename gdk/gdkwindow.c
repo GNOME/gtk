@@ -6441,7 +6441,7 @@ gdk_window_get_event_compression (GdkWindow *window)
 /**
  * gdk_window_set_icon_list:
  * @window: The #GdkWindow toplevel window to set the icon of.
- * @surfaces: (transfer none) (element-type cairo_surface_t):
+ * @surfaces: (transfer none) (element-type GdkTexture):
  *     A list of image surfaces, of different sizes.
  *
  * Sets a list of icons for the window. One of these will be used
@@ -6456,9 +6456,9 @@ gdk_window_get_event_compression (GdkWindow *window)
  */
 void
 gdk_window_set_icon_list (GdkWindow *window,
-                          GList     *surfaces)
+                          GList     *textures)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_icon_list (window, surfaces);
+  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_icon_list (window, textures);
 }
 
 /**
