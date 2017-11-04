@@ -324,7 +324,6 @@ set_busy_cursor (GtkPlacesView *view,
 {
   GtkWidget *widget;
   GtkWindow *toplevel;
-  GdkCursor *cursor;
 
   toplevel = get_toplevel (GTK_WIDGET (view));
   widget = GTK_WIDGET (toplevel);
@@ -332,14 +331,9 @@ set_busy_cursor (GtkPlacesView *view,
     return;
 
   if (busy)
-    cursor = gdk_cursor_new_from_name ("progress", NULL);
+    gtk_widget_set_cursor_from_name (widget, "progress");
   else
-    cursor = NULL;
-
-  gdk_window_set_cursor (gtk_widget_get_window (widget), cursor);
-
-  if (cursor)
-    g_object_unref (cursor);
+    gtk_widget_set_cursor (widget, NULL);
 }
 
 /* Activates the given row, with the given flags as parameter */

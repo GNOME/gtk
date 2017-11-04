@@ -4507,10 +4507,7 @@ gtk_tree_view_motion (GtkWidget      *widget,
 
       if (_gtk_tree_view_column_coords_in_resize_rect (column, x, y))
         {
-          GdkCursor *cursor = gdk_cursor_new_from_name ("col-resize", NULL);
-
-          gtk_widget_set_cursor (widget, cursor);
-          g_object_unref (cursor);
+          gtk_widget_set_cursor_from_name (widget, "col-resize");
           cursor_set = TRUE;
           break;
         }

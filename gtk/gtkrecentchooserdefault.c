@@ -626,25 +626,15 @@ set_busy_cursor (GtkRecentChooserDefault *impl,
 		 gboolean                 busy)
 {
   GtkWindow *toplevel;
-  GdkDisplay *display;
-  GdkCursor *cursor;
 
   toplevel = get_toplevel (GTK_WIDGET (impl));
   if (!toplevel || !gtk_widget_get_realized (GTK_WIDGET (toplevel)))
     return;
 
-  display = gtk_widget_get_display (GTK_WIDGET (toplevel));
-
   if (busy)
-    cursor = gdk_cursor_new_from_name ("progress", NULL);
+    gtk_widget_set_cursor_from_name (GTK_WIDGET (toplevel), "progress");
   else
-    cursor = NULL;
-
-  gdk_window_set_cursor (gtk_widget_get_window (GTK_WIDGET (toplevel)), cursor);
-  gdk_display_flush (display);
-
-  if (cursor)
-    g_object_unref (cursor);
+    gtk_widget_set_cursor (GTK_WIDGET (toplevel), NULL);
 }
 
 static void

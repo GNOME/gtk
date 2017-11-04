@@ -212,23 +212,10 @@ static void
 set_cross_cursor (GtkWidget *widget,
                   gboolean   enabled)
 {
-  GdkCursor *cursor = NULL;
-  GdkWindow *window;
-  GdkDevice *device;
-
-  window = gtk_widget_get_window (widget);
-  device = gtk_gesture_get_device (GTK_COLOR_PLANE (widget)->priv->drag_gesture);
-
-  if (!window || !device)
-    return;
-
   if (enabled)
-    cursor = gdk_cursor_new_from_name ("crosshair", NULL);
-
-  gdk_window_set_device_cursor (window, device, cursor);
-
-  if (cursor)
-    g_object_unref (cursor);
+    gtk_widget_set_cursor_from_name (widget, "crosshair");
+  else
+    gtk_widget_set_cursor (widget, NULL);
 }
 
 static void

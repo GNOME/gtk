@@ -319,15 +319,10 @@ gtk_paned_motion_notify (GtkWidget      *widget,
       (gdk_rectangle_contains_point (&handle_area, x, y) ||
        priv->panning))
     {
-      GdkCursor *cursor;
-
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-        cursor = gdk_cursor_new_from_name ("col-resize", NULL);
+        gtk_widget_set_cursor_from_name (widget, "col-resize");
       else
-        cursor = gdk_cursor_new_from_name ("row-resize", NULL);
-
-      gtk_widget_set_cursor (widget, cursor);
-      g_object_unref (cursor);
+        gtk_widget_set_cursor_from_name (widget, "row-resize");
     }
   else
     {

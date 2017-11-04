@@ -2804,11 +2804,7 @@ _gtk_entry_get_display_text (GtkEntry *entry,
 static void
 set_text_cursor (GtkWidget *widget)
 {
-  GdkCursor *cursor;
-
-  cursor = gdk_cursor_new_from_name ("text", NULL);
-  gtk_widget_set_cursor (widget, cursor);
-  g_clear_object (&cursor);
+  gtk_widget_set_cursor_from_name (widget, "text");
 }
 
 static void
@@ -2817,7 +2813,6 @@ update_cursors (GtkWidget *widget)
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
   EntryIconInfo *icon_info = NULL;
-  GdkCursor *cursor;
   gint i;
 
   for (i = 0; i < MAX_ICONS; i++)
@@ -2829,9 +2824,7 @@ update_cursors (GtkWidget *widget)
               (gtk_widget_get_sensitive (icon_info->widget) ||
                (icon_info->nonactivatable && icon_info->target_list == NULL)))
             {
-              cursor = gdk_cursor_new_from_name ("default", NULL);
-              gtk_widget_set_cursor (icon_info->widget, cursor);
-              g_clear_object (&cursor);
+              gtk_widget_set_cursor_from_name (icon_info->widget, "default");
             }
           else
             {

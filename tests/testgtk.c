@@ -3849,19 +3849,9 @@ set_cursor_from_name (GtkWidget *entry,
                       GtkWidget *widget)
 {
   const gchar *name;
-  GdkCursor *cursor;
 
   name = gtk_entry_get_text (GTK_ENTRY (entry));
-  cursor = gdk_cursor_new_from_name (name, NULL);
-
-  if (cursor == NULL)
-    {
-      name = NULL;
-      cursor = gdk_cursor_new_from_name ("none", NULL);
-    }
-
-  gdk_window_set_cursor (gtk_widget_get_window (widget), cursor);
-  g_object_unref (cursor);
+  gtk_widget_set_cursor_from_name (widget, name);
 
   g_object_set_data_full (G_OBJECT (widget), "name", g_strdup (name), g_free);
 }
