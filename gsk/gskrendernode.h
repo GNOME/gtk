@@ -101,10 +101,10 @@ GDK_AVAILABLE_IN_3_94
 const GdkRGBA *         gsk_color_node_peek_color               (GskRenderNode            *node);
 
 GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gdk_texture_node_new                    (GdkTexture               *texture,
+GskRenderNode *         gsk_texture_node_new                    (GdkTexture               *texture,
                                                                  const graphene_rect_t    *bounds);
 GDK_AVAILABLE_IN_3_94
-GdkTexture *            gdk_texture_node_get_texture            (GskRenderNode            *node);
+GdkTexture *            gsk_texture_node_get_texture            (GskRenderNode            *node);
 
 GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_linear_gradient_node_new                (const graphene_rect_t    *bounds,

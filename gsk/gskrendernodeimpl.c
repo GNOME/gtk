@@ -655,11 +655,11 @@ gsk_border_node_new (const GskRoundedRect     *outline,
   return &self->render_node;
 }
 
-/*** GDK_TEXTURE_NODE ***/
+/*** GSK_TEXTURE_NODE ***/
 
-typedef struct _GdkTextureNode GdkTextureNode;
+typedef struct _GskTextureNode GskTextureNode;
 
-struct _GdkTextureNode
+struct _GskTextureNode
 {
   GskRenderNode render_node;
 
@@ -667,18 +667,18 @@ struct _GdkTextureNode
 };
 
 static void
-gdk_texture_node_finalize (GskRenderNode *node)
+gsk_texture_node_finalize (GskRenderNode *node)
 {
-  GdkTextureNode *self = (GdkTextureNode *) node;
+  GskTextureNode *self = (GskTextureNode *) node;
 
   g_object_unref (self->texture);
 }
 
 static void
-gdk_texture_node_draw (GskRenderNode *node,
+gsk_texture_node_draw (GskRenderNode *node,
                        cairo_t       *cr)
 {
-  GdkTextureNode *self = (GdkTextureNode *) node;
+  GskTextureNode *self = (GskTextureNode *) node;
   cairo_surface_t *surface;
 
   surface = gdk_texture_download_surface (self->texture);
@@ -698,12 +698,12 @@ gdk_texture_node_draw (GskRenderNode *node,
   cairo_surface_destroy (surface);
 }
 
-#define GDK_TEXTURE_NODE_VARIANT_TYPE "(dddduuau)"
+#define GSK_TEXTURE_NODE_VARIANT_TYPE "(dddduuau)"
 
 static GVariant *
-gdk_texture_node_serialize (GskRenderNode *node)
+gsk_texture_node_serialize (GskRenderNode *node)
 {
-  GdkTextureNode *self = (GdkTextureNode *) node;
+  GskTextureNode *self = (GskTextureNode *) node;
   cairo_surface_t *surface;
   GVariant *result;
 
@@ -728,7 +728,7 @@ gdk_texture_node_serialize (GskRenderNode *node)
 }
 
 static GskRenderNode *
-gdk_texture_node_deserialize (GVariant  *variant,
+gsk_texture_node_deserialize (GVariant  *variant,
                               GError   **error)
 {
   GskRenderNode *node;
@@ -738,7 +738,7 @@ gdk_texture_node_deserialize (GVariant  *variant,
   GVariant *pixel_variant;
   gsize n_pixels;
 
-  if (!check_variant_type (variant, GDK_TEXTURE_NODE_VARIANT_TYPE, error))
+  if (!check_variant_type (variant, GSK_TEXTURE_NODE_VARIANT_TYPE, error))
     return NULL;
 
   g_variant_get (variant, "(dddduu@au)",
@@ -750,35 +750,35 @@ gdk_texture_node_deserialize (GVariant  *variant,
                                       width, height, width * 4);
   g_variant_unref (pixel_variant);
 
-  node = gdk_texture_node_new (texture, &GRAPHENE_RECT_INIT(bounds[0], bounds[1], bounds[2], bounds[3]));
+  node = gsk_texture_node_new (texture, &GRAPHENE_RECT_INIT(bounds[0], bounds[1], bounds[2], bounds[3]));
 
   g_object_unref (texture);
 
   return node;
 }
 
-static const GskRenderNodeClass GDK_TEXTURE_NODE_CLASS = {
-  GDK_TEXTURE_NODE,
-  sizeof (GdkTextureNode),
-  "GdkTextureNode",
-  gdk_texture_node_finalize,
-  gdk_texture_node_draw,
-  gdk_texture_node_serialize,
-  gdk_texture_node_deserialize
+static const GskRenderNodeClass GSK_TEXTURE_NODE_CLASS = {
+  GSK_TEXTURE_NODE,
+  sizeof (GskTextureNode),
+  "GskTextureNode",
+  gsk_texture_node_finalize,
+  gsk_texture_node_draw,
+  gsk_texture_node_serialize,
+  gsk_texture_node_deserialize
 };
 
 GdkTexture *
-gdk_texture_node_get_texture (GskRenderNode *node)
+gsk_texture_node_get_texture (GskRenderNode *node)
 {
-  GdkTextureNode *self = (GdkTextureNode *) node;
+  GskTextureNode *self = (GskTextureNode *) node;
 
-  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GDK_TEXTURE_NODE), 0);
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_TEXTURE_NODE), 0);
 
   return self->texture;
 }
 
 /**
- * gdk_texture_node_new:
+ * gsk_texture_node_new:
  * @texture: the #GdkTexture
  * @bounds: the rectangle to render the texture into
  *
@@ -790,15 +790,15 @@ gdk_texture_node_get_texture (GskRenderNode *node)
  * Since: 3.90
  */
 GskRenderNode *
-gdk_texture_node_new (GdkTexture            *texture,
+gsk_texture_node_new (GdkTexture            *texture,
                       const graphene_rect_t *bounds)
 {
-  GdkTextureNode *self;
+  GskTextureNode *self;
 
   g_return_val_if_fail (GDK_IS_TEXTURE (texture), NULL);
   g_return_val_if_fail (bounds != NULL, NULL);
 
-  self = (GdkTextureNode *) gsk_render_node_new (&GDK_TEXTURE_NODE_CLASS, 0);
+  self = (GskTextureNode *) gsk_render_node_new (&GSK_TEXTURE_NODE_CLASS, 0);
 
   self->texture = g_object_ref (texture);
   graphene_rect_init_from_rect (&self->render_node.bounds, bounds);
@@ -4448,7 +4448,7 @@ static const GskRenderNodeClass *klasses[] = {
   [GSK_LINEAR_GRADIENT_NODE] = &GSK_LINEAR_GRADIENT_NODE_CLASS,
   [GSK_REPEATING_LINEAR_GRADIENT_NODE] = &GSK_REPEATING_LINEAR_GRADIENT_NODE_CLASS,
   [GSK_BORDER_NODE] = &GSK_BORDER_NODE_CLASS,
-  [GDK_TEXTURE_NODE] = &GDK_TEXTURE_NODE_CLASS,
+  [GSK_TEXTURE_NODE] = &GSK_TEXTURE_NODE_CLASS,
   [GSK_INSET_SHADOW_NODE] = &GSK_INSET_SHADOW_NODE_CLASS,
   [GSK_OUTSET_SHADOW_NODE] = &GSK_OUTSET_SHADOW_NODE_CLASS,
   [GSK_TRANSFORM_NODE] = &GSK_TRANSFORM_NODE_CLASS,

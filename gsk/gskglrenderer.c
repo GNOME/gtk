@@ -798,9 +798,9 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
 
   switch (gsk_render_node_get_node_type (node))
     {
-    case GDK_TEXTURE_NODE:
+    case GSK_TEXTURE_NODE:
       {
-        GdkTexture *texture = gdk_texture_node_get_texture (node);
+        GdkTexture *texture = gsk_texture_node_get_texture (node);
         int gl_min_filter = GL_NEAREST, gl_mag_filter = GL_NEAREST;
 
         get_gl_scaling_filters (node, &gl_min_filter, &gl_mag_filter);

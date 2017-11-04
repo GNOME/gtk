@@ -43,8 +43,8 @@ gsk_render_node_get_bounds
 <SUBSECTION Nodes>
 gsk_color_node_new
 gsk_color_node_peek_color
-gdk_texture_node_new
-gdk_texture_node_get_texture
+gsk_texture_node_new
+gsk_texture_node_get_texture
 gsk_linear_gradient_node_new
 gsk_linear_gradient_node_peek_start
 gsk_linear_gradient_node_peek_end

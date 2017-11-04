@@ -442,7 +442,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
         return;
       }
 
-    case GDK_TEXTURE_NODE:
+    case GSK_TEXTURE_NODE:
       if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
         pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE;
       else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
@@ -678,11 +678,11 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
 
   switch ((guint) gsk_render_node_get_node_type (node))
     {
-    case GDK_TEXTURE_NODE:
+    case GSK_TEXTURE_NODE:
       if (graphene_rect_equal (bounds, &node->bounds))
         {
           result = gsk_vulkan_renderer_ref_texture_image (GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render)),
-                                                          gdk_texture_node_get_texture (node),
+                                                          gsk_texture_node_get_texture (node),
                                                           uploader);
           gsk_vulkan_render_add_cleanup_image (render, result);
           *tex_rect = GRAPHENE_RECT_INIT(0, 0, 1, 1);
@@ -938,7 +938,7 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
         case GSK_VULKAN_OP_TEXTURE:
           {
             op->render.source = gsk_vulkan_renderer_ref_texture_image (GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render)),
-                                                                       gdk_texture_node_get_texture (op->render.node),
+                                                                       gsk_texture_node_get_texture (op->render.node),
                                                                        uploader);
             op->render.source_rect = GRAPHENE_RECT_INIT(0, 0, 1, 1);
             gsk_vulkan_render_add_cleanup_image (render, op->render.source);

@@ -1240,7 +1240,7 @@ gtk_snapshot_append_texture (GtkSnapshot            *snapshot,
   g_return_if_fail (bounds != NULL);
 
   graphene_rect_offset_r (bounds, current_state->translate_x, current_state->translate_y, &real_bounds);
-  node = gdk_texture_node_new (texture, &real_bounds);
+  node = gsk_texture_node_new (texture, &real_bounds);
 
   if (name && snapshot->record_names)
     {
