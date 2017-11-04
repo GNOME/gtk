@@ -106,7 +106,7 @@
  * icons can be activatable by clicking, can be set up as drag source and
  * can have tooltips. To add an icon, use gtk_entry_set_icon_from_gicon() or
  * one of the various other functions that set an icon from a stock id, an
- * icon name, or a surface. To trigger an action when the user clicks an icon,
+ * icon name, or a texture. To trigger an action when the user clicks an icon,
  * connect to the #GtkEntry::icon-press signal. To allow DND operations
  * from an icon, use gtk_entry_set_icon_drag_source(). To set a tooltip on
  * an icon, use gtk_entry_set_icon_tooltip_text() or the corresponding function
@@ -341,6 +341,8 @@ enum {
   PROP_PROGRESS_PULSE_STEP,
   PROP_SURFACE_PRIMARY,
   PROP_SURFACE_SECONDARY,
+  PROP_TEXTURE_PRIMARY,
+  PROP_TEXTURE_SECONDARY,
   PROP_ICON_NAME_PRIMARY,
   PROP_ICON_NAME_SECONDARY,
   PROP_GICON_PRIMARY,
@@ -1033,6 +1035,34 @@ gtk_entry_class_init (GtkEntryClass *class)
                           P_("Secondary surface for the entry"),
                           CAIRO_GOBJECT_TYPE_SURFACE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+   /**
+   * GtkEntry:primary-icon-texture:
+   *
+   * A #GdkTexture to use as the primary icon for the entry.
+   *
+   * Since: 3.94
+   */
+  entry_props[PROP_TEXTURE_PRIMARY] =
+      g_param_spec_object ("primary-icon-texture",
+                           P_("Primary texture"),
+                           P_("Primary texture for the entry"),
+                           GDK_TYPE_TEXTURE,
+                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkEntry:secondary-icon-texture:
+   *
+   * A #GtkTexture to use as the secondary icon for the entry.
+   *
+   * Since: 3.94
+   */
+  entry_props[PROP_TEXTURE_SECONDARY] =
+      g_param_spec_object ("secondary-icon-texture",
+                           P_("Secondary texture"),
+                           P_("Secondary texture for the entry"),
+                           GDK_TYPE_TEXTURE,
+                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkEntry:primary-icon-name:
@@ -2041,6 +2071,18 @@ gtk_entry_set_property (GObject         *object,
                                        g_value_get_boxed (value));
       break;
 
+    case PROP_TEXTURE_PRIMARY:
+      gtk_entry_set_icon_from_texture (entry,
+                                       GTK_ENTRY_ICON_PRIMARY,
+                                       g_value_get_boxed (value));
+      break;
+
+    case PROP_TEXTURE_SECONDARY:
+      gtk_entry_set_icon_from_texture (entry,
+                                       GTK_ENTRY_ICON_SECONDARY,
+                                       g_value_get_boxed (value));
+      break;
+
     case PROP_ICON_NAME_PRIMARY:
       gtk_entry_set_icon_from_icon_name (entry,
                                          GTK_ENTRY_ICON_PRIMARY,
@@ -2281,6 +2323,18 @@ gtk_entry_get_property (GObject         *object,
     case PROP_SURFACE_SECONDARY:
       g_value_set_boxed (value,
                          gtk_entry_get_icon_surface (entry,
+                                                     GTK_ENTRY_ICON_SECONDARY));
+      break;
+
+    case PROP_TEXTURE_PRIMARY:
+      g_value_set_boxed (value,
+                         gtk_entry_get_icon_texture (entry,
+                                                     GTK_ENTRY_ICON_PRIMARY));
+      break;
+
+    case PROP_TEXTURE_SECONDARY:
+      g_value_set_boxed (value,
+                         gtk_entry_get_icon_texture (entry,
                                                      GTK_ENTRY_ICON_SECONDARY));
       break;
 
@@ -2641,9 +2695,9 @@ gtk_entry_dispose (GObject *object)
   GtkEntryPrivate *priv = entry->priv;
   GdkKeymap *keymap;
 
-  gtk_entry_set_icon_from_surface (entry, GTK_ENTRY_ICON_PRIMARY, NULL);
+  gtk_entry_set_icon_from_texture (entry, GTK_ENTRY_ICON_PRIMARY, NULL);
   gtk_entry_set_icon_tooltip_markup (entry, GTK_ENTRY_ICON_PRIMARY, NULL);
-  gtk_entry_set_icon_from_surface (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
+  gtk_entry_set_icon_from_texture (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
   gtk_entry_set_icon_tooltip_markup (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
   gtk_entry_set_completion (entry, NULL);
 
@@ -6614,6 +6668,13 @@ gtk_entry_clear_icon (GtkEntry             *entry,
                                             : PROP_SURFACE_SECONDARY]);
       break;
 
+    case GTK_IMAGE_TEXTURE:
+      g_object_notify_by_pspec (G_OBJECT (entry),
+                                entry_props[icon_pos == GTK_ENTRY_ICON_PRIMARY
+                                            ? PROP_TEXTURE_PRIMARY
+                                            : PROP_TEXTURE_SECONDARY]);
+      break;
+
     case GTK_IMAGE_ICON_NAME:
       g_object_notify_by_pspec (G_OBJECT (entry),
                                 entry_props[icon_pos == GTK_ENTRY_ICON_PRIMARY
@@ -7554,6 +7615,64 @@ gtk_entry_set_icon_from_surface (GtkEntry             *entry,
 }
 
 /**
+ * gtk_entry_set_icon_from_texture:
+ * @entry: a #GtkEntry
+ * @icon_pos: Icon position
+ * @texture: (allow-none): A #GdkTexture, or %NULL
+ *
+ * Sets the icon shown in the specified position using a #GdkTexture
+ *
+ * If @texture is %NULL, no icon will be shown in the specified position.
+ *
+ * Since: 3.94
+ */
+void
+gtk_entry_set_icon_from_texture (GtkEntry             *entry,
+                                 GtkEntryIconPosition  icon_pos,
+                                 GdkTexture           *texture)
+{
+  GtkEntryPrivate *priv;
+  EntryIconInfo *icon_info;
+
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+  g_return_if_fail (IS_VALID_ICON_POSITION (icon_pos));
+
+  priv = entry->priv;
+
+  if ((icon_info = priv->icons[icon_pos]) == NULL)
+    icon_info = construct_icon_info (GTK_WIDGET (entry), icon_pos);
+
+  g_object_freeze_notify (G_OBJECT (entry));
+
+  if (texture)
+    {
+      g_object_ref (texture);
+
+      gtk_image_set_from_texture (GTK_IMAGE (icon_info->widget), texture);
+
+      if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
+        {
+          g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_TEXTURE_PRIMARY]);
+          g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_STORAGE_TYPE_PRIMARY]);
+        }
+      else
+        {
+          g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_TEXTURE_SECONDARY]);
+          g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_STORAGE_TYPE_SECONDARY]);
+        }
+
+      g_object_unref (texture);
+    }
+  else
+    gtk_entry_clear_icon (entry, icon_pos);
+
+  if (gtk_widget_get_visible (GTK_WIDGET (entry)))
+    gtk_widget_queue_resize (GTK_WIDGET (entry));
+
+  g_object_thaw_notify (G_OBJECT (entry));
+}
+
+/**
  * gtk_entry_set_icon_from_icon_name:
  * @entry: A #GtkEntry
  * @icon_pos: The position at which to set the icon
@@ -7775,13 +7894,47 @@ gtk_entry_get_icon_surface (GtkEntry             *entry,
 }
 
 /**
+ * gtk_entry_get_icon_texture:
+ * @entry: A #GtkEntry
+ * @icon_pos: Icon position
+ *
+ * Retrieves the #GdkTexture used for the icon.
+ *
+ * If no #GdkTexture was used for the icon, %NULL is returned.
+ *
+ * Returns: (transfer none) (nullable): A #GdkTexture, or %NULL if no icon is
+ *     set for this position or the icon set is not a #GdkTexture.
+ *
+ * Since: 3.94
+ */
+GdkTexture *
+gtk_entry_get_icon_texture (GtkEntry             *entry,
+                            GtkEntryIconPosition  icon_pos)
+{
+  GtkEntryPrivate *priv;
+  EntryIconInfo *icon_info;
+
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
+  g_return_val_if_fail (IS_VALID_ICON_POSITION (icon_pos), NULL);
+
+  priv = entry->priv;
+
+  icon_info = priv->icons[icon_pos];
+
+  if (!icon_info)
+    return NULL;
+
+  return gtk_image_get_texture (GTK_IMAGE (icon_info->widget));
+}
+
+/**
  * gtk_entry_get_icon_gicon:
  * @entry: A #GtkEntry
  * @icon_pos: Icon position
  *
  * Retrieves the #GIcon used for the icon, or %NULL if there is
  * no icon or if the icon was set by some other method (e.g., by
- * stock, surface, or icon name).
+ * stock, texture, or icon name).
  *
  * Returns: (transfer none) (nullable): A #GIcon, or %NULL if no icon is set
  *     or if the icon is not a #GIcon
@@ -7818,7 +7971,7 @@ gtk_entry_get_icon_gicon (GtkEntry             *entry,
  *
  * Retrieves the icon name used for the icon, or %NULL if there is
  * no icon or if the icon was set by some other method (e.g., by
- * surface, stock or gicon).
+ * texture, stock or gicon).
  *
  * Returns: (nullable): An icon name, or %NULL if no icon is set or if the icon
  *          wasn’t set from an icon name

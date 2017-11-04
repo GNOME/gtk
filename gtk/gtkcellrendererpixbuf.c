@@ -76,6 +76,7 @@ enum {
   PROP_PIXBUF_EXPANDER_OPEN,
   PROP_PIXBUF_EXPANDER_CLOSED,
   PROP_SURFACE,
+  PROP_TEXTURE,
   PROP_STOCK_SIZE,
   PROP_STOCK_DETAIL,
   PROP_ICON_NAME,
@@ -176,6 +177,19 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 						       CAIRO_GOBJECT_TYPE_SURFACE,
 						       GTK_PARAM_READWRITE));
 
+  /**
+   * GtkCellRendererPixbuf:texture:
+   *
+   * Since: 3.94
+   */
+  g_object_class_install_property (object_class,
+				   PROP_TEXTURE,
+				   g_param_spec_object ("texture",
+						        P_("Texture"),
+						        P_("The texture to render"),
+                                                        GDK_TYPE_TEXTURE,
+						        GTK_PARAM_READWRITE));
+
   g_object_class_install_property (object_class,
 				   PROP_STOCK_SIZE,
 				   g_param_spec_uint ("stock-size",
@@ -268,6 +282,9 @@ gtk_cell_renderer_pixbuf_get_property (GObject        *object,
     case PROP_SURFACE:
       g_value_set_boxed (value, gtk_image_definition_get_surface (priv->image_def));
       break;
+    case PROP_TEXTURE:
+      g_value_set_object (value, gtk_image_definition_get_texture (priv->image_def));
+      break;
     case PROP_STOCK_SIZE:
       g_value_set_uint (value, priv->icon_size);
       break;
@@ -294,6 +311,9 @@ notify_storage_type (GtkCellRendererPixbuf *cellpixbuf,
     {
     case GTK_IMAGE_SURFACE:
       g_object_notify (G_OBJECT (cellpixbuf), "surface");
+      break;
+    case GTK_IMAGE_TEXTURE:
+      g_object_notify (G_OBJECT (cellpixbuf), "texture");
       break;
     case GTK_IMAGE_ICON_NAME:
       g_object_notify (G_OBJECT (cellpixbuf), "icon-name");
@@ -361,6 +381,9 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
       break;
     case PROP_SURFACE:
       take_image_definition (cellpixbuf, gtk_image_definition_new_surface (g_value_get_boxed (value)));
+      break;
+    case PROP_TEXTURE:
+      take_image_definition (cellpixbuf, gtk_image_definition_new_texture (g_value_get_object (value)));
       break;
     case PROP_STOCK_SIZE:
       priv->icon_size = g_value_get_uint (value);

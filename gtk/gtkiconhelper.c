@@ -235,6 +235,23 @@ ensure_surface_from_surface (GtkIconHelper   *self,
 }
 
 static cairo_surface_t *
+ensure_surface_from_texture (GtkIconHelper *self,
+                             GdkTexture    *texture)
+{
+  cairo_surface_t *surface;
+
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                        gdk_texture_get_width (texture),
+                                        gdk_texture_get_height (texture));
+  gdk_texture_download (texture,
+                        cairo_image_surface_get_data (surface),
+                        cairo_image_surface_get_stride (surface));
+  cairo_surface_mark_dirty (surface);
+
+  return surface;
+}
+
+static cairo_surface_t *
 ensure_surface_for_gicon (GtkIconHelper    *self,
                           GtkCssStyle      *style,
                           GtkTextDirection  dir,
@@ -327,6 +344,10 @@ gtk_icon_helper_load_surface (GtkIconHelper   *self,
       surface = ensure_surface_from_surface (self, gtk_image_definition_get_surface (self->def));
       break;
 
+    case GTK_IMAGE_TEXTURE:
+      surface = ensure_surface_from_texture (self, gtk_image_definition_get_texture (self->def));
+      break;
+
     case GTK_IMAGE_ICON_NAME:
       if (self->use_fallback)
         gicon = g_themed_icon_new_with_default_fallbacks (gtk_image_definition_get_icon_name (self->def));
@@ -405,6 +426,7 @@ find_cached_texture (GtkIconHelper *self)
       break;
     case GTK_IMAGE_EMPTY:
     case GTK_IMAGE_SURFACE:
+    case GTK_IMAGE_TEXTURE:
     default:
       return NULL;
     }
@@ -496,7 +518,14 @@ _gtk_icon_helper_get_size (GtkIconHelper *self,
     case GTK_IMAGE_GICON:
       if (self->pixel_size != -1 || self->force_scale_pixbuf)
         ensure_icon_size (self, &width, &height);
+      break;
 
+    case GTK_IMAGE_TEXTURE:
+      {
+        GdkTexture *texture = gtk_image_definition_get_texture (self->def);
+        width = gdk_texture_get_width (texture);
+        height = gdk_texture_get_height (texture);
+      }
       break;
 
     case GTK_IMAGE_EMPTY:
@@ -558,6 +587,13 @@ _gtk_icon_helper_set_surface (GtkIconHelper *self,
 			      cairo_surface_t *surface)
 {
   gtk_icon_helper_take_definition (self, gtk_image_definition_new_surface (surface));
+}
+
+void
+_gtk_icon_helper_set_texture (GtkIconHelper *self,
+			      GdkTexture *texture)
+{
+  gtk_icon_helper_take_definition (self, gtk_image_definition_new_texture (texture));
 }
 
 gboolean
@@ -639,6 +675,12 @@ cairo_surface_t *
 _gtk_icon_helper_peek_surface (GtkIconHelper *self)
 {
   return gtk_image_definition_get_surface (self->def);
+}
+
+GdkTexture *
+_gtk_icon_helper_peek_texture (GtkIconHelper *self)
+{
+  return gtk_image_definition_get_texture (self->def);
 }
 
 const gchar *

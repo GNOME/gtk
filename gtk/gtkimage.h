@@ -57,6 +57,8 @@ typedef struct _GtkImageClass         GtkImageClass;
  *  This image type was added in GTK+ 2.14
  * @GTK_IMAGE_SURFACE: the widget contains a #cairo_surface_t.
  *  This image type was added in GTK+ 3.10
+ * @GTK_IMAGE_TEXTURE: the widget contains a #GdkTexture.
+ *  This image type was added in GTK+ 3.94
  *
  * Describes the image data representation used by a #GtkImage. If you
  * want to get the image from the widget, you can only get the
@@ -71,7 +73,8 @@ typedef enum
   GTK_IMAGE_EMPTY,
   GTK_IMAGE_ICON_NAME,
   GTK_IMAGE_GICON,
-  GTK_IMAGE_SURFACE
+  GTK_IMAGE_SURFACE,
+  GTK_IMAGE_TEXTURE
 } GtkImageType;
 
 /**
@@ -107,6 +110,8 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_image_new_from_resource  (const gchar     *resource_path);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_image_new_from_pixbuf    (GdkPixbuf       *pixbuf);
+GDK_AVAILABLE_IN_3_94
+GtkWidget* gtk_image_new_from_texture   (GdkTexture      *texture);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_image_new_from_icon_name (const gchar     *icon_name,
 					 GtkIconSize      size);
@@ -127,6 +132,9 @@ void gtk_image_set_from_resource  (GtkImage        *image,
 GDK_AVAILABLE_IN_ALL
 void gtk_image_set_from_pixbuf    (GtkImage        *image,
                                    GdkPixbuf       *pixbuf);
+GDK_AVAILABLE_IN_3_94
+void gtk_image_set_from_texture   (GtkImage        *image,
+                                   GdkTexture      *texture);
 GDK_AVAILABLE_IN_ALL
 void gtk_image_set_from_icon_name (GtkImage        *image,
 				   const gchar     *icon_name,
@@ -147,6 +155,8 @@ GtkImageType gtk_image_get_storage_type (GtkImage   *image);
 
 GDK_AVAILABLE_IN_3_94
 cairo_surface_t *gtk_image_get_surface (GtkImage *image);
+GDK_AVAILABLE_IN_3_94
+GdkTexture *gtk_image_get_texture  (GtkImage       *image);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_image_get_icon_name (GtkImage     *image,

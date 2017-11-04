@@ -279,6 +279,15 @@ gtk_image_accessible_get_image_size (AtkImage *image,
         *width = cairo_image_surface_get_width (surface);
         break;
       }
+    case GTK_IMAGE_TEXTURE:
+      {
+        GdkTexture *texture;
+
+        texture = gtk_image_get_texture (gtk_image);
+        *height = gdk_texture_get_height (texture);
+        *width = gdk_texture_get_width (texture);
+        break;
+      }
     case GTK_IMAGE_ICON_NAME:
     case GTK_IMAGE_GICON:
       {

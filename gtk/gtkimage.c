@@ -115,6 +115,7 @@ enum
 {
   PROP_0,
   PROP_SURFACE,
+  PROP_TEXTURE,
   PROP_FILE,
   PROP_ICON_SIZE,
   PROP_PIXEL_SIZE,
@@ -155,6 +156,13 @@ gtk_image_class_init (GtkImageClass *class)
                           P_("A cairo_surface_t to display"),
                           CAIRO_GOBJECT_TYPE_SURFACE,
                           GTK_PARAM_READWRITE);
+
+  image_props[PROP_TEXTURE] =
+      g_param_spec_object ("texture",
+                           P_("Texture"),
+                           P_("A GdkTexture to display"),
+                           GDK_TYPE_TEXTURE,
+                           GTK_PARAM_READWRITE);
 
   image_props[PROP_FILE] =
       g_param_spec_string ("file",
@@ -309,6 +317,9 @@ gtk_image_set_property (GObject      *object,
     case PROP_SURFACE:
       gtk_image_set_from_surface (image, g_value_get_boxed (value));
       break;
+    case PROP_TEXTURE:
+      gtk_image_set_from_texture (image, g_value_get_object (value));
+      break;
     case PROP_FILE:
       gtk_image_set_from_file (image, g_value_get_string (value));
       break;
@@ -357,6 +368,9 @@ gtk_image_get_property (GObject     *object,
     case PROP_SURFACE:
       g_value_set_boxed (value, _gtk_icon_helper_peek_surface (&priv->icon_helper));
       break;
+    case PROP_TEXTURE:
+      g_value_set_object (value, _gtk_icon_helper_peek_texture (&priv->icon_helper));
+      break;
     case PROP_FILE:
       g_value_set_string (value, priv->filename);
       break;
@@ -398,8 +412,8 @@ gtk_image_get_property (GObject     *object,
  * it always returns a valid #GtkImage widget.
  *
  * If you need to detect failures to load the file, use
- * gdk_pixbuf_new_from_file() to load the file yourself, then create
- * the #GtkImage from the surface.
+ * gdk_texture_new_from_file() to load the file yourself, then create
+ * the #GtkImage from the texture.
  *
  * The storage type (gtk_image_get_storage_type()) of the returned
  * image is not defined, it will be whatever is appropriate for
@@ -932,6 +946,42 @@ gtk_image_set_from_surface (GtkImage       *image,
 }
 
 /**
+ * gtk_image_set_from_texture:
+ * @image: a #GtkImage
+ * @surface: (nullable): a #GdkTexture or %NULL
+ *
+ * See gtk_image_new_from_texture() for details.
+ * 
+ * Since: 3.94
+ **/
+void
+gtk_image_set_from_texture (GtkImage   *image,
+			    GdkTexture *texture)
+{
+  GtkImagePrivate *priv = gtk_image_get_instance_private (image);
+
+  g_return_if_fail (GTK_IS_IMAGE (image));
+  g_return_if_fail (texture == NULL || GDK_IS_TEXTURE (texture));
+
+  g_object_freeze_notify (G_OBJECT (image));
+
+  if (texture)
+    g_object_ref (texture);
+
+  gtk_image_clear (image);
+
+  if (texture)
+    {
+      _gtk_icon_helper_set_texture (&priv->icon_helper, texture);
+      g_object_unref (texture);
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_TEXTURE]);
+  
+  g_object_thaw_notify (G_OBJECT (image));
+}
+
+/**
  * gtk_image_get_storage_type:
  * @image: a #GtkImage
  * 
@@ -973,6 +1023,31 @@ gtk_image_get_surface (GtkImage *image)
   g_return_val_if_fail (GTK_IS_IMAGE (image), NULL);
 
   return _gtk_icon_helper_peek_surface (&priv->icon_helper);
+}
+
+/**
+ * gtk_image_get_texture:
+ * @image: a #GtkImage
+ *
+ * Gets the image #GdkTexture being displayed by the #GtkImage.
+ * The storage type of the image must be %GTK_IMAGE_EMPTY or
+ * %GTK_IMAGE_TEXTURE (see gtk_image_get_storage_type()).
+ * The caller of this function does not own a reference to the
+ * returned texture.
+ * 
+ * Returns: (nullable) (transfer none): the displayed texture, or %NULL if
+ *   the image is empty
+ *
+ * Since: 3.94
+ **/
+GdkTexture *
+gtk_image_get_texture (GtkImage *image)
+{
+  GtkImagePrivate *priv = gtk_image_get_instance_private (image);
+
+  g_return_val_if_fail (GTK_IS_IMAGE (image), NULL);
+
+  return _gtk_icon_helper_peek_texture (&priv->icon_helper);
 }
 
 /**
@@ -1144,6 +1219,9 @@ gtk_image_notify_for_storage_type (GtkImage     *image,
       break;
     case GTK_IMAGE_SURFACE:
       g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_SURFACE]);
+      break;
+    case GTK_IMAGE_TEXTURE:
+      g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_TEXTURE]);
       break;
     case GTK_IMAGE_EMPTY:
     default:

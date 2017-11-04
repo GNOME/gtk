@@ -915,10 +915,12 @@ gtk_entry_set_tabs
 gtk_entry_get_tabs
 GtkEntryIconPosition
 gtk_entry_set_icon_from_surface
+gtk_entry_set_icon_from_texture
 gtk_entry_set_icon_from_icon_name
 gtk_entry_set_icon_from_gicon
 gtk_entry_get_icon_storage_type
 gtk_entry_get_icon_surface
+gtk_entry_get_icon_texture
 gtk_entry_get_icon_name
 gtk_entry_get_icon_gicon
 gtk_entry_set_icon_activatable
@@ -1487,6 +1489,7 @@ GtkIconViewPrivate
 GtkImage
 GtkImageType
 gtk_image_get_surface
+gtk_image_get_texture
 gtk_image_get_icon_name
 gtk_image_get_gicon
 gtk_image_get_storage_type
@@ -1496,12 +1499,14 @@ gtk_image_new_from_icon_name
 gtk_image_new_from_gicon
 gtk_image_new_from_resource
 gtk_image_new_from_surface
+gtk_image_new_from_texture
 gtk_image_set_from_file
 gtk_image_set_from_pixbuf
 gtk_image_set_from_icon_name
 gtk_image_set_from_gicon
 gtk_image_set_from_resource
 gtk_image_set_from_surface
+gtk_image_set_from_texture
 gtk_image_clear
 gtk_image_new
 gtk_image_set_pixel_size
