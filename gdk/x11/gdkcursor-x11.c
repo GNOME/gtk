@@ -49,8 +49,9 @@ gdk_x11_cursor_remove_from_cache (gpointer data, GObject *cursor)
   GdkDisplay *display = data;
   Cursor xcursor;
 
-  xcursor = GDK_POINTER_TO_XID (g_hash_table_steal (GDK_X11_DISPLAY (display)->cursors, cursor));
+  xcursor = GDK_POINTER_TO_XID (g_hash_table_lookup (GDK_X11_DISPLAY (display)->cursors, cursor));
   XFreeCursor (GDK_DISPLAY_XDISPLAY (display), xcursor);
+  g_hash_table_remove (GDK_X11_DISPLAY (display)->cursors, cursor);
 }
 
 void
