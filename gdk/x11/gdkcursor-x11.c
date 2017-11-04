@@ -107,7 +107,7 @@ static const struct {
   int cursor_glyph;
 } name_map[] = {
   { "default",      "left_ptr",            XC_left_ptr, },
-  { "help",         "left_ptr",            XC_question_arrow },
+  { "help",         "question_arrow",      XC_question_arrow },
   { "context-menu", "left_ptr",            XC_left_ptr },
   { "pointer",      "hand",                XC_hand1 },
   { "progress",     "left_ptr_watch",      XC_watch },

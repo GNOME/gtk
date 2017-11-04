@@ -66,7 +66,7 @@ static const struct {
   const gchar *css_name, *traditional_name;
 } name_map[] = {
   { "default",      "left_ptr" },
-  { "help",         "left_ptr" },
+  { "help",         "question_arrow" },
   { "context-menu", "left_ptr" },
   { "pointer",      "hand" },
   { "progress",     "left_ptr_watch" },
