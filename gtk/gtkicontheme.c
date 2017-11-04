@@ -4008,9 +4008,8 @@ gtk_icon_info_load_icon (GtkIconInfo *icon_info,
  * with GSK.
  *
  * Returns: (transfer full): the icon texture; this may be a newly
- *     created texture or a new reference to an exiting texture, so you must
- *     not modify the icon. Use g_object_unref() to release your
- *     reference.
+ *     created texture or a new reference to an exiting texture. Use
+ *     g_object_unref() to release your reference.
  *
  * Since: 3.94
  */
