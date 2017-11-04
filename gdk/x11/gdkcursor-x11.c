@@ -390,7 +390,7 @@ gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
 
 /**
  * gdk_x11_display_get_xcursor:
- * @display: a #GdkDisplay
+ * @display: (type GdkX11Display): a #GdkDisplay
  * @cursor: a #GdkCursor.
  * 
  * Returns the X cursor belonging to a #GdkCursor, potentially
