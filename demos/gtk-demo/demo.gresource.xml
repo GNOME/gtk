@@ -57,6 +57,7 @@
     <file>reset.css</file>
   </gresource>
   <gresource prefix="/cursors">
+    <file>cursors.ui</file>
     <file>alias_cursor.png</file>
     <file>all_scroll_cursor.png</file>
     <file>cell_cursor.png</file>
@@ -67,6 +68,7 @@
     <file>default_cursor.png</file>
     <file>e_resize_cursor.png</file>
     <file>ew_resize_cursor.png</file>
+    <file>gtk_logo_cursor.png</file>
     <file>grabbing_cursor.png</file>
     <file>grab_cursor.png</file>
     <file>hand_cursor.png</file>
