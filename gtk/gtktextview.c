@@ -1666,6 +1666,8 @@ gtk_text_view_init (GtkTextView *text_view)
   context = gtk_widget_get_style_context (GTK_WIDGET (text_view));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
 
+  gtk_widget_set_cursor_from_name (widget, "text");
+
   /* Set up default style */
   priv->wrap_mode = GTK_WRAP_NONE;
   priv->pixels_above_lines = 0;
@@ -4691,7 +4693,6 @@ gtk_text_view_map (GtkWidget *widget)
 {
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
-  GdkCursor *cursor;
 
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
@@ -4710,9 +4711,7 @@ gtk_text_view_map (GtkWidget *widget)
   if (priv->bottom_window)
     text_window_map (priv->bottom_window);
 
-  cursor = gdk_cursor_new_from_name ("text", NULL);
-  gtk_widget_set_cursor (widget, cursor);
-  g_object_unref (cursor);
+  gtk_widget_set_cursor_from_name (widget, "text");
 
   GTK_WIDGET_CLASS (gtk_text_view_parent_class)->map (widget);
 }
@@ -4837,23 +4836,7 @@ gtk_text_view_state_flags_changed (GtkWidget     *widget,
 {
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
   GtkTextViewPrivate *priv = text_view->priv;
-  GdkCursor *cursor;
   GtkStateFlags state;
-
-  if (gtk_widget_get_realized (widget))
-    {
-      if (gtk_widget_is_sensitive (widget))
-        cursor = gdk_cursor_new_from_name ("text", NULL);
-      else
-        cursor = NULL;
-
-      gdk_window_set_cursor (priv->text_window->bin_window, cursor);
-
-      if (cursor)
-      g_object_unref (cursor);
-
-      priv->mouse_cursor_obscured = FALSE;
-    }
 
   if (!gtk_widget_is_sensitive (widget))
     {
@@ -4880,24 +4863,12 @@ gtk_text_view_state_flags_changed (GtkWidget     *widget,
 }
 
 static void
-set_invisible_cursor (GdkWindow *window)
-{
-  GdkCursor *cursor;
-
-  cursor = gdk_cursor_new_from_name ("none", NULL);
- 
-  gdk_window_set_cursor (window, cursor);
-  
-  g_clear_object (&cursor);
-}
-
-static void
 gtk_text_view_obscure_mouse_cursor (GtkTextView *text_view)
 {
   if (text_view->priv->mouse_cursor_obscured)
     return;
 
-  set_invisible_cursor (text_view->priv->text_window->bin_window);
+  gtk_widget_set_cursor_from_name (GTK_WIDGET (text_view), "none");
   
   text_view->priv->mouse_cursor_obscured = TRUE;
 }
@@ -4907,11 +4878,7 @@ gtk_text_view_unobscure_mouse_cursor (GtkTextView *text_view)
 {
   if (text_view->priv->mouse_cursor_obscured)
     {
-      GdkCursor *cursor;
-
-      cursor = gdk_cursor_new_from_name ("text", NULL);
-      gdk_window_set_cursor (text_view->priv->text_window->bin_window, cursor);
-      g_object_unref (cursor);
+      gtk_widget_set_cursor_from_name (GTK_WIDGET (text_view), "text");
       text_view->priv->mouse_cursor_obscured = FALSE;
     }
 }
@@ -9735,7 +9702,6 @@ text_window_realize (GtkTextWindow *win,
                      GtkWidget     *widget)
 {
   GdkWindow *window;
-  GdkCursor *cursor;
 
   window = gtk_widget_get_window (widget);
 
@@ -9759,9 +9725,6 @@ text_window_realize (GtkTextWindow *win,
   if (win->type == GTK_TEXT_WINDOW_TEXT &&
       gtk_widget_is_sensitive (widget))
     {
-      cursor = gdk_cursor_new_from_name ("text", NULL);
-      gdk_window_set_cursor (win->bin_window, cursor);
-      g_clear_object (&cursor);
 
       gtk_im_context_set_client_widget (GTK_TEXT_VIEW (widget)->priv->im_context,
                                         widget);
