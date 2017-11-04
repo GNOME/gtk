@@ -66,8 +66,6 @@ typedef struct
 {
   GObject parent_instance;
 
-  graphene_rect_t viewport;
-
   GskScalingFilter min_filter;
   GskScalingFilter mag_filter;
 
@@ -84,8 +82,7 @@ typedef struct
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GskRenderer, gsk_renderer, G_TYPE_OBJECT)
 
 enum {
-  PROP_VIEWPORT = 1,
-  PROP_WINDOW,
+  PROP_WINDOW = 1,
   PROP_DISPLAY,
   PROP_DRAWING_CONTEXT,
 
@@ -194,10 +191,6 @@ gsk_renderer_set_property (GObject      *gobject,
 
   switch (prop_id)
     {
-    case PROP_VIEWPORT:
-      gsk_renderer_set_viewport (self, g_value_get_boxed (value));
-      break;
-
     case PROP_DISPLAY:
       /* Construct-only */
       priv->display = g_value_dup_object (value);
@@ -220,10 +213,6 @@ gsk_renderer_get_property (GObject    *gobject,
 
   switch (prop_id)
     {
-    case PROP_VIEWPORT:
-      g_value_set_boxed (value, &priv->viewport);
-      break;
-
     case PROP_WINDOW:
       g_value_set_object (value, priv->window);
       break;
@@ -278,22 +267,6 @@ gsk_renderer_class_init (GskRendererClass *klass)
   gobject_class->dispose = gsk_renderer_dispose;
 
   /**
-   * GskRenderer:viewport:
-   *
-   * The visible area used by the #GskRenderer to render its contents.
-   *
-   * Since: 3.90
-   */
-  gsk_renderer_properties[PROP_VIEWPORT] =
-    g_param_spec_boxed ("viewport",
-			"Viewport",
-			"The visible area used by the renderer",
-			GRAPHENE_TYPE_RECT,
-			G_PARAM_READWRITE |
-			G_PARAM_STATIC_STRINGS |
-			G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
    * GskRenderer:display:
    *
    * The #GdkDisplay used by the #GskRenderer.
@@ -341,60 +314,6 @@ gsk_renderer_init (GskRenderer *self)
   GskRendererPrivate *priv = gsk_renderer_get_instance_private (self);
 
   priv->profiler = gsk_profiler_new ();
-}
-
-/**
- * gsk_renderer_set_viewport:
- * @renderer: a #GskRenderer
- * @viewport: (nullable): the viewport rectangle used by the @renderer
- *
- * Sets the visible rectangle to be used as the viewport for
- * the rendering.
- *
- * Since: 3.90
- */
-void
-gsk_renderer_set_viewport (GskRenderer           *renderer,
-                           const graphene_rect_t *viewport)
-{
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
-
-  g_return_if_fail (GSK_IS_RENDERER (renderer));
-
-  if (viewport == NULL)
-    {
-      graphene_rect_init (&priv->viewport, 0.f, 0.f, 0.f, 0.f);
-      g_object_notify_by_pspec (G_OBJECT (renderer), gsk_renderer_properties[PROP_VIEWPORT]);
-      return;
-    }
-
-  if (graphene_rect_equal (viewport, &priv->viewport))
-    return;
-
-  graphene_rect_init_from_rect (&priv->viewport, viewport);
-
-  g_object_notify_by_pspec (G_OBJECT (renderer), gsk_renderer_properties[PROP_VIEWPORT]);
-}
-
-/**
- * gsk_renderer_get_viewport:
- * @renderer: a #GskRenderer
- * @viewport: (out caller-allocates): return location for the viewport rectangle
- *
- * Retrieves the viewport of the #GskRenderer.
- *
- * Since: 3.90
- */
-void
-gsk_renderer_get_viewport (GskRenderer     *renderer,
-                           graphene_rect_t *viewport)
-{
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
-
-  g_return_if_fail (GSK_IS_RENDERER (renderer));
-  g_return_if_fail (viewport != NULL);
-
-  graphene_rect_init_from_rect (viewport, &priv->viewport);
 }
 
 /**

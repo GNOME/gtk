@@ -42,12 +42,6 @@ GDK_AVAILABLE_IN_3_90
 GskRenderer *           gsk_renderer_new_for_window             (GdkWindow               *window);
 
 GDK_AVAILABLE_IN_3_90
-void                    gsk_renderer_set_viewport               (GskRenderer             *renderer,
-                                                                 const graphene_rect_t   *viewport);
-GDK_AVAILABLE_IN_3_90
-void                    gsk_renderer_get_viewport               (GskRenderer             *renderer,
-                                                                 graphene_rect_t         *viewport);
-GDK_AVAILABLE_IN_3_90
 GdkWindow *             gsk_renderer_get_window                 (GskRenderer             *renderer);
 
 GDK_AVAILABLE_IN_3_90

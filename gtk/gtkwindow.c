@@ -7123,14 +7123,6 @@ _gtk_window_set_allocation (GtkWindow           *window,
   child_allocation.width = allocation->width;
   child_allocation.height = allocation->height;
 
-  if (priv->renderer != NULL)
-    {
-      graphene_rect_t viewport;
-
-      graphene_rect_init (&viewport, 0, 0, allocation->width, allocation->height);
-      gsk_renderer_set_viewport (priv->renderer, &viewport);
-    }
-
   get_shadow_width (window, &window_border);
 
   if (_gtk_widget_get_realized (widget))
