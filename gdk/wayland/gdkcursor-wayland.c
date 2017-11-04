@@ -214,10 +214,10 @@ _gdk_wayland_cursor_get_buffer (GdkWaylandDisplay *display,
       surface = g_hash_table_lookup (display->cursor_surface_cache, cursor);
       if (surface == NULL)
         {
-          _gdk_wayland_display_create_shm_surface (display,
-                                                   gdk_texture_get_width (texture),
-                                                   gdk_texture_get_height (texture),
-                                                   1);
+          surface = _gdk_wayland_display_create_shm_surface (display,
+                                                             gdk_texture_get_width (texture),
+                                                             gdk_texture_get_height (texture),
+                                                             1);
           
           gdk_texture_download (texture,
                                 cairo_image_surface_get_data (surface),
