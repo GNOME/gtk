@@ -43,7 +43,7 @@
  *
  * The `GdkTexture` structure contains only private data.
  *
- * Since: 3.90
+ * Since: 3.94
  */
 
 enum {
@@ -159,7 +159,7 @@ gdk_texture_class_init (GdkTextureClass *klass)
    *
    * The width of the texture.
    *
-   * Since: 3.90
+   * Since: 3.94
    */
   properties[PROP_WIDTH] =
     g_param_spec_int ("width",
@@ -178,7 +178,7 @@ gdk_texture_class_init (GdkTextureClass *klass)
    *
    * The height of the texture.
    *
-   * Since: 3.90
+   * Since: 3.94
    */
   properties[PROP_HEIGHT] =
     g_param_spec_int ("height",
@@ -437,6 +437,79 @@ gdk_texture_new_for_pixbuf (GdkPixbuf *pixbuf)
 }
 
 /**
+ * gdk_texture_new_from_resource:
+ * @resource_path: the path of the resource file
+ *
+ * Creates a new texture by loading an image from a resource.
+ * The file format is detected automatically.
+ *
+ * It is a fatal error if @resource_path does not specify a valid
+ * image resource and the program will abort if that happens.
+ * If you are unsure about the validity of a resource, use
+ * gdk_texture_new_from_file() to load it.
+ *
+ * Return value: A newly-created texture
+ *
+ * Since: 3.94
+ */
+GdkTexture *
+gdk_texture_new_from_resource (const char *resource_path)
+{
+  GError *error = NULL;
+  GdkTexture *texture;
+  GdkPixbuf *pixbuf;
+
+  g_return_val_if_fail (resource_path != NULL, NULL);
+
+  pixbuf = gdk_pixbuf_new_from_resource (resource_path, &error);
+  if (pixbuf == NULL)
+    g_error ("Resource path %s is not a valid image: %s", resource_path, error->message);
+
+  texture = gdk_texture_new_for_pixbuf (pixbuf);
+  g_object_unref (pixbuf);
+
+  return texture;
+}
+
+/**
+ * gdk_pixbuf_new_from_file:
+ * @file: #GFile to load
+ * @error: Return location for an error
+ *
+ * Creates a new texture by loading an image from a file.  The file format is
+ * detected automatically. If %NULL is returned, then @error will be set.
+ *
+ * Return value: A newly-created #GdkTexture or %NULL if an error occured.
+ *
+ * Since: 3.94
+ **/
+GdkTexture *
+gdk_texture_new_from_file (GFile   *file,
+                           GError **error)
+{
+  GdkTexture *texture;
+  GdkPixbuf *pixbuf;
+  GInputStream *stream;
+
+  g_return_val_if_fail (G_IS_FILE (file), NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+  stream = G_INPUT_STREAM (g_file_read (file, NULL, error));
+  if (stream == NULL)
+    return NULL;
+
+  pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, error);
+  g_object_unref (stream);
+  if (pixbuf == NULL)
+    return NULL;
+
+  texture = gdk_texture_new_for_pixbuf (pixbuf);
+  g_object_unref (pixbuf);
+
+  return texture;
+}
+
+/**
  * gdk_texture_get_width:
  * @texture: a #GdkTexture
  *
@@ -444,7 +517,7 @@ gdk_texture_new_for_pixbuf (GdkPixbuf *pixbuf)
  *
  * Returns: the width of the #GdkTexture
  *
- * Since: 3.90
+ * Since: 3.94
  */
 int
 gdk_texture_get_width (GdkTexture *texture)
@@ -462,7 +535,7 @@ gdk_texture_get_width (GdkTexture *texture)
  *
  * Returns: the height of the #GdkTexture
  *
- * Since: 3.90
+ * Since: 3.94
  */
 int
 gdk_texture_get_height (GdkTexture *texture)

@@ -39,23 +39,28 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkTexture, g_object_unref)
 typedef struct _GdkTextureClass        GdkTextureClass;
 
 
-GDK_AVAILABLE_IN_3_90
-GType gdk_texture_get_type (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_3_94
+GType                   gdk_texture_get_type                   (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_3_94
 GdkTexture *            gdk_texture_new_for_data               (const guchar    *data,
                                                                 int              width,
                                                                 int              height,
                                                                 int              stride);
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_3_94
 GdkTexture *            gdk_texture_new_for_pixbuf             (GdkPixbuf       *pixbuf);
+GDK_AVAILABLE_IN_3_94
+GdkTexture *            gdk_texture_new_from_resource          (const char      *resource_path);
+GDK_AVAILABLE_IN_3_94
+GdkTexture *            gdk_texture_new_from_file              (GFile           *file,
+                                                                GError         **error);
 
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_3_94
 int                     gdk_texture_get_width                  (GdkTexture      *texture);
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_3_94
 int                     gdk_texture_get_height                 (GdkTexture      *texture);
 
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_3_94
 void                    gdk_texture_download                   (GdkTexture      *texture,
                                                                 guchar          *data,
                                                                 gsize            stride);

@@ -810,6 +810,8 @@ gdk_owner_change_get_type
 gdk_texture_new_for_data
 gdk_texture_new_for_surface
 gdk_texture_new_for_pixbuf
+gdk_texture_new_from_resource
+gdk_texture_new_from_file
 gdk_texture_get_width
 gdk_texture_get_height
 gdk_texture_download
