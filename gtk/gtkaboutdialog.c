@@ -92,11 +92,10 @@
  * set the title property explicitly when constructing a GtkAboutDialog,
  * as shown in the following example:
  * |[<!-- language="C" -->
- * GdkPixbuf *example_logo = gdk_pixbuf_new_from_file ("./logo.png", NULL);
- * cairo_surface_t *example_surface = gdk_cairo_surface_create_from_pixbuf (example_logo, 1, NULL);
+ * GdkTexture *example_logo = gdk_texture_new_from_file ("./logo.png", NULL);
  * gtk_show_about_dialog (NULL,
  *                        "program-name", "ExampleCode",
- *                        "logo", example_surface,
+ *                        "logo", example_logo,
  *                        "title", _("About ExampleCode"),
  *                        NULL);
  * ]|
@@ -579,7 +578,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
     g_param_spec_boxed ("logo",
                         P_("Logo"),
                         P_("A logo for the about box. If this is not set, it defaults to gtk_window_get_default_icon_list()"),
-                        CAIRO_GOBJECT_TYPE_SURFACE,
+                        GDK_TYPE_TEXTURE,
                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -878,7 +877,7 @@ gtk_about_dialog_set_property (GObject      *object,
       gtk_about_dialog_set_copyright (about, g_value_get_string (value));
       break;
     case PROP_LOGO:
-      gtk_about_dialog_set_logo (about, g_value_get_boxed (value));
+      gtk_about_dialog_set_logo (about, g_value_get_object (value));
       break;
     case PROP_AUTHORS:
       gtk_about_dialog_set_authors (about, (const gchar**)g_value_get_boxed (value));
@@ -955,8 +954,8 @@ gtk_about_dialog_get_property (GObject    *object,
       g_value_set_boxed (value, priv->artists);
       break;
     case PROP_LOGO:
-      if (gtk_image_get_storage_type (GTK_IMAGE (priv->logo_image)) == GTK_IMAGE_SURFACE)
-        g_value_set_boxed (value, gtk_image_get_surface (GTK_IMAGE (priv->logo_image)));
+      if (gtk_image_get_storage_type (GTK_IMAGE (priv->logo_image)) == GTK_IMAGE_TEXTURE)
+        g_value_set_boxed (value, gtk_image_get_texture (GTK_IMAGE (priv->logo_image)));
       else
         g_value_set_boxed (value, NULL);
       break;
@@ -1777,15 +1776,15 @@ gtk_about_dialog_set_translator_credits (GtkAboutDialog *about,
  * gtk_about_dialog_get_logo:
  * @about: a #GtkAboutDialog
  *
- * Returns the surface displayed as logo in the about dialog.
+ * Returns the texture displayed as logo in the about dialog.
  *
- * Returns: (transfer none): the surface displayed as logo. The
- *   surface is owned by the about dialog. If you want to keep a
- *   reference to it, you have to call cairo_surface_reference() on it.
+ * Returns: (transfer none): the texture displayed as logo. The
+ *   texture is owned by the about dialog. If you want to keep a
+ *   reference to it, you have to call g_object_ref() on it.
  *
  * Since: 2.6
  */
-cairo_surface_t *
+GdkTexture *
 gtk_about_dialog_get_logo (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv;
@@ -1794,8 +1793,8 @@ gtk_about_dialog_get_logo (GtkAboutDialog *about)
 
   priv = about->priv;
 
-  if (gtk_image_get_storage_type (GTK_IMAGE (priv->logo_image)) == GTK_IMAGE_SURFACE)
-    return gtk_image_get_surface (GTK_IMAGE (priv->logo_image));
+  if (gtk_image_get_storage_type (GTK_IMAGE (priv->logo_image)) == GTK_IMAGE_TEXTURE)
+    return gtk_image_get_texture (GTK_IMAGE (priv->logo_image));
   else
     return NULL;
 }
@@ -1803,7 +1802,7 @@ gtk_about_dialog_get_logo (GtkAboutDialog *about)
 /**
  * gtk_about_dialog_set_logo:
  * @about: a #GtkAboutDialog
- * @logo: (allow-none): a #cairo_surface_t, or %NULL
+ * @logo: (allow-none): a #GdkTexture, or %NULL
  *
  * Sets the surface to be displayed as logo in the about dialog.
  * If it is %NULL, the default window icon set with
@@ -1813,11 +1812,12 @@ gtk_about_dialog_get_logo (GtkAboutDialog *about)
  */
 void
 gtk_about_dialog_set_logo (GtkAboutDialog *about,
-                           cairo_surface_t *logo)
+                           GdkTexture     *logo)
 {
   GtkAboutDialogPrivate *priv;
 
   g_return_if_fail (GTK_IS_ABOUT_DIALOG (about));
+  g_return_if_fail (GDK_IS_TEXTURE (logo));
 
   priv = about->priv;
 
@@ -1827,15 +1827,15 @@ gtk_about_dialog_set_logo (GtkAboutDialog *about,
     g_object_notify_by_pspec (G_OBJECT (about), props[PROP_LOGO_ICON_NAME]);
 
   if (logo != NULL)
-    gtk_image_set_from_surface (GTK_IMAGE (priv->logo_image), logo);
+    gtk_image_set_from_texture (GTK_IMAGE (priv->logo_image), logo);
   else
     {
       GList *surfaces = gtk_window_get_default_icon_list ();
 
       if (surfaces != NULL)
         {
-          gtk_image_set_from_surface (GTK_IMAGE (priv->logo_image),
-				      (cairo_surface_t *) (surfaces->data));
+          gtk_image_set_from_texture (GTK_IMAGE (priv->logo_image),
+				      GDK_TEXTURE (surfaces->data));
 
           g_list_free (surfaces);
         }
@@ -1898,7 +1898,7 @@ gtk_about_dialog_set_logo_icon_name (GtkAboutDialog *about,
 
   g_object_freeze_notify (G_OBJECT (about));
 
-  if (gtk_image_get_storage_type (GTK_IMAGE (priv->logo_image)) == GTK_IMAGE_SURFACE)
+  if (gtk_image_get_storage_type (GTK_IMAGE (priv->logo_image)) == GTK_IMAGE_TEXTURE)
     g_object_notify_by_pspec (G_OBJECT (about), props[PROP_LOGO]);
 
   if (icon_name)
