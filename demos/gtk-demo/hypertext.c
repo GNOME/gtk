@@ -179,8 +179,6 @@ event_after (GtkWidget *text_view,
 }
 
 static gboolean hovering_over_link = FALSE;
-static GdkCursor *hand_cursor = NULL;
-static GdkCursor *regular_cursor = NULL;
 
 /* Looks at all tags covering the position (x, y) in the text view,
  * and if one of them is a link, change the cursor to the "hands" cursor
@@ -216,9 +214,9 @@ set_cursor_if_appropriate (GtkTextView    *text_view,
       hovering_over_link = hovering;
 
       if (hovering_over_link)
-        gdk_window_set_cursor (gtk_text_view_get_window (text_view, GTK_TEXT_WINDOW_TEXT), hand_cursor);
+        gtk_widget_set_cursor_from_name (GTK_WIDGET (text_view), "pointer");
       else
-        gdk_window_set_cursor (gtk_text_view_get_window (text_view, GTK_TEXT_WINDOW_TEXT), regular_cursor);
+        gtk_widget_set_cursor_from_name (GTK_WIDGET (text_view), "text");
     }
 
   if (tags)
@@ -254,9 +252,6 @@ do_hypertext (GtkWidget *do_widget)
       GtkWidget *view;
       GtkWidget *sw;
       GtkTextBuffer *buffer;
-
-      hand_cursor = gdk_cursor_new_from_name ("pointer", NULL);
-      regular_cursor = gdk_cursor_new_from_name ("text", NULL);
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_title (GTK_WINDOW (window), "Hypertext");

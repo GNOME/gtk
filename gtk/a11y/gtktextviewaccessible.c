@@ -456,7 +456,7 @@ gtk_text_view_accessible_get_offset_at_point (AtkText      *text,
     return -1;
 
   view = GTK_TEXT_VIEW (widget);
-  window = gtk_text_view_get_window (view, GTK_TEXT_WINDOW_WIDGET);
+  window = gtk_widget_get_window (widget);
   gdk_window_get_origin (window, &x_widget, &y_widget);
 
   if (coords == ATK_XY_SCREEN)
@@ -525,7 +525,7 @@ gtk_text_view_accessible_get_character_extents (AtkText      *text,
   gtk_text_buffer_get_iter_at_offset (buffer, &iter, offset);
   gtk_text_view_get_iter_location (view, &iter, &rectangle);
 
-  window = gtk_text_view_get_window (view, GTK_TEXT_WINDOW_WIDGET);
+  window = gtk_widget_get_window (widget);
   if (window == NULL)
     return;
 

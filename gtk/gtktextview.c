@@ -5856,7 +5856,7 @@ paint_border_window (GtkTextView     *text_view,
   if (text_window == NULL)
     return;
 
-  window = gtk_text_view_get_window (text_view, text_window->type);
+  window = text_window->bin_window;
   w = gdk_window_get_width (window);
   h = gdk_window_get_height (window);
 
@@ -9721,7 +9721,7 @@ gtk_text_view_get_rendered_rect (GtkTextView  *text_view,
   GtkTextViewPrivate *priv = text_view->priv;
   GdkWindow *window;
 
-  window = gtk_text_view_get_window (text_view, GTK_TEXT_WINDOW_TEXT);
+  window = priv->text_window->bin_window;
 
   rect->x = gtk_adjustment_get_value (priv->hadjustment);
   rect->y = gtk_adjustment_get_value (priv->vadjustment) - priv->top_margin;
@@ -9994,77 +9994,6 @@ text_window_get_height (GtkTextWindow *win)
 /* Windows */
 
 
-/**
- * gtk_text_view_get_window:
- * @text_view: a #GtkTextView
- * @win: window to get
- *
- * Retrieves the #GdkWindow corresponding to an area of the text view;
- * possible windows include the overall widget window, child windows
- * on the left, right, top, bottom, and the window that displays the
- * text buffer. Windows are %NULL and nonexistent if their width or
- * height is 0, and are nonexistent before the widget has been
- * realized.
- *
- * Returns: (nullable) (transfer none): a #GdkWindow, or %NULL
- **/
-GdkWindow*
-gtk_text_view_get_window (GtkTextView *text_view,
-                          GtkTextWindowType win)
-{
-  GtkTextViewPrivate *priv = text_view->priv;
-
-  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), NULL);
-
-  switch (win)
-    {
-    case GTK_TEXT_WINDOW_WIDGET:
-      return gtk_widget_get_window (GTK_WIDGET (text_view));
-      break;
-
-    case GTK_TEXT_WINDOW_TEXT:
-      return priv->text_window->bin_window;
-      break;
-
-    case GTK_TEXT_WINDOW_LEFT:
-      if (priv->left_window)
-        return priv->left_window->bin_window;
-      else
-        return NULL;
-      break;
-
-    case GTK_TEXT_WINDOW_RIGHT:
-      if (priv->right_window)
-        return priv->right_window->bin_window;
-      else
-        return NULL;
-      break;
-
-    case GTK_TEXT_WINDOW_TOP:
-      if (priv->top_window)
-        return priv->top_window->bin_window;
-      else
-        return NULL;
-      break;
-
-    case GTK_TEXT_WINDOW_BOTTOM:
-      if (priv->bottom_window)
-        return priv->bottom_window->bin_window;
-      else
-        return NULL;
-      break;
-
-    case GTK_TEXT_WINDOW_PRIVATE:
-    default:
-      g_warning ("%s: You can't get GTK_TEXT_WINDOW_PRIVATE, it has \"PRIVATE\" in the name because it is private.", G_STRFUNC);
-      return NULL;
-      break;
-    }
-
-  g_warning ("%s: Unknown GtkTextWindowType", G_STRFUNC);
-  return NULL;
-}
-
 static GtkCssNode *
 gtk_text_view_get_css_node (GtkTextView       *text_view,
                             GtkTextWindowType  win)
@@ -10105,41 +10034,6 @@ gtk_text_view_get_css_node (GtkTextView       *text_view,
     }
 
   return NULL;
-}
-
-/**
- * gtk_text_view_get_window_type:
- * @text_view: a #GtkTextView
- * @window: a window type
- *
- * Usually used to find out which window an event corresponds to.
- * If you connect to an event signal on @text_view, this function
- * should be called on `event->window` to
- * see which window it was.
- *
- * Returns: the window type.
- **/
-GtkTextWindowType
-gtk_text_view_get_window_type (GtkTextView *text_view,
-                               GdkWindow   *window)
-{
-  GtkTextWindow *win;
-
-  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), 0);
-  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
-
-  if (window == gtk_widget_get_window (GTK_WIDGET (text_view)))
-    return GTK_TEXT_WINDOW_WIDGET;
-
-  win = g_object_get_qdata (G_OBJECT (window),
-                            g_quark_try_string ("gtk-text-view-text-window"));
-
-  if (win)
-    return win->type;
-  else
-    {
-      return GTK_TEXT_WINDOW_PRIVATE;
-    }
 }
 
 static void
@@ -10697,10 +10591,12 @@ text_view_child_set_parent_window (GtkTextView      *text_view,
                                   text_view->priv->text_window->bin_window);
   else
     {
+#if 0
       GdkWindow *window;
       window = gtk_text_view_get_window (text_view,
                                          vc->type);
       gtk_widget_set_parent_window (vc->widget, window);
+#endif
     }
 }
 
