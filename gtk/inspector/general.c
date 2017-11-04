@@ -139,6 +139,7 @@ init_version (GtkInspectorGeneral *gen)
   else
     renderer = "Unknown";
 
+  gsk_renderer_unrealize (gsk_renderer);
   g_object_unref (gsk_renderer);
   gdk_window_destroy (window);
 
