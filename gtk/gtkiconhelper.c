@@ -200,8 +200,7 @@ get_icon_lookup_flags (GtkIconHelper    *self,
 }
 
 static void
-get_surface_size (GtkIconHelper   *self,
-		  cairo_surface_t *surface,
+get_surface_size (cairo_surface_t *surface,
 		  int *width,
 		  int *height)
 {
@@ -221,7 +220,8 @@ get_surface_size (GtkIconHelper   *self,
   else
     {
       g_warning ("infinite surface size not supported");
-      ensure_icon_size (self, width, height);
+      *width = 0;
+      *height = 0;
     }
 
   cairo_destroy (cr);
@@ -487,8 +487,7 @@ _gtk_icon_helper_get_size (GtkIconHelper *self,
   switch (gtk_image_definition_get_storage_type (self->def))
     {
     case GTK_IMAGE_SURFACE:
-      get_surface_size (self,
-                        gtk_image_definition_get_surface (self->def),
+      get_surface_size (gtk_image_definition_get_surface (self->def),
                         &width,
                         &height);
       break;
@@ -512,7 +511,7 @@ _gtk_icon_helper_get_size (GtkIconHelper *self,
 
       if (self->rendered_surface != NULL)
         {
-          get_surface_size (self, self->rendered_surface, &width, &height);
+          get_surface_size (self->rendered_surface, &width, &height);
         }
       else if (self->icon_size != GTK_ICON_SIZE_INVALID)
         {
