@@ -350,6 +350,7 @@ gdk_wayland_pointer_stop_cursor_animation (GdkWaylandPointerData *pointer)
     {
       g_source_remove (pointer->cursor_timeout_id);
       pointer->cursor_timeout_id = 0;
+      pointer->cursor_image_delay = 0;
     }
 
   pointer->cursor_image_index = 0;
