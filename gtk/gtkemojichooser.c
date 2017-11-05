@@ -19,7 +19,7 @@
 
 #include "gtkemojichooser.h"
 
-#include "gtkadjustment.h"
+#include "gtkadjustmentprivate.h"
 #include "gtkbox.h"
 #include "gtkbutton.h"
 #include "gtkcssprovider.h"
@@ -102,19 +102,13 @@ scroll_to_section (GtkButton *button,
   GtkEmojiChooser *chooser;
   GtkAdjustment *adj;
   GtkAllocation alloc = { 0, 0, 0, 0 };
-  double page_increment, value;
-  gboolean dummy;
 
   chooser = GTK_EMOJI_CHOOSER (gtk_widget_get_ancestor (GTK_WIDGET (button), GTK_TYPE_EMOJI_CHOOSER));
 
   adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (chooser->scrolled_window));
   if (section->heading)
     gtk_widget_get_allocation (section->heading, &alloc);
-  page_increment = gtk_adjustment_get_page_increment (adj);
-  value = gtk_adjustment_get_value (adj);
-  gtk_adjustment_set_page_increment (adj, alloc.y - value);
-  g_signal_emit_by_name (chooser->scrolled_window, "scroll-child", GTK_SCROLL_PAGE_FORWARD, FALSE, &dummy);
-  gtk_adjustment_set_page_increment (adj, page_increment);
+  gtk_adjustment_animate_to_value (adj, alloc.y);
 }
 
 static void
