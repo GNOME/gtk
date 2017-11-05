@@ -228,8 +228,6 @@ static gboolean      gtk_range_real_change_value        (GtkRange      *range,
                                                          gdouble        value);
 static gboolean      gtk_range_key_press                (GtkWidget     *range,
 							 GdkEventKey   *event);
-static void          gtk_range_state_flags_changed      (GtkWidget     *widget,
-                                                         GtkStateFlags  previous_state);
 static void          gtk_range_direction_changed        (GtkWidget     *widget,
                                                          GtkTextDirection  previous_direction);
 static void          gtk_range_measure_trough           (GtkGizmo       *gizmo,
@@ -289,7 +287,6 @@ gtk_range_class_init (GtkRangeClass *class)
   widget_class->unmap = gtk_range_unmap;
   widget_class->event = gtk_range_event;
   widget_class->key_press_event = gtk_range_key_press;
-  widget_class->state_flags_changed = gtk_range_state_flags_changed;
   widget_class->direction_changed = gtk_range_direction_changed;
 
   class->move_slider = gtk_range_move_slider;
@@ -1661,40 +1658,22 @@ static void
 update_slider_state (GtkRange *range)
 {
   GtkRangePrivate *priv = range->priv;
-  GtkStateFlags state;
-
-  state = gtk_widget_get_state_flags (GTK_WIDGET (range));
-
-  state &= ~(GTK_STATE_FLAG_PRELIGHT | GTK_STATE_FLAG_ACTIVE);
-
-  if (priv->mouse_location == priv->slider_widget &&
-      !(state & GTK_STATE_FLAG_INSENSITIVE))
-    state |= GTK_STATE_FLAG_PRELIGHT;
 
   if (priv->grab_location == priv->slider_widget)
-    state |= GTK_STATE_FLAG_ACTIVE;
-
-  gtk_widget_set_state_flags (priv->slider_widget, state, TRUE);
+    gtk_widget_set_state_flags (priv->slider_widget, GTK_STATE_FLAG_ACTIVE, FALSE);
+  else
+    gtk_widget_unset_state_flags (priv->slider_widget, GTK_STATE_FLAG_ACTIVE);
 }
 
 static void
 update_trough_state (GtkRange *range)
 {
   GtkRangePrivate *priv = range->priv;
-  GtkStateFlags state;
-
-  state = gtk_widget_get_state_flags (GTK_WIDGET (range));
-
-  state &= ~(GTK_STATE_FLAG_PRELIGHT | GTK_STATE_FLAG_ACTIVE);
-
-  if (priv->mouse_location == priv->trough_widget &&
-      !(state & GTK_STATE_FLAG_INSENSITIVE))
-    state |= GTK_STATE_FLAG_PRELIGHT;
 
   if (priv->grab_location == priv->trough_widget)
-    state |= GTK_STATE_FLAG_ACTIVE;
-
-  gtk_widget_set_state_flags (priv->trough_widget, state, TRUE);
+    gtk_widget_set_state_flags (priv->trough_widget, GTK_STATE_FLAG_ACTIVE, FALSE);
+  else
+    gtk_widget_unset_state_flags (priv->trough_widget, GTK_STATE_FLAG_ACTIVE);
 }
 
 static void
@@ -1707,18 +1686,6 @@ gtk_range_direction_changed (GtkWidget        *widget,
   update_highlight_position (range);
 
   GTK_WIDGET_CLASS (gtk_range_parent_class)->direction_changed (widget, previous_direction);
-}
-
-static void
-gtk_range_state_flags_changed (GtkWidget     *widget,
-                               GtkStateFlags  previous_state)
-{
-  GtkRange *range = GTK_RANGE (widget);
-
-  update_trough_state (range);
-  update_slider_state (range);
-
-  GTK_WIDGET_CLASS (gtk_range_parent_class)->state_flags_changed (widget, previous_state);
 }
 
 static gboolean
@@ -1805,6 +1772,7 @@ range_grab_remove (GtkRange *range)
 
   gtk_range_update_mouse_location (range);
 
+  update_trough_state (range);
   update_slider_state (range);
   update_zoom_state (range, FALSE);
 
@@ -2676,10 +2644,7 @@ gtk_range_update_mouse_location (GtkRange *range)
 {
   GtkRangePrivate *priv = range->priv;
   gint x, y;
-  GtkWidget *old_location;
   GtkWidget *widget = GTK_WIDGET (range);
-
-  old_location = priv->mouse_location;
 
   x = priv->mouse_x;
   y = priv->mouse_y;
@@ -2695,26 +2660,6 @@ gtk_range_update_mouse_location (GtkRange *range)
          priv->mouse_location != priv->trough_widget &&
          priv->mouse_location != widget)
     priv->mouse_location = gtk_widget_get_parent (priv->mouse_location);
-
-  if (old_location != priv->mouse_location)
-    {
-      if (old_location != NULL)
-        gtk_widget_queue_allocate (GTK_WIDGET (old_location));
-
-      if (priv->mouse_location != NULL)
-        {
-          gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_PRELIGHT, FALSE);
-
-          gtk_widget_queue_allocate (GTK_WIDGET (priv->mouse_location));
-        }
-      else
-        {
-          gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_PRELIGHT);
-        }
-
-      update_trough_state (range);
-      update_slider_state (range);
-    }
 }
 
 static void
