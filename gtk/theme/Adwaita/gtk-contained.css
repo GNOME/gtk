@@ -1162,15 +1162,15 @@ menu menuitem check, menu menuitem check:hover, menu menuitem check:disabled, me
 
 check { border-radius: 3px; }
 
-check:checked { -gtk-icon-source: -gtk-recolor(url("assets/check-symbolic.symbolic.png")); }
+check:checked { -gtk-icon-source: -gtk-scaled(-gtk-recolor(url("assets/check-symbolic.symbolic.png")), -gtk-recolor(url("assets/check@2-symbolic.symbolic.png"))); }
 
-check:indeterminate { -gtk-icon-source: -gtk-recolor(url("assets/dash-symbolic.symbolic.png")); }
+check:indeterminate { -gtk-icon-source: -gtk-scaled(-gtk-recolor(url("assets/dash-symbolic.symbolic.png")), -gtk-recolor(url("assets/dash@2-symbolic.symbolic.png"))); }
 
 treeview.view radio:selected:focus, treeview.view radio:selected, radio { border-radius: 100%; }
 
-treeview.view radio:checked:selected, radio:checked { -gtk-icon-source: -gtk-recolor(url("assets/bullet-symbolic.symbolic.png")); }
+treeview.view radio:checked:selected, radio:checked { -gtk-icon-source: -gtk-scaled(-gtk-recolor(url("assets/bullet-symbolic.symbolic.png")), -gtk-recolor(url("assets/bullet@2-symbolic.symbolic.png"))); }
 
-treeview.view radio:indeterminate:selected, radio:indeterminate { -gtk-icon-source: -gtk-recolor(url("assets/dash-symbolic.symbolic.png")); }
+treeview.view radio:indeterminate:selected, radio:indeterminate { -gtk-icon-source: -gtk-scaled(-gtk-recolor(url("assets/dash-symbolic.symbolic.png")), -gtk-recolor(url("assets/dash@2-symbolic.symbolic.png"))); }
 
 radio:not(:indeterminate):not(:checked):active:not(:backdrop) { -gtk-icon-transform: scale(0); }
 
@@ -1588,9 +1588,9 @@ expander arrow { min-width: 16px; min-height: 16px; -gtk-icon-source: -gtk-icont
 
 expander arrow:dir(rtl) { -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
 
-expander arrow:hover { color: #748489; }
-
 expander arrow:checked { -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
+
+expander title:hover arrow { color: #748489; }
 
 /************ Calendar * */
 calendar { color: black; border: 1px solid #b6b6b3; }

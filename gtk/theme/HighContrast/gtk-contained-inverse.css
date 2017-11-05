@@ -1238,9 +1238,9 @@ expander arrow { min-width: 16px; min-height: 16px; -gtk-icon-source: -gtk-icont
 
 expander arrow:dir(rtl) { -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
 
-expander arrow:hover { color: white; }
-
 expander arrow:checked { -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
+
+expander title:hover arrow { color: white; }
 
 /************ Calendar * */
 calendar { border: 1px solid gray; }
