@@ -41,12 +41,12 @@ struct _GtkIconHelper
 
   guint use_fallback : 1;
   guint force_scale_pixbuf : 1;
-  guint rendered_surface_is_symbolic : 1;
+  guint texture_is_symbolic : 1;
 
   GtkWidget *owner;
   GtkCssNode *node;
-  cairo_surface_t *rendered_surface;
   GdkTexture *texture;
+  int texture_scale;
 };
 
 void gtk_icon_helper_init (GtkIconHelper *self,
