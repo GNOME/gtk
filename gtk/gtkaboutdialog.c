@@ -575,11 +575,11 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    * Since: 2.6
    */
   props[PROP_LOGO] =
-    g_param_spec_boxed ("logo",
-                        P_("Logo"),
-                        P_("A logo for the about box. If this is not set, it defaults to gtk_window_get_default_icon_list()"),
-                        GDK_TYPE_TEXTURE,
-                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+    g_param_spec_object ("logo",
+                         P_("Logo"),
+                         P_("A logo for the about box. If this is not set, it defaults to gtk_window_get_default_icon_list()"),
+                         GDK_TYPE_TEXTURE,
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAboutDialog:logo-icon-name:
@@ -955,9 +955,9 @@ gtk_about_dialog_get_property (GObject    *object,
       break;
     case PROP_LOGO:
       if (gtk_image_get_storage_type (GTK_IMAGE (priv->logo_image)) == GTK_IMAGE_TEXTURE)
-        g_value_set_boxed (value, gtk_image_get_texture (GTK_IMAGE (priv->logo_image)));
+        g_value_set_object (value, gtk_image_get_texture (GTK_IMAGE (priv->logo_image)));
       else
-        g_value_set_boxed (value, NULL);
+        g_value_set_object (value, NULL);
       break;
     case PROP_LOGO_ICON_NAME:
       if (gtk_image_get_storage_type (GTK_IMAGE (priv->logo_image)) == GTK_IMAGE_ICON_NAME)
@@ -1817,7 +1817,7 @@ gtk_about_dialog_set_logo (GtkAboutDialog *about,
   GtkAboutDialogPrivate *priv;
 
   g_return_if_fail (GTK_IS_ABOUT_DIALOG (about));
-  g_return_if_fail (GDK_IS_TEXTURE (logo));
+  g_return_if_fail (logo == NULL || GDK_IS_TEXTURE (logo));
 
   priv = about->priv;
 
