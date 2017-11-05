@@ -89,7 +89,7 @@ _gdk_broadway_display_size_changed (GdkDisplay                      *display,
   gdk_monitor_set_size (monitor, msg->width, msg->height);
   gdk_monitor_set_physical_size (monitor, msg->width * 25.4 / 96, msg->height * 25.4 / 96);
 
-  toplevels = gdk_display_get_toplevel_windows (display);
+  toplevels =  broadway_display->toplevels;
   for (l = toplevels; l != NULL; l = l->next)
     {
       GdkWindow *toplevel = l->data;
