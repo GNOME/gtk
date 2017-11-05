@@ -154,7 +154,6 @@ struct _GtkExpanderPrivate
   guint             expanded        : 1;
   guint             use_underline   : 1;
   guint             use_markup      : 1;
-  guint             prelight        : 1;
   guint             label_fill      : 1;
   guint             resize_toplevel : 1;
   guint             pressed_in_title : 1;
@@ -174,10 +173,6 @@ static void     gtk_expander_size_allocate  (GtkWidget           *widget,
                                              const GtkAllocation *allocation,
                                              int                  baseline,
                                              GtkAllocation       *out_clip);
-static gboolean gtk_expander_enter_notify   (GtkWidget        *widget,
-                                             GdkEventCrossing *event);
-static gboolean gtk_expander_leave_notify   (GtkWidget        *widget,
-                                             GdkEventCrossing *event);
 static gboolean gtk_expander_focus          (GtkWidget        *widget,
                                              GtkDirectionType  direction);
 static gboolean gtk_expander_drag_motion    (GtkWidget        *widget,
@@ -213,8 +208,6 @@ static void gtk_expander_measure (GtkWidget      *widget,
                                   int            *natural,
                                   int            *minimum_baseline,
                                   int            *natural_baseline);
-static void gtk_expander_state_flags_changed (GtkWidget        *widget,
-                                              GtkStateFlags     previous_state);
 
 /* Gestures */
 static void     gesture_multipress_pressed_cb  (GtkGestureMultiPress *gesture,
@@ -263,13 +256,10 @@ gtk_expander_class_init (GtkExpanderClass *klass)
 
   widget_class->destroy              = gtk_expander_destroy;
   widget_class->size_allocate        = gtk_expander_size_allocate;
-  widget_class->enter_notify_event   = gtk_expander_enter_notify;
-  widget_class->leave_notify_event   = gtk_expander_leave_notify;
   widget_class->focus                = gtk_expander_focus;
   widget_class->drag_motion          = gtk_expander_drag_motion;
   widget_class->drag_leave           = gtk_expander_drag_leave;
   widget_class->measure              = gtk_expander_measure;
-  widget_class->state_flags_changed  = gtk_expander_state_flags_changed;
 
   container_class->add    = gtk_expander_add;
   container_class->remove = gtk_expander_remove;
@@ -370,7 +360,6 @@ gtk_expander_init (GtkExpander *expander)
   priv->expanded = FALSE;
   priv->use_underline = FALSE;
   priv->use_markup = FALSE;
-  priv->prelight = FALSE;
   priv->label_fill = FALSE;
   priv->expand_timer = 0;
   priv->resize_toplevel = 0;
@@ -565,85 +554,6 @@ gesture_multipress_released_cb (GtkGestureMultiPress *gesture,
 {
   if (expander->priv->pressed_in_title)
     gtk_widget_activate (GTK_WIDGET (expander));
-}
-
-static void
-update_node_state (GtkExpander *expander)
-{
-  GtkExpanderPrivate *priv = expander->priv;
-  GtkStateFlags state;
-
-  state = gtk_widget_get_state_flags (GTK_WIDGET (expander));
-
-  if (priv->prelight)
-    state |= GTK_STATE_FLAG_PRELIGHT;
-  else
-    state &= ~GTK_STATE_FLAG_PRELIGHT;
-
-  gtk_widget_set_state_flags (priv->title_widget, state, TRUE);
-
-  if (priv->expanded)
-    state |= GTK_STATE_FLAG_CHECKED;
-  else
-    state &= ~GTK_STATE_FLAG_CHECKED;
-
-  gtk_widget_set_state_flags (priv->arrow_widget, state, TRUE);
-}
-
-static void
-gtk_expander_state_flags_changed (GtkWidget     *widget,
-                                  GtkStateFlags  previous_state)
-{
-  update_node_state (GTK_EXPANDER (widget));
-
-  GTK_WIDGET_CLASS (gtk_expander_parent_class)->state_flags_changed (widget, previous_state);
-}
-
-static gboolean
-gtk_expander_enter_notify (GtkWidget        *widget,
-                           GdkEventCrossing *event)
-{
-  GtkExpander *expander = GTK_EXPANDER (widget);
-  GdkNotifyType detail;
-
-  gdk_event_get_crossing_detail ((GdkEvent *)event, &detail);
-
-  if (detail != GDK_NOTIFY_INFERIOR)
-    {
-      expander->priv->prelight = TRUE;
-
-      update_node_state (expander);
-
-      if (expander->priv->label_widget)
-        gtk_widget_set_state_flags (expander->priv->label_widget,
-                                    GTK_STATE_FLAG_PRELIGHT,
-                                    FALSE);
-    }
-
-  return FALSE;
-}
-
-static gboolean
-gtk_expander_leave_notify (GtkWidget        *widget,
-                           GdkEventCrossing *event)
-{
-  GtkExpander *expander = GTK_EXPANDER (widget);
-  GdkNotifyType detail;
-
-  gdk_event_get_crossing_detail ((GdkEvent *)event, &detail);
-
-  if (detail != GDK_NOTIFY_INFERIOR)
-    {
-      expander->priv->prelight = FALSE;
-
-      update_node_state (expander);
-
-      if (expander->priv->label_widget)
-        gtk_widget_unset_state_flags (expander->priv->label_widget,
-                                      GTK_STATE_FLAG_PRELIGHT);
-    }
-
-  return FALSE;
 }
 
 static gboolean
@@ -1038,7 +948,10 @@ gtk_expander_set_expanded (GtkExpander *expander,
 
   priv->expanded = expanded;
 
-  update_node_state (expander);
+  if (priv->expanded)
+    gtk_widget_set_state_flags (priv->arrow_widget, GTK_STATE_FLAG_CHECKED, FALSE);
+  else
+    gtk_widget_unset_state_flags (priv->arrow_widget, GTK_STATE_FLAG_CHECKED);
 
   child = priv->child;
 
@@ -1297,9 +1210,6 @@ gtk_expander_set_label_widget (GtkExpander *expander,
   if (label_widget)
     {
       priv->label_widget = label_widget;
-
-      if (priv->prelight)
-        gtk_widget_set_state_flags (label_widget, GTK_STATE_FLAG_PRELIGHT, FALSE);
 
       gtk_container_add (GTK_CONTAINER (priv->title_widget), label_widget);
     }
