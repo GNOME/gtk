@@ -661,7 +661,6 @@ static gboolean
 menu_deactivate_cb (GtkMenuButton *menu_button)
 {
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (menu_button), FALSE);
-  gtk_widget_unset_state_flags (GTK_WIDGET (menu_button), GTK_STATE_FLAG_PRELIGHT);
 
   return TRUE;
 }
