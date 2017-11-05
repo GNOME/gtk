@@ -97,10 +97,8 @@ day_selected_cb (GtkCalendar *calendar,
                  gpointer     user_data)
 {
   cairo_rectangle_int_t rect;
-  GtkAllocation allocation;
   GtkWidget *popover;
   GdkEvent *event;
-  GdkWindow *window;
   gdouble x, y;
 
   event = gtk_get_current_event ();
@@ -108,12 +106,11 @@ day_selected_cb (GtkCalendar *calendar,
   if (gdk_event_get_event_type (event) != GDK_BUTTON_PRESS)
     return;
 
-  window = gdk_event_get_window (event);
   gdk_event_get_coords (event, &x, &y);
-  gdk_window_coords_to_parent (window, x, y, &x, &y);
-  gtk_widget_get_allocation (GTK_WIDGET (calendar), &allocation);
-  rect.x = x - allocation.x;
-  rect.y = y - allocation.y;
+  gtk_widget_translate_coordinates (gtk_get_event_widget (event),
+                                    GTK_WIDGET (calendar),
+                                    x, y,
+                                    &rect.x, &rect.y);
   rect.width = rect.height = 1;
 
   popover = create_popover (GTK_WIDGET (calendar),
