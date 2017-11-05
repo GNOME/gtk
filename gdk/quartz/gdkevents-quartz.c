@@ -40,9 +40,7 @@
 #define GRIP_HEIGHT 15
 #define GDK_LION_RESIZE 5
 
-#define WINDOW_IS_TOPLEVEL(window)		     \
-  (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&   \
-   GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
+#define WINDOW_IS_TOPLEVEL(window)      (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD)
 
 /* This is the window corresponding to the key window */
 static GdkWindow   *current_keyboard_window;

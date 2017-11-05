@@ -62,9 +62,7 @@ static FullscreenSavedGeometry *get_fullscreen_geometry (GdkWindow *window);
 static void update_toplevel_order (void);
 static void clear_toplevel_order  (void);
 
-#define WINDOW_IS_TOPLEVEL(window)		     \
-  (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&   \
-   GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
+#define WINDOW_IS_TOPLEVEL(window)      (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD)
 
 /*
  * GdkQuartzWindow
