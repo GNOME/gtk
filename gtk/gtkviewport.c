@@ -198,6 +198,25 @@ viewport_set_adjustment_values (GtkViewport    *viewport,
                             viewport_size);
 }
 
+static GtkWidget *
+gtk_viewport_pick (GtkWidget *widget,
+                   double     x,
+                   double     y)
+{
+  if (x >= 0 && x <= gtk_widget_get_width (widget) &&
+      y >= 0 && y <= gtk_widget_get_height(widget))
+    {
+      return GTK_WIDGET_CLASS (gtk_viewport_parent_class)->pick (widget, x, y);
+    }
+  else
+    {
+      if (gtk_widget_contains (widget, x, y))
+        return widget;
+      else
+        return NULL;
+    }
+}
+
 static void
 gtk_viewport_measure (GtkWidget      *widget,
                       GtkOrientation  orientation,
@@ -236,6 +255,7 @@ gtk_viewport_class_init (GtkViewportClass *class)
   widget_class->snapshot = gtk_viewport_snapshot;
   widget_class->size_allocate = gtk_viewport_size_allocate;
   widget_class->measure = gtk_viewport_measure;
+  widget_class->pick = gtk_viewport_pick;
   
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_VIEWPORT);
 
