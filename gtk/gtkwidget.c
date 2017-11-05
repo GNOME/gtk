@@ -955,9 +955,6 @@ gtk_widget_real_pick (GtkWidget *widget,
 {
   GtkWidget *child;
 
-  if (!gtk_widget_contains (widget, x, y))
-    return NULL;
-
   for (child = _gtk_widget_get_last_child (widget);
        child;
        child = _gtk_widget_get_prev_sibling (child))
@@ -971,6 +968,9 @@ gtk_widget_real_pick (GtkWidget *widget,
       if (picked)
         return picked;
     }
+
+  if (!gtk_widget_contains (widget, x, y))
+    return NULL;
 
   return widget;
 }
@@ -13185,6 +13185,11 @@ gtk_widget_pick (GtkWidget *widget,
                  gdouble    y)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  if (gtk_widget_get_pass_through (widget) ||
+      !gtk_widget_is_sensitive (widget) ||
+      !gtk_widget_is_drawable (widget))
+    return NULL;
 
   return GTK_WIDGET_GET_CLASS (widget)->pick (widget, x, y);
 }
