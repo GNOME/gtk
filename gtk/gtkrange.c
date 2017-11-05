@@ -1125,7 +1125,7 @@ gtk_range_set_show_fill_level (GtkRange *range,
   if (show_fill_level)
     {
       priv->fill_widget = gtk_gizmo_new ("fill", NULL, NULL, NULL);
-      gtk_widget_set_parent (priv->fill_widget, priv->trough_widget);
+      gtk_widget_insert_after (priv->fill_widget, priv->trough_widget, NULL);
       update_fill_position (range);
     }
   else
@@ -3010,7 +3010,7 @@ _gtk_range_set_has_origin (GtkRange *range,
   if (has_origin)
     {
       priv->highlight_widget = gtk_gizmo_new ("highlight", NULL, NULL, NULL);
-      gtk_widget_set_parent (priv->highlight_widget, priv->trough_widget);
+      gtk_widget_insert_before (priv->highlight_widget, priv->trough_widget, priv->slider_widget);
 
       update_highlight_position (range);
     }

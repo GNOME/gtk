@@ -87,9 +87,9 @@
  * │   ╰── mark
  * ├── [value]
  * ├── trough
- * │   ├── slider
+ * │   ├── [fill]
  * │   ├── [highlight]
- * │   ╰── [fill]
+ * │   ╰── slider
  * ╰── marks.bottom
  *     ├── mark
  *     ┊    ├── indicator
