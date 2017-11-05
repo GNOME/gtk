@@ -19,7 +19,7 @@
 
 #include "gtkemojichooser.h"
 
-#include "gtkadjustment.h"
+#include "gtkadjustmentprivate.h"
 #include "gtkbox.h"
 #include "gtkbutton.h"
 #include "gtkcssprovider.h"
@@ -62,8 +62,6 @@ struct _GtkEmojiChooser
   EmojiSection symbols;
   EmojiSection flags;
 
-  EmojiSection *scroll_to_section;
-
   GtkGesture *recent_press;
   GtkGesture *people_press;
   GtkGesture *body_press;
@@ -97,41 +95,23 @@ gtk_emoji_chooser_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_emoji_chooser_parent_class)->finalize (object);
 }
 
-static gboolean
-scroll_in_idle (gpointer data)
-{
-  GtkEmojiChooser *chooser = data;
-  GtkAdjustment *adj;
-  GtkAllocation alloc = { 0, 0, 0, 0 };
-  double page_increment, value;
-  gboolean dummy;
-
-  adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (chooser->scrolled_window));
-  if (chooser->scroll_to_section->heading)
-    gtk_widget_get_allocation (chooser->scroll_to_section->heading, &alloc);
-  page_increment = gtk_adjustment_get_page_increment (adj);
-  value = gtk_adjustment_get_value (adj);
-  gtk_adjustment_set_page_increment (adj, alloc.y - value);
-  g_signal_emit_by_name (chooser->scrolled_window, "scroll-child", GTK_SCROLL_PAGE_FORWARD, FALSE, &dummy);
-  gtk_adjustment_set_page_increment (adj, page_increment);
-
-  return G_SOURCE_REMOVE;
-}
-
 static void
 scroll_to_section (GtkButton *button,
                    gpointer   data)
 {
   EmojiSection *section = data;
   GtkEmojiChooser *chooser;
+  GtkAdjustment *adj;
+  GtkAllocation alloc = { 0, 0, 0, 0 };
 
   chooser = GTK_EMOJI_CHOOSER (gtk_widget_get_ancestor (GTK_WIDGET (button), GTK_TYPE_EMOJI_CHOOSER));
 
-  if (chooser->scroll_to_section == section)
-    return;
+  adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (chooser->scrolled_window));
 
-  chooser->scroll_to_section = section;
-  g_idle_add (scroll_in_idle, chooser);
+  if (section->heading)
+    gtk_widget_get_allocation (section->heading, &alloc);
+
+  gtk_adjustment_animate_to_value (adj, alloc.y);
 }
 
 static void
