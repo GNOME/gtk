@@ -25,6 +25,7 @@
 #include "gdkdisplay-x11.h"
 #include "gdkscreen-x11.h"
 #include "gdkdisplayprivate.h"
+#include "gdkprivate-x11.h"
 
 
 G_DEFINE_TYPE (GdkX11Monitor, gdk_x11_monitor, GDK_TYPE_MONITOR)
@@ -36,7 +37,7 @@ gdk_monitor_has_fullscreen_window (GdkMonitor *monitor)
   GdkWindow *window;
   gboolean has_fullscreen;
 
-  toplevels = gdk_display_get_toplevel_windows (monitor->display);
+  toplevels = gdk_x11_display_get_toplevel_windows (monitor->display);
 
   has_fullscreen = FALSE;
   for (l = toplevels; l; l = l->next)

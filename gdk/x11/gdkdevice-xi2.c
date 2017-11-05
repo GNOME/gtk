@@ -545,7 +545,7 @@ gdk_x11_device_xi2_window_at_position (GdkDevice       *device,
       /* FIXME: untrusted clients case not multidevice-safe */
       pointer_window = None;
 
-      toplevels = gdk_display_get_toplevel_windows (display);
+      toplevels = gdk_x11_display_get_toplevel_windows (display);
       for (list = toplevels; list != NULL; list = list->next)
         {
           window = GDK_WINDOW (list->data);

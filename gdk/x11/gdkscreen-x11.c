@@ -833,7 +833,7 @@ _gdk_x11_screen_set_window_scale (GdkX11Screen *x11_screen,
   root = x11_screen->root_window;
   GDK_WINDOW_IMPL_X11 (root->impl)->window_scale = scale;
 
-  toplevels = gdk_display_get_toplevel_windows (x11_screen->display);
+  toplevels = gdk_x11_display_get_toplevel_windows (x11_screen->display);
 
   for (l = toplevels; l != NULL; l = l->next)
     {

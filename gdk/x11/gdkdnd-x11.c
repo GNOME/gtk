@@ -588,7 +588,7 @@ gdk_window_cache_new (GdkDisplay *display)
       GdkWindowImplX11 *impl;
       gint x, y, width, height;
 
-      toplevel_windows = gdk_display_get_toplevel_windows (display);
+      toplevel_windows = gdk_x11_display_get_toplevel_windows (display);
       for (list = toplevel_windows; list; list = list->next)
         {
           window = GDK_WINDOW (list->data);
