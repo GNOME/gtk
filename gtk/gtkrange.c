@@ -2678,33 +2678,23 @@ gtk_range_update_mouse_location (GtkRange *range)
   gint x, y;
   GtkWidget *old_location;
   GtkWidget *widget = GTK_WIDGET (range);
-  GdkRectangle trough_alloc, slider_alloc, slider_trace;
-  GtkAllocation range_alloc;
 
   old_location = priv->mouse_location;
 
   x = priv->mouse_x;
   y = priv->mouse_y;
 
-  gtk_widget_get_own_allocation (widget, &range_alloc);
-  gtk_widget_get_outer_allocation (priv->trough_widget, &trough_alloc);
-
-  gtk_widget_get_outer_allocation (priv->slider_widget, &slider_alloc);
-  gtk_widget_translate_coordinates (priv->trough_widget, widget,
-                                    slider_alloc.x, slider_alloc.y, &slider_alloc.x, &slider_alloc.y);
-
-  gdk_rectangle_union (&slider_alloc, &trough_alloc, &slider_trace);
-
   if (priv->grab_location != NULL)
     priv->mouse_location = priv->grab_location;
-  else if (gdk_rectangle_contains_point (&slider_alloc, x, y))
-    priv->mouse_location = priv->slider_widget;
-  else if (gdk_rectangle_contains_point (&slider_trace, x, y))
-    priv->mouse_location = priv->trough_widget;
-  else if (gdk_rectangle_contains_point (&range_alloc, x, y))
-    priv->mouse_location = widget;
   else
-    priv->mouse_location = NULL;
+    priv->mouse_location = gtk_widget_pick (widget, x, y);
+
+  /* That's what you get for not attaching gestures to the correct widget */
+  while (priv->mouse_location &&
+         priv->mouse_location != priv->slider_widget &&
+         priv->mouse_location != priv->trough_widget &&
+         priv->mouse_location != widget)
+    priv->mouse_location = gtk_widget_get_parent (priv->mouse_location);
 
   if (old_location != priv->mouse_location)
     {
