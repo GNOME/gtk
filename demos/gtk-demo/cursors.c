@@ -1,6 +1,9 @@
 /* Cursors
  *
- * Demonstrates a useful set of available cursors.
+ * Demonstrates a useful set of available cursors. The cursors shown here are the ones
+ * defined by CSS, which we assume to be available.
+ *
+ * The example shows creating cursors by name or from an image, with or without a fallback.
  */
 
 #include <gtk/gtk.h>
