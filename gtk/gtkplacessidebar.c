@@ -4771,7 +4771,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
                                 G_PARAM_READWRITE);
   properties[PROP_SHOW_STARRED_LOCATION] =
           g_param_spec_boolean ("show-starred-location",
-                                P_("Show 'Starred Location'"),
+                                P_("Show “Starred Location”"),
                                 P_("Whether the sidebar includes an item to show starred files"),
                                 FALSE,
                                 G_PARAM_READWRITE);
