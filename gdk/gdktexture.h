@@ -1,4 +1,4 @@
-/* GSK - The GTK Scene Kit
+/* gdktexture.h
  *
  * Copyright 2016  Benjamin Otte
  *

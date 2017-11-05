@@ -1,4 +1,4 @@
-/* GDK - The GTK Scene Kit
+/* gdktexture.c
  *
  * Copyright 2016  Benjamin Otte
  *
@@ -19,7 +19,7 @@
 /**
  * SECTION:GdkTexture
  * @Title: GdkTexture
- * @Short_description: Pixel data uploaded to a #GdkRenderer
+ * @Short_description: Pixel data
  *
  * #GdkTexture is the basic element used to refer to pixel data.
  * It is primarily mean for pixel data that will not change over
@@ -155,7 +155,7 @@ gdk_texture_class_init (GdkTextureClass *klass)
   gobject_class->dispose = gdk_texture_dispose;
 
   /**
-   * GdkRenderer:width:
+   * GdkTexture:width:
    *
    * The width of the texture.
    *
@@ -174,7 +174,7 @@ gdk_texture_class_init (GdkTextureClass *klass)
                       G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GdkRenderer:height:
+   * GdkTexture:height:
    *
    * The height of the texture.
    *
@@ -287,6 +287,8 @@ gdk_cairo_texture_init (GdkCairoTexture *self)
  * The data is assumed to be in CAIRO_FORMAT_ARGB32 format.
  *
  * Returns: a new #GdkTexture
+ *
+ * Since: 3.94
  */
 GdkTexture *
 gdk_texture_new_for_data (const guchar *data,
@@ -323,6 +325,8 @@ gdk_texture_new_for_data (const guchar *data,
  * @surface must be an image surface with format CAIRO_FORMAT_ARGB32.
  *
  * Returns: a new #GdkTexture
+ *
+ * Since: 3.94
  */
 GdkTexture *
 gdk_texture_new_for_surface (cairo_surface_t *surface)
@@ -418,6 +422,8 @@ gdk_pixbuf_texture_init (GdkPixbufTexture *self)
  * Creates a new texture object representing the GdkPixbuf.
  *
  * Returns: a new #GdkTexture
+ *
+ * Since: 3.94
  */
 GdkTexture *
 gdk_texture_new_for_pixbuf (GdkPixbuf *pixbuf)
@@ -472,7 +478,7 @@ gdk_texture_new_from_resource (const char *resource_path)
 }
 
 /**
- * gdk_pixbuf_new_from_file:
+ * gdk_texture_new_from_file:
  * @file: #GFile to load
  * @error: Return location for an error
  *
@@ -576,6 +582,8 @@ gdk_texture_download_surface (GdkTexture *texture)
  *                       cairo_image_surface_get_stride (surface));
  * cairo_surface_mark_dirty (surface);
  * ]|
+ *
+ * Since: 3.94
  **/
 void
 gdk_texture_download (GdkTexture *texture,
