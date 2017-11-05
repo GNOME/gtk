@@ -806,7 +806,9 @@ gdk_owner_change_get_type
 </SECTION>
 
 <SECTION>
-<FILE>GdkTexture</FILE>
+<TITLE>Textures</TITLE>
+<FILE>textures</FILE>
+GdkTexture
 gdk_texture_new_for_data
 gdk_texture_new_for_surface
 gdk_texture_new_for_pixbuf
@@ -816,7 +818,6 @@ gdk_texture_get_width
 gdk_texture_get_height
 gdk_texture_download
 <SUBSECTION Standard>
-GdkTexture
 gdk_texture_get_type
 GDK_TYPE_TEXTURE
 GDK_IS_TEXTURE
