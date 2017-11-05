@@ -572,6 +572,7 @@ load_node_file (GFile *file, gboolean generate)
 
   g_object_unref (texture);
   g_object_unref (window);
+  gsk_renderer_unrealize (renderer);
   g_object_unref (renderer);
   gdk_window_destroy (window);
 
