@@ -1389,7 +1389,6 @@ gtk_flow_box_size_allocate (GtkWidget           *widget,
   GtkFlowBox *box = GTK_FLOW_BOX (widget);
   GtkFlowBoxPrivate  *priv = BOX_PRIV (box);
   GdkRectangle child_clip;
-  GtkAllocation widget_allocation;
   GtkAllocation child_allocation;
   gint avail_size, avail_other_size, min_items, item_spacing, line_spacing;
   GtkAlign item_align;
@@ -1405,8 +1404,6 @@ gtk_flow_box_size_allocate (GtkWidget           *widget,
   gint extra_line_pixels = 0, extra_per_line = 0, extra_line_extra = 0;
   gint i, this_line_size;
   GSequenceIter *iter;
-
-  gtk_widget_get_allocation (widget, &widget_allocation);
 
   min_items = MAX (1, priv->min_children_per_line);
 
@@ -1584,16 +1581,9 @@ gtk_flow_box_size_allocate (GtkWidget           *widget,
       extra_line_extra = extra_line_pixels % n_lines;
     }
 
-  /*
-   * Prepare item/line initial offsets and jump into the
-   * real allocation loop.
-   */
-  line_offset = allocation->y - widget_allocation.y;
-  item_offset = allocation->x - widget_allocation.x;
-
   /* prepend extra space to item_offset/line_offset for SPREAD_END */
-  item_offset += get_offset_pixels (item_align, extra_pixels);
-  line_offset += get_offset_pixels (line_align, extra_line_pixels);
+  item_offset = get_offset_pixels (item_align, extra_pixels);
+  line_offset = get_offset_pixels (line_align, extra_line_pixels);
 
   /* Get the allocation size for the first line */
   if (priv->homogeneous)
@@ -1653,7 +1643,7 @@ gtk_flow_box_size_allocate (GtkWidget           *widget,
                 }
             }
 
-          item_offset = allocation->x - widget_allocation.x;
+          item_offset = 0;
 
           if (item_align == GTK_ALIGN_CENTER)
             {
@@ -1712,15 +1702,15 @@ gtk_flow_box_size_allocate (GtkWidget           *widget,
       /* Do the actual allocation */
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
         {
-          child_allocation.x = widget_allocation.x + item_offset;
-          child_allocation.y = widget_allocation.y + line_offset;
+          child_allocation.x = item_offset;
+          child_allocation.y = line_offset;
           child_allocation.width = this_item_size;
           child_allocation.height = this_line_size;
         }
       else /* GTK_ORIENTATION_VERTICAL */
         {
-          child_allocation.x = widget_allocation.x + line_offset;
-          child_allocation.y = widget_allocation.y + item_offset;
+          child_allocation.x = line_offset;
+          child_allocation.y = item_offset;
           child_allocation.width = this_line_size;
           child_allocation.height = this_item_size;
         }
