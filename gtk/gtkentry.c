@@ -339,8 +339,6 @@ enum {
   PROP_CAPS_LOCK_WARNING,
   PROP_PROGRESS_FRACTION,
   PROP_PROGRESS_PULSE_STEP,
-  PROP_SURFACE_PRIMARY,
-  PROP_SURFACE_SECONDARY,
   PROP_TEXTURE_PRIMARY,
   PROP_TEXTURE_SECONDARY,
   PROP_ICON_NAME_PRIMARY,
@@ -1007,34 +1005,6 @@ gtk_entry_class_init (GtkEntryClass *class)
                            P_("Show text in the entry when it’s empty and unfocused"),
                            NULL,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-   /**
-   * GtkEntry:primary-icon-surface:
-   *
-   * A surface to use as the primary icon for the entry.
-   *
-   * Since: 2.16
-   */
-  entry_props[PROP_SURFACE_PRIMARY] =
-      g_param_spec_boxed ("primary-icon-surface",
-                          P_("Primary surface"),
-                          P_("Primary surface for the entry"),
-                          CAIRO_GOBJECT_TYPE_SURFACE,
-                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
-   * GtkEntry:secondary-icon-surface:
-   *
-   * An surface to use as the secondary icon for the entry.
-   *
-   * Since: 2.16
-   */
-  entry_props[PROP_SURFACE_SECONDARY] =
-      g_param_spec_boxed ("secondary-icon-surface",
-                          P_("Secondary surface"),
-                          P_("Secondary surface for the entry"),
-                          CAIRO_GOBJECT_TYPE_SURFACE,
-                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
    /**
    * GtkEntry:primary-icon-texture:
@@ -2059,18 +2029,6 @@ gtk_entry_set_property (GObject         *object,
       gtk_entry_set_placeholder_text (entry, g_value_get_string (value));
       break;
 
-    case PROP_SURFACE_PRIMARY:
-      gtk_entry_set_icon_from_surface (entry,
-                                       GTK_ENTRY_ICON_PRIMARY,
-                                       g_value_get_boxed (value));
-      break;
-
-    case PROP_SURFACE_SECONDARY:
-      gtk_entry_set_icon_from_surface (entry,
-                                       GTK_ENTRY_ICON_SECONDARY,
-                                       g_value_get_boxed (value));
-      break;
-
     case PROP_TEXTURE_PRIMARY:
       gtk_entry_set_icon_from_texture (entry,
                                        GTK_ENTRY_ICON_PRIMARY,
@@ -2312,18 +2270,6 @@ gtk_entry_get_property (GObject         *object,
 
     case PROP_PLACEHOLDER_TEXT:
       g_value_set_string (value, gtk_entry_get_placeholder_text (entry));
-      break;
-
-    case PROP_SURFACE_PRIMARY:
-      g_value_set_boxed (value,
-                         gtk_entry_get_icon_surface (entry,
-                                                     GTK_ENTRY_ICON_PRIMARY));
-      break;
-
-    case PROP_SURFACE_SECONDARY:
-      g_value_set_boxed (value,
-                         gtk_entry_get_icon_surface (entry,
-                                                     GTK_ENTRY_ICON_SECONDARY));
       break;
 
     case PROP_TEXTURE_PRIMARY:
@@ -6661,13 +6607,6 @@ gtk_entry_clear_icon (GtkEntry             *entry,
 
   switch (storage_type)
     {
-    case GTK_IMAGE_SURFACE:
-      g_object_notify_by_pspec (G_OBJECT (entry),
-                                entry_props[icon_pos == GTK_ENTRY_ICON_PRIMARY
-                                            ? PROP_SURFACE_PRIMARY
-                                            : PROP_SURFACE_SECONDARY]);
-      break;
-
     case GTK_IMAGE_TEXTURE:
       g_object_notify_by_pspec (G_OBJECT (entry),
                                 entry_props[icon_pos == GTK_ENTRY_ICON_PRIMARY
@@ -6689,6 +6628,7 @@ gtk_entry_clear_icon (GtkEntry             *entry,
                                             : PROP_GICON_SECONDARY]);
       break;
 
+    case GTK_IMAGE_SURFACE:
     case GTK_IMAGE_EMPTY:
     default:
       g_assert_not_reached ();
@@ -7556,65 +7496,6 @@ gtk_entry_get_alignment (GtkEntry *entry)
 }
 
 /**
- * gtk_entry_set_icon_from_surface:
- * @entry: a #GtkEntry
- * @icon_pos: Icon position
- * @surface: (allow-none): An image #cairo_surface, or %NULL
- *
- * Sets the icon shown in the specified position using a image surface.
- *
- * If @surface is %NULL, no icon will be shown in the specified position.
- *
- * Since: 3.94
- */
-void
-gtk_entry_set_icon_from_surface (GtkEntry             *entry,
-                                 GtkEntryIconPosition  icon_pos,
-                                 cairo_surface_t      *surface)
-{
-  GtkEntryPrivate *priv;
-  EntryIconInfo *icon_info;
-
-  g_return_if_fail (GTK_IS_ENTRY (entry));
-  g_return_if_fail (IS_VALID_ICON_POSITION (icon_pos));
-
-  priv = entry->priv;
-
-  if ((icon_info = priv->icons[icon_pos]) == NULL)
-    icon_info = construct_icon_info (GTK_WIDGET (entry), icon_pos);
-
-  g_object_freeze_notify (G_OBJECT (entry));
-
-  if (surface)
-    cairo_surface_reference (surface);
-
-  if (surface)
-    {
-      gtk_image_set_from_surface (GTK_IMAGE (icon_info->widget), surface);
-
-      if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
-        {
-          g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_SURFACE_PRIMARY]);
-          g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_STORAGE_TYPE_PRIMARY]);
-        }
-      else
-        {
-          g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_SURFACE_SECONDARY]);
-          g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_STORAGE_TYPE_SECONDARY]);
-        }
-
-      cairo_surface_destroy (surface);
-    }
-  else
-    gtk_entry_clear_icon (entry, icon_pos);
-
-  if (gtk_widget_get_visible (GTK_WIDGET (entry)))
-    gtk_widget_queue_resize (GTK_WIDGET (entry));
-
-  g_object_thaw_notify (G_OBJECT (entry));
-}
-
-/**
  * gtk_entry_set_icon_from_texture:
  * @entry: a #GtkEntry
  * @icon_pos: Icon position
@@ -7855,42 +7736,6 @@ gtk_entry_get_icon_activatable (GtkEntry             *entry,
   icon_info = priv->icons[icon_pos];
 
   return (!icon_info || !icon_info->nonactivatable);
-}
-
-/**
- * gtk_entry_get_icon_surface:
- * @entry: A #GtkEntry
- * @icon_pos: Icon position
- *
- * Retrieves the image used for the icon.
- *
- * Unlike the other methods of setting and getting icon data, this
- * method will work regardless of whether the icon was set using a
- * #cairo_surface_t, a #GIcon or an icon name.
- *
- * Returns: (transfer none) (nullable): A #cairo_surface_t, or %NULL if no icon is
- *     set for this position.
- *
- * Since: 3.94
- */
-cairo_surface_t *
-gtk_entry_get_icon_surface (GtkEntry             *entry,
-                            GtkEntryIconPosition  icon_pos)
-{
-  GtkEntryPrivate *priv;
-  EntryIconInfo *icon_info;
-
-  g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
-  g_return_val_if_fail (IS_VALID_ICON_POSITION (icon_pos), NULL);
-
-  priv = entry->priv;
-
-  icon_info = priv->icons[icon_pos];
-
-  if (!icon_info)
-    return NULL;
-
-  return gtk_image_get_surface (GTK_IMAGE (icon_info->widget));
 }
 
 /**

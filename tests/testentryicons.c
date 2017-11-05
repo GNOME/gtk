@@ -80,20 +80,16 @@ set_gicon (GtkWidget *button,
 }
 
 static void
-set_surface (GtkWidget *button,
+set_texture (GtkWidget *button,
              GtkEntry  *entry)
 {
-  GdkPixbuf *pixbuf;
-  cairo_surface_t *surface;
+  GdkTexture *texture;
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
     {
-      pixbuf = gdk_pixbuf_new_from_resource ("/org/gtk/libgtk/inspector/logo.png", NULL);
-      surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, gtk_widget_get_window (button));
-      g_object_unref (pixbuf);
-
-      gtk_entry_set_icon_from_surface (entry, GTK_ENTRY_ICON_SECONDARY, surface);
-      cairo_surface_destroy (surface);
+      texture = gdk_texture_new_from_resource ("/org/gtk/libgtk/inspector/logo.png");
+      gtk_entry_set_icon_from_texture (entry, GTK_ENTRY_ICON_SECONDARY, texture);
+      g_object_unref (texture);
     }
 }
 
@@ -273,10 +269,10 @@ main (int argc, char **argv)
   gtk_radio_button_join_group (GTK_RADIO_BUTTON (button3), GTK_RADIO_BUTTON (button1));
   g_signal_connect (button3, "toggled", G_CALLBACK (set_gicon), entry);
   gtk_container_add (GTK_CONTAINER (box), button3);
-  button4 = gtk_radio_button_new_with_label (NULL, "Surface");
+  button4 = gtk_radio_button_new_with_label (NULL, "Texture");
   gtk_widget_set_valign (button4, GTK_ALIGN_START);
   gtk_radio_button_join_group (GTK_RADIO_BUTTON (button4), GTK_RADIO_BUTTON (button1));
-  g_signal_connect (button4, "toggled", G_CALLBACK (set_surface), entry);
+  g_signal_connect (button4, "toggled", G_CALLBACK (set_texture), entry);
   gtk_container_add (GTK_CONTAINER (box), button4);
 
   label = gtk_label_new ("Emoji:");
