@@ -681,7 +681,7 @@ _gdk_quartz_window_did_resign_main (GdkWindow *window)
     {
       GList *toplevels;
 
-      toplevels = gdk_screen_get_toplevel_windows (_gdk_screen);
+      toplevels = gdk_display_get_toplevel_windows (_gdk_display);
       if (toplevels)
         new_window = toplevels->data;
       g_list_free (toplevels);
@@ -2953,4 +2953,11 @@ _gdk_root_window_impl_quartz_get_type (void)
     }
 
   return object_type;
+}
+
+GList *
+get_toplevels (void)
+{
+  update_toplevel_order ();
+  return GDK_WINDOW_IMPL_QUARTZ (_gdk_root->impl)->sorted_children;
 }

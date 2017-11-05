@@ -108,6 +108,7 @@ struct _GdkRootWindowImplQuartzClass
 
 GType _gdk_root_window_impl_quartz_get_type (void);
 
+GList *get_toplevels (void);
 
 G_END_DECLS
 
