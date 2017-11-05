@@ -214,12 +214,9 @@ _gdk_quartz_screen_update_window_sizes (GdkScreen *screen)
   _gdk_root->abs_x = 0;
   _gdk_root->abs_y = 0;
 
-  windows = gdk_display_get_toplevel_windows (GDK_QUARTZ_SCREEN (screen)->display);
-
+  windows = get_toplevels ();
   for (list = windows; list; list = list->next)
     _gdk_quartz_window_update_position (list->data);
-
-  g_list_free (windows);
 }
 
 static void

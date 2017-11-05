@@ -727,7 +727,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 
       event->dnd.context->dest_window = NULL;
 
-      windows = gdk_display_get_toplevel_windows (display);
+      windows = get_toplevels ();
       _gdk_quartz_window_nspoint_to_gdk_xy (aPoint, &gx, &gy);
 
       for (list = windows; list; list = list->next)
@@ -743,8 +743,6 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
           if (gx > wx && gy > wy && gx <= wx + ww && gy <= wy + wh)
             event->dnd.context->dest_window = win;
         }
-
-      g_list_free (windows);
     }
 
   device = gdk_drag_context_get_device (_gdk_quartz_drag_source_context);
