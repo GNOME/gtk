@@ -789,15 +789,14 @@ ensure_sync_counter (GdkWindow *window)
 }
 
 static void
-setup_toplevel_window (GdkWindow *window, 
-		       GdkWindow *parent)
+setup_toplevel_window (GdkWindow    *window,
+		       GdkX11Screen *x11_screen)
 {
   GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (window);
   GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
   GdkDisplay *display = gdk_window_get_display (window);
   Display *xdisplay = GDK_WINDOW_XDISPLAY (window);
   XID xid = GDK_WINDOW_XID (window);
-  GdkX11Screen *x11_screen = GDK_X11_SCREEN (GDK_WINDOW_SCREEN (parent));
   XSizeHints size_hints;
   long pid;
   Window leader_window;
@@ -919,9 +918,15 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
   unsigned int class;
   int depth;
 
+  int abs_x;
+  int abs_y;
+
   display_x11 = GDK_X11_DISPLAY (display);
-  xparent = GDK_WINDOW_XID (real_parent);
   x11_screen = GDK_X11_SCREEN (display_x11->screen);
+  if (real_parent)
+    xparent = GDK_WINDOW_XID (real_parent);
+  else
+    xparent = GDK_SCREEN_XROOTWIN (x11_screen);
 
   impl = g_object_new (GDK_TYPE_WINDOW_IMPL_X11, NULL);
   window->impl = GDK_WINDOW_IMPL (impl);
@@ -941,7 +946,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
     {
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_TEMP:
-      if (GDK_WINDOW_TYPE (window->parent) != GDK_WINDOW_ROOT)
+      if (window->parent && GDK_WINDOW_TYPE (window->parent) != GDK_WINDOW_ROOT)
         {
           /* The common code warns for this case */
           xparent = GDK_SCREEN_XROOTWIN (x11_screen);
@@ -1010,9 +1015,20 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
   impl->unscaled_width = window->width * impl->window_scale;
   impl->unscaled_height = window->height * impl->window_scale;
 
+  if (window->parent)
+    {
+      abs_x = window->parent->abs_x;
+      abs_y = window->parent->abs_y;
+    }
+  else
+    {
+      abs_x = 0;
+      abs_y = 0;
+    }
+
   impl->xid = XCreateWindow (xdisplay, xparent,
-                             (window->x + window->parent->abs_x) * impl->window_scale,
-                             (window->y + window->parent->abs_y) * impl->window_scale,
+                             (window->x + abs_x) * impl->window_scale,
+                             (window->y + abs_y) * impl->window_scale,
                              window->width * impl->window_scale, window->height * impl->window_scale,
                              0, depth, class, xvisual,
                              xattributes_mask, &xattributes);
@@ -1032,7 +1048,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
       XSetClassHint (xdisplay, impl->xid, class_hint);
       XFree (class_hint);
 
-      setup_toplevel_window (window, window->parent);
+      setup_toplevel_window (window, x11_screen);
       break;
 
     case GDK_WINDOW_CHILD:
