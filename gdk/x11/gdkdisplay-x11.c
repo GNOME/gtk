@@ -3239,7 +3239,6 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->get_monitor = gdk_x11_display_get_monitor;
   display_class->get_primary_monitor = gdk_x11_display_get_primary_monitor;
   display_class->get_setting = gdk_x11_display_get_setting;
-  display_class->get_root_window = gdk_x11_display_get_root_window;
 
   _gdk_x11_windowing_init ();
 }

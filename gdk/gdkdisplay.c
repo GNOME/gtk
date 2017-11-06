@@ -2231,9 +2231,3 @@ gdk_display_setting_changed (GdkDisplay       *display,
 {
   g_signal_emit (display, signals[SETTING_CHANGED], 0, name);
 }
-
-GdkWindow *
-gdk_display_get_root_window (GdkDisplay *display)
-{
-  return GDK_DISPLAY_GET_CLASS (display)->get_root_window (display);
-}
