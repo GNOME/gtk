@@ -9999,6 +9999,8 @@ gtk_widget_dispose (GObject *object)
   if (_gtk_widget_get_realized (widget))
     gtk_widget_unrealize (widget);
 
+  g_clear_object (&priv->cursor);
+
   if (!priv->in_destruction)
     {
       priv->in_destruction = TRUE;
