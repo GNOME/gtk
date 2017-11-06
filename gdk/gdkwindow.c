@@ -6027,7 +6027,7 @@ gdk_window_create_similar_image_surface (GdkWindow *     window,
   else if (GDK_WINDOW_IMPL_GET_CLASS (window->impl)->create_similar_image_surface)
     {
       surface =
-        GDK_WINDOW_iMPL_GET_CLASS (window->impl)->create_similar_image_surface (window, format, width, height);
+        GDK_WINDOW_IMPL_GET_CLASS (window->impl)->create_similar_image_surface (window, format, width, height);
     }
   else
     {
