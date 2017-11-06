@@ -610,7 +610,7 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
 }
 
 void
-window_update_scale (GdkWindow *window)
+gdk_wayland_window_update_scale (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
@@ -638,7 +638,7 @@ window_update_scale (GdkWindow *window)
   for (c = children; c; c = c->next)
     {
       GdkWindow *child = c->data;
-      window_update_scale (child);
+      gdk_wayland_window_update_scale (child);
     }
   g_list_free (children);
 }
@@ -692,6 +692,9 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
     default:
       break;
     }
+
+  if (real_parent == NULL)
+    display_wayland->toplevels = g_list_prepend (display_wayland->toplevels, window);
 
   gdk_wayland_window_create_surface (window);
 
@@ -1238,7 +1241,7 @@ surface_enter (void              *data,
 
   impl->display_server.outputs = g_slist_prepend (impl->display_server.outputs, output);
 
-  window_update_scale (window);
+  gdk_wayland_window_update_scale (window);
 }
 
 static void
@@ -1255,7 +1258,7 @@ surface_leave (void              *data,
   impl->display_server.outputs = g_slist_remove (impl->display_server.outputs, output);
 
   if (impl->display_server.outputs)
-    window_update_scale (window);
+    gdk_wayland_window_update_scale (window);
 }
 
 static const struct wl_surface_listener surface_listener = {
@@ -2835,6 +2838,12 @@ gdk_wayland_window_destroy (GdkWindow *window,
 
   gdk_wayland_window_hide_surface (window);
   drop_cairo_surfaces (window);
+
+  if (window->parent == NULL)
+    {
+      GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+      display->toplevels = g_list_remove (display->toplevels, window);
+    }
 }
 
 static void

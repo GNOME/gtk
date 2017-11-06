@@ -584,15 +584,18 @@ gdk_wayland_device_query_state (GdkDevice        *device,
                                 GdkModifierType  *mask)
 {
   GdkWaylandPointerData *pointer;
+  GList *children;
 
   if (window == NULL)
-    window = GDK_WAYLAND_DISPLAY (gdk_device_get_display (device))->root_window;
+    children = gdk_wayland_display_get_toplevel_windows (gdk_device_get_display (device));
+  else
+    children = window->children;
 
   pointer = GDK_WAYLAND_DEVICE (device)->pointer;
 
   if (child_window)
     /* Set child only if actually a child of the given window, as XIQueryPointer() does */
-    *child_window = g_list_find (window->children, pointer->focus) ? pointer->focus : NULL;
+    *child_window = g_list_find (children, pointer->focus) ? pointer->focus : NULL;
   if (mask)
     *mask = device_get_modifiers (device);
 

@@ -64,7 +64,7 @@ typedef struct {
 struct _GdkWaylandDisplay
 {
   GdkDisplay parent_instance;
-  GdkWindow *root_window;
+  GList *toplevels;
 
   GHashTable *settings;
   GsdXftSettings xft_settings;

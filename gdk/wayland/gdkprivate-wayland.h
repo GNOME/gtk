@@ -199,6 +199,8 @@ GdkWindow *_gdk_wayland_display_create_root_window (GdkDisplay *display,
                                                     int         width,
                                                     int         height);
 
+GList *gdk_wayland_display_get_toplevel_windows (GdkDisplay *display);
+
 int gdk_wayland_display_get_output_refresh_rate (GdkWaylandDisplay *display_wayland,
                                                  struct wl_output  *output);
 guint32 gdk_wayland_display_get_output_scale (GdkWaylandDisplay *display_wayland,
@@ -265,7 +267,7 @@ void gdk_wayland_window_inhibit_shortcuts (GdkWindow *window,
 void gdk_wayland_window_restore_shortcuts (GdkWindow *window,
                                            GdkSeat   *gdk_seat);
 
-void window_update_scale (GdkWindow *window);
+void gdk_wayland_window_update_scale (GdkWindow *window);
 
 
 #endif /* __GDK_PRIVATE_WAYLAND_H__ */

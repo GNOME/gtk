@@ -600,7 +600,6 @@ _gdk_wayland_display_open (const gchar *display_name)
 
   display_wayland = GDK_WAYLAND_DISPLAY (display);
   display_wayland->wl_display = wl_display;
-  display_wayland->root_window = _gdk_wayland_display_create_root_window (display, 0, 0);
   display_wayland->event_source = _gdk_wayland_display_event_source_new (display);
 
   init_settings (display);
@@ -645,12 +644,17 @@ _gdk_wayland_display_open (const gchar *display_name)
 }
 
 static void
+destroy_toplevel (gpointer data)
+{
+  _gdk_window_destroy (GDK_WINDOW (data), FALSE);
+}
+
+static void
 gdk_wayland_display_dispose (GObject *object)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (object);
 
-  if (display_wayland->root_window)
-    _gdk_window_destroy (display_wayland->root_window, FALSE);
+  g_list_free_full (display_wayland->toplevels, destroy_toplevel);
 
   if (display_wayland->event_source)
     {
@@ -685,9 +689,6 @@ gdk_wayland_display_finalize (GObject *object)
   guint i;
 
   _gdk_wayland_display_finalize_cursors (display_wayland);
-
-  if (display_wayland->root_window)
-    g_object_unref (display_wayland->root_window);
 
   g_free (display_wayland->startup_notification_id);
   g_free (display_wayland->cursor_theme_name);
@@ -1060,6 +1061,12 @@ gdk_wayland_display_init (GdkWaylandDisplay *display)
   display->xkb_context = xkb_context_new (0);
 
   display->monitors = g_ptr_array_new_with_free_func (g_object_unref);
+}
+
+GList *
+gdk_wayland_display_get_toplevel_windows (GdkDisplay *display)
+{
+  return GDK_WAYLAND_DISPLAY (display)->toplevels;
 }
 
 void
@@ -1900,6 +1907,14 @@ transform_to_string (int transform)
 #endif
 
 static void
+update_scale (GdkDisplay *display)
+{
+  g_list_foreach (gdk_wayland_display_get_toplevel_windows (display),
+                  (GFunc)gdk_wayland_window_update_scale,
+                  NULL);
+}
+
+static void
 output_handle_geometry (void             *data,
                         struct wl_output *wl_output,
                         int               x,
@@ -1924,10 +1939,7 @@ output_handle_geometry (void             *data,
   gdk_monitor_set_model (GDK_MONITOR (monitor), model);
 
   if (GDK_MONITOR (monitor)->geometry.width != 0 && monitor->version < OUTPUT_VERSION_WITH_DONE)
-    {
-      GdkDisplay *display = GDK_MONITOR (monitor)->display;
-      window_update_scale (GDK_WAYLAND_DISPLAY (display)->root_window);
-    }
+    update_scale (GDK_MONITOR (monitor)->display);
 }
 
 static void
@@ -1947,7 +1959,7 @@ output_handle_done (void             *data,
       gdk_display_monitor_added (display, GDK_MONITOR (monitor));
     }
 
-  window_update_scale (GDK_WAYLAND_DISPLAY (display)->root_window);
+  update_scale (display);
 }
 
 static void
@@ -1974,7 +1986,7 @@ output_handle_scale (void             *data,
   gdk_monitor_set_size (GDK_MONITOR (monitor), width / scale, height / scale);
 
   if (GDK_MONITOR (monitor)->geometry.width != 0 && monitor->version < OUTPUT_VERSION_WITH_DONE)
-    window_update_scale (GDK_WAYLAND_DISPLAY (GDK_MONITOR (monitor)->display)->root_window);
+    update_scale (GDK_MONITOR (monitor)->display);
 }
 
 static void
@@ -2000,7 +2012,7 @@ output_handle_mode (void             *data,
   gdk_monitor_set_refresh_rate (GDK_MONITOR (monitor), refresh);
 
   if (width != 0 && monitor->version < OUTPUT_VERSION_WITH_DONE)
-    window_update_scale (GDK_WAYLAND_DISPLAY (GDK_MONITOR (monitor)->display)->root_window);
+    update_scale (GDK_MONITOR (monitor)->display);
 }
 
 static const struct wl_output_listener output_listener =
@@ -2093,7 +2105,7 @@ gdk_wayland_display_remove_output (GdkWaylandDisplay *display_wayland,
       g_object_ref (monitor);
       g_ptr_array_remove (display_wayland->monitors, monitor);
       gdk_display_monitor_removed (GDK_DISPLAY (display_wayland), GDK_MONITOR (monitor));
-      window_update_scale (display_wayland->root_window);
+      update_scale (GDK_DISPLAY (display_wayland));
       g_object_unref (monitor);
     }
 }
