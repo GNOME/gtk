@@ -4449,9 +4449,6 @@ gdk_window_get_geometry (GdkWindow *window,
   GdkWindow *parent;
   GdkWindowImplClass *impl_class;
 
-  if (!window)
-    window = gdk_display_get_root_window ((gdk_display_get_default ()));
-
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (!GDK_WINDOW_DESTROYED (window))
