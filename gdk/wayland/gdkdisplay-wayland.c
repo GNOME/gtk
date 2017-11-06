@@ -2100,7 +2100,7 @@ gdk_wayland_display_remove_output (GdkWaylandDisplay *display_wayland,
       g_object_ref (monitor);
       g_ptr_array_remove (display_wayland->monitors, monitor);
       gdk_display_monitor_removed (GDK_DISPLAY (display_wayland), GDK_MONITOR (monitor));
-      window_update_scale (gdk_display_get_root_window (GDK_MONITOR (monitor)->display));
+      window_update_scale (display_wayland->root_window);
       g_object_unref (monitor);
     }
 }
