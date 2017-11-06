@@ -349,7 +349,7 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
     break;
 
   case BROADWAY_EVENT_SCREEN_SIZE_CHANGED:
-    window = gdk_display_get_root_window (display);
+    window = display_broadway->root_window;
     window->width = message->screen_resize_notify.width;
     window->height = message->screen_resize_notify.height;
     _gdk_window_update_size (window);

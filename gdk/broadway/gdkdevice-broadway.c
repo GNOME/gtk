@@ -182,7 +182,7 @@ gdk_broadway_device_query_state (GdkDevice        *device,
       GdkWindow *mouse_toplevel;
 
       if (window == NULL)
-        window = gdk_display_get_root_window (gdk_device_get_display (device));
+        window = broadway_display->root_window;
 
       impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
       toplevel = impl->wrapper;
@@ -333,10 +333,14 @@ gdk_broadway_device_window_at_position (GdkDevice       *device,
 					GdkModifierType *mask,
 					gboolean         get_toplevel)
 {
+  GdkDisplay *display;
+  GdkBroadwayDisplay *broadway_display;
   GdkWindow *root_window;
   GdkWindow *window;
 
-  root_window = gdk_display_get_root_window (gdk_device_get_display (device));
+  display = gdk_device_get_display (device);
+  broadway_display = GDK_BROADWAY_DISPLAY (display);
+  root_window = broadway_display->root_window;
 
   gdk_broadway_device_query_state (device, root_window, &window, NULL, NULL, win_x, win_y, mask);
 
