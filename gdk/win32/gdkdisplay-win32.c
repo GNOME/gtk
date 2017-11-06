@@ -1225,7 +1225,7 @@ gdk_win32_display_get_setting (GdkDisplay  *display,
                                         value);
 }
 
-static GdkWindow *
+GdkWindow *
 gdk_win32_display_get_root_window (GdkDisplay *display)
 {
   return gdk_win32_screen_get_root_window (GDK_WIN32_DISPLAY (display)->screen);
