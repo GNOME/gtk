@@ -123,7 +123,7 @@ gdk_device_wintab_query_state (GdkDevice        *device,
 
   device_wintab = GDK_DEVICE_WINTAB (device);
   if (window == NULL)
-    window = gdk_display_get_root_window (gdk_display_get_default ());
+    window = gdk_win32_display_get_root_window (gdk_display_get_default ());
   impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
   hwnd = GDK_WINDOW_HWND (window);
@@ -143,7 +143,7 @@ gdk_device_wintab_query_state (GdkDevice        *device,
   if (win_y)
     *win_y = point.y / impl->window_scale;
 
-  if (window == gdk_display_get_root_window (gdk_display_get_default ()))
+  if (window == gdk_win32_display_get_root_window (gdk_display_get_default ()))
     {
       if (win_x)
         *win_x += _gdk_offset_x;
@@ -223,7 +223,7 @@ _gdk_device_wintab_translate_axes (GdkDeviceWintab *device_wintab,
   gint i;
 
   device = GDK_DEVICE (device_wintab);
-  root_window = gdk_display_get_root_window (gdk_window_get_display (window));
+  root_window = gdk_win32_display_get_root_window (gdk_window_get_display (window));
   impl_window = _gdk_window_get_impl_window (window);
   temp_x = temp_y = 0;
 

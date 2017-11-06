@@ -1355,8 +1355,7 @@ propagate (GdkWindow  **window,
 	{
 	  /* Owner doesn't want it, propagate to parent. */
 	  GdkWindow *parent = gdk_window_get_parent (*window);
-	  if (parent == gdk_display_get_root_window (gdk_display_get_default ()) ||
-	      parent == NULL)
+	  if (parent == NULL)
 	    {
 	      /* No parent; check if grabbed */
 	      if (grab_window != NULL)
@@ -1434,7 +1433,7 @@ _gdk_win32_get_window_rect (GdkWindow *window,
   point.y = client_rect.top;
 
   /* top level windows need screen coords */
-  if (gdk_window_get_parent (window) == gdk_display_get_root_window (gdk_display_get_default ()))
+  if (gdk_window_get_parent (window) == NULL)
     {
       ClientToScreen (hwnd, &point);
       point.x += _gdk_offset_x * window_impl->window_scale;
@@ -2162,7 +2161,7 @@ gdk_event_translate (MSG  *msg,
     {
       /* Apply global filters */
 
-      GdkFilterReturn result = apply_event_filters (window ? window : gdk_display_get_root_window (display),
+      GdkFilterReturn result = apply_event_filters (window ? window : gdk_win32_display_get_root_window (display),
                                                     msg,
                                                     &_gdk_default_filters);
 

@@ -353,7 +353,7 @@ static void
 wintab_init_check (GdkDeviceManagerWin32 *device_manager)
 {
   GdkDisplay *display = gdk_device_manager_get_display (GDK_DEVICE_MANAGER (device_manager));
-  GdkWindow *root = gdk_display_get_root_window (display);
+  GdkWindow *root = gdk_win32_display_get_root_window (display);
   static gboolean wintab_initialized = FALSE;
   GdkDeviceWintab *device;
   WORD specversion;
@@ -961,7 +961,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 G_GNUC_END_IGNORE_DEPRECATIONS;
   window = gdk_device_get_window_at_position (device_manager->core_pointer, &x, &y);
   if (window == NULL)
-    window = gdk_display_get_root_window (gdk_display_get_default ());
+    window = gdk_win32_display_get_root_window (gdk_display_get_default ());
 
   g_object_ref (window);
 
@@ -1004,7 +1004,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
           window = g_object_ref (last_grab->window);
         }
 
-      if (window == gdk_display_get_root_window (gdk_display_get_default ()))
+      if (window == gdk_win32_display_get_root_window (gdk_display_get_default ()))
         {
           GDK_NOTE (EVENTS_OR_INPUT, g_print ("... is root\n"));
           return FALSE;
@@ -1081,8 +1081,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
         {
           GDK_NOTE (EVENTS_OR_INPUT, g_print ("... not selected\n"));
 
-          if (window->parent == gdk_display_get_root_window (gdk_display_get_default ()) ||
-              window->parent == NULL)
+          if (window->parent == NULL)
             return FALSE;
 
           impl = GDK_WINDOW_IMPL_WIN32 (window->impl);

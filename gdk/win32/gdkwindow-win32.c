@@ -465,7 +465,7 @@ _gdk_win32_window_enable_transparency (GdkWindow *window)
   if (!gdk_display_is_composited (gdk_window_get_display (window)))
     return FALSE;
 
-  if (window == gdk_display_get_root_window (gdk_window_get_display (window)))
+  if (window == gdk_win32_display_get_root_window (gdk_window_get_display (window)))
     return FALSE;
 
   thiswindow = GDK_WINDOW_HWND (window);
@@ -719,7 +719,7 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
   switch (window->window_type)
     {
     case GDK_WINDOW_TOPLEVEL:
-      if (GDK_WINDOW_TYPE (window->parent) != GDK_WINDOW_ROOT)
+      if (window->parent && GDK_WINDOW_TYPE (window->parent) != GDK_WINDOW_ROOT)
 	{
 	  /* The common code warns for this case. */
 	  hparent = GetDesktopWindow ();
@@ -744,7 +744,7 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
 
     case GDK_WINDOW_TEMP:
       /* A temp window is not necessarily a top level window */
-      dwStyle = (gdk_display_get_root_window (display) == real_parent ? WS_POPUP : WS_CHILDWINDOW);
+      dwStyle = (real_parent == NULL || gdk_win32_display_get_root_window (display) == real_parent) ? WS_POPUP : WS_CHILDWINDOW);
       dwStyle |= WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
       dwExStyle |= WS_EX_TOOLWINDOW | WS_EX_TOPMOST;
       offset_x = _gdk_offset_x;
@@ -893,9 +893,7 @@ gdk_win32_window_foreign_new_for_display (GdkDisplay *display,
   parent = GetParent (anid);
 
   /* Always treat foreigns as toplevels */
-  window->parent = gdk_display_get_root_window (gdk_display_get_default ());
-
-  window->parent->children = g_list_concat (&window->children_list_node, window->parent->children);
+  window->parent = NULL;
 
   GetClientRect ((HWND) anid, &rect);
   point.x = rect.left;
@@ -2000,14 +1998,6 @@ gdk_win32_window_get_geometry (GdkWindow *window,
 
   display = gdk_window_get_display (window);
 
-  if (!window)
-    {
-      window = gdk_display_get_root_window (display);
-      window_is_root = TRUE;
-    }
-  else
-    window_is_root = (gdk_display_get_root_window (display) == window);
-
   if (!GDK_WINDOW_DESTROYED (window))
     {
       RECT rect;
@@ -2023,18 +2013,20 @@ gdk_win32_window_get_geometry (GdkWindow *window,
 	  pt.x = rect.left;
 	  pt.y = rect.top;
 	  ClientToScreen (GDK_WINDOW_HWND (window), &pt);
-	  ScreenToClient (GDK_WINDOW_HWND (parent), &pt);
+          if (parent)
+	    ScreenToClient (GDK_WINDOW_HWND (parent), &pt);
 	  rect.left = pt.x;
 	  rect.top = pt.y;
 
 	  pt.x = rect.right;
 	  pt.y = rect.bottom;
 	  ClientToScreen (GDK_WINDOW_HWND (window), &pt);
-	  ScreenToClient (GDK_WINDOW_HWND (parent), &pt);
+          if (parent)
+	    ScreenToClient (GDK_WINDOW_HWND (parent), &pt);
 	  rect.right = pt.x;
 	  rect.bottom = pt.y;
 
-	  if (gdk_display_get_root_window (display) == parent)
+	  if (parent == NULL)
 	    {
 	      rect.left += _gdk_offset_x * impl->window_scale;
 	      rect.top += _gdk_offset_y * impl->window_scale;
