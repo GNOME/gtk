@@ -2250,7 +2250,7 @@ broadcast_xmessage (GdkDisplay *display,
 		    const char *message)
 {
   Display *xdisplay = GDK_DISPLAY_XDISPLAY (display);
-  GdkWindow *root_window = gdk_display_get_root_window (display);
+  GdkWindow *root_window = gdk_x11_display_get_root_window (display);
   Window xroot_window = GDK_WINDOW_XID (root_window);
   
   Atom type_atom;

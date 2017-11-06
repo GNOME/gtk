@@ -744,7 +744,7 @@ gdk_x11_device_manager_xi2_constructed (GObject *object)
   event_mask.mask = mask;
 
   _gdk_x11_device_manager_xi2_select_events (GDK_DEVICE_MANAGER (object),
-                                             GDK_WINDOW_XID (gdk_display_get_root_window (display)),
+                                             GDK_WINDOW_XID (gdk_x11_display_get_root_window (display)),
                                              &event_mask);
 }
 

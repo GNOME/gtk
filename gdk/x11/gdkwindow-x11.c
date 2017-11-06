@@ -1149,9 +1149,7 @@ gdk_x11_window_foreign_new_for_display (GdkDisplay *display,
   impl->window_scale = GDK_X11_SCREEN (screen)->window_scale;
 
   /* Always treat foreigns as toplevels */
-  win->parent = gdk_display_get_root_window (display);
-
-  win->parent->children = g_list_concat (&win->children_list_node, win->parent->children);
+  win->parent = NULL;
 
   impl->xid = window;
 
@@ -1701,8 +1699,8 @@ _gdk_x11_window_set_window_scale (GdkWindow *window,
   if (window->window_type == GDK_WINDOW_FOREIGN)
     XMoveWindow (GDK_WINDOW_XDISPLAY (window),
                  GDK_WINDOW_XID (window),
-                 (window->x + window->parent->abs_x) * impl->window_scale,
-                 (window->y + window->parent->abs_y) * impl->window_scale);
+                 window->x * impl->window_scale,
+                 window->y * impl->window_scale);
   else
     {
       if (impl->override_redirect)
