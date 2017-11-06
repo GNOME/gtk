@@ -6016,20 +6016,23 @@ gdk_window_create_similar_image_surface (GdkWindow *     window,
 					 int             height,
 					 int             scale)
 {
-  GdkWindowImplClass *impl_class;
-  cairo_surface_t *window_surface, *surface;
+  cairo_surface_t *surface;
 
-  g_return_val_if_fail (window ==NULL || GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
 
   if (window == NULL)
-    window = gdk_display_get_root_window (gdk_display_get_default ());
-
-  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
-
-  if (impl_class->create_similar_image_surface)
-    surface = impl_class->create_similar_image_surface (window, format, width, height);
+    {
+      surface = cairo_image_surface_create (format, width, height);
+    }
+  else if (GDK_WINDOW_IMPL_GET_CLASS (window->impl)->create_similar_image_surface)
+    {
+      surface =
+        GDK_WINDOW_iMPL_GET_CLASS (window->impl)->create_similar_image_surface (window, format, width, height);
+    }
   else
     {
+      cairo_surface_t *window_surface;
+
       window_surface = gdk_window_ref_impl_surface (window);
       surface =
         cairo_surface_create_similar_image (window_surface,
