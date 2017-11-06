@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-09 18:55+0000\n"
-"PO-Revision-Date: 2017-10-09 21:23+0200\n"
+"POT-Creation-Date: 2017-11-05 23:20+0000\n"
+"PO-Revision-Date: 2017-11-06 20:41+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -35,15 +35,15 @@ msgstr ""
 msgid "Broadway display type not supported: %s"
 msgstr "Displej typu broadway není podporovaný: %s"
 
-#: gdk/gdkwindow.c:2057
+#: gdk/gdkwindow.c:1880
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Podpora GL je zakázána skrz GDK_DEBUG"
 
-#: gdk/gdkwindow.c:2068
+#: gdk/gdkwindow.c:1891
 msgid "The current backend does not support OpenGL"
 msgstr "Aktuální podpůrná vrstva nepodporuje OpenGL"
 
-#: gdk/gdkwindow.c:2161
+#: gdk/gdkwindow.c:1984
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Podpora technologie Vulkan je zakázána skrz GDK_DEBUG"
 
@@ -424,26 +424,26 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "UspatDoPaměti"
 
-#: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:2109
-#: gdk/wayland/gdkglcontext-wayland.c:433 gdk/win32/gdkglcontext-win32.c:754
-#: gdk/x11/gdkglcontext-x11.c:1213
+#: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:2088
+#: gdk/wayland/gdkglcontext-wayland.c:433 gdk/win32/gdkglcontext-win32.c:772
+#: gdk/x11/gdkglcontext-x11.c:1216
 msgid "No GL implementation is available"
 msgstr "Není k dispozici žádná implementace GL"
 
 #: gdk/mir/gdkmirglcontext.c:89 gdk/wayland/gdkglcontext-wayland.c:144
-#: gdk/win32/gdkglcontext-win32.c:688 gdk/x11/gdkglcontext-x11.c:663
+#: gdk/win32/gdkglcontext-win32.c:706 gdk/x11/gdkglcontext-x11.c:663
 #: gdk/x11/gdkglcontext-x11.c:713
 msgid "Unable to create a GL context"
 msgstr "Nelze vytvořit kontext GL"
 
-#: gdk/mir/gdkmirwindowimpl.c:2071 gdk/mir/gdkmirwindowimpl.c:2081
+#: gdk/mir/gdkmirwindowimpl.c:2050 gdk/mir/gdkmirwindowimpl.c:2060
 #: gdk/wayland/gdkglcontext-wayland.c:394
-#: gdk/wayland/gdkglcontext-wayland.c:404 gdk/win32/gdkglcontext-win32.c:643
-#: gdk/x11/gdkglcontext-x11.c:908
+#: gdk/wayland/gdkglcontext-wayland.c:404 gdk/win32/gdkglcontext-win32.c:660
+#: gdk/x11/gdkglcontext-x11.c:911
 msgid "No available configurations for the given pixel format"
 msgstr "Není dostupné žádné nastavení pro daný pixelový fotmát"
 
-#: gdk/mir/gdkmirwindowimpl.c:2117
+#: gdk/mir/gdkmirwindowimpl.c:2096
 msgid "3.2 core GL profile is not available on EGL implementation"
 msgstr "Profil základního GL 3.2 není k dispozici v implementaci EGL"
 
@@ -485,17 +485,17 @@ msgstr "Velikost palety v osmibitovém režimu"
 msgid "COLORS"
 msgstr "BARVY"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:295
+#: gdk/x11/gdkapplaunchcontext-x11.c:292
 #, c-format
 msgid "Starting %s"
 msgstr "Spouští se %s"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:308
+#: gdk/x11/gdkapplaunchcontext-x11.c:305
 #, c-format
 msgid "Opening %s"
 msgstr "Otevírá se %s"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:313
+#: gdk/x11/gdkapplaunchcontext-x11.c:310
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
@@ -503,7 +503,7 @@ msgstr[0] "Otevírání %d položky"
 msgstr[1] "Otevírání %d položek"
 msgstr[2] "Otevírání %d položek"
 
-#: gdk/x11/gdkglcontext-x11.c:936
+#: gdk/x11/gdkglcontext-x11.c:939
 #, c-format
 msgid "No available configurations for the given RGBA pixel format"
 msgstr "Není dostupné žádné nastavení pro daný pixelový fotmát RGBA"
@@ -539,7 +539,7 @@ msgid "Edit"
 msgstr "Upravit"
 
 #: gtk/a11y/gtkcellaccessible.c:259 gtk/a11y/gtkcolorswatchaccessible.c:149
-#: gtk/a11y/gtkentryaccessible.c:1551 gtk/a11y/gtkexpanderaccessible.c:281
+#: gtk/a11y/gtkentryaccessible.c:1546 gtk/a11y/gtkexpanderaccessible.c:281
 msgctxt "Action name"
 msgid "Activate"
 msgstr "Aktivovat"
@@ -594,7 +594,7 @@ msgctxt "Action description"
 msgid "Presses the combobox"
 msgstr "Stiskne rozbalovací seznam"
 
-#: gtk/a11y/gtkentryaccessible.c:1560
+#: gtk/a11y/gtkentryaccessible.c:1555
 msgctxt "Action description"
 msgid "Activates the entry"
 msgstr "Aktivuje položku"
@@ -634,15 +634,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Zavřít"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:404 gtk/gtkwindow.c:8164
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:399 gtk/gtkwindow.c:8169
 msgid "Minimize"
 msgstr "Minimalizovat"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:427 gtk/gtkwindow.c:8173
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:422 gtk/gtkwindow.c:8178
 msgid "Maximize"
 msgstr "Maximalizovat"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:427 gtk/gtkwindow.c:8130
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:422 gtk/gtkwindow.c:8135
 msgid "Restore"
 msgstr "Obnovit"
 
@@ -1048,109 +1048,109 @@ msgstr "Nezdařilo se uložit soubor %s: %s\n"
 msgid "Can’t close stream"
 msgstr "Nezdařilo se zavřít datový proud"
 
-#: gtk/gtkaboutdialog.c:113 gtk/ui/gtkaboutdialog.ui:181
+#: gtk/gtkaboutdialog.c:116 gtk/ui/gtkaboutdialog.ui:181
 msgid "License"
 msgstr "Licence"
 
-#: gtk/gtkaboutdialog.c:114
+#: gtk/gtkaboutdialog.c:117
 msgid "Custom License"
 msgstr "Vlastní licence"
 
-#: gtk/gtkaboutdialog.c:115
+#: gtk/gtkaboutdialog.c:118
 msgid "GNU General Public License, version 2 or later"
 msgstr "GNU General Public License, verze 2 nebo novější"
 
-#: gtk/gtkaboutdialog.c:116
+#: gtk/gtkaboutdialog.c:119
 msgid "GNU General Public License, version 3 or later"
 msgstr "GNU General Public License, verze 3 nebo novější"
 
-#: gtk/gtkaboutdialog.c:117
+#: gtk/gtkaboutdialog.c:120
 msgid "GNU Lesser General Public License, version 2.1 or later"
 msgstr "GNU Lesser General Public License, verze 2.1 nebo novější"
 
-#: gtk/gtkaboutdialog.c:118
+#: gtk/gtkaboutdialog.c:121
 msgid "GNU Lesser General Public License, version 3 or later"
 msgstr "GNU Lesser General Public License, verze 3 nebo novější"
 
-#: gtk/gtkaboutdialog.c:119
+#: gtk/gtkaboutdialog.c:122
 msgid "BSD 2-Clause License"
 msgstr "BSD 2-Clause License"
 
-#: gtk/gtkaboutdialog.c:120
+#: gtk/gtkaboutdialog.c:123
 msgid "The MIT License (MIT)"
 msgstr "The MIT License (MIT)"
 
-#: gtk/gtkaboutdialog.c:121
+#: gtk/gtkaboutdialog.c:124
 msgid "Artistic License 2.0"
 msgstr "Artistic License 2.0"
 
-#: gtk/gtkaboutdialog.c:122
+#: gtk/gtkaboutdialog.c:125
 msgid "GNU General Public License, version 2 only"
 msgstr "GNU General Public License, pouze verze 2"
 
-#: gtk/gtkaboutdialog.c:123
+#: gtk/gtkaboutdialog.c:126
 msgid "GNU General Public License, version 3 only"
 msgstr "GNU General Public License, pouze verze 3"
 
-#: gtk/gtkaboutdialog.c:124
+#: gtk/gtkaboutdialog.c:127
 msgid "GNU Lesser General Public License, version 2.1 only"
 msgstr "GNU Lesser General Public License, pouze verze 2.1"
 
-#: gtk/gtkaboutdialog.c:125
+#: gtk/gtkaboutdialog.c:128
 msgid "GNU Lesser General Public License, version 3 only"
 msgstr "GNU Lesser General Public License, pouze verze 3"
 
-#: gtk/gtkaboutdialog.c:126
+#: gtk/gtkaboutdialog.c:129
 msgid "GNU Affero General Public License, version 3 or later"
 msgstr "GNU Affero General Public License, verze 3 nebo novější"
 
-#: gtk/gtkaboutdialog.c:745
+#: gtk/gtkaboutdialog.c:741
 msgid "C_redits"
 msgstr "Zá_sluhy"
 
-#: gtk/gtkaboutdialog.c:756
+#: gtk/gtkaboutdialog.c:752
 msgid "_License"
 msgstr "_Licence"
 
-#: gtk/gtkaboutdialog.c:767 gtk/gtkcustompaperunixdialog.c:329
+#: gtk/gtkaboutdialog.c:763 gtk/gtkcustompaperunixdialog.c:329
 #: gtk/gtkmessagedialog.c:848 gtk/ui/gtkassistant.ui:134
 msgid "_Close"
 msgstr "_Zavřít"
 
-#: gtk/gtkaboutdialog.c:1057
+#: gtk/gtkaboutdialog.c:1027
 msgid "Could not show link"
 msgstr "Nelze zobrazit odkaz"
 
-#: gtk/gtkaboutdialog.c:1094
+#: gtk/gtkaboutdialog.c:1064
 msgid "Website"
 msgstr "Webové stránky"
 
 #. used for the application menu on MacOS.  %s is replaced with the application name.
-#: gtk/gtkaboutdialog.c:1144 gtk/ui/gtkapplication-quartz.ui:7
+#: gtk/gtkaboutdialog.c:1114 gtk/ui/gtkapplication-quartz.ui:7
 #, c-format
 msgid "About %s"
 msgstr "O aplikaci %s"
 
-#: gtk/gtkaboutdialog.c:2401
+#: gtk/gtkaboutdialog.c:2373
 msgid "Created by"
 msgstr "Vytvořili"
 
-#: gtk/gtkaboutdialog.c:2404
+#: gtk/gtkaboutdialog.c:2376
 msgid "Documented by"
 msgstr "Zdokumentovali"
 
-#: gtk/gtkaboutdialog.c:2414
+#: gtk/gtkaboutdialog.c:2386
 msgid "Translated by"
 msgstr "Přeložili"
 
-#: gtk/gtkaboutdialog.c:2419
+#: gtk/gtkaboutdialog.c:2391
 msgid "Artwork by"
 msgstr "Grafika"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: gtk/gtkaboutdialog.c:2593
+#: gtk/gtkaboutdialog.c:2565
 #, c-format
 msgid ""
 "This program comes with absolutely no warranty.\n"
@@ -1164,7 +1164,7 @@ msgstr ""
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:199 gtk/gtkshortcutlabel.c:102
+#: gtk/gtkaccellabel.c:200 gtk/gtkshortcutlabel.c:102
 #: gtk/gtkshortcutlabel.c:138
 msgctxt "keyboard label"
 msgid "Shift"
@@ -1175,7 +1175,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:205 gtk/gtkshortcutlabel.c:105
+#: gtk/gtkaccellabel.c:206 gtk/gtkshortcutlabel.c:105
 #: gtk/gtkshortcutlabel.c:140
 msgctxt "keyboard label"
 msgid "Ctrl"
@@ -1186,7 +1186,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:211 gtk/gtkshortcutlabel.c:108
+#: gtk/gtkaccellabel.c:212 gtk/gtkshortcutlabel.c:108
 #: gtk/gtkshortcutlabel.c:142
 msgctxt "keyboard label"
 msgid "Alt"
@@ -1197,7 +1197,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:795 gtk/gtkshortcutlabel.c:114
+#: gtk/gtkaccellabel.c:796 gtk/gtkshortcutlabel.c:114
 #: gtk/gtkshortcutlabel.c:152
 msgctxt "keyboard label"
 msgid "Super"
@@ -1208,7 +1208,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:808 gtk/gtkshortcutlabel.c:117
+#: gtk/gtkaccellabel.c:809 gtk/gtkshortcutlabel.c:117
 #: gtk/gtkshortcutlabel.c:154
 msgctxt "keyboard label"
 msgid "Hyper"
@@ -1219,18 +1219,18 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:822 gtk/gtkshortcutlabel.c:111
+#: gtk/gtkaccellabel.c:823 gtk/gtkshortcutlabel.c:111
 #: gtk/gtkshortcutlabel.c:156
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: gtk/gtkaccellabel.c:839
+#: gtk/gtkaccellabel.c:840
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Mezerník"
 
-#: gtk/gtkaccellabel.c:842 gtk/gtkshortcutlabel.c:181
+#: gtk/gtkaccellabel.c:843 gtk/gtkshortcutlabel.c:181
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Zpětné lomítko"
@@ -1274,28 +1274,28 @@ msgstr "Zapomenout asociaci"
 msgid "Failed to start GNOME Software"
 msgstr "Nezdařilo se spustit GNOME Software"
 
-#: gtk/gtkappchooserwidget.c:634
+#: gtk/gtkappchooserwidget.c:635
 msgid "Default Application"
 msgstr "Výchozí aplikace"
 
-#: gtk/gtkappchooserwidget.c:684
+#: gtk/gtkappchooserwidget.c:685
 #, c-format
 msgid "No applications found for “%s”."
 msgstr "Nebyly nalezeny žádné aplikace pro „%s“."
 
-#: gtk/gtkappchooserwidget.c:767
+#: gtk/gtkappchooserwidget.c:768
 msgid "Recommended Applications"
 msgstr "Doporučené aplikace"
 
-#: gtk/gtkappchooserwidget.c:782
+#: gtk/gtkappchooserwidget.c:783
 msgid "Related Applications"
 msgstr "Související aplikace"
 
-#: gtk/gtkappchooserwidget.c:796
+#: gtk/gtkappchooserwidget.c:797
 msgid "Other Applications"
 msgstr "Další aplikace"
 
-#: gtk/gtkapplicationwindow.c:340 gtk/gtkprintoperation-unix.c:486
+#: gtk/gtkapplicationwindow.c:340 gtk/gtkprintoperation-unix.c:485
 #: gtk/gtkprintoperation-win32.c:1465 gtk/inspector/prop-editor.c:1623
 msgid "Application"
 msgstr "Aplikace"
@@ -1715,7 +1715,7 @@ msgstr "Vytvořit vlastní barvu"
 msgid "Custom color %d: %s"
 msgstr "Vlastní barva %d: %s"
 
-#: gtk/gtkcolorplane.c:429
+#: gtk/gtkcolorplane.c:416
 msgid "Color Plane"
 msgstr "Barevná rovina"
 
@@ -1744,7 +1744,7 @@ msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: gtk/gtkcustompaperunixdialog.c:405 gtk/gtkprintunixdialog.c:3347
+#: gtk/gtkcustompaperunixdialog.c:405 gtk/gtkprintunixdialog.c:3334
 msgid "Manage Custom Sizes"
 msgstr "Správa vlastních velikostí"
 
@@ -1797,52 +1797,52 @@ msgstr "P_ravý:"
 msgid "Paper Margins"
 msgstr "Okraje papíru"
 
-#: gtk/gtkentry.c:8510 gtk/gtklabel.c:6095 gtk/gtktextview.c:9286
+#: gtk/gtkentry.c:8495 gtk/gtklabel.c:6082 gtk/gtktextview.c:9241
 msgid "Cu_t"
 msgstr "_Vyjmout"
 
-#: gtk/gtkentry.c:8514 gtk/gtklabel.c:6096 gtk/gtktextview.c:9290
+#: gtk/gtkentry.c:8499 gtk/gtklabel.c:6083 gtk/gtktextview.c:9245
 msgid "_Copy"
 msgstr "_Kopírovat"
 
-#: gtk/gtkentry.c:8518 gtk/gtklabel.c:6097 gtk/gtktextview.c:9292
+#: gtk/gtkentry.c:8503 gtk/gtklabel.c:6084 gtk/gtktextview.c:9247
 msgid "_Paste"
 msgstr "V_ložit"
 
-#: gtk/gtkentry.c:8521 gtk/gtkfilechooserwidget.c:1484
-#: gtk/gtkfilechooserwidget.c:2279 gtk/gtklabel.c:6099 gtk/gtktextview.c:9295
+#: gtk/gtkentry.c:8506 gtk/gtkfilechooserwidget.c:1484
+#: gtk/gtkfilechooserwidget.c:2279 gtk/gtklabel.c:6086 gtk/gtktextview.c:9250
 msgid "_Delete"
 msgstr "_Smazat"
 
-#: gtk/gtkentry.c:8532 gtk/gtklabel.c:6108 gtk/gtktextview.c:9309
+#: gtk/gtkentry.c:8517 gtk/gtklabel.c:6095 gtk/gtktextview.c:9264
 msgid "Select _All"
 msgstr "Vybr_at vše"
 
-#: gtk/gtkentry.c:8542
+#: gtk/gtkentry.c:8527
 msgid "Insert _Emoji"
 msgstr "Vložit _Emodži"
 
-#: gtk/gtkentry.c:8716 gtk/gtktextview.c:9534
+#: gtk/gtkentry.c:8701 gtk/gtktextview.c:9489
 msgid "Select all"
 msgstr "Vybrat vše"
 
-#: gtk/gtkentry.c:8719 gtk/gtktextview.c:9537
+#: gtk/gtkentry.c:8704 gtk/gtktextview.c:9492
 msgid "Cut"
 msgstr "Vyjmout"
 
-#: gtk/gtkentry.c:8722 gtk/gtktextview.c:9540
+#: gtk/gtkentry.c:8707 gtk/gtktextview.c:9495
 msgid "Copy"
 msgstr "Kopírovat"
 
-#: gtk/gtkentry.c:8725 gtk/gtktextview.c:9543
+#: gtk/gtkentry.c:8710 gtk/gtktextview.c:9498
 msgid "Paste"
 msgstr "Vložit"
 
-#: gtk/gtkentry.c:9672
+#: gtk/gtkentry.c:9657
 msgid "Caps Lock is on"
 msgstr "Funkce Caps Lock je zapnuta"
 
-#: gtk/gtkentry.c:9944
+#: gtk/gtkentry.c:9929
 msgid "Insert Emoji"
 msgstr "Vložit Emodži"
 
@@ -1850,7 +1850,7 @@ msgstr "Vložit Emodži"
 msgid "Select a File"
 msgstr "Vyberte soubor"
 
-#: gtk/gtkfilechooserbutton.c:107 gtk/gtkplacessidebar.c:1040
+#: gtk/gtkfilechooserbutton.c:107 gtk/gtkplacessidebar.c:1065
 msgid "Desktop"
 msgstr "Pracovní plocha"
 
@@ -1858,7 +1858,7 @@ msgstr "Pracovní plocha"
 msgid "(None)"
 msgstr "(žádný)"
 
-#: gtk/gtkfilechooserbutton.c:2205
+#: gtk/gtkfilechooserbutton.c:2202
 msgid "Other…"
 msgstr "Jiné…"
 
@@ -1923,13 +1923,13 @@ msgid "A file with that name already exists"
 msgstr "Soubor s tímto názvem již existuje"
 
 #: gtk/gtkfilechoosernative.c:540 gtk/gtkfilechoosernative.c:625
-#: gtk/gtkfilechooserwidget.c:1483 gtk/gtkfilechooserwidget.c:6366
+#: gtk/gtkfilechooserwidget.c:1483 gtk/gtkfilechooserwidget.c:6352
 #: gtk/gtkmessagedialog.c:852 gtk/gtkmessagedialog.c:861
 #: gtk/gtkmountoperation.c:542 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
-#: gtk/gtkprintunixdialog.c:674 gtk/gtkprintunixdialog.c:741
-#: gtk/gtkwindow.c:10949 gtk/inspector/css-editor.c:201
-#: gtk/inspector/recorder.c:612 gtk/ui/gtkappchooserdialog.ui:58
+#: gtk/gtkprintunixdialog.c:664 gtk/gtkprintunixdialog.c:731
+#: gtk/gtkwindow.c:10924 gtk/inspector/css-editor.c:201
+#: gtk/inspector/recorder.c:704 gtk/ui/gtkappchooserdialog.ui:54
 #: gtk/ui/gtkassistant.ui:116 gtk/ui/gtkcolorchooserdialog.ui:34
 #: gtk/ui/gtkfontchooserdialog.ui:28
 msgid "_Cancel"
@@ -1937,13 +1937,13 @@ msgstr "_Zrušit"
 
 #. Open item is always present
 #: gtk/gtkfilechoosernative.c:541 gtk/gtkfilechoosernative.c:619
-#: gtk/gtkplacessidebar.c:3525 gtk/gtkplacessidebar.c:3586
-#: gtk/gtkplacesview.c:1627
+#: gtk/gtkplacessidebar.c:3560 gtk/gtkplacessidebar.c:3621
+#: gtk/gtkplacesview.c:1617
 msgid "_Open"
 msgstr "_Otevřít"
 
 #: gtk/gtkfilechoosernative.c:619 gtk/inspector/css-editor.c:202
-#: gtk/inspector/recorder.c:613
+#: gtk/inspector/recorder.c:705
 msgid "_Save"
 msgstr "_Uložit"
 
@@ -2051,7 +2051,7 @@ msgstr "_Kopírovat umístění"
 msgid "_Add to Bookmarks"
 msgstr "_Přidat mezi záložky"
 
-#: gtk/gtkfilechooserwidget.c:2278 gtk/gtkplacessidebar.c:2639
+#: gtk/gtkfilechooserwidget.c:2278 gtk/gtkplacessidebar.c:2674
 #: gtk/ui/gtkfilechooserwidget.ui:475
 msgid "_Rename"
 msgstr "Př_ejmenovat"
@@ -2104,81 +2104,81 @@ msgstr "Zadat umístění"
 msgid "Enter location or URL"
 msgstr "Zadat umístění nebo URL"
 
-#: gtk/gtkfilechooserwidget.c:4385 gtk/gtkfilechooserwidget.c:7275
+#: gtk/gtkfilechooserwidget.c:4371 gtk/gtkfilechooserwidget.c:7261
 #: gtk/ui/gtkfilechooserwidget.ui:211
 msgid "Modified"
 msgstr "Změněno"
 
-#: gtk/gtkfilechooserwidget.c:4663
+#: gtk/gtkfilechooserwidget.c:4649
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Nelze přečíst obsah %s"
 
-#: gtk/gtkfilechooserwidget.c:4667
+#: gtk/gtkfilechooserwidget.c:4653
 msgid "Could not read the contents of the folder"
 msgstr "Nelze přečíst obsah složky"
 
 #. Translators: see g_date_time_format() for details on the format
-#: gtk/gtkfilechooserwidget.c:4797 gtk/gtkfilechooserwidget.c:4845
+#: gtk/gtkfilechooserwidget.c:4783 gtk/gtkfilechooserwidget.c:4831
 msgid "%H:%M"
 msgstr "%k∶%M"
 
-#: gtk/gtkfilechooserwidget.c:4799 gtk/gtkfilechooserwidget.c:4847
+#: gtk/gtkfilechooserwidget.c:4785 gtk/gtkfilechooserwidget.c:4833
 msgid "%l:%M %p"
 msgstr "%l:%M %p"
 
-#: gtk/gtkfilechooserwidget.c:4803
+#: gtk/gtkfilechooserwidget.c:4789
 msgid "Yesterday"
 msgstr "Včera"
 
-#: gtk/gtkfilechooserwidget.c:4811
+#: gtk/gtkfilechooserwidget.c:4797
 msgid "%-e %b"
 msgstr "%-e. %B"
 
-#: gtk/gtkfilechooserwidget.c:4815
+#: gtk/gtkfilechooserwidget.c:4801
 msgid "%-e %b %Y"
 msgstr "%-e. %B %Y"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: gtk/gtkfilechooserwidget.c:5050 gtk/inspector/prop-editor.c:1626
+#: gtk/gtkfilechooserwidget.c:5036 gtk/inspector/prop-editor.c:1626
 #: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "Neznámé"
 
-#: gtk/gtkfilechooserwidget.c:5089 gtk/gtkplacessidebar.c:1025
+#: gtk/gtkfilechooserwidget.c:5075 gtk/gtkplacessidebar.c:1050
 msgid "Home"
 msgstr "Domů"
 
-#: gtk/gtkfilechooserwidget.c:5582
+#: gtk/gtkfilechooserwidget.c:5568
 msgid "Cannot change to folder because it is not local"
 msgstr "Nelze přejít do složky, protože není místní"
 
-#: gtk/gtkfilechooserwidget.c:6359 gtk/gtkprintunixdialog.c:665
+#: gtk/gtkfilechooserwidget.c:6345 gtk/gtkprintunixdialog.c:655
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Soubor nazvaný „%s“ již existuje. Chcete jej nahradit?"
 
-#: gtk/gtkfilechooserwidget.c:6362 gtk/gtkprintunixdialog.c:669
+#: gtk/gtkfilechooserwidget.c:6348 gtk/gtkprintunixdialog.c:659
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr ""
 "V „%s“ již tento soubor existuje. Jeho nahrazením přepíšete celý jeho obsah."
 
-#: gtk/gtkfilechooserwidget.c:6367 gtk/gtkprintunixdialog.c:677
+#: gtk/gtkfilechooserwidget.c:6353 gtk/gtkprintunixdialog.c:667
 msgid "_Replace"
 msgstr "Na_hradit"
 
-#: gtk/gtkfilechooserwidget.c:6575
+#: gtk/gtkfilechooserwidget.c:6561
 msgid "You do not have access to the specified folder."
 msgstr "Do zadané složky nemáte přístup."
 
-#: gtk/gtkfilechooserwidget.c:7199
+#: gtk/gtkfilechooserwidget.c:7185
 msgid "Could not send the search request"
 msgstr "Nelze odeslat vyhledávací požadavek"
 
-#: gtk/gtkfilechooserwidget.c:7485
+#: gtk/gtkfilechooserwidget.c:7471
 msgid "Accessed"
 msgstr "Otevřeno"
 
@@ -2208,24 +2208,24 @@ msgctxt "font"
 msgid "None"
 msgstr "Žádné"
 
-#: gtk/gtkglarea.c:293
+#: gtk/gtkglarea.c:298
 msgid "OpenGL context creation failed"
 msgstr "Vytvoření kontextu GL selhalo"
 
-#: gtk/gtkheaderbar.c:379
+#: gtk/gtkheaderbar.c:374
 msgid "Application menu"
 msgstr "Nabídka aplikace"
 
-#: gtk/gtkheaderbar.c:445 gtk/gtkwindow.c:8200
+#: gtk/gtkheaderbar.c:440 gtk/gtkwindow.c:8205
 msgid "Close"
 msgstr "Zavřít"
 
-#: gtk/gtkicontheme.c:2304 gtk/gtkicontheme.c:2369
+#: gtk/gtkicontheme.c:2300 gtk/gtkicontheme.c:2365
 #, c-format
 msgid "Icon “%s” not present in theme %s"
 msgstr "Ikona „%s“ není v motivu %s obsažena"
 
-#: gtk/gtkicontheme.c:3978 gtk/gtkicontheme.c:4345
+#: gtk/gtkicontheme.c:3974 gtk/gtkicontheme.c:4374
 msgid "Failed to load icon"
 msgstr "Nelze načíst ikonu"
 
@@ -2239,29 +2239,29 @@ msgctxt "input method menu"
 msgid "None"
 msgstr "Žádná"
 
-#: gtk/gtkinfobar.c:1058 gtk/gtkmessagedialog.c:353
+#: gtk/gtkinfobar.c:1057 gtk/gtkmessagedialog.c:353
 msgid "Information"
 msgstr "Informace"
 
-#: gtk/gtkinfobar.c:1062 gtk/gtkmessagedialog.c:357
+#: gtk/gtkinfobar.c:1061 gtk/gtkmessagedialog.c:357
 msgid "Question"
 msgstr "Otázka"
 
-#: gtk/gtkinfobar.c:1066 gtk/gtkmessagedialog.c:361
+#: gtk/gtkinfobar.c:1065 gtk/gtkmessagedialog.c:361
 msgid "Warning"
 msgstr "Varování"
 
-#: gtk/gtkinfobar.c:1070 gtk/gtkmessagedialog.c:365
+#: gtk/gtkinfobar.c:1069 gtk/gtkmessagedialog.c:365
 msgid "Error"
 msgstr "Chyba"
 
 #. Open Link
-#: gtk/gtklabel.c:6076
+#: gtk/gtklabel.c:6063
 msgid "_Open Link"
 msgstr "_Otevřít odkaz"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6085
+#: gtk/gtklabel.c:6072
 msgid "Copy _Link Address"
 msgstr "Ko_pírovat adresu odkazu"
 
@@ -2322,11 +2322,11 @@ msgstr "%s: neexistuje žádná aplikace s názvem %s"
 msgid "%s: error launching application: %s\n"
 msgstr "%s: chyba při spouštění aplikace: %s\n"
 
-#: gtk/gtklinkbutton.c:368
+#: gtk/gtklinkbutton.c:359
 msgid "Copy URL"
 msgstr "Kopírovat URL"
 
-#: gtk/gtklinkbutton.c:513
+#: gtk/gtklinkbutton.c:504
 msgid "Invalid URI"
 msgstr "Neplatné URI"
 
@@ -2372,7 +2372,7 @@ msgid "default:LTR"
 msgstr "default:LTR"
 
 #: gtk/gtkmessagedialog.c:844 gtk/gtkmessagedialog.c:862
-#: gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:10950
+#: gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:10925
 msgid "_OK"
 msgstr "_Budiž"
 
@@ -2469,7 +2469,7 @@ msgstr "Z Shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Nelze ukončit proces s PID %d: %s"
 
-#: gtk/gtknotebook.c:4326 gtk/gtknotebook.c:6583
+#: gtk/gtknotebook.c:4324 gtk/gtknotebook.c:6580
 #, c-format
 msgid "Page %u"
 msgstr "Strana %u"
@@ -2505,7 +2505,7 @@ msgstr ""
 " Horní: %s %s\n"
 " Dolní: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:871 gtk/gtkprintunixdialog.c:3401
+#: gtk/gtkpagesetupunixdialog.c:871 gtk/gtkprintunixdialog.c:3388
 msgid "Manage Custom Sizes…"
 msgstr "Správa vlastních velikostí…"
 
@@ -2514,249 +2514,257 @@ msgstr "Správa vlastních velikostí…"
 msgid "Page Setup"
 msgstr "Vzhled stránky"
 
-#: gtk/gtkpathbar.c:1444
+#: gtk/gtkpathbar.c:1519
 msgid "File System Root"
 msgstr "Kořen systému souborů"
 
-#: gtk/gtkplacessidebar.c:1014
+#: gtk/gtkplacessidebar.c:1028
 msgid "Recent"
 msgstr "Naposledy použité"
 
-#: gtk/gtkplacessidebar.c:1016
+#: gtk/gtkplacessidebar.c:1030
 msgid "Recent files"
 msgstr "Naposledy použité soubory"
 
-#: gtk/gtkplacessidebar.c:1027
+#: gtk/gtkplacessidebar.c:1039
+msgid "Starred"
+msgstr "Oblíbené"
+
+#: gtk/gtkplacessidebar.c:1041
+msgid "Favorite files"
+msgstr "Oblíbené soubory"
+
+#: gtk/gtkplacessidebar.c:1052
 msgid "Open your personal folder"
 msgstr "Otevřít osobní složku"
 
-#: gtk/gtkplacessidebar.c:1042
+#: gtk/gtkplacessidebar.c:1067
 msgid "Open the contents of your desktop in a folder"
 msgstr "Otevřít obsah vaší plochy ve složce"
 
-#: gtk/gtkplacessidebar.c:1056
+#: gtk/gtkplacessidebar.c:1081
 msgid "Enter Location"
 msgstr "Zadat umístění"
 
-#: gtk/gtkplacessidebar.c:1058
+#: gtk/gtkplacessidebar.c:1083
 msgid "Manually enter a location"
 msgstr "Vložit umístění ručně"
 
-#: gtk/gtkplacessidebar.c:1068
+#: gtk/gtkplacessidebar.c:1093
 msgid "Trash"
 msgstr "Koš"
 
-#: gtk/gtkplacessidebar.c:1070
+#: gtk/gtkplacessidebar.c:1095
 msgid "Open the trash"
 msgstr "Otevřít koš"
 
 #. translators: %s is the name of a cloud provider for files
-#: gtk/gtkplacessidebar.c:1113
+#: gtk/gtkplacessidebar.c:1138
 #, c-format
 msgid "Open %s"
 msgstr "Otevřít %s"
 
-#: gtk/gtkplacessidebar.c:1194 gtk/gtkplacessidebar.c:1222
-#: gtk/gtkplacessidebar.c:1421
+#: gtk/gtkplacessidebar.c:1219 gtk/gtkplacessidebar.c:1247
+#: gtk/gtkplacessidebar.c:1446
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "Připojit a otevřít „%s“"
 
-#: gtk/gtkplacessidebar.c:1310
+#: gtk/gtkplacessidebar.c:1335
 msgid "Open the contents of the file system"
 msgstr "Otevřít obsah systému souborů"
 
-#: gtk/gtkplacessidebar.c:1396
+#: gtk/gtkplacessidebar.c:1421
 msgid "New bookmark"
 msgstr "Nová záložka"
 
-#: gtk/gtkplacessidebar.c:1398
+#: gtk/gtkplacessidebar.c:1423
 msgid "Add a new bookmark"
 msgstr "Přidat novou záložku"
 
-#: gtk/gtkplacessidebar.c:1466
+#: gtk/gtkplacessidebar.c:1491
 msgid "Other Locations"
 msgstr "Další umístění"
 
-#: gtk/gtkplacessidebar.c:1467
+#: gtk/gtkplacessidebar.c:1492
 msgid "Show other locations"
 msgstr "Zobrazit další umístění"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: gtk/gtkplacessidebar.c:2262 gtk/gtkplacessidebar.c:3606
+#: gtk/gtkplacessidebar.c:2293 gtk/gtkplacessidebar.c:3641
 msgid "_Start"
 msgstr "_Spustit"
 
-#: gtk/gtkplacessidebar.c:2263 gtk/gtkplacessidebar.c:3607
+#: gtk/gtkplacessidebar.c:2294 gtk/gtkplacessidebar.c:3642
 msgid "_Stop"
 msgstr "_Zastavit"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: gtk/gtkplacessidebar.c:2270
+#: gtk/gtkplacessidebar.c:2301
 msgid "_Power On"
 msgstr "_Zapnout"
 
-#: gtk/gtkplacessidebar.c:2271
+#: gtk/gtkplacessidebar.c:2302
 msgid "_Safely Remove Drive"
 msgstr "_Bezpečně odebrat jednotku"
 
-#: gtk/gtkplacessidebar.c:2275
+#: gtk/gtkplacessidebar.c:2306
 msgid "_Connect Drive"
 msgstr "_Připojit jednotku"
 
-#: gtk/gtkplacessidebar.c:2276
+#: gtk/gtkplacessidebar.c:2307
 msgid "_Disconnect Drive"
 msgstr "_Odpojit jednotku"
 
-#: gtk/gtkplacessidebar.c:2280
+#: gtk/gtkplacessidebar.c:2311
 msgid "_Start Multi-disk Device"
 msgstr "_Spustit zařízení s více disky"
 
-#: gtk/gtkplacessidebar.c:2281
+#: gtk/gtkplacessidebar.c:2312
 msgid "_Stop Multi-disk Device"
 msgstr "_Zastavit zařízení s více disky"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: gtk/gtkplacessidebar.c:2286
+#: gtk/gtkplacessidebar.c:2317
 msgid "_Unlock Device"
 msgstr "_Odemknout zařízení"
 
-#: gtk/gtkplacessidebar.c:2287
+#: gtk/gtkplacessidebar.c:2318
 msgid "_Lock Device"
 msgstr "U_zamknout zařízení"
 
-#: gtk/gtkplacessidebar.c:2325 gtk/gtkplacessidebar.c:3291
+#: gtk/gtkplacessidebar.c:2356 gtk/gtkplacessidebar.c:3326
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "Není možné spustit „%s“"
 
-#: gtk/gtkplacessidebar.c:2355
+#: gtk/gtkplacessidebar.c:2386
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Není možné přistoupit k „%s“"
 
-#: gtk/gtkplacessidebar.c:2564
+#: gtk/gtkplacessidebar.c:2599
 msgid "This name is already taken"
 msgstr "Název je již použit"
 
-#: gtk/gtkplacessidebar.c:2633 gtk/inspector/actions.ui:43
+#: gtk/gtkplacessidebar.c:2668 gtk/inspector/actions.ui:43
 #: gtk/inspector/css-node-tree.ui:39 gtk/inspector/object-tree.ui:92
 #: gtk/ui/gtkfilechooserwidget.ui:165 gtk/ui/gtkfilechooserwidget.ui:451
 msgid "Name"
 msgstr "Název"
 
-#: gtk/gtkplacessidebar.c:2832
+#: gtk/gtkplacessidebar.c:2867
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "Není možné odpojit „%s“"
 
-#: gtk/gtkplacessidebar.c:3008
+#: gtk/gtkplacessidebar.c:3043
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "Není možné zastavit „%s“"
 
-#: gtk/gtkplacessidebar.c:3037
+#: gtk/gtkplacessidebar.c:3072
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "Není možné vysunout „%s“"
 
-#: gtk/gtkplacessidebar.c:3066 gtk/gtkplacessidebar.c:3095
+#: gtk/gtkplacessidebar.c:3101 gtk/gtkplacessidebar.c:3130
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Nezdařilo se vysunout %s"
 
-#: gtk/gtkplacessidebar.c:3243
+#: gtk/gtkplacessidebar.c:3278
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "Není možné zkontrolovat „%s“ ohledně změny média"
 
-#: gtk/gtkplacessidebar.c:3529 gtk/gtkplacessidebar.c:3589
-#: gtk/gtkplacesview.c:1636
+#: gtk/gtkplacessidebar.c:3564 gtk/gtkplacessidebar.c:3624
+#: gtk/gtkplacesview.c:1626
 msgid "Open in New _Tab"
 msgstr "Otevřít v nové kar_tě"
 
-#: gtk/gtkplacessidebar.c:3533 gtk/gtkplacessidebar.c:3592
-#: gtk/gtkplacesview.c:1646
+#: gtk/gtkplacessidebar.c:3568 gtk/gtkplacessidebar.c:3627
+#: gtk/gtkplacesview.c:1636
 msgid "Open in New _Window"
 msgstr "Otevřít v no_vém okně"
 
-#: gtk/gtkplacessidebar.c:3596
+#: gtk/gtkplacessidebar.c:3631
 msgid "_Add Bookmark"
 msgstr "_Přidat záložku"
 
-#: gtk/gtkplacessidebar.c:3597
+#: gtk/gtkplacessidebar.c:3632
 msgid "_Remove"
 msgstr "O_dstranit"
 
-#: gtk/gtkplacessidebar.c:3598
+#: gtk/gtkplacessidebar.c:3633
 msgid "Rename…"
 msgstr "Přejmenovat…"
 
-#: gtk/gtkplacessidebar.c:3602 gtk/gtkplacesview.c:1677
+#: gtk/gtkplacessidebar.c:3637 gtk/gtkplacesview.c:1667
 msgid "_Mount"
 msgstr "_Připojit"
 
-#: gtk/gtkplacessidebar.c:3603 gtk/gtkplacesview.c:1668
+#: gtk/gtkplacessidebar.c:3638 gtk/gtkplacesview.c:1658
 msgid "_Unmount"
 msgstr "_Odpojit"
 
-#: gtk/gtkplacessidebar.c:3604
+#: gtk/gtkplacessidebar.c:3639
 msgid "_Eject"
 msgstr "V_ysunout"
 
-#: gtk/gtkplacessidebar.c:3605
+#: gtk/gtkplacessidebar.c:3640
 msgid "_Detect Media"
 msgstr "_Rozpoznat médium"
 
-#: gtk/gtkplacessidebar.c:4057 gtk/gtkplacesview.c:1115
+#: gtk/gtkplacessidebar.c:4092 gtk/gtkplacesview.c:1105
 msgid "Computer"
 msgstr "Počítač"
 
-#: gtk/gtkplacesview.c:891
+#: gtk/gtkplacesview.c:881
 msgid "Searching for network locations"
 msgstr "Hledají se síťová umístění"
 
-#: gtk/gtkplacesview.c:898
+#: gtk/gtkplacesview.c:888
 msgid "No network locations found"
 msgstr "Nebyla nalezena žádná síťová umístění."
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1226 gtk/gtkplacesview.c:1301
+#: gtk/gtkplacesview.c:1216 gtk/gtkplacesview.c:1291
 msgid "Unable to access location"
 msgstr "Nelze přistoupit k umístění"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1244 gtk/ui/gtkplacesview.ui:407
+#: gtk/gtkplacesview.c:1234 gtk/ui/gtkplacesview.ui:407
 msgid "Con_nect"
 msgstr "_Připojit"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1364
+#: gtk/gtkplacesview.c:1354
 msgid "Unable to unmount volume"
 msgstr "Není možné odpojit svazek"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1464
+#: gtk/gtkplacesview.c:1454
 msgid "Cance_l"
 msgstr "Zruši_t"
 
-#: gtk/gtkplacesview.c:1668
+#: gtk/gtkplacesview.c:1658
 msgid "_Disconnect"
 msgstr "_Odpojit"
 
-#: gtk/gtkplacesview.c:1677
+#: gtk/gtkplacesview.c:1667
 msgid "_Connect"
 msgstr "_Připojit"
 
-#: gtk/gtkplacesview.c:1820
+#: gtk/gtkplacesview.c:1810
 msgid "Unable to get remote server location"
 msgstr "Nelze získat umístění vzdáleného serveru"
 
-#: gtk/gtkplacesview.c:1959 gtk/gtkplacesview.c:1968
+#: gtk/gtkplacesview.c:1949 gtk/gtkplacesview.c:1958
 msgid "Networks"
 msgstr "Sítě"
 
-#: gtk/gtkplacesview.c:1959 gtk/gtkplacesview.c:1968
+#: gtk/gtkplacesview.c:1949 gtk/gtkplacesview.c:1958
 msgid "On This Computer"
 msgstr "V tomto počítači"
 
@@ -2793,7 +2801,7 @@ msgstr "Pamat_ovat si heslo"
 msgid "Select a filename"
 msgstr "Vyberte soubor"
 
-#: gtk/gtkprinteroptionwidget.c:546 gtk/ui/gtkappchooserdialog.ui:64
+#: gtk/gtkprinteroptionwidget.c:546 gtk/ui/gtkappchooserdialog.ui:60
 #: gtk/ui/gtkcolorchooserdialog.ui:40 gtk/ui/gtkfontchooserdialog.ui:34
 msgid "_Select"
 msgstr "_Vybrat"
@@ -2883,7 +2891,7 @@ msgstr "Nejpravděpodobnější příčinou je nemožnost vytvoření dočasnéh
 
 #. window
 #: gtk/gtkprintoperation-portal.c:233 gtk/gtkprintoperation-portal.c:544
-#: gtk/gtkprintoperation-portal.c:621 gtk/gtkprintunixdialog.c:3423
+#: gtk/gtkprintoperation-portal.c:621 gtk/gtkprintunixdialog.c:3410
 msgid "Print"
 msgstr "Tisk"
 
@@ -2942,19 +2950,19 @@ msgstr "Neplatná obsluha na PrintDlgEx"
 msgid "Unspecified error"
 msgstr "Neurčená chyba"
 
-#: gtk/gtkprintunixdialog.c:740
+#: gtk/gtkprintunixdialog.c:730
 msgid "Pre_view"
 msgstr "Náhl_ed"
 
-#: gtk/gtkprintunixdialog.c:742
+#: gtk/gtkprintunixdialog.c:732
 msgid "_Print"
 msgstr "_Tisk"
 
-#: gtk/gtkprintunixdialog.c:865
+#: gtk/gtkprintunixdialog.c:855
 msgid "Getting printer information failed"
 msgstr "Získávání informací o tiskárně selhalo"
 
-#: gtk/gtkprintunixdialog.c:2075
+#: gtk/gtkprintunixdialog.c:2065
 msgid "Getting printer information…"
 msgstr "Získávají se informace o tiskárně…"
 
@@ -2964,63 +2972,63 @@ msgstr "Získávají se informace o tiskárně…"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:3130
+#: gtk/gtkprintunixdialog.c:3117
 #: modules/printbackends/cups/gtkprintbackendcups.c:5434
 msgid "Left to right, top to bottom"
 msgstr "Zleva doprava, shora dolů"
 
-#: gtk/gtkprintunixdialog.c:3130
+#: gtk/gtkprintunixdialog.c:3117
 #: modules/printbackends/cups/gtkprintbackendcups.c:5434
 msgid "Left to right, bottom to top"
 msgstr "Zleva doprava, zdola nahoru"
 
-#: gtk/gtkprintunixdialog.c:3131
+#: gtk/gtkprintunixdialog.c:3118
 #: modules/printbackends/cups/gtkprintbackendcups.c:5435
 msgid "Right to left, top to bottom"
 msgstr "Zprava doleva, shora dolů"
 
-#: gtk/gtkprintunixdialog.c:3131
+#: gtk/gtkprintunixdialog.c:3118
 #: modules/printbackends/cups/gtkprintbackendcups.c:5435
 msgid "Right to left, bottom to top"
 msgstr "Zprava doleva, zdola nahoru"
 
-#: gtk/gtkprintunixdialog.c:3132
+#: gtk/gtkprintunixdialog.c:3119
 #: modules/printbackends/cups/gtkprintbackendcups.c:5436
 msgid "Top to bottom, left to right"
 msgstr "Shora dolů, zleva doprava"
 
-#: gtk/gtkprintunixdialog.c:3132
+#: gtk/gtkprintunixdialog.c:3119
 #: modules/printbackends/cups/gtkprintbackendcups.c:5436
 msgid "Top to bottom, right to left"
 msgstr "Shora dolů, zprava doleva"
 
-#: gtk/gtkprintunixdialog.c:3133
+#: gtk/gtkprintunixdialog.c:3120
 #: modules/printbackends/cups/gtkprintbackendcups.c:5437
 msgid "Bottom to top, left to right"
 msgstr "Zdola nahoru, zleva doprava"
 
-#: gtk/gtkprintunixdialog.c:3133
+#: gtk/gtkprintunixdialog.c:3120
 #: modules/printbackends/cups/gtkprintbackendcups.c:5437
 msgid "Bottom to top, right to left"
 msgstr "Zdola nahoru, zprava doleva"
 
-#: gtk/gtkprintunixdialog.c:3137 gtk/gtkprintunixdialog.c:3150
+#: gtk/gtkprintunixdialog.c:3124 gtk/gtkprintunixdialog.c:3137
 msgid "Page Ordering"
 msgstr "Řazení stran"
 
-#: gtk/gtkprintunixdialog.c:3166
+#: gtk/gtkprintunixdialog.c:3153
 msgid "Left to right"
 msgstr "Zleva doprava"
 
-#: gtk/gtkprintunixdialog.c:3167
+#: gtk/gtkprintunixdialog.c:3154
 msgid "Right to left"
 msgstr "Zprava doleva"
 
-#: gtk/gtkprintunixdialog.c:3179
+#: gtk/gtkprintunixdialog.c:3166
 msgid "Top to bottom"
 msgstr "Shora dolů"
 
-#: gtk/gtkprintunixdialog.c:3180
+#: gtk/gtkprintunixdialog.c:3167
 msgid "Bottom to top"
 msgstr "Zdola nahoru"
 
@@ -3030,36 +3038,36 @@ msgctxt "progress bar label"
 msgid "%.0f %%"
 msgstr "%.0f %%"
 
-#: gtk/gtkrecentchooserdefault.c:1012 gtk/gtkrecentchooserdefault.c:1049
+#: gtk/gtkrecentchooserdefault.c:1002 gtk/gtkrecentchooserdefault.c:1039
 #, c-format
 msgid "No item for URI “%s” found"
 msgstr "Nenalezena žádná položka pro URI „%s“"
 
-#: gtk/gtkrecentchooserdefault.c:1176
+#: gtk/gtkrecentchooserdefault.c:1166
 msgid "Untitled filter"
 msgstr "Filtr bez názvu"
 
-#: gtk/gtkrecentchooserdefault.c:1498
+#: gtk/gtkrecentchooserdefault.c:1499
 msgid "Could not remove item"
 msgstr "Nelze odstranit položku"
 
-#: gtk/gtkrecentchooserdefault.c:1542
+#: gtk/gtkrecentchooserdefault.c:1543
 msgid "Could not clear list"
 msgstr "Nelze vymazat seznam"
 
-#: gtk/gtkrecentchooserdefault.c:1626
+#: gtk/gtkrecentchooserdefault.c:1627
 msgid "Copy _Location"
 msgstr "Kopírovat _umístění"
 
-#: gtk/gtkrecentchooserdefault.c:1637
+#: gtk/gtkrecentchooserdefault.c:1638
 msgid "_Remove From List"
 msgstr "_Odstranit ze seznamu"
 
-#: gtk/gtkrecentchooserdefault.c:1644
+#: gtk/gtkrecentchooserdefault.c:1645
 msgid "_Clear List"
 msgstr "Vy_mazat seznam"
 
-#: gtk/gtkrecentchooserdefault.c:1656
+#: gtk/gtkrecentchooserdefault.c:1657
 msgid "Show _Private Resources"
 msgstr "Zo_brazovat soukromé prostředky"
 
@@ -3123,7 +3131,7 @@ msgstr "Nelze nalézt položku s adresou URI „%s“"
 msgid "Unable to move the item with URI “%s” to “%s”"
 msgstr "Nelze přesunout položku s adresou URI „%s“ do „%s“"
 
-#: gtk/gtkrecentmanager.c:2516
+#: gtk/gtkrecentmanager.c:2436
 #, c-format
 msgid "No registered application with name “%s” for item with URI “%s” found"
 msgstr ""
@@ -3218,7 +3226,7 @@ msgstr "Zkuste zadat jiný termín k vyhledání"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: gtk/gtkswitch.c:660
+#: gtk/gtkswitch.c:657
 msgctxt "switch"
 msgid "ON"
 msgstr "❙"
@@ -3226,7 +3234,7 @@ msgstr "❙"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: gtk/gtkswitch.c:666
+#: gtk/gtkswitch.c:663
 msgctxt "switch"
 msgid "OFF"
 msgstr "○"
@@ -3409,24 +3417,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:8148
+#: gtk/gtkwindow.c:8153
 msgid "Move"
 msgstr "Přesunout"
 
-#: gtk/gtkwindow.c:8156
+#: gtk/gtkwindow.c:8161
 msgid "Resize"
 msgstr "Změnit velikost"
 
-#: gtk/gtkwindow.c:8187
+#: gtk/gtkwindow.c:8192
 msgid "Always on Top"
 msgstr "Vždy navrchu"
 
-#: gtk/gtkwindow.c:10937
+#: gtk/gtkwindow.c:10912
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Chcete použít GTK+ Inspector?"
 
-#: gtk/gtkwindow.c:10939
+#: gtk/gtkwindow.c:10914
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3437,7 +3445,7 @@ msgstr ""
 "změnit vnitřní strukturu jakékoliv aplikace GTK+. Použití tohoto programu "
 "může vést k přerušení běhu nebo pádu aplikace."
 
-#: gtk/gtkwindow.c:10944
+#: gtk/gtkwindow.c:10919
 msgid "Don’t show this message again"
 msgstr "Tuto zprávu znovu nezobrazovat"
 
@@ -3513,22 +3521,22 @@ msgstr "Hodnota"
 msgid "Show data"
 msgstr "Zobrazit data"
 
-#: gtk/inspector/general.c:339
+#: gtk/inspector/general.c:340
 msgctxt "GL version"
 msgid "None"
 msgstr "žádná"
 
-#: gtk/inspector/general.c:340
+#: gtk/inspector/general.c:341
 msgctxt "GL vendor"
 msgid "None"
 msgstr "žádný"
 
-#: gtk/inspector/general.c:442
+#: gtk/inspector/general.c:443
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "žádné"
 
-#: gtk/inspector/general.c:443 gtk/inspector/general.c:444
+#: gtk/inspector/general.c:444 gtk/inspector/general.c:445
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "žádná"
@@ -3815,7 +3823,7 @@ msgstr "Atribut"
 msgid "Defined At"
 msgstr "Definováno na"
 
-#: gtk/inspector/recorder.c:580
+#: gtk/inspector/recorder.c:672
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Uložení RenderNode selhalo"
@@ -5091,11 +5099,11 @@ msgstr "Zásluhy"
 msgid "System"
 msgstr "Systém"
 
-#: gtk/ui/gtkappchooserdialog.ui:75
+#: gtk/ui/gtkappchooserdialog.ui:71
 msgid "_View All Applications"
 msgstr "Zobrazit _všechny aplikace"
 
-#: gtk/ui/gtkappchooserdialog.ui:83
+#: gtk/ui/gtkappchooserdialog.ui:79
 msgid "_Find New Applications"
 msgstr "V_yhledat nové aplikace"
 
