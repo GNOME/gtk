@@ -873,12 +873,7 @@ gdk_window_new (GdkDisplay    *display,
 
   g_return_val_if_fail (attributes != NULL, NULL);
 
-  if (!parent)
-    parent = gdk_display_get_root_window (display);
-
-  g_return_val_if_fail (GDK_IS_WINDOW (parent), NULL);
-
-  if (GDK_WINDOW_DESTROYED (parent))
+  if (parent != NULL && GDK_WINDOW_DESTROYED (parent))
     {
       g_warning ("gdk_window_new(): parent is destroyed");
       return NULL;
@@ -904,7 +899,7 @@ gdk_window_new (GdkDisplay    *display,
        * attributes->window_type for input-only windows
        * before
        */
-      if (GDK_WINDOW_TYPE (parent) == GDK_WINDOW_ROOT)
+      if (parent == NULL)
 	window->window_type = GDK_WINDOW_TEMP;
       else
 	window->window_type = GDK_WINDOW_CHILD;
@@ -917,7 +912,7 @@ gdk_window_new (GdkDisplay    *display,
     {
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_TEMP:
-      if (GDK_WINDOW_TYPE (parent) != GDK_WINDOW_ROOT)
+      if (parent != NULL && GDK_WINDOW_TYPE (parent) != GDK_WINDOW_ROOT)
 	g_warning (G_STRLOC "Toplevel windows must be created as children of\n"
 		   "a window of type GDK_WINDOW_ROOT");
       break;
@@ -955,18 +950,18 @@ gdk_window_new (GdkDisplay    *display,
       window->input_only = TRUE;
     }
 
-  window->parent->children = g_list_concat (&window->children_list_node, window->parent->children);
+  native = FALSE;
 
-  if (window->parent->window_type == GDK_WINDOW_ROOT)
+  if (window->parent != NULL)
+    window->parent->children = g_list_concat (&window->children_list_node, window->parent->children);
+  else
     {
       GdkFrameClock *frame_clock = g_object_new (GDK_TYPE_FRAME_CLOCK_IDLE, NULL);
       gdk_window_set_frame_clock (window, frame_clock);
       g_object_unref (frame_clock);
-    }
 
-  native = FALSE;
-  if (window->parent->window_type == GDK_WINDOW_ROOT)
-    native = TRUE; /* Always use native windows for toplevels */
+      native = TRUE; /* Always use native windows for toplevels */
+    }
 
 #ifdef GDK_WINDOWING_WAYLAND
   if (window->window_type == GDK_WINDOW_SUBSURFACE)
@@ -989,8 +984,7 @@ gdk_window_new (GdkDisplay    *display,
 
   recompute_visible_regions (window, FALSE);
 
-  g_signal_connect (gdk_window_get_display (parent), "seat-removed",
-                    G_CALLBACK (seat_removed_cb), window);
+  g_signal_connect (display, "seat-removed", G_CALLBACK (seat_removed_cb), window);
 
   if ((_gdk_gl_flags & (GDK_GL_ALWAYS | GDK_GL_DISABLE)) == GDK_GL_ALWAYS)
     {
@@ -2445,14 +2439,17 @@ gdk_window_add_update_window (GdkWindow *window)
        */
       if (parent == GDK_WINDOW (tmp->data)->parent)
 	{
-	  gint index = g_list_index (parent->children, window);
-	  for (; tmp && parent == GDK_WINDOW (tmp->data)->parent; tmp = tmp->next)
-	    {
-	      gint sibling_index = g_list_index (parent->children, tmp->data);
-	      if (index > sibling_index)
-		break;
-	      prev = tmp;
-	    }
+          if (parent != NULL)
+            {
+              gint index = g_list_index (parent->children, window);
+              for (; tmp && parent == GDK_WINDOW (tmp->data)->parent; tmp = tmp->next)
+                {
+                  gint sibling_index = g_list_index (parent->children, tmp->data);
+                  if (index > sibling_index)
+                    break;
+                  prev = tmp;
+                }
+            }
 	  /* here, tmp got advanced past all lower stacked siblings */
 	  tmp = g_slist_prepend (tmp, g_object_ref (window));
 	  if (prev)
