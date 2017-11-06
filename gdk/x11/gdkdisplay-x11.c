@@ -3154,7 +3154,7 @@ gdk_x11_display_get_setting (GdkDisplay  *display,
   return gdk_x11_screen_get_setting (GDK_X11_DISPLAY (display)->screen, name, value);
 }
 
-static GdkWindow *
+GdkWindow *
 gdk_x11_display_get_root_window (GdkDisplay *display)
 {
   return gdk_x11_screen_get_root_window (GDK_X11_DISPLAY (display)->screen);

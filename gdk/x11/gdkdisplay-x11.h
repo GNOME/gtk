@@ -170,6 +170,8 @@ GdkFilterReturn _gdk_wm_protocols_filter        (GdkXEvent   *xev,
                                                  GdkEvent    *event,
                                                  gpointer     data);
 
+GdkWindow *gdk_x11_display_get_root_window (GdkDisplay *display);
+
 G_END_DECLS
 
 #endif  /* __GDK_X11_DISPLAY__ */
