@@ -1,3 +1,28 @@
+Overview of Changes in GTK+ 3.22.26
+===================================
+
+* Bugs fixed:
+ 789630 Distribute protocol/server-decoration.xml in tarballs
+ 787142 input/IME: Defer the emit of the "commit" signal
+ 789134 icon-browser: Centre Copy button in dialog again
+ 789678 AboutDialog: Fix accepting GTK_LICENSE_AGPL_3_0
+ 788898 Inspector: better default split of CSS nodes/props
+ 789733 Fix GtkEntry:has-frame not working
+ 789213 gdk/win32: Fix Win32 GL Context switching
+ 785176 placessidebar: add starred location item
+
+* Translation updates:
+ Arabic
+ Brazilian Portuguese
+ Czech
+ Dutch
+ German
+ Norwegian bokmål
+ Polish
+ Slovak
+ Swedish
+
+
 Overview of Changes in GTK+ 3.22.25
 ===================================
 
