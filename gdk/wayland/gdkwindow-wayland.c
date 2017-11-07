@@ -343,48 +343,6 @@ gdk_wayland_window_update_size (GdkWindow *window,
   cairo_region_destroy (region);
 }
 
-GdkWindow *
-_gdk_wayland_display_create_root_window (GdkDisplay *display,
-                                         int        width,
-                                         int        height)
-{
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
-  GdkWindow *window;
-  GdkWindowImplWayland *impl;
-
-  window = _gdk_display_create_window (GDK_DISPLAY (display_wayland));
-  window->impl = g_object_new (GDK_TYPE_WINDOW_IMPL_WAYLAND, NULL);
-  window->impl_window = window;
-
-  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-
-  impl->wrapper = GDK_WINDOW (window);
-  if (display_wayland->compositor_version >= WL_SURFACE_HAS_BUFFER_SCALE &&
-      gdk_display_get_n_monitors (display) > 0)
-    impl->scale = gdk_monitor_get_scale_factor (gdk_display_get_monitor (display, 0));
-
-  /* logical 1x1 fake buffer */
-  impl->staging_cairo_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                                            impl->scale,
-                                                            impl->scale);
-
-  cairo_surface_set_device_scale (impl->staging_cairo_surface, impl->scale, impl->scale);
-
-  window->window_type = GDK_WINDOW_ROOT;
-
-  window->x = 0;
-  window->y = 0;
-  window->abs_x = 0;
-  window->abs_y = 0;
-  window->width = width;
-  window->height = height;
-  window->viewable = TRUE;
-
-  window->event_mask = GDK_STRUCTURE_MASK;
-
-  return window;
-}
-
 static const gchar *
 get_default_title (void)
 {

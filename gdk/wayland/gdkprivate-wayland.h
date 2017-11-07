@@ -195,10 +195,6 @@ GdkAppLaunchContext *_gdk_wayland_display_get_app_launch_context (GdkDisplay *di
 
 GdkDisplay *_gdk_wayland_display_open (const gchar *display_name);
 
-GdkWindow *_gdk_wayland_display_create_root_window (GdkDisplay *display,
-                                                    int         width,
-                                                    int         height);
-
 GList *gdk_wayland_display_get_toplevel_windows (GdkDisplay *display);
 
 int gdk_wayland_display_get_output_refresh_rate (GdkWaylandDisplay *display_wayland,
