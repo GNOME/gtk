@@ -108,8 +108,6 @@ static gboolean gdk_event_dispatch (GSource     *source,
 
 extern gint       _gdk_input_ignore_core;
 
-GdkCursor *_gdk_win32_grab_cursor;
-
 typedef struct
 {
   GSource source;
@@ -2136,6 +2134,7 @@ gdk_event_translate (MSG  *msg,
   GdkDisplay *display;
   GdkWindow *window = NULL;
   GdkWindowImplWin32 *impl;
+  GdkWin32Display *win32_display;
 
   GdkWindow *new_window;
 
@@ -3063,15 +3062,20 @@ gdk_event_translate (MSG  *msg,
       if (grab_window == NULL && LOWORD (msg->lParam) != HTCLIENT)
 	break;
 
-      if (grab_window != NULL && _gdk_win32_grab_cursor != NULL)
-	cursor = _gdk_win32_grab_cursor;
+      if (grab_window != NULL)
+        {
+          win32_display = GDK_WIN32_DISPLAY (gdk_window_get_display (grab_window));
+
+          if (win32_display->grab_cursor != NULL)
+            cursor = win32_display->grab_cursor;
+        }
       else
-	cursor = NULL;
+        cursor = NULL;
 
       if (cursor != NULL)
         {
-	  GDK_NOTE (EVENTS, g_print (" (SetCursor(%p)", cursor));
-	  SetCursor (GDK_WIN32_CURSOR (cursor)->hcursor);
+          GDK_NOTE (EVENTS, g_print (" (SetCursor(%p)", cursor));
+          SetCursor (g_hash_table_lookup (win32_display->cursors, cursor));
           return_val = TRUE;
           *ret_valp = TRUE;
         }

@@ -26,6 +26,7 @@
 #include "gdkdevice-virtual.h"
 #include "gdkdevice-win32.h"
 #include "gdkwin32.h"
+#include "gdkdisplay-win32.h"
 
 G_DEFINE_TYPE (GdkDeviceVirtual, gdk_device_virtual, GDK_TYPE_DEVICE)
 
@@ -89,11 +90,20 @@ gdk_device_virtual_get_state (GdkDevice       *device,
 
 static void
 gdk_device_virtual_set_window_cursor (GdkDevice *device,
-				      GdkWindow *window,
-				      GdkCursor *cursor)
+                                      GdkWindow *window,
+                                      GdkCursor *cursor)
 {
-  if (cursor != NULL && GDK_WIN32_CURSOR (cursor)->hcursor != NULL)
-    SetCursor (GDK_WIN32_CURSOR (cursor)->hcursor);
+  if (cursor != NULL)
+    {
+      GdkDisplay *display = gdk_window_get_display (window);
+      HCURSOR hcursor = NULL;
+
+      if (display != NULL)
+        hcursor = gdk_win32_display_get_hcursor (display, cursor);
+
+      if (hcursor != NULL)
+        SetCursor (hcursor);   
+    }
 }
 
 static void
@@ -136,18 +146,19 @@ gdk_device_virtual_grab (GdkDevice    *device,
 
   if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
     {
-      if (_gdk_win32_grab_cursor != NULL)
-	{
-	  if (GetCursor () == GDK_WIN32_CURSOR (_gdk_win32_grab_cursor)->hcursor)
-	    SetCursor (NULL);
-	}
+      GdkWin32Display *display = GDK_WIN32_DISPLAY (gdk_device_get_display (device));
+      if (display->grab_cursor != NULL)
+        {
+          if (GetCursor () == g_hash_table_lookup (display->cursors, display->grab_cursor))
+	        SetCursor (NULL);
+        }
 
-      g_set_object (&_gdk_win32_grab_cursor, cursor);
+      g_set_object (&display->grab_cursor, cursor);
 
-      if (_gdk_win32_grab_cursor != NULL)
-	SetCursor (GDK_WIN32_CURSOR (_gdk_win32_grab_cursor)->hcursor);
+      if (display->grab_cursor != NULL)
+        SetCursor (g_hash_table_lookup (display->cursors, display->grab_cursor));
       else
-	SetCursor (LoadCursor (NULL, IDC_ARROW));
+        SetCursor (LoadCursor (NULL, IDC_ARROW));
 
       SetCapture (GDK_WINDOW_HWND (window));
     }
@@ -157,12 +168,14 @@ gdk_device_virtual_grab (GdkDevice    *device,
 
 static void
 gdk_device_virtual_ungrab (GdkDevice *device,
-                         guint32    time_)
+                           guint32    time_)
 {
   GdkDeviceGrabInfo *info;
   GdkDisplay *display;
+  GdkWin32Display *win32_display;
 
   display = gdk_device_get_display (device);
+  win32_display = GDK_WIN32_DISPLAY (display);
   info = _gdk_display_get_last_device_grab (display, device);
 
   if (info)
@@ -170,12 +183,13 @@ gdk_device_virtual_ungrab (GdkDevice *device,
 
   if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
     {
-      if (_gdk_win32_grab_cursor != NULL)
-	{
-	  if (GetCursor () == GDK_WIN32_CURSOR (_gdk_win32_grab_cursor)->hcursor)
-	    SetCursor (NULL);
-	}
-      g_clear_object (&_gdk_win32_grab_cursor);
+      if (win32_display->grab_cursor != NULL)
+        {
+          if (GetCursor () == g_hash_table_lookup (win32_display->cursors, win32_display->grab_cursor))
+            SetCursor (NULL);
+        }
+
+      g_clear_object (&win32_display->grab_cursor);
 
       ReleaseCapture ();
     }

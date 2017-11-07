@@ -31,6 +31,8 @@
 
 #include <gdk/gdk.h>
 
+#include <windows.h>
+
 G_BEGIN_DECLS
 
 #ifdef GDK_COMPILATION
@@ -54,6 +56,10 @@ GDK_AVAILABLE_IN_3_18
 void       gdk_win32_display_set_cursor_theme    (GdkDisplay  *display,
                                                   const gchar *name,
                                                   gint         size);
+
+GDK_AVAILABLE_IN_3_94
+HCURSOR    gdk_win32_display_get_hcursor         (GdkDisplay  *display,
+                                                  GdkCursor   *cursor);
 
 G_END_DECLS
 

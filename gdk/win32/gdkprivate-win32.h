@@ -132,7 +132,6 @@ struct _GdkWin32Cursor
 {
   GdkCursor cursor;
 
-  gchar *name;
   HCURSOR hcursor;
 };
 
@@ -354,15 +353,13 @@ extern GHashTable	*_format_atom_table;
 /* Hold the result of a delayed rendering */
 extern HGLOBAL		_delayed_rendering_data;
 
-extern GdkCursor *_gdk_win32_grab_cursor;
-
 HGLOBAL _gdk_win32_selection_convert_to_dib (HGLOBAL  hdata,
 					     GdkAtom  target);
 
 /* Convert a pixbuf to an HICON (or HCURSOR).  Supports alpha under
  * Windows XP, thresholds alpha otherwise.
  */
-HICON _gdk_win32_pixbuf_to_hicon   (GdkPixbuf *pixbuf);
+HICON _gdk_win32_texture_to_hicon  (GdkTexture *texture);
 HICON _gdk_win32_pixbuf_to_hcursor (GdkPixbuf *pixbuf,
 				    gint       x_hotspot,
 				    gint       y_hotspot);
@@ -370,6 +367,8 @@ HICON _gdk_win32_pixbuf_to_hcursor (GdkPixbuf *pixbuf,
 void _gdk_win32_display_init_cursors (GdkWin32Display     *display);
 void _gdk_win32_display_finalize_cursors (GdkWin32Display *display);
 void _gdk_win32_display_update_cursors (GdkWin32Display   *display);
+GdkCursor *_gdk_win32_display_get_cursor_for_name (GdkDisplay   *display, const gchar* cursor_name);
+GdkCursor *gdk_win32_display_cursor_from_hcursor (GdkDisplay *display, HCURSOR     hcursor);
 
 typedef struct _Win32CursorTheme Win32CursorTheme;
 
@@ -393,7 +392,6 @@ struct _Win32Cursor {
   gint height;
   guint load_flags;
   gint xcursor_number;
-  GdkCursorType cursor_type;
 };
 
 Win32CursorTheme *win32_cursor_theme_load             (const gchar      *name,

@@ -64,7 +64,6 @@ struct _GdkWin32Display
   Win32CursorTheme *cursor_theme;
   gchar *cursor_theme_name;
   int cursor_theme_size;
-  GHashTable *cursor_cache;
 
   HWND hwnd;
   HWND clipboard_hwnd;
@@ -90,6 +89,10 @@ struct _GdkWin32Display
 
   GdkWin32ShcoreFuncs shcore_funcs;
   GdkWin32User32DPIFuncs user32_dpi_funcs;
+  
+  /* Cursor Items (GdkCursor->HCURSOR) */
+  GHashTable *cursors;
+  GdkCursor *grab_cursor;
 };
 
 struct _GdkWin32DisplayClass

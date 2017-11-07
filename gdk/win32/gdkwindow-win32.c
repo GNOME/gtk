@@ -688,7 +688,7 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
                                                        (window->window_type == GDK_WINDOW_TEMP ? "TEMP" : "???")),
                                                        (attributes->wclass == GDK_INPUT_OUTPUT ? "" : "input-only")));
 
-  hparent = GDK_WINDOW_HWND (real_parent);
+  hparent = (real_parent != NULL) ? GDK_WINDOW_HWND (real_parent) : NULL;
 
   impl = g_object_new (GDK_TYPE_WINDOW_IMPL_WIN32, NULL);
   impl->wrapper = GDK_WINDOW (window);
@@ -725,7 +725,7 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
 	  hparent = GetDesktopWindow ();
 	}
       /* Children of foreign windows aren't toplevel windows */
-      if (GDK_WINDOW_TYPE (real_parent) == GDK_WINDOW_FOREIGN)
+      if (real_parent != NULL && GDK_WINDOW_TYPE (real_parent) == GDK_WINDOW_FOREIGN)
 	{
 	  dwStyle = WS_CHILDWINDOW | WS_CLIPCHILDREN;
 	}
@@ -744,7 +744,9 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
 
     case GDK_WINDOW_TEMP:
       /* A temp window is not necessarily a top level window */
-      dwStyle = (real_parent == NULL || gdk_win32_display_get_root_window (display) == real_parent) ? WS_POPUP : WS_CHILDWINDOW);
+      dwStyle = (real_parent == NULL ||
+                 gdk_win32_display_get_root_window (display) == real_parent) ?
+                 WS_POPUP : WS_CHILDWINDOW;
       dwStyle |= WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
       dwExStyle |= WS_EX_TOOLWINDOW | WS_EX_TOPMOST;
       offset_x = _gdk_offset_x;
@@ -2005,8 +2007,6 @@ gdk_win32_window_get_geometry (GdkWindow *window,
 
       API_CALL (GetClientRect, (GDK_WINDOW_HWND (window), &rect));
 
-      if (!window_is_root)
-	{
 	  POINT pt;
 	  GdkWindow *parent = gdk_window_get_parent (window);
 
@@ -2033,7 +2033,6 @@ gdk_win32_window_get_geometry (GdkWindow *window,
 	      rect.right += _gdk_offset_x * impl->window_scale;
 	      rect.bottom += _gdk_offset_y * impl->window_scale;
 	    }
-	}
 
       if (x)
 	*x = rect.left / impl->window_scale;
@@ -2246,7 +2245,6 @@ gdk_win32_window_set_icon_list (GdkWindow *window,
                                 GList     *textures)
 {
   GdkTexture *big_texture, *small_texture;
-  GdkPixbuf *big_pixbuf, *small_pixbuf;
   gint big_diff, small_diff;
   gint big_w, big_h, small_w, small_h;
   gint w, h;
@@ -2273,9 +2271,9 @@ gdk_win32_window_set_icon_list (GdkWindow *window,
   big_diff = 0;
   small_diff = 0;
 
-  for (l = textures; l; l = l->next)
+  for (GList *l = textures; l; l = l->next)
     {
-      texture = l->data;
+      GdkTexture *texture = l->data;
       w = gdk_texture_get_width (texture);
       h = gdk_texture_get_height (texture);
 
@@ -2301,10 +2299,10 @@ gdk_win32_window_set_icon_list (GdkWindow *window,
     }
 
   /* Create the icons */
-  big_hicon = gdk_win32_texture_to_hicon (big_texture);
-  g_object_unref (big_pixbuf);
+  big_hicon = _gdk_win32_texture_to_hicon (big_texture);
+  g_object_unref (big_texture);
   small_hicon = _gdk_win32_texture_to_hicon (small_texture);
-  g_object_unref (small_pixbuf);
+  g_object_unref (small_texture);
 
   /* Set the icons */
   SendMessageW (GDK_WINDOW_HWND (window), WM_SETICON, ICON_BIG,
@@ -4399,7 +4397,7 @@ setup_drag_move_resize_context (GdkWindow                   *window,
 
   cursor_name = get_cursor_name_from_op (op, edge);
 
-  context->cursor = _gdk_win32_display_get_cursor_for_name (display, cursor_name);
+  context->cursor = gdk_cursor_new_from_name (cursor_name, NULL);
 
   pointer_window = child_window_at_coordinates (window, root_x, root_y);
 
