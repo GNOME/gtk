@@ -3241,7 +3241,7 @@ gdk_x11_window_set_icon_list (GdkWindow *window,
   gint width, height;
   GdkTexture *texture;
   GdkDisplay *display;
-  gint n;
+  gint i, n;
 
   if (GDK_WINDOW_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
@@ -3280,6 +3280,12 @@ gdk_x11_window_set_icon_list (GdkWindow *window,
       *p++ = height;
 
       gdk_texture_download (texture, (guchar *) p, width * 4);
+      if (sizeof (gulong) > 4)
+        {
+          i = width * height;
+          while (i-- > 0)
+            p[i] = ((guint32 *) p)[i];
+        }
 
       p += width * height;
       n--;
