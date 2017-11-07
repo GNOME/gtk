@@ -177,28 +177,13 @@ gdk_broadway_device_query_state (GdkDevice        *device,
     *mask = mask32;
   if (child_window)
     {
-      GdkWindowImplBroadway *impl;
-      GdkWindow *toplevel;
       GdkWindow *mouse_toplevel;
 
-      if (window == NULL)
-        window = broadway_display->root_window;
-
-      impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
-      toplevel = impl->wrapper;
-
       mouse_toplevel = g_hash_table_lookup (broadway_display->id_ht, GUINT_TO_POINTER (mouse_toplevel_id));
-      if (gdk_window_get_window_type (toplevel) == GDK_WINDOW_ROOT)
-	{
-	  *child_window = mouse_toplevel;
-	  if (*child_window == NULL)
-	    *child_window = toplevel;
-	}
+      if (window == NULL)
+	*child_window = mouse_toplevel;
       else
-	{
-	  /* No native children */
-	  *child_window = toplevel;
-	}
+	*child_window = NULL;
     }
 
   return;
@@ -333,16 +318,9 @@ gdk_broadway_device_window_at_position (GdkDevice       *device,
 					GdkModifierType *mask,
 					gboolean         get_toplevel)
 {
-  GdkDisplay *display;
-  GdkBroadwayDisplay *broadway_display;
-  GdkWindow *root_window;
   GdkWindow *window;
 
-  display = gdk_device_get_display (device);
-  broadway_display = GDK_BROADWAY_DISPLAY (display);
-  root_window = broadway_display->root_window;
-
-  gdk_broadway_device_query_state (device, root_window, &window, NULL, NULL, win_x, win_y, mask);
+  gdk_broadway_device_query_state (device, NULL, &window, NULL, NULL, win_x, win_y, mask);
 
   return window;
 }

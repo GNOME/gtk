@@ -54,7 +54,6 @@ struct _GdkBroadwayDisplay
   gpointer move_resize_data;
 
   GdkMonitor *monitor;
-  GdkWindow *root_window;
 };
 
 struct _GdkBroadwayDisplayClass

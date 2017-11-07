@@ -113,8 +113,6 @@ _gdk_broadway_display_open (const gchar *display_name)
   display = g_object_new (GDK_TYPE_BROADWAY_DISPLAY, NULL);
   broadway_display = GDK_BROADWAY_DISPLAY (display);
 
-  _gdk_broadway_display_init_root_window (display);
-
   display->device_manager = _gdk_broadway_device_manager_new (display);
 
   gdk_event_init (display);
@@ -190,9 +188,6 @@ gdk_broadway_display_dispose (GObject *object)
 {
   GdkBroadwayDisplay *broadway_display = GDK_BROADWAY_DISPLAY (object);
 
-  if (broadway_display->root_window)
-    _gdk_window_destroy (broadway_display->root_window, TRUE);
-
   if (broadway_display->event_source)
     {
       g_source_destroy (broadway_display->event_source);
@@ -214,7 +209,6 @@ gdk_broadway_display_finalize (GObject *object)
 
   _gdk_broadway_cursor_display_finalize (GDK_DISPLAY(broadway_display));
 
-  g_object_unref (broadway_display->root_window);
   g_object_unref (broadway_display->monitor);
 
   G_OBJECT_CLASS (gdk_broadway_display_parent_class)->finalize (object);

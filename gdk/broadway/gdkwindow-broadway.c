@@ -186,41 +186,6 @@ gdk_window_impl_broadway_finalize (GObject *object)
   G_OBJECT_CLASS (gdk_window_impl_broadway_parent_class)->finalize (object);
 }
 
-void
-_gdk_broadway_display_init_root_window (GdkDisplay *display)
-{
-  GdkWindow *window;
-  GdkWindowImplBroadway *impl;
-  GdkBroadwayDisplay *broadway_display;
-
-  broadway_display = GDK_BROADWAY_DISPLAY (display);
-
-  g_assert (broadway_display->root_window == NULL);
-
-  broadway_display->root_window = _gdk_display_create_window (display);
-
-  window = broadway_display->root_window;
-  window->impl = g_object_new (GDK_TYPE_WINDOW_IMPL_BROADWAY, NULL);
-  window->impl_window = window;
-
-  impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
-
-  impl->wrapper = window;
-  impl->id = 0;
-
-  window->window_type = GDK_WINDOW_ROOT;
-
-  window->x = 0;
-  window->y = 0;
-  window->abs_x = 0;
-  window->abs_y = 0;
-  window->width = 1024;
-  window->height = 768;
-  window->viewable = TRUE;
-
-  _gdk_window_update_size (broadway_display->root_window);
-}
-
 static void
 on_frame_clock_after_paint (GdkFrameClock *clock,
                             GdkWindow     *window)
@@ -265,7 +230,7 @@ _gdk_broadway_display_create_window_impl (GdkDisplay    *display,
 
   g_assert (window->window_type == GDK_WINDOW_TOPLEVEL ||
 	    window->window_type == GDK_WINDOW_TEMP);
-  g_assert (GDK_WINDOW_TYPE (window->parent) == GDK_WINDOW_ROOT);
+  g_assert (window->parent == NULL);
 
   broadway_display->toplevels = g_list_prepend (broadway_display->toplevels, impl);
 
@@ -366,10 +331,9 @@ _gdk_broadway_window_destroy (GdkWindow *window,
     }
 
   broadway_display = GDK_BROADWAY_DISPLAY (gdk_window_get_display (window));
-  g_hash_table_remove (broadway_display->id_ht, GINT_TO_POINTER(impl->id));
+  g_hash_table_remove (broadway_display->id_ht, GINT_TO_POINTER (impl->id));
 
-  _gdk_broadway_server_destroy_window (broadway_display->server,
-				       impl->id);
+  _gdk_broadway_server_destroy_window (broadway_display->server, impl->id);
 }
 
 /* This function is called when the XWindow is really gone.
