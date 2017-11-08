@@ -1,6 +1,6 @@
 /* simple.c
- * Copyright (C) 1997  Red Hat, Inc
- * Author: Elliot Lee
+ * Copyright (C) 2017  Red Hat, Inc
+ * Author: Benjamin Otte
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,24 +28,21 @@ hello (void)
 int
 main (int argc, char *argv[])
 {
-  GtkWidget *window;
+  GtkWidget *window, *button;
 
   gtk_init ();
 
-  window = g_object_connect (g_object_new (gtk_window_get_type (),
-                                           "type", GTK_WINDOW_TOPLEVEL,
-                                           "title", "hello world",
-                                           "resizable", FALSE,
-                                           NULL),
-                             "signal::destroy", gtk_main_quit, NULL,
-                             NULL);
-  g_object_connect (g_object_new (gtk_button_get_type (),
-                                  "GtkButton::label", "hello world",
-                                  "GtkWidget::parent", window,
-                                  "GtkWidget::visible", TRUE,
-                                  NULL),
-                    "signal::clicked", hello, NULL,
-                    NULL);
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_title (GTK_WINDOW (window), "hello world");
+  gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
+  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
+
+  button = gtk_button_new ();
+  gtk_button_set_label (GTK_BUTTON (button), "hello world");
+  g_signal_connect (button, "clicked", G_CALLBACK (hello), NULL);
+
+  gtk_container_add (GTK_CONTAINER (window), button);
+
   gtk_widget_show (window);
 
   gtk_main ();
