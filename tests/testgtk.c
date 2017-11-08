@@ -914,44 +914,39 @@ create_statusbar (GtkWidget *widget)
 
       button = g_object_new (gtk_button_get_type (),
 			       "label", "push something",
-			       "visible", TRUE,
-			       "parent", box2,
 			       NULL);
+      gtk_container_add (GTK_CONTAINER (box2), button);
       g_object_connect (button,
 			"signal::clicked", statusbar_push, statusbar,
 			NULL);
 
       button = g_object_connect (g_object_new (gtk_button_get_type (),
 						 "label", "pop",
-						 "visible", TRUE,
-						 "parent", box2,
 						 NULL),
 				 "signal_after::clicked", statusbar_pop, statusbar,
 				 NULL);
+      gtk_container_add (GTK_CONTAINER (box2), button);
 
       button = g_object_connect (g_object_new (gtk_button_get_type (),
 						 "label", "steal #4",
-						 "visible", TRUE,
-						 "parent", box2,
 						 NULL),
 				 "signal_after::clicked", statusbar_steal, statusbar,
 				 NULL);
+      gtk_container_add (GTK_CONTAINER (box2), button);
 
       button = g_object_connect (g_object_new (gtk_button_get_type (),
 						 "label", "test contexts",
-						 "visible", TRUE,
-						 "parent", box2,
 						 NULL),
 				 "swapped_signal_after::clicked", statusbar_contexts, statusbar,
 				 NULL);
+      gtk_container_add (GTK_CONTAINER (box2), button);
 
       button = g_object_connect (g_object_new (gtk_button_get_type (),
 						 "label", "push something long",
-						 "visible", TRUE,
-						 "parent", box2,
 						 NULL),
 				 "signal_after::clicked", statusbar_push_long, statusbar,
 				 NULL);
+      gtk_container_add (GTK_CONTAINER (box2), button);
 
       separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_box_pack_start (GTK_BOX (box1), separator);
@@ -1571,11 +1566,10 @@ create_saved_position (GtkWidget *widget)
       vbox =
 	g_object_new (GTK_TYPE_BOX,
                       "orientation", GTK_ORIENTATION_VERTICAL,
-			"GtkBox::homogeneous", FALSE,
-			"GtkBox::spacing", 5,
-			"GtkWidget::parent", main_vbox,
-			"GtkWidget::visible", TRUE,
-			NULL);
+		      "homogeneous", FALSE,
+		      "spacing", 5,
+		      NULL);
+      gtk_container_add (GTK_CONTAINER (main_vbox), vbox);
       gtk_container_add (GTK_CONTAINER (vbox), button);
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
@@ -1762,24 +1756,21 @@ create_tooltips (GtkWidget *widget)
                       "orientation", GTK_ORIENTATION_VERTICAL,
 			"homogeneous", FALSE,
 			"spacing", 5,
-			"visible", TRUE,
 			NULL);
 
       button =
 	g_object_new (gtk_button_get_type (),
 			"label", "[?]",
-			"visible", TRUE,
-			"parent", box3,
 			NULL);
+      gtk_container_add (GTK_CONTAINER (box3), button);
       gtk_box_set_child_packing (GTK_BOX (box3), button, GTK_PACK_START);
       gtk_widget_set_tooltip_text (button, "Start the Tooltips Inspector");
 
       frame = g_object_new (gtk_frame_get_type (),
 			      "label", "ToolTips Inspector",
 			      "label_xalign", (double) 0.5,
-			      "visible", TRUE,
-			      "parent", box2,
 			      NULL);
+      gtk_container_add (GTK_CONTAINER (box2), frame);
       gtk_container_add (GTK_CONTAINER (frame), box3);
       gtk_box_set_child_packing (GTK_BOX (box2), frame, GTK_PACK_START);
 
@@ -3660,16 +3651,13 @@ create_spins (GtkWidget *widget)
  * Cursors
  */
 
-static gint
-cursor_draw (GtkWidget *widget,
-	     cairo_t   *cr,
-	     gpointer   user_data)
+static void
+cursor_draw (GtkDrawingArea *darea,
+	     cairo_t        *cr,
+             int             width,
+             int             height,
+	     gpointer        user_data)
 {
-  int width, height;
-
-  width = gtk_widget_get_allocated_width (widget);
-  height = gtk_widget_get_allocated_height (widget);
-
   cairo_set_fill_rule (cr, CAIRO_FILL_RULE_EVEN_ODD);
   cairo_rectangle (cr, 0, 0, width, height);
   cairo_rectangle (cr, width / 3, height / 3, width / 3, height / 3);
@@ -3682,8 +3670,6 @@ cursor_draw (GtkWidget *widget,
   cairo_set_source_rgb (cr, 0, 0, 0);
   cairo_rectangle (cr, 0, height / 2, width, height / 2);
   cairo_fill (cr);
-
-  return TRUE;
 }
 
 static const gchar *cursor_names[] = {
@@ -3921,14 +3907,12 @@ create_cursors (GtkWidget *widget)
       main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
       gtk_container_add (GTK_CONTAINER (window), main_vbox);
 
-      vbox =
-	g_object_new (GTK_TYPE_BOX,
-                      "orientation", GTK_ORIENTATION_VERTICAL,
-			"GtkBox::homogeneous", FALSE,
-			"GtkBox::spacing", 5,
-			"GtkWidget::parent", main_vbox,
-			"GtkWidget::visible", TRUE,
-			NULL);
+      vbox = g_object_new (GTK_TYPE_BOX,
+                           "orientation", GTK_ORIENTATION_VERTICAL,
+                           "homogeneous", FALSE,
+                           "spacing", 5,
+                           NULL);
+      gtk_container_add (GTK_CONTAINER (main_vbox), vbox);
 
 #ifdef GDK_WINDOWING_X11
       if (GDK_IS_X11_DISPLAY (gtk_widget_get_display (vbox)))
@@ -3985,19 +3969,16 @@ create_cursors (GtkWidget *widget)
 
       frame =
 	g_object_new (gtk_frame_get_type (),
-			"GtkFrame::label_xalign", 0.5,
-			"GtkFrame::label", "Cursor Area",
-			"GtkWidget::parent", vbox,
-			"GtkWidget::visible", TRUE,
+			"label_xalign", 0.5,
+			"label", "Cursor Area",
 			NULL);
+      gtk_container_add (GTK_CONTAINER (vbox), frame);
 
       darea = gtk_drawing_area_new ();
-      gtk_widget_set_size_request (darea, 80, 80);
+      gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (darea), 80);
+      gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (darea), 80);
+      gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (darea), cursor_draw, NULL, NULL);
       gtk_container_add (GTK_CONTAINER (frame), darea);
-      g_signal_connect (darea,
-			"draw",
-			G_CALLBACK (cursor_draw),
-			NULL);
       g_signal_connect (darea, "button_press_event",
 			G_CALLBACK (cursor_event), entry);
       gtk_widget_show (darea);
@@ -7222,10 +7203,12 @@ create_selection_test (GtkWidget *widget)
 
 static int scroll_test_pos = 0.0;
 
-static gint
-scroll_test_draw (GtkWidget     *widget,
-                  cairo_t       *cr,
-                  GtkAdjustment *adjustment)
+static void
+scroll_test_draw (GtkDrawingArea *darea,
+                  cairo_t        *cr,
+                  int             width,
+                  int             height,
+                  gpointer        adjustment)
 {
   gint i,j;
   gint imin, imax, jmin, jmax;
@@ -7245,8 +7228,6 @@ scroll_test_draw (GtkWidget     *widget,
 	cairo_rectangle (cr, 10*i, 10*j - (int)gtk_adjustment_get_value (adjustment), 1+i%10, 1+j%10);
 
   cairo_fill (cr);
-
-  return TRUE;
 }
 
 static gint
@@ -7328,20 +7309,23 @@ create_scroll_test (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (content_area), hbox);
       gtk_widget_show (hbox);
 
-      drawing_area = gtk_drawing_area_new ();
-      gtk_widget_set_size_request (drawing_area, 200, 200);
-      gtk_box_pack_start (GTK_BOX (hbox), drawing_area);
-      gtk_widget_show (drawing_area);
-
       adjustment = gtk_adjustment_new (0.0, 0.0, 1000.0, 1.0, 180.0, 200.0);
       scroll_test_pos = 0.0;
+
+      drawing_area = gtk_drawing_area_new ();
+      gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (drawing_area), 200);
+      gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (drawing_area), 200);
+      gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (drawing_area),
+                                      scroll_test_draw,
+                                      adjustment,
+                                      g_object_unref);
+      gtk_box_pack_start (GTK_BOX (hbox), drawing_area);
+      gtk_widget_show (drawing_area);
 
       scrollbar = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL, adjustment);
       gtk_box_pack_start (GTK_BOX (hbox), scrollbar);
       gtk_widget_show (scrollbar);
 
-      g_signal_connect (drawing_area, "draw",
-			G_CALLBACK (scroll_test_draw), adjustment);
       g_signal_connect (drawing_area, "configure_event",
 			G_CALLBACK (scroll_test_configure), adjustment);
       g_signal_connect (drawing_area, "scroll_event",
