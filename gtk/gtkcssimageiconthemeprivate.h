@@ -48,6 +48,7 @@ struct _GtkCssImageIconTheme
   char *name;
 
   int cached_size;
+  gboolean cached_symbolic;
   GdkTexture *cached_texture;
 };
 
