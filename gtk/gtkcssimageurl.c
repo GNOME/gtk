@@ -31,7 +31,7 @@ static GtkCssImage *
 gtk_css_image_url_load_image (GtkCssImageUrl  *url,
                               GError         **error)
 {
-  GdkPixbuf *pixbuf;
+  GdkTexture *texture;
   GError *local_error = NULL;
   GFileInputStream *input;
 
@@ -46,25 +46,17 @@ gtk_css_image_url_load_image (GtkCssImageUrl  *url,
       char *uri = g_file_get_uri (url->file);
       char *resource_path = g_uri_unescape_string (uri + strlen ("resource://"), NULL);
 
-      pixbuf = gdk_pixbuf_new_from_resource (resource_path, &local_error);
+      texture = gdk_texture_new_from_resource (resource_path);
+
       g_free (resource_path);
       g_free (uri);
     }
   else
     {
-      input = g_file_read (url->file, NULL, &local_error);
-      if (input != NULL)
-	{
-          pixbuf = gdk_pixbuf_new_from_stream (G_INPUT_STREAM (input), NULL, &local_error);
-          g_object_unref (input);
-	}
-      else
-        {
-          pixbuf = NULL;
-        }
+      texture = gdk_texture_new_from_file (url->file, &local_error);
     }
 
-  if (pixbuf == NULL)
+  if (texture == NULL)
     {
       if (error)
         {
@@ -75,16 +67,14 @@ gtk_css_image_url_load_image (GtkCssImageUrl  *url,
                        GTK_CSS_PROVIDER_ERROR,
                        GTK_CSS_PROVIDER_ERROR_FAILED,
                        "Error loading image '%s': %s", uri, local_error->message);
-          g_error_free (local_error);
           g_free (uri);
        }
-
-      url->loaded_image = gtk_css_image_surface_new (NULL);
-      return url->loaded_image;
     }
 
-  url->loaded_image = gtk_css_image_surface_new_for_pixbuf (pixbuf);
-  g_object_unref (pixbuf);
+  url->loaded_image = gtk_css_image_surface_new (texture);
+
+  g_clear_pointer (&texture);
+  g_clear_error (&local_error);
 
   return url->loaded_image;
 }
