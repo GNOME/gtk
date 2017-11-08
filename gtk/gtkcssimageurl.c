@@ -33,7 +33,6 @@ gtk_css_image_url_load_image (GtkCssImageUrl  *url,
 {
   GdkTexture *texture;
   GError *local_error = NULL;
-  GFileInputStream *input;
 
   if (url->loaded_image)
     return url->loaded_image;
@@ -73,7 +72,7 @@ gtk_css_image_url_load_image (GtkCssImageUrl  *url,
 
   url->loaded_image = gtk_css_image_surface_new (texture);
 
-  g_clear_pointer (&texture);
+  g_clear_object (&texture);
   g_clear_error (&local_error);
 
   return url->loaded_image;
