@@ -31,7 +31,7 @@
 #include <stdlib.h>
 #include <locale.h>
 
-#include "gtkpixbufutilsprivate.h"
+#include "gdkpixbufutilsprivate.h"
 
 static gchar *output_dir = NULL;
 
