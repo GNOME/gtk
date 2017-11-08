@@ -104,7 +104,7 @@ main (int argc, char **argv)
       return 1;
     }
 
-  symbolic = gtk_make_symbolic_pixbuf_from_data (data, len, width, height, &error);
+  symbolic = gtk_make_symbolic_pixbuf_from_data (data, len, width, height, 1.0, &error);
   if (symbolic == NULL)
     {
       g_printerr (_("Can’t load file: %s\n"), error->message);

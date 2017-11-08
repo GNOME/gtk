@@ -34,14 +34,17 @@ GdkPixbuf *gtk_make_symbolic_pixbuf_from_data     (const char    *data,
                                                    gsize          len,
                                                    int            width,
                                                    int            height,
+                                                   double         scale,
                                                    GError       **error);
 GdkPixbuf *gtk_make_symbolic_pixbuf_from_file     (GFile         *file,
                                                    int            width,
                                                    int            height,
+                                                   double         scale,
                                                    GError       **error);
 GdkPixbuf *gtk_make_symbolic_pixbuf_from_resource (const char    *path,
                                                    int            width,
                                                    int            height,
+                                                   double         scale,
                                                    GError       **error);
 G_END_DECLS
 

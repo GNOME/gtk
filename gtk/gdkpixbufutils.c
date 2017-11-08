@@ -136,6 +136,7 @@ load_symbolic_svg (const char     *file_data,
                    gsize           file_len,
                    int             width,
                    int             height,
+                   double          scale,
                    const GdkRGBA  *fg,
                    const GdkRGBA  *success_color,
                    const GdkRGBA  *warning_color,
@@ -168,8 +169,13 @@ load_symbolic_svg (const char     *file_data,
   if (!pixbuf)
     return NULL;
 
+  if (width == 0)
+    width = gdk_pixbuf_get_width (pixbuf) * scale;
+  if (height == 0)
+    height = gdk_pixbuf_get_height (pixbuf) * scale;
+
   svg_width = g_strdup_printf ("%d", gdk_pixbuf_get_width (pixbuf));
-  svg_height = g_strdup_printf ("%d",gdk_pixbuf_get_height (pixbuf));
+  svg_height = g_strdup_printf ("%d", gdk_pixbuf_get_height (pixbuf));
   g_object_unref (pixbuf);
 
   escaped_file_data = g_markup_escape_text (file_data, file_len);
@@ -253,17 +259,14 @@ gtk_make_symbolic_pixbuf_from_data (const char  *file_data,
                                     gsize        file_len,
                                     int          width,
                                     int          height,
+                                    double       scale,
                                     GError     **error)
 
 {
   GdkRGBA r = { 1,0,0,1}, g = {0,1,0,1};
   GdkPixbuf *loaded;
-  GdkPixbuf *pixbuf;
+  GdkPixbuf *pixbuf = NULL;
   int plane;
-
-  pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, width, height);
-
-  gdk_pixbuf_fill (pixbuf, 0);
 
   for (plane = 0; plane < 3; plane++)
     {
@@ -279,7 +282,7 @@ gtk_make_symbolic_pixbuf_from_data (const char  *file_data,
        * channels, with the color of the fg being implicitly
        * the "rest", as all color fractions should add up to 1.
        */
-      loaded = load_symbolic_svg (file_data, file_len, width, height,
+      loaded = load_symbolic_svg (file_data, file_len, width, height, scale,
                                   &g,
                                   plane == 0 ? &r : &g,
                                   plane == 1 ? &r : &g,
@@ -287,6 +290,14 @@ gtk_make_symbolic_pixbuf_from_data (const char  *file_data,
                                   error);
       if (loaded == NULL)
         return NULL;
+
+      if (pixbuf == NULL)
+        {
+          pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8,
+                                   gdk_pixbuf_get_width (loaded),
+                                   gdk_pixbuf_get_height (loaded));
+          gdk_pixbuf_fill (pixbuf, 0);
+        }
 
       if (plane == 0)
         extract_plane (loaded, pixbuf, 3, 3);
@@ -303,6 +314,7 @@ GdkPixbuf *
 gtk_make_symbolic_pixbuf_from_resource (const char  *path,
                                         int          width,
                                         int          height,
+                                        double       scale,
                                         GError     **error)
 {
   GBytes *bytes;
@@ -316,7 +328,7 @@ gtk_make_symbolic_pixbuf_from_resource (const char  *path,
 
   data = g_bytes_get_data (bytes, &size);
 
-  pixbuf = gtk_make_symbolic_pixbuf_from_data (data, size, width, height, error);
+  pixbuf = gtk_make_symbolic_pixbuf_from_data (data, size, width, height, scale, error);
 
   g_bytes_unref (bytes);
 
@@ -327,6 +339,7 @@ GdkPixbuf *
 gtk_make_symbolic_pixbuf_from_file (GFile   *file,
                                     int      width,
                                     int      height,
+                                    double   scale,
                                     GError **error)
 {
   char *data;
@@ -336,7 +349,7 @@ gtk_make_symbolic_pixbuf_from_file (GFile   *file,
   if (!g_file_load_contents (file, NULL, &data, &size, NULL, error))
     return NULL;
 
-  pixbuf = gtk_make_symbolic_pixbuf_from_data (data, size, width, height, error);
+  pixbuf = gtk_make_symbolic_pixbuf_from_data (data, size, width, height, scale, error);
 
   g_free (data);
 

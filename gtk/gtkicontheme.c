@@ -3796,6 +3796,7 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info)
           if (gtk_icon_info_is_symbolic (icon_info))
             source_pixbuf = gtk_make_symbolic_pixbuf_from_resource (icon_info->filename,
                                                                     size, size,
+                                                                    icon_info->desired_scale,
                                                                     &icon_info->load_error);
           else if (size == 0)
             source_pixbuf = _gdk_pixbuf_new_from_resource_scaled (icon_info->filename,
@@ -3836,6 +3837,7 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info)
               if (gtk_icon_info_is_symbolic (icon_info) && icon_info->icon_file)
                 source_pixbuf = gtk_make_symbolic_pixbuf_from_file (icon_info->icon_file,
                                                                     size, size,
+                                                                    icon_info->desired_scale,
                                                                     &icon_info->load_error);
               else if (size == 0)
                 source_pixbuf = _gdk_pixbuf_new_from_stream_scaled (stream,
