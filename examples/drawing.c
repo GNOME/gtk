@@ -27,8 +27,8 @@ configure_event_cb (GtkWidget         *widget,
 
   surface = gdk_window_create_similar_surface (gtk_widget_get_window (widget),
                                                CAIRO_CONTENT_COLOR,
-                                               gtk_widget_get_allocated_width (widget),
-                                               gtk_widget_get_allocated_height (widget));
+                                               gtk_widget_get_width (widget),
+                                               gtk_widget_get_height (widget));
 
   /* Initialize the surface to white */
   clear_surface ();
