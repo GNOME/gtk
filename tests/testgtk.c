@@ -1374,16 +1374,17 @@ on_rotated_text_unrealize (GtkWidget *widget)
   g_object_set_data (G_OBJECT (widget), "text-gc", NULL);
 }
 
-static gboolean
-on_rotated_text_draw (GtkWidget *widget,
-                      cairo_t   *cr,
-	              GdkPixbuf *tile_pixbuf)
+static void
+on_rotated_text_draw (GtkDrawingArea *drawing_area,
+                      cairo_t        *cr,
+                      int             width,
+                      int             height,
+                      gpointer        tile_pixbuf)
 {
   static const gchar *words[] = { "The", "grand", "old", "Duke", "of", "York",
                                   "had", "10,000", "men" };
   int n_words;
   int i;
-  int width, height;
   double radius;
   PangoLayout *layout;
   PangoContext *context;
@@ -1400,8 +1401,6 @@ on_rotated_text_draw (GtkWidget *widget,
   else
     cairo_set_source_rgb (cr, 0, 0, 0);
 
-  width = gtk_widget_get_allocated_width (widget);
-  height = gtk_widget_get_allocated_height (widget);
   radius = MIN (width, height) / 2.;
 
   cairo_translate (cr,
@@ -1409,7 +1408,7 @@ on_rotated_text_draw (GtkWidget *widget,
                    radius + (height - 2 * radius) / 2);
   cairo_scale (cr, radius / DEFAULT_TEXT_RADIUS, radius / DEFAULT_TEXT_RADIUS);
 
-  context = gtk_widget_get_pango_context (widget);
+  context = gtk_widget_get_pango_context (GTK_WIDGET (drawing_area));
   layout = pango_layout_new (context);
   desc = pango_font_description_from_string ("Sans Bold 30");
   pango_layout_set_font_description (layout, desc);
@@ -1435,8 +1434,6 @@ on_rotated_text_draw (GtkWidget *widget,
     }
   
   g_object_unref (layout);
-
-  return FALSE;
 }
 
 static void
@@ -1446,7 +1443,6 @@ create_rotated_text (GtkWidget *widget)
 
   if (!window)
     {
-      GtkRequisition requisition;
       GtkWidget *content_area;
       GtkWidget *drawing_area;
       GdkPixbuf *tile_pixbuf;
@@ -1473,18 +1469,17 @@ create_rotated_text (GtkWidget *widget)
 
       tile_pixbuf = gdk_pixbuf_new_from_file ("marble.xpm", NULL);
 
-      g_signal_connect (drawing_area, "draw",
-			G_CALLBACK (on_rotated_text_draw), tile_pixbuf);
+      gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (drawing_area),
+			              on_rotated_text_draw,
+                                      tile_pixbuf,
+                                      g_object_unref);
       g_signal_connect (drawing_area, "unrealize",
 			G_CALLBACK (on_rotated_text_unrealize), NULL);
 
       gtk_widget_show (gtk_bin_get_child (GTK_BIN (window)));
 
-      gtk_widget_set_size_request (drawing_area, DEFAULT_TEXT_RADIUS * 2, DEFAULT_TEXT_RADIUS * 2);
-      gtk_widget_get_preferred_size ( (window),
-                                 &requisition, NULL);
-      gtk_widget_set_size_request (drawing_area, -1, -1);
-      gtk_window_resize (GTK_WINDOW (window), requisition.width, requisition.height);
+      gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (drawing_area), DEFAULT_TEXT_RADIUS * 2);
+      gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (drawing_area), DEFAULT_TEXT_RADIUS * 2);
     }
 
   if (!gtk_widget_get_visible (window))
