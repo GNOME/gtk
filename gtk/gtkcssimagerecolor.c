@@ -183,7 +183,7 @@ gtk_css_image_recolor_load (GtkCssImageRecolor  *recolor,
 
   g_clear_error (&local_error);
 
-  return image;
+  return GTK_CSS_IMAGE (image);
 }
 
 static void
