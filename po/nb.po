@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 3.22.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-05 21:19+0000\n"
-"PO-Revision-Date: 2017-11-06 09:09+0100\n"
+"POT-Creation-Date: 2017-11-09 11:54+0000\n"
+"PO-Revision-Date: 2017-11-09 20:09+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: nb\n"
@@ -4061,11 +4061,11 @@ msgstr "Utklippsområde"
 
 #: gtk/inspector/misc-info.ui:430
 msgid "Frame Clock"
-msgstr ""
+msgstr "Bildeklokke"
 
 #: gtk/inspector/misc-info.ui:475
 msgid "Tick callback"
-msgstr ""
+msgstr "Tilbakekall for tikk"
 
 #: gtk/inspector/misc-info.ui:511
 msgid "Frame count"
@@ -4077,15 +4077,15 @@ msgstr "Bilderate"
 
 #: gtk/inspector/misc-info.ui:579
 msgid "Accessible role"
-msgstr ""
+msgstr "Tilgjengelig rolle"
 
 #: gtk/inspector/misc-info.ui:613
 msgid "Accessible name"
-msgstr ""
+msgstr "Tilgjengelig navn"
 
 #: gtk/inspector/misc-info.ui:649
 msgid "Accessible description"
-msgstr ""
+msgstr "Tilgjengelig beskrivelse"
 
 #: gtk/inspector/misc-info.ui:685
 msgid "Mapped"
