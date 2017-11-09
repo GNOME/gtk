@@ -745,14 +745,10 @@ get_surface_from_gicon (GIcon      *icon,
   return surface;
 }
 
-cairo_surface_t *
-_gtk_file_system_volume_render_icon (GtkFileSystemVolume  *volume,
-				     GtkWidget            *widget,
-				     gint                  icon_size,
-				     GError              **error)
+GIcon *
+_gtk_file_system_volume_get_icon (GtkFileSystemVolume *volume)
 {
   GIcon *icon = NULL;
-  cairo_surface_t *surface;
 
   if (IS_ROOT_VOLUME (volume))
     icon = g_themed_icon_new ("drive-harddisk");
@@ -762,6 +758,20 @@ _gtk_file_system_volume_render_icon (GtkFileSystemVolume  *volume,
     icon = g_volume_get_icon (G_VOLUME (volume));
   else if (G_IS_MOUNT (volume))
     icon = g_mount_get_icon (G_MOUNT (volume));
+
+  return icon;
+}
+
+cairo_surface_t *
+_gtk_file_system_volume_render_icon (GtkFileSystemVolume  *volume,
+				     GtkWidget            *widget,
+				     gint                  icon_size,
+				     GError              **error)
+{
+  GIcon *icon = NULL;
+  cairo_surface_t *surface;
+
+  icon = _gtk_file_system_volume_get_icon (volume);
 
   if (!icon)
     return NULL;
@@ -868,6 +878,37 @@ _gtk_file_info_render_icon_internal (GFileInfo *info,
     }
 
   return surface;
+}
+
+GIcon *
+_gtk_file_info_get_icon (GFileInfo *info,
+			 int        icon_size,
+                         int        scale)
+{
+  GIcon *icon;
+  GdkPixbuf *pixbuf;
+  const gchar *thumbnail_path;
+
+  thumbnail_path = g_file_info_get_attribute_byte_string (info, G_FILE_ATTRIBUTE_THUMBNAIL_PATH);
+
+  if (thumbnail_path)
+    {
+      pixbuf = gdk_pixbuf_new_from_file_at_size (thumbnail_path,
+						 icon_size*scale, icon_size*scale,
+						 NULL);
+
+      if (pixbuf != NULL)
+        return G_ICON (pixbuf);
+    }
+
+  icon = g_file_info_get_icon (info);
+  if (icon)
+    return icon;
+
+  /* Use general fallback for all files without icon */
+  icon = g_themed_icon_new ("text-x-generic");
+
+  return icon;
 }
 
 cairo_surface_t *

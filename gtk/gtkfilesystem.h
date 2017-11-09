@@ -94,6 +94,7 @@ gchar *               _gtk_file_system_volume_get_display_name (GtkFileSystemVol
 gboolean              _gtk_file_system_volume_is_mounted       (GtkFileSystemVolume *volume);
 GFile *               _gtk_file_system_volume_get_root         (GtkFileSystemVolume *volume);
 GIcon *               _gtk_file_system_volume_get_symbolic_icon (GtkFileSystemVolume *volume);
+GIcon *               _gtk_file_system_volume_get_icon          (GtkFileSystemVolume *volume);
 cairo_surface_t *     _gtk_file_system_volume_render_icon      (GtkFileSystemVolume  *volume,
 							        GtkWidget            *widget,
 							        gint                  icon_size,
@@ -106,6 +107,9 @@ void                  _gtk_file_system_volume_unref            (GtkFileSystemVol
 cairo_surface_t *     _gtk_file_info_render_icon (GFileInfo *info,
 						  GtkWidget *widget,
 						  gint       icon_size);
+GIcon *               _gtk_file_info_get_icon    (GFileInfo *info,
+                                                  int        icon_size,
+                                                  int        scale);
 
 gboolean	_gtk_file_info_consider_as_directory (GFileInfo *info);
 
