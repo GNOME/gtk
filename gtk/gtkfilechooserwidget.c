@@ -408,7 +408,7 @@ enum {
   MODEL_COL_NAME_COLLATED,
   MODEL_COL_IS_FOLDER,
   MODEL_COL_IS_SENSITIVE,
-  MODEL_COL_SURFACE,
+  MODEL_COL_ICON,
   MODEL_COL_SIZE_TEXT,
   MODEL_COL_DATE_TEXT,
   MODEL_COL_TIME_TEXT,
@@ -427,7 +427,7 @@ enum {
         G_TYPE_STRING,            /* MODEL_COL_NAME_COLLATED */ \
         G_TYPE_BOOLEAN,           /* MODEL_COL_IS_FOLDER */     \
         G_TYPE_BOOLEAN,           /* MODEL_COL_IS_SENSITIVE */  \
-        CAIRO_GOBJECT_TYPE_SURFACE,  /* MODEL_COL_SURFACE */    \
+        G_TYPE_ICON,              /* MODEL_COL_ICON */          \
         G_TYPE_STRING,            /* MODEL_COL_SIZE_TEXT */     \
         G_TYPE_STRING,            /* MODEL_COL_DATE_TEXT */     \
         G_TYPE_STRING,            /* MODEL_COL_TIME_TEXT */     \
@@ -3738,7 +3738,7 @@ change_icon_theme (GtkFileChooserWidget *impl)
   /* the first cell in the first column is the icon column, and we have a fixed size there */
   set_icon_cell_renderer_fixed_size (impl);
 
-  clear_model_cache (impl, MODEL_COL_SURFACE);
+  clear_model_cache (impl, MODEL_COL_ICON);
   gtk_widget_queue_resize (priv->browse_files_tree_view);
 
   profile_end ("end", NULL);
@@ -4951,12 +4951,12 @@ file_system_model_set (GtkFileSystemModel *model,
       else
         g_value_set_boolean (value, TRUE);
       break;
-    case MODEL_COL_SURFACE:
+    case MODEL_COL_ICON:
       if (info)
         {
           if (g_file_info_has_attribute (info, G_FILE_ATTRIBUTE_STANDARD_ICON))
             {
-              g_value_take_boxed (value, _gtk_file_info_render_icon (info, GTK_WIDGET (impl), priv->icon_size));
+              g_value_take_object (value, _gtk_file_info_get_icon (info, priv->icon_size, gtk_widget_get_scale_factor (GTK_WIDGET (impl))));
             }
           else
             {
@@ -7853,7 +7853,7 @@ update_cell_renderer_attributes (GtkFileChooserWidget *impl)
 
   gtk_tree_view_column_set_attributes (priv->list_name_column,
                                        priv->list_pixbuf_renderer,
-                                       "surface", MODEL_COL_SURFACE,
+                                       "gicon", MODEL_COL_ICON,
                                        "sensitive", MODEL_COL_IS_SENSITIVE,
                                        NULL);
   gtk_tree_view_column_set_attributes (priv->list_name_column,
