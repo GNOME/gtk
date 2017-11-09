@@ -23,14 +23,6 @@ test('nodes (cairo)', test_render_nodes,
      suite: 'gsk')
 
 if have_vulkan
-  vulkan_test_env = environment()
-  vulkan_test_env.set('G_TEST_SRCDIR', meson.current_source_dir())
-  vulkan_test_env.set('G_TEST_BUILDDIR', meson.current_build_dir())
-  vulkan_test_env.set('GSETTINGS_BACKEND', 'memory')
-  vulkan_test_env.set('GTK_CSD', '1')
-  vulkan_test_env.set('G_ENABLE_DIAGNOSTIC', '0')
-  vulkan_test_env.set('GSK_RENDERER', 'vulkan')
-
   test('nodes (vulkan)', test_render_nodes,
        args: [ '--tap', '-k' ],
        env: [ 'GIO_USE_VOLUME_MONITOR=unix',
