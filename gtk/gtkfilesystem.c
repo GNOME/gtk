@@ -702,49 +702,6 @@ _gtk_file_system_volume_get_root (GtkFileSystemVolume *volume)
   return file;
 }
 
-static cairo_surface_t *
-get_surface_from_gicon (GIcon      *icon,
-			GtkWidget  *widget,
-			gint        icon_size,
-			GError    **error)
-{
-  GtkStyleContext *context;
-  GtkIconTheme *icon_theme;
-  GtkIconInfo *icon_info;
-  GdkPixbuf *pixbuf;
-  cairo_surface_t *surface;
-
-  context = gtk_widget_get_style_context (widget);
-  icon_theme = gtk_css_icon_theme_value_get_icon_theme
-    (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_THEME));
-
-  icon_info = gtk_icon_theme_lookup_by_gicon_for_scale (icon_theme,
-                                                        icon,
-                                                        icon_size,
-                                                        gtk_widget_get_scale_factor (widget),
-                                                        GTK_ICON_LOOKUP_USE_BUILTIN);
-
-  if (!icon_info)
-    return NULL;
-
-  pixbuf = gtk_icon_info_load_symbolic_for_context (icon_info,
-                                                    context,
-                                                    NULL,
-                                                    error);
-
-  g_object_unref (icon_info);
-
-  if (pixbuf == NULL)
-    return NULL;
-
-  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf,
-                                                  gtk_widget_get_scale_factor (widget),
-					          gtk_widget_get_window (widget));
-  g_object_unref (pixbuf);
-
-  return surface;
-}
-
 GIcon *
 _gtk_file_system_volume_get_icon (GtkFileSystemVolume *volume)
 {
@@ -760,27 +717,6 @@ _gtk_file_system_volume_get_icon (GtkFileSystemVolume *volume)
     icon = g_mount_get_icon (G_MOUNT (volume));
 
   return icon;
-}
-
-cairo_surface_t *
-_gtk_file_system_volume_render_icon (GtkFileSystemVolume  *volume,
-				     GtkWidget            *widget,
-				     gint                  icon_size,
-				     GError              **error)
-{
-  GIcon *icon = NULL;
-  cairo_surface_t *surface;
-
-  icon = _gtk_file_system_volume_get_icon (volume);
-
-  if (!icon)
-    return NULL;
-
-  surface = get_surface_from_gicon (icon, widget, icon_size, error);
-
-  g_object_unref (icon);
-
-  return surface;
 }
 
 GIcon *
@@ -826,60 +762,6 @@ _gtk_file_system_volume_unref (GtkFileSystemVolume *volume)
 }
 
 /* GFileInfo helper functions */
-static cairo_surface_t *
-_gtk_file_info_render_icon_internal (GFileInfo *info,
-			             GtkWidget *widget,
-			             gint       icon_size,
-                                     gboolean   symbolic)
-{
-  GIcon *icon;
-  GdkPixbuf *pixbuf;
-  const gchar *thumbnail_path;
-  cairo_surface_t *surface = NULL;
-  int scale;
-
-  thumbnail_path = g_file_info_get_attribute_byte_string (info, G_FILE_ATTRIBUTE_THUMBNAIL_PATH);
-
-  if (thumbnail_path)
-    {
-      scale = gtk_widget_get_scale_factor (widget);
-      pixbuf = gdk_pixbuf_new_from_file_at_size (thumbnail_path,
-						 icon_size*scale, icon_size*scale,
-						 NULL);
-
-      if (pixbuf != NULL)
-        {
-          surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, scale,
-                                                          gtk_widget_get_window (widget));
-          g_object_unref (pixbuf);
-        }
-    }
-
-  if (!surface)
-    {
-      if (symbolic)
-        icon = g_file_info_get_symbolic_icon (info);
-      else
-        icon = g_file_info_get_icon (info);
-
-      if (icon)
-	surface = get_surface_from_gicon (icon, widget, icon_size, NULL);
-
-      if (!surface)
-	{
-	   /* Use general fallback for all files without icon */
-          if (symbolic)
-	    icon = g_themed_icon_new ("text-x-generic-symbolic");
-          else
-	    icon = g_themed_icon_new ("text-x-generic");
-	  surface = get_surface_from_gicon (icon, widget, icon_size, NULL);
-	  g_object_unref (icon);
-	}
-    }
-
-  return surface;
-}
-
 GIcon *
 _gtk_file_info_get_icon (GFileInfo *info,
 			 int        icon_size,
@@ -908,14 +790,6 @@ _gtk_file_info_get_icon (GFileInfo *info,
   /* Use general fallback for all files without icon */
   icon = g_themed_icon_new ("text-x-generic");
   return icon;
-}
-
-cairo_surface_t *
-_gtk_file_info_render_icon (GFileInfo *info,
-			    GtkWidget *widget,
-			    gint       icon_size)
-{
-  return _gtk_file_info_render_icon_internal (info, widget, icon_size, FALSE);
 }
 
 gboolean
