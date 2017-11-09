@@ -4846,7 +4846,7 @@ gtk_window_get_icon_name (GtkWindow *window)
  * called gtk_window_set_icon_list(), gets the first icon in
  * the icon list).
  *
- * Returns: (transfer none) (nullable: icon for window or %NULL if none
+ * Returns: (transfer none) (nullable): icon for window or %NULL if none
  **/
 GdkTexture *
 gtk_window_get_icon (GtkWindow  *window)
