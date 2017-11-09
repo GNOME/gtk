@@ -4859,7 +4859,7 @@ gtk_window_get_icon_name (GtkWindow *window)
  * called gtk_window_set_icon_list(), gets the first icon in
  * the icon list).
  *
- * Returns: (transfer none): icon for window
+ * Returns: (transfer none) (nullable): icon for window or %NULL if none
  **/
 GdkPixbuf*
 gtk_window_get_icon (GtkWindow  *window)
