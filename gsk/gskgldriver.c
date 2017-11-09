@@ -45,10 +45,10 @@ struct _GskGLDriver
   GHashTable *textures;
   GHashTable *vaos;
 
-  Texture *bound_source_texture;
-  Texture *bound_mask_texture;
-  Vao *bound_vao;
-  Fbo *bound_fbo;
+  const Texture *bound_source_texture;
+  const Texture *bound_mask_texture;
+  const Vao *bound_vao;
+  const Fbo *bound_fbo;
 
   int max_texture_size;
 
