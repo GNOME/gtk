@@ -78,7 +78,7 @@ get_blank_cursor (GdkDisplay *display)
   cairo_surface_t *surface;
   cairo_t *cr;
 
-  surface = _gdk_x11_window_create_bitmap_surface (gdk_x11_display_get_root_window (display), 1, 1);
+  surface = _gdk_x11_display_create_bitmap_surface (display, 1, 1);
   /* Clear surface */
   cr = cairo_create (surface);
   cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
@@ -305,13 +305,10 @@ _gdk_x11_display_get_maximal_cursor_size (GdkDisplay *display,
                                           guint       *width,
                                           guint       *height)
 {
-  GdkWindow *window;
-
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
-  window = gdk_x11_display_get_root_window (display);
   XQueryBestCursor (GDK_DISPLAY_XDISPLAY (display),
-                    GDK_WINDOW_XID (window),
+                    GDK_SCREEN_XROOTWIN (GDK_X11_DISPLAY (display)->screen),
                     128, 128, width, height);
 }
 

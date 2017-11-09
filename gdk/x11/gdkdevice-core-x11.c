@@ -242,7 +242,7 @@ gdk_x11_device_core_warp (GdkDevice *device,
   display = gdk_device_get_display (device);
   xdisplay = GDK_DISPLAY_XDISPLAY (display);
   screen = GDK_X11_DISPLAY (display)->screen;
-  dest = GDK_WINDOW_XID (gdk_x11_display_get_root_window (display));
+  dest = GDK_SCREEN_XROOTWIN (screen);
 
   XWarpPointer (xdisplay, None, dest, 0, 0, 0, 0,
                 round (x * GDK_X11_SCREEN (screen)->window_scale),
@@ -259,22 +259,30 @@ gdk_x11_device_core_query_state (GdkDevice        *device,
                                  gdouble          *win_y,
                                  GdkModifierType  *mask)
 {
-  GdkWindowImplX11 *impl;
   GdkDisplay *display;
   GdkScreen *screen;
+  Window xwindow, w;
   Window xroot_window, xchild_window;
   int xroot_x, xroot_y, xwin_x, xwin_y;
   unsigned int xmask;
+  int scale;
 
   display = gdk_device_get_display (device);
   screen = GDK_X11_DISPLAY (display)->screen;
   if (window == NULL)
-    window = gdk_x11_display_get_root_window (display);
-  impl = GDK_WINDOW_IMPL_X11 (window->impl);
+    {
+      xwindow = GDK_SCREEN_XROOTWIN (screen);
+      scale = GDK_X11_SCREEN (screen)->window_scale;
+    }
+  else
+    {
+      xwindow = GDK_WINDOW_XID (window);
+      scale = GDK_WINDOW_IMPL_X11 (window->impl)->window_scale;
+    }
 
   if (!GDK_X11_DISPLAY (display)->trusted_client ||
       !XQueryPointer (GDK_WINDOW_XDISPLAY (window),
-                      GDK_WINDOW_XID (window),
+                      xwindow,
                       &xroot_window,
                       &xchild_window,
                       &xroot_x, &xroot_y,
@@ -283,7 +291,6 @@ gdk_x11_device_core_query_state (GdkDevice        *device,
     {
       XSetWindowAttributes attributes;
       Display *xdisplay;
-      Window xwindow, w;
 
       /* FIXME: untrusted clients not multidevice-safe */
       xdisplay = GDK_SCREEN_XDISPLAY (screen);
@@ -305,16 +312,16 @@ gdk_x11_device_core_query_state (GdkDevice        *device,
     *child_window = gdk_x11_window_lookup_for_display (display, xchild_window);
 
   if (root_x)
-    *root_x = (double)xroot_x / impl->window_scale;
+    *root_x = (double)xroot_x / scale;
 
   if (root_y)
-    *root_y = (double)xroot_y / impl->window_scale;
+    *root_y = (double)xroot_y / scale;
 
   if (win_x)
-    *win_x = (double)xwin_x / impl->window_scale;
+    *win_x = (double)xwin_x / scale;
 
   if (win_y)
-    *win_y = (double)xwin_y / impl->window_scale;
+    *win_y = (double)xwin_y / scale;
 
   if (mask)
     *mask = xmask;

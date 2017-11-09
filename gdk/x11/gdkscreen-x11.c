@@ -200,7 +200,6 @@ gdk_x11_screen_get_work_area (GdkScreen    *screen,
                               GdkRectangle *area)
 {
   GdkX11Screen   *x11_screen = GDK_X11_SCREEN (screen);
-  GdkWindow      *root_window;
   Atom            workarea;
   Atom            type;
   Window          win;
@@ -215,14 +214,13 @@ gdk_x11_screen_get_work_area (GdkScreen    *screen,
   Display        *display;
 
   display = GDK_SCREEN_XDISPLAY (screen);
-  root_window = gdk_x11_display_get_root_window (GDK_SCREEN_DISPLAY (screen));
   workarea = XInternAtom (display, "_NET_WORKAREA", True);
 
   /* Defaults in case of error */
   area->x = 0;
   area->y = 0;
-  area->width = gdk_window_get_width (root_window);
-  area->height = gdk_window_get_height (root_window);
+  area->width = WidthOfScreen (x11_screen->xscreen);
+  area->height = HeightOfScreen (x11_screen->xscreen);
 
   if (!gdk_x11_screen_supports_net_wm_hint (screen,
                                             gdk_atom_intern_static_string ("_NET_WORKAREA")))

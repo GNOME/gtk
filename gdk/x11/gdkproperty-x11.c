@@ -375,16 +375,18 @@ _gdk_x11_window_get_property (GdkWindow   *window,
   Atom xproperty;
   Atom xtype;
   int res;
+  Window xwindow;
 
   g_return_val_if_fail (!window || GDK_WINDOW_IS_X11 (window), FALSE);
 
   if (!window)
-    window = gdk_x11_display_get_root_window (gdk_display_get_default ());
+    xwindow = GDK_DISPLAY_XROOTWIN (gdk_display_get_default ());
   else if (!GDK_WINDOW_IS_X11 (window))
     return FALSE;
-
-  if (GDK_WINDOW_DESTROYED (window))
+  else if (GDK_WINDOW_DESTROYED (window))
     return FALSE;
+  else
+    xwindow = GDK_WINDOW_XID (window);
 
   display = gdk_window_get_display (window);
   xproperty = gdk_x11_atom_to_xatom_for_display (display, property);
@@ -414,7 +416,7 @@ _gdk_x11_window_get_property (GdkWindow   *window,
     }
 
   res = XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display),
-			    GDK_WINDOW_XID (window), xproperty,
+			    xwindow, xproperty,
 			    offset, get_length, pdelete,
 			    xtype, &ret_prop_type, &ret_format,
 			    &ret_nitems, &ret_bytes_after,
@@ -510,12 +512,13 @@ _gdk_x11_window_change_property (GdkWindow    *window,
   g_return_if_fail (!window || GDK_WINDOW_IS_X11 (window));
 
   if (!window)
-    window = gdk_x11_display_get_root_window (gdk_display_get_default ());
+    xwindow = GDK_DISPLAY_XROOTWIN (gdk_display_get_default ());
   else if (!GDK_WINDOW_IS_X11 (window))
     return;
-
-  if (GDK_WINDOW_DESTROYED (window))
+  else if (GDK_WINDOW_DESTROYED (window))
     return;
+  else
+    xwindow = GDK_WINDOW_XID (window);
 
   if (!gdk_window_has_native (window))
     {
@@ -526,7 +529,6 @@ _gdk_x11_window_change_property (GdkWindow    *window,
   display = gdk_window_get_display (window);
   xproperty = gdk_x11_atom_to_xatom_for_display (display, property);
   xtype = gdk_x11_atom_to_xatom_for_display (display, type);
-  xwindow = GDK_WINDOW_XID (window);
 
   if (xtype == XA_ATOM ||
       xtype == gdk_x11_get_xatom_by_name_for_display (display, "ATOM_PAIR"))
@@ -557,17 +559,20 @@ void
 _gdk_x11_window_delete_property (GdkWindow *window,
                                  GdkAtom    property)
 {
+  Window xwindow;
+
   g_return_if_fail (!window || GDK_WINDOW_IS_X11 (window));
 
   if (!window)
-    window = gdk_x11_display_get_root_window (gdk_display_get_default ());
+    xwindow = GDK_DISPLAY_XROOTWIN (gdk_display_get_default ());
   else if (!GDK_WINDOW_IS_X11 (window))
     return;
-
-  if (GDK_WINDOW_DESTROYED (window))
+  else if (GDK_WINDOW_DESTROYED (window))
     return;
+  else
+    xwindow = GDK_WINDOW_XID (window);
 
-  XDeleteProperty (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window),
+  XDeleteProperty (GDK_WINDOW_XDISPLAY (window), xwindow,
 		   gdk_x11_atom_to_xatom_for_display (GDK_WINDOW_DISPLAY (window),
 						      property));
 }

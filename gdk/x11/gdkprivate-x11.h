@@ -258,6 +258,20 @@ _gdk_x11_dnd_filter (GdkXEvent *xev,
                      GdkEvent  *event,
                      gpointer   data);
 
+typedef struct _GdkWindowCache GdkWindowCache;
+
+GdkWindowCache *
+gdk_window_cache_get (GdkDisplay *display);
+
+GdkFilterReturn
+gdk_window_cache_filter (GdkXEvent *xev,
+                         GdkEvent  *event,
+                         gpointer   data);
+GdkFilterReturn
+gdk_window_cache_shape_filter (GdkXEvent *xev,
+                               GdkEvent  *event,
+                               gpointer   data);
+
 void _gdk_x11_screen_init_root_window (GdkScreen *screen);
 void _gdk_x11_screen_init_visuals     (GdkScreen *screen,
                                        gboolean   setup_display);
@@ -278,15 +292,16 @@ gboolean _gdk_x11_get_xft_setting (GdkScreen   *screen,
 
 GdkGrabStatus _gdk_x11_convert_grab_status (gint status);
 
-cairo_surface_t * _gdk_x11_window_create_bitmap_surface (GdkWindow *window,
-                                                         int        width,
-                                                         int        height);
-
+cairo_surface_t * _gdk_x11_display_create_bitmap_surface (GdkDisplay *display,
+                                                          int         width,
+                                                          int         height);
+ 
 extern const gint        _gdk_x11_event_mask_table[];
 extern const gint        _gdk_x11_event_mask_table_size;
 
 #define GDK_SCREEN_DISPLAY(screen)    (GDK_X11_SCREEN (screen)->display)
 #define GDK_SCREEN_XROOTWIN(screen)   (GDK_X11_SCREEN (screen)->xroot_window)
+#define GDK_DISPLAY_XROOTWIN(display) (GDK_SCREEN_XROOTWIN (GDK_X11_DISPLAY (display)->screen))
 #define GDK_WINDOW_SCREEN(win)        (GDK_X11_DISPLAY (gdk_window_get_display (win))->screen)
 #define GDK_WINDOW_DISPLAY(win)       (gdk_window_get_display (win))
 #define GDK_WINDOW_XROOTWIN(win)      (GDK_X11_SCREEN (GDK_WINDOW_SCREEN (win))->xroot_window)

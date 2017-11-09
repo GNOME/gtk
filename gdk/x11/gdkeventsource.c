@@ -273,6 +273,7 @@ gdk_event_source_translate_event (GdkEventSource *event_source,
   GdkWindow *filter_window;
   Display *dpy;
   GdkX11Screen *x11_screen;
+  gpointer cache;
 
   x11_screen = (GdkX11Screen *) gdk_x11_display_get_screen (event_source->display); 
 
@@ -298,6 +299,17 @@ gdk_event_source_translate_event (GdkEventSource *event_source,
   if (result == GDK_FILTER_CONTINUE &&
       xevent->xany.window == x11_screen->xsettings_manager_window)
     result = gdk_xsettings_manager_window_filter (xevent, event, x11_screen);
+
+  cache = gdk_window_cache_get (event_source->display);
+  if (cache)
+    {
+      if (result == GDK_FILTER_CONTINUE)
+        result = gdk_window_cache_shape_filter (xevent, event, cache);
+
+      if (result == GDK_FILTER_CONTINUE &&
+          xevent->xany.window == XRootWindow (dpy, 0))
+        result = gdk_window_cache_filter (xevent, event, cache);
+    }
 
   /* Run default filters */
   if (result == GDK_FILTER_CONTINUE &&

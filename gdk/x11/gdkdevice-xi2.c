@@ -212,8 +212,10 @@ gdk_x11_device_xi2_get_state (GdkDevice       *device,
       GdkDisplay *display;
       XIDeviceInfo *info;
       gint i, j, ndevices;
+      Screen *xscreen;
 
       display = gdk_device_get_display (device);
+      xscreen = GDK_X11_SCREEN (GDK_X11_DISPLAY (display)->screen)->xscreen;
 
       gdk_x11_display_error_trap_push (display);
       info = XIQueryDevice (GDK_DISPLAY_XDISPLAY (display),
@@ -241,16 +243,14 @@ gdk_x11_device_xi2_get_state (GdkDevice       *device,
                 _gdk_device_translate_window_coord (device, window, j, value, &axes[j]);
               else
                 {
-                  GdkWindow *root_window;
                   gint root_x, root_y;
 
-                  root_window = gdk_x11_display_get_root_window (gdk_window_get_display (window));
                   /* FIXME: Maybe root coords chaching should happen here */
                   gdk_window_get_origin (window, &root_x, &root_y);
                   _gdk_device_translate_screen_coord (device, window,
                                                       root_x, root_y,
-                                                      gdk_window_get_width (root_window),
-                                                      gdk_window_get_height (root_window),
+                                                      WidthOfScreen (xscreen),
+                                                      HeightOfScreen (xscreen),
                                                       j, value,
                                                       &axes[j]);
                 }
@@ -303,18 +303,16 @@ gdk_x11_device_xi2_warp (GdkDevice *device,
                          gdouble    y)
 {
   GdkX11DeviceXI2 *device_xi2 = GDK_X11_DEVICE_XI2 (device);
-  Window dest;
   GdkDisplay *display = gdk_device_get_display (device);
   GdkScreen *screen = GDK_X11_DISPLAY (display)->screen;
-
-  dest = GDK_WINDOW_XID (gdk_x11_display_get_root_window (display));
+  Window dest = GDK_DISPLAY_XROOTWIN (display);
 
   XIWarpPointer (GDK_SCREEN_XDISPLAY (screen),
                  device_xi2->device_id,
                  None, dest,
                  0, 0, 0, 0,
-                 round (x * GDK_X11_SCREEN(screen)->window_scale),
-                 round (y * GDK_X11_SCREEN(screen)->window_scale));
+                 round (x * GDK_X11_SCREEN (screen)->window_scale),
+                 round (y * GDK_X11_SCREEN (screen)->window_scale));
 }
 
 static void
@@ -327,21 +325,28 @@ gdk_x11_device_xi2_query_state (GdkDevice        *device,
                                 gdouble          *win_y,
                                 GdkModifierType  *mask)
 {
-  GdkWindowImplX11 *impl;
   GdkX11DeviceXI2 *device_xi2 = GDK_X11_DEVICE_XI2 (device);
   GdkDisplay *display;
   GdkScreen *default_screen;
-  Window xroot_window, xchild_window;
+  Window xroot_window, xchild_window, xwindow;
   gdouble xroot_x, xroot_y, xwin_x, xwin_y;
   XIButtonState button_state;
   XIModifierState mod_state;
   XIGroupState group_state;
+  int scale;
 
   display = gdk_device_get_display (device);
   default_screen = GDK_X11_DISPLAY (display)->screen;
   if (window == NULL)
-    window = gdk_x11_display_get_root_window (display);
-  impl = GDK_WINDOW_IMPL_X11 (window->impl);
+    {
+      xwindow = GDK_DISPLAY_XROOTWIN (display);
+      scale = GDK_X11_SCREEN (default_screen)->window_scale;
+    }
+  else
+    {
+      xwindow = GDK_WINDOW_XID (window);
+      scale = GDK_WINDOW_IMPL_X11 (window->impl)->window_scale;
+    }
 
   if (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_SLAVE)
     {
@@ -356,7 +361,7 @@ gdk_x11_device_xi2_query_state (GdkDevice        *device,
   if (!GDK_X11_DISPLAY (display)->trusted_client ||
       !XIQueryPointer (GDK_WINDOW_XDISPLAY (window),
                        device_xi2->device_id,
-                       GDK_WINDOW_XID (window),
+                       xwindow,
                        &xroot_window,
                        &xchild_window,
                        &xroot_x, &xroot_y,
@@ -367,7 +372,7 @@ gdk_x11_device_xi2_query_state (GdkDevice        *device,
     {
       XSetWindowAttributes attributes;
       Display *xdisplay;
-      Window xwindow, w;
+      Window w;
 
       /* FIXME: untrusted clients not multidevice-safe */
       xdisplay = GDK_SCREEN_XDISPLAY (default_screen);
@@ -392,16 +397,16 @@ gdk_x11_device_xi2_query_state (GdkDevice        *device,
     *child_window = gdk_x11_window_lookup_for_display (display, xchild_window);
 
   if (root_x)
-    *root_x = xroot_x / impl->window_scale;
+    *root_x = xroot_x / scale;
 
   if (root_y)
-    *root_y = xroot_y / impl->window_scale;
+    *root_y = xroot_y / scale;
 
   if (win_x)
-    *win_x = xwin_x / impl->window_scale;
+    *win_x = xwin_x / scale;
 
   if (win_y)
-    *win_y = xwin_y / impl->window_scale;
+    *win_y = xwin_y / scale;
 
   if (mask)
     *mask = _gdk_x11_device_xi2_translate_state (&mod_state, &button_state, &group_state);

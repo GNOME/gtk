@@ -26,6 +26,7 @@
 
 #include "gdkx11dnd.h"
 #include "gdkdndprivate.h"
+#include "gdkdeviceprivate.h"
 
 #include "gdkmain.h"
 #include "gdkinternals.h"
@@ -61,13 +62,13 @@ typedef struct {
   cairo_region_t *shape;
 } GdkCacheChild;
 
-typedef struct {
+struct _GdkWindowCache {
   GList *children;
   GHashTable *child_hash;
   guint old_event_mask;
   GdkDisplay *display;
   gint ref_count;
-} GdkWindowCache;
+};
 
 
 struct _GdkX11DragContext
@@ -141,7 +142,6 @@ static GrabKey grab_keys[] = {
 
 /* Forward declarations */
 
-static GdkWindowCache *gdk_window_cache_get   (GdkDisplay *display);
 static GdkWindowCache *gdk_window_cache_ref   (GdkWindowCache *cache);
 static void            gdk_window_cache_unref (GdkWindowCache *cache);
 
@@ -402,7 +402,7 @@ gdk_window_cache_add (GdkWindowCache *cache,
                        cache->children);
 }
 
-static GdkFilterReturn
+GdkFilterReturn
 gdk_window_cache_shape_filter (GdkXEvent *xev,
                                GdkEvent  *event,
                                gpointer   data)
@@ -437,7 +437,7 @@ gdk_window_cache_shape_filter (GdkXEvent *xev,
   return GDK_FILTER_CONTINUE;
 }
 
-static GdkFilterReturn
+GdkFilterReturn
 gdk_window_cache_filter (GdkXEvent *xev,
                          GdkEvent  *event,
                          gpointer   data)
@@ -564,7 +564,7 @@ gdk_window_cache_new (GdkDisplay *display)
   XWindowAttributes xwa;
   GdkScreen *screen = GDK_X11_DISPLAY (display)->screen;
   Display *xdisplay = GDK_SCREEN_XDISPLAY (screen);
-  GdkWindow *root_window = gdk_x11_display_get_root_window (display);
+  Window xroot_window = GDK_DISPLAY_XROOTWIN (display);
   GdkChildInfoX11 *children;
   guint nchildren, i;
 #ifdef HAVE_XCOMPOSITE
@@ -578,7 +578,7 @@ gdk_window_cache_new (GdkDisplay *display)
   result->display = display;
   result->ref_count = 1;
 
-  XGetWindowAttributes (xdisplay, GDK_WINDOW_XID (root_window), &xwa);
+  XGetWindowAttributes (xdisplay, xroot_window, &xwa);
   result->old_event_mask = xwa.your_event_mask;
 
   if (G_UNLIKELY (!GDK_X11_DISPLAY (display)->trusted_client))
@@ -604,13 +604,10 @@ gdk_window_cache_new (GdkDisplay *display)
       return result;
     }
 
-  XSelectInput (xdisplay, GDK_WINDOW_XID (root_window),
-                result->old_event_mask | SubstructureNotifyMask);
-  gdk_window_add_filter (root_window, gdk_window_cache_filter, result);
-  gdk_window_add_filter (NULL, gdk_window_cache_shape_filter, result);
+  XSelectInput (xdisplay, xroot_window, result->old_event_mask | SubstructureNotifyMask);
 
   if (!_gdk_x11_get_window_child_info (display,
-                                       GDK_WINDOW_XID (root_window),
+                                       xroot_window,
                                        FALSE, NULL,
                                        &children, &nchildren))
     return result;
@@ -634,12 +631,12 @@ gdk_window_cache_new (GdkDisplay *display)
    */
   if (gdk_display_is_composited (display))
     {
-      cow = XCompositeGetOverlayWindow (xdisplay, GDK_WINDOW_XID (root_window));
-      gdk_window_cache_add (result, cow, 0, 0, 
-			    gdk_window_get_width (root_window) * GDK_X11_SCREEN(screen)->window_scale, 
-			    gdk_window_get_height (root_window) * GDK_X11_SCREEN(screen)->window_scale, 
+      cow = XCompositeGetOverlayWindow (xdisplay, xroot_window);
+      gdk_window_cache_add (result, cow, 0, 0,
+			    WidthOfScreen (GDK_X11_SCREEN (screen)->xscreen) * GDK_X11_SCREEN (screen)->window_scale,
+			    HeightOfScreen (GDK_X11_SCREEN (screen)->xscreen) * GDK_X11_SCREEN (screen)->window_scale,
 			    TRUE);
-      XCompositeReleaseOverlayWindow (xdisplay, GDK_WINDOW_XID (root_window));
+      XCompositeReleaseOverlayWindow (xdisplay, xroot_window);
     }
 #endif
 
@@ -649,13 +646,9 @@ gdk_window_cache_new (GdkDisplay *display)
 static void
 gdk_window_cache_destroy (GdkWindowCache *cache)
 {
-  GdkWindow *root_window = gdk_x11_display_get_root_window (cache->display);
-
-  XSelectInput (GDK_WINDOW_XDISPLAY (root_window),
-                GDK_WINDOW_XID (root_window),
+  XSelectInput (GDK_DISPLAY_XDISPLAY (cache->display),
+                GDK_DISPLAY_XROOTWIN (cache->display),
                 cache->old_event_mask);
-  gdk_window_remove_filter (root_window, gdk_window_cache_filter, cache);
-  gdk_window_remove_filter (NULL, gdk_window_cache_shape_filter, cache);
 
   gdk_x11_display_error_trap_push (cache->display);
   g_list_foreach (cache->children, (GFunc)free_cache_child, cache->display);
@@ -858,7 +851,7 @@ get_client_window_at_coords (GdkWindowCache *cache,
   if (retval)
     return retval;
   else
-    return GDK_WINDOW_XID (gdk_x11_display_get_root_window (cache->display));
+    return GDK_DISPLAY_XROOTWIN (display);
 }
 
 #ifdef G_ENABLE_DEBUG
@@ -2670,7 +2663,7 @@ drag_context_grab (GdkDragContext *context)
   GdkX11DragContext *x11_context = GDK_X11_DRAG_CONTEXT (context);
   GdkDevice *device = gdk_drag_context_get_device (context);
   GdkSeatCapabilities capabilities;
-  GdkWindow *root;
+  Window root;
   GdkSeat *seat;
   gint keycode, i;
   GdkCursor *cursor;
@@ -2678,7 +2671,7 @@ drag_context_grab (GdkDragContext *context)
   if (!x11_context->ipc_window)
     return FALSE;
 
-  root = gdk_x11_display_get_root_window (GDK_WINDOW_DISPLAY (x11_context->ipc_window));
+  root = GDK_DISPLAY_XROOTWIN (GDK_WINDOW_DISPLAY (x11_context->ipc_window));
   seat = gdk_device_get_seat (gdk_drag_context_get_device (context));
 
 #ifdef XINPUT_2
@@ -2730,7 +2723,7 @@ drag_context_grab (GdkDragContext *context)
           XIGrabKeycode (GDK_WINDOW_XDISPLAY (x11_context->ipc_window),
                          deviceid,
                          keycode,
-                         GDK_WINDOW_XID (root),
+                         root,
                          GrabModeAsync,
                          GrabModeAsync,
                          False,
@@ -2743,7 +2736,7 @@ drag_context_grab (GdkDragContext *context)
         {
           XGrabKey (GDK_WINDOW_XDISPLAY (x11_context->ipc_window),
                     keycode, grab_keys[i].modifiers,
-                    GDK_WINDOW_XID (root),
+                    root,
                     FALSE,
                     GrabModeAsync,
                     GrabModeAsync);
@@ -2758,7 +2751,7 @@ drag_context_ungrab (GdkDragContext *context)
 {
   GdkX11DragContext *x11_context = GDK_X11_DRAG_CONTEXT (context);
   GdkDevice *keyboard;
-  GdkWindow *root;
+  Window root;
   gint keycode, i;
 
   if (!x11_context->grab_seat)
@@ -2767,7 +2760,7 @@ drag_context_ungrab (GdkDragContext *context)
   gdk_seat_ungrab (x11_context->grab_seat);
 
   keyboard = gdk_seat_get_keyboard (x11_context->grab_seat);
-  root = gdk_x11_display_get_root_window (GDK_WINDOW_DISPLAY (x11_context->ipc_window));
+  root = GDK_DISPLAY_XROOTWIN (GDK_WINDOW_DISPLAY (x11_context->ipc_window));
   g_clear_object (&x11_context->grab_seat);
 
   for (i = 0; i < G_N_ELEMENTS (grab_keys); ++i)
@@ -2789,7 +2782,7 @@ drag_context_ungrab (GdkDragContext *context)
           XIUngrabKeycode (GDK_WINDOW_XDISPLAY (x11_context->ipc_window),
                            gdk_x11_device_get_id (keyboard),
                            keycode,
-                           GDK_WINDOW_XID (root),
+                           root,
                            num_mods,
                            &mods);
         }
@@ -2798,7 +2791,7 @@ drag_context_ungrab (GdkDragContext *context)
         {
           XUngrabKey (GDK_WINDOW_XDISPLAY (x11_context->ipc_window),
                       keycode, grab_keys[i].modifiers,
-                      GDK_WINDOW_XID (root));
+                      root);
         }
     }
 }
@@ -2969,7 +2962,6 @@ gdk_dnd_handle_key_event (GdkDragContext    *context,
 {
   GdkX11DragContext *x11_context = GDK_X11_DRAG_CONTEXT (context);
   GdkModifierType state;
-  GdkWindow *root_window;
   GdkDevice *pointer;
   gint dx, dy;
 
@@ -3030,8 +3022,7 @@ gdk_dnd_handle_key_event (GdkDragContext    *context,
    * to query it here. We could use XGetModifierMapping, but
    * that would be overkill.
    */
-  root_window = gdk_x11_display_get_root_window (GDK_WINDOW_DISPLAY (x11_context->ipc_window));
-  gdk_window_get_device_position (root_window, pointer, NULL, NULL, &state);
+  _gdk_device_query_state (pointer, NULL, NULL, NULL, NULL, NULL, NULL, &state);
 
   if (dx != 0 || dy != 0)
     {

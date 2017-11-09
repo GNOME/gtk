@@ -578,21 +578,21 @@ attach_free_pixmap_handler (cairo_surface_t *surface,
  * These functions ensure an Xlib surface.
  */
 cairo_surface_t *
-_gdk_x11_window_create_bitmap_surface (GdkWindow *window,
-                                       int        width,
-                                       int        height)
+_gdk_x11_display_create_bitmap_surface (GdkDisplay *display,
+                                        int         width,
+                                        int         height)
 {
   cairo_surface_t *surface;
   Pixmap pixmap;
 
-  pixmap = XCreatePixmap (GDK_WINDOW_XDISPLAY (window),
-                          GDK_WINDOW_XID (window),
+  pixmap = XCreatePixmap (GDK_DISPLAY_XDISPLAY (display),
+                          GDK_SCREEN_XROOTWIN (GDK_X11_DISPLAY (display)->screen),
                           width, height, 1);
-  surface = cairo_xlib_surface_create_for_bitmap (GDK_WINDOW_XDISPLAY (window),
+  surface = cairo_xlib_surface_create_for_bitmap (GDK_DISPLAY_XDISPLAY (display),
                                                   pixmap,
-                                                  GDK_X11_SCREEN (GDK_WINDOW_SCREEN (window))->xscreen,
+                                                  GDK_X11_SCREEN (GDK_X11_DISPLAY (display)->screen)->xscreen,
                                                   width, height);
-  attach_free_pixmap_handler (surface, GDK_WINDOW_DISPLAY (window), pixmap);
+  attach_free_pixmap_handler (surface, display, pixmap);
 
   return surface;
 }
@@ -3190,9 +3190,7 @@ gdk_window_update_icon (GdkWindow *window,
       cairo_surface_t *surface;
       cairo_t *cr;
 
-      toplevel->icon_pixmap = gdk_x11_window_create_pixmap_surface (window,
-                                                                    width,
-                                                                    height);
+      toplevel->icon_pixmap = gdk_x11_window_create_pixmap_surface (window, width, height);
 
       surface = gdk_texture_download_surface (best_icon);
 
@@ -3213,9 +3211,9 @@ gdk_window_update_icon (GdkWindow *window,
 
       if (cairo_surface_get_content (surface) == CAIRO_CONTENT_COLOR_ALPHA)
         {
-          toplevel->icon_mask = _gdk_x11_window_create_bitmap_surface (window,
-                                                                       width,
-                                                                       height);
+          GdkDisplay *display = gdk_window_get_display (window);
+
+          toplevel->icon_mask = _gdk_x11_display_create_bitmap_surface (display, width, height);
 
           cr = cairo_create (toplevel->icon_mask);
           cairo_set_source_surface (cr, surface, 0, 0);
