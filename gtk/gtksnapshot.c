@@ -1510,7 +1510,7 @@ gtk_snapshot_render_icon (GtkSnapshot     *snapshot,
                                        snapshot,
                                        texture,
                                        1,
-                                       NULL, NULL);
+                                       FALSE);
   gtk_snapshot_offset (snapshot, -x, -y);
   g_object_unref (texture);
 }

@@ -609,38 +609,18 @@ gtk_icon_helper_snapshot (GtkIconHelper *self,
                           GtkSnapshot   *snapshot)
 {
   GtkCssStyle *style;
-  GdkTexture *texture;
-  graphene_matrix_t matrix;
-  graphene_vec4_t offset;
 
   style = gtk_css_node_get_style (self->node);
 
   gtk_icon_helper_ensure_texture (self);
-  texture = self->texture;
-  if (texture == NULL)
+  if (self->texture == NULL)
     return;
-
-  if (self->texture_is_symbolic)
-    {
-      GdkRGBA fg, sc, wc, ec;
-
-      gtk_icon_theme_lookup_symbolic_colors (style, &fg, &sc, &wc, &ec);
-
-      graphene_matrix_init_from_float (&matrix, (float[16]) {
-                                         sc.red - fg.red, sc.green - fg.green, sc.blue - fg.blue, 0,
-                                         wc.red - fg.red, wc.green - fg.green, wc.blue - fg.blue, 0,
-                                         ec.red - fg.red, ec.green - fg.green, ec.blue - fg.blue, 0,
-                                         0, 0, 0, fg.alpha
-                                       });
-      graphene_vec4_init (&offset, fg.red, fg.green, fg.blue, 0);
-    }
 
   gtk_css_style_snapshot_icon_texture (style,
                                        snapshot,
-                                       texture,
+                                       self->texture,
                                        self->texture_scale,
-                                       self->texture_is_symbolic ? &matrix : NULL,
-                                       self->texture_is_symbolic ? &offset : NULL);
+                                       self->texture_is_symbolic);
 }
 
 gboolean

@@ -264,12 +264,11 @@ gtk_css_style_render_icon_get_extents (GtkCssStyle  *style,
 }
 
 void
-gtk_css_style_snapshot_icon_texture (GtkCssStyle       *style,
-                                     GtkSnapshot       *snapshot,
-                                     GdkTexture        *texture,
-                                     double             texture_scale,
-                                     graphene_matrix_t *color_matrix,
-                                     graphene_vec4_t *  color_offset)
+gtk_css_style_snapshot_icon_texture (GtkCssStyle *style,
+                                     GtkSnapshot *snapshot,
+                                     GdkTexture  *texture,
+                                     double       texture_scale,
+                                     gboolean     recolor)
 {
   const GtkCssValue *shadows_value, *transform_value, *filter_value;
   graphene_matrix_t transform_matrix;
@@ -295,8 +294,24 @@ gtk_css_style_snapshot_icon_texture (GtkCssStyle       *style,
 
   has_shadow = gtk_css_shadows_value_push_snapshot (shadows_value, snapshot);
 
-  if (color_matrix)
-    gtk_snapshot_push_color_matrix (snapshot, color_matrix, color_offset, "Recoloring Icon");
+  if (recolor)
+    {
+      graphene_matrix_t color_matrix;
+      graphene_vec4_t color_offset;
+      GdkRGBA fg, sc, wc, ec;
+
+      gtk_icon_theme_lookup_symbolic_colors (style, &fg, &sc, &wc, &ec);
+
+      graphene_matrix_init_from_float (&color_matrix, (float[16]) {
+                                         sc.red - fg.red, sc.green - fg.green, sc.blue - fg.blue, 0,
+                                         wc.red - fg.red, wc.green - fg.green, wc.blue - fg.blue, 0,
+                                         ec.red - fg.red, ec.green - fg.green, ec.blue - fg.blue, 0,
+                                         0, 0, 0, fg.alpha
+                                       });
+      graphene_vec4_init (&color_offset, fg.red, fg.green, fg.blue, 0);
+
+      gtk_snapshot_push_color_matrix (snapshot, &color_matrix, &color_offset, "Recoloring Icon");
+    }
 
   if (graphene_matrix_is_identity (&transform_matrix))
     {
@@ -322,7 +337,7 @@ gtk_css_style_snapshot_icon_texture (GtkCssStyle       *style,
       gtk_snapshot_pop (snapshot);
     }
 
-  if (color_matrix)
+  if (recolor)
     gtk_snapshot_pop (snapshot);
 
   if (has_shadow)

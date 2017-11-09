@@ -51,8 +51,7 @@ void    gtk_css_style_snapshot_icon_texture     (GtkCssStyle            *style,
                                                  GtkSnapshot            *snapshot,
                                                  GdkTexture             *texture,
                                                  double                  texture_scale,
-                                                 graphene_matrix_t *     color_matrix,
-                                                 graphene_vec4_t *       color_offset);
+                                                 gboolean                recolor);
 
 void    gtk_css_style_render_icon_get_extents   (GtkCssStyle            *style,
                                                  GdkRectangle           *extents,
