@@ -749,6 +749,7 @@ gtk_style_context_get_property (GtkStyleContext *context,
 /**
  * gtk_style_context_get_valist:
  * @context: a #GtkStyleContext
+ * @first_property_name: Name of the first property
  * @args: va_list of property name/return location pairs, followed by %NULL
  *
  * Retrieves several style property values from @context for a given state.
@@ -765,13 +766,15 @@ gtk_style_context_get_property (GtkStyleContext *context,
  */
 void
 gtk_style_context_get_valist (GtkStyleContext *context,
+                              const char      *first_property_name,
                               va_list          args)
 {
   const gchar *property_name;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (first_property_name != NULL);
 
-  property_name = va_arg (args, const gchar *);
+  property_name = first_property_name;
 
   while (property_name)
     {
@@ -799,6 +802,7 @@ gtk_style_context_get_valist (GtkStyleContext *context,
 /**
  * gtk_style_context_get:
  * @context: a #GtkStyleContext
+ * @first_property_name: Name of the first property
  * @...: property name /return value pairs, followed by %NULL
  *
  * Retrieves several style property values from @context for a
@@ -816,14 +820,16 @@ gtk_style_context_get_valist (GtkStyleContext *context,
  */
 void
 gtk_style_context_get (GtkStyleContext *context,
+                       const char      *first_property_name,
                        ...)
 {
   va_list args;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (first_property_name != NULL);
 
-  va_start (args, context);
-  gtk_style_context_get_valist (context, args);
+  va_start (args, first_property_name);
+  gtk_style_context_get_valist (context, first_property_name, args);
   va_end (args);
 }
 

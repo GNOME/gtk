@@ -1005,9 +1005,11 @@ void gtk_style_context_get_property (GtkStyleContext *context,
                                      GValue          *value);
 GDK_AVAILABLE_IN_ALL
 void gtk_style_context_get_valist   (GtkStyleContext *context,
+                                     const char      *first_property_name,
                                      va_list          args);
 GDK_AVAILABLE_IN_ALL
 void gtk_style_context_get          (GtkStyleContext *context,
+                                     const char      *first_property_name,
                                      ...) G_GNUC_NULL_TERMINATED;
 
 GDK_AVAILABLE_IN_ALL
