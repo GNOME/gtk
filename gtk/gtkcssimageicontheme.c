@@ -100,7 +100,8 @@ gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
       icon_theme->cached_symbolic = symbolic;
 
       g_object_unref (pixbuf);
-      g_object_unref (icon_info);
+      if (icon_info)
+        g_object_unref (icon_info);
     }
 
   texture_width = (double) gdk_texture_get_width (texture) / icon_theme->scale;
