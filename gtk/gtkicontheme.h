@@ -345,12 +345,10 @@ GdkPixbuf *           gtk_icon_info_load_symbolic_for_context_finish (GtkIconInf
 								      gboolean         *was_symbolic,
 								      GError          **error);
 
-#ifndef GDK_MULTIHEAD_SAFE
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_icon_size_lookup (GtkIconSize  size,
                                gint        *width,
                                gint        *height);
-#endif /* GDK_MULTIHEAD_SAFE */
 
 
 G_END_DECLS
