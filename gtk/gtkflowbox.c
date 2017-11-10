@@ -2545,8 +2545,8 @@ get_view_rect (GtkFlowBox   *box,
     {
       rect->x = gtk_adjustment_get_value (priv->hadjustment);
       rect->y = gtk_adjustment_get_value (priv->vadjustment);
-      rect->width = gtk_widget_get_allocated_width (parent);
-      rect->height = gtk_widget_get_allocated_height (parent);
+      rect->width = gtk_widget_get_width (parent);
+      rect->height = gtk_widget_get_height (parent);
       return TRUE;
     }
 
