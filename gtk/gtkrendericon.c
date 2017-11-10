@@ -27,6 +27,7 @@
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkcssstyleprivate.h"
 #include "gtkcsstransformvalueprivate.h"
+#include "gtkiconthemeprivate.h"
 #include "gtksnapshotprivate.h"
 
 #include <math.h>
