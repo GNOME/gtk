@@ -359,7 +359,7 @@ gdk_x11_device_xi2_query_state (GdkDevice        *device,
     }
 
   if (!GDK_X11_DISPLAY (display)->trusted_client ||
-      !XIQueryPointer (GDK_WINDOW_XDISPLAY (window),
+      !XIQueryPointer (GDK_DISPLAY_XDISPLAY (display),
                        device_xi2->device_id,
                        xwindow,
                        &xroot_window,
