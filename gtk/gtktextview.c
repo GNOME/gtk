@@ -29,7 +29,6 @@
 
 #include <string.h>
 
-#define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 #include "gtkadjustmentprivate.h"
 #include "gtkbindings.h"
 #include "gtkdnd.h"
@@ -44,7 +43,7 @@
 #include "gtksettings.h"
 #include "gtkselectionprivate.h"
 #include "gtktextbufferrichtext.h"
-#include "gtktextdisplay.h"
+#include "gtktextdisplayprivate.h"
 #include "gtktextiterprivate.h"
 #include "gtkimmulticontext.h"
 #include "gtkprivate.h"

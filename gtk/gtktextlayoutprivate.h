@@ -75,18 +75,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_TEXT_LAYOUT_H__
-#define __GTK_TEXT_LAYOUT_H__
-
-/* This is a "semi-private" header; it is intended for
- * use by the text widget, and the text canvas item,
- * but that’s all. We may have to install it so the
- * canvas item can use it, but users are not supposed
- * to use it.
- */
-#ifndef GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
-#error "You are not supposed to be including this file; the equivalent public API is in gtktextview.h"
-#endif
+#ifndef __GTK_TEXT_LAYOUT_PRIVATE_H__
+#define __GTK_TEXT_LAYOUT_PRIVATE_H__
 
 #include <gtk/gtk.h>
 #include <gtk/gtktextattributes.h>
@@ -476,4 +466,4 @@ void gtk_text_layout_spew (GtkTextLayout *layout);
 
 G_END_DECLS
 
-#endif  /* __GTK_TEXT_LAYOUT_H__ */
+#endif  /* __GTK_TEXT_LAYOUT_PRIVATE_H__ */

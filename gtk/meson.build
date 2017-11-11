@@ -556,7 +556,6 @@ gtk_public_headers = files([
   'gtktextbuffer.h',
   'gtktextbufferrichtext.h',
   'gtktextchild.h',
-  'gtktextdisplay.h',
   'gtktextiter.h',
   'gtktextmark.h',
   'gtktexttag.h',
@@ -1004,7 +1003,6 @@ if build_gir
                                  '--c-include=gtk/gtk.h',
                                  '--include-uninstalled=./gtk/Gdk-4.0.gir',
                                  '--include-uninstalled=./gtk/Gsk-4.0.gir',
-                                 '-DGTK_TEXT_USE_INTERNAL_UNSUPPORTED_API',
                                  '-DGTK_COMPILATION',
                                ])
   gtk_dep_sources += gtk_gir

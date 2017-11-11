@@ -52,7 +52,6 @@
  *
  */
 
-#define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 #include "config.h"
 #include "gtktextbtree.h"
 #include <string.h>
@@ -62,7 +61,7 @@
 #include "gtktexttag.h"
 #include "gtktexttagprivate.h"
 #include "gtktexttagtable.h"
-#include "gtktextlayout.h"
+#include "gtktextlayoutprivate.h"
 #include "gtktextiterprivate.h"
 #include "gtkdebug.h"
 #include "gtktextmarkprivate.h"

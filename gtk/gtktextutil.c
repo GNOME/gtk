@@ -27,9 +27,7 @@
 #include "gtktextview.h"
 #include "gtktextutil.h"
 
-#define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
-
-#include "gtktextdisplay.h"
+#include "gtktextdisplayprivate.h"
 #include "gtktextbuffer.h"
 #include "gtkmenuitem.h"
 #include "gtkintl.h"
