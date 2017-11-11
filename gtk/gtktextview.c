@@ -288,7 +288,6 @@ struct _GtkTextViewPrivate
   guint selection_handle_dragged : 1;
   guint populate_all   : 1;
 
-  guint in_scroll : 1;
   guint handling_key_event : 1;
 };
 
@@ -8697,6 +8696,9 @@ gtk_text_view_value_changed (GtkAdjustment *adjustment,
 
       if (gtk_widget_get_realized (GTK_WIDGET (text_view)))
         {
+          if (priv->selection_bubble)
+            gtk_widget_hide (priv->selection_bubble);
+
           if (dy != 0)
             {
               if (priv->left_window)
@@ -9790,17 +9792,8 @@ text_window_scroll        (GtkTextWindow *win,
                            gint           dx,
                            gint           dy)
 {
-  GtkTextView *view = GTK_TEXT_VIEW (win->widget);
-  GtkTextViewPrivate *priv = view->priv;
-
   if (dx != 0 || dy != 0)
-    {
-      if (priv->selection_bubble)
-        gtk_widget_hide (priv->selection_bubble);
-      view->priv->in_scroll = TRUE;
-      gdk_window_scroll (win->bin_window, dx, dy);
-      view->priv->in_scroll = FALSE;
-    }
+    gdk_window_scroll (win->bin_window, dx, dy);
 }
 
 static void
