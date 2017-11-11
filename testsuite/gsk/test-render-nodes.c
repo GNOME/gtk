@@ -443,6 +443,81 @@ opacity (void)
   return container;
 }
 
+static GskRenderNode *
+color_matrix1 (void)
+{
+  const int N = 5;
+  GskRenderNode *container_node;
+  GskRenderNode *cairo_node = cairo ();
+  GskRenderNode *n;
+  GskRenderNode *child_nodes[N];
+  graphene_matrix_t matrix;
+  graphene_vec4_t offset;
+  graphene_matrix_t transform;
+  float cairo_width = 150;
+  graphene_rect_t bounds;
+
+  gsk_render_node_get_bounds (cairo_node, &bounds);
+  cairo_width = bounds.size.width;
+
+  /* First a cairo node inside a color matrix node, where the color matrix node doesn't do anything. */
+  graphene_matrix_init_identity (&matrix);
+  offset = *graphene_vec4_zero ();
+  child_nodes[0] = gsk_color_matrix_node_new (cairo_node, &matrix, &offset);
+
+  /* Now a color matrix node that actually does something. Inside a transform node. */
+  offset = *graphene_vec4_zero ();
+  graphene_matrix_init_scale (&matrix, 0.3, 0.3, 0.3); /* Should make the node darker */
+  n = gsk_color_matrix_node_new (cairo_node, &matrix, &offset);
+  graphene_matrix_init_translate (&transform, &GRAPHENE_POINT3D_INIT (cairo_width, 0, 0));
+  child_nodes[1] = gsk_transform_node_new (n, &transform);
+
+  /* Same as above, but this time we stuff the transform node in the color matrix node, and not vice versa */
+  offset = *graphene_vec4_zero ();
+  graphene_matrix_init_scale (&matrix, 0.3, 0.3, 0.3);
+  graphene_matrix_init_translate (&transform, &GRAPHENE_POINT3D_INIT (2 * cairo_width, 0, 0));
+  n = gsk_transform_node_new (cairo_node, &transform);
+  child_nodes[2] = gsk_color_matrix_node_new (n, &matrix, &offset);
+
+  /* Color matrix inside color matrix, one reversing the other's effect */
+  {
+    graphene_matrix_t inner_matrix;
+    graphene_vec4_t inner_offset = *graphene_vec4_zero ();
+    GskRenderNode *inner_color_matrix_node;
+
+    graphene_matrix_init_scale (&inner_matrix, 0.5, 0.5, 0.5);
+    inner_color_matrix_node = gsk_color_matrix_node_new (cairo_node, &inner_matrix, &inner_offset);
+
+    graphene_matrix_init_scale (&matrix, 2, 2, 2);
+    n = gsk_color_matrix_node_new (inner_color_matrix_node, &matrix, &offset);
+    graphene_matrix_init_translate (&transform, &GRAPHENE_POINT3D_INIT (3 * cairo_width, 0, 0));
+    child_nodes[3] = gsk_transform_node_new (n, &transform);
+  }
+
+  /* Color matrix in color matrix in transform */
+  {
+    graphene_matrix_t inner_matrix;
+    graphene_vec4_t inner_offset = *graphene_vec4_zero ();
+    GskRenderNode *inner_color_matrix_node;
+
+    graphene_matrix_init_scale (&inner_matrix, 0.5, 0.5, 0.5);
+    inner_color_matrix_node = gsk_color_matrix_node_new (cairo_node, &inner_matrix, &inner_offset);
+
+    graphene_matrix_init_scale (&matrix, 2, 2, 2);
+    offset = *graphene_vec4_zero ();
+    n = gsk_color_matrix_node_new (inner_color_matrix_node, &matrix, &offset);
+    graphene_matrix_init_scale (&transform, 1, 1, 1);
+    graphene_matrix_rotate_z (&transform, 350);
+    graphene_matrix_translate (&transform, &GRAPHENE_POINT3D_INIT (4 * cairo_width, 0, 0));
+
+    child_nodes[4] = gsk_transform_node_new (n, &transform);
+  }
+
+  container_node = gsk_container_node_new (child_nodes, N);
+
+  return container_node;
+}
+
 static const struct {
   const char *name;
   GskRenderNode * (* func) (void);
@@ -456,6 +531,7 @@ static const struct {
   { "cross-fades.node", cross_fades },
   { "transform.node", transform },
   { "opacity.node", opacity },
+  { "color-matrix1.node", color_matrix1},
 };
 
 /*** test setup ***/
