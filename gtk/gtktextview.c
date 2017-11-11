@@ -409,8 +409,6 @@ static void gtk_text_view_drag_gesture_end           (GtkGestureDrag *gesture,
                                                       gdouble         offset_y,
                                                       GtkTextView    *text_view);
 
-static gint gtk_text_view_event                (GtkWidget        *widget,
-                                                GdkEvent         *event);
 static gint gtk_text_view_key_press_event      (GtkWidget        *widget,
                                                 GdkEventKey      *event);
 static gint gtk_text_view_key_release_event    (GtkWidget        *widget,
@@ -741,7 +739,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->state_flags_changed = gtk_text_view_state_flags_changed;
   widget_class->measure = gtk_text_view_measure;
   widget_class->size_allocate = gtk_text_view_size_allocate;
-  widget_class->event = gtk_text_view_event;
   widget_class->key_press_event = gtk_text_view_key_press_event;
   widget_class->key_release_event = gtk_text_view_key_release_event;
   widget_class->focus_in_event = gtk_text_view_focus_in_event;
@@ -4886,77 +4883,6 @@ gtk_text_view_unobscure_mouse_cursor (GtkTextView *text_view)
  * Events
  */
 
-static gboolean
-get_event_coordinates (GdkEvent *event, gint *x, gint *y)
-{
-  gdouble event_x, event_y;
-
-  if (event)
-    switch ((guint) gdk_event_get_event_type (event))
-      {
-      case GDK_MOTION_NOTIFY:
-      case GDK_BUTTON_PRESS:
-      case GDK_BUTTON_RELEASE:
-        gdk_event_get_coords (event, &event_x, &event_y);
-        *x = event_x;
-        *y = event_y;
-        return TRUE;
-        break;
-
-      case GDK_KEY_PRESS:
-      case GDK_KEY_RELEASE:
-      case GDK_ENTER_NOTIFY:
-      case GDK_LEAVE_NOTIFY:
-      case GDK_PROPERTY_NOTIFY:
-      case GDK_SELECTION_CLEAR:
-      case GDK_SELECTION_REQUEST:
-      case GDK_SELECTION_NOTIFY:
-      case GDK_PROXIMITY_IN:
-      case GDK_PROXIMITY_OUT:
-      case GDK_DRAG_ENTER:
-      case GDK_DRAG_LEAVE:
-      case GDK_DRAG_MOTION:
-      case GDK_DRAG_STATUS:
-      case GDK_DROP_START:
-      case GDK_DROP_FINISHED:
-      default:
-        return FALSE;
-        break;
-      }
-
-  return FALSE;
-}
-
-static gint
-emit_event_on_tags (GtkWidget   *widget,
-                    GdkEvent    *event,
-                    GtkTextIter *iter)
-{
-  GSList *tags;
-  GSList *tmp;
-  gboolean retval = FALSE;
-
-  tags = gtk_text_iter_get_tags (iter);
-
-  tmp = tags;
-  while (tmp != NULL)
-    {
-      GtkTextTag *tag = tmp->data;
-
-      if (gtk_text_tag_event (tag, G_OBJECT (widget), event, iter))
-        {
-          retval = TRUE;
-          break;
-        }
-
-      tmp = tmp->next;
-    }
-
-  g_slist_free (tags);
-
-  return retval;
-}
-
 static void
 _text_window_to_widget_coords (GtkTextView *text_view,
                                gint        *x,
@@ -5262,54 +5188,6 @@ gtk_text_view_update_handles (GtkTextView       *text_view,
   if (mode == GTK_TEXT_HANDLE_MODE_SELECTION)
     gtk_text_view_set_handle_position (text_view, &min,
                                        GTK_TEXT_HANDLE_POSITION_SELECTION_START);
-}
-
-static gint
-gtk_text_view_event (GtkWidget *widget, GdkEvent *event)
-{
-  GtkTextView *text_view;
-  GtkTextViewPrivate *priv;
-  gint x = 0, y = 0;
-  GdkEventType event_type;
-
-  text_view = GTK_TEXT_VIEW (widget);
-  priv = text_view->priv;
-
-  if (priv->layout == NULL ||
-      get_buffer (text_view) == NULL)
-    return FALSE;
-
-  event_type = gdk_event_get_event_type (event);
-
-  if (get_event_coordinates (event, &x, &y))
-    {
-      GtkTextIter iter;
-
-      x += priv->xoffset;
-      y += priv->yoffset;
-
-      /* FIXME this is slow and we do it twice per event.
-       * My favorite solution is to have GtkTextLayout cache
-       * the last couple lookups.
-       */
-      gtk_text_layout_get_iter_at_pixel (priv->layout,
-                                         &iter,
-                                         x, y);
-
-      return emit_event_on_tags (widget, event, &iter);
-    }
-  else if (event_type == GDK_KEY_PRESS ||
-           event_type == GDK_KEY_RELEASE)
-    {
-      GtkTextIter iter;
-
-      gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &iter,
-                                        gtk_text_buffer_get_insert (get_buffer (text_view)));
-
-      return emit_event_on_tags (widget, event, &iter);
-    }
-  else
-    return FALSE;
 }
 
 static gint
