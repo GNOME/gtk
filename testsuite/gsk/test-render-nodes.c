@@ -709,6 +709,7 @@ generate (const char *name)
 {
   int i;
   GError *error = NULL;
+  gboolean wrote_file = FALSE;
 
   for (i = 0; i < G_N_ELEMENTS (functions); i++)
     {
@@ -729,9 +730,13 @@ generate (const char *name)
             }
 
           gsk_render_node_unref (node);
+          wrote_file = TRUE;
           break;
         }
     }
+
+  if (!wrote_file)
+    g_warning ("Could not generate %s", name);
 }
 
 int
