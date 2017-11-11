@@ -9809,68 +9809,6 @@ gtk_text_view_get_css_node (GtkTextView       *text_view,
   return NULL;
 }
 
-static void
-buffer_to_widget (GtkTextView      *text_view,
-                  gint              buffer_x,
-                  gint              buffer_y,
-                  gint             *window_x,
-                  gint             *window_y)
-{
-  GtkTextViewPrivate *priv = text_view->priv;
-
-  if (window_x)
-    {
-      *window_x = buffer_x - priv->xoffset;
-      *window_x += priv->text_window->allocation.x;
-    }
-
-  if (window_y)
-    {
-      *window_y = buffer_y - priv->yoffset;
-      *window_y += priv->text_window->allocation.y;
-    }
-}
-
-static void
-widget_to_text_window (GtkTextWindow *win,
-                       gint           widget_x,
-                       gint           widget_y,
-                       gint          *window_x,
-                       gint          *window_y)
-{
-  if (window_x)
-    *window_x = widget_x - win->allocation.x;
-
-  if (window_y)
-    *window_y = widget_y - win->allocation.y;
-}
-
-static void
-buffer_to_text_window (GtkTextView   *text_view,
-                       GtkTextWindow *win,
-                       gint           buffer_x,
-                       gint           buffer_y,
-                       gint          *window_x,
-                       gint          *window_y)
-{
-  if (win == NULL)
-    {
-      g_warning ("Attempt to convert text buffer coordinates to coordinates "
-                 "for a nonexistent or private child window of GtkTextView");
-      return;
-    }
-
-  buffer_to_widget (text_view,
-                    buffer_x, buffer_y,
-                    window_x, window_y);
-
-  widget_to_text_window (win,
-                         window_x ? *window_x : 0,
-                         window_y ? *window_y : 0,
-                         window_x,
-                         window_y);
-}
-
 /**
  * gtk_text_view_buffer_to_window_coords:
  * @text_view: a #GtkTextView
@@ -9898,47 +9836,33 @@ gtk_text_view_buffer_to_window_coords (GtkTextView      *text_view,
 
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
 
+  buffer_x -= priv->xoffset;
+  buffer_y -= priv->yoffset;
+
   switch (win)
     {
     case GTK_TEXT_WINDOW_WIDGET:
-      buffer_to_widget (text_view,
-                        buffer_x, buffer_y,
-                        window_x, window_y);
+      buffer_x += priv->border_window_size.left;
+      buffer_y += priv->border_window_size.top;
       break;
 
     case GTK_TEXT_WINDOW_TEXT:
-      if (window_x)
-        *window_x = buffer_x - priv->xoffset;
-      if (window_y)
-        *window_y = buffer_y - priv->yoffset;
       break;
 
     case GTK_TEXT_WINDOW_LEFT:
-      buffer_to_text_window (text_view,
-                             priv->left_window,
-                             buffer_x, buffer_y,
-                             window_x, window_y);
+      buffer_x += priv->border_window_size.left;
       break;
 
     case GTK_TEXT_WINDOW_RIGHT:
-      buffer_to_text_window (text_view,
-                             priv->right_window,
-                             buffer_x, buffer_y,
-                             window_x, window_y);
+      buffer_x -= text_window_get_width (priv->text_window);
       break;
 
     case GTK_TEXT_WINDOW_TOP:
-      buffer_to_text_window (text_view,
-                             priv->top_window,
-                             buffer_x, buffer_y,
-                             window_x, window_y);
+      buffer_y += priv->border_window_size.top;
       break;
 
     case GTK_TEXT_WINDOW_BOTTOM:
-      buffer_to_text_window (text_view,
-                             priv->bottom_window,
-                             buffer_x, buffer_y,
-                             window_x, window_y);
+      buffer_y -= text_window_get_height (priv->text_window);
       break;
 
     case GTK_TEXT_WINDOW_PRIVATE:
@@ -9949,70 +9873,11 @@ gtk_text_view_buffer_to_window_coords (GtkTextView      *text_view,
       g_warning ("%s: Unknown GtkTextWindowType", G_STRFUNC);
       break;
     }
-}
 
-static void
-widget_to_buffer (GtkTextView *text_view,
-                  gint         widget_x,
-                  gint         widget_y,
-                  gint        *buffer_x,
-                  gint        *buffer_y)
-{
-  GtkTextViewPrivate *priv = text_view->priv;
-
-  if (buffer_x)
-    {
-      *buffer_x = widget_x + priv->xoffset;
-      *buffer_x -= priv->text_window->allocation.x;
-    }
-
-  if (buffer_y)
-    {
-      *buffer_y = widget_y + priv->yoffset;
-      *buffer_y -= priv->text_window->allocation.y;
-    }
-}
-
-static void
-text_window_to_widget (GtkTextWindow *win,
-                       gint           window_x,
-                       gint           window_y,
-                       gint          *widget_x,
-                       gint          *widget_y)
-{
-  if (widget_x)
-    *widget_x = window_x + win->allocation.x;
-
-  if (widget_y)
-    *widget_y = window_y + win->allocation.y;
-}
-
-static void
-text_window_to_buffer (GtkTextView   *text_view,
-                       GtkTextWindow *win,
-                       gint           window_x,
-                       gint           window_y,
-                       gint          *buffer_x,
-                       gint          *buffer_y)
-{
-  if (win == NULL)
-    {
-      g_warning ("Attempt to convert GtkTextView buffer coordinates into "
-                 "coordinates for a nonexistent child window.");
-      return;
-    }
-
-  text_window_to_widget (win,
-                         window_x,
-                         window_y,
-                         buffer_x,
-                         buffer_y);
-
-  widget_to_buffer (text_view,
-                    buffer_x ? *buffer_x : 0,
-                    buffer_y ? *buffer_y : 0,
-                    buffer_x,
-                    buffer_y);
+  if (window_x)
+    *window_x = buffer_x;
+  if (window_y)
+    *window_y = buffer_y;
 }
 
 /**
@@ -10045,44 +9910,27 @@ gtk_text_view_window_to_buffer_coords (GtkTextView      *text_view,
   switch (win)
     {
     case GTK_TEXT_WINDOW_WIDGET:
-      widget_to_buffer (text_view,
-                        window_x, window_y,
-                        buffer_x, buffer_y);
+      window_x -= priv->border_window_size.left;
+      window_y -= priv->border_window_size.top;
       break;
 
     case GTK_TEXT_WINDOW_TEXT:
-      if (buffer_x)
-        *buffer_x = window_x + priv->xoffset;
-      if (buffer_y)
-        *buffer_y = window_y + priv->yoffset;
       break;
 
     case GTK_TEXT_WINDOW_LEFT:
-      text_window_to_buffer (text_view,
-                             priv->left_window,
-                             window_x, window_y,
-                             buffer_x, buffer_y);
+      window_x -= priv->border_window_size.left;
       break;
 
     case GTK_TEXT_WINDOW_RIGHT:
-      text_window_to_buffer (text_view,
-                             priv->right_window,
-                             window_x, window_y,
-                             buffer_x, buffer_y);
+      window_x += text_window_get_width (priv->text_window);
       break;
 
     case GTK_TEXT_WINDOW_TOP:
-      text_window_to_buffer (text_view,
-                             priv->top_window,
-                             window_x, window_y,
-                             buffer_x, buffer_y);
+      window_y -= priv->border_window_size.top;
       break;
 
     case GTK_TEXT_WINDOW_BOTTOM:
-      text_window_to_buffer (text_view,
-                             priv->bottom_window,
-                             window_x, window_y,
-                             buffer_x, buffer_y);
+      window_y += text_window_get_height (priv->text_window);
       break;
 
     case GTK_TEXT_WINDOW_PRIVATE:
@@ -10093,6 +9941,11 @@ gtk_text_view_window_to_buffer_coords (GtkTextView      *text_view,
       g_warning ("%s: Unknown GtkTextWindowType", G_STRFUNC);
       break;
     }
+
+  if (buffer_x)
+    *buffer_x = window_x + priv->xoffset;
+  if (buffer_y)
+    *buffer_y = window_y + priv->yoffset;
 }
 
 static void
