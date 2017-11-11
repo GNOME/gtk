@@ -16,20 +16,7 @@ if not disable_modules
   endif
 endif
 
-all_immodules = [
-  'am-et',
-  'cedilla',
-  'cyrillic-translit',
-  'inuktitut',
-  'ipa',
-  'multipress',
-  'thai',
-  'ti-er',
-  'ti-et',
-  'viqr',
-]
-
-all_immodules += backend_immodules
+all_immodules = backend_immodules
 
 # Allow building some or all immodules included
 included_immodules = get_option('with-included-immodules')
@@ -56,28 +43,8 @@ endforeach
 immodules_subdir = 'gtk-4.0/@0@/immodules'.format(gtk_binary_version)
 immodules_install_dir = join_paths(gtk_libdir, immodules_subdir)
 
-mp_confdir = join_paths(gtk_sysconfdir, 'gtk-4.0')
-mp_cargs = [
- '-DMULTIPRESS_LOCALEDIR=""', # FIXME: where is $(mplocaledir) ever set?
- '-DMULTIPRESS_CONFDIR="@0@"'.format(mp_confdir),
- '-DGDK_DISABLE_DEPRECATION_WARNINGS',
-]
-
-install_data('im-multipress.conf', install_dir : mp_confdir)
-
 method_defs = [
-  ['am-et', files('imam-et.c')],
-  ['cedilla', files('imcedilla.c')],
-  ['cyrillic-translit', files('imcyrillic-translit.c')],
-  ['ti-er', files('imti-er.c')],
-  ['ti-et', files('imti-et.c')],
-  ['thai', files('thai-charprop.c', 'gtkimcontextthai.c', 'imthai.c')],
-  ['viqr', files('imviqr.c')],
-  ['inuktitut', files('iminuktitut.c')],
-  ['ipa', files('imipa.c')],
-  # backend modules
   ['broadway', files('imbroadway.c')],
-  ['multipress', files('gtkimcontextmultipress.c', 'immultipress.c'), [], mp_cargs],
   ['quartz', ('imquartz.c'), [], ('-xobjective-c')],
   ['xim', files('gtkimcontextxim.c', 'imxim.c')],
   ['ime', files('gtkimcontextime.c', 'imime.c'), ['imm32']],
