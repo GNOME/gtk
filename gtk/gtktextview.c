@@ -5642,16 +5642,13 @@ paint_border_window (GtkTextView     *text_view,
                      GtkTextWindow   *text_window,
                      GtkStyleContext *context)
 {
-  GdkWindow *window;
   gint w, h;
-
 
   if (text_window == NULL)
     return;
 
-  window = text_window->bin_window;
-  w = gdk_window_get_width (window);
-  h = gdk_window_get_height (window);
+  w = text_window_get_width (text_window);
+  h = text_window_get_height (text_window);
 
   gtk_style_context_save_to_node (context, text_window->css_node);
 
@@ -7107,8 +7104,8 @@ drag_scan_timeout (gpointer data)
                              priv->dnd_mark,
                              &newplace);
 
-  pointer_xoffset = (gdouble) priv->dnd_x / gdk_window_get_width (priv->text_window->bin_window);
-  pointer_yoffset = (gdouble) priv->dnd_y / gdk_window_get_height (priv->text_window->bin_window);
+  pointer_xoffset = (gdouble) priv->dnd_x / text_window_get_width (priv->text_window);
+  pointer_yoffset = (gdouble) priv->dnd_y / text_window_get_height (priv->text_window);
 
   if (check_scroll (pointer_xoffset, priv->hadjustment) ||
       check_scroll (pointer_yoffset, priv->vadjustment))
@@ -9511,15 +9508,12 @@ gtk_text_view_get_rendered_rect (GtkTextView  *text_view,
                                  GdkRectangle *rect)
 {
   GtkTextViewPrivate *priv = text_view->priv;
-  GdkWindow *window;
-
-  window = priv->text_window->bin_window;
 
   rect->x = gtk_adjustment_get_value (priv->hadjustment);
   rect->y = gtk_adjustment_get_value (priv->vadjustment) - priv->top_margin;
 
-  rect->height = gdk_window_get_height (window);
-  rect->width = gdk_window_get_width (window);
+  rect->height = text_window_get_height (priv->text_window);
+  rect->width = text_window_get_width (priv->text_window);
 }
 
 static void
