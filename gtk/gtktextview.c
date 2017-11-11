@@ -172,6 +172,7 @@ struct _GtkTextViewPrivate
   GtkWidget *magnifier_popover;
   GtkWidget *magnifier;
 
+  GtkBorder border_window_size;
   GtkTextWindow *text_window;
   GtkTextWindow *left_window;
   GtkTextWindow *right_window;
@@ -659,14 +660,11 @@ struct _GtkTextWindow
   GdkWindow *window;
   GdkWindow *bin_window;
   GtkCssNode *css_node;
-  GtkRequisition requisition;
   GdkRectangle allocation;
 };
 
 static GtkTextWindow *text_window_new             (GtkTextWindowType  type,
-                                                   GtkWidget         *widget,
-                                                   gint               width_request,
-                                                   gint               height_request);
+                                                   GtkWidget         *widget);
 static void           text_window_free            (GtkTextWindow     *win);
 static void           text_window_realize         (GtkTextWindow     *win,
                                                    GtkWidget         *widget);
@@ -1704,8 +1702,7 @@ gtk_text_view_init (GtkTextView *text_view)
 
   priv->accepts_tab = TRUE;
 
-  priv->text_window = text_window_new (GTK_TEXT_WINDOW_TEXT,
-                                       widget, 200, 200);
+  priv->text_window = text_window_new (GTK_TEXT_WINDOW_TEXT, widget);
 
   priv->multipress_gesture = gtk_gesture_multi_press_new (widget);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture), 0);
@@ -3945,29 +3942,17 @@ gtk_text_view_size_request (GtkWidget      *widget,
 
   if (priv->layout)
     {
-      priv->text_window->requisition.width = priv->layout->width;
-      priv->text_window->requisition.height = priv->layout->height;
+      requisition->width = priv->layout->width;
+      requisition->height = priv->layout->height;
     }
   else
     {
-      priv->text_window->requisition.width = 0;
-      priv->text_window->requisition.height = 0;
+      requisition->width = 0;
+      requisition->height = 0;
     }
   
-  requisition->width = priv->text_window->requisition.width;
-  requisition->height = priv->text_window->requisition.height;
-
-  if (priv->left_window)
-    requisition->width += priv->left_window->requisition.width;
-
-  if (priv->right_window)
-    requisition->width += priv->right_window->requisition.width;
-
-  if (priv->top_window)
-    requisition->height += priv->top_window->requisition.height;
-
-  if (priv->bottom_window)
-    requisition->height += priv->bottom_window->requisition.height;
+  requisition->width += priv->border_window_size.left + priv->border_window_size.right;
+  requisition->height += priv->border_window_size.top + priv->border_window_size.bottom;
 
   requisition->height += priv->top_margin + priv->bottom_margin;
   requisition->width += priv->left_margin + priv->right_margin;
@@ -4186,63 +4171,32 @@ gtk_text_view_size_allocate (GtkWidget           *widget,
   GdkRectangle right_rect;
   GdkRectangle top_rect;
   GdkRectangle bottom_rect;
-  GdkRectangle window_alloc;
   
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
 
   DV(g_print(G_STRLOC"\n"));
 
-  gtk_widget_get_window_allocation (widget, &window_alloc);
   /* distribute width/height among child windows. Ensure all
    * windows get at least a 1x1 allocation.
    */
-
-  width = window_alloc.width;
-
-  if (priv->left_window)
-    left_rect.width = priv->left_window->requisition.width;
-  else
-    left_rect.width = 0;
-
-  width -= left_rect.width;
-
-  if (priv->right_window)
-    right_rect.width = priv->right_window->requisition.width;
-  else
-    right_rect.width = 0;
-
-  width -= right_rect.width;
-
+  left_rect.width = priv->border_window_size.left;
+  right_rect.width = priv->border_window_size.right;
+  width = allocation->width - left_rect.width - right_rect.width;
   text_rect.width = MAX (1, width);
-
   top_rect.width = text_rect.width;
   bottom_rect.width = text_rect.width;
 
-  height = window_alloc.height;
-
-  if (priv->top_window)
-    top_rect.height = priv->top_window->requisition.height;
-  else
-    top_rect.height = 0;
-
-  height -= top_rect.height;
-
-  if (priv->bottom_window)
-    bottom_rect.height = priv->bottom_window->requisition.height;
-  else
-    bottom_rect.height = 0;
-
-  height -= bottom_rect.height;
-
+  top_rect.height = priv->border_window_size.top;
+  bottom_rect.height = priv->border_window_size.bottom;
+  height = allocation->height - top_rect.height - bottom_rect.height;
   text_rect.height = MAX (1, height);
-
   left_rect.height = text_rect.height;
   right_rect.height = text_rect.height;
 
   /* Origins */
-  left_rect.x = window_alloc.x;
-  top_rect.y = window_alloc.y;
+  left_rect.x = 0;
+  top_rect.y = 0;
 
   text_rect.x = left_rect.x + left_rect.width;
   text_rect.y = top_rect.y + top_rect.height;
@@ -4890,10 +4844,8 @@ _text_window_to_widget_coords (GtkTextView *text_view,
 {
   GtkTextViewPrivate *priv = text_view->priv;
 
-  if (priv->top_window)
-    (*y) += priv->top_window->requisition.height;
-  if (priv->left_window)
-    (*x) += priv->left_window->requisition.width;
+  (*x) += priv->border_window_size.left;
+  (*y) += priv->border_window_size.top;
 }
 
 static void
@@ -4903,10 +4855,8 @@ _widget_to_text_window_coords (GtkTextView *text_view,
 {
   GtkTextViewPrivate *priv = text_view->priv;
 
-  if (priv->top_window)
-    (*y) -= priv->top_window->requisition.height;
-  if (priv->left_window)
-    (*x) -= priv->left_window->requisition.width;
+  (*x) -= priv->border_window_size.left;
+  (*y) -= priv->border_window_size.top;
 }
 
 static void
@@ -9491,9 +9441,7 @@ update_node_ordering (GtkWidget *widget)
 
 static GtkTextWindow*
 text_window_new (GtkTextWindowType  type,
-                 GtkWidget         *widget,
-                 gint               width_request,
-                 gint               height_request)
+                 GtkWidget         *widget)
 {
   GtkTextWindow *win;
   GtkCssNode *widget_node;
@@ -9504,10 +9452,8 @@ text_window_new (GtkTextWindowType  type,
   win->widget = widget;
   win->window = NULL;
   win->bin_window = NULL;
-  win->requisition.width = width_request;
-  win->requisition.height = height_request;
-  win->allocation.width = width_request;
-  win->allocation.height = height_request;
+  win->allocation.width = 0;
+  win->allocation.height = 0;
   win->allocation.x = 0;
   win->allocation.y = 0;
 
@@ -10157,25 +10103,25 @@ gtk_text_view_window_to_buffer_coords (GtkTextView      *text_view,
 }
 
 static void
-set_window_width (GtkTextView      *text_view,
-                  gint              width,
-                  GtkTextWindowType type,
-                  GtkTextWindow   **winp)
+set_window_size (GtkTextView        *text_view,
+                 gint                size,
+                 GtkTextWindowType   type,
+                 GtkTextWindow     **winp,
+                 gint16             *sizep)
 {
-  if (width == 0)
+  if (*sizep == size)
+    return;
+  
+  if (size == 0)
     {
-      if (*winp)
-        {
-          text_window_free (*winp);
-          *winp = NULL;
-          gtk_widget_queue_resize (GTK_WIDGET (text_view));
-        }
+      text_window_free (*winp);
+      *winp = NULL;
     }
   else
     {
       if (*winp == NULL)
         {
-          *winp = text_window_new (type, GTK_WIDGET (text_view), width, 0);
+          *winp = text_window_new (type, GTK_WIDGET (text_view));
           /* if the widget is already realized we need to realize the child manually */
           if (gtk_widget_get_realized (GTK_WIDGET (text_view)))
             text_window_realize (*winp, GTK_WIDGET (text_view));
@@ -10183,57 +10129,11 @@ set_window_width (GtkTextView      *text_view,
             text_window_map (*winp);
           update_node_ordering (GTK_WIDGET (text_view));
         }
-      else
-        {
-          if ((*winp)->requisition.width == width)
-            return;
-
-          (*winp)->requisition.width = width;
-        }
-
-      gtk_widget_queue_resize (GTK_WIDGET (text_view));
     }
-}
 
+  *sizep = size;
 
-static void
-set_window_height (GtkTextView      *text_view,
-                   gint              height,
-                   GtkTextWindowType type,
-                   GtkTextWindow   **winp)
-{
-  if (height == 0)
-    {
-      if (*winp)
-        {
-          text_window_free (*winp);
-          *winp = NULL;
-          gtk_widget_queue_resize (GTK_WIDGET (text_view));
-        }
-    }
-  else
-    {
-      if (*winp == NULL)
-        {
-          *winp = text_window_new (type, GTK_WIDGET (text_view), 0, height);
-
-          /* if the widget is already realized we need to realize the child manually */
-          if (gtk_widget_get_realized (GTK_WIDGET (text_view)))
-            text_window_realize (*winp, GTK_WIDGET (text_view));
-          if (gtk_widget_get_mapped (GTK_WIDGET (text_view)))
-            text_window_map (*winp);
-          update_node_ordering (GTK_WIDGET (text_view));
-        }
-      else
-        {
-          if ((*winp)->requisition.height == height)
-            return;
-
-          (*winp)->requisition.height = height;
-        }
-
-      gtk_widget_queue_resize (GTK_WIDGET (text_view));
-    }
+  gtk_widget_queue_resize (GTK_WIDGET (text_view));
 }
 
 /**
@@ -10263,23 +10163,23 @@ gtk_text_view_set_border_window_size (GtkTextView      *text_view,
   switch (type)
     {
     case GTK_TEXT_WINDOW_LEFT:
-      set_window_width (text_view, size, GTK_TEXT_WINDOW_LEFT,
-                        &priv->left_window);
+      set_window_size (text_view, size, GTK_TEXT_WINDOW_LEFT,
+                       &priv->left_window, &priv->border_window_size.left);
       break;
 
     case GTK_TEXT_WINDOW_RIGHT:
-      set_window_width (text_view, size, GTK_TEXT_WINDOW_RIGHT,
-                        &priv->right_window);
+      set_window_size (text_view, size, GTK_TEXT_WINDOW_RIGHT,
+                       &priv->right_window, &priv->border_window_size.right);
       break;
 
     case GTK_TEXT_WINDOW_TOP:
-      set_window_height (text_view, size, GTK_TEXT_WINDOW_TOP,
-                         &priv->top_window);
+      set_window_size (text_view, size, GTK_TEXT_WINDOW_TOP,
+                       &priv->top_window, &priv->border_window_size.top);
       break;
 
     case GTK_TEXT_WINDOW_BOTTOM:
-      set_window_height (text_view, size, GTK_TEXT_WINDOW_BOTTOM,
-                         &priv->bottom_window);
+      set_window_size (text_view, size, GTK_TEXT_WINDOW_BOTTOM,
+                       &priv->bottom_window, &priv->border_window_size.bottom);
       break;
 
     case GTK_TEXT_WINDOW_PRIVATE:
@@ -10312,24 +10212,16 @@ gtk_text_view_get_border_window_size (GtkTextView       *text_view,
   switch (type)
     {
     case GTK_TEXT_WINDOW_LEFT:
-      if (priv->left_window)
-        return priv->left_window->requisition.width;
-      break;
+      return priv->border_window_size.left;
       
     case GTK_TEXT_WINDOW_RIGHT:
-      if (priv->right_window)
-        return priv->right_window->requisition.width;
-      break;
+      return priv->border_window_size.right;
       
     case GTK_TEXT_WINDOW_TOP:
-      if (priv->top_window)
-        return priv->top_window->requisition.height;
-      break;
+      return priv->border_window_size.top;
 
     case GTK_TEXT_WINDOW_BOTTOM:
-      if (priv->bottom_window)
-        return priv->bottom_window->requisition.height;
-      break;
+      return priv->border_window_size.bottom;
       
     case GTK_TEXT_WINDOW_PRIVATE:
     case GTK_TEXT_WINDOW_WIDGET:
