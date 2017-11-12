@@ -2468,9 +2468,9 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget)
       tree_view->priv->last_number_of_expand_columns = number_of_expand_columns;
     }
 
-  for (list = (rtl ? last_column : first_column); 
-       list != (rtl ? first_column->prev : last_column->next);
-       list = (rtl ? list->prev : list->next)) 
+  for (list = first_column;
+       list != last_column->next;
+       list = list->next)
     {
       gint column_width;
 
@@ -2508,7 +2508,10 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget)
       if (extra_for_last > 0 && list == last_column)
 	column_width += extra_for_last;
 
-      _gtk_tree_view_column_allocate (column, width, column_width);
+      if (rtl)
+        _gtk_tree_view_column_allocate (column, widget_width - width - column_width, column_width);
+      else
+        _gtk_tree_view_column_allocate (column, width, column_width);
 
       width += column_width;
     }
