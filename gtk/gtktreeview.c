@@ -2443,7 +2443,7 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget)
 
   tree_view->priv->post_validation_flag = FALSE;
 
-  widget_width = gtk_widget_get_allocated_width (widget);
+  widget_width = gtk_widget_get_width (widget);
   if (!update_expand)
     {
       extra = tree_view->priv->last_extra_space;
@@ -5228,8 +5228,8 @@ gtk_tree_view_snapshot (GtkWidget   *widget,
   gint width, height;
 
   context = gtk_widget_get_style_context (widget);
-  width = gtk_widget_get_allocated_width (widget);
-  height = gtk_widget_get_allocated_height (widget);
+  width = gtk_widget_get_width (widget);
+  height = gtk_widget_get_height (widget);
 
   gtk_snapshot_render_background (snapshot, context,
                                   0, 0,
@@ -5868,7 +5868,7 @@ gtk_tree_view_node_queue_redraw (GtkTreeView *tree_view,
   rect.y =
     _gtk_rbtree_node_find_offset (tree, node)
     - gtk_adjustment_get_value (tree_view->priv->vadjustment);
-  rect.width = gtk_widget_get_allocated_width (GTK_WIDGET (tree_view));
+  rect.width = gtk_widget_get_width (GTK_WIDGET (tree_view));
   rect.height = GTK_RBNODE_GET_HEIGHT (node);
 
   gtk_tree_view_invalidate_bin_area (tree_view, &rect);
@@ -6068,7 +6068,7 @@ validate_visible_area (GtkTreeView *tree_view)
       tree_view->priv->scroll_to_path == NULL)
     return;
 
-  total_height = gtk_widget_get_allocated_height (GTK_WIDGET (tree_view))
+  total_height = gtk_widget_get_height (GTK_WIDGET (tree_view))
                  - gtk_tree_view_get_effective_header_height (tree_view);
 
   if (total_height == 0)
@@ -9679,7 +9679,7 @@ gtk_tree_view_queue_draw_arrow (GtkTreeView        *tree_view,
   rect.x = 0;
   rect.width = gtk_tree_view_get_expander_size (tree_view);
   rect.width = MAX (rect.width, tree_view->priv->width);
-  rect.width = MAX (rect.width, gtk_widget_get_allocated_width (GTK_WIDGET (tree_view)));
+  rect.width = MAX (rect.width, gtk_widget_get_width (GTK_WIDGET (tree_view)));
 
   rect.y = gtk_tree_view_get_row_y_offset (tree_view, tree, node);
   rect.height = gtk_tree_view_get_row_height (tree_view, node);
@@ -9699,7 +9699,7 @@ _gtk_tree_view_queue_draw_node (GtkTreeView        *tree_view,
     return;
 
   rect.x = 0;
-  rect.width = MAX (tree_view->priv->width, gtk_widget_get_allocated_width (GTK_WIDGET (tree_view)));
+  rect.width = MAX (tree_view->priv->width, gtk_widget_get_width (GTK_WIDGET (tree_view)));
 
   rect.y = gtk_tree_view_get_row_y_offset (tree_view, tree, node);
   rect.height = gtk_tree_view_get_row_height (tree_view, node);
@@ -11257,7 +11257,7 @@ gtk_tree_view_set_headers_visible (GtkTreeView *tree_view,
 	}
     }
 
-  height = gtk_widget_get_allocated_height (GTK_WIDGET (tree_view));
+  height = gtk_widget_get_height (GTK_WIDGET (tree_view));
   gtk_adjustment_configure (tree_view->priv->vadjustment,
                             gtk_adjustment_get_value (tree_view->priv->vadjustment),
                             0,
@@ -15547,7 +15547,7 @@ gtk_tree_view_set_tooltip_cell (GtkTreeView       *tree_view,
   else
     {
       rect.x = 0;
-      rect.width = gtk_widget_get_allocated_width (GTK_WIDGET (tree_view));;
+      rect.width = gtk_widget_get_width (GTK_WIDGET (tree_view));;
     }
 
   /* Determine y values. */
