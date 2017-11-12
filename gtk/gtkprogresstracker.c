@@ -82,7 +82,7 @@ gtk_progress_tracker_start (GtkProgressTracker *tracker,
   tracker->is_running = TRUE;
   tracker->last_frame_time = 0;
   tracker->duration = duration;
-  tracker->iteration = - delay / (gdouble) duration;
+  tracker->iteration = - delay / (gdouble) MAX (duration, 1);
   tracker->iteration_count = iteration_count;
 }
 
@@ -108,7 +108,7 @@ gtk_progress_tracker_finish (GtkProgressTracker *tracker)
  **/
 void
 gtk_progress_tracker_advance_frame (GtkProgressTracker *tracker,
-                                 guint64 frame_time)
+                                    guint64             frame_time)
 {
   gdouble delta;
 
@@ -127,7 +127,7 @@ gtk_progress_tracker_advance_frame (GtkProgressTracker *tracker,
       return;
     }
 
-  delta = (frame_time - tracker->last_frame_time) / gtk_slowdown / tracker->duration;
+  delta = (frame_time - tracker->last_frame_time) / gtk_slowdown / MAX (tracker->duration, 1);
   tracker->last_frame_time = frame_time;
   tracker->iteration += delta;
 }
