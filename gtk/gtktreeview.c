@@ -482,8 +482,6 @@ struct _GtkTreeViewPrivate
   guint modify_selection_pressed : 1;
   guint extend_selection_pressed : 1;
 
-  guint init_hadjust_value : 1;
-
   guint in_top_row_to_dy : 1;
 
   /* interactive search */
@@ -1702,7 +1700,6 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   priv->search_equal_func = gtk_tree_view_search_equal_func;
   priv->search_custom_entry_set = FALSE;
   priv->typeselect_flush_timeout = 0;
-  priv->init_hadjust_value = TRUE;    
   priv->width = 0;
           
   priv->hover_selection = FALSE;
@@ -2389,8 +2386,7 @@ gtk_tree_view_calculate_width_before_expander (GtkTreeView *tree_view)
 
 /* GtkWidget::size_allocate helper */
 static void
-gtk_tree_view_size_allocate_columns (GtkWidget *widget,
-				     gboolean  *width_changed)
+gtk_tree_view_size_allocate_columns (GtkWidget *widget)
 {
   GtkTreeView *tree_view;
   GList *list, *first_column, *last_column;
@@ -2437,13 +2433,11 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
 	number_of_expand_columns++;
     }
 
-  /* Only update the expand value if the width of the widget has changed,
-   * or the number of expand columns has changed, or if there are no expand
-   * columns, or if we didn't have an size-allocation yet after the
-   * last validated node.
+  /* Only update the expand value if the number of expand columns has changed,
+   * or if there are no expand columns, or if we didn't have an size-allocation
+   * yet after the last validated node.
    */
-  update_expand = (width_changed && *width_changed == TRUE)
-      || number_of_expand_columns != tree_view->priv->last_number_of_expand_columns
+  update_expand = number_of_expand_columns != tree_view->priv->last_number_of_expand_columns
       || number_of_expand_columns == 0
       || tree_view->priv->post_validation_flag == TRUE;
 
@@ -2526,8 +2520,6 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
   if (tree_view->priv->width != width)
     {
       tree_view->priv->width = width;
-      if (width_changed)
-        *width_changed = TRUE;
     }
 }
 
@@ -2560,63 +2552,23 @@ gtk_tree_view_size_allocate (GtkWidget           *widget,
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
   GList *tmp_list;
-  gboolean width_changed = TRUE;
-  gint old_width;
   double page_size;
-
-  old_width = gtk_widget_get_allocated_width (widget);
-  if (allocation->width != old_width)
-    width_changed = TRUE;
 
   /* We size-allocate the columns first because the width of the
    * tree view (used in updating the adjustments below) might change.
    */
-  gtk_tree_view_size_allocate_columns (widget, &width_changed);
+  gtk_tree_view_size_allocate_columns (widget);
   gtk_tree_view_size_allocate_drag_column (widget);
 
-  g_object_freeze_notify (G_OBJECT (tree_view->priv->hadjustment));
-  gtk_adjustment_set_page_size (tree_view->priv->hadjustment,
-                                allocation->width);
-  gtk_adjustment_set_page_increment (tree_view->priv->hadjustment,
-                                     allocation->width * 0.9);
-  gtk_adjustment_set_step_increment (tree_view->priv->hadjustment,
-                                     allocation->width * 0.1);
-  gtk_adjustment_set_lower (tree_view->priv->hadjustment, 0);
-  gtk_adjustment_set_upper (tree_view->priv->hadjustment,
-                            MAX (gtk_adjustment_get_page_size (tree_view->priv->hadjustment),
-                                 tree_view->priv->width));
-  g_object_thaw_notify (G_OBJECT (tree_view->priv->hadjustment));
-
-  if (_gtk_widget_get_direction(widget) == GTK_TEXT_DIR_RTL)
-    {
-      if (allocation->width < tree_view->priv->width)
-        {
-	  if (tree_view->priv->init_hadjust_value)
-	    {
-	      gtk_adjustment_set_value (tree_view->priv->hadjustment,
-                                        MAX (tree_view->priv->width -
-                                             allocation->width, 0));
-	      tree_view->priv->init_hadjust_value = FALSE;
-	    }
-	  else if (allocation->width != old_width)
-	    {
-	      gtk_adjustment_set_value (tree_view->priv->hadjustment,
-                                        CLAMP (gtk_adjustment_get_value (tree_view->priv->hadjustment) - allocation->width + old_width,
-                                               0,
-                                               tree_view->priv->width - allocation->width));
-	    }
-	}
-      else
-        {
-          gtk_adjustment_set_value (tree_view->priv->hadjustment, 0);
-	  tree_view->priv->init_hadjust_value = TRUE;
-	}
-    }
-  else
-    if (gtk_adjustment_get_value (tree_view->priv->hadjustment) + allocation->width > tree_view->priv->width)
-      gtk_adjustment_set_value (tree_view->priv->hadjustment,
-                                MAX (tree_view->priv->width -
-                                     allocation->width, 0));
+  page_size = gtk_adjustment_get_page_size (tree_view->priv->vadjustment);
+  gtk_adjustment_configure (tree_view->priv->hadjustment,
+                            gtk_adjustment_get_value (tree_view->priv->hadjustment) +
+                            (_gtk_widget_get_direction(widget) == GTK_TEXT_DIR_RTL ? allocation->width - page_size : 0),
+                            0,
+                            MAX (allocation->width, tree_view->priv->width),
+                            allocation->width * 0.1,
+                            allocation->width * 0.9,
+                            allocation->width);
 
   page_size = allocation->height - gtk_tree_view_get_effective_header_height (tree_view);
   gtk_adjustment_configure (tree_view->priv->vadjustment,
@@ -2638,7 +2590,7 @@ gtk_tree_view_size_allocate (GtkWidget           *widget,
       if (tree_view->priv->tree == NULL)
         invalidate_empty_focus (tree_view);
 
-      if (width_changed && tree_view->priv->expander_column)
+      if (tree_view->priv->expander_column)
         {
           /* Might seem awkward, but is the best heuristic I could come up
            * with.  Only if the width of the columns before the expander
@@ -11808,7 +11760,7 @@ gtk_tree_view_move_column_after (GtkTreeView       *tree_view,
   if (gtk_widget_get_realized (GTK_WIDGET (tree_view)))
     {
       gtk_widget_queue_resize (GTK_WIDGET (tree_view));
-      gtk_tree_view_size_allocate_columns (GTK_WIDGET (tree_view), NULL);
+      gtk_tree_view_size_allocate_columns (GTK_WIDGET (tree_view));
     }
 
   _gtk_tree_view_accessible_reorder_column (tree_view, column);
