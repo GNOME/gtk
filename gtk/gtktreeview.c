@@ -11760,11 +11760,7 @@ gtk_tree_view_move_column_after (GtkTreeView       *tree_view,
 
   gtk_tree_view_update_button_position (tree_view, column);
 
-  if (gtk_widget_get_realized (GTK_WIDGET (tree_view)))
-    {
-      gtk_widget_queue_resize (GTK_WIDGET (tree_view));
-      gtk_tree_view_size_allocate_columns (GTK_WIDGET (tree_view));
-    }
+  gtk_widget_queue_resize (GTK_WIDGET (tree_view));
 
   _gtk_tree_view_accessible_reorder_column (tree_view, column);
 
