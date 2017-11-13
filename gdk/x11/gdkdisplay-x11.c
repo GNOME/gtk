@@ -2250,8 +2250,7 @@ broadcast_xmessage (GdkDisplay *display,
 		    const char *message)
 {
   Display *xdisplay = GDK_DISPLAY_XDISPLAY (display);
-  GdkWindow *root_window = gdk_x11_display_get_root_window (display);
-  Window xroot_window = GDK_WINDOW_XID (root_window);
+  Window xroot_window = GDK_DISPLAY_XROOTWIN (display);
   
   Atom type_atom;
   Atom type_atom_begin;
@@ -2278,10 +2277,8 @@ broadcast_xmessage (GdkDisplay *display,
                      &attrs);
   }
 
-  type_atom = gdk_x11_get_xatom_by_name_for_display (display,
-                                                     message_type);
-  type_atom_begin = gdk_x11_get_xatom_by_name_for_display (display,
-                                                           message_type_begin);
+  type_atom = gdk_x11_get_xatom_by_name_for_display (display, message_type);
+  type_atom_begin = gdk_x11_get_xatom_by_name_for_display (display, message_type_begin);
   
   {
     XClientMessageEvent xclient;
@@ -2290,7 +2287,7 @@ broadcast_xmessage (GdkDisplay *display,
     char *dest;
     char *dest_end;
     
-		memset(&xclient, 0, sizeof (xclient));
+    memset(&xclient, 0, sizeof (xclient));
     xclient.type = ClientMessage;
     xclient.message_type = type_atom_begin;
     xclient.display =xdisplay;
@@ -2303,7 +2300,7 @@ broadcast_xmessage (GdkDisplay *display,
     while (src != src_end)
       {
         dest = &xclient.data.b[0];
-        dest_end = dest + 20;        
+        dest_end = dest + 20;
         
         while (dest != dest_end &&
                src != src_end)
