@@ -4367,10 +4367,10 @@ gtk_places_sidebar_dispose (GObject *object)
 static void
 gtk_places_sidebar_finalize (GObject *object)
 {
+#ifdef HAVE_CLOUDPROVIDERS
   GtkPlacesSidebar *sidebar;
 
   sidebar = GTK_PLACES_SIDEBAR (object);
-#ifdef HAVE_CLOUDPROVIDERS
   g_clear_object (&sidebar->cloud_manager);
 #endif
 
