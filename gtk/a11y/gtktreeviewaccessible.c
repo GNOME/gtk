@@ -1890,7 +1890,7 @@ static GtkTreeViewColumn *
 get_effective_focus_column (GtkTreeView       *treeview,
                             GtkTreeViewColumn *column)
 {
-  if (column == NULL)
+  if (column == NULL && get_n_columns (treeview) > 0)
     column = get_visible_column (treeview, 0);
 
   return column;
