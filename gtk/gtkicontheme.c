@@ -702,7 +702,7 @@ gtk_icon_theme_init (GtkIconTheme *icon_theme)
   for (j = 0; xdg_data_dirs[j]; j++) 
     priv->search_path[i++] = g_build_filename (xdg_data_dirs[j], "pixmaps", NULL);
 
-  priv->resource_paths = g_list_append (NULL, g_strdup ("/org/gtk/libgtk/icons"));
+  priv->resource_paths = g_list_append (NULL, g_strdup ("/org/gtk/libgtk/icons/"));
 
   priv->themes_valid = FALSE;
   priv->themes = NULL;
