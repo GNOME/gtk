@@ -69,7 +69,6 @@ void       _gtk_tree_view_install_mark_rows_col_dirty (GtkTreeView *tree_view,
 						       gboolean     install_handler);
 void         _gtk_tree_view_column_autosize           (GtkTreeView       *tree_view,
 						       GtkTreeViewColumn *column);
-gint         _gtk_tree_view_get_header_height         (GtkTreeView       *tree_view);
 
 void         _gtk_tree_view_get_row_separator_func    (GtkTreeView                 *tree_view,
 						       GtkTreeViewRowSeparatorFunc *func,
@@ -99,7 +98,8 @@ void _gtk_tree_view_column_set_tree_view    (GtkTreeViewColumn *column,
 gint _gtk_tree_view_column_request_width    (GtkTreeViewColumn *tree_column);
 void _gtk_tree_view_column_allocate         (GtkTreeViewColumn *tree_column,
 					     int                x_offset,
-					     int                width);
+					     int                width,
+					     int                height);
 void _gtk_tree_view_column_unset_model      (GtkTreeViewColumn *column,
 					     GtkTreeModel      *old_model);
 void _gtk_tree_view_column_unset_tree_view  (GtkTreeViewColumn *column);

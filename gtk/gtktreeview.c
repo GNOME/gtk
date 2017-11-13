@@ -2509,9 +2509,9 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget)
 	column_width += extra_for_last;
 
       if (rtl)
-        _gtk_tree_view_column_allocate (column, widget_width - width - column_width, column_width);
+        _gtk_tree_view_column_allocate (column, widget_width - width - column_width, column_width, tree_view->priv->header_height);
       else
-        _gtk_tree_view_column_allocate (column, width, column_width);
+        _gtk_tree_view_column_allocate (column, width, column_width, tree_view->priv->header_height);
 
       width += column_width;
     }
@@ -9723,14 +9723,8 @@ gtk_tree_view_get_effective_header_height (GtkTreeView *tree_view)
 {
   if (tree_view->priv->headers_visible)
     return tree_view->priv->header_height;
-  /* else */
-  return 0;
-}
-
-gint
-_gtk_tree_view_get_header_height (GtkTreeView *tree_view)
-{
-  return tree_view->priv->header_height;
+  else
+    return 0;
 }
 
 void
@@ -15769,7 +15763,7 @@ static gboolean
 gtk_tree_view_get_border (GtkScrollable *scrollable,
                           GtkBorder     *border)
 {
-  border->top = _gtk_tree_view_get_header_height (GTK_TREE_VIEW (scrollable));
+  border->top = gtk_tree_view_get_effective_header_height (GTK_TREE_VIEW (scrollable));
 
   return TRUE;
 }
