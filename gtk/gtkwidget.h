@@ -774,14 +774,6 @@ GDK_AVAILABLE_IN_3_8
 double	   gtk_widget_get_opacity	  (GtkWidget	       *widget);
 
 GDK_AVAILABLE_IN_ALL
-void       gtk_widget_set_device_enabled  (GtkWidget    *widget,
-                                           GdkDevice    *device,
-                                           gboolean      enabled);
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_widget_get_device_enabled  (GtkWidget    *widget,
-                                           GdkDevice    *device);
-
-GDK_AVAILABLE_IN_ALL
 GtkWidget*   gtk_widget_get_toplevel	(GtkWidget	*widget);
 GDK_AVAILABLE_IN_ALL
 GtkWidget*   gtk_widget_get_ancestor	(GtkWidget	*widget,

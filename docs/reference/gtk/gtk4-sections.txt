@@ -4520,8 +4520,6 @@ gtk_widget_set_sensitive
 gtk_widget_set_parent
 gtk_widget_set_parent_window
 gtk_widget_get_parent_window
-gtk_widget_set_device_enabled
-gtk_widget_get_device_enabled
 gtk_widget_get_toplevel
 gtk_widget_get_ancestor
 gtk_widget_is_ancestor

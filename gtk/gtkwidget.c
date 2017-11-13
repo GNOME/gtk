@@ -747,11 +747,6 @@ static void gtk_widget_set_usize_internal (GtkWidget          *widget,
 					   gint                width,
 					   gint                height);
 
-static void gtk_widget_set_device_enabled_internal (GtkWidget *widget,
-                                                    GdkDevice *device,
-                                                    gboolean   recurse,
-                                                    gboolean   enabled);
-
 static void gtk_widget_on_frame_clock_update (GdkFrameClock *frame_clock,
                                               GtkWidget     *widget);
 
@@ -778,7 +773,6 @@ static GQuark		quark_pango_context = 0;
 static GQuark		quark_mnemonic_labels = 0;
 static GQuark		quark_tooltip_markup = 0;
 static GQuark		quark_tooltip_window = 0;
-static GQuark           quark_enabled_devices = 0;
 static GQuark           quark_size_groups = 0;
 static GQuark           quark_auto_children = 0;
 static GQuark           quark_widget_path = 0;
@@ -994,7 +988,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_mnemonic_labels = g_quark_from_static_string ("gtk-mnemonic-labels");
   quark_tooltip_markup = g_quark_from_static_string ("gtk-tooltip-markup");
   quark_tooltip_window = g_quark_from_static_string ("gtk-tooltip-window");
-  quark_enabled_devices = g_quark_from_static_string ("gtk-widget-enabled-devices");
   quark_size_groups = g_quark_from_static_string ("gtk-widget-size-groups");
   quark_auto_children = g_quark_from_static_string ("gtk-widget-auto-children");
   quark_widget_path = g_quark_from_static_string ("gtk-widget-path");
@@ -4441,91 +4434,6 @@ gtk_widget_unmap (GtkWidget *widget)
     }
 }
 
-typedef struct {
-  GtkWidget *widget;
-  GdkDevice *device;
-  gboolean enabled;
-} DeviceEnableData;
-
-static void
-device_enable_foreach_window (gpointer win,
-                              gpointer user_data)
-{
-  GdkWindow *window = win;
-  DeviceEnableData *data = user_data;
-  GdkEventMask events;
-  GtkWidget *window_widget;
-  GList *window_list;
-
-  gdk_window_get_user_data (window, (gpointer *) &window_widget);
-  if (data->widget != window_widget)
-    return;
-
-  if (data->enabled)
-    events = gdk_window_get_events (window);
-  else
-    events = 0;
-
-  gdk_window_set_device_events (window, data->device, events);
-
-  window_list = gdk_window_peek_children (window);
-  g_list_foreach (window_list, device_enable_foreach_window, data);
-}
-
-void
-gtk_widget_set_device_enabled_internal (GtkWidget *widget,
-                                        GdkDevice *device,
-                                        gboolean   recurse,
-                                        gboolean   enabled)
-{
-  DeviceEnableData data;
-
-  data.widget = widget;
-  data.device = device;
-  data.enabled = enabled;
-
-  if (_gtk_widget_get_has_window (widget))
-    {
-      GdkWindow *window;
-
-      window = _gtk_widget_get_window (widget);
-      device_enable_foreach_window (window, &data);
-    }
-  else
-    {
-      GList *window_list;
-
-      window_list = gdk_window_peek_children (_gtk_widget_get_window (widget));
-      g_list_foreach (window_list, device_enable_foreach_window, &data);
-    }
-
-  if (recurse)
-    {
-      GtkWidget *child;
-      for (child = gtk_widget_get_first_child (widget);
-           child != NULL;
-           child = gtk_widget_get_next_sibling (child))
-        {
-          gtk_widget_set_device_enabled_internal (child,
-                                                  device,
-                                                  TRUE,
-                                                  enabled);
-        }
-    }
-}
-
-static void
-gtk_widget_update_devices_mask (GtkWidget *widget,
-                                gboolean   recurse)
-{
-  GList *enabled_devices, *l;
-
-  enabled_devices = g_object_get_qdata (G_OBJECT (widget), quark_enabled_devices);
-
-  for (l = enabled_devices; l; l = l->next)
-    gtk_widget_set_device_enabled_internal (widget, GDK_DEVICE (l->data), recurse, TRUE);
-}
-
 typedef struct _GtkTickCallbackInfo GtkTickCallbackInfo;
 
 struct _GtkTickCallbackInfo
@@ -4856,8 +4764,6 @@ gtk_widget_realize (GtkWidget *widget)
 
       if (priv->multidevice)
         gdk_window_set_support_multidevice (priv->window, TRUE);
-
-      gtk_widget_update_devices_mask (widget, TRUE);
 
       gtk_widget_update_alpha (widget);
 
@@ -9615,67 +9521,6 @@ gboolean
 gtk_widget_has_size_request (GtkWidget *widget)
 {
   return !(widget->priv->width == -1 && widget->priv->height == -1);
-}
-
-/**
- * gtk_widget_set_device_enabled:
- * @widget: a #GtkWidget
- * @device: a #GdkDevice
- * @enabled: whether to enable the device
- *
- * Enables or disables a #GdkDevice to interact with @widget
- * and all its children.
- *
- * It does so by descending through the #GdkWindow hierarchy
- * and enabling the same mask that is has for core events
- * (i.e. the one that gdk_window_get_events() returns).
- *
- * Since: 3.0
- */
-void
-gtk_widget_set_device_enabled (GtkWidget *widget,
-                               GdkDevice *device,
-                               gboolean   enabled)
-{
-  GList *enabled_devices;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (GDK_IS_DEVICE (device));
-
-  enabled_devices = g_object_get_qdata (G_OBJECT (widget), quark_enabled_devices);
-  enabled_devices = g_list_append (enabled_devices, device);
-
-  g_object_set_qdata_full (G_OBJECT (widget), quark_enabled_devices,
-                           enabled_devices, (GDestroyNotify) g_list_free);;
-
-  if (_gtk_widget_get_realized (widget))
-    gtk_widget_set_device_enabled_internal (widget, device, TRUE, enabled);
-}
-
-/**
- * gtk_widget_get_device_enabled:
- * @widget: a #GtkWidget
- * @device: a #GdkDevice
- *
- * Returns whether @device can interact with @widget and its
- * children. See gtk_widget_set_device_enabled().
- *
- * Returns: %TRUE is @device is enabled for @widget
- *
- * Since: 3.0
- */
-gboolean
-gtk_widget_get_device_enabled (GtkWidget *widget,
-                               GdkDevice *device)
-{
-  GList *enabled_devices;
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-  g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
-
-  enabled_devices = g_object_get_qdata (G_OBJECT (widget), quark_enabled_devices);
-
-  return g_list_find (enabled_devices, device) != NULL;
 }
 
 /**
