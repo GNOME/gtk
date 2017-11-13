@@ -32,6 +32,8 @@
 #include <glib/gstdio.h>
 #include <gmodule.h>
 
+#include "gtkutilsprivate.h"
+
 /* Copied from pango-utils.c */
 
 /* We need to call getc() a lot in a loop. This is suboptimal,
@@ -263,4 +265,37 @@ gtk_split_file_list (const char *str)
     }
 
   return files;
+}
+
+GBytes *
+gtk_file_load_bytes (GFile         *file,
+                     GCancellable  *cancellable,
+                     GError       **error)
+{
+  gchar *contents;
+  gsize len;
+
+  g_return_val_if_fail (G_IS_FILE (file), NULL);
+  g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), NULL);
+
+  if (g_file_has_uri_scheme (file, "resource"))
+    {
+      gchar *uri, *unescaped;
+      GBytes *bytes;
+
+      uri = g_file_get_uri (file);
+      unescaped = g_uri_unescape_string (uri + strlen ("resource://"), NULL);
+      g_free (uri);
+
+      bytes = g_resources_lookup_data (unescaped, 0, error);
+      g_free (unescaped);
+
+      return bytes;
+    }
+
+  /* contents is always \0 terminated, but we don't include that in the bytes */
+  if (g_file_load_contents (file, cancellable, &contents, &len, NULL, error))
+    return g_bytes_new_take (contents, len);
+
+  return NULL;
 }
