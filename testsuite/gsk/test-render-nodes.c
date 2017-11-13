@@ -549,7 +549,7 @@ load_node_file (GFile *file, gboolean generate)
       return;
     }
 
-  window = gdk_window_new_toplevel (gdk_display_get_default(), 0, 10 , 10);
+  window = gdk_window_new_toplevel (gdk_display_get_default(), 10 , 10);
   renderer = gsk_renderer_new_for_window (window);
   texture = gsk_renderer_render_texture (renderer, node, NULL);
 

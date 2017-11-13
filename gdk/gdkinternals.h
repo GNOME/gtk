@@ -166,7 +166,6 @@ typedef enum
 
 struct _GdkWindowAttr
 {
-  gint event_mask;
   gint x, y;
   gint width;
   gint height;

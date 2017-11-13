@@ -3656,7 +3656,6 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 	  width = drag_allocation.width;
 	  height = drag_allocation.height;
 	  tree_view->priv->drag_highlight_window = gdk_window_new_child (gtk_widget_get_window (widget),
-                                                                         GDK_POINTER_MOTION_MASK,
                                                                          &(GdkRectangle){
                                                                            tree_view->priv->drag_column_x,
                                                                            0,
@@ -3706,7 +3705,6 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 	    }
 
 	  tree_view->priv->drag_highlight_window = gdk_window_new_popup (gtk_widget_get_display (widget),
-                                                                         GDK_POINTER_MOTION_MASK,
                                                                          &(GdkRectangle) { x, y, width, height });
 	  gtk_widget_register_window (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_window);
 
@@ -3777,7 +3775,6 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 	    }
 
 	  tree_view->priv->drag_highlight_window = gdk_window_new_popup (gtk_widget_get_display (widget),
-                                                                         GDK_POINTER_MOTION_MASK,
                                                                          &(GdkRectangle) { x, y, width, height });
 	  gtk_widget_register_window (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_window);
 
@@ -9630,7 +9627,6 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
   button_allocation.y = 0;
 
   tree_view->priv->drag_window = gdk_window_new_child (gtk_widget_get_window (GTK_WIDGET (tree_view)),
-                                                       GDK_POINTER_MOTION_MASK,
                                                        &button_allocation);
   gtk_widget_register_window (GTK_WIDGET (tree_view), tree_view->priv->drag_window);
 

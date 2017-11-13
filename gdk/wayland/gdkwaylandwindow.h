@@ -47,7 +47,6 @@ GType                    gdk_wayland_window_get_type             (void);
 
 GDK_AVAILABLE_IN_3_90
 GdkWindow *              gdk_wayland_window_new_subsurface       (GdkDisplay            *display,
-                                                                  int                    event_mask,
                                                                   const GdkRectangle    *position);
 GDK_AVAILABLE_IN_ALL
 struct wl_surface       *gdk_wayland_window_get_wl_surface       (GdkWindow *window);

@@ -487,7 +487,6 @@ gtk_popover_realize (GtkWidget *widget)
       g_assert (GTK_IS_WINDOW (toplevel));
 
       window = gdk_wayland_window_new_subsurface (gtk_widget_get_display (toplevel),
-                                                  GDK_ALL_EVENTS_MASK,
                                                   &allocation);
 
       gdk_window_set_transient_for (window,
@@ -497,7 +496,6 @@ gtk_popover_realize (GtkWidget *widget)
 #endif
     {
       window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
-                                     GDK_ALL_EVENTS_MASK,
                                      &allocation);
     }
 

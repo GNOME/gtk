@@ -1987,7 +1987,7 @@ create_drag_window (GdkDisplay *display)
 {
   GdkWindow *window;
 
-  window = gdk_window_new_popup (display, 0, &(GdkRectangle) { 0, 0, 100, 100 });
+  window = gdk_window_new_popup (display, &(GdkRectangle) { 0, 0, 100, 100 });
 
   gdk_window_set_type_hint (window, GDK_WINDOW_TYPE_HINT_DND);
   

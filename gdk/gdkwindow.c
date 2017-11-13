@@ -939,7 +939,7 @@ gdk_window_new (GdkDisplay    *display,
       return NULL;
     }
 
-  window->event_mask = attributes->event_mask | GDK_ALL_EVENTS_MASK;
+  window->event_mask = GDK_ALL_EVENTS_MASK;
 
   if (attributes->wclass == GDK_INPUT_OUTPUT)
     {
@@ -1003,7 +1003,6 @@ gdk_window_new (GdkDisplay    *display,
 /**
  * gdk_window_new_toplevel: (constructor)
  * @display: the display to create the window on
- * @event_mask: event mask (see gdk_window_set_events())
  * @width: width of new window
  * @height: height of new window
  *
@@ -1016,7 +1015,6 @@ gdk_window_new (GdkDisplay    *display,
  **/
 GdkWindow *
 gdk_window_new_toplevel (GdkDisplay *display,
-                         gint        event_mask,
                          gint        width,
                          gint        height)
 {
@@ -1024,7 +1022,6 @@ gdk_window_new_toplevel (GdkDisplay *display,
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  attr.event_mask = event_mask;
   attr.wclass = GDK_INPUT_OUTPUT;
   attr.x = 0;
   attr.y = 0;
@@ -1038,7 +1035,6 @@ gdk_window_new_toplevel (GdkDisplay *display,
 /**
  * gdk_window_new_popup: (constructor)
  * @display: the display to create the window on
- * @event_mask: event mask (see gdk_window_set_events())
  * @position: position of the window on screen
  *
  * Creates a new toplevel popup window. The window will bypass window
@@ -1050,7 +1046,6 @@ gdk_window_new_toplevel (GdkDisplay *display,
  **/
 GdkWindow *
 gdk_window_new_popup (GdkDisplay         *display,
-                      gint                event_mask,
                       const GdkRectangle *position)
 {
   GdkWindowAttr attr;
@@ -1058,7 +1053,6 @@ gdk_window_new_popup (GdkDisplay         *display,
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (position != NULL, NULL);
 
-  attr.event_mask = event_mask;
   attr.wclass = GDK_INPUT_OUTPUT;
   attr.x = position->x;
   attr.y = position->y;
@@ -1089,7 +1083,6 @@ gdk_window_new_temp (GdkDisplay *display)
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  attr.event_mask = 0;
   attr.wclass = GDK_INPUT_ONLY;
   attr.x = -100;
   attr.y = -100;
@@ -1103,7 +1096,6 @@ gdk_window_new_temp (GdkDisplay *display)
 /**
  * gdk_window_new_child: (constructor)
  * @parent: the parent window
- * @event_mask: event mask (see gdk_window_set_events())
  * @position: placement of the window inside @parent
  *
  * Creates a new client-side child window.
@@ -1114,14 +1106,12 @@ gdk_window_new_temp (GdkDisplay *display)
  **/
 GdkWindow *
 gdk_window_new_child (GdkWindow          *parent,
-                      gint                event_mask,
                       const GdkRectangle *position)
 {
   GdkWindowAttr attr;
 
   g_return_val_if_fail (GDK_IS_WINDOW (parent), NULL);
 
-  attr.event_mask = event_mask;
   attr.wclass = GDK_INPUT_OUTPUT;
   attr.x = position->x;
   attr.y = position->y;

@@ -128,7 +128,7 @@ init_version (GtkInspectorGeneral *gen)
 #endif
     backend = "Unknown";
 
-  window = gdk_window_new_toplevel (display, 0, 10, 10);
+  window = gdk_window_new_toplevel (display, 10, 10);
   gsk_renderer = gsk_renderer_new_for_window (window);
   if (strcmp (G_OBJECT_TYPE_NAME (gsk_renderer), "GskVulkanRenderer") == 0)
     renderer = "Vulkan";
@@ -388,7 +388,7 @@ init_vulkan (GtkInspectorGeneral *gen)
   GdkVulkanContext *context;
   GdkDisplay *display = gdk_display_get_default ();
 
-  window = gdk_window_new_toplevel (display, 0, 10, 10);
+  window = gdk_window_new_toplevel (display, 10, 10);
   context = gdk_window_create_vulkan_context (window, NULL);
   gdk_window_destroy (window);
 

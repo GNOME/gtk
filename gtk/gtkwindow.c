@@ -6798,7 +6798,6 @@ gtk_window_realize (GtkWidget *widget)
         {
         case GTK_WINDOW_TOPLEVEL:
           gdk_window = gdk_window_new_toplevel (gtk_widget_get_display (widget),
-                                                GDK_ALL_EVENTS_MASK,
                                                 allocation.width,
                                                 allocation.height);
           break;
@@ -6808,14 +6807,12 @@ gtk_window_realize (GtkWidget *widget)
               GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
             {
               gdk_window = gdk_wayland_window_new_subsurface (gtk_widget_get_display (widget),
-                                                              GDK_ALL_EVENTS_MASK,
                                                               &allocation);
             }
           else
 #endif
             {
               gdk_window = gdk_window_new_popup (gtk_widget_get_display (widget),
-                                                 GDK_ALL_EVENTS_MASK,
                                                  &allocation);
             }
           break;

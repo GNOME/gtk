@@ -4569,7 +4569,7 @@ static const struct wl_surface_listener pointer_surface_listener = {
 static GdkWindow *
 create_foreign_dnd_window (GdkDisplay *display)
 {
-  return gdk_window_new_popup (display, 0, &(GdkRectangle) { 0, 0, 1, 1 });
+  return gdk_window_new_popup (display, &(GdkRectangle) { 0, 0, 1, 1 });
 }
 
 static void
