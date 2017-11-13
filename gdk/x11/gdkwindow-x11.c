@@ -624,50 +624,6 @@ gdk_x11_window_create_pixmap_surface (GdkWindow *window,
   return surface;
 }
 
-void
-_gdk_x11_screen_init_root_window (GdkScreen *screen)
-{
-  GdkWindow *window;
-  GdkWindowImplX11 *impl;
-  GdkX11Screen *x11_screen;
-
-  x11_screen = GDK_X11_SCREEN (screen);
-
-  g_assert (x11_screen->root_window == NULL);
-
-  window = x11_screen->root_window = _gdk_display_create_window (GDK_SCREEN_DISPLAY (screen));
-
-  window->impl = g_object_new (GDK_TYPE_WINDOW_IMPL_X11, NULL);
-  window->impl_window = window;
-
-  impl = GDK_WINDOW_IMPL_X11 (window->impl);
-  
-  impl->xid = x11_screen->xroot_window;
-  impl->wrapper = window;
-  impl->window_scale = x11_screen->window_scale;
-  
-  window->window_type = GDK_WINDOW_ROOT;
-
-  window->x = 0;
-  window->y = 0;
-  window->abs_x = 0;
-  window->abs_y = 0;
-  impl->unscaled_width = WidthOfScreen (x11_screen->xscreen);
-  impl->unscaled_height = HeightOfScreen (x11_screen->xscreen);
-  window->width = WidthOfScreen (x11_screen->xscreen) / impl->window_scale;
-  window->height = HeightOfScreen (x11_screen->xscreen) / impl->window_scale;
-  window->viewable = TRUE;
-
-  /* see init_randr_support() in gdkscreen-x11.c */
-  window->event_mask = GDK_STRUCTURE_MASK;
-
-  _gdk_window_update_size (x11_screen->root_window);
-
-  _gdk_x11_display_add_window (x11_screen->display,
-                               &x11_screen->xroot_window,
-                               x11_screen->root_window);
-}
-
 static void
 set_wm_protocols (GdkWindow *window)
 {

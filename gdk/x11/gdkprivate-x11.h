@@ -272,7 +272,6 @@ gdk_window_cache_shape_filter (GdkXEvent *xev,
                                GdkEvent  *event,
                                gpointer   data);
 
-void _gdk_x11_screen_init_root_window (GdkScreen *screen);
 void _gdk_x11_screen_init_visuals     (GdkScreen *screen,
                                        gboolean   setup_display);
 

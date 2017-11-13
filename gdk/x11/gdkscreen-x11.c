@@ -73,12 +73,6 @@ gdk_x11_screen_init (GdkX11Screen *screen)
 {
 }
 
-GdkWindow *
-gdk_x11_screen_get_root_window (GdkScreen *screen)
-{
-  return GDK_X11_SCREEN (screen)->root_window;
-}
-
 static void
 gdk_x11_screen_dispose (GObject *object)
 {
@@ -96,9 +90,6 @@ gdk_x11_screen_dispose (GObject *object)
 
   _gdk_x11_xsettings_finish (x11_screen);
 
-  if (x11_screen->root_window)
-    _gdk_window_destroy (x11_screen->root_window, TRUE);
-
   for (i = 0; i < x11_screen->nvisuals; i++)
     g_object_run_dispose (G_OBJECT (x11_screen->visuals[i]));
 
@@ -115,9 +106,6 @@ gdk_x11_screen_finalize (GObject *object)
 {
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (object);
   gint          i;
-
-  if (x11_screen->root_window)
-    g_object_unref (x11_screen->root_window);
 
   /* Visual Part */
   for (i = 0; i < x11_screen->nvisuals; i++)
@@ -789,7 +777,7 @@ _gdk_x11_screen_new (GdkDisplay *display,
   x11_screen->xdisplay = display_x11->xdisplay;
   x11_screen->xscreen = ScreenOfDisplay (display_x11->xdisplay, screen_number);
   x11_screen->screen_num = screen_number;
-  x11_screen->xroot_window = RootWindow (display_x11->xdisplay,screen_number);
+  x11_screen->xroot_window = RootWindow (display_x11->xdisplay, screen_number);
   x11_screen->wmspec_check_window = None;
   /* we want this to be always non-null */
   x11_screen->window_manager_name = g_strdup ("unknown");
@@ -809,7 +797,6 @@ _gdk_x11_screen_new (GdkDisplay *display,
   init_multihead (screen);
 
   _gdk_x11_screen_init_visuals (screen, setup_display);
-  _gdk_x11_screen_init_root_window (screen);
 
   return screen;
 }
@@ -820,16 +807,12 @@ _gdk_x11_screen_set_window_scale (GdkX11Screen *x11_screen,
 {
   GdkX11Display *x11_display = GDK_X11_DISPLAY (x11_screen->display);
   GList *toplevels, *l;
-  GdkWindow *root;
   int i;
 
   if (x11_screen->window_scale == scale)
     return;
 
   x11_screen->window_scale = scale;
-
-  root = x11_screen->root_window;
-  GDK_WINDOW_IMPL_X11 (root->impl)->window_scale = scale;
 
   toplevels = gdk_x11_display_get_toplevel_windows (x11_screen->display);
 
@@ -906,9 +889,8 @@ _gdk_x11_screen_get_edge_monitors (GdkScreen *screen,
 {
 #ifdef HAVE_XFREE_XINERAMA
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
-  GdkWindow    *root_window = gdk_x11_display_get_root_window (GDK_SCREEN_DISPLAY (screen));
-  gint          top_most_pos = gdk_window_get_height (root_window);
-  gint          left_most_pos = gdk_window_get_width (root_window);
+  gint          top_most_pos = HeightOfScreen (x11_screen->xscreen);
+  gint          left_most_pos = WidthOfScreen (x11_screen->xscreen);
   gint          bottom_most_pos = 0;
   gint          right_most_pos = 0;
   gint          i;

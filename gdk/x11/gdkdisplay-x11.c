@@ -1419,8 +1419,7 @@ _gdk_wm_protocols_filter (GdkXEvent *xev,
       return GDK_FILTER_REMOVE;
     }
   else if (atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_PING") &&
-	   !_gdk_x11_display_is_root_window (display,
-					     xevent->xclient.window))
+	   !_gdk_x11_display_is_root_window (display, xevent->xclient.window))
     {
       XClientMessageEvent xclient = xevent->xclient;
 
@@ -3149,12 +3148,6 @@ gdk_x11_display_get_setting (GdkDisplay  *display,
                              GValue      *value)
 {
   return gdk_x11_screen_get_setting (GDK_X11_DISPLAY (display)->screen, name, value);
-}
-
-GdkWindow *
-gdk_x11_display_get_root_window (GdkDisplay *display)
-{
-  return gdk_x11_screen_get_root_window (GDK_X11_DISPLAY (display)->screen);
 }
 
 GList *
