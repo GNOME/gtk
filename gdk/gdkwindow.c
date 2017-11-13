@@ -939,7 +939,7 @@ gdk_window_new (GdkDisplay    *display,
       return NULL;
     }
 
-  window->event_mask = attributes->event_mask;
+  window->event_mask = attributes->event_mask | GDK_ALL_EVENTS_MASK;
 
   if (attributes->wclass == GDK_INPUT_OUTPUT)
     {
