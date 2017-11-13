@@ -44,6 +44,7 @@
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtkutilsprivate.h"
 #include "gtkversion.h"
 
 /**
@@ -1722,9 +1723,9 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
                                 const char     *text,
                                 GError        **error)
 {
+  GBytes *free_bytes = NULL;
   GtkCssScanner *scanner;
   gulong error_handler;
-  char *free_data = NULL;
 
   if (error)
     error_handler = g_signal_connect (css_provider,
@@ -1738,11 +1739,11 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
     {
       GError *load_error = NULL;
 
-      if (g_file_load_contents (file, NULL,
-                                &free_data, NULL,
-                                NULL, &load_error))
+      free_bytes = gtk_file_load_bytes (file, NULL, &load_error);
+
+      if (free_bytes != NULL)
         {
-          text = free_data;
+          text = g_bytes_get_data (free_bytes, NULL);
         }
       else
         {
@@ -1791,7 +1792,7 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
         gtk_css_provider_postprocess (css_provider);
     }
 
-  g_free (free_data);
+  g_bytes_unref (free_bytes);
 
   if (error)
     {
