@@ -924,15 +924,8 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 			   : xevent->xconfigure.event != xevent->xconfigure.window
 			   ? " (discarding substructure)"
 			   : ""));
-      if (window && GDK_WINDOW_TYPE (window) == GDK_WINDOW_ROOT)
+      if (_gdk_x11_display_is_root_window (display, xevent->xconfigure.window))
         {
-          window_impl->unscaled_width = xevent->xconfigure.width;
-          window_impl->unscaled_height = xevent->xconfigure.height;
-	  window->width = (xevent->xconfigure.width + window_impl->window_scale - 1) / window_impl->window_scale;
-	  window->height = (xevent->xconfigure.height + window_impl->window_scale - 1) / window_impl->window_scale;
-
-	  _gdk_window_update_size (window);
-	  _gdk_x11_window_update_size (window_impl);
 	  _gdk_x11_screen_size_changed (screen, xevent);
         }
 
@@ -947,8 +940,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 
     if (!window ||
 	  xevent->xconfigure.event != xevent->xconfigure.window ||
-          GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD ||
-          GDK_WINDOW_TYPE (window) == GDK_WINDOW_ROOT)
+          GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD)
 	return_val = FALSE;
       else
 	{

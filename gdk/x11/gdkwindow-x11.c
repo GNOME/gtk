@@ -902,7 +902,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
     {
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_TEMP:
-      if (window->parent && GDK_WINDOW_TYPE (window->parent) != GDK_WINDOW_ROOT)
+      if (window->parent)
         {
           /* The common code warns for this case */
           xparent = GDK_SCREEN_XROOTWIN (x11_screen);
@@ -1484,7 +1484,6 @@ gdk_window_x11_hide (GdkWindow *window)
       return;
       
     case GDK_WINDOW_FOREIGN:
-    case GDK_WINDOW_ROOT:
     case GDK_WINDOW_CHILD:
     default:
       break;
