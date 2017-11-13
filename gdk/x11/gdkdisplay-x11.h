@@ -40,6 +40,7 @@ struct _GdkX11Display
   Display *xdisplay;
   GdkScreen *screen;
   GList *screens;
+  GList *toplevels;
 
   GSource *event_source;
 

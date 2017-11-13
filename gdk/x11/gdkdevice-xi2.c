@@ -606,7 +606,6 @@ gdk_x11_device_xi2_window_at_position (GdkDevice       *device,
                 }
             }
 
-          g_list_free (toplevels);
           if (pointer_window != None)
             break;
         }

@@ -523,8 +523,6 @@ gdk_x11_device_core_window_at_position (GdkDevice       *device,
             }
         }
 
-      g_list_free (toplevels);
-
       xwindow = pointer_window;
     }
 

@@ -840,8 +840,6 @@ _gdk_x11_screen_set_window_scale (GdkX11Screen *x11_screen,
       _gdk_x11_window_set_window_scale (window, scale);
     }
 
-  g_list_free (toplevels);
-
   for (i = 0; i < x11_display->monitors->len; i++)
     {
       GdkMonitor *monitor = GDK_MONITOR (x11_display->monitors->pdata[i]);

@@ -600,7 +600,6 @@ gdk_window_cache_new (GdkDisplay *display)
 				height * impl->window_scale,
                                 gdk_window_is_visible (window));
         }
-      g_list_free (toplevel_windows);
       return result;
     }
 

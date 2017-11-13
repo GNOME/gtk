@@ -55,8 +55,6 @@ gdk_monitor_has_fullscreen_window (GdkMonitor *monitor)
         }
     }
 
-  g_list_free (toplevels);
-
   return has_fullscreen;
 }
 

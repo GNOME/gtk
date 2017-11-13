@@ -61,6 +61,9 @@ _gdk_x11_display_add_window (GdkDisplay *display,
     g_warning ("XID collision, trouble ahead");
 
   g_hash_table_insert (display_x11->xid_ht, xid, data);
+
+  if (gdk_window_get_parent (GDK_WINDOW (data)) == NULL)
+    display_x11->toplevels = g_list_prepend (display_x11->toplevels, data);
 }
 
 void
@@ -68,13 +71,20 @@ _gdk_x11_display_remove_window (GdkDisplay *display,
                                 XID         xid)
 {
   GdkX11Display *display_x11;
+  GdkWindow *window;
 
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
   display_x11 = GDK_X11_DISPLAY (display);
 
-  if (display_x11->xid_ht)
-    g_hash_table_remove (display_x11->xid_ht, &xid);
+  if (!display_x11->xid_ht)
+    return;
+
+  window = g_hash_table_lookup (display_x11->xid_ht, &xid);
+  if (window && gdk_window_get_parent (window) == NULL)
+    display_x11->toplevels = g_list_remove (display_x11->toplevels, window);
+
+  g_hash_table_remove (display_x11->xid_ht, &xid);
 }
 
 /**
