@@ -4544,10 +4544,10 @@ icon_from_list (GList *list,
 
   target = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, size, size);
   cr = cairo_create (target);
-  cairo_set_source_surface (cr, source , 0, 0);
   cairo_scale (cr,
-	       size / gdk_texture_get_width (texture),
-	       size / gdk_texture_get_height (texture));
+	       (double) size / gdk_texture_get_width (texture),
+	       (double) size / gdk_texture_get_height (texture));
+  cairo_set_source_surface (cr, source, 0, 0);
   cairo_paint (cr);
   cairo_destroy (cr);
   cairo_surface_destroy (source);
