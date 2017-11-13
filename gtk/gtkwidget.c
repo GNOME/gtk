@@ -12536,15 +12536,6 @@ gtk_widget_real_set_has_tooltip (GtkWidget *widget,
     {
       priv->has_tooltip = has_tooltip;
 
-      if (priv->has_tooltip)
-        {
-	  if (_gtk_widget_get_realized (widget) && !_gtk_widget_get_has_window (widget))
-	    gdk_window_set_events (priv->window,
-				   gdk_window_get_events (priv->window) |
-				   GDK_LEAVE_NOTIFY_MASK |
-				   GDK_POINTER_MOTION_MASK);
-	}
-
       g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_HAS_TOOLTIP]);
     }
 }
