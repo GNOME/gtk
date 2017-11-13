@@ -11219,7 +11219,6 @@ gtk_tree_view_set_headers_visible (GtkTreeView *tree_view,
   GList *list;
   GtkTreeViewColumn *column;
   GtkWidget *button;
-  int height;
 
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
 
@@ -11250,15 +11249,6 @@ gtk_tree_view_set_headers_visible (GtkTreeView *tree_view,
 	    }
 	}
     }
-
-  height = gtk_widget_get_height (GTK_WIDGET (tree_view));
-  gtk_adjustment_configure (tree_view->priv->vadjustment,
-                            gtk_adjustment_get_value (tree_view->priv->vadjustment),
-                            0,
-                            gtk_tree_view_get_height (tree_view),
-                            gtk_adjustment_get_step_increment (tree_view->priv->vadjustment),
-                            (height - gtk_tree_view_get_effective_header_height (tree_view)) / 2,
-                            height - gtk_tree_view_get_effective_header_height (tree_view));
 
   gtk_widget_queue_resize (GTK_WIDGET (tree_view));
 
