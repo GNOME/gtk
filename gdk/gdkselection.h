@@ -209,6 +209,16 @@ void       gdk_selection_send_notify_for_display (GdkDisplay      *display,
 						  GdkAtom     	   property,
 						  guint32     	   time_);
 
+GDK_AVAILABLE_IN_3_94
+void       gdk_selection_clear_targets           (GdkDisplay      *display,
+                                                  GdkAtom          selection);
+
+GDK_AVAILABLE_IN_3_94
+void       gdk_selection_add_targets             (GdkWindow       *window,
+                                                  GdkAtom          selection,
+                                                  GdkAtom         *targets,
+                                                  guint            n_targets);
+
 G_END_DECLS
 
 #endif /* __GDK_SELECTION_H__ */

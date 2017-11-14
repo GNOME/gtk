@@ -966,7 +966,7 @@ data_source_dnd_finished (void                  *data,
 
   g_signal_emit_by_name (context, "dnd-finished");
   gdk_selection_owner_set (NULL, atoms[ATOM_DND], GDK_CURRENT_TIME, TRUE);
-  gdk_wayland_selection_clear_targets (display, atoms[ATOM_DND]);
+  gdk_wayland_display_clear_selection_targets (display, atoms[ATOM_DND]);
 }
 
 static void
@@ -1486,12 +1486,12 @@ _gdk_wayland_display_utf8_to_string_target (GdkDisplay  *display,
 }
 
 void
-gdk_wayland_selection_add_targets (GdkWindow *window,
-                                   GdkAtom    selection,
-                                   guint      ntargets,
-                                   GdkAtom   *targets)
+gdk_wayland_display_add_selection_targets (GdkDisplay *display,
+                                           GdkWindow  *window,
+                                           GdkAtom     selection,
+                                           GdkAtom    *targets,
+                                           guint       ntargets)
 {
-  GdkDisplay *display = gdk_window_get_display (window);
   GdkWaylandSelection *wayland_selection = gdk_wayland_display_get_selection (display);
   gpointer data_source;
   guint i;
@@ -1532,8 +1532,8 @@ gdk_wayland_selection_add_targets (GdkWindow *window,
 }
 
 void
-gdk_wayland_selection_clear_targets (GdkDisplay *display,
-                                     GdkAtom     selection)
+gdk_wayland_display_clear_selection_targets (GdkDisplay *display,
+                                             GdkAtom     selection)
 {
   GdkWaylandSelection *wayland_selection = gdk_wayland_display_get_selection (display);
 

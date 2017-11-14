@@ -329,3 +329,24 @@ gdk_utf8_to_string_target (const gchar *str)
 
   return GDK_DISPLAY_GET_CLASS (display)->utf8_to_string_target (display, str);
 }
+
+void
+gdk_selection_clear_targets (GdkDisplay *display,
+                             GdkAtom     selection)
+{
+}
+
+void
+gdk_selection_add_targets (GdkWindow *window,
+                           GdkAtom    selection,
+                           GdkAtom   *targets,
+                           guint      n_targets)
+{
+  GdkDisplay *display;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  display = gdk_window_get_display (window);
+
+  GDK_DISPLAY_GET_CLASS (display)->add_selection_targets (display, window, selection, targets, n_targets);
+}

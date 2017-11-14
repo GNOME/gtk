@@ -82,12 +82,6 @@ GDK_AVAILABLE_IN_ALL
 HGDIOBJ       gdk_win32_window_get_handle (GdkWindow *window);
 
 GDK_AVAILABLE_IN_ALL
-void          gdk_win32_selection_add_targets (GdkWindow  *owner,
-					       GdkAtom     selection,
-					       gint	   n_targets,
-					       GdkAtom    *targets);
-
-GDK_AVAILABLE_IN_ALL
 GdkWindow *   gdk_win32_window_foreign_new_for_display (GdkDisplay *display,
                                                         HWND        anid);
 GDK_AVAILABLE_IN_ALL

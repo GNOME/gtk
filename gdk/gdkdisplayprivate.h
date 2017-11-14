@@ -186,6 +186,13 @@ struct _GdkDisplayClass
                                                         guchar     **data,
                                                         GdkAtom     *type,
                                                         gint        *format);
+  void                       (*clear_selection_targets)(GdkDisplay  *display,
+                                                        GdkAtom      selection);
+  void                       (*add_selection_targets)  (GdkDisplay  *display,
+                                                        GdkWindow   *window,
+                                                        GdkAtom      selection,
+                                                        GdkAtom     *targets,
+                                                        guint        ntargets);
   void                       (*convert_selection)      (GdkDisplay  *display,
                                                         GdkWindow   *requestor,
                                                         GdkAtom      selection,

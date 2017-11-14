@@ -878,10 +878,7 @@ gtk_selection_clear_targets (GtkWidget *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (selection != GDK_NONE);
 
-#ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
-    gdk_wayland_selection_clear_targets (gtk_widget_get_display (widget), selection);
-#endif
+  gdk_selection_clear_targets (gtk_widget_get_display (widget), selection);
 
   lists = g_object_get_data (G_OBJECT (widget), gtk_selection_handler_key);
   
@@ -927,13 +924,7 @@ gtk_selection_add_target (GtkWidget	    *widget,
 
   list = gtk_selection_target_list_get (widget, selection);
   gtk_target_list_add (list, target, 0, info);
-#ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
-    gdk_wayland_selection_add_targets (gtk_widget_get_window (widget), selection, 1, &target);
-#endif
-#ifdef GDK_WINDOWING_WIN32
-  gdk_win32_selection_add_targets (gtk_widget_get_window (widget), selection, 1, &target);
-#endif
+  gdk_selection_add_targets (gtk_widget_get_window (widget), selection, &target, 1);
 }
 
 /**
@@ -953,6 +944,8 @@ gtk_selection_add_targets (GtkWidget            *widget,
 			   guint                 ntargets)
 {
   GtkTargetList *list;
+  GdkAtom *atoms = g_new (GdkAtom, ntargets);
+  guint i;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (selection != GDK_NONE);
@@ -961,31 +954,11 @@ gtk_selection_add_targets (GtkWidget            *widget,
   list = gtk_selection_target_list_get (widget, selection);
   gtk_target_list_add_table (list, targets, ntargets);
 
-#ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
-    {
-      GdkAtom *atoms = g_new (GdkAtom, ntargets);
-      guint i;
+  for (i = 0; i < ntargets; i++)
+    atoms[i] = gdk_atom_intern (targets[i].target, FALSE);
 
-      for (i = 0; i < ntargets; i++)
-        atoms[i] = gdk_atom_intern (targets[i].target, FALSE);
-
-      gdk_wayland_selection_add_targets (gtk_widget_get_window (widget), selection, ntargets, atoms);
-      g_free (atoms);
-    }
-#endif
-
-#ifdef GDK_WINDOWING_WIN32
-  {
-    int i;
-    GdkAtom *atoms = g_new (GdkAtom, ntargets);
-
-    for (i = 0; i < ntargets; ++i)
-      atoms[i] = gdk_atom_intern (targets[i].target, FALSE);
-    gdk_win32_selection_add_targets (gtk_widget_get_window (widget), selection, ntargets, atoms);
-    g_free (atoms);
-  }
-#endif
+  gdk_selection_add_targets (gtk_widget_get_window (widget), selection, atoms, ntargets);
+  g_free (atoms);
 }
 
 

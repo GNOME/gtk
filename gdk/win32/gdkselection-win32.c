@@ -1134,6 +1134,12 @@ gdk_free_compound_text (guchar *ctext)
   g_return_if_fail (ctext == NULL);
 }
 
+void
+gdk_win32_display_clear_selection_targets (GdkDisplay *display,
+                                           GdkAtom     selection)
+{
+}
+
 /* This function is called from gtk_selection_add_target() and
  * gtk_selection_add_targets() in gtkselection.c. It is this function
  * that takes care of setting those clipboard formats for which we use
@@ -1142,10 +1148,11 @@ gdk_free_compound_text (guchar *ctext)
  */
 
 void
-gdk_win32_selection_add_targets (GdkWindow  *owner,
-				 GdkAtom     selection,
-				 gint	     n_targets,
-				 GdkAtom    *targets)
+gdk_win32_display_add_selection_targets (GdkDisplay *display,
+                                         GdkWindow  *owner,
+                                         GdkAtom     selection,
+                                         GdkAtom    *targets,
+                                         guint       ntargets)
 {
   HWND hwnd = NULL;
   gboolean has_image = FALSE;

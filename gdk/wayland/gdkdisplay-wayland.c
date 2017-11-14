@@ -1043,6 +1043,8 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
   display_class->set_selection_owner = _gdk_wayland_display_set_selection_owner;
   display_class->send_selection_notify = _gdk_wayland_display_send_selection_notify;
   display_class->get_selection_property = _gdk_wayland_display_get_selection_property;
+  display_class->clear_selection_targets = gdk_wayland_display_clear_selection_targets;
+  display_class->add_selection_targets = gdk_wayland_display_add_selection_targets;
   display_class->convert_selection = _gdk_wayland_display_convert_selection;
   display_class->text_property_to_utf8_list = _gdk_wayland_display_text_property_to_utf8_list;
   display_class->utf8_to_string_target = _gdk_wayland_display_utf8_to_string_target;

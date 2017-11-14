@@ -159,6 +159,21 @@ _gdk_broadway_display_get_selection_property (GdkDisplay *display,
 }
 
 void
+gdk_broadway_display_clear_selection_targets (GdkDisplay *display,
+                                              GdkAtom     selection)
+{
+}
+
+void
+gdk_broadway_display_add_selection_targets (GdkDisplay  *display,
+                                            GdkWindow   *window,
+                                            GdkAtom      selection,
+                                            GdkAtom     *targets,
+                                            guint        ntargets)
+{
+}
+
+void
 _gdk_broadway_display_send_selection_notify (GdkDisplay      *display,
 					     GdkWindow       *requestor,
 					     GdkAtom          selection,

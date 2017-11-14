@@ -19,7 +19,6 @@ gdk_wayland_public_headers = files([
   'gdkwaylanddisplay.h',
   'gdkwaylandglcontext.h',
   'gdkwaylandmonitor.h',
-  'gdkwaylandselection.h',
   'gdkwaylandwindow.h'
 ])
 
