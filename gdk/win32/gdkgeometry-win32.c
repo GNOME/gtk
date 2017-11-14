@@ -127,14 +127,11 @@ _gdk_win32_window_tmp_unset_bg (GdkWindow *window,
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  if (window->input_only || window->destroyed ||
-      (window->window_type != GDK_WINDOW_ROOT &&
-       !GDK_WINDOW_IS_MAPPED (window)))
+  if (window->input_only || window->destroyed || !GDK_WINDOW_IS_MAPPED (window))
     return;
 
   if (_gdk_window_has_impl (window) &&
       GDK_WINDOW_IS_WIN32 (window) &&
-      window->window_type != GDK_WINDOW_ROOT &&
       window->window_type != GDK_WINDOW_FOREIGN)
     tmp_unset_bg (window);
 
@@ -150,7 +147,7 @@ _gdk_win32_window_tmp_unset_bg (GdkWindow *window,
 void
 _gdk_win32_window_tmp_unset_parent_bg (GdkWindow *window)
 {
-  if (GDK_WINDOW_TYPE (window->parent) == GDK_WINDOW_ROOT)
+  if (window->parent == NULL)
     return;
 
   window = _gdk_window_get_impl_window (window->parent);
@@ -163,13 +160,11 @@ _gdk_win32_window_tmp_reset_bg (GdkWindow *window,
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  if (window->input_only || window->destroyed ||
-      (window->window_type != GDK_WINDOW_ROOT && !GDK_WINDOW_IS_MAPPED (window)))
+  if (window->input_only || window->destroyed || !GDK_WINDOW_IS_MAPPED (window))
     return;
 
   if (_gdk_window_has_impl (window) &&
       GDK_WINDOW_IS_WIN32 (window) &&
-      window->window_type != GDK_WINDOW_ROOT &&
       window->window_type != GDK_WINDOW_FOREIGN)
     {
       tmp_reset_bg (window);

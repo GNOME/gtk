@@ -1161,14 +1161,14 @@ find_common_ancestor (GdkWindow *win1,
   GList *list1, *list2;
 
   tmp = win1;
-  while (tmp != NULL && tmp->window_type != GDK_WINDOW_ROOT)
+  while (tmp != NULL)
     {
       path1 = g_list_prepend (path1, tmp);
       tmp = get_native_parent (tmp);
     }
 
   tmp = win2;
-  while (tmp != NULL && tmp->window_type != GDK_WINDOW_ROOT)
+  while (tmp != NULL)
     {
       path2 = g_list_prepend (path2, tmp);
       tmp = get_native_parent (tmp);
@@ -1241,7 +1241,7 @@ synthesize_crossing_events (GdkDisplay                 *display,
 
 	  last = a;
 	  win = get_native_parent (a);
-	  while (win != c && win->window_type != GDK_WINDOW_ROOT)
+	  while (win != c && win != NULL)
 	    {
 	      send_crossing_event (display,
 				   win, GDK_LEAVE_NOTIFY,
@@ -1264,7 +1264,7 @@ synthesize_crossing_events (GdkDisplay                 *display,
 	{
 	  path = NULL;
 	  win = get_native_parent (b);
-	  while (win != c && win->window_type != GDK_WINDOW_ROOT)
+	  while (win != c && win != NULL)
 	    {
 	      path = g_list_prepend (path, win);
 	      win = get_native_parent (win);

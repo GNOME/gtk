@@ -716,7 +716,7 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
   switch (window->window_type)
     {
     case GDK_WINDOW_TOPLEVEL:
-      if (window->parent && GDK_WINDOW_TYPE (window->parent) != GDK_WINDOW_ROOT)
+      if (window->parent)
 	{
 	  /* The common code warns for this case. */
 	  hparent = GetDesktopWindow ();

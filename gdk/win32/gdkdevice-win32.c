@@ -223,7 +223,6 @@ _gdk_device_win32_window_at_position (GdkDevice       *device,
         window = gdk_win32_handle_table_lookup (hwnd);
 
         if (window != NULL &&
-            GDK_WINDOW_TYPE (window) != GDK_WINDOW_ROOT &&
             GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
           break;
 
