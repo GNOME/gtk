@@ -1616,6 +1616,7 @@ gtk_tool_palette_add_drag_dest (GtkToolPalette            *palette,
 {
   GtkTargetEntry entries[G_N_ELEMENTS (dnd_targets)];
   gint n_entries = 0;
+  GtkTargetList *list;
 
   g_return_if_fail (GTK_IS_TOOL_PALETTE (palette));
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -1628,7 +1629,9 @@ gtk_tool_palette_add_drag_dest (GtkToolPalette            *palette,
   if (targets & GTK_TOOL_PALETTE_DRAG_GROUPS)
     entries[n_entries++] = dnd_targets[1];
 
-  gtk_drag_dest_set (widget, flags, entries, n_entries, actions);
+  list = gtk_target_list_new (entries, n_entries);
+  gtk_drag_dest_set (widget, flags, list, actions);
+  gtk_target_list_unref (list);
 }
 
 void
@@ -1727,6 +1730,8 @@ _gtk_tool_palette_child_set_drag_source (GtkWidget *child,
   if (GTK_IS_TOOL_ITEM (child) &&
       (palette->priv->drag_source & GTK_TOOL_PALETTE_DRAG_ITEMS))
     {
+      GtkTargetList *targets;
+
       /* Connect to child instead of the item itself,
        * to work arround bug 510377.
        */
@@ -1736,8 +1741,10 @@ _gtk_tool_palette_child_set_drag_source (GtkWidget *child,
       if (!child)
         return;
 
+      targets = gtk_target_list_new (&dnd_targets[0], 1);
       gtk_drag_source_set (child, GDK_BUTTON1_MASK | GDK_BUTTON3_MASK,
-                           &dnd_targets[0], 1, GDK_ACTION_COPY | GDK_ACTION_MOVE);
+                           targets, GDK_ACTION_COPY | GDK_ACTION_MOVE);
+      gtk_target_list_unref (targets);
 
       g_signal_connect (child, "drag-data-get",
                         G_CALLBACK (gtk_tool_palette_item_drag_data_get),
@@ -1746,8 +1753,12 @@ _gtk_tool_palette_child_set_drag_source (GtkWidget *child,
   else if (GTK_IS_BUTTON (child) &&
            (palette->priv->drag_source & GTK_TOOL_PALETTE_DRAG_GROUPS))
     {
+      GtkTargetList *targets;
+
+      targets = gtk_target_list_new (&dnd_targets[1], 1);
       gtk_drag_source_set (child, GDK_BUTTON1_MASK | GDK_BUTTON3_MASK,
-                           &dnd_targets[1], 1, GDK_ACTION_COPY | GDK_ACTION_MOVE);
+                           targets, GDK_ACTION_COPY | GDK_ACTION_MOVE);
+      gtk_target_list_unref (targets);
 
       g_signal_connect (child, "drag-data-get",
                         G_CALLBACK (gtk_tool_palette_child_drag_data_get),

@@ -758,7 +758,7 @@ gtk_calendar_init (GtkCalendar *calendar)
   priv->in_drag = 0;
   priv->drag_highlight = 0;
 
-  gtk_drag_dest_set (widget, 0, NULL, 0, GDK_ACTION_COPY);
+  gtk_drag_dest_set (widget, 0, NULL, GDK_ACTION_COPY);
   gtk_drag_dest_add_text_targets (widget);
 
   priv->year_before = 0;

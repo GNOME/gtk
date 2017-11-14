@@ -8555,13 +8555,13 @@ post_process_ui (GtkFileChooserWidget *impl)
                                           impl, NULL);
   gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (impl->priv->browse_files_tree_view),
                                           GDK_BUTTON1_MASK,
-                                          NULL, 0,
+                                          NULL,
                                           GDK_ACTION_COPY | GDK_ACTION_MOVE);
   gtk_drag_source_add_uri_targets (impl->priv->browse_files_tree_view);
 
   gtk_drag_dest_set (impl->priv->browse_files_tree_view,
                      GTK_DEST_DEFAULT_ALL,
-                     NULL, 0,
+                     NULL,
                      GDK_ACTION_COPY | GDK_ACTION_MOVE);
   gtk_drag_dest_add_uri_targets (impl->priv->browse_files_tree_view);
 

@@ -1659,7 +1659,7 @@ gtk_text_view_init (GtkTextView *text_view)
 
   priv->scroll_after_paste = TRUE;
 
-  gtk_drag_dest_set (widget, 0, NULL, 0,
+  gtk_drag_dest_set (widget, 0, NULL,
                      GDK_ACTION_COPY | GDK_ACTION_MOVE);
 
   target_list = gtk_target_list_new (NULL, 0);

@@ -380,7 +380,7 @@ _gtk_recent_chooser_default_init (GtkRecentChooserDefault *impl)
   					   NULL);
   gtk_drag_source_set (priv->recent_view,
 		       GDK_BUTTON1_MASK,
-		       NULL, 0,
+		       NULL,
 		       GDK_ACTION_COPY);
   gtk_drag_source_add_uri_targets (priv->recent_view);
 }

@@ -99,7 +99,7 @@ gtk_stack_switcher_init (GtkStackSwitcher *switcher)
 
   gtk_orientable_set_orientation (GTK_ORIENTABLE (switcher), GTK_ORIENTATION_HORIZONTAL);
 
-  gtk_drag_dest_set (GTK_WIDGET (switcher), 0, NULL, 0, 0);
+  gtk_drag_dest_set (GTK_WIDGET (switcher), 0, NULL, 0);
   gtk_drag_dest_set_track_motion (GTK_WIDGET (switcher), TRUE);
 }
 

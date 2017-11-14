@@ -554,14 +554,13 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
 				      NULL, NULL);
 
   /* DnD */
-  gtk_drag_dest_set (GTK_WIDGET (button),
-                     (GTK_DEST_DEFAULT_ALL),
-		     NULL, 0,
-		     GDK_ACTION_COPY);
   target_list = gtk_target_list_new (NULL, 0);
   gtk_target_list_add_uri_targets (target_list, TEXT_URI_LIST);
   gtk_target_list_add_text_targets (target_list, TEXT_PLAIN);
-  gtk_drag_dest_set_target_list (GTK_WIDGET (button), target_list);
+  gtk_drag_dest_set (GTK_WIDGET (button),
+                     (GTK_DEST_DEFAULT_ALL),
+		     target_list,
+		     GDK_ACTION_COPY);
   gtk_target_list_unref (target_list);
 }
 

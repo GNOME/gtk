@@ -226,7 +226,7 @@ make_image (const gchar *icon_name, int hotspot)
 
   image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_DIALOG);
 
-  gtk_drag_source_set (image, GDK_BUTTON1_MASK, NULL, 0, GDK_ACTION_COPY);
+  gtk_drag_source_set (image, GDK_BUTTON1_MASK, NULL, GDK_ACTION_COPY);
   update_source_target_list (image);
 
   g_object_set_data  (G_OBJECT (image), "hotspot", GINT_TO_POINTER (hotspot));
@@ -234,7 +234,7 @@ make_image (const gchar *icon_name, int hotspot)
   g_signal_connect (image, "drag-begin", G_CALLBACK (image_drag_begin), image);
   g_signal_connect (image, "drag-data-get", G_CALLBACK (image_drag_data_get), image);
 
-  gtk_drag_dest_set (image, GTK_DEST_DEFAULT_ALL, NULL, 0, GDK_ACTION_COPY);
+  gtk_drag_dest_set (image, GTK_DEST_DEFAULT_ALL, NULL, GDK_ACTION_COPY);
   g_signal_connect (image, "drag-data-received", G_CALLBACK (image_drag_data_received), image);
   update_dest_target_list (image);
 
@@ -248,7 +248,7 @@ make_image2 (const gchar *icon_name, int hotspot)
 
   image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_DIALOG);
 
-  gtk_drag_source_set (image, GDK_BUTTON1_MASK, NULL, 0, GDK_ACTION_COPY);
+  gtk_drag_source_set (image, GDK_BUTTON1_MASK, NULL, GDK_ACTION_COPY);
   update_source_target_list (image);
 
   g_object_set_data  (G_OBJECT (image), "hotspot", GINT_TO_POINTER (hotspot));
@@ -256,7 +256,7 @@ make_image2 (const gchar *icon_name, int hotspot)
   g_signal_connect (image, "drag-begin", G_CALLBACK (window_drag_begin), image);
   g_signal_connect (image, "drag-data-get", G_CALLBACK (image_drag_data_get), image);
 
-  gtk_drag_dest_set (image, GTK_DEST_DEFAULT_ALL, NULL, 0, GDK_ACTION_COPY);
+  gtk_drag_dest_set (image, GTK_DEST_DEFAULT_ALL, NULL, GDK_ACTION_COPY);
   g_signal_connect (image, "drag-data-received", G_CALLBACK (image_drag_data_received), image);
   update_dest_target_list (image);
 
@@ -328,7 +328,7 @@ make_spinner (void)
   spinner = gtk_spinner_new ();
   gtk_spinner_start (GTK_SPINNER (spinner));
 
-  gtk_drag_source_set (spinner, GDK_BUTTON1_MASK, NULL, 0, GDK_ACTION_COPY);
+  gtk_drag_source_set (spinner, GDK_BUTTON1_MASK, NULL, GDK_ACTION_COPY);
   gtk_drag_source_add_text_targets (spinner);
 
   g_signal_connect (spinner, "drag-begin", G_CALLBACK (spinner_drag_begin), spinner);

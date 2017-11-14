@@ -430,7 +430,7 @@ get_scalable_image_data (GtkWidget        *widget,
 static void
 setup_image_dnd (GtkWidget *image)
 {
-  gtk_drag_source_set (image, GDK_BUTTON1_MASK, NULL, 0, GDK_ACTION_COPY);
+  gtk_drag_source_set (image, GDK_BUTTON1_MASK, NULL, GDK_ACTION_COPY);
   gtk_drag_source_add_image_targets (image);
   g_signal_connect (image, "drag-data-get", G_CALLBACK (get_image_data), NULL);
 }
@@ -439,11 +439,14 @@ static void
 setup_scalable_image_dnd (GtkWidget *image)
 {
   GtkWidget *parent;
+  GtkTargetList *targets;
 
   parent = gtk_widget_get_parent (image);
+  targets = gtk_target_list_new (target_table, G_N_ELEMENTS (target_table));
   gtk_drag_source_set (parent, GDK_BUTTON1_MASK,
-                       target_table, G_N_ELEMENTS (target_table),
+                       targets,
                        GDK_ACTION_COPY);
+  gtk_target_list_unref (targets);
 
   g_signal_connect (parent, "drag-data-get", G_CALLBACK (get_scalable_image_data), NULL);
 }
@@ -452,22 +455,16 @@ static void
 icon_browser_window_init (IconBrowserWindow *win)
 {
   GtkTargetList *list;
-  GtkTargetEntry *targets;
-  gint n_targets;
 
   gtk_widget_init_template (GTK_WIDGET (win));
 
   list = gtk_target_list_new (NULL, 0);
   gtk_target_list_add_text_targets (list, 0);
-  targets = gtk_target_table_new_from_list (list, &n_targets);
-  gtk_target_list_unref (list);
-
   gtk_icon_view_enable_model_drag_source (GTK_ICON_VIEW (win->list),
                                           GDK_BUTTON1_MASK,
-                                          targets, n_targets,
+                                          list,
                                           GDK_ACTION_COPY);
-
-  gtk_target_table_free (targets, n_targets);
+  gtk_target_list_unref (list);
 
   setup_image_dnd (win->image1);
   setup_image_dnd (win->image2);

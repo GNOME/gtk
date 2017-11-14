@@ -125,20 +125,18 @@ gtk_drag_source_site_destroy (gpointer data)
  * gtk_drag_source_set: (method)
  * @widget: a #GtkWidget
  * @start_button_mask: the bitmask of buttons that can start the drag
- * @targets: (allow-none) (array length=n_targets): the table of targets
- *     that the drag will support, may be %NULL
- * @n_targets: the number of items in @targets
+ * @targets: (allow-none): the targets that the drag will support,
+ *     may be %NULL
  * @actions: the bitmask of possible actions for a drag from this widget
  *
  * Sets up a widget so that GTK+ will start a drag operation when the user
  * clicks and drags on the widget. The widget must have a window.
  */
 void
-gtk_drag_source_set (GtkWidget            *widget,
-                     GdkModifierType       start_button_mask,
-                     const GtkTargetEntry *targets,
-                     gint                  n_targets,
-                     GdkDragAction         actions)
+gtk_drag_source_set (GtkWidget       *widget,
+                     GdkModifierType  start_button_mask,
+                     GtkTargetList   *targets,
+                     GdkDragAction    actions)
 {
   GtkDragSourceSite *site;
 
@@ -179,7 +177,10 @@ gtk_drag_source_set (GtkWidget            *widget,
 
   site->start_button_mask = start_button_mask;
 
-  site->target_list = gtk_target_list_new (targets, n_targets);
+  if (targets)
+    site->target_list = gtk_target_list_ref (targets);
+  else
+    site->target_list = NULL;
 
   site->actions = actions;
 }

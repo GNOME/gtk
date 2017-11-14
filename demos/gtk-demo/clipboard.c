@@ -276,7 +276,7 @@ do_clipboard (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (hbox), image);
 
       /* make image a drag source */
-      gtk_drag_source_set (image, GDK_BUTTON1_MASK, NULL, 0, GDK_ACTION_COPY);
+      gtk_drag_source_set (image, GDK_BUTTON1_MASK, NULL, GDK_ACTION_COPY);
       gtk_drag_source_add_image_targets (image);
       g_signal_connect (image, "drag-begin",
                         G_CALLBACK (drag_begin), image);
@@ -285,7 +285,7 @@ do_clipboard (GtkWidget *do_widget)
 
       /* accept drops on image */
       gtk_drag_dest_set (image, GTK_DEST_DEFAULT_ALL,
-                         NULL, 0, GDK_ACTION_COPY);
+                         NULL, GDK_ACTION_COPY);
       gtk_drag_dest_add_image_targets (image);
       g_signal_connect (image, "drag-data-received",
                         G_CALLBACK (drag_data_received), image);
@@ -300,7 +300,7 @@ do_clipboard (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (hbox), image);
 
       /* make image a drag source */
-      gtk_drag_source_set (image, GDK_BUTTON1_MASK, NULL, 0, GDK_ACTION_COPY);
+      gtk_drag_source_set (image, GDK_BUTTON1_MASK, NULL, GDK_ACTION_COPY);
       gtk_drag_source_add_image_targets (image);
       g_signal_connect (image, "drag-begin",
                         G_CALLBACK (drag_begin), image);
@@ -309,7 +309,7 @@ do_clipboard (GtkWidget *do_widget)
 
       /* accept drops on image */
       gtk_drag_dest_set (image, GTK_DEST_DEFAULT_ALL,
-                         NULL, 0, GDK_ACTION_COPY);
+                         NULL, GDK_ACTION_COPY);
       gtk_drag_dest_add_image_targets (image);
       g_signal_connect (image, "drag-data-received",
                         G_CALLBACK (drag_data_received), image);

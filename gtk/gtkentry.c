@@ -2466,7 +2466,7 @@ gtk_entry_init (GtkEntry *entry)
   priv->caps_lock_warning = TRUE;
   priv->caps_lock_warning_shown = FALSE;
 
-  gtk_drag_dest_set (GTK_WIDGET (entry), 0, NULL, 0,
+  gtk_drag_dest_set (GTK_WIDGET (entry), 0, NULL,
                      GDK_ACTION_COPY | GDK_ACTION_MOVE);
   gtk_drag_dest_add_text_targets (GTK_WIDGET (entry));
 

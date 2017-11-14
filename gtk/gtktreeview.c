@@ -12549,15 +12549,16 @@ gtk_tree_view_set_reorderable (GtkTreeView *tree_view,
       const GtkTargetEntry row_targets[] = {
         { (char *) "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_WIDGET, 0 }
       };
+      GtkTargetList *targets;
+
+      targets = gtk_target_list_new (row_targets, G_N_ELEMENTS (row_targets));
 
       gtk_tree_view_enable_model_drag_source (tree_view,
 					      GDK_BUTTON1_MASK,
-					      row_targets,
-					      G_N_ELEMENTS (row_targets),
+					      targets,
 					      GDK_ACTION_MOVE);
       gtk_tree_view_enable_model_drag_dest (tree_view,
-					    row_targets,
-					    G_N_ELEMENTS (row_targets),
+					    targets,
 					    GDK_ACTION_MOVE);
     }
   else
@@ -13534,8 +13535,7 @@ unset_reorderable (GtkTreeView *tree_view)
  * gtk_tree_view_enable_model_drag_source:
  * @tree_view: a #GtkTreeView
  * @start_button_mask: Mask of allowed buttons to start drag
- * @targets: (array length=n_targets): the table of targets that the drag will support
- * @n_targets: the number of items in @targets
+ * @targets: the targets that the drag will support
  * @actions: the bitmask of possible actions for a drag from this
  *    widget
  *
@@ -13543,11 +13543,10 @@ unset_reorderable (GtkTreeView *tree_view)
  * method sets #GtkTreeView:reorderable to %FALSE.
  **/
 void
-gtk_tree_view_enable_model_drag_source (GtkTreeView              *tree_view,
-					GdkModifierType           start_button_mask,
-					const GtkTargetEntry     *targets,
-					gint                      n_targets,
-					GdkDragAction             actions)
+gtk_tree_view_enable_model_drag_source (GtkTreeView     *tree_view,
+					GdkModifierType  start_button_mask,
+					GtkTargetList   *targets,
+					GdkDragAction    actions)
 {
   TreeViewDragInfo *di;
 
@@ -13556,7 +13555,6 @@ gtk_tree_view_enable_model_drag_source (GtkTreeView              *tree_view,
   gtk_drag_source_set (GTK_WIDGET (tree_view),
 		       0,
 		       targets,
-		       n_targets,
 		       actions);
 
   di = ensure_info (tree_view);
@@ -13571,8 +13569,7 @@ gtk_tree_view_enable_model_drag_source (GtkTreeView              *tree_view,
 /**
  * gtk_tree_view_enable_model_drag_dest:
  * @tree_view: a #GtkTreeView
- * @targets: (array length=n_targets): the table of targets that
- *           the drag will support
+ * @targets: the targets that the drag will support
  * @n_targets: the number of items in @targets
  * @actions: the bitmask of possible actions for a drag from this
  *    widget
@@ -13581,10 +13578,9 @@ gtk_tree_view_enable_model_drag_source (GtkTreeView              *tree_view,
  * this method sets #GtkTreeView:reorderable to %FALSE.
  **/
 void
-gtk_tree_view_enable_model_drag_dest (GtkTreeView              *tree_view,
-				      const GtkTargetEntry     *targets,
-				      gint                      n_targets,
-				      GdkDragAction             actions)
+gtk_tree_view_enable_model_drag_dest (GtkTreeView   *tree_view,
+				      GtkTargetList *targets,
+				      GdkDragAction  actions)
 {
   TreeViewDragInfo *di;
 
@@ -13593,7 +13589,6 @@ gtk_tree_view_enable_model_drag_dest (GtkTreeView              *tree_view,
   gtk_drag_dest_set (GTK_WIDGET (tree_view),
                      0,
                      targets,
-                     n_targets,
                      actions);
 
   di = ensure_info (tree_view);

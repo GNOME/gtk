@@ -1050,6 +1050,7 @@ static void
 gtk_notebook_init (GtkNotebook *notebook)
 {
   GtkNotebookPrivate *priv;
+  GtkTargetList *targets;
 
   gtk_widget_set_can_focus (GTK_WIDGET (notebook), TRUE);
   gtk_widget_set_has_window (GTK_WIDGET (notebook), FALSE);
@@ -1087,9 +1088,11 @@ gtk_notebook_init (GtkNotebook *notebook)
   else
     priv->tabs_reversed = FALSE;
 
+  targets = gtk_target_list_new (dst_notebook_targets, G_N_ELEMENTS (dst_notebook_targets));
   gtk_drag_dest_set (GTK_WIDGET (notebook), 0,
-                     dst_notebook_targets, G_N_ELEMENTS (dst_notebook_targets),
+                     targets,
                      GDK_ACTION_MOVE);
+  gtk_target_list_unref (targets);
 
   gtk_drag_dest_set_track_motion (GTK_WIDGET (notebook), TRUE);
 

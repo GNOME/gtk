@@ -479,6 +479,7 @@ main (gint argc, gchar **argv)
   GtkWidget *window, *toolbar, *grid, *treeview, *scrolled_window;
   GtkWidget *hbox, *hbox1, *hbox2, *checkbox, *option_menu, *menu;
   gint i;
+  GtkTargetList *targets;
   static const gchar *toolbar_styles[] = { "icons", "text", "both (vertical)",
 					   "both (horizontal)" };
   GtkToolItem *item;
@@ -712,12 +713,14 @@ main (gint argc, gchar **argv)
 
   gtk_box_pack_end (GTK_BOX (hbox), checkbox);
 
+  targets = gtk_target_list_new (target_table, G_N_ELEMENTS (target_table));
   gtk_drag_source_set (button, GDK_BUTTON1_MASK,
-		       target_table, G_N_ELEMENTS (target_table),
+                       targets,
 		       GDK_ACTION_MOVE);
   gtk_drag_dest_set (toolbar, GTK_DEST_DEFAULT_DROP,
-		     target_table, G_N_ELEMENTS (target_table),
+                     targets,
 		     GDK_ACTION_MOVE);
+  gtk_target_list_unref (targets);
   g_signal_connect (toolbar, "drag_motion",
 		    G_CALLBACK (toolbar_drag_motion), NULL);
   g_signal_connect (toolbar, "drag_leave",

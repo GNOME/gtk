@@ -377,7 +377,7 @@ gtk_expander_init (GtkExpander *expander)
                                GTK_STYLE_CLASS_HORIZONTAL);
   gtk_container_add (GTK_CONTAINER (priv->title_widget), priv->arrow_widget);
 
-  gtk_drag_dest_set (GTK_WIDGET (expander), 0, NULL, 0, 0);
+  gtk_drag_dest_set (GTK_WIDGET (expander), 0, NULL, 0);
   gtk_drag_dest_set_track_motion (GTK_WIDGET (expander), TRUE);
 
   priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (expander));

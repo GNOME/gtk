@@ -382,13 +382,11 @@ gboolean               gtk_tree_view_is_blank_at_pos               (GtkTreeView 
 GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_enable_model_drag_source      (GtkTreeView               *tree_view,
 								    GdkModifierType            start_button_mask,
-								    const GtkTargetEntry      *targets,
-								    gint                       n_targets,
+								    GtkTargetList             *targets,
 								    GdkDragAction              actions);
 GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_enable_model_drag_dest        (GtkTreeView               *tree_view,
-								    const GtkTargetEntry      *targets,
-								    gint                       n_targets,
+								    GtkTargetList             *targets,
 								    GdkDragAction              actions);
 GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_unset_rows_drag_source        (GtkTreeView               *tree_view);

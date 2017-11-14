@@ -661,6 +661,7 @@ main (int    argc,
   GtkWidget *box;
   GtkWidget *combo_box;
   GtkTreeModel *model;
+  GtkTargetList *targets;
   gint i;
   
   gtk_init ();
@@ -702,16 +703,16 @@ main (int    argc,
   tv = gtk_tree_view_new_with_model (models[0]);
   g_signal_connect (tv, "row-activated", G_CALLBACK (on_row_activated), NULL);
 
+  targets = gtk_target_list_new (row_targets, G_N_ELEMENTS (row_targets));
   gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (tv),
 					  GDK_BUTTON1_MASK,
-					  row_targets,
-					  G_N_ELEMENTS (row_targets),
+                                          targets,
 					  GDK_ACTION_MOVE | GDK_ACTION_COPY);
 
   gtk_tree_view_enable_model_drag_dest (GTK_TREE_VIEW (tv),
-					row_targets,
-					G_N_ELEMENTS (row_targets),
+                                        targets,
 					GDK_ACTION_MOVE | GDK_ACTION_COPY);
+  gtk_target_list_unref (targets);
   
   /* Model menu */
   combo_box = gtk_combo_box_text_new ();

@@ -1549,7 +1549,7 @@ make_directory_button (GtkPathBar  *path_bar,
 
   gtk_drag_source_set (button_data->button,
 		       GDK_BUTTON1_MASK,
-		       NULL, 0,
+		       NULL,
 		       GDK_ACTION_COPY);
   gtk_drag_source_add_uri_targets (button_data->button);
   g_signal_connect (button_data->button, "drag-data-get",

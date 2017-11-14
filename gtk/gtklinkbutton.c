@@ -218,6 +218,7 @@ gtk_link_button_init (GtkLinkButton *link_button)
 {
   GtkLinkButtonPrivate *priv = gtk_link_button_get_instance_private (link_button);
   GtkStyleContext *context;
+  GtkTargetList *targets;
 
   link_button->priv = priv;
 
@@ -232,10 +233,12 @@ gtk_link_button_init (GtkLinkButton *link_button)
                     G_CALLBACK (gtk_link_button_query_tooltip_cb), NULL);
 
   /* enable drag source */
+  targets = gtk_target_list_new (link_drop_types, G_N_ELEMENTS (link_drop_types));
   gtk_drag_source_set (GTK_WIDGET (link_button),
   		       GDK_BUTTON1_MASK,
-  		       link_drop_types, G_N_ELEMENTS (link_drop_types),
+  		       targets,
   		       GDK_ACTION_COPY);
+  gtk_target_list_unref (targets);
 
   priv->click_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (link_button));
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->click_gesture), FALSE);

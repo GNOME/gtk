@@ -73,6 +73,7 @@ get_dragsource (void)
   GtkTreeView *tv;
   GtkCellRenderer *renderer;
   GtkTreeViewColumn *column;
+  GtkTargetList *targets;
 
   tv = (GtkTreeView*) gtk_tree_view_new ();
   renderer = gtk_cell_renderer_text_new ();
@@ -80,7 +81,9 @@ get_dragsource (void)
   gtk_tree_view_append_column (tv, column);
 
   gtk_tree_view_set_model (tv, get_model ());
-  gtk_tree_view_enable_model_drag_source (tv, GDK_BUTTON1_MASK, entries, G_N_ELEMENTS (entries), GDK_ACTION_COPY);
+  targets = gtk_target_list_new (entries, G_N_ELEMENTS (entries));
+  gtk_tree_view_enable_model_drag_source (tv, GDK_BUTTON1_MASK, targets, GDK_ACTION_COPY);
+  gtk_target_list_unref (targets);
 
   return GTK_WIDGET (tv);
 }
@@ -104,10 +107,13 @@ static GtkWidget *
 get_droptarget (void)
 {
   GtkWidget *label;
+  GtkTargetList *targets;
 
   label = gtk_label_new ("Drop here");
-  gtk_drag_dest_set (label, GTK_DEST_DEFAULT_ALL, entries, G_N_ELEMENTS (entries), GDK_ACTION_COPY);
+  targets = gtk_target_list_new (entries, G_N_ELEMENTS (entries));
+  gtk_drag_dest_set (label, GTK_DEST_DEFAULT_ALL, targets, GDK_ACTION_COPY);
   g_signal_connect (label, "drag-data-received", G_CALLBACK (data_received), NULL);
+  gtk_target_list_unref (targets);
 
   return label;
 }

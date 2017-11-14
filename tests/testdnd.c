@@ -496,11 +496,13 @@ popup_cb (gpointer data)
 	  GtkWidget *button;
 	  GtkWidget *grid;
 	  int i, j;
+          GtkTargetList *targets;
 	  
 	  popup_window = gtk_window_new (GTK_WINDOW_POPUP);
 	  gtk_window_set_position (GTK_WINDOW (popup_window), GTK_WIN_POS_MOUSE);
 
 	  grid = gtk_grid_new ();
+          targets = gtk_target_list_new (target_table, n_targets - 1); /* no rootwin */
 
 	  for (i=0; i<3; i++)
 	    for (j=0; j<3; j++)
@@ -514,7 +516,7 @@ popup_cb (gpointer data)
 
 		gtk_drag_dest_set (button,
 				   GTK_DEST_DEFAULT_ALL,
-				   target_table, n_targets - 1, /* no rootwin */
+                                   targets,
 				   GDK_ACTION_COPY | GDK_ACTION_MOVE);
 		g_signal_connect (button, "drag_motion",
 				  G_CALLBACK (popup_motion), NULL);
@@ -522,6 +524,7 @@ popup_cb (gpointer data)
 				  G_CALLBACK (popup_leave), NULL);
 	      }
 	  gtk_container_add (GTK_CONTAINER (popup_window), grid);
+          gtk_target_list_unref (targets);
 
 	}
       gtk_widget_show (popup_window);
@@ -585,6 +588,7 @@ main (int argc, char **argv)
   GtkWidget *pixmap;
   GtkWidget *button;
   GdkPixbuf *drag_icon;
+  GtkTargetList *targets;
 
   test_init ();
   
@@ -604,9 +608,10 @@ main (int argc, char **argv)
   
   label = gtk_label_new ("Drop Here\n");
 
+  targets = gtk_target_list_new (target_table, n_targets - 1); /* no rootwin */
   gtk_drag_dest_set (label,
 		     GTK_DEST_DEFAULT_ALL,
-		     target_table, n_targets - 1, /* no rootwin */
+                     targets,
 		     GDK_ACTION_COPY | GDK_ACTION_MOVE);
 
   g_signal_connect (label, "drag_data_received",
@@ -620,7 +625,7 @@ main (int argc, char **argv)
 
   gtk_drag_dest_set (label,
 		     GTK_DEST_DEFAULT_ALL,
-		     target_table, n_targets - 1, /* no rootwin */
+                     targets,
 		     GDK_ACTION_COPY | GDK_ACTION_MOVE);
 
   gtk_widget_set_hexpand (label, TRUE);
@@ -631,9 +636,10 @@ main (int argc, char **argv)
 		    G_CALLBACK (popsite_motion), NULL);
   g_signal_connect (label, "drag_leave",
 		    G_CALLBACK (popsite_leave), NULL);
+  gtk_target_list_unref (targets);
   
   pixmap = gtk_image_new_from_pixbuf (trashcan_closed);
-  gtk_drag_dest_set (pixmap, 0, NULL, 0, 0);
+  gtk_drag_dest_set (pixmap, 0, NULL, 0);
   gtk_widget_set_hexpand (pixmap, TRUE);
   gtk_widget_set_vexpand (pixmap, TRUE);
   gtk_grid_attach (GTK_GRID (grid), pixmap, 1, 0, 1, 1);
@@ -654,10 +660,12 @@ main (int argc, char **argv)
 
   button = gtk_button_new_with_label ("Drag Here\n");
 
+  targets = gtk_target_list_new (target_table, n_targets);
   gtk_drag_source_set (button, GDK_BUTTON1_MASK | GDK_BUTTON3_MASK,
-		       target_table, n_targets, 
+                       targets,
 		       GDK_ACTION_COPY | GDK_ACTION_MOVE);
   gtk_drag_source_set_icon_pixbuf (button, drag_icon);
+  gtk_target_list_unref (targets);
 
   g_object_unref (drag_icon);
 

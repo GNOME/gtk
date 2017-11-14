@@ -4072,7 +4072,7 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
   /* DND support */
   gtk_drag_dest_set (sidebar->list_box,
                      0,
-                     NULL, 0,
+                     NULL,
                      GDK_ACTION_MOVE | GDK_ACTION_COPY | GDK_ACTION_LINK);
   target_list = gtk_target_list_new  (dnd_drop_targets, G_N_ELEMENTS (dnd_drop_targets));
   gtk_target_list_add_uri_targets (target_list, DND_TEXT_URI_LIST);

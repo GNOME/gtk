@@ -115,7 +115,7 @@ main (int argc, char **argv)
   gtk_grid_attach (GTK_GRID (grid), image, 2, 1, 1, 1);
 
   gtk_drag_source_set (image, GDK_BUTTON1_MASK, 
-		       NULL, 0,
+		       NULL,
 		       GDK_ACTION_COPY);
   gtk_drag_source_add_image_targets (image);
   g_signal_connect (image, "drag_begin", G_CALLBACK (drag_begin), image);
@@ -125,7 +125,7 @@ main (int argc, char **argv)
                      GTK_DEST_DEFAULT_MOTION |
                      GTK_DEST_DEFAULT_HIGHLIGHT |
                      GTK_DEST_DEFAULT_DROP,
-                     NULL, 0, GDK_ACTION_COPY);
+                     NULL, GDK_ACTION_COPY);
   gtk_drag_dest_add_image_targets (image);
   g_signal_connect (image, "drag_data_received",
 		    G_CALLBACK (drag_data_received), image);
