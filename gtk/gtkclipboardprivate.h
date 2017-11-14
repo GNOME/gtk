@@ -63,8 +63,7 @@ struct _GtkClipboardClass
 
   /* vfuncs */
   gboolean      (* set_contents)                (GtkClipboard                   *clipboard,
-                                                 const GtkTargetEntry           *targets,
-                                                 guint                           n_targets,
+                                                 GtkTargetList                  *targets,
                                                  GtkClipboardGetFunc             get_func,
                                                  GtkClipboardClearFunc           clear_func,
                                                  gpointer                        user_data,
@@ -75,8 +74,7 @@ struct _GtkClipboardClass
                                                  GtkClipboardReceivedFunc        callback,
                                                  gpointer                        user_data);
   void          (* set_can_store)               (GtkClipboard                   *clipboard,
-                                                 const GtkTargetEntry           *targets,
-                                                 gint                            n_targets);
+                                                 GtkTargetList                  *targets);
   void          (* store)                       (GtkClipboard                   *clipboard);
 
   /* signals */

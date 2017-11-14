@@ -198,15 +198,13 @@ GdkDisplay   *gtk_clipboard_get_display     (GtkClipboard *clipboard);
 
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_clipboard_set_with_data  (GtkClipboard          *clipboard,
-				       const GtkTargetEntry  *targets,
-				       guint                  n_targets,
+                                       GtkTargetList         *targets,
 				       GtkClipboardGetFunc    get_func,
 				       GtkClipboardClearFunc  clear_func,
 				       gpointer               user_data);
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_clipboard_set_with_owner (GtkClipboard          *clipboard,
-				       const GtkTargetEntry  *targets,
-				       guint                  n_targets,
+                                       GtkTargetList         *targets,
 				       GtkClipboardGetFunc    get_func,
 				       GtkClipboardClearFunc  clear_func,
 				       GObject               *owner);
@@ -289,8 +287,7 @@ gboolean gtk_clipboard_wait_is_target_available    (GtkClipboard  *clipboard,
 
 GDK_AVAILABLE_IN_ALL
 void gtk_clipboard_set_can_store (GtkClipboard         *clipboard,
-				  const GtkTargetEntry *targets,
-				  gint                  n_targets);
+                                  GtkTargetList        *targets);
 
 GDK_AVAILABLE_IN_ALL
 void gtk_clipboard_store         (GtkClipboard   *clipboard);

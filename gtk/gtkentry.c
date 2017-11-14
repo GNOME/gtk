@@ -6557,10 +6557,8 @@ static void
 gtk_entry_update_primary_selection (GtkEntry *entry)
 {
   GtkTargetList *list;
-  GtkTargetEntry *targets;
   GtkClipboard *clipboard;
   gint start, end;
-  gint n_targets;
 
   if (!gtk_widget_get_realized (GTK_WIDGET (entry)))
     return;
@@ -6568,13 +6566,11 @@ gtk_entry_update_primary_selection (GtkEntry *entry)
   list = gtk_target_list_new (NULL, 0);
   gtk_target_list_add_text_targets (list, 0);
 
-  targets = gtk_target_table_new_from_list (list, &n_targets);
-
   clipboard = gtk_widget_get_clipboard (GTK_WIDGET (entry), GDK_SELECTION_PRIMARY);
   
   if (gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start, &end))
     {
-      gtk_clipboard_set_with_owner (clipboard, targets, n_targets,
+      gtk_clipboard_set_with_owner (clipboard, list,
                                     primary_get_cb, primary_clear_cb, G_OBJECT (entry));
     }
   else
@@ -6583,7 +6579,6 @@ gtk_entry_update_primary_selection (GtkEntry *entry)
 	gtk_clipboard_clear (clipboard);
     }
 
-  gtk_target_table_free (targets, n_targets);
   gtk_target_list_unref (list);
 }
 

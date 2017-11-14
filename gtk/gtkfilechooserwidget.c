@@ -1733,8 +1733,6 @@ copy_file_location_cb (GSimpleAction *action,
     {
       GtkClipboard *clipboard;
       GtkTargetList *target_list;
-      GtkTargetEntry *targets;
-      int n_targets;
 
       clipboard = gtk_widget_get_clipboard (GTK_WIDGET (impl), GDK_SELECTION_CLIPBOARD);
 
@@ -1742,15 +1740,12 @@ copy_file_location_cb (GSimpleAction *action,
       gtk_target_list_add_text_targets (target_list, SELECTION_TEXT);
       gtk_target_list_add_uri_targets (target_list, SELECTION_URI);
 
-      targets = gtk_target_table_new_from_list (target_list, &n_targets);
-      gtk_target_list_unref (target_list);
-
-      gtk_clipboard_set_with_data (clipboard, targets, n_targets,
+      gtk_clipboard_set_with_data (clipboard, target_list,
                                    copy_file_get_cb,
                                    copy_file_clear_cb,
                                    selected_files);
 
-      gtk_target_table_free (targets, n_targets);
+      gtk_target_list_unref (target_list);
     }
 }
 

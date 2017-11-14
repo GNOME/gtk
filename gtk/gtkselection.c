@@ -502,6 +502,28 @@ gtk_target_list_add_uri_targets (GtkTargetList *list,
 }
 
 /**
+ * gtk_target_list_merge:
+ * @target: the #GtkTargetList to merge into
+ * @source: the #GtkTargeList to merge from
+ *
+ * Merges all targets from @source into @target.
+ */
+void
+gtk_target_list_merge (GtkTargetList       *target,
+                       const GtkTargetList *source)
+{
+  GList *l;
+
+  g_return_if_fail (target != NULL);
+  g_return_if_fail (source != NULL);
+
+  for (l = source->list; l; l = l->next)
+    {
+      target->list = g_list_prepend (target->list, g_slice_dup (GtkTargetPair, l->data));
+    }
+}
+
+/**
  * gtk_target_list_add_table:
  * @list: a #GtkTargetList
  * @targets: (array length=ntargets): the table of #GtkTargetEntry
@@ -598,6 +620,27 @@ gtk_target_list_find (GtkTargetList *list,
     }
 
   return FALSE;
+}
+
+GdkAtom *
+gtk_target_list_get_atoms (GtkTargetList *list,
+                           guint         *n_atoms)
+{
+  GdkAtom *atoms;
+  GList *l;
+  guint i, n;
+
+  n = g_list_length (list->list);
+  atoms = g_new (GdkAtom, n);
+
+  i = 0;
+  for (l = list->list; l; l = l->next)
+    atoms[i++] = ((GtkTargetPair *) l->data)->target;
+
+  if (n_atoms)
+    *n_atoms = n;
+
+  return atoms;
 }
 
 /**
@@ -938,26 +981,23 @@ gtk_selection_add_target (GtkWidget	    *widget,
  * for a given widget and selection.
  **/
 void 
-gtk_selection_add_targets (GtkWidget            *widget, 
-			   GdkAtom               selection,
-			   const GtkTargetEntry *targets,
-			   guint                 ntargets)
+gtk_selection_add_targets (GtkWidget     *widget, 
+			   GdkAtom        selection,
+			   GtkTargetList *targets)
 {
   GtkTargetList *list;
-  GdkAtom *atoms = g_new (GdkAtom, ntargets);
-  guint i;
+  GdkAtom *atoms;
+  guint n_targets;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (selection != GDK_NONE);
   g_return_if_fail (targets != NULL);
   
   list = gtk_selection_target_list_get (widget, selection);
-  gtk_target_list_add_table (list, targets, ntargets);
+  gtk_target_list_merge (list, targets);
 
-  for (i = 0; i < ntargets; i++)
-    atoms[i] = gdk_atom_intern (targets[i].target, FALSE);
-
-  gdk_selection_add_targets (gtk_widget_get_window (widget), selection, atoms, ntargets);
+  atoms = gtk_target_list_get_atoms (targets, &n_targets);
+  gdk_selection_add_targets (gtk_widget_get_window (widget), selection, atoms, n_targets);
   g_free (atoms);
 }
 

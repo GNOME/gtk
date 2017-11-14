@@ -320,7 +320,7 @@ do_clipboard (GtkWidget *do_widget)
 
       /* tell the clipboard manager to make the data persistent */
       clipboard = gtk_clipboard_get (GDK_SELECTION_CLIPBOARD);
-      gtk_clipboard_set_can_store (clipboard, NULL, 0);
+      gtk_clipboard_set_can_store (clipboard, NULL);
     }
 
   if (!gtk_widget_get_visible (window))

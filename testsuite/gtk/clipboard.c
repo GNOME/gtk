@@ -70,8 +70,11 @@ test_with_data (void)
 {
     GtkClipboard *clipboard = gtk_clipboard_get_for_display (gdk_display_get_default (), GDK_SELECTION_CLIPBOARD);
     GtkTargetEntry entries[] = { { .target = TARGET_TEXT, .info = 42 } };
+    GtkTargetList *targets;
 
-    gtk_clipboard_set_with_data (clipboard, entries, G_N_ELEMENTS(entries), test_with_data_get, NULL, NULL);
+    targets = gtk_target_list_new (entries, G_N_ELEMENTS(entries));
+    gtk_clipboard_set_with_data (clipboard, targets, test_with_data_get, NULL, NULL);
+    gtk_target_list_unref (targets);
     gtk_clipboard_request_contents (clipboard, gdk_atom_intern (TARGET_TEXT, FALSE), test_with_data_got, NULL);
 }
 

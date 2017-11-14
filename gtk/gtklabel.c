@@ -5230,21 +5230,17 @@ gtk_label_select_region_index (GtkLabel *label,
       if (anchor_index != end_index)
         {
           GtkTargetList *list;
-          GtkTargetEntry *targets;
-          gint n_targets;
 
           list = gtk_target_list_new (NULL, 0);
           gtk_target_list_add_text_targets (list, 0);
-          targets = gtk_target_table_new_from_list (list, &n_targets);
 
           if (clipboard)
             gtk_clipboard_set_with_owner (clipboard,
-                                          targets, n_targets,
+                                          list,
                                           get_text_callback,
                                           clear_text_callback,
                                           G_OBJECT (label));
 
-          gtk_target_table_free (targets, n_targets);
           gtk_target_list_unref (list);
 
           if (!priv->select_info->selection_node)

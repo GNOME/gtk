@@ -57,12 +57,7 @@ typedef struct _GtkTextLogAttrCache GtkTextLogAttrCache;
 struct _GtkTextBufferPrivate
 {
   GtkTargetList  *copy_target_list;
-  GtkTargetEntry *copy_target_entries;
   GtkTargetList  *paste_target_list;
-  GtkTargetEntry *paste_target_entries;
-
-  gint            n_copy_target_entries;
-  gint            n_paste_target_entries;
 
   GtkTextTagTable *tag_table;
   GtkTextBTree *btree;
@@ -3704,8 +3699,7 @@ update_selection_clipboards (GtkTextBuffer *buffer)
            * timestamp.
            */
           gtk_clipboard_set_with_owner (clipboard,
-                                        priv->copy_target_entries,
-                                        priv->n_copy_target_entries,
+                                        priv->copy_target_list,
                                         clipboard_get_selection_cb,
                                         clipboard_clear_selection_cb,
                                         G_OBJECT (buffer));
@@ -4000,6 +3994,41 @@ gtk_text_buffer_backspace (GtkTextBuffer *buffer,
 }
 
 static void
+gtk_text_buffer_free_target_lists (GtkTextBuffer *buffer)
+{
+  GtkTextBufferPrivate *priv = buffer->priv;
+
+  g_clear_pointer (&priv->copy_target_list, gtk_target_list_unref);
+  g_clear_pointer (&priv->paste_target_list, gtk_target_list_unref);
+}
+
+static GtkTargetList *
+gtk_text_buffer_get_target_list (GtkTextBuffer   *buffer,
+                                 gboolean         deserializable,
+                                 gboolean         include_local)
+{
+  GtkTargetList *target_list;
+
+  target_list = gtk_target_list_new (NULL, 0);
+
+  if (include_local)
+    gtk_target_list_add (target_list,
+                         gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"),
+                         GTK_TARGET_SAME_APP,
+                         GTK_TEXT_BUFFER_TARGET_INFO_BUFFER_CONTENTS);
+
+  gtk_target_list_add_rich_text_targets (target_list,
+                                         GTK_TEXT_BUFFER_TARGET_INFO_RICH_TEXT,
+                                         deserializable,
+                                         buffer);
+
+  gtk_target_list_add_text_targets (target_list,
+                                    GTK_TEXT_BUFFER_TARGET_INFO_TEXT);
+
+  return target_list;
+}
+
+static void
 cut_or_copy (GtkTextBuffer *buffer,
 	     GtkClipboard  *clipboard,
              gboolean       delete_region_after,
@@ -4048,16 +4077,21 @@ cut_or_copy (GtkTextBuffer *buffer,
       gtk_text_buffer_insert_range (contents, &ins, &start, &end);
                                     
       if (!gtk_clipboard_set_with_data (clipboard,
-                                        priv->copy_target_entries,
-                                        priv->n_copy_target_entries,
+                                        priv->copy_target_list,
 					clipboard_get_contents_cb,
 					clipboard_clear_contents_cb,
 					contents))
-	g_object_unref (contents);
+        {
+	  g_object_unref (contents);
+        }
       else
-	gtk_clipboard_set_can_store (clipboard,
-                                     priv->copy_target_entries + 1,
-                                     priv->n_copy_target_entries - 1);
+        {
+          GtkTargetList *list;
+          
+          list = gtk_text_buffer_get_target_list (buffer, FALSE, FALSE);
+          gtk_clipboard_set_can_store (clipboard, list);
+          gtk_target_list_unref (list);
+        }
 
       if (delete_region_after)
         {
@@ -4186,62 +4220,6 @@ gtk_text_buffer_end_user_action (GtkTextBuffer *buffer)
     }
 }
 
-static void
-gtk_text_buffer_free_target_lists (GtkTextBuffer *buffer)
-{
-  GtkTextBufferPrivate *priv = buffer->priv;
-
-  if (priv->copy_target_list)
-    {
-      gtk_target_list_unref (priv->copy_target_list);
-      priv->copy_target_list = NULL;
-
-      gtk_target_table_free (priv->copy_target_entries,
-                             priv->n_copy_target_entries);
-      priv->copy_target_entries = NULL;
-      priv->n_copy_target_entries = 0;
-    }
-
-  if (priv->paste_target_list)
-    {
-      gtk_target_list_unref (priv->paste_target_list);
-      priv->paste_target_list = NULL;
-
-      gtk_target_table_free (priv->paste_target_entries,
-                             priv->n_paste_target_entries);
-      priv->paste_target_entries = NULL;
-      priv->n_paste_target_entries = 0;
-    }
-}
-
-static GtkTargetList *
-gtk_text_buffer_get_target_list (GtkTextBuffer   *buffer,
-                                 gboolean         deserializable,
-                                 GtkTargetEntry **entries,
-                                 gint            *n_entries)
-{
-  GtkTargetList *target_list;
-
-  target_list = gtk_target_list_new (NULL, 0);
-
-  gtk_target_list_add (target_list,
-                       gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"),
-                       GTK_TARGET_SAME_APP,
-                       GTK_TEXT_BUFFER_TARGET_INFO_BUFFER_CONTENTS);
-
-  gtk_target_list_add_rich_text_targets (target_list,
-                                         GTK_TEXT_BUFFER_TARGET_INFO_RICH_TEXT,
-                                         deserializable,
-                                         buffer);
-
-  gtk_target_list_add_text_targets (target_list,
-                                    GTK_TEXT_BUFFER_TARGET_INFO_TEXT);
-
-  *entries = gtk_target_table_new_from_list (target_list, n_entries);
-
-  return target_list;
-}
-
 /**
  * gtk_text_buffer_get_copy_target_list:
  * @buffer: a #GtkTextBuffer
@@ -4267,9 +4245,7 @@ gtk_text_buffer_get_copy_target_list (GtkTextBuffer *buffer)
 
   if (! priv->copy_target_list)
     priv->copy_target_list =
-      gtk_text_buffer_get_target_list (buffer, FALSE,
-                                       &priv->copy_target_entries,
-                                       &priv->n_copy_target_entries);
+      gtk_text_buffer_get_target_list (buffer, FALSE, TRUE);
 
   return priv->copy_target_list;
 }
@@ -4299,9 +4275,7 @@ gtk_text_buffer_get_paste_target_list (GtkTextBuffer *buffer)
 
   if (! priv->paste_target_list)
     priv->paste_target_list =
-      gtk_text_buffer_get_target_list (buffer, TRUE,
-                                       &priv->paste_target_entries,
-                                       &priv->n_paste_target_entries);
+      gtk_text_buffer_get_target_list (buffer, TRUE, TRUE);
 
   return priv->paste_target_list;
 }

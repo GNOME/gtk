@@ -54,6 +54,9 @@ struct _GtkTargetList
   guint ref_count;
 };
 
+GdkAtom *gtk_target_list_get_atoms      (GtkTargetList     *targets,
+                                         guint             *n_atoms);
+
 gboolean _gtk_selection_clear           (GtkWidget         *widget,
                                          GdkEventSelection *event);
 gboolean _gtk_selection_request         (GtkWidget         *widget,

@@ -5227,6 +5227,7 @@ gtk_target_list_ref
 gtk_target_list_unref
 gtk_target_list_add
 gtk_target_list_add_table
+gtk_target_list_merge
 gtk_target_list_add_text_targets
 gtk_target_list_add_image_targets
 gtk_target_list_add_uri_targets
