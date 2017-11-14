@@ -619,7 +619,7 @@ inner_clipboard_window_procedure (HWND   hwnd,
         GDK_NOTE (DND, g_print (" \n"));
 
         event = gdk_event_new (GDK_OWNER_CHANGE);
-        event->owner_change.window = gdk_win32_display_get_root_window (gdk_display_get_default ());
+        event->owner_change.window = NULL;
         event->owner_change.reason = GDK_OWNER_CHANGE_NEW_OWNER;
         event->owner_change.selection = GDK_SELECTION_CLIPBOARD;
         event->owner_change.time = _gdk_win32_get_next_tick (0);
@@ -1223,12 +1223,6 @@ gdk_win32_display_get_setting (GdkDisplay  *display,
   return _gdk_win32_screen_get_setting (GDK_WIN32_DISPLAY (display)->screen,
                                         name,
                                         value);
-}
-
-GdkWindow *
-gdk_win32_display_get_root_window (GdkDisplay *display)
-{
-  return gdk_win32_screen_get_root_window (GDK_WIN32_DISPLAY (display)->screen);
 }
 
 static void

@@ -108,30 +108,39 @@ gdk_device_win32_query_state (GdkDevice        *device,
 {
   POINT point;
   HWND hwnd, hwndc;
-  GdkWindowImplWin32 *impl;
+  gint scale;
 
-  if (window == NULL)
-    window = gdk_win32_display_get_root_window (gdk_display_get_default ());
-  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+  if (window)
+    {
+      scale = GDK_WINDOW_IMPL_WIN32 (window->impl)->window_scale;
+      hwnd = GDK_WINDOW_HWND (window);
+    }
+  else
+    {
+      GdkDisplay *display = gdk_device_get_display (device);
 
-  hwnd = GDK_WINDOW_HWND (window);
+      scale = GDK_WIN32_SCREEN (GDK_WIN32_DISPLAY (display)->screen)->window_scale;
+      hwnd = NULL;
+    }
+
   GetCursorPos (&point);
 
   if (root_x)
-    *root_x = point.x / impl->window_scale;
+    *root_x = point.x / scale;
 
   if (root_y)
-    *root_y = point.y / impl->window_scale;
+    *root_y = point.y / scale;
 
-  ScreenToClient (hwnd, &point);
+  if (hwnd)
+    ScreenToClient (hwnd, &point);
 
   if (win_x)
-    *win_x = point.x / impl->window_scale;
+    *win_x = point.x / scale;
 
   if (win_y)
-    *win_y = point.y / impl->window_scale;
+    *win_y = point.y / scale;
 
-  if (window == gdk_win32_display_get_root_window (gdk_display_get_default ()))
+  if (window)
     {
       if (win_x)
         *win_x += _gdk_offset_x;
@@ -146,7 +155,7 @@ gdk_device_win32_query_state (GdkDevice        *device,
         *root_y += _gdk_offset_y;
     }
 
-  if (child_window)
+  if (hwnd && child_window)
     {
       hwndc = ChildWindowFromPoint (hwnd, point);
 
@@ -247,15 +256,12 @@ _gdk_device_win32_window_at_position (GdkDevice       *device,
       /* If we didn't hit any window at that point, return the desktop */
       if (hwnd == NULL)
         {
-          window = gdk_win32_display_get_root_window (gdk_display_get_default ());
-          impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
-
           if (win_x)
-            *win_x = (screen_pt.x + _gdk_offset_x) / impl->window_scale;
+            *win_x = screen_pt.x + _gdk_offset_x;
           if (win_y)
-            *win_y = (screen_pt.y + _gdk_offset_y) / impl->window_scale;
+            *win_y = screen_pt.y + _gdk_offset_y;
 
-          return window;
+          return NULL;
         }
 
       window = gdk_win32_handle_table_lookup (hwnd);

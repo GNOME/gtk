@@ -2160,9 +2160,7 @@ gdk_event_translate (MSG  *msg,
     {
       /* Apply global filters */
 
-      GdkFilterReturn result = apply_event_filters (window ? window : gdk_win32_display_get_root_window (display),
-                                                    msg,
-                                                    &_gdk_default_filters);
+      GdkFilterReturn result = apply_event_filters (window, msg, &_gdk_default_filters);
 
       /* If result is GDK_FILTER_CONTINUE, we continue as if nothing
        * happened. If it is GDK_FILTER_REMOVE or GDK_FILTER_TRANSLATE,

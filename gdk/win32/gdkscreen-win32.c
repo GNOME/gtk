@@ -33,7 +33,8 @@ struct _GdkWin32Screen
 {
   GdkScreen parent_instance;
 
-  GdkWindow *root_window;
+  int width, height;
+  int window_scale;
 };
 
 struct _GdkWin32ScreenClass
@@ -66,61 +67,29 @@ init_root_window_size (GdkWin32Screen *screen)
     gdk_rectangle_union (&result, &rect, &result);
   }
 
-  screen->root_window->width = result.width;
-  screen->root_window->height = result.height;
-  root_impl = GDK_WINDOW_IMPL_WIN32 (screen->root_window->impl);
-
-  root_impl->unscaled_width = result.width * root_impl->window_scale;
-  root_impl->unscaled_height = result.height * root_impl->window_scale;
+  screen->width = result.width;
+  screen->height = result.height;
 }
 
 static void
 init_root_window (GdkWin32Screen *screen_win32)
 {
   GdkScreen *screen;
-  GdkWindow *window;
-  GdkWindowImplWin32 *impl_win32;
   GdkWin32Display *win32_display;
 
   screen = GDK_SCREEN (screen_win32);
 
-  g_assert (screen_win32->root_window == NULL);
-
-  window = _gdk_display_create_window (_gdk_display);
-  window->impl = g_object_new (GDK_TYPE_WINDOW_IMPL_WIN32, NULL);
-  impl_win32 = GDK_WINDOW_IMPL_WIN32 (window->impl);
-  impl_win32->wrapper = window;
-
-  window->impl_window = window;
-
-  window->window_type = GDK_WINDOW_ROOT;
-
-  screen_win32->root_window = window;
-
   init_root_window_size (screen_win32);
 
-  window->x = 0;
-  window->y = 0;
-  window->abs_x = 0;
-  window->abs_y = 0;
-  /* width and height already initialised in init_root_window_size() */
-  window->viewable = TRUE;
   win32_display = GDK_WIN32_DISPLAY (_gdk_display);
 
   if (win32_display->dpi_aware_type != PROCESS_DPI_UNAWARE)
-    impl_win32->window_scale = _gdk_win32_display_get_monitor_scale_factor (win32_display,
-                                                                            NULL,
-                                                                            impl_win32->handle,
-                                                                            NULL);
+    screen_win32->window_scale = _gdk_win32_display_get_monitor_scale_factor (win32_display,
+                                                                              NULL,
+                                                                              NULL,
+                                                                              NULL);
   else
-    impl_win32->window_scale = 1;
-
-  impl_win32->unscaled_width = window->width * impl_win32->window_scale;
-  impl_win32->unscaled_height = window->height * impl_win32->window_scale;
-
-  gdk_win32_handle_table_insert ((HANDLE *) &impl_win32->handle, window);
-
-  GDK_NOTE (MISC, g_print ("screen->root_window=%p\n", window));
+    screen_win32->window_scale = 1;
 }
 
 static void
@@ -138,12 +107,6 @@ _gdk_win32_screen_on_displaychange_event (GdkWin32Screen *screen)
   _gdk_win32_display_init_monitors (GDK_WIN32_DISPLAY (_gdk_display));
 
   init_root_window_size (screen);
-}
-
-GdkWindow *
-gdk_win32_screen_get_root_window (GdkScreen *screen)
-{
-  return GDK_WIN32_SCREEN (screen)->root_window;
 }
 
 static void

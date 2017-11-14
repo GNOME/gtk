@@ -465,9 +465,6 @@ _gdk_win32_window_enable_transparency (GdkWindow *window)
   if (!gdk_display_is_composited (gdk_window_get_display (window)))
     return FALSE;
 
-  if (window == gdk_win32_display_get_root_window (gdk_window_get_display (window)))
-    return FALSE;
-
   thiswindow = GDK_WINDOW_HWND (window);
 
   /* Blurbehind only works on toplevel windows */
@@ -744,9 +741,7 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
 
     case GDK_WINDOW_TEMP:
       /* A temp window is not necessarily a top level window */
-      dwStyle = (real_parent == NULL ||
-                 gdk_win32_display_get_root_window (display) == real_parent) ?
-                 WS_POPUP : WS_CHILDWINDOW;
+      dwStyle = real_parent == NULL ? WS_POPUP : WS_CHILDWINDOW;
       dwStyle |= WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
       dwExStyle |= WS_EX_TOOLWINDOW | WS_EX_TOPMOST;
       offset_x = _gdk_offset_x;

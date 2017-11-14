@@ -120,30 +120,40 @@ gdk_device_wintab_query_state (GdkDevice        *device,
   POINT point;
   HWND hwnd, hwndc;
   GdkWindowImplWin32 *impl;
+  int scale;
 
   device_wintab = GDK_DEVICE_WINTAB (device);
-  if (window == NULL)
-    window = gdk_win32_display_get_root_window (gdk_display_get_default ());
-  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+  if (window)
+    {
+      scale = GDK_WINDOW_IMPL_WIN32 (window->impl)->window_scale;
+      hwnd = GDK_WINDOW_HWND (window);
+    }
+  else
+    {
+      GdkDisplay *display = gdk_device_get_display (device);
 
-  hwnd = GDK_WINDOW_HWND (window);
+      scale = GDK_WIN32_SCREEN (GDK_WIN32_DISPLAY (display)->screen)->window_scale;
+      hwnd = NULL;
+    }
+
   GetCursorPos (&point);
 
   if (root_x)
-    *root_x = point.x / impl->window_scale;
+    *root_x = point.x / scale;
 
   if (root_y)
-    *root_y = point.y / impl->window_scale;
+    *root_y = point.y / scale;
 
-  ScreenToClient (hwnd, &point);
+  if (hwn)
+    ScreenToClient (hwnd, &point);
 
   if (win_x)
-    *win_x = point.x / impl->window_scale;
+    *win_x = point.x / scale;
 
   if (win_y)
-    *win_y = point.y / impl->window_scale;
+    *win_y = point.y / scale;
 
-  if (window == gdk_win32_display_get_root_window (gdk_display_get_default ()))
+  if (!window)
     {
       if (win_x)
         *win_x += _gdk_offset_x;
@@ -152,7 +162,7 @@ gdk_device_wintab_query_state (GdkDevice        *device,
         *win_y += _gdk_offset_y;
     }
 
-  if (child_window)
+  if (hwnd && child_window)
     {
       hwndc = ChildWindowFromPoint (hwnd, point);
 
@@ -217,17 +227,19 @@ _gdk_device_wintab_translate_axes (GdkDeviceWintab *device_wintab,
                                    gdouble         *y)
 {
   GdkDevice *device;
-  GdkWindow *impl_window, *root_window;
+  GdkWindow *impl_window;
   gint root_x, root_y;
   gdouble temp_x, temp_y;
   gint i;
+  GdkDisplay *display;
 
   device = GDK_DEVICE (device_wintab);
-  root_window = gdk_win32_display_get_root_window (gdk_window_get_display (window));
   impl_window = _gdk_window_get_impl_window (window);
   temp_x = temp_y = 0;
 
   gdk_window_get_origin (impl_window, &root_x, &root_y);
+
+  display = gdk_device_get_display (device);
 
   for (i = 0; i < gdk_device_get_n_axes (device); i++)
     {
@@ -246,8 +258,8 @@ _gdk_device_wintab_translate_axes (GdkDeviceWintab *device_wintab,
           else
             _gdk_device_translate_screen_coord (device, window,
                                                 root_x, root_y,
-                                                gdk_window_get_width (root_window),
-                                                gdk_window_get_height (root_window),
+                                                GDK_WIN32_SCREEN (GDK_WIN32_DISPLAY (display)->screen)->width,
+                                                GDK_WIN32_SCREEN (GDK_WIN32_DISPLAY (display)->screen)->height,
                                                 i,
                                                 device_wintab->last_axis_data[i],
                                                 &axes[i]);
