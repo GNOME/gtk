@@ -979,8 +979,8 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
         cairo_t *cr;
 
         surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                              item.size.width * self->scale_factor,
-                                              item.size.height * self->scale_factor);
+                                              ceilf (item.size.width) * self->scale_factor,
+                                              ceilf (item.size.height) * self->scale_factor);
         cairo_surface_set_device_scale (surface, self->scale_factor, self->scale_factor);
         cr = cairo_create (surface);
 

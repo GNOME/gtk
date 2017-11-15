@@ -389,11 +389,13 @@ find_texture_by_size (GHashTable *textures,
 
 static Texture *
 create_texture (GskGLDriver *driver,
-                int          width,
-                int          height)
+                float        fwidth,
+                float        fheight)
 {
   guint texture_id;
   Texture *t;
+  int width = ceilf (fwidth);
+  int height = ceilf (fheight);
 
   if (width >= driver->max_texture_size ||
       height >= driver->max_texture_size)
@@ -456,7 +458,7 @@ gsk_gl_driver_get_texture_for_texture (GskGLDriver *driver,
       if (t->min_filter == min_filter && t->mag_filter == mag_filter)
         return t->texture_id;
     }
-  
+
   t = create_texture (driver, gdk_texture_get_width (texture), gdk_texture_get_height (texture));
 
   if (gdk_texture_set_render_data (texture, driver, t, gsk_gl_driver_release_texture))
@@ -476,8 +478,8 @@ gsk_gl_driver_get_texture_for_texture (GskGLDriver *driver,
 
 int
 gsk_gl_driver_create_texture (GskGLDriver *driver,
-                              int          width,
-                              int          height)
+                              float        width,
+                              float        height)
 {
   Texture *t;
 
@@ -644,8 +646,7 @@ gsk_gl_driver_create_render_target (GskGLDriver *driver,
 
   g_array_append_val (t->fbos, f);
 
-  g_assert (glCheckFramebufferStatus (GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
-
+  g_assert_cmpint (glCheckFramebufferStatus (GL_FRAMEBUFFER), ==, GL_FRAMEBUFFER_COMPLETE);
   glBindFramebuffer (GL_FRAMEBUFFER, driver->default_fbo.fbo_id);
 
   return fbo_id;
