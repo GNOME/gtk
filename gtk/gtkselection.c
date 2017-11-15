@@ -3301,68 +3301,6 @@ gtk_selection_data_free (GtkSelectionData *data)
   g_slice_free (GtkSelectionData, data);
 }
 
-/**
- * gtk_target_entry_new:
- * @target: String identifier for target
- * @flags: Set of flags, see #GtkTargetFlags
- * @info: an ID that will be passed back to the application
- *
- * Makes a new #GtkTargetEntry.
- *
- * Returns: a pointer to a new #GtkTargetEntry.
- *     Free with gtk_target_entry_free()
- **/
-GtkTargetEntry *
-gtk_target_entry_new (const char *target,
-		      guint       flags,
-		      guint       info)
-{
-  GtkTargetEntry entry = { (char *) target, flags, info };
-  return gtk_target_entry_copy (&entry);
-}
-
-/**
- * gtk_target_entry_copy:
- * @data: a pointer to a #GtkTargetEntry
- *
- * Makes a copy of a #GtkTargetEntry and its data.
- *
- * Returns: a pointer to a copy of @data.
- *     Free with gtk_target_entry_free()
- **/
-GtkTargetEntry *
-gtk_target_entry_copy (GtkTargetEntry *data)
-{
-  GtkTargetEntry *new_data;
-
-  g_return_val_if_fail (data != NULL, NULL);
-
-  new_data = g_slice_new (GtkTargetEntry);
-  new_data->target = g_strdup (data->target);
-  new_data->flags = data->flags;
-  new_data->info = data->info;
-
-  return new_data;
-}
-
-/**
- * gtk_target_entry_free:
- * @data: a pointer to a #GtkTargetEntry.
- *
- * Frees a #GtkTargetEntry returned from
- * gtk_target_entry_new() or gtk_target_entry_copy().
- **/
-void
-gtk_target_entry_free (GtkTargetEntry *data)
-{
-  g_return_if_fail (data != NULL);
-
-  g_free (data->target);
-
-  g_slice_free (GtkTargetEntry, data);
-}
-
-
 G_DEFINE_BOXED_TYPE (GtkSelectionData, gtk_selection_data,
                      gtk_selection_data_copy,
                      gtk_selection_data_free)
@@ -3370,10 +3308,6 @@ G_DEFINE_BOXED_TYPE (GtkSelectionData, gtk_selection_data,
 G_DEFINE_BOXED_TYPE (GtkTargetList, gtk_target_list,
                      gtk_target_list_ref,
                      gtk_target_list_unref)
-
-G_DEFINE_BOXED_TYPE (GtkTargetEntry, gtk_target_entry,
-                     gtk_target_entry_copy,
-                     gtk_target_entry_free)
 
 static int
 gtk_selection_bytes_per_item (gint format)

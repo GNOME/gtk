@@ -276,17 +276,6 @@ GtkSelectionData *gtk_selection_data_copy     (const GtkSelectionData *data);
 GDK_AVAILABLE_IN_ALL
 void              gtk_selection_data_free     (GtkSelectionData *data);
 
-GDK_AVAILABLE_IN_ALL
-GType             gtk_target_entry_get_type    (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
-GtkTargetEntry   *gtk_target_entry_new        (const gchar    *target,
-                                               guint           flags,
-                                               guint           info);
-GDK_AVAILABLE_IN_ALL
-GtkTargetEntry   *gtk_target_entry_copy       (GtkTargetEntry *data);
-GDK_AVAILABLE_IN_ALL
-void              gtk_target_entry_free       (GtkTargetEntry *data);
-
 G_END_DECLS
 
 #endif /* __GTK_SELECTION_H__ */

@@ -5213,9 +5213,6 @@ GtkSelectionData
 GtkTargetEntry
 GtkTargetList
 GtkTargetPair
-gtk_target_entry_new
-gtk_target_entry_copy
-gtk_target_entry_free
 gtk_target_list_new
 gtk_target_list_ref
 gtk_target_list_unref
@@ -5271,7 +5268,6 @@ GTK_TYPE_TARGET_LIST
 <SUBSECTION Private>
 gtk_selection_data_get_type
 gtk_target_list_get_type
-gtk_target_entry_get_type
 </SECTION>
 
 <SECTION>
