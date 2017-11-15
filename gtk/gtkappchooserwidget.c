@@ -309,58 +309,25 @@ gtk_app_chooser_search_equal_func (GtkTreeModel *model,
                                    GtkTreeIter  *iter,
                                    gpointer      user_data)
 {
-  gchar *normalized_key;
-  gchar *name, *normalized_name;
-  gchar *path, *normalized_path;
-  gchar *basename, *normalized_basename;
+  gchar *name;
+  gchar *exec_name;
   gboolean ret;
 
   if (key != NULL)
     {
-      normalized_key = g_utf8_casefold (key, -1);
-      g_assert (normalized_key != NULL);
-
       ret = TRUE;
 
       gtk_tree_model_get (model, iter,
                           COLUMN_NAME, &name,
-                          COLUMN_EXEC, &path,
+                          COLUMN_EXEC, &exec_name,
                           -1);
 
-      if (name != NULL)
-        {
-          normalized_name = g_utf8_casefold (name, -1);
-          g_assert (normalized_name != NULL);
-
-          if (strncmp (normalized_name, normalized_key, strlen (normalized_key)) == 0)
-            ret = FALSE;
-
-          g_free (normalized_name);
-        }
-
-      if (ret && path != NULL)
-        {
-          normalized_path = g_utf8_casefold (path, -1);
-          g_assert (normalized_path != NULL);
-
-          basename = g_path_get_basename (path);
-          g_assert (basename != NULL);
-
-          normalized_basename = g_utf8_casefold (basename, -1);
-          g_assert (normalized_basename != NULL);
-
-          if (strncmp (normalized_path, normalized_key, strlen (normalized_key)) == 0 ||
-              strncmp (normalized_basename, normalized_key, strlen (normalized_key)) == 0)
-            ret = FALSE;
-
-          g_free (basename);
-          g_free (normalized_basename);
-          g_free (normalized_path);
-        }
+      if ((name != NULL && g_str_match_string (key, name, TRUE)) ||
+          (exec_name != NULL && g_str_match_string (key, exec_name, FALSE)))
+        ret = FALSE;
 
       g_free (name);
-      g_free (path);
-      g_free (normalized_key);
+      g_free (exec_name);
 
       return ret;
     }
