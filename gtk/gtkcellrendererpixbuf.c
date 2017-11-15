@@ -104,7 +104,6 @@ gtk_cell_renderer_pixbuf_init (GtkCellRendererPixbuf *cellpixbuf)
   priv = cellpixbuf->priv;
 
   priv->image_def = gtk_image_definition_new_empty ();
-  priv->icon_size = GTK_ICON_SIZE_INHERIT;
 }
 
 static void
@@ -415,8 +414,6 @@ create_icon_helper (GtkIconHelper         *icon_helper,
                         widget);
   _gtk_icon_helper_set_force_scale_pixbuf (icon_helper, TRUE);
   _gtk_icon_helper_set_definition (icon_helper, priv->image_def);
-  if (gtk_image_definition_get_storage_type (priv->image_def) != GTK_IMAGE_SURFACE)
-    _gtk_icon_helper_set_icon_size (icon_helper, priv->icon_size);
 }
 
 static void
@@ -441,6 +438,7 @@ gtk_cell_renderer_pixbuf_get_size (GtkCellRenderer    *cell,
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_save (context);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_IMAGE);
+  gtk_icon_size_set_style_classes (gtk_style_context_get_node (context), priv->icon_size);
   create_icon_helper (&icon_helper, cellpixbuf, widget);
 
   if (!_gtk_icon_helper_get_is_empty (&icon_helper))
@@ -535,6 +533,7 @@ gtk_cell_renderer_pixbuf_snapshot (GtkCellRenderer      *cell,
   gtk_style_context_save (context);
 
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_IMAGE);
+  gtk_icon_size_set_style_classes (gtk_style_context_get_node (context), priv->icon_size);
 
   g_object_get (cell, "is-expander", &is_expander, NULL);
   if (is_expander)
