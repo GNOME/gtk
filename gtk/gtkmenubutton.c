@@ -586,19 +586,19 @@ set_arrow_type (GtkImage     *image,
   switch (arrow_type)
     {
     case GTK_ARROW_NONE:
-      gtk_image_set_from_icon_name (image, "open-menu-symbolic", GTK_ICON_SIZE_BUTTON);
+      gtk_image_set_from_icon_name (image, "open-menu-symbolic");
       break;
     case GTK_ARROW_DOWN:
-      gtk_image_set_from_icon_name (image, "pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
+      gtk_image_set_from_icon_name (image, "pan-down-symbolic");
       break;
     case GTK_ARROW_UP:
-      gtk_image_set_from_icon_name (image, "pan-up-symbolic", GTK_ICON_SIZE_BUTTON);
+      gtk_image_set_from_icon_name (image, "pan-up-symbolic");
       break;
     case GTK_ARROW_LEFT:
-      gtk_image_set_from_icon_name (image, "pan-start-symbolic", GTK_ICON_SIZE_BUTTON);
+      gtk_image_set_from_icon_name (image, "pan-start-symbolic");
       break;
     case GTK_ARROW_RIGHT:
-      gtk_image_set_from_icon_name (image, "pan-end-symbolic", GTK_ICON_SIZE_BUTTON);
+      gtk_image_set_from_icon_name (image, "pan-end-symbolic");
       break;
     default:
       break;

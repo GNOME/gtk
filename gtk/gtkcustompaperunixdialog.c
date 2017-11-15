@@ -1003,7 +1003,7 @@ toolbutton_new (GtkCustomPaperUnixDialog *dialog,
   GtkWidget *image;
 
   item = gtk_tool_button_new (NULL, NULL);
-  image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_SMALL_TOOLBAR);
+  image = gtk_image_new_from_gicon (icon);
   gtk_widget_show (image);
   gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (item), image);
 

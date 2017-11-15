@@ -263,9 +263,7 @@ gtk_places_view_row_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_ICON:
-      gtk_image_set_from_gicon (self->icon_image,
-                                g_value_get_object (value),
-                                GTK_ICON_SIZE_LARGE_TOOLBAR);
+      gtk_image_set_from_gicon (self->icon_image, g_value_get_object (value));
       break;
 
     case PROP_NAME:
@@ -463,7 +461,7 @@ gtk_places_view_row_set_is_network (GtkPlacesViewRow *row,
     {
       row->is_network = is_network;
 
-      gtk_image_set_from_icon_name (row->eject_icon, "media-eject-symbolic", GTK_ICON_SIZE_BUTTON);
+      gtk_image_set_from_icon_name (row->eject_icon, "media-eject-symbolic");
       gtk_widget_set_tooltip_text (GTK_WIDGET (row->eject_button), is_network ? _("Disconnect") : _("Unmount"));
     }
 }

@@ -95,7 +95,6 @@ _gtk_icon_helper_clear (GtkIconHelper *self)
       self->def = gtk_image_definition_new_empty ();
       gtk_icon_helper_invalidate (self);
     }
-  self->icon_size = GTK_ICON_SIZE_INVALID;
 }
 
 void
@@ -114,7 +113,6 @@ gtk_icon_helper_init (GtkIconHelper *self,
   memset (self, 0, sizeof (GtkIconHelper));
   self->def = gtk_image_definition_new_empty ();
 
-  self->icon_size = GTK_ICON_SIZE_INVALID;
   self->pixel_size = -1;
   self->texture_is_symbolic = FALSE;
 
@@ -479,22 +477,18 @@ _gtk_icon_helper_set_definition (GtkIconHelper *self,
     _gtk_icon_helper_clear (self);
 }
 
-void 
+void
 _gtk_icon_helper_set_gicon (GtkIconHelper *self,
-                            GIcon *gicon,
-                            GtkIconSize icon_size)
+                            GIcon         *gicon)
 {
   gtk_icon_helper_take_definition (self, gtk_image_definition_new_gicon (gicon));
-  _gtk_icon_helper_set_icon_size (self, icon_size);
 }
 
-void 
+void
 _gtk_icon_helper_set_icon_name (GtkIconHelper *self,
-                                const gchar *icon_name,
-                                GtkIconSize icon_size)
+                                const gchar   *icon_name)
 {
   gtk_icon_helper_take_definition (self, gtk_image_definition_new_icon_name (icon_name));
-  _gtk_icon_helper_set_icon_size (self, icon_size);
 }
 
 void

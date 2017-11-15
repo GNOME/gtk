@@ -1292,7 +1292,7 @@ set_button_image_get_info_cb (GCancellable *cancellable,
     goto out;
 
   icon = g_file_info_get_symbolic_icon (info);
-  gtk_image_set_from_gicon (GTK_IMAGE (data->button_data->image), icon, GTK_ICON_SIZE_BUTTON);
+  gtk_image_set_from_gicon (GTK_IMAGE (data->button_data->image), icon);
 
   switch (data->button_data->type)
     {
@@ -1327,7 +1327,7 @@ set_button_image (GtkPathBar *path_bar,
 
       if (path_bar->priv->root_icon != NULL)
         {
-          gtk_image_set_from_gicon (GTK_IMAGE (button_data->image), path_bar->priv->root_icon, GTK_ICON_SIZE_BUTTON);
+          gtk_image_set_from_gicon (GTK_IMAGE (button_data->image), path_bar->priv->root_icon);
 	  break;
 	}
 
@@ -1337,14 +1337,14 @@ set_button_image (GtkPathBar *path_bar,
 
       path_bar->priv->root_icon = _gtk_file_system_volume_get_symbolic_icon (volume);
       _gtk_file_system_volume_unref (volume);
-      gtk_image_set_from_gicon (GTK_IMAGE (button_data->image), path_bar->priv->root_icon, GTK_ICON_SIZE_BUTTON);
+      gtk_image_set_from_gicon (GTK_IMAGE (button_data->image), path_bar->priv->root_icon);
 
       break;
 
     case HOME_BUTTON:
       if (path_bar->priv->home_icon != NULL)
         {
-          gtk_image_set_from_gicon (GTK_IMAGE (button_data->image), path_bar->priv->home_icon, GTK_ICON_SIZE_BUTTON);
+          gtk_image_set_from_gicon (GTK_IMAGE (button_data->image), path_bar->priv->home_icon);
 	  break;
 	}
 
@@ -1369,7 +1369,7 @@ set_button_image (GtkPathBar *path_bar,
     case DESKTOP_BUTTON:
       if (path_bar->priv->desktop_icon != NULL)
         {
-          gtk_image_set_from_gicon (GTK_IMAGE (button_data->image), path_bar->priv->desktop_icon, GTK_ICON_SIZE_BUTTON);
+          gtk_image_set_from_gicon (GTK_IMAGE (button_data->image), path_bar->priv->desktop_icon);
 	  break;
 	}
 

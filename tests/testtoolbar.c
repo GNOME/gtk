@@ -557,7 +557,7 @@ main (gint argc, gchar **argv)
   add_item_to_list (store, item, "-----");    
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
   
-  image = gtk_image_new_from_icon_name ("dialog-warning", GTK_ICON_SIZE_DIALOG);
+  image = gtk_image_new_from_icon_name ("dialog-warning");
   item = gtk_tool_item_new ();
   gtk_widget_show (image);
   gtk_container_add (GTK_CONTAINER (item), image);
@@ -622,13 +622,13 @@ main (gint argc, gchar **argv)
   gtk_tool_button_set_use_underline (GTK_TOOL_BUTTON (item), TRUE);
 
   gicon = g_content_type_get_icon ("video/ogg");
-  image = gtk_image_new_from_gicon (gicon, GTK_ICON_SIZE_LARGE_TOOLBAR);
+  image = gtk_image_new_from_gicon (gicon);
   g_object_unref (gicon);
   item = gtk_tool_button_new (image, "Video");
   add_item_to_list (store, item, "Video");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
-  image = gtk_image_new_from_icon_name ("utilities-terminal", GTK_ICON_SIZE_LARGE_TOOLBAR);
+  image = gtk_image_new_from_icon_name ("utilities-terminal");
   item = gtk_tool_button_new (image, "Terminal");
   add_item_to_list (store, item, "Terminal");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);

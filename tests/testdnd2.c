@@ -5,8 +5,10 @@ get_image_surface (GtkImage *image,
                    int      *out_size)
 {
   GtkIconTheme *icon_theme;
+  const char *icon_name;
   int width;
   cairo_surface_t *surface;
+  GtkIconSize size;
 
   switch (gtk_image_get_storage_type (image))
     {
@@ -15,8 +17,8 @@ get_image_surface (GtkImage *image,
       *out_size = cairo_image_surface_get_width (surface);
       return cairo_surface_reference (surface);
     case GTK_IMAGE_ICON_NAME:
-<<<<<<< HEAD
       icon_name = gtk_image_get_icon_name (image);
+      size = gtk_image_get_icon_size (image);
       icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (image)));
       gtk_icon_size_lookup (size, &width, NULL);
       *out_size = width;
@@ -209,7 +211,7 @@ image_drag_data_received (GtkWidget        *widget,
       break;
     case TARGET_TEXT:
       text = (gchar *)gtk_selection_data_get_text (selection_data);
-      gtk_image_set_from_icon_name (GTK_IMAGE (data), text, GTK_ICON_SIZE_DIALOG);
+      gtk_image_set_from_icon_name (GTK_IMAGE (data), text);
       g_free (text);
       break;
     default:
@@ -223,7 +225,7 @@ make_image (const gchar *icon_name, int hotspot)
 {
   GtkWidget *image;
 
-  image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_DIALOG);
+  image = gtk_image_new_from_icon_name (icon_name);
 
   gtk_drag_source_set (image, GDK_BUTTON1_MASK, NULL, GDK_ACTION_COPY);
   update_source_target_list (image);
@@ -245,7 +247,7 @@ make_image2 (const gchar *icon_name, int hotspot)
 {
   GtkWidget *image;
 
-  image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_DIALOG);
+  image = gtk_image_new_from_icon_name (icon_name);
 
   gtk_drag_source_set (image, GDK_BUTTON1_MASK, NULL, GDK_ACTION_COPY);
   update_source_target_list (image);

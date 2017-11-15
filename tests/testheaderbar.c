@@ -109,7 +109,7 @@ change_header (GtkButton *button, gpointer data)
       gtk_header_bar_pack_end (GTK_HEADER_BAR (header), widget);
 
       widget= gtk_button_new ();
-      image = gtk_image_new_from_icon_name ("bookmark-new-symbolic", GTK_ICON_SIZE_BUTTON);
+      image = gtk_image_new_from_icon_name ("bookmark-new-symbolic");
       g_signal_connect (widget, "clicked", G_CALLBACK (on_bookmark_clicked), window);
       gtk_container_add (GTK_CONTAINER (widget), image);
 
@@ -159,7 +159,7 @@ main (int argc, char *argv[])
   g_signal_connect (button, "clicked", G_CALLBACK (toggle_fullscreen), window);
   gtk_box_pack_end (GTK_BOX (box), footer);
 
-  content = gtk_image_new_from_icon_name ("start-here-symbolic", GTK_ICON_SIZE_DIALOG);
+  content = gtk_image_new_from_icon_name ("start-here-symbolic");
   gtk_image_set_pixel_size (GTK_IMAGE (content), 512);
 
   gtk_box_pack_start (GTK_BOX (box), content);

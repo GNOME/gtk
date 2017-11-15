@@ -9082,7 +9082,7 @@ append_bubble_action (GtkTextView  *text_view,
 
   item = gtk_button_new ();
   gtk_widget_set_focus_on_click (item, FALSE);
-  image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_MENU);
+  image = gtk_image_new_from_icon_name (icon_name);
   gtk_widget_show (image);
   gtk_container_add (GTK_CONTAINER (item), image);
   gtk_widget_set_tooltip_text (item, label);

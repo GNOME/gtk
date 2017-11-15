@@ -62,12 +62,10 @@ gboolean _gtk_icon_helper_get_is_empty (GtkIconHelper *self);
 void _gtk_icon_helper_set_definition (GtkIconHelper *self,
                                       GtkImageDefinition *def);
 void _gtk_icon_helper_set_gicon (GtkIconHelper *self,
-                                 GIcon *gicon,
-                                 GtkIconSize icon_size);
+                                 GIcon *gicon);
 
 void _gtk_icon_helper_set_icon_name (GtkIconHelper *self,
-                                     const gchar *icon_name,
-                                     GtkIconSize icon_size);
+                                     const gchar *icon_name);
 void _gtk_icon_helper_set_surface (GtkIconHelper *self,
 				   cairo_surface_t *surface);
 void _gtk_icon_helper_set_texture (GtkIconHelper *self,

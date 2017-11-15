@@ -7585,7 +7585,7 @@ gtk_entry_set_icon_from_icon_name (GtkEntry             *entry,
 
   if (icon_name != NULL)
     {
-      gtk_image_set_from_icon_name (GTK_IMAGE (icon_info->widget), icon_name, GTK_ICON_SIZE_MENU);
+      gtk_image_set_from_icon_name (GTK_IMAGE (icon_info->widget), icon_name);
 
       if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
         {
@@ -7642,7 +7642,7 @@ gtk_entry_set_icon_from_gicon (GtkEntry             *entry,
 
   if (icon)
     {
-      gtk_image_set_from_gicon (GTK_IMAGE (icon_info->widget), icon, GTK_ICON_SIZE_MENU);
+      gtk_image_set_from_gicon (GTK_IMAGE (icon_info->widget), icon);
 
       if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
         {
@@ -7787,8 +7787,6 @@ gtk_entry_get_icon_gicon (GtkEntry             *entry,
 {
   GtkEntryPrivate *priv;
   EntryIconInfo *icon_info;
-  GIcon *icon;
-  GtkIconSize icon_size;
 
   g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
   g_return_val_if_fail (IS_VALID_ICON_POSITION (icon_pos), NULL);
@@ -7799,9 +7797,7 @@ gtk_entry_get_icon_gicon (GtkEntry             *entry,
   if (!icon_info)
     return NULL;
 
-  gtk_image_get_gicon (GTK_IMAGE (icon_info->widget), &icon, &icon_size);
-
-  return icon;
+  return gtk_image_get_gicon (GTK_IMAGE (icon_info->widget));
 }
 
 /**
@@ -7824,8 +7820,6 @@ gtk_entry_get_icon_name (GtkEntry             *entry,
 {
   GtkEntryPrivate *priv;
   EntryIconInfo *icon_info;
-  const char *icon_name;
-  GtkIconSize icon_size;
 
   g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
   g_return_val_if_fail (IS_VALID_ICON_POSITION (icon_pos), NULL);
@@ -7836,9 +7830,7 @@ gtk_entry_get_icon_name (GtkEntry             *entry,
   if (!icon_info)
     return NULL;
 
-  gtk_image_get_icon_name (GTK_IMAGE (icon_info->widget), &icon_name, &icon_size);
-
-  return icon_name;
+  return gtk_image_get_icon_name (GTK_IMAGE (icon_info->widget));
 }
 
 /**
@@ -8627,7 +8619,7 @@ append_bubble_action (GtkEntry     *entry,
 
   item = gtk_button_new ();
   gtk_widget_set_focus_on_click (item, FALSE);
-  image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_MENU);
+  image = gtk_image_new_from_icon_name (icon_name);
   gtk_widget_show (image);
   gtk_container_add (GTK_CONTAINER (item), image);
   gtk_widget_set_tooltip_text (item, label);

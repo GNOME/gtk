@@ -70,6 +70,7 @@ get_image_surface (GtkImage *image)
   const gchar *icon_name;
   GtkIconTheme *icon_theme;
   int width;
+  GtkIconSize size;
 
   switch (gtk_image_get_storage_type (image))
     {
@@ -77,6 +78,7 @@ get_image_surface (GtkImage *image)
       return cairo_surface_reference (gtk_image_get_surface (image));
     case GTK_IMAGE_ICON_NAME:
       icon_name = gtk_image_get_icon_name (image);
+      size = gtk_image_get_icon_size (image);
       icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (image)));
       gtk_icon_size_lookup (size, &width, NULL);
       return gtk_icon_theme_load_surface (icon_theme, icon_name, width, 1, NULL, GTK_ICON_LOOKUP_GENERIC_FALLBACK, NULL);
@@ -270,8 +272,7 @@ do_clipboard (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (vbox), hbox);
 
       /* Create the first image */
-      image = gtk_image_new_from_icon_name ("dialog-warning",
-                                            GTK_ICON_SIZE_BUTTON);
+      image = gtk_image_new_from_icon_name ("dialog-warning");
       gtk_container_add (GTK_CONTAINER (hbox), image);
 
       /* make image a drag source */
@@ -294,8 +295,7 @@ do_clipboard (GtkWidget *do_widget)
                         G_CALLBACK (button_press), image);
 
       /* Create the second image */
-      image = gtk_image_new_from_icon_name ("process-stop",
-                                            GTK_ICON_SIZE_BUTTON);
+      image = gtk_image_new_from_icon_name ("process-stop");
       gtk_container_add (GTK_CONTAINER (hbox), image);
 
       /* make image a drag source */

@@ -375,7 +375,7 @@ static void
 gtk_model_button_set_icon (GtkModelButton *button,
                            GIcon          *icon)
 {
-  gtk_image_set_from_gicon (GTK_IMAGE (button->image), icon, GTK_ICON_SIZE_MENU);
+  gtk_image_set_from_gicon (GTK_IMAGE (button->image), icon);
   update_visibility (button);
   g_object_notify_by_pspec (G_OBJECT (button), properties[PROP_ICON]);
 }

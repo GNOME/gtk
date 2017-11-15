@@ -353,7 +353,7 @@ do_images (GtkWidget *do_widget)
       gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
       gtk_box_pack_start (GTK_BOX (vbox), frame);
 
-      image = gtk_image_new_from_icon_name ("gtk3-demo", GTK_ICON_SIZE_DIALOG);
+      image = gtk_image_new_from_icon_name ("gtk3-demo");
 
       gtk_container_add (GTK_CONTAINER (frame), image);
 
@@ -389,7 +389,7 @@ do_images (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (vbox), frame);
 
       gicon = g_themed_icon_new_with_default_fallbacks ("battery-caution-charging-symbolic");
-      image = gtk_image_new_from_gicon (gicon, GTK_ICON_SIZE_DIALOG);
+      image = gtk_image_new_from_gicon (gicon);
 
       gtk_container_add (GTK_CONTAINER (frame), image);
 

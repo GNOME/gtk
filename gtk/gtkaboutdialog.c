@@ -1923,8 +1923,7 @@ gtk_about_dialog_set_logo_icon_name (GtkAboutDialog *about,
         }
       g_free (sizes);
 
-      gtk_image_set_from_icon_name (GTK_IMAGE (priv->logo_image), icon_name,
-                                    GTK_ICON_SIZE_DIALOG);
+      gtk_image_set_from_icon_name (GTK_IMAGE (priv->logo_image), icon_name);
       gtk_image_set_pixel_size (GTK_IMAGE (priv->logo_image), best_size);
     }
   else if ((icons = gtk_window_get_default_icon_list ()))

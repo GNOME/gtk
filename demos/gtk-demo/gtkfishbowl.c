@@ -411,8 +411,7 @@ gtk_fishbowl_set_count (GtkFishbowl *fishbowl,
       GtkWidget *new_widget;
 
       if (priv->use_icons)
-        new_widget = gtk_image_new_from_icon_name (get_random_icon_name (gtk_icon_theme_get_default ()),
-                                                   GTK_ICON_SIZE_DIALOG);
+        new_widget = gtk_image_new_from_icon_name (get_random_icon_name (gtk_icon_theme_get_default ()));
       else
         new_widget = g_object_new (get_random_widget_type (), NULL);
 

@@ -818,7 +818,7 @@ gtk_recent_chooser_menu_create_item (GtkRecentChooserMenu *menu,
     {
       icon = gtk_recent_info_get_gicon (info);
 
-      image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_MENU);
+      image = gtk_image_new_from_gicon (icon);
       if (icon)
         g_object_unref (icon);
 
