@@ -657,6 +657,9 @@ gdk_wayland_screen_get_setting (GdkScreen   *screen,
 
   g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
 
+  if (g_settings_schema_source_get_default () == NULL)
+    return FALSE;
+
   entry = find_translation_entry_by_setting (name);
   if (entry != NULL)
     {
