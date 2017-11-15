@@ -470,8 +470,17 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>none</code></entry>
               <entry>✓</entry>
               <entry></entry>
-              <entry></entry>
               <entry><ulink url="https://drafts.fxtf.org/filters/#FilterProperty">CSS3</ulink></entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>‑gtk‑icon‑size</entry>
+              <entry><code>〈length〉</code></entry>
+              <entry><code>none</code></entry>
+              <entry>✓</entry>
+              <entry></entry>
+              <entry></entry>
+              <entry>Determines the size at which icons are displayed</entry>
             </row>
           </tbody>
         </tgroup>
