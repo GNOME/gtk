@@ -174,12 +174,12 @@ gtk_image_class_init (GtkImageClass *class)
                            GTK_PARAM_READWRITE);
 
   image_props[PROP_ICON_SIZE] =
-      g_param_spec_int ("icon-size",
-                        P_("Icon size"),
-                        P_("Symbolic size to use for icon set or named icon"),
-                        0, G_MAXINT,
-                        GTK_ICON_SIZE_INHERIT,
-                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+      g_param_spec_enum ("icon-size",
+                         P_("Icon size"),
+                         P_("Symbolic size to use for icon set or named icon"),
+                         GTK_TYPE_ICON_SIZE,
+                         GTK_ICON_SIZE_INHERIT,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkImage:pixel-size:
@@ -321,7 +321,7 @@ gtk_image_set_property (GObject      *object,
       gtk_image_set_from_file (image, g_value_get_string (value));
       break;
     case PROP_ICON_SIZE:
-      gtk_image_set_icon_size (image, g_value_get_int (value));
+      gtk_image_set_icon_size (image, g_value_get_enum (value));
       break;
     case PROP_PIXEL_SIZE:
       gtk_image_set_pixel_size (image, g_value_get_int (value));
@@ -368,7 +368,7 @@ gtk_image_get_property (GObject     *object,
       g_value_set_string (value, priv->filename);
       break;
     case PROP_ICON_SIZE:
-      g_value_set_int (value, priv->icon_size);
+      g_value_set_enum (value, priv->icon_size);
       break;
     case PROP_PIXEL_SIZE:
       g_value_set_int (value, _gtk_icon_helper_get_pixel_size (&priv->icon_helper));
@@ -522,7 +522,11 @@ gtk_image_new_from_surface (cairo_surface_t *surface)
  * If the icon name isn’t known, a “broken image” icon will be
  * displayed instead.  If the current icon theme is changed, the icon
  * will be updated appropriately.
- * 
+ *
+ * Note: Before 3.94, this function was taking an extra icon size
+ * argument. See gtk_image_set_icon_size() for another way to set
+ * the icon size.
+ *
  * Returns: a new #GtkImage displaying the themed icon
  *
  * Since: 2.6
@@ -547,7 +551,11 @@ gtk_image_new_from_icon_name (const gchar *icon_name)
  * If the icon name isn’t known, a “broken image” icon will be
  * displayed instead.  If the current icon theme is changed, the icon
  * will be updated appropriately.
- * 
+ *
+ * Note: Before 3.94, this function was taking an extra icon size
+ * argument. See gtk_image_set_icon_size() for another way to set
+ * the icon size.
+ *
  * Returns: a new #GtkImage displaying the themed icon
  *
  * Since: 2.14
@@ -832,6 +840,10 @@ gtk_image_set_from_pixbuf (GtkImage  *image,
  *
  * See gtk_image_new_from_icon_name() for details.
  *
+ * Note: Before 3.94, this function was taking an extra icon size
+ * argument. See gtk_image_set_icon_size() for another way to set
+ * the icon size.
+ *
  * Since: 2.6
  **/
 void
@@ -860,6 +872,10 @@ gtk_image_set_from_icon_name  (GtkImage    *image,
  * @icon: an icon
  *
  * See gtk_image_new_from_gicon() for details.
+ *
+ * Note: Before 3.94, this function was taking an extra icon size
+ * argument. See gtk_image_set_icon_size() for another way to set
+ * the icon size.
  *
  * Since: 2.14
  **/
