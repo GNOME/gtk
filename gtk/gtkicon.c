@@ -21,6 +21,8 @@
 #include "config.h"
 
 #include "gtkcssnodeprivate.h"
+#include "gtkstylecontextprivate.h"
+#include "gtkcssnumbervalueprivate.h"
 #include "gtkiconprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkrendericonprivate.h"
@@ -51,11 +53,27 @@ gtk_icon_snapshot (GtkWidget   *widget,
 }
 
 static void
+gtk_icon_measure (GtkWidget      *widget,
+                  GtkOrientation  orientation,
+                  int             for_size,
+                  int            *minimum,
+                  int            *natural,
+                  int            *minimum_baseline,
+                  int            *natural_baseline)
+{
+  GtkCssValue *icon_size;
+
+  icon_size = _gtk_style_context_peek_property (gtk_widget_get_style_context (widget), GTK_CSS_PROPERTY_ICON_SIZE);
+  *minimum = *natural = _gtk_css_number_value_get (icon_size, 100);
+}
+
+static void
 gtk_icon_class_init (GtkIconClass *klass)
 {
   GtkWidgetClass *wclass = GTK_WIDGET_CLASS (klass);
 
   wclass->snapshot = gtk_icon_snapshot;
+  wclass->measure = gtk_icon_measure;
 }
 
 static void
