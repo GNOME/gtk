@@ -144,7 +144,7 @@ create_menu_button (void)
 
   widget = gtk_menu_button_new ();
   image = gtk_image_new ();
-  gtk_image_set_from_icon_name (GTK_IMAGE (image), "emblem-system-symbolic", GTK_ICON_SIZE_MENU);
+  gtk_image_set_from_icon_name (GTK_IMAGE (image), "emblem-system-symbolic");
   gtk_container_add (GTK_CONTAINER (widget), image);
   menu = gtk_menu_new ();
   gtk_menu_button_set_popup (GTK_MENU_BUTTON (widget), menu);
@@ -1074,8 +1074,8 @@ create_image (void)
   GtkWidget *widget;
   GtkWidget *vbox;
 
-  widget = gtk_image_new_from_icon_name ("applications-graphics",
-                                         GTK_ICON_SIZE_DIALOG);
+  widget = gtk_image_new_from_icon_name ("applications-graphics");
+  gtk_image_set_icon_size (GTK_IMAGE (widget), GTK_ICON_SIZE_LARGE);
   gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
 

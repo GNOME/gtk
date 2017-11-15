@@ -27,7 +27,6 @@
               <object class="GtkImage">
                 <property name="visible">True</property>
                 <property name="icon-name">emblem-system-symbolic</property>
-                <property name="icon-size">1</property>
               </object>
             </child>
           </object>
@@ -67,7 +66,6 @@
                       <object class="GtkImage">
                         <property name="visible">True</property>
                         <property name="icon-name">pan-down-symbolic</property>
-                        <property name="icon-size">1</property>
                       </object>
                     </child>
                   </object>
@@ -89,7 +87,6 @@
               <object class="GtkImage">
                 <property name="visible">True</property>
                 <property name="icon-name">object-select-symbolic</property>
-                <property name="icon-size">1</property>
               </object>
             </child>
           </object>

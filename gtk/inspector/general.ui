@@ -429,7 +429,6 @@
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="icon-name">object-select-symbolic</property>
-                            <property name="icon-size">1</property>
                             <property name="hexpand">1</property>
                           </object>
                         </child>
@@ -461,7 +460,6 @@
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="icon-name">object-select-symbolic</property>
-                            <property name="icon-size">1</property>
                             <property name="hexpand">1</property>
                           </object>
                         </child>

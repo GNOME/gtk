@@ -557,6 +557,7 @@ main (gint argc, gchar **argv)
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
   
   image = gtk_image_new_from_icon_name ("dialog-warning");
+  gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
   item = gtk_tool_item_new ();
   gtk_widget_show (image);
   gtk_container_add (GTK_CONTAINER (item), image);

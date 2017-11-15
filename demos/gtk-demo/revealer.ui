@@ -19,7 +19,7 @@
               <object class="GtkImage">
                 <property name="visible">1</property>
                 <property name="icon-name">face-cool-symbolic</property>
-                <property name="icon-size">6</property>
+                <property name="icon-size">large</property>
               </object>
             </child>
           </object>
@@ -37,7 +37,7 @@
               <object class="GtkImage">
                 <property name="visible">1</property>
                 <property name="icon-name">face-cool-symbolic</property>
-                <property name="icon-size">6</property>
+                <property name="icon-size">large</property>
               </object>
             </child>
           </object>
@@ -55,7 +55,7 @@
               <object class="GtkImage">
                 <property name="visible">1</property>
                 <property name="icon-name">face-cool-symbolic</property>
-                <property name="icon-size">6</property>
+                <property name="icon-size">large</property>
               </object>
             </child>
           </object>
@@ -72,7 +72,7 @@
               <object class="GtkImage">
                 <property name="visible">1</property>
                 <property name="icon-name">face-cool-symbolic</property>
-                <property name="icon-size">6</property>
+                <property name="icon-size">large</property>
               </object>
             </child>
           </object>
@@ -90,7 +90,7 @@
               <object class="GtkImage">
                 <property name="visible">1</property>
                 <property name="icon-name">face-cool-symbolic</property>
-                <property name="icon-size">6</property>
+                <property name="icon-size">large</property>
               </object>
             </child>
           </object>
@@ -108,7 +108,7 @@
               <object class="GtkImage">
                 <property name="visible">1</property>
                 <property name="icon-name">face-cool-symbolic</property>
-                <property name="icon-size">6</property>
+                <property name="icon-size">large</property>
               </object>
             </child>
           </object>
@@ -126,7 +126,7 @@
               <object class="GtkImage">
                 <property name="visible">1</property>
                 <property name="icon-name">face-cool-symbolic</property>
-                <property name="icon-size">6</property>
+                <property name="icon-size">large</property>
               </object>
             </child>
           </object>
@@ -143,7 +143,7 @@
               <object class="GtkImage">
                 <property name="visible">1</property>
                 <property name="icon-name">face-cool-symbolic</property>
-                <property name="icon-size">6</property>
+                <property name="icon-size">large</property>
               </object>
             </child>
           </object>
@@ -161,7 +161,7 @@
               <object class="GtkImage">
                 <property name="visible">1</property>
                 <property name="icon-name">face-cool-symbolic</property>
-                <property name="icon-size">6</property>
+                <property name="icon-size">large</property>
               </object>
             </child>
           </object>

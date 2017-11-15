@@ -5352,47 +5352,22 @@ typedef struct _IconSize IconSize;
 
 struct _IconSize
 {
-  const char *name;
-
   int width;
   int height;
 };
 
 static const IconSize icon_sizes[] = {
-  [GTK_ICON_SIZE_INVALID] = {
-    .name = NULL,
-    .width = 0,
-    .height = 0,
-  },
-  [GTK_ICON_SIZE_MENU] = {
-    .name = "gtk-menu",
+  [GTK_ICON_SIZE_INHERIT] = {
     .width = 16,
     .height = 16,
   },
-  [GTK_ICON_SIZE_BUTTON] = {
-    .name = "gtk-button",
+  [GTK_ICON_SIZE_NORMAL] = {
     .width = 16,
     .height = 16,
   },
-  [GTK_ICON_SIZE_SMALL_TOOLBAR] = {
-    .name = "gtk-small-toolbar",
-    .width = 16,
-    .height = 16,
-  },
-  [GTK_ICON_SIZE_LARGE_TOOLBAR] = {
-    .name = "gtk-large-toolbar",
-    .width = 24,
-    .height = 24,
-  },
-  [GTK_ICON_SIZE_DND] = {
-    .name = "gtk-dnd",
+  [GTK_ICON_SIZE_LARGE] = {
     .width = 32,
     .height = 32,
-  },
-  [GTK_ICON_SIZE_DIALOG] = {
-    .name = "gtk-dialog",
-    .width = 48,
-    .height = 48,
   },
 };
 
@@ -5403,7 +5378,7 @@ static const IconSize icon_sizes[] = {
  * @height: (out) (optional): location to store icon height
  *
  * Obtains the pixel size of a semantic icon size @size:
- * #GTK_ICON_SIZE_MENU, #GTK_ICON_SIZE_BUTTON, etc.  This function
+ * #GTK_ICON_NORMAL, #GTK_ICON_SIZE_LARGE, etc.  This function
  * isn’t normally needed, gtk_icon_theme_load_icon() is the usual
  * way to get an icon for rendering, then just look at the size of
  * the rendered pixbuf. The rendered pixbuf may not even correspond to
@@ -5425,9 +5400,6 @@ gtk_icon_size_lookup (GtkIconSize  size,
     return FALSE;
 
   if (size >= G_N_ELEMENTS (icon_sizes))
-    return FALSE;
-
-  if (size == GTK_ICON_SIZE_INVALID)
     return FALSE;
 
   if (widthp)
