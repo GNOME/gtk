@@ -68,8 +68,7 @@ ensure_atom_tables (void)
   names_to_atoms = g_hash_table_new (g_str_hash, g_str_equal);
   atoms_to_names = g_ptr_array_new ();
 
-  g_hash_table_insert (names_to_atoms, (gpointer) "NONE", NULL);
-  g_ptr_array_add (atoms_to_names, (gpointer) "NONE");
+  g_ptr_array_add (atoms_to_names, NULL);
 }
 
 static GdkAtom
