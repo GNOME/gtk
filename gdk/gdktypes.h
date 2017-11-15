@@ -126,7 +126,7 @@ typedef struct _GdkAtom            *GdkAtom;
  * A null value for #GdkAtom, used in a similar way as
  * `None` in the Xlib API.
  */
-#define GDK_NONE            _GDK_MAKE_ATOM (0)
+#define GDK_NONE            ((GdkAtom) 0)
 
 /* Forward declarations of commonly used types */
 typedef struct _GdkRGBA               GdkRGBA;
