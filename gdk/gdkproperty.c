@@ -56,41 +56,6 @@
  * data commonly stored in X window properties.
  */
 
-static GHashTable *names_to_atoms;
-static GPtrArray *atoms_to_names;
-
-static void
-ensure_atom_tables (void)
-{
-  if (names_to_atoms)
-    return;
-
-  names_to_atoms = g_hash_table_new (g_str_hash, g_str_equal);
-  atoms_to_names = g_ptr_array_new ();
-
-  g_ptr_array_add (atoms_to_names, NULL);
-}
-
-static GdkAtom
-intern_atom_internal (const gchar *atom_name,
-                      gboolean     allocate)
-{
-  gpointer result;
-  gchar *name;
-
-  ensure_atom_tables ();
-  
-  if (g_hash_table_lookup_extended (names_to_atoms, atom_name, NULL, &result))
-    return result;
-  
-  result = GINT_TO_POINTER (atoms_to_names->len);
-  name = allocate ? g_strdup (atom_name) : (gchar *)atom_name;
-  g_hash_table_insert (names_to_atoms, name, result);
-  g_ptr_array_add (atoms_to_names, name);
-  
-  return result;  
-}
-
 /**
  * gdk_atom_intern:
  * @atom_name: a string.
@@ -109,7 +74,7 @@ gdk_atom_intern (const gchar *atom_name,
 {
   g_return_val_if_fail (atom_name != NULL, GDK_NONE);
 
-  return intern_atom_internal (atom_name, TRUE);
+  return g_intern_string (atom_name);
 }
 
 /**
@@ -136,7 +101,7 @@ gdk_atom_intern_static_string (const gchar *atom_name)
 {
   g_return_val_if_fail (atom_name != NULL, GDK_NONE);
 
-  return intern_atom_internal (atom_name, FALSE);
+  return g_intern_static_string (atom_name);
 }
 
 /**
@@ -158,10 +123,5 @@ gdk_atom_name (GdkAtom atom)
 const gchar *
 _gdk_atom_name_const (GdkAtom atom)
 {
-  ensure_atom_tables ();
-
-  if (GPOINTER_TO_INT (atom) >= atoms_to_names->len)
-    return NULL;
-
-  return g_ptr_array_index (atoms_to_names, GPOINTER_TO_INT (atom));
+  return atom;
 }

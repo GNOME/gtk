@@ -99,7 +99,7 @@ typedef cairo_rectangle_int_t         GdkRectangle;
  * An opaque type representing a string as an index into a table
  * of strings on the X server.
  */
-typedef struct _GdkAtom            *GdkAtom;
+typedef const char                   *GdkAtom;
 
 /**
  * GDK_ATOM_TO_POINTER:
@@ -107,7 +107,7 @@ typedef struct _GdkAtom            *GdkAtom;
  *
  * Converts a #GdkAtom into a pointer type.
  */
-#define GDK_ATOM_TO_POINTER(atom) (atom)
+#define GDK_ATOM_TO_POINTER(atom) ((gpointer) (atom))
 
 /**
  * GDK_POINTER_TO_ATOM:
@@ -118,15 +118,13 @@ typedef struct _GdkAtom            *GdkAtom;
  */
 #define GDK_POINTER_TO_ATOM(ptr)  ((GdkAtom)(ptr))
 
-#define _GDK_MAKE_ATOM(val) ((GdkAtom)GUINT_TO_POINTER(val))
-
 /**
  * GDK_NONE:
  *
  * A null value for #GdkAtom, used in a similar way as
  * `None` in the Xlib API.
  */
-#define GDK_NONE            ((GdkAtom) 0)
+#define GDK_NONE            NULL
 
 /* Forward declarations of commonly used types */
 typedef struct _GdkRGBA               GdkRGBA;

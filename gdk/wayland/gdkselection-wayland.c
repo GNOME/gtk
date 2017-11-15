@@ -378,13 +378,13 @@ data_offer_offer (void                 *data,
 
   info = g_hash_table_lookup (selection->offers, wl_data_offer);
 
-  if (!info || g_list_find (info->targets, atom))
+  if (!info || g_list_find (info->targets, GDK_ATOM_TO_POINTER (atom)))
     return;
 
   GDK_NOTE (EVENTS,
             g_message ("data offer offer, offer %p, type = %s", wl_data_offer, type));
 
-  info->targets = g_list_prepend (info->targets, atom);
+  info->targets = g_list_prepend (info->targets, GDK_ATOM_TO_POINTER (atom));
 }
 
 static inline GdkDragAction
@@ -466,13 +466,13 @@ primary_offer_offer (void                               *data,
 
   info = g_hash_table_lookup (selection->offers, gtk_offer);
 
-  if (!info || g_list_find (info->targets, atom))
+  if (!info || g_list_find (info->targets, GDK_ATOM_TO_POINTER (atom)))
     return;
 
   GDK_NOTE (EVENTS,
             g_message ("primary offer offer, offer %p, type = %s", gtk_offer, type));
 
-  info->targets = g_list_prepend (info->targets, atom);
+  info->targets = g_list_prepend (info->targets, GDK_ATOM_TO_POINTER (atom));
 }
 
 static const struct gtk_primary_selection_offer_listener primary_offer_listener = {
