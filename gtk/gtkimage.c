@@ -1399,3 +1399,13 @@ gtk_image_get_icon_size (GtkImage *image)
 
   return priv->icon_size;
 }
+
+void
+gtk_image_get_image_size (GtkImage *image,
+                          int      *width,
+                          int      *height)
+{
+  GtkImagePrivate *priv = gtk_image_get_instance_private (image);
+
+  _gtk_icon_helper_get_size (&priv->icon_helper, width, height);
+}

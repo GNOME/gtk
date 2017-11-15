@@ -134,7 +134,6 @@ static void     gtk_print_unix_dialog_get_property (GObject            *object,
                                                     guint               prop_id,
                                                     GValue             *value,
                                                     GParamSpec         *pspec);
-static void     gtk_print_unix_dialog_style_updated (GtkWidget          *widget);
 static void     unschedule_idle_mark_conflicts     (GtkPrintUnixDialog *dialog);
 static void     selected_printer_changed           (GtkTreeSelection   *selection,
                                                     GtkPrintUnixDialog *dialog);
@@ -406,7 +405,6 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
   object_class->set_property = gtk_print_unix_dialog_set_property;
   object_class->get_property = gtk_print_unix_dialog_get_property;
 
-  widget_class->style_updated = gtk_print_unix_dialog_style_updated;
   widget_class->destroy = gtk_print_unix_dialog_destroy;
 
   g_object_class_install_property (object_class,
@@ -2300,23 +2298,6 @@ draw_collate (GtkDrawingArea *da,
       paint_page (widget, cr, x2 + p1, y, reverse ? "1" : "2", text_x);
       paint_page (widget, cr, x2 + p2, y + 10, collate == reverse ? "2" : "1", text_x);
     }
-}
-
-static void
-gtk_print_unix_dialog_style_updated (GtkWidget *widget)
-{
-  GtkPrintUnixDialog *dialog = (GtkPrintUnixDialog *)widget;
-  GtkPrintUnixDialogPrivate *priv = dialog->priv;
-  gint size;
-  gfloat scale;
-
-  GTK_WIDGET_CLASS (gtk_print_unix_dialog_parent_class)->style_updated (widget);
-
-  gtk_icon_size_lookup (GTK_ICON_SIZE_LARGE, &size, NULL);
-  scale = size / 48.0;
-
-  gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (priv->collate_image), (50 + 20) * scale);
-  gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (priv->collate_image), (15 + 26) * scale);
 }
 
 static void

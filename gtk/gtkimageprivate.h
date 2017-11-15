@@ -38,6 +38,11 @@ void            gtk_image_set_from_definition           (GtkImage               
 
 GtkImageDefinition * gtk_image_get_definition           (GtkImage *image);
 
+void            gtk_image_get_image_size                (GtkImage               *image,
+                                                         int                    *width,
+                                                         int                    *height);
+
+
 G_END_DECLS
 
 #endif /* __GTK_IMAGE_H__ */

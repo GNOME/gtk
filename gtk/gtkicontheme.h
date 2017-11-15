@@ -345,11 +345,6 @@ GdkPixbuf *           gtk_icon_info_load_symbolic_for_context_finish (GtkIconInf
 								      gboolean         *was_symbolic,
 								      GError          **error);
 
-GDK_AVAILABLE_IN_ALL
-gboolean gtk_icon_size_lookup (GtkIconSize  size,
-                               gint        *width,
-                               gint        *height);
-
 
 G_END_DECLS
 
