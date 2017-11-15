@@ -36,7 +36,6 @@ struct _GtkIconHelper
 
   GtkImageDefinition *def;
 
-  GtkIconSize icon_size;
   gint pixel_size;
 
   guint use_fallback : 1;
@@ -71,15 +70,12 @@ void _gtk_icon_helper_set_surface (GtkIconHelper *self,
 void _gtk_icon_helper_set_texture (GtkIconHelper *self,
 				   GdkTexture *texture);
 
-gboolean _gtk_icon_helper_set_icon_size    (GtkIconHelper *self,
-                                            GtkIconSize    icon_size);
 gboolean _gtk_icon_helper_set_pixel_size   (GtkIconHelper *self,
                                             gint           pixel_size);
 gboolean _gtk_icon_helper_set_use_fallback (GtkIconHelper *self,
                                             gboolean       use_fallback);
 
 GtkImageType _gtk_icon_helper_get_storage_type (GtkIconHelper *self);
-GtkIconSize _gtk_icon_helper_get_icon_size (GtkIconHelper *self);
 gint _gtk_icon_helper_get_pixel_size (GtkIconHelper *self);
 gboolean _gtk_icon_helper_get_use_fallback (GtkIconHelper *self);
 
@@ -104,6 +100,9 @@ void     _gtk_icon_helper_set_force_scale_pixbuf (GtkIconHelper *self,
 void      gtk_icon_helper_invalidate (GtkIconHelper *self);
 void      gtk_icon_helper_invalidate_for_change (GtkIconHelper     *self,
                                                  GtkCssStyleChange *change);
+
+void      gtk_icon_size_set_style_classes (GtkCssNode  *cssnode,
+                                           GtkIconSize  icon_size);
 
 G_END_DECLS
 

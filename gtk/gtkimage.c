@@ -75,6 +75,7 @@
 struct _GtkImagePrivate
 {
   GtkIconHelper icon_helper;
+  GtkIconSize icon_size;
 
   float baseline_align;
 
@@ -83,7 +84,6 @@ struct _GtkImagePrivate
 };
 
 
-#define DEFAULT_ICON_SIZE GTK_ICON_SIZE_INHERIT
 static void gtk_image_snapshot             (GtkWidget    *widget,
                                             GtkSnapshot  *snapshot);
 static void gtk_image_size_allocate        (GtkWidget           *widget,
@@ -176,7 +176,7 @@ gtk_image_class_init (GtkImageClass *class)
                         P_("Icon size"),
                         P_("Symbolic size to use for icon set or named icon"),
                         0, G_MAXINT,
-                        DEFAULT_ICON_SIZE,
+                        GTK_ICON_SIZE_INHERIT,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -282,7 +282,6 @@ gtk_image_init (GtkImage *image)
   gtk_widget_set_has_window (GTK_WIDGET (image), FALSE);
 
   gtk_icon_helper_init (&priv->icon_helper, widget_node, GTK_WIDGET (image));
-  _gtk_icon_helper_set_icon_size (&priv->icon_helper, DEFAULT_ICON_SIZE);
 }
 
 static void
@@ -367,7 +366,7 @@ gtk_image_get_property (GObject     *object,
       g_value_set_string (value, priv->filename);
       break;
     case PROP_ICON_SIZE:
-      g_value_set_int (value, _gtk_icon_helper_get_icon_size (&priv->icon_helper));
+      g_value_set_int (value, priv->icon_size);
       break;
     case PROP_PIXEL_SIZE:
       g_value_set_int (value, _gtk_icon_helper_get_pixel_size (&priv->icon_helper));
@@ -1373,11 +1372,12 @@ gtk_image_set_icon_size (GtkImage    *image,
 
   g_return_if_fail (GTK_IS_IMAGE (image));
 
-  if (_gtk_icon_helper_set_icon_size (&priv->icon_helper, icon_size))
-    {
-      gtk_widget_queue_resize (GTK_WIDGET (image));
-      g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_ICON_SIZE]);
-    }
+  if (priv->icon_size == icon_size)
+    return;
+
+  priv->icon_size = icon_size;
+  gtk_icon_size_set_style_classes (gtk_widget_get_css_node (GTK_WIDGET (image)), icon_size);
+  g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_ICON_SIZE]);
 }
 
 /**
@@ -1397,5 +1397,5 @@ gtk_image_get_icon_size (GtkImage *image)
 
   g_return_val_if_fail (GTK_IS_IMAGE (image), GTK_ICON_SIZE_INHERIT);
 
-  return _gtk_icon_helper_get_icon_size (&priv->icon_helper);
+  return priv->icon_size;
 }
