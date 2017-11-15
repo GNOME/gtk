@@ -275,7 +275,7 @@ GDK_AVAILABLE_IN_ALL
 GList*     gtk_window_get_icon_list                (GtkWindow  *window);
 GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_icon                     (GtkWindow  *window,
-                                                    GdkTexture *texture);
+                                                    GdkTexture *icon);
 GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_icon_name                (GtkWindow   *window,
 						    const gchar *name);

@@ -974,8 +974,7 @@ gtk_selection_add_target (GtkWidget	    *widget,
  * gtk_selection_add_targets:
  * @widget: a #GtkWidget
  * @selection: the selection
- * @targets: (array length=ntargets): a table of targets to add
- * @ntargets:  number of entries in @targets
+ * @targets: the targets to add
  * 
  * Prepends a table of targets to the list of supported targets
  * for a given widget and selection.

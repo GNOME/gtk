@@ -4297,8 +4297,8 @@ gtk_menu_select_item (GtkMenuShell *menu_shell,
 /**
  * gtk_menu_set_display:
  * @menu: a #GtkMenu
- * @screen: (allow-none): a #GdkDisplay, or %NULL if the display should be
- *          determined by the widget the menu is attached to
+ * @display: (allow-none): a #GdkDisplay, or %NULL if the display should be
+ *           determined by the widget the menu is attached to
  *
  * Sets the #GdkDisplay on which the menu will be displayed.
  *
