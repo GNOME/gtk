@@ -6,8 +6,6 @@ $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
 * {
   padding: 0;
-  -GtkToolButton-icon-spacing: 4;
-  -GtkTextView-error-underline-color: $error_color;
   -gtk-icon-style: symbolic; //force symbolic style icons
 
   // The size for scrollbars. The slider is 2px smaller, but we keep it
@@ -15,15 +13,10 @@ $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   // slider. The stepper button is larger in both directions, the slider
   // only in the width
 
-  -GtkScrolledWindow-scrollbar-spacing: 0;
+  outline-style: none;
+}
 
-  -GtkToolItemGroup-expander-size: 11;
-
-  -GtkTreeView-horizontal-separator: 4;
-
-  -GtkDialog-button-spacing: 4;
-  -GtkDialog-action-area-border: 0;
-
+*:focus(visible) {
   // We use the outline properties to signal the focus properties
   // to the adwaita engine: using real CSS properties is faster,
   // and we don't use any outlines for now.
@@ -33,9 +26,7 @@ $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   outline-offset: -4px;
   outline-width: 2px;
   -gtk-outline-radius: 2px;
-
 }
-
 
 /***************
  * Base States *
@@ -382,7 +373,7 @@ button {
     &:backdrop {
       @include button(backdrop);
 
-      -gtk-icon-effect: none;
+      -gtk-icon-filter: none;
 
       &:active,
       &:checked { @include button(backdrop-active); }
@@ -1316,11 +1307,6 @@ headerbar {
  * Tree Views *
  **************/
 treeview.view {
-  -GtkTreeView-grid-line-width: 1;
-  -GtkTreeView-grid-line-pattern: '';
-  -GtkTreeView-tree-line-width: 1;
-  -GtkTreeView-tree-line-pattern: '';
-  -GtkTreeView-expander-size: 16;
 
   border-left-color: mix($fg_color, $base_color, 50%); // this is actually the tree lines color,
   border-top-color: $bg_color;                         // while this is the grid lines color, better then nothing
@@ -1812,12 +1798,6 @@ notebook {
 scrollbar {
   $_slider_min_length: 40px;
 
-  // disable steppers
-  @at-root * {
-    -GtkScrollbar-has-backward-stepper: false;
-    -GtkScrollbar-has-forward-stepper: false;
-  }
-
   background-color: $scrollbar_bg_color;
   transition: 300ms $ease-out-quad;
 
@@ -2091,6 +2071,7 @@ radio {
   min-width: 14px;
   border: 1px solid;
   -gtk-icon-source: none;
+  -gtk-icon-size: 14px;
 
   @include button(normal);
 
