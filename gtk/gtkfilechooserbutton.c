@@ -102,7 +102,7 @@
  *  Private Macros  *
  * **************** */
 
-#define FALLBACK_ICON_SIZE	16
+#define ICON_SIZE	        16
 #define DEFAULT_TITLE		N_("Select a File")
 #define DESKTOP_DISPLAY_NAME	N_("Desktop")
 #define FALLBACK_DISPLAY_NAME	N_("(None)") /* this string is used in gtk+/gtk/tests/filechooser.c - change it there if you change it here */
@@ -195,8 +195,6 @@ struct _GtkFileChooserButtonPrivate
   GSList *change_icon_theme_cancellables;
 
   GtkBookmarksManager *bookmarks_manager;
-
-  gint icon_size;
 
   guint8 n_special;
   guint8 n_volumes;
@@ -496,8 +494,6 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
   gtk_widget_set_has_window (GTK_WIDGET (button), FALSE);
 
   priv = button->priv = gtk_file_chooser_button_get_instance_private (button);
-
-  priv->icon_size = FALLBACK_ICON_SIZE;
 
   priv->button = gtk_button_new ();
   g_signal_connect (priv->button, "clicked", G_CALLBACK (button_clicked_cb), button);
@@ -1382,14 +1378,14 @@ change_icon_theme_get_info_cb (GCancellable *cancellable,
   if (cancelled || error)
     goto out;
 
-  icon = _gtk_file_info_get_icon (info, data->button->priv->icon_size, gtk_widget_get_scale_factor (GTK_WIDGET (data->button)));
+  icon = _gtk_file_info_get_icon (info, ICON_SIZE, gtk_widget_get_scale_factor (GTK_WIDGET (data->button)));
   if (icon)
     {
       gint width = 0;
       GtkTreeIter iter;
       GtkTreePath *path;
 
-      width = MAX (width, data->button->priv->icon_size);
+      width = MAX (width, ICON_SIZE);
 
       path = gtk_tree_row_reference_get_path (data->row_ref);
       if (path)
@@ -1422,7 +1418,7 @@ change_icon_theme (GtkFileChooserButton *button)
   GtkFileChooserButtonPrivate *priv = button->priv;
   GtkTreeIter iter;
   GSList *l;
-  gint width = 0, height = 0;
+  gint width = 0;
 
   for (l = button->priv->change_icon_theme_cancellables; l; l = l->next)
     {
@@ -1431,11 +1427,6 @@ change_icon_theme (GtkFileChooserButton *button)
     }
   g_slist_free (button->priv->change_icon_theme_cancellables);
   button->priv->change_icon_theme_cancellables = NULL;
-
-  if (gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &width, &height))
-    priv->icon_size = MAX (width, height);
-  else
-    priv->icon_size = FALLBACK_ICON_SIZE;
 
   update_label_and_image (button);
 
@@ -1504,7 +1495,7 @@ change_icon_theme (GtkFileChooserButton *button)
 	}
 
       if (icon)
-	width = MAX (width, priv->icon_size);
+	width = MAX (width, ICON_SIZE);
 
       gtk_list_store_set (GTK_LIST_STORE (priv->model), &iter,
 			  ICON_COLUMN, icon,
@@ -1599,7 +1590,7 @@ set_info_get_info_cb (GCancellable *cancellable,
     /* There was an error, leave the fallback name in there */
     goto out;
 
-  icon = _gtk_file_info_get_icon (info, data->button->priv->icon_size, gtk_widget_get_scale_factor (GTK_WIDGET (data->button)));
+  icon = _gtk_file_info_get_icon (info, ICON_SIZE, gtk_widget_get_scale_factor (GTK_WIDGET (data->button)));
 
   if (!data->label)
     data->label = g_strdup (g_file_info_get_display_name (info));
@@ -1781,7 +1772,7 @@ model_add_special_get_info_cb (GCancellable *cancellable,
   if (cancelled || error)
     goto out;
 
-  icon = _gtk_file_info_get_icon (info, data->button->priv->icon_size, gtk_widget_get_scale_factor (GTK_WIDGET (data->button)));
+  icon = _gtk_file_info_get_icon (info, ICON_SIZE, gtk_widget_get_scale_factor (GTK_WIDGET (data->button)));
   if (icon)
     {
       gtk_list_store_set (GTK_LIST_STORE (data->button->priv->model), &iter,
@@ -2480,9 +2471,9 @@ update_label_get_info_cb (GCancellable *cancellable,
 
   gtk_label_set_text (GTK_LABEL (priv->label), g_file_info_get_display_name (info));
 
-  icon = _gtk_file_info_get_icon (info, priv->icon_size, gtk_widget_get_scale_factor (GTK_WIDGET (button)));
+  icon = _gtk_file_info_get_icon (info, ICON_SIZE, gtk_widget_get_scale_factor (GTK_WIDGET (button)));
   gtk_image_set_from_gicon (GTK_IMAGE (priv->image), icon);
-  gtk_image_set_pixel_size (GTK_IMAGE (priv->image), priv->icon_size);
+  gtk_image_set_pixel_size (GTK_IMAGE (priv->image), ICON_SIZE);
   if (icon)
     g_object_unref (icon);
 
@@ -2529,7 +2520,7 @@ update_label_and_image (GtkFileChooserButton *button)
               label_text = _gtk_file_system_volume_get_display_name (volume);
               icon = _gtk_file_system_volume_get_icon (volume);
               gtk_image_set_from_gicon (GTK_IMAGE (priv->image), icon);
-              gtk_image_set_pixel_size (GTK_IMAGE (priv->image), priv->icon_size);
+              gtk_image_set_pixel_size (GTK_IMAGE (priv->image), ICON_SIZE);
               if (icon)
                 g_object_unref (icon);
             }
@@ -2561,7 +2552,7 @@ update_label_and_image (GtkFileChooserButton *button)
           label_text = _gtk_bookmarks_manager_get_bookmark_label (button->priv->bookmarks_manager, file);
           icon = g_themed_icon_new ("text-x-generic");
           gtk_image_set_from_gicon (GTK_IMAGE (priv->image), icon);
-          gtk_image_set_pixel_size (GTK_IMAGE (priv->image), priv->icon_size);
+          gtk_image_set_pixel_size (GTK_IMAGE (priv->image), ICON_SIZE);
           if (icon)
             g_object_unref (icon);
 
