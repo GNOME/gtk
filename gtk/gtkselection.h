@@ -155,13 +155,6 @@ gboolean       gtk_target_list_find      (GtkTargetList  *list,
                                           guint          *info);
 
 GDK_AVAILABLE_IN_ALL
-GtkTargetEntry * gtk_target_table_new_from_list (GtkTargetList  *list,
-                                                 gint           *n_targets);
-GDK_AVAILABLE_IN_ALL
-void             gtk_target_table_free          (GtkTargetEntry *targets,
-                                                 gint            n_targets);
-
-GDK_AVAILABLE_IN_ALL
 gboolean gtk_selection_owner_set             (GtkWidget  *widget,
                                               GdkAtom     selection,
                                               guint32     time_);

@@ -5225,8 +5225,6 @@ gtk_target_list_add_uri_targets
 gtk_target_list_add_rich_text_targets
 gtk_target_list_remove
 gtk_target_list_find
-gtk_target_table_free
-gtk_target_table_new_from_list
 gtk_selection_owner_set
 gtk_selection_owner_set_for_display
 gtk_selection_add_target
