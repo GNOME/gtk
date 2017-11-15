@@ -68,7 +68,9 @@
  *
  * # CSS nodes
  *
- * GtkImage has a single CSS node with the name image.
+ * GtkImage has a single CSS node with the name image. The style classes
+ * .normal-icons or .large-icons may appear, depending on the #GtkImage::icon-size
+ * property.
  */
 
 
@@ -1037,6 +1039,10 @@ gtk_image_get_texture (GtkImage *image)
  * The returned string is owned by the #GtkImage and should not
  * be freed.
  *
+ * Note: This function was changed in 3.94 not to use out parameters
+ * anymore, but return the icon name directly. See gtk_image_get_icon_size()
+ * for a way to get the icon size.
+ *
  * Returns: (transfer none) (allow-none): the icon name, or %NULL
  *
  * Since: 2.6
@@ -1060,7 +1066,11 @@ gtk_image_get_icon_name (GtkImage *image)
  * %GTK_IMAGE_GICON (see gtk_image_get_storage_type()).
  * The caller of this function does not own a reference to the
  * returned #GIcon.
- * 
+ *
+ * Note: This function was changed in 3.94 not to use out parameters
+ * anymore, but return the GIcon directly. See gtk_image_get_icon_size()
+ * for a way to get the icon size.
+ *
  * Returns: (transfer none) (allow-none): a #GIcon, or %NULL
  *
  * Since: 2.14
