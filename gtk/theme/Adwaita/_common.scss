@@ -2752,6 +2752,7 @@ radio {
 %check,
 check {
   border-radius: 3px;
+  -gtk-icon-size: 14px;
 
   &:checked { -gtk-icon-source: -gtk-scaled(-gtk-recolor(url("assets/check-symbolic.symbolic.png")),
                                             -gtk-recolor(url("assets/check@2-symbolic.symbolic.png"))); }
@@ -2763,6 +2764,7 @@ check {
 %radio,
 radio {
   border-radius: 100%;
+  -gtk-icon-size: 14px;
 
   &:checked { -gtk-icon-source: -gtk-scaled(-gtk-recolor(url("assets/bullet-symbolic.symbolic.png")),
                                             -gtk-recolor(url("assets/bullet@2-symbolic.symbolic.png"))); }
