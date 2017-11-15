@@ -21,6 +21,7 @@
 #include <gtk/gtk.h>
 #include "gtkimageaccessible.h"
 #include "gtktoolbarprivate.h"
+#include "gtkimageprivate.h"
 #include "gtkintl.h"
 
 struct _GtkImageAccessiblePrivate
@@ -252,7 +253,6 @@ gtk_image_accessible_get_image_size (AtkImage *image,
 {
   GtkWidget* widget;
   GtkImage *gtk_image;
-  GtkImageType image_type;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (image));
   if (widget == NULL)
@@ -264,44 +264,8 @@ gtk_image_accessible_get_image_size (AtkImage *image,
 
   gtk_image = GTK_IMAGE (widget);
 
-  image_type = gtk_image_get_storage_type (gtk_image);
-  switch (image_type)
-    {
-    case GTK_IMAGE_SURFACE:
-      {
-        cairo_surface_t *surface;
-
-        surface = gtk_image_get_surface (gtk_image);
-        *height = cairo_image_surface_get_height (surface);
-        *width = cairo_image_surface_get_width (surface);
-        break;
-      }
-    case GTK_IMAGE_TEXTURE:
-      {
-        GdkTexture *texture;
-
-        texture = gtk_image_get_texture (gtk_image);
-        *height = gdk_texture_get_height (texture);
-        *width = gdk_texture_get_width (texture);
-        break;
-      }
-    case GTK_IMAGE_ICON_NAME:
-    case GTK_IMAGE_GICON:
-      {
-        GtkIconSize size;
-
-        g_object_get (gtk_image, "icon-size", &size, NULL);
-        gtk_icon_size_lookup (size, width, height);
-        break;
-      }
-    case GTK_IMAGE_EMPTY:
-    default:
-      {
-        *height = -1;
-        *width = -1;
-        break;
-      }
-    }
+  if (gtk_image_get_storage_type (gtk_image) != GTK_IMAGE_EMPTY)
+    gtk_image_get_image_size (gtk_image, width, height);
 }
 
 static gboolean

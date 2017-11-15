@@ -28,11 +28,13 @@
 #include "config.h"
 
 #include "gtkcellrendererspinner.h"
-#include "gtkicontheme.h"
+#include "gtkiconhelperprivate.h"
 #include "gtkintl.h"
 #include "gtksettings.h"
 #include "gtksnapshot.h"
 #include "gtktypebuiltins.h"
+#include "gtkstylecontextprivate.h"
+#include "gtkcssnumbervalueprivate.h"
 
 #include <math.h>
 
@@ -186,12 +188,22 @@ gtk_cell_renderer_spinner_update_size (GtkCellRendererSpinner *cell,
                                        GtkWidget              *widget)
 {
   GtkCellRendererSpinnerPrivate *priv = cell->priv;
+  GtkStyleContext *context;
+  GtkIconHelper icon_helper;
+  GtkCssNode *node;
+  GtkCssStyle *style;
 
-  if (!gtk_icon_size_lookup (priv->icon_size, &priv->size, NULL))
-    {
-      g_warning ("Invalid icon size %u", priv->icon_size);
-      priv->size = 24;
-    }
+  context = gtk_widget_get_style_context (widget);
+  gtk_style_context_save (context);
+
+  gtk_style_context_add_class (context, "spinner");
+  node = gtk_style_context_get_node (context);
+  gtk_icon_size_set_style_classes (node, priv->icon_size);
+  style = gtk_css_node_get_style (node);
+  priv->size = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_SIZE), 100);
+
+  gtk_icon_helper_destroy (&icon_helper);
+  gtk_style_context_restore (context);
 }
 
 static void
