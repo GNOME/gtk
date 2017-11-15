@@ -37,11 +37,6 @@
 #include <X11/Xatom.h>
 #include <string.h>
 
-#define N_PREDEFINED_ATOMS 69
-
-#define ATOM_TO_INDEX(atom) (GPOINTER_TO_UINT(atom))
-#define INDEX_TO_ATOM(atom) ((GdkAtom)GUINT_TO_POINTER(atom))
-
 static void
 insert_atom_pair (GdkDisplay *display,
 		  GdkAtom     virtual_atom,
@@ -69,9 +64,6 @@ lookup_cached_xatom (GdkDisplay *display,
 {
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
 
-  if (ATOM_TO_INDEX (atom) < N_PREDEFINED_ATOMS)
-    return ATOM_TO_INDEX (atom);
-  
   if (display_x11->atom_from_virtual)
     return GPOINTER_TO_UINT (g_hash_table_lookup (display_x11->atom_from_virtual,
 						  GDK_ATOM_TO_POINTER (atom)));
@@ -203,9 +195,6 @@ gdk_x11_xatom_to_atom_for_display (GdkDisplay *display,
     return GDK_NONE;
 
   display_x11 = GDK_X11_DISPLAY (display);
-  
-  if (xatom < N_PREDEFINED_ATOMS)
-    return INDEX_TO_ATOM (xatom);
   
   if (display_x11->atom_to_virtual)
     virtual_atom = GDK_POINTER_TO_ATOM (g_hash_table_lookup (display_x11->atom_to_virtual,
