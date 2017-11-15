@@ -152,7 +152,7 @@ gtk_cell_renderer_spinner_class_init (GtkCellRendererSpinnerClass *klass)
                                    g_param_spec_enum ("size",
                                                       P_("Size"),
                                                       P_("The GtkIconSize value that specifies the size of the rendered spinner"),
-                                                      GTK_TYPE_ICON_SIZE, GTK_ICON_SIZE_MENU,
+                                                      GTK_TYPE_ICON_SIZE, GTK_ICON_SIZE_INHERIT,
                                                       G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
 }
@@ -162,7 +162,7 @@ gtk_cell_renderer_spinner_init (GtkCellRendererSpinner *cell)
 {
   cell->priv = gtk_cell_renderer_spinner_get_instance_private (cell);
   cell->priv->pulse = 0;
-  cell->priv->icon_size = GTK_ICON_SIZE_MENU;
+  cell->priv->icon_size = GTK_ICON_SIZE_INHERIT;
 }
 
 /**

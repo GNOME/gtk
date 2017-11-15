@@ -1269,7 +1269,6 @@
                   <object class="GtkImage" id="image1">
                     <property name="visible">1</property>
                     <property name="icon-name">dialog-warning-symbolic</property>
-                    <property name="icon-size">1</property>
                   </object>
                 </child>
                 <child>

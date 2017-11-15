@@ -43,7 +43,7 @@ canvas_item_new (GtkWidget     *widget,
 
   icon_name = gtk_tool_button_get_icon_name (button);
   icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (widget));
-  gtk_icon_size_lookup (GTK_ICON_SIZE_DIALOG, &width, NULL);
+  gtk_icon_size_lookup (GTK_ICON_SIZE_LARGE, &width, NULL);
   pixbuf = gtk_icon_theme_load_icon (icon_theme,
                                      icon_name,
                                      width,

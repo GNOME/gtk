@@ -17,7 +17,6 @@
     <child>
       <object class="GtkImage">
         <property name="icon-name">pan-end-symbolic</property>
-        <property name="icon-size">1</property>
       </object>
     </child>
     <style>
@@ -40,7 +39,6 @@
     <child>
       <object class="GtkImage">
         <property name="icon-name">pan-start-symbolic</property>
-        <property name="icon-size">1</property>
       </object>
     </child>
     <style>

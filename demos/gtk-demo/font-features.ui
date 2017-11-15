@@ -84,7 +84,6 @@
                                   <object class="GtkImage" id="kern_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -137,7 +136,6 @@
                                   <object class="GtkImage" id="liga_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -169,7 +167,6 @@
                                   <object class="GtkImage" id="dlig_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -201,7 +198,6 @@
                                   <object class="GtkImage" id="hlig_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -233,7 +229,6 @@
                                   <object class="GtkImage" id="clig_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -286,7 +281,6 @@
                                   <object class="GtkImage" id="smcp_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -318,7 +312,6 @@
                                   <object class="GtkImage" id="c2sc_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -350,7 +343,6 @@
                                   <object class="GtkImage" id="pcap_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -382,7 +374,6 @@
                                   <object class="GtkImage" id="c2pc_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -414,7 +405,6 @@
                                   <object class="GtkImage" id="unic_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -446,7 +436,6 @@
                                   <object class="GtkImage" id="cpsp_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -478,7 +467,6 @@
                                   <object class="GtkImage" id="case_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -532,7 +520,6 @@
                                     <property name="visible">1</property>
                                     <property name="opacity">0</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -555,7 +542,6 @@
                                   <object class="GtkImage" id="lnum_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -579,7 +565,6 @@
                                   <object class="GtkImage" id="onum_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -625,7 +610,6 @@
                                     <property name="visible">1</property>
                                     <property name="opacity">0</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -648,7 +632,6 @@
                                   <object class="GtkImage" id="pnum_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -672,7 +655,6 @@
                                   <object class="GtkImage" id="tnum_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -718,7 +700,6 @@
                                     <property name="visible">1</property>
                                     <property name="opacity">0</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -741,7 +722,6 @@
                                   <object class="GtkImage" id="frac_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -765,7 +745,6 @@
                                   <object class="GtkImage" id="afrc_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -810,7 +789,6 @@
                                   <object class="GtkImage" id="zero_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -842,7 +820,6 @@
                                   <object class="GtkImage" id="nalt_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -874,7 +851,6 @@
                                   <object class="GtkImage" id="sinf_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -927,7 +903,6 @@
                                   <object class="GtkImage" id="swsh_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -959,7 +934,6 @@
                                   <object class="GtkImage" id="cswh_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -991,7 +965,6 @@
                                   <object class="GtkImage" id="locl_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -1023,7 +996,6 @@
                                   <object class="GtkImage" id="calt_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -1055,7 +1027,6 @@
                                   <object class="GtkImage" id="hist_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -1087,7 +1058,6 @@
                                   <object class="GtkImage" id="salt_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -1119,7 +1089,6 @@
                                   <object class="GtkImage" id="titl_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -1151,7 +1120,6 @@
                                   <object class="GtkImage" id="rand_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -1183,7 +1151,6 @@
                                   <object class="GtkImage" id="subs_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -1215,7 +1182,6 @@
                                   <object class="GtkImage" id="sups_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -1268,7 +1234,6 @@
                                   <object class="GtkImage" id="init_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -1300,7 +1265,6 @@
                                   <object class="GtkImage" id="medi_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -1332,7 +1296,6 @@
                                   <object class="GtkImage" id="fina_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -1364,7 +1327,6 @@
                                   <object class="GtkImage" id="isol_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -1417,7 +1379,6 @@
                                   <object class="GtkImage" id="ss01_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -1449,7 +1410,6 @@
                                   <object class="GtkImage" id="ss02_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -1481,7 +1441,6 @@
                                   <object class="GtkImage" id="ss03_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -1513,7 +1472,6 @@
                                   <object class="GtkImage" id="ss04_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
@@ -1545,7 +1503,6 @@
                                   <object class="GtkImage" id="ss05_pres">
                                     <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
-                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>

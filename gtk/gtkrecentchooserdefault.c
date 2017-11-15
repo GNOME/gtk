@@ -77,8 +77,6 @@ typedef struct
   gulong manager_changed_id;
   guint local_manager : 1;
 
-  gint icon_size;
-
   /* RecentChooser properties */
   gint limit;
   GtkRecentSortType sort_type;
@@ -352,7 +350,6 @@ _gtk_recent_chooser_default_init (GtkRecentChooserDefault *impl)
   priv->select_multiple = FALSE;
   priv->local_only = TRUE;
   
-  priv->icon_size = FALLBACK_ICON_SIZE;
   priv->icon_theme = NULL;
   
   priv->current_filter = NULL;
@@ -776,9 +773,6 @@ reload_recent_items (GtkRecentChooserDefault *impl)
   if (!impl->priv->icon_theme)
     impl->priv->icon_theme = get_icon_theme_for_widget (widget);
 
-  impl->priv->icon_size = get_icon_size_for_widget (widget,
-		  			      GTK_ICON_SIZE_BUTTON);
-
   if (!impl->priv->limit_set)
     impl->priv->limit = DEFAULT_RECENT_FILES_LIMIT;
 
@@ -812,8 +806,8 @@ set_default_size (GtkRecentChooserDefault *impl)
   /* Size based on characters and the icon size */
   gtk_style_context_get (context, "font-size", &font_size, NULL);
 
-  width = impl->priv->icon_size + font_size * NUM_CHARS + 0.5;
-  height = (impl->priv->icon_size + font_size) * NUM_LINES + 0.5;
+  width = 16 + font_size * NUM_CHARS + 0.5;
+  height = (16 + font_size) * NUM_LINES + 0.5;
 
   /* Use at least the requisition size... */
   gtk_widget_get_preferred_size (widget, &req, NULL);
@@ -1336,7 +1330,7 @@ get_drag_surface (GtkRecentChooserDefault *impl)
 
   g_assert (GTK_IS_RECENT_CHOOSER_DEFAULT (impl));
 
-  size = get_icon_size_for_widget (GTK_WIDGET (impl), GTK_ICON_SIZE_DND);
+  size = get_icon_size_for_widget (GTK_WIDGET (impl), GTK_ICON_SIZE_NORMAL);
   info = gtk_recent_chooser_get_current_item (GTK_RECENT_CHOOSER (impl));
   if (!info)
     return NULL;

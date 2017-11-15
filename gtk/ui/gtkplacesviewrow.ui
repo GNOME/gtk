@@ -71,7 +71,6 @@
                   <object class="GtkImage" id="eject_icon">
                     <property name="visible">1</property>
                     <property name="icon-name">media-eject-symbolic</property>
-                    <property name="icon-size">1</property>
                   </object>
                 </child>
                 <style>

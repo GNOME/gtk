@@ -59,6 +59,7 @@ interactive_dialog_clicked (GtkButton *button,
   gtk_box_pack_start (GTK_BOX (content_area), hbox);
 
   image = gtk_image_new_from_icon_name ("dialog-question");
+  gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
   gtk_box_pack_start (GTK_BOX (hbox), image);
 
   table = gtk_grid_new ();

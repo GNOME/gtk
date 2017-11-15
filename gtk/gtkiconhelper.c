@@ -113,6 +113,7 @@ gtk_icon_helper_init (GtkIconHelper *self,
   memset (self, 0, sizeof (GtkIconHelper));
   self->def = gtk_image_definition_new_empty ();
 
+  self->icon_size = GTK_ICON_SIZE_INHERIT;
   self->pixel_size = -1;
   self->texture_is_symbolic = FALSE;
 
@@ -135,7 +136,7 @@ ensure_icon_size (GtkIconHelper *self,
     }
   else if (!gtk_icon_size_lookup (self->icon_size, &width, &height))
     {
-      if (self->icon_size == GTK_ICON_SIZE_INVALID)
+      if (self->icon_size == GTK_ICON_SIZE_INHERIT)
         {
           width = height = 0;
         }
@@ -455,7 +456,7 @@ _gtk_icon_helper_get_size (GtkIconHelper *self,
           width = (gdk_texture_get_width (self->texture) + self->texture_scale - 1) / self->texture_scale;
           height = (gdk_texture_get_height (self->texture) + self->texture_scale - 1) / self->texture_scale;
         }
-      else if (self->icon_size != GTK_ICON_SIZE_INVALID)
+      else if (self->icon_size != GTK_ICON_SIZE_INHERIT)
         {
           ensure_icon_size (self, &width, &height);
         }

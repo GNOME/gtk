@@ -104,7 +104,7 @@ gtk_cell_renderer_pixbuf_init (GtkCellRendererPixbuf *cellpixbuf)
   priv = cellpixbuf->priv;
 
   priv->image_def = gtk_image_definition_new_empty ();
-  priv->icon_size = GTK_ICON_SIZE_MENU;
+  priv->icon_size = GTK_ICON_SIZE_INHERIT;
 }
 
 static void
@@ -193,7 +193,7 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 						      P_("The GtkIconSize value that specifies the size of the rendered icon"),
 						      0,
 						      G_MAXUINT,
-						      GTK_ICON_SIZE_MENU,
+						      GTK_ICON_SIZE_INHERIT,
 						      GTK_PARAM_READWRITE));
 
   /**

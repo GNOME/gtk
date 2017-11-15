@@ -133,8 +133,10 @@ main (int argc, char **argv)
   label = gtk_label_new ("GTK_IMAGE_ICON_NAME");
   gtk_grid_attach (GTK_GRID (grid), label, 0, 4, 1, 1);
   image = gtk_image_new_from_icon_name (icon_name);
+  gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
   gtk_grid_attach (GTK_GRID (grid), image, 1, 4, 1, 1);
   image = gtk_image_new_from_icon_name (icon_name);
+  gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
   gtk_image_set_pixel_size (GTK_IMAGE (image), 30);
   gtk_grid_attach (GTK_GRID (grid), image, 2, 4, 1, 1);
 
@@ -142,11 +144,13 @@ main (int argc, char **argv)
   gtk_grid_attach (GTK_GRID (grid), label, 0, 5, 1, 1);
   icon = g_themed_icon_new_with_default_fallbacks ("folder-remote");
   image = gtk_image_new_from_gicon (icon);
+  gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
   g_object_unref (icon);
   gtk_grid_attach (GTK_GRID (grid), image, 1, 5, 1, 1);
   file = g_file_new_for_path ("apple-red.png");
   icon = g_file_icon_new (file);
   image = gtk_image_new_from_gicon (icon);
+  gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
   g_object_unref (icon);
   gtk_image_set_pixel_size (GTK_IMAGE (image), 30);
   gtk_grid_attach (GTK_GRID (grid), image, 2, 5, 1, 1);

@@ -1851,7 +1851,6 @@ microphone-sensitivity-medium-symbolic</property>
                                         <child>
                                           <object class="GtkImage" id="listboxrow3image">
                                             <property name="icon-name">object-select-symbolic</property>
-                                            <property name="icon-size">1</property>
                                             <property name="halign">end</property>
                                             <property name="valign">center</property>
                                             <property name="margin-top">6</property>
@@ -1881,7 +1880,6 @@ microphone-sensitivity-medium-symbolic</property>
                                         <child>
                                           <object class="GtkImage">
                                             <property name="icon-name">object-select-symbolic</property>
-                                            <property name="icon-size">1</property>
                                             <property name="halign">end</property>
                                             <property name="valign">center</property>
                                             <property name="margin-top">6</property>

@@ -144,7 +144,6 @@
                       <object class="GtkImage" id="image1">
                         <property name="visible">1</property>
                         <property name="icon-name">gtk-orientation-portrait</property>
-                        <property name="icon-size">3</property>
                       </object>
                     </child>
                     <child>
@@ -180,7 +179,6 @@
                       <object class="GtkImage" id="image2">
                         <property name="visible">1</property>
                         <property name="icon-name">gtk-orientation-reverse-portrait</property>
-                        <property name="icon-size">3</property>
                       </object>
                     </child>
                     <child>
@@ -216,7 +214,6 @@
                       <object class="GtkImage" id="image3">
                         <property name="visible">1</property>
                         <property name="icon-name">gtk-orientation-landscape</property>
-                        <property name="icon-size">3</property>
                       </object>
                     </child>
                     <child>
@@ -251,7 +248,6 @@
                       <object class="GtkImage" id="image4">
                         <property name="visible">1</property>
                         <property name="icon-name">gtk-orientation-reverse-landscape</property>
-                        <property name="icon-size">3</property>
                       </object>
                     </child>
                     <child>

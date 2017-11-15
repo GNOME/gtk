@@ -170,6 +170,7 @@ populate_flowbox_images (GtkFlowBox *flowbox)
       gtk_widget_set_hexpand (widget, TRUE);
 
       image = gtk_image_new_from_icon_name ("face-wink");
+      gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
       gtk_widget_set_hexpand (image, TRUE);
       gtk_image_set_pixel_size (GTK_IMAGE (image), 256);
 

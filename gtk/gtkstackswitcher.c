@@ -89,7 +89,7 @@ gtk_stack_switcher_init (GtkStackSwitcher *switcher)
 
   priv = gtk_stack_switcher_get_instance_private (switcher);
 
-  priv->icon_size = GTK_ICON_SIZE_MENU;
+  priv->icon_size = GTK_ICON_SIZE_INHERIT;
   priv->stack = NULL;
   priv->buttons = g_hash_table_new (g_direct_hash, g_direct_equal);
 
@@ -681,7 +681,7 @@ gtk_stack_switcher_class_init (GtkStackSwitcherClass *class)
                                                      P_("Icon Size"),
                                                      P_("Symbolic size to use for named icon"),
                                                      0, G_MAXINT,
-                                                     GTK_ICON_SIZE_MENU,
+                                                     GTK_ICON_SIZE_INHERIT,
                                                      G_PARAM_EXPLICIT_NOTIFY | GTK_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,

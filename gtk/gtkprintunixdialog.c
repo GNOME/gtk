@@ -2312,7 +2312,7 @@ gtk_print_unix_dialog_style_updated (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_print_unix_dialog_parent_class)->style_updated (widget);
 
-  gtk_icon_size_lookup (GTK_ICON_SIZE_DIALOG, &size, NULL);
+  gtk_icon_size_lookup (GTK_ICON_SIZE_LARGE, &size, NULL);
   scale = size / 48.0;
 
   gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (priv->collate_image), (50 + 20) * scale);

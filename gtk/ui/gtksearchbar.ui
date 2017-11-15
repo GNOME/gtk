@@ -41,7 +41,6 @@
                     </style>
                     <child>
                       <object class="GtkImage" id="close_image">
-                        <property name="icon-size">1</property>
                         <property name="icon-name">window-close-symbolic</property>
                       </object>
                     </child>
