@@ -96,7 +96,7 @@ set_image (GtkWidget *image, const gchar *name, gint size)
 {
   GdkPixbuf *pixbuf;
 
-  gtk_image_set_from_icon_name (GTK_IMAGE (image), name, 1);
+  gtk_image_set_from_icon_name (GTK_IMAGE (image), name);
   gtk_image_set_pixel_size (GTK_IMAGE (image), size);
   pixbuf = get_icon (image, name, size);
   gtk_drag_source_set_icon_pixbuf (image, pixbuf);
@@ -413,7 +413,7 @@ get_scalable_image_data (GtkWidget        *widget,
   const gchar *name;
 
   image = gtk_bin_get_child (GTK_BIN (widget));
-  gtk_image_get_icon_name (GTK_IMAGE (image), &name, NULL);
+  name = gtk_image_get_icon_name (GTK_IMAGE (image));
 
   info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (), name, -1, 0);
   file = g_file_new_for_path (gtk_icon_info_get_filename (info));

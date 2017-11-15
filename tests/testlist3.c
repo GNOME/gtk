@@ -85,7 +85,7 @@ create_row (const gchar *text)
   GtkWidget *row, *box, *label, *image;
 
   row = gtk_list_box_row_new (); 
-  image = gtk_image_new_from_icon_name ("open-menu-symbolic", 1);
+  image = gtk_image_new_from_icon_name ("open-menu-symbolic");
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   g_object_set (box, "margin-start", 10, "margin-end", 10, NULL);
   label = gtk_label_new (text);

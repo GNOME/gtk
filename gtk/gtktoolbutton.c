@@ -460,7 +460,7 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 	}
       else if (button->priv->icon_name)
 	{
-	  icon = gtk_image_new_from_icon_name (button->priv->icon_name, GTK_ICON_SIZE_SMALL_TOOLBAR);
+	  icon = gtk_image_new_from_icon_name (button->priv->icon_name);
 	}
 
       if (icon)
@@ -713,13 +713,13 @@ clone_image_menu_size (GtkImage *image)
     {
       const gchar *icon_name = gtk_image_get_icon_name (image);
 
-      return gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_MENU);
+      return gtk_image_new_from_icon_name (icon_name);
     }
   else if (storage_type == GTK_IMAGE_GICON)
     {
       GIcon *icon = gtk_image_get_gicon (image);
 
-      return gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_MENU);
+      return gtk_image_new_from_gicon (icon);
     }
   else if (storage_type == GTK_IMAGE_SURFACE)
     {

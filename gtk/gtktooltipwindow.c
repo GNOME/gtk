@@ -141,7 +141,7 @@ gtk_tooltip_window_set_image_icon_from_name (GtkTooltipWindow *window,
 {
   if (icon_name)
     {
-      gtk_image_set_from_icon_name (GTK_IMAGE (window->image), icon_name, GTK_ICON_SIZE_MENU);
+      gtk_image_set_from_icon_name (GTK_IMAGE (window->image), icon_name);
       gtk_widget_show (window->image);
     }
   else
@@ -156,7 +156,7 @@ gtk_tooltip_window_set_image_icon_from_gicon (GtkTooltipWindow *window,
 {
   if (gicon != NULL)
     {
-      gtk_image_set_from_gicon (GTK_IMAGE (window->image), gicon, GTK_ICON_SIZE_MENU);
+      gtk_image_set_from_gicon (GTK_IMAGE (window->image), gicon);
       gtk_widget_show (window->image);
     }
   else

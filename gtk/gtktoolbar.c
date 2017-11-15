@@ -580,7 +580,7 @@ gtk_toolbar_init (GtkToolbar *toolbar)
 
   gtk_widget_set_focus_on_click (priv->arrow_button, FALSE);
 
-  priv->arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
+  priv->arrow = gtk_image_new_from_icon_name ("pan-down-symbolic");
   gtk_widget_set_name (priv->arrow, "gtk-toolbar-arrow");
   gtk_container_add (GTK_CONTAINER (priv->arrow_button), priv->arrow);
   
@@ -2197,9 +2197,9 @@ gtk_toolbar_orientation_changed (GtkToolbar    *toolbar,
       priv->orientation = orientation;
       
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        gtk_image_set_from_icon_name (GTK_IMAGE (priv->arrow), "pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
+        gtk_image_set_from_icon_name (GTK_IMAGE (priv->arrow), "pan-down-symbolic");
       else
-        gtk_image_set_from_icon_name (GTK_IMAGE (priv->arrow), "pan-end-symbolic", GTK_ICON_SIZE_BUTTON);
+        gtk_image_set_from_icon_name (GTK_IMAGE (priv->arrow), "pan-end-symbolic");
       
       gtk_toolbar_reconfigured (toolbar);
       

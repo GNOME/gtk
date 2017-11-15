@@ -249,7 +249,7 @@ update_icon_from_type (GtkShortcutsShortcut *self)
 
   if (icon)
     {
-      gtk_image_set_from_gicon (self->image, icon, GTK_ICON_SIZE_DIALOG);
+      gtk_image_set_from_gicon (self->image, icon);
       gtk_image_set_pixel_size (self->image, 64);
       g_object_unref (icon);
     }
@@ -271,7 +271,7 @@ static void
 gtk_shortcuts_shortcut_set_icon (GtkShortcutsShortcut *self,
                                  GIcon                *gicon)
 {
-  gtk_image_set_from_gicon (self->image, gicon, GTK_ICON_SIZE_DIALOG);
+  gtk_image_set_from_gicon (self->image, gicon);
   gtk_shortcuts_shortcut_set_icon_set (self, gicon != NULL);
   g_object_notify (G_OBJECT (self), "icon");
 }

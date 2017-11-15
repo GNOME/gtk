@@ -833,7 +833,7 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
   gtk_widget_set_halign (priv->frame, GTK_ALIGN_START);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
-  priv->arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
+  priv->arrow = gtk_image_new_from_icon_name ("pan-down-symbolic");
 
   if (priv->child)
     child = priv->child;
@@ -946,7 +946,7 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
 	}
     }
 
-  gtk_image_set_from_icon_name (GTK_IMAGE (arrow), icon_name, GTK_ICON_SIZE_BUTTON);
+  gtk_image_set_from_icon_name (GTK_IMAGE (arrow), icon_name);
 
   /* Put arrow on the right if the text is left-or-center justified, and on the
    * left otherwise; do this by packing boxes, so flipping text direction will

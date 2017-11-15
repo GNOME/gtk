@@ -419,9 +419,9 @@ update_icon (GtkColorSwatch *swatch)
   GtkImage *image = GTK_IMAGE (swatch->priv->overlay_widget);
 
   if (swatch->priv->icon)
-    gtk_image_set_from_icon_name (image, swatch->priv->icon, GTK_ICON_SIZE_BUTTON);
+    gtk_image_set_from_icon_name (image, swatch->priv->icon);
   else if (gtk_widget_get_state_flags (GTK_WIDGET (swatch)) & GTK_STATE_FLAG_SELECTED)
-    gtk_image_set_from_icon_name (image, "object-select-symbolic", GTK_ICON_SIZE_BUTTON);
+    gtk_image_set_from_icon_name (image, "object-select-symbolic");
   else
     gtk_image_clear (image);
 }

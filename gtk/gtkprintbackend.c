@@ -769,7 +769,7 @@ request_password (GtkPrintBackend  *backend,
   main_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
   /* Left */
-  icon = gtk_image_new_from_icon_name ("dialog-password-symbolic", GTK_ICON_SIZE_DIALOG);
+  icon = gtk_image_new_from_icon_name ("dialog-password-symbolic");
   gtk_widget_set_halign (icon, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (icon, GTK_ALIGN_START);
   g_object_set (icon, "margin", 12, NULL);

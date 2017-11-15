@@ -137,7 +137,7 @@ rebuild_child (GtkWidget   *self,
 
   if (icon_name != NULL)
     {
-      button_child = gtk_image_new_from_icon_name (icon_name, icon_size);
+      button_child = gtk_image_new_from_icon_name (icon_name);
       if (title != NULL)
         gtk_widget_set_tooltip_text (GTK_WIDGET (self), title);
 

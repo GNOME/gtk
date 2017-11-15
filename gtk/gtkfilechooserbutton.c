@@ -505,7 +505,7 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
   priv->label = gtk_label_new (_(FALLBACK_DISPLAY_NAME));
   gtk_label_set_xalign (GTK_LABEL (priv->label), 0.0f);
   gtk_widget_set_hexpand (priv->label, TRUE);
-  icon = gtk_image_new_from_icon_name ("document-open-symbolic", GTK_ICON_SIZE_BUTTON);
+  icon = gtk_image_new_from_icon_name ("document-open-symbolic");
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_valign (priv->image, GTK_ALIGN_BASELINE);
   gtk_container_add (GTK_CONTAINER (box), priv->image);
@@ -2482,7 +2482,7 @@ update_label_get_info_cb (GCancellable *cancellable,
   gtk_label_set_text (GTK_LABEL (priv->label), g_file_info_get_display_name (info));
 
   icon = _gtk_file_info_get_icon (info, priv->icon_size, gtk_widget_get_scale_factor (GTK_WIDGET (button)));
-  gtk_image_set_from_gicon (GTK_IMAGE (priv->image), icon, GTK_ICON_SIZE_BUTTON);
+  gtk_image_set_from_gicon (GTK_IMAGE (priv->image), icon);
   gtk_image_set_pixel_size (GTK_IMAGE (priv->image), priv->icon_size);
   if (icon)
     g_object_unref (icon);
@@ -2529,7 +2529,7 @@ update_label_and_image (GtkFileChooserButton *button)
 
               label_text = _gtk_file_system_volume_get_display_name (volume);
               icon = _gtk_file_system_volume_get_icon (volume);
-              gtk_image_set_from_gicon (GTK_IMAGE (priv->image), icon, GTK_ICON_SIZE_BUTTON);
+              gtk_image_set_from_gicon (GTK_IMAGE (priv->image), icon);
               gtk_image_set_pixel_size (GTK_IMAGE (priv->image), priv->icon_size);
               if (icon)
                 g_object_unref (icon);
@@ -2561,7 +2561,7 @@ update_label_and_image (GtkFileChooserButton *button)
 
           label_text = _gtk_bookmarks_manager_get_bookmark_label (button->priv->bookmarks_manager, file);
           icon = g_themed_icon_new ("text-x-generic");
-          gtk_image_set_from_gicon (GTK_IMAGE (priv->image), icon, GTK_ICON_SIZE_BUTTON);
+          gtk_image_set_from_gicon (GTK_IMAGE (priv->image), icon);
           gtk_image_set_pixel_size (GTK_IMAGE (priv->image), priv->icon_size);
           if (icon)
             g_object_unref (icon);
@@ -2588,7 +2588,7 @@ out:
   else
     {
       gtk_label_set_text (GTK_LABEL (priv->label), _(FALLBACK_DISPLAY_NAME));
-      gtk_image_set_from_gicon (GTK_IMAGE (priv->image), NULL, priv->icon_size);
+      gtk_image_set_from_gicon (GTK_IMAGE (priv->image), NULL);
     }
 
   if (done_changing_selection)

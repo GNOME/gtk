@@ -582,7 +582,7 @@ populate_servers (GtkPlacesView *view)
       gtk_container_add (GTK_CONTAINER (grid), label);
 
       /* remove button */
-      button = gtk_button_new_from_icon_name ("window-close-symbolic", GTK_ICON_SIZE_BUTTON);
+      button = gtk_button_new_from_icon_name ("window-close-symbolic");
       gtk_widget_set_halign (button, GTK_ALIGN_END);
       gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
       gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);

@@ -487,7 +487,7 @@ setup_search (GtkAppChooserDialog *self)
 
       button = gtk_toggle_button_new ();
       gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-      image = gtk_image_new_from_icon_name ("edit-find-symbolic", GTK_ICON_SIZE_MENU);
+      image = gtk_image_new_from_icon_name ("edit-find-symbolic");
       gtk_widget_show (image);
       gtk_container_add (GTK_CONTAINER (button), image);
       gtk_style_context_add_class (gtk_widget_get_style_context (button), "image-button");

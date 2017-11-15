@@ -225,9 +225,7 @@ gtk_sidebar_row_set_property (GObject      *object,
         if (object != NULL)
           {
             self->start_icon = g_object_ref (object);
-            gtk_image_set_from_gicon (GTK_IMAGE (self->start_icon_widget),
-                                      self->start_icon,
-                                      GTK_ICON_SIZE_MENU);
+            gtk_image_set_from_gicon (GTK_IMAGE (self->start_icon_widget), self->start_icon);
           }
         else
           {
@@ -243,9 +241,7 @@ gtk_sidebar_row_set_property (GObject      *object,
         if (object != NULL)
           {
             self->end_icon = g_object_ref (object);
-            gtk_image_set_from_gicon (GTK_IMAGE (self->end_icon_widget),
-                                      self->end_icon,
-                                      GTK_ICON_SIZE_MENU);
+            gtk_image_set_from_gicon (GTK_IMAGE (self->end_icon_widget), self->end_icon);
             gtk_widget_show (self->end_icon_widget);
           }
         else
@@ -411,8 +407,7 @@ gtk_sidebar_row_set_start_icon (GtkSidebarRow *self,
     {
       g_set_object (&self->start_icon, icon);
       if (self->start_icon != NULL)
-        gtk_image_set_from_gicon (GTK_IMAGE (self->start_icon_widget), self->start_icon,
-                                  GTK_ICON_SIZE_MENU);
+        gtk_image_set_from_gicon (GTK_IMAGE (self->start_icon_widget), self->start_icon);
       else
         gtk_image_clear (GTK_IMAGE (self->start_icon_widget));
 
@@ -430,8 +425,7 @@ gtk_sidebar_row_set_end_icon (GtkSidebarRow *self,
     {
       g_set_object (&self->end_icon, icon);
       if (self->end_icon != NULL)
-        gtk_image_set_from_gicon (GTK_IMAGE (self->end_icon_widget), self->end_icon,
-                                  GTK_ICON_SIZE_MENU);
+        gtk_image_set_from_gicon (GTK_IMAGE (self->end_icon_widget), self->end_icon);
       else
         if (self->end_icon_widget != NULL)
           gtk_image_clear (GTK_IMAGE (self->end_icon_widget));
