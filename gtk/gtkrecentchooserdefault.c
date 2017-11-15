@@ -98,8 +98,6 @@ typedef struct
   gpointer sort_data;
   GDestroyNotify sort_data_destroy;
 
-  GtkIconTheme *icon_theme;
-  
   GtkWidget *recent_view;
   GtkListStore *recent_store;
   GtkTreeViewColumn *icon_column;
@@ -148,8 +146,6 @@ enum {
   LOAD_FINISHED  /* the model is fully loaded and inserted */
 };
 
-/* Icon size for if we can't get it from the theme */
-#define FALLBACK_ICON_SIZE  48
 #define FALLBACK_ITEM_LIMIT 20
 
 #define NUM_CHARS 40
@@ -201,10 +197,6 @@ static void gtk_recent_chooser_default_map      (GtkWidget *widget);
 
 static void set_current_filter        (GtkRecentChooserDefault *impl,
 				       GtkRecentFilter         *filter);
-
-static GtkIconTheme *get_icon_theme_for_widget (GtkWidget   *widget);
-static gint          get_icon_size_for_widget  (GtkWidget   *widget,
-						GtkIconSize  icon_size);
 
 static void reload_recent_items (GtkRecentChooserDefault *impl);
 static void chooser_set_model   (GtkRecentChooserDefault *impl);
@@ -349,8 +341,6 @@ _gtk_recent_chooser_default_init (GtkRecentChooserDefault *impl)
   priv->show_tips = FALSE;
   priv->select_multiple = FALSE;
   priv->local_only = TRUE;
-  
-  priv->icon_theme = NULL;
   
   priv->current_filter = NULL;
 
@@ -759,19 +749,12 @@ cleanup_after_load (gpointer user_data)
 static void
 reload_recent_items (GtkRecentChooserDefault *impl)
 {
-  GtkWidget *widget;
-
   /* reload is already in progress - do not disturb */
   if (impl->priv->load_id)
     return;
-  
-  widget = GTK_WIDGET (impl);
 
   gtk_tree_view_set_model (GTK_TREE_VIEW (impl->priv->recent_view), NULL);
   gtk_list_store_clear (impl->priv->recent_store);
-  
-  if (!impl->priv->icon_theme)
-    impl->priv->icon_theme = get_icon_theme_for_widget (widget);
 
   if (!impl->priv->limit_set)
     impl->priv->limit = DEFAULT_RECENT_FILES_LIMIT;
@@ -1257,27 +1240,6 @@ chooser_set_sort_type (GtkRecentChooserDefault *impl,
     }
 }
 
-
-static GtkIconTheme *
-get_icon_theme_for_widget (GtkWidget *widget)
-{
-  return gtk_css_icon_theme_value_get_icon_theme
-    (_gtk_style_context_peek_property (gtk_widget_get_style_context (widget),
-                                       GTK_CSS_PROPERTY_ICON_THEME));
-}
-
-static gint
-get_icon_size_for_widget (GtkWidget   *widget,
-			  GtkIconSize  icon_size)
-{
-  gint width, height;
-
-  if (gtk_icon_size_lookup (icon_size, &width, &height))
-    return MAX (width, height);
-
-  return FALLBACK_ICON_SIZE;
-}
-
 static void
 recent_manager_changed_cb (GtkRecentManager *manager,
 			   gpointer          user_data)
@@ -1319,36 +1281,22 @@ filter_combo_changed_cb (GtkComboBox *combo_box,
   set_current_filter (impl, filter);
 }
 
-static cairo_surface_t *
-get_drag_surface (GtkRecentChooserDefault *impl)
+static GIcon *
+get_drag_icon (GtkRecentChooserDefault *impl)
 {
   GtkRecentInfo *info;
-  cairo_surface_t *retval;
-  gint size;
-  GIcon *gicon;
-  GtkIconInfo *icon_info;
+  GIcon *gicon = NULL;
 
   g_assert (GTK_IS_RECENT_CHOOSER_DEFAULT (impl));
 
-  size = get_icon_size_for_widget (GTK_WIDGET (impl), GTK_ICON_SIZE_NORMAL);
   info = gtk_recent_chooser_get_current_item (GTK_RECENT_CHOOSER (impl));
-  if (!info)
-    return NULL;
+  if (info != NULL)
+    {
+      gicon = gtk_recent_info_get_gicon (info);
+      gtk_recent_info_unref (info);
+    }
 
-  gicon = gtk_recent_info_get_gicon (info);
-  if (!gicon)
-    return NULL;
-
-  icon_info = gtk_icon_theme_lookup_by_gicon (gtk_icon_theme_get_default (),
-                                              gicon,
-                                              size,
-                                              GTK_ICON_LOOKUP_USE_BUILTIN);
-  retval = gtk_icon_info_load_surface (icon_info, NULL, NULL);
-  g_object_unref (gicon);
-  g_object_unref (icon_info);
-  gtk_recent_info_unref (info);
-
-  return retval;
+  return gicon;
 }
 
 static void
@@ -1357,13 +1305,13 @@ recent_view_drag_begin_cb (GtkWidget      *widget,
 			   gpointer        user_data)
 {
   GtkRecentChooserDefault *impl = GTK_RECENT_CHOOSER_DEFAULT (user_data);
-  cairo_surface_t *surface;
+  GIcon *icon;
 
-  surface = get_drag_surface (impl);
-  if (surface)
+  icon = get_drag_icon (impl);
+  if (icon)
     {
-      gtk_drag_set_icon_surface (context, surface);
-      cairo_surface_destroy (surface);
+      gtk_drag_set_icon_gicon (context, icon, 0, 0);
+      g_object_unref (icon);
     }
   else
     gtk_drag_set_icon_default (context);
