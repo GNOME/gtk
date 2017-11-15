@@ -8661,42 +8661,7 @@ gtk_text_view_target_list_notify (GtkTextBuffer    *buffer,
                                   const GParamSpec *pspec,
                                   gpointer          data)
 {
-  GtkWidget     *widget = GTK_WIDGET (data);
-  GtkTargetList *view_list;
-  GtkTargetList *buffer_list;
-  GList         *list;
-
-  view_list = gtk_drag_dest_get_target_list (widget);
-  buffer_list = gtk_text_buffer_get_paste_target_list (buffer);
-
-  if (view_list)
-    gtk_target_list_ref (view_list);
-  else
-    view_list = gtk_target_list_new (NULL, 0);
-
-  list = view_list->list;
-  while (list)
-    {
-      GtkTargetPair *pair = list->data;
-
-      list = list->next; /* get next element before removing */
-
-      if (pair->info >= GTK_TEXT_BUFFER_TARGET_INFO_TEXT &&
-          pair->info <= GTK_TEXT_BUFFER_TARGET_INFO_BUFFER_CONTENTS)
-        {
-          gtk_target_list_remove (view_list, pair->target);
-        }
-    }
-
-  for (list = buffer_list->list; list; list = list->next)
-    {
-      GtkTargetPair *pair = list->data;
-
-      gtk_target_list_add (view_list, pair->target, pair->flags, pair->info);
-    }
-
-  gtk_drag_dest_set_target_list (widget, view_list);
-  gtk_target_list_unref (view_list);
+  gtk_drag_dest_set_target_list (data, gtk_text_buffer_get_paste_target_list (buffer));
 }
 
 static void
