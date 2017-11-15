@@ -28,6 +28,7 @@
 #include "gdkseat-wayland.h"
 #include "gdkwayland.h"
 #include "gdkkeysyms.h"
+#include "gdkcursorprivate.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdevicepadprivate.h"
 #include "gdkdevicetoolprivate.h"
@@ -501,18 +502,24 @@ gdk_wayland_device_set_window_cursor (GdkDevice *device,
   if (seat->grab_cursor)
     cursor = seat->grab_cursor;
 
-  if (cursor == pointer->cursor)
-    return;
+  if (cursor == NULL)
+    cursor = gdk_cursor_new_from_name ("default", NULL);
+  else
+    cursor = g_object_ref (cursor);
+
+  if (pointer->cursor != NULL &&
+      gdk_cursor_equal (cursor, pointer->cursor))
+    {
+      g_object_unref (cursor);
+      return;
+    }
 
   gdk_wayland_pointer_stop_cursor_animation (pointer);
 
   if (pointer->cursor)
     g_object_unref (pointer->cursor);
 
-  if (cursor == NULL)
-    pointer->cursor = gdk_cursor_new_from_name ("default", NULL);
-  else
-    pointer->cursor = g_object_ref (cursor);
+  pointer->cursor = cursor;
 
   gdk_wayland_device_update_window_cursor (device);
 }
