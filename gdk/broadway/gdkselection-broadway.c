@@ -147,7 +147,7 @@ _gdk_broadway_display_get_selection_property (GdkDisplay *display,
 					      gint       *ret_format)
 {
   if (ret_type)
-    *ret_type = GDK_NONE;
+    *ret_type = NULL;
   if (ret_format)
     *ret_format = 0;
   if (data)

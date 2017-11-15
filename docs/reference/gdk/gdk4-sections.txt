@@ -421,7 +421,6 @@ gdk_selection_send_notify_for_display
 GdkAtom
 GDK_ATOM_TO_POINTER
 GDK_POINTER_TO_ATOM
-GDK_NONE
 gdk_text_property_to_utf8_list_for_display
 gdk_utf8_to_string_target
 gdk_atom_intern

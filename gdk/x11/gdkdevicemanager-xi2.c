@@ -192,7 +192,7 @@ translate_valuator_class (GdkDisplay          *display,
   if (valuator_label != None)
     label = gdk_x11_xatom_to_atom_for_display (display, valuator_label);
   else
-    label = GDK_NONE;
+    label = NULL;
 
   _gdk_device_add_axis (device, label, use, min, max, resolution);
   GDK_NOTE (INPUT, g_message ("\n\taxis: %s %s", gdk_atom_name (label), use == GDK_AXIS_IGNORE ? "(ignored)" : "(used)"));

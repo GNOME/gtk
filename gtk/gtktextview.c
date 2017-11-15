@@ -7970,7 +7970,7 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
   target = gtk_drag_dest_find_target (widget, context,
                                       gtk_drag_dest_get_target_list (widget));
 
-  if (target == GDK_NONE)
+  if (target == NULL)
     {
       /* can't accept any of the offered targets */
     }                                 
@@ -8048,7 +8048,7 @@ gtk_text_view_drag_drop (GtkWidget        *widget,
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
   GtkTextIter drop_point;
-  GdkAtom target = GDK_NONE;
+  GdkAtom target = NULL;
 
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
@@ -8067,7 +8067,7 @@ gtk_text_view_drag_drop (GtkWidget        *widget,
   if (gtk_text_iter_can_insert (&drop_point, priv->editable))
     target = gtk_drag_dest_find_target (widget, context, NULL);
 
-  if (target != GDK_NONE)
+  if (target != NULL)
     gtk_drag_get_data (widget, context, target, time);
   else
     gtk_drag_finish (context, FALSE, FALSE, time);
@@ -8154,7 +8154,7 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
           GdkAtom *atoms;
           gint     n_atoms;
           GList   *list;
-          GdkAtom  target = GDK_NONE;
+          GdkAtom  target = NULL;
 
           copy_tags = FALSE;
 
@@ -8174,7 +8174,7 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
 
           g_free (atoms);
 
-          if (target != GDK_NONE)
+          if (target != NULL)
             {
               gtk_drag_get_data (widget, context, target, time);
               gtk_text_buffer_end_user_action (buffer);

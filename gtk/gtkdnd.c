@@ -632,7 +632,7 @@ gtk_drag_finish (GdkDragContext *context,
                  gboolean        del,
                  guint32         time)
 {
-  GdkAtom target = GDK_NONE;
+  GdkAtom target = NULL;
 
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
 
@@ -641,7 +641,7 @@ gtk_drag_finish (GdkDragContext *context,
       target = gdk_atom_intern_static_string ("DELETE");
     }
 
-  if (target != GDK_NONE)
+  if (target != NULL)
     {
       GtkWidget *selection_widget = gtk_drag_get_ipc_widget_for_display (gdk_window_get_display (gdk_drag_context_get_source_window (context)));
 
@@ -1142,7 +1142,7 @@ gtk_drag_dest_drop (GtkWidget      *widget,
     {
       GdkAtom target = gtk_drag_dest_find_target (widget, context, NULL);
 
-      if (target == GDK_NONE)
+      if (target == NULL)
         {
           gtk_drag_finish (context, FALSE, FALSE, time);
           return TRUE;
@@ -1882,7 +1882,7 @@ gtk_drag_drop (GtkDragSourceInfo *info,
           
           if (pair->target == target1 || pair->target == target2)
             {
-              selection_data.selection = GDK_NONE;
+              selection_data.selection = NULL;
               selection_data.target = pair->target;
               selection_data.data = NULL;
               selection_data.length = -1;
@@ -1926,7 +1926,7 @@ gtk_drag_selection_get (GtkWidget        *widget,
                         gpointer          data)
 {
   GtkDragSourceInfo *info = data;
-  static GdkAtom null_atom = GDK_NONE;
+  static GdkAtom null_atom = NULL;
   guint target_info;
 
   if (!null_atom)

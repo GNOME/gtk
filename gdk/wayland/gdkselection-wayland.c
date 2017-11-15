@@ -795,7 +795,7 @@ gdk_wayland_selection_source_handles_target (GdkWaylandSelection *wayland_select
   GdkAtom atom;
   guint i;
 
-  if (target == GDK_NONE)
+  if (target == NULL)
     return FALSE;
 
   for (i = 0; i < wayland_selection->source_targets->len; i++)
@@ -1270,7 +1270,7 @@ emit_empty_selection_notify (GdkWindow *requestor,
   event->selection.send_event = FALSE;
   event->selection.selection = selection;
   event->selection.target = target;
-  event->selection.property = GDK_NONE;
+  event->selection.property = NULL;
   event->selection.time = GDK_CURRENT_TIME;
   event->selection.requestor = g_object_ref (requestor);
 
@@ -1537,7 +1537,7 @@ gdk_wayland_display_clear_selection_targets (GdkDisplay *display,
 {
   GdkWaylandSelection *wayland_selection = gdk_wayland_display_get_selection (display);
 
-  wayland_selection->requested_target = GDK_NONE;
+  wayland_selection->requested_target = NULL;
   g_array_set_size (wayland_selection->source_targets, 0);
   gdk_wayland_selection_unset_data_source (display, selection);
 }

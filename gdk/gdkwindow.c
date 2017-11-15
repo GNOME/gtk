@@ -7174,7 +7174,7 @@ gdk_drag_begin_from_point (GdkWindow *window,
  * gdk_property_get:
  * @window: a #GdkWindow
  * @property: the property to retrieve
- * @type: the desired property type, or %GDK_NONE, if any type of data
+ * @type: the desired property type, or %NULL, if any type of data
  *   is acceptable. If this does not match the actual
  *   type, then @actual_format and @actual_length will
  *   be filled in, a warning will be printed to stderr
@@ -7204,7 +7204,7 @@ gdk_drag_begin_from_point (GdkWindow *window,
  *
  * Retrieves a portion of the contents of a property. If the
  * property does not exist, then the function returns %FALSE,
- * and %GDK_NONE will be stored in @actual_property_type.
+ * and %NULL will be stored in @actual_property_type.
  *
  * The XGetWindowProperty() function that gdk_property_get()
  * uses has a very confusing and complicated set of semantics.

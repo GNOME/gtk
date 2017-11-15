@@ -583,7 +583,7 @@ wintab_init_check (GdkDeviceManagerWin32 *device_manager)
           if (device->pktdata & PK_X)
             {
               _gdk_device_add_axis (GDK_DEVICE (device),
-                                    GDK_NONE,
+                                    NULL,
                                     GDK_AXIS_X,
                                     axis_x.axMin,
                                     axis_x.axMax,
@@ -594,7 +594,7 @@ wintab_init_check (GdkDeviceManagerWin32 *device_manager)
           if (device->pktdata & PK_Y)
             {
               _gdk_device_add_axis (GDK_DEVICE (device),
-                                    GDK_NONE,
+                                    NULL,
                                     GDK_AXIS_Y,
                                     axis_y.axMin,
                                     axis_y.axMax,
@@ -606,7 +606,7 @@ wintab_init_check (GdkDeviceManagerWin32 *device_manager)
           if (device->pktdata & PK_NORMAL_PRESSURE)
             {
               _gdk_device_add_axis (GDK_DEVICE (device),
-                                    GDK_NONE,
+                                    NULL,
                                     GDK_AXIS_PRESSURE,
                                     axis_npressure.axMin,
                                     axis_npressure.axMax,
@@ -623,14 +623,14 @@ wintab_init_check (GdkDeviceManagerWin32 *device_manager)
                * we convert to x and y tilt in the -1000..1000 range
                */
               _gdk_device_add_axis (GDK_DEVICE (device),
-                                    GDK_NONE,
+                                    NULL,
                                     GDK_AXIS_XTILT,
                                     -1000,
                                     1000,
                                     1000);
 
               _gdk_device_add_axis (GDK_DEVICE (device),
-                                    GDK_NONE,
+                                    NULL,
                                     GDK_AXIS_YTILT,
                                     -1000,
                                     1000,

@@ -733,7 +733,7 @@ gtk_selection_owner_set_for_display (GdkDisplay   *display,
   GdkWindow *window;
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
-  g_return_val_if_fail (selection != GDK_NONE, FALSE);
+  g_return_val_if_fail (selection != NULL, FALSE);
   g_return_val_if_fail (widget == NULL || gtk_widget_get_realized (widget), FALSE);
   g_return_val_if_fail (widget == NULL || gtk_widget_get_display (widget) == display, FALSE);
   
@@ -826,7 +826,7 @@ gtk_selection_owner_set (GtkWidget *widget,
   GdkDisplay *display;
   
   g_return_val_if_fail (widget == NULL || gtk_widget_get_realized (widget), FALSE);
-  g_return_val_if_fail (selection != GDK_NONE, FALSE);
+  g_return_val_if_fail (selection != NULL, FALSE);
 
   if (widget)
     display = gtk_widget_get_display (widget);
@@ -919,7 +919,7 @@ gtk_selection_clear_targets (GtkWidget *widget,
   GList *lists;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (selection != GDK_NONE);
+  g_return_if_fail (selection != NULL);
 
   gdk_selection_clear_targets (gtk_widget_get_display (widget), selection);
 
@@ -963,7 +963,7 @@ gtk_selection_add_target (GtkWidget	    *widget,
   GtkTargetList *list;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (selection != GDK_NONE);
+  g_return_if_fail (selection != NULL);
 
   list = gtk_selection_target_list_get (widget, selection);
   gtk_target_list_add (list, target, 0, info);
@@ -990,7 +990,7 @@ gtk_selection_add_targets (GtkWidget     *widget,
   guint n_targets;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (selection != GDK_NONE);
+  g_return_if_fail (selection != NULL);
   g_return_if_fail (targets != NULL);
   
   list = gtk_selection_target_list_get (widget, selection);
@@ -1092,7 +1092,7 @@ gtk_selection_convert (GtkWidget *widget,
   guint id;
   
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-  g_return_val_if_fail (selection != GDK_NONE, FALSE);
+  g_return_val_if_fail (selection != NULL, FALSE);
   
   if (initialize)
     gtk_selection_init ();
@@ -2449,7 +2449,7 @@ _gtk_selection_request (GtkWidget *widget,
       mult_atoms = NULL;
       
       gdk_error_trap_push ();
-      if (!gdk_property_get (info->requestor, property, GDK_NONE, /* AnyPropertyType */
+      if (!gdk_property_get (info->requestor, property, NULL, /* AnyPropertyType */
 			     0, selection_max_size, FALSE,
 			     &type, &format, &length, &mult_atoms))
 	{
@@ -2457,7 +2457,7 @@ _gtk_selection_request (GtkWidget *widget,
 						 requestor, 
 						 selection,
 						 target, 
-						 GDK_NONE, 
+						 NULL, 
 						 time);
 	  g_free (mult_atoms);
 	  g_slice_free (GtkIncrInfo, info);
@@ -2534,7 +2534,7 @@ _gtk_selection_request (GtkWidget *widget,
       gtk_selection_invoke_handler (widget, &data, time);
       if (data.length < 0)
 	{
-	  info->conversions[i].property = GDK_NONE;
+	  info->conversions[i].property = NULL;
 	  continue;
 	}
       
@@ -2625,14 +2625,14 @@ _gtk_selection_request (GtkWidget *widget,
     }
 
   if (info->num_conversions == 1 &&
-      info->conversions[0].property == GDK_NONE)
+      info->conversions[0].property == NULL)
     {
       /* Reject the entire conversion */
       gdk_selection_send_notify_for_display (gtk_widget_get_display (widget),
 					     requestor, 
 					     selection, 
 					     target, 
-					     GDK_NONE, 
+					     NULL, 
 					     time);
     }
   else
@@ -2885,18 +2885,18 @@ _gtk_selection_notify (GtkWidget	 *widget,
   if (!tmp_list)		/* no retrieval in progress */
     return FALSE;
 
-  if (property != GDK_NONE)
+  if (property != NULL)
     length = gdk_selection_property_get (window, &buffer,
 					 &type, &format);
   else
     length = 0; /* silence gcc */
   
-  if (property == GDK_NONE || buffer == NULL)
+  if (property == NULL || buffer == NULL)
     {
       current_retrievals = g_list_remove_link (current_retrievals, tmp_list);
       g_list_free (tmp_list);
       /* structure will be freed in timeout */
-      gtk_selection_retrieval_report (info, GDK_NONE, 0, NULL, -1, time);
+      gtk_selection_retrieval_report (info, NULL, 0, NULL, -1, time);
       
       return TRUE;
     }
@@ -3002,15 +3002,15 @@ _gtk_selection_property_notify (GtkWidget	*widget,
      doing memory allocation at every step. But its only guaranteed to
      be a _lower bound_ (pretty useless!) */
   
-  if (length == 0 || type == GDK_NONE)		/* final zero length portion */
+  if (length == 0 || type == NULL)		/* final zero length portion */
     {
       /* Info structure will be freed in timeout */
       current_retrievals = g_list_remove_link (current_retrievals, tmp_list);
       g_list_free (tmp_list);
       gtk_selection_retrieval_report (info,
 				      type, format, 
-				      (type == GDK_NONE) ?  NULL : info->buffer,
-				      (type == GDK_NONE) ?  -1 : info->offset,
+				      (type == NULL) ?  NULL : info->buffer,
+				      (type == NULL) ?  -1 : info->offset,
 				      info->notify_time);
     }
   else				/* append on newly arrived data */
@@ -3074,7 +3074,7 @@ gtk_selection_retrieval_timeout (GtkRetrievalInfo *info)
 	{
 	  current_retrievals = g_list_remove_link (current_retrievals, tmp_list);
 	  g_list_free (tmp_list);
-	  gtk_selection_retrieval_report (info, GDK_NONE, 0, NULL, -1, GDK_CURRENT_TIME);
+	  gtk_selection_retrieval_report (info, NULL, 0, NULL, -1, GDK_CURRENT_TIME);
 	}
       
       g_free (info->buffer);

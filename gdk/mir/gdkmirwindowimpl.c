@@ -1723,7 +1723,7 @@ gdk_mir_window_impl_get_property (GdkWindow  *window,
   if (!actual_length)
     actual_length = &dummy_actual_length;
 
-  *actual_type = GDK_NONE;
+  *actual_type = NULL;
   *actual_format = 0;
   *actual_length = 0;
 
@@ -1743,7 +1743,7 @@ gdk_mir_window_impl_get_property (GdkWindow  *window,
   if (*actual_type == GDK_SELECTION_TYPE_ATOM || *actual_type == gdk_atom_intern_static_string ("ATOM_PAIR"))
     *actual_format = 32;
 
-  if (type != GDK_NONE && type != mir_property->type)
+  if (type != NULL && type != mir_property->type)
     return FALSE;
 
   offset *= 4;
@@ -1851,7 +1851,7 @@ create_paste (GdkWindow     *window,
 
   for (i = 0; i < n_requested_targets; i++)
     {
-      if (requested_targets[i] == GDK_NONE)
+      if (requested_targets[i] == NULL)
         continue;
 
       mir_property = g_hash_table_lookup (impl->properties, requested_targets[i]);

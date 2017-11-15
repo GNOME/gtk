@@ -315,7 +315,7 @@ clipboard_display_closed (GdkDisplay   *display,
  * Returns the clipboard object for the given selection.
  * Cut/copy/paste menu items and keyboard shortcuts should use
  * the default clipboard, returned by passing %GDK_SELECTION_CLIPBOARD for @selection.
- * (%GDK_NONE is supported as a synonym for GDK_SELECTION_CLIPBOARD
+ * (%NULL is supported as a synonym for GDK_SELECTION_CLIPBOARD
  * for backwards compatibility reasons.)
  * The currently-selected object or text should be provided on the clipboard
  * identified by #GDK_SELECTION_PRIMARY. Cut/copy/paste menu items
@@ -323,7 +323,7 @@ clipboard_display_closed (GdkDisplay   *display,
  * to the default clipboard, i.e. they copy the selection to what the
  * user sees as the clipboard.
  *
- * (Passing #GDK_NONE is the same as using `gdk_atom_intern
+ * (Passing #NULL is the same as using `gdk_atom_intern
  * ("CLIPBOARD", FALSE)`.
  *
  * See the
@@ -995,7 +995,7 @@ gtk_clipboard_request_contents (GtkClipboard            *clipboard,
 				gpointer                 user_data)
 {
   g_return_if_fail (clipboard != NULL);
-  g_return_if_fail (target != GDK_NONE);
+  g_return_if_fail (target != NULL);
   g_return_if_fail (callback != NULL);
 
   GTK_CLIPBOARD_GET_CLASS (clipboard)->request_contents (clipboard,
@@ -1428,7 +1428,7 @@ gtk_clipboard_wait_for_contents (GtkClipboard *clipboard,
   WaitResults results;
 
   g_return_val_if_fail (clipboard != NULL, NULL);
-  g_return_val_if_fail (target != GDK_NONE, NULL);
+  g_return_val_if_fail (target != NULL, NULL);
   
   results.data = NULL;
   results.loop = g_main_loop_new (NULL, TRUE);
@@ -1988,7 +1988,7 @@ clipboard_peek (GdkDisplay *display,
   GSList *clipboards;
   GSList *tmp_list;
 
-  if (selection == GDK_NONE)
+  if (selection == NULL)
     selection = GDK_SELECTION_CLIPBOARD;
 
   clipboards = g_object_get_data (G_OBJECT (display), "gtk-clipboard-list");
@@ -2298,7 +2298,7 @@ _gtk_clipboard_store_all (void)
 GdkAtom
 gtk_clipboard_get_selection (GtkClipboard *clipboard)
 {
-  g_return_val_if_fail (GTK_IS_CLIPBOARD (clipboard), GDK_NONE);
+  g_return_val_if_fail (GTK_IS_CLIPBOARD (clipboard), NULL);
 
   return clipboard->selection;
 }

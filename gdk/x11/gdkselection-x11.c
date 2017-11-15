@@ -190,7 +190,7 @@ _gdk_x11_display_convert_selection (GdkDisplay *display,
                                     GdkAtom     target,
                                     guint32     time)
 {
-  g_return_if_fail (selection != GDK_NONE);
+  g_return_if_fail (selection != NULL);
 
   if (GDK_WINDOW_DESTROYED (requestor) || !GDK_WINDOW_IS_X11 (requestor))
     return;
@@ -303,7 +303,7 @@ _gdk_x11_display_get_selection_property (GdkDisplay  *display,
 
  err:
   if (ret_type)
-    *ret_type = GDK_NONE;
+    *ret_type = NULL;
   if (ret_format)
     *ret_format = 0;
   if (data)
@@ -343,7 +343,7 @@ _gdk_x11_display_send_selection_notify (GdkDisplay       *display,
   xevent.requestor = GDK_WINDOW_XID (requestor);
   xevent.selection = gdk_x11_atom_to_xatom_for_display (display, selection);
   xevent.target = gdk_x11_atom_to_xatom_for_display (display, target);
-  if (property == GDK_NONE)
+  if (property == NULL)
     xevent.property = None;
   else
     xevent.property = gdk_x11_atom_to_xatom_for_display (display, property);

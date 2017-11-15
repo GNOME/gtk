@@ -74,10 +74,10 @@ lookup_cached_xatom (GdkDisplay *display,
 /**
  * gdk_x11_atom_to_xatom_for_display:
  * @display: (type GdkX11Display): A #GdkDisplay
- * @atom: A #GdkAtom, or %GDK_NONE
+ * @atom: A #GdkAtom, or %NULL
  *
  * Converts from a #GdkAtom to the X atom for a #GdkDisplay
- * with the same string value. The special value %GDK_NONE
+ * with the same string value. The special value %NULL
  * is converted to %None.
  *
  * Returns: the X atom corresponding to @atom, or %None
@@ -92,7 +92,7 @@ gdk_x11_atom_to_xatom_for_display (GdkDisplay *display,
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), None);
 
-  if (atom == GDK_NONE)
+  if (atom == NULL)
     return None;
 
   if (gdk_display_is_closed (display))
@@ -184,15 +184,15 @@ gdk_x11_xatom_to_atom_for_display (GdkDisplay *display,
 				   Atom	       xatom)
 {
   GdkX11Display *display_x11;
-  GdkAtom virtual_atom = GDK_NONE;
+  GdkAtom virtual_atom = NULL;
   
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), GDK_NONE);
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
   if (xatom == None)
-    return GDK_NONE;
+    return NULL;
 
   if (gdk_display_is_closed (display))
-    return GDK_NONE;
+    return NULL;
 
   display_x11 = GDK_X11_DISPLAY (display);
   
@@ -379,7 +379,7 @@ _gdk_x11_window_get_property (GdkWindow   *window,
 
   display = gdk_window_get_display (window);
   xproperty = gdk_x11_atom_to_xatom_for_display (display, property);
-  if (type == GDK_NONE)
+  if (type == NULL)
     xtype = AnyPropertyType;
   else
     xtype = gdk_x11_atom_to_xatom_for_display (display, type);

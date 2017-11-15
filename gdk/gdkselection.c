@@ -115,7 +115,7 @@ gdk_selection_owner_get (GdkAtom selection)
  * @selection: selection that was requested.
  * @target: target that was selected.
  * @property: property in which the selection owner stored the
- *   data, or %GDK_NONE to indicate that the request
+ *   data, or %NULL to indicate that the request
  *   was rejected.
  * @time_: timestamp.
  *
@@ -160,7 +160,7 @@ gdk_selection_owner_set_for_display (GdkDisplay *display,
                                      gboolean    send_event)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
-  g_return_val_if_fail (selection != GDK_NONE, FALSE);
+  g_return_val_if_fail (selection != NULL, FALSE);
 
   return GDK_DISPLAY_GET_CLASS (display)
            ->set_selection_owner (display, owner, selection, time, send_event);
@@ -189,7 +189,7 @@ gdk_selection_owner_get_for_display (GdkDisplay *display,
                                      GdkAtom     selection)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  g_return_val_if_fail (selection != GDK_NONE, NULL);
+  g_return_val_if_fail (selection != NULL, NULL);
 
   return GDK_DISPLAY_GET_CLASS (display)->get_selection_owner (display, selection);
 }
@@ -201,7 +201,7 @@ gdk_selection_owner_get_for_display (GdkDisplay *display,
  * @selection: selection that was requested
  * @target: target that was selected
  * @property: property in which the selection owner stored the data,
- *            or %GDK_NONE to indicate that the request was rejected
+ *            or %NULL to indicate that the request was rejected
  * @time_: timestamp
  *
  * Send a response to SelectionRequest event.
@@ -266,7 +266,7 @@ gdk_selection_convert (GdkWindow *requestor,
 {
   GdkDisplay *display;
 
-  g_return_if_fail (selection != GDK_NONE);
+  g_return_if_fail (selection != NULL);
 
   display = gdk_window_get_display (requestor);
 

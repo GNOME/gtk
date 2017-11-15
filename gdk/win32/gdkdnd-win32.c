@@ -350,7 +350,7 @@ cf_to_atom (CLIPFORMAT cf)
   if (cf == _cf_html_format || cf == _cf_text_html)
     return _text_html;
 
-  return GDK_NONE;
+  return NULL;
 }
 
 #endif
@@ -2445,7 +2445,7 @@ gdk_win32_drag_context_get_selection (GdkDragContext *context)
     case GDK_DRAG_PROTO_OLE2:
       return _gdk_ole2_dnd;
     default:
-      return GDK_NONE;
+      return NULL;
     }
 }
 

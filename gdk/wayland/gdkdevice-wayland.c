@@ -876,8 +876,8 @@ gdk_wayland_device_init (GdkWaylandDevice *device_core)
 
   device = GDK_DEVICE (device_core);
 
-  _gdk_device_add_axis (device, GDK_NONE, GDK_AXIS_X, 0, 0, 1);
-  _gdk_device_add_axis (device, GDK_NONE, GDK_AXIS_Y, 0, 0, 1);
+  _gdk_device_add_axis (device, NULL, GDK_AXIS_X, 0, 0, 1);
+  _gdk_device_add_axis (device, NULL, GDK_AXIS_Y, 0, 0, 1);
 }
 
 static gint
@@ -1892,11 +1892,11 @@ keyboard_handle_enter (void               *data,
 
   _gdk_wayland_display_deliver_event (seat->display, event);
 
-  if (seat->pending_selection != GDK_NONE)
+  if (seat->pending_selection != NULL)
     {
       emit_selection_owner_change (seat->keyboard_focus,
                                    seat->pending_selection);
-      seat->pending_selection = GDK_NONE;
+      seat->pending_selection = NULL;
     }
 }
 
@@ -3485,42 +3485,42 @@ gdk_wayland_device_tablet_clone_tool_axes (GdkWaylandTabletData *tablet,
   g_object_freeze_notify (G_OBJECT (tablet->current_device));
   _gdk_device_reset_axes (tablet->current_device);
 
-  _gdk_device_add_axis (tablet->current_device, GDK_NONE, GDK_AXIS_X, 0, 0, 0);
-  _gdk_device_add_axis (tablet->current_device, GDK_NONE, GDK_AXIS_Y, 0, 0, 0);
+  _gdk_device_add_axis (tablet->current_device, NULL, GDK_AXIS_X, 0, 0, 0);
+  _gdk_device_add_axis (tablet->current_device, NULL, GDK_AXIS_Y, 0, 0, 0);
 
   if (tool->tool_axes & (GDK_AXIS_FLAG_XTILT | GDK_AXIS_FLAG_YTILT))
     {
-      axis_pos = _gdk_device_add_axis (tablet->current_device, GDK_NONE,
+      axis_pos = _gdk_device_add_axis (tablet->current_device, NULL,
                                        GDK_AXIS_XTILT, -90, 90, 0);
       tablet->axis_indices[GDK_AXIS_XTILT] = axis_pos;
 
-      axis_pos = _gdk_device_add_axis (tablet->current_device, GDK_NONE,
+      axis_pos = _gdk_device_add_axis (tablet->current_device, NULL,
                                        GDK_AXIS_YTILT, -90, 90, 0);
       tablet->axis_indices[GDK_AXIS_YTILT] = axis_pos;
     }
   if (tool->tool_axes & GDK_AXIS_FLAG_DISTANCE)
     {
-      axis_pos = _gdk_device_add_axis (tablet->current_device, GDK_NONE,
+      axis_pos = _gdk_device_add_axis (tablet->current_device, NULL,
                                        GDK_AXIS_DISTANCE, 0, 65535, 0);
       tablet->axis_indices[GDK_AXIS_DISTANCE] = axis_pos;
     }
   if (tool->tool_axes & GDK_AXIS_FLAG_PRESSURE)
     {
-      axis_pos = _gdk_device_add_axis (tablet->current_device, GDK_NONE,
+      axis_pos = _gdk_device_add_axis (tablet->current_device, NULL,
                                        GDK_AXIS_PRESSURE, 0, 65535, 0);
       tablet->axis_indices[GDK_AXIS_PRESSURE] = axis_pos;
     }
 
   if (tool->tool_axes & GDK_AXIS_FLAG_ROTATION)
     {
-      axis_pos = _gdk_device_add_axis (tablet->current_device, GDK_NONE,
+      axis_pos = _gdk_device_add_axis (tablet->current_device, NULL,
                                        GDK_AXIS_ROTATION, 0, 360, 0);
       tablet->axis_indices[GDK_AXIS_ROTATION] = axis_pos;
     }
 
   if (tool->tool_axes & GDK_AXIS_FLAG_SLIDER)
     {
-      axis_pos = _gdk_device_add_axis (tablet->current_device, GDK_NONE,
+      axis_pos = _gdk_device_add_axis (tablet->current_device, NULL,
                                        GDK_AXIS_SLIDER, -65535, 65535, 0);
       tablet->axis_indices[GDK_AXIS_SLIDER] = axis_pos;
     }
@@ -4944,7 +4944,7 @@ _gdk_wayland_device_manager_add_seat (GdkDeviceManager *device_manager,
   seat->foreign_dnd_window = create_foreign_dnd_window (display);
   seat->wl_seat = wl_seat;
 
-  seat->pending_selection = GDK_NONE;
+  seat->pending_selection = NULL;
 
   wl_seat_add_listener (seat->wl_seat, &seat_listener, seat);
   wl_seat_set_user_data (seat->wl_seat, seat);

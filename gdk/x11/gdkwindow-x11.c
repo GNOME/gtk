@@ -2061,7 +2061,7 @@ gdk_x11_window_set_modal_hint (GdkWindow *window,
   if (GDK_WINDOW_IS_MAPPED (window))
     gdk_wmspec_change_state (modal, window,
 			     gdk_atom_intern_static_string ("_NET_WM_STATE_MODAL"), 
-			     GDK_NONE);
+			     NULL);
 }
 
 static void
@@ -2082,7 +2082,7 @@ gdk_x11_window_set_skip_taskbar_hint (GdkWindow *window,
   if (GDK_WINDOW_IS_MAPPED (window))
     gdk_wmspec_change_state (skips_taskbar, window,
 			     gdk_atom_intern_static_string ("_NET_WM_STATE_SKIP_TASKBAR"),
-			     GDK_NONE);
+			     NULL);
 }
 
 static void
@@ -2103,7 +2103,7 @@ gdk_x11_window_set_skip_pager_hint (GdkWindow *window,
   if (GDK_WINDOW_IS_MAPPED (window))
     gdk_wmspec_change_state (skips_pager, window,
 			     gdk_atom_intern_static_string ("_NET_WM_STATE_SKIP_PAGER"), 
-			     GDK_NONE);
+			     NULL);
 }
 
 static void
@@ -3331,7 +3331,7 @@ gdk_x11_window_iconify (GdkWindow *window)
                                    GDK_WINDOW_STATE_ICONIFIED);
       gdk_wmspec_change_state (TRUE, window,
                                gdk_atom_intern_static_string ("_NET_WM_STATE_HIDDEN"),
-                               GDK_NONE);
+                               NULL);
     }
 }
 
@@ -3347,7 +3347,7 @@ gdk_x11_window_deiconify (GdkWindow *window)
       gdk_window_show (window);
       gdk_wmspec_change_state (FALSE, window,
                                gdk_atom_intern_static_string ("_NET_WM_STATE_HIDDEN"),
-                               GDK_NONE);
+                               NULL);
     }
   else
     {
@@ -3357,7 +3357,7 @@ gdk_x11_window_deiconify (GdkWindow *window)
                                    0);
       gdk_wmspec_change_state (FALSE, window,
                                gdk_atom_intern_static_string ("_NET_WM_STATE_HIDDEN"),
-                               GDK_NONE);
+                               NULL);
     }
 }
 
@@ -3379,7 +3379,7 @@ gdk_x11_window_stick (GdkWindow *window)
       /* Request stick during viewport scroll */
       gdk_wmspec_change_state (TRUE, window,
 			       gdk_atom_intern_static_string ("_NET_WM_STATE_STICKY"),
-			       GDK_NONE);
+			       NULL);
 
       /* Request desktop 0xFFFFFFFF */
       memset (&xclient, 0, sizeof (xclient));
@@ -3421,7 +3421,7 @@ gdk_x11_window_unstick (GdkWindow *window)
       /* Request unstick from viewport */
       gdk_wmspec_change_state (FALSE, window,
 			       gdk_atom_intern_static_string ("_NET_WM_STATE_STICKY"),
-			       GDK_NONE);
+			       NULL);
 
       move_to_current_desktop (window);
     }
@@ -3572,7 +3572,7 @@ gdk_x11_window_fullscreen (GdkWindow *window)
     {
       gdk_wmspec_change_state (TRUE, window,
 			       gdk_atom_intern_static_string ("_NET_WM_STATE_FULLSCREEN"),
-                               GDK_NONE);
+                               NULL);
       /* Actual XRandR layout may have change since we computed the fullscreen
        * monitors in GDK_FULLSCREEN_ON_ALL_MONITORS mode.
        */
@@ -3612,7 +3612,7 @@ gdk_x11_window_unfullscreen (GdkWindow *window)
   if (GDK_WINDOW_IS_MAPPED (window))
     gdk_wmspec_change_state (FALSE, window,
 			     gdk_atom_intern_static_string ("_NET_WM_STATE_FULLSCREEN"),
-                             GDK_NONE);
+                             NULL);
 
   else
     gdk_synthesize_window_state (window,
@@ -3635,10 +3635,10 @@ gdk_x11_window_set_keep_above (GdkWindow *window,
       if (setting)
 	gdk_wmspec_change_state (FALSE, window,
 				 gdk_atom_intern_static_string ("_NET_WM_STATE_BELOW"),
-				 GDK_NONE);
+				 NULL);
       gdk_wmspec_change_state (setting, window,
 			       gdk_atom_intern_static_string ("_NET_WM_STATE_ABOVE"),
-			       GDK_NONE);
+			       NULL);
     }
   else
     gdk_synthesize_window_state (window,
@@ -3660,10 +3660,10 @@ gdk_x11_window_set_keep_below (GdkWindow *window, gboolean setting)
       if (setting)
 	gdk_wmspec_change_state (FALSE, window,
 				 gdk_atom_intern_static_string ("_NET_WM_STATE_ABOVE"),
-				 GDK_NONE);
+				 NULL);
       gdk_wmspec_change_state (setting, window,
 			       gdk_atom_intern_static_string ("_NET_WM_STATE_BELOW"),
-			       GDK_NONE);
+			       NULL);
     }
   else
     gdk_synthesize_window_state (window,

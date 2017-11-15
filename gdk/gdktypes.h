@@ -118,14 +118,6 @@ typedef const char                   *GdkAtom;
  */
 #define GDK_POINTER_TO_ATOM(ptr)  ((GdkAtom)(ptr))
 
-/**
- * GDK_NONE:
- *
- * A null value for #GdkAtom, used in a similar way as
- * `None` in the Xlib API.
- */
-#define GDK_NONE            NULL
-
 /* Forward declarations of commonly used types */
 typedef struct _GdkRGBA               GdkRGBA;
 typedef struct _GdkCursor             GdkCursor;

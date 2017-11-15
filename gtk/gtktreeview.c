@@ -7258,7 +7258,7 @@ set_destination_row (GtkTreeView    *tree_view,
   gboolean can_drop = FALSE;
 
   *suggested_action = 0;
-  *target = GDK_NONE;
+  *target = NULL;
 
   widget = GTK_WIDGET (tree_view);
 
@@ -7282,7 +7282,7 @@ set_destination_row (GtkTreeView    *tree_view,
 
   *target = gtk_drag_dest_find_target (widget, context,
                                        gtk_drag_dest_get_target_list (widget));
-  if (*target == GDK_NONE)
+  if (*target == NULL)
     {
       return FALSE;
     }
@@ -7755,7 +7755,7 @@ gtk_tree_view_drag_drop (GtkWidget        *widget,
   GtkTreeView *tree_view;
   GtkTreePath *path;
   GdkDragAction suggested_action = 0;
-  GdkAtom target = GDK_NONE;
+  GdkAtom target = NULL;
   TreeViewDragInfo *di;
   GtkTreeModel *model;
   gboolean path_down_mode;
@@ -7781,7 +7781,7 @@ gtk_tree_view_drag_drop (GtkWidget        *widget,
 
   path = get_logical_dest_row (tree_view, &path_down_mode, &drop_append_mode);
 
-  if (target != GDK_NONE && path != NULL)
+  if (target != NULL && path != NULL)
     {
       /* in case a motion had requested drag data, change things so we
        * treat drag data receives as a drop.
@@ -7800,7 +7800,7 @@ gtk_tree_view_drag_drop (GtkWidget        *widget,
                                    NULL,
                                    GTK_TREE_VIEW_DROP_BEFORE);
 
-  if (target != GDK_NONE)
+  if (target != NULL)
     {
       gtk_drag_get_data (widget, context, target, time);
       return TRUE;

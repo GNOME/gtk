@@ -7102,7 +7102,7 @@ selection_test_received (GtkWidget        *tree_view,
 void
 selection_test_get_targets (GtkWidget *dialog, gint response, GtkWidget *tree_view)
 {
-  static GdkAtom targets_atom = GDK_NONE;
+  static GdkAtom targets_atom = NULL;
 
   if (response != GTK_RESPONSE_APPLY)
     {
@@ -7110,7 +7110,7 @@ selection_test_get_targets (GtkWidget *dialog, gint response, GtkWidget *tree_vi
       return;
     }
 
-  if (targets_atom == GDK_NONE)
+  if (targets_atom == NULL)
     targets_atom = gdk_atom_intern ("TARGETS", FALSE);
 
   gtk_selection_convert (tree_view, GDK_SELECTION_PRIMARY, targets_atom,

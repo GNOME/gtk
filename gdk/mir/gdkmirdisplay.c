@@ -547,7 +547,7 @@ gdk_mir_display_get_selection_property (GdkDisplay  *display,
 
   gdk_property_get (requestor,
                     gdk_atom_intern_static_string ("GDK_SELECTION"),
-                    GDK_NONE,
+                    NULL,
                     0,
                     G_MAXULONG,
                     FALSE,
@@ -639,7 +639,7 @@ get_best_format_index (const gchar * const *formats,
   if (!out_size)
     out_size = &best_size;
 
-  *out_type = GDK_NONE;
+  *out_type = NULL;
   *out_size = 0;
 
   for (i = 0; i < n_formats; i++)

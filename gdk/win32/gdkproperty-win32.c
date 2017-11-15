@@ -92,7 +92,7 @@ _gdk_win32_display_manager_get_atom_name (GdkDisplayManager *manager,
   ATOM win32_atom;
   gchar name[256];
 
-  if (GDK_NONE == atom) return g_strdup ("<none>");
+  if (NULL == atom) return g_strdup ("<none>");
   else if (GDK_SELECTION_PRIMARY == atom) return g_strdup ("PRIMARY");
   else if (GDK_SELECTION_SECONDARY == atom) return g_strdup ("SECONDARY");
   else if (GDK_SELECTION_CLIPBOARD == atom) return g_strdup ("CLIPBOARD");

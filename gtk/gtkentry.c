@@ -8870,12 +8870,12 @@ gtk_entry_drag_drop  (GtkWidget        *widget,
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
-  GdkAtom target = GDK_NONE;
+  GdkAtom target = NULL;
 
   if (priv->editable)
     target = gtk_drag_dest_find_target (widget, context, NULL);
 
-  if (target != GDK_NONE)
+  if (target != NULL)
     gtk_drag_get_data (widget, context, target, time);
   else
     gtk_drag_finish (context, FALSE, FALSE, time);
@@ -8901,7 +8901,7 @@ gtk_entry_drag_motion (GtkWidget        *widget,
   new_position = gtk_entry_find_position (entry, x + priv->scroll_offset);
 
   if (priv->editable &&
-      gtk_drag_dest_find_target (widget, context, NULL) != GDK_NONE)
+      gtk_drag_dest_find_target (widget, context, NULL) != NULL)
     {
       source_widget = gtk_drag_get_source_widget (context);
       suggested_action = gdk_drag_context_get_suggested_action (context);

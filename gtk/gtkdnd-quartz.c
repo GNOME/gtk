@@ -113,7 +113,7 @@ struct _GtkDragFindData
   guint target_info;
   GtkSelectionData selection_data;
 
-  selection_data.selection = GDK_NONE;
+  selection_data.selection = NULL;
   selection_data.data = NULL;
   selection_data.length = -1;
   selection_data.target = gdk_quartz_pasteboard_type_to_atom_libgtk_only (type);
@@ -834,7 +834,7 @@ gtk_drag_dest_drop (GtkWidget	     *widget,
     {
       GdkAtom target = gtk_drag_dest_find_target (widget, context, NULL);
 
-      if (target == GDK_NONE)
+      if (target == NULL)
 	{
 	  gtk_drag_finish (context, FALSE, FALSE, time);
 	  return TRUE;
@@ -992,8 +992,8 @@ gtk_drag_dest_find_target (GtkWidget      *widget,
   GList *tmp_source = NULL;
   GList *source_targets;
 
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), GDK_NONE);
-  g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), GDK_NONE);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
 
   dragging_info = gdk_quartz_drag_context_get_dragging_info_libgtk_only (context);
   pasteboard = [dragging_info draggingPasteboard];
@@ -1004,7 +1004,7 @@ gtk_drag_dest_find_target (GtkWidget      *widget,
     target_list = gtk_drag_dest_get_target_list (widget);
   
   if (target_list == NULL)
-    return GDK_NONE;
+    return NULL;
 
   source_targets = _gtk_quartz_pasteboard_types_to_atom_list ([pasteboard types]);
   tmp_target = target_list->list;
@@ -1031,7 +1031,7 @@ gtk_drag_dest_find_target (GtkWidget      *widget,
     }
 
   g_list_free (source_targets);
-  return GDK_NONE;
+  return NULL;
 }
 
 static gboolean

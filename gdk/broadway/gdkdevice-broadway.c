@@ -91,8 +91,8 @@ gdk_broadway_device_init (GdkBroadwayDevice *device_core)
 
   device = GDK_DEVICE (device_core);
 
-  _gdk_device_add_axis (device, GDK_NONE, GDK_AXIS_X, 0, 0, 1);
-  _gdk_device_add_axis (device, GDK_NONE, GDK_AXIS_Y, 0, 0, 1);
+  _gdk_device_add_axis (device, NULL, GDK_AXIS_X, 0, 0, 1);
+  _gdk_device_add_axis (device, NULL, GDK_AXIS_Y, 0, 0, 1);
 }
 
 static gboolean

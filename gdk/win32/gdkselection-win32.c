@@ -261,7 +261,7 @@ _gdk_win32_display_set_selection_owner (GdkDisplay *display,
   HWND hwnd;
   GdkEvent tmp_event;
 
-  g_return_val_if_fail (selection != GDK_NONE, FALSE);
+  g_return_val_if_fail (selection != NULL, FALSE);
 
   GDK_NOTE (DND, {
       gchar *sel_name = gdk_atom_name (selection);
@@ -336,7 +336,7 @@ _gdk_win32_display_get_selection_owner (GdkDisplay *display,
 {
   GdkWindow *window;
 
-  g_return_val_if_fail (selection != GDK_NONE, NULL);
+  g_return_val_if_fail (selection != NULL, NULL);
 
   if (selection == GDK_SELECTION_CLIPBOARD)
     {
@@ -394,7 +394,7 @@ _gdk_win32_display_convert_selection (GdkDisplay *display,
   HGLOBAL hdata;
   GdkAtom property = _gdk_selection;
 
-  g_return_if_fail (selection != GDK_NONE);
+  g_return_if_fail (selection != NULL);
   g_return_if_fail (requestor != NULL);
 
   if (GDK_WINDOW_DESTROYED (requestor))
@@ -515,7 +515,7 @@ _gdk_win32_display_convert_selection (GdkDisplay *display,
 				  32, (guchar *) targets,
 				  ntargets * sizeof (GdkAtom));
       else
-	property = GDK_NONE;
+	property = NULL;
     }
   else if (selection == GDK_SELECTION_CLIPBOARD && target == _utf8_string)
     {
@@ -562,7 +562,7 @@ _gdk_win32_display_convert_selection (GdkDisplay *display,
 	    }
 	}
       else
-	property = GDK_NONE;
+	property = NULL;
 
       API_CALL (CloseClipboard, ());
     }
@@ -802,11 +802,11 @@ _gdk_win32_display_convert_selection (GdkDisplay *display,
 	}
     }
   else
-    property = GDK_NONE;
+    property = NULL;
 
   /* Generate a selection notify message so that we actually fetch the
    * data (if property == _gdk_selection) or indicating failure (if
-   * property == GDK_NONE).
+   * property == NULL).
    */
   generate_selection_notify (requestor, selection, target, property, time);
 }
@@ -1074,7 +1074,7 @@ gdk_string_to_compound_text_for_display (GdkDisplay  *display,
   /* Always fail on Win32. No COMPOUND_TEXT support. */
 
   if (encoding)
-    *encoding = GDK_NONE;
+    *encoding = NULL;
 
   if (format)
     *format = 0;
@@ -1110,7 +1110,7 @@ gdk_utf8_to_compound_text_for_display (GdkDisplay  *display,
   /* Always fail on Win32. No COMPOUND_TEXT support. */
 
   if (encoding)
-    *encoding = GDK_NONE;
+    *encoding = NULL;
 
   if (format)
     *format = 0;

@@ -184,9 +184,9 @@ _gdk_broadway_window_register_dnd (GdkWindow      *window)
 static GdkAtom
 gdk_broadway_drag_context_get_selection (GdkDragContext *context)
 {
-  g_return_val_if_fail (context != NULL, GDK_NONE);
+  g_return_val_if_fail (context != NULL, NULL);
 
-  return GDK_NONE;
+  return NULL;
 }
 
 static gboolean

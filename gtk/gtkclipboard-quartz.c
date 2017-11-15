@@ -945,7 +945,7 @@ clipboard_peek (GdkDisplay *display,
   GSList *clipboards;
   GSList *tmp_list;
 
-  if (selection == GDK_NONE)
+  if (selection == NULL)
     selection = GDK_SELECTION_CLIPBOARD;
 
   clipboards = g_object_get_data (G_OBJECT (display), "gtk-clipboard-list");
@@ -1122,7 +1122,7 @@ _gtk_clipboard_store_all (void)
 GdkAtom
 gtk_clipboard_get_selection (GtkClipboard *clipboard)
 {
-  g_return_val_if_fail (GTK_IS_CLIPBOARD (clipboard), GDK_NONE);
+  g_return_val_if_fail (GTK_IS_CLIPBOARD (clipboard), NULL);
 
   return clipboard->selection;
 }

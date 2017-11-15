@@ -2521,7 +2521,7 @@ gdk_x11_drag_context_get_selection (GdkDragContext *context)
   if (context->protocol == GDK_DRAG_PROTO_XDND)
     return gdk_atom_intern_static_string ("XdndSelection");
   else
-    return GDK_NONE;
+    return NULL;
 }
 
 static gboolean

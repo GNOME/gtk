@@ -181,8 +181,8 @@ struct _GtkToolPaletteDragData
   GtkWidget      *item;
 };
 
-static GdkAtom dnd_target_atom_item = GDK_NONE;
-static GdkAtom dnd_target_atom_group = GDK_NONE;
+static GdkAtom dnd_target_atom_item = NULL;
+static GdkAtom dnd_target_atom_group = NULL;
 
 static const GtkTargetEntry dnd_targets[] =
 {
@@ -218,7 +218,7 @@ gtk_tool_palette_init (GtkToolPalette *palette)
 
   palette->priv->text_size_group = gtk_size_group_new (GTK_SIZE_GROUP_BOTH);
 
-  if (dnd_target_atom_item == GDK_NONE)
+  if (dnd_target_atom_item == NULL)
     {
       dnd_target_atom_item = gdk_atom_intern_static_string (dnd_targets[0].target);
       dnd_target_atom_group = gdk_atom_intern_static_string (dnd_targets[1].target);

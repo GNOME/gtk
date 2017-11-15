@@ -397,14 +397,14 @@ gtk_drag_dest_get_track_motion (GtkWidget *widget)
  *
  * Looks for a match between the supported targets of @context and the
  * @dest_target_list, returning the first matching target, otherwise
- * returning %GDK_NONE. @dest_target_list should usually be the return
+ * returning %NULL. @dest_target_list should usually be the return
  * value from gtk_drag_dest_get_target_list(), but some widgets may
  * have different valid targets for different parts of the widget; in
  * that case, they will have to implement a drag_motion handler that
  * passes the correct target list to this function.
  *
- * Returns: (transfer none): first target that the source offers
- *     and the dest can accept, or %GDK_NONE
+ * Returns: (transfer none) (nullable): first target that the source offers
+ *     and the dest can accept, or %NULL
  */
 GdkAtom
 gtk_drag_dest_find_target (GtkWidget      *widget,
@@ -415,15 +415,15 @@ gtk_drag_dest_find_target (GtkWidget      *widget,
   GList *tmp_source = NULL;
   GtkWidget *source_widget;
 
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), GDK_NONE);
-  g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), GDK_NONE);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
 
   source_widget = gtk_drag_get_source_widget (context);
   if (target_list == NULL)
     target_list = gtk_drag_dest_get_target_list (widget);
 
   if (target_list == NULL)
-    return GDK_NONE;
+    return NULL;
 
   tmp_target = target_list->list;
   while (tmp_target)
@@ -447,6 +447,6 @@ gtk_drag_dest_find_target (GtkWidget      *widget,
       tmp_target = tmp_target->next;
     }
 
-  return GDK_NONE;
+  return NULL;
 }
 

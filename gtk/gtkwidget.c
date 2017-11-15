@@ -2754,7 +2754,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *    }
    *
    *   target = gtk_drag_dest_find_target (widget, context, NULL);
-   *   if (target == GDK_NONE)
+   *   if (target == NULL)
    *     gdk_drag_status (context, 0, time);
    *   else
    *    {

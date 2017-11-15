@@ -130,7 +130,7 @@ static GdkAtom
 gdk_quartz_drag_context_get_selection (GdkDragContext *context)
 {
   /* FIXME: Implement */
-  return GDK_NONE;
+  return NULL;
 }
 
 static gboolean

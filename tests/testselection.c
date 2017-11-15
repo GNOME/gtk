@@ -114,7 +114,7 @@ init_atoms (void)
 {
   int i;
 
-  seltypes[SEL_TYPE_NONE] = GDK_NONE;
+  seltypes[SEL_TYPE_NONE] = NULL;
   seltypes[APPLE_PICT] = gdk_atom_intern ("APPLE_PICT",FALSE);
   seltypes[ATOM]       = gdk_atom_intern ("ATOM",FALSE);
   seltypes[ATOM_PAIR]  = gdk_atom_intern ("ATOM_PAIR",FALSE);
@@ -167,7 +167,7 @@ selection_get (GtkWidget *widget,
 {
   guchar *buffer;
   gint len;
-  GdkAtom type = GDK_NONE;
+  GdkAtom type = NULL;
 
   if (!selection_string)
     {
@@ -368,7 +368,7 @@ paste (GtkWidget *dialog, gint response, GtkWidget *entry)
   name = gtk_entry_get_text (GTK_ENTRY(entry));
   atom = gdk_atom_intern (name, FALSE);
 
-  if (atom == GDK_NONE)
+  if (atom == NULL)
     {
       g_print("Could not create atom: \"%s\"\n",name);
       return;

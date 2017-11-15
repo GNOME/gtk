@@ -60,7 +60,7 @@
  * gdk_atom_intern:
  * @atom_name: a string.
  * @only_if_exists: if %TRUE, GDK is allowed to not create a new atom, but
- *   just return %GDK_NONE if the requested atom doesn’t already
+ *   just return %NULL if the requested atom doesn’t already
  *   exists. Currently, the flag is ignored, since checking the
  *   existance of an atom is as expensive as creating it.
  *
@@ -72,7 +72,7 @@ GdkAtom
 gdk_atom_intern (const gchar *atom_name,
                  gboolean     only_if_exists)
 {
-  g_return_val_if_fail (atom_name != NULL, GDK_NONE);
+  g_return_val_if_fail (atom_name != NULL, NULL);
 
   return g_intern_string (atom_name);
 }
@@ -99,7 +99,7 @@ gdk_atom_intern (const gchar *atom_name,
 GdkAtom
 gdk_atom_intern_static_string (const gchar *atom_name)
 {
-  g_return_val_if_fail (atom_name != NULL, GDK_NONE);
+  g_return_val_if_fail (atom_name != NULL, NULL);
 
   return g_intern_static_string (atom_name);
 }

@@ -2948,7 +2948,7 @@ gtk_calendar_drag_motion (GtkWidget      *widget,
     }
 
   target = gtk_drag_dest_find_target (widget, context, NULL);
-  if (target == GDK_NONE || gdk_drag_context_get_suggested_action (context) == 0)
+  if (target == NULL || gdk_drag_context_get_suggested_action (context) == 0)
     gdk_drag_status (context, 0, time);
   else
     {
@@ -2969,7 +2969,7 @@ gtk_calendar_drag_drop (GtkWidget      *widget,
   GdkAtom target;
 
   target = gtk_drag_dest_find_target (widget, context, NULL);
-  if (target != GDK_NONE)
+  if (target != NULL)
     {
       gtk_drag_get_data (widget, context,
                          target,

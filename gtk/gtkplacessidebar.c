@@ -1635,7 +1635,7 @@ get_drag_data (GtkWidget      *list_box,
 
   target = gtk_drag_dest_find_target (list_box, context, NULL);
 
-  if (target == GDK_NONE)
+  if (target == NULL)
     return FALSE;
 
   gtk_drag_get_data (list_box, context, target, time);
@@ -2009,7 +2009,7 @@ drag_data_received_callback (GtkWidget        *list_box,
 
   if (!sidebar->drag_data_received)
     {
-      if (gtk_selection_data_get_target (selection_data) != GDK_NONE &&
+      if (gtk_selection_data_get_target (selection_data) != NULL &&
           info == DND_TEXT_URI_LIST)
         {
           gchar **uris;

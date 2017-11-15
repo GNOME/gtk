@@ -133,7 +133,7 @@ intern_atom_internal (const gchar *atom_name, gboolean allocate)
 {
   gpointer result;
   gchar *name;
-  g_return_val_if_fail (atom_name != NULL, GDK_NONE);
+  g_return_val_if_fail (atom_name != NULL, NULL);
 
   ensure_atom_tables ();
   
