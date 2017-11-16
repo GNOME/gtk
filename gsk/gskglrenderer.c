@@ -677,7 +677,10 @@ render_item (GskGLRenderer    *self,
       case MODE_BLIT:
         g_assert (item->program == &self->blit_program);
         glUniform1i (item->program->source_location, 0);
-        gsk_gl_driver_bind_source_texture (self->gl_driver, item->render_target);
+        if (item->render_target != 0)
+          gsk_gl_driver_bind_source_texture (self->gl_driver, item->render_target);
+        else
+          gsk_gl_driver_bind_source_texture (self->gl_driver, item->texture_id);
       break;
 
       case MODE_COLOR_MATRIX:
@@ -859,13 +862,30 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
     case GSK_OPACITY_NODE:
       {
         GskRenderNode *child = gsk_opacity_node_get_child (node);
-        graphene_matrix_t p;
-        graphene_matrix_t identity;
 
-        graphene_matrix_init_identity (&identity);
-        init_framebuffer_for_node (self, &item, node, projection, &p);
-        gsk_gl_renderer_add_render_item (self, &p, &identity, item.children, child,
-                                         item.render_target);
+        if (gsk_render_node_get_node_type (child) != GSK_TEXTURE_NODE)
+          {
+            graphene_matrix_t p;
+            graphene_matrix_t identity;
+
+            graphene_matrix_init_identity (&identity);
+            init_framebuffer_for_node (self, &item, node, projection, &p);
+            gsk_gl_renderer_add_render_item (self, &p, &identity, item.children, child,
+                                             item.render_target);
+          }
+        else
+          {
+            GdkTexture *texture = gsk_texture_node_get_texture (child);
+            int gl_min_filter = GL_NEAREST, gl_mag_filter = GL_NEAREST;
+
+            get_gl_scaling_filters (node, &gl_min_filter, &gl_mag_filter);
+
+            item.texture_id = gsk_gl_driver_get_texture_for_texture (self->gl_driver,
+                                                                     texture,
+                                                                     gl_min_filter,
+                                                                     gl_mag_filter);
+          }
+
         item.mode = MODE_BLIT;
         item.opacity = gsk_opacity_node_get_opacity (node);
       }
