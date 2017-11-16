@@ -44,6 +44,7 @@ dump_framebuffer (const char *filename, int w, int h)
 
 static void
 gsk_gl_renderer_setup_render_mode (GskGLRenderer *self);
+
 typedef struct {
   int id;
   /* Common locations (gl_common)*/
@@ -73,6 +74,11 @@ typedef struct {
       int start_point_location;
       int end_point_location;
     };
+    struct {
+      int clip_bounds_location;
+      int corner_widths_location;
+      int corner_heights_location;
+    };
   };
 } Program;
 
@@ -88,6 +94,7 @@ enum {
   MODE_TEXTURE,
   MODE_COLOR_MATRIX,
   MODE_LINEAR_GRADIENT,
+  MODE_ROUNDED_CLIP,
   N_MODES
 };
 
@@ -120,6 +127,11 @@ typedef struct {
       graphene_point_t start_point;
       graphene_point_t end_point;
     } linear_gradient_data;
+    struct {
+      graphene_rect_t clip_bounds;
+      float corner_widths[4];
+      float corner_heights[4];
+    } rounded_clip_data;
   };
 
   const char *name;
@@ -204,6 +216,7 @@ struct _GskGLRenderer
   Program color_program;
   Program color_matrix_program;
   Program linear_gradient_program;
+  Program rounded_clip_program;
 
   GArray *render_items;
 
@@ -431,6 +444,22 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient_program, n_color_stops_location, "uNumColorStops");
   INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient_program, start_point_location, "uStartPoint");
   INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient_program, end_point_location, "uEndPoint");
+
+  self->rounded_clip_program.id = gsk_shader_builder_create_program (builder,
+                                                                     "blit.vs.glsl",
+                                                                     "rounded_clip.fs.glsl",
+                                                                     &shader_error);
+  if (shader_error != NULL)
+    {
+      g_propagate_prefixed_error (error,
+                                  shader_error,
+                                  "Unable to create 'rounded_clip' program: ");
+      goto out;
+    }
+  init_common_locations (self, builder, &self->rounded_clip_program);
+  INIT_PROGRAM_UNIFORM_LOCATION (rounded_clip_program, clip_bounds_location, "uClipBounds");
+  INIT_PROGRAM_UNIFORM_LOCATION (rounded_clip_program, corner_widths_location, "uCornerWidths");
+  INIT_PROGRAM_UNIFORM_LOCATION (rounded_clip_program, corner_heights_location, "uCornerHeights");
 
   res = TRUE;
 
@@ -686,6 +715,21 @@ render_item (GskGLRenderer    *self,
         }
       break;
 
+      case MODE_ROUNDED_CLIP:
+        {
+          g_assert (item->program == &self->rounded_clip_program);
+          glUniform1i (item->program->source_location, 0);
+          gsk_gl_driver_bind_source_texture (self->gl_driver, item->render_target);
+          glUniform4f (item->program->clip_bounds_location,
+                       item->rounded_clip_data.clip_bounds.origin.x,
+                       item->rounded_clip_data.clip_bounds.origin.y,
+                       item->rounded_clip_data.clip_bounds.size.width,
+                       item->rounded_clip_data.clip_bounds.size.height);
+          glUniform4fv (item->program->corner_widths_location, 1, item->rounded_clip_data.corner_widths);
+          glUniform4fv (item->program->corner_heights_location, 1, item->rounded_clip_data.corner_heights);
+        }
+      break;
+
       default:
         g_assert_not_reached ();
     }
@@ -844,14 +888,23 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
     case GSK_ROUNDED_CLIP_NODE:
       {
         GskRenderNode *child = gsk_rounded_clip_node_get_child (node);
+        const GskRoundedRect *clip = gsk_rounded_clip_node_peek_clip (node);
         graphene_matrix_t p;
         graphene_matrix_t identity;
+        int i;
 
         graphene_matrix_init_identity (&identity);
         init_framebuffer_for_node (self, &item, node, projection, &p);
         gsk_gl_renderer_add_render_item (self, &p, &identity, item.children, child,
                                          item.render_target);
-        item.mode = MODE_BLIT;
+        item.mode = MODE_ROUNDED_CLIP;
+        item.program = &self->rounded_clip_program;
+        item.rounded_clip_data.clip_bounds = clip->bounds;
+        for (i = 0; i < 4; i ++)
+          {
+            item.rounded_clip_data.corner_widths[i]  = MAX (clip->corner[i].width,  1);
+            item.rounded_clip_data.corner_heights[i] = MAX (clip->corner[i].height, 1);
+          }
       }
       break;
 
