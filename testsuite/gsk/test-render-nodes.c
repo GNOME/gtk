@@ -518,6 +518,76 @@ color_matrix1 (void)
   return container_node;
 }
 
+static GskRenderNode *
+transformed_clip (void)
+{
+  GskRenderNode *container_node;
+  GskRenderNode *transform_node;
+  GskRenderNode *clip_node;
+  GskRenderNode *nodes[4];
+  graphene_matrix_t transform;
+
+  {
+    clip_node = gsk_clip_node_new (ducky (),
+                                   &GRAPHENE_RECT_INIT (0, 0, 200, 500));
+
+    graphene_matrix_init_translate (&transform, &GRAPHENE_POINT3D_INIT (180, 0, 0));
+    nodes[0] = gsk_transform_node_new (clip_node, &transform);
+  }
+
+  {
+    graphene_matrix_init_translate (&transform, &GRAPHENE_POINT3D_INIT (0, 200, 0));
+    transform_node = gsk_transform_node_new (ducky (), &transform);
+
+    nodes[1] = gsk_clip_node_new (transform_node,
+                                  &GRAPHENE_RECT_INIT (0, 0, 500, 250));
+  }
+
+  {
+    graphene_vec3_t axis_vec;
+
+    graphene_matrix_init_translate (&transform, &GRAPHENE_POINT3D_INIT (150, 200, 0));
+    transform_node = gsk_transform_node_new (ducky (), &transform);
+    clip_node = gsk_clip_node_new (transform_node,
+                                   &GRAPHENE_RECT_INIT (150, 200, 91, 100));
+
+    graphene_vec3_init (&axis_vec, 0, 0, 1);
+    graphene_matrix_init_rotate (&transform, 20, &axis_vec);
+    /*graphene_matrix_init_identity (&transform);*/
+    nodes[2] = gsk_transform_node_new (clip_node, &transform);
+
+
+
+    /*GskColorStop *color_stops = g_newa (GskColorStop, 2);*/
+    /*graphene_matrix_init_translate (&transform, &GRAPHENE_POINT3D_INIT (300, 200, 0));*/
+
+    /*color_stops[0] = (GskColorStop){ 0.0f, (GdkRGBA){1, 0, 0, 1}};*/
+    /*color_stops[1] = (GskColorStop){ 1.0f, (GdkRGBA){0, 0, 1, 1}};*/
+    /*clip_node = gsk_linear_gradient_node_new (&GRAPHENE_RECT_INIT (0, 0, 300, 200),*/
+                                              /*&(graphene_point_t) {150, 0},*/
+                                              /*&(graphene_point_t) {150, 200},*/
+                                              /*color_stops,*/
+                                              /*2);*/
+
+    /*nodes[2] = gsk_transform_node_new (clip_node, &transform);*/
+  }
+
+  {
+    graphene_vec3_t axis_vec;
+
+    graphene_vec3_init (&axis_vec, 0, 0, 1);
+    graphene_matrix_init_rotate (&transform, 20, &axis_vec);
+    graphene_matrix_translate (&transform, &GRAPHENE_POINT3D_INIT (350, 200, 0));
+    transform_node = gsk_transform_node_new (ducky (), &transform);
+    nodes[3] = gsk_clip_node_new (transform_node,
+                                   &GRAPHENE_RECT_INIT (350, 200, 91, 100));
+  }
+
+  container_node = gsk_container_node_new (nodes, 4);
+
+  return container_node;
+}
+
 static const struct {
   const char *name;
   GskRenderNode * (* func) (void);
@@ -532,6 +602,7 @@ static const struct {
   { "transform.node", transform },
   { "opacity.node", opacity },
   { "color-matrix1.node", color_matrix1},
+  { "transformed-clip.node", transformed_clip}
 };
 
 /*** test setup ***/
