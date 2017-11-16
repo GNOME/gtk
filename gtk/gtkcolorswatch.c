@@ -191,7 +191,6 @@ static void
 swatch_drag_data_get (GtkWidget        *widget,
                       GdkDragContext   *context,
                       GtkSelectionData *selection_data,
-                      guint             info,
                       guint             time)
 {
   GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
@@ -216,7 +215,6 @@ swatch_drag_data_received (GtkWidget        *widget,
                            gint              x,
                            gint              y,
                            GtkSelectionData *selection_data,
-                           guint             info,
                            guint             time)
 {
   gint length;

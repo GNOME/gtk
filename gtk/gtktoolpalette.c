@@ -181,8 +181,8 @@ static GdkAtom dnd_target_atom_group = NULL;
 
 static const GtkTargetEntry dnd_targets[] =
 {
-  { (char *) "application/x-gtk-tool-palette-item", GTK_TARGET_SAME_APP, 0 },
-  { (char *) "application/x-gtk-tool-palette-group", GTK_TARGET_SAME_APP, 0 },
+  { (char *) "application/x-gtk-tool-palette-item", GTK_TARGET_SAME_APP },
+  { (char *) "application/x-gtk-tool-palette-group", GTK_TARGET_SAME_APP },
 };
 
 static void gtk_tool_palette_set_hadjustment (GtkToolPalette *palette,
@@ -1519,7 +1519,6 @@ static void
 gtk_tool_palette_item_drag_data_get (GtkWidget        *widget,
                                      GdkDragContext   *context,
                                      GtkSelectionData *selection,
-                                     guint             info,
                                      guint             time,
                                      gpointer          data)
 {

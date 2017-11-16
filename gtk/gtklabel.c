@@ -471,7 +471,6 @@ static void     gtk_label_setup_mnemonic    (GtkLabel          *label,
 static void     gtk_label_drag_data_get     (GtkWidget         *widget,
 					     GdkDragContext    *context,
 					     GtkSelectionData  *selection_data,
-					     guint              info,
 					     guint              time);
 
 static void     gtk_label_buildable_interface_init     (GtkBuildableIface *iface);
@@ -4779,7 +4778,7 @@ gtk_label_drag_gesture_update (GtkGestureDrag *gesture,
           const GdkEvent *event;
 
           event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
-	  gtk_target_list_add_text_targets (target_list, 0);
+	  gtk_target_list_add_text_targets (target_list);
 
           g_signal_connect (widget, "drag-begin",
                             G_CALLBACK (drag_begin_cb), NULL);
@@ -5113,7 +5112,6 @@ static void
 gtk_label_drag_data_get (GtkWidget        *widget,
 			 GdkDragContext   *context,
 			 GtkSelectionData *selection_data,
-			 guint             info,
 			 guint             time)
 {
   gtk_label_set_selection_text (GTK_LABEL (widget), selection_data);
@@ -5122,7 +5120,6 @@ gtk_label_drag_data_get (GtkWidget        *widget,
 static void
 get_text_callback (GtkClipboard     *clipboard,
                    GtkSelectionData *selection_data,
-                   guint             info,
                    gpointer          user_data_or_owner)
 {
   gtk_label_set_selection_text (GTK_LABEL (user_data_or_owner), selection_data);
@@ -5232,7 +5229,7 @@ gtk_label_select_region_index (GtkLabel *label,
           GtkTargetList *list;
 
           list = gtk_target_list_new (NULL, 0);
-          gtk_target_list_add_text_targets (list, 0);
+          gtk_target_list_add_text_targets (list);
 
           if (clipboard)
             gtk_clipboard_set_with_owner (clipboard,

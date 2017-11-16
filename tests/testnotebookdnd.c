@@ -56,7 +56,7 @@ gchar *tabs4 [] = {
 };
 
 static const GtkTargetEntry button_targets[] = {
-  { "GTK_NOTEBOOK_TAB", GTK_TARGET_SAME_APP, 0 },
+  { "GTK_NOTEBOOK_TAB", GTK_TARGET_SAME_APP },
 };
 
 static GtkNotebook*
@@ -126,7 +126,6 @@ on_button_drag_data_received (GtkWidget        *widget,
                               gint              x,
                               gint              y,
                               GtkSelectionData *data,
-                              guint             info,
                               guint             time,
                               gpointer          user_data)
 {

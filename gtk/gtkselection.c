@@ -295,15 +295,13 @@ gtk_target_list_unref (GtkTargetList *list)
  * @list:  a #GtkTargetList
  * @target: the interned atom representing the target
  * @flags: the flags for this target
- * @info: an ID that will be passed back to the application
  * 
  * Appends another target to a #GtkTargetList.
  **/
 void 
 gtk_target_list_add (GtkTargetList *list,
 		     GdkAtom        target,
-		     guint          flags,
-		     guint          info)
+		     guint          flags)
 {
   GtkTargetPair *pair;
 
@@ -312,7 +310,6 @@ gtk_target_list_add (GtkTargetList *list,
   pair = g_slice_new (GtkTargetPair);
   pair->target = target;
   pair->flags = flags;
-  pair->info = info;
 
   list->list = g_list_append (list->list, pair);
 }
@@ -350,7 +347,6 @@ init_atoms (void)
 /**
  * gtk_target_list_add_text_targets:
  * @list: a #GtkTargetList
- * @info: an ID that will be passed back to the application
  * 
  * Appends the text targets supported by #GtkSelectionData to
  * the target list. All targets are added with the same @info.
@@ -358,8 +354,7 @@ init_atoms (void)
  * Since: 2.6
  **/
 void 
-gtk_target_list_add_text_targets (GtkTargetList *list,
-				  guint          info)
+gtk_target_list_add_text_targets (GtkTargetList *list)
 {
   g_return_if_fail (list != NULL);
   
@@ -367,20 +362,19 @@ gtk_target_list_add_text_targets (GtkTargetList *list,
 
   /* Keep in sync with gtk_selection_data_targets_include_text()
    */
-  gtk_target_list_add (list, utf8_atom, 0, info);  
-  gtk_target_list_add (list, ctext_atom, 0, info);  
-  gtk_target_list_add (list, text_atom, 0, info);  
-  gtk_target_list_add (list, GDK_TARGET_STRING, 0, info);  
-  gtk_target_list_add (list, text_plain_utf8_atom, 0, info);  
+  gtk_target_list_add (list, utf8_atom, 0);  
+  gtk_target_list_add (list, ctext_atom, 0);  
+  gtk_target_list_add (list, text_atom, 0);  
+  gtk_target_list_add (list, GDK_TARGET_STRING, 0);  
+  gtk_target_list_add (list, text_plain_utf8_atom, 0);  
   if (!g_get_charset (NULL))
-    gtk_target_list_add (list, text_plain_locale_atom, 0, info);  
-  gtk_target_list_add (list, text_plain_atom, 0, info);  
+    gtk_target_list_add (list, text_plain_locale_atom, 0);  
+  gtk_target_list_add (list, text_plain_atom, 0);  
 }
 
 /**
  * gtk_target_list_add_rich_text_targets:
  * @list: a #GtkTargetList
- * @info: an ID that will be passed back to the application
  * @deserializable: if %TRUE, then deserializable rich text formats
  *                  will be added, serializable formats otherwise.
  * @buffer: a #GtkTextBuffer.
@@ -394,7 +388,6 @@ gtk_target_list_add_text_targets (GtkTargetList *list,
  **/
 void
 gtk_target_list_add_rich_text_targets (GtkTargetList  *list,
-                                       guint           info,
                                        gboolean        deserializable,
                                        GtkTextBuffer  *buffer)
 {
@@ -411,7 +404,7 @@ gtk_target_list_add_rich_text_targets (GtkTargetList  *list,
     atoms = gtk_text_buffer_get_serialize_formats (buffer, &n_atoms);
 
   for (i = 0; i < n_atoms; i++)
-    gtk_target_list_add (list, atoms[i], 0, info);
+    gtk_target_list_add (list, atoms[i], 0);
 
   g_free (atoms);
 }
@@ -419,7 +412,6 @@ gtk_target_list_add_rich_text_targets (GtkTargetList  *list,
 /**
  * gtk_target_list_add_image_targets:
  * @list: a #GtkTargetList
- * @info: an ID that will be passed back to the application
  * @writable: whether to add only targets for which GTK+ knows
  *   how to convert a pixbuf into the format
  * 
@@ -430,7 +422,6 @@ gtk_target_list_add_rich_text_targets (GtkTargetList  *list,
  **/
 void 
 gtk_target_list_add_image_targets (GtkTargetList *list,
-				   guint          info,
 				   gboolean       writable)
 {
   GSList *formats, *f;
@@ -472,7 +463,7 @@ gtk_target_list_add_image_targets (GtkTargetList *list,
       for (m = mimes; *m; m++)
 	{
 	  atom = gdk_atom_intern (*m, FALSE);
-	  gtk_target_list_add (list, atom, 0, info);  
+	  gtk_target_list_add (list, atom, 0);  
 	}
       g_strfreev (mimes);
     }
@@ -491,14 +482,13 @@ gtk_target_list_add_image_targets (GtkTargetList *list,
  * Since: 2.6
  **/
 void 
-gtk_target_list_add_uri_targets (GtkTargetList *list,
-				 guint          info)
+gtk_target_list_add_uri_targets (GtkTargetList *list)
 {
   g_return_if_fail (list != NULL);
   
   init_atoms ();
 
-  gtk_target_list_add (list, text_uri_list_atom, 0, info);  
+  gtk_target_list_add (list, text_uri_list_atom, 0);  
 }
 
 /**
@@ -543,7 +533,6 @@ gtk_target_list_add_table (GtkTargetList        *list,
       GtkTargetPair *pair = g_slice_new (GtkTargetPair);
       pair->target = gdk_atom_intern (targets[i].target, FALSE);
       pair->flags = targets[i].flags;
-      pair->info = targets[i].info;
       
       list->list = g_list_prepend (list->list, pair);
     }
@@ -587,8 +576,6 @@ gtk_target_list_remove (GtkTargetList *list,
  * gtk_target_list_find:
  * @list: a #GtkTargetList
  * @target: an interned atom representing the target to search for
- * @info: (out) (allow-none): a pointer to the location to store
- *        application info for target, or %NULL
  *
  * Looks up a given target in a #GtkTargetList.
  *
@@ -596,8 +583,7 @@ gtk_target_list_remove (GtkTargetList *list,
  **/
 gboolean
 gtk_target_list_find (GtkTargetList *list,
-		      GdkAtom        target,
-		      guint         *info)
+		      GdkAtom        target)
 {
   GList *tmp_list;
 
@@ -609,12 +595,7 @@ gtk_target_list_find (GtkTargetList *list,
       GtkTargetPair *pair = tmp_list->data;
 
       if (pair->target == target)
-	{
-          if (info)
-            *info = pair->info;
-
-	  return TRUE;
-	}
+	return TRUE;
 
       tmp_list = tmp_list->next;
     }
@@ -885,7 +866,6 @@ gtk_selection_clear_targets (GtkWidget *widget,
  * @widget:  a #GtkWidget
  * @selection: the selection
  * @target: target to add.
- * @info: A unsigned integer which will be passed back to the application.
  * 
  * Appends a specified target to the list of supported targets for a 
  * given widget and selection.
@@ -893,8 +873,7 @@ gtk_selection_clear_targets (GtkWidget *widget,
 void 
 gtk_selection_add_target (GtkWidget	    *widget, 
 			  GdkAtom	     selection,
-			  GdkAtom	     target,
-			  guint              info)
+			  GdkAtom	     target)
 {
   GtkTargetList *list;
 
@@ -902,7 +881,7 @@ gtk_selection_add_target (GtkWidget	    *widget,
   g_return_if_fail (selection != NULL);
 
   list = gtk_selection_target_list_get (widget, selection);
-  gtk_target_list_add (list, target, 0, info);
+  gtk_target_list_add (list, target, 0);
   gdk_selection_add_targets (gtk_widget_get_window (widget), selection, &target, 1);
 }
 
@@ -2118,7 +2097,7 @@ gtk_targets_include_image (GdkAtom *targets,
   g_return_val_if_fail (targets != NULL || n_targets == 0, FALSE);
 
   list = gtk_target_list_new (NULL, 0);
-  gtk_target_list_add_image_targets (list, 0, writable);
+  gtk_target_list_add_image_targets (list, writable);
   for (i = 0; i < n_targets && !result; i++)
     {
       for (l = list->list; l; l = l->next)
@@ -3080,20 +3059,18 @@ gtk_selection_invoke_handler (GtkWidget	       *widget,
 			      guint             time)
 {
   GtkTargetList *target_list;
-  guint info;
-  
 
   g_return_if_fail (widget != NULL);
 
   target_list = gtk_selection_target_list_get (widget, data->selection);
   if (data->target != gtk_selection_atoms[SAVE_TARGETS] &&
       target_list &&
-      gtk_target_list_find (target_list, data->target, &info))
+      gtk_target_list_find (target_list, data->target))
     {
       g_signal_emit_by_name (widget,
 			     "selection-get",
 			     data,
-			     info, time);
+			     time);
     }
   else
     gtk_selection_default_handler (widget, data);

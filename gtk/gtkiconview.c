@@ -279,7 +279,6 @@ static void gtk_icon_view_drag_end         (GtkWidget        *widget,
 static void gtk_icon_view_drag_data_get    (GtkWidget        *widget,
                                             GdkDragContext   *context,
                                             GtkSelectionData *selection_data,
-                                            guint             info,
                                             guint             time);
 static void gtk_icon_view_drag_data_delete (GtkWidget        *widget,
                                             GdkDragContext   *context);
@@ -303,7 +302,6 @@ static void     gtk_icon_view_drag_data_received (GtkWidget        *widget,
                                                   gint              x,
                                                   gint              y,
                                                   GtkSelectionData *selection_data,
-                                                  guint             info,
                                                   guint             time);
 static gboolean gtk_icon_view_maybe_begin_drag   (GtkIconView             *icon_view,
 					   	  GdkEventMotion          *event);
@@ -6257,7 +6255,6 @@ static void
 gtk_icon_view_drag_data_get (GtkWidget        *widget,
 			     GdkDragContext   *context,
 			     GtkSelectionData *selection_data,
-			     guint             info,
 			     guint             time)
 {
   GtkIconView *icon_view;
@@ -6470,7 +6467,6 @@ gtk_icon_view_drag_data_received (GtkWidget        *widget,
 				  gint              x,
 				  gint              y,
 				  GtkSelectionData *selection_data,
-				  guint             info,
 				  guint             time)
 {
   GtkTreePath *path;
@@ -6900,7 +6896,7 @@ gtk_icon_view_get_reorderable (GtkIconView *icon_view)
 }
 
 static const GtkTargetEntry item_targets[] = {
-  { (char *) "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_WIDGET, 0 }
+  { (char *) "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_WIDGET }
 };
 
 

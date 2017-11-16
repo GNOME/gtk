@@ -114,7 +114,6 @@ static void gtk_color_button_drag_begin    (GtkWidget        *widget,
 static void gtk_color_button_drag_data_get (GtkWidget        *widget,
                                             GdkDragContext   *context,
                                             GtkSelectionData *selection_data,
-                                            guint             info,
                                             guint             time,
                                             GtkColorButton   *button);
 
@@ -124,14 +123,13 @@ static void gtk_color_button_drag_data_received (GtkWidget        *widget,
                                                  gint              x,
                                                  gint              y,
                                                  GtkSelectionData *selection_data,
-                                                 guint             info,
                                                  guint32           time,
                                                  GtkColorButton   *button);
 
 
 static guint color_button_signals[LAST_SIGNAL] = { 0 };
 
-static const GtkTargetEntry drop_types[] = { { (char *) "application/x-color", 0, 0 } };
+static const GtkTargetEntry drop_types[] = { { (char *) "application/x-color", 0 } };
 
 static void gtk_color_button_iface_init (GtkColorChooserInterface *iface);
 
@@ -292,7 +290,6 @@ gtk_color_button_drag_data_received (GtkWidget        *widget,
                                      gint              x,
                                      gint              y,
                                      GtkSelectionData *selection_data,
-                                     guint             info,
                                      guint32           time,
                                      GtkColorButton   *button)
 {
@@ -364,7 +361,6 @@ static void
 gtk_color_button_drag_data_get (GtkWidget        *widget,
                                 GdkDragContext   *context,
                                 GtkSelectionData *selection_data,
-                                guint             info,
                                 guint             time,
                                 GtkColorButton   *button)
 {

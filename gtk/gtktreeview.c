@@ -634,7 +634,6 @@ static void gtk_tree_view_drag_end         (GtkWidget        *widget,
 static void gtk_tree_view_drag_data_get    (GtkWidget        *widget,
                                             GdkDragContext   *context,
                                             GtkSelectionData *selection_data,
-                                            guint             info,
                                             guint             time);
 static void gtk_tree_view_drag_data_delete (GtkWidget        *widget,
                                             GdkDragContext   *context);
@@ -658,7 +657,6 @@ static void     gtk_tree_view_drag_data_received (GtkWidget        *widget,
                                                   gint              x,
                                                   gint              y,
                                                   GtkSelectionData *selection_data,
-                                                  guint             info,
                                                   guint             time);
 
 /* tree_model signals */
@@ -7572,7 +7570,6 @@ static void
 gtk_tree_view_drag_data_get (GtkWidget        *widget,
                              GdkDragContext   *context,
                              GtkSelectionData *selection_data,
-                             guint             info,
                              guint             time)
 {
   GtkTreeView *tree_view;
@@ -7816,7 +7813,6 @@ gtk_tree_view_drag_data_received (GtkWidget        *widget,
                                   gint              x,
                                   gint              y,
                                   GtkSelectionData *selection_data,
-                                  guint             info,
                                   guint             time)
 {
   GtkTreePath *path;
@@ -12547,7 +12543,7 @@ gtk_tree_view_set_reorderable (GtkTreeView *tree_view,
   if (reorderable)
     {
       const GtkTargetEntry row_targets[] = {
-        { (char *) "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_WIDGET, 0 }
+        { (char *) "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_WIDGET }
       };
       GtkTargetList *targets;
 

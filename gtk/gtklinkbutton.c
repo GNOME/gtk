@@ -109,7 +109,6 @@ static gboolean gtk_link_button_popup_menu   (GtkWidget        *widget);
 static void gtk_link_button_drag_data_get_cb (GtkWidget        *widget,
 					      GdkDragContext   *context,
 					      GtkSelectionData *selection,
-					      guint             _info,
 					      guint             _time,
 					      gpointer          user_data);
 static gboolean gtk_link_button_query_tooltip_cb (GtkWidget    *widget,
@@ -130,8 +129,8 @@ static void     set_hand_cursor (GtkWidget *widget,
 				 gboolean   show_hand);
 
 static const GtkTargetEntry link_drop_types[] = {
-  { (char *) "text/uri-list", 0, 0 },
-  { (char *) "_NETSCAPE_URL", 0, 0 }
+  { (char *) "text/uri-list", 0 },
+  { (char *) "_NETSCAPE_URL", 0 }
 };
 
 static guint link_signals[LAST_SIGNAL] = { 0, };
@@ -452,7 +451,6 @@ static void
 gtk_link_button_drag_data_get_cb (GtkWidget        *widget,
 				  GdkDragContext   *context,
 				  GtkSelectionData *selection,
-				  guint             _info,
 				  guint             _time,
 				  gpointer          user_data)
 {

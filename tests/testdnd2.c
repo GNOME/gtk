@@ -28,11 +28,6 @@ get_image_surface (GtkImage *image,
 }
 
 enum {
-  TARGET_IMAGE,
-  TARGET_TEXT
-};
-
-enum {
   TOP_LEFT,
   CENTER,
   BOTTOM_RIGHT
@@ -129,9 +124,9 @@ update_source_target_list (GtkWidget *image)
 
   target_list = gtk_target_list_new (NULL, 0);
 
-  gtk_target_list_add_image_targets (target_list, TARGET_IMAGE, FALSE);
+  gtk_target_list_add_image_targets (target_list, FALSE);
   if (gtk_image_get_storage_type (GTK_IMAGE (image)) == GTK_IMAGE_ICON_NAME)
-    gtk_target_list_add_text_targets (target_list, TARGET_TEXT);
+    gtk_target_list_add_text_targets (target_list);
 
   gtk_drag_source_set_target_list (image, target_list);
 
@@ -145,8 +140,8 @@ update_dest_target_list (GtkWidget *image)
 
   target_list = gtk_target_list_new (NULL, 0);
 
-  gtk_target_list_add_image_targets (target_list, TARGET_IMAGE, FALSE);
-  gtk_target_list_add_text_targets (target_list, TARGET_TEXT);
+  gtk_target_list_add_image_targets (target_list, FALSE);
+  gtk_target_list_add_text_targets (target_list);
 
   gtk_drag_dest_set_target_list (image, target_list);
 
@@ -157,7 +152,6 @@ void
 image_drag_data_get (GtkWidget        *widget,
                      GdkDragContext   *context,
                      GtkSelectionData *selection_data,
-                     guint             info,
                      guint             time,
                      gpointer          data)
 {
@@ -165,20 +159,21 @@ image_drag_data_get (GtkWidget        *widget,
   const gchar *name;
   int size;
 
-  switch (info)
+  if (gtk_selection_data_targets_include_image (selection_data, TRUE))
     {
-    case TARGET_IMAGE:
       surface = get_image_surface (GTK_IMAGE (data), &size);
       gtk_selection_data_set_surface (selection_data, surface);
-      break;
-    case TARGET_TEXT:
+    }
+  else if (gtk_selection_data_targets_include_text (selection_data))
+    {
       if (gtk_image_get_storage_type (GTK_IMAGE (data)) == GTK_IMAGE_ICON_NAME)
         name = gtk_image_get_icon_name (GTK_IMAGE (data));
       else
         name = "Boo!";
       gtk_selection_data_set_text (selection_data, name, -1);
-      break;
-    default:
+    }
+  else
+    {
       g_assert_not_reached ();
     }
 }
@@ -189,7 +184,6 @@ image_drag_data_received (GtkWidget        *widget,
                           gint              x,
                           gint              y,
                           GtkSelectionData *selection_data,
-                          guint             info,
                           guint32           time,
                           gpointer          data)
 {
@@ -199,19 +193,20 @@ image_drag_data_received (GtkWidget        *widget,
   if (gtk_selection_data_get_length (selection_data) == 0)
     return;
 
-  switch (info)
+  if (gtk_selection_data_targets_include_image (selection_data, FALSE))
     {
-    case TARGET_IMAGE:
       surface = gtk_selection_data_get_surface (selection_data);
       gtk_image_set_from_surface (GTK_IMAGE (data), surface);
       cairo_surface_destroy (surface);
-      break;
-    case TARGET_TEXT:
+    }
+  else if (gtk_selection_data_targets_include_text (selection_data))
+    {
       text = (gchar *)gtk_selection_data_get_text (selection_data);
       gtk_image_set_from_icon_name (GTK_IMAGE (data), text);
       g_free (text);
-      break;
-    default:
+    }
+  else
+    {
       g_assert_not_reached ();
     }
 }
@@ -312,7 +307,6 @@ void
 spinner_drag_data_get (GtkWidget        *widget,
                        GdkDragContext   *context,
                        GtkSelectionData *selection_data,
-                       guint             info,
                        guint             time,
                        gpointer          data)
 {

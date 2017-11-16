@@ -24,7 +24,6 @@ static void
 drag_data_get_cb (GtkWidget        *widget,
                   GdkDragContext   *context,
                   GtkSelectionData *data,
-                  guint             info,
                   guint             time,
                   gpointer          user_data)
 {
@@ -168,7 +167,7 @@ main (int argc, char **argv)
 				   GTK_ENTRY_ICON_PRIMARY,
 				   "Save a file");
   tlist = gtk_target_list_new (NULL, 0);
-  gtk_target_list_add_text_targets (tlist, 0);
+  gtk_target_list_add_text_targets (tlist);
   gtk_entry_set_icon_drag_source (GTK_ENTRY (entry),
                                   GTK_ENTRY_ICON_PRIMARY,
                                   tlist, GDK_ACTION_COPY); 

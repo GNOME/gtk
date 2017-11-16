@@ -1,13 +1,8 @@
 #include <gtk/gtk.h>
 
-enum
-{
-  TARGET_GTK_TREE_MODEL_ROW
-};
-
 static GtkTargetEntry row_targets[] =
 {
-  { "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_APP, TARGET_GTK_TREE_MODEL_ROW }
+  { "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_APP }
 };
 
 static void

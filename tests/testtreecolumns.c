@@ -704,7 +704,7 @@ selection_changed (GtkTreeSelection *selection, GtkWidget *button)
 }
 
 static GtkTargetEntry row_targets[] = {
-  { "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_APP, 0}
+  { "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_APP }
 };
 
 int

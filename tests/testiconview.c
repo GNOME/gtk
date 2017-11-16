@@ -412,7 +412,7 @@ popup_menu_handler (GtkWidget *widget)
 }
 
 static const GtkTargetEntry item_targets[] = {
-  { "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_APP, 0 }
+  { "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_APP }
 };
 	
 gint

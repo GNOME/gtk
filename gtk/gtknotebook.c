@@ -309,12 +309,12 @@ struct _GtkNotebookPage
 };
 
 static const GtkTargetEntry src_notebook_targets [] = {
-  { (char *) "GTK_NOTEBOOK_TAB", GTK_TARGET_SAME_APP, 0 },
-  { (char *) "application/x-rootwindow-drop", 0, 0 },
+  { (char *) "GTK_NOTEBOOK_TAB", GTK_TARGET_SAME_APP },
+  { (char *) "application/x-rootwindow-drop", 0 },
 };
 
 static const GtkTargetEntry dst_notebook_targets [] = {
-  { (char *) "GTK_NOTEBOOK_TAB", GTK_TARGET_SAME_APP, 0 },
+  { (char *) "GTK_NOTEBOOK_TAB", GTK_TARGET_SAME_APP },
 };
 
 /*** GtkNotebook Methods ***/
@@ -402,14 +402,12 @@ static gboolean gtk_notebook_drag_drop       (GtkWidget        *widget,
 static void gtk_notebook_drag_data_get       (GtkWidget        *widget,
                                               GdkDragContext   *context,
                                               GtkSelectionData *data,
-                                              guint             info,
                                               guint             time);
 static void gtk_notebook_drag_data_received  (GtkWidget        *widget,
                                               GdkDragContext   *context,
                                               gint              x,
                                               gint              y,
                                               GtkSelectionData *data,
-                                              guint             info,
                                               guint             time);
 static void gtk_notebook_direction_changed   (GtkWidget        *widget,
                                               GtkTextDirection  previous_direction);
@@ -3274,7 +3272,6 @@ static void
 gtk_notebook_drag_data_get (GtkWidget        *widget,
                             GdkDragContext   *context,
                             GtkSelectionData *data,
-                            guint             info,
                             guint             time)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
@@ -3304,7 +3301,6 @@ gtk_notebook_drag_data_received (GtkWidget        *widget,
                                  gint              x,
                                  gint              y,
                                  GtkSelectionData *data,
-                                 guint             info,
                                  guint             time)
 {
   GtkNotebook *notebook;
@@ -7137,7 +7133,6 @@ gtk_notebook_get_tab_detachable (GtkNotebook *notebook,
  *                         gint              x,
  *                         gint              y,
  *                         GtkSelectionData *data,
- *                         guint             info,
  *                         guint             time,
  *                         gpointer          user_data)
  *  {

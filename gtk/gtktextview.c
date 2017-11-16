@@ -436,7 +436,6 @@ static void gtk_text_view_drag_end         (GtkWidget        *widget,
 static void gtk_text_view_drag_data_get    (GtkWidget        *widget,
                                             GdkDragContext   *context,
                                             GtkSelectionData *selection_data,
-                                            guint             info,
                                             guint             time);
 static void gtk_text_view_drag_data_delete (GtkWidget        *widget,
                                             GdkDragContext   *context);
@@ -460,7 +459,6 @@ static void     gtk_text_view_drag_data_received (GtkWidget        *widget,
                                                   gint              x,
                                                   gint              y,
                                                   GtkSelectionData *selection_data,
-                                                  guint             info,
                                                   guint             time);
 
 static gboolean gtk_text_view_popup_menu         (GtkWidget     *widget);
@@ -7840,13 +7838,12 @@ static void
 gtk_text_view_drag_data_get (GtkWidget        *widget,
                              GdkDragContext   *context,
                              GtkSelectionData *selection_data,
-                             guint             info,
                              guint             time)
 {
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
   GtkTextBuffer *buffer = gtk_text_view_get_buffer (text_view);
 
-  if (info == GTK_TEXT_BUFFER_TARGET_INFO_BUFFER_CONTENTS)
+  if (gtk_selection_data_get_target (selection_data) == gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"))
     {
       gtk_selection_data_set (selection_data,
                               gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"),
@@ -7854,7 +7851,7 @@ gtk_text_view_drag_data_get (GtkWidget        *widget,
                               (void*)&buffer,
                               sizeof (buffer));
     }
-  else if (info == GTK_TEXT_BUFFER_TARGET_INFO_RICH_TEXT)
+  else if (gtk_selection_data_targets_include_rich_text (selection_data, buffer))
     {
       GtkTextIter start;
       GtkTextIter end;
@@ -8103,7 +8100,6 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
                                   gint              x,
                                   gint              y,
                                   GtkSelectionData *selection_data,
-                                  guint             info,
                                   guint             time)
 {
   GtkTextIter drop_point;
@@ -8131,7 +8127,7 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
 
   gtk_text_buffer_begin_user_action (buffer);
 
-  if (info == GTK_TEXT_BUFFER_TARGET_INFO_BUFFER_CONTENTS)
+  if (gtk_selection_data_get_target (selection_data) == gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"))
     {
       GtkTextBuffer *src_buffer = NULL;
       GtkTextIter start, end;
@@ -8205,7 +8201,7 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
         }
     }
   else if (gtk_selection_data_get_length (selection_data) > 0 &&
-           info == GTK_TEXT_BUFFER_TARGET_INFO_RICH_TEXT)
+           gtk_selection_data_targets_include_rich_text (selection_data, buffer))
     {
       gboolean retval;
       GError *error = NULL;

@@ -304,14 +304,12 @@ static gboolean gtk_calendar_query_tooltip  (GtkWidget        *widget,
 static void     gtk_calendar_drag_data_get      (GtkWidget        *widget,
                                                  GdkDragContext   *context,
                                                  GtkSelectionData *selection_data,
-                                                 guint             info,
                                                  guint             time);
 static void     gtk_calendar_drag_data_received (GtkWidget        *widget,
                                                  GdkDragContext   *context,
                                                  gint              x,
                                                  gint              y,
                                                  GtkSelectionData *selection_data,
-                                                 guint             info,
                                                  guint             time);
 static gboolean gtk_calendar_drag_motion        (GtkWidget        *widget,
                                                  GdkDragContext   *context,
@@ -2650,7 +2648,7 @@ gtk_calendar_motion_notify (GtkWidget      *widget,
         {
           GdkDragContext *context;
           GtkTargetList *target_list = gtk_target_list_new (NULL, 0);
-          gtk_target_list_add_text_targets (target_list, 0);
+          gtk_target_list_add_text_targets (target_list);
           context = gtk_drag_begin_with_coordinates (widget, target_list, GDK_ACTION_COPY,
                                                      1, (GdkEvent *)event,
                                                      priv->drag_start_x, priv->drag_start_y);
@@ -2883,7 +2881,6 @@ static void
 gtk_calendar_drag_data_get (GtkWidget        *widget,
                             GdkDragContext   *context,
                             GtkSelectionData *selection_data,
-                            guint             info,
                             guint             time)
 {
   GtkCalendar *calendar = GTK_CALENDAR (widget);
@@ -2986,7 +2983,6 @@ gtk_calendar_drag_data_received (GtkWidget        *widget,
                                  gint              x,
                                  gint              y,
                                  GtkSelectionData *selection_data,
-                                 guint             info,
                                  guint             time)
 {
   GtkCalendar *calendar = GTK_CALENDAR (widget);

@@ -2532,10 +2532,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, selection_get),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__BOXED_UINT_UINT,
-		  G_TYPE_NONE, 3,
+		  _gtk_marshal_VOID__BOXED_UINT,
+		  G_TYPE_NONE, 2,
 		  GTK_TYPE_SELECTION_DATA | G_SIGNAL_TYPE_STATIC_SCOPE,
-		  G_TYPE_UINT,
 		  G_TYPE_UINT);
 
   /**
@@ -2871,11 +2870,10 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, drag_data_get),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__OBJECT_BOXED_UINT_UINT,
-		  G_TYPE_NONE, 4,
+		  _gtk_marshal_VOID__OBJECT_BOXED_UINT,
+		  G_TYPE_NONE, 3,
 		  GDK_TYPE_DRAG_CONTEXT,
 		  GTK_TYPE_SELECTION_DATA | G_SIGNAL_TYPE_STATIC_SCOPE,
-		  G_TYPE_UINT,
 		  G_TYPE_UINT);
 
   /**
@@ -2885,8 +2883,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * @x: where the drop happened
    * @y: where the drop happened
    * @data: the received data
-   * @info: the info that has been registered with the target in the
-   *        #GtkTargetList
    * @time: the timestamp at which the data was received
    *
    * The ::drag-data-received signal is emitted on the drop site when the
@@ -2956,13 +2952,12 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, drag_data_received),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__OBJECT_INT_INT_BOXED_UINT_UINT,
-		  G_TYPE_NONE, 6,
+		  _gtk_marshal_VOID__OBJECT_INT_INT_BOXED_UINT,
+		  G_TYPE_NONE, 5,
 		  GDK_TYPE_DRAG_CONTEXT,
 		  G_TYPE_INT,
 		  G_TYPE_INT,
 		  GTK_TYPE_SELECTION_DATA | G_SIGNAL_TYPE_STATIC_SCOPE,
-		  G_TYPE_UINT,
 		  G_TYPE_UINT);
 
   /**

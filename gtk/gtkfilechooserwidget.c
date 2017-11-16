@@ -107,11 +107,6 @@
  * GtkFileChooserWidget has a single CSS node with name filechooser.
  */
 
-
-/* Values for GtkSelection-related "info" fields */
-#define SELECTION_TEXT 0
-#define SELECTION_URI  1
-
 /* 150 mseconds of delay */
 #define LOCATION_CHANGED_TIMEOUT 150
 
@@ -1664,7 +1659,6 @@ rename_file_cb (GSimpleAction *action,
 static void
 copy_file_get_cb  (GtkClipboard     *clipboard,
                    GtkSelectionData *selection_data,
-                   guint             info,
                    gpointer          data)
 {
   GSList *selected_files = data;
@@ -1685,7 +1679,7 @@ copy_file_get_cb  (GtkClipboard     *clipboard,
         {
           GFile *file = (GFile *) l->data;
 
-          if (info == SELECTION_URI)
+          if (gtk_selection_data_targets_include_uri (selection_data))
             uris[i] = g_file_get_uri (file);
           else /* if (info == SELECTION_TEXT) - let this be the fallback */
             uris[i] = g_file_get_parse_name (file);
@@ -1693,7 +1687,7 @@ copy_file_get_cb  (GtkClipboard     *clipboard,
           i++;
         }
 
-      if (info == SELECTION_URI)
+      if (gtk_selection_data_targets_include_uri (selection_data))
         gtk_selection_data_set_uris (selection_data, uris);
       else /* if (info == SELECTION_TEXT) - let this be the fallback */
         {
@@ -1735,8 +1729,8 @@ copy_file_location_cb (GSimpleAction *action,
       clipboard = gtk_widget_get_clipboard (GTK_WIDGET (impl), GDK_SELECTION_CLIPBOARD);
 
       target_list = gtk_target_list_new (NULL, 0);
-      gtk_target_list_add_text_targets (target_list, SELECTION_TEXT);
-      gtk_target_list_add_uri_targets (target_list, SELECTION_URI);
+      gtk_target_list_add_text_targets (target_list);
+      gtk_target_list_add_uri_targets (target_list);
 
       gtk_clipboard_set_with_data (clipboard, target_list,
                                    copy_file_get_cb,
@@ -2003,7 +1997,6 @@ file_list_drag_data_received_cb (GtkWidget        *widget,
                                  gint              x,
                                  gint              y,
                                  GtkSelectionData *selection_data,
-                                 guint             info,
                                  guint             time_,
                                  gpointer          user_data)
 {

@@ -121,7 +121,6 @@ drag_data_received (GtkWidget        *widget,
                     gint              x,
                     gint              y,
                     GtkSelectionData *selection_data,
-                    guint             info,
                     guint32           time,
                     gpointer          data)
 {

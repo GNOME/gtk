@@ -6,7 +6,7 @@
 
 /* Drag 'n Drop */
 static GtkTargetEntry target_table[] = {
-  { "text/uri-list", 0, 0 },
+  { "text/uri-list", 0 },
 };
 
 typedef struct
@@ -459,7 +459,7 @@ icon_browser_window_init (IconBrowserWindow *win)
   gtk_widget_init_template (GTK_WIDGET (win));
 
   list = gtk_target_list_new (NULL, 0);
-  gtk_target_list_add_text_targets (list, 0);
+  gtk_target_list_add_text_targets (list);
   gtk_icon_view_enable_model_drag_source (GTK_ICON_VIEW (win->list),
                                           GDK_BUTTON1_MASK,
                                           list,

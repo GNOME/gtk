@@ -3204,7 +3204,6 @@ clipboard_clear_selection_cb (GtkClipboard *clipboard,
 static void
 clipboard_get_selection_cb (GtkClipboard     *clipboard,
                             GtkSelectionData *selection_data,
-                            guint             info,
                             gpointer          data)
 {
   GtkTextBuffer *buffer = GTK_TEXT_BUFFER (data);
@@ -3212,7 +3211,7 @@ clipboard_get_selection_cb (GtkClipboard     *clipboard,
 
   if (gtk_text_buffer_get_selection_bounds (buffer, &start, &end))
     {
-      if (info == GTK_TEXT_BUFFER_TARGET_INFO_BUFFER_CONTENTS)
+      if (gtk_selection_data_get_target (selection_data) == gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"))
         {
           /* Provide the address of the buffer; this will only be
            * used within-process
@@ -3223,7 +3222,7 @@ clipboard_get_selection_cb (GtkClipboard     *clipboard,
                                   (void*)&buffer,
                                   sizeof (buffer));
         }
-      else if (info == GTK_TEXT_BUFFER_TARGET_INFO_RICH_TEXT)
+      else if (gtk_selection_data_targets_include_rich_text (selection_data, buffer))
         {
           guint8 *str;
           gsize   len;
@@ -3238,7 +3237,7 @@ clipboard_get_selection_cb (GtkClipboard     *clipboard,
                                   str, len);
           g_free (str);
         }
-      else
+      else if (gtk_selection_data_targets_include_text (selection_data))
         {
           gchar *str;
 
@@ -3275,14 +3274,13 @@ create_clipboard_contents_buffer (GtkTextBuffer *buffer)
 static void
 clipboard_get_contents_cb (GtkClipboard     *clipboard,
                            GtkSelectionData *selection_data,
-                           guint             info,
                            gpointer          data)
 {
   GtkTextBuffer *contents = GTK_TEXT_BUFFER (data);
 
   g_assert (contents); /* This should never be called unless we own the clipboard */
 
-  if (info == GTK_TEXT_BUFFER_TARGET_INFO_BUFFER_CONTENTS)
+  if (gtk_selection_data_get_target (selection_data) == gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"))
     {
       /* Provide the address of the clipboard buffer; this will only
        * be used within-process. OK to supply a NULL value for contents.
@@ -3293,7 +3291,7 @@ clipboard_get_contents_cb (GtkClipboard     *clipboard,
                               (void*)&contents,
                               sizeof (contents));
     }
-  else if (info == GTK_TEXT_BUFFER_TARGET_INFO_RICH_TEXT)
+  else if (gtk_selection_data_targets_include_rich_text (selection_data, contents))
     {
       GtkTextBuffer *clipboard_source_buffer;
       GtkTextIter start, end;
@@ -4014,16 +4012,13 @@ gtk_text_buffer_get_target_list (GtkTextBuffer   *buffer,
   if (include_local)
     gtk_target_list_add (target_list,
                          gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"),
-                         GTK_TARGET_SAME_APP,
-                         GTK_TEXT_BUFFER_TARGET_INFO_BUFFER_CONTENTS);
+                         GTK_TARGET_SAME_APP);
 
   gtk_target_list_add_rich_text_targets (target_list,
-                                         GTK_TEXT_BUFFER_TARGET_INFO_RICH_TEXT,
                                          deserializable,
                                          buffer);
 
-  gtk_target_list_add_text_targets (target_list,
-                                    GTK_TEXT_BUFFER_TARGET_INFO_TEXT);
+  gtk_target_list_add_text_targets (target_list);
 
   return target_list;
 }

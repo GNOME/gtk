@@ -161,13 +161,11 @@ selection_toggled (GtkWidget *widget)
 void
 selection_get (GtkWidget *widget, 
 	       GtkSelectionData *selection_data,
-	       guint      info,
 	       guint      time,
 	       gpointer   data)
 {
   guchar *buffer;
   gint len;
-  GdkAtom type = NULL;
 
   if (!selection_string)
     {
@@ -180,18 +178,9 @@ selection_get (GtkWidget *widget,
       len = selection_string->len;
     }
 
-  switch (info)
-    {
-    case COMPOUND_TEXT:
-    case TEXT:
-      type = seltypes[COMPOUND_TEXT];
-      break;
-    case STRING:
-      type = seltypes[STRING];
-      break;
-    }
-  
-  gtk_selection_data_set (selection_data, type, 8, buffer, len);
+  gtk_selection_data_set (selection_data,
+                          gtk_selection_data_get_target (selection_data),
+                          8, buffer, len);
 }
 
 gint
@@ -396,9 +385,9 @@ main (int argc, char *argv[])
   GtkWidget *scrolled;
 
   static GtkTargetEntry targetlist[] = {
-    { "STRING",        0, STRING },
-    { "TEXT",          0, TEXT },
-    { "COMPOUND_TEXT", 0, COMPOUND_TEXT }
+    { "STRING",        0 },
+    { "TEXT",          0 },
+    { "COMPOUND_TEXT", 0 }
   };
   static gint ntargets = sizeof(targetlist) / sizeof(targetlist[0]);
   GtkTargetList *list;

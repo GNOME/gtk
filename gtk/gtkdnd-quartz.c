@@ -110,7 +110,6 @@ struct _GtkDragFindData
 @implementation GtkDragSourceOwner
 -(void)pasteboard:(NSPasteboard *)sender provideDataForType:(NSString *)type
 {
-  guint target_info;
   GtkSelectionData selection_data;
 
   selection_data.selection = NULL;
@@ -120,13 +119,11 @@ struct _GtkDragFindData
   selection_data.display = gdk_display_get_default ();
 
   if (gtk_target_list_find (info->target_list, 
-			    selection_data.target, 
-			    &target_info)) 
+			    selection_data.target))
     {
       g_signal_emit_by_name (info->widget, "drag-data-get",
 			     info->context,
 			     &selection_data,
-			     target_info,
 			     time);
 
       if (selection_data.length >= 0)

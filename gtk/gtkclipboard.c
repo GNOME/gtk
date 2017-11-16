@@ -189,14 +189,6 @@ static GtkClipboard *clipboard_peek       (GdkDisplay       *display,
 static GtkWidget *   get_clipboard_widget (GdkDisplay       *display);
 
 
-enum {
-  TARGET_STRING,
-  TARGET_TEXT,
-  TARGET_COMPOUND_TEXT,
-  TARGET_UTF8_STRING,
-  TARGET_SAVE_TARGETS
-};
-
 static const gchar request_contents_key[] = "gtk-request-contents";
 static GQuark request_contents_key_id = 0;
 
@@ -399,7 +391,6 @@ gtk_clipboard_get_default (GdkDisplay *display)
 static void 
 selection_get_cb (GtkWidget          *widget,
 		  GtkSelectionData   *selection_data,
-		  guint               info,
 		  guint               time)
 {
   GtkClipboard *clipboard;
@@ -408,7 +399,7 @@ selection_get_cb (GtkWidget          *widget,
                                         gtk_selection_data_get_selection (selection_data));
 
   if (clipboard && clipboard->get_func)
-    clipboard->get_func (clipboard, selection_data, info, clipboard->user_data);
+    clipboard->get_func (clipboard, selection_data, clipboard->user_data);
 }
 
 static gboolean
@@ -811,7 +802,6 @@ gtk_clipboard_real_clear (GtkClipboard *clipboard)
 static void 
 text_get_func (GtkClipboard     *clipboard,
 	       GtkSelectionData *selection_data,
-	       guint             info,
 	       gpointer          data)
 {
   gtk_selection_data_set_text (selection_data, data, -1);
@@ -848,7 +838,7 @@ gtk_clipboard_set_text (GtkClipboard *clipboard,
   g_return_if_fail (text != NULL);
 
   targets = gtk_target_list_new (NULL, 0);
-  gtk_target_list_add_text_targets (targets, 0);
+  gtk_target_list_add_text_targets (targets);
 
   if (len < 0)
     len = strlen (text);
@@ -865,7 +855,6 @@ gtk_clipboard_set_text (GtkClipboard *clipboard,
 static void 
 pixbuf_get_func (GtkClipboard     *clipboard,
 		 GtkSelectionData *selection_data,
-		 guint             info,
 		 gpointer          data)
 {
   gtk_selection_data_set_pixbuf (selection_data, data);
@@ -900,7 +889,7 @@ gtk_clipboard_set_image (GtkClipboard *clipboard,
   g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
 
   targets = gtk_target_list_new (NULL, 0);
-  gtk_target_list_add_image_targets (targets, 0, TRUE);
+  gtk_target_list_add_image_targets (targets, TRUE);
 
   gtk_clipboard_set_with_data (clipboard, 
 			       targets,
@@ -2155,8 +2144,7 @@ gtk_clipboard_real_set_can_store (GtkClipboard  *clipboard,
     {
       gtk_selection_add_target (clipboard_widget,
                                 clipboard->selection,
-                                gdk_atom_intern_static_string ("SAVE_TARGETS"),
-				TARGET_SAVE_TARGETS);
+                                gdk_atom_intern_static_string ("SAVE_TARGETS"));
 
       /* Ref the owner so it won't go away */
       if (clipboard->have_owner)

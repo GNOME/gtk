@@ -134,12 +134,6 @@ typedef gboolean (* GtkDragDestCallback) (GtkWidget      *widget,
                                           gint            y,
                                           guint32         time);
 
-/* Enumeration for some targets we handle internally */
-
-enum {
-  TARGET_DELETE = 0x40000002
-};
-
 /* Forward declarations */
 static void          gtk_drag_get_event_actions (const GdkEvent  *event,
                                                  gint             button,
@@ -203,7 +197,6 @@ static void gtk_drag_cancel_internal           (GtkDragSourceInfo *info,
 
 static void gtk_drag_selection_get             (GtkWidget         *widget, 
                                                 GtkSelectionData  *selection_data,
-                                                guint              sel_info,
                                                 guint32            time,
                                                 gpointer           data);
 static void gtk_drag_remove_icon               (GtkDragSourceInfo *info);
@@ -823,11 +816,8 @@ gtk_drag_selection_received (GtkWidget        *widget,
 
       if (site && site->target_list)
         {
-          guint target_info;
-
           if (gtk_target_list_find (site->target_list, 
-                                    target,
-                                    &target_info))
+                                    target))
             {
               if (!(site->flags & GTK_DEST_DEFAULT_DROP) ||
                   gtk_selection_data_get_length (selection_data) >= 0)
@@ -835,7 +825,7 @@ gtk_drag_selection_received (GtkWidget        *widget,
                                        "drag-data-received",
                                        context, info->drop_x, info->drop_y,
                                        selection_data,
-                                       target_info, time);
+                                       time);
             }
         }
       else
@@ -844,7 +834,7 @@ gtk_drag_selection_received (GtkWidget        *widget,
                                  "drag-data-received",
                                  context, info->drop_x, info->drop_y,
                                  selection_data,
-                                 0, time);
+                                 time);
         }
       
       if (site && site->flags & GTK_DEST_DEFAULT_DROP)
@@ -1810,15 +1800,13 @@ gtk_drag_source_check_selection (GtkDragSourceInfo *info,
 
       gtk_selection_add_target (info->ipc_widget,
                                 selection,
-                                pair->target,
-                                pair->info);
+                                pair->target);
       tmp_list = tmp_list->next;
     }
 
   gtk_selection_add_target (info->ipc_widget,
                             selection,
-                            gdk_atom_intern_static_string ("DELETE"),
-                            TARGET_DELETE);
+                            gdk_atom_intern_static_string ("DELETE"));
 }
 
 
@@ -1889,7 +1877,6 @@ gtk_drag_drop (GtkDragSourceInfo *info,
 
               g_signal_emit_by_name (info->widget, "drag-data-get",
                                      info->context, &selection_data,
-                                     pair->info,
                                      time);
 
               /* FIXME: Should we check for length >= 0 here? */
@@ -1921,37 +1908,29 @@ gtk_drag_drop (GtkDragSourceInfo *info,
 static void
 gtk_drag_selection_get (GtkWidget        *widget, 
                         GtkSelectionData *selection_data,
-                        guint             sel_info,
                         guint32           time,
                         gpointer          data)
 {
   GtkDragSourceInfo *info = data;
   static GdkAtom null_atom = NULL;
-  guint target_info;
 
   if (!null_atom)
     null_atom = gdk_atom_intern_static_string ("NULL");
 
-  switch (sel_info)
+  if (gtk_selection_data_get_target (selection_data) == gdk_atom_intern_static_string ("DELETE"))
     {
-    case TARGET_DELETE:
       g_signal_emit_by_name (info->widget,
                              "drag-data-delete", 
                              info->context);
       gtk_selection_data_set (selection_data, null_atom, 8, NULL, 0);
-      break;
-    default:
-      if (gtk_target_list_find (info->target_list, 
-                                gtk_selection_data_get_target (selection_data),
-                                &target_info))
-        {
-          g_signal_emit_by_name (info->widget, "drag-data-get",
-                                 info->context,
-                                 selection_data,
-                                 target_info,
-                                 time);
-        }
-      break;
+    }
+  else if (gtk_target_list_find (info->target_list, 
+                                 gtk_selection_data_get_target (selection_data)))
+    {
+      g_signal_emit_by_name (info->widget, "drag-data-get",
+                             info->context,
+                             selection_data,
+                             time);
     }
 }
 

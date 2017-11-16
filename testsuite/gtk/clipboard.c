@@ -42,12 +42,9 @@ test_text (void)
 static void
 test_with_data_get (GtkClipboard *clipboard,
                     GtkSelectionData *selection_data,
-                    guint info,
                     gpointer user_data_or_owner)
 {
     gboolean success;
-
-    g_assert_cmpuint (info, ==, 42);
 
     success = gtk_selection_data_set_text (selection_data, SOME_TEXT, -1);
     g_assert (success);
@@ -69,7 +66,7 @@ static void
 test_with_data (void)
 {
     GtkClipboard *clipboard = gtk_clipboard_get_for_display (gdk_display_get_default (), GDK_SELECTION_CLIPBOARD);
-    GtkTargetEntry entries[] = { { .target = TARGET_TEXT, .info = 42 } };
+    GtkTargetEntry entries[] = { { .target = TARGET_TEXT } };
     GtkTargetList *targets;
 
     targets = gtk_target_list_new (entries, G_N_ELEMENTS(entries));

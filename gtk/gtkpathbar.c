@@ -1474,7 +1474,6 @@ static void
 button_drag_data_get_cb (GtkWidget        *widget,
                          GdkDragContext   *context,
                          GtkSelectionData *selection_data,
-                         guint             info,
                          guint             time_,
                          gpointer          data)
 {

@@ -392,7 +392,6 @@ struct _GtkWidgetClass
   /* selection */
   void     (* selection_get)       (GtkWidget          *widget,
 				    GtkSelectionData   *selection_data,
-				    guint               info,
 				    guint               time_);
   void     (* selection_received)  (GtkWidget          *widget,
 				    GtkSelectionData   *selection_data,
@@ -406,7 +405,6 @@ struct _GtkWidgetClass
   void     (* drag_data_get)       (GtkWidget          *widget,
 				    GdkDragContext     *context,
 				    GtkSelectionData   *selection_data,
-				    guint               info,
 				    guint               time_);
   void     (* drag_data_delete)    (GtkWidget          *widget,
 				    GdkDragContext     *context);
@@ -430,7 +428,6 @@ struct _GtkWidgetClass
 				    gint                x,
 				    gint                y,
 				    GtkSelectionData   *selection_data,
-				    guint               info,
 				    guint               time_);
   gboolean (* drag_failed)         (GtkWidget          *widget,
                                     GdkDragContext     *context,

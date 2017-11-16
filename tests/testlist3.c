@@ -1,7 +1,7 @@
 #include <gtk/gtk.h>
 
 static GtkTargetEntry entries[] = {
-  { "GTK_LIST_BOX_ROW", GTK_TARGET_SAME_APP, 0 }
+  { "GTK_LIST_BOX_ROW", GTK_TARGET_SAME_APP }
 };
 
 static void
@@ -37,7 +37,6 @@ void
 drag_data_get (GtkWidget        *widget,
                GdkDragContext   *context,
                GtkSelectionData *selection_data,
-               guint             info,
                guint             time,
                gpointer          data)
 {
@@ -55,7 +54,6 @@ drag_data_received (GtkWidget        *widget,
                     gint              x,
                     gint              y,
                     GtkSelectionData *selection_data,
-                    guint             info,
                     guint32           time,
                     gpointer          data)
 {

@@ -53,7 +53,6 @@ struct _GtkTargetPair
 {
   GdkAtom   target;
   guint     flags;
-  guint     info;
 };
 
 /**
@@ -107,7 +106,6 @@ struct _GtkTargetEntry
 {
   gchar *target;
   guint  flags;
-  guint  info;
 };
 
 GDK_AVAILABLE_IN_ALL
@@ -125,23 +123,18 @@ void           gtk_target_list_merge     (GtkTargetList         *target,
 GDK_AVAILABLE_IN_ALL
 void           gtk_target_list_add       (GtkTargetList  *list,
                                           GdkAtom         target,
-                                          guint           flags,
-                                          guint           info);
+                                          guint           flags);
 GDK_AVAILABLE_IN_ALL
-void           gtk_target_list_add_text_targets      (GtkTargetList  *list,
-                                                      guint           info);
+void           gtk_target_list_add_text_targets      (GtkTargetList  *list);
 GDK_AVAILABLE_IN_ALL
 void           gtk_target_list_add_rich_text_targets (GtkTargetList  *list,
-                                                      guint           info,
                                                       gboolean        deserializable,
                                                       GtkTextBuffer  *buffer);
 GDK_AVAILABLE_IN_ALL
 void           gtk_target_list_add_image_targets     (GtkTargetList  *list,
-                                                      guint           info,
                                                       gboolean        writable);
 GDK_AVAILABLE_IN_ALL
-void           gtk_target_list_add_uri_targets       (GtkTargetList  *list,
-                                                      guint           info);
+void           gtk_target_list_add_uri_targets       (GtkTargetList  *list);
 GDK_AVAILABLE_IN_ALL
 void           gtk_target_list_add_table (GtkTargetList        *list,
                                           const GtkTargetEntry *targets,
@@ -151,8 +144,7 @@ void           gtk_target_list_remove    (GtkTargetList  *list,
                                           GdkAtom         target);
 GDK_AVAILABLE_IN_ALL
 gboolean       gtk_target_list_find      (GtkTargetList  *list,
-                                          GdkAtom         target,
-                                          guint          *info);
+                                          GdkAtom         target);
 
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_selection_owner_set             (GtkWidget  *widget,
@@ -167,8 +159,7 @@ gboolean gtk_selection_owner_set_for_display (GdkDisplay *display,
 GDK_AVAILABLE_IN_ALL
 void     gtk_selection_add_target    (GtkWidget            *widget,
                                       GdkAtom               selection,
-                                      GdkAtom               target,
-                                      guint                 info);
+                                      GdkAtom               target);
 GDK_AVAILABLE_IN_ALL
 void     gtk_selection_add_targets   (GtkWidget            *widget,
                                       GdkAtom               selection,

@@ -454,12 +454,10 @@ static void     gtk_entry_drag_data_received (GtkWidget        *widget,
 					      gint              x,
 					      gint              y,
 					      GtkSelectionData *selection_data,
-					      guint             info,
 					      guint             time);
 static void     gtk_entry_drag_data_get      (GtkWidget        *widget,
 					      GdkDragContext   *context,
 					      GtkSelectionData *selection_data,
-					      guint             info,
 					      guint             time);
 static void     gtk_entry_drag_data_delete   (GtkWidget        *widget,
 					      GdkDragContext   *context);
@@ -3882,7 +3880,7 @@ gtk_entry_drag_gesture_update (GtkGestureDrag *gesture,
           guint actions = priv->editable ? GDK_ACTION_COPY | GDK_ACTION_MOVE : GDK_ACTION_COPY;
           guint button;
 
-          gtk_target_list_add_text_targets (target_list, 0);
+          gtk_target_list_add_text_targets (target_list);
 
           gtk_entry_get_pixel_ranges (entry, &ranges, &n_ranges);
 
@@ -6529,7 +6527,6 @@ gtk_entry_paste (GtkEntry *entry,
 static void
 primary_get_cb (GtkClipboard     *clipboard,
 		GtkSelectionData *selection_data,
-		guint             info,
 		gpointer          data)
 {
   GtkEntry *entry = GTK_ENTRY (data);
@@ -6564,7 +6561,7 @@ gtk_entry_update_primary_selection (GtkEntry *entry)
     return;
 
   list = gtk_target_list_new (NULL, 0);
-  gtk_target_list_add_text_targets (list, 0);
+  gtk_target_list_add_text_targets (list);
 
   clipboard = gtk_widget_get_clipboard (GTK_WIDGET (entry), GDK_SELECTION_PRIMARY);
   
@@ -8945,7 +8942,6 @@ gtk_entry_drag_data_received (GtkWidget        *widget,
 			      gint              x,
 			      gint              y,
 			      GtkSelectionData *selection_data,
-			      guint             info,
 			      guint             time)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
@@ -8995,7 +8991,6 @@ static void
 gtk_entry_drag_data_get (GtkWidget        *widget,
 			 GdkDragContext   *context,
 			 GtkSelectionData *selection_data,
-			 guint             info,
 			 guint             time)
 {
   GtkEntry *entry = GTK_ENTRY (widget);

@@ -313,12 +313,12 @@ enum {
 
 /* Target types for dragging from the shortcuts list */
 static const GtkTargetEntry dnd_source_targets[] = {
-  { (char *) "DND_GTK_SIDEBAR_ROW", GTK_TARGET_SAME_WIDGET, DND_GTK_SIDEBAR_ROW }
+  { (char *) "DND_GTK_SIDEBAR_ROW", GTK_TARGET_SAME_WIDGET }
 };
 
 /* Target types for dropping into the shortcuts list */
 static const GtkTargetEntry dnd_drop_targets [] = {
-  { (char *) "DND_GTK_SIDEBAR_ROW", GTK_TARGET_SAME_WIDGET, DND_GTK_SIDEBAR_ROW }
+  { (char *) "DND_GTK_SIDEBAR_ROW", GTK_TARGET_SAME_WIDGET }
 };
 
 G_DEFINE_TYPE (GtkPlacesSidebar, gtk_places_sidebar, GTK_TYPE_SCROLLED_WINDOW);
@@ -1972,8 +1972,6 @@ static void
 drag_data_get_callback (GtkWidget        *widget,
                         GdkDragContext   *context,
                         GtkSelectionData *data,
-                        guint             info,
-                        guint             time,
                         gpointer          user_data)
 {
   GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (user_data);
@@ -1995,7 +1993,6 @@ drag_data_received_callback (GtkWidget        *list_box,
                              int               x,
                              int               y,
                              GtkSelectionData *selection_data,
-                             guint             info,
                              guint             time,
                              gpointer          user_data)
 {
@@ -2009,8 +2006,7 @@ drag_data_received_callback (GtkWidget        *list_box,
 
   if (!sidebar->drag_data_received)
     {
-      if (gtk_selection_data_get_target (selection_data) != NULL &&
-          info == DND_TEXT_URI_LIST)
+      if (gtk_selection_data_targets_include_uri (selection_data))
         {
           gchar **uris;
 
@@ -2020,13 +2016,15 @@ drag_data_received_callback (GtkWidget        *list_box,
             g_list_free_full (sidebar->drag_list, g_object_unref);
           sidebar->drag_list = build_file_list_from_uris ((const char **) uris);
           g_strfreev (uris);
+          sidebar->drag_data_info = DND_TEXT_URI_LIST;
         }
       else
         {
           sidebar->drag_list = NULL;
+          if (gtk_selection_data_get_target (selection_data) == gdk_atom_intern_static_string ("DND_GTK_SIDEBAR_ROW"))
+            sidebar->drag_data_info = DND_GTK_SIDEBAR_ROW;
         }
       sidebar->drag_data_received = TRUE;
-      sidebar->drag_data_info = info;
     }
 
   g_signal_stop_emission_by_name (list_box, "drag-data-received");
@@ -4075,11 +4073,11 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
                      NULL,
                      GDK_ACTION_MOVE | GDK_ACTION_COPY | GDK_ACTION_LINK);
   target_list = gtk_target_list_new  (dnd_drop_targets, G_N_ELEMENTS (dnd_drop_targets));
-  gtk_target_list_add_uri_targets (target_list, DND_TEXT_URI_LIST);
+  gtk_target_list_add_uri_targets (target_list);
   gtk_drag_dest_set_target_list (sidebar->list_box, target_list);
   gtk_target_list_unref (target_list);
   sidebar->source_targets = gtk_target_list_new (dnd_source_targets, G_N_ELEMENTS (dnd_source_targets));
-  gtk_target_list_add_text_targets (sidebar->source_targets, 0);
+  gtk_target_list_add_text_targets (sidebar->source_targets);
 
   g_signal_connect (sidebar->list_box, "motion-notify-event",
                     G_CALLBACK (on_motion_notify_event), sidebar);

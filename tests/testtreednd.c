@@ -64,7 +64,7 @@ get_model (void)
 }
 
 static GtkTargetEntry entries[] = {
-  { "text/plain", 0, 0 }
+  { "text/plain", 0 }
 };
 
 static GtkWidget *
@@ -89,12 +89,12 @@ get_dragsource (void)
 }
 
 static void
-data_received (GtkWidget *widget,
-               GdkDragContext *context,
-               gint x, gint y,
-               GtkSelectionData *selda,
-               guint info, guint time,
-               gpointer dada)
+drag_data_received (GtkWidget *widget,
+                    GdkDragContext *context,
+                    gint x, gint y,
+                    GtkSelectionData *selda,
+                    guint time,
+                    gpointer dada)
 {
   gchar *text;
 
@@ -112,7 +112,7 @@ get_droptarget (void)
   label = gtk_label_new ("Drop here");
   targets = gtk_target_list_new (entries, G_N_ELEMENTS (entries));
   gtk_drag_dest_set (label, GTK_DEST_DEFAULT_ALL, targets, GDK_ACTION_COPY);
-  g_signal_connect (label, "drag-data-received", G_CALLBACK (data_received), NULL);
+  g_signal_connect (label, "drag-data-received", G_CALLBACK (drag_data_received), NULL);
   gtk_target_list_unref (targets);
 
   return label;

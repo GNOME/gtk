@@ -166,7 +166,6 @@ palette_drag_data_received (GtkWidget        *widget,
                             gint              x,
                             gint              y,
                             GtkSelectionData *selection,
-                            guint             info,
                             guint             time,
                             gpointer          data)
 {
@@ -210,7 +209,6 @@ passive_canvas_drag_data_received (GtkWidget        *widget,
                                    gint              x,
                                    gint              y,
                                    GtkSelectionData *selection,
-                                   guint             info,
                                    guint             time,
                                    gpointer          data)
 {
@@ -285,7 +283,6 @@ interactive_canvas_drag_data_received (GtkWidget        *widget,
                                        gint              x,
                                        gint              y,
                                        GtkSelectionData *selection,
-                                       guint             info,
                                        guint             time,
                                        gpointer          data)
 
@@ -566,8 +563,8 @@ do_toolpalette (GtkWidget *do_widget)
       contents = gtk_drawing_area_new ();
 
       g_object_connect (contents,
-                        "signal::draw", canvas_draw, NULL,
-                        "signal::drag-data-received", passive_canvas_drag_data_received, NULL,
+                        "draw", canvas_draw, NULL,
+                        "drag-data-received", passive_canvas_drag_data_received, NULL,
                         NULL);
 
       gtk_tool_palette_add_drag_dest (GTK_TOOL_PALETTE (palette),
@@ -592,11 +589,11 @@ do_toolpalette (GtkWidget *do_widget)
       contents = gtk_drawing_area_new ();
 
       g_object_connect (contents,
-                        "signal::draw", canvas_draw, NULL,
-                        "signal::drag-motion", interactive_canvas_drag_motion, NULL,
-                        "signal::drag-data-received", interactive_canvas_drag_data_received, NULL,
-                        "signal::drag-leave", interactive_canvas_drag_leave, contents,
-                        "signal::drag-drop", interactive_canvas_drag_drop, NULL,
+                        "draw", canvas_draw, NULL,
+                        "drag-motion", interactive_canvas_drag_motion, NULL,
+                        "drag-data-received", interactive_canvas_drag_data_received, NULL,
+                        "drag-leave", interactive_canvas_drag_leave, contents,
+                        "drag-drop", interactive_canvas_drag_drop, NULL,
                         NULL);
 
       gtk_tool_palette_add_drag_dest (GTK_TOOL_PALETTE (palette),

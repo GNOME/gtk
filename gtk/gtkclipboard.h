@@ -146,9 +146,6 @@ typedef void (* GtkClipboardTargetsReceivedFunc)  (GtkClipboard     *clipboard,
  * @clipboard: the #GtkClipboard
  * @selection_data: a #GtkSelectionData argument in which the requested
  *   data should be stored.
- * @info: the info field corresponding to the requested target from the
- *   #GtkTargetEntry array passed to gtk_clipboard_set_with_data() or
- *   gtk_clipboard_set_with_owner().
  * @user_data_or_owner: the @user_data argument passed to
  *   gtk_clipboard_set_with_data(), or the @owner argument passed to
  *   gtk_clipboard_set_with_owner()
@@ -164,7 +161,6 @@ typedef void (* GtkClipboardTargetsReceivedFunc)  (GtkClipboard     *clipboard,
  */
 typedef void (* GtkClipboardGetFunc)          (GtkClipboard     *clipboard,
 					       GtkSelectionData *selection_data,
-					       guint             info,
 					       gpointer          user_data_or_owner);
 
 /**

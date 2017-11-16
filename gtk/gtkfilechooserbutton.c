@@ -213,17 +213,6 @@ struct _GtkFileChooserButtonPrivate
 };
 
 
-/* ************* *
- *  DnD Support  *
- * ************* */
-
-enum
-{
-  TEXT_PLAIN,
-  TEXT_URI_LIST
-};
-
-
 /* ********************* *
  *  Function Prototypes  *
  * ********************* */
@@ -267,7 +256,6 @@ static void     gtk_file_chooser_button_drag_data_received (GtkWidget        *wi
 							    gint              x,
 							    gint              y,
 							    GtkSelectionData *data,
-							    guint             type,
 							    guint             drag_time);
 static void     gtk_file_chooser_button_show               (GtkWidget        *widget);
 static void     gtk_file_chooser_button_hide               (GtkWidget        *widget);
@@ -551,8 +539,8 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
 
   /* DnD */
   target_list = gtk_target_list_new (NULL, 0);
-  gtk_target_list_add_uri_targets (target_list, TEXT_URI_LIST);
-  gtk_target_list_add_text_targets (target_list, TEXT_PLAIN);
+  gtk_target_list_add_uri_targets (target_list);
+  gtk_target_list_add_text_targets (target_list);
   gtk_drag_dest_set (GTK_WIDGET (button),
                      (GTK_DEST_DEFAULT_ALL),
 		     target_list,
@@ -1227,7 +1215,6 @@ gtk_file_chooser_button_drag_data_received (GtkWidget	     *widget,
 					    gint	      x,
 					    gint	      y,
 					    GtkSelectionData *data,
-					    guint	      type,
 					    guint	      drag_time)
 {
   GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (widget);
@@ -1239,55 +1226,48 @@ gtk_file_chooser_button_drag_data_received (GtkWidget	     *widget,
     GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->drag_data_received (widget,
 										 context,
 										 x, y,
-										 data, type,
+										 data,
 										 drag_time);
 
   if (widget == NULL || context == NULL || data == NULL || gtk_selection_data_get_length (data) < 0)
     return;
 
-  switch (type)
+  if (gtk_selection_data_targets_include_uri (data))
     {
-    case TEXT_URI_LIST:
-      {
-	gchar **uris;
-	struct DndSelectFolderData *info;
+      gchar **uris;
+      struct DndSelectFolderData *info;
 
-	uris = gtk_selection_data_get_uris (data);
+      uris = gtk_selection_data_get_uris (data);
 
-	if (uris == NULL)
-	  break;
+      if (uris != NULL)
+        {
+          info = g_new0 (struct DndSelectFolderData, 1);
+          info->button = g_object_ref (button);
+          info->i = 0;
+          info->uris = uris;
+          info->selected = FALSE;
+          info->file_system = priv->fs;
+          g_object_get (priv->chooser, "action", &info->action, NULL);
 
-	info = g_new0 (struct DndSelectFolderData, 1);
-	info->button = g_object_ref (button);
-	info->i = 0;
-	info->uris = uris;
-	info->selected = FALSE;
-	info->file_system = priv->fs;
-	g_object_get (priv->chooser, "action", &info->action, NULL);
+          info->file = g_file_new_for_uri (info->uris[info->i]);
 
-	info->file = g_file_new_for_uri (info->uris[info->i]);
+          if (priv->dnd_select_folder_cancellable)
+            g_cancellable_cancel (priv->dnd_select_folder_cancellable);
 
-	if (priv->dnd_select_folder_cancellable)
-	  g_cancellable_cancel (priv->dnd_select_folder_cancellable);
-
-	priv->dnd_select_folder_cancellable =
-	  _gtk_file_system_get_info (priv->fs, info->file,
-				     "standard::type",
-				     dnd_select_folder_get_info_cb, info);
-      }
-      break;
-
-    case TEXT_PLAIN:
+          priv->dnd_select_folder_cancellable =
+            _gtk_file_system_get_info (priv->fs, info->file,
+                                       "standard::type",
+                                       dnd_select_folder_get_info_cb, info);
+        }
+    }
+  else if (gtk_selection_data_targets_include_text (data))
+    {
       text = (char*) gtk_selection_data_get_text (data);
       file = g_file_new_for_uri (text);
       gtk_file_chooser_select_file (GTK_FILE_CHOOSER (priv->chooser), file, NULL);
       g_object_unref (file);
       g_free (text);
       g_signal_emit (button, file_chooser_button_signals[FILE_SET], 0);
-      break;
-
-    default:
-      break;
     }
 
   gtk_drag_finish (context, TRUE, FALSE, drag_time);

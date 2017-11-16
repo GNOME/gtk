@@ -289,15 +289,10 @@ GdkPixbuf *trashcan_closed;
 
 gboolean have_drag;
 
-enum {
-  TARGET_STRING,
-  TARGET_ROOTWIN
-};
-
 static GtkTargetEntry target_table[] = {
-  { "STRING",     0, TARGET_STRING },
-  { "text/plain", 0, TARGET_STRING },
-  { "application/x-rootwindow-drop", 0, TARGET_ROOTWIN }
+  { "STRING",     0 },
+  { "text/plain", 0 },
+  { "application/x-rootwindow-drop", 0 }
 };
 
 static guint n_targets = sizeof(target_table) / sizeof(target_table[0]);
@@ -415,11 +410,10 @@ void
 source_drag_data_get  (GtkWidget          *widget,
 		       GdkDragContext     *context,
 		       GtkSelectionData   *selection_data,
-		       guint               info,
 		       guint               time,
 		       gpointer            data)
 {
-  if (info == TARGET_ROOTWIN)
+  if (gtk_selection_data_get_target (selection_data) == gdk_atom_intern_static_string ("application/x-rootwindow-drop"))
     g_print ("I was dropped on the rootwin\n");
   else
     gtk_selection_data_set (selection_data,
