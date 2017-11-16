@@ -384,10 +384,10 @@ main (int argc, char *argv[])
   GtkWidget *hbox;
   GtkWidget *scrolled;
 
-  static GtkTargetEntry targetlist[] = {
-    { "STRING",        0 },
-    { "TEXT",          0 },
-    { "COMPOUND_TEXT", 0 }
+  static const char *targetlist[] = {
+    "STRING",
+    "TEXT",
+    "COMPOUND_TEXT"
   };
   static gint ntargets = sizeof(targetlist) / sizeof(targetlist[0]);
   GtkTargetList *list;

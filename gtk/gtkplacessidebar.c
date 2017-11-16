@@ -313,13 +313,13 @@ enum {
 };
 
 /* Target types for dragging from the shortcuts list */
-static const GtkTargetEntry dnd_source_targets[] = {
-  { (char *) "DND_GTK_SIDEBAR_ROW", GTK_TARGET_SAME_WIDGET }
+static const char *dnd_source_targets[] = {
+  "DND_GTK_SIDEBAR_ROW"
 };
 
 /* Target types for dropping into the shortcuts list */
-static const GtkTargetEntry dnd_drop_targets [] = {
-  { (char *) "DND_GTK_SIDEBAR_ROW", GTK_TARGET_SAME_WIDGET }
+static const char *dnd_drop_targets [] = {
+  "DND_GTK_SIDEBAR_ROW"
 };
 
 G_DEFINE_TYPE (GtkPlacesSidebar, gtk_places_sidebar, GTK_TYPE_SCROLLED_WINDOW);

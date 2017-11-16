@@ -413,12 +413,10 @@ gtk_drag_dest_find_target (GtkWidget      *widget,
 {
   GList *tmp_target;
   GList *tmp_source = NULL;
-  GtkWidget *source_widget;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
 
-  source_widget = gtk_drag_get_source_widget (context);
   if (target_list == NULL)
     target_list = gtk_drag_dest_get_target_list (widget);
 
@@ -428,20 +426,11 @@ gtk_drag_dest_find_target (GtkWidget      *widget,
   tmp_target = target_list->list;
   while (tmp_target)
     {
-      GtkTargetPair *pair = tmp_target->data;
       tmp_source = gdk_drag_context_list_targets (context);
       while (tmp_source)
         {
-          if (tmp_source->data == GUINT_TO_POINTER (pair->target))
-            {
-              if ((!(pair->flags & GTK_TARGET_SAME_APP) || source_widget) &&
-                  (!(pair->flags & GTK_TARGET_SAME_WIDGET) || (source_widget == widget)) &&
-                  (!(pair->flags & GTK_TARGET_OTHER_APP) || !source_widget) &&
-                  (!(pair->flags & GTK_TARGET_OTHER_WIDGET) || (source_widget != widget)))
-                return pair->target;
-              else
-                break;
-            }
+          if (tmp_source->data == tmp_target->data)
+            return tmp_target->data;
           tmp_source = tmp_source->next;
         }
       tmp_target = tmp_target->next;

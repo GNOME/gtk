@@ -4011,8 +4011,7 @@ gtk_text_buffer_get_target_list (GtkTextBuffer   *buffer,
 
   if (include_local)
     gtk_target_list_add (target_list,
-                         gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"),
-                         GTK_TARGET_SAME_APP);
+                         gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"));
 
   gtk_target_list_add_rich_text_targets (target_list,
                                          deserializable,

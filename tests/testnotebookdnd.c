@@ -55,8 +55,8 @@ gchar *tabs4 [] = {
   NULL
 };
 
-static const GtkTargetEntry button_targets[] = {
-  { "GTK_NOTEBOOK_TAB", GTK_TARGET_SAME_APP },
+static const char *button_targets[] = {
+  "GTK_NOTEBOOK_TAB"
 };
 
 static GtkNotebook*

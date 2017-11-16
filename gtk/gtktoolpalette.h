@@ -144,9 +144,9 @@ void                           gtk_tool_palette_add_drag_dest         (GtkToolPa
                                                                        GdkDragAction              actions);
 
 GDK_AVAILABLE_IN_ALL
-const GtkTargetEntry*          gtk_tool_palette_get_drag_target_item  (void) G_GNUC_CONST;
+const char *                   gtk_tool_palette_get_drag_target_item  (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-const GtkTargetEntry*          gtk_tool_palette_get_drag_target_group (void) G_GNUC_CONST;
+const char *                   gtk_tool_palette_get_drag_target_group (void) G_GNUC_CONST;
 
 
 G_END_DECLS

@@ -68,7 +68,7 @@
  *
  * Some of the datatypes defined this section are used in
  * the #GtkClipboard and drag-and-drop API’s as well. The
- * #GtkTargetEntry and #GtkTargetList objects represent
+ * #GtkTargetList object represents
  * lists of data types that are supported when sending or
  * receiving data. The #GtkSelectionData object is used to
  * store a chunk of data along with the data type and other
@@ -221,16 +221,16 @@ static const char gtk_selection_handler_key[] = "gtk-selection-handlers";
 /**
  * gtk_target_list_new:
  * @targets: (array length=ntargets) (allow-none): Pointer to an array
- *   of #GtkTargetEntry
+ *   of char *
  * @ntargets: number of entries in @targets.
  * 
- * Creates a new #GtkTargetList from an array of #GtkTargetEntry.
+ * Creates a new #GtkTargetList from an array of mime types.
  * 
  * Returns: (transfer full): the new #GtkTargetList.
  **/
 GtkTargetList *
-gtk_target_list_new (const GtkTargetEntry *targets,
-		     guint                 ntargets)
+gtk_target_list_new (const char **targets,
+		     guint        ntargets)
 {
   GtkTargetList *result = g_slice_new (GtkTargetList);
   result->list = NULL;
@@ -274,44 +274,27 @@ gtk_target_list_unref (GtkTargetList *list)
   g_return_if_fail (list->ref_count > 0);
 
   list->ref_count--;
-  if (list->ref_count == 0)
-    {
-      GList *tmp_list = list->list;
-      while (tmp_list)
-	{
-	  GtkTargetPair *pair = tmp_list->data;
-	  g_slice_free (GtkTargetPair, pair);
+  if (list->ref_count > 0)
+    return;
 
-	  tmp_list = tmp_list->next;
-	}
-      
-      g_list_free (list->list);
-      g_slice_free (GtkTargetList, list);
-    }
+  g_list_free (list->list);
+  g_slice_free (GtkTargetList, list);
 }
 
 /**
  * gtk_target_list_add:
  * @list:  a #GtkTargetList
- * @target: the interned atom representing the target
- * @flags: the flags for this target
+ * @target: the mime type of the target
  * 
  * Appends another target to a #GtkTargetList.
  **/
 void 
 gtk_target_list_add (GtkTargetList *list,
-		     GdkAtom        target,
-		     guint          flags)
+		     const char    *target)
 {
-  GtkTargetPair *pair;
-
   g_return_if_fail (list != NULL);
   
-  pair = g_slice_new (GtkTargetPair);
-  pair->target = target;
-  pair->flags = flags;
-
-  list->list = g_list_append (list->list, pair);
+  list->list = g_list_append (list->list, (gpointer) gdk_atom_intern (target, FALSE));
 }
 
 static GdkAtom utf8_atom;
@@ -362,14 +345,14 @@ gtk_target_list_add_text_targets (GtkTargetList *list)
 
   /* Keep in sync with gtk_selection_data_targets_include_text()
    */
-  gtk_target_list_add (list, utf8_atom, 0);  
-  gtk_target_list_add (list, ctext_atom, 0);  
-  gtk_target_list_add (list, text_atom, 0);  
-  gtk_target_list_add (list, GDK_TARGET_STRING, 0);  
-  gtk_target_list_add (list, text_plain_utf8_atom, 0);  
+  gtk_target_list_add (list, utf8_atom);  
+  gtk_target_list_add (list, ctext_atom);  
+  gtk_target_list_add (list, text_atom);  
+  gtk_target_list_add (list, GDK_TARGET_STRING);  
+  gtk_target_list_add (list, text_plain_utf8_atom);  
   if (!g_get_charset (NULL))
-    gtk_target_list_add (list, text_plain_locale_atom, 0);  
-  gtk_target_list_add (list, text_plain_atom, 0);  
+    gtk_target_list_add (list, text_plain_locale_atom);  
+  gtk_target_list_add (list, text_plain_atom);  
 }
 
 /**
@@ -404,7 +387,7 @@ gtk_target_list_add_rich_text_targets (GtkTargetList  *list,
     atoms = gtk_text_buffer_get_serialize_formats (buffer, &n_atoms);
 
   for (i = 0; i < n_atoms; i++)
-    gtk_target_list_add (list, atoms[i], 0);
+    gtk_target_list_add (list, atoms[i]);
 
   g_free (atoms);
 }
@@ -426,7 +409,6 @@ gtk_target_list_add_image_targets (GtkTargetList *list,
 {
   GSList *formats, *f;
   gchar **mimes, **m;
-  GdkAtom atom;
 
   g_return_if_fail (list != NULL);
 
@@ -462,8 +444,7 @@ gtk_target_list_add_image_targets (GtkTargetList *list,
       mimes = gdk_pixbuf_format_get_mime_types (fmt);
       for (m = mimes; *m; m++)
 	{
-	  atom = gdk_atom_intern (*m, FALSE);
-	  gtk_target_list_add (list, atom, 0);  
+	  gtk_target_list_add (list, *m);  
 	}
       g_strfreev (mimes);
     }
@@ -488,7 +469,7 @@ gtk_target_list_add_uri_targets (GtkTargetList *list)
   
   init_atoms ();
 
-  gtk_target_list_add (list, text_uri_list_atom, 0);  
+  gtk_target_list_add (list, text_uri_list_atom);  
 }
 
 /**
@@ -509,7 +490,7 @@ gtk_target_list_merge (GtkTargetList       *target,
 
   for (l = source->list; l; l = l->next)
     {
-      target->list = g_list_prepend (target->list, g_slice_dup (GtkTargetPair, l->data));
+      target->list = g_list_prepend (target->list, l->data);
     }
 }
 
@@ -522,19 +503,15 @@ gtk_target_list_merge (GtkTargetList       *target,
  * Prepends a table of #GtkTargetEntry to a target list.
  **/
 void               
-gtk_target_list_add_table (GtkTargetList        *list,
-			   const GtkTargetEntry *targets,
-			   guint                 ntargets)
+gtk_target_list_add_table (GtkTargetList  *list,
+			   const char    **targets,
+			   guint           ntargets)
 {
   gint i;
 
   for (i=ntargets-1; i >= 0; i--)
     {
-      GtkTargetPair *pair = g_slice_new (GtkTargetPair);
-      pair->target = gdk_atom_intern (targets[i].target, FALSE);
-      pair->flags = targets[i].flags;
-      
-      list->list = g_list_prepend (list->list, pair);
+      list->list = g_list_prepend (list->list, (gpointer) gdk_atom_intern (targets[i], FALSE));
     }
 }
 
@@ -547,35 +524,17 @@ gtk_target_list_add_table (GtkTargetList        *list,
  **/
 void 
 gtk_target_list_remove (GtkTargetList *list,
-			GdkAtom            target)
+			GdkAtom        target)
 {
-  GList *tmp_list;
-
   g_return_if_fail (list != NULL);
 
-  tmp_list = list->list;
-  while (tmp_list)
-    {
-      GtkTargetPair *pair = tmp_list->data;
-      
-      if (pair->target == target)
-	{
-	  g_slice_free (GtkTargetPair, pair);
-
-	  list->list = g_list_remove_link (list->list, tmp_list);
-	  g_list_free_1 (tmp_list);
-
-	  return;
-	}
-      
-      tmp_list = tmp_list->next;
-    }
+  list->list = g_list_remove (list->list, (gpointer) target);
 }
 
 /**
  * gtk_target_list_find:
  * @list: a #GtkTargetList
- * @target: an interned atom representing the target to search for
+ * @target: a string representing the target to search for
  *
  * Looks up a given target in a #GtkTargetList.
  *
@@ -583,24 +542,12 @@ gtk_target_list_remove (GtkTargetList *list,
  **/
 gboolean
 gtk_target_list_find (GtkTargetList *list,
-		      GdkAtom        target)
+		      const char    *target)
 {
-  GList *tmp_list;
-
   g_return_val_if_fail (list != NULL, FALSE);
+  g_return_val_if_fail (target != NULL, FALSE);
 
-  tmp_list = list->list;
-  while (tmp_list)
-    {
-      GtkTargetPair *pair = tmp_list->data;
-
-      if (pair->target == target)
-	return TRUE;
-
-      tmp_list = tmp_list->next;
-    }
-
-  return FALSE;
+  return g_list_find (list->list, (gpointer) gdk_atom_intern (target, FALSE)) != NULL;
 }
 
 GdkAtom *
@@ -616,7 +563,7 @@ gtk_target_list_get_atoms (GtkTargetList *list,
 
   i = 0;
   for (l = list->list; l; l = l->next)
-    atoms[i++] = ((GtkTargetPair *) l->data)->target;
+    atoms[i++] = l->data;
 
   if (n_atoms)
     *n_atoms = n;
@@ -881,7 +828,7 @@ gtk_selection_add_target (GtkWidget	    *widget,
   g_return_if_fail (selection != NULL);
 
   list = gtk_selection_target_list_get (widget, selection);
-  gtk_target_list_add (list, target, 0);
+  gtk_target_list_add (list, target);
   gdk_selection_add_targets (gtk_widget_get_window (widget), selection, &target, 1);
 }
 
@@ -2102,8 +2049,7 @@ gtk_targets_include_image (GdkAtom *targets,
     {
       for (l = list->list; l; l = l->next)
 	{
-	  GtkTargetPair *pair = (GtkTargetPair *)l->data;
-	  if (pair->target == targets[i])
+	  if ((GdkAtom) l->data == targets[i])
 	    {
 	      result = TRUE;
 	      break;
@@ -3143,7 +3089,6 @@ gtk_selection_default_handler (GtkWidget	*widget,
       guint count;
       GList *tmp_list;
       GtkTargetList *target_list;
-      GtkTargetPair *pair;
       
       target_list = gtk_selection_target_list_get (widget,
 						   data->selection);
@@ -3166,8 +3111,7 @@ gtk_selection_default_handler (GtkWidget	*widget,
       tmp_list = target_list->list;
       while (tmp_list)
 	{
-	  pair = (GtkTargetPair *)tmp_list->data;
-	  *p++ = pair->target;
+	  *p++ = (GdkAtom) tmp_list->data;
 	  
 	  tmp_list = tmp_list->next;
 	}

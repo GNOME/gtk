@@ -128,9 +128,9 @@ static gboolean gtk_link_button_activate_link (GtkLinkButton *link_button);
 static void     set_hand_cursor (GtkWidget *widget,
 				 gboolean   show_hand);
 
-static const GtkTargetEntry link_drop_types[] = {
-  { (char *) "text/uri-list", 0 },
-  { (char *) "_NETSCAPE_URL", 0 }
+static const char *link_drop_types[] = {
+  "text/uri-list",
+  "_NETSCAPE_URL"
 };
 
 static guint link_signals[LAST_SIGNAL] = { 0, };

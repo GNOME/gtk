@@ -703,8 +703,8 @@ selection_changed (GtkTreeSelection *selection, GtkWidget *button)
     gtk_widget_set_sensitive (button, FALSE);
 }
 
-static GtkTargetEntry row_targets[] = {
-  { "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_APP }
+static const char *row_targets[] = {
+  "GTK_TREE_MODEL_ROW"
 };
 
 int

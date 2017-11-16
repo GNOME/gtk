@@ -12542,8 +12542,8 @@ gtk_tree_view_set_reorderable (GtkTreeView *tree_view,
 
   if (reorderable)
     {
-      const GtkTargetEntry row_targets[] = {
-        { (char *) "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_WIDGET }
+      const char *row_targets[] = {
+        "GTK_TREE_MODEL_ROW"
       };
       GtkTargetList *targets;
 

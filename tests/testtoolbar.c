@@ -305,8 +305,8 @@ toolbar_drag_drop (GtkWidget *widget, GdkDragContext *context,
   return TRUE;
 }
 
-static GtkTargetEntry target_table[] = {
-  { "application/x-toolbar-item", 0 }
+static const char *target_table[] = {
+  "application/x-toolbar-item"
 };
 
 static void

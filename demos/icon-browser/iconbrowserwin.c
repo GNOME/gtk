@@ -5,8 +5,8 @@
 #include <gtk/gtk.h>
 
 /* Drag 'n Drop */
-static GtkTargetEntry target_table[] = {
-  { "text/uri-list", 0 },
+static const char *target_table[] = {
+  "text/uri-list"
 };
 
 typedef struct

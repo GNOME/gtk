@@ -34,27 +34,6 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GtkTargetPair GtkTargetPair;
-
-/**
- * GtkTargetPair:
- * @target: #GdkAtom representation of the target type
- * @flags: #GtkTargetFlags for DND
- * @info: an application-assigned integer ID which will
- *     get passed as a parameter to e.g the #GtkWidget::selection-get
- *     signal. It allows the application to identify the target
- *     type without extensive string compares.
- *
- * A #GtkTargetPair is used to represent the same
- * information as a table of #GtkTargetEntry, but in
- * an efficient form.
- */
-struct _GtkTargetPair
-{
-  GdkAtom   target;
-  guint     flags;
-};
-
 /**
  * GtkTargetList:
  *
@@ -63,55 +42,14 @@ struct _GtkTargetPair
  * opaque.
  */
 typedef struct _GtkTargetList  GtkTargetList;
-typedef struct _GtkTargetEntry GtkTargetEntry;
 
 #define GTK_TYPE_SELECTION_DATA (gtk_selection_data_get_type ())
 #define GTK_TYPE_TARGET_LIST    (gtk_target_list_get_type ())
 
-/**
- * GtkTargetFlags:
- * @GTK_TARGET_SAME_APP: If this is set, the target will only be selected
- *   for drags within a single application.
- * @GTK_TARGET_SAME_WIDGET: If this is set, the target will only be selected
- *   for drags within a single widget.
- * @GTK_TARGET_OTHER_APP: If this is set, the target will not be selected
- *   for drags within a single application.
- * @GTK_TARGET_OTHER_WIDGET: If this is set, the target will not be selected
- *   for drags withing a single widget.
- *
- * The #GtkTargetFlags enumeration is used to specify
- * constraints on a #GtkTargetEntry.
- */
-typedef enum {
-  GTK_TARGET_SAME_APP = 1 << 0,    /*< nick=same-app >*/
-  GTK_TARGET_SAME_WIDGET = 1 << 1, /*< nick=same-widget >*/
-  GTK_TARGET_OTHER_APP = 1 << 2,   /*< nick=other-app >*/
-  GTK_TARGET_OTHER_WIDGET = 1 << 3 /*< nick=other-widget >*/
-} GtkTargetFlags;
-
-/**
- * GtkTargetEntry:
- * @target: a string representation of the target type
- * @flags: #GtkTargetFlags for DND
- * @info: an application-assigned integer ID which will
- *     get passed as a parameter to e.g the #GtkWidget::selection-get
- *     signal. It allows the application to identify the target
- *     type without extensive string compares.
- *
- * A #GtkTargetEntry represents a single type of
- * data than can be supplied for by a widget for a selection
- * or for supplied or received during drag-and-drop.
- */
-struct _GtkTargetEntry
-{
-  gchar *target;
-  guint  flags;
-};
-
 GDK_AVAILABLE_IN_ALL
 GType          gtk_target_list_get_type  (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-GtkTargetList *gtk_target_list_new       (const GtkTargetEntry *targets,
+GtkTargetList *gtk_target_list_new       (const char          **targets,
                                           guint                 ntargets);
 GDK_AVAILABLE_IN_ALL
 GtkTargetList *gtk_target_list_ref       (GtkTargetList  *list);
@@ -122,8 +60,7 @@ void           gtk_target_list_merge     (GtkTargetList         *target,
                                           const GtkTargetList   *source);
 GDK_AVAILABLE_IN_ALL
 void           gtk_target_list_add       (GtkTargetList  *list,
-                                          GdkAtom         target,
-                                          guint           flags);
+                                          const char     *target);
 GDK_AVAILABLE_IN_ALL
 void           gtk_target_list_add_text_targets      (GtkTargetList  *list);
 GDK_AVAILABLE_IN_ALL
@@ -137,14 +74,14 @@ GDK_AVAILABLE_IN_ALL
 void           gtk_target_list_add_uri_targets       (GtkTargetList  *list);
 GDK_AVAILABLE_IN_ALL
 void           gtk_target_list_add_table (GtkTargetList        *list,
-                                          const GtkTargetEntry *targets,
+                                          const char          **targets,
                                           guint                 ntargets);
 GDK_AVAILABLE_IN_ALL
 void           gtk_target_list_remove    (GtkTargetList  *list,
-                                          GdkAtom         target);
+                                          const char     *target);
 GDK_AVAILABLE_IN_ALL
 gboolean       gtk_target_list_find      (GtkTargetList  *list,
-                                          GdkAtom         target);
+                                          const char     *target);
 
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_selection_owner_set             (GtkWidget  *widget,

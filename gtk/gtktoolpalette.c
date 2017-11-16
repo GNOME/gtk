@@ -179,10 +179,10 @@ struct _GtkToolPaletteDragData
 static GdkAtom dnd_target_atom_item = NULL;
 static GdkAtom dnd_target_atom_group = NULL;
 
-static const GtkTargetEntry dnd_targets[] =
+static const char *dnd_targets[] =
 {
-  { (char *) "application/x-gtk-tool-palette-item", GTK_TARGET_SAME_APP },
-  { (char *) "application/x-gtk-tool-palette-group", GTK_TARGET_SAME_APP },
+  "application/x-gtk-tool-palette-item",
+  "application/x-gtk-tool-palette-group"
 };
 
 static void gtk_tool_palette_set_hadjustment (GtkToolPalette *palette,
@@ -213,8 +213,8 @@ gtk_tool_palette_init (GtkToolPalette *palette)
 
   if (dnd_target_atom_item == NULL)
     {
-      dnd_target_atom_item = gdk_atom_intern_static_string (dnd_targets[0].target);
-      dnd_target_atom_group = gdk_atom_intern_static_string (dnd_targets[1].target);
+      dnd_target_atom_item = gdk_atom_intern_static_string (dnd_targets[0]);
+      dnd_target_atom_group = gdk_atom_intern_static_string (dnd_targets[1]);
     }
 
   gtk_widget_set_has_window (GTK_WIDGET (palette), FALSE);
@@ -1456,7 +1456,7 @@ gtk_tool_palette_add_drag_dest (GtkToolPalette            *palette,
                                 GtkToolPaletteDragTargets  targets,
                                 GdkDragAction              actions)
 {
-  GtkTargetEntry entries[G_N_ELEMENTS (dnd_targets)];
+  const char *entries[G_N_ELEMENTS (dnd_targets)];
   gint n_entries = 0;
   GtkTargetList *list;
 
@@ -1610,16 +1610,16 @@ _gtk_tool_palette_child_set_drag_source (GtkWidget *child,
 /**
  * gtk_tool_palette_get_drag_target_item:
  *
- * Gets the target entry for a dragged #GtkToolItem.
+ * Gets the mime type for a dragged #GtkToolItem.
  *
  * Returns: (transfer none): the #GtkTargetEntry for a dragged item.
  *
  * Since: 2.20
  */
-const GtkTargetEntry*
+const char *
 gtk_tool_palette_get_drag_target_item (void)
 {
-  return &dnd_targets[0];
+  return dnd_targets[0];
 }
 
 /**
@@ -1631,10 +1631,10 @@ gtk_tool_palette_get_drag_target_item (void)
  *
  * Since: 2.20
  */
-const GtkTargetEntry*
+const char *
 gtk_tool_palette_get_drag_target_group (void)
 {
-  return &dnd_targets[1];
+  return dnd_targets[1];
 }
 
 void

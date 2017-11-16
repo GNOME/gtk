@@ -1,7 +1,7 @@
 #include <gtk/gtk.h>
 
-static GtkTargetEntry entries[] = {
-  { "GTK_LIST_BOX_ROW", GTK_TARGET_SAME_APP }
+static const char *entries[] = {
+  "GTK_LIST_BOX_ROW"
 };
 
 static void

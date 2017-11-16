@@ -1,8 +1,8 @@
 #include <gtk/gtk.h>
 
-static GtkTargetEntry row_targets[] =
+static const char *row_targets[] =
 {
-  { "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_APP }
+  "GTK_TREE_MODEL_ROW"
 };
 
 static void

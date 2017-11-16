@@ -1264,9 +1264,7 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   tmp_list = g_list_last (target_list->list);
   while (tmp_list)
     {
-      GtkTargetPair *pair = tmp_list->data;
-      targets = g_list_prepend (targets, 
-                                GINT_TO_POINTER (pair->target));
+      targets = g_list_prepend (targets, tmp_list->data);
       tmp_list = tmp_list->prev;
     }
 
@@ -1796,11 +1794,9 @@ gtk_drag_source_check_selection (GtkDragSourceInfo *info,
   tmp_list = info->target_list->list;
   while (tmp_list)
     {
-      GtkTargetPair *pair = tmp_list->data;
-
       gtk_selection_add_target (info->ipc_widget,
                                 selection,
-                                pair->target);
+                                tmp_list->data);
       tmp_list = tmp_list->next;
     }
 
@@ -1866,12 +1862,10 @@ gtk_drag_drop (GtkDragSourceInfo *info,
       tmp_list = info->target_list->list;
       while (tmp_list)
         {
-          GtkTargetPair *pair = tmp_list->data;
-          
-          if (pair->target == target1 || pair->target == target2)
+          if (tmp_list->data == target1 || tmp_list->data == target2)
             {
               selection_data.selection = NULL;
-              selection_data.target = pair->target;
+              selection_data.target = tmp_list->data;
               selection_data.data = NULL;
               selection_data.length = -1;
 

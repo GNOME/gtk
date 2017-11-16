@@ -641,8 +641,8 @@ on_row_activated (GtkTreeView       *tree_view,
   g_print ("Row activated\n");
 }
 
-static GtkTargetEntry row_targets[] = {
-  { "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_APP }
+static const char *row_targets[] = {
+  "GTK_TREE_MODEL_ROW"
 };
 
 int

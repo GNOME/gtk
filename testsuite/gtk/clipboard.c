@@ -66,7 +66,7 @@ static void
 test_with_data (void)
 {
     GtkClipboard *clipboard = gtk_clipboard_get_for_display (gdk_display_get_default (), GDK_SELECTION_CLIPBOARD);
-    GtkTargetEntry entries[] = { { .target = TARGET_TEXT } };
+    const char *entries[] = { TARGET_TEXT };
     GtkTargetList *targets;
 
     targets = gtk_target_list_new (entries, G_N_ELEMENTS(entries));

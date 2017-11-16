@@ -277,8 +277,8 @@ struct _GtkWindowPrivate
   GList *foci;
 };
 
-static const GtkTargetEntry dnd_dest_targets [] = {
-  { (char *) "application/x-rootwindow-drop", 0 },
+static const char *dnd_dest_targets [] = {
+  "application/x-rootwindow-drop"
 };
 
 enum {

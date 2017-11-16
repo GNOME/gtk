@@ -308,13 +308,13 @@ struct _GtkNotebookPage
   gulong notify_visible_handler;
 };
 
-static const GtkTargetEntry src_notebook_targets [] = {
-  { (char *) "GTK_NOTEBOOK_TAB", GTK_TARGET_SAME_APP },
-  { (char *) "application/x-rootwindow-drop", 0 },
+static const char *src_notebook_targets [] = {
+  "GTK_NOTEBOOK_TAB",
+  "application/x-rootwindow-drop"
 };
 
-static const GtkTargetEntry dst_notebook_targets [] = {
-  { (char *) "GTK_NOTEBOOK_TAB", GTK_TARGET_SAME_APP },
+static const char *dst_notebook_targets [] = {
+  "GTK_NOTEBOOK_TAB"
 };
 
 /*** GtkNotebook Methods ***/

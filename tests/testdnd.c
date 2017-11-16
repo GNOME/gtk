@@ -289,10 +289,10 @@ GdkPixbuf *trashcan_closed;
 
 gboolean have_drag;
 
-static GtkTargetEntry target_table[] = {
-  { "STRING",     0 },
-  { "text/plain", 0 },
-  { "application/x-rootwindow-drop", 0 }
+static const char *target_table[] = {
+  "STRING",
+  "text/plain",
+  "application/x-rootwindow-drop"
 };
 
 static guint n_targets = sizeof(target_table) / sizeof(target_table[0]);

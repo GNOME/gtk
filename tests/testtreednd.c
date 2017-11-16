@@ -63,8 +63,8 @@ get_model (void)
   return GTK_TREE_MODEL (model);
 }
 
-static GtkTargetEntry entries[] = {
-  { "text/plain", 0 }
+static const char *entries[] = {
+  "text/plain"
 };
 
 static GtkWidget *
