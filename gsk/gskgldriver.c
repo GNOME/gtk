@@ -3,6 +3,7 @@
 #include "gskgldriverprivate.h"
 
 #include "gskdebugprivate.h"
+#include "gskprofilerprivate.h"
 #include "gdk/gdktextureprivate.h"
 
 #include <gdk/gdk.h>
@@ -39,6 +40,12 @@ struct _GskGLDriver
   GObject parent_instance;
 
   GdkGLContext *gl_context;
+  GskProfiler *profiler;
+  struct {
+    GQuark created_textures;
+    GQuark reused_textures;
+    GQuark surface_uploads;
+  } counters;
 
   Fbo default_fbo;
 
@@ -122,6 +129,7 @@ gsk_gl_driver_finalize (GObject *gobject)
 
   g_clear_pointer (&self->textures, g_hash_table_unref);
   g_clear_pointer (&self->vaos, g_hash_table_unref);
+  g_clear_object (&self->profiler);
 
   if (self->gl_context == gdk_gl_context_get_current ())
     gdk_gl_context_clear_current ();
@@ -193,6 +201,22 @@ gsk_gl_driver_init (GskGLDriver *self)
   self->vaos = g_hash_table_new_full (NULL, NULL, NULL, vao_free);
 
   self->max_texture_size = -1;
+
+#ifdef G_ENABLE_DEBUG
+  self->profiler = gsk_profiler_new ();
+  self->counters.created_textures = gsk_profiler_add_counter (self->profiler,
+                                                              "created_textures",
+                                                              "Textures created this frame",
+                                                              TRUE);
+  self->counters.reused_textures = gsk_profiler_add_counter (self->profiler,
+                                                             "reused_textures",
+                                                             "Textures reused this frame",
+                                                             TRUE);
+  self->counters.surface_uploads = gsk_profiler_add_counter (self->profiler,
+                                                             "surface_uploads",
+                                                             "Texture uploads from surfaces this frame",
+                                                             TRUE);
+#endif
 }
 
 GskGLDriver *
@@ -206,21 +230,21 @@ gsk_gl_driver_new (GdkGLContext *context)
 }
 
 void
-gsk_gl_driver_begin_frame (GskGLDriver *driver)
+gsk_gl_driver_begin_frame (GskGLDriver *self)
 {
-  g_return_if_fail (GSK_IS_GL_DRIVER (driver));
-  g_return_if_fail (!driver->in_frame);
+  g_return_if_fail (GSK_IS_GL_DRIVER (self));
+  g_return_if_fail (!self->in_frame);
 
-  driver->in_frame = TRUE;
+  self->in_frame = TRUE;
 
-  if (driver->max_texture_size < 0)
+  if (self->max_texture_size < 0)
     {
-      glGetIntegerv (GL_MAX_TEXTURE_SIZE, (GLint *) &driver->max_texture_size);
-      GSK_NOTE (OPENGL, g_print ("GL max texture size: %d\n", driver->max_texture_size));
+      glGetIntegerv (GL_MAX_TEXTURE_SIZE, (GLint *) &self->max_texture_size);
+      GSK_NOTE (OPENGL, g_print ("GL max texture size: %d\n", self->max_texture_size));
     }
 
   glBindFramebuffer (GL_FRAMEBUFFER, 0);
-  driver->bound_fbo = &driver->default_fbo;
+  self->bound_fbo = &self->default_fbo;
 
   glActiveTexture (GL_TEXTURE0);
   glBindTexture (GL_TEXTURE_2D, 0);
@@ -232,31 +256,40 @@ gsk_gl_driver_begin_frame (GskGLDriver *driver)
   glUseProgram (0);
 
   glActiveTexture (GL_TEXTURE0);
+
+  gsk_profiler_reset (self->profiler);
 }
 
 void
-gsk_gl_driver_end_frame (GskGLDriver *driver)
+gsk_gl_driver_end_frame (GskGLDriver *self)
 {
-  g_return_if_fail (GSK_IS_GL_DRIVER (driver));
-  g_return_if_fail (driver->in_frame);
+  g_return_if_fail (GSK_IS_GL_DRIVER (self));
+  g_return_if_fail (self->in_frame);
 
   glBindTexture (GL_TEXTURE_2D, 0);
   glUseProgram (0);
   glBindVertexArray (0);
 
-  driver->bound_source_texture = NULL;
-  driver->bound_mask_texture = NULL;
-  driver->bound_vao = NULL;
-  driver->bound_fbo = NULL;
+  self->bound_source_texture = NULL;
+  self->bound_mask_texture = NULL;
+  self->bound_vao = NULL;
+  self->bound_fbo = NULL;
 
-  driver->default_fbo.fbo_id = 0;
+  self->default_fbo.fbo_id = 0;
 
   GSK_NOTE (OPENGL,
+            g_print ("Textures created: %ld\n"
+                     " Textures reused: %ld\n"
+                     " Surface uploads: %ld\n",
+                     gsk_profiler_counter_get (self->profiler, self->counters.created_textures),
+                     gsk_profiler_counter_get (self->profiler, self->counters.reused_textures),
+                     gsk_profiler_counter_get (self->profiler, self->counters.surface_uploads)));
+  GSK_NOTE (OPENGL,
             g_print ("*** Frame end: textures=%d, vaos=%d\n",
-                     g_hash_table_size (driver->textures),
-                     g_hash_table_size (driver->vaos)));
+                     g_hash_table_size (self->textures),
+                     g_hash_table_size (self->vaos)));
 
-  driver->in_frame = FALSE;
+  self->in_frame = FALSE;
 }
 
 int
@@ -388,7 +421,7 @@ find_texture_by_size (GHashTable *textures,
 }
 
 static Texture *
-create_texture (GskGLDriver *driver,
+create_texture (GskGLDriver *self,
                 float        fwidth,
                 float        fheight)
 {
@@ -397,23 +430,24 @@ create_texture (GskGLDriver *driver,
   int width = ceilf (fwidth);
   int height = ceilf (fheight);
 
-  if (width >= driver->max_texture_size ||
-      height >= driver->max_texture_size)
+  if (width >= self->max_texture_size ||
+      height >= self->max_texture_size)
     {
       g_critical ("Texture %d x %d is bigger than supported texture limit of %d; clipping...",
                   width, height,
-                  driver->max_texture_size);
+                  self->max_texture_size);
 
-      width = MIN (width, driver->max_texture_size);
-      height = MIN (height, driver->max_texture_size);
+      width = MIN (width, self->max_texture_size);
+      height = MIN (height, self->max_texture_size);
     }
 
-  t = find_texture_by_size (driver->textures, width, height);
+  t = find_texture_by_size (self->textures, width, height);
   if (t != NULL && !t->in_use && t->user == NULL)
     {
       GSK_NOTE (OPENGL, g_print ("Reusing Texture(%d) for size %dx%d\n",
                                  t->texture_id, t->width, t->height));
       t->in_use = TRUE;
+      gsk_profiler_counter_inc (self->profiler, self->counters.reused_textures);
       return t;
     }
 
@@ -426,7 +460,8 @@ create_texture (GskGLDriver *driver,
   t->min_filter = GL_NEAREST;
   t->mag_filter = GL_NEAREST;
   t->in_use = TRUE;
-  g_hash_table_insert (driver->textures, GINT_TO_POINTER (texture_id), t);
+  g_hash_table_insert (self->textures, GINT_TO_POINTER (texture_id), t);
+  gsk_profiler_counter_inc (self->profiler, self->counters.created_textures);
 
   return t;
 }
@@ -837,7 +872,7 @@ gsk_gl_driver_init_texture_empty (GskGLDriver *driver,
 }
 
 void
-gsk_gl_driver_init_texture_with_surface (GskGLDriver     *driver,
+gsk_gl_driver_init_texture_with_surface (GskGLDriver     *self,
                                          int              texture_id,
                                          cairo_surface_t *surface,
                                          int              min_filter,
@@ -845,24 +880,25 @@ gsk_gl_driver_init_texture_with_surface (GskGLDriver     *driver,
 {
   Texture *t;
 
-  g_return_if_fail (GSK_IS_GL_DRIVER (driver));
+  g_return_if_fail (GSK_IS_GL_DRIVER (self));
 
-  t = gsk_gl_driver_get_texture (driver, texture_id);
+  t = gsk_gl_driver_get_texture (self, texture_id);
   if (t == NULL)
     {
       g_critical ("No texture %d found.", texture_id);
       return;
     }
 
-  if (!(driver->bound_source_texture == t || driver->bound_mask_texture == t))
+  if (!(self->bound_source_texture == t || self->bound_mask_texture == t))
     {
       g_critical ("You must bind the texture before initializing it.");
       return;
     }
 
-  gsk_gl_driver_set_texture_parameters (driver, min_filter, mag_filter);
+  gsk_gl_driver_set_texture_parameters (self, min_filter, mag_filter);
 
   gdk_cairo_surface_upload_to_gl (surface, GL_TEXTURE_2D, t->width, t->height, NULL);
+  gsk_profiler_counter_inc (self->profiler, self->counters.surface_uploads);
 
   t->min_filter = min_filter;
   t->mag_filter = mag_filter;
