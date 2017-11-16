@@ -57,6 +57,10 @@ typedef struct {
   int blendMode_location;
   int viewport_location;
   int projection_location;
+  int modelview_location;
+  int clip_location;
+  int clip_corner_widths_location;
+  int clip_corner_heights_location;
 
   /* Shader-specific locations */
   union {
@@ -94,7 +98,6 @@ enum {
   MODE_TEXTURE,
   MODE_COLOR_MATRIX,
   MODE_LINEAR_GRADIENT,
-  MODE_ROUNDED_CLIP,
   N_MODES
 };
 
@@ -108,6 +111,10 @@ typedef struct {
 
   graphene_matrix_t mvp;
   graphene_matrix_t projection;
+  graphene_matrix_t modelview;
+
+  /* (Rounded) Clip */
+  GskRoundedRect rounded_clip;
 
   float opacity;
   float z;
@@ -127,11 +134,6 @@ typedef struct {
       graphene_point_t start_point;
       graphene_point_t end_point;
     } linear_gradient_data;
-    struct {
-      graphene_rect_t clip_bounds;
-      float corner_widths[4];
-      float corner_heights[4];
-    } rounded_clip_data;
   };
 
   const char *name;
@@ -165,6 +167,10 @@ enum {
   BLEND_MODE,
   VIEWPORT,
   PROJECTION,
+  MODELVIEW,
+  CLIP,
+  CLIP_CORNER_WIDTHS,
+  CLIP_CORNER_HEIGHTS,
   N_UNIFORMS
 };
 
@@ -216,7 +222,7 @@ struct _GskGLRenderer
   Program color_program;
   Program color_matrix_program;
   Program linear_gradient_program;
-  Program rounded_clip_program;
+  Program clip_program;
 
   GArray *render_items;
 
@@ -314,6 +320,14 @@ init_common_locations (GskGLRenderer    *self,
                                                                      self->uniforms[VIEWPORT]);
   prog->projection_location = gsk_shader_builder_get_uniform_location (builder, prog->id,
                                                                        self->uniforms[PROJECTION]);
+  prog->modelview_location = gsk_shader_builder_get_uniform_location (builder, prog->id,
+                                                                      self->uniforms[MODELVIEW]);
+  prog->clip_location = gsk_shader_builder_get_uniform_location (builder, prog->id,
+                                                                 self->uniforms[CLIP]);
+  prog->clip_corner_widths_location = gsk_shader_builder_get_uniform_location (builder, prog->id,
+                                                                               self->uniforms[CLIP_CORNER_WIDTHS]);
+  prog->clip_corner_heights_location = gsk_shader_builder_get_uniform_location (builder, prog->id,
+                                                                               self->uniforms[CLIP_CORNER_HEIGHTS]);
 
   prog->position_location =
     gsk_shader_builder_get_attribute_location (builder, prog->id, self->attributes[POSITION]);
@@ -340,6 +354,10 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   self->uniforms[BLEND_MODE] = gsk_shader_builder_add_uniform (builder, "uBlendMode");
   self->uniforms[VIEWPORT] = gsk_shader_builder_add_uniform (builder, "uViewport");
   self->uniforms[PROJECTION] = gsk_shader_builder_add_uniform (builder, "uProjection");
+  self->uniforms[MODELVIEW] = gsk_shader_builder_add_uniform (builder, "uModelview");
+  self->uniforms[CLIP] = gsk_shader_builder_add_uniform (builder, "uClip");
+  self->uniforms[CLIP_CORNER_WIDTHS] = gsk_shader_builder_add_uniform (builder, "uClipCornerWidths");
+  self->uniforms[CLIP_CORNER_HEIGHTS] = gsk_shader_builder_add_uniform (builder, "uClipCornerHeights");
 
   self->attributes[POSITION] = gsk_shader_builder_add_attribute (builder, "aPosition");
   self->attributes[UV] = gsk_shader_builder_add_attribute (builder, "aUv");
@@ -428,7 +446,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   INIT_PROGRAM_UNIFORM_LOCATION (color_matrix_program, color_offset_location, "uColorOffset");
 
   self->linear_gradient_program.id = gsk_shader_builder_create_program (builder,
-                                                                        "linear_gradient.vs.glsl",
+                                                                        "blit.vs.glsl",
                                                                         "linear_gradient.fs.glsl",
                                                                         &shader_error);
   if (shader_error != NULL)
@@ -444,22 +462,6 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient_program, n_color_stops_location, "uNumColorStops");
   INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient_program, start_point_location, "uStartPoint");
   INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient_program, end_point_location, "uEndPoint");
-
-  self->rounded_clip_program.id = gsk_shader_builder_create_program (builder,
-                                                                     "blit.vs.glsl",
-                                                                     "rounded_clip.fs.glsl",
-                                                                     &shader_error);
-  if (shader_error != NULL)
-    {
-      g_propagate_prefixed_error (error,
-                                  shader_error,
-                                  "Unable to create 'rounded_clip' program: ");
-      goto out;
-    }
-  init_common_locations (self, builder, &self->rounded_clip_program);
-  INIT_PROGRAM_UNIFORM_LOCATION (rounded_clip_program, clip_bounds_location, "uClipBounds");
-  INIT_PROGRAM_UNIFORM_LOCATION (rounded_clip_program, corner_widths_location, "uCornerWidths");
-  INIT_PROGRAM_UNIFORM_LOCATION (rounded_clip_program, corner_heights_location, "uCornerHeights");
 
   res = TRUE;
 
@@ -718,21 +720,6 @@ render_item (GskGLRenderer    *self,
         }
       break;
 
-      case MODE_ROUNDED_CLIP:
-        {
-          g_assert (item->program == &self->rounded_clip_program);
-          glUniform1i (item->program->source_location, 0);
-          gsk_gl_driver_bind_source_texture (self->gl_driver, item->render_target);
-          glUniform4f (item->program->clip_bounds_location,
-                       item->rounded_clip_data.clip_bounds.origin.x,
-                       item->rounded_clip_data.clip_bounds.origin.y,
-                       item->rounded_clip_data.clip_bounds.size.width,
-                       item->rounded_clip_data.clip_bounds.size.height);
-          glUniform4fv (item->program->corner_widths_location, 1, item->rounded_clip_data.corner_widths);
-          glUniform4fv (item->program->corner_heights_location, 1, item->rounded_clip_data.corner_heights);
-        }
-      break;
-
       default:
         g_assert_not_reached ();
     }
@@ -740,12 +727,30 @@ render_item (GskGLRenderer    *self,
   /* Common uniforms */
   graphene_matrix_to_float (&item->mvp, mat);
   glUniformMatrix4fv (item->program->mvp_location, 1, GL_FALSE, mat);
+
   graphene_matrix_to_float (&item->projection, mat);
-  glUniformMatrix4fv (item->program->projection_location, 1, GL_FALSE, mat);
+  glUniformMatrix4fv (item->program->projection_location, 1, GL_TRUE, mat);
+
+  graphene_matrix_to_float (&item->modelview, mat);
+  glUniformMatrix4fv (item->program->modelview_location, 1, GL_TRUE, mat);
   glUniform1f (item->program->alpha_location, item->opacity);
   glUniform4f (item->program->viewport_location,
                self->viewport.origin.x, self->viewport.origin.y,
                self->viewport.size.width, self->viewport.size.height);
+  glUniform4f (item->program->clip_location,
+               item->rounded_clip.bounds.origin.x, item->rounded_clip.bounds.origin.y,
+               item->rounded_clip.bounds.size.width, item->rounded_clip.bounds.size.height);
+
+  glUniform4f (item->program->clip_corner_widths_location,
+               MAX (item->rounded_clip.corner[0].width, 1),
+               MAX (item->rounded_clip.corner[1].width, 1),
+               MAX (item->rounded_clip.corner[2].width, 1),
+               MAX (item->rounded_clip.corner[3].width, 1));
+  glUniform4f (item->program->clip_corner_heights_location,
+               MAX (item->rounded_clip.corner[0].height, 1),
+               MAX (item->rounded_clip.corner[1].height, 1),
+               MAX (item->rounded_clip.corner[2].height, 1),
+               MAX (item->rounded_clip.corner[3].height, 1));
 
   gsk_gl_driver_bind_vao (self->gl_driver, item->vao_id);
   glDrawArrays (GL_TRIANGLES, 0, N_VERTICES);
@@ -805,7 +810,8 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
                                  const graphene_matrix_t *modelview,
                                  GArray                  *render_items,
                                  GskRenderNode           *node,
-                                 int                      render_target)
+                                 int                      render_target,
+                                 const GskRoundedRect    *parent_clip)
 {
   RenderItem item;
 
@@ -817,7 +823,8 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
       for (i = 0, p = gsk_container_node_get_n_children (node); i < p; i++)
         {
           GskRenderNode *child = gsk_container_node_get_child (node, i);
-          gsk_gl_renderer_add_render_item (self, projection, modelview, render_items, child, render_target);
+          gsk_gl_renderer_add_render_item (self, projection, modelview, render_items,
+                                           child, render_target, parent_clip);
         }
       return;
     }
@@ -826,7 +833,6 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
 
   item.name = node->name != NULL ? node->name : "unnamed";
 
-  /*g_message ("%s: %s", __FUNCTION__, item.name);*/
 
   item.size.width = node->bounds.size.width;
   item.size.height = node->bounds.size.height;
@@ -835,8 +841,6 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
    */
   item.min.x = node->bounds.origin.x;
   item.min.y = node->bounds.origin.y;
-
-  /*g_message ("%s: %f, %f", item.name, item.min.x, item.min.y);*/
 
   item.max.x = item.min.x + node->bounds.size.width;
   item.max.y = item.min.y + node->bounds.size.height;
@@ -847,6 +851,8 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
 
   item.opacity = 1.0;
   item.projection = *projection;
+  item.modelview = *modelview;
+  item.rounded_clip = *parent_clip;
 
   item.blend_mode = GSK_BLEND_MODE_DEFAULT;
 
@@ -871,7 +877,7 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
             graphene_matrix_init_identity (&identity);
             init_framebuffer_for_node (self, &item, node, projection, &p);
             gsk_gl_renderer_add_render_item (self, &p, &identity, item.children, child,
-                                             item.render_target);
+                                             item.render_target, parent_clip);
           }
         else
           {
@@ -894,39 +900,49 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
     case GSK_CLIP_NODE:
       {
         GskRenderNode *child = gsk_clip_node_get_child (node);
-        graphene_matrix_t p;
-        graphene_matrix_t identity;
+        graphene_rect_t transformed_clip;
+        graphene_rect_t intersection;
+        GskRoundedRect child_clip;
 
-        graphene_matrix_init_identity (&identity);
-        init_framebuffer_for_node (self, &item, node, projection, &p);
-        gsk_gl_renderer_add_render_item (self, &p, &identity, item.children, child,
-                                         item.render_target);
-        item.mode = MODE_BLIT;
+        transformed_clip = *gsk_clip_node_peek_clip (node);
+        graphene_matrix_transform_bounds (modelview, &transformed_clip, &transformed_clip);
+
+        /* Since we do the intersection here, we also need to transform by the modelview matrix.
+         * We can't do it in the shader. Same with rounded clips */
+        graphene_rect_intersection (&transformed_clip,
+                                    &parent_clip->bounds,
+                                    &intersection);
+
+        gsk_rounded_rect_init_from_rect (&child_clip, &intersection, 0.0f);
+
+        gsk_gl_renderer_add_render_item (self, projection, modelview, render_items, child,
+                                         render_target, &child_clip);
       }
-      break;
+      return;
 
     case GSK_ROUNDED_CLIP_NODE:
       {
         GskRenderNode *child = gsk_rounded_clip_node_get_child (node);
-        const GskRoundedRect *clip = gsk_rounded_clip_node_peek_clip (node);
-        graphene_matrix_t p;
-        graphene_matrix_t identity;
-        int i;
+        const GskRoundedRect *rounded_clip = gsk_rounded_clip_node_peek_clip (node);
+        graphene_rect_t transformed_clip;
+        graphene_rect_t intersection;
+        GskRoundedRect child_clip;
 
-        graphene_matrix_init_identity (&identity);
-        init_framebuffer_for_node (self, &item, node, projection, &p);
-        gsk_gl_renderer_add_render_item (self, &p, &identity, item.children, child,
-                                         item.render_target);
-        item.mode = MODE_ROUNDED_CLIP;
-        item.program = &self->rounded_clip_program;
-        item.rounded_clip_data.clip_bounds = clip->bounds;
-        for (i = 0; i < 4; i ++)
-          {
-            item.rounded_clip_data.corner_widths[i]  = MAX (clip->corner[i].width,  1);
-            item.rounded_clip_data.corner_heights[i] = MAX (clip->corner[i].height, 1);
-          }
+        transformed_clip = rounded_clip->bounds;
+        graphene_matrix_transform_bounds (modelview, &transformed_clip, &transformed_clip);
+
+        graphene_rect_intersection (&transformed_clip, &parent_clip->bounds,
+                                    &intersection);
+        gsk_rounded_rect_init (&child_clip, &intersection,
+                               &rounded_clip->corner[0],
+                               &rounded_clip->corner[1],
+                               &rounded_clip->corner[2],
+                               &rounded_clip->corner[3]);
+
+        gsk_gl_renderer_add_render_item (self, projection, modelview, render_items, child,
+                                         render_target, &child_clip);
       }
-      break;
+      return;
 
     case GSK_COLOR_MATRIX_NODE:
       {
@@ -941,7 +957,7 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
             graphene_matrix_init_identity (&identity);
             init_framebuffer_for_node (self, &item, node, projection, &p);
             gsk_gl_renderer_add_render_item (self, &p, &identity, item.children, child,
-                                             item.render_target);
+                                             item.render_target, parent_clip);
           }
         else
           {
@@ -1044,10 +1060,12 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
         graphene_matrix_init_from_matrix (&transform, gsk_transform_node_peek_transform (node));
         graphene_matrix_multiply (&transform, modelview, &transformed_mv);
         gsk_gl_renderer_add_render_item (self,
-                                         projection, &transformed_mv,
+                                         projection,
+                                         &transformed_mv,
                                          render_items,
                                          gsk_transform_node_get_child (node),
-                                         render_target);
+                                         render_target,
+                                         parent_clip);
       }
       return;
 
@@ -1157,12 +1175,16 @@ gsk_gl_renderer_validate_tree (GskGLRenderer           *self,
                                const graphene_matrix_t *projection)
 {
   graphene_matrix_t modelview;
+  GskRoundedRect viewport_clip;
+
   graphene_matrix_init_scale (&modelview, self->scale_factor, self->scale_factor, 1.0f);
 
   gdk_gl_context_make_current (self->gl_context);
 
+  gsk_rounded_rect_init_from_rect (&viewport_clip, &self->viewport, 0.0f);
+
   gsk_gl_renderer_add_render_item (self, projection, &modelview, self->render_items, root,
-                                   self->texture_id);
+                                   self->texture_id, &viewport_clip);
 }
 
 static void

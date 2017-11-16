@@ -12,13 +12,15 @@ vec4 fragCoord() {
 }
 
 void main() {
-  float maxDist = length(uEndPoint - uStartPoint);
+  vec2 startPoint = (vec4(uStartPoint, 0, 1) * uModelview).xy;
+  vec2 endPoint   = (vec4(uEndPoint,   0, 1) * uModelview).xy;
+  float maxDist   = length(endPoint - startPoint);
 
   // Position relative to startPoint
-  vec2 pos = fragCoord().xy - uStartPoint;
+  vec2 pos = fragCoord().xy - startPoint;
 
   // Gradient direction
-  vec2 gradient = uEndPoint - uStartPoint;
+  vec2 gradient = endPoint - startPoint;
   float gradientLength = length(gradient);
 
   // Current pixel, projected onto the line between the start point and the end point
