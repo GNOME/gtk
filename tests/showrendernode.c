@@ -115,7 +115,7 @@ main (int argc, char **argv)
     }
 
   gsk_render_node_get_bounds (GTK_NODE_VIEW (nodeview)->node, &node_bounds);
-  gtk_window_resize (GTK_WINDOW (window), node_bounds.size.width, node_bounds.size.height);
+  gtk_window_resize (GTK_WINDOW (window), 600, 500);//node_bounds.size.width, node_bounds.size.height);
 
   g_signal_connect (window, "delete-event", G_CALLBACK (gtk_main_quit), NULL);
   gtk_widget_show (window);
