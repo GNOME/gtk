@@ -340,7 +340,7 @@ gtk_im_context_thai_filter_keypress (GtkIMContext *context,
   if (is_reject)
     {
       /* reject character */
-      gdk_beep ();
+      gdk_display_beep (gdk_event_get_display ((GdkEvent*)event));
     }
   return TRUE;
 }
