@@ -1205,9 +1205,7 @@ gdk_win32_display_get_setting (GdkDisplay  *display,
                                const gchar *name,
                                GValue      *value)
 {
-  return _gdk_win32_screen_get_setting (GDK_WIN32_DISPLAY (display)->screen,
-                                        name,
-                                        value);
+  return _gdk_win32_get_setting (name, value);
 }
 
 static void

@@ -28,7 +28,6 @@
 #include <stdlib.h>
 #include <glib/gprintf.h>
 
-#include "gdkscreen.h"
 #include "gdkproperty.h"
 #include "gdkselection.h"
 #include "gdkdisplayprivate.h"
@@ -344,12 +343,9 @@ _gdk_win32_window_delete_property (GdkWindow *window,
 
 */
 gboolean
-_gdk_win32_screen_get_setting (GdkScreen   *screen,
-                        const gchar *name,
+_gdk_win32_get_setting (const gchar *name,
                         GValue      *value)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
-
   /*
    * XXX : if these values get changed through the Windoze UI the
    *       respective gdk_events are not generated yet.

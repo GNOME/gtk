@@ -497,7 +497,7 @@ void _gdk_win32_window_change_property (GdkWindow    *window,
 void _gdk_win32_window_delete_property (GdkWindow *window, GdkAtom    property);
 
 /* Stray GdkWin32Screen members */
-gboolean _gdk_win32_screen_get_setting (GdkScreen   *screen, const gchar *name, GValue *value);
+gboolean _gdk_win32_get_setting (const gchar *name, GValue *value);
 void _gdk_win32_screen_on_displaychange_event (GdkWin32Screen *screen);
 GdkWindow *gdk_win32_screen_get_root_window (GdkScreen *screen);
 GdkWindow *gdk_win32_display_get_root_window (GdkDisplay *display);
