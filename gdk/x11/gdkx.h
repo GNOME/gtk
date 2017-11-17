@@ -48,7 +48,6 @@
 #include <gdk/x11/gdkx11screen.h>
 #include <gdk/x11/gdkx11selection.h>
 #include <gdk/x11/gdkx11utils.h>
-#include <gdk/x11/gdkx11visual.h>
 #include <gdk/x11/gdkx11window.h>
 
 #include <gdk/x11/gdkx-autocleanups.h>

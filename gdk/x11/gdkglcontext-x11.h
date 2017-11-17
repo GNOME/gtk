@@ -29,7 +29,7 @@
 
 #include "gdkglcontextprivate.h"
 #include "gdkdisplayprivate.h"
-#include "gdkx11visual.h"
+#include "gdkvisual-x11.h"
 #include "gdkwindow.h"
 #include "gdkinternals.h"
 

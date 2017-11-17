@@ -23,7 +23,7 @@
 #define __GDK_X11_SCREEN__
 
 #include "gdkx11screen.h"
-#include "gdkx11visual.h"
+#include "gdkvisual-x11.h"
 #include <X11/X.h>
 #include <X11/Xlib.h>
 

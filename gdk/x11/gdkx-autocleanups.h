@@ -31,7 +31,6 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkX11DragContext, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkX11GLContext, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkX11Keymap, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkX11Screen, g_object_unref)
-G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkX11Visual, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkX11Window, g_object_unref)
 
 #endif

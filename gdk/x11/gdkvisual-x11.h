@@ -18,6 +18,34 @@
 
 G_BEGIN_DECLS
 
+#include <gdk/gdk.h>
+#include <gdk/x11/gdkx11screen.h>
+
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+
+G_BEGIN_DECLS
+
+#define GDK_TYPE_X11_VISUAL              (gdk_x11_visual_get_type ())
+#define GDK_X11_VISUAL(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_X11_VISUAL, GdkX11Visual))
+#define GDK_X11_VISUAL_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_X11_VISUAL, GdkX11VisualClass))
+#define GDK_IS_X11_VISUAL(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_X11_VISUAL))
+#define GDK_IS_X11_VISUAL_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_X11_VISUAL))
+#define GDK_X11_VISUAL_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_X11_VISUAL, GdkX11VisualClass))
+
+typedef struct _GdkX11Visual GdkX11Visual;
+typedef struct _GdkX11VisualClass GdkX11VisualClass;
+
+typedef enum
+{
+  GDK_VISUAL_STATIC_GRAY,
+  GDK_VISUAL_GRAYSCALE,
+  GDK_VISUAL_STATIC_COLOR,
+  GDK_VISUAL_PSEUDO_COLOR,
+  GDK_VISUAL_TRUE_COLOR,
+  GDK_VISUAL_DIRECT_COLOR
+} GdkVisualType;
+
 struct _GdkX11Visual
 {
   GObject parent_instance;
@@ -34,6 +62,15 @@ struct _GdkX11Visual
 
   Visual *xvisual;
 };
+
+GType    gdk_x11_visual_get_type          (void);
+
+Visual * gdk_x11_visual_get_xvisual       (GdkX11Visual *visual);
+
+#define GDK_VISUAL_XVISUAL(visual)    (gdk_x11_visual_get_xvisual (visual))
+
+GdkX11Visual* gdk_x11_screen_lookup_visual (GdkX11Screen *screen,
+                                            VisualID      xvisualid);
 
 G_END_DECLS
 

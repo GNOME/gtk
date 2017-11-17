@@ -29,7 +29,6 @@
 #include "gdkx11glcontext.h"
 #include "gdkx11screen.h"
 #include "gdkx11window.h"
-#include "gdkx11visual.h"
 #include "gdkvisual-x11.h"
 #include "gdkx11property.h"
 #include <X11/Xatom.h>
