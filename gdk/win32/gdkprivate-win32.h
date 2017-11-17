@@ -121,7 +121,7 @@
 #define GDK_DEBUG_EVENTS_OR_INPUT (GDK_DEBUG_EVENTS|GDK_DEBUG_INPUT)
 #define GDK_DEBUG_MISC_OR_EVENTS (GDK_DEBUG_MISC|GDK_DEBUG_EVENTS)
 
-GdkScreen *GDK_WINDOW_SCREEN(GObject *win);
+GdkWin32Screen *GDK_WINDOW_SCREEN(GObject *win);
 
 #define GDK_WINDOW_IS_WIN32(win)        (GDK_IS_WINDOW_IMPL_WIN32 (win->impl))
 
@@ -499,7 +499,7 @@ void _gdk_win32_window_delete_property (GdkWindow *window, GdkAtom    property);
 /* Stray GdkWin32Screen members */
 gboolean _gdk_win32_get_setting (const gchar *name, GValue *value);
 void _gdk_win32_screen_on_displaychange_event (GdkWin32Screen *screen);
-GdkWindow *gdk_win32_screen_get_root_window (GdkScreen *screen);
+GdkWindow *gdk_win32_screen_get_root_window (GdkWin32Screen *screen);
 GdkWindow *gdk_win32_display_get_root_window (GdkDisplay *display);
 
 /* Distributed display manager implementation */

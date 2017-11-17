@@ -18,6 +18,7 @@
  */
 
 #include "gdkdisplayprivate.h"
+#include "gdkscreen-win32.h"
 
 #ifndef __GDK_DISPLAY__WIN32_H__
 #define __GDK_DISPLAY__WIN32_H__
@@ -59,7 +60,7 @@ struct _GdkWin32Display
 {
   GdkDisplay display;
 
-  GdkScreen *screen;
+  GdkWin32Screen *screen;
 
   Win32CursorTheme *cursor_theme;
   gchar *cursor_theme_name;
