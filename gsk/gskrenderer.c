@@ -55,6 +55,9 @@
 #ifdef GDK_WINDOWING_WAYLAND
 #include <gdk/wayland/gdkwayland.h>
 #endif
+#ifdef GDK_WINDOWING_BROADWAY
+#include "gskbroadwayrendererprivate.h"
+#endif
 #ifdef GDK_RENDERING_VULKAN
 #include "gskvulkanrendererprivate.h"
 #endif
@@ -751,6 +754,10 @@ get_renderer_for_backend (GdkWindow *window)
 #ifdef GDK_WINDOWING_WAYLAND
   if (GDK_IS_WAYLAND_WINDOW (window))
     return GSK_TYPE_GL_RENDERER;
+#endif
+#ifdef GDK_WINDOWING_BROADWAY
+  if (GDK_IS_BROADWAY_WINDOW (window))
+    return GSK_TYPE_BROADWAY_RENDERER;
 #endif
 
   return G_TYPE_INVALID;

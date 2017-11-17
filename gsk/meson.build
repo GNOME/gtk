@@ -80,6 +80,12 @@ if have_vulkan
   subdir('resources/vulkan')
 endif # have_vulkan
 
+if get_variable('broadway_enabled')
+  gsk_private_sources += files([
+    'gskbroadwayrenderer.c',
+  ])
+endif
+
 gsk_resources_xml = configure_file(output: 'gsk.resources.xml',
                                    input: 'gen-gsk-gresources-xml.py',
                                    command: [
