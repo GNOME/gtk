@@ -15,10 +15,8 @@ gdk_set_program_class
 <SUBSECTION>
 gdk_flush
 
-
 <SUBSECTION>
 GdkGrabStatus
-gdk_set_double_click_time
 
 <SUBSECTION>
 gdk_beep

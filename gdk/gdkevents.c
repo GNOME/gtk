@@ -2224,22 +2224,6 @@ gdk_display_set_double_click_time (GdkDisplay *display,
 }
 
 /**
- * gdk_set_double_click_time:
- * @msec: double click time in milliseconds (thousandths of a second)
- *
- * Set the double click time for the default display. See
- * gdk_display_set_double_click_time(). 
- * See also gdk_display_set_double_click_distance().
- * Applications should not set this, it is a 
- * global user-configured setting.
- **/
-void
-gdk_set_double_click_time (guint msec)
-{
-  gdk_display_set_double_click_time (gdk_display_get_default (), msec);
-}
-
-/**
  * gdk_display_set_double_click_distance:
  * @display: a #GdkDisplay
  * @distance: distance in pixels
