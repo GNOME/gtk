@@ -22,7 +22,7 @@
 
 #include "gtkapplicationprivate.h"
 
-#include <gdk/gdkx.h>
+#include <gdk/x11/gdkx.h>
 
 typedef GtkApplicationImplDBusClass GtkApplicationImplX11Class;
 
