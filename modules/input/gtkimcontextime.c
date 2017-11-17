@@ -955,7 +955,6 @@ gtk_im_context_ime_set_preedit_font (GtkIMContext *context)
   gtk_style_context_save (style);
   gtk_style_context_set_state (style, GTK_STATE_FLAG_NORMAL);
   gtk_style_context_get (style,
-                         gtk_style_context_get_state (style),
                          "font",
                          &font_desc,
                          NULL);
