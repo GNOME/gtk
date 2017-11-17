@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <locale.h>
+#include <errno.h>
 
 #include <glib.h>
 #include <gio/gio.h>
@@ -56,6 +57,7 @@ typedef struct  {
   GList *windows;
   guint disconnect_idle;
   GList *fds;
+  GHashTable *textures;
 } BroadwayClient;
 
 static void
@@ -75,6 +77,7 @@ client_free (BroadwayClient *client)
   g_string_free (client->buffer, TRUE);
   g_slist_free_full (client->serial_mappings, g_free);
   g_list_free_full (client->fds, close_fd);
+  g_hash_table_destroy (client->textures);
   g_free (client);
 }
 
@@ -218,6 +221,7 @@ client_handle_request (BroadwayClient *client,
   BroadwayReplyUngrabPointer reply_ungrab_pointer;
   cairo_surface_t *surface;
   guint32 before_serial, now_serial;
+  int fd;
 
   before_serial = broadway_server_get_next_serial (server);
 
@@ -285,6 +289,54 @@ client_handle_request (BroadwayClient *client,
 					 surface);
 	  cairo_surface_destroy (surface);
 	}
+      break;
+    case BROADWAY_REQUEST_UPLOAD_TEXTURE:
+      if (client->fds == NULL)
+        g_warning ("FD passing mismatch");
+      else
+        {
+          char *data, *p;
+          gsize to_read;
+          gssize num_read;
+          GBytes *texture;
+
+          fd = GPOINTER_TO_INT (client->fds->data);
+          client->fds = g_list_delete_link (client->fds, client->fds);
+
+          data = g_malloc (request->upload_texture.size);
+          to_read = request->upload_texture.size;
+          lseek (fd, request->upload_texture.offset, SEEK_SET);
+
+          p = data;
+          do
+            {
+              num_read = read (fd, p, to_read);
+              if (num_read == -1 && errno == EAGAIN)
+                continue;
+
+              if (num_read > 0)
+                {
+                  p += num_read;
+                  to_read -= num_read;
+                }
+              else
+                {
+                  g_warning ("Unexpected short read of texture");
+                  break;
+                }
+            }
+          while (to_read > 0);
+          close (fd);
+
+          texture = g_bytes_new_take (data, request->upload_texture.size);
+          g_hash_table_replace (client->textures,
+                                GINT_TO_POINTER (request->release_texture.id),
+                                texture);
+        }
+      break;
+    case BROADWAY_REQUEST_RELEASE_TEXTURE:
+      g_hash_table_remove (client->textures, GINT_TO_POINTER (request->release_texture.id));
+
       break;
     case BROADWAY_REQUEST_MOVE_RESIZE:
       broadway_server_window_move_resize (server,
@@ -429,6 +481,7 @@ incoming_client (GSocketService    *service,
   client = g_new0 (BroadwayClient, 1);
   client->id = client_id_count++;
   client->connection = g_object_ref (connection);
+  client->textures = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify)g_bytes_unref);
 
   input = g_io_stream_get_input_stream (G_IO_STREAM (client->connection));
   client->in = input;

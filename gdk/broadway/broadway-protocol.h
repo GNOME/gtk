@@ -157,7 +157,9 @@ typedef enum {
   BROADWAY_REQUEST_GRAB_POINTER,
   BROADWAY_REQUEST_UNGRAB_POINTER,
   BROADWAY_REQUEST_FOCUS_WINDOW,
-  BROADWAY_REQUEST_SET_SHOW_KEYBOARD
+  BROADWAY_REQUEST_SET_SHOW_KEYBOARD,
+  BROADWAY_REQUEST_UPLOAD_TEXTURE,
+  BROADWAY_REQUEST_RELEASE_TEXTURE,
 } BroadwayRequestType;
 
 typedef struct {
@@ -193,6 +195,18 @@ typedef struct {
   guint32 width;
   guint32 height;
 } BroadwayRequestUpdate;
+
+typedef struct {
+  BroadwayRequestBase base;
+  guint32 id;
+  guint32 offset;
+  guint32 size;
+} BroadwayRequestUploadTexture;
+
+typedef struct {
+  BroadwayRequestBase base;
+  guint32 id;
+} BroadwayRequestReleaseTexture;
 
 typedef struct {
   BroadwayRequestBase base;
@@ -248,6 +262,8 @@ typedef union {
   BroadwayRequestTranslate translate;
   BroadwayRequestFocusWindow focus_window;
   BroadwayRequestSetShowKeyboard set_show_keyboard;
+  BroadwayRequestUploadTexture upload_texture;
+  BroadwayRequestReleaseTexture release_texture;
 } BroadwayRequest;
 
 typedef enum {

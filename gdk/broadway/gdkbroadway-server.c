@@ -1,5 +1,9 @@
 #include "config.h"
 
+#ifdef HAVE_LINUX_MEMFD_H
+#include <linux/memfd.h>
+#endif
+
 #ifdef HAVE_SYS_MMAN_H
 #include <sys/mman.h>
 #endif
@@ -9,6 +13,7 @@
 #include "gdkbroadway-server.h"
 
 #include "gdkprivate-broadway.h"
+#include <gdk/gdktextureprivate.h>
 
 #include <glib.h>
 #include <glib/gprintf.h>
@@ -35,6 +40,7 @@ struct _GdkBroadwayServer {
   GObject parent_instance;
 
   guint32 next_serial;
+  guint32 next_texture_id;
   GSocketConnection *connection;
 
   guint32 recv_buffer_size;
@@ -197,7 +203,6 @@ gdk_broadway_server_send_message_with_size (GdkBroadwayServer *server, BroadwayR
           exit (1);
         }
 
-      g_print ("socket send message wrote %d of %d\n", (int)bytes_written, (int)size);
       buf += bytes_written;
       size -= bytes_written;
 
@@ -773,6 +778,120 @@ _gdk_broadway_server_window_update (GdkBroadwayServer *server,
 
   gdk_broadway_server_send_message (server, msg,
 				    BROADWAY_REQUEST_UPDATE);
+}
+
+static int
+open_shared_memory (void)
+{
+  static gboolean force_shm_open = FALSE;
+  int ret = -1;
+
+#if !defined (__NR_memfd_create)
+  force_shm_open = TRUE;
+#endif
+
+  do
+    {
+#if defined (__NR_memfd_create)
+      if (!force_shm_open)
+        {
+          ret = syscall (__NR_memfd_create, "gdk-broadway", MFD_CLOEXEC);
+
+          /* fall back to shm_open until debian stops shipping 3.16 kernel
+           * See bug 766341
+           */
+          if (ret < 0 && errno == ENOSYS)
+            force_shm_open = TRUE;
+        }
+#endif
+
+      if (force_shm_open)
+        {
+          char name[NAME_MAX - 1] = "";
+
+          sprintf (name, "/gdk-broadway-%x", g_random_int ());
+
+          ret = shm_open (name, O_CREAT | O_EXCL | O_RDWR | O_CLOEXEC, 0600);
+
+          if (ret >= 0)
+            shm_unlink (name);
+          else if (errno == EEXIST)
+            continue;
+        }
+    }
+  while (ret < 0 && errno == EINTR);
+
+  if (ret < 0)
+    g_critical (G_STRLOC ": creating shared memory file (using %s) failed: %m",
+                force_shm_open? "shm_open" : "memfd_create");
+
+  return ret;
+}
+
+typedef struct {
+  int fd;
+  gsize size;
+} PngData;
+
+static cairo_status_t
+write_png_cb (void         *closure,
+              const guchar *data,
+              unsigned int  length)
+{
+  PngData *png_data = closure;
+  int fd = png_data->fd;
+
+  while (length)
+    {
+      gssize ret = write (fd, data, length);
+
+      if (ret <= 0)
+        return CAIRO_STATUS_WRITE_ERROR;
+
+      png_data->size += ret;
+      length -= ret;
+      data += ret;
+    }
+
+  return CAIRO_STATUS_SUCCESS;
+}
+
+guint32
+gdk_broadway_server_upload_texture (GdkBroadwayServer *server,
+                                    GdkTexture        *texture)
+{
+  guint32 id;
+  cairo_surface_t *surface = gdk_texture_download_surface (texture);
+  BroadwayRequestUploadTexture msg;
+  PngData data;
+
+  id = ++server->next_texture_id;
+
+  data.fd = open_shared_memory ();
+  data.size = 0;
+  cairo_surface_write_to_png_stream (surface, write_png_cb, &data);
+
+  msg.id = id;
+  msg.offset = 0;
+  msg.size = data.size;
+
+  /* This passes ownership of fd */
+  gdk_broadway_server_send_fd_message (server, msg,
+                                       BROADWAY_REQUEST_UPLOAD_TEXTURE, data.fd);
+
+  return id;
+}
+
+void
+gdk_broadway_server_release_texture (GdkBroadwayServer *server,
+                                     guint32            id)
+{
+  BroadwayRequestReleaseTexture msg;
+
+  msg.id = id;
+
+  gdk_broadway_server_send_message (server, msg,
+                                    BROADWAY_REQUEST_RELEASE_TEXTURE);
 }
 
 gboolean

@@ -59,6 +59,10 @@ gboolean           _gdk_broadway_server_window_translate         (GdkBroadwaySer
 								  cairo_region_t     *area,
 								  gint                dx,
 								  gint                dy);
+guint32             gdk_broadway_server_upload_texture           (GdkBroadwayServer  *server,
+                                                                  GdkTexture         *texture);
+void                gdk_broadway_server_release_texture          (GdkBroadwayServer  *server,
+                                                                  guint32             id);
 cairo_surface_t   *_gdk_broadway_server_create_surface           (int                 width,
 								  int                 height);
 void               _gdk_broadway_server_window_update            (GdkBroadwayServer  *server,
