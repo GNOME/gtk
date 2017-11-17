@@ -61,13 +61,7 @@ GDK_AVAILABLE_IN_ALL
 void                           gdk_error_trap_pop_ignored (void);
 
 GDK_AVAILABLE_IN_ALL
-void gdk_flush (void);
-
-GDK_AVAILABLE_IN_ALL
 void gdk_disable_multidevice (void);
-
-GDK_AVAILABLE_IN_3_10
-void gdk_set_allowed_backends (const gchar *backends);
 
 G_END_DECLS
 

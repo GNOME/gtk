@@ -56,6 +56,8 @@ GDK_AVAILABLE_IN_ALL
 void        gdk_display_sync               (GdkDisplay  *display);
 GDK_AVAILABLE_IN_ALL
 void        gdk_display_flush              (GdkDisplay  *display);
+GDK_AVAILABLE_IN_ALL
+void        gdk_flush                      (void);
 
 GDK_AVAILABLE_IN_ALL
 void        gdk_display_close                  (GdkDisplay  *display);
