@@ -2106,25 +2106,11 @@ settings_update_cursor_theme (GtkSettings *settings)
                 "gtk-cursor-theme-name", &theme,
                 "gtk-cursor-theme-size", &size,
                 NULL);
-  if (theme == NULL)
-    return;
-#ifdef GDK_WINDOWING_X11
-  if (GDK_IS_X11_DISPLAY (priv->display))
-    gdk_x11_display_set_cursor_theme (priv->display, theme, size);
-  else
-#endif
-#ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_DISPLAY (priv->display))
-    gdk_wayland_display_set_cursor_theme (priv->display, theme, size);
-  else
-#endif
-#ifdef GDK_WINDOWING_WIN32
-  if (GDK_IS_WIN32_DISPLAY (priv->display))
-    gdk_win32_display_set_cursor_theme (priv->display, theme, size);
-  else
-#endif
-    g_warning ("GtkSettings Cursor Theme: Unsupported GDK backend");
-  g_free (theme);
+  if (theme)
+    {
+      gdk_display_set_cursor_theme (priv->display, theme, size);
+      g_free (theme);
+    }
 }
 
 static void
