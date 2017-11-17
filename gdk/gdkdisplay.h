@@ -78,13 +78,6 @@ GDK_AVAILABLE_IN_ALL
 gboolean  gdk_display_has_pending (GdkDisplay  *display);
 
 GDK_AVAILABLE_IN_ALL
-void gdk_display_set_double_click_time     (GdkDisplay   *display,
-                                            guint         msec);
-GDK_AVAILABLE_IN_ALL
-void gdk_display_set_double_click_distance (GdkDisplay   *display,
-                                            guint         distance);
-
-GDK_AVAILABLE_IN_ALL
 GdkDisplay *gdk_display_get_default (void);
 
 GDK_AVAILABLE_IN_ALL

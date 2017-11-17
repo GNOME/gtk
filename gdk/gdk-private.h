@@ -41,4 +41,9 @@ GObject *       gdk_event_get_user_data         (const GdkEvent *event);
 
 guint32         gdk_display_get_last_seen_time  (GdkDisplay *display);
 
+void gdk_display_set_double_click_time     (GdkDisplay   *display,
+                                            guint         msec);
+void gdk_display_set_double_click_distance (GdkDisplay   *display,
+                                            guint         distance);
+
 #endif /* __GDK__PRIVATE_H__ */
