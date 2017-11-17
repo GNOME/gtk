@@ -2025,3 +2025,39 @@ gdk_display_get_last_seen_time (GdkDisplay *display)
   return GDK_CURRENT_TIME;
 }
 
+/**
+ * gdk_display_set_double_click_time:
+ * @display: a #GdkDisplay
+ * @msec: double click time in milliseconds (thousandths of a second)
+ *
+ * Sets the double click time (two clicks within this time interval
+ * count as a double click). Applications should not set this, it is a global
+ * user-configured setting.
+ *
+ * Since: 2.2
+ **/
+void
+gdk_display_set_double_click_time (GdkDisplay *display,
+                                   guint       msec)
+{
+  display->double_click_time = msec;
+}
+
+/**
+ * gdk_display_set_double_click_distance:
+ * @display: a #GdkDisplay
+ * @distance: distance in pixels
+ *
+ * Sets the double click distance (two clicks within this distance
+ * count as a double click). See also gdk_display_set_double_click_time().
+ * Applications should not set this, it is a global
+ * user-configured setting.
+ *
+ * Since: 2.4
+ **/
+void
+gdk_display_set_double_click_distance (GdkDisplay *display,
+                                       guint       distance)
+{
+  display->double_click_distance = distance;
+}
