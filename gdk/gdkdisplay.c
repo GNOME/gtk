@@ -570,30 +570,6 @@ gdk_display_put_event (GdkDisplay     *display,
   gdk_display_put_event_nocopy (display, gdk_event_copy (event));
 }
 
-/**
- * gdk_flush:
- *
- * Flushes the output buffers of all display connections and waits
- * until all requests have been processed.
- *
- * This is rarely needed by applications.
- */
-void
-gdk_flush (void)
-{
-  GSList *list, *l;
-
-  list = gdk_display_manager_list_displays (gdk_display_manager_get ());
-  for (l = list; l; l = l->next)
-    {
-      GdkDisplay *display = l->data;
-
-      GDK_DISPLAY_GET_CLASS (display)->sync (display);
-    }
-
-  g_slist_free (list);
-}
-
 static void
 generate_grab_broken_event (GdkDisplay *display,
                             GdkWindow  *window,
