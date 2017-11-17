@@ -203,7 +203,6 @@ struct _GskGLRenderer
 
   int scale_factor;
 
-  graphene_matrix_t mvp;
   graphene_rect_t viewport;
 
   guint frame_buffer;
@@ -1437,8 +1436,6 @@ static void
 gsk_gl_renderer_init (GskGLRenderer *self)
 {
   gsk_ensure_resources ();
-
-  graphene_matrix_init_identity (&self->mvp);
 
   self->render_items = g_array_new (FALSE, FALSE, sizeof (RenderItem));
   g_array_set_clear_func (self->render_items, (GDestroyNotify)destroy_render_item);
