@@ -1663,7 +1663,7 @@ gdk_x11_display_open (const gchar *display_name)
 
   class_hint = XAllocClassHint();
   class_hint->res_name = (char *) g_get_prgname ();
-  class_hint->res_class = (char *)gdk_get_program_class ();
+  class_hint->res_class = (char *) g_get_prgname ();
 
   /* XmbSetWMProperties sets the RESOURCE_NAME environment variable
    * from argv[0], so we just synthesize an argument array here.
@@ -1758,6 +1758,35 @@ gdk_x11_display_open (const gchar *display_name)
   gdk_display_emit_opened (display);
 
   return display;
+}
+
+/**
+ * gdk_x11_display_set_program_class:
+ * @display: a #GdkDisplay
+ * @program_class: a string
+ *
+ * Sets the program class.
+ *
+ * The X11 backend uses the program class to set the class name part
+ * of the `WM_CLASS` property on toplevel windows; see the ICCCM.
+ *
+ * Since: 3.94
+ */
+void
+gdk_x11_display_set_program_class (GdkDisplay *display,
+                                   const char *program_class)
+{
+  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
+  XClassHint *class_hint;
+
+  g_free (display_x11->program_class);
+  display_x11->program_class = g_strdup (program_class);
+
+  class_hint = XAllocClassHint();
+  class_hint->res_name = (char *) g_get_prgname ();
+  class_hint->res_class = (char *) program_class;
+  XSetClassHint (display_x11->xdisplay, display_x11->leader_window, class_hint);
+  XFree (class_hint);
 }
 
 /*
@@ -2070,6 +2099,8 @@ gdk_x11_display_finalize (GObject *object)
 
       g_slice_free (GdkErrorTrap, trap);
     }
+
+  g_free (display_x11->program_class);
 
   G_OBJECT_CLASS (gdk_x11_display_parent_class)->finalize (object);
 }

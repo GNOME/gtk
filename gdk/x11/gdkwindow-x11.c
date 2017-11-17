@@ -1000,7 +1000,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
 
       class_hint = XAllocClassHint ();
       class_hint->res_name = (char *) g_get_prgname ();
-      class_hint->res_class = (char *) gdk_get_program_class ();
+      class_hint->res_class = (char *) display_x11->program_class;
       XSetClassHint (xdisplay, impl->xid, class_hint);
       XFree (class_hint);
 

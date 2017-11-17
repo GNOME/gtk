@@ -90,6 +90,7 @@ struct _GdkX11Display
   GHashTable *atom_to_virtual;
 
   /* Session Management leader window see ICCCM */
+  char *program_class;
   Window leader_window;
   GdkWindow *leader_gdk_window;
   gboolean leader_window_title_set;
