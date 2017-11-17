@@ -46,7 +46,7 @@
  * data types, and file list dnd (which is handled seperately as it predates OLE2
  * both in this implementation and on Windows in general).
  *
- * As such, the data type conversion from gdk selection targets to OLE2 CF_* data
+ * As such, the data type conversion from gdk selection formats to OLE2 CF_* data
  * type specifiers is partially hardwired. Fixing this is complicated by (a) the
  * fact that the widget’s declared selection types aren’t accessible in calls here
  * that need to declare the corresponding OLE2 data types, and (b) there isn’t a
@@ -1190,8 +1190,8 @@ target_context_new (GdkWindow *window)
 }
 
 static source_drag_context *
-source_context_new (GdkWindow *window,
-		    GList     *targets)
+source_context_new (GdkWindow         *window,
+                    GdkContentFormats *formats)
 {
   GdkDragContext *context;
   GdkWin32DragContext *context_win32;
@@ -1211,7 +1211,7 @@ source_context_new (GdkWindow *window,
   g_object_ref (window);
 
   result->context->dest_window = NULL;
-  result->context->targets = g_list_copy (targets);
+  result->context->formats = gdk_content_formats_ref (formats);
 
   context_win32->ole2_dnd_iface = (IUnknown *) &result->ids;
   idropsource_addref (&result->ids);
@@ -1417,6 +1417,9 @@ gdk_dropfiles_filter (GdkXEvent *xev,
   POINT pt;
   gint nfiles, i;
   gchar *fileName, *linkedFile;
+  GPtrArray *formats;
+
+  formats = g_ptr_array_new ();
 
   if (msg->message == WM_DROPFILES)
     {
@@ -1432,8 +1435,10 @@ gdk_dropfiles_filter (GdkXEvent *xev,
       g_object_ref (context->dest_window);
 
       /* WM_DROPFILES drops are always file names */
-      context->targets =
-	g_list_append (NULL, _text_uri_list);
+      g_ptr_array_add (formats, _text_uri_list);
+      context->formats = gdk_content_formats_new ((const char **) formats->pdata, formats->len);
+      g_ptr_array_unref (formats);
+
       context->actions = GDK_ACTION_COPY;
       context->suggested_action = GDK_ACTION_COPY;
       current_dest_drag = context;
@@ -1664,7 +1669,7 @@ local_send_enter (GdkDragContext *context,
   new_context->dest_window = context->dest_window;
   g_object_ref (new_context->dest_window);
 
-  new_context->targets = g_list_copy (context->targets);
+  new_context->formats = gdk_content_formats_ref (context->formats);
 
   gdk_window_set_events (new_context->source_window,
 			 gdk_window_get_events (new_context->source_window) |
@@ -1789,11 +1794,11 @@ gdk_drag_do_leave (GdkDragContext *context,
 }
 
 GdkDragContext *
-_gdk_win32_window_drag_begin (GdkWindow *window,
-			      GdkDevice *device,
-			      GList     *targets,
-                              gint       x_root,
-                              gint       y_root)
+_gdk_win32_window_drag_begin (GdkWindow         *window,
+                              GdkDevice         *device,
+                              GdkContentFormats *formats,
+                              gint               x_root,
+                              gint               y_root)
 {
   if (!use_ole2_dnd)
     {
@@ -1807,7 +1812,7 @@ _gdk_win32_window_drag_begin (GdkWindow *window,
       new_context->source_window = window;
       g_object_ref (window);
 
-      new_context->targets = g_list_copy (targets);
+      new_context->formats = gdk_content_formats_ref (formats);
       new_context->actions = 0;
 
       return new_context;
@@ -1820,7 +1825,7 @@ _gdk_win32_window_drag_begin (GdkWindow *window,
 
       GDK_NOTE (DND, g_print ("gdk_drag_begin\n"));
 
-      ctx = source_context_new (window, targets);
+      ctx = source_context_new (window, formats);
 
       _dnd_source_state = GDK_WIN32_DND_PENDING;
 

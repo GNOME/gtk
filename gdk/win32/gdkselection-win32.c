@@ -1166,13 +1166,13 @@ gdk_win32_display_add_selection_targets (GdkDisplay *display,
 	       sel_name);
       g_free (sel_name);
 
-      for (i = 0; i < n_targets; i++)
+      for (i = 0; i < ntargets; i++)
 	{
 	  gchar *tgt_name = gdk_atom_name (targets[i]);
 
 	  g_print ("%s", tgt_name);
 	  g_free (tgt_name);
-	  if (i < n_targets - 1)
+	  if (i < ntargets - 1)
 	    g_print (", ");
 	}
       g_print ("\n");
@@ -1199,7 +1199,7 @@ gdk_win32_display_add_selection_targets (GdkDisplay *display,
    * support for it in Windows software, but note that alpha won't be
    * handled.
    */
-  for (i = 0; !has_image && i < n_targets; ++i)
+  for (i = 0; !has_image && i < ntargets; ++i)
     {
       UINT cf;
       gchar *target_name;

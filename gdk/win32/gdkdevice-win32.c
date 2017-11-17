@@ -22,9 +22,9 @@
 #include <windowsx.h>
 #include <objbase.h>
 
-#include "gdkdisplayprivate.h"
 #include "gdkdevice-win32.h"
 #include "gdkwin32.h"
+#include "gdkdisplay-win32.h"
 
 G_DEFINE_TYPE (GdkDeviceWin32, gdk_device_win32, GDK_TYPE_DEVICE)
 
@@ -119,7 +119,7 @@ gdk_device_win32_query_state (GdkDevice        *device,
     {
       GdkDisplay *display = gdk_device_get_display (device);
 
-      scale = GDK_WIN32_SCREEN (GDK_WIN32_DISPLAY (display)->screen)->window_scale;
+      scale = GDK_WIN32_DISPLAY (display)->window_scale;
       hwnd = NULL;
     }
 

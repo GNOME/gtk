@@ -24,7 +24,7 @@
 
 #include "gdkwin32.h"
 #include "gdkdevice-wintab.h"
-#include "gdkdisplayprivate.h"
+#include "gdkdisplay-win32.h"
 
 G_DEFINE_TYPE (GdkDeviceWintab, gdk_device_wintab, GDK_TYPE_DEVICE)
 
@@ -132,7 +132,7 @@ gdk_device_wintab_query_state (GdkDevice        *device,
     {
       GdkDisplay *display = gdk_device_get_display (device);
 
-      scale = GDK_WIN32_SCREEN (GDK_WIN32_DISPLAY (display)->screen)->window_scale;
+      scale = GDK_WIN32_DISPLAY (display)->window_scale;
       hwnd = NULL;
     }
 
@@ -144,7 +144,7 @@ gdk_device_wintab_query_state (GdkDevice        *device,
   if (root_y)
     *root_y = point.y / scale;
 
-  if (hwn)
+  if (hwnd)
     ScreenToClient (hwnd, &point);
 
   if (win_x)
@@ -256,13 +256,23 @@ _gdk_device_wintab_translate_axes (GdkDeviceWintab *device_wintab,
                                                 device_wintab->last_axis_data[i],
                                                 &axes[i]);
           else
-            _gdk_device_translate_screen_coord (device, window,
-                                                root_x, root_y,
-                                                GDK_WIN32_SCREEN (GDK_WIN32_DISPLAY (display)->screen)->width,
-                                                GDK_WIN32_SCREEN (GDK_WIN32_DISPLAY (display)->screen)->height,
-                                                i,
-                                                device_wintab->last_axis_data[i],
-                                                &axes[i]);
+            {
+              HMONITOR hmonitor;
+              MONITORINFO minfo = {sizeof (MONITORINFO),};
+
+              hmonitor = MonitorFromWindow (GDK_WINDOW_HWND (window),
+                                            MONITOR_DEFAULTTONEAREST);
+              GetMonitorInfo (hmonitor, &minfo);
+
+              /* XXX: the dimensions from minfo may need to be scaled for HiDPI usage */
+              _gdk_device_translate_screen_coord (device, window,
+                                                  root_x, root_y,
+                                                  minfo.rcWork.right - minfo.rcWork.left,
+                                                  minfo.rcWork.bottom - minfo.rcWork.top,
+                                                  i,
+                                                  device_wintab->last_axis_data[i],
+                                                  &axes[i]);
+            }
           if (use == GDK_AXIS_X)
             temp_x = axes[i];
           else if (use == GDK_AXIS_Y)

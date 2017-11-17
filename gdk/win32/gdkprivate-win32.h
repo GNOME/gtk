@@ -475,7 +475,11 @@ void       _gdk_win32_display_create_window_impl   (GdkDisplay    *display,
 
 /* stray GdkWindowImplWin32 members */
 void _gdk_win32_window_register_dnd (GdkWindow *window);
-GdkDragContext *_gdk_win32_window_drag_begin (GdkWindow *window, GdkDevice *device, GList *targets, gint x_root, gint y_root);
+GdkDragContext *_gdk_win32_window_drag_begin (GdkWindow         *window,
+                                              GdkDevice         *device,
+                                              GdkContentFormats *formats,
+                                              gint               x_root,
+                                              gint               y_root);
 
 gint _gdk_win32_window_get_property (GdkWindow   *window,
 				     GdkAtom      property,

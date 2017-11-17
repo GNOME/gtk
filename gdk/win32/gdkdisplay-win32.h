@@ -18,7 +18,6 @@
  */
 
 #include "gdkdisplayprivate.h"
-#include "gdkscreen-win32.h"
 
 #ifndef __GDK_DISPLAY__WIN32_H__
 #define __GDK_DISPLAY__WIN32_H__
