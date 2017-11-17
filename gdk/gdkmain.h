@@ -45,11 +45,6 @@ const gchar *         gdk_get_program_class               (void);
 GDK_AVAILABLE_IN_ALL
 void                  gdk_set_program_class               (const gchar    *program_class);
 
-GDK_AVAILABLE_IN_ALL
-void                  gdk_notify_startup_complete         (void);
-GDK_AVAILABLE_IN_ALL
-void                  gdk_notify_startup_complete_with_id (const gchar* startup_id);
-
 /* Push and pop error handlers for X errors
  */
 GDK_AVAILABLE_IN_ALL

@@ -575,6 +575,7 @@ gdk_display_put_event (GdkDisplay     *display,
  *
  * Flushes the output buffers of all display connections and waits
  * until all requests have been processed.
+ *
  * This is rarely needed by applications.
  */
 void
@@ -1520,52 +1521,6 @@ gulong
 _gdk_display_get_next_serial (GdkDisplay *display)
 {
   return GDK_DISPLAY_GET_CLASS (display)->get_next_serial (display);
-}
-
-
-/**
- * gdk_notify_startup_complete:
- *
- * Indicates to the GUI environment that the application has finished
- * loading. If the applications opens windows, this function is
- * normally called after opening the application’s initial set of
- * windows.
- *
- * GTK+ will call this function automatically after opening the first
- * #GtkWindow unless gtk_window_set_auto_startup_notification() is called
- * to disable that feature.
- *
- * Since: 2.2
- **/
-void
-gdk_notify_startup_complete (void)
-{
-  gdk_notify_startup_complete_with_id (NULL);
-}
-
-/**
- * gdk_notify_startup_complete_with_id:
- * @startup_id: a startup-notification identifier, for which
- *     notification process should be completed
- *
- * Indicates to the GUI environment that the application has
- * finished loading, using a given identifier.
- *
- * GTK+ will call this function automatically for #GtkWindow
- * with custom startup-notification identifier unless
- * gtk_window_set_auto_startup_notification() is called to
- * disable that feature.
- *
- * Since: 2.12
- */
-void
-gdk_notify_startup_complete_with_id (const gchar* startup_id)
-{
-  GdkDisplay *display;
-
-  display = gdk_display_get_default ();
-  if (display)
-    gdk_display_notify_startup_complete (display, startup_id);
 }
 
 /**

@@ -4,9 +4,6 @@
 <SECTION>
 <TITLE>General</TITLE>
 <FILE>general</FILE>
-gdk_notify_startup_complete
-gdk_notify_startup_complete_with_id
-gdk_set_allowed_backends
 
 <SUBSECTION>
 gdk_get_program_class
@@ -149,6 +146,9 @@ gdk_display_manager_get_default_display
 gdk_display_manager_set_default_display
 gdk_display_manager_list_displays
 gdk_display_manager_open_display
+
+<SUBSECTION>
+gdk_set_allowed_backends
 
 <SUBSECTION Standard>
 GDK_DISPLAY_MANAGER
