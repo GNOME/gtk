@@ -20,7 +20,7 @@
 
 #include "gdkproperty.h"
 
-#include "gdkprivate.h"
+#include "gdkinternals.h"
 
 /**
  * SECTION:properties

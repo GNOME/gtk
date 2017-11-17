@@ -29,6 +29,7 @@
 
 #include "gdkcursor.h"
 #include "gdkcursorprivate.h"
+#include "gdktexture.h"
 #include "gdkintl.h"
 #include "gdkinternals.h"
 

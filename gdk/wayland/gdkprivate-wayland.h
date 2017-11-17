@@ -30,7 +30,6 @@
 #define __GDK_PRIVATE_WAYLAND_H__
 
 #include <gdk/gdkcursor.h>
-#include <gdk/gdkprivate.h>
 #include <gdk/wayland/gdkwayland.h>
 #include <gdk/wayland/gdkdisplay-wayland.h>
 

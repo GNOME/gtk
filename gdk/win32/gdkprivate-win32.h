@@ -34,7 +34,6 @@
 #define _WIN32_WINNT WINVER
 #endif
 
-#include <gdk/gdkprivate.h>
 #include <gdk/gdkcursorprivate.h>
 #include <gdk/win32/gdkwindow-win32.h>
 #include <gdk/win32/gdkwin32display.h>

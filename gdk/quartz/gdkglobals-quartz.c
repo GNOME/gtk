@@ -18,7 +18,6 @@
 
 #include "config.h"
 #include "gdktypes.h"
-#include "gdkprivate.h"
 #include "gdkquartz.h"
 
 GdkDisplay *_gdk_display = NULL;

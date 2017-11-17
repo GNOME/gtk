@@ -22,7 +22,6 @@
 #define GDK_QUARTZ_ALLOC_POOL NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init]
 #define GDK_QUARTZ_RELEASE_POOL [pool release]
 
-#include <gdk/gdkprivate.h>
 #include <gdk/quartz/gdkquartz.h>
 #include <gdk/quartz/gdkdevicemanager-core-quartz.h>
 #include <gdk/quartz/gdkdnd-quartz.h>

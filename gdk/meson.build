@@ -61,7 +61,6 @@ gdk_public_headers = files([
   'gdkmonitor.h',
   'gdkpango.h',
   'gdkpixbuf.h',
-  'gdkprivate.h',
   'gdkproperty.h',
   'gdkrectangle.h',
   'gdkrgba.h',
@@ -82,7 +81,6 @@ gdk_private_h_sources = files([
   'gdkdevicetoolprivate.h',
   'gdkdrawingcontextprivate.h',
   'gdkmonitorprivate.h',
-  'gdkprivate.h',
   'gdkseatdefaultprivate.h',
 ])
 

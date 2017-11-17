@@ -37,6 +37,7 @@
 #include "gdktextureprivate.h"
 
 #include "gdkinternals.h"
+#include "gdkcairo.h"
 
 /**
  * GdkTexture:

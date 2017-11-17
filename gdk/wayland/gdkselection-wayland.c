@@ -30,7 +30,6 @@
 #include "gdkdndprivate.h"
 #include "gdkselection.h"
 #include "gdkproperty.h"
-#include "gdkprivate.h"
 
 #include <string.h>
 

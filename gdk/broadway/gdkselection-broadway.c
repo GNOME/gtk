@@ -27,7 +27,6 @@
 #include "gdkselection.h"
 
 #include "gdkproperty.h"
-#include "gdkprivate.h"
 #include "gdkprivate-broadway.h"
 #include "gdkdisplay-broadway.h"
 

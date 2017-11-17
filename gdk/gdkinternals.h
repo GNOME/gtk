@@ -28,10 +28,11 @@
 #define __GDK_INTERNALS_H__
 
 #include <gio/gio.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
 #include "gdkwindowimpl.h"
 #include "gdkdisplay.h"
-#include "gdkprivate.h"
 #include "gdkeventsprivate.h"
+#include "gdkenumtypes.h"
 
 G_BEGIN_DECLS
 
@@ -444,6 +445,14 @@ void _gdk_display_set_window_under_pointer (GdkDisplay *display,
 
 gboolean    _gdk_window_has_impl (GdkWindow *window);
 GdkWindow * _gdk_window_get_impl_window (GdkWindow *window);
+
+void gdk_window_destroy_notify       (GdkWindow *window);
+
+void gdk_synthesize_window_state (GdkWindow     *window,
+                                  GdkWindowState unset_flags,
+                                  GdkWindowState set_flags);
+
+const char * _gdk_atom_name_const (GdkAtom atom);
 
 G_END_DECLS
 

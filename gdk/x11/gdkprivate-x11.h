@@ -30,7 +30,6 @@
 #define __GDK_PRIVATE_X11_H__
 
 #include "gdkcursor.h"
-#include "gdkprivate.h"
 #include "gdkinternals.h"
 #include "gdkx.h"
 #include "gdkwindow-x11.h"

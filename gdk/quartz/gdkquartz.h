@@ -23,7 +23,6 @@
 #include <AppKit/AppKit.h>
 
 #include <gdk/gdk.h>
-#include <gdk/gdkprivate.h>
 
 G_BEGIN_DECLS
 
