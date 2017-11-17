@@ -176,6 +176,7 @@ _gdk_mir_display_open (const gchar *display_name)
   MirPixelFormat sw_pixel_format, hw_pixel_format;
   GdkMirDisplay *display;
   GDBusConnection *session;
+  GError *error = NULL;
 
   connection = mir_connect_sync (NULL, g_get_prgname ());
   if (!connection)
@@ -208,7 +209,15 @@ _gdk_mir_display_open (const gchar *display_name)
   display->sw_pixel_format = sw_pixel_format;
   display->hw_pixel_format = hw_pixel_format;
 
-  session = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
+  session = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, &error);
+
+  if (session == NULL)
+    {
+      g_error ("Error connecting to D-Bus session bus: %s", error->message);
+      g_clear_error (&error);
+      mir_connection_release (connection);
+      return NULL;
+    }
 
   display->content_service = content_hub_service_proxy_new_sync (
     session,
