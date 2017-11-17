@@ -32,19 +32,5 @@
 #include <gdk/gdkversionmacros.h>
 #include <gdk/gdktypes.h>
 
-G_BEGIN_DECLS
-
-
-/* Push and pop error handlers for X errors
- */
-GDK_AVAILABLE_IN_ALL
-void                           gdk_error_trap_push        (void);
-/* warn unused because you could use pop_ignored otherwise */
-GDK_AVAILABLE_IN_ALL
-G_GNUC_WARN_UNUSED_RESULT gint gdk_error_trap_pop         (void);
-GDK_AVAILABLE_IN_ALL
-void                           gdk_error_trap_pop_ignored (void);
-
-G_END_DECLS
 
 #endif /* __GDK_MAIN_H__ */
