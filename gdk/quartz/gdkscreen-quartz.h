@@ -19,13 +19,11 @@
 #ifndef __GDK_QUARTZ_SCREEN__
 #define __GDK_QUARTZ_SCREEN__
 
-#include <gdkscreenprivate.h>
-
 G_BEGIN_DECLS
 
 struct _GdkQuartzScreen
 {
-  GdkScreen parent_instance;
+  GObject parent_instance;
 
   GdkDisplay *display;
 
@@ -43,7 +41,7 @@ struct _GdkQuartzScreen
 
 struct _GdkQuartzScreenClass
 {
-  GdkScreenClass parent_class;
+  GObjectClass parent_class;
 };
 
 G_END_DECLS

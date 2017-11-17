@@ -70,21 +70,17 @@ static void display_reconfiguration_callback (CGDirectDisplayID            displ
 
 static gint get_mm_from_pixels (NSScreen *screen, int pixels);
 
-G_DEFINE_TYPE (GdkQuartzScreen, gdk_quartz_screen, GDK_TYPE_SCREEN);
+G_DEFINE_TYPE (GdkQuartzScreen, gdk_quartz_screen, G_TYPE_OBJECT);
 
 static void
-gdk_quartz_screen_init (GdkQuartzScreen *quartz_screen)
+gdk_quartz_screen_init (GdkQuartzScreen *screen)
 {
-  GdkScreen *screen = GDK_SCREEN (quartz_screen);
   NSDictionary *dd = [[[NSScreen screens] objectAtIndex:0] deviceDescription];
   NSSize size = [[dd valueForKey:NSDeviceResolution] sizeValue];
 
-  _gdk_screen_set_resolution (screen, size.width);
+  gdk_quartz_screen_calculate_layout (screen);
 
-  gdk_quartz_screen_calculate_layout (quartz_screen);
-
-  CGDisplayRegisterReconfigurationCallback (display_reconfiguration_callback,
-                                            screen);
+  CGDisplayRegisterReconfigurationCallback (display_reconfiguration_callback, screen);
 
   quartz_screen->emit_monitors_changed = FALSE;
 }
@@ -100,8 +96,7 @@ gdk_quartz_screen_dispose (GObject *object)
       screen->screen_changed_id = 0;
     }
 
-  CGDisplayRemoveReconfigurationCallback (display_reconfiguration_callback,
-                                          screen);
+  CGDisplayRemoveReconfigurationCallback (display_reconfiguration_callback, screen);
 
   G_OBJECT_CLASS (gdk_quartz_screen_parent_class)->dispose (object);
 }
@@ -194,7 +189,7 @@ gdk_quartz_screen_calculate_layout (GdkQuartzScreen *screen)
 }
 
 void
-_gdk_quartz_screen_update_window_sizes (GdkScreen *screen)
+_gdk_quartz_screen_update_window_sizes (GdkQuartzScreen *screen)
 {
   GList *windows, *list;
 
@@ -206,9 +201,6 @@ _gdk_quartz_screen_update_window_sizes (GdkScreen *screen)
    * This data is updated when the monitor configuration is changed.
    */
 
-  /* FIXME: At some point, fetch the root window from GdkScreen.  But
-   * on OS X will we only have a single root window anyway.
-   */
   _gdk_root->x = 0;
   _gdk_root->y = 0;
   _gdk_root->abs_x = 0;
@@ -222,7 +214,7 @@ _gdk_quartz_screen_update_window_sizes (GdkScreen *screen)
 static void
 process_display_reconfiguration (GdkQuartzScreen *screen)
 {
-  gdk_quartz_screen_calculate_layout (GDK_QUARTZ_SCREEN (screen));
+  gdk_quartz_screen_calculate_layout (screen);
 
   _gdk_quartz_screen_update_window_sizes (GDK_SCREEN (screen));
 }
@@ -270,8 +262,7 @@ display_reconfiguration_callback (CGDirectDisplayID            display,
        */
       if (!screen->screen_changed_id)
         {
-          screen->screen_changed_id = gdk_threads_add_idle (screen_changed_idle,
-                                                            screen);
+          screen->screen_changed_id = gdk_threads_add_idle (screen_changed_idle, screen);
           g_source_set_name_by_id (screen->screen_changed_id, "[gtk+] screen_changed_idle");
         }
     }
