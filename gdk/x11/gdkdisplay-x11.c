@@ -3051,21 +3051,6 @@ gdk_x11_display_get_screen (GdkDisplay *display)
   return GDK_X11_DISPLAY (display)->screen;
 }
 
-static gint
-pop_error_trap (GdkDisplay *display,
-                gboolean    ignored)
-{
-  if (ignored)
-    {
-      gdk_x11_display_error_trap_pop_ignored (display);
-      return Success;
-    }
-  else
-    {
-      return gdk_x11_display_error_trap_pop (display);
-    }
-}
-
 static GdkKeymap *
 gdk_x11_display_get_keymap (GdkDisplay *display)
 {
@@ -3218,8 +3203,6 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->notify_startup_complete = gdk_x11_display_notify_startup_complete;
   display_class->create_window_impl = _gdk_x11_display_create_window_impl;
   display_class->get_keymap = gdk_x11_display_get_keymap;
-  display_class->push_error_trap = gdk_x11_display_error_trap_push;
-  display_class->pop_error_trap = pop_error_trap;
   display_class->get_selection_owner = _gdk_x11_display_get_selection_owner;
   display_class->set_selection_owner = _gdk_x11_display_set_selection_owner;
   display_class->send_selection_notify = _gdk_x11_display_send_selection_notify;

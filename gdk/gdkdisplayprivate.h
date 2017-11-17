@@ -164,9 +164,6 @@ struct _GdkDisplayClass
                                                     GdkWindowAttr *attributes);
 
   GdkKeymap *                (*get_keymap)         (GdkDisplay    *display);
-  void                       (*push_error_trap)    (GdkDisplay    *display);
-  gint                       (*pop_error_trap)     (GdkDisplay    *display,
-                                                    gboolean       ignore);
 
   GdkWindow *                (*get_selection_owner) (GdkDisplay   *display,
                                                      GdkAtom       selection);

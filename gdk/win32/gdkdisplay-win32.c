@@ -1086,19 +1086,6 @@ gdk_win32_display_notify_startup_complete (GdkDisplay  *display,
   /* nothing */
 }
 
-static void
-gdk_win32_display_push_error_trap (GdkDisplay *display)
-{
-  /* nothing */
-}
-
-static gint
-gdk_win32_display_pop_error_trap (GdkDisplay *display,
-				  gboolean    ignored)
-{
-  return 0;
-}
-
 static int
 gdk_win32_display_get_n_monitors (GdkDisplay *display)
 {
@@ -1262,8 +1249,6 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
   display_class->create_window_impl = _gdk_win32_display_create_window_impl;
 
   display_class->get_keymap = _gdk_win32_display_get_keymap;
-  display_class->push_error_trap = gdk_win32_display_push_error_trap;
-  display_class->pop_error_trap = gdk_win32_display_pop_error_trap;
   display_class->get_selection_owner = _gdk_win32_display_get_selection_owner;
   display_class->set_selection_owner = _gdk_win32_display_set_selection_owner;
   display_class->send_selection_notify = _gdk_win32_display_send_selection_notify;

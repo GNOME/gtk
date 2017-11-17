@@ -937,18 +937,6 @@ _gdk_wayland_display_get_keymap (GdkDisplay *display)
   return tmp_keymap;
 }
 
-static void
-gdk_wayland_display_push_error_trap (GdkDisplay *display)
-{
-}
-
-static gint
-gdk_wayland_display_pop_error_trap (GdkDisplay *display,
-				    gboolean    ignored)
-{
-  return 0;
-}
-
 static int
 gdk_wayland_display_get_n_monitors (GdkDisplay *display)
 {
@@ -1037,8 +1025,6 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
   display_class->notify_startup_complete = gdk_wayland_display_notify_startup_complete;
   display_class->create_window_impl = _gdk_wayland_display_create_window_impl;
   display_class->get_keymap = _gdk_wayland_display_get_keymap;
-  display_class->push_error_trap = gdk_wayland_display_push_error_trap;
-  display_class->pop_error_trap = gdk_wayland_display_pop_error_trap;
   display_class->get_selection_owner = _gdk_wayland_display_get_selection_owner;
   display_class->set_selection_owner = _gdk_wayland_display_set_selection_owner;
   display_class->send_selection_notify = _gdk_wayland_display_send_selection_notify;
