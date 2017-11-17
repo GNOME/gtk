@@ -33,7 +33,6 @@
 #include "gdkwindowimpl.h"
 #include "gdkinternals.h"
 #include "gdkmarshalers.h"
-#include "gdkscreen.h"
 #include "gdkmonitorprivate.h"
 
 #include <math.h>

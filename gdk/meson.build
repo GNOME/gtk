@@ -27,7 +27,6 @@ gdk_public_sources = files([
   'gdkproperty.c',
   'gdkrectangle.c',
   'gdkrgba.c',
-  'gdkscreen.c',
   'gdkseat.c',
   'gdkseatdefault.c',
   'gdkselection.c',

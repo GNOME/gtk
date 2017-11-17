@@ -32,7 +32,6 @@
 #include "gdkrectangle.h"
 #include "gdkinternals.h"
 #include "gdkintl.h"
-#include "gdkscreenprivate.h"
 #include "gdkdisplayprivate.h"
 #include "gdkdeviceprivate.h"
 #include "gdkmarshalers.h"
