@@ -3,7 +3,6 @@ gdk_public_sources = files([
   'gdkapplaunchcontext.c',
   'gdkcairo.c',
   'gdkcursor.c',
-  'gdkdeprecated.c',
   'gdkdevice.c',
   'gdkdevicemanager.c',
   'gdkdevicepad.c',
