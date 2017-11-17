@@ -131,9 +131,6 @@ static int gdk_initialized = 0;                     /* 1 if the library is initi
                                                      * 0 otherwise.
                                                      */
 
-static gchar  *gdk_progclass = NULL;
-static gboolean gdk_progclass_overridden;
-
 static GMutex gdk_threads_mutex;
 
 static GCallback gdk_threads_lock = NULL;
