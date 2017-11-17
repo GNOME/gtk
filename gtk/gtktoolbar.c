@@ -144,7 +144,6 @@ struct _GtkToolbarPrivate
   guint            animation : 1;
   guint            is_sliding : 1;
   guint            need_rebuild : 1;  /* whether the overflow menu should be regenerated */
-  guint            need_sync : 1;
   guint            show_arrow : 1;
   guint            style_set     : 1;
 };
@@ -895,12 +894,6 @@ slide_idle_handler (gpointer data)
   GtkToolbarPrivate *priv = toolbar->priv;
   GList *list;
 
-  if (priv->need_sync)
-    {
-      gdk_flush ();
-      priv->need_sync = FALSE;
-    }
-  
   for (list = priv->content; list != NULL; list = list->next)
     {
       ToolbarContent *content = list->data;
@@ -1479,8 +1472,6 @@ gtk_toolbar_size_allocate (GtkWidget           *widget,
                                                &start_allocation,
                                                &goal_allocation,
                                                &alloc);
-
-              priv->need_sync = TRUE;
             }
           else
             {
