@@ -31,7 +31,14 @@ gdk_broadway_public_headers = [
 
 gdk_broadway_deps = [shmlib]
 
+clienthtml_h = custom_target('clienthtml.h',
+  input : 'client.html',
+  output : 'clienthtml.h',
+  command : [find_program('toarray.pl'), 'client_html', '@INPUT@'],
+  capture : true)
+
 libgdk_broadway = static_library('gdk-broadway',
+  clienthtml_h,
   gdk_broadway_sources, gdkconfig, gdkenum_h,
   include_directories: [confinc, gdkinc],
   c_args: [
@@ -44,12 +51,6 @@ libgdk_broadway = static_library('gdk-broadway',
 # gtk4-broadwayd
 
 broadwayd_syslib = os_win32 ? find_library('ws2_32') : shmlib
-
-clienthtml_h = custom_target('clienthtml.h',
-  input : 'client.html',
-  output : 'clienthtml.h',
-  command : [find_program('toarray.pl'), 'client_html', '@INPUT@'],
-  capture : true)
 
 broadwayjs_h = custom_target('broadwayjs.h',
   input : ['broadway.js', 'rawinflate.min.js'],
