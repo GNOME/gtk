@@ -12,7 +12,6 @@ gdk/gdkdnd.c
 gdk/gdkdrawcontext.c
 gdk/gdkglcontext.c
 gdk/gdkpango.c
-gdk/gdkscreen.c
 gdk/gdkseat.c
 gdk/gdkwindow.c
 gdk/keyname-table.h
