@@ -92,14 +92,11 @@ _gdk_broadway_display_size_changed (GdkDisplay                      *display,
   toplevels =  broadway_display->toplevels;
   for (l = toplevels; l != NULL; l = l->next)
     {
-      GdkWindow *toplevel = l->data;
-      GdkWindowImplBroadway *toplevel_impl = GDK_WINDOW_IMPL_BROADWAY (toplevel->impl);
+      GdkWindowImplBroadway *toplevel_impl = l->data;
 
       if (toplevel_impl->maximized)
-        gdk_window_move_resize (toplevel, 0, 0, msg->width, msg->height);
+        gdk_window_move_resize (toplevel_impl->wrapper, 0, 0, msg->width, msg->height);
     }
-
-  g_list_free (toplevels);
 }
 
 
