@@ -30,18 +30,7 @@
 #include "gtktextbufferrichtext.h"
 #include "gtkintl.h"
 
-#ifdef GDK_WINDOWING_X11
-#include "x11/gdkx.h"
-#endif
-
-#ifdef GDK_WINDOWING_BROADWAY
-#include "broadway/gdkbroadway.h"
-#endif
-
-#ifdef GDK_WINDOWING_WIN32
-#include "win32/gdkwin32.h"
-#endif
-
+#include "gdk/gdk-private.h"
 
 /**
  * SECTION:gtkclipboard
@@ -473,37 +462,11 @@ get_clipboard_widget (GdkDisplay *display)
 static guint32
 clipboard_get_timestamp (GtkClipboard *clipboard)
 {
-  GtkWidget *clipboard_widget = get_clipboard_widget (clipboard->display);
   guint32 timestamp = gtk_get_current_event_time ();
-  GdkWindow *window;
 
   if (timestamp == GDK_CURRENT_TIME)
     {
-      window = gtk_widget_get_window (clipboard_widget);
-#ifdef GDK_WINDOWING_X11
-      if (GDK_IS_X11_WINDOW (window))
-	{
-	  timestamp = gdk_x11_get_server_time (gtk_widget_get_window (clipboard_widget));
-	}
-      else
-#endif
-#if defined GDK_WINDOWING_WIN32
-      if (GDK_IS_WIN32_WINDOW (window))
-	{
-	  timestamp = GetMessageTime ();
-	}
-      else
-#endif
-#if defined GDK_WINDOWING_BROADWAY
-      if (GDK_IS_BROADWAY_WINDOW (window))
-	{
-	  timestamp = gdk_broadway_get_last_seen_time (window);
-	}
-      else
-#endif
-	{
-	  /* No implementation */
-	}
+      timestamp = gdk_display_get_last_seen_time (clipboard->display);
     }
   else
     {
