@@ -58,7 +58,6 @@ gdk_public_headers = files([
   'gdkglcontext.h',
   'gdkkeys.h',
   'gdkkeysyms.h',
-  'gdkmain.h',
   'gdkmonitor.h',
   'gdkpango.h',
   'gdkpixbuf.h',
