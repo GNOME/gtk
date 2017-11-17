@@ -19,7 +19,6 @@
 
 #include "gdkpango.h"
 
-#include "gdkscreen.h"
 #include "gdkintl.h"
 
 #include <math.h>

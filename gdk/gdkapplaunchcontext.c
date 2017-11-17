@@ -21,7 +21,7 @@
 #include "config.h"
 
 #include "gdkapplaunchcontextprivate.h"
-#include "gdkscreen.h"
+#include "gdkdisplay.h"
 #include "gdkintl.h"
 
 
