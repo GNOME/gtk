@@ -23,7 +23,6 @@
 
 
 typedef struct {
-  cairo_surface_t *surface;
   GskVulkanImage *image;
   int width, height;
   int x, y, y0;
@@ -79,8 +78,6 @@ free_atlas (gpointer v)
 {
   Atlas *atlas = v;
 
-  if (atlas->surface)
-    cairo_surface_destroy (atlas->surface);
   g_clear_object (&atlas->image);
   g_list_free_full (atlas->dirty_glyphs, dirty_glyph_free);
   g_free (atlas);
