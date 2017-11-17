@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-16 15:32+0000\n"
-"PO-Revision-Date: 2017-11-17 11:48+0100\n"
+"PO-Revision-Date: 2017-11-17 11:50+0100\n"
 "Last-Translator: Milo Casagrande <milo@milo.name>\n"
 "Language-Team: Italiano <gnome-it-list@gnome.org>\n"
 "Language: it\n"
@@ -342,12 +342,12 @@ msgstr "LuminosTastRid"
 #: gdk/keyname-table.h:6885
 msgctxt "keyboard label"
 msgid "AudioMute"
-msgstr "AudioEscluso"
+msgstr "AudioEscuso"
 
 #: gdk/keyname-table.h:6886
 msgctxt "keyboard label"
 msgid "AudioMicMute"
-msgstr "AudioMicEscluso"
+msgstr "AudioMicEscuso"
 
 #: gdk/keyname-table.h:6887
 msgctxt "keyboard label"
@@ -3025,17 +3025,12 @@ msgid "Recent files"
 msgstr "File recenti"
 
 #: gtk/gtkplacessidebar.c:1082
-#, fuzzy
-#| msgid "_Start"
 msgid "Starred"
-msgstr "_Avvia"
+msgstr "Preferiti"
 
 #: gtk/gtkplacessidebar.c:1084
-#, fuzzy
-#| msgctxt "printer option"
-#| msgid "Printer Profile"
 msgid "Favorite files"
-msgstr "Profilo stampante"
+msgstr "File preferiti"
 
 #: gtk/gtkplacessidebar.c:1095
 msgid "Open your personal folder"
