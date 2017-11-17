@@ -61,9 +61,6 @@ GDK_AVAILABLE_IN_ALL
 void                           gdk_error_trap_pop_ignored (void);
 
 GDK_AVAILABLE_IN_ALL
-void gdk_beep (void);
-
-GDK_AVAILABLE_IN_ALL
 void gdk_flush (void);
 
 GDK_AVAILABLE_IN_ALL

@@ -19,9 +19,6 @@ gdk_flush
 GdkGrabStatus
 
 <SUBSECTION>
-gdk_beep
-
-<SUBSECTION>
 gdk_error_trap_push
 gdk_error_trap_pop
 gdk_error_trap_pop_ignored

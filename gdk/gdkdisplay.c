@@ -571,17 +571,6 @@ gdk_display_put_event (GdkDisplay     *display,
 }
 
 /**
- * gdk_beep:
- * 
- * Emits a short beep on the default display.
- **/
-void
-gdk_beep (void)
-{
-  gdk_display_beep (gdk_display_get_default ());
-}
-
-/**
  * gdk_flush:
  *
  * Flushes the output buffers of all display connections and waits
