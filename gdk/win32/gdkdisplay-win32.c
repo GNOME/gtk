@@ -1208,6 +1208,12 @@ gdk_win32_display_get_setting (GdkDisplay  *display,
   return _gdk_win32_get_setting (name, value);
 }
 
+static guint32
+gdk_win32_display_get_last_seen_time (GdkDisplay *display)
+{
+  return GetMessageTime ();
+}
+
 static void
 gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
 {
@@ -1266,6 +1272,7 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
 #endif
 
   display_class->get_setting = gdk_win32_display_get_setting;
+  display_class->get_last_seen_time = gdk_win32_display_get_last_seen_time;
 
   _gdk_win32_windowing_init ();
 }

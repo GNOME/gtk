@@ -2013,3 +2013,15 @@ gdk_display_setting_changed (GdkDisplay       *display,
 {
   g_signal_emit (display, signals[SETTING_CHANGED], 0, name);
 }
+
+guint32
+gdk_display_get_last_seen_time (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), GDK_CURRENT_TIME);
+
+  if (GDK_DISPLAY_GET_CLASS (display)->get_last_seen_time)
+    return GDK_DISPLAY_GET_CLASS (display)->get_last_seen_time (display);
+
+  return GDK_CURRENT_TIME;
+}
+

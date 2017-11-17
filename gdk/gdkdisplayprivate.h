@@ -219,6 +219,7 @@ struct _GdkDisplayClass
   gboolean               (*get_setting)                (GdkDisplay     *display,
                                                         const char     *name,
                                                         GValue         *value);
+  guint32                (*get_last_seen_time)         (GdkDisplay     *display);
 
   /* Signals */
   void                   (*opened)                     (GdkDisplay     *display);

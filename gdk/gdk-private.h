@@ -39,4 +39,6 @@ void            gdk_window_move_to_rect         (GdkWindow          *window,
 
 GObject *       gdk_event_get_user_data         (const GdkEvent *event);
 
+guint32         gdk_display_get_last_seen_time  (GdkDisplay *display);
+
 #endif /* __GDK__PRIVATE_H__ */
