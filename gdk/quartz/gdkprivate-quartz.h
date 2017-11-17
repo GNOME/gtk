@@ -93,9 +93,8 @@ GdkScreen  *_gdk_quartz_screen_new                      (void);
 void        _gdk_quartz_screen_update_window_sizes      (GdkScreen *screen);
 
 /* Screen methods - events */
-gboolean    _gdk_quartz_screen_get_setting              (GdkScreen   *screen,
-                                                         const gchar *name,
-                                                         GValue      *value);
+gboolean    _gdk_quartz_get_setting                 (const gchar *name,
+                                                     GValue      *value);
 
 
 /* Window */

@@ -29,7 +29,6 @@
 
 #include <gdk/gdkdisplayprivate.h>
 
-#include "gdkscreen.h"
 #include "gdkkeysyms.h"
 #include "gdkquartz.h"
 #include "gdkquartzdisplay.h"
@@ -1743,9 +1742,8 @@ _gdk_quartz_display_queue_events (GdkDisplay *display)
 }
 
 gboolean
-_gdk_quartz_screen_get_setting (GdkScreen   *screen,
-                                const gchar *name,
-                                GValue      *value)
+_gdk_quartz_get_setting (const gchar *name,
+                         GValue      *value)
 {
   if (strcmp (name, "gtk-double-click-time") == 0)
     {

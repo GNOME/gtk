@@ -208,7 +208,7 @@ gdk_quartz_display_get_setting (GdkDisplay  *display,
                                 const gchar *name,
                                 GValue      *value)
 {
-  return _gdk_quartz_screen_get_setting (_gdk_screen, name, value);
+  return _gdk_quartz_get_setting (name, value);
 }
 
 
