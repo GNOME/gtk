@@ -986,7 +986,6 @@ gtk_main (void)
       gdk_threads_leave ();
       g_main_loop_run (loop);
       gdk_threads_enter ();
-      gdk_flush ();
     }
 
   main_loops = g_slist_remove (main_loops, loop);
