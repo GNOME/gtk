@@ -1472,8 +1472,6 @@ gdk_wayland_window_create_xdg_toplevel (GdkWindow *window)
   impl->initial_fullscreen_output = NULL;
 
   app_id = g_get_prgname ();
-  if (app_id == NULL)
-    app_id = gdk_get_program_class ();
 
   zxdg_toplevel_v6_set_app_id (impl->display_server.xdg_toplevel, app_id);
 
