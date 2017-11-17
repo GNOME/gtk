@@ -55,9 +55,6 @@ G_GNUC_WARN_UNUSED_RESULT gint gdk_error_trap_pop         (void);
 GDK_AVAILABLE_IN_ALL
 void                           gdk_error_trap_pop_ignored (void);
 
-GDK_AVAILABLE_IN_ALL
-void gdk_disable_multidevice (void);
-
 G_END_DECLS
 
 #endif /* __GDK_MAIN_H__ */
