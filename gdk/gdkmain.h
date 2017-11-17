@@ -35,11 +35,6 @@
 G_BEGIN_DECLS
 
 
-/* Initialization, exit and events
- */
-
-#define GDK_PRIORITY_EVENTS (G_PRIORITY_DEFAULT)
-
 /* Push and pop error handlers for X errors
  */
 GDK_AVAILABLE_IN_ALL
