@@ -34,36 +34,8 @@
 
 G_BEGIN_DECLS
 
-/**
- * GtkTargetList:
- *
- * A #GtkTargetList-struct is a reference counted list
- * of #GtkTargetPair and should be treated as
- * opaque.
- */
-typedef struct _GtkTargetList  GtkTargetList;
-
 #define GTK_TYPE_SELECTION_DATA (gtk_selection_data_get_type ())
-#define GTK_TYPE_TARGET_LIST    (gtk_target_list_get_type ())
 
-GDK_AVAILABLE_IN_ALL
-GType          gtk_target_list_get_type  (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
-GtkTargetList *gtk_target_list_new       (const char          **targets,
-                                          guint                 ntargets);
-GDK_AVAILABLE_IN_ALL
-GtkTargetList *gtk_target_list_ref       (GtkTargetList  *list);
-GDK_AVAILABLE_IN_ALL
-void           gtk_target_list_unref     (GtkTargetList  *list);
-GDK_AVAILABLE_IN_3_94
-void           gtk_target_list_merge     (GtkTargetList         *target,
-                                          const GtkTargetList   *source);
-GDK_AVAILABLE_IN_3_94
-GdkAtom        gtk_target_list_intersects(const GtkTargetList   *first,
-                                          const GtkTargetList   *second);
-GDK_AVAILABLE_IN_ALL
-void           gtk_target_list_add       (GtkTargetList  *list,
-                                          const char     *target);
 GDK_AVAILABLE_IN_ALL
 void           gtk_target_list_add_text_targets      (GtkTargetList  *list);
 GDK_AVAILABLE_IN_ALL
@@ -75,16 +47,6 @@ void           gtk_target_list_add_image_targets     (GtkTargetList  *list,
                                                       gboolean        writable);
 GDK_AVAILABLE_IN_ALL
 void           gtk_target_list_add_uri_targets       (GtkTargetList  *list);
-GDK_AVAILABLE_IN_ALL
-void           gtk_target_list_add_table (GtkTargetList        *list,
-                                          const char          **targets,
-                                          guint                 ntargets);
-GDK_AVAILABLE_IN_ALL
-void           gtk_target_list_remove    (GtkTargetList  *list,
-                                          const char     *target);
-GDK_AVAILABLE_IN_ALL
-gboolean       gtk_target_list_find      (GtkTargetList  *list,
-                                          const char     *target);
 
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_selection_owner_set             (GtkWidget  *widget,
