@@ -21,7 +21,6 @@
 
 #include "gdk.h"
 #include "gdkprivate-win32.h"
-#include "gdkscreenprivate.h"
 #include "gdkwin32screen.h"
 #include "gdkdisplayprivate.h"
 #include "gdkdisplay-win32.h"
@@ -31,7 +30,7 @@
 
 struct _GdkWin32Screen
 {
-  GdkScreen parent_instance;
+  GObject parent_instance;
 
   int width, height;
   int window_scale;
@@ -39,10 +38,10 @@ struct _GdkWin32Screen
 
 struct _GdkWin32ScreenClass
 {
-  GdkScreenClass parent_class;
+  GObjectClass parent_class;
 };
 
-G_DEFINE_TYPE (GdkWin32Screen, gdk_win32_screen, GDK_TYPE_SCREEN)
+G_DEFINE_TYPE (GdkWin32Screen, gdk_win32_screen, G_TYPE_OBJECT)
 
 static void
 init_root_window_size (GdkWin32Screen *screen)
@@ -74,10 +73,7 @@ init_root_window_size (GdkWin32Screen *screen)
 static void
 init_root_window (GdkWin32Screen *screen_win32)
 {
-  GdkScreen *screen;
   GdkWin32Display *win32_display;
-
-  screen = GDK_SCREEN (screen_win32);
 
   init_root_window_size (screen_win32);
 
@@ -95,8 +91,6 @@ init_root_window (GdkWin32Screen *screen_win32)
 static void
 gdk_win32_screen_init (GdkWin32Screen *win32_screen)
 {
-  GdkScreen *screen = GDK_SCREEN (win32_screen);
-
   _gdk_win32_display_init_monitors (GDK_WIN32_DISPLAY (_gdk_display));
   init_root_window (win32_screen);
 }
@@ -105,7 +99,6 @@ void
 _gdk_win32_screen_on_displaychange_event (GdkWin32Screen *screen)
 {
   _gdk_win32_display_init_monitors (GDK_WIN32_DISPLAY (_gdk_display));
-
   init_root_window_size (screen);
 }
 
