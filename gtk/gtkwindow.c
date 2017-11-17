@@ -2654,15 +2654,13 @@ gtk_window_set_startup_id (GtkWindow   *window,
        */
       if (startup_id_is_fake (priv->startup_id))
 	gtk_window_present_with_time (window, timestamp);
-      else 
+      else
         {
-          gdk_window_set_startup_id (gdk_window,
-                                     priv->startup_id);
-          
+          gdk_window_set_startup_id (gdk_window, priv->startup_id);
+
           /* If window is mapped, terminate the startup-notification too */
-          if (_gtk_widget_get_mapped (widget) &&
-              !disable_startup_notification)
-            gdk_notify_startup_complete_with_id (priv->startup_id);
+          if (_gtk_widget_get_mapped (widget) && !disable_startup_notification)
+            gdk_display_notify_startup_complete (gtk_widget_get_display (widget), priv->startup_id);
         }
     }
 
@@ -6182,15 +6180,13 @@ gtk_window_map (GtkWidget *widget)
         {
           /* Make sure we have a "real" id */
           if (!startup_id_is_fake (priv->startup_id))
-            gdk_notify_startup_complete_with_id (priv->startup_id);
+            gdk_display_notify_startup_complete (gtk_widget_get_display (widget), priv->startup_id);
 
           g_free (priv->startup_id);
           priv->startup_id = NULL;
         }
-      else
-        {
-          gdk_notify_startup_complete ();
-        }
+       else
+         gdk_display_notify_startup_complete (gtk_widget_get_display (widget), NULL);
     }
 
   /* if mnemonics visible is not already set
