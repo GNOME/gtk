@@ -875,8 +875,7 @@ _gdk_quartz_window_update_position (GdkWindow *window)
 }
 
 void
-_gdk_quartz_window_init_windowing (GdkDisplay *display,
-                                   GdkScreen  *screen)
+_gdk_quartz_window_init_windowing (GdkDisplay *display)
 {
   GdkWindowImplQuartz *impl;
 

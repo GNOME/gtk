@@ -35,7 +35,7 @@
 #include "config.h"
 
 extern GdkDisplay *_gdk_display;
-extern GdkScreen *_gdk_screen;
+extern GdkQuartzScreen *_gdk_screen;
 extern GdkWindow *_gdk_root;
 
 extern GdkDragContext *_gdk_quartz_drag_source_context;
@@ -43,8 +43,7 @@ extern GdkDragContext *_gdk_quartz_drag_source_context;
 #define GDK_WINDOW_IS_QUARTZ(win)        (GDK_IS_WINDOW_IMPL_QUARTZ (((GdkWindow *)win)->impl))
 
 /* Initialization */
-void _gdk_quartz_window_init_windowing      (GdkDisplay *display,
-                                             GdkScreen  *screen);
+void _gdk_quartz_window_init_windowing      (GdkDisplay *display);
 void _gdk_quartz_events_init                (void);
 void _gdk_quartz_event_loop_init            (void);
 
@@ -89,8 +88,8 @@ GdkDisplay *    _gdk_quartz_display_open (const gchar *name);
 
 
 /* Screen */
-GdkScreen  *_gdk_quartz_screen_new                      (void);
-void        _gdk_quartz_screen_update_window_sizes      (GdkScreen *screen);
+GdkQuartzScreen  *_gdk_quartz_screen_new                      (void);
+void        _gdk_quartz_screen_update_window_sizes      (GdkQuartzScreen *screen);
 
 /* Screen methods - events */
 gboolean    _gdk_quartz_get_setting                 (const gchar *name,

@@ -62,7 +62,7 @@ _gdk_quartz_display_open (const gchar *display_name)
 
   _gdk_screen = g_object_new (gdk_quartz_screen_get_type (), NULL);
 
-  _gdk_quartz_window_init_windowing (_gdk_display, _gdk_screen);
+  _gdk_quartz_window_init_windowing (_gdk_display);
 
   _gdk_quartz_events_init ();
 

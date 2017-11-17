@@ -179,7 +179,6 @@ gdk_quartz_device_core_set_window_cursor (GdkDevice *device,
 
 static void
 gdk_quartz_device_core_warp (GdkDevice *device,
-                             GdkScreen *screen,
                              gdouble    x,
                              gdouble    y)
 {
@@ -324,25 +323,18 @@ gdk_quartz_device_core_window_at_position (GdkDevice       *device,
                                            GdkModifierType *mask,
                                            gboolean         get_toplevel)
 {
-  GdkDisplay *display;
-  GdkScreen *screen;
   GdkWindow *found_window;
   NSPoint point;
   gint x_tmp, y_tmp;
-
-  display = _gdk_display;
-  screen = _gdk_screen;
 
   /* Get mouse coordinates, find window under the mouse pointer */
   point = [NSEvent mouseLocation];
   _gdk_quartz_window_nspoint_to_gdk_xy (point, &x_tmp, &y_tmp);
 
-  found_window = _gdk_quartz_window_find_child (_gdk_root, x_tmp, y_tmp,
-                                                get_toplevel);
+  found_window = _gdk_quartz_window_find_child (_gdk_root, x_tmp, y_tmp, get_toplevel);
 
   if (found_window)
-    translate_coords_to_child_coords (_gdk_root, found_window,
-                                      &x_tmp, &y_tmp);
+    translate_coords_to_child_coords (_gdk_root, found_window, &x_tmp, &y_tmp);
 
   if (win_x)
     *win_x = found_window ? x_tmp : -1;

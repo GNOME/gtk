@@ -19,9 +19,10 @@
 #include "config.h"
 #include "gdktypes.h"
 #include "gdkquartz.h"
+#include "gdkscreen-quartz.h"
 
 GdkDisplay *_gdk_display = NULL;
-GdkScreen *_gdk_screen = NULL;
+GdkQuartzScreen *_gdk_screen = NULL;
 GdkWindow *_gdk_root = NULL;
 
 GdkOSXVersion
