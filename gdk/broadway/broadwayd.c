@@ -413,7 +413,6 @@ main (int argc, char *argv[])
   GError *error = NULL;
   GOptionContext *context;
   GMainLoop *loop;
-  GInetAddress *inet;
   GSocketAddress *address;
   GSocketService *listener;
   char *http_address = NULL;
@@ -456,26 +455,9 @@ main (int argc, char *argv[])
     }
 
   if (display == NULL)
-    {
-#ifdef G_OS_UNIX
-      if (g_unix_socket_address_abstract_names_supported ())
-        display = ":0";
-      else
-#endif
-        display = ":tcp";
-    }
+    display = ":0";
 
-  if (g_str_has_prefix (display, ":tcp"))
-    {
-      port = strtol (display + strlen (":tcp"), NULL, 10);
-
-      inet = g_inet_address_new_from_string ("127.0.0.1");
-      g_print ("Listening on 127.0.0.1:%d\n", port + 9090);
-      address = g_inet_socket_address_new (inet, port + 9090);
-      g_object_unref (inet);
-    }
-#ifdef G_OS_UNIX
-  else if (display[0] == ':' && g_ascii_isdigit(display[1]))
+  if (display[0] == ':' && g_ascii_isdigit(display[1]))
     {
       char *path, *basename;
 
@@ -484,12 +466,13 @@ main (int argc, char *argv[])
       path = g_build_filename (g_get_user_runtime_dir (), basename, NULL);
       g_free (basename);
 
+      unlink (path);
+
       g_print ("Listening on %s\n", path);
       address = g_unix_socket_address_new_with_type (path, -1,
-						     G_UNIX_SOCKET_ADDRESS_ABSTRACT);
+                                                     G_UNIX_SOCKET_ADDRESS_PATH);
       g_free (path);
     }
-#endif
   else
     {
       g_printerr ("Failed to parse display %s\n", display);

@@ -97,7 +97,6 @@ _gdk_broadway_server_new (const char *display, GError **error)
   GdkBroadwayServer *server;
   GSocketClient *client;
   GSocketConnection *connection;
-  GInetAddress *inet;
   GSocketAddress *address;
   GPollableInputStream *pollable;
   GInputStream *in;
@@ -106,25 +105,9 @@ _gdk_broadway_server_new (const char *display, GError **error)
   int port;
 
   if (display == NULL)
-    {
-#ifdef G_OS_UNIX
-      if (g_unix_socket_address_abstract_names_supported ())
-        display = ":0";
-      else
-#endif
-        display = ":tcp";
-    }
+    display = ":0";
 
-  if (g_str_has_prefix (display, ":tcp"))
-    {
-      port = 9090 + strtol (display + strlen (":tcp"), NULL, 10);
-
-      inet = g_inet_address_new_from_string ("127.0.0.1");
-      address = g_inet_socket_address_new (inet, port);
-      g_object_unref (inet);
-    }
-#ifdef G_OS_UNIX
-  else if (display[0] == ':' && g_ascii_isdigit(display[1]))
+  if (display[0] == ':' && g_ascii_isdigit(display[1]))
     {
       char *path, *basename;
 
@@ -134,14 +117,13 @@ _gdk_broadway_server_new (const char *display, GError **error)
       g_free (basename);
 
       address = g_unix_socket_address_new_with_type (path, -1,
-						     G_UNIX_SOCKET_ADDRESS_ABSTRACT);
+                                                     G_UNIX_SOCKET_ADDRESS_PATH);
       g_free (path);
     }
-#endif
   else
     {
       g_set_error (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
-		   _("Broadway display type not supported: %s"), display);
+                   _("Broadway display type not supported: %s"), display);
       return NULL;
     }
 
