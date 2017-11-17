@@ -12,9 +12,8 @@
 
 #include <glib.h>
 #include <glib/gprintf.h>
-#ifdef G_OS_UNIX
 #include <gio/gunixsocketaddress.h>
-#endif
+#include <gio/gunixfdmessage.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
@@ -160,30 +159,73 @@ _gdk_broadway_server_get_last_seen_time (GdkBroadwayServer *server)
 
 static guint32
 gdk_broadway_server_send_message_with_size (GdkBroadwayServer *server, BroadwayRequestBase *base,
-					    gsize size, guint32 type)
+                                            gsize size, guint32 type, int fd)
 {
   GOutputStream *out;
   gsize written;
+  guchar *buf;
 
   base->size = size;
   base->type = type;
   base->serial = server->next_serial++;
 
-  out = g_io_stream_get_output_stream (G_IO_STREAM (server->connection));
+  buf = (guchar *)base;
 
-  if (!g_output_stream_write_all (out, base, size, &written, NULL, NULL))
+  if (fd != -1)
     {
-      g_printerr ("Unable to write to server\n");
-      exit (1);
+      GUnixFDList *fd_list = g_unix_fd_list_new_from_array (&fd, 1);
+      GSocketControlMessage *control_message = g_unix_fd_message_new_with_fd_list (fd_list);
+      GSocket *socket = g_socket_connection_get_socket (server->connection);
+      GOutputVector vector;
+      gssize bytes_written;
+
+      vector.buffer = buf;
+      vector.size = size;
+
+      bytes_written = g_socket_send_message (socket,
+                                             NULL, /* address */
+                                             &vector,
+                                             1,
+                                             &control_message, 1,
+                                             G_SOCKET_MSG_NONE,
+                                             NULL,
+                                             NULL);
+
+      if (bytes_written <= 0)
+        {
+          g_printerr ("Unable to write to server\n");
+          exit (1);
+        }
+
+      g_print ("socket send message wrote %d of %d\n", (int)bytes_written, (int)size);
+      buf += bytes_written;
+      size -= bytes_written;
+
+      g_object_unref (control_message);
+      g_object_unref (fd_list);
     }
 
-  g_assert (written == size);
+  if (size > 0)
+    {
+      out = g_io_stream_get_output_stream (G_IO_STREAM (server->connection));
+      if (!g_output_stream_write_all (out, buf, size, &written, NULL, NULL))
+        {
+          g_printerr ("Unable to write to server\n");
+          exit (1);
+        }
+
+      g_assert (written == size);
+    }
+
 
   return base->serial;
 }
 
 #define gdk_broadway_server_send_message(_server, _msg, _type) \
-  gdk_broadway_server_send_message_with_size(_server, (BroadwayRequestBase *)&_msg, sizeof (_msg), _type)
+  gdk_broadway_server_send_message_with_size(_server, (BroadwayRequestBase *)&_msg, sizeof (_msg), _type, -1)
+
+#define gdk_broadway_server_send_fd_message(_server, _msg, _type, _fd)      \
+  gdk_broadway_server_send_message_with_size(_server, (BroadwayRequestBase *)&_msg, sizeof (_msg), _type, _fd)
 
 static void
 parse_all_input (GdkBroadwayServer *server)

@@ -13,6 +13,7 @@
 #include <gio/gio.h>
 #ifdef G_OS_UNIX
 #include <gio/gunixsocketaddress.h>
+#include <gio/gunixfdmessage.h>
 #endif
 
 #include "broadway-server.h"
@@ -54,7 +55,14 @@ typedef struct  {
   GSList *serial_mappings;
   GList *windows;
   guint disconnect_idle;
+  GList *fds;
 } BroadwayClient;
+
+static void
+close_fd (void *data)
+{
+  close (GPOINTER_TO_INT (data));
+}
 
 static void
 client_free (BroadwayClient *client)
@@ -66,6 +74,7 @@ client_free (BroadwayClient *client)
   g_object_unref (client->in);
   g_string_free (client->buffer, TRUE);
   g_slist_free_full (client->serial_mappings, g_free);
+  g_list_free_full (client->fds, close_fd);
   g_free (client);
 }
 
@@ -341,6 +350,9 @@ client_input_cb (GPollableInputStream *stream,
   gsize old_len;
   guchar *buffer;
   gsize buffer_len;
+  GInputVector input_vector;
+  GSocketControlMessage **messages = NULL;
+  int i, num_messages;
 
   old_len = client->buffer->len;
 
@@ -348,16 +360,36 @@ client_input_cb (GPollableInputStream *stream,
   g_string_set_size (client->buffer, old_len + INPUT_BUFFER_SIZE);
   g_string_set_size (client->buffer, old_len);
 
-  res  = g_socket_receive_with_blocking (socket, client->buffer->str + old_len,
-                                         client->buffer->allocated_len - client->buffer->len -1,
-                                         FALSE, NULL, NULL);
+  input_vector.buffer = client->buffer->str + old_len;
+  input_vector.size = client->buffer->allocated_len - client->buffer->len -1;
 
+  res = g_socket_receive_message (socket, NULL,
+                                  &input_vector, 1,
+                                  &messages, &num_messages,
+                                  NULL, NULL, NULL);
   if (res <= 0)
     {
       client->source = NULL;
       client_disconnected (client);
       return G_SOURCE_REMOVE;
     }
+
+  for (i = 0; i < num_messages; i++)
+    {
+      if (G_IS_UNIX_FD_MESSAGE (messages[i]))
+        {
+          int j, n_fds;
+          int *fds = g_unix_fd_message_steal_fds (G_UNIX_FD_MESSAGE (messages[i]), &n_fds);
+          for (j = 0; j < n_fds; j++)
+            {
+              int fd = fds[i];
+              client->fds = g_list_append (client->fds, GINT_TO_POINTER (fd));
+            }
+          g_free (fds);
+        }
+      g_object_unref (messages[i]);
+    }
+  g_free (messages);
 
   g_string_set_size (client->buffer, old_len + res);
 
