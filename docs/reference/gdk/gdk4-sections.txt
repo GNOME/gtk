@@ -9,11 +9,6 @@
 GdkGrabStatus
 
 <SUBSECTION>
-gdk_error_trap_push
-gdk_error_trap_pop
-gdk_error_trap_pop_ignored
-
-<SUBSECTION>
 GDK_WINDOWING_X11
 GDK_WINDOWING_WIN32
 GDK_WINDOWING_QUARTZ
