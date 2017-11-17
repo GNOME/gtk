@@ -26,7 +26,6 @@
 
 #include "gdkproperty.h"
 
-#include "gdkmain.h"
 #include "gdkprivate.h"
 #include "gdkinternals.h"
 #include "gdkdisplay-broadway.h"

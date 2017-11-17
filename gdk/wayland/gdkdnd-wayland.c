@@ -19,7 +19,6 @@
 
 #include "gdkdndprivate.h"
 
-#include "gdkmain.h"
 #include "gdkinternals.h"
 #include "gdkproperty.h"
 #include "gdkprivate-wayland.h"

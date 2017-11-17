@@ -25,7 +25,6 @@
 #include "config.h"
 
 #include "gdkversionmacros.h"
-#include "gdkmain.h"
 
 #include "gdkinternals.h"
 #include "gdkintl.h"

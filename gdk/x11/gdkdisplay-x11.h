@@ -26,7 +26,6 @@
 #include "gdkkeys.h"
 #include "gdkwindow.h"
 #include "gdkinternals.h"
-#include "gdkmain.h"
 
 #include <X11/X.h>
 #include <X11/Xlib.h>

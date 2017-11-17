@@ -28,7 +28,6 @@
 #include "gdkkeys.h"
 #include "gdkwindow.h"
 #include "gdkinternals.h"
-#include "gdkmain.h"
 #include "gdkbroadway-server.h"
 #include "gdkmonitorprivate.h"
 

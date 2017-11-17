@@ -48,7 +48,6 @@
 #include <gdk/gdkglcontext.h>
 #include <gdk/gdkkeys.h>
 #include <gdk/gdkkeysyms.h>
-#include <gdk/gdkmain.h>
 #include <gdk/gdkmonitor.h>
 #include <gdk/gdkpango.h>
 #include <gdk/gdkpixbuf.h>

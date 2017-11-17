@@ -26,7 +26,6 @@
 #include "gdkglcontextprivate.h"
 #include "gdkwindow.h"
 #include "gdkinternals.h"
-#include "gdkmain.h"
 
 G_BEGIN_DECLS
 

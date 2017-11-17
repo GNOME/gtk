@@ -28,7 +28,6 @@
 #include "gdkdndprivate.h"
 #include "gdkdeviceprivate.h"
 
-#include "gdkmain.h"
 #include "gdkinternals.h"
 #include "gdkasync.h"
 #include "gdkproperty.h"

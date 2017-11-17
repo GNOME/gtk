@@ -32,7 +32,6 @@
 #include "gdkx11visual.h"
 #include "gdkwindow.h"
 #include "gdkinternals.h"
-#include "gdkmain.h"
 
 G_BEGIN_DECLS
 
