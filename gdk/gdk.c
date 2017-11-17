@@ -200,13 +200,6 @@ gdk_pre_parse (void)
 
   gdk_ensure_resources ();
 
-  /* We set the fallback program class here, rather than lazily in
-   * gdk_get_program_class, since we don't want -name to override it.
-   */
-  gdk_progclass = g_strdup (g_get_prgname ());
-  if (gdk_progclass && gdk_progclass[0])
-    gdk_progclass[0] = g_ascii_toupper (gdk_progclass[0]);
-  
 #ifdef G_ENABLE_DEBUG
   {
     gchar *debug_string = getenv("GDK_DEBUG");
@@ -709,45 +702,4 @@ gdk_threads_add_timeout_seconds (guint       interval,
 {
   return gdk_threads_add_timeout_seconds_full (G_PRIORITY_DEFAULT,
                                                interval, function, data, NULL);
-}
-
-/**
- * gdk_get_program_class:
- *
- * Gets the program class. Unless the program class has explicitly
- * been set with gdk_set_program_class() or with the `--class`
- * commandline option, the default value is the program name (determined
- * with g_get_prgname()) with the first character converted to uppercase.
- *
- * Returns: the program class.
- */
-const char *
-gdk_get_program_class (void)
-{
-  if (gdk_progclass)
-    return gdk_progclass;
-
-  return "GTK+ Application";
-}
-
-/**
- * gdk_set_program_class:
- * @program_class: a string.
- *
- * Sets the program class. The X11 backend uses the program class to set
- * the class name part of the `WM_CLASS` property on
- * toplevel windows; see the ICCCM.
- *
- * The program class can still be overridden with the --class command
- * line option.
- */
-void
-gdk_set_program_class (const char *program_class)
-{
-  if (gdk_progclass_overridden)
-    return;
-
-  g_free (gdk_progclass);
-
-  gdk_progclass = g_strdup (program_class);
 }

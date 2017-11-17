@@ -40,11 +40,6 @@ G_BEGIN_DECLS
 
 #define GDK_PRIORITY_EVENTS (G_PRIORITY_DEFAULT)
 
-GDK_AVAILABLE_IN_ALL
-const gchar *         gdk_get_program_class               (void);
-GDK_AVAILABLE_IN_ALL
-void                  gdk_set_program_class               (const gchar    *program_class);
-
 /* Push and pop error handlers for X errors
  */
 GDK_AVAILABLE_IN_ALL
