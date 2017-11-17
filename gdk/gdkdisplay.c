@@ -2038,3 +2038,12 @@ gdk_display_set_double_click_distance (GdkDisplay *display,
 {
   display->double_click_distance = distance;
 }
+
+void
+gdk_display_set_cursor_theme (GdkDisplay *display,
+                              const char *name,
+                              int         size)
+{
+  if (GDK_DISPLAY_GET_CLASS (display)->set_cursor_theme)
+    GDK_DISPLAY_GET_CLASS (display)->set_cursor_theme (display, name, size);
+}

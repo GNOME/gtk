@@ -1273,6 +1273,7 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
 
   display_class->get_setting = gdk_win32_display_get_setting;
   display_class->get_last_seen_time = gdk_win32_display_get_last_seen_time;
+  display_class->set_cursor_theme = gdk_win32_display_set_cursor_theme;
 
   _gdk_win32_windowing_init ();
 }

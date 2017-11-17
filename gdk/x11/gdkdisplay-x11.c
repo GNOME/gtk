@@ -3222,6 +3222,7 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->get_primary_monitor = gdk_x11_display_get_primary_monitor;
   display_class->get_setting = gdk_x11_display_get_setting;
   display_class->get_last_seen_time = gdk_x11_display_get_last_seen_time;
+  display_class->set_cursor_theme = gdk_x11_display_set_cursor_theme;
 
   _gdk_x11_windowing_init ();
 }

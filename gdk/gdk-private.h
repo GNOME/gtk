@@ -45,5 +45,8 @@ void gdk_display_set_double_click_time     (GdkDisplay   *display,
                                             guint         msec);
 void gdk_display_set_double_click_distance (GdkDisplay   *display,
                                             guint         distance);
+void gdk_display_set_cursor_theme          (GdkDisplay   *display,
+                                            const char   *theme,
+                                            int           size);
 
 #endif /* __GDK__PRIVATE_H__ */

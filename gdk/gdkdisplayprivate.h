@@ -220,6 +220,9 @@ struct _GdkDisplayClass
                                                         const char     *name,
                                                         GValue         *value);
   guint32                (*get_last_seen_time)         (GdkDisplay     *display);
+  void                   (*set_cursor_theme)           (GdkDisplay     *display,
+                                                        const char     *name,
+                                                        int             size);
 
   /* Signals */
   void                   (*opened)                     (GdkDisplay     *display);

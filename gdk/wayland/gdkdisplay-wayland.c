@@ -1041,6 +1041,7 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
   display_class->get_monitor = gdk_wayland_display_get_monitor;
   display_class->get_monitor_at_window = gdk_wayland_display_get_monitor_at_window;
   display_class->get_setting = gdk_wayland_display_get_setting;
+  display_class->set_cursor_theme = gdk_wayland_display_set_cursor_theme;
 }
 
 static void
