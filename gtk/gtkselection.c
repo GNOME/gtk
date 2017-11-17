@@ -2361,8 +2361,9 @@ _gtk_selection_request (GtkWidget *widget,
       gint     length;
       
       mult_atoms = NULL;
-      
-      gdk_error_trap_push ();
+
+      if (GDK_IS_X11_DISPLAY (display))
+        gdk_x11_display_error_trap_push (display);
       if (!gdk_property_get (info->requestor, property, NULL, /* AnyPropertyType */
 			     0, selection_max_size, FALSE,
 			     &type, &format, &length, &mult_atoms))
@@ -2375,10 +2376,12 @@ _gtk_selection_request (GtkWidget *widget,
 						 time);
 	  g_free (mult_atoms);
 	  g_slice_free (GtkIncrInfo, info);
-          gdk_error_trap_pop_ignored ();
+          if (GDK_IS_X11_DISPLAY (display))
+            gdk_x11_display_error_trap_pop_ignored (display);
 	  return TRUE;
 	}
-      gdk_error_trap_pop_ignored ();
+      if (GDK_IS_X11_DISPLAY (display))
+        gdk_x11_display_error_trap_pop_ignored (display);
 
       /* This is annoying; the ICCCM doesn't specify the property type
        * used for the property contents, so the autoconversion for
@@ -2468,27 +2471,31 @@ _gtk_selection_request (GtkWidget *widget,
 	  info->conversions[i].data = data;
 	  info->num_incrs++;
 	  
-	  gdk_error_trap_push ();
+          if (GDK_IS_X11_DISPLAY (display))
+            gdk_x11_display_error_trap_push (display);
 	  gdk_property_change (info->requestor, 
 			       info->conversions[i].property,
 			       gtk_selection_atoms[INCR],
 			       32,
 			       GDK_PROP_MODE_REPLACE,
 			       (guchar *)&items, 1);
-	  gdk_error_trap_pop_ignored ();
+          if (GDK_IS_X11_DISPLAY (display))
+            gdk_x11_display_error_trap_pop_ignored (display);
 	}
       else
 	{
 	  info->conversions[i].offset = -1;
 	  
-	  gdk_error_trap_push ();
+          if (GDK_IS_X11_DISPLAY (display))
+            gdk_x11_display_error_trap_push (display);
 	  gdk_property_change (info->requestor, 
 			       info->conversions[i].property,
 			       data.type,
 			       data.format,
 			       GDK_PROP_MODE_REPLACE,
 			       data.data, items);
-	  gdk_error_trap_pop_ignored ();
+          if (GDK_IS_X11_DISPLAY (display))
+            gdk_x11_display_error_trap_pop_ignored (display);
 	  
 	  g_free (data.data);
 	}
@@ -2508,11 +2515,13 @@ _gtk_selection_request (GtkWidget *widget,
       g_message ("Starting INCR...");
 #endif
       
-      gdk_error_trap_push ();
+      if (GDK_IS_X11_DISPLAY (display))
+        gdk_x11_display_error_trap_push (display);
       gdk_window_set_events (info->requestor,
 			     gdk_window_get_events (info->requestor) |
 			     GDK_PROPERTY_CHANGE_MASK);
-      gdk_error_trap_pop_ignored ();
+      if (GDK_IS_X11_DISPLAY (display))
+        gdk_x11_display_error_trap_pop_ignored (display);
       current_incrs = g_list_append (current_incrs, info);
       id = gdk_threads_add_timeout (1000, (GSourceFunc) gtk_selection_incr_timeout, info);
       g_source_set_name_by_id (id, "[gtk+] gtk_selection_incr_timeout");
@@ -2529,12 +2538,14 @@ _gtk_selection_request (GtkWidget *widget,
 	  mult_atoms[2*i+1] = info->conversions[i].property;
 	}
 
-      gdk_error_trap_push ();
+      if (GDK_IS_X11_DISPLAY (display))
+        gdk_x11_display_error_trap_push (display);
       gdk_property_change (info->requestor, property,
 			   gdk_atom_intern_static_string ("ATOM_PAIR"), 32, 
 			   GDK_PROP_MODE_REPLACE,
 			   (guchar *)mult_atoms, 2*info->num_conversions);
-      gdk_error_trap_pop_ignored ();
+      if (GDK_IS_X11_DISPLAY (display))
+        gdk_x11_display_error_trap_pop_ignored (display);
       g_free (mult_atoms);
     }
 
@@ -2597,6 +2608,7 @@ _gtk_selection_incr_event (GdkWindow	   *window,
   GdkPropertyState state;
   GdkAtom atom;
   int i;
+  GdkDisplay *display;
   
   gdk_event_get_property ((GdkEvent *)event, &atom, &state);
   if (state != GDK_PROPERTY_DELETE)
@@ -2606,7 +2618,8 @@ _gtk_selection_incr_event (GdkWindow	   *window,
   g_message ("PropertyDelete, property %ld", atom);
 #endif
 
-  selection_max_size = GTK_SELECTION_MAX_SIZE (gdk_window_get_display (window));  
+  display = gdk_window_get_display (window);
+  selection_max_size = GTK_SELECTION_MAX_SIZE (display);
 
   /* Now find the appropriate ongoing INCR */
   tmp_list = current_incrs;
@@ -2660,14 +2673,16 @@ _gtk_selection_incr_event (GdkWindow	   *window,
 #endif
 
 	  bytes_per_item = gtk_selection_bytes_per_item (info->conversions[i].data.format);
-	  gdk_error_trap_push ();
+          if (GDK_IS_X11_DISPLAY (display))
+            gdk_x11_display_error_trap_push (display);
 	  gdk_property_change (info->requestor, atom,
 			       info->conversions[i].data.type,
 			       info->conversions[i].data.format,
 			       GDK_PROP_MODE_REPLACE,
 			       buffer,
 			       num_bytes / bytes_per_item);
-	  gdk_error_trap_pop_ignored ();
+          if (GDK_IS_X11_DISPLAY (display))
+            gdk_x11_display_error_trap_pop_ignored (display);
 	  
 	  if (info->conversions[i].offset == -2)
 	    {
