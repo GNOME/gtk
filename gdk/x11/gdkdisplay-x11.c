@@ -2033,8 +2033,6 @@ gdk_x11_display_dispose (GObject *object)
 {
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (object);
 
-  _gdk_screen_close (display_x11->screen);
-
   if (display_x11->event_source)
     {
       g_source_destroy (display_x11->event_source);

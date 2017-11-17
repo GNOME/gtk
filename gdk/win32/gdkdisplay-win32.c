@@ -801,8 +801,6 @@ gdk_win32_display_dispose (GObject *object)
 {
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (object);
 
-  _gdk_screen_close (display_win32->screen);
-
   if (display_win32->hwnd != NULL)
     {
       DestroyWindow (display_win32->hwnd);
