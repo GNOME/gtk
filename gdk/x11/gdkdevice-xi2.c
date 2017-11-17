@@ -304,15 +304,15 @@ gdk_x11_device_xi2_warp (GdkDevice *device,
 {
   GdkX11DeviceXI2 *device_xi2 = GDK_X11_DEVICE_XI2 (device);
   GdkDisplay *display = gdk_device_get_display (device);
-  GdkScreen *screen = GDK_X11_DISPLAY (display)->screen;
+  GdkX11Screen *screen = GDK_X11_DISPLAY (display)->screen;
   Window dest = GDK_DISPLAY_XROOTWIN (display);
 
   XIWarpPointer (GDK_SCREEN_XDISPLAY (screen),
                  device_xi2->device_id,
                  None, dest,
                  0, 0, 0, 0,
-                 round (x * GDK_X11_SCREEN (screen)->window_scale),
-                 round (y * GDK_X11_SCREEN (screen)->window_scale));
+                 round (x * screen->window_scale),
+                 round (y * screen->window_scale));
 }
 
 static void
@@ -327,7 +327,7 @@ gdk_x11_device_xi2_query_state (GdkDevice        *device,
 {
   GdkX11DeviceXI2 *device_xi2 = GDK_X11_DEVICE_XI2 (device);
   GdkDisplay *display;
-  GdkScreen *default_screen;
+  GdkX11Screen *default_screen;
   Window xroot_window, xchild_window, xwindow;
   gdouble xroot_x, xroot_y, xwin_x, xwin_y;
   XIButtonState button_state;
@@ -340,7 +340,7 @@ gdk_x11_device_xi2_query_state (GdkDevice        *device,
   if (window == NULL)
     {
       xwindow = GDK_DISPLAY_XROOTWIN (display);
-      scale = GDK_X11_SCREEN (default_screen)->window_scale;
+      scale = default_screen->window_scale;
     }
   else
     {
@@ -499,7 +499,7 @@ gdk_x11_device_xi2_window_at_position (GdkDevice       *device,
   GdkWindowImplX11 *impl;
   GdkX11DeviceXI2 *device_xi2 = GDK_X11_DEVICE_XI2 (device);
   GdkDisplay *display;
-  GdkScreen *screen;
+  GdkX11Screen *screen;
   Display *xdisplay;
   GdkWindow *window;
   Window xwindow, root, child, last = None;

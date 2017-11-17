@@ -30,6 +30,7 @@
 #endif
 
 #include <gdk/gdk.h>
+#include <gdk/x11/gdkx11screen.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -65,8 +66,8 @@ Visual * gdk_x11_visual_get_xvisual       (GdkX11Visual *visual);
 #define GDK_VISUAL_XVISUAL(visual)    (gdk_x11_visual_get_xvisual (visual))
 
 GDK_AVAILABLE_IN_ALL
-GdkX11Visual* gdk_x11_screen_lookup_visual (GdkScreen *screen,
-                                            VisualID   xvisualid);
+GdkX11Visual* gdk_x11_screen_lookup_visual (GdkX11Screen *screen,
+                                            VisualID      xvisualid);
 
 G_END_DECLS
 

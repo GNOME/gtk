@@ -58,7 +58,7 @@ enum
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GdkX11Screen, gdk_x11_screen, GDK_TYPE_SCREEN)
+G_DEFINE_TYPE (GdkX11Screen, gdk_x11_screen, G_TYPE_OBJECT)
 
 typedef struct _NetWmSupportedAtoms NetWmSupportedAtoms;
 
@@ -119,7 +119,7 @@ gdk_x11_screen_finalize (GObject *object)
 
 /**
  * gdk_x11_screen_get_monitor_output:
- * @screen: (type GdkX11Screen): a #GdkScreen
+ * @screen: a #GdkX11Screen
  * @monitor_num: number of the monitor, between 0 and gdk_screen_get_n_monitors (screen)
  *
  * Gets the XID of the specified output/monitor.
@@ -256,9 +256,9 @@ out:
 
 /**
  * gdk_x11_screen_get_xscreen:
- * @screen: (type GdkX11Screen): a #GdkScreen
+ * @screen: a #GdkX11Screen
  *
- * Returns the screen of a #GdkScreen.
+ * Returns the screen of a #GdkX11Screen.
  *
  * Returns: (transfer none): an Xlib Screen*
  *
@@ -272,9 +272,9 @@ gdk_x11_screen_get_xscreen (GdkX11Screen *screen)
 
 /**
  * gdk_x11_screen_get_screen_number:
- * @screen: (type GdkX11Screen): a #GdkScreen
+ * @screen: a #GdkX11Screen
  *
- * Returns the index of a #GdkScreen.
+ * Returns the index of a #GdkX11Screen.
  *
  * Returns: the position of @screen among the screens
  *     of its display
@@ -1061,7 +1061,7 @@ fetch_net_wm_check_window (GdkX11Screen *x11_screen)
 
 /**
  * gdk_x11_screen_supports_net_wm_hint:
- * @screen: (type GdkX11Screen): the relevant #GdkScreen.
+ * @screen: the relevant #GdkX11Screen.
  * @property: a property atom.
  *
  * This function is specific to the X11 backend of GDK, and indicates
@@ -1074,7 +1074,7 @@ fetch_net_wm_check_window (GdkX11Screen *x11_screen)
  * is that your application can start up before the window manager
  * does when the user logs in, and before the window manager starts
  * gdk_x11_screen_supports_net_wm_hint() will return %FALSE for every property.
- * You can monitor the window_manager_changed signal on #GdkScreen to detect
+ * You can monitor the window_manager_changed signal on #GdkX11Screen to detect
  * a window manager change.
  *
  * Returns: %TRUE if the window manager supports @property
@@ -1150,7 +1150,7 @@ gdk_x11_screen_supports_net_wm_hint (GdkX11Screen *x11_screen,
 
 /**
  * gdk_x11_screen_get_window_manager_name:
- * @screen: (type GdkX11Screen): a #GdkScreen
+ * @screen: a #GdkX11Screen
  *
  * Returns the name of the window manager for @screen.
  *
@@ -1270,7 +1270,7 @@ get_netwm_cardinal_property (GdkX11Screen *x11_screen,
 
 /**
  * gdk_x11_screen_get_number_of_desktops:
- * @screen: (type GdkX11Screen): a #GdkScreen
+ * @screen: a #GdkX11Screen
  *
  * Returns the number of workspaces for @screen when running under a
  * window manager that supports multiple workspaces, as described
@@ -1289,7 +1289,7 @@ gdk_x11_screen_get_number_of_desktops (GdkX11Screen *screen)
 
 /**
  * gdk_x11_screen_get_current_desktop:
- * @screen: (type GdkX11Screen): a #GdkScreen
+ * @screen: a #GdkX11Screen
  *
  * Returns the current workspace for @screen when running under a
  * window manager that supports multiple workspaces, as described

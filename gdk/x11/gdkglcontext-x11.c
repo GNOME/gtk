@@ -783,7 +783,7 @@ gdk_x11_gl_context_init (GdkX11GLContext *self)
 }
 
 gboolean
-gdk_x11_screen_init_gl (GdkScreen *screen)
+gdk_x11_screen_init_gl (GdkX11Screen *screen)
 {
   GdkDisplay *display = GDK_SCREEN_DISPLAY (screen);
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
@@ -805,7 +805,7 @@ gdk_x11_screen_init_gl (GdkScreen *screen)
   if (!glXQueryExtension (dpy, &error_base, &event_base))
     return FALSE;
 
-  screen_num = GDK_X11_SCREEN (screen)->screen_num;
+  screen_num = screen->screen_num;
 
   display_x11->have_glx = TRUE;
 

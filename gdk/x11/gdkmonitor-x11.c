@@ -62,7 +62,7 @@ static void
 gdk_x11_monitor_get_workarea (GdkMonitor   *monitor,
                               GdkRectangle *dest)
 {
-  GdkScreen *screen = GDK_X11_DISPLAY (monitor->display)->screen;
+  GdkX11Screen *screen = GDK_X11_DISPLAY (monitor->display)->screen;
   GdkRectangle workarea;
 
   gdk_monitor_get_geometry (monitor, dest);

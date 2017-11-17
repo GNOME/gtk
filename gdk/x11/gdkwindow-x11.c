@@ -1740,8 +1740,7 @@ static guint32
 get_netwm_cardinal_property (GdkWindow   *window,
                              const gchar *name)
 {
-  GdkScreen *screen = GDK_WINDOW_SCREEN (window);
-  GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
+  GdkX11Screen *x11_screen = GDK_WINDOW_SCREEN (window);
   GdkAtom atom;
   guint32 prop = 0;
   Atom type;
@@ -1752,7 +1751,7 @@ get_netwm_cardinal_property (GdkWindow   *window,
 
   atom = gdk_atom_intern_static_string (name);
 
-  if (!gdk_x11_screen_supports_net_wm_hint (screen, atom))
+  if (!gdk_x11_screen_supports_net_wm_hint (x11_screen, atom))
     return 0;
 
   XGetWindowProperty (x11_screen->xdisplay,

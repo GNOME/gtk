@@ -22,7 +22,6 @@
 #ifndef __GDK_X11_SCREEN__
 #define __GDK_X11_SCREEN__
 
-#include "gdkscreenprivate.h"
 #include "gdkx11screen.h"
 #include "gdkx11visual.h"
 #include <X11/X.h>
@@ -34,7 +33,7 @@ typedef struct _GdkX11Monitor GdkX11Monitor;
 
 struct _GdkX11Screen
 {
-  GdkScreen parent_instance;
+  GObject parent_instance;
 
   GdkDisplay *display;
   Display *xdisplay;
@@ -90,7 +89,7 @@ struct _GdkX11Screen
 
 struct _GdkX11ScreenClass
 {
-  GdkScreenClass parent_class;
+  GObjectClass parent_class;
 
   void (* window_manager_changed) (GdkX11Screen *x11_screen);
 };

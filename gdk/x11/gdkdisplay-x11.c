@@ -2066,7 +2066,7 @@ gdk_x11_display_finalize (GObject *object)
   /* input GdkWindow list */
   g_list_free_full (display_x11->input_windows, g_free);
 
-  /* Free all GdkScreens */
+  /* Free all GdkX11Screens */
   g_object_unref (display_x11->screen);
   g_list_free_full (display_x11->screens, g_object_unref);
 
@@ -2142,7 +2142,7 @@ gdk_x11_lookup_xdisplay (Display *xdisplay)
  * Given the root window ID of one of the screen’s of a #GdkDisplay,
  * finds the screen.
  * 
- * Returns: (transfer none): the #GdkScreen corresponding to
+ * Returns: (transfer none): the #GdkX11Screen corresponding to
  *     @xrootwin, or %NULL.
  **/
 GdkX11Screen *

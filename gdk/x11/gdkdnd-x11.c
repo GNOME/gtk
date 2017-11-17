@@ -561,7 +561,7 @@ static GdkWindowCache *
 gdk_window_cache_new (GdkDisplay *display)
 {
   XWindowAttributes xwa;
-  GdkScreen *screen = GDK_X11_DISPLAY (display)->screen;
+  GdkX11Screen *screen = GDK_X11_DISPLAY (display)->screen;
   Display *xdisplay = GDK_SCREEN_XDISPLAY (screen);
   Window xroot_window = GDK_DISPLAY_XROOTWIN (display);
   GdkChildInfoX11 *children;
