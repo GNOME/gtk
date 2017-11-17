@@ -30,7 +30,6 @@
 #include "gdkeventtranslator.h"
 #include "gdkframeclockprivate.h"
 #include "gdkinternals.h"
-#include "gdkscreen.h"
 #include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
 #include "gdkkeysprivate.h"
@@ -452,7 +451,7 @@ gdk_check_wm_state_changed (GdkWindow *window)
 {
   GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (window);
   GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
-  GdkScreen *screen = GDK_WINDOW_SCREEN (window);
+  GdkX11Screen *screen = GDK_WINDOW_SCREEN (window);
 
   Atom type;
   gint format;
@@ -619,7 +618,6 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
   GdkWindow *window;
   gboolean is_substructure;
   GdkWindowImplX11 *window_impl = NULL;
-  GdkScreen *screen = NULL;
   GdkX11Screen *x11_screen = NULL;
   GdkToplevelX11 *toplevel = NULL;
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
@@ -647,8 +645,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       if (!GDK_IS_WINDOW (window))
         return FALSE;
 
-      screen = GDK_WINDOW_SCREEN (window);
-      x11_screen = GDK_X11_SCREEN (screen);
+      x11_screen = GDK_WINDOW_SCREEN (window);
       toplevel = _gdk_x11_window_get_toplevel (window);
       window_impl = GDK_WINDOW_IMPL_X11 (window->impl);
 
@@ -669,8 +666,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 
   if (xevent->type == DestroyNotify && !is_substructure)
     {
-      screen = GDK_X11_DISPLAY (display)->screen;
-      x11_screen = GDK_X11_SCREEN (screen);
+      x11_screen = GDK_X11_DISPLAY (display)->screen;
 
       if (x11_screen->wmspec_check_window == xevent->xdestroywindow.window)
         {
@@ -680,7 +676,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
           x11_screen->window_manager_name = g_strdup ("unknown");
 
           /* careful, reentrancy */
-          _gdk_x11_screen_window_manager_changed (screen);
+          _gdk_x11_screen_window_manager_changed (x11_screen);
 
           return_val = FALSE;
           goto done;
@@ -841,8 +837,8 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
            * interpret UnmapNotify events as implying iconic state.
            * http://bugzilla.gnome.org/show_bug.cgi?id=590726.
            */
-          if (screen &&
-              !gdk_x11_screen_supports_net_wm_hint (screen,
+          if (x11_screen &&
+              !gdk_x11_screen_supports_net_wm_hint (x11_screen,
                                                     gdk_atom_intern_static_string ("_NET_WM_STATE_HIDDEN")))
             {
               /* If we are shown (not withdrawn) and get an unmap, it means we were
@@ -926,7 +922,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 			   : ""));
       if (_gdk_x11_display_is_root_window (display, xevent->xconfigure.window))
         {
-	  _gdk_x11_screen_size_changed (screen, xevent);
+	  _gdk_x11_screen_size_changed (x11_screen, xevent);
         }
 
 #ifdef HAVE_XSYNC
@@ -1162,8 +1158,8 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       if (xevent->type - display_x11->xrandr_event_base == RRScreenChangeNotify ||
           xevent->type - display_x11->xrandr_event_base == RRNotify)
 	{
-          if (screen)
-            _gdk_x11_screen_size_changed (screen, xevent);
+          if (x11_screen)
+            _gdk_x11_screen_size_changed (x11_screen, xevent);
 	}
       else
 #endif
@@ -2149,11 +2145,11 @@ gdk_x11_lookup_xdisplay (Display *xdisplay)
  * Returns: (transfer none): the #GdkScreen corresponding to
  *     @xrootwin, or %NULL.
  **/
-GdkScreen *
+GdkX11Screen *
 _gdk_x11_display_screen_for_xrootwin (GdkDisplay *display,
 				      Window      xrootwin)
 {
-  GdkScreen *screen;
+  GdkX11Screen *screen;
   XWindowAttributes attrs;
   gboolean result;
   GdkX11Display *display_x11;
@@ -3043,7 +3039,7 @@ gdk_x11_set_sm_client_id (const gchar *sm_client_id)
   g_slist_free (displays);
 }
 
-GdkScreen *
+GdkX11Screen *
 gdk_x11_display_get_screen (GdkDisplay *display)
 {
   return GDK_X11_DISPLAY (display)->screen;

@@ -1117,9 +1117,8 @@ save_cached_gl_visuals (GdkDisplay *display, int system, int rgba)
 }
 
 void
-_gdk_x11_screen_update_visuals_for_gl (GdkScreen *screen)
+_gdk_x11_screen_update_visuals_for_gl (GdkX11Screen *x11_screen)
 {
-  GdkX11Screen *x11_screen;
   GdkDisplay *display;
   GdkX11Display *display_x11;
   Display *dpy;
@@ -1127,7 +1126,6 @@ _gdk_x11_screen_update_visuals_for_gl (GdkScreen *screen)
   int i;
   int system_visual_id, rgba_visual_id;
 
-  x11_screen = GDK_X11_SCREEN (screen);
   display = x11_screen->display;
   display_x11 = GDK_X11_DISPLAY (display);
   dpy = gdk_x11_display_get_xdisplay (display);
@@ -1150,7 +1148,7 @@ _gdk_x11_screen_update_visuals_for_gl (GdkScreen *screen)
       return;
     }
 
-  if (!gdk_x11_screen_init_gl (screen))
+  if (!gdk_x11_screen_init_gl (x11_screen))
     return;
 
   gl_info = g_new0 (struct glvisualinfo, x11_screen->nvisuals);

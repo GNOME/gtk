@@ -1059,7 +1059,7 @@ GdkWindow *
 gdk_x11_window_foreign_new_for_display (GdkDisplay *display,
                                         Window      window)
 {
-  GdkScreen *screen;
+  GdkX11Screen *screen;
   GdkWindow *win;
   GdkWindowImplX11 *impl;
   GdkX11Display *display_x11;

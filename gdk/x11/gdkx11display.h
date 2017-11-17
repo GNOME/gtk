@@ -30,6 +30,7 @@
 #endif
 
 #include <gdk/gdk.h>
+#include <gdk/x11/gdkx11screen.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -94,7 +95,7 @@ GDK_AVAILABLE_IN_ALL
 GdkDisplay   *gdk_x11_lookup_xdisplay (Display *xdisplay);
 
 GDK_AVAILABLE_IN_3_94
-GdkScreen  *gdk_x11_display_get_screen (GdkDisplay *display);
+GdkX11Screen *gdk_x11_display_get_screen (GdkDisplay *display);
 
 GDK_AVAILABLE_IN_ALL
 void        gdk_x11_display_grab              (GdkDisplay *display);

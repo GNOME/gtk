@@ -22,7 +22,6 @@
 
 #include "gdkx11applaunchcontext.h"
 #include "gdkapplaunchcontextprivate.h"
-#include "gdkscreen.h"
 #include "gdkintl.h"
 #include "gdkprivate-x11.h"
 
@@ -225,8 +224,8 @@ startup_timeout (void *data)
 
 
 static void
-add_startup_timeout (GdkScreen  *screen,
-                     const char *startup_id)
+add_startup_timeout (GdkX11Screen *screen,
+                     const char   *startup_id)
 {
   StartupTimeoutData *data;
   StartupNotificationData *sn_data;
@@ -265,7 +264,7 @@ gdk_x11_app_launch_context_get_startup_notify_id (GAppLaunchContext *context,
 {
   static int sequence = 0;
   GdkDisplay *display;
-  GdkScreen *screen;
+  GdkX11Screen *screen;
   int files_count;
   char *description;
   char *icon_name;
@@ -392,7 +391,7 @@ gdk_x11_app_launch_context_launch_failed (GAppLaunchContext *context,
                                           const gchar       *startup_notify_id)
 {
   GdkAppLaunchContext *ctx;
-  GdkScreen *screen;
+  GdkX11Screen *screen;
   StartupTimeoutData *data;
   StartupNotificationData *sn_data;
   GSList *l;

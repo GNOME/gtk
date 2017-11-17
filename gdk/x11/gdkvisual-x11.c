@@ -49,8 +49,8 @@ gdk_x11_visual_class_init (GdkX11VisualClass *class)
 }
 
 void
-_gdk_x11_screen_init_visuals (GdkScreen *screen,
-                              gboolean   setup_display)
+_gdk_x11_screen_init_visuals (GdkX11Screen *screen,
+                              gboolean      setup_display)
 {
   static const gint possible_depths[8] = { 32, 30, 24, 16, 15, 8, 4, 1 };
   static const GdkVisualType possible_types[6] =
@@ -255,7 +255,7 @@ _gdk_x11_screen_init_visuals (GdkScreen *screen,
   /* If GL is available we want to pick better default/rgba visuals,
      as we care about glx details such as alpha/depth/stencil depth,
      stereo and double buffering */
-  _gdk_x11_screen_update_visuals_for_gl (screen);
+  _gdk_x11_screen_update_visuals_for_gl (x11_screen);
 
   if (setup_display)
     {

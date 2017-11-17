@@ -29,7 +29,7 @@
 #include <X11/Xlib.h>
 
 G_BEGIN_DECLS
-  
+
 typedef struct _GdkX11Monitor GdkX11Monitor;
 
 struct _GdkX11Screen
@@ -96,26 +96,33 @@ struct _GdkX11ScreenClass
 };
 
 GType       _gdk_x11_screen_get_type (void);
-GdkScreen * _gdk_x11_screen_new      (GdkDisplay *display,
-				      gint	  screen_number,
-                                      gboolean    setup_display);
+GdkX11Screen *_gdk_x11_screen_new           (GdkDisplay   *display,
+                                             gint          screen_number,
+                                             gboolean      setup_display);
 
-void _gdk_x11_screen_update_visuals_for_gl  (GdkScreen *screen);
-void _gdk_x11_screen_window_manager_changed (GdkScreen *screen);
-void _gdk_x11_screen_size_changed           (GdkScreen *screen,
-					     XEvent    *event);
-void _gdk_x11_screen_get_edge_monitors      (GdkScreen *screen,
-					     gint      *top,
-					     gint      *bottom,
-					     gint      *left,
-					     gint      *right);
+void _gdk_x11_screen_update_visuals_for_gl  (GdkX11Screen *screen);
+void _gdk_x11_screen_window_manager_changed (GdkX11Screen *screen);
+void _gdk_x11_screen_size_changed           (GdkX11Screen *screen,
+                                             XEvent       *event);
+void _gdk_x11_screen_get_edge_monitors      (GdkX11Screen *screen,
+                                             gint         *top,
+                                             gint         *bottom,
+                                             gint         *left,
+                                             gint         *right);
 void _gdk_x11_screen_set_window_scale       (GdkX11Screen *x11_screen,
-					     int        scale);
-void gdk_x11_screen_get_work_area           (GdkScreen    *screen,
+                                             int           scale);
+void gdk_x11_screen_get_work_area           (GdkX11Screen *screen,
                                              GdkRectangle *area);
-gboolean gdk_x11_screen_get_setting         (GdkScreen    *screen,
+gboolean gdk_x11_screen_get_setting         (GdkX11Screen *screen,
                                              const char   *name,
                                              GValue       *value);
+gboolean
+_gdk_x11_screen_get_xft_setting             (GdkX11Screen *screen,
+                                             const char   *name,
+                                             GValue       *value);
+
+void _gdk_x11_screen_init_visuals           (GdkX11Screen *screen,
+                                             gboolean      setup_display);
 
 G_END_DECLS
 

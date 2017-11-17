@@ -278,9 +278,6 @@ gdk_window_cache_shape_filter (GdkXEvent *xev,
                                GdkEvent  *event,
                                gpointer   data);
 
-void _gdk_x11_screen_init_visuals     (GdkScreen *screen,
-                                       gboolean   setup_display);
-
 void _gdk_x11_cursor_display_finalize (GdkDisplay *display);
 
 void _gdk_x11_window_register_dnd (GdkWindow *window);
@@ -290,10 +287,6 @@ GdkDragContext * _gdk_x11_window_drag_begin (GdkWindow *window,
                                              GList     *targets,
                                              gint       x_root,
                                              gint       y_root);
-
-gboolean _gdk_x11_get_xft_setting (GdkScreen   *screen,
-                                   const gchar *name,
-                                   GValue      *value);
 
 GdkGrabStatus _gdk_x11_convert_grab_status (gint status);
 

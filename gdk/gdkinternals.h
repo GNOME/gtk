@@ -390,8 +390,6 @@ cairo_region_t *gdk_window_get_current_paint_region (GdkWindow *window);
 void       _gdk_window_process_updates_recurse (GdkWindow *window,
                                                 cairo_region_t *expose_region);
 
-void       _gdk_screen_close             (GdkScreen      *screen);
-
 /*****************************************
  * Interfaces provided by windowing code *
  *****************************************/

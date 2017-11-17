@@ -55,15 +55,3 @@ static void
 gdk_screen_init (GdkScreen *screen)
 {
 }
-
-void
-_gdk_screen_close (GdkScreen *screen)
-{
-  g_return_if_fail (GDK_IS_SCREEN (screen));
-
-  if (!screen->closed)
-    {
-      screen->closed = TRUE;
-      g_object_run_dispose (G_OBJECT (screen));
-    }
-}
