@@ -19,7 +19,6 @@
 #include "config.h"
 #define GDK_PIXBUF_ENABLE_BACKEND /* Ugly? */
 #include "gdkdisplay.h"
-#include "gdkscreen.h"
 #include "gdkcursor.h"
 #include "gdkwin32.h"
 #include "gdktextureprivate.h"
