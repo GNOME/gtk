@@ -4,6 +4,8 @@
 #include <gdk/gdk.h>
 #include "gdk/gdkinternals.h"
 
+/* Private API for use in GTK+ */
+
 GdkDisplay *    gdk_display_open_default        (void);
 
 gboolean        gdk_device_grab_info            (GdkDisplay  *display,
