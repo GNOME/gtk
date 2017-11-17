@@ -150,7 +150,6 @@ query_for_toplevel (GdkDisplay *display,
 
   g_object_unref (cursor);
   gtk_widget_destroy (popup);
-  gdk_flush ();                 /* Really release the grab */
 
   return toplevel;
 }
