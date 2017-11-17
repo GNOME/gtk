@@ -154,6 +154,13 @@ struct _GtkIncrConversion
 				 *	  left to send */
 };
 
+struct _GtkTargetList
+{
+  /*< private >*/
+  GList *list;
+  guint ref_count;
+};
+
 struct _GtkIncrInfo
 {
   GdkWindow *requestor;		/* Requestor window - we create a GdkWindow
@@ -492,6 +499,35 @@ gtk_target_list_merge (GtkTargetList       *target,
     {
       target->list = g_list_prepend (target->list, l->data);
     }
+}
+
+/**
+ * gtk_target_list_intersects:
+ * @first: the primary #GtkTargetList to intersect
+ * @second: the #GtkTargeList to intersect with
+ *
+ * Finds the first element from @first that is also contained
+ * in @second.
+ *
+ * Returns: The first matching #GdkAtom or %NULL if the lists
+ *     do not intersect.
+ */
+GdkAtom
+gtk_target_list_intersects (const GtkTargetList *first,
+                            const GtkTargetList *second)
+{
+  GList *l;
+
+  g_return_val_if_fail (first != NULL, NULL);
+  g_return_val_if_fail (second != NULL, NULL);
+
+  for (l = first->list; l; l = l->next)
+    {
+      if (g_list_find (second->list, l->data))
+        return l->data;
+    }
+
+  return NULL;
 }
 
 /**
@@ -3085,18 +3121,17 @@ gtk_selection_default_handler (GtkWidget	*widget,
   else if (data->target == gtk_selection_atoms[TARGETS])
     {
       /* List of all targets supported for this widget/selection pair */
-      GdkAtom *p;
-      guint count;
-      GList *tmp_list;
+      GdkAtom *p, *atoms;
+      guint count, i;
       GtkTargetList *target_list;
       
       target_list = gtk_selection_target_list_get (widget,
 						   data->selection);
-      count = g_list_length (target_list->list) + 3;
+      atoms = gtk_target_list_get_atoms (target_list, &count);
       
       data->type = GDK_SELECTION_TYPE_ATOM;
       data->format = 32;
-      data->length = count * sizeof (GdkAtom);
+      data->length = (count + 3) * sizeof (GdkAtom);
 
       /* selection data is always terminated by a trailing \0
        */
@@ -3108,13 +3143,10 @@ gtk_selection_default_handler (GtkWidget	*widget,
       *p++ = gtk_selection_atoms[TARGETS];
       *p++ = gtk_selection_atoms[MULTIPLE];
       
-      tmp_list = target_list->list;
-      while (tmp_list)
-	{
-	  *p++ = (GdkAtom) tmp_list->data;
-	  
-	  tmp_list = tmp_list->next;
-	}
+      for (i = 0; i < count; i++)
+        *p++ = atoms[i];
+
+      g_free (atoms);
     }
   else if (data->target == gtk_selection_atoms[SAVE_TARGETS])
     {

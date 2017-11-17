@@ -1180,7 +1180,6 @@ gtk_drag_begin_internal (GtkWidget          *widget,
 {
   GtkDragSourceInfo *info;
   GList *targets = NULL;
-  GList *tmp_list;
   guint32 time = GDK_CURRENT_TIME;
   GdkDragAction possible_actions, suggested_action;
   GdkDragContext *context;
@@ -1190,6 +1189,8 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   GdkWindow *ipc_window;
   int start_x, start_y;
   GdkAtom selection;
+  GdkAtom *atoms;
+  guint i, n_atoms;
   gboolean managed;
 
   managed = gtk_drag_is_managed (widget);
@@ -1261,12 +1262,12 @@ gtk_drag_begin_internal (GtkWidget          *widget,
       gtk_device_grab_add (ipc_widget, pointer, FALSE);
     }
 
-  tmp_list = g_list_last (target_list->list);
-  while (tmp_list)
+  atoms = gtk_target_list_get_atoms (target_list, &n_atoms);
+  for (i = 0; i < n_atoms; i++)
     {
-      targets = g_list_prepend (targets, tmp_list->data);
-      tmp_list = tmp_list->prev;
+      targets = g_list_prepend (targets, (gpointer) atoms[i]);
     }
+  g_free (atoms);
 
   source_widgets = g_slist_prepend (source_widgets, ipc_widget);
 
@@ -1791,14 +1792,9 @@ gtk_drag_source_check_selection (GtkDragSourceInfo *info,
   info->selections = g_list_prepend (info->selections,
                                      GUINT_TO_POINTER (selection));
 
-  tmp_list = info->target_list->list;
-  while (tmp_list)
-    {
-      gtk_selection_add_target (info->ipc_widget,
-                                selection,
-                                tmp_list->data);
-      tmp_list = tmp_list->next;
-    }
+  gtk_selection_add_targets (info->ipc_widget,
+                             selection,
+                             info->target_list);
 
   gtk_selection_add_target (info->ipc_widget,
                             selection,
@@ -1852,33 +1848,32 @@ gtk_drag_drop (GtkDragSourceInfo *info,
   if (gdk_drag_context_get_protocol (info->context) == GDK_DRAG_PROTO_ROOTWIN)
     {
       GtkSelectionData selection_data;
-      GList *tmp_list;
+      GdkAtom found = NULL;
       /* GTK+ traditionally has used application/x-rootwin-drop, but the
        * XDND spec specifies x-rootwindow-drop.
        */
-      GdkAtom target1 = gdk_atom_intern_static_string ("application/x-rootwindow-drop");
-      GdkAtom target2 = gdk_atom_intern_static_string ("application/x-rootwin-drop");
+      if (gtk_target_list_find (info->target_list, "application/x-rootwindow-drop"))
+        found = gdk_atom_intern ("application/x-rootwindow-drop", FALSE);
+      if (gtk_target_list_find (info->target_list, "application/x-rootwin-drop"))
+        found = gdk_atom_intern ("application/x-rootwin-drop", FALSE);
+      else found = NULL;
       
-      tmp_list = info->target_list->list;
-      while (tmp_list)
+      if (found)
         {
-          if (tmp_list->data == target1 || tmp_list->data == target2)
-            {
-              selection_data.selection = NULL;
-              selection_data.target = tmp_list->data;
-              selection_data.data = NULL;
-              selection_data.length = -1;
+          selection_data.selection = NULL;
+          selection_data.target = found;
+          selection_data.data = NULL;
+          selection_data.length = -1;
 
-              g_signal_emit_by_name (info->widget, "drag-data-get",
-                                     info->context, &selection_data,
-                                     time);
+          g_signal_emit_by_name (info->widget, "drag-data-get",
+                                 info->context, &selection_data,
+                                 time);
 
-              /* FIXME: Should we check for length >= 0 here? */
-              gtk_drag_drop_finished (info, GTK_DRAG_RESULT_SUCCESS, time);
-              return;
-            }
-          tmp_list = tmp_list->next;
+          /* FIXME: Should we check for length >= 0 here? */
+          gtk_drag_drop_finished (info, GTK_DRAG_RESULT_SUCCESS, time);
+          return;
         }
+
       gtk_drag_drop_finished (info, GTK_DRAG_RESULT_NO_TARGET, time);
     }
   else

@@ -58,6 +58,9 @@ void           gtk_target_list_unref     (GtkTargetList  *list);
 GDK_AVAILABLE_IN_3_94
 void           gtk_target_list_merge     (GtkTargetList         *target,
                                           const GtkTargetList   *source);
+GDK_AVAILABLE_IN_3_94
+GdkAtom        gtk_target_list_intersects(const GtkTargetList   *first,
+                                          const GtkTargetList   *second);
 GDK_AVAILABLE_IN_ALL
 void           gtk_target_list_add       (GtkTargetList  *list,
                                           const char     *target);

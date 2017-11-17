@@ -47,13 +47,6 @@ struct _GtkSelectionData
   GdkDisplay   *display;
 };
 
-struct _GtkTargetList
-{
-  /*< private >*/
-  GList *list;
-  guint ref_count;
-};
-
 GdkAtom *gtk_target_list_get_atoms      (GtkTargetList     *targets,
                                          guint             *n_atoms);
 

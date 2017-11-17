@@ -411,8 +411,9 @@ gtk_drag_dest_find_target (GtkWidget      *widget,
                            GdkDragContext *context,
                            GtkTargetList  *target_list)
 {
-  GList *tmp_target;
-  GList *tmp_source = NULL;
+  GtkTargetList *source_list;
+  GList *tmp_source;
+  GdkAtom result;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
@@ -423,19 +424,18 @@ gtk_drag_dest_find_target (GtkWidget      *widget,
   if (target_list == NULL)
     return NULL;
 
-  tmp_target = target_list->list;
-  while (tmp_target)
+  source_list = gtk_target_list_new (NULL, 0);
+  for (tmp_source = gdk_drag_context_list_targets (context);
+       tmp_source != NULL;
+       tmp_source = tmp_source->next)
     {
-      tmp_source = gdk_drag_context_list_targets (context);
-      while (tmp_source)
-        {
-          if (tmp_source->data == tmp_target->data)
-            return tmp_target->data;
-          tmp_source = tmp_source->next;
-        }
-      tmp_target = tmp_target->next;
+      gtk_target_list_add (source_list, tmp_source->data);
     }
+       
+  result = gtk_target_list_intersects (target_list, source_list);
 
-  return NULL;
+  gtk_target_list_unref (source_list);
+
+  return result;
 }
 
