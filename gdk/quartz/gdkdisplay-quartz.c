@@ -26,7 +26,6 @@
 #include "gdkquartzwindow.h"
 #include "gdkquartzdisplay.h"
 #include "gdkquartzdevicemanager-core.h"
-#include "gdkscreen.h"
 #include "gdkmonitorprivate.h"
 #include "gdkdisplay-quartz.h"
 
