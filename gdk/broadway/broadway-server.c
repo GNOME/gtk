@@ -1647,6 +1647,9 @@ broadway_server_upload_texture (BroadwayServer   *server,
 			GINT_TO_POINTER (id),
 			g_bytes_ref (texture));
 
+  if (server->output)
+    broadway_output_upload_texture (server->output, id, texture);
+
   return id;
 }
 
@@ -1655,6 +1658,9 @@ broadway_server_release_texture (BroadwayServer   *server,
 				 guint32           id)
 {
   g_hash_table_remove (server->textures, GINT_TO_POINTER (id));
+
+  if (server->output)
+    broadway_output_release_texture (server->output, id);
 }
 
 gboolean
@@ -1901,12 +1907,21 @@ broadway_server_new_window (BroadwayServer *server,
 static void
 broadway_server_resync_windows (BroadwayServer *server)
 {
+  GHashTableIter iter;
+  gpointer key, value;
   GList *l;
 
   if (server->output == NULL)
     return;
 
-  /* First create all windows */
+  /* First upload all textures */
+  g_hash_table_iter_init (&iter, server->textures);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    broadway_output_upload_texture (server->output,
+				    GPOINTER_TO_INT (key),
+				    (GBytes *)value);
+
+  /* Then create all windows */
   for (l = server->toplevels; l != NULL; l = l->next)
     {
       BroadwayWindow *window = l->data;

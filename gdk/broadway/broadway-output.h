@@ -58,6 +58,11 @@ void            broadway_output_put_buffer      (BroadwayOutput *output,
 						 int             id,
                                                  BroadwayBuffer *prev_buffer,
                                                  BroadwayBuffer *buffer);
+void            broadway_output_upload_texture (BroadwayOutput *output,
+						guint32 id,
+						GBytes *texture);
+void            broadway_output_release_texture (BroadwayOutput *output,
+						 guint32 id);
 void            broadway_output_grab_pointer    (BroadwayOutput *output,
 						 int id,
 						 gboolean owner_event);

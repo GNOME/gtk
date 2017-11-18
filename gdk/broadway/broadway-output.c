@@ -330,3 +330,23 @@ broadway_output_put_buffer (BroadwayOutput *output,
   g_object_unref (out);
   g_object_unref (out_mem);
 }
+
+void
+broadway_output_upload_texture (BroadwayOutput *output,
+				guint32 id,
+				GBytes *texture)
+{
+  gsize len = g_bytes_get_size (texture);
+  write_header (output, BROADWAY_OP_UPLOAD_TEXTURE);
+  append_uint32 (output, id);
+  append_uint32 (output, (guint32)len);
+  g_string_append_len (output->buf, g_bytes_get_data (texture, NULL), len);
+}
+
+void
+broadway_output_release_texture (BroadwayOutput *output,
+				 guint32 id)
+{
+  write_header (output, BROADWAY_OP_RELEASE_TEXTURE);
+  append_uint32 (output, id);
+}

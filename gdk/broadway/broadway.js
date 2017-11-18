@@ -99,6 +99,7 @@ var lastTimeStamp = 0;
 var realWindowWithMouse = 0;
 var windowWithMouse = 0;
 var surfaces = {};
+var textures = {};
 var stackingOrder = [];
 var outstandingCommands = new Array();
 var inputSocket = null;
@@ -528,6 +529,20 @@ function cmdPutBuffer(id, w, h, compressed)
     surface.imageData = imageData;
 }
 
+function cmdUploadTexture(id, data)
+{
+    var blob = new Blob([data],{type: "image/png"});
+    var url = window.URL.createObjectURL(blob);
+    textures[id] = url;
+}
+
+function cmdReleaseTexture(id)
+{
+    var url = textures[id];
+    window.URL.revokeObjectURL(url);
+    delete textures[id];
+}
+
 function cmdGrabPointer(id, ownerEvents)
 {
     doGrab(id, ownerEvents, false);
@@ -622,6 +637,17 @@ function handleCommands(cmd)
 	    h = cmd.get_16();
             var data = cmd.get_data();
             cmdPutBuffer(id, w, h, data);
+            break;
+
+	case 't': // Upload texture
+	    id = cmd.get_32();
+            var data = cmd.get_data();
+            cmdUploadTexture(id, data);
+            break;
+
+	case 'T': // Upload texture
+	    id = cmd.get_32();
+            cmdReleaseTexture(id);
             break;
 
 	case 'g': // Grab
