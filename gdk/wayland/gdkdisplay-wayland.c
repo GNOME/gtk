@@ -1654,6 +1654,11 @@ init_settings (GdkDisplay *display)
   GSettings *settings;
   gint i;
 
+  g_intern_static_string ("antialiasing");
+  g_intern_static_string ("hinting");
+  g_intern_static_string ("rgba-order");
+  g_intern_static_string ("text-scaling-factor");
+
   display_wayland->settings = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, g_object_unref);
 
   source = g_settings_schema_source_get_default ();
@@ -1665,6 +1670,8 @@ init_settings (GdkDisplay *display)
       schema = g_settings_schema_source_lookup (source, translations[i].schema, TRUE);
       if (!schema)
         continue;
+
+      g_intern_static_string (translations[i].key);
 
       if (g_hash_table_lookup (display_wayland->settings, (gpointer)translations[i].schema) == NULL)
         {
