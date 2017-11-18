@@ -171,7 +171,7 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
    * Since: 2.16
    */
   signals[STATE_CHANGED] =
-    g_signal_new (g_intern_static_string ("state_changed"),
+    g_signal_new (g_intern_static_string ("state-changed"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GdkKeymapClass, state_changed),
