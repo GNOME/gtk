@@ -218,7 +218,7 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkStatusbar, label);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_STATUSBAR_ACCESSIBLE);
-  gtk_widget_class_set_css_name (widget_class, "statusbar");
+  gtk_widget_class_set_css_name (widget_class, I_("statusbar"));
 }
 
 static void

@@ -679,7 +679,7 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, size_change_cb);
   gtk_widget_class_bind_template_callback (widget_class, output_cb);
 
-  gtk_widget_class_set_css_name (widget_class, "fontchooser");
+  gtk_widget_class_set_css_name (widget_class, I_("fontchooser"));
 }
 
 static void

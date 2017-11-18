@@ -1657,7 +1657,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_F, GDK_CONTROL_MASK, "start-interactive-search", 0);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_TREE_VIEW_ACCESSIBLE);
-  gtk_widget_class_set_css_name (widget_class, "treeview");
+  gtk_widget_class_set_css_name (widget_class, I_("treeview"));
 }
 
 static void

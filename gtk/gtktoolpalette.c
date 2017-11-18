@@ -910,7 +910,7 @@ gtk_tool_palette_class_init (GtkToolPaletteClass *cls)
                                                                     DEFAULT_CHILD_EXPAND,
                                                                     GTK_PARAM_READWRITE));
 
-  gtk_widget_class_set_css_name (wclass, "toolpalette");
+  gtk_widget_class_set_css_name (wclass, I_("toolpalette"));
 }
 
 /**

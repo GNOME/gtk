@@ -915,7 +915,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 				  GTK_MOVEMENT_VISUAL_POSITIONS, -1);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_ICON_VIEW_ACCESSIBLE);
-  gtk_widget_class_set_css_name (widget_class, "iconview");
+  gtk_widget_class_set_css_name (widget_class, I_("iconview"));
 }
 
 static void

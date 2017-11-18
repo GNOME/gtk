@@ -694,7 +694,7 @@ gtk_stack_switcher_class_init (GtkStackSwitcherClass *class)
                                                         GTK_PARAM_READWRITE |
                                                         G_PARAM_CONSTRUCT));
 
-  gtk_widget_class_set_css_name (widget_class, "stackswitcher");
+  gtk_widget_class_set_css_name (widget_class, I_("stackswitcher"));
 }
 
 /**

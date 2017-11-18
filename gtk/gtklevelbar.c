@@ -1059,7 +1059,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
   g_object_class_install_properties (oclass, LAST_PROPERTY, properties);
 
   gtk_widget_class_set_accessible_type (wclass, GTK_TYPE_LEVEL_BAR_ACCESSIBLE);
-  gtk_widget_class_set_css_name (wclass, "levelbar");
+  gtk_widget_class_set_css_name (wclass, I_("levelbar"));
 }
 
 static void

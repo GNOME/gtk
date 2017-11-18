@@ -1611,7 +1611,7 @@ gtk_tool_item_group_class_init (GtkToolItemGroupClass *cls)
                                                                 0,
                                                                 GTK_PARAM_READWRITE));
 
-  gtk_widget_class_set_css_name (wclass, "toolitemgroup");
+  gtk_widget_class_set_css_name (wclass, I_("toolitemgroup"));
 }
 
 /**

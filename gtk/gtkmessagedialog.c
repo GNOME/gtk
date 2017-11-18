@@ -272,7 +272,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkMessageDialog, secondary_label);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkMessageDialog, message_area);
 
-  gtk_widget_class_set_css_name (widget_class, "messagedialog");
+  gtk_widget_class_set_css_name (widget_class, I_("messagedialog"));
 }
 
 static void

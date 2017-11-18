@@ -1689,7 +1689,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
 
   quark_widget_popovers = g_quark_from_static_string ("gtk-quark-widget-popovers");
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_POPOVER_ACCESSIBLE);
-  gtk_widget_class_set_css_name (widget_class, "popover");
+  gtk_widget_class_set_css_name (widget_class, I_("popover"));
 }
 
 static void

@@ -1878,7 +1878,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 				"toggle-overwrite", 0);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_ENTRY_ACCESSIBLE);
-  gtk_widget_class_set_css_name (widget_class, "entry");
+  gtk_widget_class_set_css_name (widget_class, I_("entry"));
 }
 
 static void

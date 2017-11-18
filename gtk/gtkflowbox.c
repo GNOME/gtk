@@ -471,7 +471,7 @@ gtk_flow_box_child_class_init (GtkFlowBoxChildClass *class)
   widget_class->activate_signal = child_signals[CHILD_ACTIVATE];
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_LIST_ITEM);
-  gtk_widget_class_set_css_name (widget_class, "flowboxchild");
+  gtk_widget_class_set_css_name (widget_class, I_("flowboxchild"));
 }
 
 static void
@@ -3684,7 +3684,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                                 "unselect-all", 0);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_FLOW_BOX_ACCESSIBLE);
-  gtk_widget_class_set_css_name (widget_class, "flowbox");
+  gtk_widget_class_set_css_name (widget_class, I_("flowbox"));
 }
 
 static void

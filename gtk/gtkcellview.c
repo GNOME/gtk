@@ -266,7 +266,7 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
 							  FALSE,
 							  GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
-  gtk_widget_class_set_css_name (widget_class, "cellview");
+  gtk_widget_class_set_css_name (widget_class, I_("cellview"));
 }
 
 static void

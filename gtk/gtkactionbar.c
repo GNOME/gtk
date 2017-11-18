@@ -402,7 +402,7 @@ gtk_action_bar_class_init (GtkActionBarClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_PANEL);
-  gtk_widget_class_set_css_name (widget_class, "actionbar");
+  gtk_widget_class_set_css_name (widget_class, I_("actionbar"));
 }
 
 static void

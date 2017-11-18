@@ -271,7 +271,7 @@ gtk_image_class_init (GtkImageClass *class)
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, image_props);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_IMAGE_ACCESSIBLE);
-  gtk_widget_class_set_css_name (widget_class, "image");
+  gtk_widget_class_set_css_name (widget_class, I_("image"));
 }
 
 static void

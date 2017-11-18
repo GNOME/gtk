@@ -559,7 +559,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   add_spin_binding (binding_set, GDK_KEY_Page_Down, GDK_CONTROL_MASK, GTK_SCROLL_START);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SPIN_BUTTON_ACCESSIBLE);
-  gtk_widget_class_set_css_name (widget_class, "spinbutton");
+  gtk_widget_class_set_css_name (widget_class, I_("spinbutton"));
 }
 
 static void

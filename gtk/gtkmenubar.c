@@ -200,7 +200,7 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_MENU_BAR);
-  gtk_widget_class_set_css_name (widget_class, "menubar");
+  gtk_widget_class_set_css_name (widget_class, I_("menubar"));
 }
 
 static void

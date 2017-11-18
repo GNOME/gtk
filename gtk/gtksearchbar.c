@@ -414,7 +414,7 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkSearchBar, box_center);
   gtk_widget_class_bind_template_child_private (widget_class, GtkSearchBar, close_button);
 
-  gtk_widget_class_set_css_name (widget_class, "searchbar");
+  gtk_widget_class_set_css_name (widget_class, I_("searchbar"));
 }
 
 static void

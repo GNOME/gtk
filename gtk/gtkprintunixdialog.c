@@ -557,7 +557,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
   gtk_widget_class_bind_template_callback (widget_class, update_number_up_layout);
   gtk_widget_class_bind_template_callback (widget_class, redraw_page_layout_preview);
 
-  gtk_widget_class_set_css_name (widget_class, "printdialog");
+  gtk_widget_class_set_css_name (widget_class, I_("printdialog"));
 }
 
 /* Returns a toplevel GtkWindow, or NULL if none */

@@ -225,7 +225,7 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
                   G_TYPE_NONE, 0);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_CHECK_MENU_ITEM_ACCESSIBLE);
-  gtk_widget_class_set_css_name (widget_class, "menuitem");
+  gtk_widget_class_set_css_name (widget_class, I_("menuitem"));
 }
 
 /**

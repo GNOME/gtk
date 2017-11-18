@@ -201,7 +201,7 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
 		  NULL,
 		  G_TYPE_NONE, 0);
 
-  gtk_widget_class_set_css_name (widget_class, "toolitem");
+  gtk_widget_class_set_css_name (widget_class, I_("toolitem"));
 }
 
 static void

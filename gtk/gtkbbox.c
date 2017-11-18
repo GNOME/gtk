@@ -172,7 +172,7 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
                                                                     FALSE,
                                                                     GTK_PARAM_READWRITE));
 
-  gtk_widget_class_set_css_name (widget_class, "buttonbox");
+  gtk_widget_class_set_css_name (widget_class, I_("buttonbox"));
 }
 
 static void

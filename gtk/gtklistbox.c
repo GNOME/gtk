@@ -572,7 +572,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_a, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
                                 "unselect-all", 0);
 
-  gtk_widget_class_set_css_name (widget_class, "list");
+  gtk_widget_class_set_css_name (widget_class, I_("list"));
 }
 
 static void
@@ -3362,7 +3362,7 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
 
   g_object_class_install_properties (object_class, LAST_ROW_PROPERTY, row_properties);
 
-  gtk_widget_class_set_css_name (widget_class, "row");
+  gtk_widget_class_set_css_name (widget_class, I_("row"));
 }
 
 static void

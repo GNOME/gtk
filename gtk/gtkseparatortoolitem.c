@@ -101,7 +101,7 @@ gtk_separator_tool_item_class_init (GtkSeparatorToolItemClass *class)
                                                          TRUE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
-  gtk_widget_class_set_css_name (widget_class, "separator");
+  gtk_widget_class_set_css_name (widget_class, I_("separator"));
 }
 
 static void

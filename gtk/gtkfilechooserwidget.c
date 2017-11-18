@@ -8519,7 +8519,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_callback (widget_class, rename_file_rename_clicked);
   gtk_widget_class_bind_template_callback (widget_class, rename_file_end);
 
-  gtk_widget_class_set_css_name (widget_class, "filechooser");
+  gtk_widget_class_set_css_name (widget_class, I_("filechooser"));
 }
 
 static void

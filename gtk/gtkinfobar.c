@@ -408,7 +408,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInfoBar, close_button);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInfoBar, revealer);
 
-  gtk_widget_class_set_css_name (widget_class, "infobar");
+  gtk_widget_class_set_css_name (widget_class, I_("infobar"));
 }
 
 static void

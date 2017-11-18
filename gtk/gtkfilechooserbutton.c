@@ -468,7 +468,7 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
 
   _gtk_file_chooser_install_properties (gobject_class);
 
-  gtk_widget_class_set_css_name (widget_class, "filechooserbutton");
+  gtk_widget_class_set_css_name (widget_class, I_("filechooserbutton"));
 }
 
 static void

@@ -2241,7 +2241,7 @@ gtk_places_view_class_init (GtkPlacesViewClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_listbox_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_recent_servers_listbox_row_activated);
 
-  gtk_widget_class_set_css_name (widget_class, "placesview");
+  gtk_widget_class_set_css_name (widget_class, I_("placesview"));
 }
 
 static void

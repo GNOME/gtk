@@ -1619,7 +1619,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 				GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_TEXT_VIEW_ACCESSIBLE);
-  gtk_widget_class_set_css_name (widget_class, "textview");
+  gtk_widget_class_set_css_name (widget_class, I_("textview"));
 
   quark_text_selection_data = g_quark_from_static_string ("gtk-text-view-text-selection-data");
   quark_gtk_signal = g_quark_from_static_string ("gtk-signal");

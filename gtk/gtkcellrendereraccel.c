@@ -747,7 +747,7 @@ gtk_cell_editable_widget_class_init (GtkCellEditableWidgetClass *class)
       g_param_spec_string ("path", NULL, NULL,
                            NULL, GTK_PARAM_READWRITE));
 
-  gtk_widget_class_set_css_name (widget_class, "acceleditor");
+  gtk_widget_class_set_css_name (widget_class, I_("acceleditor"));
 }
 
 static void

@@ -697,7 +697,7 @@ gtk_color_chooser_widget_class_init (GtkColorChooserWidgetClass *class)
       g_param_spec_boolean ("show-editor", P_("Show editor"), P_("Show editor"),
                             FALSE, GTK_PARAM_READWRITE));
 
-  gtk_widget_class_set_css_name (GTK_WIDGET_CLASS (class), "colorchooser");
+  gtk_widget_class_set_css_name (GTK_WIDGET_CLASS (class), I_("colorchooser"));
 }
 
 /* GtkColorChooser implementation {{{1 */

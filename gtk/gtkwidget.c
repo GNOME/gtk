@@ -819,7 +819,7 @@ gtk_widget_get_type (void)
 	NULL /* interface data */
       };
 
-      widget_type = g_type_register_static (G_TYPE_INITIALLY_UNOWNED, "GtkWidget",
+      widget_type = g_type_register_static (G_TYPE_INITIALLY_UNOWNED, g_intern_static_string ("GtkWidget"),
                                             &widget_info, G_TYPE_FLAG_ABSTRACT);
 
       g_type_add_class_private (widget_type, sizeof (GtkWidgetClassPrivate));
@@ -3144,7 +3144,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                 "popup-menu", 0);
 
   gtk_widget_class_set_accessible_type (klass, GTK_TYPE_WIDGET_ACCESSIBLE);
-  gtk_widget_class_set_css_name (klass, "widget");
+  gtk_widget_class_set_css_name (klass, I_("widget"));
 }
 
 static void

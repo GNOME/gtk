@@ -275,7 +275,7 @@ gtk_tool_button_class_init (GtkToolButtonClass *klass)
   
   g_type_class_add_private (object_class, sizeof (GtkToolButtonPrivate));
 
-  gtk_widget_class_set_css_name (widget_class, "toolbutton");
+  gtk_widget_class_set_css_name (widget_class, I_("toolbutton"));
 }
 
 static void

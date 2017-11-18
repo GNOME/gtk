@@ -640,7 +640,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                   G_TYPE_NONE, 0);
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_CALENDAR);
-  gtk_widget_class_set_css_name (widget_class, "calendar");
+  gtk_widget_class_set_css_name (widget_class, I_("calendar"));
 }
 
 static void

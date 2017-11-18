@@ -665,7 +665,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   g_object_class_override_property (gobject_class, PROP_ACTION_TARGET, "action-target");
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_MENU_ITEM_ACCESSIBLE);
-  gtk_widget_class_set_css_name (widget_class, "menuitem");
+  gtk_widget_class_set_css_name (widget_class, I_("menuitem"));
 }
 
 static void

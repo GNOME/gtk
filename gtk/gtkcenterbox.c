@@ -718,7 +718,7 @@ gtk_center_box_class_init (GtkCenterBoxClass *klass)
 
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_FILLER);
-  gtk_widget_class_set_css_name (widget_class, "box");
+  gtk_widget_class_set_css_name (widget_class, I_("box"));
 }
 
 static void

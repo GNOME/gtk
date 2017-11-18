@@ -615,7 +615,7 @@ gtk_switch_class_init (GtkSwitchClass *klass)
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SWITCH_ACCESSIBLE);
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_TOGGLE_BUTTON);
 
-  gtk_widget_class_set_css_name (widget_class, "switch");
+  gtk_widget_class_set_css_name (widget_class, I_("switch"));
 }
 
 static void

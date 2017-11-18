@@ -134,7 +134,7 @@ gtk_separator_class_init (GtkSeparatorClass *class)
   g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_SEPARATOR);
-  gtk_widget_class_set_css_name (widget_class, "separator");
+  gtk_widget_class_set_css_name (widget_class, I_("separator"));
 }
 
 /**

@@ -933,7 +933,7 @@ gtk_menu_class_init (GtkMenuClass *class)
                                 GTK_SCROLL_PAGE_DOWN);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_MENU_ACCESSIBLE);
-  gtk_widget_class_set_css_name (widget_class, "menu");
+  gtk_widget_class_set_css_name (widget_class, I_("menu"));
 }
 
 

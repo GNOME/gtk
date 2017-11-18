@@ -712,7 +712,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
-  gtk_widget_class_set_css_name (widget_class, "shortcut");
+  gtk_widget_class_set_css_name (widget_class, I_("shortcut"));
 }
 
 static void

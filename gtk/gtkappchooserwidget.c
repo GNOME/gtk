@@ -1176,7 +1176,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, program_list_selection_activated);
   gtk_widget_class_bind_template_callback (widget_class, widget_button_press_event_cb);
 
-  gtk_widget_class_set_css_name (widget_class, "appchooser");
+  gtk_widget_class_set_css_name (widget_class, I_("appchooser"));
 }
 
 static void

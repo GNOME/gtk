@@ -541,7 +541,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   add_ctrl_tab_bindings (binding_set, 0, GTK_DIR_TAB_FORWARD);
   add_ctrl_tab_bindings (binding_set, GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
 
-  gtk_widget_class_set_css_name (widget_class, "toolbar");
+  gtk_widget_class_set_css_name (widget_class, I_("toolbar"));
 }
 
 static void

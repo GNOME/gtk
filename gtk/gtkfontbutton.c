@@ -611,7 +611,7 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
                                                 g_cclosure_marshal_VOID__VOID,
                                                 G_TYPE_NONE, 0);
 
-  gtk_widget_class_set_css_name (widget_class, "fontbutton");
+  gtk_widget_class_set_css_name (widget_class, I_("fontbutton"));
 }
 
 static void

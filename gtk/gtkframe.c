@@ -218,7 +218,7 @@ gtk_frame_class_init (GtkFrameClass *class)
   class->compute_child_allocation = gtk_frame_real_compute_child_allocation;
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_FRAME_ACCESSIBLE);
-  gtk_widget_class_set_css_name (widget_class, "frame");
+  gtk_widget_class_set_css_name (widget_class, I_("frame"));
 }
 
 static void

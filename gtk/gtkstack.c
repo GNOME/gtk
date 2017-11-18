@@ -427,7 +427,7 @@ gtk_stack_class_init (GtkStackClass *klass)
   gtk_container_class_install_child_properties (container_class, LAST_CHILD_PROP, stack_child_props);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_STACK_ACCESSIBLE);
-  gtk_widget_class_set_css_name (widget_class, "stack");
+  gtk_widget_class_set_css_name (widget_class, I_("stack"));
 }
 
 /**

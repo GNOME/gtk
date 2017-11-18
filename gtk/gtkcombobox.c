@@ -894,7 +894,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, gtk_combo_box_menu_hide);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_COMBO_BOX_ACCESSIBLE);
-  gtk_widget_class_set_css_name (widget_class, "combobox");
+  gtk_widget_class_set_css_name (widget_class, I_("combobox"));
 }
 
 static void

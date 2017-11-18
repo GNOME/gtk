@@ -1721,7 +1721,7 @@ gtk_grid_class_init (GtkGridClass *class)
                       GTK_PARAM_READWRITE);
 
   gtk_container_class_install_child_properties (container_class, N_CHILD_PROPERTIES, child_properties);
-  gtk_widget_class_set_css_name (widget_class, "grid");
+  gtk_widget_class_set_css_name (widget_class, I_("grid"));
 }
 
 static void

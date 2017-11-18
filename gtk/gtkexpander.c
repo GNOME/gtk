@@ -341,7 +341,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                   G_TYPE_NONE, 0);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_EXPANDER_ACCESSIBLE);
-  gtk_widget_class_set_css_name (widget_class, "expander");
+  gtk_widget_class_set_css_name (widget_class, I_("expander"));
 }
 
 static void

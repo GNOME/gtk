@@ -855,7 +855,7 @@ gtk_scale_class_init (GtkScaleClass *class)
                       GTK_SCROLL_END);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SCALE_ACCESSIBLE);
-  gtk_widget_class_set_css_name (widget_class, "scale");
+  gtk_widget_class_set_css_name (widget_class, I_("scale"));
 }
 
 static void

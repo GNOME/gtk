@@ -274,7 +274,7 @@ gtk_viewport_class_init (GtkViewportClass *class)
 						      GTK_SHADOW_IN,
 						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
-  gtk_widget_class_set_css_name (widget_class, "viewport");
+  gtk_widget_class_set_css_name (widget_class, I_("viewport"));
 }
 
 static void

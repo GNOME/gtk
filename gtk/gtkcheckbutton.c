@@ -328,7 +328,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
   g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_CHECK_BOX);
-  gtk_widget_class_set_css_name (widget_class, "checkbutton");
+  gtk_widget_class_set_css_name (widget_class, I_("checkbutton"));
 }
 
 static void

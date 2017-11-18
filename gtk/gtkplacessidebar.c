@@ -4752,7 +4752,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, properties);
 
-  gtk_widget_class_set_css_name (widget_class, "placessidebar");
+  gtk_widget_class_set_css_name (widget_class, I_("placessidebar"));
 }
 
 /**

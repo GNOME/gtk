@@ -563,7 +563,7 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
                             TRUE, GTK_PARAM_READWRITE));
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_COLOR_SWATCH_ACCESSIBLE);
-  gtk_widget_class_set_css_name (widget_class, "colorswatch");
+  gtk_widget_class_set_css_name (widget_class, I_("colorswatch"));
 }
 
 static void

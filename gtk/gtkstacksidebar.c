@@ -450,7 +450,7 @@ gtk_stack_sidebar_class_init (GtkStackSidebarClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPERTIES, obj_properties);
 
-  gtk_widget_class_set_css_name (widget_class, "stacksidebar");
+  gtk_widget_class_set_css_name (widget_class, I_("stacksidebar"));
 }
 
 /**

@@ -307,25 +307,25 @@ update_node_name (GtkModelButton *button)
       a11y_role = ATK_ROLE_PUSH_BUTTON;
       if (button->menu_name)
         {
-          indicator_name = "arrow";
+          indicator_name = I_("arrow");
           indicator_visible = TRUE;
         }
       else
         {
-          indicator_name = "check";
+          indicator_name = I_("check");
           indicator_visible = FALSE;
         }
       break;
 
     case GTK_BUTTON_ROLE_CHECK:
       a11y_role = ATK_ROLE_CHECK_BOX;
-      indicator_name = "check";
+      indicator_name = I_("check");
       indicator_visible = TRUE;
       break;
 
     case GTK_BUTTON_ROLE_RADIO:
       a11y_role = ATK_ROLE_RADIO_BUTTON;
-      indicator_name = "radio";
+      indicator_name = I_("radio");
       indicator_visible = TRUE;
       break;
 
@@ -1040,7 +1040,7 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   g_object_class_install_properties (object_class, LAST_PROPERTY, properties);
 
   gtk_widget_class_set_accessible_role (GTK_WIDGET_CLASS (class), ATK_ROLE_PUSH_BUTTON);
-  gtk_widget_class_set_css_name (GTK_WIDGET_CLASS (class), "modelbutton");
+  gtk_widget_class_set_css_name (GTK_WIDGET_CLASS (class), I_("modelbutton"));
 }
 
 static void

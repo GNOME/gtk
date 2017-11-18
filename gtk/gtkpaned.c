@@ -692,7 +692,7 @@ gtk_paned_class_init (GtkPanedClass *class)
   add_move_binding (binding_set, GDK_KEY_KP_End, 0, GTK_SCROLL_END);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_PANED_ACCESSIBLE);
-  gtk_widget_class_set_css_name (widget_class, "paned");
+  gtk_widget_class_set_css_name (widget_class, I_("paned"));
 }
 
 static GType

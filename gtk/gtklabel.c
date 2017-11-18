@@ -1127,7 +1127,7 @@ gtk_label_class_init (GtkLabelClass *class)
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_LABEL_ACCESSIBLE);
 
-  gtk_widget_class_set_css_name (widget_class, "label");
+  gtk_widget_class_set_css_name (widget_class, I_("label"));
 
   quark_shortcuts_connected = g_quark_from_static_string ("gtk-label-shortcuts-connected");
   quark_mnemonic_menu = g_quark_from_static_string ("gtk-mnemonic-menu");
