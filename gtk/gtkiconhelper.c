@@ -631,8 +631,8 @@ gtk_icon_size_set_style_classes (GtkCssNode  *cssnode,
   for (i = 0; i < G_N_ELEMENTS (class_names); i++)
     {
       if (icon_size == class_names[i].icon_size)
-        gtk_css_node_add_class (cssnode, g_quark_from_string (class_names[i].class_name));
+        gtk_css_node_add_class (cssnode, g_quark_from_static_string (class_names[i].class_name));
       else
-        gtk_css_node_remove_class (cssnode, g_quark_from_string (class_names[i].class_name));
+        gtk_css_node_remove_class (cssnode, g_quark_from_static_string (class_names[i].class_name));
     }
 }
