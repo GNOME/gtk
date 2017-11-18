@@ -76,6 +76,10 @@ gboolean            broadway_server_window_translate         (BroadwayServer   *
 							      cairo_region_t   *area,
 							      gint              dx,
 							      gint              dy);
+guint32             broadway_server_upload_texture           (BroadwayServer   *server,
+							      GBytes           *texture);
+void                broadway_server_release_texture          (BroadwayServer   *server,
+							      guint32           id);
 cairo_surface_t   * broadway_server_create_surface           (int               width,
 							      int               height);
 void                broadway_server_window_update            (BroadwayServer   *server,

@@ -59,6 +59,9 @@ struct _BroadwayServer {
   gint32 focused_window_id; /* -1 => none */
   gint show_keyboard;
 
+  guint32 next_texture_id;
+  GHashTable *textures;
+
   guint32 screen_width;
   guint32 screen_height;
 
@@ -138,6 +141,8 @@ broadway_server_init (BroadwayServer *server)
   server->last_seen_time = 1;
   server->id_ht = g_hash_table_new (NULL, NULL);
   server->id_counter = 0;
+  server->textures = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL,
+					    (GDestroyNotify)g_bytes_unref);
 
   root = g_new0 (BroadwayWindow, 1);
   root->id = server->id_counter++;
@@ -160,6 +165,7 @@ broadway_server_finalize (GObject *object)
   g_free (server->address);
   g_free (server->ssl_cert);
   g_free (server->ssl_key);
+  g_hash_table_destroy (server->textures);
 
   G_OBJECT_CLASS (broadway_server_parent_class)->finalize (object);
 }
@@ -1628,6 +1634,27 @@ broadway_server_window_update (BroadwayServer *server,
     broadway_buffer_destroy (window->buffer);
 
   window->buffer = buffer;
+}
+
+guint32
+broadway_server_upload_texture (BroadwayServer   *server,
+				GBytes           *texture)
+{
+  guint32 id;
+
+  id = ++server->next_texture_id;
+  g_hash_table_replace (server->textures,
+			GINT_TO_POINTER (id),
+			g_bytes_ref (texture));
+
+  return id;
+}
+
+void
+broadway_server_release_texture (BroadwayServer   *server,
+				 guint32           id)
+{
+  g_hash_table_remove (server->textures, GINT_TO_POINTER (id));
 }
 
 gboolean

@@ -84,6 +84,8 @@ client_free (BroadwayClient *client)
 static void
 client_disconnected (BroadwayClient *client)
 {
+  GHashTableIter iter;
+  gpointer key, value;
   GList *l;
 
   if (client->disconnect_idle != 0)
@@ -103,6 +105,10 @@ client_disconnected (BroadwayClient *client)
 				    GPOINTER_TO_UINT (l->data));
   g_list_free (client->windows);
   client->windows = NULL;
+
+  g_hash_table_iter_init (&iter, client->textures);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    broadway_server_release_texture (server, GPOINTER_TO_INT (value));
 
   broadway_server_flush (server);
 
@@ -221,6 +227,7 @@ client_handle_request (BroadwayClient *client,
   BroadwayReplyUngrabPointer reply_ungrab_pointer;
   cairo_surface_t *surface;
   guint32 before_serial, now_serial;
+  guint32 global_id;
   int fd;
 
   before_serial = broadway_server_get_next_serial (server);
@@ -329,13 +336,21 @@ client_handle_request (BroadwayClient *client,
           close (fd);
 
           texture = g_bytes_new_take (data, request->upload_texture.size);
+	  global_id = broadway_server_upload_texture (server, texture);
+	  g_bytes_unref (texture);
+
           g_hash_table_replace (client->textures,
                                 GINT_TO_POINTER (request->release_texture.id),
-                                texture);
+                                GINT_TO_POINTER (global_id));
         }
       break;
     case BROADWAY_REQUEST_RELEASE_TEXTURE:
-      g_hash_table_remove (client->textures, GINT_TO_POINTER (request->release_texture.id));
+      global_id = GPOINTER_TO_INT (g_hash_table_lookup (client->textures,
+							GINT_TO_POINTER (request->release_texture.id)));
+      if (global_id != 0)
+	broadway_server_release_texture (server, global_id);
+      g_hash_table_remove (client->textures,
+			   GINT_TO_POINTER (request->release_texture.id));
 
       break;
     case BROADWAY_REQUEST_MOVE_RESIZE:
@@ -481,7 +496,7 @@ incoming_client (GSocketService    *service,
   client = g_new0 (BroadwayClient, 1);
   client->id = client_id_count++;
   client->connection = g_object_ref (connection);
-  client->textures = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify)g_bytes_unref);
+  client->textures = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
 
   input = g_io_stream_get_input_stream (G_IO_STREAM (client->connection));
   client->in = input;
