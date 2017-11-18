@@ -3696,7 +3696,7 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
   impl_class->create_gl_context = gdk_wayland_window_create_gl_context;
   impl_class->supports_edge_constraints = gdk_wayland_window_supports_edge_constraints;
 
-  signals[COMMITTED] = g_signal_new ("committed",
+  signals[COMMITTED] = g_signal_new (g_intern_static_string ("committed"),
                                      G_TYPE_FROM_CLASS (object_class),
                                      G_SIGNAL_RUN_LAST,
                                      0,
