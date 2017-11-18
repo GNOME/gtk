@@ -6475,7 +6475,7 @@ void
 _gtk_widget_set_captured_event_handler (GtkWidget               *widget,
                                         GtkCapturedEventHandler  callback)
 {
-  g_object_set_data (G_OBJECT (widget), "captured-event-handler", callback);
+  g_object_set_data (G_OBJECT (widget), I_("captured-event-handler"), callback);
 }
 
 static gboolean
@@ -6576,7 +6576,7 @@ _gtk_widget_captured_event (GtkWidget      *widget,
 
   return_val = _gtk_widget_run_controllers (widget, event_copy, GTK_PHASE_CAPTURE);
 
-  handler = g_object_get_data (G_OBJECT (widget), "captured-event-handler");
+  handler = g_object_get_data (G_OBJECT (widget), I_("captured-event-handler"));
   if (!handler)
     goto out;
 
@@ -15458,8 +15458,7 @@ gtk_widget_init_legacy_controller (GtkWidget *widget)
   GtkEventController *controller;
 
   controller = _gtk_event_controller_legacy_new (widget);
-  g_object_set_data_full (G_OBJECT (widget),
-                          "gtk-widget-legacy-event-controller",
+  g_object_set_data_full (G_OBJECT (widget), I_("gtk-widget-legacy-event-controller"),
                           controller, g_object_unref);
 }
 

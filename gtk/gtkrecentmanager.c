@@ -289,7 +289,7 @@ gtk_recent_manager_class_init (GtkRecentManagerClass *klass)
                                                         P_("Filename"),
                                                         P_("The full path to the file to be used to store and read the list"),
                                                         NULL,
-                                                        (G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE)));
+                                                        (G_PARAM_CONSTRUCT_ONLY | GTK_PARAM_READWRITE)));
 
   /**
    * GtkRecentManager:size:
@@ -303,10 +303,8 @@ gtk_recent_manager_class_init (GtkRecentManagerClass *klass)
                                    g_param_spec_int ("size",
                                                      P_("Size"),
                                                      P_("The size of the recently used resources list"),
-                                                     -1,
-                                                     G_MAXINT,
-                                                     0,
-                                                     G_PARAM_READABLE));
+                                                     -1, G_MAXINT, 0,
+                                                     GTK_PARAM_READABLE));
 
   /**
    * GtkRecentManager::changed:

@@ -1532,7 +1532,7 @@ gtk_text_attr_appearance_new (const GtkTextAppearance *appearance)
 
   if (!klass.type)
     klass.type = gtk_text_attr_appearance_type =
-      pango_attr_type_register ("GtkTextAttrAppearance");
+      pango_attr_type_register (I_("GtkTextAttrAppearance"));
 
   result = g_slice_new (GtkTextAttrAppearance);
   result->attr.klass = &klass;

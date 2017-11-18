@@ -26,6 +26,7 @@
 #include "gtkgesturelongpress.h"
 #include "gtkintl.h"
 #include "gtksnapshot.h"
+#include "gtkprivate.h"
 
 struct _GtkColorPlanePrivate
 {
@@ -516,7 +517,7 @@ gtk_color_plane_class_init (GtkColorPlaneClass *class)
                                                         "Hue Adjustment",
                                                         "Hue Adjustment",
 							GTK_TYPE_ADJUSTMENT,
-							G_PARAM_WRITABLE |
+							GTK_PARAM_WRITABLE |
 							G_PARAM_CONSTRUCT_ONLY));
 
   g_object_class_install_property (object_class,
@@ -525,7 +526,7 @@ gtk_color_plane_class_init (GtkColorPlaneClass *class)
                                                         "Saturation Adjustment",
                                                         "Saturation Adjustment",
 							GTK_TYPE_ADJUSTMENT,
-							G_PARAM_WRITABLE |
+							GTK_PARAM_WRITABLE |
 							G_PARAM_CONSTRUCT_ONLY));
 
   g_object_class_install_property (object_class,
@@ -534,7 +535,7 @@ gtk_color_plane_class_init (GtkColorPlaneClass *class)
                                                         "Value Adjustment",
                                                         "Value Adjustment",
 							GTK_TYPE_ADJUSTMENT,
-							G_PARAM_WRITABLE |
+							GTK_PARAM_WRITABLE |
 							G_PARAM_CONSTRUCT_ONLY));
 }
 

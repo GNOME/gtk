@@ -1063,7 +1063,7 @@ get_component_paddings (GtkCalendar *calendar,
   if (day_padding)
     {
       gtk_style_context_save (context);
-      gtk_style_context_add_class (context, "day-number");
+      gtk_style_context_add_class (context, I_("day-number"));
       gtk_style_context_get_padding (context, day_padding);
       gtk_style_context_restore (context);
     }
@@ -1071,7 +1071,7 @@ get_component_paddings (GtkCalendar *calendar,
   if (day_name_padding)
     {
       gtk_style_context_save (context);
-      gtk_style_context_add_class (context, "day-name");
+      gtk_style_context_add_class (context, I_("day-name"));
       gtk_style_context_get_padding (context, day_name_padding);
       gtk_style_context_restore (context);
     }
@@ -1079,7 +1079,7 @@ get_component_paddings (GtkCalendar *calendar,
   if (week_padding)
     {
       gtk_style_context_save (context);
-      gtk_style_context_add_class (context, "week-number");
+      gtk_style_context_add_class (context, I_("week-number"));
       gtk_style_context_get_padding (context, week_padding);
       gtk_style_context_restore (context);
     }

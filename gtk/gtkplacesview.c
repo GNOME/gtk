@@ -22,6 +22,7 @@
 #include <gio/gvfs.h>
 #include <gtk/gtk.h>
 
+#include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkplacesviewprivate.h"
@@ -2193,21 +2194,21 @@ gtk_places_view_class_init (GtkPlacesViewClass *klass)
                                 P_("Local Only"),
                                 P_("Whether the sidebar only includes local files"),
                                 FALSE,
-                                G_PARAM_READWRITE);
+                                GTK_PARAM_READWRITE);
 
   properties[PROP_LOADING] =
           g_param_spec_boolean ("loading",
                                 P_("Loading"),
                                 P_("Whether the view is loading locations"),
                                 FALSE,
-                                G_PARAM_READABLE);
+                                GTK_PARAM_READABLE);
 
   properties[PROP_FETCHING_NETWORKS] =
           g_param_spec_boolean ("fetching-networks",
                                 P_("Fetching networks"),
                                 P_("Whether the view is fetching networks"),
                                 FALSE,
-                                G_PARAM_READABLE);
+                                GTK_PARAM_READABLE);
 
   properties[PROP_OPEN_FLAGS] =
           g_param_spec_flags ("open-flags",
@@ -2215,7 +2216,7 @@ gtk_places_view_class_init (GtkPlacesViewClass *klass)
                               P_("Modes in which the calling application can open locations selected in the sidebar"),
                               GTK_TYPE_PLACES_OPEN_FLAGS,
                               GTK_PLACES_OPEN_NORMAL,
-                              G_PARAM_READWRITE);
+                              GTK_PARAM_READWRITE);
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 

@@ -302,7 +302,7 @@ add_child (GtkWidget       *widget,
   g_signal_connect (widget, "child-notify::position",
                     G_CALLBACK (on_position_updated), sidebar);
 
-  g_object_set_data (G_OBJECT (item), "stack-child", widget);
+  g_object_set_data (G_OBJECT (item), I_("stack-child"), widget);
   g_hash_table_insert (priv->rows, widget, row);
   gtk_container_add (GTK_CONTAINER (priv->list), row);
 }

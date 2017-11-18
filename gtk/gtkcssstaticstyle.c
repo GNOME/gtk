@@ -33,6 +33,7 @@
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcsstransitionprivate.h"
 #include "gtkprivate.h"
+#include "gtkintl.h"
 #include "gtksettings.h"
 #include "gtkstyleanimationprivate.h"
 #include "gtkstylepropertyprivate.h"
@@ -158,7 +159,7 @@ gtk_css_static_style_get_default (void)
       default_style = gtk_css_static_style_new_compute (GTK_STYLE_PROVIDER (settings),
                                                         NULL,
                                                         NULL);
-      g_object_set_data_full (G_OBJECT (settings), "gtk-default-style",
+      g_object_set_data_full (G_OBJECT (settings), I_("gtk-default-style"),
                               default_style, clear_default_style);
     }
 

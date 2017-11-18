@@ -8436,14 +8436,14 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                                          P_("Search mode"),
                                                          P_("Search mode"),
                                                          FALSE,
-                                                         G_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class, PROP_SUBTITLE,
                                    g_param_spec_string ("subtitle",
                                                         P_("Subtitle"),
                                                         P_("Subtitle"),
                                                         "",
-                                                        G_PARAM_READABLE));
+                                                        GTK_PARAM_READABLE));
 
   _gtk_file_chooser_install_properties (gobject_class);
 

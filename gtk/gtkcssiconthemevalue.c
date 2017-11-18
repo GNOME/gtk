@@ -22,6 +22,7 @@
 #include "gtkicontheme.h"
 #include "gtksettingsprivate.h"
 #include "gtkstyleproviderprivate.h"
+#include "gtkintl.h"
 
 /*
  * The idea behind this value (and the '-gtk-icon-theme' CSS property) is
@@ -134,7 +135,7 @@ gtk_css_icon_theme_value_new (GtkIconTheme *icontheme)
   result = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_ICON_THEME);
   result->icontheme = g_object_ref (icontheme);
 
-  g_object_set_data (G_OBJECT (icontheme), "-gtk-css-value", result);
+  g_object_set_data (G_OBJECT (icontheme), I_("-gtk-css-value"), result);
   result->changed_id = g_signal_connect (icontheme, "changed", G_CALLBACK (gtk_css_value_icon_theme_changed_cb), result);
 
   return result;

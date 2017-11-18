@@ -3409,7 +3409,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                        P_("The selection mode"),
                        GTK_TYPE_SELECTION_MODE,
                        GTK_SELECTION_SINGLE,
-                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                       GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkFlowBox:activate-on-single-click:
@@ -3422,7 +3422,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                           P_("Activate on Single Click"),
                           P_("Activate row on a single click"),
                           TRUE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkFlowBox:homogeneous:
@@ -3435,7 +3435,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                           P_("Homogeneous"),
                           P_("Whether the children should all be the same size"),
                           FALSE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkFlowBox:min-children-per-line:
@@ -3453,7 +3453,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                        P_("The minimum number of children to allocate "
                        "consecutively in the given orientation."),
                        0, G_MAXUINT, 0,
-                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                       GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkFlowBox:max-children-per-line:
@@ -3467,7 +3467,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                        P_("The maximum amount of children to request space for "
                           "consecutively in the given orientation."),
                        1, G_MAXUINT, DEFAULT_MAX_CHILDREN_PER_LINE,
-                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                       GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkFlowBox:row-spacing:
@@ -3479,7 +3479,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                        P_("Vertical spacing"),
                        P_("The amount of vertical space between two children"),
                        0, G_MAXUINT, 0,
-                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                       GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkFlowBox:column-spacing:
@@ -3491,7 +3491,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                        P_("Horizontal spacing"),
                        P_("The amount of horizontal space between two children"),
                        0, G_MAXUINT, 0,
-                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                       GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 

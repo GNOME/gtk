@@ -131,10 +131,8 @@ gtk_cell_area_context_class_init (GtkCellAreaContextClass *class)
                                    g_param_spec_int ("minimum-width",
                                                      P_("Minimum Width"),
                                                      P_("Minimum cached width"),
-                                                     -1,
-                                                     G_MAXINT,
-                                                     -1,
-                                                     G_PARAM_READABLE));
+                                                     -1, G_MAXINT, -1,
+                                                     GTK_PARAM_READABLE));
 
   /**
    * GtkCellAreaContext:natural-width:
@@ -150,10 +148,8 @@ gtk_cell_area_context_class_init (GtkCellAreaContextClass *class)
                                    g_param_spec_int ("natural-width",
                                                      P_("Minimum Width"),
                                                      P_("Minimum cached width"),
-                                                     -1,
-                                                     G_MAXINT,
-                                                     -1,
-                                                     G_PARAM_READABLE));
+                                                     -1, G_MAXINT, -1,
+                                                     GTK_PARAM_READABLE));
 
   /**
    * GtkCellAreaContext:minimum-height:
@@ -169,10 +165,8 @@ gtk_cell_area_context_class_init (GtkCellAreaContextClass *class)
                                    g_param_spec_int ("minimum-height",
                                                      P_("Minimum Height"),
                                                      P_("Minimum cached height"),
-                                                     -1,
-                                                     G_MAXINT,
-                                                     -1,
-                                                     G_PARAM_READABLE));
+                                                     -1, G_MAXINT, -1,
+                                                     GTK_PARAM_READABLE));
 
   /**
    * GtkCellAreaContext:natural-height:
@@ -188,10 +182,8 @@ gtk_cell_area_context_class_init (GtkCellAreaContextClass *class)
                                    g_param_spec_int ("natural-height",
                                                      P_("Minimum Height"),
                                                      P_("Minimum cached height"),
-                                                     -1,
-                                                     G_MAXINT,
-                                                     -1,
-                                                     G_PARAM_READABLE));
+                                                     -1, G_MAXINT, -1,
+                                                     GTK_PARAM_READABLE));
 }
 
 /*************************************************************

@@ -64,6 +64,7 @@
 #include "gtkgesturelongpress.h"
 #include "gtkbox.h"
 #include "gtkmodelbutton.h"
+#include "gtkprivate.h"
 
 /**
  * SECTION:gtkplacessidebar
@@ -4683,56 +4684,56 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
                                P_("Location to Select"),
                                P_("The location to highlight in the sidebar"),
                                G_TYPE_FILE,
-                               G_PARAM_READWRITE);
+                               GTK_PARAM_READWRITE);
   properties[PROP_OPEN_FLAGS] =
           g_param_spec_flags ("open-flags",
                               P_("Open Flags"),
                               P_("Modes in which the calling application can open locations selected in the sidebar"),
                               GTK_TYPE_PLACES_OPEN_FLAGS,
                               GTK_PLACES_OPEN_NORMAL,
-                              G_PARAM_READWRITE);
+                              GTK_PARAM_READWRITE);
   properties[PROP_SHOW_RECENT] =
           g_param_spec_boolean ("show-recent",
                                 P_("Show recent files"),
                                 P_("Whether the sidebar includes a builtin shortcut for recent files"),
                                 TRUE,
-                                G_PARAM_READWRITE);
+                                GTK_PARAM_READWRITE);
   properties[PROP_SHOW_DESKTOP] =
           g_param_spec_boolean ("show-desktop",
                                 P_("Show “Desktop”"),
                                 P_("Whether the sidebar includes a builtin shortcut to the Desktop folder"),
                                 TRUE,
-                                G_PARAM_READWRITE);
+                                GTK_PARAM_READWRITE);
   properties[PROP_SHOW_ENTER_LOCATION] =
           g_param_spec_boolean ("show-enter-location",
                                 P_("Show “Enter Location”"),
                                 P_("Whether the sidebar includes a builtin shortcut to manually enter a location"),
                                 FALSE,
-                                G_PARAM_READWRITE);
+                                GTK_PARAM_READWRITE);
   properties[PROP_LOCAL_ONLY] =
           g_param_spec_boolean ("local-only",
                                 P_("Local Only"),
                                 P_("Whether the sidebar only includes local files"),
                                 FALSE,
-                                G_PARAM_READWRITE);
+                                GTK_PARAM_READWRITE);
   properties[PROP_SHOW_TRASH] =
           g_param_spec_boolean ("show-trash",
                                 P_("Show “Trash”"),
                                 P_("Whether the sidebar includes a builtin shortcut to the Trash location"),
                                 TRUE,
-                                G_PARAM_READWRITE);
+                                GTK_PARAM_READWRITE);
   properties[PROP_SHOW_OTHER_LOCATIONS] =
           g_param_spec_boolean ("show-other-locations",
                                 P_("Show “Other locations”"),
                                 P_("Whether the sidebar includes an item to show external locations"),
                                 FALSE,
-                                G_PARAM_READWRITE);
+                                GTK_PARAM_READWRITE);
   properties[PROP_SHOW_STARRED_LOCATION] =
           g_param_spec_boolean ("show-starred-location",
                                 P_("Show “Starred Location”"),
                                 P_("Whether the sidebar includes an item to show starred files"),
                                 FALSE,
-                                G_PARAM_READWRITE);
+                                GTK_PARAM_READWRITE);
 
 
   /**
@@ -4744,7 +4745,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
    * Since: 3.18
    */
   properties[PROP_POPULATE_ALL] =
-          g_param_spec_boolean ("populate-all",
+          g_param_spec_boolean (I_("populate-all"),
                                 P_("Populate all"),
                                 P_("Whether to emit ::populate-popup for popups that are not menus"),
                                 FALSE,

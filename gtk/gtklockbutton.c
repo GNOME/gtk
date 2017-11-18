@@ -244,7 +244,7 @@ gtk_lock_button_init (GtkLockButton *button)
   update_state (button);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (button));
-  gtk_style_context_add_class (context, "lock");
+  gtk_style_context_add_class (context, I_("lock"));
 }
 
 static void

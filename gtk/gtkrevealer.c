@@ -258,7 +258,7 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
                           P_("Child Revealed"),
                           P_("Whether the child is revealed and the animation target reached"),
                           FALSE,
-                          G_PARAM_READABLE);
+                          GTK_PARAM_READABLE);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
