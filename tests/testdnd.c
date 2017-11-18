@@ -315,7 +315,7 @@ target_drag_motion	   (GtkWidget	       *widget,
 			    guint               time)
 {
   GtkWidget *source_widget;
-  GList *tmp_list;
+  char *s;
 
   if (!have_drag)
     {
@@ -328,15 +328,8 @@ target_drag_motion	   (GtkWidget	       *widget,
 	   G_OBJECT_TYPE_NAME (source_widget) :
 	   "NULL");
 
-  tmp_list = gdk_drag_context_list_targets (context);
-  while (tmp_list)
-    {
-      char *name = gdk_atom_name (GDK_POINTER_TO_ATOM (tmp_list->data));
-      g_print ("%s\n", name);
-      g_free (name);
-      
-      tmp_list = tmp_list->next;
-    }
+  s = gdk_content_formats_to_string (gdk_drag_context_get_formats (context));
+  g_print ("%s\n", s);
 
   gdk_drag_status (context, gdk_drag_context_get_suggested_action (context), time);
 
@@ -350,15 +343,20 @@ target_drag_drop	   (GtkWidget	       *widget,
 			    gint                y,
 			    guint               time)
 {
+  GdkContentFormats *formats;
+  GdkAtom format;
+
   g_print("drop\n");
   have_drag = FALSE;
 
   gtk_image_set_from_pixbuf (GTK_IMAGE (widget), trashcan_closed);
 
-  if (gdk_drag_context_list_targets (context))
+  formats = gdk_drag_context_get_formats (context);
+  format = gdk_content_formats_intersects (formats, formats);
+  if (format)
     {
       gtk_drag_get_data (widget, context,
-			 GDK_POINTER_TO_ATOM (gdk_drag_context_list_targets (context)->data),
+			 format,
 			 time);
       return TRUE;
     }

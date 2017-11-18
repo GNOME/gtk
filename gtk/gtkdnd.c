@@ -1180,7 +1180,6 @@ gtk_drag_begin_internal (GtkWidget          *widget,
                          int                 y)
 {
   GtkDragSourceInfo *info;
-  GList *targets = NULL;
   guint32 time = GDK_CURRENT_TIME;
   GdkDragAction possible_actions, suggested_action;
   GdkDragContext *context;
@@ -1190,8 +1189,6 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   GdkWindow *ipc_window;
   int start_x, start_y;
   GdkAtom selection;
-  GdkAtom *atoms;
-  guint i, n_atoms;
   gboolean managed;
 
   managed = gtk_drag_is_managed (widget);
@@ -1263,13 +1260,6 @@ gtk_drag_begin_internal (GtkWidget          *widget,
       gtk_device_grab_add (ipc_widget, pointer, FALSE);
     }
 
-  atoms = gdk_content_formats_get_atoms (target_list, &n_atoms);
-  for (i = 0; i < n_atoms; i++)
-    {
-      targets = g_list_prepend (targets, (gpointer) atoms[i]);
-    }
-  g_free (atoms);
-
   source_widgets = g_slist_prepend (source_widgets, ipc_widget);
 
   if (x != -1 && y != -1)
@@ -1291,10 +1281,9 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   else
     gdk_device_get_position (pointer, &start_x, &start_y);
 
-  context = gdk_drag_begin_from_point (ipc_window, pointer, targets, start_x, start_y);
+  context = gdk_drag_begin_from_point (ipc_window, pointer, target_list, start_x, start_y);
 
   gdk_drag_context_set_device (context, pointer);
-  g_list_free (targets);
 
   if (managed &&
       !gdk_drag_context_manage_dnd (context, ipc_window, actions))

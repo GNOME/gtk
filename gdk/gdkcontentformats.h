@@ -41,6 +41,12 @@ GDK_AVAILABLE_IN_3_94
 void                    gdk_content_formats_unref               (GdkContentFormats              *formats);
 
 GDK_AVAILABLE_IN_3_94
+void                    gdk_content_formats_print               (GdkContentFormats              *formats,
+                                                                 GString                        *string);
+GDK_AVAILABLE_IN_3_94
+char *                  gdk_content_formats_to_string           (GdkContentFormats              *formats);
+
+GDK_AVAILABLE_IN_3_94
 void                    gdk_content_formats_union               (GdkContentFormats              *first,
                                                                  const GdkContentFormats        *second);
 GDK_AVAILABLE_IN_3_94
@@ -48,9 +54,6 @@ GdkAtom                 gdk_content_formats_intersects          (const GdkConten
                                                                  const GdkContentFormats        *second);
 GDK_AVAILABLE_IN_3_94
 void                    gdk_content_formats_add                 (GdkContentFormats              *formats,
-                                                                 const char                     *mime_type);
-GDK_AVAILABLE_IN_3_94
-void                    gdk_content_formats_remove              (GdkContentFormats              *formats,
                                                                  const char                     *mime_type);
 GDK_AVAILABLE_IN_3_94
 gboolean                gdk_content_formats_contains            (const GdkContentFormats        *formats,

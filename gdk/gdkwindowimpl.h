@@ -219,11 +219,11 @@ struct _GdkWindowImplClass
   GdkDragProtocol (* get_drag_protocol) (GdkWindow *window,
                                          GdkWindow **target);
   void         (* register_dnd)         (GdkWindow *window);
-  GdkDragContext * (*drag_begin)        (GdkWindow *window,
-                                         GdkDevice *device,
-                                         GList     *targets,
-                                         gint       x_root,
-                                         gint       y_root);
+  GdkDragContext * (*drag_begin)        (GdkWindow        *window,
+                                         GdkDevice        *device,
+                                         GdkContentFormats *formats,
+                                         gint              x_root,
+                                         gint              y_root);
 
   void         (*process_updates_recurse) (GdkWindow      *window,
                                            cairo_region_t *region);

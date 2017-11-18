@@ -22,6 +22,7 @@
 #include "gdkinternals.h"
 #include "gdkproperty.h"
 #include "gdkprivate-wayland.h"
+#include "gdkcontentformatsprivate.h"
 #include "gdkdisplay-wayland.h"
 #include "gdkseat-wayland.h"
 
@@ -239,22 +240,26 @@ gdk_wayland_drop_context_set_status (GdkDragContext *context,
 
   if (accepted)
     {
-      GList *l;
-
-      for (l = context->targets; l; l = l->next)
+      GdkAtom *atoms;
+      guint i, n_atoms;
+      
+      atoms = gdk_content_formats_get_atoms (context->formats, &n_atoms);
+      for (i = 0; i < n_atoms; i++)
         {
-          if (l->data != gdk_atom_intern_static_string ("DELETE"))
+          if (atoms[i] != gdk_atom_intern_static_string ("DELETE"))
             break;
         }
 
-      if (l)
+      if (i < n_atoms)
         {
-          gchar *mimetype = gdk_atom_name (l->data);
+          gchar *mimetype = gdk_atom_name (atoms[i]);
 
           wl_data_offer_accept (wl_offer, context_wayland->serial, mimetype);
-          g_free (mimetype);
+          g_free (atoms);
           return;
         }
+      
+      g_free (atoms);
     }
 
   wl_data_offer_accept (wl_offer, context_wayland->serial, NULL);
@@ -508,22 +513,23 @@ create_dnd_window (GdkDisplay *display)
 }
 
 GdkDragContext *
-_gdk_wayland_window_drag_begin (GdkWindow *window,
-				GdkDevice *device,
-				GList     *targets,
-                                gint       x_root,
-                                gint       y_root)
+_gdk_wayland_window_drag_begin (GdkWindow         *window,
+				GdkDevice         *device,
+				GdkContentFormats *formats,
+                                gint               x_root,
+                                gint               y_root)
 {
   GdkWaylandDragContext *context_wayland;
   GdkDragContext *context;
-  GList *l;
+  GdkAtom *atoms;
+  guint i, n_atoms;
 
   context_wayland = g_object_new (GDK_TYPE_WAYLAND_DRAG_CONTEXT, NULL);
   context = GDK_DRAG_CONTEXT (context_wayland);
   context->display = gdk_window_get_display (window);
   context->source_window = g_object_ref (window);
   context->is_source = TRUE;
-  context->targets = g_list_copy (targets);
+  context->formats = gdk_content_formats_ref (formats);
 
   gdk_drag_context_set_device (context, device);
 
@@ -533,13 +539,15 @@ _gdk_wayland_window_drag_begin (GdkWindow *window,
     gdk_wayland_selection_get_data_source (window,
                                            gdk_wayland_drag_context_get_selection (context));
 
-  for (l = context->targets; l; l = l->next)
+  atoms = gdk_content_formats_get_atoms (context->formats, &n_atoms);
+  for (i = 0; i < n_atoms; i++)
     {
-      gchar *mimetype = gdk_atom_name (l->data);
+      gchar *mimetype = gdk_atom_name (atoms[i]);
 
       wl_data_source_offer (context_wayland->data_source, mimetype);
       g_free (mimetype);
     }
+  g_free (atoms);
 
   return context;
 }
@@ -567,9 +575,13 @@ gdk_wayland_drop_context_update_targets (GdkDragContext *context)
 
   device = gdk_drag_context_get_device (context);
   display = gdk_device_get_display (device);
-  g_list_free (context->targets);
-  context->targets = g_list_copy (gdk_wayland_selection_get_targets (display,
-                                                                     gdk_drag_get_selection (context)));
+  gdk_content_formats_unref (context->formats);
+  context->formats = gdk_wayland_selection_get_targets (display,
+                                                        gdk_drag_get_selection (context));
+  if (context->formats)
+    gdk_content_formats_ref (context->formats);
+  else
+    context->formats = gdk_content_formats_new (NULL, 0);
 }
 
 void

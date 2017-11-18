@@ -411,8 +411,6 @@ gtk_drag_dest_find_target (GtkWidget         *widget,
                            GdkDragContext    *context,
                            GdkContentFormats *target_list)
 {
-  GdkContentFormats *source_list;
-  GList *tmp_source;
   GdkAtom result;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
@@ -424,17 +422,8 @@ gtk_drag_dest_find_target (GtkWidget         *widget,
   if (target_list == NULL)
     return NULL;
 
-  source_list = gdk_content_formats_new (NULL, 0);
-  for (tmp_source = gdk_drag_context_list_targets (context);
-       tmp_source != NULL;
-       tmp_source = tmp_source->next)
-    {
-      gdk_content_formats_add (source_list, tmp_source->data);
-    }
-       
-  result = gdk_content_formats_intersects (target_list, source_list);
-
-  gdk_content_formats_unref (source_list);
+  result = gdk_content_formats_intersects (target_list,
+                                           gdk_drag_context_get_formats (context));
 
   return result;
 }

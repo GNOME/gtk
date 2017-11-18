@@ -150,6 +150,59 @@ gdk_content_formats_unref (GdkContentFormats *formats)
 }
 
 /**
+ * gdk_content_formats_print:
+ * @formats: a #GdkContentFormats
+ * @string: a #GString to print into
+ *
+ * Prints the given @formats into a string for human consumption.
+ * This is meant for debugging and logging.
+ *
+ * The form of the representation may change at any time and is
+ * not guranteed to stay identical.
+ **/
+void
+gdk_content_formats_print (GdkContentFormats *formats,
+                           GString           *string)
+{
+  GList *l;
+
+  g_return_if_fail (formats != NULL);
+  g_return_if_fail (string != NULL);
+
+  g_string_append (string, "{ ");
+  for (l = formats->formats; l; l = l->next)
+    {
+      if (l != formats->formats)
+        g_string_append (string, ", ");
+      g_string_append (string, l->data);
+    }
+  g_string_append (string, " }");
+}
+
+/**
+ * gdk_content_formats_to_string:
+ * @formats: a #GdkContentFormats
+ *
+ * Prints the given @formats into a human-readable string.
+ * This is a small wrapper around gdk_content_formats_print() to help
+ * when debugging.
+ *
+ * Returns: (transfer full): a new string
+ **/
+char *
+gdk_content_formats_to_string (GdkContentFormats *formats)
+{
+  GString *string;
+
+  g_return_val_if_fail (formats != NULL, NULL);
+
+  string = g_string_new (NULL);
+  gdk_content_formats_print (formats, string);
+
+  return g_string_free (string, FALSE);
+}
+
+/**
  * gdk_content_formats_add:
  * @formats:  a #GdkContentFormats
  * @mime_type: the mime type to add
@@ -215,24 +268,6 @@ gdk_content_formats_intersects (const GdkContentFormats *first,
     }
 
   return NULL;
-}
-
-/**
- * gdk_content_formats_remove:
- * @formats: a #GdkContentFormats
- * @mime_type: the mime type
- * 
- * Removes a mime type. If the mime type was not part of @formats, nothing
- * happens.
- **/
-void 
-gdk_content_formats_remove (GdkContentFormats *formats,
-                            const char        *mime_type)
-{
-  g_return_if_fail (formats != NULL);
-  g_return_if_fail (mime_type != NULL);
-
-  formats->formats = g_list_remove (formats->formats, (gpointer) gdk_atom_intern (mime_type, FALSE));
 }
 
 /**

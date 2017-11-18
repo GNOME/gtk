@@ -40,11 +40,11 @@
 void _gdk_broadway_resync_windows (void);
 
 void     _gdk_broadway_window_register_dnd (GdkWindow      *window);
-GdkDragContext * _gdk_broadway_window_drag_begin (GdkWindow *window,
-						  GdkDevice *device,
-						  GList     *targets,
-                                                  gint       x_root,
-                                                  gint       y_root);
+GdkDragContext * _gdk_broadway_window_drag_begin (GdkWindow         *window,
+						  GdkDevice         *device,
+						  GdkContentFormats *formats,
+                                                  gint               x_root,
+                                                  gint               y_root);
 void     _gdk_broadway_window_translate         (GdkWindow *window,
 						 cairo_region_t *area,
 						 gint       dx,

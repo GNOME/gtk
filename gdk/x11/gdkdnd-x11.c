@@ -30,6 +30,7 @@
 
 #include "gdkinternals.h"
 #include "gdkasync.h"
+#include "gdkcontentformatsprivate.h"
 #include "gdkproperty.h"
 #include "gdkprivate-x11.h"
 #include "gdkscreen-x11.h"
@@ -336,23 +337,18 @@ gdk_drag_context_find (GdkDisplay *display,
 static void
 precache_target_list (GdkDragContext *context)
 {
-  if (context->targets)
+  if (context->formats)
     {
-      GPtrArray *targets = g_ptr_array_new ();
-      GList *tmp_list;
-      int i;
+      GdkAtom *atoms;
+      guint n_atoms;
 
-      for (tmp_list = context->targets; tmp_list; tmp_list = tmp_list->next)
-        g_ptr_array_add (targets, gdk_atom_name (GDK_POINTER_TO_ATOM (tmp_list->data)));
+      atoms = gdk_content_formats_get_atoms (context->formats, &n_atoms);
 
       _gdk_x11_precache_atoms (GDK_WINDOW_DISPLAY (context->source_window),
-                               (const gchar **)targets->pdata,
-                               targets->len);
+                               (const gchar **) atoms,
+                               n_atoms);
 
-      for (i =0; i < targets->len; i++)
-        g_free (targets->pdata[i]);
-
-      g_ptr_array_free (targets, TRUE);
+      g_free (atoms);
     }
 }
 
@@ -854,15 +850,11 @@ get_client_window_at_coords (GdkWindowCache *cache,
 
 #ifdef G_ENABLE_DEBUG
 static void
-print_target_list (GList *targets)
+print_target_list (GdkContentFormats *formats)
 {
-  while (targets)
-    {
-      gchar *name = gdk_atom_name (GDK_POINTER_TO_ATOM (targets->data));
-      g_message ("\t%s", name);
-      g_free (name);
-      targets = targets->next;
-    }
+  gchar *name = gdk_content_formats_to_string (formats);
+  g_message ("DND formats: %s", name);
+  g_free (name);
 }
 #endif /* G_ENABLE_DEBUG */
 
@@ -1033,19 +1025,14 @@ xdnd_set_targets (GdkX11DragContext *context_x11)
 {
   GdkDragContext *context = GDK_DRAG_CONTEXT (context_x11);
   Atom *atomlist;
-  GList *tmp_list = context->targets;
-  gint i;
-  gint n_atoms = g_list_length (context->targets);
+  GdkAtom *atoms;
+  guint i, n_atoms;
   GdkDisplay *display = GDK_WINDOW_DISPLAY (context->source_window);
 
+  atoms = gdk_content_formats_get_atoms (context->formats, &n_atoms);
   atomlist = g_new (Atom, n_atoms);
-  i = 0;
-  while (tmp_list)
-    {
-      atomlist[i] = gdk_x11_atom_to_xatom_for_display (display, GDK_POINTER_TO_ATOM (tmp_list->data));
-      tmp_list = tmp_list->next;
-      i++;
-    }
+  for (i = 0; i < n_atoms; i++)
+    atomlist[i] = gdk_x11_atom_to_xatom_for_display (display, atoms[i]);
 
   XChangeProperty (GDK_WINDOW_XDISPLAY (context->source_window),
                    GDK_WINDOW_XID (context->source_window),
@@ -1054,6 +1041,7 @@ xdnd_set_targets (GdkX11DragContext *context_x11)
                    (guchar *)atomlist, n_atoms);
 
   g_free (atomlist);
+  g_free (atoms);
 
   context_x11->xdnd_targets_set = 1;
 }
@@ -1234,6 +1222,8 @@ xdnd_send_enter (GdkX11DragContext *context_x11)
 {
   GdkDragContext *context = GDK_DRAG_CONTEXT (context_x11);
   GdkDisplay *display = GDK_WINDOW_DISPLAY (context->dest_window);
+  GdkAtom *atoms;
+  guint i, n_atoms;
   XEvent xev;
 
   xev.xclient.type = ClientMessage;
@@ -1251,7 +1241,9 @@ xdnd_send_enter (GdkX11DragContext *context_x11)
   GDK_NOTE(DND,
            g_message ("Sending enter source window %#lx XDND protocol version %d\n",
                       GDK_WINDOW_XID (context->source_window), context_x11->version));
-  if (g_list_length (context->targets) > 3)
+  atoms = gdk_content_formats_get_atoms (context->formats, &n_atoms);
+
+  if (n_atoms > 3)
     {
       if (!context_x11->xdnd_targets_set)
         xdnd_set_targets (context_x11);
@@ -1259,15 +1251,9 @@ xdnd_send_enter (GdkX11DragContext *context_x11)
     }
   else
     {
-      GList *tmp_list = context->targets;
-      gint i = 2;
-
-      while (tmp_list)
+      for (i = 0; i < n_atoms; i++)
         {
-          xev.xclient.data.l[i] = gdk_x11_atom_to_xatom_for_display (display,
-                                                                     GDK_POINTER_TO_ATOM (tmp_list->data));
-          tmp_list = tmp_list->next;
-          i++;
+          xev.xclient.data.l[i + 2] = gdk_x11_atom_to_xatom_for_display (display, atoms[i]);
         }
     }
 
@@ -1654,6 +1640,7 @@ xdnd_enter_filter (GdkXEvent *xev,
   gulong nitems, after;
   guchar *data;
   Atom *atoms;
+  GPtrArray *formats;
   guint32 source_window;
   gboolean get_types;
   gint version;
@@ -1708,7 +1695,7 @@ xdnd_enter_filter (GdkXEvent *xev,
   context->dest_window = event->any.window;
   g_object_ref (context->dest_window);
 
-  context->targets = NULL;
+  formats = g_ptr_array_new ();
   if (get_types)
     {
       gdk_x11_display_error_trap_push (display);
@@ -1730,12 +1717,9 @@ xdnd_enter_filter (GdkXEvent *xev,
         }
 
       atoms = (Atom *)data;
-
       for (i = 0; i < nitems; i++)
-        context->targets =
-          g_list_append (context->targets,
-                         GDK_ATOM_TO_POINTER (gdk_x11_xatom_to_atom_for_display (display,
-                                                                                 atoms[i])));
+        g_ptr_array_add (formats, 
+                         (gpointer) gdk_x11_get_xatom_name_for_display (display, atoms[i]));
 
       XFree (atoms);
     }
@@ -1743,15 +1727,16 @@ xdnd_enter_filter (GdkXEvent *xev,
     {
       for (i = 0; i < 3; i++)
         if (xevent->xclient.data.l[2 + i])
-          context->targets =
-            g_list_append (context->targets,
-                           GDK_ATOM_TO_POINTER (gdk_x11_xatom_to_atom_for_display (display,
-                                                                                   xevent->xclient.data.l[2 + i])));
+          g_ptr_array_add (formats, 
+                           (gpointer) gdk_x11_get_xatom_name_for_display (display,
+                                                                          xevent->xclient.data.l[2 + i]));
     }
+  context->formats = gdk_content_formats_new ((const char **) formats->pdata, formats->len);
+  g_ptr_array_unref (formats);
 
 #ifdef G_ENABLE_DEBUG
   if (GDK_DEBUG_CHECK (DND))
-    print_target_list (context->targets);
+    print_target_list (context->formats);
 #endif /* G_ENABLE_DEBUG */
 
   xdnd_manage_source_filter (context, context->source_window, TRUE);
@@ -1994,11 +1979,11 @@ create_drag_window (GdkDisplay *display)
 }
 
 GdkDragContext *
-_gdk_x11_window_drag_begin (GdkWindow *window,
-                            GdkDevice *device,
-                            GList     *targets,
-                            gint       x_root,
-                            gint       y_root)
+_gdk_x11_window_drag_begin (GdkWindow         *window,
+                            GdkDevice         *device,
+                            GdkContentFormats *formats,
+                            gint               x_root,
+                            gint               y_root)
 {
   GdkDragContext *context;
 
@@ -2009,7 +1994,7 @@ _gdk_x11_window_drag_begin (GdkWindow *window,
   context->source_window = window;
   g_object_ref (window);
 
-  context->targets = g_list_copy (targets);
+  context->formats = gdk_content_formats_ref (formats);
   precache_target_list (context);
 
   context->actions = 0;
@@ -2325,13 +2310,8 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
                 /* GTK+ traditionally has used application/x-rootwin-drop,
                  * but the XDND spec specifies x-rootwindow-drop.
                  */
-                GdkAtom target1 = gdk_atom_intern_static_string ("application/x-rootwindow-drop");
-                GdkAtom target2 = gdk_atom_intern_static_string ("application/x-rootwin-drop");
-
-                if (g_list_find (context->targets,
-                                 GDK_ATOM_TO_POINTER (target1)) ||
-                    g_list_find (context->targets,
-                                 GDK_ATOM_TO_POINTER (target2)))
+                if (gdk_content_formats_contains (context->formats, "application/x-rootwindow-drop") ||
+                    gdk_content_formats_contains (context->formats, "application/x-rootwin-drop"))
                   context->action = context->suggested_action;
                 else
                   context->action = 0;

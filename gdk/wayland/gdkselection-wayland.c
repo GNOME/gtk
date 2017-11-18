@@ -27,6 +27,7 @@
 #include "gdkwayland.h"
 #include "gdkprivate-wayland.h"
 #include "gdkdisplay-wayland.h"
+#include "gdkcontentformatsprivate.h"
 #include "gdkdndprivate.h"
 #include "gdkselection.h"
 #include "gdkproperty.h"
@@ -70,7 +71,7 @@ struct _DataOfferData
 {
   GDestroyNotify destroy_notify;
   gpointer offer_data;
-  GList *targets; /* List of GdkAtom */
+  GdkContentFormats *targets;
 };
 
 struct _AsyncWriteData
@@ -295,6 +296,7 @@ data_offer_data_new (gpointer       offer,
   info = g_slice_new0 (DataOfferData);
   info->offer_data = offer;
   info->destroy_notify = destroy_notify;
+  info->targets = gdk_content_formats_new (NULL, 0);
 
   return info;
 }
@@ -303,7 +305,7 @@ static void
 data_offer_data_free (DataOfferData *info)
 {
   info->destroy_notify (info->offer_data);
-  g_list_free (info->targets);
+  gdk_content_formats_unref (info->targets);
   g_slice_free (DataOfferData, info);
 }
 
@@ -373,17 +375,16 @@ data_offer_offer (void                 *data,
 {
   GdkWaylandSelection *selection = data;
   DataOfferData *info;
-  GdkAtom atom = gdk_atom_intern (type, FALSE);
 
   info = g_hash_table_lookup (selection->offers, wl_data_offer);
 
-  if (!info || g_list_find (info->targets, GDK_ATOM_TO_POINTER (atom)))
+  if (!info || gdk_content_formats_contains (info->targets, type))
     return;
 
   GDK_NOTE (EVENTS,
             g_message ("data offer offer, offer %p, type = %s", wl_data_offer, type));
 
-  info->targets = g_list_prepend (info->targets, GDK_ATOM_TO_POINTER (atom));
+  gdk_content_formats_add (info->targets, type);
 }
 
 static inline GdkDragAction
@@ -461,17 +462,16 @@ primary_offer_offer (void                               *data,
 {
   GdkWaylandSelection *selection = data;
   DataOfferData *info;
-  GdkAtom atom = gdk_atom_intern (type, FALSE);
 
   info = g_hash_table_lookup (selection->offers, gtk_offer);
 
-  if (!info || g_list_find (info->targets, GDK_ATOM_TO_POINTER (atom)))
+  if (!info || gdk_content_formats_contains (info->targets, type))
     return;
 
   GDK_NOTE (EVENTS,
             g_message ("primary offer offer, offer %p, type = %s", gtk_offer, type));
 
-  info->targets = g_list_prepend (info->targets, GDK_ATOM_TO_POINTER (atom));
+  gdk_content_formats_add (info->targets, type);
 }
 
 static const struct gtk_primary_selection_offer_listener primary_offer_listener = {
@@ -574,7 +574,7 @@ gdk_wayland_selection_get_offer (GdkDisplay *display,
   return NULL;
 }
 
-GList *
+GdkContentFormats *
 gdk_wayland_selection_get_targets (GdkDisplay *display,
                                    GdkAtom     selection_atom)
 {
@@ -1289,14 +1289,14 @@ _gdk_wayland_display_convert_selection (GdkDisplay *display,
   SelectionBuffer *buffer_data;
   gpointer offer;
   gchar *mimetype;
-  GList *target_list;
+  GdkContentFormats *formats;
 
   selection_data = selection_lookup_offer_by_atom (wayland_selection, selection);
   if (!selection_data)
     return;
 
   offer = gdk_wayland_selection_get_offer (display, selection);
-  target_list = gdk_wayland_selection_get_targets (display, selection);
+  formats = gdk_wayland_selection_get_targets (display, selection);
 
   if (!offer || target == gdk_atom_intern_static_string ("DELETE"))
     {
@@ -1308,7 +1308,7 @@ _gdk_wayland_display_convert_selection (GdkDisplay *display,
 
   if (target != gdk_atom_intern_static_string ("TARGETS"))
     {
-      if (!g_list_find (target_list, GDK_ATOM_TO_POINTER (target)))
+      if (!gdk_content_formats_contains (formats, GDK_ATOM_TO_POINTER (target)))
         {
           emit_empty_selection_notify (requestor, selection, target);
           return;
@@ -1327,19 +1327,13 @@ _gdk_wayland_display_convert_selection (GdkDisplay *display,
   else
     {
       GInputStream *stream = NULL;
-      int pipe_fd[2], natoms = 0;
+      int pipe_fd[2];
+      guint natoms = 0;
       GdkAtom *targets = NULL;
 
       if (target == gdk_atom_intern_static_string ("TARGETS"))
         {
-          gint i = 0;
-          GList *l;
-
-          natoms = g_list_length (target_list);
-          targets = g_new0 (GdkAtom, natoms);
-
-          for (l = target_list; l; l = l->next)
-            targets[i++] = l->data;
+          targets = gdk_content_formats_get_atoms (formats, &natoms);
         }
       else
         {

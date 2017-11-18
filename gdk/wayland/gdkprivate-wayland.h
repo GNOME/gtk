@@ -92,12 +92,12 @@ void       gdk_wayland_window_sync (GdkWindow *window);
 GdkDragProtocol _gdk_wayland_window_get_drag_protocol (GdkWindow *window,
 						       GdkWindow **target);
 
-void            _gdk_wayland_window_register_dnd (GdkWindow *window);
-GdkDragContext *_gdk_wayland_window_drag_begin (GdkWindow *window,
-						GdkDevice *device,
-						GList     *targets,
-                                                gint       x_root,
-                                                gint       y_root);
+void            _gdk_wayland_window_register_dnd          (GdkWindow *window);
+GdkDragContext *_gdk_wayland_window_drag_begin            (GdkWindow *window,
+				                	   GdkDevice *device,
+	                                                   GdkContentFormats *formats,
+                                                           gint       x_root,
+                                                           gint       y_root);
 void            _gdk_wayland_window_offset_next_wl_buffer (GdkWindow *window,
                                                            int        x,
                                                            int        y);
@@ -238,8 +238,8 @@ void gdk_wayland_selection_set_offer (GdkDisplay           *display,
                                       gpointer              offer);
 gpointer gdk_wayland_selection_get_offer (GdkDisplay *display,
                                           GdkAtom     selection);
-GList * gdk_wayland_selection_get_targets (GdkDisplay *display,
-                                           GdkAtom     selection);
+GdkContentFormats *gdk_wayland_selection_get_targets (GdkDisplay *display,
+                                                      GdkAtom     selection);
 
 void     gdk_wayland_selection_store   (GdkWindow    *window,
                                         GdkAtom       type,

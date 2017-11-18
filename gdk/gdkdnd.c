@@ -28,8 +28,9 @@
 #include "gdkdisplay.h"
 #include "gdkwindow.h"
 #include "gdkintl.h"
-#include "gdkenumtypes.h"
+#include "gdkcontentformats.h"
 #include "gdkcursor.h"
+#include "gdkenumtypes.h"
 #include "gdkeventsprivate.h"
 
 static struct {
@@ -73,21 +74,21 @@ static GList *contexts = NULL;
  */
 
 /**
- * gdk_drag_context_list_targets:
+ * gdk_drag_context_get_formats:
  * @context: a #GdkDragContext
  *
- * Retrieves the list of targets of the context.
+ * Retrieves the formats supported by this context.
  *
- * Returns: (transfer none) (element-type GdkAtom): a #GList of targets
+ * Returns: (transfer none): a #GdkContentFormats
  *
- * Since: 2.22
+ * Since: 3.94
  **/
-GList *
-gdk_drag_context_list_targets (GdkDragContext *context)
+GdkContentFormats *
+gdk_drag_context_get_formats (GdkDragContext *context)
 {
   g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
 
-  return context->targets;
+  return context->formats;
 }
 
 /**
@@ -253,7 +254,7 @@ gdk_drag_context_finalize (GObject *object)
   GdkDragContext *context = GDK_DRAG_CONTEXT (object);
 
   contexts = g_list_remove (contexts, context);
-  g_list_free (context->targets);
+  g_clear_pointer (&context->formats, gdk_content_formats_unref);
 
   if (context->source_window)
     g_object_unref (context->source_window);

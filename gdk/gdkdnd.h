@@ -117,8 +117,8 @@ void             gdk_drag_context_set_device           (GdkDragContext *context,
 GDK_AVAILABLE_IN_ALL
 GdkDevice *      gdk_drag_context_get_device           (GdkDragContext *context);
 
-GDK_AVAILABLE_IN_ALL
-GList           *gdk_drag_context_list_targets         (GdkDragContext *context);
+GDK_AVAILABLE_IN_3_94
+GdkContentFormats *gdk_drag_context_get_formats        (GdkDragContext *context);
 GDK_AVAILABLE_IN_ALL
 GdkDragAction    gdk_drag_context_get_actions          (GdkDragContext *context);
 GDK_AVAILABLE_IN_ALL
@@ -153,19 +153,19 @@ GdkAtom          gdk_drag_get_selection (GdkDragContext   *context);
 /* Source side */
 
 GDK_AVAILABLE_IN_ALL
-GdkDragContext * gdk_drag_begin            (GdkWindow      *window,
-                                            GList          *targets);
+GdkDragContext *        gdk_drag_begin                  (GdkWindow              *window,
+                                                         GdkContentFormats      *formats);
 
 GDK_AVAILABLE_IN_ALL
-GdkDragContext * gdk_drag_begin_for_device (GdkWindow      *window,
-                                            GdkDevice      *device,
-                                            GList          *targets);
+GdkDragContext *        gdk_drag_begin_for_device       (GdkWindow              *window,
+                                                         GdkDevice              *device,
+                                                         GdkContentFormats      *formats);
 GDK_AVAILABLE_IN_3_20
-GdkDragContext * gdk_drag_begin_from_point  (GdkWindow      *window,
-                                             GdkDevice      *device,
-                                             GList          *targets,
-                                             gint            x_root,
-                                             gint            y_root);
+GdkDragContext *        gdk_drag_begin_from_point       (GdkWindow              *window,
+                                                         GdkDevice              *device,
+                                                         GdkContentFormats      *formats,
+                                                         gint                    x_root,
+                                                         gint                    y_root);
 
 GDK_AVAILABLE_IN_ALL
 void    gdk_drag_find_window (GdkDragContext   *context,

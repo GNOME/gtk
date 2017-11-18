@@ -8149,25 +8149,18 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
           /*  try to find a suitable rich text target instead  */
           GdkAtom *atoms;
           gint     n_atoms;
-          GList   *list;
+          GdkContentFormats *dnd_formats, *buffer_formats;
           GdkAtom  target = NULL;
 
           copy_tags = FALSE;
 
           atoms = gtk_text_buffer_get_deserialize_formats (buffer, &n_atoms);
+          buffer_formats = gdk_content_formats_new (atoms, n_atoms);
+          dnd_formats = gdk_drag_context_get_formats (context);
 
-          for (list = gdk_drag_context_list_targets (context); list; list = list->next)
-            {
-              gint i;
+          target = gdk_content_formats_intersects (dnd_formats, buffer_formats);
 
-              for (i = 0; i < n_atoms; i++)
-                if (GUINT_TO_POINTER (atoms[i]) == list->data)
-                  {
-                    target = atoms[i];
-                    break;
-                  }
-            }
-
+          gdk_content_formats_unref (buffer_formats);
           g_free (atoms);
 
           if (target != NULL)

@@ -100,7 +100,7 @@ struct _GdkDragContext {
   GdkWindow *dest_window;
   GdkWindow *drag_window;
 
-  GList *targets;
+  GdkContentFormats *formats;
   GdkDragAction actions;
   GdkDragAction suggested_action;
   GdkDragAction action;
