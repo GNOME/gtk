@@ -188,7 +188,7 @@ _gtk_css_style_property_class_init (GtkCssStylePropertyClass *klass)
                                                          P_("Animated"),
                                                          P_("Set if the value can be animated"),
                                                          FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class,
                                    PROP_AFFECTS,
                                    g_param_spec_flags ("affects",
@@ -196,28 +196,28 @@ _gtk_css_style_property_class_init (GtkCssStylePropertyClass *klass)
                                                        P_("Set if the value affects the sizing of elements"),
                                                        GTK_TYPE_CSS_AFFECTS,
                                                        0,
-                                                       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+                                                       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class,
                                    PROP_ID,
                                    g_param_spec_uint ("id",
                                                       P_("ID"),
                                                       P_("The numeric id for quick access"),
                                                       0, G_MAXUINT, 0,
-                                                      G_PARAM_READABLE));
+                                                      G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class,
                                    PROP_INHERIT,
                                    g_param_spec_boolean ("inherit",
                                                          P_("Inherit"),
                                                          P_("Set if the value is inherited by default"),
                                                          FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class,
                                    PROP_INITIAL,
                                    g_param_spec_boxed ("initial-value",
                                                        P_("Initial value"),
                                                        P_("The initial specified value used for this property"),
                                                        GTK_TYPE_CSS_VALUE,
-                                                       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+                                                       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   property_class->query = _gtk_css_style_property_query;
   property_class->parse_value = gtk_css_style_property_parse_value;
