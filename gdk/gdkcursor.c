@@ -183,35 +183,40 @@ gdk_cursor_class_init (GdkCursorClass *cursor_class)
                                                         P_("Fallback"),
                                                         P_("Cursor image to fall back to if this cursor cannot be displayed"),
                                                         GDK_TYPE_CURSOR,
-                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
+                                                        G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class,
 				   PROP_HOTSPOT_X,
 				   g_param_spec_int ("hotspot-x",
                                                      P_("Hotspot X"),
                                                      P_("Horizontal offset of the cursor hotspot"),
                                                      0, G_MAXINT, 0,
-                                                     G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+                                                     G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
+                                                     G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class,
 				   PROP_HOTSPOT_Y,
 				   g_param_spec_int ("hotspot-y",
                                                      P_("Hotspot Y"),
                                                      P_("Vertical offset of the cursor hotspot"),
                                                      0, G_MAXINT, 0,
-                                                     G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+                                                     G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
+                                                     G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class,
 				   PROP_NAME,
 				   g_param_spec_string ("name",
                                                         P_("Name"),
                                                         P_("Name of this cursor"),
                                                         NULL,
-                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
+                                                        G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class,
 				   PROP_TEXTURE,
 				   g_param_spec_object ("texture",
                                                         P_("Texture"),
                                                         P_("The texture displayed by this cursor"),
                                                         GDK_TYPE_TEXTURE,
-                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
+                                                        G_PARAM_STATIC_STRINGS));
 }
 
 static void

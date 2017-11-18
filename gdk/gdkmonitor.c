@@ -178,76 +178,76 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                          "Display",
                          "The display of the monitor",
                          GDK_TYPE_DISPLAY,
-                         G_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY);
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
   props[PROP_MANUFACTURER] =
     g_param_spec_string ("manufacturer",
                          "Manufacturer",
                          "The manufacturer name",
                          NULL,
-                         G_PARAM_READABLE);
+                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
   props[PROP_MODEL] =
     g_param_spec_string ("model",
                          "Model",
                          "The model name",
                          NULL,
-                         G_PARAM_READABLE);
+                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
   props[PROP_SCALE_FACTOR] =
     g_param_spec_int ("scale-factor",
                       "Scale factor",
                       "The scale factor",
                       0, G_MAXINT,
                       1,
-                      G_PARAM_READABLE);
+                      G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
   props[PROP_GEOMETRY] =
     g_param_spec_boxed ("geometry",
                         "Geometry",
                         "The geometry of the monitor",
                         GDK_TYPE_RECTANGLE,
-                        G_PARAM_READABLE);
+                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
   props[PROP_WORKAREA] =
     g_param_spec_boxed ("workarea",
                         "Workarea",
                         "The workarea of the monitor",
                         GDK_TYPE_RECTANGLE,
-                        G_PARAM_READABLE);
+                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
   props[PROP_WIDTH_MM] =
     g_param_spec_int ("width-mm",
                       "Physical width",
                       "The width of the monitor, in millimeters",
                       0, G_MAXINT,
                       0,
-                      G_PARAM_READABLE);
+                      G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
   props[PROP_HEIGHT_MM] =
     g_param_spec_int ("height-mm",
                       "Physical height",
                       "The height of the monitor, in millimeters",
                       0, G_MAXINT,
                       0,
-                      G_PARAM_READABLE);
+                      G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
   props[PROP_REFRESH_RATE] =
     g_param_spec_int ("refresh-rate",
                       "Refresh rate",
                       "The refresh rate, in millihertz",
                       0, G_MAXINT,
                       0,
-                      G_PARAM_READABLE);
+                      G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
   props[PROP_SUBPIXEL_LAYOUT] =
     g_param_spec_enum ("subpixel-layout",
                        "Subpixel layout",
                        "The subpixel layout",
                        GDK_TYPE_SUBPIXEL_LAYOUT,
                        GDK_SUBPIXEL_LAYOUT_UNKNOWN,
-                       G_PARAM_READABLE);
+                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
   props[PROP_VALID] =
     g_param_spec_boolean ("valid",
                           "Valid",
                           "Whether the monitor is still valid",
                           TRUE,
-                          G_PARAM_READABLE);
+                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
-  signals[INVALIDATE] = g_signal_new ("invalidate",
+  signals[INVALIDATE] = g_signal_new (g_intern_static_string ("invalidate"),
                                       G_TYPE_FROM_CLASS (object_class),
                                       G_SIGNAL_RUN_FIRST,
                                       0,

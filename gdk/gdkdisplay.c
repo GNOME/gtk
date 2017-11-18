@@ -214,7 +214,7 @@ gdk_display_class_init (GdkDisplayClass *class)
                           P_("Composited"),
                           P_("Composited"),
                           TRUE,
-                          G_PARAM_READABLE);
+                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
    * GdkDisplay:rgba:
@@ -229,7 +229,7 @@ gdk_display_class_init (GdkDisplayClass *class)
                           P_("RGBA"),
                           P_("RGBA"),
                           TRUE,
-                          G_PARAM_READABLE);
+                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 

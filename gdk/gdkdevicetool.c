@@ -106,14 +106,16 @@ gdk_device_tool_class_init (GdkDeviceToolClass *klass)
                                                       "Serial number",
                                                       0, G_MAXUINT64, 0,
                                                       G_PARAM_READWRITE |
-                                                      G_PARAM_CONSTRUCT_ONLY);
+                                                      G_PARAM_CONSTRUCT_ONLY |
+                                                      G_PARAM_STATIC_STRINGS);
   tool_props[TOOL_PROP_TOOL_TYPE] = g_param_spec_enum ("tool-type",
                                                        "Tool type",
                                                        "Tool type",
                                                        GDK_TYPE_DEVICE_TOOL_TYPE,
                                                        GDK_DEVICE_TOOL_TYPE_UNKNOWN,
                                                        G_PARAM_READWRITE |
-                                                       G_PARAM_CONSTRUCT_ONLY);
+                                                       G_PARAM_CONSTRUCT_ONLY |
+                                                       G_PARAM_STATIC_STRINGS);
   tool_props[TOOL_PROP_AXES] = g_param_spec_flags ("axes",
                                                    "Axes",
                                                    "Tool axes",
@@ -125,7 +127,8 @@ gdk_device_tool_class_init (GdkDeviceToolClass *klass)
                                                            "Hardware ID",
                                                            0, G_MAXUINT64, 0,
                                                            G_PARAM_READWRITE |
-                                                           G_PARAM_CONSTRUCT_ONLY);
+                                                           G_PARAM_CONSTRUCT_ONLY |
+                                                           G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, N_TOOL_PROPS, tool_props);
 }

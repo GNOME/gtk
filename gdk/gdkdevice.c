@@ -123,8 +123,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
                            P_("Device Display"),
                            P_("Display which the device belongs to"),
                            GDK_TYPE_DISPLAY,
-                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
-                           G_PARAM_STATIC_STRINGS);
+                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   /**
    * GdkDevice:device-manager:
@@ -138,8 +137,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
                            P_("Device manager"),
                            P_("Device manager which the device belongs to"),
                            GDK_TYPE_DEVICE_MANAGER,
-                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
-                           G_PARAM_STATIC_STRINGS);
+                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
   /**
    * GdkDevice:name:
    *

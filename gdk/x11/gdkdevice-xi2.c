@@ -141,7 +141,8 @@ gdk_x11_device_xi2_class_init (GdkX11DeviceXI2Class *klass)
                                                      P_("Device ID"),
                                                      P_("Device identifier"),
                                                      0, G_MAXINT, 0,
-                                                     G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+                                                     G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
+                                                     G_PARAM_STATIC_STRINGS));
 }
 
 static void

@@ -258,7 +258,7 @@ gdk_window_class_init (GdkWindowClass *klass)
                            P_("Cursor"),
                            P_("Cursor"),
                            GDK_TYPE_CURSOR,
-                           G_PARAM_READWRITE);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   /**
    * GdkWindow:display:
@@ -273,7 +273,7 @@ gdk_window_class_init (GdkWindowClass *klass)
                            P_("Display"),
                            P_("Display"),
                            GDK_TYPE_DISPLAY,
-                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
