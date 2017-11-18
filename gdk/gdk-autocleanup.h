@@ -33,7 +33,7 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkGLContext, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkKeymap, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkWindow, g_object_unref)
 
-G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkTargetList, gtk_target_list_unref)
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkContentFormats, gdk_content_formats_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkEvent, gdk_event_free)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkFrameTimings, gdk_frame_timings_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkRGBA, gdk_rgba_free)

@@ -368,6 +368,21 @@ gdk_fullscreen_mode_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gdkcontentformats</FILE>
+<TITLE>Content Formats</TITLE>
+gdk_content_formats_new
+gdk_content_formats_ref
+gdk_content_formats_unref
+gdk_content_formats_add
+gdk_content_formats_union
+gdk_content_formats_intersects
+gdk_content_formats_remove
+gdk_content_formats_contains
+<SUBSECTION Private>
+gdk_content_formats_get_type
+</SECTION>
+
+<SECTION>
 <TITLE>Selections</TITLE>
 <FILE>selections</FILE>
 GDK_SELECTION_PRIMARY

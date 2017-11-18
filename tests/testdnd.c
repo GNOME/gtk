@@ -490,13 +490,13 @@ popup_cb (gpointer data)
 	  GtkWidget *button;
 	  GtkWidget *grid;
 	  int i, j;
-          GtkTargetList *targets;
+          GdkContentFormats *targets;
 	  
 	  popup_window = gtk_window_new (GTK_WINDOW_POPUP);
 	  gtk_window_set_position (GTK_WINDOW (popup_window), GTK_WIN_POS_MOUSE);
 
 	  grid = gtk_grid_new ();
-          targets = gtk_target_list_new (target_table, n_targets - 1); /* no rootwin */
+          targets = gdk_content_formats_new (target_table, n_targets - 1); /* no rootwin */
 
 	  for (i=0; i<3; i++)
 	    for (j=0; j<3; j++)
@@ -518,7 +518,7 @@ popup_cb (gpointer data)
 				  G_CALLBACK (popup_leave), NULL);
 	      }
 	  gtk_container_add (GTK_CONTAINER (popup_window), grid);
-          gtk_target_list_unref (targets);
+          gdk_content_formats_unref (targets);
 
 	}
       gtk_widget_show (popup_window);
@@ -582,7 +582,7 @@ main (int argc, char **argv)
   GtkWidget *pixmap;
   GtkWidget *button;
   GdkPixbuf *drag_icon;
-  GtkTargetList *targets;
+  GdkContentFormats *targets;
 
   test_init ();
   
@@ -602,7 +602,7 @@ main (int argc, char **argv)
   
   label = gtk_label_new ("Drop Here\n");
 
-  targets = gtk_target_list_new (target_table, n_targets - 1); /* no rootwin */
+  targets = gdk_content_formats_new (target_table, n_targets - 1); /* no rootwin */
   gtk_drag_dest_set (label,
 		     GTK_DEST_DEFAULT_ALL,
                      targets,
@@ -630,7 +630,7 @@ main (int argc, char **argv)
 		    G_CALLBACK (popsite_motion), NULL);
   g_signal_connect (label, "drag_leave",
 		    G_CALLBACK (popsite_leave), NULL);
-  gtk_target_list_unref (targets);
+  gdk_content_formats_unref (targets);
   
   pixmap = gtk_image_new_from_pixbuf (trashcan_closed);
   gtk_drag_dest_set (pixmap, 0, NULL, 0);
@@ -654,12 +654,12 @@ main (int argc, char **argv)
 
   button = gtk_button_new_with_label ("Drag Here\n");
 
-  targets = gtk_target_list_new (target_table, n_targets);
+  targets = gdk_content_formats_new (target_table, n_targets);
   gtk_drag_source_set (button, GDK_BUTTON1_MASK | GDK_BUTTON3_MASK,
                        targets,
 		       GDK_ACTION_COPY | GDK_ACTION_MOVE);
   gtk_drag_source_set_icon_pixbuf (button, drag_icon);
-  gtk_target_list_unref (targets);
+  gdk_content_formats_unref (targets);
 
   g_object_unref (drag_icon);
 

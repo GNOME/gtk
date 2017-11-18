@@ -4774,11 +4774,11 @@ gtk_label_drag_gesture_update (GtkGestureDrag *gesture,
 				    info->drag_start_y,
 				    x, y))
 	{
-	  GtkTargetList *target_list = gtk_target_list_new (NULL, 0);
+	  GdkContentFormats *target_list = gdk_content_formats_new (NULL, 0);
           const GdkEvent *event;
 
           event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
-	  gtk_target_list_add_text_targets (target_list);
+	  gtk_content_formats_add_text_targets (target_list);
 
           g_signal_connect (widget, "drag-begin",
                             G_CALLBACK (drag_begin_cb), NULL);
@@ -4790,7 +4790,7 @@ gtk_label_drag_gesture_update (GtkGestureDrag *gesture,
 
 	  info->in_drag = FALSE;
 
-	  gtk_target_list_unref (target_list);
+	  gdk_content_formats_unref (target_list);
 	}
     }
   else
@@ -5226,10 +5226,10 @@ gtk_label_select_region_index (GtkLabel *label,
 
       if (anchor_index != end_index)
         {
-          GtkTargetList *list;
+          GdkContentFormats *list;
 
-          list = gtk_target_list_new (NULL, 0);
-          gtk_target_list_add_text_targets (list);
+          list = gdk_content_formats_new (NULL, 0);
+          gtk_content_formats_add_text_targets (list);
 
           if (clipboard)
             gtk_clipboard_set_with_owner (clipboard,
@@ -5238,7 +5238,7 @@ gtk_label_select_region_index (GtkLabel *label,
                                           clear_text_callback,
                                           G_OBJECT (label));
 
-          gtk_target_list_unref (list);
+          gdk_content_formats_unref (list);
 
           if (!priv->select_info->selection_node)
             {

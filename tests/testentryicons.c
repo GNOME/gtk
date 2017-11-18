@@ -105,7 +105,7 @@ main (int argc, char **argv)
   GtkWidget *button3;
   GtkWidget *button4;
   GIcon *icon;
-  GtkTargetList *tlist;
+  GdkContentFormats *tlist;
 
   gtk_init ();
 
@@ -166,8 +166,8 @@ main (int argc, char **argv)
   gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
 				   GTK_ENTRY_ICON_PRIMARY,
 				   "Save a file");
-  tlist = gtk_target_list_new (NULL, 0);
-  gtk_target_list_add_text_targets (tlist);
+  tlist = gdk_content_formats_new (NULL, 0);
+  gtk_content_formats_add_text_targets (tlist);
   gtk_entry_set_icon_drag_source (GTK_ENTRY (entry),
                                   GTK_ENTRY_ICON_PRIMARY,
                                   tlist, GDK_ACTION_COPY); 
@@ -175,7 +175,7 @@ main (int argc, char **argv)
                           G_CALLBACK (drag_begin_cb), NULL);
   g_signal_connect (entry, "drag-data-get", 
                     G_CALLBACK (drag_data_get_cb), NULL);
-  gtk_target_list_unref (tlist);
+  gdk_content_formats_unref (tlist);
 
   /*
    * Search - Uses a helper function

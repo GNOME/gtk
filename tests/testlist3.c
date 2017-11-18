@@ -81,7 +81,7 @@ static GtkWidget *
 create_row (const gchar *text)
 {
   GtkWidget *row, *box, *label, *image;
-  GtkTargetList *targets;
+  GdkContentFormats *targets;
 
   row = gtk_list_box_row_new (); 
   image = gtk_image_new_from_icon_name ("open-menu-symbolic");
@@ -93,7 +93,7 @@ create_row (const gchar *text)
   gtk_container_add (GTK_CONTAINER (box), label);
   gtk_container_add (GTK_CONTAINER (box), image);
 
-  targets = gtk_target_list_new (entries, 1);
+  targets = gdk_content_formats_new (entries, 1);
 
   gtk_drag_source_set (image, GDK_BUTTON1_MASK, targets, GDK_ACTION_MOVE);
   g_signal_connect (image, "drag-begin", G_CALLBACK (drag_begin), NULL);
@@ -102,7 +102,7 @@ create_row (const gchar *text)
   gtk_drag_dest_set (row, GTK_DEST_DEFAULT_ALL, targets, GDK_ACTION_MOVE);
   g_signal_connect (row, "drag-data-received", G_CALLBACK (drag_data_received), NULL);
 
-  gtk_target_list_unref (targets);
+  gdk_content_formats_unref (targets);
 
   return row;
 }

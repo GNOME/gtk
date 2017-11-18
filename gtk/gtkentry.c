@@ -281,7 +281,7 @@ struct _EntryIconInfo
   guint pressed        : 1;
 
   GdkDragAction actions;
-  GtkTargetList *target_list;
+  GdkContentFormats *target_list;
   GdkEventSequence *current_sequence;
   GdkDevice *device;
 };
@@ -2703,7 +2703,7 @@ gtk_entry_finalize (GObject *object)
         continue;
 
       if (icon_info->target_list != NULL)
-        gtk_target_list_unref (icon_info->target_list);
+        gdk_content_formats_unref (icon_info->target_list);
 
       gtk_widget_unparent (icon_info->widget);
 
@@ -3904,11 +3904,11 @@ gtk_entry_drag_gesture_update (GtkGestureDrag *gesture,
         {
           gint *ranges;
           gint n_ranges;
-          GtkTargetList  *target_list = gtk_target_list_new (NULL, 0);
+          GdkContentFormats  *target_list = gdk_content_formats_new (NULL, 0);
           guint actions = priv->editable ? GDK_ACTION_COPY | GDK_ACTION_MOVE : GDK_ACTION_COPY;
           guint button;
 
-          gtk_target_list_add_text_targets (target_list);
+          gtk_content_formats_add_text_targets (target_list);
 
           gtk_entry_get_pixel_ranges (entry, &ranges, &n_ranges);
 
@@ -3921,7 +3921,7 @@ gtk_entry_drag_gesture_update (GtkGestureDrag *gesture,
 
           priv->in_drag = FALSE;
 
-          gtk_target_list_unref (target_list);
+          gdk_content_formats_unref (target_list);
         }
     }
   else
@@ -6581,15 +6581,15 @@ primary_clear_cb (GtkClipboard *clipboard,
 static void
 gtk_entry_update_primary_selection (GtkEntry *entry)
 {
-  GtkTargetList *list;
+  GdkContentFormats *list;
   GtkClipboard *clipboard;
   gint start, end;
 
   if (!gtk_widget_get_realized (GTK_WIDGET (entry)))
     return;
 
-  list = gtk_target_list_new (NULL, 0);
-  gtk_target_list_add_text_targets (list);
+  list = gdk_content_formats_new (NULL, 0);
+  gtk_content_formats_add_text_targets (list);
 
   clipboard = gtk_widget_get_clipboard (GTK_WIDGET (entry), GDK_SELECTION_PRIMARY);
   
@@ -6604,7 +6604,7 @@ gtk_entry_update_primary_selection (GtkEntry *entry)
 	gtk_clipboard_clear (clipboard);
     }
 
-  gtk_target_list_unref (list);
+  gdk_content_formats_unref (list);
 }
 
 static void
@@ -8013,7 +8013,7 @@ gtk_entry_get_icon_at_pos (GtkEntry *entry,
  * gtk_entry_set_icon_drag_source:
  * @entry: a #GtkEntry
  * @icon_pos: icon position
- * @target_list: the targets (data formats) in which the data can be provided
+ * @formats: the targets (data formats) in which the data can be provided
  * @actions: a bitmask of the allowed drag actions
  *
  * Sets up the icon at the given position so that GTK+ will start a drag
@@ -8035,7 +8035,7 @@ gtk_entry_get_icon_at_pos (GtkEntry *entry,
 void
 gtk_entry_set_icon_drag_source (GtkEntry             *entry,
                                 GtkEntryIconPosition  icon_pos,
-                                GtkTargetList        *target_list,
+                                GdkContentFormats    *formats,
                                 GdkDragAction         actions)
 {
   GtkEntryPrivate *priv;
@@ -8050,10 +8050,10 @@ gtk_entry_set_icon_drag_source (GtkEntry             *entry,
     icon_info = construct_icon_info (GTK_WIDGET (entry), icon_pos);
 
   if (icon_info->target_list)
-    gtk_target_list_unref (icon_info->target_list);
-  icon_info->target_list = target_list;
+    gdk_content_formats_unref (icon_info->target_list);
+  icon_info->target_list = formats;
   if (icon_info->target_list)
-    gtk_target_list_ref (icon_info->target_list);
+    gdk_content_formats_ref (icon_info->target_list);
 
   icon_info->actions = actions;
 }

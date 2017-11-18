@@ -21,7 +21,7 @@ kinetic_scrolling (void)
   GtkCellRenderer *renderer;
   GtkListStore *store;
   GtkWidget *textview;
-  GtkTargetList *targets;
+  GdkContentFormats *targets;
   gint i;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -71,7 +71,7 @@ kinetic_scrolling (void)
   gtk_widget_show (swindow);
 
   treeview = gtk_tree_view_new ();
-  targets = gtk_target_list_new (row_targets, G_N_ELEMENTS (row_targets));
+  targets = gdk_content_formats_new (row_targets, G_N_ELEMENTS (row_targets));
   gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (treeview),
                                           GDK_BUTTON1_MASK,
                                           targets,
@@ -79,7 +79,7 @@ kinetic_scrolling (void)
   gtk_tree_view_enable_model_drag_dest (GTK_TREE_VIEW (treeview),
                                         targets,
                                         GDK_ACTION_MOVE | GDK_ACTION_COPY);
-  gtk_target_list_unref (targets);
+  gdk_content_formats_unref (targets);
 
   renderer = gtk_cell_renderer_text_new ();
   g_object_set (renderer, "editable", TRUE, NULL);

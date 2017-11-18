@@ -38,7 +38,7 @@ typedef struct _GtkDragSourceSite GtkDragSourceSite;
 struct _GtkDragSourceSite 
 {
   GdkModifierType    start_button_mask;
-  GtkTargetList     *target_list;        /* Targets for drag data */
+  GdkContentFormats *target_list;        /* Targets for drag data */
   GdkDragAction      actions;            /* Possible actions */
 
   GtkImageDefinition *image_def;
@@ -114,7 +114,7 @@ gtk_drag_source_site_destroy (gpointer data)
   GtkDragSourceSite *site = data;
 
   if (site->target_list)
-    gtk_target_list_unref (site->target_list);
+    gdk_content_formats_unref (site->target_list);
 
   gtk_image_definition_unref (site->image_def);
   g_clear_object (&site->drag_gesture);
@@ -133,10 +133,10 @@ gtk_drag_source_site_destroy (gpointer data)
  * clicks and drags on the widget. The widget must have a window.
  */
 void
-gtk_drag_source_set (GtkWidget       *widget,
-                     GdkModifierType  start_button_mask,
-                     GtkTargetList   *targets,
-                     GdkDragAction    actions)
+gtk_drag_source_set (GtkWidget         *widget,
+                     GdkModifierType    start_button_mask,
+                     GdkContentFormats *targets,
+                     GdkDragAction      actions)
 {
   GtkDragSourceSite *site;
 
@@ -147,7 +147,7 @@ gtk_drag_source_set (GtkWidget       *widget,
   if (site)
     {
       if (site->target_list)
-        gtk_target_list_unref (site->target_list);
+        gdk_content_formats_unref (site->target_list);
     }
   else
     {
@@ -178,7 +178,7 @@ gtk_drag_source_set (GtkWidget       *widget,
   site->start_button_mask = start_button_mask;
 
   if (targets)
-    site->target_list = gtk_target_list_ref (targets);
+    site->target_list = gdk_content_formats_ref (targets);
   else
     site->target_list = NULL;
 
@@ -216,11 +216,11 @@ gtk_drag_source_unset (GtkWidget *widget)
  * Gets the list of targets this widget can provide for
  * drag-and-drop.
  *
- * Returns: (nullable) (transfer none): the #GtkTargetList, or %NULL if none
+ * Returns: (nullable) (transfer none): the #GdkContentFormats, or %NULL if none
  *
  * Since: 2.4
  */
-GtkTargetList *
+GdkContentFormats *
 gtk_drag_source_get_target_list (GtkWidget *widget)
 {
   GtkDragSourceSite *site;
@@ -244,8 +244,8 @@ gtk_drag_source_get_target_list (GtkWidget *widget)
  * Since: 2.4
  */
 void
-gtk_drag_source_set_target_list (GtkWidget     *widget,
-                                 GtkTargetList *target_list)
+gtk_drag_source_set_target_list (GtkWidget         *widget,
+                                 GdkContentFormats *target_list)
 {
   GtkDragSourceSite *site;
 
@@ -260,10 +260,10 @@ gtk_drag_source_set_target_list (GtkWidget     *widget,
     }
 
   if (target_list)
-    gtk_target_list_ref (target_list);
+    gdk_content_formats_ref (target_list);
 
   if (site->target_list)
-    gtk_target_list_unref (site->target_list);
+    gdk_content_formats_unref (site->target_list);
 
   site->target_list = target_list;
 }
@@ -275,7 +275,7 @@ gtk_drag_source_set_target_list (GtkWidget     *widget,
  * Add the text targets supported by #GtkSelectionData to
  * the target list of the drag source.  The targets
  * are added with @info = 0. If you need another value, 
- * use gtk_target_list_add_text_targets() and
+ * use gtk_content_formats_add_text_targets() and
  * gtk_drag_source_set_target_list().
  * 
  * Since: 2.6
@@ -283,16 +283,16 @@ gtk_drag_source_set_target_list (GtkWidget     *widget,
 void
 gtk_drag_source_add_text_targets (GtkWidget *widget)
 {
-  GtkTargetList *target_list;
+  GdkContentFormats *target_list;
 
   target_list = gtk_drag_source_get_target_list (widget);
   if (target_list)
-    gtk_target_list_ref (target_list);
+    gdk_content_formats_ref (target_list);
   else
-    target_list = gtk_target_list_new (NULL, 0);
-  gtk_target_list_add_text_targets (target_list);
+    target_list = gdk_content_formats_new (NULL, 0);
+  gtk_content_formats_add_text_targets (target_list);
   gtk_drag_source_set_target_list (widget, target_list);
-  gtk_target_list_unref (target_list);
+  gdk_content_formats_unref (target_list);
 }
 
 /**
@@ -310,16 +310,16 @@ gtk_drag_source_add_text_targets (GtkWidget *widget)
 void
 gtk_drag_source_add_image_targets (GtkWidget *widget)
 {
-  GtkTargetList *target_list;
+  GdkContentFormats *target_list;
 
   target_list = gtk_drag_source_get_target_list (widget);
   if (target_list)
-    gtk_target_list_ref (target_list);
+    gdk_content_formats_ref (target_list);
   else
-    target_list = gtk_target_list_new (NULL, 0);
-  gtk_target_list_add_image_targets (target_list, TRUE);
+    target_list = gdk_content_formats_new (NULL, 0);
+  gtk_content_formats_add_image_targets (target_list, TRUE);
   gtk_drag_source_set_target_list (widget, target_list);
-  gtk_target_list_unref (target_list);
+  gdk_content_formats_unref (target_list);
 }
 
 /**
@@ -329,7 +329,7 @@ gtk_drag_source_add_image_targets (GtkWidget *widget)
  * Add the URI targets supported by #GtkSelectionData to
  * the target list of the drag source.  The targets
  * are added with @info = 0. If you need another value, 
- * use gtk_target_list_add_uri_targets() and
+ * use gtk_content_formats_add_uri_targets() and
  * gtk_drag_source_set_target_list().
  * 
  * Since: 2.6
@@ -337,16 +337,16 @@ gtk_drag_source_add_image_targets (GtkWidget *widget)
 void
 gtk_drag_source_add_uri_targets (GtkWidget *widget)
 {
-  GtkTargetList *target_list;
+  GdkContentFormats *target_list;
 
   target_list = gtk_drag_source_get_target_list (widget);
   if (target_list)
-    gtk_target_list_ref (target_list);
+    gdk_content_formats_ref (target_list);
   else
-    target_list = gtk_target_list_new (NULL, 0);
-  gtk_target_list_add_uri_targets (target_list);
+    target_list = gdk_content_formats_new (NULL, 0);
+  gtk_content_formats_add_uri_targets (target_list);
   gtk_drag_source_set_target_list (widget, target_list);
-  gtk_target_list_unref (target_list);
+  gdk_content_formats_unref (target_list);
 }
 
 /**

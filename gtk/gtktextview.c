@@ -1630,7 +1630,7 @@ static void
 gtk_text_view_init (GtkTextView *text_view)
 {
   GtkWidget *widget = GTK_WIDGET (text_view);
-  GtkTargetList *target_list;
+  GdkContentFormats *target_list;
   GtkTextViewPrivate *priv;
   GtkStyleContext *context;
 
@@ -1660,9 +1660,9 @@ gtk_text_view_init (GtkTextView *text_view)
   gtk_drag_dest_set (widget, 0, NULL,
                      GDK_ACTION_COPY | GDK_ACTION_MOVE);
 
-  target_list = gtk_target_list_new (NULL, 0);
+  target_list = gdk_content_formats_new (NULL, 0);
   gtk_drag_dest_set_target_list (widget, target_list);
-  gtk_target_list_unref (target_list);
+  gdk_content_formats_unref (target_list);
 
   priv->virtual_cursor_x = -1;
   priv->virtual_cursor_y = -1;
@@ -7806,7 +7806,7 @@ gtk_text_view_start_selection_dnd (GtkTextView       *text_view,
                                    gint               x,
                                    gint               y)
 {
-  GtkTargetList *target_list;
+  GdkContentFormats *target_list;
 
   target_list = gtk_text_buffer_get_copy_target_list (get_buffer (text_view));
 

@@ -56,8 +56,8 @@ typedef struct _GtkTextLogAttrCache GtkTextLogAttrCache;
 
 struct _GtkTextBufferPrivate
 {
-  GtkTargetList  *copy_target_list;
-  GtkTargetList  *paste_target_list;
+  GdkContentFormats  *copy_target_list;
+  GdkContentFormats  *paste_target_list;
 
   GtkTextTagTable *tag_table;
   GtkTextBTree *btree;
@@ -257,7 +257,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
       g_param_spec_boxed ("copy-target-list",
                           P_("Copy target list"),
                           P_("The list of targets this buffer supports for clipboard copying and DND source"),
-                          GTK_TYPE_TARGET_LIST,
+                          GDK_TYPE_CONTENT_FORMATS,
                           GTK_PARAM_READABLE);
 
   /**
@@ -272,7 +272,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
       g_param_spec_boxed ("paste-target-list",
                           P_("Paste target list"),
                           P_("The list of targets this buffer supports for clipboard pasting and DND destination"),
-                          GTK_TYPE_TARGET_LIST,
+                          GDK_TYPE_CONTENT_FORMATS,
                           GTK_PARAM_READABLE);
 
   g_object_class_install_properties (object_class, LAST_PROP, text_buffer_props);
@@ -3996,28 +3996,28 @@ gtk_text_buffer_free_target_lists (GtkTextBuffer *buffer)
 {
   GtkTextBufferPrivate *priv = buffer->priv;
 
-  g_clear_pointer (&priv->copy_target_list, gtk_target_list_unref);
-  g_clear_pointer (&priv->paste_target_list, gtk_target_list_unref);
+  g_clear_pointer (&priv->copy_target_list, gdk_content_formats_unref);
+  g_clear_pointer (&priv->paste_target_list, gdk_content_formats_unref);
 }
 
-static GtkTargetList *
+static GdkContentFormats *
 gtk_text_buffer_get_target_list (GtkTextBuffer   *buffer,
                                  gboolean         deserializable,
                                  gboolean         include_local)
 {
-  GtkTargetList *target_list;
+  GdkContentFormats *target_list;
 
-  target_list = gtk_target_list_new (NULL, 0);
+  target_list = gdk_content_formats_new (NULL, 0);
 
   if (include_local)
-    gtk_target_list_add (target_list,
+    gdk_content_formats_add (target_list,
                          gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"));
 
-  gtk_target_list_add_rich_text_targets (target_list,
-                                         deserializable,
-                                         buffer);
+  gtk_content_formats_add_rich_text_targets (target_list,
+                                             deserializable,
+                                             buffer);
 
-  gtk_target_list_add_text_targets (target_list);
+  gtk_content_formats_add_text_targets (target_list);
 
   return target_list;
 }
@@ -4080,11 +4080,11 @@ cut_or_copy (GtkTextBuffer *buffer,
         }
       else
         {
-          GtkTargetList *list;
+          GdkContentFormats *list;
           
           list = gtk_text_buffer_get_target_list (buffer, FALSE, FALSE);
           gtk_clipboard_set_can_store (clipboard, list);
-          gtk_target_list_unref (list);
+          gdk_content_formats_unref (list);
         }
 
       if (delete_region_after)
@@ -4221,14 +4221,14 @@ gtk_text_buffer_end_user_action (GtkTextBuffer *buffer)
  * This function returns the list of targets this text buffer can
  * provide for copying and as DND source. The targets in the list are
  * added with @info values from the #GtkTextBufferTargetInfo enum,
- * using gtk_target_list_add_rich_text_targets() and
- * gtk_target_list_add_text_targets().
+ * using gdk_content_formats_add_rich_text_targets() and
+ * gdk_content_formats_add_text_targets().
  *
- * Returns: (transfer none): the #GtkTargetList
+ * Returns: (transfer none): the #GdkContentFormats
  *
  * Since: 2.10
  **/
-GtkTargetList *
+GdkContentFormats *
 gtk_text_buffer_get_copy_target_list (GtkTextBuffer *buffer)
 {
   GtkTextBufferPrivate *priv;
@@ -4251,14 +4251,14 @@ gtk_text_buffer_get_copy_target_list (GtkTextBuffer *buffer)
  * This function returns the list of targets this text buffer supports
  * for pasting and as DND destination. The targets in the list are
  * added with @info values from the #GtkTextBufferTargetInfo enum,
- * using gtk_target_list_add_rich_text_targets() and
- * gtk_target_list_add_text_targets().
+ * using gtk_content_formats_add_rich_text_targets() and
+ * gtk_content_formats_add_text_targets().
  *
- * Returns: (transfer none): the #GtkTargetList
+ * Returns: (transfer none): the #GdkContentFormats
  *
  * Since: 2.10
  **/
-GtkTargetList *
+GdkContentFormats *
 gtk_text_buffer_get_paste_target_list (GtkTextBuffer *buffer)
 {
   GtkTextBufferPrivate *priv;

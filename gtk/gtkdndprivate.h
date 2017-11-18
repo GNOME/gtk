@@ -30,7 +30,7 @@ typedef struct _GtkDragDestSite GtkDragDestSite;
 struct _GtkDragDestSite
 {
   GtkDestDefaults    flags;
-  GtkTargetList     *target_list;
+  GdkContentFormats *target_list;
   GdkDragAction      actions;
   guint              do_proxy     : 1;
   guint              proxy_coords : 1;
@@ -42,7 +42,7 @@ G_BEGIN_DECLS
 
 GdkDragContext *        gtk_drag_begin_internal         (GtkWidget              *widget,
                                                          GtkImageDefinition     *icon,
-                                                         GtkTargetList          *target_list,
+                                                         GdkContentFormats      *target_list,
                                                          GdkDragAction           actions,
                                                          gint                    button,
                                                          const GdkEvent         *event,

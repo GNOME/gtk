@@ -24,8 +24,9 @@
 
 G_BEGIN_DECLS
 
-GdkAtom *gtk_target_list_get_atoms      (GtkTargetList     *targets,
-                                         guint             *n_atoms);
+
+GdkAtom *               gdk_content_formats_get_atoms   (GdkContentFormats              *formats,
+                                                         guint                          *n_atoms);
 
 
 G_END_DECLS

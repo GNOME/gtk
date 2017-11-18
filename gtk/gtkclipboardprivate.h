@@ -46,15 +46,15 @@ struct _GtkClipboard
   gboolean have_selection;
   GdkDisplay *display;
 
-  GdkAtom *cached_targets;
-  gint     n_cached_targets;
+  GdkAtom *cached_formats;
+  gint     n_cached_formats;
 
   gulong     notify_signal_id;
   gboolean   storing_selection;
   GMainLoop *store_loop;
   guint      store_timeout;
-  gint       n_storable_targets;
-  GdkAtom   *storable_targets;
+  gint       n_storable_formats;
+  GdkAtom   *storable_formats;
 };
 
 struct _GtkClipboardClass
@@ -63,7 +63,7 @@ struct _GtkClipboardClass
 
   /* vfuncs */
   gboolean      (* set_contents)                (GtkClipboard                   *clipboard,
-                                                 GtkTargetList                  *targets,
+                                                 GdkContentFormats              *formats,
                                                  GtkClipboardGetFunc             get_func,
                                                  GtkClipboardClearFunc           clear_func,
                                                  gpointer                        user_data,
@@ -74,7 +74,7 @@ struct _GtkClipboardClass
                                                  GtkClipboardReceivedFunc        callback,
                                                  gpointer                        user_data);
   void          (* set_can_store)               (GtkClipboard                   *clipboard,
-                                                 GtkTargetList                  *targets);
+                                                 GdkContentFormats              *formats);
   void          (* store)                       (GtkClipboard                   *clipboard);
 
   /* signals */

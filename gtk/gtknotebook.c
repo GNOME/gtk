@@ -169,7 +169,7 @@ struct _GtkNotebookPrivate
   GtkNotebookDragOperation   operation;
   GtkNotebookPage           *cur_page;
   GtkNotebookPage           *detached_tab;
-  GtkTargetList             *source_targets;
+  GdkContentFormats             *source_targets;
   GtkWidget                 *action_widget[N_ACTION_WIDGETS];
   GtkWidget                 *dnd_child;
   GtkWidget                 *menu;
@@ -1048,7 +1048,7 @@ static void
 gtk_notebook_init (GtkNotebook *notebook)
 {
   GtkNotebookPrivate *priv;
-  GtkTargetList *targets;
+  GdkContentFormats *targets;
 
   gtk_widget_set_can_focus (GTK_WIDGET (notebook), TRUE);
   gtk_widget_set_has_window (GTK_WIDGET (notebook), FALSE);
@@ -1075,7 +1075,7 @@ gtk_notebook_init (GtkNotebook *notebook)
   priv->pressed_button = 0;
   priv->dnd_timer = 0;
   priv->switch_tab_timer = 0;
-  priv->source_targets = gtk_target_list_new (src_notebook_targets,
+  priv->source_targets = gdk_content_formats_new (src_notebook_targets,
                                               G_N_ELEMENTS (src_notebook_targets));
   priv->operation = DRAG_OPERATION_NONE;
   priv->detached_tab = NULL;
@@ -1086,11 +1086,11 @@ gtk_notebook_init (GtkNotebook *notebook)
   else
     priv->tabs_reversed = FALSE;
 
-  targets = gtk_target_list_new (dst_notebook_targets, G_N_ELEMENTS (dst_notebook_targets));
+  targets = gdk_content_formats_new (dst_notebook_targets, G_N_ELEMENTS (dst_notebook_targets));
   gtk_drag_dest_set (GTK_WIDGET (notebook), 0,
                      targets,
                      GDK_ACTION_MOVE);
-  gtk_target_list_unref (targets);
+  gdk_content_formats_unref (targets);
 
   gtk_drag_dest_set_track_motion (GTK_WIDGET (notebook), TRUE);
 
@@ -1591,7 +1591,7 @@ gtk_notebook_destroy (GtkWidget *widget)
 
   if (priv->source_targets)
     {
-      gtk_target_list_unref (priv->source_targets);
+      gdk_content_formats_unref (priv->source_targets);
       priv->source_targets = NULL;
     }
 

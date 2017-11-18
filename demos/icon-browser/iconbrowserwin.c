@@ -439,14 +439,14 @@ static void
 setup_scalable_image_dnd (GtkWidget *image)
 {
   GtkWidget *parent;
-  GtkTargetList *targets;
+  GdkContentFormats *targets;
 
   parent = gtk_widget_get_parent (image);
-  targets = gtk_target_list_new (target_table, G_N_ELEMENTS (target_table));
+  targets = gdk_content_formats_new (target_table, G_N_ELEMENTS (target_table));
   gtk_drag_source_set (parent, GDK_BUTTON1_MASK,
                        targets,
                        GDK_ACTION_COPY);
-  gtk_target_list_unref (targets);
+  gdk_content_formats_unref (targets);
 
   g_signal_connect (parent, "drag-data-get", G_CALLBACK (get_scalable_image_data), NULL);
 }
@@ -454,17 +454,17 @@ setup_scalable_image_dnd (GtkWidget *image)
 static void
 icon_browser_window_init (IconBrowserWindow *win)
 {
-  GtkTargetList *list;
+  GdkContentFormats *list;
 
   gtk_widget_init_template (GTK_WIDGET (win));
 
-  list = gtk_target_list_new (NULL, 0);
-  gtk_target_list_add_text_targets (list);
+  list = gdk_content_formats_new (NULL, 0);
+  gtk_content_formats_add_text_targets (list);
   gtk_icon_view_enable_model_drag_source (GTK_ICON_VIEW (win->list),
                                           GDK_BUTTON1_MASK,
                                           list,
                                           GDK_ACTION_COPY);
-  gtk_target_list_unref (list);
+  gdk_content_formats_unref (list);
 
   setup_image_dnd (win->image1);
   setup_image_dnd (win->image2);

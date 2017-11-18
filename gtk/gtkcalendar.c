@@ -2647,14 +2647,14 @@ gtk_calendar_motion_notify (GtkWidget      *widget,
                                     x, y))
         {
           GdkDragContext *context;
-          GtkTargetList *target_list = gtk_target_list_new (NULL, 0);
-          gtk_target_list_add_text_targets (target_list);
+          GdkContentFormats *target_list = gdk_content_formats_new (NULL, 0);
+          gtk_content_formats_add_text_targets (target_list);
           context = gtk_drag_begin_with_coordinates (widget, target_list, GDK_ACTION_COPY,
                                                      1, (GdkEvent *)event,
                                                      priv->drag_start_x, priv->drag_start_y);
 
           priv->in_drag = 0;
-          gtk_target_list_unref (target_list);
+          gdk_content_formats_unref (target_list);
           gtk_drag_set_icon_default (context);
         }
     }

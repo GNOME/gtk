@@ -57,7 +57,7 @@ gtk_drag_dest_site_destroy (gpointer data)
   GtkDragDestSite *site = data;
 
   if (site->target_list)
-    gtk_target_list_unref (site->target_list);
+    gdk_content_formats_unref (site->target_list);
 
   g_slice_free (GtkDragDestSite, site);
 }
@@ -143,10 +143,10 @@ gtk_drag_dest_set_internal (GtkWidget       *widget,
  * ]|
  */
 void
-gtk_drag_dest_set (GtkWidget       *widget,
-                   GtkDestDefaults  flags,
-                   GtkTargetList   *targets,
-                   GdkDragAction    actions)
+gtk_drag_dest_set (GtkWidget         *widget,
+                   GtkDestDefaults    flags,
+                   GdkContentFormats *targets,
+                   GdkDragAction      actions)
 {
   GtkDragDestSite *site;
 
@@ -157,7 +157,7 @@ gtk_drag_dest_set (GtkWidget       *widget,
   site->flags = flags;
   site->have_drag = FALSE;
   if (targets)
-    site->target_list = gtk_target_list_ref (targets);
+    site->target_list = gdk_content_formats_ref (targets);
   else
     site->target_list = NULL;
   site->actions = actions;
@@ -202,9 +202,9 @@ gtk_drag_dest_unset (GtkWidget *widget)
  * Returns the list of targets this widget can accept from
  * drag-and-drop.
  *
- * Returns: (nullable) (transfer none): the #GtkTargetList, or %NULL if none
+ * Returns: (nullable) (transfer none): the #GdkContentFormats, or %NULL if none
  */
-GtkTargetList *
+GdkContentFormats *
 gtk_drag_dest_get_target_list (GtkWidget *widget)
 {
   GtkDragDestSite *site;
@@ -227,7 +227,7 @@ gtk_drag_dest_get_target_list (GtkWidget *widget)
  */
 void
 gtk_drag_dest_set_target_list (GtkWidget     *widget,
-                               GtkTargetList *target_list)
+                               GdkContentFormats *target_list)
 {
   GtkDragDestSite *site;
 
@@ -243,10 +243,10 @@ gtk_drag_dest_set_target_list (GtkWidget     *widget,
     }
 
   if (target_list)
-    gtk_target_list_ref (target_list);
+    gdk_content_formats_ref (target_list);
 
   if (site->target_list)
-    gtk_target_list_unref (site->target_list);
+    gdk_content_formats_unref (site->target_list);
 
   site->target_list = target_list;
 }
@@ -266,16 +266,16 @@ gtk_drag_dest_set_target_list (GtkWidget     *widget,
 void
 gtk_drag_dest_add_text_targets (GtkWidget *widget)
 {
-  GtkTargetList *target_list;
+  GdkContentFormats *target_list;
 
   target_list = gtk_drag_dest_get_target_list (widget);
   if (target_list)
-    gtk_target_list_ref (target_list);
+    gdk_content_formats_ref (target_list);
   else
-    target_list = gtk_target_list_new (NULL, 0);
-  gtk_target_list_add_text_targets (target_list);
+    target_list = gdk_content_formats_new (NULL, 0);
+  gtk_content_formats_add_text_targets (target_list);
   gtk_drag_dest_set_target_list (widget, target_list);
-  gtk_target_list_unref (target_list);
+  gdk_content_formats_unref (target_list);
 }
 
 /**
@@ -293,16 +293,16 @@ gtk_drag_dest_add_text_targets (GtkWidget *widget)
 void
 gtk_drag_dest_add_image_targets (GtkWidget *widget)
 {
-  GtkTargetList *target_list;
+  GdkContentFormats *target_list;
 
   target_list = gtk_drag_dest_get_target_list (widget);
   if (target_list)
-    gtk_target_list_ref (target_list);
+    gdk_content_formats_ref (target_list);
   else
-    target_list = gtk_target_list_new (NULL, 0);
-  gtk_target_list_add_image_targets (target_list, FALSE);
+    target_list = gdk_content_formats_new (NULL, 0);
+  gtk_content_formats_add_image_targets (target_list, FALSE);
   gtk_drag_dest_set_target_list (widget, target_list);
-  gtk_target_list_unref (target_list);
+  gdk_content_formats_unref (target_list);
 }
 
 /**
@@ -320,16 +320,16 @@ gtk_drag_dest_add_image_targets (GtkWidget *widget)
 void
 gtk_drag_dest_add_uri_targets (GtkWidget *widget)
 {
-  GtkTargetList *target_list;
+  GdkContentFormats *target_list;
 
   target_list = gtk_drag_dest_get_target_list (widget);
   if (target_list)
-    gtk_target_list_ref (target_list);
+    gdk_content_formats_ref (target_list);
   else
-    target_list = gtk_target_list_new (NULL, 0);
-  gtk_target_list_add_uri_targets (target_list);
+    target_list = gdk_content_formats_new (NULL, 0);
+  gtk_content_formats_add_uri_targets (target_list);
   gtk_drag_dest_set_target_list (widget, target_list);
-  gtk_target_list_unref (target_list);
+  gdk_content_formats_unref (target_list);
 }
 
 /**
@@ -407,11 +407,11 @@ gtk_drag_dest_get_track_motion (GtkWidget *widget)
  *     and the dest can accept, or %NULL
  */
 GdkAtom
-gtk_drag_dest_find_target (GtkWidget      *widget,
-                           GdkDragContext *context,
-                           GtkTargetList  *target_list)
+gtk_drag_dest_find_target (GtkWidget         *widget,
+                           GdkDragContext    *context,
+                           GdkContentFormats *target_list)
 {
-  GtkTargetList *source_list;
+  GdkContentFormats *source_list;
   GList *tmp_source;
   GdkAtom result;
 
@@ -424,17 +424,17 @@ gtk_drag_dest_find_target (GtkWidget      *widget,
   if (target_list == NULL)
     return NULL;
 
-  source_list = gtk_target_list_new (NULL, 0);
+  source_list = gdk_content_formats_new (NULL, 0);
   for (tmp_source = gdk_drag_context_list_targets (context);
        tmp_source != NULL;
        tmp_source = tmp_source->next)
     {
-      gtk_target_list_add (source_list, tmp_source->data);
+      gdk_content_formats_add (source_list, tmp_source->data);
     }
        
-  result = gtk_target_list_intersects (target_list, source_list);
+  result = gdk_content_formats_intersects (target_list, source_list);
 
-  gtk_target_list_unref (source_list);
+  gdk_content_formats_unref (source_list);
 
   return result;
 }

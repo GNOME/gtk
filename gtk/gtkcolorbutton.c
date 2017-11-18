@@ -384,7 +384,7 @@ gtk_color_button_init (GtkColorButton *button)
   PangoLayout *layout;
   PangoRectangle rect;
   GtkStyleContext *context;
-  GtkTargetList *targets;
+  GdkContentFormats *targets;
 
   gtk_widget_set_has_window (GTK_WIDGET (button), FALSE);
 
@@ -413,7 +413,7 @@ gtk_color_button_init (GtkColorButton *button)
   priv->rgba.alpha = 1;
   priv->use_alpha = FALSE;
 
-  targets = gtk_target_list_new (drop_types, G_N_ELEMENTS (drop_types));
+  targets = gdk_content_formats_new (drop_types, G_N_ELEMENTS (drop_types));
   gtk_drag_dest_set (priv->button,
                      GTK_DEST_DEFAULT_MOTION |
                      GTK_DEST_DEFAULT_HIGHLIGHT |
@@ -424,7 +424,7 @@ gtk_color_button_init (GtkColorButton *button)
                        GDK_BUTTON1_MASK|GDK_BUTTON3_MASK,
                        targets,
                        GDK_ACTION_COPY);
-  gtk_target_list_unref (targets);
+  gdk_content_formats_unref (targets);
   g_signal_connect (priv->button, "drag-begin",
                     G_CALLBACK (gtk_color_button_drag_begin), button);
   g_signal_connect (priv->button, "drag-data-received",

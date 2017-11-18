@@ -1,5 +1,5 @@
 /* GTK - The GIMP Toolkit
- * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ * Copyright (C) 2017 Benjamin Otte
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -8,71 +8,50 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.          See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* This file implements most of the work of the ICCCM selection protocol.
- * The code was written after an intensive study of the equivalent part
- * of John Ousterhout’s Tk toolkit, and does many things in much the 
- * same way.
+/**
+ * SECTION:gdkcontentformats
+ * @Title: Content Formats
+ * @Short_description: Advertising and negotiating of content
+ *     exchange formats
+   @See_also: #GdkDragContext, #GtkClipboard
  *
- * The one thing in the ICCCM that isn’t fully supported here (or in Tk)
- * is side effects targets. For these to be handled properly, MULTIPLE
- * targets need to be done in the order specified. This cannot be
- * guaranteed with the way we do things, since if we are doing INCR
- * transfers, the order will depend on the timing of the requestor.
+ * This section describes the #GdkContentFormats structure that is used to
+ * advertise and negotiate the format of content passed between different
+ * widgets, windows or applications using for example the clipboard or
+ * drag'n'drop.
  *
- * By Owen Taylor <owt1@cornell.edu>	      8/16/97
- */
-
-/* Terminology note: when not otherwise specified, the term "incr" below
- * refers to the _sending_ part of the INCR protocol. The receiving
- * portion is referred to just as “retrieval”. (Terminology borrowed
- * from Tk, because there is no good opposite to “retrieval” in English.
- * “send” can’t be made into a noun gracefully and we’re already using
- * “emission” for something else ....)
- */
-
-/* The MOTIF entry widget seems to ask for the TARGETS target, then
-   (regardless of the reply) ask for the TEXT target. It's slightly
-   possible though that it somehow thinks we are responding negatively
-   to the TARGETS request, though I don't really think so ... */
-
-/*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
- * file for a list of people on the GTK+ Team.  See the ChangeLog
- * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GDK supports content in 2 forms: #GType and mime type.
+ * Using #GTypes is meant only for in-process content transfers. Mime types
+ * are meant to be used for data passing both in-process and out-of-process.
+ * The details of how data is passed is described in the documentation of
+ * the actual implementations.
+ *
+ * A #GdkContentFormats describes a set of possible formats content can be
+ * exchanged in. It is assumed that this set is ordered. #GTypes are more
+ * important than mime types. Order between different #Gtypes or mime types
+ * is the order they were added in, most important first. Functions that
+ * care about order, such as gdk_content_formats_union() will describe in
+ * their documentation how they interpret that order, though in general the
+ * order of the first argument is considered the primary order of the result,
+ * followed by the order of further arguments.
+ *
+ * For debugging purposes, the function gdk_content_formats_to_string() exists.
+ * It will print a comma-seperated formats of formats from most important to least
+ * important.
  */
 
 /**
- * SECTION:gtkselection
- * @Title: Selections
- * @Short_description: Functions for handling inter-process communication
- *     via selections
- * @See_also: #GtkWidget - Much of the operation of selections happens via
- *     signals for #GtkWidget. In particular, if you are using the functions
- *     in this section, you may need to pay attention to
- *     #GtkWidget::selection-get, #GtkWidget::selection-received and
- *     #GtkWidget::selection-clear-event signals
+ * GdkContentFormats:
  *
- * The selection mechanism provides the basis for different types
- * of communication between processes. In particular, drag and drop and
- * #GtkClipboard work via selections. You will very seldom or
- * never need to use most of the functions in this section directly;
- * #GtkClipboard provides a nicer interface to the same functionality.
- *
- * Some of the datatypes defined this section are used in
- * the #GtkClipboard and drag-and-drop API’s as well. The
- * #GtkTargetList object represents
- * lists of data types that are supported when sending or
- * receiving data. The #GtkSelectionData object is used to
- * store a chunk of data along with the data type and other
- * associated information.
+ * A #GdkContentFormats struct is a reference counted struct
+ * and should be treated as opaque.
  */
 
 #include "config.h"
@@ -82,138 +61,156 @@
 
 #include "gdkproperty.h"
 
-struct _GtkTargetList
+struct _GdkContentFormats
 {
   /*< private >*/
-  GList *list;
+  GList *formats;
   guint ref_count;
 };
 
+G_DEFINE_BOXED_TYPE (GdkContentFormats, gdk_content_formats,
+                     gdk_content_formats_ref,
+                     gdk_content_formats_unref)
+
+
+static void
+gdk_content_formats_add_table (GdkContentFormats  *formats,
+                               const char        **mime_types,
+                               guint               n_mime_types)
+{
+  gint i;
+
+  for (i = n_mime_types - 1; i >= 0; i--)
+    {
+      formats->formats = g_list_prepend (formats->formats, (gpointer) gdk_atom_intern (mime_types[i], FALSE));
+    }
+}
 
 /**
- * gtk_target_list_new:
- * @targets: (array length=ntargets) (allow-none): Pointer to an array
- *   of char *
- * @ntargets: number of entries in @targets.
+ * gdk_content_formats_new:
+ * @mime_types: (array length=n_mime_types) (allow-none): Pointer to an
+ *   array of mime types
+ * @nmime_types: number of entries in @mime_types.
  * 
- * Creates a new #GtkTargetList from an array of mime types.
+ * Creates a new #GdkContentFormats from an array of mime types.
  * 
- * Returns: (transfer full): the new #GtkTargetList.
+ * Returns: (transfer full): the new #GdkContentFormats.
  **/
-GtkTargetList *
-gtk_target_list_new (const char **targets,
-		     guint        ntargets)
+GdkContentFormats *
+gdk_content_formats_new (const char **mime_types,
+                         guint        n_mime_types)
 {
-  GtkTargetList *result = g_slice_new (GtkTargetList);
-  result->list = NULL;
+  GdkContentFormats *result = g_slice_new (GdkContentFormats);
+  result->formats = NULL;
   result->ref_count = 1;
 
-  if (targets)
-    gtk_target_list_add_table (result, targets, ntargets);
+  if (mime_types)
+    gdk_content_formats_add_table (result, mime_types, n_mime_types);
   
   return result;
 }
 
 /**
- * gtk_target_list_ref:
- * @list:  a #GtkTargetList
+ * gdk_content_formats_ref:
+ * @formats:  a #GdkContentFormats
  * 
- * Increases the reference count of a #GtkTargetList by one.
+ * Increases the reference count of a #GdkContentFormats by one.
  *
- * Returns: the passed in #GtkTargetList.
+ * Returns: the passed in #GdkContentFormats.
  **/
-GtkTargetList *
-gtk_target_list_ref (GtkTargetList *list)
+GdkContentFormats *
+gdk_content_formats_ref (GdkContentFormats *formats)
 {
-  g_return_val_if_fail (list != NULL, NULL);
+  g_return_val_if_fail (formats != NULL, NULL);
 
-  list->ref_count++;
+  formats->ref_count++;
 
-  return list;
+  return formats;
 }
 
 /**
- * gtk_target_list_unref:
- * @list: a #GtkTargetList
+ * gdk_content_formats_unref:
+ * @formats: a #GdkContentFormats
  * 
- * Decreases the reference count of a #GtkTargetList by one.
- * If the resulting reference count is zero, frees the list.
+ * Decreases the reference count of a #GdkContentFormats by one.
+ * If the resulting reference count is zero, frees the formats.
  **/
 void               
-gtk_target_list_unref (GtkTargetList *list)
+gdk_content_formats_unref (GdkContentFormats *formats)
 {
-  g_return_if_fail (list != NULL);
-  g_return_if_fail (list->ref_count > 0);
+  g_return_if_fail (formats != NULL);
+  g_return_if_fail (formats->ref_count > 0);
 
-  list->ref_count--;
-  if (list->ref_count > 0)
+  formats->ref_count--;
+  if (formats->ref_count > 0)
     return;
 
-  g_list_free (list->list);
-  g_slice_free (GtkTargetList, list);
+  g_list_free (formats->formats);
+  g_slice_free (GdkContentFormats, formats);
 }
 
 /**
- * gtk_target_list_add:
- * @list:  a #GtkTargetList
- * @target: the mime type of the target
+ * gdk_content_formats_add:
+ * @formats:  a #GdkContentFormats
+ * @mime_type: the mime type to add
  * 
- * Appends another target to a #GtkTargetList.
+ * Appends another mime_type to a #GdkContentFormats.
  **/
 void 
-gtk_target_list_add (GtkTargetList *list,
-		     const char    *target)
+gdk_content_formats_add (GdkContentFormats *formats,
+                         const char    *mime_type)
 {
-  g_return_if_fail (list != NULL);
+  g_return_if_fail (formats != NULL);
   
-  list->list = g_list_append (list->list, (gpointer) gdk_atom_intern (target, FALSE));
+  formats->formats = g_list_append (formats->formats, (gpointer) gdk_atom_intern (mime_type, FALSE));
 }
 
 /**
- * gtk_target_list_merge:
- * @target: the #GtkTargetList to merge into
- * @source: the #GtkTargeList to merge from
+ * gdk_content_formats_union:
+ * @first: the #GdkContentFormats to merge into
+ * @second: the #GtkTargeList to merge from
  *
- * Merges all targets from @source into @target.
+ * Append all missing types from @second to @first, in the order
+ * they had in @second.
  */
 void
-gtk_target_list_merge (GtkTargetList       *target,
-                       const GtkTargetList *source)
+gdk_content_formats_union (GdkContentFormats       *first,
+                           const GdkContentFormats *second)
 {
   GList *l;
 
-  g_return_if_fail (target != NULL);
-  g_return_if_fail (source != NULL);
+  g_return_if_fail (first != NULL);
+  g_return_if_fail (second != NULL);
 
-  for (l = source->list; l; l = l->next)
+  for (l = second->formats; l; l = l->next)
     {
-      target->list = g_list_prepend (target->list, l->data);
+      first->formats = g_list_append (first->formats, l->data);
     }
 }
 
 /**
- * gtk_target_list_intersects:
- * @first: the primary #GtkTargetList to intersect
- * @second: the #GtkTargeList to intersect with
+ * gdk_content_formats_intersects:
+ * @first: the primary #GdkContentFormats to intersect
+ * @second: the #GdkContentFormats to intersect with
  *
  * Finds the first element from @first that is also contained
  * in @second.
  *
- * Returns: The first matching #GdkAtom or %NULL if the lists
+ * Returns: The first matching #GdkAtom or %NULL if the formatss
  *     do not intersect.
  */
 GdkAtom
-gtk_target_list_intersects (const GtkTargetList *first,
-                            const GtkTargetList *second)
+gdk_content_formats_intersects (const GdkContentFormats *first,
+                                const GdkContentFormats *second)
 {
   GList *l;
 
   g_return_val_if_fail (first != NULL, NULL);
   g_return_val_if_fail (second != NULL, NULL);
 
-  for (l = first->list; l; l = l->next)
+  for (l = first->formats; l; l = l->next)
     {
-      if (g_list_find (second->list, l->data))
+      if (g_list_find (second->formats, l->data))
         return l->data;
     }
 
@@ -221,74 +218,55 @@ gtk_target_list_intersects (const GtkTargetList *first,
 }
 
 /**
- * gtk_target_list_add_table:
- * @list: a #GtkTargetList
- * @targets: (array length=ntargets): the table of #GtkTargetEntry
- * @ntargets: number of targets in the table
+ * gdk_content_formats_remove:
+ * @formats: a #GdkContentFormats
+ * @mime_type: the mime type
  * 
- * Prepends a table of #GtkTargetEntry to a target list.
- **/
-void               
-gtk_target_list_add_table (GtkTargetList  *list,
-			   const char    **targets,
-			   guint           ntargets)
-{
-  gint i;
-
-  for (i=ntargets-1; i >= 0; i--)
-    {
-      list->list = g_list_prepend (list->list, (gpointer) gdk_atom_intern (targets[i], FALSE));
-    }
-}
-
-/**
- * gtk_target_list_remove:
- * @list: a #GtkTargetList
- * @target: the interned atom representing the target
- * 
- * Removes a target from a target list.
+ * Removes a mime type. If the mime type was not part of @formats, nothing
+ * happens.
  **/
 void 
-gtk_target_list_remove (GtkTargetList *list,
-			GdkAtom        target)
+gdk_content_formats_remove (GdkContentFormats *formats,
+                            const char        *mime_type)
 {
-  g_return_if_fail (list != NULL);
+  g_return_if_fail (formats != NULL);
+  g_return_if_fail (mime_type != NULL);
 
-  list->list = g_list_remove (list->list, (gpointer) target);
+  formats->formats = g_list_remove (formats->formats, (gpointer) gdk_atom_intern (mime_type, FALSE));
 }
 
 /**
- * gtk_target_list_find:
- * @list: a #GtkTargetList
- * @target: a string representing the target to search for
+ * gdk_content_formats_contains:
+ * @formats: a #GdkContentFormats
+ * @mime_type: the mime type to search for
  *
- * Looks up a given target in a #GtkTargetList.
+ * Checks if a given mime type is part of the given @formats.
  *
- * Returns: %TRUE if the target was found, otherwise %FALSE
+ * Returns: %TRUE if the mime_type was found, otherwise %FALSE
  **/
 gboolean
-gtk_target_list_find (GtkTargetList *list,
-		      const char    *target)
+gdk_content_formats_contains (const GdkContentFormats *formats,
+                              const char              *mime_type)
 {
-  g_return_val_if_fail (list != NULL, FALSE);
-  g_return_val_if_fail (target != NULL, FALSE);
+  g_return_val_if_fail (formats != NULL, FALSE);
+  g_return_val_if_fail (mime_type != NULL, FALSE);
 
-  return g_list_find (list->list, (gpointer) gdk_atom_intern (target, FALSE)) != NULL;
+  return g_list_find (formats->formats, (gpointer) gdk_atom_intern (mime_type, FALSE)) != NULL;
 }
 
 GdkAtom *
-gtk_target_list_get_atoms (GtkTargetList *list,
-                           guint         *n_atoms)
+gdk_content_formats_get_atoms (GdkContentFormats *formats,
+                               guint             *n_atoms)
 {
   GdkAtom *atoms;
   GList *l;
   guint i, n;
 
-  n = g_list_length (list->list);
+  n = g_list_length (formats->formats);
   atoms = g_new (GdkAtom, n);
 
   i = 0;
-  for (l = list->list; l; l = l->next)
+  for (l = formats->formats; l; l = l->next)
     atoms[i++] = l->data;
 
   if (n_atoms)

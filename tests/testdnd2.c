@@ -120,32 +120,32 @@ window_drag_begin (GtkWidget      *widget,
 static void
 update_source_target_list (GtkWidget *image)
 {
-  GtkTargetList *target_list;
+  GdkContentFormats *target_list;
 
-  target_list = gtk_target_list_new (NULL, 0);
+  target_list = gdk_content_formats_new (NULL, 0);
 
-  gtk_target_list_add_image_targets (target_list, FALSE);
+  gtk_content_formats_add_image_targets (target_list, FALSE);
   if (gtk_image_get_storage_type (GTK_IMAGE (image)) == GTK_IMAGE_ICON_NAME)
-    gtk_target_list_add_text_targets (target_list);
+    gtk_content_formats_add_text_targets (target_list);
 
   gtk_drag_source_set_target_list (image, target_list);
 
-  gtk_target_list_unref (target_list);
+  gdk_content_formats_unref (target_list);
 }
 
 static void
 update_dest_target_list (GtkWidget *image)
 {
-  GtkTargetList *target_list;
+  GdkContentFormats *target_list;
 
-  target_list = gtk_target_list_new (NULL, 0);
+  target_list = gdk_content_formats_new (NULL, 0);
 
-  gtk_target_list_add_image_targets (target_list, FALSE);
-  gtk_target_list_add_text_targets (target_list);
+  gtk_content_formats_add_image_targets (target_list, FALSE);
+  gtk_content_formats_add_text_targets (target_list);
 
   gtk_drag_dest_set_target_list (image, target_list);
 
-  gtk_target_list_unref (target_list);
+  gdk_content_formats_unref (target_list);
 }
 
 void

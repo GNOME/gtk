@@ -34,6 +34,8 @@
 
 #include "gdk/gdk.h"
 
+#include "gdk/gdkcontentformatsprivate.h"
+
 #ifdef GDK_WINDOWING_X11
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
@@ -93,7 +95,7 @@ typedef enum
 struct _GtkDragSourceInfo 
 {
   GtkWidget         *widget;
-  GtkTargetList     *target_list; /* Targets for drag data */
+  GdkContentFormats *target_list; /* Targets for drag data */
   GdkDragAction      possible_actions; /* Actions allowed by source */
   GdkDragContext    *context;     /* drag context */
   GtkWidget         *icon_window; /* Window for drag */
@@ -816,8 +818,7 @@ gtk_drag_selection_received (GtkWidget        *widget,
 
       if (site && site->target_list)
         {
-          if (gtk_target_list_find (site->target_list, 
-                                    target))
+          if (gdk_content_formats_contains (site->target_list, target))
             {
               if (!(site->flags & GTK_DEST_DEFAULT_DROP) ||
                   gtk_selection_data_get_length (selection_data) >= 0)
@@ -1171,7 +1172,7 @@ gtk_drag_is_managed (GtkWidget *source_widget)
 GdkDragContext *
 gtk_drag_begin_internal (GtkWidget          *widget,
                          GtkImageDefinition *icon,
-                         GtkTargetList      *target_list,
+                         GdkContentFormats  *target_list,
                          GdkDragAction       actions,
                          gint                button,
                          const GdkEvent     *event,
@@ -1262,7 +1263,7 @@ gtk_drag_begin_internal (GtkWidget          *widget,
       gtk_device_grab_add (ipc_widget, pointer, FALSE);
     }
 
-  atoms = gtk_target_list_get_atoms (target_list, &n_atoms);
+  atoms = gdk_content_formats_get_atoms (target_list, &n_atoms);
   for (i = 0; i < n_atoms; i++)
     {
       targets = g_list_prepend (targets, (gpointer) atoms[i]);
@@ -1313,7 +1314,7 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   info->button = button;
   info->cursor = cursor;
   info->target_list = target_list;
-  gtk_target_list_ref (target_list);
+  gdk_content_formats_ref (target_list);
 
   info->possible_actions = actions;
 
@@ -1440,13 +1441,13 @@ gtk_drag_begin_internal (GtkWidget          *widget,
  * Since: 3.10
  */
 GdkDragContext *
-gtk_drag_begin_with_coordinates (GtkWidget     *widget,
-                                 GtkTargetList *targets,
-                                 GdkDragAction  actions,
-                                 gint           button,
-                                 GdkEvent      *event,
-                                 gint           x,
-                                 gint           y)
+gtk_drag_begin_with_coordinates (GtkWidget         *widget,
+                                 GdkContentFormats *targets,
+                                 GdkDragAction      actions,
+                                 gint               button,
+                                 GdkEvent          *event,
+                                 gint               x,
+                                 gint               y)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   g_return_val_if_fail (gtk_widget_get_realized (widget), NULL);
@@ -1852,9 +1853,9 @@ gtk_drag_drop (GtkDragSourceInfo *info,
       /* GTK+ traditionally has used application/x-rootwin-drop, but the
        * XDND spec specifies x-rootwindow-drop.
        */
-      if (gtk_target_list_find (info->target_list, "application/x-rootwindow-drop"))
+      if (gdk_content_formats_contains (info->target_list, "application/x-rootwindow-drop"))
         found = gdk_atom_intern ("application/x-rootwindow-drop", FALSE);
-      if (gtk_target_list_find (info->target_list, "application/x-rootwin-drop"))
+      if (gdk_content_formats_contains (info->target_list, "application/x-rootwin-drop"))
         found = gdk_atom_intern ("application/x-rootwin-drop", FALSE);
       else found = NULL;
       
@@ -1913,8 +1914,8 @@ gtk_drag_selection_get (GtkWidget        *widget,
                              info->context);
       gtk_selection_data_set (selection_data, null_atom, 8, NULL, 0);
     }
-  else if (gtk_target_list_find (info->target_list, 
-                                 gtk_selection_data_get_target (selection_data)))
+  else if (gdk_content_formats_contains (info->target_list, 
+                                         gtk_selection_data_get_target (selection_data)))
     {
       g_signal_emit_by_name (info->widget, "drag-data-get",
                              info->context,
@@ -1993,7 +1994,7 @@ gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
   source_widgets = g_slist_remove (source_widgets, info->ipc_widget);
   gtk_drag_release_ipc_widget (info->ipc_widget);
 
-  gtk_target_list_unref (info->target_list);
+  gdk_content_formats_unref (info->target_list);
 
   if (info->drop_timeout)
     g_source_remove (info->drop_timeout);

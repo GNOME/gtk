@@ -120,6 +120,7 @@ typedef const char                   *GdkAtom;
 
 /* Forward declarations of commonly used types */
 typedef struct _GdkRGBA               GdkRGBA;
+typedef struct _GdkContentFormats     GdkContentFormats;
 typedef struct _GdkCursor             GdkCursor;
 typedef struct _GdkTexture            GdkTexture;
 typedef struct _GdkDevice             GdkDevice;

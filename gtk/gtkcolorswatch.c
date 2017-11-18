@@ -618,12 +618,12 @@ gtk_color_swatch_set_rgba (GtkColorSwatch *swatch,
 
   if (!swatch->priv->has_color)
     {
-      GtkTargetList *targets = gtk_target_list_new (dnd_targets, G_N_ELEMENTS (dnd_targets));
+      GdkContentFormats *targets = gdk_content_formats_new (dnd_targets, G_N_ELEMENTS (dnd_targets));
       gtk_drag_source_set (GTK_WIDGET (swatch),
                            GDK_BUTTON1_MASK | GDK_BUTTON3_MASK,
                            targets,
                            GDK_ACTION_COPY | GDK_ACTION_MOVE);
-      gtk_target_list_unref (targets);
+      gdk_content_formats_unref (targets);
     }
 
   swatch->priv->has_color = TRUE;
@@ -681,14 +681,14 @@ gtk_color_swatch_set_can_drop (GtkColorSwatch *swatch,
 {
   if (can_drop)
     {
-      GtkTargetList *targets = gtk_target_list_new (dnd_targets, G_N_ELEMENTS (dnd_targets));
+      GdkContentFormats *targets = gdk_content_formats_new (dnd_targets, G_N_ELEMENTS (dnd_targets));
       gtk_drag_dest_set (GTK_WIDGET (swatch),
                          GTK_DEST_DEFAULT_HIGHLIGHT |
                          GTK_DEST_DEFAULT_MOTION |
                          GTK_DEST_DEFAULT_DROP,
                          targets,
                          GDK_ACTION_COPY);
-      gtk_target_list_unref (targets);
+      gdk_content_formats_unref (targets);
     }
   else
     {

@@ -151,7 +151,7 @@ struct _GtkPlacesSidebar {
   GList     *drag_list; /* list of GFile */
   gint       drag_data_info;
   gboolean   dragging_over;
-  GtkTargetList *source_targets;
+  GdkContentFormats *source_targets;
   GtkWidget *drag_row;
   gint drag_row_height;
   gint drag_row_x;
@@ -4020,7 +4020,7 @@ shell_shows_desktop_changed (GtkSettings *settings,
 static void
 gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 {
-  GtkTargetList *target_list;
+  GdkContentFormats *target_list;
   gboolean show_desktop;
   GtkStyleContext *context;
 
@@ -4073,12 +4073,12 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
                      0,
                      NULL,
                      GDK_ACTION_MOVE | GDK_ACTION_COPY | GDK_ACTION_LINK);
-  target_list = gtk_target_list_new  (dnd_drop_targets, G_N_ELEMENTS (dnd_drop_targets));
-  gtk_target_list_add_uri_targets (target_list);
+  target_list = gdk_content_formats_new  (dnd_drop_targets, G_N_ELEMENTS (dnd_drop_targets));
+  gtk_content_formats_add_uri_targets (target_list);
   gtk_drag_dest_set_target_list (sidebar->list_box, target_list);
-  gtk_target_list_unref (target_list);
-  sidebar->source_targets = gtk_target_list_new (dnd_source_targets, G_N_ELEMENTS (dnd_source_targets));
-  gtk_target_list_add_text_targets (sidebar->source_targets);
+  gdk_content_formats_unref (target_list);
+  sidebar->source_targets = gdk_content_formats_new (dnd_source_targets, G_N_ELEMENTS (dnd_source_targets));
+  gtk_content_formats_add_text_targets (sidebar->source_targets);
 
   g_signal_connect (sidebar->list_box, "motion-notify-event",
                     G_CALLBACK (on_motion_notify_event), sidebar);
@@ -4339,7 +4339,7 @@ gtk_places_sidebar_dispose (GObject *object)
 
   if (sidebar->source_targets)
     {
-      gtk_target_list_unref (sidebar->source_targets);
+      gdk_content_formats_unref (sidebar->source_targets);
       sidebar->source_targets = NULL;
     }
 

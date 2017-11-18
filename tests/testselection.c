@@ -390,7 +390,7 @@ main (int argc, char *argv[])
     "COMPOUND_TEXT"
   };
   static gint ntargets = sizeof(targetlist) / sizeof(targetlist[0]);
-  GtkTargetList *list;
+  GdkContentFormats *list;
   
   gtk_init ();
 
@@ -422,9 +422,9 @@ main (int argc, char *argv[])
   g_signal_connect (selection_widget, "selection_received",
 		    G_CALLBACK (selection_received), NULL);
 
-  list = gtk_target_list_new (targetlist, ntargets);
+  list = gdk_content_formats_new (targetlist, ntargets);
   gtk_selection_add_targets (selection_widget, GDK_SELECTION_PRIMARY, list);
-  gtk_target_list_unref (list);
+  gdk_content_formats_unref (list);
 
   g_signal_connect (selection_widget, "selection_get",
 		    G_CALLBACK (selection_get), NULL);

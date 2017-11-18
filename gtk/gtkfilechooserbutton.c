@@ -477,7 +477,7 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
   GtkFileChooserButtonPrivate *priv;
   GtkWidget *box;
   GtkWidget *icon;
-  GtkTargetList *target_list;
+  GdkContentFormats *target_list;
 
   gtk_widget_set_has_window (GTK_WIDGET (button), FALSE);
 
@@ -538,14 +538,14 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
 				      NULL, NULL);
 
   /* DnD */
-  target_list = gtk_target_list_new (NULL, 0);
-  gtk_target_list_add_uri_targets (target_list);
-  gtk_target_list_add_text_targets (target_list);
+  target_list = gdk_content_formats_new (NULL, 0);
+  gtk_content_formats_add_uri_targets (target_list);
+  gtk_content_formats_add_text_targets (target_list);
   gtk_drag_dest_set (GTK_WIDGET (button),
                      (GTK_DEST_DEFAULT_ALL),
 		     target_list,
 		     GDK_ACTION_COPY);
-  gtk_target_list_unref (target_list);
+  gdk_content_formats_unref (target_list);
 }
 
 

@@ -1724,20 +1724,20 @@ copy_file_location_cb (GSimpleAction *action,
   if (selected_files)
     {
       GtkClipboard *clipboard;
-      GtkTargetList *target_list;
+      GdkContentFormats *target_list;
 
       clipboard = gtk_widget_get_clipboard (GTK_WIDGET (impl), GDK_SELECTION_CLIPBOARD);
 
-      target_list = gtk_target_list_new (NULL, 0);
-      gtk_target_list_add_text_targets (target_list);
-      gtk_target_list_add_uri_targets (target_list);
+      target_list = gdk_content_formats_new (NULL, 0);
+      gtk_content_formats_add_text_targets (target_list);
+      gtk_content_formats_add_uri_targets (target_list);
 
       gtk_clipboard_set_with_data (clipboard, target_list,
                                    copy_file_get_cb,
                                    copy_file_clear_cb,
                                    selected_files);
 
-      gtk_target_list_unref (target_list);
+      gdk_content_formats_unref (target_list);
     }
 }
 

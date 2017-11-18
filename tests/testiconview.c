@@ -425,7 +425,7 @@ main (gint argc, gchar **argv)
   GtkTreeModel *model;
   GtkCellRenderer *cell;
   GtkTreeViewColumn *tvc;
-  GtkTargetList *targets;
+  GdkContentFormats *targets;
   
 #ifdef GTK_SRCDIR
   g_chdir (GTK_SRCDIR);
@@ -528,7 +528,7 @@ main (gint argc, gchar **argv)
 #endif
   /* Allow DND between the icon view and the tree view */
   
-  targets = gtk_target_list_new (item_targets, G_N_ELEMENTS (item_targets));
+  targets = gdk_content_formats_new (item_targets, G_N_ELEMENTS (item_targets));
   gtk_icon_view_enable_model_drag_source (GTK_ICON_VIEW (icon_list),
 					  GDK_BUTTON1_MASK,
                                           targets,
@@ -544,7 +544,7 @@ main (gint argc, gchar **argv)
   gtk_tree_view_enable_model_drag_dest (GTK_TREE_VIEW (tv),
                                         targets,
 					GDK_ACTION_MOVE);
-  gtk_target_list_unref (targets);
+  gdk_content_formats_unref (targets);
 			      
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_container_add (GTK_CONTAINER (scrolled_window), icon_list);

@@ -464,9 +464,9 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_text_buffer_end_user_action         (GtkTextBuffer *buffer);
 
 GDK_AVAILABLE_IN_ALL
-GtkTargetList * gtk_text_buffer_get_copy_target_list    (GtkTextBuffer *buffer);
+GdkContentFormats * gtk_text_buffer_get_copy_target_list    (GtkTextBuffer *buffer);
 GDK_AVAILABLE_IN_ALL
-GtkTargetList * gtk_text_buffer_get_paste_target_list   (GtkTextBuffer *buffer);
+GdkContentFormats * gtk_text_buffer_get_paste_target_list   (GtkTextBuffer *buffer);
 
 
 G_END_DECLS

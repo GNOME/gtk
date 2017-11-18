@@ -718,7 +718,7 @@ main (int argc, char *argv[])
   GtkCellRenderer *cell;
   GtkWidget *swindow;
   GtkTreeModel *sample_model;
-  GtkTargetList *targets;
+  GdkContentFormats *targets;
   gint i;
 
   gtk_init ();
@@ -864,7 +864,7 @@ main (int argc, char *argv[])
 
 
   /* Drag and Drop */
-  targets = gtk_target_list_new (row_targets, G_N_ELEMENTS (row_targets));
+  targets = gdk_content_formats_new (row_targets, G_N_ELEMENTS (row_targets));
   gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (left_tree_view),
 					  GDK_BUTTON1_MASK,
                                           targets,
@@ -888,7 +888,7 @@ main (int argc, char *argv[])
   gtk_tree_view_enable_model_drag_dest (GTK_TREE_VIEW (bottom_right_tree_view),
 					targets,
 					GDK_ACTION_MOVE);
-  gtk_target_list_unref (targets);
+  gdk_content_formats_unref (targets);
 
   gtk_box_pack_start (GTK_BOX (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
 

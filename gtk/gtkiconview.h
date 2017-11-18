@@ -253,11 +253,11 @@ void             gtk_icon_view_scroll_to_path     (GtkIconView            *icon_
 GDK_AVAILABLE_IN_ALL
 void                   gtk_icon_view_enable_model_drag_source (GtkIconView              *icon_view,
 							       GdkModifierType           start_button_mask,
-							       GtkTargetList            *targets,
+							       GdkContentFormats        *formats,
 							       GdkDragAction             actions);
 GDK_AVAILABLE_IN_ALL
 void                   gtk_icon_view_enable_model_drag_dest   (GtkIconView              *icon_view,
-							       GtkTargetList            *targets,
+							       GdkContentFormats        *formats,
 							       GdkDragAction             actions);
 GDK_AVAILABLE_IN_ALL
 void                   gtk_icon_view_unset_model_drag_source  (GtkIconView              *icon_view);

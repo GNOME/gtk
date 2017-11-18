@@ -37,16 +37,16 @@ G_BEGIN_DECLS
 #define GTK_TYPE_SELECTION_DATA (gtk_selection_data_get_type ())
 
 GDK_AVAILABLE_IN_ALL
-void           gtk_target_list_add_text_targets      (GtkTargetList  *list);
+void           gtk_content_formats_add_text_targets      (GdkContentFormats *list);
 GDK_AVAILABLE_IN_ALL
-void           gtk_target_list_add_rich_text_targets (GtkTargetList  *list,
-                                                      gboolean        deserializable,
-                                                      GtkTextBuffer  *buffer);
+void           gtk_content_formats_add_rich_text_targets (GdkContentFormats *list,
+                                                          gboolean           deserializable,
+                                                          GtkTextBuffer     *buffer);
 GDK_AVAILABLE_IN_ALL
-void           gtk_target_list_add_image_targets     (GtkTargetList  *list,
-                                                      gboolean        writable);
+void           gtk_content_formats_add_image_targets     (GdkContentFormats *list,
+                                                          gboolean           writable);
 GDK_AVAILABLE_IN_ALL
-void           gtk_target_list_add_uri_targets       (GtkTargetList  *list);
+void           gtk_content_formats_add_uri_targets       (GdkContentFormats *list);
 
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_selection_owner_set             (GtkWidget  *widget,
@@ -65,7 +65,7 @@ void     gtk_selection_add_target    (GtkWidget            *widget,
 GDK_AVAILABLE_IN_ALL
 void     gtk_selection_add_targets   (GtkWidget            *widget,
                                       GdkAtom               selection,
-                                      GtkTargetList        *targets);
+                                      GdkContentFormats    *targets);
 GDK_AVAILABLE_IN_ALL
 void     gtk_selection_clear_targets (GtkWidget            *widget,
                                       GdkAtom               selection);

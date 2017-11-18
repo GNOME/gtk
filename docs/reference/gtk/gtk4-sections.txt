@@ -5213,19 +5213,6 @@ GtkSelectionData
 GtkTargetEntry
 GtkTargetList
 GtkTargetPair
-gtk_target_list_new
-gtk_target_list_ref
-gtk_target_list_unref
-gtk_target_list_add
-gtk_target_list_add_table
-gtk_target_list_merge
-gtk_target_list_intersects
-gtk_target_list_add_text_targets
-gtk_target_list_add_image_targets
-gtk_target_list_add_uri_targets
-gtk_target_list_add_rich_text_targets
-gtk_target_list_remove
-gtk_target_list_find
 gtk_selection_owner_set
 gtk_selection_owner_set_for_display
 gtk_selection_add_target
@@ -5266,7 +5253,6 @@ GTK_TYPE_SELECTION_DATA
 GTK_TYPE_TARGET_LIST
 <SUBSECTION Private>
 gtk_selection_data_get_type
-gtk_target_list_get_type
 </SECTION>
 
 <SECTION>

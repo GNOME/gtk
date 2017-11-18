@@ -6276,7 +6276,7 @@ gtk_icon_view_drag_data_get (GtkWidget        *widget,
     return;
 
   /* We can implement the GTK_TREE_MODEL_ROW target generically for
-   * any model; for DragSource models there are some other targets
+   * any model; for DragSource models there are some other formats
    * we also support.
    */
 
@@ -6551,7 +6551,7 @@ gtk_icon_view_drag_data_received (GtkWidget        *widget,
  * gtk_icon_view_enable_model_drag_source:
  * @icon_view: a #GtkIconView
  * @start_button_mask: Mask of allowed buttons to start drag
- * @targets: the targets that the drag will support
+ * @formats: the formats that the drag will support
  * @actions: the bitmask of possible actions for a drag from this
  *    widget
  *
@@ -6563,12 +6563,12 @@ gtk_icon_view_drag_data_received (GtkWidget        *widget,
 void
 gtk_icon_view_enable_model_drag_source (GtkIconView              *icon_view,
 					GdkModifierType           start_button_mask,
-                                        GtkTargetList            *targets,
+                                        GdkContentFormats        *formats,
 					GdkDragAction             actions)
 {
   g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
 
-  gtk_drag_source_set (GTK_WIDGET (icon_view), 0, targets, actions);
+  gtk_drag_source_set (GTK_WIDGET (icon_view), 0, formats, actions);
 
   icon_view->priv->start_button_mask = start_button_mask;
   icon_view->priv->source_actions = actions;
@@ -6581,7 +6581,7 @@ gtk_icon_view_enable_model_drag_source (GtkIconView              *icon_view,
 /**
  * gtk_icon_view_enable_model_drag_dest:
  * @icon_view: a #GtkIconView
- * @targets: the targets that the drag will support
+ * @formats: the formats that the drag will support
  * @actions: the bitmask of possible actions for a drag to this
  *    widget
  *
@@ -6591,13 +6591,13 @@ gtk_icon_view_enable_model_drag_source (GtkIconView              *icon_view,
  * Since: 2.8
  **/
 void 
-gtk_icon_view_enable_model_drag_dest (GtkIconView   *icon_view,
-                                      GtkTargetList *targets,
-				      GdkDragAction  actions)
+gtk_icon_view_enable_model_drag_dest (GtkIconView       *icon_view,
+                                      GdkContentFormats *formats,
+				      GdkDragAction      actions)
 {
   g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
 
-  gtk_drag_dest_set (GTK_WIDGET (icon_view), 0, targets, actions);
+  gtk_drag_dest_set (GTK_WIDGET (icon_view), 0, formats, actions);
 
   icon_view->priv->dest_actions = actions;
 
@@ -6895,7 +6895,7 @@ gtk_icon_view_get_reorderable (GtkIconView *icon_view)
   return icon_view->priv->reorderable;
 }
 
-static const char *item_targets[] = {
+static const char *item_formats[] = {
   "GTK_TREE_MODEL_ROW" 
 };
 
@@ -6933,15 +6933,15 @@ gtk_icon_view_set_reorderable (GtkIconView *icon_view,
 
   if (reorderable)
     {
-      GtkTargetList *targets = gtk_target_list_new (item_targets, G_N_ELEMENTS (item_targets));
+      GdkContentFormats *formats = gdk_content_formats_new (item_formats, G_N_ELEMENTS (item_formats));
       gtk_icon_view_enable_model_drag_source (icon_view,
 					      GDK_BUTTON1_MASK,
-					      targets,
+					      formats,
 					      GDK_ACTION_MOVE);
       gtk_icon_view_enable_model_drag_dest (icon_view,
-					    targets,
+					    formats,
 					    GDK_ACTION_MOVE);
-      gtk_target_list_unref (targets);
+      gdk_content_formats_unref (formats);
     }
   else
     {

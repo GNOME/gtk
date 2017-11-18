@@ -292,10 +292,7 @@ typedef struct _TreeViewDragInfo TreeViewDragInfo;
 struct _TreeViewDragInfo
 {
   GdkModifierType start_button_mask;
-  GtkTargetList *_unused_source_target_list;
   GdkDragAction source_actions;
-
-  GtkTargetList *_unused_dest_target_list;
 
   guint source_set : 1;
   guint dest_set : 1;
@@ -12545,17 +12542,18 @@ gtk_tree_view_set_reorderable (GtkTreeView *tree_view,
       const char *row_targets[] = {
         "GTK_TREE_MODEL_ROW"
       };
-      GtkTargetList *targets;
+      GdkContentFormats *formats;
 
-      targets = gtk_target_list_new (row_targets, G_N_ELEMENTS (row_targets));
+      formats = gdk_content_formats_new (row_targets, G_N_ELEMENTS (row_targets));
 
       gtk_tree_view_enable_model_drag_source (tree_view,
 					      GDK_BUTTON1_MASK,
-					      targets,
+					      formats,
 					      GDK_ACTION_MOVE);
       gtk_tree_view_enable_model_drag_dest (tree_view,
-					    targets,
+					    formats,
 					    GDK_ACTION_MOVE);
+      gdk_content_formats_unref (formats);
     }
   else
     {
@@ -13531,7 +13529,7 @@ unset_reorderable (GtkTreeView *tree_view)
  * gtk_tree_view_enable_model_drag_source:
  * @tree_view: a #GtkTreeView
  * @start_button_mask: Mask of allowed buttons to start drag
- * @targets: the targets that the drag will support
+ * @formats: the target formats that the drag will support
  * @actions: the bitmask of possible actions for a drag from this
  *    widget
  *
@@ -13539,10 +13537,10 @@ unset_reorderable (GtkTreeView *tree_view)
  * method sets #GtkTreeView:reorderable to %FALSE.
  **/
 void
-gtk_tree_view_enable_model_drag_source (GtkTreeView     *tree_view,
-					GdkModifierType  start_button_mask,
-					GtkTargetList   *targets,
-					GdkDragAction    actions)
+gtk_tree_view_enable_model_drag_source (GtkTreeView       *tree_view,
+					GdkModifierType    start_button_mask,
+					GdkContentFormats *formats,
+					GdkDragAction      actions)
 {
   TreeViewDragInfo *di;
 
@@ -13550,7 +13548,7 @@ gtk_tree_view_enable_model_drag_source (GtkTreeView     *tree_view,
 
   gtk_drag_source_set (GTK_WIDGET (tree_view),
 		       0,
-		       targets,
+		       formats,
 		       actions);
 
   di = ensure_info (tree_view);
@@ -13565,8 +13563,7 @@ gtk_tree_view_enable_model_drag_source (GtkTreeView     *tree_view,
 /**
  * gtk_tree_view_enable_model_drag_dest:
  * @tree_view: a #GtkTreeView
- * @targets: the targets that the drag will support
- * @n_targets: the number of items in @targets
+ * @formats: the target formats that the drag will support
  * @actions: the bitmask of possible actions for a drag from this
  *    widget
  * 
@@ -13574,9 +13571,9 @@ gtk_tree_view_enable_model_drag_source (GtkTreeView     *tree_view,
  * this method sets #GtkTreeView:reorderable to %FALSE.
  **/
 void
-gtk_tree_view_enable_model_drag_dest (GtkTreeView   *tree_view,
-				      GtkTargetList *targets,
-				      GdkDragAction  actions)
+gtk_tree_view_enable_model_drag_dest (GtkTreeView       *tree_view,
+				      GdkContentFormats *formats,
+				      GdkDragAction      actions)
 {
   TreeViewDragInfo *di;
 
@@ -13584,7 +13581,7 @@ gtk_tree_view_enable_model_drag_dest (GtkTreeView   *tree_view,
 
   gtk_drag_dest_set (GTK_WIDGET (tree_view),
                      0,
-                     targets,
+                     formats,
                      actions);
 
   di = ensure_info (tree_view);
