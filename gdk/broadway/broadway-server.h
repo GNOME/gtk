@@ -84,7 +84,7 @@ cairo_surface_t   * broadway_server_create_surface           (int               
 							      int               height);
 void                broadway_server_window_update            (BroadwayServer   *server,
 							      gint              id,
-							      cairo_surface_t  *surface);
+							      guint32           texture);
 gboolean            broadway_server_window_move_resize       (BroadwayServer   *server,
 							      gint              id,
 							      gboolean          with_move,
@@ -94,10 +94,5 @@ gboolean            broadway_server_window_move_resize       (BroadwayServer   *
 							      int               height);
 void                broadway_server_focus_window             (BroadwayServer   *server,
                                                               gint              new_focused_window);
-cairo_surface_t * broadway_server_open_surface (BroadwayServer *server,
-						guint32 id,
-						char *name,
-						int width,
-						int height);
 
 #endif /* __BROADWAY_SERVER__ */

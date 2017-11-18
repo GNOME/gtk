@@ -116,12 +116,7 @@ struct BroadwayWindow {
   gboolean is_temp;
   gboolean visible;
   gint32 transient_for;
-
-  BroadwayBuffer *buffer;
-  gboolean buffer_synced;
-
-  char *cached_surface_name;
-  cairo_surface_t *cached_surface;
+  guint32 texture;
 };
 
 static void broadway_server_resync_windows (BroadwayServer *server);
@@ -826,87 +821,6 @@ broadway_server_block_for_input (BroadwayServer *server, char op,
 }
 #endif
 
-static void *
-map_named_shm (char *name, gsize size)
-{
-#ifdef G_OS_UNIX
-
-  int fd;
-  void *ptr;
-  char *filename = NULL;
-
-  fd = shm_open (name, O_RDONLY, 0600);
-  if (fd == -1)
-    {
-      filename = g_build_filename (g_get_tmp_dir (), name, NULL);
-      fd = open (filename, O_RDONLY);
-      if (fd == -1)
-	{
-	  perror ("Failed to map shm");
-	  g_free (filename);
-
-	  return NULL;
-	}
-    }
-
-  ptr = mmap (0, size, PROT_READ, MAP_SHARED, fd, 0);
-
-  (void) close (fd);
-
-  if (filename)
-    {
-      unlink (filename);
-      g_free (filename);
-    }
-  else
-    shm_unlink (name);
-
-  return ptr;
-
-#elif defined(G_OS_WIN32)
-
-  int fd;
-  void *ptr;
-  char *shmpath;
-  void *map = ((void *)-1);
-
-  if (*name == '/')
-    ++name;
-  shmpath = g_build_filename (g_get_tmp_dir (), name, NULL);
-
-  fd = open(shmpath, O_RDONLY, 0600);
-  if (fd == -1)
-    {
-      g_free (shmpath);
-      perror ("Failed to shm_open");
-      return NULL;
-    }
-
-  if (size == 0)
-    ptr = map;
-  else
-    {
-      HANDLE h, fm;
-      h = (HANDLE)_get_osfhandle (fd);
-      fm = CreateFileMapping (h, NULL, PAGE_READONLY, 0, (DWORD)size, NULL);
-      ptr = MapViewOfFile (fm, FILE_MAP_READ, 0, 0, (size_t)size);
-      CloseHandle (fm);
-    }
-
-  (void) close(fd);
-
-  remove (shmpath);
-  g_free (shmpath);
-
-  return ptr;
-
-#else
-#error "No shm mapping supported"
-
-  return NULL;
-#endif
-}
-
 static const char *
 parse_line (const char *line, const char *key)
 {
@@ -1463,10 +1377,6 @@ broadway_server_destroy_window (BroadwayServer *server,
       g_hash_table_remove (server->id_ht,
 			   GINT_TO_POINTER (id));
 
-      g_free (window->cached_surface_name);
-      if (window->cached_surface != NULL)
-	cairo_surface_destroy (window->cached_surface);
-
       g_free (window);
     }
 }
@@ -1601,39 +1511,22 @@ broadway_server_has_client (BroadwayServer *server)
 }
 
 void
-broadway_server_window_update (BroadwayServer *server,
-			       gint id,
-			       cairo_surface_t *surface)
+broadway_server_window_update (BroadwayServer   *server,
+			       gint              id,
+			       guint32           texture)
 {
   BroadwayWindow *window;
-  BroadwayBuffer *buffer;
-
-  if (surface == NULL)
-    return;
 
   window = g_hash_table_lookup (server->id_ht,
 				GINT_TO_POINTER (id));
   if (window == NULL)
     return;
 
-  g_assert (window->width == cairo_image_surface_get_width (surface));
-  g_assert (window->height == cairo_image_surface_get_height (surface));
-
-  buffer = broadway_buffer_create (window->width, window->height,
-                                   cairo_image_surface_get_data (surface),
-                                   cairo_image_surface_get_stride (surface));
+  window->texture = texture;
 
   if (server->output != NULL)
-    {
-      window->buffer_synced = TRUE;
-      broadway_output_put_buffer (server->output, window->id,
-                                  window->buffer, buffer);
-    }
-
-  if (window->buffer)
-    broadway_buffer_destroy (window->buffer);
-
-  window->buffer = buffer;
+    broadway_output_window_update (server->output, window->id,
+				   window->texture);
 }
 
 guint32
@@ -1788,78 +1681,6 @@ broadway_server_ungrab_pointer (BroadwayServer *server,
   return serial;
 }
 
-static const cairo_user_data_key_t shm_cairo_key;
-
-typedef struct {
-  void *data;
-  gsize data_size;
-} ShmSurfaceData;
-
-static void
-shm_data_unmap (void *_data)
-{
-  ShmSurfaceData *data = _data;
-#ifdef G_OS_UNIX
-  munmap (data->data, data->data_size);
-#elif defined(G_OS_WIN32)
-  UnmapViewOfFile (data->data);
-#endif
-  g_free (data);
-}
-
-cairo_surface_t *
-broadway_server_open_surface (BroadwayServer *server,
-			      guint32 id,
-			      char *name,
-			      int width,
-			      int height)
-{
-  BroadwayWindow *window;
-  ShmSurfaceData *data;
-  cairo_surface_t *surface;
-  gsize size;
-  void *ptr;
-
-  window = g_hash_table_lookup (server->id_ht,
-				GINT_TO_POINTER (id));
-  if (window == NULL)
-    return NULL;
-
-  if (window->cached_surface_name != NULL &&
-      strcmp (name, window->cached_surface_name) == 0)
-    return cairo_surface_reference (window->cached_surface);
-
-  size = width * height * sizeof (guint32);
-
-  ptr = map_named_shm (name, size);
-
-  if (ptr == NULL)
-    return NULL;
-
-  data = g_new0 (ShmSurfaceData, 1);
-
-  data->data = ptr;
-  data->data_size = size;
-
-  surface = cairo_image_surface_create_for_data ((guchar *)data->data,
-						 CAIRO_FORMAT_ARGB32,
-						 width, height,
-						 width * sizeof (guint32));
-  g_assert (surface != NULL);
-
-  cairo_surface_set_user_data (surface, &shm_cairo_key,
-			       data, shm_data_unmap);
-
-  g_free (window->cached_surface_name);
-  window->cached_surface_name = g_strdup (name);
-
-  if (window->cached_surface != NULL)
-    cairo_surface_destroy (window->cached_surface);
-  window->cached_surface = cairo_surface_reference (surface);
-
-  return surface;
-}
-
 guint32
 broadway_server_new_window (BroadwayServer *server,
 			    int x,
@@ -1929,7 +1750,6 @@ broadway_server_resync_windows (BroadwayServer *server)
       if (window->id == 0)
 	continue; /* Skip root */
 
-      window->buffer_synced = FALSE;
       broadway_output_new_surface (server->output,
 				   window->id,
 				   window->x,
@@ -1948,18 +1768,14 @@ broadway_server_resync_windows (BroadwayServer *server)
 	continue; /* Skip root */
 
       if (window->transient_for != -1)
-	broadway_output_set_transient_for (server->output, window->id, window->transient_for);
-      if (window->visible)
-	{
-	  broadway_output_show_surface (server->output, window->id);
+	broadway_output_set_transient_for (server->output, window->id,
+					   window->transient_for);
 
-	  if (window->buffer != NULL)
-	    {
-	      window->buffer_synced = TRUE;
-              broadway_output_put_buffer (server->output, window->id,
-                                          NULL, window->buffer);
-	    }
-	}
+      broadway_output_window_update (server->output, window->id,
+				     window->texture);
+
+      if (window->visible)
+	broadway_output_show_surface (server->output, window->id);
     }
 
   if (server->show_keyboard)

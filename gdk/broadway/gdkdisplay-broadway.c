@@ -30,6 +30,7 @@
 #include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdevicemanager-broadway.h"
+#include <gdk/gdktextureprivate.h>
 
 #include <glib.h>
 #include <glib/gprintf.h>

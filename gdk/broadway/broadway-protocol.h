@@ -41,7 +41,7 @@ typedef enum {
   BROADWAY_OP_REQUEST_AUTH = 'l',
   BROADWAY_OP_AUTH_OK = 'L',
   BROADWAY_OP_DISCONNECTED = 'D',
-  BROADWAY_OP_PUT_BUFFER = 'b',
+  BROADWAY_OP_WINDOW_UPDATE = 'b',
   BROADWAY_OP_SET_SHOW_KEYBOARD = 'k',
   BROADWAY_OP_UPLOAD_TEXTURE = 't',
   BROADWAY_OP_RELEASE_TEXTURE = 'T',
@@ -193,9 +193,7 @@ typedef struct {
 typedef struct {
   BroadwayRequestBase base;
   guint32 id;
-  char name[36];
-  guint32 width;
-  guint32 height;
+  guint32 texture;
 } BroadwayRequestUpdate;
 
 typedef struct {

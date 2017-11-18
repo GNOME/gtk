@@ -36,6 +36,7 @@
 #include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
 #include "gdkeventsource.h"
+#include <gdk/gdktextureprivate.h>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -112,11 +113,26 @@ update_dirty_windows_and_sync (void)
 
       if (impl->dirty)
 	{
+	  GdkTexture *texture;
+	  guint32 texture_id;
+
 	  impl->dirty = FALSE;
 	  updated_surface = TRUE;
+
+	  if (impl->texture_id)
+	    gdk_broadway_server_release_texture (display->server, impl->texture_id);
+	  impl->texture_id = 0;
+
+	  texture = gdk_texture_new_for_surface (impl->surface);
+	  texture_id =  gdk_broadway_server_upload_texture (display->server, texture);
+	  g_object_unref (texture);
+
+	  impl->texture_id = texture_id;
+
 	  _gdk_broadway_server_window_update (display->server,
 					      impl->id,
-					      impl->surface);
+					      texture_id);
+
 	}
     }
 
@@ -246,8 +262,9 @@ _gdk_broadway_window_resize_surface (GdkWindow *window)
     {
       cairo_surface_destroy (impl->surface);
 
-      impl->surface = _gdk_broadway_server_create_surface (gdk_window_get_width (impl->wrapper),
-							   gdk_window_get_height (impl->wrapper));
+      impl->surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+						  gdk_window_get_width (impl->wrapper),
+						  gdk_window_get_height (impl->wrapper));
     }
 
   if (impl->ref_surface)
@@ -283,7 +300,7 @@ gdk_window_broadway_ref_cairo_surface (GdkWindow *window)
 
   /* Create actual backing store if missing */
   if (!impl->surface)
-    impl->surface = _gdk_broadway_server_create_surface (w, h);
+    impl->surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, w, h);
 
   /* Create a destroyable surface referencing the real one */
   if (!impl->ref_surface)
@@ -334,6 +351,9 @@ _gdk_broadway_window_destroy (GdkWindow *window,
   g_hash_table_remove (broadway_display->id_ht, GINT_TO_POINTER (impl->id));
 
   _gdk_broadway_server_destroy_window (broadway_display->server, impl->id);
+  if (impl->texture_id)
+    gdk_broadway_server_release_texture (broadway_display->server, impl->texture_id);
+
 }
 
 /* This function is called when the XWindow is really gone.

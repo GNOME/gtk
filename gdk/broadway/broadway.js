@@ -67,25 +67,6 @@ function logStackTrace(len) {
 	log(callstack[i]);
 }
 
-function resizeCanvas(canvas, w, h)
-{
-    /* Canvas resize clears the data, so we need to save it first */
-    var tmpCanvas = canvas.ownerDocument.createElement("canvas");
-    tmpCanvas.width = canvas.width;
-    tmpCanvas.height = canvas.height;
-    var tmpContext = tmpCanvas.getContext("2d");
-    tmpContext.globalCompositeOperation = "copy";
-    tmpContext.drawImage(canvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
-
-    canvas.width = w;
-    canvas.height = h;
-
-    var context = canvas.getContext("2d");
-
-    context.globalCompositeOperation = "copy";
-    context.drawImage(tmpCanvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
-}
-
 var grab = new Object();
 grab.window = null;
 grab.ownerEvents = false;
@@ -160,15 +141,15 @@ function cmdCreateSurface(id, x, y, width, height, isTemp)
     surface.visible = false;
     surface.imageData = null;
 
-    var canvas = document.createElement("canvas");
-    canvas.width = width;
-    canvas.height = height;
-    canvas.surface = surface;
-    surface.canvas = canvas;
+    var image = new Image();
+    image.width = width;
+    image.height = height;
+    image.surface = surface;
+    surface.image = image;
     var toplevelElement;
 
-    toplevelElement = canvas;
-    document.body.appendChild(canvas);
+    toplevelElement = image;
+    document.body.appendChild(image);
 
     surface.toplevelElement = toplevelElement;
     toplevelElement.style["position"] = "absolute";
@@ -268,8 +249,8 @@ function cmdDeleteSurface(id)
     var i = stackingOrder.indexOf(surface);
     if (i >= 0)
 	stackingOrder.splice(i, 1);
-    var canvas = surface.canvas;
-    canvas.parentNode.removeChild(canvas);
+    var image = surface.image;
+    image.parentNode.removeChild(image);
     delete surfaces[id];
 }
 
@@ -286,15 +267,17 @@ function cmdMoveResizeSurface(id, has_pos, x, y, has_size, w, h)
 	surface.height = h;
     }
 
-    if (has_size)
-	resizeCanvas(surface.canvas, w, h);
+    if (has_size) {
+	surface.image.width = w;
+	surface.image.height = h;
+    }
 
     if (surface.visible) {
 	if (has_pos) {
 	    var xOffset = surface.x;
 	    var yOffset = surface.y;
 
-	    var element = surface.canvas;
+	    var element = surface.image;
 
 	    element.style["left"] = xOffset + "px";
 	    element.style["top"] = yOffset + "px";
@@ -512,21 +495,12 @@ function decodeBuffer(context, oldData, w, h, data, debug)
     return imageData;
 }
 
-function cmdPutBuffer(id, w, h, compressed)
+function cmdWindowUpdate(id, texture_id)
 {
     var surface = surfaces[id];
-    var context = surface.canvas.getContext("2d");
+    var texture_url = textures[texture];
 
-    var inflate = new Zlib.RawInflate(compressed);
-    var data = inflate.decompress();
-
-    var imageData = decodeBuffer (context, surface.imageData, w, h, data, debugDecoding);
-    context.putImageData(imageData, 0, 0);
-
-    if (debugDecoding)
-        imageData = decodeBuffer (context, surface.imageData, w, h, data, false);
-
-    surface.imageData = imageData;
+    surface.image.src = texture_url;
 }
 
 function cmdUploadTexture(id, data)
@@ -631,12 +605,10 @@ function handleCommands(cmd)
 	    cmdLowerSurface(id);
 	    break;
 
-	case 'b': // Put image buffer
+	case 'b': // Update window
 	    id = cmd.get_16();
-	    w = cmd.get_16();
-	    h = cmd.get_16();
-            var data = cmd.get_data();
-            cmdPutBuffer(id, w, h, data);
+	    texture = cmd.get_32();
+            cmdWindowUpdate(id, texture);
             break;
 
 	case 't': // Upload texture

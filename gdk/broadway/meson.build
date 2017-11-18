@@ -1,5 +1,4 @@
 gdk_broadway_sources = files([
-  'broadway-buffer.c',
   'broadway-output.c',
   'broadway-server.c',
   'broadwayd.c',
@@ -60,7 +59,7 @@ broadwayjs_h = custom_target('broadwayjs.h',
 
 executable('gtk4-broadwayd',
   clienthtml_h, broadwayjs_h,
-  'broadwayd.c', 'broadway-server.c', 'broadway-buffer.c', 'broadway-output.c',
+  'broadwayd.c', 'broadway-server.c', 'broadway-output.c',
   include_directories: [confinc, gdkinc],
   c_args: ['-DGDK_COMPILATION', '-DG_LOG_DOMAIN="Gdk"', ],
   dependencies : [broadwayd_syslib, gdk_deps],

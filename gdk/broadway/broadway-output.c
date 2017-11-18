@@ -287,48 +287,14 @@ broadway_output_set_transient_for (BroadwayOutput *output,
 }
 
 void
-broadway_output_put_buffer (BroadwayOutput *output,
-                            int             id,
-                            BroadwayBuffer *prev_buffer,
-                            BroadwayBuffer *buffer)
+broadway_output_window_update (BroadwayOutput *output,
+			       int             id,
+			       guint32         texture)
 {
-  gsize len;
-  int w, h;
-  GZlibCompressor *compressor;
-  GOutputStream *out, *out_mem;
-  GString *encoded;
-
-  write_header (output, BROADWAY_OP_PUT_BUFFER);
-
-  w = broadway_buffer_get_width (buffer);
-  h = broadway_buffer_get_height (buffer);
+  write_header (output, BROADWAY_OP_WINDOW_UPDATE);
 
   append_uint16 (output, id);
-  append_uint16 (output, w);
-  append_uint16 (output, h);
-
-  encoded = g_string_new ("");
-  broadway_buffer_encode (buffer, prev_buffer, encoded);
-
-  compressor = g_zlib_compressor_new (G_ZLIB_COMPRESSOR_FORMAT_RAW, -1);
-  out_mem = g_memory_output_stream_new_resizable ();
-  out = g_converter_output_stream_new (out_mem, G_CONVERTER (compressor));
-  g_object_unref (compressor);
-
-  if (!g_output_stream_write_all (out, encoded->str, encoded->len,
-                                  NULL, NULL, NULL) ||
-      !g_output_stream_close (out, NULL, NULL))
-    g_warning ("compression failed");
-
-
-  len = g_memory_output_stream_get_data_size (G_MEMORY_OUTPUT_STREAM (out_mem));
-  append_uint32 (output, len);
-
-  g_string_append_len (output->buf, g_memory_output_stream_get_data (G_MEMORY_OUTPUT_STREAM (out_mem)), len);
-
-  g_string_free (encoded, TRUE);
-  g_object_unref (out);
-  g_object_unref (out_mem);
+  append_uint32 (output, texture);
 }
 
 void

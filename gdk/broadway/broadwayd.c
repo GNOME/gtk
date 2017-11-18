@@ -225,7 +225,6 @@ client_handle_request (BroadwayClient *client,
   BroadwayReplyQueryMouse reply_query_mouse;
   BroadwayReplyGrabPointer reply_grab_pointer;
   BroadwayReplyUngrabPointer reply_ungrab_pointer;
-  cairo_surface_t *surface;
   guint32 before_serial, now_serial;
   guint32 global_id;
   int fd;
@@ -284,18 +283,11 @@ client_handle_request (BroadwayClient *client,
 						request->set_transient_for.parent);
       break;
     case BROADWAY_REQUEST_UPDATE:
-      surface = broadway_server_open_surface (server,
-					      request->update.id,
-					      request->update.name,
-					      request->update.width,
-					      request->update.height);
-      if (surface != NULL)
-	{
-	  broadway_server_window_update (server,
-					 request->update.id,
-					 surface);
-	  cairo_surface_destroy (surface);
-	}
+      global_id = GPOINTER_TO_INT (g_hash_table_lookup (client->textures,
+							GINT_TO_POINTER (request->update.texture)));
+      broadway_server_window_update (server,
+				     request->update.id,
+				     global_id);
       break;
     case BROADWAY_REQUEST_UPLOAD_TEXTURE:
       if (client->fds == NULL)

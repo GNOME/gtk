@@ -63,11 +63,9 @@ guint32             gdk_broadway_server_upload_texture           (GdkBroadwaySer
                                                                   GdkTexture         *texture);
 void                gdk_broadway_server_release_texture          (GdkBroadwayServer  *server,
                                                                   guint32             id);
-cairo_surface_t   *_gdk_broadway_server_create_surface           (int                 width,
-								  int                 height);
 void               _gdk_broadway_server_window_update            (GdkBroadwayServer  *server,
 								  gint                id,
-								  cairo_surface_t    *surface);
+								  guint32             texture);
 gboolean           _gdk_broadway_server_window_move_resize       (GdkBroadwayServer  *server,
 								  gint                id,
 								  gboolean            with_move,

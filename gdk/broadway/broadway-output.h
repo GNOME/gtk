@@ -4,7 +4,6 @@
 #include <glib.h>
 #include <gio/gio.h>
 #include "broadway-protocol.h"
-#include "broadway-buffer.h"
 
 typedef struct BroadwayOutput BroadwayOutput;
 
@@ -54,10 +53,9 @@ void            broadway_output_move_resize_surface (BroadwayOutput *output,
 void            broadway_output_set_transient_for (BroadwayOutput *output,
 						   int             id,
 						   int             parent_id);
-void            broadway_output_put_buffer      (BroadwayOutput *output,
+void            broadway_output_window_update   (BroadwayOutput *output,
 						 int             id,
-                                                 BroadwayBuffer *prev_buffer,
-                                                 BroadwayBuffer *buffer);
+						 guint32         texture);
 void            broadway_output_upload_texture (BroadwayOutput *output,
 						guint32 id,
 						GBytes *texture);
