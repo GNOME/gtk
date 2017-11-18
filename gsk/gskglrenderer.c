@@ -10,11 +10,13 @@
 #include "gskrendererprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskshaderbuilderprivate.h"
+#include "gskglglyphcacheprivate.h"
 #include "gdk/gdktextureprivate.h"
 
 #include "gskprivate.h"
 
 #include <epoxy/gl.h>
+#include <cairo-ft.h>
 
 #define SHADER_VERSION_GLES             100
 #define SHADER_VERSION_GL2_LEGACY       110
@@ -41,6 +43,22 @@ dump_framebuffer (const char *filename, int w, int h)
   g_free (data);
 }
 
+static gboolean
+font_has_color_glyphs (const PangoFont *font)
+{
+  cairo_scaled_font_t *scaled_font;
+  gboolean has_color = FALSE;
+
+  scaled_font = pango_cairo_font_get_scaled_font ((PangoCairoFont *)font);
+  if (cairo_scaled_font_get_type (scaled_font) == CAIRO_FONT_TYPE_FT)
+    {
+      FT_Face ft_face = cairo_ft_scaled_font_lock_face (scaled_font);
+      has_color = (FT_HAS_COLOR (ft_face) != 0);
+      cairo_ft_scaled_font_unlock_face (scaled_font);
+    }
+
+  return has_color;
+}
 
 static void
 gsk_gl_renderer_setup_render_mode (GskGLRenderer *self);
@@ -95,6 +113,7 @@ typedef struct {
 enum {
   MODE_BLIT = 1,
   MODE_COLOR,
+  MODE_COLORING,
   MODE_TEXTURE,
   MODE_COLOR_MATRIX,
   MODE_LINEAR_GRADIENT,
@@ -219,11 +238,14 @@ struct _GskGLRenderer
   Program blend_program;
   Program blit_program;
   Program color_program;
+  Program coloring_program;
   Program color_matrix_program;
   Program linear_gradient_program;
   Program clip_program;
 
   GArray *render_items;
+
+  GskGLGlyphCache glyph_cache;
 
 #ifdef G_ENABLE_DEBUG
   ProfileCounters profile_counters;
@@ -429,6 +451,20 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   init_common_locations (self, builder, &self->color_program);
   INIT_PROGRAM_UNIFORM_LOCATION (color_program, color_location, "uColor");
 
+  self->coloring_program.id = gsk_shader_builder_create_program (builder,
+                                                                 "blit.vs.glsl",
+                                                                 "coloring.fs.glsl",
+                                                                 &shader_error);
+  if (shader_error != NULL)
+    {
+      g_propagate_prefixed_error (error,
+                                  shader_error,
+                                  "Unable to create 'coloring' program: ");
+      goto out;
+    }
+  init_common_locations (self, builder, &self->coloring_program);
+  INIT_PROGRAM_UNIFORM_LOCATION (coloring_program, color_location, "uColor");
+
   self->color_matrix_program.id = gsk_shader_builder_create_program (builder,
                                                                      "color_matrix.vs.glsl",
                                                                      "color_matrix.fs.glsl",
@@ -502,6 +538,8 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
   if (!gsk_gl_renderer_create_programs (self, error))
     return FALSE;
 
+  gsk_gl_glyph_cache_init (&self->glyph_cache, self->gl_driver);
+
   return TRUE;
 }
 
@@ -524,10 +562,13 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
   glDeleteProgram (self->blend_program.id);
   glDeleteProgram (self->blit_program.id);
   glDeleteProgram (self->color_program.id);
+  glDeleteProgram (self->coloring_program.id);
   glDeleteProgram (self->color_matrix_program.id);
   glDeleteProgram (self->linear_gradient_program.id);
 
   gsk_gl_renderer_destroy_buffers (self);
+
+  gsk_gl_glyph_cache_free (&self->glyph_cache);
 
   g_clear_object (&self->gl_profiler);
   g_clear_object (&self->gl_driver);
@@ -663,6 +704,20 @@ render_item (GskGLRenderer    *self,
                        item->color_data.color.green,
                        item->color_data.color.blue,
                        item->color_data.color.alpha);
+        }
+      break;
+
+      case MODE_COLORING:
+        {
+          glUniform4f (item->program->color_location,
+                       item->color_data.color.red,
+                       item->color_data.color.green,
+                       item->color_data.color.blue,
+                       item->color_data.color.alpha);
+          g_assert(item->texture_id != 0);
+          /* Use texture unit 0 for the source */
+          glUniform1i (item->program->source_location, 0);
+          gsk_gl_driver_bind_source_texture (self->gl_driver, item->texture_id);
         }
       break;
 
@@ -949,7 +1004,6 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
 
         if (gsk_render_node_get_node_type (child) != GSK_TEXTURE_NODE)
           {
-
             graphene_matrix_t p;
             graphene_matrix_t identity;
 
@@ -1068,6 +1122,104 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
       }
       return;
 
+    case GSK_TEXT_NODE:
+      {
+        const PangoFont *font = gsk_text_node_peek_font (node);
+        const PangoGlyphInfo *glyphs = gsk_text_node_peek_glyphs (node);
+        guint num_glyphs = gsk_text_node_get_num_glyphs (node);
+        int i;
+        int x_position = 0;
+        int x = gsk_text_node_get_x (node);
+        int y = gsk_text_node_get_y (node);
+
+        /* We use one quad per character, unlike the other nodes which
+         * use at most one quad altogether */
+        for (i = 0; i < num_glyphs; i++)
+          {
+            const PangoGlyphInfo *gi = &glyphs[i];
+            const GskGLCachedGlyph *glyph;
+            int glyph_x, glyph_y, glyph_w, glyph_h;
+            float tx, ty, tx2, ty2;
+            double cx;
+            double cy;
+
+            if (gi->glyph == PANGO_GLYPH_EMPTY ||
+                (gi->glyph & PANGO_GLYPH_UNKNOWN_FLAG) > 0)
+              continue;
+
+            glyph = gsk_gl_glyph_cache_lookup (&self->glyph_cache,
+                                               TRUE,
+                                               (PangoFont *)font,
+                                               gi->glyph,
+                                               self->scale_factor);
+
+            /* e.g. whitespace */
+            if (glyph->draw_width <= 0 || glyph->draw_height <= 0)
+              {
+                x_position += gi->geometry.width;
+                continue;
+              }
+            cx = (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
+            cy = (double)(gi->geometry.y_offset) / PANGO_SCALE;
+
+            /* If the font has color glyphs, we don't need to recolor anything */
+            if (font_has_color_glyphs (font))
+              {
+                item.mode = MODE_BLIT;
+                item.program = &self->blit_program;
+              }
+            else
+              {
+                item.mode = MODE_COLORING;
+                item.program = &self->coloring_program;
+                item.color_data.color = *gsk_text_node_peek_color (node);
+              }
+
+            item.texture_id = gsk_gl_glyph_cache_get_glyph_image (&self->glyph_cache, glyph)->texture_id;
+
+            {
+              tx  = glyph->tx;
+              ty  = glyph->ty;
+              tx2 = tx + glyph->tw;
+              ty2 = ty + glyph->th;
+
+              glyph_x = x + cx + glyph->draw_x;
+              glyph_y = y + cy + glyph->draw_y;
+              glyph_w = glyph->draw_width;
+              glyph_h = glyph->draw_height;
+
+              item.min.x = glyph_x;
+              item.min.y = glyph_y;
+              item.size.width = glyph_w;
+              item.size.height = glyph_h;
+              item.max.x = item.min.x + item.size.width;
+              item.max.y = item.min.y + item.size.height;
+
+              GskQuadVertex vertex_data[N_VERTICES] = {
+                { { glyph_x,           glyph_y           }, { tx,  ty  }, },
+                { { glyph_x,           glyph_y + glyph_h }, { tx,  ty2 }, },
+                { { glyph_x + glyph_w, glyph_y           }, { tx2, ty  }, },
+
+                { { glyph_x + glyph_w, glyph_y + glyph_h }, { tx2, ty2 }, },
+                { { glyph_x,           glyph_y + glyph_h }, { tx,  ty2 }, },
+                { { glyph_x + glyph_w, glyph_y           }, { tx2, ty  }, },
+              };
+
+              item.vao_id = gsk_gl_driver_create_vao_for_quad (self->gl_driver,
+                                                               item.program->position_location,
+                                                               item.program->uv_location,
+                                                               N_VERTICES,
+                                                               vertex_data);
+            }
+
+
+            g_array_append_val (render_items, item);
+
+            x_position += gi->geometry.width;
+          }
+      }
+      return;
+
     case GSK_NOT_A_RENDER_NODE:
     case GSK_CONTAINER_NODE:
       g_assert_not_reached ();
@@ -1077,7 +1229,6 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
     case GSK_BORDER_NODE:
     case GSK_INSET_SHADOW_NODE:
     case GSK_OUTSET_SHADOW_NODE:
-    case GSK_TEXT_NODE:
     case GSK_BLUR_NODE:
     case GSK_SHADOW_NODE:
     case GSK_CROSS_FADE_NODE:
@@ -1242,8 +1393,8 @@ gsk_gl_renderer_setup_render_mode (GskGLRenderer *self)
 
         window_height = gdk_window_get_height (window) * self->scale_factor;
 
-        cairo_region_get_extents (clip, &extents);
-        /*cairo_region_get_rectangle (clip, 0, &extents);*/
+        /*cairo_region_get_extents (clip, &extents);*/
+        cairo_region_get_rectangle (clip, 0, &extents);
 
         glEnable (GL_SCISSOR_TEST);
         glScissor (extents.x * self->scale_factor,
@@ -1302,6 +1453,7 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
     graphene_matrix_scale (&projection, 1, -1, 1);
 
   gsk_gl_driver_begin_frame (self->gl_driver);
+  gsk_gl_glyph_cache_begin_frame (&self->glyph_cache);
   gsk_gl_renderer_validate_tree (self, root, &projection);
 
 #ifdef G_ENABLE_DEBUG
@@ -1436,6 +1588,7 @@ static void
 gsk_gl_renderer_init (GskGLRenderer *self)
 {
   gsk_ensure_resources ();
+
 
   self->render_items = g_array_new (FALSE, FALSE, sizeof (RenderItem));
   g_array_set_clear_func (self->render_items, (GDestroyNotify)destroy_render_item);

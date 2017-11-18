@@ -27,6 +27,9 @@ int             gsk_gl_driver_get_texture_for_texture   (GskGLDriver     *driver
                                                          GdkTexture      *texture,
                                                          int              min_filter,
                                                          int              mag_filter);
+int             gsk_gl_driver_create_permanent_texture  (GskGLDriver     *driver,
+                                                         float            width,
+                                                         float            height);
 int             gsk_gl_driver_create_texture            (GskGLDriver     *driver,
                                                          float            width,
                                                          float            height);

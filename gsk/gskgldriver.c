@@ -17,7 +17,8 @@ typedef struct {
   GLuint mag_filter;
   GArray *fbos;
   GdkTexture *user;
-  gboolean in_use : 1;
+  guint in_use : 1;
+  guint permanent : 1;
 } Texture;
 
 typedef struct {
@@ -298,6 +299,7 @@ gsk_gl_driver_collect_textures (GskGLDriver *driver)
   GHashTableIter iter;
   gpointer value_p = NULL;
   int old_size;
+  /*return;*/
 
   g_return_val_if_fail (GSK_IS_GL_DRIVER (driver), 0);
   g_return_val_if_fail (!driver->in_frame, 0);
@@ -309,7 +311,7 @@ gsk_gl_driver_collect_textures (GskGLDriver *driver)
     {
       Texture *t = value_p;
 
-      if (t->user)
+      if (t->user || t->permanent)
         continue;
 
       if (t->in_use)
@@ -507,6 +509,21 @@ gsk_gl_driver_get_texture_for_texture (GskGLDriver *driver,
                                            min_filter,
                                            mag_filter);
   cairo_surface_destroy (surface);
+
+  return t->texture_id;
+}
+
+int
+gsk_gl_driver_create_permanent_texture (GskGLDriver *self,
+                                        float        width,
+                                        float        height)
+{
+  Texture *t;
+
+  g_return_val_if_fail (GSK_IS_GL_DRIVER (self), -1);
+
+  t = create_texture (self, width, height);
+  t->permanent = TRUE;
 
   return t->texture_id;
 }
