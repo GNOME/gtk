@@ -785,12 +785,11 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
    */
   g_object_class_install_property (object_class,
                                    PROP_FOCUS_CELL,
-                                   g_param_spec_object
-                                   ("focus-cell",
-                                    P_("Focus Cell"),
-                                    P_("The cell which currently has focus"),
-                                    GTK_TYPE_CELL_RENDERER,
-                                    GTK_PARAM_READWRITE));
+                                   g_param_spec_object ("focus-cell",
+                                                        P_("Focus Cell"),
+                                                        P_("The cell which currently has focus"),
+                                                        GTK_TYPE_CELL_RENDERER,
+                                                        GTK_PARAM_READWRITE));
 
   /**
    * GtkCellArea:edited-cell:
@@ -804,12 +803,11 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
    */
   g_object_class_install_property (object_class,
                                    PROP_EDITED_CELL,
-                                   g_param_spec_object
-                                   ("edited-cell",
-                                    P_("Edited Cell"),
-                                    P_("The cell which is currently being edited"),
-                                    GTK_TYPE_CELL_RENDERER,
-                                    G_PARAM_READABLE));
+                                   g_param_spec_object ("edited-cell",
+                                                        P_("Edited Cell"),
+                                                        P_("The cell which is currently being edited"),
+                                                        GTK_TYPE_CELL_RENDERER,
+                                                        GTK_PARAM_READABLE));
 
   /**
    * GtkCellArea:edit-widget:
@@ -823,12 +821,11 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
    */
   g_object_class_install_property (object_class,
                                    PROP_EDIT_WIDGET,
-                                   g_param_spec_object
-                                   ("edit-widget",
-                                    P_("Edit Widget"),
-                                    P_("The widget currently editing the edited cell"),
-                                    GTK_TYPE_CELL_EDITABLE,
-                                    G_PARAM_READABLE));
+                                   g_param_spec_object ("edit-widget",
+                                                        P_("Edit Widget"),
+                                                        P_("The widget currently editing the edited cell"),
+                                                        GTK_TYPE_CELL_EDITABLE,
+                                                        GTK_PARAM_READABLE));
 
   /* Pool for Cell Properties */
   if (!cell_property_pool)
