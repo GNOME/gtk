@@ -115,8 +115,13 @@ gdk_x11_clipboard_request_targets_finish (GObject      *source_object,
     {
       gdk_content_formats_builder_add_mime_type (builder, gdk_x11_get_xatom_name_for_display (display , atoms[i]));
     }
+  gdk_content_formats_builder_add_formats (builder, gdk_clipboard_get_formats (GDK_CLIPBOARD (cb)));
   formats = gdk_content_formats_builder_free (builder);
   GDK_NOTE(CLIPBOARD, char *s = gdk_content_formats_to_string (formats); g_printerr ("%s: got formats: %s\n", cb->selection, s); g_free (s));
+
+  /* union with previously loaded formats */
+  gdk_clipboard_claim_remote (GDK_CLIPBOARD (cb), formats);
+  gdk_content_formats_unref (formats);
 
   g_input_stream_read_bytes_async (stream,
                                    SELECTION_MAX_SIZE (display),

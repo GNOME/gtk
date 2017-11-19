@@ -188,6 +188,7 @@ gdk_clipboard_init (GdkClipboard *clipboard)
   GdkClipboardPrivate *priv = gdk_clipboard_get_instance_private (clipboard);
 
   priv->formats = gdk_content_formats_new (NULL, 0);
+  priv->local = TRUE;
 }
 
 /**
@@ -232,4 +233,25 @@ gdk_clipboard_new (GdkDisplay *display)
   return g_object_new (GDK_TYPE_CLIPBOARD,
                        "display", display,
                        NULL);
+}
+
+void
+gdk_clipboard_claim_remote (GdkClipboard      *clipboard,
+                            GdkContentFormats *formats)
+{
+  GdkClipboardPrivate *priv = gdk_clipboard_get_instance_private (clipboard);
+
+  g_return_if_fail (GDK_IS_CLIPBOARD (clipboard));
+  g_return_if_fail (formats != NULL);
+
+  gdk_content_formats_unref (priv->formats);
+  priv->formats = gdk_content_formats_ref (formats);
+  g_object_notify_by_pspec (G_OBJECT (clipboard), properties[PROP_FORMATS]);
+  if (priv->local)
+    {
+      priv->local = FALSE;
+      g_object_notify_by_pspec (G_OBJECT (clipboard), properties[PROP_LOCAL]);
+    }
+
+  g_signal_emit (clipboard, signals[CHANGED], 0);
 }

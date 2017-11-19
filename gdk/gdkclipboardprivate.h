@@ -45,6 +45,8 @@ struct _GdkClipboardClass
 
 GdkClipboard *          gdk_clipboard_new                       (GdkDisplay             *display);
 
+void                    gdk_clipboard_claim_remote              (GdkClipboard           *clipboard,
+                                                                 GdkContentFormats      *formats);
 
 G_END_DECLS
 
