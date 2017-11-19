@@ -27,6 +27,8 @@
 #include "gtkpopover.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
+#include "gtkgesturelongpress.h"
+#include "gtkflowbox.h"
 
 struct _GtkEmojiCompletion
 {
@@ -43,6 +45,8 @@ struct _GtkEmojiCompletion
   GtkWidget *active;
 
   GVariant *data;
+
+  GtkGesture *long_press;
 };
 
 struct _GtkEmojiCompletionClass {
@@ -69,6 +73,8 @@ gtk_emoji_completion_finalize (GObject *object)
 
   g_free (completion->text);
   g_variant_unref (completion->data);
+
+  g_clear_object (&completion->long_press);
 
   G_OBJECT_CLASS (gtk_emoji_completion_parent_class)->finalize (object);
 }
@@ -312,6 +318,8 @@ add_emoji (GtkWidget *list,
   gtk_box_pack_start (GTK_BOX (box), label);
 
   g_object_set_data_full (G_OBJECT (child), "text", g_strdup (text), g_free);
+  g_object_set_data_full (G_OBJECT (child), "emoji-data",
+                          g_variant_ref (item), (GDestroyNotify)g_variant_unref);
   gtk_style_context_add_class (gtk_widget_get_style_context (child), "emoji-completion-row");
 
   gtk_list_box_insert (GTK_LIST_BOX (list), child, -1);
@@ -373,6 +381,115 @@ populate_completion (GtkEmojiCompletion *completion,
 }
 
 static void
+add_emoji_variation (GtkWidget *box,
+                     GVariant  *item,
+                     gunichar   modifier)
+{
+  GtkWidget *child;
+  GtkWidget *label;
+  PangoAttrList *attrs;
+  GVariant *codes;
+  char text[64];
+  char *p = text;
+  int i;
+
+  codes = g_variant_get_child_value (item, 0);
+  for (i = 0; i < g_variant_n_children (codes); i++)
+    {
+      gunichar code;
+
+      g_variant_get_child (codes, i, "u", &code);
+      if (code == 0)
+        code = modifier;
+      if (code != 0)
+        p += g_unichar_to_utf8 (code, p);
+    }
+  g_variant_unref (codes);
+  p[0] = 0;
+
+  label = gtk_label_new (text);
+  attrs = pango_attr_list_new ();
+  pango_attr_list_insert (attrs, pango_attr_scale_new (PANGO_SCALE_X_LARGE));
+  gtk_label_set_attributes (GTK_LABEL (label), attrs);
+  pango_attr_list_unref (attrs);
+
+  child = gtk_flow_box_child_new ();
+  gtk_style_context_add_class (gtk_widget_get_style_context (child), "emoji");
+  g_object_set_data_full (G_OBJECT (child), "text", g_strdup (text), g_free);
+  g_object_set_data_full (G_OBJECT (child), "emoji-data",
+                          g_variant_ref (item),
+                          (GDestroyNotify)g_variant_unref);
+  if (modifier != 0)
+    g_object_set_data (G_OBJECT (child), "modifier", GUINT_TO_POINTER (modifier));
+
+  gtk_container_add (GTK_CONTAINER (child), label);
+  gtk_flow_box_insert (GTK_FLOW_BOX (box), child, -1);
+}
+
+static void
+long_pressed_cb (GtkGesture *gesture,
+                 double      x,
+                 double      y,
+                 gpointer    data)
+{
+  GtkEmojiCompletion *completion = data;
+  GtkWidget *row;
+  GVariant *emoji_data;
+  gboolean has_variations;
+  GtkWidget *popover;
+  gunichar modifier;
+  GVariant *codes;
+  int i;
+  GtkWidget *box;
+  GtkWidget *view;
+
+  row = GTK_WIDGET (gtk_list_box_get_row_at_y (GTK_LIST_BOX (completion->list), y));
+  if (!row)
+    return;
+
+  emoji_data = (GVariant*) g_object_get_data (G_OBJECT (row), "emoji-data");
+  if (!emoji_data)
+    return;
+
+  has_variations = FALSE;
+  codes = g_variant_get_child_value (emoji_data, 0);
+  for (i = 0; i < g_variant_n_children (codes); i++)
+    {
+      gunichar code;
+      g_variant_get_child (codes, i, "u", &code);
+      if (code == 0)
+        {
+          has_variations = TRUE;
+          break;
+        }
+    }
+  g_variant_unref (codes);
+  if (!has_variations)
+    return;
+
+  popover = gtk_popover_new (row);
+  gtk_popover_set_modal (GTK_POPOVER (popover), FALSE);
+  view = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_style_context_add_class (gtk_widget_get_style_context (view), "view");
+  box = gtk_flow_box_new ();
+  gtk_flow_box_set_homogeneous (GTK_FLOW_BOX (box), TRUE);
+  gtk_flow_box_set_min_children_per_line (GTK_FLOW_BOX (box), 6);
+  gtk_flow_box_set_max_children_per_line (GTK_FLOW_BOX (box), 6);
+  gtk_flow_box_set_activate_on_single_click (GTK_FLOW_BOX (box), TRUE);
+  gtk_flow_box_set_selection_mode (GTK_FLOW_BOX (box), GTK_SELECTION_NONE);
+  gtk_container_add (GTK_CONTAINER (popover), view);
+  gtk_container_add (GTK_CONTAINER (view), box);
+
+  g_signal_connect (box, "child-activated", G_CALLBACK (emoji_activated), completion);
+
+  add_emoji_variation (box, emoji_data, 0);
+  for (modifier = 0x1f3fb; modifier <= 0x1f3ff; modifier++)
+    add_emoji_variation (box, emoji_data, modifier);
+
+  gtk_popover_popup (GTK_POPOVER (popover));
+}
+
+static void
 gtk_emoji_completion_init (GtkEmojiCompletion *completion)
 {
   g_autoptr(GBytes) bytes = NULL;
@@ -381,6 +498,9 @@ gtk_emoji_completion_init (GtkEmojiCompletion *completion)
 
   bytes = g_resources_lookup_data ("/org/gtk/libgtk/emoji/emoji.data", 0, NULL);
   completion->data = g_variant_ref_sink (g_variant_new_from_bytes (G_VARIANT_TYPE ("a(auss)"), bytes, TRUE));
+
+  completion->long_press = gtk_gesture_long_press_new (completion->list);
+  g_signal_connect (completion->long_press, "pressed", G_CALLBACK (long_pressed_cb), completion);
 }
 
 static void
