@@ -139,6 +139,7 @@ struct _GtkEntryClass
   void (* copy_clipboard)     (GtkEntry             *entry);
   void (* paste_clipboard)    (GtkEntry             *entry);
   void (* toggle_overwrite)   (GtkEntry             *entry);
+  void (* insert_emoji)       (GtkEntry             *entry);
 
   /*< private >*/
 
@@ -149,7 +150,6 @@ struct _GtkEntryClass
   void (*_gtk_reserved4)      (void);
   void (*_gtk_reserved5)      (void);
   void (*_gtk_reserved6)      (void);
-  void (*_gtk_reserved7)      (void);
 };
 
 GDK_AVAILABLE_IN_ALL

@@ -313,6 +313,7 @@ enum {
   ICON_PRESS,
   ICON_RELEASE,
   PREEDIT_CHANGED,
+  INSERT_EMOJI,
   LAST_SIGNAL
 };
 
@@ -517,6 +518,7 @@ static void gtk_entry_cut_clipboard      (GtkEntry        *entry);
 static void gtk_entry_copy_clipboard     (GtkEntry        *entry);
 static void gtk_entry_paste_clipboard    (GtkEntry        *entry);
 static void gtk_entry_toggle_overwrite   (GtkEntry        *entry);
+static void gtk_entry_insert_emoji       (GtkEntry        *entry);
 static void gtk_entry_select_all         (GtkEntry        *entry);
 static void gtk_entry_real_activate      (GtkEntry        *entry);
 static gboolean gtk_entry_popup_menu     (GtkWidget       *widget);
@@ -749,6 +751,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   class->copy_clipboard = gtk_entry_copy_clipboard;
   class->paste_clipboard = gtk_entry_paste_clipboard;
   class->toggle_overwrite = gtk_entry_toggle_overwrite;
+  class->insert_emoji = gtk_entry_insert_emoji;
   class->activate = gtk_entry_real_activate;
   
   quark_password_hint = g_quark_from_static_string ("gtk-entry-password-hint");
@@ -1710,6 +1713,25 @@ gtk_entry_class_init (GtkEntryClass *class)
                                 G_TYPE_STRING);
 
 
+  /**
+   * GtkEntry::insert-emoji:
+   * @entry: the object which received the signal
+   *
+   * The ::insert-emoji signal is a
+   * [keybinding signal][GtkBindingSignal]
+   * which gets emitted to present the Emoji chooser for the entry.
+   *
+   * The default bindings for this signal are Ctrl-. and Ctrl-;
+   */
+  signals[INSERT_EMOJI] =
+    g_signal_new (I_("insert-emoji"),
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+		  G_STRUCT_OFFSET (GtkEntryClass, insert_emoji),
+		  NULL, NULL,
+		  NULL,
+		  G_TYPE_NONE, 0);
+
   /*
    * Key bindings
    */
@@ -1876,6 +1898,12 @@ gtk_entry_class_init (GtkEntryClass *class)
 				"toggle-overwrite", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Insert, 0,
 				"toggle-overwrite", 0);
+
+  /* Emoji */
+ gtk_binding_entry_add_signal (binding_set, GDK_KEY_period, GDK_CONTROL_MASK,
+                               "insert-emoji", 0);
+ gtk_binding_entry_add_signal (binding_set, GDK_KEY_semicolon, GDK_CONTROL_MASK,
+                               "insert-emoji", 0);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_ENTRY_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("entry"));
@@ -8447,8 +8475,6 @@ typedef struct
   GdkEvent *trigger_event;
 } PopupInfo;
 
-static void gtk_entry_choose_emoji (GtkEntry *entry);
-
 static void
 popup_targets_received (GtkClipboard     *clipboard,
 			GtkSelectionData *data,
@@ -8513,7 +8539,7 @@ popup_targets_received (GtkClipboard     *clipboard,
                                     mode == DISPLAY_NORMAL &&
                                     info_entry_priv->editable);
           g_signal_connect_swapped (menuitem, "activate",
-                                    G_CALLBACK (gtk_entry_choose_emoji), entry);
+                                    G_CALLBACK (gtk_entry_insert_emoji), entry);
           gtk_widget_show (menuitem);
           gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
         }
@@ -9848,10 +9874,13 @@ gtk_entry_get_tabs (GtkEntry *entry)
 }
 
 static void
-gtk_entry_choose_emoji (GtkEntry *entry)
+gtk_entry_insert_emoji (GtkEntry *entry)
 {
   GtkWidget *chooser;
   GdkRectangle rect;
+
+  if (gtk_widget_get_ancestor (GTK_WIDGET (entry), GTK_TYPE_EMOJI_CHOOSER) != NULL)
+    return;
 
   chooser = GTK_WIDGET (g_object_get_data (G_OBJECT (entry), "gtk-emoji-chooser"));
   if (!chooser)
@@ -9878,7 +9907,7 @@ pick_emoji (GtkEntry *entry,
             gpointer  data)
 {
   if (icon == GTK_ENTRY_ICON_SECONDARY)
-    gtk_entry_choose_emoji (entry);
+    gtk_entry_insert_emoji (entry);
 }
 
 static void
