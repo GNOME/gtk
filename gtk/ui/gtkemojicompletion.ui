@@ -9,7 +9,7 @@
       <object class="GtkListBox" id="list">
         <property name="selection-mode">none</property>
         <property name="activate-on-single-click">1</property>
-        <signal name="row-activated" handler="emoji_activated"/>
+        <signal name="row-activated" handler="row_activated"/>
       </object>
     </child>
   </template>
