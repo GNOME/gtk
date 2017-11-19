@@ -12,8 +12,8 @@ vec4 fragCoord() {
 }
 
 void main() {
-  vec2 startPoint = (vec4(uStartPoint, 0, 1) * uModelview).xy;
-  vec2 endPoint   = (vec4(uEndPoint,   0, 1) * uModelview).xy;
+  vec2 startPoint = (uModelview * vec4(uStartPoint, 0, 1)).xy;
+  vec2 endPoint   = (uModelview * vec4(uEndPoint,   0, 1)).xy;
   float maxDist   = length(endPoint - startPoint);
 
   // Position relative to startPoint

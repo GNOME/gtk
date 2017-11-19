@@ -2,7 +2,6 @@ precision highp float;
 
 uniform sampler2D uSource;
 uniform sampler2D uMask;
-uniform mat4 uMVP;
 uniform mat4 uProjection = mat4(1.0);
 uniform mat4 uModelview = mat4(1.0);
 uniform float uAlpha = 1.0;

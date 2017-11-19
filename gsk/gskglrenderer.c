@@ -66,7 +66,6 @@ gsk_gl_renderer_setup_render_mode (GskGLRenderer *self);
 typedef struct {
   int id;
   /* Common locations (gl_common)*/
-  int mvp_location;
   int source_location;
   int mask_location;
   int uv_location;
@@ -128,7 +127,6 @@ typedef struct {
 
   graphene_size_t size;
 
-  graphene_matrix_t mvp;
   graphene_matrix_t projection;
   graphene_matrix_t modelview;
 
@@ -179,7 +177,6 @@ destroy_render_item (RenderItem *item)
 
 
 enum {
-  MVP,
   SOURCE,
   MASK,
   ALPHA,
@@ -331,8 +328,6 @@ init_common_locations (GskGLRenderer    *self,
     gsk_shader_builder_get_uniform_location (builder, prog->id, self->uniforms[SOURCE]);
   prog->mask_location =
     gsk_shader_builder_get_uniform_location (builder, prog->id, self->uniforms[MASK]);
-  prog->mvp_location =
-    gsk_shader_builder_get_uniform_location (builder, prog->id, self->uniforms[MVP]);
   prog->alpha_location =
     gsk_shader_builder_get_uniform_location (builder, prog->id, self->uniforms[ALPHA]);
   prog->blendMode_location =
@@ -368,7 +363,6 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
 
   gsk_shader_builder_set_resource_base_path (builder, "/org/gtk/libgsk/glsl");
 
-  self->uniforms[MVP] = gsk_shader_builder_add_uniform (builder, "uMVP");
   self->uniforms[SOURCE] = gsk_shader_builder_add_uniform (builder, "uSource");
   self->uniforms[MASK] = gsk_shader_builder_add_uniform (builder, "uMask");
   self->uniforms[ALPHA] = gsk_shader_builder_add_uniform (builder, "uAlpha");
@@ -440,7 +434,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   init_common_locations (self, builder, &self->blit_program);
 
   self->color_program.id =
-    gsk_shader_builder_create_program (builder, "color.vs.glsl", "color.fs.glsl", &shader_error);
+    gsk_shader_builder_create_program (builder, "blit.vs.glsl", "color.fs.glsl", &shader_error);
   if (shader_error != NULL)
     {
       g_propagate_prefixed_error (error,
@@ -466,7 +460,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   INIT_PROGRAM_UNIFORM_LOCATION (coloring_program, color_location, "uColor");
 
   self->color_matrix_program.id = gsk_shader_builder_create_program (builder,
-                                                                     "color_matrix.vs.glsl",
+                                                                     "blit.vs.glsl",
                                                                      "color_matrix.fs.glsl",
                                                                      &shader_error);
   if (shader_error != NULL)
@@ -779,14 +773,12 @@ render_item (GskGLRenderer    *self,
     }
 
   /* Common uniforms */
-  graphene_matrix_to_float (&item->mvp, mat);
-  glUniformMatrix4fv (item->program->mvp_location, 1, GL_FALSE, mat);
-
   graphene_matrix_to_float (&item->projection, mat);
-  glUniformMatrix4fv (item->program->projection_location, 1, GL_TRUE, mat);
+  glUniformMatrix4fv (item->program->projection_location, 1, GL_FALSE, mat);
 
   graphene_matrix_to_float (&item->modelview, mat);
-  glUniformMatrix4fv (item->program->modelview_location, 1, GL_TRUE, mat);
+  glUniformMatrix4fv (item->program->modelview_location, 1, GL_FALSE, mat);
+
   glUniform1f (item->program->alpha_location, item->opacity);
   glUniform4f (item->program->viewport_location,
                self->viewport.origin.x, self->viewport.origin.y,
@@ -899,8 +891,6 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
   item.max.x = item.min.x + node->bounds.size.width;
   item.max.y = item.min.y + node->bounds.size.height;
 
-  /* The location of the item, in normalized world coordinates */
-  graphene_matrix_multiply (modelview, projection, &item.mvp);
   item.z = project_item (projection, modelview);
 
   item.opacity = 1.0;
