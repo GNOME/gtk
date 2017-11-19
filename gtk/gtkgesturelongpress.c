@@ -107,7 +107,7 @@ _gtk_gesture_long_press_timeout (gpointer user_data)
   priv->triggered = TRUE;
   g_signal_emit (gesture, signals[PRESSED], 0, x, y);
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void
