@@ -129,7 +129,8 @@ static void
 add_emoji (GtkWidget    *box,
            gboolean      prepend,
            GVariant     *item,
-           gunichar      modifier);
+           gunichar      modifier,
+           GtkEmojiChooser *chooser);
 
 #define MAX_RECENT (7*3)
 
@@ -149,7 +150,7 @@ populate_recent_section (GtkEmojiChooser *chooser)
 
       emoji_data = g_variant_get_child_value (item, 0);
       g_variant_get_child (item, 1, "u", &modifier);
-      add_emoji (chooser->recent.box, FALSE, emoji_data, modifier);
+      add_emoji (chooser->recent.box, FALSE, emoji_data, modifier, chooser);
       g_variant_unref (emoji_data);
       g_variant_unref (item);
     }
@@ -192,7 +193,7 @@ add_recent_item (GtkEmojiChooser *chooser,
     }
   g_list_free (children);
 
-  add_emoji (chooser->recent.box, TRUE, item, modifier);
+  add_emoji (chooser->recent.box, TRUE, item, modifier, chooser);
 
   g_settings_set_value (chooser->settings, "recent-emoji", g_variant_builder_end (&builder));
 
@@ -277,9 +278,9 @@ show_variations (GtkEmojiChooser *chooser,
 
   g_signal_connect (box, "child-activated", G_CALLBACK (emoji_activated), parent_popover);
 
-  add_emoji (box, FALSE, emoji_data, 0);
+  add_emoji (box, FALSE, emoji_data, 0, NULL);
   for (modifier = 0x1f3fb; modifier <= 0x1f3ff; modifier++)
-    add_emoji (box, FALSE, emoji_data, modifier);
+    add_emoji (box, FALSE, emoji_data, modifier, NULL);
 
   gtk_widget_show_all (view);
   gtk_popover_popup (GTK_POPOVER (popover));
@@ -327,11 +328,22 @@ pressed_cb (GtkGesture *gesture,
   show_variations (chooser, child);
 }
 
+static gboolean
+popup_menu (GtkWidget *widget,
+            gpointer   data)
+{
+  GtkEmojiChooser *chooser = data;
+
+  show_variations (chooser, widget);
+  return TRUE;
+}
+
 static void
 add_emoji (GtkWidget    *box,
            gboolean      prepend,
            GVariant     *item,
-           gunichar      modifier)
+           gunichar      modifier,
+           GtkEmojiChooser *chooser)
 {
   GtkWidget *child;
   GtkWidget *ebox;
@@ -377,6 +389,10 @@ add_emoji (GtkWidget    *box,
   gtk_container_add (GTK_CONTAINER (child), ebox);
   gtk_container_add (GTK_CONTAINER (ebox), label);
   gtk_widget_show_all (child);
+
+  if (chooser)
+    g_signal_connect (child, "popup-menu", G_CALLBACK (popup_menu), chooser);
+
   gtk_flow_box_insert (GTK_FLOW_BOX (box), child, prepend ? 0 : -1);
 }
 
@@ -416,7 +432,7 @@ populate_emoji_chooser (GtkEmojiChooser *chooser)
       else if (strcmp (name, chooser->flags.first) == 0)
         box = chooser->flags.box;
 
-      add_emoji (box, FALSE, item, 0);
+      add_emoji (box, FALSE, item, 0, chooser);
       g_variant_unref (item);
     }
 
