@@ -36,10 +36,6 @@ GType                   gdk_x11_clipboard_get_type              (void) G_GNUC_CO
 GdkClipboard *          gdk_x11_clipboard_new                   (GdkDisplay             *display,
                                                                  const gchar            *selection);
 
-gboolean                gdk_x11_clipboard_handle_event          (GdkX11Clipboard        *clipboard,
-                                                                 XEvent                 *xevent);
-gboolean                gdk_x11_clipboard_handle_selection_notify(GdkX11Clipboard       *clipboard,
-                                                                 XEvent                 *xevent);
 
 G_END_DECLS
 

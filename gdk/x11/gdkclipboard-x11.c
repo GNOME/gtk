@@ -41,7 +41,7 @@ struct _GdkX11Clipboard
 
   char       *selection;
   Atom        xselection;
-  guint32     time;
+  guint32     timestamp;
 };
 
 struct _GdkX11ClipboardClass
@@ -50,30 +50,6 @@ struct _GdkX11ClipboardClass
 };
 
 G_DEFINE_TYPE (GdkX11Clipboard, gdk_x11_clipboard, GDK_TYPE_CLIPBOARD)
-
-static void
-gdk_x11_clipboard_finalize (GObject *object)
-{
-  GdkX11Clipboard *cb = GDK_X11_CLIPBOARD (object);
-
-  g_free (cb->selection);
-
-  G_OBJECT_CLASS (gdk_x11_clipboard_parent_class)->finalize (object);
-}
-
-static void
-gdk_x11_clipboard_class_init (GdkX11ClipboardClass *class)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (class);
-  //GdkClipboardClass *clipboard_class = GDK_CLIPBOARD_CLASS (class);
-
-  object_class->finalize = gdk_x11_clipboard_finalize;
-}
-
-static void
-gdk_x11_clipboard_init (GdkX11Clipboard *clipboard)
-{
-}
 
 #define SELECTION_MAX_SIZE(display)                                     \
   MIN(262144,                                                           \
@@ -141,7 +117,8 @@ gdk_x11_clipboard_request_targets (GdkX11Clipboard *cb)
 
   stream = gdk_x11_selection_input_stream_new (gdk_clipboard_get_display (GDK_CLIPBOARD (cb)),
                                                cb->selection,
-                                               "TARGETS");
+                                               "TARGETS",
+                                               cb->timestamp);
 
   g_input_stream_read_bytes_async (stream,
                                    SELECTION_MAX_SIZE (display),
@@ -149,6 +126,73 @@ gdk_x11_clipboard_request_targets (GdkX11Clipboard *cb)
                                    NULL,
                                    gdk_x11_clipboard_request_targets_finish,
                                    g_object_ref (cb));
+}
+
+static GdkFilterReturn
+gdk_x11_clipboard_filter_event (GdkXEvent *xev,
+                                GdkEvent  *gdkevent,
+                                gpointer   data)
+{
+  GdkX11Clipboard *cb = GDK_X11_CLIPBOARD (data);
+  GdkDisplay *display;
+  XEvent *xevent = xev;
+  Window xwindow;
+
+  display = gdk_clipboard_get_display (GDK_CLIPBOARD (cb));
+  xwindow = GDK_X11_DISPLAY (display)->leader_window;
+
+  if (xevent->xany.window != xwindow)
+    return GDK_FILTER_CONTINUE;
+
+  switch (xevent->type)
+  {
+    default:
+#ifdef HAVE_XFIXES
+      if (xevent->type - GDK_X11_DISPLAY (display)->xfixes_event_base == XFixesSelectionNotify)
+	{
+	  XFixesSelectionNotifyEvent *sn = (XFixesSelectionNotifyEvent *) xevent;
+
+          if (sn->selection == cb->xselection)
+            {
+              GdkContentFormats *empty;
+              
+              GDK_NOTE(CLIPBOARD, g_printerr ("%s: got FixesSelectionNotify\n", cb->selection));
+              empty = gdk_content_formats_new (NULL, 0);
+              gdk_clipboard_claim_remote (GDK_CLIPBOARD (cb), empty);
+              gdk_content_formats_unref (empty);
+              cb->timestamp = sn->selection_timestamp;
+              gdk_x11_clipboard_request_targets (cb);
+            }
+        }
+#endif
+      return GDK_FILTER_CONTINUE;
+  }
+}
+
+static void
+gdk_x11_clipboard_finalize (GObject *object)
+{
+  GdkX11Clipboard *cb = GDK_X11_CLIPBOARD (object);
+
+  gdk_window_remove_filter (NULL, gdk_x11_clipboard_filter_event, cb);
+  g_free (cb->selection);
+
+  G_OBJECT_CLASS (gdk_x11_clipboard_parent_class)->finalize (object);
+}
+
+static void
+gdk_x11_clipboard_class_init (GdkX11ClipboardClass *class)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+  //GdkClipboardClass *clipboard_class = GDK_CLIPBOARD_CLASS (class);
+
+  object_class->finalize = gdk_x11_clipboard_finalize;
+}
+
+static void
+gdk_x11_clipboard_init (GdkX11Clipboard *cb)
+{
+  cb->timestamp = CurrentTime;
 }
 
 GdkClipboard *
@@ -165,33 +209,9 @@ gdk_x11_clipboard_new (GdkDisplay  *display,
   cb->xselection = gdk_x11_get_xatom_by_name_for_display (display, selection);
 
   gdk_display_request_selection_notification (display, gdk_atom_intern (selection, FALSE));
+  gdk_window_add_filter (NULL, gdk_x11_clipboard_filter_event, cb);
   gdk_x11_clipboard_request_targets (cb);
 
   return GDK_CLIPBOARD (cb);
-}
-
-gboolean
-gdk_x11_clipboard_handle_event (GdkX11Clipboard *cb,
-                                XEvent          *xevent)
-{
-  return FALSE;
-}
-
-gboolean
-gdk_x11_clipboard_handle_selection_notify (GdkX11Clipboard *cb,
-                                           XEvent          *xevent)
-{
-#ifdef HAVE_XFIXES
-  GdkDisplay *display = gdk_clipboard_get_display (GDK_CLIPBOARD (cb));
-  XFixesSelectionNotifyEvent *event = (XFixesSelectionNotifyEvent *)xevent;
-
-  if (event->window != GDK_X11_DISPLAY (display)->leader_window ||
-      event->selection != cb->xselection)
-    return FALSE;
-
-  return TRUE;
-#else
-  return FALSE;
-#endif
 }
 

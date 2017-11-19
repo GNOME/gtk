@@ -134,7 +134,7 @@ gdk_x11_selection_input_stream_complete (GdkX11SelectionInputStream *stream)
   gdk_x11_selection_input_stream_flush (stream);
 
   GDK_X11_DISPLAY (priv->display)->input_streams = g_slist_remove (GDK_X11_DISPLAY (priv->display)->input_streams, stream);
-  gdk_window_remove_filter (GDK_X11_DISPLAY (priv->display)->leader_gdk_window, gdk_x11_selection_input_stream_filter_event, stream);
+  gdk_window_remove_filter (NULL, gdk_x11_selection_input_stream_filter_event, stream);
 
   g_object_unref (stream);
 }
@@ -412,7 +412,8 @@ gdk_x11_selection_input_stream_filter_event (GdkXEvent *xev,
 GInputStream *
 gdk_x11_selection_input_stream_new (GdkDisplay *display,
                                     const char *selection,
-                                    const char *target)
+                                    const char *target,
+                                    guint32     timestamp)
 {
   GdkX11SelectionInputStream *stream;
   GdkX11SelectionInputStreamPrivate *priv;
@@ -436,7 +437,7 @@ gdk_x11_selection_input_stream_new (GdkDisplay *display,
                      priv->xtarget,
                      priv->xproperty,
                      GDK_X11_DISPLAY (display)->leader_window,
-                     CurrentTime);
+                     timestamp);
 
   return g_object_ref (stream);
 }

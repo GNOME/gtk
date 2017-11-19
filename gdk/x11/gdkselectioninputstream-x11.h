@@ -52,7 +52,8 @@ GType          gdk_x11_selection_input_stream_get_type      (void) G_GNUC_CONST;
 
 GInputStream * gdk_x11_selection_input_stream_new           (GdkDisplay *display,
                                                              const char *selection,
-                                                             const char *target);
+                                                             const char *target,
+                                                             guint32     timestamp);
 
 G_END_DECLS
 

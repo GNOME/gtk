@@ -1142,24 +1142,16 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
               gdk_display_set_composited (display, composited);
             }
 
-          if (gdk_x11_clipboard_handle_selection_notify (GDK_X11_CLIPBOARD (display->clipboard), xevent) ||
-              gdk_x11_clipboard_handle_selection_notify (GDK_X11_CLIPBOARD (display->primary_clipboard), xevent))
-            {
-              return_val = FALSE;
-            }
-          else
-            {
-              event->owner_change.type = GDK_OWNER_CHANGE;
-              event->owner_change.window = window;
-              event->owner_change.reason = selection_notify->subtype;
-              event->owner_change.selection =
-                gdk_x11_xatom_to_atom_for_display (display,
-                                                   selection_notify->selection);
-              event->owner_change.time = selection_notify->timestamp;
-              event->owner_change.selection_time = selection_notify->selection_timestamp;
+          event->owner_change.type = GDK_OWNER_CHANGE;
+          event->owner_change.window = window;
+          event->owner_change.reason = selection_notify->subtype;
+          event->owner_change.selection =
+            gdk_x11_xatom_to_atom_for_display (display,
+                                               selection_notify->selection);
+          event->owner_change.time = selection_notify->timestamp;
+          event->owner_change.selection_time = selection_notify->selection_timestamp;
 
-	      return_val = TRUE;
-            }
+          return_val = TRUE;
 	}
       else
 #endif
