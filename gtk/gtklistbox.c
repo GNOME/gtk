@@ -243,6 +243,8 @@ static void gtk_list_box_multipress_gesture_released (GtkGestureMultiPress *gest
                                                       gdouble               x,
                                                       gdouble               y,
                                                       GtkListBox           *box);
+static void gtk_list_box_multipress_gesture_stopped  (GtkGestureMultiPress *gesture,
+                                                      GtkListBox           *box);
 
 static void gtk_list_box_update_row_styles (GtkListBox    *box);
 static void gtk_list_box_update_row_style  (GtkListBox    *box,
@@ -599,6 +601,8 @@ gtk_list_box_init (GtkListBox *box)
                     G_CALLBACK (gtk_list_box_multipress_gesture_pressed), box);
   g_signal_connect (priv->multipress_gesture, "released",
                     G_CALLBACK (gtk_list_box_multipress_gesture_released), box);
+  g_signal_connect (priv->multipress_gesture, "stopped",
+                    G_CALLBACK (gtk_list_box_multipress_gesture_stopped), box);
 
 
   g_signal_connect (box, "notify::parent", G_CALLBACK (gtk_list_box_parent_cb), NULL);
@@ -1783,6 +1787,7 @@ gtk_list_box_multipress_gesture_released (GtkGestureMultiPress *gesture,
    */
   g_object_ref (box);
 
+g_print ("released\n");
   if (priv->active_row != NULL &&
       priv->active_row == gtk_list_box_get_row_at_y (box, y))
     {
@@ -1816,12 +1821,26 @@ gtk_list_box_multipress_gesture_released (GtkGestureMultiPress *gesture,
 
   if (priv->active_row)
     {
-      gtk_widget_unset_state_flags (GTK_WIDGET (priv->active_row),
-                                    GTK_STATE_FLAG_ACTIVE);
+      gtk_widget_unset_state_flags (GTK_WIDGET (priv->active_row), GTK_STATE_FLAG_ACTIVE);
       priv->active_row = NULL;
     }
 
   g_object_unref (box);
+}
+
+static void
+gtk_list_box_multipress_gesture_stopped (GtkGestureMultiPress *gesture,
+                                         GtkListBox           *box)
+{
+  GtkListBoxPrivate *priv = BOX_PRIV (box);
+
+g_print ("stopped\n");
+  if (priv->active_row)
+    {
+      gtk_widget_unset_state_flags (GTK_WIDGET (priv->active_row), GTK_STATE_FLAG_ACTIVE);
+      priv->active_row = NULL;
+      gtk_widget_queue_draw (GTK_WIDGET (box));
+    }
 }
 
 static void
