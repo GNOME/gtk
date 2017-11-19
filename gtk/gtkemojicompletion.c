@@ -195,16 +195,20 @@ entry_key_press (GtkEntry           *entry,
                  GdkEventKey        *event,
                  GtkEmojiCompletion *completion)
 {
+  guint keyval;
+
   if (!gtk_widget_get_visible (GTK_WIDGET (completion)))
     return FALSE;
 
-  if (event->keyval == GDK_KEY_Escape)
+  gdk_event_get_keyval ((GdkEvent*)event, &keyval);
+
+  if (keyval == GDK_KEY_Escape)
     {
       gtk_popover_popdown (GTK_POPOVER (completion));
       return TRUE;
     }
 
-  if (event->keyval == GDK_KEY_Tab)
+  if (keyval == GDK_KEY_Tab)
     {
       guint offset = completion->offset + MAX_ROWS;
       if (offset >= completion->n_matches)
@@ -213,21 +217,21 @@ entry_key_press (GtkEntry           *entry,
       return TRUE;
     }
 
-  if (event->keyval == GDK_KEY_Up)
+  if (keyval == GDK_KEY_Up)
     {
       move_active_row (completion, -1);
       return TRUE;
     }
 
-  if (event->keyval == GDK_KEY_Down)
+  if (keyval == GDK_KEY_Down)
     {
       move_active_row (completion, 1);
       return TRUE;
     }
 
-  if (event->keyval == GDK_KEY_Return ||
-      event->keyval == GDK_KEY_KP_Enter ||
-      event->keyval == GDK_KEY_ISO_Enter)
+  if (keyval == GDK_KEY_Return ||
+      keyval == GDK_KEY_KP_Enter ||
+      keyval == GDK_KEY_ISO_Enter)
     {
       activate_active_row (completion);
       return TRUE;
@@ -326,7 +330,7 @@ populate_completion (GtkEmojiCompletion *completion,
 
   text = g_strdup (text);
   g_free (completion->text);
-  completion->text = text;
+  completion->text = g_strdup (text);
   completion->length = g_utf8_strlen (text, -1);
   completion->offset = offset;
 
