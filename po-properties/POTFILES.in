@@ -101,9 +101,11 @@ gtk/gtkcolorscale.c
 gtk/gtkcolorswatch.c
 gtk/gtkcombobox.c
 gtk/gtkcontainer.c
+gtk/gtkcssiconthemevalue.c
 gtk/gtkcssnode.c
 gtk/gtkcssprovider.c
 gtk/gtkcssshorthandproperty.c
+gtk/gtkcssstaticstyle.c
 gtk/gtkcssstyleproperty.c
 gtk/gtkcustompaperunixdialog.c
 gtk/gtkdialog.c
@@ -176,6 +178,7 @@ gtk/gtkmenu.c
 gtk/gtkmenuitem.c
 gtk/gtkmenushell.c
 gtk/gtkmenutoolbutton.c
+gtk/gtkmenutrackeritem.c
 gtk/gtkmessagedialog.c
 gtk/gtkmodelbutton.c
 gtk/gtkmodules.c
@@ -229,6 +232,7 @@ gtk/gtksearchengine.c
 gtk/gtksearchentry.c
 gtk/gtkselection.c
 gtk/gtkseparator.c
+gtk/gtkseparatormenuitem.c
 gtk/gtkseparatortoolitem.c
 gtk/gtksettings.c
 gtk/gtkshortcutlabel.c
@@ -236,6 +240,7 @@ gtk/gtkshortcutsgroup.c
 gtk/gtkshortcutssection.c
 gtk/gtkshortcutsshortcut.c
 gtk/gtkshortcutswindow.c
+gtk/gtksidebarrow.c
 gtk/gtksizegroup.c
 gtk/gtkspinbutton.c
 gtk/gtkspinner.c
