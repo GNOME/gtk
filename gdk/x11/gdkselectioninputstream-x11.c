@@ -46,6 +46,7 @@ struct GdkX11SelectionInputStreamPrivate {
   gsize pending_size;
 
   guint complete : 1;
+  guint incr : 1;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GdkX11SelectionInputStream, gdk_x11_selection_input_stream, G_TYPE_INPUT_STREAM);
@@ -340,33 +341,50 @@ gdk_x11_selection_input_stream_filter_event (GdkXEvent *xev,
   XEvent *xevent = xev;
   Display *xdisplay;
   Window xwindow;
-
-#if 0
-  GList *tmp_list;
-  GtkRetrievalInfo *info = NULL;
-  GdkWindow *window;
   GBytes *bytes;
-  gint length;
-  GdkAtom type;
-  GdkAtom selection;
-  GdkAtom property;
-  gint	  format;
-  guint32 time;
-#endif
+  Atom type;
+  gint format;
 
   xdisplay = gdk_x11_display_get_xdisplay (priv->display);
   xwindow = GDK_X11_DISPLAY (priv->display)->leader_window;
 
-  if (xevent->xany.window != xwindow)
+  if (xevent->xany.display != xdisplay ||
+      xevent->xany.window != xwindow)
     return GDK_FILTER_CONTINUE;
 
   switch (xevent->type)
     {
+      case PropertyNotify:
+        if (!priv->incr ||
+            xevent->xproperty.atom != priv->xproperty ||
+            xevent->xproperty.state != PropertyNewValue)
+          return GDK_FILTER_CONTINUE;
+
+      GDK_NOTE(SELECTION, g_printerr ("%s:%s: got PropertyNotify durin INCR\n", priv->selection, priv->target));
+      
+      bytes = get_selection_property (xdisplay, xwindow, xevent->xproperty.atom, &type, &format);
+      if (bytes == NULL)
+        { 
+          /* error, should we signal one? */
+          gdk_x11_selection_input_stream_complete (stream);
+        }
+      else if (g_bytes_get_size (bytes) == 0 || type == None)
+        {
+          g_bytes_unref (bytes);
+          gdk_x11_selection_input_stream_complete (stream);
+        }
+      else
+        {
+          g_queue_push_tail (&priv->chunks, bytes);
+          gdk_x11_selection_input_stream_flush (stream);
+        }
+
+      XDeleteProperty (xdisplay, xwindow, xevent->xproperty.atom);
+
+      return GDK_FILTER_CONTINUE;
+
     case SelectionNotify:
       {
-        GBytes *bytes;
-        Atom type;
-        gint format;
 
         if (priv->xselection != xevent->xselection.selection ||
             priv->xtarget != xevent->xselection.target)
@@ -385,17 +403,18 @@ gdk_x11_selection_input_stream_filter_event (GdkXEvent *xev,
           }
         else
           {
-            g_queue_push_tail (&priv->chunks, bytes);
-
             if (type == gdk_x11_get_xatom_by_name_for_display (priv->display, "INCR"))
               {
                 /* The remainder of the selection will come through PropertyNotify
                    events on xwindow */
                 GDK_NOTE(SELECTION, g_print ("%s:%s: initiating INCR transfer\n", priv->selection, priv->target));
+                priv->incr = TRUE;
                 gdk_x11_selection_input_stream_flush (stream);
               }
             else
               {
+                g_queue_push_tail (&priv->chunks, bytes);
+
                 gdk_x11_selection_input_stream_complete (stream);
               }
 
