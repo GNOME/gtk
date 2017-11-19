@@ -1834,6 +1834,9 @@ captured_event_cb (GtkWidget *widget,
 
   gtk_widget_set_cursor (widget, cursor);
 
+  if (cursor)
+    g_object_unref (cursor);
+
   return GDK_EVENT_PROPAGATE;
 }
 
