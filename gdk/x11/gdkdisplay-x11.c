@@ -24,6 +24,9 @@
 
 #define VK_USE_PLATFORM_XLIB_KHR
 
+#include "gdkdisplay-x11.h"
+#include "gdkdisplayprivate.h"
+
 #include "gdkasync.h"
 #include "gdkdisplay.h"
 #include "gdkeventsource.h"
@@ -34,13 +37,12 @@
 #include "gdkdeviceprivate.h"
 #include "gdkkeysprivate.h"
 #include "xsettings-client.h"
-#include "gdkdisplay-x11.h"
+#include "gdkclipboard-x11.h"
 #include "gdkprivate-x11.h"
 #include "gdkscreen-x11.h"
 #include "gdkglcontext-x11.h"
 #include "gdkvulkancontext-x11.h"
 #include "gdk-private.h"
-#include "gdkdisplayprivate.h"
 
 #include <glib.h>
 #include <glib/gprintf.h>
@@ -1140,16 +1142,24 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
               gdk_display_set_composited (display, composited);
             }
 
-	  event->owner_change.type = GDK_OWNER_CHANGE;
-	  event->owner_change.window = window;
-	  event->owner_change.reason = selection_notify->subtype;
-	  event->owner_change.selection =
-	    gdk_x11_xatom_to_atom_for_display (display,
-					       selection_notify->selection);
-	  event->owner_change.time = selection_notify->timestamp;
-	  event->owner_change.selection_time = selection_notify->selection_timestamp;
+          if (gdk_x11_clipboard_handle_selection_notify (GDK_X11_CLIPBOARD (display->clipboard), xevent) ||
+              gdk_x11_clipboard_handle_selection_notify (GDK_X11_CLIPBOARD (display->primary_clipboard), xevent))
+            {
+              return_val = FALSE;
+            }
+          else
+            {
+              event->owner_change.type = GDK_OWNER_CHANGE;
+              event->owner_change.window = window;
+              event->owner_change.reason = selection_notify->subtype;
+              event->owner_change.selection =
+                gdk_x11_xatom_to_atom_for_display (display,
+                                                   selection_notify->selection);
+              event->owner_change.time = selection_notify->timestamp;
+              event->owner_change.selection_time = selection_notify->selection_timestamp;
 
-	  return_val = TRUE;
+	      return_val = TRUE;
+            }
 	}
       else
 #endif
@@ -1736,6 +1746,9 @@ gdk_x11_display_open (const gchar *display_name)
   }
 #endif
 
+  display->clipboard = gdk_x11_clipboard_new (display, "CLIPBOARD");
+  display->primary_clipboard = gdk_x11_clipboard_new (display, "PRIMARY");
+
   /*
    * It is important that we first request the selection
    * notification, and then setup the initial state of
@@ -2047,6 +2060,9 @@ gdk_x11_display_finalize (GObject *object)
 
   /* Empty the event queue */
   _gdk_x11_display_free_translate_queue (GDK_DISPLAY (display_x11));
+
+  /* Get rid of pending streams */
+  g_slist_free_full (display_x11->input_streams, g_object_unref);
 
   /* Atom Hashtable */
   g_hash_table_destroy (display_x11->atom_from_virtual);

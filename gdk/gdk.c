@@ -166,7 +166,9 @@ static const GDebugKey gdk_debug_keys[] = {
   { "frames",        GDK_DEBUG_FRAMES },
   { "settings",      GDK_DEBUG_SETTINGS },
   { "opengl",        GDK_DEBUG_OPENGL },
-  { "vulkan",        GDK_DEBUG_VULKAN }
+  { "vulkan",        GDK_DEBUG_VULKAN },
+  { "selection",     GDK_DEBUG_SELECTION },
+  { "clipboard",     GDK_DEBUG_CLIPBOARD }
 };
 #endif
 
