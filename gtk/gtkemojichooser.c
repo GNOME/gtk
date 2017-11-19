@@ -92,6 +92,10 @@ gtk_emoji_chooser_finalize (GObject *object)
   g_variant_unref (chooser->data);
   g_object_unref (chooser->settings);
 
+  g_clear_object (&chooser->recent_press);
+  g_clear_object (&chooser->people_press);
+  g_clear_object (&chooser->body_press);
+
   G_OBJECT_CLASS (gtk_emoji_chooser_parent_class)->finalize (object);
 }
 
