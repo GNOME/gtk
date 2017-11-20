@@ -207,42 +207,31 @@ gdk_content_formats_to_string (GdkContentFormats *formats)
 }
 
 /**
- * gdk_content_formats_add:
- * @formats:  a #GdkContentFormats
- * @mime_type: the mime type to add
- * 
- * Appends another mime_type to a #GdkContentFormats.
- **/
-void 
-gdk_content_formats_add (GdkContentFormats *formats,
-                         const char    *mime_type)
-{
-  g_return_if_fail (formats != NULL);
-  
-  formats->formats = g_list_append (formats->formats, (gpointer) gdk_atom_intern (mime_type, FALSE));
-}
-
-/**
  * gdk_content_formats_union:
- * @first: the #GdkContentFormats to merge into
- * @second: the #GtkTargeList to merge from
+ * @first: (transfer full): the #GdkContentFormats to merge into
+ * @second: (transfer none): the #GdkContentFormats to merge from
  *
  * Append all missing types from @second to @first, in the order
  * they had in @second.
+ *
+ * Returns: a new #GdkContentFormats
  */
-void
+GdkContentFormats *
 gdk_content_formats_union (GdkContentFormats       *first,
                            const GdkContentFormats *second)
 {
-  GList *l;
+  GdkContentFormatsBuilder *builder;
 
-  g_return_if_fail (first != NULL);
-  g_return_if_fail (second != NULL);
+  g_return_val_if_fail (first != NULL, NULL);
+  g_return_val_if_fail (second != NULL, NULL);
 
-  for (l = second->formats; l; l = l->next)
-    {
-      first->formats = g_list_append (first->formats, l->data);
-    }
+  builder = gdk_content_formats_builder_new ();
+
+  gdk_content_formats_builder_add_formats (builder, first);
+  gdk_content_formats_unref (first);
+  gdk_content_formats_builder_add_formats (builder, second);
+
+  return gdk_content_formats_builder_free (builder);
 }
 
 /**
@@ -384,7 +373,7 @@ gdk_content_formats_builder_free (GdkContentFormatsBuilder *builder)
  **/
 void
 gdk_content_formats_builder_add_formats (GdkContentFormatsBuilder *builder,
-                                         GdkContentFormats        *formats)
+                                         const GdkContentFormats  *formats)
 {
   GList *l;
 

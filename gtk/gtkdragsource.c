@@ -290,7 +290,7 @@ gtk_drag_source_add_text_targets (GtkWidget *widget)
     gdk_content_formats_ref (target_list);
   else
     target_list = gdk_content_formats_new (NULL, 0);
-  gtk_content_formats_add_text_targets (target_list);
+  target_list = gtk_content_formats_add_text_targets (target_list);
   gtk_drag_source_set_target_list (widget, target_list);
   gdk_content_formats_unref (target_list);
 }
@@ -317,7 +317,7 @@ gtk_drag_source_add_image_targets (GtkWidget *widget)
     gdk_content_formats_ref (target_list);
   else
     target_list = gdk_content_formats_new (NULL, 0);
-  gtk_content_formats_add_image_targets (target_list, TRUE);
+  target_list = gtk_content_formats_add_image_targets (target_list, TRUE);
   gtk_drag_source_set_target_list (widget, target_list);
   gdk_content_formats_unref (target_list);
 }
@@ -344,7 +344,7 @@ gtk_drag_source_add_uri_targets (GtkWidget *widget)
     gdk_content_formats_ref (target_list);
   else
     target_list = gdk_content_formats_new (NULL, 0);
-  gtk_content_formats_add_uri_targets (target_list);
+  target_list = gtk_content_formats_add_uri_targets (target_list);
   gtk_drag_source_set_target_list (widget, target_list);
   gdk_content_formats_unref (target_list);
 }

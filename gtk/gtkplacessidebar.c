@@ -4074,11 +4074,11 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
                      NULL,
                      GDK_ACTION_MOVE | GDK_ACTION_COPY | GDK_ACTION_LINK);
   target_list = gdk_content_formats_new  (dnd_drop_targets, G_N_ELEMENTS (dnd_drop_targets));
-  gtk_content_formats_add_uri_targets (target_list);
+  target_list = gtk_content_formats_add_uri_targets (target_list);
   gtk_drag_dest_set_target_list (sidebar->list_box, target_list);
   gdk_content_formats_unref (target_list);
   sidebar->source_targets = gdk_content_formats_new (dnd_source_targets, G_N_ELEMENTS (dnd_source_targets));
-  gtk_content_formats_add_text_targets (sidebar->source_targets);
+  sidebar->source_targets = gtk_content_formats_add_text_targets (sidebar->source_targets);
 
   g_signal_connect (sidebar->list_box, "motion-notify-event",
                     G_CALLBACK (on_motion_notify_event), sidebar);

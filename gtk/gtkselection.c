@@ -259,23 +259,31 @@ init_atoms (void)
  * 
  * Since: 2.6
  **/
-void 
+GdkContentFormats *
 gtk_content_formats_add_text_targets (GdkContentFormats *list)
 {
-  g_return_if_fail (list != NULL);
+  GdkContentFormatsBuilder *builder;
+
+  g_return_val_if_fail (list != NULL, NULL);
   
   init_atoms ();
 
+  builder = gdk_content_formats_builder_new ();
+  gdk_content_formats_builder_add_formats (builder, list);
+  gdk_content_formats_unref (list);
+
   /* Keep in sync with gtk_selection_data_targets_include_text()
    */
-  gdk_content_formats_add (list, utf8_atom);  
-  gdk_content_formats_add (list, ctext_atom);  
-  gdk_content_formats_add (list, text_atom);  
-  gdk_content_formats_add (list, GDK_TARGET_STRING);  
-  gdk_content_formats_add (list, text_plain_utf8_atom);  
+  gdk_content_formats_builder_add_mime_type (builder, utf8_atom);  
+  gdk_content_formats_builder_add_mime_type (builder, ctext_atom);  
+  gdk_content_formats_builder_add_mime_type (builder, text_atom);  
+  gdk_content_formats_builder_add_mime_type (builder, GDK_TARGET_STRING);  
+  gdk_content_formats_builder_add_mime_type (builder, text_plain_utf8_atom);  
   if (!g_get_charset (NULL))
-    gdk_content_formats_add (list, text_plain_locale_atom);  
-  gdk_content_formats_add (list, text_plain_atom);  
+    gdk_content_formats_builder_add_mime_type (builder, text_plain_locale_atom);  
+  gdk_content_formats_builder_add_mime_type (builder, text_plain_atom);  
+
+  return gdk_content_formats_builder_free (builder);
 }
 
 /**
@@ -292,17 +300,22 @@ gtk_content_formats_add_text_targets (GdkContentFormats *list)
  *
  * Since: 2.10
  **/
-void
+GdkContentFormats *
 gtk_content_formats_add_rich_text_targets (GdkContentFormats *list,
                                            gboolean           deserializable,
                                            GtkTextBuffer     *buffer)
 {
+  GdkContentFormatsBuilder *builder;
   GdkAtom *atoms;
   gint     n_atoms;
   gint     i;
 
-  g_return_if_fail (list != NULL);
-  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
+  g_return_val_if_fail (list != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), NULL);
+
+  builder = gdk_content_formats_builder_new ();
+  gdk_content_formats_builder_add_formats (builder, list);
+  gdk_content_formats_unref (list);
 
   if (deserializable)
     atoms = gtk_text_buffer_get_deserialize_formats (buffer, &n_atoms);
@@ -310,9 +323,11 @@ gtk_content_formats_add_rich_text_targets (GdkContentFormats *list,
     atoms = gtk_text_buffer_get_serialize_formats (buffer, &n_atoms);
 
   for (i = 0; i < n_atoms; i++)
-    gdk_content_formats_add (list, atoms[i]);
+    gdk_content_formats_builder_add_mime_type (builder, atoms[i]);
 
   g_free (atoms);
+
+  return gdk_content_formats_builder_free (builder);
 }
 
 /**
@@ -326,14 +341,19 @@ gtk_content_formats_add_rich_text_targets (GdkContentFormats *list,
  * 
  * Since: 2.6
  **/
-void 
+GdkContentFormats *
 gtk_content_formats_add_image_targets (GdkContentFormats *list,
 		                       gboolean           writable)
 {
+  GdkContentFormatsBuilder *builder;
   GSList *formats, *f;
   gchar **mimes, **m;
 
-  g_return_if_fail (list != NULL);
+  g_return_val_if_fail (list != NULL, NULL);
+
+  builder = gdk_content_formats_builder_new ();
+  gdk_content_formats_builder_add_formats (builder, list);
+  gdk_content_formats_unref (list);
 
   formats = gdk_pixbuf_get_formats ();
 
@@ -367,12 +387,14 @@ gtk_content_formats_add_image_targets (GdkContentFormats *list,
       mimes = gdk_pixbuf_format_get_mime_types (fmt);
       for (m = mimes; *m; m++)
 	{
-	  gdk_content_formats_add (list, *m);  
+	  gdk_content_formats_builder_add_mime_type (builder, *m);  
 	}
       g_strfreev (mimes);
     }
 
   g_slist_free (formats);
+
+  return gdk_content_formats_builder_free (builder);
 }
 
 /**
@@ -385,14 +407,22 @@ gtk_content_formats_add_image_targets (GdkContentFormats *list,
  * 
  * Since: 2.6
  **/
-void 
+GdkContentFormats *
 gtk_content_formats_add_uri_targets (GdkContentFormats *list)
 {
-  g_return_if_fail (list != NULL);
+  GdkContentFormatsBuilder *builder;
+
+  g_return_val_if_fail (list != NULL, NULL);
   
   init_atoms ();
 
-  gdk_content_formats_add (list, text_uri_list_atom);  
+  builder = gdk_content_formats_builder_new ();
+  gdk_content_formats_builder_add_formats (builder, list);
+  gdk_content_formats_unref (list);
+
+  gdk_content_formats_builder_add_mime_type (builder, text_uri_list_atom);  
+
+  return gdk_content_formats_builder_free (builder);
 }
 
 /**
@@ -567,6 +597,40 @@ gtk_selection_target_list_get (GtkWidget    *widget,
 }
 
 static void
+gtk_selection_target_list_add (GtkWidget         *widget,
+			       GdkAtom            selection,
+                               GdkContentFormats *formats)
+{
+  GtkSelectionTargetList *sellist;
+  GList *tmp_list;
+  GList *lists;
+
+  lists = g_object_get_data (G_OBJECT (widget), gtk_selection_handler_key);
+  
+  tmp_list = lists;
+  while (tmp_list)
+    {
+      sellist = tmp_list->data;
+      if (sellist->selection == selection)
+        {
+          sellist->list = gdk_content_formats_union (sellist->list, formats);
+	  return;
+        }
+      tmp_list = tmp_list->next;
+    }
+
+  if (tmp_list == NULL)
+    {
+      sellist = g_slice_new (GtkSelectionTargetList);
+      sellist->selection = selection;
+      sellist->list = gdk_content_formats_ref (formats);
+    }
+
+  lists = g_list_prepend (lists, sellist);
+  g_object_set_data (G_OBJECT (widget), I_(gtk_selection_handler_key), lists);
+}
+
+static void
 gtk_selection_target_list_remove (GtkWidget    *widget)
 {
   GtkSelectionTargetList *sellist;
@@ -651,9 +715,9 @@ gtk_selection_add_target (GtkWidget	    *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (selection != NULL);
 
-  list = gtk_selection_target_list_get (widget, selection);
-  gdk_content_formats_add (list, target);
-  gdk_selection_add_targets (gtk_widget_get_window (widget), selection, &target, 1);
+  list = gdk_content_formats_new (&target, 1);
+  gtk_selection_add_targets (widget, selection, list);
+  gdk_content_formats_unref (list);
 }
 
 /**
@@ -666,11 +730,10 @@ gtk_selection_add_target (GtkWidget	    *widget,
  * for a given widget and selection.
  **/
 void 
-gtk_selection_add_targets (GtkWidget     *widget, 
-			   GdkAtom        selection,
+gtk_selection_add_targets (GtkWidget         *widget, 
+			   GdkAtom            selection,
 			   GdkContentFormats *targets)
 {
-  GdkContentFormats *list;
   GdkAtom *atoms;
   guint n_targets;
 
@@ -678,8 +741,7 @@ gtk_selection_add_targets (GtkWidget     *widget,
   g_return_if_fail (selection != NULL);
   g_return_if_fail (targets != NULL);
   
-  list = gtk_selection_target_list_get (widget, selection);
-  gdk_content_formats_union (list, targets);
+  gtk_selection_target_list_add (widget, selection, targets);
 
   atoms = gdk_content_formats_get_atoms (targets, &n_targets);
   gdk_selection_add_targets (gtk_widget_get_window (widget), selection, atoms, n_targets);
@@ -1867,7 +1929,7 @@ gtk_targets_include_image (GdkAtom *targets,
   g_return_val_if_fail (targets != NULL || n_targets == 0, FALSE);
 
   list = gdk_content_formats_new (NULL, 0);
-  gtk_content_formats_add_image_targets (list, writable);
+  list = gtk_content_formats_add_image_targets (list, writable);
   for (i = 0; i < n_targets && !result; i++)
     {
       if (gdk_content_formats_contains (list, targets[i]))

@@ -4778,7 +4778,7 @@ gtk_label_drag_gesture_update (GtkGestureDrag *gesture,
           const GdkEvent *event;
 
           event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
-	  gtk_content_formats_add_text_targets (target_list);
+	  target_list = gtk_content_formats_add_text_targets (target_list);
 
           g_signal_connect (widget, "drag-begin",
                             G_CALLBACK (drag_begin_cb), NULL);
@@ -5229,7 +5229,7 @@ gtk_label_select_region_index (GtkLabel *label,
           GdkContentFormats *list;
 
           list = gdk_content_formats_new (NULL, 0);
-          gtk_content_formats_add_text_targets (list);
+          list = gtk_content_formats_add_text_targets (list);
 
           if (clipboard)
             gtk_clipboard_set_with_owner (clipboard,

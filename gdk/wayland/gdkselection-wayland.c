@@ -374,6 +374,7 @@ data_offer_offer (void                 *data,
                   const char           *type)
 {
   GdkWaylandSelection *selection = data;
+  GdkContentFormatsBuilder *builder;
   DataOfferData *info;
 
   info = g_hash_table_lookup (selection->offers, wl_data_offer);
@@ -384,7 +385,11 @@ data_offer_offer (void                 *data,
   GDK_NOTE (EVENTS,
             g_message ("data offer offer, offer %p, type = %s", wl_data_offer, type));
 
-  gdk_content_formats_add (info->targets, type);
+  builder = gdk_content_formats_builder_new ();
+  gdk_content_formats_builder_add_formats (builder, info->targets);
+  gdk_content_formats_builder_add_mime_type (builder, type);
+  gdk_content_formats_unref (info->targets);
+  info->targets = gdk_content_formats_builder_free (builder);
 }
 
 static inline GdkDragAction
@@ -461,6 +466,7 @@ primary_offer_offer (void                               *data,
                      const char                         *type)
 {
   GdkWaylandSelection *selection = data;
+  GdkContentFormatsBuilder *builder;
   DataOfferData *info;
 
   info = g_hash_table_lookup (selection->offers, gtk_offer);
@@ -471,7 +477,11 @@ primary_offer_offer (void                               *data,
   GDK_NOTE (EVENTS,
             g_message ("primary offer offer, offer %p, type = %s", gtk_offer, type));
 
-  gdk_content_formats_add (info->targets, type);
+  builder = gdk_content_formats_builder_new ();
+  gdk_content_formats_builder_add_formats (builder, info->targets);
+  gdk_content_formats_builder_add_mime_type (builder, type);
+  gdk_content_formats_unref (info->targets);
+  info->targets = gdk_content_formats_builder_free (builder);
 }
 
 static const struct gtk_primary_selection_offer_listener primary_offer_listener = {

@@ -4007,17 +4007,20 @@ gtk_text_buffer_get_target_list (GtkTextBuffer   *buffer,
 {
   GdkContentFormats *target_list;
 
-  target_list = gdk_content_formats_new (NULL, 0);
 
   if (include_local)
-    gdk_content_formats_add (target_list,
-                         gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"));
+    target_list = gdk_content_formats_new ((const char *[2]) {
+                                             "GTK_TEXT_BUFFER_CONTENTS",
+                                             NULL
+                                           }, 1);
+  else
+    target_list = gdk_content_formats_new (NULL, 0);
 
-  gtk_content_formats_add_rich_text_targets (target_list,
-                                             deserializable,
-                                             buffer);
+  target_list = gtk_content_formats_add_rich_text_targets (target_list,
+                                                           deserializable,
+                                                           buffer);
 
-  gtk_content_formats_add_text_targets (target_list);
+  target_list = gtk_content_formats_add_text_targets (target_list);
 
   return target_list;
 }

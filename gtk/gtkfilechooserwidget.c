@@ -1729,8 +1729,8 @@ copy_file_location_cb (GSimpleAction *action,
       clipboard = gtk_widget_get_clipboard (GTK_WIDGET (impl), GDK_SELECTION_CLIPBOARD);
 
       target_list = gdk_content_formats_new (NULL, 0);
-      gtk_content_formats_add_text_targets (target_list);
-      gtk_content_formats_add_uri_targets (target_list);
+      target_list = gtk_content_formats_add_text_targets (target_list);
+      target_list = gtk_content_formats_add_uri_targets (target_list);
 
       gtk_clipboard_set_with_data (clipboard, target_list,
                                    copy_file_get_cb,

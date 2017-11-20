@@ -3908,7 +3908,7 @@ gtk_entry_drag_gesture_update (GtkGestureDrag *gesture,
           guint actions = priv->editable ? GDK_ACTION_COPY | GDK_ACTION_MOVE : GDK_ACTION_COPY;
           guint button;
 
-          gtk_content_formats_add_text_targets (target_list);
+          target_list = gtk_content_formats_add_text_targets (target_list);
 
           gtk_entry_get_pixel_ranges (entry, &ranges, &n_ranges);
 
@@ -6589,7 +6589,7 @@ gtk_entry_update_primary_selection (GtkEntry *entry)
     return;
 
   list = gdk_content_formats_new (NULL, 0);
-  gtk_content_formats_add_text_targets (list);
+  list = gtk_content_formats_add_text_targets (list);
 
   clipboard = gtk_widget_get_clipboard (GTK_WIDGET (entry), GDK_SELECTION_PRIMARY);
   

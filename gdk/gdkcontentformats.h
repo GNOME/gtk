@@ -47,14 +47,11 @@ GDK_AVAILABLE_IN_3_94
 char *                  gdk_content_formats_to_string           (GdkContentFormats              *formats);
 
 GDK_AVAILABLE_IN_3_94
-void                    gdk_content_formats_union               (GdkContentFormats              *first,
-                                                                 const GdkContentFormats        *second);
+GdkContentFormats *     gdk_content_formats_union               (GdkContentFormats              *first,
+                                                                 const GdkContentFormats        *second) G_GNUC_WARN_UNUSED_RESULT;
 GDK_AVAILABLE_IN_3_94
 GdkAtom                 gdk_content_formats_intersects          (const GdkContentFormats        *first,
                                                                  const GdkContentFormats        *second);
-GDK_AVAILABLE_IN_3_94
-void                    gdk_content_formats_add                 (GdkContentFormats              *formats,
-                                                                 const char                     *mime_type);
 GDK_AVAILABLE_IN_3_94
 gboolean                gdk_content_formats_contains            (const GdkContentFormats        *formats,
                                                                  const char                     *mime_type);
@@ -67,7 +64,7 @@ GDK_AVAILABLE_IN_3_94
 GdkContentFormats *     gdk_content_formats_builder_free        (GdkContentFormatsBuilder       *builder) G_GNUC_WARN_UNUSED_RESULT;
 GDK_AVAILABLE_IN_3_94
 void                    gdk_content_formats_builder_add_formats (GdkContentFormatsBuilder       *builder,
-                                                                 GdkContentFormats              *formats);
+                                                                 const GdkContentFormats        *formats);
 GDK_AVAILABLE_IN_3_94
 void                    gdk_content_formats_builder_add_mime_type(GdkContentFormatsBuilder      *builder,
                                                                  const char                     *mime_type);

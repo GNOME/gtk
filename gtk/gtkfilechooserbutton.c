@@ -539,8 +539,8 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
 
   /* DnD */
   target_list = gdk_content_formats_new (NULL, 0);
-  gtk_content_formats_add_uri_targets (target_list);
-  gtk_content_formats_add_text_targets (target_list);
+  target_list = gtk_content_formats_add_uri_targets (target_list);
+  target_list = gtk_content_formats_add_text_targets (target_list);
   gtk_drag_dest_set (GTK_WIDGET (button),
                      (GTK_DEST_DEFAULT_ALL),
 		     target_list,

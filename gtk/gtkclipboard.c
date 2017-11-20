@@ -802,7 +802,7 @@ gtk_clipboard_set_text (GtkClipboard *clipboard,
   g_return_if_fail (text != NULL);
 
   formats = gdk_content_formats_new (NULL, 0);
-  gtk_content_formats_add_text_targets (formats);
+  formats = gtk_content_formats_add_text_targets (formats);
 
   if (len < 0)
     len = strlen (text);
@@ -853,7 +853,7 @@ gtk_clipboard_set_image (GtkClipboard *clipboard,
   g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
 
   formats = gdk_content_formats_new (NULL, 0);
-  gtk_content_formats_add_image_targets (formats, TRUE);
+  formats = gtk_content_formats_add_image_targets (formats, TRUE);
 
   gtk_clipboard_set_with_data (clipboard, 
 			       formats,

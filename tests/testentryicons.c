@@ -167,7 +167,7 @@ main (int argc, char **argv)
 				   GTK_ENTRY_ICON_PRIMARY,
 				   "Save a file");
   tlist = gdk_content_formats_new (NULL, 0);
-  gtk_content_formats_add_text_targets (tlist);
+  tlist = gtk_content_formats_add_text_targets (tlist);
   gtk_entry_set_icon_drag_source (GTK_ENTRY (entry),
                                   GTK_ENTRY_ICON_PRIMARY,
                                   tlist, GDK_ACTION_COPY); 

@@ -37,16 +37,16 @@ G_BEGIN_DECLS
 #define GTK_TYPE_SELECTION_DATA (gtk_selection_data_get_type ())
 
 GDK_AVAILABLE_IN_ALL
-void           gtk_content_formats_add_text_targets      (GdkContentFormats *list);
+GdkContentFormats *     gtk_content_formats_add_text_targets      (GdkContentFormats *list) G_GNUC_WARN_UNUSED_RESULT;
 GDK_AVAILABLE_IN_ALL
-void           gtk_content_formats_add_rich_text_targets (GdkContentFormats *list,
-                                                          gboolean           deserializable,
-                                                          GtkTextBuffer     *buffer);
+GdkContentFormats *     gtk_content_formats_add_rich_text_targets (GdkContentFormats *list,
+                                                                   gboolean           deserializable,
+                                                                   GtkTextBuffer     *buffer) G_GNUC_WARN_UNUSED_RESULT;
 GDK_AVAILABLE_IN_ALL
-void           gtk_content_formats_add_image_targets     (GdkContentFormats *list,
-                                                          gboolean           writable);
+GdkContentFormats *     gtk_content_formats_add_image_targets     (GdkContentFormats *list,
+                                                                   gboolean           writable) G_GNUC_WARN_UNUSED_RESULT;
 GDK_AVAILABLE_IN_ALL
-void           gtk_content_formats_add_uri_targets       (GdkContentFormats *list);
+GdkContentFormats *     gtk_content_formats_add_uri_targets       (GdkContentFormats *list) G_GNUC_WARN_UNUSED_RESULT;
 
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_selection_owner_set             (GtkWidget  *widget,
