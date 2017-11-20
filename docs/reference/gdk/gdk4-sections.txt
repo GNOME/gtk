@@ -370,6 +370,7 @@ gdk_fullscreen_mode_get_type
 <SECTION>
 <FILE>gdkcontentformats</FILE>
 <TITLE>Content Formats</TITLE>
+GdkContentFormats
 gdk_content_formats_new
 gdk_content_formats_ref
 gdk_content_formats_unref
@@ -380,6 +381,14 @@ gdk_content_formats_union
 gdk_content_formats_intersects
 gdk_content_formats_remove
 gdk_content_formats_contains
+
+<SUBSECTION>
+GdkContentFormatsBuilder
+gdk_content_formats_builder_new
+gdk_content_formats_builder_free
+gdk_content_formats_builder_add_formats
+gdk_content_formats_builder_add_mime_type
+
 <SUBSECTION Private>
 gdk_content_formats_get_type
 </SECTION>

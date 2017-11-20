@@ -45,6 +45,10 @@
  * For debugging purposes, the function gdk_content_formats_to_string() exists.
  * It will print a comma-seperated formats of formats from most important to least
  * important.
+ *
+ * #GdkContentFormats is an immutable struct. After creation, you cannot change
+ * the types it represents. Instead, new #GdkContentFormats have to be created.
+ * The #GdkContentFormatsBuilder structure is meant to help in this endeavor.
  */
 
 /**
@@ -308,5 +312,109 @@ gdk_content_formats_get_atoms (GdkContentFormats *formats,
     *n_atoms = n;
 
   return atoms;
+}
+
+/**
+ * GdkContentFormatsBuilder:
+ *
+ * A #GdkContentFormatsBuilder struct is an opaque struct. It is meant to
+ * not be kept around and only be used to create new #GdkContentFormats
+ * objects.
+ */
+
+struct _GdkContentFormatsBuilder
+{
+  GSList *mime_types;
+  gsize n_mime_types;
+};
+
+/**
+ * gdk_content_formats_builder_new:
+ *
+ * Create a new #GdkContentFormatsBuilder object. The resulting builder
+ * would create an empty #GdkContentFormats. Use addition functions to add
+ * types to it.
+ *
+ * Returns: a new #GdkContentFormatsBuilder
+ **/
+GdkContentFormatsBuilder *
+gdk_content_formats_builder_new (void)
+{
+  return g_slice_new0 (GdkContentFormatsBuilder);
+}
+
+/**
+ * gdk_content_formats_builder_free:
+ * @builder: a #GdkContentFormatsBuilder
+ *
+ * Frees @builder and creates a new #GdkContentFormats from it.
+ *
+ * Returns: a new #GdkContentFormats with all the formats added to @builder
+ **/
+GdkContentFormats *
+gdk_content_formats_builder_free (GdkContentFormatsBuilder *builder)
+{
+  GdkContentFormats *result;
+  const char **mime_types;
+  GSList *l;
+  gsize i;
+
+  g_return_val_if_fail (builder != NULL, NULL);
+
+  mime_types = g_new (const char *, builder->n_mime_types + 1);
+  i = builder->n_mime_types;
+  mime_types[i--] = NULL;
+  /* add backwards because most important type is last in the list */
+  for (l = builder->mime_types; l; l = l->next)
+    mime_types[i--] = l->data;
+
+  result = gdk_content_formats_new (mime_types, builder->n_mime_types);
+  g_free (mime_types);
+
+  return result;
+}
+
+/**
+ * gdk_content_formats_builder_add_formats:
+ * @builder: a #GdkContentFormatsBuilder
+ * @formats: the formats to add
+ *
+ * Appends all formats from @formats to @builder, skipping those that
+ * already exist.
+ **/
+void
+gdk_content_formats_builder_add_formats (GdkContentFormatsBuilder *builder,
+                                         GdkContentFormats        *formats)
+{
+  GList *l;
+
+  g_return_if_fail (builder != NULL);
+  g_return_if_fail (formats != NULL);
+
+  for (l = formats->formats; l; l = l->next)
+    gdk_content_formats_builder_add_mime_type (builder, l->data);
+}
+
+/**
+ * gdk_content_formats_builder_add_formats:
+ * @builder: a #GdkContentFormatsBuilder
+ * @mime_type: a mime type
+ *
+ * Appends @mime_type to @builder if it has not already been added.
+ **/
+void
+gdk_content_formats_builder_add_mime_type (GdkContentFormatsBuilder *builder,
+                                           const char               *mime_type)
+{
+  g_return_if_fail (builder != NULL);
+  g_return_if_fail (mime_type != NULL);
+
+  mime_type = g_intern_string (mime_type);
+
+  if (g_slist_find (builder->mime_types, mime_type))
+    return;
+
+  builder->mime_types = g_slist_prepend (builder->mime_types, (gpointer) mime_type);
+  builder->n_mime_types++;
 }
 

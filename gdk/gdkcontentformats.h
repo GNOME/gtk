@@ -59,6 +59,19 @@ GDK_AVAILABLE_IN_3_94
 gboolean                gdk_content_formats_contains            (const GdkContentFormats        *formats,
                                                                  const char                     *mime_type);
 
+typedef struct _GdkContentFormatsBuilder GdkContentFormatsBuilder;
+
+GDK_AVAILABLE_IN_3_94
+GdkContentFormatsBuilder*gdk_content_formats_builder_new        (void);
+GDK_AVAILABLE_IN_3_94
+GdkContentFormats *     gdk_content_formats_builder_free        (GdkContentFormatsBuilder       *builder) G_GNUC_WARN_UNUSED_RESULT;
+GDK_AVAILABLE_IN_3_94
+void                    gdk_content_formats_builder_add_formats (GdkContentFormatsBuilder       *builder,
+                                                                 GdkContentFormats              *formats);
+GDK_AVAILABLE_IN_3_94
+void                    gdk_content_formats_builder_add_mime_type(GdkContentFormatsBuilder      *builder,
+                                                                 const char                     *mime_type);
+
 G_END_DECLS
 
 #endif /* __GTK_CONTENT_FORMATS_H__ */
