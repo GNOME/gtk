@@ -1319,18 +1319,16 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
 static void
 gsk_gl_renderer_validate_tree (GskGLRenderer           *self,
                                GskRenderNode           *root,
-                               const graphene_matrix_t *projection)
+                               const graphene_matrix_t *projection,
+                               const graphene_matrix_t *modelview)
 {
-  graphene_matrix_t modelview;
   GskRoundedRect viewport_clip;
-
-  graphene_matrix_init_scale (&modelview, self->scale_factor, self->scale_factor, 1.0f);
 
   gdk_gl_context_make_current (self->gl_context);
 
   gsk_rounded_rect_init_from_rect (&viewport_clip, &self->viewport, 0.0f);
 
-  gsk_gl_renderer_add_render_item (self, projection, &modelview, self->render_items, root,
+  gsk_gl_renderer_add_render_item (self, projection, modelview, self->render_items, root,
                                    self->texture_id, &viewport_clip);
 }
 
@@ -1451,7 +1449,7 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
 
   gsk_gl_driver_begin_frame (self->gl_driver);
   gsk_gl_glyph_cache_begin_frame (&self->glyph_cache);
-  gsk_gl_renderer_validate_tree (self, root, &projection);
+  gsk_gl_renderer_validate_tree (self, root, &projection, &modelview);
 
 #ifdef G_ENABLE_DEBUG
   gsk_gl_profiler_begin_gpu_region (self->gl_profiler);
