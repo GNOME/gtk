@@ -1787,7 +1787,6 @@ gtk_list_box_multipress_gesture_released (GtkGestureMultiPress *gesture,
    */
   g_object_ref (box);
 
-g_print ("released\n");
   if (priv->active_row != NULL &&
       priv->active_row == gtk_list_box_get_row_at_y (box, y))
     {
@@ -1834,7 +1833,6 @@ gtk_list_box_multipress_gesture_stopped (GtkGestureMultiPress *gesture,
 {
   GtkListBoxPrivate *priv = BOX_PRIV (box);
 
-g_print ("stopped\n");
   if (priv->active_row)
     {
       gtk_widget_unset_state_flags (GTK_WIDGET (priv->active_row), GTK_STATE_FLAG_ACTIVE);
