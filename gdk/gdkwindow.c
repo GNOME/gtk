@@ -9294,8 +9294,9 @@ proxy_pointer_event (GdkDisplay                 *display,
 				       serial, non_linear);
       _gdk_display_set_window_under_pointer (display, device, pointer_window);
     }
-  else if (source_event->type == GDK_MOTION_NOTIFY ||
-           source_event->type == GDK_TOUCH_UPDATE)
+
+  if (source_event->type == GDK_MOTION_NOTIFY ||
+      source_event->type == GDK_TOUCH_UPDATE)
     {
       GdkWindow *event_win;
       guint evmask;
