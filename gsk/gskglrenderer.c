@@ -861,18 +861,85 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
 {
   RenderItem item;
 
+  /* A few of the render nodes don't actually result in a RenderItem, they just
+   * change the current state and pass it down. */
   /* We handle container nodes here directly */
-  if (gsk_render_node_get_node_type (node) == GSK_CONTAINER_NODE)
+  switch ((guint)gsk_render_node_get_node_type (node))
     {
-      guint i, p;
+    case GSK_CONTAINER_NODE:
+      {
+        guint i, p;
 
-      for (i = 0, p = gsk_container_node_get_n_children (node); i < p; i++)
-        {
-          GskRenderNode *child = gsk_container_node_get_child (node, i);
-          gsk_gl_renderer_add_render_item (self, projection, modelview, render_items,
-                                           child, render_target, parent_clip);
-        }
-      return;
+        for (i = 0, p = gsk_container_node_get_n_children (node); i < p; i++)
+          {
+            GskRenderNode *child = gsk_container_node_get_child (node, i);
+            gsk_gl_renderer_add_render_item (self, projection, modelview, render_items,
+                                             child, render_target, parent_clip);
+          }
+      }
+    return;
+
+    case GSK_TRANSFORM_NODE:
+      {
+        graphene_matrix_t transform, transformed_mv;
+
+        graphene_matrix_init_from_matrix (&transform, gsk_transform_node_peek_transform (node));
+        graphene_matrix_multiply (&transform, modelview, &transformed_mv);
+        gsk_gl_renderer_add_render_item (self, projection, &transformed_mv, render_items,
+                                         gsk_transform_node_get_child (node),
+                                         render_target,
+                                         parent_clip);
+      }
+    return;
+
+    case GSK_CLIP_NODE:
+      {
+        GskRenderNode *child = gsk_clip_node_get_child (node);
+        graphene_rect_t transformed_clip;
+        graphene_rect_t intersection;
+        GskRoundedRect child_clip;
+
+        transformed_clip = *gsk_clip_node_peek_clip (node);
+        graphene_matrix_transform_bounds (modelview, &transformed_clip, &transformed_clip);
+
+        /* Since we do the intersection here, we also need to transform by the modelview matrix.
+         * We can't do it in the shader. Same with rounded clips */
+        graphene_rect_intersection (&transformed_clip,
+                                    &parent_clip->bounds,
+                                    &intersection);
+
+        gsk_rounded_rect_init_from_rect (&child_clip, &intersection, 0.0f);
+
+        gsk_gl_renderer_add_render_item (self, projection, modelview, render_items, child,
+                                         render_target, &child_clip);
+      }
+    return;
+
+    case GSK_ROUNDED_CLIP_NODE:
+      {
+        GskRenderNode *child = gsk_rounded_clip_node_get_child (node);
+        const GskRoundedRect *rounded_clip = gsk_rounded_clip_node_peek_clip (node);
+        graphene_rect_t transformed_clip;
+        graphene_rect_t intersection;
+        GskRoundedRect child_clip;
+
+        transformed_clip = rounded_clip->bounds;
+        graphene_matrix_transform_bounds (modelview, &transformed_clip, &transformed_clip);
+
+        graphene_rect_intersection (&transformed_clip, &parent_clip->bounds,
+                                    &intersection);
+        gsk_rounded_rect_init (&child_clip, &intersection,
+                               &rounded_clip->corner[0],
+                               &rounded_clip->corner[1],
+                               &rounded_clip->corner[2],
+                               &rounded_clip->corner[3]);
+
+        gsk_gl_renderer_add_render_item (self, projection, modelview, render_items, child,
+                                         render_target, &child_clip);
+      }
+    return;
+
+    default: {}
     }
 
   memset (&item, 0, sizeof (RenderItem));
@@ -940,53 +1007,6 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
         item.opacity = gsk_opacity_node_get_opacity (node);
       }
       break;
-
-    case GSK_CLIP_NODE:
-      {
-        GskRenderNode *child = gsk_clip_node_get_child (node);
-        graphene_rect_t transformed_clip;
-        graphene_rect_t intersection;
-        GskRoundedRect child_clip;
-
-        transformed_clip = *gsk_clip_node_peek_clip (node);
-        graphene_matrix_transform_bounds (modelview, &transformed_clip, &transformed_clip);
-
-        /* Since we do the intersection here, we also need to transform by the modelview matrix.
-         * We can't do it in the shader. Same with rounded clips */
-        graphene_rect_intersection (&transformed_clip,
-                                    &parent_clip->bounds,
-                                    &intersection);
-
-        gsk_rounded_rect_init_from_rect (&child_clip, &intersection, 0.0f);
-
-        gsk_gl_renderer_add_render_item (self, projection, modelview, render_items, child,
-                                         render_target, &child_clip);
-      }
-      return;
-
-    case GSK_ROUNDED_CLIP_NODE:
-      {
-        GskRenderNode *child = gsk_rounded_clip_node_get_child (node);
-        const GskRoundedRect *rounded_clip = gsk_rounded_clip_node_peek_clip (node);
-        graphene_rect_t transformed_clip;
-        graphene_rect_t intersection;
-        GskRoundedRect child_clip;
-
-        transformed_clip = rounded_clip->bounds;
-        graphene_matrix_transform_bounds (modelview, &transformed_clip, &transformed_clip);
-
-        graphene_rect_intersection (&transformed_clip, &parent_clip->bounds,
-                                    &intersection);
-        gsk_rounded_rect_init (&child_clip, &intersection,
-                               &rounded_clip->corner[0],
-                               &rounded_clip->corner[1],
-                               &rounded_clip->corner[2],
-                               &rounded_clip->corner[3]);
-
-        gsk_gl_renderer_add_render_item (self, projection, modelview, render_items, child,
-                                         render_target, &child_clip);
-      }
-      return;
 
     case GSK_COLOR_MATRIX_NODE:
       {
@@ -1096,22 +1116,6 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
       }
       break;
 
-    case GSK_TRANSFORM_NODE:
-      {
-        graphene_matrix_t transform, transformed_mv;
-
-        graphene_matrix_init_from_matrix (&transform, gsk_transform_node_peek_transform (node));
-        graphene_matrix_multiply (&transform, modelview, &transformed_mv);
-        gsk_gl_renderer_add_render_item (self,
-                                         projection,
-                                         &transformed_mv,
-                                         render_items,
-                                         gsk_transform_node_get_child (node),
-                                         render_target,
-                                         parent_clip);
-      }
-      return;
-
     case GSK_TEXT_NODE:
       {
         const PangoFont *font = gsk_text_node_peek_font (node);
@@ -1212,6 +1216,9 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
 
     case GSK_NOT_A_RENDER_NODE:
     case GSK_CONTAINER_NODE:
+    case GSK_TRANSFORM_NODE:
+    case GSK_CLIP_NODE:
+    case GSK_ROUNDED_CLIP_NODE:
       g_assert_not_reached ();
       return;
 
