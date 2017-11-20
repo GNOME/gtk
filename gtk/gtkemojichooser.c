@@ -226,26 +226,12 @@ emoji_activated (GtkFlowBox      *box,
   g_free (text);
 }
 
-static void
-show_variations (GtkEmojiChooser *chooser,
-                 GtkWidget       *child)
+static gboolean
+has_variations (GVariant *emoji_data)
 {
-  GtkWidget *popover;
-  GtkWidget *view;
-  GtkWidget *box;
-  GVariant *emoji_data;
-  GtkWidget *parent_popover;
   GVariant *codes;
   int i;
   gboolean has_variations;
-  gunichar modifier;
-
-  if (!child)
-    return;
-
-  emoji_data = (GVariant*) g_object_get_data (G_OBJECT (child), "emoji-data");
-  if (!emoji_data)
-    return;
 
   has_variations = FALSE;
   codes = g_variant_get_child_value (emoji_data, 0);
@@ -260,7 +246,29 @@ show_variations (GtkEmojiChooser *chooser,
         }
     }
   g_variant_unref (codes);
-  if (!has_variations)
+
+  return has_variations;
+}
+
+static void
+show_variations (GtkEmojiChooser *chooser,
+                 GtkWidget       *child)
+{
+  GtkWidget *popover;
+  GtkWidget *view;
+  GtkWidget *box;
+  GVariant *emoji_data;
+  GtkWidget *parent_popover;
+  gunichar modifier;
+
+  if (!child)
+    return;
+
+  emoji_data = (GVariant*) g_object_get_data (G_OBJECT (child), "emoji-data");
+  if (!emoji_data)
+    return;
+
+  if (!has_variations (emoji_data))
     return;
 
   parent_popover = gtk_widget_get_ancestor (child, GTK_TYPE_POPOVER);
