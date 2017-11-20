@@ -22,7 +22,7 @@
 #include "gdkinternals.h"
 #include "gdkproperty.h"
 #include "gdkprivate-wayland.h"
-#include "gdkcontentformatsprivate.h"
+#include "gdkcontentformats.h"
 #include "gdkdisplay-wayland.h"
 #include "gdkseat-wayland.h"
 
@@ -240,26 +240,21 @@ gdk_wayland_drop_context_set_status (GdkDragContext *context,
 
   if (accepted)
     {
-      GdkAtom *atoms;
-      guint i, n_atoms;
+      const char *const *mimetypes;
+      gsize i, n_mimetypes;
       
-      atoms = gdk_content_formats_get_atoms (context->formats, &n_atoms);
-      for (i = 0; i < n_atoms; i++)
+      mimetypes = gdk_content_formats_get_mime_types (context->formats, &n_mimetypes);
+      for (i = 0; i < n_mimetypes; i++)
         {
-          if (atoms[i] != gdk_atom_intern_static_string ("DELETE"))
+          if (mimetypes[i] != gdk_atom_intern_static_string ("DELETE"))
             break;
         }
 
-      if (i < n_atoms)
+      if (i < n_mimetypes)
         {
-          gchar *mimetype = gdk_atom_name (atoms[i]);
-
-          wl_data_offer_accept (wl_offer, context_wayland->serial, mimetype);
-          g_free (atoms);
+          wl_data_offer_accept (wl_offer, context_wayland->serial, mimetypes[i]);
           return;
         }
-      
-      g_free (atoms);
     }
 
   wl_data_offer_accept (wl_offer, context_wayland->serial, NULL);
@@ -521,8 +516,8 @@ _gdk_wayland_window_drag_begin (GdkWindow         *window,
 {
   GdkWaylandDragContext *context_wayland;
   GdkDragContext *context;
-  GdkAtom *atoms;
-  guint i, n_atoms;
+  const char *const *mimetypes;
+  gsize i, n_mimetypes;
 
   context_wayland = g_object_new (GDK_TYPE_WAYLAND_DRAG_CONTEXT, NULL);
   context = GDK_DRAG_CONTEXT (context_wayland);
@@ -536,18 +531,14 @@ _gdk_wayland_window_drag_begin (GdkWindow         *window,
   context_wayland->dnd_window = create_dnd_window (gdk_window_get_display (window));
   context_wayland->dnd_surface = gdk_wayland_window_get_wl_surface (context_wayland->dnd_window);
   context_wayland->data_source =
-    gdk_wayland_selection_get_data_source (window,
-                                           gdk_wayland_drag_context_get_selection (context));
+  gdk_wayland_selection_get_data_source (window,
+                                         gdk_wayland_drag_context_get_selection (context));
 
-  atoms = gdk_content_formats_get_atoms (context->formats, &n_atoms);
-  for (i = 0; i < n_atoms; i++)
+  mimetypes = gdk_content_formats_get_mime_types (context->formats, &n_mimetypes);
+  for (i = 0; i < n_mimetypes; i++)
     {
-      gchar *mimetype = gdk_atom_name (atoms[i]);
-
-      wl_data_source_offer (context_wayland->data_source, mimetype);
-      g_free (mimetype);
+      wl_data_source_offer (context_wayland->data_source, mimetypes[i]);
     }
-  g_free (atoms);
 
   return context;
 }

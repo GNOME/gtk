@@ -379,7 +379,7 @@ data_offer_offer (void                 *data,
 
   info = g_hash_table_lookup (selection->offers, wl_data_offer);
 
-  if (!info || gdk_content_formats_contains (info->targets, type))
+  if (!info || gdk_content_formats_contain_mime_type (info->targets, type))
     return;
 
   GDK_NOTE (EVENTS,
@@ -471,7 +471,7 @@ primary_offer_offer (void                               *data,
 
   info = g_hash_table_lookup (selection->offers, gtk_offer);
 
-  if (!info || gdk_content_formats_contains (info->targets, type))
+  if (!info || gdk_content_formats_contain_mime_type (info->targets, type))
     return;
 
   GDK_NOTE (EVENTS,
@@ -1318,7 +1318,7 @@ _gdk_wayland_display_convert_selection (GdkDisplay *display,
 
   if (target != gdk_atom_intern_static_string ("TARGETS"))
     {
-      if (!gdk_content_formats_contains (formats, GDK_ATOM_TO_POINTER (target)))
+      if (!gdk_content_formats_contain_mime_type (formats, GDK_ATOM_TO_POINTER (target)))
         {
           emit_empty_selection_notify (requestor, selection, target);
           return;
@@ -1338,12 +1338,12 @@ _gdk_wayland_display_convert_selection (GdkDisplay *display,
     {
       GInputStream *stream = NULL;
       int pipe_fd[2];
-      guint natoms = 0;
-      GdkAtom *targets = NULL;
+      gsize n_targets = 0;
+      const char * const *targets = NULL;
 
       if (target == gdk_atom_intern_static_string ("TARGETS"))
         {
-          targets = gdk_content_formats_get_atoms (formats, &natoms);
+          targets = gdk_content_formats_get_mime_types (formats, &n_targets);
         }
       else
         {
@@ -1367,8 +1367,7 @@ _gdk_wayland_display_convert_selection (GdkDisplay *display,
       if (targets)
         {
           /* Store directly the local atoms */
-          selection_buffer_append_data (buffer_data, targets, natoms * sizeof (GdkAtom));
-          g_free (targets);
+          selection_buffer_append_data (buffer_data, targets, n_targets * sizeof (const char * const *));
         }
 
       g_hash_table_insert (selection_data->buffers,

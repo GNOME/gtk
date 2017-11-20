@@ -2090,7 +2090,6 @@ gtk_clipboard_real_set_can_store (GtkClipboard      *clipboard,
  			          GdkContentFormats *formats)
 {
   GtkWidget *clipboard_widget;
-  guint n_atoms;
 
   if (clipboard->selection != GDK_SELECTION_CLIPBOARD)
     return;
@@ -2117,8 +2116,12 @@ gtk_clipboard_real_set_can_store (GtkClipboard      *clipboard,
   
   if (formats)
     {
-      clipboard->storable_formats = gdk_content_formats_get_atoms (formats, &n_atoms);
-      clipboard->n_storable_formats = n_atoms;
+      const char * const *mime_types;
+      gsize n_mime_types;
+
+      mime_types = gdk_content_formats_get_mime_types (formats, &n_mime_types);
+      clipboard->storable_formats = g_memdup (mime_types, sizeof (char *) * n_mime_types);
+      clipboard->n_storable_formats = n_mime_types;
     }
   else
     {

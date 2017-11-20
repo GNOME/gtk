@@ -8158,7 +8158,7 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
           buffer_formats = gdk_content_formats_new (atoms, n_atoms);
           dnd_formats = gdk_drag_context_get_formats (context);
 
-          target = gdk_content_formats_intersects (dnd_formats, buffer_formats);
+          target = gdk_content_formats_match (dnd_formats, buffer_formats);
 
           gdk_content_formats_unref (buffer_formats);
           g_free (atoms);

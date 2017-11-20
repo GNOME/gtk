@@ -818,7 +818,7 @@ gtk_drag_selection_received (GtkWidget        *widget,
 
       if (site && site->target_list)
         {
-          if (gdk_content_formats_contains (site->target_list, target))
+          if (gdk_content_formats_contain_mime_type (site->target_list, target))
             {
               if (!(site->flags & GTK_DEST_DEFAULT_DROP) ||
                   gtk_selection_data_get_length (selection_data) >= 0)
@@ -1842,9 +1842,9 @@ gtk_drag_drop (GtkDragSourceInfo *info,
       /* GTK+ traditionally has used application/x-rootwin-drop, but the
        * XDND spec specifies x-rootwindow-drop.
        */
-      if (gdk_content_formats_contains (info->target_list, "application/x-rootwindow-drop"))
+      if (gdk_content_formats_contain_mime_type (info->target_list, "application/x-rootwindow-drop"))
         found = gdk_atom_intern ("application/x-rootwindow-drop", FALSE);
-      if (gdk_content_formats_contains (info->target_list, "application/x-rootwin-drop"))
+      if (gdk_content_formats_contain_mime_type (info->target_list, "application/x-rootwin-drop"))
         found = gdk_atom_intern ("application/x-rootwin-drop", FALSE);
       else found = NULL;
       
@@ -1903,8 +1903,8 @@ gtk_drag_selection_get (GtkWidget        *widget,
                              info->context);
       gtk_selection_data_set (selection_data, null_atom, 8, NULL, 0);
     }
-  else if (gdk_content_formats_contains (info->target_list, 
-                                         gtk_selection_data_get_target (selection_data)))
+  else if (gdk_content_formats_contain_mime_type (info->target_list, 
+                                                  gtk_selection_data_get_target (selection_data)))
     {
       g_signal_emit_by_name (info->widget, "drag-data-get",
                              info->context,

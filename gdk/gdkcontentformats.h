@@ -47,13 +47,17 @@ GDK_AVAILABLE_IN_3_94
 char *                  gdk_content_formats_to_string           (GdkContentFormats              *formats);
 
 GDK_AVAILABLE_IN_3_94
+const char * const *    gdk_content_formats_get_mime_types      (GdkContentFormats              *formats,
+                                                                 gsize                          *n_mime_types);
+
+GDK_AVAILABLE_IN_3_94
 GdkContentFormats *     gdk_content_formats_union               (GdkContentFormats              *first,
                                                                  const GdkContentFormats        *second) G_GNUC_WARN_UNUSED_RESULT;
 GDK_AVAILABLE_IN_3_94
-GdkAtom                 gdk_content_formats_intersects          (const GdkContentFormats        *first,
+const char *            gdk_content_formats_match               (const GdkContentFormats        *first,
                                                                  const GdkContentFormats        *second);
 GDK_AVAILABLE_IN_3_94
-gboolean                gdk_content_formats_contains            (const GdkContentFormats        *formats,
+gboolean                gdk_content_formats_contain_mime_type   (const GdkContentFormats        *formats,
                                                                  const char                     *mime_type);
 
 typedef struct _GdkContentFormatsBuilder GdkContentFormatsBuilder;

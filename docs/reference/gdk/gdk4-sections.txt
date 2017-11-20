@@ -376,10 +376,10 @@ gdk_content_formats_ref
 gdk_content_formats_unref
 gdk_content_formats_print
 gdk_content_formats_to_string
+gdk_content_formats_get_mime_types
 gdk_content_formats_union
-gdk_content_formats_intersects
-gdk_content_formats_remove
-gdk_content_formats_contains
+gdk_content_formats_match
+gdk_content_formats_contain_mime_type
 
 <SUBSECTION>
 GdkContentFormatsBuilder

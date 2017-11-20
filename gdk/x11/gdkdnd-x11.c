@@ -339,16 +339,14 @@ precache_target_list (GdkDragContext *context)
 {
   if (context->formats)
     {
-      GdkAtom *atoms;
-      guint n_atoms;
+      const char * const *atoms;
+      gsize n_atoms;
 
-      atoms = gdk_content_formats_get_atoms (context->formats, &n_atoms);
+      atoms = gdk_content_formats_get_mime_types (context->formats, &n_atoms);
 
       _gdk_x11_precache_atoms (GDK_WINDOW_DISPLAY (context->source_window),
                                (const gchar **) atoms,
                                n_atoms);
-
-      g_free (atoms);
     }
 }
 
@@ -1025,14 +1023,14 @@ xdnd_set_targets (GdkX11DragContext *context_x11)
 {
   GdkDragContext *context = GDK_DRAG_CONTEXT (context_x11);
   Atom *atomlist;
-  GdkAtom *atoms;
-  guint i, n_atoms;
+  const char * const *atoms;
+  gsize i, n_atoms;
   GdkDisplay *display = GDK_WINDOW_DISPLAY (context->source_window);
 
-  atoms = gdk_content_formats_get_atoms (context->formats, &n_atoms);
+  atoms = gdk_content_formats_get_mime_types (context->formats, &n_atoms);
   atomlist = g_new (Atom, n_atoms);
   for (i = 0; i < n_atoms; i++)
-    atomlist[i] = gdk_x11_atom_to_xatom_for_display (display, atoms[i]);
+    atomlist[i] = gdk_x11_get_xatom_by_name_for_display (display, atoms[i]);
 
   XChangeProperty (GDK_WINDOW_XDISPLAY (context->source_window),
                    GDK_WINDOW_XID (context->source_window),
@@ -1041,7 +1039,6 @@ xdnd_set_targets (GdkX11DragContext *context_x11)
                    (guchar *)atomlist, n_atoms);
 
   g_free (atomlist);
-  g_free (atoms);
 
   context_x11->xdnd_targets_set = 1;
 }
@@ -1222,8 +1219,8 @@ xdnd_send_enter (GdkX11DragContext *context_x11)
 {
   GdkDragContext *context = GDK_DRAG_CONTEXT (context_x11);
   GdkDisplay *display = GDK_WINDOW_DISPLAY (context->dest_window);
-  GdkAtom *atoms;
-  guint i, n_atoms;
+  const char * const *atoms;
+  gsize i, n_atoms;
   XEvent xev;
 
   xev.xclient.type = ClientMessage;
@@ -1241,7 +1238,7 @@ xdnd_send_enter (GdkX11DragContext *context_x11)
   GDK_NOTE(DND,
            g_message ("Sending enter source window %#lx XDND protocol version %d\n",
                       GDK_WINDOW_XID (context->source_window), context_x11->version));
-  atoms = gdk_content_formats_get_atoms (context->formats, &n_atoms);
+  atoms = gdk_content_formats_get_mime_types (context->formats, &n_atoms);
 
   if (n_atoms > 3)
     {
@@ -2310,8 +2307,8 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
                 /* GTK+ traditionally has used application/x-rootwin-drop,
                  * but the XDND spec specifies x-rootwindow-drop.
                  */
-                if (gdk_content_formats_contains (context->formats, "application/x-rootwindow-drop") ||
-                    gdk_content_formats_contains (context->formats, "application/x-rootwin-drop"))
+                if (gdk_content_formats_contain_mime_type (context->formats, "application/x-rootwindow-drop") ||
+                    gdk_content_formats_contain_mime_type (context->formats, "application/x-rootwin-drop"))
                   context->action = context->suggested_action;
                 else
                   context->action = 0;

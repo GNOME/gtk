@@ -422,8 +422,8 @@ gtk_drag_dest_find_target (GtkWidget         *widget,
   if (target_list == NULL)
     return NULL;
 
-  result = gdk_content_formats_intersects (target_list,
-                                           gdk_drag_context_get_formats (context));
+  result = gdk_content_formats_match (target_list,
+                                      gdk_drag_context_get_formats (context));
 
   return result;
 }

@@ -25,8 +25,6 @@
 G_BEGIN_DECLS
 
 
-GdkAtom *               gdk_content_formats_get_atoms   (GdkContentFormats              *formats,
-                                                         guint                          *n_atoms);
 
 
 G_END_DECLS

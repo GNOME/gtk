@@ -734,8 +734,8 @@ gtk_selection_add_targets (GtkWidget         *widget,
 			   GdkAtom            selection,
 			   GdkContentFormats *targets)
 {
-  GdkAtom *atoms;
-  guint n_targets;
+  const char * const *mime_types;
+  gsize n_mime_types;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (selection != NULL);
@@ -743,9 +743,8 @@ gtk_selection_add_targets (GtkWidget         *widget,
   
   gtk_selection_target_list_add (widget, selection, targets);
 
-  atoms = gdk_content_formats_get_atoms (targets, &n_targets);
-  gdk_selection_add_targets (gtk_widget_get_window (widget), selection, atoms, n_targets);
-  g_free (atoms);
+  mime_types = gdk_content_formats_get_mime_types (targets, &n_mime_types);
+  gdk_selection_add_targets (gtk_widget_get_window (widget), selection, (GdkAtom *) mime_types, n_mime_types);
 }
 
 
@@ -1932,7 +1931,7 @@ gtk_targets_include_image (GdkAtom *targets,
   list = gtk_content_formats_add_image_targets (list, writable);
   for (i = 0; i < n_targets && !result; i++)
     {
-      if (gdk_content_formats_contains (list, targets[i]))
+      if (gdk_content_formats_contain_mime_type (list, targets[i]))
         {
           result = TRUE;
           break;
@@ -2908,7 +2907,7 @@ gtk_selection_invoke_handler (GtkWidget	       *widget,
   target_list = gtk_selection_target_list_get (widget, data->selection);
   if (data->target != gtk_selection_atoms[SAVE_TARGETS] &&
       target_list &&
-      gdk_content_formats_contains (target_list, data->target))
+      gdk_content_formats_contain_mime_type (target_list, data->target))
     {
       g_signal_emit_by_name (widget,
 			     "selection-get",
@@ -2967,13 +2966,14 @@ gtk_selection_default_handler (GtkWidget	*widget,
   else if (data->target == gtk_selection_atoms[TARGETS])
     {
       /* List of all targets supported for this widget/selection pair */
-      GdkAtom *p, *atoms;
-      guint count, i;
+      GdkAtom *p;
+      const char * const *atoms;
+      gsize count, i;
       GdkContentFormats *target_list;
       
       target_list = gtk_selection_target_list_get (widget,
 						   data->selection);
-      atoms = gdk_content_formats_get_atoms (target_list, &count);
+      atoms = gdk_content_formats_get_mime_types (target_list, &count);
       
       data->type = GDK_SELECTION_TYPE_ATOM;
       data->format = 32;
@@ -2991,8 +2991,6 @@ gtk_selection_default_handler (GtkWidget	*widget,
       
       for (i = 0; i < count; i++)
         *p++ = atoms[i];
-
-      g_free (atoms);
     }
   else if (data->target == gtk_selection_atoms[SAVE_TARGETS])
     {
