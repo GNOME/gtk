@@ -72,6 +72,8 @@ struct _GdkContentFormats
 
   const char **mime_types; /* interned */
   gsize n_mime_types;
+  GType *gtypes;
+  gsize n_gtypes;
 };
 
 G_DEFINE_BOXED_TYPE (GdkContentFormats, gdk_content_formats,
@@ -80,12 +82,16 @@ G_DEFINE_BOXED_TYPE (GdkContentFormats, gdk_content_formats,
 
 
 static GdkContentFormats *
-gdk_content_formats_new_take (const char **mime_types,
-                              guint        n_mime_types)
+gdk_content_formats_new_take (GType *      gtypes,
+                              gsize        n_gtypes,
+                              const char **mime_types,
+                              gsize        n_mime_types)
 {
   GdkContentFormats *result = g_slice_new0 (GdkContentFormats);
   result->ref_count = 1;
 
+  result->gtypes = gtypes;
+  result->n_gtypes = n_gtypes;
   result->mime_types = mime_types;
   result->n_mime_types = n_mime_types;
 
@@ -114,14 +120,14 @@ gdk_content_formats_new (const char **mime_types,
   guint i;
 
   if (n_mime_types == 0)
-      return gdk_content_formats_new_take (NULL, 0);
+      return gdk_content_formats_new_take (NULL, 0, NULL, 0);
 
   array = g_ptr_array_new ();
   for (i = 0; i < n_mime_types; i++)
     g_ptr_array_add (array, (gpointer) g_intern_string (mime_types[i]));
   g_ptr_array_add (array, NULL);
 
-  return gdk_content_formats_new_take ((const char **) g_ptr_array_free (array, FALSE), n_mime_types);
+  return gdk_content_formats_new_take (NULL, 0, (const char **) g_ptr_array_free (array, FALSE), n_mime_types);
 }
 
 /**
@@ -159,6 +165,7 @@ gdk_content_formats_unref (GdkContentFormats *formats)
   if (formats->ref_count > 0)
     return;
 
+  g_free (formats->gtypes);
   g_free (formats->mime_types);
   g_slice_free (GdkContentFormats, formats);
 }
@@ -184,9 +191,15 @@ gdk_content_formats_print (GdkContentFormats *formats,
   g_return_if_fail (string != NULL);
 
   g_string_append (string, "{ ");
-  for (i = 0; i < formats->n_mime_types; i++)
+  for (i = 0; i < formats->n_gtypes; i++)
     {
       if (i > 0)
+        g_string_append (string, ", ");
+      g_string_append (string, g_type_name (formats->gtypes[i]));
+    }
+  for (i = 0; i < formats->n_mime_types; i++)
+    {
+      if (i > 0 || formats->n_gtypes > 0)
         g_string_append (string, ", ");
       g_string_append (string, formats->mime_types[i]);
     }
@@ -263,29 +276,81 @@ gdk_content_formats_contain_interned_mime_type (const GdkContentFormats *formats
  * gdk_content_formats_match:
  * @first: the primary #GdkContentFormats to intersect
  * @second: the #GdkContentFormats to intersect with
+ * @out_gtype: (out) (allow-none): pointer to take the 
+ *     matching #GType or %G_TYPE_INVALID if @out_mime_type was set.
+ * @out_mime_type: (out) (allow-none) (transfer none): The matching
+ *    mime type or %NULL if @out_gtype is set
  *
  * Finds the first element from @first that is also contained
- * in @second.
+ * in @second. If no matching format is found, %FALSE is returned
+ * and @out_gtype and @out_mime_type are set to %G_TYPE_INVALID and
+ * %NULL respectively.
  *
- * Returns: The first matching #GdkAtom or %NULL if the formatss
- *     do not intersect.
+ * Returns: %TRUE if a matching format was found.
  */
-const char *
+gboolean
 gdk_content_formats_match (const GdkContentFormats *first,
-                           const GdkContentFormats *second)
+                           const GdkContentFormats *second,
+                           GType                   *out_gtype,
+                           const char             **out_mime_type)
 {
   gsize i;
 
-  g_return_val_if_fail (first != NULL, NULL);
-  g_return_val_if_fail (second != NULL, NULL);
+  g_return_val_if_fail (first != NULL, FALSE);
+  g_return_val_if_fail (second != NULL, FALSE);
+
+  if (out_gtype)
+    *out_gtype = G_TYPE_INVALID;
+  if (out_mime_type)
+    *out_mime_type = NULL;
+
+  for (i = 0; i < first->n_gtypes; i++)
+    {
+      if (gdk_content_formats_contain_gtype (second, first->gtypes[i]))
+        {
+          if (out_gtype)
+            *out_gtype = first->gtypes[i];
+          return TRUE;
+        }
+    }
 
   for (i = 0; i < first->n_mime_types; i++)
     {
       if (gdk_content_formats_contain_interned_mime_type (second, first->mime_types[i]))
-        return first->mime_types[i];
+        {
+          if (out_mime_type)
+            *out_mime_type = first->mime_types[i];
+          return TRUE;
+        }
     }
 
-  return NULL;
+  return FALSE;
+}
+
+/**
+ * gdk_content_formats_contain_gtype:
+ * @formats: a #GdkContentFormats
+ * @type: the #GType to search for
+ *
+ * Checks if a given #GType is part of the given @formats.
+ *
+ * Returns: %TRUE if the #GType was found
+ **/
+gboolean
+gdk_content_formats_contain_gtype (const GdkContentFormats *formats,
+                                   GType                    type)
+{
+  g_return_val_if_fail (formats != NULL, FALSE);
+
+  gsize i;
+
+  for (i = 0; i < formats->n_gtypes; i++)
+    {
+      if (type == formats->gtypes[i])
+        return TRUE;
+    }
+
+  return FALSE;
 }
 
 /**
@@ -295,7 +360,7 @@ gdk_content_formats_match (const GdkContentFormats *first,
  *
  * Checks if a given mime type is part of the given @formats.
  *
- * Returns: %TRUE if the mime_type was found, otherwise %FALSE
+ * Returns: %TRUE if the mime_type was found
  **/
 gboolean
 gdk_content_formats_contain_mime_type (const GdkContentFormats *formats,
@@ -309,6 +374,31 @@ gdk_content_formats_contain_mime_type (const GdkContentFormats *formats,
 }
 
 /**
+ * gdk_content_formats_get_gtypes:
+ * @formats: a #GdkContentFormats
+ * @n_gtypes: (out) (allow-none): optional pointer to take the
+ *     number of #GTypes contained in the return value
+ *
+ * Gets the #GTypes included in @formats. Note that @formats may not
+ * contain any #GTypes, in particular when they are empty. In that
+ * case %NULL will be returned. 
+ *
+ * Returns: (transfer none) (nullable): %G_TYPE_INVALID-terminated array of 
+ *     types included in @formats or %NULL if none.
+ **/
+const GType *
+gdk_content_formats_get_gtypes (GdkContentFormats *formats,
+                                gsize             *n_gtypes)
+{
+  g_return_val_if_fail (formats != NULL, NULL);
+
+  if (n_gtypes)
+    *n_gtypes = formats->n_gtypes;
+  
+  return formats->gtypes;
+}
+
+/**
  * gdk_content_formats_get_mime_types:
  * @formats: a #GdkContentFormats
  * @n_mime_types: (out) (allow-none): optional pointer to take the
@@ -318,8 +408,9 @@ gdk_content_formats_contain_mime_type (const GdkContentFormats *formats,
  * contain any mime types, in particular when they are empty. In that
  * case %NULL will be returned. 
  *
- * Returns: (transfer none): %NULL-terminated array of interned
- *     strings of mime types included in @formats or %NULL if none.
+ * Returns: (transfer none) (nullable): %NULL-terminated array of 
+ *     interned strings of mime types included in @formats or %NULL
+ *     if none.
  **/
 const char * const *
 gdk_content_formats_get_mime_types (GdkContentFormats *formats,
@@ -343,6 +434,8 @@ gdk_content_formats_get_mime_types (GdkContentFormats *formats,
 
 struct _GdkContentFormatsBuilder
 {
+  GSList *gtypes;
+  gsize n_gtypes;
   GSList *mime_types;
   gsize n_mime_types;
 };
@@ -374,11 +467,19 @@ GdkContentFormats *
 gdk_content_formats_builder_free (GdkContentFormatsBuilder *builder)
 {
   GdkContentFormats *result;
+  GType *gtypes;
   const char **mime_types;
   GSList *l;
   gsize i;
 
   g_return_val_if_fail (builder != NULL, NULL);
+
+  gtypes = g_new (GType, builder->n_gtypes + 1);
+  i = builder->n_gtypes;
+  gtypes[i--] = G_TYPE_INVALID;
+  /* add backwards because most important type is last in the list */
+  for (l = builder->gtypes; l; l = l->next)
+    gtypes[i--] = GPOINTER_TO_SIZE (l->data);
 
   mime_types = g_new (const char *, builder->n_mime_types + 1);
   i = builder->n_mime_types;
@@ -387,8 +488,10 @@ gdk_content_formats_builder_free (GdkContentFormatsBuilder *builder)
   for (l = builder->mime_types; l; l = l->next)
     mime_types[i--] = l->data;
 
-  result = gdk_content_formats_new_take (mime_types, builder->n_mime_types);
+  result = gdk_content_formats_new_take (gtypes, builder->n_gtypes,
+                                         mime_types, builder->n_mime_types);
 
+  g_slist_free (builder->gtypes);
   g_slist_free (builder->mime_types);
   g_slice_free (GdkContentFormatsBuilder, builder);
 
@@ -412,12 +515,35 @@ gdk_content_formats_builder_add_formats (GdkContentFormatsBuilder *builder,
   g_return_if_fail (builder != NULL);
   g_return_if_fail (formats != NULL);
 
+  for (i = 0; i < formats->n_gtypes; i++)
+    gdk_content_formats_builder_add_gtype (builder, formats->gtypes[i]);
+
   for (i = 0; i < formats->n_mime_types; i++)
     gdk_content_formats_builder_add_mime_type (builder, formats->mime_types[i]);
 }
 
 /**
- * gdk_content_formats_builder_add_formats:
+ * gdk_content_formats_builder_add_gtype:
+ * @builder: a #GdkContentFormatsBuilder
+ * @type: a #GType
+ *
+ * Appends @gtype to @builder if it has not already been added.
+ **/
+void
+gdk_content_formats_builder_add_gtype (GdkContentFormatsBuilder *builder,
+                                       GType                     type)
+{
+  g_return_if_fail (builder != NULL);
+
+  if (g_slist_find (builder->gtypes, GSIZE_TO_POINTER (type)))
+    return;
+
+  builder->gtypes = g_slist_prepend (builder->gtypes, GSIZE_TO_POINTER (type));
+  builder->n_gtypes++;
+}
+
+/**
+ * gdk_content_formats_builder_add_mime_type:
  * @builder: a #GdkContentFormatsBuilder
  * @mime_type: a mime type
  *

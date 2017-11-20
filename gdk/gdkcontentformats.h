@@ -47,6 +47,9 @@ GDK_AVAILABLE_IN_3_94
 char *                  gdk_content_formats_to_string           (GdkContentFormats              *formats);
 
 GDK_AVAILABLE_IN_3_94
+const GType *           gdk_content_formats_get_gtypes          (GdkContentFormats              *formats,
+                                                                 gsize                          *n_gtypes);
+GDK_AVAILABLE_IN_3_94
 const char * const *    gdk_content_formats_get_mime_types      (GdkContentFormats              *formats,
                                                                  gsize                          *n_mime_types);
 
@@ -54,8 +57,13 @@ GDK_AVAILABLE_IN_3_94
 GdkContentFormats *     gdk_content_formats_union               (GdkContentFormats              *first,
                                                                  const GdkContentFormats        *second) G_GNUC_WARN_UNUSED_RESULT;
 GDK_AVAILABLE_IN_3_94
-const char *            gdk_content_formats_match               (const GdkContentFormats        *first,
-                                                                 const GdkContentFormats        *second);
+gboolean                gdk_content_formats_match               (const GdkContentFormats        *first,
+                                                                 const GdkContentFormats        *second,
+                                                                 GType                          *out_gtype,
+                                                                 const char                    **out_mime_type);
+GDK_AVAILABLE_IN_3_94
+gboolean                gdk_content_formats_contain_gtype       (const GdkContentFormats        *formats,
+                                                                 GType                           type);
 GDK_AVAILABLE_IN_3_94
 gboolean                gdk_content_formats_contain_mime_type   (const GdkContentFormats        *formats,
                                                                  const char                     *mime_type);
@@ -72,6 +80,9 @@ void                    gdk_content_formats_builder_add_formats (GdkContentForma
 GDK_AVAILABLE_IN_3_94
 void                    gdk_content_formats_builder_add_mime_type(GdkContentFormatsBuilder      *builder,
                                                                  const char                     *mime_type);
+GDK_AVAILABLE_IN_3_94
+void                    gdk_content_formats_builder_add_gtype   (GdkContentFormatsBuilder       *builder,
+                                                                 GType                           type);
 
 G_END_DECLS
 

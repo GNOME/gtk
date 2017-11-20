@@ -376,9 +376,11 @@ gdk_content_formats_ref
 gdk_content_formats_unref
 gdk_content_formats_print
 gdk_content_formats_to_string
+gdk_content_formats_get_gtypes
 gdk_content_formats_get_mime_types
 gdk_content_formats_union
 gdk_content_formats_match
+gdk_content_formats_contain_gtype
 gdk_content_formats_contain_mime_type
 
 <SUBSECTION>
@@ -386,6 +388,7 @@ GdkContentFormatsBuilder
 gdk_content_formats_builder_new
 gdk_content_formats_builder_free
 gdk_content_formats_builder_add_formats
+gdk_content_formats_builder_add_gtype
 gdk_content_formats_builder_add_mime_type
 
 <SUBSECTION Private>

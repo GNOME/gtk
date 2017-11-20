@@ -352,7 +352,7 @@ target_drag_drop	   (GtkWidget	       *widget,
   gtk_image_set_from_pixbuf (GTK_IMAGE (widget), trashcan_closed);
 
   formats = gdk_drag_context_get_formats (context);
-  format = gdk_content_formats_match (formats, formats);
+  gdk_content_formats_match (formats, formats, NULL, &format);
   if (format)
     {
       gtk_drag_get_data (widget, context,

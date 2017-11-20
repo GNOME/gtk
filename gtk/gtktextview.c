@@ -8150,7 +8150,7 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
           GdkAtom *atoms;
           gint     n_atoms;
           GdkContentFormats *dnd_formats, *buffer_formats;
-          GdkAtom  target = NULL;
+          const char *target = NULL;
 
           copy_tags = FALSE;
 
@@ -8158,7 +8158,7 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
           buffer_formats = gdk_content_formats_new (atoms, n_atoms);
           dnd_formats = gdk_drag_context_get_formats (context);
 
-          target = gdk_content_formats_match (dnd_formats, buffer_formats);
+          gdk_content_formats_match (dnd_formats, buffer_formats, NULL, &target);
 
           gdk_content_formats_unref (buffer_formats);
           g_free (atoms);
