@@ -38,9 +38,11 @@ struct _GdkClipboardClass
   GObjectClass parent_class;
 
   /* signals */
-  void          (* changed)          (GdkClipboard           *clipboard);
+  void                  (* changed)                             (GdkClipboard           *clipboard);
 
   /* vfuncs */
+  GInputStream *        (* read)                                (GdkClipboard           *clipboard,
+                                                                 const char             *mime_type);
 };
 
 GdkClipboard *          gdk_clipboard_new                       (GdkDisplay             *display);

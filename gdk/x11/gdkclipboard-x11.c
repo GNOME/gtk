@@ -180,13 +180,27 @@ gdk_x11_clipboard_finalize (GObject *object)
   G_OBJECT_CLASS (gdk_x11_clipboard_parent_class)->finalize (object);
 }
 
+static GInputStream *
+gdk_x11_clipboard_read (GdkClipboard *clipboard,
+                        const char   *mime_type)
+{
+  GdkX11Clipboard *cb = GDK_X11_CLIPBOARD (clipboard);
+
+  return gdk_x11_selection_input_stream_new (gdk_clipboard_get_display (GDK_CLIPBOARD (cb)),
+                                             cb->selection,
+                                             mime_type,
+                                             cb->timestamp);
+}
+
 static void
 gdk_x11_clipboard_class_init (GdkX11ClipboardClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
-  //GdkClipboardClass *clipboard_class = GDK_CLIPBOARD_CLASS (class);
+  GdkClipboardClass *clipboard_class = GDK_CLIPBOARD_CLASS (class);
 
   object_class->finalize = gdk_x11_clipboard_finalize;
+
+  clipboard_class->read = gdk_x11_clipboard_read;
 }
 
 static void

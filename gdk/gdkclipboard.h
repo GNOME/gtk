@@ -42,6 +42,9 @@ GdkDisplay *            gdk_clipboard_get_display       (GdkClipboard          *
 GDK_AVAILABLE_IN_3_94
 GdkContentFormats *     gdk_clipboard_get_formats       (GdkClipboard          *clipboard);
 
+GDK_AVAILABLE_IN_3_94
+GInputStream *          gdk_clipboard_read              (GdkClipboard          *clipboard,
+                                                         const char            *mime_type);
 
 G_END_DECLS
 
