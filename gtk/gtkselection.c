@@ -2189,8 +2189,10 @@ _gtk_selection_request (GtkWidget *widget,
       
       mult_atoms = NULL;
 
+#ifdef GDK_WINDOWING_X11
       if (GDK_IS_X11_DISPLAY (display))
         gdk_x11_display_error_trap_push (display);
+#endif
       if (!gdk_property_get (info->requestor, property, NULL, /* AnyPropertyType */
 			     0, selection_max_size, FALSE,
 			     &type, &format, &length, &mult_atoms))
@@ -2203,10 +2205,14 @@ _gtk_selection_request (GtkWidget *widget,
 						 time);
 	  g_free (mult_atoms);
 	  g_slice_free (GtkIncrInfo, info);
+
+#ifdef GDK_WINDOWING_X11
           if (GDK_IS_X11_DISPLAY (display))
             gdk_x11_display_error_trap_pop_ignored (display);
+#endif
 	  return TRUE;
 	}
+#ifdef GDK_WINDOWING_X11
       if (GDK_IS_X11_DISPLAY (display))
         gdk_x11_display_error_trap_pop_ignored (display);
 
@@ -2214,7 +2220,6 @@ _gtk_selection_request (GtkWidget *widget,
        * used for the property contents, so the autoconversion for
        * ATOM / ATOM_PAIR in GDK doesn't work properly.
        */
-#ifdef GDK_WINDOWING_X11
       if (type != GDK_SELECTION_TYPE_ATOM &&
 	  type != gdk_atom_intern_static_string ("ATOM_PAIR"))
 	{
@@ -2297,32 +2302,44 @@ _gtk_selection_request (GtkWidget *widget,
 	  info->conversions[i].offset = 0;
 	  info->conversions[i].data = data;
 	  info->num_incrs++;
-	  
+
+#ifdef GDK_WINDOWING_X11
           if (GDK_IS_X11_DISPLAY (display))
             gdk_x11_display_error_trap_push (display);
+#endif
 	  gdk_property_change (info->requestor, 
 			       info->conversions[i].property,
 			       gtk_selection_atoms[INCR],
 			       32,
 			       GDK_PROP_MODE_REPLACE,
 			       (guchar *)&items, 1);
+
+#ifdef GDK_WINDOWING_X11
           if (GDK_IS_X11_DISPLAY (display))
             gdk_x11_display_error_trap_pop_ignored (display);
+#endif
 	}
       else
 	{
 	  info->conversions[i].offset = -1;
-	  
+
+#ifdef GDK_WINDOWING_X11
           if (GDK_IS_X11_DISPLAY (display))
             gdk_x11_display_error_trap_push (display);
+#endif
+
 	  gdk_property_change (info->requestor, 
 			       info->conversions[i].property,
 			       data.type,
 			       data.format,
 			       GDK_PROP_MODE_REPLACE,
 			       data.data, items);
+
+#ifdef GDK_WINDOWING_X11
           if (GDK_IS_X11_DISPLAY (display))
             gdk_x11_display_error_trap_pop_ignored (display);
+#endif
+			
 	  
 	  g_free (data.data);
 	}
@@ -2341,14 +2358,21 @@ _gtk_selection_request (GtkWidget *widget,
 #ifdef DEBUG_SELECTION
       g_message ("Starting INCR...");
 #endif
-      
+
+#ifdef GDK_WINDOWING_X11
       if (GDK_IS_X11_DISPLAY (display))
         gdk_x11_display_error_trap_push (display);
+#endif
+
       gdk_window_set_events (info->requestor,
 			     gdk_window_get_events (info->requestor) |
 			     GDK_PROPERTY_CHANGE_MASK);
+
+#ifdef GDK_WINDOWING_X11
       if (GDK_IS_X11_DISPLAY (display))
         gdk_x11_display_error_trap_pop_ignored (display);
+#endif
+
       current_incrs = g_list_append (current_incrs, info);
       id = gdk_threads_add_timeout (1000, (GSourceFunc) gtk_selection_incr_timeout, info);
       g_source_set_name_by_id (id, "[gtk+] gtk_selection_incr_timeout");
@@ -2365,14 +2389,20 @@ _gtk_selection_request (GtkWidget *widget,
 	  mult_atoms[2*i+1] = info->conversions[i].property;
 	}
 
+#ifdef GDK_WINDOWING_X11
       if (GDK_IS_X11_DISPLAY (display))
         gdk_x11_display_error_trap_push (display);
+#endif
+
       gdk_property_change (info->requestor, property,
 			   gdk_atom_intern_static_string ("ATOM_PAIR"), 32, 
 			   GDK_PROP_MODE_REPLACE,
 			   (guchar *)mult_atoms, 2*info->num_conversions);
+
+#ifdef GDK_WINDOWING_X11
       if (GDK_IS_X11_DISPLAY (display))
         gdk_x11_display_error_trap_pop_ignored (display);
+#endif
       g_free (mult_atoms);
     }
 
@@ -2500,16 +2530,23 @@ _gtk_selection_incr_event (GdkWindow	   *window,
 #endif
 
 	  bytes_per_item = gtk_selection_bytes_per_item (info->conversions[i].data.format);
+
+#ifdef GDK_WINDOWING_X11
           if (GDK_IS_X11_DISPLAY (display))
             gdk_x11_display_error_trap_push (display);
+#endif
+
 	  gdk_property_change (info->requestor, atom,
 			       info->conversions[i].data.type,
 			       info->conversions[i].data.format,
 			       GDK_PROP_MODE_REPLACE,
 			       buffer,
 			       num_bytes / bytes_per_item);
+
+#ifdef GDK_WINDOWING_X11
           if (GDK_IS_X11_DISPLAY (display))
             gdk_x11_display_error_trap_pop_ignored (display);
+#endif
 	  
 	  if (info->conversions[i].offset == -2)
 	    {
