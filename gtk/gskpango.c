@@ -126,7 +126,7 @@ gsk_pango_renderer_show_text_glyphs (PangoRenderer        *renderer,
   if (crenderer->snapshot->record_names)
     {
       char name[64];
-      snprintf (name, sizeof (name), "Glyphs<%d>", glyphs->num_glyphs);
+      g_snprintf (name, sizeof (name), "Glyphs<%d>", glyphs->num_glyphs);
       gsk_render_node_set_name (node, name);
     }
 
