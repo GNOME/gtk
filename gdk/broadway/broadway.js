@@ -347,6 +347,31 @@ SwapNodes.prototype.handle_node = function(parent, node_data, data_pos)
             data_pos = this.handle_node(parent, node_data, data_pos);
         }
         break;
+
+    case 2:  // COLOR
+        var x = node_data[data_pos++];
+        var y = node_data[data_pos++];
+        var width = node_data[data_pos++];
+        var height = node_data[data_pos++];
+        var rgba = node_data[data_pos++];
+	var div = document.createElement('div');
+        div.style["position"] = "absolute";
+        div.style["left"] = x + "px";
+        div.style["top"] = y + "px";
+        div.style["width"] = width + "px";
+        div.style["height"] = height + "px";
+	a = (rgba >> 24) & 0xff;
+	r = (rgba >> 16) & 0xff;
+	g = (rgba >> 8) & 0xff;
+	b = (rgba >> 0) & 0xff;
+	if (a == 0)
+	    c = "rgb(" + r + "," + g + "," + b + ")";
+	else
+	    c = "rgba(" + r + "," + g + "," + b + "," + (a / 255.0) + ")";
+	div.style["background-color"] = c;
+        parent.appendChild(div);
+        break;
+
     default:
         alert("Unexpected node type " + type);
     }

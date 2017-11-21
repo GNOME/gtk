@@ -226,6 +226,9 @@ rewrite_node_textures (BroadwayClient *client,
 
   type = data[pos++];
   switch (type) {
+  case BROADWAY_NODE_COLOR:
+    pos += 5;
+    break;
   case BROADWAY_NODE_TEXTURE:
     data[pos+4] = GPOINTER_TO_INT (g_hash_table_lookup (client->textures,
                                                         GINT_TO_POINTER (data[pos+4])));

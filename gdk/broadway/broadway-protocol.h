@@ -11,6 +11,7 @@ typedef struct  {
 typedef enum { /* Sync changes with broadway.js */
   BROADWAY_NODE_TEXTURE,
   BROADWAY_NODE_CONTAINER,
+  BROADWAY_NODE_COLOR,
 } BroadwayNodeType;
 
 typedef enum {

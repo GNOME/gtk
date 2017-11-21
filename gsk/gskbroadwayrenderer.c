@@ -89,6 +89,24 @@ add_uint32 (GArray *nodes, guint32 v)
   g_array_append_val (nodes, v);
 }
 
+static guint32
+rgba_to_uint32 (const GdkRGBA *rgba)
+{
+  return
+    ((guint32)(0.5 + CLAMP (rgba->alpha, 0., 1.) * 255.) << 24) |
+    ((guint32)(0.5 + CLAMP (rgba->red, 0., 1.) * 255.) << 16) |
+    ((guint32)(0.5 + CLAMP (rgba->green, 0., 1.) * 255.) << 8) |
+    ((guint32)(0.5 + CLAMP (rgba->blue, 0., 1.) * 255.) << 0);
+}
+
+
+static void
+add_rgba (GArray *nodes, const GdkRGBA *rgba)
+{
+  guint32 c = rgba_to_uint32 (rgba);
+  g_array_append_val (nodes, c);
+}
+
 static void
 gsk_broadway_renderer_add_node (GskRenderer *self,
                                 GArray *nodes,
@@ -96,6 +114,10 @@ gsk_broadway_renderer_add_node (GskRenderer *self,
                                 GskRenderNode *node)
 {
   GdkDisplay *display = gsk_renderer_get_display (self);
+  int x = floorf (node->bounds.origin.x);
+  int y = floorf (node->bounds.origin.y);
+  int width = ceil (node->bounds.origin.x + node->bounds.size.width) - x;
+  int height = ceil (node->bounds.origin.y + node->bounds.size.height) - y;
 
   switch (gsk_render_node_get_node_type (node))
     {
@@ -115,12 +137,20 @@ gsk_broadway_renderer_add_node (GskRenderer *self,
       }
       return;
 
+    case GSK_COLOR_NODE:
+      {
+
+        add_uint32 (nodes, BROADWAY_NODE_COLOR);
+        add_uint32 (nodes, x);
+        add_uint32 (nodes, y);
+        add_uint32 (nodes, width);
+        add_uint32 (nodes, height);
+        add_rgba (nodes, gsk_color_node_peek_color (node));
+      }
+      return;
+
     default:
       {
-        int x = floorf (node->bounds.origin.x);
-        int y = floorf (node->bounds.origin.y);
-        int width = ceil (node->bounds.origin.x + node->bounds.size.width) - x;
-        int height = ceil (node->bounds.origin.y + node->bounds.size.height) - y;
         cairo_surface_t *surface;
         GdkTexture *texture;
         guint32 texture_id;
