@@ -53,9 +53,6 @@ void            broadway_output_move_resize_surface (BroadwayOutput *output,
 void            broadway_output_set_transient_for (BroadwayOutput *output,
 						   int             id,
 						   int             parent_id);
-void            broadway_output_window_update   (BroadwayOutput *output,
-						 int             id,
-						 guint32         texture);
 void            broadway_output_window_set_nodes (BroadwayOutput *output,
                                                   int             id,
                                                   guint32        *data,

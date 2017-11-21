@@ -1519,24 +1519,6 @@ broadway_server_has_client (BroadwayServer *server)
 }
 
 void
-broadway_server_window_update (BroadwayServer   *server,
-                               gint              id,
-                               guint32           texture)
-{
-  BroadwayWindow *window;
-
-  window = g_hash_table_lookup (server->id_ht, GINT_TO_POINTER (id));
-  if (window == NULL)
-    return;
-
-  window->texture = texture;
-
-  if (server->output != NULL)
-    broadway_output_window_update (server->output, window->id,
-                                   window->texture);
-}
-
-void
 broadway_server_window_set_nodes (BroadwayServer   *server,
                                   gint              id,
                                   gint              n_data,
@@ -1802,9 +1784,6 @@ broadway_server_resync_windows (BroadwayServer *server)
       if (window->nodes)
         broadway_output_window_set_nodes (server->output, window->id,
                                           window->nodes, window->nodes_len);
-
-      broadway_output_window_update (server->output, window->id,
-				     window->texture);
 
       if (window->visible)
 	broadway_output_show_surface (server->output, window->id);

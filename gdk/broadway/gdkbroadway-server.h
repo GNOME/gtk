@@ -63,9 +63,6 @@ guint32             gdk_broadway_server_upload_texture           (GdkBroadwaySer
                                                                   GdkTexture         *texture);
 void                gdk_broadway_server_release_texture          (GdkBroadwayServer  *server,
                                                                   guint32             id);
-void               _gdk_broadway_server_window_update            (GdkBroadwayServer  *server,
-								  gint                id,
-								  guint32             texture);
 void               gdk_broadway_server_window_set_nodes          (GdkBroadwayServer *server,
                                                                   guint32            id,
                                                                   GArray             *nodes);

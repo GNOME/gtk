@@ -552,20 +552,6 @@ _gdk_broadway_server_window_set_transient_for (GdkBroadwayServer *server,
 				    BROADWAY_REQUEST_SET_TRANSIENT_FOR);
 }
 
-void
-_gdk_broadway_server_window_update (GdkBroadwayServer *server,
-				    gint id,
-				    guint32 texture)
-{
-  BroadwayRequestUpdate msg;
-
-  msg.id = id;
-  msg.texture = texture;
-
-  gdk_broadway_server_send_message (server, msg,
-				    BROADWAY_REQUEST_UPDATE);
-}
-
 static int
 open_shared_memory (void)
 {

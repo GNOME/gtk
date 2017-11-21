@@ -160,7 +160,6 @@ typedef enum {
   BROADWAY_REQUEST_SHOW_WINDOW,
   BROADWAY_REQUEST_HIDE_WINDOW,
   BROADWAY_REQUEST_SET_TRANSIENT_FOR,
-  BROADWAY_REQUEST_UPDATE,
   BROADWAY_REQUEST_MOVE_RESIZE,
   BROADWAY_REQUEST_GRAB_POINTER,
   BROADWAY_REQUEST_UNGRAB_POINTER,
@@ -187,12 +186,6 @@ typedef struct {
   guint32 id;
   guint32 parent;
 } BroadwayRequestSetTransientFor;
-
-typedef struct {
-  BroadwayRequestBase base;
-  guint32 id;
-  guint32 texture;
-} BroadwayRequestUpdate;
 
 typedef struct {
   BroadwayRequestBase base;
@@ -260,7 +253,6 @@ typedef union {
   BroadwayRequestShowWindow show_window;
   BroadwayRequestHideWindow hide_window;
   BroadwayRequestSetTransientFor set_transient_for;
-  BroadwayRequestUpdate update;
   BroadwayRequestMoveResize move_resize;
   BroadwayRequestGrabPointer grab_pointer;
   BroadwayRequestUngrabPointer ungrab_pointer;

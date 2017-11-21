@@ -287,17 +287,6 @@ broadway_output_set_transient_for (BroadwayOutput *output,
 }
 
 void
-broadway_output_window_update (BroadwayOutput *output,
-			       int             id,
-			       guint32         texture)
-{
-  write_header (output, BROADWAY_OP_WINDOW_UPDATE);
-
-  append_uint16 (output, id);
-  append_uint32 (output, texture);
-}
-
-void
 broadway_output_window_set_nodes (BroadwayOutput *output,
                                   int             id,
                                   guint32        *data,

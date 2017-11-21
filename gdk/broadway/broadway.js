@@ -291,14 +291,6 @@ function cmdLowerSurface(id)
     restackWindows();
 }
 
-function cmdWindowUpdate(id, texture_id)
-{
-    var surface = surfaces[id];
-    var texture_url = textures[texture_id];
-
-    surface.div.src = texture_url;
-}
-
 function handleNode(parent, node_data, data_pos)
 {
     var type = node_data[data_pos++];
@@ -457,12 +449,6 @@ function handleCommands(cmd)
         case 'R': // Lower a surface
             id = cmd.get_16();
             cmdLowerSurface(id);
-            break;
-
-        case 'b': // Update window
-            id = cmd.get_16();
-            var texture = cmd.get_32();
-            cmdWindowUpdate(id, texture);
             break;
 
         case 't': // Upload texture

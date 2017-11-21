@@ -55,7 +55,6 @@ struct _GdkWindowImplBroadway
   GdkCursor *cursor;
 
   int id;
-  int texture_id;
 
   gboolean visible;
   gboolean maximized;

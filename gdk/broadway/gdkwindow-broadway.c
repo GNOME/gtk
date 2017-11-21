@@ -99,53 +99,12 @@ find_broadway_display (void)
 static void
 update_dirty_windows_and_sync (void)
 {
-  GList *l;
   GdkBroadwayDisplay *display;
-  gboolean updated_surface;
 
   display = GDK_BROADWAY_DISPLAY (find_broadway_display ());
   g_assert (display != NULL);
 
-  updated_surface = FALSE;
-  for (l = display->toplevels; l != NULL; l = l->next)
-    {
-      GdkWindowImplBroadway *impl = l->data;
-
-      if (impl->dirty)
-        {
-          GdkTexture *texture;
-          guint32 texture_id;
-
-          impl->dirty = FALSE;
-          updated_surface = TRUE;
-
-          if (impl->texture_id)
-            gdk_broadway_server_release_texture (display->server, impl->texture_id);
-          impl->texture_id = 0;
-
-          texture = gdk_texture_new_for_surface (impl->surface);
-          texture_id =  gdk_broadway_server_upload_texture (display->server, texture);
-          g_object_unref (texture);
-
-          impl->texture_id = texture_id;
-
-
-          if (impl->node_data)
-            gdk_broadway_server_window_set_nodes (display->server, impl->id, impl->node_data);
-
-          _gdk_broadway_server_window_update (display->server,
-                                              impl->id,
-                                              texture_id);
-
-        }
-    }
-
-  /* We sync here to ensure all references to the impl->surface memory
-     is done, as we may later paint new data in them. */
-  if (updated_surface)
-    gdk_display_sync (GDK_DISPLAY (display));
-  else
-    gdk_display_flush (GDK_DISPLAY (display));
+  gdk_display_flush (GDK_DISPLAY (display));
 }
 
 static guint flush_id = 0;
@@ -360,8 +319,6 @@ _gdk_broadway_window_destroy (GdkWindow *window,
   g_hash_table_remove (broadway_display->id_ht, GINT_TO_POINTER (impl->id));
 
   _gdk_broadway_server_destroy_window (broadway_display->server, impl->id);
-  if (impl->texture_id)
-    gdk_broadway_server_release_texture (broadway_display->server, impl->texture_id);
 
 }
 

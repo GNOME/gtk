@@ -282,13 +282,6 @@ client_handle_request (BroadwayClient *client,
 						request->set_transient_for.id,
 						request->set_transient_for.parent);
       break;
-    case BROADWAY_REQUEST_UPDATE:
-      global_id = GPOINTER_TO_INT (g_hash_table_lookup (client->textures,
-							GINT_TO_POINTER (request->update.texture)));
-      broadway_server_window_update (server,
-				     request->update.id,
-				     global_id);
-      break;
     case BROADWAY_REQUEST_SET_NODES:
       {
         gsize array_size = request->base.size - sizeof (BroadwayRequestSetNodes) + sizeof(guint32);
