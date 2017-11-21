@@ -102,7 +102,7 @@ client_disconnected (BroadwayClient *client)
 
   for (l = client->windows; l != NULL; l = l->next)
     broadway_server_destroy_window (server,
-				    GPOINTER_TO_UINT (l->data));
+                                    GPOINTER_TO_UINT (l->data));
   g_list_free (client->windows);
   client->windows = NULL;
 
@@ -133,10 +133,10 @@ client_disconnect_in_idle (BroadwayClient *client)
 
 static void
 send_reply (BroadwayClient *client,
-	    BroadwayRequest *request,
-	    BroadwayReply *reply,
-	    gsize size,
-	    guint32 type)
+            BroadwayRequest *request,
+            BroadwayReply *reply,
+            gsize size,
+            guint32 type)
 {
   GOutputStream *output;
 
@@ -154,8 +154,8 @@ send_reply (BroadwayClient *client,
 
 static void
 add_client_serial_mapping (BroadwayClient *client,
-			   guint32 client_serial,
-			   guint32 daemon_serial)
+                           guint32 client_serial,
+                           guint32 daemon_serial)
 {
   BroadwaySerialMapping *map;
   GSList *last;
@@ -168,10 +168,10 @@ add_client_serial_mapping (BroadwayClient *client,
 
       /* If we have no web client, don't grow forever */
       if (map->daemon_serial == daemon_serial)
-	{
-	  map->client_serial = client_serial;
-	  return;
-	}
+        {
+          map->client_serial = client_serial;
+          return;
+        }
     }
 
   map = g_new0 (BroadwaySerialMapping, 1);
@@ -195,30 +195,58 @@ get_client_serial (BroadwayClient *client, guint32 daemon_serial)
       map = l->data;
 
       if (map->daemon_serial <= daemon_serial)
-	{
-	  found = l;
-	  client_serial = map->client_serial;
-	}
+        {
+          found = l;
+          client_serial = map->client_serial;
+        }
       else
-	break;
+        break;
     }
 
   /* Remove mappings before the found one, they will never more be used */
   while (found != NULL &&
-	 client->serial_mappings != found)
+         client->serial_mappings != found)
     {
       g_free (client->serial_mappings->data);
       client->serial_mappings =
-	g_slist_delete_link (client->serial_mappings, client->serial_mappings);
+        g_slist_delete_link (client->serial_mappings, client->serial_mappings);
     }
 
   return client_serial;
 }
 
+static int
+rewrite_node_textures (BroadwayClient *client,
+                       int len, guint32 data[], int pos)
+{
+  guint32 type;
+  guint32 i, n_children;
+
+  g_assert (pos < len);
+
+  type = data[pos++];
+  switch (type) {
+  case BROADWAY_NODE_TEXTURE:
+    data[pos+4] = GPOINTER_TO_INT (g_hash_table_lookup (client->textures,
+                                                        GINT_TO_POINTER (data[pos+4])));
+    pos += 5;
+    break;
+  case BROADWAY_NODE_CONTAINER:
+    n_children = data[pos++];
+    for (i = 0; i < n_children; i++)
+      pos = rewrite_node_textures (client, len, data, pos);
+    break;
+  default:
+    g_assert_not_reached ();
+  }
+
+  return pos;
+}
+
 
 static void
 client_handle_request (BroadwayClient *client,
-		       BroadwayRequest *request)
+                       BroadwayRequest *request)
 {
   BroadwayReplyNewWindow reply_new_window;
   BroadwayReplySync reply_sync;
@@ -235,18 +263,18 @@ client_handle_request (BroadwayClient *client,
     {
     case BROADWAY_REQUEST_NEW_WINDOW:
       reply_new_window.id =
-	broadway_server_new_window (server,
-				    request->new_window.x,
-				    request->new_window.y,
-				    request->new_window.width,
-				    request->new_window.height,
-				    request->new_window.is_temp);
+        broadway_server_new_window (server,
+                                    request->new_window.x,
+                                    request->new_window.y,
+                                    request->new_window.width,
+                                    request->new_window.height,
+                                    request->new_window.is_temp);
       client->windows =
-	g_list_prepend (client->windows,
-			GUINT_TO_POINTER (reply_new_window.id));
+        g_list_prepend (client->windows,
+                        GUINT_TO_POINTER (reply_new_window.id));
 
       send_reply (client, request, (BroadwayReply *)&reply_new_window, sizeof (reply_new_window),
-		  BROADWAY_REPLY_NEW_WINDOW);
+                  BROADWAY_REPLY_NEW_WINDOW);
       break;
     case BROADWAY_REQUEST_FLUSH:
       broadway_server_flush (server);
@@ -254,21 +282,21 @@ client_handle_request (BroadwayClient *client,
     case BROADWAY_REQUEST_SYNC:
       broadway_server_flush (server);
       send_reply (client, request, (BroadwayReply *)&reply_sync, sizeof (reply_sync),
-		  BROADWAY_REPLY_SYNC);
+                  BROADWAY_REPLY_SYNC);
       break;
     case BROADWAY_REQUEST_QUERY_MOUSE:
       broadway_server_query_mouse (server,
-				   &reply_query_mouse.toplevel,
-				   &reply_query_mouse.root_x,
-				   &reply_query_mouse.root_y,
-				   &reply_query_mouse.mask);
+                                   &reply_query_mouse.toplevel,
+                                   &reply_query_mouse.root_x,
+                                   &reply_query_mouse.root_y,
+                                   &reply_query_mouse.mask);
       send_reply (client, request, (BroadwayReply *)&reply_query_mouse, sizeof (reply_query_mouse),
-		  BROADWAY_REPLY_QUERY_MOUSE);
+                  BROADWAY_REPLY_QUERY_MOUSE);
       break;
     case BROADWAY_REQUEST_DESTROY_WINDOW:
       client->windows =
-	g_list_remove (client->windows,
-		       GUINT_TO_POINTER (request->destroy_window.id));
+        g_list_remove (client->windows,
+                       GUINT_TO_POINTER (request->destroy_window.id));
       broadway_server_destroy_window (server, request->destroy_window.id);
       break;
     case BROADWAY_REQUEST_SHOW_WINDOW:
@@ -279,13 +307,15 @@ client_handle_request (BroadwayClient *client,
       break;
     case BROADWAY_REQUEST_SET_TRANSIENT_FOR:
       broadway_server_window_set_transient_for (server,
-						request->set_transient_for.id,
-						request->set_transient_for.parent);
+                                                request->set_transient_for.id,
+                                                request->set_transient_for.parent);
       break;
     case BROADWAY_REQUEST_SET_NODES:
       {
         gsize array_size = request->base.size - sizeof (BroadwayRequestSetNodes) + sizeof(guint32);
         int n_data = array_size / sizeof(guint32);
+
+        rewrite_node_textures (client, n_data, request->set_nodes.data, 0);
 
         broadway_server_window_set_nodes (server,
                                           request->set_nodes.id,
@@ -332,8 +362,8 @@ client_handle_request (BroadwayClient *client,
           close (fd);
 
           texture = g_bytes_new_take (data, request->upload_texture.size);
-	  global_id = broadway_server_upload_texture (server, texture);
-	  g_bytes_unref (texture);
+          global_id = broadway_server_upload_texture (server, texture);
+          g_bytes_unref (texture);
 
           g_hash_table_replace (client->textures,
                                 GINT_TO_POINTER (request->release_texture.id),
@@ -342,39 +372,39 @@ client_handle_request (BroadwayClient *client,
       break;
     case BROADWAY_REQUEST_RELEASE_TEXTURE:
       global_id = GPOINTER_TO_INT (g_hash_table_lookup (client->textures,
-							GINT_TO_POINTER (request->release_texture.id)));
+                                                        GINT_TO_POINTER (request->release_texture.id)));
       if (global_id != 0)
-	broadway_server_release_texture (server, global_id);
+        broadway_server_release_texture (server, global_id);
       g_hash_table_remove (client->textures,
-			   GINT_TO_POINTER (request->release_texture.id));
+                           GINT_TO_POINTER (request->release_texture.id));
 
       break;
     case BROADWAY_REQUEST_MOVE_RESIZE:
       broadway_server_window_move_resize (server,
-					  request->move_resize.id,
-					  request->move_resize.with_move,
-					  request->move_resize.x,
-					  request->move_resize.y,
-					  request->move_resize.width,
-					  request->move_resize.height);
+                                          request->move_resize.id,
+                                          request->move_resize.with_move,
+                                          request->move_resize.x,
+                                          request->move_resize.y,
+                                          request->move_resize.width,
+                                          request->move_resize.height);
       break;
     case BROADWAY_REQUEST_GRAB_POINTER:
       reply_grab_pointer.status =
-	broadway_server_grab_pointer (server,
-				      client->id,
-				      request->grab_pointer.id,
-				      request->grab_pointer.owner_events,
-				      request->grab_pointer.event_mask,
-				      request->grab_pointer.time_);
+        broadway_server_grab_pointer (server,
+                                      client->id,
+                                      request->grab_pointer.id,
+                                      request->grab_pointer.owner_events,
+                                      request->grab_pointer.event_mask,
+                                      request->grab_pointer.time_);
       send_reply (client, request, (BroadwayReply *)&reply_grab_pointer, sizeof (reply_grab_pointer),
-		  BROADWAY_REPLY_GRAB_POINTER);
+                  BROADWAY_REPLY_GRAB_POINTER);
       break;
     case BROADWAY_REQUEST_UNGRAB_POINTER:
       reply_ungrab_pointer.status =
-	broadway_server_ungrab_pointer (server,
-					request->ungrab_pointer.time_);
+        broadway_server_ungrab_pointer (server,
+                                        request->ungrab_pointer.time_);
       send_reply (client, request, (BroadwayReply *)&reply_ungrab_pointer, sizeof (reply_ungrab_pointer),
-		  BROADWAY_REPLY_UNGRAB_POINTER);
+                  BROADWAY_REPLY_UNGRAB_POINTER);
       break;
     case BROADWAY_REQUEST_FOCUS_WINDOW:
       broadway_server_focus_window (server, request->focus_window.id);
@@ -393,12 +423,12 @@ client_handle_request (BroadwayClient *client,
      update old mapping for previously sent daemon serial */
   if (now_serial != before_serial)
     add_client_serial_mapping (client,
-			       request->base.serial,
-			       before_serial);
+                               request->base.serial,
+                               before_serial);
   else
     add_client_serial_mapping (client,
-			       request->base.serial,
-			       before_serial - 1);
+                               request->base.serial,
+                               before_serial - 1);
 }
 
 #define INPUT_BUFFER_SIZE 8192
@@ -482,8 +512,8 @@ client_input_cb (GPollableInputStream *stream,
 
 static gboolean
 incoming_client (GSocketService    *service,
-		 GSocketConnection *connection,
-		 GObject           *source_object)
+                 GSocketConnection *connection,
+                 GObject           *source_object)
 {
   BroadwayClient *client;
   GInputStream *input;
@@ -509,11 +539,11 @@ incoming_client (GSocketService    *service,
   ev.base.serial = broadway_server_get_next_serial (server) - 1;
   ev.base.time = broadway_server_get_last_seen_time (server);
   broadway_server_get_screen_size (server,
-				   &ev.screen_resize_notify.width,
-				   &ev.screen_resize_notify.height);
+                                   &ev.screen_resize_notify.width,
+                                   &ev.screen_resize_notify.height);
 
   broadway_events_got_input (&ev,
-			     client->id);
+                             client->id);
 
   return TRUE;
 }
@@ -559,10 +589,10 @@ main (int argc, char *argv[])
   if (argc > 1)
     {
       if (*argv[1] != ':')
-	{
-	  g_printerr ("Usage gtk4-broadwayd [:DISPLAY]\n");
-	  exit (1);
-	}
+        {
+          g_printerr ("Usage gtk4-broadwayd [:DISPLAY]\n");
+          exit (1);
+        }
       display = argv[1];
     }
 
@@ -611,12 +641,12 @@ main (int argc, char *argv[])
 
   listener = g_socket_service_new ();
   if (!g_socket_listener_add_address (G_SOCKET_LISTENER (listener),
-				      address,
-				      G_SOCKET_TYPE_STREAM,
-				      G_SOCKET_PROTOCOL_DEFAULT,
-				      G_OBJECT (server),
-				      NULL,
-				      &error))
+                                      address,
+                                      G_SOCKET_TYPE_STREAM,
+                                      G_SOCKET_PROTOCOL_DEFAULT,
+                                      G_OBJECT (server),
+                                      NULL,
+                                      &error))
     {
       g_printerr ("Can't listen: %s\n", error->message);
       return 1;
@@ -671,7 +701,7 @@ get_event_size (int type)
 
 void
 broadway_events_got_input (BroadwayInputMsg *message,
-			   gint32 client_id)
+                           gint32 client_id)
 {
   GList *l;
   BroadwayReplyEvent reply_event;
@@ -691,13 +721,13 @@ broadway_events_got_input (BroadwayInputMsg *message,
       BroadwayClient *client = l->data;
 
       if (client_id == -1 ||
-	  client->id == client_id)
-	{
-	  reply_event.msg.base.serial = get_client_serial (client, daemon_serial);
+          client->id == client_id)
+        {
+          reply_event.msg.base.serial = get_client_serial (client, daemon_serial);
 
-	  send_reply (client, NULL, (BroadwayReply *)&reply_event,
-		      G_STRUCT_OFFSET (BroadwayReplyEvent, msg) + size,
-		      BROADWAY_REPLY_EVENT);
-	}
+          send_reply (client, NULL, (BroadwayReply *)&reply_event,
+                      G_STRUCT_OFFSET (BroadwayReplyEvent, msg) + size,
+                      BROADWAY_REPLY_EVENT);
+        }
     }
 }
