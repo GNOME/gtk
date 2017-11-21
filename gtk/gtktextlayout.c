@@ -2821,8 +2821,8 @@ gtk_text_layout_get_iter_at_position (GtkTextLayout *layout,
  * gtk_text_layout_get_cursor_locations:
  * @layout: a #GtkTextLayout
  * @iter: a #GtkTextIter
- * @strong_pos: (allow-none): location to store the strong cursor position (may be %NULL)
- * @weak_pos: (allow-none): location to store the weak cursor position (may be %NULL)
+ * @strong_pos: (out) (optional): location to store the strong cursor position, or %NULL
+ * @weak_pos: (out) (optional): location to store the weak cursor position, or %NULL
  *
  * Given an iterator within a text layout, determine the positions of the
  * strong and weak cursors if the insertion point is at that
