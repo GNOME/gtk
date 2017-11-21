@@ -60,6 +60,7 @@ enum {
   PRESSED,
   RELEASED,
   STOPPED,
+  UNPAIRED_RELEASE,
   LAST_SIGNAL
 };
 
@@ -300,6 +301,35 @@ gtk_gesture_multi_press_reset (GtkEventController *controller)
   GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_multi_press_parent_class)->reset (controller);
 }
 
+static gboolean
+gtk_gesture_multi_press_handle_event (GtkEventController *controller,
+                                      const GdkEvent     *event)
+{
+  GtkEventControllerClass *parent_controller;
+  GtkGestureMultiPressPrivate *priv;
+  GdkEventSequence *sequence;
+  guint button;
+  gdouble x, y;
+
+  priv = gtk_gesture_multi_press_get_instance_private (GTK_GESTURE_MULTI_PRESS (controller));
+  parent_controller = GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_multi_press_parent_class);
+  sequence = gdk_event_get_event_sequence (event);
+
+  if (priv->n_presses == 0 &&
+      !gtk_gesture_handles_sequence (GTK_GESTURE (controller), sequence) &&
+      (gdk_event_get_event_type (event) == GDK_BUTTON_RELEASE ||
+       gdk_event_get_event_type (event) == GDK_TOUCH_END))
+    {
+      if (!gdk_event_get_button (event, &button))
+        button = 0;
+      gdk_event_get_coords (event, &x, &y);
+      g_signal_emit (controller, signals[UNPAIRED_RELEASE], 0,
+                     x, y, button, sequence);
+    }
+
+  return parent_controller->handle_event (controller, event);
+}
+
 static void
 gtk_gesture_multi_press_class_init (GtkGestureMultiPressClass *klass)
 {
@@ -316,6 +346,7 @@ gtk_gesture_multi_press_class_init (GtkGestureMultiPressClass *klass)
   gesture_class->cancel = gtk_gesture_multi_press_cancel;
 
   controller_class->reset = gtk_gesture_multi_press_reset;
+  controller_class->handle_event = gtk_gesture_multi_press_handle_event;
 
   /**
    * GtkGestureMultiPress::pressed:
@@ -375,6 +406,31 @@ gtk_gesture_multi_press_class_init (GtkGestureMultiPressClass *klass)
                   G_STRUCT_OFFSET (GtkGestureMultiPressClass, stopped),
                   NULL, NULL, NULL,
                   G_TYPE_NONE, 0);
+
+  /**
+   * GtkGestureMultiPress::unpaired-release
+   * @gesture: the object which received the signal
+   * @x: X coordinate of the event
+   * @y: Y coordinate of the event
+   * @button: Button being released
+   * @sequence: Sequence being released
+   *
+   * This signal is emitted whenever the gesture receives a release
+   * event that had no previous corresponding press. Due to implicit
+   * grabs, this can only happen on situations where input is grabbed
+   * elsewhere mid-press or the pressed widget voluntarily relinquishes
+   * its implicit grab.
+   *
+   * Since: 3.93.
+   */
+  signals[UNPAIRED_RELEASE] =
+    g_signal_new (I_("unpaired-release"),
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 4,
+                  G_TYPE_DOUBLE, G_TYPE_DOUBLE,
+                  G_TYPE_UINT, GDK_TYPE_EVENT_SEQUENCE);
 }
 
 static void
