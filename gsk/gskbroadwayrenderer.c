@@ -108,6 +108,44 @@ add_rgba (GArray *nodes, const GdkRGBA *rgba)
 }
 
 static void
+add_float (GArray *nodes, float f)
+{
+  gint32 i = (gint32) (f * 256.0f);
+  guint u = (guint32) i;
+  g_array_append_val (nodes, u);
+}
+
+static void
+add_point (GArray *nodes, const graphene_point_t *point)
+{
+  add_float (nodes, point->x);
+  add_float (nodes, point->y);
+}
+
+static void
+add_size (GArray *nodes, const graphene_size_t *size)
+{
+  add_float (nodes, size->width);
+  add_float (nodes, size->height);
+}
+
+static void
+add_rect (GArray *nodes, const graphene_rect_t *rect)
+{
+  add_point (nodes, &rect->origin);
+  add_size (nodes, &rect->size);
+}
+
+static void
+add_rounded_rect (GArray *nodes, const GskRoundedRect *rrect)
+{
+  int i;
+  add_rect (nodes, &rrect->bounds);
+  for (i = 0; i < 4; i++)
+    add_size (nodes, &rrect->corner[i]);
+}
+
+static void
 gsk_broadway_renderer_add_node (GskRenderer *self,
                                 GArray *nodes,
                                 GPtrArray *node_textures,
@@ -139,13 +177,24 @@ gsk_broadway_renderer_add_node (GskRenderer *self,
 
     case GSK_COLOR_NODE:
       {
-
         add_uint32 (nodes, BROADWAY_NODE_COLOR);
         add_uint32 (nodes, x);
         add_uint32 (nodes, y);
         add_uint32 (nodes, width);
         add_uint32 (nodes, height);
         add_rgba (nodes, gsk_color_node_peek_color (node));
+      }
+      return;
+
+    case GSK_BORDER_NODE:
+      {
+	int i;
+        add_uint32 (nodes, BROADWAY_NODE_BORDER);
+	add_rounded_rect (nodes, gsk_border_node_peek_outline (node));
+	for (i = 0; i < 4; i++)
+	  add_float (nodes, gsk_border_node_peek_widths (node)[i]);
+	for (i = 0; i < 4; i++)
+	  add_rgba (nodes, &gsk_border_node_peek_colors (node)[i]);
       }
       return;
 

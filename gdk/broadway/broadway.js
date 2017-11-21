@@ -293,6 +293,7 @@ function cmdLowerSurface(id)
 
 function SwapNodes(node_data, div) {
     this.node_data = node_data;
+    this.node_data_signed = new Int32Array(node_data);
     this.data_pos = 0;
     this.div = div;
     this.div2 = document.createElement('div');
@@ -324,6 +325,10 @@ SwapNodes.prototype.decode_uint32 = function() {
     return this.node_data[this.data_pos++];
 }
 
+SwapNodes.prototype.decode_int32 = function() {
+    return this.node_data_signed[this.data_pos++];
+}
+
 SwapNodes.prototype.decode_color = function() {
     var rgba = this.decode_uint32();
     a = (rgba >> 24) & 0xff;
@@ -335,6 +340,35 @@ SwapNodes.prototype.decode_color = function() {
     else
 	c = "rgba(" + r + "," + g + "," + b + "," + (a / 255.0) + ")";
     return c
+}
+
+SwapNodes.prototype.decode_float = function() {
+    return this.decode_int32() / 256.0;
+}
+
+SwapNodes.prototype.decode_size = function() {
+    var s = new Object();
+    s.width = this.decode_float ();
+    s.height = this.decode_float ();
+    return s
+}
+
+SwapNodes.prototype.decode_rect = function() {
+    var r = new Object();
+    r.x = this.decode_float ();
+    r.y = this.decode_float ();
+    r.width = this.decode_float ();
+    r.height = this.decode_float ();
+    return r;
+}
+
+SwapNodes.prototype.decode_rounded_rect = function() {
+    var r = new Object();
+    r.bounds = this.decode_rect();
+    r.sizes = []
+    for (var i = 0; i < 4; i++)
+	r.sizes[i] = this.decode_size();
+    return r
 }
 
 SwapNodes.prototype.handle_node = function(parent)
@@ -372,8 +406,8 @@ SwapNodes.prototype.handle_node = function(parent)
         var y = this.decode_uint32();
         var width = this.decode_uint32();
         var height = this.decode_uint32();
-	var div = document.createElement('div');
 	var c = this.decode_color ()
+	var div = document.createElement('div');
         div.style["position"] = "absolute";
         div.style["left"] = x + "px";
         div.style["top"] = y + "px";
@@ -383,6 +417,36 @@ SwapNodes.prototype.handle_node = function(parent)
         parent.appendChild(div);
         break;
 
+    case 3:  // BORDER
+	var rrect = this.decode_rounded_rect();
+	var border_widths = []
+	for (var i = 0; i < 4; i++)
+	    border_widths[i] = this.decode_float();
+	var border_colors = []
+	for (var i = 0; i < 4; i++)
+	    border_colors[i] = this.decode_color();
+
+	var div = document.createElement('div');
+        div.style["position"] = "absolute";
+        div.style["left"] = (rrect.bounds.x + border_widths[3]) + "px";
+        div.style["top"] = (rrect.bounds.y + border_widths[0]) + "px";
+        div.style["width"] = (rrect.bounds.width - border_widths[1] - border_widths[3]) + "px";
+        div.style["height"] = (rrect.bounds.height - border_widths[0] - border_widths[2]) + "px";
+	div.style["border-style"] = "solid";
+	div.style["border-top-left-radius"] = rrect.sizes[0].width + "px " + rrect.sizes[0].height + "px"
+	div.style["border-top-right-radius"] = rrect.sizes[1].width + "px " + rrect.sizes[1].height + "px"
+	div.style["border-bottom-right-radius"] = rrect.sizes[2].width + "px " + rrect.sizes[2].height + "px"
+	div.style["border-bottom-left-radius"] = rrect.sizes[3].width + "px " + rrect.sizes[3].height + "px"
+	div.style["border-top-color"] = border_colors[0];
+	div.style["border-top-width"] = border_widths[0] + "px";
+	div.style["border-right-color"] = border_colors[1];
+	div.style["border-right-width"] = border_widths[1] + "px";
+	div.style["border-bottom-color"] = border_colors[2];
+	div.style["border-bottom-width"] = border_widths[2] + "px";
+	div.style["border-left-color"] = border_colors[3];
+	div.style["border-left-width"] = border_widths[3] + "px";
+        parent.appendChild(div);
+        break;
     default:
         alert("Unexpected node type " + type);
     }

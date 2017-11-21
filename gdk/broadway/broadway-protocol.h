@@ -12,6 +12,7 @@ typedef enum { /* Sync changes with broadway.js */
   BROADWAY_NODE_TEXTURE,
   BROADWAY_NODE_CONTAINER,
   BROADWAY_NODE_COLOR,
+  BROADWAY_NODE_BORDER,
 } BroadwayNodeType;
 
 typedef enum {

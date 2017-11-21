@@ -215,6 +215,13 @@ get_client_serial (BroadwayClient *client, guint32 daemon_serial)
   return client_serial;
 }
 
+#define NODE_SIZE_COLOR 1
+#define NODE_SIZE_FLOAT 1
+#define NODE_SIZE_POINT 2
+#define NODE_SIZE_SIZE 2
+#define NODE_SIZE_RECT (NODE_SIZE_POINT + NODE_SIZE_SIZE)
+#define NODE_SIZE_RRECT (NODE_SIZE_RECT + 4 * NODE_SIZE_SIZE)
+
 static int
 rewrite_node_textures (BroadwayClient *client,
                        int len, guint32 data[], int pos)
@@ -227,7 +234,10 @@ rewrite_node_textures (BroadwayClient *client,
   type = data[pos++];
   switch (type) {
   case BROADWAY_NODE_COLOR:
-    pos += 5;
+    pos += NODE_SIZE_RECT + NODE_SIZE_COLOR;
+    break;
+  case BROADWAY_NODE_BORDER:
+    pos += NODE_SIZE_RRECT + 4 * NODE_SIZE_FLOAT + 4 * NODE_SIZE_COLOR;
     break;
   case BROADWAY_NODE_TEXTURE:
     data[pos+4] = GPOINTER_TO_INT (g_hash_table_lookup (client->textures,
