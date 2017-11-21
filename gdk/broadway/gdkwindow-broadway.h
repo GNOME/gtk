@@ -72,6 +72,9 @@ struct _GdkWindowImplBroadway
 
   GdkGeometry geometry_hints;
   GdkWindowHints geometry_hints_mask;
+
+  GArray *node_data;
+  GPtrArray *node_data_textures;
 };
 
 struct _GdkWindowImplBroadwayClass

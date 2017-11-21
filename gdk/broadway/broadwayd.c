@@ -289,9 +289,20 @@ client_handle_request (BroadwayClient *client,
 				     request->update.id,
 				     global_id);
       break;
+    case BROADWAY_REQUEST_SET_NODES:
+      {
+        gsize array_size = request->base.size - sizeof (BroadwayRequestSetNodes) + sizeof(guint32);
+        int n_data = array_size / sizeof(guint32);
+
+        broadway_server_window_set_nodes (server,
+                                          request->set_nodes.id,
+                                          n_data,
+                                          request->set_nodes.data);
+      }
+      break;
     case BROADWAY_REQUEST_UPLOAD_TEXTURE:
       if (client->fds == NULL)
-        g_warning ("FD passing mismatch");
+        g_warning ("FD passing mismatch for texture upload %d", request->release_texture.id);
       else
         {
           char *data, *p;

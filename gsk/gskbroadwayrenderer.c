@@ -23,7 +23,7 @@ struct _GskBroadwayRendererClass
 G_DEFINE_TYPE (GskBroadwayRenderer, gsk_broadway_renderer, GSK_TYPE_RENDERER)
 
 static gboolean
-gsk_broadway_renderer_realize (GskRenderer  *renderer,
+gsk_broadway_renderer_realize (GskRenderer  *self,
                                GdkWindow    *window,
                                GError      **error)
 {
@@ -31,13 +31,36 @@ gsk_broadway_renderer_realize (GskRenderer  *renderer,
 }
 
 static void
-gsk_broadway_renderer_unrealize (GskRenderer *renderer)
+gsk_broadway_renderer_unrealize (GskRenderer *self)
 {
 
 }
 
+static GdkDrawingContext *
+gsk_broadway_renderer_begin_draw_frame (GskRenderer          *renderer,
+                                        const cairo_region_t *update_area)
+{
+  cairo_region_t *region;
+  GdkDrawingContext *result;
+  cairo_rectangle_int_t whole_window;
+  GdkWindow *window;
+
+  window = gsk_renderer_get_window (renderer);
+  whole_window = (cairo_rectangle_int_t) {
+    0, 0,
+    gdk_window_get_width (window),
+    gdk_window_get_height (window)
+  };
+  region = cairo_region_create_rectangle (&whole_window);
+  result = gdk_window_begin_draw_frame (window, NULL, region);
+  cairo_region_destroy (region);
+
+  return result;
+}
+
+
 static GdkTexture *
-gsk_broadway_renderer_render_texture (GskRenderer           *renderer,
+gsk_broadway_renderer_render_texture (GskRenderer           *self,
                                       GskRenderNode         *root,
                                       const graphene_rect_t *viewport)
 {
@@ -61,34 +84,80 @@ gsk_broadway_renderer_render_texture (GskRenderer           *renderer,
 }
 
 static void
-gsk_broadway_renderer_render (GskRenderer   *renderer,
+add_uint32 (GArray *nodes, guint32 v)
+{
+  g_array_append_val (nodes, v);
+}
+
+static void
+gsk_broadway_renderer_add_node (GskRenderer *self,
+                                GArray *nodes,
+                                GPtrArray *node_textures,
+                                GskRenderNode *node)
+{
+  GdkDisplay *display = gsk_renderer_get_display (self);
+
+  switch (gsk_render_node_get_node_type (node))
+    {
+    case GSK_NOT_A_RENDER_NODE:
+      g_assert_not_reached ();
+      return;
+    case GSK_CONTAINER_NODE:
+      {
+        guint i;
+
+        add_uint32 (nodes, BROADWAY_NODE_CONTAINER);
+        add_uint32 (nodes, gsk_container_node_get_n_children (node));
+
+        for (i = 0; i < gsk_container_node_get_n_children (node); i++)
+          gsk_broadway_renderer_add_node (self, nodes, node_textures,
+                                          gsk_container_node_get_child (node, i));
+      }
+      return;
+
+    default:
+      {
+        int x = floorf (node->bounds.origin.x);
+        int y = floorf (node->bounds.origin.y);
+        int width = ceil (node->bounds.origin.x + node->bounds.size.width) - x;
+        int height = ceil (node->bounds.origin.y + node->bounds.size.height) - y;
+        cairo_surface_t *surface;
+        GdkTexture *texture;
+        guint32 texture_id;
+        cairo_t *cr;
+
+        surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
+        cr = cairo_create (surface);
+        cairo_translate (cr, -x, -y);
+        gsk_render_node_draw (node, cr);
+        cairo_destroy (cr);
+
+        texture = gdk_texture_new_for_surface (surface);
+        g_ptr_array_add (node_textures, texture); /* Transfers ownership to node_textures */
+        texture_id = gdk_broadway_display_ensure_texture (display, texture);
+        add_uint32 (nodes, BROADWAY_NODE_TEXTURE);
+        add_uint32 (nodes, x);
+        add_uint32 (nodes, y);
+        add_uint32 (nodes, width);
+        add_uint32 (nodes, height);
+        add_uint32 (nodes, texture_id);
+      }
+      return;
+    }
+}
+
+static void
+gsk_broadway_renderer_render (GskRenderer   *self,
                               GskRenderNode *root)
 {
-  GdkDrawingContext *context = gsk_renderer_get_drawing_context (renderer);
-  graphene_rect_t viewport;
-  cairo_t *cr;
+  GdkWindow *window = gsk_renderer_get_window (self);
+  GArray *nodes = g_array_new (FALSE, FALSE, sizeof(guint32));
+  GPtrArray *node_textures = g_ptr_array_new_with_free_func (g_object_unref);
 
-  cr = gdk_drawing_context_get_cairo_context (context);
-
-  g_return_if_fail (cr != NULL);
-
-  gsk_renderer_get_viewport (renderer, &viewport);
-
-  if (GSK_RENDER_MODE_CHECK (GEOMETRY))
-    {
-      cairo_save (cr);
-      cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
-      cairo_rectangle (cr,
-                       viewport.origin.x,
-                       viewport.origin.y,
-                       viewport.size.width,
-                       viewport.size.height);
-      cairo_set_source_rgba (cr, 0, 0, 0.85, 0.5);
-      cairo_stroke (cr);
-      cairo_restore (cr);
-    }
-
-  gsk_render_node_draw (root, cr);
+  gsk_broadway_renderer_add_node (self, nodes, node_textures, root);
+  gdk_broadway_window_set_nodes (window, nodes, node_textures);
+  g_array_unref (nodes);
+  g_ptr_array_unref (node_textures);
 }
 
 static void
@@ -96,6 +165,7 @@ gsk_broadway_renderer_class_init (GskBroadwayRendererClass *klass)
 {
   GskRendererClass *renderer_class = GSK_RENDERER_CLASS (klass);
 
+  renderer_class->begin_draw_frame = gsk_broadway_renderer_begin_draw_frame;
   renderer_class->realize = gsk_broadway_renderer_realize;
   renderer_class->unrealize = gsk_broadway_renderer_unrealize;
   renderer_class->render = gsk_broadway_renderer_render;

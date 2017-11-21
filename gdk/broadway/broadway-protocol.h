@@ -8,6 +8,11 @@ typedef struct  {
     gint32 width, height;
 } BroadwayRect;
 
+typedef enum { /* Sync changes with broadway.js */
+  BROADWAY_NODE_TEXTURE,
+  BROADWAY_NODE_CONTAINER,
+} BroadwayNodeType;
+
 typedef enum {
   BROADWAY_EVENT_ENTER = 'e',
   BROADWAY_EVENT_LEAVE = 'l',
@@ -45,6 +50,7 @@ typedef enum {
   BROADWAY_OP_SET_SHOW_KEYBOARD = 'k',
   BROADWAY_OP_UPLOAD_TEXTURE = 't',
   BROADWAY_OP_RELEASE_TEXTURE = 'T',
+  BROADWAY_OP_SET_NODES = 'n',
 } BroadwayOpType;
 
 typedef struct {
@@ -162,6 +168,7 @@ typedef enum {
   BROADWAY_REQUEST_SET_SHOW_KEYBOARD,
   BROADWAY_REQUEST_UPLOAD_TEXTURE,
   BROADWAY_REQUEST_RELEASE_TEXTURE,
+  BROADWAY_REQUEST_SET_NODES,
 } BroadwayRequestType;
 
 typedef struct {
@@ -184,15 +191,6 @@ typedef struct {
 typedef struct {
   BroadwayRequestBase base;
   guint32 id;
-  gint32 dx;
-  gint32 dy;
-  guint32 n_rects;
-  BroadwayRect rects[1];
-} BroadwayRequestTranslate;
-
-typedef struct {
-  BroadwayRequestBase base;
-  guint32 id;
   guint32 texture;
 } BroadwayRequestUpdate;
 
@@ -207,6 +205,13 @@ typedef struct {
   BroadwayRequestBase base;
   guint32 id;
 } BroadwayRequestReleaseTexture;
+
+typedef struct {
+  BroadwayRequestBase base;
+  guint32 id;
+  guint32 data[1];
+} BroadwayRequestSetNodes;
+
 
 typedef struct {
   BroadwayRequestBase base;
@@ -259,11 +264,11 @@ typedef union {
   BroadwayRequestMoveResize move_resize;
   BroadwayRequestGrabPointer grab_pointer;
   BroadwayRequestUngrabPointer ungrab_pointer;
-  BroadwayRequestTranslate translate;
   BroadwayRequestFocusWindow focus_window;
   BroadwayRequestSetShowKeyboard set_show_keyboard;
   BroadwayRequestUploadTexture upload_texture;
   BroadwayRequestReleaseTexture release_texture;
+  BroadwayRequestSetNodes set_nodes;
 } BroadwayRequest;
 
 typedef enum {

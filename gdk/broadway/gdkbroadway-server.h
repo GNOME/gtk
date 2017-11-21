@@ -66,6 +66,9 @@ void                gdk_broadway_server_release_texture          (GdkBroadwaySer
 void               _gdk_broadway_server_window_update            (GdkBroadwayServer  *server,
 								  gint                id,
 								  guint32             texture);
+void               gdk_broadway_server_window_set_nodes          (GdkBroadwayServer *server,
+                                                                  guint32            id,
+                                                                  GArray             *nodes);
 gboolean           _gdk_broadway_server_window_move_resize       (GdkBroadwayServer  *server,
 								  gint                id,
 								  gboolean            with_move,

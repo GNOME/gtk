@@ -668,6 +668,7 @@ gdk_broadway_server_upload_texture (GdkBroadwayServer *server,
   return id;
 }
 
+
 void
 gdk_broadway_server_release_texture (GdkBroadwayServer *server,
                                      guint32            id)
@@ -678,6 +679,22 @@ gdk_broadway_server_release_texture (GdkBroadwayServer *server,
 
   gdk_broadway_server_send_message (server, msg,
                                     BROADWAY_REQUEST_RELEASE_TEXTURE);
+}
+
+void
+gdk_broadway_server_window_set_nodes (GdkBroadwayServer *server,
+                                      guint32 id,
+                                      GArray *nodes)
+{
+  gsize size = sizeof(BroadwayRequestSetNodes) + sizeof(guint32) * (nodes->len - 1);
+  BroadwayRequestSetNodes *msg = g_alloca (size);
+  int i;
+
+  for (i = 0; i < nodes->len; i++)
+    msg->data[i] = g_array_index (nodes, guint32, i);
+
+  msg->id = id;
+  gdk_broadway_server_send_message_with_size (server, (BroadwayRequestBase *) msg, size, BROADWAY_REQUEST_SET_NODES, -1);
 }
 
 gboolean

@@ -39,6 +39,13 @@
 
 void _gdk_broadway_resync_windows (void);
 
+guint32 gdk_broadway_display_ensure_texture (GdkDisplay *display,
+					     GdkTexture *texture);
+
+void gdk_broadway_window_set_nodes (GdkWindow *window,
+				    GArray *nodes,
+                                    GPtrArray *node_textures);
+
 void     _gdk_broadway_window_register_dnd (GdkWindow      *window);
 GdkDragContext * _gdk_broadway_window_drag_begin (GdkWindow         *window,
 						  GdkDevice         *device,

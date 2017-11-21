@@ -324,6 +324,45 @@ gdk_broadway_display_get_last_seen_time (GdkDisplay *display)
   return _gdk_broadway_server_get_last_seen_time (GDK_BROADWAY_DISPLAY (display)->server);
 }
 
+typedef struct {
+  int id;
+  GdkDisplay *display;
+} BroadwayTextureData;
+
+static void
+broadway_texture_data_free (BroadwayTextureData *data)
+{
+  GdkBroadwayDisplay *broadway_display = GDK_BROADWAY_DISPLAY (data->display);
+
+  gdk_broadway_server_release_texture (broadway_display->server, data->id);
+  g_object_unref (data->display);
+  g_free (data);
+}
+
+guint32
+gdk_broadway_display_ensure_texture (GdkDisplay *display,
+                                     GdkTexture *texture)
+{
+  GdkBroadwayDisplay *broadway_display = GDK_BROADWAY_DISPLAY (display);
+  BroadwayTextureData *data;
+  guint32 id;
+
+  data = gdk_texture_get_render_data (texture, display);
+  if (data != NULL)
+    return data->id;
+
+  id = gdk_broadway_server_upload_texture (broadway_display->server, texture);
+
+  data = g_new0 (BroadwayTextureData, 1);
+  data->id = id;
+  data->display = g_object_ref (display);
+
+  if (!gdk_texture_set_render_data (texture, display, data, (GDestroyNotify)broadway_texture_data_free))
+    g_warning ("Failed to set render data, will leak texture");
+
+  return id;
+}
+
 static void
 gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
 {

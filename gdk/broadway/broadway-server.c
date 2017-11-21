@@ -117,6 +117,8 @@ struct BroadwayWindow {
   gboolean visible;
   gint32 transient_for;
   guint32 texture;
+  guint32 *nodes;
+  gint nodes_len;
 };
 
 static void broadway_server_resync_windows (BroadwayServer *server);
@@ -171,6 +173,13 @@ broadway_server_class_init (BroadwayServerClass * class)
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
   object_class->finalize = broadway_server_finalize;
+}
+
+static void
+broadway_window_free (BroadwayWindow *window)
+{
+  g_free (window->nodes);
+  g_free (window);
 }
 
 static void start (BroadwayInput *input);
@@ -1375,9 +1384,8 @@ broadway_server_destroy_window (BroadwayServer *server,
     {
       server->toplevels = g_list_remove (server->toplevels, window);
       g_hash_table_remove (server->id_ht,
-			   GINT_TO_POINTER (id));
-
-      g_free (window);
+                           GINT_TO_POINTER (id));
+      broadway_window_free (window);
     }
 }
 
@@ -1512,13 +1520,12 @@ broadway_server_has_client (BroadwayServer *server)
 
 void
 broadway_server_window_update (BroadwayServer   *server,
-			       gint              id,
-			       guint32           texture)
+                               gint              id,
+                               guint32           texture)
 {
   BroadwayWindow *window;
 
-  window = g_hash_table_lookup (server->id_ht,
-				GINT_TO_POINTER (id));
+  window = g_hash_table_lookup (server->id_ht, GINT_TO_POINTER (id));
   if (window == NULL)
     return;
 
@@ -1526,7 +1533,28 @@ broadway_server_window_update (BroadwayServer   *server,
 
   if (server->output != NULL)
     broadway_output_window_update (server->output, window->id,
-				   window->texture);
+                                   window->texture);
+}
+
+void
+broadway_server_window_set_nodes (BroadwayServer   *server,
+                                  gint              id,
+                                  gint              n_data,
+                                  guint32          *data)
+{
+  BroadwayWindow *window;
+
+  window = g_hash_table_lookup (server->id_ht, GINT_TO_POINTER (id));
+  if (window == NULL)
+    return;
+
+  g_free (window->nodes);
+  window->nodes = g_memdup (data, sizeof (guint32)*n_data);
+  window->nodes_len = n_data;
+
+  if (server->output != NULL)
+    broadway_output_window_set_nodes (server->output, window->id,
+                                      window->nodes, window->nodes_len);
 }
 
 guint32
@@ -1770,6 +1798,10 @@ broadway_server_resync_windows (BroadwayServer *server)
       if (window->transient_for != -1)
 	broadway_output_set_transient_for (server->output, window->id,
 					   window->transient_for);
+
+      if (window->nodes)
+        broadway_output_window_set_nodes (server->output, window->id,
+                                          window->nodes, window->nodes_len);
 
       broadway_output_window_update (server->output, window->id,
 				     window->texture);

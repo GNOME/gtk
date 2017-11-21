@@ -298,6 +298,21 @@ broadway_output_window_update (BroadwayOutput *output,
 }
 
 void
+broadway_output_window_set_nodes (BroadwayOutput *output,
+                                  int             id,
+                                  guint32        *data,
+                                  guint32         data_len)
+{
+  write_header (output, BROADWAY_OP_SET_NODES);
+  guint32 i;
+
+  append_uint16 (output, id);
+  append_uint32 (output, data_len);
+  for (i = 0; i < data_len; i++)
+    append_uint32 (output, data[i]);
+}
+
+void
 broadway_output_upload_texture (BroadwayOutput *output,
 				guint32 id,
 				GBytes *texture)

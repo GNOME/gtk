@@ -56,6 +56,10 @@ void            broadway_output_set_transient_for (BroadwayOutput *output,
 void            broadway_output_window_update   (BroadwayOutput *output,
 						 int             id,
 						 guint32         texture);
+void            broadway_output_window_set_nodes (BroadwayOutput *output,
+                                                  int             id,
+                                                  guint32        *data,
+                                                  guint32         data_len);
 void            broadway_output_upload_texture (BroadwayOutput *output,
 						guint32 id,
 						GBytes *texture);

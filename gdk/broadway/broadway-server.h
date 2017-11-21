@@ -85,6 +85,10 @@ cairo_surface_t   * broadway_server_create_surface           (int               
 void                broadway_server_window_update            (BroadwayServer   *server,
 							      gint              id,
 							      guint32           texture);
+void                broadway_server_window_set_nodes         (BroadwayServer   *server,
+							      gint              id,
+                                                              gint              n_data,
+                                                              guint32          *data);
 gboolean            broadway_server_window_move_resize       (BroadwayServer   *server,
 							      gint              id,
 							      gboolean          with_move,
