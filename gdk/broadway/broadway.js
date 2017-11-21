@@ -291,9 +291,11 @@ function cmdLowerSurface(id)
     restackWindows();
 }
 
-function SwapNodes(div) {
+function SwapNodes(node_data, div) {
+    this.node_data = node_data;
+    this.data_pos = 0;
     this.div = div;
-    this.div2 = document.createElement('div');;
+    this.div2 = document.createElement('div');
     this.outstanding = 1;
 }
 
@@ -318,17 +320,34 @@ SwapNodes.prototype.add_image = function(image) {
     }, false);
 };
 
-SwapNodes.prototype.handle_node = function(parent, node_data, data_pos)
+SwapNodes.prototype.decode_uint32 = function() {
+    return this.node_data[this.data_pos++];
+}
+
+SwapNodes.prototype.decode_color = function() {
+    var rgba = this.decode_uint32();
+    a = (rgba >> 24) & 0xff;
+    r = (rgba >> 16) & 0xff;
+    g = (rgba >> 8) & 0xff;
+    b = (rgba >> 0) & 0xff;
+    if (a == 0)
+	c = "rgb(" + r + "," + g + "," + b + ")";
+    else
+	c = "rgba(" + r + "," + g + "," + b + "," + (a / 255.0) + ")";
+    return c
+}
+
+SwapNodes.prototype.handle_node = function(parent)
 {
-    var type = node_data[data_pos++];
+    var type = this.decode_uint32();
     switch (type)
     {
-    case 0:  // TEXTURE
-        var x = node_data[data_pos++];
-        var y = node_data[data_pos++];
-        var width = node_data[data_pos++];
-        var height = node_data[data_pos++];
-        var texture_id = node_data[data_pos++];
+	case 0:  // TEXTURE
+        var x = this.decode_uint32();
+        var y = this.decode_uint32();
+        var width = this.decode_uint32();
+        var height = this.decode_uint32();
+        var texture_id = this.decode_uint32();
         var image = new Image();
         image.width = width;
         image.height = height;
@@ -342,32 +361,24 @@ SwapNodes.prototype.handle_node = function(parent, node_data, data_pos)
         break;
 
     case 1: // CONTAINER
-        var len = node_data[data_pos++];
+        var len = this.decode_uint32();
         for (var i = 0; i < len; i++) {
-            data_pos = this.handle_node(parent, node_data, data_pos);
+            this.handle_node(parent);
         }
         break;
 
     case 2:  // COLOR
-        var x = node_data[data_pos++];
-        var y = node_data[data_pos++];
-        var width = node_data[data_pos++];
-        var height = node_data[data_pos++];
-        var rgba = node_data[data_pos++];
+        var x = this.decode_uint32();
+        var y = this.decode_uint32();
+        var width = this.decode_uint32();
+        var height = this.decode_uint32();
 	var div = document.createElement('div');
+	var c = this.decode_color ()
         div.style["position"] = "absolute";
         div.style["left"] = x + "px";
         div.style["top"] = y + "px";
         div.style["width"] = width + "px";
         div.style["height"] = height + "px";
-	a = (rgba >> 24) & 0xff;
-	r = (rgba >> 16) & 0xff;
-	g = (rgba >> 8) & 0xff;
-	b = (rgba >> 0) & 0xff;
-	if (a == 0)
-	    c = "rgb(" + r + "," + g + "," + b + ")";
-	else
-	    c = "rgba(" + r + "," + g + "," + b + "," + (a / 255.0) + ")";
 	div.style["background-color"] = c;
         parent.appendChild(div);
         break;
@@ -375,7 +386,6 @@ SwapNodes.prototype.handle_node = function(parent, node_data, data_pos)
     default:
         alert("Unexpected node type " + type);
     }
-    return data_pos;
 }
 
 function cmdWindowSetNodes(id, node_data)
@@ -387,9 +397,9 @@ function cmdWindowSetNodes(id, node_data)
 
     /* We use a secondary div so that we can remove all previous children in one go */
 
-    var swap = new SwapNodes (div);
-    var end = swap.handle_node(swap.div2, node_data, 0);
-    if (end != node_data.length)
+    var swap = new SwapNodes (node_data, div);
+    swap.handle_node(swap.div2);
+    if (swap.data_pos != node_data.length)
         alert ("Did not consume entire array (len " + node_data.length + " end " + end + ")");
     swap.did_one ();
 }
