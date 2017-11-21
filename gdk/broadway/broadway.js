@@ -582,10 +582,14 @@ function handleMessage(message)
 }
 
 function getSurfaceId(ev) {
-    var surface = ev.target.surface;
-    if (surface != undefined)
-        return surface.id;
-    return 0;
+    var target = ev.target;
+    while (target.surface == undefined) {
+	if (target == document)
+	    return 0;
+	target = target.parentNode;
+    }
+
+    return target.surface.id;
 }
 
 function sendInput(cmd, args)
