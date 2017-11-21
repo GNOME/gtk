@@ -291,7 +291,34 @@ function cmdLowerSurface(id)
     restackWindows();
 }
 
-function handleNode(parent, node_data, data_pos)
+function SwapNodes(div) {
+    this.div = div;
+    this.div2 = document.createElement('div');;
+    this.outstanding = 1;
+}
+
+SwapNodes.prototype.did_one = function(image) {
+    this.outstanding--;
+    if (this.outstanding == 0) {
+        var oldDiv2 = null;
+        if (this.div.hasChildNodes())
+            oldDiv2 = this.div.lastChild;
+
+        this.div.appendChild(this.div2);
+        if (oldDiv2)
+            this.div.removeChild(oldDiv2);
+    }
+}
+
+SwapNodes.prototype.add_image = function(image) {
+    this.outstanding++;
+    var v = this;
+    image.addEventListener('load', function() {
+        v.did_one ();
+    }, false);
+};
+
+SwapNodes.prototype.handle_node = function(parent, node_data, data_pos)
 {
     var type = node_data[data_pos++];
     switch (type)
@@ -309,6 +336,7 @@ function handleNode(parent, node_data, data_pos)
         image.style["left"] = x + "px";
         image.style["top"] = y + "px";
         var texture_url = textures[texture_id];
+        this.add_image(image);
         image.src = texture_url;
         parent.appendChild(image);
         break;
@@ -316,7 +344,7 @@ function handleNode(parent, node_data, data_pos)
     case 1: // CONTAINER
         var len = node_data[data_pos++];
         for (var i = 0; i < len; i++) {
-            data_pos = handleNode(parent, node_data, data_pos);
+            data_pos = this.handle_node(parent, node_data, data_pos);
         }
         break;
     default:
@@ -333,20 +361,12 @@ function cmdWindowSetNodes(id, node_data)
     var div = surface.div;
 
     /* We use a secondary div so that we can remove all previous children in one go */
-    var oldDiv2 = null;
 
-    if (div.hasChildNodes())
-        oldDiv2 = div.lastChild;
-
-    var div2 = document.createElement('div');
-
-    var end = handleNode(div2, node_data, 0);
+    var swap = new SwapNodes (div);
+    var end = swap.handle_node(swap.div2, node_data, 0);
     if (end != node_data.length)
         alert ("Did not consume entire array (len " + node_data.length + " end " + end + ")");
-
-    div.appendChild(div2);
-    if (oldDiv2)
-        div.removeChild(oldDiv2);
+    swap.did_one ();
 }
 
 function cmdUploadTexture(id, data)
