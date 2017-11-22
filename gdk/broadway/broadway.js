@@ -336,9 +336,9 @@ SwapNodes.prototype.decode_color = function() {
     g = (rgba >> 8) & 0xff;
     b = (rgba >> 0) & 0xff;
     if (a == 0)
-	c = "rgb(" + r + "," + g + "," + b + ")";
+        c = "rgb(" + r + "," + g + "," + b + ")";
     else
-	c = "rgba(" + r + "," + g + "," + b + "," + (a / 255.0) + ")";
+        c = "rgba(" + r + "," + g + "," + b + "," + (a / 255.0) + ")";
     return c
 }
 
@@ -367,7 +367,7 @@ SwapNodes.prototype.decode_rounded_rect = function() {
     r.bounds = this.decode_rect();
     r.sizes = []
     for (var i = 0; i < 4; i++)
-	r.sizes[i] = this.decode_size();
+        r.sizes[i] = this.decode_size();
     return r
 }
 
@@ -376,7 +376,7 @@ SwapNodes.prototype.handle_node = function(parent)
     var type = this.decode_uint32();
     switch (type)
     {
-	case 0:  // TEXTURE
+        case 0:  // TEXTURE
         var x = this.decode_uint32();
         var y = this.decode_uint32();
         var width = this.decode_uint32();
@@ -406,45 +406,45 @@ SwapNodes.prototype.handle_node = function(parent)
         var y = this.decode_uint32();
         var width = this.decode_uint32();
         var height = this.decode_uint32();
-	var c = this.decode_color ()
-	var div = document.createElement('div');
+        var c = this.decode_color ()
+        var div = document.createElement('div');
         div.style["position"] = "absolute";
         div.style["left"] = x + "px";
         div.style["top"] = y + "px";
         div.style["width"] = width + "px";
         div.style["height"] = height + "px";
-	div.style["background-color"] = c;
+        div.style["background-color"] = c;
         parent.appendChild(div);
         break;
 
     case 3:  // BORDER
-	var rrect = this.decode_rounded_rect();
-	var border_widths = []
-	for (var i = 0; i < 4; i++)
-	    border_widths[i] = this.decode_float();
-	var border_colors = []
-	for (var i = 0; i < 4; i++)
-	    border_colors[i] = this.decode_color();
+        var rrect = this.decode_rounded_rect();
+        var border_widths = []
+        for (var i = 0; i < 4; i++)
+            border_widths[i] = this.decode_float();
+        var border_colors = []
+        for (var i = 0; i < 4; i++)
+            border_colors[i] = this.decode_color();
 
-	var div = document.createElement('div');
+        var div = document.createElement('div');
         div.style["position"] = "absolute";
-        div.style["left"] = (rrect.bounds.x + border_widths[3]) + "px";
-        div.style["top"] = (rrect.bounds.y + border_widths[0]) + "px";
+        div.style["left"] = rrect.bounds.x + "px";
+        div.style["top"] = rrect.bounds.y + "px";
         div.style["width"] = (rrect.bounds.width - border_widths[1] - border_widths[3]) + "px";
         div.style["height"] = (rrect.bounds.height - border_widths[0] - border_widths[2]) + "px";
-	div.style["border-style"] = "solid";
-	div.style["border-top-left-radius"] = rrect.sizes[0].width + "px " + rrect.sizes[0].height + "px"
-	div.style["border-top-right-radius"] = rrect.sizes[1].width + "px " + rrect.sizes[1].height + "px"
-	div.style["border-bottom-right-radius"] = rrect.sizes[2].width + "px " + rrect.sizes[2].height + "px"
-	div.style["border-bottom-left-radius"] = rrect.sizes[3].width + "px " + rrect.sizes[3].height + "px"
-	div.style["border-top-color"] = border_colors[0];
-	div.style["border-top-width"] = border_widths[0] + "px";
-	div.style["border-right-color"] = border_colors[1];
-	div.style["border-right-width"] = border_widths[1] + "px";
-	div.style["border-bottom-color"] = border_colors[2];
-	div.style["border-bottom-width"] = border_widths[2] + "px";
-	div.style["border-left-color"] = border_colors[3];
-	div.style["border-left-width"] = border_widths[3] + "px";
+        div.style["border-style"] = "solid";
+        div.style["border-top-left-radius"] = rrect.sizes[0].width + "px " + rrect.sizes[0].height + "px";
+        div.style["border-top-right-radius"] = rrect.sizes[1].width + "px " + rrect.sizes[1].height + "px";
+        div.style["border-bottom-right-radius"] = rrect.sizes[2].width + "px " + rrect.sizes[2].height + "px";
+        div.style["border-bottom-left-radius"] = rrect.sizes[3].width + "px " + rrect.sizes[3].height + "px";
+        div.style["border-top-color"] = border_colors[0];
+        div.style["border-top-width"] = border_widths[0] + "px";
+        div.style["border-right-color"] = border_colors[1];
+        div.style["border-right-width"] = border_widths[1] + "px";
+        div.style["border-bottom-color"] = border_colors[2];
+        div.style["border-bottom-width"] = border_widths[2] + "px";
+        div.style["border-left-color"] = border_colors[3];
+        div.style["border-left-width"] = border_widths[3] + "px";
         parent.appendChild(div);
         break;
     default:
@@ -683,9 +683,9 @@ function handleMessage(message)
 function getSurfaceId(ev) {
     var target = ev.target;
     while (target.surface == undefined) {
-	if (target == document)
-	    return 0;
-	target = target.parentNode;
+        if (target == document)
+            return 0;
+        target = target.parentNode;
     }
 
     return target.surface.id;
