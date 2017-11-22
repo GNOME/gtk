@@ -48,7 +48,7 @@ flowbox flowboxchild:selected { outline-offset: -2px; }
 
 .content-view .tile:disabled { background-color: transparent; }
 
-label { caret-color: currentColor; }
+label { caret-color: currentColor; border-radius: 99px;}
 
 label.separator { color: #2e3436; }
 

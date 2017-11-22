@@ -26,7 +26,25 @@
 #define ORTHO_NEAR_PLANE        -10000
 #define ORTHO_FAR_PLANE          10000
 
+#define N_VERTICES      6
+#define N_PROGRAMS      6
+
 #define HIGHLIGHT_FALLBACK 0
+#define DEBUG_OPS          0
+
+#if DEBUG_OPS
+#define OP_PRINT(format, ...) g_print(format, ## __VA_ARGS__)
+#else
+#define OP_PRINT(format, ...)
+#endif
+
+#define INIT_PROGRAM_UNIFORM_LOCATION(program_name, location_name, uniform_name) \
+              G_STMT_START{\
+                self->program_name.location_name = glGetUniformLocation(self->program_name.id, uniform_name);\
+                g_assert (self->program_name.location_name != 0); \
+              }G_STMT_END
+
+
 
 static void G_GNUC_UNUSED
 dump_framebuffer (const char *filename, int w, int h)
@@ -43,7 +61,7 @@ dump_framebuffer (const char *filename, int w, int h)
   g_free (data);
 }
 
-static gboolean
+static gboolean G_GNUC_UNUSED
 font_has_color_glyphs (const PangoFont *font)
 {
   cairo_scaled_font_t *scaled_font;
@@ -63,7 +81,11 @@ font_has_color_glyphs (const PangoFont *font)
 static void
 gsk_gl_renderer_setup_render_mode (GskGLRenderer *self);
 
-typedef struct {
+typedef struct
+{
+  int index;        /* Into the renderer's program array */
+  const char *name; /* For debugging */
+
   int id;
   /* Common locations (gl_common)*/
   int source_location;
@@ -71,7 +93,7 @@ typedef struct {
   int uv_location;
   int position_location;
   int alpha_location;
-  int blendMode_location;
+  int blend_mode_location;
   int viewport_location;
   int projection_location;
   int modelview_location;
@@ -79,7 +101,7 @@ typedef struct {
   int clip_corner_widths_location;
   int clip_corner_heights_location;
 
-  /* Shader-specific locations */
+  /* Program-specific locations */
   union {
     struct {
       int color_location;
@@ -103,12 +125,6 @@ typedef struct {
   };
 } Program;
 
-#define INIT_PROGRAM_UNIFORM_LOCATION(program_name, location_name, uniform_name) \
-              G_STMT_START{\
-                self->program_name.location_name = glGetUniformLocation(self->program_name.id, uniform_name);\
-                g_assert (self->program_name.location_name != 0); \
-              }G_STMT_END
-
 enum {
   MODE_BLIT = 1,
   MODE_COLOR,
@@ -119,96 +135,65 @@ enum {
   N_MODES
 };
 
-typedef struct {
-  int mode;
+enum {
+  OP_NONE,
+  OP_CHANGE_OPACITY         =  1,
+  OP_CHANGE_COLOR           =  2,
+  OP_CHANGE_PROJECTION      =  3,
+  OP_CHANGE_MODELVIEW       =  4,
+  OP_CHANGE_PROGRAM         =  5,
+  OP_CHANGE_RENDER_TARGET   =  6,
+  OP_CHANGE_CLIP            =  7,
+  OP_CHANGE_VIEWPORT        =  8,
+  OP_CHANGE_SOURCE_TEXTURE  =  9,
+  OP_CHANGE_VAO             =  10,
+  OP_CHANGE_LINEAR_GRADIENT =  11,
+  OP_DRAW                   =  12,
+};
 
-  graphene_point3d_t min;
-  graphene_point3d_t max;
-
-  graphene_size_t size;
-
-  graphene_matrix_t projection;
-  graphene_matrix_t modelview;
-
-  /* (Rounded) Clip */
-  GskRoundedRect rounded_clip;
-
-  float opacity;
-  float z;
+typedef struct
+{
+  guint op;
 
   union {
-    struct {
-      GdkRGBA color;
-    } color_data;
-    struct {
-      graphene_matrix_t color_matrix;
-      graphene_vec4_t color_offset;
-    } color_matrix_data;
+    float opacity;
+    graphene_matrix_t modelview; // TODO: Make both matrix members just "matrix".
+    graphene_matrix_t projection;
+    const Program *program;
+    GdkRGBA color;
+    gsize vao_offset;
+    GskQuadVertex vertex_data[N_VERTICES]; // New Quad
+    int texture_id;
+    int render_target_id;
+    GskRoundedRect clip;
+    graphene_rect_t viewport;
     struct {
       int n_color_stops;
       float color_offsets[8];
       float color_stops[4 * 8];
       graphene_point_t start_point;
       graphene_point_t end_point;
-    } linear_gradient_data;
+    } linear_gradient;
   };
-
-  const char *name;
-
-  GskBlendMode blend_mode;
-
-  /* The render target this item will draw itself on */
-  int parent_render_target;
-  /* In case this item creates a new render target, this is its id */
-  int render_target;
-  int vao_id;
-  int texture_id;
-  const Program *program;
-
-  GArray *children;
-} RenderItem;
-
-static void
-destroy_render_item (RenderItem *item)
-{
-  if (item->children)
-    g_array_unref (item->children);
-}
-
-
-enum {
-  SOURCE,
-  MASK,
-  ALPHA,
-  BLEND_MODE,
-  VIEWPORT,
-  PROJECTION,
-  MODELVIEW,
-  CLIP,
-  CLIP_CORNER_WIDTHS,
-  CLIP_CORNER_HEIGHTS,
-  N_UNIFORMS
-};
-
-enum {
-  POSITION,
-  UV,
-  N_ATTRIBUTES
-};
+} RenderOp;
 
 #ifdef G_ENABLE_DEBUG
-typedef struct {
+typedef struct
+{
   GQuark frames;
   GQuark draw_calls;
 } ProfileCounters;
 
-typedef struct {
+typedef struct
+{
   GQuark cpu_time;
   GQuark gpu_time;
 } ProfileTimers;
 #endif
 
-typedef enum {
+
+typedef enum
+{
   RENDER_FULL,
   RENDER_SCISSOR
 } RenderMode;
@@ -225,24 +210,28 @@ struct _GskGLRenderer
   guint depth_stencil_buffer;
   guint texture_id;
 
-  GQuark uniforms[N_UNIFORMS];
-  GQuark attributes[N_ATTRIBUTES];
 
   GdkGLContext *gl_context;
   GskGLDriver *gl_driver;
   GskGLProfiler *gl_profiler;
 
-  Program blend_program;
-  Program blit_program;
-  Program color_program;
-  Program coloring_program;
-  Program color_matrix_program;
-  Program linear_gradient_program;
-  Program clip_program;
+  union {
+    Program programs[N_PROGRAMS];
+    struct {
+      Program blend_program;
+      Program blit_program;
+      Program color_program;
+      Program coloring_program;
+      Program color_matrix_program;
+      Program linear_gradient_program;
+    };
+  };
 
-  GArray *render_items;
+  GArray *render_ops;
 
   GskGLGlyphCache glyph_cache;
+  int full_vao_id;
+  int full_vao_buffer_id;
 
 #ifdef G_ENABLE_DEBUG
   ProfileCounters profile_counters;
@@ -261,12 +250,270 @@ struct _GskGLRendererClass
 
 G_DEFINE_TYPE (GskGLRenderer, gsk_gl_renderer, GSK_TYPE_RENDERER)
 
+typedef struct
+{
+  /* Per-Program State */
+  struct {
+    GskRoundedRect clip;
+    graphene_matrix_t modelview;
+    graphene_matrix_t projection;
+    int source_texture;
+    graphene_rect_t viewport;
+  } program_state[N_PROGRAMS];
+
+  /* Current global state */
+  const Program *current_program;
+  int current_render_target;
+  int current_vao;
+  int current_texture;
+  GskRoundedRect current_clip;
+  graphene_matrix_t current_modelview;
+  graphene_matrix_t current_projection;
+  graphene_rect_t current_viewport;
+  float current_opacity;
+
+  gsize buffer_size;
+
+  GskGLRenderer *renderer;
+} RenderOpBuilder;
+
+static void
+add_program_op (RenderOpBuilder *builder,
+                const Program   *new_program)
+{
+  static const GskRoundedRect empty_clip;
+  static const graphene_matrix_t empty_matrix;
+  static const graphene_rect_t empty_rect;
+  RenderOp op;
+
+  if (builder->current_program == new_program)
+    return;
+
+  op.op = OP_CHANGE_PROGRAM;
+  op.program = new_program;
+  g_array_append_val (builder->renderer->render_ops, op);
+  builder->current_program = new_program;
+
+  /* If the projection is not yet set for this program, we use the current one. */
+  if (memcmp (&empty_matrix, &builder->program_state[new_program->index].projection, sizeof (graphene_matrix_t)) == 0 ||
+      memcmp (&builder->current_projection, &builder->program_state[new_program->index].projection, sizeof (graphene_matrix_t)) != 0)
+    {
+      op.op = OP_CHANGE_PROJECTION;
+      op.projection = builder->current_projection;
+      g_array_append_val (builder->renderer->render_ops, op);
+      builder->program_state[new_program->index].projection = builder->current_projection;
+    }
+
+  if (memcmp (&empty_matrix, &builder->program_state[new_program->index].modelview, sizeof (graphene_matrix_t)) == 0 ||
+      memcmp (&builder->current_modelview, &builder->program_state[new_program->index].modelview, sizeof (graphene_matrix_t)) != 0)
+    {
+      op.op = OP_CHANGE_MODELVIEW;
+      op.modelview = builder->current_modelview;
+      g_array_append_val (builder->renderer->render_ops, op);
+      builder->program_state[new_program->index].modelview = builder->current_modelview;
+    }
+
+  if (memcmp (&empty_rect, &builder->program_state[new_program->index].viewport, sizeof (graphene_rect_t)) == 0 ||
+      memcmp (&builder->current_viewport, &builder->program_state[new_program->index].viewport, sizeof (graphene_rect_t)) != 0)
+    {
+      op.op = OP_CHANGE_VIEWPORT;
+      op.viewport = builder->current_viewport;
+      g_array_append_val (builder->renderer->render_ops, op);
+      builder->program_state[new_program->index].viewport = builder->current_viewport;
+    }
+
+  if (memcmp (&empty_clip, &builder->program_state[new_program->index].clip, sizeof (GskRoundedRect)) == 0 ||
+      memcmp (&builder->current_clip, &builder->program_state[new_program->index].clip, sizeof (GskRoundedRect)) != 0)
+    {
+      op.op = OP_CHANGE_CLIP;
+      op.clip = builder->current_clip;
+      g_array_append_val (builder->renderer->render_ops, op);
+      builder->program_state[new_program->index].clip = builder->current_clip;
+    }
+
+  if (graphene_rect_equal (&empty_rect, &builder->program_state[new_program->index].viewport) ||
+      !graphene_rect_equal (&builder->current_viewport, &builder->program_state[new_program->index].viewport))
+    {
+      op.op = OP_CHANGE_VIEWPORT;
+      op.viewport = builder->current_viewport;
+      g_array_append_val (builder->renderer->render_ops, op);
+      builder->program_state[new_program->index].viewport = builder->current_viewport;
+    }
+}
+
+static GskRoundedRect
+add_clip_op (RenderOpBuilder      *builder,
+             const GskRoundedRect *new_clip)
+{
+  RenderOp op;
+  GskRoundedRect prev_clip;
+
+  op.op = OP_CHANGE_CLIP;
+  op.clip = *new_clip;
+  g_array_append_val (builder->renderer->render_ops, op);
+
+  if (builder->current_program != NULL)
+    builder->program_state[builder->current_program->index].clip = *new_clip;
+
+  prev_clip = builder->current_clip;
+  builder->current_clip = *new_clip;
+
+  return prev_clip;
+}
+
+static graphene_matrix_t
+add_modelview_op (RenderOpBuilder         *builder,
+                  const graphene_matrix_t *matrix)
+{
+  RenderOp op;
+  graphene_matrix_t prev_mv;
+  RenderOp *last_op;
+
+  last_op = &g_array_index (builder->renderer->render_ops, RenderOp, builder->renderer->render_ops->len - 1);
+  if (last_op->op == OP_CHANGE_MODELVIEW)
+    {
+      last_op->modelview = *matrix;
+    }
+  else
+    {
+      op.op = OP_CHANGE_MODELVIEW;
+      op.modelview = *matrix;
+      g_array_append_val (builder->renderer->render_ops, op);
+    }
+
+  if (builder->current_program != NULL)
+    builder->program_state[builder->current_program->index].modelview = *matrix;
+
+  prev_mv = builder->current_modelview;
+  builder->current_modelview = *matrix;
+
+  return prev_mv;
+}
+
+static graphene_matrix_t
+add_projection_op (RenderOpBuilder         *builder,
+                   const graphene_matrix_t *matrix)
+{
+  RenderOp op;
+  graphene_matrix_t prev_proj;
+
+  op.op = OP_CHANGE_PROJECTION;
+  op.projection = *matrix;
+  g_array_append_val (builder->renderer->render_ops, op);
+
+  if (builder->current_program != NULL)
+    builder->program_state[builder->current_program->index].projection = *matrix;
+
+  prev_proj = builder->current_projection;
+  builder->current_projection = *matrix;
+
+  return prev_proj;
+}
+
+static graphene_rect_t
+add_viewport_op (RenderOpBuilder       *builder,
+                 const graphene_rect_t *viewport)
+{
+  RenderOp op;
+  graphene_rect_t prev_viewport;
+
+  op.op = OP_CHANGE_VIEWPORT;
+  op.viewport = *viewport;
+  g_array_append_val (builder->renderer->render_ops, op);
+
+  if (builder->current_program != NULL)
+    builder->program_state[builder->current_program->index].viewport = *viewport;
+
+  prev_viewport = builder->current_viewport;
+  builder->current_viewport = *viewport;
+
+  return prev_viewport;
+}
+
+static void
+add_texture_op (RenderOpBuilder *builder,
+                int              texture_id)
+{
+  RenderOp op;
+
+  if (builder->current_texture == texture_id)
+    return;
+
+  op.op = OP_CHANGE_SOURCE_TEXTURE;
+  op.texture_id = texture_id;
+  g_array_append_val (builder->renderer->render_ops, op);
+  builder->current_texture = texture_id;
+}
+
+static float
+add_opacity_op (RenderOpBuilder *builder,
+                float            opacity)
+{
+  RenderOp op;
+  float prev_opacity;
+
+  if (builder->current_opacity == opacity)
+    return opacity;
+
+  op.op = OP_CHANGE_OPACITY;
+  op.opacity = opacity;
+  g_array_append_val (builder->renderer->render_ops, op);
+
+  prev_opacity = builder->current_opacity;
+  builder->current_opacity = opacity;
+
+  return prev_opacity;
+}
+
+static int
+add_render_target_op (RenderOpBuilder *builder,
+                      int              render_target_id)
+{
+  RenderOp op;
+  int prev_render_target;
+
+  if (builder->current_render_target == render_target_id)
+    return render_target_id;
+
+  prev_render_target = builder->current_render_target;
+  op.op = OP_CHANGE_RENDER_TARGET;
+  op.render_target_id = render_target_id;
+  g_array_append_val (builder->renderer->render_ops, op);
+  builder->current_render_target = render_target_id;
+
+  return prev_render_target;
+}
+
+static void
+add_draw_op (RenderOpBuilder     *builder,
+             const GskQuadVertex  vertex_data[N_VERTICES])
+{
+  RenderOp op;
+  gsize offset = builder->buffer_size / sizeof (GskQuadVertex);
+
+  op.op = OP_CHANGE_VAO;
+  memcpy (&op.vertex_data, vertex_data, sizeof(GskQuadVertex) * N_VERTICES);
+  g_array_append_val (builder->renderer->render_ops, op);
+  builder->buffer_size += sizeof (GskQuadVertex) * N_VERTICES;
+
+  op.op = OP_DRAW;
+  op.vao_offset = offset;
+  g_array_append_val (builder->renderer->render_ops, op);
+}
+
+static void
+add_op (RenderOpBuilder *builder,
+        const RenderOp  *op)
+{
+  g_array_append_val (builder->renderer->render_ops, *op);
+}
+
 static void
 gsk_gl_renderer_dispose (GObject *gobject)
 {
   GskGLRenderer *self = GSK_GL_RENDERER (gobject);
 
-  g_clear_pointer (&self->render_items, g_array_unref);
+  g_clear_pointer (&self->render_ops, g_array_unref);
 
   G_OBJECT_CLASS (gsk_gl_renderer_parent_class)->dispose (gobject);
 }
@@ -324,31 +571,19 @@ init_common_locations (GskGLRenderer    *self,
                        GskShaderBuilder *builder,
                        Program          *prog)
 {
-  prog->source_location =
-    gsk_shader_builder_get_uniform_location (builder, prog->id, self->uniforms[SOURCE]);
-  prog->mask_location =
-    gsk_shader_builder_get_uniform_location (builder, prog->id, self->uniforms[MASK]);
-  prog->alpha_location =
-    gsk_shader_builder_get_uniform_location (builder, prog->id, self->uniforms[ALPHA]);
-  prog->blendMode_location =
-    gsk_shader_builder_get_uniform_location (builder, prog->id, self->uniforms[BLEND_MODE]);
-  prog->viewport_location = gsk_shader_builder_get_uniform_location (builder, prog->id,
-                                                                     self->uniforms[VIEWPORT]);
-  prog->projection_location = gsk_shader_builder_get_uniform_location (builder, prog->id,
-                                                                       self->uniforms[PROJECTION]);
-  prog->modelview_location = gsk_shader_builder_get_uniform_location (builder, prog->id,
-                                                                      self->uniforms[MODELVIEW]);
-  prog->clip_location = gsk_shader_builder_get_uniform_location (builder, prog->id,
-                                                                 self->uniforms[CLIP]);
-  prog->clip_corner_widths_location = gsk_shader_builder_get_uniform_location (builder, prog->id,
-                                                                               self->uniforms[CLIP_CORNER_WIDTHS]);
-  prog->clip_corner_heights_location = gsk_shader_builder_get_uniform_location (builder, prog->id,
-                                                                               self->uniforms[CLIP_CORNER_HEIGHTS]);
+  prog->source_location = glGetUniformLocation (prog->id, "uSource");
+  prog->mask_location = glGetUniformLocation (prog->id, "uMask");
+  prog->alpha_location = glGetUniformLocation (prog->id, "uAlpha");
+  prog->blend_mode_location = glGetUniformLocation (prog->id, "uBlendMode");
+  prog->viewport_location = glGetUniformLocation (prog->id, "uViewport");
+  prog->projection_location = glGetUniformLocation (prog->id, "uProjection");
+  prog->modelview_location = glGetUniformLocation (prog->id, "uModelview");
+  prog->clip_location = glGetUniformLocation (prog->id, "uClip");
+  prog->clip_corner_widths_location = glGetUniformLocation (prog->id, "uClipCornerWidths");
+  prog->clip_corner_heights_location = glGetUniformLocation (prog->id, "uClipCornerHeights");
 
-  prog->position_location =
-    gsk_shader_builder_get_attribute_location (builder, prog->id, self->attributes[POSITION]);
-  prog->uv_location =
-    gsk_shader_builder_get_attribute_location (builder, prog->id, self->attributes[UV]);
+  prog->position_location = glGetAttribLocation (prog->id, "aPosition");
+  prog->uv_location = glGetAttribLocation (prog->id, "aUv");
 }
 
 static gboolean
@@ -362,20 +597,6 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   builder = gsk_shader_builder_new ();
 
   gsk_shader_builder_set_resource_base_path (builder, "/org/gtk/libgsk/glsl");
-
-  self->uniforms[SOURCE] = gsk_shader_builder_add_uniform (builder, "uSource");
-  self->uniforms[MASK] = gsk_shader_builder_add_uniform (builder, "uMask");
-  self->uniforms[ALPHA] = gsk_shader_builder_add_uniform (builder, "uAlpha");
-  self->uniforms[BLEND_MODE] = gsk_shader_builder_add_uniform (builder, "uBlendMode");
-  self->uniforms[VIEWPORT] = gsk_shader_builder_add_uniform (builder, "uViewport");
-  self->uniforms[PROJECTION] = gsk_shader_builder_add_uniform (builder, "uProjection");
-  self->uniforms[MODELVIEW] = gsk_shader_builder_add_uniform (builder, "uModelview");
-  self->uniforms[CLIP] = gsk_shader_builder_add_uniform (builder, "uClip");
-  self->uniforms[CLIP_CORNER_WIDTHS] = gsk_shader_builder_add_uniform (builder, "uClipCornerWidths");
-  self->uniforms[CLIP_CORNER_HEIGHTS] = gsk_shader_builder_add_uniform (builder, "uClipCornerHeights");
-
-  self->attributes[POSITION] = gsk_shader_builder_add_attribute (builder, "aPosition");
-  self->attributes[UV] = gsk_shader_builder_add_attribute (builder, "aUv");
 
   if (gdk_gl_context_get_use_es (self->gl_context))
     {
@@ -411,8 +632,9 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
     gsk_shader_builder_add_define (builder, "GSK_DEBUG", "1");
 #endif
 
-  self->blend_program.id = 
-    gsk_shader_builder_create_program (builder, "blend.vs.glsl", "blend.fs.glsl", &shader_error);
+  self->blend_program.id =  gsk_shader_builder_create_program (builder,
+                                                               "blend.vs.glsl", "blend.fs.glsl",
+                                                               &shader_error);
   if (shader_error != NULL)
     {
       g_propagate_prefixed_error (error,
@@ -420,10 +642,12 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
                                   "Unable to create 'blend' program: ");
       goto out;
     }
+  self->blend_program.index = 0;
   init_common_locations (self, builder, &self->blend_program);
 
-  self->blit_program.id =
-    gsk_shader_builder_create_program (builder, "blit.vs.glsl", "blit.fs.glsl", &shader_error);
+  self->blit_program.id = gsk_shader_builder_create_program (builder,
+                                                             "blit.vs.glsl", "blit.fs.glsl",
+                                                             &shader_error);
   if (shader_error != NULL)
     {
       g_propagate_prefixed_error (error,
@@ -431,10 +655,12 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
                                   "Unable to create 'blit' program: ");
       goto out;
     }
+  self->blit_program.index = 1;
   init_common_locations (self, builder, &self->blit_program);
 
-  self->color_program.id =
-    gsk_shader_builder_create_program (builder, "blit.vs.glsl", "color.fs.glsl", &shader_error);
+  self->color_program.id = gsk_shader_builder_create_program (builder,
+                                                              "blit.vs.glsl", "color.fs.glsl",
+                                                              &shader_error);
   if (shader_error != NULL)
     {
       g_propagate_prefixed_error (error,
@@ -442,12 +668,12 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
                                   "Unable to create 'color' program: ");
       goto out;
     }
+  self->color_program.index = 2;
   init_common_locations (self, builder, &self->color_program);
   INIT_PROGRAM_UNIFORM_LOCATION (color_program, color_location, "uColor");
 
   self->coloring_program.id = gsk_shader_builder_create_program (builder,
-                                                                 "blit.vs.glsl",
-                                                                 "coloring.fs.glsl",
+                                                                 "blit.vs.glsl", "coloring.fs.glsl",
                                                                  &shader_error);
   if (shader_error != NULL)
     {
@@ -456,12 +682,12 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
                                   "Unable to create 'coloring' program: ");
       goto out;
     }
+  self->coloring_program.index = 3;
   init_common_locations (self, builder, &self->coloring_program);
   INIT_PROGRAM_UNIFORM_LOCATION (coloring_program, color_location, "uColor");
 
   self->color_matrix_program.id = gsk_shader_builder_create_program (builder,
-                                                                     "blit.vs.glsl",
-                                                                     "color_matrix.fs.glsl",
+                                                                     "blit.vs.glsl", "color_matrix.fs.glsl",
                                                                      &shader_error);
   if (shader_error != NULL)
     {
@@ -470,13 +696,13 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
                                   "Unable to create 'color_matrix' program: ");
       goto out;
     }
+  self->color_matrix_program.index = 4;
   init_common_locations (self, builder, &self->color_matrix_program);
   INIT_PROGRAM_UNIFORM_LOCATION (color_matrix_program, color_matrix_location, "uColorMatrix");
   INIT_PROGRAM_UNIFORM_LOCATION (color_matrix_program, color_offset_location, "uColorOffset");
 
   self->linear_gradient_program.id = gsk_shader_builder_create_program (builder,
-                                                                        "blit.vs.glsl",
-                                                                        "linear_gradient.fs.glsl",
+                                                                        "blit.vs.glsl", "linear_gradient.fs.glsl",
                                                                         &shader_error);
   if (shader_error != NULL)
     {
@@ -485,6 +711,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
                                   "Unable to create 'linear_gradient' program: ");
       goto out;
     }
+  self->linear_gradient_program.index = 5;
   init_common_locations (self, builder, &self->linear_gradient_program);
   INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient_program, color_stops_location, "uColorStops");
   INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient_program, color_offsets_location, "uColorOffsets");
@@ -506,6 +733,16 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
                          GError      **error)
 {
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
+  GskQuadVertex vertex_data[N_VERTICES] = {
+    { { 0, 0 }, { 0, 0 }, },
+    { { 0, 1 }, { 0, 1 }, },
+    { { 1, 0 }, { 1, 0 }, },
+
+    { { 1, 1 }, { 1, 1 }, },
+    { { 0, 1 }, { 0, 1 }, },
+    { { 1, 0 }, { 1, 0 }, },
+  };
+
 
   self->scale_factor = gdk_window_get_scale_factor (window);
 
@@ -534,6 +771,9 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
 
   gsk_gl_glyph_cache_init (&self->glyph_cache, self->gl_driver);
 
+  gsk_gl_driver_create_permanent_vao_for_quad (self->gl_driver, N_VERTICES, vertex_data,
+                                               &self->full_vao_id, &self->full_vao_buffer_id);
+
   return TRUE;
 }
 
@@ -550,7 +790,7 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
   /* We don't need to iterate to destroy the associated GL resources,
    * as they will be dropped when we finalize the GskGLDriver
    */
-  g_array_set_size (self->render_items, 0);
+  g_array_set_size (self->render_ops, 0);
 
 
   glDeleteProgram (self->blend_program.id);
@@ -634,173 +874,6 @@ gsk_gl_renderer_resize_viewport (GskGLRenderer         *self,
   glViewport (0, 0, width, height);
 }
 
-#define N_VERTICES      6
-
-static void
-render_item (GskGLRenderer    *self,
-             const RenderItem *item)
-{
-  float mat[16];
-  const gboolean draw_children = item->children != NULL &&
-                                 item->children->len > 0;
-  const gboolean drawing_offscreen = item->parent_render_target != 0;
-
-  /*g_message ("Rendering %s with %u children and parent render target %d", item->name, item->children ? item->children->len : 0, item->parent_render_target);*/
-
-  if (draw_children)
-    {
-      guint i;
-      guint p;
-      graphene_rect_t prev_viewport;
-
-      prev_viewport = self->viewport;
-
-      gsk_gl_driver_bind_render_target (self->gl_driver, item->render_target);
-      glDisable (GL_SCISSOR_TEST);
-      glClearColor (0.0, 0.0, 0.0, 0.0);
-      glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-      graphene_rect_init (&self->viewport,
-                          item->min.x, item->min.y, item->size.width * self->scale_factor, item->size.height * self->scale_factor);
-      glViewport (0, 0, item->size.width * self->scale_factor, item->size.height * self->scale_factor);
-
-      p = item->children->len;
-      for (i = 0; i < p; i ++)
-        {
-          const RenderItem *child = &g_array_index (item->children, RenderItem, i);
-
-          g_assert (child->parent_render_target == item->render_target);
-          render_item (self, child);
-        }
-
-      /* At this point, all the child items should've been drawn */
-      gsk_gl_driver_bind_render_target (self->gl_driver, 0);
-      /* TODO: Manage pre-/post-framebuffer-state in the driver? */
-      /* Resets the scissor test, etc. */
-      if (!drawing_offscreen)
-        gsk_gl_renderer_setup_render_mode (self);
-
-      graphene_rect_init_from_rect (&self->viewport, &prev_viewport);
-      glViewport (0, 0, self->viewport.size.width, self->viewport.size.height);
-    }
-
-
-  if (drawing_offscreen)
-    g_assert (gsk_gl_driver_bind_render_target (self->gl_driver, item->parent_render_target));
-
-  glUseProgram (item->program->id);
-
-  switch(item->mode)
-    {
-      case MODE_COLOR:
-        {
-          glUniform4f (item->program->color_location,
-                       item->color_data.color.red,
-                       item->color_data.color.green,
-                       item->color_data.color.blue,
-                       item->color_data.color.alpha);
-        }
-      break;
-
-      case MODE_COLORING:
-        {
-          glUniform4f (item->program->color_location,
-                       item->color_data.color.red,
-                       item->color_data.color.green,
-                       item->color_data.color.blue,
-                       item->color_data.color.alpha);
-          g_assert(item->texture_id != 0);
-          /* Use texture unit 0 for the source */
-          glUniform1i (item->program->source_location, 0);
-          gsk_gl_driver_bind_source_texture (self->gl_driver, item->texture_id);
-        }
-      break;
-
-      case MODE_TEXTURE:
-        {
-          g_assert(item->texture_id != 0);
-          /* Use texture unit 0 for the source */
-          glUniform1i (item->program->source_location, 0);
-          gsk_gl_driver_bind_source_texture (self->gl_driver, item->texture_id);
-        }
-      break;
-
-      case MODE_BLIT:
-        g_assert (item->program == &self->blit_program);
-        glUniform1i (item->program->source_location, 0);
-        if (item->render_target != 0)
-          gsk_gl_driver_bind_source_texture (self->gl_driver, item->render_target);
-        else
-          gsk_gl_driver_bind_source_texture (self->gl_driver, item->texture_id);
-      break;
-
-      case MODE_COLOR_MATRIX:
-        {
-          float vec[4];
-
-          glUniform1i (item->program->source_location, 0);
-          if (item->render_target != 0)
-            gsk_gl_driver_bind_source_texture (self->gl_driver, item->render_target);
-          else
-            gsk_gl_driver_bind_source_texture (self->gl_driver, item->texture_id);
-
-          graphene_matrix_to_float (&item->color_matrix_data.color_matrix, mat);
-          glUniformMatrix4fv (item->program->color_matrix_location, 1, GL_FALSE, mat);
-
-          graphene_vec4_to_float (&item->color_matrix_data.color_offset, vec);
-          glUniform4fv (item->program->color_offset_location, 1, vec);
-        }
-      break;
-
-      case MODE_LINEAR_GRADIENT:
-        {
-          glUniform1i (item->program->n_color_stops_location,
-                       item->linear_gradient_data.n_color_stops);
-          glUniform4fv (item->program->color_stops_location,
-                        item->linear_gradient_data.n_color_stops,
-                        item->linear_gradient_data.color_stops);
-          glUniform1fv (item->program->color_offsets_location,
-                        item->linear_gradient_data.n_color_stops,
-                        item->linear_gradient_data.color_offsets);
-          glUniform2f (item->program->start_point_location,
-                       item->linear_gradient_data.start_point.x, item->linear_gradient_data.start_point.y);
-          glUniform2f (item->program->end_point_location,
-                       item->linear_gradient_data.end_point.x, item->linear_gradient_data.end_point.y);
-        }
-      break;
-
-      default:
-        g_assert_not_reached ();
-    }
-
-  /* Common uniforms */
-  graphene_matrix_to_float (&item->projection, mat);
-  glUniformMatrix4fv (item->program->projection_location, 1, GL_FALSE, mat);
-
-  graphene_matrix_to_float (&item->modelview, mat);
-  glUniformMatrix4fv (item->program->modelview_location, 1, GL_FALSE, mat);
-
-  glUniform1f (item->program->alpha_location, item->opacity);
-  glUniform4f (item->program->viewport_location,
-               self->viewport.origin.x, self->viewport.origin.y,
-               self->viewport.size.width, self->viewport.size.height);
-  glUniform4f (item->program->clip_location,
-               item->rounded_clip.bounds.origin.x, item->rounded_clip.bounds.origin.y,
-               item->rounded_clip.bounds.size.width, item->rounded_clip.bounds.size.height);
-
-  glUniform4f (item->program->clip_corner_widths_location,
-               MAX (item->rounded_clip.corner[0].width, 1),
-               MAX (item->rounded_clip.corner[1].width, 1),
-               MAX (item->rounded_clip.corner[2].width, 1),
-               MAX (item->rounded_clip.corner[3].width, 1));
-  glUniform4f (item->program->clip_corner_heights_location,
-               MAX (item->rounded_clip.corner[0].height, 1),
-               MAX (item->rounded_clip.corner[1].height, 1),
-               MAX (item->rounded_clip.corner[2].height, 1),
-               MAX (item->rounded_clip.corner[3].height, 1));
-
-  gsk_gl_driver_bind_vao (self->gl_driver, item->vao_id);
-  glDrawArrays (GL_TRIANGLES, 0, N_VERTICES);
-}
 
 static void
 get_gl_scaling_filters (GskRenderNode *node,
@@ -809,527 +882,6 @@ get_gl_scaling_filters (GskRenderNode *node,
 {
   *min_filter_r = GL_NEAREST;
   *mag_filter_r = GL_NEAREST;
-}
-
-static float
-project_item (const graphene_matrix_t *projection,
-              const graphene_matrix_t *modelview)
-{
-  graphene_vec4_t vec;
-
-  graphene_matrix_get_row (modelview, 3, &vec);
-  graphene_matrix_transform_vec4 (projection, &vec, &vec);
-
-  return graphene_vec4_get_z (&vec) / graphene_vec4_get_w (&vec);
-}
-
-static void
-init_framebuffer_for_node (GskGLRenderer           *self,
-                           RenderItem              *item,
-                           GskRenderNode           *node,
-                           const graphene_matrix_t *projection,
-                           graphene_matrix_t       *out_projection)
-{
-  item->render_target = gsk_gl_driver_create_texture (self->gl_driver,
-                                                      item->size.width  * self->scale_factor,
-                                                      item->size.height * self->scale_factor);
-  gsk_gl_driver_bind_source_texture (self->gl_driver, item->render_target);
-  gsk_gl_driver_init_texture_empty (self->gl_driver, item->render_target);
-  gsk_gl_driver_create_render_target (self->gl_driver, item->render_target, TRUE, TRUE);
-
-  item->children = g_array_new (FALSE, FALSE, sizeof (RenderItem));
-  g_array_set_clear_func (item->children, (GDestroyNotify)destroy_render_item);
-
-  g_assert (projection != NULL);
-  graphene_matrix_init_ortho (out_projection,
-                              item->min.x,
-                              item->min.x + item->size.width  * self->scale_factor,
-                              item->min.y,
-                              item->min.y + item->size.height * self->scale_factor,
-                              ORTHO_NEAR_PLANE, ORTHO_FAR_PLANE);
-  graphene_matrix_scale (out_projection, 1, -1, 1);
-}
-
-static void
-gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
-                                 const graphene_matrix_t *projection,
-                                 const graphene_matrix_t *modelview,
-                                 GArray                  *render_items,
-                                 GskRenderNode           *node,
-                                 int                      render_target,
-                                 const GskRoundedRect    *parent_clip)
-{
-  RenderItem item;
-
-  /* A few of the render nodes don't actually result in a RenderItem, they just
-   * change the current state and pass it down. */
-  /* We handle container nodes here directly */
-  switch ((guint)gsk_render_node_get_node_type (node))
-    {
-    case GSK_CONTAINER_NODE:
-      {
-        guint i, p;
-
-        for (i = 0, p = gsk_container_node_get_n_children (node); i < p; i++)
-          {
-            GskRenderNode *child = gsk_container_node_get_child (node, i);
-            gsk_gl_renderer_add_render_item (self, projection, modelview, render_items,
-                                             child, render_target, parent_clip);
-          }
-      }
-    return;
-
-    case GSK_TRANSFORM_NODE:
-      {
-        graphene_matrix_t transform, transformed_mv;
-
-        graphene_matrix_init_from_matrix (&transform, gsk_transform_node_peek_transform (node));
-        graphene_matrix_multiply (&transform, modelview, &transformed_mv);
-        gsk_gl_renderer_add_render_item (self, projection, &transformed_mv, render_items,
-                                         gsk_transform_node_get_child (node),
-                                         render_target,
-                                         parent_clip);
-      }
-    return;
-
-    case GSK_CLIP_NODE:
-      {
-        GskRenderNode *child = gsk_clip_node_get_child (node);
-        graphene_rect_t transformed_clip;
-        graphene_rect_t intersection;
-        GskRoundedRect child_clip;
-
-        transformed_clip = *gsk_clip_node_peek_clip (node);
-        graphene_matrix_transform_bounds (modelview, &transformed_clip, &transformed_clip);
-
-        /* Since we do the intersection here, we also need to transform by the modelview matrix.
-         * We can't do it in the shader. Same with rounded clips */
-        graphene_rect_intersection (&transformed_clip,
-                                    &parent_clip->bounds,
-                                    &intersection);
-
-        gsk_rounded_rect_init_from_rect (&child_clip, &intersection, 0.0f);
-
-        gsk_gl_renderer_add_render_item (self, projection, modelview, render_items, child,
-                                         render_target, &child_clip);
-      }
-    return;
-
-    case GSK_ROUNDED_CLIP_NODE:
-      {
-        GskRenderNode *child = gsk_rounded_clip_node_get_child (node);
-        const GskRoundedRect *rounded_clip = gsk_rounded_clip_node_peek_clip (node);
-        graphene_rect_t transformed_clip;
-        graphene_rect_t intersection;
-        GskRoundedRect child_clip;
-
-        transformed_clip = rounded_clip->bounds;
-        graphene_matrix_transform_bounds (modelview, &transformed_clip, &transformed_clip);
-
-        graphene_rect_intersection (&transformed_clip, &parent_clip->bounds,
-                                    &intersection);
-        gsk_rounded_rect_init (&child_clip, &intersection,
-                               &rounded_clip->corner[0],
-                               &rounded_clip->corner[1],
-                               &rounded_clip->corner[2],
-                               &rounded_clip->corner[3]);
-
-        gsk_gl_renderer_add_render_item (self, projection, modelview, render_items, child,
-                                         render_target, &child_clip);
-      }
-    return;
-
-    default: {}
-    }
-
-  memset (&item, 0, sizeof (RenderItem));
-
-  item.name = node->name != NULL ? node->name : "unnamed";
-
-
-  item.size.width = node->bounds.size.width;
-  item.size.height = node->bounds.size.height;
-  /* Each render item is an axis-aligned bounding box that we
-   * transform using the given transformation matrix
-   */
-  item.min.x = node->bounds.origin.x;
-  item.min.y = node->bounds.origin.y;
-
-  item.max.x = item.min.x + node->bounds.size.width;
-  item.max.y = item.min.y + node->bounds.size.height;
-
-  item.z = project_item (projection, modelview);
-
-  item.opacity = 1.0;
-  item.projection = *projection;
-  item.modelview = *modelview;
-  item.rounded_clip = *parent_clip;
-
-  item.blend_mode = GSK_BLEND_MODE_DEFAULT;
-
-  item.parent_render_target = render_target;
-
-  item.mode = MODE_BLIT;
-  item.program = &self->blit_program;
-  item.render_target = 0;
-  item.children = NULL;
-
-  switch (gsk_render_node_get_node_type (node))
-    {
-    case GSK_OPACITY_NODE:
-      {
-        GskRenderNode *child = gsk_opacity_node_get_child (node);
-
-        if (gsk_render_node_get_node_type (child) != GSK_TEXTURE_NODE)
-          {
-            graphene_matrix_t p;
-            graphene_matrix_t identity;
-
-            graphene_matrix_init_identity (&identity);
-            init_framebuffer_for_node (self, &item, node, projection, &p);
-            gsk_gl_renderer_add_render_item (self, &p, &identity, item.children, child,
-                                             item.render_target, parent_clip);
-          }
-        else
-          {
-            GdkTexture *texture = gsk_texture_node_get_texture (child);
-            int gl_min_filter = GL_NEAREST, gl_mag_filter = GL_NEAREST;
-
-            get_gl_scaling_filters (node, &gl_min_filter, &gl_mag_filter);
-
-            item.texture_id = gsk_gl_driver_get_texture_for_texture (self->gl_driver,
-                                                                     texture,
-                                                                     gl_min_filter,
-                                                                     gl_mag_filter);
-          }
-
-        item.mode = MODE_BLIT;
-        item.opacity = gsk_opacity_node_get_opacity (node);
-      }
-      break;
-
-    case GSK_COLOR_MATRIX_NODE:
-      {
-        GskRenderNode *child = gsk_color_matrix_node_get_child (node);
-
-        if (gsk_render_node_get_node_type (child) != GSK_TEXTURE_NODE)
-          {
-            graphene_matrix_t p;
-            graphene_matrix_t identity;
-
-            graphene_matrix_init_identity (&identity);
-            init_framebuffer_for_node (self, &item, node, projection, &p);
-            gsk_gl_renderer_add_render_item (self, &p, &identity, item.children, child,
-                                             item.render_target, parent_clip);
-          }
-        else
-          {
-            GdkTexture *texture = gsk_texture_node_get_texture (child);
-            int gl_min_filter = GL_NEAREST, gl_mag_filter = GL_NEAREST;
-
-            get_gl_scaling_filters (node, &gl_min_filter, &gl_mag_filter);
-
-            item.texture_id = gsk_gl_driver_get_texture_for_texture (self->gl_driver,
-                                                                     texture,
-                                                                     gl_min_filter,
-                                                                     gl_mag_filter);
-          }
-
-        item.mode = MODE_COLOR_MATRIX;
-        item.program = &self->color_matrix_program;
-        item.color_matrix_data.color_matrix = *gsk_color_matrix_node_peek_color_matrix (node);
-        item.color_matrix_data.color_offset = *gsk_color_matrix_node_peek_color_offset (node);
-      }
-      break;
-
-    case GSK_TEXTURE_NODE:
-      {
-        GdkTexture *texture = gsk_texture_node_get_texture (node);
-        int gl_min_filter = GL_NEAREST, gl_mag_filter = GL_NEAREST;
-
-        get_gl_scaling_filters (node, &gl_min_filter, &gl_mag_filter);
-
-        item.texture_id = gsk_gl_driver_get_texture_for_texture (self->gl_driver,
-                                                                 texture,
-                                                                 gl_min_filter,
-                                                                 gl_mag_filter);
-        item.mode = MODE_TEXTURE;
-      }
-      break;
-
-    case GSK_CAIRO_NODE:
-      {
-        const cairo_surface_t *surface = gsk_cairo_node_peek_surface (node);
-        int gl_min_filter = GL_NEAREST, gl_mag_filter = GL_NEAREST;
-
-        if (surface == NULL)
-          return;
-
-        get_gl_scaling_filters (node, &gl_min_filter, &gl_mag_filter);
-
-        item.texture_id = gsk_gl_driver_create_texture (self->gl_driver,
-                                                        item.size.width,
-                                                        item.size.height);
-        gsk_gl_driver_bind_source_texture (self->gl_driver, item.texture_id);
-        gsk_gl_driver_init_texture_with_surface (self->gl_driver,
-                                                 item.texture_id,
-                                                 (cairo_surface_t *)surface,
-                                                 gl_min_filter,
-                                                 gl_mag_filter);
-        item.mode = MODE_TEXTURE;
-      }
-      break;
-
-    case GSK_COLOR_NODE:
-      {
-        item.mode = MODE_COLOR;
-        item.program = &self->color_program;
-        item.color_data.color= *gsk_color_node_peek_color (node);
-      }
-      break;
-
-    case GSK_LINEAR_GRADIENT_NODE:
-      {
-        int n_color_stops = MIN (8, gsk_linear_gradient_node_get_n_color_stops (node));
-        const GskColorStop *stops = gsk_linear_gradient_node_peek_color_stops (node);
-        const graphene_point_t *start = gsk_linear_gradient_node_peek_start (node);
-        const graphene_point_t *end = gsk_linear_gradient_node_peek_end (node);
-        int i;
-
-        item.mode = MODE_LINEAR_GRADIENT;
-        item.program = &self->linear_gradient_program;
-
-        for (i = 0; i < n_color_stops; i ++)
-          {
-            const GskColorStop *stop = stops + i;
-
-            item.linear_gradient_data.color_stops[(i * 4) + 0] = stop->color.red;
-            item.linear_gradient_data.color_stops[(i * 4) + 1] = stop->color.green;
-            item.linear_gradient_data.color_stops[(i * 4) + 2] = stop->color.blue;
-            item.linear_gradient_data.color_stops[(i * 4) + 3] = stop->color.alpha;
-            item.linear_gradient_data.color_offsets[i] = stop->offset;
-          }
-
-        item.linear_gradient_data.n_color_stops = n_color_stops;
-        item.linear_gradient_data.start_point = *start;
-        item.linear_gradient_data.end_point = *end;
-      }
-      break;
-
-    case GSK_TEXT_NODE:
-      {
-        const PangoFont *font = gsk_text_node_peek_font (node);
-        const PangoGlyphInfo *glyphs = gsk_text_node_peek_glyphs (node);
-        guint num_glyphs = gsk_text_node_get_num_glyphs (node);
-        int i;
-        int x_position = 0;
-        int x = gsk_text_node_get_x (node);
-        int y = gsk_text_node_get_y (node);
-
-        /* We use one quad per character, unlike the other nodes which
-         * use at most one quad altogether */
-        for (i = 0; i < num_glyphs; i++)
-          {
-            const PangoGlyphInfo *gi = &glyphs[i];
-            const GskGLCachedGlyph *glyph;
-            int glyph_x, glyph_y, glyph_w, glyph_h;
-            float tx, ty, tx2, ty2;
-            double cx;
-            double cy;
-
-            if (gi->glyph == PANGO_GLYPH_EMPTY ||
-                (gi->glyph & PANGO_GLYPH_UNKNOWN_FLAG) > 0)
-              continue;
-
-            glyph = gsk_gl_glyph_cache_lookup (&self->glyph_cache,
-                                               TRUE,
-                                               (PangoFont *)font,
-                                               gi->glyph,
-                                               self->scale_factor);
-
-            /* e.g. whitespace */
-            if (glyph->draw_width <= 0 || glyph->draw_height <= 0)
-              {
-                x_position += gi->geometry.width;
-                continue;
-              }
-            cx = (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
-            cy = (double)(gi->geometry.y_offset) / PANGO_SCALE;
-
-            /* If the font has color glyphs, we don't need to recolor anything */
-            if (font_has_color_glyphs (font))
-              {
-                item.mode = MODE_BLIT;
-                item.program = &self->blit_program;
-              }
-            else
-              {
-                item.mode = MODE_COLORING;
-                item.program = &self->coloring_program;
-                item.color_data.color = *gsk_text_node_peek_color (node);
-              }
-
-            item.texture_id = gsk_gl_glyph_cache_get_glyph_image (&self->glyph_cache, glyph)->texture_id;
-
-            {
-              tx  = glyph->tx;
-              ty  = glyph->ty;
-              tx2 = tx + glyph->tw;
-              ty2 = ty + glyph->th;
-
-              glyph_x = x + cx + glyph->draw_x;
-              glyph_y = y + cy + glyph->draw_y;
-              glyph_w = glyph->draw_width;
-              glyph_h = glyph->draw_height;
-
-              item.min.x = glyph_x;
-              item.min.y = glyph_y;
-              item.size.width = glyph_w;
-              item.size.height = glyph_h;
-              item.max.x = item.min.x + item.size.width;
-              item.max.y = item.min.y + item.size.height;
-
-              GskQuadVertex vertex_data[N_VERTICES] = {
-                { { glyph_x,           glyph_y           }, { tx,  ty  }, },
-                { { glyph_x,           glyph_y + glyph_h }, { tx,  ty2 }, },
-                { { glyph_x + glyph_w, glyph_y           }, { tx2, ty  }, },
-
-                { { glyph_x + glyph_w, glyph_y + glyph_h }, { tx2, ty2 }, },
-                { { glyph_x,           glyph_y + glyph_h }, { tx,  ty2 }, },
-                { { glyph_x + glyph_w, glyph_y           }, { tx2, ty  }, },
-              };
-
-              item.vao_id = gsk_gl_driver_create_vao_for_quad (self->gl_driver,
-                                                               item.program->position_location,
-                                                               item.program->uv_location,
-                                                               N_VERTICES,
-                                                               vertex_data);
-            }
-
-
-            g_array_append_val (render_items, item);
-
-            x_position += gi->geometry.width;
-          }
-      }
-      return;
-
-    case GSK_NOT_A_RENDER_NODE:
-    case GSK_CONTAINER_NODE:
-    case GSK_TRANSFORM_NODE:
-    case GSK_CLIP_NODE:
-    case GSK_ROUNDED_CLIP_NODE:
-      g_assert_not_reached ();
-      return;
-
-    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
-    case GSK_BORDER_NODE:
-    case GSK_INSET_SHADOW_NODE:
-    case GSK_OUTSET_SHADOW_NODE:
-    case GSK_BLUR_NODE:
-    case GSK_SHADOW_NODE:
-    case GSK_CROSS_FADE_NODE:
-    case GSK_BLEND_NODE:
-    case GSK_REPEAT_NODE:
-    default:
-      {
-        cairo_surface_t *surface;
-        cairo_t *cr;
-
-        surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                              ceilf (item.size.width) * self->scale_factor,
-                                              ceilf (item.size.height) * self->scale_factor);
-        cairo_surface_set_device_scale (surface, self->scale_factor, self->scale_factor);
-        cr = cairo_create (surface);
-
-        cairo_save (cr);
-        cairo_translate (cr, -node->bounds.origin.x, -node->bounds.origin.y);
-        gsk_render_node_draw (node, cr);
-        cairo_restore (cr);
-
-#if HIGHLIGHT_FALLBACK
-        cairo_move_to (cr, 0, 0);
-        cairo_rectangle (cr, 0, 0, item.size.width, item.size.height);
-        cairo_set_source_rgba (cr, 1, 0, 0, 1);
-        cairo_stroke (cr);
-#endif
-
-        cairo_destroy (cr);
-
-        /* Upload the Cairo surface to a GL texture */
-        item.texture_id = gsk_gl_driver_create_texture (self->gl_driver,
-                                                        item.size.width * self->scale_factor,
-                                                        item.size.height * self->scale_factor);
-        gsk_gl_driver_bind_source_texture (self->gl_driver, item.texture_id);
-        gsk_gl_driver_init_texture_with_surface (self->gl_driver,
-                                                 item.texture_id,
-                                                 surface,
-                                                 GL_NEAREST, GL_NEAREST);
-
-        cairo_surface_destroy (surface);
-        item.mode = MODE_TEXTURE;
-      }
-      break;
-    }
-
-  /* Create the vertex buffers holding the geometry of the quad */
-  if (item.render_target == 0)
-    {
-      GskQuadVertex vertex_data[N_VERTICES] = {
-        { { item.min.x, item.min.y }, { 0, 0 }, },
-        { { item.min.x, item.max.y }, { 0, 1 }, },
-        { { item.max.x, item.min.y }, { 1, 0 }, },
-
-        { { item.max.x, item.max.y }, { 1, 1 }, },
-        { { item.min.x, item.max.y }, { 0, 1 }, },
-        { { item.max.x, item.min.y }, { 1, 0 }, },
-      };
-
-      item.vao_id = gsk_gl_driver_create_vao_for_quad (self->gl_driver,
-                                                       item.program->position_location,
-                                                       item.program->uv_location,
-                                                       N_VERTICES,
-                                                       vertex_data);
-    }
-  else
-    {
-      GskQuadVertex vertex_data[N_VERTICES] = {
-        { { item.min.x, item.min.y }, { 0, 1 }, },
-        { { item.min.x, item.max.y }, { 0, 0 }, },
-        { { item.max.x, item.min.y }, { 1, 1 }, },
-
-        { { item.max.x, item.max.y }, { 1, 0 }, },
-        { { item.min.x, item.max.y }, { 0, 0 }, },
-        { { item.max.x, item.min.y }, { 1, 1 }, },
-      };
-
-      item.vao_id = gsk_gl_driver_create_vao_for_quad (self->gl_driver,
-                                                       item.program->position_location,
-                                                       item.program->uv_location,
-                                                       N_VERTICES,
-                                                       vertex_data);
-    }
-
-  GSK_NOTE (OPENGL, g_print ("Adding node <%s>[%p] to render items\n",
-                             node->name != NULL ? node->name : "unnamed",
-                             node));
-  g_array_append_val (render_items, item);
-}
-
-static void
-gsk_gl_renderer_validate_tree (GskGLRenderer           *self,
-                               GskRenderNode           *root,
-                               const graphene_matrix_t *projection,
-                               const graphene_matrix_t *modelview)
-{
-  GskRoundedRect viewport_clip;
-
-  gdk_gl_context_make_current (self->gl_context);
-
-  gsk_rounded_rect_init_from_rect (&viewport_clip, &self->viewport, 0.0f);
-
-  gsk_gl_renderer_add_render_item (self, projection, modelview, self->render_items, root,
-                                   self->texture_id, &viewport_clip);
 }
 
 static void
@@ -1342,7 +894,7 @@ gsk_gl_renderer_clear_tree (GskGLRenderer *self)
 
   gdk_gl_context_make_current (self->gl_context);
 
-  g_array_remove_range (self->render_items, 0, self->render_items->len);
+  g_array_remove_range (self->render_ops, 0, self->render_ops->len);
 
   removed_textures = gsk_gl_driver_collect_textures (self->gl_driver);
   removed_vaos = gsk_gl_driver_collect_vaos (self->gl_driver);
@@ -1409,14 +961,564 @@ gsk_gl_renderer_setup_render_mode (GskGLRenderer *self)
 
 
 static void
+gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
+                                GskRenderNode   *node,
+                                RenderOpBuilder *builder)
+{
+  float min_x = node->bounds.origin.x;
+  float min_y = node->bounds.origin.y;
+  float max_x = min_x + node->bounds.size.width;
+  float max_y = min_y + node->bounds.size.height;
+
+  /* Default vertex data */
+  GskQuadVertex vertex_data[N_VERTICES] = {
+    { { min_x, min_y }, { 0, 0 }, },
+    { { min_x, max_y }, { 0, 1 }, },
+    { { max_x, min_y }, { 1, 0 }, },
+
+    { { max_x, max_y }, { 1, 1 }, },
+    { { min_x, max_y }, { 0, 1 }, },
+    { { max_x, min_y }, { 1, 0 }, },
+  };
+
+  /*if (gsk_render_node_get_node_type (node) != GSK_CONTAINER_NODE)*/
+    /*g_message ("Adding ops for node %s with type %u", node->name,*/
+               /*gsk_render_node_get_node_type (node));*/
+
+
+  switch (gsk_render_node_get_node_type (node))
+    {
+    case GSK_NOT_A_RENDER_NODE:
+      g_assert_not_reached ();
+
+    case GSK_CONTAINER_NODE:
+      {
+        guint i, p;
+
+        for (i = 0, p = gsk_container_node_get_n_children (node); i < p; i ++)
+          {
+            GskRenderNode *child = gsk_container_node_get_child (node, i);
+
+            gsk_gl_renderer_add_render_ops (self, child, builder);
+          }
+      }
+    break;
+
+    case GSK_COLOR_NODE:
+      {
+        RenderOp op;
+
+        add_program_op (builder, &self->color_program);
+        op.op = OP_CHANGE_COLOR;
+        op.color = *gsk_color_node_peek_color (node);
+        add_op (builder, &op);
+        add_draw_op (builder, vertex_data);
+      }
+    break;
+
+    case GSK_TEXTURE_NODE:
+      {
+        GdkTexture *texture = gsk_texture_node_get_texture (node);
+        int gl_min_filter = GL_NEAREST, gl_mag_filter = GL_NEAREST;
+        int texture_id;
+
+        get_gl_scaling_filters (node, &gl_min_filter, &gl_mag_filter);
+
+        texture_id = gsk_gl_driver_get_texture_for_texture (self->gl_driver,
+                                                            texture,
+                                                            gl_min_filter,
+                                                            gl_mag_filter);
+        add_program_op (builder, &self->blit_program);
+        add_texture_op (builder, texture_id);
+        add_draw_op (builder, vertex_data);
+      }
+    break;
+
+    case GSK_TRANSFORM_NODE:
+      {
+        GskRenderNode *child = gsk_transform_node_get_child (node);
+        graphene_matrix_t prev_mv;
+        graphene_matrix_t transform, transformed_mv;
+
+        graphene_matrix_init_from_matrix (&transform, gsk_transform_node_peek_transform (node));
+        graphene_matrix_multiply (&transform, &builder->current_modelview, &transformed_mv);
+        prev_mv = add_modelview_op (builder, &transformed_mv);
+
+        gsk_gl_renderer_add_render_ops (self, child, builder);
+
+        add_modelview_op (builder, &prev_mv);
+      }
+    break;
+
+    case GSK_OPACITY_NODE:
+      {
+        int render_target;
+        int texture;
+        int prev_render_target;
+        float prev_opacity;
+        graphene_matrix_t identity;
+        graphene_matrix_t prev_projection;
+        graphene_matrix_t prev_modelview;
+        graphene_rect_t prev_viewport;
+        graphene_matrix_t item_proj;
+        GskQuadVertex vertex_data[N_VERTICES] = {
+          { { min_x, min_y }, { 0, 1 }, },
+          { { min_x, max_y }, { 0, 0 }, },
+          { { max_x, min_y }, { 1, 1 }, },
+
+          { { max_x, max_y }, { 1, 0 }, },
+          { { min_x, max_y }, { 0, 0 }, },
+          { { max_x, min_y }, { 1, 1 }, },
+        };
+
+        texture = gsk_gl_driver_create_texture (self->gl_driver,
+                                                node->bounds.size.width,
+                                                node->bounds.size.height);
+        gsk_gl_driver_bind_source_texture (self->gl_driver, texture);
+        gsk_gl_driver_init_texture_empty (self->gl_driver, texture);
+        render_target = gsk_gl_driver_create_render_target (self->gl_driver, texture, TRUE, TRUE);
+
+        graphene_matrix_init_ortho (&item_proj,
+                                    min_x, max_x,
+                                    min_y, max_y,
+                                    ORTHO_NEAR_PLANE, ORTHO_FAR_PLANE);
+        graphene_matrix_scale (&item_proj, 1, -1, 1);
+        graphene_matrix_init_identity (&identity);
+
+        prev_render_target = add_render_target_op (builder, render_target);
+        prev_projection = add_projection_op (builder, &item_proj);
+        prev_modelview = add_modelview_op (builder, &identity);
+        prev_viewport = add_viewport_op (builder, &node->bounds);
+
+        gsk_gl_renderer_add_render_ops (self, gsk_opacity_node_get_child (node), builder);
+
+        add_viewport_op (builder, &prev_viewport);
+        add_modelview_op (builder, &prev_modelview);
+        add_projection_op (builder, &prev_projection);
+        add_render_target_op (builder, prev_render_target);
+
+        add_program_op (builder, &self->blit_program);
+        prev_opacity = add_opacity_op (builder, gsk_opacity_node_get_opacity (node));
+        add_texture_op (builder, texture);
+        add_draw_op (builder, vertex_data);
+        add_opacity_op (builder, prev_opacity);
+      }
+    break;
+
+    case GSK_LINEAR_GRADIENT_NODE:
+      {
+        RenderOp op;
+        int n_color_stops = MIN (8, gsk_linear_gradient_node_get_n_color_stops (node));
+        const GskColorStop *stops = gsk_linear_gradient_node_peek_color_stops (node);
+        const graphene_point_t *start = gsk_linear_gradient_node_peek_start (node);
+        const graphene_point_t *end = gsk_linear_gradient_node_peek_end (node);
+        int i;
+
+        for (i = 0; i < n_color_stops; i ++)
+          {
+            const GskColorStop *stop = stops + i;
+
+            op.linear_gradient.color_stops[(i * 4) + 0] = stop->color.red;
+            op.linear_gradient.color_stops[(i * 4) + 1] = stop->color.green;
+            op.linear_gradient.color_stops[(i * 4) + 2] = stop->color.blue;
+            op.linear_gradient.color_stops[(i * 4) + 3] = stop->color.alpha;
+            op.linear_gradient.color_offsets[i] = stop->offset;
+          }
+
+        add_program_op (builder, &self->linear_gradient_program);
+        op.op = OP_CHANGE_LINEAR_GRADIENT;
+        op.linear_gradient.n_color_stops = n_color_stops;
+        op.linear_gradient.start_point = *start;
+        op.linear_gradient.end_point = *end;
+        add_op (builder, &op);
+
+        add_draw_op (builder, vertex_data);
+      }
+    break;
+
+    case GSK_CLIP_NODE:
+      {
+        GskRoundedRect prev_clip;
+        GskRenderNode *child = gsk_clip_node_get_child (node);
+        graphene_rect_t transformed_clip;
+        graphene_rect_t intersection;
+        GskRoundedRect child_clip;
+
+        transformed_clip = *gsk_clip_node_peek_clip (node);
+        graphene_matrix_transform_bounds (&builder->current_modelview, &transformed_clip, &transformed_clip);
+
+        graphene_rect_intersection (&transformed_clip,
+                                    &builder->current_clip.bounds,
+                                    &intersection);
+
+        gsk_rounded_rect_init_from_rect (&child_clip, &intersection, 0.0f);
+
+        prev_clip = add_clip_op (builder, &child_clip);
+        gsk_gl_renderer_add_render_ops (self, child, builder);
+        add_clip_op (builder, &prev_clip);
+      }
+    break;
+
+    case GSK_ROUNDED_CLIP_NODE:
+      {
+        GskRoundedRect prev_clip;
+        GskRenderNode *child = gsk_rounded_clip_node_get_child (node);
+        const GskRoundedRect *rounded_clip = gsk_rounded_clip_node_peek_clip (node);
+        graphene_rect_t transformed_clip;
+        graphene_rect_t intersection;
+        GskRoundedRect child_clip;
+
+        transformed_clip = rounded_clip->bounds;
+        graphene_matrix_transform_bounds (&builder->current_modelview, &transformed_clip, &transformed_clip);
+
+        graphene_rect_intersection (&transformed_clip, &builder->current_clip.bounds,
+                                    &intersection);
+        gsk_rounded_rect_init (&child_clip, &intersection,
+                               &rounded_clip->corner[0],
+                               &rounded_clip->corner[1],
+                               &rounded_clip->corner[2],
+                               &rounded_clip->corner[3]);
+
+        prev_clip = add_clip_op (builder, &child_clip);
+        gsk_gl_renderer_add_render_ops (self, child, builder);
+        add_clip_op (builder, &prev_clip);
+      }
+    break;
+
+    case GSK_TEXT_NODE:
+      {
+        const PangoFont *font = gsk_text_node_peek_font (node);
+        const PangoGlyphInfo *glyphs = gsk_text_node_peek_glyphs (node);
+        guint num_glyphs = gsk_text_node_get_num_glyphs (node);
+        int i;
+        int x_position = 0;
+        int x = gsk_text_node_get_x (node);
+        int y = gsk_text_node_get_y (node);
+
+        /* We use one quad per character, unlike the other nodes which
+         * use at most one quad altogether */
+        for (i = 0; i < num_glyphs; i++)
+          {
+            const PangoGlyphInfo *gi = &glyphs[i];
+            const GskGLCachedGlyph *glyph;
+            int glyph_x, glyph_y, glyph_w, glyph_h;
+            float tx, ty, tx2, ty2;
+            double cx;
+            double cy;
+
+            if (gi->glyph == PANGO_GLYPH_EMPTY ||
+                (gi->glyph & PANGO_GLYPH_UNKNOWN_FLAG) > 0)
+              continue;
+
+            glyph = gsk_gl_glyph_cache_lookup (&self->glyph_cache,
+                                               TRUE,
+                                               (PangoFont *)font,
+                                               gi->glyph,
+                                               self->scale_factor);
+
+            /* e.g. whitespace */
+            if (glyph->draw_width <= 0 || glyph->draw_height <= 0)
+              {
+                x_position += gi->geometry.width;
+                continue;
+              }
+            cx = (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
+            cy = (double)(gi->geometry.y_offset) / PANGO_SCALE;
+
+            /* If the font has color glyphs, we don't need to recolor anything */
+            if (font_has_color_glyphs (font))
+              {
+                add_program_op (builder, &self->blit_program);
+              }
+            else
+              {
+                RenderOp op;
+
+                add_program_op (builder, &self->coloring_program);
+
+                op.op = OP_CHANGE_COLOR;
+                op.color = *gsk_text_node_peek_color (node);
+                add_op (builder, &op);
+              }
+
+            add_texture_op (builder, gsk_gl_glyph_cache_get_glyph_image (&self->glyph_cache,
+                                                                         glyph)->texture_id);
+
+            {
+              tx  = glyph->tx;
+              ty  = glyph->ty;
+              tx2 = tx + glyph->tw;
+              ty2 = ty + glyph->th;
+
+              glyph_x = x + cx + glyph->draw_x;
+              glyph_y = y + cy + glyph->draw_y;
+              glyph_w = glyph->draw_width;
+              glyph_h = glyph->draw_height;
+
+              GskQuadVertex vertex_data[N_VERTICES] = {
+                { { glyph_x,           glyph_y           }, { tx,  ty  }, },
+                { { glyph_x,           glyph_y + glyph_h }, { tx,  ty2 }, },
+                { { glyph_x + glyph_w, glyph_y           }, { tx2, ty  }, },
+
+                { { glyph_x + glyph_w, glyph_y + glyph_h }, { tx2, ty2 }, },
+                { { glyph_x,           glyph_y + glyph_h }, { tx,  ty2 }, },
+                { { glyph_x + glyph_w, glyph_y           }, { tx2, ty  }, },
+              };
+
+              add_draw_op (builder, vertex_data);
+            }
+
+            x_position += gi->geometry.width;
+          }
+
+      }
+    break;
+
+
+    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
+    case GSK_BORDER_NODE:
+    case GSK_INSET_SHADOW_NODE:
+    case GSK_OUTSET_SHADOW_NODE:
+    case GSK_BLUR_NODE:
+    case GSK_SHADOW_NODE:
+    case GSK_CROSS_FADE_NODE:
+    case GSK_BLEND_NODE:
+    case GSK_REPEAT_NODE:
+    case GSK_CAIRO_NODE:
+    case GSK_COLOR_MATRIX_NODE:
+    default:
+      {
+        cairo_surface_t *surface;
+        cairo_t *cr;
+        int texture_id;
+
+        surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                              ceilf (node->bounds.size.width) * self->scale_factor,
+                                              ceilf (node->bounds.size.height) * self->scale_factor);
+        cairo_surface_set_device_scale (surface, self->scale_factor, self->scale_factor);
+        cr = cairo_create (surface);
+
+        cairo_save (cr);
+        cairo_translate (cr, -min_x, -min_y);
+        gsk_render_node_draw (node, cr);
+        cairo_restore (cr);
+
+#if HIGHLIGHT_FALLBACK
+        cairo_move_to (cr, 0, 0);
+        cairo_rectangle (cr, 0, 0, max_x - min_x, max_y - min_y);
+        cairo_set_source_rgba (cr, 1, 0, 0, 1);
+        cairo_stroke (cr);
+#endif
+        cairo_destroy (cr);
+
+        /* Upload the Cairo surface to a GL texture */
+        texture_id = gsk_gl_driver_create_texture (self->gl_driver,
+                                                   node->bounds.size.width * self->scale_factor,
+                                                   node->bounds.size.height * self->scale_factor);
+
+        gsk_gl_driver_bind_source_texture (self->gl_driver, texture_id);
+        gsk_gl_driver_init_texture_with_surface (self->gl_driver,
+                                                 texture_id,
+                                                 surface,
+                                                 GL_NEAREST, GL_NEAREST);
+
+        cairo_surface_destroy (surface);
+
+        add_program_op (builder, &self->blit_program);
+        add_texture_op (builder, texture_id);
+        add_draw_op (builder, vertex_data);
+      }
+    }
+}
+
+static void
+gsk_gl_renderer_render_ops (GskGLRenderer *self,
+                            gsize          vertex_data_size)
+{
+  guint i;
+  guint n_ops = self->render_ops->len;
+  float mat[16];
+  const Program *program = NULL;
+  gsize buffer_index = 0;
+  float *vertex_data = g_malloc (vertex_data_size);
+
+  /*g_message ("%s: Buffer size: %ld", __FUNCTION__, vertex_data_size);*/
+
+
+  GLuint buffer_id, vao_id;
+  glGenVertexArrays (1, &vao_id);
+  glBindVertexArray (vao_id);
+
+  glGenBuffers (1, &buffer_id);
+  glBindBuffer (GL_ARRAY_BUFFER, buffer_id);
+
+
+  // Fill buffer data
+  for (i = 0; i < n_ops; i ++)
+    {
+      const RenderOp *op = &g_array_index (self->render_ops, RenderOp, i);
+
+      if (op->op == OP_CHANGE_VAO)
+        {
+          memcpy (vertex_data + buffer_index, &op->vertex_data, sizeof (GskQuadVertex) * N_VERTICES);
+          buffer_index += sizeof (GskQuadVertex) * N_VERTICES / sizeof (float);
+        }
+    }
+
+  // Set buffer data
+  glBufferData (GL_ARRAY_BUFFER, vertex_data_size, vertex_data, GL_STATIC_DRAW);
+
+  // Describe buffer contents
+
+  /* 0 = position location */
+  glEnableVertexAttribArray (0);
+  glVertexAttribPointer (0, 2, GL_FLOAT, GL_FALSE,
+                         sizeof (GskQuadVertex),
+                         (void *) G_STRUCT_OFFSET (GskQuadVertex, position));
+  /* 1 = texture coord location */
+  glEnableVertexAttribArray (1);
+  glVertexAttribPointer (1, 2, GL_FLOAT, GL_FALSE,
+                         sizeof (GskQuadVertex),
+                         (void *) G_STRUCT_OFFSET (GskQuadVertex, uv));
+
+  for (i = 0; i < n_ops; i ++)
+    {
+      const RenderOp *op = &g_array_index (self->render_ops, RenderOp, i);
+
+      if (op->op == OP_NONE ||
+          op->op == OP_CHANGE_VAO)
+        continue;
+
+      OP_PRINT ("Op %u: %u", i, op->op);
+
+      switch (op->op)
+        {
+        case OP_CHANGE_PROJECTION:
+          graphene_matrix_to_float (&op->projection, mat);
+          glUniformMatrix4fv (program->projection_location, 1, GL_FALSE, mat);
+          OP_PRINT (" -> Projection");
+          /*graphene_matrix_print (&op->projection);*/
+          break;
+
+        case OP_CHANGE_MODELVIEW:
+          graphene_matrix_to_float (&op->modelview, mat);
+          glUniformMatrix4fv (program->modelview_location, 1, GL_FALSE, mat);
+          OP_PRINT (" -> Modelview");
+          /*graphene_matrix_print (&op->modelview);*/
+          break;
+
+        case OP_CHANGE_PROGRAM:
+          program = op->program;
+          glUseProgram (op->program->id);
+          OP_PRINT (" -> Program: %d", op->program->id);
+          break;
+
+        case OP_CHANGE_RENDER_TARGET:
+          OP_PRINT (" -> Render Target: %d", op->render_target_id);
+
+          glBindFramebuffer (GL_FRAMEBUFFER, op->render_target_id);
+          if (op->render_target_id != 0)
+            {
+              glDisable (GL_SCISSOR_TEST);
+              glClearColor (0.0, 0.0, 0.0, 0.0);
+              glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+            }
+          else
+            {
+              /* Reset glScissor, etc. */
+              gsk_gl_renderer_setup_render_mode (self);
+            }
+          break;
+
+        case OP_CHANGE_VIEWPORT:
+          OP_PRINT (" -> New Viewport: %f, %f, %f, %f", op->viewport.origin.x, op->viewport.origin.y, op->viewport.size.width, op->viewport.size.height);
+          glUniform4f (program->viewport_location,
+                       op->viewport.origin.x, op->viewport.origin.y,
+                       op->viewport.size.width, op->viewport.size.height);
+          glViewport (0, 0, op->viewport.size.width, op->viewport.size.height);
+          break;
+
+        case OP_CHANGE_OPACITY:
+          glUniform1f (program->alpha_location, op->opacity);
+          break;
+
+        case OP_CHANGE_COLOR:
+          OP_PRINT (" -> Color: (%f, %f, %f, %f)", op->color.red, op->color.green, op->color.blue, op->color.alpha);
+          g_assert (program == &self->color_program || program == &self->coloring_program);
+          glUniform4f (program->color_location,
+                       op->color.red, op->color.green, op->color.blue, op->color.alpha);
+          break;
+
+        case OP_CHANGE_CLIP:
+          OP_PRINT (" -> Clip");
+          glUniform4f (program->clip_location,
+                       op->clip.bounds.origin.x, op->clip.bounds.origin.y,
+                       op->clip.bounds.size.width, op->clip.bounds.size.height);
+
+          glUniform4f (program->clip_corner_widths_location,
+                       MAX (op->clip.corner[0].width, 1),
+                       MAX (op->clip.corner[1].width, 1),
+                       MAX (op->clip.corner[2].width, 1),
+                       MAX (op->clip.corner[3].width, 1));
+          glUniform4f (program->clip_corner_heights_location,
+                       MAX (op->clip.corner[0].height, 1),
+                       MAX (op->clip.corner[1].height, 1),
+                       MAX (op->clip.corner[2].height, 1),
+                       MAX (op->clip.corner[3].height, 1));
+          break;
+
+        case OP_CHANGE_SOURCE_TEXTURE:
+          g_assert(op->texture_id != 0);
+          OP_PRINT (" -> New texture: %d", op->texture_id);
+          /* Use texture unit 0 for the source */
+          glUniform1i (program->source_location, 0);
+          glActiveTexture (GL_TEXTURE0);
+          glBindTexture (GL_TEXTURE_2D, op->texture_id);
+
+          break;
+
+        case OP_CHANGE_LINEAR_GRADIENT:
+            OP_PRINT (" -> Linear gradient");
+            glUniform1i (program->n_color_stops_location,
+                         op->linear_gradient.n_color_stops);
+            glUniform4fv (program->color_stops_location,
+                          op->linear_gradient.n_color_stops,
+                          op->linear_gradient.color_stops);
+            glUniform1fv (program->color_offsets_location,
+                          op->linear_gradient.n_color_stops,
+                          op->linear_gradient.color_offsets);
+            glUniform2f (program->start_point_location,
+                         op->linear_gradient.start_point.x, op->linear_gradient.start_point.y);
+            glUniform2f (program->end_point_location,
+                         op->linear_gradient.end_point.x, op->linear_gradient.end_point.y);
+          break;
+
+        case OP_DRAW:
+          OP_PRINT (" -> draw %ld\n", op->vao_offset);
+          glDrawArrays (GL_TRIANGLES, op->vao_offset, N_VERTICES);
+          break;
+
+        default:
+          g_warn_if_reached ();
+        }
+
+      OP_PRINT ("\n");
+    }
+
+  /* Done drawing, destroy the buffer again.
+   * TODO: Can we reuse the memory, though? */
+  g_free (vertex_data);
+}
+
+static void
 gsk_gl_renderer_do_render (GskRenderer           *renderer,
                            GskRenderNode         *root,
                            const graphene_rect_t *viewport,
                            int                    scale_factor)
 {
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
+  RenderOpBuilder render_op_builder;
   graphene_matrix_t modelview, projection;
-  guint i;
 #ifdef G_ENABLE_DEBUG
   GskProfiler *profiler;
   gint64 gpu_time, cpu_time;
@@ -1449,37 +1551,39 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
 
   gsk_gl_driver_begin_frame (self->gl_driver);
   gsk_gl_glyph_cache_begin_frame (&self->glyph_cache);
-  gsk_gl_renderer_validate_tree (self, root, &projection, &modelview);
 
+  memset (&render_op_builder, 0, sizeof (render_op_builder));
+  render_op_builder.renderer = self;
+  render_op_builder.current_projection = projection;
+  render_op_builder.current_modelview = modelview;
+  render_op_builder.current_viewport = *viewport;
+  render_op_builder.current_render_target = self->texture_id;
+  render_op_builder.current_opacity = 1.0f;
+  gsk_rounded_rect_init_from_rect (&render_op_builder.current_clip, &self->viewport, 0.0f);
+  gsk_gl_renderer_add_render_ops (self, root, &render_op_builder);
+
+  /*g_message ("Ops: %u", self->render_ops->len);*/
+
+  /* Now actually draw things... */
 #ifdef G_ENABLE_DEBUG
   gsk_gl_profiler_begin_gpu_region (self->gl_profiler);
   gsk_profiler_timer_begin (profiler, self->profile_timers.cpu_time);
 #endif
 
-  /* Ensure that the viewport is up to date */
-  gsk_gl_driver_bind_render_target (self->gl_driver, self->texture_id);
   gsk_gl_renderer_resize_viewport (self, viewport);
-
   gsk_gl_renderer_setup_render_mode (self);
-
   gsk_gl_renderer_clear (self);
 
   glEnable (GL_DEPTH_TEST);
   glDepthFunc (GL_LEQUAL);
 
-  glEnable (GL_BLEND);
   /* Pre-multiplied alpha! */
+  glEnable (GL_BLEND);
   glBlendFunc (GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
   glBlendEquation (GL_FUNC_ADD);
 
-  for (i = 0; i < self->render_items->len; i++)
-    {
-      const RenderItem *item = &g_array_index (self->render_items, RenderItem, i);
+  gsk_gl_renderer_render_ops (self, render_op_builder.buffer_size);
 
-      render_item (self, item);
-    }
-
-  /* Draw the output of the GL rendering to the window */
   gsk_gl_driver_end_frame (self->gl_driver);
 
 #ifdef G_ENABLE_DEBUG
@@ -1585,9 +1689,8 @@ gsk_gl_renderer_init (GskGLRenderer *self)
   gsk_ensure_resources ();
 
 
-  self->render_items = g_array_new (FALSE, FALSE, sizeof (RenderItem));
-  g_array_set_clear_func (self->render_items, (GDestroyNotify)destroy_render_item);
   self->scale_factor = 1;
+  self->render_ops = g_array_new (TRUE, FALSE, sizeof (RenderOp));
 
 #ifdef G_ENABLE_DEBUG
   {

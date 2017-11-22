@@ -28,7 +28,8 @@ typedef struct {
   GLuint uv_id;
   GskQuadVertex *quads;
   int n_quads;
-  gboolean in_use : 1;
+  guint in_use : 1;
+  guint permanent : 1;
 } Vao;
 
 typedef struct {
@@ -266,10 +267,6 @@ gsk_gl_driver_end_frame (GskGLDriver *self)
 {
   g_return_if_fail (GSK_IS_GL_DRIVER (self));
   g_return_if_fail (self->in_frame);
-
-  glBindTexture (GL_TEXTURE_2D, 0);
-  glUseProgram (0);
-  glBindVertexArray (0);
 
   self->bound_source_texture = NULL;
   self->bound_mask_texture = NULL;
@@ -570,6 +567,29 @@ find_vao (GHashTable    *vaos,
   return NULL;
 }
 
+void
+gsk_gl_driver_create_permanent_vao_for_quad (GskGLDriver        *driver,
+                                             int                  n_vertices,
+                                             const GskQuadVertex *quads,
+                                             int                 *out_vao_id,
+                                             int                 *out_vao_buffer_id)
+{
+  GLuint vao_id, buffer_id;
+
+  glGenVertexArrays (1, &vao_id);
+  glBindVertexArray (vao_id);
+
+  glGenBuffers (1, &buffer_id);
+  glBindBuffer (GL_ARRAY_BUFFER, buffer_id);
+  glBufferData (GL_ARRAY_BUFFER, sizeof (GskQuadVertex) * n_vertices, quads, GL_STATIC_DRAW);
+
+  glBindBuffer (GL_ARRAY_BUFFER, 0);
+  glBindVertexArray (0);
+
+  *out_vao_id = buffer_id;
+  *out_vao_buffer_id = vao_id;
+}
+
 int
 gsk_gl_driver_create_vao_for_quad (GskGLDriver   *driver,
                                    int            position_id,
@@ -599,10 +619,13 @@ gsk_gl_driver_create_vao_for_quad (GskGLDriver   *driver,
   glBindBuffer (GL_ARRAY_BUFFER, buffer_id);
   glBufferData (GL_ARRAY_BUFFER, sizeof (GskQuadVertex) * n_vertices, quads, GL_STATIC_DRAW);
 
-  glEnableVertexAttribArray (position_id);
-  glVertexAttribPointer (position_id, 2, GL_FLOAT, GL_FALSE,
-                         sizeof (GskQuadVertex),
-                         (void *) G_STRUCT_OFFSET (GskQuadVertex, position));
+  if (position_id != -1)
+    {
+      glEnableVertexAttribArray (position_id);
+      glVertexAttribPointer (position_id, 2, GL_FLOAT, GL_FALSE,
+                             sizeof (GskQuadVertex),
+                             (void *) G_STRUCT_OFFSET (GskQuadVertex, position));
+    }
 
   if (uv_id != -1)
     {
@@ -776,7 +799,9 @@ gsk_gl_driver_bind_vao (GskGLDriver *driver,
     {
       glBindVertexArray (v->vao_id);
       glBindBuffer (GL_ARRAY_BUFFER, v->buffer_id);
-      glEnableVertexAttribArray (v->position_id);
+
+      if (v->position_id != -1)
+        glEnableVertexAttribArray (v->position_id);
 
       if (v->uv_id != -1)
         glEnableVertexAttribArray (v->uv_id);

@@ -38,6 +38,11 @@ int             gsk_gl_driver_create_vao_for_quad       (GskGLDriver     *driver
                                                          int              uv_id,
                                                          int              n_vertices,
                                                          GskQuadVertex   *vertices);
+void           gsk_gl_driver_create_permanent_vao_for_quad (GskGLDriver        *driver,
+                                                            int                  n_vertices,
+                                                            const GskQuadVertex *quads,
+                                                            int                 *out_vao_id,
+                                                            int                 *out_vao_buffer_id);
 int             gsk_gl_driver_create_render_target      (GskGLDriver     *driver,
                                                          int              texture_id,
                                                          gboolean         add_depth_buffer,

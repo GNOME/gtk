@@ -424,7 +424,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
         <property name="margin">10</property>
         <child>
           <object class="GtkStack" id="toplevel_stack">
-            <property name="transition-duration">1000</property>
+            <property name="transition-duration">30000</property>
             <child>
               <object class="GtkBox" id="page1">
                 <property name="orientation">vertical</property>
