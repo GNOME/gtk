@@ -50,6 +50,30 @@ pixbuf_loaded_cb (GObject      *stream,
 }
 
 static void
+clipboard_read_pixbuf_cb (GObject      *clipboard,
+                          GAsyncResult *result,
+                          gpointer      image)
+{
+  GInputStream *stream;
+  GError *error = NULL;
+
+  stream = gdk_clipboard_read_finish (GDK_CLIPBOARD (clipboard),
+                                      NULL,
+                                      result,
+                                      &error);
+  if (stream)
+    {
+      gdk_pixbuf_new_from_stream_async (stream, NULL, pixbuf_loaded_cb, image);
+      g_object_unref (stream);
+    }
+  else
+    {
+      g_print ("%s\n", error->message);
+      g_error_free (error);
+    }
+}
+
+static void
 visible_child_changed_cb (GtkWidget    *stack,
                           GParamSpec   *pspec,
                           GdkClipboard *clipboard)
@@ -63,19 +87,13 @@ visible_child_changed_cb (GtkWidget    *stack,
   else if (g_str_equal (visible_child, "image"))
     {
       GtkWidget *image = gtk_stack_get_child_by_name (GTK_STACK (stack), "image");
-      GdkContentFormats *formats;
-      GInputStream *stream;
 
-      formats = gdk_clipboard_get_formats (clipboard);
-      if (gdk_content_formats_contain_mime_type (formats, "image/png"))
-        stream = gdk_clipboard_read (clipboard, "image/png");
-      else
-        stream = NULL;
-      if (stream)
-        {
-          gdk_pixbuf_new_from_stream_async (stream, NULL, pixbuf_loaded_cb, image);
-          g_object_unref (stream);
-        }
+      gdk_clipboard_read_async (clipboard,
+                                (const gchar*[2]) { "image/png", NULL },
+                                G_PRIORITY_DEFAULT,
+                                NULL,
+                                clipboard_read_pixbuf_cb,
+                                image);
     }
 }
                 

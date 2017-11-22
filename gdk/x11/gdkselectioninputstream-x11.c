@@ -404,42 +404,64 @@ gdk_x11_selection_input_stream_filter_event (GdkXEvent *xev,
 
     case SelectionNotify:
       {
+        GTask *task;
 
+        /* selection is not for us */
         if (priv->xselection != xevent->xselection.selection ||
             priv->xtarget != xevent->xselection.target)
           return GDK_FILTER_CONTINUE;
 
+        /* We already received a selectionNotify before */
+        if (priv->pending_task == NULL || 
+            g_task_get_source_tag (priv->pending_task) != gdk_x11_selection_input_stream_new_async)
+          return GDK_FILTER_CONTINUE;
+
         GDK_NOTE(SELECTION, g_print ("%s:%s: got SelectionNotify\n", priv->selection, priv->target));
 
-        if (xevent->xselection.property != None)
-          bytes = get_selection_property (xdisplay, xwindow, xevent->xselection.property, &type, &format);
-        else
-          bytes = NULL;
+        task = priv->pending_task;
+        priv->pending_task = NULL;
 
-        if (bytes == NULL)
-          { 
+        if (xevent->xselection.property == None)
+          {
+            g_task_return_new_error (task,
+                                     G_IO_ERROR,
+                                     G_IO_ERROR_NOT_FOUND,
+                                     _("Format %s not supported"), priv->target);
             gdk_x11_selection_input_stream_complete (stream);
           }
         else
           {
-            if (type == gdk_x11_get_xatom_by_name_for_display (priv->display, "INCR"))
-              {
-                /* The remainder of the selection will come through PropertyNotify
-                   events on xwindow */
-                GDK_NOTE(SELECTION, g_print ("%s:%s: initiating INCR transfer\n", priv->selection, priv->target));
-                priv->incr = TRUE;
-                gdk_x11_selection_input_stream_flush (stream);
+            bytes = get_selection_property (xdisplay, xwindow, xevent->xselection.property, &type, &format);
+
+            g_task_return_pointer (task, g_object_ref (stream), g_object_unref);
+
+            if (bytes == NULL)
+              { 
+                gdk_x11_selection_input_stream_complete (stream);
               }
             else
               {
-                g_async_queue_push (priv->chunks, bytes);
+                if (priv->xtype == gdk_x11_get_xatom_by_name_for_display (priv->display, "INCR"))
+                  {
+                    /* The remainder of the selection will come through PropertyNotify
+                       events on xwindow */
+                    GDK_NOTE(SELECTION, g_print ("%s:%s: initiating INCR transfer\n", priv->selection, priv->target));
+                    priv->incr = TRUE;
+                    gdk_x11_selection_input_stream_flush (stream);
+                  }
+                else
+                  {
+                    g_async_queue_push (priv->chunks, bytes);
 
-                gdk_x11_selection_input_stream_complete (stream);
+                    gdk_x11_selection_input_stream_complete (stream);
+                  }
               }
 
             XDeleteProperty (xdisplay, xwindow, xevent->xselection.property);
           }
-        }
+
+        g_object_unref (task);
+      }
       return GDK_FILTER_REMOVE;
 
     default:
@@ -447,15 +469,19 @@ gdk_x11_selection_input_stream_filter_event (GdkXEvent *xev,
     }
 }
 
-GInputStream *
-gdk_x11_selection_input_stream_new (GdkDisplay *display,
-                                    const char *selection,
-                                    const char *target,
-                                    guint32     timestamp)
+void
+gdk_x11_selection_input_stream_new_async (GdkDisplay          *display,
+                                          const char          *selection,
+                                          const char          *target,
+                                          guint32              timestamp,
+                                          int                  io_priority,
+                                          GCancellable        *cancellable,
+                                          GAsyncReadyCallback  callback,
+                                          gpointer             user_data)
 {
   GdkX11SelectionInputStream *stream;
   GdkX11SelectionInputStreamPrivate *priv;
-  
+
   stream = g_object_new (GDK_TYPE_X11_SELECTION_INPUT_STREAM, NULL);
   priv = gdk_x11_selection_input_stream_get_instance_private (stream);
 
@@ -477,6 +503,25 @@ gdk_x11_selection_input_stream_new (GdkDisplay *display,
                      GDK_X11_DISPLAY (display)->leader_window,
                      timestamp);
 
-  return g_object_ref (stream);
+  priv->pending_task = g_task_new (NULL, cancellable, callback, user_data);
+  g_task_set_source_tag (priv->pending_task, gdk_x11_selection_input_stream_new_async);
+  g_task_set_priority (priv->pending_task, io_priority);
+}
+
+GInputStream *
+gdk_x11_selection_input_stream_new_finish (GAsyncResult  *result,
+                                           GError       **error)
+{
+  GInputStream *stream;
+  GTask *task;
+
+  g_return_val_if_fail (g_task_is_valid (result, NULL), NULL);
+  task = G_TASK (result);
+  g_return_val_if_fail (g_task_get_source_tag (task) == gdk_x11_selection_input_stream_new_async, NULL);
+
+  stream = g_task_propagate_pointer (task, error);
+  if (stream)
+    g_object_ref (stream);
+  return stream;
 }
 

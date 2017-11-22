@@ -113,9 +113,30 @@ gdk_clipboard_finalize (GObject *object)
   G_OBJECT_CLASS (gdk_clipboard_parent_class)->finalize (object);
 }
 
+static void
+gdk_clipboard_real_read_async (GdkClipboard        *clipboard,
+                               GdkContentFormats   *formats,
+                               int                  io_priority,
+                               GCancellable        *cancellable,
+                               GAsyncReadyCallback  callback,
+                               gpointer             user_data)
+{
+  GTask *task;
+
+  task = g_task_new (clipboard, cancellable, callback, user_data);
+  g_task_set_priority (task, io_priority);
+  g_task_set_source_tag (task, gdk_clipboard_read_async);
+  g_task_set_task_data (task, gdk_content_formats_ref (formats), (GDestroyNotify) gdk_content_formats_unref);
+
+  g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED, "Reading local content not supported yet.");
+  g_object_unref (task);
+}
+
 static GInputStream *
-gdk_clipboard_real_read (GdkClipboard *clipboard,
-                         const char   *mime_type)
+gdk_clipboard_real_read_finish (GdkClipboard  *clipboard,
+                                const char   **out_mime_type,
+                                GAsyncResult  *result,
+                                GError       **error)
 {
   /* whoop whooop */
   return g_memory_input_stream_new ();
@@ -130,7 +151,8 @@ gdk_clipboard_class_init (GdkClipboardClass *class)
   object_class->set_property = gdk_clipboard_set_property;
   object_class->finalize = gdk_clipboard_finalize;
 
-  class->read = gdk_clipboard_real_read;
+  class->read_async = gdk_clipboard_real_read_async;
+  class->read_finish = gdk_clipboard_real_read_finish;
 
   /**
    * GdkClipboard:display:
@@ -237,17 +259,84 @@ gdk_clipboard_get_formats (GdkClipboard *clipboard)
   return priv->formats;
 }
 
-GInputStream *
-gdk_clipboard_read (GdkClipboard *clipboard,
-                    const char   *mime_type)
+static void
+gdk_clipboard_read_internal (GdkClipboard        *clipboard,
+                             GdkContentFormats   *formats,
+                             int                  io_priority,
+                             GCancellable        *cancellable,
+                             GAsyncReadyCallback  callback,
+                             gpointer             user_data)
 {
-  GdkClipboardPrivate *priv = gdk_clipboard_get_instance_private (clipboard);
+  return GDK_CLIPBOARD_GET_CLASS (clipboard)->read_async (clipboard,
+                                                          formats,
+                                                          io_priority,
+                                                          cancellable,
+                                                          callback,
+                                                          user_data);
+}
 
+/**
+ * gdk_clipboard_read_async:
+ * @clipboard: a #GdkClipboard
+ * @mime_types: a %NULL-terminated array of mime types to choose from
+ * @io_priority: the [I/O priority][io-priority]
+ * of the request. 
+ * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): callback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
+ *
+ * Asynchronously requests an input stream to read the @clipboard's
+ * contents from. When the operation is finished @callback will be called. 
+ * You can then call gdk_clipboard_read_finish() to get the result of the 
+ * operation.
+ *
+ * The clipboard will choose the most suitable mime type from the given list
+ * to fulfill the request, preferring the ones listed first. 
+ **/
+void
+gdk_clipboard_read_async (GdkClipboard        *clipboard,
+                          const char         **mime_types,
+                          int                  io_priority,
+                          GCancellable        *cancellable,
+                          GAsyncReadyCallback  callback,
+                          gpointer             user_data)
+{
+  GdkContentFormats *formats;
+
+  g_return_if_fail (GDK_IS_CLIPBOARD (clipboard));
+  g_return_if_fail (mime_types != NULL && mime_types[0] != NULL);
+  g_return_if_fail (callback != NULL);
+
+  formats = gdk_content_formats_new (mime_types, g_strv_length ((char **) mime_types));
+
+  gdk_clipboard_read_internal (clipboard, formats, io_priority, cancellable, callback, user_data);
+
+  gdk_content_formats_unref (formats);
+}
+
+/**
+ * gdk_clipboard_read_finish:
+ * @clipboard: a #GdkClipboard
+ * @out_mime_type: (out) (allow-none) (transfer none): pointer to store
+ *     the chosen mime type in or %NULL
+ * @result: a #GAsyncResult
+ * @error: a #GError location to store the error occurring, or %NULL to 
+ * ignore.
+ *
+ * Finishes an asynchronous clipboard read started with gdk_clipboard_read_async().
+ *
+ * Returns: (transfer full): a #GInputStream or %NULL on error.
+ **/
+GInputStream *
+gdk_clipboard_read_finish (GdkClipboard  *clipboard,
+                           const char   **out_mime_type,
+                           GAsyncResult  *result,
+                           GError       **error)
+{
   g_return_val_if_fail (GDK_IS_CLIPBOARD (clipboard), NULL);
-  g_return_val_if_fail (mime_type != NULL, NULL);
-  g_return_val_if_fail (gdk_content_formats_contain_mime_type (priv->formats, mime_type), NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-  return GDK_CLIPBOARD_GET_CLASS (clipboard)->read (clipboard, mime_type);
+  return GDK_CLIPBOARD_GET_CLASS (clipboard)->read_finish (clipboard, out_mime_type, result, error);
 }
 
 GdkClipboard *

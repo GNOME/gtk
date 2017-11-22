@@ -41,8 +41,16 @@ struct _GdkClipboardClass
   void                  (* changed)                             (GdkClipboard           *clipboard);
 
   /* vfuncs */
-  GInputStream *        (* read)                                (GdkClipboard           *clipboard,
-                                                                 const char             *mime_type);
+  void                  (* read_async)                          (GdkClipboard          *clipboard,
+                                                                 GdkContentFormats     *formats,
+                                                                 int                    io_priority,
+                                                                 GCancellable          *cancellable,
+                                                                 GAsyncReadyCallback    callback,
+                                                                 gpointer               user_data);
+  GInputStream *        (* read_finish)                         (GdkClipboard          *clipboard,
+                                                                 const char           **out_mime_type,
+                                                                 GAsyncResult          *result,
+                                                                 GError               **error);
 };
 
 GdkClipboard *          gdk_clipboard_new                       (GdkDisplay             *display);

@@ -43,8 +43,17 @@ GDK_AVAILABLE_IN_3_94
 GdkContentFormats *     gdk_clipboard_get_formats       (GdkClipboard          *clipboard);
 
 GDK_AVAILABLE_IN_3_94
-GInputStream *          gdk_clipboard_read              (GdkClipboard          *clipboard,
-                                                         const char            *mime_type);
+void                    gdk_clipboard_read_async        (GdkClipboard          *clipboard,
+                                                         const char           **mime_types,
+                                                         int                    io_priority,
+                                                         GCancellable          *cancellable,
+                                                         GAsyncReadyCallback    callback,
+                                                         gpointer               user_data);
+GDK_AVAILABLE_IN_3_94
+GInputStream *          gdk_clipboard_read_finish       (GdkClipboard          *clipboard,
+                                                         const char           **out_mime_type,
+                                                         GAsyncResult          *result,
+                                                         GError               **error);
 
 G_END_DECLS
 

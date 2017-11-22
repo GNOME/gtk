@@ -73,10 +73,16 @@ gdk_x11_clipboard_request_targets_finish (GObject      *source_object,
   guint i, n_atoms;
 
   bytes = g_input_stream_read_bytes_finish (stream, res, &error);
-  if (bytes == NULL || g_bytes_get_size (bytes) == 0)
+  if (bytes == NULL)
     {
-      if (bytes)
-        g_bytes_unref (bytes);
+      g_error_free (error);
+      g_object_unref (stream);
+      g_object_unref (cb);
+      return;
+    }
+  else if (g_bytes_get_size (bytes) == 0)
+    {
+      g_bytes_unref (bytes);
       g_object_unref (stream);
       g_object_unref (cb);
       return;
@@ -108,24 +114,43 @@ gdk_x11_clipboard_request_targets_finish (GObject      *source_object,
 }
 
 static void
-gdk_x11_clipboard_request_targets (GdkX11Clipboard *cb)
+gdk_x11_clipboard_request_targets_got_stream (GObject      *source,
+                                              GAsyncResult *result,
+                                              gpointer      data)
 {
+  GdkX11Clipboard *cb = data;
   GInputStream *stream;
   GdkDisplay *display;
-  
-  display = gdk_clipboard_get_display (GDK_CLIPBOARD (cb));
+  GError *error = NULL;
 
-  stream = gdk_x11_selection_input_stream_new (gdk_clipboard_get_display (GDK_CLIPBOARD (cb)),
-                                               cb->selection,
-                                               "TARGETS",
-                                               cb->timestamp);
+  stream = gdk_x11_selection_input_stream_new_finish (result, &error);
+  if (stream == NULL)
+    {
+      g_object_unref (cb);
+      return;
+    }
+
+  display = gdk_clipboard_get_display (GDK_CLIPBOARD (cb));
 
   g_input_stream_read_bytes_async (stream,
                                    SELECTION_MAX_SIZE (display),
                                    G_PRIORITY_DEFAULT,
                                    NULL,
                                    gdk_x11_clipboard_request_targets_finish,
-                                   g_object_ref (cb));
+                                   cb);
+}
+
+static void
+gdk_x11_clipboard_request_targets (GdkX11Clipboard *cb)
+{
+  gdk_x11_selection_input_stream_new_async (gdk_clipboard_get_display (GDK_CLIPBOARD (cb)),
+                                            cb->selection,
+                                            "TARGETS",
+                                            cb->timestamp,
+                                            G_PRIORITY_DEFAULT,
+                                            NULL,
+                                            gdk_x11_clipboard_request_targets_got_stream,
+                                            g_object_ref (cb));
 }
 
 static GdkFilterReturn
@@ -180,16 +205,90 @@ gdk_x11_clipboard_finalize (GObject *object)
   G_OBJECT_CLASS (gdk_x11_clipboard_parent_class)->finalize (object);
 }
 
-static GInputStream *
-gdk_x11_clipboard_read (GdkClipboard *clipboard,
-                        const char   *mime_type)
+static void
+gdk_x11_clipboard_read_got_stream (GObject      *source,
+                                   GAsyncResult *res,
+                                   gpointer      data)
+{
+  GTask *task = data;
+  GError *error = NULL;
+  GInputStream *stream;
+  
+  stream = gdk_x11_selection_input_stream_new_finish (res, &error);
+  /* XXX: We could try more types here */
+  if (stream == NULL)
+    g_task_return_error (task, error);
+  else
+    g_task_return_pointer (task, stream, g_object_unref);
+
+  g_object_unref (task);
+}
+
+static void
+gdk_x11_clipboard_read_async (GdkClipboard        *clipboard,
+                              GdkContentFormats   *formats,
+                              int                  io_priority,
+                              GCancellable        *cancellable,
+                              GAsyncReadyCallback  callback,
+                              gpointer             user_data)
 {
   GdkX11Clipboard *cb = GDK_X11_CLIPBOARD (clipboard);
+  const char * const *mime_types;
+  GTask *task;
 
-  return gdk_x11_selection_input_stream_new (gdk_clipboard_get_display (GDK_CLIPBOARD (cb)),
-                                             cb->selection,
-                                             mime_type,
-                                             cb->timestamp);
+  task = g_task_new (clipboard, cancellable, callback, user_data);
+  g_task_set_priority (task, io_priority);
+  g_task_set_source_tag (task, gdk_x11_clipboard_read_async);
+  g_task_set_task_data (task, gdk_content_formats_ref (formats), (GDestroyNotify) gdk_content_formats_unref);
+
+  /* XXX: Sort differently? */
+  mime_types = gdk_content_formats_get_mime_types (formats, NULL);
+
+  gdk_x11_selection_input_stream_new_async (gdk_clipboard_get_display (GDK_CLIPBOARD (cb)),
+                                            cb->selection,
+                                            mime_types[0],
+                                            cb->timestamp,
+                                            io_priority,
+                                            cancellable,
+                                            gdk_x11_clipboard_read_got_stream,
+                                            task);
+}
+
+static GInputStream *
+gdk_x11_clipboard_read_finish (GdkClipboard  *clipboard,
+                               const char   **out_mime_type,
+                               GAsyncResult  *result,
+                               GError       **error)
+{
+  GInputStream *stream;
+  GTask *task;
+
+  g_return_val_if_fail (g_task_is_valid (result, G_OBJECT (clipboard)), NULL);
+  task = G_TASK (result);
+  g_return_val_if_fail (g_task_get_source_tag (task) == gdk_x11_clipboard_read_async, NULL);
+
+  stream = g_task_propagate_pointer (task, error);
+
+  if (stream)
+    {
+      if (out_mime_type)
+        {
+          GdkContentFormats *formats;
+          const char * const  *mime_types;
+
+          formats = g_task_get_task_data (task);
+          mime_types = gdk_content_formats_get_mime_types (formats, NULL);
+          *out_mime_type = mime_types[0];
+        }
+      g_object_ref (stream);
+    }
+  else
+    {
+      if (out_mime_type)
+        *out_mime_type = NULL;
+    }
+
+  return stream;
 }
 
 static void
@@ -200,7 +299,8 @@ gdk_x11_clipboard_class_init (GdkX11ClipboardClass *class)
 
   object_class->finalize = gdk_x11_clipboard_finalize;
 
-  clipboard_class->read = gdk_x11_clipboard_read;
+  clipboard_class->read_async = gdk_x11_clipboard_read_async;
+  clipboard_class->read_finish = gdk_x11_clipboard_read_finish;
 }
 
 static void

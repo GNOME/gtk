@@ -50,10 +50,17 @@ struct GdkX11SelectionInputStreamClass
 
 GType          gdk_x11_selection_input_stream_get_type      (void) G_GNUC_CONST;
 
-GInputStream * gdk_x11_selection_input_stream_new           (GdkDisplay *display,
-                                                             const char *selection,
-                                                             const char *target,
-                                                             guint32     timestamp);
+void           gdk_x11_selection_input_stream_new_async     (GdkDisplay                 *display,
+                                                             const char                 *selection,
+                                                             const char                 *target,
+                                                             guint32                     timestamp,
+                                                             int                         io_priority,
+                                                             GCancellable               *cancellable,
+                                                             GAsyncReadyCallback         callback,
+                                                             gpointer                    user_data);
+GInputStream * gdk_x11_selection_input_stream_new_finish    (GAsyncResult               *result,
+                                                             GError                    **error);
+
 
 G_END_DECLS
 
