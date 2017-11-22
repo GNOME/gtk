@@ -4416,8 +4416,10 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
    * GtkPlacesSidebar::populate-popup:
    * @sidebar: the object which received the signal.
    * @container: (type Gtk.Widget): a #GtkMenu or another #GtkContainer
-   * @selected_item: (type Gio.File) (nullable): #GFile with the item to which the popup should refer, or #NULL in the case of a @selected_volume.
-   * @selected_volume: (type Gio.Volume) (nullable): #GVolume if the selected item is a volume, or #NULL if it is a file.
+   * @selected_item: (type Gio.File) (nullable): #GFile with the item to which
+   *     the popup should refer, or %NULL in the case of a @selected_volume.
+   * @selected_volume: (type Gio.Volume) (nullable): #GVolume if the selected
+   *     item is a volume, or %NULL if it is a file.
    *
    * The places sidebar emits this signal when the user invokes a contextual
    * popup on one of its items. In the signal handler, the application may
@@ -4834,7 +4836,7 @@ gtk_places_sidebar_get_open_flags (GtkPlacesSidebar *sidebar)
 /**
  * gtk_places_sidebar_set_location:
  * @sidebar: a places sidebar
- * @location: (allow-none): location to select, or #NULL for no current path
+ * @location: (nullable): location to select, or %NULL for no current path
  *
  * Sets the location that is being shown in the widgets surrounding the
  * @sidebar, for example, in a folder view in a file manager.  In turn, the
@@ -4894,7 +4896,7 @@ gtk_places_sidebar_set_location (GtkPlacesSidebar *sidebar,
  * gtk_places_sidebar_get_location:
  * @sidebar: a places sidebar
  *
- * Gets the currently-selected location in the @sidebar.  This can be #NULL when
+ * Gets the currently selected location in the @sidebar. This can be %NULL when
  * nothing is selected, for example, when gtk_places_sidebar_set_location() has
  * been called with a location that is not among the sidebar’s list of places to
  * show.
@@ -4904,7 +4906,7 @@ gtk_places_sidebar_set_location (GtkPlacesSidebar *sidebar,
  * function to get the location that is being referred to during the callbacks
  * for your menu items.
  *
- * Returns: (nullable) (transfer full): a GFile with the selected location, or
+ * Returns: (nullable) (transfer full): a #GFile with the selected location, or
  * %NULL if nothing is visually selected.
  *
  * Since: 3.10

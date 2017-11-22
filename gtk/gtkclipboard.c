@@ -305,7 +305,7 @@ clipboard_display_closed (GdkDisplay   *display,
  * to the default clipboard, i.e. they copy the selection to what the
  * user sees as the clipboard.
  *
- * (Passing #NULL is the same as using `gdk_atom_intern
+ * (Passing %NULL is the same as using `gdk_atom_intern
  * ("CLIPBOARD", FALSE)`.
  *
  * See the

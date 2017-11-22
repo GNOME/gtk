@@ -1423,7 +1423,7 @@ gtk_drag_begin_internal (GtkWidget          *widget,
  * button is held down for some time.  Try to save the last event that you got
  * from the mouse, using gdk_event_copy(), and pass it to this function
  * (remember to free the event with gdk_event_free() when you are done).
- * If you can really not pass a real event, pass #NULL instead.
+ * If you can really not pass a real event, pass %NULL instead.
  *
  * Returns: (transfer none): the context for this drag
  *
