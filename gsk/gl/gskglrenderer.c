@@ -12,6 +12,7 @@
 #include "gskshaderbuilderprivate.h"
 #include "gskglglyphcacheprivate.h"
 #include "gdk/gdktextureprivate.h"
+#include "gskglrenderopsprivate.h"
 
 #include "gskprivate.h"
 
@@ -25,9 +26,6 @@
 
 #define ORTHO_NEAR_PLANE        -10000
 #define ORTHO_FAR_PLANE          10000
-
-#define N_VERTICES      6
-#define N_PROGRAMS      6
 
 #define HIGHLIGHT_FALLBACK 0
 #define DEBUG_OPS          0
@@ -54,7 +52,7 @@ dump_framebuffer (const char *filename, int w, int h)
   cairo_surface_t *s;
 
   glReadPixels (0, 0, w, h, GL_BGRA, GL_UNSIGNED_BYTE, data);
-  s = cairo_image_surface_create_for_data (data, CAIRO_FORMAT_RGB24, w, h, stride);
+  s = cairo_image_surface_create_for_data (data, CAIRO_FORMAT_ARGB32, w, h, stride);
   cairo_surface_write_to_png (s, filename);
 
   cairo_surface_destroy (s);
@@ -80,102 +78,6 @@ font_has_color_glyphs (const PangoFont *font)
 
 static void
 gsk_gl_renderer_setup_render_mode (GskGLRenderer *self);
-
-typedef struct
-{
-  int index;        /* Into the renderer's program array */
-  const char *name; /* For debugging */
-
-  int id;
-  /* Common locations (gl_common)*/
-  int source_location;
-  int mask_location;
-  int uv_location;
-  int position_location;
-  int alpha_location;
-  int blend_mode_location;
-  int viewport_location;
-  int projection_location;
-  int modelview_location;
-  int clip_location;
-  int clip_corner_widths_location;
-  int clip_corner_heights_location;
-
-  /* Program-specific locations */
-  union {
-    struct {
-      int color_location;
-    };
-    struct {
-      int color_matrix_location;
-      int color_offset_location;
-    };
-    struct {
-      int n_color_stops_location;
-      int color_stops_location;
-      int color_offsets_location;
-      int start_point_location;
-      int end_point_location;
-    };
-    struct {
-      int clip_bounds_location;
-      int corner_widths_location;
-      int corner_heights_location;
-    };
-  };
-} Program;
-
-enum {
-  MODE_BLIT = 1,
-  MODE_COLOR,
-  MODE_COLORING,
-  MODE_TEXTURE,
-  MODE_COLOR_MATRIX,
-  MODE_LINEAR_GRADIENT,
-  N_MODES
-};
-
-enum {
-  OP_NONE,
-  OP_CHANGE_OPACITY         =  1,
-  OP_CHANGE_COLOR           =  2,
-  OP_CHANGE_PROJECTION      =  3,
-  OP_CHANGE_MODELVIEW       =  4,
-  OP_CHANGE_PROGRAM         =  5,
-  OP_CHANGE_RENDER_TARGET   =  6,
-  OP_CHANGE_CLIP            =  7,
-  OP_CHANGE_VIEWPORT        =  8,
-  OP_CHANGE_SOURCE_TEXTURE  =  9,
-  OP_CHANGE_VAO             =  10,
-  OP_CHANGE_LINEAR_GRADIENT =  11,
-  OP_DRAW                   =  12,
-};
-
-typedef struct
-{
-  guint op;
-
-  union {
-    float opacity;
-    graphene_matrix_t modelview; // TODO: Make both matrix members just "matrix".
-    graphene_matrix_t projection;
-    const Program *program;
-    GdkRGBA color;
-    gsize vao_offset;
-    GskQuadVertex vertex_data[N_VERTICES]; // New Quad
-    int texture_id;
-    int render_target_id;
-    GskRoundedRect clip;
-    graphene_rect_t viewport;
-    struct {
-      int n_color_stops;
-      float color_offsets[8];
-      float color_stops[4 * 8];
-      graphene_point_t start_point;
-      graphene_point_t end_point;
-    } linear_gradient;
-  };
-} RenderOp;
 
 #ifdef G_ENABLE_DEBUG
 typedef struct
@@ -216,7 +118,7 @@ struct _GskGLRenderer
   GskGLProfiler *gl_profiler;
 
   union {
-    Program programs[N_PROGRAMS];
+    Program programs[GL_N_PROGRAMS];
     struct {
       Program blend_program;
       Program blit_program;
@@ -249,264 +151,6 @@ struct _GskGLRendererClass
 };
 
 G_DEFINE_TYPE (GskGLRenderer, gsk_gl_renderer, GSK_TYPE_RENDERER)
-
-typedef struct
-{
-  /* Per-Program State */
-  struct {
-    GskRoundedRect clip;
-    graphene_matrix_t modelview;
-    graphene_matrix_t projection;
-    int source_texture;
-    graphene_rect_t viewport;
-  } program_state[N_PROGRAMS];
-
-  /* Current global state */
-  const Program *current_program;
-  int current_render_target;
-  int current_vao;
-  int current_texture;
-  GskRoundedRect current_clip;
-  graphene_matrix_t current_modelview;
-  graphene_matrix_t current_projection;
-  graphene_rect_t current_viewport;
-  float current_opacity;
-
-  gsize buffer_size;
-
-  GskGLRenderer *renderer;
-} RenderOpBuilder;
-
-static void
-add_program_op (RenderOpBuilder *builder,
-                const Program   *new_program)
-{
-  static const GskRoundedRect empty_clip;
-  static const graphene_matrix_t empty_matrix;
-  static const graphene_rect_t empty_rect;
-  RenderOp op;
-
-  if (builder->current_program == new_program)
-    return;
-
-  op.op = OP_CHANGE_PROGRAM;
-  op.program = new_program;
-  g_array_append_val (builder->renderer->render_ops, op);
-  builder->current_program = new_program;
-
-  /* If the projection is not yet set for this program, we use the current one. */
-  if (memcmp (&empty_matrix, &builder->program_state[new_program->index].projection, sizeof (graphene_matrix_t)) == 0 ||
-      memcmp (&builder->current_projection, &builder->program_state[new_program->index].projection, sizeof (graphene_matrix_t)) != 0)
-    {
-      op.op = OP_CHANGE_PROJECTION;
-      op.projection = builder->current_projection;
-      g_array_append_val (builder->renderer->render_ops, op);
-      builder->program_state[new_program->index].projection = builder->current_projection;
-    }
-
-  if (memcmp (&empty_matrix, &builder->program_state[new_program->index].modelview, sizeof (graphene_matrix_t)) == 0 ||
-      memcmp (&builder->current_modelview, &builder->program_state[new_program->index].modelview, sizeof (graphene_matrix_t)) != 0)
-    {
-      op.op = OP_CHANGE_MODELVIEW;
-      op.modelview = builder->current_modelview;
-      g_array_append_val (builder->renderer->render_ops, op);
-      builder->program_state[new_program->index].modelview = builder->current_modelview;
-    }
-
-  if (memcmp (&empty_rect, &builder->program_state[new_program->index].viewport, sizeof (graphene_rect_t)) == 0 ||
-      memcmp (&builder->current_viewport, &builder->program_state[new_program->index].viewport, sizeof (graphene_rect_t)) != 0)
-    {
-      op.op = OP_CHANGE_VIEWPORT;
-      op.viewport = builder->current_viewport;
-      g_array_append_val (builder->renderer->render_ops, op);
-      builder->program_state[new_program->index].viewport = builder->current_viewport;
-    }
-
-  if (memcmp (&empty_clip, &builder->program_state[new_program->index].clip, sizeof (GskRoundedRect)) == 0 ||
-      memcmp (&builder->current_clip, &builder->program_state[new_program->index].clip, sizeof (GskRoundedRect)) != 0)
-    {
-      op.op = OP_CHANGE_CLIP;
-      op.clip = builder->current_clip;
-      g_array_append_val (builder->renderer->render_ops, op);
-      builder->program_state[new_program->index].clip = builder->current_clip;
-    }
-
-  if (graphene_rect_equal (&empty_rect, &builder->program_state[new_program->index].viewport) ||
-      !graphene_rect_equal (&builder->current_viewport, &builder->program_state[new_program->index].viewport))
-    {
-      op.op = OP_CHANGE_VIEWPORT;
-      op.viewport = builder->current_viewport;
-      g_array_append_val (builder->renderer->render_ops, op);
-      builder->program_state[new_program->index].viewport = builder->current_viewport;
-    }
-}
-
-static GskRoundedRect
-add_clip_op (RenderOpBuilder      *builder,
-             const GskRoundedRect *new_clip)
-{
-  RenderOp op;
-  GskRoundedRect prev_clip;
-
-  op.op = OP_CHANGE_CLIP;
-  op.clip = *new_clip;
-  g_array_append_val (builder->renderer->render_ops, op);
-
-  if (builder->current_program != NULL)
-    builder->program_state[builder->current_program->index].clip = *new_clip;
-
-  prev_clip = builder->current_clip;
-  builder->current_clip = *new_clip;
-
-  return prev_clip;
-}
-
-static graphene_matrix_t
-add_modelview_op (RenderOpBuilder         *builder,
-                  const graphene_matrix_t *matrix)
-{
-  RenderOp op;
-  graphene_matrix_t prev_mv;
-  RenderOp *last_op;
-
-  last_op = &g_array_index (builder->renderer->render_ops, RenderOp, builder->renderer->render_ops->len - 1);
-  if (last_op->op == OP_CHANGE_MODELVIEW)
-    {
-      last_op->modelview = *matrix;
-    }
-  else
-    {
-      op.op = OP_CHANGE_MODELVIEW;
-      op.modelview = *matrix;
-      g_array_append_val (builder->renderer->render_ops, op);
-    }
-
-  if (builder->current_program != NULL)
-    builder->program_state[builder->current_program->index].modelview = *matrix;
-
-  prev_mv = builder->current_modelview;
-  builder->current_modelview = *matrix;
-
-  return prev_mv;
-}
-
-static graphene_matrix_t
-add_projection_op (RenderOpBuilder         *builder,
-                   const graphene_matrix_t *matrix)
-{
-  RenderOp op;
-  graphene_matrix_t prev_proj;
-
-  op.op = OP_CHANGE_PROJECTION;
-  op.projection = *matrix;
-  g_array_append_val (builder->renderer->render_ops, op);
-
-  if (builder->current_program != NULL)
-    builder->program_state[builder->current_program->index].projection = *matrix;
-
-  prev_proj = builder->current_projection;
-  builder->current_projection = *matrix;
-
-  return prev_proj;
-}
-
-static graphene_rect_t
-add_viewport_op (RenderOpBuilder       *builder,
-                 const graphene_rect_t *viewport)
-{
-  RenderOp op;
-  graphene_rect_t prev_viewport;
-
-  op.op = OP_CHANGE_VIEWPORT;
-  op.viewport = *viewport;
-  g_array_append_val (builder->renderer->render_ops, op);
-
-  if (builder->current_program != NULL)
-    builder->program_state[builder->current_program->index].viewport = *viewport;
-
-  prev_viewport = builder->current_viewport;
-  builder->current_viewport = *viewport;
-
-  return prev_viewport;
-}
-
-static void
-add_texture_op (RenderOpBuilder *builder,
-                int              texture_id)
-{
-  RenderOp op;
-
-  if (builder->current_texture == texture_id)
-    return;
-
-  op.op = OP_CHANGE_SOURCE_TEXTURE;
-  op.texture_id = texture_id;
-  g_array_append_val (builder->renderer->render_ops, op);
-  builder->current_texture = texture_id;
-}
-
-static float
-add_opacity_op (RenderOpBuilder *builder,
-                float            opacity)
-{
-  RenderOp op;
-  float prev_opacity;
-
-  if (builder->current_opacity == opacity)
-    return opacity;
-
-  op.op = OP_CHANGE_OPACITY;
-  op.opacity = opacity;
-  g_array_append_val (builder->renderer->render_ops, op);
-
-  prev_opacity = builder->current_opacity;
-  builder->current_opacity = opacity;
-
-  return prev_opacity;
-}
-
-static int
-add_render_target_op (RenderOpBuilder *builder,
-                      int              render_target_id)
-{
-  RenderOp op;
-  int prev_render_target;
-
-  if (builder->current_render_target == render_target_id)
-    return render_target_id;
-
-  prev_render_target = builder->current_render_target;
-  op.op = OP_CHANGE_RENDER_TARGET;
-  op.render_target_id = render_target_id;
-  g_array_append_val (builder->renderer->render_ops, op);
-  builder->current_render_target = render_target_id;
-
-  return prev_render_target;
-}
-
-static void
-add_draw_op (RenderOpBuilder     *builder,
-             const GskQuadVertex  vertex_data[N_VERTICES])
-{
-  RenderOp op;
-  gsize offset = builder->buffer_size / sizeof (GskQuadVertex);
-
-  op.op = OP_CHANGE_VAO;
-  memcpy (&op.vertex_data, vertex_data, sizeof(GskQuadVertex) * N_VERTICES);
-  g_array_append_val (builder->renderer->render_ops, op);
-  builder->buffer_size += sizeof (GskQuadVertex) * N_VERTICES;
-
-  op.op = OP_DRAW;
-  op.vao_offset = offset;
-  g_array_append_val (builder->renderer->render_ops, op);
-}
-
-static void
-add_op (RenderOpBuilder *builder,
-        const RenderOp  *op)
-{
-  g_array_append_val (builder->renderer->render_ops, *op);
-}
 
 static void
 gsk_gl_renderer_dispose (GObject *gobject)
@@ -643,6 +287,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
       goto out;
     }
   self->blend_program.index = 0;
+  self->blend_program.name = "blend";
   init_common_locations (self, builder, &self->blend_program);
 
   self->blit_program.id = gsk_shader_builder_create_program (builder,
@@ -656,6 +301,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
       goto out;
     }
   self->blit_program.index = 1;
+  self->blit_program.name = "blit";
   init_common_locations (self, builder, &self->blit_program);
 
   self->color_program.id = gsk_shader_builder_create_program (builder,
@@ -669,6 +315,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
       goto out;
     }
   self->color_program.index = 2;
+  self->color_program.name = "color";
   init_common_locations (self, builder, &self->color_program);
   INIT_PROGRAM_UNIFORM_LOCATION (color_program, color_location, "uColor");
 
@@ -733,7 +380,7 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
                          GError      **error)
 {
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
-  GskQuadVertex vertex_data[N_VERTICES] = {
+  GskQuadVertex vertex_data[GL_N_VERTICES] = {
     { { 0, 0 }, { 0, 0 }, },
     { { 0, 1 }, { 0, 1 }, },
     { { 1, 0 }, { 1, 0 }, },
@@ -771,7 +418,7 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
 
   gsk_gl_glyph_cache_init (&self->glyph_cache, self->gl_driver);
 
-  gsk_gl_driver_create_permanent_vao_for_quad (self->gl_driver, N_VERTICES, vertex_data,
+  gsk_gl_driver_create_permanent_vao_for_quad (self->gl_driver, GL_N_VERTICES, vertex_data,
                                                &self->full_vao_id, &self->full_vao_buffer_id);
 
   return TRUE;
@@ -971,7 +618,7 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
   float max_y = min_y + node->bounds.size.height;
 
   /* Default vertex data */
-  GskQuadVertex vertex_data[N_VERTICES] = {
+  GskQuadVertex vertex_data[GL_N_VERTICES] = {
     { { min_x, min_y }, { 0, 0 }, },
     { { min_x, max_y }, { 0, 1 }, },
     { { max_x, min_y }, { 1, 0 }, },
@@ -981,10 +628,11 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
     { { max_x, min_y }, { 1, 0 }, },
   };
 
-  /*if (gsk_render_node_get_node_type (node) != GSK_CONTAINER_NODE)*/
-    /*g_message ("Adding ops for node %s with type %u", node->name,*/
-               /*gsk_render_node_get_node_type (node));*/
-
+#if DEBUG_OPS
+  if (gsk_render_node_get_node_type (node) != GSK_CONTAINER_NODE)
+    g_message ("Adding ops for node %s with type %u", node->name,
+               gsk_render_node_get_node_type (node));
+#endif
 
   switch (gsk_render_node_get_node_type (node))
     {
@@ -1008,11 +656,11 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
       {
         RenderOp op;
 
-        add_program_op (builder, &self->color_program);
+        ops_set_program (builder, &self->color_program);
         op.op = OP_CHANGE_COLOR;
         op.color = *gsk_color_node_peek_color (node);
-        add_op (builder, &op);
-        add_draw_op (builder, vertex_data);
+        ops_add (builder, &op);
+        ops_draw (builder, vertex_data);
       }
     break;
 
@@ -1028,9 +676,9 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
                                                             texture,
                                                             gl_min_filter,
                                                             gl_mag_filter);
-        add_program_op (builder, &self->blit_program);
-        add_texture_op (builder, texture_id);
-        add_draw_op (builder, vertex_data);
+        ops_set_program (builder, &self->blit_program);
+        ops_set_texture (builder, texture_id);
+        ops_draw (builder, vertex_data);
       }
     break;
 
@@ -1042,18 +690,18 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
 
         graphene_matrix_init_from_matrix (&transform, gsk_transform_node_peek_transform (node));
         graphene_matrix_multiply (&transform, &builder->current_modelview, &transformed_mv);
-        prev_mv = add_modelview_op (builder, &transformed_mv);
+        prev_mv = ops_set_modelview (builder, &transformed_mv);
 
         gsk_gl_renderer_add_render_ops (self, child, builder);
 
-        add_modelview_op (builder, &prev_mv);
+        ops_set_modelview (builder, &prev_mv);
       }
     break;
 
     case GSK_OPACITY_NODE:
       {
         int render_target;
-        int texture;
+        int texture_id;
         int prev_render_target;
         float prev_opacity;
         graphene_matrix_t identity;
@@ -1061,7 +709,7 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
         graphene_matrix_t prev_modelview;
         graphene_rect_t prev_viewport;
         graphene_matrix_t item_proj;
-        GskQuadVertex vertex_data[N_VERTICES] = {
+        GskQuadVertex vertex_data[GL_N_VERTICES] = {
           { { min_x, min_y }, { 0, 1 }, },
           { { min_x, max_y }, { 0, 0 }, },
           { { max_x, min_y }, { 1, 1 }, },
@@ -1071,12 +719,14 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
           { { max_x, min_y }, { 1, 1 }, },
         };
 
-        texture = gsk_gl_driver_create_texture (self->gl_driver,
-                                                node->bounds.size.width,
-                                                node->bounds.size.height);
-        gsk_gl_driver_bind_source_texture (self->gl_driver, texture);
-        gsk_gl_driver_init_texture_empty (self->gl_driver, texture);
-        render_target = gsk_gl_driver_create_render_target (self->gl_driver, texture, TRUE, TRUE);
+        texture_id = gsk_gl_driver_create_texture (self->gl_driver, max_x - min_x, max_y - min_y);
+        gsk_gl_driver_bind_source_texture (self->gl_driver, texture_id);
+        gsk_gl_driver_init_texture_empty (self->gl_driver, texture_id);
+        render_target = gsk_gl_driver_create_render_target (self->gl_driver, texture_id, TRUE, TRUE);
+
+        /* Clear the framebuffer now, once */
+        RenderOp op;
+        op.op = OP_CLEAR;
 
         graphene_matrix_init_ortho (&item_proj,
                                     min_x, max_x,
@@ -1085,23 +735,26 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
         graphene_matrix_scale (&item_proj, 1, -1, 1);
         graphene_matrix_init_identity (&identity);
 
-        prev_render_target = add_render_target_op (builder, render_target);
-        prev_projection = add_projection_op (builder, &item_proj);
-        prev_modelview = add_modelview_op (builder, &identity);
-        prev_viewport = add_viewport_op (builder, &node->bounds);
+        prev_render_target = ops_set_render_target (builder, render_target);
+        /* Clear since we use this rendertarget for the first time */
+        ops_add (builder, &op);
+        prev_projection = ops_set_projection (builder, &item_proj);
+        prev_modelview = ops_set_modelview (builder, &identity);
+        prev_viewport = ops_set_viewport (builder, &node->bounds);
 
         gsk_gl_renderer_add_render_ops (self, gsk_opacity_node_get_child (node), builder);
 
-        add_viewport_op (builder, &prev_viewport);
-        add_modelview_op (builder, &prev_modelview);
-        add_projection_op (builder, &prev_projection);
-        add_render_target_op (builder, prev_render_target);
+        ops_set_viewport (builder, &prev_viewport);
+        ops_set_modelview (builder, &prev_modelview);
+        ops_set_projection (builder, &prev_projection);
+        ops_set_render_target (builder, prev_render_target);
 
-        add_program_op (builder, &self->blit_program);
-        prev_opacity = add_opacity_op (builder, gsk_opacity_node_get_opacity (node));
-        add_texture_op (builder, texture);
-        add_draw_op (builder, vertex_data);
-        add_opacity_op (builder, prev_opacity);
+        /* Now draw the texture with the node's opacity */
+        ops_set_program (builder, &self->blit_program);
+        prev_opacity = ops_set_opacity (builder, gsk_opacity_node_get_opacity (node));
+        ops_set_texture (builder, texture_id);
+        ops_draw (builder, vertex_data);
+        ops_set_opacity (builder, prev_opacity);
       }
     break;
 
@@ -1125,14 +778,14 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
             op.linear_gradient.color_offsets[i] = stop->offset;
           }
 
-        add_program_op (builder, &self->linear_gradient_program);
+        ops_set_program (builder, &self->linear_gradient_program);
         op.op = OP_CHANGE_LINEAR_GRADIENT;
         op.linear_gradient.n_color_stops = n_color_stops;
         op.linear_gradient.start_point = *start;
         op.linear_gradient.end_point = *end;
-        add_op (builder, &op);
+        ops_add (builder, &op);
 
-        add_draw_op (builder, vertex_data);
+        ops_draw (builder, vertex_data);
       }
     break;
 
@@ -1153,9 +806,9 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
 
         gsk_rounded_rect_init_from_rect (&child_clip, &intersection, 0.0f);
 
-        prev_clip = add_clip_op (builder, &child_clip);
+        prev_clip = ops_set_clip (builder, &child_clip);
         gsk_gl_renderer_add_render_ops (self, child, builder);
-        add_clip_op (builder, &prev_clip);
+        ops_set_clip (builder, &prev_clip);
       }
     break;
 
@@ -1179,9 +832,9 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
                                &rounded_clip->corner[2],
                                &rounded_clip->corner[3]);
 
-        prev_clip = add_clip_op (builder, &child_clip);
+        prev_clip = ops_set_clip (builder, &child_clip);
         gsk_gl_renderer_add_render_ops (self, child, builder);
-        add_clip_op (builder, &prev_clip);
+        ops_set_clip (builder, &prev_clip);
       }
     break;
 
@@ -1228,20 +881,20 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
             /* If the font has color glyphs, we don't need to recolor anything */
             if (font_has_color_glyphs (font))
               {
-                add_program_op (builder, &self->blit_program);
+                ops_set_program (builder, &self->blit_program);
               }
             else
               {
                 RenderOp op;
 
-                add_program_op (builder, &self->coloring_program);
+                ops_set_program (builder, &self->coloring_program);
 
                 op.op = OP_CHANGE_COLOR;
                 op.color = *gsk_text_node_peek_color (node);
-                add_op (builder, &op);
+                ops_add (builder, &op);
               }
 
-            add_texture_op (builder, gsk_gl_glyph_cache_get_glyph_image (&self->glyph_cache,
+            ops_set_texture (builder, gsk_gl_glyph_cache_get_glyph_image (&self->glyph_cache,
                                                                          glyph)->texture_id);
 
             {
@@ -1255,7 +908,7 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
               glyph_w = glyph->draw_width;
               glyph_h = glyph->draw_height;
 
-              GskQuadVertex vertex_data[N_VERTICES] = {
+              GskQuadVertex vertex_data[GL_N_VERTICES] = {
                 { { glyph_x,           glyph_y           }, { tx,  ty  }, },
                 { { glyph_x,           glyph_y + glyph_h }, { tx,  ty2 }, },
                 { { glyph_x + glyph_w, glyph_y           }, { tx2, ty  }, },
@@ -1265,7 +918,7 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
                 { { glyph_x + glyph_w, glyph_y           }, { tx2, ty  }, },
               };
 
-              add_draw_op (builder, vertex_data);
+              ops_draw (builder, vertex_data);
             }
 
             x_position += gi->geometry.width;
@@ -1273,7 +926,6 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
 
       }
     break;
-
 
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
     case GSK_BORDER_NODE:
@@ -1324,9 +976,9 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
 
         cairo_surface_destroy (surface);
 
-        add_program_op (builder, &self->blit_program);
-        add_texture_op (builder, texture_id);
-        add_draw_op (builder, vertex_data);
+        ops_set_program (builder, &self->blit_program);
+        ops_set_texture (builder, texture_id);
+        ops_draw (builder, vertex_data);
       }
     }
 }
@@ -1360,8 +1012,8 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
 
       if (op->op == OP_CHANGE_VAO)
         {
-          memcpy (vertex_data + buffer_index, &op->vertex_data, sizeof (GskQuadVertex) * N_VERTICES);
-          buffer_index += sizeof (GskQuadVertex) * N_VERTICES / sizeof (float);
+          memcpy (vertex_data + buffer_index, &op->vertex_data, sizeof (GskQuadVertex) * GL_N_VERTICES);
+          buffer_index += sizeof (GskQuadVertex) * GL_N_VERTICES / sizeof (float);
         }
     }
 
@@ -1410,24 +1062,24 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
         case OP_CHANGE_PROGRAM:
           program = op->program;
           glUseProgram (op->program->id);
-          OP_PRINT (" -> Program: %d", op->program->id);
+          OP_PRINT (" -> Program: %d(%s)", op->program->index, op->program->name);
           break;
 
         case OP_CHANGE_RENDER_TARGET:
           OP_PRINT (" -> Render Target: %d", op->render_target_id);
 
           glBindFramebuffer (GL_FRAMEBUFFER, op->render_target_id);
+
           if (op->render_target_id != 0)
-            {
-              glDisable (GL_SCISSOR_TEST);
-              glClearColor (0.0, 0.0, 0.0, 0.0);
-              glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-            }
+            glDisable (GL_SCISSOR_TEST);
           else
-            {
-              /* Reset glScissor, etc. */
-              gsk_gl_renderer_setup_render_mode (self);
-            }
+            gsk_gl_renderer_setup_render_mode (self); /* Reset glScissor etc. */
+
+          break;
+
+        case OP_CLEAR:
+          glClearColor (0, 0, 0, 0);
+          glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
           break;
 
         case OP_CHANGE_VIEWPORT:
@@ -1439,6 +1091,7 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
           break;
 
         case OP_CHANGE_OPACITY:
+          OP_PRINT (" -> Opacity %f", op->opacity);
           glUniform1f (program->alpha_location, op->opacity);
           break;
 
@@ -1494,8 +1147,8 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
           break;
 
         case OP_DRAW:
-          OP_PRINT (" -> draw %ld\n", op->vao_offset);
-          glDrawArrays (GL_TRIANGLES, op->vao_offset, N_VERTICES);
+          OP_PRINT (" -> draw %ld and program %s\n", op->vao_offset, program->name);
+          glDrawArrays (GL_TRIANGLES, op->vao_offset, GL_N_VERTICES);
           break;
 
         default:
@@ -1559,6 +1212,7 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
   render_op_builder.current_viewport = *viewport;
   render_op_builder.current_render_target = self->texture_id;
   render_op_builder.current_opacity = 1.0f;
+  render_op_builder.render_ops = self->render_ops;
   gsk_rounded_rect_init_from_rect (&render_op_builder.current_clip, &self->viewport, 0.0f);
   gsk_gl_renderer_add_render_ops (self, root, &render_op_builder);
 
