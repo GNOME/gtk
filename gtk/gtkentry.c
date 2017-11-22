@@ -1900,10 +1900,10 @@ gtk_entry_class_init (GtkEntryClass *class)
 				"toggle-overwrite", 0);
 
   /* Emoji */
- gtk_binding_entry_add_signal (binding_set, GDK_KEY_period, GDK_CONTROL_MASK,
-                               "insert-emoji", 0);
- gtk_binding_entry_add_signal (binding_set, GDK_KEY_semicolon, GDK_CONTROL_MASK,
-                               "insert-emoji", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_period, GDK_CONTROL_MASK,
+                                "insert-emoji", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_semicolon, GDK_CONTROL_MASK,
+                                "insert-emoji", 0);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_ENTRY_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("entry"));
