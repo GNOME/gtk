@@ -65,6 +65,15 @@ GDK_AVAILABLE_IN_3_94
 const GValue *          gdk_clipboard_read_value_finish (GdkClipboard          *clipboard,
                                                          GAsyncResult          *res,
                                                          GError               **error);
+GDK_AVAILABLE_IN_3_94
+void                    gdk_clipboard_read_pixbuf_async (GdkClipboard          *clipboard,
+                                                         GCancellable          *cancellable,
+                                                         GAsyncReadyCallback    callback,
+                                                         gpointer               user_data);
+GDK_AVAILABLE_IN_3_94
+GdkPixbuf *             gdk_clipboard_read_pixbuf_finish(GdkClipboard          *clipboard,
+                                                         GAsyncResult          *res,
+                                                         GError               **error);
 
 G_END_DECLS
 

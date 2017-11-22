@@ -34,18 +34,19 @@ pixbuf_loaded_cb (GObject      *clipboard,
                   GAsyncResult *res,
                   gpointer      data)
 {
-  const GValue *value;
   GError *error = NULL;
+  GdkPixbuf *pixbuf;
 
-  value = gdk_clipboard_read_value_finish (GDK_CLIPBOARD (clipboard), res, &error);
-  if (value == NULL)
+  pixbuf = gdk_clipboard_read_pixbuf_finish (GDK_CLIPBOARD (clipboard), res, &error);
+  if (pixbuf == NULL)
     {
       g_print ("%s\n", error->message);
       g_error_free (error);
       return;
     }
 
-  gtk_image_set_from_pixbuf (data, g_value_get_object (value));
+  gtk_image_set_from_pixbuf (data, pixbuf);
+  g_object_unref (pixbuf);
 }
 
 static void
@@ -63,12 +64,10 @@ visible_child_changed_cb (GtkWidget    *stack,
     {
       GtkWidget *image = gtk_stack_get_child_by_name (GTK_STACK (stack), "image");
 
-      gdk_clipboard_read_value_async (clipboard,
-                                      GDK_TYPE_PIXBUF,
-                                      G_PRIORITY_DEFAULT,
-                                      NULL,
-                                      pixbuf_loaded_cb,
-                                      image);
+      gdk_clipboard_read_pixbuf_async (clipboard,
+                                       NULL,
+                                       pixbuf_loaded_cb,
+                                       image);
     }
 }
                 

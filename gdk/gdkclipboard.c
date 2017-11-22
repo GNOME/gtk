@@ -385,6 +385,39 @@ gdk_clipboard_read_value_got_stream (GObject      *source,
   g_object_unref (stream);
 }
 
+static void
+gdk_clipboard_read_value_internal (GdkClipboard        *clipboard,
+                                   GType                type,
+                                   gpointer             source_tag,
+                                   int                  io_priority,
+                                   GCancellable        *cancellable,
+                                   GAsyncReadyCallback  callback,
+                                   gpointer             user_data)
+{
+  GdkContentFormatsBuilder *builder;
+  GdkContentFormats *formats;
+  GTask *task;
+
+  builder = gdk_content_formats_builder_new ();
+  gdk_content_formats_builder_add_gtype (builder, type);
+  formats = gdk_content_formats_builder_free (builder);
+  formats = gdk_content_formats_union_deserialize_mime_types (formats);
+
+  task = g_task_new (clipboard, cancellable, callback, user_data);
+  g_task_set_priority (task, io_priority);
+  g_task_set_source_tag (task, source_tag);
+  g_task_set_task_data (task, GSIZE_TO_POINTER (type), NULL);
+
+  gdk_clipboard_read_internal (clipboard,
+                               formats,
+                               io_priority,
+                               cancellable,
+                               gdk_clipboard_read_value_got_stream,
+                               task);
+
+  gdk_content_formats_unref (formats);
+}
+
 /**
  * gdk_clipboard_read_value_async:
  * @clipboard: a #GdkClipboard
@@ -412,28 +445,17 @@ gdk_clipboard_read_value_async (GdkClipboard        *clipboard,
                                 GAsyncReadyCallback  callback,
                                 gpointer             user_data)
 {
-  GdkContentFormatsBuilder *builder;
-  GdkContentFormats *formats;
-  GTask *task;
+  g_return_if_fail (GDK_IS_CLIPBOARD (clipboard));
+  g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
+  g_return_if_fail (callback != NULL);
 
-  builder = gdk_content_formats_builder_new ();
-  gdk_content_formats_builder_add_gtype (builder, type);
-  formats = gdk_content_formats_builder_free (builder);
-  formats = gdk_content_formats_union_deserialize_mime_types (formats);
-
-  task = g_task_new (clipboard, cancellable, callback, user_data);
-  g_task_set_priority (task, io_priority);
-  g_task_set_source_tag (task, gdk_clipboard_read_value_async);
-  g_task_set_task_data (task, GSIZE_TO_POINTER (type), NULL);
-
-  gdk_clipboard_read_internal (clipboard,
-                               formats,
-                               io_priority,
-                               cancellable,
-                               gdk_clipboard_read_value_got_stream,
-                               task);
-
-  gdk_content_formats_unref (formats);
+  gdk_clipboard_read_value_internal (clipboard,
+                                     type,
+                                     gdk_clipboard_read_value_async,
+                                     io_priority,
+                                     cancellable,
+                                     callback,
+                                     user_data);
 }
 
 /**
@@ -455,8 +477,73 @@ gdk_clipboard_read_value_finish (GdkClipboard  *clipboard,
 {
   g_return_val_if_fail (g_task_is_valid (res, clipboard), NULL);
   g_return_val_if_fail (g_task_get_source_tag (G_TASK (res)) == gdk_clipboard_read_value_async, NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
   return g_task_propagate_pointer (G_TASK (res), error);
+}
+
+/**
+ * gdk_clipboard_read_pixbuf_async:
+ * @clipboard: a #GdkClipboard
+ * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): callback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
+ *
+ * Asynchronously request the @clipboard contents converted to a #GdkPixbuf.
+ * When the operation is finished @callback will be called. You can then
+ * call gdk_clipboard_read_pixbuf_finish() to get the result.
+ *
+ * This is a simple wrapper around gdk_clipboard_read_value_async(). Use
+ * that function or gdk_clipboard_read_async() directly if you need more
+ * control over the operation.
+ **/
+void
+gdk_clipboard_read_pixbuf_async (GdkClipboard        *clipboard,
+                                 GCancellable        *cancellable,
+                                 GAsyncReadyCallback  callback,
+                                 gpointer             user_data)
+{
+  g_return_if_fail (GDK_IS_CLIPBOARD (clipboard));
+  g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
+  g_return_if_fail (callback != NULL);
+
+  gdk_clipboard_read_value_internal (clipboard,
+                                     GDK_TYPE_PIXBUF,
+                                     gdk_clipboard_read_pixbuf_async,
+                                     G_PRIORITY_DEFAULT,
+                                     cancellable,
+                                     callback,
+                                     user_data);
+}
+
+/**
+ * gdk_clipboard_read_pixbuf_finish:
+ * @clipboard: a #GdkClipboard
+ * @result: a #GAsyncResult
+ * @error: a #GError location to store the error occurring, or %NULL to 
+ * ignore.
+ *
+ * Finishes an asynchronous clipboard read started with
+ * gdk_clipboard_read_pixbuf_async().
+ *
+ * Returns: (transfer full) (nullable): a new #GdkPixbuf or %NULL on error.
+ **/
+GdkPixbuf *
+gdk_clipboard_read_pixbuf_finish (GdkClipboard  *clipboard,
+                                  GAsyncResult  *res,
+                                  GError       **error)
+{
+  const GValue *value;
+
+  g_return_val_if_fail (g_task_is_valid (res, clipboard), NULL);
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (res)) == gdk_clipboard_read_pixbuf_async, NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+  value = g_task_propagate_pointer (G_TASK (res), error);
+  if (!value)
+    return NULL;
+  
+  return g_value_dup_object (value);
 }
 
 GdkClipboard *
