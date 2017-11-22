@@ -592,6 +592,29 @@ SwapNodes.prototype.handle_node = function(parent, offset_x, offset_y)
         }
         break;
 
+    case 8:  // SHADOW
+        {
+            var len = this.decode_uint32();
+            var filters = "";
+            for (var i = 0; i < len; i++) {
+                var color = this.decode_color();
+                var dx = this.decode_float();
+                var dy = this.decode_float();
+                var blur = this.decode_float();
+                filters = filters + "drop-shadow(" + args (px(dx), px(dy), px(blur), color) + ")";
+            }
+            var div = document.createElement('div');
+            div.style["position"] = "absolute";
+            div.style["left"] = px(0);
+            div.style["top"] = px(0);
+            div.style["filter"] = filters;
+
+            parent.appendChild(div);
+            this.handle_node(div, offset_x, offset_y);
+        }
+        break;
+
+
     default:
         alert("Unexpected node type " + type);
     }

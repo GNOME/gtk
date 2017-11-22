@@ -222,13 +222,14 @@ get_client_serial (BroadwayClient *client, guint32 daemon_serial)
 #define NODE_SIZE_RECT (NODE_SIZE_POINT + NODE_SIZE_SIZE)
 #define NODE_SIZE_RRECT (NODE_SIZE_RECT + 4 * NODE_SIZE_SIZE)
 #define NODE_SIZE_COLOR_STOP (NODE_SIZE_FLOAT + NODE_SIZE_COLOR)
+#define NODE_SIZE_SHADOW (NODE_SIZE_COLOR + 3 * NODE_SIZE_FLOAT)
 
 static int
 rewrite_node_textures (BroadwayClient *client,
                        int len, guint32 data[], int pos)
 {
   guint32 type;
-  guint32 i, n_children, n_stops;
+  guint32 i, n_children, n_stops, n_shadows;
 
   g_assert (pos < len);
 
@@ -242,7 +243,7 @@ rewrite_node_textures (BroadwayClient *client,
     break;
   case BROADWAY_NODE_INSET_SHADOW:
   case BROADWAY_NODE_OUTSET_SHADOW:
-    pos += NODE_SIZE_RRECT + NODE_SIZE_COLOR + 4 * NODE_SIZE_COLOR;
+    pos += NODE_SIZE_RRECT + NODE_SIZE_COLOR + 4 * NODE_SIZE_FLOAT;
     break;
   case BROADWAY_NODE_TEXTURE:
     data[pos+4] = GPOINTER_TO_INT (g_hash_table_lookup (client->textures,
@@ -262,6 +263,11 @@ rewrite_node_textures (BroadwayClient *client,
     pos += NODE_SIZE_RECT + 2 * NODE_SIZE_POINT;
     n_stops = data[pos++];
     pos += n_stops * NODE_SIZE_COLOR_STOP;
+    break;
+  case BROADWAY_NODE_SHADOW:
+    n_shadows = data[pos++];
+    pos += n_shadows * NODE_SIZE_SHADOW;
+    pos = rewrite_node_textures (client, len, data, pos);
     break;
   default:
     g_assert_not_reached ();

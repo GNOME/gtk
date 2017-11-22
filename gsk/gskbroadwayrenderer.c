@@ -437,32 +437,58 @@ gsk_broadway_renderer_add_node (GskRenderer *self,
       }
       return;
 
-    case GSK_TEXT_NODE:
-    default:
+    case GSK_SHADOW_NODE:
       {
-        GdkTexture *texture;
-        guint32 texture_id;
-        float off_x = 0, off_y = 0;
-
-        texture = node_cache_lookup (node, &off_x, &off_y);
-
-        if (!texture)
+        gsize i, n_shadows = gsk_shadow_node_get_n_shadows (node);
+        add_uint32 (nodes, BROADWAY_NODE_SHADOW);
+        add_uint32 (nodes, n_shadows);
+        for (i = 0; i < n_shadows; i++)
           {
-            texture = node_texture_fallback (node, &off_x, &off_y);
-            node_cache_store (node, texture, off_x, off_y);
+            const GskShadow *shadow = gsk_shadow_node_peek_shadow (node, i);
+            add_rgba (nodes, &shadow->color);
+            add_float (nodes, shadow->dx);
+            add_float (nodes, shadow->dy);
+            add_float (nodes, shadow->radius);
           }
-
-        g_ptr_array_add (node_textures, texture); /* Transfers ownership to node_textures */
-        texture_id = gdk_broadway_display_ensure_texture (display, texture);
-        add_uint32 (nodes, BROADWAY_NODE_TEXTURE);
-        add_float (nodes, node->bounds.origin.x + off_x);
-        add_float (nodes, node->bounds.origin.y + off_y);
-        add_float (nodes, gdk_texture_get_width (texture));
-        add_float (nodes, gdk_texture_get_height (texture));
-        add_uint32 (nodes, texture_id);
+        gsk_broadway_renderer_add_node (self, nodes, node_textures,
+                                        gsk_shadow_node_get_child (node));
       }
       return;
+
+    case GSK_TEXT_NODE:
+    default:
+      break; /* Fallback */
     }
+
+  {
+    GdkTexture *texture;
+    guint32 texture_id;
+    float off_x = 0, off_y = 0;
+
+    texture = node_cache_lookup (node, &off_x, &off_y);
+
+    if (!texture)
+      {
+        texture = node_texture_fallback (node, &off_x, &off_y);
+        g_print ("Fallback %p for %s\n", texture, node->node_class->type_name);
+
+        node_cache_store (node, texture, off_x, off_y);
+      }
+    else
+      {
+        g_print ("Cache hit %p for %s\n", texture,
+                 node->node_class->type_name);
+      }
+
+    g_ptr_array_add (node_textures, texture); /* Transfers ownership to node_textures */
+    texture_id = gdk_broadway_display_ensure_texture (display, texture);
+    add_uint32 (nodes, BROADWAY_NODE_TEXTURE);
+    add_float (nodes, node->bounds.origin.x + off_x);
+    add_float (nodes, node->bounds.origin.y + off_y);
+    add_float (nodes, gdk_texture_get_width (texture));
+    add_float (nodes, gdk_texture_get_height (texture));
+    add_uint32 (nodes, texture_id);
+  }
 }
 
 static void
