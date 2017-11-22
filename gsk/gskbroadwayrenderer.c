@@ -492,6 +492,25 @@ gsk_broadway_renderer_add_node (GskRenderer *self,
       }
       return;
 
+    case GSK_CAIRO_NODE:
+      {
+        const cairo_surface_t *surface = gsk_cairo_node_peek_surface (node);
+	GdkTexture *texture;
+        guint32 texture_id;
+
+	texture = gdk_texture_new_for_surface ((cairo_surface_t *)surface);
+        g_ptr_array_add (node_textures, g_object_ref (texture)); /* Transfers ownership to node_textures */
+        texture_id = gdk_broadway_display_ensure_texture (display, texture);
+
+        add_uint32 (nodes, BROADWAY_NODE_TEXTURE);
+        add_float (nodes, node->bounds.origin.x);
+        add_float (nodes, node->bounds.origin.y);
+        add_float (nodes, node->bounds.size.width);
+        add_float (nodes, node->bounds.size.height);
+        add_uint32 (nodes, texture_id);
+      }
+      return;
+
     case GSK_CONTAINER_NODE:
       {
         guint i;
