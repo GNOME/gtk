@@ -52,9 +52,9 @@ libgdk_broadway = static_library('gdk-broadway',
 broadwayd_syslib = os_win32 ? find_library('ws2_32') : shmlib
 
 broadwayjs_h = custom_target('broadwayjs.h',
-  input : ['broadway.js', 'rawinflate.min.js'],
+  input : ['broadway.js'],
   output : 'broadwayjs.h',
-  command : [find_program('toarray.pl'), 'broadway_js', '@INPUT0@', '@INPUT1@'],
+  command : [find_program('toarray.pl'), 'broadway_js', '@INPUT0@'],
   capture : true)
 
 executable('gtk4-broadwayd',
