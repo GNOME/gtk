@@ -54,6 +54,17 @@ GInputStream *          gdk_clipboard_read_finish       (GdkClipboard          *
                                                          const char           **out_mime_type,
                                                          GAsyncResult          *result,
                                                          GError               **error);
+GDK_AVAILABLE_IN_3_94
+void                    gdk_clipboard_read_value_async  (GdkClipboard          *clipboard,
+                                                         GType                  type,
+                                                         int                    io_priority,
+                                                         GCancellable          *cancellable,
+                                                         GAsyncReadyCallback    callback,
+                                                         gpointer               user_data);
+GDK_AVAILABLE_IN_3_94
+const GValue *          gdk_clipboard_read_value_finish (GdkClipboard          *clipboard,
+                                                         GAsyncResult          *res,
+                                                         GError               **error);
 
 G_END_DECLS
 

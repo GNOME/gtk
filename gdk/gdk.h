@@ -32,6 +32,7 @@
 #include <gdk/gdkapplaunchcontext.h>
 #include <gdk/gdkcairo.h>
 #include <gdk/gdkclipboard.h>
+#include <gdk/gdkcontentdeserializer.h>
 #include <gdk/gdkcontentformats.h>
 #include <gdk/gdkcursor.h>
 #include <gdk/gdkdevice.h>

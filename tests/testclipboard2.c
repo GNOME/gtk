@@ -30,47 +30,22 @@ clipboard_changed_cb (GdkClipboard *clipboard,
 }
 
 static void
-pixbuf_loaded_cb (GObject      *stream,
+pixbuf_loaded_cb (GObject      *clipboard,
                   GAsyncResult *res,
                   gpointer      data)
 {
-  GdkPixbuf *pixbuf;
+  const GValue *value;
   GError *error = NULL;
 
-  pixbuf = gdk_pixbuf_new_from_stream_finish (res, &error);
-  if (pixbuf == NULL)
+  value = gdk_clipboard_read_value_finish (GDK_CLIPBOARD (clipboard), res, &error);
+  if (value == NULL)
     {
       g_print ("%s\n", error->message);
       g_error_free (error);
       return;
     }
 
-  gtk_image_set_from_pixbuf (data, pixbuf);
-  g_object_unref (pixbuf);
-}
-
-static void
-clipboard_read_pixbuf_cb (GObject      *clipboard,
-                          GAsyncResult *result,
-                          gpointer      image)
-{
-  GInputStream *stream;
-  GError *error = NULL;
-
-  stream = gdk_clipboard_read_finish (GDK_CLIPBOARD (clipboard),
-                                      NULL,
-                                      result,
-                                      &error);
-  if (stream)
-    {
-      gdk_pixbuf_new_from_stream_async (stream, NULL, pixbuf_loaded_cb, image);
-      g_object_unref (stream);
-    }
-  else
-    {
-      g_print ("%s\n", error->message);
-      g_error_free (error);
-    }
+  gtk_image_set_from_pixbuf (data, g_value_get_object (value));
 }
 
 static void
@@ -88,12 +63,12 @@ visible_child_changed_cb (GtkWidget    *stack,
     {
       GtkWidget *image = gtk_stack_get_child_by_name (GTK_STACK (stack), "image");
 
-      gdk_clipboard_read_async (clipboard,
-                                (const gchar*[2]) { "image/png", NULL },
-                                G_PRIORITY_DEFAULT,
-                                NULL,
-                                clipboard_read_pixbuf_cb,
-                                image);
+      gdk_clipboard_read_value_async (clipboard,
+                                      GDK_TYPE_PIXBUF,
+                                      G_PRIORITY_DEFAULT,
+                                      NULL,
+                                      pixbuf_loaded_cb,
+                                      image);
     }
 }
                 

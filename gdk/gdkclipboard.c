@@ -20,6 +20,7 @@
 
 #include "gdkclipboardprivate.h"
 
+#include "gdkcontentdeserializer.h"
 #include "gdkcontentformats.h"
 #include "gdkdisplay.h"
 
@@ -339,6 +340,125 @@ gdk_clipboard_read_finish (GdkClipboard  *clipboard,
   return GDK_CLIPBOARD_GET_CLASS (clipboard)->read_finish (clipboard, out_mime_type, result, error);
 }
 
+static void
+gdk_clipboard_read_value_done (GObject      *source,
+                               GAsyncResult *result,
+                               gpointer      data)
+{
+  GTask *task = data;
+  GError *error = NULL;
+  const GValue *value;
+
+  value = gdk_content_deserialize_finish (result, &error);
+  if (value == NULL)
+    g_task_return_error (task, error);
+  else
+    g_task_return_pointer (task, (gpointer) value, NULL);
+
+  g_object_unref (task);
+}
+
+static void
+gdk_clipboard_read_value_got_stream (GObject      *source,
+                                     GAsyncResult *result,
+                                     gpointer      data)
+{
+  GInputStream *stream;
+  GError *error = NULL;
+  GTask *task = data;
+  const char *mime_type;
+
+  stream = gdk_clipboard_read_finish (GDK_CLIPBOARD (source), &mime_type, result, &error);
+  if (stream == NULL)
+    {
+      g_task_return_error (task, error);
+      return;
+    }
+
+  gdk_content_deserialize_async (stream,
+                                 mime_type,
+                                 GPOINTER_TO_SIZE (g_task_get_task_data (task)),
+                                 g_task_get_priority (task),
+                                 g_task_get_cancellable (task),
+                                 gdk_clipboard_read_value_done,
+                                 task);
+  g_object_unref (stream);
+}
+
+/**
+ * gdk_clipboard_read_value_async:
+ * @clipboard: a #GdkClipboard
+ * @type: a #GType to read
+ * @io_priority: the [I/O priority][io-priority]
+ *     of the request. 
+ * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): callback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
+ *
+ * Asynchronously request the @clipboard contents converted to the given
+ * @type. When the operation is finished @callback will be called. 
+ * You can then call gdk_clipboard_read_value_finish() to get the resulting
+ * #GValue.
+ *
+ * For local clipboard contents that are available in the given #GType, the
+ * value will be copied directly. Otherwise, GDK will try to use
+ * gdk_content_deserialize_async() to convert the clipboard's data.
+ **/
+void
+gdk_clipboard_read_value_async (GdkClipboard        *clipboard,
+                                GType                type,
+                                int                  io_priority,
+                                GCancellable        *cancellable,
+                                GAsyncReadyCallback  callback,
+                                gpointer             user_data)
+{
+  GdkContentFormatsBuilder *builder;
+  GdkContentFormats *formats;
+  GTask *task;
+
+  builder = gdk_content_formats_builder_new ();
+  gdk_content_formats_builder_add_gtype (builder, type);
+  formats = gdk_content_formats_builder_free (builder);
+  formats = gdk_content_formats_union_deserialize_mime_types (formats);
+
+  task = g_task_new (clipboard, cancellable, callback, user_data);
+  g_task_set_priority (task, io_priority);
+  g_task_set_source_tag (task, gdk_clipboard_read_value_async);
+  g_task_set_task_data (task, GSIZE_TO_POINTER (type), NULL);
+
+  gdk_clipboard_read_internal (clipboard,
+                               formats,
+                               io_priority,
+                               cancellable,
+                               gdk_clipboard_read_value_got_stream,
+                               task);
+
+  gdk_content_formats_unref (formats);
+}
+
+/**
+ * gdk_clipboard_read_value_finish:
+ * @clipboard: a #GdkClipboard
+ * @result: a #GAsyncResult
+ * @error: a #GError location to store the error occurring, or %NULL to 
+ * ignore.
+ *
+ * Finishes an asynchronous clipboard read started with
+ * gdk_clipboard_read_value_async().
+ *
+ * Returns: (transfer none): a #GValue containing the result.
+ **/
+const GValue *
+gdk_clipboard_read_value_finish (GdkClipboard  *clipboard,
+                                 GAsyncResult  *res,
+                                 GError       **error)
+{
+  g_return_val_if_fail (g_task_is_valid (res, clipboard), NULL);
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (res)) == gdk_clipboard_read_value_async, NULL);
+
+  return g_task_propagate_pointer (G_TASK (res), error);
+}
+
 GdkClipboard *
 gdk_clipboard_new (GdkDisplay *display)
 {
@@ -357,7 +477,9 @@ gdk_clipboard_claim_remote (GdkClipboard      *clipboard,
   g_return_if_fail (formats != NULL);
 
   gdk_content_formats_unref (priv->formats);
-  priv->formats = gdk_content_formats_ref (formats);
+  gdk_content_formats_ref (formats);
+  formats = gdk_content_formats_union_deserialize_gtypes (formats);
+  priv->formats = formats;
   g_object_notify_by_pspec (G_OBJECT (clipboard), properties[PROP_FORMATS]);
   if (priv->local)
     {
