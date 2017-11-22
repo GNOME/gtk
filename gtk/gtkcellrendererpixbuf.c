@@ -185,6 +185,13 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
                                                         GDK_TYPE_TEXTURE,
 						        GTK_PARAM_READWRITE));
 
+  /**
+   * GtkCellRendererPixbuf:stock-size:
+   *
+   * The #GtkIconSize value that specifies the size of the rendered icon.
+   *
+   * Since: 2.2
+   */
   g_object_class_install_property (object_class,
 				   PROP_STOCK_SIZE,
 				   g_param_spec_uint ("stock-size",
