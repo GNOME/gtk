@@ -19,6 +19,7 @@ typedef enum { /* Sync changes with broadway.js */
   BROADWAY_NODE_LINEAR_GRADIENT = 7,
   BROADWAY_NODE_SHADOW = 8,
   BROADWAY_NODE_OPACITY = 9,
+  BROADWAY_NODE_CLIP = 10,
 } BroadwayNodeType;
 
 typedef enum {

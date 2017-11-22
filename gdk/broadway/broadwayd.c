@@ -259,6 +259,10 @@ rewrite_node_textures (BroadwayClient *client,
     pos += NODE_SIZE_RRECT;
     pos = rewrite_node_textures (client, len, data, pos);
     break;
+  case BROADWAY_NODE_CLIP:
+    pos += NODE_SIZE_RECT;
+    pos = rewrite_node_textures (client, len, data, pos);
+    break;
   case BROADWAY_NODE_LINEAR_GRADIENT:
     pos += NODE_SIZE_RECT + 2 * NODE_SIZE_POINT;
     n_stops = data[pos++];

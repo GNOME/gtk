@@ -628,6 +628,17 @@ SwapNodes.prototype.handle_node = function(parent, offset_x, offset_y)
         }
         break;
 
+    case 10:  // CLIP
+        {
+            var rect = this.decode_rect();
+            var div = document.createElement('div');
+            div.style["position"] = "absolute";
+            set_rect_style(div, rect, offset_x, offset_y);
+            div.style["overflow"] = "hidden";
+            parent.appendChild(div);
+            this.handle_node(div, rect.x, rect.y);
+        }
+        break;
 
     default:
         alert("Unexpected node type " + type);
