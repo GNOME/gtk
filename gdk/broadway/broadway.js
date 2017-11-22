@@ -331,15 +331,16 @@ SwapNodes.prototype.decode_int32 = function() {
 
 SwapNodes.prototype.decode_color = function() {
     var rgba = this.decode_uint32();
-    a = (rgba >> 24) & 0xff;
-    r = (rgba >> 16) & 0xff;
-    g = (rgba >> 8) & 0xff;
-    b = (rgba >> 0) & 0xff;
+    var a = (rgba >> 24) & 0xff;
+    var r = (rgba >> 16) & 0xff;
+    var g = (rgba >> 8) & 0xff;
+    var b = (rgba >> 0) & 0xff;
+    var c;
     if (a == 0)
         c = "rgb(" + r + "," + g + "," + b + ")";
     else
         c = "rgba(" + r + "," + g + "," + b + "," + (a / 255.0) + ")";
-    return c
+    return c;
 }
 
 SwapNodes.prototype.decode_float = function() {
@@ -350,7 +351,14 @@ SwapNodes.prototype.decode_size = function() {
     var s = new Object();
     s.width = this.decode_float ();
     s.height = this.decode_float ();
-    return s
+    return s;
+}
+
+SwapNodes.prototype.decode_point = function() {
+    var p = new Object();
+    p.x = this.decode_float ();
+    p.y = this.decode_float ();
+    return p;
 }
 
 SwapNodes.prototype.decode_rect = function() {
@@ -374,10 +382,25 @@ SwapNodes.prototype.decode_irect = function() {
 SwapNodes.prototype.decode_rounded_rect = function() {
     var r = new Object();
     r.bounds = this.decode_rect();
-    r.sizes = []
+    r.sizes = [];
     for (var i = 0; i < 4; i++)
         r.sizes[i] = this.decode_size();
-    return r
+    return r;
+}
+
+SwapNodes.prototype.decode_color_stop = function() {
+    var s = new Object();
+    s.offset = this.decode_float ();
+    s.color = this.decode_color ();
+    return s;
+}
+
+SwapNodes.prototype.decode_color_stops = function() {
+    var stops = [];
+    var len = this.decode_uint32();
+    for (var i = 0; i < len; i++)
+        stops[i] = this.decode_color_stop();
+    return stops;
 }
 
 function args() {
@@ -521,6 +544,51 @@ SwapNodes.prototype.handle_node = function(parent, offset_x, offset_y)
             div.style["overflow"] = "hidden";
             parent.appendChild(div);
             this.handle_node(div, rrect.bounds.x, rrect.bounds.y);
+        }
+        break;
+
+    case 7:  // LINEAR_GRADIENT
+        {
+            var rect = this.decode_rect();
+            var start = this.decode_point ();
+            var end = this.decode_point ();
+            var stops = this.decode_color_stops ();
+            var div = document.createElement('div');
+            div.style["position"] = "absolute";
+            set_rect_style(div, rect, offset_x, offset_y);
+
+            // direction:
+            var dx = end.x - start.x;
+            var dy = end.y - start.y;
+
+            // Angle in css coords (clockwise degrees, up = 0), note that y goes downwards so we have to invert
+            var angle = Math.atan2(dx, -dy) * 180.0 / Math.PI;
+
+            // Figure out which corner has offset == 0 in css
+            var start_corner_x, start_corner_y;
+            if (dx >= 0) // going right
+                start_corner_x = rect.x;
+            else
+                start_corner_x = rect.x + rect.width;
+            if (dy >= 0) // going down
+                start_corner_y = rect.y;
+            else
+                start_corner_y = rect.y + rect.height;
+
+            /* project start corner on the line */
+            var l2 = dx*dx + dy*dy;
+            var l = Math.sqrt(l2);
+            var offset = ((start_corner_x - start.x) * dx  + (start_corner_y - start.y) * dy) / l2;
+
+            var gradient = "linear-gradient(" + angle + "deg";
+            for (var i = 0; i < stops.length; i++) {
+                var stop = stops[i];
+                gradient = gradient + ", " + stop.color + " " + px(stop.offset * l - offset);
+            }
+            gradient = gradient + ")";
+
+            div.style["background-image"] = gradient;
+            parent.appendChild(div);
         }
         break;
 

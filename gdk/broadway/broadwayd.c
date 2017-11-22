@@ -221,13 +221,14 @@ get_client_serial (BroadwayClient *client, guint32 daemon_serial)
 #define NODE_SIZE_SIZE 2
 #define NODE_SIZE_RECT (NODE_SIZE_POINT + NODE_SIZE_SIZE)
 #define NODE_SIZE_RRECT (NODE_SIZE_RECT + 4 * NODE_SIZE_SIZE)
+#define NODE_SIZE_COLOR_STOP (NODE_SIZE_FLOAT + NODE_SIZE_COLOR)
 
 static int
 rewrite_node_textures (BroadwayClient *client,
                        int len, guint32 data[], int pos)
 {
   guint32 type;
-  guint32 i, n_children;
+  guint32 i, n_children, n_stops;
 
   g_assert (pos < len);
 
@@ -256,6 +257,11 @@ rewrite_node_textures (BroadwayClient *client,
   case BROADWAY_NODE_ROUNDED_CLIP:
     pos += NODE_SIZE_RRECT;
     pos = rewrite_node_textures (client, len, data, pos);
+    break;
+  case BROADWAY_NODE_LINEAR_GRADIENT:
+    pos += NODE_SIZE_RECT + 2 * NODE_SIZE_POINT;
+    n_stops = data[pos++];
+    pos += n_stops * NODE_SIZE_COLOR_STOP;
     break;
   default:
     g_assert_not_reached ();

@@ -146,6 +146,13 @@ add_rounded_rect (GArray *nodes, const GskRoundedRect *rrect)
 }
 
 static void
+add_color_stop (GArray *nodes, const GskColorStop *stop)
+{
+  add_float (nodes, stop->offset);
+  add_rgba (nodes, &stop->color);
+}
+
+static void
 gsk_broadway_renderer_add_node (GskRenderer *self,
                                 GArray *nodes,
                                 GPtrArray *node_textures,
@@ -225,6 +232,21 @@ gsk_broadway_renderer_add_node (GskRenderer *self,
         add_rounded_rect (nodes, gsk_rounded_clip_node_peek_clip (node));
         gsk_broadway_renderer_add_node (self, nodes, node_textures,
                                         gsk_rounded_clip_node_get_child (node));
+      }
+      return;
+
+    case GSK_LINEAR_GRADIENT_NODE:
+      {
+        guint i, n;
+
+        add_uint32 (nodes, BROADWAY_NODE_LINEAR_GRADIENT);
+        add_rect (nodes, &node->bounds);
+        add_point (nodes, gsk_linear_gradient_node_peek_start (node));
+        add_point (nodes, gsk_linear_gradient_node_peek_end (node));
+        n = gsk_linear_gradient_node_get_n_color_stops (node);
+        add_uint32 (nodes, n);
+        for (i = 0; i < n; i++)
+          add_color_stop (nodes, &gsk_linear_gradient_node_peek_color_stops (node)[i]);
       }
       return;
 
