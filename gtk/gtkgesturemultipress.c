@@ -409,7 +409,7 @@ gtk_gesture_multi_press_new (GtkWidget *widget)
  * If @rect is non-%NULL, the press area will be checked to be
  * confined within the rectangle, otherwise the button count
  * will be reset so the press is seen as being the first one.
- * If @rect is #NULL, the area will be reset to an unrestricted
+ * If @rect is %NULL, the area will be reset to an unrestricted
  * state.
  *
  * Note: The rectangle is only used to determine whether any

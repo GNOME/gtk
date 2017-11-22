@@ -340,7 +340,7 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
   /**
    * GdkGLContext:shared-context:
    *
-   * The #GdkGLContext that this context is sharing data with, or #NULL
+   * The #GdkGLContext that this context is sharing data with, or %NULL
    *
    * Since: 3.16
    */
