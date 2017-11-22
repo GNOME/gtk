@@ -26,14 +26,14 @@ gsk_private_sources = files([
   'gskcairoblur.c',
   'gskcairorenderer.c',
   'gskdebug.c',
-  'gskgldriver.c',
-  'gskglprofiler.c',
-  'gskglrenderer.c',
-  'gskglglyphcache.c',
-  'gskglimage.c',
   'gskprivate.c',
   'gskprofiler.c',
   'gskshaderbuilder.c',
+  'gl/gskglprofiler.c',
+  'gl/gskglrenderer.c',
+  'gl/gskglglyphcache.c',
+  'gl/gskglimage.c',
+  'gl/gskgldriver.c',
 ])
 
 gsk_public_headers = files([
