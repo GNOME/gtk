@@ -27,6 +27,9 @@ clipboard_changed_cb (GdkClipboard *clipboard,
 
   child = gtk_stack_get_child_by_name (GTK_STACK (stack), "image");
   gtk_image_clear (GTK_IMAGE (child));
+
+  child = gtk_stack_get_child_by_name (GTK_STACK (stack), "text");
+  gtk_label_set_text (GTK_LABEL (child), "");
 }
 
 static void
@@ -50,6 +53,26 @@ pixbuf_loaded_cb (GObject      *clipboard,
 }
 
 static void
+text_loaded_cb (GObject      *clipboard,
+                GAsyncResult *res,
+                gpointer      data)
+{
+  GError *error = NULL;
+  char *text;
+
+  text = gdk_clipboard_read_text_finish (GDK_CLIPBOARD (clipboard), res, &error);
+  if (text == NULL)
+    {
+      g_print ("%s\n", error->message);
+      g_error_free (error);
+      return;
+    }
+
+  gtk_label_set_text (data, text);
+  g_free (text);
+}
+
+static void
 visible_child_changed_cb (GtkWidget    *stack,
                           GParamSpec   *pspec,
                           GdkClipboard *clipboard)
@@ -68,6 +91,15 @@ visible_child_changed_cb (GtkWidget    *stack,
                                        NULL,
                                        pixbuf_loaded_cb,
                                        image);
+    }
+  else if (g_str_equal (visible_child, "text"))
+    {
+      GtkWidget *label = gtk_stack_get_child_by_name (GTK_STACK (stack), "text");
+
+      gdk_clipboard_read_text_async (clipboard,
+                                     NULL,
+                                     text_loaded_cb,
+                                     label);
     }
 }
                 
@@ -102,6 +134,10 @@ get_contents_widget (GdkClipboard *clipboard)
 
   child = gtk_image_new ();
   gtk_stack_add_titled (GTK_STACK (stack), child, "image", "Image");
+
+  child = gtk_label_new (NULL);
+  gtk_label_set_line_wrap (GTK_LABEL (child), TRUE);
+  gtk_stack_add_titled (GTK_STACK (stack), child, "text", "Text");
 
   return stack;
 }

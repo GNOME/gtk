@@ -433,10 +433,72 @@ pixbuf_deserializer (GdkContentDeserializer *deserializer)
 }
 
 static void
+string_deserializer_finish (GObject      *source,
+                            GAsyncResult *result,
+                            gpointer      deserializer)
+{
+  GOutputStream *stream = G_OUTPUT_STREAM (source);
+  GError *error = NULL;
+  gssize written;
+
+  written = g_output_stream_splice_finish (stream, result, &error);
+  if (written < 0)
+    {
+      gdk_content_deserializer_return_error (deserializer, error);
+      return;
+    }
+  else if (written == 0)
+    {
+      /* Never return NULL, we only return that on error */
+      g_value_set_string (gdk_content_deserializer_get_value (deserializer), "");
+    }
+  else
+    {
+      g_value_take_string (gdk_content_deserializer_get_value (deserializer),
+                           g_memory_output_stream_steal_data (G_MEMORY_OUTPUT_STREAM (
+                               g_filter_output_stream_get_base_stream (G_FILTER_OUTPUT_STREAM (stream)))));
+    }
+  gdk_content_deserializer_return_success (deserializer);
+}
+
+static void
+string_deserializer (GdkContentDeserializer *deserializer)
+{
+  GOutputStream *output, *filter;
+  GCharsetConverter *converter;
+  GError *error = NULL;
+
+  converter = g_charset_converter_new ("utf-8",
+                                       gdk_content_deserializer_get_user_data (deserializer),
+                                       &error);
+  if (converter == NULL)
+    {
+      gdk_content_deserializer_return_error (deserializer, error);
+      return;
+    }
+  g_charset_converter_set_use_fallback (converter, TRUE);
+
+  output = g_memory_output_stream_new_resizable ();
+  filter = g_converter_output_stream_new (output, G_CONVERTER (converter));
+  g_object_unref (output);
+  g_object_unref (converter);
+
+  g_output_stream_splice_async (filter,
+                                gdk_content_deserializer_get_input_stream (deserializer),
+                                G_OUTPUT_STREAM_SPLICE_CLOSE_SOURCE | G_OUTPUT_STREAM_SPLICE_CLOSE_TARGET,
+                                gdk_content_deserializer_get_priority (deserializer),
+                                gdk_content_deserializer_get_cancellable (deserializer),
+                                string_deserializer_finish,
+                                deserializer);
+  g_object_unref (filter);
+}
+
+static void
 init (void)
 {
   static gboolean initialized = FALSE;
   GSList *formats, *f;
+  const char *charset;
 
   if (initialized)
     return;
@@ -483,5 +545,25 @@ init (void)
     }
 
   g_slist_free (formats);
+
+  gdk_content_register_deserializer ("text/plain;charset=utf-8",
+                                     G_TYPE_STRING,
+                                     string_deserializer,
+                                     (gpointer) "utf-8",
+                                     NULL);
+  if (!g_get_charset (&charset))
+    {
+      char *mime = g_strdup_printf ("text/plain;charset=%s", charset);
+      gdk_content_register_deserializer (mime,
+                                         G_TYPE_STRING,
+                                         string_deserializer,
+                                         mime,
+                                         g_free);
+    }
+  gdk_content_register_deserializer ("text/plain",
+                                     G_TYPE_STRING,
+                                     string_deserializer,
+                                     (gpointer) "ASCII",
+                                     NULL);
 }
 

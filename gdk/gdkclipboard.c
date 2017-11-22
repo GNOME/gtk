@@ -546,6 +546,70 @@ gdk_clipboard_read_pixbuf_finish (GdkClipboard  *clipboard,
   return g_value_dup_object (value);
 }
 
+/**
+ * gdk_clipboard_read_text_async:
+ * @clipboard: a #GdkClipboard
+ * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): callback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
+ *
+ * Asynchronously request the @clipboard contents converted to a string.
+ * When the operation is finished @callback will be called. You can then
+ * call gdk_clipboard_read_text_finish() to get the result.
+ *
+ * This is a simple wrapper around gdk_clipboard_read_value_async(). Use
+ * that function or gdk_clipboard_read_async() directly if you need more
+ * control over the operation.
+ **/
+void
+gdk_clipboard_read_text_async (GdkClipboard        *clipboard,
+                               GCancellable        *cancellable,
+                               GAsyncReadyCallback  callback,
+                               gpointer             user_data)
+{
+  g_return_if_fail (GDK_IS_CLIPBOARD (clipboard));
+  g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
+  g_return_if_fail (callback != NULL);
+
+  gdk_clipboard_read_value_internal (clipboard,
+                                     G_TYPE_STRING,
+                                     gdk_clipboard_read_text_async,
+                                     G_PRIORITY_DEFAULT,
+                                     cancellable,
+                                     callback,
+                                     user_data);
+}
+
+/**
+ * gdk_clipboard_read_text_finish:
+ * @clipboard: a #GdkClipboard
+ * @result: a #GAsyncResult
+ * @error: a #GError location to store the error occurring, or %NULL to 
+ * ignore.
+ *
+ * Finishes an asynchronous clipboard read started with
+ * gdk_clipboard_read_text_async().
+ *
+ * Returns: (transfer full) (nullable): a new string or %NULL on error.
+ **/
+char *
+gdk_clipboard_read_text_finish (GdkClipboard  *clipboard,
+                                GAsyncResult  *res,
+                                GError       **error)
+{
+  const GValue *value;
+
+  g_return_val_if_fail (g_task_is_valid (res, clipboard), NULL);
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (res)) == gdk_clipboard_read_text_async, NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+  value = g_task_propagate_pointer (G_TASK (res), error);
+  if (!value)
+    return NULL;
+  
+  return g_value_dup_string (value);
+}
+
 GdkClipboard *
 gdk_clipboard_new (GdkDisplay *display)
 {
