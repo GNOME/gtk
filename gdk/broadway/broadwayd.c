@@ -253,6 +253,10 @@ rewrite_node_textures (BroadwayClient *client,
     for (i = 0; i < n_children; i++)
       pos = rewrite_node_textures (client, len, data, pos);
     break;
+  case BROADWAY_NODE_ROUNDED_CLIP:
+    pos += NODE_SIZE_RRECT;
+    pos = rewrite_node_textures (client, len, data, pos);
+    break;
   default:
     g_assert_not_reached ();
   }

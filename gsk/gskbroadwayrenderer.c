@@ -178,10 +178,7 @@ gsk_broadway_renderer_add_node (GskRenderer *self,
     case GSK_COLOR_NODE:
       {
         add_uint32 (nodes, BROADWAY_NODE_COLOR);
-        add_uint32 (nodes, x);
-        add_uint32 (nodes, y);
-        add_uint32 (nodes, width);
-        add_uint32 (nodes, height);
+        add_rect (nodes, &node->bounds);
         add_rgba (nodes, gsk_color_node_peek_color (node));
       }
       return;
@@ -219,6 +216,15 @@ gsk_broadway_renderer_add_node (GskRenderer *self,
         add_float (nodes, gsk_inset_shadow_node_get_dy (node));
         add_float (nodes, gsk_inset_shadow_node_get_spread (node));
         add_float (nodes, gsk_inset_shadow_node_get_blur_radius (node));
+      }
+      return;
+
+    case GSK_ROUNDED_CLIP_NODE:
+      {
+        add_uint32 (nodes, BROADWAY_NODE_ROUNDED_CLIP);
+        add_rounded_rect (nodes, gsk_rounded_clip_node_peek_clip (node));
+        gsk_broadway_renderer_add_node (self, nodes, node_textures,
+                                        gsk_rounded_clip_node_get_child (node));
       }
       return;
 

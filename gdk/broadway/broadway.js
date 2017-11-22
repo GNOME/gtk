@@ -362,6 +362,15 @@ SwapNodes.prototype.decode_rect = function() {
     return r;
 }
 
+SwapNodes.prototype.decode_irect = function() {
+    var r = new Object();
+    r.x = this.decode_int32 ();
+    r.y = this.decode_int32 ();
+    r.width = this.decode_int32 ();
+    r.height = this.decode_int32 ();
+    return r;
+}
+
 SwapNodes.prototype.decode_rounded_rect = function() {
     var r = new Object();
     r.bounds = this.decode_rect();
@@ -384,35 +393,35 @@ function px(x) {
     return x + "px";
 }
 
-function set_rrect_style (div, rrect) {
-    div.style["left"] = px(rrect.bounds.x);
-    div.style["top"] = px(rrect.bounds.y);
-    div.style["width"] = px(rrect.bounds.width);
-    div.style["height"] = px(rrect.bounds.height);
+function set_rect_style (div, rect, offset_x, offset_y) {
+    div.style["left"] = px(rect.x - offset_x);
+    div.style["top"] = px(rect.y - offset_y);
+    div.style["width"] = px(rect.width);
+    div.style["height"] = px(rect.height);
+}
+
+function set_rrect_style (div, rrect, offset_x, offset_y) {
+    set_rect_style(div, rrect.bounds, offset_x, offset_y);
     div.style["border-top-left-radius"] = args(px(rrect.sizes[0].width), px(rrect.sizes[0].height));
     div.style["border-top-right-radius"] = args(px(rrect.sizes[1].width), px(rrect.sizes[1].height));
     div.style["border-bottom-right-radius"] = args(px(rrect.sizes[2].width), px(rrect.sizes[2].height));
     div.style["border-bottom-left-radius"] = args(px(rrect.sizes[3].width), px(rrect.sizes[3].height));
 }
 
-SwapNodes.prototype.handle_node = function(parent)
+SwapNodes.prototype.handle_node = function(parent, offset_x, offset_y)
 {
     var type = this.decode_uint32();
     switch (type)
     {
         case 0:  // TEXTURE
         {
-            var x = this.decode_uint32();
-            var y = this.decode_uint32();
-            var width = this.decode_uint32();
-            var height = this.decode_uint32();
+            var rect = this.decode_irect();
             var texture_id = this.decode_uint32();
             var image = new Image();
-            image.width = width;
-            image.height = height;
+            image.width = rect.width;
+            image.height = rect.height;
             image.style["position"] = "absolute";
-            image.style["left"] = px(x);
-            image.style["top"] = px(y);
+            set_rect_style(image, rect, offset_x, offset_y);
             var texture_url = textures[texture_id];
             this.add_image(image);
             image.src = texture_url;
@@ -424,27 +433,21 @@ SwapNodes.prototype.handle_node = function(parent)
         {
             var len = this.decode_uint32();
             for (var i = 0; i < len; i++) {
-                this.handle_node(parent);
+                this.handle_node(parent, offset_x, offset_y);
             }
         }
         break;
 
     case 2:  // COLOR
         {
-            var x = this.decode_uint32();
-            var y = this.decode_uint32();
-            var width = this.decode_uint32();
-            var height = this.decode_uint32();
+            var rect = this.decode_rect();
             var c = this.decode_color ();
             var div = document.createElement('div');
             div.style["position"] = "absolute";
-            div.style["left"] = x + "px";
-            div.style["top"] = y + "px";
-            div.style["width"] = width + "px";
-            div.style["height"] = height + "px";
+            set_rect_style(div, rect, offset_x, offset_y);
             div.style["background-color"] = c;
             parent.appendChild(div);
-}
+        }
         break;
 
     case 3:  // BORDER
@@ -461,7 +464,7 @@ SwapNodes.prototype.handle_node = function(parent)
             div.style["position"] = "absolute";
             rrect.bounds.width -= border_widths[1] + border_widths[3];
             rrect.bounds.height -= border_widths[0] + border_widths[2];
-            set_rrect_style(div, rrect, border_widths);
+            set_rrect_style(div, rrect, offset_x, offset_y);
             div.style["border-style"] = "solid";
             div.style["border-top-color"] = border_colors[0];
             div.style["border-top-width"] = px(border_widths[0]);
@@ -486,7 +489,7 @@ SwapNodes.prototype.handle_node = function(parent)
 
             var div = document.createElement('div');
             div.style["position"] = "absolute";
-            set_rrect_style(div, rrect, null);
+            set_rrect_style(div, rrect, offset_x, offset_y);
             div.style["box-shadow"] = args(px(dx), px(dy), px(blur), px(spread), color);
             parent.appendChild(div);
         }
@@ -503,9 +506,21 @@ SwapNodes.prototype.handle_node = function(parent)
 
             var div = document.createElement('div');
             div.style["position"] = "absolute";
-            set_rrect_style(div, rrect, null);
+            set_rrect_style(div, rrect, offset_x, offset_y);
             div.style["box-shadow"] = args("inset", px(dx), px(dy), px(blur), px(spread), color);
             parent.appendChild(div);
+        }
+        break;
+
+    case 6:  // ROUNDED_CLIP
+        {
+            var rrect = this.decode_rounded_rect();
+            var div = document.createElement('div');
+            div.style["position"] = "absolute";
+            set_rrect_style(div, rrect, offset_x, offset_y);
+            div.style["overflow"] = "hidden";
+            parent.appendChild(div);
+            this.handle_node(div, rrect.bounds.x, rrect.bounds.y);
         }
         break;
 
@@ -524,7 +539,7 @@ function cmdWindowSetNodes(id, node_data)
     /* We use a secondary div so that we can remove all previous children in one go */
 
     var swap = new SwapNodes (node_data, div);
-    swap.handle_node(swap.div2);
+    swap.handle_node(swap.div2, 0, 0);
     if (swap.data_pos != node_data.length)
         alert ("Did not consume entire array (len " + node_data.length + " end " + end + ")");
     swap.did_one ();
