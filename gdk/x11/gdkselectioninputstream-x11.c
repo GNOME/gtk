@@ -132,6 +132,9 @@ gdk_x11_selection_input_stream_flush (GdkX11SelectionInputStream *stream)
     return;
 
   written = gdk_x11_selection_input_stream_fill_buffer (stream, priv->pending_data, priv->pending_size);
+  GDK_NOTE(SELECTION, g_printerr ("%s:%s: finishing read of %zd/%zu bytes\n",
+                                  priv->selection, priv->target,
+                                  written, priv->pending_size));
   g_task_return_int (priv->pending_task, written);
 
   priv->pending_task = NULL;
@@ -166,8 +169,19 @@ gdk_x11_selection_input_stream_read (GInputStream  *input_stream,
                                      GError       **error)
 {
   GdkX11SelectionInputStream *stream = GDK_X11_SELECTION_INPUT_STREAM (input_stream);
+#ifdef G_ENABLE_DEBUG
+  GdkX11SelectionInputStreamPrivate *priv = gdk_x11_selection_input_stream_get_instance_private (stream);
+#endif
+  gssize written;
 
-  return gdk_x11_selection_input_stream_fill_buffer (stream, buffer, count);
+  GDK_NOTE(SELECTION, g_printerr ("%s:%s: starting sync read of %zu bytes\n",
+                                  priv->selection, priv->target,
+                                  count));
+  written = gdk_x11_selection_input_stream_fill_buffer (stream, buffer, count);
+  GDK_NOTE(SELECTION, g_printerr ("%s:%s: finishing sync read of %zd/%zu bytes\n",
+                                  priv->selection, priv->target,
+                                  written, count));
+  return written;
 }
 
 static gboolean
@@ -200,6 +214,9 @@ gdk_x11_selection_input_stream_read_async (GInputStream        *input_stream,
       gssize size;
 
       size = gdk_x11_selection_input_stream_fill_buffer (stream, buffer, count);
+      GDK_NOTE(SELECTION, g_printerr ("%s:%s: async read of %zd/%zu bytes\n",
+                                      priv->selection, priv->target,
+                                      size, count));
       g_task_return_int (task, size);
     }
   else
@@ -207,6 +224,9 @@ gdk_x11_selection_input_stream_read_async (GInputStream        *input_stream,
       priv->pending_data = buffer;
       priv->pending_size = count;
       priv->pending_task = task;
+      GDK_NOTE(SELECTION, g_printerr ("%s:%s: async read of %zu bytes pending\n",
+                                      priv->selection, priv->target,
+                                      count));
     }
 }
 
@@ -216,6 +236,7 @@ gdk_x11_selection_input_stream_read_finish (GInputStream  *stream,
                                             GError       **error)
 {
   g_return_val_if_fail (g_task_is_valid (result, stream), -1);
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gdk_x11_selection_input_stream_read_async, -1);
 
   return g_task_propagate_int (G_TASK (result), error);
 }
@@ -379,21 +400,26 @@ gdk_x11_selection_input_stream_filter_event (GdkXEvent *xev,
             xevent->xproperty.state != PropertyNewValue)
           return GDK_FILTER_CONTINUE;
 
-      GDK_NOTE(SELECTION, g_printerr ("%s:%s: got PropertyNotify durin INCR\n", priv->selection, priv->target));
-      
       bytes = get_selection_property (xdisplay, xwindow, xevent->xproperty.atom, &type, &format);
       if (bytes == NULL)
         { 
+          GDK_NOTE(SELECTION, g_printerr ("%s:%s: got PropertyNotify erroring out of INCR\n",
+                                          priv->selection, priv->target));
           /* error, should we signal one? */
           gdk_x11_selection_input_stream_complete (stream);
         }
       else if (g_bytes_get_size (bytes) == 0 || type == None)
         {
+          GDK_NOTE(SELECTION, g_printerr ("%s:%s: got PropertyNotify ending INCR\n",
+                                          priv->selection, priv->target));
           g_bytes_unref (bytes);
           gdk_x11_selection_input_stream_complete (stream);
         }
       else
         {
+          GDK_NOTE(SELECTION, g_printerr ("%s:%s: got PropertyNotify during INCR with %zu bytes\n",
+                                          priv->selection, priv->target,
+                                          g_bytes_get_size (bytes)));
           g_async_queue_push (priv->chunks, bytes);
           gdk_x11_selection_input_stream_flush (stream);
         }
@@ -416,7 +442,7 @@ gdk_x11_selection_input_stream_filter_event (GdkXEvent *xev,
             g_task_get_source_tag (priv->pending_task) != gdk_x11_selection_input_stream_new_async)
           return GDK_FILTER_CONTINUE;
 
-        GDK_NOTE(SELECTION, g_print ("%s:%s: got SelectionNotify\n", priv->selection, priv->target));
+        GDK_NOTE(SELECTION, g_printerr ("%s:%s: got SelectionNotify\n", priv->selection, priv->target));
 
         task = priv->pending_task;
         priv->pending_task = NULL;
@@ -445,7 +471,7 @@ gdk_x11_selection_input_stream_filter_event (GdkXEvent *xev,
                   {
                     /* The remainder of the selection will come through PropertyNotify
                        events on xwindow */
-                    GDK_NOTE(SELECTION, g_print ("%s:%s: initiating INCR transfer\n", priv->selection, priv->target));
+                    GDK_NOTE(SELECTION, g_printerr ("%s:%s: initiating INCR transfer\n", priv->selection, priv->target));
                     priv->incr = TRUE;
                     gdk_x11_selection_input_stream_flush (stream);
                   }
