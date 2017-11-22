@@ -152,6 +152,197 @@ add_color_stop (GArray *nodes, const GskColorStop *stop)
   add_rgba (nodes, &stop->color);
 }
 
+static gboolean
+float_is_int32 (float f)
+{
+  gint32 i = (gint32)f;
+  float f2 = (float)i;
+  return f2 == f;
+}
+
+static GHashTable *gsk_broadway_node_cache;
+
+typedef struct {
+  GdkTexture *texture;
+  GskRenderNode *node;
+  float off_x;
+  float off_y;
+} NodeCacheElement;
+
+static void
+node_cache_element_free (NodeCacheElement *element)
+{
+  gsk_render_node_unref (element->node);
+  g_free (element);
+}
+
+static guint
+glyph_info_hash (const PangoGlyphInfo *info)
+{
+  return info->glyph ^
+    info->geometry.width << 6 ^
+    info->geometry.x_offset << 12 ^
+    info->geometry.y_offset << 18 ^
+    info->attr.is_cluster_start << 30;
+}
+
+static gboolean
+glyph_info_equal (const PangoGlyphInfo *a,
+                  const PangoGlyphInfo *b)
+{
+  return
+    a->glyph == b->glyph &&
+    a->geometry.width == b->geometry.width &&
+    a->geometry.x_offset == b->geometry.x_offset &&
+    a->geometry.y_offset == b->geometry.y_offset &&
+    a->attr.is_cluster_start == b->attr.is_cluster_start;
+ }
+
+static guint
+node_cache_hash (GskRenderNode *node)
+{
+  if (gsk_render_node_get_node_type (node) == GSK_TEXT_NODE &&
+      float_is_int32 (gsk_text_node_get_x (node)) &&
+      float_is_int32 (gsk_text_node_get_y (node)))
+    {
+      guint i;
+      const PangoFont *font = gsk_text_node_peek_font (node);
+      guint n_glyphs = gsk_text_node_get_num_glyphs (node);
+      const PangoGlyphInfo *infos = gsk_text_node_peek_glyphs (node);
+      const GdkRGBA *color = gsk_text_node_peek_color (node);
+      guint h;
+
+      h = g_direct_hash (font) ^ n_glyphs << 16 ^ gdk_rgba_hash (color);
+      for (i = 0; i < n_glyphs; i++)
+        h ^= glyph_info_hash (&infos[i]);
+
+      return h;
+    }
+
+  return 0;
+}
+
+static gboolean
+node_cache_equal (GskRenderNode *a,
+                  GskRenderNode *b)
+{
+  if (gsk_render_node_get_node_type (a) != gsk_render_node_get_node_type (b))
+    return FALSE;
+
+  if (gsk_render_node_get_node_type (a) == GSK_TEXT_NODE &&
+      float_is_int32 (gsk_text_node_get_x (a)) &&
+      float_is_int32 (gsk_text_node_get_y (a)) &&
+      float_is_int32 (gsk_text_node_get_x (b)) &&
+      float_is_int32 (gsk_text_node_get_y (b)))
+    {
+      const PangoFont *a_font = gsk_text_node_peek_font (a);
+      guint a_n_glyphs = gsk_text_node_get_num_glyphs (a);
+      const PangoGlyphInfo *a_infos = gsk_text_node_peek_glyphs (a);
+      const GdkRGBA *a_color = gsk_text_node_peek_color (a);
+      const PangoFont *b_font = gsk_text_node_peek_font (b);
+      guint b_n_glyphs = gsk_text_node_get_num_glyphs (b);
+      const PangoGlyphInfo *b_infos = gsk_text_node_peek_glyphs (b);
+      const GdkRGBA *b_color = gsk_text_node_peek_color (a);
+      guint i;
+
+      if (a_font != b_font)
+        return FALSE;
+
+      if (a_n_glyphs != b_n_glyphs)
+        return FALSE;
+
+      for (i = 0; i < a_n_glyphs; i++)
+        {
+          if (!glyph_info_equal (&a_infos[i], &b_infos[i]))
+            return FALSE;
+        }
+
+      if (!gdk_rgba_equal (a_color, b_color))
+        return FALSE;
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static GdkTexture *
+node_cache_lookup (GskRenderNode *node,
+                   float *off_x, float *off_y)
+{
+  NodeCacheElement *hit;
+
+  if (gsk_broadway_node_cache == NULL)
+    gsk_broadway_node_cache = g_hash_table_new_full ((GHashFunc)node_cache_hash,
+                                                     (GEqualFunc)node_cache_equal,
+                                                     NULL,
+                                                     (GDestroyNotify)node_cache_element_free);
+
+  hit = g_hash_table_lookup (gsk_broadway_node_cache, node);
+  if (hit)
+    {
+      *off_x = hit->off_x;
+      *off_y = hit->off_y;
+      return g_object_ref (hit->texture);
+    }
+
+  return NULL;
+}
+
+static void
+cached_texture_gone (gpointer data,
+                     GObject *where_the_object_was)
+{
+  NodeCacheElement *element = data;
+  g_hash_table_remove (gsk_broadway_node_cache, element->node);
+}
+
+static void
+node_cache_store (GskRenderNode *node,
+                  GdkTexture *texture,
+                  float off_x,
+                  float off_y)
+{
+  if (gsk_render_node_get_node_type (node) == GSK_TEXT_NODE &&
+      float_is_int32 (gsk_text_node_get_x (node)) &&
+      float_is_int32 (gsk_text_node_get_y (node)))
+    {
+      NodeCacheElement *element = g_new0 (NodeCacheElement, 1);
+      element->texture = texture;
+      element->node = gsk_render_node_ref (node);
+      element->off_x = off_x;
+      element->off_y = off_y;
+      g_object_weak_ref (G_OBJECT (texture), cached_texture_gone, element);
+      g_hash_table_insert (gsk_broadway_node_cache, element->node, element);
+    }
+}
+
+static GdkTexture *
+node_texture_fallback (GskRenderNode *node,
+                       float *off_x,
+                       float *off_y)
+{
+  cairo_surface_t *surface;
+  cairo_t *cr;
+  int x = floorf (node->bounds.origin.x);
+  int y = floorf (node->bounds.origin.y);
+  int width = ceil (node->bounds.origin.x + node->bounds.size.width) - x;
+  int height = ceil (node->bounds.origin.y + node->bounds.size.height) - y;
+  GdkTexture *texture;
+
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
+  cr = cairo_create (surface);
+  cairo_translate (cr, -x, -y);
+  gsk_render_node_draw (node, cr);
+  cairo_destroy (cr);
+
+  texture = gdk_texture_new_for_surface (surface);
+  *off_x =  x - node->bounds.origin.x;
+  *off_y =  y - node->bounds.origin.y;
+
+  return texture;
+}
+
 static void
 gsk_broadway_renderer_add_node (GskRenderer *self,
                                 GArray *nodes,
@@ -159,10 +350,6 @@ gsk_broadway_renderer_add_node (GskRenderer *self,
                                 GskRenderNode *node)
 {
   GdkDisplay *display = gsk_renderer_get_display (self);
-  int x = floorf (node->bounds.origin.x);
-  int y = floorf (node->bounds.origin.y);
-  int width = ceil (node->bounds.origin.x + node->bounds.size.width) - x;
-  int height = ceil (node->bounds.origin.y + node->bounds.size.height) - y;
 
   switch (gsk_render_node_get_node_type (node))
     {
@@ -250,27 +437,28 @@ gsk_broadway_renderer_add_node (GskRenderer *self,
       }
       return;
 
+    case GSK_TEXT_NODE:
     default:
       {
-        cairo_surface_t *surface;
         GdkTexture *texture;
         guint32 texture_id;
-        cairo_t *cr;
+        float off_x = 0, off_y = 0;
 
-        surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
-        cr = cairo_create (surface);
-        cairo_translate (cr, -x, -y);
-        gsk_render_node_draw (node, cr);
-        cairo_destroy (cr);
+        texture = node_cache_lookup (node, &off_x, &off_y);
 
-        texture = gdk_texture_new_for_surface (surface);
+        if (!texture)
+          {
+            texture = node_texture_fallback (node, &off_x, &off_y);
+            node_cache_store (node, texture, off_x, off_y);
+          }
+
         g_ptr_array_add (node_textures, texture); /* Transfers ownership to node_textures */
         texture_id = gdk_broadway_display_ensure_texture (display, texture);
         add_uint32 (nodes, BROADWAY_NODE_TEXTURE);
-        add_uint32 (nodes, x);
-        add_uint32 (nodes, y);
-        add_uint32 (nodes, width);
-        add_uint32 (nodes, height);
+        add_float (nodes, node->bounds.origin.x + off_x);
+        add_float (nodes, node->bounds.origin.y + off_y);
+        add_float (nodes, gdk_texture_get_width (texture));
+        add_float (nodes, gdk_texture_get_height (texture));
         add_uint32 (nodes, texture_id);
       }
       return;

@@ -438,7 +438,7 @@ SwapNodes.prototype.handle_node = function(parent, offset_x, offset_y)
     {
         case 0:  // TEXTURE
         {
-            var rect = this.decode_irect();
+            var rect = this.decode_rect();
             var texture_id = this.decode_uint32();
             var image = new Image();
             image.width = rect.width;
