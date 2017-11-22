@@ -371,82 +371,127 @@ SwapNodes.prototype.decode_rounded_rect = function() {
     return r
 }
 
+function args() {
+    var argsLength = arguments.length;
+    var strings = [];
+    for (var i = 0; i < argsLength; ++i)
+        strings[i] = arguments[i];
+
+    return strings.join(" ");
+}
+
+function px(x) {
+    return x + "px";
+}
+
+function set_rrect_style (div, rrect) {
+    div.style["left"] = px(rrect.bounds.x);
+    div.style["top"] = px(rrect.bounds.y);
+    div.style["width"] = px(rrect.bounds.width);
+    div.style["height"] = px(rrect.bounds.height);
+    div.style["border-top-left-radius"] = args(px(rrect.sizes[0].width), px(rrect.sizes[0].height));
+    div.style["border-top-right-radius"] = args(px(rrect.sizes[1].width), px(rrect.sizes[1].height));
+    div.style["border-bottom-right-radius"] = args(px(rrect.sizes[2].width), px(rrect.sizes[2].height));
+    div.style["border-bottom-left-radius"] = args(px(rrect.sizes[3].width), px(rrect.sizes[3].height));
+}
+
 SwapNodes.prototype.handle_node = function(parent)
 {
     var type = this.decode_uint32();
     switch (type)
     {
         case 0:  // TEXTURE
-        var x = this.decode_uint32();
-        var y = this.decode_uint32();
-        var width = this.decode_uint32();
-        var height = this.decode_uint32();
-        var texture_id = this.decode_uint32();
-        var image = new Image();
-        image.width = width;
-        image.height = height;
-        image.style["position"] = "absolute";
-        image.style["left"] = x + "px";
-        image.style["top"] = y + "px";
-        var texture_url = textures[texture_id];
-        this.add_image(image);
-        image.src = texture_url;
-        parent.appendChild(image);
+        {
+            var x = this.decode_uint32();
+            var y = this.decode_uint32();
+            var width = this.decode_uint32();
+            var height = this.decode_uint32();
+            var texture_id = this.decode_uint32();
+            var image = new Image();
+            image.width = width;
+            image.height = height;
+            image.style["position"] = "absolute";
+            image.style["left"] = px(x);
+            image.style["top"] = px(y);
+            var texture_url = textures[texture_id];
+            this.add_image(image);
+            image.src = texture_url;
+            parent.appendChild(image);
+        }
         break;
 
     case 1: // CONTAINER
-        var len = this.decode_uint32();
-        for (var i = 0; i < len; i++) {
-            this.handle_node(parent);
+        {
+            var len = this.decode_uint32();
+            for (var i = 0; i < len; i++) {
+                this.handle_node(parent);
+            }
         }
         break;
 
     case 2:  // COLOR
-        var x = this.decode_uint32();
-        var y = this.decode_uint32();
-        var width = this.decode_uint32();
-        var height = this.decode_uint32();
-        var c = this.decode_color ()
-        var div = document.createElement('div');
-        div.style["position"] = "absolute";
-        div.style["left"] = x + "px";
-        div.style["top"] = y + "px";
-        div.style["width"] = width + "px";
-        div.style["height"] = height + "px";
-        div.style["background-color"] = c;
-        parent.appendChild(div);
+        {
+            var x = this.decode_uint32();
+            var y = this.decode_uint32();
+            var width = this.decode_uint32();
+            var height = this.decode_uint32();
+            var c = this.decode_color ();
+            var div = document.createElement('div');
+            div.style["position"] = "absolute";
+            div.style["left"] = x + "px";
+            div.style["top"] = y + "px";
+            div.style["width"] = width + "px";
+            div.style["height"] = height + "px";
+            div.style["background-color"] = c;
+            parent.appendChild(div);
+}
         break;
 
     case 3:  // BORDER
-        var rrect = this.decode_rounded_rect();
-        var border_widths = []
-        for (var i = 0; i < 4; i++)
-            border_widths[i] = this.decode_float();
-        var border_colors = []
-        for (var i = 0; i < 4; i++)
-            border_colors[i] = this.decode_color();
+        {
+            var rrect = this.decode_rounded_rect();
+            var border_widths = [];
+            for (var i = 0; i < 4; i++)
+                border_widths[i] = this.decode_float();
+            var border_colors = [];
+            for (var i = 0; i < 4; i++)
+                border_colors[i] = this.decode_color();
 
-        var div = document.createElement('div');
-        div.style["position"] = "absolute";
-        div.style["left"] = rrect.bounds.x + "px";
-        div.style["top"] = rrect.bounds.y + "px";
-        div.style["width"] = (rrect.bounds.width - border_widths[1] - border_widths[3]) + "px";
-        div.style["height"] = (rrect.bounds.height - border_widths[0] - border_widths[2]) + "px";
-        div.style["border-style"] = "solid";
-        div.style["border-top-left-radius"] = rrect.sizes[0].width + "px " + rrect.sizes[0].height + "px";
-        div.style["border-top-right-radius"] = rrect.sizes[1].width + "px " + rrect.sizes[1].height + "px";
-        div.style["border-bottom-right-radius"] = rrect.sizes[2].width + "px " + rrect.sizes[2].height + "px";
-        div.style["border-bottom-left-radius"] = rrect.sizes[3].width + "px " + rrect.sizes[3].height + "px";
-        div.style["border-top-color"] = border_colors[0];
-        div.style["border-top-width"] = border_widths[0] + "px";
-        div.style["border-right-color"] = border_colors[1];
-        div.style["border-right-width"] = border_widths[1] + "px";
-        div.style["border-bottom-color"] = border_colors[2];
-        div.style["border-bottom-width"] = border_widths[2] + "px";
-        div.style["border-left-color"] = border_colors[3];
-        div.style["border-left-width"] = border_widths[3] + "px";
-        parent.appendChild(div);
+            var div = document.createElement('div');
+            div.style["position"] = "absolute";
+            rrect.bounds.width -= border_widths[1] + border_widths[3];
+            rrect.bounds.height -= border_widths[0] + border_widths[2];
+            set_rrect_style(div, rrect, border_widths);
+            div.style["border-style"] = "solid";
+            div.style["border-top-color"] = border_colors[0];
+            div.style["border-top-width"] = px(border_widths[0]);
+            div.style["border-right-color"] = border_colors[1];
+            div.style["border-right-width"] = px(border_widths[1]);
+            div.style["border-bottom-color"] = border_colors[2];
+            div.style["border-bottom-width"] = px(border_widths[2]);
+            div.style["border-left-color"] = border_colors[3];
+            div.style["border-left-width"] = px(border_widths[3]);
+            parent.appendChild(div);
+        }
         break;
+
+    case 4:  // OUTSET_SHADOW
+        {
+            var rrect = this.decode_rounded_rect();
+            var color = this.decode_color();
+            var dx = this.decode_float();
+            var dy = this.decode_float();
+            var spread = this.decode_float();
+            var blur = this.decode_float();
+
+            var div = document.createElement('div');
+            div.style["position"] = "absolute";
+            set_rrect_style(div, rrect, null);
+            div.style["box-shadow"] = args(px(dx), px(dy), px(blur), px(spread), color);
+            parent.appendChild(div);
+        }
+        break;
+
     default:
         alert("Unexpected node type " + type);
     }

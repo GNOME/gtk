@@ -188,13 +188,25 @@ gsk_broadway_renderer_add_node (GskRenderer *self,
 
     case GSK_BORDER_NODE:
       {
-	int i;
+        int i;
         add_uint32 (nodes, BROADWAY_NODE_BORDER);
-	add_rounded_rect (nodes, gsk_border_node_peek_outline (node));
-	for (i = 0; i < 4; i++)
-	  add_float (nodes, gsk_border_node_peek_widths (node)[i]);
-	for (i = 0; i < 4; i++)
-	  add_rgba (nodes, &gsk_border_node_peek_colors (node)[i]);
+        add_rounded_rect (nodes, gsk_border_node_peek_outline (node));
+        for (i = 0; i < 4; i++)
+          add_float (nodes, gsk_border_node_peek_widths (node)[i]);
+        for (i = 0; i < 4; i++)
+          add_rgba (nodes, &gsk_border_node_peek_colors (node)[i]);
+      }
+      return;
+
+    case GSK_OUTSET_SHADOW_NODE:
+      {
+        add_uint32 (nodes, BROADWAY_NODE_OUTSET_SHADOW);
+        add_rounded_rect (nodes, gsk_outset_shadow_node_peek_outline (node));
+        add_rgba (nodes, gsk_outset_shadow_node_peek_color (node));
+        add_float (nodes, gsk_outset_shadow_node_get_dx (node));
+        add_float (nodes, gsk_outset_shadow_node_get_dy (node));
+        add_float (nodes, gsk_outset_shadow_node_get_spread (node));
+        add_float (nodes, gsk_outset_shadow_node_get_blur_radius (node));
       }
       return;
 
