@@ -185,6 +185,8 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
   /**
    * GtkCellRendererPixbuf:stock-id:
    *
+   * Since: 2.2
+   *
    * Deprecated: 3.10: Use #GtkCellRendererPixbuf:icon-name instead.
    */
   g_object_class_install_property (object_class,
@@ -195,6 +197,13 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 							NULL,
 							GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
 
+  /**
+   * GtkCellRendererPixbuf:stock-size:
+   *
+   * The #GtkIconSize value that specifies the size of the rendered icon.
+   *
+   * Since: 2.2
+   */
   g_object_class_install_property (object_class,
 				   PROP_STOCK_SIZE,
 				   g_param_spec_uint ("stock-size",
@@ -205,6 +214,13 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 						      GTK_ICON_SIZE_MENU,
 						      GTK_PARAM_READWRITE));
 
+  /*
+   * GtkCellRendererPixbuf:stock-detail:
+   *
+   * Since: 2.2
+   *
+   * Deprecated: 3.22: This property does nothing. Use CSS to theme widgets.
+   */
   g_object_class_install_property (object_class,
 				   PROP_STOCK_DETAIL,
 				   g_param_spec_string ("stock-detail",
