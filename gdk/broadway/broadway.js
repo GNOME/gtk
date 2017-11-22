@@ -614,6 +614,20 @@ SwapNodes.prototype.handle_node = function(parent, offset_x, offset_y)
         }
         break;
 
+    case 9:  // OPACITY
+        {
+            var opacity = this.decode_float();
+            var div = document.createElement('div');
+            div.style["position"] = "absolute";
+            div.style["left"] = px(0);
+            div.style["top"] = px(0);
+            div.style["opacity"] = opacity;
+
+            parent.appendChild(div);
+            this.handle_node(div, offset_x, offset_y);
+        }
+        break;
+
 
     default:
         alert("Unexpected node type " + type);

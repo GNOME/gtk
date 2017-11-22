@@ -269,6 +269,10 @@ rewrite_node_textures (BroadwayClient *client,
     pos += n_shadows * NODE_SIZE_SHADOW;
     pos = rewrite_node_textures (client, len, data, pos);
     break;
+  case BROADWAY_NODE_OPACITY:
+    pos += NODE_SIZE_FLOAT;
+    pos = rewrite_node_textures (client, len, data, pos);
+    break;
   default:
     g_assert_not_reached ();
   }

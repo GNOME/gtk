@@ -455,6 +455,16 @@ gsk_broadway_renderer_add_node (GskRenderer *self,
       }
       return;
 
+    case GSK_OPACITY_NODE:
+      {
+        add_uint32 (nodes, BROADWAY_NODE_OPACITY);
+        add_float (nodes, gsk_opacity_node_get_opacity (node));
+        gsk_broadway_renderer_add_node (self, nodes, node_textures,
+                                        gsk_opacity_node_get_child (node));
+      }
+      return;
+
+    case GSK_COLOR_MATRIX_NODE:
     case GSK_TEXT_NODE:
     default:
       break; /* Fallback */
