@@ -474,6 +474,24 @@ gsk_broadway_renderer_add_node (GskRenderer *self,
     case GSK_NOT_A_RENDER_NODE:
       g_assert_not_reached ();
       return;
+
+    case GSK_TEXTURE_NODE:
+      {
+        GdkTexture *texture = gsk_texture_node_get_texture (node);
+        guint32 texture_id;
+
+        g_ptr_array_add (node_textures, g_object_ref (texture)); /* Transfers ownership to node_textures */
+        texture_id = gdk_broadway_display_ensure_texture (display, texture);
+
+        add_uint32 (nodes, BROADWAY_NODE_TEXTURE);
+        add_float (nodes, node->bounds.origin.x);
+        add_float (nodes, node->bounds.origin.y);
+        add_float (nodes, gdk_texture_get_width (texture));
+        add_float (nodes, gdk_texture_get_height (texture));
+        add_uint32 (nodes, texture_id);
+      }
+      return;
+
     case GSK_CONTAINER_NODE:
       {
         guint i;
