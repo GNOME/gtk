@@ -210,6 +210,18 @@ gsk_broadway_renderer_add_node (GskRenderer *self,
       }
       return;
 
+    case GSK_INSET_SHADOW_NODE:
+      {
+        add_uint32 (nodes, BROADWAY_NODE_INSET_SHADOW);
+        add_rounded_rect (nodes, gsk_inset_shadow_node_peek_outline (node));
+        add_rgba (nodes, gsk_inset_shadow_node_peek_color (node));
+        add_float (nodes, gsk_inset_shadow_node_get_dx (node));
+        add_float (nodes, gsk_inset_shadow_node_get_dy (node));
+        add_float (nodes, gsk_inset_shadow_node_get_spread (node));
+        add_float (nodes, gsk_inset_shadow_node_get_blur_radius (node));
+      }
+      return;
+
     default:
       {
         cairo_surface_t *surface;

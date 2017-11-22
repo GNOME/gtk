@@ -492,6 +492,23 @@ SwapNodes.prototype.handle_node = function(parent)
         }
         break;
 
+    case 5:  // INSET_SHADOW
+        {
+            var rrect = this.decode_rounded_rect();
+            var color = this.decode_color();
+            var dx = this.decode_float();
+            var dy = this.decode_float();
+            var spread = this.decode_float();
+            var blur = this.decode_float();
+
+            var div = document.createElement('div');
+            div.style["position"] = "absolute";
+            set_rrect_style(div, rrect, null);
+            div.style["box-shadow"] = args("inset", px(dx), px(dy), px(blur), px(spread), color);
+            parent.appendChild(div);
+        }
+        break;
+
     default:
         alert("Unexpected node type " + type);
     }

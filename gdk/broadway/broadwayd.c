@@ -239,6 +239,7 @@ rewrite_node_textures (BroadwayClient *client,
   case BROADWAY_NODE_BORDER:
     pos += NODE_SIZE_RRECT + 4 * NODE_SIZE_FLOAT + 4 * NODE_SIZE_COLOR;
     break;
+  case BROADWAY_NODE_INSET_SHADOW:
   case BROADWAY_NODE_OUTSET_SHADOW:
     pos += NODE_SIZE_RRECT + NODE_SIZE_COLOR + 4 * NODE_SIZE_COLOR;
     break;
