@@ -1411,9 +1411,11 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    *
    * The ::insert-emoji signal is a
    * [keybinding signal][GtkBindingSignal]
-   * which gets emitted to present the Emoji chooser for the text_view.
+   * which gets emitted to present the Emoji chooser for the @text_view.
    *
    * The default bindings for this signal are Ctrl-. and Ctrl-;
+   *
+   * Since: 3.22
    */
   signals[INSERT_EMOJI] =
     g_signal_new (I_("insert-emoji"),
@@ -10374,4 +10376,3 @@ gtk_text_view_insert_emoji (GtkTextView *text_view)
 
   gtk_popover_popup (GTK_POPOVER (chooser));
 }
-
