@@ -199,9 +199,80 @@ glyph_info_equal (const PangoGlyphInfo *a,
  }
 
 static guint
+hash_matrix (const graphene_matrix_t *matrix)
+{
+  float m[16];
+  guint h = 0;
+  int i;
+
+  graphene_matrix_to_float (matrix, m);
+  for (i = 0; i < 16; i++)
+    h ^= (guint) m[i];
+
+  return h;
+}
+
+static gboolean
+matrix_equal (const graphene_matrix_t *a,
+              const graphene_matrix_t *b)
+{
+  float ma[16];
+  float mb[16];
+  int i;
+
+  graphene_matrix_to_float (a, ma);
+  graphene_matrix_to_float (b, mb);
+  for (i = 0; i < 16; i++)
+    {
+      if (ma[i] != mb[i])
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
+static guint
+hash_vec4 (const graphene_vec4_t *vec4)
+{
+  float v[4];
+  guint h = 0;
+  int i;
+
+  graphene_vec4_to_float (vec4, v);
+  for (i = 0; i < 4; i++)
+    h ^= (guint) v[i];
+
+  return h;
+}
+
+static gboolean
+vec4_equal (const graphene_vec4_t *a,
+            const graphene_vec4_t *b)
+{
+  float va[4];
+  float vb[4];
+  int i;
+
+  graphene_vec4_to_float (a, va);
+  graphene_vec4_to_float (b, vb);
+  for (i = 0; i < 4; i++)
+    {
+      if (va[i] != vb[i])
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
+static guint
 node_cache_hash (GskRenderNode *node)
 {
-  if (gsk_render_node_get_node_type (node) == GSK_TEXT_NODE &&
+  GskRenderNodeType type;
+  guint h;
+
+  type = gsk_render_node_get_node_type (node);
+  h = type << 28;
+  if (type == GSK_TEXT_NODE &&
       float_is_int32 (gsk_text_node_get_x (node)) &&
       float_is_int32 (gsk_text_node_get_y (node)))
     {
@@ -210,11 +281,23 @@ node_cache_hash (GskRenderNode *node)
       guint n_glyphs = gsk_text_node_get_num_glyphs (node);
       const PangoGlyphInfo *infos = gsk_text_node_peek_glyphs (node);
       const GdkRGBA *color = gsk_text_node_peek_color (node);
-      guint h;
 
-      h = g_direct_hash (font) ^ n_glyphs << 16 ^ gdk_rgba_hash (color);
+      h ^= g_direct_hash (font) ^ n_glyphs << 16 ^ gdk_rgba_hash (color);
       for (i = 0; i < n_glyphs; i++)
         h ^= glyph_info_hash (&infos[i]);
+
+      return h;
+    }
+
+  if (type == GSK_COLOR_MATRIX_NODE &&
+      gsk_render_node_get_node_type (gsk_color_matrix_node_get_child (node)) == GSK_TEXTURE_NODE)
+    {
+      const graphene_matrix_t *matrix = gsk_color_matrix_node_peek_color_matrix (node);
+      const graphene_vec4_t *offset = gsk_color_matrix_node_peek_color_offset (node);
+      GskRenderNode *child = gsk_color_matrix_node_get_child (node);
+      GdkTexture *texture = gsk_texture_node_get_texture (child);
+
+      h ^= g_direct_hash (texture) ^ hash_matrix (matrix) ^ hash_vec4 (offset);
 
       return h;
     }
@@ -226,10 +309,13 @@ static gboolean
 node_cache_equal (GskRenderNode *a,
                   GskRenderNode *b)
 {
-  if (gsk_render_node_get_node_type (a) != gsk_render_node_get_node_type (b))
+  GskRenderNodeType type;
+
+  type = gsk_render_node_get_node_type (a);
+  if (type != gsk_render_node_get_node_type (b))
     return FALSE;
 
-  if (gsk_render_node_get_node_type (a) == GSK_TEXT_NODE &&
+  if (type == GSK_TEXT_NODE &&
       float_is_int32 (gsk_text_node_get_x (a)) &&
       float_is_int32 (gsk_text_node_get_y (a)) &&
       float_is_int32 (gsk_text_node_get_x (b)) &&
@@ -258,6 +344,31 @@ node_cache_equal (GskRenderNode *a,
         }
 
       if (!gdk_rgba_equal (a_color, b_color))
+        return FALSE;
+
+      return TRUE;
+    }
+
+  if (type == GSK_COLOR_MATRIX_NODE &&
+      gsk_render_node_get_node_type (gsk_color_matrix_node_get_child (a)) == GSK_TEXTURE_NODE &&
+      gsk_render_node_get_node_type (gsk_color_matrix_node_get_child (b)) == GSK_TEXTURE_NODE)
+    {
+      const graphene_matrix_t *a_matrix = gsk_color_matrix_node_peek_color_matrix (a);
+      const graphene_vec4_t *a_offset = gsk_color_matrix_node_peek_color_offset (a);
+      GskRenderNode *a_child = gsk_color_matrix_node_get_child (a);
+      GdkTexture *a_texture = gsk_texture_node_get_texture (a_child);
+      const graphene_matrix_t *b_matrix = gsk_color_matrix_node_peek_color_matrix (b);
+      const graphene_vec4_t *b_offset = gsk_color_matrix_node_peek_color_offset (b);
+      GskRenderNode *b_child = gsk_color_matrix_node_get_child (b);
+      GdkTexture *b_texture = gsk_texture_node_get_texture (b_child);
+
+      if (a_texture != b_texture)
+        return FALSE;
+
+      if (!matrix_equal (a_matrix, b_matrix))
+        return FALSE;
+
+      if (!vec4_equal (a_offset, b_offset))
         return FALSE;
 
       return TRUE;
@@ -303,9 +414,14 @@ node_cache_store (GskRenderNode *node,
                   float off_x,
                   float off_y)
 {
-  if (gsk_render_node_get_node_type (node) == GSK_TEXT_NODE &&
-      float_is_int32 (gsk_text_node_get_x (node)) &&
-      float_is_int32 (gsk_text_node_get_y (node)))
+  GskRenderNodeType type;
+
+  type = gsk_render_node_get_node_type (node);
+  if ((type == GSK_TEXT_NODE &&
+       float_is_int32 (gsk_text_node_get_x (node)) &&
+       float_is_int32 (gsk_text_node_get_y (node))) ||
+      (type == GSK_COLOR_MATRIX_NODE &&
+       gsk_render_node_get_node_type (gsk_color_matrix_node_get_child (node)) == GSK_TEXTURE_NODE))
     {
       NodeCacheElement *element = g_new0 (NodeCacheElement, 1);
       element->texture = texture;
@@ -314,6 +430,8 @@ node_cache_store (GskRenderNode *node,
       element->off_y = off_y;
       g_object_weak_ref (G_OBJECT (texture), cached_texture_gone, element);
       g_hash_table_insert (gsk_broadway_node_cache, element->node, element);
+
+      return;
     }
 }
 
