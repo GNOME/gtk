@@ -191,6 +191,7 @@ struct _GtkTextViewClass
                                   const GtkTextIter      *location,
                                   GtkTextIter            *start,
                                   GtkTextIter            *end);
+  void (* insert_emoji)          (GtkTextView      *text_view);
 
   /*< private >*/
 
@@ -199,7 +200,6 @@ struct _GtkTextViewClass
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
   void (*_gtk_reserved4) (void);
-  void (*_gtk_reserved5) (void);
 };
 
 GDK_AVAILABLE_IN_ALL

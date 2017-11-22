@@ -57,6 +57,7 @@
 #include "gtktoolbar.h"
 #include "gtkpixelcacheprivate.h"
 #include "gtkmagnifierprivate.h"
+#include "gtkemojichooser.h"
 
 #include "a11y/gtktextviewaccessibleprivate.h"
 
@@ -332,6 +333,7 @@ enum
   TOGGLE_CURSOR_VISIBLE,
   PREEDIT_CHANGED,
   EXTEND_SELECTION,
+  INSERT_EMOJI,
   LAST_SIGNAL
 };
 
@@ -584,6 +586,7 @@ static void     gtk_text_view_set_hadjustment_values (GtkTextView   *text_view);
 static void     gtk_text_view_set_vadjustment_values (GtkTextView   *text_view);
 
 static void gtk_text_view_update_im_spot_location (GtkTextView *text_view);
+static void gtk_text_view_insert_emoji (GtkTextView *text_view);
 
 /* Container methods */
 static void gtk_text_view_add    (GtkContainer *container,
@@ -785,6 +788,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   klass->toggle_overwrite = gtk_text_view_toggle_overwrite;
   klass->create_buffer = gtk_text_view_create_buffer;
   klass->extend_selection = gtk_text_view_extend_selection;
+  klass->insert_emoji = gtk_text_view_insert_emoji;
 
   /*
    * Properties
@@ -1444,6 +1448,25 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                   GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE,
                   GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE);
 
+  /**
+   * GtkTextView::insert-emoji:
+   * @text_view: the object which received the signal
+   *
+   * The ::insert-emoji signal is a
+   * [keybinding signal][GtkBindingSignal]
+   * which gets emitted to present the Emoji chooser for the text_view.
+   *
+   * The default bindings for this signal are Ctrl-. and Ctrl-;
+   */
+  signals[INSERT_EMOJI] =
+    g_signal_new (I_("insert-emoji"),
+                  G_OBJECT_CLASS_TYPE (gobject_class),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GtkTextViewClass, insert_emoji),
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 0);
+
   /*
    * Key bindings
    */
@@ -1641,6 +1664,12 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 				"toggle-overwrite", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Insert, 0,
 				"toggle-overwrite", 0);
+
+  /* Emoji */
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_period, GDK_CONTROL_MASK,
+                                "insert-emoji", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_semicolon, GDK_CONTROL_MASK,
+                                "insert-emoji", 0);
 
   /* Caret mode */
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_F7, 0,
@@ -9484,6 +9513,16 @@ popup_targets_received (GtkClipboard     *clipboard,
       gtk_widget_show (menuitem);
       gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
 
+      if ((gtk_text_view_get_input_hints (text_view) & GTK_INPUT_HINT_NO_EMOJI) == 0)
+        {
+          menuitem = gtk_menu_item_new_with_mnemonic (_("Insert _Emoji"));
+          gtk_widget_set_sensitive (menuitem, can_insert);
+          g_signal_connect_swapped (menuitem, "activate",
+                                    G_CALLBACK (gtk_text_view_insert_emoji), text_view);
+          gtk_widget_show (menuitem);
+          gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
+        }
+
       g_signal_emit (text_view, signals[POPULATE_POPUP],
 		     0, priv->popup_menu);
 
@@ -11402,3 +11441,40 @@ gtk_text_view_get_monospace (GtkTextView *text_view)
   
   return gtk_style_context_has_class (context, GTK_STYLE_CLASS_MONOSPACE);
 }
+
+static void
+gtk_text_view_insert_emoji (GtkTextView *text_view)
+{
+  GtkWidget *chooser;
+  GtkTextIter iter;
+  GdkRectangle rect;
+  GtkTextBuffer *buffer;
+
+  if (gtk_widget_get_ancestor (GTK_WIDGET (text_view), GTK_TYPE_EMOJI_CHOOSER) != NULL)
+    return;
+
+  chooser = GTK_WIDGET (g_object_get_data (G_OBJECT (text_view), "gtk-emoji-chooser"));
+  if (!chooser)
+    {
+      chooser = gtk_emoji_chooser_new ();
+      g_object_set_data (G_OBJECT (text_view), "gtk-emoji-chooser", chooser);
+
+      gtk_popover_set_relative_to (GTK_POPOVER (chooser), GTK_WIDGET (text_view));
+      g_signal_connect_swapped (chooser, "emoji-picked",
+                                G_CALLBACK (gtk_text_view_insert_at_cursor), text_view);
+    }
+
+  buffer = get_buffer (text_view);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter,
+                                    gtk_text_buffer_get_insert (buffer));
+
+  gtk_text_view_get_iter_location (text_view, &iter, (GdkRectangle *) &rect);
+  gtk_text_view_buffer_to_window_coords (text_view, GTK_TEXT_WINDOW_TEXT,
+                                         rect.x, rect.y, &rect.x, &rect.y);
+  _text_window_to_widget_coords (text_view, &rect.x, &rect.y);
+
+  gtk_popover_set_pointing_to (GTK_POPOVER (chooser), &rect);
+
+  gtk_popover_popup (GTK_POPOVER (chooser));
+}
+
