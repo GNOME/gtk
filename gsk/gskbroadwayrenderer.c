@@ -602,11 +602,6 @@ gsk_broadway_renderer_add_node (GskRenderer *self,
 
         node_cache_store (node, texture, off_x, off_y);
       }
-    else
-      {
-        g_print ("Cache hit %p for %s\n", texture,
-                 node->node_class->type_name);
-      }
 
     g_ptr_array_add (node_textures, texture); /* Transfers ownership to node_textures */
     texture_id = gdk_broadway_display_ensure_texture (display, texture);
