@@ -117,9 +117,6 @@ GDK_AVAILABLE_IN_ALL
 void     gdk_display_notify_startup_complete   (GdkDisplay    *display,
                                                 const gchar   *startup_id);
 
-GDK_DEPRECATED_IN_3_20_FOR(gdk_display_get_default_seat)
-GdkDeviceManager * gdk_display_get_device_manager (GdkDisplay *display);
-
 GDK_AVAILABLE_IN_ALL
 GdkAppLaunchContext *gdk_display_get_app_launch_context (GdkDisplay *display);
 
