@@ -766,10 +766,7 @@ prune_monitors (EnumMonitorData *data)
       m = g_ptr_array_index (data->monitors, i);
 
       if (m->remove)
-        {
-          g_ptr_array_remove_index (data->monitors, i);
-          continue;
-        }
+        g_ptr_array_remove_index (data->monitors, i--);
     }
 }
 
