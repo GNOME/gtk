@@ -868,6 +868,7 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
       {
         const PangoFont *font = gsk_text_node_peek_font (node);
         const PangoGlyphInfo *glyphs = gsk_text_node_peek_glyphs (node);
+        const gboolean has_color_glyphs = font_has_color_glyphs (font);
         guint num_glyphs = gsk_text_node_get_num_glyphs (node);
         int i;
         int x_position = 0;
@@ -905,7 +906,7 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
             cy = (double)(gi->geometry.y_offset) / PANGO_SCALE;
 
             /* If the font has color glyphs, we don't need to recolor anything */
-            if (font_has_color_glyphs (font))
+            if (has_color_glyphs)
               {
                 ops_set_program (builder, &self->blit_program);
               }
