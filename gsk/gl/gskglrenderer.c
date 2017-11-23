@@ -682,6 +682,32 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
       }
     break;
 
+    case GSK_CAIRO_NODE:
+      {
+        const cairo_surface_t *surface = gsk_cairo_node_peek_surface (node);
+        int gl_min_filter = GL_NEAREST, gl_mag_filter = GL_NEAREST;
+        int texture_id;
+
+        if (surface == NULL)
+          return;
+
+        get_gl_scaling_filters (node, &gl_min_filter, &gl_mag_filter);
+
+        texture_id = gsk_gl_driver_create_texture (self->gl_driver,
+                                                   max_x - min_x,
+                                                   max_y - min_y);
+        gsk_gl_driver_bind_source_texture (self->gl_driver, texture_id);
+        gsk_gl_driver_init_texture_with_surface (self->gl_driver,
+                                                 texture_id,
+                                                 (cairo_surface_t *)surface,
+                                                 gl_min_filter,
+                                                 gl_mag_filter);
+        ops_set_program (builder, &self->blit_program);
+        ops_set_texture (builder, texture_id);
+        ops_draw (builder, vertex_data);
+      }
+    break;
+
     case GSK_TRANSFORM_NODE:
       {
         GskRenderNode *child = gsk_transform_node_get_child (node);
@@ -936,7 +962,6 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
     case GSK_CROSS_FADE_NODE:
     case GSK_BLEND_NODE:
     case GSK_REPEAT_NODE:
-    case GSK_CAIRO_NODE:
     case GSK_COLOR_MATRIX_NODE:
     default:
       {
