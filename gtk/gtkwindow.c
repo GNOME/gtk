@@ -7555,26 +7555,20 @@ static void
 do_focus_change (GtkWidget *widget,
 		 gboolean   in)
 {
-  GdkWindow *window;
-  GdkDeviceManager *device_manager;
+  GdkSeat *seat;
   GList *devices, *d;
 
   g_object_ref (widget);
 
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  device_manager = gdk_display_get_device_manager (gtk_widget_get_display (widget));
-  devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
-  devices = g_list_concat (devices, gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_SLAVE));
-  devices = g_list_concat (devices, gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_FLOATING));
-  G_GNUC_END_IGNORE_DEPRECATIONS;
+  seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
+  devices = gdk_seat_get_slaves (seat, GDK_SEAT_CAPABILITY_KEYBOARD);
+  devices = g_list_prepend (devices, gdk_seat_get_keyboard (seat));
 
   for (d = devices; d; d = d->next)
     {
       GdkDevice *dev = d->data;
       GdkEvent *fevent;
-
-      if (gdk_device_get_source (dev) != GDK_SOURCE_KEYBOARD)
-        continue;
+      GdkWindow *window;
 
       /* Skip non-master keyboards that haven't
        * selected for events from this window
