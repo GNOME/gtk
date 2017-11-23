@@ -1394,7 +1394,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * When this is %TRUE, the entry will show an emoji icon in the secondary
    * icon position that brings up the Emoji chooser when clicked.
    *
-   * Since: 3.92
+   * Since: 3.22.19
    */
   entry_props[PROP_SHOW_EMOJI_ICON] =
       g_param_spec_boolean ("show-emoji-icon",
