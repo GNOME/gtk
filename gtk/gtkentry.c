@@ -1723,7 +1723,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    *
    * The default bindings for this signal are Ctrl-. and Ctrl-;
    *
-   * Since: 3.22
+   * Since: 3.22.27
    */
   signals[INSERT_EMOJI] =
     g_signal_new (I_("insert-emoji"),
