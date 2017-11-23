@@ -85,7 +85,6 @@ typedef struct
     int texture_id;
     int render_target_id;
     GdkRGBA color;
-    gsize vao_offset;
     GskQuadVertex vertex_data[6];
     GskRoundedRect clip;
     graphene_rect_t viewport;
@@ -96,6 +95,10 @@ typedef struct
       graphene_point_t start_point;
       graphene_point_t end_point;
     } linear_gradient;
+    struct {
+      gsize vao_offset;
+      gsize draw_size;
+    } draw;
   };
 } RenderOp;
 

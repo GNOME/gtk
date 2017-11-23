@@ -223,17 +223,45 @@ void
 ops_draw (RenderOpBuilder     *builder,
           const GskQuadVertex  vertex_data[GL_N_VERTICES])
 {
-  RenderOp op;
-  gsize offset = builder->buffer_size / sizeof (GskQuadVertex);
+  RenderOp *last_op;
 
-  op.op = OP_CHANGE_VAO;
-  memcpy (&op.vertex_data, vertex_data, sizeof(GskQuadVertex) * GL_N_VERTICES);
-  g_array_append_val (builder->render_ops, op);
+  last_op = &g_array_index (builder->render_ops, RenderOp, builder->render_ops->len - 1);
+  /* If the previous op was a DRAW as well, we didn't change anything between the two calls,
+   * so these are just 2 subsequent draw calls. Same VAO, same program etc.
+   * And the offsets into the vao are in order as well, so make it one draw call. */
+  if (last_op->op == OP_DRAW)
+    {
+      /* We allow ourselves a little trick here. We still have to add a CHANGE_VAO op for
+       * this draw call so we can add our vertex data there, but we want it to be placed before
+       * the last draw call, so we reorder those. */
+      RenderOp new_draw;
+      new_draw.op = OP_DRAW;
+      new_draw.draw.vao_offset = last_op->draw.vao_offset;
+      new_draw.draw.draw_size = last_op->draw.draw_size + GL_N_VERTICES;
+
+      last_op->op = OP_CHANGE_VAO;
+      memcpy (&last_op->vertex_data, vertex_data, sizeof(GskQuadVertex) * GL_N_VERTICES);
+
+      /* Now add the DRAW */
+      g_array_append_val (builder->render_ops, new_draw);
+    }
+  else
+    {
+      RenderOp op;
+      gsize offset = builder->buffer_size / sizeof (GskQuadVertex);
+
+      op.op = OP_CHANGE_VAO;
+      memcpy (&op.vertex_data, vertex_data, sizeof(GskQuadVertex) * GL_N_VERTICES);
+      g_array_append_val (builder->render_ops, op);
+
+      op.op = OP_DRAW;
+      op.draw.vao_offset = offset;
+      op.draw.draw_size = GL_N_VERTICES;
+      g_array_append_val (builder->render_ops, op);
+    }
+
+  /* We added new vertex data in both cases so increase the buffer size */
   builder->buffer_size += sizeof (GskQuadVertex) * GL_N_VERTICES;
-
-  op.op = OP_DRAW;
-  op.vao_offset = offset;
-  g_array_append_val (builder->render_ops, op);
 }
 
 void

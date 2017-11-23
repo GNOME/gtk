@@ -328,6 +328,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
       goto out;
     }
   self->coloring_program.index = 3;
+  self->coloring_program.name = "coloring";
   init_common_locations (self, builder, &self->coloring_program);
   INIT_PROGRAM_UNIFORM_LOCATION (coloring_program, color_location, "uColor");
 
@@ -342,6 +343,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
       goto out;
     }
   self->color_matrix_program.index = 4;
+  self->color_matrix_program.name = "color matrix";
   init_common_locations (self, builder, &self->color_matrix_program);
   INIT_PROGRAM_UNIFORM_LOCATION (color_matrix_program, color_matrix_location, "uColorMatrix");
   INIT_PROGRAM_UNIFORM_LOCATION (color_matrix_program, color_offset_location, "uColorOffset");
@@ -357,6 +359,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
       goto out;
     }
   self->linear_gradient_program.index = 5;
+  self->linear_gradient_program.name = "linear gradient";
   init_common_locations (self, builder, &self->linear_gradient_program);
   INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient_program, color_stops_location, "uColorStops");
   INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient_program, color_offsets_location, "uColorOffsets");
@@ -858,6 +861,22 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
         int x = gsk_text_node_get_x (node);
         int y = gsk_text_node_get_y (node);
 
+        /* If the font has color glyphs, we don't need to recolor anything */
+        if (has_color_glyphs)
+          {
+            ops_set_program (builder, &self->blit_program);
+          }
+        else
+          {
+            RenderOp op;
+
+            ops_set_program (builder, &self->coloring_program);
+
+            op.op = OP_CHANGE_COLOR;
+            op.color = *gsk_text_node_peek_color (node);
+            ops_add (builder, &op);
+          }
+
         /* We use one quad per character, unlike the other nodes which
          * use at most one quad altogether */
         for (i = 0; i < num_glyphs; i++)
@@ -887,22 +906,6 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
               }
             cx = (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
             cy = (double)(gi->geometry.y_offset) / PANGO_SCALE;
-
-            /* If the font has color glyphs, we don't need to recolor anything */
-            if (has_color_glyphs)
-              {
-                ops_set_program (builder, &self->blit_program);
-              }
-            else
-              {
-                RenderOp op;
-
-                ops_set_program (builder, &self->coloring_program);
-
-                op.op = OP_CHANGE_COLOR;
-                op.color = *gsk_text_node_peek_color (node);
-                ops_add (builder, &op);
-              }
 
             ops_set_texture (builder, gsk_gl_glyph_cache_get_glyph_image (&self->glyph_cache,
                                                                          glyph)->texture_id);
@@ -1156,8 +1159,9 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
           break;
 
         case OP_DRAW:
-          OP_PRINT (" -> draw %ld and program %s\n", op->vao_offset, program->name);
-          glDrawArrays (GL_TRIANGLES, op->vao_offset, GL_N_VERTICES);
+          OP_PRINT (" -> draw %ld, size %ld and program %s\n",
+                    op->draw.vao_offset, op->draw.draw_size, program->name);
+          glDrawArrays (GL_TRIANGLES, op->draw.vao_offset, op->draw.draw_size);//GL_N_VERTICES);
           break;
 
         default:
