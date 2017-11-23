@@ -671,26 +671,6 @@ gdk_seat_capabilities_get_type
 </SECTION>
 
 <SECTION>
-<TITLE>GdkDeviceManager</TITLE>
-<FILE>gdkdevicemanager</FILE>
-GdkDeviceManager
-gdk_device_manager_get_display
-gdk_device_manager_list_devices
-
-<SUBSECTION Standard>
-GDK_DEVICE_MANAGER
-GDK_DEVICE_MANAGER_CLASS
-GDK_DEVICE_MANAGER_GET_CLASS
-GDK_IS_DEVICE_MANAGER
-GDK_IS_DEVICE_MANAGER_CLASS
-GDK_TYPE_DEVICE_MANAGER
-
-<SUBSECTION Private>
-GdkDeviceManagerClass
-gdk_device_manager_get_type
-</SECTION>
-
-<SECTION>
 <TITLE>Events</TITLE>
 <FILE>events</FILE>
 GdkEventType
