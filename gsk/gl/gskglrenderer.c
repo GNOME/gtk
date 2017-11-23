@@ -534,7 +534,7 @@ get_gl_scaling_filters (GskRenderNode *node,
 static void
 gsk_gl_renderer_clear_tree (GskGLRenderer *self)
 {
-  int removed_textures, removed_vaos;
+  int removed_textures;
 
   if (self->gl_context == NULL)
     return;
@@ -544,11 +544,9 @@ gsk_gl_renderer_clear_tree (GskGLRenderer *self)
   g_array_remove_range (self->render_ops, 0, self->render_ops->len);
 
   removed_textures = gsk_gl_driver_collect_textures (self->gl_driver);
-  removed_vaos = gsk_gl_driver_collect_vaos (self->gl_driver);
 
-  GSK_NOTE (OPENGL, g_print ("Collected: %d textures, %d vaos\n",
-                             removed_textures,
-                             removed_vaos));
+  GSK_NOTE (OPENGL, g_print ("Collected: %d textures\n",
+                             removed_textures));
 }
 
 static void
