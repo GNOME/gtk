@@ -132,8 +132,6 @@ struct _GskGLRenderer
   GArray *render_ops;
 
   GskGLGlyphCache glyph_cache;
-  int full_vao_id;
-  int full_vao_buffer_id;
 
 #ifdef G_ENABLE_DEBUG
   ProfileCounters profile_counters;
@@ -380,16 +378,6 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
                          GError      **error)
 {
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
-  GskQuadVertex vertex_data[GL_N_VERTICES] = {
-    { { 0, 0 }, { 0, 0 }, },
-    { { 0, 1 }, { 0, 1 }, },
-    { { 1, 0 }, { 1, 0 }, },
-
-    { { 1, 1 }, { 1, 1 }, },
-    { { 0, 1 }, { 0, 1 }, },
-    { { 1, 0 }, { 1, 0 }, },
-  };
-
 
   self->scale_factor = gdk_window_get_scale_factor (window);
 
@@ -417,9 +405,6 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
     return FALSE;
 
   gsk_gl_glyph_cache_init (&self->glyph_cache, self->gl_driver);
-
-  gsk_gl_driver_create_permanent_vao_for_quad (self->gl_driver, GL_N_VERTICES, vertex_data,
-                                               &self->full_vao_id, &self->full_vao_buffer_id);
 
   return TRUE;
 }
