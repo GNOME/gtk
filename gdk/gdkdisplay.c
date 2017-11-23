@@ -1079,20 +1079,6 @@ gdk_display_device_is_grabbed (GdkDisplay *display,
   return (info && !info->implicit);
 }
 
-/**
- * gdk_display_get_device_manager:
- * @display: a #GdkDisplay.
- *
- * Returns the #GdkDeviceManager associated to @display.
- *
- * Returns: (nullable) (transfer none): A #GdkDeviceManager, or
- *          %NULL. This memory is owned by GDK and must not be freed
- *          or unreferenced.
- *
- * Since: 3.0
- *
- * Deprecated: 3.20. Use gdk_display_get_default_seat() and #GdkSeat operations.
- **/
 GdkDeviceManager *
 gdk_display_get_device_manager (GdkDisplay *display)
 {

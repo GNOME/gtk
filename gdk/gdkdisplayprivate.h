@@ -306,6 +306,9 @@ void                gdk_display_emit_opened           (GdkDisplay       *display
 void                gdk_display_setting_changed       (GdkDisplay       *display,
                                                        const char       *name);
 
+GdkDeviceManager *  gdk_display_get_device_manager    (GdkDisplay *display);
+
+
 G_END_DECLS
 
 #endif  /* __GDK_DISPLAY_PRIVATE_H__ */
