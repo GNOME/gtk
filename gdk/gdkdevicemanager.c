@@ -339,23 +339,3 @@ gdk_device_manager_list_devices (GdkDeviceManager *device_manager,
 
   return GDK_DEVICE_MANAGER_GET_CLASS (device_manager)->list_devices (device_manager, type);
 }
-
-/**
- * gdk_disable_multidevice:
- *
- * Disables multidevice support in GDK. This call must happen prior
- * to gdk_display_open(), gtk_init() or gtk_init_check() in order to
- * take effect.
- *
- * Most common GTK+ applications won’t ever need to call this. Only
- * applications that do mixed GDK/Xlib calls could want to disable
- * multidevice support if such Xlib code deals with input devices in
- * any way and doesn’t observe the presence of XInput 2.
- *
- * Since: 3.0
- */
-void
-gdk_disable_multidevice (void)
-{
-  _gdk_disable_multidevice = TRUE;
-}

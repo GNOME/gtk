@@ -31,7 +31,6 @@
 
 guint               _gdk_debug_flags = 0;
 GList              *_gdk_default_filters = NULL;
-gboolean            _gdk_disable_multidevice = FALSE;
 guint               _gdk_gl_flags = 0;
 guint               _gdk_vulkan_flags = 0;
 GdkRenderingMode    _gdk_rendering_mode = GDK_RENDERING_MODE_SIMILAR;
