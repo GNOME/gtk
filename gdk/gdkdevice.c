@@ -32,12 +32,12 @@
  * SECTION:gdkdevice
  * @Short_description: Object representing an input device
  * @Title: GdkDevice
- * @See_also: #GdkDeviceManager
+ * @See_also: #GdkSeat
  *
  * The #GdkDevice object represents a single input device, such
  * as a keyboard, a mouse, a touchpad, etc.
  *
- * See the #GdkDeviceManager documentation for more information
+ * See the #GdkSeat documentation for more information
  * about the various kinds of master and slave devices, and their
  * relationships.
  */
@@ -1375,7 +1375,7 @@ get_native_grab_event_mask (GdkEventMask grab_mask)
  * gdk_device_grab:
  * @device: a #GdkDevice. To get the device you can use gtk_get_current_event_device()
  *   or gdk_event_get_device() if the grab is in reaction to an event. Also, you can use
- *   gdk_device_manager_get_client_pointer() but only in code that isn’t triggered by a
+ *   gdk_seat_get_pointer() but only in code that isn’t triggered by a
  *   #GdkEvent and there aren’t other means to get a meaningful #GdkDevice to operate on.
  * @window: the #GdkWindow which will own the grab (the grab window)
  * @grab_ownership: specifies the grab ownership.

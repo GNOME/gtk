@@ -50,20 +50,17 @@
  *
  * - To manage and provide information about input devices (pointers and keyboards)
  *
- * - To manage and provide information about the available #GdkMonitors
+ * - To manage and provide information about output devices (monitors)
  *
- * GdkDisplay objects are the GDK representation of an X Display,
- * which can be described as a workstation consisting of
- * a keyboard, a pointing device (such as a mouse) and one or more
- * screens.
- * It is used to open and keep track of various GdkMonitor objects
- * currently instantiated by the application. It is also used to
- * access the keyboard(s) and mouse pointer(s) of the display.
+ * GdkDisplay objects are the GDK representation of a workstation, consisting
+ * of a keyboard, a pointing device (such as a mouse) and one or more screens.
  *
- * Most of the input device handling has been factored out into
- * the separate #GdkDeviceManager object. Every display has a
- * device manager, which you can obtain using
- * gdk_display_get_device_manager().
+ * Most of the input device handling has been factored out into separate #GdkSeat
+ * objects. Every display has a one or more seats, which can be accessed with
+ * gdk_display_get_default_seat() and gdk_display_list_seats().
+ *
+ * Output devices are represented by #GdkMonitor objects, which can be accessed
+ * with gdk-display_get_monitor() and similar APIs.
  */
 
 enum

@@ -93,10 +93,9 @@ typedef enum
  *                          be an associated focus indicator on the screen.
  * @GDK_DEVICE_TYPE_SLAVE: Device is a slave (or physical) device.
  * @GDK_DEVICE_TYPE_FLOATING: Device is a physical device, currently not attached to
- *                            any virtual device.
+ *                            any seat.
  *
- * Indicates the device type. See [above][GdkDeviceManager.description]
- * for more information about the meaning of these device types.
+ * Indicates the device type.
  */
 typedef enum {
   GDK_DEVICE_TYPE_MASTER,
