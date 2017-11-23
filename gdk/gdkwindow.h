@@ -715,14 +715,6 @@ GdkEventMask  gdk_window_get_device_events (GdkWindow    *window,
                                             GdkDevice    *device);
 
 GDK_AVAILABLE_IN_ALL
-void          gdk_window_set_source_events (GdkWindow      *window,
-                                            GdkInputSource  source,
-                                            GdkEventMask    event_mask);
-GDK_AVAILABLE_IN_ALL
-GdkEventMask  gdk_window_get_source_events (GdkWindow      *window,
-                                            GdkInputSource  source);
-
-GDK_AVAILABLE_IN_ALL
 void          gdk_window_set_icon_list   (GdkWindow       *window,
 					  GList           *surfaces);
 GDK_AVAILABLE_IN_ALL

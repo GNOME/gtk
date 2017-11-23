@@ -328,8 +328,6 @@ gdk_window_get_device_cursor
 gdk_window_set_device_cursor
 gdk_window_get_device_events
 gdk_window_set_device_events
-gdk_window_get_source_events
-gdk_window_set_source_events
 gdk_window_get_event_compression
 gdk_window_set_event_compression
 

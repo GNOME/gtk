@@ -279,10 +279,6 @@ struct _GdkWindow
   GList *devices_inside;
   GHashTable *device_events;
 
-  GHashTable *source_event_masks;
-  gulong device_added_handler_id;
-  gulong device_changed_handler_id;
-
   GdkFrameClock *frame_clock; /* NULL to use from parent or default */
 
   GdkDrawingContext *drawing_context;
