@@ -56,15 +56,6 @@ ops_set_program (RenderOpBuilder *builder,
       g_array_append_val (builder->render_ops, op);
       builder->program_state[program->index].clip = builder->current_clip;
     }
-
-  if (graphene_rect_equal (&empty_rect, &builder->program_state[program->index].viewport) ||
-      !graphene_rect_equal (&builder->current_viewport, &builder->program_state[program->index].viewport))
-    {
-      op.op = OP_CHANGE_VIEWPORT;
-      op.viewport = builder->current_viewport;
-      g_array_append_val (builder->render_ops, op);
-      builder->program_state[program->index].viewport = builder->current_viewport;
-    }
 }
 
 GskRoundedRect
