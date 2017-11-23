@@ -10304,61 +10304,40 @@ _gtk_widget_get_device_window (GtkWidget *widget,
     return NULL;
 }
 
-static void
-list_devices (GtkWidget        *widget,
-              GdkDeviceManager *device_manager,
-              GdkDeviceType     device_type,
-              GList           **result)
-{
-  GList *devices;
-  GList *l;
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  devices = gdk_device_manager_list_devices (device_manager, device_type);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
-  for (l = devices; l; l = l->next)
-    {
-      GdkDevice *device = l->data;
-      if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
-        {
-          GdkWindow *window = gdk_device_get_last_event_window (device);
-          if (window && is_my_window (widget, window))
-            *result = g_list_prepend (*result, device);
-        }
-    }
-  g_list_free (devices);
-}
-
 /*
  * _gtk_widget_list_devices:
  * @widget: a #GtkWidget
  *
- * Returns the list of #GdkDevices that is currently on top
- * of any window belonging to @widget.
- * Free the list with g_list_free(), the elements are owned
- * by GTK+ and must not be freed.
+ * Returns the list of pointer #GdkDevices that are currently
+ * on top of any window belonging to @widget. Free the list
+ * with g_list_free(), the elements are owned by GTK+ and must
+ * not be freed.
  */
 GList *
 _gtk_widget_list_devices (GtkWidget *widget)
 {
-  GdkDisplay *display;
-  GdkDeviceManager *device_manager;
+  GdkSeat *seat;
   GList *result = NULL;
+  GList *devices;
+  GList *l;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
   if (!_gtk_widget_get_mapped (widget))
     return NULL;
 
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  display = gtk_widget_get_display (widget);
-  device_manager = gdk_display_get_device_manager (display);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
+  seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
+  result = g_list_prepend (result, gdk_seat_get_pointer (seat));
 
-  list_devices (widget, device_manager, GDK_DEVICE_TYPE_MASTER, &result);
-  /* Rare, but we can get events for grabbed slave devices */
-  list_devices (widget, device_manager, GDK_DEVICE_TYPE_SLAVE, &result);
+  devices = gdk_seat_get_slaves (seat, GDK_SEAT_CAPABILITY_ALL_POINTING);
+  for (l = devices; l; l = l->next)
+    {
+      GdkDevice *device = l->data;
+      GdkWindow *window = gdk_device_get_last_event_window (device);
+      if (window && is_my_window (widget, window))
+        result = g_list_prepend (result, device);
+    }
+  g_list_free (devices);
 
   return result;
 }
