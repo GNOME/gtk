@@ -115,7 +115,8 @@ gtk_notebook_page_accessible_get_parent (AtkObject *accessible)
 static gint
 gtk_notebook_page_accessible_get_n_children (AtkObject *accessible)
 {
-  return 1;
+  /* A tab label widget can either be a GtkLabel or any container widget */
+  return 2;
 }
 
 static AtkObject *
@@ -123,19 +124,32 @@ gtk_notebook_page_accessible_ref_child (AtkObject *accessible,
                                         gint       i)
 {
   AtkObject *child_obj;
-  GtkNotebookPageAccessible *page = NULL;
+  GtkNotebookPageAccessible *page = GTK_NOTEBOOK_PAGE_ACCESSIBLE (accessible);
+  GtkWidget *label = NULL;
+  GtkNotebook *notebook = NULL;
 
-  if (i != 0)
+  notebook = GTK_NOTEBOOK (gtk_accessible_get_widget (page->priv->notebook));
+  if (notebook == NULL)
     return NULL;
 
-  page = GTK_NOTEBOOK_PAGE_ACCESSIBLE (accessible);
-  if (!page->priv->child)
-    return NULL;
+  if (i == 0)
+    {
+      /* First will be always the label or the component that contains the label */
+      label = gtk_notebook_get_tab_label (notebook, page->priv->child);
+      child_obj = gtk_widget_get_accessible (label);
+      return g_object_ref (child_obj);
+    }
+  else if (i == 1)
+    {
+      page = GTK_NOTEBOOK_PAGE_ACCESSIBLE (accessible);
+      if (page->priv->child == NULL)
+        return NULL;
 
-  child_obj = gtk_widget_get_accessible (page->priv->child);
-  g_object_ref (child_obj);
+      child_obj = gtk_widget_get_accessible (page->priv->child);
+      return g_object_ref (child_obj);
+    }
 
-  return child_obj;
+  return NULL;
 }
 
 static AtkStateSet *
