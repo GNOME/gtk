@@ -40,6 +40,10 @@
 #include <gtk/gtk.h>
 #define GTK_COMPILATION
 
+#ifdef GDK_WINDOWING_X11
+#include <gdk/x11/gdkx.h>
+#endif
+
 /**
  * SECTION:gtktesting
  * @Short_description: Utilities for testing GTK+ applications
@@ -94,7 +98,9 @@ gtk_test_init (int    *argcp,
    * send events that GTK+ understands if XI2 is
    * disabled, bummer.
    */
+#ifdef GDK_WINDOWING_X11
   gdk_disable_multidevice ();
+#endif
 
   gtk_init ();
 }

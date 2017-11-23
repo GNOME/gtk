@@ -41,9 +41,6 @@ GDK_DEPRECATED_IN_3_20
 GList *      gdk_device_manager_list_devices       (GdkDeviceManager *device_manager,
                                                     GdkDeviceType     type);
 
-GDK_AVAILABLE_IN_ALL
-void         gdk_disable_multidevice               (void);
-
 
 G_END_DECLS
 

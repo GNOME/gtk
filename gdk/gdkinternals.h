@@ -294,7 +294,6 @@ struct _GdkWindow
 #define GDK_WINDOW_DESTROYED(d) (((GdkWindow *)(d))->destroyed)
 
 extern gint       _gdk_screen_number;
-extern gboolean   _gdk_disable_multidevice;
 
 GdkEvent* _gdk_event_unqueue (GdkDisplay *display);
 
