@@ -59,6 +59,8 @@ void           gdk_x11_selection_input_stream_new_async     (GdkDisplay         
                                                              GAsyncReadyCallback         callback,
                                                              gpointer                    user_data);
 GInputStream * gdk_x11_selection_input_stream_new_finish    (GAsyncResult               *result,
+                                                             const char                **type,
+                                                             int                        *format,
                                                              GError                    **error);
 
 

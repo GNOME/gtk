@@ -22,6 +22,7 @@ gdk_x11_sources = files([
   'gdkscreen-x11.c',
   'gdkselection-x11.c',
   'gdkselectioninputstream-x11.c',
+  'gdktextlistconverter-x11.c',
   'gdkvisual-x11.c',
   'gdkvulkancontext-x11.c',
   'gdkwindow-x11.c',

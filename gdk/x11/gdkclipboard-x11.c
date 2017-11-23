@@ -19,8 +19,11 @@
 
 #include "gdkclipboardprivate.h"
 #include "gdkclipboard-x11.h"
-#include "gdkselectioninputstream-x11.h"
+
+#include "gdkintl.h"
 #include "gdkprivate-x11.h"
+#include "gdkselectioninputstream-x11.h"
+#include "gdktextlistconverter-x11.h"
 
 #include <string.h>
 #include <X11/Xatom.h>
@@ -57,6 +60,121 @@ G_DEFINE_TYPE (GdkX11Clipboard, gdk_x11_clipboard, GDK_TYPE_CLIPBOARD)
        ? XMaxRequestSize (GDK_DISPLAY_XDISPLAY (display)) - 100         \
        : XExtendedMaxRequestSize (GDK_DISPLAY_XDISPLAY (display)) - 100)
 
+static GInputStream * 
+text_list_convert (GdkX11Clipboard *cb,
+                   GInputStream    *stream,
+                   const char      *encoding,
+                   int              format)
+{
+  GInputStream *converter_stream;
+  GConverter *converter;
+
+  converter = gdk_x11_text_list_converter_to_utf8_new (gdk_clipboard_get_display (GDK_CLIPBOARD (cb)),
+                                                       encoding,
+                                                       format);
+  converter_stream = g_converter_input_stream_new (stream, converter);
+
+  g_object_unref (converter);
+  g_object_unref (stream);
+
+  return converter_stream;
+}
+
+static GInputStream * 
+no_convert (GdkX11Clipboard *cb,
+            GInputStream    *stream,
+            const char      *encoding,
+            int              format)
+{
+  return stream;
+}
+
+static const struct {
+  const char *x_target;
+  const char *mime_type;
+  GInputStream * (* convert) (GdkX11Clipboard *, GInputStream *, const char *, int);
+} special_targets[] = {
+  { "UTF8_STRING", "text/plain;charset=utf-8",   no_convert },
+  { "COMPOUND_TEXT", "text/plain;charset=utf-8", text_list_convert },
+  { "TEXT", "text/plain;charset=utf-8",          text_list_convert },
+  { "STRING", "text/plain;charset=utf-8",        text_list_convert }
+};
+
+static void
+print_atoms (GdkX11Clipboard *cb,
+             const char      *prefix,
+             const Atom      *atoms,
+             gsize            n_atoms)
+{
+  GDK_NOTE(CLIPBOARD,
+           GdkDisplay *display = gdk_clipboard_get_display (GDK_CLIPBOARD (cb));
+           gsize i;
+            
+           g_printerr ("%s: %s [ ", cb->selection, prefix);
+           for (i = 0; i < n_atoms; i++)
+             {
+               g_printerr ("%s%s", i > 0 ? ", " : "", gdk_x11_get_xatom_name_for_display (display , atoms[i]));
+             }
+           g_printerr (" ]\n");
+          ); 
+}
+
+static GSList *
+gdk_x11_clipboard_formats_to_targets (GdkContentFormats *formats)
+{
+  GSList *targets;
+  const char * const *mime_types;
+  gsize i, j, n_mime_types;
+
+  targets = NULL;
+  mime_types = gdk_content_formats_get_mime_types (formats, &n_mime_types);
+
+  for (i = 0; i < n_mime_types; i++)
+    {
+      for (j = 0; j < G_N_ELEMENTS (special_targets); j++)
+        {
+          if (g_str_equal (mime_types[i], special_targets[j].mime_type))
+            targets = g_slist_prepend (targets, (gpointer) g_intern_string (special_targets[i].x_target));
+        }
+      targets = g_slist_prepend (targets, (gpointer) mime_types[i]);
+    }
+
+  return g_slist_reverse (targets);
+}
+
+static GdkContentFormats *
+gdk_x11_clipboard_formats_from_atoms (GdkDisplay *display,
+                                      const Atom *atoms,
+                                      gsize       n_atoms)
+{
+  GdkContentFormatsBuilder *builder;
+  gsize i, j;
+
+  builder = gdk_content_formats_builder_new ();
+  for (i = 0; i < n_atoms; i++)
+    {
+      const char *name;
+
+      name = gdk_x11_get_xatom_name_for_display (display , atoms[i]);
+      if (strchr (name, '/'))
+        {
+          gdk_content_formats_builder_add_mime_type (builder, name);
+          continue;
+        }
+
+      for (j = 0; j < G_N_ELEMENTS (special_targets); j++)
+        {
+          if (g_str_equal (name, special_targets[j].x_target))
+            {
+              gdk_content_formats_builder_add_mime_type (builder, special_targets[j].mime_type);
+              break;
+            }
+        }
+    }
+
+  return gdk_content_formats_builder_free (builder);
+}
+
 static void
 gdk_x11_clipboard_request_targets_finish (GObject      *source_object,
                                           GAsyncResult *res,
@@ -66,11 +184,8 @@ gdk_x11_clipboard_request_targets_finish (GObject      *source_object,
   GdkX11Clipboard *cb = user_data;
   GdkDisplay *display;
   GdkContentFormats *formats;
-  GdkContentFormatsBuilder *builder;
   GBytes *bytes;
   GError *error = NULL;
-  const Atom *atoms;
-  guint i, n_atoms;
 
   bytes = g_input_stream_read_bytes_finish (stream, res, &error);
   if (bytes == NULL)
@@ -88,17 +203,15 @@ gdk_x11_clipboard_request_targets_finish (GObject      *source_object,
       return;
     }
 
-  display = gdk_clipboard_get_display (GDK_CLIPBOARD (cb));
+  print_atoms (cb,
+               "received targets",
+               g_bytes_get_data (bytes, NULL),
+               g_bytes_get_size (bytes) / sizeof (Atom));
 
-  atoms = g_bytes_get_data (bytes, NULL);
-  n_atoms = g_bytes_get_size (bytes) / sizeof (Atom);
-  builder = gdk_content_formats_builder_new ();
-  for (i = 0; i < n_atoms; i++)
-    {
-      gdk_content_formats_builder_add_mime_type (builder, gdk_x11_get_xatom_name_for_display (display , atoms[i]));
-    }
-  gdk_content_formats_builder_add_formats (builder, gdk_clipboard_get_formats (GDK_CLIPBOARD (cb)));
-  formats = gdk_content_formats_builder_free (builder);
+  display = gdk_clipboard_get_display (GDK_CLIPBOARD (cb));
+  formats = gdk_x11_clipboard_formats_from_atoms (display,
+                                                  g_bytes_get_data (bytes, NULL),
+                                                  g_bytes_get_size (bytes) / sizeof (Atom));
   GDK_NOTE(CLIPBOARD, char *s = gdk_content_formats_to_string (formats); g_printerr ("%s: got formats: %s\n", cb->selection, s); g_free (s));
 
   /* union with previously loaded formats */
@@ -122,10 +235,19 @@ gdk_x11_clipboard_request_targets_got_stream (GObject      *source,
   GInputStream *stream;
   GdkDisplay *display;
   GError *error = NULL;
+  const char *type;
+  int format;
 
-  stream = gdk_x11_selection_input_stream_new_finish (result, &error);
+  stream = gdk_x11_selection_input_stream_new_finish (result, &type, &format, &error);
   if (stream == NULL)
     {
+      g_object_unref (cb);
+      return;
+    }
+  else if (!g_str_equal (type, "ATOM") || format != 32)
+    {
+      g_input_stream_close (stream, NULL, NULL);
+      g_object_unref (stream);
       g_object_unref (cb);
       return;
     }
@@ -213,13 +335,61 @@ gdk_x11_clipboard_read_got_stream (GObject      *source,
   GTask *task = data;
   GError *error = NULL;
   GInputStream *stream;
+  const char *type;
+  int format;
   
-  stream = gdk_x11_selection_input_stream_new_finish (res, &error);
-  /* XXX: We could try more types here */
+  stream = gdk_x11_selection_input_stream_new_finish (res, &type, &format, &error);
   if (stream == NULL)
-    g_task_return_error (task, error);
+    {
+      GSList *targets, *next;
+      
+      targets = g_task_get_task_data (task);
+      next = targets->next;
+      if (next)
+        {
+          GdkX11Clipboard *cb = GDK_X11_CLIPBOARD (g_task_get_source_object (task));
+
+          GDK_NOTE(CLIPBOARD, g_printerr ("%s: reading %s failed, trying %s next\n",
+                                          cb->selection, (char *) targets->data, (char *) next->data));
+          targets->next = NULL;
+          g_task_set_task_data (task, next, (GDestroyNotify) g_slist_free);
+          gdk_x11_selection_input_stream_new_async (gdk_clipboard_get_display (GDK_CLIPBOARD (cb)),
+                                                    cb->selection,
+                                                    next->data,
+                                                    cb->timestamp,
+                                                    g_task_get_priority (task),
+                                                    g_task_get_cancellable (task),
+                                                    gdk_x11_clipboard_read_got_stream,
+                                                    task);
+          g_error_free (error);
+          return;
+        }
+
+      g_task_return_error (task, error);
+    }
   else
-    g_task_return_pointer (task, stream, g_object_unref);
+    {
+      GdkX11Clipboard *cb = GDK_X11_CLIPBOARD (g_task_get_source_object (task));
+      const char *mime_type = ((GSList *) g_task_get_task_data (task))->data;
+      gsize i;
+
+      for (i = 0; i < G_N_ELEMENTS (special_targets); i++)
+        {
+          if (g_str_equal (mime_type, special_targets[i].x_target))
+            {
+              GDK_NOTE(CLIPBOARD, g_printerr ("%s: reading with converter from %s to %s\n",
+                                              cb->selection, mime_type, special_targets[i].mime_type));
+              mime_type = g_intern_string (special_targets[i].mime_type);
+              g_task_set_task_data (task, g_slist_prepend (NULL, (gpointer) mime_type), (GDestroyNotify) g_slist_free);
+              stream = special_targets[i].convert (cb, stream, type, format);
+              break;
+            }
+        }
+
+      GDK_NOTE(CLIPBOARD, g_printerr ("%s: reading clipboard as %s now\n",
+                                      cb->selection, mime_type));
+      g_task_return_pointer (task, stream, g_object_unref);
+    }
 
   g_object_unref (task);
 }
@@ -233,20 +403,27 @@ gdk_x11_clipboard_read_async (GdkClipboard        *clipboard,
                               gpointer             user_data)
 {
   GdkX11Clipboard *cb = GDK_X11_CLIPBOARD (clipboard);
-  const char * const *mime_types;
+  GSList *targets;
   GTask *task;
 
   task = g_task_new (clipboard, cancellable, callback, user_data);
   g_task_set_priority (task, io_priority);
   g_task_set_source_tag (task, gdk_x11_clipboard_read_async);
-  g_task_set_task_data (task, gdk_content_formats_ref (formats), (GDestroyNotify) gdk_content_formats_unref);
 
-  /* XXX: Sort differently? */
-  mime_types = gdk_content_formats_get_mime_types (formats, NULL);
+  targets = gdk_x11_clipboard_formats_to_targets (formats);
+  g_task_set_task_data (task, targets, (GDestroyNotify) g_slist_free);
+  if (targets == NULL)
+    {
+      g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
+                               _("No compatible transfer format found"));
+      return;
+    }
 
+  GDK_NOTE(CLIPBOARD, g_printerr ("%s: new read for %s (%u other options)\n",
+                                  cb->selection, (char *) targets->data, g_slist_length (targets->next)));
   gdk_x11_selection_input_stream_new_async (gdk_clipboard_get_display (GDK_CLIPBOARD (cb)),
                                             cb->selection,
-                                            mime_types[0],
+                                            targets->data,
                                             cb->timestamp,
                                             io_priority,
                                             cancellable,
@@ -273,12 +450,10 @@ gdk_x11_clipboard_read_finish (GdkClipboard  *clipboard,
     {
       if (out_mime_type)
         {
-          GdkContentFormats *formats;
-          const char * const  *mime_types;
+          GSList *targets;
 
-          formats = g_task_get_task_data (task);
-          mime_types = gdk_content_formats_get_mime_types (formats, NULL);
-          *out_mime_type = mime_types[0];
+          targets = g_task_get_task_data (task);
+          *out_mime_type = targets->data;
         }
       g_object_ref (stream);
     }

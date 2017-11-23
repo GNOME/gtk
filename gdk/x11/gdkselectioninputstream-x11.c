@@ -40,6 +40,9 @@ struct GdkX11SelectionInputStreamPrivate {
   Atom xtarget;
   char *property;
   Atom xproperty;
+  const char *type;
+  Atom xtype;
+  int format;
 
   GTask *pending_task;
   guchar *pending_data;
@@ -150,6 +153,8 @@ gdk_x11_selection_input_stream_complete (GdkX11SelectionInputStream *stream)
   if (priv->complete)
     return;
 
+  GDK_NOTE(SELECTION, g_printerr ("%s:%s: transfer complete\n",
+                                  priv->selection, priv->target));
   priv->complete = TRUE;
 
   g_async_queue_push (priv->chunks, g_bytes_new (NULL, 0));
@@ -457,7 +462,8 @@ gdk_x11_selection_input_stream_filter_event (GdkXEvent *xev,
           }
         else
           {
-            bytes = get_selection_property (xdisplay, xwindow, xevent->xselection.property, &type, &format);
+            bytes = get_selection_property (xdisplay, xwindow, xevent->xselection.property, &priv->xtype, &priv->format);
+            priv->type = gdk_x11_get_xatom_name_for_display (priv->display, priv->xtype);
 
             g_task_return_pointer (task, g_object_ref (stream), g_object_unref);
 
@@ -477,6 +483,9 @@ gdk_x11_selection_input_stream_filter_event (GdkXEvent *xev,
                   }
                 else
                   {
+                    GDK_NOTE(SELECTION, g_printerr ("%s:%s: reading %zu bytes\n",
+                                                    priv->selection, priv->target,
+                                                    g_bytes_get_size (bytes)));
                     g_async_queue_push (priv->chunks, bytes);
 
                     gdk_x11_selection_input_stream_complete (stream);
@@ -536,9 +545,11 @@ gdk_x11_selection_input_stream_new_async (GdkDisplay          *display,
 
 GInputStream *
 gdk_x11_selection_input_stream_new_finish (GAsyncResult  *result,
+                                           const char   **type,
+                                           int           *format,
                                            GError       **error)
 {
-  GInputStream *stream;
+  GdkX11SelectionInputStream *stream;
   GTask *task;
 
   g_return_val_if_fail (g_task_is_valid (result, NULL), NULL);
@@ -547,7 +558,16 @@ gdk_x11_selection_input_stream_new_finish (GAsyncResult  *result,
 
   stream = g_task_propagate_pointer (task, error);
   if (stream)
-    g_object_ref (stream);
-  return stream;
+    {
+      GdkX11SelectionInputStreamPrivate *priv = gdk_x11_selection_input_stream_get_instance_private (stream);
+
+      if (type)
+        *type = priv->type;
+      if (format)
+        *format = priv->format;
+      g_object_ref (stream);
+    }
+
+  return G_INPUT_STREAM (stream);
 }
 
