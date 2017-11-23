@@ -1215,16 +1215,14 @@ gtk_popover_snapshot (GtkWidget   *widget,
   GtkBorder border;
   graphene_rect_t bounds;
   cairo_t *cr;
-  int width, height;
 
   /* Draw the child first so we can draw the arrow (partially) over it */
   gtk_widget_snapshot_child (widget, priv->contents_widget, snapshot);
 
-  gtk_widget_get_content_size (widget, &width, &height);
-
   graphene_rect_init (&bounds,
                       0, 0,
-                      width, height);
+                      gtk_widget_get_width (widget),
+                      gtk_widget_get_height (widget));
   cr = gtk_snapshot_append_cairo (snapshot,
                                   &bounds,
                                   "Popover");
@@ -1243,7 +1241,8 @@ gtk_popover_snapshot (GtkWidget   *widget,
   /* Render the arrow background */
   gtk_render_background (context, cr,
                          0, 0,
-                         width, height);
+                         gtk_widget_get_width (widget),
+                         gtk_widget_get_height (widget));
 
   /* Render the border of the arrow tip */
   if (border.bottom > 0)
