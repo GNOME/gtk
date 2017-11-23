@@ -37,7 +37,8 @@ typedef enum {
   BROADWAY_EVENT_CONFIGURE_NOTIFY = 'w',
   BROADWAY_EVENT_DELETE_NOTIFY = 'W',
   BROADWAY_EVENT_SCREEN_SIZE_CHANGED = 'd',
-  BROADWAY_EVENT_FOCUS = 'f'
+  BROADWAY_EVENT_FOCUS = 'f',
+  BROADWAY_EVENT_ROUNDTRIP_NOTIFY = 'F',
 } BroadwayEventType;
 
 typedef enum {
@@ -60,6 +61,7 @@ typedef enum {
   BROADWAY_OP_UPLOAD_TEXTURE = 't',
   BROADWAY_OP_RELEASE_TEXTURE = 'T',
   BROADWAY_OP_SET_NODES = 'n',
+  BROADWAY_OP_ROUNDTRIP = 'F',
 } BroadwayOpType;
 
 typedef struct {
@@ -130,6 +132,13 @@ typedef struct {
 
 typedef struct {
   BroadwayInputBaseMsg base;
+  gint32 id;
+  guint32 tag;
+  guint32 local;
+} BroadwayInputRoundtripNotify;
+
+typedef struct {
+  BroadwayInputBaseMsg base;
   guint32 width;
   guint32 height;
 } BroadwayInputScreenResizeNotify;
@@ -155,6 +164,7 @@ typedef union {
   BroadwayInputKeyMsg key;
   BroadwayInputGrabReply grab_reply;
   BroadwayInputConfigureNotify configure_notify;
+  BroadwayInputRoundtripNotify roundtrip_notify;
   BroadwayInputDeleteNotify delete_notify;
   BroadwayInputScreenResizeNotify screen_resize_notify;
   BroadwayInputFocusMsg focus;
@@ -177,6 +187,7 @@ typedef enum {
   BROADWAY_REQUEST_UPLOAD_TEXTURE,
   BROADWAY_REQUEST_RELEASE_TEXTURE,
   BROADWAY_REQUEST_SET_NODES,
+  BROADWAY_REQUEST_ROUNDTRIP,
 } BroadwayRequestType;
 
 typedef struct {
@@ -189,6 +200,12 @@ typedef struct {
   BroadwayRequestBase base;
   guint32 id;
 } BroadwayRequestDestroyWindow, BroadwayRequestShowWindow, BroadwayRequestHideWindow, BroadwayRequestFocusWindow;
+
+typedef struct {
+  BroadwayRequestBase base;
+  guint32 id;
+  guint32 tag;
+} BroadwayRequestRoundtrip;
 
 typedef struct {
   BroadwayRequestBase base;
@@ -257,6 +274,7 @@ typedef union {
   BroadwayRequestNewWindow new_window;
   BroadwayRequestFlush flush;
   BroadwayRequestSync sync;
+  BroadwayRequestRoundtrip roundtrip;
   BroadwayRequestQueryMouse query_mouse;
   BroadwayRequestDestroyWindow destroy_window;
   BroadwayRequestShowWindow show_window;

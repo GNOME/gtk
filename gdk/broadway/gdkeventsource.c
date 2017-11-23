@@ -21,6 +21,7 @@
 #include "gdkdevicemanager-broadway.h"
 
 #include "gdkinternals.h"
+#include "gdkframeclockprivate.h"
 
 #include <stdlib.h>
 
@@ -334,6 +335,12 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
 	      _gdk_broadway_moveresize_configure_done (display, window);
 	  }
       }
+    break;
+
+  case BROADWAY_EVENT_ROUNDTRIP_NOTIFY:
+    window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->roundtrip_notify.id));
+    if (window)
+      _gdk_broadway_roundtrip_notify (window, message->roundtrip_notify.tag, message->roundtrip_notify.local);
     break;
 
   case BROADWAY_EVENT_DELETE_NOTIFY:

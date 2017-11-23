@@ -18,6 +18,9 @@ GdkBroadwayServer *_gdk_broadway_server_new                      (const char    
 								  GError            **error);
 void               _gdk_broadway_server_flush                    (GdkBroadwayServer  *server);
 void               _gdk_broadway_server_sync                     (GdkBroadwayServer  *server);
+void               _gdk_broadway_server_roundtrip                (GdkBroadwayServer *server,
+                                                                  gint32            id,
+                                                                  guint32           tag);
 gulong             _gdk_broadway_server_get_next_serial          (GdkBroadwayServer  *server);
 guint32            _gdk_broadway_server_get_last_seen_time       (GdkBroadwayServer  *server);
 gboolean           _gdk_broadway_server_lookahead_event          (GdkBroadwayServer  *server,

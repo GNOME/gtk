@@ -79,8 +79,9 @@ gboolean _gdk_broadway_moveresize_handle_event   (GdkDisplay *display,
 						  BroadwayInputMsg *msg);
 gboolean _gdk_broadway_moveresize_configure_done (GdkDisplay *display,
 						  GdkWindow  *window);
-
-
+void _gdk_broadway_roundtrip_notify (GdkWindow  *window,
+                                     guint32 tag,
+                                     gboolean local_reply);
 void     _gdk_broadway_selection_window_destroyed (GdkWindow *window);
 void     _gdk_broadway_window_grab_check_destroy (GdkWindow *window);
 void     _gdk_broadway_window_grab_check_unmap (GdkWindow *window,

@@ -238,6 +238,16 @@ broadway_output_destroy_surface(BroadwayOutput *output,  int id)
 }
 
 void
+broadway_output_roundtrip (BroadwayOutput *output,
+                           int             id,
+                           guint32         tag)
+{
+  write_header (output, BROADWAY_OP_ROUNDTRIP);
+  append_uint16 (output, id);
+  append_uint32 (output, tag);
+}
+
+void
 broadway_output_set_show_keyboard (BroadwayOutput *output,
                                    gboolean show)
 {

@@ -325,6 +325,11 @@ client_handle_request (BroadwayClient *client,
       send_reply (client, request, (BroadwayReply *)&reply_sync, sizeof (reply_sync),
                   BROADWAY_REPLY_SYNC);
       break;
+    case BROADWAY_REQUEST_ROUNDTRIP:
+      broadway_server_roundtrip (server,
+                                 request->roundtrip.id,
+                                 request->roundtrip.tag);
+      break;
     case BROADWAY_REQUEST_QUERY_MOUSE:
       broadway_server_query_mouse (server,
                                    &reply_query_mouse.toplevel,
@@ -728,6 +733,8 @@ get_event_size (int type)
       return sizeof (BroadwayInputGrabReply);
     case BROADWAY_EVENT_CONFIGURE_NOTIFY:
       return  sizeof (BroadwayInputConfigureNotify);
+    case BROADWAY_EVENT_ROUNDTRIP_NOTIFY:
+      return  sizeof (BroadwayInputRoundtripNotify);
     case BROADWAY_EVENT_DELETE_NOTIFY:
       return sizeof (BroadwayInputDeleteNotify);
     case BROADWAY_EVENT_SCREEN_SIZE_CHANGED:

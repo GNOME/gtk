@@ -37,6 +37,7 @@
 #include "gdkdeviceprivate.h"
 #include "gdkeventsource.h"
 #include <gdk/gdktextureprivate.h>
+#include <gdk/gdkframeclockprivate.h>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -94,17 +95,6 @@ find_broadway_display (void)
   g_slist_free (list);
 
   return display;
-}
-
-static void
-update_dirty_windows_and_sync (void)
-{
-  GdkBroadwayDisplay *display;
-
-  display = GDK_BROADWAY_DISPLAY (find_broadway_display ());
-  g_assert (display != NULL);
-
-  gdk_display_flush (GDK_DISPLAY (display));
 }
 
 static guint flush_id = 0;
@@ -165,11 +155,43 @@ gdk_window_impl_broadway_finalize (GObject *object)
   G_OBJECT_CLASS (gdk_window_impl_broadway_parent_class)->finalize (object);
 }
 
+static gboolean
+thaw_clock_cb (GdkFrameClock *clock)
+{
+  _gdk_frame_clock_thaw (clock);
+  g_object_unref (clock);
+  return G_SOURCE_REMOVE;
+}
+
+void
+_gdk_broadway_roundtrip_notify (GdkWindow  *window,
+                                guint32 tag,
+                                gboolean local_reply)
+{
+  GdkFrameClock *clock = gdk_window_get_frame_clock (window);
+
+  /* If there is no remove web client, rate limit update to once a second */
+  if (local_reply)
+    g_timeout_add_seconds (1, (GSourceFunc)thaw_clock_cb, g_object_ref (clock));
+  else
+    _gdk_frame_clock_thaw (clock);
+}
+
 static void
 on_frame_clock_after_paint (GdkFrameClock *clock,
                             GdkWindow     *window)
 {
-  update_dirty_windows_and_sync ();
+  GdkDisplay *display = gdk_window_get_display (window);
+  GdkWindowImplBroadway *impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
+  GdkBroadwayDisplay *broadway_display;
+
+  _gdk_frame_clock_freeze (gdk_window_get_frame_clock (window));
+
+  broadway_display = GDK_BROADWAY_DISPLAY (display);
+
+  _gdk_broadway_server_roundtrip (broadway_display->server, impl->id, _gdk_display_get_next_serial (display));
+
+  gdk_display_flush (display);
 }
 
 static void

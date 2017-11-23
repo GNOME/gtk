@@ -48,7 +48,6 @@ struct _GdkBroadwayServer {
 
   guint process_input_idle;
   GList *incomming;
-  
 };
 
 struct _GdkBroadwayServerClass
@@ -422,7 +421,7 @@ _gdk_broadway_server_sync (GdkBroadwayServer *server)
   BroadwayReply *reply;
 
   serial = gdk_broadway_server_send_message (server, msg,
-					     BROADWAY_REQUEST_SYNC);
+                                             BROADWAY_REQUEST_SYNC);
   reply = gdk_broadway_server_wait_for_reply (server, serial);
 
   g_assert (reply->base.type == BROADWAY_REPLY_SYNC);
@@ -430,6 +429,19 @@ _gdk_broadway_server_sync (GdkBroadwayServer *server)
   g_free (reply);
 
   return;
+}
+
+void
+_gdk_broadway_server_roundtrip (GdkBroadwayServer *server,
+                                gint32            id,
+                                guint32           tag)
+{
+  BroadwayRequestRoundtrip msg;
+
+  msg.id = id;
+  msg.tag = tag;
+  gdk_broadway_server_send_message (server, msg,
+                                    BROADWAY_REQUEST_ROUNDTRIP);
 }
 
 void

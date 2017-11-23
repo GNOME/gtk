@@ -42,6 +42,9 @@ void            broadway_output_lower_surface   (BroadwayOutput *output,
                                                  int             id);
 void            broadway_output_destroy_surface (BroadwayOutput *output,
 						 int             id);
+void            broadway_output_roundtrip       (BroadwayOutput *output,
+                                                 int             id,
+                                                 guint32         tag);
 void            broadway_output_move_resize_surface (BroadwayOutput *output,
 						     int             id,
 						     gboolean        has_pos,

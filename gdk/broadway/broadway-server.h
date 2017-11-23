@@ -29,6 +29,9 @@ BroadwayServer     *broadway_server_on_unix_socket_new       (char             *
 gboolean            broadway_server_has_client               (BroadwayServer   *server);
 void                broadway_server_flush                    (BroadwayServer   *server);
 void                broadway_server_sync                     (BroadwayServer   *server);
+void                broadway_server_roundtrip                (BroadwayServer   *server,
+                                                              gint              id,
+                                                              guint32           tag);
 void                broadway_server_get_screen_size          (BroadwayServer   *server,
 							      guint32          *width,
 							      guint32          *height);

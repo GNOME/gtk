@@ -245,6 +245,11 @@ function cmdDeleteSurface(id)
     delete surfaces[id];
 }
 
+function cmdRoundtrip(id, tag)
+{
+    sendInput("F", [id, tag]);
+}
+
 function cmdMoveResizeSurface(id, has_pos, x, y, has_size, w, h)
 {
     var surface = surfaces[id];
@@ -735,6 +740,12 @@ function handleCommands(cmd)
         case 'd': // Delete surface
             id = cmd.get_16();
             cmdDeleteSurface(id);
+            break;
+
+        case 'F': // RoundTrip
+            id = cmd.get_16();
+            var tag = cmd.get_32();
+            cmdRoundtrip(id, tag);
             break;
 
         case 'm': // Move a surface

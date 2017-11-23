@@ -35,6 +35,12 @@
 #include <string.h>
 #endif
 
+
+typedef struct {
+  int id;
+  guint32 tag;
+} BroadwayOutstandingRoundtrip;
+
 typedef struct BroadwayInput BroadwayInput;
 typedef struct BroadwayWindow BroadwayWindow;
 struct _BroadwayServer {
@@ -81,6 +87,8 @@ struct _BroadwayServer {
   int future_root_y;
   guint32 future_state;
   int future_mouse_in_toplevel;
+
+  GList *outstanding_roundtrips;
 };
 
 struct _BroadwayServerClass
@@ -122,6 +130,7 @@ struct BroadwayWindow {
 };
 
 static void broadway_server_resync_windows (BroadwayServer *server);
+static void send_outstanding_roundtrips (BroadwayServer *server);
 
 static GType broadway_server_get_type (void);
 
@@ -288,6 +297,8 @@ update_event_state (BroadwayServer *server,
 	window->y = message->configure_notify.y;
       }
     break;
+  case BROADWAY_EVENT_ROUNDTRIP_NOTIFY:
+    break;
   case BROADWAY_EVENT_DELETE_NOTIFY:
     break;
   case BROADWAY_EVENT_SCREEN_SIZE_CHANGED:
@@ -430,12 +441,19 @@ update_future_pointer_info (BroadwayServer *server, BroadwayInputPointerMsg *dat
 }
 
 static void
+queue_input_message (BroadwayServer *server, BroadwayInputMsg *msg)
+{
+  server->input_messages = g_list_append (server->input_messages, g_memdup (msg, sizeof (BroadwayInputMsg)));
+}
+
+static void
 parse_input_message (BroadwayInput *input, const unsigned char *message)
 {
   BroadwayServer *server = input->server;
   BroadwayInputMsg msg;
   guint32 *p;
   gint64 time_;
+  GList *l;
 
   memset (&msg, 0, sizeof (msg));
 
@@ -512,6 +530,26 @@ parse_input_message (BroadwayInput *input, const unsigned char *message)
     msg.configure_notify.height = ntohl (*p++);
     break;
 
+  case BROADWAY_EVENT_ROUNDTRIP_NOTIFY:
+    msg.roundtrip_notify.id = ntohl (*p++);
+    msg.roundtrip_notify.tag = ntohl (*p++);
+    msg.roundtrip_notify.local = FALSE;
+
+    /* Remove matched outstanding roundtrips */
+    for (l = server->outstanding_roundtrips; l != NULL; l = l->next)
+      {
+        BroadwayOutstandingRoundtrip *rt = l->data;
+
+        if (rt->id == msg.roundtrip_notify.id &&
+            rt->tag == msg.roundtrip_notify.tag)
+          {
+            server->outstanding_roundtrips = g_list_delete_link (server->outstanding_roundtrips, l);
+            g_free (rt);
+            break;
+          }
+      }
+    break;
+
   case BROADWAY_EVENT_DELETE_NOTIFY:
     msg.delete_notify.id = ntohl (*p++);
     break;
@@ -526,8 +564,7 @@ parse_input_message (BroadwayInput *input, const unsigned char *message)
     break;
   }
 
-  server->input_messages = g_list_append (server->input_messages, g_memdup (&msg, sizeof (msg)));
-
+  queue_input_message (server, &msg);
 }
 
 static inline void
@@ -697,7 +734,11 @@ broadway_server_read_all_input_nonblocking (BroadwayInput *input)
 	}
 
       if (input->server->input == input)
-	input->server->input = NULL;
+        {
+          send_outstanding_roundtrips (input->server);
+
+          input->server->input = NULL;
+        }
       broadway_input_free (input);
       if (res < 0)
 	{
@@ -758,6 +799,23 @@ broadway_server_get_screen_size (BroadwayServer   *server,
   *height = server->root->height;
 }
 
+static void
+broadway_server_fake_roundtrip_reply (BroadwayServer *server,
+                                      gint            id,
+                                      guint32         tag)
+{
+  BroadwayInputMsg msg;
+
+  msg.base.type = BROADWAY_EVENT_ROUNDTRIP_NOTIFY;
+  msg.base.serial = 0;
+  msg.base.time = server->last_seen_time;
+  msg.roundtrip_notify.id = id;
+  msg.roundtrip_notify.tag = tag;
+  msg.roundtrip_notify.local = 1;
+
+  queue_input_message (server, &msg);
+  queue_process_input_at_idle (server);
+}
 
 void
 broadway_server_flush (BroadwayServer *server)
@@ -768,7 +826,26 @@ broadway_server_flush (BroadwayServer *server)
       server->saved_serial = broadway_output_get_next_serial (server->output);
       broadway_output_free (server->output);
       server->output = NULL;
+      send_outstanding_roundtrips (server);
     }
+}
+
+void
+broadway_server_roundtrip (BroadwayServer *server,
+                           gint            id,
+                           guint32         tag)
+{
+  if (server->output)
+    {
+      BroadwayOutstandingRoundtrip *rt = g_new0 (BroadwayOutstandingRoundtrip, 1);
+      rt->id = id;
+      rt->tag = tag;
+      server->outstanding_roundtrips = g_list_prepend (server->outstanding_roundtrips, rt);
+
+      broadway_output_roundtrip (server->output, id, tag);
+    }
+  else
+    broadway_server_fake_roundtrip_reply (server, id, tag);
 }
 
 #if 0
@@ -1001,6 +1078,21 @@ start_input (HttpRequest *request)
 }
 
 static void
+send_outstanding_roundtrips (BroadwayServer *server)
+{
+  GList *l;
+
+  for (l = server->outstanding_roundtrips; l != NULL; l = l->next)
+    {
+      BroadwayOutstandingRoundtrip *rt = l->data;
+      broadway_server_fake_roundtrip_reply (server, rt->id, rt->tag);
+    }
+
+  g_list_free_full (server->outstanding_roundtrips, g_free);
+  server->outstanding_roundtrips = NULL;
+}
+
+static void
 start (BroadwayInput *input)
 {
   BroadwayServer *server;
@@ -1011,12 +1103,14 @@ start (BroadwayInput *input)
 
   if (server->output)
     {
+      send_outstanding_roundtrips (server);
       broadway_output_disconnected (server->output);
       broadway_output_flush (server->output);
     }
 
   if (server->input != NULL)
     {
+      send_outstanding_roundtrips (server);
       broadway_input_free (server->input);
       server->input = NULL;
     }
