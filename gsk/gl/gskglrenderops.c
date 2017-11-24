@@ -228,7 +228,7 @@ ops_draw (RenderOpBuilder     *builder,
       RenderOp new_draw;
       new_draw.op = OP_DRAW;
       new_draw.draw.vao_offset = last_op->draw.vao_offset;
-      new_draw.draw.draw_size = last_op->draw.draw_size + GL_N_VERTICES;
+      new_draw.draw.vao_size = last_op->draw.vao_size + GL_N_VERTICES;
 
       last_op->op = OP_CHANGE_VAO;
       memcpy (&last_op->vertex_data, vertex_data, sizeof(GskQuadVertex) * GL_N_VERTICES);
@@ -247,7 +247,7 @@ ops_draw (RenderOpBuilder     *builder,
 
       op.op = OP_DRAW;
       op.draw.vao_offset = offset;
-      op.draw.draw_size = GL_N_VERTICES;
+      op.draw.vao_size = GL_N_VERTICES;
       g_array_append_val (builder->render_ops, op);
     }
 

@@ -97,8 +97,9 @@ typedef struct
     } linear_gradient;
     struct {
       gsize vao_offset;
-      gsize draw_size;
+      gsize vao_size;
     } draw;
+
   };
 } RenderOp;
 

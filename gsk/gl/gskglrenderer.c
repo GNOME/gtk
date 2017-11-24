@@ -1184,8 +1184,8 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
 
         case OP_DRAW:
           OP_PRINT (" -> draw %ld, size %ld and program %s\n",
-                    op->draw.vao_offset, op->draw.draw_size, program->name);
-          glDrawArrays (GL_TRIANGLES, op->draw.vao_offset, op->draw.draw_size);//GL_N_VERTICES);
+                    op->draw.vao_offset, op->draw.vao_size, program->name);
+          glDrawArrays (GL_TRIANGLES, op->draw.vao_offset, op->draw.vao_size);//GL_N_VERTICES);
           break;
 
         default:
