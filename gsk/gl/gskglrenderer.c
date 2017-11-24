@@ -646,12 +646,8 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
 
     case GSK_COLOR_NODE:
       {
-        RenderOp op;
-
         ops_set_program (builder, &self->color_program);
-        op.op = OP_CHANGE_COLOR;
-        op.color = *gsk_color_node_peek_color (node);
-        ops_add (builder, &op);
+        ops_set_color (builder, gsk_color_node_peek_color (node));
         ops_draw (builder, vertex_data);
       }
     break;
@@ -851,13 +847,8 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
           }
         else
           {
-            RenderOp op;
-
             ops_set_program (builder, &self->coloring_program);
-
-            op.op = OP_CHANGE_COLOR;
-            op.color = *gsk_text_node_peek_color (node);
-            ops_add (builder, &op);
+            ops_set_color (builder, gsk_text_node_peek_color (node));
           }
 
         /* We use one quad per character, unlike the other nodes which

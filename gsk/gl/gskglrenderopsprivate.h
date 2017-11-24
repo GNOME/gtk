@@ -116,6 +116,10 @@ typedef struct
     graphene_matrix_t projection;
     int source_texture;
     graphene_rect_t viewport;
+    /* Per-program state */
+    union {
+      GdkRGBA color;
+    };
   } program_state[GL_N_PROGRAMS];
 
   /* Current global state */
@@ -160,6 +164,8 @@ int               ops_set_render_target (RenderOpBuilder         *builder,
 
 float             ops_set_opacity        (RenderOpBuilder        *builder,
                                           float                   opacity);
+void              ops_set_color          (RenderOpBuilder        *builder,
+                                          const GdkRGBA          *color);
 
 void              ops_draw               (RenderOpBuilder        *builder,
                                           const GskQuadVertex     vertex_data[GL_N_VERTICES]);

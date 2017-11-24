@@ -211,6 +211,24 @@ ops_set_opacity (RenderOpBuilder *builder,
 }
 
 void
+ops_set_color (RenderOpBuilder *builder,
+               const GdkRGBA   *color)
+{
+  RenderOp op;
+
+  g_assert (builder->current_program->color_location != 0);
+
+  if (gdk_rgba_equal (color, &builder->program_state[builder->current_program->index].color))
+    return;
+
+  builder->program_state[builder->current_program->index].color = *color;
+
+  op.op = OP_CHANGE_COLOR;
+  op.color = *color;
+  g_array_append_val (builder->render_ops, op);
+}
+
+void
 ops_draw (RenderOpBuilder     *builder,
           const GskQuadVertex  vertex_data[GL_N_VERTICES])
 {
