@@ -383,15 +383,6 @@ gdk_display_dispose (GObject *object)
   display->queued_events = NULL;
   display->queued_tail = NULL;
 
-  if (display->device_manager)
-    {
-      /* this is to make it drop devices which may require using the X
-       * display and therefore can't be cleaned up in finalize.
-       * It will also disconnect device_removed_cb
-       */
-      g_object_run_dispose (G_OBJECT (display->device_manager));
-    }
-
   G_OBJECT_CLASS (gdk_display_parent_class)->dispose (object);
 }
 
@@ -408,9 +399,6 @@ gdk_display_finalize (GObject *object)
   g_hash_table_destroy (display->pointers_info);
 
   g_list_free_full (display->seats, g_object_unref);
-
-  if (display->device_manager)
-    g_object_unref (display->device_manager);
 
   G_OBJECT_CLASS (gdk_display_parent_class)->finalize (object);
 }
@@ -1049,14 +1037,6 @@ gdk_display_device_is_grabbed (GdkDisplay *display,
   info = _gdk_display_get_last_device_grab (display, device);
 
   return (info && !info->implicit);
-}
-
-GdkDeviceManager *
-gdk_display_get_device_manager (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-
-  return display->device_manager;
 }
 
 /**

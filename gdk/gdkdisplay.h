@@ -29,7 +29,6 @@
 #include <gdk/gdkversionmacros.h>
 #include <gdk/gdktypes.h>
 #include <gdk/gdkevents.h>
-#include <gdk/gdkdevicemanager.h>
 #include <gdk/gdkseat.h>
 #include <gdk/gdkmonitor.h>
 

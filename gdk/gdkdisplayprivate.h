@@ -82,7 +82,6 @@ struct _GdkDisplay
   guint closed             : 1;  /* Whether this display has been closed */
 
   GHashTable *device_grabs;
-  GdkDeviceManager *device_manager;
 
   GHashTable *pointers_info;  /* GdkPointerWindowInfo for each device */
   guint32 last_event_time;    /* Last reported event time from server */
@@ -305,8 +304,6 @@ void                gdk_display_emit_opened           (GdkDisplay       *display
 
 void                gdk_display_setting_changed       (GdkDisplay       *display,
                                                        const char       *name);
-
-GdkDeviceManager *  gdk_display_get_device_manager    (GdkDisplay *display);
 
 
 G_END_DECLS
