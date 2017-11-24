@@ -29,7 +29,6 @@
 #include "gdkmonitor-broadway.h"
 #include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
-#include "gdkdevicemanager-broadway.h"
 #include <gdk/gdktextureprivate.h>
 
 #include <glib.h>
@@ -110,8 +109,6 @@ _gdk_broadway_display_open (const gchar *display_name)
 
   display = g_object_new (GDK_TYPE_BROADWAY_DISPLAY, NULL);
   broadway_display = GDK_BROADWAY_DISPLAY (display);
-
-  display->device_manager = _gdk_broadway_device_manager_new (display);
 
   gdk_event_init (display);
 
