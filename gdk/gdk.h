@@ -36,6 +36,7 @@
 #include <gdk/gdkcontentformats.h>
 #include <gdk/gdkcontentprovider.h>
 #include <gdk/gdkcontentproviderimpl.h>
+#include <gdk/gdkcontentserializer.h>
 #include <gdk/gdkcursor.h>
 #include <gdk/gdkdevice.h>
 #include <gdk/gdkdevicepad.h>

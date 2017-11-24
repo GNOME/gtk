@@ -24,6 +24,7 @@
 #include "gdkcontentformats.h"
 #include "gdkcontentproviderimpl.h"
 #include "gdkcontentproviderprivate.h"
+#include "gdkcontentserializer.h"
 #include "gdkdisplay.h"
 #include "gdkintl.h"
 #include "gdkpipeiostreamprivate.h"
@@ -164,14 +165,10 @@ gdk_clipboard_read_local_async (GdkClipboard        *clipboard,
     }
 
   content_formats = gdk_content_provider_ref_formats (priv->content);
+  content_formats = gdk_content_formats_union_serialize_mime_types (content_formats);
 
-  if (!gdk_content_formats_match (content_formats, formats, NULL, &mime_type)
-      || mime_type == NULL)
-    {
-      g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
-                                     _("No compatible formats to transfer clipboard contents."));
-    }
-  else
+  if (gdk_content_formats_match (content_formats, formats, NULL, &mime_type)
+      && mime_type != NULL)
     {
       GOutputStream *output_stream;
       GIOStream *stream;
@@ -189,6 +186,11 @@ gdk_clipboard_read_local_async (GdkClipboard        *clipboard,
       g_task_return_pointer (task, g_object_ref (g_io_stream_get_input_stream (stream)), g_object_unref);
 
       g_object_unref (stream);
+    }
+  else
+    {
+      g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
+                                     _("No compatible formats to transfer clipboard contents."));
     }
 
   gdk_content_formats_unref (content_formats);
@@ -826,6 +828,20 @@ gdk_clipboard_write_done (GObject      *content,
   g_object_unref (task);
 }
 
+static void
+gdk_clipboard_write_serialize_done (GObject      *content,
+                                    GAsyncResult *result,
+                                    gpointer      task)
+{
+  GError *error = NULL;
+
+  if (gdk_content_serialize_finish (result, &error))
+    g_task_return_boolean (task, TRUE);
+  else
+    g_task_return_error (task, error);
+
+  g_object_unref (task);
+}
 void
 gdk_clipboard_write_async (GdkClipboard        *clipboard,
                            const char          *mime_type,
@@ -836,8 +852,9 @@ gdk_clipboard_write_async (GdkClipboard        *clipboard,
                            gpointer             user_data)
 {
   GdkClipboardPrivate *priv = gdk_clipboard_get_instance_private (clipboard);
-  GdkContentFormats *formats;
+  GdkContentFormats *formats, *mime_formats;
   GTask *task;
+  GType gtype;
 
   g_return_if_fail (GDK_IS_CLIPBOARD (clipboard));
   g_return_if_fail (priv->local);
@@ -873,11 +890,42 @@ gdk_clipboard_write_async (GdkClipboard        *clipboard,
       return;
     }
 
-  g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
-                           _("FIXME: Implement serializing."));
+  mime_formats = gdk_content_formats_new ((const gchar *[2]) { mime_type, NULL }, 1);
+  mime_formats = gdk_content_formats_union_serialize_gtypes (mime_formats);
+  if (gdk_content_formats_match (mime_formats, formats, &gtype, NULL))
+    {
+      GValue value = G_VALUE_INIT;
+      GError *error = NULL;
+
+      g_assert (gtype != G_TYPE_INVALID);
+      
+      g_value_init (&value, gtype);
+      if (gdk_content_provider_get_value (priv->content, &value, &error))
+        {
+          gdk_content_serialize_async (stream,
+                                       mime_type,
+                                       &value,
+                                       io_priority,
+                                       cancellable,
+                                       gdk_clipboard_write_serialize_done,
+                                       g_object_ref (task));
+        }
+      else
+        {
+          g_task_return_error (task, error);
+        }
+      
+      g_value_unset (&value);
+    }
+  else
+    {
+      g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
+                               _("No compatible formats to transfer clipboard contents."));
+    }
+
+  gdk_content_formats_unref (mime_formats);
   gdk_content_formats_unref (formats);
   g_object_unref (task);
-  return;
 }
 
 gboolean
@@ -954,6 +1002,7 @@ gdk_clipboard_content_changed_cb (GdkContentProvider *provider,
   GdkContentFormats *formats;
 
   formats = gdk_content_provider_ref_formats (provider);
+  formats = gdk_content_formats_union_serialize_mime_types (formats);
 
   gdk_clipboard_claim (clipboard, formats, TRUE, provider);
 
@@ -1000,6 +1049,7 @@ gdk_clipboard_set_content (GdkClipboard       *clipboard,
         return;
 
       formats = gdk_content_provider_ref_formats (provider);
+      formats = gdk_content_formats_union_serialize_mime_types (formats);
     }
   else
     {
