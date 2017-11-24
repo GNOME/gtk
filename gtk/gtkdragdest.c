@@ -406,13 +406,11 @@ gtk_drag_dest_get_track_motion (GtkWidget *widget)
  * Returns: (transfer none) (nullable): first target that the source offers
  *     and the dest can accept, or %NULL
  */
-GdkAtom
+const char *
 gtk_drag_dest_find_target (GtkWidget         *widget,
                            GdkDragContext    *context,
                            GdkContentFormats *target_list)
 {
-  GdkAtom result;
-
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
 
@@ -422,11 +420,7 @@ gtk_drag_dest_find_target (GtkWidget         *widget,
   if (target_list == NULL)
     return NULL;
 
-  gdk_content_formats_match (target_list,
-                             gdk_drag_context_get_formats (context),
-                             NULL,
-                             &result);
-
-  return result;
+  return gdk_content_formats_match_mime_type (target_list,
+                                              gdk_drag_context_get_formats (context));
 }
 

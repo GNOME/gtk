@@ -58,9 +58,13 @@ GdkContentFormats *     gdk_content_formats_union               (GdkContentForma
                                                                  const GdkContentFormats        *second) G_GNUC_WARN_UNUSED_RESULT;
 GDK_AVAILABLE_IN_3_94
 gboolean                gdk_content_formats_match               (const GdkContentFormats        *first,
-                                                                 const GdkContentFormats        *second,
-                                                                 GType                          *out_gtype,
-                                                                 const char                    **out_mime_type);
+                                                                 const GdkContentFormats        *second);
+GDK_AVAILABLE_IN_3_94
+GType                   gdk_content_formats_match_gtype         (const GdkContentFormats        *first,
+                                                                 const GdkContentFormats        *second);
+GDK_AVAILABLE_IN_3_94
+const char *            gdk_content_formats_match_mime_type     (const GdkContentFormats        *first,
+                                                                 const GdkContentFormats        *second);
 GDK_AVAILABLE_IN_3_94
 gboolean                gdk_content_formats_contain_gtype       (const GdkContentFormats        *formats,
                                                                  GType                           type);

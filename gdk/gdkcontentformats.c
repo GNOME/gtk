@@ -276,55 +276,78 @@ gdk_content_formats_contain_interned_mime_type (const GdkContentFormats *formats
  * gdk_content_formats_match:
  * @first: the primary #GdkContentFormats to intersect
  * @second: the #GdkContentFormats to intersect with
- * @out_gtype: (out) (allow-none): pointer to take the 
- *     matching #GType or %G_TYPE_INVALID if @out_mime_type was set.
- * @out_mime_type: (out) (allow-none) (transfer none): The matching
- *    mime type or %NULL if @out_gtype is set
  *
- * Finds the first element from @first that is also contained
- * in @second. If no matching format is found, %FALSE is returned
- * and @out_gtype and @out_mime_type are set to %G_TYPE_INVALID and
- * %NULL respectively.
+ * Checks if @first and @second have any matching formats.
  *
  * Returns: %TRUE if a matching format was found.
  */
 gboolean
 gdk_content_formats_match (const GdkContentFormats *first,
-                           const GdkContentFormats *second,
-                           GType                   *out_gtype,
-                           const char             **out_mime_type)
+                           const GdkContentFormats *second)
+{
+  g_return_val_if_fail (first != NULL, FALSE);
+  g_return_val_if_fail (second != NULL, FALSE);
+
+  return gdk_content_formats_match_gtype (first, second) != G_TYPE_INVALID
+      || gdk_content_formats_match_mime_type (first, second) != NULL;
+}
+
+/**
+ * gdk_content_formats_match_gtype:
+ * @first: the primary #GdkContentFormats to intersect
+ * @second: the #GdkContentFormats to intersect with
+ *
+ * Finds the first #GType from @first that is also contained
+ * in @second. If no matching #GType is found, %G_TYPE_INVALID
+ * is returned.
+ *
+ * Returns: The first common #GType or %G_TYPE_INVALID if none.
+ **/
+GType
+gdk_content_formats_match_gtype (const GdkContentFormats *first,
+                                 const GdkContentFormats *second)
 {
   gsize i;
 
   g_return_val_if_fail (first != NULL, FALSE);
   g_return_val_if_fail (second != NULL, FALSE);
 
-  if (out_gtype)
-    *out_gtype = G_TYPE_INVALID;
-  if (out_mime_type)
-    *out_mime_type = NULL;
-
   for (i = 0; i < first->n_gtypes; i++)
     {
       if (gdk_content_formats_contain_gtype (second, first->gtypes[i]))
-        {
-          if (out_gtype)
-            *out_gtype = first->gtypes[i];
-          return TRUE;
-        }
+        return first->gtypes[i];
     }
+
+  return G_TYPE_INVALID;
+}
+
+/**
+ * gdk_content_formats_match_mime_type:
+ * @first: the primary #GdkContentFormats to intersect
+ * @second: the #GdkContentFormats to intersect with
+ *
+ * Finds the first mime type from @first that is also contained
+ * in @second. If no matching mime type is found, %NULL is
+ * returned.
+ *
+ * Returns: The first common mime type or %NULL if none.
+ **/
+const char *
+gdk_content_formats_match_mime_type (const GdkContentFormats *first,
+                                     const GdkContentFormats *second)
+{
+  gsize i;
+
+  g_return_val_if_fail (first != NULL, FALSE);
+  g_return_val_if_fail (second != NULL, FALSE);
 
   for (i = 0; i < first->n_mime_types; i++)
     {
       if (gdk_content_formats_contain_interned_mime_type (second, first->mime_types[i]))
-        {
-          if (out_mime_type)
-            *out_mime_type = first->mime_types[i];
-          return TRUE;
-        }
+        return first->mime_types[i];
     }
 
-  return FALSE;
+  return NULL;
 }
 
 /**
@@ -534,6 +557,7 @@ gdk_content_formats_builder_add_gtype (GdkContentFormatsBuilder *builder,
                                        GType                     type)
 {
   g_return_if_fail (builder != NULL);
+  g_return_if_fail (type != G_TYPE_INVALID);
 
   if (g_slist_find (builder->gtypes, GSIZE_TO_POINTER (type)))
     return;

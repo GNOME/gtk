@@ -76,7 +76,7 @@ GDK_AVAILABLE_IN_ALL
 void gtk_drag_dest_unset (GtkWidget          *widget);
 
 GDK_AVAILABLE_IN_ALL
-GdkAtom                 gtk_drag_dest_find_target       (GtkWidget              *widget,
+const char *            gtk_drag_dest_find_target       (GtkWidget              *widget,
                                                          GdkDragContext         *context,
                                                          GdkContentFormats      *target_list);
 GDK_AVAILABLE_IN_ALL

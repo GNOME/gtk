@@ -377,6 +377,8 @@ gdk_content_formats_get_gtypes
 gdk_content_formats_get_mime_types
 gdk_content_formats_union
 gdk_content_formats_match
+gdk_content_formats_match_gtype
+gdk_content_formats_match_mime_types
 gdk_content_formats_contain_gtype
 gdk_content_formats_contain_mime_type
 

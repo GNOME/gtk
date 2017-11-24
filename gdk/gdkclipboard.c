@@ -166,9 +166,9 @@ gdk_clipboard_read_local_async (GdkClipboard        *clipboard,
 
   content_formats = gdk_content_provider_ref_formats (priv->content);
   content_formats = gdk_content_formats_union_serialize_mime_types (content_formats);
+  mime_type = gdk_content_formats_match_mime_type (content_formats, formats);
 
-  if (gdk_content_formats_match (content_formats, formats, NULL, &mime_type)
-      && mime_type != NULL)
+  if (mime_type != NULL)
     {
       GOutputStream *output_stream;
       GIOStream *stream;
@@ -892,7 +892,8 @@ gdk_clipboard_write_async (GdkClipboard        *clipboard,
 
   mime_formats = gdk_content_formats_new ((const gchar *[2]) { mime_type, NULL }, 1);
   mime_formats = gdk_content_formats_union_serialize_gtypes (mime_formats);
-  if (gdk_content_formats_match (mime_formats, formats, &gtype, NULL))
+  gtype = gdk_content_formats_match_gtype (formats, mime_formats);
+  if (gtype != G_TYPE_INVALID)
     {
       GValue value = G_VALUE_INIT;
       GError *error = NULL;
