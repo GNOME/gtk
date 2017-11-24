@@ -683,9 +683,7 @@ wintab_default_display_notify_cb (GdkDisplayManager *display_manager)
 
   g_assert (display != NULL);
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  device_manager = GDK_DEVICE_MANAGER_WIN32 (gdk_display_get_device_manager (display));
-G_GNUC_END_IGNORE_DEPRECATIONS;
+  device_manager = GDK_DEVICE_MANAGER_WIN32 (_gdk_device_manager);
   g_assert (display_manager != NULL);
 
   default_display_opened = TRUE;
@@ -955,9 +953,7 @@ gdk_input_other_event (GdkDisplay *display,
       return FALSE;
     }
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  device_manager = GDK_DEVICE_MANAGER_WIN32 (gdk_display_get_device_manager (display));
-G_GNUC_END_IGNORE_DEPRECATIONS;
+  device_manager = GDK_DEVICE_MANAGER_WIN32 (_gdk_device_manager);
   window = gdk_device_get_window_at_position (device_manager->core_pointer, &x, &y);
 
   if (window)

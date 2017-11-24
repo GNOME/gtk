@@ -259,6 +259,8 @@ extern LRESULT CALLBACK _gdk_win32_window_procedure (HWND, UINT, WPARAM, LPARAM)
 
 extern GdkDisplay       *_gdk_display;
 
+extern GdkDeviceManager *_gdk_device_manager;
+
 /* Offsets to add to Windows coordinates (which are relative to the
  * primary monitor's origin, and thus might be negative for monitors
  * to the left and/or above the primary monitor) to get GDK

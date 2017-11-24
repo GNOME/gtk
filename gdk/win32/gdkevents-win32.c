@@ -465,7 +465,7 @@ find_window_for_mouse_event (GdkWindow* reported_window,
   GdkDeviceGrabInfo *grab;
 
   display = gdk_display_get_default ();
-  device_manager = GDK_DEVICE_MANAGER_WIN32 (gdk_display_get_device_manager (display));
+  device_manager = GDK_DEVICE_MANAGER_WIN32 (_gdk_device_manager);
 
   grab = _gdk_display_get_last_device_grab (display, device_manager->core_pointer);
   if (grab == NULL)
@@ -1107,7 +1107,7 @@ send_crossing_event (GdkDisplay                 *display,
   POINT pt;
   GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
-  device_manager = GDK_DEVICE_MANAGER_WIN32 (gdk_display_get_device_manager (display));
+  device_manager = GDK_DEVICE_MANAGER_WIN32 (_gdk_device_manager);_gdk_device_manager);
 
   grab = _gdk_display_has_device_grab (display, device_manager->core_pointer, 0);
 
@@ -1751,7 +1751,7 @@ generate_button_event (GdkEventType      type,
   if (_gdk_input_ignore_core)
     return;
 
-  device_manager = GDK_DEVICE_MANAGER_WIN32 (gdk_display_get_device_manager (gdk_display_get_default ()));
+  device_manager = GDK_DEVICE_MANAGER_WIN32 (_gdk_device_manager);
 
   event->button.window = window;
   event->button.time = _gdk_win32_get_next_tick (msg->time);
@@ -2138,7 +2138,6 @@ gdk_event_translate (MSG  *msg,
 
   GdkWindow *new_window;
 
-  GdkDeviceManager *device_manager;
   GdkDeviceManagerWin32 *device_manager_win32;
 
   GdkDeviceGrabInfo *keyboard_grab = NULL;
@@ -2190,8 +2189,7 @@ gdk_event_translate (MSG  *msg,
       return FALSE;
     }
 
-  device_manager = gdk_display_get_device_manager (display);
-  device_manager_win32 = GDK_DEVICE_MANAGER_WIN32 (device_manager);
+  device_manager_win32 = GDK_DEVICE_MANAGER_WIN32 (_gdk_device_manager);
 
   keyboard_grab = _gdk_display_get_last_device_grab (display,
                                                      device_manager_win32->core_keyboard);
