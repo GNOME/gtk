@@ -41,16 +41,20 @@ struct _GdkClipboardClass
   void                  (* changed)                             (GdkClipboard           *clipboard);
 
   /* vfuncs */
-  void                  (* read_async)                          (GdkClipboard          *clipboard,
-                                                                 GdkContentFormats     *formats,
-                                                                 int                    io_priority,
-                                                                 GCancellable          *cancellable,
-                                                                 GAsyncReadyCallback    callback,
-                                                                 gpointer               user_data);
-  GInputStream *        (* read_finish)                         (GdkClipboard          *clipboard,
-                                                                 const char           **out_mime_type,
-                                                                 GAsyncResult          *result,
-                                                                 GError               **error);
+  gboolean              (* claim)                               (GdkClipboard           *clipboard,
+                                                                 GdkContentFormats      *formats,
+                                                                 gboolean                local,
+                                                                 GdkContentProvider     *content);
+  void                  (* read_async)                          (GdkClipboard           *clipboard,
+                                                                 GdkContentFormats      *formats,
+                                                                 int                      io_priority,
+                                                                 GCancellable           *cancellable,
+                                                                 GAsyncReadyCallback     callback,
+                                                                 gpointer                user_data);
+  GInputStream *        (* read_finish)                         (GdkClipboard           *clipboard,
+                                                                 const char            **out_mime_type,
+                                                                 GAsyncResult           *result,
+                                                                 GError                **error);
 };
 
 GdkClipboard *          gdk_clipboard_new                       (GdkDisplay             *display);

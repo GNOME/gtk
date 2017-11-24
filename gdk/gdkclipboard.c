@@ -126,6 +126,67 @@ gdk_clipboard_finalize (GObject *object)
 }
 
 static void
+gdk_clipboard_content_changed_cb (GdkContentProvider *provider,
+                                  GdkClipboard       *clipboard);
+
+static gboolean
+gdk_clipboard_real_claim (GdkClipboard       *clipboard,
+                          GdkContentFormats  *formats,
+                          gboolean            local,
+                          GdkContentProvider *content)
+{
+  GdkClipboardPrivate *priv = gdk_clipboard_get_instance_private (clipboard);
+
+  g_object_freeze_notify (G_OBJECT (clipboard));
+
+  gdk_content_formats_unref (priv->formats);
+  gdk_content_formats_ref (formats);
+  formats = gdk_content_formats_union_deserialize_gtypes (formats);
+  priv->formats = formats;
+  g_object_notify_by_pspec (G_OBJECT (clipboard), properties[PROP_FORMATS]);
+  if (priv->local != local)
+    {
+      priv->local = local;
+      g_object_notify_by_pspec (G_OBJECT (clipboard), properties[PROP_LOCAL]);
+    }
+
+  if (priv->content != content)
+    {
+      GdkContentProvider *old_content = priv->content;
+
+      if (content)
+        priv->content = g_object_ref (content);
+      else
+        priv->content = NULL;
+
+      if (old_content)
+        {
+          g_signal_handlers_disconnect_by_func (old_content,
+                                                gdk_clipboard_content_changed_cb,
+                                                clipboard);
+          gdk_content_provider_detach_clipboard (old_content, clipboard);
+          g_object_unref (old_content);
+        }
+      if (content)
+        {
+          gdk_content_provider_attach_clipboard (content, clipboard);
+          g_signal_connect (content,
+                            "content-changed",
+                            G_CALLBACK (gdk_clipboard_content_changed_cb),
+                            clipboard);
+        }
+
+      g_object_notify_by_pspec (G_OBJECT (clipboard), properties[PROP_CONTENT]);
+    }
+
+  g_object_thaw_notify (G_OBJECT (clipboard));
+
+  g_signal_emit (clipboard, signals[CHANGED], 0);
+
+  return TRUE;
+}
+
+static void
 gdk_clipboard_read_local_write_done (GObject      *clipboard,
                                      GAsyncResult *result,
                                      gpointer      stream)
@@ -221,6 +282,7 @@ gdk_clipboard_class_init (GdkClipboardClass *class)
   object_class->set_property = gdk_clipboard_set_property;
   object_class->finalize = gdk_clipboard_finalize;
 
+  class->claim = gdk_clipboard_real_claim;
   class->read_async = gdk_clipboard_read_local_async;
   class->read_finish = gdk_clipboard_read_local_finish;
 
@@ -940,60 +1002,13 @@ gdk_clipboard_write_finish (GdkClipboard  *clipboard,
   return g_task_propagate_boolean (G_TASK (result), error); 
 }
 
-static void
-gdk_clipboard_content_changed_cb (GdkContentProvider *provider,
-                                  GdkClipboard       *clipboard);
-
-static void
+static gboolean
 gdk_clipboard_claim (GdkClipboard       *clipboard,
                      GdkContentFormats  *formats,
                      gboolean            local,
                      GdkContentProvider *content)
 {
-  GdkClipboardPrivate *priv = gdk_clipboard_get_instance_private (clipboard);
-
-  g_object_freeze_notify (G_OBJECT (clipboard));
-
-  gdk_content_formats_unref (priv->formats);
-  gdk_content_formats_ref (formats);
-  formats = gdk_content_formats_union_deserialize_gtypes (formats);
-  priv->formats = formats;
-  g_object_notify_by_pspec (G_OBJECT (clipboard), properties[PROP_FORMATS]);
-  if (priv->local != local)
-    {
-      priv->local = local;
-      g_object_notify_by_pspec (G_OBJECT (clipboard), properties[PROP_LOCAL]);
-    }
-
-  if (priv->content != content)
-    {
-      GdkContentProvider *old_content = priv->content;
-
-      priv->content = g_object_ref (content);
-
-      if (old_content)
-        {
-          g_signal_handlers_disconnect_by_func (old_content,
-                                                gdk_clipboard_content_changed_cb,
-                                                clipboard);
-          gdk_content_provider_detach_clipboard (old_content, clipboard);
-          g_object_unref (old_content);
-        }
-      if (content)
-        {
-          gdk_content_provider_attach_clipboard (content, clipboard);
-          g_signal_connect (content,
-                            "content-changed",
-                            G_CALLBACK (gdk_clipboard_content_changed_cb),
-                            clipboard);
-        }
-
-      g_object_notify_by_pspec (G_OBJECT (clipboard), properties[PROP_CONTENT]);
-    }
-
-  g_object_thaw_notify (G_OBJECT (clipboard));
-
-  g_signal_emit (clipboard, signals[CHANGED], 0);
+  return GDK_CLIPBOARD_GET_CLASS (clipboard)->claim (clipboard, formats, local, content);
 }
 
 static void
@@ -1030,24 +1045,31 @@ gdk_clipboard_claim_remote (GdkClipboard      *clipboard,
  * #GdkDisplay's resources and advertise these new contents to other
  * applications.
  *
+ * In the rare case of a failure, this function will return %FALSE. The
+ * clipboard will then continue reporting its old contents and ignore
+ * @provider.
+ *
  * If the contents are read by either an external application or the
  * @clipboard's read functions, @clipboard will select the best format to
  * transfer the contents and then request that format from @provider.
+ *
+ * Returns: %TRUE if setting the clipboard succeeded
  **/
-void
+gboolean
 gdk_clipboard_set_content (GdkClipboard       *clipboard,
                            GdkContentProvider *provider)
 {
   GdkClipboardPrivate *priv = gdk_clipboard_get_instance_private (clipboard);
   GdkContentFormats *formats;
+  gboolean result;
 
-  g_return_if_fail (GDK_IS_CLIPBOARD (clipboard));
-  g_return_if_fail (provider == NULL || GDK_IS_CONTENT_PROVIDER (provider));
+  g_return_val_if_fail (GDK_IS_CLIPBOARD (clipboard), FALSE);
+  g_return_val_if_fail (provider == NULL || GDK_IS_CONTENT_PROVIDER (provider), FALSE);
 
   if (provider)
     {
       if (priv->content == provider)
-        return;
+        return TRUE;
 
       formats = gdk_content_provider_ref_formats (provider);
       formats = gdk_content_formats_union_serialize_mime_types (formats);
@@ -1055,14 +1077,16 @@ gdk_clipboard_set_content (GdkClipboard       *clipboard,
   else
     {
       if (priv->content == NULL && priv->local)
-        return;
+        return TRUE;
 
       formats = gdk_content_formats_new (NULL, 0);
     }
 
-  gdk_clipboard_claim (clipboard, formats, TRUE, provider);
+  result = gdk_clipboard_claim (clipboard, formats, TRUE, provider);
 
   gdk_content_formats_unref (formats);
+
+  return result;
 }
 
 /**

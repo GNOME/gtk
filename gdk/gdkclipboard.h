@@ -89,7 +89,7 @@ char *                  gdk_clipboard_read_text_finish  (GdkClipboard          *
                                                          GError               **error);
 
 GDK_AVAILABLE_IN_3_94
-void                    gdk_clipboard_set_content       (GdkClipboard          *clipboard,
+gboolean                gdk_clipboard_set_content       (GdkClipboard          *clipboard,
                                                          GdkContentProvider    *provider);
 GDK_AVAILABLE_IN_3_94
 void                    gdk_clipboard_set_text          (GdkClipboard          *clipboard,
