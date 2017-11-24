@@ -81,7 +81,8 @@ void                    gdk_content_deserialize_async                   (GInputS
                                                                          GAsyncReadyCallback     callback,
                                                                          gpointer                user_data);
 GDK_AVAILABLE_IN_3_94
-const GValue *          gdk_content_deserialize_finish                  (GAsyncResult           *result,
+gboolean                gdk_content_deserialize_finish                  (GAsyncResult           *result,
+                                                                         GValue                 *value,
                                                                          GError                **error);
 
 

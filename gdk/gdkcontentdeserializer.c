@@ -380,25 +380,27 @@ gdk_content_deserialize_async (GInputStream        *stream,
                                 user_data);
 }
 
-const GValue *
+gboolean
 gdk_content_deserialize_finish (GAsyncResult  *result,
+                                GValue        *value,
                                 GError       **error)
 {
   GdkContentDeserializer *deserializer;
 
-  g_return_val_if_fail (GDK_IS_CONTENT_DESERIALIZER (result), NULL);
-  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
-
+  g_return_val_if_fail (GDK_IS_CONTENT_DESERIALIZER (result), FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
   deserializer = GDK_CONTENT_DESERIALIZER (result);
+  g_return_val_if_fail (G_VALUE_HOLDS (value, G_VALUE_TYPE (&deserializer->value)), FALSE);
 
   if (deserializer->error)
     {
       if (error)
         *error = g_error_copy (deserializer->error);
-      return NULL;
+      return FALSE;
     }
 
-  return &deserializer->value;
+  g_value_copy (&deserializer->value, value);
+  return TRUE;
 }
 
 /*** DESERIALIZERS ***/

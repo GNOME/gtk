@@ -347,13 +347,14 @@ gdk_clipboard_read_value_done (GObject      *source,
 {
   GTask *task = data;
   GError *error = NULL;
-  const GValue *value;
+  GValue *value;
 
-  value = gdk_content_deserialize_finish (result, &error);
-  if (value == NULL)
+  value = g_task_get_task_data (task);
+
+  if (!gdk_content_deserialize_finish (result, value, &error))
     g_task_return_error (task, error);
   else
-    g_task_return_pointer (task, (gpointer) value, NULL);
+    g_task_return_pointer (task, value, NULL);
 
   g_object_unref (task);
 }
@@ -377,12 +378,19 @@ gdk_clipboard_read_value_got_stream (GObject      *source,
 
   gdk_content_deserialize_async (stream,
                                  mime_type,
-                                 GPOINTER_TO_SIZE (g_task_get_task_data (task)),
+                                 G_VALUE_TYPE (g_task_get_task_data (task)),
                                  g_task_get_priority (task),
                                  g_task_get_cancellable (task),
                                  gdk_clipboard_read_value_done,
                                  task);
   g_object_unref (stream);
+}
+
+static void
+free_value (gpointer value)
+{
+  g_value_unset (value);
+  g_slice_free (GValue, value);
 }
 
 static void
@@ -396,6 +404,7 @@ gdk_clipboard_read_value_internal (GdkClipboard        *clipboard,
 {
   GdkContentFormatsBuilder *builder;
   GdkContentFormats *formats;
+  GValue *value;
   GTask *task;
 
   builder = gdk_content_formats_builder_new ();
@@ -406,7 +415,9 @@ gdk_clipboard_read_value_internal (GdkClipboard        *clipboard,
   task = g_task_new (clipboard, cancellable, callback, user_data);
   g_task_set_priority (task, io_priority);
   g_task_set_source_tag (task, source_tag);
-  g_task_set_task_data (task, GSIZE_TO_POINTER (type), NULL);
+  value = g_slice_new0 (GValue);
+  g_value_init (value, type);
+  g_task_set_task_data (task, value, free_value);
 
   gdk_clipboard_read_internal (clipboard,
                                formats,
