@@ -219,14 +219,13 @@ _gdk_wayland_display_add_seat (GdkWaylandDisplay *display_wayland,
                                uint32_t id,
                                uint32_t version)
 {
-  GdkDisplay *gdk_display = GDK_DISPLAY (display_wayland);
   struct wl_seat *seat;
 
   display_wayland->seat_version = MIN (version, 5);
   seat = wl_registry_bind (display_wayland->wl_registry,
                            id, &wl_seat_interface,
                            display_wayland->seat_version);
-  _gdk_wayland_device_manager_add_seat (gdk_display->device_manager,
+  _gdk_wayland_device_manager_add_seat (display_wayland->device_manager,
                                         id, seat);
   _gdk_wayland_display_async_roundtrip (display_wayland);
 }
@@ -526,10 +525,9 @@ gdk_registry_handle_global_remove (void               *data,
                                    uint32_t            id)
 {
   GdkWaylandDisplay *display_wayland = data;
-  GdkDisplay *display = GDK_DISPLAY (display_wayland);
 
   GDK_NOTE (MISC, g_message ("remove global %u", id));
-  _gdk_wayland_device_manager_remove_seat (display->device_manager, id);
+  _gdk_wayland_device_manager_remove_seat (display_wayland->device_manager, id);
   gdk_wayland_display_remove_output (display_wayland, id);
 
   g_hash_table_remove (display_wayland->known_globals, GUINT_TO_POINTER (id));
@@ -596,9 +594,8 @@ _gdk_wayland_display_open (const gchar *display_name)
     return NULL;
 
   display = g_object_new (GDK_TYPE_WAYLAND_DISPLAY, NULL);
-  display->device_manager = _gdk_wayland_device_manager_new (display);
-
   display_wayland = GDK_WAYLAND_DISPLAY (display);
+  display_wayland->device_manager = _gdk_wayland_device_manager_new (display);
   display_wayland->wl_display = wl_display;
   display_wayland->event_source = _gdk_wayland_display_event_source_new (display);
 
