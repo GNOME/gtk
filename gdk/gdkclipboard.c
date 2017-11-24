@@ -22,7 +22,10 @@
 
 #include "gdkcontentdeserializer.h"
 #include "gdkcontentformats.h"
+#include "gdkcontentproviderimpl.h"
+#include "gdkcontentproviderprivate.h"
 #include "gdkdisplay.h"
+#include "gdkintl.h"
 
 typedef struct _GdkClipboardPrivate GdkClipboardPrivate;
 
@@ -30,6 +33,7 @@ struct _GdkClipboardPrivate
 {
   GdkDisplay *display;
   GdkContentFormats *formats;
+  GdkContentProvider *content;
 
   guint local : 1;
 };
@@ -39,6 +43,7 @@ enum {
   PROP_DISPLAY,
   PROP_FORMATS,
   PROP_LOCAL,
+  PROP_CONTENT,
   N_PROPERTIES
 };
 
@@ -93,6 +98,10 @@ gdk_clipboard_get_property (GObject    *gobject,
       g_value_set_boxed (value, priv->formats);
       break;
 
+    case PROP_CONTENT:
+      g_value_set_object (value, priv->content);
+      break;
+
     case PROP_LOCAL:
       g_value_set_boolean (value, priv->local);
       break;
@@ -115,32 +124,48 @@ gdk_clipboard_finalize (GObject *object)
 }
 
 static void
-gdk_clipboard_real_read_async (GdkClipboard        *clipboard,
-                               GdkContentFormats   *formats,
-                               int                  io_priority,
-                               GCancellable        *cancellable,
-                               GAsyncReadyCallback  callback,
-                               gpointer             user_data)
+gdk_clipboard_read_local_async (GdkClipboard        *clipboard,
+                                GdkContentFormats   *formats,
+                                int                  io_priority,
+                                GCancellable        *cancellable,
+                                GAsyncReadyCallback  callback,
+                                gpointer             user_data)
 {
+  GdkClipboardPrivate *priv = gdk_clipboard_get_instance_private (clipboard);
   GTask *task;
 
   task = g_task_new (clipboard, cancellable, callback, user_data);
   g_task_set_priority (task, io_priority);
-  g_task_set_source_tag (task, gdk_clipboard_read_async);
+  g_task_set_source_tag (task, gdk_clipboard_read_local_async);
   g_task_set_task_data (task, gdk_content_formats_ref (formats), (GDestroyNotify) gdk_content_formats_unref);
 
-  g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED, "Reading local content not supported yet.");
+  if (priv->content == NULL)
+    {
+      g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_FOUND,
+                                     _("Cannot read from empty clipboard."));
+    }
+  else
+    {
+      g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
+                               _("Reading local content via streams not supported yet."));
+    }
+
   g_object_unref (task);
 }
 
 static GInputStream *
-gdk_clipboard_real_read_finish (GdkClipboard  *clipboard,
-                                const char   **out_mime_type,
-                                GAsyncResult  *result,
-                                GError       **error)
+gdk_clipboard_read_local_finish (GdkClipboard  *clipboard,
+                                 const char   **out_mime_type,
+                                 GAsyncResult  *result,
+                                 GError       **error)
 {
-  /* whoop whooop */
-  return g_memory_input_stream_new ();
+  g_return_val_if_fail (g_task_is_valid (result, clipboard), NULL);
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gdk_clipboard_read_local_async, NULL);
+
+  if (out_mime_type)
+    *out_mime_type = NULL;
+
+  return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 static void
@@ -152,8 +177,8 @@ gdk_clipboard_class_init (GdkClipboardClass *class)
   object_class->set_property = gdk_clipboard_set_property;
   object_class->finalize = gdk_clipboard_finalize;
 
-  class->read_async = gdk_clipboard_real_read_async;
-  class->read_finish = gdk_clipboard_real_read_finish;
+  class->read_async = gdk_clipboard_read_local_async;
+  class->read_finish = gdk_clipboard_read_local_finish;
 
   /**
    * GdkClipboard:display:
@@ -203,6 +228,23 @@ gdk_clipboard_class_init (GdkClipboardClass *class)
                           G_PARAM_READABLE |
                           G_PARAM_STATIC_STRINGS |
                           G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GdkClipboard:content:
+   *
+   * The #GdkContentProvider or %NULL if the clipboard is empty or contents are
+   * provided otherwise.
+   *
+   * Since: 3.94
+   */
+  properties[PROP_CONTENT] =
+    g_param_spec_object ("content",
+                         "Content",
+                         "Provider of the clipboard's content",
+                         GDK_TYPE_CONTENT_PROVIDER,
+                         G_PARAM_READABLE |
+                         G_PARAM_STATIC_STRINGS |
+                         G_PARAM_EXPLICIT_NOTIFY);
 
   signals[CHANGED] =
     g_signal_new ("changed",
@@ -260,6 +302,49 @@ gdk_clipboard_get_formats (GdkClipboard *clipboard)
   return priv->formats;
 }
 
+/**
+ * gdk_clipboard_is_local:
+ * @clipboard: a #GdkClipboard
+ *
+ * Returns if the clipboard is local. A clipboard is consideredlocal if it was
+ * last claimed by the running application.
+ *
+ * Note that gdk_clipboard_get_content() may return %NULL even on a local
+ * clipboard. In this case the clipboard is empty.
+ *
+ * Returns: %TRUE if the clipboard is local
+ **/
+gboolean
+gdk_clipboard_is_local (GdkClipboard *clipboard)
+{
+  GdkClipboardPrivate *priv = gdk_clipboard_get_instance_private (clipboard);
+
+  g_return_val_if_fail (GDK_IS_CLIPBOARD (clipboard), FALSE);
+
+  return priv->local;
+}
+
+/**
+ * gdk_clipboard_get_content:
+ * @clipboard: a #GdkClipboard
+ *
+ * Returns the #GdkContentProvider currently set on @clipboard. If the
+ * @clipboard is empty or its contents are not owned by the current process,
+ * %NULL will be returned.
+ *
+ * Returns: (transfer none) (nullable): The content of a clipboard or %NULL
+ *     if the clipboard does not maintain any content.
+ **/
+GdkContentProvider *
+gdk_clipboard_get_content (GdkClipboard *clipboard)
+{
+  GdkClipboardPrivate *priv = gdk_clipboard_get_instance_private (clipboard);
+
+  g_return_val_if_fail (GDK_IS_CLIPBOARD (clipboard), NULL);
+
+  return priv->content;
+}
+
 static void
 gdk_clipboard_read_internal (GdkClipboard        *clipboard,
                              GdkContentFormats   *formats,
@@ -268,12 +353,26 @@ gdk_clipboard_read_internal (GdkClipboard        *clipboard,
                              GAsyncReadyCallback  callback,
                              gpointer             user_data)
 {
-  return GDK_CLIPBOARD_GET_CLASS (clipboard)->read_async (clipboard,
-                                                          formats,
-                                                          io_priority,
-                                                          cancellable,
-                                                          callback,
-                                                          user_data);
+  GdkClipboardPrivate *priv = gdk_clipboard_get_instance_private (clipboard);
+
+  if (priv->local)
+    {
+      return gdk_clipboard_read_local_async (clipboard,
+                                             formats,
+                                             io_priority,
+                                             cancellable,
+                                             callback,
+                                             user_data);
+    }
+  else
+    {
+      return GDK_CLIPBOARD_GET_CLASS (clipboard)->read_async (clipboard,
+                                                              formats,
+                                                              io_priority,
+                                                              cancellable,
+                                                              callback,
+                                                              user_data);
+    }
 }
 
 /**
@@ -337,7 +436,16 @@ gdk_clipboard_read_finish (GdkClipboard  *clipboard,
   g_return_val_if_fail (GDK_IS_CLIPBOARD (clipboard), NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-  return GDK_CLIPBOARD_GET_CLASS (clipboard)->read_finish (clipboard, out_mime_type, result, error);
+  /* don't check priv->local here because it might have changed while the
+   * read was ongoing */
+  if (g_async_result_is_tagged (result, gdk_clipboard_read_local_async))
+    {
+      return gdk_clipboard_read_local_finish (clipboard, out_mime_type, result, error);
+    }
+  else
+    {
+      return GDK_CLIPBOARD_GET_CLASS (clipboard)->read_finish (clipboard, out_mime_type, result, error);
+    }
 }
 
 static void
@@ -402,22 +510,54 @@ gdk_clipboard_read_value_internal (GdkClipboard        *clipboard,
                                    GAsyncReadyCallback  callback,
                                    gpointer             user_data)
 {
+  GdkClipboardPrivate *priv = gdk_clipboard_get_instance_private (clipboard);
   GdkContentFormatsBuilder *builder;
   GdkContentFormats *formats;
   GValue *value;
   GTask *task;
-
-  builder = gdk_content_formats_builder_new ();
-  gdk_content_formats_builder_add_gtype (builder, type);
-  formats = gdk_content_formats_builder_free (builder);
-  formats = gdk_content_formats_union_deserialize_mime_types (formats);
-
+ 
   task = g_task_new (clipboard, cancellable, callback, user_data);
   g_task_set_priority (task, io_priority);
   g_task_set_source_tag (task, source_tag);
   value = g_slice_new0 (GValue);
   g_value_init (value, type);
   g_task_set_task_data (task, value, free_value);
+
+  if (priv->local)
+    {
+      GError *error = NULL;
+
+      if (priv->content == NULL)
+        {
+          g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_FOUND,
+                                   _("Cannot read from empty clipboard."));
+          g_object_unref (task);
+          return;
+        }
+
+      if (gdk_content_provider_get_value (priv->content, value, &error))
+        {
+          g_task_return_pointer (task, value, NULL);
+          g_object_unref (task);
+          return;
+        }
+      else if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED))
+        {
+          g_task_return_error (task, error);
+          g_object_unref (task);
+          return;
+        }
+      else
+        {
+          /* fall through to regular stream transfer */
+          g_clear_error (&error);
+        }
+    }
+
+  builder = gdk_content_formats_builder_new ();
+  gdk_content_formats_builder_add_gtype (builder, type);
+  formats = gdk_content_formats_builder_free (builder);
+  formats = gdk_content_formats_union_deserialize_mime_types (formats);
 
   gdk_clipboard_read_internal (clipboard,
                                formats,
@@ -629,25 +769,177 @@ gdk_clipboard_new (GdkDisplay *display)
                        NULL);
 }
 
-void
-gdk_clipboard_claim_remote (GdkClipboard      *clipboard,
-                            GdkContentFormats *formats)
+static void
+gdk_clipboard_content_changed_cb (GdkContentProvider *provider,
+                                  GdkClipboard       *clipboard);
+
+static void
+gdk_clipboard_claim (GdkClipboard       *clipboard,
+                     GdkContentFormats  *formats,
+                     gboolean            local,
+                     GdkContentProvider *content)
 {
   GdkClipboardPrivate *priv = gdk_clipboard_get_instance_private (clipboard);
 
-  g_return_if_fail (GDK_IS_CLIPBOARD (clipboard));
-  g_return_if_fail (formats != NULL);
+  g_object_freeze_notify (G_OBJECT (clipboard));
 
   gdk_content_formats_unref (priv->formats);
   gdk_content_formats_ref (formats);
   formats = gdk_content_formats_union_deserialize_gtypes (formats);
   priv->formats = formats;
   g_object_notify_by_pspec (G_OBJECT (clipboard), properties[PROP_FORMATS]);
-  if (priv->local)
+  if (priv->local != local)
     {
-      priv->local = FALSE;
+      priv->local = local;
       g_object_notify_by_pspec (G_OBJECT (clipboard), properties[PROP_LOCAL]);
     }
 
+  if (priv->content != content)
+    {
+      GdkContentProvider *old_content = priv->content;
+
+      priv->content = g_object_ref (content);
+
+      if (old_content)
+        {
+          g_signal_handlers_disconnect_by_func (old_content,
+                                                gdk_clipboard_content_changed_cb,
+                                                clipboard);
+          gdk_content_provider_detach_clipboard (old_content, clipboard);
+          g_object_unref (old_content);
+        }
+      if (content)
+        {
+          gdk_content_provider_attach_clipboard (content, clipboard);
+          g_signal_connect (content,
+                            "content-changed",
+                            G_CALLBACK (gdk_clipboard_content_changed_cb),
+                            clipboard);
+        }
+
+      g_object_notify_by_pspec (G_OBJECT (clipboard), properties[PROP_CONTENT]);
+    }
+
+  g_object_thaw_notify (G_OBJECT (clipboard));
+
   g_signal_emit (clipboard, signals[CHANGED], 0);
 }
+
+static void
+gdk_clipboard_content_changed_cb (GdkContentProvider *provider,
+                                  GdkClipboard       *clipboard)
+{
+  GdkContentFormats *formats;
+
+  formats = gdk_content_provider_ref_formats (provider);
+
+  gdk_clipboard_claim (clipboard, formats, TRUE, provider);
+
+  gdk_content_formats_unref (formats);
+}
+
+void
+gdk_clipboard_claim_remote (GdkClipboard      *clipboard,
+                            GdkContentFormats *formats)
+{
+  g_return_if_fail (GDK_IS_CLIPBOARD (clipboard));
+  g_return_if_fail (formats != NULL);
+
+  gdk_clipboard_claim (clipboard, formats, FALSE, NULL);
+}
+
+/**
+ * gdk_clipboard_set_content:
+ * @clipboard: a #GdkClipboard
+ * @provider: (transfer none) (allow-none): the new contents of @clipboard or
+ *     %NULL to clear the clipboard
+ *
+ * Sets a new content provider on @clipboard. The clipboard will claim the
+ * #GdkDisplay's resources and advertise these new contents to other
+ * applications.
+ *
+ * If the contents are read by either an external application or the
+ * @clipboard's read functions, @clipboard will select the best format to
+ * transfer the contents and then request that format from @provider.
+ **/
+void
+gdk_clipboard_set_content (GdkClipboard       *clipboard,
+                           GdkContentProvider *provider)
+{
+  GdkClipboardPrivate *priv = gdk_clipboard_get_instance_private (clipboard);
+  GdkContentFormats *formats;
+
+  g_return_if_fail (GDK_IS_CLIPBOARD (clipboard));
+  g_return_if_fail (provider == NULL || GDK_IS_CONTENT_PROVIDER (provider));
+
+  if (provider)
+    {
+      if (priv->content == provider)
+        return;
+
+      formats = gdk_content_provider_ref_formats (provider);
+    }
+  else
+    {
+      if (priv->content == NULL && priv->local)
+        return;
+
+      formats = gdk_content_formats_new (NULL, 0);
+    }
+
+  gdk_clipboard_claim (clipboard, formats, TRUE, provider);
+
+  gdk_content_formats_unref (formats);
+}
+
+/**
+ * gdk_clipboard_set_text:
+ * @clipboard: a #GdkClipboard
+ * @text: Text to put into the clipboard
+ *
+ * Puts the given @text into the clipboard.
+ **/
+void
+gdk_clipboard_set_text (GdkClipboard *clipboard,
+                        const char   *text)
+{
+  GdkContentProvider *provider;
+  GValue value = G_VALUE_INIT;
+
+  g_return_if_fail (GDK_IS_CLIPBOARD (clipboard));
+
+  g_value_init (&value, G_TYPE_STRING);
+  g_value_set_string (&value, text);
+  provider = gdk_content_provider_new_for_value (&value);
+  g_value_unset (&value);
+
+  gdk_clipboard_set_content (clipboard, provider);
+  g_object_unref (provider);
+}
+
+/**
+ * gdk_clipboard_set_pixbuf:
+ * @clipboard: a #GdkClipboard
+ * @pixbuf: a #GdkPixbuf to put into the clipboard
+ *
+ * Puts the given @pixbuf into the clipboard.
+ **/
+void
+gdk_clipboard_set_pixbuf (GdkClipboard *clipboard,
+                          GdkPixbuf    *pixbuf)
+{
+  GdkContentProvider *provider;
+  GValue value = G_VALUE_INIT;
+
+  g_return_if_fail (GDK_IS_CLIPBOARD (clipboard));
+  g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
+
+  g_value_init (&value, GDK_TYPE_PIXBUF);
+  g_value_set_object (&value, pixbuf);
+  provider = gdk_content_provider_new_for_value (&value);
+  g_value_unset (&value);
+
+  gdk_clipboard_set_content (clipboard, provider);
+  g_object_unref (provider);
+}
+

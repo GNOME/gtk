@@ -41,6 +41,10 @@ GDK_AVAILABLE_IN_3_94
 GdkDisplay *            gdk_clipboard_get_display       (GdkClipboard          *clipboard);
 GDK_AVAILABLE_IN_3_94
 GdkContentFormats *     gdk_clipboard_get_formats       (GdkClipboard          *clipboard);
+GDK_AVAILABLE_IN_3_94
+gboolean                gdk_clipboard_is_local          (GdkClipboard          *clipboard);
+GDK_AVAILABLE_IN_3_94
+GdkContentProvider *    gdk_clipboard_get_content       (GdkClipboard          *clipboard);
 
 GDK_AVAILABLE_IN_3_94
 void                    gdk_clipboard_read_async        (GdkClipboard          *clipboard,
@@ -83,6 +87,16 @@ GDK_AVAILABLE_IN_3_94
 char *                  gdk_clipboard_read_text_finish  (GdkClipboard          *clipboard,
                                                          GAsyncResult          *res,
                                                          GError               **error);
+
+GDK_AVAILABLE_IN_3_94
+void                    gdk_clipboard_set_content       (GdkClipboard          *clipboard,
+                                                         GdkContentProvider    *provider);
+GDK_AVAILABLE_IN_3_94
+void                    gdk_clipboard_set_text          (GdkClipboard          *clipboard,
+                                                         const char            *text);
+GDK_AVAILABLE_IN_3_94
+void                    gdk_clipboard_set_pixbuf        (GdkClipboard          *clipboard,
+                                                         GdkPixbuf             *pixbuf);
 
 G_END_DECLS
 

@@ -142,21 +142,78 @@ get_contents_widget (GdkClipboard *clipboard)
   return stack;
 }
 
+static void
+provider_button_clicked_cb (GtkWidget    *button,
+                            GdkClipboard *clipboard)
+{
+  gdk_clipboard_set_content (clipboard,
+                             g_object_get_data (G_OBJECT (button), "provider"));
+}
+
+static void
+add_provider_button (GtkWidget          *box,
+                     GdkContentProvider *provider,
+                     GdkClipboard       *clipboard,
+                     const char         *name)
+{
+  GtkWidget *button;
+
+  button = gtk_button_new_with_label (name);
+  g_signal_connect (button, "clicked", G_CALLBACK (provider_button_clicked_cb), clipboard);
+  g_object_set_data_full (G_OBJECT (button), "provider", provider, g_object_unref);
+
+  gtk_container_add (GTK_CONTAINER (box), button);
+}
+
+static GtkWidget *
+get_button_list (GdkClipboard *clipboard)
+{
+  GtkWidget *box;
+  GValue value = G_VALUE_INIT;
+
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+
+  gtk_container_add (GTK_CONTAINER (box), gtk_label_new ("Set Clipboard:"));
+
+  g_value_init (&value, GDK_TYPE_PIXBUF);
+  g_value_take_object (&value, gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
+                                                         "utilities-terminal",
+                                                         48, 0, NULL));
+  add_provider_button (box,
+                       gdk_content_provider_new_for_value (&value),
+                       clipboard,
+                       "Icon");
+  g_value_unset (&value);
+
+  g_value_init (&value, G_TYPE_STRING);
+  g_value_set_string (&value, "Hello Clipboard ☺");
+  add_provider_button (box,
+                       gdk_content_provider_new_for_value (&value),
+                       clipboard,
+                       "Text");
+  g_value_unset (&value);
+
+  return box;
+}
+
 static GtkWidget *
 get_clipboard_widget (GdkClipboard *clipboard,
                       const char   *name)
 {
-  GtkWidget *box, *stack, *switcher;
+  GtkWidget *vbox, *hbox, *stack, *switcher;
 
-  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (box), gtk_label_new (name));
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  gtk_container_add (GTK_CONTAINER (hbox), vbox);
+  gtk_container_add (GTK_CONTAINER (vbox), gtk_label_new (name));
   switcher = gtk_stack_switcher_new ();
-  gtk_container_add (GTK_CONTAINER (box), switcher);
+  gtk_container_add (GTK_CONTAINER (vbox), switcher);
   stack = get_contents_widget (clipboard);
-  gtk_container_add (GTK_CONTAINER (box), stack);
+  gtk_container_add (GTK_CONTAINER (vbox), stack);
   gtk_stack_switcher_set_stack (GTK_STACK_SWITCHER (switcher), GTK_STACK (stack));
+  gtk_container_add (GTK_CONTAINER (hbox), get_button_list (clipboard));
 
-  return box;
+  return hbox;
 }
 
 static GtkWidget *
