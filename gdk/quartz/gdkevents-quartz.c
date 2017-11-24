@@ -500,7 +500,7 @@ create_focus_event (GdkWindow *window,
   event->focus_change.window = window;
   event->focus_change.in = in;
 
-  device_manager = GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_display->device_manager);
+  device_manager = GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_device_manager);
   gdk_event_set_device (event, device_manager->core_keyboard);
   gdk_event_set_seat (event, gdk_device_get_seat (device_manager->core_keyboard));
 
@@ -536,7 +536,7 @@ generate_motion_event (GdkWindow *window)
   event->motion.state = _gdk_quartz_events_get_current_keyboard_modifiers () |
                         _gdk_quartz_events_get_current_mouse_modifiers ();
   event->motion.is_hint = FALSE;
-  device_manager = GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_display->device_manager);
+  device_manager = GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_device_manager);
   event->motion.device = device_manager->core_pointer;
   gdk_event_set_seat (event, gdk_device_get_seat (device_manager->core_pointer));
 
@@ -616,7 +616,7 @@ find_toplevel_under_pointer (GdkDisplay *display,
   GdkWindow *toplevel;
   GdkPointerWindowInfo *info;
 
-  info = _gdk_display_get_pointer_info (display, GDK_QUARTZ_DEVICE_MANAGER_CORE (display->device_manager)->core_pointer);
+  info = _gdk_display_get_pointer_info (display, GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_device_manager)->core_pointer);
   toplevel = info->toplevel_under_pointer;
   if (toplevel && WINDOW_IS_TOPLEVEL (toplevel))
     get_window_point_from_screen_point (toplevel, screen_point, x, y);
@@ -703,7 +703,7 @@ find_toplevel_for_mouse_event (NSEvent    *nsevent,
    * events are discarded.
    */
   grab = _gdk_display_get_last_device_grab (display,
-                                            GDK_QUARTZ_DEVICE_MANAGER_CORE (display->device_manager)->core_pointer);
+                                            GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_device_manager)->core_pointer);
   if (WINDOW_IS_TOPLEVEL (toplevel) && grab)
     {
       /* Implicit grabs do not go through XGrabPointer and thus the
@@ -880,7 +880,7 @@ fill_crossing_event (GdkWindow       *toplevel,
   event->crossing.state = get_keyboard_modifiers_from_ns_event (nsevent) |
                          _gdk_quartz_events_get_current_mouse_modifiers ();
 
-  device_manager = GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_display->device_manager);
+  device_manager = GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_device_manager);
   gdk_event_set_device (event, device_manager->core_pointer);
   gdk_event_set_seat (event, gdk_device_get_seat (device_manager->core_pointer));
 
@@ -917,7 +917,7 @@ fill_pinch_event (GdkWindow *window,
   } last_state = FP_STATE_IDLE;
   GdkQuartzDeviceManagerCore *device_manager;
 
-  device_manager = GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_display->device_manager);
+  device_manager = GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_device_manager);
 
   event->any.type = GDK_TOUCHPAD_PINCH;
   event->touchpad_pinch.window = window;
@@ -1044,7 +1044,7 @@ fill_button_event (GdkWindow *window,
   /* FIXME event->axes */
   event->button.state = state;
   event->button.button = get_mouse_button_from_ns_event (nsevent);
-  device_manager = GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_display->device_manager);
+  device_manager = GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_device_manager);
   event->button.device = device_manager->core_pointer;
   gdk_event_set_seat (event, gdk_device_get_seat (device_manager->core_pointer));
 }
@@ -1071,7 +1071,7 @@ fill_motion_event (GdkWindow *window,
   event->motion.state = get_keyboard_modifiers_from_ns_event (nsevent) |
                         _gdk_quartz_events_get_current_mouse_modifiers ();
   event->motion.is_hint = FALSE;
-  device_manager = GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_display->device_manager);
+  device_manager = GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_device_manager);
   event->motion.device = device_manager->core_pointer;
   gdk_event_set_seat (event, gdk_device_get_seat (device_manager->core_pointer));
 }
@@ -1092,7 +1092,7 @@ fill_scroll_event (GdkWindow          *window,
   NSPoint point;
 
   point = [nsevent locationInWindow];
-  device_manager = GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_display->device_manager);
+  device_manager = GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_device_manager);
 
   event->any.type = GDK_SCROLL;
   event->scroll.window = window;
@@ -1132,7 +1132,7 @@ fill_key_event (GdkWindow    *window,
   event->key.group = ([nsevent modifierFlags] & NSAlternateKeyMask) ? 1 : 0;
   event->key.keyval = GDK_KEY_VoidSymbol;
 
-  device_manager = GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_display->device_manager);
+  device_manager = GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_device_manager);
   gdk_event_set_device (event, device_manager->core_keyboard);
   gdk_event_set_seat (event, gdk_device_get_seat (device_manager->core_keyboard));
   
@@ -1299,7 +1299,7 @@ _gdk_quartz_synthesize_null_key_event (GdkWindow *window)
   event->key.hardware_keycode = 0;
   event->key.group = 0;
   event->key.keyval = GDK_KEY_VoidSymbol;
-  device_manager = GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_display->device_manager);
+  device_manager = GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_device_manager);
   gdk_event_set_device (event, device_manager->core_keyboard);
   gdk_event_set_seat (event, gdk_device_get_seat (device_manager->core_keyboard));
   append_event(event, FALSE);
@@ -1550,7 +1550,7 @@ gdk_event_translate (GdkEvent *event,
           GdkDeviceGrabInfo *grab;
 
           grab = _gdk_display_get_last_device_grab (_gdk_display,
-                                                    GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_display->device_manager)->core_pointer);
+                                                    GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_device_manager)->core_pointer);
           if (!grab)
             [impl->toplevel makeKeyWindow];
         }

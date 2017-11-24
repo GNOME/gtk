@@ -58,7 +58,7 @@ _gdk_quartz_display_open (const gchar *display_name)
   [NSApplication sharedApplication];
 
   _gdk_display = g_object_new (gdk_quartz_display_get_type (), NULL);
-  _gdk_display->device_manager = _gdk_device_manager_new (_gdk_display);
+  _gdk_device_manager = _gdk_device_manager_new (_gdk_display);
 
   _gdk_screen = g_object_new (gdk_quartz_screen_get_type (), NULL);
 

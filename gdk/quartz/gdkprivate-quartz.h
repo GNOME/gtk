@@ -37,6 +37,7 @@
 extern GdkDisplay *_gdk_display;
 extern GdkQuartzScreen *_gdk_screen;
 extern GdkWindow *_gdk_root;
+extern GdkDeviceManager *_gdk_device_manager;
 
 extern GdkDragContext *_gdk_quartz_drag_source_context;
 
