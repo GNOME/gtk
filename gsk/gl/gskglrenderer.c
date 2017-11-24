@@ -912,6 +912,34 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
       }
     break;
 
+    case GSK_COLOR_MATRIX_NODE:
+      {
+        int texture_id;
+        RenderOp op;
+        GskQuadVertex vertex_data[GL_N_VERTICES] = {
+          { { min_x, min_y }, { 0, 1 }, },
+          { { min_x, max_y }, { 0, 0 }, },
+          { { max_x, min_y }, { 1, 1 }, },
+
+          { { max_x, max_y }, { 1, 0 }, },
+          { { min_x, max_y }, { 0, 0 }, },
+          { { max_x, min_y }, { 1, 1 }, },
+        };
+
+        texture_id = add_offscreen_ops (self, builder, min_x, max_x, min_y, max_y,
+                                        gsk_color_matrix_node_get_child (node));
+
+        ops_set_program (builder, &self->color_matrix_program);
+        op.op = OP_CHANGE_COLOR_MATRIX;
+        op.color_matrix.matrix = *gsk_color_matrix_node_peek_color_matrix (node);
+        op.color_matrix.offset = *gsk_color_matrix_node_peek_color_offset (node);
+        ops_add (builder, &op);
+
+        ops_set_texture (builder, texture_id);
+        ops_draw (builder, vertex_data);
+      }
+    break;
+
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
     case GSK_BORDER_NODE:
     case GSK_INSET_SHADOW_NODE:
@@ -921,7 +949,6 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
     case GSK_CROSS_FADE_NODE:
     case GSK_BLEND_NODE:
     case GSK_REPEAT_NODE:
-    case GSK_COLOR_MATRIX_NODE:
     default:
       {
         cairo_surface_t *surface;
@@ -1017,15 +1044,14 @@ add_offscreen_ops (GskGLRenderer   *self,
   return texture_id;
 }
 
-
-
 static void
 gsk_gl_renderer_render_ops (GskGLRenderer *self,
                             gsize          vertex_data_size)
 {
+  float mat[16];
+  float vec[4];
   guint i;
   guint n_ops = self->render_ops->len;
-  float mat[16];
   const Program *program = NULL;
   gsize buffer_index = 0;
   float *vertex_data = g_malloc (vertex_data_size);
@@ -1129,6 +1155,16 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
         case OP_CHANGE_OPACITY:
           OP_PRINT (" -> Opacity %f", op->opacity);
           glUniform1f (program->alpha_location, op->opacity);
+          break;
+
+        case OP_CHANGE_COLOR_MATRIX:
+          OP_PRINT (" -> Color Matrix");
+          g_assert (program == &self->color_matrix_program);
+          graphene_matrix_to_float (&op->color_matrix.matrix, mat);
+          glUniformMatrix4fv (program->color_matrix_location, 1, GL_FALSE, mat);
+
+          graphene_vec4_to_float (&op->color_matrix.offset, vec);
+          glUniform4fv (program->color_offset_location, 1, vec);
           break;
 
         case OP_CHANGE_COLOR:

@@ -25,8 +25,9 @@ enum {
   OP_CHANGE_SOURCE_TEXTURE  =  9,
   OP_CHANGE_VAO             =  10,
   OP_CHANGE_LINEAR_GRADIENT =  11,
-  OP_CLEAR                  =  12,
-  OP_DRAW                   =  13,
+  OP_CHANGE_COLOR_MATRIX    =  12,
+  OP_CLEAR                  =  13,
+  OP_DRAW                   =  14,
 };
 
 typedef struct
@@ -99,7 +100,10 @@ typedef struct
       gsize vao_offset;
       gsize vao_size;
     } draw;
-
+    struct {
+      graphene_matrix_t matrix;
+      graphene_vec4_t offset;
+    } color_matrix;
   };
 } RenderOp;
 
