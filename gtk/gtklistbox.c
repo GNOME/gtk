@@ -17,6 +17,7 @@
 
 #include "config.h"
 
+#include "gtkactionhelper.h"
 #include "gtkadjustmentprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtklistbox.h"
@@ -127,6 +128,7 @@ typedef struct
   GSequenceIter *iter;
   GtkWidget *header;
   GtkCssGadget *gadget;
+  GtkActionHelper *action_helper;
   gint y;
   gint height;
   guint visible     :1;
@@ -163,19 +165,28 @@ enum {
   ROW_PROP_0,
   ROW_PROP_ACTIVATABLE,
   ROW_PROP_SELECTABLE,
-  LAST_ROW_PROPERTY
+
+  /* actionable properties */
+  ROW_PROP_ACTION_NAME,
+  ROW_PROP_ACTION_TARGET,
+
+  LAST_ROW_PROPERTY = ROW_PROP_ACTION_NAME
 };
 
 #define BOX_PRIV(box) ((GtkListBoxPrivate*)gtk_list_box_get_instance_private ((GtkListBox*)(box)))
 #define ROW_PRIV(row) ((GtkListBoxRowPrivate*)gtk_list_box_row_get_instance_private ((GtkListBoxRow*)(row)))
 
-static void     gtk_list_box_buildable_interface_init     (GtkBuildableIface *iface);
+static void     gtk_list_box_buildable_interface_init   (GtkBuildableIface *iface);
+
+static void     gtk_list_box_row_actionable_iface_init  (GtkActionableInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkListBox, gtk_list_box, GTK_TYPE_CONTAINER,
                          G_ADD_PRIVATE (GtkListBox)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_list_box_buildable_interface_init))
-G_DEFINE_TYPE_WITH_PRIVATE (GtkListBoxRow, gtk_list_box_row, GTK_TYPE_BIN)
+G_DEFINE_TYPE_WITH_CODE (GtkListBoxRow, gtk_list_box_row, GTK_TYPE_BIN,
+                         G_ADD_PRIVATE (GtkListBoxRow)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIONABLE, gtk_list_box_row_actionable_iface_init))
 
 static void                 gtk_list_box_apply_filter_all             (GtkListBox          *box);
 static void                 gtk_list_box_update_header                (GtkListBox          *box,
@@ -1773,7 +1784,14 @@ static void
 gtk_list_box_activate (GtkListBox    *box,
                        GtkListBoxRow *row)
 {
-  if (gtk_list_box_row_get_activatable (row))
+  GtkListBoxRowPrivate *priv = ROW_PRIV (row);
+
+  if (!gtk_list_box_row_get_activatable (row))
+    return;
+
+  if (priv->action_helper)
+    gtk_action_helper_activate (priv->action_helper);
+  else
     g_signal_emit (box, signals[ROW_ACTIVATED], 0, row);
 }
 
@@ -3688,6 +3706,32 @@ gtk_list_box_row_get_selectable (GtkListBoxRow *row)
 }
 
 static void
+gtk_list_box_row_set_action_name (GtkActionable *actionable,
+                                  const gchar   *action_name)
+{
+  GtkListBoxRow *row = GTK_LIST_BOX_ROW (actionable);
+  GtkListBoxRowPrivate *priv = ROW_PRIV (row);
+
+  if (!priv->action_helper)
+    priv->action_helper = gtk_action_helper_new (actionable);
+
+  gtk_action_helper_set_action_name (priv->action_helper, action_name);
+}
+
+static void
+gtk_list_box_row_set_action_target_value (GtkActionable *actionable,
+                                          GVariant      *action_target)
+{
+  GtkListBoxRow *row = GTK_LIST_BOX_ROW (actionable);
+  GtkListBoxRowPrivate *priv = ROW_PRIV (row);
+
+  if (!priv->action_helper)
+    priv->action_helper = gtk_action_helper_new (actionable);
+
+  gtk_action_helper_set_action_target_value (priv->action_helper, action_target);
+}
+
+static void
 gtk_list_box_row_get_property (GObject    *obj,
                                guint       property_id,
                                GValue     *value,
@@ -3702,6 +3746,12 @@ gtk_list_box_row_get_property (GObject    *obj,
       break;
     case ROW_PROP_SELECTABLE:
       g_value_set_boolean (value, gtk_list_box_row_get_selectable (row));
+      break;
+    case ROW_PROP_ACTION_NAME:
+      g_value_set_string (value, gtk_action_helper_get_action_name (ROW_PRIV (row)->action_helper));
+      break;
+    case ROW_PROP_ACTION_TARGET:
+      g_value_set_variant (value, gtk_action_helper_get_action_target_value (ROW_PRIV (row)->action_helper));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
@@ -3725,10 +3775,41 @@ gtk_list_box_row_set_property (GObject      *obj,
     case ROW_PROP_SELECTABLE:
       gtk_list_box_row_set_selectable (row, g_value_get_boolean (value));
       break;
+    case ROW_PROP_ACTION_NAME:
+      gtk_list_box_row_set_action_name (GTK_ACTIONABLE (row), g_value_get_string (value));
+      break;
+    case ROW_PROP_ACTION_TARGET:
+      gtk_list_box_row_set_action_target_value (GTK_ACTIONABLE (row), g_value_get_variant (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
       break;
     }
+}
+
+static const gchar *
+gtk_list_box_row_get_action_name (GtkActionable *actionable)
+{
+  GtkListBoxRow *row = GTK_LIST_BOX_ROW (actionable);
+
+  return gtk_action_helper_get_action_name (ROW_PRIV (row)->action_helper);
+}
+
+static GVariant *
+gtk_list_box_row_get_action_target_value (GtkActionable *actionable)
+{
+  GtkListBoxRow *row = GTK_LIST_BOX_ROW (actionable);
+
+  return gtk_action_helper_get_action_target_value (ROW_PRIV (row)->action_helper);
+}
+
+static void
+gtk_list_box_row_actionable_iface_init (GtkActionableInterface *iface)
+{
+  iface->get_action_name = gtk_list_box_row_get_action_name;
+  iface->set_action_name = gtk_list_box_row_set_action_name;
+  iface->get_action_target_value = gtk_list_box_row_get_action_target_value;
+  iface->set_action_target_value = gtk_list_box_row_set_action_target_value;
 }
 
 static void
@@ -3738,6 +3819,17 @@ gtk_list_box_row_finalize (GObject *obj)
   g_clear_object (&ROW_PRIV (GTK_LIST_BOX_ROW (obj))->gadget);
 
   G_OBJECT_CLASS (gtk_list_box_row_parent_class)->finalize (obj);
+}
+
+static void
+gtk_list_box_row_dispose (GObject *object)
+{
+  GtkListBoxRow *row = GTK_LIST_BOX_ROW (object);
+  GtkListBoxRowPrivate *priv = ROW_PRIV (row);
+
+  g_clear_object (&priv->action_helper);
+
+  G_OBJECT_CLASS (gtk_list_box_row_parent_class)->dispose (object);
 }
 
 static void
@@ -3765,6 +3857,7 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
   object_class->get_property = gtk_list_box_row_get_property;
   object_class->set_property = gtk_list_box_row_set_property;
   object_class->finalize = gtk_list_box_row_finalize;
+  object_class->dispose = gtk_list_box_row_dispose;
 
   widget_class->show = gtk_list_box_row_show;
   widget_class->hide = gtk_list_box_row_hide;
@@ -3820,6 +3913,9 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_ROW_PROPERTY, row_properties);
+
+  g_object_class_override_property (object_class, ROW_PROP_ACTION_NAME, "action-name");
+  g_object_class_override_property (object_class, ROW_PROP_ACTION_TARGET, "action-target");
 
   gtk_widget_class_set_css_name (widget_class, "row");
 }
