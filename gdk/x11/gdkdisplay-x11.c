@@ -1440,7 +1440,6 @@ static void
 gdk_event_init (GdkDisplay *display)
 {
   GdkX11Display *display_x11;
-  GdkDeviceManager *device_manager;
 
   display_x11 = GDK_X11_DISPLAY (display);
   display_x11->event_source = gdk_x11_event_source_new (display);
@@ -1448,11 +1447,8 @@ gdk_event_init (GdkDisplay *display)
   gdk_x11_event_source_add_translator ((GdkEventSource *) display_x11->event_source,
                                        GDK_EVENT_TRANSLATOR (display));
 
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  device_manager = gdk_display_get_device_manager (display);
   gdk_x11_event_source_add_translator ((GdkEventSource *) display_x11->event_source,
-                                        GDK_EVENT_TRANSLATOR (device_manager));
-  G_GNUC_END_IGNORE_DEPRECATIONS;
+                                        GDK_EVENT_TRANSLATOR (display_x11->device_manager));
 }
 
 static void
@@ -1566,7 +1562,7 @@ gdk_x11_display_open (const gchar *display_name)
    */
   _gdk_x11_xsettings_init (GDK_X11_SCREEN (display_x11->screen));
 
-  display->device_manager = _gdk_x11_device_manager_new (display);
+  display_x11->device_manager = _gdk_x11_device_manager_new (display);
 
   gdk_event_init (display);
 
