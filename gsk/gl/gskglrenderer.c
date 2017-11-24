@@ -42,8 +42,6 @@
                 g_assert (self->program_name.location_name != 0); \
               }G_STMT_END
 
-
-
 static void G_GNUC_UNUSED
 dump_framebuffer (const char *filename, int w, int h)
 {
@@ -77,13 +75,15 @@ font_has_color_glyphs (const PangoFont *font)
 }
 
 static void gsk_gl_renderer_setup_render_mode (GskGLRenderer   *self);
-static int  add_offscreen_ops                 (GskGLRenderer   *self,
+static void add_offscreen_ops                 (GskGLRenderer   *self,
                                                RenderOpBuilder *builder,
                                                float            min_x,
                                                float            max_x,
                                                float            min_y,
                                                float            max_y,
-                                               GskRenderNode   *child_node);
+                                               GskRenderNode   *child_node,
+                                               int             *texture_id,
+                                               gboolean        *is_offscreen);
 
 #ifdef G_ENABLE_DEBUG
 typedef struct
@@ -719,25 +719,36 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
     case GSK_OPACITY_NODE:
       {
         int texture_id;
+        gboolean is_offscreen;
         float prev_opacity;
-        GskQuadVertex vertex_data[GL_N_VERTICES] = {
-          { { min_x, min_y }, { 0, 1 }, },
-          { { min_x, max_y }, { 0, 0 }, },
-          { { max_x, min_y }, { 1, 1 }, },
 
-          { { max_x, max_y }, { 1, 0 }, },
-          { { min_x, max_y }, { 0, 0 }, },
-          { { max_x, min_y }, { 1, 1 }, },
-        };
 
-        texture_id = add_offscreen_ops (self, builder, min_x, max_x, min_y, max_y,
-                                        gsk_opacity_node_get_child (node));
+        add_offscreen_ops (self, builder, min_x, max_x, min_y, max_y,
+                           gsk_opacity_node_get_child (node),
+                           &texture_id, &is_offscreen);
 
         /* Now draw the texture with the node's opacity */
         ops_set_program (builder, &self->blit_program);
         prev_opacity = ops_set_opacity (builder, gsk_opacity_node_get_opacity (node));
         ops_set_texture (builder, texture_id);
-        ops_draw (builder, vertex_data);
+
+        if (is_offscreen)
+          {
+            GskQuadVertex vertex_data[GL_N_VERTICES] = {
+              { { min_x, min_y }, { 0, 1 }, },
+              { { min_x, max_y }, { 0, 0 }, },
+              { { max_x, min_y }, { 1, 1 }, },
+
+              { { max_x, max_y }, { 1, 0 }, },
+              { { min_x, max_y }, { 0, 0 }, },
+              { { max_x, min_y }, { 1, 1 }, },
+            };
+            ops_draw (builder, vertex_data);
+          }
+        else
+          {
+            ops_draw (builder, vertex_data);
+          }
         ops_set_opacity (builder, prev_opacity);
       }
     break;
@@ -911,23 +922,14 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
 
       }
     break;
-
     case GSK_COLOR_MATRIX_NODE:
       {
         int texture_id;
+        gboolean is_offscreen;
         RenderOp op;
-        GskQuadVertex vertex_data[GL_N_VERTICES] = {
-          { { min_x, min_y }, { 0, 1 }, },
-          { { min_x, max_y }, { 0, 0 }, },
-          { { max_x, min_y }, { 1, 1 }, },
-
-          { { max_x, max_y }, { 1, 0 }, },
-          { { min_x, max_y }, { 0, 0 }, },
-          { { max_x, min_y }, { 1, 1 }, },
-        };
-
-        texture_id = add_offscreen_ops (self, builder, min_x, max_x, min_y, max_y,
-                                        gsk_color_matrix_node_get_child (node));
+        add_offscreen_ops (self, builder, min_x, max_x, min_y, max_y,
+                           gsk_color_matrix_node_get_child (node),
+                           &texture_id, &is_offscreen);
 
         ops_set_program (builder, &self->color_matrix_program);
         op.op = OP_CHANGE_COLOR_MATRIX;
@@ -936,7 +938,26 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
         ops_add (builder, &op);
 
         ops_set_texture (builder, texture_id);
-        ops_draw (builder, vertex_data);
+
+        if (is_offscreen)
+          {
+            GskQuadVertex vertex_data[GL_N_VERTICES] = {
+              { { min_x, min_y }, { 0, 1 }, },
+              { { min_x, max_y }, { 0, 0 }, },
+              { { max_x, min_y }, { 1, 1 }, },
+
+              { { max_x, max_y }, { 1, 0 }, },
+              { { min_x, max_y }, { 0, 0 }, },
+              { { max_x, min_y }, { 1, 1 }, },
+            };
+
+            ops_draw (builder, vertex_data);
+          }
+        else
+          {
+            ops_draw (builder, vertex_data);
+          }
+
       }
     break;
 
@@ -994,16 +1015,17 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
     }
 }
 
-static int
+static void
 add_offscreen_ops (GskGLRenderer   *self,
                    RenderOpBuilder *builder,
                    float            min_x,
                    float            max_x,
                    float            min_y,
                    float            max_y,
-                   GskRenderNode   *child_node)
+                   GskRenderNode   *child_node,
+                   int             *texture_id,
+                   gboolean        *is_offscreen)
 {
-  int texture_id;
   int render_target;
   int prev_render_target;
   RenderOp op;
@@ -1013,11 +1035,27 @@ add_offscreen_ops (GskGLRenderer   *self,
   graphene_rect_t prev_viewport;
   graphene_matrix_t item_proj;
 
+  /* We need the child node as a texture. If it already is one, we don't need to draw
+   * it on a framebuffer of course. */
+  if (gsk_render_node_get_node_type (child_node) == GSK_TEXTURE_NODE)
+    {
+      GdkTexture *texture = gsk_texture_node_get_texture (child_node);
+      int gl_min_filter = GL_NEAREST, gl_mag_filter = GL_NEAREST;
 
-  texture_id = gsk_gl_driver_create_texture (self->gl_driver, max_x - min_x, max_y - min_y);
-  gsk_gl_driver_bind_source_texture (self->gl_driver, texture_id);
-  gsk_gl_driver_init_texture_empty (self->gl_driver, texture_id);
-  render_target = gsk_gl_driver_create_render_target (self->gl_driver, texture_id, TRUE, TRUE);
+      get_gl_scaling_filters (child_node, &gl_min_filter, &gl_mag_filter);
+
+      *texture_id = gsk_gl_driver_get_texture_for_texture (self->gl_driver,
+                                                           texture,
+                                                           gl_min_filter,
+                                                           gl_mag_filter);
+      *is_offscreen = FALSE;
+      return;
+    }
+
+  *texture_id = gsk_gl_driver_create_texture (self->gl_driver, max_x - min_x, max_y - min_y);
+  gsk_gl_driver_bind_source_texture (self->gl_driver, *texture_id);
+  gsk_gl_driver_init_texture_empty (self->gl_driver, *texture_id);
+  render_target = gsk_gl_driver_create_render_target (self->gl_driver, *texture_id, TRUE, TRUE);
 
   graphene_matrix_init_ortho (&item_proj,
                               min_x, max_x,
@@ -1041,7 +1079,7 @@ add_offscreen_ops (GskGLRenderer   *self,
   ops_set_projection (builder, &prev_projection);
   ops_set_render_target (builder, prev_render_target);
 
-  return texture_id;
+  *is_offscreen = TRUE;
 }
 
 static void
