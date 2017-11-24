@@ -182,7 +182,7 @@ get_button_list (GdkClipboard *clipboard)
   add_provider_button (box,
                        gdk_content_provider_new_for_value (&value),
                        clipboard,
-                       "Icon");
+                       "GdkPixbuf");
   g_value_unset (&value);
 
   g_value_init (&value, G_TYPE_STRING);
@@ -190,8 +190,15 @@ get_button_list (GdkClipboard *clipboard)
   add_provider_button (box,
                        gdk_content_provider_new_for_value (&value),
                        clipboard,
-                       "Text");
+                       "gchararry");
   g_value_unset (&value);
+
+  add_provider_button (box,
+                       gdk_content_provider_new_for_bytes ("text/plain;charset=utf-8",
+                                                           g_bytes_new_static ("𝕳𝖊𝖑𝖑𝖔 𝖀𝖓𝖎𝖈𝖔𝖉𝖊",
+                                                                               strlen ("𝕳𝖊𝖑𝖑𝖔 𝖀𝖓𝖎𝖈𝖔𝖉𝖊") + 1)),
+                       clipboard,
+                       "text/plain");
 
   return box;
 }

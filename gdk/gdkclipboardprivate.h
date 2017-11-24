@@ -57,6 +57,16 @@ GdkClipboard *          gdk_clipboard_new                       (GdkDisplay     
 
 void                    gdk_clipboard_claim_remote              (GdkClipboard           *clipboard,
                                                                  GdkContentFormats      *formats);
+void                    gdk_clipboard_write_async               (GdkClipboard           *clipboard,
+                                                                 const char             *mime_type,
+                                                                 GOutputStream          *stream,
+                                                                 int                     io_priority,
+                                                                 GCancellable           *cancellable,
+                                                                 GAsyncReadyCallback     callback,
+                                                                 gpointer                user_data);
+gboolean                gdk_clipboard_write_finish              (GdkClipboard           *clipboard,
+                                                                 GAsyncResult           *result,
+                                                                 GError                **error);
 
 G_END_DECLS
 

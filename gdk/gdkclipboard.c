@@ -26,6 +26,7 @@
 #include "gdkcontentproviderprivate.h"
 #include "gdkdisplay.h"
 #include "gdkintl.h"
+#include "gdkpipeiostreamprivate.h"
 
 typedef struct _GdkClipboardPrivate GdkClipboardPrivate;
 
@@ -124,6 +125,20 @@ gdk_clipboard_finalize (GObject *object)
 }
 
 static void
+gdk_clipboard_read_local_write_done (GObject      *clipboard,
+                                     GAsyncResult *result,
+                                     gpointer      stream)
+{
+  /* we don't care about the error, we just want to clean up */
+  gdk_clipboard_write_finish (GDK_CLIPBOARD (clipboard), result, NULL);
+
+  /* XXX: Do we need to close_async() here? */
+  g_output_stream_close (stream, NULL, NULL);
+
+  g_object_unref (stream);
+}
+
+static void
 gdk_clipboard_read_local_async (GdkClipboard        *clipboard,
                                 GdkContentFormats   *formats,
                                 int                  io_priority,
@@ -132,24 +147,51 @@ gdk_clipboard_read_local_async (GdkClipboard        *clipboard,
                                 gpointer             user_data)
 {
   GdkClipboardPrivate *priv = gdk_clipboard_get_instance_private (clipboard);
+  GdkContentFormats *content_formats;
+  const char *mime_type;
   GTask *task;
 
   task = g_task_new (clipboard, cancellable, callback, user_data);
   g_task_set_priority (task, io_priority);
   g_task_set_source_tag (task, gdk_clipboard_read_local_async);
-  g_task_set_task_data (task, gdk_content_formats_ref (formats), (GDestroyNotify) gdk_content_formats_unref);
 
   if (priv->content == NULL)
     {
       g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_FOUND,
                                      _("Cannot read from empty clipboard."));
+      g_object_unref (task);
+      return;
+    }
+
+  content_formats = gdk_content_provider_ref_formats (priv->content);
+
+  if (!gdk_content_formats_match (content_formats, formats, NULL, &mime_type)
+      || mime_type == NULL)
+    {
+      g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
+                                     _("No compatible formats to transfer clipboard contents."));
     }
   else
     {
-      g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
-                               _("Reading local content via streams not supported yet."));
+      GOutputStream *output_stream;
+      GIOStream *stream;
+      
+      stream = gdk_pipe_io_stream_new ();
+      output_stream = g_io_stream_get_output_stream (stream);
+      gdk_clipboard_write_async (clipboard,
+                                 mime_type,
+                                 output_stream,
+                                 io_priority,
+                                 cancellable,
+                                 gdk_clipboard_read_local_write_done,
+                                 g_object_ref (output_stream));
+      g_task_set_task_data (task, (gpointer) mime_type, NULL);
+      g_task_return_pointer (task, g_object_ref (g_io_stream_get_input_stream (stream)), g_object_unref);
+
+      g_object_unref (stream);
     }
 
+  gdk_content_formats_unref (content_formats);
   g_object_unref (task);
 }
 
@@ -163,7 +205,7 @@ gdk_clipboard_read_local_finish (GdkClipboard  *clipboard,
   g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gdk_clipboard_read_local_async, NULL);
 
   if (out_mime_type)
-    *out_mime_type = NULL;
+    *out_mime_type = g_task_get_task_data (G_TASK (result));
 
   return g_task_propagate_pointer (G_TASK (result), error);
 }
@@ -767,6 +809,86 @@ gdk_clipboard_new (GdkDisplay *display)
   return g_object_new (GDK_TYPE_CLIPBOARD,
                        "display", display,
                        NULL);
+}
+
+static void
+gdk_clipboard_write_done (GObject      *content,
+                          GAsyncResult *result,
+                          gpointer      task)
+{
+  GError *error = NULL;
+
+  if (gdk_content_provider_write_mime_type_finish (GDK_CONTENT_PROVIDER (content), result, &error))
+    g_task_return_boolean (task, TRUE);
+  else
+    g_task_return_error (task, error);
+
+  g_object_unref (task);
+}
+
+void
+gdk_clipboard_write_async (GdkClipboard        *clipboard,
+                           const char          *mime_type,
+                           GOutputStream       *stream,
+                           int                  io_priority,
+                           GCancellable        *cancellable,
+                           GAsyncReadyCallback  callback,
+                           gpointer             user_data)
+{
+  GdkClipboardPrivate *priv = gdk_clipboard_get_instance_private (clipboard);
+  GdkContentFormats *formats;
+  GTask *task;
+
+  g_return_if_fail (GDK_IS_CLIPBOARD (clipboard));
+  g_return_if_fail (priv->local);
+  g_return_if_fail (mime_type != NULL);
+  g_return_if_fail (mime_type == g_intern_string (mime_type));
+  g_return_if_fail (G_IS_OUTPUT_STREAM (stream));
+  g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
+  g_return_if_fail (callback != NULL);
+
+  task = g_task_new (clipboard, cancellable, callback, user_data);
+  g_task_set_priority (task, io_priority);
+  g_task_set_source_tag (task, gdk_clipboard_write_async);
+
+  if (priv->content == NULL)
+    {
+      g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_FOUND,
+                               _("Cannot read from empty clipboard."));
+      g_object_unref (task);
+      return;
+    }
+
+  formats = gdk_content_provider_ref_formats (priv->content);
+  if (gdk_content_formats_contain_mime_type (formats, mime_type))
+    {
+      gdk_content_provider_write_mime_type_async (priv->content,
+                                                  mime_type,
+                                                  stream,
+                                                  io_priority,
+                                                  cancellable,
+                                                  gdk_clipboard_write_done,
+                                                  task);
+      gdk_content_formats_unref (formats);
+      return;
+    }
+
+  g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
+                           _("FIXME: Implement serializing."));
+  gdk_content_formats_unref (formats);
+  g_object_unref (task);
+  return;
+}
+
+gboolean
+gdk_clipboard_write_finish (GdkClipboard  *clipboard,
+                            GAsyncResult  *result,
+                            GError       **error)
+{
+  g_return_val_if_fail (g_task_is_valid (result, clipboard), FALSE);
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gdk_clipboard_write_async, FALSE);
+
+  return g_task_propagate_boolean (G_TASK (result), error); 
 }
 
 static void
