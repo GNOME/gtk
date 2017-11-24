@@ -125,28 +125,8 @@ gdk_display_real_make_default (GdkDisplay *display)
 }
 
 static void
-device_removed_cb (GdkDeviceManager *device_manager,
-                   GdkDevice        *device,
-                   GdkDisplay       *display)
-{
-  g_hash_table_remove (display->device_grabs, device);
-  g_hash_table_remove (display->pointers_info, device);
-
-  /* FIXME: change core pointer and remove from device list */
-}
-
-static void
 gdk_display_real_opened (GdkDisplay *display)
 {
-  GdkDeviceManager *device_manager;
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  device_manager = gdk_display_get_device_manager (display);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
-  g_signal_connect (device_manager, "device-removed",
-                    G_CALLBACK (device_removed_cb), display);
-
   _gdk_display_manager_add_display (gdk_display_manager_get (), display);
 }
 
@@ -396,11 +376,6 @@ static void
 gdk_display_dispose (GObject *object)
 {
   GdkDisplay *display = GDK_DISPLAY (object);
-  GdkDeviceManager *device_manager;
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  device_manager = gdk_display_get_device_manager (GDK_DISPLAY (object));
-  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   _gdk_display_manager_remove_display (gdk_display_manager_get (), display);
 
@@ -408,7 +383,7 @@ gdk_display_dispose (GObject *object)
   display->queued_events = NULL;
   display->queued_tail = NULL;
 
-  if (device_manager)
+  if (display->device_manager)
     {
       /* this is to make it drop devices which may require using the X
        * display and therefore can't be cleaned up in finalize.
@@ -1690,6 +1665,16 @@ gdk_display_set_rgba (GdkDisplay *display,
   g_object_notify_by_pspec (G_OBJECT (display), props[PROP_RGBA]);
 }
 
+static void
+device_removed_cb (GdkSeat    *seat,
+                   GdkDevice  *device,
+                   GdkDisplay *display)
+{
+  g_hash_table_remove (display->device_grabs, device);
+  g_hash_table_remove (display->pointers_info, device);
+
+  /* FIXME: change core pointer and remove from device list */
+}
 
 void
 gdk_display_add_seat (GdkDisplay *display,
@@ -1700,6 +1685,8 @@ gdk_display_add_seat (GdkDisplay *display,
 
   display->seats = g_list_append (display->seats, g_object_ref (seat));
   g_signal_emit (display, signals[SEAT_ADDED], 0, seat);
+
+  g_signal_connect (seat, "device-removed", G_CALLBACK (device_removed_cb), display);
 }
 
 void
@@ -1710,6 +1697,8 @@ gdk_display_remove_seat (GdkDisplay *display,
 
   g_return_if_fail (GDK_IS_DISPLAY (display));
   g_return_if_fail (GDK_IS_SEAT (seat));
+
+  g_signal_handlers_disconnect_by_func (seat, G_CALLBACK (device_removed_cb), display);
 
   link = g_list_find (display->seats, seat);
 
