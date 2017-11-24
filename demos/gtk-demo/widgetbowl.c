@@ -9,11 +9,85 @@
 
 #include "gtkfishbowl.h"
 
-GtkWidget *allow_changes;
+GtkWidget *fishbowl;
+
+static GtkWidget *
+create_button (void)
+{
+  return gtk_button_new_with_label ("Button");;
+}
+
+static GtkWidget *
+create_font_button (void)
+{
+  return gtk_font_button_new ();
+}
+
+static GtkWidget *
+create_level_bar (void)
+{
+  GtkWidget *w = gtk_level_bar_new_for_interval (0, 100);
+
+  gtk_level_bar_set_value (GTK_LEVEL_BAR (w), 50);
+
+  /* Force them to be a bit larger */
+  gtk_widget_set_size_request (w, 200, -1);
+
+  return w;
+}
+
+static GtkWidget *
+create_label (void)
+{
+  GtkWidget *w = gtk_label_new ("pLorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.");
+
+  gtk_label_set_line_wrap (GTK_LABEL (w), TRUE);
+  gtk_label_set_max_width_chars (GTK_LABEL (w), 100);
+
+  return w;
+}
+
+static const struct {
+  const char *name;
+  GtkWidget * (*create_func) (void);
+} widget_types[] = {
+  { "Button",     create_button      },
+  { "Fontbutton", create_font_button },
+  { "Levelbar"  , create_level_bar   },
+  { "Label"     , create_label       },
+};
+
+static int selected_widget_type = -1;
+static const int N_WIDGET_TYPES = G_N_ELEMENTS (widget_types);
 
 #define N_STATS 5
 
 #define STATS_UPDATE_TIME G_USEC_PER_SEC
+
+static void
+set_widget_type (GtkWidget *headerbar,
+                 int        widget_type_index)
+{
+  GList *children, *l;
+
+  if (widget_type_index == selected_widget_type)
+    return;
+
+  /* Remove everything */
+  children = gtk_container_get_children (GTK_CONTAINER (fishbowl));
+  for (l = children; l; l = l->next)
+    {
+      gtk_container_remove (GTK_CONTAINER (fishbowl), (GtkWidget*)l->data);
+    }
+
+  g_list_free (children);
+
+  selected_widget_type = widget_type_index;
+
+  gtk_header_bar_set_title (GTK_HEADER_BAR (headerbar),
+                            widget_types[selected_widget_type].name);
+}
+
 
 typedef struct _Stats Stats;
 struct _Stats {
@@ -69,7 +143,7 @@ do_stats (GtkWidget *widget,
         {
           n_frames += stats->frame_counter[i];
         }
-      
+
       new_label = g_strdup_printf ("widgets - %.1f fps",
                                    (double) G_USEC_PER_SEC * n_frames
                                        / (N_STATS * STATS_UPDATE_TIME));
@@ -96,7 +170,7 @@ do_stats (GtkWidget *widget,
       stats->frame_counter[stats->stats_index] = 0;
       stats->item_counter[stats->stats_index] = stats->item_counter[(stats->stats_index + N_STATS - 1) % N_STATS];
       stats->last_stats = frame_time;
-      
+
       if (suggested_change)
         *suggested_change = stats->last_suggestion;
       else
@@ -129,16 +203,72 @@ move_fish (GtkWidget     *bowl,
            gpointer       info_label)
 {
   gint suggested_change = 0;
-  
-  do_stats (bowl,
-            info_label,
-            !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (allow_changes)) ? &suggested_change : NULL);
 
-  gtk_fishbowl_set_count (GTK_FISHBOWL (bowl),
-                          gtk_fishbowl_get_count (GTK_FISHBOWL (bowl)) + suggested_change);
+  do_stats (bowl, info_label, &suggested_change);
+
+  if (suggested_change > 0)
+    {
+      int i;
+
+      for (i = 0; i < suggested_change; i ++)
+        {
+          GtkWidget *new_widget = widget_types[selected_widget_type].create_func ();
+
+          gtk_container_add (GTK_CONTAINER (fishbowl), new_widget);
+
+        }
+    }
+  else if (suggested_change < 0)
+    {
+      GList *children, *l;
+      int n_removed = 0;
+
+      children = gtk_container_get_children (GTK_CONTAINER (fishbowl));
+      for (l = children; l; l = l->next)
+        {
+          gtk_container_remove (GTK_CONTAINER (fishbowl), (GtkWidget *)l->data);
+          n_removed ++;
+
+          if (n_removed >= (-suggested_change))
+            break;
+        }
+
+      g_list_free (children);
+    }
+
   stats_update (bowl);
 
   return G_SOURCE_CONTINUE;
+}
+
+static void
+next_button_clicked_cb (GtkButton *source,
+                        gpointer   user_data)
+{
+  GtkWidget *headerbar = user_data;
+  int new_index;
+
+  if (selected_widget_type + 1 >= N_WIDGET_TYPES)
+    new_index = 0;
+  else
+    new_index = selected_widget_type + 1;
+
+  set_widget_type (headerbar, new_index);
+}
+
+static void
+prev_button_clicked_cb (GtkButton *source,
+                        gpointer   user_data)
+{
+  GtkWidget *headerbar = user_data;
+  int new_index;
+
+  if (selected_widget_type - 1 < 0)
+    new_index = N_WIDGET_TYPES - 1;
+  else
+    new_index = selected_widget_type - 1;
+
+  set_widget_type (headerbar, new_index);
 }
 
 GtkWidget *
@@ -148,25 +278,55 @@ do_widgetbowl (GtkWidget *do_widget)
 
   if (!window)
     {
-      GtkBuilder *builder;
-      GtkWidget *bowl, *info_label;
+      GtkWidget *info_label;
+      GtkWidget *count_label;
+      GtkWidget *titlebar;
+      GtkWidget *title_box;
+      GtkWidget *left_box;
+      GtkWidget *next_button;
+      GtkWidget *prev_button;
 
-      g_type_ensure (GTK_TYPE_FISHBOWL);
+      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      titlebar = gtk_header_bar_new ();
+      gtk_header_bar_set_show_close_button (GTK_HEADER_BAR (titlebar), TRUE);
+      info_label = gtk_label_new ("widget - 00.0 fps");
+      count_label = gtk_label_new ("0");
+      fishbowl = gtk_fishbowl_new ();
+      title_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+      prev_button = gtk_button_new_from_icon_name ("pan-start-symbolic");
+      next_button = gtk_button_new_from_icon_name ("pan-end-symbolic");
+      left_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
-      builder = gtk_builder_new_from_resource ("/fishbowl/fishbowl.ui");
-      gtk_builder_connect_signals (builder, NULL);
-      window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
-      bowl = GTK_WIDGET (gtk_builder_get_object (builder, "bowl"));
-      gtk_fishbowl_set_use_icons (GTK_FISHBOWL (bowl), FALSE);
-      info_label = GTK_WIDGET (gtk_builder_get_object (builder, "info_label"));
-      allow_changes = GTK_WIDGET (gtk_builder_get_object (builder, "changes_allow"));
+      g_object_bind_property (fishbowl, "count", count_label, "label", 0);
+      g_signal_connect (next_button, "clicked", G_CALLBACK (next_button_clicked_cb), titlebar);
+      g_signal_connect (prev_button, "clicked", G_CALLBACK (prev_button_clicked_cb), titlebar);
+
+      gtk_fishbowl_set_animating (GTK_FISHBOWL (fishbowl), TRUE);
+
+      gtk_widget_set_hexpand (title_box, TRUE);
+      gtk_widget_set_halign (title_box, GTK_ALIGN_END);
+
+      gtk_window_set_titlebar (GTK_WINDOW (window), titlebar);
+      gtk_container_add (GTK_CONTAINER (title_box), count_label);
+      gtk_container_add (GTK_CONTAINER (title_box), info_label);
+      gtk_header_bar_pack_end (GTK_HEADER_BAR (titlebar), title_box);
+      gtk_container_add (GTK_CONTAINER (window), fishbowl);
+
+
+      gtk_style_context_add_class (gtk_widget_get_style_context (left_box), "linked");
+      gtk_container_add (GTK_CONTAINER (left_box), prev_button);
+      gtk_container_add (GTK_CONTAINER (left_box), next_button);
+      gtk_header_bar_pack_start (GTK_HEADER_BAR (titlebar), left_box);
+
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
       gtk_widget_realize (window);
-      gtk_widget_add_tick_callback (bowl, move_fish, info_label, NULL);
+      gtk_widget_add_tick_callback (fishbowl, move_fish, info_label, NULL);
+
+      set_widget_type (titlebar, 0);
     }
 
   if (!gtk_widget_get_visible (window))

@@ -106,7 +106,18 @@ gtk_fishbowl_measure (GtkWidget      *widget,
       if (!gtk_widget_get_visible (child->widget))
         continue;
 
-      gtk_widget_measure (child->widget, orientation, -1, &child_min, &child_nat, NULL, NULL);
+
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+        {
+          gtk_widget_measure (child->widget, orientation, -1, &child_min, &child_nat, NULL, NULL);
+        }
+      else
+        {
+          int min_width;
+
+          gtk_widget_measure (child->widget, GTK_ORIENTATION_HORIZONTAL, -1, &min_width, NULL, NULL, NULL);
+          gtk_widget_measure (child->widget, orientation, min_width, &child_min, &child_nat, NULL, NULL);
+        }
 
       *minimum = MAX (*minimum, child_min);
       *natural = MAX (*natural, child_nat);
