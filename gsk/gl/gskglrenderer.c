@@ -76,8 +76,14 @@ font_has_color_glyphs (const PangoFont *font)
   return has_color;
 }
 
-static void
-gsk_gl_renderer_setup_render_mode (GskGLRenderer *self);
+static void gsk_gl_renderer_setup_render_mode (GskGLRenderer   *self);
+static int  add_offscreen_ops                 (GskGLRenderer   *self,
+                                               RenderOpBuilder *builder,
+                                               float            min_x,
+                                               float            max_x,
+                                               float            min_y,
+                                               float            max_y,
+                                               GskRenderNode   *child_node);
 
 #ifdef G_ENABLE_DEBUG
 typedef struct
@@ -712,15 +718,8 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
 
     case GSK_OPACITY_NODE:
       {
-        int render_target;
         int texture_id;
-        int prev_render_target;
         float prev_opacity;
-        graphene_matrix_t identity;
-        graphene_matrix_t prev_projection;
-        graphene_matrix_t prev_modelview;
-        graphene_rect_t prev_viewport;
-        graphene_matrix_t item_proj;
         GskQuadVertex vertex_data[GL_N_VERTICES] = {
           { { min_x, min_y }, { 0, 1 }, },
           { { min_x, max_y }, { 0, 0 }, },
@@ -731,35 +730,8 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
           { { max_x, min_y }, { 1, 1 }, },
         };
 
-        texture_id = gsk_gl_driver_create_texture (self->gl_driver, max_x - min_x, max_y - min_y);
-        gsk_gl_driver_bind_source_texture (self->gl_driver, texture_id);
-        gsk_gl_driver_init_texture_empty (self->gl_driver, texture_id);
-        render_target = gsk_gl_driver_create_render_target (self->gl_driver, texture_id, TRUE, TRUE);
-
-        /* Clear the framebuffer now, once */
-        RenderOp op;
-        op.op = OP_CLEAR;
-
-        graphene_matrix_init_ortho (&item_proj,
-                                    min_x, max_x,
-                                    min_y, max_y,
-                                    ORTHO_NEAR_PLANE, ORTHO_FAR_PLANE);
-        graphene_matrix_scale (&item_proj, 1, -1, 1);
-        graphene_matrix_init_identity (&identity);
-
-        prev_render_target = ops_set_render_target (builder, render_target);
-        /* Clear since we use this rendertarget for the first time */
-        ops_add (builder, &op);
-        prev_projection = ops_set_projection (builder, &item_proj);
-        prev_modelview = ops_set_modelview (builder, &identity);
-        prev_viewport = ops_set_viewport (builder, &node->bounds);
-
-        gsk_gl_renderer_add_render_ops (self, gsk_opacity_node_get_child (node), builder);
-
-        ops_set_viewport (builder, &prev_viewport);
-        ops_set_modelview (builder, &prev_modelview);
-        ops_set_projection (builder, &prev_projection);
-        ops_set_render_target (builder, prev_render_target);
+        texture_id = add_offscreen_ops (self, builder, min_x, max_x, min_y, max_y,
+                                        gsk_opacity_node_get_child (node));
 
         /* Now draw the texture with the node's opacity */
         ops_set_program (builder, &self->blit_program);
@@ -994,6 +966,58 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
       }
     }
 }
+
+static int
+add_offscreen_ops (GskGLRenderer   *self,
+                   RenderOpBuilder *builder,
+                   float            min_x,
+                   float            max_x,
+                   float            min_y,
+                   float            max_y,
+                   GskRenderNode   *child_node)
+{
+  int texture_id;
+  int render_target;
+  int prev_render_target;
+  RenderOp op;
+  graphene_matrix_t identity;
+  graphene_matrix_t prev_projection;
+  graphene_matrix_t prev_modelview;
+  graphene_rect_t prev_viewport;
+  graphene_matrix_t item_proj;
+
+
+  texture_id = gsk_gl_driver_create_texture (self->gl_driver, max_x - min_x, max_y - min_y);
+  gsk_gl_driver_bind_source_texture (self->gl_driver, texture_id);
+  gsk_gl_driver_init_texture_empty (self->gl_driver, texture_id);
+  render_target = gsk_gl_driver_create_render_target (self->gl_driver, texture_id, TRUE, TRUE);
+
+  graphene_matrix_init_ortho (&item_proj,
+                              min_x, max_x,
+                              min_y, max_y,
+                              ORTHO_NEAR_PLANE, ORTHO_FAR_PLANE);
+  graphene_matrix_scale (&item_proj, 1, -1, 1);
+  graphene_matrix_init_identity (&identity);
+
+  prev_render_target = ops_set_render_target (builder, render_target);
+  /* Clear since we use this rendertarget for the first time */
+  op.op = OP_CLEAR;
+  ops_add (builder, &op);
+  prev_projection = ops_set_projection (builder, &item_proj);
+  prev_modelview = ops_set_modelview (builder, &identity);
+  prev_viewport = ops_set_viewport (builder, &GRAPHENE_RECT_INIT (min_x, min_y, max_x - min_x, max_y - min_y));
+
+  gsk_gl_renderer_add_render_ops (self, child_node, builder);
+
+  ops_set_viewport (builder, &prev_viewport);
+  ops_set_modelview (builder, &prev_modelview);
+  ops_set_projection (builder, &prev_projection);
+  ops_set_render_target (builder, prev_render_target);
+
+  return texture_id;
+}
+
+
 
 static void
 gsk_gl_renderer_render_ops (GskGLRenderer *self,
