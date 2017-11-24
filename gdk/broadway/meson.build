@@ -5,7 +5,6 @@ gdk_broadway_sources = files([
   'gdkbroadway-server.c',
   'gdkcursor-broadway.c',
   'gdkdevice-broadway.c',
-  'gdkdevicemanager-broadway.c',
   'gdkdisplay-broadway.c',
   'gdkdnd-broadway.c',
   'gdkeventsource.c',
