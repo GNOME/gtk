@@ -66,6 +66,8 @@ struct _GdkWaylandDisplay
   GdkDisplay parent_instance;
   GList *toplevels;
 
+  GdkDeviceManager *device_manager;
+
   GHashTable *settings;
   GsdXftSettings xft_settings;
 
