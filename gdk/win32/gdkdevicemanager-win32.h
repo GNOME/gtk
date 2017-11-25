@@ -34,7 +34,8 @@ typedef struct _GdkDeviceManagerWin32Class GdkDeviceManagerWin32Class;
 
 struct _GdkDeviceManagerWin32
 {
-  GdkDeviceManager parent_object;
+  GObject parent_object;
+  GdkDisplay *display;
   /* Master Devices */
   GdkDevice *core_pointer;
   GdkDevice *core_keyboard;
@@ -46,7 +47,7 @@ struct _GdkDeviceManagerWin32
 
 struct _GdkDeviceManagerWin32Class
 {
-  GdkDeviceManagerClass parent_class;
+  GObjectClass parent_class;
 };
 
 GType gdk_device_manager_win32_get_type (void) G_GNUC_CONST;
