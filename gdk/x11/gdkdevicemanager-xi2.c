@@ -96,15 +96,12 @@ enum {
 static void
 gdk_x11_device_manager_xi2_class_init (GdkX11DeviceManagerXI2Class *klass)
 {
-  GdkDeviceManagerClass *device_manager_class = GDK_DEVICE_MANAGER_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->constructed = gdk_x11_device_manager_xi2_constructed;
   object_class->dispose = gdk_x11_device_manager_xi2_dispose;
   object_class->set_property = gdk_x11_device_manager_xi2_set_property;
   object_class->get_property = gdk_x11_device_manager_xi2_get_property;
-
-  device_manager_class->get_client_pointer = gdk_x11_device_manager_xi2_get_client_pointer;
 
   g_object_class_install_property (object_class,
                                    PROP_OPCODE,

@@ -5001,30 +5001,12 @@ gdk_wayland_device_manager_finalize (GObject *object)
   G_OBJECT_CLASS (gdk_wayland_device_manager_parent_class)->finalize (object);
 }
 
-static GdkDevice *
-gdk_wayland_device_manager_get_client_pointer (GdkDeviceManager *device_manager)
-{
-  GdkWaylandDeviceManager *wayland_device_manager;
-  GdkWaylandSeat *seat;
-  GdkDevice *device;
-
-  wayland_device_manager = GDK_WAYLAND_DEVICE_MANAGER (device_manager);
-
-  /* Find the master pointer of the first GdkWaylandSeat we find */
-  device = wayland_device_manager->devices->data;
-  seat = GDK_WAYLAND_SEAT (gdk_device_get_seat (device));
-
-  return seat->master_pointer;
-}
-
 static void
 gdk_wayland_device_manager_class_init (GdkWaylandDeviceManagerClass *klass)
 {
-  GdkDeviceManagerClass *device_manager_class = GDK_DEVICE_MANAGER_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = gdk_wayland_device_manager_finalize;
-  device_manager_class->get_client_pointer = gdk_wayland_device_manager_get_client_pointer;
 }
 
 static void

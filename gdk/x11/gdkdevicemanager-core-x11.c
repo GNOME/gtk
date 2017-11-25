@@ -35,8 +35,6 @@
 static void    gdk_x11_device_manager_core_finalize    (GObject *object);
 static void    gdk_x11_device_manager_core_constructed (GObject *object);
 
-static GdkDevice * gdk_x11_device_manager_core_get_client_pointer (GdkDeviceManager *device_manager);
-
 static void     gdk_x11_device_manager_event_translator_init (GdkEventTranslatorIface *iface);
 
 static gboolean gdk_x11_device_manager_core_translate_event  (GdkEventTranslator *translator,
@@ -52,12 +50,10 @@ G_DEFINE_TYPE_WITH_CODE (GdkX11DeviceManagerCore, gdk_x11_device_manager_core, G
 static void
 gdk_x11_device_manager_core_class_init (GdkX11DeviceManagerCoreClass *klass)
 {
-  GdkDeviceManagerClass *device_manager_class = GDK_DEVICE_MANAGER_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = gdk_x11_device_manager_core_finalize;
   object_class->constructed = gdk_x11_device_manager_core_constructed;
-  device_manager_class->get_client_pointer = gdk_x11_device_manager_core_get_client_pointer;
 }
 
 static void
@@ -678,15 +674,6 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
     g_object_unref (window);
 
   return return_val;
-}
-
-static GdkDevice *
-gdk_x11_device_manager_core_get_client_pointer (GdkDeviceManager *device_manager)
-{
-  GdkX11DeviceManagerCore *device_manager_core;
-
-  device_manager_core = (GdkX11DeviceManagerCore *) device_manager;
-  return device_manager_core->core_pointer;
 }
 
 void
