@@ -20,7 +20,6 @@
 
 #include "gdkdevice.h"
 #include "gdkdevicetool.h"
-#include "gdkdevicemanager.h"
 #include "gdkevents.h"
 #include "gdkseat.h"
 
@@ -50,7 +49,6 @@ struct _GdkDevice
   gint num_keys;
   GdkAxisFlags axis_flags;
   GdkDeviceKey *keys;
-  GdkDeviceManager *manager;
   GdkDisplay *display;
   /* Paired master for master,
    * associated master for slaves
