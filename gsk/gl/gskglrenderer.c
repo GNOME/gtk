@@ -130,6 +130,7 @@ struct _GskGLRenderer
       Program coloring_program;
       Program color_matrix_program;
       Program linear_gradient_program;
+      Program blur_program;
     };
   };
 
@@ -370,6 +371,22 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient_program, n_color_stops_location, "uNumColorStops");
   INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient_program, start_point_location, "uStartPoint");
   INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient_program, end_point_location, "uEndPoint");
+
+  self->blur_program.id = gsk_shader_builder_create_program (builder,
+                                                             "blur.vs.glsl", "blur.fs.glsl",
+                                                             &shader_error);
+  if (shader_error != NULL)
+    {
+      g_propagate_prefixed_error (error,
+                                  shader_error,
+                                  "Unable to create 'blur' program: ");
+      goto out;
+    }
+  self->blur_program.index = 6;
+  self->blur_program.name = "blur";
+  init_common_locations (self, builder, &self->blur_program);
+  INIT_PROGRAM_UNIFORM_LOCATION (blur_program, blur_radius_location, "uBlurRadius");
+  INIT_PROGRAM_UNIFORM_LOCATION (blur_program, blur_size_location, "uSize");
 
   res = TRUE;
 
@@ -950,11 +967,48 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
       }
     break;
 
+    case GSK_BLUR_NODE:
+      {
+        int texture_id;
+        gboolean is_offscreen;
+        RenderOp op;
+        add_offscreen_ops (self, builder, min_x, max_x, min_y, max_y,
+                           gsk_blur_node_get_child (node),
+                           &texture_id, &is_offscreen);
+
+        ops_set_program (builder, &self->blur_program);
+        op.op = OP_CHANGE_BLUR;
+        graphene_size_init_from_size (&op.blur.size, &node->bounds.size);
+        op.blur.radius = gsk_blur_node_get_radius (node);
+        ops_add (builder, &op);
+
+        ops_set_texture (builder, texture_id);
+
+        if (is_offscreen)
+          {
+            GskQuadVertex vertex_data[GL_N_VERTICES] = {
+              { { min_x, min_y }, { 0, 1 }, },
+              { { min_x, max_y }, { 0, 0 }, },
+              { { max_x, min_y }, { 1, 1 }, },
+
+              { { max_x, max_y }, { 1, 0 }, },
+              { { min_x, max_y }, { 0, 0 }, },
+              { { max_x, min_y }, { 1, 1 }, },
+            };
+
+            ops_draw (builder, vertex_data);
+          }
+        else
+          {
+            ops_draw (builder, vertex_data);
+          }
+      }
+    break;
+
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
     case GSK_BORDER_NODE:
     case GSK_INSET_SHADOW_NODE:
     case GSK_OUTSET_SHADOW_NODE:
-    case GSK_BLUR_NODE:
     case GSK_SHADOW_NODE:
     case GSK_CROSS_FADE_NODE:
     case GSK_BLEND_NODE:
@@ -1243,6 +1297,12 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
                          op->linear_gradient.start_point.x, op->linear_gradient.start_point.y);
             glUniform2f (program->end_point_location,
                          op->linear_gradient.end_point.x, op->linear_gradient.end_point.y);
+          break;
+
+       case OP_CHANGE_BLUR:
+          g_assert (program == &self->blur_program);
+          glUniform1f (program->blur_radius_location, op->blur.radius);
+          glUniform2f (program->blur_size_location, op->blur.size.width, op->blur.size.height);
           break;
 
         case OP_DRAW:

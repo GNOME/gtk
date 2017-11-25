@@ -7,6 +7,8 @@ gsk_private_source_shaders = [
   'resources/glsl/coloring.fs.glsl',
   'resources/glsl/color_matrix.fs.glsl',
   'resources/glsl/linear_gradient.fs.glsl',
+  'resources/glsl/blur.vs.glsl',
+  'resources/glsl/blur.fs.glsl',
   'resources/glsl/es2_common.fs.glsl',
   'resources/glsl/es2_common.vs.glsl',
   'resources/glsl/gl3_common.fs.glsl',
