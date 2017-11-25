@@ -167,7 +167,8 @@ add_provider_button (GtkWidget          *box,
 }
 
 static GtkWidget *
-get_button_list (GdkClipboard *clipboard)
+get_button_list (GdkClipboard *clipboard,
+                 const char   *info)
 {
   static const guchar invalid_utf8[] = {  'L', 'i', 'b', 'e', 'r', 't', 0xe9, ',', ' ',
                                          0xc9, 'g', 'a', 'l', 'i', 't', 0xe9, ',', ' ',
@@ -177,7 +178,7 @@ get_button_list (GdkClipboard *clipboard)
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
-  gtk_container_add (GTK_CONTAINER (box), gtk_label_new ("Set Clipboard:"));
+  gtk_container_add (GTK_CONTAINER (box), gtk_label_new (info));
 
   add_provider_button (box,
                        NULL,
@@ -220,6 +221,7 @@ get_button_list (GdkClipboard *clipboard)
 
 static GtkWidget *
 get_clipboard_widget (GdkClipboard *clipboard,
+                      GdkClipboard *alt_clipboard,
                       const char   *name)
 {
   GtkWidget *vbox, *hbox, *stack, *switcher;
@@ -233,23 +235,28 @@ get_clipboard_widget (GdkClipboard *clipboard,
   stack = get_contents_widget (clipboard);
   gtk_container_add (GTK_CONTAINER (vbox), stack);
   gtk_stack_switcher_set_stack (GTK_STACK_SWITCHER (switcher), GTK_STACK (stack));
-  gtk_container_add (GTK_CONTAINER (hbox), get_button_list (clipboard));
+  gtk_container_add (GTK_CONTAINER (hbox), get_button_list (clipboard, "Set Locally:"));
+  if (clipboard != alt_clipboard)
+    gtk_container_add (GTK_CONTAINER (hbox), get_button_list (alt_clipboard, "Set Remotely:"));
 
   return hbox;
 }
 
 static GtkWidget *
-get_window_contents (GdkDisplay *display)
+get_window_contents (GdkDisplay *display,
+                     GdkDisplay *alt_display)
 {
   GtkWidget *box;
 
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   gtk_box_set_homogeneous (GTK_BOX (box), TRUE);
   gtk_container_add (GTK_CONTAINER (box),
                      get_clipboard_widget (gdk_display_get_clipboard (display),
+                                           gdk_display_get_clipboard (alt_display),
                                            "Clipboard"));
   gtk_container_add (GTK_CONTAINER (box),
                      get_clipboard_widget (gdk_display_get_primary_clipboard (display),
+                                           gdk_display_get_primary_clipboard (alt_display),
                                            "Primary Clipboard"));
 
   return box;
@@ -259,12 +266,19 @@ int
 main (int argc, char **argv)
 {
   GtkWidget *window;
+  GdkDisplay *alt_display;
 
   gtk_init ();
 
+  alt_display = gdk_display_open (NULL);
+  if (alt_display == NULL)
+    alt_display = gdk_display_get_default ();
+
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
-  gtk_container_add (GTK_CONTAINER (window), get_window_contents (gtk_widget_get_display (window)));
+  gtk_container_add (GTK_CONTAINER (window),
+                     get_window_contents (gtk_widget_get_display (window),
+                                          alt_display));
 
   gtk_widget_show (window);
 
