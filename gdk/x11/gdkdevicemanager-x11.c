@@ -33,7 +33,7 @@
 
 static gboolean _gdk_disable_multidevice = FALSE;
 
-GdkDeviceManager *
+GdkX11DeviceManagerCore *
 _gdk_x11_device_manager_new (GdkDisplay *display)
 {
   if (!g_getenv ("GDK_CORE_DEVICE_EVENTS"))
@@ -66,7 +66,7 @@ _gdk_x11_device_manager_new (GdkDisplay *display)
                                                  "minor", minor,
                                                  NULL);
 
-              return GDK_DEVICE_MANAGER (device_manager_xi2);
+              return GDK_X11_DEVICE_MANAGER_CORE (device_manager_xi2);
             }
         }
 #endif /* XINPUT_2 */
@@ -92,12 +92,12 @@ _gdk_x11_device_manager_new (GdkDisplay *display)
  * Since: 3.2
  **/
 GdkDevice *
-gdk_x11_device_manager_lookup (GdkDeviceManager *device_manager,
-			       gint              device_id)
+gdk_x11_device_manager_lookup (GdkX11DeviceManagerCore *device_manager,
+			       gint                     device_id)
 {
   GdkDevice *device = NULL;
 
-  g_return_val_if_fail (GDK_IS_DEVICE_MANAGER (device_manager), NULL);
+  g_return_val_if_fail (GDK_IS_X11_DEVICE_MANAGER_CORE (device_manager), NULL);
 
 #ifdef XINPUT_2
   if (GDK_IS_X11_DEVICE_MANAGER_XI2 (device_manager))

@@ -33,7 +33,6 @@
 #include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
 #include "gdkkeysprivate.h"
-#include "gdkdevicemanager.h"
 #include "xsettings-client.h"
 #include "gdkdisplay-x11.h"
 #include "gdkprivate-x11.h"

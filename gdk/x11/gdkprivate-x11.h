@@ -194,7 +194,7 @@ gchar *     _gdk_x11_display_utf8_to_string_target      (GdkDisplay     *display
 
 void _gdk_x11_device_check_extension_events   (GdkDevice  *device);
 
-GdkDeviceManager *_gdk_x11_device_manager_new (GdkDisplay *display);
+GdkX11DeviceManagerCore *_gdk_x11_device_manager_new (GdkDisplay *display);
 
 #ifdef XINPUT_2
 guchar * _gdk_x11_device_xi2_translate_event_mask (GdkX11DeviceManagerXI2 *device_manager_xi2,

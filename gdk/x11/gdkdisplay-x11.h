@@ -27,6 +27,7 @@
 #include "gdkwindow.h"
 #include "gdkinternals.h"
 #include "gdkx11screen.h"
+#include "gdkx11devicemanager.h"
 
 #include <X11/X.h>
 #include <X11/Xlib.h>
@@ -41,7 +42,7 @@ struct _GdkX11Display
   GdkX11Screen *screen;
   GList *screens;
   GList *toplevels;
-  GdkDeviceManager *device_manager;
+  GdkX11DeviceManagerCore *device_manager;
 
   GSource *event_source;
 
