@@ -754,15 +754,6 @@ gdk_device_manager_win32_constructed (GObject *object)
                     NULL);
 }
 
-static GdkDevice *
-gdk_device_manager_win32_get_client_pointer (GdkDeviceManager *device_manager)
-{
-  GdkDeviceManagerWin32 *device_manager_win32;
-
-  device_manager_win32 = (GdkDeviceManagerWin32 *) device_manager;
-  return device_manager_win32->core_pointer;
-}
-
 static void
 gdk_device_manager_win32_class_init (GdkDeviceManagerWin32Class *klass)
 {
@@ -771,7 +762,6 @@ gdk_device_manager_win32_class_init (GdkDeviceManagerWin32Class *klass)
 
   object_class->finalize = gdk_device_manager_win32_finalize;
   object_class->constructed = gdk_device_manager_win32_constructed;
-  device_manager_class->get_client_pointer = gdk_device_manager_win32_get_client_pointer;
 }
 
 void
