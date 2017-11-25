@@ -57,15 +57,6 @@ file_exists (const char *filename)
   return stat (filename, &statbuf) == 0;
 }
 
-GtkWidget *
-shape_create_icon (GdkScreen *screen,
-		   char      *xpm_file,
-		   gint       x,
-		   gint       y,
-		   gint       px,
-		   gint       py,
-		   gint       window_type);
-
 static GtkWidget *
 build_option_menu (gchar           *items[],
 		   gint             num_items,
