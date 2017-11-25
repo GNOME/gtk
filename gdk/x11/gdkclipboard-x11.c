@@ -54,12 +54,6 @@ struct _GdkX11ClipboardClass
 
 G_DEFINE_TYPE (GdkX11Clipboard, gdk_x11_clipboard, GDK_TYPE_CLIPBOARD)
 
-#define SELECTION_MAX_SIZE(display)                                     \
-  MIN(262144,                                                           \
-      XExtendedMaxRequestSize (GDK_DISPLAY_XDISPLAY (display)) == 0     \
-       ? XMaxRequestSize (GDK_DISPLAY_XDISPLAY (display)) - 100         \
-       : XExtendedMaxRequestSize (GDK_DISPLAY_XDISPLAY (display)) - 100)
-
 static GInputStream * 
 text_list_convert (GdkX11Clipboard *cb,
                    GInputStream    *stream,
@@ -219,7 +213,7 @@ gdk_x11_clipboard_request_targets_finish (GObject      *source_object,
   gdk_content_formats_unref (formats);
 
   g_input_stream_read_bytes_async (stream,
-                                   SELECTION_MAX_SIZE (display),
+                                   gdk_x11_display_get_max_request_size (display),
                                    G_PRIORITY_DEFAULT,
                                    NULL,
                                    gdk_x11_clipboard_request_targets_finish,
@@ -255,7 +249,7 @@ gdk_x11_clipboard_request_targets_got_stream (GObject      *source,
   display = gdk_clipboard_get_display (GDK_CLIPBOARD (cb));
 
   g_input_stream_read_bytes_async (stream,
-                                   SELECTION_MAX_SIZE (display),
+                                   gdk_x11_display_get_max_request_size (display),
                                    G_PRIORITY_DEFAULT,
                                    NULL,
                                    gdk_x11_clipboard_request_targets_finish,

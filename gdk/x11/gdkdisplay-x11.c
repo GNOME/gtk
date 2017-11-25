@@ -3041,6 +3041,20 @@ gdk_x11_set_sm_client_id (const gchar *sm_client_id)
 
   g_slist_free (displays);
 }
+ 
+gsize
+gdk_x11_display_get_max_request_size (GdkDisplay *display)
+{
+  Display *xdisplay = GDK_DISPLAY_XDISPLAY (display);
+  gsize size;
+
+  size = XExtendedMaxRequestSize (xdisplay);
+  if (size <= 0)
+    size = XMaxRequestSize (xdisplay);
+  
+  size = MIN (262144, size - 100);
+  return size;
+}
 
 GdkX11Screen *
 gdk_x11_display_get_screen (GdkDisplay *display)
