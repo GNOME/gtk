@@ -37,6 +37,9 @@ GType              gdk_x11_text_list_converter_get_type         (void) G_GNUC_CO
 GConverter *       gdk_x11_text_list_converter_to_utf8_new      (GdkDisplay     *display,
                                                                  const char     *encoding,
                                                                  int             format);
+GConverter *       gdk_x11_text_list_converter_from_utf8_new    (GdkDisplay     *display,
+                                                                 const char     *encoding,
+                                                                 int             format);
 
 
 G_END_DECLS

@@ -39,6 +39,8 @@ struct _GdkX11TextListConverter
   
   const char *encoding; /* interned */
   gint format;
+
+  guint encoder : 1;
 };
 
 struct _GdkX11TextListConverterClass
@@ -47,17 +49,39 @@ struct _GdkX11TextListConverterClass
 };
 
 static GConverterResult
-gdk_x11_text_list_converter_convert (GConverter       *converter,
-                                     const void       *inbuf,
-                                     gsize             inbuf_size,
-                                     void             *outbuf,
-                                     gsize             outbuf_size,
-                                     GConverterFlags   flags,
-                                     gsize            *bytes_read,
-                                     gsize            *bytes_written,
-                                     GError          **error)
+write_output (void        *outbuf,
+              gsize        outbuf_size,
+              gsize       *bytes_written,
+              const void  *data,
+              gssize       len,
+              GError     **error)
 {
-  GdkX11TextListConverter *conv = GDK_X11_TEXT_LIST_CONVERTER (converter);
+  if (len < 0)
+    len = strlen (data) + 1;
+
+  if (outbuf_size < len)
+    {
+      g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_NO_SPACE,
+                           _("Not enough space in destination"));
+      return G_CONVERTER_ERROR;
+    }
+
+  memcpy (outbuf, data, len);
+  *bytes_written = len;
+  return G_CONVERTER_FINISHED;
+}
+
+static GConverterResult
+gdk_x11_text_list_converter_decode (GdkX11TextListConverter *conv,
+                                    const void              *inbuf,
+                                    gsize                    inbuf_size,
+                                    void                    *outbuf,
+                                    gsize                    outbuf_size,
+                                    GConverterFlags          flags,
+                                    gsize                   *bytes_read,
+                                    gsize                   *bytes_written,
+                                    GError                 **error)
+{
   gint count;
   char **list;
 
@@ -83,32 +107,135 @@ gdk_x11_text_list_converter_convert (GConverter       *converter,
     }
   else if (count == 0)
     {
-      if (outbuf_size < 1)
-        {
-          g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_NO_SPACE,
-                               _("Not enough space in destination"));
-          return G_CONVERTER_ERROR;
-        }
-      ((gchar *) outbuf)[0] = 0;
       *bytes_read = inbuf_size;
-      *bytes_written = 1;
-      return G_CONVERTER_FINISHED;
+      return write_output (outbuf, outbuf_size, bytes_written, "", 1, error);
     }
   else
     {
-      gsize len = strlen (list[0]) + 1;
-
-      if (outbuf_size < len)
-        {
-          g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_NO_SPACE,
-                               _("Not enough space in destination"));
-          return G_CONVERTER_ERROR;
-        }
-      memcpy (outbuf, list[0], len);
+      GConverterResult result;
+      
+      result = write_output (outbuf, outbuf_size, bytes_written, list[0], -1, error);
       g_strfreev (list);
       *bytes_read = inbuf_size;
-      *bytes_written = len;
-      return G_CONVERTER_FINISHED;
+      return result;
+    }
+}
+
+static GConverterResult
+gdk_x11_text_list_converter_encode (GdkX11TextListConverter *conv,
+                                    const void              *inbuf,
+                                    gsize                    inbuf_size,
+                                    void                    *outbuf,
+                                    gsize                    outbuf_size,
+                                    GConverterFlags          flags,
+                                    gsize                   *bytes_read,
+                                    gsize                   *bytes_written,
+                                    GError                 **error)
+{
+  if (!(flags & G_CONVERTER_INPUT_AT_END))
+    {
+      g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_PARTIAL_INPUT,
+                           _("Need complete input to do conversion"));
+      return G_CONVERTER_ERROR;
+    }
+
+  if (g_str_equal (conv->encoding, "STRING") ||
+      g_str_equal (conv->encoding, "TEXT"))
+    {
+      GConverterResult result;
+      gchar *tmp, *latin1;
+
+      tmp = g_strndup (inbuf, inbuf_size);
+      latin1 = gdk_utf8_to_string_target (tmp);
+      g_free (tmp);
+      if (latin1)
+        {
+          result = write_output (outbuf, outbuf_size, bytes_written, latin1, -1, error);
+          g_free (latin1);
+        }
+      else
+        { 
+          g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_INVALID_DATA,
+                               _("Invalid byte sequence in conversion input"));
+          result = G_CONVERTER_ERROR;
+        }
+      return result;
+    }
+  else if (g_str_equal (conv->encoding, "COMPOUND_TEXT"))
+    {
+      GConverterResult result;
+      guchar *text;
+      GdkAtom encoding;
+      gint format;
+      gint new_length;
+      char *tmp;
+
+      tmp = g_strndup (inbuf, inbuf_size);
+      if (gdk_x11_display_utf8_to_compound_text (conv->display, tmp,
+                                                 &encoding, &format, &text, &new_length))
+        {
+          if (encoding == gdk_atom_intern (conv->encoding, FALSE) &&
+              format == conv->format)
+            {
+              result = write_output (outbuf, outbuf_size, bytes_written, text, new_length, error);
+            }
+          else
+            {
+              g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_FAILED,
+                                   _("Invalid formats in compound text conversion."));
+              result = G_CONVERTER_ERROR;
+            }
+          gdk_x11_free_compound_text (text);
+        }
+      else
+        {
+          g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_INVALID_DATA,
+                               _("Invalid byte sequence in conversion input"));
+          result = G_CONVERTER_ERROR;
+        }
+      g_free (tmp);
+      return result;
+    }
+  else
+    {
+      g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
+                   _("Unsupported encoding \"%s\""), conv->encoding);
+      return G_CONVERTER_ERROR;
+    }
+
+  return FALSE;
+}
+
+static GConverterResult
+gdk_x11_text_list_converter_convert (GConverter       *converter,
+                                     const void       *inbuf,
+                                     gsize             inbuf_size,
+                                     void             *outbuf,
+                                     gsize             outbuf_size,
+                                     GConverterFlags   flags,
+                                     gsize            *bytes_read,
+                                     gsize            *bytes_written,
+                                     GError          **error)
+{
+  GdkX11TextListConverter *conv = GDK_X11_TEXT_LIST_CONVERTER (converter);
+
+  if (conv->encoder)
+    {
+      return gdk_x11_text_list_converter_encode (conv,
+                                                 inbuf, inbuf_size,
+                                                 outbuf, outbuf_size,
+                                                 flags,
+                                                 bytes_read, bytes_written,
+                                                 error);
+    }
+  else
+    {
+      return gdk_x11_text_list_converter_decode (conv,
+                                                 inbuf, inbuf_size,
+                                                 outbuf, outbuf_size,
+                                                 flags,
+                                                 bytes_read, bytes_written,
+                                                 error);
     }
 }
 
@@ -163,6 +290,23 @@ gdk_x11_text_list_converter_to_utf8_new (GdkDisplay *display,
   conv->display = g_object_ref (display);
   conv->encoding = g_intern_string (encoding);
   conv->format = format;
+
+  return G_CONVERTER (conv);
+}
+
+GConverter *
+gdk_x11_text_list_converter_from_utf8_new (GdkDisplay *display,
+                                           const char *encoding,
+                                           int         format)
+{
+  GdkX11TextListConverter *conv;
+
+  conv = g_object_new (GDK_TYPE_X11_TEXT_LIST_CONVERTER, NULL);
+
+  conv->display = g_object_ref (display);
+  conv->encoding = g_intern_string (encoding);
+  conv->format = format;
+  conv->encoder = TRUE;
 
   return G_CONVERTER (conv);
 }

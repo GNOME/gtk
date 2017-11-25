@@ -367,6 +367,9 @@ gdk_fullscreen_mode_get_type
 <SECTION>
 <FILE>gdkcontentformats</FILE>
 <TITLE>Content Formats</TITLE>
+gdk_intern_mime_type
+
+<SUBSECTION>
 GdkContentFormats
 gdk_content_formats_new
 gdk_content_formats_ref

@@ -63,7 +63,7 @@
 #include "gdkcontentformats.h"
 #include "gdkcontentformatsprivate.h"
 
-#include "gdkproperty.h"
+#include <string.h>
 
 struct _GdkContentFormats
 {
@@ -80,6 +80,37 @@ G_DEFINE_BOXED_TYPE (GdkContentFormats, gdk_content_formats,
                      gdk_content_formats_ref,
                      gdk_content_formats_unref)
 
+
+/**
+ * gdk_intern_mime_type:
+ * @string: (transfer none): string of a potential mime type
+ *
+ * Canonicalizes the given mime type and interns the result.
+ *
+ * If @string is not a valid mime type, %NULL is returned instead.
+ * See RFC 2048 for the syntax if mime types.
+ *
+ * Returns: An interned string for the canonicalized mime type
+ *     or %NULL if the string wasn't a valid mime type
+ **/
+const char *
+gdk_intern_mime_type (const char *string)
+{
+  char *tmp;
+
+  g_return_val_if_fail (string != NULL, NULL);
+
+  if (!strchr (string, '/'))
+    return NULL;
+
+  tmp = g_ascii_strdown (string, -1);
+
+  string = g_intern_string (tmp);
+
+  g_free (tmp);
+
+  return string;
+}
 
 static GdkContentFormats *
 gdk_content_formats_new_take (GType *      gtypes,

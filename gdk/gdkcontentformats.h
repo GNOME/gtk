@@ -31,6 +31,9 @@ G_BEGIN_DECLS
 #define GDK_TYPE_CONTENT_FORMATS    (gdk_content_formats_get_type ())
 
 GDK_AVAILABLE_IN_3_94
+const char *            gdk_intern_mime_type                    (const char                     *string);
+
+GDK_AVAILABLE_IN_3_94
 GType                   gdk_content_formats_get_type            (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_3_94
 GdkContentFormats *     gdk_content_formats_new                 (const char                    **mime_types,

@@ -2054,7 +2054,7 @@ gdk_x11_display_finalize (GObject *object)
   _gdk_x11_display_free_translate_queue (GDK_DISPLAY (display_x11));
 
   /* Get rid of pending streams */
-  g_slist_free_full (display_x11->input_streams, g_object_unref);
+  g_slist_free_full (display_x11->streams, g_object_unref);
 
   /* Atom Hashtable */
   g_hash_table_destroy (display_x11->atom_from_virtual);

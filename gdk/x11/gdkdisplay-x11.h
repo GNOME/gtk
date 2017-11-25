@@ -107,7 +107,7 @@ struct _GdkX11Display
   GQueue *translate_queue;
 
   /* streams reading selections */
-  GSList *input_streams;
+  GSList *streams;
 
   /* input GdkWindow list */
   GList *input_windows;

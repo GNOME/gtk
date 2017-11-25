@@ -160,7 +160,7 @@ gdk_x11_selection_input_stream_complete (GdkX11SelectionInputStream *stream)
   g_async_queue_push (priv->chunks, g_bytes_new (NULL, 0));
   gdk_x11_selection_input_stream_flush (stream);
 
-  GDK_X11_DISPLAY (priv->display)->input_streams = g_slist_remove (GDK_X11_DISPLAY (priv->display)->input_streams, stream);
+  GDK_X11_DISPLAY (priv->display)->streams = g_slist_remove (GDK_X11_DISPLAY (priv->display)->streams, stream);
   gdk_window_remove_filter (NULL, gdk_x11_selection_input_stream_filter_event, stream);
 
   g_object_unref (stream);
@@ -521,7 +521,7 @@ gdk_x11_selection_input_stream_new_async (GdkDisplay          *display,
   priv = gdk_x11_selection_input_stream_get_instance_private (stream);
 
   priv->display = display;
-  GDK_X11_DISPLAY (display)->input_streams = g_slist_prepend (GDK_X11_DISPLAY (display)->input_streams, stream);
+  GDK_X11_DISPLAY (display)->streams = g_slist_prepend (GDK_X11_DISPLAY (display)->streams, stream);
   priv->selection = g_strdup (selection);
   priv->xselection = gdk_x11_get_xatom_by_name_for_display (display, priv->selection);
   priv->target = g_strdup (target);
