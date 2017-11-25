@@ -12380,6 +12380,50 @@ gtk_widget_set_margin_bottom (GtkWidget *widget,
 }
 
 /**
+ * gtk_widget_get_clipboard:
+ * @widget: a #GtkWidget
+ *
+ * This is a utility function to get the clipboard object for the
+ * #GdkDisplay that @widget is using.
+ *
+ * Note that this function always works, even when @widget is not
+ * realized yet.
+ *
+ * Returns: (transfer none): the appropriate clipboard object.
+ *
+ * Since: 3.94
+ **/
+GdkClipboard *
+gtk_widget_get_clipboard (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  return gdk_display_get_clipboard (gtk_widget_get_display (widget));
+}
+
+/**
+ * gtk_widget_get_primary_clipboard:
+ * @widget: a #GtkWidget
+ *
+ * This is a utility function to get the primary clipboard object 
+ * for the #GdkDisplay that @widget is using.
+ *
+ * Note that this function always works, even when @widget is not
+ * realized yet.
+ *
+ * Returns: (transfer none): the appropriate clipboard object.
+ *
+ * Since: 3.94
+ **/
+GdkClipboard *
+gtk_widget_get_primary_clipboard (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  return gdk_display_get_primary_clipboard (gtk_widget_get_display (widget));
+}
+
+/**
  * gtk_widget_get_old_clipboard:
  * @widget: a #GtkWidget
  * @selection: a #GdkAtom which identifies the clipboard

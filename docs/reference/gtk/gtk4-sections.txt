@@ -4530,6 +4530,8 @@ gtk_widget_freeze_child_notify
 gtk_widget_get_child_visible
 gtk_widget_get_parent
 gtk_widget_get_settings
+gtk_widget_get_clipboard
+gtk_widget_get_primary_clipboard
 gtk_widget_get_old_clipboard
 gtk_widget_get_display
 gtk_widget_get_size_request

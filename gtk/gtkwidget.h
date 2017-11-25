@@ -782,6 +782,10 @@ GDK_AVAILABLE_IN_ALL
 GdkDisplay *  gtk_widget_get_display     (GtkWidget *widget);
 GDK_AVAILABLE_IN_ALL
 GtkSettings*  gtk_widget_get_settings    (GtkWidget *widget);
+GDK_AVAILABLE_IN_3_94
+GdkClipboard *gtk_widget_get_clipboard   (GtkWidget *widget);
+GDK_AVAILABLE_IN_3_94
+GdkClipboard *gtk_widget_get_primary_clipboard (GtkWidget *widget);
 GDK_AVAILABLE_IN_ALL
 GtkClipboard *gtk_widget_get_old_clipboard   (GtkWidget *widget,
 					  GdkAtom    selection);
