@@ -5,7 +5,6 @@ gdk/gdkapplaunchcontext.c
 gdk/gdk.c
 gdk/gdkcursor.c
 gdk/gdkdevice.c
-gdk/gdkdevicemanager.c
 gdk/gdkdisplay.c
 gdk/gdkdisplaymanager.c
 gdk/gdkdnd.c
