@@ -82,7 +82,6 @@ G_DEFINE_ABSTRACT_TYPE (GdkDevice, gdk_device, G_TYPE_OBJECT)
 enum {
   PROP_0,
   PROP_DISPLAY,
-  PROP_DEVICE_MANAGER,
   PROP_NAME,
   PROP_ASSOCIATED_DEVICE,
   PROP_TYPE,
@@ -125,19 +124,6 @@ gdk_device_class_init (GdkDeviceClass *klass)
                            GDK_TYPE_DISPLAY,
                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
-  /**
-   * GdkDevice:device-manager:
-   *
-   * The #GdkDeviceManager the #GdkDevice pertains to.
-   *
-   * Since: 3.0
-   */
-  device_props[PROP_DEVICE_MANAGER] =
-      g_param_spec_object ("device-manager",
-                           P_("Device manager"),
-                           P_("Device manager which the device belongs to"),
-                           GDK_TYPE_DEVICE_MANAGER,
-                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
   /**
    * GdkDevice:name:
    *
@@ -432,9 +418,6 @@ gdk_device_set_property (GObject      *object,
     case PROP_DISPLAY:
       device->display = g_value_get_object (value);
       break;
-    case PROP_DEVICE_MANAGER:
-      device->manager = g_value_get_object (value);
-      break;
     case PROP_NAME:
       g_free (device->name);
 
@@ -482,9 +465,6 @@ gdk_device_get_property (GObject    *object,
     {
     case PROP_DISPLAY:
       g_value_set_object (value, device->display);
-      break;
-    case PROP_DEVICE_MANAGER:
-      g_value_set_object (value, device->manager);
       break;
     case PROP_ASSOCIATED_DEVICE:
       g_value_set_object (value, device->associated);
