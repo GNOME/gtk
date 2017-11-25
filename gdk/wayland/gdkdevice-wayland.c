@@ -2774,13 +2774,6 @@ _gdk_wayland_seat_remove_tablet (GdkWaylandSeat       *seat,
   device_manager->devices =
     g_list_remove (device_manager->devices, tablet->eraser_device);
 
-  g_signal_emit_by_name (device_manager, "device-removed",
-                         tablet->stylus_device);
-  g_signal_emit_by_name (device_manager, "device-removed",
-                         tablet->eraser_device);
-  g_signal_emit_by_name (device_manager, "device-removed",
-                         tablet->master);
-
   _gdk_device_set_associated_device (tablet->master, NULL);
   _gdk_device_set_associated_device (tablet->stylus_device, NULL);
   _gdk_device_set_associated_device (tablet->eraser_device, NULL);
@@ -2809,7 +2802,6 @@ _gdk_wayland_seat_remove_tablet_pad (GdkWaylandSeat          *seat,
 
   device_manager->devices =
     g_list_remove (device_manager->devices, pad->device);
-  g_signal_emit_by_name (device_manager, "device-removed", pad->device);
 
   _gdk_device_set_associated_device (pad->device, NULL);
 
@@ -2927,17 +2919,14 @@ tablet_handle_done (void                 *data,
   tablet->master = master;
   device_manager->devices =
     g_list_prepend (device_manager->devices, tablet->master);
-  g_signal_emit_by_name (device_manager, "device-added", master);
 
   tablet->stylus_device = stylus_device;
   device_manager->devices =
     g_list_prepend (device_manager->devices, tablet->stylus_device);
-  g_signal_emit_by_name (device_manager, "device-added", stylus_device);
 
   tablet->eraser_device = eraser_device;
   device_manager->devices =
     g_list_prepend (device_manager->devices, tablet->eraser_device);
-  g_signal_emit_by_name (device_manager, "device-added", eraser_device);
 
   _gdk_device_set_associated_device (master, seat->master_keyboard);
   _gdk_device_set_associated_device (stylus_device, master);
@@ -3061,8 +3050,6 @@ seat_handle_capabilities (void                    *data,
           zwp_pointer_gesture_pinch_v1_add_listener (seat->wp_pointer_gesture_pinch,
                                                      &gesture_pinch_listener, seat);
         }
-
-      g_signal_emit_by_name (device_manager, "device-added", seat->pointer);
     }
   else if (!(caps & WL_SEAT_CAPABILITY_POINTER) && seat->wl_pointer)
     {
@@ -3073,7 +3060,6 @@ seat_handle_capabilities (void                    *data,
       device_manager->devices =
         g_list_remove (device_manager->devices, seat->pointer);
 
-      g_signal_emit_by_name (device_manager, "device-removed", seat->pointer);
       g_clear_object (&seat->pointer);
 
       if (seat->wheel_scrolling)
@@ -3083,7 +3069,6 @@ seat_handle_capabilities (void                    *data,
           device_manager->devices =
             g_list_remove (device_manager->devices, seat->wheel_scrolling);
 
-          g_signal_emit_by_name (device_manager, "device-removed", seat->wheel_scrolling);
           g_clear_object (&seat->wheel_scrolling);
         }
 
@@ -3094,7 +3079,6 @@ seat_handle_capabilities (void                    *data,
           device_manager->devices =
             g_list_remove (device_manager->devices, seat->finger_scrolling);
 
-          g_signal_emit_by_name (device_manager, "device-removed", seat->finger_scrolling);
           g_clear_object (&seat->finger_scrolling);
         }
 
@@ -3105,7 +3089,6 @@ seat_handle_capabilities (void                    *data,
           device_manager->devices =
             g_list_remove (device_manager->devices, seat->continuous_scrolling);
 
-          g_signal_emit_by_name (device_manager, "device-removed", seat->continuous_scrolling);
           g_clear_object (&seat->continuous_scrolling);
         }
     }
@@ -3131,8 +3114,6 @@ seat_handle_capabilities (void                    *data,
 
       device_manager->devices =
         g_list_prepend (device_manager->devices, seat->keyboard);
-
-      g_signal_emit_by_name (device_manager, "device-added", seat->keyboard);
     }
   else if (!(caps & WL_SEAT_CAPABILITY_KEYBOARD) && seat->wl_keyboard)
     {
@@ -3143,7 +3124,6 @@ seat_handle_capabilities (void                    *data,
       device_manager->devices =
         g_list_remove (device_manager->devices, seat->keyboard);
 
-      g_signal_emit_by_name (device_manager, "device-removed", seat->keyboard);
       g_clear_object (&seat->keyboard);
     }
 
@@ -3168,7 +3148,6 @@ seat_handle_capabilities (void                    *data,
 
       device_manager->devices =
         g_list_prepend (device_manager->devices, seat->touch_master);
-      g_signal_emit_by_name (device_manager, "device-added", seat->touch_master);
 
       seat->touch = g_object_new (GDK_TYPE_WAYLAND_DEVICE,
                                   "name", "Wayland Touch",
@@ -3184,8 +3163,6 @@ seat_handle_capabilities (void                    *data,
 
       device_manager->devices =
         g_list_prepend (device_manager->devices, seat->touch);
-
-      g_signal_emit_by_name (device_manager, "device-added", seat->touch);
     }
   else if (!(caps & WL_SEAT_CAPABILITY_TOUCH) && seat->wl_touch)
     {
@@ -3199,8 +3176,6 @@ seat_handle_capabilities (void                    *data,
       device_manager->devices =
         g_list_remove (device_manager->devices, seat->touch);
 
-      g_signal_emit_by_name (device_manager, "device-removed", seat->touch_master);
-      g_signal_emit_by_name (device_manager, "device-removed", seat->touch);
       g_clear_object (&seat->touch_master);
       g_clear_object (&seat->touch);
     }
@@ -3239,8 +3214,6 @@ get_scroll_device (GdkWaylandSeat              *seat,
 
           device_manager->devices =
             g_list_append (device_manager->devices, seat->wheel_scrolling);
-
-          g_signal_emit_by_name (device_manager, "device-added", seat->wheel_scrolling);
         }
       return seat->wheel_scrolling;
 
@@ -3261,8 +3234,6 @@ get_scroll_device (GdkWaylandSeat              *seat,
 
           device_manager->devices =
             g_list_append (device_manager->devices, seat->finger_scrolling);
-
-          g_signal_emit_by_name (device_manager, "device-added", seat->finger_scrolling);
         }
       return seat->finger_scrolling;
 
@@ -3283,8 +3254,6 @@ get_scroll_device (GdkWaylandSeat              *seat,
 
           device_manager->devices =
             g_list_append (device_manager->devices, seat->continuous_scrolling);
-
-          g_signal_emit_by_name (device_manager, "device-added", seat->continuous_scrolling);
         }
       return seat->continuous_scrolling;
 
@@ -4291,7 +4260,6 @@ tablet_pad_handle_done (void                     *data,
                   NULL);
 
   _gdk_device_set_associated_device (pad->device, seat->master_keyboard);
-  g_signal_emit_by_name (device_manager, "device-added", pad->device);
 }
 
 static void
@@ -4482,7 +4450,6 @@ init_devices (GdkWaylandSeat *seat)
 
   device_manager->devices =
     g_list_prepend (device_manager->devices, seat->master_pointer);
-  g_signal_emit_by_name (device_manager, "device-added", seat->master_pointer);
 
   /* keyboard */
   seat->master_keyboard = g_object_new (GDK_TYPE_WAYLAND_DEVICE,
@@ -4499,7 +4466,6 @@ init_devices (GdkWaylandSeat *seat)
 
   device_manager->devices =
     g_list_prepend (device_manager->devices, seat->master_keyboard);
-  g_signal_emit_by_name (device_manager, "device-added", seat->master_keyboard);
 
   /* link both */
   _gdk_device_set_associated_device (seat->master_pointer, seat->master_keyboard);
