@@ -41,9 +41,6 @@ struct _GdkDeviceManager
 struct _GdkDeviceManagerClass
 {
   GObjectClass parent_class;
-
-  /* VMethods */
-  GdkDevice * (* get_client_pointer) (GdkDeviceManager *device_manager);
 };
 
 G_END_DECLS
