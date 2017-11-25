@@ -37,68 +37,20 @@ static void    gdk_quartz_device_manager_core_constructed (GObject *object);
 static GdkDevice * gdk_quartz_device_manager_core_get_client_pointer (GdkDeviceManager *device_manager);
 
 
-G_DEFINE_TYPE (GdkQuartzDeviceManagerCore, gdk_quartz_device_manager_core, GDK_TYPE_DEVICE_MANAGER)
-
-
-static void
-gdk_device_manager_set_property (GObject      *object,
-                                 guint         prop_id,
-                                 const GValue *value,
-                                 GParamSpec   *pspec)
-{
-  switch (prop_id)
-    {
-    case PROP_DISPLAY:
-      GDK_QUARTZ_DEVICE_MANAGER_CORE (object)->display = g_value_get_object (value);
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
-    }
-}
-
-static void
-gdk_device_manager_get_property (GObject      *object,
-                                 guint         prop_id,
-                                 GValue       *value,
-                                 GParamSpec   *pspec)
-{
-
-  switch (prop_id)
-    {
-    case PROP_DISPLAY:
-      g_value_set_object (value, GDK_QUARTZ_DEVICE_MANAGER_CORE (object)->display);
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
-    }
-}
+G_DEFINE_TYPE (GdkQuartzDeviceManagerCore, gdk_quartz_device_manager_core, G_TYPE_OBJECT)
 
 static void
 gdk_quartz_device_manager_core_class_init (GdkQuartzDeviceManagerCoreClass *klass)
 {
-  GdkDeviceManagerClass *device_manager_class = GDK_DEVICE_MANAGER_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = gdk_quartz_device_manager_core_finalize;
   object_class->constructed = gdk_quartz_device_manager_core_constructed;
-
-  object_class->set_property = gdk_device_manager_set_property;
-  object_class->get_property = gdk_device_manager_get_property;
-
-  g_object_class_install_property (object_class,
-                                   PROP_DISPLAY,
-                                   g_param_spec_object ("display",
-                                                        P_("Display"),
-                                                        P_("Display for the device manager"),
-                                                        GDK_TYPE_DISPLAY,
-                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
 }
 
 static GdkDevice *
-create_core_pointer (GdkDeviceManager *device_manager,
-                     GdkDisplay       *display)
+create_core_pointer (GdkQuartzDeviceManagerCore *device_manager,
+                     GdkDisplay                 *display)
 {
   return g_object_new (GDK_TYPE_QUARTZ_DEVICE_CORE,
                        "name", "Core Pointer",
@@ -112,8 +64,8 @@ create_core_pointer (GdkDeviceManager *device_manager,
 }
 
 static GdkDevice *
-create_core_keyboard (GdkDeviceManager *device_manager,
-                      GdkDisplay       *display)
+create_core_keyboard (GdkQuartzDeviceManagerCore *device_manager,
+                      GdkDisplay                 *display)
 {
   return g_object_new (GDK_TYPE_QUARTZ_DEVICE_CORE,
                        "name", "Core Keyboard",
@@ -151,8 +103,9 @@ gdk_quartz_device_manager_core_constructed (GObject *object)
   GdkDisplay *display;
   GdkSeat *seat;
 
+  display = _gdk_display;
+
   device_manager = GDK_QUARTZ_DEVICE_MANAGER_CORE (object);
-  display = device_manager->display;
   device_manager->core_pointer = create_core_pointer (GDK_DEVICE_MANAGER (device_manager), display);
   device_manager->core_keyboard = create_core_keyboard (GDK_DEVICE_MANAGER (device_manager), display);
 
