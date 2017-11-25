@@ -754,40 +754,6 @@ gdk_device_manager_win32_constructed (GObject *object)
                     NULL);
 }
 
-static GList *
-gdk_device_manager_win32_list_devices (GdkDeviceManager *device_manager,
-                                       GdkDeviceType     type)
-{
-  GdkDeviceManagerWin32 *device_manager_win32;
-  GList *devices = NULL, *l;
-
-  device_manager_win32 = (GdkDeviceManagerWin32 *) device_manager;
-
-  if (type == GDK_DEVICE_TYPE_MASTER)
-    {
-      devices = g_list_prepend (devices, device_manager_win32->core_keyboard);
-      devices = g_list_prepend (devices, device_manager_win32->core_pointer);
-    }
-  else
-    {
-      if (type == GDK_DEVICE_TYPE_SLAVE)
-	{
-	  devices = g_list_prepend (devices, device_manager_win32->system_keyboard);
-	  devices = g_list_prepend (devices, device_manager_win32->system_pointer);
-	}
-
-      for (l = device_manager_win32->wintab_devices; l != NULL; l = l->next)
-	{
-	  GdkDevice *device = l->data;
-
-	  if (gdk_device_get_device_type (device) == type)
-	    devices = g_list_prepend (devices, device);
-	}
-    }
-
-  return g_list_reverse (devices);
-}
-
 static GdkDevice *
 gdk_device_manager_win32_get_client_pointer (GdkDeviceManager *device_manager)
 {
@@ -805,7 +771,6 @@ gdk_device_manager_win32_class_init (GdkDeviceManagerWin32Class *klass)
 
   object_class->finalize = gdk_device_manager_win32_finalize;
   object_class->constructed = gdk_device_manager_win32_constructed;
-  device_manager_class->list_devices = gdk_device_manager_win32_list_devices;
   device_manager_class->get_client_pointer = gdk_device_manager_win32_get_client_pointer;
 }
 
