@@ -22,7 +22,8 @@
 #ifndef __GDK_WAYLAND_DISPLAY__
 #define __GDK_WAYLAND_DISPLAY__
 
-#include <config.h>
+#include "config.h"
+
 #include <stdint.h>
 #include <wayland-client.h>
 #include <wayland-cursor.h>
@@ -41,6 +42,7 @@
 #include <gdk/gdk.h>		/* For gdk_get_program_class() */
 
 #include "gdkdisplayprivate.h"
+#include "gdkwaylanddevice.h"
 
 #include <epoxy/egl.h>
 
@@ -66,7 +68,7 @@ struct _GdkWaylandDisplay
   GdkDisplay parent_instance;
   GList *toplevels;
 
-  GdkDeviceManager *device_manager;
+  GdkWaylandDeviceManager *device_manager;
 
   GHashTable *settings;
   GsdXftSettings xft_settings;

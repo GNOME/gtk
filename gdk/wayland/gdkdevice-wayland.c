@@ -32,7 +32,6 @@
 #include "gdkdeviceprivate.h"
 #include "gdkdevicepadprivate.h"
 #include "gdkdevicetoolprivate.h"
-#include "gdkdevicemanagerprivate.h"
 #include "gdkseatprivate.h"
 #include "pointer-gestures-unstable-v1-client-protocol.h"
 #include "tablet-unstable-v2-client-protocol.h"
@@ -192,7 +191,7 @@ struct _GdkWaylandSeat
   struct zwp_tablet_seat_v2 *wp_tablet_seat;
 
   GdkDisplay *display;
-  GdkDeviceManager *device_manager;
+  GdkWaylandDeviceManager *device_manager;
 
   GdkDevice *master_pointer;
   GdkDevice *master_keyboard;
@@ -297,13 +296,13 @@ typedef struct _GdkWaylandDeviceManagerClass GdkWaylandDeviceManagerClass;
 
 struct _GdkWaylandDeviceManager
 {
-  GdkDeviceManager parent_object;
+  GObject parent_instance;
   GList *devices;
 };
 
 struct _GdkWaylandDeviceManagerClass
 {
-  GdkDeviceManagerClass parent_class;
+  GObjectClass parent_class;
 };
 
 static void deliver_key_event (GdkWaylandSeat       *seat,
@@ -313,8 +312,7 @@ static void deliver_key_event (GdkWaylandSeat       *seat,
                                gboolean              from_key_repeat);
 GType gdk_wayland_device_manager_get_type (void);
 
-G_DEFINE_TYPE (GdkWaylandDeviceManager,
-	       gdk_wayland_device_manager, GDK_TYPE_DEVICE_MANAGER)
+G_DEFINE_TYPE (GdkWaylandDeviceManager, gdk_wayland_device_manager, G_TYPE_OBJECT)
 
 static gboolean
 gdk_wayland_device_get_history (GdkDevice      *device,
@@ -2760,8 +2758,7 @@ static void
 _gdk_wayland_seat_remove_tablet (GdkWaylandSeat       *seat,
                                  GdkWaylandTabletData *tablet)
 {
-  GdkWaylandDeviceManager *device_manager =
-    GDK_WAYLAND_DEVICE_MANAGER (seat->device_manager);
+  GdkWaylandDeviceManager *device_manager = seat->device_manager;
 
   seat->tablets = g_list_remove (seat->tablets, tablet);
 
@@ -2795,8 +2792,7 @@ static void
 _gdk_wayland_seat_remove_tablet_pad (GdkWaylandSeat          *seat,
                                      GdkWaylandTabletPadData *pad)
 {
-  GdkWaylandDeviceManager *device_manager =
-    GDK_WAYLAND_DEVICE_MANAGER (seat->device_manager);
+  GdkWaylandDeviceManager *device_manager = seat->device_manager;
 
   seat->tablet_pads = g_list_remove (seat->tablet_pads, pad);
 
@@ -2866,8 +2862,7 @@ tablet_handle_done (void                 *data,
   GdkWaylandTabletData *tablet = data;
   GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (tablet->seat);
   GdkDisplay *display = gdk_seat_get_display (GDK_SEAT (seat));
-  GdkWaylandDeviceManager *device_manager =
-    GDK_WAYLAND_DEVICE_MANAGER (seat->device_manager);
+  GdkWaylandDeviceManager *device_manager = seat->device_manager;
   GdkDevice *master, *stylus_device, *eraser_device;
   gchar *master_name, *eraser_name;
   gchar *vid, *pid;
@@ -2883,7 +2878,6 @@ tablet_handle_done (void                 *data,
                          "input-mode", GDK_MODE_SCREEN,
                          "has-cursor", TRUE,
                          "display", display,
-                         "device-manager", device_manager,
                          "seat", seat,
                          NULL);
   GDK_WAYLAND_DEVICE (master)->pointer = &tablet->pointer_info;
@@ -2897,7 +2891,6 @@ tablet_handle_done (void                 *data,
                                 "input-mode", GDK_MODE_SCREEN,
                                 "has-cursor", FALSE,
                                 "display", display,
-                                "device-manager", device_manager,
                                 "seat", seat,
                                 "vendor-id", vid,
                                 "product-id", pid,
@@ -2910,7 +2903,6 @@ tablet_handle_done (void                 *data,
                                 "input-mode", GDK_MODE_SCREEN,
                                 "has-cursor", FALSE,
                                 "display", display,
-                                "device-manager", device_manager,
                                 "seat", seat,
                                 "vendor-id", vid,
                                 "product-id", pid,
@@ -3002,7 +2994,7 @@ seat_handle_capabilities (void                    *data,
                           enum wl_seat_capability  caps)
 {
   GdkWaylandSeat *seat = data;
-  GdkWaylandDeviceManager *device_manager = GDK_WAYLAND_DEVICE_MANAGER (seat->device_manager);
+  GdkWaylandDeviceManager *device_manager = seat->device_manager;
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (seat->display);
 
   GDK_NOTE (MISC,
@@ -3024,7 +3016,6 @@ seat_handle_capabilities (void                    *data,
                                     "input-mode", GDK_MODE_SCREEN,
                                     "has-cursor", TRUE,
                                     "display", seat->display,
-                                    "device-manager", seat->device_manager,
                                     "seat", seat,
                                     NULL);
       _gdk_device_set_associated_device (seat->pointer, seat->master_pointer);
@@ -3106,7 +3097,6 @@ seat_handle_capabilities (void                    *data,
                                      "input-mode", GDK_MODE_SCREEN,
                                      "has-cursor", FALSE,
                                      "display", seat->display,
-                                     "device-manager", seat->device_manager,
                                      "seat", seat,
                                      NULL);
       _gdk_device_reset_axes (seat->keyboard);
@@ -3140,7 +3130,6 @@ seat_handle_capabilities (void                    *data,
                                          "input-mode", GDK_MODE_SCREEN,
                                          "has-cursor", TRUE,
                                          "display", seat->display,
-                                         "device-manager", seat->device_manager,
                                          "seat", seat,
                                          NULL);
       GDK_WAYLAND_DEVICE (seat->touch_master)->pointer = &seat->touch_info;
@@ -3156,7 +3145,6 @@ seat_handle_capabilities (void                    *data,
                                   "input-mode", GDK_MODE_SCREEN,
                                   "has-cursor", FALSE,
                                   "display", seat->display,
-                                  "device-manager", seat->device_manager,
                                   "seat", seat,
                                   NULL);
       _gdk_device_set_associated_device (seat->touch, seat->touch_master);
@@ -3190,7 +3178,7 @@ static GdkDevice *
 get_scroll_device (GdkWaylandSeat              *seat,
                    enum wl_pointer_axis_source  source)
 {
-  GdkWaylandDeviceManager *device_manager = GDK_WAYLAND_DEVICE_MANAGER (seat->device_manager);
+  GdkWaylandDeviceManager *device_manager = seat->device_manager;
 
   if (!seat->pointer)
     return NULL;
@@ -3207,7 +3195,6 @@ get_scroll_device (GdkWaylandSeat              *seat,
                                                 "input-mode", GDK_MODE_SCREEN,
                                                 "has-cursor", TRUE,
                                                 "display", seat->display,
-                                                "device-manager", seat->device_manager,
                                                 "seat", seat,
                                                 NULL);
           _gdk_device_set_associated_device (seat->wheel_scrolling, seat->master_pointer);
@@ -3227,7 +3214,6 @@ get_scroll_device (GdkWaylandSeat              *seat,
                                                  "input-mode", GDK_MODE_SCREEN,
                                                  "has-cursor", TRUE,
                                                  "display", seat->display,
-                                                 "device-manager", seat->device_manager,
                                                  "seat", seat,
                                                  NULL);
           _gdk_device_set_associated_device (seat->finger_scrolling, seat->master_pointer);
@@ -3247,7 +3233,6 @@ get_scroll_device (GdkWaylandSeat              *seat,
                                                      "input-mode", GDK_MODE_SCREEN,
                                                      "has-cursor", TRUE,
                                                      "display", seat->display,
-                                                     "device-manager", seat->device_manager,
                                                      "seat", seat,
                                                      NULL);
           _gdk_device_set_associated_device (seat->continuous_scrolling, seat->master_pointer);
@@ -4242,8 +4227,6 @@ tablet_pad_handle_done (void                     *data,
 {
   GdkWaylandTabletPadData *pad = data;
   GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (pad->seat);
-  GdkWaylandDeviceManager *device_manager =
-    GDK_WAYLAND_DEVICE_MANAGER (seat->device_manager);
 
   GDK_NOTE (EVENTS,
             g_message ("tablet pad handle done, pad = %p", wp_tablet_pad));
@@ -4255,7 +4238,6 @@ tablet_pad_handle_done (void                     *data,
                   "input-source", GDK_SOURCE_TABLET_PAD,
                   "input-mode", GDK_MODE_SCREEN,
                   "display", gdk_seat_get_display (pad->seat),
-                  "device-manager", device_manager,
                   "seat", seat,
                   NULL);
 
@@ -4432,7 +4414,7 @@ static const struct zwp_tablet_seat_v2_listener tablet_seat_listener = {
 static void
 init_devices (GdkWaylandSeat *seat)
 {
-  GdkWaylandDeviceManager *device_manager = GDK_WAYLAND_DEVICE_MANAGER (seat->device_manager);
+  GdkWaylandDeviceManager *device_manager = seat->device_manager;
 
   /* pointer */
   seat->master_pointer = g_object_new (GDK_TYPE_WAYLAND_DEVICE,
@@ -4442,7 +4424,6 @@ init_devices (GdkWaylandSeat *seat)
                                        "input-mode", GDK_MODE_SCREEN,
                                        "has-cursor", TRUE,
                                        "display", seat->display,
-                                       "device-manager", device_manager,
                                        "seat", seat,
                                        NULL);
 
@@ -4459,7 +4440,6 @@ init_devices (GdkWaylandSeat *seat)
                                         "input-mode", GDK_MODE_SCREEN,
                                         "has-cursor", FALSE,
                                         "display", seat->display,
-                                        "device-manager", device_manager,
                                         "seat", seat,
                                         NULL);
   _gdk_device_reset_axes (seat->master_keyboard);
@@ -4894,10 +4874,10 @@ gdk_wayland_seat_init (GdkWaylandSeat *seat)
 }
 
 void
-_gdk_wayland_device_manager_add_seat (GdkDeviceManager *device_manager,
-                                      GdkDisplay       *display,
-                                      guint32           id,
-				      struct wl_seat   *wl_seat)
+_gdk_wayland_device_manager_add_seat (GdkWaylandDeviceManager *device_manager,
+                                      GdkDisplay              *display,
+                                      guint32                  id,
+				      struct wl_seat          *wl_seat)
 {
   GdkWaylandDisplay *display_wayland;
   GdkWaylandSeat *seat;
@@ -4911,8 +4891,7 @@ _gdk_wayland_device_manager_add_seat (GdkDeviceManager *device_manager,
   seat->keymap = _gdk_wayland_keymap_new ();
   seat->display = display;
   seat->device_manager = device_manager;
-  seat->touches = g_hash_table_new_full (NULL, NULL, NULL,
-                                         (GDestroyNotify) g_free);
+  seat->touches = g_hash_table_new_full (NULL, NULL, NULL, (GDestroyNotify) g_free);
   seat->foreign_dnd_window = create_foreign_dnd_window (display);
   seat->wl_seat = wl_seat;
 
@@ -4960,9 +4939,9 @@ _gdk_wayland_device_manager_add_seat (GdkDeviceManager *device_manager,
 }
 
 void
-_gdk_wayland_device_manager_remove_seat (GdkDeviceManager *manager,
-                                         GdkDisplay       *display,
-                                         guint32           id)
+_gdk_wayland_device_manager_remove_seat (GdkWaylandDeviceManager *manager,
+                                         GdkDisplay              *display,
+                                         guint32                  id)
 {
   GList *l, *seats;
 
@@ -5013,7 +4992,7 @@ gdk_wayland_device_manager_init (GdkWaylandDeviceManager *device_manager)
 {
 }
 
-GdkDeviceManager *
+GdkWaylandDeviceManager *
 _gdk_wayland_device_manager_new (GdkDisplay *display)
 {
   return g_object_new (GDK_TYPE_WAYLAND_DEVICE_MANAGER, NULL);
