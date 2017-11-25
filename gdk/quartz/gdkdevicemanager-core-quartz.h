@@ -27,7 +27,8 @@ G_BEGIN_DECLS
 
 struct _GdkQuartzDeviceManagerCore
 {
-  GdkDeviceManager parent_object;
+  GObject parent_object;
+  GdkDisplay *display;
   GdkDevice *core_pointer;
   GdkDevice *core_keyboard;
 };

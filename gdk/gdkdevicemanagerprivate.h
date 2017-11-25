@@ -33,9 +33,6 @@ typedef struct _GdkDeviceManagerClass GdkDeviceManagerClass;
 struct _GdkDeviceManager
 {
   GObject parent_instance;
-
-  /*< private >*/
-  GdkDisplay *display;
 };
 
 struct _GdkDeviceManagerClass

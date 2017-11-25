@@ -20,6 +20,7 @@
 #include "gdkx11devicemanager-xi2.h"
 #include "gdkx11device-xi2.h"
 
+#include "gdkx11devicemanager-core.h"
 #include "gdkdevicemanagerprivate-core.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdevicetoolprivate.h"
@@ -53,7 +54,7 @@ struct _GdkX11DeviceManagerXI2
 
 struct _GdkX11DeviceManagerXI2Class
 {
-  GdkDeviceManagerClass parent_class;
+  GdkX11DeviceManagerCoreClass parent_class;
 };
 
 static void     gdk_x11_device_manager_xi2_event_translator_init (GdkEventTranslatorIface *iface);
@@ -146,7 +147,7 @@ _gdk_x11_device_manager_xi2_select_events (GdkDeviceManager *device_manager,
   GdkDisplay *display;
   Display *xdisplay;
 
-  display = gdk_device_manager_get_display (device_manager);
+  display = GDK_X11_DEVICE_MANAGER_CORE (device_manager)->display;
   xdisplay = GDK_DISPLAY_XDISPLAY (display);
 
   XISelectEvents (xdisplay, xwindow, event_mask, 1);
@@ -518,7 +519,7 @@ ensure_seat_for_device_pair (GdkX11DeviceManagerXI2 *device_manager,
   GdkDisplay *display;
   GdkSeat *seat;
 
-  display = gdk_device_manager_get_display (GDK_DEVICE_MANAGER (device_manager));
+  display = GDK_X11_DEVICE_MANAGER_CORE (device_manager)->display;
   seat = gdk_device_get_seat (device1);
 
   if (!seat)
@@ -548,7 +549,7 @@ add_device (GdkX11DeviceManagerXI2 *device_manager,
   GdkDisplay *display;
   GdkDevice *device;
 
-  display = gdk_device_manager_get_display (GDK_DEVICE_MANAGER (device_manager));
+  display = GDK_X11_DEVICE_MANAGER_CORE (device_manager)->display;
   device = create_device (GDK_DEVICE_MANAGER (device_manager), display, dev);
 
   g_hash_table_replace (device_manager->id_table,
@@ -682,7 +683,7 @@ gdk_x11_device_manager_xi2_constructed (GObject *object)
   G_OBJECT_CLASS (gdk_x11_device_manager_xi2_parent_class)->constructed (object);
 
   device_manager = GDK_X11_DEVICE_MANAGER_XI2 (object);
-  display = gdk_device_manager_get_display (GDK_DEVICE_MANAGER (object));
+  display = GDK_X11_DEVICE_MANAGER_CORE (device_manager)->display;
   xdisplay = GDK_DISPLAY_XDISPLAY (display);
 
   g_assert (device_manager->major == 2);
@@ -768,7 +769,7 @@ gdk_x11_device_manager_xi2_get_client_pointer (GdkDeviceManager *device_manager)
   int device_id;
 
   device_manager_xi2 = (GdkX11DeviceManagerXI2 *) device_manager;
-  display = gdk_device_manager_get_display (device_manager);
+  display = GDK_X11_DEVICE_MANAGER_CORE (device_manager)->display;
 
   XIGetClientPointer (GDK_DISPLAY_XDISPLAY (display),
                       None, &device_id);
@@ -850,7 +851,7 @@ handle_hierarchy_changed (GdkX11DeviceManagerXI2 *device_manager,
   int ndevices;
   gint i;
 
-  display = gdk_device_manager_get_display (GDK_DEVICE_MANAGER (device_manager));
+  display = GDK_X11_DEVICE_MANAGER_CORE (device_manager)->display;
   xdisplay = GDK_DISPLAY_XDISPLAY (display);
 
   for (i = 0; i < ev->num_info; i++)
@@ -925,7 +926,7 @@ handle_device_changed (GdkX11DeviceManagerXI2 *device_manager,
   GdkDisplay *display;
   GdkDevice *device, *source_device;
 
-  display = gdk_device_manager_get_display (GDK_DEVICE_MANAGER (device_manager));
+  display = GDK_X11_DEVICE_MANAGER_CORE (device_manager)->display;
   device = g_hash_table_lookup (device_manager->id_table,
                                 GUINT_TO_POINTER (ev->deviceid));
   source_device = g_hash_table_lookup (device_manager->id_table,
@@ -1158,7 +1159,7 @@ get_event_window (GdkEventTranslator *translator,
   GdkWindow *window = NULL;
   gboolean should_have_window = TRUE;
 
-  display = gdk_device_manager_get_display (GDK_DEVICE_MANAGER (translator));
+  display = GDK_X11_DEVICE_MANAGER_CORE (translator)->display;
 
   switch (ev->evtype)
     {

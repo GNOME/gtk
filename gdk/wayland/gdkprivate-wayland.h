@@ -171,9 +171,11 @@ gchar *     _gdk_wayland_display_utf8_to_string_target (GdkDisplay  *display,
 
 GdkDeviceManager *_gdk_wayland_device_manager_new (GdkDisplay *display);
 void              _gdk_wayland_device_manager_add_seat (GdkDeviceManager *device_manager,
+                                                        GdkDisplay       *display,
                                                         guint32           id,
 						        struct wl_seat   *seat);
 void              _gdk_wayland_device_manager_remove_seat (GdkDeviceManager *device_manager,
+                                                           GdkDisplay       *display,
                                                            guint32           id);
 
 GdkKeymap *_gdk_wayland_device_get_keymap (GdkDevice *device);

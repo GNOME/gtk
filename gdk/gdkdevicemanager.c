@@ -144,97 +144,15 @@
  * written code.
  */
 
-static void gdk_device_manager_set_property (GObject      *object,
-                                             guint         prop_id,
-                                             const GValue *value,
-                                             GParamSpec   *pspec);
-static void gdk_device_manager_get_property (GObject      *object,
-                                             guint         prop_id,
-                                             GValue       *value,
-                                             GParamSpec   *pspec);
-
-
 G_DEFINE_ABSTRACT_TYPE (GdkDeviceManager, gdk_device_manager, G_TYPE_OBJECT)
-
-enum {
-  PROP_0,
-  PROP_DISPLAY
-};
 
 static void
 gdk_device_manager_class_init (GdkDeviceManagerClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->set_property = gdk_device_manager_set_property;
-  object_class->get_property = gdk_device_manager_get_property;
-
-  g_object_class_install_property (object_class,
-                                   PROP_DISPLAY,
-                                   g_param_spec_object ("display",
-                                                        P_("Display"),
-                                                        P_("Display for the device manager"),
-                                                        GDK_TYPE_DISPLAY,
-                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
-                                                        G_PARAM_STATIC_STRINGS));
 }
 
 static void
 gdk_device_manager_init (GdkDeviceManager *device_manager)
 {
-}
-
-static void
-gdk_device_manager_set_property (GObject      *object,
-                                 guint         prop_id,
-                                 const GValue *value,
-                                 GParamSpec   *pspec)
-{
-  switch (prop_id)
-    {
-    case PROP_DISPLAY:
-      GDK_DEVICE_MANAGER (object)->display = g_value_get_object (value);
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
-    }
-}
-
-static void
-gdk_device_manager_get_property (GObject      *object,
-                                 guint         prop_id,
-                                 GValue       *value,
-                                 GParamSpec   *pspec)
-{
-
-  switch (prop_id)
-    {
-    case PROP_DISPLAY:
-      g_value_set_object (value, GDK_DEVICE_MANAGER (object)->display);
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
-    }
-}
-
-/**
- * gdk_device_manager_get_display:
- * @device_manager: a #GdkDeviceManager
- *
- * Gets the #GdkDisplay associated to @device_manager.
- *
- * Returns: (nullable) (transfer none): the #GdkDisplay to which
- *          @device_manager is associated to, or %NULL. This memory is
- *          owned by GDK and must not be freed or unreferenced.
- *
- * Since: 3.0
- **/
-GdkDisplay *
-gdk_device_manager_get_display (GdkDeviceManager *device_manager)
-{
-  g_return_val_if_fail (GDK_IS_DEVICE_MANAGER (device_manager), NULL);
-
-  return device_manager->display;
 }
