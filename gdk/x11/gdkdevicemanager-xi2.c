@@ -598,8 +598,6 @@ add_device (GdkX11DeviceManagerXI2 *device_manager,
         }
     }
 
-    g_signal_emit_by_name (device_manager, "device-added", device);
-
   return device;
 }
 
@@ -630,8 +628,6 @@ remove_device (GdkX11DeviceManagerXI2 *device_manager,
     {
       detach_from_seat (device);
       device_manager->devices = g_list_remove (device_manager->devices, device);
-
-      g_signal_emit_by_name (device_manager, "device-removed", device);
 
       g_object_run_dispose (G_OBJECT (device));
 
@@ -918,8 +914,6 @@ handle_hierarchy_changed (GdkX11DeviceManagerXI2 *device_manager,
               _gdk_device_remove_slave (master, slave);
               _gdk_device_set_associated_device (slave, NULL);
 
-              g_signal_emit_by_name (device_manager, "device-changed", master);
-
               seat = gdk_device_get_seat (master);
               gdk_seat_default_remove_slave (GDK_SEAT_DEFAULT (seat), slave);
             }
@@ -944,12 +938,8 @@ handle_hierarchy_changed (GdkX11DeviceManagerXI2 *device_manager,
 
                   seat = gdk_device_get_seat (master);
                   gdk_seat_default_add_slave (GDK_SEAT_DEFAULT (seat), slave);
-
-                  g_signal_emit_by_name (device_manager, "device-changed", master);
                 }
             }
-
-          g_signal_emit_by_name (device_manager, "device-changed", slave);
         }
     }
 }
