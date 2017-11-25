@@ -29,6 +29,8 @@
 #ifndef __GDK_PRIVATE_WAYLAND_H__
 #define __GDK_PRIVATE_WAYLAND_H__
 
+#include "config.h"
+
 #include <gdk/gdkcursor.h>
 #include <gdk/wayland/gdkwayland.h>
 #include <gdk/wayland/gdkdisplay-wayland.h>
@@ -38,7 +40,7 @@
 #include "gdkinternals.h"
 #include "wayland/gtk-primary-selection-client-protocol.h"
 
-#include "config.h"
+typedef struct _GdkWaylandDeviceManager GdkWaylandDeviceManager;
 
 #define WL_SURFACE_HAS_BUFFER_SCALE 3
 #define WL_POINTER_HAS_FRAME 5
@@ -169,14 +171,14 @@ gint        _gdk_wayland_display_text_property_to_utf8_list (GdkDisplay    *disp
 gchar *     _gdk_wayland_display_utf8_to_string_target (GdkDisplay  *display,
 							const gchar *str);
 
-GdkDeviceManager *_gdk_wayland_device_manager_new (GdkDisplay *display);
-void              _gdk_wayland_device_manager_add_seat (GdkDeviceManager *device_manager,
-                                                        GdkDisplay       *display,
-                                                        guint32           id,
-						        struct wl_seat   *seat);
-void              _gdk_wayland_device_manager_remove_seat (GdkDeviceManager *device_manager,
-                                                           GdkDisplay       *display,
-                                                           guint32           id);
+GdkWaylandDeviceManager *_gdk_wayland_device_manager_new         (GdkDisplay              *display);
+void                     _gdk_wayland_device_manager_add_seat    (GdkWaylandDeviceManager *device_manager,
+                                                                  GdkDisplay              *display,
+                                                                  guint32                  id,
+                                                                  struct wl_seat          *seat);
+void                    _gdk_wayland_device_manager_remove_seat  (GdkWaylandDeviceManager *device_manager,
+                                                                  GdkDisplay              *display,
+                                                                  guint32                  id);
 
 GdkKeymap *_gdk_wayland_device_get_keymap (GdkDevice *device);
 uint32_t _gdk_wayland_device_get_implicit_grab_serial(GdkWaylandDevice *device,

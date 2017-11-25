@@ -40,7 +40,6 @@
 #include "gdkmonitor-wayland.h"
 #include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
-#include "gdkdevicemanager.h"
 #include "gdkkeysprivate.h"
 #include "gdkprivate-wayland.h"
 #include "gdkglcontext-wayland.h"
