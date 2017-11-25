@@ -2736,7 +2736,7 @@ gdk_drag_anim_timeout (gpointer data)
   gdk_window_show (context->drag_window);
   gdk_window_move (context->drag_window,
                    context->last_x + (context->start_x - context->last_x) * t - context->hot_x,
-                   сontext->last_y + (context->start_y - context->last_y) * t - context->hot_y);
+                   context->last_y + (context->start_y - context->last_y) * t - context->hot_y);
   gdk_window_set_opacity (context->drag_window, 1.0 - f);
 
   return G_SOURCE_CONTINUE;
