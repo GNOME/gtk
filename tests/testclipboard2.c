@@ -160,7 +160,8 @@ add_provider_button (GtkWidget          *box,
 
   button = gtk_button_new_with_label (name);
   g_signal_connect (button, "clicked", G_CALLBACK (provider_button_clicked_cb), clipboard);
-  g_object_set_data_full (G_OBJECT (button), "provider", provider, g_object_unref);
+  if (provider)
+    g_object_set_data_full (G_OBJECT (button), "provider", provider, g_object_unref);
 
   gtk_container_add (GTK_CONTAINER (box), button);
 }
@@ -168,12 +169,20 @@ add_provider_button (GtkWidget          *box,
 static GtkWidget *
 get_button_list (GdkClipboard *clipboard)
 {
+  static const guchar invalid_utf8[] = {  'L', 'i', 'b', 'e', 'r', 't', 0xe9, ',', ' ',
+                                         0xc9, 'g', 'a', 'l', 'i', 't', 0xe9, ',', ' ',
+                                          'F', 'r', 'a', 't', 'e', 'r', 'n', 'i', 't', 0xe9, 0 };
   GtkWidget *box;
   GValue value = G_VALUE_INIT;
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
   gtk_container_add (GTK_CONTAINER (box), gtk_label_new ("Set Clipboard:"));
+
+  add_provider_button (box,
+                       NULL,
+                       clipboard,
+                       "Empty");
 
   g_value_init (&value, GDK_TYPE_PIXBUF);
   g_value_take_object (&value, gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
@@ -199,6 +208,12 @@ get_button_list (GdkClipboard *clipboard)
                                                                                strlen ("𝕳𝖊𝖑𝖑𝖔 𝖀𝖓𝖎𝖈𝖔𝖉𝖊") + 1)),
                        clipboard,
                        "text/plain");
+
+  add_provider_button (box,
+                       gdk_content_provider_new_for_bytes ("text/plain;charset=utf-8",
+                                                           g_bytes_new_static (invalid_utf8, sizeof(invalid_utf8))),
+                       clipboard,
+                       "Invalid UTF-8");
 
   return box;
 }
