@@ -238,30 +238,3 @@ gdk_device_manager_get_display (GdkDeviceManager *device_manager)
 
   return device_manager->display;
 }
-
-/**
- * gdk_device_manager_list_devices:
- * @device_manager: a #GdkDeviceManager
- * @type: device type to get.
- *
- * Returns the list of devices of type @type currently attached to
- * @device_manager.
- *
- * Returns: (transfer container) (element-type Gdk.Device): a list of 
- *          #GdkDevices. The returned list must be
- *          freed with g_list_free (). The list elements are owned by
- *          GTK+ and must not be freed or unreffed.
- *
- * Since: 3.0
- *
- * Deprecated: 3.20, use gdk_seat_get_pointer(), gdk_seat_get_keyboard()
- *             and gdk_seat_get_slaves() instead.
- **/
-GList *
-gdk_device_manager_list_devices (GdkDeviceManager *device_manager,
-                                 GdkDeviceType     type)
-{
-  g_return_val_if_fail (GDK_IS_DEVICE_MANAGER (device_manager), NULL);
-
-  return GDK_DEVICE_MANAGER_GET_CLASS (device_manager)->list_devices (device_manager, type);
-}
