@@ -358,8 +358,8 @@ gdk_wayland_pointer_stop_cursor_animation (GdkWaylandPointerData *pointer)
 }
 
 static GdkWaylandTabletData *
-gdk_wayland_device_manager_find_tablet (GdkWaylandSeat *seat,
-                                        GdkDevice      *device)
+gdk_wayland_seat_find_tablet (GdkWaylandSeat *seat,
+                              GdkDevice      *device)
 {
   GList *l;
 
@@ -377,8 +377,8 @@ gdk_wayland_device_manager_find_tablet (GdkWaylandSeat *seat,
 }
 
 static GdkWaylandTabletPadData *
-gdk_wayland_device_manager_find_pad (GdkWaylandSeat *seat,
-                                     GdkDevice      *device)
+gdk_wayland_seat_find_pad (GdkWaylandSeat *seat,
+                           GdkDevice      *device)
 {
   GList *l;
 
@@ -405,7 +405,7 @@ gdk_wayland_device_update_window_cursor (GdkDevice *device)
   gboolean retval = G_SOURCE_REMOVE;
   GdkWaylandTabletData *tablet;
 
-  tablet = gdk_wayland_device_manager_find_tablet (seat, device);
+  tablet = gdk_wayland_seat_find_tablet (seat, device);
 
   if (pointer->cursor)
     {
@@ -893,8 +893,8 @@ gdk_wayland_device_pad_get_n_groups (GdkDevicePad *pad)
   GdkSeat *seat = gdk_device_get_seat (GDK_DEVICE (pad));
   GdkWaylandTabletPadData *data;
 
-  data = gdk_wayland_device_manager_find_pad (GDK_WAYLAND_SEAT (seat),
-                                              GDK_DEVICE (pad));
+  data = gdk_wayland_seat_find_pad (GDK_WAYLAND_SEAT (seat),
+                                    GDK_DEVICE (pad));
   g_assert (data != NULL);
 
   return g_list_length (data->mode_groups);
@@ -908,8 +908,8 @@ gdk_wayland_device_pad_get_group_n_modes (GdkDevicePad *pad,
   GdkWaylandTabletPadGroupData *group;
   GdkWaylandTabletPadData *data;
 
-  data = gdk_wayland_device_manager_find_pad (GDK_WAYLAND_SEAT (seat),
-                                              GDK_DEVICE (pad));
+  data = gdk_wayland_seat_find_pad (GDK_WAYLAND_SEAT (seat),
+                                    GDK_DEVICE (pad));
   g_assert (data != NULL);
 
   group = g_list_nth_data (data->mode_groups, n_group);
@@ -926,8 +926,8 @@ gdk_wayland_device_pad_get_n_features (GdkDevicePad        *pad,
   GdkSeat *seat = gdk_device_get_seat (GDK_DEVICE (pad));
   GdkWaylandTabletPadData *data;
 
-  data = gdk_wayland_device_manager_find_pad (GDK_WAYLAND_SEAT (seat),
-                                              GDK_DEVICE (pad));
+  data = gdk_wayland_seat_find_pad (GDK_WAYLAND_SEAT (seat),
+                                    GDK_DEVICE (pad));
   g_assert (data != NULL);
 
   switch (feature)
@@ -954,8 +954,8 @@ gdk_wayland_device_pad_get_feature_group (GdkDevicePad        *pad,
   GList *l;
   gint i;
 
-  data = gdk_wayland_device_manager_find_pad (GDK_WAYLAND_SEAT (seat),
-                                              GDK_DEVICE (pad));
+  data = gdk_wayland_seat_find_pad (GDK_WAYLAND_SEAT (seat),
+                                    GDK_DEVICE (pad));
   g_assert (data != NULL);
 
   for (l = data->mode_groups, i = 0; l; l = l->next, i++)
@@ -4895,14 +4895,13 @@ gdk_wayland_seat_init (GdkWaylandSeat *seat)
 
 void
 _gdk_wayland_device_manager_add_seat (GdkDeviceManager *device_manager,
+                                      GdkDisplay       *display,
                                       guint32           id,
 				      struct wl_seat   *wl_seat)
 {
-  GdkDisplay *display;
   GdkWaylandDisplay *display_wayland;
   GdkWaylandSeat *seat;
 
-  display = gdk_device_manager_get_display (device_manager);
   display_wayland = GDK_WAYLAND_DISPLAY (display);
 
   seat = g_object_new (GDK_TYPE_WAYLAND_SEAT,
@@ -4962,9 +4961,9 @@ _gdk_wayland_device_manager_add_seat (GdkDeviceManager *device_manager,
 
 void
 _gdk_wayland_device_manager_remove_seat (GdkDeviceManager *manager,
+                                         GdkDisplay       *display,
                                          guint32           id)
 {
-  GdkDisplay *display = gdk_device_manager_get_display (manager);
   GList *l, *seats;
 
   seats = gdk_display_list_seats (display);
@@ -5017,9 +5016,7 @@ gdk_wayland_device_manager_init (GdkWaylandDeviceManager *device_manager)
 GdkDeviceManager *
 _gdk_wayland_device_manager_new (GdkDisplay *display)
 {
-  return g_object_new (GDK_TYPE_WAYLAND_DEVICE_MANAGER,
-                       "display", display,
-                       NULL);
+  return g_object_new (GDK_TYPE_WAYLAND_DEVICE_MANAGER, NULL);
 }
 
 uint32_t
@@ -5238,12 +5235,11 @@ gdk_wayland_device_get_node_path (GdkDevice *device)
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
 
   seat = gdk_device_get_seat (device);
-  tablet = gdk_wayland_device_manager_find_tablet (GDK_WAYLAND_SEAT (seat),
-                                                   device);
+  tablet = gdk_wayland_seat_find_tablet (GDK_WAYLAND_SEAT (seat), device);
   if (tablet)
     return tablet->path;
 
-  pad = gdk_wayland_device_manager_find_pad (GDK_WAYLAND_SEAT (seat), device);
+  pad = gdk_wayland_seat_find_pad (GDK_WAYLAND_SEAT (seat), device);
   if (pad)
     return pad->path;
 
@@ -5271,8 +5267,7 @@ gdk_wayland_device_pad_set_feedback (GdkDevice           *device,
   GdkSeat *seat;
 
   seat = gdk_device_get_seat (device);
-  pad = gdk_wayland_device_manager_find_pad (GDK_WAYLAND_SEAT (seat),
-                                             device);
+  pad = gdk_wayland_seat_find_pad (GDK_WAYLAND_SEAT (seat), device);
   if (!pad)
     return;
 

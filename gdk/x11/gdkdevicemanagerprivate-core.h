@@ -21,20 +21,20 @@
 #include <X11/Xlib.h>
 
 #include "gdkx11devicemanager-core.h"
-#include "gdkdevicemanagerprivate.h"
 
 G_BEGIN_DECLS
 
 struct _GdkX11DeviceManagerCore
 {
-  GdkDeviceManager parent_object;
+  GObject parent_instance;
+  GdkDisplay *display;
   GdkDevice *core_pointer;
   GdkDevice *core_keyboard;
 };
 
 struct _GdkX11DeviceManagerCoreClass
 {
-  GdkDeviceManagerClass parent_class;
+  GObjectClass parent_class;
 };
 
 void            _gdk_device_manager_core_handle_focus           (GdkWindow   *window,

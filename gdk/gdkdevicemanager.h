@@ -34,8 +34,6 @@ G_BEGIN_DECLS
 
 GType        gdk_device_manager_get_type           (void) G_GNUC_CONST;
 
-GdkDisplay * gdk_device_manager_get_display        (GdkDeviceManager *device_manager);
-
 
 G_END_DECLS
 
