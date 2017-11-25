@@ -125,7 +125,6 @@ create_core_pointer (GdkX11DeviceManagerCore *device_manager,
                        "input-mode", GDK_MODE_SCREEN,
                        "has-cursor", TRUE,
                        "display", display,
-                       "device-manager", device_manager,
                        NULL);
 }
 
@@ -140,7 +139,6 @@ create_core_keyboard (GdkX11DeviceManagerCore *device_manager,
                        "input-mode", GDK_MODE_SCREEN,
                        "has-cursor", FALSE,
                        "display", display,
-                       "device-manager", device_manager,
                        NULL);
 }
 
@@ -338,12 +336,10 @@ static GdkWindow *
 get_event_window (GdkEventTranslator *translator,
                   XEvent             *xevent)
 {
-  GdkDeviceManager *device_manager;
   GdkDisplay *display;
   GdkWindow *window;
 
-  device_manager = GDK_DEVICE_MANAGER (translator);
-  display = GDK_X11_DEVICE_MANAGER_CORE (device_manager)->display;
+  display = GDK_X11_DEVICE_MANAGER_CORE (translator)->display;
   window = gdk_x11_window_lookup_for_display (display, xevent->xany.window);
 
   /* Apply keyboard grabs to non-native windows */
@@ -354,7 +350,7 @@ get_event_window (GdkEventTranslator *translator,
 
       serial = _gdk_display_get_next_serial (display);
       info = _gdk_display_has_device_grab (display,
-                                           GDK_X11_DEVICE_MANAGER_CORE (device_manager)->core_keyboard,
+                                           GDK_X11_DEVICE_MANAGER_CORE (translator)->core_keyboard,
                                            serial);
       if (info &&
           (!is_parent_of (info->window, window) ||
