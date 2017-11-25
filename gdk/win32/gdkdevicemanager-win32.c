@@ -68,7 +68,7 @@ static t_WTQueueSizeSet p_WTQueueSizeSet;
 
 static gboolean default_display_opened = FALSE;
 
-G_DEFINE_TYPE (GdkDeviceManagerWin32, gdk_device_manager_win32, GDK_TYPE_DEVICE_MANAGER)
+G_DEFINE_TYPE (GdkDeviceManagerWin32, gdk_device_manager_win32, G_TYPE_OBJECT)
 
 static GdkDevice *
 create_pointer (GdkDeviceManager *device_manager,
@@ -82,7 +82,7 @@ create_pointer (GdkDeviceManager *device_manager,
                        "input-source", GDK_SOURCE_MOUSE,
                        "input-mode", GDK_MODE_SCREEN,
                        "has-cursor", type == GDK_DEVICE_TYPE_MASTER,
-                       "display", gdk_device_manager_get_display (device_manager),
+                       "display", _gdk_display,
                        "device-manager", device_manager,
                        NULL);
 }
@@ -99,7 +99,7 @@ create_keyboard (GdkDeviceManager *device_manager,
                        "input-source", GDK_SOURCE_KEYBOARD,
                        "input-mode", GDK_MODE_SCREEN,
                        "has-cursor", FALSE,
-                       "display", gdk_device_manager_get_display (device_manager),
+                       "display", _gdk_display,
                        "device-manager", device_manager,
                        NULL);
 }
@@ -735,7 +735,7 @@ gdk_device_manager_win32_constructed (GObject *object)
 
   seat = gdk_seat_default_new_for_master_pair (device_manager->core_pointer,
                                                device_manager->core_keyboard);
-  gdk_display_add_seat (gdk_device_manager_get_display (GDK_DEVICE_MANAGER (object)), seat);
+  gdk_display_add_seat (_gdk_display, seat);
   gdk_seat_default_add_slave (GDK_SEAT_DEFAULT (seat), device_manager->system_pointer);
   gdk_seat_default_add_slave (GDK_SEAT_DEFAULT (seat), device_manager->system_keyboard);
   g_object_unref (seat);
@@ -744,7 +744,7 @@ gdk_device_manager_win32_constructed (GObject *object)
    * is globally known and accessible through the display manager
    * singleton. Approach lifted from gtkmodules.c.
    */
-  display_manager = gdk_display_manager_get();
+  display_manager = gdk_display_manager_get ();
   g_assert (display_manager != NULL);
   default_display = gdk_display_manager_get_default_display (display_manager);
   g_assert (default_display == NULL);
