@@ -42,14 +42,6 @@ struct _GdkDeviceManagerClass
 {
   GObjectClass parent_class;
 
-  /* Signals */
-  void (* device_added)   (GdkDeviceManager *device_manager,
-                           GdkDevice        *device);
-  void (* device_removed) (GdkDeviceManager *device_manager,
-                           GdkDevice        *device);
-  void (* device_changed) (GdkDeviceManager *device_manager,
-                           GdkDevice        *device);
-
   /* VMethods */
   GList *     (* list_devices)       (GdkDeviceManager *device_manager,
                                       GdkDeviceType     type);

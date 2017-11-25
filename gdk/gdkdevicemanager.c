@@ -161,16 +161,6 @@ enum {
   PROP_DISPLAY
 };
 
-enum {
-  DEVICE_ADDED,
-  DEVICE_REMOVED,
-  DEVICE_CHANGED,
-  LAST_SIGNAL
-};
-
-static guint signals [LAST_SIGNAL] = { 0 };
-
-
 static void
 gdk_device_manager_class_init (GdkDeviceManagerClass *klass)
 {
@@ -187,70 +177,6 @@ gdk_device_manager_class_init (GdkDeviceManagerClass *klass)
                                                         GDK_TYPE_DISPLAY,
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
                                                         G_PARAM_STATIC_STRINGS));
-
-  /**
-   * GdkDeviceManager::device-added:
-   * @device_manager: the object on which the signal is emitted
-   * @device: the newly added #GdkDevice.
-   *
-   * The ::device-added signal is emitted either when a new master
-   * pointer is created, or when a slave (Hardware) input device
-   * is plugged in.
-   */
-  signals [DEVICE_ADDED] =
-    g_signal_new (g_intern_static_string ("device-added"),
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GdkDeviceManagerClass, device_added),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
-                  G_TYPE_NONE, 1,
-                  GDK_TYPE_DEVICE);
-
-  /**
-   * GdkDeviceManager::device-removed:
-   * @device_manager: the object on which the signal is emitted
-   * @device: the just removed #GdkDevice.
-   *
-   * The ::device-removed signal is emitted either when a master
-   * pointer is removed, or when a slave (Hardware) input device
-   * is unplugged.
-   */
-  signals [DEVICE_REMOVED] =
-    g_signal_new (g_intern_static_string ("device-removed"),
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GdkDeviceManagerClass, device_removed),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
-                  G_TYPE_NONE, 1,
-                  GDK_TYPE_DEVICE);
-
-  /**
-   * GdkDeviceManager::device-changed:
-   * @device_manager: the object on which the signal is emitted
-   * @device: the #GdkDevice that changed.
-   *
-   * The ::device-changed signal is emitted whenever a device
-   * has changed in the hierarchy, either slave devices being
-   * disconnected from their master device or connected to
-   * another one, or master devices being added or removed
-   * a slave device.
-   *
-   * If a slave device is detached from all master devices
-   * (gdk_device_get_associated_device() returns %NULL), its
-   * #GdkDeviceType will change to %GDK_DEVICE_TYPE_FLOATING,
-   * if it's attached, it will change to %GDK_DEVICE_TYPE_SLAVE.
-   */
-  signals [DEVICE_CHANGED] =
-    g_signal_new (g_intern_static_string ("device-changed"),
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GdkDeviceManagerClass, device_changed),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
-                  G_TYPE_NONE, 1,
-                  GDK_TYPE_DEVICE);
 }
 
 static void
