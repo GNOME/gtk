@@ -114,8 +114,6 @@ struct _GskGLRenderer
 
   graphene_rect_t viewport;
 
-  guint frame_buffer;
-  guint depth_stencil_buffer;
   guint texture_id;
 
 
@@ -1250,7 +1248,7 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
         case OP_DRAW:
           OP_PRINT (" -> draw %ld, size %ld and program %s\n",
                     op->draw.vao_offset, op->draw.vao_size, program->name);
-          glDrawArrays (GL_TRIANGLES, op->draw.vao_offset, op->draw.vao_size);//GL_N_VERTICES);
+          glDrawArrays (GL_TRIANGLES, op->draw.vao_offset, op->draw.vao_size);
           break;
 
         default:
