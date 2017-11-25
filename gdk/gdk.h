@@ -36,7 +36,6 @@
 #include <gdk/gdkdevice.h>
 #include <gdk/gdkdevicepad.h>
 #include <gdk/gdkdevicetool.h>
-#include <gdk/gdkdevicemanager.h>
 #include <gdk/gdkdisplay.h>
 #include <gdk/gdkdisplaymanager.h>
 #include <gdk/gdkdnd.h>

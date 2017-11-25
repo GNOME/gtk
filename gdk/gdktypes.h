@@ -127,7 +127,6 @@ typedef struct _GdkDevice             GdkDevice;
 typedef struct _GdkDragContext        GdkDragContext;
 
 typedef struct _GdkDisplayManager     GdkDisplayManager;
-typedef struct _GdkDeviceManager      GdkDeviceManager;
 typedef struct _GdkDisplay            GdkDisplay;
 typedef struct _GdkWindow             GdkWindow;
 typedef struct _GdkKeymap             GdkKeymap;
