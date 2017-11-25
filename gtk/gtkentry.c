@@ -3023,7 +3023,7 @@ gtk_entry_unrealize (GtkWidget *widget)
   
   gtk_im_context_set_client_widget (priv->im_context, NULL);
 
-  clipboard = gtk_widget_get_clipboard (widget, GDK_SELECTION_PRIMARY);
+  clipboard = gtk_widget_get_old_clipboard (widget, GDK_SELECTION_PRIMARY);
   if (gtk_clipboard_get_owner (clipboard) == G_OBJECT (entry))
     gtk_clipboard_clear (clipboard);
 
@@ -5117,7 +5117,7 @@ gtk_entry_copy_clipboard (GtkEntry *entry)
         }
 
       str = _gtk_entry_get_display_text (entry, start, end);
-      gtk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (entry),
+      gtk_clipboard_set_text (gtk_widget_get_old_clipboard (GTK_WIDGET (entry),
 							GDK_SELECTION_CLIPBOARD),
 			      str, -1);
       g_free (str);
@@ -6550,7 +6550,7 @@ gtk_entry_paste (GtkEntry *entry,
 		 GdkAtom   selection)
 {
   g_object_ref (entry);
-  gtk_clipboard_request_text (gtk_widget_get_clipboard (GTK_WIDGET (entry), selection),
+  gtk_clipboard_request_text (gtk_widget_get_old_clipboard (GTK_WIDGET (entry), selection),
 			      paste_received, entry);
 }
 
@@ -6593,7 +6593,7 @@ gtk_entry_update_primary_selection (GtkEntry *entry)
   list = gdk_content_formats_new (NULL, 0);
   list = gtk_content_formats_add_text_targets (list);
 
-  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (entry), GDK_SELECTION_PRIMARY);
+  clipboard = gtk_widget_get_old_clipboard (GTK_WIDGET (entry), GDK_SELECTION_PRIMARY);
   
   if (gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start, &end))
     {
@@ -8580,7 +8580,7 @@ gtk_entry_do_popup (GtkEntry       *entry,
   info->entry = g_object_ref (entry);
   info->trigger_event = event ? gdk_event_copy (event) : gtk_get_current_event ();
 
-  gtk_clipboard_request_contents (gtk_widget_get_clipboard (GTK_WIDGET (entry), GDK_SELECTION_CLIPBOARD),
+  gtk_clipboard_request_contents (gtk_widget_get_old_clipboard (GTK_WIDGET (entry), GDK_SELECTION_CLIPBOARD),
 				  gdk_atom_intern_static_string ("TARGETS"),
 				  popup_targets_received,
 				  info);
@@ -8763,7 +8763,7 @@ gtk_entry_selection_bubble_popup_show (gpointer user_data)
 {
   GtkEntry *entry = user_data;
 
-  gtk_clipboard_request_contents (gtk_widget_get_clipboard (GTK_WIDGET (entry), GDK_SELECTION_CLIPBOARD),
+  gtk_clipboard_request_contents (gtk_widget_get_old_clipboard (GTK_WIDGET (entry), GDK_SELECTION_CLIPBOARD),
                                   gdk_atom_intern_static_string ("TARGETS"),
                                   bubble_targets_received,
                                   entry);

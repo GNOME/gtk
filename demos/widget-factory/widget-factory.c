@@ -1235,7 +1235,7 @@ handle_cutcopypaste (GtkWidget *button, GtkWidget *textview)
   GtkClipboard *clipboard;
   const gchar *id;
 
-  clipboard = gtk_widget_get_clipboard (textview, GDK_SELECTION_CLIPBOARD);
+  clipboard = gtk_widget_get_old_clipboard (textview, GDK_SELECTION_CLIPBOARD);
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (textview));
   id = gtk_buildable_get_name (GTK_BUILDABLE (button));
 
@@ -1837,7 +1837,7 @@ activate (GApplication *app)
                     G_CALLBACK (textbuffer_notify_selection), widget);
   widget = (GtkWidget *)gtk_builder_get_object (builder, "pastebutton");
   g_signal_connect (widget, "clicked", G_CALLBACK (handle_cutcopypaste), widget2);
-  g_signal_connect_object (gtk_widget_get_clipboard (widget2, GDK_SELECTION_CLIPBOARD), "owner-change",
+  g_signal_connect_object (gtk_widget_get_old_clipboard (widget2, GDK_SELECTION_CLIPBOARD), "owner-change",
                            G_CALLBACK (clipboard_owner_change), widget, 0);
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "osd_frame");

@@ -1265,7 +1265,7 @@ gtk_entry_accessible_copy_text (AtkEditableText *text,
 
   editable = GTK_EDITABLE (widget);
   str = gtk_editable_get_chars (editable, start_pos, end_pos);
-  clipboard = gtk_widget_get_clipboard (widget, GDK_SELECTION_CLIPBOARD);
+  clipboard = gtk_widget_get_old_clipboard (widget, GDK_SELECTION_CLIPBOARD);
   gtk_clipboard_set_text (clipboard, str, -1);
   g_free (str);
 }
@@ -1289,7 +1289,7 @@ gtk_entry_accessible_cut_text (AtkEditableText *text,
     return;
 
   str = gtk_editable_get_chars (editable, start_pos, end_pos);
-  clipboard = gtk_widget_get_clipboard (widget, GDK_SELECTION_CLIPBOARD);
+  clipboard = gtk_widget_get_old_clipboard (widget, GDK_SELECTION_CLIPBOARD);
   gtk_clipboard_set_text (clipboard, str, -1);
   gtk_editable_delete_text (editable, start_pos, end_pos);
 }
@@ -1356,7 +1356,7 @@ gtk_entry_accessible_paste_text (AtkEditableText *text,
   paste->position = position;
 
   g_object_ref (paste->entry);
-  clipboard = gtk_widget_get_clipboard (widget, GDK_SELECTION_CLIPBOARD);
+  clipboard = gtk_widget_get_old_clipboard (widget, GDK_SELECTION_CLIPBOARD);
   gtk_clipboard_request_text (clipboard, paste_received_cb, paste);
 }
 

@@ -12380,7 +12380,7 @@ gtk_widget_set_margin_bottom (GtkWidget *widget,
 }
 
 /**
- * gtk_widget_get_clipboard:
+ * gtk_widget_get_old_clipboard:
  * @widget: a #GtkWidget
  * @selection: a #GdkAtom which identifies the clipboard
  *             to use. %GDK_SELECTION_CLIPBOARD gives the
@@ -12401,7 +12401,7 @@ gtk_widget_set_margin_bottom (GtkWidget *widget,
  * Since: 2.2
  **/
 GtkClipboard *
-gtk_widget_get_clipboard (GtkWidget *widget, GdkAtom selection)
+gtk_widget_get_old_clipboard (GtkWidget *widget, GdkAtom selection)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 

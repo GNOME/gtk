@@ -1460,7 +1460,7 @@ copy_activated_cb (GtkMenuItem *menu_item,
 
   utf8_uri = gtk_recent_info_get_uri_display (info);
   
-  gtk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (impl),
+  gtk_clipboard_set_text (gtk_widget_get_old_clipboard (GTK_WIDGET (impl),
 			  			    GDK_SELECTION_CLIPBOARD),
                           utf8_uri, -1);
 

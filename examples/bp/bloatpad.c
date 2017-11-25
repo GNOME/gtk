@@ -96,7 +96,7 @@ change_justify_state (GSimpleAction *action,
 static GtkClipboard *
 get_clipboard (GtkWidget *widget)
 {
-  return gtk_widget_get_clipboard (widget, gdk_atom_intern_static_string ("CLIPBOARD"));
+  return gtk_widget_get_old_clipboard (widget, gdk_atom_intern_static_string ("CLIPBOARD"));
 }
 
 static void

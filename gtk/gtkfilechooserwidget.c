@@ -1726,7 +1726,7 @@ copy_file_location_cb (GSimpleAction *action,
       GtkClipboard *clipboard;
       GdkContentFormats *target_list;
 
-      clipboard = gtk_widget_get_clipboard (GTK_WIDGET (impl), GDK_SELECTION_CLIPBOARD);
+      clipboard = gtk_widget_get_old_clipboard (GTK_WIDGET (impl), GDK_SELECTION_CLIPBOARD);
 
       target_list = gdk_content_formats_new (NULL, 0);
       target_list = gtk_content_formats_add_text_targets (target_list);
@@ -6708,7 +6708,7 @@ paste_text_received (GtkClipboard         *clipboard,
 static void
 location_popup_on_paste_handler (GtkFileChooserWidget *impl)
 {
-  GtkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET (impl),
+  GtkClipboard *clipboard = gtk_widget_get_old_clipboard (GTK_WIDGET (impl),
                                                       GDK_SELECTION_CLIPBOARD);
   gtk_clipboard_request_text (clipboard,
                               (GtkClipboardTextReceivedFunc) paste_text_received,

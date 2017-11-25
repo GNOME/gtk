@@ -23,7 +23,7 @@ copy_button_clicked (GtkWidget *button,
   entry = GTK_WIDGET (user_data);
 
   /* Get the clipboard object */
-  clipboard = gtk_widget_get_clipboard (entry,
+  clipboard = gtk_widget_get_old_clipboard (entry,
                                         GDK_SELECTION_CLIPBOARD);
 
   /* Set clipboard text */
@@ -54,7 +54,7 @@ paste_button_clicked (GtkWidget *button,
   entry = GTK_WIDGET (user_data);
 
   /* Get the clipboard object */
-  clipboard = gtk_widget_get_clipboard (entry,
+  clipboard = gtk_widget_get_old_clipboard (entry,
                                         GDK_SELECTION_CLIPBOARD);
 
   /* Request the contents of the clipboard, contents_received will be

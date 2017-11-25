@@ -5221,7 +5221,7 @@ gtk_label_select_region_index (GtkLabel *label,
       priv->select_info->selection_anchor = anchor_index;
       priv->select_info->selection_end = end_index;
 
-      clipboard = gtk_widget_get_clipboard (GTK_WIDGET (label),
+      clipboard = gtk_widget_get_old_clipboard (GTK_WIDGET (label),
                                             GDK_SELECTION_PRIMARY);
 
       if (anchor_index != end_index)
@@ -5922,7 +5922,7 @@ gtk_label_copy_clipboard (GtkLabel *label)
       if (start > len)
         start = len;
 
-      clipboard = gtk_widget_get_clipboard (GTK_WIDGET (label), GDK_SELECTION_CLIPBOARD);
+      clipboard = gtk_widget_get_old_clipboard (GTK_WIDGET (label), GDK_SELECTION_CLIPBOARD);
 
       if (start != end)
 	gtk_clipboard_set_text (clipboard, priv->text + start, end - start);
@@ -6003,7 +6003,7 @@ copy_link_activate_cb (GtkMenuItem *menuitem,
   GtkClipboard *clipboard;
 
   link = g_object_get_qdata (G_OBJECT (menuitem), quark_link);
-  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (label), GDK_SELECTION_CLIPBOARD);
+  clipboard = gtk_widget_get_old_clipboard (GTK_WIDGET (label), GDK_SELECTION_CLIPBOARD);
   gtk_clipboard_set_text (clipboard, link->uri, -1);
 }
 

@@ -384,7 +384,7 @@ selection_get_cb (GtkWidget          *widget,
 {
   GtkClipboard *clipboard;
 
-  clipboard = gtk_widget_get_clipboard (widget,
+  clipboard = gtk_widget_get_old_clipboard (widget,
                                         gtk_selection_data_get_selection (selection_data));
 
   if (clipboard && clipboard->get_func)
@@ -399,7 +399,7 @@ selection_clear_event_cb (GtkWidget	    *widget,
   GtkClipboard *clipboard;
 
   gdk_event_get_selection ((GdkEvent *)event, &selection);
-  clipboard = gtk_widget_get_clipboard (widget, selection);
+  clipboard = gtk_widget_get_old_clipboard (widget, selection);
 
   if (clipboard)
     {
@@ -916,7 +916,7 @@ selection_received (GtkWidget            *widget,
   RequestContentsInfo *request_info = get_request_contents_info (widget);
   set_request_contents_info (widget, NULL);
 
-  request_info->callback (gtk_widget_get_clipboard (widget, gtk_selection_data_get_selection (selection_data)),
+  request_info->callback (gtk_widget_get_old_clipboard (widget, gtk_selection_data_get_selection (selection_data)),
 			  selection_data,
 			  request_info->user_data);
 

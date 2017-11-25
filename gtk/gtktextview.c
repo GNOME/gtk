@@ -1894,7 +1894,7 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
 
       if (gtk_widget_get_realized (GTK_WIDGET (text_view)))
 	{
-	  GtkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET (text_view),
+	  GtkClipboard *clipboard = gtk_widget_get_old_clipboard (GTK_WIDGET (text_view),
 							      GDK_SELECTION_PRIMARY);
 	  gtk_text_buffer_remove_selection_clipboard (priv->buffer, clipboard);
         }
@@ -1948,7 +1948,7 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
 
       if (gtk_widget_get_realized (GTK_WIDGET (text_view)))
 	{
-	  GtkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET (text_view),
+	  GtkClipboard *clipboard = gtk_widget_get_old_clipboard (GTK_WIDGET (text_view),
 							      GDK_SELECTION_PRIMARY);
 	  gtk_text_buffer_add_selection_clipboard (priv->buffer, clipboard);
 	}
@@ -4582,7 +4582,7 @@ gtk_text_view_realize (GtkWidget *widget)
 
   if (priv->buffer)
     {
-      GtkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET (text_view),
+      GtkClipboard *clipboard = gtk_widget_get_old_clipboard (GTK_WIDGET (text_view),
 							  GDK_SELECTION_PRIMARY);
       gtk_text_buffer_add_selection_clipboard (priv->buffer, clipboard);
     }
@@ -4602,7 +4602,7 @@ gtk_text_view_unrealize (GtkWidget *widget)
 
   if (priv->buffer)
     {
-      GtkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET (text_view),
+      GtkClipboard *clipboard = gtk_widget_get_old_clipboard (GTK_WIDGET (text_view),
 							  GDK_SELECTION_PRIMARY);
       gtk_text_buffer_remove_selection_clipboard (priv->buffer, clipboard);
     }
@@ -5289,7 +5289,7 @@ gtk_text_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
       get_iter_from_gesture (text_view, priv->multipress_gesture,
                              &iter, NULL, NULL);
       gtk_text_buffer_paste_clipboard (get_buffer (text_view),
-                                       gtk_widget_get_clipboard (GTK_WIDGET (text_view),
+                                       gtk_widget_get_old_clipboard (GTK_WIDGET (text_view),
                                                                  GDK_SELECTION_PRIMARY),
                                        &iter,
                                        priv->editable);
@@ -6770,7 +6770,7 @@ gtk_text_view_backspace (GtkTextView *text_view)
 static void
 gtk_text_view_cut_clipboard (GtkTextView *text_view)
 {
-  GtkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET (text_view),
+  GtkClipboard *clipboard = gtk_widget_get_old_clipboard (GTK_WIDGET (text_view),
 						      GDK_SELECTION_CLIPBOARD);
   
   gtk_text_buffer_cut_clipboard (get_buffer (text_view),
@@ -6785,7 +6785,7 @@ gtk_text_view_cut_clipboard (GtkTextView *text_view)
 static void
 gtk_text_view_copy_clipboard (GtkTextView *text_view)
 {
-  GtkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET (text_view),
+  GtkClipboard *clipboard = gtk_widget_get_old_clipboard (GTK_WIDGET (text_view),
 						      GDK_SELECTION_CLIPBOARD);
   
   gtk_text_buffer_copy_clipboard (get_buffer (text_view),
@@ -6797,7 +6797,7 @@ gtk_text_view_copy_clipboard (GtkTextView *text_view)
 static void
 gtk_text_view_paste_clipboard (GtkTextView *text_view)
 {
-  GtkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET (text_view),
+  GtkClipboard *clipboard = gtk_widget_get_old_clipboard (GTK_WIDGET (text_view),
 						      GDK_SELECTION_CLIPBOARD);
   
   gtk_text_buffer_paste_clipboard (get_buffer (text_view),
@@ -8921,7 +8921,7 @@ gtk_text_view_do_popup (GtkTextView    *text_view,
   info->text_view = g_object_ref (text_view);
   info->trigger_event = event ? gdk_event_copy (event) : gtk_get_current_event ();
 
-  gtk_clipboard_request_contents (gtk_widget_get_clipboard (GTK_WIDGET (text_view),
+  gtk_clipboard_request_contents (gtk_widget_get_old_clipboard (GTK_WIDGET (text_view),
 							    GDK_SELECTION_CLIPBOARD),
 				  gdk_atom_intern_static_string ("TARGETS"),
 				  popup_targets_received,
@@ -9111,7 +9111,7 @@ static gboolean
 gtk_text_view_selection_bubble_popup_show (gpointer user_data)
 {
   GtkTextView *text_view = user_data;
-  gtk_clipboard_request_contents (gtk_widget_get_clipboard (GTK_WIDGET (text_view),
+  gtk_clipboard_request_contents (gtk_widget_get_old_clipboard (GTK_WIDGET (text_view),
 							    GDK_SELECTION_CLIPBOARD),
 				  gdk_atom_intern_static_string ("TARGETS"),
 				  bubble_targets_received,
