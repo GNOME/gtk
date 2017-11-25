@@ -35,8 +35,6 @@
 static void    gdk_x11_device_manager_core_finalize    (GObject *object);
 static void    gdk_x11_device_manager_core_constructed (GObject *object);
 
-static GList * gdk_x11_device_manager_core_list_devices (GdkDeviceManager *device_manager,
-                                                         GdkDeviceType     type);
 static GdkDevice * gdk_x11_device_manager_core_get_client_pointer (GdkDeviceManager *device_manager);
 
 static void     gdk_x11_device_manager_event_translator_init (GdkEventTranslatorIface *iface);
@@ -59,7 +57,6 @@ gdk_x11_device_manager_core_class_init (GdkX11DeviceManagerCoreClass *klass)
 
   object_class->finalize = gdk_x11_device_manager_core_finalize;
   object_class->constructed = gdk_x11_device_manager_core_constructed;
-  device_manager_class->list_devices = gdk_x11_device_manager_core_list_devices;
   device_manager_class->get_client_pointer = gdk_x11_device_manager_core_get_client_pointer;
 }
 
@@ -681,23 +678,6 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
     g_object_unref (window);
 
   return return_val;
-}
-
-static GList *
-gdk_x11_device_manager_core_list_devices (GdkDeviceManager *device_manager,
-                                          GdkDeviceType     type)
-{
-  GdkX11DeviceManagerCore *device_manager_core;
-  GList *devices = NULL;
-
-  if (type == GDK_DEVICE_TYPE_MASTER)
-    {
-      device_manager_core = (GdkX11DeviceManagerCore *) device_manager;
-      devices = g_list_prepend (devices, device_manager_core->core_keyboard);
-      devices = g_list_prepend (devices, device_manager_core->core_pointer);
-    }
-
-  return devices;
 }
 
 static GdkDevice *

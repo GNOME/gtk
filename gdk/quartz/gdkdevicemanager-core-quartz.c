@@ -34,8 +34,6 @@
 static void    gdk_quartz_device_manager_core_finalize    (GObject *object);
 static void    gdk_quartz_device_manager_core_constructed (GObject *object);
 
-static GList * gdk_quartz_device_manager_core_list_devices (GdkDeviceManager *device_manager,
-                                                            GdkDeviceType     type);
 static GdkDevice * gdk_quartz_device_manager_core_get_client_pointer (GdkDeviceManager *device_manager);
 
 
@@ -49,7 +47,6 @@ gdk_quartz_device_manager_core_class_init (GdkQuartzDeviceManagerCoreClass *klas
 
   object_class->finalize = gdk_quartz_device_manager_core_finalize;
   object_class->constructed = gdk_quartz_device_manager_core_constructed;
-  device_manager_class->list_devices = gdk_quartz_device_manager_core_list_devices;
   device_manager_class->get_client_pointer = gdk_quartz_device_manager_core_get_client_pointer;
 }
 
@@ -120,23 +117,6 @@ gdk_quartz_device_manager_core_constructed (GObject *object)
                                                device_manager->core_keyboard);
   gdk_display_add_seat (display, seat);
   g_object_unref (seat);
-}
-
-static GList *
-gdk_quartz_device_manager_core_list_devices (GdkDeviceManager *device_manager,
-                                             GdkDeviceType     type)
-{
-  GdkQuartzDeviceManagerCore *quartz_device_manager_core;
-  GList *devices = NULL;
-
-  if (type == GDK_DEVICE_TYPE_MASTER)
-    {
-      quartz_device_manager_core = (GdkQuartzDeviceManagerCore *) device_manager;
-      devices = g_list_prepend (devices, quartz_device_manager_core->core_keyboard);
-      devices = g_list_prepend (devices, quartz_device_manager_core->core_pointer);
-    }
-
-  return devices;
 }
 
 static GdkDevice *

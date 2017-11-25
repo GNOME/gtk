@@ -73,8 +73,6 @@ static void    gdk_x11_device_manager_xi2_get_property (GObject      *object,
                                                         GValue       *value,
                                                         GParamSpec   *pspec);
 
-static GList * gdk_x11_device_manager_xi2_list_devices (GdkDeviceManager *device_manager,
-                                                        GdkDeviceType     type);
 static GdkDevice * gdk_x11_device_manager_xi2_get_client_pointer (GdkDeviceManager *device_manager);
 
 static gboolean gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
@@ -106,7 +104,6 @@ gdk_x11_device_manager_xi2_class_init (GdkX11DeviceManagerXI2Class *klass)
   object_class->set_property = gdk_x11_device_manager_xi2_set_property;
   object_class->get_property = gdk_x11_device_manager_xi2_get_property;
 
-  device_manager_class->list_devices = gdk_x11_device_manager_xi2_list_devices;
   device_manager_class->get_client_pointer = gdk_x11_device_manager_xi2_get_client_pointer;
 
   g_object_class_install_property (object_class,
@@ -764,26 +761,6 @@ gdk_x11_device_manager_xi2_dispose (GObject *object)
     }
 
   G_OBJECT_CLASS (gdk_x11_device_manager_xi2_parent_class)->dispose (object);
-}
-
-static GList *
-gdk_x11_device_manager_xi2_list_devices (GdkDeviceManager *device_manager,
-                                         GdkDeviceType     type)
-{
-  GdkX11DeviceManagerXI2 *device_manager_xi2;
-  GList *cur, *list = NULL;
-
-  device_manager_xi2 = GDK_X11_DEVICE_MANAGER_XI2 (device_manager);
-
-  for (cur = device_manager_xi2->devices; cur; cur = cur->next)
-    {
-      GdkDevice *dev = cur->data;
-
-      if (type == gdk_device_get_device_type (dev))
-        list = g_list_prepend (list, dev);
-    }
-
-  return list;
 }
 
 static GdkDevice *

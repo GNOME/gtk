@@ -5001,24 +5001,6 @@ gdk_wayland_device_manager_finalize (GObject *object)
   G_OBJECT_CLASS (gdk_wayland_device_manager_parent_class)->finalize (object);
 }
 
-static GList *
-gdk_wayland_device_manager_list_devices (GdkDeviceManager *device_manager,
-                                         GdkDeviceType     type)
-{
-  GdkWaylandDeviceManager *wayland_device_manager;
-  GList *devices = NULL, *l;
-
-  wayland_device_manager = GDK_WAYLAND_DEVICE_MANAGER (device_manager);
-
-  for (l = wayland_device_manager->devices; l; l = l->next)
-    {
-      if (gdk_device_get_device_type (l->data) == type)
-        devices = g_list_prepend (devices, l->data);
-    }
-
-  return devices;
-}
-
 static GdkDevice *
 gdk_wayland_device_manager_get_client_pointer (GdkDeviceManager *device_manager)
 {
@@ -5042,7 +5024,6 @@ gdk_wayland_device_manager_class_init (GdkWaylandDeviceManagerClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = gdk_wayland_device_manager_finalize;
-  device_manager_class->list_devices = gdk_wayland_device_manager_list_devices;
   device_manager_class->get_client_pointer = gdk_wayland_device_manager_get_client_pointer;
 }
 
