@@ -1124,6 +1124,15 @@ gtk_selection_convert (GtkWidget *widget,
   display = gtk_widget_get_display (widget);
   owner_window = gdk_selection_owner_get_for_display (display, selection);
   
+#ifdef GDK_WINDOWING_WIN32
+  /* Special handling for DELETE requests,
+   * make sure this goes down into GDK layer.
+   */
+  if (GDK_IS_WIN32_DISPLAY (display) &&
+      target == gdk_atom_intern_static_string ("DELETE"))
+    owner_window = NULL;
+#endif
+
   if (owner_window != NULL)
     {
       GtkWidget *owner_widget;

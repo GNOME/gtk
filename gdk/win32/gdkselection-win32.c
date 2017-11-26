@@ -2168,6 +2168,15 @@ convert_dnd_selection_to_target (GdkAtom    target,
   fmt.lindex = -1;
   fmt.tymed = TYMED_HGLOBAL;
 
+  /* We rely on GTK+ applications to synthesize the DELETE request
+   * for themselves, since they do know whether a DnD operation was a
+   * move and whether was successful. Therefore, we do not need to
+   * actually send anything here. Just report back without storing
+   * any data.
+   */
+  if (target == _gdk_win32_selection_atom (GDK_WIN32_ATOM_INDEX_DELETE))
+    return result;
+
   for (format = 0, with_transmute = 0; format == 0 && with_transmute < 2; with_transmute++)
     {
       for (i = 0;
