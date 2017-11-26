@@ -55,7 +55,6 @@
 
 #include <string.h>
 
-#include "gtkclipboard.h"
 #include "gtkdnd.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
@@ -332,9 +331,8 @@ copy_activate_cb (GtkWidget     *widget,
 {
   GtkLinkButtonPrivate *priv = link_button->priv;
   
-  gtk_clipboard_set_text (gtk_widget_get_old_clipboard (GTK_WIDGET (link_button),
-			  			    GDK_SELECTION_CLIPBOARD),
-		  	  priv->uri, -1);
+  gdk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (link_button)),
+		  	  priv->uri);
 }
 
 static void
