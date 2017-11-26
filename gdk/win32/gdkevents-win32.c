@@ -3821,6 +3821,7 @@ gdk_event_translate (MSG  *msg,
       property_change_data = g_new0 (STGMEDIUM, 1);
       win32_sel->property_change_data = property_change_data;
       win32_sel->property_change_format = msg->wParam;
+      win32_sel->property_change_target_atom = target;
 
       fixup_event (event);
       GDK_NOTE (EVENTS, g_print (" (calling _gdk_event_emit)"));

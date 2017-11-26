@@ -167,6 +167,8 @@ struct _GdkWin32Selection
   LPSTGMEDIUM       property_change_data;
   /* Carries the transmute field of the GdkSelTargetFormat from from idataobject_getdata() to property_change() */
   gboolean          property_change_transmute;
+  /* Carries the target atom from GDK_SELECTION_REQUEST issuer to property_change() */
+  GdkAtom           property_change_target_atom;
 
   /* TRUE when we are emptying the clipboard ourselves */
   gboolean          ignore_destroy_clipboard;
