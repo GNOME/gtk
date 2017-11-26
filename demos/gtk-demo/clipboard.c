@@ -13,55 +13,84 @@
 #include <gtk/gtk.h>
 #include <string.h>
 
+static GtkWidget *window = NULL;
+
 void
 copy_button_clicked (GtkWidget *button,
                      gpointer   user_data)
 {
   GtkWidget *entry;
-  GtkClipboard *clipboard;
+  GdkClipboard *clipboard;
 
   entry = GTK_WIDGET (user_data);
 
   /* Get the clipboard object */
-  clipboard = gtk_widget_get_old_clipboard (entry,
-                                        GDK_SELECTION_CLIPBOARD);
+  clipboard = gtk_widget_get_clipboard (entry);
 
   /* Set clipboard text */
-  gtk_clipboard_set_text (clipboard, gtk_entry_get_text (GTK_ENTRY (entry)), -1);
+  gdk_clipboard_set_text (clipboard, gtk_entry_get_text (GTK_ENTRY (entry)));
 }
 
 void
-paste_received (GtkClipboard *clipboard,
-                const gchar  *text,
+paste_received (GObject      *source_object,
+                GAsyncResult *result,
                 gpointer      user_data)
 {
+  GdkClipboard *clipboard;
   GtkWidget *entry;
+  char *text;
+  GError *error = NULL;
 
+  clipboard = GDK_CLIPBOARD (source_object);
   entry = GTK_WIDGET (user_data);
 
-  /* Set the entry text */
-  if(text)
-    gtk_entry_set_text (GTK_ENTRY (entry), text);
+  /* Get the resulting text of the read operation */
+  text = gdk_clipboard_read_text_finish (clipboard, result, &error);
+
+  if (text)
+    {
+      /* Set the entry text */
+      gtk_entry_set_text (GTK_ENTRY (entry), text);
+      g_free (text);
+    }
+  else
+    {
+      GtkWidget *dialog;
+
+      /* Show an error about why pasting failed.
+       * Usually you probably want to ignore such failures,
+       * but for demonstration purposes, we show the error.
+       */
+      dialog = gtk_message_dialog_new (GTK_WINDOW (window),
+                                       GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
+                                       GTK_MESSAGE_ERROR,
+                                       GTK_BUTTONS_CLOSE,
+                                       "Could not paste text: %s",
+                                       error->message);
+      g_signal_connect (dialog, "response",
+                        G_CALLBACK (gtk_widget_destroy), NULL);
+      gtk_widget_show (dialog);
+
+      g_error_free (error);
+    }
 }
 
 void
 paste_button_clicked (GtkWidget *button,
-                     gpointer   user_data)
+                      gpointer   user_data)
 {
   GtkWidget *entry;
-  GtkClipboard *clipboard;
+  GdkClipboard *clipboard;
 
   entry = GTK_WIDGET (user_data);
 
   /* Get the clipboard object */
-  clipboard = gtk_widget_get_old_clipboard (entry,
-                                        GDK_SELECTION_CLIPBOARD);
+  clipboard = gtk_widget_get_clipboard (entry);
 
   /* Request the contents of the clipboard, contents_received will be
      called when we do get the contents.
    */
-  gtk_clipboard_request_text (clipboard,
-                              paste_received, entry);
+  gdk_clipboard_read_text_async (clipboard, NULL, paste_received, entry);
 }
 
 static cairo_surface_t *
@@ -201,8 +230,6 @@ button_press (GtkWidget      *widget,
 GtkWidget *
 do_clipboard (GtkWidget *do_widget)
 {
-  static GtkWidget *window = NULL;
-
   if (!window)
     {
       GtkWidget *vbox, *hbox;
