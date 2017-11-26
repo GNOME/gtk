@@ -34,7 +34,6 @@
 #include "gtkbutton.h"
 #include "gtkcelllayout.h"
 #include "gtkcheckmenuitem.h"
-#include "gtkclipboard.h"
 #include "gtkcomboboxtext.h"
 #include "gtkcssiconthemevalueprivate.h"
 #include "gtkdragsource.h"
@@ -1460,9 +1459,8 @@ copy_activated_cb (GtkMenuItem *menu_item,
 
   utf8_uri = gtk_recent_info_get_uri_display (info);
   
-  gtk_clipboard_set_text (gtk_widget_get_old_clipboard (GTK_WIDGET (impl),
-			  			    GDK_SELECTION_CLIPBOARD),
-                          utf8_uri, -1);
+  gdk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (impl)),
+                          utf8_uri);
 
   gtk_recent_info_unref (info);
   g_free (utf8_uri);
