@@ -757,8 +757,6 @@ selection_property_store (GdkWindow *owner,
   GdkSelProp *prop;
   GdkWin32Selection *win32_sel = _gdk_win32_selection_get ();
 
-  g_return_if_fail (type != GDK_TARGET_STRING);
-
   prop = g_hash_table_lookup (win32_sel->sel_prop_table, GDK_WINDOW_HWND (owner));
 
   if (prop != NULL)
