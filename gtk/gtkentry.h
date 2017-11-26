@@ -146,7 +146,6 @@ struct _GtkEntryClass
   void (* copy_clipboard)     (GtkEntry             *entry);
   void (* paste_clipboard)    (GtkEntry             *entry);
   void (* toggle_overwrite)   (GtkEntry             *entry);
-  void (* insert_emoji)       (GtkEntry             *entry);
 
   /* hooks to add other objects beside the entry (like in GtkSpinButton) */
   void (* get_text_area_size) (GtkEntry       *entry,
@@ -159,6 +158,7 @@ struct _GtkEntryClass
                                gint           *y,
 			       gint           *width,
 			       gint           *height);
+  void (* insert_emoji)       (GtkEntry             *entry);
 
   /*< private >*/
 
