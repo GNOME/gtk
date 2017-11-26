@@ -1057,6 +1057,7 @@ idataobject_getdata (LPDATAOBJECT This,
         {
           target = frec->target;
           win32_sel->property_change_transmute = frec->transmute;
+          win32_sel->property_change_target_atom = frec->target;
         }
     }
 
@@ -2130,6 +2131,7 @@ _gdk_win32_dnd_do_dragdrop (void)
   /* Delete dnd selection after successful move */
   if (hr == DRAGDROP_S_DROP && dwEffect == DROPEFFECT_MOVE)
     {
+      GdkWin32Selection *win32_sel = _gdk_win32_selection_get ();
       GdkEvent tmp_event;
 
       memset (&tmp_event, 0, sizeof (tmp_event));
@@ -2138,6 +2140,7 @@ _gdk_win32_dnd_do_dragdrop (void)
       tmp_event.selection.send_event = FALSE;
       tmp_event.selection.selection = _gdk_win32_selection_atom (GDK_WIN32_ATOM_INDEX_OLE2_DND);
       tmp_event.selection.target = _gdk_win32_selection_atom (GDK_WIN32_ATOM_INDEX_DELETE);
+      win32_sel->property_change_target_atom = _gdk_win32_selection_atom (GDK_WIN32_ATOM_INDEX_DELETE);
       tmp_event.selection.property = _gdk_win32_selection_atom (GDK_WIN32_ATOM_INDEX_OLE2_DND);
       g_set_object (&tmp_event.selection.requestor, drag_ctx->source_window);
       tmp_event.selection.time = GDK_CURRENT_TIME; /* ??? */
