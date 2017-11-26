@@ -575,6 +575,8 @@ idroptarget_dragenter (LPDROPTARGET This,
    */
   if (current_src_context && current_src_context->context)
     g_set_object (&context->source_window, current_src_context->context->source_window);
+  else
+    g_set_object (&context->source_window, gdk_get_default_root_window ());
 
   g_set_object (&sel_win32->target_drag_context, context);
   context->actions = GDK_ACTION_DEFAULT | GDK_ACTION_COPY | GDK_ACTION_MOVE;
