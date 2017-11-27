@@ -46,5 +46,3 @@ Did gyre and gimple in the wabe
                         variant: <omitted>
                         weight: <omitted>
                         wrap-mode: none
-    <AtkStreamableContent>
-    mime types: application/x-gtk-text-buffer-rich-text text/plain
