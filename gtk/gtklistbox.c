@@ -609,7 +609,7 @@ gtk_list_box_init (GtkListBox *box)
                     G_CALLBACK (gtk_list_box_multipress_gesture_released), box);
   g_signal_connect (priv->multipress_gesture, "stopped",
                     G_CALLBACK (gtk_list_box_multipress_gesture_stopped), box);
-  g_signal_connect (priv->multipress_gesture, "unpaired-released",
+  g_signal_connect (priv->multipress_gesture, "unpaired-release",
                     G_CALLBACK (gtk_list_box_multipress_unpaired_release), box);
 
   g_signal_connect (box, "notify::parent", G_CALLBACK (gtk_list_box_parent_cb), NULL);
