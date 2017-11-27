@@ -1818,6 +1818,9 @@ gdk_wayland_display_get_setting (GdkDisplay *display,
 {
   TranslationEntry *entry;
 
+  if (g_hash_table_size (GDK_WAYLAND_DISPLAY (display)->settings) == 0)
+    return FALSE;
+
   entry = find_translation_entry_by_setting (name);
   if (entry != NULL)
     {
