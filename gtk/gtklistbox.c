@@ -243,6 +243,12 @@ static void gtk_list_box_multipress_gesture_released (GtkGestureMultiPress *gest
                                                       gdouble               x,
                                                       gdouble               y,
                                                       GtkListBox           *box);
+static void gtk_list_box_multipress_unpaired_release (GtkGestureMultiPress *gesture,
+                                                      gdouble               x,
+                                                      gdouble               y,
+                                                      guint                 button,
+                                                      GdkEventSequence     *sequence,
+                                                      GtkListBox           *box);
 static void gtk_list_box_multipress_gesture_stopped  (GtkGestureMultiPress *gesture,
                                                       GtkListBox           *box);
 
@@ -603,7 +609,8 @@ gtk_list_box_init (GtkListBox *box)
                     G_CALLBACK (gtk_list_box_multipress_gesture_released), box);
   g_signal_connect (priv->multipress_gesture, "stopped",
                     G_CALLBACK (gtk_list_box_multipress_gesture_stopped), box);
-
+  g_signal_connect (priv->multipress_gesture, "unpaired-released",
+                    G_CALLBACK (gtk_list_box_multipress_unpaired_release), box);
 
   g_signal_connect (box, "notify::parent", G_CALLBACK (gtk_list_box_parent_cb), NULL);
 }
@@ -1771,6 +1778,26 @@ get_current_selection_modifiers (GtkWidget *widget,
       if ((state & mask) == mask)
         *extend = TRUE;
     }
+}
+
+static void
+gtk_list_box_multipress_unpaired_release (GtkGestureMultiPress *gesture,
+                                          gdouble               x,
+                                          gdouble               y,
+                                          guint                 button,
+                                          GdkEventSequence     *sequence,
+                                          GtkListBox           *box)
+{
+  GtkListBoxPrivate *priv = BOX_PRIV (box);
+  GtkListBoxRow *row;
+
+  if (!priv->activate_single_click)
+    return;
+
+  row = gtk_list_box_get_row_at_y (box, y);
+
+  if (row)
+    gtk_list_box_select_and_activate (box, row);
 }
 
 static void
