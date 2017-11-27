@@ -226,10 +226,11 @@ device_get_capability (GdkDevice *device)
     case GDK_SOURCE_ERASER:
     case GDK_SOURCE_CURSOR:
       return GDK_SEAT_CAPABILITY_TABLET_STYLUS;
+    case GDK_SOURCE_TABLET_PAD:
+      return GDK_SEAT_CAPABILITY_TABLET_PAD;
     case GDK_SOURCE_MOUSE:
     case GDK_SOURCE_TOUCHPAD:
     case GDK_SOURCE_TRACKPOINT:
-    case GDK_SOURCE_TABLET_PAD:
     default:
       return GDK_SEAT_CAPABILITY_POINTER;
     }
@@ -269,7 +270,7 @@ gdk_seat_default_get_slaves (GdkSeat             *seat,
   if (capabilities & (GDK_SEAT_CAPABILITY_ALL_POINTING))
     devices = append_filtered (devices, priv->slave_pointers, capabilities);
 
-  if (capabilities & GDK_SEAT_CAPABILITY_KEYBOARD)
+  if (capabilities & (GDK_SEAT_CAPABILITY_KEYBOARD | GDK_SEAT_CAPABILITY_TABLET_PAD))
     devices = append_filtered (devices, priv->slave_keyboards, capabilities);
 
   return devices;
@@ -375,7 +376,7 @@ gdk_seat_default_add_slave (GdkSeatDefault *seat,
 
   if (capability & GDK_SEAT_CAPABILITY_ALL_POINTING)
     priv->slave_pointers = g_list_prepend (priv->slave_pointers, g_object_ref (device));
-  else if (capability & GDK_SEAT_CAPABILITY_KEYBOARD)
+  else if (capability & (GDK_SEAT_CAPABILITY_KEYBOARD | GDK_SEAT_CAPABILITY_TABLET_PAD))
     priv->slave_keyboards = g_list_prepend (priv->slave_keyboards, g_object_ref (device));
   else
     {
@@ -415,8 +416,9 @@ gdk_seat_default_remove_slave (GdkSeatDefault *seat,
     {
       priv->slave_keyboards = g_list_remove (priv->slave_keyboards, device);
 
-      if (priv->slave_keyboards == NULL)
-        priv->capabilities &= ~GDK_SEAT_CAPABILITY_KEYBOARD;
+      priv->capabilities &= ~(GDK_SEAT_CAPABILITY_KEYBOARD | GDK_SEAT_CAPABILITY_TABLET_PAD);
+      for (l = priv->slave_keyboards; l; l = l->next)
+        priv->capabilities |= device_get_capability (GDK_DEVICE (l->data));
 
       gdk_seat_device_removed (GDK_SEAT (seat), device);
     }

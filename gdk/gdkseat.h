@@ -42,6 +42,7 @@ G_BEGIN_DECLS
  * @GDK_SEAT_CAPABILITY_TOUCH: The seat has touchscreen(s) attached
  * @GDK_SEAT_CAPABILITY_TABLET_STYLUS: The seat has drawing tablet(s) attached
  * @GDK_SEAT_CAPABILITY_KEYBOARD: The seat has keyboard(s) attached
+ * @GDK_SEAT_CAPABILITY_TABLET_PAD: The seat has drawing tablet pad(s) attached
  * @GDK_SEAT_CAPABILITY_ALL_POINTING: The union of all pointing capabilities
  * @GDK_SEAT_CAPABILITY_ALL: The union of all capabilities
  *
@@ -55,6 +56,7 @@ typedef enum {
   GDK_SEAT_CAPABILITY_TOUCH         = 1 << 1,
   GDK_SEAT_CAPABILITY_TABLET_STYLUS = 1 << 2,
   GDK_SEAT_CAPABILITY_KEYBOARD      = 1 << 3,
+  GDK_SEAT_CAPABILITY_TABLET_PAD    = 1 << 4,
   GDK_SEAT_CAPABILITY_ALL_POINTING  = (GDK_SEAT_CAPABILITY_POINTER | GDK_SEAT_CAPABILITY_TOUCH | GDK_SEAT_CAPABILITY_TABLET_STYLUS),
   GDK_SEAT_CAPABILITY_ALL           = (GDK_SEAT_CAPABILITY_ALL_POINTING | GDK_SEAT_CAPABILITY_KEYBOARD)
 } GdkSeatCapabilities;
@@ -112,7 +114,7 @@ GdkDevice *    gdk_seat_get_pointer      (GdkSeat             *seat);
 GDK_AVAILABLE_IN_3_20
 GdkDevice *    gdk_seat_get_keyboard     (GdkSeat             *seat);
 
-GDK_AVAILABLE_IN_3_93
+GDK_AVAILABLE_IN_3_94
 GList *        gdk_seat_get_master_pointers (GdkSeat             *seat,
                                              GdkSeatCapabilities  capabilities);
 

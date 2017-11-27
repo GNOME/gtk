@@ -4711,6 +4711,17 @@ gdk_wayland_seat_get_slaves (GdkSeat             *seat,
         }
     }
 
+  if (wayland_seat->tablet_pads && (capabilities & GDK_SEAT_CAPABILITY_TABLET_PAD))
+    {
+      GList *l;
+
+      for (l = wayland_seat->tablet_pads; l; l = l->next)
+        {
+          GdkWaylandTabletPadData *data = l->data;
+          slaves = g_list_prepend (slaves, data->device);
+        }
+    }
+
   return slaves;
 }
 
