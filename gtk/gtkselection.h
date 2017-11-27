@@ -39,10 +39,6 @@ G_BEGIN_DECLS
 GDK_AVAILABLE_IN_ALL
 GdkContentFormats *     gtk_content_formats_add_text_targets      (GdkContentFormats *list) G_GNUC_WARN_UNUSED_RESULT;
 GDK_AVAILABLE_IN_ALL
-GdkContentFormats *     gtk_content_formats_add_rich_text_targets (GdkContentFormats *list,
-                                                                   gboolean           deserializable,
-                                                                   GtkTextBuffer     *buffer) G_GNUC_WARN_UNUSED_RESULT;
-GDK_AVAILABLE_IN_ALL
 GdkContentFormats *     gtk_content_formats_add_image_targets     (GdkContentFormats *list,
                                                                    gboolean           writable) G_GNUC_WARN_UNUSED_RESULT;
 GDK_AVAILABLE_IN_ALL
@@ -132,9 +128,6 @@ gboolean gtk_selection_data_get_targets          (const GtkSelectionData  *selec
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_selection_data_targets_include_text (const GtkSelectionData  *selection_data);
 GDK_AVAILABLE_IN_ALL
-gboolean gtk_selection_data_targets_include_rich_text (const GtkSelectionData *selection_data,
-                                                       GtkTextBuffer    *buffer);
-GDK_AVAILABLE_IN_ALL
 gboolean gtk_selection_data_targets_include_image (const GtkSelectionData  *selection_data,
                                                    gboolean           writable);
 GDK_AVAILABLE_IN_ALL
@@ -142,10 +135,6 @@ gboolean gtk_selection_data_targets_include_uri  (const GtkSelectionData  *selec
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_targets_include_text                (GdkAtom       *targets,
                                                   gint           n_targets);
-GDK_AVAILABLE_IN_ALL
-gboolean gtk_targets_include_rich_text           (GdkAtom       *targets,
-                                                  gint           n_targets,
-                                                  GtkTextBuffer *buffer);
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_targets_include_image               (GdkAtom       *targets,
                                                   gint           n_targets,

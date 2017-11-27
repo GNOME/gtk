@@ -229,11 +229,6 @@ void gtk_clipboard_request_text      (GtkClipboard                     *clipboar
                                       GtkClipboardTextReceivedFunc      callback,
                                       gpointer                          user_data);
 GDK_AVAILABLE_IN_ALL
-void gtk_clipboard_request_rich_text (GtkClipboard                     *clipboard,
-                                      GtkTextBuffer                    *buffer,
-                                      GtkClipboardRichTextReceivedFunc  callback,
-                                      gpointer                          user_data);
-GDK_AVAILABLE_IN_ALL
 void gtk_clipboard_request_image     (GtkClipboard                     *clipboard,
                                       GtkClipboardImageReceivedFunc     callback,
                                       gpointer                          user_data);
@@ -269,9 +264,6 @@ GDK_AVAILABLE_IN_3_94
 cairo_surface_t * gtk_clipboard_wait_for_surface   (GtkClipboard  *clipboard);
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_clipboard_wait_is_text_available      (GtkClipboard  *clipboard);
-GDK_AVAILABLE_IN_ALL
-gboolean gtk_clipboard_wait_is_rich_text_available (GtkClipboard  *clipboard,
-                                                    GtkTextBuffer *buffer);
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_clipboard_wait_is_image_available     (GtkClipboard  *clipboard);
 GDK_AVAILABLE_IN_ALL

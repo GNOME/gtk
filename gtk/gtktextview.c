@@ -42,7 +42,6 @@
 #include "gtkseparatormenuitem.h"
 #include "gtksettings.h"
 #include "gtkselectionprivate.h"
-#include "gtktextbufferrichtext.h"
 #include "gtktextdisplayprivate.h"
 #include "gtktextiterprivate.h"
 #include "gtkimmulticontext.h"
@@ -7882,31 +7881,6 @@ gtk_text_view_drag_data_get (GtkWidget        *widget,
                               (void*)&buffer,
                               sizeof (buffer));
     }
-  else if (gtk_selection_data_targets_include_rich_text (selection_data, buffer))
-    {
-      GtkTextIter start;
-      GtkTextIter end;
-      guint8 *str = NULL;
-      gsize len;
-
-      if (gtk_text_buffer_get_selection_bounds (buffer, &start, &end))
-        {
-          /* Extract the selected text */
-          str = gtk_text_buffer_serialize (buffer, buffer,
-                                           gtk_selection_data_get_target (selection_data),
-                                           &start, &end,
-                                           &len);
-        }
-
-      if (str)
-        {
-          gtk_selection_data_set (selection_data,
-                                  gtk_selection_data_get_target (selection_data),
-                                  8, /* bytes */
-                                  (guchar *) str, len);
-          g_free (str);
-        }
-    }
   else
     {
       GtkTextIter start;
@@ -8177,29 +8151,7 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
       if (gtk_text_buffer_get_tag_table (src_buffer) !=
           gtk_text_buffer_get_tag_table (buffer))
         {
-          /*  try to find a suitable rich text target instead  */
-          GdkAtom *atoms;
-          gint     n_atoms;
-          GdkContentFormats *dnd_formats, *buffer_formats;
-          const char *target = NULL;
-
           copy_tags = FALSE;
-
-          atoms = gtk_text_buffer_get_deserialize_formats (buffer, &n_atoms);
-          buffer_formats = gdk_content_formats_new (atoms, n_atoms);
-          dnd_formats = gdk_drag_context_get_formats (context);
-
-          gdk_content_formats_match (dnd_formats, buffer_formats, NULL, &target);
-
-          gdk_content_formats_unref (buffer_formats);
-          g_free (atoms);
-
-          if (target != NULL)
-            {
-              gtk_drag_get_data (widget, context, target, time);
-              gtk_text_buffer_end_user_action (buffer);
-              return;
-            }
         }
 
       if (gtk_text_buffer_get_selection_bounds (src_buffer,
@@ -8222,25 +8174,6 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
                                                   priv->editable);
               g_free (str);
             }
-        }
-    }
-  else if (gtk_selection_data_get_length (selection_data) > 0 &&
-           gtk_selection_data_targets_include_rich_text (selection_data, buffer))
-    {
-      gboolean retval;
-      GError *error = NULL;
-
-      retval = gtk_text_buffer_deserialize (buffer, buffer,
-                                            gtk_selection_data_get_target (selection_data),
-                                            &drop_point,
-                                            (guint8 *) gtk_selection_data_get_data (selection_data),
-                                            gtk_selection_data_get_length (selection_data),
-                                            &error);
-
-      if (!retval)
-        {
-          g_warning ("error pasting: %s", error->message);
-          g_clear_error (&error);
         }
     }
   else

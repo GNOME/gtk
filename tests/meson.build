@@ -73,7 +73,6 @@ gtk_tests = [
   ['testprint', ['testprintfileoperation.c']],
   ['testrecentchooser'],
   ['testrecentchoosermenu'],
-  ['testrichtext'],
   ['testscale'],
   ['testselection'],
   ['testselectionmode'],

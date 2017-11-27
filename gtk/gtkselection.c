@@ -86,7 +86,6 @@
 
 #include "gtkmain.h"
 #include "gtkdebug.h"
-#include "gtktextbufferrichtext.h"
 #include "gtkintl.h"
 #include "gdk-pixbuf/gdk-pixbuf.h"
 
@@ -282,50 +281,6 @@ gtk_content_formats_add_text_targets (GdkContentFormats *list)
   if (!g_get_charset (NULL))
     gdk_content_formats_builder_add_mime_type (builder, text_plain_locale_atom);  
   gdk_content_formats_builder_add_mime_type (builder, text_plain_atom);  
-
-  return gdk_content_formats_builder_free (builder);
-}
-
-/**
- * gtk_content_formats_add_rich_text_targets:
- * @list: a #GdkContentFormats
- * @deserializable: if %TRUE, then deserializable rich text formats
- *                  will be added, serializable formats otherwise.
- * @buffer: a #GtkTextBuffer.
- *
- * Appends the rich text targets registered with
- * gtk_text_buffer_register_serialize_format() or
- * gtk_text_buffer_register_deserialize_format() to the target list. All
- * targets are added with the same @info.
- *
- * Since: 2.10
- **/
-GdkContentFormats *
-gtk_content_formats_add_rich_text_targets (GdkContentFormats *list,
-                                           gboolean           deserializable,
-                                           GtkTextBuffer     *buffer)
-{
-  GdkContentFormatsBuilder *builder;
-  GdkAtom *atoms;
-  gint     n_atoms;
-  gint     i;
-
-  g_return_val_if_fail (list != NULL, NULL);
-  g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), NULL);
-
-  builder = gdk_content_formats_builder_new ();
-  gdk_content_formats_builder_add_formats (builder, list);
-  gdk_content_formats_unref (list);
-
-  if (deserializable)
-    atoms = gtk_text_buffer_get_deserialize_formats (buffer, &n_atoms);
-  else
-    atoms = gtk_text_buffer_get_serialize_formats (buffer, &n_atoms);
-
-  for (i = 0; i < n_atoms; i++)
-    gdk_content_formats_builder_add_mime_type (builder, atoms[i]);
-
-  g_free (atoms);
 
   return gdk_content_formats_builder_free (builder);
 }
@@ -1783,56 +1738,6 @@ gtk_targets_include_text (GdkAtom *targets,
 }
 
 /**
- * gtk_targets_include_rich_text:
- * @targets: (array length=n_targets): an array of #GdkAtoms
- * @n_targets: the length of @targets
- * @buffer: a #GtkTextBuffer
- *
- * Determines if any of the targets in @targets can be used to
- * provide rich text.
- *
- * Returns: %TRUE if @targets include a suitable target for rich text,
- *               otherwise %FALSE.
- *
- * Since: 2.10
- **/
-gboolean
-gtk_targets_include_rich_text (GdkAtom       *targets,
-                               gint           n_targets,
-                               GtkTextBuffer *buffer)
-{
-  GdkAtom *rich_targets;
-  gint n_rich_targets;
-  gint i, j;
-  gboolean result = FALSE;
-
-  g_return_val_if_fail (targets != NULL || n_targets == 0, FALSE);
-  g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), FALSE);
-
-  init_atoms ();
-
-  rich_targets = gtk_text_buffer_get_deserialize_formats (buffer,
-                                                          &n_rich_targets);
-
-  for (i = 0; i < n_targets; i++)
-    {
-      for (j = 0; j < n_rich_targets; j++)
-        {
-          if (targets[i] == rich_targets[j])
-            {
-              result = TRUE;
-              goto done;
-            }
-        }
-    }
-
- done:
-  g_free (rich_targets);
-
-  return result;
-}
-
-/**
  * gtk_selection_data_targets_include_text:
  * @selection_data: a #GtkSelectionData object
  * 
@@ -1857,43 +1762,6 @@ gtk_selection_data_targets_include_text (const GtkSelectionData *selection_data)
   if (gtk_selection_data_get_targets (selection_data, &targets, &n_targets))
     {
       result = gtk_targets_include_text (targets, n_targets);
-      g_free (targets);
-    }
-
-  return result;
-}
-
-/**
- * gtk_selection_data_targets_include_rich_text:
- * @selection_data: a #GtkSelectionData object
- * @buffer: a #GtkTextBuffer
- *
- * Given a #GtkSelectionData object holding a list of targets,
- * determines if any of the targets in @targets can be used to
- * provide rich text.
- *
- * Returns: %TRUE if @selection_data holds a list of targets,
- *               and a suitable target for rich text is included,
- *               otherwise %FALSE.
- *
- * Since: 2.10
- **/
-gboolean
-gtk_selection_data_targets_include_rich_text (const GtkSelectionData *selection_data,
-                                              GtkTextBuffer          *buffer)
-{
-  GdkAtom *targets;
-  gint n_targets;
-  gboolean result = FALSE;
-
-  g_return_val_if_fail (selection_data != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), FALSE);
-
-  init_atoms ();
-
-  if (gtk_selection_data_get_targets (selection_data, &targets, &n_targets))
-    {
-      result = gtk_targets_include_rich_text (targets, n_targets, buffer);
       g_free (targets);
     }
 

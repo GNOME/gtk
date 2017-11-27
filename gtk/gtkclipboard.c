@@ -27,7 +27,6 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkselectionprivate.h"
-#include "gtktextbufferrichtext.h"
 #include "gtkintl.h"
 
 #include "gdk/gdk-private.h"
@@ -1065,80 +1064,6 @@ gtk_clipboard_request_text (GtkClipboard                *clipboard,
 				  info);
 }
 
-static void
-request_rich_text_received_func (GtkClipboard     *clipboard,
-                                 GtkSelectionData *selection_data,
-                                 gpointer          data)
-{
-  RequestRichTextInfo *info = data;
-  guint8 *result = NULL;
-  gsize length = 0;
-
-  result = (guint8 *) gtk_selection_data_get_data (selection_data);
-  length = gtk_selection_data_get_length (selection_data);
-
-  info->current_atom++;
-
-  if ((!result || length < 1) && (info->current_atom < info->n_atoms))
-    {
-      gtk_clipboard_request_contents (clipboard, info->atoms[info->current_atom],
-                                      request_rich_text_received_func,
-                                      info);
-      return;
-    }
-
-  info->callback (clipboard, gtk_selection_data_get_target (selection_data),
-                  result, length,
-                  info->user_data);
-  g_free (info->atoms);
-  g_free (info);
-}
-
-/**
- * gtk_clipboard_request_rich_text:
- * @clipboard: a #GtkClipboard
- * @buffer: a #GtkTextBuffer
- * @callback: (scope async): a function to call when the text is received,
- *     or the retrieval fails. (It will always be called one way or the other.)
- * @user_data: user data to pass to @callback.
- *
- * Requests the contents of the clipboard as rich text. When the rich
- * text is later received, @callback will be called.
- *
- * The @text parameter to @callback will contain the resulting rich
- * text if the request succeeded, or %NULL if it failed. The @length
- * parameter will contain @text’s length. This function can fail for
- * various reasons, in particular if the clipboard was empty or if the
- * contents of the clipboard could not be converted into rich text form.
- *
- * Since: 2.10
- **/
-void
-gtk_clipboard_request_rich_text (GtkClipboard                    *clipboard,
-                                 GtkTextBuffer                   *buffer,
-                                 GtkClipboardRichTextReceivedFunc callback,
-                                 gpointer                         user_data)
-{
-  RequestRichTextInfo *info;
-
-  g_return_if_fail (clipboard != NULL);
-  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
-  g_return_if_fail (callback != NULL);
-
-  info = g_new (RequestRichTextInfo, 1);
-  info->callback = callback;
-  info->atoms = NULL;
-  info->n_atoms = 0;
-  info->current_atom = 0;
-  info->user_data = user_data;
-
-  info->atoms = gtk_text_buffer_get_deserialize_formats (buffer, &info->n_atoms);
-
-  gtk_clipboard_request_contents (clipboard, info->atoms[info->current_atom],
-				  request_rich_text_received_func,
-				  info);
-}
-
 static void 
 request_image_received_func (GtkClipboard     *clipboard,
 			     GtkSelectionData *selection_data,
@@ -1455,77 +1380,6 @@ gtk_clipboard_wait_for_text (GtkClipboard *clipboard)
   return results.data;
 }
 
-static void
-clipboard_rich_text_received_func (GtkClipboard *clipboard,
-                                   GdkAtom       format,
-                                   const guint8 *text,
-                                   gsize         length,
-                                   gpointer      data)
-{
-  WaitResults *results = data;
-
-  results->data = g_memdup (text, length);
-  results->format = format;
-  results->length = length;
-  g_main_loop_quit (results->loop);
-}
-
-/**
- * gtk_clipboard_wait_for_rich_text:
- * @clipboard: a #GtkClipboard
- * @buffer: a #GtkTextBuffer
- * @format: (out): return location for the format of the returned data
- * @length: (out): return location for the length of the returned data
- *
- * Requests the contents of the clipboard as rich text.  This function
- * waits for the data to be received using the main loop, so events,
- * timeouts, etc, may be dispatched during the wait.
- *
- * Returns: (nullable) (array length=length) (transfer full): a
- *               newly-allocated binary block of data which must be
- *               freed with g_free(), or %NULL if retrieving the
- *               selection data failed. (This could happen for various
- *               reasons, in particular if the clipboard was empty or
- *               if the contents of the clipboard could not be
- *               converted into text form.)
- *
- * Since: 2.10
- **/
-guint8 *
-gtk_clipboard_wait_for_rich_text (GtkClipboard  *clipboard,
-                                  GtkTextBuffer *buffer,
-                                  GdkAtom       *format,
-                                  gsize         *length)
-{
-  WaitResults results;
-
-  g_return_val_if_fail (clipboard != NULL, NULL);
-  g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), NULL);
-  g_return_val_if_fail (format != NULL, NULL);
-  g_return_val_if_fail (length != NULL, NULL);
-
-  results.data = NULL;
-  results.loop = g_main_loop_new (NULL, TRUE);
-
-  gtk_clipboard_request_rich_text (clipboard, buffer,
-                                   clipboard_rich_text_received_func,
-                                   &results);
-
-  if (g_main_loop_is_running (results.loop))
-    {
-      gdk_threads_leave ();
-      g_main_loop_run (results.loop);
-      gdk_threads_enter ();
-    }
-
-  g_main_loop_unref (results.loop);
-
-  *format = results.format;
-  *length = results.length;
-
-  return results.data;
-}
-
 static void 
 clipboard_image_received_func (GtkClipboard *clipboard,
 			       GdkPixbuf    *pixbuf,
@@ -1738,45 +1592,6 @@ gtk_clipboard_wait_is_text_available (GtkClipboard *clipboard)
   if (data)
     {
       result = gtk_selection_data_targets_include_text (data);
-      gtk_selection_data_free (data);
-    }
-
-  return result;
-}
-
-/**
- * gtk_clipboard_wait_is_rich_text_available:
- * @clipboard: a #GtkClipboard
- * @buffer: a #GtkTextBuffer
- *
- * Test to see if there is rich text available to be pasted
- * This is done by requesting the TARGETS atom and checking
- * if it contains any of the supported rich text formats. This function
- * waits for the data to be received using the main loop, so events,
- * timeouts, etc, may be dispatched during the wait.
- *
- * This function is a little faster than calling
- * gtk_clipboard_wait_for_rich_text() since it doesn’t need to retrieve
- * the actual text.
- *
- * Returns: %TRUE is there is rich text available, %FALSE otherwise.
- *
- * Since: 2.10
- **/
-gboolean
-gtk_clipboard_wait_is_rich_text_available (GtkClipboard  *clipboard,
-                                           GtkTextBuffer *buffer)
-{
-  GtkSelectionData *data;
-  gboolean result = FALSE;
-
-  g_return_val_if_fail (GTK_IS_CLIPBOARD (clipboard), FALSE);
-  g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), FALSE);
-
-  data = gtk_clipboard_wait_for_contents (clipboard, gdk_atom_intern_static_string ("TARGETS"));
-  if (data)
-    {
-      result = gtk_selection_data_targets_include_rich_text (data, buffer);
       gtk_selection_data_free (data);
     }
 
