@@ -673,6 +673,7 @@ gdk_seat_get_capabilities
 gdk_seat_get_pointer
 gdk_seat_get_keyboard
 gdk_seat_get_slaves
+gdk_seat_get_master_pointers
 
 <SUBSECTION Standard>
 GDK_SEAT

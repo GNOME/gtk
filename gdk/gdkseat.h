@@ -112,6 +112,10 @@ GdkDevice *    gdk_seat_get_pointer      (GdkSeat             *seat);
 GDK_AVAILABLE_IN_3_20
 GdkDevice *    gdk_seat_get_keyboard     (GdkSeat             *seat);
 
+GDK_AVAILABLE_IN_3_93
+GList *        gdk_seat_get_master_pointers (GdkSeat             *seat,
+                                             GdkSeatCapabilities  capabilities);
+
 G_END_DECLS
 
 #endif /* __GDK_SEAT_H__ */

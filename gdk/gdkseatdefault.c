@@ -299,6 +299,18 @@ gdk_seat_default_get_tool (GdkSeat *seat,
   return NULL;
 }
 
+static GList *
+gdk_seat_default_get_master_pointers (GdkSeat             *seat,
+                                      GdkSeatCapabilities  capabilities)
+{
+  GList *masters = NULL;
+
+  if (capabilities & GDK_SEAT_CAPABILITY_ALL_POINTING)
+    masters = g_list_prepend (masters, gdk_seat_get_pointer (seat));
+
+  return masters;
+}
+
 static void
 gdk_seat_default_class_init (GdkSeatDefaultClass *klass)
 {
@@ -314,6 +326,7 @@ gdk_seat_default_class_init (GdkSeatDefaultClass *klass)
 
   seat_class->get_master = gdk_seat_default_get_master;
   seat_class->get_slaves = gdk_seat_default_get_slaves;
+  seat_class->get_master_pointers = gdk_seat_default_get_master_pointers;
 
   seat_class->get_tool = gdk_seat_default_get_tool;
 }

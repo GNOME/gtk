@@ -4714,6 +4714,32 @@ gdk_wayland_seat_get_slaves (GdkSeat             *seat,
   return slaves;
 }
 
+static GList *
+gdk_wayland_seat_get_master_pointers (GdkSeat             *seat,
+                                      GdkSeatCapabilities  capabilities)
+{
+  GdkWaylandSeat *wayland_seat = GDK_WAYLAND_SEAT (seat);
+  GList *masters = NULL;
+
+  if (capabilities & GDK_SEAT_CAPABILITY_POINTER)
+    masters = g_list_prepend (masters, wayland_seat->master_pointer);
+  if (capabilities & GDK_SEAT_CAPABILITY_TOUCH)
+    masters = g_list_prepend (masters, wayland_seat->touch_master);
+  if (capabilities & GDK_SEAT_CAPABILITY_TABLET_STYLUS)
+    {
+      GList *l;
+
+      for (l = wayland_seat->tablets; l; l = l->next)
+        {
+          GdkWaylandTabletData *tablet = l->data;
+
+          masters = g_list_prepend (masters, tablet->master);
+        }
+    }
+
+  return masters;
+}
+
 static void
 gdk_wayland_seat_class_init (GdkWaylandSeatClass *klass)
 {
@@ -4727,6 +4753,7 @@ gdk_wayland_seat_class_init (GdkWaylandSeatClass *klass)
   seat_class->ungrab = gdk_wayland_seat_ungrab;
   seat_class->get_master = gdk_wayland_seat_get_master;
   seat_class->get_slaves = gdk_wayland_seat_get_slaves;
+  seat_class->get_master_pointers = gdk_wayland_seat_get_master_pointers;
 }
 
 static void

@@ -458,3 +458,29 @@ gdk_seat_get_tool (GdkSeat *seat,
   seat_class = GDK_SEAT_GET_CLASS (seat);
   return seat_class->get_tool (seat, serial);
 }
+
+/**
+ * gdk_seat_get_master_pointers:
+ * @seat: The #GdkSeat
+ * @capabilities: Queried capabilities
+ *
+ * Returns all master pointers with the given capabilities driven by this @seat.
+ * On most backends this function will return a list with a single element (meaning
+ * that all input devices drive the same onscreen cursor).
+ *
+ * In other backends where there can possibly be multiple foci (eg. wayland),
+ * this function will return all master #GdkDevices that represent these.
+ *
+ * Returns: (transfer container) (element-type GdkDevice): A list
+ * of master pointing devices
+ *
+ * Since: 3.93.
+ */
+GList *
+gdk_seat_get_master_pointers (GdkSeat             *seat,
+                              GdkSeatCapabilities  capabilities)
+{
+  g_return_val_if_fail (GDK_IS_SEAT (seat), NULL);
+
+  return GDK_SEAT_GET_CLASS (seat)->get_master_pointers (seat, capabilities);
+}
