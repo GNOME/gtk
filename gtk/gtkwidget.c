@@ -10274,6 +10274,9 @@ is_my_window (GtkWidget *widget,
 {
   gpointer user_data;
 
+  if (!window)
+    return FALSE;
+
   gdk_window_get_user_data (window, &user_data);
   return (user_data == widget);
 }
@@ -10320,6 +10323,7 @@ _gtk_widget_list_devices (GtkWidget *widget)
   GList *result = NULL;
   GList *devices;
   GList *l;
+  GdkDevice *device;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
@@ -10327,14 +10331,15 @@ _gtk_widget_list_devices (GtkWidget *widget)
     return NULL;
 
   seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
-  result = g_list_prepend (result, gdk_seat_get_pointer (seat));
+  device = gdk_seat_get_pointer (seat);
+  if (is_my_window (widget, gdk_device_get_last_event_window (device)))
+    result = g_list_prepend (result, device);
 
   devices = gdk_seat_get_slaves (seat, GDK_SEAT_CAPABILITY_ALL_POINTING);
   for (l = devices; l; l = l->next)
     {
-      GdkDevice *device = l->data;
-      GdkWindow *window = gdk_device_get_last_event_window (device);
-      if (window && is_my_window (widget, window))
+      device = l->data;
+      if (is_my_window (widget, gdk_device_get_last_event_window (device)))
         result = g_list_prepend (result, device);
     }
   g_list_free (devices);
