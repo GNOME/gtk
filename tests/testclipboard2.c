@@ -104,15 +104,65 @@ visible_child_changed_cb (GtkWidget    *stack,
 }
                 
 static void
+format_list_add_row (GtkWidget         *list,
+                     const char        *format_name,
+                     GdkContentFormats *formats)
+{
+  GtkWidget *box;
+
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
+  gtk_container_add (GTK_CONTAINER (box), gtk_label_new (format_name));
+
+  gdk_content_formats_unref (formats);
+  gtk_container_add (GTK_CONTAINER (list), box);
+}
+
+static void
 clipboard_formats_change_cb (GdkClipboard *clipboard,
                              GParamSpec   *pspec,
-                             GtkWidget    *label)
+                             GtkWidget    *list)
 {
-  char *s;
+  GdkContentFormats *formats;
+  GtkWidget *row;
+  const char * const *mime_types;
+  const GType *gtypes;
+  gsize i, n;
 
-  s = gdk_content_formats_to_string (gdk_clipboard_get_formats (clipboard));
-  gtk_label_set_text (GTK_LABEL (label), s);
-  g_free (s);
+  while ((row = GTK_WIDGET (gtk_list_box_get_row_at_index (GTK_LIST_BOX (list), 0))))
+    gtk_container_remove (GTK_CONTAINER (list), row);
+
+  formats = gdk_clipboard_get_formats (clipboard);
+  
+  gtypes = gdk_content_formats_get_gtypes (formats, &n);
+  for (i = 0; i < n; i++)
+    {
+      format_list_add_row (list,
+                           g_type_name (gtypes[i]),
+                           gdk_content_formats_new_for_gtype (gtypes[i]));
+    }
+
+  mime_types = gdk_content_formats_get_mime_types (formats, &n);
+  for (i = 0; i < n; i++)
+    {
+      format_list_add_row (list,
+                           mime_types[i],
+                           gdk_content_formats_new ((const char *[2]) { mime_types[i], NULL }, 1));
+    }
+}
+
+static GtkWidget *
+get_formats_list (GdkClipboard *clipboard)
+{
+  GtkWidget *sw, *list;
+
+  sw = gtk_scrolled_window_new (NULL, NULL);
+
+  list = gtk_list_box_new ();
+  g_signal_connect (clipboard, "notify::formats", G_CALLBACK (clipboard_formats_change_cb), list);
+  clipboard_formats_change_cb (clipboard, NULL, list);
+  gtk_container_add (GTK_CONTAINER (sw), list);
+
+  return sw;
 }
 
 static GtkWidget *
@@ -126,10 +176,7 @@ get_contents_widget (GdkClipboard *clipboard)
   g_signal_connect (stack, "notify::visible-child", G_CALLBACK (visible_child_changed_cb), clipboard);
   g_signal_connect (clipboard, "changed", G_CALLBACK (clipboard_changed_cb), stack);
 
-  child = gtk_label_new (NULL);
-  gtk_label_set_line_wrap (GTK_LABEL (child), TRUE);
-  g_signal_connect (clipboard, "notify::formats", G_CALLBACK (clipboard_formats_change_cb), child);
-  clipboard_formats_change_cb (clipboard, NULL, child);
+  child = get_formats_list (clipboard);
   gtk_stack_add_titled (GTK_STACK (stack), child, "info", "Info");
 
   child = gtk_image_new ();
