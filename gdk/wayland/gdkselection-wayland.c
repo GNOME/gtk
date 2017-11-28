@@ -113,6 +113,7 @@ struct _GdkWaylandSelection
 
 static void selection_buffer_read (SelectionBuffer *buffer);
 static void async_write_data_write (AsyncWriteData *write_data);
+static void emit_selection_clear (GdkDisplay *display, GdkAtom selection);
 
 static void
 selection_buffer_notify (SelectionBuffer *buffer)
@@ -930,6 +931,7 @@ data_source_cancelled (void                  *data,
   if (context)
     gdk_drag_context_cancel (context, GDK_DRAG_CANCEL_ERROR);
 
+  emit_selection_clear (display, atom);
   gdk_selection_owner_set (NULL, atom, GDK_CURRENT_TIME, TRUE);
   gdk_wayland_selection_unset_data_source (display, atom);
 }
@@ -1040,6 +1042,7 @@ primary_source_cancelled (void                                *data,
   display = gdk_display_get_default ();
 
   atom = atoms[ATOM_PRIMARY];
+  emit_selection_clear (display, atom);
   gdk_selection_owner_set (NULL, atom, GDK_CURRENT_TIME, TRUE);
   gdk_wayland_selection_unset_data_source (display, atom);
 }
@@ -1276,6 +1279,27 @@ emit_empty_selection_notify (GdkWindow *requestor,
   event->selection.property = NULL;
   event->selection.time = GDK_CURRENT_TIME;
   event->selection.requestor = g_object_ref (requestor);
+
+  gdk_event_put (event);
+  gdk_event_free (event);
+}
+
+static void
+emit_selection_clear (GdkDisplay *display,
+                      GdkAtom     selection)
+{
+  GdkEvent *event;
+  GdkWindow *window;
+
+  event = gdk_event_new (GDK_SELECTION_CLEAR);
+  event->selection.selection = selection;
+  event->selection.time = GDK_CURRENT_TIME;
+
+  window = _gdk_wayland_display_get_selection_owner (display, selection);
+  if (window != NULL) {
+    event->selection.window = g_object_ref (window);
+    event->selection.requestor = g_object_ref (window);
+  }
 
   gdk_event_put (event);
   gdk_event_free (event);
