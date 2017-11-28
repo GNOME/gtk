@@ -69,7 +69,7 @@ typedef enum {
 GDK_AVAILABLE_IN_ALL
 void gtk_drag_dest_set   (GtkWidget            *widget,
                           GtkDestDefaults       flags,
-                          GdkContentFormats    *formats,
+                          GdkContentFormats    *targets,
                           GdkDragAction         actions);
 
 GDK_AVAILABLE_IN_ALL

@@ -40,7 +40,7 @@ G_BEGIN_DECLS
 GDK_AVAILABLE_IN_ALL
 void gtk_drag_source_set  (GtkWidget            *widget,
 			   GdkModifierType       start_button_mask,
-			   GdkContentFormats    *formats,
+			   GdkContentFormats    *targets,
 			   GdkDragAction         actions);
 
 GDK_AVAILABLE_IN_ALL

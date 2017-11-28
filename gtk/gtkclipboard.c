@@ -1854,7 +1854,7 @@ gtk_clipboard_wait_is_uris_available (GtkClipboard *clipboard)
 }
 
 /**
- * gtk_clipboard_wait_for_formats:
+ * gtk_clipboard_wait_for_targets:
  * @clipboard: a #GtkClipboard
  * @formats: (out) (array length=n_formats) (transfer container): location
  *           to store an array of formats. The result stored here must
@@ -2065,7 +2065,6 @@ gtk_clipboard_store_timeout (GtkClipboard *clipboard)
  * @formats: (allow-none): The targets (data formats) in which the
  *    functions can provide the data or %NULL
  *    to indicate that all forms should be stored.
- * @n_formats: number of elements in @formats
  *
  * Hints that the clipboard data should be stored somewhere when the
  * application exits or when gtk_clipboard_store () is called.

@@ -102,7 +102,7 @@ gdk_content_formats_new_take (GType *      gtypes,
  * gdk_content_formats_new:
  * @mime_types: (array length=n_mime_types) (allow-none): Pointer to an
  *   array of mime types
- * @nmime_types: number of entries in @mime_types.
+ * @n_mime_types: number of entries in @mime_types.
  * 
  * Creates a new #GdkContentFormats from an array of mime types.
  *

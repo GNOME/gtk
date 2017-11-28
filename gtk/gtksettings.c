@@ -1238,7 +1238,7 @@ gtk_settings_create_for_display (GdkDisplay *display)
 
 /**
  * gtk_settings_get_for_display:
- * @screen: a #GdkDisplay.
+ * @display: a #GdkDisplay.
  *
  * Gets the #GtkSettings object for @display, creating it if necessary.
  *

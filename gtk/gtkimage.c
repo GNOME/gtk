@@ -943,7 +943,7 @@ gtk_image_set_from_surface (GtkImage       *image,
 /**
  * gtk_image_set_from_texture:
  * @image: a #GtkImage
- * @surface: (nullable): a #GdkTexture or %NULL
+ * @texture: (nullable): a #GdkTexture or %NULL
  *
  * See gtk_image_new_from_texture() for details.
  * 

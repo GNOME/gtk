@@ -262,8 +262,8 @@ GDK_AVAILABLE_IN_ALL
 gchar **          gtk_clipboard_wait_for_uris      (GtkClipboard  *clipboard);
 GDK_AVAILABLE_IN_ALL
 gboolean          gtk_clipboard_wait_for_targets   (GtkClipboard  *clipboard,
-                                                    GdkAtom      **targets,
-                                                    gint          *n_targets);
+                                                    GdkAtom      **formats,
+                                                    gint          *n_formats);
 
 GDK_AVAILABLE_IN_3_94
 cairo_surface_t * gtk_clipboard_wait_for_surface   (GtkClipboard  *clipboard);
@@ -283,7 +283,7 @@ gboolean gtk_clipboard_wait_is_target_available    (GtkClipboard  *clipboard,
 
 GDK_AVAILABLE_IN_ALL
 void gtk_clipboard_set_can_store (GtkClipboard         *clipboard,
-                                  GdkContentFormats    *targets);
+                                  GdkContentFormats    *formats);
 
 GDK_AVAILABLE_IN_ALL
 void gtk_clipboard_store         (GtkClipboard   *clipboard);

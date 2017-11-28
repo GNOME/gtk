@@ -400,7 +400,6 @@ gtk_content_formats_add_image_targets (GdkContentFormats *list,
 /**
  * gtk_content_formats_add_uri_targets:
  * @list: a #GdkContentFormats
- * @info: an ID that will be passed back to the application
  * 
  * Appends the URI targets supported by #GtkSelectionData to
  * the target list. All targets are added with the same @info.
