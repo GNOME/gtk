@@ -60,6 +60,9 @@ struct _GdkContentSerializer
   GAsyncReadyCallback callback;
   gpointer callback_data;
 
+  gpointer task_data;
+  GDestroyNotify task_notify;
+
   GError *error;
   gboolean returned;
 };
@@ -100,6 +103,9 @@ gdk_content_serializer_finalize (GObject *object)
   g_clear_object (&serializer->stream);
   g_clear_object (&serializer->cancellable);
   g_clear_error (&serializer->error);
+
+  if (serializer->task_notify)
+    serializer->task_notify (serializer->task_data);
 
   G_OBJECT_CLASS (gdk_content_serializer_parent_class)->finalize (object);
 }
@@ -200,6 +206,28 @@ gdk_content_serializer_get_user_data (GdkContentSerializer *serializer)
   g_return_val_if_fail (GDK_IS_CONTENT_SERIALIZER (serializer), NULL);
 
   return serializer->user_data;
+}
+
+void
+gdk_content_serializer_set_task_data (GdkContentSerializer   *serializer,
+                                      gpointer                data,
+                                      GDestroyNotify          notify)
+{
+  g_return_if_fail (GDK_IS_CONTENT_SERIALIZER (serializer));
+
+  if (serializer->task_notify)
+    serializer->task_notify (serializer->task_data);
+
+  serializer->task_data = data;
+  serializer->task_notify = notify;
+}
+
+gpointer
+gdk_content_serializer_get_task_data (GdkContentSerializer *serializer)
+{
+  g_return_val_if_fail (GDK_IS_CONTENT_SERIALIZER (serializer), NULL);
+
+  return serializer->task_data;
 }
 
 static gboolean

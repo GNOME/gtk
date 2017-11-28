@@ -54,6 +54,12 @@ GDK_AVAILABLE_IN_3_94
 GCancellable *          gdk_content_deserializer_get_cancellable        (GdkContentDeserializer *deserializer);
 GDK_AVAILABLE_IN_3_94
 gpointer                gdk_content_deserializer_get_user_data          (GdkContentDeserializer *deserializer);
+GDK_AVAILABLE_IN_3_94
+void                    gdk_content_deserializer_set_task_data          (GdkContentDeserializer *deserializer,
+                                                                         gpointer                data,
+                                                                         GDestroyNotify          notify);
+GDK_AVAILABLE_IN_3_94
+gpointer                gdk_content_deserializer_get_task_data          (GdkContentDeserializer *deserializer);
 
 GDK_AVAILABLE_IN_3_94
 void                    gdk_content_deserializer_return_success         (GdkContentDeserializer *deserializer);

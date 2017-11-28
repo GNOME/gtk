@@ -59,6 +59,9 @@ struct _GdkContentDeserializer
   GAsyncReadyCallback callback;
   gpointer callback_data;
 
+  gpointer task_data;
+  GDestroyNotify task_notify;
+
   GError *error;
   gboolean returned;
 };
@@ -99,6 +102,9 @@ gdk_content_deserializer_finalize (GObject *object)
   g_clear_object (&deserializer->stream);
   g_clear_object (&deserializer->cancellable);
   g_clear_error (&deserializer->error);
+
+  if (deserializer->task_notify)
+    deserializer->task_notify (deserializer->task_data);
 
   G_OBJECT_CLASS (gdk_content_deserializer_parent_class)->finalize (object);
 }
@@ -198,6 +204,28 @@ gdk_content_deserializer_get_user_data (GdkContentDeserializer *deserializer)
   g_return_val_if_fail (GDK_IS_CONTENT_DESERIALIZER (deserializer), NULL);
 
   return deserializer->user_data;
+}
+
+void
+gdk_content_deserializer_set_task_data (GdkContentDeserializer *deserializer,
+                                        gpointer                data,
+                                        GDestroyNotify          notify)
+{
+  g_return_if_fail (GDK_IS_CONTENT_DESERIALIZER (deserializer));
+
+  if (deserializer->task_notify)
+    deserializer->task_notify (deserializer->task_data);
+
+  deserializer->task_data = data;
+  deserializer->task_notify = notify;
+}
+
+gpointer
+gdk_content_deserializer_get_task_data (GdkContentDeserializer *deserializer)
+{
+  g_return_val_if_fail (GDK_IS_CONTENT_DESERIALIZER (deserializer), NULL);
+
+  return deserializer->task_data;
 }
 
 static gboolean
