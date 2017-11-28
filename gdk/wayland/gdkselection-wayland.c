@@ -61,12 +61,6 @@ struct _StoredSelection
   gint fd;
 };
 
-struct _DataSourceData
-{
-  GdkWindow *window;
-  GdkAtom selection;
-};
-
 struct _DataOfferData
 {
   GDestroyNotify destroy_notify;
