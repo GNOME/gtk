@@ -30,7 +30,6 @@
 #endif
 
 #include <gtk/gtkwidget.h>
-#include <gtk/gtkclipboard.h>
 #include <gtk/gtktexttagtable.h>
 #include <gtk/gtktextiter.h>
 #include <gtk/gtktextmark.h>
@@ -146,7 +145,7 @@ struct _GtkTextBufferClass
   void (* end_user_action)        (GtkTextBuffer      *buffer);
 
   void (* paste_done)             (GtkTextBuffer      *buffer,
-                                   GtkClipboard       *clipboard);
+                                   GdkClipboard       *clipboard);
 
   /*< private >*/
 
@@ -425,21 +424,21 @@ gboolean        gtk_text_buffer_get_has_selection       (GtkTextBuffer *buffer);
 
 GDK_AVAILABLE_IN_ALL
 void gtk_text_buffer_add_selection_clipboard    (GtkTextBuffer     *buffer,
-						 GtkClipboard      *clipboard);
+						 GdkClipboard      *clipboard);
 GDK_AVAILABLE_IN_ALL
 void gtk_text_buffer_remove_selection_clipboard (GtkTextBuffer     *buffer,
-						 GtkClipboard      *clipboard);
+						 GdkClipboard      *clipboard);
 
 GDK_AVAILABLE_IN_ALL
 void            gtk_text_buffer_cut_clipboard           (GtkTextBuffer *buffer,
-							 GtkClipboard  *clipboard,
+							 GdkClipboard  *clipboard,
                                                          gboolean       default_editable);
 GDK_AVAILABLE_IN_ALL
 void            gtk_text_buffer_copy_clipboard          (GtkTextBuffer *buffer,
-							 GtkClipboard  *clipboard);
+							 GdkClipboard  *clipboard);
 GDK_AVAILABLE_IN_ALL
 void            gtk_text_buffer_paste_clipboard         (GtkTextBuffer *buffer,
-							 GtkClipboard  *clipboard,
+							 GdkClipboard  *clipboard,
 							 GtkTextIter   *override_location,
                                                          gboolean       default_editable);
 
@@ -457,11 +456,6 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_text_buffer_begin_user_action       (GtkTextBuffer *buffer);
 GDK_AVAILABLE_IN_ALL
 void            gtk_text_buffer_end_user_action         (GtkTextBuffer *buffer);
-
-GDK_AVAILABLE_IN_ALL
-GdkContentFormats * gtk_text_buffer_get_copy_target_list    (GtkTextBuffer *buffer);
-GDK_AVAILABLE_IN_ALL
-GdkContentFormats * gtk_text_buffer_get_paste_target_list   (GtkTextBuffer *buffer);
 
 
 G_END_DECLS

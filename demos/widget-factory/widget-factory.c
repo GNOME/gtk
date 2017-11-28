@@ -1232,10 +1232,10 @@ static void
 handle_cutcopypaste (GtkWidget *button, GtkWidget *textview)
 {
   GtkTextBuffer *buffer;
-  GtkClipboard *clipboard;
+  GdkClipboard *clipboard;
   const gchar *id;
 
-  clipboard = gtk_widget_get_old_clipboard (textview, GDK_SELECTION_CLIPBOARD);
+  clipboard = gtk_widget_get_clipboard (textview);
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (textview));
   id = gtk_buildable_get_name (GTK_BUILDABLE (button));
 
@@ -1250,13 +1250,13 @@ handle_cutcopypaste (GtkWidget *button, GtkWidget *textview)
 }
 
 static void
-clipboard_owner_change (GtkClipboard *clipboard, GdkEvent *event, GtkWidget *button)
+clipboard_formats_notify (GdkClipboard *clipboard, GdkEvent *event, GtkWidget *button)
 {
   const gchar *id;
   gboolean has_text;
 
   id = gtk_buildable_get_name (GTK_BUILDABLE (button));
-  has_text = gtk_clipboard_wait_is_text_available (clipboard);
+  has_text = gdk_content_formats_contain_gtype (gdk_clipboard_get_formats (clipboard), GTK_TYPE_TEXT_BUFFER);
 
   if (strcmp (id, "pastebutton") == 0)
     gtk_widget_set_sensitive (button, has_text);
@@ -1837,8 +1837,8 @@ activate (GApplication *app)
                     G_CALLBACK (textbuffer_notify_selection), widget);
   widget = (GtkWidget *)gtk_builder_get_object (builder, "pastebutton");
   g_signal_connect (widget, "clicked", G_CALLBACK (handle_cutcopypaste), widget2);
-  g_signal_connect_object (gtk_widget_get_old_clipboard (widget2, GDK_SELECTION_CLIPBOARD), "owner-change",
-                           G_CALLBACK (clipboard_owner_change), widget, 0);
+  g_signal_connect_object (gtk_widget_get_clipboard (widget2), "notify::formats",
+                           G_CALLBACK (clipboard_formats_notify), widget, 0);
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "osd_frame");
   widget2 = (GtkWidget *)gtk_builder_get_object (builder, "totem_like_osd");

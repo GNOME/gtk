@@ -1365,13 +1365,13 @@ check_buffer_contents (GtkTextBuffer *buffer,
 static void
 test_clipboard (void)
 {
-  GtkClipboard *clipboard;
+  GdkClipboard *clipboard;
   GtkTextBuffer *buffer;
   GtkTextIter start;
   GtkTextIter end;
   GtkTextTag *tag;
 
-  clipboard = gtk_clipboard_get (GDK_SELECTION_CLIPBOARD);
+  clipboard = gdk_display_get_clipboard (gdk_display_get_default ());
 
   buffer = gtk_text_buffer_new (NULL);
   gtk_text_buffer_set_text (buffer, "abcdef", -1);

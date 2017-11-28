@@ -536,11 +536,8 @@ static void gtk_text_view_mark_set_handler       (GtkTextBuffer     *buffer,
                                                   const GtkTextIter *location,
                                                   GtkTextMark       *mark,
                                                   gpointer           data);
-static void gtk_text_view_target_list_notify     (GtkTextBuffer     *buffer,
-                                                  const GParamSpec  *pspec,
-                                                  gpointer           data);
 static void gtk_text_view_paste_done_handler     (GtkTextBuffer     *buffer,
-                                                  GtkClipboard      *clipboard,
+                                                  GdkClipboard      *clipboard,
                                                   gpointer           data);
 static void gtk_text_view_buffer_changed_handler (GtkTextBuffer     *buffer,
                                                   gpointer           data);
@@ -1690,7 +1687,7 @@ gtk_text_view_init (GtkTextView *text_view)
   gtk_drag_dest_set (widget, 0, NULL,
                      GDK_ACTION_COPY | GDK_ACTION_MOVE);
 
-  target_list = gdk_content_formats_new (NULL, 0);
+  target_list = gdk_content_formats_new_for_gtype (GTK_TYPE_TEXT_BUFFER);
   gtk_drag_dest_set_target_list (widget, target_list);
   gdk_content_formats_unref (target_list);
 
@@ -1883,9 +1880,6 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
 					    gtk_text_view_mark_set_handler,
 					    text_view);
       g_signal_handlers_disconnect_by_func (priv->buffer,
-                                            gtk_text_view_target_list_notify,
-                                            text_view);
-      g_signal_handlers_disconnect_by_func (priv->buffer,
                                             gtk_text_view_paste_done_handler,
                                             text_view);
       g_signal_handlers_disconnect_by_func (priv->buffer,
@@ -1894,8 +1888,7 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
 
       if (gtk_widget_get_realized (GTK_WIDGET (text_view)))
 	{
-	  GtkClipboard *clipboard = gtk_widget_get_old_clipboard (GTK_WIDGET (text_view),
-							      GDK_SELECTION_PRIMARY);
+	  GdkClipboard *clipboard = gtk_widget_get_primary_clipboard (GTK_WIDGET (text_view));
 	  gtk_text_buffer_remove_selection_clipboard (priv->buffer, clipboard);
         }
 
@@ -1934,9 +1927,6 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
       g_signal_connect (priv->buffer, "mark-set",
 			G_CALLBACK (gtk_text_view_mark_set_handler),
                         text_view);
-      g_signal_connect (priv->buffer, "notify::paste-target-list",
-			G_CALLBACK (gtk_text_view_target_list_notify),
-                        text_view);
       g_signal_connect (priv->buffer, "paste-done",
 			G_CALLBACK (gtk_text_view_paste_done_handler),
                         text_view);
@@ -1944,12 +1934,9 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
 			G_CALLBACK (gtk_text_view_buffer_changed_handler),
                         text_view);
 
-      gtk_text_view_target_list_notify (priv->buffer, NULL, text_view);
-
       if (gtk_widget_get_realized (GTK_WIDGET (text_view)))
 	{
-	  GtkClipboard *clipboard = gtk_widget_get_old_clipboard (GTK_WIDGET (text_view),
-							      GDK_SELECTION_PRIMARY);
+	  GdkClipboard *clipboard = gtk_widget_get_primary_clipboard (GTK_WIDGET (text_view));
 	  gtk_text_buffer_add_selection_clipboard (priv->buffer, clipboard);
 	}
 
@@ -4582,8 +4569,7 @@ gtk_text_view_realize (GtkWidget *widget)
 
   if (priv->buffer)
     {
-      GtkClipboard *clipboard = gtk_widget_get_old_clipboard (GTK_WIDGET (text_view),
-							  GDK_SELECTION_PRIMARY);
+      GdkClipboard *clipboard = gtk_widget_get_primary_clipboard (GTK_WIDGET (text_view));
       gtk_text_buffer_add_selection_clipboard (priv->buffer, clipboard);
     }
 
@@ -4602,8 +4588,7 @@ gtk_text_view_unrealize (GtkWidget *widget)
 
   if (priv->buffer)
     {
-      GtkClipboard *clipboard = gtk_widget_get_old_clipboard (GTK_WIDGET (text_view),
-							  GDK_SELECTION_PRIMARY);
+      GdkClipboard *clipboard = gtk_widget_get_primary_clipboard (GTK_WIDGET (text_view));
       gtk_text_buffer_remove_selection_clipboard (priv->buffer, clipboard);
     }
 
@@ -5289,8 +5274,7 @@ gtk_text_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
       get_iter_from_gesture (text_view, priv->multipress_gesture,
                              &iter, NULL, NULL);
       gtk_text_buffer_paste_clipboard (get_buffer (text_view),
-                                       gtk_widget_get_old_clipboard (GTK_WIDGET (text_view),
-                                                                 GDK_SELECTION_PRIMARY),
+                                       gtk_widget_get_primary_clipboard (GTK_WIDGET (text_view)),
                                        &iter,
                                        priv->editable);
     }
@@ -6770,8 +6754,7 @@ gtk_text_view_backspace (GtkTextView *text_view)
 static void
 gtk_text_view_cut_clipboard (GtkTextView *text_view)
 {
-  GtkClipboard *clipboard = gtk_widget_get_old_clipboard (GTK_WIDGET (text_view),
-						      GDK_SELECTION_CLIPBOARD);
+  GdkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET (text_view));
   
   gtk_text_buffer_cut_clipboard (get_buffer (text_view),
 				 clipboard,
@@ -6785,8 +6768,7 @@ gtk_text_view_cut_clipboard (GtkTextView *text_view)
 static void
 gtk_text_view_copy_clipboard (GtkTextView *text_view)
 {
-  GtkClipboard *clipboard = gtk_widget_get_old_clipboard (GTK_WIDGET (text_view),
-						      GDK_SELECTION_CLIPBOARD);
+  GdkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET (text_view));
   
   gtk_text_buffer_copy_clipboard (get_buffer (text_view),
 				  clipboard);
@@ -6797,8 +6779,7 @@ gtk_text_view_copy_clipboard (GtkTextView *text_view)
 static void
 gtk_text_view_paste_clipboard (GtkTextView *text_view)
 {
-  GtkClipboard *clipboard = gtk_widget_get_old_clipboard (GTK_WIDGET (text_view),
-						      GDK_SELECTION_CLIPBOARD);
+  GdkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET (text_view));
   
   gtk_text_buffer_paste_clipboard (get_buffer (text_view),
 				   clipboard,
@@ -6808,7 +6789,7 @@ gtk_text_view_paste_clipboard (GtkTextView *text_view)
 
 static void
 gtk_text_view_paste_done_handler (GtkTextBuffer *buffer,
-                                  GtkClipboard  *clipboard,
+                                  GdkClipboard  *clipboard,
                                   gpointer       data)
 {
   GtkTextView *text_view = data;
@@ -7836,13 +7817,13 @@ gtk_text_view_start_selection_dnd (GtkTextView       *text_view,
                                    gint               x,
                                    gint               y)
 {
-  GdkContentFormats *target_list;
+  GdkContentFormats *formats;
 
-  target_list = gtk_text_buffer_get_copy_target_list (get_buffer (text_view));
+  formats = gdk_content_formats_new_for_gtype (GTK_TYPE_TEXT_BUFFER);
 
   g_signal_connect (text_view, "drag-begin",
                     G_CALLBACK (drag_begin_cb), NULL);
-  gtk_drag_begin_with_coordinates (GTK_WIDGET (text_view), target_list,
+  gtk_drag_begin_with_coordinates (GTK_WIDGET (text_view), formats,
                                    GDK_ACTION_COPY | GDK_ACTION_MOVE,
                                    1, (GdkEvent*) event, x, y);
 }
@@ -8610,14 +8591,6 @@ gtk_text_view_mark_set_handler (GtkTextBuffer     *buffer,
 }
 
 static void
-gtk_text_view_target_list_notify (GtkTextBuffer    *buffer,
-                                  const GParamSpec *pspec,
-                                  gpointer          data)
-{
-  gtk_drag_dest_set_target_list (data, gtk_text_buffer_get_paste_target_list (buffer));
-}
-
-static void
 gtk_text_view_get_virtual_cursor_pos (GtkTextView *text_view,
                                       GtkTextIter *cursor,
                                       gint        *x,
@@ -8747,12 +8720,6 @@ popup_menu_detach (GtkWidget *attach_widget,
   GTK_TEXT_VIEW (attach_widget)->priv->popup_menu = NULL;
 }
 
-typedef struct
-{
-  GtkTextView *text_view;
-  GdkEvent *trigger_event;
-} PopupInfo;
-
 static gboolean
 range_contains_editable_text (const GtkTextIter *start,
                               const GtkTextIter *end,
@@ -8772,33 +8739,27 @@ range_contains_editable_text (const GtkTextIter *start,
 }
 
 static void
-popup_targets_received (GtkClipboard     *clipboard,
-			GtkSelectionData *data,
-			gpointer          user_data)
+gtk_text_view_do_popup (GtkTextView    *text_view,
+                        const GdkEvent *event)
 {
-  PopupInfo *info = user_data;
-  GtkTextView *text_view;
-  GtkTextViewPrivate *priv;
+  GtkTextViewPrivate *priv = text_view->priv;
+  GdkEvent *trigger_event;
 
-  text_view = info->text_view;
-  priv = text_view->priv;
+  if (event)
+    trigger_event = gdk_event_copy (event);
+  else
+    trigger_event = gtk_get_current_event ();
 
   if (gtk_widget_get_realized (GTK_WIDGET (text_view)))
     {
-      /* We implicitely rely here on the fact that if we are pasting ourself, we'll
-       * have text targets as well as the private GTK_TEXT_BUFFER_CONTENTS target.
-       */
-      gboolean clipboard_contains_text;
       GtkWidget *menuitem;
       gboolean have_selection;
-      gboolean can_insert;
+      gboolean can_insert, can_paste;
       GtkTextIter iter;
       GtkTextIter sel_start, sel_end;
       GdkRectangle iter_location;
       GdkRectangle visible_rect;
       gboolean is_visible;
-
-      clipboard_contains_text = gtk_selection_data_targets_include_text (data);
 
       if (priv->popup_menu)
 	gtk_widget_destroy (priv->popup_menu);
@@ -8819,6 +8780,8 @@ popup_targets_received (GtkClipboard     *clipboard,
 					gtk_text_buffer_get_insert (get_buffer (text_view)));
 
       can_insert = gtk_text_iter_can_insert (&iter, priv->editable);
+      can_paste = gdk_content_formats_contain_gtype (gdk_clipboard_get_formats (gtk_widget_get_clipboard (GTK_WIDGET (text_view))),
+                                                     GTK_TYPE_TEXT_BUFFER);
 
       append_action_signal (text_view, priv->popup_menu, _("Cu_t"), "cut-clipboard",
 			    have_selection &&
@@ -8827,7 +8790,7 @@ popup_targets_received (GtkClipboard     *clipboard,
       append_action_signal (text_view, priv->popup_menu, _("_Copy"), "copy-clipboard",
 			    have_selection);
       append_action_signal (text_view, priv->popup_menu, _("_Paste"), "paste-clipboard",
-			    can_insert && clipboard_contains_text);
+			    can_insert && can_paste);
 
       menuitem = gtk_menu_item_new_with_mnemonic (_("_Delete"));
       gtk_widget_set_sensitive (menuitem,
@@ -8864,8 +8827,8 @@ popup_targets_received (GtkClipboard     *clipboard,
       g_signal_emit (text_view, signals[POPULATE_POPUP],
 		     0, priv->popup_menu);
 
-      if (info->trigger_event && gdk_event_triggers_context_menu (info->trigger_event))
-        gtk_menu_popup_at_pointer (GTK_MENU (priv->popup_menu), info->trigger_event);
+      if (trigger_event && gdk_event_triggers_context_menu (trigger_event))
+        gtk_menu_popup_at_pointer (GTK_MENU (priv->popup_menu), trigger_event);
       else
         {
           gtk_text_view_get_iter_location (text_view, &iter, &iter_location);
@@ -8890,42 +8853,20 @@ popup_targets_received (GtkClipboard     *clipboard,
                                       &iter_location,
                                       GDK_GRAVITY_SOUTH_EAST,
                                       GDK_GRAVITY_NORTH_WEST,
-                                      info->trigger_event);
+                                      trigger_event);
             }
           else
             gtk_menu_popup_at_widget (GTK_MENU (priv->popup_menu),
                                       GTK_WIDGET (text_view),
                                       GDK_GRAVITY_CENTER,
                                       GDK_GRAVITY_CENTER,
-                                      info->trigger_event);
+                                      trigger_event);
 
           gtk_menu_shell_select_first (GTK_MENU_SHELL (priv->popup_menu), FALSE);
         }
     }
 
-  g_clear_pointer (&info->trigger_event, gdk_event_free);
-  g_object_unref (text_view);
-  g_slice_free (PopupInfo, info);
-}
-
-static void
-gtk_text_view_do_popup (GtkTextView    *text_view,
-                        const GdkEvent *event)
-{
-  PopupInfo *info = g_slice_new (PopupInfo);
-
-  /* In order to know what entries we should make sensitive, we
-   * ask for the current targets of the clipboard, and when
-   * we get them, then we actually pop up the menu.
-   */
-  info->text_view = g_object_ref (text_view);
-  info->trigger_event = event ? gdk_event_copy (event) : gtk_get_current_event ();
-
-  gtk_clipboard_request_contents (gtk_widget_get_old_clipboard (GTK_WIDGET (text_view),
-							    GDK_SELECTION_CLIPBOARD),
-				  gdk_atom_intern_static_string ("TARGETS"),
-				  popup_targets_received,
-				  info);
+  g_clear_pointer (&trigger_event, gdk_event_free);
 }
 
 static gboolean
@@ -9022,14 +8963,13 @@ append_bubble_action (GtkTextView  *text_view,
   gtk_container_add (GTK_CONTAINER (toolbar), item);
 }
 
-static void
-bubble_targets_received (GtkClipboard     *clipboard,
-                         GtkSelectionData *data,
-                         gpointer          user_data)
+static gboolean
+gtk_text_view_selection_bubble_popup_show (gpointer user_data)
 {
   GtkTextView *text_view = user_data;
   GtkTextViewPrivate *priv = text_view->priv;
   cairo_rectangle_int_t rect;
+  GdkClipboard *clipboard;
   gboolean has_selection;
   gboolean has_clipboard;
   gboolean can_insert;
@@ -9050,7 +8990,7 @@ bubble_targets_received (GtkClipboard     *clipboard,
   if (!priv->editable && !has_selection)
     {
       priv->selection_bubble_timeout_id = 0;
-      return;
+      return G_SOURCE_REMOVE;
     }
 
   if (priv->selection_bubble)
@@ -9075,7 +9015,8 @@ bubble_targets_received (GtkClipboard     *clipboard,
   gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &iter,
                                     gtk_text_buffer_get_insert (get_buffer (text_view)));
   can_insert = gtk_text_iter_can_insert (&iter, priv->editable);
-  has_clipboard = gtk_selection_data_targets_include_text (data);
+  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (text_view));
+  has_clipboard = gdk_content_formats_contain_gtype (gdk_clipboard_get_formats (clipboard), GTK_TYPE_TEXT_BUFFER);
 
   if (range_contains_editable_text (&sel_start, &sel_end, priv->editable) && has_selection)
     append_bubble_action (text_view, toolbar, _("Select all"), "edit-select-all-symbolic", "select-all", !all_selected);
@@ -9105,18 +9046,6 @@ bubble_targets_received (GtkClipboard     *clipboard,
 
   gtk_popover_set_pointing_to (GTK_POPOVER (priv->selection_bubble), &rect);
   gtk_widget_show (priv->selection_bubble);
-}
-
-static gboolean
-gtk_text_view_selection_bubble_popup_show (gpointer user_data)
-{
-  GtkTextView *text_view = user_data;
-  gtk_clipboard_request_contents (gtk_widget_get_old_clipboard (GTK_WIDGET (text_view),
-							    GDK_SELECTION_CLIPBOARD),
-				  gdk_atom_intern_static_string ("TARGETS"),
-				  bubble_targets_received,
-				  text_view);
-  text_view->priv->selection_bubble_timeout_id = 0;
 
   return G_SOURCE_REMOVE;
 }

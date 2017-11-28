@@ -38,12 +38,6 @@ change_fullscreen_state (GSimpleAction *action,
   g_simple_action_set_state (action, state);
 }
 
-static GtkClipboard *
-get_clipboard (GtkWidget *widget)
-{
-  return gtk_widget_get_old_clipboard (widget, gdk_atom_intern_static_string ("CLIPBOARD"));
-}
-
 static void
 window_copy (GSimpleAction *action,
              GVariant      *parameter,
@@ -53,7 +47,7 @@ window_copy (GSimpleAction *action,
   GtkTextView *text = g_object_get_data ((GObject*)window, "plugman-text");
 
   gtk_text_buffer_copy_clipboard (gtk_text_view_get_buffer (text),
-                                  get_clipboard ((GtkWidget*) text));
+                                  gtk_widget_get_clipboard (GTK_WIDGET (text)));
 }
 
 static void
@@ -65,7 +59,7 @@ window_paste (GSimpleAction *action,
   GtkTextView *text = g_object_get_data ((GObject*)window, "plugman-text");
   
   gtk_text_buffer_paste_clipboard (gtk_text_view_get_buffer (text),
-                                   get_clipboard ((GtkWidget*) text),
+                                   gtk_widget_get_clipboard (GTK_WIDGET (text)),
                                    NULL,
                                    TRUE);
 
