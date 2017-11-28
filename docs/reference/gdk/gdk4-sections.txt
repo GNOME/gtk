@@ -372,6 +372,7 @@ gdk_intern_mime_type
 <SUBSECTION>
 GdkContentFormats
 gdk_content_formats_new
+gdk_content_formats_new_for_gtype
 gdk_content_formats_ref
 gdk_content_formats_unref
 gdk_content_formats_print

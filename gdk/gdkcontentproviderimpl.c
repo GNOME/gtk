@@ -64,11 +64,8 @@ static GdkContentFormats *
 gdk_content_provider_value_ref_formats (GdkContentProvider *provider)
 {
   GdkContentProviderValue *content = GDK_CONTENT_PROVIDER_VALUE (provider);
-  GdkContentFormatsBuilder *builder;
 
-  builder = gdk_content_formats_builder_new ();
-  gdk_content_formats_builder_add_gtype (builder, G_VALUE_TYPE (&content->value));
-  return gdk_content_formats_builder_free (builder);
+  return gdk_content_formats_new_for_gtype (G_VALUE_TYPE (&content->value));
 }
 
 static gboolean

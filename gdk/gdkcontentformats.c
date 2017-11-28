@@ -137,9 +137,9 @@ gdk_content_formats_new_take (GType *      gtypes,
  * 
  * Creates a new #GdkContentFormats from an array of mime types.
  *
- * The mime types must be different or the behavior of the return value
- * is undefined. If you cannot guarantee this, use #GdkContentFormatsBuilder
- * instead.
+ * The mime types must be valid and different from each other or the
+ * behavior of the return value is undefined. If you cannot guarantee
+ * this, use #GdkContentFormatsBuilder instead.
  * 
  * Returns: (transfer full): the new #GdkContentFormats.
  **/
@@ -159,6 +159,28 @@ gdk_content_formats_new (const char **mime_types,
   g_ptr_array_add (array, NULL);
 
   return gdk_content_formats_new_take (NULL, 0, (const char **) g_ptr_array_free (array, FALSE), n_mime_types);
+}
+
+/**
+ * gdk_content_formats_new_for_gtype:
+ * @type: a $GType
+ *
+ * Creates a new #GdkContentFormats for a given #GType.
+ *
+ * Returns: a new #GdkContentFormats
+ **/
+GdkContentFormats *
+gdk_content_formats_new_for_gtype (GType type)
+{
+  GType *data;
+
+  g_return_val_if_fail (type != G_TYPE_INVALID, NULL);
+
+  data = g_new (GType, 2);
+  data[0] = type;
+  data[1] = G_TYPE_INVALID;
+
+  return gdk_content_formats_new_take (data, 1, NULL, 0);
 }
 
 /**

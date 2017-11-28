@@ -39,6 +39,8 @@ GDK_AVAILABLE_IN_3_94
 GdkContentFormats *     gdk_content_formats_new                 (const char                    **mime_types,
                                                                  guint                           n_mime_types);
 GDK_AVAILABLE_IN_3_94
+GdkContentFormats *     gdk_content_formats_new_for_gtype       (GType                           type);
+GDK_AVAILABLE_IN_3_94
 GdkContentFormats *     gdk_content_formats_ref                 (GdkContentFormats              *formats);
 GDK_AVAILABLE_IN_3_94
 void                    gdk_content_formats_unref               (GdkContentFormats              *formats);
