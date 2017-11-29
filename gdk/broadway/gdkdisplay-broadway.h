@@ -57,6 +57,8 @@ struct _GdkBroadwayDisplay
   gpointer move_resize_data;
 
   GdkMonitor *monitor;
+
+  GHashTable *texture_cache;
 };
 
 struct _GdkBroadwayDisplayClass
