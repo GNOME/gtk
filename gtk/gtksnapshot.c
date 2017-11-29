@@ -1480,38 +1480,3 @@ gtk_snapshot_render_layout (GtkSnapshot     *snapshot,
 
   gtk_snapshot_offset (snapshot, -x, -y);
 }
-
-/**
- * gtk_snapshot_render_icon:
- * @snapshot: a #GtkSnapshot
- * @context: the #GtkStyleContext to use
- * @pixbuf: the #GdkPixbuf to render
- * @x: X origin of the rectangle
- * @y: Y origin of the rectangle
- *
- * Creates a render node for rendering @pixbuf according to the style
- * information in @context, and appends it to the current node of @snapshot,
- * without changing the current node.
- *
- * Since: 3.90
- */
-void
-gtk_snapshot_render_icon (GtkSnapshot     *snapshot,
-                          GtkStyleContext *context,
-                          GdkPixbuf       *pixbuf,
-                          gdouble          x,
-                          gdouble          y)
-{
-  GdkTexture *texture;
-
-  texture = gdk_texture_new_for_pixbuf (pixbuf);
-  gtk_snapshot_offset (snapshot, x, y);
-  gtk_css_style_snapshot_icon_texture (gtk_style_context_lookup_style (context),
-                                       snapshot,
-                                       texture,
-                                       1,
-                                       FALSE);
-  gtk_snapshot_offset (snapshot, -x, -y);
-  g_object_unref (texture);
-}
-

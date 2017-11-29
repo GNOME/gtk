@@ -166,12 +166,6 @@ void            gtk_snapshot_render_insertion_cursor    (GtkSnapshot            
                                                          PangoLayout            *layout,
                                                          int                     index,
                                                          PangoDirection          direction);
-GDK_AVAILABLE_IN_3_90
-void            gtk_snapshot_render_icon                (GtkSnapshot            *snapshot,
-                                                         GtkStyleContext        *context,
-                                                         GdkPixbuf              *pixbuf,
-                                                         gdouble                 x,
-                                                         gdouble                 y);
 
 G_END_DECLS
 
