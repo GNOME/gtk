@@ -59,7 +59,8 @@ void            broadway_output_set_transient_for (BroadwayOutput *output,
 						   int             parent_id);
 void            broadway_output_window_set_nodes (BroadwayOutput *output,
                                                   int             id,
-                                                  BroadwayNode   *root);
+                                                  BroadwayNode   *root,
+                                                  BroadwayNode   *old_root);
 void            broadway_output_upload_texture (BroadwayOutput *output,
 						guint32 id,
 						GBytes *texture);

@@ -1635,13 +1635,13 @@ broadway_server_window_set_nodes (BroadwayServer   *server,
   if (window == NULL)
     return;
 
+  if (server->output != NULL)
+    broadway_output_window_set_nodes (server->output, window->id,
+                                      root, window->nodes);
+
   if (window->nodes)
     broadway_node_free (window->nodes);
   window->nodes = root;
-
-  if (server->output != NULL)
-    broadway_output_window_set_nodes (server->output, window->id,
-                                      window->nodes);
 }
 
 guint32
@@ -1888,7 +1888,7 @@ broadway_server_resync_windows (BroadwayServer *server)
 
       if (window->nodes)
         broadway_output_window_set_nodes (server->output, window->id,
-                                          window->nodes);
+                                          window->nodes, NULL);
 
       if (window->visible)
 	broadway_output_show_surface (server->output, window->id);

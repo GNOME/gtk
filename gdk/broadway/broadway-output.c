@@ -155,6 +155,19 @@ append_uint32 (BroadwayOutput *output, guint32 v)
 }
 
 static void
+patch_uint32 (BroadwayOutput *output, guint32 v, gsize offset)
+{
+  guint8 *buf;
+
+  buf = (guint8 *)output->buf->str + offset;
+  buf[0] = (v >> 0) & 0xff;
+  buf[1] = (v >> 8) & 0xff;
+  buf[2] = (v >> 16) & 0xff;
+  buf[3] = (v >> 24) & 0xff;
+}
+
+
+static void
 write_header(BroadwayOutput *output, char op)
 {
   append_char (output, op);
@@ -309,29 +322,24 @@ append_node (BroadwayOutput *output,
     append_node (output, node->children[i]);
 }
 
-guint32
-get_node_size (BroadwayNode   *node)
-{
-  guint32 size = 1 + node->n_data;
-  guint32 i;
-
-  for (i = 0; i < node->n_children; i++)
-    size += get_node_size (node->children[i]);
-
-  return size;
-}
-
-
 void
 broadway_output_window_set_nodes (BroadwayOutput *output,
                                   int             id,
-                                  BroadwayNode   *root)
+                                  BroadwayNode   *root,
+                                  BroadwayNode   *old_root)
 {
+  gsize size_pos, start, end;
   write_header (output, BROADWAY_OP_SET_NODES);
 
   append_uint16 (output, id);
-  append_uint32 (output, get_node_size (root));
+
+  size_pos = output->buf->len;
+  append_uint32 (output, 0);
+
+  start = output->buf->len;
   append_node (output, root);
+  end = output->buf->len;
+  patch_uint32 (output, (end - start) / 4, size_pos);
 }
 
 void
