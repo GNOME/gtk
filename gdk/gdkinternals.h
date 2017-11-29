@@ -185,6 +185,11 @@ gboolean gdk_surface_handle_event (GdkEvent       *event);
 GdkSeat * gdk_surface_get_seat_from_event (GdkSurface *surface,
                                            GdkEvent    *event);
 
+void       gdk_surface_enter_monitor (GdkSurface *surface,
+                                      GdkMonitor *monitor);
+void       gdk_surface_leave_monitor (GdkSurface *surface,
+                                      GdkMonitor *monitor);
+
 /*****************************************
  * Interfaces provided by windowing code *
  *****************************************/
@@ -295,6 +300,7 @@ void gdk_surface_get_geometry (GdkSurface *surface,
                                gint       *height);
 
 GdkGLContext *gdk_surface_get_shared_data_gl_context (GdkSurface *surface);
+
 
 /*
  * GdkSeatGrabPrepareFunc:
