@@ -995,15 +995,17 @@ gtk_main (void)
   gtk_main_loop_level--;
 
   if (gtk_main_loop_level == 0)
-    {
-      /* Keep this section in sync with gtk_application_shutdown() */
+    gtk_main_sync ();
+}
 
-      /* Try storing all clipboard data we have */
-      _gtk_clipboard_store_all ();
+void
+gtk_main_sync (void)
+{
+  /* Try storing all clipboard data we have */
+  _gtk_clipboard_store_all ();
 
-      /* Synchronize the recent manager singleton */
-      _gtk_recent_manager_sync ();
-    }
+  /* Synchronize the recent manager singleton */
+  _gtk_recent_manager_sync ();
 }
 
 /**

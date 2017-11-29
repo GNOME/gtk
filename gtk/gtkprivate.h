@@ -63,6 +63,8 @@ gchar       * _gtk_get_lc_ctype           (void);
 
 void          _gtk_ensure_resources       (void);
 
+void          gtk_main_sync               (void);
+
 gboolean _gtk_boolean_handled_accumulator (GSignalInvocationHint *ihint,
                                            GValue                *return_accu,
                                            const GValue          *handler_return,

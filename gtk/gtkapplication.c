@@ -38,6 +38,7 @@
 #include "gtkbuilder.h"
 #include "gtkshortcutswindow.h"
 #include "gtkintl.h"
+#include "gtkprivate.h"
 
 /* NB: please do not add backend-specific GDK headers here.  This should
  * be abstracted via GtkApplicationImpl.
@@ -311,13 +312,7 @@ gtk_application_shutdown (GApplication *g_application)
 
   gtk_action_muxer_remove (application->priv->muxer, "app");
 
-  /* Keep this section in sync with gtk_main() */
-
-  /* Try storing all clipboard data we have */
-  _gtk_clipboard_store_all ();
-
-  /* Synchronize the recent manager singleton */
-  _gtk_recent_manager_sync ();
+  gtk_main_sync ();
 
   G_APPLICATION_CLASS (gtk_application_parent_class)->shutdown (g_application);
 }
