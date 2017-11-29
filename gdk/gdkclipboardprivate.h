@@ -45,6 +45,14 @@ struct _GdkClipboardClass
                                                                  GdkContentFormats      *formats,
                                                                  gboolean                local,
                                                                  GdkContentProvider     *content);
+  void                  (* store_async)                         (GdkClipboard           *clipboard,
+                                                                 int                     io_priority,
+                                                                 GCancellable           *cancellable,
+                                                                 GAsyncReadyCallback     callback,
+                                                                 gpointer                user_data);
+  gboolean              (* store_finish)                        (GdkClipboard           *clipboard,
+                                                                 GAsyncResult           *result,
+                                                                 GError                **error);
   void                  (* read_async)                          (GdkClipboard           *clipboard,
                                                                  GdkContentFormats      *formats,
                                                                  int                      io_priority,

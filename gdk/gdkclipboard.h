@@ -47,6 +47,17 @@ GDK_AVAILABLE_IN_3_94
 GdkContentProvider *    gdk_clipboard_get_content       (GdkClipboard          *clipboard);
 
 GDK_AVAILABLE_IN_3_94
+void                    gdk_clipboard_store_async       (GdkClipboard          *clipboard,
+                                                         int                    io_priority,
+                                                         GCancellable          *cancellable,
+                                                         GAsyncReadyCallback    callback,
+                                                         gpointer               user_data);
+GDK_AVAILABLE_IN_3_94
+gboolean                gdk_clipboard_store_finish      (GdkClipboard          *clipboard,
+                                                         GAsyncResult          *result,
+                                                         GError               **error);
+
+GDK_AVAILABLE_IN_3_94
 void                    gdk_clipboard_read_async        (GdkClipboard          *clipboard,
                                                          const char           **mime_types,
                                                          int                    io_priority,

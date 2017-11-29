@@ -187,6 +187,44 @@ gdk_clipboard_real_claim (GdkClipboard       *clipboard,
 }
 
 static void
+gdk_clipboard_store_default_async (GdkClipboard        *clipboard,
+                                   int                  io_priority,
+                                   GCancellable        *cancellable,
+                                   GAsyncReadyCallback  callback,
+                                   gpointer             user_data)
+{
+  GdkClipboardPrivate *priv = gdk_clipboard_get_instance_private (clipboard);
+  GTask *task;
+
+  task = g_task_new (clipboard, cancellable, callback, user_data);
+  g_task_set_priority (task, io_priority);
+  g_task_set_source_tag (task, gdk_clipboard_store_default_async);
+
+  if (priv->local)
+    {
+      g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
+                               _("This clipboard cannot store data."));
+    }
+  else
+    {
+      g_task_return_boolean (task, TRUE);
+    }
+
+  g_object_unref (task);
+}
+
+static gboolean
+gdk_clipboard_store_default_finish (GdkClipboard  *clipboard,
+                                    GAsyncResult  *result,
+                                    GError       **error)
+{
+  g_return_val_if_fail (g_task_is_valid (result, clipboard), FALSE);
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gdk_clipboard_store_default_async, FALSE);
+
+  return g_task_propagate_boolean (G_TASK (result), error);
+}
+
+static void
 gdk_clipboard_read_local_write_done (GObject      *clipboard,
                                      GAsyncResult *result,
                                      gpointer      stream)
@@ -283,6 +321,8 @@ gdk_clipboard_class_init (GdkClipboardClass *class)
   object_class->finalize = gdk_clipboard_finalize;
 
   class->claim = gdk_clipboard_real_claim;
+  class->store_async = gdk_clipboard_store_default_async;
+  class->store_finish = gdk_clipboard_store_default_finish;
   class->read_async = gdk_clipboard_read_local_async;
   class->read_finish = gdk_clipboard_read_local_finish;
 
@@ -451,6 +491,84 @@ gdk_clipboard_get_content (GdkClipboard *clipboard)
   return priv->content;
 }
 
+/**
+ * gdk_clipboard_store_async:
+ * @clipboard: a #GdkClipboard
+ * @io_priority: the [I/O priority][io-priority]
+ *     of the request. 
+ * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): callback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
+ *
+ * Asynchronously instructs the @clipboard to store its contents remotely to
+ * preserve them for later usage. If the clipboard is not local, this function
+ * does nothing but report success.
+ *
+ * This function is called automatically when gtk_main() or #GtkApplication
+ * exit, so you likely don't need to call it.
+ **/
+void
+gdk_clipboard_store_async (GdkClipboard        *clipboard,
+                           int                  io_priority,
+                           GCancellable        *cancellable,
+                           GAsyncReadyCallback  callback,
+                           gpointer             user_data)
+{
+  GdkClipboardPrivate *priv = gdk_clipboard_get_instance_private (clipboard);
+
+  g_return_if_fail (GDK_IS_CLIPBOARD (clipboard));
+  g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
+  g_return_if_fail (callback != NULL);
+
+  if (priv->local)
+    {
+      return GDK_CLIPBOARD_GET_CLASS (clipboard)->store_async (clipboard,
+                                                               io_priority,
+                                                               cancellable,
+                                                               callback,
+                                                               user_data);
+    }
+  else
+    {
+      return gdk_clipboard_store_default_async (clipboard,
+                                                io_priority,
+                                                cancellable,
+                                                callback,
+                                                user_data);
+    }
+}
+
+/**
+ * gdk_clipboard_store_finish:
+ * @clipboard: a #GdkClipboard
+ * @result: a #GAsyncResult
+ * @error: a #GError location to store the error occurring, or %NULL to 
+ * ignore.
+ *
+ * Finishes an asynchronous clipboard store started with gdk_clipboard_store_async().
+ *
+ * Returns: %TRUE if storing was successful.
+ **/
+gboolean
+gdk_clipboard_store_finish (GdkClipboard  *clipboard,
+                            GAsyncResult  *result,
+                            GError       **error)
+{
+  g_return_val_if_fail (GDK_IS_CLIPBOARD (clipboard), FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+  /* don't check priv->local here because it might have changed while the
+   * read was ongoing */
+  if (g_async_result_is_tagged (result, gdk_clipboard_store_default_async))
+    {
+      return gdk_clipboard_store_default_finish (clipboard, result, error);
+    }
+  else
+    {
+      return GDK_CLIPBOARD_GET_CLASS (clipboard)->store_finish (clipboard, result, error);
+    }
+}
+
 static void
 gdk_clipboard_read_internal (GdkClipboard        *clipboard,
                              GdkContentFormats   *formats,
@@ -511,6 +629,7 @@ gdk_clipboard_read_async (GdkClipboard        *clipboard,
 
   g_return_if_fail (GDK_IS_CLIPBOARD (clipboard));
   g_return_if_fail (mime_types != NULL && mime_types[0] != NULL);
+  g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
   g_return_if_fail (callback != NULL);
 
   formats = gdk_content_formats_new (mime_types, g_strv_length ((char **) mime_types));
