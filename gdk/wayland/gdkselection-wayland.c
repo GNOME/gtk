@@ -1296,10 +1296,11 @@ emit_selection_clear (GdkDisplay *display,
   event->selection.time = GDK_CURRENT_TIME;
 
   window = _gdk_wayland_display_get_selection_owner (display, selection);
-  if (window != NULL) {
-    event->selection.window = g_object_ref (window);
-    event->selection.requestor = g_object_ref (window);
-  }
+  if (window != NULL)
+    {
+      event->selection.window = g_object_ref (window);
+      event->selection.requestor = g_object_ref (window);
+    }
 
   gdk_event_put (event);
   gdk_event_free (event);
