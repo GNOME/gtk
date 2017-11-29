@@ -459,10 +459,12 @@ SwapNodes.prototype.handle_node = function(parent, offset_x, offset_y)
 
     case 1: // CONTAINER
         {
+            var div = document.createElement('div');
             var len = this.decode_uint32();
             for (var i = 0; i < len; i++) {
-                this.handle_node(parent, offset_x, offset_y);
+                this.handle_node(div, offset_x, offset_y);
             }
+            parent.appendChild(div);
         }
         break;
 
