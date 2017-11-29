@@ -93,6 +93,8 @@
 
 enum {
   MOVED_TO_RECT,
+  ENTER_MONITOR,
+  LEAVE_MONITOR,
   LAST_SIGNAL
 };
 
@@ -316,6 +318,30 @@ gdk_window_class_init (GdkWindowClass *klass)
                   G_TYPE_POINTER,
                   G_TYPE_BOOLEAN,
                   G_TYPE_BOOLEAN);
+
+  signals[ENTER_MONITOR] =
+    g_signal_new (g_intern_static_string ("enter-monitor"),
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_FIRST,
+                  0,
+                  NULL,
+                  NULL,
+                  NULL,
+                  G_TYPE_NONE,
+                  1,
+                  GDK_TYPE_MONITOR);
+
+  signals[LEAVE_MONITOR] =
+    g_signal_new (g_intern_static_string ("leave-monitor"),
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_FIRST,
+                  0,
+                  NULL,
+                  NULL,
+                  NULL,
+                  G_TYPE_NONE,
+                  1,
+                  GDK_TYPE_MONITOR);
 }
 
 static void
@@ -7445,4 +7471,18 @@ gdk_window_supports_edge_constraints (GdkWindow *window)
     return impl_class->supports_edge_constraints (window);
   else
     return FALSE;
+}
+
+void
+gdk_window_enter_monitor (GdkWindow  *window,
+                          GdkMonitor *monitor)
+{
+  g_signal_emit (window, signals[ENTER_MONITOR], 0, monitor);
+}
+
+void
+gdk_window_leave_monitor (GdkWindow  *window,
+                          GdkMonitor *monitor)
+{
+  g_signal_emit (window, signals[LEAVE_MONITOR], 0, monitor);
 }
