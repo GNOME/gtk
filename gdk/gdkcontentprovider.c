@@ -34,6 +34,7 @@ struct _GdkContentProviderPrivate
 enum {
   PROP_0,
   PROP_FORMATS,
+  PROP_STORABLE_FORMATS,
   N_PROPERTIES
 };
 
@@ -63,6 +64,12 @@ static GdkContentFormats *
 gdk_content_provider_real_ref_formats (GdkContentProvider *provider)
 {
   return gdk_content_formats_new (NULL, 0);
+}
+
+static GdkContentFormats *
+gdk_content_provider_real_ref_storable_formats (GdkContentProvider *provider)
+{
+  return gdk_content_provider_ref_formats (provider);
 }
 
 static void
@@ -121,6 +128,10 @@ gdk_content_provider_get_property (GObject    *gobject,
       g_value_take_boxed (value, gdk_content_provider_ref_formats (provider));
       break;
 
+    case PROP_STORABLE_FORMATS:
+      g_value_take_boxed (value, gdk_content_provider_ref_storable_formats (provider));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
       break;
@@ -137,6 +148,7 @@ gdk_content_provider_class_init (GdkContentProviderClass *class)
   class->attach_clipboard = gdk_content_provider_real_attach_clipboard;
   class->detach_clipboard = gdk_content_provider_real_detach_clipboard;
   class->ref_formats = gdk_content_provider_real_ref_formats;
+  class->ref_storable_formats = gdk_content_provider_real_ref_storable_formats;
   class->write_mime_type_async = gdk_content_provider_real_write_mime_type_async;
   class->write_mime_type_finish = gdk_content_provider_real_write_mime_type_finish;
   class->get_value = gdk_content_provider_real_get_value;
@@ -152,6 +164,22 @@ gdk_content_provider_class_init (GdkContentProviderClass *class)
     g_param_spec_boxed ("formats",
                         "Formats",
                         "The possible formats for data",
+                        GDK_TYPE_CONTENT_FORMATS,
+                        G_PARAM_READABLE |
+                        G_PARAM_STATIC_STRINGS |
+                        G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GdkContentProvider:storable-formats:
+   *
+   * The subset of formats that clipboard managers should store this provider's data in.
+   *
+   * Since: 3.94
+   */
+  properties[PROP_STORABLE_FORMATS] =
+    g_param_spec_boxed ("storable-formats",
+                        "Storable formats",
+                        "The formats that data should be stored in",
                         GDK_TYPE_CONTENT_FORMATS,
                         G_PARAM_READABLE |
                         G_PARAM_STATIC_STRINGS |
@@ -194,6 +222,26 @@ gdk_content_provider_ref_formats (GdkContentProvider *provider)
   g_return_val_if_fail (GDK_IS_CONTENT_PROVIDER (provider), NULL);
 
   return GDK_CONTENT_PROVIDER_GET_CLASS (provider)->ref_formats (provider);
+}
+
+/**
+ * gdk_content_provider_ref_storable_formats:
+ * @provider: a #GdkContentProvider
+ *
+ * Gets the formats that the provider suggests other applications to store
+ * the data in.  
+ * An example of such an application would be a clipboard manager.
+ *
+ * This can be assumed to be a subset of gdk_content_provider_ref_formats().
+ *
+ * Returns: (transfer full): The storable formats of the provider
+ **/
+GdkContentFormats *
+gdk_content_provider_ref_storable_formats (GdkContentProvider *provider)
+{
+  g_return_val_if_fail (GDK_IS_CONTENT_PROVIDER (provider), NULL);
+
+  return GDK_CONTENT_PROVIDER_GET_CLASS (provider)->ref_storable_formats (provider);
 }
 
 void

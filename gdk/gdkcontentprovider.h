@@ -58,6 +58,7 @@ struct _GdkContentProviderClass
                                                                          GdkClipboard           *clipboard);
 
   GdkContentFormats *   (* ref_formats)                                 (GdkContentProvider     *provider);
+  GdkContentFormats *   (* ref_storable_formats)                        (GdkContentProvider     *provider);
   void                  (* write_mime_type_async)                       (GdkContentProvider     *provider,
                                                                          const char             *mime_type,
                                                                          GOutputStream          *stream,
@@ -90,6 +91,8 @@ GType                   gdk_content_provider_get_type                   (void) G
 
 GDK_AVAILABLE_IN_3_94
 GdkContentFormats *     gdk_content_provider_ref_formats                (GdkContentProvider     *provider);
+GDK_AVAILABLE_IN_3_94
+GdkContentFormats *     gdk_content_provider_ref_storable_formats       (GdkContentProvider     *provider);
 
 GDK_AVAILABLE_IN_3_94
 void                    gdk_content_provider_content_changed            (GdkContentProvider     *provider);
