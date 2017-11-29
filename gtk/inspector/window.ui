@@ -67,48 +67,70 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToggleButton" id="record_statistics_button">
-                <property name="focus-on-click">0</property>
-                <property name="tooltip-text" translatable="yes">Collect Statistics</property>
-                <property name="halign">start</property>
-                <property name="valign">center</property>
-                <property name="icon-name">media-record-symbolic</property>
-              </object>
-              <packing>
-                <property name="name">statistics</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkStack" id="resource_buttons">
-                <property name="halign">start</property>
-                <property name="valign">center</property>
+              <object class="GtkStack" id="global_button_stack">
+                <property name="visible-child-name" bind-source="global_stack" bind-property="visible-child-name"/>
                 <child>
-                  <object class="GtkButton">
-                    <property name="focus-on-click">0</property>
-                    <property name="tooltip-text" translatable="yes">Show Details</property>
-                    <property name="halign">center</property>
-                    <property name="valign">center</property>
-                    <property name="icon-name">dialog-information-symbolic</property>
+                  <object class="GtkBox">
                   </object>
                   <packing>
-                    <property name="name">list</property>
+                    <property name="name">general</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton">
-                    <property name="focus-on-click">0</property>
-                    <property name="tooltip-text" translatable="yes">Show all Resources</property>
-                    <property name="halign">center</property>
-                    <property name="valign">center</property>
-                    <property name="icon-name">view-list-symbolic</property>
+                  <object class="GtkBox">
                   </object>
                   <packing>
-                    <property name="name">details</property>
+                    <property name="name">visual</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkStack" id="resource_buttons">
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="focus-on-click">0</property>
+                        <property name="tooltip-text" translatable="yes">Show Details</property>
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
+                        <property name="icon-name">dialog-information-symbolic</property>
+                      </object>
+                      <packing>
+                        <property name="name">list</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="focus-on-click">0</property>
+                        <property name="tooltip-text" translatable="yes">Show all Resources</property>
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
+                        <property name="icon-name">view-list-symbolic</property>
+                      </object>
+                      <packing>
+                        <property name="name">details</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="name">resources</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToggleButton" id="record_statistics_button">
+                    <property name="focus-on-click">0</property>
+                    <property name="tooltip-text" translatable="yes">Collect Statistics</property>
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
+                    <property name="icon-name">media-record-symbolic</property>
+                  </object>
+                  <packing>
+                    <property name="name">statistics</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="name">resources</property>
+                <property name="name">global</property>
               </packing>
             </child>
             <child>
@@ -123,20 +145,6 @@
               </object>
               <packing>
                 <property name="name">recorder</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox">
-              </object>
-              <packing>
-                <property name="name">visual</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox">
-              </object>
-              <packing>
-                <property name="name">general</property>
               </packing>
             </child>
           </object>
@@ -396,21 +404,55 @@
           </packing>
         </child>
         <child>
-          <object class="GtkInspectorStatistics">
-            <property name="button">record_statistics_button</property>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <child>
+              <object class="GtkStackSidebar">
+                <property name="stack">global_stack</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkStack" id="global_stack">
+                <child>
+                  <object class="GtkInspectorGeneral">
+                  </object>
+                  <packing>
+                    <property name="name">general</property>
+                    <property name="title" translatable="yes">General</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkInspectorVisual">
+                  </object>
+                  <packing>
+                    <property name="name">visual</property>
+                    <property name="title" translatable="yes">Visual</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkInspectorResourceList">
+                    <property name="buttons">resource_buttons</property>
+                  </object>
+                  <packing>
+                    <property name="name">resources</property>
+                    <property name="title" translatable="yes">Resources</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkInspectorStatistics">
+                    <property name="button">record_statistics_button</property>
+                  </object>
+                  <packing>
+                    <property name="name">statistics</property>
+                    <property name="title" translatable="yes">Statistics</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
           </object>
           <packing>
-            <property name="name">statistics</property>
-            <property name="title" translatable="yes">Statistics</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkInspectorResourceList">
-            <property name="buttons">resource_buttons</property>
-          </object>
-          <packing>
-            <property name="name">resources</property>
-            <property name="title" translatable="yes">Resources</property>
+            <property name="name">global</property>
+            <property name="title" translatable="yes">Global</property>
           </packing>
         </child>
         <child>
@@ -427,22 +469,6 @@
           <packing>
             <property name="name">recorder</property>
             <property name="title" translatable="yes">Recorder</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkInspectorVisual">
-          </object>
-          <packing>
-            <property name="name">visual</property>
-            <property name="title" translatable="yes">Visual</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkInspectorGeneral">
-          </object>
-          <packing>
-            <property name="name">general</property>
-            <property name="title" translatable="yes">General</property>
           </packing>
         </child>
       </object>
