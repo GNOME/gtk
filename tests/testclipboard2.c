@@ -102,7 +102,26 @@ visible_child_changed_cb (GtkWidget    *stack,
                                      label);
     }
 }
-                
+
+static GList *
+get_file_list (const char *dir)
+{
+  GFileEnumerator *enumerator;
+  GFile *file;
+  GList *list = NULL;
+  
+  file = g_file_new_for_path (dir);
+  enumerator = g_file_enumerate_children (file, "standard::name", 0, NULL, NULL);
+  g_object_unref (file);
+  if (enumerator == NULL)
+    return NULL;
+
+  while (g_file_enumerator_iterate (enumerator, NULL, &file, NULL, NULL) && file != NULL)
+    list = g_list_prepend (list, g_object_ref (file));
+
+  return g_list_reverse (list);
+}
+
 static void
 format_list_add_row (GtkWidget         *list,
                      const char        *format_name,
@@ -271,6 +290,12 @@ get_button_list (GdkClipboard *clipboard,
                        "home directory");
   g_value_unset (&value);
 
+  g_value_init (&value, GDK_TYPE_FILE_LIST);
+  g_value_take_boxed (&value, get_file_list (g_get_home_dir ()));
+  add_provider_button (box,
+                       gdk_content_provider_new_for_value (&value),
+                       clipboard,
+                       "files in home");
   return box;
 }
 

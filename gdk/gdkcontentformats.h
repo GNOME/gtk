@@ -93,6 +93,12 @@ GDK_AVAILABLE_IN_3_94
 void                    gdk_content_formats_builder_add_gtype   (GdkContentFormatsBuilder       *builder,
                                                                  GType                           type);
 
+/* dunno where else to put this */
+#define GDK_TYPE_FILE_LIST (gdk_file_list_get_type ())
+GDK_AVAILABLE_IN_3_94
+GType     gdk_file_list_get_type  (void) G_GNUC_CONST;
+
+
 G_END_DECLS
 
 #endif /* __GTK_CONTENT_FORMATS_H__ */

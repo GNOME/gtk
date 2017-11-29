@@ -530,15 +530,39 @@ file_uri_serializer (GdkContentSerializer *serializer)
 {
   GFile *file;
   GString *str;
+  const GValue *value;
   char *uri;
 
   str = g_string_new (NULL);
+  value = gdk_content_serializer_get_value (serializer);
 
-  file = g_value_get_object (gdk_content_serializer_get_value (serializer));
-  uri = g_file_get_uri (file);
-  g_string_append (str, uri);
-  g_free (uri);
-  g_string_append (str, "\r\n");
+  if (G_VALUE_HOLDS (value, G_TYPE_FILE))
+    {
+      file = g_value_get_object (gdk_content_serializer_get_value (serializer));
+      if (file)
+        {
+          uri = g_file_get_uri (file);
+          g_string_append (str, uri);
+          g_free (uri);
+        }
+      else
+        {
+          g_string_append (str, "# GTK does not crash when copying a NULL GFile!");
+        }
+      g_string_append (str, "\r\n");
+    }
+  else if (G_VALUE_HOLDS (value, GDK_TYPE_FILE_LIST))
+    {
+      GSList *l;
+      
+      for (l = g_value_get_boxed (value); l; l = l->next)
+        {
+          uri = g_file_get_uri (l->data);
+          g_string_append (str, uri);
+          g_free (uri);
+          g_string_append (str, "\r\n");
+        }
+    }
 
   g_output_stream_write_all_async (gdk_content_serializer_get_output_stream (serializer),
                                    str->str,
@@ -553,13 +577,42 @@ file_uri_serializer (GdkContentSerializer *serializer)
 static void
 file_text_serializer (GdkContentSerializer *serializer)
 {
-  GFile *file;
+  const GValue *value;
   char *path;
 
-  file = g_value_get_object (gdk_content_serializer_get_value (serializer));
-  path = g_file_get_path (file);
-  if (path == NULL)
-    path = g_file_get_uri (file);
+  value = gdk_content_serializer_get_value (serializer);
+
+  if (G_VALUE_HOLDS (value, G_TYPE_FILE))
+    {
+      GFile *file;
+
+      file = g_value_get_object (value);
+      if (file)
+        {
+          path = g_file_get_path (file);
+          if (path == NULL)
+            path = g_file_get_uri (file);
+        }
+    }
+  else if (G_VALUE_HOLDS (value, GDK_TYPE_FILE_LIST))
+    {
+      GString *str;
+      GSList *l;
+      
+      str = g_string_new (NULL);
+
+      for (l = g_value_get_boxed (value); l; l = l->next)
+        {
+          path = g_file_get_path (l->data);
+          if (path == NULL)
+            path = g_file_get_uri (l->data);
+          g_string_append (str, path);
+          g_free (path);
+          if (l->next)
+            g_string_append (str, " ");
+        }
+      path = g_string_free (str, FALSE);
+    }
 
   g_output_stream_write_all_async (gdk_content_serializer_get_output_stream (serializer),
                                    path,
@@ -633,6 +686,16 @@ init (void)
                                    NULL,
                                    NULL);
   gdk_content_register_serializer (G_TYPE_FILE,
+                                   "text/plain;charset=utf-8",
+                                   file_text_serializer,
+                                   NULL,
+                                   NULL);
+  gdk_content_register_serializer (GDK_TYPE_FILE_LIST,
+                                   "text/uri-list",
+                                   file_uri_serializer,
+                                   NULL,
+                                   NULL);
+  gdk_content_register_serializer (GDK_TYPE_FILE_LIST,
                                    "text/plain;charset=utf-8",
                                    file_text_serializer,
                                    NULL,

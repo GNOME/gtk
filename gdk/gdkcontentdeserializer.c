@@ -22,7 +22,6 @@
 #include "gdkcontentdeserializer.h"
 
 #include "gdkcontentformats.h"
-#include "gdkintl.h"
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
@@ -532,6 +531,7 @@ file_uri_deserializer_finish (GObject      *source,
   GOutputStream *stream = G_OUTPUT_STREAM (source);
   GError *error = NULL;
   gssize written;
+  GValue *value;
   char *str;
   char **uris;
 
@@ -554,17 +554,21 @@ file_uri_deserializer_finish (GObject      *source,
   uris = g_uri_list_extract_uris (str);
   g_free (str);
 
-  if (uris == NULL || uris[0] == NULL)
+  value = gdk_content_deserializer_get_value (deserializer);
+  if (G_VALUE_HOLDS (value, G_TYPE_FILE))
     {
-      error = g_error_new (G_IO_ERROR, G_IO_ERROR, _("No file given"));
-      gdk_content_deserializer_return_error (deserializer, error);
+      if (uris[0] != NULL)
+        g_value_take_object (value, g_file_new_for_uri (uris[0]));
     }
   else
     {
-      GFile *file = g_file_new_for_uri (uris[0]);
+      GSList *l = NULL;
+      gsize i;
 
-      g_value_take_object (gdk_content_deserializer_get_value (deserializer), file);
-      gdk_content_deserializer_return_success (deserializer);
+      for (i = 0; uris[i] != NULL; i++)
+        l = g_slist_prepend (l, g_file_new_for_uri (uris[i]));
+
+      g_value_take_boxed (value, g_slist_reverse (l));
     }
   g_strfreev (uris);
 }
@@ -639,6 +643,11 @@ init (void)
 
   g_slist_free (formats);
 
+  gdk_content_register_deserializer ("text/uri-list",
+                                     GDK_TYPE_FILE_LIST,
+                                     file_uri_deserializer,
+                                     NULL,
+                                     NULL);
   gdk_content_register_deserializer ("text/uri-list",
                                      G_TYPE_FILE,
                                      file_uri_deserializer,

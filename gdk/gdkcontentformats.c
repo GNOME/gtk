@@ -642,3 +642,19 @@ gdk_content_formats_builder_add_mime_type (GdkContentFormatsBuilder *builder,
   builder->n_mime_types++;
 }
 
+/* G_DEFINE_BOXED wants this */
+typedef gpointer GdkFileList;
+
+static gpointer
+gdk_file_list_copy (gpointer list)
+{
+  return g_slist_copy_deep (list, (GCopyFunc) g_object_ref, NULL);
+}
+
+static void
+gdk_file_list_free (gpointer list)
+{
+  g_slist_free_full (list, g_object_unref);
+}
+
+G_DEFINE_BOXED_TYPE (GdkFileList, gdk_file_list, gdk_file_list_copy, gdk_file_list_free)
