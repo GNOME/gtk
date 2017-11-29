@@ -40,6 +40,10 @@ struct _GdkBroadwayDisplay
   GHashTable *id_ht;
   GList *toplevels;
 
+  GdkDevice *core_pointer;
+  GdkDevice *core_keyboard;
+  GdkDevice *touchscreen;
+
   GSource *event_source;
 
   /* Keyboard related information */
