@@ -145,6 +145,34 @@ broadway_node_free (BroadwayNode *node)
   g_free (node);
 }
 
+gboolean
+broadway_node_equal (BroadwayNode     *a,
+		     BroadwayNode     *b)
+{
+  int i;
+
+  if (a->hash != b->hash)
+    return FALSE;
+
+  if (a->type != b->type)
+    return FALSE;
+
+  if (a->n_data != b->n_data)
+    return FALSE;
+
+  if (a->n_children != b->n_children)
+    return FALSE;
+
+  for (i = 0; i < a->n_data; i++)
+    if (a->data[i] != b->data[i])
+      return FALSE;
+
+  for (i = 0; i < a->n_children; i++)
+    if (!broadway_node_equal (a->children[i], b->children[i]))
+      return FALSE;
+
+  return TRUE;
+}
 
 static void
 broadway_server_init (BroadwayServer *server)

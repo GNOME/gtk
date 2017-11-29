@@ -224,6 +224,14 @@ get_client_serial (BroadwayClient *client, guint32 daemon_serial)
 #define NODE_SIZE_COLOR_STOP (NODE_SIZE_FLOAT + NODE_SIZE_COLOR)
 #define NODE_SIZE_SHADOW (NODE_SIZE_COLOR + 3 * NODE_SIZE_FLOAT)
 
+static guint32
+rotl (guint32 value, int shift)
+{
+  if ((shift &= 32 - 1) == 0)
+    return value;
+  return (value << shift) | (value >> (32 - shift));
+}
+
 static BroadwayNode *
 decode_nodes (BroadwayClient *client,
 	      int len, guint32 data[], int *pos)
@@ -233,6 +241,7 @@ decode_nodes (BroadwayClient *client,
   guint32 i, n_stops, n_shadows;
   guint32 size, n_children;
   gint32 texture_offset;
+  guint32 hash;
 
   g_assert (*pos < len);
 
@@ -303,6 +312,16 @@ decode_nodes (BroadwayClient *client,
 
   for (i = 0; i < n_children; i++)
     node->children[i] = decode_nodes (client, len, data, pos);
+
+  hash = node->type << 16;
+
+  for (i = 0; i < size; i++)
+    hash ^= rotl (node->data[i], i);
+
+  for (i = 0; i < n_children; i++)
+    hash ^= rotl (node->children[i]->hash, i);
+
+  node->hash = hash;
 
   return node;
 }

@@ -22,11 +22,15 @@ typedef struct _BroadwayNode BroadwayNode;
 
 struct _BroadwayNode {
   guint32 type;
+  guint32 hash;
   guint32 n_children;
   BroadwayNode **children;
   guint32 n_data;
   guint32 data[1];
 };
+
+gboolean            broadway_node_equal                      (BroadwayNode     *a,
+							      BroadwayNode     *b);
 
 BroadwayServer     *broadway_server_new                      (char             *address,
 							      int               port,
