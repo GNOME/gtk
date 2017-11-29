@@ -148,17 +148,43 @@ gtk_application_get_proxy_if_service_present (GDBusConnection *connection,
   return proxy;
 }
 
+#ifdef G_HAS_CONSTRUCTORS
+#ifdef G_DEFINE_CONSTRUCTOR_NEEDS_PRAGMA
+#pragma G_DEFINE_CONSTRUCTOR_PRAGMA_ARGS(stash_desktop_autostart_id)
+#endif
+G_DEFINE_CONSTRUCTOR(stash_desktop_autostart_id)
+#endif
+
+static char *client_id = NULL;
+
+static void
+stash_desktop_autostart_id (void)
+{
+  const char *desktop_autostart_id;
+
+  desktop_autostart_id = g_getenv ("DESKTOP_AUTOSTART_ID");
+  client_id = g_strdup (desktop_autostart_id ? desktop_autostart_id : "");
+
+  /* Unset DESKTOP_AUTOSTART_ID in order to avoid child processes to
+   * use the same client id.
+   */
+  g_unsetenv ("DESKTOP_AUTOSTART_ID");
+}
+
 static void
 gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
                                    gboolean            register_session)
 {
   GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) impl;
-  static gchar *client_id;
   GError *error = NULL;
   GVariant *res;
   gboolean same_bus;
   const char *bus_name;
   const char *client_interface;
+
+#ifndef G_HAS_CONSTRUCTORS
+  stash_desktop_autostart_id ();
+#endif
 
   dbus->session = g_application_get_dbus_connection (G_APPLICATION (impl->application));
 
@@ -168,18 +194,6 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
   dbus->application_id = g_application_get_application_id (G_APPLICATION (impl->application));
   dbus->object_path = g_application_get_dbus_object_path (G_APPLICATION (impl->application));
   dbus->unique_name = g_dbus_connection_get_unique_name (dbus->session);
-
-  if (client_id == NULL)
-    {
-      const gchar *desktop_autostart_id;
-
-      desktop_autostart_id = g_getenv ("DESKTOP_AUTOSTART_ID");
-      /* Unset DESKTOP_AUTOSTART_ID in order to avoid child processes to
-       * use the same client id.
-       */
-      g_unsetenv ("DESKTOP_AUTOSTART_ID");
-      client_id = g_strdup (desktop_autostart_id ? desktop_autostart_id : "");
-    }
 
   g_debug ("Connecting to session manager");
 
