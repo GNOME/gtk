@@ -18,6 +18,15 @@ typedef struct _BroadwayServerClass BroadwayServerClass;
 #define BROADWAY_IS_SERVER_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), BROADWAY_TYPE_SERVER))
 #define BROADWAY_SERVER_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), BROADWAY_TYPE_SERVER, BroadwayServerClass))
 
+typedef struct _BroadwayNode BroadwayNode;
+
+struct _BroadwayNode {
+  guint32 type;
+  guint32 n_children;
+  BroadwayNode **children;
+  guint32 n_data;
+  guint32 data[1];
+};
 
 BroadwayServer     *broadway_server_new                      (char             *address,
 							      int               port,
@@ -87,8 +96,7 @@ cairo_surface_t   * broadway_server_create_surface           (int               
 							      int               height);
 void                broadway_server_window_set_nodes         (BroadwayServer   *server,
 							      gint              id,
-                                                              gint              n_data,
-                                                              guint32          *data);
+                                                              BroadwayNode     *root);
 gboolean            broadway_server_window_move_resize       (BroadwayServer   *server,
 							      gint              id,
 							      gboolean          with_move,

@@ -125,8 +125,7 @@ struct BroadwayWindow {
   gboolean visible;
   gint32 transient_for;
   guint32 texture;
-  guint32 *nodes;
-  gint nodes_len;
+  BroadwayNode *nodes;
 };
 
 static void broadway_server_resync_windows (BroadwayServer *server);
@@ -135,6 +134,17 @@ static void send_outstanding_roundtrips (BroadwayServer *server);
 static GType broadway_server_get_type (void);
 
 G_DEFINE_TYPE (BroadwayServer, broadway_server, G_TYPE_OBJECT)
+
+static void
+broadway_node_free (BroadwayNode *node)
+{
+  int i;
+  for (i = 0; i < node->n_children; i++)
+    broadway_node_free (node->children[i]);
+
+  g_free (node);
+}
+
 
 static void
 broadway_server_init (BroadwayServer *server)
@@ -187,7 +197,8 @@ broadway_server_class_init (BroadwayServerClass * class)
 static void
 broadway_window_free (BroadwayWindow *window)
 {
-  g_free (window->nodes);
+  if (window->nodes)
+    broadway_node_free (window->nodes);
   g_free (window);
 }
 
@@ -1612,11 +1623,11 @@ broadway_server_has_client (BroadwayServer *server)
   return server->output != NULL;
 }
 
+/* passes ownership of nodes */
 void
 broadway_server_window_set_nodes (BroadwayServer   *server,
                                   gint              id,
-                                  gint              n_data,
-                                  guint32          *data)
+				  BroadwayNode     *root)
 {
   BroadwayWindow *window;
 
@@ -1624,13 +1635,13 @@ broadway_server_window_set_nodes (BroadwayServer   *server,
   if (window == NULL)
     return;
 
-  g_free (window->nodes);
-  window->nodes = g_memdup (data, sizeof (guint32)*n_data);
-  window->nodes_len = n_data;
+  if (window->nodes)
+    broadway_node_free (window->nodes);
+  window->nodes = root;
 
   if (server->output != NULL)
     broadway_output_window_set_nodes (server->output, window->id,
-                                      window->nodes, window->nodes_len);
+                                      window->nodes);
 }
 
 guint32
@@ -1877,7 +1888,7 @@ broadway_server_resync_windows (BroadwayServer *server)
 
       if (window->nodes)
         broadway_output_window_set_nodes (server->output, window->id,
-                                          window->nodes, window->nodes_len);
+                                          window->nodes);
 
       if (window->visible)
 	broadway_output_show_surface (server->output, window->id);

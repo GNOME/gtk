@@ -4,6 +4,7 @@
 #include <glib.h>
 #include <gio/gio.h>
 #include "broadway-protocol.h"
+#include "broadway-server.h"
 
 typedef struct BroadwayOutput BroadwayOutput;
 
@@ -58,8 +59,7 @@ void            broadway_output_set_transient_for (BroadwayOutput *output,
 						   int             parent_id);
 void            broadway_output_window_set_nodes (BroadwayOutput *output,
                                                   int             id,
-                                                  guint32        *data,
-                                                  guint32         data_len);
+                                                  BroadwayNode   *root);
 void            broadway_output_upload_texture (BroadwayOutput *output,
 						guint32 id,
 						GBytes *texture);

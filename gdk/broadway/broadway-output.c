@@ -296,19 +296,42 @@ broadway_output_set_transient_for (BroadwayOutput *output,
   append_uint16 (output, parent_id);
 }
 
+static void
+append_node (BroadwayOutput *output,
+	     BroadwayNode   *node)
+{
+  append_uint32 (output, node->type);
+  guint32 i;
+
+  for (i = 0; i < node->n_data; i++)
+    append_uint32 (output, node->data[i]);
+  for (i = 0; i < node->n_children; i++)
+    append_node (output, node->children[i]);
+}
+
+guint32
+get_node_size (BroadwayNode   *node)
+{
+  guint32 size = 1 + node->n_data;
+  guint32 i;
+
+  for (i = 0; i < node->n_children; i++)
+    size += get_node_size (node->children[i]);
+
+  return size;
+}
+
+
 void
 broadway_output_window_set_nodes (BroadwayOutput *output,
                                   int             id,
-                                  guint32        *data,
-                                  guint32         data_len)
+                                  BroadwayNode   *root)
 {
   write_header (output, BROADWAY_OP_SET_NODES);
-  guint32 i;
 
   append_uint16 (output, id);
-  append_uint32 (output, data_len);
-  for (i = 0; i < data_len; i++)
-    append_uint32 (output, data[i]);
+  append_uint32 (output, get_node_size (root));
+  append_node (output, root);
 }
 
 void
