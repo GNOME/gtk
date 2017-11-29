@@ -4398,15 +4398,17 @@ icon_list_from_theme (GtkWindow   *window,
 {
   GtkWindowPrivate *priv = window->priv;
   GList *list;
+  GtkStyleContext *context;
+  GtkCssValue *value;
   GtkIconTheme *icon_theme;
   GdkTexture *icon;
   GdkPixbuf *pixbuf;
   gint *sizes;
   gint i;
 
-  icon_theme = gtk_css_icon_theme_value_get_icon_theme
-    (_gtk_style_context_peek_property (gtk_widget_get_style_context (GTK_WIDGET (window)),
-                                       GTK_CSS_PROPERTY_ICON_THEME));
+  context = gtk_widget_get_style_context (GTK_WIDGET (window));
+  value = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_THEME);
+  icon_theme = gtk_css_icon_theme_value_get_icon_theme (value);
 
   sizes = gtk_icon_theme_get_icon_sizes (icon_theme, name);
 
@@ -4414,10 +4416,10 @@ icon_list_from_theme (GtkWindow   *window,
   for (i = 0; sizes[i]; i++)
     {
       /* FIXME
-       * We need an EWMH extension to handle scalable icons 
-       * by passing their name to the WM. For now just use a 
+       * We need an EWMH extension to handle scalable icons
+       * by passing their name to the WM. For now just use a
        * fixed size of 48.
-       */ 
+       */
       if (sizes[i] == -1)
         pixbuf = gtk_icon_theme_load_icon_for_scale (icon_theme, name,
 					             48, priv->scale,
@@ -4428,7 +4430,7 @@ icon_list_from_theme (GtkWindow   *window,
 					             0, NULL);
       if (pixbuf)
         {
-          icon = gdk_texture_new_for_pixbuf (pixbuf);
+  i       icon = gdk_texture_new_for_pixbuf (pixbuf);
 	  list = g_list_append (list, icon);
           g_object_unref (pixbuf);
         }
