@@ -1193,11 +1193,17 @@ surface_enter (void              *data,
 {
   GdkWindow *window = GDK_WINDOW (data);
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkDisplay *display;
+  GdkMonitor *monitor;
 
   GDK_NOTE (EVENTS,
             g_message ("surface enter, window %p output %p", window, output));
 
   impl->display_server.outputs = g_slist_prepend (impl->display_server.outputs, output);
+
+  display = gdk_window_get_display (window);
+  monitor = gdk_wayland_display_get_monitor_for_output (display, output);
+  gdk_window_enter_monitor (window, monitor);
 
   gdk_wayland_window_update_scale (window);
 }
@@ -1209,11 +1215,17 @@ surface_leave (void              *data,
 {
   GdkWindow *window = GDK_WINDOW (data);
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkDisplay *display;
+  GdkMonitor *monitor;
 
   GDK_NOTE (EVENTS,
             g_message ("surface leave, window %p output %p", window, output));
 
   impl->display_server.outputs = g_slist_remove (impl->display_server.outputs, output);
+
+  display = gdk_window_get_display (window);
+  monitor = gdk_wayland_display_get_monitor_for_output (display, output);
+  gdk_window_leave_monitor (window, monitor);
 
   if (impl->display_server.outputs)
     gdk_wayland_window_update_scale (window);

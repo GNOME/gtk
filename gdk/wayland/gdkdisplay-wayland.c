@@ -2086,6 +2086,13 @@ get_monitor_for_output (GdkWaylandDisplay *display_wayland,
   return NULL;
 }
 
+GdkMonitor *
+gdk_wayland_display_get_monitor_for_output (GdkDisplay       *display,
+                                            struct wl_output *output)
+{
+  return (GdkMonitor *)get_monitor_for_output (GDK_WAYLAND_DISPLAY (display), output);
+}
+
 static void
 gdk_wayland_display_remove_output (GdkWaylandDisplay *display_wayland,
                                    guint32            id)

@@ -208,6 +208,8 @@ guint32 gdk_wayland_display_get_output_scale (GdkWaylandDisplay *display_wayland
                                               struct wl_output  *output);
 struct wl_output *gdk_wayland_display_get_wl_output (GdkDisplay *display,
                                                      int         monitor_num);
+GdkMonitor *gdk_wayland_display_get_monitor_for_output (GdkDisplay       *display,
+                                                        struct wl_output *output);
 
 void _gdk_wayland_window_set_grab_seat (GdkWindow      *window,
                                         GdkSeat        *seat);
