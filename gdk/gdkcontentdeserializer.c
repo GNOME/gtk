@@ -22,6 +22,7 @@
 #include "gdkcontentdeserializer.h"
 
 #include "gdkcontentformats.h"
+#include "gdkintl.h"
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
@@ -524,6 +525,68 @@ string_deserializer (GdkContentDeserializer *deserializer)
 }
 
 static void
+file_uri_deserializer_finish (GObject      *source,
+                              GAsyncResult *result,
+                              gpointer      deserializer)
+{
+  GOutputStream *stream = G_OUTPUT_STREAM (source);
+  GError *error = NULL;
+  gssize written;
+  char *str;
+  char **uris;
+
+  written = g_output_stream_splice_finish (stream, result, &error);
+  if (written < 0)
+    {
+      gdk_content_deserializer_return_error (deserializer, error);
+      return;
+    }
+
+  /* write terminating NULL */
+  if (!g_output_stream_write (stream, "", 1, NULL, &error))
+    {
+      gdk_content_deserializer_return_error (deserializer, error);
+      return;
+    }
+
+  str = g_memory_output_stream_steal_data (G_MEMORY_OUTPUT_STREAM (
+            g_filter_output_stream_get_base_stream (G_FILTER_OUTPUT_STREAM (stream))));
+  uris = g_uri_list_extract_uris (str);
+  g_free (str);
+
+  if (uris == NULL || uris[0] == NULL)
+    {
+      error = g_error_new (G_IO_ERROR, G_IO_ERROR, _("No file given"));
+      gdk_content_deserializer_return_error (deserializer, error);
+    }
+  else
+    {
+      GFile *file = g_file_new_for_uri (uris[0]);
+
+      g_value_take_object (gdk_content_deserializer_get_value (deserializer), file);
+      gdk_content_deserializer_return_success (deserializer);
+    }
+  g_strfreev (uris);
+}
+
+static void
+file_uri_deserializer (GdkContentDeserializer *deserializer)
+{
+  GOutputStream *output;
+
+  output = g_memory_output_stream_new_resizable ();
+
+  g_output_stream_splice_async (output,
+                                gdk_content_deserializer_get_input_stream (deserializer),
+                                G_OUTPUT_STREAM_SPLICE_CLOSE_SOURCE | G_OUTPUT_STREAM_SPLICE_CLOSE_TARGET,
+                                gdk_content_deserializer_get_priority (deserializer),
+                                gdk_content_deserializer_get_cancellable (deserializer),
+                                file_uri_deserializer_finish,
+                                deserializer);
+  g_object_unref (output);
+}
+
+static void
 init (void)
 {
   static gboolean initialized = FALSE;
@@ -575,6 +638,12 @@ init (void)
     }
 
   g_slist_free (formats);
+
+  gdk_content_register_deserializer ("text/uri-list",
+                                     G_TYPE_FILE,
+                                     file_uri_deserializer,
+                                     NULL,
+                                     NULL);
 
   gdk_content_register_deserializer ("text/plain;charset=utf-8",
                                      G_TYPE_STRING,

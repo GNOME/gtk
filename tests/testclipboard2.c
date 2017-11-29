@@ -263,6 +263,14 @@ get_button_list (GdkClipboard *clipboard,
                        clipboard,
                        "Invalid UTF-8");
 
+  g_value_init (&value, G_TYPE_FILE);
+  g_value_take_object (&value, g_file_new_for_path (g_get_home_dir ()));
+  add_provider_button (box,
+                       gdk_content_provider_new_for_value (&value),
+                       clipboard,
+                       "home directory");
+  g_value_unset (&value);
+
   return box;
 }
 

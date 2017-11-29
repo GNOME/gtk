@@ -512,6 +512,66 @@ string_serializer (GdkContentSerializer *serializer)
 }
 
 static void
+file_serializer_finish (GObject      *source,
+                        GAsyncResult *result,
+                        gpointer      serializer)
+{
+  GOutputStream *stream = G_OUTPUT_STREAM (source);
+  GError *error = NULL;
+
+  if (!g_output_stream_write_all_finish (stream, result, NULL, &error))
+    gdk_content_serializer_return_error (serializer, error);
+  else
+    gdk_content_serializer_return_success (serializer);
+}
+
+static void
+file_uri_serializer (GdkContentSerializer *serializer)
+{
+  GFile *file;
+  GString *str;
+  char *uri;
+
+  str = g_string_new (NULL);
+
+  file = g_value_get_object (gdk_content_serializer_get_value (serializer));
+  uri = g_file_get_uri (file);
+  g_string_append (str, uri);
+  g_free (uri);
+  g_string_append (str, "\r\n");
+
+  g_output_stream_write_all_async (gdk_content_serializer_get_output_stream (serializer),
+                                   str->str,
+                                   str->len,
+                                   gdk_content_serializer_get_priority (serializer),
+                                   gdk_content_serializer_get_cancellable (serializer),
+                                   file_serializer_finish,
+                                   serializer);
+  gdk_content_serializer_set_task_data (serializer, g_string_free (str, FALSE), g_free);
+}
+
+static void
+file_text_serializer (GdkContentSerializer *serializer)
+{
+  GFile *file;
+  char *path;
+
+  file = g_value_get_object (gdk_content_serializer_get_value (serializer));
+  path = g_file_get_path (file);
+  if (path == NULL)
+    path = g_file_get_uri (file);
+
+  g_output_stream_write_all_async (gdk_content_serializer_get_output_stream (serializer),
+                                   path,
+                                   strlen (path),
+                                   gdk_content_serializer_get_priority (serializer),
+                                   gdk_content_serializer_get_cancellable (serializer),
+                                   file_serializer_finish,
+                                   serializer);
+  gdk_content_serializer_set_task_data (serializer, path, g_free);
+}
+
+static void
 init (void)
 {
   static gboolean initialized = FALSE;
@@ -566,6 +626,17 @@ init (void)
     }
 
   g_slist_free (formats);
+
+  gdk_content_register_serializer (G_TYPE_FILE,
+                                   "text/uri-list",
+                                   file_uri_serializer,
+                                   NULL,
+                                   NULL);
+  gdk_content_register_serializer (G_TYPE_FILE,
+                                   "text/plain;charset=utf-8",
+                                   file_text_serializer,
+                                   NULL,
+                                   NULL);
 
   gdk_content_register_serializer (G_TYPE_STRING,
                                    "text/plain;charset=utf-8",
