@@ -4401,8 +4401,7 @@ icon_list_from_theme (GtkWindow   *window,
   GtkStyleContext *context;
   GtkCssValue *value;
   GtkIconTheme *icon_theme;
-  GdkTexture *icon;
-  GdkPixbuf *pixbuf;
+  GtkIconInfo *info;
   gint *sizes;
   gint i;
 
@@ -4421,18 +4420,17 @@ icon_list_from_theme (GtkWindow   *window,
        * fixed size of 48.
        */
       if (sizes[i] == -1)
-        pixbuf = gtk_icon_theme_load_icon_for_scale (icon_theme, name,
+        info = gtk_icon_theme_lookup_icon_for_scale (icon_theme, name,
 					             48, priv->scale,
-					             0, NULL);
+					             0);
       else
-        pixbuf = gtk_icon_theme_load_icon_for_scale (icon_theme, name,
+        info = gtk_icon_theme_lookup_icon_for_scale (icon_theme, name,
 					             sizes[i], priv->scale,
-					             0, NULL);
-      if (pixbuf)
+					             0);
+      if (info)
         {
-  i       icon = gdk_texture_new_for_pixbuf (pixbuf);
-	  list = g_list_append (list, icon);
-          g_object_unref (pixbuf);
+	  list = g_list_append (list, gtk_icon_info_load_texture (info));
+          g_object_unref (info);
         }
     }
 
@@ -4567,17 +4565,17 @@ static GdkTexture *
 icon_from_name (const gchar *name,
                 gint         size)
 {
-  GdkPixbuf *pixbuf;
+  GtkIconInfo *info;
   GdkTexture *texture;
-  
-  pixbuf = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
+
+  info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),
 				     name, size,
-				     GTK_ICON_LOOKUP_FORCE_SIZE, NULL);
-  if (pixbuf == NULL)
+				     GTK_ICON_LOOKUP_FORCE_SIZE);
+  if (info == NULL)
     return NULL;
 
-  texture = gdk_texture_new_for_pixbuf (pixbuf);
-  g_object_unref (pixbuf);
+  texture = gtk_icon_info_load_texture (info);
+  g_object_unref (info);
 
   return texture;
 }
@@ -4871,13 +4869,15 @@ static GdkTexture *
 load_texture_verbosely (const char *filename,
 			GError    **err)
 {
+  GFile *file;
   GError *local_err = NULL;
   GdkTexture *texture;
-  GdkPixbuf *pixbuf;
 
-  pixbuf = gdk_pixbuf_new_from_file (filename, &local_err);
+  file = g_file_new_for_path (filename);
+  texture = gdk_texture_new_from_file (file, &local_err);
+  g_object_unref (file);
 
-  if (!pixbuf)
+  if (!texture)
     {
       if (err)
 	*err = local_err;
@@ -4889,9 +4889,6 @@ load_texture_verbosely (const char *filename,
 	}
       return NULL;
     }
-
-  texture = gdk_texture_new_for_pixbuf (pixbuf);
-  g_object_unref (pixbuf);
 
   return texture;
 }
