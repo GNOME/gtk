@@ -1237,6 +1237,9 @@ gtk_application_uninhibit (GtkApplication *application,
  * Determines if any of the actions specified in @flags are
  * currently inhibited (possibly by another application).
  *
+ * Note that this information may not be available (for example
+ * when the application is running in a sandbox).
+ *
  * Returns: %TRUE if any of the actions specified in @flags are inhibited
  *
  * Since: 3.4
