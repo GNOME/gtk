@@ -28,7 +28,6 @@
 #include "gtkcellrendererpixbuf.h"
 #include "gtkcellrenderertext.h"
 #include "gtkcheckmenuitem.h"
-#include "gtkclipboard.h"
 #include "gtkcomboboxtext.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkdragsource.h"
@@ -1655,61 +1654,6 @@ rename_file_cb (GSimpleAction *action,
   gtk_tree_selection_selected_foreach (selection, rename_selected_cb, impl);
 }
 
-/* callback used to set data to clipboard */
-static void
-copy_file_get_cb  (GtkClipboard     *clipboard,
-                   GtkSelectionData *selection_data,
-                   gpointer          data)
-{
-  GSList *selected_files = data;
-
-  if (selected_files)
-    {
-      gint num_files = g_slist_length (selected_files);
-      gchar **uris;
-      gint i;
-      GSList *l;
-
-      uris = g_new (gchar *, num_files + 1);
-      uris[num_files] = NULL; /* null terminator */
-
-      i = 0;
-
-      for (l = selected_files; l; l = l->next)
-        {
-          GFile *file = (GFile *) l->data;
-
-          if (gtk_selection_data_targets_include_uri (selection_data))
-            uris[i] = g_file_get_uri (file);
-          else /* if (info == SELECTION_TEXT) - let this be the fallback */
-            uris[i] = g_file_get_parse_name (file);
-
-          i++;
-        }
-
-      if (gtk_selection_data_targets_include_uri (selection_data))
-        gtk_selection_data_set_uris (selection_data, uris);
-      else /* if (info == SELECTION_TEXT) - let this be the fallback */
-        {
-          char *str = g_strjoinv (" ", uris);
-          gtk_selection_data_set_text (selection_data, str, -1);
-          g_free (str);
-        }
-
-      g_strfreev (uris);
-    }
-}
-
-/* callback used to clear the clipboard data */
-static void
-copy_file_clear_cb (GtkClipboard *clipboard,
-                    gpointer      data)
-{
-  GSList *selected_files = data;
-
-  g_slist_free_full (selected_files, g_object_unref);
-}
-
 /* Callback used when the "Copy file’s location" menu item is activated */
 static void
 copy_file_location_cb (GSimpleAction *action,
@@ -1723,21 +1667,20 @@ copy_file_location_cb (GSimpleAction *action,
 
   if (selected_files)
     {
-      GtkClipboard *clipboard;
-      GdkContentFormats *target_list;
+      GdkClipboard *clipboard;
+      GdkContentProvider *provider;
+      GValue value = G_VALUE_INIT;
 
-      clipboard = gtk_widget_get_old_clipboard (GTK_WIDGET (impl), GDK_SELECTION_CLIPBOARD);
+      clipboard = gtk_widget_get_clipboard (GTK_WIDGET (impl));
 
-      target_list = gdk_content_formats_new (NULL, 0);
-      target_list = gtk_content_formats_add_text_targets (target_list);
-      target_list = gtk_content_formats_add_uri_targets (target_list);
+      g_value_init (&value, GDK_TYPE_FILE_LIST);
+      g_value_take_boxed (&value, selected_files);
 
-      gtk_clipboard_set_with_data (clipboard, target_list,
-                                   copy_file_get_cb,
-                                   copy_file_clear_cb,
-                                   selected_files);
+      provider = gdk_content_provider_new_for_value (&value);
+      g_value_unset (&value);
 
-      gdk_content_formats_unref (target_list);
+      gdk_clipboard_set_content (clipboard, provider);
+      g_object_unref (provider);
     }
 }
 
@@ -6687,12 +6630,15 @@ out:
 }
 
 static void
-paste_text_received (GtkClipboard         *clipboard,
-                     const gchar          *text,
-                     GtkFileChooserWidget *impl)
+paste_text_received (GObject      *source,
+                     GAsyncResult *result,
+                     gpointer      data)
 {
+  GtkFileChooserWidget *impl = data;
   GFile *file;
+  char *text;
 
+  text = gdk_clipboard_read_text_finish (GDK_CLIPBOARD (source), result, NULL);
   if (!text)
     return;
 
@@ -6702,17 +6648,19 @@ paste_text_received (GtkClipboard         *clipboard,
     location_popup_handler (impl, text);
 
   g_object_unref (file);
+  g_free (text);
 }
 
 /* Handler for the "location-popup-on-paste" keybinding signal */
 static void
 location_popup_on_paste_handler (GtkFileChooserWidget *impl)
 {
-  GtkClipboard *clipboard = gtk_widget_get_old_clipboard (GTK_WIDGET (impl),
-                                                      GDK_SELECTION_CLIPBOARD);
-  gtk_clipboard_request_text (clipboard,
-                              (GtkClipboardTextReceivedFunc) paste_text_received,
-                              impl);
+  GdkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET (impl));
+
+  gdk_clipboard_read_text_async (clipboard,
+                                 NULL,
+                                 paste_text_received,
+                                 impl);
 }
 
 /* Implementation for GtkFileChooserEmbed::should_respond() */
