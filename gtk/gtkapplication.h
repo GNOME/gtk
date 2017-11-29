@@ -117,9 +117,6 @@ guint            gtk_application_inhibit            (GtkApplication             
 GDK_AVAILABLE_IN_3_4
 void             gtk_application_uninhibit          (GtkApplication             *application,
                                                      guint                       cookie);
-GDK_AVAILABLE_IN_3_4
-gboolean         gtk_application_is_inhibited       (GtkApplication             *application,
-                                                     GtkApplicationInhibitFlags  flags);
 
 GDK_AVAILABLE_IN_3_6
 GtkWindow *      gtk_application_get_window_by_id   (GtkApplication             *application,

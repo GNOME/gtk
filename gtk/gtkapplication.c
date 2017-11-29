@@ -1150,31 +1150,6 @@ gtk_application_uninhibit (GtkApplication *application,
   gtk_application_impl_uninhibit (application->priv->impl, cookie);
 }
 
-/**
- * gtk_application_is_inhibited:
- * @application: the #GtkApplication
- * @flags: what types of actions should be queried
- *
- * Determines if any of the actions specified in @flags are
- * currently inhibited (possibly by another application).
- *
- * Note that this information may not be available (for example
- * when the application is running in a sandbox).
- *
- * Returns: %TRUE if any of the actions specified in @flags are inhibited
- *
- * Since: 3.4
- */
-gboolean
-gtk_application_is_inhibited (GtkApplication             *application,
-                              GtkApplicationInhibitFlags  flags)
-{
-  g_return_val_if_fail (GTK_IS_APPLICATION (application), FALSE);
-  g_return_val_if_fail (!g_application_get_is_remote (G_APPLICATION (application)), FALSE);
-
-  return gtk_application_impl_is_inhibited (application->priv->impl, flags);
-}
-
 GtkActionMuxer *
 gtk_application_get_parent_muxer_for_window (GtkWindow *window)
 {

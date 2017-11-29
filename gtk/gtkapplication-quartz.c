@@ -292,18 +292,6 @@ gtk_application_impl_quartz_uninhibit (GtkApplicationImpl *impl,
   g_warning ("Invalid inhibitor cookie");
 }
 
-static gboolean
-gtk_application_impl_quartz_is_inhibited (GtkApplicationImpl         *impl,
-                                          GtkApplicationInhibitFlags  flags)
-{
-  GtkApplicationImplQuartz *quartz = (GtkApplicationImplQuartz *) impl;
-
-  if (flags & GTK_APPLICATION_INHIBIT_LOGOUT)
-    return quartz->quit_inhibit > 0;
-
-  return FALSE;
-}
-
 static void
 gtk_application_impl_quartz_init (GtkApplicationImplQuartz *quartz)
 {
@@ -332,7 +320,6 @@ gtk_application_impl_quartz_class_init (GtkApplicationImplClass *class)
   class->set_menubar = gtk_application_impl_quartz_set_menubar;
   class->inhibit = gtk_application_impl_quartz_inhibit;
   class->uninhibit = gtk_application_impl_quartz_uninhibit;
-  class->is_inhibited = gtk_application_impl_quartz_is_inhibited;
 
   gobject_class->finalize = gtk_application_impl_quartz_finalize;
 }

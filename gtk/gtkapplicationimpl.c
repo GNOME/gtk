@@ -59,7 +59,6 @@ gtk_application_impl_class_init (GtkApplicationImplClass *class)
   class->set_menubar = (gpointer) do_nothing;
   class->inhibit = (gpointer) do_nothing;
   class->uninhibit = (gpointer) do_nothing;
-  class->is_inhibited = (gpointer) do_nothing;
   class->prefers_app_menu = (gpointer) return_false;
 }
 
@@ -146,13 +145,6 @@ gtk_application_impl_uninhibit (GtkApplicationImpl *impl,
                                 guint               cookie)
 {
   GTK_APPLICATION_IMPL_GET_CLASS (impl)->uninhibit (impl, cookie);
-}
-
-gboolean
-gtk_application_impl_is_inhibited (GtkApplicationImpl         *impl,
-                                   GtkApplicationInhibitFlags  flags)
-{
-  return GTK_APPLICATION_IMPL_GET_CLASS (impl)->is_inhibited (impl, flags);
 }
 
 gboolean

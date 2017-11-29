@@ -612,45 +612,6 @@ gtk_application_impl_dbus_uninhibit (GtkApplicationImpl *impl,
 }
 
 static gboolean
-gtk_application_impl_dbus_is_inhibited (GtkApplicationImpl         *impl,
-                                        GtkApplicationInhibitFlags  flags)
-{
-  GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) impl;
-  GVariant *res;
-  GError *error = NULL;
-  gboolean inhibited;
-  static gboolean warned = FALSE;
-
-  if (dbus->sm_proxy == NULL)
-    return FALSE;
-
-  res = g_dbus_proxy_call_sync (dbus->sm_proxy,
-                                "IsInhibited",
-                                g_variant_new ("(u)", flags),
-                                G_DBUS_CALL_FLAGS_NONE,
-                                G_MAXINT,
-                                NULL,
-                                &error);
-  if (error)
-    {
-      if (!warned)
-        {
-          g_warning ("Calling %s.IsInhibited failed: %s",
-                     g_dbus_proxy_get_interface_name (dbus->sm_proxy),
-                     error->message);
-          warned = TRUE;
-        }
-      g_error_free (error);
-      return FALSE;
-    }
-
-  g_variant_get (res, "(b)", &inhibited);
-  g_variant_unref (res);
-
-  return inhibited;
-}
-
-static gboolean
 gtk_application_impl_dbus_prefers_app_menu (GtkApplicationImpl *impl)
 {
   static gboolean decided;
@@ -718,7 +679,6 @@ gtk_application_impl_dbus_class_init (GtkApplicationImplDBusClass *class)
   impl_class->set_menubar = gtk_application_impl_dbus_set_menubar;
   impl_class->inhibit = gtk_application_impl_dbus_inhibit;
   impl_class->uninhibit = gtk_application_impl_dbus_uninhibit;
-  impl_class->is_inhibited = gtk_application_impl_dbus_is_inhibited;
   impl_class->prefers_app_menu = gtk_application_impl_dbus_prefers_app_menu;
 
   gobject_class->finalize = gtk_application_impl_dbus_finalize;
