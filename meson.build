@@ -422,6 +422,7 @@ if wayland_enabled
   wlprotocolsdep = dependency('wayland-protocols', version: wayland_proto_req)
   wlcursordep    = dependency('wayland-cursor', version: wayland_req)
   wlegldep       = dependency('wayland-egl')
+  backend_immodules += ['wayland']
 
   wayland_pkgs = [
     'wayland-client', wayland_req,
