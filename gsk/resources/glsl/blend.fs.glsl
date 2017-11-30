@@ -28,8 +28,8 @@ vec3 BlendLighten(vec3 Cb, vec3 Cs) {
 }
 
 void main() {
-  vec4 Cs = Texture(uSource, vUv);
-  vec4 Cb = Texture(uMask, vUv);
+  vec4 Cs = Texture(u_source, vUv);
+  vec4 Cb = Texture(u_mask, vUv);
   vec3 res;
 
   if (uBlendMode == 0) {
@@ -57,5 +57,5 @@ void main() {
     // Use red for debugging missing blend modes
     res = vec3(1.0, 0.0, 0.0);
   }
-  setOutputColor(vec4(res, Cs.a) * uAlpha);
+  setOutputColor(vec4(res, Cs.a) * u_alpha);
 }

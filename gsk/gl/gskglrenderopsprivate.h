@@ -35,14 +35,13 @@ enum {
 typedef struct
 {
   int index;        /* Into the renderer's program array */
-  const char *name; /* For debugging */
 
   int id;
   /* Common locations (gl_common)*/
   int source_location;
   int mask_location;
-  int uv_location;
   int position_location;
+  int uv_location;
   int alpha_location;
   int blend_mode_location;
   int viewport_location;
@@ -52,40 +51,38 @@ typedef struct
   int clip_corner_widths_location;
   int clip_corner_heights_location;
 
-  /* Program-specific locations */
   union {
     struct {
       int color_location;
-    };
+    } color;
+    struct {
+      int color_location;
+    } coloring;
     struct {
       int color_matrix_location;
       int color_offset_location;
-    };
+    } color_matrix;
     struct {
-      int n_color_stops_location;
+      int num_color_stops_location;
       int color_stops_location;
       int color_offsets_location;
       int start_point_location;
       int end_point_location;
-    };
-    struct {
-      int clip_bounds_location;
-      int corner_widths_location;
-      int corner_heights_location;
-    };
+    } linear_gradient;
     struct {
       int blur_radius_location;
       int blur_size_location;
-    };
+    } blur;
     struct {
-      int inset_shadow_color_location;
-      int inset_shadow_spread_location;
-      int inset_shadow_d_location;
-      int inset_shadow_outline_location;
-      int inset_shadow_outline_corner_widths_location;
-      int inset_shadow_outline_corner_heights_location;
-    };
+      int color_location;
+      int spread_location;
+      int offset_location;
+      int outline_location;
+      int corner_widths_location;
+      int corner_heights_location;
+    } inset_shadow;
   };
+
 } Program;
 
 typedef struct
@@ -128,7 +125,7 @@ typedef struct
       float corner_heights[4];
       float radius;
       float spread;
-      float d[2];
+      float offset[2];
       float color[4];
     } inset_shadow;
   };

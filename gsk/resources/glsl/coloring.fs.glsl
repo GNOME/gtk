@@ -1,12 +1,12 @@
 
-uniform vec4 uColor;
+uniform vec4 u_color;
 
 void main() {
-  vec4 diffuse = Texture(uSource, vUv);
-  vec4 color = uColor;
+  vec4 diffuse = Texture(u_source, vUv);
+  vec4 color = u_color;
 
   // pre-multiply
   color.rgb *= color.a;
 
-  setOutputColor((diffuse * color) * uAlpha);
+  setOutputColor((diffuse * color) * u_alpha);
 }

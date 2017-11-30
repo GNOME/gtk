@@ -1,19 +1,19 @@
-uniform vec4 uColorStops[8];
-uniform float uColorOffsets[8];
-uniform int uNumColorStops;
-uniform vec2 uStartPoint;
-uniform vec2 uEndPoint;
+uniform vec4 u_color_stops[8];
+uniform float u_color_offsets[8];
+uniform int u_num_color_stops;
+uniform vec2 u_start_point;
+uniform vec2 u_end_point;
 
 vec4 fragCoord() {
   vec4 f = gl_FragCoord;
-  f.x += uViewport.x;
-  f.y = (uViewport.y + uViewport.w) - f.y;
+  f.x += u_viewport.x;
+  f.y = (u_viewport.y + u_viewport.w) - f.y;
   return f;
 }
 
 void main() {
-  vec2 startPoint = (uModelview * vec4(uStartPoint, 0, 1)).xy;
-  vec2 endPoint   = (uModelview * vec4(uEndPoint,   0, 1)).xy;
+  vec2 startPoint = (u_modelview * vec4(u_start_point, 0, 1)).xy;
+  vec2 endPoint   = (u_modelview * vec4(u_end_point,   0, 1)).xy;
   float maxDist   = length(endPoint - startPoint);
 
   // Position relative to startPoint
@@ -30,16 +30,16 @@ void main() {
   // Offset of the current pixel
   float offset = length(proj) / maxDist;
 
-  vec4 color = uColorStops[0];
-  for (int i = 1; i < uNumColorStops; i ++) {
-    if (offset >= uColorOffsets[i - 1])  {
-      float o = (offset - uColorOffsets[i - 1]) / (uColorOffsets[i] - uColorOffsets[i - 1]);
-      color = mix(uColorStops[i - 1], uColorStops[i], o);
+  vec4 color = u_color_stops[0];
+  for (int i = 1; i < u_num_color_stops; i ++) {
+    if (offset >= u_color_offsets[i - 1])  {
+      float o = (offset - u_color_offsets[i - 1]) / (u_color_offsets[i] - u_color_offsets[i - 1]);
+      color = mix(u_color_stops[i - 1], u_color_stops[i], o);
     }
   }
 
   /* Pre-multiply */
   color.rgb *= color.a;
 
-  setOutputColor(color * uAlpha);
+  setOutputColor(color * u_alpha);
 }

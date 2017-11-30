@@ -216,8 +216,6 @@ ops_set_color (RenderOpBuilder *builder,
 {
   RenderOp op;
 
-  g_assert (builder->current_program->color_location != 0);
-
   if (gdk_rgba_equal (color, &builder->program_state[builder->current_program->index].color))
     return;
 

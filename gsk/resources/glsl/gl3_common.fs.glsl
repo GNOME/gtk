@@ -1,17 +1,17 @@
 precision highp float;
 
-uniform sampler2D uSource;
-uniform sampler2D uMask;
-uniform mat4 uProjection = mat4(1.0);
-uniform mat4 uModelview = mat4(1.0);
-uniform float uAlpha = 1.0;
+uniform sampler2D u_source;
+uniform sampler2D u_mask;
+uniform mat4 u_projection = mat4(1.0);
+uniform mat4 u_modelview = mat4(1.0);
+uniform float u_alpha = 1.0;
 uniform int uBlendMode;
-uniform vec4 uViewport;
+uniform vec4 u_viewport;
 
 // In GtkSnapshot coordinates
-uniform vec4 uClip;
-uniform vec4 uClipCornerWidths  = vec4(1, 1, 1, 1);
-uniform vec4 uClipCornerHeights = vec4(1, 1, 1, 1);
+uniform vec4 u_clip;
+uniform vec4 u_clip_corner_widths  = vec4(1, 1, 1, 1);
+uniform vec4 u_clip_corner_heights = vec4(1, 1, 1, 1);
 
 in vec2 vUv;
 
@@ -88,16 +88,16 @@ vec4 Texture(sampler2D sampler, vec2 texCoords) {
 }
 
 void setOutputColor(vec4 color) {
-  vec4 clipBounds = uClip;
+  vec4 clipBounds = u_clip;
   vec4 f = gl_FragCoord;
 
-  f.x += uViewport.x;
-  f.y = (uViewport.y + uViewport.w) - f.y;
+  f.x += u_viewport.x;
+  f.y = (u_viewport.y + u_viewport.w) - f.y;
 
   clipBounds.z = clipBounds.x + clipBounds.z;
   clipBounds.w = clipBounds.y + clipBounds.w;
 
-  RoundedRect r = RoundedRect(clipBounds, uClipCornerWidths, uClipCornerHeights);
+  RoundedRect r = RoundedRect(clipBounds, u_clip_corner_widths, u_clip_corner_heights);
 
   outputColor = color * rounded_rect_coverage(r, f.xy);
   /*outputColor = color;*/

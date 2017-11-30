@@ -36,11 +36,19 @@
 #define OP_PRINT(format, ...)
 #endif
 
-#define INIT_PROGRAM_UNIFORM_LOCATION(program_name, location_name, uniform_name) \
+#define INIT_PROGRAM_UNIFORM_LOCATION2(program_name, uniform_basename) \
               G_STMT_START{\
-                self->program_name.location_name = glGetUniformLocation(self->program_name.id, uniform_name);\
-                g_assert (self->program_name.location_name != 0); \
+                self->program_name ## _program.program_name.uniform_basename ## _location = \
+                              glGetUniformLocation(self->program_name ## _program.id, "u_" #uniform_basename);\
+                g_assert_cmpint (self->program_name ## _program.program_name.uniform_basename ## _location, >, -1); \
               }G_STMT_END
+
+#define INIT_COMMON_UNIFORM_LOCATION(program_ptr, uniform_basename) \
+              G_STMT_START{\
+                program_ptr->uniform_basename ## _location =  \
+                              glGetUniformLocation(program_ptr->id, "u_" #uniform_basename);\
+              }G_STMT_END
+
 
 static void G_GNUC_UNUSED
 dump_framebuffer (const char *filename, int w, int h)
@@ -244,33 +252,27 @@ gsk_gl_renderer_destroy_buffers (GskGLRenderer *self)
   self->has_buffers = FALSE;
 }
 
-static void
-init_common_locations (GskGLRenderer    *self,
-                       GskShaderBuilder *builder,
-                       Program          *prog)
-{
-  prog->source_location = glGetUniformLocation (prog->id, "uSource");
-  prog->mask_location = glGetUniformLocation (prog->id, "uMask");
-  prog->alpha_location = glGetUniformLocation (prog->id, "uAlpha");
-  prog->blend_mode_location = glGetUniformLocation (prog->id, "uBlendMode");
-  prog->viewport_location = glGetUniformLocation (prog->id, "uViewport");
-  prog->projection_location = glGetUniformLocation (prog->id, "uProjection");
-  prog->modelview_location = glGetUniformLocation (prog->id, "uModelview");
-  prog->clip_location = glGetUniformLocation (prog->id, "uClip");
-  prog->clip_corner_widths_location = glGetUniformLocation (prog->id, "uClipCornerWidths");
-  prog->clip_corner_heights_location = glGetUniformLocation (prog->id, "uClipCornerHeights");
-
-  prog->position_location = glGetAttribLocation (prog->id, "aPosition");
-  prog->uv_location = glGetAttribLocation (prog->id, "aUv");
-}
-
 static gboolean
 gsk_gl_renderer_create_programs (GskGLRenderer  *self,
                                  GError        **error)
 {
   GskShaderBuilder *builder;
   GError *shader_error = NULL;
-  gboolean res = FALSE;
+  int i;
+  static struct {
+    const char *name;
+    const char *vs;
+    const char *fs;
+  } program_definitions[] = {
+      { "blend",           "blend.vs.glsl", "blend.fs.glsl" },
+      { "blit",            "blit.vs.glsl",  "blit.fs.glsl" },
+      { "color",           "blit.vs.glsl",  "color.fs.glsl" },
+      { "coloring",        "blit.vs.glsl",  "coloring.fs.glsl" },
+      { "color matrix",    "blit.vs.glsl",  "color_matrix.fs.glsl" },
+      { "linear gradient", "blit.vs.glsl",  "linear_gradient.fs.glsl" },
+      { "blur",            "blit.vs.glsl",  "blur.fs.glsl" },
+      { "inset shadow",    "blit.vs.glsl",  "inset_shadow.fs.glsl" },
+  };
 
   builder = gsk_shader_builder_new ();
 
@@ -310,140 +312,70 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
     gsk_shader_builder_add_define (builder, "GSK_DEBUG", "1");
 #endif
 
-  self->blend_program.id =  gsk_shader_builder_create_program (builder,
-                                                               "blend.vs.glsl", "blend.fs.glsl",
-                                                               &shader_error);
-  if (shader_error != NULL)
+  for (i = 0; i < GL_N_PROGRAMS; i ++)
     {
-      g_propagate_prefixed_error (error,
-                                  shader_error,
-                                  "Unable to create 'blend' program: ");
-      goto out;
+      Program *prog = &self->programs[i];
+
+      prog->index = i;
+      prog->id = gsk_shader_builder_create_program (builder,
+                                                    program_definitions[i].vs,
+                                                    program_definitions[i].fs,
+                                                    &shader_error);
+
+      if (shader_error != NULL)
+        {
+          g_propagate_prefixed_error (error, shader_error,
+                                      "Unable to create '%s' program (from %s and %s):\n",
+                                      program_definitions[i].name,
+                                      program_definitions[i].vs,
+                                      program_definitions[i].fs);
+
+          g_object_unref (builder);
+          return FALSE;
+        }
+
+      INIT_COMMON_UNIFORM_LOCATION (prog, alpha);
+      INIT_COMMON_UNIFORM_LOCATION (prog, source);
+      INIT_COMMON_UNIFORM_LOCATION (prog, mask);
+      INIT_COMMON_UNIFORM_LOCATION (prog, clip);
+      INIT_COMMON_UNIFORM_LOCATION (prog, clip_corner_widths);
+      INIT_COMMON_UNIFORM_LOCATION (prog, clip_corner_heights);
+      INIT_COMMON_UNIFORM_LOCATION (prog, viewport);
+      INIT_COMMON_UNIFORM_LOCATION (prog, projection);
+      INIT_COMMON_UNIFORM_LOCATION (prog, modelview);
     }
-  self->blend_program.index = 0;
-  self->blend_program.name = "blend";
-  init_common_locations (self, builder, &self->blend_program);
 
-  self->blit_program.id = gsk_shader_builder_create_program (builder,
-                                                             "blit.vs.glsl", "blit.fs.glsl",
-                                                             &shader_error);
-  if (shader_error != NULL)
-    {
-      g_propagate_prefixed_error (error,
-                                  shader_error,
-                                  "Unable to create 'blit' program: ");
-      goto out;
-    }
-  self->blit_program.index = 1;
-  self->blit_program.name = "blit";
-  init_common_locations (self, builder, &self->blit_program);
+  /* color */
+  INIT_PROGRAM_UNIFORM_LOCATION2 (color, color);
 
-  self->color_program.id = gsk_shader_builder_create_program (builder,
-                                                              "blit.vs.glsl", "color.fs.glsl",
-                                                              &shader_error);
-  if (shader_error != NULL)
-    {
-      g_propagate_prefixed_error (error,
-                                  shader_error,
-                                  "Unable to create 'color' program: ");
-      goto out;
-    }
-  self->color_program.index = 2;
-  self->color_program.name = "color";
-  init_common_locations (self, builder, &self->color_program);
-  INIT_PROGRAM_UNIFORM_LOCATION (color_program, color_location, "uColor");
+  /* coloring */
+  INIT_PROGRAM_UNIFORM_LOCATION2 (coloring, color);
 
-  self->coloring_program.id = gsk_shader_builder_create_program (builder,
-                                                                 "blit.vs.glsl", "coloring.fs.glsl",
-                                                                 &shader_error);
-  if (shader_error != NULL)
-    {
-      g_propagate_prefixed_error (error,
-                                  shader_error,
-                                  "Unable to create 'coloring' program: ");
-      goto out;
-    }
-  self->coloring_program.index = 3;
-  self->coloring_program.name = "coloring";
-  init_common_locations (self, builder, &self->coloring_program);
-  INIT_PROGRAM_UNIFORM_LOCATION (coloring_program, color_location, "uColor");
+  /* color matrix */
+  INIT_PROGRAM_UNIFORM_LOCATION2 (color_matrix, color_matrix);
+  INIT_PROGRAM_UNIFORM_LOCATION2 (color_matrix, color_offset);
 
-  self->color_matrix_program.id = gsk_shader_builder_create_program (builder,
-                                                                     "blit.vs.glsl", "color_matrix.fs.glsl",
-                                                                     &shader_error);
-  if (shader_error != NULL)
-    {
-      g_propagate_prefixed_error (error,
-                                  shader_error,
-                                  "Unable to create 'color_matrix' program: ");
-      goto out;
-    }
-  self->color_matrix_program.index = 4;
-  self->color_matrix_program.name = "color matrix";
-  init_common_locations (self, builder, &self->color_matrix_program);
-  INIT_PROGRAM_UNIFORM_LOCATION (color_matrix_program, color_matrix_location, "uColorMatrix");
-  INIT_PROGRAM_UNIFORM_LOCATION (color_matrix_program, color_offset_location, "uColorOffset");
+  /* linear gradient */
+  INIT_PROGRAM_UNIFORM_LOCATION2 (linear_gradient, color_stops);
+  INIT_PROGRAM_UNIFORM_LOCATION2 (linear_gradient, color_offsets);
+  INIT_PROGRAM_UNIFORM_LOCATION2 (linear_gradient, num_color_stops);
+  INIT_PROGRAM_UNIFORM_LOCATION2 (linear_gradient, start_point);
+  INIT_PROGRAM_UNIFORM_LOCATION2 (linear_gradient, end_point);
 
-  self->linear_gradient_program.id = gsk_shader_builder_create_program (builder,
-                                                                        "blit.vs.glsl", "linear_gradient.fs.glsl",
-                                                                        &shader_error);
-  if (shader_error != NULL)
-    {
-      g_propagate_prefixed_error (error,
-                                  shader_error,
-                                  "Unable to create 'linear_gradient' program: ");
-      goto out;
-    }
-  self->linear_gradient_program.index = 5;
-  self->linear_gradient_program.name = "linear gradient";
-  init_common_locations (self, builder, &self->linear_gradient_program);
-  INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient_program, color_stops_location, "uColorStops");
-  INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient_program, color_offsets_location, "uColorOffsets");
-  INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient_program, n_color_stops_location, "uNumColorStops");
-  INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient_program, start_point_location, "uStartPoint");
-  INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient_program, end_point_location, "uEndPoint");
+  /* blur */
+  INIT_PROGRAM_UNIFORM_LOCATION2 (blur, blur_radius);
+  INIT_PROGRAM_UNIFORM_LOCATION2 (blur, blur_size);
 
-  self->blur_program.id = gsk_shader_builder_create_program (builder,
-                                                             "blur.vs.glsl", "blur.fs.glsl",
-                                                             &shader_error);
-  if (shader_error != NULL)
-    {
-      g_propagate_prefixed_error (error,
-                                  shader_error,
-                                  "Unable to create 'blur' program: ");
-      goto out;
-    }
-  self->blur_program.index = 6;
-  self->blur_program.name = "blur";
-  init_common_locations (self, builder, &self->blur_program);
-  INIT_PROGRAM_UNIFORM_LOCATION (blur_program, blur_radius_location, "uBlurRadius");
-  INIT_PROGRAM_UNIFORM_LOCATION (blur_program, blur_size_location, "uSize");
-
-  self->inset_shadow_program.id = gsk_shader_builder_create_program (builder,
-                                                                     "blit.vs.glsl", "inset_shadow.fs.glsl",
-                                                                     &shader_error);
-  if (shader_error != NULL)
-    {
-      g_propagate_prefixed_error (error,
-                                  shader_error,
-                                  "Unable to create 'inset shadow' program: ");
-      goto out;
-    }
-  self->blur_program.index = 7;
-  self->blur_program.name = "inset shadow";
-  init_common_locations (self, builder, &self->inset_shadow_program);
-  INIT_PROGRAM_UNIFORM_LOCATION (inset_shadow_program, inset_shadow_color_location, "uColor");
-  INIT_PROGRAM_UNIFORM_LOCATION (inset_shadow_program, inset_shadow_spread_location, "uSpread");
-  INIT_PROGRAM_UNIFORM_LOCATION (inset_shadow_program, inset_shadow_outline_location, "uOutline");
-  INIT_PROGRAM_UNIFORM_LOCATION (inset_shadow_program, inset_shadow_outline_corner_widths_location, "uOutlineCornerWidths");
-  INIT_PROGRAM_UNIFORM_LOCATION (inset_shadow_program, inset_shadow_outline_corner_heights_location, "uOutlineCornerHeights");
-
-  res = TRUE;
-
-out:
+  /* inset shadow */
+  INIT_PROGRAM_UNIFORM_LOCATION2 (inset_shadow, color);
+  INIT_PROGRAM_UNIFORM_LOCATION2 (inset_shadow, spread);
+  INIT_PROGRAM_UNIFORM_LOCATION2 (inset_shadow, offset);
+  INIT_PROGRAM_UNIFORM_LOCATION2 (inset_shadow, outline);
+  INIT_PROGRAM_UNIFORM_LOCATION2 (inset_shadow, corner_widths);
+  INIT_PROGRAM_UNIFORM_LOCATION2 (inset_shadow, corner_heights);
 
   g_object_unref (builder);
-  return res;
+  return TRUE;
 }
 
 static gboolean
@@ -1071,8 +1003,8 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
                                 op.inset_shadow.corner_heights);
         op.inset_shadow.radius = gsk_inset_shadow_node_get_blur_radius (node);
         op.inset_shadow.spread = gsk_inset_shadow_node_get_spread (node);
-        op.inset_shadow.d[0] = gsk_inset_shadow_node_get_dx (node);
-        op.inset_shadow.d[1] = -gsk_inset_shadow_node_get_dy (node);
+        op.inset_shadow.offset[0] = gsk_inset_shadow_node_get_dx (node);
+        op.inset_shadow.offset[1] = -gsk_inset_shadow_node_get_dy (node);
 
         ops_set_program (builder, &self->inset_shadow_program);
         ops_add (builder, &op);
@@ -1318,16 +1250,16 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
           OP_PRINT (" -> Color Matrix");
           g_assert (program == &self->color_matrix_program);
           graphene_matrix_to_float (&op->color_matrix.matrix, mat);
-          glUniformMatrix4fv (program->color_matrix_location, 1, GL_FALSE, mat);
+          glUniformMatrix4fv (program->color_matrix.color_matrix_location, 1, GL_FALSE, mat);
 
           graphene_vec4_to_float (&op->color_matrix.offset, vec);
-          glUniform4fv (program->color_offset_location, 1, vec);
+          glUniform4fv (program->color_matrix.color_offset_location, 1, vec);
           break;
 
         case OP_CHANGE_COLOR:
           OP_PRINT (" -> Color: (%f, %f, %f, %f)", op->color.red, op->color.green, op->color.blue, op->color.alpha);
           g_assert (program == &self->color_program || program == &self->coloring_program);
-          glUniform4f (program->color_location,
+          glUniform4f (program->color.color_location,
                        op->color.red, op->color.green, op->color.blue, op->color.alpha);
           break;
 
@@ -1361,34 +1293,34 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
 
         case OP_CHANGE_LINEAR_GRADIENT:
             OP_PRINT (" -> Linear gradient");
-            glUniform1i (program->n_color_stops_location,
+            glUniform1i (program->linear_gradient.num_color_stops_location,
                          op->linear_gradient.n_color_stops);
-            glUniform4fv (program->color_stops_location,
+            glUniform4fv (program->linear_gradient.color_stops_location,
                           op->linear_gradient.n_color_stops,
                           op->linear_gradient.color_stops);
-            glUniform1fv (program->color_offsets_location,
+            glUniform1fv (program->linear_gradient.color_offsets_location,
                           op->linear_gradient.n_color_stops,
                           op->linear_gradient.color_offsets);
-            glUniform2f (program->start_point_location,
+            glUniform2f (program->linear_gradient.start_point_location,
                          op->linear_gradient.start_point.x, op->linear_gradient.start_point.y);
-            glUniform2f (program->end_point_location,
+            glUniform2f (program->linear_gradient.end_point_location,
                          op->linear_gradient.end_point.x, op->linear_gradient.end_point.y);
           break;
 
        case OP_CHANGE_BLUR:
           g_assert (program == &self->blur_program);
-          glUniform1f (program->blur_radius_location, op->blur.radius);
-          glUniform2f (program->blur_size_location, op->blur.size.width, op->blur.size.height);
+          glUniform1f (program->blur.blur_radius_location, op->blur.radius);
+          glUniform2f (program->blur.blur_size_location, op->blur.size.width, op->blur.size.height);
           break;
 
        case OP_CHANGE_INSET_SHADOW:
           g_assert (program == &self->inset_shadow_program);
-          glUniform4fv (program->inset_shadow_color_location, 1, op->inset_shadow.color);
-          glUniform2fv (program->inset_shadow_d_location, 1, op->inset_shadow.d);
-          glUniform1f (program->inset_shadow_spread_location, op->inset_shadow.spread);
-          glUniform4fv (program->inset_shadow_outline_location, 1, op->inset_shadow.outline);
-          glUniform4fv (program->inset_shadow_outline_corner_widths_location, 1, op->inset_shadow.corner_widths);
-          glUniform4fv (program->inset_shadow_outline_corner_heights_location, 1, op->inset_shadow.corner_heights);
+          glUniform4fv (program->inset_shadow.color_location, 1, op->inset_shadow.color);
+          glUniform2fv (program->inset_shadow.offset_location, 1, op->inset_shadow.offset);
+          glUniform1f (program->inset_shadow.spread_location, op->inset_shadow.spread);
+          glUniform4fv (program->inset_shadow.outline_location, 1, op->inset_shadow.outline);
+          glUniform4fv (program->inset_shadow.corner_widths_location, 1, op->inset_shadow.corner_widths);
+          glUniform4fv (program->inset_shadow.corner_heights_location, 1, op->inset_shadow.corner_heights);
           break;
 
         case OP_DRAW:
