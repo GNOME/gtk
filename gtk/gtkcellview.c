@@ -944,6 +944,38 @@ gtk_cell_view_new_with_pixbuf (GdkPixbuf *pixbuf)
 }
 
 /**
+ * gtk_cell_view_new_with_texture:
+ * @texture: the image to display in the cell view
+ *
+ * Creates a new #GtkCellView widget, adds a #GtkCellRendererPixbuf
+ * to it, and makes it show @texture.
+ *
+ * Returns: A newly created #GtkCellView widget.
+ *
+ * Since: 3.94
+ */
+GtkWidget *
+gtk_cell_view_new_with_texture (GdkTexture *texture)
+{
+  GtkCellView *cellview;
+  GtkCellRenderer *renderer;
+  GValue value = G_VALUE_INIT;
+
+  cellview = GTK_CELL_VIEW (gtk_cell_view_new ());
+
+  renderer = gtk_cell_renderer_pixbuf_new ();
+  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (cellview),
+			      renderer, TRUE);
+
+  g_value_init (&value, GDK_TYPE_TEXTURE);
+  g_value_set_object (&value, texture);
+  gtk_cell_view_set_value (cellview, renderer, "texture", &value);
+  g_value_unset (&value);
+
+  return GTK_WIDGET (cellview);
+}
+
+/**
  * gtk_cell_view_set_value:
  * @cell_view: a #GtkCellView widget
  * @renderer: one of the renderers of @cell_view
