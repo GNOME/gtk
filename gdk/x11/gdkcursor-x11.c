@@ -326,7 +326,7 @@ _gdk_x11_display_get_maximal_cursor_size (GdkDisplay *display,
  * with gdk_cursor_new(), gdk_cursor_new_for_display() and
  * gdk_cursor_new_from_name() are updated to reflect the theme
  * change. Custom cursors constructed with
- * gdk_cursor_new_from_pixbuf() will have to be handled
+ * gdk_cursor_new_from_texture() will have to be handled
  * by the application (GTK+ applications can learn about
  * cursor theme changes by listening for change notification
  * for the corresponding #GtkSetting).

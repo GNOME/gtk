@@ -4281,7 +4281,7 @@ gdk_window_get_cursor (GdkWindow *window)
  *
  * Note that @cursor must be for the same display as @window.
  *
- * Use gdk_cursor_new_for_display() or gdk_cursor_new_from_pixbuf() to
+ * Use gdk_cursor_new_for_display() or gdk_cursor_new_from_texture() to
  * create the cursor. To make the cursor invisible, use %GDK_BLANK_CURSOR.
  * Passing %NULL for the @cursor argument to gdk_window_set_cursor() means
  * that @window will use the cursor of its parent window. Most windows
@@ -4370,7 +4370,7 @@ gdk_window_get_device_cursor (GdkWindow *window,
  * @cursor: a #GdkCursor
  *
  * Sets a specific #GdkCursor for a given device when it gets inside @window.
- * Use gdk_cursor_new_for_display() or gdk_cursor_new_from_pixbuf() to create
+ * Use gdk_cursor_new_for_display() or gdk_cursor_new_from_texture() to create
  * the cursor. To make the cursor invisible, use %GDK_BLANK_CURSOR. Passing
  * %NULL for the @cursor argument to gdk_window_set_cursor() means that
  * @window will use the cursor of its parent window. Most windows should
