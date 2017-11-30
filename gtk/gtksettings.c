@@ -1903,6 +1903,13 @@ gtk_settings_create_for_display (GdkDisplay *display)
                                NULL);
   else
 #endif
+#ifdef GDK_WINDOWING_WAYLAND
+    if (GDK_IS_WAYLAND_DISPLAY (display))
+      settings = g_object_new (GTK_TYPE_SETTINGS,
+                               "gtk-im-module", "wayland",
+                               NULL);
+  else
+#endif
     settings = g_object_new (GTK_TYPE_SETTINGS, NULL);
 
   settings->priv->screen = gdk_display_get_default_screen (display);
