@@ -107,41 +107,23 @@ gtk_css_image_recolor_load_texture (GtkCssImageRecolor  *recolor,
 
   uri = g_file_get_uri (recolor->file);
 
-  if (g_str_has_suffix (uri, ".symbolic.png"))
+  if (g_file_has_uri_scheme (recolor->file, "resource"))
     {
-      if (g_file_has_uri_scheme (recolor->file, "resource"))
-        {
-          char *resource_path = g_uri_unescape_string (uri + strlen ("resource://"), NULL);
+      char *resource_path = g_uri_unescape_string (uri + strlen ("resource://"), NULL);
 
-          recolor->texture = gdk_texture_new_from_resource (resource_path);
-
-          g_free (resource_path);
-        }
+      if (g_str_has_suffix (uri, ".symbolic.png"))
+        recolor->texture = gdk_texture_new_from_resource (resource_path);
       else
-        {
-          recolor->texture = gdk_texture_new_from_file (recolor->file, NULL);
-        }
+        recolor->texture = gtk_make_symbolic_texture_from_resource (resource_path, 0, 0, 1.0, NULL);
+
+      g_free (resource_path);
     }
   else
     {
-      GdkPixbuf *pixbuf;
-
-      if (g_file_has_uri_scheme (recolor->file, "resource"))
-        {
-          char *resource_path = g_uri_unescape_string (uri + strlen ("resource://"), NULL);
-
-          pixbuf = gtk_make_symbolic_pixbuf_from_resource (resource_path, 0, 0, 1.0, NULL);
-
-          g_free (resource_path);
-        }
+      if (g_str_has_suffix (uri, ".symbolic.png"))
+        recolor->texture = gdk_texture_new_from_file (recolor->file, NULL);
       else
-        {
-          pixbuf = gtk_make_symbolic_pixbuf_from_file (recolor->file, 0, 0, 1.0, NULL);
-        }
-
-      recolor->texture = gdk_texture_new_for_pixbuf (pixbuf);
-
-      g_object_unref (pixbuf);
+        recolor->texture = gtk_make_symbolic_texture_from_file (recolor->file, 0, 0, 1.0, NULL);
     }
 
   g_free (uri);
