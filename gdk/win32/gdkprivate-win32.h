@@ -39,6 +39,7 @@
 #include <gdk/win32/gdkwin32display.h>
 #include <gdk/win32/gdkwin32screen.h>
 #include <gdk/win32/gdkwin32keys.h>
+#include <gdk/win32/gdkdevicemanager-win32.h>
 
 #include "gdkinternals.h"
 
@@ -259,7 +260,7 @@ extern LRESULT CALLBACK _gdk_win32_window_procedure (HWND, UINT, WPARAM, LPARAM)
 
 extern GdkDisplay       *_gdk_display;
 
-extern GdkDeviceManager *_gdk_device_manager;
+extern GdkDeviceManagerWin32 *_gdk_device_manager;
 
 /* Offsets to add to Windows coordinates (which are relative to the
  * primary monitor's origin, and thus might be negative for monitors

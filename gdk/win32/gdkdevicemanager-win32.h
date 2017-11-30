@@ -18,8 +18,6 @@
 #ifndef __GDK_DEVICE_MANAGER_WIN32_H__
 #define __GDK_DEVICE_MANAGER_WIN32_H__
 
-#include <gdk/gdkdevicemanagerprivate.h>
-
 G_BEGIN_DECLS
 
 #define GDK_TYPE_DEVICE_MANAGER_WIN32         (gdk_device_manager_win32_get_type ())

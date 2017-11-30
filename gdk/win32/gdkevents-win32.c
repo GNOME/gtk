@@ -179,7 +179,7 @@ _gdk_win32_get_next_tick (gulong suggested_tick)
 }
 
 static void
-generate_focus_event (GdkDeviceManager *device_manager,
+generate_focus_event (GdkDeviceManagerWin32 *device_manager,
                       GdkWindow        *window,
                       gboolean          in)
 {
@@ -201,7 +201,7 @@ generate_focus_event (GdkDeviceManager *device_manager,
 }
 
 static void
-generate_grab_broken_event (GdkDeviceManager *device_manager,
+generate_grab_broken_event (GdkDeviceManagerWin32 *device_manager,
                             GdkWindow        *window,
                             gboolean          keyboard,
                             GdkWindow        *grab_window)
@@ -1107,7 +1107,7 @@ send_crossing_event (GdkDisplay                 *display,
   POINT pt;
   GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
-  device_manager = GDK_DEVICE_MANAGER_WIN32 (_gdk_device_manager);_gdk_device_manager);
+  device_manager = _gdk_device_manager;
 
   grab = _gdk_display_has_device_grab (display, device_manager->core_pointer, 0);
 
@@ -3009,7 +3009,7 @@ gdk_event_translate (MSG  *msg,
       if (keyboard_grab != NULL &&
 	  !GDK_WINDOW_DESTROYED (keyboard_grab->window))
 	{
-	  generate_grab_broken_event (device_manager, keyboard_grab->window, TRUE, NULL);
+	  generate_grab_broken_event (_gdk_device_manager, keyboard_grab->window, TRUE, NULL);
 	}
 
       /* fallthrough */
@@ -3024,7 +3024,7 @@ gdk_event_translate (MSG  *msg,
       if (GDK_WINDOW_DESTROYED (window))
 	break;
 
-      generate_focus_event (device_manager, window, (msg->message == WM_SETFOCUS));
+      generate_focus_event (_gdk_device_manager, window, (msg->message == WM_SETFOCUS));
       return_val = TRUE;
       break;
 

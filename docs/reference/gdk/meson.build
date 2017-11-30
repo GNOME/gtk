@@ -7,7 +7,6 @@ private_headers = [
   'gdk-private.h',
   'gdkapplaunchcontextprivate.h',
   'gdkcursorprivate.h',
-  'gdkdevicemanagerprivate.h',
   'gdkdeviceprivate.h',
   'gdkdisplaymanagerprivate.h',
   'gdkdisplayprivate.h',

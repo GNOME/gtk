@@ -71,7 +71,7 @@ static gboolean default_display_opened = FALSE;
 G_DEFINE_TYPE (GdkDeviceManagerWin32, gdk_device_manager_win32, G_TYPE_OBJECT)
 
 static GdkDevice *
-create_pointer (GdkDeviceManager *device_manager,
+create_pointer (GdkDeviceManagerWin32 *device_manager,
 		GType g_type,
 		const char *name,
 		GdkDeviceType type)
@@ -83,12 +83,11 @@ create_pointer (GdkDeviceManager *device_manager,
                        "input-mode", GDK_MODE_SCREEN,
                        "has-cursor", type == GDK_DEVICE_TYPE_MASTER,
                        "display", _gdk_display,
-                       "device-manager", device_manager,
                        NULL);
 }
 
 static GdkDevice *
-create_keyboard (GdkDeviceManager *device_manager,
+create_keyboard (GdkDeviceManagerWin32 *device_manager,
 		 GType g_type,
 		 const char *name,
 		 GdkDeviceType type)
@@ -100,7 +99,6 @@ create_keyboard (GdkDeviceManager *device_manager,
                        "input-mode", GDK_MODE_SCREEN,
                        "has-cursor", FALSE,
                        "display", _gdk_display,
-                       "device-manager", device_manager,
                        NULL);
 }
 
@@ -352,7 +350,7 @@ print_cursor (int index)
 static void
 wintab_init_check (GdkDeviceManagerWin32 *device_manager)
 {
-  GdkDisplay *display = gdk_device_manager_get_display (GDK_DEVICE_MANAGER (device_manager));
+  GdkDisplay *display = device_manager->display;
   static gboolean wintab_initialized = FALSE;
   GdkDeviceWintab *device;
   WORD specversion;
@@ -564,7 +562,6 @@ wintab_init_check (GdkDeviceManagerWin32 *device_manager)
                                  "input-mode", GDK_MODE_SCREEN,
                                  "has-cursor", lc.lcOptions & CXO_SYSTEM,
                                  "display", display,
-                                 "device-manager", device_manager,
                                  NULL);
 
 	  device->sends_core = lc.lcOptions & CXO_SYSTEM;
@@ -701,12 +698,12 @@ gdk_device_manager_win32_constructed (GObject *object)
 
   device_manager = GDK_DEVICE_MANAGER_WIN32 (object);
   device_manager->core_pointer =
-    create_pointer (GDK_DEVICE_MANAGER (device_manager),
+    create_pointer (device_manager,
 		    GDK_TYPE_DEVICE_VIRTUAL,
 		    "Virtual Core Pointer",
 		    GDK_DEVICE_TYPE_MASTER);
   device_manager->system_pointer =
-    create_pointer (GDK_DEVICE_MANAGER (device_manager),
+    create_pointer (device_manager,
 		    GDK_TYPE_DEVICE_WIN32,
 		    "System Aggregated Pointer",
 		    GDK_DEVICE_TYPE_SLAVE);
@@ -716,12 +713,12 @@ gdk_device_manager_win32_constructed (GObject *object)
   _gdk_device_add_slave (device_manager->core_pointer, device_manager->system_pointer);
 
   device_manager->core_keyboard =
-    create_keyboard (GDK_DEVICE_MANAGER (device_manager),
+    create_keyboard (device_manager,
 		     GDK_TYPE_DEVICE_VIRTUAL,
 		     "Virtual Core Keyboard",
 		     GDK_DEVICE_TYPE_MASTER);
   device_manager->system_keyboard =
-    create_keyboard (GDK_DEVICE_MANAGER (device_manager),
+    create_keyboard (device_manager,
 		    GDK_TYPE_DEVICE_WIN32,
 		     "System Aggregated Keyboard",
 		     GDK_DEVICE_TYPE_SLAVE);
@@ -757,7 +754,6 @@ gdk_device_manager_win32_constructed (GObject *object)
 static void
 gdk_device_manager_win32_class_init (GdkDeviceManagerWin32Class *klass)
 {
-  GdkDeviceManagerClass *device_manager_class = GDK_DEVICE_MANAGER_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = gdk_device_manager_win32_finalize;
