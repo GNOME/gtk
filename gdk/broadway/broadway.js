@@ -2,13 +2,14 @@
 var logDiv = null;
 function log(str) {
     if (!logDiv) {
-        logDiv = document.createElement('div');
+        logDiv = document.createElement('pre');
         document.body.appendChild(logDiv);
         logDiv.style["position"] = "absolute";
         logDiv.style["right"] = "0px";
+        logDiv.style["font-size"] = "small";
     }
-    logDiv.appendChild(document.createTextNode(str));
-    logDiv.appendChild(document.createElement('br'));
+    logDiv.insertBefore(document.createElement('br'), logDiv.firstChild);
+    logDiv.insertBefore(document.createTextNode(str), logDiv.firstChild);
 }
 
 function getStackTrace()
