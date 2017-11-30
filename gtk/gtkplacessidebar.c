@@ -35,8 +35,6 @@
 #include "gdk/gdkkeysyms.h"
 #include "gtkbookmarksmanager.h"
 #include "gtkcelllayout.h"
-#include "gtkcellrenderertext.h"
-#include "gtkcellrendererpixbuf.h"
 #include "gtkfilesystem.h"
 #include "gtkicontheme.h"
 #include "gtkintl.h"

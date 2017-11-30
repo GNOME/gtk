@@ -33,8 +33,6 @@
 #include "gtkliststore.h"
 #include "gtkbutton.h"
 #include "gtkcelllayout.h"
-#include "gtkcellrendererpixbuf.h"
-#include "gtkcellrenderertext.h"
 #include "gtkcheckmenuitem.h"
 #include "gtkclipboard.h"
 #include "gtkcomboboxtext.h"

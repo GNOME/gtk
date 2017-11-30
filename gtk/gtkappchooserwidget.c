@@ -31,8 +31,6 @@
 #include "gtkappchooserwidget.h"
 #include "gtkappchooserprivate.h"
 #include "gtkliststore.h"
-#include "gtkcellrenderertext.h"
-#include "gtkcellrendererpixbuf.h"
 #include "gtktreeview.h"
 #include "gtktreeselection.h"
 #include "gtktreemodelsort.h"
