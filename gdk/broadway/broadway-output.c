@@ -7,6 +7,8 @@
 
 #include "broadway-output.h"
 
+//#define DEBUG_NODE_SENDING
+
 /************************************************************************
  *                Basic I/O primitives                                  *
  ************************************************************************/
@@ -309,6 +311,22 @@ broadway_output_set_transient_for (BroadwayOutput *output,
   append_uint16 (output, parent_id);
 }
 
+static gint append_node_depth = -1;
+
+static void
+append_type (BroadwayOutput *output, guint32 type, BroadwayNode *node)
+{
+#ifdef DEBUG_NODE_SENDING
+  g_print ("%*s%s", append_node_depth*2, "", broadway_node_type_names[type]);
+  if (type == BROADWAY_NODE_TEXTURE)
+    g_print (" %u", node->data[4]);
+  g_print ("\n");
+#endif
+
+  append_uint32 (output, type);
+}
+
+
 /***********************************
  * This outputs the tree to the client, while at the same time diffing
  * against the old tree.  This allows us to avoid sending certain
@@ -326,7 +344,6 @@ broadway_output_set_transient_for (BroadwayOutput *output,
  * changing the dom node at all, and we emit a KEEP_THIS node.
  *
  ***********************************/
-
 static void
 append_node (BroadwayOutput *output,
              BroadwayNode   *node,
@@ -335,28 +352,30 @@ append_node (BroadwayOutput *output,
 {
   guint32 i;
 
+  append_node_depth++;
+
   if (old_node != NULL && broadway_node_equal (node, old_node))
     {
       if (broadway_node_deep_equal (node, old_node))
         {
-          append_uint32 (output, BROADWAY_NODE_KEEP_ALL);
-          return;
+          append_type (output, BROADWAY_NODE_KEEP_ALL, node);
+          goto out;
         }
 
       if (all_parents_are_kept)
         {
-          append_uint32 (output, BROADWAY_NODE_KEEP_THIS);
+          append_type (output, BROADWAY_NODE_KEEP_THIS, node);
           append_uint32 (output, node->n_children);
           for (i = 0; i < node->n_children; i++)
             append_node (output, node->children[i],
                          i < old_node->n_children ? old_node->children[i] : NULL,
                          TRUE);
-          return;
+
+          goto out;
         }
     }
 
-  append_uint32 (output, node->type);
-
+  append_type (output, node->type, node);
   for (i = 0; i < node->n_data; i++)
     append_uint32 (output, node->data[i]);
   for (i = 0; i < node->n_children; i++)
@@ -364,6 +383,9 @@ append_node (BroadwayOutput *output,
                  node->children[i],
                  (old_node != NULL && i < old_node->n_children) ? old_node->children[i] : NULL,
                  FALSE);
+
+ out:
+  append_node_depth--;
 }
 
 void
@@ -387,6 +409,9 @@ broadway_output_window_set_nodes (BroadwayOutput *output,
   append_uint32 (output, 0);
 
   start = output->buf->len;
+#ifdef DEBUG_NODE_SENDING
+  g_print ("====== node tree for %d =======\n", id);
+#endif
   append_node (output, root, old_root, TRUE);
   end = output->buf->len;
   patch_uint32 (output, (end - start) / 4, size_pos);

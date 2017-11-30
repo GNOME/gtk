@@ -24,6 +24,22 @@ typedef enum { /* Sync changes with broadway.js */
   BROADWAY_NODE_KEEP_THIS = 12,
 } BroadwayNodeType;
 
+static const char *broadway_node_type_names[] G_GNUC_UNUSED =  {
+  "TEXTURE",
+  "CONTAINER",
+  "COLOR",
+  "BORDER",
+  "OUTSET_SHADOW",
+  "INSET_SHADOW",
+  "ROUNDED_CLIP",
+  "LINEAR_GRADIENT",
+  "SHADOW",
+  "OPACITY",
+  "CLIP",
+  "KEEP_ALL",
+  "KEEP_THIS",
+};
+
 typedef enum {
   BROADWAY_EVENT_ENTER = 'e',
   BROADWAY_EVENT_LEAVE = 'l',
