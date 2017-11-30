@@ -403,6 +403,9 @@ gtk_im_module_initialize (void)
 #ifdef INCLUDE_IM_broadway
   do_builtin (broadway);
 #endif
+#ifdef INCLUDE_IM_wayland
+  do_builtin (wayland);
+#endif
 
 #undef do_builtin
 

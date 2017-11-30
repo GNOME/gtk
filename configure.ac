@@ -459,6 +459,7 @@ if test "$enable_wayland_backend" = "yes"; then
   GDK_BACKENDS="$GDK_BACKENDS wayland"
   GDK_WINDOWING="$GDK_WINDOWING
 #define GDK_WINDOWING_WAYLAND"
+  backend_immodules="$backend_immodules,wayland"
   WAYLAND_PACKAGES="$WAYLAND_DEPENDENCIES"
   AC_PATH_PROG([WAYLAND_SCANNER],[wayland-scanner],[no])
   AS_IF([test "x$WAYLAND_SCANNER" = "xno"],
@@ -990,6 +991,7 @@ AM_CONDITIONAL(INCLUDE_IM_TI_ER, [test x"$INCLUDE_ti_er" = xyes])
 AM_CONDITIONAL(INCLUDE_IM_TI_ET, [test x"$INCLUDE_ti_et" = xyes])
 AM_CONDITIONAL(INCLUDE_IM_VIQR, [test x"$INCLUDE_viqr" = xyes])
 AM_CONDITIONAL(INCLUDE_IM_XIM, [test x"$INCLUDE_xim" = xyes])
+AM_CONDITIONAL(INCLUDE_IM_WAYLAND, [test x"$INCLUDE_wayland" = xyes])
 
 # Checks to see whether we should include mediaLib
 # support.
