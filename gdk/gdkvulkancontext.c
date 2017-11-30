@@ -599,10 +599,9 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
 {
   uint32_t i, j;
 
-  uint32_t n_devices;
+  uint32_t n_devices = 0;
   GDK_VK_CHECK(vkEnumeratePhysicalDevices, display->vk_instance, &n_devices, NULL);
-  VkPhysicalDevice *devices = g_newa (VkPhysicalDevice, n_devices);
-  GDK_VK_CHECK(vkEnumeratePhysicalDevices, display->vk_instance, &n_devices, devices);
+  VkPhysicalDevice *devices;
 
   if (n_devices == 0)
     {
@@ -611,6 +610,9 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
                            "No Vulkan devices available.");
       return FALSE;
     }
+
+  devices = g_newa (VkPhysicalDevice, n_devices);
+  GDK_VK_CHECK(vkEnumeratePhysicalDevices, display->vk_instance, &n_devices, devices);
 
   for (i = 0; i < n_devices; i++)
     {
