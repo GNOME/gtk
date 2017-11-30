@@ -373,6 +373,12 @@ broadway_output_window_set_nodes (BroadwayOutput *output,
                                   BroadwayNode   *old_root)
 {
   gsize size_pos, start, end;
+
+  /* Early return if nothing changed */
+  if (old_root != NULL &&
+      broadway_node_deep_equal (root, old_root))
+    return;
+
   write_header (output, BROADWAY_OP_SET_NODES);
 
   append_uint16 (output, id);
