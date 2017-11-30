@@ -102,7 +102,6 @@
 #include "gtkrecentmanager.h"
 #include "gtkintl.h"
 #include "gtksettings.h"
-#include "gtkicontheme.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkmarshalers.h"
@@ -159,8 +158,6 @@ struct _GtkRecentInfo
   GSList *groups;
 
   gboolean is_private;
-
-  GdkPixbuf *icon;
 
   gint ref_count;
 };
@@ -1547,9 +1544,6 @@ gtk_recent_info_free (GtkRecentInfo *recent_info)
     g_hash_table_destroy (recent_info->apps_lookup);
 
   g_slist_free_full (recent_info->groups, g_free);
-
-  if (recent_info->icon)
-    g_object_unref (recent_info->icon);
 
   g_free (recent_info);
 }
