@@ -22,7 +22,6 @@
 #include "gtkcssprovider.h"
 #include "gtkcssparserprivate.h"
 #include "gtkcssshorthandpropertyprivate.h"
-#include "gtkcssstylefuncsprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkintl.h"

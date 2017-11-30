@@ -33,7 +33,6 @@
 #include "gtkcsssectionprivate.h"
 #include "gtkcssselectorprivate.h"
 #include "gtkcssshorthandpropertyprivate.h"
-#include "gtkcssstylefuncsprivate.h"
 #include "gtksettingsprivate.h"
 #include "gtkstyleprovider.h"
 #include "gtkstylecontextprivate.h"

@@ -24,7 +24,6 @@
 #include "gtkcssarrayvalueprivate.h"
 #include "gtkcssinheritvalueprivate.h"
 #include "gtkcssinitialvalueprivate.h"
-#include "gtkcssstylefuncsprivate.h"
 #include "gtkcssunsetvalueprivate.h"
 #include "gtkintl.h"
 

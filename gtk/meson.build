@@ -125,7 +125,6 @@ gtk_public_sources = files([
   'gtkcssstringvalue.c',
   'gtkcssstyle.c',
   'gtkcssstylechange.c',
-  'gtkcssstylefuncs.c',
   'gtkcssstyleproperty.c',
   'gtkcssstylepropertyimpl.c',
   'gtkcsstransformvalue.c',

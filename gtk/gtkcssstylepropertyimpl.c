@@ -25,7 +25,6 @@
 #include <math.h>
 
 #include "gtkcssparserprivate.h"
-#include "gtkcssstylefuncsprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkintl.h"
