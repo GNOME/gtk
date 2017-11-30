@@ -41,9 +41,9 @@ void gtk_tooltip_set_markup              (GtkTooltip         *tooltip,
 GDK_AVAILABLE_IN_ALL
 void gtk_tooltip_set_text                (GtkTooltip         *tooltip,
                                           const gchar        *text);
-GDK_AVAILABLE_IN_ALL
+GDK_AVAILABLE_IN_3_94
 void gtk_tooltip_set_icon                (GtkTooltip         *tooltip,
-                                          GdkPixbuf          *pixbuf);
+                                          GdkTexture         *texture);
 GDK_AVAILABLE_IN_ALL
 void gtk_tooltip_set_icon_from_icon_name (GtkTooltip         *tooltip,
 				          const gchar        *icon_name);
