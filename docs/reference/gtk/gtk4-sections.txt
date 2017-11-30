@@ -3982,7 +3982,6 @@ gtk_cell_view_new
 gtk_cell_view_new_with_context
 gtk_cell_view_new_with_text
 gtk_cell_view_new_with_markup
-gtk_cell_view_new_with_pixbuf
 gtk_cell_view_new_with_texture
 gtk_cell_view_set_model
 gtk_cell_view_get_model

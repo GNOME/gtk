@@ -77,8 +77,6 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget        *gtk_cell_view_new_with_text           (const gchar     *text);
 GDK_AVAILABLE_IN_ALL
 GtkWidget        *gtk_cell_view_new_with_markup         (const gchar     *markup);
-GDK_AVAILABLE_IN_ALL
-GtkWidget        *gtk_cell_view_new_with_pixbuf         (GdkPixbuf       *pixbuf);
 GDK_AVAILABLE_IN_3_94
 GtkWidget        *gtk_cell_view_new_with_texture        (GdkTexture      *texture);
 GDK_AVAILABLE_IN_ALL
