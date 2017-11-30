@@ -35,6 +35,7 @@
 #include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkcsswin32sizevalueprivate.h"
+#include <gdk/gdktextureprivate.h>
 
 
 /* this is in case round() is not provided by the compiler, 
@@ -403,8 +404,7 @@ pattern_value_parse (GtkCssParser *parser,
   else
     {
       GError *error = NULL;
-      gchar *path;
-      GdkPixbuf *pixbuf;
+      GdkTexture *texture;
       GFile *file;
       cairo_surface_t *surface;
       cairo_pattern_t *pattern;
@@ -414,27 +414,24 @@ pattern_value_parse (GtkCssParser *parser,
       if (file == NULL)
         return FALSE;
 
-      path = g_file_get_path (file);
-      g_object_unref (file);
+      texture = gdk_texture_new_from_file (file, &error);
 
-      pixbuf = gdk_pixbuf_new_from_file (path, &error);
-      g_free (path);
-      if (pixbuf == NULL)
+      if (texture == NULL)
         {
           _gtk_css_parser_take_error (parser, error);
           return FALSE;
         }
 
-      surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, NULL);
+      surface = gdk_texture_download_surface (texture);
       pattern = cairo_pattern_create_for_surface (surface);
       cairo_surface_destroy (surface);
 
       cairo_matrix_init_scale (&matrix,
-                               gdk_pixbuf_get_width (pixbuf),
-                               gdk_pixbuf_get_height (pixbuf));
+                               gdk_texture_get_width (texture),
+                               gdk_texture_get_height (texture));
       cairo_pattern_set_matrix (pattern, &matrix);
 
-      g_object_unref (pixbuf);
+      g_object_unref (texture);
 
       g_value_take_boxed (value, pattern);
     }
