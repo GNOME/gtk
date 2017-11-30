@@ -112,19 +112,3 @@ gtk_css_image_surface_new (GdkTexture *texture)
 
   return image;
 }
-
-GtkCssImage *
-gtk_css_image_surface_new_for_pixbuf (GdkPixbuf *pixbuf)
-{
-  GtkCssImage *image;
-  GdkTexture *texture;
-
-  g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
-
-  texture = gdk_texture_new_for_pixbuf (pixbuf);
-  image = gtk_css_image_surface_new (texture);
-  g_object_unref (texture);
-
-  return image;
-}
-
