@@ -10,7 +10,7 @@
 #include "gskglrendererprivate.h"
 
 #define GL_N_VERTICES 6
-#define GL_N_PROGRAMS 7
+#define GL_N_PROGRAMS 8
 
 enum {
   OP_NONE,
@@ -27,8 +27,9 @@ enum {
   OP_CHANGE_LINEAR_GRADIENT =  11,
   OP_CHANGE_COLOR_MATRIX    =  12,
   OP_CHANGE_BLUR            =  13,
-  OP_CLEAR                  =  14,
-  OP_DRAW                   =  15,
+  OP_CHANGE_INSET_SHADOW    =  14,
+  OP_CLEAR                  =  15,
+  OP_DRAW                   =  16,
 };
 
 typedef struct
@@ -76,6 +77,14 @@ typedef struct
       int blur_radius_location;
       int blur_size_location;
     };
+    struct {
+      int inset_shadow_color_location;
+      int inset_shadow_spread_location;
+      int inset_shadow_d_location;
+      int inset_shadow_outline_location;
+      int inset_shadow_outline_corner_widths_location;
+      int inset_shadow_outline_corner_heights_location;
+    };
   };
 } Program;
 
@@ -113,6 +122,15 @@ typedef struct
       float radius;
       graphene_size_t size;
     } blur;
+    struct {
+      float outline[4];
+      float corner_widths[4];
+      float corner_heights[4];
+      float radius;
+      float spread;
+      float d[2];
+      float color[4];
+    } inset_shadow;
   };
 } RenderOp;
 

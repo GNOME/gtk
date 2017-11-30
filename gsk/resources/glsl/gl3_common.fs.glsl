@@ -100,4 +100,5 @@ void setOutputColor(vec4 color) {
   RoundedRect r = RoundedRect(clipBounds, uClipCornerWidths, uClipCornerHeights);
 
   outputColor = color * rounded_rect_coverage(r, f.xy);
+  /*outputColor = color;*/
 }

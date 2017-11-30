@@ -74,6 +74,36 @@ font_has_color_glyphs (const PangoFont *font)
   return has_color;
 }
 
+static inline void
+rounded_rect_to_floats (const GskRoundedRect *rect,
+                        float                *outline,
+                        float                *corner_widths,
+                        float                *corner_heights)
+{
+  int i;
+
+  outline[0] = rect->bounds.origin.x;
+  outline[1] = rect->bounds.origin.y;
+  outline[2] = rect->bounds.size.width;
+  outline[3] = rect->bounds.size.height;
+
+  for (i = 0; i < 4; i ++)
+    {
+      corner_widths[i] = MAX (rect->corner[i].width, 1);
+      corner_heights[i] = MAX (rect->corner[i].height, 1);
+    }
+}
+
+static inline void
+rgba_to_float (const GdkRGBA *c,
+               float         *f)
+{
+  f[0] = c->red;
+  f[1] = c->green;
+  f[2] = c->blue;
+  f[3] = c->alpha;
+}
+
 static void gsk_gl_renderer_setup_render_mode (GskGLRenderer   *self);
 static void add_offscreen_ops                 (GskGLRenderer   *self,
                                                RenderOpBuilder *builder,
@@ -131,6 +161,7 @@ struct _GskGLRenderer
       Program color_matrix_program;
       Program linear_gradient_program;
       Program blur_program;
+      Program inset_shadow_program;
     };
   };
 
@@ -387,6 +418,25 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   init_common_locations (self, builder, &self->blur_program);
   INIT_PROGRAM_UNIFORM_LOCATION (blur_program, blur_radius_location, "uBlurRadius");
   INIT_PROGRAM_UNIFORM_LOCATION (blur_program, blur_size_location, "uSize");
+
+  self->inset_shadow_program.id = gsk_shader_builder_create_program (builder,
+                                                                     "blit.vs.glsl", "inset_shadow.fs.glsl",
+                                                                     &shader_error);
+  if (shader_error != NULL)
+    {
+      g_propagate_prefixed_error (error,
+                                  shader_error,
+                                  "Unable to create 'inset shadow' program: ");
+      goto out;
+    }
+  self->blur_program.index = 7;
+  self->blur_program.name = "inset shadow";
+  init_common_locations (self, builder, &self->inset_shadow_program);
+  INIT_PROGRAM_UNIFORM_LOCATION (inset_shadow_program, inset_shadow_color_location, "uColor");
+  INIT_PROGRAM_UNIFORM_LOCATION (inset_shadow_program, inset_shadow_spread_location, "uSpread");
+  INIT_PROGRAM_UNIFORM_LOCATION (inset_shadow_program, inset_shadow_outline_location, "uOutline");
+  INIT_PROGRAM_UNIFORM_LOCATION (inset_shadow_program, inset_shadow_outline_corner_widths_location, "uOutlineCornerWidths");
+  INIT_PROGRAM_UNIFORM_LOCATION (inset_shadow_program, inset_shadow_outline_corner_heights_location, "uOutlineCornerHeights");
 
   res = TRUE;
 
@@ -1005,9 +1055,35 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
       }
     break;
 
+    case GSK_INSET_SHADOW_NODE:
+      {
+        RenderOp op;
+
+        /* TODO: Implement blurred inset shadows as well */
+        if (gsk_inset_shadow_node_get_blur_radius (node) > 0)
+          goto do_default;
+
+        op.op = OP_CHANGE_INSET_SHADOW;
+        rgba_to_float (gsk_inset_shadow_node_peek_color (node), op.inset_shadow.color);
+        rounded_rect_to_floats (gsk_inset_shadow_node_peek_outline (node),
+                                op.inset_shadow.outline,
+                                op.inset_shadow.corner_widths,
+                                op.inset_shadow.corner_heights);
+        op.inset_shadow.radius = gsk_inset_shadow_node_get_blur_radius (node);
+        op.inset_shadow.spread = gsk_inset_shadow_node_get_spread (node);
+        op.inset_shadow.d[0] = gsk_inset_shadow_node_get_dx (node);
+        op.inset_shadow.d[1] = -gsk_inset_shadow_node_get_dy (node);
+
+        ops_set_program (builder, &self->inset_shadow_program);
+        ops_add (builder, &op);
+        ops_draw (builder, vertex_data);
+      }
+    break;
+
+do_default:
+
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
     case GSK_BORDER_NODE:
-    case GSK_INSET_SHADOW_NODE:
     case GSK_OUTSET_SHADOW_NODE:
     case GSK_SHADOW_NODE:
     case GSK_CROSS_FADE_NODE:
@@ -1303,6 +1379,16 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
           g_assert (program == &self->blur_program);
           glUniform1f (program->blur_radius_location, op->blur.radius);
           glUniform2f (program->blur_size_location, op->blur.size.width, op->blur.size.height);
+          break;
+
+       case OP_CHANGE_INSET_SHADOW:
+          g_assert (program == &self->inset_shadow_program);
+          glUniform4fv (program->inset_shadow_color_location, 1, op->inset_shadow.color);
+          glUniform2fv (program->inset_shadow_d_location, 1, op->inset_shadow.d);
+          glUniform1f (program->inset_shadow_spread_location, op->inset_shadow.spread);
+          glUniform4fv (program->inset_shadow_outline_location, 1, op->inset_shadow.outline);
+          glUniform4fv (program->inset_shadow_outline_corner_widths_location, 1, op->inset_shadow.corner_widths);
+          glUniform4fv (program->inset_shadow_outline_corner_heights_location, 1, op->inset_shadow.corner_heights);
           break;
 
         case OP_DRAW:
