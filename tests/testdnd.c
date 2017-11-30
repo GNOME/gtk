@@ -662,7 +662,7 @@ main (int argc, char **argv)
   gtk_drag_source_set_icon_surface (button, surface);
   gdk_content_formats_unref (targets);
 
-  cairo_destroy (surface);
+  cairo_surface_destroy (surface);
 
   gtk_widget_set_hexpand (button, TRUE);
   gtk_widget_set_vexpand (button, TRUE);
