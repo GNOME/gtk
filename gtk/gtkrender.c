@@ -854,8 +854,8 @@ gtk_render_activity (GtkStyleContext *context,
  * @context: a #GtkStyleContext
  * @cr: a #cairo_t
  * @texture: a #GdkTexture containing the icon to draw
- * @x: X position for the @pixbuf
- * @y: Y position for the @pixbuf
+ * @x: X position for the @texture
+ * @y: Y position for the @texture 
  *
  * Renders the icon in @texture at the specified @x and @y coordinates.
  *
