@@ -275,12 +275,6 @@ typedef struct
   gboolean is_resource;
 } UnthemedIcon;
 
-typedef struct
-{
-  gint size;
-  GdkPixbuf *pixbuf;
-} BuiltinIcon;
-
 typedef struct 
 {
   gchar *dir;
@@ -318,19 +312,12 @@ static IconSuffix   theme_dir_get_icon_suffix (IconThemeDir     *dir,
 static GtkIconInfo *icon_info_new             (IconThemeDirType  type,
                                                gint              dir_size,
                                                gint              dir_scale);
-static GtkIconInfo *icon_info_new_builtin     (BuiltinIcon      *icon);
 static IconSuffix   suffix_from_name          (const gchar      *name);
-static BuiltinIcon *find_builtin_icon         (const gchar      *icon_name,
-                                               gint              size,
-                                               gint              scale,
-                                               gint             *min_difference_p);
 static void         remove_from_lru_cache     (GtkIconTheme     *icon_theme,
                                                GtkIconInfo      *icon_info);
 static gboolean     icon_info_ensure_scale_and_pixbuf (GtkIconInfo* icon_info);
 
 static guint signal_changed = 0;
-
-static GHashTable *icon_theme_builtin_icons;
 
 static guint
 icon_info_key_hash (gconstpointer _key)
@@ -2414,11 +2401,6 @@ gtk_icon_theme_has_icon (GtkIconTheme *icon_theme,
         return TRUE;
     }
 
-  if (icon_theme_builtin_icons &&
-      g_hash_table_lookup_extended (icon_theme_builtin_icons,
-                                    icon_name, NULL, NULL))
-    return TRUE;
-
   return FALSE;
 }
 
@@ -2455,7 +2437,7 @@ gint *
 gtk_icon_theme_get_icon_sizes (GtkIconTheme *icon_theme,
                                const gchar  *icon_name)
 {
-  GList *l, *d, *icons;
+  GList *l, *d;
   GHashTable *sizes;
   gint *result, *r;
   guint suffix;  
@@ -2488,19 +2470,6 @@ gtk_icon_theme_get_icon_sizes (GtkIconTheme *icon_theme,
                 g_hash_table_insert (sizes, GINT_TO_POINTER (dir->size), NULL);
             }
         }
-    }
-
-  if (icon_theme_builtin_icons)
-    {
-      icons = g_hash_table_lookup (icon_theme_builtin_icons, icon_name);
-      
-      while (icons)
-        {
-          BuiltinIcon *icon = icons->data;
-
-          g_hash_table_insert (sizes, GINT_TO_POINTER (icon->size), NULL);
-          icons = icons->next;
-        }      
     }
 
   r = result = g_new0 (gint, g_hash_table_size (sizes) + 1);
@@ -2990,24 +2959,10 @@ theme_lookup_icon (IconTheme   *theme,
   IconThemeDir *dir, *min_dir;
   gchar *file;
   gint min_difference, difference;
-  BuiltinIcon *closest_builtin = NULL;
   IconSuffix suffix;
 
   min_difference = G_MAXINT;
   min_dir = NULL;
-
-  /* Builtin icons are logically part of the default theme and
-   * are searched before other subdirectories of the default theme.
-   */
-  if (use_builtin && strcmp (theme->name, FALLBACK_ICON_THEME) == 0)
-    {
-      closest_builtin = find_builtin_icon (icon_name, 
-                                           size, scale,
-                                           &min_difference);
-
-      if (min_difference == 0)
-        return icon_info_new_builtin (closest_builtin);
-    }
 
   dirs = theme->dirs;
 
@@ -3081,9 +3036,6 @@ theme_lookup_icon (IconTheme   *theme,
       return icon_info;
     }
 
-  if (closest_builtin)
-    return icon_info_new_builtin (closest_builtin);
-  
   return NULL;
 }
 
@@ -3460,16 +3412,6 @@ icon_info_dup (GtkIconInfo *icon_info)
   dup->symbolic_height = icon_info->symbolic_height;
 
   return dup;
-}
-
-static GtkIconInfo *
-icon_info_new_builtin (BuiltinIcon *icon)
-{
-  GtkIconInfo *icon_info = icon_info_new (ICON_THEME_DIR_THRESHOLD, icon->size, 1);
-
-  icon_info->cache_pixbuf = g_object_ref (icon->pixbuf);
-
-  return icon_info;
 }
 
 static void
@@ -5053,79 +4995,6 @@ gtk_icon_info_load_symbolic_for_context_finish (GtkIconInfo   *icon_info,
                                                 GError       **error)
 {
   return gtk_icon_info_load_symbolic_finish (icon_info, result, was_symbolic, error);
-}
-
-/* Look up a builtin icon; the min_difference_p and
- * has_larger_p out parameters allow us to combine
- * this lookup with searching through the actual directories
- * of the “hicolor” icon theme. See theme_lookup_icon()
- * for how they are used.
- */
-static BuiltinIcon *
-find_builtin_icon (const gchar *icon_name,
-                   gint         size,
-                   gint         scale,
-                   gint        *min_difference_p)
-{
-  GSList *icons = NULL;
-  gint min_difference = G_MAXINT;
-  gboolean has_larger = FALSE;
-  BuiltinIcon *min_icon = NULL;
-  
-  if (!icon_theme_builtin_icons)
-    return NULL;
-
-  size *= scale;
-
-  icons = g_hash_table_lookup (icon_theme_builtin_icons, icon_name);
-
-  while (icons)
-    {
-      BuiltinIcon *default_icon = icons->data;
-      int min, max, difference;
-      gboolean smaller;
-      
-      min = default_icon->size - 2;
-      max = default_icon->size + 2;
-      smaller = size < min;
-      if (size < min)
-        difference = min - size;
-      else if (size > max)
-        difference = size - max;
-      else
-        difference = 0;
-      
-      if (difference == 0)
-        {
-          min_icon = default_icon;
-          break;
-        }
-      
-      if (!has_larger)
-        {
-          if (difference < min_difference || smaller)
-            {
-              min_difference = difference;
-              min_icon = default_icon;
-              has_larger = smaller;
-            }
-        }
-      else
-        {
-          if (difference < min_difference && smaller)
-            {
-              min_difference = difference;
-              min_icon = default_icon;
-            }
-        }
-      
-      icons = icons->next;
-    }
-
-  if (min_difference_p)
-    *min_difference_p = min_difference;
-
-  return min_icon;
 }
 
 /**
