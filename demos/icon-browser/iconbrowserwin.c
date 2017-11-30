@@ -94,13 +94,9 @@ get_icon (GtkWidget *image, const gchar *name, gint size)
 static void
 set_image (GtkWidget *image, const gchar *name, gint size)
 {
-  GdkPixbuf *pixbuf;
-
   gtk_image_set_from_icon_name (GTK_IMAGE (image), name);
   gtk_image_set_pixel_size (GTK_IMAGE (image), size);
-  pixbuf = get_icon (image, name, size);
-  gtk_drag_source_set_icon_pixbuf (image, pixbuf);
-  g_object_unref (pixbuf);
+  gtk_drag_source_set_icon_name (image, name);
 }
 
 static void

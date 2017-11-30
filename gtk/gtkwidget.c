@@ -2623,7 +2623,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *
    * The ::drag-begin signal is emitted on the drag source when a drag is
    * started. A typical reason to connect to this signal is to set up a
-   * custom drag icon with e.g. gtk_drag_source_set_icon_pixbuf().
+   * custom drag icon with e.g. gtk_drag_source_set_icon_surface().
    *
    * Note that some widgets set up a drag icon in the default handler of
    * this signal, so you may have to use g_signal_connect_after() to
