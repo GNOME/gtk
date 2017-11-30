@@ -281,7 +281,6 @@ ensure_texture_for_gicon (GtkIconHelper    *self,
   GtkIconInfo *info;
   GtkIconLookupFlags flags;
   GdkTexture *texture;
-  GdkPixbuf *destination;
 
   icon_theme = gtk_css_icon_theme_value_get_icon_theme
     (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_THEME));
@@ -293,34 +292,14 @@ ensure_texture_for_gicon (GtkIconHelper    *self,
                                                    gicon,
                                                    MIN (width, height),
                                                    scale, flags);
-  if (info)
-    {
-      *symbolic = gtk_icon_info_is_symbolic (info);
+  if (info == NULL)
+    info = gtk_icon_theme_lookup_icon (icon_theme,
+                                       "image-missing",
+                                       width,
+                                       flags | GTK_ICON_LOOKUP_USE_BUILTIN | GTK_ICON_LOOKUP_GENERIC_FALLBACK);
 
-      destination = gtk_icon_info_load_icon (info, NULL);
-    }
-  else
-    {
-      destination = NULL;
-    }
-
-  if (destination == NULL)
-    {
-      GError *error = NULL;
-      destination = gtk_icon_theme_load_icon (icon_theme,
-                                              "image-missing",
-                                              width,
-                                              flags | GTK_ICON_LOOKUP_USE_BUILTIN | GTK_ICON_LOOKUP_GENERIC_FALLBACK,
-                                              &error);
-      /* We include this image as resource, so we always have it available or
-       * the icontheme code is broken */
-      g_assert_no_error (error);
-      g_assert (destination);
-      *symbolic = FALSE;
-    }
-
-  texture = gdk_texture_new_for_pixbuf (destination);
-  g_object_unref (destination);
+  *symbolic = gtk_icon_info_is_symbolic (info);
+  texture = gtk_icon_info_load_texture (info);
 
   return texture;
 }
