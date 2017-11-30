@@ -998,9 +998,79 @@ gtk_main (void)
     gtk_main_sync ();
 }
 
+typedef struct {
+  GMainLoop *store_loop;
+  guint n_clipboards;
+} ClipboardStore;
+
+static void
+clipboard_store_finished (GObject      *source,
+                          GAsyncResult *result,
+                          gpointer      data)
+{
+  ClipboardStore *store;
+  GError *error = NULL;
+
+  if (!gdk_clipboard_store_finish (GDK_CLIPBOARD (source), result, &error))
+    {
+      if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        {
+          g_error_free (error);
+          return;
+        }
+
+      g_error_free (error);
+    }
+
+  store = data;
+  store->n_clipboards--;
+  if (store->n_clipboards == 0)
+    g_main_loop_quit (store->store_loop);
+}
+
 void
 gtk_main_sync (void)
 {
+  ClipboardStore store = { NULL, };
+  GSList *displays, *l;
+  GCancellable *cancel;
+  guint store_timeout;
+  
+  /* Try storing all clipboard data we have */
+  displays = gdk_display_manager_list_displays (gdk_display_manager_get ());
+  cancel = g_cancellable_new ();
+
+  for (l = displays; l; l = l->next)
+    {
+      GdkDisplay *display = l->data;
+      GdkClipboard *clipboard = gdk_display_get_clipboard (display);
+
+      gdk_clipboard_store_async (clipboard,
+                                 G_PRIORITY_HIGH,
+                                 cancel,
+                                 clipboard_store_finished,
+                                 &store);
+      store.n_clipboards++;
+    }
+  g_slist_free (displays);
+
+  store.store_loop = g_main_loop_new (NULL, TRUE);
+  store_timeout = g_timeout_add_seconds (10, (GSourceFunc) g_main_loop_quit, store.store_loop);
+  g_source_set_name_by_id (store_timeout, "[gtk+] gtk_main_sync clipboard store timeout");
+
+  if (g_main_loop_is_running (store.store_loop))
+    {
+      gdk_threads_leave ();
+      g_main_loop_run (store.store_loop);
+      gdk_threads_enter ();
+    }
+  
+  g_cancellable_cancel (cancel);
+  g_object_unref (cancel);
+  g_source_remove (store_timeout);
+  g_main_loop_unref (store.store_loop);
+  store.store_loop = NULL;
+  
   /* Try storing all clipboard data we have */
   _gtk_clipboard_store_all ();
 
