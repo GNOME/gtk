@@ -85,7 +85,7 @@ struct _ClipboardRequest
 
 enum {
   INSERT_TEXT,
-  INSERT_PIXBUF,
+  INSERT_TEXTURE,
   INSERT_CHILD_ANCHOR,
   DELETE_RANGE,
   CHANGED,
@@ -121,9 +121,9 @@ static void gtk_text_buffer_real_insert_text           (GtkTextBuffer     *buffe
                                                         GtkTextIter       *iter,
                                                         const gchar       *text,
                                                         gint               len);
-static void gtk_text_buffer_real_insert_pixbuf         (GtkTextBuffer     *buffer,
+static void gtk_text_buffer_real_insert_texture        (GtkTextBuffer     *buffer,
                                                         GtkTextIter       *iter,
-                                                        GdkPixbuf         *pixbuf);
+                                                        GdkTexture        *texture);
 static void gtk_text_buffer_real_insert_anchor         (GtkTextBuffer     *buffer,
                                                         GtkTextIter       *iter,
                                                         GtkTextChildAnchor *anchor);
@@ -180,7 +180,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
   object_class->notify       = gtk_text_buffer_notify;
  
   klass->insert_text = gtk_text_buffer_real_insert_text;
-  klass->insert_pixbuf = gtk_text_buffer_real_insert_pixbuf;
+  klass->insert_texture = gtk_text_buffer_real_insert_texture;
   klass->insert_child_anchor = gtk_text_buffer_real_insert_anchor;
   klass->delete_range = gtk_text_buffer_real_delete_range;
   klass->apply_tag = gtk_text_buffer_real_apply_tag;
@@ -311,33 +311,33 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                               _gtk_marshal_VOID__BOXED_STRING_INTv);
 
   /**
-   * GtkTextBuffer::insert-pixbuf:
+   * GtkTextBuffer::insert-texture:
    * @textbuffer: the object which received the signal
-   * @location: position to insert @pixbuf in @textbuffer
-   * @pixbuf: the #GdkPixbuf to be inserted
-   * 
-   * The ::insert-pixbuf signal is emitted to insert a #GdkPixbuf 
+   * @location: position to insert @texture in @textbuffer
+   * @texture: the #GdkTexture to be inserted
+   *
+   * The ::insert-texture signal is emitted to insert a #GdkTexture
    * in a #GtkTextBuffer. Insertion actually occurs in the default handler.
-   * 
-   * Note that if your handler runs before the default handler it must not 
-   * invalidate the @location iter (or has to revalidate it). 
-   * The default signal handler revalidates it to be placed after the 
-   * inserted @pixbuf.
-   * 
-   * See also: gtk_text_buffer_insert_pixbuf().
+   *
+   * Note that if your handler runs before the default handler it must not
+   * invalidate the @location iter (or has to revalidate it).
+   * The default signal handler revalidates it to be placed after the
+   * inserted @texture.
+   *
+   * See also: gtk_text_buffer_insert_texture().
    */
-  signals[INSERT_PIXBUF] =
-    g_signal_new (I_("insert-pixbuf"),
+  signals[INSERT_TEXTURE] =
+    g_signal_new (I_("insert-texture"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GtkTextBufferClass, insert_pixbuf),
+                  G_STRUCT_OFFSET (GtkTextBufferClass, insert_texture),
                   NULL, NULL,
                   _gtk_marshal_VOID__BOXED_OBJECT,
                   G_TYPE_NONE,
                   2,
                   GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE,
-                  GDK_TYPE_PIXBUF);
-  g_signal_set_va_marshaller (signals[INSERT_PIXBUF],
+                  GDK_TYPE_TEXTURE);
+  g_signal_set_va_marshaller (signals[INSERT_TEXTURE],
                               G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_VOID__BOXED_OBJECTv);
 
@@ -1198,26 +1198,25 @@ insert_range_untagged (GtkTextBuffer     *buffer,
             }
           else if (gtk_text_iter_get_char (&range_end) == GTK_TEXT_UNKNOWN_CHAR)
             {
-              GdkPixbuf *pixbuf = NULL;
-              GtkTextChildAnchor *anchor = NULL;
-              pixbuf = gtk_text_iter_get_pixbuf (&range_end);
+              GdkTexture *texture;
+              GtkTextChildAnchor *anchor;
+
+              texture = gtk_text_iter_get_texture (&range_end);
               anchor = gtk_text_iter_get_child_anchor (&range_end);
 
-              if (pixbuf)
+              if (texture)
                 {
                   r = save_range (&range_start,
                                   &range_end,
                                   &end);
 
-                  gtk_text_buffer_insert_pixbuf (buffer,
-                                                 iter,
-                                                 pixbuf);
+                  gtk_text_buffer_insert_texture (buffer, iter, texture);
 
                   restore_range (r);
                   r = NULL;
-                  
+
                   gtk_text_iter_forward_char (&range_end);
-                  
+
                   range_start = range_end;
                 }
               else if (anchor)
@@ -1413,7 +1412,7 @@ gtk_text_buffer_real_insert_range (GtkTextBuffer     *buffer,
  * @start: a position in a #GtkTextBuffer
  * @end: another position in the same buffer as @start
  *
- * Copies text, tags, and pixbufs between @start and @end (the order
+ * Copies text, tags, and texture between @start and @end (the order
  * of @start and @end doesn’t matter) and inserts the copy at @iter.
  * Used instead of simply getting/inserting text because it preserves
  * images and tags. If @start and @end are in a different buffer from
@@ -1873,7 +1872,7 @@ gtk_text_buffer_get_text (GtkTextBuffer     *buffer,
  * the returned string do correspond to byte
  * and character indexes into the buffer. Contrast with
  * gtk_text_buffer_get_text(). Note that 0xFFFC can occur in normal
- * text as well, so it is not a reliable indicator that a pixbuf or
+ * text as well, so it is not a reliable indicator that a texture or
  * widget is in the buffer.
  *
  * Returns: (transfer full): an allocated UTF-8 string
@@ -1901,42 +1900,41 @@ gtk_text_buffer_get_slice (GtkTextBuffer     *buffer,
  */
 
 static void
-gtk_text_buffer_real_insert_pixbuf (GtkTextBuffer *buffer,
-                                    GtkTextIter   *iter,
-                                    GdkPixbuf     *pixbuf)
+gtk_text_buffer_real_insert_texture (GtkTextBuffer *buffer,
+                                     GtkTextIter   *iter,
+                                     GdkTexture    *texture)
 { 
-  _gtk_text_btree_insert_pixbuf (iter, pixbuf);
+  _gtk_text_btree_insert_texture (iter, texture);
 
   g_signal_emit (buffer, signals[CHANGED], 0);
 }
 
 /**
- * gtk_text_buffer_insert_pixbuf:
+ * gtk_text_buffer_insert_texture:
  * @buffer: a #GtkTextBuffer
- * @iter: location to insert the pixbuf
- * @pixbuf: a #GdkPixbuf
+ * @iter: location to insert the texture
+ * @texture: a #GdkTexture
  *
  * Inserts an image into the text buffer at @iter. The image will be
  * counted as one character in character counts, and when obtaining
  * the buffer contents as a string, will be represented by the Unicode
  * “object replacement character” 0xFFFC. Note that the “slice”
  * variants for obtaining portions of the buffer as a string include
- * this character for pixbufs, but the “text” variants do
+ * this character for texture, but the “text” variants do
  * not. e.g. see gtk_text_buffer_get_slice() and
  * gtk_text_buffer_get_text().
  **/
 void
-gtk_text_buffer_insert_pixbuf (GtkTextBuffer *buffer,
-                               GtkTextIter   *iter,
-                               GdkPixbuf     *pixbuf)
+gtk_text_buffer_insert_texture (GtkTextBuffer *buffer,
+                                GtkTextIter   *iter,
+                                GdkTexture    *texture)
 {
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
   g_return_if_fail (iter != NULL);
-  g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
+  g_return_if_fail (GDK_IS_TEXTURE (texture));
   g_return_if_fail (gtk_text_iter_get_buffer (iter) == buffer);
-  
-  g_signal_emit (buffer, signals[INSERT_PIXBUF], 0,
-                 iter, pixbuf);
+
+  g_signal_emit (buffer, signals[INSERT_TEXTURE], 0, iter, texture);
 }
 
 /*

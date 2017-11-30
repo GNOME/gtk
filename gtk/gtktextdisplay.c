@@ -79,6 +79,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkintl.h"
+#include <gdk/gdktextureprivate.h>
 
 /* DO NOT go putting private headers in here. This file should only
  * use the semi-public headers, as with gtktextview.c.
@@ -414,19 +415,24 @@ gtk_text_renderer_draw_shape (PangoRenderer   *renderer,
 
       unset_color (text_renderer);
     }
-  else if (GDK_IS_PIXBUF (attr->data))
+  else if (GDK_IS_TEXTURE (attr->data))
     {
       cairo_t *cr = text_renderer->cr;
-      GdkPixbuf *pixbuf = GDK_PIXBUF (attr->data);
-      
+      GdkTexture *texture = GDK_TEXTURE (attr->data);
+      cairo_surface_t *surface;
+
+      surface = gdk_texture_download_surface (texture);
+
       cairo_save (cr);
 
-      gdk_cairo_set_source_pixbuf (cr, pixbuf,
-                                   PANGO_PIXELS (x),
-                                   PANGO_PIXELS (y) -  gdk_pixbuf_get_height (pixbuf));
+      cairo_set_source_surface (cr, surface,
+                                PANGO_PIXELS (x),
+                                PANGO_PIXELS (y) -  gdk_texture_get_height (texture));
       cairo_paint (cr);
 
       cairo_restore (cr);
+
+      cairo_surface_destroy (surface);
     }
   else if (GTK_IS_WIDGET (attr->data))
     {

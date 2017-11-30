@@ -1686,20 +1686,20 @@ add_text_attrs (GtkTextLayout      *layout,
 }
 
 static void
-add_pixbuf_attrs (GtkTextLayout      *layout,
-                  GtkTextLineDisplay *display,
-                  GtkTextAttributes  *style,
-                  GtkTextLineSegment *seg,
-                  PangoAttrList      *attrs,
-                  gint                start)
+add_texture_attrs (GtkTextLayout      *layout,
+                   GtkTextLineDisplay *display,
+                   GtkTextAttributes  *style,
+                   GtkTextLineSegment *seg,
+                   PangoAttrList      *attrs,
+                   gint                start)
 {
   PangoAttribute *attr;
   PangoRectangle logical_rect;
-  GtkTextPixbuf *pixbuf = &seg->body.pixbuf;
+  GtkTextTexture *texture = &seg->body.texture;
   gint width, height;
 
-  width = gdk_pixbuf_get_width (pixbuf->pixbuf);
-  height = gdk_pixbuf_get_height (pixbuf->pixbuf);
+  width = gdk_texture_get_width (texture->texture);
+  height = gdk_texture_get_height (texture->texture);
 
   logical_rect.x = 0;
   logical_rect.y = -height * PANGO_SCALE;
@@ -1707,7 +1707,7 @@ add_pixbuf_attrs (GtkTextLayout      *layout,
   logical_rect.height = height * PANGO_SCALE;
 
   attr = pango_attr_shape_new_with_data (&logical_rect, &logical_rect,
-					 pixbuf->pixbuf, NULL, NULL);
+					 texture->texture, NULL, NULL);
   attr->start_index = start;
   attr->end_index = start + seg->byte_count;
   pango_attr_list_insert (attrs, attr);
@@ -2120,7 +2120,7 @@ update_text_display_cursors (GtkTextLayout      *layout,
     {
       /* Displayable segments */
       if (seg->type == &gtk_text_char_type ||
-          seg->type == &gtk_text_pixbuf_type ||
+          seg->type == &gtk_text_texture_type ||
           seg->type == &gtk_text_child_type)
         {
           gtk_text_layout_get_iter_at_line (layout, &iter, line,
@@ -2336,14 +2336,14 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
     {
       /* Displayable segments */
       if (seg->type == &gtk_text_char_type ||
-          seg->type == &gtk_text_pixbuf_type ||
+          seg->type == &gtk_text_texture_type ||
           seg->type == &gtk_text_child_type)
         {
           style = get_style (layout, tags);
 	  initial_toggle_segments = FALSE;
 
           /* We have to delay setting the paragraph values until we
-           * hit the first pixbuf or text segment because toggles at
+           * hit the first texture or text segment because toggles at
            * the beginning of the paragraph should affect the
            * paragraph-global values
            */
@@ -2417,15 +2417,15 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
                   add_text_attrs (layout, style, bytes, attrs,
                                   layout_byte_offset - bytes, size_only);
                 }
-              else if (seg->type == &gtk_text_pixbuf_type)
+              else if (seg->type == &gtk_text_texture_type)
                 {
                   add_generic_attrs (layout,
                                      &style->appearance,
                                      seg->byte_count,
                                      attrs, layout_byte_offset,
                                      size_only, FALSE);
-                  add_pixbuf_attrs (layout, display, style,
-                                    seg, attrs, layout_byte_offset);
+                  add_texture_attrs (layout, display, style,
+                                     seg, attrs, layout_byte_offset);
                   memcpy (text + layout_byte_offset, _gtk_text_unknown_char_utf8,
                           seg->byte_count);
                   layout_byte_offset += seg->byte_count;

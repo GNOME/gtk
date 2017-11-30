@@ -72,67 +72,67 @@
       }                                                                 \
   } G_STMT_END
 
-#define PIXBUF_SEG_SIZE ((unsigned) (G_STRUCT_OFFSET (GtkTextLineSegment, body) \
-        + sizeof (GtkTextPixbuf)))
+#define TEXTURE_SEG_SIZE ((unsigned) (G_STRUCT_OFFSET (GtkTextLineSegment, body) \
+        + sizeof (GtkTextTexture)))
 
 #define WIDGET_SEG_SIZE ((unsigned) (G_STRUCT_OFFSET (GtkTextLineSegment, body) \
         + sizeof (GtkTextChildBody)))
 
 static GtkTextLineSegment *
-pixbuf_segment_cleanup_func (GtkTextLineSegment *seg,
-                             GtkTextLine        *line)
+texture_segment_cleanup_func (GtkTextLineSegment *seg,
+                              GtkTextLine        *line)
 {
   /* nothing */
   return seg;
 }
 
 static int
-pixbuf_segment_delete_func (GtkTextLineSegment *seg,
-                            GtkTextLine        *line,
-                            gboolean            tree_gone)
+texture_segment_delete_func (GtkTextLineSegment *seg,
+                             GtkTextLine        *line,
+                             gboolean            tree_gone)
 {
-  if (seg->body.pixbuf.pixbuf)
-    g_object_unref (seg->body.pixbuf.pixbuf);
+  if (seg->body.texture.texture)
+    g_object_unref (seg->body.texture.texture);
 
-  g_slice_free1 (PIXBUF_SEG_SIZE, seg);
+  g_slice_free1 (TEXTURE_SEG_SIZE, seg);
 
   return 0;
 }
 
 static void
-pixbuf_segment_check_func (GtkTextLineSegment *seg,
-                           GtkTextLine        *line)
+texture_segment_check_func (GtkTextLineSegment *seg,
+                            GtkTextLine        *line)
 {
   if (seg->next == NULL)
-    g_error ("pixbuf segment is the last segment in a line");
+    g_error ("texture segment is the last segment in a line");
 
   if (seg->byte_count != GTK_TEXT_UNKNOWN_CHAR_UTF8_LEN)
-    g_error ("pixbuf segment has byte count of %d", seg->byte_count);
+    g_error ("texture segment has byte count of %d", seg->byte_count);
 
   if (seg->char_count != 1)
-    g_error ("pixbuf segment has char count of %d", seg->char_count);
+    g_error ("texture segment has char count of %d", seg->char_count);
 }
 
 
-const GtkTextLineSegmentClass gtk_text_pixbuf_type = {
-  "pixbuf",                          /* name */
+const GtkTextLineSegmentClass gtk_text_texture_type = {
+  "texture",                          /* name */
   FALSE,                                            /* leftGravity */
   NULL,                                          /* splitFunc */
-  pixbuf_segment_delete_func,                             /* deleteFunc */
-  pixbuf_segment_cleanup_func,                            /* cleanupFunc */
+  texture_segment_delete_func,                             /* deleteFunc */
+  texture_segment_cleanup_func,                            /* cleanupFunc */
   NULL,                                                    /* lineChangeFunc */
-  pixbuf_segment_check_func                               /* checkFunc */
+  texture_segment_check_func                               /* checkFunc */
 
 };
 
 GtkTextLineSegment *
-_gtk_pixbuf_segment_new (GdkPixbuf *pixbuf)
+_gtk_texture_segment_new (GdkTexture *texture)
 {
   GtkTextLineSegment *seg;
 
-  seg = g_slice_alloc (PIXBUF_SEG_SIZE);
+  seg = g_slice_alloc (TEXTURE_SEG_SIZE);
 
-  seg->type = &gtk_text_pixbuf_type;
+  seg->type = &gtk_text_texture_type;
 
   seg->next = NULL;
 
@@ -142,9 +142,9 @@ _gtk_pixbuf_segment_new (GdkPixbuf *pixbuf)
   seg->byte_count = GTK_TEXT_UNKNOWN_CHAR_UTF8_LEN;
   seg->char_count = 1;
 
-  seg->body.pixbuf.pixbuf = pixbuf;
+  seg->body.texture.texture = texture;
 
-  g_object_ref (pixbuf);
+  g_object_ref (texture);
 
   return seg;
 }

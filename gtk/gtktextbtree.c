@@ -1258,8 +1258,8 @@ _gtk_text_btree_insert (GtkTextIter *iter,
 }
 
 static void
-insert_pixbuf_or_widget_segment (GtkTextIter        *iter,
-                                 GtkTextLineSegment *seg)
+insert_texture_or_widget_segment (GtkTextIter        *iter,
+                                  GtkTextLineSegment *seg)
 
 {
   GtkTextIter start;
@@ -1296,19 +1296,19 @@ insert_pixbuf_or_widget_segment (GtkTextIter        *iter,
   *iter = start;
   gtk_text_iter_forward_char (iter); /* skip forward past the segment */
 
-  DV (g_print ("invalidating due to inserting pixbuf/widget (%s)\n", G_STRLOC));
+  DV (g_print ("invalidating due to inserting texture/widget (%s)\n", G_STRLOC));
   _gtk_text_btree_invalidate_region (tree, &start, iter, FALSE);
 }
      
 void
-_gtk_text_btree_insert_pixbuf (GtkTextIter *iter,
-                              GdkPixbuf   *pixbuf)
+_gtk_text_btree_insert_texture (GtkTextIter *iter,
+                                GdkTexture  *texture)
 {
   GtkTextLineSegment *seg;
   
-  seg = _gtk_pixbuf_segment_new (pixbuf);
+  seg = _gtk_texture_segment_new (texture);
 
-  insert_pixbuf_or_widget_segment (iter, seg);
+  insert_texture_or_widget_segment (iter, seg);
 }
 
 void
@@ -1329,7 +1329,7 @@ _gtk_text_btree_insert_child_anchor (GtkTextIter        *iter,
   tree = seg->body.child.tree = _gtk_text_iter_get_btree (iter);
   seg->body.child.line = _gtk_text_iter_get_text_line (iter);
   
-  insert_pixbuf_or_widget_segment (iter, seg);
+  insert_texture_or_widget_segment (iter, seg);
 
   if (tree->child_anchor_table == NULL)
     tree->child_anchor_table = g_hash_table_new (NULL, NULL);
@@ -2379,7 +2379,7 @@ copy_segment (GString *string,
 
       /* printf ("  :%s\n", string->str); */
     }
-  else if (seg->type == &gtk_text_pixbuf_type ||
+  else if (seg->type == &gtk_text_texture_type ||
            seg->type == &gtk_text_child_type)
     {
       gboolean copy = TRUE;

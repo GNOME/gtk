@@ -129,6 +129,7 @@ insert_text (GtkTextBuffer *buffer)
   GtkTextIter iter;
   GtkTextIter start, end;
   GdkPixbuf *pixbuf;
+  GdkTexture *texture;
   GtkIconTheme *icon_theme;
 
   icon_theme = gtk_icon_theme_get_default ();
@@ -138,6 +139,7 @@ insert_text (GtkTextBuffer *buffer)
                                      GTK_ICON_LOOKUP_GENERIC_FALLBACK,
                                      NULL);
   g_assert (pixbuf);
+  texture = gdk_texture_new_for_pixbuf (pixbuf);
 
   /* get start of buffer; each insertion will revalidate the
    * iterator to point to just after the inserted text.
@@ -232,9 +234,9 @@ insert_text (GtkTextBuffer *buffer)
                                             "heading", NULL);
 
   gtk_text_buffer_insert (buffer, &iter, "The buffer can have images in it: ", -1);
-  gtk_text_buffer_insert_pixbuf (buffer, &iter, pixbuf);
-  gtk_text_buffer_insert_pixbuf (buffer, &iter, pixbuf);
-  gtk_text_buffer_insert_pixbuf (buffer, &iter, pixbuf);
+  gtk_text_buffer_insert_texture (buffer, &iter, texture);
+  gtk_text_buffer_insert_texture (buffer, &iter, texture);
+  gtk_text_buffer_insert_texture (buffer, &iter, texture);
   gtk_text_buffer_insert (buffer, &iter, " for example.\n\n", -1);
 
   gtk_text_buffer_insert_with_tags_by_name (buffer, &iter, "Spacing. ", -1,
@@ -378,6 +380,7 @@ insert_text (GtkTextBuffer *buffer)
   gtk_text_buffer_apply_tag_by_name (buffer, "word_wrap", &start, &end);
 
   g_object_unref (pixbuf);
+  g_object_unref (texture);
 }
 
 static gboolean

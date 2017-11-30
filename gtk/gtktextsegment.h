@@ -144,7 +144,7 @@ struct _GtkTextLineSegment {
                                          * hold as many characters as needed.*/
     GtkTextToggleBody toggle;              /* Information about tag toggle. */
     GtkTextMarkBody mark;              /* Information about mark. */
-    GtkTextPixbuf pixbuf;              /* Child pixbuf */
+    GtkTextTexture texture;            /* Child texture */
     GtkTextChildBody child;            /* Child widget */
   } body;
 };

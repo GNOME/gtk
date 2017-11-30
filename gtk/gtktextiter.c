@@ -173,7 +173,7 @@ gtk_text_iter_make_surreal (const GtkTextIter *_iter)
       _gtk_text_btree_get_chars_changed_stamp (iter->tree))
     {
       g_warning ("Invalid text buffer iterator: either the iterator "
-                 "is uninitialized, or the characters/pixbufs/widgets "
+                 "is uninitialized, or the characters/textures/widgets "
                  "in the buffer have been modified since the iterator "
                  "was created.\nYou must use marks, character numbers, "
                  "or line numbers to preserve a position across buffer "
@@ -896,7 +896,7 @@ gtk_text_iter_get_char (const GtkTextIter *iter)
  * such as images.  Because images are encoded in the slice, byte and
  * character offsets in the returned array will correspond to byte
  * offsets in the text buffer. Note that 0xFFFC can occur in normal
- * text as well, so it is not a reliable indicator that a pixbuf or
+ * text as well, so it is not a reliable indicator that a texture or
  * widget is in the buffer.
  *
  * Returns: (transfer full): slice of text from the buffer
@@ -990,17 +990,16 @@ gtk_text_iter_get_visible_text (const GtkTextIter  *start,
 }
 
 /**
- * gtk_text_iter_get_pixbuf:
+ * gtk_text_iter_get_texture:
  * @iter: an iterator
  *
- * If the element at @iter is a pixbuf, the pixbuf is returned
- * (with no new reference count added). Otherwise,
- * %NULL is returned.
+ * If the element at @iter is a texture, the texture is returned
+ * (with no new reference count added). Otherwise, %NULL is returned.
  *
- * Returns: (transfer none): the pixbuf at @iter
+ * Returns: (transfer none): the texture at @iter
  **/
-GdkPixbuf*
-gtk_text_iter_get_pixbuf (const GtkTextIter *iter)
+GdkTexture *
+gtk_text_iter_get_texture (const GtkTextIter *iter)
 {
   GtkTextRealIter *real;
 
@@ -1013,10 +1012,10 @@ gtk_text_iter_get_pixbuf (const GtkTextIter *iter)
 
   check_invariants (iter);
 
-  if (real->segment->type != &gtk_text_pixbuf_type)
+  if (real->segment->type != &gtk_text_texture_type)
     return NULL;
   else
-    return real->segment->body.pixbuf.pixbuf;
+    return real->segment->body.texture.texture;
 }
 
 /**
@@ -2446,7 +2445,7 @@ gtk_text_iter_backward_chars (GtkTextIter *iter, gint count)
  * @iter: a #GtkTextIter
  * @count: number of chars to move
  *
- * Moves forward by @count text characters (pixbufs, widgets,
+ * Moves forward by @count text characters (textures, widgets,
  * etc. do not count as characters for this). Equivalent to moving
  * through the results of gtk_text_iter_get_text(), rather than
  * gtk_text_iter_get_slice().
@@ -2467,7 +2466,7 @@ gtk_text_iter_forward_text_chars  (GtkTextIter *iter,
  * @iter: a #GtkTextIter
  * @count: number of chars to move
  *
- * Moves backward by @count text characters (pixbufs, widgets,
+ * Moves backward by @count text characters (textures, widgets,
  * etc. do not count as characters for this). Equivalent to moving
  * through the results of gtk_text_iter_get_text(), rather than
  * gtk_text_iter_get_slice().

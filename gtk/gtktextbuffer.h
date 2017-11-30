@@ -86,22 +86,17 @@ struct _GtkTextBuffer
  * GtkTextBufferClass:
  * @parent_class: The object class structure needs to be the first.
  * @insert_text: The class handler for the #GtkTextBuffer::insert-text signal.
- * @insert_pixbuf: The class handler for the #GtkTextBuffer::insert-pixbuf
- *   signal.
- * @insert_child_anchor: The class handler for the
- *   #GtkTextBuffer::insert-child-anchor signal.
+ * @insert_texture: The class handler for the #GtkTextBuffer::insert-texture signal.
+ * @insert_child_anchor: The class handler for the #GtkTextBuffer::insert-child-anchor signal.
  * @delete_range: The class handler for the #GtkTextBuffer::delete-range signal.
  * @changed: The class handler for the #GtkTextBuffer::changed signal.
- * @modified_changed: The class handler for the #GtkTextBuffer::modified-changed
- *   signal.
+ * @modified_changed: The class handler for the #GtkTextBuffer::modified-changed signal.
  * @mark_set: The class handler for the #GtkTextBuffer::mark-set signal.
  * @mark_deleted: The class handler for the #GtkTextBuffer::mark-deleted signal.
  * @apply_tag: The class handler for the #GtkTextBuffer::apply-tag signal.
  * @remove_tag: The class handler for the #GtkTextBuffer::remove-tag signal.
- * @begin_user_action: The class handler for the
- *   #GtkTextBuffer::begin-user-action signal.
- * @end_user_action: The class handler for the #GtkTextBuffer::end-user-action
- *   signal.
+ * @begin_user_action: The class handler for the #GtkTextBuffer::begin-user-action signal.
+ * @end_user_action: The class handler for the #GtkTextBuffer::end-user-action signal.
  * @paste_done: The class handler for the #GtkTextBuffer::paste-done signal.
  */
 struct _GtkTextBufferClass
@@ -113,9 +108,9 @@ struct _GtkTextBufferClass
                                    const gchar        *new_text,
                                    gint                new_text_length);
 
-  void (* insert_pixbuf)          (GtkTextBuffer      *buffer,
+  void (* insert_texture)         (GtkTextBuffer      *buffer,
                                    GtkTextIter        *iter,
-                                   GdkPixbuf          *pixbuf);
+                                   GdkTexture         *texture);
 
   void (* insert_child_anchor)    (GtkTextBuffer      *buffer,
                                    GtkTextIter        *iter,
@@ -271,11 +266,11 @@ gchar          *gtk_text_buffer_get_slice           (GtkTextBuffer     *buffer,
                                                      const GtkTextIter *end,
                                                      gboolean           include_hidden_chars);
 
-/* Insert a pixbuf */
+/* Insert a texture */
 GDK_AVAILABLE_IN_ALL
-void gtk_text_buffer_insert_pixbuf         (GtkTextBuffer *buffer,
+void gtk_text_buffer_insert_texture        (GtkTextBuffer *buffer,
                                             GtkTextIter   *iter,
-                                            GdkPixbuf     *pixbuf);
+                                            GdkTexture    *texture);
 
 /* Insert a child anchor */
 GDK_AVAILABLE_IN_ALL
