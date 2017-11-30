@@ -252,8 +252,6 @@ gtk/gtkstyleproperty.c
 gtk/gtkstyleprovider.c
 gtk/gtkswitch.c
 gtk/gtktextbuffer.c
-gtk/gtktextbufferrichtext.c
-gtk/gtktextbufferserialize.c
 gtk/gtktextchild.c
 gtk/gtktextdisplay.c
 gtk/gtktexthandle.c
