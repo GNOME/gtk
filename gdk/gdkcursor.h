@@ -31,7 +31,6 @@
 
 #include <gdk/gdkversionmacros.h>
 #include <gdk/gdktypes.h>
-#include <gdk-pixbuf/gdk-pixbuf.h>
 
 G_BEGIN_DECLS
 
@@ -45,11 +44,6 @@ G_BEGIN_DECLS
 GDK_AVAILABLE_IN_ALL
 GType      gdk_cursor_get_type           (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_ALL
-GdkCursor* gdk_cursor_new_from_pixbuf	 (GdkPixbuf       *pixbuf,
-					  gint             x,
-					  gint             y,
-                                          GdkCursor       *fallback);
 GDK_AVAILABLE_IN_3_94
 GdkCursor* gdk_cursor_new_from_texture   (GdkTexture      *texture,
 					  int              hotspot_x,
@@ -58,7 +52,7 @@ GdkCursor* gdk_cursor_new_from_texture   (GdkTexture      *texture,
 GDK_AVAILABLE_IN_ALL
 GdkCursor*  gdk_cursor_new_from_name	 (const gchar     *name,
                                           GdkCursor       *fallback);
-					  
+
 GDK_AVAILABLE_IN_3_94
 GdkCursor * gdk_cursor_get_fallback      (GdkCursor	  *cursor);
 GDK_AVAILABLE_IN_3_94
