@@ -580,6 +580,7 @@ main (int argc, char **argv)
   GtkWidget *pixmap;
   GtkWidget *button;
   GdkPixbuf *drag_icon;
+  cairo_surface_t *surface;
   GdkContentFormats *targets;
 
   test_init ();
@@ -595,6 +596,8 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (window), grid);
 
   drag_icon = gdk_pixbuf_new_from_xpm_data (drag_icon_xpm);
+  surface = gdk_cairo_surface_create_from_pixbuf (drag_icon, 1, NULL);
+  g_object_unref (drag_icon);
   trashcan_open = gdk_pixbuf_new_from_xpm_data (trashcan_open_xpm);
   trashcan_closed = gdk_pixbuf_new_from_xpm_data (trashcan_closed_xpm);
   
@@ -656,10 +659,10 @@ main (int argc, char **argv)
   gtk_drag_source_set (button, GDK_BUTTON1_MASK | GDK_BUTTON3_MASK,
                        targets,
 		       GDK_ACTION_COPY | GDK_ACTION_MOVE);
-  gtk_drag_source_set_icon_pixbuf (button, drag_icon);
+  gtk_drag_source_set_icon_surface (button, surface);
   gdk_content_formats_unref (targets);
 
-  g_object_unref (drag_icon);
+  cairo_destroy (surface);
 
   gtk_widget_set_hexpand (button, TRUE);
   gtk_widget_set_vexpand (button, TRUE);
