@@ -479,6 +479,96 @@ gdk_x11_clipboard_claim_remote (GdkX11Clipboard *cb,
   gdk_x11_clipboard_request_targets (cb);
 }
 
+static void
+gdk_x11_clipboard_request_selection (GdkX11Clipboard *cb,
+                                     Window           requestor,
+                                     const char      *target,
+                                     const char      *property,
+                                     gulong           timestamp)
+{
+  const char *type, *mime_type;
+  MimeTypeHandleFunc handler_func = NULL;
+  GdkDisplay *display;
+  gint format;
+  gsize i;
+
+  display = gdk_clipboard_get_display (GDK_CLIPBOARD (cb));
+  mime_type = gdk_intern_mime_type (target);
+
+  if (mime_type)
+    {
+      handler_func = gdk_x11_clipboard_default_output_handler;
+      type = target;
+      format = 8;
+    }
+  else
+    {
+      for (i = 0; i < G_N_ELEMENTS (special_targets); i++)
+        {
+          if (g_str_equal (target, special_targets[i].x_target) &&
+              special_targets[i].handler)
+            {
+              if (special_targets[i].mime_type)
+                mime_type = gdk_intern_mime_type (special_targets[i].mime_type);
+              handler_func = special_targets[i].handler;
+              type = special_targets[i].type;
+              format = special_targets[i].format;
+              break;
+            }
+        }
+    }
+
+  if (handler_func == NULL ||
+      (mime_type && !gdk_content_formats_contain_mime_type (gdk_clipboard_get_formats (GDK_CLIPBOARD (cb)), mime_type)))
+    {
+      Display *xdisplay = gdk_x11_display_get_xdisplay (display);
+      XSelectionEvent xreply;
+      int error;
+
+      xreply.type = SelectionNotify;
+      xreply.serial = 0;
+      xreply.send_event = True;
+      xreply.requestor = requestor;
+      xreply.selection = cb->xselection;
+      xreply.target = gdk_x11_get_xatom_by_name_for_display (display, target);
+      xreply.property = None;
+      xreply.time = timestamp;
+
+      GDK_NOTE(CLIPBOARD, g_printerr ("%s%s: Sending SelectionNotify rejecting request\n",
+                                      cb->selection, target));
+
+      gdk_x11_display_error_trap_push (display);
+      if (XSendEvent (xdisplay, xreply.requestor, False, NoEventMask, (XEvent*) & xreply) == 0)
+        {
+          GDK_NOTE(CLIPBOARD, g_printerr ("%s:%s: failed to XSendEvent()\n",
+                                          cb->selection, target));
+          g_warning ("failed to XSendEvent()");
+        }
+      XSync (xdisplay, False);
+
+      error = gdk_x11_display_error_trap_pop (display);
+      if (error != Success)
+        {
+          GDK_NOTE(CLIPBOARD, g_printerr ("%s:%s: X error during write: %d\n",
+                                          cb->selection, target, error));
+        }
+    }
+  else
+    {
+      GOutputStream *stream;
+
+      stream = gdk_x11_selection_output_stream_new (display,
+                                                    requestor,
+                                                    cb->selection,
+                                                    target,
+                                                    property,
+                                                    type,
+                                                    format,
+                                                    timestamp);
+      handler_func (cb, target, type, format, stream);
+    }
+}
+
 static GdkFilterReturn
 gdk_x11_clipboard_filter_event (GdkXEvent *xev,
                                 GdkEvent  *gdkevent,
@@ -514,11 +604,7 @@ gdk_x11_clipboard_filter_event (GdkXEvent *xev,
 
     case SelectionRequest:
       {
-        GOutputStream *stream;
-        const char *target, *property, *type, *mime_type;
-        MimeTypeHandleFunc handler_func = NULL;
-        gint format;
-        gsize i;
+        const char *target, *property;
 
         if (xevent->xselectionrequest.selection != cb->xselection)
           return GDK_FILTER_CONTINUE;
@@ -544,77 +630,11 @@ gdk_x11_clipboard_filter_event (GdkXEvent *xev,
         
         GDK_NOTE(CLIPBOARD, g_printerr ("%s: got SelectionRequest for %s @ %s\n",
                                         cb->selection, target, property));
-        mime_type = gdk_intern_mime_type (target);
-        if (mime_type)
-          {
-            handler_func = gdk_x11_clipboard_default_output_handler;
-            type = target;
-            format = 8;
-          }
-        else
-          {
-            for (i = 0; i < G_N_ELEMENTS (special_targets); i++)
-              {
-                if (g_str_equal (target, special_targets[i].x_target) &&
-                    special_targets[i].handler)
-                  {
-                    if (special_targets[i].mime_type)
-                      mime_type = gdk_intern_mime_type (special_targets[i].mime_type);
-                    handler_func = special_targets[i].handler;
-                    type = special_targets[i].type;
-                    format = special_targets[i].format;
-                    break;
-                  }
-              }
-          }
-
-        if (handler_func == NULL ||
-            (mime_type && !gdk_content_formats_contain_mime_type (gdk_clipboard_get_formats (GDK_CLIPBOARD (cb)), mime_type)))
-          {
-            Display *xdisplay = gdk_x11_display_get_xdisplay (display);
-            XSelectionEvent xreply;
-            int error;
-
-            xreply.type = SelectionNotify;
-            xreply.serial = 0;
-            xreply.send_event = True;
-            xreply.requestor = xevent->xselectionrequest.requestor,
-            xreply.selection = xevent->xselectionrequest.selection;
-            xreply.target = xevent->xselectionrequest.target;
-            xreply.property = None;
-            xreply.time = xevent->xselectionrequest.time;
-
-            GDK_NOTE(CLIPBOARD, g_printerr ("%s%s: Sending SelectionNotify rejecting request\n",
-                                            cb->selection, target));
-
-            gdk_x11_display_error_trap_push (display);
-            if (XSendEvent (xdisplay, xreply.requestor, False, NoEventMask, (XEvent*) & xreply) == 0)
-              {
-                GDK_NOTE(CLIPBOARD, g_printerr ("%s:%s: failed to XSendEvent()\n",
-                                                cb->selection, target));
-                g_warning ("failed to XSendEvent()");
-              }
-            XSync (xdisplay, False);
-
-            error = gdk_x11_display_error_trap_pop (display);
-            if (error != Success)
-              {
-                GDK_NOTE(CLIPBOARD, g_printerr ("%s:%s: X error during write: %d\n",
-                                                cb->selection, target, error));
-              }
-          }
-        else
-          {
-            stream = gdk_x11_selection_output_stream_new (display,
-                                                          xevent->xselectionrequest.requestor,
-                                                          cb->selection,
-                                                          target,
-                                                          property,
-                                                          type,
-                                                          format,
-                                                          xevent->xselectionrequest.time);
-            handler_func (cb, target, type, format, stream);
-          }
+        gdk_x11_clipboard_request_selection (cb,
+                                             xevent->xselectionrequest.requestor,
+                                             target,
+                                             property,
+                                             xevent->xselectionrequest.time);
         return GDK_FILTER_REMOVE;
       }
 
