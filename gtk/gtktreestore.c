@@ -309,8 +309,8 @@ gtk_tree_store_init (GtkTreeStore *tree_store)
  * are supported.
  *
  * As an example, `gtk_tree_store_new (3, G_TYPE_INT, G_TYPE_STRING,
- * GDK_TYPE_PIXBUF);` will create a new #GtkTreeStore with three columns, of type
- * #gint, #gchararray, and #GdkPixbuf respectively.
+ * GDK_TYPE_TEXTURE);` will create a new #GtkTreeStore with three columns, of type
+ * #gint, #gchararray, and #GdkTexture respectively.
  *
  * Returns: a new #GtkTreeStore
  **/

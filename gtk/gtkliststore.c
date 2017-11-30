@@ -51,7 +51,7 @@
  * value.  As a result, if the object is modified, it is up to the
  * application writer to call gtk_tree_model_row_changed() to emit the
  * #GtkTreeModel::row_changed signal.  This most commonly affects lists with
- * #GdkPixbufs stored.
+ * #GdkTextures stored.
  *
  * An example for creating a simple list store:
  * |[<!-- language="C" -->
@@ -406,8 +406,8 @@ iter_is_valid (GtkTreeIter  *iter,
  * are supported.
  *
  * As an example, `gtk_list_store_new (3, G_TYPE_INT, G_TYPE_STRING,
- * GDK_TYPE_PIXBUF);` will create a new #GtkListStore with three columns, of type
- * int, string and #GdkPixbuf respectively.
+ * GDK_TYPE_TEXTURE);` will create a new #GtkListStore with three columns, of type
+ * int, string and #GdkTexture, respectively.
  *
  * Returns: a new #GtkListStore
  */
