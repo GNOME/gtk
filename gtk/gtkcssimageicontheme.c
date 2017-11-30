@@ -64,44 +64,30 @@ gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
   else
     {
       GtkIconInfo *icon_info;
-      GdkPixbuf *pixbuf;
 
       icon_info = gtk_icon_theme_lookup_icon_for_scale (icon_theme->icon_theme,
                                                         icon_theme->name,
                                                         size,
                                                         icon_theme->scale,
                                                         GTK_ICON_LOOKUP_USE_BUILTIN);
-      if (icon_info)
-        {
-          symbolic = gtk_icon_info_is_symbolic (icon_info);
-          pixbuf = gtk_icon_info_load_icon (icon_info, NULL);
-        }
-      else
-        {
-          pixbuf = NULL;
-        }
+      if (icon_info == NULL)
+        icon_info = gtk_icon_theme_lookup_icon (icon_theme->icon_theme,
+                                                "image-missing",
+                                                size,
+                                                GTK_ICON_LOOKUP_USE_BUILTIN | GTK_ICON_LOOKUP_GENERIC_FALLBACK);
 
-      if (pixbuf == NULL)
-        {
-          pixbuf = gtk_icon_theme_load_icon (icon_theme->icon_theme,
-                                             "image-missing",
-                                             size,
-                                             GTK_ICON_LOOKUP_USE_BUILTIN | GTK_ICON_LOOKUP_GENERIC_FALLBACK,
-                                             NULL);
-          g_assert (pixbuf != NULL);
-          symbolic = FALSE;
-        }
+      g_assert (icon_info != NULL);
 
-      texture = gdk_texture_new_for_pixbuf (pixbuf);
+      symbolic = gtk_icon_info_is_symbolic (icon_info);
+      texture = gtk_icon_info_load_texture (icon_info);
 
       g_clear_object (&icon_theme->cached_texture);
+
       icon_theme->cached_size = size;
       icon_theme->cached_texture = texture;
       icon_theme->cached_symbolic = symbolic;
 
-      g_object_unref (pixbuf);
-      if (icon_info)
-        g_object_unref (icon_info);
+      g_object_unref (icon_info);
     }
 
   texture_width = (double) gdk_texture_get_width (texture) / icon_theme->scale;
