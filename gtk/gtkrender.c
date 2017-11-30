@@ -35,6 +35,7 @@
 #include "gtkstylecontextprivate.h"
 
 #include "gsk/gskroundedrectprivate.h"
+#include <gdk/gdktextureprivate.h>
 
 #include "fallback-c89.c"
 
@@ -852,13 +853,13 @@ gtk_render_activity (GtkStyleContext *context,
  * gtk_render_icon:
  * @context: a #GtkStyleContext
  * @cr: a #cairo_t
- * @pixbuf: a #GdkPixbuf containing the icon to draw
+ * @texture: a #GdkTexture containing the icon to draw
  * @x: X position for the @pixbuf
  * @y: Y position for the @pixbuf
  *
- * Renders the icon in @pixbuf at the specified @x and @y coordinates.
+ * Renders the icon in @texture at the specified @x and @y coordinates.
  *
- * This function will render the icon in @pixbuf at exactly its size,
+ * This function will render the icon in @texture at exactly its size,
  * regardless of scaling factors, which may not be appropriate when
  * drawing on displays with high pixel densities.
  *
@@ -870,7 +871,7 @@ gtk_render_activity (GtkStyleContext *context,
 void
 gtk_render_icon (GtkStyleContext *context,
                  cairo_t         *cr,
-                 GdkPixbuf       *pixbuf,
+                 GdkTexture      *texture,
                  gdouble          x,
                  gdouble          y)
 {
@@ -879,7 +880,7 @@ gtk_render_icon (GtkStyleContext *context,
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
 
-  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, NULL);
+  surface = gdk_texture_download_surface (texture);
 
   gtk_css_style_render_icon_surface (gtk_style_context_lookup_style (context),
                                      cr,

@@ -134,10 +134,10 @@ void        gtk_render_activity    (GtkStyleContext     *context,
                                     gdouble              y,
                                     gdouble              width,
                                     gdouble              height);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_3_94
 void        gtk_render_icon        (GtkStyleContext     *context,
                                     cairo_t             *cr,
-                                    GdkPixbuf           *pixbuf,
+                                    GdkTexture          *texture,
                                     gdouble              x,
                                     gdouble              y);
 GDK_AVAILABLE_IN_3_10
