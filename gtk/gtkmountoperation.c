@@ -1061,19 +1061,19 @@ add_pid_to_process_list_store (GtkMountOperation              *mount_operation,
 {
   gchar *command_line;
   gchar *name;
-  GdkPixbuf *pixbuf;
+  GdkTexture *texture;
   gchar *markup;
   GtkTreeIter iter;
 
   name = NULL;
-  pixbuf = NULL;
+  texture = NULL;
   command_line = NULL;
   _gtk_mount_operation_lookup_info (lookup_context,
                                     pid,
                                     24,
                                     &name,
                                     &command_line,
-                                    &pixbuf);
+                                    &texture);
 
   if (name == NULL)
     name = g_strdup_printf (_("Unknown Application (PID %d)"), (int) (gssize) pid);
@@ -1081,17 +1081,17 @@ add_pid_to_process_list_store (GtkMountOperation              *mount_operation,
   if (command_line == NULL)
     command_line = g_strdup ("");
 
-  if (pixbuf == NULL)
+  if (texture == NULL)
     {
       GtkIconTheme *theme;
+      GtkIconInfo *info;
+
       theme = gtk_css_icon_theme_value_get_icon_theme
         (_gtk_style_context_peek_property (gtk_widget_get_style_context (GTK_WIDGET (mount_operation->priv->dialog)),
                                            GTK_CSS_PROPERTY_ICON_THEME));
-      pixbuf = gtk_icon_theme_load_icon (theme,
-                                         "application-x-executable",
-                                         24,
-                                         0,
-                                         NULL);
+      info = gtk_icon_theme_lookup_icon (theme, "application-x-executable", 24, 0);
+      texture = gtk_icon_info_load_texture (info);
+      g_object_unref (info);
     }
 
   markup = g_strdup_printf ("<b>%s</b>\n"
@@ -1101,13 +1101,13 @@ add_pid_to_process_list_store (GtkMountOperation              *mount_operation,
 
   gtk_list_store_append (list_store, &iter);
   gtk_list_store_set (list_store, &iter,
-                      0, pixbuf,
+                      0, texture,
                       1, markup,
                       2, pid,
                       -1);
 
-  if (pixbuf != NULL)
-    g_object_unref (pixbuf);
+  if (texture != NULL)
+    g_object_unref (texture);
   g_free (markup);
   g_free (name);
   g_free (command_line);
@@ -1415,7 +1415,8 @@ create_show_processes_dialog (GtkMountOperation *op,
   gtk_box_pack_start (GTK_BOX (vbox), label);
 
   /* First count the items in the list then
-   * add the buttons in reverse order */
+   * add the buttons in reverse order
+   */
 
   while (choices[len] != NULL)
     len++;
@@ -1433,16 +1434,13 @@ create_show_processes_dialog (GtkMountOperation *op,
     gtk_window_set_display (GTK_WINDOW (dialog), priv->display);
 
   tree_view = gtk_tree_view_new ();
-  /* TODO: should use EM's when gtk+ RI patches land */
-  gtk_widget_set_size_request (tree_view,
-                               300,
-                               120);
+  gtk_widget_set_size_request (tree_view, 300, 120);
 
   column = gtk_tree_view_column_new ();
   renderer = gtk_cell_renderer_pixbuf_new ();
   gtk_tree_view_column_pack_start (column, renderer, FALSE);
   gtk_tree_view_column_set_attributes (column, renderer,
-                                       "pixbuf", 0,
+                                       "texture", 0,
                                        NULL);
   renderer = gtk_cell_renderer_text_new ();
   g_object_set (renderer,
@@ -1474,7 +1472,7 @@ create_show_processes_dialog (GtkMountOperation *op,
                     op);
 
   list_store = gtk_list_store_new (3,
-                                   GDK_TYPE_PIXBUF,
+                                   GDK_TYPE_TEXTURE,
                                    G_TYPE_STRING,
                                    G_TYPE_INT);
 

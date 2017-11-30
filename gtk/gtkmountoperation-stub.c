@@ -47,7 +47,7 @@ _gtk_mount_operation_lookup_info (GtkMountOperationLookupContext *context,
                                   gint                            size_pixels,
                                   gchar                         **out_name,
                                   gchar                         **out_command_line,
-                                  GdkPixbuf                     **out_pixbuf)
+                                  GdkTexture                    **out_texture)
 {
   return FALSE;
 }

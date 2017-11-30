@@ -407,7 +407,7 @@ free_pixels (guchar *pixels, gpointer data)
   g_free (pixels);
 }
 
-static GdkPixbuf*
+static GdkTexture *
 scaled_from_pixdata (guchar *pixdata,
                      int     w,
                      int     h,
@@ -416,6 +416,7 @@ scaled_from_pixdata (guchar *pixdata,
 {
   GdkPixbuf *src;
   GdkPixbuf *dest;
+  GdkTexture *ret;
 
   src = gdk_pixbuf_new_from_data (pixdata,
                                   GDK_COLORSPACE_RGB,
@@ -460,7 +461,11 @@ scaled_from_pixdata (guchar *pixdata,
       dest = src;
     }
 
-  return dest;
+  ret = gdk_texture_new_for_pixbuf (dest);
+
+  g_object_unref (dest);
+
+  return ret;
 }
 
 static gboolean
@@ -910,13 +915,13 @@ get_name_for_window_with_pid (GtkMountOperationLookupContext *context,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-static GdkPixbuf *
-get_pixbuf_for_window_with_pid (GtkMountOperationLookupContext *context,
-                                GPid                            pid,
-                                gint                            size_pixels)
+static GdkTexture *
+get_texture_for_window_with_pid (GtkMountOperationLookupContext *context,
+                                 GPid                            pid,
+                                 gint                            size_pixels)
 {
   Window window;
-  GdkPixbuf *ret;
+  GdkTexture *ret;
 
   ret = NULL;
 
@@ -951,6 +956,7 @@ get_pixbuf_for_window_with_pid (GtkMountOperationLookupContext *context,
                          &pixdata))
         {
           /* steals pixdata */
+
           ret = scaled_from_pixdata (pixdata,
                                      width, height,
                                      size_pixels, size_pixels);
@@ -979,11 +985,11 @@ _gtk_mount_operation_lookup_info (GtkMountOperationLookupContext *context,
                                   gint                            size_pixels,
                                   gchar                         **out_name,
                                   gchar                         **out_command_line,
-                                  GdkPixbuf                     **out_pixbuf)
+                                  GdkTexture                    **out_texture)
 {
   g_return_val_if_fail (out_name != NULL && *out_name == NULL, FALSE);
   g_return_val_if_fail (out_command_line != NULL && *out_command_line == NULL, FALSE);
-  g_return_val_if_fail (out_pixbuf != NULL && *out_pixbuf == NULL, FALSE);
+  g_return_val_if_fail (out_texture != NULL && *out_texture == NULL, FALSE);
 
   /* We perform two different lookups for name and icon size.. this is
    * because we want the name from the window with WINDOWID and this
@@ -998,7 +1004,7 @@ _gtk_mount_operation_lookup_info (GtkMountOperationLookupContext *context,
 
   *out_name = get_name_for_window_with_pid (context, pid);
 
-  *out_pixbuf = get_pixbuf_for_window_with_pid (context, pid, size_pixels);
+  *out_texture = get_texture_for_window_with_pid (context, pid, size_pixels);
 
   /* if we didn't manage to find the name via X, fall back to the basename
    * of the first element of the command line and, for maximum geek-comfort,
