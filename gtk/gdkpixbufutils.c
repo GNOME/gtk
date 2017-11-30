@@ -355,3 +355,37 @@ gtk_make_symbolic_pixbuf_from_file (GFile   *file,
 
   return pixbuf;
 }
+
+GdkTexture *
+gtk_make_symbolic_texture_from_resource (const char  *path,
+                                         int          width,
+                                         int          height,
+                                         double       scale,
+                                         GError     **error)
+{
+  GdkPixbuf *pixbuf;
+  GdkTexture *texture;
+
+  pixbuf = gtk_make_symbolic_pixbuf_from_resource (path, width, height, scale, error);
+  texture = gdk_texture_new_for_pixbuf (pixbuf);
+  g_object_unref (pixbuf);
+
+  return texture;
+}
+
+GdkTexture *
+gtk_make_symbolic_texture_from_file (GFile   *file,
+                                     int      width,
+                                     int      height,
+                                     double   scale,
+                                     GError **error)
+{
+  GdkPixbuf *pixbuf;
+  GdkTexture *texture;
+
+  pixbuf = gtk_make_symbolic_pixbuf_from_file (file, width, height, scale, error);
+  texture = gdk_texture_new_for_pixbuf (pixbuf);
+  g_object_unref (pixbuf);
+
+  return texture;
+}
