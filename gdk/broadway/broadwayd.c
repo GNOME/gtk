@@ -234,7 +234,7 @@ rotl (guint32 value, int shift)
 
 static BroadwayNode *
 decode_nodes (BroadwayClient *client,
-	      int len, guint32 data[], int *pos)
+              int len, guint32 data[], int *pos)
 {
   BroadwayNode *node;
   guint32 type;
@@ -305,9 +305,8 @@ decode_nodes (BroadwayClient *client,
     {
       node->data[i] = data[(*pos)++];
       if (i == texture_offset)
-	node->data[i] = GPOINTER_TO_INT (g_hash_table_lookup (client->textures,
-							      GINT_TO_POINTER (node->data[i])));
-
+        node->data[i] = GPOINTER_TO_INT (g_hash_table_lookup (client->textures,
+                                                              GINT_TO_POINTER (node->data[i])));
     }
 
   for (i = 0; i < n_children; i++)

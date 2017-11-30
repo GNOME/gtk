@@ -309,17 +309,61 @@ broadway_output_set_transient_for (BroadwayOutput *output,
   append_uint16 (output, parent_id);
 }
 
+/***********************************
+ * This outputs the tree to the client, while at the same time diffing
+ * against the old tree.  This allows us to avoid sending certain
+ * parts.
+ *
+ * Reusing existing dom nodes are problematic because doing so
+ * automatically inherits all their children.  There are two cases
+ * where we do this:
+ *
+ * If the entire sub tree is identical we emit a KEEP_ALL node which
+ * just reuses the entire old dom subtree.
+ *
+ * If a the node is unchanged (but some descendant may have changed),
+ * and all parents are also unchanged, then we can just avoid
+ * changing the dom node at all, and we emit a KEEP_THIS node.
+ *
+ ***********************************/
+
 static void
 append_node (BroadwayOutput *output,
-	     BroadwayNode   *node)
+             BroadwayNode   *node,
+             BroadwayNode   *old_node,
+             gboolean        all_parents_are_kept)
 {
-  append_uint32 (output, node->type);
   guint32 i;
+
+  if (old_node != NULL && broadway_node_equal (node, old_node))
+    {
+      if (broadway_node_deep_equal (node, old_node))
+        {
+          append_uint32 (output, BROADWAY_NODE_KEEP_ALL);
+          return;
+        }
+
+      if (all_parents_are_kept)
+        {
+          append_uint32 (output, BROADWAY_NODE_KEEP_THIS);
+          append_uint32 (output, node->n_children);
+          for (i = 0; i < node->n_children; i++)
+            append_node (output, node->children[i],
+                         i < old_node->n_children ? old_node->children[i] : NULL,
+                         TRUE);
+          return;
+        }
+    }
+
+  append_uint32 (output, node->type);
 
   for (i = 0; i < node->n_data; i++)
     append_uint32 (output, node->data[i]);
   for (i = 0; i < node->n_children; i++)
-    append_node (output, node->children[i]);
+    append_node (output,
+                 node->children[i],
+                 (old_node != NULL && i < old_node->n_children) ? old_node->children[i] : NULL,
+                 FALSE);
 }
 
 void
@@ -337,7 +381,7 @@ broadway_output_window_set_nodes (BroadwayOutput *output,
   append_uint32 (output, 0);
 
   start = output->buf->len;
-  append_node (output, root);
+  append_node (output, root, old_root, TRUE);
   end = output->buf->len;
   patch_uint32 (output, (end - start) / 4, size_pos);
 }

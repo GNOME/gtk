@@ -22,7 +22,7 @@ typedef struct _BroadwayNode BroadwayNode;
 
 struct _BroadwayNode {
   guint32 type;
-  guint32 hash;
+  guint32 hash; /* deep hash */
   guint32 n_children;
   BroadwayNode **children;
   guint32 n_data;
@@ -30,7 +30,9 @@ struct _BroadwayNode {
 };
 
 gboolean            broadway_node_equal                      (BroadwayNode     *a,
-							      BroadwayNode     *b);
+                                                              BroadwayNode     *b);
+gboolean            broadway_node_deep_equal                 (BroadwayNode     *a,
+                                                              BroadwayNode     *b);
 
 BroadwayServer     *broadway_server_new                      (char             *address,
 							      int               port,

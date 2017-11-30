@@ -301,30 +301,8 @@ function SwapNodes(node_data, div) {
     this.node_data_signed = new Int32Array(node_data);
     this.data_pos = 0;
     this.div = div;
-    this.div2 = document.createElement('div');
     this.outstanding = 1;
 }
-
-SwapNodes.prototype.did_one = function(image) {
-    this.outstanding--;
-    if (this.outstanding == 0) {
-        var oldDiv2 = null;
-        if (this.div.hasChildNodes())
-            oldDiv2 = this.div.lastChild;
-
-        this.div.appendChild(this.div2);
-        if (oldDiv2)
-            this.div.removeChild(oldDiv2);
-    }
-}
-
-SwapNodes.prototype.add_image = function(image) {
-    this.outstanding++;
-    var v = this;
-    image.addEventListener('load', function() {
-        v.did_one ();
-    }, false);
-};
 
 SwapNodes.prototype.decode_uint32 = function() {
     return this.node_data[this.data_pos++];
@@ -421,26 +399,37 @@ function px(x) {
     return x + "px";
 }
 
-function set_rect_style (div, rect, offset_x, offset_y) {
-    div.style["left"] = px(rect.x - offset_x);
-    div.style["top"] = px(rect.y - offset_y);
+function set_rect_style (div, rect) {
+    div.style["left"] = px(rect.x);
+    div.style["top"] = px(rect.y);
     div.style["width"] = px(rect.width);
     div.style["height"] = px(rect.height);
 }
 
-function set_rrect_style (div, rrect, offset_x, offset_y) {
-    set_rect_style(div, rrect.bounds, offset_x, offset_y);
+function set_rrect_style (div, rrect) {
+    set_rect_style(div, rrect.bounds);
     div.style["border-top-left-radius"] = args(px(rrect.sizes[0].width), px(rrect.sizes[0].height));
     div.style["border-top-right-radius"] = args(px(rrect.sizes[1].width), px(rrect.sizes[1].height));
     div.style["border-bottom-right-radius"] = args(px(rrect.sizes[2].width), px(rrect.sizes[2].height));
     div.style["border-bottom-left-radius"] = args(px(rrect.sizes[3].width), px(rrect.sizes[3].height));
 }
 
-SwapNodes.prototype.handle_node = function(parent, offset_x, offset_y)
+SwapNodes.prototype.insertNode = function(parent, posInParent, oldNode)
 {
     var type = this.decode_uint32();
+    var newNode = null;
+
+    // We need to dup this because as we reuse children the original order is lost
+    var oldChildren = [];
+    if (oldNode) {
+        for (var i = 0; i < oldNode.children.length; i++)
+            oldChildren[i] = oldNode.children[i];
+    }
+
     switch (type)
     {
+        /* Leaf nodes */
+
         case 0:  // TEXTURE
         {
             var rect = this.decode_rect();
@@ -449,22 +438,10 @@ SwapNodes.prototype.handle_node = function(parent, offset_x, offset_y)
             image.width = rect.width;
             image.height = rect.height;
             image.style["position"] = "absolute";
-            set_rect_style(image, rect, offset_x, offset_y);
+            set_rect_style(image, rect);
             var texture_url = textures[texture_id];
-            this.add_image(image);
             image.src = texture_url;
-            parent.appendChild(image);
-        }
-        break;
-
-    case 1: // CONTAINER
-        {
-            var div = document.createElement('div');
-            var len = this.decode_uint32();
-            for (var i = 0; i < len; i++) {
-                this.handle_node(div, offset_x, offset_y);
-            }
-            parent.appendChild(div);
+            newNode = image;
         }
         break;
 
@@ -474,9 +451,9 @@ SwapNodes.prototype.handle_node = function(parent, offset_x, offset_y)
             var c = this.decode_color ();
             var div = document.createElement('div');
             div.style["position"] = "absolute";
-            set_rect_style(div, rect, offset_x, offset_y);
+            set_rect_style(div, rect);
             div.style["background-color"] = c;
-            parent.appendChild(div);
+            newNode = div;
         }
         break;
 
@@ -494,7 +471,7 @@ SwapNodes.prototype.handle_node = function(parent, offset_x, offset_y)
             div.style["position"] = "absolute";
             rrect.bounds.width -= border_widths[1] + border_widths[3];
             rrect.bounds.height -= border_widths[0] + border_widths[2];
-            set_rrect_style(div, rrect, offset_x, offset_y);
+            set_rrect_style(div, rrect);
             div.style["border-style"] = "solid";
             div.style["border-top-color"] = border_colors[0];
             div.style["border-top-width"] = px(border_widths[0]);
@@ -504,7 +481,7 @@ SwapNodes.prototype.handle_node = function(parent, offset_x, offset_y)
             div.style["border-bottom-width"] = px(border_widths[2]);
             div.style["border-left-color"] = border_colors[3];
             div.style["border-left-width"] = px(border_widths[3]);
-            parent.appendChild(div);
+            newNode = div;
         }
         break;
 
@@ -519,9 +496,9 @@ SwapNodes.prototype.handle_node = function(parent, offset_x, offset_y)
 
             var div = document.createElement('div');
             div.style["position"] = "absolute";
-            set_rrect_style(div, rrect, offset_x, offset_y);
+            set_rrect_style(div, rrect);
             div.style["box-shadow"] = args(px(dx), px(dy), px(blur), px(spread), color);
-            parent.appendChild(div);
+            newNode = div;
         }
         break;
 
@@ -536,23 +513,12 @@ SwapNodes.prototype.handle_node = function(parent, offset_x, offset_y)
 
             var div = document.createElement('div');
             div.style["position"] = "absolute";
-            set_rrect_style(div, rrect, offset_x, offset_y);
+            set_rrect_style(div, rrect);
             div.style["box-shadow"] = args("inset", px(dx), px(dy), px(blur), px(spread), color);
-            parent.appendChild(div);
+            newNode = div;
         }
         break;
 
-    case 6:  // ROUNDED_CLIP
-        {
-            var rrect = this.decode_rounded_rect();
-            var div = document.createElement('div');
-            div.style["position"] = "absolute";
-            set_rrect_style(div, rrect, offset_x, offset_y);
-            div.style["overflow"] = "hidden";
-            parent.appendChild(div);
-            this.handle_node(div, rrect.bounds.x, rrect.bounds.y);
-        }
-        break;
 
     case 7:  // LINEAR_GRADIENT
         {
@@ -562,7 +528,7 @@ SwapNodes.prototype.handle_node = function(parent, offset_x, offset_y)
             var stops = this.decode_color_stops ();
             var div = document.createElement('div');
             div.style["position"] = "absolute";
-            set_rect_style(div, rect, offset_x, offset_y);
+            set_rect_style(div, rect);
 
             // direction:
             var dx = end.x - start.x;
@@ -595,7 +561,48 @@ SwapNodes.prototype.handle_node = function(parent, offset_x, offset_y)
             gradient = gradient + ")";
 
             div.style["background-image"] = gradient;
-            parent.appendChild(div);
+            newNode = div;
+        }
+        break;
+
+
+    /* Bin nodes */
+
+    case 10:  // CLIP
+        {
+            var rect = this.decode_rect();
+            var div = document.createElement('div');
+            div.style["position"] = "absolute";
+            set_rect_style(div, rect);
+            div.style["overflow"] = "hidden";
+            this.insertNode(div, -1, oldChildren[0]);
+            newNode = div;
+        }
+        break;
+
+    case 6:  // ROUNDED_CLIP
+        {
+            var rrect = this.decode_rounded_rect();
+            var div = document.createElement('div');
+            div.style["position"] = "absolute";
+            set_rrect_style(div, rrect);
+            div.style["overflow"] = "hidden";
+            this.insertNode(div, -1, oldChildren[0]);
+            newNode = div;
+        }
+        break;
+
+    case 9:  // OPACITY
+        {
+            var opacity = this.decode_float();
+            var div = document.createElement('div');
+            div.style["position"] = "absolute";
+            div.style["left"] = px(0);
+            div.style["top"] = px(0);
+            div.style["opacity"] = opacity;
+
+            this.insertNode(div, -1, oldChildren[0]);
+            newNode = div;
         }
         break;
 
@@ -616,39 +623,71 @@ SwapNodes.prototype.handle_node = function(parent, offset_x, offset_y)
             div.style["top"] = px(0);
             div.style["filter"] = filters;
 
-            parent.appendChild(div);
-            this.handle_node(div, offset_x, offset_y);
+            this.insertNode(div, -1, oldChildren[0]);
+            newNode = div;
         }
         break;
 
-    case 9:  // OPACITY
-        {
-            var opacity = this.decode_float();
-            var div = document.createElement('div');
-            div.style["position"] = "absolute";
-            div.style["left"] = px(0);
-            div.style["top"] = px(0);
-            div.style["opacity"] = opacity;
+   /* Generic nodes */
 
-            parent.appendChild(div);
-            this.handle_node(div, offset_x, offset_y);
+    case 1: // CONTAINER
+        {
+            var div = document.createElement('div');
+            var len = this.decode_uint32();
+            for (var i = 0; i < len; i++) {
+                this.insertNode(div, -1, oldChildren[i]);
+            }
+            newNode = div;
         }
         break;
 
-    case 10:  // CLIP
+    case 11:  // KEEP_ALL
         {
-            var rect = this.decode_rect();
-            var div = document.createElement('div');
-            div.style["position"] = "absolute";
-            set_rect_style(div, rect, offset_x, offset_y);
-            div.style["overflow"] = "hidden";
-            parent.appendChild(div);
-            this.handle_node(div, rect.x, rect.y);
+            if (!oldNode)
+                alert("KEEP_ALL with no oldNode");
+
+            if (oldNode.parentNode != parent)
+                newNode = oldNode;
+            else
+                newNode = null;
+        }
+        break;
+
+    case 12:  // KEEP_THIS
+        {
+            if (!oldNode)
+                alert("KEEP_THIS with no oldNode ");
+
+            /* We only get keep-this if all parents were kept, check this */
+            if (oldNode.parentNode != parent)
+                alert("Got KEEP_THIS for non-kept parent");
+
+            var len = this.decode_uint32();
+            var i;
+
+            for (i = 0; i < len; i++) {
+                this.insertNode(oldNode, i,
+                                oldChildren[i]);
+            }
+
+            /* Remove children that are after the new length */
+            for (i = oldChildren.length - 1; i > len - 1; i--)
+                oldNode.removeChild(oldChildren[i]);
+
+            /* NOTE: No need to modify the parent, we're keeping this node as is */
+            newNode = null;
         }
         break;
 
     default:
         alert("Unexpected node type " + type);
+    }
+
+    if (newNode) {
+        if (posInParent >= 0 && parent.children[posInParent])
+            parent.replaceChild(newNode, parent.children[posInParent]);
+        else
+            parent.appendChild(newNode);
     }
 }
 
@@ -662,10 +701,9 @@ function cmdWindowSetNodes(id, node_data)
     /* We use a secondary div so that we can remove all previous children in one go */
 
     var swap = new SwapNodes (node_data, div);
-    swap.handle_node(swap.div2, 0, 0);
+    swap.insertNode(div, 0, div.firstChild);
     if (swap.data_pos != node_data.length)
         alert ("Did not consume entire array (len " + node_data.length + " end " + end + ")");
-    swap.did_one ();
 }
 
 function cmdUploadTexture(id, data)

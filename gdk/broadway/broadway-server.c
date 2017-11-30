@@ -147,12 +147,9 @@ broadway_node_free (BroadwayNode *node)
 
 gboolean
 broadway_node_equal (BroadwayNode     *a,
-		     BroadwayNode     *b)
+                     BroadwayNode     *b)
 {
   int i;
-
-  if (a->hash != b->hash)
-    return FALSE;
 
   if (a->type != b->type)
     return FALSE;
@@ -160,19 +157,40 @@ broadway_node_equal (BroadwayNode     *a,
   if (a->n_data != b->n_data)
     return FALSE;
 
+  /* Don't check data for containers, that is just n_children, which
+     we don't want to compare for a shallow equal */
+  if (a->type != BROADWAY_NODE_CONTAINER)
+    {
+      for (i = 0; i < a->n_data; i++)
+        if (a->data[i] != b->data[i])
+          return FALSE;
+    }
+
+  return TRUE;
+}
+
+gboolean
+broadway_node_deep_equal (BroadwayNode     *a,
+                          BroadwayNode     *b)
+{
+  int i;
+
+  if (a->hash != b->hash)
+    return FALSE;
+
+  if (!broadway_node_equal (a,b))
+    return FALSE;
+
   if (a->n_children != b->n_children)
     return FALSE;
 
-  for (i = 0; i < a->n_data; i++)
-    if (a->data[i] != b->data[i])
-      return FALSE;
-
   for (i = 0; i < a->n_children; i++)
-    if (!broadway_node_equal (a->children[i], b->children[i]))
+    if (!broadway_node_deep_equal (a->children[i], b->children[i]))
       return FALSE;
 
   return TRUE;
 }
+
 
 static void
 broadway_server_init (BroadwayServer *server)
@@ -1665,7 +1683,8 @@ broadway_server_window_set_nodes (BroadwayServer   *server,
 
   if (server->output != NULL)
     broadway_output_window_set_nodes (server->output, window->id,
-                                      root, window->nodes);
+                                      root,
+                                      window->nodes);
 
   if (window->nodes)
     broadway_node_free (window->nodes);
