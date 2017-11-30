@@ -244,7 +244,7 @@ static void     set_icon_helper (GdkDragContext    *context,
 static struct {
   GdkDragAction action;
   const gchar  *name;
-  GdkPixbuf    *pixbuf;
+  GdkTexture   *texture;
   GdkCursor    *cursor;
 } drag_cursors[] = {
   { GDK_ACTION_DEFAULT, NULL },
@@ -442,17 +442,12 @@ gtk_drag_get_event_actions (const GdkEvent *event,
 }
 
 static void
-ensure_drag_cursor_pixbuf (int i)
+ensure_drag_cursor_texture (int i)
 {
-  if (drag_cursors[i].pixbuf == NULL)
+  if (drag_cursors[i].texture == NULL)
     {
       char *path = g_strconcat ("/org/gtk/libgtk/cursor/",  drag_cursors[i].name, ".png", NULL);
-      GInputStream *stream = g_resources_open_stream (path, 0, NULL);
-      if (stream != NULL)
-        {
-          drag_cursors[i].pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, NULL);
-          g_object_unref (stream);
-        }
+      drag_cursors[i].texture = gdk_texture_new_from_resource (path);
       g_free (path);
     }
 }
@@ -482,8 +477,8 @@ gtk_drag_get_cursor (GtkWidget         *widget,
 
   if (drag_cursors[i].cursor == NULL)
     {
-      ensure_drag_cursor_pixbuf (i);
-      drag_cursors[i].cursor = gdk_cursor_new_from_pixbuf (drag_cursors[i].pixbuf, 0, 0, NULL);
+      ensure_drag_cursor_texture (i);
+      drag_cursors[i].cursor = gdk_cursor_new_from_texture (drag_cursors[i].texture, 0, 0, NULL);
     }
 
   return drag_cursors[i].cursor;
