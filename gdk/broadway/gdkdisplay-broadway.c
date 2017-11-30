@@ -111,8 +111,8 @@ gdk_texture_hash (GdkTexture *self)
   data = cairo_image_surface_get_data (surface);
   stride = cairo_image_surface_get_stride (surface);
 
-  width = MAX (self->width, 4);
-  height = MAX (self->height, 4);
+  width = MIN (self->width, 4);
+  height = MIN (self->height, 4);
 
   sum = 0;
   for (y = 0; y < height; y++, data += stride)
