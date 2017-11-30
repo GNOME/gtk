@@ -5340,7 +5340,6 @@ gtk_drag_set_icon_gicon
 gtk_drag_set_icon_default
 gtk_drag_check_threshold
 gtk_drag_source_set
-gtk_drag_source_set_icon_pixbuf
 gtk_drag_source_set_icon_surface
 gtk_drag_source_set_icon_name
 gtk_drag_source_set_icon_gicon
