@@ -2400,7 +2400,6 @@ microphone-sensitivity-medium-symbolic</property>
                                         <property name="model">iconsmodel</property>
                                         <child>
                                           <object class="GtkCellRendererPixbuf" id="iconviewcell">
-                                            <property name="stock-size">2</property>
                                           </object>
                                           <attributes>
                                             <attribute name="icon-name">0</attribute>
@@ -2419,21 +2418,21 @@ microphone-sensitivity-medium-symbolic</property>
                                     <child>
                                       <object class="GtkToolButton" id="decrease_button">
                                         <property name="icon-name">zoom-out-symbolic</property>
-                                        <property name="label">Remove item</property>
+                                        <property name="tooltip-text">Normal icons</property>
                                         <signal name="clicked" handler="decrease_icon_size" object="iconview1" swapped="yes"/>
                                       </object>
                                     </child>
                                     <child>
                                       <object class="GtkToolButton" id="increase_button">
                                         <property name="icon-name">zoom-in-symbolic</property>
-                                        <property name="label">Add item</property>
+                                        <property name="tooltip-text">Large icons</property>
                                         <signal name="clicked" handler="increase_icon_size" object="iconview1" swapped="yes"/>
                                       </object>
                                     </child>
                                     <child>
                                       <object class="GtkToolButton" id="reset_button">
                                         <property name="icon-name">zoom-original-symbolic</property>
-                                        <property name="label">Refresh</property>
+                                        <property name="tooltip-text">Inherited icon size</property>
                                         <signal name="clicked" handler="reset_icon_size" object="iconview1" swapped="yes"/>
                                       </object>
                                     </child>

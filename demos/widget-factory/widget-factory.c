@@ -1523,17 +1523,17 @@ g_test_permission_class_init (GTestPermissionClass *class)
   permission_class->release_finish = release_finish;
 }
 
-static int icon_sizes[] = {0, 1, 2, 3, 4, 5, 6};
-
 static void
-update_buttons (GtkWidget *iv, int pos)
+update_buttons (GtkWidget *iv, GtkIconSize size)
 {
   GtkWidget *button;
 
   button = GTK_WIDGET (g_object_get_data (G_OBJECT (iv), "increase_button"));
-  gtk_widget_set_sensitive (button, pos + 1 < G_N_ELEMENTS (icon_sizes));
+  gtk_widget_set_sensitive (button, size != GTK_ICON_SIZE_LARGE);
   button = GTK_WIDGET (g_object_get_data (G_OBJECT (iv), "decrease_button"));
-  gtk_widget_set_sensitive (button, pos > 0);
+  gtk_widget_set_sensitive (button, size != GTK_ICON_SIZE_NORMAL);
+  button = GTK_WIDGET (g_object_get_data (G_OBJECT (iv), "reset_button"));
+  gtk_widget_set_sensitive (button, size != GTK_ICON_SIZE_INHERIT);
 }
 
 static void
@@ -1541,17 +1541,14 @@ increase_icon_size (GtkWidget *iv)
 {
   GList *cells;
   GtkCellRendererPixbuf *cell;
-  GtkIconSize size;
 
   cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (iv));
   cell = cells->data;
   g_list_free (cells);
 
-  g_object_get (cell, "stock-size", &size, NULL);
-  size = MIN (size + 1, G_N_ELEMENTS (icon_sizes) - 1);
-  g_object_set (cell, "stock-size", size, NULL);
+  g_object_set (cell, "stock-size", GTK_ICON_SIZE_LARGE, NULL);
 
-  update_buttons (iv, size);
+  update_buttons (iv, GTK_ICON_SIZE_LARGE);
 
   gtk_widget_queue_resize (iv);
 }
@@ -1561,17 +1558,14 @@ decrease_icon_size (GtkWidget *iv)
 {
   GList *cells;
   GtkCellRendererPixbuf *cell;
-  GtkIconSize size;
 
   cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (iv));
   cell = cells->data;
   g_list_free (cells);
 
-  g_object_get (cell, "stock-size", &size, NULL);
-  size  = MAX (size - 1, 1);
-  g_object_set (cell, "stock-size", size, NULL);
+  g_object_set (cell, "stock-size", GTK_ICON_SIZE_NORMAL, NULL);
 
-  update_buttons (iv, size);
+  update_buttons (iv, GTK_ICON_SIZE_NORMAL);
 
   gtk_widget_queue_resize (iv);
 }
@@ -1586,9 +1580,9 @@ reset_icon_size (GtkWidget *iv)
   cell = cells->data;
   g_list_free (cells);
 
-  g_object_set (cell, "stock-size", 2, NULL);
+  g_object_set (cell, "stock-size", GTK_ICON_SIZE_INHERIT, NULL);
 
-  update_buttons (iv, 2);
+  update_buttons (iv, GTK_ICON_SIZE_INHERIT);
 
   gtk_widget_queue_resize (iv);
 }
@@ -1888,6 +1882,9 @@ activate (GApplication *app)
   g_object_set_data (G_OBJECT (widget), "increase_button", widget2);
   widget2 = (GtkWidget *)gtk_builder_get_object (builder, "decrease_button");
   g_object_set_data (G_OBJECT (widget), "decrease_button", widget2);
+  widget2 = (GtkWidget *)gtk_builder_get_object (builder, "reset_button");
+  g_object_set_data (G_OBJECT (widget), "reset_button", widget2);
+  reset_icon_size (widget);
 
   adj = (GtkAdjustment *)gtk_builder_get_object (builder, "adjustment3");
   widget = (GtkWidget *)gtk_builder_get_object (builder, "progressbar1");
