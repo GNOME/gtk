@@ -1381,6 +1381,14 @@ gtk_about_dialog_set_license (GtkAboutDialog *about,
   g_object_notify_by_pspec (G_OBJECT (about), props[PROP_LICENSE_TYPE]);
 }
 
+/**
+ * gtk_about_dialog_get_system_information:
+ * @about: a #GtkAboutDialog
+ *
+ * Returns the system information that is shown in the about dialog.
+ *
+ * Returns: the system information
+ */
 const gchar *
 gtk_about_dialog_get_system_information (GtkAboutDialog *about)
 {
@@ -1389,6 +1397,17 @@ gtk_about_dialog_get_system_information (GtkAboutDialog *about)
   return about->priv->system_information;
 }
 
+/**
+ * gtk_about_dialog_set_system_information:
+ * @about: a #GtkAboutDialog
+ * @system_information: (allow-none): system information or %NULL
+ *
+ * Sets the system information to be displayed in the about
+ * dialog. If @system_information is %NULL, the system information
+ * tab is hidden.
+ *
+ * See #GtkAboutdialog:system-information.
+ */
 void
 gtk_about_dialog_set_system_information (GtkAboutDialog *about,
                                          const gchar    *system_information)
@@ -1628,7 +1647,7 @@ gtk_about_dialog_get_documenters (GtkAboutDialog *about)
  * @documenters: (array zero-terminated=1): a %NULL-terminated array of strings
  *
  * Sets the strings which are displayed in the documenters tab
- * of the secondary credits dialog.
+ * of the credits dialog.
  *
  * Since: 2.6
  */
