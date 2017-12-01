@@ -172,6 +172,7 @@ struct _GskGLRenderer
       Program inset_shadow_program;
       Program outset_shadow_program;
       Program shadow_program;
+      Program border_program;
     };
   };
 
@@ -330,6 +331,126 @@ render_text_node (GskGLRenderer   *self,
     }
 }
 
+static inline void
+render_border_node (GskGLRenderer   *self,
+                    GskRenderNode   *node,
+                    RenderOpBuilder *builder)
+{
+  float min_x = node->bounds.origin.x;
+  float min_y = node->bounds.origin.y;
+  float max_x = min_x + node->bounds.size.width;
+  float max_y = min_y + node->bounds.size.height;
+  const GdkRGBA *colors = gsk_border_node_peek_colors (node);
+  const GskRoundedRect *rounded_outline = gsk_border_node_peek_outline (node);
+  const float *widths = gsk_border_node_peek_widths (node);
+  const gboolean needs_clip = TRUE;/*!gsk_rounded_rect_is_rectilinear (rounded_outline);*/
+  GskRoundedRect prev_clip;
+  graphene_rect_t transformed_clip;
+  graphene_rect_t intersection;
+  GskRoundedRect child_clip;
+  RenderOp op;
+  struct {
+    float w;
+    float h;
+  } sizes[4];
+
+  /* Top left */
+  sizes[0].w = MAX (MAX (widths[3], rounded_outline->corner[0].width), 1);
+  sizes[0].h = MAX (MAX (widths[1], rounded_outline->corner[0].height), 1);
+
+  /* Top right */
+  sizes[1].w = MAX (MAX (widths[1], rounded_outline->corner[1].width), 1);
+  sizes[1].h = MAX (MAX (widths[0], rounded_outline->corner[1].height), 1);
+
+  /* Bottom right */
+  sizes[2].w = MAX (MAX (widths[1], rounded_outline->corner[2].width), 1);
+  sizes[2].h = MAX (MAX (widths[2], rounded_outline->corner[2].height), 1);
+
+  /* Bottom left */
+  sizes[3].w = MAX (MAX (widths[3], rounded_outline->corner[3].width), 1);
+  sizes[3].h = MAX (MAX (widths[2], rounded_outline->corner[3].height), 1);
+
+  if (needs_clip)
+    {
+      ops_set_program (builder, &self->border_program);
+
+      transformed_clip = rounded_outline->bounds;
+      graphene_matrix_transform_bounds (&builder->current_modelview, &transformed_clip, &transformed_clip);
+
+      graphene_rect_intersection (&transformed_clip, &builder->current_clip.bounds,
+                                  &intersection);
+      gsk_rounded_rect_init (&child_clip, &intersection,
+                             &rounded_outline->corner[0],
+                             &rounded_outline->corner[1],
+                             &rounded_outline->corner[2],
+                             &rounded_outline->corner[3]);
+
+      prev_clip = ops_set_clip (builder, &child_clip);
+
+      op.op = OP_CHANGE_BORDER;
+      op.border.widths[0] = widths[0];
+      op.border.widths[1] = widths[1];
+      op.border.widths[2] = widths[2];
+      op.border.widths[3] = widths[3];
+      ops_add (builder, &op);
+    }
+  else
+    {
+      ops_set_program (builder, &self->color_program);
+    }
+
+  /* Top */
+  ops_set_color (builder, &colors[0]);
+  ops_draw (builder, (const GskQuadVertex[6]) {
+    { { min_x,              min_y              }, { 0, 1 }, }, /* Upper left */
+    { { min_x + sizes[0].w, min_y + sizes[0].h }, { 0, 0 }, }, /* Lower left */
+    { { max_x,              min_y              }, { 1, 1 }, }, /* Upper right */
+
+    { { max_x - sizes[1].w, min_y + sizes[1].h }, { 1, 0 }, }, /* Lower right */
+    { { min_x + sizes[0].w, min_y + sizes[0].h }, { 0, 0 }, }, /* Lower left */
+    { { max_x,              min_y              }, { 1, 1 }, }, /* Upper right */
+  });
+
+  /* Right */
+  ops_set_color (builder, &colors[1]);
+  ops_draw (builder, (const GskQuadVertex[6]) {
+    { { max_x - sizes[1].w, min_y + sizes[1].h }, { 0, 1 }, }, /* Upper left */
+    { { max_x - sizes[2].w, max_y - sizes[2].h }, { 0, 0 }, }, /* Lower left */
+    { { max_x,              min_y              }, { 1, 1 }, }, /* Upper right */
+
+    { { max_x,              max_y              }, { 1, 0 }, }, /* Lower right */
+    { { max_x - sizes[2].w, max_y - sizes[2].h }, { 0, 0 }, }, /* Lower left */
+    { { max_x,              min_y              }, { 1, 1 }, }, /* Upper right */
+  });
+
+  /* Bottom */
+  ops_set_color (builder, &colors[2]);
+  ops_draw (builder, (const GskQuadVertex[6]) {
+    { { min_x + sizes[3].w, max_y - sizes[3].h }, { 0, 1 }, }, /* Upper left */
+    { { min_x,              max_y              }, { 0, 0 }, }, /* Lower left */
+    { { max_x - sizes[2].w, max_y - sizes[2].h }, { 1, 1 }, }, /* Upper right */
+
+    { { max_x,              max_y              }, { 1, 0 }, }, /* Lower right */
+    { { min_x            ,  max_y              }, { 0, 0 }, }, /* Lower left */
+    { { max_x - sizes[2].w, max_y - sizes[2].h }, { 1, 1 }, }, /* Upper right */
+  });
+
+  /* Left */
+  ops_set_color (builder, &colors[3]);
+  ops_draw (builder, (const GskQuadVertex[6]) {
+    { { min_x,              min_y              }, { 0, 1 }, }, /* Upper left */
+    { { min_x,              max_y              }, { 0, 0 }, }, /* Lower left */
+    { { min_x + sizes[0].w, min_y + sizes[0].h }, { 1, 1 }, }, /* Upper right */
+
+    { { min_x + sizes[3].w, max_y - sizes[2].h }, { 1, 0 }, }, /* Lower right */
+    { { min_x,              max_y              }, { 0, 0 }, }, /* Lower left */
+    { { min_x + sizes[0].w, min_y + sizes[0].h }, { 1, 1 }, }, /* Upper right */
+  });
+
+  if (needs_clip)
+    ops_set_clip (builder, &prev_clip);
+}
+
 static void
 gsk_gl_renderer_dispose (GObject *gobject)
 {
@@ -400,16 +521,17 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
     const char *vs;
     const char *fs;
   } program_definitions[] = {
-      { "blend",           "blend.vs.glsl", "blend.fs.glsl" },
-      { "blit",            "blit.vs.glsl",  "blit.fs.glsl" },
-      { "color",           "blit.vs.glsl",  "color.fs.glsl" },
-      { "coloring",        "blit.vs.glsl",  "coloring.fs.glsl" },
-      { "color matrix",    "blit.vs.glsl",  "color_matrix.fs.glsl" },
-      { "linear gradient", "blit.vs.glsl",  "linear_gradient.fs.glsl" },
-      { "blur",            "blit.vs.glsl",  "blur.fs.glsl" },
-      { "inset shadow",    "blit.vs.glsl",  "inset_shadow.fs.glsl" },
-      { "outset shadow",   "blit.vs.glsl",  "outset_shadow.fs.glsl" },
-      { "shadow",          "blit.vs.glsl",  "shadow.fs.glsl" },
+    { "blend",           "blend.vs.glsl", "blend.fs.glsl" },
+    { "blit",            "blit.vs.glsl",  "blit.fs.glsl" },
+    { "color",           "blit.vs.glsl",  "color.fs.glsl" },
+    { "coloring",        "blit.vs.glsl",  "coloring.fs.glsl" },
+    { "color matrix",    "blit.vs.glsl",  "color_matrix.fs.glsl" },
+    { "linear gradient", "blit.vs.glsl",  "linear_gradient.fs.glsl" },
+    { "blur",            "blit.vs.glsl",  "blur.fs.glsl" },
+    { "inset shadow",    "blit.vs.glsl",  "inset_shadow.fs.glsl" },
+    { "outset shadow",   "blit.vs.glsl",  "outset_shadow.fs.glsl" },
+    { "shadow",          "blit.vs.glsl",  "shadow.fs.glsl" },
+    { "border",          "blit.vs.glsl",  "border.fs.glsl" },
   };
 
   builder = gsk_shader_builder_new ();
@@ -522,6 +644,10 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
 
   /* shadow */
   INIT_PROGRAM_UNIFORM_LOCATION2 (shadow, color);
+
+  /* border */
+  INIT_PROGRAM_UNIFORM_LOCATION2 (border, color);
+  INIT_PROGRAM_UNIFORM_LOCATION2 (border, widths);
 
   g_object_unref (builder);
   return TRUE;
@@ -1122,7 +1248,7 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
         guint i;
 
         /* TODO: shadow nodes are most commonly used for text and icon shadows.
-         *       In both cases, we can avoit the RTT case!
+         *       In both cases, we can avoid the RTT case!
          *       if the child is neither a text node nor a texture node though, we need
          *       to fall back to rendering it to a texture and then applying the shadow on that one.*/
 
@@ -1190,8 +1316,31 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
       }
     break;
 
-    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
     case GSK_BORDER_NODE:
+      {
+        /* TODO: The cairo backend is exactly as broken as the code in the following
+           function. test case:
+
+          .foo {
+            border-left:   50px solid #0f0;
+            border-top:    10px solid red;
+            border-bottom: 50px solid teal;
+            border-right:  100px solid pink;
+
+
+            border-radius: 100px; 
+            min-height:100px;
+
+            float:left;
+          }
+
+          Or, like, just circular things.
+         */
+        render_border_node (self, node, builder);
+      }
+    break;
+
+    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
     case GSK_CROSS_FADE_NODE:
     case GSK_BLEND_NODE:
     case GSK_REPEAT_NODE:
@@ -1395,7 +1544,7 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
         case OP_CHANGE_COLOR:
           OP_PRINT (" -> Color: (%f, %f, %f, %f)", op->color.red, op->color.green, op->color.blue, op->color.alpha);
           g_assert (program == &self->color_program || program == &self->coloring_program ||
-                    program == &self->shadow_program);
+                    program == &self->shadow_program || program == &self->border_program);
           /* TODO: We use color.color_location here and this is right for all three of the programs above,
            *       but that's just a coincidence. */
           glUniform4f (program->color.color_location,
@@ -1470,6 +1619,11 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
           glUniform4fv (program->outset_shadow.outline_location, 1, op->outset_shadow.outline);
           glUniform4fv (program->outset_shadow.corner_widths_location, 1, op->outset_shadow.corner_widths);
           glUniform4fv (program->outset_shadow.corner_heights_location, 1, op->outset_shadow.corner_heights);
+          break;
+
+        case OP_CHANGE_BORDER:
+          g_assert (program == &self->border_program);
+          glUniform4fv (program->border.widths_location, 1, op->border.widths);
           break;
 
         case OP_DRAW:
