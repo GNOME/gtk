@@ -1498,7 +1498,7 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
         case OP_CHANGE_PROGRAM:
           program = op->program;
           glUseProgram (op->program->id);
-          OP_PRINT (" -> Program: %d(%s)", op->program->index, op->program->name);
+          OP_PRINT (" -> Program: %d", op->program->index);
           break;
 
         case OP_CHANGE_RENDER_TARGET:
@@ -1596,12 +1596,14 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
           break;
 
        case OP_CHANGE_BLUR:
+          OP_PRINT (" -> Blur");
           g_assert (program == &self->blur_program);
           glUniform1f (program->blur.blur_radius_location, op->blur.radius);
           glUniform2f (program->blur.blur_size_location, op->blur.size.width, op->blur.size.height);
           break;
 
        case OP_CHANGE_INSET_SHADOW:
+          OP_PRINT (" -> inset shadow");
           g_assert (program == &self->inset_shadow_program);
           glUniform4fv (program->inset_shadow.color_location, 1, op->inset_shadow.color);
           glUniform2fv (program->inset_shadow.offset_location, 1, op->inset_shadow.offset);
@@ -1612,6 +1614,7 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
           break;
 
        case OP_CHANGE_OUTSET_SHADOW:
+          OP_PRINT (" -> outset shadow");
           g_assert (program == &self->outset_shadow_program);
           glUniform4fv (program->outset_shadow.color_location, 1, op->outset_shadow.color);
           glUniform2fv (program->outset_shadow.offset_location, 1, op->outset_shadow.offset);
@@ -1622,13 +1625,14 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
           break;
 
         case OP_CHANGE_BORDER:
+          OP_PRINT (" -> Border");
           g_assert (program == &self->border_program);
           glUniform4fv (program->border.widths_location, 1, op->border.widths);
           break;
 
         case OP_DRAW:
-          OP_PRINT (" -> draw %ld, size %ld and program %s\n",
-                    op->draw.vao_offset, op->draw.vao_size, program->name);
+          OP_PRINT (" -> draw %ld, size %ld and program %d\n",
+                    op->draw.vao_offset, op->draw.vao_size, program->index);
           glDrawArrays (GL_TRIANGLES, op->draw.vao_offset, op->draw.vao_size);
           break;
 
