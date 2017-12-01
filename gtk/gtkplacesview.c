@@ -35,7 +35,7 @@
  * @Title: GtkPlacesView
  * @See_also: #GtkFileChooser
  *
- * #GtkPlacesView is a stock widget that displays a list of persistent drives
+ * #GtkPlacesView is a widget that displays a list of persistent drives
  * such as harddisk partitions and networks.  #GtkPlacesView does not monitor
  * removable devices.
  *
