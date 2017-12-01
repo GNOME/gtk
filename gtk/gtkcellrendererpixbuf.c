@@ -77,8 +77,7 @@ enum {
   PROP_PIXBUF_EXPANDER_CLOSED,
   PROP_SURFACE,
   PROP_TEXTURE,
-  PROP_STOCK_SIZE,
-  PROP_STOCK_DETAIL,
+  PROP_ICON_SIZE,
   PROP_ICON_NAME,
   PROP_GICON
 };
@@ -186,19 +185,18 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 						        GTK_PARAM_READWRITE));
 
   /**
-   * GtkCellRendererPixbuf:stock-size:
+   * GtkCellRendererPixbuf:icon-size:
    *
    * The #GtkIconSize value that specifies the size of the rendered icon.
    *
-   * Since: 2.2
+   * Since: 3.94
    */
   g_object_class_install_property (object_class,
-				   PROP_STOCK_SIZE,
-				   g_param_spec_uint ("stock-size",
-						      P_("Size"),
+				   PROP_ICON_SIZE,
+				   g_param_spec_enum ("icon-size",
+						      P_("Icon Size"),
 						      P_("The GtkIconSize value that specifies the size of the rendered icon"),
-						      0,
-						      G_MAXUINT,
+                                                      GTK_TYPE_ICON_SIZE,
 						      GTK_ICON_SIZE_INHERIT,
 						      GTK_PARAM_READWRITE));
 
@@ -206,8 +204,7 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
    * GtkCellRendererPixbuf:icon-name:
    *
    * The name of the themed icon to display.
-   * This property only has an effect if not overridden by "stock_id" 
-   * or "pixbuf" properties.
+   * This property only has an effect if not overridden by the "pixbuf" property.
    *
    * Since: 2.8 
    */
@@ -278,8 +275,8 @@ gtk_cell_renderer_pixbuf_get_property (GObject        *object,
     case PROP_TEXTURE:
       g_value_set_object (value, gtk_image_definition_get_texture (priv->image_def));
       break;
-    case PROP_STOCK_SIZE:
-      g_value_set_uint (value, priv->icon_size);
+    case PROP_ICON_SIZE:
+      g_value_set_enum (value, priv->icon_size);
       break;
     case PROP_ICON_NAME:
       g_value_set_string (value, gtk_image_definition_get_icon_name (priv->image_def));
@@ -375,8 +372,8 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
     case PROP_TEXTURE:
       take_image_definition (cellpixbuf, gtk_image_definition_new_texture (g_value_get_object (value)));
       break;
-    case PROP_STOCK_SIZE:
-      priv->icon_size = g_value_get_uint (value);
+    case PROP_ICON_SIZE:
+      priv->icon_size = g_value_get_enum (value);
       break;
     case PROP_ICON_NAME:
       take_image_definition (cellpixbuf, gtk_image_definition_new_icon_name (g_value_get_string (value)));

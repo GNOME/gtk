@@ -1546,7 +1546,7 @@ increase_icon_size (GtkWidget *iv)
   cell = cells->data;
   g_list_free (cells);
 
-  g_object_set (cell, "stock-size", GTK_ICON_SIZE_LARGE, NULL);
+  g_object_set (cell, "icon-size", GTK_ICON_SIZE_LARGE, NULL);
 
   update_buttons (iv, GTK_ICON_SIZE_LARGE);
 
@@ -1563,7 +1563,7 @@ decrease_icon_size (GtkWidget *iv)
   cell = cells->data;
   g_list_free (cells);
 
-  g_object_set (cell, "stock-size", GTK_ICON_SIZE_NORMAL, NULL);
+  g_object_set (cell, "icon-size", GTK_ICON_SIZE_NORMAL, NULL);
 
   update_buttons (iv, GTK_ICON_SIZE_NORMAL);
 
@@ -1580,7 +1580,7 @@ reset_icon_size (GtkWidget *iv)
   cell = cells->data;
   g_list_free (cells);
 
-  g_object_set (cell, "stock-size", GTK_ICON_SIZE_INHERIT, NULL);
+  g_object_set (cell, "icon-size", GTK_ICON_SIZE_INHERIT, NULL);
 
   update_buttons (iv, GTK_ICON_SIZE_INHERIT);
 
