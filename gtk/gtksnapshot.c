@@ -552,21 +552,7 @@ gtk_snapshot_collect_clip (GtkSnapshot      *snapshot,
   if (graphene_rect_contains_rect (&state->data.clip.bounds, &node->bounds))
     return node;
 
-  /* Its not uncommon to produce stacked clip nodes, which are trivial
-     to merge, so do that here */
-  if (gsk_render_node_get_node_type (node) == GSK_CLIP_NODE)
-    {
-      GskRenderNode *child = gsk_clip_node_get_child (node);
-      const graphene_rect_t *node_clip = gsk_clip_node_peek_clip (node);
-      graphene_rect_t merged_clip;
-
-      graphene_rect_intersection (&state->data.clip.bounds, node_clip, &merged_clip);
-      clip_node = gsk_clip_node_new (child, &state->data.clip.bounds);
-      gsk_render_node_unref (node);
-    }
-  else
-    clip_node = gsk_clip_node_new (node, &state->data.clip.bounds);
-
+  clip_node = gsk_clip_node_new (node, &state->data.clip.bounds);
   if (name)
     gsk_render_node_set_name (clip_node, name);
 
