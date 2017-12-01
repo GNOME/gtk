@@ -20,5 +20,5 @@ void main()
   float alpha = clamp (rounded_rect_coverage (routside, inPos) -
                        rounded_rect_coverage (rinside, inPos),
                        0.0, 1.0);
-  color = clip (inPos, inColor * alpha);
+  color = clip (inPos, vec4(inColor.rgb * inColor.a, inColor.a) * alpha);
 }
