@@ -6015,7 +6015,6 @@ gtk_application_get_active_window
 GtkApplicationInhibitFlags
 gtk_application_inhibit
 gtk_application_uninhibit
-gtk_application_is_inhibited
 
 <SUBSECTION>
 gtk_application_prefers_app_menu
