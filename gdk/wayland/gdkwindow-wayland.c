@@ -1013,6 +1013,24 @@ gdk_wayland_window_sync_parent (GdkWindow *window,
 }
 
 static void
+gdk_wayland_window_sync_parent_of_imported (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  if (!impl->display_server.wl_surface)
+    return;
+
+  if (!impl->imported_transient_for)
+    return;
+
+  if (!impl->display_server.xdg_toplevel)
+    return;
+
+  zxdg_imported_v1_set_parent_of (impl->imported_transient_for,
+                                  impl->display_server.wl_surface);
+}
+
+static void
 gdk_wayland_window_update_dialogs (GdkWindow *window)
 {
   GdkWaylandDisplay *display_wayland =
@@ -1461,6 +1479,7 @@ gdk_wayland_window_create_xdg_toplevel (GdkWindow *window)
                                  window);
 
   gdk_wayland_window_sync_parent (window, NULL);
+  gdk_wayland_window_sync_parent_of_imported (window);
   gdk_wayland_window_sync_title (window);
 
   if (window->state & GDK_WINDOW_STATE_MAXIMIZED)
@@ -4167,11 +4186,11 @@ gdk_wayland_window_set_transient_for_exported (GdkWindow *window,
 
   g_return_val_if_fail (GDK_IS_WAYLAND_WINDOW (window), FALSE);
   g_return_val_if_fail (GDK_IS_WAYLAND_DISPLAY (display), FALSE);
+  g_return_val_if_fail (!should_map_as_subsurface (window) &&
+                        !should_map_as_popup (window), FALSE);
 
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   display_wayland = GDK_WAYLAND_DISPLAY (display);
-
-  g_return_val_if_fail (impl->display_server.xdg_surface, FALSE);
 
   if (!display_wayland->xdg_importer)
     {
@@ -4187,8 +4206,7 @@ gdk_wayland_window_set_transient_for_exported (GdkWindow *window,
                                  &xdg_imported_listener,
                                  window);
 
-  zxdg_imported_v1_set_parent_of (impl->imported_transient_for,
-                                  impl->display_server.wl_surface);
+  gdk_wayland_window_sync_parent_of_imported (window);
 
   return TRUE;
 }
