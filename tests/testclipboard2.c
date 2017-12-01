@@ -177,7 +177,7 @@ get_formats_list (GdkClipboard *clipboard)
   sw = gtk_scrolled_window_new (NULL, NULL);
 
   list = gtk_list_box_new ();
-  g_signal_connect (clipboard, "notify::formats", G_CALLBACK (clipboard_formats_change_cb), list);
+  g_signal_connect_object (clipboard, "notify::formats", G_CALLBACK (clipboard_formats_change_cb), list, 0);
   clipboard_formats_change_cb (clipboard, NULL, list);
   gtk_container_add (GTK_CONTAINER (sw), list);
 
@@ -193,7 +193,7 @@ get_contents_widget (GdkClipboard *clipboard)
   gtk_widget_set_hexpand (stack, TRUE);
   gtk_widget_set_vexpand (stack, TRUE);
   g_signal_connect (stack, "notify::visible-child", G_CALLBACK (visible_child_changed_cb), clipboard);
-  g_signal_connect (clipboard, "changed", G_CALLBACK (clipboard_changed_cb), stack);
+  g_signal_connect_object (clipboard, "changed", G_CALLBACK (clipboard_changed_cb), stack, 0);
 
   child = get_formats_list (clipboard);
   gtk_stack_add_titled (GTK_STACK (stack), child, "info", "Info");
