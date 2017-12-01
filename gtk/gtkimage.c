@@ -468,8 +468,8 @@ gtk_image_new_from_resource (const gchar *resource_path)
  * pixbuf; you still need to unref it if you own references.
  * #GtkImage will add its own reference rather than adopting yours.
  *
- * This is a helper for gtk_image_new_from_surface, and you can't
- * get back the exact pixbuf once this is called, only a surface.
+ * This is a helper for gtk_image_new_from_texture, and you can't
+ * get back the exact pixbuf once this is called, only a texture.
  *
  * Note that this function just creates an #GtkImage from the pixbuf. The
  * #GtkImage created will not react to state changes. Should you want that, 
@@ -809,28 +809,28 @@ gtk_image_set_from_resource (GtkImage    *image,
  *
  * See gtk_image_new_from_pixbuf() for details.
  *
- * Note: This is a helper for gtk_image_new_from_surface, and you can't
- * get back the exact pixbuf once this is called, only a surface.
+ * Note: This is a helper for gtk_image_new_from_texture, and you can't
+ * get back the exact pixbuf once this is called, only a texture.
  *
  **/
 void
 gtk_image_set_from_pixbuf (GtkImage  *image,
                            GdkPixbuf *pixbuf)
 {
-  cairo_surface_t *surface = NULL;
+  GdkTexture *texture;
 
   g_return_if_fail (GTK_IS_IMAGE (image));
-  g_return_if_fail (pixbuf == NULL ||
-                    GDK_IS_PIXBUF (pixbuf));
-
+  g_return_if_fail (pixbuf == NULL || GDK_IS_PIXBUF (pixbuf));
 
   if (pixbuf)
-    surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, gtk_widget_get_window (GTK_WIDGET (image)));
+    texture = gdk_texture_new_for_pixbuf (pixbuf);
+  else
+    texture = NULL;
 
-  gtk_image_set_from_surface (image, surface);
+  gtk_image_set_from_texture (image, texture);
 
-  if (surface)
-    cairo_surface_destroy (surface);
+  if (texture)
+    g_object_unref (texture);
 }
 
 /**
