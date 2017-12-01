@@ -20,7 +20,6 @@
 #include "gtkimagedefinitionprivate.h"
 
 typedef struct _GtkImageDefinitionEmpty GtkImageDefinitionEmpty;
-typedef struct _GtkImageDefinitionStock GtkImageDefinitionStock;
 typedef struct _GtkImageDefinitionIconName GtkImageDefinitionIconName;
 typedef struct _GtkImageDefinitionGIcon GtkImageDefinitionGIcon;
 typedef struct _GtkImageDefinitionSurface GtkImageDefinitionSurface;
@@ -29,13 +28,6 @@ typedef struct _GtkImageDefinitionTexture GtkImageDefinitionTexture;
 struct _GtkImageDefinitionEmpty {
   GtkImageType type;
   gint ref_count;
-};
-
-struct _GtkImageDefinitionStock {
-  GtkImageType type;
-  gint ref_count;
-
-  char *id;
 };
 
 struct _GtkImageDefinitionIconName {
@@ -70,7 +62,6 @@ union _GtkImageDefinition
 {
   GtkImageType type;
   GtkImageDefinitionEmpty empty;
-  GtkImageDefinitionStock stock;
   GtkImageDefinitionIconName icon_name;
   GtkImageDefinitionGIcon gicon;
   GtkImageDefinitionSurface surface;
@@ -90,7 +81,6 @@ gtk_image_definition_alloc (GtkImageType type)
 {
   static gsize sizes[] = {
     sizeof (GtkImageDefinitionEmpty),
-    sizeof (GtkImageDefinitionStock),
     sizeof (GtkImageDefinitionIconName),
     sizeof (GtkImageDefinitionGIcon),
     sizeof (GtkImageDefinitionSurface),
