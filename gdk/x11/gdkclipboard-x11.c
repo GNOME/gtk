@@ -47,6 +47,8 @@ struct _GdkX11Clipboard
   char       *selection;
   Atom        xselection;
   gulong      timestamp;
+  
+  GTask      *store_task;
 };
 
 struct _GdkX11ClipboardClass
@@ -124,6 +126,7 @@ handle_targets_done (GObject      *stream,
 
 static Atom *
 gdk_x11_clipboard_formats_to_atoms (GdkDisplay        *display,
+                                    gboolean           include_special,
                                     GdkContentFormats *formats,
                                     gsize             *n_atoms);
 
@@ -139,6 +142,7 @@ handle_targets (GdkX11Clipboard *cb,
   gsize n_atoms;
 
   atoms = gdk_x11_clipboard_formats_to_atoms (gdk_clipboard_get_display (clipboard),
+                                              TRUE,
                                               gdk_clipboard_get_formats (clipboard),
                                               &n_atoms);
   print_atoms (cb, "sending targets", atoms, n_atoms);
@@ -189,6 +193,18 @@ handle_timestamp (GdkX11Clipboard *cb,
                                    NULL,
                                    handle_timestamp_done,
                                    timestamp);
+  g_object_unref (stream);
+}
+
+static void
+handle_save_targets (GdkX11Clipboard *cb,
+                     const char      *target,
+                     const char      *encoding,
+                     int              format,
+                     GOutputStream   *stream)
+{
+  /* Don't do anything */
+
   g_object_unref (stream);
 }
 
@@ -267,7 +283,8 @@ static const struct {
   { "TEXT",          "text/plain;charset=utf-8", text_list_convert, "STRING",        8,  handle_text_list },
   { "STRING",        "text/plain;charset=utf-8", text_list_convert, "STRING",        8,  handle_text_list },
   { "TARGETS",       NULL,                       NULL,              "ATOM",          32, handle_targets },
-  { "TIMESTAMP",     NULL,                       NULL,              "INTEGER",       32, handle_timestamp }
+  { "TIMESTAMP",     NULL,                       NULL,              "INTEGER",       32, handle_timestamp },
+  { "SAVE_TARGETS",  NULL,                       NULL,              "NULL",          32, handle_save_targets }
 };
 
 static GSList *
@@ -298,6 +315,7 @@ gdk_x11_clipboard_formats_to_targets (GdkContentFormats *formats)
 
 static Atom *
 gdk_x11_clipboard_formats_to_atoms (GdkDisplay        *display,
+                                    gboolean           include_special,
                                     GdkContentFormats *formats,
                                     gsize             *n_atoms)
 {
@@ -307,13 +325,16 @@ gdk_x11_clipboard_formats_to_atoms (GdkDisplay        *display,
 
   targets = gdk_x11_clipboard_formats_to_targets (formats);
 
-  for (i = 0; i < G_N_ELEMENTS (special_targets); i++)
+  if (include_special)
     {
-      if (special_targets[i].mime_type != NULL)
-        continue;
+      for (i = 0; i < G_N_ELEMENTS (special_targets); i++)
+        {
+          if (special_targets[i].mime_type != NULL)
+            continue;
 
-      if (special_targets[i].handler)
-        targets = g_slist_prepend (targets, (gpointer) g_intern_string (special_targets[i].x_target));
+          if (special_targets[i].handler)
+            targets = g_slist_prepend (targets, (gpointer) g_intern_string (special_targets[i].x_target));
+        }
     }
 
   *n_atoms = g_slist_length (targets);
@@ -668,6 +689,36 @@ gdk_x11_clipboard_filter_event (GdkXEvent *xev,
       gdk_x11_clipboard_claim_remote (cb, xevent->xselectionclear.time);
       return GDK_FILTER_REMOVE;
 
+    case SelectionNotify:
+      /* This code only checks clipboard manager replies, so... */
+      if (!g_str_equal (cb->selection, "CLIPBOARD"))
+        return GDK_FILTER_CONTINUE;
+
+      /* selection is not for us */
+      if (xevent->xselection.selection != gdk_x11_get_xatom_by_name_for_display (display, "CLIPBOARD_MANAGER") ||
+          xevent->xselection.target != gdk_x11_get_xatom_by_name_for_display (display, "SAVE_TARGETS"))
+        return GDK_FILTER_CONTINUE;
+
+      /* We already received a selectionNotify before */
+      if (cb->store_task == NULL)
+        {
+          GDK_NOTE(CLIPBOARD, g_printerr ("%s: got SelectionNotify for nonexisting task?!\n",
+                                          cb->selection));
+          return GDK_FILTER_CONTINUE;
+        }
+
+      GDK_NOTE(CLIPBOARD, g_printerr ("%s: got SelectionNotify for store task\n",
+                                      cb->selection));
+
+      if (xevent->xselection.property != None)
+        g_task_return_boolean (cb->store_task, TRUE);
+      else
+        g_task_return_new_error (cb->store_task, G_IO_ERROR, G_IO_ERROR_FAILED,
+                                 _("Clipboard manager could not store selection."));
+      g_clear_object (&cb->store_task);
+      
+      return GDK_FILTER_CONTINUE;
+
     case SelectionRequest:
       {
         GdkX11PendingSelectionNotify *notify;
@@ -787,6 +838,105 @@ gdk_x11_clipboard_claim (GdkClipboard       *clipboard,
     }
 
   return GDK_CLIPBOARD_CLASS (gdk_x11_clipboard_parent_class)->claim (clipboard, formats, local, content);
+}
+
+static void
+gdk_x11_clipboard_store_async (GdkClipboard        *clipboard,
+                               int                  io_priority,
+                               GCancellable        *cancellable,
+                               GAsyncReadyCallback  callback,
+                               gpointer             user_data)
+{
+  GdkX11Clipboard *cb = GDK_X11_CLIPBOARD (clipboard);
+  GdkDisplay *display = gdk_clipboard_get_display (clipboard);
+  Display *xdisplay = GDK_DISPLAY_XDISPLAY (display);
+  Atom clipboard_manager, save_targets, property_name;
+  GdkContentProvider *content;
+  GdkContentFormats *formats;
+  Atom *atoms;
+  gsize n_atoms;
+  int error;
+
+  /* clipboard managers don't work on anythig but the clipbpoard selection */
+  if (!g_str_equal (cb->selection, "CLIPBOARD"))
+    {
+      GDK_NOTE(CLIPBOARD, g_printerr ("%s: can only store on CLIPBOARD\n",
+                                      cb->selection));
+      GDK_CLIPBOARD_CLASS (gdk_x11_clipboard_parent_class)->store_async (clipboard,
+                                                                         io_priority,
+                                                                         cancellable,
+                                                                         callback,
+                                                                         user_data);
+      return;
+    }
+
+  cb->store_task = g_task_new (clipboard, cancellable, callback, user_data);
+  g_task_set_priority (cb->store_task, io_priority);
+  g_task_set_source_tag (cb->store_task, gdk_x11_clipboard_store_async);
+
+  clipboard_manager = gdk_x11_get_xatom_by_name_for_display (display, "CLIPBOARD_MANAGER");
+  save_targets = gdk_x11_get_xatom_by_name_for_display (display, "SAVE_TARGETS");
+
+  if (XGetSelectionOwner (xdisplay, clipboard_manager) == None)
+    {
+      GDK_NOTE(CLIPBOARD, g_printerr ("%s: XGetSelectionOwner (CLIPBOARD_MANAGER) returned None, aborting.\n",
+                                      cb->selection));
+      g_task_return_new_error (cb->store_task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
+                               _("Cannot store clipboard. No clipboard manager is active."));
+      g_clear_object (&cb->store_task);
+      return;
+    }
+
+  content = gdk_clipboard_get_content (clipboard);
+  if (content == NULL)
+    {
+      GDK_NOTE(CLIPBOARD, g_printerr ("%s: storing empty clipboard: SUCCESS!\n",
+                                      cb->selection));
+      g_task_return_boolean (cb->store_task, TRUE);
+      g_clear_object (&cb->store_task);
+      return;
+    }
+
+  formats = gdk_content_provider_ref_storable_formats (content);
+  formats = gdk_content_formats_union_serialize_mime_types (formats);
+  atoms = gdk_x11_clipboard_formats_to_atoms (display, FALSE, formats, &n_atoms);
+  print_atoms (cb, "requesting store from clipboard manager", atoms, n_atoms);
+  gdk_content_formats_unref (formats);
+
+  gdk_x11_display_error_trap_push (display);
+
+  if (n_atoms > 0)
+    {
+      property_name = gdk_x11_get_xatom_by_name_for_display (display, "GDK_CLIPBOARD_SAVE_TARGETS");
+
+      XChangeProperty (xdisplay, GDK_X11_DISPLAY (display)->leader_window,
+                       property_name, XA_ATOM,
+                       32, PropModeReplace, (guchar *)atoms, n_atoms);
+    }
+  else
+    property_name = None;
+
+  XConvertSelection (xdisplay,
+                     clipboard_manager, save_targets, property_name,
+                     GDK_X11_DISPLAY (display)->leader_window, cb->timestamp);
+
+  error = gdk_x11_display_error_trap_pop (display);
+  if (error != Success)
+    {
+      GDK_NOTE(CLIPBOARD, g_printerr ("%s: X error during ConvertSelection() while storing selection: %d\n",
+                                      cb->selection, error));
+    }
+}
+
+static gboolean
+gdk_x11_clipboard_store_finish (GdkClipboard  *clipboard,
+                                GAsyncResult  *result,
+                                GError       **error)
+{
+  g_return_val_if_fail (g_task_is_valid (result, clipboard), FALSE);
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gdk_x11_clipboard_store_async, FALSE);
+
+  return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 static void
@@ -939,6 +1089,8 @@ gdk_x11_clipboard_class_init (GdkX11ClipboardClass *class)
   object_class->finalize = gdk_x11_clipboard_finalize;
 
   clipboard_class->claim = gdk_x11_clipboard_claim;
+  clipboard_class->store_async = gdk_x11_clipboard_store_async;
+  clipboard_class->store_finish = gdk_x11_clipboard_store_finish;
   clipboard_class->read_async = gdk_x11_clipboard_read_async;
   clipboard_class->read_finish = gdk_x11_clipboard_read_finish;
 }
