@@ -243,6 +243,93 @@ render_fallback_node (GskGLRenderer       *self,
   ops_draw (builder, vertex_data);
 }
 
+static inline void
+render_text_node (GskGLRenderer   *self,
+                  GskRenderNode   *node,
+                  RenderOpBuilder *builder,
+                  const GdkRGBA   *color,
+                  gboolean         force_color)
+{
+  const PangoFont *font = gsk_text_node_peek_font (node);
+  const PangoGlyphInfo *glyphs = gsk_text_node_peek_glyphs (node);
+  guint num_glyphs = gsk_text_node_get_num_glyphs (node);
+  int i;
+  int x_position = 0;
+  int x = gsk_text_node_get_x (node);
+  int y = gsk_text_node_get_y (node);
+
+  /* If the font has color glyphs, we don't need to recolor anything */
+  if (!force_color && font_has_color_glyphs (font))
+    {
+      ops_set_program (builder, &self->blit_program);
+    }
+  else
+    {
+      ops_set_program (builder, &self->coloring_program);
+      ops_set_color (builder, color);
+    }
+
+  /* We use one quad per character, unlike the other nodes which
+   * use at most one quad altogether */
+  for (i = 0; i < num_glyphs; i++)
+    {
+      const PangoGlyphInfo *gi = &glyphs[i];
+      const GskGLCachedGlyph *glyph;
+      int glyph_x, glyph_y, glyph_w, glyph_h;
+      float tx, ty, tx2, ty2;
+      double cx;
+      double cy;
+
+      if (gi->glyph == PANGO_GLYPH_EMPTY ||
+          (gi->glyph & PANGO_GLYPH_UNKNOWN_FLAG) > 0)
+        continue;
+
+      glyph = gsk_gl_glyph_cache_lookup (&self->glyph_cache,
+                                         TRUE,
+                                         (PangoFont *)font,
+                                         gi->glyph,
+                                         self->scale_factor);
+
+      /* e.g. whitespace */
+      if (glyph->draw_width <= 0 || glyph->draw_height <= 0)
+        {
+          x_position += gi->geometry.width;
+          continue;
+        }
+      cx = (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
+      cy = (double)(gi->geometry.y_offset) / PANGO_SCALE;
+
+      ops_set_texture (builder, gsk_gl_glyph_cache_get_glyph_image (&self->glyph_cache,
+                                                                   glyph)->texture_id);
+
+      {
+        tx  = glyph->tx;
+        ty  = glyph->ty;
+        tx2 = tx + glyph->tw;
+        ty2 = ty + glyph->th;
+
+        glyph_x = x + cx + glyph->draw_x;
+        glyph_y = y + cy + glyph->draw_y;
+        glyph_w = glyph->draw_width;
+        glyph_h = glyph->draw_height;
+
+        GskQuadVertex vertex_data[GL_N_VERTICES] = {
+          { { glyph_x,           glyph_y           }, { tx,  ty  }, },
+          { { glyph_x,           glyph_y + glyph_h }, { tx,  ty2 }, },
+          { { glyph_x + glyph_w, glyph_y           }, { tx2, ty  }, },
+
+          { { glyph_x + glyph_w, glyph_y + glyph_h }, { tx2, ty2 }, },
+          { { glyph_x,           glyph_y + glyph_h }, { tx,  ty2 }, },
+          { { glyph_x + glyph_w, glyph_y           }, { tx2, ty  }, },
+        };
+
+        ops_draw (builder, vertex_data);
+      }
+
+      x_position += gi->geometry.width;
+    }
+}
+
 static void
 gsk_gl_renderer_dispose (GObject *gobject)
 {
@@ -890,86 +977,8 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
 
     case GSK_TEXT_NODE:
       {
-        const PangoFont *font = gsk_text_node_peek_font (node);
-        const PangoGlyphInfo *glyphs = gsk_text_node_peek_glyphs (node);
-        const gboolean has_color_glyphs = font_has_color_glyphs (font);
-        guint num_glyphs = gsk_text_node_get_num_glyphs (node);
-        int i;
-        int x_position = 0;
-        int x = gsk_text_node_get_x (node);
-        int y = gsk_text_node_get_y (node);
-
-        /* If the font has color glyphs, we don't need to recolor anything */
-        if (has_color_glyphs)
-          {
-            ops_set_program (builder, &self->blit_program);
-          }
-        else
-          {
-            ops_set_program (builder, &self->coloring_program);
-            ops_set_color (builder, gsk_text_node_peek_color (node));
-          }
-
-        /* We use one quad per character, unlike the other nodes which
-         * use at most one quad altogether */
-        for (i = 0; i < num_glyphs; i++)
-          {
-            const PangoGlyphInfo *gi = &glyphs[i];
-            const GskGLCachedGlyph *glyph;
-            int glyph_x, glyph_y, glyph_w, glyph_h;
-            float tx, ty, tx2, ty2;
-            double cx;
-            double cy;
-
-            if (gi->glyph == PANGO_GLYPH_EMPTY ||
-                (gi->glyph & PANGO_GLYPH_UNKNOWN_FLAG) > 0)
-              continue;
-
-            glyph = gsk_gl_glyph_cache_lookup (&self->glyph_cache,
-                                               TRUE,
-                                               (PangoFont *)font,
-                                               gi->glyph,
-                                               self->scale_factor);
-
-            /* e.g. whitespace */
-            if (glyph->draw_width <= 0 || glyph->draw_height <= 0)
-              {
-                x_position += gi->geometry.width;
-                continue;
-              }
-            cx = (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
-            cy = (double)(gi->geometry.y_offset) / PANGO_SCALE;
-
-            ops_set_texture (builder, gsk_gl_glyph_cache_get_glyph_image (&self->glyph_cache,
-                                                                         glyph)->texture_id);
-
-            {
-              tx  = glyph->tx;
-              ty  = glyph->ty;
-              tx2 = tx + glyph->tw;
-              ty2 = ty + glyph->th;
-
-              glyph_x = x + cx + glyph->draw_x;
-              glyph_y = y + cy + glyph->draw_y;
-              glyph_w = glyph->draw_width;
-              glyph_h = glyph->draw_height;
-
-              GskQuadVertex vertex_data[GL_N_VERTICES] = {
-                { { glyph_x,           glyph_y           }, { tx,  ty  }, },
-                { { glyph_x,           glyph_y + glyph_h }, { tx,  ty2 }, },
-                { { glyph_x + glyph_w, glyph_y           }, { tx2, ty  }, },
-
-                { { glyph_x + glyph_w, glyph_y + glyph_h }, { tx2, ty2 }, },
-                { { glyph_x,           glyph_y + glyph_h }, { tx,  ty2 }, },
-                { { glyph_x + glyph_w, glyph_y           }, { tx2, ty  }, },
-              };
-
-              ops_draw (builder, vertex_data);
-            }
-
-            x_position += gi->geometry.width;
-          }
-
+        render_text_node (self, node, builder,
+                          gsk_text_node_peek_color (node), FALSE);
       }
     break;
 
