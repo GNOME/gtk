@@ -408,6 +408,15 @@ gdk_x11_clipboard_request_targets_finish (GObject      *source_object,
       g_object_unref (cb);
       return;
     }
+  else if (gdk_clipboard_is_local (GDK_CLIPBOARD (cb)))
+    {
+      /* FIXME: Use a cancellable for this request, so that we don't do he brittle
+       * is_local() check */
+      g_bytes_unref (bytes);
+      g_object_unref (stream);
+      g_object_unref (cb);
+      return;
+    }
 
   print_atoms (cb,
                "received targets",
@@ -421,8 +430,10 @@ gdk_x11_clipboard_request_targets_finish (GObject      *source_object,
   GDK_NOTE(CLIPBOARD, char *s = gdk_content_formats_to_string (formats); g_printerr ("%s: got formats: %s\n", cb->selection, s); g_free (s));
 
   /* union with previously loaded formats */
+  formats = gdk_content_formats_union (formats, gdk_clipboard_get_formats (GDK_CLIPBOARD (cb)));
   gdk_clipboard_claim_remote (GDK_CLIPBOARD (cb), formats);
   gdk_content_formats_unref (formats);
+  g_bytes_unref (bytes);
 
   g_input_stream_read_bytes_async (stream,
                                    gdk_x11_display_get_max_request_size (display),
