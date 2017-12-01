@@ -289,7 +289,7 @@ gtk_recent_chooser_dialog_new_valist (const gchar      *title,
  * gtk_recent_chooser_dialog_new:
  * @title: (allow-none): Title of the dialog, or %NULL
  * @parent: (allow-none): Transient parent of the dialog, or %NULL,
- * @first_button_text: (allow-none): stock ID or text to go in the first button, or %NULL
+ * @first_button_text: (allow-none): text to go in the first button, or %NULL
  * @...: response ID for the first button, then additional (button, id)
  *   pairs, ending with %NULL
  *
@@ -325,7 +325,7 @@ gtk_recent_chooser_dialog_new (const gchar *title,
  * @title: (allow-none): Title of the dialog, or %NULL
  * @parent: (allow-none): Transient parent of the dialog, or %NULL,
  * @manager: a #GtkRecentManager
- * @first_button_text: (allow-none): stock ID or text to go in the first button, or %NULL
+ * @first_button_text: (allow-none): text to go in the first button, or %NULL
  * @...: response ID for the first button, then additional (button, id)
  *   pairs, ending with %NULL
  *
