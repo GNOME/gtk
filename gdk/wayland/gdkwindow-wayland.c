@@ -2448,8 +2448,6 @@ gdk_wayland_window_hide_surface (GdkWindow *window)
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
-  unset_transient_for_exported (window);
-
   unmap_popups_for_window (window);
 
   if (impl->display_server.wl_surface)
@@ -2530,6 +2528,8 @@ gdk_wayland_window_hide_surface (GdkWindow *window)
         display_wayland->orphan_dialogs =
           g_list_remove (display_wayland->orphan_dialogs, window);
     }
+
+  unset_transient_for_exported (window);
 
   _gdk_wayland_window_clear_saved_size (window);
   impl->pending_commit = FALSE;
