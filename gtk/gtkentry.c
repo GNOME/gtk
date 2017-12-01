@@ -34,7 +34,6 @@
 
 #include "gtkbindings.h"
 #include "gtkcelleditable.h"
-#include "gtkclipboard.h"
 #include "gtkdebug.h"
 #include "gtkdnd.h"
 #include "gtkdndprivate.h"
@@ -193,6 +192,8 @@ struct _GtkEntryPrivate
   PangoLayout           *cached_layout;
   PangoAttrList         *attrs;
   PangoTabArray         *tabs;
+
+  GdkContentProvider    *selection_content;
 
   gchar        *im_module;
 
@@ -596,7 +597,7 @@ static void         gtk_entry_delete_whitespace        (GtkEntry       *entry);
 static void         gtk_entry_select_word              (GtkEntry       *entry);
 static void         gtk_entry_select_line              (GtkEntry       *entry);
 static void         gtk_entry_paste                    (GtkEntry       *entry,
-							GdkAtom         selection);
+							GdkClipboard   *clipboard);
 static void         gtk_entry_update_primary_selection (GtkEntry       *entry);
 static void         gtk_entry_do_popup                 (GtkEntry       *entry,
 							const GdkEvent *event);
@@ -672,6 +673,86 @@ G_DEFINE_TYPE_WITH_CODE (GtkEntry, gtk_entry, GTK_TYPE_WIDGET,
                                                 gtk_entry_editable_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_EDITABLE,
                                                 gtk_entry_cell_editable_init))
+
+#define GTK_TYPE_ENTRY_CONTENT            (gtk_entry_content_get_type ())
+#define GTK_ENTRY_CONTENT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ENTRY_CONTENT, GtkEntryContent))
+#define GTK_IS_ENTRY_CONTENT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_ENTRY_CONTENT))
+#define GTK_ENTRY_CONTENT_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_ENTRY_CONTENT, GtkEntryContentClass))
+#define GTK_IS_ENTRY_CONTENT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ENTRY_CONTENT))
+#define GTK_ENTRY_CONTENT_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ENTRY_CONTENT, GtkEntryContentClass))
+
+typedef struct _GtkEntryContent GtkEntryContent;
+typedef struct _GtkEntryContentClass GtkEntryContentClass;
+
+struct _GtkEntryContent
+{
+  GdkContentProvider parent;
+
+  GtkEntry *entry;
+};
+
+struct _GtkEntryContentClass
+{
+  GdkContentProviderClass parent_class;
+};
+
+GType gtk_entry_content_get_type (void) G_GNUC_CONST;
+
+G_DEFINE_TYPE (GtkEntryContent, gtk_entry_content, GDK_TYPE_CONTENT_PROVIDER)
+
+static GdkContentFormats *
+gtk_entry_content_ref_formats (GdkContentProvider *provider)
+{
+  return gdk_content_formats_new_for_gtype (G_TYPE_STRING);
+}
+
+static gboolean
+gtk_entry_content_get_value (GdkContentProvider  *provider,
+                             GValue              *value,
+                             GError             **error)
+{
+  GtkEntryContent *content = GTK_ENTRY_CONTENT (provider);
+
+  if (G_VALUE_HOLDS (value, G_TYPE_STRING))
+    {
+      int start, end;
+
+      if (gtk_editable_get_selection_bounds (GTK_EDITABLE (content->entry), &start, &end))
+        {
+          gchar *str = _gtk_entry_get_display_text (content->entry, start, end);
+          g_value_take_string (value, str);
+        }
+      return TRUE;
+    }
+
+  return GDK_CONTENT_PROVIDER_CLASS (gtk_entry_content_parent_class)->get_value (provider, value, error);
+}
+
+static void
+gtk_entry_content_detach (GdkContentProvider *provider,
+                          GdkClipboard       *clipboard)
+{
+  GtkEntryContent *content = GTK_ENTRY_CONTENT (provider);
+  GtkEntry *entry = content->entry;
+  GtkEntryPrivate *priv = entry->priv;
+
+  gtk_editable_select_region (GTK_EDITABLE (entry), priv->current_pos, priv->current_pos);
+}
+
+static void
+gtk_entry_content_class_init (GtkEntryContentClass *class)
+{
+  GdkContentProviderClass *provider_class = GDK_CONTENT_PROVIDER_CLASS (class);
+
+  provider_class->ref_formats = gtk_entry_content_ref_formats;
+  provider_class->get_value = gtk_entry_content_get_value;
+  provider_class->detach_clipboard = gtk_entry_content_detach;
+}
+
+static void
+gtk_entry_content_init (GtkEntryContent *content)
+{
+}
 
 static void
 add_move_binding (GtkBindingSet  *binding_set,
@@ -2493,6 +2574,10 @@ gtk_entry_init (GtkEntry *entry)
   priv->xalign = 0.0;
   priv->caps_lock_warning = TRUE;
   priv->caps_lock_warning_shown = FALSE;
+  priv->insert_pos = -1;
+
+  priv->selection_content = g_object_new (GTK_TYPE_ENTRY_CONTENT, NULL);
+  GTK_ENTRY_CONTENT (priv->selection_content)->entry = entry;
 
   gtk_drag_dest_set (GTK_WIDGET (entry), 0, NULL,
                      GDK_ACTION_COPY | GDK_ACTION_MOVE);
@@ -2697,6 +2782,8 @@ gtk_entry_finalize (GObject *object)
   GtkEntryPrivate *priv = entry->priv;
   EntryIconInfo *icon_info = NULL;
   gint i;
+
+  g_clear_object (&priv->selection_content);
 
   for (i = 0; i < MAX_ICONS; i++)
     {
@@ -3017,15 +3104,15 @@ gtk_entry_unrealize (GtkWidget *widget)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
-  GtkClipboard *clipboard;
+  GdkClipboard *clipboard;
 
   gtk_entry_reset_layout (entry);
   
   gtk_im_context_set_client_widget (priv->im_context, NULL);
 
-  clipboard = gtk_widget_get_old_clipboard (widget, GDK_SELECTION_PRIMARY);
-  if (gtk_clipboard_get_owner (clipboard) == G_OBJECT (entry))
-    gtk_clipboard_clear (clipboard);
+  clipboard = gtk_widget_get_primary_clipboard (widget);
+  if (gdk_clipboard_get_content (clipboard) == priv->selection_content)
+    gdk_clipboard_set_content (clipboard, NULL);
 
   if (priv->popup_menu)
     {
@@ -3682,7 +3769,7 @@ gtk_entry_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
       if (priv->editable)
         {
           priv->insert_pos = tmp_pos;
-          gtk_entry_paste (entry, GDK_SELECTION_PRIMARY);
+          gtk_entry_paste (entry, gtk_widget_get_primary_clipboard (widget));
         }
       else
         {
@@ -5117,9 +5204,7 @@ gtk_entry_copy_clipboard (GtkEntry *entry)
         }
 
       str = _gtk_entry_get_display_text (entry, start, end);
-      gtk_clipboard_set_text (gtk_widget_get_old_clipboard (GTK_WIDGET (entry),
-							GDK_SELECTION_CLIPBOARD),
-			      str, -1);
+      gdk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (entry)), str);
       g_free (str);
     }
 }
@@ -5168,7 +5253,7 @@ gtk_entry_paste_clipboard (GtkEntry *entry)
   GtkEntryPrivate *priv = entry->priv;
 
   if (priv->editable)
-    gtk_entry_paste (entry, GDK_SELECTION_CLIPBOARD);
+    gtk_entry_paste (entry, gtk_widget_get_clipboard (GTK_WIDGET (entry)));
   else
     gtk_widget_error_bell (GTK_WIDGET (entry));
 
@@ -6483,130 +6568,103 @@ truncate_multiline (const gchar *text)
 }
 
 static void
-paste_received (GtkClipboard *clipboard,
-		const gchar  *text,
+paste_received (GObject      *clipboard,
+                GAsyncResult *result,
 		gpointer      data)
 {
   GtkEntry *entry = GTK_ENTRY (data);
   GtkEditable *editable = GTK_EDITABLE (entry);
   GtkEntryPrivate *priv = entry->priv;
-  guint button;
+  char *text;
+  gint pos, start, end;
+  gint length = -1;
+  gboolean popup_completion;
+  GtkEntryCompletion *completion;
 
-  button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (priv->multipress_gesture));
+  text = gdk_clipboard_read_text_finish (GDK_CLIPBOARD (clipboard), result, NULL);
+  if (text == NULL)
+    {
+      gtk_widget_error_bell (GTK_WIDGET (entry));
+      return;
+    }
 
-  if (button == GDK_BUTTON_MIDDLE)
+  if (priv->insert_pos >= 0)
     {
       gint pos, start, end;
       pos = priv->insert_pos;
       gtk_editable_get_selection_bounds (editable, &start, &end);
       if (!((start <= pos && pos <= end) || (end <= pos && pos <= start)))
 	gtk_editable_select_region (editable, pos, pos);
+      priv->insert_pos = -1;
     }
       
-  if (text)
+  completion = gtk_entry_get_completion (entry);
+
+  if (priv->truncate_multiline)
+    length = truncate_multiline (text);
+
+  /* only complete if the selection is at the end */
+  popup_completion = (gtk_entry_buffer_get_length (get_buffer (entry)) ==
+                      MAX (priv->current_pos, priv->selection_bound));
+
+  if (completion)
     {
-      gint pos, start, end;
-      gint length = -1;
-      gboolean popup_completion;
-      GtkEntryCompletion *completion;
+      if (gtk_widget_get_mapped (completion->priv->popup_window))
+        _gtk_entry_completion_popdown (completion);
 
-      completion = gtk_entry_get_completion (entry);
-
-      if (priv->truncate_multiline)
-        length = truncate_multiline (text);
-
-      /* only complete if the selection is at the end */
-      popup_completion = (gtk_entry_buffer_get_length (get_buffer (entry)) ==
-                          MAX (priv->current_pos, priv->selection_bound));
-
-      if (completion)
-	{
-	  if (gtk_widget_get_mapped (completion->priv->popup_window))
-	    _gtk_entry_completion_popdown (completion);
-
-          if (!popup_completion && completion->priv->changed_id > 0)
-            g_signal_handler_block (entry, completion->priv->changed_id);
-	}
-
-      begin_change (entry);
-      if (gtk_editable_get_selection_bounds (editable, &start, &end))
-        gtk_editable_delete_text (editable, start, end);
-
-      pos = priv->current_pos;
-      gtk_editable_insert_text (editable, text, length, &pos);
-      gtk_editable_set_position (editable, pos);
-      end_change (entry);
-
-      if (completion &&
-          !popup_completion && completion->priv->changed_id > 0)
-	g_signal_handler_unblock (entry, completion->priv->changed_id);
+      if (!popup_completion && completion->priv->changed_id > 0)
+        g_signal_handler_block (entry, completion->priv->changed_id);
     }
 
+  begin_change (entry);
+  if (gtk_editable_get_selection_bounds (editable, &start, &end))
+    gtk_editable_delete_text (editable, start, end);
+
+  pos = priv->current_pos;
+  gtk_editable_insert_text (editable, text, length, &pos);
+  gtk_editable_set_position (editable, pos);
+  end_change (entry);
+
+  if (completion &&
+      !popup_completion && completion->priv->changed_id > 0)
+    g_signal_handler_unblock (entry, completion->priv->changed_id);
+
+  g_free (text);
   g_object_unref (entry);
 }
 
 static void
-gtk_entry_paste (GtkEntry *entry,
-		 GdkAtom   selection)
+gtk_entry_paste (GtkEntry     *entry,
+		 GdkClipboard *clipboard)
 {
   g_object_ref (entry);
-  gtk_clipboard_request_text (gtk_widget_get_old_clipboard (GTK_WIDGET (entry), selection),
-			      paste_received, entry);
-}
-
-static void
-primary_get_cb (GtkClipboard     *clipboard,
-		GtkSelectionData *selection_data,
-		gpointer          data)
-{
-  GtkEntry *entry = GTK_ENTRY (data);
-  gint start, end;
-  
-  if (gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start, &end))
-    {
-      gchar *str = _gtk_entry_get_display_text (entry, start, end);
-      gtk_selection_data_set_text (selection_data, str, -1);
-      g_free (str);
-    }
-}
-
-static void
-primary_clear_cb (GtkClipboard *clipboard,
-		  gpointer      data)
-{
-  GtkEntry *entry = GTK_ENTRY (data);
-  GtkEntryPrivate *priv = entry->priv;
-
-  gtk_editable_select_region (GTK_EDITABLE (entry), priv->current_pos, priv->current_pos);
+  gdk_clipboard_read_text_async (clipboard,
+                                 NULL,
+                                 paste_received,
+                                 entry);
 }
 
 static void
 gtk_entry_update_primary_selection (GtkEntry *entry)
 {
-  GdkContentFormats *list;
-  GtkClipboard *clipboard;
+  GtkEntryPrivate *priv = entry->priv;
+  GdkClipboard *clipboard;
   gint start, end;
 
   if (!gtk_widget_get_realized (GTK_WIDGET (entry)))
     return;
 
-  list = gdk_content_formats_new (NULL, 0);
-  list = gtk_content_formats_add_text_targets (list);
-
-  clipboard = gtk_widget_get_old_clipboard (GTK_WIDGET (entry), GDK_SELECTION_PRIMARY);
+  clipboard = gtk_widget_get_primary_clipboard (GTK_WIDGET (entry));
   
   if (gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start, &end))
     {
-      gtk_clipboard_set_with_owner (clipboard, list,
-                                    primary_get_cb, primary_clear_cb, G_OBJECT (entry));
+      gdk_clipboard_set_content (clipboard, priv->selection_content);
     }
   else
     {
-      if (gtk_clipboard_get_owner (clipboard) == G_OBJECT (entry))
-	gtk_clipboard_clear (clipboard);
+      if (gdk_clipboard_get_content (clipboard) == priv->selection_content)
+	gdk_clipboard_set_content (clipboard, NULL);
     }
-
-  gdk_content_formats_unref (list);
 }
 
 static void
@@ -8471,20 +8529,18 @@ popup_menu_detach (GtkWidget *attach_widget,
   priv_attach->popup_menu = NULL;
 }
 
-typedef struct
-{
-  GtkEntry *entry;
-  GdkEvent *trigger_event;
-} PopupInfo;
-
 static void
-popup_targets_received (GtkClipboard     *clipboard,
-			GtkSelectionData *data,
-			gpointer          user_data)
+gtk_entry_do_popup (GtkEntry       *entry,
+                    const GdkEvent *event)
 {
-  PopupInfo *info = user_data;
-  GtkEntry *entry = info->entry;
   GtkEntryPrivate *info_entry_priv = entry->priv;
+  GdkEvent *trigger_event;
+
+  /* In order to know what entries we should make sensitive, we
+   * ask for the current targets of the clipboard, and when
+   * we get them, then we actually pop up the menu.
+   */
+  trigger_event = event ? gdk_event_copy (event) : gtk_get_current_event ();
 
   if (gtk_widget_get_realized (GTK_WIDGET (entry)))
     {
@@ -8493,7 +8549,8 @@ popup_targets_received (GtkClipboard     *clipboard,
       GtkWidget *menu;
       GtkWidget *menuitem;
 
-      clipboard_contains_text = gtk_selection_data_targets_include_text (data);
+      clipboard_contains_text = gdk_content_formats_contain_gtype (gdk_clipboard_get_formats (gtk_widget_get_clipboard (GTK_WIDGET (entry))),
+                                                                   G_TYPE_STRING);
       if (info_entry_priv->popup_menu)
 	gtk_widget_destroy (info_entry_priv->popup_menu);
 
@@ -8548,42 +8605,21 @@ popup_targets_received (GtkClipboard     *clipboard,
 
       g_signal_emit (entry, signals[POPULATE_POPUP], 0, menu);
 
-      if (info->trigger_event && gdk_event_triggers_context_menu (info->trigger_event))
-        gtk_menu_popup_at_pointer (GTK_MENU (menu), info->trigger_event);
+      if (trigger_event && gdk_event_triggers_context_menu (trigger_event))
+        gtk_menu_popup_at_pointer (GTK_MENU (menu), trigger_event);
       else
         {
           gtk_menu_popup_at_widget (GTK_MENU (menu),
                                     GTK_WIDGET (entry),
                                     GDK_GRAVITY_SOUTH_EAST,
                                     GDK_GRAVITY_NORTH_WEST,
-                                    info->trigger_event);
+                                    trigger_event);
 
           gtk_menu_shell_select_first (GTK_MENU_SHELL (menu), FALSE);
         }
     }
 
-  g_clear_pointer (&info->trigger_event, gdk_event_free);
-  g_object_unref (entry);
-  g_slice_free (PopupInfo, info);
-}
-
-static void
-gtk_entry_do_popup (GtkEntry       *entry,
-                    const GdkEvent *event)
-{
-  PopupInfo *info = g_slice_new (PopupInfo);
-
-  /* In order to know what entries we should make sensitive, we
-   * ask for the current targets of the clipboard, and when
-   * we get them, then we actually pop up the menu.
-   */
-  info->entry = g_object_ref (entry);
-  info->trigger_event = event ? gdk_event_copy (event) : gtk_get_current_event ();
-
-  gtk_clipboard_request_contents (gtk_widget_get_old_clipboard (GTK_WIDGET (entry), GDK_SELECTION_CLIPBOARD),
-				  gdk_atom_intern_static_string ("TARGETS"),
-				  popup_targets_received,
-				  info);
+  g_clear_pointer (&trigger_event, gdk_event_free);
 }
 
 static gboolean
@@ -8656,10 +8692,8 @@ append_bubble_action (GtkEntry     *entry,
   gtk_container_add (GTK_CONTAINER (toolbar), item);
 }
 
-static void
-bubble_targets_received (GtkClipboard     *clipboard,
-                         GtkSelectionData *data,
-                         gpointer          user_data)
+static gboolean
+gtk_entry_selection_bubble_popup_show (gpointer user_data)
 {
   GtkEntry *entry = user_data;
   GtkEntryPrivate *priv = entry->priv;
@@ -8684,7 +8718,7 @@ bubble_targets_received (GtkClipboard     *clipboard,
   if (!has_selection && !priv->editable)
     {
       priv->selection_bubble_timeout_id = 0;
-      return;
+      return G_SOURCE_REMOVE;
     }
 
   if (priv->selection_bubble)
@@ -8706,7 +8740,8 @@ bubble_targets_received (GtkClipboard     *clipboard,
   gtk_container_add (GTK_CONTAINER (priv->selection_bubble), box);
   gtk_container_add (GTK_CONTAINER (box), toolbar);
 
-  has_clipboard = gtk_selection_data_targets_include_text (data);
+  has_clipboard = gdk_content_formats_contain_gtype (gdk_clipboard_get_formats (gtk_widget_get_clipboard (GTK_WIDGET (entry))),
+                                                     G_TYPE_STRING);
   mode = gtk_entry_get_display_mode (entry);
 
   if (priv->editable && has_selection && mode == DISPLAY_NORMAL)
@@ -8756,17 +8791,7 @@ bubble_targets_received (GtkClipboard     *clipboard,
   gtk_widget_show (priv->selection_bubble);
 
   priv->selection_bubble_timeout_id = 0;
-}
 
-static gboolean
-gtk_entry_selection_bubble_popup_show (gpointer user_data)
-{
-  GtkEntry *entry = user_data;
-
-  gtk_clipboard_request_contents (gtk_widget_get_old_clipboard (GTK_WIDGET (entry), GDK_SELECTION_CLIPBOARD),
-                                  gdk_atom_intern_static_string ("TARGETS"),
-                                  bubble_targets_received,
-                                  entry);
   return G_SOURCE_REMOVE;
 }
 
