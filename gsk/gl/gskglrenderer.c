@@ -195,6 +195,53 @@ struct _GskGLRendererClass
 
 G_DEFINE_TYPE (GskGLRenderer, gsk_gl_renderer, GSK_TYPE_RENDERER)
 
+static inline void
+render_fallback_node (GskGLRenderer       *self,
+                      GskRenderNode       *node,
+                      RenderOpBuilder     *builder,
+                      const GskQuadVertex *vertex_data)
+{
+  cairo_surface_t *surface;
+  cairo_t *cr;
+  int texture_id;
+
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                        ceilf (node->bounds.size.width) * self->scale_factor,
+                                        ceilf (node->bounds.size.height) * self->scale_factor);
+  cairo_surface_set_device_scale (surface, self->scale_factor, self->scale_factor);
+  cr = cairo_create (surface);
+
+  cairo_save (cr);
+  cairo_translate (cr, -node->bounds.origin.x, -node->bounds.origin.y);
+  gsk_render_node_draw (node, cr);
+  cairo_restore (cr);
+
+#if HIGHLIGHT_FALLBACK
+  cairo_move_to (cr, 0, 0);
+  cairo_rectangle (cr, 0, 0, node->bounds.size.width, node->bounds.size.height);
+  cairo_set_source_rgba (cr, 1, 0, 0, 1);
+  cairo_stroke (cr);
+#endif
+  cairo_destroy (cr);
+
+  /* Upload the Cairo surface to a GL texture */
+  texture_id = gsk_gl_driver_create_texture (self->gl_driver,
+                                             node->bounds.size.width * self->scale_factor,
+                                             node->bounds.size.height * self->scale_factor);
+
+  gsk_gl_driver_bind_source_texture (self->gl_driver, texture_id);
+  gsk_gl_driver_init_texture_with_surface (self->gl_driver,
+                                           texture_id,
+                                           surface,
+                                           GL_NEAREST, GL_NEAREST);
+
+  cairo_surface_destroy (surface);
+
+  ops_set_program (builder, &self->blit_program);
+  ops_set_texture (builder, texture_id);
+  ops_draw (builder, vertex_data);
+}
+
 static void
 gsk_gl_renderer_dispose (GObject *gobject)
 {
@@ -1003,7 +1050,10 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
 
         /* TODO: Implement blurred inset shadows as well */
         if (gsk_inset_shadow_node_get_blur_radius (node) > 0)
-          goto do_default;
+          {
+            render_fallback_node (self, node, builder, vertex_data);
+            break;
+          }
 
         op.op = OP_CHANGE_INSET_SHADOW;
         rgba_to_float (gsk_inset_shadow_node_peek_color (node), op.inset_shadow.color);
@@ -1028,7 +1078,10 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
 
         /* TODO: Implement blurred outset shadows as well */
         if (gsk_outset_shadow_node_get_blur_radius (node) > 0)
-          goto do_default;
+          {
+            render_fallback_node (self, node, builder, vertex_data);
+            break;
+          }
 
         op.op = OP_CHANGE_OUTSET_SHADOW;
         rgba_to_float (gsk_outset_shadow_node_peek_color (node), op.outset_shadow.color);
@@ -1057,45 +1110,7 @@ do_default:
     case GSK_REPEAT_NODE:
     default:
       {
-        cairo_surface_t *surface;
-        cairo_t *cr;
-        int texture_id;
-
-        surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                              ceilf (node->bounds.size.width) * self->scale_factor,
-                                              ceilf (node->bounds.size.height) * self->scale_factor);
-        cairo_surface_set_device_scale (surface, self->scale_factor, self->scale_factor);
-        cr = cairo_create (surface);
-
-        cairo_save (cr);
-        cairo_translate (cr, -min_x, -min_y);
-        gsk_render_node_draw (node, cr);
-        cairo_restore (cr);
-
-#if HIGHLIGHT_FALLBACK
-        cairo_move_to (cr, 0, 0);
-        cairo_rectangle (cr, 0, 0, max_x - min_x, max_y - min_y);
-        cairo_set_source_rgba (cr, 1, 0, 0, 1);
-        cairo_stroke (cr);
-#endif
-        cairo_destroy (cr);
-
-        /* Upload the Cairo surface to a GL texture */
-        texture_id = gsk_gl_driver_create_texture (self->gl_driver,
-                                                   node->bounds.size.width * self->scale_factor,
-                                                   node->bounds.size.height * self->scale_factor);
-
-        gsk_gl_driver_bind_source_texture (self->gl_driver, texture_id);
-        gsk_gl_driver_init_texture_with_surface (self->gl_driver,
-                                                 texture_id,
-                                                 surface,
-                                                 GL_NEAREST, GL_NEAREST);
-
-        cairo_surface_destroy (surface);
-
-        ops_set_program (builder, &self->blit_program);
-        ops_set_texture (builder, texture_id);
-        ops_draw (builder, vertex_data);
+        render_fallback_node (self, node, builder, vertex_data);
       }
     }
 }
