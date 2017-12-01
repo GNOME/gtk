@@ -24,7 +24,7 @@
       release of GTK+ 3.x. It includes all the necessary APIs and tools
       to help you port your application to GTK+ 4. If you are still using
       an older version of GTK+ 3.x, you should first get your application
-      to build and work with 3.22.
+      to build and work with the latest minor release in the 3.22 series.
     </para>
 
     <section>
@@ -56,7 +56,7 @@
       <title>Do not use widget style properties</title>
       <para>
         Style properties do not exist in GTK+ 4. You should stop using them in
-        your custom CSS.
+        your custom CSS and in your code.
       </para>
     </section>
 
@@ -85,6 +85,11 @@
         GTK+ 4 always uses RGBA visuals for its windows; you should make
         sure that your code works with that.
       </para>
+      <para>
+        At the same time, you should stop using GdkVisual APIs, this object
+        not longer exist in GTK+ 4. Most of its APIs are deprecated already
+        and not useful when dealing with RGBA visuals.
+      </para>
     </section>
 
     <section>
@@ -100,7 +105,7 @@
         widgets. If you previously set the fill child property to %TRUE, you can
         achieve the same effect by setting the halign or valign properties to
         %GTK_ALIGN_FILL, depending on the parent box -- halign for a horizontal
-        box, valign for a vertial one.
+        box, valign for a vertical one.
       </para>
       <para>
         #GtkBox also uses the expand child property. It can be replaced by setting
@@ -108,12 +113,13 @@
         old behavior of the #GtkBox's expand child property, you need to set
         #GtkWidget:hexpand on the child widgets of a horizontal #GtkBox and
         #GtkWidget:vexpand on the child widgets of a vertical #GtkBox.
-
+      </para>
+      <para>
         Note that there's a subtle but important difference between #GtkBox's
         expand and fill child properties and the ones in #GtkWidget: setting
         #GtkWidget:hexpand or #GtkWidget:vexpand to %TRUE will propagate up
-        the widget hierarchy, so a pixel-perfect port migth require a reset
-        of the expansion flags to %FALSE in a parent widget higher up the hierarchy.
+        the widget hierarchy, so a pixel-perfect port might require you to reset
+        the expansion flags to %FALSE in a parent widget higher up the hierarchy.
       </para>
     </section>
 
@@ -123,8 +129,8 @@
         The getters in the GtkStyleContext API, such as
         gtk_style_context_get_property(), gtk_style_context_get(),
         or gtk_style_context_get_color() only accept the context's current
-        state for their state argument. Update all callers to pass the current
-        state.
+        state for their state argument. You should update all callers to pass
+        the current state.
       </para>
     </section>
 
@@ -149,6 +155,33 @@
     </para>
 
     <section>
+      <title>Stop using GdkScreen</title>
+      <para>
+        The GdkScreen object has been removed in GTK+ 4. Most of its APIs already
+        had replacements in GTK+ 3 and were deprecated, a few remaining replacements
+        have been added to GdkDisplay.
+      </para>
+    </section>
+
+    <section>
+      <title>Stop using the root window</title>
+      <para>
+        The root window is an X11-centric concept that is no longer exposed in the
+        backend-neutral GDK API. gdk_window_get_parent() will return %NULL for toplevel
+        windows. If you need to interact with the X11 root window, you can use
+        gdk_x11_display_get_xrootwindow() to get its XID.
+      </para>
+    </section>
+
+    <section>
+      <title>Stop using GdkDeviceManager</title>
+      <para>
+        The GdkDeviceManager object has been removed in GTK+ 4. Most of its APIs already
+        had replacements in GTK+ 3 and were deprecated in favor of GdkSeat.
+      </para>
+    </section>
+
+    <section>
       <title>Adapt to GdkWindow API changes</title>
       <para>
         The gdk_window_new() function has been replaced by a number of more
@@ -163,6 +196,15 @@
       </para>
       <para>
         gdk_window_reparent() is no longer available.
+      </para>
+    </section>
+
+    <section>
+      <title>Stop accessing GdkEvent fields</title>
+      <para>
+        Direct access to GdkEvent structs is no longer possible in GTK+ 4. Some
+        frequently-used fields already had accessors in GTK+ 3, and the remaining
+        fields have gained accessors in GTK+ 4.
       </para>
     </section>
 
@@ -269,7 +311,7 @@
       <para>
         A number of APIs for querying special-purpose windows have been removed,
         since these windows are no longer publically available:
-        gtk_tree_view_get_pin_window(), gtk_viewport_get_bin_window(),
+        gtk_tree_view_get_bin_window(), gtk_viewport_get_bin_window(),
         gtk_viewport_get_view_window().
       </para>
     </section>
@@ -299,8 +341,55 @@
     <section>
       <title>GdkPixbuf is deemphasized</title>
       <para>
-        A number of GdkPixbuf-based APIs have been removed. Use the available
-        surface-based replacements instead.
+        A number of GdkPixbuf-based APIs have been removed. The available replacements
+        are either using cairo_surface_t or the newly introduced GdkTexture class
+        instead.
+      </para>
+      <para>
+        If you are still dealing with pixbufs, you will likely want to use
+        gdk_texture_new_for_pixbuf() to convert them to texture objects where needed.
+      </para>
+    </section>
+
+    <section>
+      <title>GtkWidget event signals are deemphasized</title>
+      <para>
+        GtkGesture classes have already been introduced in GTK+ 3 to handle input for
+        many cases. In GTK+ 4, even more are available, such as GtkEventControllerScroll.
+      </para>
+    </section>
+
+    <section>
+      <title>The gtk_window_fullscreen_on_monitor() API has changed</title>
+      <para>
+        Instead of a monitor number, it now takes a GdkMonitor argument.
+      </para>
+    </section>
+
+    <section>
+      <title>Adapt to cursor API changes</title>
+      <para>
+        Use the new gtk_widget_set_cursor() function to set cursors, instead of
+        setting the cursor on the underlying window directly. This is necessary
+        because most widgets don't have their own window anymore, turning any
+        such calls into global cursor changes.
+      </para>
+      <para>
+        For creating standard cursors, gdk_cursor_new_for_display() has been removed,
+        you have to use cursor names instead of GdkCursorType. For creating custom cursors,
+        use gdk_cursor_new_from_texture(). The ability to get cursor images has been removed.
+      </para>
+    </section>
+
+    <section>
+      <title>Adapt to icon-size API changes</title>
+      <para>
+        Instead of the existing extensible set of symbolic icon sizes, GTK+ now only
+        supports normal and large icons. The actual sizes can be defined by themes via
+        the CSS property -gtk-icon-size.
+      </para>
+      <para>
+        The GtkCellRendererPixbuf::stock-size property has been renamed to ::icon-size.
       </para>
     </section>
   </section>
