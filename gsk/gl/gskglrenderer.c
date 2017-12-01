@@ -170,6 +170,7 @@ struct _GskGLRenderer
       Program linear_gradient_program;
       Program blur_program;
       Program inset_shadow_program;
+      Program outset_shadow_program;
     };
   };
 
@@ -272,6 +273,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
       { "linear gradient", "blit.vs.glsl",  "linear_gradient.fs.glsl" },
       { "blur",            "blit.vs.glsl",  "blur.fs.glsl" },
       { "inset shadow",    "blit.vs.glsl",  "inset_shadow.fs.glsl" },
+      { "outset shadow",   "blit.vs.glsl",  "outset_shadow.fs.glsl" },
   };
 
   builder = gsk_shader_builder_new ();
@@ -373,6 +375,14 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   INIT_PROGRAM_UNIFORM_LOCATION2 (inset_shadow, outline);
   INIT_PROGRAM_UNIFORM_LOCATION2 (inset_shadow, corner_widths);
   INIT_PROGRAM_UNIFORM_LOCATION2 (inset_shadow, corner_heights);
+
+  /* outset shadow */
+  INIT_PROGRAM_UNIFORM_LOCATION2 (outset_shadow, color);
+  INIT_PROGRAM_UNIFORM_LOCATION2 (outset_shadow, spread);
+  INIT_PROGRAM_UNIFORM_LOCATION2 (outset_shadow, offset);
+  INIT_PROGRAM_UNIFORM_LOCATION2 (outset_shadow, outline);
+  INIT_PROGRAM_UNIFORM_LOCATION2 (outset_shadow, corner_widths);
+  INIT_PROGRAM_UNIFORM_LOCATION2 (outset_shadow, corner_heights);
 
   g_object_unref (builder);
   return TRUE;
@@ -1012,12 +1022,36 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
       }
     break;
 
+    case GSK_OUTSET_SHADOW_NODE:
+      {
+        RenderOp op;
+
+        /* TODO: Implement blurred outset shadows as well */
+        if (gsk_outset_shadow_node_get_blur_radius (node) > 0)
+          goto do_default;
+
+        op.op = OP_CHANGE_OUTSET_SHADOW;
+        rgba_to_float (gsk_outset_shadow_node_peek_color (node), op.outset_shadow.color);
+        rounded_rect_to_floats (gsk_outset_shadow_node_peek_outline (node),
+                                op.outset_shadow.outline,
+                                op.outset_shadow.corner_widths,
+                                op.outset_shadow.corner_heights);
+        op.outset_shadow.radius = gsk_outset_shadow_node_get_blur_radius (node);
+        op.outset_shadow.spread = gsk_outset_shadow_node_get_spread (node);
+        op.outset_shadow.offset[0] = gsk_outset_shadow_node_get_dx (node);
+        op.outset_shadow.offset[1] = -gsk_outset_shadow_node_get_dy (node);
+
+        ops_set_program (builder, &self->outset_shadow_program);
+        ops_add (builder, &op);
+        ops_draw (builder, vertex_data);
+      }
+    break;
+
 do_default:
 
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
-    case GSK_BORDER_NODE:
-    case GSK_OUTSET_SHADOW_NODE:
     case GSK_SHADOW_NODE:
+    case GSK_BORDER_NODE:
     case GSK_CROSS_FADE_NODE:
     case GSK_BLEND_NODE:
     case GSK_REPEAT_NODE:
@@ -1321,6 +1355,16 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
           glUniform4fv (program->inset_shadow.outline_location, 1, op->inset_shadow.outline);
           glUniform4fv (program->inset_shadow.corner_widths_location, 1, op->inset_shadow.corner_widths);
           glUniform4fv (program->inset_shadow.corner_heights_location, 1, op->inset_shadow.corner_heights);
+          break;
+
+       case OP_CHANGE_OUTSET_SHADOW:
+          g_assert (program == &self->outset_shadow_program);
+          glUniform4fv (program->outset_shadow.color_location, 1, op->outset_shadow.color);
+          glUniform2fv (program->outset_shadow.offset_location, 1, op->outset_shadow.offset);
+          glUniform1f (program->outset_shadow.spread_location, op->outset_shadow.spread);
+          glUniform4fv (program->outset_shadow.outline_location, 1, op->outset_shadow.outline);
+          glUniform4fv (program->outset_shadow.corner_widths_location, 1, op->outset_shadow.corner_widths);
+          glUniform4fv (program->outset_shadow.corner_heights_location, 1, op->outset_shadow.corner_heights);
           break;
 
         case OP_DRAW:
