@@ -176,23 +176,20 @@ gtk_tool_button_class_init (GtkToolButtonClass *klass)
   /* Properties are interpreted like this:
    *
    *          - if the tool button has an icon_widget, then that widget
-   *            will be used as the icon. Otherwise, if the tool button
-   *            has a stock id, the corresponding stock icon will be
-   *            used. Otherwise, if the tool button has an icon name,
-   *            the corresponding icon from the theme will be used.
+   *            will be used as the icon. Otherwise, if the tool button has
+   *            an icon name, the corresponding icon from the theme will be used.
    *            Otherwise, the tool button will not have an icon.
    *
    *          - if the tool button has a label_widget then that widget
    *            will be used as the label. Otherwise, if the tool button
    *            has a label text, that text will be used as label. Otherwise,
-   *            if the toolbutton has a stock id, the corresponding text
-   *            will be used as label. Otherwise, if the tool button has
-   *            an icon name, the corresponding icon name from the theme will
-   *            be used. Otherwise, the toolbutton will have an empty label.
+   *            if the tool button has an icon name, the corresponding icon name
+   *            from the theme will be used. Otherwise, the toolbutton will have
+   *            an empty label.
    *
    *	      - The use_underline property only has an effect when the label
    *            on the toolbutton comes from the label property (ie. not from
-   *            label_widget or from stock_id).
+   *            label_widget).
    *
    *            In that case, if use_underline is set,
    *
