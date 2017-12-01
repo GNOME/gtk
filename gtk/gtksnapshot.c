@@ -636,7 +636,23 @@ gtk_snapshot_collect_rounded_clip (GtkSnapshot      *snapshot,
   if (node == NULL)
     return NULL;
 
-  clip_node = gsk_rounded_clip_node_new (node, &state->data.rounded_clip.bounds);
+  /* If the given radius is 0 in all corners, we can just create a normal clip node */
+  if (gsk_rounded_rect_is_rectilinear (&state->data.rounded_clip.bounds))
+    {
+      /* ... and do the same optimization */
+      if (graphene_rect_contains_rect (&state->data.rounded_clip.bounds.bounds, &node->bounds))
+        return node;
+
+      clip_node = gsk_clip_node_new (node, &state->data.rounded_clip.bounds.bounds);
+    }
+  else
+    {
+      if (gsk_rounded_rect_contains_rect (&state->data.rounded_clip.bounds, &node->bounds))
+        return node;
+
+      clip_node = gsk_rounded_clip_node_new (node, &state->data.rounded_clip.bounds);
+    }
+
   if (name)
     gsk_render_node_set_name (clip_node, name);
 
