@@ -105,8 +105,8 @@
  * Additionally, GtkEntry can show icons at either side of the entry. These
  * icons can be activatable by clicking, can be set up as drag source and
  * can have tooltips. To add an icon, use gtk_entry_set_icon_from_gicon() or
- * one of the various other functions that set an icon from a stock id, an
- * icon name, or a texture. To trigger an action when the user clicks an icon,
+ * one of the various other functions that set an icon from an icon name or a
+ * texture. To trigger an action when the user clicks an icon,
  * connect to the #GtkEntry::icon-press signal. To allow DND operations
  * from an icon, use gtk_entry_set_icon_drag_source(). To set a tooltip on
  * an icon, use gtk_entry_set_icon_tooltip_text() or the corresponding function
@@ -7801,7 +7801,7 @@ gtk_entry_get_icon_texture (GtkEntry             *entry,
  *
  * Retrieves the #GIcon used for the icon, or %NULL if there is
  * no icon or if the icon was set by some other method (e.g., by
- * stock, texture, or icon name).
+ * texture or icon name).
  *
  * Returns: (transfer none) (nullable): A #GIcon, or %NULL if no icon is set
  *     or if the icon is not a #GIcon
@@ -7834,7 +7834,7 @@ gtk_entry_get_icon_gicon (GtkEntry             *entry,
  *
  * Retrieves the icon name used for the icon, or %NULL if there is
  * no icon or if the icon was set by some other method (e.g., by
- * texture, stock or gicon).
+ * texture or gicon).
  *
  * Returns: (nullable): An icon name, or %NULL if no icon is set or if the icon
  *          wasn’t set from an icon name
