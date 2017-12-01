@@ -548,6 +548,10 @@ gtk_snapshot_collect_clip (GtkSnapshot      *snapshot,
   if (node == NULL)
     return NULL;
 
+  /* Check if the child node will even be clipped */
+  if (graphene_rect_contains_rect (&state->data.clip.bounds, &node->bounds))
+    return node;
+
   /* Its not uncommon to produce stacked clip nodes, which are trivial
      to merge, so do that here */
   if (gsk_render_node_get_node_type (node) == GSK_CLIP_NODE)
