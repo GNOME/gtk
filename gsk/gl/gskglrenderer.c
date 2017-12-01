@@ -171,6 +171,7 @@ struct _GskGLRenderer
       Program blur_program;
       Program inset_shadow_program;
       Program outset_shadow_program;
+      Program shadow_program;
     };
   };
 
@@ -321,6 +322,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
       { "blur",            "blit.vs.glsl",  "blur.fs.glsl" },
       { "inset shadow",    "blit.vs.glsl",  "inset_shadow.fs.glsl" },
       { "outset shadow",   "blit.vs.glsl",  "outset_shadow.fs.glsl" },
+      { "shadow",          "blit.vs.glsl",  "shadow.fs.glsl" },
   };
 
   builder = gsk_shader_builder_new ();
@@ -430,6 +432,9 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   INIT_PROGRAM_UNIFORM_LOCATION2 (outset_shadow, outline);
   INIT_PROGRAM_UNIFORM_LOCATION2 (outset_shadow, corner_widths);
   INIT_PROGRAM_UNIFORM_LOCATION2 (outset_shadow, corner_heights);
+
+  /* shadow */
+  INIT_PROGRAM_UNIFORM_LOCATION2 (shadow, color);
 
   g_object_unref (builder);
   return TRUE;
@@ -664,7 +669,7 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
   float max_y = min_y + node->bounds.size.height;
 
   /* Default vertex data */
-  GskQuadVertex vertex_data[GL_N_VERTICES] = {
+  const GskQuadVertex vertex_data[GL_N_VERTICES] = {
     { { min_x, min_y }, { 0, 0 }, },
     { { min_x, max_y }, { 0, 1 }, },
     { { max_x, min_y }, { 1, 0 }, },
@@ -967,6 +972,7 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
 
       }
     break;
+
     case GSK_COLOR_MATRIX_NODE:
       {
         int texture_id;
@@ -1100,10 +1106,70 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
       }
     break;
 
-do_default:
+    case GSK_SHADOW_NODE:
+      {
+        GskRenderNode *child = gsk_shadow_node_get_child (node);
+        gsize n_shadows = gsk_shadow_node_get_n_shadows (node);
+        guint i;
+
+        /* TODO: shadow nodes are most commonly used for text and icon shadows.
+         *       In both cases, we can avoit the RTT case!
+         *       if the child is neither a text node nor a texture node though, we need
+         *       to fall back to rendering it to a texture and then applying the shadow on that one.*/
+
+        for (i = 0; i < n_shadows; i ++)
+          {
+            const GskShadow *shadow = gsk_shadow_node_peek_shadow (node, i);
+            int texture_id;
+            gboolean is_offscreen;
+            graphene_matrix_t offset_matrix;
+            graphene_matrix_t prev_modelview;
+
+            /* TODO: Implement blurred shadow nodes */;
+            if (shadow->radius > 0)
+              {
+                /* TODO: This draws the entire node, not just one shadow. */
+                render_fallback_node (self, node, builder, vertex_data);
+                continue;
+              }
+
+            add_offscreen_ops (self, builder, min_x, max_x, min_y, max_y, child, &texture_id, &is_offscreen);
+
+            ops_set_program (builder, &self->shadow_program);
+            ops_set_color (builder, &shadow->color);
+            ops_set_texture (builder, texture_id);
+
+            offset_matrix = builder->current_modelview;
+            graphene_matrix_translate (&offset_matrix, &GRAPHENE_POINT3D_INIT (shadow->dx, shadow->dy, 0));
+            prev_modelview = ops_set_modelview (builder, &offset_matrix);
+
+            if (is_offscreen)
+              {
+                GskQuadVertex vertex_data[GL_N_VERTICES] = {
+                  { { min_x, min_y }, { 0, 1 }, },
+                  { { min_x, max_y }, { 0, 0 }, },
+                  { { max_x, min_y }, { 1, 1 }, },
+
+                  { { max_x, max_y }, { 1, 0 }, },
+                  { { min_x, max_y }, { 0, 0 }, },
+                  { { max_x, min_y }, { 1, 1 }, },
+                };
+                ops_draw (builder, vertex_data);
+              }
+            else
+              {
+                ops_draw (builder, vertex_data);
+              }
+
+            ops_set_modelview (builder, &prev_modelview);
+          }
+
+        /* Now draw the child normally */
+        gsk_gl_renderer_add_render_ops (self, child, builder);
+      }
+    break;
 
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
-    case GSK_SHADOW_NODE:
     case GSK_BORDER_NODE:
     case GSK_CROSS_FADE_NODE:
     case GSK_BLEND_NODE:
@@ -1307,7 +1373,10 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
 
         case OP_CHANGE_COLOR:
           OP_PRINT (" -> Color: (%f, %f, %f, %f)", op->color.red, op->color.green, op->color.blue, op->color.alpha);
-          g_assert (program == &self->color_program || program == &self->coloring_program);
+          g_assert (program == &self->color_program || program == &self->coloring_program ||
+                    program == &self->shadow_program);
+          /* TODO: We use color.color_location here and this is right for all three of the programs above,
+           *       but that's just a coincidence. */
           glUniform4f (program->color.color_location,
                        op->color.red, op->color.green, op->color.blue, op->color.alpha);
           break;

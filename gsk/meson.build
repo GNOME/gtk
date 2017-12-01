@@ -11,6 +11,7 @@ gsk_private_source_shaders = [
   'resources/glsl/blur.fs.glsl',
   'resources/glsl/inset_shadow.fs.glsl',
   'resources/glsl/outset_shadow.fs.glsl',
+  'resources/glsl/shadow.fs.glsl',
   'resources/glsl/es2_common.fs.glsl',
   'resources/glsl/es2_common.vs.glsl',
   'resources/glsl/gl3_common.fs.glsl',
