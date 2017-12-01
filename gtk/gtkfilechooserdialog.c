@@ -181,7 +181,7 @@
  *                                       NULL);
  * ]|
  *
- * This will create buttons for “Cancel” and “Open” that use stock
+ * This will create buttons for “Cancel” and “Open” that use predefined
  * response identifiers from #GtkResponseType.  For most dialog
  * boxes you can use your own custom response codes rather than the
  * ones in #GtkResponseType, but #GtkFileChooserDialog assumes that
@@ -200,7 +200,7 @@
  * appropriate.
  *
  * To summarize, make sure you use a
- * [stock response code][gtkfilechooserdialog-responses]
+ * [predefined response code][gtkfilechooserdialog-responses]
  * when you use #GtkFileChooserDialog to ensure proper operation.
  */
 
@@ -328,7 +328,7 @@ get_accept_action_widget (GtkDialog *dialog,
 }
 
 static gboolean
-is_stock_accept_response_id (gint response_id)
+is_accept_response_id (gint response_id)
 {
   return (response_id == GTK_RESPONSE_ACCEPT ||
           response_id == GTK_RESPONSE_OK ||
@@ -645,7 +645,7 @@ response_cb (GtkDialog *dialog,
   priv = gtk_file_chooser_dialog_get_instance_private (GTK_FILE_CHOOSER_DIALOG (dialog));
 
   /* Act only on response IDs we recognize */
-  if (is_stock_accept_response_id (response_id) &&
+  if (is_accept_response_id (response_id) &&
       !priv->response_requested &&
       !_gtk_file_chooser_embed_should_respond (GTK_FILE_CHOOSER_EMBED (priv->widget)))
     {
@@ -689,7 +689,7 @@ gtk_file_chooser_dialog_new_valist (const gchar          *title,
  * @title: (allow-none): Title of the dialog, or %NULL
  * @parent: (allow-none): Transient parent of the dialog, or %NULL
  * @action: Open or save mode for the dialog
- * @first_button_text: (allow-none): stock ID or text to go in the first button, or %NULL
+ * @first_button_text: (allow-none): text to go in the first button, or %NULL
  * @...: response ID for the first button, then additional (button, id) pairs, ending with %NULL
  *
  * Creates a new #GtkFileChooserDialog.  This function is analogous to

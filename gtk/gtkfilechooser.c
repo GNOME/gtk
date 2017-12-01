@@ -306,7 +306,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
    * Most applications just need to turn on the
    * #GtkFileChooser:do-overwrite-confirmation property (or call the
    * gtk_file_chooser_set_do_overwrite_confirmation() function), and
-   * they will automatically get a stock confirmation dialog.
+   * they will automatically get a standard confirmation dialog.
    * Applications which need to customize this behavior should do
    * that, and also connect to the #GtkFileChooser::confirm-overwrite
    * signal.
@@ -318,7 +318,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
    * %GTK_FILE_CHOOSER_CONFIRMATION_SELECT_AGAIN.  If it determines
    * that the user is satisfied with his choice of file name, it
    * should return %GTK_FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME.
-   * On the other hand, if it determines that the stock confirmation
+   * On the other hand, if it determines that the standard confirmation
    * dialog should be used, it should return
    * %GTK_FILE_CHOOSER_CONFIRMATION_CONFIRM. The following example
    * illustrates this.
@@ -404,7 +404,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
   g_object_interface_install_property (iface,
 				       g_param_spec_boolean ("use-preview-label",
 							     P_("Use Preview Label"),
-							     P_("Whether to display a stock label with the name of the previewed file."),
+							     P_("Whether to display a label with the name of the previewed file."),
 							     TRUE,
 							     GTK_PARAM_READWRITE));
   g_object_interface_install_property (iface,
@@ -1634,9 +1634,9 @@ gtk_file_chooser_get_preview_widget_active (GtkFileChooser *chooser)
 /**
  * gtk_file_chooser_set_use_preview_label:
  * @chooser: a #GtkFileChooser
- * @use_label: whether to display a stock label with the name of the previewed file
+ * @use_label: whether to display a label with the name of the previewed file
  * 
- * Sets whether the file chooser should display a stock label with the name of
+ * Sets whether the file chooser should display a label with the name of
  * the file that is being previewed; the default is %TRUE.  Applications that
  * want to draw the whole preview area themselves should set this to %FALSE and
  * display the name themselves in their preview widget.
@@ -1658,7 +1658,7 @@ gtk_file_chooser_set_use_preview_label (GtkFileChooser *chooser,
  * gtk_file_chooser_get_use_preview_label:
  * @chooser: a #GtkFileChooser
  * 
- * Gets whether a stock label should be drawn with the name of the previewed
+ * Gets whether a label should be drawn with the name of the previewed
  * file.  See gtk_file_chooser_set_use_preview_label().
  * 
  * Returns: %TRUE if the file chooser is set to display a label with the
@@ -2224,7 +2224,7 @@ gtk_file_chooser_get_show_hidden (GtkFileChooser *chooser)
  * If set to %TRUE, the @chooser will emit the
  * #GtkFileChooser::confirm-overwrite signal when appropriate.
  *
- * If all you need is the stock confirmation dialog, set this property to %TRUE.
+ * If all you need is the standard confirmation dialog, set this property to %TRUE.
  * You can override the way confirmation is done by actually handling the
  * #GtkFileChooser::confirm-overwrite signal; please refer to its documentation
  * for the details.
