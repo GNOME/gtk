@@ -36,6 +36,8 @@ G_BEGIN_DECLS
 #define GDK_IS_X11_SELECTION_OUTPUT_STREAM_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GDK_TYPE_X11_SELECTION_OUTPUT_STREAM))
 #define GDK_X11_SELECTION_OUTPUT_STREAM_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GDK_TYPE_X11_SELECTION_OUTPUT_STREAM, GdkX11SelectionOutputStreamClass))
 
+typedef struct _GdkX11PendingSelectionNotify GdkX11PendingSelectionNotify;
+
 typedef struct GdkX11SelectionOutputStream         GdkX11SelectionOutputStream;
 typedef struct GdkX11SelectionOutputStreamClass    GdkX11SelectionOutputStreamClass;
 
@@ -53,6 +55,7 @@ struct GdkX11SelectionOutputStreamClass
 GType           gdk_x11_selection_output_stream_get_type        (void) G_GNUC_CONST;
 
 GOutputStream * gdk_x11_selection_output_stream_new             (GdkDisplay             *display,
+                                                                 GdkX11PendingSelectionNotify *notify,
                                                                  Window                  window,
                                                                  const char             *selection,
                                                                  const char             *target,
@@ -61,6 +64,17 @@ GOutputStream * gdk_x11_selection_output_stream_new             (GdkDisplay     
                                                                  int                     format,
                                                                  gulong                  timestamp);
 
+GdkX11PendingSelectionNotify *
+                gdk_x11_pending_selection_notify_new            (Window                  window,
+                                                                 Atom                    selection,
+                                                                 Atom                    target,
+                                                                 Atom                    property,
+                                                                 Time                    timestamp);
+void            gdk_x11_pending_selection_notify_require        (GdkX11PendingSelectionNotify *notify,
+                                                                 guint                   n_sends);
+void            gdk_x11_pending_selection_notify_send           (GdkX11PendingSelectionNotify *notify,
+                                                                 GdkDisplay             *display,
+                                                                 gboolean                success);
 
 G_END_DECLS
 

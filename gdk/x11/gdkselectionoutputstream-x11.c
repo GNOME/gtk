@@ -29,10 +29,11 @@
 #include "gdkx11property.h"
 #include "gdkx11window.h"
 
-typedef struct GdkX11SelectionOutputStreamPrivate  GdkX11SelectionOutputStreamPrivate;
+typedef struct _GdkX11SelectionOutputStreamPrivate  GdkX11SelectionOutputStreamPrivate;
 
-struct GdkX11SelectionOutputStreamPrivate {
+struct _GdkX11SelectionOutputStreamPrivate {
   GdkDisplay *display;
+  GdkX11PendingSelectionNotify *notify;
   Window xwindow;
   char *selection;
   Atom xselection;
@@ -52,9 +53,15 @@ struct GdkX11SelectionOutputStreamPrivate {
 
   GTask *pending_task;
 
-  guint started : 1;
   guint incr : 1;
   guint delete_pending : 1;
+};
+
+struct _GdkX11PendingSelectionNotify
+{
+  gsize n_pending;
+  
+  XSelectionEvent xevent;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GdkX11SelectionOutputStream, gdk_x11_selection_output_stream, G_TYPE_OUTPUT_STREAM);
@@ -80,7 +87,7 @@ gdk_x11_selection_output_stream_needs_flush_unlocked (GdkX11SelectionOutputStrea
 {
   GdkX11SelectionOutputStreamPrivate *priv = gdk_x11_selection_output_stream_get_instance_private (stream);
 
-  if (priv->data->len == 0)
+  if (priv->data->len == 0 && priv->notify == NULL)
     return FALSE;
 
   if (g_output_stream_is_closing (G_OUTPUT_STREAM (stream)))
@@ -148,7 +155,7 @@ gdk_x11_selection_output_stream_perform_flush (GdkX11SelectionOutputStream *stre
   element_size = get_element_size (priv->format);
   n_elements = priv->data->len / element_size;
 
-  if (!priv->started && !g_output_stream_is_closing (G_OUTPUT_STREAM (stream)))
+  if (priv->notify && !g_output_stream_is_closing (G_OUTPUT_STREAM (stream)))
     {
       XWindowAttributes attrs;
 
@@ -190,30 +197,10 @@ gdk_x11_selection_output_stream_perform_flush (GdkX11SelectionOutputStream *stre
         priv->flush_requested = FALSE;
     }
 
-  if (!priv->started)
+  if (priv->notify)
     {
-      XSelectionEvent xevent;
-
-      xevent.type = SelectionNotify;
-      xevent.serial = 0;
-      xevent.send_event = True;
-      xevent.requestor = priv->xwindow;
-      xevent.selection = priv->xselection;
-      xevent.target = priv->xtarget;
-      xevent.property = priv->xproperty;
-      xevent.time = priv->timestamp;
-
-      if (XSendEvent (xdisplay, priv->xwindow, False, NoEventMask, (XEvent*) & xevent) == 0)
-        {
-          GDK_NOTE(SELECTION, g_printerr ("%s:%s: failed to XSendEvent()\n",
-                                          priv->selection, priv->target));
-          g_warning ("failed to XSendEvent()");
-        }
-      XSync (xdisplay, False);
-
-      GDK_NOTE(SELECTION, g_printerr ("%s:%s: sent SelectionNotify for %s on %s\n",
-                                      priv->selection, priv->target, priv->target, priv->property));
-      priv->started = TRUE;
+      gdk_x11_pending_selection_notify_send (priv->notify, priv->display, TRUE);
+      priv->notify = NULL;
     }
 
   priv->delete_pending = TRUE;
@@ -475,6 +462,9 @@ gdk_x11_selection_output_stream_finalize (GObject *object)
   GdkX11SelectionOutputStream *stream = GDK_X11_SELECTION_OUTPUT_STREAM (object);
   GdkX11SelectionOutputStreamPrivate *priv = gdk_x11_selection_output_stream_get_instance_private (stream);
 
+  /* not sending a notify is terrible */
+  g_assert (priv->notify == NULL);
+
   g_byte_array_unref (priv->data);
   g_cond_clear (&priv->cond);
   g_mutex_clear (&priv->mutex);
@@ -550,14 +540,15 @@ gdk_x11_selection_output_stream_filter_event (GdkXEvent *xev,
 }
 
 GOutputStream *
-gdk_x11_selection_output_stream_new (GdkDisplay *display,
-                                     Window      window,
-                                     const char *selection,
-                                     const char *target,
-                                     const char *property,
-                                     const char *type,
-                                     int         format,
-                                     gulong      timestamp)
+gdk_x11_selection_output_stream_new (GdkDisplay                   *display,
+                                     GdkX11PendingSelectionNotify *notify,
+                                     Window                        window,
+                                     const char                   *selection,
+                                     const char                   *target,
+                                     const char                   *property,
+                                     const char                   *type,
+                                     int                           format,
+                                     gulong                        timestamp)
 {
   GdkX11SelectionOutputStream *stream;
   GdkX11SelectionOutputStreamPrivate *priv;
@@ -567,6 +558,7 @@ gdk_x11_selection_output_stream_new (GdkDisplay *display,
 
   priv->display = display;
   GDK_X11_DISPLAY (display)->streams = g_slist_prepend (GDK_X11_DISPLAY (display)->streams, stream);
+  priv->notify = notify;
   priv->xwindow = window;
   priv->selection = g_strdup (selection);
   priv->xselection = gdk_x11_get_xatom_by_name_for_display (display, priv->selection);
@@ -580,6 +572,86 @@ gdk_x11_selection_output_stream_new (GdkDisplay *display,
   priv->timestamp = timestamp;
 
   gdk_window_add_filter (NULL, gdk_x11_selection_output_stream_filter_event, stream);
-
+  
   return G_OUTPUT_STREAM (stream);
 }
+
+GdkX11PendingSelectionNotify *
+gdk_x11_pending_selection_notify_new (Window window,
+                                      Atom   selection,
+                                      Atom   target,
+                                      Atom   property,
+                                      Time   timestamp)
+{
+  GdkX11PendingSelectionNotify *pending;
+
+  pending = g_slice_new0 (GdkX11PendingSelectionNotify);
+  pending->n_pending = 1;
+
+  pending->xevent.type = SelectionNotify;
+  pending->xevent.serial = 0;
+  pending->xevent.send_event = True;
+  pending->xevent.requestor = window;
+  pending->xevent.selection = selection;
+  pending->xevent.target = target;
+  pending->xevent.property = property;
+  pending->xevent.time = timestamp;
+
+  return pending;
+}
+
+void
+gdk_x11_pending_selection_notify_require (GdkX11PendingSelectionNotify *notify,
+                                          guint                         n_sends)
+{
+  notify->n_pending += n_sends;
+}
+
+void
+gdk_x11_pending_selection_notify_send (GdkX11PendingSelectionNotify *notify,
+                                       GdkDisplay                   *display,
+                                       gboolean                      success)
+{
+  Display *xdisplay;
+  int error;
+
+  notify->n_pending--;
+  if (notify->n_pending)
+    {
+      GDK_NOTE(SELECTION, g_printerr ("%s:%s: not sending SelectionNotify yet, %zu streams still pending\n",
+                                      gdk_x11_get_xatom_name_for_display (display, notify->xevent.selection),
+                                      gdk_x11_get_xatom_name_for_display (display, notify->xevent.target),
+                                      notify->n_pending));
+      return;
+    }
+
+  GDK_NOTE(SELECTION, g_printerr ("%s:%s: sending SelectionNotify reporting %s\n",
+                                  gdk_x11_get_xatom_name_for_display (display, notify->xevent.selection),
+                                  gdk_x11_get_xatom_name_for_display (display, notify->xevent.target),
+                                  success ? "success" : "failure"));
+  if (!success)
+    notify->xevent.property = None;
+
+  xdisplay = gdk_x11_display_get_xdisplay (display);
+
+  gdk_x11_display_error_trap_push (display);
+
+  if (XSendEvent (xdisplay, notify->xevent.requestor, False, NoEventMask, (XEvent*) &notify->xevent) == 0)
+    {
+      GDK_NOTE(SELECTION, g_printerr ("%s:%s: failed to XSendEvent()\n",
+                                      gdk_x11_get_xatom_name_for_display (display, notify->xevent.selection),
+                                      gdk_x11_get_xatom_name_for_display (display, notify->xevent.target)));
+    }
+  XSync (xdisplay, False);
+
+  error = gdk_x11_display_error_trap_pop (display);
+  if (error != Success)
+    {
+      GDK_NOTE(SELECTION, g_printerr ("%s:%s: X error during write: %d\n",
+                                      gdk_x11_get_xatom_name_for_display (display, notify->xevent.selection),
+                                      gdk_x11_get_xatom_name_for_display (display, notify->xevent.target),
+                                      error));
+    }
+}
+
+
