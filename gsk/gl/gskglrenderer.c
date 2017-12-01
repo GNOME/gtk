@@ -36,7 +36,7 @@
 #define OP_PRINT(format, ...)
 #endif
 
-#define INIT_PROGRAM_UNIFORM_LOCATION2(program_name, uniform_basename) \
+#define INIT_PROGRAM_UNIFORM_LOCATION(program_name, uniform_basename) \
               G_STMT_START{\
                 self->program_name ## _program.program_name.uniform_basename ## _location = \
                               glGetUniformLocation(self->program_name ## _program.id, "u_" #uniform_basename);\
@@ -65,7 +65,7 @@ dump_framebuffer (const char *filename, int w, int h)
   g_free (data);
 }
 
-static gboolean G_GNUC_UNUSED
+static gboolean
 font_has_color_glyphs (const PangoFont *font)
 {
   cairo_scaled_font_t *scaled_font;
@@ -606,48 +606,48 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
     }
 
   /* color */
-  INIT_PROGRAM_UNIFORM_LOCATION2 (color, color);
+  INIT_PROGRAM_UNIFORM_LOCATION (color, color);
 
   /* coloring */
-  INIT_PROGRAM_UNIFORM_LOCATION2 (coloring, color);
+  INIT_PROGRAM_UNIFORM_LOCATION (coloring, color);
 
   /* color matrix */
-  INIT_PROGRAM_UNIFORM_LOCATION2 (color_matrix, color_matrix);
-  INIT_PROGRAM_UNIFORM_LOCATION2 (color_matrix, color_offset);
+  INIT_PROGRAM_UNIFORM_LOCATION (color_matrix, color_matrix);
+  INIT_PROGRAM_UNIFORM_LOCATION (color_matrix, color_offset);
 
   /* linear gradient */
-  INIT_PROGRAM_UNIFORM_LOCATION2 (linear_gradient, color_stops);
-  INIT_PROGRAM_UNIFORM_LOCATION2 (linear_gradient, color_offsets);
-  INIT_PROGRAM_UNIFORM_LOCATION2 (linear_gradient, num_color_stops);
-  INIT_PROGRAM_UNIFORM_LOCATION2 (linear_gradient, start_point);
-  INIT_PROGRAM_UNIFORM_LOCATION2 (linear_gradient, end_point);
+  INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient, color_stops);
+  INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient, color_offsets);
+  INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient, num_color_stops);
+  INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient, start_point);
+  INIT_PROGRAM_UNIFORM_LOCATION (linear_gradient, end_point);
 
   /* blur */
-  INIT_PROGRAM_UNIFORM_LOCATION2 (blur, blur_radius);
-  INIT_PROGRAM_UNIFORM_LOCATION2 (blur, blur_size);
+  INIT_PROGRAM_UNIFORM_LOCATION (blur, blur_radius);
+  INIT_PROGRAM_UNIFORM_LOCATION (blur, blur_size);
 
   /* inset shadow */
-  INIT_PROGRAM_UNIFORM_LOCATION2 (inset_shadow, color);
-  INIT_PROGRAM_UNIFORM_LOCATION2 (inset_shadow, spread);
-  INIT_PROGRAM_UNIFORM_LOCATION2 (inset_shadow, offset);
-  INIT_PROGRAM_UNIFORM_LOCATION2 (inset_shadow, outline);
-  INIT_PROGRAM_UNIFORM_LOCATION2 (inset_shadow, corner_widths);
-  INIT_PROGRAM_UNIFORM_LOCATION2 (inset_shadow, corner_heights);
+  INIT_PROGRAM_UNIFORM_LOCATION (inset_shadow, color);
+  INIT_PROGRAM_UNIFORM_LOCATION (inset_shadow, spread);
+  INIT_PROGRAM_UNIFORM_LOCATION (inset_shadow, offset);
+  INIT_PROGRAM_UNIFORM_LOCATION (inset_shadow, outline);
+  INIT_PROGRAM_UNIFORM_LOCATION (inset_shadow, corner_widths);
+  INIT_PROGRAM_UNIFORM_LOCATION (inset_shadow, corner_heights);
 
   /* outset shadow */
-  INIT_PROGRAM_UNIFORM_LOCATION2 (outset_shadow, color);
-  INIT_PROGRAM_UNIFORM_LOCATION2 (outset_shadow, spread);
-  INIT_PROGRAM_UNIFORM_LOCATION2 (outset_shadow, offset);
-  INIT_PROGRAM_UNIFORM_LOCATION2 (outset_shadow, outline);
-  INIT_PROGRAM_UNIFORM_LOCATION2 (outset_shadow, corner_widths);
-  INIT_PROGRAM_UNIFORM_LOCATION2 (outset_shadow, corner_heights);
+  INIT_PROGRAM_UNIFORM_LOCATION (outset_shadow, color);
+  INIT_PROGRAM_UNIFORM_LOCATION (outset_shadow, spread);
+  INIT_PROGRAM_UNIFORM_LOCATION (outset_shadow, offset);
+  INIT_PROGRAM_UNIFORM_LOCATION (outset_shadow, outline);
+  INIT_PROGRAM_UNIFORM_LOCATION (outset_shadow, corner_widths);
+  INIT_PROGRAM_UNIFORM_LOCATION (outset_shadow, corner_heights);
 
   /* shadow */
-  INIT_PROGRAM_UNIFORM_LOCATION2 (shadow, color);
+  INIT_PROGRAM_UNIFORM_LOCATION (shadow, color);
 
   /* border */
-  INIT_PROGRAM_UNIFORM_LOCATION2 (border, color);
-  INIT_PROGRAM_UNIFORM_LOCATION2 (border, widths);
+  INIT_PROGRAM_UNIFORM_LOCATION (border, color);
+  INIT_PROGRAM_UNIFORM_LOCATION (border, widths);
 
   g_object_unref (builder);
   return TRUE;
