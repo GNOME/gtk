@@ -1142,6 +1142,18 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
                 continue;
               }
 
+            if (gsk_render_node_get_node_type (child) == GSK_TEXT_NODE)
+              {
+                offset_matrix = builder->current_modelview;
+                graphene_matrix_translate (&offset_matrix, &GRAPHENE_POINT3D_INIT (shadow->dx, shadow->dy, 0));
+                prev_modelview = ops_set_modelview (builder, &offset_matrix);
+
+                render_text_node (self, child, builder, &shadow->color, TRUE);
+
+                ops_set_modelview (builder, &prev_modelview);
+                continue;
+              }
+
             add_offscreen_ops (self, builder, min_x, max_x, min_y, max_y, child, &texture_id, &is_offscreen);
 
             ops_set_program (builder, &self->shadow_program);
