@@ -46,7 +46,6 @@
                 <property name="title">icon</property>
                 <child>
                   <object class="GtkCellRendererPixbuf" id="icon_renderer">
-                    <property name="stock-size">4</property>
                   </object>
                 </child>
               </object>
