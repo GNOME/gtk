@@ -477,7 +477,7 @@ gdk_x11_clipboard_claim_remote (GdkX11Clipboard *cb,
   gdk_x11_clipboard_request_targets (cb);
 }
 
-static void
+static gboolean
 gdk_x11_clipboard_request_selection (GdkX11Clipboard              *cb,
                                      GdkX11PendingSelectionNotify *notify,
                                      Window                        requestor,
@@ -508,7 +508,98 @@ gdk_x11_clipboard_request_selection (GdkX11Clipboard              *cb,
                                                         8,
                                                         timestamp);
           gdk_x11_clipboard_default_output_handler (cb, target, stream);
+          return TRUE;
         }
+    }
+  else if (g_str_equal (target, "MULTIPLE"))
+    {
+      gulong n_atoms;
+      gulong nbytes;
+      Atom prop_type;
+      gint prop_format;
+      Atom *atoms = NULL;
+      int error;
+
+      error = XGetWindowProperty (gdk_x11_display_get_xdisplay (display),
+                                  requestor,
+                                  gdk_x11_get_xatom_by_name_for_display (display, property),
+                                  0, 0x1FFFFFFF, False,
+                                  AnyPropertyType,
+                                  &prop_type, &prop_format,
+                                  &n_atoms, &nbytes, (guchar **) &atoms);
+      if (error != Success)
+        {
+          GDK_NOTE(CLIPBOARD, g_printerr ("%s: XGetProperty() during MULTIPLE failed with %d\n",
+                                          cb->selection, error));
+        }
+      else if (prop_format != 32 ||
+               prop_type != gdk_x11_get_xatom_by_name_for_display (display, "ATOM_PAIR"))
+        {
+          GDK_NOTE(CLIPBOARD, g_printerr ("%s: XGetProperty() type/format should be ATOM_PAIR/32 but is %s/%d\n",
+                                          cb->selection, gdk_x11_get_xatom_name_for_display (display, prop_type), prop_format));
+        }
+      else if (n_atoms < 2)
+        {
+          print_atoms (cb, "ignoring MULTIPLE request with too little elements", atoms, n_atoms);
+        }
+      else
+        {
+          gulong i;
+
+          print_atoms (cb, "MULTIPLE request", atoms, n_atoms);
+          if (n_atoms % 2)
+            {
+              GDK_NOTE(CLIPBOARD, g_printerr ("%s: Number of atoms is uneven at %lu, ignoring last element\n",
+                                              cb->selection, n_atoms));
+              n_atoms &= ~1;
+            }
+
+          gdk_x11_pending_selection_notify_require (notify, n_atoms / 2);
+
+          for (i = 0; i < n_atoms / 2; i++)
+            {
+              gboolean success;
+
+              if (atoms[2 * i] == None || atoms[2 * i + 1] == None)
+                {
+                  success = FALSE;
+                  GDK_NOTE(CLIPBOARD, g_printerr ("%s: None not allowed as atom in MULTIPLE request\n",
+                                                  cb->selection));
+                  gdk_x11_pending_selection_notify_send (notify, display, FALSE);
+                }
+              else if (atoms[2 * i] == gdk_x11_get_xatom_by_name_for_display (display, "MULTIPLE"))
+                {
+                  success = FALSE;
+                  GDK_NOTE(CLIPBOARD, g_printerr ("%s: MULTIPLE as target in MULTIPLE request would cause recursion\n",
+                                                  cb->selection));
+                  gdk_x11_pending_selection_notify_send (notify, display, FALSE);
+                }
+              else
+                {
+                  success = gdk_x11_clipboard_request_selection (cb,
+                                                                 notify,
+                                                                 requestor,
+                                                                 gdk_x11_get_xatom_name_for_display (display, atoms[2 * i]),
+                                                                 gdk_x11_get_xatom_name_for_display (display, atoms[2 * i + 1]),
+                                                                 timestamp);
+                }
+
+              if (!success)
+                atoms[2 * i + 1] = None;
+            }
+        }
+
+      XChangeProperty (gdk_x11_display_get_xdisplay (display),
+                       requestor,
+                       gdk_x11_get_xatom_by_name_for_display (display, property),
+                       prop_type, 32,
+                       PropModeReplace, (guchar *)atoms, n_atoms);
+
+      if (atoms)
+        XFree (atoms);
+
+      gdk_x11_pending_selection_notify_send (notify, display, TRUE);
+      return TRUE;
     }
   else
     {
@@ -535,12 +626,13 @@ gdk_x11_clipboard_request_selection (GdkX11Clipboard              *cb,
                                           special_targets[i].type,
                                           special_targets[i].format,
                                           stream);
-              return;
+              return TRUE;
             }
         }
     }
 
   gdk_x11_pending_selection_notify_send (notify, display, FALSE);
+  return FALSE;
 }
 
 static GdkFilterReturn
