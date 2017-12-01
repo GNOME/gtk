@@ -579,6 +579,8 @@ gtk_action_bar_set_revealed (GtkActionBar *action_bar,
  * gtk_action_bar_get_revealed:
  * @action_bar: a #GtkActionBar
  *
+ * Gets the value of the #GtkActionBar:revealed property.
+ *
  * Returns: the current value of the #GtkActionBar:revealed property.
  *
  * Since: 3.90
