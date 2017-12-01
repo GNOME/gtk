@@ -294,6 +294,7 @@
     <chapter id="Gestures">
       <title>Gestures and event handling</title>
       <xi:include href="xml/gtkeventcontroller.xml" />
+      <xi:include href="xml/gtkeventcontrollerscroll.xml" />
       <xi:include href="xml/gtkgesture.xml" />
       <xi:include href="xml/gtkgesturesingle.xml" />
       <xi:include href="xml/gtkgesturedrag.xml" />

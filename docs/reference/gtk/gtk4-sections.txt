@@ -6741,6 +6741,27 @@ gtk_gesture_single_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkeventcontrollerscroll</FILE>
+<TITLE>GtkEventControlerScroll</TITLE>
+GtkEventControllerScroll
+GtkEventControllerScrollFlags
+gtk_event_controller_scroll_new
+gtk_event_controller_scroll_set_flags
+gtk_event_controller_scroll_get_flags
+
+<SUBSECTION Standard>
+GTK_TYPE_EVENT_CONTROLLER_SCROLL
+GTK_EVENT_CONTROLLER_SCROLL
+GTK_EVENT_CONTROLLER_SCROLL_CLASS
+GTK_IS_EVENT_CONTROLLER_SCROLL
+GTK_IS_EVENT_CONTROLLER_SCROLL_CLASS
+GTK_EVENT_CONTROLLER_SCROLL_GET_CLASS
+
+<SUBSECTION Private>
+gtk_event_controller_scroll_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkgesturedrag</FILE>
 <TITLE>GtkGestureDrag</TITLE>
 GtkGestureDrag
