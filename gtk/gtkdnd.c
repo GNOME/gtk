@@ -1620,6 +1620,38 @@ gtk_drag_set_icon_surface (GdkDragContext  *context,
 }
 
 /**
+ * gtk_drag_set_icon_texture: (method)
+ * @context: the context for a drag (This must be called
+ *     with a context for the source side of a drag)
+ * @texture: the #GdkTexture to use as icon
+ * @hot_x: the X offset of the hotspot within the icon
+ * @hot_y: the Y offset of the hotspot within the icon
+ *
+ * Sets @texture as the icon for a given drag. GTK+ retains
+ * references for the arguments, and will release them when
+ * they are no longer needed.
+ *
+ * To position the texture relative to the mouse, its top
+ * left will be positioned @hot_x, @hot_y pixels from the
+ * mouse cursor.
+ */
+void
+gtk_drag_set_icon_texture (GdkDragContext *context,
+                           GdkTexture     *texture,
+                           int             hot_x,
+                           int             hot_y)
+{
+  GtkWidget *widget;
+
+  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
+  g_return_if_fail (GDK_IS_TEXTURE (texture));
+
+  widget = gtk_image_new_from_texture (texture);
+
+  gtk_drag_set_icon_widget_internal (context, widget, hot_x, hot_y, TRUE);
+}
+
+/**
  * gtk_drag_set_icon_name: (method)
  * @context: the context for a drag (This must be called 
  *     with a context for the source side of a drag)
