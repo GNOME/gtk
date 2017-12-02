@@ -256,7 +256,7 @@ static gchar *types[] =
   "GtkTreeIter ",
   "GtkTreeViewColumn ",
   "GdkDisplayManager ",
-  "GtkClipboard ",
+  "GdkClipboard ",
   "GtkIconSize ",
   "GtkImage ",
   "GdkDragContext ",

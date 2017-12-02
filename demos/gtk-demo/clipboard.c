@@ -1,6 +1,6 @@
 /* Clipboard
  *
- * GtkClipboard is used for clipboard handling. This demo shows how to
+ * GdkClipboard is used for clipboard handling. This demo shows how to
  * copy and paste text to and from the clipboard.
  *
  * It also shows how to transfer images via the clipboard or via
@@ -93,20 +93,24 @@ paste_button_clicked (GtkWidget *button,
   gdk_clipboard_read_text_async (clipboard, NULL, paste_received, entry);
 }
 
-static cairo_surface_t *
-get_image_surface (GtkImage *image)
+static GdkTexture *
+get_image_texture (GtkImage *image)
 {
   const gchar *icon_name;
   GtkIconTheme *icon_theme;
+  GtkIconInfo *icon_info;
 
   switch (gtk_image_get_storage_type (image))
     {
-    case GTK_IMAGE_SURFACE:
-      return cairo_surface_reference (gtk_image_get_surface (image));
+    case GTK_IMAGE_TEXTURE:
+      return g_object_ref (gtk_image_get_texture (image));
     case GTK_IMAGE_ICON_NAME:
       icon_name = gtk_image_get_icon_name (image);
       icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (image)));
-      return gtk_icon_theme_load_surface (icon_theme, icon_name, 48, 1, NULL, GTK_ICON_LOOKUP_GENERIC_FALLBACK, NULL);
+      icon_info = gtk_icon_theme_lookup_icon (icon_theme, icon_name, 48, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
+      if (icon_info == NULL)
+        return NULL;
+      return gtk_icon_info_load_texture (icon_info);
     default:
       g_warning ("Image storage type %d not handled",
                  gtk_image_get_storage_type (image));
@@ -119,14 +123,11 @@ drag_begin (GtkWidget      *widget,
             GdkDragContext *context,
             gpointer        data)
 {
-  cairo_surface_t *surface;
+  GdkTexture *texture;
 
-  surface = get_image_surface (GTK_IMAGE (widget));
-  if (surface)
-    {
-      cairo_surface_set_device_offset (surface, -2, -2);
-      gtk_drag_set_icon_surface (context, surface);
-    }
+  texture = get_image_texture (GTK_IMAGE (widget));
+  if (texture)
+    gtk_drag_set_icon_texture (context, texture, -2, -2);
 }
 
 void
@@ -137,11 +138,11 @@ drag_data_get (GtkWidget        *widget,
                guint             time,
                gpointer          data)
 {
-  cairo_surface_t *surface;
+  GdkTexture *texture;
 
-  surface = get_image_surface (GTK_IMAGE (data));
-  if (surface)
-    gtk_selection_data_set_surface (selection_data, surface);
+  texture = get_image_texture (GTK_IMAGE (widget));
+  if (texture)
+    gtk_selection_data_set_texture (selection_data, texture);
 }
 
 static void
@@ -155,11 +156,11 @@ drag_data_received (GtkWidget        *widget,
 {
   if (gtk_selection_data_get_length (selection_data) > 0)
     {
-      cairo_surface_t *surface;
+      GdkTexture *texture;
 
-      surface = gtk_selection_data_get_surface (selection_data);
-      gtk_image_set_from_surface (GTK_IMAGE (data), surface);
-      cairo_surface_destroy (surface);
+      texture = gtk_selection_data_get_texture (selection_data);
+      gtk_image_set_from_texture (GTK_IMAGE (data), texture);
+      g_object_unref (texture);
     }
 }
 
@@ -167,34 +168,45 @@ static void
 copy_image (GtkMenuItem *item,
             gpointer     data)
 {
-  GtkClipboard *clipboard;
-  cairo_surface_t *surface;
+  GdkClipboard *clipboard;
+  GdkTexture *texture;
 
-  clipboard = gtk_clipboard_get (GDK_SELECTION_CLIPBOARD);
-  surface = get_image_surface (GTK_IMAGE (data));
+  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (data));
+  texture = get_image_texture (GTK_IMAGE (data));
 
-  if (surface)
+  if (texture)
     {
-      gtk_clipboard_set_surface (clipboard, surface);
-      cairo_surface_destroy (surface);
+      gdk_clipboard_set_texture (clipboard, texture);
+      g_object_unref (texture);
     }
+}
+
+static void
+paste_image_received (GObject      *source,
+                      GAsyncResult *result,
+                      gpointer      data)
+{
+  GdkTexture *texture;
+
+  texture = gdk_clipboard_read_texture_finish (GDK_CLIPBOARD (source), result, NULL);
+  if (texture == NULL)
+    return;
+    
+  gtk_image_set_from_texture (GTK_IMAGE (data), texture);
+  g_object_unref (texture);
 }
 
 static void
 paste_image (GtkMenuItem *item,
              gpointer     data)
 {
-  GtkClipboard *clipboard;
-  cairo_surface_t *surface;
+  GdkClipboard *clipboard;
 
-  clipboard = gtk_clipboard_get (GDK_SELECTION_CLIPBOARD);
-  surface = gtk_clipboard_wait_for_surface (clipboard);
-
-  if (surface)
-    {
-      gtk_image_set_from_surface (GTK_IMAGE (data), surface);
-      cairo_surface_destroy (surface);
-    }
+  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (data));
+  gdk_clipboard_read_texture_async (clipboard,
+                                    NULL,
+                                    paste_image_received,
+                                    data);
 }
 
 static gboolean
@@ -236,7 +248,6 @@ do_clipboard (GtkWidget *do_widget)
       GtkWidget *label;
       GtkWidget *entry, *button;
       GtkWidget *image;
-      GtkClipboard *clipboard;
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_display (GTK_WINDOW (window),
@@ -338,10 +349,6 @@ do_clipboard (GtkWidget *do_widget)
       /* context menu on image */
       g_signal_connect (image, "button-press-event",
                         G_CALLBACK (button_press), image);
-
-      /* tell the clipboard manager to make the data persistent */
-      clipboard = gtk_clipboard_get (GDK_SELECTION_CLIPBOARD);
-      gtk_clipboard_set_can_store (clipboard, NULL);
     }
 
   if (!gtk_widget_get_visible (window))
