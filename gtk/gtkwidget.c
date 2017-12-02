@@ -6732,7 +6732,6 @@ gtk_widget_emit_event_signals (GtkWidget      *widget,
         case GDK_DROP_START:
         case GDK_DROP_FINISHED:
         case GDK_CLIENT_EVENT:
-        case GDK_OWNER_CHANGE:
         case GDK_DAMAGE:
         case GDK_EVENT_LAST:
         case GDK_TOUCHPAD_SWIPE:

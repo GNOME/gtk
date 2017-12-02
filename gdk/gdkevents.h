@@ -252,8 +252,6 @@ typedef GdkFilterReturn (*GdkFilterFunc) (GdkXEvent *xevent,
  * @GDK_SCROLL: the scroll wheel was turned
  * @GDK_WINDOW_STATE: the state of a window has changed. See #GdkWindowState
  *   for the possible window states
- * @GDK_OWNER_CHANGE: the owner of a selection has changed. This event type
- *   was added in 2.6
  * @GDK_GRAB_BROKEN: a pointer or keyboard grab was broken. This event type
  *   was added in 2.8.
  * @GDK_DAMAGE: the content of the window has been changed. This event type
@@ -320,7 +318,6 @@ typedef enum
   GDK_CLIENT_EVENT	= 28,
   GDK_SCROLL            = 31,
   GDK_WINDOW_STATE      = 32,
-  GDK_OWNER_CHANGE      = 34,
   GDK_GRAB_BROKEN       = 35,
   GDK_DAMAGE            = 36,
   GDK_TOUCH_BEGIN       = 37,
@@ -514,21 +511,6 @@ typedef enum
   GDK_WINDOW_STATE_LEFT_TILED       = 1 << 15,
   GDK_WINDOW_STATE_LEFT_RESIZABLE   = 1 << 16
 } GdkWindowState;
-
-/**
- * GdkOwnerChange:
- * @GDK_OWNER_CHANGE_NEW_OWNER: some other app claimed the ownership
- * @GDK_OWNER_CHANGE_DESTROY: the window was destroyed
- * @GDK_OWNER_CHANGE_CLOSE: the client was closed
- *
- * Specifies why a selection ownership was changed.
- */
-typedef enum
-{
-  GDK_OWNER_CHANGE_NEW_OWNER,
-  GDK_OWNER_CHANGE_DESTROY,
-  GDK_OWNER_CHANGE_CLOSE
-} GdkOwnerChange;
 
 GDK_AVAILABLE_IN_ALL
 GType     gdk_event_get_type            (void) G_GNUC_CONST;
@@ -747,9 +729,6 @@ gboolean       gdk_event_get_property (const GdkEvent   *event,
 GDK_AVAILABLE_IN_3_92
 gboolean       gdk_event_get_selection (const GdkEvent   *event,
                                         GdkAtom          *selection);
-GDK_AVAILABLE_IN_3_94
-gboolean       gdk_event_get_owner_change_reason (const GdkEvent *event,
-                                                  GdkOwnerChange *reason);
 GDK_AVAILABLE_IN_3_92
 gboolean       gdk_event_get_selection_property (const GdkEvent  *event,
                                                  GdkAtom         *property,

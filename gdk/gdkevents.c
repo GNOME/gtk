@@ -916,7 +916,6 @@ gdk_event_get_time (const GdkEvent *event)
       case GDK_MAP:
       case GDK_UNMAP:
       case GDK_WINDOW_STATE:
-      case GDK_OWNER_CHANGE:
       case GDK_GRAB_BROKEN:
       case GDK_EVENT_LAST:
       default:
@@ -1001,7 +1000,6 @@ gdk_event_get_state (const GdkEvent        *event,
       case GDK_MAP:
       case GDK_UNMAP:
       case GDK_WINDOW_STATE:
-      case GDK_OWNER_CHANGE:
       case GDK_GRAB_BROKEN:
       case GDK_PAD_BUTTON_PRESS:
       case GDK_PAD_BUTTON_RELEASE:
@@ -2853,33 +2851,9 @@ gdk_event_get_selection (const GdkEvent   *event,
 
   if (event->type == GDK_SELECTION_CLEAR ||
       event->type == GDK_SELECTION_NOTIFY ||
-      event->type == GDK_SELECTION_REQUEST ||
-      event->type == GDK_OWNER_CHANGE)
+      event->type == GDK_SELECTION_REQUEST)
     {
       *selection = event->selection.selection;
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-/**
- * gdk_event_get_owner_change_reason:
- * @event: a #GdkEvent
- * @reason: (out):
- *
- * Returns: %TRUE on success, otherwise %FALSE
- **/
-gboolean
-gdk_event_get_owner_change_reason (const GdkEvent *event,
-                                   GdkOwnerChange *reason)
-{
-  if (!event)
-    return FALSE;
-
-  if (event->type == GDK_OWNER_CHANGE)
-    {
-      *reason = event->owner_change.reason;
       return TRUE;
     }
 

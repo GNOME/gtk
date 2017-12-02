@@ -1130,31 +1130,6 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       break;
 
     default:
-#ifdef HAVE_XFIXES
-      if (xevent->type - display_x11->xfixes_event_base == XFixesSelectionNotify)
-	{
-	  XFixesSelectionNotifyEvent *selection_notify = (XFixesSelectionNotifyEvent *)xevent;
-
-          if (selection_notify->selection == get_cm_atom (display))
-            {
-              gboolean composited = selection_notify->owner != None;
-
-              gdk_display_set_composited (display, composited);
-            }
-
-          event->owner_change.type = GDK_OWNER_CHANGE;
-          event->owner_change.window = window;
-          event->owner_change.reason = selection_notify->subtype;
-          event->owner_change.selection =
-            gdk_x11_xatom_to_atom_for_display (display,
-                                               selection_notify->selection);
-          event->owner_change.time = selection_notify->timestamp;
-          event->owner_change.selection_time = selection_notify->selection_timestamp;
-
-          return_val = TRUE;
-	}
-      else
-#endif
 #ifdef HAVE_RANDR
       if (xevent->type - display_x11->xrandr_event_base == RRScreenChangeNotify ||
           xevent->type - display_x11->xrandr_event_base == RRNotify)

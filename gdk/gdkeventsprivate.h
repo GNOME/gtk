@@ -432,34 +432,6 @@ struct _GdkEventSelection
 };
 
 /**
- * GdkEventOwnerChange:
- * @type: the type of the event (%GDK_OWNER_CHANGE).
- * @window: the window which received the event
- * @send_event: %TRUE if the event was sent explicitly.
- * @reason: the reason for the ownership change as a #GdkOwnerChange value
- * @selection: the atom identifying the selection
- * @time: the timestamp of the event
- * @selection_time: the time at which the selection ownership was taken
- *   over
- *
- * Generated when the owner of a selection changes. On X11, this
- * information is only available if the X server supports the XFIXES
- * extension.
- *
- * Since: 2.6
- */
-struct _GdkEventOwnerChange
-{
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
-  GdkOwnerChange reason;
-  GdkAtom selection;
-  guint32 time;
-  guint32 selection_time;
-};
-
-/**
  * GdkEventProximity:
  * @type: the type of the event (%GDK_PROXIMITY_IN or %GDK_PROXIMITY_OUT).
  * @window: the window which received the event.
@@ -738,7 +710,6 @@ struct _GdkEventPadGroupMode {
  * @configure: a #GdkEventConfigure
  * @property: a #GdkEventProperty
  * @selection: a #GdkEventSelection
- * @owner_change: a #GdkEventOwnerChange
  * @proximity: a #GdkEventProximity
  * @dnd: a #GdkEventDND
  * @window_state: a #GdkEventWindowState
@@ -795,7 +766,6 @@ union _GdkEvent
   GdkEventConfigure	    configure;
   GdkEventProperty	    property;
   GdkEventSelection	    selection;
-  GdkEventOwnerChange  	    owner_change;
   GdkEventProximity	    proximity;
   GdkEventDND               dnd;
   GdkEventWindowState       window_state;

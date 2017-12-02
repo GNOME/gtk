@@ -1684,9 +1684,6 @@ gtk_main_do_event (GdkEvent *event)
   GdkDevice *device;
   GList *tmp_list;
 
-  if (event->type == GDK_OWNER_CHANGE)
-    return;
-
   /* Find the widget which got the event. We store the widget
    * in the user_data field of GdkWindow's. Ignore the event
    * if we don't have a widget for it, except for GDK_PROPERTY_NOTIFY
@@ -1906,7 +1903,6 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_DROP_START:
       _gtk_drag_dest_handle_event (event_widget, event);
       break;
-    case GDK_OWNER_CHANGE:
     case GDK_EVENT_LAST:
     default:
       g_assert_not_reached ();
