@@ -468,7 +468,7 @@ gtk_image_new_from_resource (const gchar *resource_path)
  * pixbuf; you still need to unref it if you own references.
  * #GtkImage will add its own reference rather than adopting yours.
  *
- * This is a helper for gtk_image_new_from_texture, and you can't
+ * This is a helper for gtk_image_new_from_texture(), and you can't
  * get back the exact pixbuf once this is called, only a texture.
  *
  * Note that this function just creates an #GtkImage from the pixbuf. The
@@ -485,6 +485,33 @@ gtk_image_new_from_pixbuf (GdkPixbuf *pixbuf)
   image = g_object_new (GTK_TYPE_IMAGE, NULL);
 
   gtk_image_set_from_pixbuf (image, pixbuf);
+
+  return GTK_WIDGET (image);  
+}
+
+/**
+ * gtk_image_new_from_texture:
+ * @pixbuf: (allow-none): a #GdkTexture, or %NULL
+ *
+ * Creates a new #GtkImage displaying @texture.
+ * The #GtkImage does not assume a reference to the
+ * texture; you still need to unref it if you own references.
+ * #GtkImage will add its own reference rather than adopting yours.
+ *
+ * Note that this function just creates an #GtkImage from the texture. The
+ * #GtkImage created will not react to state changes. Should you want that, 
+ * you should use gtk_image_new_from_icon_name().
+ * 
+ * Returns: a new #GtkImage
+ **/
+GtkWidget*
+gtk_image_new_from_texture (GdkTexture *texture)
+{
+  GtkImage *image;
+
+  image = g_object_new (GTK_TYPE_IMAGE, NULL);
+
+  gtk_image_set_from_texture (image, texture);
 
   return GTK_WIDGET (image);  
 }
@@ -809,7 +836,7 @@ gtk_image_set_from_resource (GtkImage    *image,
  *
  * See gtk_image_new_from_pixbuf() for details.
  *
- * Note: This is a helper for gtk_image_new_from_texture, and you can't
+ * Note: This is a helper for gtk_image_set_from_texture(), and you can't
  * get back the exact pixbuf once this is called, only a texture.
  *
  **/
