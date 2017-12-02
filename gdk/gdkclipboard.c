@@ -28,6 +28,7 @@
 #include "gdkdisplay.h"
 #include "gdkintl.h"
 #include "gdkpipeiostreamprivate.h"
+#include "gdktexture.h"
 
 typedef struct _GdkClipboardPrivate GdkClipboardPrivate;
 
@@ -859,7 +860,7 @@ gdk_clipboard_read_value_finish (GdkClipboard  *clipboard,
 }
 
 /**
- * gdk_clipboard_read_pixbuf_async:
+ * gdk_clipboard_read_texture_async:
  * @clipboard: a #GdkClipboard
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
  * @callback: (scope async): callback to call when the request is satisfied
@@ -867,25 +868,25 @@ gdk_clipboard_read_value_finish (GdkClipboard  *clipboard,
  *
  * Asynchronously request the @clipboard contents converted to a #GdkPixbuf.
  * When the operation is finished @callback will be called. You can then
- * call gdk_clipboard_read_pixbuf_finish() to get the result.
+ * call gdk_clipboard_read_texture_finish() to get the result.
  *
  * This is a simple wrapper around gdk_clipboard_read_value_async(). Use
  * that function or gdk_clipboard_read_async() directly if you need more
  * control over the operation.
  **/
 void
-gdk_clipboard_read_pixbuf_async (GdkClipboard        *clipboard,
-                                 GCancellable        *cancellable,
-                                 GAsyncReadyCallback  callback,
-                                 gpointer             user_data)
+gdk_clipboard_read_texture_async (GdkClipboard        *clipboard,
+                                  GCancellable        *cancellable,
+                                  GAsyncReadyCallback  callback,
+                                  gpointer             user_data)
 {
   g_return_if_fail (GDK_IS_CLIPBOARD (clipboard));
   g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
   g_return_if_fail (callback != NULL);
 
   gdk_clipboard_read_value_internal (clipboard,
-                                     GDK_TYPE_PIXBUF,
-                                     gdk_clipboard_read_pixbuf_async,
+                                     GDK_TYPE_TEXTURE,
+                                     gdk_clipboard_read_texture_async,
                                      G_PRIORITY_DEFAULT,
                                      cancellable,
                                      callback,
@@ -893,26 +894,26 @@ gdk_clipboard_read_pixbuf_async (GdkClipboard        *clipboard,
 }
 
 /**
- * gdk_clipboard_read_pixbuf_finish:
+ * gdk_clipboard_read_texture_finish:
  * @clipboard: a #GdkClipboard
  * @result: a #GAsyncResult
  * @error: a #GError location to store the error occurring, or %NULL to 
  * ignore.
  *
  * Finishes an asynchronous clipboard read started with
- * gdk_clipboard_read_pixbuf_async().
+ * gdk_clipboard_read_texture_async().
  *
- * Returns: (transfer full) (nullable): a new #GdkPixbuf or %NULL on error.
+ * Returns: (transfer full) (nullable): a new #GdkTexture or %NULL on error.
  **/
-GdkPixbuf *
-gdk_clipboard_read_pixbuf_finish (GdkClipboard  *clipboard,
-                                  GAsyncResult  *res,
-                                  GError       **error)
+GdkTexture *
+gdk_clipboard_read_texture_finish (GdkClipboard  *clipboard,
+                                   GAsyncResult  *res,
+                                   GError       **error)
 {
   const GValue *value;
 
   g_return_val_if_fail (g_task_is_valid (res, clipboard), NULL);
-  g_return_val_if_fail (g_task_get_source_tag (G_TASK (res)) == gdk_clipboard_read_pixbuf_async, NULL);
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (res)) == gdk_clipboard_read_texture_async, NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
   value = g_task_propagate_pointer (G_TASK (res), error);
@@ -1234,24 +1235,24 @@ gdk_clipboard_set_text (GdkClipboard *clipboard,
 }
 
 /**
- * gdk_clipboard_set_pixbuf:
+ * gdk_clipboard_set_texture:
  * @clipboard: a #GdkClipboard
- * @pixbuf: a #GdkPixbuf to put into the clipboard
+ * @texture: a #GdkTexture to put into the clipboard
  *
- * Puts the given @pixbuf into the clipboard.
+ * Puts the given @texture into the clipboard.
  **/
 void
-gdk_clipboard_set_pixbuf (GdkClipboard *clipboard,
-                          GdkPixbuf    *pixbuf)
+gdk_clipboard_set_texture (GdkClipboard *clipboard,
+                           GdkTexture   *texture)
 {
   GdkContentProvider *provider;
   GValue value = G_VALUE_INIT;
 
   g_return_if_fail (GDK_IS_CLIPBOARD (clipboard));
-  g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
+  g_return_if_fail (GDK_IS_TEXTURE (texture));
 
-  g_value_init (&value, GDK_TYPE_PIXBUF);
-  g_value_set_object (&value, pixbuf);
+  g_value_init (&value, GDK_TYPE_TEXTURE);
+  g_value_set_object (&value, texture);
   provider = gdk_content_provider_new_for_value (&value);
   g_value_unset (&value);
 

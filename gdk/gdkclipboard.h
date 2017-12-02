@@ -25,7 +25,7 @@
 
 #include <gdk/gdkversionmacros.h>
 #include <gdk/gdktypes.h>
-#include <gdk-pixbuf/gdk-pixbuf.h>
+#include <gio/gio.h>
 
 
 G_BEGIN_DECLS
@@ -81,12 +81,12 @@ const GValue *          gdk_clipboard_read_value_finish (GdkClipboard          *
                                                          GAsyncResult          *res,
                                                          GError               **error);
 GDK_AVAILABLE_IN_3_94
-void                    gdk_clipboard_read_pixbuf_async (GdkClipboard          *clipboard,
+void                    gdk_clipboard_read_texture_async(GdkClipboard          *clipboard,
                                                          GCancellable          *cancellable,
                                                          GAsyncReadyCallback    callback,
                                                          gpointer               user_data);
 GDK_AVAILABLE_IN_3_94
-GdkPixbuf *             gdk_clipboard_read_pixbuf_finish(GdkClipboard          *clipboard,
+GdkTexture *            gdk_clipboard_read_texture_finish (GdkClipboard        *clipboard,
                                                          GAsyncResult          *res,
                                                          GError               **error);
 GDK_AVAILABLE_IN_3_94
@@ -106,8 +106,8 @@ GDK_AVAILABLE_IN_3_94
 void                    gdk_clipboard_set_text          (GdkClipboard          *clipboard,
                                                          const char            *text);
 GDK_AVAILABLE_IN_3_94
-void                    gdk_clipboard_set_pixbuf        (GdkClipboard          *clipboard,
-                                                         GdkPixbuf             *pixbuf);
+void                    gdk_clipboard_set_texture       (GdkClipboard          *clipboard,
+                                                         GdkTexture            *texture);
 
 G_END_DECLS
 

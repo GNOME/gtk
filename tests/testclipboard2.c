@@ -33,23 +33,23 @@ clipboard_changed_cb (GdkClipboard *clipboard,
 }
 
 static void
-pixbuf_loaded_cb (GObject      *clipboard,
+texture_loaded_cb (GObject      *clipboard,
                   GAsyncResult *res,
                   gpointer      data)
 {
   GError *error = NULL;
-  GdkPixbuf *pixbuf;
+  GdkTexture *texture;
 
-  pixbuf = gdk_clipboard_read_pixbuf_finish (GDK_CLIPBOARD (clipboard), res, &error);
-  if (pixbuf == NULL)
+  texture = gdk_clipboard_read_texture_finish (GDK_CLIPBOARD (clipboard), res, &error);
+  if (texture == NULL)
     {
       g_print ("%s\n", error->message);
       g_error_free (error);
       return;
     }
 
-  gtk_image_set_from_pixbuf (data, pixbuf);
-  g_object_unref (pixbuf);
+  gtk_image_set_from_texture (data, texture);
+  g_object_unref (texture);
 }
 
 static void
@@ -87,10 +87,10 @@ visible_child_changed_cb (GtkWidget    *stack,
     {
       GtkWidget *image = gtk_stack_get_child_by_name (GTK_STACK (stack), "image");
 
-      gdk_clipboard_read_pixbuf_async (clipboard,
-                                       NULL,
-                                       pixbuf_loaded_cb,
-                                       image);
+      gdk_clipboard_read_texture_async (clipboard,
+                                        NULL,
+                                        texture_loaded_cb,
+                                        image);
     }
   else if (g_str_equal (visible_child, "text"))
     {
