@@ -299,10 +299,10 @@ static void
 copy_to_clipboard (GtkButton         *button,
                    IconBrowserWindow *win)
 {
-  GtkClipboard *clipboard;
+  GdkClipboard *clipboard;
 
-  clipboard = gtk_clipboard_get_default (gdk_display_get_default ());
-  gtk_clipboard_set_text (clipboard, gtk_window_get_title (GTK_WINDOW (win->details)), -1);
+  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (win));
+  gdk_clipboard_set_text (clipboard, gtk_window_get_title (GTK_WINDOW (win->details)));
 }
 
 static gboolean
