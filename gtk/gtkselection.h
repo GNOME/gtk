@@ -115,6 +115,11 @@ gboolean gtk_selection_data_set_surface (GtkSelectionData  *selection_data,
                                          cairo_surface_t   *surface);
 GDK_AVAILABLE_IN_ALL
 GdkPixbuf *gtk_selection_data_get_pixbuf (const GtkSelectionData  *selection_data);
+GDK_AVAILABLE_IN_3_94
+gboolean gtk_selection_data_set_texture (GtkSelectionData *selection_data,
+                                         GdkTexture       *texture);
+GDK_AVAILABLE_IN_3_94
+GdkTexture *gtk_selection_data_get_texture (const GtkSelectionData *selection_data);
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_selection_data_set_uris (GtkSelectionData     *selection_data,
                                       gchar               **uris);

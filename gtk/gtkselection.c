@@ -90,6 +90,7 @@
 #include "gdk-pixbuf/gdk-pixbuf.h"
 
 #include "gdk/gdkcontentformatsprivate.h"
+#include "gdk/gdktextureprivate.h"
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
@@ -1553,6 +1554,69 @@ gtk_selection_data_get_pixbuf (const GtkSelectionData *selection_data)
     }
 
   return result;
+}
+
+/**
+ * gtk_selection_data_set_texture:
+ * @selection_data: a #GtkSelectionData
+ * @texture: a #GdkTexture
+ * 
+ * Sets the contents of the selection from a #GdkTexture.
+ * The surface is converted to the form determined by
+ * @selection_data->target.
+ * 
+ * Returns: %TRUE if the selection was successfully set,
+ *   otherwise %FALSE.
+ *
+ * Since: 3.94
+ **/
+gboolean
+gtk_selection_data_set_texture (GtkSelectionData *selection_data,
+                                GdkTexture       *texture)
+{
+  cairo_surface_t *surface;
+  gboolean retval;
+
+  g_return_val_if_fail (selection_data != NULL, FALSE);
+  g_return_val_if_fail (GDK_IS_TEXTURE (texture), FALSE);
+
+  surface = gdk_texture_download_surface (texture);
+  retval = gtk_selection_data_set_surface (selection_data, surface);
+  cairo_surface_destroy (surface);
+
+  return retval;
+}
+
+/**
+ * gtk_selection_data_get_texture:
+ * @selection_data: a #GtkSelectionData
+ * 
+ * Gets the contents of the selection data as a #GdkPixbuf.
+ * 
+ * Returns: (nullable) (transfer full): if the selection data
+ *   contained a recognized image type and it could be converted to a
+ *   #GdkTexture, a newly allocated texture is returned, otherwise
+ *   %NULL.  If the result is non-%NULL it must be freed with
+ *   g_object_unref().
+ *
+ * Since: 3.94
+ **/
+GdkTexture *
+gtk_selection_data_get_texture (const GtkSelectionData *selection_data)
+{
+  GdkTexture *texture;
+  GdkPixbuf *pixbuf;
+
+  g_return_val_if_fail (selection_data != NULL, NULL);
+
+  pixbuf = gtk_selection_data_get_pixbuf (selection_data);
+  if (pixbuf == NULL)
+    return NULL;
+
+  texture = gdk_texture_new_for_pixbuf (pixbuf);
+  g_object_unref (pixbuf);
+
+  return texture;
 }
 
 /**
