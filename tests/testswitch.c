@@ -162,27 +162,21 @@ int main (int argc, char *argv[])
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
   gtk_container_add (GTK_CONTAINER (window), vbox);
-  gtk_widget_show (vbox);
 
   hbox = make_switch (FALSE, TRUE);
   gtk_container_add (GTK_CONTAINER (vbox), hbox);
-  gtk_widget_show (hbox);
 
   hbox = make_switch (TRUE, TRUE);
   gtk_container_add (GTK_CONTAINER (vbox), hbox);
-  gtk_widget_show (hbox);
 
   hbox = make_switch (FALSE, FALSE);
   gtk_container_add (GTK_CONTAINER (vbox), hbox);
-  gtk_widget_show (hbox);
 
   hbox = make_switch (TRUE, FALSE);
   gtk_container_add (GTK_CONTAINER (vbox), hbox);
-  gtk_widget_show (hbox);
 
   hbox = make_delayed_switch (FALSE, TRUE);
   gtk_container_add (GTK_CONTAINER (vbox), hbox);
-  gtk_widget_show (hbox);
 
   gtk_main ();
 
