@@ -22,6 +22,8 @@
 #include "gdkcontentserializer.h"
 
 #include "gdkcontentformats.h"
+#include "gdkpixbuf.h"
+#include "gdktextureprivate.h"
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <string.h>
@@ -449,9 +451,32 @@ pixbuf_serializer_finish (GObject      *source,
 static void
 pixbuf_serializer (GdkContentSerializer *serializer)
 {
-  const char *name = gdk_content_serializer_get_user_data (serializer);
+  const GValue *value;
+  GdkPixbuf *pixbuf;
+  const char *name;
+  
+  name = gdk_content_serializer_get_user_data (serializer);
+  value = gdk_content_serializer_get_value (serializer);
 
-  gdk_pixbuf_save_to_stream_async (g_value_get_object (gdk_content_serializer_get_value (serializer)),
+  if (G_VALUE_HOLDS (value, GDK_TYPE_PIXBUF))
+    {
+      pixbuf = g_value_dup_object (value);
+    }
+  else if (G_VALUE_HOLDS (value, GDK_TYPE_TEXTURE))
+    {
+      GdkTexture *texture = g_value_get_object (value);
+      cairo_surface_t *surface = gdk_texture_download_surface (texture);
+      pixbuf = gdk_pixbuf_get_from_surface (surface,
+                                            0, 0,
+                                            gdk_texture_get_width (texture), gdk_texture_get_height (texture));
+      cairo_surface_destroy (surface);
+    }
+  else
+    {
+      g_assert_not_reached ();
+    }
+
+  gdk_pixbuf_save_to_stream_async (pixbuf,
                                    gdk_content_serializer_get_output_stream (serializer),
                                    name,
 				   gdk_content_serializer_get_cancellable (serializer),
@@ -459,6 +484,7 @@ pixbuf_serializer (GdkContentSerializer *serializer)
                                    serializer,
                                    g_str_equal (name, "png") ? "compression" : NULL, "2",
                                    NULL);
+  g_object_unref (pixbuf);
 }
 
 static void
@@ -669,6 +695,11 @@ init (void)
       mimes = gdk_pixbuf_format_get_mime_types (fmt);
       for (m = mimes; *m; m++)
 	{
+          gdk_content_register_serializer (GDK_TYPE_TEXTURE,
+                                           *m,
+                                           pixbuf_serializer,
+                                           g_strdup (gdk_pixbuf_format_get_name (fmt)),
+                                           g_free);
           gdk_content_register_serializer (GDK_TYPE_PIXBUF,
                                            *m,
                                            pixbuf_serializer,

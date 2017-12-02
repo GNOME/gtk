@@ -22,6 +22,7 @@
 #include "gdkcontentdeserializer.h"
 
 #include "gdkcontentformats.h"
+#include "gdktexture.h"
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
@@ -439,6 +440,7 @@ pixbuf_deserializer_finish (GObject      *source,
                             gpointer      deserializer)
 {
   GdkPixbuf *pixbuf;
+  GValue *value;
   GError *error = NULL;
 
   pixbuf = gdk_pixbuf_new_from_stream_finish (res, &error);
@@ -448,8 +450,22 @@ pixbuf_deserializer_finish (GObject      *source,
       return;
     }
 
-  g_value_take_object (gdk_content_deserializer_get_value (deserializer),
-                       pixbuf);
+  value = gdk_content_deserializer_get_value (deserializer);
+  if (G_VALUE_HOLDS (value, GDK_TYPE_PIXBUF))
+    {
+      g_value_take_object (value, pixbuf);
+    }
+  else if (G_VALUE_HOLDS (value, GDK_TYPE_TEXTURE))
+    {
+      GdkTexture *texture;
+      texture = gdk_texture_new_for_pixbuf (pixbuf);
+      g_object_unref (pixbuf);
+      g_value_take_object (value, texture);
+    }
+  else
+    {
+      g_assert_not_reached ();
+    }
   gdk_content_deserializer_return_success (deserializer);
 }
 
@@ -632,6 +648,11 @@ init (void)
       mimes = gdk_pixbuf_format_get_mime_types (fmt);
       for (m = mimes; *m; m++)
 	{
+          gdk_content_register_deserializer (*m,
+                                             GDK_TYPE_TEXTURE,
+                                             pixbuf_deserializer,
+                                             NULL,
+                                             NULL);
           gdk_content_register_deserializer (*m,
                                              GDK_TYPE_PIXBUF,
                                              pixbuf_deserializer,
