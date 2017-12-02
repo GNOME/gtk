@@ -1247,10 +1247,17 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
         gsize n_shadows = gsk_shadow_node_get_n_shadows (node);
         guint i;
 
-        /* TODO: shadow nodes are most commonly used for text and icon shadows.
-         *       In both cases, we can avoid the RTT case!
-         *       if the child is neither a text node nor a texture node though, we need
-         *       to fall back to rendering it to a texture and then applying the shadow on that one.*/
+        /* TODO: Implement blurred shadow nodes */;
+        for (i = 0; i < n_shadows; i ++)
+          {
+            const GskShadow *shadow = gsk_shadow_node_peek_shadow (node, i);
+
+            if (shadow->radius > 0)
+              {
+                render_fallback_node (self, node, builder, vertex_data);
+                return;
+              }
+          }
 
         for (i = 0; i < n_shadows; i ++)
           {
@@ -1260,13 +1267,7 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
             graphene_matrix_t offset_matrix;
             graphene_matrix_t prev_modelview;
 
-            /* TODO: Implement blurred shadow nodes */;
-            if (shadow->radius > 0)
-              {
-                /* TODO: This draws the entire node, not just one shadow. */
-                render_fallback_node (self, node, builder, vertex_data);
-                continue;
-              }
+            g_assert (shadow->radius <= 0);
 
             if (gsk_render_node_get_node_type (child) == GSK_TEXT_NODE)
               {
