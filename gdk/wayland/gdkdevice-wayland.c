@@ -24,6 +24,8 @@
 #include <string.h>
 #include <gdk/gdkwindow.h>
 #include <gdk/gdktypes.h>
+#include "gdkclipboard-wayland.h"
+#include "gdkclipboardprivate.h"
 #include "gdkprivate-wayland.h"
 #include "gdkseat-wayland.h"
 #include "gdkwayland.h"
@@ -230,6 +232,8 @@ struct _GdkWaylandSeat
   uint32_t keyboard_time;
   uint32_t keyboard_key_serial;
 
+  GdkClipboard *clipboard;
+  GdkClipboard *primary_clipboard;
   struct gtk_primary_selection_device *primary_data_device;
   struct wl_data_device *data_device;
   GdkDragContext *drop_context;
@@ -4469,6 +4473,8 @@ gdk_wayland_seat_finalize (GObject *object)
   /* FIXME: destroy data_device */
   g_clear_object (&seat->keyboard_settings);
   g_clear_object (&seat->drop_context);
+  g_clear_object (&seat->clipboard);
+  g_clear_object (&seat->primary_clipboard);
   g_hash_table_destroy (seat->touches);
   gdk_window_destroy (seat->foreign_dnd_window);
   zwp_tablet_seat_v2_destroy (seat->wp_tablet_seat);
@@ -4817,11 +4823,19 @@ _gdk_wayland_display_create_seat (GdkWaylandDisplay *display_wayland,
                                                          seat->wl_seat);
       gtk_primary_selection_device_add_listener (seat->primary_data_device,
                                                  &primary_selection_device_listener, seat);
+      seat->primary_clipboard = gdk_wayland_clipboard_new (display);
+    }
+  else
+    {
+      /* If the compositor doesn't support primary clipboard,
+       * just do it local-only */
+      seat->primary_clipboard = gdk_clipboard_new (display);
     }
 
   seat->data_device =
     wl_data_device_manager_get_data_device (display_wayland->data_device_manager,
                                             seat->wl_seat);
+  seat->clipboard = gdk_wayland_clipboard_new (display);
   seat->drop_context = _gdk_wayland_drop_context_new (display,
                                                       seat->data_device);
   wl_data_device_add_listener (seat->data_device,
@@ -4844,6 +4858,11 @@ _gdk_wayland_display_create_seat (GdkWaylandDisplay *display_wayland,
       zwp_tablet_seat_v2_add_listener (seat->wp_tablet_seat, &tablet_seat_listener,
                                        seat);
     }
+
+  if (display->clipboard == NULL)
+    display->clipboard = g_object_ref (seat->clipboard);
+  if (display->primary_clipboard == NULL)
+    display->primary_clipboard = g_object_ref (seat->primary_clipboard);
 
   gdk_display_add_seat (display, GDK_SEAT (seat));
 }

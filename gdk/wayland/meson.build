@@ -1,5 +1,6 @@
 gdk_wayland_sources = files([
   'gdkapplaunchcontext-wayland.c',
+  'gdkclipboard-wayland.c',
   'gdkcursor-wayland.c',
   'gdkdevice-wayland.c',
   'gdkdisplay-wayland.c',
