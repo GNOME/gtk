@@ -114,7 +114,6 @@
 
 #include "gtkaccelmapprivate.h"
 #include "gtkbox.h"
-#include "gtkclipboardprivate.h"
 #include "gtkdebug.h"
 #include "gtkdebugupdatesprivate.h"
 #include "gtkdndprivate.h"
@@ -1071,9 +1070,6 @@ gtk_main_sync (void)
   g_main_loop_unref (store.store_loop);
   store.store_loop = NULL;
   
-  /* Try storing all clipboard data we have */
-  _gtk_clipboard_store_all ();
-
   /* Synchronize the recent manager singleton */
   _gtk_recent_manager_sync ();
 }
@@ -1689,10 +1685,7 @@ gtk_main_do_event (GdkEvent *event)
   GList *tmp_list;
 
   if (event->type == GDK_OWNER_CHANGE)
-    {
-      _gtk_clipboard_handle_event (&event->owner_change);
-      return;
-    }
+    return;
 
   /* Find the widget which got the event. We store the widget
    * in the user_data field of GdkWindow's. Ignore the event

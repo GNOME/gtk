@@ -39,7 +39,6 @@
 #include "gtkcontainer.h"
 #include "gtkaccelmapprivate.h"
 #include "gtkaccelgroupprivate.h"
-#include "gtkclipboard.h"
 #include "gtkcssfiltervalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
@@ -12421,36 +12420,6 @@ gtk_widget_get_primary_clipboard (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
   return gdk_display_get_primary_clipboard (gtk_widget_get_display (widget));
-}
-
-/**
- * gtk_widget_get_old_clipboard:
- * @widget: a #GtkWidget
- * @selection: a #GdkAtom which identifies the clipboard
- *             to use. %GDK_SELECTION_CLIPBOARD gives the
- *             default clipboard. Another common value
- *             is %GDK_SELECTION_PRIMARY, which gives
- *             the primary X selection.
- *
- * Returns the clipboard object for the given selection to
- * be used with @widget. @widget must have a #GdkDisplay
- * associated with it, so must be attached to a toplevel
- * window.
- *
- * Returns: (transfer none): the appropriate clipboard object. If no
- *             clipboard already exists, a new one will
- *             be created. Once a clipboard object has
- *             been created, it is persistent for all time.
- *
- * Since: 2.2
- **/
-GtkClipboard *
-gtk_widget_get_old_clipboard (GtkWidget *widget, GdkAtom selection)
-{
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
-  return gtk_clipboard_get_for_display (gtk_widget_get_display (widget),
-					selection);
 }
 
 /**

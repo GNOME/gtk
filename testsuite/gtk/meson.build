@@ -16,7 +16,6 @@ tests = [
   ['builderparser'],
   ['cellarea'],
   ['check-icon-names'],
-  ['clipboard'],
   ['cssprovider'],
   ['entry'],
   ['firefox-stylecontext'],

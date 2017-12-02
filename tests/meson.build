@@ -25,7 +25,6 @@ gtk_tests = [
   ['testbuttons'],
   ['testcairo'],
   ['testcalendar'],
-  ['testclipboard'],
   ['testclipboard2'],
   ['testcolorchooser'],
   ['testcolorchooser2'],

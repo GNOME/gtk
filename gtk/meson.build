@@ -413,7 +413,6 @@ gtk_public_headers = files([
   'gtkcellview.h',
   'gtkcheckbutton.h',
   'gtkcheckmenuitem.h',
-  'gtkclipboard.h',
   'gtkcolorbutton.h',
   'gtkcolorchooser.h',
   'gtkcolorchooserdialog.h',
@@ -707,12 +706,10 @@ gtk_use_wayland_or_x11_c_sources = files([
 
 if quartz_enabled
   dnd_sources = files([
-    'gtkclipboard-quartz.c',
     'gtkdnd-quartz.c',
   ])
 else
   dnd_sources = files([
-    'gtkclipboard.c',
     'gtkdnd.c',
     'gtkdragdest.c',
   ])

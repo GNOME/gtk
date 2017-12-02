@@ -71,7 +71,6 @@
 #include <gtk/gtkcenterbox.h>
 #include <gtk/gtkcheckbutton.h>
 #include <gtk/gtkcheckmenuitem.h>
-#include <gtk/gtkclipboard.h>
 #include <gtk/gtkcolorbutton.h>
 #include <gtk/gtkcolorchooser.h>
 #include <gtk/gtkcolorchooserdialog.h>

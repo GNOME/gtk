@@ -29,7 +29,6 @@
 #endif
 
 #include "gtkapplicationprivate.h"
-#include "gtkclipboardprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkmain.h"
 #include "gtkrecentmanager.h"
