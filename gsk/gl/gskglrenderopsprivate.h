@@ -175,6 +175,10 @@ typedef struct
     /* Per-program state */
     union {
       GdkRGBA color;
+      struct {
+        graphene_matrix_t matrix;
+        graphene_vec4_t offset;
+      } color_matrix;
     };
   } program_state[GL_N_PROGRAMS];
 
@@ -197,31 +201,35 @@ typedef struct
 
 
 
-void              ops_set_program       (RenderOpBuilder         *builder,
-                                         const Program           *program);
+void              ops_set_program        (RenderOpBuilder         *builder,
+                                          const Program           *program);
 
-GskRoundedRect    ops_set_clip          (RenderOpBuilder         *builder,
-                                         const GskRoundedRect    *clip);
+GskRoundedRect    ops_set_clip           (RenderOpBuilder         *builder,
+                                          const GskRoundedRect    *clip);
 
-graphene_matrix_t ops_set_modelview     (RenderOpBuilder         *builder,
-                                         const graphene_matrix_t *modelview);
+graphene_matrix_t ops_set_modelview      (RenderOpBuilder         *builder,
+                                          const graphene_matrix_t *modelview);
 
-graphene_matrix_t ops_set_projection    (RenderOpBuilder         *builder,
-                                         const graphene_matrix_t *projection);
+graphene_matrix_t ops_set_projection     (RenderOpBuilder         *builder,
+                                          const graphene_matrix_t *projection);
 
-graphene_rect_t   ops_set_viewport      (RenderOpBuilder         *builder,
-                                         const graphene_rect_t   *viewport);
+graphene_rect_t   ops_set_viewport       (RenderOpBuilder         *builder,
+                                          const graphene_rect_t   *viewport);
 
-void              ops_set_texture       (RenderOpBuilder         *builder,
-                                         int                      texture_id);
+void              ops_set_texture        (RenderOpBuilder         *builder,
+                                          int                      texture_id);
 
-int               ops_set_render_target (RenderOpBuilder         *builder,
-                                         int                      render_target_id);
+int               ops_set_render_target  (RenderOpBuilder         *builder,
+                                          int                      render_target_id);
 
-float             ops_set_opacity        (RenderOpBuilder        *builder,
-                                          float                   opacity);
-void              ops_set_color          (RenderOpBuilder        *builder,
-                                          const GdkRGBA          *color);
+float             ops_set_opacity        (RenderOpBuilder         *builder,
+                                          float                    opacity);
+void              ops_set_color          (RenderOpBuilder         *builder,
+                                          const GdkRGBA           *color);
+
+void              ops_set_color_matrix   (RenderOpBuilder         *builder,
+                                          const graphene_matrix_t *matrix,
+                                          const graphene_vec4_t   *offset);
 
 void              ops_draw               (RenderOpBuilder        *builder,
                                           const GskQuadVertex     vertex_data[GL_N_VERTICES]);

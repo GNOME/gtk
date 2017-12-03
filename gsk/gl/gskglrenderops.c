@@ -248,6 +248,30 @@ ops_set_color (RenderOpBuilder *builder,
 }
 
 void
+ops_set_color_matrix (RenderOpBuilder         *builder,
+                      const graphene_matrix_t *matrix,
+                      const graphene_vec4_t   *offset)
+{
+  RenderOp op;
+
+  if (memcmp (matrix,
+              &builder->program_state[builder->current_program->index].color_matrix.matrix,
+              sizeof (graphene_matrix_t)) == 0 &&
+      memcmp (offset,
+              &builder->program_state[builder->current_program->index].color_matrix.offset,
+              sizeof (graphene_vec4_t)) == 0)
+    return;
+
+  builder->program_state[builder->current_program->index].color_matrix.matrix = *matrix;
+  builder->program_state[builder->current_program->index].color_matrix.offset = *offset;
+
+  op.op = OP_CHANGE_COLOR_MATRIX;
+  op.color_matrix.matrix = *matrix;
+  op.color_matrix.offset = *offset;
+  g_array_append_val (builder->render_ops, op);
+}
+
+void
 ops_draw (RenderOpBuilder     *builder,
           const GskQuadVertex  vertex_data[GL_N_VERTICES])
 {

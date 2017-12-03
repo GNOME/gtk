@@ -1102,16 +1102,15 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
       {
         int texture_id;
         gboolean is_offscreen;
-        RenderOp op;
+
         add_offscreen_ops (self, builder, min_x, max_x, min_y, max_y,
                            gsk_color_matrix_node_get_child (node),
                            &texture_id, &is_offscreen);
 
         ops_set_program (builder, &self->color_matrix_program);
-        op.op = OP_CHANGE_COLOR_MATRIX;
-        op.color_matrix.matrix = *gsk_color_matrix_node_peek_color_matrix (node);
-        op.color_matrix.offset = *gsk_color_matrix_node_peek_color_offset (node);
-        ops_add (builder, &op);
+        ops_set_color_matrix (builder,
+                              gsk_color_matrix_node_peek_color_matrix (node),
+                              gsk_color_matrix_node_peek_color_offset (node));
 
         ops_set_texture (builder, texture_id);
 
