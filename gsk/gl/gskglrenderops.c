@@ -207,13 +207,23 @@ ops_set_opacity (RenderOpBuilder *builder,
 {
   RenderOp op;
   float prev_opacity;
+  RenderOp *last_op;
 
   if (builder->current_opacity == opacity)
     return opacity;
 
-  op.op = OP_CHANGE_OPACITY;
-  op.opacity = opacity;
-  g_array_append_val (builder->render_ops, op);
+  last_op = &g_array_index (builder->render_ops, RenderOp, builder->render_ops->len - 1);
+
+  if (last_op->op == OP_CHANGE_OPACITY)
+    {
+      last_op->opacity = opacity;
+    }
+  else
+    {
+      op.op = OP_CHANGE_OPACITY;
+      op.opacity = opacity;
+      g_array_append_val (builder->render_ops, op);
+    }
 
   prev_opacity = builder->current_opacity;
   builder->current_opacity = opacity;
