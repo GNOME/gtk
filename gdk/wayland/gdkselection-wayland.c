@@ -82,7 +82,6 @@ struct _SelectionData
 };
 
 enum {
-  ATOM_PRIMARY,
   ATOM_DND,
   N_ATOMS
 };
@@ -99,9 +98,6 @@ struct _GdkWaylandSelection
   StoredSelection stored_selection;
   GArray *source_targets;
   GdkAtom requested_target;
-
-  struct gtk_primary_selection_source *primary_source;
-  GdkWindow *primary_owner;
 
   struct wl_data_source *dnd_source; /* Owned by the GdkDragContext */
   GdkWindow *dnd_owner;
@@ -307,7 +303,6 @@ gdk_wayland_selection_new (void)
   gint i;
 
   /* init atoms */
-  atoms[ATOM_PRIMARY] = gdk_atom_intern_static_string ("PRIMARY");
   atoms[ATOM_DND] = gdk_atom_intern_static_string ("GdkWaylandSelection");
 
   selection = g_new0 (GdkWaylandSelection, 1);
@@ -348,8 +343,6 @@ gdk_wayland_selection_free (GdkWaylandSelection *selection)
   if (selection->stored_selection.fd > 0)
     close (selection->stored_selection.fd);
 
-  if (selection->primary_source)
-    gtk_primary_selection_source_destroy (selection->primary_source);
   if (selection->dnd_source)
     wl_data_source_destroy (selection->dnd_source);
 
@@ -448,41 +441,11 @@ static const struct wl_data_offer_listener data_offer_listener = {
   data_offer_action
 };
 
-static void
-primary_offer_offer (void                               *data,
-                     struct gtk_primary_selection_offer *gtk_offer,
-                     const char                         *type)
-{
-  GdkWaylandSelection *selection = data;
-  GdkContentFormatsBuilder *builder;
-  DataOfferData *info;
-
-  info = g_hash_table_lookup (selection->offers, gtk_offer);
-
-  if (!info || gdk_content_formats_contain_mime_type (info->targets, type))
-    return;
-
-  GDK_NOTE (EVENTS,
-            g_message ("primary offer offer, offer %p, type = %s", gtk_offer, type));
-
-  builder = gdk_content_formats_builder_new ();
-  gdk_content_formats_builder_add_formats (builder, info->targets);
-  gdk_content_formats_builder_add_mime_type (builder, type);
-  gdk_content_formats_unref (info->targets);
-  info->targets = gdk_content_formats_builder_free (builder);
-}
-
-static const struct gtk_primary_selection_offer_listener primary_offer_listener = {
-  primary_offer_offer,
-};
-
 static SelectionData *
 selection_lookup_offer_by_atom (GdkWaylandSelection *selection,
                                 GdkAtom              selection_atom)
 {
-  if (selection_atom == atoms[ATOM_PRIMARY])
-    return &selection->selections[ATOM_PRIMARY];
-  else if (selection_atom == atoms[ATOM_DND])
+  if (selection_atom == atoms[ATOM_DND])
     return &selection->selections[ATOM_DND];
   else
     return NULL;
@@ -505,26 +468,6 @@ gdk_wayland_selection_ensure_offer (GdkDisplay           *display,
       wl_data_offer_add_listener (wl_offer,
                                   &data_offer_listener,
                                   selection);
-    }
-}
-
-void
-gdk_wayland_selection_ensure_primary_offer (GdkDisplay                         *display,
-                                            struct gtk_primary_selection_offer *gtk_offer)
-{
-  GdkWaylandSelection *selection = gdk_wayland_display_get_selection (display);
-  DataOfferData *info;
-
-  info = g_hash_table_lookup (selection->offers, gtk_offer);
-
-  if (!info)
-    {
-      info = data_offer_data_new (gtk_offer,
-                                  (GDestroyNotify) gtk_primary_selection_offer_destroy);
-      g_hash_table_insert (selection->offers, gtk_offer, info);
-      gtk_primary_selection_offer_add_listener (gtk_offer,
-                                                &primary_offer_listener,
-                                                selection);
     }
 }
 
@@ -1006,55 +949,6 @@ static const struct wl_data_source_listener data_source_listener = {
   data_source_action,
 };
 
-static void
-primary_source_send (void                                *data,
-                     struct gtk_primary_selection_source *source,
-                     const char                          *mime_type,
-                     int32_t                              fd)
-{
-  GdkWaylandSelection *wayland_selection = data;
-
-  GDK_NOTE (EVENTS,
-            g_message ("primary source send, source = %p, mime_type = %s, fd = %d",
-                       source, mime_type, fd));
-
-  if (!mime_type || !wayland_selection->primary_owner)
-    {
-      close (fd);
-      return;
-    }
-
-  if (!gdk_wayland_selection_request_target (wayland_selection,
-                                             wayland_selection->primary_owner,
-                                             atoms[ATOM_PRIMARY],
-                                             gdk_atom_intern (mime_type, FALSE),
-                                             fd))
-    gdk_wayland_selection_check_write (wayland_selection);
-}
-
-static void
-primary_source_cancelled (void                                *data,
-                          struct gtk_primary_selection_source *source)
-{
-  GdkDisplay *display;
-  GdkAtom atom;
-
-  GDK_NOTE (EVENTS,
-            g_message ("primary source cancelled, source = %p", source));
-
-  display = gdk_display_get_default ();
-
-  atom = atoms[ATOM_PRIMARY];
-  emit_selection_clear (display, atom);
-  gdk_selection_owner_set (NULL, atom, GDK_CURRENT_TIME, TRUE);
-  gdk_wayland_selection_unset_data_source (display, atom);
-}
-
-static const struct gtk_primary_selection_source_listener primary_source_listener = {
-  primary_source_send,
-  primary_source_cancelled,
-};
-
 struct wl_data_source *
 gdk_wayland_selection_get_data_source (GdkWindow *owner,
                                        GdkAtom    selection)
@@ -1070,18 +964,6 @@ gdk_wayland_selection_get_data_source (GdkWindow *owner,
           (!owner || owner == wayland_selection->dnd_owner))
         return wayland_selection->dnd_source;
     }
-  else if (selection == atoms[ATOM_PRIMARY])
-    {
-      if (wayland_selection->primary_source &&
-          (!owner || owner == wayland_selection->primary_owner))
-        return (gpointer) wayland_selection->primary_source;
-
-      if (wayland_selection->primary_source)
-        {
-          gtk_primary_selection_source_destroy (wayland_selection->primary_source);
-          wayland_selection->primary_source = NULL;
-        }
-    }
   else
     return NULL;
 
@@ -1090,28 +972,13 @@ gdk_wayland_selection_get_data_source (GdkWindow *owner,
 
   display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (owner));
 
-  if (selection == atoms[ATOM_PRIMARY])
-    {
-      if (display_wayland->primary_selection_manager)
-        {
-          source = gtk_primary_selection_device_manager_create_source (display_wayland->primary_selection_manager);
-          gtk_primary_selection_source_add_listener (source,
-                                                     &primary_source_listener,
-                                                     wayland_selection);
-        }
-    }
-  else
-    {
-      source = wl_data_device_manager_create_data_source (display_wayland->data_device_manager);
-      wl_data_source_add_listener (source,
-                                   &data_source_listener,
-                                   wayland_selection);
-    }
+  source = wl_data_device_manager_create_data_source (display_wayland->data_device_manager);
+  wl_data_source_add_listener (source,
+                               &data_source_listener,
+                               wayland_selection);
 
   if (selection == atoms[ATOM_DND])
     wayland_selection->dnd_source = source;
-  else if (selection == atoms[ATOM_PRIMARY])
-    wayland_selection->primary_source = source;
 
   return source;
 }
@@ -1122,19 +989,7 @@ gdk_wayland_selection_unset_data_source (GdkDisplay *display,
 {
   GdkWaylandSelection *wayland_selection = gdk_wayland_display_get_selection (display);
 
-  if (selection == atoms[ATOM_PRIMARY])
-    {
-      GdkSeat *seat = gdk_display_get_default_seat (display);
-
-      gdk_wayland_seat_set_primary (seat, NULL);
-
-      if (wayland_selection->primary_source)
-        {
-          gtk_primary_selection_source_destroy (wayland_selection->primary_source);
-          wayland_selection->primary_source = NULL;
-        }
-    }
-  else if (selection == atoms[ATOM_DND])
+  if (selection == atoms[ATOM_DND])
     {
       wayland_selection->dnd_source = NULL;
     }
@@ -1146,9 +1001,7 @@ _gdk_wayland_display_get_selection_owner (GdkDisplay *display,
 {
   GdkWaylandSelection *wayland_selection = gdk_wayland_display_get_selection (display);
 
-  if (selection == atoms[ATOM_PRIMARY])
-    return wayland_selection->primary_owner;
-  else if (selection == atoms[ATOM_DND])
+  if (selection == atoms[ATOM_DND])
     return wayland_selection->dnd_owner;
 
   return NULL;
@@ -1163,12 +1016,7 @@ _gdk_wayland_display_set_selection_owner (GdkDisplay *display,
 {
   GdkWaylandSelection *wayland_selection = gdk_wayland_display_get_selection (display);
 
-  if (selection == atoms[ATOM_PRIMARY])
-    {
-      wayland_selection->primary_owner = owner;
-      return TRUE;
-    }
-  else if (selection == atoms[ATOM_DND])
+  if (selection == atoms[ATOM_DND])
     {
       wayland_selection->dnd_owner = owner;
       return TRUE;
@@ -1311,10 +1159,9 @@ _gdk_wayland_display_convert_selection (GdkDisplay *display,
           return;
         }
 
-      if (selection != atoms[ATOM_PRIMARY])
-        wl_data_offer_accept (offer,
-                              _gdk_wayland_display_get_serial (GDK_WAYLAND_DISPLAY (display)),
-                              mimetype);
+    wl_data_offer_accept (offer,
+                          _gdk_wayland_display_get_serial (GDK_WAYLAND_DISPLAY (display)),
+                          mimetype);
     }
 
   buffer_data = g_hash_table_lookup (selection_data->buffers, target);
@@ -1336,10 +1183,7 @@ _gdk_wayland_display_convert_selection (GdkDisplay *display,
         {
           g_unix_open_pipe (pipe_fd, FD_CLOEXEC, NULL);
 
-          if (selection == atoms[ATOM_PRIMARY])
-            gtk_primary_selection_offer_receive (offer, mimetype, pipe_fd[1]);
-          else
-            wl_data_offer_receive (offer, mimetype, pipe_fd[1]);
+          wl_data_offer_receive (offer, mimetype, pipe_fd[1]);
 
           stream = g_unix_input_stream_new (pipe_fd[0], TRUE);
           close (pipe_fd[1]);
@@ -1500,14 +1344,6 @@ gdk_wayland_display_add_selection_targets (GdkDisplay *display,
 
       wl_data_source_offer (data_source, mimetype);
       g_free (mimetype);
-    }
-
-  if (selection == atoms[ATOM_PRIMARY])
-    {
-      GdkSeat *seat;
-
-      seat = gdk_display_get_default_seat (display);
-      gdk_wayland_seat_set_primary (seat, data_source);
     }
 }
 

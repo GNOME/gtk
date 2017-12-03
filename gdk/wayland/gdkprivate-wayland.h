@@ -184,9 +184,6 @@ struct wl_data_device * gdk_wayland_device_get_data_device (GdkDevice *gdk_devic
 void gdk_wayland_device_set_selection (GdkDevice             *gdk_device,
                                        struct wl_data_source *source);
 
-void gdk_wayland_seat_set_primary (GdkSeat                             *seat,
-                                   struct gtk_primary_selection_source *source);
-
 GdkDragContext * gdk_wayland_device_get_drop_context (GdkDevice *gdk_device);
 
 void gdk_wayland_device_unset_touch_grab (GdkDevice        *device,

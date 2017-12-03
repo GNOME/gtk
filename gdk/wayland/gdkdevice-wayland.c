@@ -34,6 +34,7 @@
 #include "gdkdeviceprivate.h"
 #include "gdkdevicepadprivate.h"
 #include "gdkdevicetoolprivate.h"
+#include "gdkprimary-wayland.h"
 #include "gdkseatprivate.h"
 #include "pointer-gestures-unstable-v1-client-protocol.h"
 #include "tablet-unstable-v2-client-protocol.h"
@@ -233,7 +234,6 @@ struct _GdkWaylandSeat
 
   GdkClipboard *clipboard;
   GdkClipboard *primary_clipboard;
-  struct gtk_primary_selection_device *primary_data_device;
   struct wl_data_device *data_device;
   GdkDragContext *drop_context;
 
@@ -1209,45 +1209,6 @@ static const struct wl_data_device_listener data_device_listener = {
   data_device_motion,
   data_device_drop,
   data_device_selection
-};
-
-static void
-primary_selection_data_offer (void                                *data,
-                              struct gtk_primary_selection_device *gtk_primary_selection_device,
-                              struct gtk_primary_selection_offer  *gtk_primary_offer)
-{
-  GdkWaylandSeat *seat = data;
-
-  GDK_NOTE (EVENTS,
-            g_message ("primary selection offer, device %p, data offer %p",
-                       gtk_primary_selection_device, gtk_primary_offer));
-
-  gdk_wayland_selection_ensure_primary_offer (seat->display, gtk_primary_offer);
-}
-
-static void
-primary_selection_selection (void                                *data,
-                             struct gtk_primary_selection_device *gtk_primary_selection_device,
-                             struct gtk_primary_selection_offer  *gtk_primary_offer)
-{
-  GdkWaylandSeat *seat = data;
-  GdkAtom selection;
-
-  if (!seat->keyboard_focus)
-    return;
-
-  GDK_NOTE (EVENTS,
-            g_message ("primary selection selection, device %p, data offer %p",
-                       gtk_primary_selection_device, gtk_primary_offer));
-
-  selection = gdk_atom_intern_static_string ("PRIMARY");
-  gdk_wayland_selection_set_offer (seat->display, selection, gtk_primary_offer);
-  /* emit_selection_owner_change (seat->keyboard_focus, selection); */
-}
-
-static const struct gtk_primary_selection_device_listener primary_selection_device_listener = {
-  primary_selection_data_offer,
-  primary_selection_selection,
 };
 
 static GdkDevice * get_scroll_device (GdkWaylandSeat              *seat,
@@ -4796,12 +4757,7 @@ _gdk_wayland_display_create_seat (GdkWaylandDisplay *display_wayland,
 
   if (display_wayland->primary_selection_manager)
     {
-      seat->primary_data_device =
-        gtk_primary_selection_device_manager_get_device (display_wayland->primary_selection_manager,
-                                                         seat->wl_seat);
-      gtk_primary_selection_device_add_listener (seat->primary_data_device,
-                                                 &primary_selection_device_listener, seat);
-      seat->primary_clipboard = gdk_wayland_clipboard_new (display);
+      seat->primary_clipboard = gdk_wayland_primary_new (seat);
     }
   else
     {
@@ -5014,23 +4970,6 @@ gdk_wayland_device_set_selection (GdkDevice             *gdk_device,
 
   wl_data_device_set_selection (seat->data_device, source,
                                 _gdk_wayland_display_get_serial (display_wayland));
-}
-
-void
-gdk_wayland_seat_set_primary (GdkSeat                             *seat,
-                              struct gtk_primary_selection_source *source)
-{
-  GdkWaylandSeat *wayland_seat = GDK_WAYLAND_SEAT (seat);
-  GdkWaylandDisplay *display_wayland;
-  guint32 serial;
-
-  if (source)
-    {
-      display_wayland = GDK_WAYLAND_DISPLAY (gdk_seat_get_display (seat));
-      serial = _gdk_wayland_display_get_serial (display_wayland);
-      gtk_primary_selection_device_set_selection (wayland_seat->primary_data_device,
-                                                  source, serial);
-    }
 }
 
 /**
