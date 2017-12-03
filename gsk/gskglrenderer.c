@@ -650,39 +650,8 @@ get_gl_scaling_filters (GskRenderNode *node,
                         int           *min_filter_r,
                         int           *mag_filter_r)
 {
-  switch (node->min_filter)
-    {
-    case GSK_SCALING_FILTER_NEAREST:
-      *min_filter_r = GL_NEAREST;
-      break;
-
-    case GSK_SCALING_FILTER_LINEAR:
-      *min_filter_r = GL_LINEAR;
-      break;
-
-    case GSK_SCALING_FILTER_TRILINEAR:
-      *min_filter_r = GL_LINEAR_MIPMAP_LINEAR;
-      break;
-
-    default:
-      break;
-    }
-
-  switch (node->mag_filter)
-    {
-    case GSK_SCALING_FILTER_NEAREST:
-      *mag_filter_r = GL_NEAREST;
-      break;
-
-    /* There's no point in using anything above GL_LINEAR for
-     * magnification filters
-     */
-    case GSK_SCALING_FILTER_LINEAR:
-    case GSK_SCALING_FILTER_TRILINEAR:
-    default:
-      *mag_filter_r = GL_LINEAR;
-      break;
-    }
+  *min_filter_r = GL_NEAREST;
+  *mag_filter_r = GL_NEAREST;
 }
 
 #if 0

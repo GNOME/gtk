@@ -19,10 +19,6 @@ struct _GskRenderNode
   /* Use for debugging */
   char *name;
 
-  /* Scaling filters */
-  GskScalingFilter min_filter;
-  GskScalingFilter mag_filter;
-
   graphene_rect_t bounds;
 };
 

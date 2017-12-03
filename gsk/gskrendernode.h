@@ -67,11 +67,6 @@ GDK_AVAILABLE_IN_3_90
 GskRenderNodeType       gsk_render_node_get_node_type           (GskRenderNode *node);
 
 GDK_AVAILABLE_IN_3_90
-void                    gsk_render_node_set_scaling_filters     (GskRenderNode *node,
-                                                                 GskScalingFilter min_filter,
-                                                                 GskScalingFilter mag_filter);
-
-GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_set_name                (GskRenderNode *node,
                                                                  const char    *name);
 GDK_AVAILABLE_IN_3_90

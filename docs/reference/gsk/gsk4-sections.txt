@@ -35,7 +35,6 @@ gsk_render_node_serialize
 gsk_render_node_deserialize
 gsk_render_node_write_to_file
 GskScalingFilter
-gsk_render_node_set_scaling_filters
 gsk_render_node_set_name
 gsk_render_node_get_name
 gsk_render_node_get_bounds
