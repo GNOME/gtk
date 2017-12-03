@@ -1553,7 +1553,17 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
           break;
 
         case OP_CHANGE_CLIP:
-          OP_PRINT (" -> Clip");
+          OP_PRINT (" -> Clip (%f, %f, %f, %f) (%f, %f, %f, %f), (%f, %f, %f, %f)",
+                    op->clip.bounds.origin.x, op->clip.bounds.origin.y,
+                    op->clip.bounds.size.width, op->clip.bounds.size.height,
+                    MAX (op->clip.corner[0].width, 1),
+                    MAX (op->clip.corner[1].width, 1),
+                    MAX (op->clip.corner[2].width, 1),
+                    MAX (op->clip.corner[3].width, 1),
+                    MAX (op->clip.corner[0].height, 1),
+                    MAX (op->clip.corner[1].height, 1),
+                    MAX (op->clip.corner[2].height, 1),
+                    MAX (op->clip.corner[3].height, 1));
           glUniform4f (program->clip_location,
                        op->clip.bounds.origin.x, op->clip.bounds.origin.y,
                        op->clip.bounds.size.width, op->clip.bounds.size.height);
@@ -1604,7 +1614,26 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
           break;
 
        case OP_CHANGE_INSET_SHADOW:
-          OP_PRINT (" -> inset shadow");
+          OP_PRINT (" -> inset shadow. Color: (%f, %f, %f, %f), Offset: (%f, %f), Spread: %f, Outline: (%f, %f, %f, %f) Corner widths: (%f, %f, %f, %f), Corner Heights: (%f, %f, %f, %f)",
+                    op->inset_shadow.color[0],
+                    op->inset_shadow.color[1],
+                    op->inset_shadow.color[2],
+                    op->inset_shadow.color[3],
+                    op->inset_shadow.offset[0],
+                    op->inset_shadow.offset[1],
+                    op->inset_shadow.spread,
+                    op->inset_shadow.outline[0],
+                    op->inset_shadow.outline[1],
+                    op->inset_shadow.outline[2],
+                    op->inset_shadow.outline[3],
+                    op->inset_shadow.corner_widths[0],
+                    op->inset_shadow.corner_widths[1],
+                    op->inset_shadow.corner_widths[2],
+                    op->inset_shadow.corner_widths[3],
+                    op->inset_shadow.corner_heights[0],
+                    op->inset_shadow.corner_heights[1],
+                    op->inset_shadow.corner_heights[2],
+                    op->inset_shadow.corner_heights[3]);
           g_assert (program == &self->inset_shadow_program);
           glUniform4fv (program->inset_shadow.color_location, 1, op->inset_shadow.color);
           glUniform2fv (program->inset_shadow.offset_location, 1, op->inset_shadow.offset);
@@ -1626,7 +1655,8 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
           break;
 
         case OP_CHANGE_BORDER:
-          OP_PRINT (" -> Border");
+          OP_PRINT (" -> Border (%f, %f, %f, %f)",
+                    op->border.widths[0], op->border.widths[1], op->border.widths[2], op->border.widths[3]);
           g_assert (program == &self->border_program);
           glUniform4fv (program->border.widths_location, 1, op->border.widths);
           break;
