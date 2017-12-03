@@ -22,10 +22,12 @@
 
 #include "gdkcontentformats.h"
 #include "gdkintl.h"
+#include "gdkprivate-wayland.h"
 #include "gdk-private.h"
 
 #include <glib-unix.h>
 #include <gio/gunixinputstream.h>
+#include <gio/gunixoutputstream.h>
 
 typedef struct _GdkWaylandClipboardClass GdkWaylandClipboardClass;
 
@@ -35,6 +37,8 @@ struct _GdkWaylandClipboard
 
   struct wl_data_offer *offer;
   GdkContentFormats *offer_formats;
+
+  struct wl_data_source *source;
 };
 
 struct _GdkWaylandClipboardClass
@@ -52,14 +56,114 @@ gdk_wayland_clipboard_discard_offer (GdkWaylandClipboard *cb)
 }
 
 static void
+gdk_wayland_clipboard_discard_source (GdkWaylandClipboard *cb)
+{
+  g_clear_pointer (&cb->source, (GDestroyNotify) wl_data_source_destroy);
+}
+
+static void
 gdk_wayland_clipboard_finalize (GObject *object)
 {
   GdkWaylandClipboard *cb = GDK_WAYLAND_CLIPBOARD (object);
 
   gdk_wayland_clipboard_discard_offer (cb);
+  gdk_wayland_clipboard_discard_source (cb);
   
   G_OBJECT_CLASS (gdk_wayland_clipboard_parent_class)->finalize (object);
 }
+
+static void
+gdk_wayland_clipboard_data_source_target (void                  *data,
+                                          struct wl_data_source *source,
+                                          const char            *mime_type)
+{
+  GDK_NOTE (CLIPBOARD, g_printerr ("%p: Huh? data_source.target() events?\n", data));
+}
+
+static void
+gdk_wayland_clipboard_write_done (GObject      *clipboard,
+                                  GAsyncResult *result,
+                                  gpointer      user_data)
+{
+  GError *error = NULL;
+
+  if (!gdk_clipboard_write_finish (GDK_CLIPBOARD (clipboard), result, &error))
+    {
+      GDK_NOTE(CLIPBOARD, g_printerr ("%p: failed to write stream: %s\n", clipboard, error->message));
+      g_error_free (error);
+    }
+}
+
+static void
+gdk_wayland_clipboard_data_source_send (void                  *data,
+                                        struct wl_data_source *source,
+                                        const char            *mime_type,
+                                        int32_t                fd)
+{
+  GdkWaylandClipboard *cb = GDK_WAYLAND_CLIPBOARD (data);
+  GOutputStream *stream;
+
+  GDK_NOTE (CLIPBOARD, g_printerr ("%p: data source send request for %s on fd %d\n",
+                                   source, mime_type, fd));
+
+  mime_type = gdk_intern_mime_type (mime_type);
+  stream = g_unix_output_stream_new (fd, TRUE);
+
+  gdk_clipboard_write_async (GDK_CLIPBOARD (cb),
+                             mime_type,
+                             stream,
+                             G_PRIORITY_DEFAULT,
+                             NULL,
+                             gdk_wayland_clipboard_write_done,
+                             cb);
+  g_object_unref (stream);
+}
+
+static void
+gdk_wayland_clipboard_data_source_cancelled (void                  *data,
+                                             struct wl_data_source *source)
+{
+  GdkWaylandClipboard *cb = GDK_WAYLAND_CLIPBOARD (data);
+
+  GDK_NOTE (CLIPBOARD, g_printerr ("%p: data source cancelled\n", data));
+
+  if (cb->source == source)
+    {
+      gdk_wayland_clipboard_discard_source (cb);
+      gdk_wayland_clipboard_claim_remote (cb, NULL, gdk_content_formats_new (NULL, 0));
+    }
+}
+
+static void
+gdk_wayland_clipboard_data_source_dnd_drop_performed (void                  *data,
+                                                      struct wl_data_source *source)
+{
+  GDK_NOTE (CLIPBOARD, g_printerr ("%p: Huh? data_source.dnd_drop_performed() events?\n", data));
+}
+
+static void
+gdk_wayland_clipboard_data_source_dnd_finished (void                  *data,
+                                               struct wl_data_source *source)
+{
+  GDK_NOTE (CLIPBOARD, g_printerr ("%p: Huh? data_source.dnd_finished() events?\n", data));
+}
+
+static void
+gdk_wayland_clipboard_data_source_action (void                  *data,
+                                          struct wl_data_source *source,
+                                          uint32_t               action)
+{
+  GDK_NOTE (CLIPBOARD, g_printerr ("%p: Huh? data_source.action() events?\n", data));
+}
+
+static const struct wl_data_source_listener data_source_listener = {
+  gdk_wayland_clipboard_data_source_target,
+  gdk_wayland_clipboard_data_source_send,
+  gdk_wayland_clipboard_data_source_cancelled,
+  gdk_wayland_clipboard_data_source_dnd_drop_performed,
+  gdk_wayland_clipboard_data_source_dnd_finished,
+  gdk_wayland_clipboard_data_source_action,
+};
 
 static gboolean
 gdk_wayland_clipboard_claim (GdkClipboard       *clipboard,
@@ -71,8 +175,25 @@ gdk_wayland_clipboard_claim (GdkClipboard       *clipboard,
 
   if (local)
     {
-      /* not handled yet */
-      cb->offer = NULL;
+      GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (gdk_clipboard_get_display (clipboard));
+      GdkDevice *device;
+      const char * const *mime_types;
+      gsize i, n_mime_types;
+
+      gdk_wayland_clipboard_discard_offer (cb);
+      gdk_wayland_clipboard_discard_source (cb);
+
+      cb->source = wl_data_device_manager_create_data_source (wayland_display->data_device_manager);
+      wl_data_source_add_listener (cb->source, &data_source_listener, cb);
+
+      mime_types = gdk_content_formats_get_mime_types (formats, &n_mime_types);
+      for (i = 0; i < n_mime_types; i++)
+        {
+          wl_data_source_offer (cb->source, mime_types[i]);
+        }
+
+      device = gdk_seat_get_pointer (gdk_display_get_default_seat (GDK_DISPLAY (wayland_display)));
+      gdk_wayland_device_set_selection (device, cb->source);
     }
 
   return GDK_CLIPBOARD_CLASS (gdk_wayland_clipboard_parent_class)->claim (clipboard, formats, local, content);
@@ -163,10 +284,6 @@ gdk_wayland_clipboard_class_init (GdkWaylandClipboardClass *class)
   object_class->finalize = gdk_wayland_clipboard_finalize;
 
   clipboard_class->claim = gdk_wayland_clipboard_claim;
-#if 0
-  clipboard_class->store_async = gdk_wayland_clipboard_store_async;
-  clipboard_class->store_finish = gdk_wayland_clipboard_store_finish;
-#endif
   clipboard_class->read_async = gdk_wayland_clipboard_read_async;
   clipboard_class->read_finish = gdk_wayland_clipboard_read_finish;
 }
@@ -194,6 +311,12 @@ gdk_wayland_clipboard_claim_remote (GdkWaylandClipboard  *cb,
                                     GdkContentFormats    *formats)
 {
   g_return_if_fail (GDK_IS_WAYLAND_CLIPBOARD (cb));
+
+  if (cb->source)
+    {
+      GDK_NOTE (CLIPBOARD, g_printerr ("%p: Ignoring clipboard offer for self\n", cb));
+      return;
+    }
 
   gdk_wayland_clipboard_discard_offer (cb);
 
