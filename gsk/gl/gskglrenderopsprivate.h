@@ -185,7 +185,6 @@ typedef struct
   /* Current global state */
   const Program *current_program;
   int current_render_target;
-  int current_vao;
   int current_texture;
   GskRoundedRect current_clip;
   graphene_matrix_t current_modelview;
