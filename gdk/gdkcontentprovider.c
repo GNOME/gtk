@@ -88,7 +88,7 @@ gdk_content_provider_real_write_mime_type_async (GdkContentProvider  *provider,
   g_task_set_source_tag (task, gdk_content_provider_real_write_mime_type_async);
 
   g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
-                           _("Cannot provide contents as \"%s\""), mime_type);
+                           _("Cannot provide contents as “%s”"), mime_type);
   g_object_unref (task);
 }
 

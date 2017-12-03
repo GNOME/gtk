@@ -212,7 +212,7 @@ gdk_content_provider_bytes_write_mime_type_async (GdkContentProvider     *provid
   if (mime_type != content->mime_type)
     {
       g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
-                               _("Cannot provide contents as \"%s\""), mime_type);
+                               _("Cannot provide contents as “%s”"), mime_type);
       g_object_unref (task);
       return;
     }

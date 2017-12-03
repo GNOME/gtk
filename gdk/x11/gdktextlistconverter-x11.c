@@ -199,7 +199,7 @@ gdk_x11_text_list_converter_encode (GdkX11TextListConverter *conv,
   else
     {
       g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
-                   _("Unsupported encoding \"%s\""), conv->encoding);
+                   _("Unsupported encoding “%s”"), conv->encoding);
       return G_CONVERTER_ERROR;
     }
 
