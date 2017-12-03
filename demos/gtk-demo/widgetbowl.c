@@ -37,6 +37,24 @@ create_level_bar (void)
 }
 
 static GtkWidget *
+create_spinner (void)
+{
+  GtkWidget *w = gtk_spinner_new ();
+
+  gtk_spinner_start (GTK_SPINNER (w));
+
+  return w;
+}
+
+static GtkWidget *
+create_spinbutton (void)
+{
+  GtkWidget *w = gtk_spin_button_new_with_range (0, 10, 1);
+
+  return w;
+}
+
+static GtkWidget *
 create_label (void)
 {
   GtkWidget *w = gtk_label_new ("pLorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.");
@@ -55,6 +73,8 @@ static const struct {
   { "Fontbutton", create_font_button },
   { "Levelbar"  , create_level_bar   },
   { "Label"     , create_label       },
+  { "Spinner"   , create_spinner     },
+  { "Spinbutton", create_spinbutton  },
 };
 
 static int selected_widget_type = -1;
