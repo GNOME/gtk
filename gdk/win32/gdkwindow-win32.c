@@ -238,14 +238,12 @@ gdk_window_impl_win32_finalize (GObject *object)
 
   if (window_impl->cache_surface)
     {
-      cairo_surface_t_note_about_to_dereference (window_impl->cache_surface);
       cairo_surface_destroy (window_impl->cache_surface);
       window_impl->cache_surface = NULL;
     }
 
   if (window_impl->cairo_surface)
     {
-      cairo_surface_t_note_about_to_dereference (window_impl->cairo_surface);
       cairo_surface_destroy (window_impl->cairo_surface);
       window_impl->cairo_surface = NULL;
     }
