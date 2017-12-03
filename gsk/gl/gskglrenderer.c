@@ -122,22 +122,6 @@ static void add_offscreen_ops                 (GskGLRenderer   *self,
                                                GskRenderNode   *child_node,
                                                int             *texture_id,
                                                gboolean        *is_offscreen);
-
-#ifdef G_ENABLE_DEBUG
-typedef struct
-{
-  GQuark frames;
-  GQuark draw_calls;
-} ProfileCounters;
-
-typedef struct
-{
-  GQuark cpu_time;
-  GQuark gpu_time;
-} ProfileTimers;
-#endif
-
-
 typedef enum
 {
   RENDER_FULL,
@@ -181,8 +165,14 @@ struct _GskGLRenderer
   GskGLGlyphCache glyph_cache;
 
 #ifdef G_ENABLE_DEBUG
-  ProfileCounters profile_counters;
-  ProfileTimers profile_timers;
+  struct {
+    GQuark frames;
+    GQuark draw_calls;
+  } profile_counters;
+  struct {
+    GQuark cpu_time;
+    GQuark gpu_time;
+  } profile_timers;
 #endif
 
   RenderMode render_mode;
