@@ -1504,47 +1504,13 @@ static void
 gtk_drag_drop (GtkDragSourceInfo *info, 
                guint32            time)
 {
-  if (gdk_drag_context_get_protocol (info->context) == GDK_DRAG_PROTO_ROOTWIN)
-    {
-      GtkSelectionData selection_data;
-      GdkAtom found = NULL;
-      /* GTK+ traditionally has used application/x-rootwin-drop, but the
-       * XDND spec specifies x-rootwindow-drop.
-       */
-      if (gdk_content_formats_contain_mime_type (info->target_list, "application/x-rootwindow-drop"))
-        found = gdk_atom_intern ("application/x-rootwindow-drop", FALSE);
-      if (gdk_content_formats_contain_mime_type (info->target_list, "application/x-rootwin-drop"))
-        found = gdk_atom_intern ("application/x-rootwin-drop", FALSE);
-      else found = NULL;
-      
-      if (found)
-        {
-          selection_data.selection = NULL;
-          selection_data.target = found;
-          selection_data.data = NULL;
-          selection_data.length = -1;
+  if (info->icon_window)
+    gtk_widget_hide (info->icon_window);
 
-          g_signal_emit_by_name (info->widget, "drag-data-get",
-                                 info->context, &selection_data,
-                                 time);
-
-          /* FIXME: Should we check for length >= 0 here? */
-          gtk_drag_drop_finished (info, GTK_DRAG_RESULT_SUCCESS, time);
-          return;
-        }
-
-      gtk_drag_drop_finished (info, GTK_DRAG_RESULT_NO_TARGET, time);
-    }
-  else
-    {
-      if (info->icon_window)
-        gtk_widget_hide (info->icon_window);
-
-      info->drop_timeout = gdk_threads_add_timeout (DROP_ABORT_TIME,
-                                          gtk_drag_abort_timeout,
-                                          info);
-      g_source_set_name_by_id (info->drop_timeout, "[gtk+] gtk_drag_abort_timeout");
-    }
+  info->drop_timeout = gdk_threads_add_timeout (DROP_ABORT_TIME,
+                                                gtk_drag_abort_timeout,
+                                                info);
+  g_source_set_name_by_id (info->drop_timeout, "[gtk+] gtk_drag_abort_timeout");
 }
 
 /*
