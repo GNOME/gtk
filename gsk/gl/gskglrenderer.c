@@ -783,8 +783,8 @@ get_gl_scaling_filters (GskRenderNode *node,
                         int           *min_filter_r,
                         int           *mag_filter_r)
 {
-  *min_filter_r = GL_NEAREST;
-  *mag_filter_r = GL_NEAREST;
+  *min_filter_r = GL_LINEAR;
+  *mag_filter_r = GL_LINEAR;
 }
 
 static void
