@@ -110,13 +110,11 @@ gtk_spinner_snapshot (GtkWidget   *widget,
                       GtkSnapshot *snapshot)
 {
   GtkCssStyle *style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
-  int width, height;
-
-  gtk_widget_get_content_size (widget, &width, &height);
 
   gtk_css_style_snapshot_icon (style,
                                snapshot,
-                               width, height,
+                               gtk_widget_get_width (widget),
+                               gtk_widget_get_height (widget),
                                GTK_CSS_IMAGE_BUILTIN_SPINNER);
 }
 
