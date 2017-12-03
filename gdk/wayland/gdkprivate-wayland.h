@@ -227,10 +227,12 @@ GdkWaylandSelection * gdk_wayland_display_get_selection (GdkDisplay *display);
 GdkWaylandSelection * gdk_wayland_selection_new (void);
 void gdk_wayland_selection_free (GdkWaylandSelection *selection);
 
+
 void gdk_wayland_selection_ensure_offer (GdkDisplay           *display,
                                          struct wl_data_offer *wl_offer);
 void gdk_wayland_selection_ensure_primary_offer (GdkDisplay                         *display,
                                                  struct gtk_primary_selection_offer *wp_offer);
+GdkContentFormats *gdk_wayland_selection_steal_offer (GdkDisplay *display, gpointer wl_offer);
 
 void gdk_wayland_selection_set_offer (GdkDisplay           *display,
                                       GdkAtom               selection,

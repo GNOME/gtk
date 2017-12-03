@@ -20,6 +20,7 @@
 
 #include "gdk/gdkclipboard.h"
 
+#include <wayland-client.h>
 
 G_BEGIN_DECLS
 
@@ -33,6 +34,9 @@ GType                   gdk_wayland_clipboard_get_type              (void) G_GNU
 
 GdkClipboard *          gdk_wayland_clipboard_new                   (GdkDisplay             *display);
 
+void                    gdk_wayland_clipboard_claim_remote          (GdkWaylandClipboard    *cb,
+                                                                     struct wl_data_offer   *offer,
+                                                                     GdkContentFormats      *formats);
 
 G_END_DECLS
 

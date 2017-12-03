@@ -216,7 +216,6 @@ struct _GdkWaylandSeat
 
   GdkModifierType key_modifiers;
   GdkWindow *keyboard_focus;
-  GdkAtom pending_selection;
   GdkWindow *grab_window;
   uint32_t grab_time;
   gboolean have_server_repeat;
@@ -1191,26 +1190,16 @@ data_device_selection (void                  *data,
                        struct wl_data_offer  *offer)
 {
   GdkWaylandSeat *seat = data;
-  GdkAtom selection;
+  GdkContentFormats *formats;
 
-  GDK_NOTE (EVENTS,
-            g_message ("data device selection, data device %p, data offer %p",
-                       wl_data_device, offer));
-
-  selection = gdk_atom_intern_static_string ("CLIPBOARD");
-  gdk_wayland_selection_set_offer (seat->display, selection, offer);
-
-#if 0
-  /* If we already have keyboard focus, the selection was targeted at the
-   * focused surface. If we don't we will receive keyboard focus directly after
-   * this, so lets wait and find out what window will get the focus before
-   * emitting the owner-changed event.
-   */
-  if (seat->keyboard_focus)
-    emit_selection_owner_change (seat->keyboard_focus, selection);
+  if (offer)
+    formats = gdk_wayland_selection_steal_offer (seat->display, offer);
   else
-    seat->pending_selection = selection;
-#endif
+    formats = gdk_content_formats_new (NULL, 0);
+
+  gdk_wayland_clipboard_claim_remote (GDK_WAYLAND_CLIPBOARD (seat->clipboard),
+                                      offer,
+                                      formats);
 }
 
 static const struct wl_data_device_listener data_device_listener = {
@@ -1860,15 +1849,6 @@ keyboard_handle_enter (void               *data,
                        seat, seat->keyboard_focus));
 
   _gdk_wayland_display_deliver_event (seat->display, event);
-
-  /*
-  if (seat->pending_selection != NULL)
-    {
-      emit_selection_owner_change (seat->keyboard_focus,
-                                   seat->pending_selection);
-      seat->pending_selection = NULL;
-    }
-  */
 }
 
 static void stop_key_repeat (GdkWaylandSeat *seat);
@@ -4810,8 +4790,6 @@ _gdk_wayland_display_create_seat (GdkWaylandDisplay *display_wayland,
   seat->touches = g_hash_table_new_full (NULL, NULL, NULL, (GDestroyNotify) g_free);
   seat->foreign_dnd_window = create_foreign_dnd_window (display);
   seat->wl_seat = wl_seat;
-
-  seat->pending_selection = NULL;
 
   wl_seat_add_listener (seat->wl_seat, &seat_listener, seat);
   wl_seat_set_user_data (seat->wl_seat, seat);

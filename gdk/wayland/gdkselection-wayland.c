@@ -537,6 +537,25 @@ gdk_wayland_selection_ensure_primary_offer (GdkDisplay                         *
     }
 }
 
+GdkContentFormats *
+gdk_wayland_selection_steal_offer (GdkDisplay *display,
+                                   gpointer    wl_offer)
+{
+  GdkWaylandSelection *selection = gdk_wayland_display_get_selection (display);
+  GdkContentFormats *formats;
+  DataOfferData *info;
+
+  info = g_hash_table_lookup (selection->offers, wl_offer);
+  if (info == NULL)
+    return NULL;
+
+  g_hash_table_steal (selection->offers, wl_offer);
+  formats = info->targets;
+  g_slice_free (DataOfferData, info);
+
+  return formats;
+}
+
 void
 gdk_wayland_selection_set_offer (GdkDisplay *display,
                                  GdkAtom     selection_atom,
