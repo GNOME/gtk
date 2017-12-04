@@ -548,6 +548,7 @@ _gdk_wayland_drop_context_new (GdkDisplay            *display,
   context = GDK_DRAG_CONTEXT (context_wayland);
   context->display = display;
   context->is_source = FALSE;
+  context->formats = gdk_content_formats_new (NULL, 0);
 
   return context;
 }
