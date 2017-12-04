@@ -1,7 +1,6 @@
 gdk_app_launch_context_get_type
 gdk_cursor_get_type
 gdk_device_get_type
-gdk_device_manager_get_type
 gdk_device_pad_get_type
 gdk_display_get_type
 gdk_display_manager_get_type
@@ -11,7 +10,5 @@ gdk_frame_clock_get_type
 gdk_gl_context_get_type
 gdk_keymap_get_type
 gdk_monitor_get_type
-gdk_screen_get_type
 gdk_seat_get_type
-gdk_visual_get_type
 gdk_window_get_type

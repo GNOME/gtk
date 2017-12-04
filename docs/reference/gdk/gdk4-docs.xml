@@ -21,7 +21,6 @@
     <xi:include href="xml/general.xml" />
     <xi:include href="xml/gdkdisplaymanager.xml" />
     <xi:include href="xml/gdkdisplay.xml" />
-    <xi:include href="xml/gdkscreen.xml" />
     <xi:include href="xml/gdkseat.xml" />
     <xi:include href="xml/gdkmonitor.xml" />
     <xi:include href="xml/gdkdevice.xml" />
