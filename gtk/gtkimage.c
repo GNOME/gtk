@@ -1199,11 +1199,12 @@ gtk_image_snapshot (GtkWidget   *widget,
   int x, y, width, height;
   gint w, h, baseline;
 
-  gtk_widget_get_content_size (widget, &width, &height);
-  x = 0;
+  width = gtk_widget_get_width (widget);
+  height = gtk_widget_get_height (widget);
   y = 0;
 
   _gtk_icon_helper_get_size (&priv->icon_helper, &w, &h);
+  x = (width - w) / 2;
 
   baseline = gtk_widget_get_allocated_baseline (widget);
 
@@ -1211,8 +1212,6 @@ gtk_image_snapshot (GtkWidget   *widget,
     y += floor(height - h) / 2;
   else
     y += CLAMP (baseline - h * gtk_image_get_baseline_align (image), 0, height - h);
-
-  x += (width - w) / 2;
 
   gtk_snapshot_offset (snapshot, x, y);
   gtk_icon_helper_snapshot (&priv->icon_helper, snapshot);
