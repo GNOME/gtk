@@ -40,6 +40,22 @@
 #include "gdkcairo.h"
 
 /**
+ * SECTION:gdktexture
+ * @Short_description: Image data for display
+ * @Title: GdkTexture
+ *
+ * A GdkTexture represents image data that can be displayed on screen.
+ *
+ * There are various ways to create GdkTexture objects from a #GdkPixbuf
+ * or a cairo surface, or other pixel data.
+ *
+ * An important aspect of GdkTextures is that they are immutable - once
+ * the image data has been wrapped in a GdkTexture, it may be uploaded
+ * to the GPU or used in other ways that make it impractical to allow
+ * modification.
+ */
+
+/**
  * GdkTexture:
  *
  * The `GdkTexture` structure contains only private data.
