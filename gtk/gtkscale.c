@@ -330,7 +330,8 @@ gtk_scale_allocate_value (GtkScale      *scale,
   GtkAllocation slider_alloc, value_alloc;
   int range_width, range_height;
 
-  gtk_widget_get_content_size (widget, &range_width, &range_height);
+  range_width = gtk_widget_get_width (widget);
+  range_height = gtk_widget_get_height (widget);
 
   slider_widget = gtk_range_get_slider_widget (range);
   gtk_widget_get_outer_allocation (slider_widget, &slider_alloc);

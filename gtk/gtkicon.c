@@ -43,7 +43,8 @@ gtk_icon_snapshot (GtkWidget   *widget,
   GtkCssStyle *style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
   int width, height;
 
-  gtk_widget_get_content_size (widget, &width, &height);
+  width = gtk_widget_get_width (widget);
+  height = gtk_widget_get_height (widget);
 
   if (width > 0 && height > 0)
     gtk_css_style_snapshot_icon (style,

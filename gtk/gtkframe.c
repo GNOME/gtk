@@ -683,7 +683,8 @@ gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
   int frame_width, frame_height;
   gint height;
 
-  gtk_widget_get_content_size (GTK_WIDGET (frame), &frame_width, &frame_height);
+  frame_width = gtk_widget_get_width (GTK_WIDGET (frame));
+  frame_height = gtk_widget_get_height (GTK_WIDGET (frame));
 
   if (priv->label_widget)
     {

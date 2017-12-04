@@ -3306,17 +3306,9 @@ gtk_label_update_layout_width (GtkLabel *label)
   g_assert (priv->layout);
 
   if (priv->ellipsize || priv->wrap)
-    {
-      int width, height;
-
-      gtk_widget_get_content_size (GTK_WIDGET (label), &width, &height);
-
-      pango_layout_set_width (priv->layout, width * PANGO_SCALE);
-    }
+    pango_layout_set_width (priv->layout, gtk_widget_get_width (GTK_WIDGET (label)) * PANGO_SCALE);
   else
-    {
-      pango_layout_set_width (priv->layout, -1);
-    }
+    pango_layout_set_width (priv->layout, -1);
 }
 
 static void
@@ -3666,7 +3658,8 @@ get_layout_location (GtkLabel  *label,
   req_width  = logical.width;
   req_height = logical.height;
 
-  gtk_widget_get_content_size (widget, &label_width, &label_height);
+  label_width = gtk_widget_get_width (widget);
+  label_height = gtk_widget_get_height (widget);
 
   baseline = gtk_widget_get_allocated_baseline (widget);
 
@@ -3908,7 +3901,8 @@ gtk_label_snapshot (GtkWidget   *widget,
 
   context = _gtk_widget_get_style_context (widget);
 
-  gtk_widget_get_content_size (widget, &width, &height);
+  width = gtk_widget_get_width (widget);
+  height = gtk_widget_get_height (widget);
   x = 0;
 
   if (priv->text && (*priv->text != '\0'))

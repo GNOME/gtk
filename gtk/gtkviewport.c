@@ -127,7 +127,8 @@ viewport_set_adjustment_values (GtkViewport    *viewport,
   int viewport_size, other_viewport_size;
   int view_width, view_height;
 
-  gtk_widget_get_content_size (GTK_WIDGET (viewport), &view_width, &view_height);
+  view_width = gtk_widget_get_width (GTK_WIDGET (viewport));
+  view_height = gtk_widget_get_height (GTK_WIDGET (viewport));
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -511,12 +512,12 @@ static void
 gtk_viewport_snapshot (GtkWidget   *widget,
                        GtkSnapshot *snapshot)
 {
-  int width, height;
-
-  gtk_widget_get_content_size (widget, &width, &height);
-
   gtk_snapshot_push_clip (snapshot,
-                          &GRAPHENE_RECT_INIT(0, 0, width, height), "Viewport");
+                          &GRAPHENE_RECT_INIT(
+                            0, 0,
+                            gtk_widget_get_width (widget),
+                            gtk_widget_get_height (widget)),
+                            "Viewport");
 
   GTK_WIDGET_CLASS (gtk_viewport_parent_class)->snapshot (widget, snapshot);
 

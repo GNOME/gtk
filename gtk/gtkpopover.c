@@ -826,7 +826,8 @@ gtk_popover_get_gap_coords (GtkPopover      *popover,
   int popover_width, popover_height;
 
   gtk_popover_get_pointing_to (popover, &rect);
-  gtk_widget_get_content_size (widget, &popover_width, &popover_height);
+  popover_width = gtk_widget_get_width (widget);
+  popover_height = gtk_widget_get_height (widget);
 
 #ifdef GDK_WINDOWING_WAYLAND
   if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))

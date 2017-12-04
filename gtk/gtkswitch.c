@@ -221,15 +221,16 @@ gtk_switch_pan_gesture_pan (GtkGesturePan   *gesture,
 {
   GtkWidget *widget = GTK_WIDGET (sw);
   GtkSwitchPrivate *priv = gtk_switch_get_instance_private (sw);
-  gint width;
+  int width;
   int height;
+
+  width = gtk_widget_get_width (widget);
+  height = gtk_widget_get_height (widget);
 
   if (direction == GTK_PAN_DIRECTION_LEFT)
     offset = -offset;
 
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
-
-  gtk_widget_get_content_size (widget, &width, &height);
 
   if (priv->is_active)
     offset += width / 2;

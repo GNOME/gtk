@@ -98,17 +98,15 @@ swatch_snapshot (GtkWidget   *widget,
     {
       cairo_pattern_t *pattern;
       cairo_matrix_t matrix;
-      int width, height;
       GskRoundedRect content_box;
-
-      gtk_widget_get_content_size (widget, &width, &height);
 
       gtk_rounded_boxes_init_for_style (NULL,
                                         NULL,
                                         &content_box,
                                         gtk_style_context_lookup_style (context),
                                         0, 0,
-                                        width, height);
+                                        gtk_widget_get_width (widget),
+                                        gtk_widget_get_height (widget));
       gtk_snapshot_push_rounded_clip (snapshot,
                                       &content_box,
                                       "ColorSwatchClip");

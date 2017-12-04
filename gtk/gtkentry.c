@@ -3383,15 +3383,13 @@ gtk_entry_snapshot (GtkWidget   *widget,
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
-  int width, height;
   graphene_rect_t bounds;
   int i;
 
-  gtk_widget_get_content_size (widget, &width, &height);
-
   graphene_rect_init (&bounds,
                       0, 0,
-                      width, height);
+                      gtk_widget_get_width (widget),
+                      gtk_widget_get_height (widget));
 
   gtk_snapshot_push_clip (snapshot, &bounds, "Entry Clip");
 
@@ -5821,8 +5819,9 @@ gtk_entry_draw_text (GtkEntry    *entry,
     return;
 
   context = gtk_widget_get_style_context (widget);
-  gtk_widget_get_content_size (widget, &width, &height);
   layout = gtk_entry_ensure_layout (entry, TRUE);
+  width = gtk_widget_get_width (widget);
+  height = gtk_widget_get_height (widget);
 
   gtk_entry_get_layout_offsets (entry, &x, &y);
 
@@ -5881,7 +5880,8 @@ gtk_entry_draw_cursor (GtkEntry    *entry,
   layout = gtk_entry_ensure_layout (entry, TRUE);
   text = pango_layout_get_text (layout);
   gtk_entry_get_layout_offsets (entry, &x, &y);
-  gtk_widget_get_content_size (widget, &width, &height);
+  width = gtk_widget_get_width (widget);
+  height = gtk_widget_get_height (widget);
 
   if (type == CURSOR_DND)
     cursor_index = g_utf8_offset_to_pointer (text, priv->dnd_position) - text;

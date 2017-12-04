@@ -1412,13 +1412,12 @@ gtk_paned_snapshot (GtkWidget   *widget,
 {
   GtkPanedPrivate *priv = gtk_paned_get_instance_private (GTK_PANED (widget));
   GtkAllocation child_allocation;
-  int width, height;
 
-  gtk_widget_get_content_size (widget, &width, &height);
   gtk_snapshot_push_clip (snapshot,
                           &GRAPHENE_RECT_INIT (
                               0, 0,
-                              width, height
+                              gtk_widget_get_width (widget),
+                              gtk_widget_get_height (widget)
                           ),
                           "GtkPaned");
 
@@ -1467,7 +1466,8 @@ gtk_paned_render_handle (GtkGizmo    *gizmo,
   GtkCssStyle *style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
   int width, height;
 
-  gtk_widget_get_content_size (widget, &width, &height);
+  width = gtk_widget_get_width (widget);
+  height = gtk_widget_get_height (widget);
 
   if (width > 0 && height > 0)
     gtk_css_style_snapshot_icon (style,
@@ -1566,12 +1566,9 @@ update_drag (GtkPaned *paned,
              int       ypos)
 {
   GtkPanedPrivate *priv = paned->priv;
-  int width, height;
   gint pos;
   gint handle_size;
   gint size;
-
-  gtk_widget_get_content_size (GTK_WIDGET (paned), &width, &height);
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     pos = xpos;
@@ -1588,7 +1585,7 @@ update_drag (GtkPaned *paned,
                           NULL, &handle_size,
                           NULL, NULL);
 
-      size = width - pos - handle_size;
+      size = gtk_widget_get_width (GTK_WIDGET (paned)) - pos - handle_size;
     }
   else
     {

@@ -1695,16 +1695,15 @@ gtk_range_render_trough (GtkGizmo    *gizmo,
   GtkWidget *widget = gtk_widget_get_parent (GTK_WIDGET (gizmo));
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
-  int width, height;
-
-  gtk_widget_get_content_size (GTK_WIDGET (gizmo), &width, &height);
 
   /* HACK: GtkColorScale wants to draw its own trough
    * so we let it...
    */
   if (GTK_IS_COLOR_SCALE (widget))
     gtk_color_scale_snapshot_trough (GTK_COLOR_SCALE (widget), snapshot,
-                                     0, 0, width, height);
+                                     0, 0,
+                                     gtk_widget_get_width (GTK_WIDGET (gizmo)),
+                                     gtk_widget_get_height (GTK_WIDGET (gizmo)));
 
   if (priv->show_fill_level &&
       gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_page_size (priv->adjustment) -
@@ -2303,7 +2302,8 @@ update_autoscroll_mode (GtkRange *range)
       int width, height;
       gint size, pos;
 
-      gtk_widget_get_content_size (GTK_WIDGET (range), &width, &height);
+      width = gtk_widget_get_width (GTK_WIDGET (range));
+      height = gtk_widget_get_height (GTK_WIDGET (range));
 
       if (range->priv->orientation == GTK_ORIENTATION_VERTICAL)
         {
@@ -2680,7 +2680,8 @@ gtk_range_compute_slider_position (GtkRange     *range,
                       &slider_height, NULL,
                       NULL, NULL);
 
-  gtk_widget_get_content_size (priv->trough_widget, &trough_width, &trough_height);
+  trough_width = gtk_widget_get_width (priv->trough_widget);
+  trough_height = gtk_widget_get_height (priv->trough_widget);
 
   if (priv->orientation == GTK_ORIENTATION_VERTICAL)
     {
