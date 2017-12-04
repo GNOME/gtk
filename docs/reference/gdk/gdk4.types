@@ -12,3 +12,7 @@ gdk_keymap_get_type
 gdk_monitor_get_type
 gdk_seat_get_type
 gdk_window_get_type
+gdk_content_serializer_get_type
+gdk_content_deserializer_get_type
+gdk_clipboard_get_type
+gdk_content_formats_get_type
