@@ -528,9 +528,9 @@ gtk_file_chooser_get_action (GtkFileChooser *chooser)
  * @local_only: %TRUE if only local files can be selected
  * 
  * Sets whether only local files can be selected in the
- * file selector. If @local_only is %TRUE (the default),
+ * file selector. If @local_only is %TRUE (the default is %FALSE),
  * then the selected file or files are guaranteed to be
- * accessible through the operating systems native file
+ * accessible through the operating system’s native file
  * system and therefore the application only
  * needs to worry about the filename functions in
  * #GtkFileChooser, like gtk_file_chooser_get_filename(),
