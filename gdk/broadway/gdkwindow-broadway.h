@@ -48,10 +48,6 @@ struct _GdkWindowImplBroadway
 
   GdkWindow *wrapper;
 
-  cairo_surface_t *surface;
-  cairo_surface_t *last_surface;
-  cairo_surface_t *ref_surface;
-
   GdkCursor *cursor;
 
   int id;

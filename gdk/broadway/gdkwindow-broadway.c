@@ -46,8 +46,6 @@
 /* Forward declarations */
 static void        gdk_window_impl_broadway_finalize   (GObject            *object);
 
-static const cairo_user_data_key_t gdk_broadway_cairo_key;
-
 #define WINDOW_IS_TOPLEVEL(window) \
   (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD)
 
@@ -238,70 +236,16 @@ _gdk_broadway_display_create_window_impl (GdkDisplay    *display,
   connect_frame_clock (window);
 }
 
-void
-_gdk_broadway_window_resize_surface (GdkWindow *window)
-{
-  GdkWindowImplBroadway *impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
-
-  if (impl->surface)
-    {
-      cairo_surface_destroy (impl->surface);
-
-      impl->surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                                  gdk_window_get_width (impl->wrapper),
-                                                  gdk_window_get_height (impl->wrapper));
-    }
-
-  if (impl->ref_surface)
-    {
-      cairo_surface_set_user_data (impl->ref_surface, &gdk_broadway_cairo_key,
-                                   NULL, NULL);
-      impl->ref_surface = NULL;
-    }
-
-  gdk_window_invalidate_rect (window, NULL, TRUE);
-}
-
-static void
-ref_surface_destroyed (void *data)
-{
-  GdkWindowImplBroadway *impl = data;
-
-  impl->ref_surface = NULL;
-}
-
 static cairo_surface_t *
 gdk_window_broadway_ref_cairo_surface (GdkWindow *window)
 {
   GdkWindowImplBroadway *impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
-  int w, h;
 
   if (GDK_IS_WINDOW_IMPL_BROADWAY (window) &&
       GDK_WINDOW_DESTROYED (impl->wrapper))
     return NULL;
 
-  w = gdk_window_get_width (impl->wrapper);
-  h = gdk_window_get_height (impl->wrapper);
-
-  /* Create actual backing store if missing */
-  if (!impl->surface)
-    impl->surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, w, h);
-
-  /* Create a destroyable surface referencing the real one */
-  if (!impl->ref_surface)
-    {
-      impl->ref_surface =
-        cairo_surface_create_for_rectangle (impl->surface,
-                                            0, 0,
-                                            w, h);
-      if (impl->ref_surface)
-        cairo_surface_set_user_data (impl->ref_surface, &gdk_broadway_cairo_key,
-                                     impl, ref_surface_destroyed);
-    }
-  else
-    cairo_surface_reference (impl->ref_surface);
-
-  return impl->ref_surface;
+  return cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 1, 1);
 }
 
 static void
@@ -323,19 +267,6 @@ _gdk_broadway_window_destroy (GdkWindow *window,
 
   _gdk_broadway_selection_window_destroyed (window);
   _gdk_broadway_window_grab_check_destroy (window);
-
-  if (impl->ref_surface)
-    {
-      cairo_surface_finish (impl->ref_surface);
-      cairo_surface_set_user_data (impl->ref_surface, &gdk_broadway_cairo_key,
-                                   NULL, NULL);
-    }
-
-  if (impl->surface)
-    {
-      cairo_surface_destroy (impl->surface);
-      impl->surface = NULL;
-    }
 
   broadway_display = GDK_BROADWAY_DISPLAY (gdk_window_get_display (window));
   g_hash_table_remove (broadway_display->id_ht, GINT_TO_POINTER (impl->id));
@@ -472,7 +403,6 @@ gdk_window_broadway_move_resize (GdkWindow *window,
 
           window->width = width;
           window->height = height;
-          _gdk_broadway_window_resize_surface (window);
         }
     }
 
