@@ -24,6 +24,15 @@
 #include "gdkcontentformats.h"
 #include "gdkintl.h"
 
+/**
+ * SECTION:gdkcontentprovider
+ * @Short_description: Provides content for data transfer between applications
+ * @Title: GdkContentProvider
+ *
+ * A GdkContentProvider is used to provide content for the clipboard in
+ * a number of formats.
+ */
+
 typedef struct _GdkContentProviderPrivate GdkContentProviderPrivate;
 
 struct _GdkContentProviderPrivate

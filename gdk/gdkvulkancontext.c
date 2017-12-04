@@ -28,6 +28,22 @@
 #include "gdkinternals.h"
 #include "gdkintl.h"
 
+/**
+ * SECTION:gdkvulkancontext
+ * @Title: GdkVulkanContext
+ * @Short_description: Vulkan context
+ *
+ * #GdkVulkanContext is an object representing the platform-specific
+ * Vulkan drawing context.
+ *
+ * #GdkVulkanContexts are created for a #GdkWindow using
+ * gdk_window_create_vulkan_context(), and the context will match the
+ * the characteristics of the window.
+ *
+ * Support for #GdkGLContext is platform-specific, context creation
+ * can fail, returning %NULL context.
+ */
+
 typedef struct _GdkVulkanContextPrivate GdkVulkanContextPrivate;
 
 struct _GdkVulkanContextPrivate {

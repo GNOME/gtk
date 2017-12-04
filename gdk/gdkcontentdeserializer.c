@@ -26,6 +26,17 @@
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
+
+/**
+ * SECTION:gdkcontentdeserializer
+ * @Short_description: Deserialize content for transfer
+ * @Title: GdkContentSerializer
+ * @See_also: #GdkContentDeserializer
+ *
+ * A GdkContentDeserializer is used to deserialize content for inter-application
+ * data transfers.
+ */
+
 typedef struct _Deserializer Deserializer;
 
 struct _Deserializer 

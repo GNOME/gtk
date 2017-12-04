@@ -28,6 +28,17 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <string.h>
 
+
+/**
+ * SECTION:gdkcontentserializer
+ * @Short_description: Serialize content for transfer
+ * @Title: GdkContentSerializer
+ * @See_also: #GdkContentDeserializer, #GdkContentProvider
+ *
+ * A GdkContentSerializer is used to serialize content for inter-application
+ * data transfers.
+ */
+
 typedef struct _Serializer Serializer;
 
 struct _Serializer 

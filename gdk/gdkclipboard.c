@@ -30,6 +30,20 @@
 #include "gdkpipeiostreamprivate.h"
 #include "gdktexture.h"
 
+/**
+ * SECTION:gdkclipboard
+ * @Short_description: Share data between applications for Copy-and-Paste
+ * @Title: Clipboards
+ * @See_also: #GdkContentProvider, #GdkContentFormats
+ *
+ * The #GdkClipboard object represents a clipboard of data shared
+ * between different applications or between different parts of
+ * the same application.
+ *
+ * To get a GdkClipboard object, use gdk_display_get_clipboard() or
+ * gdk_display_get_primary_clipboard().
+ */
+
 typedef struct _GdkClipboardPrivate GdkClipboardPrivate;
 
 struct _GdkClipboardPrivate
@@ -453,7 +467,7 @@ gdk_clipboard_get_formats (GdkClipboard *clipboard)
  * gdk_clipboard_is_local:
  * @clipboard: a #GdkClipboard
  *
- * Returns if the clipboard is local. A clipboard is consideredlocal if it was
+ * Returns if the clipboard is local. A clipboard is considered local if it was
  * last claimed by the running application.
  *
  * Note that gdk_clipboard_get_content() may return %NULL even on a local

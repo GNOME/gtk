@@ -20,7 +20,7 @@
  * @Title: Content Formats
  * @Short_description: Advertising and negotiating of content
  *     exchange formats
- * @See_also: #GdkDragContext, #GdkClipboard
+ * @See_also: #GdkDragContext, #GdkClipboard, #GdkContentProvider
  *
  * This section describes the #GdkContentFormats structure that is used to
  * advertise and negotiate the format of content passed between different
