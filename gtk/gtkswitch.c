@@ -222,10 +222,8 @@ gtk_switch_pan_gesture_pan (GtkGesturePan   *gesture,
   GtkWidget *widget = GTK_WIDGET (sw);
   GtkSwitchPrivate *priv = gtk_switch_get_instance_private (sw);
   int width;
-  int height;
 
   width = gtk_widget_get_width (widget);
-  height = gtk_widget_get_height (widget);
 
   if (direction == GTK_PAN_DIRECTION_LEFT)
     offset = -offset;
