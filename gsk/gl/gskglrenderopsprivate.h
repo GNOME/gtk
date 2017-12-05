@@ -30,8 +30,9 @@ enum {
   OP_CHANGE_INSET_SHADOW    =  14,
   OP_CHANGE_OUTSET_SHADOW   =  15,
   OP_CHANGE_BORDER          =  16,
-  OP_CLEAR                  =  17,
-  OP_DRAW                   =  18,
+  OP_CHANGE_BORDER_COLOR    =  17,
+  OP_CLEAR                  =  18,
+  OP_DRAW                   =  19,
 };
 
 typedef struct
@@ -159,6 +160,7 @@ typedef struct
     } shadow;
     struct {
       float widths[4];
+      float color[4];
     } border;
   };
 } RenderOp;
@@ -179,6 +181,10 @@ typedef struct
         graphene_matrix_t matrix;
         graphene_vec4_t offset;
       } color_matrix;
+      struct {
+        float widths[4];
+        float color[4];
+      } border;
     };
   } program_state[GL_N_PROGRAMS];
 
@@ -229,6 +235,12 @@ void              ops_set_color          (RenderOpBuilder         *builder,
 void              ops_set_color_matrix   (RenderOpBuilder         *builder,
                                           const graphene_matrix_t *matrix,
                                           const graphene_vec4_t   *offset);
+
+void              ops_set_border         (RenderOpBuilder         *builder,
+                                          const float             *widths);
+
+void              ops_set_border_color   (RenderOpBuilder         *builder,
+                                          const GdkRGBA           *color);
 
 void              ops_draw               (RenderOpBuilder        *builder,
                                           const GskQuadVertex     vertex_data[GL_N_VERTICES]);

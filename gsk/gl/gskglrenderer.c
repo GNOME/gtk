@@ -340,7 +340,6 @@ render_border_node (GskGLRenderer   *self,
   graphene_rect_t transformed_clip;
   graphene_rect_t intersection;
   GskRoundedRect child_clip;
-  RenderOp op;
   struct {
     float w;
     float h;
@@ -379,12 +378,7 @@ render_border_node (GskGLRenderer   *self,
 
       prev_clip = ops_set_clip (builder, &child_clip);
 
-      op.op = OP_CHANGE_BORDER;
-      op.border.widths[0] = widths[0];
-      op.border.widths[1] = widths[1];
-      op.border.widths[2] = widths[2];
-      op.border.widths[3] = widths[3];
-      ops_add (builder, &op);
+      ops_set_border (builder, widths);
     }
   else
     {
@@ -392,7 +386,7 @@ render_border_node (GskGLRenderer   *self,
     }
 
   /* Top */
-  ops_set_color (builder, &colors[0]);
+  ops_set_border_color (builder, &colors[0]);
   ops_draw (builder, (const GskQuadVertex[6]) {
     { { min_x,              min_y              }, { 0, 1 }, }, /* Upper left */
     { { min_x + sizes[0].w, min_y + sizes[0].h }, { 0, 0 }, }, /* Lower left */
@@ -404,7 +398,7 @@ render_border_node (GskGLRenderer   *self,
   });
 
   /* Right */
-  ops_set_color (builder, &colors[1]);
+  ops_set_border_color (builder, &colors[1]);
   ops_draw (builder, (const GskQuadVertex[6]) {
     { { max_x - sizes[1].w, min_y + sizes[1].h }, { 0, 1 }, }, /* Upper left */
     { { max_x - sizes[2].w, max_y - sizes[2].h }, { 0, 0 }, }, /* Lower left */
@@ -416,7 +410,7 @@ render_border_node (GskGLRenderer   *self,
   });
 
   /* Bottom */
-  ops_set_color (builder, &colors[2]);
+  ops_set_border_color (builder, &colors[2]);
   ops_draw (builder, (const GskQuadVertex[6]) {
     { { min_x + sizes[3].w, max_y - sizes[3].h }, { 0, 1 }, }, /* Upper left */
     { { min_x,              max_y              }, { 0, 0 }, }, /* Lower left */
@@ -428,7 +422,7 @@ render_border_node (GskGLRenderer   *self,
   });
 
   /* Left */
-  ops_set_color (builder, &colors[3]);
+  ops_set_border_color (builder, &colors[3]);
   ops_draw (builder, (const GskQuadVertex[6]) {
     { { min_x,              min_y              }, { 0, 1 }, }, /* Upper left */
     { { min_x,              max_y              }, { 0, 0 }, }, /* Lower left */
@@ -1537,11 +1531,18 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
         case OP_CHANGE_COLOR:
           OP_PRINT (" -> Color: (%f, %f, %f, %f)", op->color.red, op->color.green, op->color.blue, op->color.alpha);
           g_assert (program == &self->color_program || program == &self->coloring_program ||
-                    program == &self->shadow_program || program == &self->border_program);
+                    program == &self->shadow_program);
           /* TODO: We use color.color_location here and this is right for all three of the programs above,
            *       but that's just a coincidence. */
           glUniform4f (program->color.color_location,
                        op->color.red, op->color.green, op->color.blue, op->color.alpha);
+          break;
+
+        case OP_CHANGE_BORDER_COLOR:
+          OP_PRINT (" -> Border color (%f, %f, %f, %f)",
+                    op->border.color[0], op->border.color[1], op->border.color[2], op->border.color[3]);
+          g_assert (program == &self->border_program);
+          glUniform4fv (program->border.color_location, 1, op->border.color);
           break;
 
         case OP_CHANGE_CLIP:

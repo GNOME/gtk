@@ -1,5 +1,14 @@
 #include "gskglrenderopsprivate.h"
 
+static inline void
+rgba_to_float (const GdkRGBA *c,
+               float         *f)
+{
+  f[0] = c->red;
+  f[1] = c->green;
+  f[2] = c->blue;
+  f[3] = c->alpha;
+}
 
 void
 ops_set_program (RenderOpBuilder *builder,
@@ -272,6 +281,44 @@ ops_set_color_matrix (RenderOpBuilder         *builder,
   op.op = OP_CHANGE_COLOR_MATRIX;
   op.color_matrix.matrix = *matrix;
   op.color_matrix.offset = *offset;
+  g_array_append_val (builder->render_ops, op);
+}
+
+void
+ops_set_border (RenderOpBuilder *builder,
+                const float     *widths)
+{
+  RenderOp op;
+
+  if (memcmp (&builder->program_state[builder->current_program->index].border.widths,
+              widths, sizeof (float) * 4) == 0)
+    return;
+
+  memcpy (&builder->program_state[builder->current_program->index].border.widths,
+          widths, sizeof (float) * 4);
+
+  op.op = OP_CHANGE_BORDER;
+  op.border.widths[0] = widths[0];
+  op.border.widths[1] = widths[1];
+  op.border.widths[2] = widths[2];
+  op.border.widths[3] = widths[3];
+  g_array_append_val (builder->render_ops, op);
+}
+
+void
+ops_set_border_color (RenderOpBuilder *builder,
+                      const GdkRGBA   *color)
+{
+  RenderOp op;
+  op.op = OP_CHANGE_BORDER_COLOR;
+  rgba_to_float (color, op.border.color);
+
+  if (memcmp (&op.border.color, &builder->program_state[builder->current_program->index].border.color,
+              sizeof (float) * 4) == 0)
+    return;
+
+  rgba_to_float (color, builder->program_state[builder->current_program->index].border.color);
+
   g_array_append_val (builder->render_ops, op);
 }
 
