@@ -28,9 +28,17 @@
  * SECTION:gdkcontentprovider
  * @Short_description: Provides content for data transfer between applications
  * @Title: GdkContentProvider
+ * @See_also: #GdkContentSerializer, #GdkContentDeserializer
  *
  * A GdkContentProvider is used to provide content for the clipboard in
  * a number of formats.
+ *
+ * To create a GdkContentProvider, use gdk_content_provider_new_for_value() or
+ * gdk_content_provider_new_for_bytes().
+ *
+ * GDK knows how to handle common text and image formats out-of-the-box. See
+ * #GdkContentSerializer and #GdkContentDeserializer if you want to add support
+ * for application-specific data formats.
  */
 
 typedef struct _GdkContentProviderPrivate GdkContentProviderPrivate;
@@ -254,7 +262,7 @@ gdk_content_provider_ref_storable_formats (GdkContentProvider *provider)
 }
 
 /**
- * gdk_content_provider_content_changeD:
+ * gdk_content_provider_content_changed:
  * @provider: a #GdkContentProvider
  *
  * Emits the #GdkContentProvider::contents-changed signal.
