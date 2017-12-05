@@ -25,7 +25,6 @@
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
 
-#include <gio/gio.h>
 #include <gdk/gdkversionmacros.h>
 #include <gdk/gdktypes.h>
 

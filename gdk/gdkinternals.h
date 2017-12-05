@@ -27,7 +27,6 @@
 #ifndef __GDK_INTERNALS_H__
 #define __GDK_INTERNALS_H__
 
-#include <gio/gio.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include "gdkwindowimpl.h"
 #include "gdkdisplay.h"

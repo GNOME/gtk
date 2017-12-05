@@ -25,7 +25,6 @@
 
 #include <gdk/gdkversionmacros.h>
 #include <gdk/gdktypes.h>
-#include <gio/gio.h>
 
 
 G_BEGIN_DECLS

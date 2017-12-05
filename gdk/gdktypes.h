@@ -32,9 +32,10 @@
 /* GDK uses "glib". (And so does GTK).
  */
 #include <glib.h>
-#include <pango/pango.h>
 #include <glib-object.h>
+#include <gio/gio.h>
 #include <cairo.h>
+#include <pango/pango.h>
 
 /* The system specific file gdkconfig.h contains such configuration
  * settings that are needed not only when compiling GDK (or GTK)

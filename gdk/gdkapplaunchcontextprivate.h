@@ -18,7 +18,6 @@
 #ifndef __GDK_APP_LAUNCH_CONTEXT_PRIVATE_H__
 #define __GDK_APP_LAUNCH_CONTEXT_PRIVATE_H__
 
-#include <gio/gio.h>
 #include "gdkapplaunchcontext.h"
 #include "gdktypes.h"
 
