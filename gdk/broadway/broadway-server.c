@@ -59,7 +59,7 @@ struct _BroadwayServer {
   GList *input_messages;
   guint process_input_idle;
 
-  GHashTable *id_ht;
+  GHashTable *surface_id_hash;
   GList *surfaces;
   BroadwaySurface *root;
   gint32 focused_surface_id; /* -1 => none */
@@ -201,7 +201,7 @@ broadway_server_init (BroadwayServer *server)
   server->pointer_grab_surface_id = -1;
   server->saved_serial = 1;
   server->last_seen_time = 1;
-  server->id_ht = g_hash_table_new (NULL, NULL);
+  server->surface_id_hash = g_hash_table_new (NULL, NULL);
   server->id_counter = 0;
   server->textures = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL,
                                             (GDestroyNotify)g_bytes_unref);
@@ -214,7 +214,7 @@ broadway_server_init (BroadwayServer *server)
 
   server->root = root;
 
-  g_hash_table_insert (server->id_ht,
+  g_hash_table_insert (server->surface_id_hash,
                        GINT_TO_POINTER (root->id),
                        root);
 }
@@ -246,6 +246,14 @@ broadway_surface_free (BroadwaySurface *surface)
   if (surface->nodes)
     broadway_node_free (surface->nodes);
   g_free (surface);
+}
+
+static BroadwaySurface *
+broadway_server_lookup_surface (BroadwayServer   *server,
+                                guint32           id)
+{
+  return g_hash_table_lookup (server->surface_id_hash,
+                              GINT_TO_POINTER (id));
 }
 
 static void start (BroadwayInput *input);
@@ -346,8 +354,7 @@ update_event_state (BroadwayServer *server,
   case BROADWAY_EVENT_UNGRAB_NOTIFY:
     break;
   case BROADWAY_EVENT_CONFIGURE_NOTIFY:
-    surface = g_hash_table_lookup (server->id_ht,
-                                   GINT_TO_POINTER (message->configure_notify.id));
+    surface = broadway_server_lookup_surface (server, message->configure_notify.id);
     if (surface != NULL)
       {
         surface->x = message->configure_notify.x;
@@ -1464,12 +1471,11 @@ broadway_server_destroy_surface (BroadwayServer *server,
     broadway_output_destroy_surface (server->output,
                                      id);
 
-  surface = g_hash_table_lookup (server->id_ht,
-                                 GINT_TO_POINTER (id));
+  surface = broadway_server_lookup_surface (server, id);
   if (surface != NULL)
     {
       server->surfaces = g_list_remove (server->surfaces, surface);
-      g_hash_table_remove (server->id_ht,
+      g_hash_table_remove (server->surface_id_hash,
                            GINT_TO_POINTER (id));
       broadway_surface_free (surface);
     }
@@ -1482,8 +1488,7 @@ broadway_server_surface_show (BroadwayServer *server,
   BroadwaySurface *surface;
   gboolean sent = FALSE;
 
-  surface = g_hash_table_lookup (server->id_ht,
-                                 GINT_TO_POINTER (id));
+  surface = broadway_server_lookup_surface (server, id);
   if (surface == NULL)
     return FALSE;
 
@@ -1505,8 +1510,7 @@ broadway_server_surface_hide (BroadwayServer *server,
   BroadwaySurface *surface;
   gboolean sent = FALSE;
 
-  surface = g_hash_table_lookup (server->id_ht,
-                                 GINT_TO_POINTER (id));
+  surface = broadway_server_lookup_surface (server, id);
   if (surface == NULL)
     return FALSE;
 
@@ -1535,8 +1539,7 @@ broadway_server_surface_raise (BroadwayServer *server,
 {
   BroadwaySurface *surface;
 
-  surface = g_hash_table_lookup (server->id_ht,
-                                 GINT_TO_POINTER (id));
+  surface = broadway_server_lookup_surface (server, id);
   if (surface == NULL)
     return;
 
@@ -1566,8 +1569,7 @@ broadway_server_surface_lower (BroadwayServer *server,
 {
   BroadwaySurface *surface;
 
-  surface = g_hash_table_lookup (server->id_ht,
-                                 GINT_TO_POINTER (id));
+  surface = broadway_server_lookup_surface (server, id);
   if (surface == NULL)
     return;
 
@@ -1584,8 +1586,7 @@ broadway_server_surface_set_transient_for (BroadwayServer *server,
 {
   BroadwaySurface *surface;
 
-  surface = g_hash_table_lookup (server->id_ht,
-                                 GINT_TO_POINTER (id));
+  surface = broadway_server_lookup_surface (server, id);
   if (surface == NULL)
     return;
 
@@ -1612,7 +1613,7 @@ broadway_server_surface_set_nodes (BroadwayServer   *server,
 {
   BroadwaySurface *surface;
 
-  surface = g_hash_table_lookup (server->id_ht, GINT_TO_POINTER (id));
+  surface = broadway_server_lookup_surface (server, id);
   if (surface == NULL)
     return;
 
@@ -1666,8 +1667,7 @@ broadway_server_surface_move_resize (BroadwayServer *server,
   gboolean with_resize;
   gboolean sent = FALSE;
 
-  surface = g_hash_table_lookup (server->id_ht,
-                                 GINT_TO_POINTER (id));
+  surface = broadway_server_lookup_surface (server, id);
   if (surface == NULL)
     return FALSE;
 
@@ -1802,7 +1802,7 @@ broadway_server_new_surface (BroadwayServer *server,
   surface->height = height;
   surface->is_temp = is_temp;
 
-  g_hash_table_insert (server->id_ht,
+  g_hash_table_insert (server->surface_id_hash,
                        GINT_TO_POINTER (surface->id),
                        surface);
 
