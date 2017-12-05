@@ -239,15 +239,17 @@ render_text_node (GskGLRenderer   *self,
                   GskRenderNode   *node,
                   RenderOpBuilder *builder,
                   const GdkRGBA   *color,
-                  gboolean         force_color)
+                  gboolean         force_color,
+                  float            dx,
+                  float            dy)
 {
   const PangoFont *font = gsk_text_node_peek_font (node);
   const PangoGlyphInfo *glyphs = gsk_text_node_peek_glyphs (node);
   guint num_glyphs = gsk_text_node_get_num_glyphs (node);
   int i;
   int x_position = 0;
-  int x = gsk_text_node_get_x (node);
-  int y = gsk_text_node_get_y (node);
+  int x = gsk_text_node_get_x (node) + dx;
+  int y = gsk_text_node_get_y (node) + dy;
 
   /* If the font has color glyphs, we don't need to recolor anything */
   if (!force_color && font_has_color_glyphs (font))
@@ -1094,7 +1096,7 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
     case GSK_TEXT_NODE:
       {
         render_text_node (self, node, builder,
-                          gsk_text_node_peek_color (node), FALSE);
+                          gsk_text_node_peek_color (node), FALSE, 0, 0);
       }
     break;
 
@@ -1253,20 +1255,14 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
             const GskShadow *shadow = gsk_shadow_node_peek_shadow (node, i);
             int texture_id;
             gboolean is_offscreen;
-            graphene_matrix_t offset_matrix;
-            graphene_matrix_t prev_modelview;
+            float dx, dy;
 
             g_assert (shadow->radius <= 0);
 
             if (gsk_render_node_get_node_type (child) == GSK_TEXT_NODE)
               {
-                offset_matrix = builder->current_modelview;
-                graphene_matrix_translate (&offset_matrix, &GRAPHENE_POINT3D_INIT (shadow->dx, shadow->dy, 0));
-                prev_modelview = ops_set_modelview (builder, &offset_matrix);
-
-                render_text_node (self, child, builder, &shadow->color, TRUE);
-
-                ops_set_modelview (builder, &prev_modelview);
+                render_text_node (self, child, builder, &shadow->color, TRUE,
+                                  shadow->dx, shadow->dy);
                 continue;
               }
 
@@ -1276,29 +1272,36 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
             ops_set_color (builder, &shadow->color);
             ops_set_texture (builder, texture_id);
 
-            offset_matrix = builder->current_modelview;
-            graphene_matrix_translate (&offset_matrix, &GRAPHENE_POINT3D_INIT (shadow->dx, shadow->dy, 0));
-            prev_modelview = ops_set_modelview (builder, &offset_matrix);
+            dx = shadow->dx;
+            dy = shadow->dy;
 
             if (is_offscreen)
               {
-                GskQuadVertex vertex_data[GL_N_VERTICES] = {
-                  { { min_x, min_y }, { 0, 1 }, },
-                  { { min_x, max_y }, { 0, 0 }, },
-                  { { max_x, min_y }, { 1, 1 }, },
+                const GskQuadVertex vertex_data[GL_N_VERTICES] = {
+                  { { dx + min_x, dy + min_y }, { 0, 1 }, },
+                  { { dx + min_x, dy + max_y }, { 0, 0 }, },
+                  { { dx + max_x, dy + min_y }, { 1, 1 }, },
 
-                  { { max_x, max_y }, { 1, 0 }, },
-                  { { min_x, max_y }, { 0, 0 }, },
-                  { { max_x, min_y }, { 1, 1 }, },
+                  { { dx + max_x, dy + max_y }, { 1, 0 }, },
+                  { { dx + min_x, dy + max_y }, { 0, 0 }, },
+                  { { dx + max_x, dy + min_y }, { 1, 1 }, },
                 };
                 ops_draw (builder, vertex_data);
               }
             else
               {
+                const GskQuadVertex vertex_data[GL_N_VERTICES] = {
+                  { { dx + min_x, dy + min_y }, { 0, 0 }, },
+                  { { dx + min_x, dy + max_y }, { 0, 1 }, },
+                  { { dx + max_x, dy + min_y }, { 1, 0 }, },
+
+                  { { dx + max_x, dy + max_y }, { 1, 1 }, },
+                  { { dx + min_x, dy + max_y }, { 0, 1 }, },
+                  { { dx + max_x, dy + min_y }, { 1, 0 }, },
+                };
+
                 ops_draw (builder, vertex_data);
               }
-
-            ops_set_modelview (builder, &prev_modelview);
           }
 
         /* Now draw the child normally */
