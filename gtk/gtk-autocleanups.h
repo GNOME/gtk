@@ -191,6 +191,7 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkPaperSize, gtk_paper_size_free)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkSelectionData, gtk_selection_data_free)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkTextIter, gtk_text_iter_free)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkTreeIter, gtk_tree_iter_free)
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkTreePath, gtk_tree_path_free)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkTreeRowReference, gtk_tree_row_reference_free)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWidgetPath, gtk_widget_path_unref)
 
