@@ -860,6 +860,7 @@ GdkDragAction
 gdk_drag_status
 gdk_drag_drop_succeeded
 
+gdk_drag_context_get_display
 gdk_drag_context_get_actions
 gdk_drag_context_get_suggested_action
 gdk_drag_context_get_selected_action

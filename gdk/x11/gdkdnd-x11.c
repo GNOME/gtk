@@ -1134,19 +1134,6 @@ send_client_message_async_cb (Window   window,
   g_object_unref (context);
 }
 
-
-static GdkDisplay *
-gdk_drag_context_get_display (GdkDragContext *context)
-{
-  if (context->source_window)
-    return GDK_WINDOW_DISPLAY (context->source_window);
-  else if (context->dest_window)
-    return GDK_WINDOW_DISPLAY (context->dest_window);
-
-  g_assert_not_reached ();
-  return NULL;
-}
-
 static void
 send_client_message_async (GdkDragContext      *context,
                            Window               window,
@@ -1672,10 +1659,11 @@ xdnd_enter_filter (GdkXEvent *xev,
       display_x11->current_dest_drag = NULL;
     }
 
-  context_x11 = (GdkX11DragContext *)g_object_new (GDK_TYPE_X11_DRAG_CONTEXT, NULL);
+  context_x11 = g_object_new (GDK_TYPE_X11_DRAG_CONTEXT,
+                              "display", display,
+                              NULL);
   context = (GdkDragContext *)context_x11;
 
-  context->display = display;
   context->protocol = GDK_DRAG_PROTO_XDND;
   context_x11->version = version;
 
@@ -1984,9 +1972,10 @@ _gdk_x11_window_drag_begin (GdkWindow         *window,
 {
   GdkDragContext *context;
 
-  context = (GdkDragContext *) g_object_new (GDK_TYPE_X11_DRAG_CONTEXT, NULL);
+  context = (GdkDragContext *) g_object_new (GDK_TYPE_X11_DRAG_CONTEXT,
+                                             "display", gdk_window_get_display (window),
+                                             NULL);
 
-  context->display = gdk_window_get_display (window);
   context->is_source = TRUE;
   context->source_window = window;
   g_object_ref (window);

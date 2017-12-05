@@ -47,6 +47,12 @@ static struct {
 };
 
 enum {
+  PROP_0,
+  PROP_DISPLAY,
+  N_PROPERTIES
+};
+
+enum {
   CANCEL,
   DROP_PERFORMED,
   DND_FINISHED,
@@ -54,6 +60,7 @@ enum {
   N_SIGNALS
 };
 
+static GParamSpec *properties[N_PROPERTIES] = { NULL, };
 static guint signals[N_SIGNALS] = { 0 };
 static GList *contexts = NULL;
 
@@ -72,6 +79,20 @@ static GList *contexts = NULL;
  * See the [Drag and Drop][gtk3-Drag-and-Drop] section of
  * the GTK+ documentation for more information.
  */
+
+/**
+ * gdk_drag_context_get_display:
+ * @context: a #GdkDragContext
+ *
+ * Gets the #GdkDisplay that the drag context was created for.
+ *
+ * Returns: (transfer none): a #GdkDisplay
+ **/
+GdkDisplay *
+gdk_drag_context_get_display (GdkDragContext *context)
+{
+  return context->display;
+}
 
 /**
  * gdk_drag_context_get_formats:
@@ -231,6 +252,47 @@ gdk_drag_context_init (GdkDragContext *context)
 }
 
 static void
+gdk_drag_context_set_property (GObject      *gobject,
+                               guint         prop_id,
+                               const GValue *value,
+                               GParamSpec   *pspec)
+{
+  GdkDragContext *context = GDK_DRAG_CONTEXT (gobject);
+
+  switch (prop_id)
+    {
+    case PROP_DISPLAY:
+      context->display = g_value_get_object (value);
+      g_assert (context->display != NULL);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gdk_drag_context_get_property (GObject    *gobject,
+                               guint       prop_id,
+                               GValue     *value,
+                               GParamSpec *pspec)
+{
+  GdkDragContext *context = GDK_DRAG_CONTEXT (gobject);
+
+  switch (prop_id)
+    {
+    case PROP_DISPLAY:
+      g_value_set_object (value, context->display);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
+      break;
+    }
+}
+
+static void
 gdk_drag_context_finalize (GObject *object)
 {
   GdkDragContext *context = GDK_DRAG_CONTEXT (object);
@@ -252,7 +314,26 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->get_property = gdk_drag_context_get_property;
+  object_class->set_property = gdk_drag_context_set_property;
   object_class->finalize = gdk_drag_context_finalize;
+
+  /**
+   * GdkDragContext:display:
+   *
+   * The #GdkDisplay that the drag context belongs to.
+   *
+   * Since: 3.94
+   */
+  properties[PROP_DISPLAY] =
+    g_param_spec_object ("display",
+                         "Display",
+                         "Display owning this clipboard",
+                         GDK_TYPE_DISPLAY,
+                         G_PARAM_READWRITE |
+                         G_PARAM_CONSTRUCT_ONLY |
+                         G_PARAM_STATIC_STRINGS |
+                         G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GdkDragContext::cancel:
@@ -342,6 +423,8 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__FLAGS,
                   G_TYPE_NONE, 1, GDK_TYPE_DRAG_ACTION);
+
+  g_object_class_install_properties (object_class, N_PROPERTIES, properties);
 }
 
 /*

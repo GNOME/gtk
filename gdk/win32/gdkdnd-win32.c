@@ -238,9 +238,10 @@ gdk_drag_context_new (GdkDisplay *display)
   GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (display);
   GdkDragContext *context;
 
-  context_win32 = g_object_new (GDK_TYPE_WIN32_DRAG_CONTEXT, NULL);
+  context_win32 = g_object_new (GDK_TYPE_WIN32_DRAG_CONTEXT,
+                                "display", display,
+                                NULL);
   context = GDK_DRAG_CONTEXT(context_win32);
-  context->display = display;
 
   gdk_drag_context_set_device (context, gdk_seat_get_pointer (gdk_display_get_default_seat (display)));
 

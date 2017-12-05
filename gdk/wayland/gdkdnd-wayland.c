@@ -513,9 +513,10 @@ _gdk_wayland_window_drag_begin (GdkWindow         *window,
   const char *const *mimetypes;
   gsize i, n_mimetypes;
 
-  context_wayland = g_object_new (GDK_TYPE_WAYLAND_DRAG_CONTEXT, NULL);
+  context_wayland = g_object_new (GDK_TYPE_WAYLAND_DRAG_CONTEXT,
+                                  "display", gdk_window_get_display (window),
+                                  NULL);
   context = GDK_DRAG_CONTEXT (context_wayland);
-  context->display = gdk_window_get_display (window);
   context->source_window = g_object_ref (window);
   context->is_source = TRUE;
   context->formats = gdk_content_formats_ref (formats);
@@ -544,9 +545,10 @@ _gdk_wayland_drop_context_new (GdkDisplay            *display,
   GdkWaylandDragContext *context_wayland;
   GdkDragContext *context;
 
-  context_wayland = g_object_new (GDK_TYPE_WAYLAND_DRAG_CONTEXT, NULL);
+  context_wayland = g_object_new (GDK_TYPE_WAYLAND_DRAG_CONTEXT,
+                                  "display", display,
+                                  NULL);
   context = GDK_DRAG_CONTEXT (context_wayland);
-  context->display = display;
   context->is_source = FALSE;
   context->formats = gdk_content_formats_new (NULL, 0);
 

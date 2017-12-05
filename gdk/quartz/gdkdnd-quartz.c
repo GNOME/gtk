@@ -43,8 +43,8 @@ _gdk_quartz_window_drag_begin (GdkWindow *window,
 
   /* Create fake context */
   _gdk_quartz_drag_source_context = g_object_new (GDK_TYPE_QUARTZ_DRAG_CONTEXT,
+                                                  "display", display,
                                                   NULL);
-  _gdk_quartz_drag_source_context->display = gdk_window_get_display (window);
   _gdk_quartz_drag_source_context->is_source = TRUE;
 
   _gdk_quartz_drag_source_context->source_window = window;

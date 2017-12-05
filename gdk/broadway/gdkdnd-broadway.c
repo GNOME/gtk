@@ -96,8 +96,8 @@ _gdk_broadway_window_drag_begin (GdkWindow         *window,
   g_return_val_if_fail (GDK_WINDOW_IS_BROADWAY (window), NULL);
 
   new_context = g_object_new (GDK_TYPE_BROADWAY_DRAG_CONTEXT,
+                              "display", gdk_window_get_display (window),
 			      NULL);
-  new_context->display = gdk_window_get_display (window);
 
   return new_context;
 }
