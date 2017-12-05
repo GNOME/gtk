@@ -91,7 +91,6 @@ get_dragsource (void)
 static void
 drag_data_received (GtkWidget *widget,
                     GdkDragContext *context,
-                    gint x, gint y,
                     GtkSelectionData *selda,
                     guint time,
                     gpointer dada)

@@ -210,8 +210,6 @@ swatch_drag_data_get (GtkWidget        *widget,
 static void
 swatch_drag_data_received (GtkWidget        *widget,
                            GdkDragContext   *context,
-                           gint              x,
-                           gint              y,
                            GtkSelectionData *selection_data,
                            guint             time)
 {

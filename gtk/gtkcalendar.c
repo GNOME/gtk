@@ -307,8 +307,6 @@ static void     gtk_calendar_drag_data_get      (GtkWidget        *widget,
                                                  guint             time);
 static void     gtk_calendar_drag_data_received (GtkWidget        *widget,
                                                  GdkDragContext   *context,
-                                                 gint              x,
-                                                 gint              y,
                                                  GtkSelectionData *selection_data,
                                                  guint             time);
 static gboolean gtk_calendar_drag_motion        (GtkWidget        *widget,
@@ -2980,8 +2978,6 @@ gtk_calendar_drag_drop (GtkWidget      *widget,
 static void
 gtk_calendar_drag_data_received (GtkWidget        *widget,
                                  GdkDragContext   *context,
-                                 gint              x,
-                                 gint              y,
                                  GtkSelectionData *selection_data,
                                  guint             time)
 {

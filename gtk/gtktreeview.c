@@ -651,8 +651,6 @@ static gboolean gtk_tree_view_drag_drop          (GtkWidget        *widget,
                                                   guint             time);
 static void     gtk_tree_view_drag_data_received (GtkWidget        *widget,
                                                   GdkDragContext   *context,
-                                                  gint              x,
-                                                  gint              y,
                                                   GtkSelectionData *selection_data,
                                                   guint             time);
 
@@ -7806,9 +7804,6 @@ gtk_tree_view_drag_drop (GtkWidget        *widget,
 static void
 gtk_tree_view_drag_data_received (GtkWidget        *widget,
                                   GdkDragContext   *context,
-				  /* coordinates relative to the widget */
-                                  gint              x,
-                                  gint              y,
                                   GtkSelectionData *selection_data,
                                   guint             time)
 {

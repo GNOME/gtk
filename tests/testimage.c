@@ -47,8 +47,6 @@ drag_data_get  (GtkWidget        *widget,
 static void
 drag_data_received (GtkWidget        *widget,
 		    GdkDragContext   *context,
-		    gint              x,
-		    gint              y,
 		    GtkSelectionData *selection_data,
 		    guint             info,
 		    guint32           time,

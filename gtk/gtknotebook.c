@@ -405,8 +405,6 @@ static void gtk_notebook_drag_data_get       (GtkWidget        *widget,
                                               guint             time);
 static void gtk_notebook_drag_data_received  (GtkWidget        *widget,
                                               GdkDragContext   *context,
-                                              gint              x,
-                                              gint              y,
                                               GtkSelectionData *data,
                                               guint             time);
 static void gtk_notebook_direction_changed   (GtkWidget        *widget,
@@ -523,9 +521,7 @@ static gboolean focus_child_in (GtkNotebook      *notebook,
 static void stop_scrolling (GtkNotebook *notebook);
 static void do_detach_tab  (GtkNotebook *from,
                             GtkNotebook *to,
-                            GtkWidget   *child,
-                            gint         x,
-                            gint         y);
+                            GtkWidget   *child);
 
 /* GtkBuildable */
 static void gtk_notebook_buildable_init           (GtkBuildableIface *iface);
@@ -2980,7 +2976,7 @@ gtk_notebook_drag_end (GtkWidget      *widget,
                      priv->detached_tab->child, x, y, &dest_notebook);
 
       if (dest_notebook)
-        do_detach_tab (notebook, dest_notebook, priv->detached_tab->child, 0, 0);
+        do_detach_tab (notebook, dest_notebook, priv->detached_tab->child);
 
       priv->rootwindow_drop = FALSE;
     }
@@ -3030,7 +3026,7 @@ gtk_notebook_drag_failed (GtkWidget      *widget,
                      priv->detached_tab->child, x, y, &dest_notebook);
 
       if (dest_notebook)
-        do_detach_tab (notebook, dest_notebook, priv->detached_tab->child, 0, 0);
+        do_detach_tab (notebook, dest_notebook, priv->detached_tab->child);
 
       return TRUE;
     }
@@ -3171,6 +3167,7 @@ gtk_notebook_drag_drop (GtkWidget        *widget,
                         gint              y,
                         guint             time)
 {
+  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GdkAtom target, tab_target;
 
   target = gtk_drag_dest_find_target (widget, context, NULL);
@@ -3178,6 +3175,8 @@ gtk_notebook_drag_drop (GtkWidget        *widget,
 
   if (target == tab_target)
     {
+      notebook->priv->mouse_x = x;
+      notebook->priv->mouse_y = y;
       gtk_drag_get_data (widget, context, target, time);
       return TRUE;
     }
@@ -3209,11 +3208,9 @@ gtk_notebook_detach_tab (GtkNotebook *notebook,
 }
 
 static void
-do_detach_tab (GtkNotebook     *from,
-               GtkNotebook     *to,
-               GtkWidget       *child,
-               gint             x,
-               gint             y)
+do_detach_tab (GtkNotebook *from,
+               GtkNotebook *to,
+               GtkWidget   *child)
 {
   GtkNotebookPrivate *to_priv = to->priv;
   GtkWidget *tab_label, *menu_label;
@@ -3242,9 +3239,6 @@ do_detach_tab (GtkNotebook     *from,
                            NULL);
 
   gtk_notebook_detach_tab (from, child);
-
-  to_priv->mouse_x = x;
-  to_priv->mouse_y = y;
 
   element = get_drop_position (to);
   page_num = g_list_position (to_priv->children, element);
@@ -3298,8 +3292,6 @@ gtk_notebook_drag_data_get (GtkWidget        *widget,
 static void
 gtk_notebook_drag_data_received (GtkWidget        *widget,
                                  GdkDragContext   *context,
-                                 gint              x,
-                                 gint              y,
                                  GtkSelectionData *data,
                                  guint             time)
 {
@@ -3315,7 +3307,7 @@ gtk_notebook_drag_data_received (GtkWidget        *widget,
     {
       child = (void*) gtk_selection_data_get_data (data);
 
-      do_detach_tab (GTK_NOTEBOOK (source_widget), notebook, *child, x, y);
+      do_detach_tab (GTK_NOTEBOOK (source_widget), notebook, *child);
       gtk_drag_finish (context, TRUE, FALSE, time);
     }
   else
@@ -7130,8 +7122,6 @@ gtk_notebook_get_tab_detachable (GtkNotebook *notebook,
  *  static void
  *  on_drag_data_received (GtkWidget        *widget,
  *                         GdkDragContext   *context,
- *                         gint              x,
- *                         gint              y,
  *                         GtkSelectionData *data,
  *                         guint             time,
  *                         gpointer          user_data)

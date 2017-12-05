@@ -253,8 +253,6 @@ static void     gtk_file_chooser_button_finalize           (GObject          *ob
 static void     gtk_file_chooser_button_destroy            (GtkWidget        *widget);
 static void     gtk_file_chooser_button_drag_data_received (GtkWidget        *widget,
 							    GdkDragContext   *context,
-							    gint              x,
-							    gint              y,
 							    GtkSelectionData *data,
 							    guint             drag_time);
 static void     gtk_file_chooser_button_show               (GtkWidget        *widget);
@@ -1212,8 +1210,6 @@ dnd_select_folder_get_info_cb (GCancellable *cancellable,
 static void
 gtk_file_chooser_button_drag_data_received (GtkWidget	     *widget,
 					    GdkDragContext   *context,
-					    gint	      x,
-					    gint	      y,
 					    GtkSelectionData *data,
 					    guint	      drag_time)
 {
@@ -1225,7 +1221,6 @@ gtk_file_chooser_button_drag_data_received (GtkWidget	     *widget,
   if (GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->drag_data_received != NULL)
     GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->drag_data_received (widget,
 										 context,
-										 x, y,
 										 data,
 										 drag_time);
 

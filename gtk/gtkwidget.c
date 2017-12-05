@@ -2951,11 +2951,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, drag_data_received),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__OBJECT_INT_INT_BOXED_UINT,
-		  G_TYPE_NONE, 5,
+		  _gtk_marshal_VOID__OBJECT_BOXED_UINT,
+		  G_TYPE_NONE, 3,
 		  GDK_TYPE_DRAG_CONTEXT,
-		  G_TYPE_INT,
-		  G_TYPE_INT,
 		  GTK_TYPE_SELECTION_DATA | G_SIGNAL_TYPE_STATIC_SCOPE,
 		  G_TYPE_UINT);
 

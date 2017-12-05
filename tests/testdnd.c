@@ -367,8 +367,6 @@ target_drag_drop	   (GtkWidget	       *widget,
 void  
 target_drag_data_received  (GtkWidget          *widget,
 			    GdkDragContext     *context,
-			    gint                x,
-			    gint                y,
 			    GtkSelectionData   *selection_data,
 			    guint               info,
 			    guint               time)
@@ -387,8 +385,6 @@ target_drag_data_received  (GtkWidget          *widget,
 void  
 label_drag_data_received  (GtkWidget          *widget,
 			    GdkDragContext     *context,
-			    gint                x,
-			    gint                y,
 			    GtkSelectionData   *selection_data,
 			    guint               info,
 			    guint               time)

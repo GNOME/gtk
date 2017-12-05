@@ -225,6 +225,7 @@ struct _GtkEntryPrivate
   gint          dnd_position;               /* In chars, -1 == no DND cursor */
   gint          drag_start_x;
   gint          drag_start_y;
+  gint          drop_position;              /* where the drop should happen */
   gint          insert_pos;
   gint          selection_bound;
   gint          scroll_offset;
@@ -453,8 +454,6 @@ static void     gtk_entry_drag_leave         (GtkWidget        *widget,
 					      guint             time);
 static void     gtk_entry_drag_data_received (GtkWidget        *widget,
 					      GdkDragContext   *context,
-					      gint              x,
-					      gint              y,
 					      GtkSelectionData *selection_data,
 					      guint             time);
 static void     gtk_entry_drag_data_get      (GtkWidget        *widget,
@@ -8918,7 +8917,10 @@ gtk_entry_drag_drop  (GtkWidget        *widget,
     target = gtk_drag_dest_find_target (widget, context, NULL);
 
   if (target != NULL)
-    gtk_drag_get_data (widget, context, target, time);
+    {
+      priv->drop_position = gtk_entry_find_position (entry, x + priv->scroll_offset);
+      gtk_drag_get_data (widget, context, target, time);
+    }
   else
     gtk_drag_finish (context, FALSE, FALSE, time);
   
@@ -8992,8 +8994,6 @@ gtk_entry_drag_motion (GtkWidget        *widget,
 static void
 gtk_entry_drag_data_received (GtkWidget        *widget,
 			      GdkDragContext   *context,
-			      gint              x,
-			      gint              y,
 			      GtkSelectionData *selection_data,
 			      guint             time)
 {
@@ -9006,19 +9006,16 @@ gtk_entry_drag_data_received (GtkWidget        *widget,
 
   if (str && priv->editable)
     {
-      gint new_position;
       gint sel1, sel2;
       gint length = -1;
 
       if (priv->truncate_multiline)
         length = truncate_multiline (str);
 
-      new_position = gtk_entry_find_position (entry, x + priv->scroll_offset);
-
       if (!gtk_editable_get_selection_bounds (editable, &sel1, &sel2) ||
-	  new_position < sel1 || new_position > sel2)
+	  priv->drop_position < sel1 || priv->drop_position > sel2)
 	{
-	  gtk_editable_insert_text (editable, str, length, &new_position);
+	  gtk_editable_insert_text (editable, str, length, &priv->drop_position);
 	}
       else
 	{

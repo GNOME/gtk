@@ -1937,8 +1937,6 @@ out:
 static void
 file_list_drag_data_received_cb (GtkWidget        *widget,
                                  GdkDragContext   *context,
-                                 gint              x,
-                                 gint              y,
                                  GtkSelectionData *selection_data,
                                  guint             time_,
                                  gpointer          user_data)

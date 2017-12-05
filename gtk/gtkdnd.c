@@ -83,7 +83,6 @@ struct _GtkDragDestInfo
 {
   GtkWidget         *widget;              /* Widget in which drag is in */
   GdkDragContext    *context;             /* Drag context */
-  gint               drop_x, drop_y;      /* Position of drop */
 };
 
 #define DROP_ABORT_TIME 300000
@@ -594,14 +593,12 @@ gtk_drag_selection_received (GtkWidget        *widget,
                              gpointer          data)
 {
   GdkDragContext *context;
-  GtkDragDestInfo *info;
   GtkWidget *drop_widget;
   GdkAtom target;
 
   drop_widget = data;
 
   context = g_object_get_data (G_OBJECT (widget), "drag-context");
-  info = gtk_drag_get_dest_info (context, FALSE);
 
   target = gtk_selection_data_get_target (selection_data);
   if (target == gdk_atom_intern_static_string ("DELETE"))
@@ -622,7 +619,7 @@ gtk_drag_selection_received (GtkWidget        *widget,
                   gtk_selection_data_get_length (selection_data) >= 0)
                 g_signal_emit_by_name (drop_widget,
                                        "drag-data-received",
-                                       context, info->drop_x, info->drop_y,
+                                       context,
                                        selection_data,
                                        time);
             }
@@ -631,7 +628,7 @@ gtk_drag_selection_received (GtkWidget        *widget,
         {
           g_signal_emit_by_name (drop_widget,
                                  "drag-data-received",
-                                 context, info->drop_x, info->drop_y,
+                                 context,
                                  selection_data,
                                  time);
         }
@@ -923,9 +920,6 @@ gtk_drag_dest_drop (GtkWidget      *widget,
 
   info = gtk_drag_get_dest_info (context, FALSE);
   g_return_val_if_fail (info != NULL, FALSE);
-
-  info->drop_x = x;
-  info->drop_y = y;
 
   if (site->flags & GTK_DEST_DEFAULT_DROP)
     {

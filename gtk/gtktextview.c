@@ -457,8 +457,6 @@ static gboolean gtk_text_view_drag_drop          (GtkWidget        *widget,
                                                   guint             time);
 static void     gtk_text_view_drag_data_received (GtkWidget        *widget,
                                                   GdkDragContext   *context,
-                                                  gint              x,
-                                                  gint              y,
                                                   GtkSelectionData *selection_data,
                                                   guint             time);
 
@@ -8081,8 +8079,6 @@ insert_text_data (GtkTextView      *text_view,
 static void
 gtk_text_view_drag_data_received (GtkWidget        *widget,
                                   GdkDragContext   *context,
-                                  gint              x,
-                                  gint              y,
                                   GtkSelectionData *selection_data,
                                   guint             time)
 {
