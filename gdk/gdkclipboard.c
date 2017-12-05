@@ -30,8 +30,6 @@
 #include "gdkpipeiostreamprivate.h"
 #include "gdktexture.h"
 
-#include <gobject/gvaluecollector.h>
-
 /**
  * SECTION:gdkclipboard
  * @Short_description: Share data between applications for Copy-and-Paste
@@ -1235,88 +1233,7 @@ gdk_clipboard_set_content (GdkClipboard       *clipboard,
 }
 
 /**
- * gdk_clipboard_set:
- * @clipboard: a #GdkClipboard
- * @type: type of value to set
- * @...: value contents conforming to @type
- *
- * Sets the clipboard to contain the value collected from the given
- * varargs.
- **/
-void
-gdk_clipboard_set (GdkClipboard          *clipboard,
-                   GType                  type,
-                   ...)
-{
-  va_list args;
-                          
-  g_return_if_fail (GDK_IS_CLIPBOARD (clipboard));
-
-  va_start (args, type);
-  gdk_clipboard_set_valist (clipboard, type, args);
-  va_end (args);
-}
-
-/**
- * gdk_clipboard_set_valist: (skip)
- * @clipboard: a #GdkClipboard
- * @type: type of value to set
- * @args: varargs containing the value of @type
- *
- * Sets the clipboard to contain the value collected from the given
- * @args.
- **/
-void
-gdk_clipboard_set_valist (GdkClipboard *clipboard,
-                          GType         type,
-                          va_list       args)
-{
-  GValue value = G_VALUE_INIT;
-  char *error;
-
-  g_return_if_fail (GDK_IS_CLIPBOARD (clipboard));
-
-  G_VALUE_COLLECT_INIT (&value, type,
-                        args, G_VALUE_NOCOPY_CONTENTS,
-                        &error);
-  if (error)
-    {
-      g_warning ("%s: %s", G_STRLOC, error);
-      g_free (error);
-      /* we purposely leak the value here, it might not be
-       * in a sane state if an error condition occoured
-       */
-      return;
-    }
-
-  gdk_clipboard_set_value (clipboard, &value);
-  g_value_unset (&value);
-}
-
-/**
- * gdk_clipboard_set_value: (rename-to gdk_clipboard_set)
- * @clipboard: a #GdkClipboard
- * @value: a #GValue to set
- *
- * Sets the @clipboard to contain the given @value.
- **/
-void
-gdk_clipboard_set_value (GdkClipboard *clipboard,
-                         const GValue *value)
-{
-  GdkContentProvider *provider;
-
-  g_return_if_fail (GDK_IS_CLIPBOARD (clipboard));
-  g_return_if_fail (G_IS_VALUE (value));
-
-  provider = gdk_content_provider_new_for_value (value);
-
-  gdk_clipboard_set_content (clipboard, provider);
-  g_object_unref (provider);
-}
-
-/**
- * gdk_clipboard_set_text: (skip)
+ * gdk_clipboard_set_text:
  * @clipboard: a #GdkClipboard
  * @text: Text to put into the clipboard
  *
@@ -1326,13 +1243,22 @@ void
 gdk_clipboard_set_text (GdkClipboard *clipboard,
                         const char   *text)
 {
+  GdkContentProvider *provider;
+  GValue value = G_VALUE_INIT;
+
   g_return_if_fail (GDK_IS_CLIPBOARD (clipboard));
 
-  gdk_clipboard_set (clipboard, G_TYPE_STRING, text);
+  g_value_init (&value, G_TYPE_STRING);
+  g_value_set_string (&value, text);
+  provider = gdk_content_provider_new_for_value (&value);
+  g_value_unset (&value);
+
+  gdk_clipboard_set_content (clipboard, provider);
+  g_object_unref (provider);
 }
 
 /**
- * gdk_clipboard_set_texture: (skip)
+ * gdk_clipboard_set_texture:
  * @clipboard: a #GdkClipboard
  * @texture: a #GdkTexture to put into the clipboard
  *
@@ -1342,9 +1268,18 @@ void
 gdk_clipboard_set_texture (GdkClipboard *clipboard,
                            GdkTexture   *texture)
 {
+  GdkContentProvider *provider;
+  GValue value = G_VALUE_INIT;
+
   g_return_if_fail (GDK_IS_CLIPBOARD (clipboard));
   g_return_if_fail (GDK_IS_TEXTURE (texture));
 
-  gdk_clipboard_set (clipboard, GDK_TYPE_TEXTURE, texture);
+  g_value_init (&value, GDK_TYPE_TEXTURE);
+  g_value_set_object (&value, texture);
+  provider = gdk_content_provider_new_for_value (&value);
+  g_value_unset (&value);
+
+  gdk_clipboard_set_content (clipboard, provider);
+  g_object_unref (provider);
 }
 
