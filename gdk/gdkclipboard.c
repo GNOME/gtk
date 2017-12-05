@@ -1002,7 +1002,7 @@ gdk_clipboard_read_text_finish (GdkClipboard  *clipboard,
   const GValue *value;
 
   g_return_val_if_fail (g_task_is_valid (result, clipboard), NULL);
-  g_return_val_if_fail (g_task_get_source_tag (G_TASK (res)) == gdk_clipboard_read_text_async, NULL);
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gdk_clipboard_read_text_async, NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
   value = g_task_propagate_pointer (G_TASK (result), error);
