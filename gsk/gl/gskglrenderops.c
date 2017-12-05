@@ -74,19 +74,22 @@ ops_set_clip (RenderOpBuilder      *builder,
   RenderOp *last_op;
   GskRoundedRect prev_clip;
 
-  last_op = &g_array_index (builder->render_ops, RenderOp, builder->render_ops->len - 1);
-
-  if (last_op->op == OP_CHANGE_CLIP)
+  if (builder->render_ops->len > 0)
     {
-      last_op->clip = *clip;
-    }
-  else
-    {
-      RenderOp op;
+      last_op = &g_array_index (builder->render_ops, RenderOp, builder->render_ops->len - 1);
 
-      op.op = OP_CHANGE_CLIP;
-      op.clip = *clip;
-      g_array_append_val (builder->render_ops, op);
+      if (last_op->op == OP_CHANGE_CLIP)
+        {
+          last_op->clip = *clip;
+        }
+      else
+        {
+          RenderOp op;
+
+          op.op = OP_CHANGE_CLIP;
+          op.clip = *clip;
+          g_array_append_val (builder->render_ops, op);
+        }
     }
 
   if (builder->current_program != NULL)
