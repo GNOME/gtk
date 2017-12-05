@@ -1893,7 +1893,7 @@ gsk_gl_renderer_init (GskGLRenderer *self)
 
 
   self->scale_factor = 1;
-  self->render_ops = g_array_new (TRUE, FALSE, sizeof (RenderOp));
+  self->render_ops = g_array_new (FALSE, FALSE, sizeof (RenderOp));
 
 #ifdef G_ENABLE_DEBUG
   {
