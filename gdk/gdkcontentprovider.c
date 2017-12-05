@@ -253,6 +253,12 @@ gdk_content_provider_ref_storable_formats (GdkContentProvider *provider)
   return GDK_CONTENT_PROVIDER_GET_CLASS (provider)->ref_storable_formats (provider);
 }
 
+/**
+ * gdk_content_provider_content_changeD:
+ * @provider: a #GdkContentProvider
+ *
+ * Emits the #GdkContentProvider::contents-changed signal.
+ */
 void
 gdk_content_provider_content_changed (GdkContentProvider *provider)
 {
