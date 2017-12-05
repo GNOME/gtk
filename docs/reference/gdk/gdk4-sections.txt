@@ -1304,9 +1304,6 @@ gdk_clipboard_read_texture_finish
 gdk_clipboard_read_text_async
 gdk_clipboard_read_text_finish
 gdk_clipboard_set_content
-gdk_clipboard_set
-gdk_clipboard_set_valist
-gdk_clipboard_set_value
 gdk_clipboard_set_text
 gdk_clipboard_set_texture
 

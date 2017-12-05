@@ -103,6 +103,17 @@ GDK_AVAILABLE_IN_3_94
 gboolean                gdk_clipboard_set_content       (GdkClipboard          *clipboard,
                                                          GdkContentProvider    *provider);
 GDK_AVAILABLE_IN_3_94
+void                    gdk_clipboard_set               (GdkClipboard          *clipboard,
+                                                         GType                  type,
+                                                         ...);
+GDK_AVAILABLE_IN_3_94
+void                    gdk_clipboard_set_valist        (GdkClipboard          *clipboard,
+                                                         GType                  type,
+                                                         va_list                args);
+GDK_AVAILABLE_IN_3_94
+void                    gdk_clipboard_set_value         (GdkClipboard          *clipboard,
+                                                         const GValue          *value);
+GDK_AVAILABLE_IN_3_94
 void                    gdk_clipboard_set_text          (GdkClipboard          *clipboard,
                                                          const char            *text);
 GDK_AVAILABLE_IN_3_94

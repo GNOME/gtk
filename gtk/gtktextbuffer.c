@@ -3927,10 +3927,19 @@ cut_or_copy (GtkTextBuffer *buffer,
   if (!gtk_text_iter_equal (&start, &end))
     {
       GtkTextBuffer *contents;
+      GdkContentProvider *provider;
+      GValue value = G_VALUE_INIT;
 
       contents = create_clipboard_contents_buffer (buffer, &start, &end);
-      gdk_clipboard_set (clipboard, GTK_TYPE_TEXT_BUFFER, contents);
-      g_object_unref (contents);
+
+      g_value_init (&value, GTK_TYPE_TEXT_BUFFER);
+      g_value_take_object (&value, contents);
+
+      provider = gdk_content_provider_new_for_value (&value);
+      g_value_unset (&value);
+
+      gdk_clipboard_set_content (clipboard, provider);
+      g_object_unref (provider);
 
       if (delete_region_after)
         {

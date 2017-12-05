@@ -1668,10 +1668,19 @@ copy_file_location_cb (GSimpleAction *action,
   if (selected_files)
     {
       GdkClipboard *clipboard;
+      GdkContentProvider *provider;
+      GValue value = G_VALUE_INIT;
 
       clipboard = gtk_widget_get_clipboard (GTK_WIDGET (impl));
-      gdk_clipboard_set (clipboard, GDK_TYPE_FILE_LIST, selected_files);
-      g_slist_free_full (selected_files, g_object_unref);
+
+      g_value_init (&value, GDK_TYPE_FILE_LIST);
+      g_value_take_boxed (&value, selected_files);
+
+      provider = gdk_content_provider_new_for_value (&value);
+      g_value_unset (&value);
+
+      gdk_clipboard_set_content (clipboard, provider);
+      g_object_unref (provider);
     }
 }
 
