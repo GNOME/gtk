@@ -22,8 +22,8 @@ struct BroadwayOutput {
 
 static void
 broadway_output_send_cmd (BroadwayOutput *output,
-			  gboolean fin, BroadwayWSOpCode code,
-			  const void *buf, gsize count)
+                          gboolean fin, BroadwayWSOpCode code,
+                          const void *buf, gsize count)
 {
   gboolean mask = FALSE;
   guchar header[16];
@@ -102,7 +102,7 @@ broadway_output_get_next_serial (BroadwayOutput *output)
 
 void
 broadway_output_set_next_serial (BroadwayOutput *output,
-				 guint32 serial)
+                                 guint32 serial)
 {
   output->serial = serial;
 }
@@ -178,8 +178,8 @@ write_header(BroadwayOutput *output, char op)
 
 void
 broadway_output_grab_pointer (BroadwayOutput *output,
-			      int id,
-			      gboolean owner_event)
+                              int id,
+                              gboolean owner_event)
 {
   write_header (output, BROADWAY_OP_GRAB_POINTER);
   append_uint16 (output, id);
@@ -199,8 +199,8 @@ broadway_output_ungrab_pointer (BroadwayOutput *output)
 
 void
 broadway_output_new_surface(BroadwayOutput *output,
-			    int id, int x, int y, int w, int h,
-			    gboolean is_temp)
+                            int id, int x, int y, int w, int h,
+                            gboolean is_temp)
 {
   write_header (output, BROADWAY_OP_NEW_SURFACE);
   append_uint16 (output, id);
@@ -272,13 +272,13 @@ broadway_output_set_show_keyboard (BroadwayOutput *output,
 
 void
 broadway_output_move_resize_surface (BroadwayOutput *output,
-				     int             id,
-				     gboolean        has_pos,
-				     int             x,
-				     int             y,
-				     gboolean        has_size,
-				     int             w,
-				     int             h)
+                                     int             id,
+                                     gboolean        has_pos,
+                                     int             x,
+                                     int             y,
+                                     gboolean        has_size,
+                                     int             w,
+                                     int             h)
 {
   int val;
 
@@ -303,8 +303,8 @@ broadway_output_move_resize_surface (BroadwayOutput *output,
 
 void
 broadway_output_set_transient_for (BroadwayOutput *output,
-				   int             id,
-				   int             parent_id)
+                                   int             id,
+                                   int             parent_id)
 {
   write_header (output, BROADWAY_OP_SET_TRANSIENT_FOR);
   append_uint16 (output, id);
@@ -389,10 +389,10 @@ append_node (BroadwayOutput *output,
 }
 
 void
-broadway_output_window_set_nodes (BroadwayOutput *output,
-                                  int             id,
-                                  BroadwayNode   *root,
-                                  BroadwayNode   *old_root)
+broadway_output_surface_set_nodes (BroadwayOutput *output,
+                                   int             id,
+                                   BroadwayNode   *root,
+                                   BroadwayNode   *old_root)
 {
   gsize size_pos, start, end;
 
@@ -419,8 +419,8 @@ broadway_output_window_set_nodes (BroadwayOutput *output,
 
 void
 broadway_output_upload_texture (BroadwayOutput *output,
-				guint32 id,
-				GBytes *texture)
+                                guint32 id,
+                                GBytes *texture)
 {
   gsize len = g_bytes_get_size (texture);
   write_header (output, BROADWAY_OP_UPLOAD_TEXTURE);
@@ -431,7 +431,7 @@ broadway_output_upload_texture (BroadwayOutput *output,
 
 void
 broadway_output_release_texture (BroadwayOutput *output,
-				 guint32 id)
+                                 guint32 id)
 {
   write_header (output, BROADWAY_OP_RELEASE_TEXTURE);
   append_uint32 (output, id);

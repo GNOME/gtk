@@ -54,7 +54,7 @@ typedef struct  {
   GString *buffer;
   GSource *source;
   GSList *serial_mappings;
-  GList *windows;
+  GList *surfaces;
   guint disconnect_idle;
   GList *fds;
   GHashTable *textures;
@@ -69,7 +69,7 @@ close_fd (void *data)
 static void
 client_free (BroadwayClient *client)
 {
-  g_assert (client->windows == NULL);
+  g_assert (client->surfaces == NULL);
   g_assert (client->disconnect_idle == 0);
   clients = g_list_remove (clients, client);
   g_object_unref (client->connection);
@@ -100,11 +100,11 @@ client_disconnected (BroadwayClient *client)
       client->source = 0;
     }
 
-  for (l = client->windows; l != NULL; l = l->next)
-    broadway_server_destroy_window (server,
-                                    GPOINTER_TO_UINT (l->data));
-  g_list_free (client->windows);
-  client->windows = NULL;
+  for (l = client->surfaces; l != NULL; l = l->next)
+    broadway_server_destroy_surface (server,
+                                     GPOINTER_TO_UINT (l->data));
+  g_list_free (client->surfaces);
+  client->surfaces = NULL;
 
   g_hash_table_iter_init (&iter, client->textures);
   while (g_hash_table_iter_next (&iter, &key, &value))
@@ -329,7 +329,7 @@ static void
 client_handle_request (BroadwayClient *client,
                        BroadwayRequest *request)
 {
-  BroadwayReplyNewWindow reply_new_window;
+  BroadwayReplyNewSurface reply_new_surface;
   BroadwayReplySync reply_sync;
   BroadwayReplyQueryMouse reply_query_mouse;
   BroadwayReplyGrabPointer reply_grab_pointer;
@@ -342,20 +342,20 @@ client_handle_request (BroadwayClient *client,
 
   switch (request->base.type)
     {
-    case BROADWAY_REQUEST_NEW_WINDOW:
-      reply_new_window.id =
-        broadway_server_new_window (server,
-                                    request->new_window.x,
-                                    request->new_window.y,
-                                    request->new_window.width,
-                                    request->new_window.height,
-                                    request->new_window.is_temp);
-      client->windows =
-        g_list_prepend (client->windows,
-                        GUINT_TO_POINTER (reply_new_window.id));
+    case BROADWAY_REQUEST_NEW_SURFACE:
+      reply_new_surface.id =
+        broadway_server_new_surface (server,
+                                     request->new_surface.x,
+                                     request->new_surface.y,
+                                     request->new_surface.width,
+                                     request->new_surface.height,
+                                     request->new_surface.is_temp);
+      client->surfaces =
+        g_list_prepend (client->surfaces,
+                        GUINT_TO_POINTER (reply_new_surface.id));
 
-      send_reply (client, request, (BroadwayReply *)&reply_new_window, sizeof (reply_new_window),
-                  BROADWAY_REPLY_NEW_WINDOW);
+      send_reply (client, request, (BroadwayReply *)&reply_new_surface, sizeof (reply_new_surface),
+                  BROADWAY_REPLY_NEW_SURFACE);
       break;
     case BROADWAY_REQUEST_FLUSH:
       broadway_server_flush (server);
@@ -372,41 +372,41 @@ client_handle_request (BroadwayClient *client,
       break;
     case BROADWAY_REQUEST_QUERY_MOUSE:
       broadway_server_query_mouse (server,
-                                   &reply_query_mouse.toplevel,
+                                   &reply_query_mouse.surface,
                                    &reply_query_mouse.root_x,
                                    &reply_query_mouse.root_y,
                                    &reply_query_mouse.mask);
       send_reply (client, request, (BroadwayReply *)&reply_query_mouse, sizeof (reply_query_mouse),
                   BROADWAY_REPLY_QUERY_MOUSE);
       break;
-    case BROADWAY_REQUEST_DESTROY_WINDOW:
-      client->windows =
-        g_list_remove (client->windows,
-                       GUINT_TO_POINTER (request->destroy_window.id));
-      broadway_server_destroy_window (server, request->destroy_window.id);
+    case BROADWAY_REQUEST_DESTROY_SURFACE:
+      client->surfaces =
+        g_list_remove (client->surfaces,
+                       GUINT_TO_POINTER (request->destroy_surface.id));
+      broadway_server_destroy_surface (server, request->destroy_surface.id);
       break;
-    case BROADWAY_REQUEST_SHOW_WINDOW:
-      broadway_server_window_show (server, request->show_window.id);
+    case BROADWAY_REQUEST_SHOW_SURFACE:
+      broadway_server_surface_show (server, request->show_surface.id);
       break;
-    case BROADWAY_REQUEST_HIDE_WINDOW:
-      broadway_server_window_hide (server, request->hide_window.id);
+    case BROADWAY_REQUEST_HIDE_SURFACE:
+      broadway_server_surface_hide (server, request->hide_surface.id);
       break;
     case BROADWAY_REQUEST_SET_TRANSIENT_FOR:
-      broadway_server_window_set_transient_for (server,
-                                                request->set_transient_for.id,
-                                                request->set_transient_for.parent);
+      broadway_server_surface_set_transient_for (server,
+                                                 request->set_transient_for.id,
+                                                 request->set_transient_for.parent);
       break;
     case BROADWAY_REQUEST_SET_NODES:
       {
         gsize array_size = request->base.size - sizeof (BroadwayRequestSetNodes) + sizeof(guint32);
         int n_data = array_size / sizeof(guint32);
-	int pos = 0;
-	BroadwayNode *node;
+        int pos = 0;
+        BroadwayNode *node;
 
-	node = decode_nodes (client, n_data, request->set_nodes.data, &pos);
+        node = decode_nodes (client, n_data, request->set_nodes.data, &pos);
 
-        broadway_server_window_set_nodes (server, request->set_nodes.id,
-                                          node);
+        broadway_server_surface_set_nodes (server, request->set_nodes.id,
+                                           node);
       }
       break;
     case BROADWAY_REQUEST_UPLOAD_TEXTURE:
@@ -466,13 +466,13 @@ client_handle_request (BroadwayClient *client,
 
       break;
     case BROADWAY_REQUEST_MOVE_RESIZE:
-      broadway_server_window_move_resize (server,
-                                          request->move_resize.id,
-                                          request->move_resize.with_move,
-                                          request->move_resize.x,
-                                          request->move_resize.y,
-                                          request->move_resize.width,
-                                          request->move_resize.height);
+      broadway_server_surface_move_resize (server,
+                                           request->move_resize.id,
+                                           request->move_resize.with_move,
+                                           request->move_resize.x,
+                                           request->move_resize.y,
+                                           request->move_resize.width,
+                                           request->move_resize.height);
       break;
     case BROADWAY_REQUEST_GRAB_POINTER:
       reply_grab_pointer.status =
@@ -492,8 +492,8 @@ client_handle_request (BroadwayClient *client,
       send_reply (client, request, (BroadwayReply *)&reply_ungrab_pointer, sizeof (reply_ungrab_pointer),
                   BROADWAY_REPLY_UNGRAB_POINTER);
       break;
-    case BROADWAY_REQUEST_FOCUS_WINDOW:
-      broadway_server_focus_window (server, request->focus_window.id);
+    case BROADWAY_REQUEST_FOCUS_SURFACE:
+      broadway_server_focus_surface (server, request->focus_surface.id);
       break;
     case BROADWAY_REQUEST_SET_SHOW_KEYBOARD:
       broadway_server_set_show_keyboard (server, request->set_show_keyboard.show_keyboard);

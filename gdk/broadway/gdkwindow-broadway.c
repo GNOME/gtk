@@ -218,12 +218,12 @@ _gdk_broadway_display_create_window_impl (GdkDisplay    *display,
 
   impl = g_object_new (GDK_TYPE_WINDOW_IMPL_BROADWAY, NULL);
   window->impl = (GdkWindowImpl *)impl;
-  impl->id = _gdk_broadway_server_new_window (broadway_display->server,
-                                              window->x,
-                                              window->y,
-                                              window->width,
-                                              window->height,
-                                              window->window_type == GDK_WINDOW_TEMP);
+  impl->id = _gdk_broadway_server_new_surface (broadway_display->server,
+                                               window->x,
+                                               window->y,
+                                               window->width,
+                                               window->height,
+                                               window->window_type == GDK_WINDOW_TEMP);
   g_hash_table_insert (broadway_display->id_ht, GINT_TO_POINTER(impl->id), window);
   impl->wrapper = window;
 
@@ -271,7 +271,7 @@ _gdk_broadway_window_destroy (GdkWindow *window,
   broadway_display = GDK_BROADWAY_DISPLAY (gdk_window_get_display (window));
   g_hash_table_remove (broadway_display->id_ht, GINT_TO_POINTER (impl->id));
 
-  _gdk_broadway_server_destroy_window (broadway_display->server, impl->id);
+  _gdk_broadway_server_destroy_surface (broadway_display->server, impl->id);
 
 }
 
@@ -301,7 +301,7 @@ gdk_broadway_window_set_nodes (GdkWindow *window,
     g_ptr_array_unref (impl->node_data_textures);
   impl->node_data_textures = node_textures;
 
-  gdk_broadway_server_window_set_nodes (broadway_display->server, impl->id, impl->node_data);
+  gdk_broadway_server_surface_set_nodes (broadway_display->server, impl->id, impl->node_data);
 }
 
 /* This function is called when the XWindow is really gone.
@@ -331,7 +331,7 @@ gdk_window_broadway_show (GdkWindow *window, gboolean already_mapped)
     _gdk_make_event (GDK_WINDOW (window), GDK_MAP, NULL, FALSE);
 
   broadway_display = GDK_BROADWAY_DISPLAY (gdk_window_get_display (window));
-  if (_gdk_broadway_server_window_show (broadway_display->server, impl->id))
+  if (_gdk_broadway_server_surface_show (broadway_display->server, impl->id))
     queue_flush (window);
 
 }
@@ -356,7 +356,7 @@ gdk_window_broadway_hide (GdkWindow *window)
   _gdk_broadway_window_grab_check_unmap (window,
                                          _gdk_broadway_server_get_next_serial (broadway_display->server));
 
-  if (_gdk_broadway_server_window_hide (broadway_display->server, impl->id))
+  if (_gdk_broadway_server_surface_hide (broadway_display->server, impl->id))
     queue_flush (window);
 
   _gdk_window_clear_update_area (window);
@@ -406,11 +406,11 @@ gdk_window_broadway_move_resize (GdkWindow *window,
         }
     }
 
-  _gdk_broadway_server_window_move_resize (broadway_display->server,
-                                           impl->id,
-                                           with_move,
-                                           x, y,
-                                           window->width, window->height);
+  _gdk_broadway_server_surface_move_resize (broadway_display->server,
+                                            impl->id,
+                                            with_move,
+                                            x, y,
+                                            window->width, window->height);
   queue_flush (window);
   if (size_changed)
     window->resize_count++;
@@ -449,8 +449,8 @@ gdk_broadway_window_focus (GdkWindow *window,
 
   impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
   broadway_display = GDK_BROADWAY_DISPLAY (gdk_window_get_display (window));
-  _gdk_broadway_server_window_focus (broadway_display->server,
-                                     impl->id);
+  _gdk_broadway_server_surface_focus (broadway_display->server,
+                                      impl->id);
 }
 
 static void
@@ -537,7 +537,7 @@ gdk_broadway_window_set_transient_for (GdkWindow *window,
   impl->transient_for = parent_id;
 
   display = GDK_BROADWAY_DISPLAY (gdk_window_get_display (impl->wrapper));
-  _gdk_broadway_server_window_set_transient_for (display->server, impl->id, impl->transient_for);
+  _gdk_broadway_server_surface_set_transient_for (display->server, impl->id, impl->transient_for);
 }
 
 static void

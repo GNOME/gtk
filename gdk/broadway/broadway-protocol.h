@@ -73,7 +73,7 @@ typedef enum {
   BROADWAY_OP_REQUEST_AUTH = 'l',
   BROADWAY_OP_AUTH_OK = 'L',
   BROADWAY_OP_DISCONNECTED = 'D',
-  BROADWAY_OP_WINDOW_UPDATE = 'b',
+  BROADWAY_OP_SURFACE_UPDATE = 'b',
   BROADWAY_OP_SET_SHOW_KEYBOARD = 'k',
   BROADWAY_OP_UPLOAD_TEXTURE = 't',
   BROADWAY_OP_RELEASE_TEXTURE = 'T',
@@ -89,8 +89,8 @@ typedef struct {
 
 typedef struct {
   BroadwayInputBaseMsg base;
-  guint32 mouse_window_id; /* The real window, not taking grabs into account */
-  guint32 event_window_id;
+  guint32 mouse_surface_id; /* The real surface, not taking grabs into account */
+  guint32 event_surface_id;
   gint32 root_x;
   gint32 root_y;
   gint32 win_x;
@@ -116,7 +116,7 @@ typedef struct {
 typedef struct {
   BroadwayInputBaseMsg base;
   guint32 touch_type;
-  guint32 event_window_id;
+  guint32 event_surface_id;
   guint32 sequence_id;
   guint32 is_emulated;
   gint32 root_x;
@@ -128,7 +128,7 @@ typedef struct {
 
 typedef struct {
   BroadwayInputBaseMsg base;
-  guint32 window_id;
+  guint32 surface_id;
   guint32 state;
   gint32 key;
 } BroadwayInputKeyMsg;
@@ -188,18 +188,18 @@ typedef union {
 } BroadwayInputMsg;
 
 typedef enum {
-  BROADWAY_REQUEST_NEW_WINDOW,
+  BROADWAY_REQUEST_NEW_SURFACE,
   BROADWAY_REQUEST_FLUSH,
   BROADWAY_REQUEST_SYNC,
   BROADWAY_REQUEST_QUERY_MOUSE,
-  BROADWAY_REQUEST_DESTROY_WINDOW,
-  BROADWAY_REQUEST_SHOW_WINDOW,
-  BROADWAY_REQUEST_HIDE_WINDOW,
+  BROADWAY_REQUEST_DESTROY_SURFACE,
+  BROADWAY_REQUEST_SHOW_SURFACE,
+  BROADWAY_REQUEST_HIDE_SURFACE,
   BROADWAY_REQUEST_SET_TRANSIENT_FOR,
   BROADWAY_REQUEST_MOVE_RESIZE,
   BROADWAY_REQUEST_GRAB_POINTER,
   BROADWAY_REQUEST_UNGRAB_POINTER,
-  BROADWAY_REQUEST_FOCUS_WINDOW,
+  BROADWAY_REQUEST_FOCUS_SURFACE,
   BROADWAY_REQUEST_SET_SHOW_KEYBOARD,
   BROADWAY_REQUEST_UPLOAD_TEXTURE,
   BROADWAY_REQUEST_RELEASE_TEXTURE,
@@ -216,7 +216,7 @@ typedef struct {
 typedef struct {
   BroadwayRequestBase base;
   guint32 id;
-} BroadwayRequestDestroyWindow, BroadwayRequestShowWindow, BroadwayRequestHideWindow, BroadwayRequestFocusWindow;
+} BroadwayRequestDestroySurface, BroadwayRequestShowSurface, BroadwayRequestHideSurface, BroadwayRequestFocusSurface;
 
 typedef struct {
   BroadwayRequestBase base;
@@ -269,7 +269,7 @@ typedef struct {
   guint32 width;
   guint32 height;
   guint32 is_temp;
-} BroadwayRequestNewWindow;
+} BroadwayRequestNewSurface;
 
 typedef struct {
   BroadwayRequestBase base;
@@ -288,19 +288,19 @@ typedef struct {
 
 typedef union {
   BroadwayRequestBase base;
-  BroadwayRequestNewWindow new_window;
+  BroadwayRequestNewSurface new_surface;
   BroadwayRequestFlush flush;
   BroadwayRequestSync sync;
   BroadwayRequestRoundtrip roundtrip;
   BroadwayRequestQueryMouse query_mouse;
-  BroadwayRequestDestroyWindow destroy_window;
-  BroadwayRequestShowWindow show_window;
-  BroadwayRequestHideWindow hide_window;
+  BroadwayRequestDestroySurface destroy_surface;
+  BroadwayRequestShowSurface show_surface;
+  BroadwayRequestHideSurface hide_surface;
   BroadwayRequestSetTransientFor set_transient_for;
   BroadwayRequestMoveResize move_resize;
   BroadwayRequestGrabPointer grab_pointer;
   BroadwayRequestUngrabPointer ungrab_pointer;
-  BroadwayRequestFocusWindow focus_window;
+  BroadwayRequestFocusSurface focus_surface;
   BroadwayRequestSetShowKeyboard set_show_keyboard;
   BroadwayRequestUploadTexture upload_texture;
   BroadwayRequestReleaseTexture release_texture;
@@ -311,7 +311,7 @@ typedef enum {
   BROADWAY_REPLY_EVENT,
   BROADWAY_REPLY_SYNC,
   BROADWAY_REPLY_QUERY_MOUSE,
-  BROADWAY_REPLY_NEW_WINDOW,
+  BROADWAY_REPLY_NEW_SURFACE,
   BROADWAY_REPLY_GRAB_POINTER,
   BROADWAY_REPLY_UNGRAB_POINTER
 } BroadwayReplyType;
@@ -325,7 +325,7 @@ typedef struct {
 typedef struct {
   BroadwayReplyBase base;
   guint32 id;
-} BroadwayReplyNewWindow;
+} BroadwayReplyNewSurface;
 
 typedef struct {
   BroadwayReplyBase base;
@@ -334,7 +334,7 @@ typedef struct {
 
 typedef struct {
   BroadwayReplyBase base;
-  guint32 toplevel;
+  guint32 surface;
   gint32 root_x;
   gint32 root_y;
   guint32 mask;
@@ -349,7 +349,7 @@ typedef union {
   BroadwayReplyBase base;
   BroadwayReplyEvent event;
   BroadwayReplyQueryMouse query_mouse;
-  BroadwayReplyNewWindow new_window;
+  BroadwayReplyNewSurface new_surface;
   BroadwayReplyGrabPointer grab_pointer;
   BroadwayReplyUngrabPointer ungrab_pointer;
 } BroadwayReply;

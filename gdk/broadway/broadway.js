@@ -69,7 +69,7 @@ function logStackTrace(len) {
 }
 
 var grab = new Object();
-grab.window = null;
+grab.surface = null;
 grab.ownerEvents = false;
 grab.implicit = false;
 var keyDownList = [];
@@ -78,8 +78,8 @@ var lastX = 0;
 var lastY = 0;
 var lastState;
 var lastTimeStamp = 0;
-var realWindowWithMouse = 0;
-var windowWithMouse = 0;
+var realSurfaceWithMouse = 0;
+var surfaceWithMouse = 0;
 var surfaces = {};
 var textures = {};
 var stackingOrder = [];
@@ -177,12 +177,12 @@ function cmdShowSurface(id)
     surface.div.style["top"] = yOffset + "px";
     surface.div.style["visibility"] = "visible";
 
-    restackWindows();
+    restackSurfaces();
 }
 
 function cmdHideSurface(id)
 {
-    if (grab.window == id)
+    if (grab.surface == id)
         doUngrab();
 
     var surface = surfaces[id];
@@ -206,11 +206,11 @@ function cmdSetTransientFor(id, parentId)
     }
 
     if (surface.visible) {
-        restackWindows();
+        restackSurfaces();
     }
 }
 
-function restackWindows() {
+function restackSurfaces() {
     for (var i = 0; i < stackingOrder.length; i++) {
         var surface = stackingOrder[i];
         surface.div.style.zIndex = i;
@@ -234,7 +234,7 @@ function moveToHelper(surface, position) {
 
 function cmdDeleteSurface(id)
 {
-    if (grab.window == id)
+    if (grab.surface == id)
         doUngrab();
 
     var surface = surfaces[id];
@@ -286,7 +286,7 @@ function cmdRaiseSurface(id)
     var surface = surfaces[id];
 
     moveToHelper(surface);
-    restackWindows();
+    restackSurfaces();
 }
 
 function cmdLowerSurface(id)
@@ -294,7 +294,7 @@ function cmdLowerSurface(id)
     var surface = surfaces[id];
 
     moveToHelper(surface, 0);
-    restackWindows();
+    restackSurfaces();
 }
 
 function SwapNodes(node_data, div) {
@@ -692,7 +692,7 @@ SwapNodes.prototype.insertNode = function(parent, posInParent, oldNode)
     }
 }
 
-function cmdWindowSetNodes(id, node_data)
+function cmdSurfaceSetNodes(id, node_data)
 {
     var surface = surfaces[id];
     surface.node_data = node_data;
@@ -730,7 +730,7 @@ function cmdGrabPointer(id, ownerEvents)
 function cmdUngrabPointer()
 {
     sendInput ("u", []);
-    if (grab.window)
+    if (grab.surface)
         doUngrab();
 }
 
@@ -833,7 +833,7 @@ function handleCommands(cmd)
             for (var i = 0; i < len; i++)
                 node_data[i] = cmd.get_32();
 
-            cmdWindowSetNodes(id, node_data);
+            cmdSurfaceSetNodes(id, node_data);
             break;
 
         case 'g': // Grab
@@ -980,11 +980,11 @@ function getPositionsFromEvent(ev, relativeId) {
 }
 
 function getEffectiveEventTarget (id) {
-    if (grab.window != null) {
+    if (grab.surface != null) {
         if (!grab.ownerEvents)
-            return grab.window;
+            return grab.surface;
         if (id == 0)
-            return grab.window;
+            return grab.surface;
     }
     return id;
 }
@@ -1016,19 +1016,19 @@ function onMouseMove (ev) {
     var id = getSurfaceId(ev);
     id = getEffectiveEventTarget (id);
     var pos = getPositionsFromEvent(ev, id);
-    sendInput ("m", [realWindowWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
+    sendInput ("m", [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
 }
 
 function onMouseOver (ev) {
     updateForEvent(ev);
 
     var id = getSurfaceId(ev);
-    realWindowWithMouse = id;
+    realSurfaceWithMouse = id;
     id = getEffectiveEventTarget (id);
     var pos = getPositionsFromEvent(ev, id);
-    windowWithMouse = id;
-    if (windowWithMouse != 0) {
-        sendInput ("e", [realWindowWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
+    surfaceWithMouse = id;
+    if (surfaceWithMouse != 0) {
+        sendInput ("e", [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
     }
 }
 
@@ -1040,44 +1040,44 @@ function onMouseOut (ev) {
     var pos = getPositionsFromEvent(ev, id);
 
     if (id != 0) {
-        sendInput ("l", [realWindowWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
+        sendInput ("l", [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
     }
-    realWindowWithMouse = 0;
-    windowWithMouse = 0;
+    realSurfaceWithMouse = 0;
+    surfaceWithMouse = 0;
 }
 
 function doGrab(id, ownerEvents, implicit) {
     var pos;
 
-    if (windowWithMouse != id) {
-        if (windowWithMouse != 0) {
-            pos = getPositionsFromAbsCoord(lastX, lastY, windowWithMouse);
-            sendInput ("l", [realWindowWithMouse, windowWithMouse, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_GRAB]);
+    if (surfaceWithMouse != id) {
+        if (surfaceWithMouse != 0) {
+            pos = getPositionsFromAbsCoord(lastX, lastY, surfaceWithMouse);
+            sendInput ("l", [realSurfaceWithMouse, surfaceWithMouse, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_GRAB]);
         }
         pos = getPositionsFromAbsCoord(lastX, lastY, id);
-        sendInput ("e", [realWindowWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_GRAB]);
-        windowWithMouse = id;
+        sendInput ("e", [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_GRAB]);
+        surfaceWithMouse = id;
     }
 
-    grab.window = id;
+    grab.surface = id;
     grab.ownerEvents = ownerEvents;
     grab.implicit = implicit;
 }
 
 function doUngrab() {
     var pos;
-    if (realWindowWithMouse != windowWithMouse) {
-        if (windowWithMouse != 0) {
-            pos = getPositionsFromAbsCoord(lastX, lastY, windowWithMouse);
-            sendInput ("l", [realWindowWithMouse, windowWithMouse, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_UNGRAB]);
+    if (realSurfaceWithMouse != surfaceWithMouse) {
+        if (surfaceWithMouse != 0) {
+            pos = getPositionsFromAbsCoord(lastX, lastY, surfaceWithMouse);
+            sendInput ("l", [realSurfaceWithMouse, surfaceWithMouse, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_UNGRAB]);
         }
-        if (realWindowWithMouse != 0) {
-            pos = getPositionsFromAbsCoord(lastX, lastY, realWindowWithMouse);
-            sendInput ("e", [realWindowWithMouse, realWindowWithMouse, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_UNGRAB]);
+        if (realSurfaceWithMouse != 0) {
+            pos = getPositionsFromAbsCoord(lastX, lastY, realSurfaceWithMouse);
+            sendInput ("e", [realSurfaceWithMouse, realSurfaceWithMouse, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_UNGRAB]);
         }
-        windowWithMouse = realWindowWithMouse;
+        surfaceWithMouse = realSurfaceWithMouse;
     }
-    grab.window = null;
+    grab.surface = null;
 }
 
 function onMouseDown (ev) {
@@ -1088,9 +1088,9 @@ function onMouseDown (ev) {
     id = getEffectiveEventTarget (id);
 
     var pos = getPositionsFromEvent(ev, id);
-    if (grab.window == null)
+    if (grab.surface == null)
         doGrab (id, false, true);
-    sendInput ("b", [realWindowWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, button]);
+    sendInput ("b", [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, button]);
     return false;
 }
 
@@ -1102,9 +1102,9 @@ function onMouseUp (ev) {
     id = getEffectiveEventTarget (evId);
     var pos = getPositionsFromEvent(ev, id);
 
-    sendInput ("B", [realWindowWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, button]);
+    sendInput ("B", [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, button]);
 
-    if (grab.window != null && grab.implicit)
+    if (grab.surface != null && grab.implicit)
         doUngrab();
 
     return false;
@@ -2691,7 +2691,7 @@ function onMouseWheel(ev)
     var dir = 0;
     if (offset > 0)
         dir = 1;
-    sendInput ("s", [realWindowWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, dir]);
+    sendInput ("s", [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, dir]);
 
     return cancelEvent(ev);
 }
@@ -2714,13 +2714,13 @@ function onTouchStart(ev) {
             firstTouchDownId = touch.identifier;
             isEmulated = 1;
 
-            if (realWindowWithMouse != origId || id != windowWithMouse) {
+            if (realSurfaceWithMouse != origId || id != surfaceWithMouse) {
                 if (id != 0) {
-                    sendInput ("l", [realWindowWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
+                    sendInput ("l", [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
                 }
 
-                windowWithMouse = id;
-                realWindowWithMouse = origId;
+                surfaceWithMouse = id;
+                realSurfaceWithMouse = origId;
 
                 sendInput ("e", [origId, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
             }
