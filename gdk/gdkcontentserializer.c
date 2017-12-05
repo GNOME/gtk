@@ -615,7 +615,7 @@ static void
 file_text_serializer (GdkContentSerializer *serializer)
 {
   const GValue *value;
-  char *path;
+  char *path = NULL;
 
   value = gdk_content_serializer_get_value (serializer);
 
@@ -650,6 +650,8 @@ file_text_serializer (GdkContentSerializer *serializer)
         }
       path = g_string_free (str, FALSE);
     }
+
+  g_assert (path != NULL);
 
   g_output_stream_write_all_async (gdk_content_serializer_get_output_stream (serializer),
                                    path,
