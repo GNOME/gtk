@@ -358,7 +358,7 @@ gtk_center_box_get_center_widget
 gtk_center_box_get_end_widget
 gtk_center_box_set_baseline_position
 gtk_center_box_get_baseline_position
-<PRIVATE>
+<SUBSECTION Private>
 GTK_TYPE_CENTER_BOX
 GTK_CENTER_BOX
 GTK_CENTER_BOX_CLASS
@@ -1598,9 +1598,6 @@ GtkIMMulticontextPrivate
 <TITLE>GtkInvisible</TITLE>
 GtkInvisible
 gtk_invisible_new
-gtk_invisible_new_for_screen
-gtk_invisible_set_screen
-gtk_invisible_get_screen
 <SUBSECTION Standard>
 GTK_INVISIBLE
 GTK_IS_INVISIBLE
@@ -2842,7 +2839,7 @@ gtk_text_buffer_backspace
 gtk_text_buffer_set_text
 gtk_text_buffer_get_text
 gtk_text_buffer_get_slice
-gtk_text_buffer_insert_pixbuf
+gtk_text_buffer_insert_texture
 gtk_text_buffer_insert_child_anchor
 gtk_text_buffer_create_child_anchor
 gtk_text_buffer_create_mark
@@ -2915,7 +2912,7 @@ gtk_text_iter_get_slice
 gtk_text_iter_get_text
 gtk_text_iter_get_visible_slice
 gtk_text_iter_get_visible_text
-gtk_text_iter_get_pixbuf
+gtk_text_iter_get_texture
 gtk_text_iter_get_marks
 gtk_text_iter_get_toggled_tags
 gtk_text_iter_get_child_anchor
@@ -3090,8 +3087,6 @@ gtk_text_view_get_iter_at_location
 gtk_text_view_get_iter_at_position
 gtk_text_view_buffer_to_window_coords
 gtk_text_view_window_to_buffer_coords
-gtk_text_view_get_window
-gtk_text_view_get_window_type
 gtk_text_view_set_border_window_size
 gtk_text_view_get_border_window_size
 gtk_text_view_forward_display_line
@@ -4444,7 +4439,6 @@ gtk_snapshot_render_frame
 gtk_snapshot_render_focus
 gtk_snapshot_render_layout
 gtk_snapshot_render_insertion_cursor
-gtk_snapshot_render_icon
 </SECTION>
 
 <SECTION>
@@ -4532,7 +4526,6 @@ gtk_widget_get_parent
 gtk_widget_get_settings
 gtk_widget_get_clipboard
 gtk_widget_get_primary_clipboard
-gtk_widget_get_old_clipboard
 gtk_widget_get_display
 gtk_widget_get_size_request
 gtk_widget_set_child_visible
@@ -4953,7 +4946,6 @@ gtk_widget_path_get_type
 <SECTION>
 <FILE>gtkstyleprovider</FILE>
 <TITLE>GtkStyleProvider</TITLE>
-GtkStyleProviderIface
 GtkStyleProvider
 GTK_STYLE_PROVIDER_PRIORITY_FALLBACK
 GTK_STYLE_PROVIDER_PRIORITY_THEME
@@ -5193,9 +5185,6 @@ gtk_css_section_get_type
 <FILE>gtkselection</FILE>
 <TITLE>Selections</TITLE>
 GtkSelectionData
-GtkTargetEntry
-GtkTargetList
-GtkTargetPair
 gtk_selection_owner_set
 gtk_selection_owner_set_for_display
 gtk_selection_add_target
@@ -5217,7 +5206,6 @@ gtk_selection_data_get_targets
 gtk_selection_data_targets_include_image
 gtk_selection_data_targets_include_text
 gtk_selection_data_targets_include_uri
-gtk_selection_data_targets_include_rich_text
 gtk_selection_data_get_selection
 gtk_selection_data_get_data
 gtk_selection_data_get_length
@@ -5229,7 +5217,6 @@ gtk_selection_data_get_target
 gtk_targets_include_image
 gtk_targets_include_text
 gtk_targets_include_uri
-gtk_targets_include_rich_text
 gtk_selection_remove_all
 gtk_selection_data_copy
 gtk_selection_data_free
@@ -5241,62 +5228,9 @@ gtk_selection_data_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkclipboard</FILE>
-<TITLE>Clipboards</TITLE>
-GtkClipboard
-GtkClipboardReceivedFunc
-GtkClipboardTextReceivedFunc
-GtkClipboardImageReceivedFunc
-GtkClipboardTargetsReceivedFunc
-GtkClipboardRichTextReceivedFunc
-GtkClipboardURIReceivedFunc
-GtkClipboardGetFunc
-GtkClipboardClearFunc
-gtk_clipboard_get
-gtk_clipboard_get_for_display
-gtk_clipboard_get_display
-gtk_clipboard_get_default
-gtk_clipboard_set_with_data
-gtk_clipboard_set_with_owner
-gtk_clipboard_get_owner
-gtk_clipboard_clear
-gtk_clipboard_set_text
-gtk_clipboard_set_image
-gtk_clipboard_set_surface
-gtk_clipboard_request_contents
-gtk_clipboard_request_text
-gtk_clipboard_request_image
-gtk_clipboard_request_targets
-gtk_clipboard_request_rich_text
-gtk_clipboard_request_uris
-gtk_clipboard_wait_for_contents
-gtk_clipboard_wait_for_text
-gtk_clipboard_wait_for_image
-gtk_clipboard_wait_for_surface
-gtk_clipboard_wait_for_rich_text
-gtk_clipboard_wait_for_uris
-gtk_clipboard_wait_is_text_available
-gtk_clipboard_wait_is_image_available
-gtk_clipboard_wait_is_rich_text_available
-gtk_clipboard_wait_is_uris_available
-gtk_clipboard_wait_for_targets
-gtk_clipboard_wait_is_target_available
-gtk_clipboard_set_can_store
-gtk_clipboard_store
-gtk_clipboard_get_selection
-<SUBSECTION Standard>
-GTK_CLIPBOARD
-GTK_TYPE_CLIPBOARD
-GTK_IS_CLIPBOARD
-<SUBSECTION Private>
-gtk_clipboard_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtkdnd</FILE>
 <TITLE>Drag and Drop</TITLE>
 GtkDestDefaults
-GtkTargetFlags
 GtkDragResult
 <SUBSECTION Destination Side>
 gtk_drag_dest_set
@@ -5407,7 +5341,6 @@ gtk_icon_theme_lookup_by_gicon_for_scale
 gtk_icon_theme_load_icon
 gtk_icon_theme_load_icon_for_scale
 gtk_icon_theme_load_surface
-gtk_icon_theme_load_texture
 gtk_icon_theme_list_contexts
 gtk_icon_theme_list_icons
 gtk_icon_theme_get_icon_sizes
@@ -5419,6 +5352,7 @@ gtk_icon_info_get_base_scale
 gtk_icon_info_get_filename
 gtk_icon_info_load_icon
 gtk_icon_info_load_surface
+gtk_icon_info_load_texture
 gtk_icon_info_load_icon_async
 gtk_icon_info_load_icon_finish
 gtk_icon_info_load_symbolic

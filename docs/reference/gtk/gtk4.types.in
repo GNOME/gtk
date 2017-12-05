@@ -38,7 +38,6 @@ gtk_cell_renderer_toggle_get_type
 gtk_cell_view_get_type
 gtk_check_button_get_type
 gtk_check_menu_item_get_type
-gtk_clipboard_get_type
 gtk_color_button_get_type
 gtk_color_chooser_get_type
 gtk_color_chooser_dialog_get_type
