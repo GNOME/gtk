@@ -65,6 +65,7 @@ static void
 gdk_broadway_server_init (GdkBroadwayServer *server)
 {
   server->next_serial = 1;
+  server->next_texture_id = 1;
 }
 
 static void
@@ -647,7 +648,7 @@ gdk_broadway_server_upload_texture (GdkBroadwayServer *server,
   BroadwayRequestUploadTexture msg;
   PngData data;
 
-  id = ++server->next_texture_id;
+  id = server->next_texture_id++;
 
   data.fd = open_shared_memory ();
   data.size = 0;
