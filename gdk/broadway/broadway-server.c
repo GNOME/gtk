@@ -356,8 +356,6 @@ update_event_state (BroadwayServer *server,
     break;
   case BROADWAY_EVENT_ROUNDTRIP_NOTIFY:
     break;
-  case BROADWAY_EVENT_DELETE_NOTIFY:
-    break;
   case BROADWAY_EVENT_SCREEN_SIZE_CHANGED:
     server->root->width = message->screen_resize_notify.width;
     server->root->height = message->screen_resize_notify.height;
@@ -605,10 +603,6 @@ parse_input_message (BroadwayInput *input, const unsigned char *message)
             break;
           }
       }
-    break;
-
-  case BROADWAY_EVENT_DELETE_NOTIFY:
-    msg.delete_notify.id = ntohl (*p++);
     break;
 
   case BROADWAY_EVENT_SCREEN_SIZE_CHANGED:

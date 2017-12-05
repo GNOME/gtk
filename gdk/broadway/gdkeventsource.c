@@ -347,18 +347,6 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
       _gdk_broadway_roundtrip_notify (window, message->roundtrip_notify.tag, message->roundtrip_notify.local);
     break;
 
-  case BROADWAY_EVENT_DELETE_NOTIFY:
-    window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->delete_notify.id));
-    if (window)
-      {
-	event = gdk_event_new (GDK_DELETE);
-	event->any.window = g_object_ref (window);
-
-	node = _gdk_event_queue_append (display, event);
-	_gdk_windowing_got_event (display, node, event, message->base.serial);
-      }
-    break;
-
   case BROADWAY_EVENT_SCREEN_SIZE_CHANGED:
     _gdk_broadway_display_size_changed (display, &message->screen_resize_notify);
     break;

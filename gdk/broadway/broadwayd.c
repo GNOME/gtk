@@ -775,8 +775,6 @@ get_event_size (int type)
       return  sizeof (BroadwayInputConfigureNotify);
     case BROADWAY_EVENT_ROUNDTRIP_NOTIFY:
       return  sizeof (BroadwayInputRoundtripNotify);
-    case BROADWAY_EVENT_DELETE_NOTIFY:
-      return sizeof (BroadwayInputDeleteNotify);
     case BROADWAY_EVENT_SCREEN_SIZE_CHANGED:
       return sizeof (BroadwayInputScreenResizeNotify);
     case BROADWAY_EVENT_FOCUS:
