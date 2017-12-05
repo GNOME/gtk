@@ -3,8 +3,6 @@
 gsk_renderer_new_for_window
 gsk_renderer_set_viewport
 gsk_renderer_get_viewport
-gsk_renderer_set_scale_factor
-gsk_renderer_get_scale_factor
 gsk_renderer_get_window
 gsk_renderer_get_display
 gsk_renderer_realize
