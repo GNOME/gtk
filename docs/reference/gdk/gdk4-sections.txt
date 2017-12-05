@@ -846,7 +846,6 @@ GdkDragCancelReason
 gdk_drag_get_selection
 gdk_drop_reply
 gdk_drag_drop_done
-gdk_drag_find_window
 gdk_drag_begin
 gdk_drag_begin_for_device
 gdk_drag_begin_from_point
@@ -855,7 +854,6 @@ GdkDragProtocol
 GdkDragAction
 gdk_drag_status
 gdk_drag_drop_succeeded
-gdk_window_get_drag_protocol
 
 gdk_drag_context_get_actions
 gdk_drag_context_get_suggested_action
@@ -865,7 +863,6 @@ gdk_drag_context_get_device
 gdk_drag_context_set_device
 gdk_drag_context_get_source_window
 gdk_drag_context_get_dest_window
-gdk_drag_context_get_protocol
 gdk_drag_context_get_drag_window
 gdk_drag_context_set_hotspot
 gdk_drag_context_manage_dnd
@@ -1116,7 +1113,6 @@ gdk_wayland_window_get_type
 <TITLE>Application launching</TITLE>
 <FILE>gdkapplaunchcontext</FILE>
 GdkAppLaunchContext
-gdk_app_launch_context_set_screen
 gdk_app_launch_context_set_desktop
 gdk_app_launch_context_set_timestamp
 gdk_app_launch_context_set_icon
