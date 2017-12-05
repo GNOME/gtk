@@ -112,6 +112,38 @@ rgba_to_float (const GdkRGBA *c,
   f[3] = c->alpha;
 }
 
+static inline void
+sort_border_sides (const GdkRGBA *colors,
+                   int           *indices)
+{
+  gboolean done[4] = {0, 0, 0, 0};
+  int i, k;
+  int cur = 0;
+
+  for (i = 0; i < 3; i ++)
+    {
+      if (done[i])
+        continue;
+
+      indices[cur] = i;
+      done[i] = TRUE;
+      cur ++;
+
+      for (k = i + 1; k < 4; k ++)
+        {
+          if (gdk_rgba_equal (&colors[k], &colors[i]))
+            {
+              indices[cur] = k;
+              done[k] = TRUE;
+              cur ++;
+            }
+        }
+
+      if (cur >= 4)
+        break;
+    }
+}
+
 static void gsk_gl_renderer_setup_render_mode (GskGLRenderer   *self);
 static void add_offscreen_ops                 (GskGLRenderer   *self,
                                                RenderOpBuilder *builder,
@@ -385,53 +417,61 @@ render_border_node (GskGLRenderer   *self,
       ops_set_program (builder, &self->color_program);
     }
 
-  /* Top */
-  ops_set_border_color (builder, &colors[0]);
-  ops_draw (builder, (const GskQuadVertex[6]) {
-    { { min_x,              min_y              }, { 0, 1 }, }, /* Upper left */
-    { { min_x + sizes[0].w, min_y + sizes[0].h }, { 0, 0 }, }, /* Lower left */
-    { { max_x,              min_y              }, { 1, 1 }, }, /* Upper right */
+    {
+      const GskQuadVertex side_data[4][6] = {
+        /* Top */
+        {
+          { { min_x,              min_y              }, { 0, 1 }, }, /* Upper left */
+          { { min_x + sizes[0].w, min_y + sizes[0].h }, { 0, 0 }, }, /* Lower left */
+          { { max_x,              min_y              }, { 1, 1 }, }, /* Upper right */
 
-    { { max_x - sizes[1].w, min_y + sizes[1].h }, { 1, 0 }, }, /* Lower right */
-    { { min_x + sizes[0].w, min_y + sizes[0].h }, { 0, 0 }, }, /* Lower left */
-    { { max_x,              min_y              }, { 1, 1 }, }, /* Upper right */
-  });
+          { { max_x - sizes[1].w, min_y + sizes[1].h }, { 1, 0 }, }, /* Lower right */
+          { { min_x + sizes[0].w, min_y + sizes[0].h }, { 0, 0 }, }, /* Lower left */
+          { { max_x,              min_y              }, { 1, 1 }, }, /* Upper right */
+        },
+        /* Right */
+        {
+          { { max_x - sizes[1].w, min_y + sizes[1].h }, { 0, 1 }, }, /* Upper left */
+          { { max_x - sizes[2].w, max_y - sizes[2].h }, { 0, 0 }, }, /* Lower left */
+          { { max_x,              min_y              }, { 1, 1 }, }, /* Upper right */
 
-  /* Right */
-  ops_set_border_color (builder, &colors[1]);
-  ops_draw (builder, (const GskQuadVertex[6]) {
-    { { max_x - sizes[1].w, min_y + sizes[1].h }, { 0, 1 }, }, /* Upper left */
-    { { max_x - sizes[2].w, max_y - sizes[2].h }, { 0, 0 }, }, /* Lower left */
-    { { max_x,              min_y              }, { 1, 1 }, }, /* Upper right */
+          { { max_x,              max_y              }, { 1, 0 }, }, /* Lower right */
+          { { max_x - sizes[2].w, max_y - sizes[2].h }, { 0, 0 }, }, /* Lower left */
+          { { max_x,              min_y              }, { 1, 1 }, }, /* Upper right */
+        },
+        /* Bottom */
+        {
+          { { min_x + sizes[3].w, max_y - sizes[3].h }, { 0, 1 }, }, /* Upper left */
+          { { min_x,              max_y              }, { 0, 0 }, }, /* Lower left */
+          { { max_x - sizes[2].w, max_y - sizes[2].h }, { 1, 1 }, }, /* Upper right */
 
-    { { max_x,              max_y              }, { 1, 0 }, }, /* Lower right */
-    { { max_x - sizes[2].w, max_y - sizes[2].h }, { 0, 0 }, }, /* Lower left */
-    { { max_x,              min_y              }, { 1, 1 }, }, /* Upper right */
-  });
+          { { max_x,              max_y              }, { 1, 0 }, }, /* Lower right */
+          { { min_x            ,  max_y              }, { 0, 0 }, }, /* Lower left */
+          { { max_x - sizes[2].w, max_y - sizes[2].h }, { 1, 1 }, }, /* Upper right */
+        },
+        /* Left */
+        {
+          { { min_x,              min_y              }, { 0, 1 }, }, /* Upper left */
+          { { min_x,              max_y              }, { 0, 0 }, }, /* Lower left */
+          { { min_x + sizes[0].w, min_y + sizes[0].h }, { 1, 1 }, }, /* Upper right */
 
-  /* Bottom */
-  ops_set_border_color (builder, &colors[2]);
-  ops_draw (builder, (const GskQuadVertex[6]) {
-    { { min_x + sizes[3].w, max_y - sizes[3].h }, { 0, 1 }, }, /* Upper left */
-    { { min_x,              max_y              }, { 0, 0 }, }, /* Lower left */
-    { { max_x - sizes[2].w, max_y - sizes[2].h }, { 1, 1 }, }, /* Upper right */
+          { { min_x + sizes[3].w, max_y - sizes[2].h }, { 1, 0 }, }, /* Lower right */
+          { { min_x,              max_y              }, { 0, 0 }, }, /* Lower left */
+          { { min_x + sizes[0].w, min_y + sizes[0].h }, { 1, 1 }, }, /* Upper right */
+        }
+      };
+      int indices[4] = { 0, 1, 2, 3 };
+      int i;
 
-    { { max_x,              max_y              }, { 1, 0 }, }, /* Lower right */
-    { { min_x            ,  max_y              }, { 0, 0 }, }, /* Lower left */
-    { { max_x - sizes[2].w, max_y - sizes[2].h }, { 1, 1 }, }, /* Upper right */
-  });
+      /* We sort them by color */
+      sort_border_sides (colors, indices);
 
-  /* Left */
-  ops_set_border_color (builder, &colors[3]);
-  ops_draw (builder, (const GskQuadVertex[6]) {
-    { { min_x,              min_y              }, { 0, 1 }, }, /* Upper left */
-    { { min_x,              max_y              }, { 0, 0 }, }, /* Lower left */
-    { { min_x + sizes[0].w, min_y + sizes[0].h }, { 1, 1 }, }, /* Upper right */
-
-    { { min_x + sizes[3].w, max_y - sizes[2].h }, { 1, 0 }, }, /* Lower right */
-    { { min_x,              max_y              }, { 0, 0 }, }, /* Lower left */
-    { { min_x + sizes[0].w, min_y + sizes[0].h }, { 1, 1 }, }, /* Upper right */
-  });
+      for (i = 0; i < 4; i ++)
+        {
+          ops_set_border_color (builder, &colors[indices[i]]);
+          ops_draw (builder, side_data[indices[i]]);
+        }
+    }
 
   if (needs_clip)
     ops_set_clip (builder, &prev_clip);
