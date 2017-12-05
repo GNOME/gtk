@@ -280,7 +280,7 @@ gdk_content_provider_content_changed (GdkContentProvider *provider)
 /**
  * gdk_content_provider_write_mime_type_async:
  * @provider: a #GdkContentProvider
- * @type: the #GType to provide the data in
+ * @mime_type: the mime type to provide the data in
  * @stream: the #GOutputStream to write to
  * @io_priority: the [I/O priority][io-priority]
  * of the request. 

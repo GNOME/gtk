@@ -78,7 +78,7 @@ void                    gdk_clipboard_read_value_async  (GdkClipboard          *
                                                          gpointer               user_data);
 GDK_AVAILABLE_IN_3_94
 const GValue *          gdk_clipboard_read_value_finish (GdkClipboard          *clipboard,
-                                                         GAsyncResult          *res,
+                                                         GAsyncResult          *result,
                                                          GError               **error);
 GDK_AVAILABLE_IN_3_94
 void                    gdk_clipboard_read_texture_async(GdkClipboard          *clipboard,
@@ -87,7 +87,7 @@ void                    gdk_clipboard_read_texture_async(GdkClipboard          *
                                                          gpointer               user_data);
 GDK_AVAILABLE_IN_3_94
 GdkTexture *            gdk_clipboard_read_texture_finish (GdkClipboard        *clipboard,
-                                                         GAsyncResult          *res,
+                                                         GAsyncResult          *result,
                                                          GError               **error);
 GDK_AVAILABLE_IN_3_94
 void                    gdk_clipboard_read_text_async   (GdkClipboard          *clipboard,
@@ -96,7 +96,7 @@ void                    gdk_clipboard_read_text_async   (GdkClipboard          *
                                                          gpointer               user_data);
 GDK_AVAILABLE_IN_3_94
 char *                  gdk_clipboard_read_text_finish  (GdkClipboard          *clipboard,
-                                                         GAsyncResult          *res,
+                                                         GAsyncResult          *result,
                                                          GError               **error);
 
 GDK_AVAILABLE_IN_3_94

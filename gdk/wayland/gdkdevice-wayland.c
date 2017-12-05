@@ -4974,7 +4974,7 @@ gdk_wayland_device_set_selection (GdkDevice             *gdk_device,
 
 /**
  * gdk_wayland_seat_get_wl_seat:
- * @device: (type GdkWaylandDevice): a #GdkDevice
+ * @seat: (type GdkWaylandSeat): a #GdkSeat
  *
  * Returns the Wayland wl_seat of a #GdkSeat.
  *

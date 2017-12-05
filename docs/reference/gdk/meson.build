@@ -6,6 +6,9 @@ private_headers = [
   'gdkprivate.h',
   'gdk-private.h',
   'gdkapplaunchcontextprivate.h',
+  'gdkclipboardprivate.h',
+  'gdkcontentformatsprivate.h',
+  'gdkcontentproviderprivate.h',
   'gdkcursorprivate.h',
   'gdkdeviceprivate.h',
   'gdkdisplaymanagerprivate.h',
@@ -16,17 +19,17 @@ private_headers = [
   'gdkglcontextprivate.h',
   'gdkkeysprivate.h',
   'gdkmonitorprivate.h',
+  'gdkpipeiostreamprivate.h',
   'gdkscreenprivate.h',
   'gdkseatdefaultprivate.h',
   'gdkseatprivate.h',
+  'gdktextureprivate.h',
   'gdkvisualprivate.h',
   'gdkvulkancontextprivate.h',
   'keyname-table.h',
   'win32',
-  'x11',
   'quartz',
-  'broadway',
-  'wayland',
+  'broadway'
 ]
 
 images = [

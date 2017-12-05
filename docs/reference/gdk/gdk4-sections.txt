@@ -104,6 +104,9 @@ gdk_display_get_monitor
 gdk_display_get_primary_monitor
 gdk_display_get_monitor_at_point
 gdk_display_get_monitor_at_window
+gdk_display_get_clipboard
+gdk_display_get_primary_clipboard
+gdk_display_get_setting
 
 <SUBSECTION Standard>
 GDK_DISPLAY
@@ -174,7 +177,7 @@ gdk_rgba_get_type
 <FILE>windows</FILE>
 GdkWindow
 GdkWindowType
-GdkWindowWindowClass
+GdkWindowClass
 GdkWindowHints
 GdkGeometry
 GdkGravity
@@ -379,7 +382,7 @@ gdk_content_formats_get_mime_types
 gdk_content_formats_union
 gdk_content_formats_match
 gdk_content_formats_match_gtype
-gdk_content_formats_match_mime_types
+gdk_content_formats_match_mime_type
 gdk_content_formats_contain_gtype
 gdk_content_formats_contain_mime_type
 
@@ -398,6 +401,8 @@ gdk_content_formats_builder_add_gtype
 gdk_content_formats_builder_add_mime_type
 
 <SUBSECTION Private>
+GDK_TYPE_FILE_LIST
+gdk_file_list_get_type
 gdk_content_formats_get_type
 </SECTION>
 
@@ -783,7 +788,6 @@ GdkCrossingMode
 GdkNotifyType
 GdkPropertyState
 GdkWindowState
-GdkOwnerChange
 
 <SUBSECTION Standard>
 GDK_TYPE_CROSSING_MODE
@@ -804,17 +808,19 @@ gdk_owner_change_get_type
 <FILE>textures</FILE>
 GdkTexture
 gdk_texture_new_for_data
-gdk_texture_new_for_surface
 gdk_texture_new_for_pixbuf
 gdk_texture_new_from_resource
 gdk_texture_new_from_file
 gdk_texture_get_width
 gdk_texture_get_height
 gdk_texture_download
+
 <SUBSECTION Standard>
+GdkTextureClass
 gdk_texture_get_type
 GDK_TYPE_TEXTURE
 GDK_IS_TEXTURE
+GDK_TEXTURE
 </SECTION>
 
 <SECTION>
@@ -823,7 +829,6 @@ GDK_IS_TEXTURE
 GdkCursor
 gdk_cursor_new_from_texture
 gdk_cursor_new_from_name
-gdk_cursor_get_display
 gdk_cursor_get_fallback
 gdk_cursor_get_name
 gdk_cursor_get_texture
@@ -850,7 +855,6 @@ gdk_drag_begin
 gdk_drag_begin_for_device
 gdk_drag_begin_from_point
 gdk_drop_finish
-GdkDragProtocol
 GdkDragAction
 gdk_drag_status
 gdk_drag_drop_succeeded
@@ -925,7 +929,6 @@ gdk_x11_screen_get_current_desktop
 gdk_x11_window_foreign_new_for_display
 gdk_x11_window_lookup_for_display
 gdk_x11_window_get_xid
-gdk_x11_window_set_hide_titlebar_when_maximized
 gdk_x11_window_set_theme_variant
 gdk_x11_window_set_user_time
 gdk_x11_window_move_to_current_desktop
@@ -1066,7 +1069,6 @@ gdk_wayland_device_get_wl_pointer
 gdk_wayland_device_get_wl_seat
 gdk_wayland_display_get_wl_compositor
 gdk_wayland_display_get_wl_display
-gdk_wayland_display_get_xdg_shell
 gdk_wayland_window_new_subsurface
 gdk_wayland_window_get_wl_surface
 gdk_wayland_window_set_use_custom_surface
@@ -1253,6 +1255,7 @@ gdk_drawing_context_get_window
 gdk_drawing_context_get_clip
 gdk_drawing_context_get_cairo_context
 gdk_drawing_context_is_valid
+gdk_drawing_context_get_paint_context
 
 <SUBSECTION Standard>
 gdk_drawing_context_get_type
@@ -1265,6 +1268,7 @@ GDK_IS_DRAWING_CONTEXT
 <SECTION>
 <FILE>gdkvulkancontext</FILE>
 GdkVulkanContext
+GdkVulkanError
 gdk_vulkan_context_get_device
 gdk_vulkan_context_get_draw_index
 gdk_vulkan_context_get_draw_semaphore
@@ -1323,6 +1327,7 @@ gdk_content_provider_write_mime_type_finish
 gdk_content_provider_get_value
 
 <SUBSECTION Standard>
+GdkContentProviderClass
 gdk_content_provider_get_type
 </SECTION>
 
@@ -1351,6 +1356,7 @@ gdk_content_serialize_finish
 GDK_TYPE_CONTENT_SERIALIZER
 GDK_CONTENT_SERIALIZER
 GDK_IS_CONTENT_SERIALIZER
+gdk_content_serializer_get_type
 </SECTION>
 
 <SECTION>

@@ -874,14 +874,14 @@ gdk_clipboard_read_value_async (GdkClipboard        *clipboard,
  **/
 const GValue *
 gdk_clipboard_read_value_finish (GdkClipboard  *clipboard,
-                                 GAsyncResult  *res,
+                                 GAsyncResult  *result,
                                  GError       **error)
 {
-  g_return_val_if_fail (g_task_is_valid (res, clipboard), NULL);
-  g_return_val_if_fail (g_task_get_source_tag (G_TASK (res)) == gdk_clipboard_read_value_async, NULL);
+  g_return_val_if_fail (g_task_is_valid (result, clipboard), NULL);
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gdk_clipboard_read_value_async, NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-  return g_task_propagate_pointer (G_TASK (res), error);
+  return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 /**
@@ -932,16 +932,16 @@ gdk_clipboard_read_texture_async (GdkClipboard        *clipboard,
  **/
 GdkTexture *
 gdk_clipboard_read_texture_finish (GdkClipboard  *clipboard,
-                                   GAsyncResult  *res,
+                                   GAsyncResult  *result,
                                    GError       **error)
 {
   const GValue *value;
 
-  g_return_val_if_fail (g_task_is_valid (res, clipboard), NULL);
-  g_return_val_if_fail (g_task_get_source_tag (G_TASK (res)) == gdk_clipboard_read_texture_async, NULL);
+  g_return_val_if_fail (g_task_is_valid (result, clipboard), NULL);
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gdk_clipboard_read_texture_async, NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-  value = g_task_propagate_pointer (G_TASK (res), error);
+  value = g_task_propagate_pointer (G_TASK (result), error);
   if (!value)
     return NULL;
   
@@ -996,16 +996,16 @@ gdk_clipboard_read_text_async (GdkClipboard        *clipboard,
  **/
 char *
 gdk_clipboard_read_text_finish (GdkClipboard  *clipboard,
-                                GAsyncResult  *res,
+                                GAsyncResult  *result,
                                 GError       **error)
 {
   const GValue *value;
 
-  g_return_val_if_fail (g_task_is_valid (res, clipboard), NULL);
+  g_return_val_if_fail (g_task_is_valid (result, clipboard), NULL);
   g_return_val_if_fail (g_task_get_source_tag (G_TASK (res)) == gdk_clipboard_read_text_async, NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-  value = g_task_propagate_pointer (G_TASK (res), error);
+  value = g_task_propagate_pointer (G_TASK (result), error);
   if (!value)
     return NULL;
   
