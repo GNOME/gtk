@@ -41,7 +41,16 @@
  * the same application.
  *
  * To get a GdkClipboard object, use gdk_display_get_clipboard() or
- * gdk_display_get_primary_clipboard().
+ * gdk_display_get_primary_clipboard(). You can find out about the data that
+ * is currently available in a clipboard using gdk_clipboard_get_formats().
+ *
+ * To make text or image data available in a clipboard, use gdk_clipboard_set_text() or
+ * gdk_clipboard_set_texture(). For other data, you can use gdk_clipboard_set_content(),
+ * which takes a #GdkContentProvider object.
+ *
+ * To read textual or image data from a clipboard, use gdk_clipboard_read_text_async() or
+ * gdk_clipboard_read_texture_async(). For other data, use gdk_clipboard_read_async(),
+ * which provides a #GInputStream object.
  */
 
 typedef struct _GdkClipboardPrivate GdkClipboardPrivate;
