@@ -1285,7 +1285,8 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
 
     case GSK_SHADOW_NODE:
       {
-        GskRenderNode *child = gsk_shadow_node_get_child (node);
+        GskRenderNode *original_child = gsk_shadow_node_get_child (node);
+        GskRenderNode *shadow_child = original_child;
         gsize n_shadows = gsk_shadow_node_get_n_shadows (node);
         guint i;
 
@@ -1301,6 +1302,14 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
               }
           }
 
+        /* Shadow nodes recolor every pixel of the source texture, but leave the alpha in tact.
+         * If the child is a color matrix node that doesn't touch the alpha, we can throw that away. */
+        if (gsk_render_node_get_node_type (shadow_child) == GSK_COLOR_MATRIX_NODE &&
+            !color_matrix_modifies_alpha (shadow_child))
+          {
+            shadow_child = gsk_color_matrix_node_get_child (shadow_child);
+          }
+
         for (i = 0; i < n_shadows; i ++)
           {
             const GskShadow *shadow = gsk_shadow_node_peek_shadow (node, i);
@@ -1310,14 +1319,16 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
 
             g_assert (shadow->radius <= 0);
 
-            if (gsk_render_node_get_node_type (child) == GSK_TEXT_NODE)
+            if (gsk_render_node_get_node_type (shadow_child) == GSK_TEXT_NODE)
               {
-                render_text_node (self, child, builder, &shadow->color, TRUE,
+                render_text_node (self, shadow_child, builder, &shadow->color, TRUE,
                                   shadow->dx, shadow->dy);
                 continue;
               }
 
-            add_offscreen_ops (self, builder, min_x, max_x, min_y, max_y, child, &texture_id, &is_offscreen);
+            add_offscreen_ops (self, builder,
+                               dx + min_x, dx + max_x, dy + min_y, dy + max_y,
+                               shadow_child, &texture_id, &is_offscreen);
 
             ops_set_program (builder, &self->shadow_program);
             ops_set_color (builder, &shadow->color);
@@ -1341,6 +1352,13 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
               }
             else
               {
+                min_x = shadow_child->bounds.origin.x;
+                min_y = shadow_child->bounds.origin.y;
+                max_x = min_x + shadow_child->bounds.size.width;
+                max_y = min_y + shadow_child->bounds.size.height;
+
+                /* XXX We are inside a loop and the 4 lines above modify min_x/min_y/...
+                 * so this is potentially wrong for >1 shadow. */
                 const GskQuadVertex vertex_data[GL_N_VERTICES] = {
                   { { dx + min_x, dy + min_y }, { 0, 0 }, },
                   { { dx + min_x, dy + max_y }, { 0, 1 }, },
@@ -1356,7 +1374,7 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
           }
 
         /* Now draw the child normally */
-        gsk_gl_renderer_add_render_ops (self, child, builder);
+        gsk_gl_renderer_add_render_ops (self, original_child, builder);
       }
     break;
 
