@@ -577,6 +577,22 @@ populate_render_node_properties (GtkListStore  *store,
                                clip->bounds.origin.y);
         add_text_row (store, "Clip", tmp);
         g_free (tmp);
+
+        tmp = g_strdup_printf ("%.2f x %.2f", clip->corner[0].width, clip->corner[0].height);
+        add_text_row (store, "Top Left Corner Size", tmp);
+        g_free (tmp);
+
+        tmp = g_strdup_printf ("%.2f x %.2f", clip->corner[1].width, clip->corner[1].height);
+        add_text_row (store, "Top Right Corner Size", tmp);
+        g_free (tmp);
+
+        tmp = g_strdup_printf ("%.2f x %.2f", clip->corner[2].width, clip->corner[2].height);
+        add_text_row (store, "Bottom Right Corner Size", tmp);
+        g_free (tmp);
+
+        tmp = g_strdup_printf ("%.2f x %.2f", clip->corner[3].width, clip->corner[3].height);
+        add_text_row (store, "Bottom Left Corner Size", tmp);
+        g_free (tmp);
       }
       break;
 
