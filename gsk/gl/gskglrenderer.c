@@ -144,6 +144,23 @@ sort_border_sides (const GdkRGBA *colors,
     }
 }
 
+static inline gboolean
+color_matrix_modifies_alpha (GskRenderNode *node)
+{
+  const graphene_matrix_t *matrix = gsk_color_matrix_node_peek_color_matrix (node);
+  const graphene_vec4_t *offset = gsk_color_matrix_node_peek_color_offset (node);
+  graphene_vec4_t row3;
+  graphene_vec4_t id_row3;
+
+  if (graphene_vec4_get_w (offset) != 0.0f)
+    return TRUE;
+
+  graphene_vec4_init (&id_row3, 0, 0, 0, 1);
+  graphene_matrix_get_row (matrix, 3, &row3);
+
+  return !graphene_vec4_equal (&id_row3, &row3);
+}
+
 static void gsk_gl_renderer_setup_render_mode (GskGLRenderer   *self);
 static void add_offscreen_ops                 (GskGLRenderer   *self,
                                                RenderOpBuilder *builder,
