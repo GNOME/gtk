@@ -315,9 +315,6 @@ void              gtk_widget_get_outer_allocation          (GtkWidget        *wi
                                                             GtkAllocation    *allocation);
 void              gtk_widget_get_own_allocation            (GtkWidget        *widget,
                                                             GtkAllocation    *allocation);
-void              gtk_widget_get_content_size              (GtkWidget        *widget,
-                                                            int              *width,
-                                                            int              *height);
 
 void              gtk_widget_get_window_allocation         (GtkWidget *widget,
                                                             GtkAllocation *allocation);

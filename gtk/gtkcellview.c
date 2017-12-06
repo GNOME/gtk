@@ -657,7 +657,8 @@ gtk_cell_view_snapshot (GtkWidget   *widget,
   /* render cells */
   area.x = 0;
   area.y = 0;
-  gtk_widget_get_content_size (widget, &area.width, &area.height);
+  area.width = gtk_widget_get_width (widget);
+  area.height = gtk_widget_get_height (widget);
 
   /* set cell data (if available) */
   if (cellview->priv->displayed_row)

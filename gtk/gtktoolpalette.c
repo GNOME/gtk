@@ -818,12 +818,12 @@ static void
 gtk_tool_palette_snapshot (GtkWidget   *widget,
                            GtkSnapshot *snapshot)
 {
-  int width, height;
-
-  gtk_widget_get_content_size (widget, &width, &height);
-
   gtk_snapshot_push_clip (snapshot,
-                          &GRAPHENE_RECT_INIT(0, 0, width, height), "ToolPalette Clip");
+                          &GRAPHENE_RECT_INIT(
+                              0, 0,
+                              gtk_widget_get_width (widget),
+                              gtk_widget_get_height (widget)
+                          ), "ToolPalette Clip");
 
   GTK_WIDGET_CLASS (gtk_tool_palette_parent_class)->snapshot (widget, snapshot);
 

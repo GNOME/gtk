@@ -2326,9 +2326,10 @@ gtk_flow_box_snapshot (GtkWidget   *widget,
 
   GTK_WIDGET_CLASS (gtk_flow_box_parent_class)->snapshot (widget, snapshot);
 
-  gtk_widget_get_content_size (widget, &width, &height);
   x = 0;
   y = 0;
+  width = gtk_widget_get_width (widget);
+  height = gtk_widget_get_height (widget);
 
   if (priv->rubberband_first && priv->rubberband_last)
     {

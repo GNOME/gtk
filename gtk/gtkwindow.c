@@ -9153,7 +9153,8 @@ gtk_window_snapshot (GtkWidget   *widget,
   context = gtk_widget_get_style_context (widget);
 
   get_shadow_width (GTK_WINDOW (widget), &window_border);
-  gtk_widget_get_content_size (widget, &width, &height);
+  width = gtk_widget_get_width (widget);
+  height = gtk_widget_get_height (widget);
 
   if (priv->client_decorated &&
       priv->decorated &&

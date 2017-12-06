@@ -735,10 +735,10 @@ static gint
 get_bin_window_x (GtkStack *stack)
 {
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-  int width, height;
+  int width;
   int x = 0;
 
-  gtk_widget_get_content_size (GTK_WIDGET (stack), &width, &height);
+  width = gtk_widget_get_width (GTK_WIDGET (stack));
 
   if (gtk_progress_tracker_get_state (&priv->tracker) != GTK_PROGRESS_STATE_AFTER)
     {
@@ -755,10 +755,10 @@ static gint
 get_bin_window_y (GtkStack *stack)
 {
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-  int width, height;
+  int height;
   int y = 0;
 
-  gtk_widget_get_content_size (GTK_WIDGET (stack), &width, &height);
+  height = gtk_widget_get_height (GTK_WIDGET (stack));
 
   if (gtk_progress_tracker_get_state (&priv->tracker) != GTK_PROGRESS_STATE_AFTER)
     {
@@ -1871,10 +1871,9 @@ gtk_stack_snapshot_under (GtkWidget   *widget,
   gint x, y, width, height, pos_x, pos_y;
 
 
-  gtk_widget_get_content_size (widget, &widget_width, &widget_height);
   x = y = 0;
-  width = widget_width;
-  height = widget_height;
+  width = widget_width = gtk_widget_get_width (widget);
+  height = widget_height = gtk_widget_get_height (widget);
 
   pos_x = pos_y = 0;
 
@@ -1939,7 +1938,8 @@ gtk_stack_snapshot_slide (GtkWidget   *widget,
       int x, y;
       int width, height;
 
-      gtk_widget_get_content_size (widget, &width, &height);
+      width = gtk_widget_get_width (widget);
+      height = gtk_widget_get_height (widget);
 
       x = get_bin_window_x (stack);
       y = get_bin_window_y (stack);
@@ -1999,8 +1999,6 @@ gtk_stack_snapshot (GtkWidget   *widget,
     {
       if (gtk_progress_tracker_get_state (&priv->tracker) != GTK_PROGRESS_STATE_AFTER)
         {
-          int width, height;
-
           if (priv->last_visible_node == NULL &&
               priv->last_visible_child != NULL)
             {
@@ -2017,11 +2015,11 @@ gtk_stack_snapshot (GtkWidget   *widget,
               priv->last_visible_node = gtk_snapshot_finish (&last_visible_snapshot);
             }
 
-          gtk_widget_get_content_size (widget, &width, &height);
           gtk_snapshot_push_clip (snapshot,
                                   &GRAPHENE_RECT_INIT(
                                       0, 0,
-                                      width, height
+                                      gtk_widget_get_width (widget),
+                                      gtk_widget_get_height (widget)
                                   ),
                                   "StackAnimationClip");
 

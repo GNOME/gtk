@@ -4490,10 +4490,10 @@ snapshot_empty (GtkTreeView *tree_view,
 
   if (gtk_widget_has_visible_focus (widget))
     {
-      int width, height;
-
-      gtk_widget_get_content_size (widget, &width, &height);
-      gtk_snapshot_render_focus (snapshot, context, 0, 0, width, height);
+      gtk_snapshot_render_focus (snapshot, context,
+                                 0, 0,
+                                 gtk_widget_get_width (widget),
+                                 gtk_widget_get_height (widget));
     }
 }
 
@@ -4662,7 +4662,8 @@ gtk_tree_view_bin_snapshot (GtkWidget   *widget,
       return;
     }
 
-  gtk_widget_get_content_size (GTK_WIDGET (tree_view), &bin_window_width, &bin_window_height);
+  bin_window_width = gtk_widget_get_width (GTK_WIDGET (tree_view));
+  bin_window_height = gtk_widget_get_height(GTK_WIDGET (tree_view));
 
   clip = (GdkRectangle) { 0, 0, bin_window_width, bin_window_height };
   new_y = TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, clip.y);
@@ -13885,7 +13886,6 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
   gint x = 1, y = 1;
   cairo_surface_t *surface;
   gint bin_window_width;
-  gint bin_window_height;
   gboolean is_separator = FALSE;
   gboolean rtl;
   cairo_t *cr;
@@ -13922,7 +13922,7 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
   background_area.y = y;
   background_area.height = gtk_tree_view_get_row_height (tree_view, node);
 
-  gtk_widget_get_content_size (GTK_WIDGET (tree_view), &bin_window_width, &bin_window_height);
+  bin_window_width = gtk_widget_get_width (GTK_WIDGET (tree_view));
 
   surface = gdk_window_create_similar_surface (gtk_widget_get_window (GTK_WIDGET (tree_view)),
                                                CAIRO_CONTENT_COLOR,

@@ -13059,29 +13059,6 @@ gtk_widget_get_own_allocation (GtkWidget    *widget,
   allocation->height = priv->allocation.height -margin.top - margin.bottom;
 }
 
-void
-gtk_widget_get_content_size (GtkWidget *widget,
-                             int       *width,
-                             int       *height)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GtkBorder margin, border, padding;
-  GtkCssStyle *style;
-
-  style = gtk_css_node_get_style (priv->cssnode);
-  get_box_margin (style, &margin);
-  get_box_border (style, &border);
-  get_box_padding (style, &padding);
-
-  *width = priv->allocation.width;
-  *height = priv->allocation.height;
-
-  *width -= margin.left + border.left + padding.left +
-            margin.right + border.right + padding.right;
-  *height -= margin.top + border.top + padding.top +
-             margin.bottom + border.bottom + padding.bottom;
-}
-
 /**
  * gtk_widget_get_allocated_width:
  * @widget: the widget to query

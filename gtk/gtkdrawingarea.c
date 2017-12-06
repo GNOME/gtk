@@ -242,7 +242,9 @@ gtk_drawing_area_snapshot (GtkWidget   *widget,
   if (!priv->draw_func)
     return;
 
-  gtk_widget_get_content_size (widget, &width, &height);
+  width = gtk_widget_get_width (widget);
+  height = gtk_widget_get_height (widget);
+
 
   cr = gtk_snapshot_append_cairo (snapshot,
                                   &GRAPHENE_RECT_INIT (
