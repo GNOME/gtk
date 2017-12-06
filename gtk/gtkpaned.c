@@ -332,6 +332,25 @@ gtk_paned_motion_notify (GtkWidget      *widget,
   return GTK_WIDGET_CLASS (gtk_paned_parent_class)->motion_notify_event (widget, event);
 }
 
+static GtkWidget *
+gtk_paned_pick (GtkWidget *widget,
+                   double     x,
+                   double     y)
+{
+  if (x >= 0 && x <= gtk_widget_get_width (widget) &&
+      y >= 0 && y <= gtk_widget_get_height(widget))
+    {
+      return GTK_WIDGET_CLASS (gtk_paned_parent_class)->pick (widget, x, y);
+    }
+  else
+    {
+      if (gtk_widget_contains (widget, x, y))
+        return widget;
+      else
+        return NULL;
+    }
+}
+
 static void
 gtk_paned_class_init (GtkPanedClass *class)
 {
@@ -357,6 +376,7 @@ gtk_paned_class_init (GtkPanedClass *class)
   widget_class->focus = gtk_paned_focus;
   widget_class->motion_notify_event = gtk_paned_motion_notify;
   widget_class->direction_changed = gtk_paned_direction_changed;
+  widget_class->pick = gtk_paned_pick;
 
   container_class->add = gtk_paned_add;
   container_class->remove = gtk_paned_remove;
