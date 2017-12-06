@@ -18,6 +18,7 @@ demos = files([
   'cursors.c',
   'dialog.c',
   'drawingarea.c',
+  'dnd.c',
   'editable_cells.c',
   'entry_buffer.c',
   'entry_completion.c',
