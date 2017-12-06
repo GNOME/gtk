@@ -404,13 +404,44 @@ gtk_snapshot_collect_color_matrix (GtkSnapshot      *snapshot,
   if (node == NULL)
     return NULL;
 
-  color_matrix_node = gsk_color_matrix_node_new (node,
-                                                 &state->data.color_matrix.matrix,
-                                                 &state->data.color_matrix.offset);
+  if (gsk_render_node_get_node_type (node) == GSK_COLOR_MATRIX_NODE)
+    {
+      GskRenderNode *child = gsk_render_node_ref (gsk_color_matrix_node_get_child (node));
+      const graphene_matrix_t *mat1 = gsk_color_matrix_node_peek_color_matrix (node);
+      graphene_matrix_t mat2;
+      graphene_vec4_t offset2;
+
+      /* color matrix node: color = mat * p + offset; for a pixel p.
+       * color =  mat1 * (mat2 * p + offset2) + offset1;
+       *       =  mat1 * mat2  * p + offset2 * mat1 + offset1
+       *       = (mat1 * mat2) * p + (offset2 * mat1 + offset1)
+       * Which this code does.
+       * mat1 and offset1 come from @child.
+       */
+
+      mat2 = state->data.color_matrix.matrix;
+      offset2 = state->data.color_matrix.offset;
+      graphene_matrix_transform_vec4 (mat1, &offset2, &offset2);
+      graphene_vec4_add (&offset2, gsk_color_matrix_node_peek_color_offset (node), &offset2);
+
+      graphene_matrix_multiply (mat1, &mat2, &mat2);
+
+      gsk_render_node_unref (node);
+      node = NULL;
+      color_matrix_node = gsk_color_matrix_node_new (child, &mat2, &offset2);
+
+      gsk_render_node_unref (child);
+    }
+  else
+    {
+      color_matrix_node = gsk_color_matrix_node_new (node,
+                                                     &state->data.color_matrix.matrix,
+                                                     &state->data.color_matrix.offset);
+      gsk_render_node_unref (node);
+    }
+
   if (name)
     gsk_render_node_set_name (color_matrix_node, name);
-
-  gsk_render_node_unref (node);
 
   return color_matrix_node;
 }
