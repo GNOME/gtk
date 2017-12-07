@@ -174,6 +174,7 @@ typedef struct
     graphene_matrix_t projection;
     int source_texture;
     graphene_rect_t viewport;
+    float opacity;
     /* Per-program state */
     union {
       GdkRGBA color;

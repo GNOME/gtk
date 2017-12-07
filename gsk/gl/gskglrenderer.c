@@ -1029,37 +1029,13 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
 
     case GSK_OPACITY_NODE:
       {
-        int texture_id;
-        gboolean is_offscreen;
         float prev_opacity;
 
+        prev_opacity = ops_set_opacity (builder,
+                                        builder->current_opacity * gsk_opacity_node_get_opacity (node));
 
-        add_offscreen_ops (self, builder, min_x, max_x, min_y, max_y,
-                           gsk_opacity_node_get_child (node),
-                           &texture_id, &is_offscreen);
+        gsk_gl_renderer_add_render_ops (self, gsk_opacity_node_get_child (node), builder);
 
-        /* Now draw the texture with the node's opacity */
-        ops_set_program (builder, &self->blit_program);
-        prev_opacity = ops_set_opacity (builder, gsk_opacity_node_get_opacity (node));
-        ops_set_texture (builder, texture_id);
-
-        if (is_offscreen)
-          {
-            GskQuadVertex vertex_data[GL_N_VERTICES] = {
-              { { min_x, min_y }, { 0, 1 }, },
-              { { min_x, max_y }, { 0, 0 }, },
-              { { max_x, min_y }, { 1, 1 }, },
-
-              { { max_x, max_y }, { 1, 0 }, },
-              { { min_x, max_y }, { 0, 0 }, },
-              { { max_x, min_y }, { 1, 1 }, },
-            };
-            ops_draw (builder, vertex_data);
-          }
-        else
-          {
-            ops_draw (builder, vertex_data);
-          }
         ops_set_opacity (builder, prev_opacity);
       }
     break;

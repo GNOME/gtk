@@ -65,6 +65,14 @@ ops_set_program (RenderOpBuilder *builder,
       g_array_append_val (builder->render_ops, op);
       builder->program_state[program->index].clip = builder->current_clip;
     }
+
+  if (builder->program_state[program->index].opacity != builder->current_opacity)
+    {
+      op.op = OP_CHANGE_OPACITY;
+      op.opacity = builder->current_opacity;
+      g_array_append_val (builder->render_ops, op);
+      builder->program_state[program->index].opacity = builder->current_opacity;
+    }
 }
 
 GskRoundedRect
@@ -243,6 +251,9 @@ ops_set_opacity (RenderOpBuilder *builder,
 
   prev_opacity = builder->current_opacity;
   builder->current_opacity = opacity;
+
+  if (builder->current_program != NULL)
+    builder->program_state[builder->current_program->index].opacity = opacity;
 
   return prev_opacity;
 }
