@@ -1,6 +1,3 @@
-demo {
-  background: red;
-  border: 1px solid black;
-  min-width: 30px;
-  min-height: 30px;
+spinner.demo {
+  opacity: 1;
 }
