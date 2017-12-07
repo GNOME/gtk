@@ -114,10 +114,8 @@ new_spinner_cb (GtkMenuItem *item,
 }
 
 static void
-copy_cb (GtkMenuItem *item,
-         gpointer     data)
+copy_cb (GtkWidget *child)
 {
-  GtkWidget *child = data;
   GdkClipboard *clipboard;
   GtkDemoWidget *demo;
 
@@ -127,6 +125,19 @@ copy_cb (GtkMenuItem *item,
 
   clipboard = gdk_display_get_clipboard (gdk_display_get_default ());
   gdk_clipboard_set (clipboard, GTK_TYPE_DEMO_WIDGET, demo);
+}
+
+static void
+delete_cb (GtkWidget *child)
+{
+  gtk_widget_destroy (child);
+}
+
+static void
+cut_cb (GtkWidget *child)
+{
+  copy_cb (child);
+  delete_cb (child);
 }
 
 static void
@@ -162,8 +173,7 @@ value_read (GObject      *source,
 }
 
 static void
-paste_cb (GtkMenuItem *item,
-          gpointer     data)
+paste_cb (GtkWidget *fixed)
 {
   GdkClipboard *clipboard;
 
@@ -171,7 +181,7 @@ paste_cb (GtkMenuItem *item,
   if (gdk_content_formats_contain_gtype (gdk_clipboard_get_formats (clipboard), GTK_TYPE_DEMO_WIDGET))
     {
       g_print ("Paste %s\n", g_type_name (GTK_TYPE_DEMO_WIDGET));
-      gdk_clipboard_read_value_async (clipboard, GTK_TYPE_DEMO_WIDGET, 0, NULL, value_read, data);
+      gdk_clipboard_read_value_async (clipboard, GTK_TYPE_DEMO_WIDGET, 0, NULL, value_read, fixed);
     }
   else
     g_print ("Don't know how to handle clipboard contents\n");
@@ -193,7 +203,7 @@ edit_label_done (GtkWidget *entry, gpointer data)
 }
 
 static void
-edit_widget (GtkWidget *child)
+edit_cb (GtkWidget *child)
 {
   GtkWidget *fixed = gtk_widget_get_parent (child);
   int x, y;
@@ -221,12 +231,6 @@ edit_widget (GtkWidget *child)
 }
 
 static void
-delete_widget (GtkWidget *child)
-{
-  gtk_widget_destroy (child);
-}
-
-static void
 pressed_cb (GtkGesture *gesture,
             int         n_press,
             double      x,
@@ -242,7 +246,7 @@ pressed_cb (GtkGesture *gesture,
   if (gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)) == GDK_BUTTON_PRIMARY)
     {
       if (child != NULL && child != widget)
-        edit_widget (child);
+        edit_cb (child);
     }
   else if (gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)) == GDK_BUTTON_SECONDARY)
     {
@@ -268,28 +272,29 @@ pressed_cb (GtkGesture *gesture,
 
       item = gtk_menu_item_new_with_label ("Edit");
       gtk_widget_set_sensitive (item, child != NULL && child != widget);
-      g_signal_connect_swapped (item, "activate", G_CALLBACK (edit_widget), child);
-      gtk_container_add (GTK_CONTAINER (menu), item);
-      item = gtk_menu_item_new_with_label ("Delete");
-      gtk_widget_set_sensitive (item, child != NULL && child != widget);
-      g_signal_connect_swapped (item, "activate", G_CALLBACK (delete_widget), child);
+      g_signal_connect_swapped (item, "activate", G_CALLBACK (edit_cb), child);
       gtk_container_add (GTK_CONTAINER (menu), item);
 
       item = gtk_separator_menu_item_new ();
       gtk_container_add (GTK_CONTAINER (menu), item);
 
+      item = gtk_menu_item_new_with_label ("Cut");
+      gtk_widget_set_sensitive (item, child != NULL && child != widget);
+      g_signal_connect_swapped (item, "activate", G_CALLBACK (cut_cb), child);
+      gtk_container_add (GTK_CONTAINER (menu), item);
       item = gtk_menu_item_new_with_label ("Copy");
       gtk_widget_set_sensitive (item, child != NULL && child != widget);
-      g_signal_connect (item, "activate", G_CALLBACK (copy_cb), child);
+      g_signal_connect_swapped (item, "activate", G_CALLBACK (copy_cb), child);
       gtk_container_add (GTK_CONTAINER (menu), item);
       item = gtk_menu_item_new_with_label ("Paste");
-
       clipboard = gdk_display_get_clipboard (gdk_display_get_default ());
-      if (gdk_content_formats_contain_gtype (gdk_clipboard_get_formats (clipboard), GTK_TYPE_DEMO_WIDGET))
-        gtk_widget_set_sensitive (item, TRUE);
-      else
-        gtk_widget_set_sensitive (item, FALSE);
-      g_signal_connect (item, "activate", G_CALLBACK (paste_cb), widget);
+      gtk_widget_set_sensitive (item,
+                                gdk_content_formats_contain_gtype (gdk_clipboard_get_formats (clipboard), GTK_TYPE_DEMO_WIDGET));
+      g_signal_connect_swapped (item, "activate", G_CALLBACK (paste_cb), widget);
+      gtk_container_add (GTK_CONTAINER (menu), item);
+      item = gtk_menu_item_new_with_label ("Delete");
+      gtk_widget_set_sensitive (item, child != NULL && child != widget);
+      g_signal_connect_swapped (item, "activate", G_CALLBACK (delete_cb), child);
       gtk_container_add (GTK_CONTAINER (menu), item);
 
       rect.x = x;
