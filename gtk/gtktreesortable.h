@@ -48,7 +48,7 @@ G_BEGIN_DECLS
 /**
  * GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID:
  *
- * The GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID can be used to make a
+ * The GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID can be used to make a
  * #GtkTreeSortable use no sorting.
  *
  * See also gtk_tree_sortable_set_sort_column_id()
