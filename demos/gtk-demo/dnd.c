@@ -7,47 +7,85 @@
 #include <gtk/gtk.h>
 #include <string.h>
 
-#define GTK_TYPE_DEMO_WIDGET (gtk_demo_widget_get_type ())
-
-G_DECLARE_FINAL_TYPE (GtkDemoWidget, gtk_demo_widget, GTK, DEMO_WIDGET, GtkWidget)
-
-static GtkWidget *gtk_demo_widget_new (void);
-
+typedef struct _GtkDemoWidget GtkDemoWidget;
 struct _GtkDemoWidget
 {
-  GtkWidget parent_instance;
+  GType type;
+  union {
+    char *text;
+    gboolean active;
+  };
 };
 
-G_DEFINE_TYPE (GtkDemoWidget, gtk_demo_widget, GTK_TYPE_WIDGET)
-
-static void
-gtk_demo_widget_finalize (GObject *object)
+static gpointer
+copy_demo_widget (gpointer data)
 {
-  G_OBJECT_CLASS (gtk_demo_widget_parent_class)->finalize (object);
+  GtkDemoWidget *demo = g_memdup (data, sizeof (GtkDemoWidget));
+
+  if (demo->type == GTK_TYPE_LABEL)
+    demo->text = g_strdup (demo->text);
+
+  return demo;
 }
 
 static void
-gtk_demo_widget_init (GtkDemoWidget *demo)
+free_demo_widget (gpointer data)
 {
-  gtk_widget_set_has_window (GTK_WIDGET (demo), FALSE);
+  GtkDemoWidget *demo = data;
 
+  if (demo->type == GTK_TYPE_LABEL)
+    g_free (demo->text);
+
+  g_free (demo);
 }
 
-static void
-gtk_demo_widget_class_init (GtkDemoWidgetClass *class)
+#define GTK_TYPE_DEMO_WIDGET (gtk_demo_widget_get_type ())
+
+G_DEFINE_BOXED_TYPE (GtkDemoWidget, gtk_demo_widget, copy_demo_widget, free_demo_widget)
+
+static GtkDemoWidget *
+serialize_widget (GtkWidget *widget)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (class);
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+  GtkDemoWidget *demo;
 
-  object_class->finalize = gtk_demo_widget_finalize;
+  demo = g_new0 (GtkDemoWidget, 1);
+  demo->type = G_OBJECT_TYPE (widget);
 
-  gtk_widget_class_set_css_name (widget_class, "demo");
+  if (GTK_IS_LABEL (widget))
+    {
+      demo->text = g_strdup (gtk_label_get_text (GTK_LABEL (widget)));
+    }
+  else if (GTK_IS_SPINNER (widget))
+    {
+      g_object_get (widget, "active", &demo->active, NULL);
+    }
+  else
+    {
+      g_print ("Type %s not supported\n", g_type_name (demo->type));
+    }
+
+  return demo;
 }
 
 static GtkWidget *
-gtk_demo_widget_new (void)
+deserialize_widget (GtkDemoWidget *demo)
 {
-  return g_object_new (GTK_TYPE_DEMO_WIDGET, NULL);
+  GtkWidget *widget = NULL;
+
+  if (demo->type == GTK_TYPE_LABEL)
+    {
+      widget = gtk_label_new (demo->text);
+    }
+  else if (demo->type == GTK_TYPE_SPINNER)
+    {
+      widget = g_object_new (demo->type, "active", demo->active, NULL);
+    }
+  else
+    {
+      g_print ("Type %s not supported\n", g_type_name (demo->type));
+    }
+
+  return widget;
 }
 
 static double pos_x, pos_y;
@@ -76,31 +114,19 @@ new_spinner_cb (GtkMenuItem *item,
 }
 
 static void
-new_demo_cb (GtkMenuItem *item,
-             gpointer     data)
-{
-  GtkFixed *fixed = data;
-  GtkWidget *widget;
-
-  widget = gtk_demo_widget_new ();
-  gtk_fixed_put (fixed, widget, pos_x, pos_y);
-}
-
-static void
 copy_cb (GtkMenuItem *item,
          gpointer     data)
 {
   GtkWidget *child = data;
   GdkClipboard *clipboard;
-  GValue value = { 0, };
+  GtkDemoWidget *demo;
 
-  g_print ("Copy %s!\n", g_type_name_from_instance ((GTypeInstance *)child));
+  g_print ("Copy %s\n", G_OBJECT_TYPE_NAME (child));
 
-  g_value_init (&value, G_OBJECT_TYPE (child));
-  g_value_set_object (&value, child);
+  demo = serialize_widget (child);
 
   clipboard = gdk_display_get_clipboard (gdk_display_get_default ());
-  gdk_clipboard_set_value (clipboard, &value);
+  gdk_clipboard_set (clipboard, GTK_TYPE_DEMO_WIDGET, demo);
 }
 
 static void
@@ -111,8 +137,8 @@ value_read (GObject      *source,
   GdkClipboard *clipboard = GDK_CLIPBOARD (source);
   GError *error = NULL;
   const GValue *value;
-  GtkWidget *widget;
-  GtkWidget *new_widget;
+  GtkDemoWidget *demo;
+  GtkWidget *widget = NULL;
 
   value = gdk_clipboard_read_value_finish (clipboard, res, &error);
 
@@ -123,21 +149,18 @@ value_read (GObject      *source,
       return;
     }
 
-  widget = g_value_get_object (value);
-  if (GTK_IS_LABEL (widget))
-    new_widget = gtk_label_new (gtk_label_get_text (GTK_LABEL (widget)));
-  else if (GTK_IS_SPINNER (widget))
+  if (!G_VALUE_HOLDS (value, GTK_TYPE_DEMO_WIDGET))
     {
-      new_widget = gtk_spinner_new ();
-      gtk_spinner_start (GTK_SPINNER (new_widget));
-    }
-  else
-    {
+      g_print ("can't handle clipboard contents\n");
       return;
     }
 
-  gtk_fixed_put (GTK_FIXED (data), new_widget, pos_x, pos_y);
+  demo = g_value_get_boxed (value);
+  widget = deserialize_widget (demo);
+
+  gtk_fixed_put (GTK_FIXED (data), widget, pos_x, pos_y);
 }
+
 static void
 paste_cb (GtkMenuItem *item,
           gpointer     data)
@@ -145,12 +168,62 @@ paste_cb (GtkMenuItem *item,
   GdkClipboard *clipboard;
 
   clipboard = gdk_display_get_clipboard (gdk_display_get_default ());
-  if (gdk_content_formats_contain_gtype (gdk_clipboard_get_formats (clipboard), GTK_TYPE_LABEL))
-    gdk_clipboard_read_value_async (clipboard, GTK_TYPE_LABEL, 0, NULL, value_read, data);
-  else if (gdk_content_formats_contain_gtype (gdk_clipboard_get_formats (clipboard), GTK_TYPE_SPINNER))
-    gdk_clipboard_read_value_async (clipboard, GTK_TYPE_SPINNER, 0, NULL, value_read, data);
+  if (gdk_content_formats_contain_gtype (gdk_clipboard_get_formats (clipboard), GTK_TYPE_DEMO_WIDGET))
+    {
+      g_print ("Paste %s\n", g_type_name (GTK_TYPE_DEMO_WIDGET));
+      gdk_clipboard_read_value_async (clipboard, GTK_TYPE_DEMO_WIDGET, 0, NULL, value_read, data);
+    }
   else
     g_print ("Don't know how to handle clipboard contents\n");
+}
+
+static void
+edit_label_done (GtkWidget *entry, gpointer data)
+{
+  GtkWidget *fixed = gtk_widget_get_parent (entry);
+  GtkWidget *label;
+  int x, y;
+
+  gtk_container_child_get (GTK_CONTAINER (fixed), entry, "x", &x, "y", &y, NULL);
+
+  label = GTK_WIDGET (g_object_get_data (G_OBJECT (entry), "label"));
+  gtk_label_set_text (GTK_LABEL (label), gtk_entry_get_text (GTK_ENTRY (entry)));
+
+  gtk_widget_destroy (entry);
+}
+
+static void
+edit_widget (GtkWidget *child)
+{
+  GtkWidget *fixed = gtk_widget_get_parent (child);
+  int x, y;
+
+  gtk_container_child_get (GTK_CONTAINER (fixed), child, "x", &x, "y", &y, NULL);
+
+  if (GTK_IS_LABEL (child))
+    {
+      GtkWidget *entry = gtk_entry_new ();
+
+      g_object_set_data (G_OBJECT (entry), "label", child);
+
+      gtk_entry_set_text (GTK_ENTRY (entry), gtk_label_get_text (GTK_LABEL (child)));
+      g_signal_connect (entry, "activate", G_CALLBACK (edit_label_done), NULL);
+      gtk_fixed_put (GTK_FIXED (fixed), entry, x, y);
+      gtk_widget_grab_focus (entry);
+    }
+  else if (GTK_IS_SPINNER (child))
+    {
+      gboolean active;
+
+      g_object_get (child, "active", &active, NULL);
+      g_object_set (child, "active", !active, NULL);
+    }
+}
+
+static void
+delete_widget (GtkWidget *child)
+{
+  gtk_widget_destroy (child);
 }
 
 static void
@@ -160,17 +233,24 @@ pressed_cb (GtkGesture *gesture,
             double      y,
             gpointer    data)
 {
-  if (gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)) == GDK_BUTTON_SECONDARY)
+  GtkWidget *widget;
+  GtkWidget *child;
+
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
+  child = gtk_widget_pick (widget, x, y);
+
+  if (gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)) == GDK_BUTTON_PRIMARY)
     {
-      GtkWidget *widget;
+      if (child != NULL && child != widget)
+        edit_widget (child);
+    }
+  else if (gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)) == GDK_BUTTON_SECONDARY)
+    {
       GdkRectangle rect;
       GtkWidget *menu;
       GtkWidget *item;
-      GtkWidget *child;
       GdkClipboard *clipboard;
 
-      widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
-      child = gtk_widget_pick (widget, x, y);
 
       pos_x = x;
       pos_y = y;
@@ -182,11 +262,22 @@ pressed_cb (GtkGesture *gesture,
       item = gtk_menu_item_new_with_label ("New Spinner");
       g_signal_connect (item, "activate", G_CALLBACK (new_spinner_cb), widget);
       gtk_container_add (GTK_CONTAINER (menu), item);
-      item = gtk_menu_item_new_with_label ("New Custom");
-      g_signal_connect (item, "activate", G_CALLBACK (new_demo_cb), widget);
-      gtk_container_add (GTK_CONTAINER (menu), item);
+
       item = gtk_separator_menu_item_new ();
       gtk_container_add (GTK_CONTAINER (menu), item);
+
+      item = gtk_menu_item_new_with_label ("Edit");
+      gtk_widget_set_sensitive (item, child != NULL && child != widget);
+      g_signal_connect_swapped (item, "activate", G_CALLBACK (edit_widget), child);
+      gtk_container_add (GTK_CONTAINER (menu), item);
+      item = gtk_menu_item_new_with_label ("Delete");
+      gtk_widget_set_sensitive (item, child != NULL && child != widget);
+      g_signal_connect_swapped (item, "activate", G_CALLBACK (delete_widget), child);
+      gtk_container_add (GTK_CONTAINER (menu), item);
+
+      item = gtk_separator_menu_item_new ();
+      gtk_container_add (GTK_CONTAINER (menu), item);
+
       item = gtk_menu_item_new_with_label ("Copy");
       gtk_widget_set_sensitive (item, child != NULL && child != widget);
       g_signal_connect (item, "activate", G_CALLBACK (copy_cb), child);
@@ -194,12 +285,11 @@ pressed_cb (GtkGesture *gesture,
       item = gtk_menu_item_new_with_label ("Paste");
 
       clipboard = gdk_display_get_clipboard (gdk_display_get_default ());
-      if (gdk_content_formats_contain_gtype (gdk_clipboard_get_formats (clipboard), GTK_TYPE_LABEL) ||
-          gdk_content_formats_contain_gtype (gdk_clipboard_get_formats (clipboard), GTK_TYPE_SPINNER))
+      if (gdk_content_formats_contain_gtype (gdk_clipboard_get_formats (clipboard), GTK_TYPE_DEMO_WIDGET))
         gtk_widget_set_sensitive (item, TRUE);
       else
         gtk_widget_set_sensitive (item, FALSE);
-      g_signal_connect (item, "activate", G_CALLBACK (paste_cb), child);
+      g_signal_connect (item, "activate", G_CALLBACK (paste_cb), widget);
       gtk_container_add (GTK_CONTAINER (menu), item);
 
       rect.x = x;
