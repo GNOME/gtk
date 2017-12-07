@@ -363,7 +363,7 @@ gtk_css_shadow_value_start_drawing (const GtkCssValue *shadow,
   cairo_surface_set_device_scale (surface, x_scale, y_scale);
   cairo_surface_set_device_offset (surface,
                                     x_scale * ((blur_x ? clip_radius: 0) - clip_rect.x),
-                                    y_scale * ((blur_y ? clip_radius * y_scale : 0) - clip_rect.y));
+                                    y_scale * ((blur_y ? clip_radius: 0) - clip_rect.y));
 
   blur_cr = cairo_create (surface);
   cairo_set_user_data (blur_cr, &original_cr_key, cairo_reference (cr), (cairo_destroy_func_t) cairo_destroy);
