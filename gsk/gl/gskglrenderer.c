@@ -106,8 +106,8 @@ rounded_rect_to_floats (const GskRoundedRect *rect,
 
   for (i = 0; i < 4; i ++)
     {
-      corner_widths[i] = MAX (rect->corner[i].width, 1);
-      corner_heights[i] = MAX (rect->corner[i].height, 1);
+      corner_widths[i] = rect->corner[i].width;
+      corner_heights[i] = rect->corner[i].height;
     }
 }
 
@@ -409,48 +409,48 @@ render_border_node (GskGLRenderer   *self,
 
   /* Top left */
   if (widths[3] > 0)
-    sizes[0].w = MAX (MAX (widths[3], rounded_outline->corner[0].width), 1);
+    sizes[0].w = MAX (widths[3], rounded_outline->corner[0].width);
   else
-    sizes[0].w = 1;
+    sizes[0].w = 0;
 
   if (widths[0] > 0)
-    sizes[0].h = MAX (MAX (widths[0], rounded_outline->corner[0].height), 1);
+    sizes[0].h = MAX (widths[0], rounded_outline->corner[0].height);
   else
-    sizes[0].h = 1;
+    sizes[0].h = 0;
 
   /* Top right */
   if (widths[1] > 0)
-    sizes[1].w = MAX (MAX (widths[1], rounded_outline->corner[1].width), 1);
+    sizes[1].w = MAX (widths[1], rounded_outline->corner[1].width);
   else
-    sizes[1].w = 1;
+    sizes[1].w = 0;
 
   if (widths[0] > 0)
-    sizes[1].h = MAX (MAX (widths[0], rounded_outline->corner[1].height), 1);
+    sizes[1].h = MAX (widths[0], rounded_outline->corner[1].height);
   else
-    sizes[1].h = 1;
+    sizes[1].h = 0;
 
   /* Bottom right */
   if (widths[1] > 0)
     sizes[2].w = MAX (widths[1], rounded_outline->corner[2].width);
   else
-    sizes[2].w = 1;
+    sizes[2].w = 0;
 
   if (widths[2] > 0)
     sizes[2].h = MAX (widths[2], rounded_outline->corner[2].height);
   else
-    sizes[2].h = 1;
+    sizes[2].h = 0;
 
 
   /* Bottom left */
   if (widths[3] > 0)
     sizes[3].w = MAX (widths[3], rounded_outline->corner[3].width);
   else
-    sizes[3].w = 1;
+    sizes[3].w = 0;
 
   if (widths[2] > 0)
     sizes[3].h = MAX (widths[2], rounded_outline->corner[3].height);
   else
-    sizes[3].h = 1;
+    sizes[3].h = 0;
 
   if (needs_clip)
     {
@@ -514,7 +514,7 @@ render_border_node (GskGLRenderer   *self,
         { { min_x,              max_y              }, { 0, 0 }, }, /* Lower left */
         { { min_x + sizes[0].w, min_y + sizes[0].h }, { 1, 1 }, }, /* Upper right */
 
-        { { min_x + sizes[3].w, max_y - sizes[2].h }, { 1, 0 }, }, /* Lower right */
+        { { min_x + sizes[3].w, max_y - sizes[3].h }, { 1, 0 }, }, /* Lower right */
         { { min_x,              max_y              }, { 0, 0 }, }, /* Lower left */
         { { min_x + sizes[0].w, min_y + sizes[0].h }, { 1, 1 }, }, /* Upper right */
       }
@@ -1718,28 +1718,28 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
           OP_PRINT (" -> Clip (%f, %f, %f, %f) (%f, %f, %f, %f), (%f, %f, %f, %f)",
                     op->clip.bounds.origin.x, op->clip.bounds.origin.y,
                     op->clip.bounds.size.width, op->clip.bounds.size.height,
-                    MAX (op->clip.corner[0].width, 1),
-                    MAX (op->clip.corner[1].width, 1),
-                    MAX (op->clip.corner[2].width, 1),
-                    MAX (op->clip.corner[3].width, 1),
-                    MAX (op->clip.corner[0].height, 1),
-                    MAX (op->clip.corner[1].height, 1),
-                    MAX (op->clip.corner[2].height, 1),
-                    MAX (op->clip.corner[3].height, 1));
+                    op->clip.corner[0].width,
+                    op->clip.corner[1].width,
+                    op->clip.corner[2].width,
+                    op->clip.corner[3].width,
+                    op->clip.corner[0].height,
+                    op->clip.corner[1].height,
+                    op->clip.corner[2].height,
+                    op->clip.corner[3].height);
           glUniform4f (program->clip_location,
                        op->clip.bounds.origin.x, op->clip.bounds.origin.y,
                        op->clip.bounds.size.width, op->clip.bounds.size.height);
 
           glUniform4f (program->clip_corner_widths_location,
-                       MAX (op->clip.corner[0].width, 1),
-                       MAX (op->clip.corner[1].width, 1),
-                       MAX (op->clip.corner[2].width, 1),
-                       MAX (op->clip.corner[3].width, 1));
+                       op->clip.corner[0].width,
+                       op->clip.corner[1].width,
+                       op->clip.corner[2].width,
+                       op->clip.corner[3].width);
           glUniform4f (program->clip_corner_heights_location,
-                       MAX (op->clip.corner[0].height, 1),
-                       MAX (op->clip.corner[1].height, 1),
-                       MAX (op->clip.corner[2].height, 1),
-                       MAX (op->clip.corner[3].height, 1));
+                       op->clip.corner[0].height,
+                       op->clip.corner[1].height,
+                       op->clip.corner[2].height,
+                       op->clip.corner[3].height);
           break;
 
         case OP_CHANGE_SOURCE_TEXTURE:

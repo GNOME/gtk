@@ -10,8 +10,8 @@ uniform vec4 u_viewport;
 
 // In GtkSnapshot coordinates
 uniform vec4 u_clip;
-uniform vec4 u_clip_corner_widths  = vec4(1, 1, 1, 1);
-uniform vec4 u_clip_corner_heights = vec4(1, 1, 1, 1);
+uniform vec4 u_clip_corner_widths  = vec4(0, 0, 0, 0);
+uniform vec4 u_clip_corner_heights = vec4(0, 0, 0, 0);
 
 in vec2 vUv;
 
@@ -28,6 +28,9 @@ struct RoundedRect
 float
 ellipsis_dist (vec2 p, vec2 radius)
 {
+  if (radius == vec2(0, 0))
+    return 0.0;
+
   vec2 p0 = p / radius;
   vec2 p1 = 2.0 * p0 / radius;
 
