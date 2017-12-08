@@ -225,7 +225,7 @@ gtk_sidebar_row_set_property (GObject      *object,
         object = g_value_get_object (value);
         if (object != NULL)
           {
-            self->start_icon = g_object_ref (object);
+            self->start_icon = G_ICON (g_object_ref (object));
             gtk_image_set_from_gicon (GTK_IMAGE (self->start_icon_widget), self->start_icon);
           }
         else
@@ -241,7 +241,7 @@ gtk_sidebar_row_set_property (GObject      *object,
         object = g_value_get_object (value);
         if (object != NULL)
           {
-            self->end_icon = g_object_ref (object);
+            self->end_icon = G_ICON (g_object_ref (object));
             gtk_image_set_from_gicon (GTK_IMAGE (self->end_icon_widget), self->end_icon);
             gtk_widget_show (self->end_icon_widget);
           }
