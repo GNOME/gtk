@@ -79,6 +79,7 @@ deserialize_widget (GtkDemoWidget *demo)
   else if (demo->type == GTK_TYPE_SPINNER)
     {
       widget = g_object_new (demo->type, "active", demo->active, NULL);
+      gtk_style_context_add_class (gtk_widget_get_style_context (widget), "demo");
     }
   else
     {
@@ -109,6 +110,7 @@ new_spinner_cb (GtkMenuItem *item,
   GtkWidget *widget;
 
   widget = gtk_spinner_new ();
+  gtk_style_context_add_class (gtk_widget_get_style_context (widget), "demo");
   gtk_spinner_start (GTK_SPINNER (widget));
   gtk_fixed_put (fixed, widget, pos_x, pos_y);
 }
@@ -243,18 +245,12 @@ pressed_cb (GtkGesture *gesture,
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
   child = gtk_widget_pick (widget, x, y);
 
-  if (gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)) == GDK_BUTTON_PRIMARY)
-    {
-      if (child != NULL && child != widget)
-        edit_cb (child);
-    }
-  else if (gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)) == GDK_BUTTON_SECONDARY)
+  if (gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)) == GDK_BUTTON_SECONDARY)
     {
       GdkRectangle rect;
       GtkWidget *menu;
       GtkWidget *item;
       GdkClipboard *clipboard;
-
 
       pos_x = x;
       pos_y = y;
@@ -313,6 +309,26 @@ pressed_cb (GtkGesture *gesture,
     }
 }
 
+static void
+released_cb (GtkGesture *gesture,
+             int         n_press,
+             double      x,
+             double      y,
+             gpointer    data)
+{
+  GtkWidget *widget;
+  GtkWidget *child;
+
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
+  child = gtk_widget_pick (widget, x, y);
+
+  if (gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)) == GDK_BUTTON_PRIMARY)
+    {
+      if (child != NULL && child != widget)
+        edit_cb (child);
+    }
+}
+
 static GtkWidget *window = NULL;
 
 GtkWidget *
@@ -343,6 +359,7 @@ do_dnd (GtkWidget *do_widget)
       multipress = gtk_gesture_multi_press_new (fixed);
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (multipress), 0);
       g_signal_connect (multipress, "pressed", G_CALLBACK (pressed_cb), NULL);
+      g_signal_connect (multipress, "released", G_CALLBACK (released_cb), NULL);
 
       provider = gtk_css_provider_new ();
       gtk_css_provider_load_from_resource (provider, "/dnd/dnd.css");
