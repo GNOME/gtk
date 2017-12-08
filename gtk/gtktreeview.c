@@ -5222,10 +5222,6 @@ gtk_tree_view_snapshot (GtkWidget   *widget,
   width = gtk_widget_get_width (widget);
   height = gtk_widget_get_height (widget);
 
-  gtk_snapshot_render_background (snapshot, context,
-                                  0, 0,
-                                  width, height);
-
   gtk_snapshot_push_clip (snapshot,
                           &GRAPHENE_RECT_INIT(
                               0, gtk_tree_view_get_effective_header_height (tree_view),
