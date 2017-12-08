@@ -1629,6 +1629,10 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
           op->op == OP_CHANGE_VAO)
         continue;
 
+      if (op->op != OP_CHANGE_PROGRAM &&
+          program == NULL)
+        continue;
+
       OP_PRINT ("Op %u: %u", i, op->op);
 
       switch (op->op)
