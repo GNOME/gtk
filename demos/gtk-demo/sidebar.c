@@ -40,7 +40,7 @@ do_sidebar (GtkWidget *do_widget)
       gtk_widget_set_size_request (window, 500, 350);
 
       header = gtk_header_bar_new ();
-      gtk_header_bar_set_show_close_button (GTK_HEADER_BAR(header), TRUE);
+      gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR(header), TRUE);
       gtk_window_set_titlebar (GTK_WINDOW(window), header);
       gtk_window_set_title (GTK_WINDOW(window), "Stack Sidebar");
 

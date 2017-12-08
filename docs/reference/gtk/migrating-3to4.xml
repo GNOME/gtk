@@ -209,6 +209,14 @@
     </section>
 
     <section>
+      <title>Adapt to GtkHeaderBar API changes</title>
+      <para>
+        The gtk_header_bar_set_show_close_button() function has been renamed to
+        the more accurate name gtk_header_bar_set_show_title_buttons().
+      </para>
+    </section>
+
+    <section>
       <title>Adapt to GtkStyleContext API changes</title>
       <para>
         The getters in the GtkStyleContext API, such as

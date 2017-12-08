@@ -366,7 +366,7 @@ apply_response_for_header_bar (GtkDialog *dialog,
                            NULL);
 
   if (response_id == GTK_RESPONSE_CANCEL || response_id == GTK_RESPONSE_CLOSE)
-    gtk_header_bar_set_show_close_button (GTK_HEADER_BAR (priv->headerbar), FALSE);
+    gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (priv->headerbar), FALSE);
 }
 
 static void

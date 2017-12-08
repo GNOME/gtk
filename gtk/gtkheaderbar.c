@@ -70,7 +70,7 @@ struct _GtkHeaderBarPrivate
 
   GList *children;
 
-  gboolean shows_wm_decorations;
+  gboolean show_title_buttons;
   gchar *decoration_layout;
   gboolean decoration_layout_set;
 
@@ -99,7 +99,7 @@ enum {
   PROP_HAS_SUBTITLE,
   PROP_CUSTOM_TITLE,
   PROP_SPACING,
-  PROP_SHOW_CLOSE_BUTTON,
+  PROP_SHOW_TITLE_BUTTONS,
   PROP_DECORATION_LAYOUT,
   PROP_DECORATION_LAYOUT_SET,
   LAST_PROP
@@ -286,7 +286,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
   priv->titlebar_icon = NULL;
   priv->shows_app_menu = FALSE;
 
-  if (!priv->shows_wm_decorations)
+  if (!priv->show_title_buttons)
     return;
 
   direction = gtk_widget_get_direction (widget);
@@ -501,8 +501,7 @@ _gtk_header_bar_shows_app_menu (GtkHeaderBar *bar)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
 
-  return priv->shows_wm_decorations &&
-         priv->shows_app_menu;
+  return priv->show_title_buttons && priv->shows_app_menu;
 }
 
 /* As an intended side effect, this function allows @child
@@ -1456,8 +1455,8 @@ gtk_header_bar_get_property (GObject    *object,
       g_value_set_int (value, priv->spacing);
       break;
 
-    case PROP_SHOW_CLOSE_BUTTON:
-      g_value_set_boolean (value, gtk_header_bar_get_show_close_button (bar));
+    case PROP_SHOW_TITLE_BUTTONS:
+      g_value_set_boolean (value, gtk_header_bar_get_show_title_buttons (bar));
       break;
 
     case PROP_HAS_SUBTITLE:
@@ -1510,8 +1509,8 @@ gtk_header_bar_set_property (GObject      *object,
         }
       break;
 
-    case PROP_SHOW_CLOSE_BUTTON:
-      gtk_header_bar_set_show_close_button (bar, g_value_get_boolean (value));
+    case PROP_SHOW_TITLE_BUTTONS:
+      gtk_header_bar_set_show_title_buttons (bar, g_value_get_boolean (value));
       break;
 
     case PROP_HAS_SUBTITLE:
@@ -1910,19 +1909,19 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkHeaderBar:show-close-button:
+   * GtkHeaderBar:show-title-buttons:
    *
-   * Whether to show window decorations.
+   * Whether to show title buttons like close, minimize, maximize.
    *
    * Which buttons are actually shown and where is determined
    * by the #GtkHeaderBar:decoration-layout property, and by
    * the state of the window (e.g. a close button will not be
    * shown if the window can't be closed).
    */
-  header_bar_props[PROP_SHOW_CLOSE_BUTTON] =
-      g_param_spec_boolean ("show-close-button",
-                            P_("Show decorations"),
-                            P_("Whether to show window decorations"),
+  header_bar_props[PROP_SHOW_TITLE_BUTTONS] =
+      g_param_spec_boolean ("show-title-buttons",
+                            P_("Show title buttons"),
+                            P_("Whether to show title buttons"),
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -2073,18 +2072,18 @@ gtk_header_bar_new (void)
 }
 
 /**
- * gtk_header_bar_get_show_close_button:
+ * gtk_header_bar_get_show_title_buttons:
  * @bar: a #GtkHeaderBar
  *
  * Returns whether this header bar shows the standard window
- * decorations.
+ * title buttons.
  *
- * Returns: %TRUE if the decorations are shown
+ * Returns: %TRUE if title buttons are shown
  *
- * Since: 3.10
+ * Since: 3.94
  */
 gboolean
-gtk_header_bar_get_show_close_button (GtkHeaderBar *bar)
+gtk_header_bar_get_show_title_buttons (GtkHeaderBar *bar)
 {
   GtkHeaderBarPrivate *priv;
 
@@ -2092,22 +2091,22 @@ gtk_header_bar_get_show_close_button (GtkHeaderBar *bar)
 
   priv = gtk_header_bar_get_instance_private (bar);
 
-  return priv->shows_wm_decorations;
+  return priv->show_title_buttons;
 }
 
 /**
- * gtk_header_bar_set_show_close_button:
+ * gtk_header_bar_set_show_title_buttons:
  * @bar: a #GtkHeaderBar
- * @setting: %TRUE to show standard window decorations
+ * @setting: %TRUE to show standard title buttons
  *
- * Sets whether this header bar shows the standard window decorations,
- * including close, maximize, and minimize.
+ * Sets whether this header bar shows the standard window
+ * title buttons including close, maximize, and minimize.
  *
- * Since: 3.10
+ * Since: 3.94
  */
 void
-gtk_header_bar_set_show_close_button (GtkHeaderBar *bar,
-                                      gboolean      setting)
+gtk_header_bar_set_show_title_buttons (GtkHeaderBar *bar,
+                                       gboolean      setting)
 {
   GtkHeaderBarPrivate *priv;
 
@@ -2117,12 +2116,12 @@ gtk_header_bar_set_show_close_button (GtkHeaderBar *bar,
 
   setting = setting != FALSE;
 
-  if (priv->shows_wm_decorations == setting)
+  if (priv->show_title_buttons == setting)
     return;
 
-  priv->shows_wm_decorations = setting;
+  priv->show_title_buttons = setting;
   _gtk_header_bar_update_window_buttons (bar);
-  g_object_notify_by_pspec (G_OBJECT (bar), header_bar_props[PROP_SHOW_CLOSE_BUTTON]);
+  g_object_notify_by_pspec (G_OBJECT (bar), header_bar_props[PROP_SHOW_TITLE_BUTTONS]);
 }
 
 /**

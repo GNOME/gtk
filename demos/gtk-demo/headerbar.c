@@ -30,7 +30,7 @@ do_headerbar (GtkWidget *do_widget)
       gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
 
       header = gtk_header_bar_new ();
-      gtk_header_bar_set_show_close_button (GTK_HEADER_BAR (header), TRUE);
+      gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header), TRUE);
       gtk_header_bar_set_title (GTK_HEADER_BAR (header), "Welcome to Facebook - Log in, sign up or learn more");
       gtk_header_bar_set_has_subtitle (GTK_HEADER_BAR (header), FALSE);
 

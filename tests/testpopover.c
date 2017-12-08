@@ -59,7 +59,7 @@ main (int argc, char *argv[])
   win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (win), 400, 600);
   header_bar = gtk_header_bar_new ();
-  gtk_header_bar_set_show_close_button (GTK_HEADER_BAR (header_bar), TRUE);
+  gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header_bar), TRUE);
   gtk_window_set_titlebar (GTK_WINDOW (win), header_bar);
   gtk_window_set_title (GTK_WINDOW (win), "Test GtkPopover");
   actions = g_simple_action_group_new ();

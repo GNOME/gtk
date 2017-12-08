@@ -308,7 +308,7 @@ do_widgetbowl (GtkWidget *do_widget)
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       titlebar = gtk_header_bar_new ();
-      gtk_header_bar_set_show_close_button (GTK_HEADER_BAR (titlebar), TRUE);
+      gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (titlebar), TRUE);
       info_label = gtk_label_new ("widget - 00.0 fps");
       count_label = gtk_label_new ("0");
       fishbowl = gtk_fishbowl_new ();

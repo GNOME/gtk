@@ -83,12 +83,12 @@ GDK_AVAILABLE_IN_3_10
 void         gtk_header_bar_pack_end          (GtkHeaderBar *bar,
                                                GtkWidget    *child);
 
-GDK_AVAILABLE_IN_3_10
-gboolean     gtk_header_bar_get_show_close_button (GtkHeaderBar *bar);
+GDK_AVAILABLE_IN_3_94
+gboolean     gtk_header_bar_get_show_title_buttons (GtkHeaderBar *bar);
 
-GDK_AVAILABLE_IN_3_10
-void         gtk_header_bar_set_show_close_button (GtkHeaderBar *bar,
-                                                   gboolean      setting);
+GDK_AVAILABLE_IN_3_94
+void         gtk_header_bar_set_show_title_buttons (GtkHeaderBar *bar,
+                                                    gboolean      setting);
 
 GDK_AVAILABLE_IN_3_12
 void         gtk_header_bar_set_has_subtitle (GtkHeaderBar *bar,
