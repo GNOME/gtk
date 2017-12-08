@@ -14,10 +14,7 @@ void main() {
   bounds.z = bounds.x + bounds.z;
   bounds.w = bounds.y + bounds.w;
 
-  vec4 corner_widths = max (u_clip_corner_widths, u_widths.wyyw);
-  vec4 corner_heights = max (u_clip_corner_heights, u_widths.xxzz);
-
-  RoundedRect routside = RoundedRect (bounds, corner_widths, corner_heights);
+  RoundedRect routside = RoundedRect (bounds, u_clip_corner_widths, u_clip_corner_heights);
   RoundedRect rinside = rounded_rect_shrink (routside, u_widths);
 
   float alpha = clamp (rounded_rect_coverage (routside, f.xy) -

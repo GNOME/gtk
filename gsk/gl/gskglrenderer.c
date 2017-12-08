@@ -390,10 +390,10 @@ render_border_node (GskGLRenderer   *self,
                     GskRenderNode   *node,
                     RenderOpBuilder *builder)
 {
-  float min_x = node->bounds.origin.x;
-  float min_y = node->bounds.origin.y;
-  float max_x = min_x + node->bounds.size.width;
-  float max_y = min_y + node->bounds.size.height;
+  const float min_x = node->bounds.origin.x;
+  const float min_y = node->bounds.origin.y;
+  const float max_x = min_x + node->bounds.size.width;
+  const float max_y = min_y + node->bounds.size.height;
   const GdkRGBA *colors = gsk_border_node_peek_colors (node);
   const GskRoundedRect *rounded_outline = gsk_border_node_peek_outline (node);
   const float *widths = gsk_border_node_peek_widths (node);
@@ -408,20 +408,49 @@ render_border_node (GskGLRenderer   *self,
   } sizes[4];
 
   /* Top left */
-  sizes[0].w = MAX (MAX (widths[3], rounded_outline->corner[0].width), 1);
-  sizes[0].h = MAX (MAX (widths[1], rounded_outline->corner[0].height), 1);
+  if (widths[3] > 0)
+    sizes[0].w = MAX (MAX (widths[3], rounded_outline->corner[0].width), 1);
+  else
+    sizes[0].w = 1;
+
+  if (widths[0] > 0)
+    sizes[0].h = MAX (MAX (widths[0], rounded_outline->corner[0].height), 1);
+  else
+    sizes[0].h = 1;
 
   /* Top right */
-  sizes[1].w = MAX (MAX (widths[1], rounded_outline->corner[1].width), 1);
-  sizes[1].h = MAX (MAX (widths[0], rounded_outline->corner[1].height), 1);
+  if (widths[1] > 0)
+    sizes[1].w = MAX (MAX (widths[1], rounded_outline->corner[1].width), 1);
+  else
+    sizes[1].w = 1;
+
+  if (widths[0] > 0)
+    sizes[1].h = MAX (MAX (widths[0], rounded_outline->corner[1].height), 1);
+  else
+    sizes[1].h = 1;
 
   /* Bottom right */
-  sizes[2].w = MAX (MAX (widths[1], rounded_outline->corner[2].width), 1);
-  sizes[2].h = MAX (MAX (widths[2], rounded_outline->corner[2].height), 1);
+  if (widths[1] > 0)
+    sizes[2].w = MAX (widths[1], rounded_outline->corner[2].width);
+  else
+    sizes[2].w = 1;
+
+  if (widths[2] > 0)
+    sizes[2].h = MAX (widths[2], rounded_outline->corner[2].height);
+  else
+    sizes[2].h = 1;
+
 
   /* Bottom left */
-  sizes[3].w = MAX (MAX (widths[3], rounded_outline->corner[3].width), 1);
-  sizes[3].h = MAX (MAX (widths[2], rounded_outline->corner[3].height), 1);
+  if (widths[3] > 0)
+    sizes[3].w = MAX (widths[3], rounded_outline->corner[3].width);
+  else
+    sizes[3].w = 1;
+
+  if (widths[2] > 0)
+    sizes[3].h = MAX (widths[2], rounded_outline->corner[3].height);
+  else
+    sizes[3].h = 1;
 
   if (needs_clip)
     {
@@ -447,61 +476,64 @@ render_border_node (GskGLRenderer   *self,
       ops_set_program (builder, &self->color_program);
     }
 
-    {
-      const GskQuadVertex side_data[4][6] = {
-        /* Top */
-        {
-          { { min_x,              min_y              }, { 0, 1 }, }, /* Upper left */
-          { { min_x + sizes[0].w, min_y + sizes[0].h }, { 0, 0 }, }, /* Lower left */
-          { { max_x,              min_y              }, { 1, 1 }, }, /* Upper right */
+  {
+    const GskQuadVertex side_data[4][6] = {
+      /* Top */
+      {
+        { { min_x,              min_y              }, { 0, 1 }, }, /* Upper left */
+        { { min_x + sizes[0].w, min_y + sizes[0].h }, { 0, 0 }, }, /* Lower left */
+        { { max_x,              min_y              }, { 1, 1 }, }, /* Upper right */
 
-          { { max_x - sizes[1].w, min_y + sizes[1].h }, { 1, 0 }, }, /* Lower right */
-          { { min_x + sizes[0].w, min_y + sizes[0].h }, { 0, 0 }, }, /* Lower left */
-          { { max_x,              min_y              }, { 1, 1 }, }, /* Upper right */
-        },
-        /* Right */
-        {
-          { { max_x - sizes[1].w, min_y + sizes[1].h }, { 0, 1 }, }, /* Upper left */
-          { { max_x - sizes[2].w, max_y - sizes[2].h }, { 0, 0 }, }, /* Lower left */
-          { { max_x,              min_y              }, { 1, 1 }, }, /* Upper right */
+        { { max_x - sizes[1].w, min_y + sizes[1].h }, { 1, 0 }, }, /* Lower right */
+        { { min_x + sizes[0].w, min_y + sizes[0].h }, { 0, 0 }, }, /* Lower left */
+        { { max_x,              min_y              }, { 1, 1 }, }, /* Upper right */
+      },
+      /* Right */
+      {
+        { { max_x - sizes[1].w, min_y + sizes[1].h }, { 0, 1 }, }, /* Upper left */
+        { { max_x - sizes[2].w, max_y - sizes[2].h }, { 0, 0 }, }, /* Lower left */
+        { { max_x,              min_y              }, { 1, 1 }, }, /* Upper right */
 
-          { { max_x,              max_y              }, { 1, 0 }, }, /* Lower right */
-          { { max_x - sizes[2].w, max_y - sizes[2].h }, { 0, 0 }, }, /* Lower left */
-          { { max_x,              min_y              }, { 1, 1 }, }, /* Upper right */
-        },
-        /* Bottom */
-        {
-          { { min_x + sizes[3].w, max_y - sizes[3].h }, { 0, 1 }, }, /* Upper left */
-          { { min_x,              max_y              }, { 0, 0 }, }, /* Lower left */
-          { { max_x - sizes[2].w, max_y - sizes[2].h }, { 1, 1 }, }, /* Upper right */
+        { { max_x,              max_y              }, { 1, 0 }, }, /* Lower right */
+        { { max_x - sizes[2].w, max_y - sizes[2].h }, { 0, 0 }, }, /* Lower left */
+        { { max_x,              min_y              }, { 1, 1 }, }, /* Upper right */
+      },
+      /* Bottom */
+      {
+        { { min_x + sizes[3].w, max_y - sizes[3].h }, { 0, 1 }, }, /* Upper left */
+        { { min_x,              max_y              }, { 0, 0 }, }, /* Lower left */
+        { { max_x - sizes[2].w, max_y - sizes[2].h }, { 1, 1 }, }, /* Upper right */
 
-          { { max_x,              max_y              }, { 1, 0 }, }, /* Lower right */
-          { { min_x            ,  max_y              }, { 0, 0 }, }, /* Lower left */
-          { { max_x - sizes[2].w, max_y - sizes[2].h }, { 1, 1 }, }, /* Upper right */
-        },
-        /* Left */
-        {
-          { { min_x,              min_y              }, { 0, 1 }, }, /* Upper left */
-          { { min_x,              max_y              }, { 0, 0 }, }, /* Lower left */
-          { { min_x + sizes[0].w, min_y + sizes[0].h }, { 1, 1 }, }, /* Upper right */
+        { { max_x,              max_y              }, { 1, 0 }, }, /* Lower right */
+        { { min_x            ,  max_y              }, { 0, 0 }, }, /* Lower left */
+        { { max_x - sizes[2].w, max_y - sizes[2].h }, { 1, 1 }, }, /* Upper right */
+      },
+      /* Left */
+      {
+        { { min_x,              min_y              }, { 0, 1 }, }, /* Upper left */
+        { { min_x,              max_y              }, { 0, 0 }, }, /* Lower left */
+        { { min_x + sizes[0].w, min_y + sizes[0].h }, { 1, 1 }, }, /* Upper right */
 
-          { { min_x + sizes[3].w, max_y - sizes[2].h }, { 1, 0 }, }, /* Lower right */
-          { { min_x,              max_y              }, { 0, 0 }, }, /* Lower left */
-          { { min_x + sizes[0].w, min_y + sizes[0].h }, { 1, 1 }, }, /* Upper right */
-        }
-      };
-      int indices[4] = { 0, 1, 2, 3 };
-      int i;
+        { { min_x + sizes[3].w, max_y - sizes[2].h }, { 1, 0 }, }, /* Lower right */
+        { { min_x,              max_y              }, { 0, 0 }, }, /* Lower left */
+        { { min_x + sizes[0].w, min_y + sizes[0].h }, { 1, 1 }, }, /* Upper right */
+      }
+    };
+    int indices[4] = { 0, 1, 2, 3 };
+    int i;
 
-      /* We sort them by color */
-      sort_border_sides (colors, indices);
+    /* We sort them by color */
+    sort_border_sides (colors, indices);
 
-      for (i = 0; i < 4; i ++)
-        {
-          ops_set_border_color (builder, &colors[indices[i]]);
-          ops_draw (builder, side_data[indices[i]]);
-        }
-    }
+    for (i = 0; i < 4; i ++)
+      {
+        if (widths[indices[i]] > 0)
+          {
+            ops_set_border_color (builder, &colors[indices[i]]);
+            ops_draw (builder, side_data[indices[i]]);
+          }
+      }
+  }
 
   if (needs_clip)
     ops_set_clip (builder, &prev_clip);
