@@ -24,7 +24,7 @@
     <child type="titlebar">
       <object class="GtkHeaderBar" id="headerbar">
         <property name="visible">1</property>
-        <property name="show-close-button">1</property>
+        <property name="show-title-buttons">1</property>
         <child>
           <object class="GtkButton">
             <property name="visible">1</property>

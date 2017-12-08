@@ -15,7 +15,7 @@
       <object class="GtkHeaderBar" id="header">
         <property name="visible">True</property>
         <property name="title" translatable="yes">Icon Browser</property>
-        <property name="show-close-button">True</property>
+        <property name="show-title-buttons">True</property>
         <child type="title">
           <object class="GtkBox">
             <property name="visible">True</property>

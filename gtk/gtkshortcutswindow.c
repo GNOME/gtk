@@ -875,7 +875,7 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
   priv->search_image_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 
   priv->header_bar = g_object_new (GTK_TYPE_HEADER_BAR,
-                                   "show-close-button", TRUE,
+                                   "show-title-buttons", TRUE,
                                    NULL);
   gtk_window_set_titlebar (GTK_WINDOW (self), GTK_WIDGET (priv->header_bar));
 

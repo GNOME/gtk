@@ -6,7 +6,7 @@
     <child type="titlebar">
       <object class="GtkHeaderBar" id="">
         <property name="visible">True</property>
-        <property name="show-close-button">True</property>
+        <property name="show-title-buttons">True</property>
         <child>
           <object class="GtkLabel" id="info_label">
             <property name="visible">True</property>

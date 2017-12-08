@@ -400,7 +400,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
     <property name="title">GTK+ Widget Factory</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="headerbar1">
-        <property name="show-close-button">1</property>
+        <property name="show-title-buttons">1</property>
         <child type="title">
           <object class="GtkStackSwitcher" id="stack_switcher">
             <property name="stack">toplevel_stack</property>
