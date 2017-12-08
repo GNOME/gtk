@@ -346,12 +346,18 @@ gtk_snapshot_collect_blur (GtkSnapshot      *snapshot,
                            const char     *name)
 {
   GskRenderNode *node, *blur_node;
+  double radius;
 
   node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes, name);
   if (node == NULL)
     return NULL;
 
-  blur_node = gsk_blur_node_new (node, state->data.blur.radius);
+  radius = state->data.blur.radius;
+
+  if (radius == 0.0)
+    return node;
+
+  blur_node = gsk_blur_node_new (node, radius);
   if (name)
     gsk_render_node_set_name (blur_node, name);
 
