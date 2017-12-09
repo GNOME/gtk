@@ -382,6 +382,15 @@ ops_draw (RenderOpBuilder     *builder,
 }
 
 void
+ops_offset (RenderOpBuilder *builder,
+            float            x,
+            float            y)
+{
+  builder->dx = x;
+  builder->dy = y;
+}
+
+void
 ops_add (RenderOpBuilder *builder,
          const RenderOp  *op)
 {

@@ -198,6 +198,7 @@ typedef struct
   graphene_matrix_t current_projection;
   graphene_rect_t current_viewport;
   float current_opacity;
+  float dx, dy;
 
   gsize buffer_size;
 
@@ -245,6 +246,10 @@ void              ops_set_border_color   (RenderOpBuilder         *builder,
 
 void              ops_draw               (RenderOpBuilder        *builder,
                                           const GskQuadVertex     vertex_data[GL_N_VERTICES]);
+
+void              ops_offset             (RenderOpBuilder        *builder,
+                                          float                   x,
+                                          float                   y);
 
 void              ops_add                (RenderOpBuilder        *builder,
                                           const RenderOp         *op);

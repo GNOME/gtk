@@ -328,17 +328,15 @@ render_text_node (GskGLRenderer   *self,
                   GskRenderNode   *node,
                   RenderOpBuilder *builder,
                   const GdkRGBA   *color,
-                  gboolean         force_color,
-                  float            dx,
-                  float            dy)
+                  gboolean         force_color)
 {
   const PangoFont *font = gsk_text_node_peek_font (node);
   const PangoGlyphInfo *glyphs = gsk_text_node_peek_glyphs (node);
   guint num_glyphs = gsk_text_node_get_num_glyphs (node);
   int i;
   int x_position = 0;
-  int x = gsk_text_node_get_x (node) + dx;
-  int y = gsk_text_node_get_y (node) + dy;
+  int x = gsk_text_node_get_x (node) + builder->dx;
+  int y = gsk_text_node_get_y (node) + builder->dy;
 
   /* If the font has color glyphs, we don't need to recolor anything */
   if (!force_color && font_has_color_glyphs (font))
@@ -925,25 +923,37 @@ render_shadow_node (GskGLRenderer       *self,
   for (i = 0; i < n_shadows; i ++)
     {
       const GskShadow *shadow = gsk_shadow_node_peek_shadow (node, i);
+      const float dx = shadow->dx;
+      const float dy = shadow->dy;
       int texture_id;
       gboolean is_offscreen;
-      float dx, dy;
-
-      dx = shadow->dx;
-      dy = shadow->dy;
+      float prev_dx;
+      float prev_dy;
 
       g_assert (shadow->radius <= 0);
 
+      min_x = shadow_child->bounds.origin.x;
+      min_y = shadow_child->bounds.origin.y;
+      max_x = min_x + shadow_child->bounds.size.width;
+      max_y = min_y + shadow_child->bounds.size.height;
+
+      prev_dx = builder->dx;
+      prev_dy = builder->dy;
+
+      ops_offset (builder, dx, dy);
+
       if (gsk_render_node_get_node_type (shadow_child) == GSK_TEXT_NODE)
         {
-          render_text_node (self, shadow_child, builder, &shadow->color, TRUE,
-                            shadow->dx, shadow->dy);
+          render_text_node (self, shadow_child, builder, &shadow->color, TRUE);
+          ops_offset (builder, prev_dx, prev_dy);
           continue;
         }
 
       add_offscreen_ops (self, builder,
                          dx + min_x, dx + max_x, dy + min_y, dy + max_y,
                          shadow_child, &texture_id, &is_offscreen);
+
+      ops_offset (builder, prev_dx, prev_dy);
 
       ops_set_program (builder, &self->shadow_program);
       ops_set_color (builder, &shadow->color);
@@ -959,18 +969,11 @@ render_shadow_node (GskGLRenderer       *self,
             { { dx + min_x, dy + max_y }, { 0, 0 }, },
             { { dx + max_x, dy + min_y }, { 1, 1 }, },
           };
-          ops_draw (builder, vertex_data);
 
+          ops_draw (builder, vertex_data);
         }
       else
         {
-          min_x = shadow_child->bounds.origin.x;
-          min_y = shadow_child->bounds.origin.y;
-          max_x = min_x + shadow_child->bounds.size.width;
-          max_y = min_y + shadow_child->bounds.size.height;
-
-          /* XXX We are inside a loop and the 4 lines above modify min_x/min_y/...
-           * so this is potentially wrong for >1 shadow. */
           const GskQuadVertex vertex_data[GL_N_VERTICES] = {
             { { dx + min_x, dy + min_y }, { 0, 0 }, },
             { { dx + min_x, dy + max_y }, { 0, 1 }, },
@@ -1406,8 +1409,8 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
                                 GskRenderNode   *node,
                                 RenderOpBuilder *builder)
 {
-  const float min_x = node->bounds.origin.x;
-  const float min_y = node->bounds.origin.y;
+  const float min_x = builder->dx + node->bounds.origin.x;
+  const float min_y = builder->dy + node->bounds.origin.y;
   const float max_x = min_x + node->bounds.size.width;
   const float max_y = min_y + node->bounds.size.height;
 
@@ -1480,7 +1483,7 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
 
     case GSK_TEXT_NODE:
       render_text_node (self, node, builder,
-                        gsk_text_node_peek_color (node), FALSE, 0, 0);
+                        gsk_text_node_peek_color (node), FALSE);
     break;
 
     case GSK_COLOR_MATRIX_NODE:
