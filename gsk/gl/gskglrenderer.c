@@ -384,18 +384,18 @@ render_text_node (GskGLRenderer   *self,
       ops_set_texture (builder, gsk_gl_glyph_cache_get_glyph_image (&self->glyph_cache,
                                                                    glyph)->texture_id);
 
+      tx  = glyph->tx;
+      ty  = glyph->ty;
+      tx2 = tx + glyph->tw;
+      ty2 = ty + glyph->th;
+
+      glyph_x = x + cx + glyph->draw_x;
+      glyph_y = y + cy + glyph->draw_y;
+      glyph_w = glyph->draw_width;
+      glyph_h = glyph->draw_height;
+
       {
-        tx  = glyph->tx;
-        ty  = glyph->ty;
-        tx2 = tx + glyph->tw;
-        ty2 = ty + glyph->th;
-
-        glyph_x = x + cx + glyph->draw_x;
-        glyph_y = y + cy + glyph->draw_y;
-        glyph_w = glyph->draw_width;
-        glyph_h = glyph->draw_height;
-
-        GskQuadVertex vertex_data[GL_N_VERTICES] = {
+        const GskQuadVertex vertex_data[GL_N_VERTICES] = {
           { { glyph_x,           glyph_y           }, { tx,  ty  }, },
           { { glyph_x,           glyph_y + glyph_h }, { tx,  ty2 }, },
           { { glyph_x + glyph_w, glyph_y           }, { tx2, ty  }, },
