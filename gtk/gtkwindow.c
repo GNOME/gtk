@@ -11358,7 +11358,7 @@ update_cursor (GtkWindow *toplevel,
         }
     }
 
-  for (l = widgets; l; l = l->next)
+  for (l = g_list_last (widgets); l; l = l->prev)
     {
       cursor = gtk_widget_get_cursor (l->data);
       if (cursor)
