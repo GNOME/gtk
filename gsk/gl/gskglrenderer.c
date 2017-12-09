@@ -92,26 +92,6 @@ get_gl_scaling_filters (GskRenderNode *node,
 }
 
 static inline void
-rounded_rect_to_floats (const GskRoundedRect *rect,
-                        float                *outline,
-                        float                *corner_widths,
-                        float                *corner_heights)
-{
-  int i;
-
-  outline[0] = rect->bounds.origin.x;
-  outline[1] = rect->bounds.origin.y;
-  outline[2] = rect->bounds.size.width;
-  outline[3] = rect->bounds.size.height;
-
-  for (i = 0; i < 4; i ++)
-    {
-      corner_widths[i] = rect->corner[i].width;
-      corner_heights[i] = rect->corner[i].height;
-    }
-}
-
-static inline void
 rgba_to_float (const GdkRGBA *c,
                float         *f)
 {
@@ -268,6 +248,31 @@ rounded_rect_intersect (GskGLRenderer        *self,
     {
       dest->corner[i].width = rect->corner[i].width * self->scale_factor;
       dest->corner[i].height = rect->corner[i].height * self->scale_factor;
+    }
+}
+
+static inline void
+rounded_rect_to_floats (GskGLRenderer        *self,
+                        RenderOpBuilder      *builder,
+                        const GskRoundedRect *rect,
+                        float                *outline,
+                        float                *corner_widths,
+                        float                *corner_heights)
+{
+  int i;
+  graphene_rect_t transformed_bounds;
+
+  graphene_matrix_transform_bounds (&builder->current_modelview, &rect->bounds, &transformed_bounds);
+
+  outline[0] = transformed_bounds.origin.x;
+  outline[1] = transformed_bounds.origin.y;
+  outline[2] = transformed_bounds.size.width;
+  outline[3] = transformed_bounds.size.height;
+
+  for (i = 0; i < 4; i ++)
+    {
+      corner_widths[i] = rect->corner[i].width * self->scale_factor;
+      corner_heights[i] = rect->corner[i].height * self->scale_factor;
     }
 }
 
@@ -835,14 +840,15 @@ render_inset_shadow_node (GskGLRenderer       *self,
 
   op.op = OP_CHANGE_INSET_SHADOW;
   rgba_to_float (gsk_inset_shadow_node_peek_color (node), op.inset_shadow.color);
-  rounded_rect_to_floats (gsk_inset_shadow_node_peek_outline (node),
+  rounded_rect_to_floats (self, builder,
+                          gsk_inset_shadow_node_peek_outline (node),
                           op.inset_shadow.outline,
                           op.inset_shadow.corner_widths,
                           op.inset_shadow.corner_heights);
-  op.inset_shadow.radius = gsk_inset_shadow_node_get_blur_radius (node);
-  op.inset_shadow.spread = gsk_inset_shadow_node_get_spread (node);
-  op.inset_shadow.offset[0] = gsk_inset_shadow_node_get_dx (node);
-  op.inset_shadow.offset[1] = -gsk_inset_shadow_node_get_dy (node);
+  op.inset_shadow.radius = gsk_inset_shadow_node_get_blur_radius (node) * self->scale_factor;
+  op.inset_shadow.spread = gsk_inset_shadow_node_get_spread (node) * self->scale_factor;
+  op.inset_shadow.offset[0] = gsk_inset_shadow_node_get_dx (node) * self->scale_factor;
+  op.inset_shadow.offset[1] = -gsk_inset_shadow_node_get_dy (node) * self->scale_factor;
 
   ops_set_program (builder, &self->inset_shadow_program);
   ops_add (builder, &op);
@@ -866,14 +872,15 @@ render_outset_shadow_node (GskGLRenderer       *self,
 
   op.op = OP_CHANGE_OUTSET_SHADOW;
   rgba_to_float (gsk_outset_shadow_node_peek_color (node), op.outset_shadow.color);
-  rounded_rect_to_floats (gsk_outset_shadow_node_peek_outline (node),
+  rounded_rect_to_floats (self, builder,
+                          gsk_outset_shadow_node_peek_outline (node),
                           op.outset_shadow.outline,
                           op.outset_shadow.corner_widths,
                           op.outset_shadow.corner_heights);
-  op.outset_shadow.radius = gsk_outset_shadow_node_get_blur_radius (node);
-  op.outset_shadow.spread = gsk_outset_shadow_node_get_spread (node);
-  op.outset_shadow.offset[0] = gsk_outset_shadow_node_get_dx (node);
-  op.outset_shadow.offset[1] = -gsk_outset_shadow_node_get_dy (node);
+  op.outset_shadow.radius = gsk_outset_shadow_node_get_blur_radius (node) * self->scale_factor;
+  op.outset_shadow.spread = gsk_outset_shadow_node_get_spread (node) * self->scale_factor;
+  op.outset_shadow.offset[0] = gsk_outset_shadow_node_get_dx (node) * self->scale_factor;
+  op.outset_shadow.offset[1] = -gsk_outset_shadow_node_get_dy (node) * self->scale_factor;
 
   ops_set_program (builder, &self->outset_shadow_program);
   ops_add (builder, &op);
