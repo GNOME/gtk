@@ -7,7 +7,7 @@ void main() {
   // pre-multiply
   color.rgb *= color.a;
 
-  color = vec4(u_color.rgb * diffuse.a, diffuse.a * color.a);
+  color = vec4(u_color.rgb * diffuse.a * u_alpha, diffuse.a * color.a * u_alpha);
 
   setOutputColor(color);
 }

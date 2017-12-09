@@ -1,4 +1,3 @@
-
 uniform vec4 u_color;
 
 void main() {
@@ -8,5 +7,7 @@ void main() {
   // pre-multiply
   color.rgb *= color.a;
 
-  setOutputColor((diffuse * color) * u_alpha);
+  color = vec4(u_color.rgb * diffuse.a * u_alpha, diffuse.a * color.a * u_alpha);
+
+  setOutputColor(color);
 }
