@@ -1732,7 +1732,7 @@ edge_under_coordinates (GtkWindow     *window,
     {
       handle_h = MIN (RESIZE_HANDLE_SIZE, allocation.width / 2);
       handle_v = MIN (RESIZE_HANDLE_SIZE, allocation.height / 2);
-      gtk_style_context_get_margin (context, &border);
+      get_shadow_width (window, &border);
     }
   else
     {
