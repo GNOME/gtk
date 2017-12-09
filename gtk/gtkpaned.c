@@ -801,6 +801,9 @@ gesture_drag_begin_cb (GtkGestureDrag *gesture,
       else
         priv->drag_pos = start_y - priv->handle_pos.y;
 
+      paned->priv->panning = TRUE;
+      gtk_grab_add (GTK_WIDGET (paned));
+
       gtk_gesture_set_state (GTK_GESTURE (gesture),
                              GTK_EVENT_SEQUENCE_CLAIMED);
     }
@@ -819,8 +822,6 @@ gesture_drag_update_cb (GtkGestureDrag   *gesture,
 {
   gdouble start_x, start_y;
 
-  paned->priv->panning = TRUE;
-
   gtk_gesture_drag_get_start_point (GTK_GESTURE_DRAG (gesture),
                                &start_x, &start_y);
   update_drag (paned, start_x + offset_x, start_y + offset_y);
@@ -836,6 +837,7 @@ gesture_drag_end_cb (GtkGestureDrag *gesture,
   if (!paned->priv->panning)
     gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
 
+  gtk_grab_remove (GTK_WIDGET (paned));
   paned->priv->panning = FALSE;
 }
 
