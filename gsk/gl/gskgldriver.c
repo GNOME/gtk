@@ -429,6 +429,9 @@ create_texture (GskGLDriver *self,
   int width = ceilf (fwidth);
   int height = ceilf (fheight);
 
+  g_assert (width > 0);
+  g_assert (height > 0);
+
   if (width >= self->max_texture_size ||
       height >= self->max_texture_size)
     {
