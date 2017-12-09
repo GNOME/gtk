@@ -250,6 +250,28 @@ struct _GskGLRendererClass
 G_DEFINE_TYPE (GskGLRenderer, gsk_gl_renderer, GSK_TYPE_RENDERER)
 
 static inline void
+rounded_rect_intersect (GskGLRenderer        *self,
+                        RenderOpBuilder      *builder,
+                        const GskRoundedRect *rect,
+                        GskRoundedRect       *dest)
+{
+  graphene_rect_t transformed_rect;
+  graphene_rect_t intersection;
+  int i;
+
+  graphene_matrix_transform_bounds (&builder->current_modelview, &rect->bounds, &transformed_rect);
+  graphene_rect_intersection (&transformed_rect, &builder->current_clip.bounds,
+                              &intersection);
+
+  dest->bounds = intersection;
+  for (i = 0; i < 4; i ++)
+    {
+      dest->corner[i].width = rect->corner[i].width * self->scale_factor;
+      dest->corner[i].height = rect->corner[i].height * self->scale_factor;
+    }
+}
+
+static inline void
 render_fallback_node (GskGLRenderer       *self,
                       GskRenderNode       *node,
                       RenderOpBuilder     *builder,
@@ -396,16 +418,19 @@ render_border_node (GskGLRenderer   *self,
   const float max_y = min_y + node->bounds.size.height;
   const GdkRGBA *colors = gsk_border_node_peek_colors (node);
   const GskRoundedRect *rounded_outline = gsk_border_node_peek_outline (node);
-  const float *widths = gsk_border_node_peek_widths (node);
+  const float *og_widths = gsk_border_node_peek_widths (node);
+  float widths[4];
   const gboolean needs_clip = TRUE;/*!gsk_rounded_rect_is_rectilinear (rounded_outline);*/
+  int i;
   GskRoundedRect prev_clip;
-  graphene_rect_t transformed_clip;
-  graphene_rect_t intersection;
-  GskRoundedRect child_clip;
   struct {
     float w;
     float h;
   } sizes[4];
+
+
+  for (i = 0; i < 4; i ++)
+    widths[i] = og_widths[i];
 
   /* Top left */
   if (widths[3] > 0)
@@ -452,21 +477,16 @@ render_border_node (GskGLRenderer   *self,
   else
     sizes[3].h = 0;
 
+  for (i = 0; i < 4; i ++)
+    widths[i] *= self->scale_factor;
+
   if (needs_clip)
     {
+      GskRoundedRect child_clip;
+
       ops_set_program (builder, &self->border_program);
 
-      transformed_clip = rounded_outline->bounds;
-      graphene_matrix_transform_bounds (&builder->current_modelview, &transformed_clip, &transformed_clip);
-
-      graphene_rect_intersection (&transformed_clip, &builder->current_clip.bounds,
-                                  &intersection);
-      gsk_rounded_rect_init (&child_clip, &intersection,
-                             &rounded_outline->corner[0],
-                             &rounded_outline->corner[1],
-                             &rounded_outline->corner[2],
-                             &rounded_outline->corner[3]);
-
+      rounded_rect_intersect (self, builder, rounded_outline, &child_clip);
       prev_clip = ops_set_clip (builder, &child_clip);
 
       ops_set_border (builder, widths);
