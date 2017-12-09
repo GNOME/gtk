@@ -929,6 +929,9 @@ render_shadow_node (GskGLRenderer       *self,
       gboolean is_offscreen;
       float dx, dy;
 
+      dx = shadow->dx;
+      dy = shadow->dy;
+
       g_assert (shadow->radius <= 0);
 
       if (gsk_render_node_get_node_type (shadow_child) == GSK_TEXT_NODE)
@@ -945,10 +948,6 @@ render_shadow_node (GskGLRenderer       *self,
       ops_set_program (builder, &self->shadow_program);
       ops_set_color (builder, &shadow->color);
       ops_set_texture (builder, texture_id);
-
-      dx = shadow->dx;
-      dy = shadow->dy;
-
       if (is_offscreen)
         {
           const GskQuadVertex vertex_data[GL_N_VERTICES] = {
