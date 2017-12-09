@@ -399,11 +399,11 @@ test_type (gconstpointer data)
   klass = g_type_class_ref (type);
 
   if (g_type_is_a (type, GTK_TYPE_SETTINGS))
-    instance = g_object_ref (gtk_settings_get_default ());
+    instance = G_OBJECT (g_object_ref (gtk_settings_get_default ()));
   else if (g_type_is_a (type, GDK_TYPE_WINDOW))
     {
-      instance = g_object_ref (gdk_window_new_popup (gdk_display_get_default (),
-                                                     &(GdkRectangle) { 0, 0, 100, 100 }));
+      instance = G_OBJECT (g_object_ref (gdk_window_new_popup (gdk_display_get_default (),
+                                                               &(GdkRectangle) { 0, 0, 100, 100 })));
     }
   else if (g_str_equal (g_type_name (type), "GdkX11Cursor"))
     instance = g_object_new (type, "display", display, NULL);

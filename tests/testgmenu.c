@@ -103,9 +103,9 @@ get_model (void)
   gtk_builder_add_from_string (builder, menu_markup, -1, &error);
   g_assert_no_error (error);
 
-  menu = g_object_ref (gtk_builder_get_object (builder, "edit-menu"));
+  menu = G_MENU_MODEL (g_object_ref (gtk_builder_get_object (builder, "edit-menu")));
 
-  section = g_object_ref (gtk_builder_get_object (builder, "size-placeholder"));
+  section = G_MENU_MODEL (g_object_ref (gtk_builder_get_object (builder, "size-placeholder")));
   g_object_unref (builder);
 
   for (i = 0.5; i <= 2.0; i += 0.5)
