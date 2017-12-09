@@ -720,20 +720,9 @@ render_rounded_clip_node (GskGLRenderer   *self,
   GskRoundedRect prev_clip;
   GskRenderNode *child = gsk_rounded_clip_node_get_child (node);
   const GskRoundedRect *rounded_clip = gsk_rounded_clip_node_peek_clip (node);
-  graphene_rect_t transformed_clip;
-  graphene_rect_t intersection;
   GskRoundedRect child_clip;
 
-  transformed_clip = rounded_clip->bounds;
-  graphene_matrix_transform_bounds (&builder->current_modelview, &transformed_clip, &transformed_clip);
-
-  graphene_rect_intersection (&transformed_clip, &builder->current_clip.bounds,
-                              &intersection);
-  gsk_rounded_rect_init (&child_clip, &intersection,
-                         &rounded_clip->corner[0],
-                         &rounded_clip->corner[1],
-                         &rounded_clip->corner[2],
-                         &rounded_clip->corner[3]);
+  rounded_rect_intersect (self, builder, rounded_clip, &child_clip);
 
   prev_clip = ops_set_clip (builder, &child_clip);
   gsk_gl_renderer_add_render_ops (self, child, builder);
