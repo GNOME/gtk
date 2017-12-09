@@ -491,7 +491,7 @@ gtk_image_new_from_pixbuf (GdkPixbuf *pixbuf)
 
 /**
  * gtk_image_new_from_texture:
- * @pixbuf: (allow-none): a #GdkTexture, or %NULL
+ * @texture: (allow-none): a #GdkTexture, or %NULL
  *
  * Creates a new #GtkImage displaying @texture.
  * The #GtkImage does not assume a reference to the
