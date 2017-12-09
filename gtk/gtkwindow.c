@@ -1744,10 +1744,10 @@ edge_under_coordinates (GtkWindow     *window,
   gtk_style_context_restore (context);
 
   /* Check whether the click falls outside the handle area */
-  if (x >= allocation.x + border.left + handle_h &&
-      x < allocation.x + allocation.width - border.right - handle_h &&
-      y >= allocation.y + border.top + handle_v &&
-      y < allocation.y + allocation.height - border.bottom - handle_v)
+  if (x >= allocation.x + border.left &&
+      x < allocation.x + allocation.width - border.right &&
+      y >= allocation.y + border.top &&
+      y < allocation.y + allocation.height - border.bottom)
     return FALSE;
 
   /* Check X axis */
