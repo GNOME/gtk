@@ -1060,7 +1060,7 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   GtkWidget *ipc_widget;
   GdkDevice *pointer, *keyboard;
   GdkWindow *ipc_window;
-  int start_x, start_y;
+  int dx, dy;
   GdkAtom selection;
 
   pointer = keyboard = NULL;
@@ -1106,21 +1106,37 @@ gtk_drag_begin_internal (GtkWidget          *widget,
       GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
       gtk_widget_translate_coordinates (widget, toplevel,
                                         x, y, &x, &y);
-      gdk_window_get_root_coords (gtk_widget_get_window (toplevel),
-                                  x, y, &start_x, &start_y);
+      gdk_window_get_device_position (gtk_widget_get_window (toplevel),
+                                      pointer,
+                                      &dx, &dy,
+                                      NULL);
+      dx -= x;
+      dy -= y;
     }
   else if (event && gdk_event_get_event_type (event) == GDK_MOTION_NOTIFY)
     {
-      double x, y;
+      double ex, ey;
+      GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
 
-      gdk_event_get_root_coords (event, &x, &y);
-      start_x = (int)x;
-      start_y = (int)y;
+      gdk_event_get_coords (event, &ex, &ey);
+      x = ex;
+      y = ey;
+      gtk_widget_translate_coordinates (widget, toplevel,
+                                        x, y, &x, &y);
+      gdk_window_get_device_position (gtk_widget_get_window (toplevel),
+                                      pointer,
+                                      &dx, &dy,
+                                      NULL);
+      dx -= x;
+      dy -= y;
     }
   else
-    gdk_device_get_position (pointer, &start_x, &start_y);
+    {
+      dx = 0;
+      dy = 0;
+    }
 
-  context = gdk_drag_begin (ipc_window, pointer, target_list, start_x, start_y);
+  context = gdk_drag_begin (ipc_window, pointer, target_list, dx, dy);
 
   if (!gdk_drag_context_manage_dnd (context, ipc_window, actions))
     {

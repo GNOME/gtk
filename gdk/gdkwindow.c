@@ -6928,8 +6928,8 @@ gdk_window_register_dnd (GdkWindow *window)
  * @window: the source window for this drag
  * @device: the device that controls this drag
  * @formats: (transfer none): the offered formats
- * @x_root: the x coordinate where the drag nominally started
- * @y_root: the y coordinate where the drag nominally started
+ * @dx: the x offset to @device's position where the drag nominally started
+ * @dy: the y offset to @device's position where the drag nominally started
  *
  * Starts a drag and creates a new drag context for it.
  *

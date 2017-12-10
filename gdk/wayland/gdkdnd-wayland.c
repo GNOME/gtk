@@ -586,8 +586,8 @@ GdkDragContext *
 _gdk_wayland_window_drag_begin (GdkWindow         *window,
 				GdkDevice         *device,
 				GdkContentFormats *formats,
-                                gint               x_root,
-                                gint               y_root)
+                                gint               dx,
+                                gint               dy)
 {
   GdkWaylandDragContext *context_wayland;
   GdkDragContext *context;

@@ -87,8 +87,8 @@ GdkDragContext *
 _gdk_broadway_window_drag_begin (GdkWindow         *window,
 				 GdkDevice         *device,
 				 GdkContentFormats *formats,
-                                 gint               x_root,
-                                 gint               y_root)
+                                 gint               dx,
+                                 gint               dy)
 {
   GdkDragContext *new_context;
 

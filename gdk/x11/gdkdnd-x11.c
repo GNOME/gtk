@@ -2101,10 +2101,11 @@ GdkDragContext *
 _gdk_x11_window_drag_begin (GdkWindow         *window,
                             GdkDevice         *device,
                             GdkContentFormats *formats,
-                            gint               x_root,
-                            gint               y_root)
+                            gint               dx,
+                            gint               dy)
 {
   GdkDragContext *context;
+  int x_root, y_root;
 
   context = (GdkDragContext *) g_object_new (GDK_TYPE_X11_DRAG_CONTEXT,
                                              "display", gdk_window_get_display (window),
@@ -2120,6 +2121,9 @@ _gdk_x11_window_drag_begin (GdkWindow         *window,
   context->actions = 0;
 
   gdk_drag_context_set_device (context, device);
+  gdk_device_get_position (device, &x_root, &y_root);
+  x_root += dx;
+  y_root += dy;
 
   GDK_X11_DRAG_CONTEXT (context)->start_x = x_root;
   GDK_X11_DRAG_CONTEXT (context)->start_y = y_root;

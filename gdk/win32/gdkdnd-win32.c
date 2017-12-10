@@ -2011,13 +2011,14 @@ GdkDragContext *
 _gdk_win32_window_drag_begin (GdkWindow         *window,
                               GdkDevice         *device,
                               GdkContentFormats *formats,
-                              gint               x_root,
-                              gint               y_root)
+                              gint               dx,
+                              gint               dy)
 {
   GdkDragContext *new_context;
   GdkWin32DragContext *context_win32;
   BYTE kbd_state[256];
   GdkWin32Selection *sel_win32 = _gdk_win32_selection_get ();
+  int x_root, y_root;
 
   if (!use_ole2_dnd)
     {
@@ -2049,6 +2050,10 @@ _gdk_win32_window_drag_begin (GdkWindow         *window,
 
       context_win32 = GDK_WIN32_DRAG_CONTEXT (new_context);
     }
+
+  gdk_device_get_position (device, &x_root, &y_root);
+  x_root += dx;
+  y_root += dy;
 
   context_win32->start_x = x_root;
   context_win32->start_y = y_root;

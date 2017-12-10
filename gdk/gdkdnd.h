@@ -137,8 +137,8 @@ GDK_AVAILABLE_IN_ALL
 GdkDragContext *        gdk_drag_begin                  (GdkWindow              *window,
                                                          GdkDevice              *device,
                                                          GdkContentFormats      *formats,
-                                                         gint                    x_root,
-                                                         gint                    y_root);
+                                                         gint                    dx,
+                                                         gint                    dy);
 
 GDK_AVAILABLE_IN_ALL
 gboolean        gdk_drag_drop_succeeded (GdkDragContext *context);
