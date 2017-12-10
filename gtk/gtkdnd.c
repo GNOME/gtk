@@ -1058,12 +1058,11 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   GdkDragAction possible_actions, suggested_action;
   GdkDragContext *context;
   GtkWidget *ipc_widget;
-  GdkDevice *pointer, *keyboard;
+  GdkDevice *pointer;
   GdkWindow *ipc_window;
   int dx, dy;
   GdkAtom selection;
 
-  pointer = keyboard = NULL;
   ipc_widget = gtk_drag_get_ipc_widget (widget);
 
   gtk_drag_get_event_actions (event, button, actions,
@@ -1078,12 +1077,7 @@ gtk_drag_begin_internal (GtkWidget          *widget,
       pointer = gdk_event_get_device (event);
 
       if (gdk_device_get_source (pointer) == GDK_SOURCE_KEYBOARD)
-        {
-          keyboard = pointer;
-          pointer = gdk_device_get_associated_device (keyboard);
-        }
-      else
-        keyboard = gdk_device_get_associated_device (pointer);
+        pointer = gdk_device_get_associated_device (pointer);
     }
   else
     {
@@ -1091,7 +1085,6 @@ gtk_drag_begin_internal (GtkWidget          *widget,
 
       seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
       pointer = gdk_seat_get_pointer (seat);
-      keyboard = gdk_seat_get_keyboard (seat);
     }
 
   if (!pointer)
