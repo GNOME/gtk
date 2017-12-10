@@ -2945,7 +2945,7 @@ gtk_calendar_drag_motion (GtkWidget      *widget,
   target = gtk_drag_dest_find_target (widget, context, NULL);
   if (target == NULL || gdk_drag_context_get_suggested_action (context) == 0)
     gdk_drag_status (context, 0, time);
-  else
+  else if (get_status_pending (context) == 0)
     {
       set_status_pending (context, gdk_drag_context_get_suggested_action (context));
       gtk_drag_get_data (widget, context, target, time);
