@@ -237,6 +237,7 @@ gtk_link_button_init (GtkLinkButton *link_button)
   		       targets,
   		       GDK_ACTION_COPY);
   gdk_content_formats_unref (targets);
+  gtk_drag_source_set_icon_name (GTK_WIDGET (link_button), "text-x-generic");
 
   priv->click_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (link_button));
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->click_gesture), FALSE);
