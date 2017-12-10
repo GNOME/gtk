@@ -6539,7 +6539,6 @@ gtk_icon_view_drag_data_received (GtkWidget        *widget,
 
   gtk_drag_finish (context,
                    accepted,
-                   (gdk_drag_context_get_selected_action (context) == GDK_ACTION_MOVE),
                    time);
 
   gtk_tree_path_free (dest_row);

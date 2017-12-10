@@ -47,7 +47,6 @@ void gtk_drag_get_data (GtkWidget      *widget,
 GDK_AVAILABLE_IN_ALL
 void gtk_drag_finish   (GdkDragContext *context,
 			gboolean        success,
-			gboolean        del,
 			guint32         time_);
 
 GDK_AVAILABLE_IN_ALL

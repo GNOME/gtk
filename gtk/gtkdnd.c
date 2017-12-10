@@ -378,7 +378,6 @@ gtk_drag_get_data_finish (GtkDragGetData *data,
 
       gtk_drag_finish (data->context, 
                        size > 0,
-                       (gdk_drag_context_get_selected_action (data->context) == GDK_ACTION_MOVE),
                        data->time);
     }
   
@@ -519,8 +518,6 @@ gtk_drag_get_source_widget (GdkDragContext *context)
  * gtk_drag_finish: (method)
  * @context: the drag context
  * @success: a flag indicating whether the drop was successful
- * @del: a flag indicating whether the source should delete the
- *   original data. (This should be %TRUE for a move)
  * @time_: the timestamp from the #GtkWidget::drag-drop signal
  *
  * Informs the drag source that the drop is finished, and
@@ -529,19 +526,11 @@ gtk_drag_get_source_widget (GdkDragContext *context)
 void 
 gtk_drag_finish (GdkDragContext *context,
                  gboolean        success,
-                 gboolean        del,
                  guint32         time)
 {
-  GdkAtom target = NULL;
-
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
 
-  if (success && del)
-    {
-      target = gdk_atom_intern_static_string ("DELETE");
-    }
-
-  if (target != NULL)
+  if (success && gdk_drag_context_get_selected_action (context) == GDK_ACTION_MOVE)
     {
       GtkWidget *selection_widget = gtk_drag_get_ipc_widget_for_display (gdk_window_get_display (gdk_drag_context_get_source_window (context)));
 
@@ -554,12 +543,13 @@ gtk_drag_finish (GdkDragContext *context,
       
       gtk_selection_convert (selection_widget,
                              gdk_drag_get_selection (context),
-                             target,
+                             gdk_atom_intern_static_string ("DELETE"),
                              time);
     }
-  
-  if (!(success && del))
-    gdk_drop_finish (context, success, time);
+  else
+    {
+      gdk_drop_finish (context, success, time);
+    }
 }
 
 /**
@@ -710,7 +700,7 @@ gtk_drag_selection_received (GtkWidget        *widget,
   target = gtk_selection_data_get_target (selection_data);
   if (target == gdk_atom_intern_static_string ("DELETE"))
     {
-      gtk_drag_finish (context, TRUE, FALSE, time);
+      gdk_drop_finish (context, TRUE, time);
     }
   else
     {
@@ -745,7 +735,6 @@ gtk_drag_selection_received (GtkWidget        *widget,
 
           gtk_drag_finish (context, 
                            (gtk_selection_data_get_length (selection_data) >= 0),
-                           (gdk_drag_context_get_selected_action (context) == GDK_ACTION_MOVE),
                            time);
         }
       
@@ -1034,7 +1023,7 @@ gtk_drag_dest_drop (GtkWidget      *widget,
 
       if (target == NULL)
         {
-          gtk_drag_finish (context, FALSE, FALSE, time);
+          gtk_drag_finish (context, FALSE, time);
           return TRUE;
         }
       else 

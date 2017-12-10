@@ -375,11 +375,11 @@ target_drag_data_received  (GtkWidget          *widget,
       gtk_selection_data_get_format (selection_data) == 8)
     {
       g_print ("Received \"%s\" in trashcan\n", (gchar *) gtk_selection_data_get_data (selection_data));
-      gtk_drag_finish (context, TRUE, FALSE, time);
+      gtk_drag_finish (context, TRUE, time);
       return;
     }
   
-  gtk_drag_finish (context, FALSE, FALSE, time);
+  gtk_drag_finish (context, FALSE, time);
 }
   
 void  
@@ -393,11 +393,11 @@ label_drag_data_received  (GtkWidget          *widget,
       gtk_selection_data_get_format (selection_data) == 8)
     {
       g_print ("Received \"%s\" in label\n", (gchar *) gtk_selection_data_get_data (selection_data));
-      gtk_drag_finish (context, TRUE, FALSE, time);
+      gtk_drag_finish (context, TRUE, time);
       return;
     }
   
-  gtk_drag_finish (context, FALSE, FALSE, time);
+  gtk_drag_finish (context, FALSE, time);
 }
 
 void  

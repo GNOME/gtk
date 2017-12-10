@@ -7902,10 +7902,7 @@ gtk_tree_view_drag_data_received (GtkWidget        *widget,
         accepted = TRUE;
     }
 
-  gtk_drag_finish (context,
-                   accepted,
-                   (gdk_drag_context_get_selected_action (context) == GDK_ACTION_MOVE),
-                   time);
+  gtk_drag_finish (context, accepted, time);
 
   if (gtk_tree_path_get_depth (dest_row) == 1 &&
       gtk_tree_path_get_indices (dest_row)[0] == 0 &&

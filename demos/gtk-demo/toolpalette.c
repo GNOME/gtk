@@ -322,7 +322,7 @@ interactive_canvas_drag_data_received (GtkWidget        *widget,
       canvas_items = g_list_append (canvas_items, item);
       drop_item = NULL;
 
-      gtk_drag_finish (context, TRUE, FALSE, time);
+      gtk_drag_finish (context, TRUE, time);
     } else
     {
       drop_item = item;
