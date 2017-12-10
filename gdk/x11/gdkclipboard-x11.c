@@ -287,7 +287,7 @@ static const struct {
   { "SAVE_TARGETS",  NULL,                       NULL,              "NULL",          32, handle_save_targets }
 };
 
-static GSList *
+GSList *
 gdk_x11_clipboard_formats_to_targets (GdkContentFormats *formats)
 {
   GSList *targets;

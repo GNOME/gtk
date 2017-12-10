@@ -24,10 +24,14 @@
 #include "gdkprivate-wayland.h"
 #include "gdkcontentformats.h"
 #include "gdkdisplay-wayland.h"
+#include "gdkintl.h"
 #include "gdkseat-wayland.h"
 
 #include "gdkdeviceprivate.h"
 
+#include <glib-unix.h>
+#include <gio/gunixinputstream.h>
+#include <gio/gunixoutputstream.h>
 #include <string.h>
 
 #define GDK_TYPE_WAYLAND_DRAG_CONTEXT              (gdk_wayland_drag_context_get_type ())
@@ -324,6 +328,80 @@ gdk_wayland_drag_context_drop_finish (GdkDragContext *context,
   gdk_wayland_selection_set_offer (display, selection, NULL);
 }
 
+static void
+gdk_wayland_drag_context_read_async (GdkDragContext      *context,
+                                     GdkContentFormats   *formats,
+                                     int                  io_priority,
+                                     GCancellable        *cancellable,
+                                     GAsyncReadyCallback  callback,
+                                     gpointer             user_data)
+{
+  GdkDisplay *display;
+  GdkContentFormats *dnd_formats;
+  GInputStream *stream;
+  struct wl_data_offer *offer;
+  const char *mime_type;
+  int pipe_fd[2];
+  GError *error = NULL;
+  GTask *task;
+
+  display = gdk_drag_context_get_display (context),
+  task = g_task_new (context, cancellable, callback, user_data);
+  g_task_set_priority (task, io_priority);
+  g_task_set_source_tag (task, gdk_wayland_drag_context_read_async);
+
+  GDK_NOTE (DND, char *s = gdk_content_formats_to_string (formats);
+                 g_printerr ("%p: read for %s\n", context, s);
+                 g_free (s); );
+  dnd_formats = gdk_wayland_selection_get_targets (display,
+                                                   gdk_drag_get_selection (context));                      
+  mime_type = gdk_content_formats_match_mime_type (formats, dnd_formats);
+  if (mime_type == NULL)
+    {
+      g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
+                               _("No compatible transfer format found"));
+      return;
+    }
+  /* offer formats should be empty if we have no offer */
+  offer = gdk_wayland_selection_get_offer (display,
+                                           gdk_drag_get_selection (context));
+  g_assert (offer);
+
+  g_task_set_task_data (task, (gpointer) mime_type, NULL);
+
+  if (!g_unix_open_pipe (pipe_fd, FD_CLOEXEC, &error))
+    {
+      g_task_return_error (task, error);
+      return;
+    }
+
+  wl_data_offer_accept (offer,
+                        _gdk_wayland_display_get_serial (GDK_WAYLAND_DISPLAY (display)),
+                        mime_type);
+  wl_data_offer_receive (offer, mime_type, pipe_fd[1]);
+  stream = g_unix_input_stream_new (pipe_fd[0], TRUE);
+  close (pipe_fd[1]);
+  g_task_return_pointer (task, stream, g_object_unref);
+}
+
+static GInputStream *
+gdk_wayland_drag_context_read_finish (GdkDragContext  *context,
+                                      const char     **out_mime_type,
+                                      GAsyncResult    *result,
+                                      GError         **error)
+{
+  GTask *task;
+
+  g_return_val_if_fail (g_task_is_valid (result, G_OBJECT (context)), NULL);
+  task = G_TASK (result);
+  g_return_val_if_fail (g_task_get_source_tag (task) == gdk_wayland_drag_context_read_async, NULL);
+
+  if (out_mime_type)
+    *out_mime_type = g_task_get_task_data (task);
+
+  return g_task_propagate_pointer (task, error);
+}
+
 static gboolean
 gdk_wayland_drag_context_drop_status (GdkDragContext *context)
 {
@@ -471,6 +549,9 @@ gdk_wayland_drag_context_class_init (GdkWaylandDragContextClass *klass)
   context_class->drag_drop = gdk_wayland_drag_context_drag_drop;
   context_class->drop_reply = gdk_wayland_drag_context_drop_reply;
   context_class->drop_finish = gdk_wayland_drag_context_drop_finish;
+  context_class->drop_finish = gdk_wayland_drag_context_drop_finish;
+  context_class->read_async = gdk_wayland_drag_context_read_async;
+  context_class->read_finish = gdk_wayland_drag_context_read_finish;
   context_class->drop_status = gdk_wayland_drag_context_drop_status;
   context_class->get_selection = gdk_wayland_drag_context_get_selection;
   context_class->get_drag_window = gdk_wayland_drag_context_get_drag_window;

@@ -326,6 +326,115 @@ gtk_drag_get_event_actions (const GdkEvent *event,
  * Destination side *
  ********************/
 
+typedef struct {
+  GdkDragContext *context;
+  GtkWidget *widget;
+  const char *mime_type;
+  guint time;
+} GtkDragGetData;
+
+static void
+gtk_drag_get_data_finish (GtkDragGetData *data,
+                          guchar         *bytes,
+                          gsize           size)
+{
+  GtkDragDestSite *site;
+  GtkSelectionData sdata;
+
+  site = g_object_get_data (G_OBJECT (data->widget), "gtk-drag-dest");
+
+  sdata.selection = gdk_drag_get_selection (data->context);
+  sdata.target = data->mime_type;
+  sdata.type = data->mime_type;
+  sdata.format = 8;
+  sdata.length = size;
+  sdata.data = bytes;
+  sdata.display = gtk_widget_get_display (data->widget);
+  
+  if (site && site->target_list)
+    {
+      if (gdk_content_formats_contain_mime_type (site->target_list, data->mime_type))
+        {
+          if (!(site->flags & GTK_DEST_DEFAULT_DROP) ||
+              size >= 0)
+            g_signal_emit_by_name (data->widget,
+                                   "drag-data-received",
+                                   data->context,
+                                   &sdata,
+                                   data->time);
+        }
+    }
+  else
+    {
+      g_signal_emit_by_name (data->widget,
+                             "drag-data-received",
+                             data->context,
+                             &sdata,
+                             data->time);
+    }
+  
+  if (site && site->flags & GTK_DEST_DEFAULT_DROP)
+    {
+
+      gtk_drag_finish (data->context, 
+                       size > 0,
+                       (gdk_drag_context_get_selected_action (data->context) == GDK_ACTION_MOVE),
+                       data->time);
+    }
+  
+  g_object_unref (data->widget);
+  g_slice_free (GtkDragGetData, data);
+}
+
+static void
+gtk_drag_get_data_got_data (GObject      *source,
+                            GAsyncResult *result,
+                            gpointer      data)
+{
+  gssize written;
+
+  written = g_output_stream_splice_finish (G_OUTPUT_STREAM (source), result, NULL);
+  if (written < 0)
+    {
+      gtk_drag_get_data_finish (data, NULL, 0);
+    }
+  else
+    {
+      gtk_drag_get_data_finish (data,
+                                g_memory_output_stream_get_data (G_MEMORY_OUTPUT_STREAM (source)),
+                                g_memory_output_stream_get_data_size (G_MEMORY_OUTPUT_STREAM (source)));
+    }
+}
+
+static void
+gtk_drag_get_data_got_stream (GObject      *source,
+                              GAsyncResult *result,
+                              gpointer      user_data)
+{
+  GtkDragGetData *data = user_data;
+  GInputStream *input_stream;
+  GOutputStream *output_stream;
+
+  input_stream = gdk_drop_read_finish (GDK_DRAG_CONTEXT (source), &data->mime_type, result, NULL);
+  if (input_stream == NULL)
+    {
+      gtk_drag_get_data_finish (data, NULL, 0);
+      return;
+    }
+
+  output_stream = g_memory_output_stream_new_resizable ();
+  g_output_stream_splice_async (output_stream,
+                                input_stream,
+                                G_OUTPUT_STREAM_SPLICE_CLOSE_SOURCE | G_OUTPUT_STREAM_SPLICE_CLOSE_TARGET,
+                                G_PRIORITY_DEFAULT,
+                                NULL,
+                                gtk_drag_get_data_got_data,
+                                data);
+  g_object_unref (output_stream);
+  g_object_unref (input_stream);
+
+}
+
 /**
  * gtk_drag_get_data: (method)
  * @widget: the widget that will receive the
@@ -351,25 +460,23 @@ gtk_drag_get_data (GtkWidget      *widget,
                    GdkAtom         target,
                    guint32         time_)
 {
-  GtkWidget *selection_widget;
+  GtkDragGetData *data;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
 
-  selection_widget = gtk_drag_get_ipc_widget (widget);
+  data = g_slice_new0 (GtkDragGetData);
+  data->widget = g_object_ref (widget);
+  data->context = context;
+  data->mime_type = target;
+  data->time = time_;
 
-  g_object_ref (context);
-  g_object_ref (widget);
-
-  g_signal_connect (selection_widget, "selection-received",
-                    G_CALLBACK (gtk_drag_selection_received), widget);
-
-  g_object_set_data (G_OBJECT (selection_widget), I_("drag-context"), context);
-
-  gtk_selection_convert (selection_widget,
-                         gdk_drag_get_selection (context),
-                         target,
-                         time_);
+  gdk_drop_read_async (context,
+                       (const gchar *[2]) { target, NULL },
+                       G_PRIORITY_DEFAULT,
+                       NULL,
+                       gtk_drag_get_data_got_stream,
+                       data);
 }
 
 /**

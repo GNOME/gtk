@@ -36,6 +36,7 @@ GType                   gdk_x11_clipboard_get_type              (void) G_GNUC_CO
 GdkClipboard *          gdk_x11_clipboard_new                   (GdkDisplay             *display,
                                                                  const gchar            *selection);
 
+GSList *                gdk_x11_clipboard_formats_to_targets    (GdkContentFormats      *formats);
 
 G_END_DECLS
 

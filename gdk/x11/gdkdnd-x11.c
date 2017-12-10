@@ -25,16 +25,19 @@
 #include "config.h"
 
 #include "gdkx11dnd.h"
-#include "gdkdndprivate.h"
-#include "gdkdeviceprivate.h"
 
-#include "gdkinternals.h"
 #include "gdkasync.h"
-#include "gdkcontentformatsprivate.h"
+#include "gdkclipboardprivate.h"
+#include "gdkclipboard-x11.h"
+#include "gdkdeviceprivate.h"
+#include "gdkdisplay-x11.h"
+#include "gdkdndprivate.h"
+#include "gdkinternals.h"
+#include "gdkintl.h"
 #include "gdkproperty.h"
 #include "gdkprivate-x11.h"
 #include "gdkscreen-x11.h"
-#include "gdkdisplay-x11.h"
+#include "gdkselectioninputstream-x11.h"
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -243,6 +246,135 @@ static void        gdk_x11_drag_context_drop_performed (GdkDragContext *context,
                                                         guint32         time);
 
 static void
+gdk_x11_drag_context_read_got_stream (GObject      *source,
+                                      GAsyncResult *res,
+                                      gpointer      data)
+{
+  GTask *task = data;
+  GError *error = NULL;
+  GInputStream *stream;
+  const char *type;
+  int format;
+  
+  stream = gdk_x11_selection_input_stream_new_finish (res, &type, &format, &error);
+  if (stream == NULL)
+    {
+      GSList *targets, *next;
+      
+      targets = g_task_get_task_data (task);
+      next = targets->next;
+      if (next)
+        {
+          GdkDragContext *context = GDK_DRAG_CONTEXT (g_task_get_source_object (task));
+
+          GDK_NOTE (DND, g_printerr ("reading %s failed, trying %s next\n",
+                                     (char *) targets->data, (char *) next->data));
+          targets->next = NULL;
+          g_task_set_task_data (task, next, (GDestroyNotify) g_slist_free);
+          gdk_x11_selection_input_stream_new_async (gdk_drag_context_get_display (context),
+                                                    gdk_drag_get_selection (context),
+                                                    next->data,
+                                                    CurrentTime,
+                                                    g_task_get_priority (task),
+                                                    g_task_get_cancellable (task),
+                                                    gdk_x11_drag_context_read_got_stream,
+                                                    task);
+          g_error_free (error);
+          return;
+        }
+
+      g_task_return_error (task, error);
+    }
+  else
+    {
+      const char *mime_type = ((GSList *) g_task_get_task_data (task))->data;
+#if 0
+      gsize i;
+
+      for (i = 0; i < G_N_ELEMENTS (special_targets); i++)
+        {
+          if (g_str_equal (mime_type, special_targets[i].x_target))
+            {
+              g_assert (special_targets[i].mime_type != NULL);
+
+              GDK_NOTE(CLIPBOARD, g_printerr ("%s: reading with converter from %s to %s\n",
+                                              cb->selection, mime_type, special_targets[i].mime_type));
+              mime_type = g_intern_string (special_targets[i].mime_type);
+              g_task_set_task_data (task, g_slist_prepend (NULL, (gpointer) mime_type), (GDestroyNotify) g_slist_free);
+              stream = special_targets[i].convert (cb, stream, type, format);
+              break;
+            }
+        }
+#endif
+
+      GDK_NOTE(DND, g_printerr ("reading DND as %s now\n",
+                                mime_type));
+      g_task_return_pointer (task, stream, g_object_unref);
+    }
+
+  g_object_unref (task);
+}
+
+static void
+gdk_x11_drag_context_read_async (GdkDragContext      *context,
+                                 GdkContentFormats   *formats,
+                                 int                  io_priority,
+                                 GCancellable        *cancellable,
+                                 GAsyncReadyCallback  callback,
+                                 gpointer             user_data)
+{
+  GSList *targets;
+  GTask *task;
+
+  task = g_task_new (context, cancellable, callback, user_data);
+  g_task_set_priority (task, io_priority);
+  g_task_set_source_tag (task, gdk_x11_drag_context_read_async);
+
+  targets = gdk_x11_clipboard_formats_to_targets (formats);
+  g_task_set_task_data (task, targets, (GDestroyNotify) g_slist_free);
+  if (targets == NULL)
+    {
+      g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
+                               _("No compatible transfer format found"));
+      return;
+    }
+
+  GDK_NOTE(DND, g_printerr ("new read for %s (%u other options)\n",
+                            (char *) targets->data, g_slist_length (targets->next)));
+  gdk_x11_selection_input_stream_new_async (gdk_drag_context_get_display (context),
+                                            gdk_drag_get_selection (context),
+                                            targets->data,
+                                            CurrentTime,
+                                            io_priority,
+                                            cancellable,
+                                            gdk_x11_drag_context_read_got_stream,
+                                            task);
+}
+
+static GInputStream *
+gdk_x11_drag_context_read_finish (GdkDragContext  *context,
+                                  const char     **out_mime_type,
+                                  GAsyncResult    *result,
+                                  GError         **error)
+{
+  GTask *task;
+
+  g_return_val_if_fail (g_task_is_valid (result, G_OBJECT (context)), NULL);
+  task = G_TASK (result);
+  g_return_val_if_fail (g_task_get_source_tag (task) == gdk_x11_drag_context_read_async, NULL);
+
+  if (out_mime_type)
+    {
+      GSList *targets;
+
+      targets = g_task_get_task_data (task);
+      *out_mime_type = targets ? targets->data : NULL;
+    }
+
+  return g_task_propagate_pointer (task, error);
+}
+
+static void
 gdk_x11_drag_context_class_init (GdkX11DragContextClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -258,6 +390,8 @@ gdk_x11_drag_context_class_init (GdkX11DragContextClass *klass)
   context_class->drop_reply = gdk_x11_drag_context_drop_reply;
   context_class->drop_finish = gdk_x11_drag_context_drop_finish;
   context_class->drop_status = gdk_x11_drag_context_drop_status;
+  context_class->read_async = gdk_x11_drag_context_read_async;
+  context_class->read_finish = gdk_x11_drag_context_read_finish;
   context_class->get_selection = gdk_x11_drag_context_get_selection;
   context_class->get_drag_window = gdk_x11_drag_context_get_drag_window;
   context_class->set_hotspot = gdk_x11_drag_context_set_hotspot;
