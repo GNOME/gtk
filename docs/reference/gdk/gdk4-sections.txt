@@ -853,8 +853,6 @@ gdk_drag_get_selection
 gdk_drop_reply
 gdk_drag_drop_done
 gdk_drag_begin
-gdk_drag_begin_for_device
-gdk_drag_begin_from_point
 gdk_drop_finish
 GdkDragAction
 gdk_drag_status

@@ -138,14 +138,6 @@ GInputStream *          gdk_drop_read_finish            (GdkDragContext        *
 
 GDK_AVAILABLE_IN_ALL
 GdkDragContext *        gdk_drag_begin                  (GdkWindow              *window,
-                                                         GdkContentFormats      *formats);
-
-GDK_AVAILABLE_IN_ALL
-GdkDragContext *        gdk_drag_begin_for_device       (GdkWindow              *window,
-                                                         GdkDevice              *device,
-                                                         GdkContentFormats      *formats);
-GDK_AVAILABLE_IN_3_20
-GdkDragContext *        gdk_drag_begin_from_point       (GdkWindow              *window,
                                                          GdkDevice              *device,
                                                          GdkContentFormats      *formats,
                                                          gint                    x_root,

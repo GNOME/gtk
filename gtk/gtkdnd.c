@@ -1120,7 +1120,7 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   else
     gdk_device_get_position (pointer, &start_x, &start_y);
 
-  context = gdk_drag_begin_from_point (ipc_window, pointer, target_list, start_x, start_y);
+  context = gdk_drag_begin (ipc_window, pointer, target_list, start_x, start_y);
 
   gdk_drag_context_set_device (context, pointer);
 
