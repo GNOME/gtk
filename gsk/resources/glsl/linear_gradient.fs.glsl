@@ -34,7 +34,7 @@ void main() {
   for (int i = 1; i < u_num_color_stops; i ++) {
     if (offset >= u_color_offsets[i - 1])  {
       float o = (offset - u_color_offsets[i - 1]) / (u_color_offsets[i] - u_color_offsets[i - 1]);
-      color = mix(u_color_stops[i - 1], u_color_stops[i], o);
+      color = mix(u_color_stops[i - 1], u_color_stops[i], clamp(o, 0.0, 1.0));
     }
   }
 
