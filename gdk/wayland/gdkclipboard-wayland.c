@@ -251,28 +251,16 @@ gdk_wayland_clipboard_read_finish (GdkClipboard  *clipboard,
                                    GAsyncResult  *result,
                                    GError       **error)
 {
-  GInputStream *stream;
   GTask *task;
 
   g_return_val_if_fail (g_task_is_valid (result, G_OBJECT (clipboard)), NULL);
   task = G_TASK (result);
   g_return_val_if_fail (g_task_get_source_tag (task) == gdk_wayland_clipboard_read_async, NULL);
 
-  stream = g_task_propagate_pointer (task, error);
+  if (out_mime_type)
+    *out_mime_type = g_task_get_task_data (task);
 
-  if (stream)
-    {
-      if (out_mime_type)
-        *out_mime_type = g_task_get_task_data (task);
-      g_object_ref (stream);
-    }
-  else
-    {
-      if (out_mime_type)
-        *out_mime_type = NULL;
-    }
-
-  return stream;
+  return g_task_propagate_pointer (task, error);
 }
 
 static void
