@@ -15328,9 +15328,8 @@ gtk_widget_get_focus_child (GtkWidget *widget)
  *
  * Sets the cursor to be shown when pointer devices point towards @widget.
  *
- * If the @cursor is NULL, @widget will use the cursor specified via CSS
- * or the parent widget. If neither specifies a cursor, the default cursor
- * will be shown. This is the default behavior.
+ * If the @cursor is NULL, @widget will use the cursor inherited from the
+ * parent widget.
  *
  * Since: 3.94
  **/
