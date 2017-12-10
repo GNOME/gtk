@@ -67,6 +67,7 @@
 #include "gtktooltip.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtktextutil.h"
 
 #include "a11y/gtklinkbuttonaccessible.h"
 
@@ -108,6 +109,8 @@ static void     gtk_link_button_clicked      (GtkButton        *button);
 static gboolean gtk_link_button_popup_menu   (GtkWidget        *widget);
 static void     gtk_link_button_realize      (GtkWidget        *widget);
 static void     gtk_link_button_unrealize    (GtkWidget        *widget);
+static void     gtk_link_button_drag_begin   (GtkWidget        *widget,
+                                              GdkDragContext   *context);
 static void gtk_link_button_drag_data_get_cb (GtkWidget        *widget,
 					      GdkDragContext   *context,
 					      GtkSelectionData *selection,
@@ -146,6 +149,7 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
   widget_class->popup_menu = gtk_link_button_popup_menu;
   widget_class->realize = gtk_link_button_realize;
   widget_class->unrealize = gtk_link_button_unrealize;
+  widget_class->drag_begin = gtk_link_button_drag_begin;
 
   button_class->clicked = gtk_link_button_clicked;
 
@@ -450,6 +454,13 @@ gtk_link_button_popup_menu (GtkWidget *widget)
   gtk_link_button_do_popup (GTK_LINK_BUTTON (widget), NULL);
 
   return TRUE; 
+}
+
+static void
+gtk_link_button_drag_begin (GtkWidget      *widget,
+                            GdkDragContext *context)
+{
+  gtk_drag_set_icon_name (context, "text-x-generic", 0, 0);
 }
 
 static void
