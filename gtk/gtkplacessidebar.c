@@ -922,6 +922,7 @@ is_external_volume (GVolume *volume)
   return is_external;
 }
 
+
 static void
 update_trash_icon (GtkPlacesSidebar *sidebar)
 {
@@ -1287,10 +1288,13 @@ update_places (GtkPlacesSidebar *sidebar)
     }
   g_list_free_full (drives, g_object_unref);
 
-  /* add all network volumes that is not associated with a drive */
+  /* add all network volumes that is not associated with a drive and
+   * encrypted file containers
+   */
   volumes = g_volume_monitor_get_volumes (sidebar->volume_monitor);
   for (l = volumes; l != NULL; l = l->next)
     {
+      gboolean is_encrypted_file_container = FALSE;
       volume = l->data;
       drive = g_volume_get_drive (volume);
       if (drive != NULL)
@@ -1308,9 +1312,13 @@ update_places (GtkPlacesSidebar *sidebar)
           network_volumes = g_list_prepend (network_volumes, volume);
           continue;
         }
+      else if (g_strcmp0 (identifier, "encrypted-file-container") == 0)
+        is_encrypted_file_container = TRUE;
       g_free (identifier);
 
-      if (sidebar->show_other_locations && !is_external_volume (volume))
+      if (sidebar->show_other_locations &&
+          !is_external_volume (volume) &&
+          !is_encrypted_file_container)
         {
           g_object_unref (volume);
           continue;
