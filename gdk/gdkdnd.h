@@ -86,9 +86,6 @@ GType            gdk_drag_context_get_type             (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_3_94
 GdkDisplay *     gdk_drag_context_get_display          (GdkDragContext *context);
 GDK_AVAILABLE_IN_ALL
-void             gdk_drag_context_set_device           (GdkDragContext *context,
-                                                        GdkDevice      *device);
-GDK_AVAILABLE_IN_ALL
 GdkDevice *      gdk_drag_context_get_device           (GdkDragContext *context);
 
 GDK_AVAILABLE_IN_3_94

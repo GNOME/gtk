@@ -1122,8 +1122,6 @@ gtk_drag_begin_internal (GtkWidget          *widget,
 
   context = gdk_drag_begin (ipc_window, pointer, target_list, start_x, start_y);
 
-  gdk_drag_context_set_device (context, pointer);
-
   if (!gdk_drag_context_manage_dnd (context, ipc_window, actions))
     {
       gtk_drag_release_ipc_widget (ipc_widget);

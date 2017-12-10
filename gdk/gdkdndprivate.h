@@ -151,6 +151,8 @@ struct _GdkDragContext {
 
 GList *  gdk_drag_context_list (void);
 
+void     gdk_drag_context_set_device          (GdkDragContext *context,
+                                               GdkDevice      *device);
 void     gdk_drag_context_set_cursor          (GdkDragContext *context,
                                                GdkCursor      *cursor);
 void     gdk_drag_context_cancel              (GdkDragContext      *context,
