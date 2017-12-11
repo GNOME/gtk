@@ -973,6 +973,7 @@ gtk_drag_begin_internal (GtkWidget          *widget,
                          int                 y)
 {
   GtkDragSourceInfo *info;
+  GtkWidget *toplevel;
   guint32 time = GDK_CURRENT_TIME;
   GdkDragContext *context;
   GtkWidget *ipc_widget;
@@ -1009,40 +1010,15 @@ gtk_drag_begin_internal (GtkWidget          *widget,
 
   source_widgets = g_slist_prepend (source_widgets, ipc_widget);
 
-  if (x != -1 && y != -1)
-    {
-      GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
-      gtk_widget_translate_coordinates (widget, toplevel,
-                                        x, y, &x, &y);
-      gdk_window_get_device_position (gtk_widget_get_window (toplevel),
-                                      pointer,
-                                      &dx, &dy,
-                                      NULL);
-      dx -= x;
-      dy -= y;
-    }
-  else if (event && gdk_event_get_event_type (event) == GDK_MOTION_NOTIFY)
-    {
-      double ex, ey;
-      GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
-
-      gdk_event_get_coords (event, &ex, &ey);
-      x = ex;
-      y = ey;
-      gtk_widget_translate_coordinates (widget, toplevel,
-                                        x, y, &x, &y);
-      gdk_window_get_device_position (gtk_widget_get_window (toplevel),
-                                      pointer,
-                                      &dx, &dy,
-                                      NULL);
-      dx -= x;
-      dy -= y;
-    }
-  else
-    {
-      dx = 0;
-      dy = 0;
-    }
+  toplevel = gtk_widget_get_toplevel (widget);
+  gtk_widget_translate_coordinates (widget, toplevel,
+                                    x, y, &x, &y);
+  gdk_window_get_device_position (gtk_widget_get_window (toplevel),
+                                  pointer,
+                                  &dx, &dy,
+                                  NULL);
+  dx -= x;
+  dy -= y;
 
   context = gdk_drag_begin (ipc_window, pointer, target_list, actions, dx, dy);
   if (context == NULL)
@@ -1126,11 +1102,9 @@ gtk_drag_begin_internal (GtkWidget          *widget,
  * @event: (nullable): The event that triggered the start of the drag,
  *    or %NULL if none can be obtained.
  * @x: The initial x coordinate to start dragging from, in the coordinate space
- *    of @widget. If -1 is passed, the coordinates are retrieved from @event or
- *    the current pointer position
+ *    of @widget.
  * @y: The initial y coordinate to start dragging from, in the coordinate space
- *    of @widget. If -1 is passed, the coordinates are retrieved from @event or
- *    the current pointer position
+ *    of @widget.
  *
  * Initiates a drag on the source side. The function only needs to be used
  * when the application is starting drags itself, and is not needed when
