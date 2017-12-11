@@ -59,6 +59,7 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkdialogprivate.h"
+#include "gtkeventcontrollermotion.h"
 
 
 /**
@@ -181,6 +182,9 @@ struct _GtkAboutDialogPrivate
 
   GSList *visited_links;
 
+  GtkEventController *license_motion;
+  GtkEventController *system_motion;
+
   GtkLicense license_type;
 
   guint hovering_over_link : 1;
@@ -227,7 +231,6 @@ static void                 follow_if_link                  (GtkAboutDialog     
                                                              GtkTextIter        *iter);
 static void                 set_cursor_if_appropriate       (GtkAboutDialog     *about,
                                                              GtkTextView        *text_view,
-                                                             GdkDevice          *device,
                                                              gint                x,
                                                              gint                y);
 static void                 populate_credits_page           (GtkAboutDialog     *about);
@@ -244,9 +247,10 @@ static gboolean             text_view_key_press_event       (GtkWidget          
 static gboolean             text_view_event_after           (GtkWidget          *text_view,
 							     GdkEvent           *event,
 							     GtkAboutDialog     *about);
-static gboolean             text_view_motion_notify_event   (GtkWidget          *text_view,
-							     GdkEventMotion     *event,
-							     GtkAboutDialog     *about);
+static void                 text_view_motion                (GtkEventControllerMotion *motion,
+                                                             double                    x,
+                                                             double                    y,
+							     GtkAboutDialog           *about);
 static void                 toggle_credits                  (GtkToggleButton    *button,
                                                              gpointer            user_data);
 static void                 toggle_license                  (GtkToggleButton    *button,
@@ -636,7 +640,6 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, emit_activate_link);
   gtk_widget_class_bind_template_callback (widget_class, text_view_event_after);
   gtk_widget_class_bind_template_callback (widget_class, text_view_key_press_event);
-  gtk_widget_class_bind_template_callback (widget_class, text_view_motion_notify_event);
   gtk_widget_class_bind_template_callback (widget_class, stack_visible_child_notify);
 }
 
@@ -800,6 +803,11 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   switch_page (about, "main");
   update_stack_switcher_visibility (about);
 
+  priv->license_motion = gtk_event_controller_motion_new (priv->license_view);
+  g_signal_connect (priv->license_motion, "motion", G_CALLBACK (text_view_motion), about);
+  priv->system_motion = gtk_event_controller_motion_new (priv->system_view);
+  g_signal_connect (priv->system_motion, "motion", G_CALLBACK (text_view_motion), about);
+
   /* force defaults */
   gtk_about_dialog_set_program_name (about, NULL);
   gtk_about_dialog_set_logo (about, NULL);
@@ -835,6 +843,9 @@ gtk_about_dialog_finalize (GObject *object)
 
   g_slist_free_full (priv->credit_sections, destroy_credit_section);
   g_slist_free_full (priv->visited_links, g_free);
+
+  g_object_unref (priv->license_motion);
+  g_object_unref (priv->system_motion);
 
   G_OBJECT_CLASS (gtk_about_dialog_parent_class)->finalize (object);
 }
@@ -2065,7 +2076,6 @@ text_view_event_after (GtkWidget      *text_view,
 static void
 set_cursor_if_appropriate (GtkAboutDialog *about,
                            GtkTextView    *text_view,
-                           GdkDevice      *device,
                            gint            x,
                            gint            y)
 {
@@ -2102,23 +2112,22 @@ set_cursor_if_appropriate (GtkAboutDialog *about,
   g_slist_free (tags);
 }
 
-static gboolean
-text_view_motion_notify_event (GtkWidget      *text_view,
-                               GdkEventMotion *event,
-                               GtkAboutDialog *about)
+static void
+text_view_motion (GtkEventControllerMotion *motion,
+                  double                    x,
+                  double                    y,
+                  GtkAboutDialog           *about)
 {
-  gdouble event_x, event_y;
-  gint x, y;
+  gint tx, ty;
+  GtkWidget *widget;
 
-  gdk_event_get_coords ((GdkEvent *) event, &event_x, &event_y);
-  gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (text_view),
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (motion));
+
+  gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (widget),
                                          GTK_TEXT_WINDOW_WIDGET,
-                                         event_x, event_y, &x, &y);
+                                         x, y, &tx, &ty);
 
-  set_cursor_if_appropriate (about, GTK_TEXT_VIEW (text_view),
-                             gdk_event_get_device ((GdkEvent *) event), x, y);
-
-  return FALSE;
+  set_cursor_if_appropriate (about, GTK_TEXT_VIEW (widget), tx, ty);
 }
 
 static GtkTextBuffer *
