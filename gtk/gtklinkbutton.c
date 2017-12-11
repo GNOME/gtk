@@ -78,6 +78,7 @@ struct _GtkLinkButtonPrivate
 
   GtkWidget *popup_menu;
   GtkGesture *click_gesture;
+  GtkGesture *drag_gesture;
 };
 
 enum
@@ -121,6 +122,11 @@ static void gtk_link_button_pressed_cb (GtkGestureMultiPress *gesture,
                                         double                x,
                                         double                y,
                                         gpointer              user_data);
+static void gtk_link_button_drag_update_cb (GtkGestureDrag *gesture,
+                                            double          offset_x,
+                                            double          offset_y,
+                                            gpointer        data);
+
 
 static gboolean gtk_link_button_activate_link (GtkLinkButton *link_button);
 
@@ -216,7 +222,6 @@ gtk_link_button_init (GtkLinkButton *link_button)
 {
   GtkLinkButtonPrivate *priv = gtk_link_button_get_instance_private (link_button);
   GtkStyleContext *context;
-  GdkContentFormats *targets;
 
   link_button->priv = priv;
 
@@ -230,14 +235,10 @@ gtk_link_button_init (GtkLinkButton *link_button)
   g_signal_connect (link_button, "query-tooltip",
                     G_CALLBACK (gtk_link_button_query_tooltip_cb), NULL);
 
-  /* enable drag source */
-  targets = gdk_content_formats_new (link_drop_types, G_N_ELEMENTS (link_drop_types));
-  gtk_drag_source_set (GTK_WIDGET (link_button),
-  		       GDK_BUTTON1_MASK,
-  		       targets,
-  		       GDK_ACTION_COPY);
-  gdk_content_formats_unref (targets);
-  gtk_drag_source_set_icon_name (GTK_WIDGET (link_button), "text-x-generic");
+  priv->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (link_button));
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->drag_gesture), FALSE);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->drag_gesture), 0);
+  g_signal_connect (priv->drag_gesture, "drag-update", G_CALLBACK (gtk_link_button_drag_update_cb), link_button);
 
   priv->click_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (link_button));
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->click_gesture), FALSE);
@@ -256,10 +257,11 @@ static void
 gtk_link_button_finalize (GObject *object)
 {
   GtkLinkButton *link_button = GTK_LINK_BUTTON (object);
-  
+
   g_free (link_button->priv->uri);
+  g_object_unref (link_button->priv->drag_gesture);
   g_object_unref (link_button->priv->click_gesture);
-  
+
   G_OBJECT_CLASS (gtk_link_button_parent_class)->finalize (object);
 }
 
@@ -270,7 +272,7 @@ gtk_link_button_get_property (GObject    *object,
 			      GParamSpec *pspec)
 {
   GtkLinkButton *link_button = GTK_LINK_BUTTON (object);
-  
+
   switch (prop_id)
     {
     case PROP_URI:
@@ -444,6 +446,44 @@ gtk_link_button_popup_menu (GtkWidget *widget)
   gtk_link_button_do_popup (GTK_LINK_BUTTON (widget), NULL);
 
   return TRUE; 
+}
+
+static void
+gtk_link_button_drag_update_cb (GtkGestureDrag *gesture,
+                                double          offset_x,
+                                double          offset_y,
+                                gpointer        data)
+{
+  GtkWidget *widget = data;
+  double start_x, start_y;
+  GdkEventSequence *sequence;
+  GdkEvent *last_event;
+  int button;
+  GdkContentFormats *targets;
+  GdkDragContext *context;
+
+  if (!gtk_drag_check_threshold (widget, 0, 0, offset_x, offset_y))
+    return;
+
+  gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
+
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  last_event = gdk_event_copy (gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence));
+  button = gtk_gesture_single_get_button (GTK_GESTURE_SINGLE (gesture));
+
+  gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
+
+  targets = gdk_content_formats_new (link_drop_types, G_N_ELEMENTS (link_drop_types));
+  context = gtk_drag_begin_with_coordinates (widget,
+                                             targets,
+                                             GDK_ACTION_COPY,
+                                             button,
+                                             last_event,
+                                             start_x,
+                                             start_y);
+  gtk_drag_set_icon_name (context, "text-x-generic", 0, 0);
+  gdk_content_formats_unref (targets);
+  gdk_event_free (last_event);
 }
 
 static void
