@@ -84,6 +84,7 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkgesturemultipress.h"
+#include "gtkgesturedrag.h"
 #include "gtkeventcontrollerscroll.h"
 
 #define TIMEOUT_INITIAL  500
@@ -248,6 +249,7 @@ struct _GtkCalendarPrivate
   gint detail_overflow[6];
 
   GtkGesture *press_gesture;
+  GtkGesture *drag_gesture;
   GtkEventController *scroll_controller;
 };
 
@@ -285,8 +287,14 @@ static void     gtk_calendar_button_release (GtkGestureMultiPress *gesture,
                                              double                x,
                                              double                y,
                                              gpointer              user_data);
-static gboolean gtk_calendar_motion_notify  (GtkWidget        *widget,
-                                             GdkEventMotion   *event);
+static void     gtk_calendar_drag_begin     (GtkGestureDrag   *gesture,
+                                             double            x,
+                                             double            y,
+                                             gpointer          data);
+static void     gtk_calendar_drag_update    (GtkGestureDrag   *gesture,
+                                             double            x,
+                                             double            y,
+                                             gpointer          data);
 static gboolean gtk_calendar_key_press      (GtkWidget        *widget,
                                              GdkEventKey      *event);
 static gboolean gtk_calendar_focus_out      (GtkWidget        *widget,
@@ -366,7 +374,6 @@ gtk_calendar_class_init (GtkCalendarClass *class)
   widget_class->snapshot = gtk_calendar_snapshot;
   widget_class->measure = gtk_calendar_measure;
   widget_class->size_allocate = gtk_calendar_size_allocate;
-  widget_class->motion_notify_event = gtk_calendar_motion_notify;
   widget_class->key_press_event = gtk_calendar_key_press;
   widget_class->state_flags_changed = gtk_calendar_state_flags_changed;
   widget_class->grab_notify = gtk_calendar_grab_notify;
@@ -676,6 +683,10 @@ gtk_calendar_init (GtkCalendar *calendar)
   priv->press_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (calendar));
   g_signal_connect (priv->press_gesture, "pressed", G_CALLBACK (gtk_calendar_button_press), calendar);
   g_signal_connect (priv->press_gesture, "released", G_CALLBACK (gtk_calendar_button_release), calendar);
+
+  priv->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (calendar));
+  g_signal_connect (priv->drag_gesture, "drag-begin", G_CALLBACK (gtk_calendar_drag_begin), calendar);
+  g_signal_connect (priv->drag_gesture, "drag-update", G_CALLBACK (gtk_calendar_drag_update), calendar);
 
   priv->scroll_controller =
     gtk_event_controller_scroll_new (GTK_WIDGET (calendar),
@@ -1303,6 +1314,7 @@ gtk_calendar_finalize (GObject *object)
   GtkCalendarPrivate *priv = GTK_CALENDAR (object)->priv;
 
   g_object_unref (priv->press_gesture);
+  g_object_unref (priv->drag_gesture);
   g_object_unref (priv->scroll_controller);
 
   G_OBJECT_CLASS (gtk_calendar_parent_class)->finalize (object);
@@ -2630,34 +2642,58 @@ gtk_calendar_button_release (GtkGestureMultiPress *gesture,
     }
 }
 
-static gboolean
-gtk_calendar_motion_notify (GtkWidget      *widget,
-                            GdkEventMotion *event)
+static void
+gtk_calendar_drag_begin (GtkGestureDrag *gesture,
+                         double          x,
+                         double          y,
+                         gpointer        data)
 {
+  GtkWidget *widget = data;
   GtkCalendarPrivate *priv = GTK_CALENDAR (widget)->priv;
-  gdouble x, y;
 
-  if (priv->in_drag)
-    {
-      if (gdk_event_get_coords ((GdkEvent *) event, &x, &y) &&
-          gtk_drag_check_threshold (widget,
-                                    priv->drag_start_x, priv->drag_start_y,
-                                    x, y))
-        {
-          GdkDragContext *context;
-          GdkContentFormats *target_list = gdk_content_formats_new (NULL, 0);
-          target_list = gtk_content_formats_add_text_targets (target_list);
-          context = gtk_drag_begin_with_coordinates (widget, target_list, GDK_ACTION_COPY,
-                                                     1, (GdkEvent *)event,
-                                                     priv->drag_start_x, priv->drag_start_y);
+  priv->in_drag = TRUE;
+}
 
-          priv->in_drag = 0;
-          gdk_content_formats_unref (target_list);
-          gtk_drag_set_icon_default (context);
-        }
-    }
+static void
+gtk_calendar_drag_update (GtkGestureDrag *gesture,
+                          double          x,
+                          double          y,
+                          gpointer        data)
+{
+  GtkWidget *widget = data;
+  GtkCalendarPrivate *priv = GTK_CALENDAR (widget)->priv;
+  gdouble start_x, start_y;
+  GdkDragContext *context;
+  GdkContentFormats *targets;
+  GdkEventSequence *sequence;
+  GdkEvent *last_event;
+  guint button;
 
-  return TRUE;
+  if (!priv->in_drag)
+    return;
+
+  if (!gtk_drag_check_threshold (widget, 0, 0, x, y))
+    return;
+
+  gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
+
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  last_event = gdk_event_copy (gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence));
+
+  button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
+  gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
+
+  targets = gdk_content_formats_new (NULL, 0);
+  targets = gtk_content_formats_add_text_targets (targets);
+  context = gtk_drag_begin_with_coordinates (widget, targets, GDK_ACTION_COPY,
+                                             button, last_event,
+                                             start_x, start_y);
+
+  priv->in_drag = 0;
+  gdk_content_formats_unref (targets);
+  gdk_event_free (last_event);
+
+  gtk_drag_set_icon_default (context);
 }
 
 static void
