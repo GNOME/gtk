@@ -2713,7 +2713,7 @@ gtk_notebook_motion_notify (GtkWidget      *widget,
       priv->detached_tab = priv->cur_page;
 
       gtk_drag_begin_with_coordinates (widget, priv->source_targets, GDK_ACTION_MOVE,
-                                       priv->pressed_button, (GdkEvent*) event,
+                                       (GdkEvent*) event,
                                        priv->drag_begin_x, priv->drag_begin_y);
       return TRUE;
     }

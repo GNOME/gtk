@@ -7821,7 +7821,7 @@ gtk_text_view_start_selection_dnd (GtkTextView       *text_view,
                     G_CALLBACK (drag_begin_cb), NULL);
   gtk_drag_begin_with_coordinates (GTK_WIDGET (text_view), formats,
                                    GDK_ACTION_COPY | GDK_ACTION_MOVE,
-                                   1, (GdkEvent*) event, x, y);
+                                   (GdkEvent*) event, x, y);
 }
 
 static void

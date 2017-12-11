@@ -94,11 +94,6 @@ typedef gboolean (* GtkDragDestCallback) (GtkWidget      *widget,
                                           guint32         time);
 
 /* Forward declarations */
-static void          gtk_drag_get_event_actions (const GdkEvent  *event,
-                                                 gint             button,
-                                                 GdkDragAction    actions,
-                                                 GdkDragAction   *suggested_action,
-                                                 GdkDragAction   *possible_actions);
 static GtkWidget    *gtk_drag_get_ipc_widget            (GtkWidget *widget);
 static GtkWidget    *gtk_drag_get_ipc_widget_for_display(GdkDisplay*display);
 static void          gtk_drag_release_ipc_widget (GtkWidget      *widget);
@@ -245,81 +240,6 @@ gtk_drag_release_ipc_widget (GtkWidget *widget)
   g_object_set_data (G_OBJECT (display),
                      I_("gtk-dnd-ipc-widgets"),
                      drag_widgets);
-}
-
-static void
-gtk_drag_get_event_actions (const GdkEvent *event,
-                            gint            button,
-                            GdkDragAction   actions,
-                            GdkDragAction  *suggested_action,
-                            GdkDragAction  *possible_actions)
-{
-  *suggested_action = 0;
-  *possible_actions = 0;
-
-  if (event)
-    {
-      GdkModifierType state = 0;
-
-      gdk_event_get_state (event, &state);
-
-      if ((button == GDK_BUTTON_MIDDLE || button == GDK_BUTTON_SECONDARY) && (actions & GDK_ACTION_ASK))
-        {
-          *suggested_action = GDK_ACTION_ASK;
-          *possible_actions = actions;
-        }
-      else if (state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK))
-        {
-          if ((state & GDK_SHIFT_MASK) && (state & GDK_CONTROL_MASK))
-            {
-              if (actions & GDK_ACTION_LINK)
-                {
-                  *suggested_action = GDK_ACTION_LINK;
-                  *possible_actions = GDK_ACTION_LINK;
-                }
-            }
-          else if (state & GDK_CONTROL_MASK)
-            {
-              if (actions & GDK_ACTION_COPY)
-                {
-                  *suggested_action = GDK_ACTION_COPY;
-                  *possible_actions = GDK_ACTION_COPY;
-                }
-            }
-          else
-            {
-              if (actions & GDK_ACTION_MOVE)
-                {
-                  *suggested_action = GDK_ACTION_MOVE;
-                  *possible_actions = GDK_ACTION_MOVE;
-                }
-            }
-        }
-      else
-        {
-          *possible_actions = actions;
-
-          if ((state & (GDK_MOD1_MASK)) && (actions & GDK_ACTION_ASK))
-            *suggested_action = GDK_ACTION_ASK;
-          else if (actions & GDK_ACTION_COPY)
-            *suggested_action =  GDK_ACTION_COPY;
-          else if (actions & GDK_ACTION_MOVE)
-            *suggested_action = GDK_ACTION_MOVE;
-          else if (actions & GDK_ACTION_LINK)
-            *suggested_action = GDK_ACTION_LINK;
-        }
-    }
-  else
-    {
-      *possible_actions = actions;
-      
-      if (actions & GDK_ACTION_COPY)
-        *suggested_action =  GDK_ACTION_COPY;
-      else if (actions & GDK_ACTION_MOVE)
-        *suggested_action = GDK_ACTION_MOVE;
-      else if (actions & GDK_ACTION_LINK)
-        *suggested_action = GDK_ACTION_LINK;
-    }
 }
 
 /********************
@@ -1048,14 +968,12 @@ gtk_drag_begin_internal (GtkWidget          *widget,
                          GtkImageDefinition *icon,
                          GdkContentFormats  *target_list,
                          GdkDragAction       actions,
-                         gint                button,
                          const GdkEvent     *event,
                          int                 x,
                          int                 y)
 {
   GtkDragSourceInfo *info;
   guint32 time = GDK_CURRENT_TIME;
-  GdkDragAction possible_actions, suggested_action;
   GdkDragContext *context;
   GtkWidget *ipc_widget;
   GdkDevice *pointer;
@@ -1064,9 +982,6 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   GdkAtom selection;
 
   ipc_widget = gtk_drag_get_ipc_widget (widget);
-
-  gtk_drag_get_event_actions (event, button, actions,
-                              &suggested_action, &possible_actions);
 
   if (event)
     {
@@ -1208,7 +1123,6 @@ gtk_drag_begin_internal (GtkWidget          *widget,
  * @targets: The targets (data formats) in which the
  *    source can provide the data
  * @actions: A bitmask of the allowed drag actions for this drag
- * @button: The button the user clicked to start the drag
  * @event: (nullable): The event that triggered the start of the drag,
  *    or %NULL if none can be obtained.
  * @x: The initial x coordinate to start dragging from, in the coordinate space
@@ -1252,7 +1166,6 @@ GdkDragContext *
 gtk_drag_begin_with_coordinates (GtkWidget         *widget,
                                  GdkContentFormats *targets,
                                  GdkDragAction      actions,
-                                 gint               button,
                                  GdkEvent          *event,
                                  gint               x,
                                  gint               y)
@@ -1262,7 +1175,7 @@ gtk_drag_begin_with_coordinates (GtkWidget         *widget,
   g_return_val_if_fail (targets != NULL, NULL);
 
   return gtk_drag_begin_internal (widget, NULL, targets,
-                                  actions, button, event, x, y);
+                                  actions, event, x, y);
 }
 
 static void

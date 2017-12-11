@@ -2667,7 +2667,6 @@ gtk_calendar_drag_update (GtkGestureDrag *gesture,
   GdkContentFormats *targets;
   GdkEventSequence *sequence;
   GdkEvent *last_event;
-  guint button;
 
   if (!priv->in_drag)
     return;
@@ -2680,13 +2679,12 @@ gtk_calendar_drag_update (GtkGestureDrag *gesture,
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   last_event = gdk_event_copy (gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence));
 
-  button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
   gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
 
   targets = gdk_content_formats_new (NULL, 0);
   targets = gtk_content_formats_add_text_targets (targets);
   context = gtk_drag_begin_with_coordinates (widget, targets, GDK_ACTION_COPY,
-                                             button, last_event,
+                                             last_event,
                                              start_x, start_y);
 
   priv->in_drag = 0;

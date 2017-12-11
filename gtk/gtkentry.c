@@ -3679,7 +3679,6 @@ gtk_entry_event (GtkWidget *widget,
           gtk_drag_begin_with_coordinates (widget,
                                            icon_info->target_list,
                                            icon_info->actions,
-                                           1,
                                            event,
                                            priv->start_x,
                                            priv->start_y);
@@ -3998,15 +3997,13 @@ gtk_entry_drag_gesture_update (GtkGestureDrag *gesture,
           gint n_ranges;
           GdkContentFormats  *target_list = gdk_content_formats_new (NULL, 0);
           guint actions = priv->editable ? GDK_ACTION_COPY | GDK_ACTION_MOVE : GDK_ACTION_COPY;
-          guint button;
 
           target_list = gtk_content_formats_add_text_targets (target_list);
 
           gtk_entry_get_pixel_ranges (entry, &ranges, &n_ranges);
 
-          button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
           gtk_drag_begin_with_coordinates (widget, target_list, actions,
-                                           button, (GdkEvent*) event,
+                                           (GdkEvent*) event,
                                            priv->drag_start_x + ranges[0],
                                            priv->drag_start_y);
           g_free (ranges);

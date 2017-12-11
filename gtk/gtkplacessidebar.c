@@ -1726,7 +1726,7 @@ on_motion_notify_event (GtkWidget      *widget,
       sidebar->dragging_over = TRUE;
 
       gtk_drag_begin_with_coordinates (widget, sidebar->source_targets, GDK_ACTION_MOVE,
-                                       GDK_BUTTON_PRIMARY, (GdkEvent*)event,
+                                       (GdkEvent*)event,
                                        -1, -1);
     }
 

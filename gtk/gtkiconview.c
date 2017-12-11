@@ -6146,7 +6146,6 @@ gtk_icon_view_maybe_begin_drag (GtkIconView    *icon_view,
   GtkWidget *widget = GTK_WIDGET (icon_view);
   GdkDragContext *context;
   GtkTreePath *path = NULL;
-  gint button;
   GtkTreeModel *model;
   gboolean retval = FALSE;
   gdouble x, y;
@@ -6169,7 +6168,6 @@ gtk_icon_view_maybe_begin_drag (GtkIconView    *icon_view,
   if (model == NULL)
     goto out;
 
-  button = icon_view->priv->pressed_button;
   icon_view->priv->pressed_button = -1;
 
   path = gtk_icon_view_get_path_at_pos (icon_view,
@@ -6195,7 +6193,6 @@ gtk_icon_view_maybe_begin_drag (GtkIconView    *icon_view,
   context = gtk_drag_begin_with_coordinates (widget,
                                              gtk_drag_source_get_target_list (widget),
                                              icon_view->priv->source_actions,
-                                             button,
                                              (GdkEvent*)event,
                                              icon_view->priv->press_start_x,
                                              icon_view->priv->press_start_y);

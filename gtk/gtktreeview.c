@@ -7485,7 +7485,6 @@ gtk_tree_view_maybe_begin_dragging_row (GtkTreeView *tree_view)
   context = gtk_drag_begin_with_coordinates (widget,
                                              gtk_drag_source_get_target_list (widget),
                                              di->source_actions,
-                                             button,
                                              (GdkEvent*)event,
                                              start_x, start_y);
 

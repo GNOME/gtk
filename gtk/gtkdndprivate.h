@@ -44,7 +44,6 @@ GdkDragContext *        gtk_drag_begin_internal         (GtkWidget              
                                                          GtkImageDefinition     *icon,
                                                          GdkContentFormats      *target_list,
                                                          GdkDragAction           actions,
-                                                         gint                    button,
                                                          const GdkEvent         *event,
                                                          int                     x,
                                                          int                     y);
