@@ -435,7 +435,6 @@ gtk_button_init (GtkButton *button)
   g_signal_connect (priv->gesture, "update", G_CALLBACK (multipress_gesture_update_cb), button);
   g_signal_connect (priv->gesture, "cancel", G_CALLBACK (multipress_gesture_cancel_cb), button);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->gesture), GTK_PHASE_CAPTURE);
-
 }
 
 static void
@@ -1145,4 +1144,12 @@ gtk_button_get_icon_name (GtkButton *button)
     }
 
   return NULL;
+}
+
+GtkGesture *
+gtk_button_get_gesture (GtkButton *button)
+{
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
+
+  return priv->gesture;
 }
