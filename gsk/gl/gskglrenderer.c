@@ -1835,19 +1835,19 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
           break;
 
         case OP_CHANGE_LINEAR_GRADIENT:
-            OP_PRINT (" -> Linear gradient");
-            glUniform1i (program->linear_gradient.num_color_stops_location,
-                         op->linear_gradient.n_color_stops);
-            glUniform4fv (program->linear_gradient.color_stops_location,
-                          op->linear_gradient.n_color_stops,
-                          op->linear_gradient.color_stops);
-            glUniform1fv (program->linear_gradient.color_offsets_location,
-                          op->linear_gradient.n_color_stops,
-                          op->linear_gradient.color_offsets);
-            glUniform2f (program->linear_gradient.start_point_location,
-                         op->linear_gradient.start_point.x, op->linear_gradient.start_point.y);
-            glUniform2f (program->linear_gradient.end_point_location,
-                         op->linear_gradient.end_point.x, op->linear_gradient.end_point.y);
+          OP_PRINT (" -> Linear gradient");
+          glUniform1i (program->linear_gradient.num_color_stops_location,
+                       op->linear_gradient.n_color_stops);
+          glUniform4fv (program->linear_gradient.color_stops_location,
+                        op->linear_gradient.n_color_stops,
+                        op->linear_gradient.color_stops);
+          glUniform1fv (program->linear_gradient.color_offsets_location,
+                        op->linear_gradient.n_color_stops,
+                        op->linear_gradient.color_offsets);
+          glUniform2f (program->linear_gradient.start_point_location,
+                       op->linear_gradient.start_point.x, op->linear_gradient.start_point.y);
+          glUniform2f (program->linear_gradient.end_point_location,
+                       op->linear_gradient.end_point.x, op->linear_gradient.end_point.y);
           break;
 
        case OP_CHANGE_BLUR:
