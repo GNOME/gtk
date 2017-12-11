@@ -154,8 +154,8 @@ struct _GtkPlacesSidebar {
   gint drag_row_height;
   gint drag_row_x;
   gint drag_row_y;
-  gint drag_root_x;
-  gint drag_root_y;
+  gint drag_x;
+  gint drag_y;
   GtkWidget *row_placeholder;
   DropState drop_state;
   GtkGesture *long_press_gesture;
@@ -1708,7 +1708,7 @@ on_motion_notify_event (GtkWidget      *widget,
 {
   GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (user_data);
   guint state;
-  double x_root, y_root;
+  double x, y;
 
   if (sidebar->drag_row == NULL || sidebar->dragging_over)
     return FALSE;
@@ -1717,18 +1717,18 @@ on_motion_notify_event (GtkWidget      *widget,
       !(state & GDK_BUTTON1_MASK))
     return FALSE;
 
-  gdk_event_get_root_coords ((GdkEvent *) event, &x_root, &y_root);
+  gdk_event_get_coords ((GdkEvent *) event, &x, &y);
 
   if (gtk_drag_check_threshold (widget,
-                                sidebar->drag_root_x, sidebar->drag_root_y,
-                                x_root, y_root))
+                                sidebar->drag_x, sidebar->drag_y,
+                                x, y))
     {
       sidebar->dragging_over = TRUE;
 
       gtk_drag_begin_with_coordinates (widget,
                                        gdk_event_get_device ((GdkEvent*) event),
                                        sidebar->source_targets, GDK_ACTION_MOVE,
-                                       -1, -1);
+                                       sidebar->drag_x, sidebar->drag_y);
     }
 
   return FALSE;
@@ -3731,7 +3731,6 @@ on_button_press_event (GtkWidget      *widget,
   GtkPlacesSidebar *sidebar;
   GtkPlacesSidebarSectionType section_type;
   gdouble x, y;
-  double x_root, y_root;
 
   g_object_get (GTK_SIDEBAR_ROW (row),
                 "sidebar", &sidebar,
@@ -3741,13 +3740,12 @@ on_button_press_event (GtkWidget      *widget,
   if (section_type == SECTION_BOOKMARKS)
     {
       gdk_event_get_coords ((GdkEvent *) event, &x, &y);
-      gdk_event_get_root_coords ((GdkEvent *) event, &x_root, &y_root);
       sidebar->drag_row = GTK_WIDGET (row);
       sidebar->drag_row_x = (gint)x;
       sidebar->drag_row_y = (gint)y;
 
-      sidebar->drag_root_x = x_root;
-      sidebar->drag_root_y = y_root;
+      sidebar->drag_x = x;
+      sidebar->drag_y = y;
     }
 
   g_object_unref (sidebar);
