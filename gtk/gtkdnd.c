@@ -965,46 +965,27 @@ gtk_drag_dest_drop (GtkWidget      *widget,
  */
 GdkDragContext *
 gtk_drag_begin_internal (GtkWidget          *widget,
+                         GdkDevice          *device,
                          GtkImageDefinition *icon,
                          GdkContentFormats  *target_list,
                          GdkDragAction       actions,
-                         const GdkEvent     *event,
                          int                 x,
                          int                 y)
 {
   GtkDragSourceInfo *info;
   GtkWidget *toplevel;
-  guint32 time = GDK_CURRENT_TIME;
   GdkDragContext *context;
   GtkWidget *ipc_widget;
-  GdkDevice *pointer;
   GdkWindow *ipc_window;
   int dx, dy;
   GdkAtom selection;
+  guint32 time;
 
   ipc_widget = gtk_drag_get_ipc_widget (widget);
+  time = gtk_get_current_event_time ();
 
-  if (event)
-    {
-      time = gdk_event_get_time (event);
-      if (time == GDK_CURRENT_TIME)
-        time = gtk_get_current_event_time ();
-
-      pointer = gdk_event_get_device (event);
-
-      if (gdk_device_get_source (pointer) == GDK_SOURCE_KEYBOARD)
-        pointer = gdk_device_get_associated_device (pointer);
-    }
-  else
-    {
-      GdkSeat *seat;
-
-      seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
-      pointer = gdk_seat_get_pointer (seat);
-    }
-
-  if (!pointer)
-    return NULL;
+  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
+    device = gdk_device_get_associated_device (device);
 
   ipc_window = gtk_widget_get_window (ipc_widget);
 
@@ -1014,13 +995,13 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   gtk_widget_translate_coordinates (widget, toplevel,
                                     x, y, &x, &y);
   gdk_window_get_device_position (gtk_widget_get_window (toplevel),
-                                  pointer,
+                                  device,
                                   &dx, &dy,
                                   NULL);
   dx -= x;
   dy -= y;
 
-  context = gdk_drag_begin (ipc_window, pointer, target_list, actions, dx, dy);
+  context = gdk_drag_begin (ipc_window, device, target_list, actions, dx, dy);
   if (context == NULL)
     {
       gtk_drag_release_ipc_widget (ipc_widget);
@@ -1096,11 +1077,11 @@ gtk_drag_begin_internal (GtkWidget          *widget,
 /**
  * gtk_drag_begin_with_coordinates: (method)
  * @widget: the source widget
+ * @device: (nullable): the device that starts the drag or %NULL to use the default
+ *    pointer.
  * @targets: The targets (data formats) in which the
  *    source can provide the data
  * @actions: A bitmask of the allowed drag actions for this drag
- * @event: (nullable): The event that triggered the start of the drag,
- *    or %NULL if none can be obtained.
  * @x: The initial x coordinate to start dragging from, in the coordinate space
  *    of @widget.
  * @y: The initial y coordinate to start dragging from, in the coordinate space
@@ -1138,18 +1119,31 @@ gtk_drag_begin_internal (GtkWidget          *widget,
  */
 GdkDragContext *
 gtk_drag_begin_with_coordinates (GtkWidget         *widget,
+                                 GdkDevice         *device,
                                  GdkContentFormats *targets,
                                  GdkDragAction      actions,
-                                 GdkEvent          *event,
                                  gint               x,
                                  gint               y)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  g_return_val_if_fail (device == NULL || GDK_IS_DEVICE (device), NULL);
   g_return_val_if_fail (gtk_widget_get_realized (widget), NULL);
   g_return_val_if_fail (targets != NULL, NULL);
 
-  return gtk_drag_begin_internal (widget, NULL, targets,
-                                  actions, event, x, y);
+  if (device == NULL)
+    {
+      GdkSeat *seat;
+
+      seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
+      device = gdk_seat_get_pointer (seat);
+    }
+
+  return gtk_drag_begin_internal (widget,
+                                  device,
+                                  NULL,
+                                  targets,
+                                  actions,
+                                  x, y);
 }
 
 static void

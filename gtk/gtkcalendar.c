@@ -2665,8 +2665,6 @@ gtk_calendar_drag_update (GtkGestureDrag *gesture,
   gdouble start_x, start_y;
   GdkDragContext *context;
   GdkContentFormats *targets;
-  GdkEventSequence *sequence;
-  GdkEvent *last_event;
 
   if (!priv->in_drag)
     return;
@@ -2676,20 +2674,17 @@ gtk_calendar_drag_update (GtkGestureDrag *gesture,
 
   gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
 
-  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
-  last_event = gdk_event_copy (gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence));
-
   gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
 
   targets = gdk_content_formats_new (NULL, 0);
   targets = gtk_content_formats_add_text_targets (targets);
-  context = gtk_drag_begin_with_coordinates (widget, targets, GDK_ACTION_COPY,
-                                             last_event,
+  context = gtk_drag_begin_with_coordinates (widget,
+                                             gtk_gesture_get_device (GTK_GESTURE (gesture)),
+                                             targets, GDK_ACTION_COPY,
                                              start_x, start_y);
 
   priv->in_drag = 0;
   gdk_content_formats_unref (targets);
-  gdk_event_free (last_event);
 
   gtk_drag_set_icon_default (context);
 }

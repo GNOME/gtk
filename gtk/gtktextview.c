@@ -7819,9 +7819,11 @@ gtk_text_view_start_selection_dnd (GtkTextView       *text_view,
 
   g_signal_connect (text_view, "drag-begin",
                     G_CALLBACK (drag_begin_cb), NULL);
-  gtk_drag_begin_with_coordinates (GTK_WIDGET (text_view), formats,
+  gtk_drag_begin_with_coordinates (GTK_WIDGET (text_view),
+                                   gdk_event_get_device (event),
+                                   formats,
                                    GDK_ACTION_COPY | GDK_ACTION_MOVE,
-                                   (GdkEvent*) event, x, y);
+                                   x, y);
 }
 
 static void

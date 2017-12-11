@@ -4769,16 +4769,15 @@ gtk_label_drag_gesture_update (GtkGestureDrag *gesture,
 				    x, y))
 	{
 	  GdkContentFormats *target_list = gdk_content_formats_new (NULL, 0);
-          const GdkEvent *event;
 
-          event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
 	  target_list = gtk_content_formats_add_text_targets (target_list);
 
           g_signal_connect (widget, "drag-begin",
                             G_CALLBACK (drag_begin_cb), NULL);
-	  gtk_drag_begin_with_coordinates (widget, target_list,
+	  gtk_drag_begin_with_coordinates (widget,
+                                           gtk_gesture_get_device (GTK_GESTURE (gesture)),
+                                           target_list,
                                            GDK_ACTION_COPY,
-                                           (GdkEvent*) event,
                                            info->drag_start_x,
                                            info->drag_start_y);
 

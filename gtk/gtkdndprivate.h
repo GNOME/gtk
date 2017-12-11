@@ -41,10 +41,10 @@ struct _GtkDragDestSite
 G_BEGIN_DECLS
 
 GdkDragContext *        gtk_drag_begin_internal         (GtkWidget              *widget,
+                                                         GdkDevice              *device,
                                                          GtkImageDefinition     *icon,
                                                          GdkContentFormats      *target_list,
                                                          GdkDragAction           actions,
-                                                         const GdkEvent         *event,
                                                          int                     x,
                                                          int                     y);
 void                    gtk_drag_set_icon_definition    (GdkDragContext         *context,

@@ -7421,8 +7421,6 @@ gtk_tree_view_maybe_begin_dragging_row (GtkTreeView *tree_view)
 {
   GtkWidget *widget = GTK_WIDGET (tree_view);
   gdouble start_x, start_y, offset_x, offset_y;
-  GdkEventSequence *sequence;
-  const GdkEvent *event;
   GdkDragContext *context;
   TreeViewDragInfo *di;
   GtkTreePath *path = NULL;
@@ -7479,13 +7477,11 @@ gtk_tree_view_maybe_begin_dragging_row (GtkTreeView *tree_view)
   /* Now we can begin the drag */
   gtk_gesture_set_state (GTK_GESTURE (tree_view->priv->drag_gesture),
                          GTK_EVENT_SEQUENCE_CLAIMED);
-  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (tree_view->priv->drag_gesture));
-  event = gtk_gesture_get_last_event (GTK_GESTURE (tree_view->priv->drag_gesture), sequence);
 
   context = gtk_drag_begin_with_coordinates (widget,
+                                             gtk_gesture_get_device (GTK_GESTURE (tree_view->priv->drag_gesture)),
                                              gtk_drag_source_get_target_list (widget),
                                              di->source_actions,
-                                             (GdkEvent*)event,
                                              start_x, start_y);
 
   set_source_row (context, model, path);

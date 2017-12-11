@@ -85,19 +85,13 @@ gtk_drag_source_event_cb (GtkWidget *widget,
       if (gtk_drag_check_threshold (widget, start_x, start_y,
                                     start_x + offset_x, start_y + offset_y))
         {
-          GdkEventSequence *sequence;
-          GdkEvent *last_event;
-
-          sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (site->drag_gesture));
-          last_event = gdk_event_copy (gtk_gesture_get_last_event (site->drag_gesture, sequence));
-
           gtk_event_controller_reset (GTK_EVENT_CONTROLLER (site->drag_gesture));
 
-          gtk_drag_begin_internal (widget, site->image_def, site->target_list,
-                                   site->actions, last_event,
+          gtk_drag_begin_internal (widget,
+                                   gtk_gesture_get_device (site->drag_gesture),
+                                   site->image_def, site->target_list,
+                                   site->actions,
                                    start_x, start_y);
-
-          gdk_event_free (last_event);
 
           return TRUE;
         }

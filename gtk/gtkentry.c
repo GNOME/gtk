@@ -3677,9 +3677,9 @@ gtk_entry_event (GtkWidget *widget,
         {
           icon_info->in_drag = TRUE;
           gtk_drag_begin_with_coordinates (widget,
+                                           device,
                                            icon_info->target_list,
                                            icon_info->actions,
-                                           event,
                                            priv->start_x,
                                            priv->start_y);
         }
@@ -4002,8 +4002,9 @@ gtk_entry_drag_gesture_update (GtkGestureDrag *gesture,
 
           gtk_entry_get_pixel_ranges (entry, &ranges, &n_ranges);
 
-          gtk_drag_begin_with_coordinates (widget, target_list, actions,
-                                           (GdkEvent*) event,
+          gtk_drag_begin_with_coordinates (widget,
+                                           gdk_event_get_device ((GdkEvent*) event),
+                                           target_list, actions,
                                            priv->drag_start_x + ranges[0],
                                            priv->drag_start_y);
           g_free (ranges);

@@ -61,9 +61,9 @@ void gtk_drag_unhighlight (GtkWidget  *widget);
 
 GDK_AVAILABLE_IN_3_10
 GdkDragContext *gtk_drag_begin_with_coordinates (GtkWidget         *widget,
+                                                 GdkDevice         *device,
                                                  GdkContentFormats *targets,
                                                  GdkDragAction      actions,
-                                                 GdkEvent          *event,
                                                  gint               x,
                                                  gint               y);
 

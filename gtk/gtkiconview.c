@@ -6191,9 +6191,9 @@ gtk_icon_view_maybe_begin_drag (GtkIconView    *icon_view,
   retval = TRUE;
 
   context = gtk_drag_begin_with_coordinates (widget,
+                                             gdk_event_get_device ((GdkEvent*) event),
                                              gtk_drag_source_get_target_list (widget),
                                              icon_view->priv->source_actions,
-                                             (GdkEvent*)event,
                                              icon_view->priv->press_start_x,
                                              icon_view->priv->press_start_y);
 
