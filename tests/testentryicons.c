@@ -92,6 +92,28 @@ set_texture (GtkWidget *button,
     }
 }
 
+static const char cssdata[] =
+".entry-frame:not(:focus) { "
+"  border: 2px solid alpha(gray,0.3);"
+"}"
+".entry-frame:focus { "
+"  border: 2px solid red;"
+"}"
+".entry-frame entry { "
+"  border: none; "
+"  box-shadow: none; "
+"}";
+
+static void
+icon_pressed_cb (GtkGesture *gesture,
+                 int         n_press,
+                 double      x,
+                 double      y,
+                 gpointer    data)
+{
+  g_print ("You clicked me!\n");
+}
+
 int
 main (int argc, char **argv)
 {
@@ -100,6 +122,7 @@ main (int argc, char **argv)
   GtkWidget *label;
   GtkWidget *entry;
   GtkWidget *box;
+  GtkWidget *image;
   GtkWidget *button1;
   GtkWidget *button2;
   GtkWidget *button3;
@@ -119,6 +142,7 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (window), grid);
   gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 6);
+  g_object_set (grid, "margin", 10, NULL);
 
   /*
    * Open File - Sets the icon using a GIcon
@@ -283,8 +307,33 @@ main (int argc, char **argv)
   g_object_set (entry, "show-emoji-icon", TRUE, NULL);
   gtk_widget_set_hexpand (entry, TRUE);
   gtk_grid_attach (GTK_GRID (grid), entry, 1, 6, 1, 1);
-  gtk_widget_show (window);
 
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_style_context_add_class (gtk_widget_get_style_context (box), "view");
+  gtk_style_context_add_class (gtk_widget_get_style_context (box), "entry-frame");
+  gtk_widget_set_cursor_from_name (box, "text");
+  entry = gtk_entry_new ();
+  gtk_widget_set_hexpand (entry, TRUE);
+  gtk_container_add (GTK_CONTAINER (box), entry);
+  image = gtk_image_new_from_icon_name ("edit-find-symbolic");
+  gtk_widget_set_cursor_from_name (image, "default");
+  g_object_set (image, "margin", 6, NULL);
+  gtk_widget_set_tooltip_text (image, "Click me");
+
+  GtkGesture *gesture;
+  gesture = gtk_gesture_multi_press_new (image);
+  g_signal_connect (gesture, "pressed", G_CALLBACK (icon_pressed_cb), NULL);
+  gtk_container_add (GTK_CONTAINER (box), image);
+  image = gtk_image_new_from_icon_name ("document-save-symbolic");
+  g_object_set (image, "margin", 6, NULL);
+  gtk_container_add (GTK_CONTAINER (box), image);
+  gtk_grid_attach (GTK_GRID (grid), box, 1, 7, 1, 1);
+
+  GtkCssProvider *provider;
+  provider = gtk_css_provider_new ();
+  gtk_css_provider_load_from_data (provider, cssdata, -1);
+  gtk_style_context_add_provider_for_display (gdk_display_get_default (), GTK_STYLE_PROVIDER (provider), 800);
+  gtk_widget_show (window);
   gtk_main();
 
   return 0;
