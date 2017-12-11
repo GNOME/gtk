@@ -142,6 +142,9 @@ gtk/gtkentry.c
 gtk/gtkentrycompletion.c
 gtk/gtkeventbox.c
 gtk/gtkeventcontroller.c
+gtk/gtkeventcontrollerkey.c
+gtk/gtkeventcontrollermotion.c
+gtk/gtkeventcontrollerscroll.c
 gtk/gtkexpander.c
 gtk/gtkfilechooserbutton.c
 gtk/gtkfilechooser.c

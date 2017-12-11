@@ -192,6 +192,7 @@ gtk_public_h_sources = 		\
 	gtkenums.h		\
 	gtkeventbox.h		\
 	gtkeventcontroller.h	\
+	gtkeventcontrollerkey.h	\
 	gtkeventcontrollermotion.h	\
 	gtkeventcontrollerscroll.h	\
 	gtkexpander.h		\
@@ -756,6 +757,7 @@ gtk_base_c_sources = 		\
 	gtkentrycompletion.c	\
 	gtkeventbox.c		\
 	gtkeventcontroller.c	\
+	gtkeventcontrollerkey.c	\
 	gtkeventcontrollermotion.c	\
 	gtkeventcontrollerscroll.c	\
 	gtkexpander.c		\
