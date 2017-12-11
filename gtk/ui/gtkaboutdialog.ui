@@ -170,7 +170,6 @@
                             <property name="cursor-visible">0</property>
                             <signal name="event-after" handler="text_view_event_after" swapped="no"/>
                             <signal name="key-press-event" handler="text_view_key_press_event" swapped="no"/>
-                            <signal name="motion-notify-event" handler="text_view_motion_notify_event" swapped="no"/>
                           </object>
                         </child>
                       </object>
@@ -201,7 +200,6 @@
                             <property name="cursor-visible">0</property>
                             <signal name="event-after" handler="text_view_event_after" swapped="no"/>
                             <signal name="key-press-event" handler="text_view_key_press_event" swapped="no"/>
-                            <signal name="motion-notify-event" handler="text_view_motion_notify_event" swapped="no"/>
                           </object>
                         </child>
                       </object>
