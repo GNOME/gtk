@@ -67,6 +67,7 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkwidgetprivate.h"
+#include "gtkbuttonprivate.h"
 
 #include "a11y/gtklinkbuttonaccessible.h"
 
@@ -239,6 +240,8 @@ gtk_link_button_init (GtkLinkButton *link_button)
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->drag_gesture), FALSE);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->drag_gesture), 0);
   g_signal_connect (priv->drag_gesture, "drag-update", G_CALLBACK (gtk_link_button_drag_update_cb), link_button);
+
+  gtk_gesture_group (priv->drag_gesture, gtk_button_get_gesture (GTK_BUTTON (link_button)));
 
   priv->click_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (link_button));
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->click_gesture), FALSE);
