@@ -6928,6 +6928,7 @@ gdk_window_register_dnd (GdkWindow *window)
  * @window: the source window for this drag
  * @device: the device that controls this drag
  * @formats: (transfer none): the offered formats
+ * @actions: the actions supported by this drag
  * @dx: the x offset to @device's position where the drag nominally started
  * @dy: the y offset to @device's position where the drag nominally started
  *
@@ -6935,16 +6936,18 @@ gdk_window_register_dnd (GdkWindow *window)
  *
  * This function is called by the drag source.
  *
- * Returns: (transfer full): a newly created #GdkDragContext
+ * Returns: (transfer full) (nullable): a newly created #GdkDragContext or
+ *     %NULL on error.
  */
 GdkDragContext *
 gdk_drag_begin (GdkWindow         *window,
                 GdkDevice         *device,
                 GdkContentFormats *formats,
-                gint               x_root,
-                gint               y_root)
+                GdkDragAction      actions,
+                gint               dx,
+                gint               dy)
 {
-  return GDK_WINDOW_IMPL_GET_CLASS (window->impl)->drag_begin (window, device, formats, x_root, y_root);
+  return GDK_WINDOW_IMPL_GET_CLASS (window->impl)->drag_begin (window, device, formats, actions, dx, dy);
 }
 
 /**

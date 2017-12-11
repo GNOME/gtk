@@ -1129,12 +1129,10 @@ gtk_drag_begin_internal (GtkWidget          *widget,
       dy = 0;
     }
 
-  context = gdk_drag_begin (ipc_window, pointer, target_list, dx, dy);
-
-  if (!gdk_drag_context_manage_dnd (context, ipc_window, actions))
+  context = gdk_drag_begin (ipc_window, pointer, target_list, actions, dx, dy);
+  if (context == NULL)
     {
       gtk_drag_release_ipc_widget (ipc_widget);
-      g_object_unref (context);
       return NULL;
     }
 

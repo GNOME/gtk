@@ -235,9 +235,6 @@ static void        gdk_x11_drag_context_set_hotspot (GdkDragContext  *context,
                                                      gint             hot_y);
 static void        gdk_x11_drag_context_drop_done     (GdkDragContext  *context,
                                                        gboolean         success);
-static gboolean    gdk_x11_drag_context_manage_dnd     (GdkDragContext *context,
-                                                        GdkWindow      *window,
-                                                        GdkDragAction   actions);
 static void        gdk_x11_drag_context_set_cursor     (GdkDragContext *context,
                                                         GdkCursor      *cursor);
 static void        gdk_x11_drag_context_cancel         (GdkDragContext      *context,
@@ -396,7 +393,6 @@ gdk_x11_drag_context_class_init (GdkX11DragContextClass *klass)
   context_class->get_drag_window = gdk_x11_drag_context_get_drag_window;
   context_class->set_hotspot = gdk_x11_drag_context_set_hotspot;
   context_class->drop_done = gdk_x11_drag_context_drop_done;
-  context_class->manage_dnd = gdk_x11_drag_context_manage_dnd;
   context_class->set_cursor = gdk_x11_drag_context_set_cursor;
   context_class->cancel = gdk_x11_drag_context_cancel;
   context_class->drop_performed = gdk_x11_drag_context_drop_performed;
@@ -2097,44 +2093,6 @@ create_drag_window (GdkDisplay *display)
   return window;
 }
 
-GdkDragContext *
-_gdk_x11_window_drag_begin (GdkWindow         *window,
-                            GdkDevice         *device,
-                            GdkContentFormats *formats,
-                            gint               dx,
-                            gint               dy)
-{
-  GdkDragContext *context;
-  int x_root, y_root;
-
-  context = (GdkDragContext *) g_object_new (GDK_TYPE_X11_DRAG_CONTEXT,
-                                             "display", gdk_window_get_display (window),
-                                             NULL);
-
-  context->is_source = TRUE;
-  context->source_window = window;
-  g_object_ref (window);
-
-  context->formats = gdk_content_formats_ref (formats);
-  precache_target_list (context);
-
-  context->actions = 0;
-
-  gdk_drag_context_set_device (context, device);
-  gdk_device_get_position (device, &x_root, &y_root);
-  x_root += dx;
-  y_root += dy;
-
-  GDK_X11_DRAG_CONTEXT (context)->start_x = x_root;
-  GDK_X11_DRAG_CONTEXT (context)->start_y = y_root;
-  GDK_X11_DRAG_CONTEXT (context)->last_x = x_root;
-  GDK_X11_DRAG_CONTEXT (context)->last_y = y_root;
-
-  GDK_X11_DRAG_CONTEXT (context)->drag_window = create_drag_window (gdk_window_get_display(window));
-
-  return context;
-}
-
 Window
 _gdk_x11_display_get_drag_protocol (GdkDisplay      *display,
                                     Window           xid,
@@ -2900,30 +2858,53 @@ drag_context_ungrab (GdkDragContext *context)
     }
 }
 
-static gboolean
-gdk_x11_drag_context_manage_dnd (GdkDragContext *context,
-                                 GdkWindow      *ipc_window,
-                                 GdkDragAction   actions)
+GdkDragContext *
+_gdk_x11_window_drag_begin (GdkWindow         *window,
+                            GdkDevice         *device,
+                            GdkContentFormats *formats,
+                            GdkDragAction      actions,
+                            gint               dx,
+                            gint               dy)
 {
-  GdkX11DragContext *x11_context = GDK_X11_DRAG_CONTEXT (context);
+  GdkDragContext *context;
+  int x_root, y_root;
 
-  if (x11_context->ipc_window)
-    return FALSE;
+  context = (GdkDragContext *) g_object_new (GDK_TYPE_X11_DRAG_CONTEXT,
+                                             "display", gdk_window_get_display (window),
+                                             NULL);
+
+  context->is_source = TRUE;
+  context->source_window = window;
+  g_object_ref (window);
+
+  context->formats = gdk_content_formats_ref (formats);
+  precache_target_list (context);
+
+  gdk_drag_context_set_device (context, device);
+  gdk_device_get_position (device, &x_root, &y_root);
+  x_root += dx;
+  y_root += dy;
+
+  GDK_X11_DRAG_CONTEXT (context)->start_x = x_root;
+  GDK_X11_DRAG_CONTEXT (context)->start_y = y_root;
+  GDK_X11_DRAG_CONTEXT (context)->last_x = x_root;
+  GDK_X11_DRAG_CONTEXT (context)->last_y = y_root;
 
   context->protocol = GDK_DRAG_PROTO_XDND;
-  x11_context->ipc_window = g_object_ref (ipc_window);
+  GDK_X11_DRAG_CONTEXT (context)->actions = actions;
+  GDK_X11_DRAG_CONTEXT (context)->ipc_window = g_object_ref (window);
 
-  if (drag_context_grab (context))
+  GDK_X11_DRAG_CONTEXT (context)->drag_window = create_drag_window (gdk_window_get_display(window));
+
+  if (!drag_context_grab (context))
     {
-      x11_context->actions = actions;
-      move_drag_window (context, x11_context->start_x, x11_context->start_y);
-      return TRUE;
+      g_object_unref (context);
+      return NULL;
     }
-  else
-    {
-      g_clear_object (&x11_context->ipc_window);
-      return FALSE;
-    }
+  
+  move_drag_window (context, x_root, y_root);
+
+  return context;
 }
 
 static void

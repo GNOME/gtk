@@ -105,9 +105,6 @@ struct _GdkDragContextClass {
   void        (*drop_done)     (GdkDragContext   *context,
                                 gboolean          success);
 
-  gboolean    (*manage_dnd)     (GdkDragContext  *context,
-                                 GdkWindow       *ipc_window,
-                                 GdkDragAction    actions);
   void        (*set_cursor)     (GdkDragContext  *context,
                                  GdkCursor       *cursor);
   void        (*cancel)         (GdkDragContext      *context,

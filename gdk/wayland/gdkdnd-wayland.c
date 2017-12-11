@@ -454,40 +454,6 @@ gdk_wayland_drag_context_set_hotspot (GdkDragContext *context,
   gdk_window_invalidate_rect (context_wayland->dnd_window, &damage_rect, FALSE);
 }
 
-static gboolean
-gdk_wayland_drag_context_manage_dnd (GdkDragContext *context,
-                                     GdkWindow      *ipc_window,
-                                     GdkDragAction   actions)
-{
-  GdkWaylandDragContext *context_wayland;
-  GdkWaylandDisplay *display_wayland;
-  GdkDevice *device;
-  GdkWindow *toplevel;
-
-  device = gdk_drag_context_get_device (context);
-  display_wayland = GDK_WAYLAND_DISPLAY (gdk_device_get_display (device));
-  toplevel = _gdk_device_window_at_position (device, NULL, NULL, NULL, TRUE);
-
-  context_wayland = GDK_WAYLAND_DRAG_CONTEXT (context);
-
-  if (display_wayland->data_device_manager_version >=
-      WL_DATA_SOURCE_SET_ACTIONS_SINCE_VERSION)
-    {
-      wl_data_source_set_actions (context_wayland->data_source,
-                                  gdk_to_wl_actions (actions));
-    }
-
-  wl_data_device_start_drag (gdk_wayland_device_get_data_device (device),
-                             context_wayland->data_source,
-                             gdk_wayland_window_get_wl_surface (toplevel),
-			     context_wayland->dnd_surface,
-                             _gdk_wayland_display_get_serial (display_wayland));
-
-  gdk_seat_ungrab (gdk_device_get_seat (device));
-
-  return TRUE;
-}
-
 static void
 gdk_wayland_drag_context_set_cursor (GdkDragContext *context,
                                      GdkCursor      *cursor)
@@ -557,7 +523,6 @@ gdk_wayland_drag_context_class_init (GdkWaylandDragContextClass *klass)
   context_class->get_drag_window = gdk_wayland_drag_context_get_drag_window;
   context_class->set_hotspot = gdk_wayland_drag_context_set_hotspot;
   context_class->drop_done = gdk_wayland_drag_context_drop_done;
-  context_class->manage_dnd = gdk_wayland_drag_context_manage_dnd;
   context_class->set_cursor = gdk_wayland_drag_context_set_cursor;
   context_class->action_changed = gdk_wayland_drag_context_action_changed;
   context_class->drop_performed = gdk_wayland_drag_context_drop_performed;
@@ -586,16 +551,21 @@ GdkDragContext *
 _gdk_wayland_window_drag_begin (GdkWindow         *window,
 				GdkDevice         *device,
 				GdkContentFormats *formats,
+                                GdkDragAction      actions,
                                 gint               dx,
                                 gint               dy)
 {
   GdkWaylandDragContext *context_wayland;
   GdkDragContext *context;
+  GdkWaylandDisplay *display_wayland;
+  GdkWindow *toplevel;
   const char *const *mimetypes;
   gsize i, n_mimetypes;
 
+  display_wayland = GDK_WAYLAND_DISPLAY (gdk_device_get_display (device));
+
   context_wayland = g_object_new (GDK_TYPE_WAYLAND_DRAG_CONTEXT,
-                                  "display", gdk_window_get_display (window),
+                                  "display", display_wayland,
                                   NULL);
   context = GDK_DRAG_CONTEXT (context_wayland);
   context->source_window = g_object_ref (window);
@@ -616,8 +586,26 @@ _gdk_wayland_window_drag_begin (GdkWindow         *window,
       wl_data_source_offer (context_wayland->data_source, mimetypes[i]);
     }
 
+  toplevel = _gdk_device_window_at_position (device, NULL, NULL, NULL, TRUE);
+
+  if (display_wayland->data_device_manager_version >=
+      WL_DATA_SOURCE_SET_ACTIONS_SINCE_VERSION)
+    {
+      wl_data_source_set_actions (context_wayland->data_source,
+                                  gdk_to_wl_actions (actions));
+    }
+
+  wl_data_device_start_drag (gdk_wayland_device_get_data_device (device),
+                             context_wayland->data_source,
+                             gdk_wayland_window_get_wl_surface (toplevel),
+			     context_wayland->dnd_surface,
+                             _gdk_wayland_display_get_serial (display_wayland));
+
+  gdk_seat_ungrab (gdk_device_get_seat (device));
+
   return context;
 }
+
 
 GdkDragContext *
 _gdk_wayland_drop_context_new (GdkDisplay            *display,

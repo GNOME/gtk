@@ -87,6 +87,7 @@ GdkDragContext *
 _gdk_broadway_window_drag_begin (GdkWindow         *window,
 				 GdkDevice         *device,
 				 GdkContentFormats *formats,
+                                 GdkDragAction      actions,
                                  gint               dx,
                                  gint               dy)
 {

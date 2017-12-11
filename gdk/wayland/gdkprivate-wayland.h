@@ -94,8 +94,9 @@ void            _gdk_wayland_window_register_dnd          (GdkWindow *window);
 GdkDragContext *_gdk_wayland_window_drag_begin            (GdkWindow *window,
 				                	   GdkDevice *device,
 	                                                   GdkContentFormats *formats,
-                                                           gint       x_root,
-                                                           gint       y_root);
+                                                           GdkDragAction actions,
+                                                           gint       dx,
+                                                           gint       dy);
 void            _gdk_wayland_window_offset_next_wl_buffer (GdkWindow *window,
                                                            int        x,
                                                            int        y);

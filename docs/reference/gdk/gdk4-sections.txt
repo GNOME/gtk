@@ -869,7 +869,6 @@ gdk_drag_context_get_source_window
 gdk_drag_context_get_dest_window
 gdk_drag_context_get_drag_window
 gdk_drag_context_set_hotspot
-gdk_drag_context_manage_dnd
 
 <SUBSECTION Standard>
 GDK_DRAG_CONTEXT
