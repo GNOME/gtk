@@ -540,7 +540,9 @@ inner_clipboard_window_procedure (HWND   hwnd,
       {
         HWND hwnd_owner;
         HWND hwnd_opener;
+/*
         GdkEvent *event;
+*/
         GdkWin32Selection *win32_sel = _gdk_win32_selection_get ();
 
         hwnd_owner = GetClipboardOwner ();
@@ -589,7 +591,7 @@ inner_clipboard_window_procedure (HWND   hwnd,
 
             _gdk_win32_clear_clipboard_queue ();
           }
-
+/* GDK_OWNER_CHANGE does not exist anymore since 437d70f56919916e884a81d3bff0170322ab2906
         event = gdk_event_new (GDK_OWNER_CHANGE);
         event->owner_change.window = NULL;
         event->owner_change.reason = GDK_OWNER_CHANGE_NEW_OWNER;
@@ -597,6 +599,7 @@ inner_clipboard_window_procedure (HWND   hwnd,
         event->owner_change.time = _gdk_win32_get_next_tick (0);
         event->owner_change.selection_time = GDK_CURRENT_TIME;
         _gdk_win32_append_event (event);
+*/
 
         if (_hwnd_next_viewer != NULL)
           return SendMessage (_hwnd_next_viewer, message, wparam, lparam);

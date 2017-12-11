@@ -798,7 +798,6 @@ _gdk_win32_print_event (const GdkEvent *event)
     CASE (GDK_DROP_FINISHED);
     CASE (GDK_SCROLL);
     CASE (GDK_WINDOW_STATE);
-    CASE (GDK_OWNER_CHANGE);
     CASE (GDK_GRAB_BROKEN);
 #undef CASE
     default: g_assert_not_reached ();
