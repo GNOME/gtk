@@ -423,6 +423,7 @@ void _gdk_win32_window_register_dnd (GdkWindow *window);
 GdkDragContext *_gdk_win32_window_drag_begin (GdkWindow         *window,
                                               GdkDevice         *device,
                                               GdkContentFormats *formats,
+                                              GdkDragAction      actions,
                                               gint               x_root,
                                               gint               y_root);
 
