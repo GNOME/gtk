@@ -199,6 +199,7 @@ struct _GskGLRenderer
       Program outset_shadow_program;
       Program shadow_program;
       Program border_program;
+      Program cross_fade_program;
     };
   };
 
@@ -992,6 +993,51 @@ render_shadow_node (GskGLRenderer       *self,
   gsk_gl_renderer_add_render_ops (self, original_child, builder);
 }
 
+static inline void
+render_cross_fade_node (GskGLRenderer       *self,
+                        GskRenderNode       *node,
+                        RenderOpBuilder     *builder)
+{
+  const float min_x = node->bounds.origin.x;
+  const float min_y = node->bounds.origin.y;
+  const float max_x = min_x + node->bounds.size.width;
+  const float max_y = min_y + node->bounds.size.height;
+  GskRenderNode *start_node = gsk_cross_fade_node_get_start_child (node);
+  GskRenderNode *end_node = gsk_cross_fade_node_get_end_child (node);
+  float progress = gsk_cross_fade_node_get_progress (node);
+  int start_texture_id;
+  int end_texture_id;
+  gboolean is_offscreen;
+  RenderOp op;
+  const GskQuadVertex vertex_data[GL_N_VERTICES] = {
+    { { min_x, min_y }, { 0, 1 }, },
+    { { min_x, max_y }, { 0, 0 }, },
+    { { max_x, min_y }, { 1, 1 }, },
+
+    { { max_x, max_y }, { 1, 0 }, },
+    { { min_x, max_y }, { 0, 0 }, },
+    { { max_x, min_y }, { 1, 1 }, },
+  };
+
+  /* TODO: We create 2 textures here as big as the cross-fade node, but both the
+   * start and the end node might be a lot smaller than that. */
+
+  add_offscreen_ops (self, builder, min_x, max_x, min_y, max_y, start_node,
+                         &start_texture_id, &is_offscreen);
+
+  add_offscreen_ops (self, builder, min_x, max_x, min_y, max_y, end_node,
+                     &end_texture_id, &is_offscreen);
+
+  ops_set_program (builder, &self->cross_fade_program);
+  op.op = OP_CHANGE_CROSS_FADE;
+  op.cross_fade.progress = progress;
+  op.cross_fade.source2 = end_texture_id;
+  ops_add (builder, &op);
+  ops_set_texture (builder, start_texture_id);
+
+  ops_draw (builder, vertex_data);
+}
+
 static void
 gsk_gl_renderer_dispose (GObject *gobject)
 {
@@ -1073,6 +1119,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
     { "outset shadow",   "blit.vs.glsl",  "outset_shadow.fs.glsl" },
     { "shadow",          "blit.vs.glsl",  "shadow.fs.glsl" },
     { "border",          "blit.vs.glsl",  "border.fs.glsl" },
+    { "cross fade",      "blit.vs.glsl",  "cross_fade.fs.glsl" },
   };
 
   builder = gsk_shader_builder_new ();
@@ -1189,6 +1236,10 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   /* border */
   INIT_PROGRAM_UNIFORM_LOCATION (border, color);
   INIT_PROGRAM_UNIFORM_LOCATION (border, widths);
+
+  /* cross fade */
+  INIT_PROGRAM_UNIFORM_LOCATION (cross_fade, progress);
+  INIT_PROGRAM_UNIFORM_LOCATION (cross_fade, source2);
 
   g_object_unref (builder);
   return TRUE;
@@ -1510,8 +1561,11 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
       render_border_node (self, node, builder);
     break;
 
-    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
     case GSK_CROSS_FADE_NODE:
+      render_cross_fade_node (self, node, builder);
+    break;
+
+    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
     case GSK_BLEND_NODE:
     case GSK_REPEAT_NODE:
     default:
@@ -1768,6 +1822,16 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
           glActiveTexture (GL_TEXTURE0);
           glBindTexture (GL_TEXTURE_2D, op->texture_id);
 
+          break;
+
+        case OP_CHANGE_CROSS_FADE:
+          g_assert (program == &self->cross_fade_program);
+          /* End texture id */
+          glUniform1i (program->cross_fade.source2_location, 1);
+          glActiveTexture (GL_TEXTURE0 + 1);
+          glBindTexture (GL_TEXTURE_2D, op->cross_fade.source2);
+          /* progress */
+          glUniform1f (program->cross_fade.progress_location, op->cross_fade.progress);
           break;
 
         case OP_CHANGE_LINEAR_GRADIENT:

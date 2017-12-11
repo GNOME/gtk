@@ -10,7 +10,7 @@
 #include "gskglrendererprivate.h"
 
 #define GL_N_VERTICES 6
-#define GL_N_PROGRAMS 11
+#define GL_N_PROGRAMS 12
 
 enum {
   OP_NONE,
@@ -31,8 +31,9 @@ enum {
   OP_CHANGE_OUTSET_SHADOW   =  15,
   OP_CHANGE_BORDER          =  16,
   OP_CHANGE_BORDER_COLOR    =  17,
-  OP_CLEAR                  =  18,
-  OP_DRAW                   =  19,
+  OP_CHANGE_CROSS_FADE      =  18,
+  OP_CLEAR                  =  19,
+  OP_DRAW                   =  20,
 };
 
 typedef struct
@@ -99,6 +100,10 @@ typedef struct
       int color_location;
       int widths_location;
     } border;
+    struct {
+      int source2_location;
+      int progress_location;
+    } cross_fade;
   };
 
 } Program;
@@ -162,6 +167,10 @@ typedef struct
       float widths[4];
       float color[4];
     } border;
+    struct {
+      float progress;
+      int source2;
+    } cross_fade;
   };
 } RenderOp;
 
