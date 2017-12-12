@@ -60,6 +60,7 @@
 #include "gtkintl.h"
 #include "gtkdialogprivate.h"
 #include "gtkeventcontrollermotion.h"
+#include "gtkgesturemultipress.h"
 
 
 /**
@@ -182,6 +183,8 @@ struct _GtkAboutDialogPrivate
 
   GSList *visited_links;
 
+  GtkGesture *license_press;
+  GtkGesture *system_press;
   GtkEventController *license_motion;
   GtkEventController *system_motion;
 
@@ -244,9 +247,11 @@ static gboolean             emit_activate_link              (GtkAboutDialog     
 static gboolean             text_view_key_press_event       (GtkWidget          *text_view,
 							     GdkEventKey        *event,
 							     GtkAboutDialog     *about);
-static gboolean             text_view_event_after           (GtkWidget          *text_view,
-							     GdkEvent           *event,
-							     GtkAboutDialog     *about);
+static void                 text_view_released              (GtkGestureMultiPress *press,
+                                                             int                   n,
+                                                             double                x,
+                                                             double                y,
+							     GtkAboutDialog       *about);
 static void                 text_view_motion                (GtkEventControllerMotion *motion,
                                                              double                    x,
                                                              double                    y,
@@ -638,7 +643,6 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkAboutDialog, system_view);
 
   gtk_widget_class_bind_template_callback (widget_class, emit_activate_link);
-  gtk_widget_class_bind_template_callback (widget_class, text_view_event_after);
   gtk_widget_class_bind_template_callback (widget_class, text_view_key_press_event);
   gtk_widget_class_bind_template_callback (widget_class, stack_visible_child_notify);
 }
@@ -803,6 +807,10 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   switch_page (about, "main");
   update_stack_switcher_visibility (about);
 
+  priv->license_press = gtk_gesture_multi_press_new (priv->license_view);
+  g_signal_connect (priv->license_press, "released", G_CALLBACK (text_view_released), about);
+  priv->system_press = gtk_gesture_multi_press_new (priv->system_view);
+  g_signal_connect (priv->system_press, "released", G_CALLBACK (text_view_released), about);
   priv->license_motion = gtk_event_controller_motion_new (priv->license_view);
   g_signal_connect (priv->license_motion, "motion", G_CALLBACK (text_view_motion), about);
   priv->system_motion = gtk_event_controller_motion_new (priv->system_view);
@@ -844,6 +852,8 @@ gtk_about_dialog_finalize (GObject *object)
   g_slist_free_full (priv->credit_sections, destroy_credit_section);
   g_slist_free_full (priv->visited_links, g_free);
 
+  g_object_unref (priv->license_press);
+  g_object_unref (priv->system_press);
   g_object_unref (priv->license_motion);
   g_object_unref (priv->system_motion);
 
@@ -2037,40 +2047,36 @@ text_view_key_press_event (GtkWidget      *text_view,
   return FALSE;
 }
 
-static gboolean
-text_view_event_after (GtkWidget      *text_view,
-                       GdkEvent       *event,
-                       GtkAboutDialog *about)
+static void
+text_view_released (GtkGestureMultiPress *gesture,
+                    int                   n_press,
+                    double                x,
+                    double                y,
+                    GtkAboutDialog       *about)
 {
+  GtkWidget *text_view;
   GtkTextIter start, end, iter;
   GtkTextBuffer *buffer;
-  gdouble event_x, event_y;
-  gint x, y;
-  guint button;
+  gint tx, ty;
 
-  if (gdk_event_get_event_type (event) != GDK_BUTTON_RELEASE)
-    return FALSE;
+  if (gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)) != GDK_BUTTON_PRIMARY)
+    return;
 
-  if (!gdk_event_get_button (event, &button) || button != GDK_BUTTON_PRIMARY)
-    return FALSE;
-
+  text_view = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view));
 
   /* we shouldn't follow a link if the user has selected something */
   gtk_text_buffer_get_selection_bounds (buffer, &start, &end);
   if (gtk_text_iter_get_offset (&start) != gtk_text_iter_get_offset (&end))
-    return FALSE;
+    return;
 
-  gdk_event_get_coords (event, &event_x, &event_y);
   gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (text_view),
                                          GTK_TEXT_WINDOW_WIDGET,
-                                         event_x, event_y, &x, &y);
+                                         x, y, &tx, &ty);
 
-  gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (text_view), &iter, x, y);
+  gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (text_view), &iter, tx, ty);
 
   follow_if_link (about, GTK_TEXT_VIEW (text_view), &iter);
-
-  return FALSE;
 }
 
 static void
