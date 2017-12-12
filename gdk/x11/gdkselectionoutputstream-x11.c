@@ -23,12 +23,15 @@
 
 #include "gdkselectionoutputstream-x11.h"
 
+#include "gdkclipboard-x11.h"
 #include "gdkdisplay-x11.h"
 #include "gdkintl.h"
+#include "gdktextlistconverter-x11.h"
 #include "gdkx11display.h"
 #include "gdkx11property.h"
 #include "gdkx11window.h"
 
+typedef struct _GdkX11PendingSelectionNotify GdkX11PendingSelectionNotify;
 typedef struct _GdkX11SelectionOutputStreamPrivate  GdkX11SelectionOutputStreamPrivate;
 
 struct _GdkX11SelectionOutputStreamPrivate {
@@ -65,6 +68,84 @@ struct _GdkX11PendingSelectionNotify
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GdkX11SelectionOutputStream, gdk_x11_selection_output_stream, G_TYPE_OUTPUT_STREAM);
+
+static GdkX11PendingSelectionNotify *
+gdk_x11_pending_selection_notify_new (Window window,
+                                      Atom   selection,
+                                      Atom   target,
+                                      Atom   property,
+                                      Time   timestamp)
+{
+  GdkX11PendingSelectionNotify *pending;
+
+  pending = g_slice_new0 (GdkX11PendingSelectionNotify);
+  pending->n_pending = 1;
+
+  pending->xevent.type = SelectionNotify;
+  pending->xevent.serial = 0;
+  pending->xevent.send_event = True;
+  pending->xevent.requestor = window;
+  pending->xevent.selection = selection;
+  pending->xevent.target = target;
+  pending->xevent.property = property;
+  pending->xevent.time = timestamp;
+
+  return pending;
+}
+
+static void
+gdk_x11_pending_selection_notify_require (GdkX11PendingSelectionNotify *notify,
+                                          guint                         n_sends)
+{
+  notify->n_pending += n_sends;
+}
+
+static void
+gdk_x11_pending_selection_notify_send (GdkX11PendingSelectionNotify *notify,
+                                       GdkDisplay                   *display,
+                                       gboolean                      success)
+{
+  Display *xdisplay;
+  int error;
+
+  notify->n_pending--;
+  if (notify->n_pending)
+    {
+      GDK_NOTE(SELECTION, g_printerr ("%s:%s: not sending SelectionNotify yet, %zu streams still pending\n",
+                                      gdk_x11_get_xatom_name_for_display (display, notify->xevent.selection),
+                                      gdk_x11_get_xatom_name_for_display (display, notify->xevent.target),
+                                      notify->n_pending));
+      return;
+    }
+
+  GDK_NOTE(SELECTION, g_printerr ("%s:%s: sending SelectionNotify reporting %s\n",
+                                  gdk_x11_get_xatom_name_for_display (display, notify->xevent.selection),
+                                  gdk_x11_get_xatom_name_for_display (display, notify->xevent.target),
+                                  success ? "success" : "failure"));
+  if (!success)
+    notify->xevent.property = None;
+
+  xdisplay = gdk_x11_display_get_xdisplay (display);
+
+  gdk_x11_display_error_trap_push (display);
+
+  if (XSendEvent (xdisplay, notify->xevent.requestor, False, NoEventMask, (XEvent*) &notify->xevent) == 0)
+    {
+      GDK_NOTE(SELECTION, g_printerr ("%s:%s: failed to XSendEvent()\n",
+                                      gdk_x11_get_xatom_name_for_display (display, notify->xevent.selection),
+                                      gdk_x11_get_xatom_name_for_display (display, notify->xevent.target)));
+    }
+  XSync (xdisplay, False);
+
+  error = gdk_x11_display_error_trap_pop (display);
+  if (error != Success)
+    {
+      GDK_NOTE(SELECTION, g_printerr ("%s:%s: X error during write: %d\n",
+                                      gdk_x11_get_xatom_name_for_display (display, notify->xevent.selection),
+                                      gdk_x11_get_xatom_name_for_display (display, notify->xevent.target),
+                                      error));
+    }
+}
 
 static GdkFilterReturn
 gdk_x11_selection_output_stream_filter_event (GdkXEvent *xevent,
@@ -539,7 +620,7 @@ gdk_x11_selection_output_stream_filter_event (GdkXEvent *xev,
     }
 }
 
-GOutputStream *
+static GOutputStream *
 gdk_x11_selection_output_stream_new (GdkDisplay                   *display,
                                      GdkX11PendingSelectionNotify *notify,
                                      Window                        window,
@@ -576,82 +657,386 @@ gdk_x11_selection_output_stream_new (GdkDisplay                   *display,
   return G_OUTPUT_STREAM (stream);
 }
 
-GdkX11PendingSelectionNotify *
-gdk_x11_pending_selection_notify_new (Window window,
-                                      Atom   selection,
-                                      Atom   target,
-                                      Atom   property,
-                                      Time   timestamp)
+static void
+print_atoms (GdkDisplay *display,
+             const char *selection,
+             const char *prefix,
+             const Atom *atoms,
+             gsize       n_atoms)
 {
-  GdkX11PendingSelectionNotify *pending;
+  GDK_NOTE(CLIPBOARD,
+           gsize i;
+            
+           g_printerr ("%s: %s [ ", selection, prefix);
+           for (i = 0; i < n_atoms; i++)
+             {
+               g_printerr ("%s%s", i > 0 ? ", " : "", gdk_x11_get_xatom_name_for_display (display , atoms[i]));
+             }
+           g_printerr (" ]\n");
+          ); 
+}
 
-  pending = g_slice_new0 (GdkX11PendingSelectionNotify);
-  pending->n_pending = 1;
+static void
+handle_targets_done (GObject      *stream,
+                     GAsyncResult *result,
+                     gpointer      user_data)
+{
+  GError *error = NULL;
+  gsize bytes_written;
 
-  pending->xevent.type = SelectionNotify;
-  pending->xevent.serial = 0;
-  pending->xevent.send_event = True;
-  pending->xevent.requestor = window;
-  pending->xevent.selection = selection;
-  pending->xevent.target = target;
-  pending->xevent.property = property;
-  pending->xevent.time = timestamp;
+  if (!g_output_stream_write_all_finish (G_OUTPUT_STREAM (stream), result, &bytes_written, &error))
+    {
+      GDK_NOTE(CLIPBOARD, g_printerr ("---: failed to send targets after %zu bytes: %s\n",
+                                      bytes_written, error->message));
+      g_error_free (error);
+    }
 
-  return pending;
+  g_free (user_data);
+}
+
+static void
+handle_targets (GOutputStream                *stream,
+                GdkDisplay                   *display,
+                GdkContentFormats            *formats,
+                const char                   *target,
+                const char                   *encoding,
+                int                           format,
+                gulong                        timestamp,
+                GdkX11SelectionOutputHandler  handler,
+                gpointer                      user_data)
+{
+  Atom *atoms;
+  gsize n_atoms;
+
+  atoms = gdk_x11_clipboard_formats_to_atoms (display,
+                                              TRUE,
+                                              formats,
+                                              &n_atoms);
+  print_atoms (display, "---", "sending targets", atoms, n_atoms);
+  g_output_stream_write_all_async (stream,
+                                   atoms,
+                                   n_atoms * sizeof (Atom),
+                                   G_PRIORITY_DEFAULT,
+                                   NULL,
+                                   handle_targets_done,
+                                   atoms);
+  g_object_unref (stream);
+}
+
+static void
+handle_timestamp_done (GObject      *stream,
+                       GAsyncResult *result,
+                       gpointer      user_data)
+{
+  GError *error = NULL;
+  gsize bytes_written;
+
+  if (!g_output_stream_write_all_finish (G_OUTPUT_STREAM (stream), result, &bytes_written, &error))
+    {
+      GDK_NOTE(CLIPBOARD, g_printerr ("---: failed to send timestamp after %zu bytes: %s\n",
+                                      bytes_written, error->message));
+      g_error_free (error);
+    }
+
+  g_slice_free (gulong, user_data);
+}
+
+static void
+handle_timestamp (GOutputStream                *stream,
+                  GdkDisplay                   *display,
+                  GdkContentFormats            *formats,
+                  const char                   *target,
+                  const char                   *encoding,
+                  int                           format,
+                  gulong                        timestamp,
+                  GdkX11SelectionOutputHandler  handler,
+                  gpointer                      user_data)
+{
+  gulong *time_;
+
+  time_ = g_slice_new (gulong);
+  *time_ = timestamp;
+
+  g_output_stream_write_all_async (stream,
+                                   time_,
+                                   sizeof (gulong),
+                                   G_PRIORITY_DEFAULT,
+                                   NULL,
+                                   handle_timestamp_done,
+                                   time_);
+  g_object_unref (stream);
+}
+
+static void
+handle_save_targets (GOutputStream                *stream,
+                     GdkDisplay                   *display,
+                     GdkContentFormats            *formats,
+                     const char                   *target,
+                     const char                   *encoding,
+                     int                           format,
+                     gulong                        timestamp,
+                     GdkX11SelectionOutputHandler  handler,
+                     gpointer                      user_data)
+{
+  /* Don't do anything */
+
+  g_object_unref (stream);
+}
+
+static void
+handle_text_list (GOutputStream                *stream,
+                  GdkDisplay                   *display,
+                  GdkContentFormats            *formats,
+                  const char                   *target,
+                  const char                   *encoding,
+                  int                           format,
+                  gulong                        timestamp,
+                  GdkX11SelectionOutputHandler  handler,
+                  gpointer                      user_data)
+{
+  GOutputStream *converter_stream;
+  GConverter *converter;
+
+  converter = gdk_x11_text_list_converter_to_utf8_new (display,
+                                                       encoding,
+                                                       format);
+  converter_stream = g_converter_output_stream_new (stream, converter);
+
+  g_object_unref (converter);
+  g_object_unref (stream);
+
+  handler (converter_stream, gdk_intern_mime_type ("text/plain;charset=utf-8"), user_data);
+}
+
+static void
+handle_utf8 (GOutputStream                *stream,
+             GdkDisplay                   *display,
+             GdkContentFormats            *formats,
+             const char                   *target,
+             const char                   *encoding,
+             int                           format,
+             gulong                        timestamp,
+             GdkX11SelectionOutputHandler  handler,
+             gpointer                      user_data)
+{
+  handler (stream, gdk_intern_mime_type ("text/plain;charset=utf-8"), user_data);
+}
+
+typedef void (* MimeTypeHandleFunc) (GOutputStream *, GdkDisplay *, GdkContentFormats *, const char *, const char *, int, gulong, GdkX11SelectionOutputHandler, gpointer);
+
+static const struct {
+  const char *x_target;
+  const char *mime_type;
+  const char *type;
+  gint format;
+  MimeTypeHandleFunc handler;
+} special_targets[] = {
+  { "UTF8_STRING",   "text/plain;charset=utf-8", "UTF8_STRING",   8,  handle_utf8 },
+  { "COMPOUND_TEXT", "text/plain;charset=utf-8", "COMPOUND_TEXT", 8,  handle_text_list },
+  { "TEXT",          "text/plain;charset=utf-8", "STRING",        8,  handle_text_list },
+  { "STRING",        "text/plain;charset=utf-8", "STRING",        8,  handle_text_list },
+  { "TARGETS",       NULL,                       "ATOM",          32, handle_targets },
+  { "TIMESTAMP",     NULL,                       "INTEGER",       32, handle_timestamp },
+  { "SAVE_TARGETS",  NULL,                       "NULL",          32, handle_save_targets }
+};
+
+static gboolean
+gdk_x11_selection_output_streams_request (GdkDisplay                   *display,
+                                          GdkX11PendingSelectionNotify *notify,
+                                          GdkContentFormats            *formats,
+                                          Window                        requestor,
+                                          Atom                          xselection,
+                                          Atom                          xtarget,
+                                          Atom                          xproperty,
+                                          gulong                        timestamp,
+                                          GdkX11SelectionOutputHandler  handler,
+                                          gpointer                      user_data)
+{
+  const char *mime_type, *selection, *target, *property;
+  gsize i;
+
+  selection = gdk_x11_get_xatom_name_for_display (display, xselection);
+  target = gdk_x11_get_xatom_name_for_display (display, xtarget);
+  property = gdk_x11_get_xatom_name_for_display (display, xproperty);
+  mime_type = gdk_intern_mime_type (target);
+
+  if (mime_type)
+    {
+      if (gdk_content_formats_contain_mime_type (formats, mime_type))
+        {
+          GOutputStream *stream;
+
+          stream = gdk_x11_selection_output_stream_new (display,
+                                                        notify,
+                                                        requestor,
+                                                        selection,
+                                                        target,
+                                                        property,
+                                                        target,
+                                                        8,
+                                                        timestamp);
+          handler (stream, target, user_data);
+          return TRUE;
+        }
+    }
+  else if (g_str_equal (target, "MULTIPLE"))
+    {
+      gulong n_atoms;
+      gulong nbytes;
+      Atom prop_type;
+      gint prop_format;
+      Atom *atoms = NULL;
+      int error;
+
+      error = XGetWindowProperty (gdk_x11_display_get_xdisplay (display),
+                                  requestor,
+                                  xproperty,
+                                  0, 0x1FFFFFFF, False,
+                                  AnyPropertyType,
+                                  &prop_type, &prop_format,
+                                  &n_atoms, &nbytes, (guchar **) &atoms);
+      if (error != Success)
+        {
+          GDK_NOTE(SELECTION, g_printerr ("%s: XGetProperty() during MULTIPLE failed with %d\n",
+                                          selection, error));
+        }
+      else if (prop_format != 32 ||
+               prop_type != gdk_x11_get_xatom_by_name_for_display (display, "ATOM_PAIR"))
+        {
+          GDK_NOTE(SELECTION, g_printerr ("%s: XGetProperty() type/format should be ATOM_PAIR/32 but is %s/%d\n",
+                                          selection, gdk_x11_get_xatom_name_for_display (display, prop_type), prop_format));
+        }
+      else if (n_atoms < 2)
+        {
+          print_atoms (display, selection, "ignoring MULTIPLE request with too little elements", atoms, n_atoms);
+        }
+      else
+        {
+          gulong i;
+
+          print_atoms (display, selection, "MULTIPLE request", atoms, n_atoms);
+          if (n_atoms % 2)
+            {
+              GDK_NOTE(SELECTION, g_printerr ("%s: Number of atoms is uneven at %lu, ignoring last element\n",
+                                              selection, n_atoms));
+              n_atoms &= ~1;
+            }
+
+          gdk_x11_pending_selection_notify_require (notify, n_atoms / 2);
+
+          for (i = 0; i < n_atoms / 2; i++)
+            {
+              gboolean success;
+
+              if (atoms[2 * i] == None || atoms[2 * i + 1] == None)
+                {
+                  success = FALSE;
+                  GDK_NOTE(SELECTION, g_printerr ("%s: None not allowed as atom in MULTIPLE request\n",
+                                                  selection));
+                  gdk_x11_pending_selection_notify_send (notify, display, FALSE);
+                }
+              else if (atoms[2 * i] == gdk_x11_get_xatom_by_name_for_display (display, "MULTIPLE"))
+                {
+                  success = FALSE;
+                  GDK_NOTE(SELECTION, g_printerr ("%s: MULTIPLE as target in MULTIPLE request would cause recursion\n",
+                                                  selection));
+                  gdk_x11_pending_selection_notify_send (notify, display, FALSE);
+                }
+              else
+                {
+                  success = gdk_x11_selection_output_streams_request (display,
+                                                                      notify,
+                                                                      formats,
+                                                                      requestor,
+                                                                      xselection,
+                                                                      atoms[2 * i],
+                                                                      atoms[2 * i + 1],
+                                                                      timestamp,
+                                                                      handler,
+                                                                      user_data);
+                }
+
+              if (!success)
+                atoms[2 * i + 1] = None;
+            }
+        }
+
+      XChangeProperty (gdk_x11_display_get_xdisplay (display),
+                       requestor,
+                       xproperty,
+                       prop_type, 32,
+                       PropModeReplace, (guchar *)atoms, n_atoms);
+
+      if (atoms)
+        XFree (atoms);
+
+      gdk_x11_pending_selection_notify_send (notify, display, TRUE);
+      return TRUE;
+    }
+  else
+    {
+      for (i = 0; i < G_N_ELEMENTS (special_targets); i++)
+        {
+          if (g_str_equal (target, special_targets[i].x_target) &&
+              special_targets[i].handler)
+            {
+              GOutputStream *stream;
+
+              if (special_targets[i].mime_type)
+                mime_type = gdk_intern_mime_type (special_targets[i].mime_type);
+              stream = gdk_x11_selection_output_stream_new (display,
+                                                            notify,
+                                                            requestor,
+                                                            selection,
+                                                            target,
+                                                            property,
+                                                            special_targets[i].type,
+                                                            special_targets[i].format,
+                                                            timestamp);
+              special_targets[i].handler (stream,
+                                          display,
+                                          formats,
+                                          target,
+                                          special_targets[i].type,
+                                          special_targets[i].format,
+                                          timestamp,
+                                          handler,
+                                          user_data);
+              return TRUE;
+            }
+        }
+    }
+
+  gdk_x11_pending_selection_notify_send (notify, display, FALSE);
+  return FALSE;
 }
 
 void
-gdk_x11_pending_selection_notify_require (GdkX11PendingSelectionNotify *notify,
-                                          guint                         n_sends)
+gdk_x11_selection_output_streams_create (GdkDisplay                   *display,
+                                         GdkContentFormats            *formats,
+                                         Window                        requestor,
+                                         Atom                          selection,
+                                         Atom                          target,
+                                         Atom                          property,
+                                         gulong                        timestamp,
+                                         GdkX11SelectionOutputHandler  handler,
+                                         gpointer                      user_data)
 {
-  notify->n_pending += n_sends;
+  GdkX11PendingSelectionNotify *notify;
+
+  notify = gdk_x11_pending_selection_notify_new (requestor,
+                                                 selection,
+                                                 target,
+                                                 property,
+                                                 timestamp);
+  gdk_x11_selection_output_streams_request (display,
+                                            notify,
+                                            formats,
+                                            requestor,
+                                            selection,
+                                            target,
+                                            property,
+                                            timestamp,
+                                            handler,
+                                            user_data);
 }
-
-void
-gdk_x11_pending_selection_notify_send (GdkX11PendingSelectionNotify *notify,
-                                       GdkDisplay                   *display,
-                                       gboolean                      success)
-{
-  Display *xdisplay;
-  int error;
-
-  notify->n_pending--;
-  if (notify->n_pending)
-    {
-      GDK_NOTE(SELECTION, g_printerr ("%s:%s: not sending SelectionNotify yet, %zu streams still pending\n",
-                                      gdk_x11_get_xatom_name_for_display (display, notify->xevent.selection),
-                                      gdk_x11_get_xatom_name_for_display (display, notify->xevent.target),
-                                      notify->n_pending));
-      return;
-    }
-
-  GDK_NOTE(SELECTION, g_printerr ("%s:%s: sending SelectionNotify reporting %s\n",
-                                  gdk_x11_get_xatom_name_for_display (display, notify->xevent.selection),
-                                  gdk_x11_get_xatom_name_for_display (display, notify->xevent.target),
-                                  success ? "success" : "failure"));
-  if (!success)
-    notify->xevent.property = None;
-
-  xdisplay = gdk_x11_display_get_xdisplay (display);
-
-  gdk_x11_display_error_trap_push (display);
-
-  if (XSendEvent (xdisplay, notify->xevent.requestor, False, NoEventMask, (XEvent*) &notify->xevent) == 0)
-    {
-      GDK_NOTE(SELECTION, g_printerr ("%s:%s: failed to XSendEvent()\n",
-                                      gdk_x11_get_xatom_name_for_display (display, notify->xevent.selection),
-                                      gdk_x11_get_xatom_name_for_display (display, notify->xevent.target)));
-    }
-  XSync (xdisplay, False);
-
-  error = gdk_x11_display_error_trap_pop (display);
-  if (error != Success)
-    {
-      GDK_NOTE(SELECTION, g_printerr ("%s:%s: X error during write: %d\n",
-                                      gdk_x11_get_xatom_name_for_display (display, notify->xevent.selection),
-                                      gdk_x11_get_xatom_name_for_display (display, notify->xevent.target),
-                                      error));
-    }
-}
-
-

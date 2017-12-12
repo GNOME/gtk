@@ -37,6 +37,10 @@ GdkClipboard *          gdk_x11_clipboard_new                   (GdkDisplay     
                                                                  const gchar            *selection);
 
 GSList *                gdk_x11_clipboard_formats_to_targets    (GdkContentFormats      *formats);
+Atom *                  gdk_x11_clipboard_formats_to_atoms      (GdkDisplay             *display,
+                                                                 gboolean                include_special,
+                                                                 GdkContentFormats      *formats,
+                                                                 gsize                  *n_atoms);
 
 G_END_DECLS
 

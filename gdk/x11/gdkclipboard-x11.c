@@ -92,119 +92,17 @@ gdk_x11_clipboard_default_output_done (GObject      *clipboard,
 }
 
 static void
-gdk_x11_clipboard_default_output_handler (GdkX11Clipboard *cb,
-                                          const char      *target,
-                                          GOutputStream   *stream)
+gdk_x11_clipboard_default_output_handler (GOutputStream   *stream,
+                                          const char      *mime_type,
+                                          gpointer         user_data)
 {
-  gdk_clipboard_write_async (GDK_CLIPBOARD (cb),
-                             g_intern_string (target),
+  gdk_clipboard_write_async (GDK_CLIPBOARD (user_data),
+                             mime_type,
                              stream,
                              G_PRIORITY_DEFAULT,
                              NULL,
                              gdk_x11_clipboard_default_output_done,
                              NULL);
-  g_object_unref (stream);
-}
-
-static void
-handle_targets_done (GObject      *stream,
-                     GAsyncResult *result,
-                     gpointer      user_data)
-{
-  GError *error = NULL;
-  gsize bytes_written;
-
-  if (!g_output_stream_write_all_finish (G_OUTPUT_STREAM (stream), result, &bytes_written, &error))
-    {
-      GDK_NOTE(CLIPBOARD, g_printerr ("---: failed to send targets after %zu bytes: %s\n",
-                                      bytes_written, error->message));
-      g_error_free (error);
-    }
-
-  g_free (user_data);
-}
-
-static Atom *
-gdk_x11_clipboard_formats_to_atoms (GdkDisplay        *display,
-                                    gboolean           include_special,
-                                    GdkContentFormats *formats,
-                                    gsize             *n_atoms);
-
-static void
-handle_targets (GdkX11Clipboard *cb,
-                const char      *target,
-                const char      *encoding,
-                int              format,
-                GOutputStream   *stream)
-{
-  GdkClipboard *clipboard = GDK_CLIPBOARD (cb);
-  Atom *atoms;
-  gsize n_atoms;
-
-  atoms = gdk_x11_clipboard_formats_to_atoms (gdk_clipboard_get_display (clipboard),
-                                              TRUE,
-                                              gdk_clipboard_get_formats (clipboard),
-                                              &n_atoms);
-  print_atoms (cb, "sending targets", atoms, n_atoms);
-  g_output_stream_write_all_async (stream,
-                                     atoms,
-                                     n_atoms * sizeof (Atom),
-                                     G_PRIORITY_DEFAULT,
-                                     NULL,
-                                     handle_targets_done,
-                                     atoms);
-  g_object_unref (stream);
-}
-
-static void
-handle_timestamp_done (GObject      *stream,
-                       GAsyncResult *result,
-                       gpointer      user_data)
-{
-  GError *error = NULL;
-  gsize bytes_written;
-
-  if (!g_output_stream_write_all_finish (G_OUTPUT_STREAM (stream), result, &bytes_written, &error))
-    {
-      GDK_NOTE(CLIPBOARD, g_printerr ("---: failed to send timestamp after %zu bytes: %s\n",
-                                      bytes_written, error->message));
-      g_error_free (error);
-    }
-
-  g_slice_free (gulong, user_data);
-}
-
-static void
-handle_timestamp (GdkX11Clipboard *cb,
-                  const char      *target,
-                  const char      *encoding,
-                  int              format,
-                  GOutputStream   *stream)
-{
-  gulong *timestamp;
-
-  timestamp = g_slice_new (gulong);
-  *timestamp = cb->timestamp;
-
-  g_output_stream_write_all_async (stream,
-                                   timestamp,
-                                   sizeof (gulong),
-                                   G_PRIORITY_DEFAULT,
-                                   NULL,
-                                   handle_timestamp_done,
-                                   timestamp);
-  g_object_unref (stream);
-}
-
-static void
-handle_save_targets (GdkX11Clipboard *cb,
-                     const char      *target,
-                     const char      *encoding,
-                     int              format,
-                     GOutputStream   *stream)
-{
-  /* Don't do anything */
-
   g_object_unref (stream);
 }
 
@@ -228,37 +126,6 @@ text_list_convert (GdkX11Clipboard *cb,
   return converter_stream;
 }
 
-static void
-handle_text_list (GdkX11Clipboard *cb,
-                  const char      *target,
-                  const char      *encoding,
-                  int              format,
-                  GOutputStream   *stream)
-{
-  GOutputStream *converter_stream;
-  GConverter *converter;
-
-  converter = gdk_x11_text_list_converter_to_utf8_new (gdk_clipboard_get_display (GDK_CLIPBOARD (cb)),
-                                                       encoding,
-                                                       format);
-  converter_stream = g_converter_output_stream_new (stream, converter);
-
-  g_object_unref (converter);
-  g_object_unref (stream);
-
-  gdk_x11_clipboard_default_output_handler (cb, "text/plain;charset=utf-8", converter_stream);
-}
-
-static void
-handle_utf8 (GdkX11Clipboard *cb,
-             const char      *target,
-             const char      *encoding,
-             int              format,
-             GOutputStream   *stream)
-{
-  gdk_x11_clipboard_default_output_handler (cb, "text/plain;charset=utf-8", stream);
-}
-
 static GInputStream * 
 no_convert (GdkX11Clipboard *cb,
             GInputStream    *stream,
@@ -268,23 +135,20 @@ no_convert (GdkX11Clipboard *cb,
   return stream;
 }
 
-typedef void (* MimeTypeHandleFunc) (GdkX11Clipboard *, const char *, const char *, int, GOutputStream *);
-
 static const struct {
   const char *x_target;
   const char *mime_type;
   GInputStream * (* convert) (GdkX11Clipboard *, GInputStream *, const char *, int);
   const char *type;
   gint format;
-  MimeTypeHandleFunc handler;
 } special_targets[] = {
-  { "UTF8_STRING",   "text/plain;charset=utf-8", no_convert,        "UTF8_STRING",   8,  handle_utf8 },
-  { "COMPOUND_TEXT", "text/plain;charset=utf-8", text_list_convert, "COMPOUND_TEXT", 8,  handle_text_list },
-  { "TEXT",          "text/plain;charset=utf-8", text_list_convert, "STRING",        8,  handle_text_list },
-  { "STRING",        "text/plain;charset=utf-8", text_list_convert, "STRING",        8,  handle_text_list },
-  { "TARGETS",       NULL,                       NULL,              "ATOM",          32, handle_targets },
-  { "TIMESTAMP",     NULL,                       NULL,              "INTEGER",       32, handle_timestamp },
-  { "SAVE_TARGETS",  NULL,                       NULL,              "NULL",          32, handle_save_targets }
+  { "UTF8_STRING",   "text/plain;charset=utf-8", no_convert,        "UTF8_STRING",   8 },
+  { "COMPOUND_TEXT", "text/plain;charset=utf-8", text_list_convert, "COMPOUND_TEXT", 8 },
+  { "TEXT",          "text/plain;charset=utf-8", text_list_convert, "STRING",        8 },
+  { "STRING",        "text/plain;charset=utf-8", text_list_convert, "STRING",        8 },
+  { "TARGETS",       NULL,                       NULL,              "ATOM",          32 },
+  { "TIMESTAMP",     NULL,                       NULL,              "INTEGER",       32 },
+  { "SAVE_TARGETS",  NULL,                       NULL,              "NULL",          32 }
 };
 
 GSList *
@@ -313,7 +177,7 @@ gdk_x11_clipboard_formats_to_targets (GdkContentFormats *formats)
   return g_slist_reverse (targets);
 }
 
-static Atom *
+Atom *
 gdk_x11_clipboard_formats_to_atoms (GdkDisplay        *display,
                                     gboolean           include_special,
                                     GdkContentFormats *formats,
@@ -332,8 +196,7 @@ gdk_x11_clipboard_formats_to_atoms (GdkDisplay        *display,
           if (special_targets[i].mime_type != NULL)
             continue;
 
-          if (special_targets[i].handler)
-            targets = g_slist_prepend (targets, (gpointer) g_intern_string (special_targets[i].x_target));
+          targets = g_slist_prepend (targets, (gpointer) g_intern_string (special_targets[i].x_target));
         }
     }
 
@@ -509,164 +372,6 @@ gdk_x11_clipboard_claim_remote (GdkX11Clipboard *cb,
   gdk_x11_clipboard_request_targets (cb);
 }
 
-static gboolean
-gdk_x11_clipboard_request_selection (GdkX11Clipboard              *cb,
-                                     GdkX11PendingSelectionNotify *notify,
-                                     Window                        requestor,
-                                     const char                   *target,
-                                     const char                   *property,
-                                     gulong                        timestamp)
-{
-  const char *mime_type;
-  GdkDisplay *display;
-  gsize i;
-
-  display = gdk_clipboard_get_display (GDK_CLIPBOARD (cb));
-  mime_type = gdk_intern_mime_type (target);
-
-  if (mime_type)
-    {
-      if (gdk_content_formats_contain_mime_type (gdk_clipboard_get_formats (GDK_CLIPBOARD (cb)), mime_type))
-        {
-          GOutputStream *stream;
-
-          stream = gdk_x11_selection_output_stream_new (display,
-                                                        notify,
-                                                        requestor,
-                                                        cb->selection,
-                                                        target,
-                                                        property,
-                                                        target,
-                                                        8,
-                                                        timestamp);
-          gdk_x11_clipboard_default_output_handler (cb, target, stream);
-          return TRUE;
-        }
-    }
-  else if (g_str_equal (target, "MULTIPLE"))
-    {
-      gulong n_atoms;
-      gulong nbytes;
-      Atom prop_type;
-      gint prop_format;
-      Atom *atoms = NULL;
-      int error;
-
-      error = XGetWindowProperty (gdk_x11_display_get_xdisplay (display),
-                                  requestor,
-                                  gdk_x11_get_xatom_by_name_for_display (display, property),
-                                  0, 0x1FFFFFFF, False,
-                                  AnyPropertyType,
-                                  &prop_type, &prop_format,
-                                  &n_atoms, &nbytes, (guchar **) &atoms);
-      if (error != Success)
-        {
-          GDK_NOTE(CLIPBOARD, g_printerr ("%s: XGetProperty() during MULTIPLE failed with %d\n",
-                                          cb->selection, error));
-        }
-      else if (prop_format != 32 ||
-               prop_type != gdk_x11_get_xatom_by_name_for_display (display, "ATOM_PAIR"))
-        {
-          GDK_NOTE(CLIPBOARD, g_printerr ("%s: XGetProperty() type/format should be ATOM_PAIR/32 but is %s/%d\n",
-                                          cb->selection, gdk_x11_get_xatom_name_for_display (display, prop_type), prop_format));
-        }
-      else if (n_atoms < 2)
-        {
-          print_atoms (cb, "ignoring MULTIPLE request with too little elements", atoms, n_atoms);
-        }
-      else
-        {
-          gulong i;
-
-          print_atoms (cb, "MULTIPLE request", atoms, n_atoms);
-          if (n_atoms % 2)
-            {
-              GDK_NOTE(CLIPBOARD, g_printerr ("%s: Number of atoms is uneven at %lu, ignoring last element\n",
-                                              cb->selection, n_atoms));
-              n_atoms &= ~1;
-            }
-
-          gdk_x11_pending_selection_notify_require (notify, n_atoms / 2);
-
-          for (i = 0; i < n_atoms / 2; i++)
-            {
-              gboolean success;
-
-              if (atoms[2 * i] == None || atoms[2 * i + 1] == None)
-                {
-                  success = FALSE;
-                  GDK_NOTE(CLIPBOARD, g_printerr ("%s: None not allowed as atom in MULTIPLE request\n",
-                                                  cb->selection));
-                  gdk_x11_pending_selection_notify_send (notify, display, FALSE);
-                }
-              else if (atoms[2 * i] == gdk_x11_get_xatom_by_name_for_display (display, "MULTIPLE"))
-                {
-                  success = FALSE;
-                  GDK_NOTE(CLIPBOARD, g_printerr ("%s: MULTIPLE as target in MULTIPLE request would cause recursion\n",
-                                                  cb->selection));
-                  gdk_x11_pending_selection_notify_send (notify, display, FALSE);
-                }
-              else
-                {
-                  success = gdk_x11_clipboard_request_selection (cb,
-                                                                 notify,
-                                                                 requestor,
-                                                                 gdk_x11_get_xatom_name_for_display (display, atoms[2 * i]),
-                                                                 gdk_x11_get_xatom_name_for_display (display, atoms[2 * i + 1]),
-                                                                 timestamp);
-                }
-
-              if (!success)
-                atoms[2 * i + 1] = None;
-            }
-        }
-
-      XChangeProperty (gdk_x11_display_get_xdisplay (display),
-                       requestor,
-                       gdk_x11_get_xatom_by_name_for_display (display, property),
-                       prop_type, 32,
-                       PropModeReplace, (guchar *)atoms, n_atoms);
-
-      if (atoms)
-        XFree (atoms);
-
-      gdk_x11_pending_selection_notify_send (notify, display, TRUE);
-      return TRUE;
-    }
-  else
-    {
-      for (i = 0; i < G_N_ELEMENTS (special_targets); i++)
-        {
-          if (g_str_equal (target, special_targets[i].x_target) &&
-              special_targets[i].handler)
-            {
-              GOutputStream *stream;
-
-              if (special_targets[i].mime_type)
-                mime_type = gdk_intern_mime_type (special_targets[i].mime_type);
-              stream = gdk_x11_selection_output_stream_new (display,
-                                                            notify,
-                                                            requestor,
-                                                            cb->selection,
-                                                            target,
-                                                            property,
-                                                            special_targets[i].type,
-                                                            special_targets[i].format,
-                                                            timestamp);
-              special_targets[i].handler (cb,
-                                          target,
-                                          special_targets[i].type,
-                                          special_targets[i].format,
-                                          stream);
-              return TRUE;
-            }
-        }
-    }
-
-  gdk_x11_pending_selection_notify_send (notify, display, FALSE);
-  return FALSE;
-}
-
 static GdkFilterReturn
 gdk_x11_clipboard_filter_event (GdkXEvent *xev,
                                 GdkEvent  *gdkevent,
@@ -732,7 +437,6 @@ gdk_x11_clipboard_filter_event (GdkXEvent *xev,
 
     case SelectionRequest:
       {
-        GdkX11PendingSelectionNotify *notify;
         const char *target, *property;
 
         if (xevent->xselectionrequest.selection != cb->xselection)
@@ -760,19 +464,16 @@ gdk_x11_clipboard_filter_event (GdkXEvent *xev,
         GDK_NOTE(CLIPBOARD, g_printerr ("%s: got SelectionRequest for %s @ %s\n",
                                         cb->selection, target, property));
 
-        notify = gdk_x11_pending_selection_notify_new (xevent->xselectionrequest.requestor,
-                                                       xevent->xselectionrequest.selection,
-                                                       xevent->xselectionrequest.target,
-                                                       xevent->xselectionrequest.property ? xevent->xselectionrequest.property
-                                                                                          : xevent->xselectionrequest.target,
-                                                       xevent->xselectionrequest.time);
-
-        gdk_x11_clipboard_request_selection (cb,
-                                             notify,
-                                             xevent->xselectionrequest.requestor,
-                                             target,
-                                             property,
-                                             xevent->xselectionrequest.time);
+        gdk_x11_selection_output_streams_create (display,
+                                                 gdk_clipboard_get_formats (GDK_CLIPBOARD (cb)),
+                                                 xevent->xselectionrequest.requestor,
+                                                 xevent->xselectionrequest.selection,
+                                                 xevent->xselectionrequest.target,
+                                                 xevent->xselectionrequest.property ? xevent->xselectionrequest.property
+                                                                                    : xevent->xselectionrequest.target,
+                                                 xevent->xselectionrequest.time,
+                                                 gdk_x11_clipboard_default_output_handler,
+                                                 cb);
         return GDK_FILTER_REMOVE;
       }
 
