@@ -1944,7 +1944,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   widget_signals[EVENT] =
     g_signal_new (I_("event"),
 		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_DEPRECATED,
 		  G_STRUCT_OFFSET (GtkWidgetClass, event),
 		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__BOXED,
@@ -1966,7 +1966,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   widget_signals[EVENT_AFTER] =
     g_signal_new (I_("event-after"),
 		  G_TYPE_FROM_CLASS (klass),
-		  0,
+		  G_SIGNAL_DEPRECATED,
 		  0,
 		  NULL, NULL,
 		  NULL,
@@ -1993,7 +1993,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   widget_signals[BUTTON_PRESS_EVENT] =
     g_signal_new (I_("button-press-event"),
 		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_DEPRECATED,
 		  G_STRUCT_OFFSET (GtkWidgetClass, button_press_event),
 		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__BOXED,
@@ -2022,7 +2022,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   widget_signals[BUTTON_RELEASE_EVENT] =
     g_signal_new (I_("button-release-event"),
 		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_DEPRECATED,
 		  G_STRUCT_OFFSET (GtkWidgetClass, button_release_event),
 		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__BOXED,
@@ -2034,7 +2034,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   widget_signals[TOUCH_EVENT] =
     g_signal_new (I_("touch-event"),
                   G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_DEPRECATED,
                   G_STRUCT_OFFSET (GtkWidgetClass, touch_event),
                   _gtk_boolean_handled_accumulator, NULL,
                   _gtk_marshal_BOOLEAN__BOXED,
@@ -2064,7 +2064,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   widget_signals[SCROLL_EVENT] =
     g_signal_new (I_("scroll-event"),
 		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_DEPRECATED,
 		  G_STRUCT_OFFSET (GtkWidgetClass, scroll_event),
 		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__BOXED,
@@ -2093,7 +2093,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   widget_signals[MOTION_NOTIFY_EVENT] =
     g_signal_new (I_("motion-notify-event"),
 		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_DEPRECATED,
 		  G_STRUCT_OFFSET (GtkWidgetClass, motion_notify_event),
 		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__BOXED,
@@ -2232,7 +2232,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   widget_signals[ENTER_NOTIFY_EVENT] =
     g_signal_new (I_("enter-notify-event"),
 		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_DEPRECATED,
 		  G_STRUCT_OFFSET (GtkWidgetClass, enter_notify_event),
 		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__BOXED,
@@ -2261,7 +2261,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   widget_signals[LEAVE_NOTIFY_EVENT] =
     g_signal_new (I_("leave-notify-event"),
 		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_DEPRECATED,
 		  G_STRUCT_OFFSET (GtkWidgetClass, leave_notify_event),
 		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__BOXED,
@@ -2424,7 +2424,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   widget_signals[PROPERTY_NOTIFY_EVENT] =
     g_signal_new (I_("property-notify-event"),
 		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_DEPRECATED,
 		  G_STRUCT_OFFSET (GtkWidgetClass, property_notify_event),
 		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__BOXED,
@@ -2448,7 +2448,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   widget_signals[SELECTION_CLEAR_EVENT] =
     g_signal_new (I_("selection-clear-event"),
 		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_DEPRECATED,
 		  G_STRUCT_OFFSET (GtkWidgetClass, selection_clear_event),
 		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__BOXED,
@@ -2473,7 +2473,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   widget_signals[SELECTION_REQUEST_EVENT] =
     g_signal_new (I_("selection-request-event"),
 		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_DEPRECATED,
 		  G_STRUCT_OFFSET (GtkWidgetClass, selection_request_event),
 		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__BOXED,
@@ -2492,7 +2492,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   widget_signals[SELECTION_NOTIFY_EVENT] =
     g_signal_new (I_("selection-notify-event"),
 		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_DEPRECATED,
 		  G_STRUCT_OFFSET (GtkWidgetClass, selection_notify_event),
 		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__BOXED,
@@ -2510,7 +2510,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   widget_signals[SELECTION_RECEIVED] =
     g_signal_new (I_("selection-received"),
 		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_DEPRECATED,
 		  G_STRUCT_OFFSET (GtkWidgetClass, selection_received),
 		  NULL, NULL,
 		  _gtk_marshal_VOID__BOXED_UINT,
@@ -2528,7 +2528,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   widget_signals[SELECTION_GET] =
     g_signal_new (I_("selection-get"),
 		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_DEPRECATED,
 		  G_STRUCT_OFFSET (GtkWidgetClass, selection_get),
 		  NULL, NULL,
 		  _gtk_marshal_VOID__BOXED_UINT,
@@ -2553,7 +2553,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   widget_signals[PROXIMITY_IN_EVENT] =
     g_signal_new (I_("proximity-in-event"),
 		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_DEPRECATED,
 		  G_STRUCT_OFFSET (GtkWidgetClass, proximity_in_event),
 		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__BOXED,
@@ -2579,7 +2579,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   widget_signals[PROXIMITY_OUT_EVENT] =
     g_signal_new (I_("proximity-out-event"),
 		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_DEPRECATED,
 		  G_STRUCT_OFFSET (GtkWidgetClass, proximity_out_event),
 		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__BOXED,
