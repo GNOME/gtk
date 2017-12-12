@@ -33,9 +33,9 @@
 #include "gdkeventtranslator.h"
 #include "gdkframeclockprivate.h"
 #include "gdkinternals.h"
-#include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
 #include "gdkkeysprivate.h"
+#include "gdkmarshalers.h"
 #include "xsettings-client.h"
 #include "gdkclipboard-x11.h"
 #include "gdkprivate-x11.h"
@@ -75,6 +75,11 @@
 #ifdef HAVE_RANDR
 #include <X11/extensions/Xrandr.h>
 #endif
+
+enum {
+  TRANSLATE_EVENT,
+  LAST_SIGNAL
+};
 
 typedef struct _GdkErrorTrap  GdkErrorTrap;
 
@@ -175,6 +180,8 @@ static const char *const precache_atoms[] = {
 };
 
 static char *gdk_sm_client_id;
+
+static guint signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE_WITH_CODE (GdkX11Display, gdk_x11_display, GDK_TYPE_DISPLAY,
                          G_IMPLEMENT_INTERFACE (GDK_TYPE_EVENT_TRANSLATOR,
@@ -3156,6 +3163,24 @@ gdk_x11_display_get_last_seen_time (GdkDisplay *display)
   return gdk_x11_get_server_time (GDK_X11_DISPLAY (display)->leader_gdk_window);
 }
 
+static gboolean
+gdk_x11_display_translate_event_accumulator (GSignalInvocationHint *ihint,
+                                             GValue                *return_accu,
+                                             const GValue          *handler_return,
+                                             gpointer               dummy)
+{
+  GdkEvent *event;
+
+  event = g_value_get_boxed (handler_return);
+  if (event == NULL)
+    return TRUE;
+
+  if (event->type != GDK_NOTHING)
+    g_value_set_boxed (return_accu, event);
+
+  return FALSE;
+}
+
 static void
 gdk_x11_display_class_init (GdkX11DisplayClass * class)
 {
@@ -3215,6 +3240,54 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->get_setting = gdk_x11_display_get_setting;
   display_class->get_last_seen_time = gdk_x11_display_get_last_seen_time;
   display_class->set_cursor_theme = gdk_x11_display_set_cursor_theme;
+
+  class->translate_event = gdk_event_source_translate_event;
+
+  /**
+   * GdkX11Display::translate-event:
+   * @display: the object on which the signal is emitted
+   * @xevent: a pointer to the XEvent to process
+   *
+   * The ::translate-event signal is a low level signal that is emitted
+   * whenever an XEvent needs to be translated to a #GdkEvent.
+   *
+   * Handlers to this signal can return one of 3 possible values:
+   * 
+   * 1. %NULL
+   * 
+   * This will result in the next handler being invoked.
+   *
+   * 2. a #GdkEvent
+   *
+   * This will result in no further handlers being invoked and the returned
+   * event being enqueued for further processing by GDK.
+   *
+   * 3. gdk_event_new(GDK_NOTHING)
+   *
+   * If a handler returns an event of type GDK_NOTHING, the event will be
+   * discarded and no further handlers will be invoked. Use this if your
+   * function completely handled the @xevent.
+   *
+   * Note that the default handler for this function is GDK's own event
+   * translation mechanism, so by translating an event that GDK expects to
+   * translate, you may break GDK and/or GTK+ in interesting ways, so you
+   * have to know what you're doing.
+   *
+   * If you are interested in X GenericEvents, bear in mind that
+   * XGetEventData() has been already called on the event, and
+   * XFreeEventData() will be called afterwards.
+   *
+   * Returns: The translated #GdkEvent or %NULL to invoke further handlers to
+   *     translate the event.
+   */
+  signals[TRANSLATE_EVENT] =
+    g_signal_new (g_intern_static_string ("translate-event"),
+		  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GdkX11DisplayClass, translate_event),
+                  gdk_x11_display_translate_event_accumulator, NULL,
+                  _gdk_marshal_BOXED__POINTER,
+                  GDK_TYPE_EVENT, 1, G_TYPE_POINTER);
 
   _gdk_x11_windowing_init ();
 }

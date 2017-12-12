@@ -263,29 +263,23 @@ handle_touch_synthetic_crossing (GdkEvent *event)
     }
 }
 
-static GdkEvent *
-gdk_event_source_translate_event (GdkEventSource *event_source,
-                                  XEvent         *xevent)
+GdkEvent *
+gdk_event_source_translate_event (GdkX11Display  *x11_display,
+                                  const XEvent   *xevent)
 {
+  GdkEventSource *event_source = (GdkEventSource *) x11_display->event_source;
   GdkEvent *event = gdk_event_new (GDK_NOTHING);
   GdkFilterReturn result = GDK_FILTER_CONTINUE;
+  GdkDisplay *display = GDK_DISPLAY (x11_display);
   GdkEventTranslator *event_translator;
   GdkWindow *filter_window;
   Display *dpy;
   GdkX11Screen *x11_screen;
   gpointer cache;
 
-  x11_screen = GDK_X11_DISPLAY (event_source->display)->screen;
+  x11_screen = GDK_X11_DISPLAY (display)->screen;
 
-  dpy = GDK_DISPLAY_XDISPLAY (event_source->display);
-
-#ifdef HAVE_XGENERICEVENTS
-  /* Get cookie data here so it's available
-   * to every event translator and event filter.
-   */
-  if (xevent->type == GenericEvent)
-    XGetEventData (dpy, &xevent->xcookie);
-#endif
+  dpy = GDK_DISPLAY_XDISPLAY (display);
 
   filter_window = gdk_event_source_get_filter_window (event_source, xevent,
                                                       &event_translator);
@@ -300,7 +294,7 @@ gdk_event_source_translate_event (GdkEventSource *event_source,
       xevent->xany.window == x11_screen->xsettings_manager_window)
     result = gdk_xsettings_manager_window_filter (xevent, event, x11_screen);
 
-  cache = gdk_window_cache_get (event_source->display);
+  cache = gdk_window_cache_get (display);
   if (cache)
     {
       if (result == GDK_FILTER_CONTINUE)
@@ -328,11 +322,6 @@ gdk_event_source_translate_event (GdkEventSource *event_source,
 
   if (result != GDK_FILTER_CONTINUE)
     {
-#ifdef HAVE_XGENERICEVENTS
-      if (xevent->type == GenericEvent)
-        XFreeEventData (dpy, &xevent->xcookie);
-#endif
-
       if (result == GDK_FILTER_REMOVE)
         {
           gdk_event_free (event);
@@ -349,7 +338,7 @@ gdk_event_source_translate_event (GdkEventSource *event_source,
     {
       /* Event translator was gotten before in get_filter_window() */
       event = _gdk_x11_event_translator_translate (event_translator,
-                                                   event_source->display,
+                                                   display,
                                                    xevent);
     }
   else
@@ -362,7 +351,7 @@ gdk_event_source_translate_event (GdkEventSource *event_source,
 
           list = list->next;
           event = _gdk_x11_event_translator_translate (translator,
-                                                       event_source->display,
+                                                       display,
                                                        xevent);
         }
     }
@@ -385,11 +374,6 @@ gdk_event_source_translate_event (GdkEventSource *event_source,
     {
       handle_touch_synthetic_crossing (event);
     }
-
-#ifdef HAVE_XGENERICEVENTS
-  if (xevent->type == GenericEvent)
-    XFreeEventData (dpy, &xevent->xcookie);
-#endif
 
   return event;
 }
@@ -449,11 +433,6 @@ _gdk_x11_display_queue_events (GdkDisplay *display)
   GdkEvent *event;
   XEvent xevent;
   Display *xdisplay = GDK_DISPLAY_XDISPLAY (display);
-  GdkEventSource *event_source;
-  GdkX11Display *display_x11;
-
-  display_x11 = GDK_X11_DISPLAY (display);
-  event_source = (GdkEventSource *) display_x11->event_source;
 
   while (!_gdk_event_queue_find_first (display) && XPending (xdisplay))
     {
@@ -469,9 +448,26 @@ _gdk_x11_display_queue_events (GdkDisplay *display)
             continue;
         }
 
-      event = gdk_event_source_translate_event (event_source, &xevent);
+#ifdef HAVE_XGENERICEVENTS
+      /* Get cookie data here so it's available
+       * to every event translator and event filter.
+       */
+      if (xevent.type == GenericEvent)
+        XGetEventData (xdisplay, &xevent.xcookie);
+#endif
 
-      if (event)
+      g_signal_emit_by_name (display, "translate-event", &xevent, &event);
+
+#ifdef HAVE_XGENERICEVENTS
+      if (xevent.type == GenericEvent)
+        XFreeEventData (xdisplay, &xevent.xcookie);
+#endif
+
+      if (event && event->type == GDK_NOTHING)
+        {
+          gdk_event_free (event);
+        }
+      else if (event)
         {
           GList *node;
 

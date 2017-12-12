@@ -26,8 +26,9 @@
 #include "gdkkeys.h"
 #include "gdkwindow.h"
 #include "gdkinternals.h"
-#include "gdkx11screen.h"
 #include "gdkx11devicemanager.h"
+#include "gdkx11display.h"
+#include "gdkx11screen.h"
 
 #include <X11/X.h>
 #include <X11/Xlib.h>
@@ -166,6 +167,9 @@ struct _GdkX11Display
 struct _GdkX11DisplayClass
 {
   GdkDisplayClass parent_class;
+
+  GdkEvent *            (* translate_event)             (GdkX11Display          *display,
+                                                         const XEvent           *event);
 };
 
 GdkX11Screen *_gdk_x11_display_screen_for_xrootwin (GdkDisplay  *display,

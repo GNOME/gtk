@@ -19,6 +19,7 @@
 #define __GDK_X11_EVENT_SOURCE_H__
 
 #include "gdkeventtranslator.h"
+#include "gdkx11display.h"
 
 G_BEGIN_DECLS
 
@@ -36,6 +37,9 @@ void      gdk_x11_event_source_select_events  (GdkEventSource *source,
                                                Window          window,
                                                GdkEventMask    event_mask,
                                                unsigned int    extra_x_mask);
+
+GdkEvent *gdk_event_source_translate_event    (GdkX11Display  *display,
+                                               const XEvent   *xevent);
 
 
 G_END_DECLS
