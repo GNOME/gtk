@@ -33,7 +33,6 @@
 #include "gdkevents.h"
 #include "gdkwindowimpl.h"
 #include "gdkinternals.h"
-#include "gdkmarshalers.h"
 #include "gdkmonitorprivate.h"
 
 #include <math.h>
@@ -243,7 +242,7 @@ gdk_display_class_init (GdkDisplayClass *class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GdkDisplayClass, closed),
 		  NULL, NULL,
-		  _gdk_marshal_VOID__BOOLEAN,
+                  g_cclosure_marshal_VOID__BOOLEAN,
 		  G_TYPE_NONE,
 		  1,
 		  G_TYPE_BOOLEAN);
