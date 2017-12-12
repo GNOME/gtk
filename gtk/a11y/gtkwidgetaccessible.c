@@ -372,14 +372,8 @@ gtk_widget_accessible_ref_state_set (AtkObject *accessible)
             atk_state_set_add_state (state_set, ATK_STATE_SHOWING);
         }
 
-      if (gtk_widget_has_focus (widget) && (widget == _focus_widget))
-        {
-          AtkObject *focus_obj;
-
-          focus_obj = g_object_get_data (G_OBJECT (accessible), "gail-focus-object");
-          if (focus_obj == NULL)
-            atk_state_set_add_state (state_set, ATK_STATE_FOCUSED);
-        }
+      if (gtk_widget_has_focus (widget))
+        atk_state_set_add_state (state_set, ATK_STATE_FOCUSED);
 
       if (gtk_widget_has_default (widget))
         atk_state_set_add_state (state_set, ATK_STATE_DEFAULT);
