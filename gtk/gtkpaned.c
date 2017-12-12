@@ -43,6 +43,7 @@
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkrendericonprivate.h"
 #include "gtkgizmoprivate.h"
+#include "gtkeventcontrollermotion.h"
 
 #include <math.h>
 
@@ -140,6 +141,7 @@ struct _GtkPanedPrivate
 
   GtkGesture    *pan_gesture;  /* Used for touch */
   GtkGesture    *drag_gesture; /* Used for mice */
+  GtkEventController *motion_controller;
 
   gint          child1_size;
   gint          drag_pos;
@@ -304,32 +306,28 @@ get_handle_area (GtkPaned     *paned,
   area->height += extra * 2;
 }
 
-static gboolean
-gtk_paned_motion_notify (GtkWidget      *widget,
-                         GdkEventMotion *event)
+static void
+gtk_paned_motion (GtkEventControllerMotion *motion,
+                  double                    x,
+                  double                    y,
+                  GtkPaned                 *paned)
 {
-  GtkPaned *paned = GTK_PANED (widget);
   GtkPanedPrivate *priv = gtk_paned_get_instance_private (paned);
   GdkRectangle handle_area;
-  gdouble x, y;
 
   get_handle_area (paned, &handle_area);
 
-  if (gdk_event_get_coords ((GdkEvent *) event, &x, &y) &&
-      (gdk_rectangle_contains_point (&handle_area, x, y) ||
-       priv->panning))
+  if (gdk_rectangle_contains_point (&handle_area, x, y) || priv->panning)
     {
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-        gtk_widget_set_cursor_from_name (widget, "col-resize");
+        gtk_widget_set_cursor_from_name (GTK_WIDGET (paned), "col-resize");
       else
-        gtk_widget_set_cursor_from_name (widget, "row-resize");
+        gtk_widget_set_cursor_from_name (GTK_WIDGET (paned), "row-resize");
     }
   else
     {
-      gtk_widget_set_cursor (widget, NULL);
+      gtk_widget_set_cursor (GTK_WIDGET (paned), NULL);
     }
-
-  return GTK_WIDGET_CLASS (gtk_paned_parent_class)->motion_notify_event (widget, event);
 }
 
 static GtkWidget *
@@ -374,7 +372,6 @@ gtk_paned_class_init (GtkPanedClass *class)
   widget_class->unrealize = gtk_paned_unrealize;
   widget_class->snapshot = gtk_paned_snapshot;
   widget_class->focus = gtk_paned_focus;
-  widget_class->motion_notify_event = gtk_paned_motion_notify;
   widget_class->direction_changed = gtk_paned_direction_changed;
   widget_class->pick = gtk_paned_pick;
 
@@ -1019,6 +1016,7 @@ gtk_paned_finalize (GObject *object)
 
   g_clear_object (&paned->priv->pan_gesture);
   g_clear_object (&paned->priv->drag_gesture);
+  g_clear_object (&paned->priv->motion_controller);
 
   gtk_widget_unparent (priv->handle_widget);
 
@@ -1560,6 +1558,9 @@ gtk_paned_init (GtkPaned *paned)
                                               GTK_PHASE_CAPTURE);
   connect_drag_gesture_signals (paned, gesture);
   priv->drag_gesture = gesture;
+
+  priv->motion_controller = gtk_event_controller_motion_new (GTK_WIDGET (paned));
+  g_signal_connect (priv->motion_controller, "motion", G_CALLBACK (gtk_paned_motion), paned);
 
   priv->handle_widget = gtk_gizmo_new ("separator",
                                        NULL,
