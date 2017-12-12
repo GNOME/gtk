@@ -701,10 +701,6 @@ GDK_BUTTON_MIDDLE
 GDK_BUTTON_SECONDARY
 
 <SUBSECTION>
-gdk_events_pending
-gdk_event_peek
-gdk_event_get
-gdk_event_put
 gdk_event_new
 gdk_event_copy
 gdk_event_free

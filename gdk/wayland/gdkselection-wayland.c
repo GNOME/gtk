@@ -124,7 +124,7 @@ selection_buffer_notify (SelectionBuffer *buffer)
       event->selection.time = GDK_CURRENT_TIME;
       event->selection.requestor = g_object_ref (l->data);
 
-      gdk_event_put (event);
+      gdk_display_put_event (gdk_window_get_display (l->data), event);
       gdk_event_free (event);
     }
 }
@@ -563,7 +563,7 @@ gdk_wayland_selection_emit_request (GdkWindow *window,
   event->selection.time = GDK_CURRENT_TIME;
   event->selection.requestor = g_object_ref (window);
 
-  gdk_event_put (event);
+  gdk_display_put_event (gdk_window_get_display (window), event);
   gdk_event_free (event);
 }
 
@@ -1096,7 +1096,7 @@ emit_empty_selection_notify (GdkWindow *requestor,
   event->selection.time = GDK_CURRENT_TIME;
   event->selection.requestor = g_object_ref (requestor);
 
-  gdk_event_put (event);
+  gdk_display_put_event (gdk_window_get_display (requestor), event);
   gdk_event_free (event);
 }
 
@@ -1118,7 +1118,7 @@ emit_selection_clear (GdkDisplay *display,
       event->selection.requestor = g_object_ref (window);
     }
 
-  gdk_event_put (event);
+  gdk_display_put_event (display, event);
   gdk_event_free (event);
 }
 

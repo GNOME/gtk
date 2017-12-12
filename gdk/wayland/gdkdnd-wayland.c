@@ -137,7 +137,7 @@ _gdk_wayland_drag_context_emit_event (GdkDragContext *context,
   event->dnd.y_root = GDK_WAYLAND_DRAG_CONTEXT (context)->y;
   gdk_event_set_device (event, gdk_drag_context_get_device (context));
 
-  gdk_event_put (event);
+  gdk_display_put_event (gdk_window_get_display (window), event);
   gdk_event_free (event);
 }
 

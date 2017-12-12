@@ -519,16 +519,6 @@ GDK_AVAILABLE_IN_3_14
 GType     gdk_event_sequence_get_type   (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-gboolean  gdk_events_pending	 	(void);
-GDK_AVAILABLE_IN_ALL
-GdkEvent* gdk_event_get			(void);
-
-GDK_AVAILABLE_IN_ALL
-GdkEvent* gdk_event_peek                (void);
-GDK_AVAILABLE_IN_ALL
-void      gdk_event_put	 		(const GdkEvent *event);
-
-GDK_AVAILABLE_IN_ALL
 GdkEvent* gdk_event_new                 (GdkEventType    type);
 GDK_AVAILABLE_IN_ALL
 GdkEvent* gdk_event_copy     		(const GdkEvent *event);

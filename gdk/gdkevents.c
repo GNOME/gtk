@@ -352,135 +352,6 @@ gdk_event_handler_set (GdkEventFunc   func,
   _gdk_event_notify = notify;
 }
 
-/**
- * gdk_events_pending:
- *
- * Checks if any events are ready to be processed for any display.
- *
- * Returns: %TRUE if any events are pending.
- */
-gboolean
-gdk_events_pending (void)
-{
-  GSList *list, *l;
-  gboolean pending;
-
-  pending = FALSE;
-  list = gdk_display_manager_list_displays (gdk_display_manager_get ());
-  for (l = list; l; l = l->next)
-    {
-      if (_gdk_event_queue_find_first (l->data))
-        {
-          pending = TRUE;
-          goto out;
-        }
-    }
-
-  for (l = list; l; l = l->next)
-    {
-      if (gdk_display_has_pending (l->data))
-        {
-          pending = TRUE;
-          goto out;
-        }
-    }
-
- out:
-  g_slist_free (list);
-
-  return pending;
-}
-
-/**
- * gdk_event_get:
- * 
- * Checks all open displays for a #GdkEvent to process,to be processed
- * on, fetching events from the windowing system if necessary.
- * See gdk_display_get_event().
- * 
- * Returns: (nullable): the next #GdkEvent to be processed, or %NULL
- * if no events are pending. The returned #GdkEvent should be freed
- * with gdk_event_free().
- **/
-GdkEvent*
-gdk_event_get (void)
-{
-  GSList *list, *l;
-  GdkEvent *event;
-
-  event = NULL;
-  list = gdk_display_manager_list_displays (gdk_display_manager_get ());
-  for (l = list; l; l = l->next)
-    {
-      event = gdk_display_get_event (l->data);
-      if (event)
-        break;
-    }
-
-  g_slist_free (list);
-
-  return event;
-}
-
-/**
- * gdk_event_peek:
- *
- * If there is an event waiting in the event queue of some open
- * display, returns a copy of it. See gdk_display_peek_event().
- * 
- * Returns: (nullable): a copy of the first #GdkEvent on some event
- * queue, or %NULL if no events are in any queues. The returned
- * #GdkEvent should be freed with gdk_event_free().
- **/
-GdkEvent*
-gdk_event_peek (void)
-{
-  GSList *list, *l;
-  GdkEvent *event;
-
-  event = NULL;
-  list = gdk_display_manager_list_displays (gdk_display_manager_get ());
-  for (l = list; l; l = l->next)
-    {
-      event = gdk_display_peek_event (l->data);
-      if (event)
-        break;
-    }
-
-  g_slist_free (list);
-
-  return event;
-}
-
-static GdkDisplay *
-event_get_display (const GdkEvent *event)
-{
-  if (event->any.window)
-    return gdk_window_get_display (event->any.window);
-  else
-    return gdk_display_get_default ();
-}
-
-/**
- * gdk_event_put:
- * @event: a #GdkEvent.
- *
- * Appends a copy of the given event onto the front of the event
- * queue for event->any.window’s display, or the default event
- * queue if event->any.window is %NULL. See gdk_display_put_event().
- **/
-void
-gdk_event_put (const GdkEvent *event)
-{
-  GdkDisplay *display;
-  
-  g_return_if_fail (event != NULL);
-
-  display = event_get_display (event);
-
-  gdk_display_put_event (display, event);
-}
-
 static GHashTable *event_hash = NULL;
 
 /**
@@ -729,7 +600,7 @@ gdk_event_copy (const GdkEvent *event)
     }
 
   if (gdk_event_is_allocated (event))
-    _gdk_display_event_data_copy (event_get_display (event), event, new_event);
+    _gdk_display_event_data_copy (gdk_event_get_display (event), event, new_event);
 
   return new_event;
 }
@@ -815,7 +686,7 @@ gdk_event_free (GdkEvent *event)
       break;
     }
 
-  display = event_get_display (event);
+  display = gdk_event_get_display (event);
   if (display)
     _gdk_display_event_data_free (display, event);
 

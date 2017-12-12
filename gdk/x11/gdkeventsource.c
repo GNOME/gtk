@@ -164,7 +164,7 @@ handle_focus_change (GdkEventCrossing *event)
       focus_event->focus_change.in = focus_in;
       gdk_event_set_device (focus_event, gdk_event_get_device ((GdkEvent *) event));
 
-      gdk_event_put (focus_event);
+      gdk_display_put_event (gdk_window_get_display (event->window), focus_event);
       gdk_event_free (focus_event);
     }
 }
@@ -258,7 +258,7 @@ handle_touch_synthetic_crossing (GdkEvent *event)
 
   if (crossing)
     {
-      gdk_event_put (crossing);
+      gdk_display_put_event (gdk_device_get_display (device), crossing);
       gdk_event_free (crossing);
     }
 }

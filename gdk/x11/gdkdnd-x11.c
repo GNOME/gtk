@@ -1256,7 +1256,7 @@ send_client_message_async_cb (Window   window,
       temp_event->dnd.time = GDK_CURRENT_TIME;
       gdk_event_set_device (temp_event, gdk_drag_context_get_device (context));
 
-      gdk_event_put (temp_event);
+      gdk_display_put_event (gdk_drag_context_get_display (context), temp_event);
 
       gdk_event_free (temp_event);
     }
@@ -1309,7 +1309,7 @@ xdnd_send_xevent (GdkX11DragContext *context_x11,
               temp_event->any.window = g_object_ref (window);
 
               if ((*xdnd_filters[i].func) (event_send, temp_event, NULL) == GDK_FILTER_TRANSLATE)
-                gdk_event_put (temp_event);
+                gdk_display_put_event (display, temp_event);
 
               gdk_event_free (temp_event);
 
@@ -2360,7 +2360,7 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
       temp_event->dnd.time = time;
       gdk_event_set_device (temp_event, gdk_drag_context_get_device (context));
 
-      gdk_event_put (temp_event);
+      gdk_display_put_event (gdk_drag_context_get_display (context), temp_event);
       gdk_event_free (temp_event);
     }
   else
@@ -2405,7 +2405,7 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
                 temp_event->dnd.time = time;
                 gdk_event_set_device (temp_event, gdk_drag_context_get_device (context));
 
-                gdk_event_put (temp_event);
+                gdk_display_put_event (gdk_drag_context_get_display (context), temp_event);
                 gdk_event_free (temp_event);
               }
               break;
