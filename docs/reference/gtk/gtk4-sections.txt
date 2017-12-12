@@ -6700,6 +6700,24 @@ gtk_event_controller_scroll_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkeventcontrollermotion</FILE>
+<TITLE>GtkEventControlerMotion</TITLE>
+GtkEventControllerMotion
+gtk_event_controller_motion_new
+
+<SUBSECTION Standard>
+GTK_TYPE_EVENT_CONTROLLER_MOTION
+GTK_EVENT_CONTROLLER_MOTION
+GTK_EVENT_CONTROLLER_MOTION_CLASS
+GTK_IS_EVENT_CONTROLLER_MOTION
+GTK_IS_EVENT_CONTROLLER_MOTION_CLASS
+GTK_EVENT_CONTROLLER_MOTION_GET_CLASS
+
+<SUBSECTION Private>
+gtk_event_controller_motion_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkgesturedrag</FILE>
 <TITLE>GtkGestureDrag</TITLE>
 GtkGestureDrag
