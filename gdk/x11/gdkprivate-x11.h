@@ -103,7 +103,7 @@ void     _gdk_x11_window_translate         (GdkWindow *window,
 void     _gdk_x11_display_free_translate_queue (GdkDisplay *display);
 
 void     _gdk_x11_selection_window_destroyed   (GdkWindow            *window);
-gboolean _gdk_x11_selection_filter_clear_event (XSelectionClearEvent *event);
+gboolean _gdk_x11_selection_filter_clear_event (const XSelectionClearEvent *event);
 
 cairo_region_t* _gdk_x11_xwindow_get_shape  (Display *xdisplay,
                                              Window   window,
@@ -117,12 +117,12 @@ void     _gdk_x11_region_get_xrectangles   (const cairo_region_t  *region,
                                             XRectangle           **rects,
                                             gint                  *n_rects);
 
-gboolean _gdk_x11_moveresize_handle_event   (XEvent     *event);
+gboolean _gdk_x11_moveresize_handle_event   (const XEvent *event);
 gboolean _gdk_x11_moveresize_configure_done (GdkDisplay *display,
                                              GdkWindow  *window);
 
 void     _gdk_x11_keymap_state_changed   (GdkDisplay      *display,
-                                          XEvent          *event);
+                                          const XEvent    *event);
 void     _gdk_x11_keymap_keys_changed    (GdkDisplay      *display);
 void     _gdk_x11_keymap_add_virt_mods   (GdkKeymap       *keymap,
                                           GdkModifierType *modifiers);
@@ -270,13 +270,13 @@ GdkWindowCache *
 gdk_window_cache_get (GdkDisplay *display);
 
 GdkFilterReturn
-gdk_window_cache_filter (GdkXEvent *xev,
-                         GdkEvent  *event,
-                         gpointer   data);
+gdk_window_cache_filter (const XEvent *xevent,
+                         GdkEvent     *event,
+                         gpointer      data);
 GdkFilterReturn
-gdk_window_cache_shape_filter (GdkXEvent *xev,
-                               GdkEvent  *event,
-                               gpointer   data);
+gdk_window_cache_shape_filter (const XEvent *xevent,
+                               GdkEvent     *event,
+                               gpointer      data);
 
 void _gdk_x11_cursor_display_finalize (GdkDisplay *display);
 

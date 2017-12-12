@@ -41,28 +41,28 @@ struct _GdkEventTranslatorIface
   gboolean (* translate_event) (GdkEventTranslator *translator,
                                 GdkDisplay         *display,
                                 GdkEvent           *event,
-                                XEvent             *xevent);
+                                const XEvent       *xevent);
 
   GdkEventMask (* get_handled_events)   (GdkEventTranslator *translator);
   void         (* select_window_events) (GdkEventTranslator *translator,
                                          Window              window,
                                          GdkEventMask        event_mask);
   GdkWindow *  (* get_window)           (GdkEventTranslator *translator,
-                                         XEvent             *xevent);
+                                         const XEvent       *xevent);
 };
 
 GType      _gdk_x11_event_translator_get_type (void) G_GNUC_CONST;
 
 GdkEvent * _gdk_x11_event_translator_translate (GdkEventTranslator *translator,
-                                               GdkDisplay         *display,
-                                               XEvent             *xevent);
+                                                GdkDisplay         *display,
+                                                const XEvent       *xevent);
 GdkEventMask _gdk_x11_event_translator_get_handled_events   (GdkEventTranslator *translator);
 void         _gdk_x11_event_translator_select_window_events (GdkEventTranslator *translator,
                                                              Window              window,
                                                              GdkEventMask        event_mask);
 GdkWindow *  _gdk_x11_event_translator_get_window           (GdkEventTranslator *translator,
                                                              GdkDisplay         *display,
-                                                             XEvent             *xevent);
+                                                             const XEvent       *xevent);
 
 G_END_DECLS
 

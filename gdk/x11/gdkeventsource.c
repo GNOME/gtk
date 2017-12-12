@@ -55,9 +55,9 @@ static GSourceFuncs event_funcs = {
 };
 
 static gint
-gdk_event_apply_filters (XEvent    *xevent,
-			 GdkEvent  *event,
-			 GdkWindow *window)
+gdk_event_apply_filters (const XEvent *xevent,
+			 GdkEvent     *event,
+			 GdkWindow    *window)
 {
   GList *tmp_list;
   GdkFilterReturn result;
@@ -79,7 +79,7 @@ gdk_event_apply_filters (XEvent    *xevent,
         }
 
       filter->ref_count++;
-      result = filter->function (xevent, event, filter->data);
+      result = filter->function ((GdkXEvent *) xevent, event, filter->data);
 
       /* Protect against unreffing the filter mutating the list */
       node = tmp_list->next;
@@ -97,7 +97,7 @@ gdk_event_apply_filters (XEvent    *xevent,
 
 static GdkWindow *
 gdk_event_source_get_filter_window (GdkEventSource      *event_source,
-                                    XEvent              *xevent,
+                                    const XEvent        *xevent,
                                     GdkEventTranslator **event_translator)
 {
   GList *list = event_source->translators;

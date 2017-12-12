@@ -3933,8 +3933,8 @@ wmspec_send_message (GdkDisplay *display,
 }
 
 static void
-handle_wmspec_button_release (GdkDisplay *display,
-                              XEvent     *xevent)
+handle_wmspec_button_release (GdkDisplay   *display,
+                              const XEvent *xevent)
 {
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
   GdkWindow *window;
@@ -4261,7 +4261,7 @@ lookahead_motion_predicate (Display *xdisplay,
 
 static gboolean
 moveresize_lookahead (MoveResizeData *mv_resize,
-		      XEvent         *event)
+		      const XEvent   *event)
 {
   XEvent tmp_event;
   gboolean seen_release = FALSE;
@@ -4284,7 +4284,7 @@ moveresize_lookahead (MoveResizeData *mv_resize,
 }
 
 gboolean
-_gdk_x11_moveresize_handle_event (XEvent *event)
+_gdk_x11_moveresize_handle_event (const XEvent *event)
 {
   guint button_mask = 0;
   GdkDisplay *display = gdk_x11_lookup_xdisplay (event->xany.display);

@@ -33,7 +33,7 @@ _gdk_x11_event_translator_default_init (GdkEventTranslatorInterface *iface)
 GdkEvent *
 _gdk_x11_event_translator_translate (GdkEventTranslator *translator,
                                      GdkDisplay         *display,
-                                     XEvent             *xevent)
+                                     const XEvent       *xevent)
 {
   GdkEventTranslatorIface *iface;
   GdkEvent *event;
@@ -89,7 +89,7 @@ _gdk_x11_event_translator_select_window_events (GdkEventTranslator *translator,
 GdkWindow *
 _gdk_x11_event_translator_get_window (GdkEventTranslator *translator,
                                       GdkDisplay         *display,
-                                      XEvent             *xevent)
+                                      const XEvent       *xevent)
 {
   GdkEventTranslatorIface *iface;
 

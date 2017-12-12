@@ -526,11 +526,10 @@ gdk_window_cache_add (GdkWindowCache *cache,
 }
 
 GdkFilterReturn
-gdk_window_cache_shape_filter (GdkXEvent *xev,
-                               GdkEvent  *event,
-                               gpointer   data)
+gdk_window_cache_shape_filter (const XEvent *xevent,
+                               GdkEvent     *event,
+                               gpointer      data)
 {
-  XEvent *xevent = (XEvent *)xev;
   GdkWindowCache *cache = data;
 
   GdkX11Display *display = GDK_X11_DISPLAY (cache->display);
@@ -561,11 +560,10 @@ gdk_window_cache_shape_filter (GdkXEvent *xev,
 }
 
 GdkFilterReturn
-gdk_window_cache_filter (GdkXEvent *xev,
-                         GdkEvent  *event,
-                         gpointer   data)
+gdk_window_cache_filter (const XEvent *xevent,
+                         GdkEvent     *event,
+                         gpointer      data)
 {
-  XEvent *xevent = (XEvent *)xev;
   GdkWindowCache *cache = data;
 
   switch (xevent->type)
@@ -574,7 +572,7 @@ gdk_window_cache_filter (GdkXEvent *xev,
       break;
     case ConfigureNotify:
       {
-        XConfigureEvent *xce = &xevent->xconfigure;
+        const XConfigureEvent *xce = &xevent->xconfigure;
         GList *node;
 
         node = g_hash_table_lookup (cache->child_hash,
@@ -616,7 +614,7 @@ gdk_window_cache_filter (GdkXEvent *xev,
       }
     case CreateNotify:
       {
-        XCreateWindowEvent *xcwe = &xevent->xcreatewindow;
+        const XCreateWindowEvent *xcwe = &xevent->xcreatewindow;
 
         if (!g_hash_table_lookup (cache->child_hash,
                                   GUINT_TO_POINTER (xcwe->window)))
@@ -627,7 +625,7 @@ gdk_window_cache_filter (GdkXEvent *xev,
       }
     case DestroyNotify:
       {
-        XDestroyWindowEvent *xdwe = &xevent->xdestroywindow;
+        const XDestroyWindowEvent *xdwe = &xevent->xdestroywindow;
         GList *node;
 
         node = g_hash_table_lookup (cache->child_hash,
@@ -647,7 +645,7 @@ gdk_window_cache_filter (GdkXEvent *xev,
       }
     case MapNotify:
       {
-        XMapEvent *xme = &xevent->xmap;
+        const XMapEvent *xme = &xevent->xmap;
         GList *node;
 
         node = g_hash_table_lookup (cache->child_hash,
@@ -663,7 +661,7 @@ gdk_window_cache_filter (GdkXEvent *xev,
       break;
     case UnmapNotify:
       {
-        XMapEvent *xume = &xevent->xmap;
+        const XMapEvent *xume = &xevent->xmap;
         GList *node;
 
         node = g_hash_table_lookup (cache->child_hash,

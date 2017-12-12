@@ -642,11 +642,11 @@ update_lock_state (GdkX11Keymap *keymap_x11,
  * call in gdk_display_open()
  */
 void
-_gdk_x11_keymap_state_changed (GdkDisplay *display,
-                               XEvent     *xevent)
+_gdk_x11_keymap_state_changed (GdkDisplay   *display,
+                               const XEvent *xevent)
 {
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
-  XkbEvent *xkb_event = (XkbEvent *)xevent;
+  const XkbEvent *xkb_event = (const XkbEvent *) xevent;
 
   if (display_x11->keymap)
     {

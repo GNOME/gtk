@@ -102,7 +102,7 @@ GdkX11Screen *_gdk_x11_screen_new           (GdkDisplay   *display,
 void _gdk_x11_screen_update_visuals_for_gl  (GdkX11Screen *screen);
 void _gdk_x11_screen_window_manager_changed (GdkX11Screen *screen);
 void _gdk_x11_screen_size_changed           (GdkX11Screen *screen,
-                                             XEvent       *event);
+                                             const XEvent *event);
 void _gdk_x11_screen_get_edge_monitors      (GdkX11Screen *screen,
                                              gint         *top,
                                              gint         *bottom,

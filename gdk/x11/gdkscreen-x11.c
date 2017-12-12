@@ -851,7 +851,7 @@ process_monitors_change (GdkX11Screen *screen)
 
 void
 _gdk_x11_screen_size_changed (GdkX11Screen *screen,
-			      XEvent       *event)
+			      const XEvent *event)
 {
 #ifdef HAVE_RANDR
   GdkX11Display *display_x11;
@@ -861,7 +861,7 @@ _gdk_x11_screen_size_changed (GdkX11Screen *screen,
   if (display_x11->have_randr13 && event->type == ConfigureNotify)
     return;
 
-  XRRUpdateConfiguration (event);
+  XRRUpdateConfiguration ((XEvent *) event);
 #else
   if (event->type != ConfigureNotify)
     return;

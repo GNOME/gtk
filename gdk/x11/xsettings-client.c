@@ -502,13 +502,12 @@ check_manager_window (GdkX11Screen *x11_screen,
 }
 
 GdkFilterReturn
-gdk_xsettings_root_window_filter (GdkXEvent *xevent,
-                                  GdkEvent  *event,
-                                  gpointer   data)
+gdk_xsettings_root_window_filter (const XEvent *xev,
+                                  GdkEvent     *event,
+                                  gpointer      data)
 {
   GdkX11Screen *x11_screen = data;
   GdkDisplay *display = x11_screen->display;
-  XEvent *xev = xevent;
 
   /* The checks here will not unlikely cause us to reread
    * the properties from the manager window a number of
@@ -527,12 +526,11 @@ gdk_xsettings_root_window_filter (GdkXEvent *xevent,
 }
 
 GdkFilterReturn
-gdk_xsettings_manager_window_filter (GdkXEvent *xevent,
-                                     GdkEvent  *event,
-                                     gpointer   data)
+gdk_xsettings_manager_window_filter (const XEvent *xev,
+                                     GdkEvent     *event,
+                                     gpointer      data)
 {
   GdkX11Screen *x11_screen = data;
-  XEvent *xev = xevent;
 
   if (xev->xany.type == DestroyNotify)
     {

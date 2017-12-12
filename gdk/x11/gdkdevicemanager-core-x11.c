@@ -41,7 +41,7 @@ static void     gdk_x11_device_manager_event_translator_init (GdkEventTranslator
 static gboolean gdk_x11_device_manager_core_translate_event  (GdkEventTranslator *translator,
                                                               GdkDisplay         *display,
                                                               GdkEvent           *event,
-                                                              XEvent             *xevent);
+                                                              const XEvent       *xevent);
 
 
 G_DEFINE_TYPE_WITH_CODE (GdkX11DeviceManagerCore, gdk_x11_device_manager_core, G_TYPE_OBJECT,
@@ -191,7 +191,7 @@ static void
 translate_key_event (GdkDisplay              *display,
                      GdkX11DeviceManagerCore *device_manager,
                      GdkEvent                *event,
-                     XEvent                  *xevent)
+                     const XEvent            *xevent)
 {
   GdkKeymap *keymap = gdk_keymap_get_for_display (display);
   GdkModifierType consumed, state;
@@ -334,7 +334,7 @@ is_parent_of (GdkWindow *parent,
 
 static GdkWindow *
 get_event_window (GdkEventTranslator *translator,
-                  XEvent             *xevent)
+                  const XEvent       *xevent)
 {
   GdkDisplay *display;
   GdkWindow *window;
@@ -368,7 +368,7 @@ static gboolean
 gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
                                              GdkDisplay         *display,
                                              GdkEvent           *event,
-                                             XEvent             *xevent)
+                                             const XEvent       *xevent)
 {
   GdkWindowImplX11 *impl;
   GdkX11DeviceManagerCore *device_manager;

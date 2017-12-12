@@ -102,7 +102,7 @@ static void     gdk_x11_display_event_translator_init (GdkEventTranslatorIface *
 static gboolean gdk_x11_display_translate_event (GdkEventTranslator *translator,
                                                  GdkDisplay         *display,
                                                  GdkEvent           *event,
-                                                 XEvent             *xevent);
+                                                 const XEvent       *xevent);
 
 static void gdk_internal_connection_watch (Display  *display,
 					   XPointer  arg,
@@ -575,7 +575,7 @@ get_cm_atom (GdkDisplay *display)
 }
 
 static Window
-get_event_xwindow (XEvent             *xevent)
+get_event_xwindow (const XEvent *xevent)
 {
   Window xwindow;
 
@@ -613,7 +613,7 @@ static gboolean
 gdk_x11_display_translate_event (GdkEventTranslator *translator,
                                  GdkDisplay         *display,
                                  GdkEvent           *event,
-                                 XEvent             *xevent)
+                                 const XEvent       *xevent)
 {
   Window xwindow;
   GdkWindow *window;
@@ -1124,7 +1124,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 
       /* Let XLib know that there is a new keyboard mapping.
        */
-      XRefreshKeyboardMapping (&xevent->xmapping);
+      XRefreshKeyboardMapping ((XMappingEvent *) xevent);
       _gdk_x11_keymap_keys_changed (display);
       return_val = FALSE;
       break;

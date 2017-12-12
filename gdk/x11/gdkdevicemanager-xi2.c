@@ -79,13 +79,13 @@ static GdkDevice * gdk_x11_device_manager_xi2_get_client_pointer (GdkX11DeviceMa
 static gboolean gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                                             GdkDisplay         *display,
                                                             GdkEvent           *event,
-                                                            XEvent             *xevent);
+                                                            const XEvent       *xevent);
 static GdkEventMask gdk_x11_device_manager_xi2_get_handled_events   (GdkEventTranslator *translator);
 static void         gdk_x11_device_manager_xi2_select_window_events (GdkEventTranslator *translator,
                                                                      Window              window,
                                                                      GdkEventMask        event_mask);
 static GdkWindow *  gdk_x11_device_manager_xi2_get_window           (GdkEventTranslator *translator,
-                                                                     XEvent             *xevent);
+                                                                     const XEvent       *xevent);
 
 enum {
   PROP_0,
@@ -1225,7 +1225,7 @@ static gboolean
 gdk_x11_device_manager_xi2_translate_core_event (GdkEventTranslator *translator,
 						 GdkDisplay         *display,
 						 GdkEvent           *event,
-						 XEvent             *xevent)
+						 const XEvent       *xevent)
 {
   GdkEventTranslatorIface *parent_iface;
   gboolean keyboard = FALSE;
@@ -1341,10 +1341,10 @@ static gboolean
 gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                             GdkDisplay         *display,
                                             GdkEvent           *event,
-                                            XEvent             *xevent)
+                                            const XEvent       *xevent)
 {
   GdkX11DeviceManagerXI2 *device_manager;
-  XGenericEventCookie *cookie;
+  const XGenericEventCookie *cookie;
   GdkDevice *device, *source_device;
   gboolean return_val = TRUE;
   GdkWindow *window;
@@ -1943,7 +1943,7 @@ gdk_x11_device_manager_xi2_select_window_events (GdkEventTranslator *translator,
 
 static GdkWindow *
 gdk_x11_device_manager_xi2_get_window (GdkEventTranslator *translator,
-                                       XEvent             *xevent)
+                                       const XEvent       *xevent)
 {
   GdkX11DeviceManagerXI2 *device_manager;
   XIEvent *ev;
