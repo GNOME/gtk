@@ -1345,7 +1345,23 @@ gtk_snapshot_append_color (GtkSnapshot           *snapshot,
   g_return_if_fail (color != NULL);
   g_return_if_fail (bounds != NULL);
 
+
   graphene_rect_offset_r (bounds, current_state->translate_x, current_state->translate_y, &real_bounds);
+
+  /* Color nodes are trivially "clippable" so we do it now */
+  if (current_state->clip_region)
+    {
+      cairo_rectangle_int_t clip_extents;
+      cairo_region_get_extents (current_state->clip_region, &clip_extents);
+      graphene_rect_intersection (&GRAPHENE_RECT_INIT (
+                                    clip_extents.x,
+                                    clip_extents.y,
+                                    clip_extents.width,
+                                    clip_extents.height
+                                  ),
+                                  &real_bounds, &real_bounds);
+    }
+
   node = gsk_color_node_new (color, &real_bounds);
 
   if (name && snapshot->record_names)
