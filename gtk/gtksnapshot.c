@@ -1373,7 +1373,7 @@ gtk_snapshot_append_color (GtkSnapshot           *snapshot,
  *
  * Tests whether the rectangle is entirely outside the clip region of @snapshot.
  *
- * Returns: %TRUE is @bounds is entirely outside the clip region
+ * Returns: %TRUE if @bounds is entirely outside the clip region
  *
  * Since: 3.90
  */
