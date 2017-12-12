@@ -1882,10 +1882,21 @@ on_listbox_row_activated (GtkPlacesView    *view,
                           GtkWidget        *listbox)
 {
   GtkPlacesViewPrivate *priv;
+  GdkEvent *event;
+  guint button;
+  GtkPlacesOpenFlags open_flags;
 
   priv = gtk_places_view_get_instance_private (view);
 
-  activate_row (view, row, priv->current_open_flags);
+  event = gtk_get_current_event ();
+  gdk_event_get_button (event, &button);
+
+  if (gdk_event_get_event_type (event) == GDK_BUTTON_RELEASE && button == GDK_BUTTON_MIDDLE)
+    open_flags = GTK_PLACES_OPEN_NEW_TAB;
+  else
+    open_flags = priv->current_open_flags;
+
+  activate_row (view, row, open_flags);
 }
 
 static gboolean
