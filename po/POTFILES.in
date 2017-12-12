@@ -21,6 +21,7 @@ gdk/mir/gdkmirglcontext.c
 gdk/mir/gdkmirwindowimpl.c
 gdk/quartz/gdkglcontext-quartz.c
 gdk/wayland/gdkclipboard-wayland.c
+gdk/wayland/gdkdnd-wayland.c
 gdk/wayland/gdkglcontext-wayland.c
 gdk/wayland/gdkprimary-wayland.c
 gdk/win32/gdkglcontext-win32.c
@@ -29,6 +30,7 @@ gdk/x11/gdkapplaunchcontext-x11.c
 gdk/x11/gdkclipboard-x11.c
 gdk/x11/gdkdevicemanager-xi2.c
 gdk/x11/gdkdevice-xi2.c
+gdk/x11/gdkdnd-x11.c
 gdk/x11/gdkglcontext-x11.c
 gdk/x11/gdkmain-x11.c
 gdk/x11/gdkselectioninputstream-x11.c
@@ -125,6 +127,7 @@ gtk/gtkentrybuffer.c
 gtk/gtkentry.c
 gtk/gtkentrycompletion.c
 gtk/gtkeventcontroller.c
+gtk/gtkeventcontrollermotion.c
 gtk/gtkeventcontrollerscroll.c
 gtk/gtkexpander.c
 gtk/gtkfilechooserbutton.c
