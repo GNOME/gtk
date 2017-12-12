@@ -802,12 +802,6 @@ gdk_drag_context_cancel (GdkDragContext      *context,
   g_signal_emit (context, signals[CANCEL], 0, reason);
 }
 
-GList *
-gdk_drag_context_list (void)
-{
-  return contexts;
-}
-
 gboolean
 gdk_drag_context_handle_source_event (GdkEvent *event)
 {
