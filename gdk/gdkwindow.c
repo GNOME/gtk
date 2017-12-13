@@ -6927,7 +6927,7 @@ gdk_window_register_dnd (GdkWindow *window)
  * gdk_drag_begin:
  * @window: the source window for this drag
  * @device: the device that controls this drag
- * @formats: (transfer none): the offered formats
+ * @content: (transfer none): the offered content
  * @actions: the actions supported by this drag
  * @dx: the x offset to @device's position where the drag nominally started
  * @dy: the y offset to @device's position where the drag nominally started
@@ -6940,14 +6940,19 @@ gdk_window_register_dnd (GdkWindow *window)
  *     %NULL on error.
  */
 GdkDragContext *
-gdk_drag_begin (GdkWindow         *window,
-                GdkDevice         *device,
-                GdkContentFormats *formats,
-                GdkDragAction      actions,
-                gint               dx,
-                gint               dy)
+gdk_drag_begin (GdkWindow          *window,
+                GdkDevice          *device,
+                GdkContentProvider *content,
+                GdkDragAction       actions,
+                gint                dx,
+                gint                dy)
 {
-  return GDK_WINDOW_IMPL_GET_CLASS (window->impl)->drag_begin (window, device, formats, actions, dx, dy);
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
+  g_return_val_if_fail (gdk_window_get_display (window) == gdk_device_get_display (device), NULL);
+  g_return_val_if_fail (GDK_IS_CONTENT_PROVIDER (content), NULL);
+
+  return GDK_WINDOW_IMPL_GET_CLASS (window->impl)->drag_begin (window, device, content, actions, dx, dy);
 }
 
 /**

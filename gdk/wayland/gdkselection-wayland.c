@@ -753,63 +753,6 @@ gdk_wayland_selection_lookup_requestor_buffer (GdkWindow *requestor)
   return NULL;
 }
 
-static gboolean
-gdk_wayland_selection_source_handles_target (GdkWaylandSelection *wayland_selection,
-                                             GdkAtom              target)
-{
-  GdkAtom atom;
-  guint i;
-
-  if (target == NULL)
-    return FALSE;
-
-  for (i = 0; i < wayland_selection->source_targets->len; i++)
-    {
-      atom = g_array_index (wayland_selection->source_targets, GdkAtom, i);
-
-      if (atom == target)
-        return TRUE;
-    }
-
-  return FALSE;
-}
-
-static gboolean
-gdk_wayland_selection_request_target (GdkWaylandSelection *wayland_selection,
-                                      GdkWindow           *window,
-                                      GdkAtom              selection,
-                                      GdkAtom              target,
-                                      gint                 fd)
-{
-  if (wayland_selection->stored_selection.fd == fd &&
-      wayland_selection->requested_target == target)
-    return FALSE;
-
-  /* If we didn't issue gdk_wayland_selection_check_write() yet
-   * on a previous fd, it will still linger here. Just close it,
-   * as we can't have more than one fd on the fly.
-   */
-  if (wayland_selection->stored_selection.fd >= 0)
-    close (wayland_selection->stored_selection.fd);
-
-  wayland_selection->stored_selection.fd = fd;
-  wayland_selection->requested_target = target;
-
-  if (window &&
-      gdk_wayland_selection_source_handles_target (wayland_selection, target))
-    {
-      gdk_wayland_selection_emit_request (window, selection, target);
-      return TRUE;
-    }
-  else
-    {
-      close (fd);
-      wayland_selection->stored_selection.fd = -1;
-    }
-
-  return FALSE;
-}
-
 static void
 data_source_target (void                  *data,
                     struct wl_data_source *source,
@@ -821,44 +764,47 @@ data_source_target (void                  *data,
 }
 
 static void
+gdk_wayland_drag_context_write_done (GObject      *context,
+                                     GAsyncResult *result,
+                                     gpointer      user_data)
+{
+  GError *error = NULL;
+
+  if (!gdk_drag_context_write_finish (GDK_DRAG_CONTEXT (context), result, &error))
+    {
+      GDK_NOTE(DND, g_printerr ("%p: failed to write stream: %s\n", context, error->message));
+      g_error_free (error);
+    }
+}
+
+static void
 data_source_send (void                  *data,
                   struct wl_data_source *source,
                   const char            *mime_type,
                   int32_t                fd)
 {
-  GdkWaylandSelection *wayland_selection = data;
-  GdkWindow *window;
-  GdkAtom selection;
+  GdkDragContext *context;
+  GOutputStream *stream;
 
-  GDK_NOTE (EVENTS,
-            g_message ("data source send, source = %p, mime_type = %s, fd = %d",
-                       source, mime_type, fd));
-
-  if (!mime_type)
-    {
-      close (fd);
-      return;
-    }
-
-  if (source == wayland_selection->dnd_source)
-    {
-      window = wayland_selection->dnd_owner;
-      selection = atoms[ATOM_DND];
-    }
-  else
-    {
-      close (fd);
-      return;
-    }
-
-  if (!window)
+  context = gdk_wayland_drag_context_lookup_by_data_source (source);
+  if (!context)
     return;
 
-  if (!gdk_wayland_selection_request_target (wayland_selection, window,
-                                             selection,
-                                             gdk_atom_intern (mime_type, FALSE),
-                                             fd))
-    gdk_wayland_selection_check_write (wayland_selection);
+  GDK_NOTE (DND, g_printerr ("%p: data source send request for %s on fd %d\n",
+                             source, mime_type, fd));
+
+  //mime_type = gdk_intern_mime_type (mime_type);
+  mime_type = g_intern_string (mime_type);
+  stream = g_unix_output_stream_new (fd, TRUE);
+
+  gdk_drag_context_write_async (context,
+                                mime_type,
+                                stream,
+                                G_PRIORITY_DEFAULT,
+                                NULL,
+                                gdk_wayland_drag_context_write_done,
+                                context);
+  g_object_unref (stream);
 }
 
 static void

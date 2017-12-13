@@ -47,12 +47,12 @@ void gdk_broadway_window_set_nodes (GdkWindow *window,
                                     GPtrArray *node_textures);
 
 void     _gdk_broadway_window_register_dnd (GdkWindow      *window);
-GdkDragContext * _gdk_broadway_window_drag_begin (GdkWindow         *window,
-						  GdkDevice         *device,
-						  GdkContentFormats *formats,
-                                                  GdkDragAction      actions,
-                                                  gint               dx,
-                                                  gint               dy);
+GdkDragContext * _gdk_broadway_window_drag_begin (GdkWindow          *window,
+						  GdkDevice          *device,
+						  GdkContentProvider *content,
+                                                  GdkDragAction       actions,
+                                                  gint                dx,
+                                                  gint                dy);
 void     _gdk_broadway_window_translate         (GdkWindow *window,
 						 cairo_region_t *area,
 						 gint       dx,

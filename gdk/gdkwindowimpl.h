@@ -219,7 +219,7 @@ struct _GdkWindowImplClass
   void         (* register_dnd)         (GdkWindow *window);
   GdkDragContext * (*drag_begin)        (GdkWindow        *window,
                                          GdkDevice        *device,
-                                         GdkContentFormats *formats,
+                                         GdkContentProvider*content,
                                          GdkDragAction     actions,
                                          gint              dx,
                                          gint              dy);

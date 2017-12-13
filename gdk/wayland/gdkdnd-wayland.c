@@ -548,12 +548,12 @@ create_dnd_window (GdkDisplay *display)
 }
 
 GdkDragContext *
-_gdk_wayland_window_drag_begin (GdkWindow         *window,
-				GdkDevice         *device,
-				GdkContentFormats *formats,
-                                GdkDragAction      actions,
-                                gint               dx,
-                                gint               dy)
+_gdk_wayland_window_drag_begin (GdkWindow          *window,
+				GdkDevice          *device,
+	                        GdkContentProvider *content,
+                                GdkDragAction       actions,
+                                gint                dx,
+                                gint                dy)
 {
   GdkWaylandDragContext *context_wayland;
   GdkDragContext *context;
@@ -566,11 +566,11 @@ _gdk_wayland_window_drag_begin (GdkWindow         *window,
 
   context_wayland = g_object_new (GDK_TYPE_WAYLAND_DRAG_CONTEXT,
                                   "display", display_wayland,
+                                  "content", content,
                                   NULL);
   context = GDK_DRAG_CONTEXT (context_wayland);
   context->source_window = g_object_ref (window);
   context->is_source = TRUE;
-  context->formats = gdk_content_formats_ref (formats);
 
   gdk_drag_context_set_device (context, device);
 

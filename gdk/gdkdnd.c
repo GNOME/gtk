@@ -29,6 +29,8 @@
 #include "gdkwindow.h"
 #include "gdkintl.h"
 #include "gdkcontentformats.h"
+#include "gdkcontentprovider.h"
+#include "gdkcontentserializer.h"
 #include "gdkcursor.h"
 #include "gdkenumtypes.h"
 #include "gdkeventsprivate.h"
@@ -48,7 +50,9 @@ static struct {
 
 enum {
   PROP_0,
+  PROP_CONTENT,
   PROP_DISPLAY,
+  PROP_FORMATS,
   N_PROPERTIES
 };
 
@@ -261,6 +265,12 @@ gdk_drag_context_set_property (GObject      *gobject,
 
   switch (prop_id)
     {
+    case PROP_CONTENT:
+      context->content = g_value_dup_object (value);
+      if (context->content)
+        context->formats = gdk_content_provider_ref_formats (context->content);
+      break;
+
     case PROP_DISPLAY:
       context->display = g_value_get_object (value);
       g_assert (context->display != NULL);
@@ -282,8 +292,16 @@ gdk_drag_context_get_property (GObject    *gobject,
 
   switch (prop_id)
     {
+    case PROP_CONTENT:
+      g_value_set_object (value, context->content);
+      break;
+
     case PROP_DISPLAY:
       g_value_set_object (value, context->display);
+      break;
+
+    case PROP_FORMATS:
+      g_value_set_boxed (value, context->formats);
       break;
 
     default:
@@ -298,6 +316,8 @@ gdk_drag_context_finalize (GObject *object)
   GdkDragContext *context = GDK_DRAG_CONTEXT (object);
 
   contexts = g_list_remove (contexts, context);
+
+  g_clear_object (&context->content);
   g_clear_pointer (&context->formats, gdk_content_formats_unref);
 
   if (context->source_window)
@@ -353,6 +373,24 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
   object_class->finalize = gdk_drag_context_finalize;
 
   /**
+   * GdkDragContext:content:
+   *
+   * The #GdkContentProvider or %NULL if the context is not a source-side
+   * context.
+   *
+   * Since: 3.94
+   */
+  properties[PROP_CONTENT] =
+    g_param_spec_object ("content",
+                         "Content",
+                         "The content being dragged",
+                         GDK_TYPE_CONTENT_PROVIDER,
+                         G_PARAM_READWRITE |
+                         G_PARAM_CONSTRUCT_ONLY |
+                         G_PARAM_STATIC_STRINGS |
+                         G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
    * GdkDragContext:display:
    *
    * The #GdkDisplay that the drag context belongs to.
@@ -368,6 +406,22 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
                          G_PARAM_CONSTRUCT_ONLY |
                          G_PARAM_STATIC_STRINGS |
                          G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GdkDragContext:formats:
+   *
+   * The possible formats that the context can provide its data in.
+   *
+   * Since: 3.94
+   */
+  properties[PROP_FORMATS] =
+    g_param_spec_boxed ("formats",
+                        "Formats",
+                        "The possible formats for data",
+                        GDK_TYPE_CONTENT_FORMATS,
+                        G_PARAM_READABLE |
+                        G_PARAM_STATIC_STRINGS |
+                        G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GdkDragContext::cancel:
@@ -653,6 +707,125 @@ gdk_drag_get_selection (GdkDragContext *context)
   g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
 
   return GDK_DRAG_CONTEXT_GET_CLASS (context)->get_selection (context);
+}
+
+static void
+gdk_drag_context_write_done (GObject      *content,
+                             GAsyncResult *result,
+                             gpointer      task)
+{
+  GError *error = NULL;
+
+  if (gdk_content_provider_write_mime_type_finish (GDK_CONTENT_PROVIDER (content), result, &error))
+    g_task_return_boolean (task, TRUE);
+  else
+    g_task_return_error (task, error);
+
+  g_object_unref (task);
+}
+
+static void
+gdk_drag_context_write_serialize_done (GObject      *content,
+                                       GAsyncResult *result,
+                                       gpointer      task)
+{
+  GError *error = NULL;
+
+  if (gdk_content_serialize_finish (result, &error))
+    g_task_return_boolean (task, TRUE);
+  else
+    g_task_return_error (task, error);
+
+  g_object_unref (task);
+}
+
+void
+gdk_drag_context_write_async (GdkDragContext      *context,
+                              const char          *mime_type,
+                              GOutputStream       *stream,
+                              int                  io_priority,
+                              GCancellable        *cancellable,
+                              GAsyncReadyCallback  callback,
+                              gpointer             user_data)
+{
+  GdkContentFormats *formats, *mime_formats;
+  GTask *task;
+  GType gtype;
+
+  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
+  g_return_if_fail (context->content);
+  g_return_if_fail (mime_type != NULL);
+  g_return_if_fail (mime_type == g_intern_string (mime_type));
+  g_return_if_fail (G_IS_OUTPUT_STREAM (stream));
+  g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
+  g_return_if_fail (callback != NULL);
+
+  task = g_task_new (context, cancellable, callback, user_data);
+  g_task_set_priority (task, io_priority);
+  g_task_set_source_tag (task, gdk_drag_context_write_async);
+
+  formats = gdk_content_provider_ref_formats (context->content);
+  if (gdk_content_formats_contain_mime_type (formats, mime_type))
+    {
+      gdk_content_provider_write_mime_type_async (context->content,
+                                                  mime_type,
+                                                  stream,
+                                                  io_priority,
+                                                  cancellable,
+                                                  gdk_drag_context_write_done,
+                                                  task);
+      gdk_content_formats_unref (formats);
+      return;
+    }
+
+  mime_formats = gdk_content_formats_new ((const gchar *[2]) { mime_type, NULL }, 1);
+  mime_formats = gdk_content_formats_union_serialize_gtypes (mime_formats);
+  gtype = gdk_content_formats_match_gtype (formats, mime_formats);
+  if (gtype != G_TYPE_INVALID)
+    {
+      GValue value = G_VALUE_INIT;
+      GError *error = NULL;
+
+      g_assert (gtype != G_TYPE_INVALID);
+      
+      g_value_init (&value, gtype);
+      if (gdk_content_provider_get_value (context->content, &value, &error))
+        {
+          gdk_content_serialize_async (stream,
+                                       mime_type,
+                                       &value,
+                                       io_priority,
+                                       cancellable,
+                                       gdk_drag_context_write_serialize_done,
+                                       g_object_ref (task));
+        }
+      else
+        {
+          g_task_return_error (task, error);
+        }
+      
+      g_value_unset (&value);
+    }
+  else
+    {
+      g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
+                               _("No compatible formats to transfer clipboard contents."));
+    }
+
+  gdk_content_formats_unref (mime_formats);
+  gdk_content_formats_unref (formats);
+  g_object_unref (task);
+}
+
+gboolean
+gdk_drag_context_write_finish (GdkDragContext *context,
+                               GAsyncResult   *result,
+                               GError        **error)
+{
+  g_return_val_if_fail (g_task_is_valid (result, context), FALSE);
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gdk_drag_context_write_async, FALSE);
+
+  return g_task_propagate_boolean (G_TASK (result), error); 
 }
 
 void

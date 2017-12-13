@@ -2857,25 +2857,25 @@ drag_context_ungrab (GdkDragContext *context)
 }
 
 GdkDragContext *
-_gdk_x11_window_drag_begin (GdkWindow         *window,
-                            GdkDevice         *device,
-                            GdkContentFormats *formats,
-                            GdkDragAction      actions,
-                            gint               dx,
-                            gint               dy)
+_gdk_x11_window_drag_begin (GdkWindow          *window,
+                            GdkDevice          *device,
+                            GdkContentProvider *content,
+                            GdkDragAction       actions,
+                            gint                dx,
+                            gint                dy)
 {
   GdkDragContext *context;
   int x_root, y_root;
 
   context = (GdkDragContext *) g_object_new (GDK_TYPE_X11_DRAG_CONTEXT,
                                              "display", gdk_window_get_display (window),
+                                             "content", content,
                                              NULL);
 
   context->is_source = TRUE;
   context->source_window = window;
   g_object_ref (window);
 
-  context->formats = gdk_content_formats_ref (formats);
   precache_target_list (context);
 
   gdk_drag_context_set_device (context, device);

@@ -93,7 +93,7 @@ void       gdk_wayland_window_sync (GdkWindow *window);
 void            _gdk_wayland_window_register_dnd          (GdkWindow *window);
 GdkDragContext *_gdk_wayland_window_drag_begin            (GdkWindow *window,
 				                	   GdkDevice *device,
-	                                                   GdkContentFormats *formats,
+	                                                   GdkContentProvider *content,
                                                            GdkDragAction actions,
                                                            gint       dx,
                                                            gint       dy);

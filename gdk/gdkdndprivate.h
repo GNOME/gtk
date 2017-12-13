@@ -134,6 +134,7 @@ struct _GdkDragContext {
   GdkWindow *dest_window;
   GdkWindow *drag_window;
 
+  GdkContentProvider *content;
   GdkContentFormats *formats;
   GdkDragAction actions;
   GdkDragAction suggested_action;
@@ -177,6 +178,16 @@ void     gdk_drag_find_window             (GdkDragContext   *context,
                                            GdkWindow       **dest_window,
                                            GdkDragProtocol  *protocol);
 
+void                    gdk_drag_context_write_async            (GdkDragContext         *context,
+                                                                 const char             *mime_type,
+                                                                 GOutputStream          *stream,
+                                                                 int                     io_priority,
+                                                                 GCancellable           *cancellable,
+                                                                 GAsyncReadyCallback     callback,
+                                                                 gpointer                user_data);
+gboolean                gdk_drag_context_write_finish           (GdkDragContext         *context,
+                                                                 GAsyncResult           *result,
+                                                                 GError                **error);
 
 
 G_END_DECLS

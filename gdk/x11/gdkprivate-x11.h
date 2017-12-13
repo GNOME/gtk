@@ -282,12 +282,12 @@ void _gdk_x11_cursor_display_finalize (GdkDisplay *display);
 
 void _gdk_x11_window_register_dnd (GdkWindow *window);
 
-GdkDragContext * _gdk_x11_window_drag_begin (GdkWindow         *window,
-                                             GdkDevice         *device,
-                                             GdkContentFormats *formats,
-                                             GdkDragAction      actions,
-                                             gint               x_root,
-                                             gint               y_root);
+GdkDragContext * _gdk_x11_window_drag_begin (GdkWindow          *window,
+                                             GdkDevice          *device,
+                                             GdkContentProvider *content,
+                                             GdkDragAction       actions,
+                                             gint                dx,
+                                             gint                dy);
 
 GdkGrabStatus _gdk_x11_convert_grab_status (gint status);
 

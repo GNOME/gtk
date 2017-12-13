@@ -136,7 +136,7 @@ GInputStream *          gdk_drop_read_finish            (GdkDragContext        *
 GDK_AVAILABLE_IN_ALL
 GdkDragContext *        gdk_drag_begin                  (GdkWindow              *window,
                                                          GdkDevice              *device,
-                                                         GdkContentFormats      *formats,
+                                                         GdkContentProvider     *content,
                                                          GdkDragAction           actions,
                                                          gint                    dx,
                                                          gint                    dy);

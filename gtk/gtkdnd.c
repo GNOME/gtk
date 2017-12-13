@@ -960,6 +960,150 @@ gtk_drag_dest_drop (GtkWidget      *widget,
  * Source side *
  ***************/
 
+#define GTK_TYPE_DRAG_CONTENT            (gtk_drag_content_get_type ())
+#define GTK_DRAG_CONTENT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_DRAG_CONTENT, GtkDragContent))
+#define GTK_IS_DRAG_CONTENT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_DRAG_CONTENT))
+#define GTK_DRAG_CONTENT_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_DRAG_CONTENT, GtkDragContentClass))
+#define GTK_IS_DRAG_CONTENT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_DRAG_CONTENT))
+#define GTK_DRAG_CONTENT_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_DRAG_CONTENT, GtkDragContentClass))
+
+typedef struct _GtkDragContent GtkDragContent;
+typedef struct _GtkDragContentClass GtkDragContentClass;
+
+struct _GtkDragContent
+{
+  GdkContentProvider parent;
+
+  GtkWidget *widget;
+  GdkDragContext *context;
+  GdkContentFormats *formats;
+  guint32 time;
+};
+
+struct _GtkDragContentClass
+{
+  GdkContentProviderClass parent_class;
+};
+
+GType gtk_drag_content_get_type (void) G_GNUC_CONST;
+
+G_DEFINE_TYPE (GtkDragContent, gtk_drag_content, GDK_TYPE_CONTENT_PROVIDER)
+
+static GdkContentFormats *
+gtk_drag_content_ref_formats (GdkContentProvider *provider)
+{
+  GtkDragContent *content = GTK_DRAG_CONTENT (provider);
+
+  return gdk_content_formats_ref (content->formats);
+}
+
+static void
+gtk_drag_content_write_mime_type_done (GObject      *stream,
+                                       GAsyncResult *result,
+                                       gpointer      task)
+{
+  GError *error = NULL;
+
+  if (!g_output_stream_write_all_finish (G_OUTPUT_STREAM (stream),
+                                         result,
+                                         NULL,
+                                         &error))
+    {
+      g_task_return_error (task, error);
+    }
+  else
+    {
+      g_task_return_boolean (task, TRUE);
+    }
+
+  g_object_unref (task);
+}
+
+static void
+gtk_drag_content_write_mime_type_async (GdkContentProvider  *provider,
+                                        const char          *mime_type,
+                                        GOutputStream       *stream,
+                                        int                  io_priority,
+                                        GCancellable        *cancellable,
+                                        GAsyncReadyCallback  callback,
+                                        gpointer             user_data)
+{
+  GtkDragContent *content = GTK_DRAG_CONTENT (provider);
+  GtkSelectionData sdata = { 0, };
+  GTask *task;
+
+  task = g_task_new (content, cancellable, callback, user_data);
+  g_task_set_priority (task, io_priority);
+  g_task_set_source_tag (task, gtk_drag_content_write_mime_type_async);
+
+  sdata.selection = gdk_drag_get_selection (content->context);
+  sdata.target = gdk_atom_intern (mime_type, FALSE);
+  sdata.length = -1;
+  sdata.display = gtk_widget_get_display (content->widget);
+  
+  g_signal_emit_by_name (content->widget, "drag-data-get",
+                         content->context,
+                         &sdata,
+                         content->time);
+
+  if (sdata.length == -1)
+    {
+      g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_FAILED,
+                               _("Cannot provide contents as “%s”"), mime_type);
+      g_object_unref (task);
+      return;
+    }
+  g_task_set_task_data (task, sdata.data, g_free);
+
+  g_output_stream_write_all_async (stream,
+                                   sdata.data,
+                                   sdata.length,
+                                   io_priority,
+                                   cancellable,
+                                   gtk_drag_content_write_mime_type_done,
+                                   task);
+}
+
+static gboolean
+gtk_drag_content_write_mime_type_finish (GdkContentProvider  *provider,
+                                         GAsyncResult        *result,
+                                         GError             **error)
+{
+  g_return_val_if_fail (g_task_is_valid (result, provider), FALSE);
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_drag_content_write_mime_type_async, FALSE);
+
+  return g_task_propagate_boolean (G_TASK (result), error);
+}
+
+static void
+gtk_drag_content_finalize (GObject *object)
+{
+  GtkDragContent *content = GTK_DRAG_CONTENT (object);
+
+  g_clear_object (&content->widget);
+  g_clear_pointer (&content->formats, (GDestroyNotify) gdk_content_formats_unref);
+
+  G_OBJECT_CLASS (gtk_drag_content_parent_class)->finalize (object);
+}
+
+static void
+gtk_drag_content_class_init (GtkDragContentClass *class)
+{
+  GdkContentProviderClass *provider_class = GDK_CONTENT_PROVIDER_CLASS (class);
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+
+  object_class->finalize = gtk_drag_content_finalize;
+
+  provider_class->ref_formats = gtk_drag_content_ref_formats;
+  provider_class->write_mime_type_async = gtk_drag_content_write_mime_type_async;
+  provider_class->write_mime_type_finish = gtk_drag_content_write_mime_type_finish;
+}
+
+static void
+gtk_drag_content_init (GtkDragContent *content)
+{
+}
+
 /* Like gtk_drag_begin(), but also takes a GtkIconHelper
  * so that we can set the icon from the source site information
  */
@@ -979,6 +1123,7 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   GdkWindow *ipc_window;
   int dx, dy;
   GdkAtom selection;
+  GtkDragContent *content;
   guint32 time;
 
   ipc_widget = gtk_drag_get_ipc_widget (widget);
@@ -1001,12 +1146,21 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   dx -= x;
   dy -= y;
 
-  context = gdk_drag_begin (ipc_window, device, target_list, actions, dx, dy);
+  content = g_object_new (GTK_TYPE_DRAG_CONTENT, NULL);
+  content->widget = g_object_ref (widget);
+  content->formats = gdk_content_formats_ref (target_list);
+  content->time = time;
+
+  context = gdk_drag_begin (ipc_window, device, GDK_CONTENT_PROVIDER (content), actions, dx, dy);
   if (context == NULL)
     {
       gtk_drag_release_ipc_widget (ipc_widget);
+      g_object_unref (content);
       return NULL;
     }
+
+  content->context = context;
+  g_object_unref (content);
 
   info = gtk_drag_get_source_info (context, TRUE);
 
