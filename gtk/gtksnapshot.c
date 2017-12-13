@@ -1553,3 +1553,163 @@ gtk_snapshot_render_layout (GtkSnapshot     *snapshot,
 
   gtk_snapshot_offset (snapshot, -x, -y);
 }
+
+/*
+ * gtk_snapshot_append_linear_gradient:
+ * @snapshot: a #GtkSnapshot
+ * @bounds: the rectangle to render the linear gradient into
+ * @start: the point at which the linear gradient will begin
+ * @end: the point at which the linear gradient will finish
+ * @stops: (array length=n_stops): a pointer to an array of #GskColorStop defining the gradient
+ * @n_stops: the number of elements in @color_stops
+ *
+ * Appends a linear gradient node with the given stops to @snapshot.
+ *
+ * Since: 3.94
+ */
+void
+gtk_snapshot_append_linear_gradient (GtkSnapshot            *snapshot,
+                                     const graphene_rect_t  *bounds,
+                                     const graphene_point_t *start_point,
+                                     const graphene_point_t *end_point,
+                                     const GskColorStop     *stops,
+                                     gsize                   n_stops,
+                                     const char             *name,
+                                     ...)
+{
+  const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
+  GskRenderNode *node;
+  graphene_rect_t real_bounds;
+  graphene_point_t real_start_point;
+  graphene_point_t real_end_point;
+
+  g_return_if_fail (snapshot != NULL);
+  g_return_if_fail (start_point != NULL);
+  g_return_if_fail (end_point != NULL);
+  g_return_if_fail (stops != NULL);
+  g_return_if_fail (n_stops > 1);
+
+  graphene_rect_offset_r (bounds, current_state->translate_x, current_state->translate_y, &real_bounds);
+  real_start_point.x = start_point->x + current_state->translate_x;
+  real_start_point.y = start_point->y + current_state->translate_y;
+  real_end_point.x = end_point->x + current_state->translate_x;
+  real_end_point.y = end_point->y + current_state->translate_y;
+
+  /* Linear gradients can be trivially clipped if we don't change the start/end points. */
+  if (current_state->clip_region)
+    {
+      cairo_rectangle_int_t clip_extents;
+
+      cairo_region_get_extents (current_state->clip_region, &clip_extents);
+      graphene_rect_intersection (&GRAPHENE_RECT_INIT (
+                                    clip_extents.x,
+                                    clip_extents.y,
+                                    clip_extents.width,
+                                    clip_extents.height
+                                  ),
+                                  &real_bounds, &real_bounds);
+    }
+
+  node = gsk_linear_gradient_node_new (&real_bounds,
+                                       &real_start_point,
+                                       &real_end_point,
+                                       stops,
+                                       n_stops);
+
+  if (name && snapshot->record_names)
+    {
+      va_list args;
+      char *str;
+
+      va_start (args, name);
+      str = g_strdup_vprintf (name, args);
+      va_end (args);
+
+      gsk_render_node_set_name (node, str);
+
+      g_free (str);
+    }
+
+  gtk_snapshot_append_node (snapshot, node);
+  gsk_render_node_unref (node);
+}
+
+/*
+ * gtk_snapshot_append_repeating_linear_gradient:
+ * @snapshot: a #GtkSnapshot
+ * @bounds: the rectangle to render the linear gradient into
+ * @start: the point at which the linear gradient will begin
+ * @end: the point at which the linear gradient will finish
+ * @stops: (array length=n_stops): a pointer to an array of #GskColorStop defining the gradient
+ * @n_stops: the number of elements in @color_stops
+ *
+ * Appends a repeating linear gradient node with the given stops to @snapshot.
+ *
+ * Since: 3.94
+ */
+void
+gtk_snapshot_append_repeating_linear_gradient (GtkSnapshot            *snapshot,
+                                               const graphene_rect_t  *bounds,
+                                               const graphene_point_t *start_point,
+                                               const graphene_point_t *end_point,
+                                               const GskColorStop     *stops,
+                                               gsize                   n_stops,
+                                               const char             *name,
+                                               ...)
+{
+  const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
+  GskRenderNode *node;
+  graphene_rect_t real_bounds;
+  graphene_point_t real_start_point;
+  graphene_point_t real_end_point;
+
+  g_return_if_fail (snapshot != NULL);
+  g_return_if_fail (start_point != NULL);
+  g_return_if_fail (end_point != NULL);
+  g_return_if_fail (stops != NULL);
+  g_return_if_fail (n_stops > 1);
+
+  graphene_rect_offset_r (bounds, current_state->translate_x, current_state->translate_y, &real_bounds);
+  real_start_point.x = start_point->x + current_state->translate_x;
+  real_start_point.y = start_point->y + current_state->translate_y;
+  real_end_point.x = end_point->x + current_state->translate_x;
+  real_end_point.y = end_point->y + current_state->translate_y;
+
+  /* Repeating Linear gradients can be trivially clipped if we don't change the start/end points. */
+  if (current_state->clip_region)
+    {
+      cairo_rectangle_int_t clip_extents;
+
+      cairo_region_get_extents (current_state->clip_region, &clip_extents);
+      graphene_rect_intersection (&GRAPHENE_RECT_INIT (
+                                    clip_extents.x,
+                                    clip_extents.y,
+                                    clip_extents.width,
+                                    clip_extents.height
+                                  ),
+                                  &real_bounds, &real_bounds);
+    }
+
+  node = gsk_repeating_linear_gradient_node_new (&real_bounds,
+                                                 &real_start_point,
+                                                 &real_end_point,
+                                                 stops,
+                                                 n_stops);
+
+  if (name && snapshot->record_names)
+    {
+      va_list args;
+      char *str;
+
+      va_start (args, name);
+      str = g_strdup_vprintf (name, args);
+      va_end (args);
+
+      gsk_render_node_set_name (node, str);
+
+      g_free (str);
+    }
+
+  gtk_snapshot_append_node (snapshot, node);
+  gsk_render_node_unref (node);
+}

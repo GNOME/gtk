@@ -166,6 +166,25 @@ void            gtk_snapshot_render_insertion_cursor    (GtkSnapshot            
                                                          PangoLayout            *layout,
                                                          int                     index,
                                                          PangoDirection          direction);
+GDK_AVAILABLE_IN_3_94
+void            gtk_snapshot_append_linear_gradient     (GtkSnapshot            *snapshot,
+                                                         const graphene_rect_t  *bounds,
+                                                         const graphene_point_t *start_point,
+                                                         const graphene_point_t *end_point,
+                                                         const GskColorStop     *stops,
+                                                         gsize                   n_stops,
+                                                         const char             *name,
+                                                         ...) G_GNUC_PRINTF (7, 8);
+GDK_AVAILABLE_IN_3_94
+void            gtk_snapshot_append_repeating_linear_gradient (GtkSnapshot            *snapshot,
+                                                               const graphene_rect_t  *bounds,
+                                                               const graphene_point_t *start_point,
+                                                               const graphene_point_t *end_point,
+                                                               const GskColorStop     *stops,
+                                                               gsize                   n_stops,
+                                                                const char             *name,
+                                                               ...) G_GNUC_PRINTF (7, 8);
+
 
 G_END_DECLS
 

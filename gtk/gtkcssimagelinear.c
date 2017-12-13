@@ -135,15 +135,12 @@ gtk_css_image_linear_snapshot (GtkCssImage        *image,
 {
   GtkCssImageLinear *linear = GTK_CSS_IMAGE_LINEAR (image);
   GskColorStop *stops;
-  GskRenderNode *node;
-  int off_x, off_y; /* snapshot offset */
   double angle; /* actual angle of the gradiant line in degrees */
   double x, y; /* coordinates of start point */
   double length; /* distance in pixels for 100% */
   double start, end; /* position of first/last point on gradient line - with gradient line being [0, 1] */
   double offset;
   int i, last;
-  char *name;
 
   if (linear->side)
     {
@@ -233,37 +230,28 @@ gtk_css_image_linear_snapshot (GtkCssImage        *image,
       last = i;
     }
 
-  gtk_snapshot_get_offset (snapshot, &off_x, &off_y);
-
   if (linear->repeating)
     {
-      node = gsk_repeating_linear_gradient_node_new (
-          &GRAPHENE_RECT_INIT (off_x, off_y, width, height),
-          &GRAPHENE_POINT_INIT (off_x + width / 2 + x * (start - 0.5), off_y + height / 2 + y * (start - 0.5)),
-          &GRAPHENE_POINT_INIT (off_x + width / 2 + x * (end - 0.5),   off_y + height / 2 + y * (end - 0.5)),
+      gtk_snapshot_append_repeating_linear_gradient (
+          snapshot,
+          &GRAPHENE_RECT_INIT (0, 0, width, height),
+          &GRAPHENE_POINT_INIT (width / 2 + x * (start - 0.5), height / 2 + y * (start - 0.5)),
+          &GRAPHENE_POINT_INIT (width / 2 + x * (end - 0.5),   height / 2 + y * (end - 0.5)),
           stops,
-          linear->stops->len);
+          linear->stops->len,
+          "RepeatingLinearGradient<%ustops>", linear->stops->len);
     }
   else
     {
-      node = gsk_linear_gradient_node_new (
-          &GRAPHENE_RECT_INIT (off_x, off_y, width, height),
-          &GRAPHENE_POINT_INIT (off_x + width / 2 + x * (start - 0.5), off_y + height / 2 + y * (start - 0.5)),
-          &GRAPHENE_POINT_INIT (off_x + width / 2 + x * (end - 0.5),   off_y + height / 2 + y * (end - 0.5)),
+      gtk_snapshot_append_linear_gradient (
+          snapshot,
+          &GRAPHENE_RECT_INIT (0, 0, width, height),
+          &GRAPHENE_POINT_INIT (width / 2 + x * (start - 0.5), height / 2 + y * (start - 0.5)),
+          &GRAPHENE_POINT_INIT (width / 2 + x * (end - 0.5),   height / 2 + y * (end - 0.5)),
           stops,
-          linear->stops->len);
+          linear->stops->len,
+          "LinearGradient<%ustops>", linear->stops->len);
     }
-
-  if (snapshot->record_names)
-    {
-      name = g_strdup_printf ("%sLinearGradient<%ustops>", linear->repeating ? "Repeating" : "", linear->stops->len);
-      gsk_render_node_set_name (node, name);
-      g_free (name);
-    }
-
-  gtk_snapshot_append_node (snapshot, node);
-
-  gsk_render_node_unref (node);
 }
 
 
