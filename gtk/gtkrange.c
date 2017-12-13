@@ -3047,3 +3047,18 @@ gtk_range_get_slider_widget (GtkRange *range)
 {
   return range->priv->slider_widget;
 }
+
+void
+gtk_range_start_autoscroll (GtkRange      *range,
+                            GtkScrollType  scroll_type)
+{
+  remove_autoscroll (range);
+  range->priv->autoscroll_mode = scroll_type;
+  add_autoscroll (range);
+}
+
+void
+gtk_range_stop_autoscroll (GtkRange *range)
+{
+  remove_autoscroll (range);
+}
