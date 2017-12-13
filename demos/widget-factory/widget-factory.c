@@ -1278,8 +1278,13 @@ textbuffer_notify_selection (GObject *object, GParamSpec *pspec, GtkWidget *butt
 }
 
 static gboolean
-osd_frame_button_press (GtkWidget *frame, GdkEventButton *event, gpointer data)
+osd_frame_pressed (GtkGestureMultiPress *gesture,
+                   int                   press,
+                   double                x,
+                   double                y,
+                   gpointer              data)
 {
+  GtkWidget *frame = data;
   GtkWidget *osd;
   gboolean visible;
 
@@ -1650,6 +1655,7 @@ activate (GApplication *app)
   gint i;
   GPermission *permission;
   GAction *action;
+  GtkGesture *gesture;
 
   g_type_ensure (my_text_view_get_type ());
 
@@ -1668,7 +1674,6 @@ activate (GApplication *app)
   gtk_builder_add_callback_symbol (builder, "on_page_combo_changed", (GCallback)on_page_combo_changed);
   gtk_builder_add_callback_symbol (builder, "on_range_from_changed", (GCallback)on_range_from_changed);
   gtk_builder_add_callback_symbol (builder, "on_range_to_changed", (GCallback)on_range_to_changed);
-  gtk_builder_add_callback_symbol (builder, "osd_frame_button_press", (GCallback)osd_frame_button_press);
   gtk_builder_add_callback_symbol (builder, "tab_close_cb", (GCallback)tab_close_cb);
   gtk_builder_add_callback_symbol (builder, "increase_icon_size", (GCallback)increase_icon_size);
   gtk_builder_add_callback_symbol (builder, "decrease_icon_size", (GCallback)decrease_icon_size);
@@ -1891,6 +1896,10 @@ activate (GApplication *app)
   widget2 = (GtkWidget *)gtk_builder_get_object (builder, "progressbar2");
   g_signal_connect (adj, "value-changed", G_CALLBACK (adjustment3_value_changed), widget);
   g_signal_connect (adj, "value-changed", G_CALLBACK (adjustment3_value_changed), widget2);
+
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "osd_frame");
+  gesture = gtk_gesture_multi_press_new (widget);
+  g_signal_connect (gesture, "pressed", G_CALLBACK (osd_frame_pressed), widget);
 
   gtk_widget_show (GTK_WIDGET (window));
 

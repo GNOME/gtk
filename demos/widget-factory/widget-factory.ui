@@ -3032,7 +3032,6 @@ microphone-sensitivity-medium-symbolic</property>
                         </child>
                         <child>
                           <object class="GtkFrame" id="osd_frame">
-                            <signal name="button-press-event" handler="osd_frame_button_press"/>
                             <child>
                               <object class="GtkPaned">
                                 <property name="wide-handle">1</property>
