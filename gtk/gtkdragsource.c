@@ -65,15 +65,16 @@ gtk_drag_source_gesture_begin (GtkGesture       *gesture,
     gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_DENIED);
 }
 
-static gboolean
-gtk_drag_source_event_cb (GtkWidget *widget,
-                          GdkEvent  *event,
-                          gpointer   data)
+static void
+gtk_drag_source_gesture_update (GtkGesture       *gesture,
+                                GdkEventSequence *sequence,
+                                gpointer          data)
 {
   gdouble start_x, start_y, offset_x, offset_y;
   GtkDragSourceSite *site = data;
+  GtkWidget *widget;
 
-  gtk_event_controller_handle_event (GTK_EVENT_CONTROLLER (site->drag_gesture), event);
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
 
   if (gtk_gesture_is_recognized (site->drag_gesture))
     {
@@ -85,22 +86,20 @@ gtk_drag_source_event_cb (GtkWidget *widget,
       if (gtk_drag_check_threshold (widget, start_x, start_y,
                                     start_x + offset_x, start_y + offset_y))
         {
+          GdkDevice *device = gtk_gesture_get_device (site->drag_gesture);
+
           gtk_event_controller_reset (GTK_EVENT_CONTROLLER (site->drag_gesture));
 
           gtk_drag_begin_internal (widget,
-                                   gtk_gesture_get_device (site->drag_gesture),
+                                   device,
                                    site->image_def, site->target_list,
                                    site->actions,
                                    start_x, start_y);
-
-          return TRUE;
         }
     }
-
-  return FALSE;
 }
 
-static void 
+static void
 gtk_drag_source_site_destroy (gpointer data)
 {
   GtkDragSourceSite *site = data;
@@ -147,21 +146,15 @@ gtk_drag_source_set (GtkWidget         *widget,
       site->image_def = gtk_image_definition_new_empty ();
       site->drag_gesture = gtk_gesture_drag_new (widget);
       gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (site->drag_gesture),
-                                                  GTK_PHASE_NONE);
+                                                  GTK_PHASE_BUBBLE);
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (site->drag_gesture), 0);
       g_signal_connect (site->drag_gesture, "begin",
                         G_CALLBACK (gtk_drag_source_gesture_begin),
                         site);
+      g_signal_connect (site->drag_gesture, "update",
+                        G_CALLBACK (gtk_drag_source_gesture_update),
+                        site);
 
-      g_signal_connect (widget, "button-press-event",
-                        G_CALLBACK (gtk_drag_source_event_cb),
-                        site);
-      g_signal_connect (widget, "button-release-event",
-                        G_CALLBACK (gtk_drag_source_event_cb),
-                        site);
-      g_signal_connect (widget, "motion-notify-event",
-                        G_CALLBACK (gtk_drag_source_event_cb),
-                        site);
       g_object_set_data_full (G_OBJECT (widget),
                               I_("gtk-site-data"), 
                               site, gtk_drag_source_site_destroy);
@@ -186,19 +179,9 @@ gtk_drag_source_set (GtkWidget         *widget,
 void 
 gtk_drag_source_unset (GtkWidget *widget)
 {
-  GtkDragSourceSite *site;
-
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  site = g_object_get_data (G_OBJECT (widget), "gtk-site-data");
-
-  if (site)
-    {
-      g_signal_handlers_disconnect_by_func (widget,
-                                            gtk_drag_source_event_cb,
-                                            site);
-      g_object_set_data (G_OBJECT (widget), I_("gtk-site-data"), NULL);
-    }
+  g_object_set_data (G_OBJECT (widget), I_("gtk-site-data"), NULL);
 }
 
 /**
