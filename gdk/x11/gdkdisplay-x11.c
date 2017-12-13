@@ -77,7 +77,7 @@
 #endif
 
 enum {
-  TRANSLATE_EVENT,
+  XEVENT,
   LAST_SIGNAL
 };
 
@@ -3164,21 +3164,19 @@ gdk_x11_display_get_last_seen_time (GdkDisplay *display)
 }
 
 static gboolean
-gdk_x11_display_translate_event_accumulator (GSignalInvocationHint *ihint,
-                                             GValue                *return_accu,
-                                             const GValue          *handler_return,
-                                             gpointer               dummy)
+gdk_boolean_handled_accumulator (GSignalInvocationHint *ihint,
+                                 GValue                *return_accu,
+                                 const GValue          *handler_return,
+                                 gpointer               dummy)
 {
-  GdkEvent *event;
+  gboolean continue_emission;
+  gboolean signal_handled;
 
-  event = g_value_get_boxed (handler_return);
-  if (event == NULL)
-    return TRUE;
+  signal_handled = g_value_get_boolean (handler_return);
+  g_value_set_boolean (return_accu, signal_handled);
+  continue_emission = !signal_handled;
 
-  if (event->type != GDK_NOTHING)
-    g_value_set_boxed (return_accu, event);
-
-  return FALSE;
+  return continue_emission;
 }
 
 static void
@@ -3241,53 +3239,40 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->get_last_seen_time = gdk_x11_display_get_last_seen_time;
   display_class->set_cursor_theme = gdk_x11_display_set_cursor_theme;
 
-  class->translate_event = gdk_event_source_translate_event;
+  class->xevent = gdk_event_source_xevent;
 
   /**
-   * GdkX11Display::translate-event:
+   * GdkX11Display::xevent:
    * @display: the object on which the signal is emitted
    * @xevent: a pointer to the XEvent to process
    *
-   * The ::translate-event signal is a low level signal that is emitted
-   * whenever an XEvent needs to be translated to a #GdkEvent.
+   * The ::xevent signal is a low level signal that is emitted
+   * whenever an XEvent has been received.
    *
-   * Handlers to this signal can return one of 3 possible values:
-   * 
-   * 1. %NULL
-   * 
-   * This will result in the next handler being invoked.
+   * When handlers to this signal return %TRUE, no other handlers will be
+   * invoked. In particular, the default handler for this function is
+   * GDK's own event handling mechanism, so by returning %TRUE for an event
+   * that GDK expects to translate, you may break GDK and/or GTK+ in
+   * interesting ways. You have been warned.
    *
-   * 2. a #GdkEvent
-   *
-   * This will result in no further handlers being invoked and the returned
-   * event being enqueued for further processing by GDK.
-   *
-   * 3. gdk_event_new(GDK_NOTHING)
-   *
-   * If a handler returns an event of type GDK_NOTHING, the event will be
-   * discarded and no further handlers will be invoked. Use this if your
-   * function completely handled the @xevent.
-   *
-   * Note that the default handler for this function is GDK's own event
-   * translation mechanism, so by translating an event that GDK expects to
-   * translate, you may break GDK and/or GTK+ in interesting ways, so you
-   * have to know what you're doing.
+   * If you want this signal handler to queue a #GdkEvent, you can use
+   * gdk_display_put_event().
    *
    * If you are interested in X GenericEvents, bear in mind that
    * XGetEventData() has been already called on the event, and
    * XFreeEventData() will be called afterwards.
    *
-   * Returns: The translated #GdkEvent or %NULL to invoke further handlers to
-   *     translate the event.
+   * Returns: %TRUE to stop other handlers from being invoked for the event.
+   *   %FALSE to propagate the event further.
    */
-  signals[TRANSLATE_EVENT] =
-    g_signal_new (g_intern_static_string ("translate-event"),
+  signals[XEVENT] =
+    g_signal_new (g_intern_static_string ("xevent"),
 		  G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GdkX11DisplayClass, translate_event),
-                  gdk_x11_display_translate_event_accumulator, NULL,
-                  _gdk_marshal_BOXED__POINTER,
-                  GDK_TYPE_EVENT, 1, G_TYPE_POINTER);
+		  G_STRUCT_OFFSET (GdkX11DisplayClass, xevent),
+                  gdk_boolean_handled_accumulator, NULL,
+                  _gdk_marshal_BOOLEAN__POINTER,
+                  G_TYPE_BOOLEAN, 1, G_TYPE_POINTER);
 
   _gdk_x11_windowing_init ();
 }

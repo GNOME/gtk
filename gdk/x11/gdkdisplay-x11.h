@@ -168,7 +168,7 @@ struct _GdkX11DisplayClass
 {
   GdkDisplayClass parent_class;
 
-  GdkEvent *            (* translate_event)             (GdkX11Display          *display,
+  gboolean              (* xevent)                      (GdkX11Display          *display,
                                                          const XEvent           *event);
 };
 

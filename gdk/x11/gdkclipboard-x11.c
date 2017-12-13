@@ -372,10 +372,10 @@ gdk_x11_clipboard_claim_remote (GdkX11Clipboard *cb,
   gdk_x11_clipboard_request_targets (cb);
 }
 
-static GdkEvent *
-gdk_x11_clipboard_translate_event (GdkDisplay   *display,
-                                   const XEvent *xevent,
-                                   gpointer   data)
+static gboolean
+gdk_x11_clipboard_xevent (GdkDisplay   *display,
+                          const XEvent *xevent,
+                          gpointer   data)
 {
   GdkX11Clipboard *cb = GDK_X11_CLIPBOARD (data);
   Window xwindow;
@@ -383,41 +383,41 @@ gdk_x11_clipboard_translate_event (GdkDisplay   *display,
   xwindow = GDK_X11_DISPLAY (display)->leader_window;
 
   if (xevent->xany.window != xwindow)
-    return NULL;
+    return FALSE;
 
   switch (xevent->type)
   {
     case SelectionClear:
       if (xevent->xselectionclear.selection != cb->xselection)
-        return NULL;
+        return FALSE;
 
       if (xevent->xselectionclear.time < cb->timestamp)
         {
           GDK_NOTE(CLIPBOARD, g_printerr ("%s: ignoring SelectionClear with too old timestamp (%lu vs %lu)\n",
                                           cb->selection, xevent->xselectionclear.time, cb->timestamp));
-          return NULL;
+          return FALSE;
         }
 
       GDK_NOTE(CLIPBOARD, g_printerr ("%s: got SelectionClear\n", cb->selection));
       gdk_x11_clipboard_claim_remote (cb, xevent->xselectionclear.time);
-      return gdk_event_new (GDK_NOTHING);
+      return TRUE;
 
     case SelectionNotify:
       /* This code only checks clipboard manager replies, so... */
       if (!g_str_equal (cb->selection, "CLIPBOARD"))
-        return NULL;
+        return FALSE;
 
       /* selection is not for us */
       if (xevent->xselection.selection != gdk_x11_get_xatom_by_name_for_display (display, "CLIPBOARD_MANAGER") ||
           xevent->xselection.target != gdk_x11_get_xatom_by_name_for_display (display, "SAVE_TARGETS"))
-        return NULL;
+        return FALSE;
 
       /* We already received a selectionNotify before */
       if (cb->store_task == NULL)
         {
           GDK_NOTE(CLIPBOARD, g_printerr ("%s: got SelectionNotify for nonexisting task?!\n",
                                           cb->selection));
-          return NULL;
+          return FALSE;
         }
 
       GDK_NOTE(CLIPBOARD, g_printerr ("%s: got SelectionNotify for store task\n",
@@ -430,14 +430,14 @@ gdk_x11_clipboard_translate_event (GdkDisplay   *display,
                                  _("Clipboard manager could not store selection."));
       g_clear_object (&cb->store_task);
       
-      return NULL;
+      return FALSE;
 
     case SelectionRequest:
       {
         const char *target, *property;
 
         if (xevent->xselectionrequest.selection != cb->xselection)
-          return NULL;
+          return FALSE;
 
         target = gdk_x11_get_xatom_name_for_display (display, xevent->xselectionrequest.target);
         if (xevent->xselectionrequest.property == None)
@@ -449,13 +449,13 @@ gdk_x11_clipboard_translate_event (GdkDisplay   *display,
           {
             GDK_NOTE(CLIPBOARD, g_printerr ("%s: got SelectionRequest for %s @ %s even though we don't own the selection, huh?\n",
                                             cb->selection, target, property));
-            return gdk_event_new (GDK_NOTHING);
+            return TRUE;
           }
         if (xevent->xselectionrequest.requestor == None)
           {
             GDK_NOTE(CLIPBOARD, g_printerr ("%s: got SelectionRequest for %s @ %s with NULL window, ignoring\n",
                                             cb->selection, target, property));
-            return gdk_event_new (GDK_NOTHING);
+            return TRUE;
           }
         
         GDK_NOTE(CLIPBOARD, g_printerr ("%s: got SelectionRequest for %s @ %s\n",
@@ -471,7 +471,7 @@ gdk_x11_clipboard_translate_event (GdkDisplay   *display,
                                                  xevent->xselectionrequest.time,
                                                  gdk_x11_clipboard_default_output_handler,
                                                  cb);
-        return gdk_event_new (GDK_NOTHING);
+        return TRUE;
       }
 
     default:
@@ -481,13 +481,13 @@ gdk_x11_clipboard_translate_event (GdkDisplay   *display,
           XFixesSelectionNotifyEvent *sn = (XFixesSelectionNotifyEvent *) xevent;
 
           if (sn->selection != cb->xselection)
-            return NULL;
+            return FALSE;
 
           if (sn->owner == GDK_X11_DISPLAY (display)->leader_window)
             {
               GDK_NOTE(CLIPBOARD, g_printerr ("%s: Ignoring XFixesSelectionNotify for ourselves\n",
                                               cb->selection));
-              return NULL;
+              return FALSE;
             }
 
           GDK_NOTE(CLIPBOARD, g_printerr ("%s: Received XFixesSelectionNotify, claiming selection\n",
@@ -496,7 +496,7 @@ gdk_x11_clipboard_translate_event (GdkDisplay   *display,
           gdk_x11_clipboard_claim_remote (cb, sn->selection_timestamp);
         }
 #endif
-      return NULL;
+      return FALSE;
   }
 }
 
@@ -506,7 +506,7 @@ gdk_x11_clipboard_finalize (GObject *object)
   GdkX11Clipboard *cb = GDK_X11_CLIPBOARD (object);
 
   g_signal_handlers_disconnect_by_func (gdk_clipboard_get_display (GDK_CLIPBOARD (cb)),
-                                        gdk_x11_clipboard_translate_event,
+                                        gdk_x11_clipboard_xevent,
                                         cb);
   g_free (cb->selection);
 
@@ -814,7 +814,7 @@ gdk_x11_clipboard_new (GdkDisplay  *display,
   cb->xselection = gdk_x11_get_xatom_by_name_for_display (display, selection);
 
   gdk_display_request_selection_notification (display, gdk_atom_intern (selection, FALSE));
-  g_signal_connect (display, "translate-event", G_CALLBACK (gdk_x11_clipboard_translate_event), cb);
+  g_signal_connect (display, "xevent", G_CALLBACK (gdk_x11_clipboard_xevent), cb);
   gdk_x11_clipboard_claim_remote (cb, CurrentTime);
 
   return GDK_CLIPBOARD (cb);

@@ -38,7 +38,7 @@ void      gdk_x11_event_source_select_events  (GdkEventSource *source,
                                                GdkEventMask    event_mask,
                                                unsigned int    extra_x_mask);
 
-GdkEvent *gdk_event_source_translate_event    (GdkX11Display  *display,
+gboolean  gdk_event_source_xevent             (GdkX11Display  *x11_display,
                                                const XEvent   *xevent);
 
 

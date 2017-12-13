@@ -263,7 +263,7 @@ handle_touch_synthetic_crossing (GdkEvent *event)
     }
 }
 
-GdkEvent *
+static GdkEvent *
 gdk_event_source_translate_event (GdkX11Display  *x11_display,
                                   const XEvent   *xevent)
 {
@@ -378,6 +378,24 @@ gdk_event_source_translate_event (GdkX11Display  *x11_display,
   return event;
 }
 
+gboolean
+gdk_event_source_xevent (GdkX11Display  *x11_display,
+                         const XEvent   *xevent)
+{
+  GdkDisplay *display = GDK_DISPLAY (x11_display);
+  GdkEvent *event;
+  GList *node;
+
+  event = gdk_event_source_translate_event (x11_display, xevent);
+  if (event == NULL)
+    return FALSE;
+
+  node = _gdk_event_queue_append (display, event);
+  _gdk_windowing_got_event (display, node, event, xevent->xany.serial);
+
+  return TRUE;
+}
+
 static gboolean
 gdk_check_xpending (GdkDisplay *display)
 {
@@ -430,9 +448,9 @@ gdk_event_source_check (GSource *source)
 void
 _gdk_x11_display_queue_events (GdkDisplay *display)
 {
-  GdkEvent *event;
-  XEvent xevent;
   Display *xdisplay = GDK_DISPLAY_XDISPLAY (display);
+  XEvent xevent;
+  gboolean unused;
 
   while (!_gdk_event_queue_find_first (display) && XPending (xdisplay))
     {
@@ -456,24 +474,12 @@ _gdk_x11_display_queue_events (GdkDisplay *display)
         XGetEventData (xdisplay, &xevent.xcookie);
 #endif
 
-      g_signal_emit_by_name (display, "translate-event", &xevent, &event);
+      g_signal_emit_by_name (display, "xevent", &xevent, &unused);
 
 #ifdef HAVE_XGENERICEVENTS
       if (xevent.type == GenericEvent)
         XFreeEventData (xdisplay, &xevent.xcookie);
 #endif
-
-      if (event && event->type == GDK_NOTHING)
-        {
-          gdk_event_free (event);
-        }
-      else if (event)
-        {
-          GList *node;
-
-          node = _gdk_event_queue_append (display, event);
-          _gdk_windowing_got_event (display, node, event, xevent.xany.serial);
-        }
     }
 }
 
