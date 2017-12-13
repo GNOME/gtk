@@ -41,6 +41,7 @@ struct _GtkButtonPrivate
   guint          child_type            : 2;
 };
 
+GtkGesture * gtk_button_get_gesture (GtkButton *button);
 
 G_END_DECLS
 

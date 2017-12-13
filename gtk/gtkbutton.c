@@ -1146,3 +1146,11 @@ gtk_button_get_icon_name (GtkButton *button)
 
   return NULL;
 }
+
+GtkGesture *
+gtk_button_get_gesture (GtkButton *button)
+{
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
+
+  return priv->gesture;
+}
