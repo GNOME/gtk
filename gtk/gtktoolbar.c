@@ -59,6 +59,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
 #include "gtkgesturemultipress.h"
+#include "gtkbuttonprivate.h"
 
 
 /**
@@ -231,8 +232,10 @@ static void       gtk_toolbar_real_style_changed   (GtkToolbar          *toolbar
 						    GtkToolbarStyle      style);
 static gboolean   gtk_toolbar_focus_home_or_end    (GtkToolbar          *toolbar,
 						    gboolean             focus_home);
-static gboolean   gtk_toolbar_arrow_button_press   (GtkWidget           *button,
-						    GdkEventButton      *event,
+static void       gtk_toolbar_arrow_button_press   (GtkGesture          *gesture,
+                                                    int                  n_press,
+                                                    double               x,
+                                                    double               y,
 						    GtkToolbar          *toolbar);
 static void       gtk_toolbar_arrow_button_clicked (GtkWidget           *button,
 						    GtkToolbar          *toolbar);
@@ -572,7 +575,7 @@ gtk_toolbar_init (GtkToolbar *toolbar)
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (toolbar));
 
   priv->arrow_button = gtk_toggle_button_new ();
-  g_signal_connect (priv->arrow_button, "button-press-event",
+  g_signal_connect (gtk_button_get_gesture (GTK_BUTTON (priv->arrow_button)), "pressed",
 		    G_CALLBACK (gtk_toolbar_arrow_button_press), toolbar);
   g_signal_connect (priv->arrow_button, "clicked",
 		    G_CALLBACK (gtk_toolbar_arrow_button_clicked), toolbar);
@@ -2288,15 +2291,18 @@ gtk_toolbar_arrow_button_clicked (GtkWidget  *button,
     }
 }
 
-static gboolean
-gtk_toolbar_arrow_button_press (GtkWidget      *button,
-				GdkEventButton *event,
+static void
+gtk_toolbar_arrow_button_press (GtkGesture     *gesture,
+                                int             n_press,
+                                double          x,
+                                double          y,
 				GtkToolbar     *toolbar)
 {
-  show_menu (toolbar, event);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+  GtkWidget *button;
 
-  return TRUE;
+  button = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
+  show_menu (toolbar, NULL);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
 }
 
 
