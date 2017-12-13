@@ -54,10 +54,10 @@ struct GdkX11SelectionInputStreamPrivate {
 
 G_DEFINE_TYPE_WITH_PRIVATE (GdkX11SelectionInputStream, gdk_x11_selection_input_stream, G_TYPE_INPUT_STREAM);
 
-static GdkFilterReturn
-gdk_x11_selection_input_stream_filter_event (GdkXEvent *xevent,
-                                             GdkEvent  *gdkevent,
-                                             gpointer   data);
+static GdkEvent *
+gdk_x11_selection_input_stream_translate_event (GdkDisplay   *display,
+                                                const XEvent *xevent,
+                                                gpointer      data);
 
 static gboolean
 gdk_x11_selection_input_stream_has_data (GdkX11SelectionInputStream *stream)
@@ -161,7 +161,9 @@ gdk_x11_selection_input_stream_complete (GdkX11SelectionInputStream *stream)
   gdk_x11_selection_input_stream_flush (stream);
 
   GDK_X11_DISPLAY (priv->display)->streams = g_slist_remove (GDK_X11_DISPLAY (priv->display)->streams, stream);
-  gdk_window_remove_filter (NULL, gdk_x11_selection_input_stream_filter_event, stream);
+  g_signal_handlers_disconnect_by_func (priv->display,
+                                        gdk_x11_selection_input_stream_translate_event,
+                                        stream);
 
   g_object_unref (stream);
 }
@@ -376,14 +378,13 @@ err:
 }
 
 
-static GdkFilterReturn
-gdk_x11_selection_input_stream_filter_event (GdkXEvent *xev,
-                                             GdkEvent  *gdkevent,
-                                             gpointer   data)
+static GdkEvent *
+gdk_x11_selection_input_stream_translate_event (GdkDisplay   *display,
+                                                const XEvent *xevent,
+                                                gpointer      data)
 {
   GdkX11SelectionInputStream *stream = GDK_X11_SELECTION_INPUT_STREAM (data);
   GdkX11SelectionInputStreamPrivate *priv = gdk_x11_selection_input_stream_get_instance_private (stream);
-  XEvent *xevent = xev;
   Display *xdisplay;
   Window xwindow;
   GBytes *bytes;
@@ -395,7 +396,7 @@ gdk_x11_selection_input_stream_filter_event (GdkXEvent *xev,
 
   if (xevent->xany.display != xdisplay ||
       xevent->xany.window != xwindow)
-    return GDK_FILTER_CONTINUE;
+    return NULL;
 
   switch (xevent->type)
     {
@@ -403,7 +404,7 @@ gdk_x11_selection_input_stream_filter_event (GdkXEvent *xev,
         if (!priv->incr ||
             xevent->xproperty.atom != priv->xproperty ||
             xevent->xproperty.state != PropertyNewValue)
-          return GDK_FILTER_CONTINUE;
+          return NULL;
 
       bytes = get_selection_property (xdisplay, xwindow, xevent->xproperty.atom, &type, &format);
       if (bytes == NULL)
@@ -431,7 +432,7 @@ gdk_x11_selection_input_stream_filter_event (GdkXEvent *xev,
 
       XDeleteProperty (xdisplay, xwindow, xevent->xproperty.atom);
 
-      return GDK_FILTER_CONTINUE;
+      return NULL;
 
     case SelectionNotify:
       {
@@ -440,12 +441,12 @@ gdk_x11_selection_input_stream_filter_event (GdkXEvent *xev,
         /* selection is not for us */
         if (priv->xselection != xevent->xselection.selection ||
             priv->xtarget != xevent->xselection.target)
-          return GDK_FILTER_CONTINUE;
+          return NULL;
 
         /* We already received a selectionNotify before */
         if (priv->pending_task == NULL || 
             g_task_get_source_tag (priv->pending_task) != gdk_x11_selection_input_stream_new_async)
-          return GDK_FILTER_CONTINUE;
+          return NULL;
 
         GDK_NOTE(SELECTION, g_printerr ("%s:%s: got SelectionNotify\n", priv->selection, priv->target));
 
@@ -497,10 +498,10 @@ gdk_x11_selection_input_stream_filter_event (GdkXEvent *xev,
 
         g_object_unref (task);
       }
-      return GDK_FILTER_REMOVE;
+      return gdk_event_new (GDK_NOTHING);
 
     default:
-      return GDK_FILTER_CONTINUE;
+      return NULL;
     }
 }
 
@@ -529,7 +530,7 @@ gdk_x11_selection_input_stream_new_async (GdkDisplay          *display,
   priv->property = g_strdup_printf ("GDK_SELECTION_%p", stream); 
   priv->xproperty = gdk_x11_get_xatom_by_name_for_display (display, priv->property);
 
-  gdk_window_add_filter (NULL, gdk_x11_selection_input_stream_filter_event, stream);
+  g_signal_connect (display, "translate-event", G_CALLBACK (gdk_x11_selection_input_stream_translate_event), stream);
 
   XConvertSelection (GDK_DISPLAY_XDISPLAY (display),
                      priv->xselection,

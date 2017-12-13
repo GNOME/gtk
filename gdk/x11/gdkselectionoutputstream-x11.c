@@ -147,10 +147,10 @@ gdk_x11_pending_selection_notify_send (GdkX11PendingSelectionNotify *notify,
     }
 }
 
-static GdkFilterReturn
-gdk_x11_selection_output_stream_filter_event (GdkXEvent *xevent,
-                                              GdkEvent  *gdkevent,
-                                              gpointer   data);
+static GdkEvent *
+gdk_x11_selection_output_stream_translate_event (GdkDisplay   *display,
+                                                 const XEvent *xevent,
+                                                 gpointer      data);
 
 static gboolean
 gdk_x11_selection_output_stream_can_flush (GdkX11SelectionOutputStream *stream)
@@ -492,7 +492,9 @@ gdk_x11_selection_output_stream_invoke_close (gpointer stream)
   GdkX11SelectionOutputStreamPrivate *priv = gdk_x11_selection_output_stream_get_instance_private (stream);
 
   GDK_X11_DISPLAY (priv->display)->streams = g_slist_remove (GDK_X11_DISPLAY (priv->display)->streams, stream);
-  gdk_window_remove_filter (NULL, gdk_x11_selection_output_stream_filter_event, stream);
+  g_signal_handlers_disconnect_by_func (priv->display,
+                                        gdk_x11_selection_output_stream_translate_event,
+                                        stream);
 
   return G_SOURCE_REMOVE;
 }
@@ -587,21 +589,20 @@ gdk_x11_selection_output_stream_init (GdkX11SelectionOutputStream *stream)
   priv->data = g_byte_array_new ();
 }
 
-static GdkFilterReturn
-gdk_x11_selection_output_stream_filter_event (GdkXEvent *xev,
-                                             GdkEvent  *gdkevent,
-                                             gpointer   data)
+static GdkEvent *
+gdk_x11_selection_output_stream_translate_event (GdkDisplay   *display,
+                                                 const XEvent *xevent,
+                                                 gpointer      data)
 {
   GdkX11SelectionOutputStream *stream = GDK_X11_SELECTION_OUTPUT_STREAM (data);
   GdkX11SelectionOutputStreamPrivate *priv = gdk_x11_selection_output_stream_get_instance_private (stream);
-  XEvent *xevent = xev;
   Display *xdisplay;
 
   xdisplay = gdk_x11_display_get_xdisplay (priv->display);
 
   if (xevent->xany.display != xdisplay ||
       xevent->xany.window != priv->xwindow)
-    return GDK_FILTER_CONTINUE;
+    return NULL;
 
   switch (xevent->type)
   {
@@ -609,14 +610,18 @@ gdk_x11_selection_output_stream_filter_event (GdkXEvent *xev,
       if (!priv->incr ||
           xevent->xproperty.atom != priv->xproperty ||
           xevent->xproperty.state != PropertyDelete)
-        return GDK_FILTER_CONTINUE;
+        return NULL;
 
       GDK_NOTE(SELECTION, g_printerr ("%s:%s: got PropertyNotify Delete during INCR\n",
                                       priv->selection, priv->target));
-      return GDK_FILTER_CONTINUE;
+      priv->delete_pending = FALSE;
+      if (gdk_x11_selection_output_stream_needs_flush (stream) &
+          gdk_x11_selection_output_stream_can_flush (stream))
+        gdk_x11_selection_output_stream_perform_flush (stream);
+      return NULL;
 
     default:
-      return GDK_FILTER_CONTINUE;
+      return NULL;
     }
 }
 
@@ -652,7 +657,10 @@ gdk_x11_selection_output_stream_new (GdkDisplay                   *display,
   priv->format = format;
   priv->timestamp = timestamp;
 
-  gdk_window_add_filter (NULL, gdk_x11_selection_output_stream_filter_event, stream);
+  g_signal_connect (display,
+                    "translate-event",
+                    G_CALLBACK (gdk_x11_selection_output_stream_translate_event),
+                    stream);
   
   return G_OUTPUT_STREAM (stream);
 }
