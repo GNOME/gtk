@@ -96,8 +96,6 @@ struct _GdkWaylandSelection
 
   /* Source-side data */
   StoredSelection stored_selection;
-  GArray *source_targets;
-  GdkAtom requested_target;
 
   struct wl_data_source *dnd_source; /* Owned by the GdkDragContext */
   GdkWindow *dnd_owner;
@@ -325,7 +323,6 @@ gdk_wayland_selection_new (void)
     g_hash_table_new_full (NULL, NULL, NULL,
                            (GDestroyNotify) data_offer_data_free);
   selection->stored_selection.fd = -1;
-  selection->source_targets = g_array_new (FALSE, FALSE, sizeof (GdkAtom));
   return selection;
 }
 
@@ -336,8 +333,6 @@ gdk_wayland_selection_free (GdkWaylandSelection *selection)
 
   for (i = 0; i < G_N_ELEMENTS (selection->selections); i++)
     g_hash_table_destroy (selection->selections[i].buffers);
-
-  g_array_unref (selection->source_targets);
 
   g_hash_table_destroy (selection->offers);
   g_free (selection->stored_selection.data);
@@ -854,7 +849,6 @@ static void
 data_source_dnd_finished (void                  *data,
                           struct wl_data_source *source)
 {
-  GdkDisplay *display = gdk_display_get_default ();
   GdkDragContext *context;
 
   context = gdk_wayland_drag_context_lookup_by_data_source (source);
@@ -871,7 +865,6 @@ data_source_dnd_finished (void                  *data,
 
   g_signal_emit_by_name (context, "dnd-finished");
   gdk_selection_owner_set (NULL, atoms[ATOM_DND], GDK_CURRENT_TIME, TRUE);
-  gdk_wayland_display_clear_selection_targets (display, atoms[ATOM_DND]);
 }
 
 static void
@@ -1270,46 +1263,6 @@ _gdk_wayland_display_utf8_to_string_target (GdkDisplay  *display,
    * this backend) in common code, so we end up in this vfunc.
    */
   return sanitize_utf8 (str, TRUE);
-}
-
-void
-gdk_wayland_display_add_selection_targets (GdkDisplay *display,
-                                           GdkWindow  *window,
-                                           GdkAtom     selection,
-                                           GdkAtom    *targets,
-                                           guint       ntargets)
-{
-  GdkWaylandSelection *wayland_selection = gdk_wayland_display_get_selection (display);
-  gpointer data_source;
-  guint i;
-
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  data_source = gdk_wayland_selection_get_data_source (window, selection);
-
-  if (!data_source)
-    return;
-
-  g_array_append_vals (wayland_selection->source_targets, targets, ntargets);
-
-  for (i = 0; i < ntargets; i++)
-    {
-      gchar *mimetype = gdk_atom_name (targets[i]);
-
-      wl_data_source_offer (data_source, mimetype);
-      g_free (mimetype);
-    }
-}
-
-void
-gdk_wayland_display_clear_selection_targets (GdkDisplay *display,
-                                             GdkAtom     selection)
-{
-  GdkWaylandSelection *wayland_selection = gdk_wayland_display_get_selection (display);
-
-  wayland_selection->requested_target = NULL;
-  g_array_set_size (wayland_selection->source_targets, 0);
-  gdk_wayland_selection_unset_data_source (display, selection);
 }
 
 gboolean

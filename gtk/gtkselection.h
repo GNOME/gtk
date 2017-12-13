@@ -55,17 +55,6 @@ gboolean gtk_selection_owner_set_for_display (GdkDisplay *display,
                                               guint32     time_);
 
 GDK_AVAILABLE_IN_ALL
-void     gtk_selection_add_target    (GtkWidget            *widget,
-                                      GdkAtom               selection,
-                                      GdkAtom               target);
-GDK_AVAILABLE_IN_ALL
-void     gtk_selection_add_targets   (GtkWidget            *widget,
-                                      GdkAtom               selection,
-                                      GdkContentFormats    *targets);
-GDK_AVAILABLE_IN_ALL
-void     gtk_selection_clear_targets (GtkWidget            *widget,
-                                      GdkAtom               selection);
-GDK_AVAILABLE_IN_ALL
 gboolean gtk_selection_convert       (GtkWidget            *widget,
                                       GdkAtom               selection,
                                       GdkAtom               target,

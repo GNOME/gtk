@@ -2805,12 +2805,6 @@ _gdk_win32_add_target_to_selformats (GdkAtom  target,
   return added_count;
 }
 
-void
-gdk_win32_display_clear_selection_targets (GdkDisplay *display,
-                                           GdkAtom     selection)
-{
-}
-
 /* This function is called from gtk_selection_add_target() and
  * gtk_selection_add_targets() in gtkselection.c. It is this function
  * that takes care of setting those clipboard formats for which we use

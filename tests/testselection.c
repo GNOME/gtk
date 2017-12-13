@@ -384,14 +384,6 @@ main (int argc, char *argv[])
   GtkWidget *hbox;
   GtkWidget *scrolled;
 
-  static const char *targetlist[] = {
-    "STRING",
-    "TEXT",
-    "COMPOUND_TEXT"
-  };
-  static gint ntargets = sizeof(targetlist) / sizeof(targetlist[0]);
-  GdkContentFormats *list;
-  
   gtk_init ();
 
   init_atoms();
@@ -421,10 +413,6 @@ main (int argc, char *argv[])
 		    G_CALLBACK (selection_clear), NULL);
   g_signal_connect (selection_widget, "selection_received",
 		    G_CALLBACK (selection_received), NULL);
-
-  list = gdk_content_formats_new (targetlist, ntargets);
-  gtk_selection_add_targets (selection_widget, GDK_SELECTION_PRIMARY, list);
-  gdk_content_formats_unref (list);
 
   g_signal_connect (selection_widget, "selection_get",
 		    G_CALLBACK (selection_get), NULL);

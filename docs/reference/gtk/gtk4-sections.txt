@@ -5187,9 +5187,6 @@ gtk_css_section_get_type
 GtkSelectionData
 gtk_selection_owner_set
 gtk_selection_owner_set_for_display
-gtk_selection_add_target
-gtk_selection_add_targets
-gtk_selection_clear_targets
 gtk_selection_convert
 gtk_selection_data_set
 gtk_selection_data_set_text
