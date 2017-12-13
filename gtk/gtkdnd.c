@@ -131,8 +131,6 @@ static GtkDragSourceInfo *gtk_drag_get_source_info   (GdkDragContext *context,
                                                       gboolean        create);
 static void               gtk_drag_clear_source_info (GdkDragContext *context);
 
-static void gtk_drag_source_release_selection  (GtkDragSourceInfo *info,
-                                                guint32            time);
 static void gtk_drag_drop                      (GtkDragSourceInfo *info,
                                                 guint32            time);
 static void gtk_drag_drop_finished             (GtkDragSourceInfo *info,
@@ -1550,7 +1548,6 @@ gtk_drag_drop_finished (GtkDragSourceInfo *info,
   gboolean success;
 
   success = (result == GTK_DRAG_RESULT_SUCCESS);
-  gtk_drag_source_release_selection  (info, time); 
 
   if (!success)
     g_signal_emit_by_name (info->widget, "drag-failed",
@@ -1558,19 +1555,6 @@ gtk_drag_drop_finished (GtkDragSourceInfo *info,
 
   gdk_drag_drop_done (info->context, success);
   gtk_drag_source_info_destroy (info);
-}
-
-static void
-gtk_drag_source_release_selection (GtkDragSourceInfo *info,
-                                   guint32            time)
-{
-  GdkDisplay *display = gtk_widget_get_display (info->widget);
-  GdkAtom selection;
-  
-  selection = gdk_drag_get_selection (info->context);
-  if (selection &&
-      gdk_selection_owner_get_for_display (display, selection) == gtk_widget_get_window (info->ipc_widget))
-    gtk_selection_owner_set_for_display (display, NULL, selection, time);
 }
 
 static void
@@ -1734,8 +1718,6 @@ static void
 gtk_drag_context_dnd_finished_cb (GdkDragContext    *context,
                                   GtkDragSourceInfo *info)
 {
-  gtk_drag_source_release_selection (info, GDK_CURRENT_TIME);
-
   if (gdk_drag_context_get_selected_action (context) == GDK_ACTION_MOVE)
     {
       g_signal_emit_by_name (info->widget,
