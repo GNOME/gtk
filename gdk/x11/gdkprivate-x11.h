@@ -102,9 +102,6 @@ void     _gdk_x11_window_translate         (GdkWindow *window,
 
 void     _gdk_x11_display_free_translate_queue (GdkDisplay *display);
 
-void     _gdk_x11_selection_window_destroyed   (GdkWindow            *window);
-gboolean _gdk_x11_selection_filter_clear_event (const XSelectionClearEvent *event);
-
 cairo_region_t* _gdk_x11_xwindow_get_shape  (Display *xdisplay,
                                              Window   window,
                                              gint     scale,
@@ -148,13 +145,6 @@ void _gdk_x11_display_queue_events            (GdkDisplay *display);
 
 GdkAppLaunchContext *_gdk_x11_display_get_app_launch_context (GdkDisplay *display);
 
-gboolean    _gdk_x11_display_set_selection_owner   (GdkDisplay *display,
-                                                    GdkWindow  *owner,
-                                                    GdkAtom     selection,
-                                                    guint32     time,
-                                                    gboolean    send_event);
-GdkWindow * _gdk_x11_display_get_selection_owner   (GdkDisplay *display,
-                                                    GdkAtom     selection);
 void        _gdk_x11_display_send_selection_notify (GdkDisplay       *display,
                                                     GdkWindow        *requestor,
                                                     GdkAtom          selection,

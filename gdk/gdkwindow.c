@@ -5468,8 +5468,6 @@ _gdk_make_event (GdkWindow    *window,
       event->property.state = the_state;
       break;
 
-    case GDK_SELECTION_CLEAR:
-    case GDK_SELECTION_REQUEST:
     case GDK_SELECTION_NOTIFY:
       event->selection.time = the_time;
       break;

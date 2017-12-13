@@ -72,13 +72,6 @@ void       _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
 GdkKeymap * _gdk_quartz_display_get_keymap (GdkDisplay *display);
 
 /* Display methods - selection */
-gboolean    _gdk_quartz_display_set_selection_owner (GdkDisplay *display,
-                                                     GdkWindow  *owner,
-                                                     GdkAtom     selection,
-                                                     guint32     time,
-                                                     gboolean    send_event);
-GdkWindow * _gdk_quartz_display_get_selection_owner (GdkDisplay *display,
-                                                     GdkAtom     selection);
 gint        _gdk_quartz_display_get_selection_property (GdkDisplay     *display,
                                                         GdkWindow      *requestor,
                                                         guchar        **data,

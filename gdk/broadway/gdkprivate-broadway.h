@@ -83,7 +83,6 @@ gboolean _gdk_broadway_moveresize_configure_done (GdkDisplay *display,
 void _gdk_broadway_roundtrip_notify (GdkWindow  *window,
                                      guint32 tag,
                                      gboolean local_reply);
-void     _gdk_broadway_selection_window_destroyed (GdkWindow *window);
 void     _gdk_broadway_window_grab_check_destroy (GdkWindow *window);
 void     _gdk_broadway_window_grab_check_unmap (GdkWindow *window,
 						gulong     serial);
@@ -124,13 +123,6 @@ void       _gdk_broadway_display_create_window_impl     (GdkDisplay    *display,
 							 GdkWindow     *real_parent,
 							 GdkEventMask   event_mask,
 							 GdkWindowAttr *attributes);
-gboolean _gdk_broadway_display_set_selection_owner (GdkDisplay *display,
-						    GdkWindow  *owner,
-						    GdkAtom     selection,
-						    guint32     time,
-						    gboolean    send_event);
-GdkWindow * _gdk_broadway_display_get_selection_owner (GdkDisplay *display,
-						       GdkAtom     selection);
 gint _gdk_broadway_display_get_selection_property (GdkDisplay *display,
 						   GdkWindow  *requestor,
 						   guchar    **data,

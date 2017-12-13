@@ -406,8 +406,7 @@ struct _GdkEventProperty
 
 /**
  * GdkEventSelection:
- * @type: the type of the event (%GDK_SELECTION_CLEAR,
- *   %GDK_SELECTION_NOTIFY or %GDK_SELECTION_REQUEST).
+ * @type: the type of the event (%GDK_SELECTION_NOTIFY).
  * @window: the window which received the event.
  * @send_event: %TRUE if the event was sent explicitly.
  * @selection: the selection.

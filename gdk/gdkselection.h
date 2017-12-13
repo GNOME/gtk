@@ -152,23 +152,6 @@ G_BEGIN_DECLS
 /* Selections
  */
 
-GDK_AVAILABLE_IN_ALL
-gboolean   gdk_selection_owner_set (GdkWindow	 *owner,
-				    GdkAtom	  selection,
-				    guint32	  time_,
-				    gboolean      send_event);
-GDK_AVAILABLE_IN_ALL
-GdkWindow* gdk_selection_owner_get (GdkAtom	  selection);
-GDK_AVAILABLE_IN_ALL
-gboolean   gdk_selection_owner_set_for_display (GdkDisplay *display,
-						GdkWindow  *owner,
-						GdkAtom     selection,
-						guint32     time_,
-						gboolean    send_event);
-GDK_AVAILABLE_IN_ALL
-GdkWindow *gdk_selection_owner_get_for_display (GdkDisplay *display,
-						GdkAtom     selection);
-
 /**
  * gdk_selection_convert:
  * @requestor: a #GdkWindow.

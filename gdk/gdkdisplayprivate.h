@@ -167,13 +167,6 @@ struct _GdkDisplayClass
 
   GdkKeymap *                (*get_keymap)         (GdkDisplay    *display);
 
-  GdkWindow *                (*get_selection_owner) (GdkDisplay   *display,
-                                                     GdkAtom       selection);
-  gboolean                   (*set_selection_owner) (GdkDisplay   *display,
-                                                     GdkWindow    *owner,
-                                                     GdkAtom       selection,
-                                                     guint32       time,
-                                                     gboolean      send_event);
   void                       (*send_selection_notify) (GdkDisplay *dispay,
                                                        GdkWindow        *requestor,
                                                        GdkAtom          selection,

@@ -80,15 +80,6 @@ gdk_wayland_drag_context_finalize (GObject *object)
 
   if (context->is_source)
     {
-      GdkDisplay *display = gdk_window_get_display (context->source_window);
-      GdkAtom selection;
-      GdkWindow *selection_owner;
-
-      selection = gdk_drag_get_selection (context);
-      selection_owner = gdk_selection_owner_get_for_display (display, selection);
-      if (selection_owner == context->source_window)
-        gdk_wayland_selection_unset_data_source (display, selection);
-
       gdk_drag_context_set_cursor (context, NULL);
     }
 

@@ -587,9 +587,7 @@ gdk_event_copy (const GdkEvent *event)
                                            sizeof (gdouble) * gdk_device_get_n_axes (event->motion.device));
       break;
 
-    case GDK_SELECTION_CLEAR:
     case GDK_SELECTION_NOTIFY:
-    case GDK_SELECTION_REQUEST:
       new_event->selection.requestor = event->selection.requestor;
       if (new_event->selection.requestor)
         g_object_ref (new_event->selection.requestor);
@@ -675,9 +673,7 @@ gdk_event_free (GdkEvent *event)
       g_free (event->motion.axes);
       break;
 
-    case GDK_SELECTION_CLEAR:
     case GDK_SELECTION_NOTIFY:
-    case GDK_SELECTION_REQUEST:
       if (event->selection.requestor)
         g_object_unref (event->selection.requestor);
       break;
@@ -754,8 +750,6 @@ gdk_event_get_time (const GdkEvent *event)
 	return event->crossing.time;
       case GDK_PROPERTY_NOTIFY:
 	return event->property.time;
-      case GDK_SELECTION_CLEAR:
-      case GDK_SELECTION_REQUEST:
       case GDK_SELECTION_NOTIFY:
 	return event->selection.time;
       case GDK_PROXIMITY_IN:
@@ -852,8 +846,6 @@ gdk_event_get_state (const GdkEvent        *event,
       case GDK_CLIENT_EVENT:
       case GDK_CONFIGURE:
       case GDK_FOCUS_CHANGE:
-      case GDK_SELECTION_CLEAR:
-      case GDK_SELECTION_REQUEST:
       case GDK_SELECTION_NOTIFY:
       case GDK_PROXIMITY_IN:
       case GDK_PROXIMITY_OUT:
@@ -2720,9 +2712,7 @@ gdk_event_get_selection (const GdkEvent   *event,
   if (!event)
     return FALSE;
 
-  if (event->type == GDK_SELECTION_CLEAR ||
-      event->type == GDK_SELECTION_NOTIFY ||
-      event->type == GDK_SELECTION_REQUEST)
+  if (event->type == GDK_SELECTION_NOTIFY)
     {
       *selection = event->selection.selection;
       return TRUE;
@@ -2749,9 +2739,7 @@ gdk_event_get_selection_property (const GdkEvent  *event,
   if (!event)
     return FALSE;
 
-  if (event->type == GDK_SELECTION_CLEAR ||
-      event->type == GDK_SELECTION_NOTIFY ||
-      event->type == GDK_SELECTION_REQUEST)
+  if (event->type == GDK_SELECTION_NOTIFY)
     {
       if (property)
         *property = event->selection.property;

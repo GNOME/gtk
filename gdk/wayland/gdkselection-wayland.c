@@ -98,12 +98,10 @@ struct _GdkWaylandSelection
   StoredSelection stored_selection;
 
   struct wl_data_source *dnd_source; /* Owned by the GdkDragContext */
-  GdkWindow *dnd_owner;
 };
 
 static void selection_buffer_read (SelectionBuffer *buffer);
 static void async_write_data_write (AsyncWriteData *write_data);
-static void emit_selection_clear (GdkDisplay *display, GdkAtom selection);
 
 static void
 _gdk_display_put_event (GdkDisplay *display,
@@ -550,26 +548,6 @@ gdk_wayland_selection_get_targets (GdkDisplay *display,
   return NULL;
 }
 
-static void
-gdk_wayland_selection_emit_request (GdkWindow *window,
-                                    GdkAtom    selection,
-                                    GdkAtom    target)
-{
-  GdkEvent *event;
-
-  event = gdk_event_new (GDK_SELECTION_REQUEST);
-  event->selection.window = g_object_ref (window);
-  event->selection.send_event = FALSE;
-  event->selection.selection = selection;
-  event->selection.target = target;
-  event->selection.property = gdk_atom_intern_static_string ("GDK_SELECTION");
-  event->selection.time = GDK_CURRENT_TIME;
-  event->selection.requestor = g_object_ref (window);
-
-  _gdk_display_put_event (gdk_window_get_display (window), event);
-  gdk_event_free (event);
-}
-
 static AsyncWriteData *
 async_write_data_new (GdkWaylandSelection *selection)
 {
@@ -826,8 +804,6 @@ data_source_cancelled (void                  *data,
   if (context)
     gdk_drag_context_cancel (context, GDK_DRAG_CANCEL_ERROR);
 
-  emit_selection_clear (display, atom);
-  gdk_selection_owner_set (NULL, atom, GDK_CURRENT_TIME, TRUE);
   gdk_wayland_selection_unset_data_source (display, atom);
 }
 
@@ -856,15 +832,7 @@ data_source_dnd_finished (void                  *data,
   if (!context)
     return;
 
-  if (context->action == GDK_ACTION_MOVE)
-    {
-      gdk_wayland_selection_emit_request (context->source_window,
-                                          atoms[ATOM_DND],
-                                          gdk_atom_intern_static_string ("DELETE"));
-    }
-
   g_signal_emit_by_name (context, "dnd-finished");
-  gdk_selection_owner_set (NULL, atoms[ATOM_DND], GDK_CURRENT_TIME, TRUE);
 }
 
 static void
@@ -907,8 +875,7 @@ gdk_wayland_selection_get_data_source (GdkWindow *owner,
 
   if (selection == atoms[ATOM_DND])
     {
-      if (wayland_selection->dnd_source &&
-          (!owner || owner == wayland_selection->dnd_owner))
+      if (wayland_selection->dnd_source)
         return wayland_selection->dnd_source;
     }
   else
@@ -940,36 +907,6 @@ gdk_wayland_selection_unset_data_source (GdkDisplay *display,
     {
       wayland_selection->dnd_source = NULL;
     }
-}
-
-GdkWindow *
-_gdk_wayland_display_get_selection_owner (GdkDisplay *display,
-                                          GdkAtom     selection)
-{
-  GdkWaylandSelection *wayland_selection = gdk_wayland_display_get_selection (display);
-
-  if (selection == atoms[ATOM_DND])
-    return wayland_selection->dnd_owner;
-
-  return NULL;
-}
-
-gboolean
-_gdk_wayland_display_set_selection_owner (GdkDisplay *display,
-                                          GdkWindow  *owner,
-                                          GdkAtom     selection,
-                                          guint32     time,
-                                          gboolean    send_event)
-{
-  GdkWaylandSelection *wayland_selection = gdk_wayland_display_get_selection (display);
-
-  if (selection == atoms[ATOM_DND])
-    {
-      wayland_selection->dnd_owner = owner;
-      return TRUE;
-    }
-
-  return FALSE;
 }
 
 void
@@ -1044,28 +981,6 @@ emit_empty_selection_notify (GdkWindow *requestor,
   event->selection.requestor = g_object_ref (requestor);
 
   _gdk_display_put_event (gdk_window_get_display (requestor), event);
-  gdk_event_free (event);
-}
-
-static void
-emit_selection_clear (GdkDisplay *display,
-                      GdkAtom     selection)
-{
-  GdkEvent *event;
-  GdkWindow *window;
-
-  event = gdk_event_new (GDK_SELECTION_CLEAR);
-  event->selection.selection = selection;
-  event->selection.time = GDK_CURRENT_TIME;
-
-  window = _gdk_wayland_display_get_selection_owner (display, selection);
-  if (window != NULL)
-    {
-      event->selection.window = g_object_ref (window);
-      event->selection.requestor = g_object_ref (window);
-    }
-
-  _gdk_display_put_event (display, event);
   gdk_event_free (event);
 }
 

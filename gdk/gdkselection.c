@@ -61,55 +61,6 @@
  */
 
 /**
- * gdk_selection_owner_set:
- * @owner: (allow-none): a #GdkWindow or %NULL to indicate that the
- *   the owner for the given should be unset.
- * @selection: an atom identifying a selection.
- * @time_: timestamp to use when setting the selection.
- *   If this is older than the timestamp given last
- *   time the owner was set for the given selection, the
- *   request will be ignored.
- * @send_event: if %TRUE, and the new owner is different
- *   from the current owner, the current owner
- *   will be sent a SelectionClear event.
- *
- * Sets the owner of the given selection.
- *
- * Returns: %TRUE if the selection owner was successfully
- *   changed to @owner, otherwise %FALSE.
- */
-gboolean
-gdk_selection_owner_set (GdkWindow *owner,
-			 GdkAtom    selection,
-			 guint32    time,
-			 gboolean   send_event)
-{
-  return gdk_selection_owner_set_for_display (gdk_display_get_default (),
-					      owner, selection, 
-					      time, send_event);
-}
-
-/**
- * gdk_selection_owner_get:
- * @selection: an atom indentifying a selection.
- *
- * Determines the owner of the given selection.
- *
- * Returns: (nullable) (transfer none): if there is a selection owner
- *   for this window, and it is a window known to the current process,
- *   the #GdkWindow that owns the selection, otherwise %NULL. Note
- *   that the return value may be owned by a different process if a
- *   foreign window was previously created for that window, but a new
- *   foreign window will never be created by this call.
- */
-GdkWindow*
-gdk_selection_owner_get (GdkAtom selection)
-{
-  return gdk_selection_owner_get_for_display (gdk_display_get_default (), 
-					      selection);
-}
-
-/**
  * gdk_selection_send_notify:
  * @requestor: window to which to deliver response.
  * @selection: selection that was requested.
@@ -131,67 +82,6 @@ gdk_selection_send_notify (GdkWindow      *requestor,
   gdk_selection_send_notify_for_display (gdk_window_get_display (requestor),
 					 requestor, selection, 
 					 target, property, time);
-}
-
-/**
- * gdk_selection_owner_set_for_display:
- * @display: the #GdkDisplay
- * @owner: (nullable): a #GdkWindow or %NULL to indicate that the owner for
- *         the given should be unset
- * @selection: an atom identifying a selection
- * @time_: timestamp to use when setting the selection
- *         If this is older than the timestamp given last time the owner was
- *         set for the given selection, the request will be ignored
- * @send_event: if %TRUE, and the new owner is different from the current
- *              owner, the current owner will be sent a SelectionClear event
- *
- * Sets the #GdkWindow @owner as the current owner of the selection @selection.
- *
- * Returns: %TRUE if the selection owner was successfully changed to owner,
- *    otherwise %FALSE.
- *
- * Since: 2.2
- */
-gboolean
-gdk_selection_owner_set_for_display (GdkDisplay *display,
-                                     GdkWindow  *owner,
-                                     GdkAtom     selection,
-                                     guint32     time,
-                                     gboolean    send_event)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
-  g_return_val_if_fail (selection != NULL, FALSE);
-
-  return GDK_DISPLAY_GET_CLASS (display)
-           ->set_selection_owner (display, owner, selection, time, send_event);
-}
-
-/**
- * gdk_selection_owner_get_for_display:
- * @display: a #GdkDisplay
- * @selection: an atom indentifying a selection
- *
- * Determine the owner of the given selection.
- *
- * Note that the return value may be owned by a different
- * process if a foreign window was previously created for that
- * window, but a new foreign window will never be created by this call.
- *
- * Returns: (nullable) (transfer none): if there is a selection owner
- *    for this window, and it is a window known to the current
- *    process, the #GdkWindow that owns the selection, otherwise
- *    %NULL.
- *
- * Since: 2.2
- */
-GdkWindow *
-gdk_selection_owner_get_for_display (GdkDisplay *display,
-                                     GdkAtom     selection)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  g_return_val_if_fail (selection != NULL, NULL);
-
-  return GDK_DISPLAY_GET_CLASS (display)->get_selection_owner (display, selection);
 }
 
 /**

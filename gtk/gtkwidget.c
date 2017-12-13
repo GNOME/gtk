@@ -521,8 +521,6 @@ enum {
   MAP_EVENT,
   UNMAP_EVENT,
   PROPERTY_NOTIFY_EVENT,
-  SELECTION_CLEAR_EVENT,
-  SELECTION_REQUEST_EVENT,
   SELECTION_NOTIFY_EVENT,
   SELECTION_GET,
   SELECTION_RECEIVED,
@@ -1048,8 +1046,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->unmap_event = NULL;
   klass->window_state_event = NULL;
   klass->property_notify_event = _gtk_selection_property_notify;
-  klass->selection_clear_event = _gtk_selection_clear;
-  klass->selection_request_event = _gtk_selection_request;
   klass->selection_notify_event = _gtk_selection_notify;
   klass->selection_received = NULL;
   klass->proximity_in_event = NULL;
@@ -2431,55 +2427,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   g_signal_set_va_marshaller (widget_signals[PROPERTY_NOTIFY_EVENT], G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__BOXEDv);
-
-  /**
-   * GtkWidget::selection-clear-event:
-   * @widget: the object which received the signal
-   * @event: (type Gdk.EventSelection): the #GdkEventSelection which triggered
-   *   this signal.
-   *
-   * The ::selection-clear-event signal will be emitted when the
-   * the @widget's window has lost ownership of a selection.
-   *
-   * Returns: %TRUE to stop other handlers from being invoked for the event.
-   *   %FALSE to propagate the event further.
-   */
-  widget_signals[SELECTION_CLEAR_EVENT] =
-    g_signal_new (I_("selection-clear-event"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST | G_SIGNAL_DEPRECATED,
-		  G_STRUCT_OFFSET (GtkWidgetClass, selection_clear_event),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__BOXED,
-		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
-  g_signal_set_va_marshaller (widget_signals[SELECTION_CLEAR_EVENT], G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__BOXEDv);
-
-  /**
-   * GtkWidget::selection-request-event:
-   * @widget: the object which received the signal
-   * @event: (type Gdk.EventSelection): the #GdkEventSelection which triggered
-   *   this signal.
-   *
-   * The ::selection-request-event signal will be emitted when
-   * another client requests ownership of the selection owned by
-   * the @widget's window.
-   *
-   * Returns: %TRUE to stop other handlers from being invoked for the event.
-   *   %FALSE to propagate the event further.
-   */
-  widget_signals[SELECTION_REQUEST_EVENT] =
-    g_signal_new (I_("selection-request-event"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST | G_SIGNAL_DEPRECATED,
-		  G_STRUCT_OFFSET (GtkWidgetClass, selection_request_event),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__BOXED,
-		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
-  g_signal_set_va_marshaller (widget_signals[SELECTION_REQUEST_EVENT], G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_BOOLEAN__BOXEDv);
 
   /**
@@ -6676,8 +6623,6 @@ gtk_widget_event_internal (GtkWidget      *widget,
     case GDK_UNMAP:
     case GDK_WINDOW_STATE:
     case GDK_PROPERTY_NOTIFY:
-    case GDK_SELECTION_CLEAR:
-    case GDK_SELECTION_REQUEST:
     case GDK_SELECTION_NOTIFY:
       return gtk_widget_emit_event_signals (widget, event);
     default:
@@ -6797,12 +6742,6 @@ gtk_widget_emit_event_signals (GtkWidget      *widget,
 	  break;
 	case GDK_PROPERTY_NOTIFY:
 	  signal_num = PROPERTY_NOTIFY_EVENT;
-	  break;
-	case GDK_SELECTION_CLEAR:
-	  signal_num = SELECTION_CLEAR_EVENT;
-	  break;
-	case GDK_SELECTION_REQUEST:
-	  signal_num = SELECTION_REQUEST_EVENT;
 	  break;
 	case GDK_SELECTION_NOTIFY:
 	  signal_num = SELECTION_NOTIFY_EVENT;

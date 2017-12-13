@@ -224,11 +224,6 @@ struct _GtkWidget
  *   unmapped.
  * @property_notify_event: Signal will be emitted when a property on
  *   the widget’s window has been changed or deleted.
- * @selection_clear_event: Signal will be emitted when the the
- *   widget’s window has lost ownership of a selection.
- * @selection_request_event: Signal will be emitted when another
- *   client requests ownership of the selection owned by the widget's
- *   window.
  * @selection_notify_event:
  * @proximity_in_event:
  * @proximity_out_event:

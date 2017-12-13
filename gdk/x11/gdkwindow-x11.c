@@ -1179,8 +1179,6 @@ gdk_x11_window_destroy (GdkWindow *window,
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  _gdk_x11_selection_window_destroyed (window);
-
   toplevel = _gdk_x11_window_get_toplevel (window);
   if (toplevel)
     gdk_toplevel_x11_free_contents (GDK_WINDOW_DISPLAY (window), toplevel);

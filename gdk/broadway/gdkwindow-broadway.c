@@ -265,7 +265,6 @@ _gdk_broadway_window_destroy (GdkWindow *window,
   if (impl->node_data_textures)
     g_ptr_array_unref (impl->node_data_textures);
 
-  _gdk_broadway_selection_window_destroyed (window);
   _gdk_broadway_window_grab_check_destroy (window);
 
   broadway_display = GDK_BROADWAY_DISPLAY (gdk_window_get_display (window));

@@ -24,25 +24,6 @@
 #include "gdkproperty.h"
 #include "gdkquartz.h"
 
-gboolean
-_gdk_quartz_display_set_selection_owner (GdkDisplay *display,
-                                         GdkWindow  *owner,
-                                         GdkAtom     selection,
-                                         guint32     time,
-                                         gint        send_event)
-{
-  /* FIXME: Implement */
-  return TRUE;
-}
-
-GdkWindow*
-_gdk_quartz_display_get_selection_owner (GdkDisplay *display,
-                                         GdkAtom     selection)
-{
-  /* FIXME: Implement */
-  return NULL;
-}
-
 void
 _gdk_quartz_display_convert_selection (GdkDisplay *display,
                                        GdkWindow  *requestor,

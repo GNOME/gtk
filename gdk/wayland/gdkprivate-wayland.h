@@ -129,13 +129,6 @@ void _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
 					      GdkEventMask   event_mask,
 					      GdkWindowAttr *attributes);
 
-GdkWindow *_gdk_wayland_display_get_selection_owner (GdkDisplay *display,
-						 GdkAtom     selection);
-gboolean   _gdk_wayland_display_set_selection_owner (GdkDisplay *display,
-						     GdkWindow  *owner,
-						     GdkAtom     selection,
-						     guint32     time,
-						     gboolean    send_event);
 void       _gdk_wayland_display_send_selection_notify (GdkDisplay *dispay,
 						       GdkWindow        *requestor,
 						       GdkAtom          selection,

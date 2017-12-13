@@ -1823,8 +1823,6 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_CONFIGURE:
     case GDK_MAP:
     case GDK_UNMAP:
-    case GDK_SELECTION_CLEAR:
-    case GDK_SELECTION_REQUEST:
     case GDK_SELECTION_NOTIFY:
     case GDK_CLIENT_EVENT:
     case GDK_WINDOW_STATE:

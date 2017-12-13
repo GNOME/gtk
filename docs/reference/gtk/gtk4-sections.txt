@@ -5185,8 +5185,6 @@ gtk_css_section_get_type
 <FILE>gtkselection</FILE>
 <TITLE>Selections</TITLE>
 GtkSelectionData
-gtk_selection_owner_set
-gtk_selection_owner_set_for_display
 gtk_selection_convert
 gtk_selection_data_set
 gtk_selection_data_set_text

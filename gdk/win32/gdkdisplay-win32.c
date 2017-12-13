@@ -1244,8 +1244,6 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
   display_class->create_window_impl = _gdk_win32_display_create_window_impl;
 
   display_class->get_keymap = _gdk_win32_display_get_keymap;
-  display_class->get_selection_owner = _gdk_win32_display_get_selection_owner;
-  display_class->set_selection_owner = _gdk_win32_display_set_selection_owner;
   display_class->send_selection_notify = _gdk_win32_display_send_selection_notify;
   display_class->get_selection_property = _gdk_win32_display_get_selection_property;
   display_class->convert_selection = _gdk_win32_display_convert_selection;

@@ -379,13 +379,6 @@ gboolean _gdk_win32_selection_owner_set_for_display (GdkDisplay *display,
 						     GdkAtom     selection,
 						     guint32     time,
 						     gboolean    send_event);
-GdkWindow *_gdk_win32_display_get_selection_owner   (GdkDisplay *display,
-						     GdkAtom     selection);
-gboolean   _gdk_win32_display_set_selection_owner   (GdkDisplay *display,
-						     GdkWindow  *owner,
-						     GdkAtom     selection,
-						     guint32     time,
-						     gboolean    send_event);
 void       _gdk_win32_display_send_selection_notify (GdkDisplay      *display,
 						     GdkWindow       *requestor,
 						     GdkAtom   	      selection,

@@ -1051,45 +1051,6 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 
       break;
 
-    case SelectionClear:
-      GDK_NOTE (EVENTS,
-		g_message ("selection clear:\twindow: %ld",
-			   xevent->xproperty.window));
-
-      if (_gdk_x11_selection_filter_clear_event (&xevent->xselectionclear))
-	{
-	  event->selection.type = GDK_SELECTION_CLEAR;
-	  event->selection.window = window;
-	  event->selection.selection = gdk_x11_xatom_to_atom_for_display (display, xevent->xselectionclear.selection);
-	  event->selection.time = xevent->xselectionclear.time;
-	}
-      else
-	return_val = FALSE;
-
-      break;
-
-    case SelectionRequest:
-      GDK_NOTE (EVENTS,
-		g_message ("selection request:\twindow: %ld",
-			   xevent->xproperty.window));
-
-      event->selection.type = GDK_SELECTION_REQUEST;
-      event->selection.window = window;
-      event->selection.selection = gdk_x11_xatom_to_atom_for_display (display, xevent->xselectionrequest.selection);
-      event->selection.target = gdk_x11_xatom_to_atom_for_display (display, xevent->xselectionrequest.target);
-      if (xevent->xselectionrequest.property == None)
-        event->selection.property = event->selection.target;
-      else
-        event->selection.property = gdk_x11_xatom_to_atom_for_display (display, xevent->xselectionrequest.property);
-      if (xevent->xselectionrequest.requestor != None)
-        event->selection.requestor = gdk_x11_window_foreign_new_for_display (display,
-                                                                             xevent->xselectionrequest.requestor);
-      else
-        event->selection.requestor = NULL;
-      event->selection.time = xevent->xselectionrequest.time;
-
-      break;
-
     case SelectionNotify:
       GDK_NOTE (EVENTS,
 		g_message ("selection notify:\twindow: %ld",
@@ -3218,8 +3179,6 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->notify_startup_complete = gdk_x11_display_notify_startup_complete;
   display_class->create_window_impl = _gdk_x11_display_create_window_impl;
   display_class->get_keymap = gdk_x11_display_get_keymap;
-  display_class->get_selection_owner = _gdk_x11_display_get_selection_owner;
-  display_class->set_selection_owner = _gdk_x11_display_set_selection_owner;
   display_class->send_selection_notify = _gdk_x11_display_send_selection_notify;
   display_class->get_selection_property = _gdk_x11_display_get_selection_property;
   display_class->convert_selection = _gdk_x11_display_convert_selection;

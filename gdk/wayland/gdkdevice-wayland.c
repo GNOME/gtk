@@ -1102,10 +1102,8 @@ data_device_enter (void                  *data,
   gdk_wayland_drop_context_update_targets (seat->drop_context);
 
   selection = gdk_drag_get_selection (seat->drop_context);
-  dnd_owner = gdk_selection_owner_get_for_display (seat->display, selection);
 
-  if (!dnd_owner)
-    dnd_owner = seat->foreign_dnd_window;
+  dnd_owner = seat->foreign_dnd_window;
 
   _gdk_wayland_drag_context_set_source_window (seat->drop_context, dnd_owner);
 

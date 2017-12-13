@@ -496,45 +496,6 @@ gdk_mir_display_pop_error_trap (GdkDisplay *display,
   return 0;
 }
 
-static GdkWindow *
-gdk_mir_display_get_selection_owner (GdkDisplay *display,
-                                     GdkAtom     selection)
-{
-  return NULL;
-}
-
-static gboolean
-gdk_mir_display_set_selection_owner (GdkDisplay *display,
-                                     GdkWindow  *owner,
-                                     GdkAtom     selection,
-                                     guint32     time,
-                                     gboolean    send_event)
-{
-  GdkEvent *event;
-
-  if (selection == GDK_SELECTION_CLIPBOARD)
-    {
-      if (owner)
-        {
-          event = gdk_event_new (GDK_SELECTION_REQUEST);
-          event->selection.window = g_object_ref (owner);
-          event->selection.send_event = FALSE;
-          event->selection.selection = selection;
-          event->selection.target = gdk_atom_intern_static_string ("TARGETS");
-          event->selection.property = gdk_atom_intern_static_string ("AVAILABLE_TARGETS");
-          event->selection.time = GDK_CURRENT_TIME;
-          event->selection.requestor = g_object_ref (owner);
-
-          gdk_event_put (event);
-          gdk_event_free (event);
-
-          return TRUE;
-        }
-    }
-
-  return FALSE;
-}
-
 static void
 gdk_mir_display_send_selection_notify (GdkDisplay *display,
                                        GdkWindow  *requestor,
@@ -1215,8 +1176,6 @@ gdk_mir_display_class_init (GdkMirDisplayClass *klass)
   display_class->get_keymap = gdk_mir_display_get_keymap;
   display_class->push_error_trap = gdk_mir_display_push_error_trap;
   display_class->pop_error_trap = gdk_mir_display_pop_error_trap;
-  display_class->get_selection_owner = gdk_mir_display_get_selection_owner;
-  display_class->set_selection_owner = gdk_mir_display_set_selection_owner;
   display_class->send_selection_notify = gdk_mir_display_send_selection_notify;
   display_class->get_selection_property = gdk_mir_display_get_selection_property;
   display_class->convert_selection = gdk_mir_display_convert_selection;
