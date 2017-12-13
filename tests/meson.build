@@ -74,7 +74,6 @@ gtk_tests = [
   ['testrecentchooser'],
   ['testrecentchoosermenu'],
   ['testscale'],
-  ['testselection'],
   ['testselectionmode'],
   ['testspinbutton'],
   ['testtoolbar'],
