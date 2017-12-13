@@ -1122,7 +1122,6 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   GtkWidget *ipc_widget;
   GdkWindow *ipc_window;
   int dx, dy;
-  GdkAtom selection;
   GtkDragContent *content;
   guint32 time;
 
@@ -1204,23 +1203,6 @@ gtk_drag_begin_internal (GtkWidget          *widget,
                     G_CALLBACK (gtk_drag_context_dnd_finished_cb), info);
   g_signal_connect (context, "cancel",
                     G_CALLBACK (gtk_drag_context_cancel_cb), info);
-
-  selection = gdk_drag_get_selection (context);
-  if (selection)
-    {
-      gtk_selection_owner_set_for_display (gtk_widget_get_display (info->widget),
-                                           info->ipc_widget,
-                                           selection,
-                                           time);
-
-      gtk_selection_add_targets (info->ipc_widget,
-                                 selection,
-                                 info->target_list);
-
-      gtk_selection_add_target (info->ipc_widget,
-                                selection,
-                                gdk_atom_intern_static_string ("DELETE"));
-    }
 
   g_signal_connect (info->ipc_widget, "selection-get",
                     G_CALLBACK (gtk_drag_selection_get), info);

@@ -26,6 +26,7 @@
 
 #include "gdkx11dnd.h"
 
+#include "gdk-private.h"
 #include "gdkasync.h"
 #include "gdkclipboardprivate.h"
 #include "gdkclipboard-x11.h"
@@ -38,6 +39,7 @@
 #include "gdkprivate-x11.h"
 #include "gdkscreen-x11.h"
 #include "gdkselectioninputstream-x11.h"
+#include "gdkselectionoutputstream-x11.h"
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -82,6 +84,7 @@ struct _GdkX11DragContext
   gint start_y;
   guint16 last_x;              /* Coordinates from last event */
   guint16 last_y;
+  gulong timestamp;            /* Timestamp we claimed the DND selection with */
   GdkDragAction old_action;    /* The last action we sent to the source */
   GdkDragAction old_actions;   /* The last actions we sent to the source */
   GdkDragAction xdnd_actions;  /* What is currently set in XdndActionList */
@@ -2091,7 +2094,7 @@ create_drag_window (GdkDisplay *display)
   return window;
 }
 
-Window
+static Window
 _gdk_x11_display_get_drag_protocol (GdkDisplay      *display,
                                     Window           xid,
                                     GdkDragProtocol *protocol,
@@ -2612,6 +2615,109 @@ gdk_x11_drag_context_set_hotspot (GdkDragContext *context,
     }
 }
 
+static void
+gdk_x11_drag_context_default_output_done (GObject      *context,
+                                          GAsyncResult *result,
+                                          gpointer      user_data)
+{
+  GError *error = NULL;
+
+  if (!gdk_drag_context_write_finish (GDK_DRAG_CONTEXT (context), result, &error))
+    {
+      GDK_NOTE(DND, g_printerr ("failed to write stream: %s\n", error->message));
+      g_error_free (error);
+    }
+}
+
+static void
+gdk_x11_drag_context_default_output_handler (GOutputStream   *stream,
+                                             const char      *mime_type,
+                                             gpointer         user_data)
+{
+  gdk_drag_context_write_async (GDK_DRAG_CONTEXT (user_data),
+                                mime_type,
+                                stream,
+                                G_PRIORITY_DEFAULT,
+                                NULL,
+                                gdk_x11_drag_context_default_output_done,
+                                NULL);
+  g_object_unref (stream);
+}
+
+static gboolean
+gdk_x11_drag_context_xevent (GdkDisplay   *display,
+                             const XEvent *xevent,
+                             gpointer      data)
+{
+  GdkDragContext *context = GDK_DRAG_CONTEXT (data);
+  GdkX11DragContext *x11_context = GDK_X11_DRAG_CONTEXT (context);
+  Window xwindow;
+  Atom xselection;
+
+  xwindow = GDK_WINDOW_XID (x11_context->ipc_window);
+  xselection = gdk_x11_get_xatom_by_name_for_display (display, "XdndSelection");
+
+  if (xevent->xany.window != xwindow)
+    return FALSE;
+
+  switch (xevent->type)
+  {
+    case SelectionClear:
+      if (xevent->xselectionclear.selection != xselection)
+        return FALSE;
+
+      if (xevent->xselectionclear.time < x11_context->timestamp)
+        {
+          GDK_NOTE(CLIPBOARD, g_printerr ("ignoring SelectionClear with too old timestamp (%lu vs %lu)\n",
+                                          xevent->xselectionclear.time, x11_context->timestamp));
+          return FALSE;
+        }
+
+      GDK_NOTE(CLIPBOARD, g_printerr ("got SelectionClear, aborting DND\n"));
+      gdk_drag_context_cancel (context, GDK_DRAG_CANCEL_ERROR);
+      return TRUE;
+
+    case SelectionRequest:
+      {
+        const char *target, *property;
+
+        if (xevent->xselectionrequest.selection != xselection)
+          return FALSE;
+
+        target = gdk_x11_get_xatom_name_for_display (display, xevent->xselectionrequest.target);
+        if (xevent->xselectionrequest.property == None)
+          property = target;
+        else
+          property = gdk_x11_get_xatom_name_for_display (display, xevent->xselectionrequest.property);
+
+        if (xevent->xselectionrequest.requestor == None)
+          {
+            GDK_NOTE(CLIPBOARD, g_printerr ("got SelectionRequest for %s @ %s with NULL window, ignoring\n",
+                                            target, property));
+            return TRUE;
+          }
+        
+        GDK_NOTE(CLIPBOARD, g_printerr ("got SelectionRequest for %s @ %s\n",
+                                        target, property));
+
+        gdk_x11_selection_output_streams_create (display,
+                                                 gdk_drag_context_get_formats (context),
+                                                 xevent->xselectionrequest.requestor,
+                                                 xevent->xselectionrequest.selection,
+                                                 xevent->xselectionrequest.target,
+                                                 xevent->xselectionrequest.property ? xevent->xselectionrequest.property
+                                                                                    : xevent->xselectionrequest.target,
+                                                 xevent->xselectionrequest.time,
+                                                 gdk_x11_drag_context_default_output_handler,
+                                                 context);
+        return TRUE;
+      }
+
+    default:
+      return FALSE;
+  }
+}
+
 static double
 ease_out_cubic (double t)
 {
@@ -2668,6 +2774,24 @@ gdk_drag_anim_timeout (gpointer data)
 }
 
 static void
+gdk_x11_drag_context_release_selection (GdkDragContext *context)
+{
+  GdkX11DragContext *x11_context = GDK_X11_DRAG_CONTEXT (context);
+  GdkDisplay *display;
+  Display *xdisplay;
+  Window xwindow;
+  Atom xselection;
+
+  display = gdk_drag_context_get_display (context);
+  xdisplay = GDK_DISPLAY_XDISPLAY (display);
+  xselection = gdk_x11_get_xatom_by_name_for_display (display, "XdndSelection");
+  xwindow = GDK_WINDOW_XID (x11_context->ipc_window);
+
+  if (XGetSelectionOwner (xdisplay, xselection) == xwindow)
+    XSetSelectionOwner (xdisplay, xselection, None, CurrentTime);
+}
+
+static void
 gdk_x11_drag_context_drop_done (GdkDragContext *context,
                                 gboolean        success)
 {
@@ -2678,6 +2802,11 @@ gdk_x11_drag_context_drop_done (GdkDragContext *context,
   cairo_t *cr;
   guint id;
 
+  gdk_x11_drag_context_release_selection (context);
+
+  g_signal_handlers_disconnect_by_func (gdk_drag_context_get_display (context),
+                                        gdk_x11_drag_context_xevent,
+                                        context);
   if (success)
     {
       gdk_window_hide (x11_context->drag_window);
@@ -2864,17 +2993,25 @@ _gdk_x11_window_drag_begin (GdkWindow          *window,
                             gint                dx,
                             gint                dy)
 {
+  GdkX11DragContext *x11_context;
   GdkDragContext *context;
+  GdkDisplay *display;
   int x_root, y_root;
+  Atom xselection;
+
+  display = gdk_window_get_display (window);
 
   context = (GdkDragContext *) g_object_new (GDK_TYPE_X11_DRAG_CONTEXT,
-                                             "display", gdk_window_get_display (window),
+                                             "display", display,
                                              "content", content,
                                              NULL);
+  x11_context = GDK_X11_DRAG_CONTEXT (context);
 
   context->is_source = TRUE;
   context->source_window = window;
   g_object_ref (window);
+
+  g_signal_connect (display, "xevent", G_CALLBACK (gdk_x11_drag_context_xevent), context);
 
   precache_target_list (context);
 
@@ -2883,16 +3020,16 @@ _gdk_x11_window_drag_begin (GdkWindow          *window,
   x_root += dx;
   y_root += dy;
 
-  GDK_X11_DRAG_CONTEXT (context)->start_x = x_root;
-  GDK_X11_DRAG_CONTEXT (context)->start_y = y_root;
-  GDK_X11_DRAG_CONTEXT (context)->last_x = x_root;
-  GDK_X11_DRAG_CONTEXT (context)->last_y = y_root;
+  x11_context->start_x = x_root;
+  x11_context->start_y = y_root;
+  x11_context->last_x = x_root;
+  x11_context->last_y = y_root;
 
   context->protocol = GDK_DRAG_PROTO_XDND;
-  GDK_X11_DRAG_CONTEXT (context)->actions = actions;
-  GDK_X11_DRAG_CONTEXT (context)->ipc_window = g_object_ref (window);
+  x11_context->actions = actions;
+  x11_context->ipc_window = g_object_ref (window);
 
-  GDK_X11_DRAG_CONTEXT (context)->drag_window = create_drag_window (gdk_window_get_display(window));
+  x11_context->drag_window = create_drag_window (display);
 
   if (!drag_context_grab (context))
     {
@@ -2901,6 +3038,19 @@ _gdk_x11_window_drag_begin (GdkWindow          *window,
     }
   
   move_drag_window (context, x_root, y_root);
+
+  x11_context->timestamp = gdk_display_get_last_seen_time (display);
+  xselection = gdk_x11_get_xatom_by_name_for_display (display, "XdndSelection");
+  XSetSelectionOwner (GDK_DISPLAY_XDISPLAY (display),
+                      xselection,
+                      GDK_WINDOW_XID (window),
+                      x11_context->timestamp);
+  if (XGetSelectionOwner (GDK_DISPLAY_XDISPLAY (display), xselection) != GDK_WINDOW_XID (window))
+    {
+      GDK_NOTE(DND, g_printerr ("failed XSetSelectionOwner() on \"XdndSelection\", aborting DND\n"));
+      g_object_unref (context);
+      return NULL;
+    }
 
   return context;
 }
