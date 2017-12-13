@@ -1636,7 +1636,6 @@ gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
 
   g_clear_object (&info->widget);
 
-  gtk_selection_remove_all (info->ipc_widget);
   g_object_set_data (G_OBJECT (info->ipc_widget), I_("gtk-info"), NULL);
   source_widgets = g_slist_remove (source_widgets, info->ipc_widget);
   gtk_drag_release_ipc_widget (info->ipc_widget);

@@ -47,13 +47,6 @@ struct _GtkSelectionData
   GdkDisplay   *display;
 };
 
-gboolean _gtk_selection_incr_event      (GdkWindow         *window,
-                                         GdkEventProperty  *event);
-gboolean _gtk_selection_notify          (GtkWidget         *widget,
-                                         GdkEventSelection *event);
-gboolean _gtk_selection_property_notify (GtkWidget         *widget,
-                                         GdkEventProperty  *event);
-
 G_END_DECLS
 
 #endif /* __GTK_SELECTION_PRIVATE_H__ */

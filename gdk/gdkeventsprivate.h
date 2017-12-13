@@ -405,32 +405,6 @@ struct _GdkEventProperty
 };
 
 /**
- * GdkEventSelection:
- * @type: the type of the event (%GDK_SELECTION_NOTIFY).
- * @window: the window which received the event.
- * @send_event: %TRUE if the event was sent explicitly.
- * @selection: the selection.
- * @target: the target to which the selection should be converted.
- * @property: the property in which to place the result of the conversion.
- * @time: the time of the event in milliseconds.
- * @requestor: the window on which to place @property or %NULL if none.
- *
- * Generated when a selection is requested or ownership of a selection
- * is taken over by another client application.
- */
-struct _GdkEventSelection
-{
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
-  GdkAtom selection;
-  GdkAtom target;
-  GdkAtom property;
-  guint32 time;
-  GdkWindow *requestor;
-};
-
-/**
  * GdkEventProximity:
  * @type: the type of the event (%GDK_PROXIMITY_IN or %GDK_PROXIMITY_OUT).
  * @window: the window which received the event.
@@ -708,7 +682,6 @@ struct _GdkEventPadGroupMode {
  * @focus_change: a #GdkEventFocus
  * @configure: a #GdkEventConfigure
  * @property: a #GdkEventProperty
- * @selection: a #GdkEventSelection
  * @proximity: a #GdkEventProximity
  * @dnd: a #GdkEventDND
  * @window_state: a #GdkEventWindowState
@@ -764,7 +737,6 @@ union _GdkEvent
   GdkEventFocus		    focus_change;
   GdkEventConfigure	    configure;
   GdkEventProperty	    property;
-  GdkEventSelection	    selection;
   GdkEventProximity	    proximity;
   GdkEventDND               dnd;
   GdkEventWindowState       window_state;

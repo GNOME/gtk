@@ -425,10 +425,6 @@ GDK_SELECTION_TYPE_INTEGER
 GDK_SELECTION_TYPE_PIXMAP
 GDK_SELECTION_TYPE_WINDOW
 GDK_SELECTION_TYPE_STRING
-gdk_selection_convert
-gdk_selection_property_get
-gdk_selection_send_notify
-gdk_selection_send_notify_for_display
 </SECTION>
 
 <SECTION>
@@ -763,7 +759,6 @@ GdkEventCrossing
 GdkEventFocus
 GdkEventConfigure
 GdkEventProperty
-GdkEventSelection
 GdkEventDND
 GdkEventProximity
 GdkEventWindowState

@@ -1692,19 +1692,7 @@ gtk_main_do_event (GdkEvent *event)
    */
   event_widget = gtk_get_event_widget (event);
   if (!event_widget)
-    {
-      /* To handle selection INCR transactions, we select
-       * PropertyNotify events on the requestor window and create
-       * a corresponding (fake) GdkWindow so that events get here.
-       * There won't be a widget though, so we have to handle
-       * them specially
-       */
-      if (event->type == GDK_PROPERTY_NOTIFY)
-        _gtk_selection_incr_event (event->any.window,
-                                   &event->property);
-
-      return;
-    }
+    return;
 
   /* If pointer or keyboard grabs are in effect, munge the events
    * so that each window group looks like a separate app.
@@ -1823,7 +1811,6 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_CONFIGURE:
     case GDK_MAP:
     case GDK_UNMAP:
-    case GDK_SELECTION_NOTIFY:
     case GDK_CLIENT_EVENT:
     case GDK_WINDOW_STATE:
     case GDK_GRAB_BROKEN:

@@ -45,14 +45,6 @@ GDK_AVAILABLE_IN_ALL
 GdkContentFormats *     gtk_content_formats_add_uri_targets       (GdkContentFormats *list) G_GNUC_WARN_UNUSED_RESULT;
 
 GDK_AVAILABLE_IN_ALL
-gboolean gtk_selection_convert       (GtkWidget            *widget,
-                                      GdkAtom               selection,
-                                      GdkAtom               target,
-                                      guint32               time_);
-GDK_AVAILABLE_IN_ALL
-void     gtk_selection_remove_all    (GtkWidget             *widget);
-
-GDK_AVAILABLE_IN_ALL
 GdkAtom       gtk_selection_data_get_selection (const GtkSelectionData *selection_data);
 GDK_AVAILABLE_IN_ALL
 GdkAtom       gtk_selection_data_get_target    (const GtkSelectionData *selection_data);

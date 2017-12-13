@@ -5468,10 +5468,6 @@ _gdk_make_event (GdkWindow    *window,
       event->property.state = the_state;
       break;
 
-    case GDK_SELECTION_NOTIFY:
-      event->selection.time = the_time;
-      break;
-
     case GDK_PROXIMITY_IN:
     case GDK_PROXIMITY_OUT:
       event->proximity.time = the_time;

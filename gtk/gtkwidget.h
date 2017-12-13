@@ -369,12 +369,6 @@ struct _GtkWidgetClass
 					 GdkEventAny	     *event);
   gboolean (* property_notify_event)	(GtkWidget	     *widget,
 					 GdkEventProperty    *event);
-  gboolean (* selection_clear_event)	(GtkWidget	     *widget,
-					 GdkEventSelection   *event);
-  gboolean (* selection_request_event)	(GtkWidget	     *widget,
-					 GdkEventSelection   *event);
-  gboolean (* selection_notify_event)	(GtkWidget	     *widget,
-					 GdkEventSelection   *event);
   gboolean (* proximity_in_event)	(GtkWidget	     *widget,
 					 GdkEventProximity   *event);
   gboolean (* proximity_out_event)	(GtkWidget	     *widget,

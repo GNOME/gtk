@@ -132,7 +132,6 @@ typedef struct _GdkEventFocus	    GdkEventFocus;
 typedef struct _GdkEventCrossing    GdkEventCrossing;
 typedef struct _GdkEventConfigure   GdkEventConfigure;
 typedef struct _GdkEventProperty    GdkEventProperty;
-typedef struct _GdkEventSelection   GdkEventSelection;
 typedef struct _GdkEventOwnerChange GdkEventOwnerChange;
 typedef struct _GdkEventProximity   GdkEventProximity;
 typedef struct _GdkEventDND         GdkEventDND;
@@ -233,9 +232,6 @@ typedef GdkFilterReturn (*GdkFilterFunc) (GdkXEvent *xevent,
  * @GDK_MAP: the window has been mapped.
  * @GDK_UNMAP: the window has been unmapped.
  * @GDK_PROPERTY_NOTIFY: a property on the window has been changed or deleted.
- * @GDK_SELECTION_CLEAR: the application has lost ownership of a selection.
- * @GDK_SELECTION_REQUEST: another application has requested a selection.
- * @GDK_SELECTION_NOTIFY: a selection has been received.
  * @GDK_PROXIMITY_IN: an input device has moved into contact with a sensing
  *   surface (e.g. a touchscreen or graphics tablet).
  * @GDK_PROXIMITY_OUT: an input device has moved out of contact with a sensing
@@ -304,7 +300,6 @@ typedef enum
   GDK_MAP		= 14,
   GDK_UNMAP		= 15,
   GDK_PROPERTY_NOTIFY	= 16,
-  GDK_SELECTION_NOTIFY	= 19,
   GDK_PROXIMITY_IN	= 20,
   GDK_PROXIMITY_OUT	= 21,
   GDK_DRAG_ENTER        = 22,
@@ -714,19 +709,6 @@ GDK_AVAILABLE_IN_3_92
 gboolean       gdk_event_get_property (const GdkEvent   *event,
                                        GdkAtom          *property,
                                        GdkPropertyState *state);
-GDK_AVAILABLE_IN_3_92
-gboolean       gdk_event_get_selection (const GdkEvent   *event,
-                                        GdkAtom          *selection);
-GDK_AVAILABLE_IN_3_92
-gboolean       gdk_event_get_selection_property (const GdkEvent  *event,
-                                                 GdkAtom         *property,
-                                                 GdkAtom         *target,
-                                                 GdkWindow      **requestor);
-GDK_AVAILABLE_IN_3_92
-void           gdk_event_set_selection (GdkEvent  *event,
-                                        GdkWindow *window,
-                                        GdkAtom    selection,
-                                        guint32    time);
 GDK_AVAILABLE_IN_3_92
 gboolean       gdk_event_get_axes      (GdkEvent  *event,
                                         gdouble  **axes,

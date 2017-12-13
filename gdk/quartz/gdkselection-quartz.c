@@ -24,27 +24,6 @@
 #include "gdkproperty.h"
 #include "gdkquartz.h"
 
-void
-_gdk_quartz_display_convert_selection (GdkDisplay *display,
-                                       GdkWindow  *requestor,
-                                       GdkAtom     selection,
-                                       GdkAtom     target,
-                                       guint32     time)
-{
-  /* FIXME: Implement */
-}
-
-gint
-_gdk_quartz_display_get_selection_property (GdkDisplay *display,
-                                            GdkWindow  *requestor,
-                                            guchar    **data,
-                                            GdkAtom    *ret_type,
-                                            gint       *ret_format)
-{
-  /* FIXME: Implement */
-  return 0;
-}
-
 gchar *
 _gdk_quartz_display_utf8_to_string_target (GdkDisplay  *display,
                                            const gchar *str)

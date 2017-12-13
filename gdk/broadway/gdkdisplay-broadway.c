@@ -573,9 +573,6 @@ gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
   display_class->notify_startup_complete = gdk_broadway_display_notify_startup_complete;
   display_class->create_window_impl = _gdk_broadway_display_create_window_impl;
   display_class->get_keymap = _gdk_broadway_display_get_keymap;
-  display_class->send_selection_notify = _gdk_broadway_display_send_selection_notify;
-  display_class->get_selection_property = _gdk_broadway_display_get_selection_property;
-  display_class->convert_selection = _gdk_broadway_display_convert_selection;
   display_class->text_property_to_utf8_list = _gdk_broadway_display_text_property_to_utf8_list;
   display_class->utf8_to_string_target = _gdk_broadway_display_utf8_to_string_target;
 

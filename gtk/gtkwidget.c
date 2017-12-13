@@ -521,7 +521,6 @@ enum {
   MAP_EVENT,
   UNMAP_EVENT,
   PROPERTY_NOTIFY_EVENT,
-  SELECTION_NOTIFY_EVENT,
   SELECTION_GET,
   SELECTION_RECEIVED,
   PROXIMITY_IN_EVENT,
@@ -1045,8 +1044,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->map_event = NULL;
   klass->unmap_event = NULL;
   klass->window_state_event = NULL;
-  klass->property_notify_event = _gtk_selection_property_notify;
-  klass->selection_notify_event = _gtk_selection_notify;
+  klass->property_notify_event = NULL;
   klass->selection_received = NULL;
   klass->proximity_in_event = NULL;
   klass->proximity_out_event = NULL;
@@ -2427,25 +2425,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   g_signal_set_va_marshaller (widget_signals[PROPERTY_NOTIFY_EVENT], G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__BOXEDv);
-
-  /**
-   * GtkWidget::selection-notify-event:
-   * @widget: the object which received the signal.
-   * @event: (type Gdk.EventSelection):
-   *
-   * Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
-   */
-  widget_signals[SELECTION_NOTIFY_EVENT] =
-    g_signal_new (I_("selection-notify-event"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST | G_SIGNAL_DEPRECATED,
-		  G_STRUCT_OFFSET (GtkWidgetClass, selection_notify_event),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__BOXED,
-		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
-  g_signal_set_va_marshaller (widget_signals[SELECTION_NOTIFY_EVENT], G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_BOOLEAN__BOXEDv);
 
   /**
@@ -6623,7 +6602,6 @@ gtk_widget_event_internal (GtkWidget      *widget,
     case GDK_UNMAP:
     case GDK_WINDOW_STATE:
     case GDK_PROPERTY_NOTIFY:
-    case GDK_SELECTION_NOTIFY:
       return gtk_widget_emit_event_signals (widget, event);
     default:
       break;
@@ -6742,9 +6720,6 @@ gtk_widget_emit_event_signals (GtkWidget      *widget,
 	  break;
 	case GDK_PROPERTY_NOTIFY:
 	  signal_num = PROPERTY_NOTIFY_EVENT;
-	  break;
-	case GDK_SELECTION_NOTIFY:
-	  signal_num = SELECTION_NOTIFY_EVENT;
 	  break;
 	case GDK_PROXIMITY_IN:
 	  signal_num = PROXIMITY_IN_EVENT;
@@ -10146,8 +10121,6 @@ gtk_widget_real_unrealize (GtkWidget *widget)
       g_object_unref (priv->window);
       priv->window = NULL;
     }
-
-  gtk_selection_remove_all (widget);
 
   gtk_widget_set_realized (widget, FALSE);
 }

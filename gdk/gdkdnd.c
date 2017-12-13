@@ -1032,26 +1032,12 @@ gboolean
 gdk_drag_context_handle_dest_event (GdkEvent *event)
 {
   GdkDragContext *context = NULL;
-  GList *l;
 
   switch ((guint) event->type)
     {
     case GDK_DRAG_MOTION:
     case GDK_DROP_START:
       context = event->dnd.context;
-      break;
-    case GDK_SELECTION_NOTIFY:
-      for (l = contexts; l; l = l->next)
-        {
-          GdkDragContext *c = l->data;
-
-          if (!c->is_source &&
-              event->selection.selection == gdk_drag_get_selection (c))
-            {
-              context = c;
-              break;
-            }
-        }
       break;
     default:
       return FALSE;

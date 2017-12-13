@@ -7084,98 +7084,6 @@ selection_test_received (GtkWidget        *tree_view,
   return;
 }
 
-void
-selection_test_get_targets (GtkWidget *dialog, gint response, GtkWidget *tree_view)
-{
-  static GdkAtom targets_atom = NULL;
-
-  if (response != GTK_RESPONSE_APPLY)
-    {
-      gtk_widget_destroy (dialog);
-      return;
-    }
-
-  if (targets_atom == NULL)
-    targets_atom = gdk_atom_intern ("TARGETS", FALSE);
-
-  gtk_selection_convert (tree_view, GDK_SELECTION_PRIMARY, targets_atom,
-			 GDK_CURRENT_TIME);
-}
-
-void
-create_selection_test (GtkWidget *widget)
-{
-  static GtkWidget *window = NULL;
-  GtkWidget *content_area;
-  GtkWidget *vbox;
-  GtkWidget *scrolled_win;
-  GtkListStore* store;
-  GtkWidget *tree_view;
-  GtkTreeViewColumn *column;
-  GtkCellRenderer *renderer;
-  GtkWidget *label;
-
-  if (!window)
-    {
-      window = gtk_dialog_new ();
-      
-      gtk_window_set_display (GTK_WINDOW (window),
-			      gtk_widget_get_display (widget));
-
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window);
-
-      content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
-
-      gtk_window_set_title (GTK_WINDOW (window), "Selection Test");
-
-      /* Create the list */
-
-      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-      gtk_box_pack_start (GTK_BOX (content_area), vbox);
-
-      label = gtk_label_new ("Gets available targets for current selection");
-      gtk_box_pack_start (GTK_BOX (vbox), label);
-
-      scrolled_win = gtk_scrolled_window_new (NULL, NULL);
-      gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
-				      GTK_POLICY_AUTOMATIC,
-				      GTK_POLICY_AUTOMATIC);
-      gtk_box_pack_start (GTK_BOX (vbox), scrolled_win);
-      gtk_widget_set_size_request (scrolled_win, 100, 200);
-
-      store = gtk_list_store_new (1, G_TYPE_STRING);
-      tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));
-      gtk_container_add (GTK_CONTAINER (scrolled_win), tree_view);
-
-      renderer = gtk_cell_renderer_text_new ();
-      column = gtk_tree_view_column_new_with_attributes ("Target", renderer,
-                                                         "text", 0, NULL);
-      gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
-
-      g_signal_connect (tree_view, "selection_received",
-			G_CALLBACK (selection_test_received), NULL);
-
-      /* .. And create some buttons */
-      gtk_dialog_add_button (GTK_DIALOG (window),
-                             "Get Targets",
-                             GTK_RESPONSE_APPLY);
-
-      g_signal_connect (window, "response",
-			G_CALLBACK (selection_test_get_targets), tree_view);
-
-      gtk_dialog_add_button (GTK_DIALOG (window),
-                             "Quit",
-                             GTK_RESPONSE_CLOSE);
-    }
-
-  if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
-  else
-    gtk_widget_destroy (window);
-}
-
 /*
  * Test scrolling
  */
@@ -8043,7 +7951,6 @@ struct {
   { "statusbar", create_statusbar },
   { "test mainloop", create_mainloop, TRUE },
   { "test scrolling", create_scroll_test },
-  { "test selection", create_selection_test },
   { "test timeout", create_timeout_test },
   { "toggle buttons", create_toggle_buttons },
   { "tooltips", create_tooltips },

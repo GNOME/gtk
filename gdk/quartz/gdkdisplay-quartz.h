@@ -71,17 +71,6 @@ void       _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
 /* Display methods - keymap */
 GdkKeymap * _gdk_quartz_display_get_keymap (GdkDisplay *display);
 
-/* Display methods - selection */
-gint        _gdk_quartz_display_get_selection_property (GdkDisplay     *display,
-                                                        GdkWindow      *requestor,
-                                                        guchar        **data,
-                                                        GdkAtom        *ret_type,
-                                                        gint           *ret_format);
-void        _gdk_quartz_display_convert_selection      (GdkDisplay     *display,
-                                                        GdkWindow      *requestor,
-                                                        GdkAtom         selection,
-                                                        GdkAtom         target,
-                                                        guint32         time);
 gint        _gdk_quartz_display_text_property_to_utf8_list (GdkDisplay     *display,
                                                             GdkAtom         encoding,
                                                             gint            format,

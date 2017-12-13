@@ -587,12 +587,6 @@ gdk_event_copy (const GdkEvent *event)
                                            sizeof (gdouble) * gdk_device_get_n_axes (event->motion.device));
       break;
 
-    case GDK_SELECTION_NOTIFY:
-      new_event->selection.requestor = event->selection.requestor;
-      if (new_event->selection.requestor)
-        g_object_ref (new_event->selection.requestor);
-      break;
-
     default:
       break;
     }
@@ -673,11 +667,6 @@ gdk_event_free (GdkEvent *event)
       g_free (event->motion.axes);
       break;
 
-    case GDK_SELECTION_NOTIFY:
-      if (event->selection.requestor)
-        g_object_unref (event->selection.requestor);
-      break;
-
     default:
       break;
     }
@@ -750,8 +739,6 @@ gdk_event_get_time (const GdkEvent *event)
 	return event->crossing.time;
       case GDK_PROPERTY_NOTIFY:
 	return event->property.time;
-      case GDK_SELECTION_NOTIFY:
-	return event->selection.time;
       case GDK_PROXIMITY_IN:
       case GDK_PROXIMITY_OUT:
 	return event->proximity.time;
@@ -846,7 +833,6 @@ gdk_event_get_state (const GdkEvent        *event,
       case GDK_CLIENT_EVENT:
       case GDK_CONFIGURE:
       case GDK_FOCUS_CHANGE:
-      case GDK_SELECTION_NOTIFY:
       case GDK_PROXIMITY_IN:
       case GDK_PROXIMITY_OUT:
       case GDK_DAMAGE:
@@ -2696,72 +2682,6 @@ gdk_event_get_property (const GdkEvent   *event,
     }
 
   return FALSE;
-}
-
-/**
- * gdk_event_get_selection:
- * @event: a #GdkEvent
- * @selection: (out):
- * 
- * Returns: %TRUE on success, otherwise %FALSE
- **/
-gboolean
-gdk_event_get_selection (const GdkEvent   *event,
-                         GdkAtom          *selection)
-{
-  if (!event)
-    return FALSE;
-
-  if (event->type == GDK_SELECTION_NOTIFY)
-    {
-      *selection = event->selection.selection;
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-/**
- * gdk_event_get_selection_property:
- * @event: a #GdkEvent
- * @property: (out) (optional):
- * @target: (out) (optional):
- * @requestor: (out) (optional) (transfer none):
- * 
- * Returns: %TRUE on success, otherwise %FALSE
- **/
-gboolean
-gdk_event_get_selection_property (const GdkEvent  *event,
-                                  GdkAtom         *property,
-                                  GdkAtom         *target,
-                                  GdkWindow      **requestor)
-{
-  if (!event)
-    return FALSE;
-
-  if (event->type == GDK_SELECTION_NOTIFY)
-    {
-      if (property)
-        *property = event->selection.property;
-      if (target)
-        *target = event->selection.target;
-      if (requestor)
-        *requestor = event->selection.requestor;
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-void
-gdk_event_set_selection (GdkEvent  *event,
-                         GdkWindow *window,
-                         GdkAtom    selection,
-                         guint32    time)
-{
-  event->selection.window = g_object_ref (window);
-  event->selection.selection = selection;
-  event->selection.time = time;
 }
 
 /**

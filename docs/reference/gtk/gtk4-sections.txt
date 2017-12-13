@@ -5185,7 +5185,6 @@ gtk_css_section_get_type
 <FILE>gtkselection</FILE>
 <TITLE>Selections</TITLE>
 GtkSelectionData
-gtk_selection_convert
 gtk_selection_data_set
 gtk_selection_data_set_text
 gtk_selection_data_get_text
@@ -5212,12 +5211,10 @@ gtk_selection_data_get_target
 gtk_targets_include_image
 gtk_targets_include_text
 gtk_targets_include_uri
-gtk_selection_remove_all
 gtk_selection_data_copy
 gtk_selection_data_free
 <SUBSECTION Standard>
 GTK_TYPE_SELECTION_DATA
-GTK_TYPE_TARGET_LIST
 <SUBSECTION Private>
 gtk_selection_data_get_type
 </SECTION>

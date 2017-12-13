@@ -78,7 +78,6 @@ struct _AsyncWriteData
 struct _SelectionData
 {
   DataOfferData *offer;
-  GHashTable *buffers; /* Hashtable of target_atom->SelectionBuffer */
 };
 
 enum {
@@ -100,182 +99,12 @@ struct _GdkWaylandSelection
   struct wl_data_source *dnd_source; /* Owned by the GdkDragContext */
 };
 
-static void selection_buffer_read (SelectionBuffer *buffer);
 static void async_write_data_write (AsyncWriteData *write_data);
-
-static void
-_gdk_display_put_event (GdkDisplay *display,
-                        GdkEvent   *event)
-{
-  gdk_event_set_display (event, display);
-  gdk_display_put_event (display, event);
-}
-
-static void
-selection_buffer_notify (SelectionBuffer *buffer)
-{
-  GdkEvent *event;
-  GList *l;
-
-  for (l = buffer->requestors; l; l = l->next)
-    {
-      event = gdk_event_new (GDK_SELECTION_NOTIFY);
-      event->selection.window = g_object_ref (l->data);
-      event->selection.send_event = FALSE;
-      event->selection.selection = buffer->selection;
-      event->selection.target = buffer->target;
-      event->selection.property = gdk_atom_intern_static_string ("GDK_SELECTION");
-      event->selection.time = GDK_CURRENT_TIME;
-      event->selection.requestor = g_object_ref (l->data);
-
-      _gdk_display_put_event (gdk_window_get_display (l->data), event);
-      gdk_event_free (event);
-    }
-}
-
-static SelectionBuffer *
-selection_buffer_new (GInputStream *stream,
-                      GdkAtom       selection,
-                      GdkAtom       target)
-{
-  SelectionBuffer *buffer;
-
-  buffer = g_new0 (SelectionBuffer, 1);
-  buffer->stream = (stream) ? g_object_ref (stream) : NULL;
-  buffer->cancellable = g_cancellable_new ();
-  buffer->data = g_byte_array_new ();
-  buffer->selection = selection;
-  buffer->target = target;
-  buffer->ref_count = 1;
-
-  if (stream)
-    selection_buffer_read (buffer);
-
-  return buffer;
-}
-
-static SelectionBuffer *
-selection_buffer_ref (SelectionBuffer *buffer)
-{
-  buffer->ref_count++;
-  return buffer;
-}
-
-static void
-selection_buffer_unref (SelectionBuffer *buffer_data)
-{
-  buffer_data->ref_count--;
-
-  if (buffer_data->ref_count != 0)
-    return;
-
-  if (buffer_data->cancellable)
-    g_object_unref (buffer_data->cancellable);
-
-  if (buffer_data->stream)
-    g_object_unref (buffer_data->stream);
-
-  if (buffer_data->data)
-    g_byte_array_unref (buffer_data->data);
-
-  g_free (buffer_data);
-}
-
-static void
-selection_buffer_append_data (SelectionBuffer *buffer,
-                              gconstpointer    data,
-                              gsize            len)
-{
-  g_byte_array_append (buffer->data, data, len);
-}
-
-static void
-selection_buffer_cancel_and_unref (SelectionBuffer *buffer_data)
-{
-  if (buffer_data->cancellable)
-    g_cancellable_cancel (buffer_data->cancellable);
-
-  selection_buffer_unref (buffer_data);
-}
-
-static void
-selection_buffer_add_requestor (SelectionBuffer *buffer,
-                                GdkWindow       *requestor)
-{
-  if (!g_list_find (buffer->requestors, requestor))
-    buffer->requestors = g_list_prepend (buffer->requestors,
-                                         g_object_ref (requestor));
-}
-
-static gboolean
-selection_buffer_remove_requestor (SelectionBuffer *buffer,
-                                   GdkWindow       *requestor)
-{
-  GList *link = g_list_find (buffer->requestors, requestor);
-
-  if (!link)
-    return FALSE;
-
-  g_object_unref (link->data);
-  buffer->requestors = g_list_delete_link (buffer->requestors, link);
-  return TRUE;
-}
 
 static inline glong
 get_buffer_size (void)
 {
   return sysconf (_SC_PAGESIZE);
-}
-
-static void
-selection_buffer_read_cb (GObject      *object,
-                          GAsyncResult *result,
-                          gpointer      user_data)
-{
-  SelectionBuffer *buffer = user_data;
-  gboolean finished = TRUE;
-  GError *error = NULL;
-  GBytes *bytes;
-
-  bytes = g_input_stream_read_bytes_finish (buffer->stream, result, &error);
-
-  if (bytes)
-    {
-      finished = g_bytes_get_size (bytes) < get_buffer_size ();
-      selection_buffer_append_data (buffer,
-                                    g_bytes_get_data (bytes, NULL),
-                                    g_bytes_get_size (bytes));
-      g_bytes_unref (bytes);
-    }
-
-  if (!finished)
-    selection_buffer_read (buffer);
-  else
-    {
-      if (error)
-        {
-          g_warning (G_STRLOC ": error reading selection buffer: %s", error->message);
-          g_error_free (error);
-        }
-      else
-        selection_buffer_notify (buffer);
-
-      g_input_stream_close (buffer->stream, NULL, NULL);
-      g_clear_object (&buffer->stream);
-      g_clear_object (&buffer->cancellable);
-    }
-
-  selection_buffer_unref (buffer);
-}
-
-static void
-selection_buffer_read (SelectionBuffer *buffer)
-{
-  selection_buffer_ref (buffer);
-  g_input_stream_read_bytes_async (buffer->stream, get_buffer_size(),
-                                   G_PRIORITY_DEFAULT,
-                                   buffer->cancellable, selection_buffer_read_cb,
-                                   buffer);
 }
 
 static DataOfferData *
@@ -304,18 +133,11 @@ GdkWaylandSelection *
 gdk_wayland_selection_new (void)
 {
   GdkWaylandSelection *selection;
-  gint i;
 
   /* init atoms */
   atoms[ATOM_DND] = gdk_atom_intern_static_string ("GdkWaylandSelection");
 
   selection = g_new0 (GdkWaylandSelection, 1);
-  for (i = 0; i < G_N_ELEMENTS (selection->selections); i++)
-    {
-      selection->selections[i].buffers =
-        g_hash_table_new_full (NULL, NULL, NULL,
-                               (GDestroyNotify) selection_buffer_cancel_and_unref);
-    }
 
   selection->offers =
     g_hash_table_new_full (NULL, NULL, NULL,
@@ -327,11 +149,6 @@ gdk_wayland_selection_new (void)
 void
 gdk_wayland_selection_free (GdkWaylandSelection *selection)
 {
-  gint i;
-
-  for (i = 0; i < G_N_ELEMENTS (selection->selections); i++)
-    g_hash_table_destroy (selection->selections[i].buffers);
-
   g_hash_table_destroy (selection->offers);
   g_free (selection->stored_selection.data);
 
@@ -513,8 +330,6 @@ gdk_wayland_selection_set_offer (GdkDisplay *display,
   if (selection_data)
     {
       selection_data->offer = info;
-      /* Clear all buffers */
-      g_hash_table_remove_all (selection_data->buffers);
     }
 }
 
@@ -703,29 +518,6 @@ gdk_wayland_selection_store (GdkWindow    *window,
   gdk_wayland_selection_check_write (selection);
 }
 
-static SelectionBuffer *
-gdk_wayland_selection_lookup_requestor_buffer (GdkWindow *requestor)
-{
-  GdkDisplay *display = gdk_window_get_display (requestor);
-  GdkWaylandSelection *selection = gdk_wayland_display_get_selection (display);
-  SelectionBuffer *buffer_data;
-  GHashTableIter iter;
-  gint i;
-
-  for (i = 0; i < G_N_ELEMENTS (selection->selections); i++)
-    {
-      g_hash_table_iter_init (&iter, selection->selections[i].buffers);
-
-      while (g_hash_table_iter_next (&iter, NULL, (gpointer*) &buffer_data))
-        {
-          if (g_list_find (buffer_data->requestors, requestor))
-            return buffer_data;
-        }
-    }
-
-  return NULL;
-}
-
 static void
 data_source_target (void                  *data,
                     struct wl_data_source *source,
@@ -907,171 +699,6 @@ gdk_wayland_selection_unset_data_source (GdkDisplay *display,
     {
       wayland_selection->dnd_source = NULL;
     }
-}
-
-void
-_gdk_wayland_display_send_selection_notify (GdkDisplay *dispay,
-                                            GdkWindow  *requestor,
-                                            GdkAtom     selection,
-                                            GdkAtom     target,
-                                            GdkAtom     property,
-                                            guint32     time)
-{
-}
-
-gint
-_gdk_wayland_display_get_selection_property (GdkDisplay  *display,
-                                             GdkWindow   *requestor,
-                                             guchar     **data,
-                                             GdkAtom     *ret_type,
-                                             gint        *ret_format)
-{
-  SelectionBuffer *buffer_data;
-  gsize len;
-
-  buffer_data = gdk_wayland_selection_lookup_requestor_buffer (requestor);
-
-  if (!buffer_data)
-    return 0;
-
-  selection_buffer_remove_requestor (buffer_data, requestor);
-  len = buffer_data->data->len;
-
-  if (data)
-    {
-      guchar *buffer;
-
-      buffer = g_new0 (guchar, len + 1);
-      memcpy (buffer, buffer_data->data->data, len);
-      *data = buffer;
-    }
-
-  if (buffer_data->target == gdk_atom_intern_static_string ("TARGETS"))
-    {
-      if (ret_type)
-        *ret_type = GDK_SELECTION_TYPE_ATOM;
-      if (ret_format)
-        *ret_format = 32;
-    }
-  else
-    {
-      if (ret_type)
-        *ret_type = buffer_data->target;
-      if (ret_format)
-        *ret_format = 8;
-    }
-
-  return len;
-}
-
-static void
-emit_empty_selection_notify (GdkWindow *requestor,
-                             GdkAtom    selection,
-                             GdkAtom    target)
-{
-  GdkEvent *event;
-
-  event = gdk_event_new (GDK_SELECTION_NOTIFY);
-  event->selection.window = g_object_ref (requestor);
-  event->selection.send_event = FALSE;
-  event->selection.selection = selection;
-  event->selection.target = target;
-  event->selection.property = NULL;
-  event->selection.time = GDK_CURRENT_TIME;
-  event->selection.requestor = g_object_ref (requestor);
-
-  _gdk_display_put_event (gdk_window_get_display (requestor), event);
-  gdk_event_free (event);
-}
-
-void
-_gdk_wayland_display_convert_selection (GdkDisplay *display,
-                                        GdkWindow  *requestor,
-                                        GdkAtom     selection,
-                                        GdkAtom     target,
-                                        guint32     time)
-{
-  GdkWaylandSelection *wayland_selection = gdk_wayland_display_get_selection (display);
-  const SelectionData *selection_data;
-  SelectionBuffer *buffer_data;
-  gpointer offer;
-  gchar *mimetype;
-  GdkContentFormats *formats;
-
-  selection_data = selection_lookup_offer_by_atom (wayland_selection, selection);
-  if (!selection_data)
-    return;
-
-  offer = gdk_wayland_selection_get_offer (display, selection);
-  formats = gdk_wayland_selection_get_targets (display, selection);
-
-  if (!offer || target == gdk_atom_intern_static_string ("DELETE"))
-    {
-      emit_empty_selection_notify (requestor, selection, target);
-      return;
-    }
-
-  mimetype = gdk_atom_name (target);
-
-  if (target != gdk_atom_intern_static_string ("TARGETS"))
-    {
-      if (!gdk_content_formats_contain_mime_type (formats, GDK_ATOM_TO_POINTER (target)))
-        {
-          emit_empty_selection_notify (requestor, selection, target);
-          return;
-        }
-
-    wl_data_offer_accept (offer,
-                          _gdk_wayland_display_get_serial (GDK_WAYLAND_DISPLAY (display)),
-                          mimetype);
-    }
-
-  buffer_data = g_hash_table_lookup (selection_data->buffers, target);
-
-  if (buffer_data)
-    selection_buffer_add_requestor (buffer_data, requestor);
-  else
-    {
-      GInputStream *stream = NULL;
-      int pipe_fd[2];
-      gsize n_targets = 0;
-      const char * const *targets = NULL;
-
-      if (target == gdk_atom_intern_static_string ("TARGETS"))
-        {
-          targets = gdk_content_formats_get_mime_types (formats, &n_targets);
-        }
-      else
-        {
-          g_unix_open_pipe (pipe_fd, FD_CLOEXEC, NULL);
-
-          wl_data_offer_receive (offer, mimetype, pipe_fd[1]);
-
-          stream = g_unix_input_stream_new (pipe_fd[0], TRUE);
-          close (pipe_fd[1]);
-        }
-
-      buffer_data = selection_buffer_new (stream, selection, target);
-      selection_buffer_add_requestor (buffer_data, requestor);
-
-      if (stream)
-        g_object_unref (stream);
-
-      if (targets)
-        {
-          /* Store directly the local atoms */
-          selection_buffer_append_data (buffer_data, targets, n_targets * sizeof (const char * const *));
-        }
-
-      g_hash_table_insert (selection_data->buffers,
-                           GDK_ATOM_TO_POINTER (target),
-                           buffer_data);
-    }
-
-  if (!buffer_data->stream)
-    selection_buffer_notify (buffer_data);
-
-  g_free (mimetype);
 }
 
 gint

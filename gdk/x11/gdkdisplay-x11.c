@@ -1051,23 +1051,6 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 
       break;
 
-    case SelectionNotify:
-      GDK_NOTE (EVENTS,
-		g_message ("selection notify:\twindow: %ld",
-			   xevent->xproperty.window));
-
-      event->selection.type = GDK_SELECTION_NOTIFY;
-      event->selection.window = window;
-      event->selection.selection = gdk_x11_xatom_to_atom_for_display (display, xevent->xselection.selection);
-      event->selection.target = gdk_x11_xatom_to_atom_for_display (display, xevent->xselection.target);
-      if (xevent->xselection.property == None)
-        event->selection.property = event->selection.target;
-      else
-        event->selection.property = gdk_x11_xatom_to_atom_for_display (display, xevent->xselection.property);
-      event->selection.time = xevent->xselection.time;
-
-      break;
-
     case ColormapNotify:
       GDK_NOTE (EVENTS,
 		g_message ("colormap notify:\twindow: %ld",
@@ -3179,9 +3162,6 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->notify_startup_complete = gdk_x11_display_notify_startup_complete;
   display_class->create_window_impl = _gdk_x11_display_create_window_impl;
   display_class->get_keymap = gdk_x11_display_get_keymap;
-  display_class->send_selection_notify = _gdk_x11_display_send_selection_notify;
-  display_class->get_selection_property = _gdk_x11_display_get_selection_property;
-  display_class->convert_selection = _gdk_x11_display_convert_selection;
   display_class->text_property_to_utf8_list = _gdk_x11_display_text_property_to_utf8_list;
   display_class->utf8_to_string_target = _gdk_x11_display_utf8_to_string_target;
 

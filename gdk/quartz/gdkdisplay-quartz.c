@@ -276,8 +276,6 @@ gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
   display_class->event_data_free = _gdk_quartz_display_event_data_free;
   display_class->create_window_impl = _gdk_quartz_display_create_window_impl;
   display_class->get_keymap = _gdk_quartz_display_get_keymap;
-  display_class->get_selection_property = _gdk_quartz_display_get_selection_property;
-  display_class->convert_selection = _gdk_quartz_display_convert_selection;
   display_class->text_property_to_utf8_list = _gdk_quartz_display_text_property_to_utf8_list;
   display_class->utf8_to_string_target = _gdk_quartz_display_utf8_to_string_target;
   display_class->get_n_monitors = gdk_quartz_display_get_n_monitors;

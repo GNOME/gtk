@@ -33,49 +33,6 @@
 #include <string.h>
 
 
-void
-_gdk_broadway_display_convert_selection (GdkDisplay *display,
-					 GdkWindow *requestor,
-					 GdkAtom    selection,
-					 GdkAtom    target,
-					 guint32    time)
-{
-  g_warning ("convert_selection not implemented");
-}
-
-gint
-_gdk_broadway_display_get_selection_property (GdkDisplay *display,
-					      GdkWindow  *requestor,
-					      guchar    **data,
-					      GdkAtom    *ret_type,
-					      gint       *ret_format)
-{
-  if (ret_type)
-    *ret_type = NULL;
-  if (ret_format)
-    *ret_format = 0;
-  if (data)
-    *data = NULL;
-
-  g_warning ("get_selection_property not implemented");
-
-  return 0;
-}
-
-void
-_gdk_broadway_display_send_selection_notify (GdkDisplay      *display,
-					     GdkWindow       *requestor,
-					     GdkAtom          selection,
-					     GdkAtom          target,
-					     GdkAtom          property, 
-					     guint32          time)
-{
-  g_return_if_fail (GDK_IS_DISPLAY (display));
-
-  g_warning ("send_selection_notify not implemented");
-}
-
-
 static gint
 make_list (const gchar  *text,
            gint          length,

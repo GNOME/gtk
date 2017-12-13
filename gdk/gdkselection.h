@@ -152,46 +152,6 @@ G_BEGIN_DECLS
 /* Selections
  */
 
-/**
- * gdk_selection_convert:
- * @requestor: a #GdkWindow.
- * @selection: an atom identifying the selection to get the
- *   contents of.
- * @target: the form in which to retrieve the selection.
- * @time_: the timestamp to use when retrieving the
- *   selection. The selection owner may refuse the
- *   request if it did not own the selection at
- *   the time indicated by the timestamp.
- *
- * Retrieves the contents of a selection in a given
- * form.
- */
-GDK_AVAILABLE_IN_ALL
-void	   gdk_selection_convert   (GdkWindow	 *requestor,
-				    GdkAtom	  selection,
-				    GdkAtom	  target,
-				    guint32	  time_);
-GDK_AVAILABLE_IN_ALL
-gint       gdk_selection_property_get (GdkWindow  *requestor,
-				       guchar	 **data,
-				       GdkAtom	  *prop_type,
-				       gint	  *prop_format);
-
-GDK_AVAILABLE_IN_ALL
-void	   gdk_selection_send_notify (GdkWindow      *requestor,
-				      GdkAtom	      selection,
-				      GdkAtom	      target,
-				      GdkAtom	      property,
-				      guint32	      time_);
-
-GDK_AVAILABLE_IN_ALL
-void       gdk_selection_send_notify_for_display (GdkDisplay      *display,
-						  GdkWindow       *requestor,
-						  GdkAtom     	   selection,
-						  GdkAtom     	   target,
-						  GdkAtom     	   property,
-						  guint32     	   time_);
-
 G_END_DECLS
 
 #endif /* __GDK_SELECTION_H__ */

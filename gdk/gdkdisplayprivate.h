@@ -167,23 +167,6 @@ struct _GdkDisplayClass
 
   GdkKeymap *                (*get_keymap)         (GdkDisplay    *display);
 
-  void                       (*send_selection_notify) (GdkDisplay *dispay,
-                                                       GdkWindow        *requestor,
-                                                       GdkAtom          selection,
-                                                       GdkAtom          target,
-                                                       GdkAtom          property,
-                                                       guint32          time);
-  gint                       (*get_selection_property) (GdkDisplay  *display,
-                                                        GdkWindow   *requestor,
-                                                        guchar     **data,
-                                                        GdkAtom     *type,
-                                                        gint        *format);
-  void                       (*convert_selection)      (GdkDisplay  *display,
-                                                        GdkWindow   *requestor,
-                                                        GdkAtom      selection,
-                                                        GdkAtom      target,
-                                                        guint32      time);
-
   gint                   (*text_property_to_utf8_list) (GdkDisplay     *display,
                                                         GdkAtom         encoding,
                                                         gint            format,

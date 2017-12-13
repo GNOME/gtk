@@ -145,23 +145,6 @@ void _gdk_x11_display_queue_events            (GdkDisplay *display);
 
 GdkAppLaunchContext *_gdk_x11_display_get_app_launch_context (GdkDisplay *display);
 
-void        _gdk_x11_display_send_selection_notify (GdkDisplay       *display,
-                                                    GdkWindow        *requestor,
-                                                    GdkAtom          selection,
-                                                    GdkAtom          target,
-                                                    GdkAtom          property,
-                                                    guint32          time);
-gint        _gdk_x11_display_get_selection_property (GdkDisplay     *display,
-                                                     GdkWindow      *requestor,
-                                                     guchar        **data,
-                                                     GdkAtom        *ret_type,
-                                                     gint           *ret_format);
-void        _gdk_x11_display_convert_selection      (GdkDisplay     *display,
-                                                     GdkWindow      *requestor,
-                                                     GdkAtom         selection,
-                                                     GdkAtom         target,
-                                                     guint32         time);
-
 gint        _gdk_x11_display_text_property_to_utf8_list (GdkDisplay     *display,
                                                          GdkAtom         encoding,
                                                          gint            format,
