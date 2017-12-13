@@ -49,10 +49,13 @@
 #include "gtkpopover.h"
 #include "gtkprivate.h"
 #include "gtkscale.h"
+#include "gtkrangeprivate.h"
 #include "gtkbox.h"
 #include "gtkwindow.h"
 #include "gtkwindowprivate.h"
 #include "gtktypebuiltins.h"
+#include "gtkgesture.h"
+#include "gtkbuttonprivate.h"
 #include "gtkintl.h"
 #include "a11y/gtkscalebuttonaccessible.h"
 
@@ -109,6 +112,10 @@ struct _GtkScaleButtonPrivate
   GtkOrientation orientation;
   GtkOrientation applied_orientation;
 
+  guint autoscroll_timeout;
+  GtkScrollType autoscroll_step;
+  gboolean autoscrolling;
+
   guint click_id;
 
   gchar **icon_list;
@@ -134,12 +141,6 @@ static void gtk_scale_button_set_orientation_private (GtkScaleButton *button,
 static void     gtk_scale_button_clicked        (GtkButton           *button);
 static void     gtk_scale_button_popup          (GtkWidget           *widget);
 static void     gtk_scale_button_popdown        (GtkWidget           *widget);
-static gboolean cb_button_press			(GtkWidget           *widget,
-						 GdkEventButton      *event,
-						 gpointer             user_data);
-static gboolean cb_button_release		(GtkWidget           *widget,
-						 GdkEventButton      *event,
-						 gpointer             user_data);
 static void     cb_button_clicked               (GtkWidget           *button,
                                                  gpointer             user_data);
 static void     gtk_scale_button_update_icon    (GtkScaleButton      *button);
@@ -328,14 +329,44 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkScaleButton, scale);
   gtk_widget_class_bind_template_child_private (widget_class, GtkScaleButton, image);
 
-  gtk_widget_class_bind_template_callback (widget_class, cb_button_press);
-  gtk_widget_class_bind_template_callback (widget_class, cb_button_release);
   gtk_widget_class_bind_template_callback (widget_class, cb_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, cb_scale_value_changed);
   gtk_widget_class_bind_template_callback (widget_class, cb_popup_mapped);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SCALE_BUTTON_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("button"));
+}
+
+static gboolean
+start_autoscroll (gpointer data)
+{
+  GtkScaleButton *button = data;
+  GtkScaleButtonPrivate *priv = gtk_scale_button_get_instance_private (button);
+
+  gtk_range_start_autoscroll (GTK_RANGE (priv->scale), priv->autoscroll_step);
+
+  priv->autoscrolling = TRUE;
+  priv->autoscroll_timeout = 0;
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+button_pressed_cb (GtkGesture     *gesture,
+                   int             n_press,
+                   double          x,
+                   double          y,
+                   GtkScaleButton *button)
+{
+  GtkScaleButtonPrivate *priv = gtk_scale_button_get_instance_private (button);
+  GtkWidget *widget;
+
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
+  if (widget == priv->plus_button)
+    priv->autoscroll_step = GTK_SCROLL_PAGE_FORWARD;
+  else
+    priv->autoscroll_step = GTK_SCROLL_PAGE_BACKWARD;
+  priv->autoscroll_timeout = g_timeout_add (200, start_autoscroll, button);
 }
 
 static void
@@ -367,6 +398,11 @@ gtk_scale_button_init (GtkScaleButton *button)
   g_signal_connect (priv->scroll_controller, "scroll",
                     G_CALLBACK (gtk_scale_button_scroll_controller_scroll),
                     button);
+
+  g_signal_connect (gtk_button_get_gesture (GTK_BUTTON (priv->plus_button)),
+                    "pressed", G_CALLBACK (button_pressed_cb), button);
+  g_signal_connect (gtk_button_get_gesture (GTK_BUTTON (priv->minus_button)),
+                    "pressed", G_CALLBACK (button_pressed_cb), button);
 }
 
 static void
@@ -457,6 +493,9 @@ gtk_scale_button_finalize (GObject *object)
     }
 
   g_object_unref (priv->scroll_controller);
+
+  if (priv->autoscroll_timeout)
+    g_source_remove (priv->autoscroll_timeout);
 
   G_OBJECT_CLASS (gtk_scale_button_parent_class)->finalize (object);
 }
@@ -865,69 +904,6 @@ button_click (GtkScaleButton *button,
   return can_continue;
 }
 
-static gboolean
-cb_button_timeout (gpointer user_data)
-{
-  GtkScaleButton *button = GTK_SCALE_BUTTON (user_data);
-  GtkScaleButtonPrivate *priv = button->priv;
-  gboolean res;
-
-  if (priv->click_id == 0)
-    return G_SOURCE_REMOVE;
-
-  res = button_click (button, priv->active_button);
-  if (!res)
-    {
-      g_source_remove (priv->click_id);
-      priv->click_id = 0;
-    }
-
-  return res;
-}
-
-static gboolean
-cb_button_press (GtkWidget      *widget,
-		 GdkEventButton *event,
-		 gpointer        user_data)
-{
-  GtkScaleButton *button = GTK_SCALE_BUTTON (user_data);
-  GtkScaleButtonPrivate *priv = button->priv;
-  gint double_click_time;
-
-  if (priv->click_id != 0)
-    g_source_remove (priv->click_id);
-
-  priv->active_button = widget;
-
-  g_object_get (gtk_widget_get_settings (widget),
-                "gtk-double-click-time", &double_click_time,
-                NULL);
-  priv->click_id = gdk_threads_add_timeout (double_click_time,
-                                            cb_button_timeout,
-                                            button);
-  g_source_set_name_by_id (priv->click_id, "[gtk+] cb_button_timeout");
-  cb_button_timeout (button);
-
-  return TRUE;
-}
-
-static gboolean
-cb_button_release (GtkWidget      *widget,
-		   GdkEventButton *event,
-		   gpointer        user_data)
-{
-  GtkScaleButton *button = GTK_SCALE_BUTTON (user_data);
-  GtkScaleButtonPrivate *priv = button->priv;
-
-  if (priv->click_id != 0)
-    {
-      g_source_remove (priv->click_id);
-      priv->click_id = 0;
-    }
-
-  return TRUE;
-}
-
 static void
 cb_button_clicked (GtkWidget *widget,
                    gpointer   user_data)
@@ -935,8 +911,18 @@ cb_button_clicked (GtkWidget *widget,
   GtkScaleButton *button = GTK_SCALE_BUTTON (user_data);
   GtkScaleButtonPrivate *priv = button->priv;
 
-  if (priv->click_id != 0)
-    return;
+  if (priv->autoscroll_timeout)
+    {
+      g_source_remove (priv->autoscroll_timeout);
+      priv->autoscroll_timeout = 0;
+    }
+
+  if (priv->autoscrolling)
+    {
+      gtk_range_stop_autoscroll (GTK_RANGE (priv->scale));
+      priv->autoscrolling = FALSE;
+      return;
+    }
 
   button_click (button, widget);
 }
