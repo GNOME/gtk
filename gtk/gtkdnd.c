@@ -448,26 +448,7 @@ gtk_drag_finish (GdkDragContext *context,
 {
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
 
-  if (success && gdk_drag_context_get_selected_action (context) == GDK_ACTION_MOVE)
-    {
-      GtkWidget *selection_widget = gtk_drag_get_ipc_widget_for_display (gdk_window_get_display (gdk_drag_context_get_source_window (context)));
-
-      g_object_ref (context);
-      
-      g_object_set_data (G_OBJECT (selection_widget), I_("drag-context"), context);
-      g_signal_connect (selection_widget, "selection-received",
-                        G_CALLBACK (gtk_drag_selection_received),
-                        NULL);
-      
-      gtk_selection_convert (selection_widget,
-                             gdk_drag_get_selection (context),
-                             gdk_atom_intern_static_string ("DELETE"),
-                             time);
-    }
-  else
-    {
-      gdk_drop_finish (context, success, time);
-    }
+  gdk_drop_finish (context, success, time);
 }
 
 /**

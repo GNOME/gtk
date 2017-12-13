@@ -2523,6 +2523,17 @@ gdk_x11_drag_context_drop_finish (GdkDragContext *context,
       GdkDisplay *display = GDK_WINDOW_DISPLAY (context->source_window);
       XEvent xev;
 
+      if (success && gdk_drag_context_get_selected_action (context) == GDK_ACTION_MOVE)
+        {
+          XConvertSelection (GDK_DISPLAY_XDISPLAY (display),
+                             gdk_x11_get_xatom_by_name_for_display (display, "XdndSelection"),
+                             gdk_x11_get_xatom_by_name_for_display (display, "DELETE"),
+                             gdk_x11_get_xatom_by_name_for_display (display, "GDK_SELECTION"),
+                             GDK_WINDOW_XID (context->source_window),
+                             time);
+          /* XXX: Do we need to wait for a reply here before sending the next message? */
+        }
+
       xev.xclient.type = ClientMessage;
       xev.xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "XdndFinished");
       xev.xclient.format = 32;
