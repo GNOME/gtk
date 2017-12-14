@@ -3507,40 +3507,6 @@ gdk_wayland_window_destroy_notify (GdkWindow *window)
   g_object_unref (window);
 }
 
-static gboolean
-gdk_wayland_window_get_property (GdkWindow   *window,
-                                 GdkAtom      property,
-                                 GdkAtom      type,
-                                 gulong       offset,
-                                 gulong       length,
-                                 gint         pdelete,
-                                 GdkAtom     *actual_property_type,
-                                 gint        *actual_format_type,
-                                 gint        *actual_length,
-                                 guchar     **data)
-{
-  return FALSE;
-}
-
-static void
-gdk_wayland_window_change_property (GdkWindow    *window,
-                                    GdkAtom       property,
-                                    GdkAtom       type,
-                                    gint          format,
-                                    GdkPropMode   mode,
-                                    const guchar *data,
-                                    gint          nelements)
-{
-  if (property == gdk_atom_intern_static_string ("GDK_SELECTION"))
-    gdk_wayland_selection_store (window, type, mode, data, nelements * (format / 8));
-}
-
-static void
-gdk_wayland_window_delete_property (GdkWindow *window,
-                                    GdkAtom    property)
-{
-}
-
 static gint
 gdk_wayland_window_get_scale_factor (GdkWindow *window)
 {
@@ -3707,9 +3673,6 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
   impl_class->destroy_notify = gdk_wayland_window_destroy_notify;
   impl_class->register_dnd = _gdk_wayland_window_register_dnd;
   impl_class->drag_begin = _gdk_wayland_window_drag_begin;
-  impl_class->get_property = gdk_wayland_window_get_property;
-  impl_class->change_property = gdk_wayland_window_change_property;
-  impl_class->delete_property = gdk_wayland_window_delete_property;
   impl_class->get_scale_factor = gdk_wayland_window_get_scale_factor;
   impl_class->set_opaque_region = gdk_wayland_window_set_opaque_region;
   impl_class->set_shadow_width = gdk_wayland_window_set_shadow_width;

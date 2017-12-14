@@ -73,26 +73,6 @@ void _gdk_x11_window_process_expose    (GdkWindow     *window,
                                         gulong         serial,
                                         GdkRectangle  *area);
 
-gboolean _gdk_x11_window_get_property      (GdkWindow    *window,
-                                            GdkAtom       property,
-                                            GdkAtom       type,
-                                            gulong        offset,
-                                            gulong        length,
-                                            gint          pdelete,
-                                            GdkAtom      *actual_property_type,
-                                            gint         *actual_format_type,
-                                            gint         *actual_length,
-                                            guchar      **data);
-void     _gdk_x11_window_change_property   (GdkWindow    *window,
-                                            GdkAtom       property,
-                                            GdkAtom       type,
-                                            gint          format,
-                                            GdkPropMode   mode,
-                                            const guchar *data,
-                                            gint          nelements);
-void     _gdk_x11_window_delete_property   (GdkWindow    *window,
-                                            GdkAtom       property);
-
 void     _gdk_x11_window_queue_antiexpose  (GdkWindow *window,
                                             cairo_region_t *area);
 void     _gdk_x11_window_translate         (GdkWindow *window,

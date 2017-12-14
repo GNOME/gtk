@@ -35,23 +35,6 @@
 G_BEGIN_DECLS
 
 
-/**
- * GdkPropMode:
- * @GDK_PROP_MODE_REPLACE: the new data replaces the existing data.
- * @GDK_PROP_MODE_PREPEND: the new data is prepended to the existing data.
- * @GDK_PROP_MODE_APPEND: the new data is appended to the existing data.
- *
- * Describes how existing data is combined with new data when
- * using gdk_property_change().
- */
-typedef enum
-{
-  GDK_PROP_MODE_REPLACE,
-  GDK_PROP_MODE_PREPEND,
-  GDK_PROP_MODE_APPEND
-} GdkPropMode;
-
-
 GDK_AVAILABLE_IN_ALL
 GdkAtom gdk_atom_intern (const gchar *atom_name,
                          gboolean     only_if_exists);
@@ -60,29 +43,6 @@ GdkAtom gdk_atom_intern_static_string (const gchar *atom_name);
 GDK_AVAILABLE_IN_ALL
 gchar*  gdk_atom_name   (GdkAtom      atom);
 
-
-GDK_AVAILABLE_IN_ALL
-gboolean gdk_property_get    (GdkWindow     *window,
-                              GdkAtom        property,
-                              GdkAtom        type,
-                              gulong         offset,
-                              gulong         length,
-                              gint           pdelete,
-                              GdkAtom       *actual_property_type,
-                              gint          *actual_format,
-                              gint          *actual_length,
-                              guchar       **data);
-GDK_AVAILABLE_IN_ALL
-void     gdk_property_change (GdkWindow     *window,
-                              GdkAtom        property,
-                              GdkAtom        type,
-                              gint           format,
-                              GdkPropMode    mode,
-                              const guchar  *data,
-                              gint           nelements);
-GDK_AVAILABLE_IN_ALL
-void     gdk_property_delete (GdkWindow     *window,
-                              GdkAtom        property);
 
 GDK_AVAILABLE_IN_ALL
 gint   gdk_text_property_to_utf8_list_for_display (GdkDisplay     *display,

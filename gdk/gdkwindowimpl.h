@@ -227,26 +227,6 @@ struct _GdkWindowImplClass
   void         (*process_updates_recurse) (GdkWindow      *window,
                                            cairo_region_t *region);
 
-  gboolean     (*get_property)            (GdkWindow      *window,
-                                           GdkAtom         property,
-                                           GdkAtom         type,
-                                           gulong          offset,
-                                           gulong          length,
-                                           gint            pdelete,
-                                           GdkAtom        *actual_type,
-                                           gint           *actual_format,
-                                           gint           *actual_length,
-                                           guchar        **data);
-  void         (*change_property)         (GdkWindow      *window,
-                                           GdkAtom         property,
-                                           GdkAtom         type,
-                                           gint            format,
-                                           GdkPropMode     mode,
-                                           const guchar   *data,
-                                           gint            n_elements);
-  void         (*delete_property)         (GdkWindow      *window,
-                                           GdkAtom         property);
-
   gint         (* get_scale_factor)       (GdkWindow      *window);
   void         (* get_unscaled_size)      (GdkWindow      *window,
                                            int            *unscaled_width,

@@ -57,25 +57,6 @@ void     _gdk_broadway_window_translate         (GdkWindow *window,
 						 cairo_region_t *area,
 						 gint       dx,
 						 gint       dy);
-gboolean _gdk_broadway_window_get_property (GdkWindow   *window,
-					    GdkAtom      property,
-					    GdkAtom      type,
-					    gulong       offset,
-					    gulong       length,
-					    gint         pdelete,
-					    GdkAtom     *actual_property_type,
-					    gint        *actual_format_type,
-					    gint        *actual_length,
-					    guchar     **data);
-void _gdk_broadway_window_change_property (GdkWindow    *window,
-					   GdkAtom       property,
-					   GdkAtom       type,
-					   gint          format,
-					   GdkPropMode   mode,
-					   const guchar *data,
-					   gint          nelements);
-void _gdk_broadway_window_delete_property (GdkWindow *window,
-					   GdkAtom    property);
 gboolean _gdk_broadway_moveresize_handle_event   (GdkDisplay *display,
 						  BroadwayInputMsg *msg);
 gboolean _gdk_broadway_moveresize_configure_done (GdkDisplay *display,

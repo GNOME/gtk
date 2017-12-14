@@ -13,7 +13,6 @@ gdk_quartz_sources = files([
   'gdkglcontext-quartz.c',
   'gdkglobals-quartz.c',
   'gdkkeys-quartz.c',
-  'gdkproperty-quartz.c',
   'gdkscreen-quartz.c',
   'gdkselection-quartz.c',
   'gdkutils-quartz.c',

@@ -1806,7 +1806,6 @@ gtk_main_do_event (GdkEvent *event)
         gtk_widget_render (event_widget, event->any.window, event->expose.region);
       break;
 
-    case GDK_PROPERTY_NOTIFY:
     case GDK_FOCUS_CHANGE:
     case GDK_CONFIGURE:
     case GDK_MAP:

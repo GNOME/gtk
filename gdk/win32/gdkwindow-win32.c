@@ -5941,9 +5941,6 @@ gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass)
   impl_class->destroy_notify = gdk_win32_window_destroy_notify;
   impl_class->register_dnd = _gdk_win32_window_register_dnd;
   impl_class->drag_begin = _gdk_win32_window_drag_begin;
-  impl_class->get_property = _gdk_win32_window_get_property;
-  impl_class->change_property = _gdk_win32_window_change_property;
-  impl_class->delete_property = _gdk_win32_window_delete_property;
   impl_class->create_gl_context = _gdk_win32_window_create_gl_context;
   impl_class->get_scale_factor = _gdk_win32_window_get_scale_factor;
   impl_class->get_unscaled_size = _gdk_win32_window_get_unscaled_size;

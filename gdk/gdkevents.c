@@ -838,8 +838,6 @@ gdk_event_get_time (const GdkEvent *event)
       case GDK_ENTER_NOTIFY:
       case GDK_LEAVE_NOTIFY:
 	return event->crossing.time;
-      case GDK_PROPERTY_NOTIFY:
-	return event->property.time;
       case GDK_PROXIMITY_IN:
       case GDK_PROXIMITY_OUT:
 	return event->proximity.time;
@@ -930,7 +928,6 @@ gdk_event_get_state (const GdkEvent        *event,
       case GDK_LEAVE_NOTIFY:
 	*state =  event->crossing.state;
         return TRUE;
-      case GDK_PROPERTY_NOTIFY:
       case GDK_CLIENT_EVENT:
       case GDK_CONFIGURE:
       case GDK_FOCUS_CHANGE:
@@ -2597,32 +2594,6 @@ gdk_event_get_pad_axis_value (const GdkEvent *event,
     {
       *index = event->pad_axis.index;
       *value = event->pad_axis.value;
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-/**
- * gdk_event_get_property:
- * @event: a #GdkEvent
- * @property: (out):
- * @state: (out):
- * 
- * Returns: %TRUE on success, otherwise %FALSE
- **/
-gboolean
-gdk_event_get_property (const GdkEvent   *event,
-                        GdkAtom          *property,
-                        GdkPropertyState *state)
-{
-  if (!event)
-    return FALSE;
-
-  if (event->any.type == GDK_PROPERTY_NOTIFY)
-    {
-      *property = event->property.atom;
-      *state = event->property.state;
       return TRUE;
     }
 

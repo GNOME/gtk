@@ -36,7 +36,6 @@
 typedef struct _SelectionBuffer SelectionBuffer;
 typedef struct _SelectionData SelectionData;
 typedef struct _StoredSelection StoredSelection;
-typedef struct _AsyncWriteData AsyncWriteData;
 typedef struct _DataOfferData DataOfferData;
 
 struct _SelectionBuffer
@@ -67,13 +66,6 @@ struct _DataOfferData
   GdkContentFormats *targets;
 };
 
-struct _AsyncWriteData
-{
-  GOutputStream *stream;
-  GdkWaylandSelection *selection;
-  gsize index;
-};
-
 struct _SelectionData
 {
   DataOfferData *offer;
@@ -97,14 +89,6 @@ struct _GdkWaylandSelection
 
   struct wl_data_source *dnd_source; /* Owned by the GdkDragContext */
 };
-
-static void async_write_data_write (AsyncWriteData *write_data);
-
-static inline glong
-get_buffer_size (void)
-{
-  return sysconf (_SC_PAGESIZE);
-}
 
 static DataOfferData *
 data_offer_data_new (gpointer       offer,
@@ -360,161 +344,6 @@ gdk_wayland_selection_get_targets (GdkDisplay *display,
     return data->offer->targets;
 
   return NULL;
-}
-
-static AsyncWriteData *
-async_write_data_new (GdkWaylandSelection *selection)
-{
-  AsyncWriteData *write_data;
-
-  write_data = g_slice_new0 (AsyncWriteData);
-  write_data->selection = selection;
-  write_data->stream =
-    g_unix_output_stream_new (selection->stored_selection.fd, TRUE);
-
-  selection->stored_selection.fd = -1;
-
-  return write_data;
-}
-
-static void
-async_write_data_free (AsyncWriteData *write_data)
-{
-  g_object_unref (write_data->stream);
-  g_slice_free (AsyncWriteData, write_data);
-}
-
-static void
-async_write_data_cb (GObject      *object,
-                     GAsyncResult *res,
-                     gpointer      user_data)
-{
-  AsyncWriteData *write_data = user_data;
-  GError *error = NULL;
-  gsize bytes_written;
-
-  bytes_written = g_output_stream_write_finish (G_OUTPUT_STREAM (object),
-                                                res, &error);
-  if (error)
-    {
-      if (error->domain != G_IO_ERROR ||
-          error->code != G_IO_ERROR_CANCELLED)
-        g_warning ("Error writing selection data: %s", error->message);
-
-      g_error_free (error);
-      async_write_data_free (write_data);
-      return;
-    }
-
-  write_data->index += bytes_written;
-
-  if (write_data->index <
-      write_data->selection->stored_selection.data_len)
-    {
-      /* Write the next chunk */
-      async_write_data_write (write_data);
-    }
-  else
-    async_write_data_free (write_data);
-}
-
-static void
-async_write_data_write (AsyncWriteData *write_data)
-{
-  GdkWaylandSelection *selection = write_data->selection;
-  gsize buf_len;
-  guchar *buf;
-
-  buf = selection->stored_selection.data;
-  buf_len = selection->stored_selection.data_len;
-
-  g_output_stream_write_async (write_data->stream,
-                               &buf[write_data->index],
-                               buf_len - write_data->index,
-                               G_PRIORITY_DEFAULT,
-                               selection->stored_selection.cancellable,
-                               async_write_data_cb,
-                               write_data);
-}
-
-static gboolean
-gdk_wayland_selection_check_write (GdkWaylandSelection *selection)
-{
-  AsyncWriteData *write_data;
-
-  if (selection->stored_selection.fd < 0)
-    return FALSE;
-
-  /* Cancel any previous ongoing async write */
-  if (selection->stored_selection.cancellable)
-    {
-      g_cancellable_cancel (selection->stored_selection.cancellable);
-      g_object_unref (selection->stored_selection.cancellable);
-    }
-
-  selection->stored_selection.cancellable = g_cancellable_new ();
-
-  write_data = async_write_data_new (selection);
-  async_write_data_write (write_data);
-  selection->stored_selection.fd = -1;
-
-  return TRUE;
-}
-
-void
-gdk_wayland_selection_store (GdkWindow    *window,
-                             GdkAtom       type,
-                             GdkPropMode   mode,
-                             const guchar *data,
-                             gint          len)
-{
-  GdkDisplay *display = gdk_window_get_display (window);
-  GdkWaylandSelection *selection = gdk_wayland_display_get_selection (display);
-  GArray *array;
-
-  if (type == gdk_atom_intern_static_string ("NULL"))
-    return;
-
-  array = g_array_new (TRUE, FALSE, sizeof (guchar));
-  g_array_append_vals (array, data, len);
-
-  if (selection->stored_selection.data)
-    {
-      if (mode != GDK_PROP_MODE_REPLACE &&
-          type != selection->stored_selection.type)
-        {
-          gchar *type_str, *stored_str;
-
-          type_str = gdk_atom_name (type);
-          stored_str = gdk_atom_name (selection->stored_selection.type);
-
-          g_warning (G_STRLOC ": Attempted to append/prepend selection data with "
-                     "type %s into the current selection with type %s",
-                     type_str, stored_str);
-          g_free (type_str);
-          g_free (stored_str);
-          return;
-        }
-
-      /* In these cases we also replace the stored data, so we
-       * apply the inverse operation into the just given data.
-       */
-      if (mode == GDK_PROP_MODE_APPEND)
-        g_array_prepend_vals (array, selection->stored_selection.data,
-                              selection->stored_selection.data_len - 1);
-      else if (mode == GDK_PROP_MODE_PREPEND)
-        g_array_append_vals (array, selection->stored_selection.data,
-                             selection->stored_selection.data_len - 1);
-
-      g_free (selection->stored_selection.data);
-    }
-
-  selection->stored_selection.source = window;
-  selection->stored_selection.data_len = array->len;
-  selection->stored_selection.data = (guchar *) g_array_free (array, FALSE);
-  selection->stored_selection.type = type;
-
-  gdk_wayland_selection_check_write (selection);
 }
 
 static void

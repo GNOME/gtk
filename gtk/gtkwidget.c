@@ -520,7 +520,6 @@ enum {
   FOCUS_OUT_EVENT,
   MAP_EVENT,
   UNMAP_EVENT,
-  PROPERTY_NOTIFY_EVENT,
   SELECTION_GET,
   SELECTION_RECEIVED,
   PROXIMITY_IN_EVENT,
@@ -1044,7 +1043,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->map_event = NULL;
   klass->unmap_event = NULL;
   klass->window_state_event = NULL;
-  klass->property_notify_event = NULL;
   klass->selection_received = NULL;
   klass->proximity_in_event = NULL;
   klass->proximity_out_event = NULL;
@@ -2398,33 +2396,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT);
   g_signal_set_va_marshaller (widget_signals[UNMAP_EVENT], G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__OBJECTv);
-
-  /**
-   * GtkWidget::property-notify-event:
-   * @widget: the object which received the signal
-   * @event: (type Gdk.EventProperty): the #GdkEventProperty which triggered
-   *   this signal.
-   *
-   * The ::property-notify-event signal will be emitted when a property on
-   * the @widget's window has been changed or deleted.
-   *
-   * To receive this signal, the #GdkWindow associated to the widget needs
-   * to enable the #GDK_PROPERTY_CHANGE_MASK mask.
-   *
-   * Returns: %TRUE to stop other handlers from being invoked for the event.
-   *   %FALSE to propagate the event further.
-   */
-  widget_signals[PROPERTY_NOTIFY_EVENT] =
-    g_signal_new (I_("property-notify-event"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST | G_SIGNAL_DEPRECATED,
-		  G_STRUCT_OFFSET (GtkWidgetClass, property_notify_event),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__OBJECT,
-		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT);
-  g_signal_set_va_marshaller (widget_signals[PROPERTY_NOTIFY_EVENT], G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_BOOLEAN__OBJECTv);
 
   /**
@@ -6601,7 +6572,6 @@ gtk_widget_event_internal (GtkWidget      *widget,
     case GDK_MAP:
     case GDK_UNMAP:
     case GDK_WINDOW_STATE:
-    case GDK_PROPERTY_NOTIFY:
       return gtk_widget_emit_event_signals (widget, event);
     default:
       break;
@@ -6717,9 +6687,6 @@ gtk_widget_emit_event_signals (GtkWidget      *widget,
 	  break;
 	case GDK_WINDOW_STATE:
 	  signal_num = WINDOW_STATE_EVENT;
-	  break;
-	case GDK_PROPERTY_NOTIFY:
-	  signal_num = PROPERTY_NOTIFY_EVENT;
 	  break;
 	case GDK_PROXIMITY_IN:
 	  signal_num = PROXIMITY_IN_EVENT;

@@ -49,7 +49,6 @@ gdk_input_source_get_type
 gdk_modifier_intent_get_type
 gdk_modifier_type_get_type
 gdk_notify_type_get_type
-gdk_property_state_get_type
 gdk_prop_mode_get_type
 gdk_scroll_direction_get_type
 gdk_setting_action_get_type
@@ -417,13 +416,6 @@ gdk_utf8_to_string_target
 gdk_atom_intern
 gdk_atom_intern_static_string
 gdk_atom_name
-gdk_property_get
-gdk_property_change
-GdkPropMode
-gdk_property_delete
-
-<SUBSECTION Standard>
-GDK_TYPE_PROP_MODE
 </SECTION>
 
 <SECTION>

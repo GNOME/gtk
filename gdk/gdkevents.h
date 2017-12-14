@@ -135,8 +135,6 @@ typedef struct _GdkEventKey	    GdkEventKey;
 typedef struct _GdkEventFocus	    GdkEventFocus;
 typedef struct _GdkEventCrossing    GdkEventCrossing;
 typedef struct _GdkEventConfigure   GdkEventConfigure;
-typedef struct _GdkEventProperty    GdkEventProperty;
-typedef struct _GdkEventOwnerChange GdkEventOwnerChange;
 typedef struct _GdkEventProximity   GdkEventProximity;
 typedef struct _GdkEventDND         GdkEventDND;
 typedef struct _GdkEventWindowState GdkEventWindowState;
@@ -234,7 +232,6 @@ typedef GdkFilterReturn (*GdkFilterFunc) (GdkXEvent *xevent,
  *   Note that GTK+ discards these events for %GDK_WINDOW_CHILD windows.
  * @GDK_MAP: the window has been mapped.
  * @GDK_UNMAP: the window has been unmapped.
- * @GDK_PROPERTY_NOTIFY: a property on the window has been changed or deleted.
  * @GDK_PROXIMITY_IN: an input device has moved into contact with a sensing
  *   surface (e.g. a touchscreen or graphics tablet).
  * @GDK_PROXIMITY_OUT: an input device has moved out of contact with a sensing
@@ -302,7 +299,6 @@ typedef enum
   GDK_CONFIGURE		= 13,
   GDK_MAP		= 14,
   GDK_UNMAP		= 15,
-  GDK_PROPERTY_NOTIFY	= 16,
   GDK_PROXIMITY_IN	= 20,
   GDK_PROXIMITY_OUT	= 21,
   GDK_DRAG_ENTER        = 22,
@@ -449,19 +445,6 @@ typedef enum
   GDK_CROSSING_TOUCH_END,
   GDK_CROSSING_DEVICE_SWITCH
 } GdkCrossingMode;
-
-/**
- * GdkPropertyState:
- * @GDK_PROPERTY_NEW_VALUE: the property value was changed.
- * @GDK_PROPERTY_DELETE: the property was deleted.
- *
- * Specifies the type of a property change for a #GdkEventProperty.
- */
-typedef enum
-{
-  GDK_PROPERTY_NEW_VALUE,
-  GDK_PROPERTY_DELETE
-} GdkPropertyState;
 
 /**
  * GdkWindowState:
@@ -708,10 +691,6 @@ GDK_AVAILABLE_IN_3_92
 gboolean       gdk_event_get_pad_axis_value (const GdkEvent *event,
                                              guint          *index,
                                              gdouble        *value);
-GDK_AVAILABLE_IN_3_92
-gboolean       gdk_event_get_property (const GdkEvent   *event,
-                                       GdkAtom          *property,
-                                       GdkPropertyState *state);
 GDK_AVAILABLE_IN_3_92
 gboolean       gdk_event_get_axes      (GdkEvent  *event,
                                         gdouble  **axes,

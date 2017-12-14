@@ -426,28 +426,6 @@ GdkDragContext *_gdk_win32_window_drag_begin (GdkWindow         *window,
                                               gint               x_root,
                                               gint               y_root);
 
-gint _gdk_win32_window_get_property (GdkWindow   *window,
-				     GdkAtom      property,
-				     GdkAtom      type,
-				     gulong       offset,
-				     gulong       length,
-				     gint         pdelete,
-				     GdkAtom     *actual_property_type,
-				     gint        *actual_format_type,
-				     gint        *actual_length,
-				     guchar     **data);
-void _gdk_win32_window_change_property (GdkWindow    *window,
-					GdkAtom       property,
-					GdkAtom       type,
-					gint          format,
-					GdkPropMode   mode,
-					const guchar *data,
-					gint          nelements);
-void _gdk_win32_window_delete_property (GdkWindow *window, GdkAtom    property);
-
-void gdk_win32_selection_clear_targets (GdkDisplay *display,
-                                        GdkAtom     selection);
-
 /* Stray GdkWin32Screen members */
 gboolean _gdk_win32_get_setting (const gchar *name, GValue *value);
 void _gdk_win32_screen_on_displaychange_event (GdkWin32Screen *screen);

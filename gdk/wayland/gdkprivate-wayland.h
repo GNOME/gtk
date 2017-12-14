@@ -129,22 +129,6 @@ void _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
 					      GdkEventMask   event_mask,
 					      GdkWindowAttr *attributes);
 
-void       _gdk_wayland_display_send_selection_notify (GdkDisplay *dispay,
-						       GdkWindow        *requestor,
-						       GdkAtom          selection,
-						       GdkAtom          target,
-						       GdkAtom          property,
-						       guint32          time);
-gint       _gdk_wayland_display_get_selection_property (GdkDisplay  *display,
-							GdkWindow   *requestor,
-							guchar     **data,
-							GdkAtom     *ret_type,
-							gint        *ret_format);
-void       _gdk_wayland_display_convert_selection (GdkDisplay *display,
-						   GdkWindow  *requestor,
-						   GdkAtom     selection,
-						   GdkAtom     target,
-						   guint32     time);
 gint        _gdk_wayland_display_text_property_to_utf8_list (GdkDisplay    *display,
 							     GdkAtom        encoding,
 							     gint           format,
@@ -224,11 +208,6 @@ gpointer gdk_wayland_selection_get_offer (GdkDisplay *display,
 GdkContentFormats *gdk_wayland_selection_get_targets (GdkDisplay *display,
                                                       GdkAtom     selection);
 
-void     gdk_wayland_selection_store   (GdkWindow    *window,
-                                        GdkAtom       type,
-                                        GdkPropMode   mode,
-                                        const guchar *data,
-                                        gint          len);
 struct wl_data_source * gdk_wayland_selection_get_data_source (GdkWindow *owner,
                                                                GdkAtom    selection);
 void gdk_wayland_selection_unset_data_source (GdkDisplay *display, GdkAtom selection);

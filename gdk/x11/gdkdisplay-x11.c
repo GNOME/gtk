@@ -1038,17 +1038,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	    gdk_check_edge_constraints_changed (window);
 	}
 
-      if (window->event_mask & GDK_PROPERTY_CHANGE_MASK)
-	{
-	  event->any.type = GDK_PROPERTY_NOTIFY;
-	  event->any.window = window;
-	  event->property.atom = gdk_x11_xatom_to_atom_for_display (display, xevent->xproperty.atom);
-	  event->property.time = xevent->xproperty.time;
-	  event->property.state = xevent->xproperty.state;
-	}
-      else
-	return_val = FALSE;
-
+      return_val = FALSE;
       break;
 
     case ColormapNotify:

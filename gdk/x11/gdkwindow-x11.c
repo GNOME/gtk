@@ -4975,9 +4975,6 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   impl_class->destroy_notify = gdk_x11_window_destroy_notify;
   impl_class->register_dnd = _gdk_x11_window_register_dnd;
   impl_class->drag_begin = _gdk_x11_window_drag_begin;
-  impl_class->get_property = _gdk_x11_window_get_property;
-  impl_class->change_property = _gdk_x11_window_change_property;
-  impl_class->delete_property = _gdk_x11_window_delete_property;
   impl_class->get_scale_factor = gdk_x11_window_get_scale_factor;
   impl_class->set_opaque_region = gdk_x11_window_set_opaque_region;
   impl_class->set_shadow_width = gdk_x11_window_set_shadow_width;

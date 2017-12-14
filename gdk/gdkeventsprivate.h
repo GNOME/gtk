@@ -381,26 +381,6 @@ struct _GdkEventConfigure
 };
 
 /**
- * GdkEventProperty:
- * @type: the type of the event (%GDK_PROPERTY_NOTIFY).
- * @window: the window which received the event.
- * @send_event: %TRUE if the event was sent explicitly.
- * @atom: the property that was changed.
- * @time: the time of the event in milliseconds.
- * @state: (type GdkPropertyState): whether the property was changed
- *   (%GDK_PROPERTY_NEW_VALUE) or deleted (%GDK_PROPERTY_DELETE).
- *
- * Describes a property change on a window.
- */
-struct _GdkEventProperty
-{
-  GdkEventAny any;
-  GdkAtom atom;
-  guint32 time;
-  guint state;
-};
-
-/**
  * GdkEventProximity:
  * @type: the type of the event (%GDK_PROXIMITY_IN or %GDK_PROXIMITY_OUT).
  * @window: the window which received the event.
@@ -658,7 +638,6 @@ struct _GdkEventPadGroupMode {
  * @crossing: a #GdkEventCrossing
  * @focus_change: a #GdkEventFocus
  * @configure: a #GdkEventConfigure
- * @property: a #GdkEventProperty
  * @proximity: a #GdkEventProximity
  * @dnd: a #GdkEventDND
  * @window_state: a #GdkEventWindowState
@@ -712,7 +691,6 @@ union _GdkEvent
   GdkEventCrossing	    crossing;
   GdkEventFocus		    focus_change;
   GdkEventConfigure	    configure;
-  GdkEventProperty	    property;
   GdkEventProximity	    proximity;
   GdkEventDND               dnd;
   GdkEventWindowState       window_state;
