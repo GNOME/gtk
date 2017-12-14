@@ -428,7 +428,6 @@ void gdk_synthesize_window_state (GdkWindow     *window,
                                   GdkWindowState unset_flags,
                                   GdkWindowState set_flags);
 
-const char * _gdk_atom_name_const (GdkAtom atom);
 
 G_END_DECLS
 

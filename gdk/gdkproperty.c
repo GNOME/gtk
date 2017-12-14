@@ -103,25 +103,3 @@ gdk_atom_intern_static_string (const gchar *atom_name)
 
   return g_intern_static_string (atom_name);
 }
-
-/**
- * gdk_atom_name:
- * @atom: a #GdkAtom.
- *
- * Determines the string corresponding to an atom.
- *
- * Returns: a newly-allocated string containing the string
- *   corresponding to @atom. When you are done with the
- *   return value, you should free it using g_free().
- */
-gchar *
-gdk_atom_name (GdkAtom atom)
-{
-  return g_strdup (_gdk_atom_name_const (atom));
-}
-
-const gchar *
-_gdk_atom_name_const (GdkAtom atom)
-{
-  return atom;
-}

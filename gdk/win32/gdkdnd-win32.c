@@ -1083,10 +1083,9 @@ idataobject_getdata (LPDATAOBJECT This,
     }
 
   GDK_NOTE (DND, {
-      gchar *target_name = gdk_atom_name (target);
+      const char *target_name = (const char *)target;
       g_print ("idataobject_getdata will request target 0x%p (%s) ",
                target, target_name);
-      g_free (target_name);
     });
 
 

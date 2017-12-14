@@ -253,16 +253,14 @@ _gtk_quartz_get_selection_data_from_pasteboard (NSPasteboard *pasteboard,
   else
     {
       NSData *data;
-      gchar *name;
+      const char *name;
 
-      name = gdk_atom_name (target);
+      name = (const char *)target;
 
       if (strcmp (name, "image/tiff") == 0)
 	data = [pasteboard dataForType:NSTIFFPboardType];
       else
 	data = [pasteboard dataForType:[NSString stringWithUTF8String:name]];
-
-      g_free (name);
 
       if (data)
 	{

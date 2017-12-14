@@ -1701,10 +1701,9 @@ convert_clipboard_selection_to_targets_target (GdkWindow *requestor)
       g_print ("... ");
       for (i = 0; i < targets->len; i++)
         {
-          gchar *atom_name = gdk_atom_name (g_array_index (targets, GdkSelTargetFormat, i).target);
+          const char *atom_name = (const char *)g_array_index (targets, GdkSelTargetFormat, i).target;
 
           g_print ("%s", atom_name);
-          g_free (atom_name);
           if (i < targets->len - 1)
             g_print (", ");
         }
@@ -1743,9 +1742,9 @@ convert_clipboard_selection_to_target (GdkWindow *requestor,
   gboolean transmute = FALSE;
   GdkAtom result = _gdk_win32_selection_atom (GDK_WIN32_ATOM_INDEX_GDK_SELECTION);
   gboolean found;
-  gchar *atom_name;
+  const char *atom_name;
 
-  atom_name = gdk_atom_name (target);
+  atom_name = (const char *)target;
 
   for (format = 0, found = FALSE;
        !found && 0 != (format = EnumClipboardFormats (format));
@@ -1760,8 +1759,6 @@ convert_clipboard_selection_to_target (GdkWindow *requestor,
       found = g_strcmp0 (format_name, atom_name) == 0;
       g_free (format_name);
     }
-
-  g_free (atom_name);
 
   if (format == 0)
     {
@@ -2025,12 +2022,11 @@ _gdk_win32_display_set_selection_owner (GdkDisplay *display,
   g_return_val_if_fail (selection != NULL, FALSE);
 
   GDK_NOTE (DND, {
-      gchar *sel_name = gdk_atom_name (selection);
+      const char *sel_name = (const char *)selection;
 
       g_print ("gdk_selection_owner_set_for_display: %p %s\n",
 	       (owner ? GDK_WINDOW_HWND (owner) : NULL),
 	       sel_name);
-      g_free (sel_name);
     });
 
   if (selection != GDK_SELECTION_CLIPBOARD)
@@ -2128,12 +2124,11 @@ _gdk_win32_display_get_selection_owner (GdkDisplay *display,
     window = NULL;
 
   GDK_NOTE (DND, {
-      gchar *sel_name = gdk_atom_name (selection);
+      const char *sel_name = (const char *)selection;
 
       g_print ("gdk_selection_owner_get: %s = %p\n",
 	       sel_name,
 	       (window ? GDK_WINDOW_HWND (window) : NULL));
-      g_free (sel_name);
     });
 
   return window;
@@ -2263,14 +2258,12 @@ _gdk_win32_display_convert_selection (GdkDisplay *display,
     return;
 
   GDK_NOTE (DND, {
-      gchar *sel_name = gdk_atom_name (selection);
-      gchar *tgt_name = gdk_atom_name (target);
+      const char *sel_name = (const char *)selection;
+      const char *tgt_name = (const char *)target;
 
       g_print ("gdk_selection_convert: %p %s %s\n",
 	       GDK_WINDOW_HWND (requestor),
 	       sel_name, tgt_name);
-      g_free (sel_name);
-      g_free (tgt_name);
     });
 
   if (selection == GDK_SELECTION_CLIPBOARD)
@@ -2421,8 +2414,8 @@ _gdk_win32_selection_property_change (GdkWin32Selection *win32_sel,
     }
   else
     {
-      gchar *prop_name = gdk_atom_name (property);
-      gchar *type_name = gdk_atom_name (type);
+      const char *prop_name = (const char *)property;
+      const char *type_name = (const char *)type;
       gchar *datastring = _gdk_win32_data_to_string (data, MIN (10, format*nelements/8));
 
       g_warning ("Unsupported property change on window 0x%p, %s property %s, %d-bit, target 0x%x of %d bytes: %s",
@@ -2437,8 +2430,6 @@ _gdk_win32_selection_property_change (GdkWin32Selection *win32_sel,
                  nelements,
                  datastring);
       g_free (datastring);
-      g_free (prop_name);
-      g_free (type_name);
     }
 }
 
@@ -2477,7 +2468,7 @@ _gdk_win32_display_get_selection_property (GdkDisplay *display,
     memmove (*data, prop->data, prop->length);
 
   GDK_NOTE (DND, {
-      gchar *type_name = gdk_atom_name (prop->target);
+      const char *type_name = (const char *)prop->target;
 
       g_print (" %s format:%d length:%"G_GSIZE_FORMAT"\n", type_name, prop->bitness, prop->length);
       g_free (type_name);
@@ -2518,15 +2509,12 @@ _gdk_win32_display_send_selection_notify (GdkDisplay   *display,
 					  guint32     	time)
 {
   GDK_NOTE (DND, {
-      gchar *sel_name = gdk_atom_name (selection);
-      gchar *tgt_name = gdk_atom_name (target);
-      gchar *prop_name = gdk_atom_name (property);
+      const char *sel_name = (const char *)selection;
+      const char *tgt_name = (const char *)target;
+      const char *prop_name = (const char *)property;
 
       g_print ("gdk_selection_send_notify_for_display: %p %s %s %s (no-op)\n",
 	       requestor, sel_name, tgt_name, prop_name);
-      g_free (sel_name);
-      g_free (tgt_name);
-      g_free (prop_name);
     });
 }
 
@@ -2547,11 +2535,10 @@ gdk_text_property_to_text_list_for_display (GdkDisplay   *display,
   gchar *source_charset;
 
   GDK_NOTE (DND, {
-      gchar *enc_name = gdk_atom_name (encoding);
+      const char *enc_name = (const char *)encoding;
 
       g_print ("gdk_text_property_to_text_list_for_display: %s %d %.20s %d\n",
 	       enc_name, format, text, length);
-      g_free (enc_name);
     });
 
   if (!list)
@@ -2562,7 +2549,7 @@ gdk_text_property_to_text_list_for_display (GdkDisplay   *display,
   else if (encoding == _gdk_win32_selection_atom (GDK_WIN32_ATOM_INDEX_UTF8_STRING))
     source_charset = g_strdup ("UTF-8");
   else
-    source_charset = gdk_atom_name (encoding);
+    source_charset = g_strdup ((const char *)encoding);
 
   g_get_charset (&charset);
 
@@ -2678,10 +2665,9 @@ _gdk_win32_display_text_property_to_utf8_list (GdkDisplay    *display,
     }
   else
     {
-      gchar *enc_name = gdk_atom_name (encoding);
+      const char *enc_name = (const char *)encoding;
 
       g_warning ("gdk_text_property_to_utf8_list_for_display: encoding %s not handled\n", enc_name);
-      g_free (enc_name);
 
       if (list)
 	*list = NULL;
@@ -2718,10 +2704,9 @@ gdk_win32_selection_clear_targets (GdkDisplay *display,
     }
   else
     {
-      gchar *sel_name = gdk_atom_name (selection);
+      const char *sel_name = (const char *)selection;
 
       g_warning ("Unsupported generic selection %s (0x%p)", sel_name, selection);
-      g_free (sel_name);
     }
 }
 
@@ -2730,7 +2715,7 @@ _gdk_win32_add_target_to_selformats (GdkAtom  target,
                                      GArray  *array)
 {
   gint added_count = 0;
-  gchar *target_name;
+  const char *target_name;
   wchar_t *target_name_w;
   GdkSelTargetFormat fmt;
   gint i;
@@ -2764,9 +2749,8 @@ _gdk_win32_add_target_to_selformats (GdkAtom  target,
    */
   starting_point = array->len;
 
-  target_name = gdk_atom_name (target);
+  target_name = (const char *)target;
   target_name_w = g_utf8_to_utf16 (target_name, -1, NULL, NULL, NULL);
-  g_free (target_name);
 
   if (target_name_w == NULL)
     return added_count;
@@ -2831,19 +2815,17 @@ gdk_win32_display_add_selection_targets (GdkDisplay *display,
   gint i;
 
   GDK_NOTE (DND, {
-      gchar *sel_name = gdk_atom_name (selection);
+      const char *sel_name = (const char *)selection;
 
       g_print ("gdk_win32_selection_add_targets: %p: %s: ",
 	       owner ? GDK_WINDOW_HWND (owner) : NULL,
 	       sel_name);
-      g_free (sel_name);
 
       for (i = 0; i < ntargets; i++)
 	{
-	  gchar *tgt_name = gdk_atom_name (targets[i]);
+	  const char *tgt_name = (const char *)targets[i];
 
 	  g_print ("%s", tgt_name);
-	  g_free (tgt_name);
 	  if (i < ntargets - 1)
 	    g_print (", ");
 	}
@@ -2875,9 +2857,8 @@ gdk_win32_display_add_selection_targets (GdkDisplay *display,
     }
   else
     {
-      gchar *sel_name = gdk_atom_name (selection);
+      const char *sel_name = (const char *)selection;
 
       g_warning ("Unsupported generic selection %s (0x%p)", sel_name, selection);
-      g_free (sel_name);
     }
 }

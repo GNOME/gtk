@@ -119,10 +119,7 @@ _gdk_quartz_display_text_property_to_utf8_list (GdkDisplay    *display,
     }
   else
     {
-      gchar *enc_name = gdk_atom_name (encoding);
-
-      g_warning ("gdk_text_property_to_utf8_list_for_display: encoding %s not handled", enc_name);
-      g_free (enc_name);
+      g_warning ("gdk_text_property_to_utf8_list_for_display: encoding %s not handled", (const char *)encoding);
 
       if (list)
 	*list = NULL;
@@ -164,9 +161,8 @@ gdk_quartz_target_to_pasteboard_type_libgtk_only (const char *target)
 NSString *
 gdk_quartz_atom_to_pasteboard_type_libgtk_only (GdkAtom atom)
 {
-  gchar *target = gdk_atom_name (atom);
+  const char *target = (const char *)atom;
   NSString *ret = gdk_quartz_target_to_pasteboard_type_libgtk_only (target);
-  g_free (target);
 
   return ret;
 }

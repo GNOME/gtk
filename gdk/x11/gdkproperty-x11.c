@@ -99,12 +99,10 @@ gdk_x11_atom_to_xatom_for_display (GdkDisplay *display,
 
   if (!xatom)
     {
-      char *name = gdk_atom_name (atom);
+      const char *name = (const char *)atom;
 
       xatom = XInternAtom (GDK_DISPLAY_XDISPLAY (display), name, FALSE);
       insert_atom_pair (display, atom, xatom);
-
-      g_free (name);
     }
 
   return xatom;
@@ -302,7 +300,7 @@ gdk_x11_get_xatom_by_name (const gchar *atom_name)
  * 
  * Returns the name of an X atom for its display. This
  * function is meant mainly for debugging, so for convenience, unlike
- * XAtomName() and gdk_atom_name(), the result doesn’t need to
+ * XAtomName() and the result doesn’t need to
  * be freed. 
  *
  * Returns: name of the X atom; this string is owned by GDK,
@@ -316,7 +314,7 @@ gdk_x11_get_xatom_name_for_display (GdkDisplay *display,
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  return _gdk_atom_name_const (gdk_x11_xatom_to_atom_for_display (display, xatom));
+  return (const char *)gdk_x11_xatom_to_atom_for_display (display, xatom);
 }
 
 /**
@@ -325,7 +323,7 @@ gdk_x11_get_xatom_name_for_display (GdkDisplay *display,
  * 
  * Returns the name of an X atom for GDK’s default display. This
  * function is meant mainly for debugging, so for convenience, unlike
- * XAtomName() and gdk_atom_name(), the result 
+ * XAtomName() and the result 
  * doesn’t need to be freed. Also, this function will never return %NULL, 
  * even if @xatom is invalid.
  * 
@@ -335,6 +333,6 @@ gdk_x11_get_xatom_name_for_display (GdkDisplay *display,
 const gchar *
 gdk_x11_get_xatom_name (Atom xatom)
 {
-  return _gdk_atom_name_const (gdk_x11_xatom_to_atom (xatom));
+  return (const char *)gdk_x11_xatom_to_atom (xatom);
 }
 

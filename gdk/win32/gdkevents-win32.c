@@ -763,7 +763,7 @@ void
 _gdk_win32_print_event (const GdkEvent *event)
 {
   gchar *escaped, *kvname;
-  gchar *selection_name, *target_name, *property_name;
+  const char *selection_name, *target_name, *property_name;
 
   g_print ("%s%*s===> ", (debug_indent > 0 ? "\n" : ""), debug_indent, "");
   switch (event->any.type)
@@ -877,14 +877,11 @@ _gdk_win32_print_event (const GdkEvent *event)
     case GDK_SELECTION_CLEAR:
     case GDK_SELECTION_REQUEST:
     case GDK_SELECTION_NOTIFY:
-      selection_name = gdk_atom_name (event->selection.selection);
-      target_name = gdk_atom_name (event->selection.target);
-      property_name = gdk_atom_name (event->selection.property);
+      selection_name = (const char *)event->selection.selection;
+      target_name = (const char *)event->selection.target;
+      property_name = (const char *)event->selection.property;
       g_print ("sel:%s tgt:%s prop:%s",
 	       selection_name, target_name, property_name);
-      g_free (selection_name);
-      g_free (target_name);
-      g_free (property_name);
       break;
     case GDK_DRAG_ENTER:
     case GDK_DRAG_LEAVE:

@@ -40,8 +40,6 @@ GdkAtom gdk_atom_intern (const gchar *atom_name,
                          gboolean     only_if_exists);
 GDK_AVAILABLE_IN_ALL
 GdkAtom gdk_atom_intern_static_string (const gchar *atom_name);
-GDK_AVAILABLE_IN_ALL
-gchar*  gdk_atom_name   (GdkAtom      atom);
 
 
 GDK_AVAILABLE_IN_ALL
