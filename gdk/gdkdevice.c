@@ -46,7 +46,7 @@ typedef struct _GdkAxisInfo GdkAxisInfo;
 
 struct _GdkAxisInfo
 {
-  GdkAtom label;
+  char *label;
   GdkAxisUse use;
 
   gdouble min_axis;
@@ -356,9 +356,18 @@ gdk_device_class_init (GdkDeviceClass *klass)
 }
 
 static void
+gdk_device_axis_info_clear (gpointer data)
+{
+  GdkAxisInfo *info = data;
+
+  g_free (info->label);
+}
+
+static void
 gdk_device_init (GdkDevice *device)
 {
   device->axes = g_array_new (FALSE, TRUE, sizeof (GdkAxisInfo));
+  g_array_set_clear_func (device->axes, gdk_device_axis_info_clear);
 }
 
 static void
@@ -1218,7 +1227,7 @@ gdk_device_get_n_axes (GdkDevice *device)
  * the axes that @device currently has.
  *
  * Returns: (transfer container) (element-type GdkAtom):
- *     A #GList of #GdkAtoms, free with g_list_free().
+ *     A #GList of strings, free with g_list_free().
  *
  * Since: 3.0
  **/
@@ -1246,7 +1255,7 @@ gdk_device_list_axes (GdkDevice *device)
  * gdk_device_get_axis_value: (skip)
  * @device: a pointer #GdkDevice.
  * @axes: (array): pointer to an array of axes
- * @axis_label: #GdkAtom with the axis label.
+ * @axis_label: name of the label
  * @value: (out): location to store the found value.
  *
  * Interprets an array of double as axis values for a given device,
@@ -1258,10 +1267,10 @@ gdk_device_list_axes (GdkDevice *device)
  * Since: 3.0
  **/
 gboolean
-gdk_device_get_axis_value (GdkDevice *device,
-                           gdouble   *axes,
-                           GdkAtom    axis_label,
-                           gdouble   *value)
+gdk_device_get_axis_value (GdkDevice  *device,
+                           gdouble    *axes,
+                           const char *axis_label,
+                           gdouble    *value)
 {
   gint i;
 
@@ -1277,7 +1286,7 @@ gdk_device_get_axis_value (GdkDevice *device,
 
       axis_info = g_array_index (device->axes, GdkAxisInfo, i);
 
-      if (axis_info.label != axis_label)
+      if (!g_str_equal (axis_info.label, axis_label))
         continue;
 
       if (value)
@@ -1522,7 +1531,7 @@ _gdk_device_reset_axes (GdkDevice *device)
 
 guint
 _gdk_device_add_axis (GdkDevice   *device,
-                      GdkAtom      label_atom,
+                      const char  *label_name,
                       GdkAxisUse   use,
                       gdouble      min_value,
                       gdouble      max_value,
@@ -1532,7 +1541,7 @@ _gdk_device_add_axis (GdkDevice   *device,
   guint pos;
 
   axis_info.use = use;
-  axis_info.label = label_atom;
+  axis_info.label = g_strdup (label_name);
   axis_info.min_value = min_value;
   axis_info.max_value = max_value;
   axis_info.resolution = resolution;
@@ -1569,7 +1578,7 @@ _gdk_device_add_axis (GdkDevice   *device,
 void
 _gdk_device_get_axis_info (GdkDevice   *device,
 			   guint        index_,
-			   GdkAtom      *label_atom,
+			   const char **label_name,
 			   GdkAxisUse   *use,
 			   gdouble      *min_value,
 			   gdouble      *max_value,
@@ -1582,7 +1591,7 @@ _gdk_device_get_axis_info (GdkDevice   *device,
 
   info = &g_array_index (device->axes, GdkAxisInfo, index_);
 
-  *label_atom = info->label;
+  *label_name = info->label;
   *use = info->use;
   *min_value = info->min_value;
   *max_value = info->max_value;
