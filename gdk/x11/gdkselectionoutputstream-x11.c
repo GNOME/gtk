@@ -309,7 +309,7 @@ gdk_x11_selection_output_stream_invoke_flush (gpointer data)
 {
   GdkX11SelectionOutputStream *stream = GDK_X11_SELECTION_OUTPUT_STREAM (data);
 
-  if (gdk_x11_selection_output_stream_needs_flush (stream) &
+  if (gdk_x11_selection_output_stream_needs_flush (stream) &&
       gdk_x11_selection_output_stream_can_flush (stream))
     gdk_x11_selection_output_stream_perform_flush (stream);
 
@@ -615,7 +615,7 @@ gdk_x11_selection_output_stream_xevent (GdkDisplay   *display,
       GDK_NOTE(SELECTION, g_printerr ("%s:%s: got PropertyNotify Delete during INCR\n",
                                       priv->selection, priv->target));
       priv->delete_pending = FALSE;
-      if (gdk_x11_selection_output_stream_needs_flush (stream) &
+      if (gdk_x11_selection_output_stream_needs_flush (stream) &&
           gdk_x11_selection_output_stream_can_flush (stream))
         gdk_x11_selection_output_stream_perform_flush (stream);
       return FALSE;
