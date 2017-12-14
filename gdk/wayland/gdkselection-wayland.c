@@ -29,7 +29,6 @@
 #include "gdkdisplay-wayland.h"
 #include "gdkcontentformatsprivate.h"
 #include "gdkdndprivate.h"
-#include "gdkselection.h"
 #include "gdkproperty.h"
 
 #include <string.h>

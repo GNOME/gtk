@@ -24,8 +24,6 @@
 
 #include "config.h"
 
-#include "gdkselection.h"
-
 #include "gdkproperty.h"
 #include "gdkprivate-broadway.h"
 #include "gdkdisplay-broadway.h"
@@ -123,7 +121,7 @@ _gdk_broadway_display_text_property_to_utf8_list (GdkDisplay    *display,
   g_return_val_if_fail (length >= 0, 0);
   g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
 
-  if (encoding == GDK_TARGET_STRING)
+  if (encoding == gdk_atom_intern_static_string ("STRING"))
     {
       return make_list ((gchar *)text, length, TRUE, list);
     }

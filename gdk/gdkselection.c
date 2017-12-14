@@ -24,41 +24,10 @@
 
 #include "config.h"
 
-#include "gdkselection.h"
-
 #include "gdkproperty.h"
+
 #include "gdkdisplayprivate.h"
 
-
-/**
- * SECTION:selections
- * @Short_description: Functions for transfering data via the X selection mechanism
- * @Title: Selections
- *
- * The X selection mechanism provides a way to transfer arbitrary chunks of
- * data between programs. A “selection” is a essentially
- * a named clipboard, identified by a string interned as a #GdkAtom. By
- * claiming ownership of a selection, an application indicates that it will
- * be responsible for supplying its contents. The most common selections are
- * `PRIMARY` and `CLIPBOARD`.
- *
- * The contents of a selection can be represented in a number of formats,
- * called “targets”. Each target is identified by an atom.
- * A list of all possible targets supported by the selection owner can be
- * retrieved by requesting the special target `TARGETS`. When
- * a selection is retrieved, the data is accompanied by a type (an atom), and
- * a format (an integer, representing the number of bits per item).
- * See [Properties and Atoms][gdk3-Properties-and-Atoms]
- * for more information.
- *
- * The functions in this section only contain the lowlevel parts of the
- * selection protocol. A considerably more complicated implementation is needed
- * on top of this. GTK+ contains such an implementation in the functions in
- * `gtkselection.h` and programmers should use those functions
- * instead of the ones presented here. If you plan to implement selection
- * handling directly on top of the functions here, you should refer to the
- * X Inter-client Communication Conventions Manual (ICCCM).
- */
 
 /**
  * gdk_text_property_to_utf8_list_for_display:

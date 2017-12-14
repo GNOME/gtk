@@ -170,7 +170,7 @@ gtk_content_formats_add_text_targets (GdkContentFormats *list)
   gdk_content_formats_builder_add_mime_type (builder, utf8_atom);  
   gdk_content_formats_builder_add_mime_type (builder, ctext_atom);  
   gdk_content_formats_builder_add_mime_type (builder, text_atom);  
-  gdk_content_formats_builder_add_mime_type (builder, GDK_TARGET_STRING);  
+  gdk_content_formats_builder_add_mime_type (builder, gdk_atom_intern_static_string ("STRING"));  
   gdk_content_formats_builder_add_mime_type (builder, text_plain_utf8_atom);  
   if (!g_get_charset (NULL))
     gdk_content_formats_builder_add_mime_type (builder, text_plain_locale_atom);  
@@ -479,7 +479,7 @@ selection_set_string (GtkSelectionData *selection_data,
   if (latin1)
     {
       gtk_selection_data_set (selection_data,
-			      GDK_SELECTION_TYPE_STRING,
+			      gdk_atom_intern_static_string ("STRING"),
 			      8, (guchar *) latin1, strlen (latin1));
       g_free (latin1);
       
@@ -702,7 +702,7 @@ gtk_selection_data_set_text (GtkSelectionData     *selection_data,
 			      8, (guchar *)str, len);
       return TRUE;
     }
-  else if (selection_data->target == GDK_TARGET_STRING)
+  else if (selection_data->target == gdk_atom_intern_static_string ("STRING"))
     {
       return selection_set_string (selection_data, str, len);
     }
@@ -745,7 +745,7 @@ gtk_selection_data_get_text (const GtkSelectionData *selection_data)
   init_atoms ();
   
   if (selection_data->length >= 0 &&
-      (selection_data->type == GDK_TARGET_STRING ||
+      (selection_data->type == gdk_atom_intern_static_string ("STRING") ||
        selection_data->type == ctext_atom ||
        selection_data->type == utf8_atom))
     {
@@ -1131,7 +1131,7 @@ gtk_selection_data_get_targets (const GtkSelectionData  *selection_data,
 
   if (selection_data->length >= 0 &&
       selection_data->format == 32 &&
-      selection_data->type == GDK_SELECTION_TYPE_ATOM)
+      selection_data->type == gdk_atom_intern_static_string ("ATOM"))
     {
       if (targets)
 	*targets = g_memdup (selection_data->data, selection_data->length);
@@ -1182,7 +1182,7 @@ gtk_targets_include_text (GdkAtom *targets,
     {
       if (targets[i] == utf8_atom ||
 	  targets[i] == text_atom ||
-	  targets[i] == GDK_TARGET_STRING ||
+	  targets[i] == gdk_atom_intern_static_string ("STRING") ||
 	  targets[i] == ctext_atom ||
 	  targets[i] == text_plain_atom ||
 	  targets[i] == text_plain_utf8_atom ||

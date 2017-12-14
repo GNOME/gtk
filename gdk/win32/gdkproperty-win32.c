@@ -29,7 +29,6 @@
 #include <glib/gprintf.h>
 
 #include "gdkproperty.h"
-#include "gdkselection.h"
 #include "gdkdisplayprivate.h"
 #include "gdkprivate-win32.h"
 #include "gdkwin32.h"
@@ -49,33 +48,9 @@ _gdk_win32_display_manager_atom_intern (GdkDisplayManager *manager,
   retval = g_hash_table_lookup (atom_hash, atom_name);
   if (!retval)
     {
-      if (strcmp (atom_name, "PRIMARY") == 0)
-	retval = GDK_SELECTION_PRIMARY;
-      else if (strcmp (atom_name, "SECONDARY") == 0)
-	retval = GDK_SELECTION_SECONDARY;
-      else if (strcmp (atom_name, "CLIPBOARD") == 0)
-	retval = GDK_SELECTION_CLIPBOARD;
-      else if (strcmp (atom_name, "ATOM") == 0)
-	retval = GDK_SELECTION_TYPE_ATOM;
-      else if (strcmp (atom_name, "BITMAP") == 0)
-	retval = GDK_SELECTION_TYPE_BITMAP;
-      else if (strcmp (atom_name, "COLORMAP") == 0)
-	retval = GDK_SELECTION_TYPE_COLORMAP;
-      else if (strcmp (atom_name, "DRAWABLE") == 0)
-	retval = GDK_SELECTION_TYPE_DRAWABLE;
-      else if (strcmp (atom_name, "INTEGER") == 0)
-	retval = GDK_SELECTION_TYPE_INTEGER;
-      else if (strcmp (atom_name, "PIXMAP") == 0)
-	retval = GDK_SELECTION_TYPE_PIXMAP;
-      else if (strcmp (atom_name, "WINDOW") == 0)
-	retval = GDK_SELECTION_TYPE_WINDOW;
-      else if (strcmp (atom_name, "STRING") == 0)
-	retval = GDK_SELECTION_TYPE_STRING;
-      else
-	{
-	  win32_atom = GlobalAddAtom (atom_name);
-	  retval = GUINT_TO_POINTER ((guint) win32_atom);
-	}
+      win32_atom = GlobalAddAtom (atom_name);
+      retval = GUINT_TO_POINTER ((guint) win32_atom);
+
       g_hash_table_insert (atom_hash,
 			   g_strdup (atom_name),
 			   retval);
@@ -92,17 +67,6 @@ _gdk_win32_display_manager_get_atom_name (GdkDisplayManager *manager,
   gchar name[256];
 
   if (NULL == atom) return g_strdup ("<none>");
-  else if (GDK_SELECTION_PRIMARY == atom) return g_strdup ("PRIMARY");
-  else if (GDK_SELECTION_SECONDARY == atom) return g_strdup ("SECONDARY");
-  else if (GDK_SELECTION_CLIPBOARD == atom) return g_strdup ("CLIPBOARD");
-  else if (GDK_SELECTION_TYPE_ATOM == atom) return g_strdup ("ATOM");
-  else if (GDK_SELECTION_TYPE_BITMAP == atom) return g_strdup ("BITMAP");
-  else if (GDK_SELECTION_TYPE_COLORMAP == atom) return g_strdup ("COLORMAP");
-  else if (GDK_SELECTION_TYPE_DRAWABLE == atom) return g_strdup ("DRAWABLE");
-  else if (GDK_SELECTION_TYPE_INTEGER == atom) return g_strdup ("INTEGER");
-  else if (GDK_SELECTION_TYPE_PIXMAP == atom) return g_strdup ("PIXMAP");
-  else if (GDK_SELECTION_TYPE_WINDOW == atom) return g_strdup ("WINDOW");
-  else if (GDK_SELECTION_TYPE_STRING == atom) return g_strdup ("STRING");
 
   win32_atom = GPOINTER_TO_UINT (atom);
 

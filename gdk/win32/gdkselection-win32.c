@@ -284,7 +284,6 @@ which emits the "drag-data-received" signal for the app.
 #include <shlobj.h>
 
 #include "gdkproperty.h"
-#include "gdkselection.h"
 #include "gdkdisplay.h"
 #include "gdkprivate-win32.h"
 #include "gdkselection-win32.h"
@@ -2558,7 +2557,7 @@ gdk_text_property_to_text_list_for_display (GdkDisplay   *display,
   if (!list)
     return 0;
 
-  if (encoding == GDK_TARGET_STRING)
+  if (encoding == gdk_atom_intern_static_string ("STRING"))
     source_charset = g_strdup ("ISO-8859-1");
   else if (encoding == _gdk_win32_selection_atom (GDK_WIN32_ATOM_INDEX_UTF8_STRING))
     source_charset = g_strdup ("UTF-8");
@@ -2669,7 +2668,7 @@ _gdk_win32_display_text_property_to_utf8_list (GdkDisplay    *display,
   g_return_val_if_fail (text != NULL, 0);
   g_return_val_if_fail (length >= 0, 0);
 
-  if (encoding == GDK_TARGET_STRING)
+  if (encoding == gdk_atom_intern_static_string ("STRING"))
     {
       return make_list ((gchar *)text, length, TRUE, list);
     }

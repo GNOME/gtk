@@ -7032,59 +7032,6 @@ create_snapshot (GtkWidget *widget)
 }
 
 /*
- * Selection Test
- */
-
-void
-selection_test_received (GtkWidget        *tree_view,
-                         GtkSelectionData *selection_data)
-{
-  GtkTreeModel *model;
-  GtkListStore *store;
-  GdkAtom *atoms;
-  int i, l;
-
-  if (gtk_selection_data_get_length (selection_data) < 0)
-    {
-      g_print ("Selection retrieval failed\n");
-      return;
-    }
-  if (gtk_selection_data_get_data_type (selection_data) != GDK_SELECTION_TYPE_ATOM)
-    {
-      g_print ("Selection \"TARGETS\" was not returned as atoms!\n");
-      return;
-    }
-
-  /* Clear out any current list items */
-
-  model = gtk_tree_view_get_model (GTK_TREE_VIEW (tree_view));
-  store = GTK_LIST_STORE (model);
-  gtk_list_store_clear (store);
-
-  /* Add new items to list */
-
-  gtk_selection_data_get_targets (selection_data,
-                                  &atoms, &l);
-
-  for (i = 0; i < l; i++)
-    {
-      char *name;
-      GtkTreeIter iter;
-
-      name = gdk_atom_name (atoms[i]);
-      if (name != NULL)
-        {
-          gtk_list_store_insert_with_values (store, &iter, i, 0, name, -1);
-          g_free (name);
-        }
-      else
-       gtk_list_store_insert_with_values (store, &iter, i, 0,  "(bad atom)", -1);
-    }
-
-  return;
-}
-
-/*
  * Test scrolling
  */
 

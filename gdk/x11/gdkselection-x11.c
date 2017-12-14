@@ -24,7 +24,6 @@
 
 #include "config.h"
 
-#include "gdkselection.h"
 #include "gdkproperty.h"
 #include "gdkprivate-x11.h"
 #include "gdkdisplay-x11.h"
@@ -200,7 +199,7 @@ _gdk_x11_display_text_property_to_utf8_list (GdkDisplay    *display,
                                              gint           length,
                                              gchar       ***list)
 {
-  if (encoding == GDK_TARGET_STRING)
+  if (encoding == gdk_atom_intern_static_string ("STRING"))
     {
       return make_list ((gchar *)text, length, TRUE, list);
     }
