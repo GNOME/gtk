@@ -531,7 +531,7 @@ _gtk_gesture_update_point (GtkGesture     *gesture,
   if (data->event)
     g_object_unref (data->event);
 
-  data->event = g_object_ref (event);
+  data->event = g_object_ref ((gpointer) event);
   _update_touchpad_deltas (data);
   _update_widget_coordinates (gesture, data);
 
