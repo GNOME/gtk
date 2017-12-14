@@ -520,8 +520,6 @@ enum {
   FOCUS_OUT_EVENT,
   MAP_EVENT,
   UNMAP_EVENT,
-  SELECTION_GET,
-  SELECTION_RECEIVED,
   PROXIMITY_IN_EVENT,
   PROXIMITY_OUT_EVENT,
   WINDOW_STATE_EVENT,
@@ -2397,41 +2395,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  GDK_TYPE_EVENT);
   g_signal_set_va_marshaller (widget_signals[UNMAP_EVENT], G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_BOOLEAN__OBJECTv);
-
-  /**
-   * GtkWidget::selection-received:
-   * @widget: the object which received the signal.
-   * @data:
-   * @time:
-   */
-  widget_signals[SELECTION_RECEIVED] =
-    g_signal_new (I_("selection-received"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST | G_SIGNAL_DEPRECATED,
-		  G_STRUCT_OFFSET (GtkWidgetClass, selection_received),
-		  NULL, NULL,
-		  _gtk_marshal_VOID__BOXED_UINT,
-		  G_TYPE_NONE, 2,
-		  GTK_TYPE_SELECTION_DATA | G_SIGNAL_TYPE_STATIC_SCOPE,
-		  G_TYPE_UINT);
-
-  /**
-   * GtkWidget::selection-get:
-   * @widget: the object which received the signal.
-   * @data:
-   * @info:
-   * @time:
-   */
-  widget_signals[SELECTION_GET] =
-    g_signal_new (I_("selection-get"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST | G_SIGNAL_DEPRECATED,
-		  G_STRUCT_OFFSET (GtkWidgetClass, selection_get),
-		  NULL, NULL,
-		  _gtk_marshal_VOID__BOXED_UINT,
-		  G_TYPE_NONE, 2,
-		  GTK_TYPE_SELECTION_DATA | G_SIGNAL_TYPE_STATIC_SCOPE,
-		  G_TYPE_UINT);
 
   /**
    * GtkWidget::proximity-in-event:
