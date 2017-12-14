@@ -993,46 +993,31 @@ print_target_list (GdkContentFormats *formats)
 
 static struct {
   const gchar *name;
-  GdkAtom atom;
   GdkDragAction action;
 } xdnd_actions_table[] = {
-    { "XdndActionCopy",    None, GDK_ACTION_COPY },
-    { "XdndActionMove",    None, GDK_ACTION_MOVE },
-    { "XdndActionLink",    None, GDK_ACTION_LINK },
-    { "XdndActionAsk",     None, GDK_ACTION_ASK  },
-    { "XdndActionPrivate", None, GDK_ACTION_COPY },
+    { "XdndActionCopy",    GDK_ACTION_COPY },
+    { "XdndActionMove",    GDK_ACTION_MOVE },
+    { "XdndActionLink",    GDK_ACTION_LINK },
+    { "XdndActionAsk",     GDK_ACTION_ASK  },
+    { "XdndActionPrivate", GDK_ACTION_COPY },
   };
 
 static const gint xdnd_n_actions = G_N_ELEMENTS (xdnd_actions_table);
-static gboolean xdnd_actions_initialized = FALSE;
-
-static void
-xdnd_initialize_actions (void)
-{
-  gint i;
-
-  xdnd_actions_initialized = TRUE;
-  for (i = 0; i < xdnd_n_actions; i++)
-    xdnd_actions_table[i].atom = g_intern_static_string (xdnd_actions_table[i].name);
-}
 
 static GdkDragAction
 xdnd_action_from_atom (GdkDisplay *display,
                        Atom        xatom)
 {
-  GdkAtom atom;
+  const char *name;
   gint i;
 
   if (xatom == None)
     return 0;
 
-  atom = gdk_x11_xatom_to_atom_for_display (display, xatom);
-
-  if (!xdnd_actions_initialized)
-    xdnd_initialize_actions();
+  name = gdk_x11_get_xatom_name_for_display (display, xatom);
 
   for (i = 0; i < xdnd_n_actions; i++)
-    if (atom == xdnd_actions_table[i].atom)
+    if (g_str_equal (name, xdnd_actions_table[i].name))
       return xdnd_actions_table[i].action;
 
   return 0;
@@ -1044,12 +1029,9 @@ xdnd_action_to_atom (GdkDisplay    *display,
 {
   gint i;
 
-  if (!xdnd_actions_initialized)
-    xdnd_initialize_actions();
-
   for (i = 0; i < xdnd_n_actions; i++)
     if (action == xdnd_actions_table[i].action)
-      return gdk_x11_atom_to_xatom_for_display (display, xdnd_actions_table[i].atom);
+      return gdk_x11_get_xatom_by_name_for_display (display, xdnd_actions_table[i].name);
 
   return None;
 }
@@ -1182,9 +1164,6 @@ xdnd_set_actions (GdkX11DragContext *context_x11)
   guint actions;
   GdkDisplay *display = GDK_WINDOW_DISPLAY (context->source_window);
 
-  if (!xdnd_actions_initialized)
-    xdnd_initialize_actions();
-
   actions = context->actions;
   n_atoms = 0;
   for (i = 0; i < xdnd_n_actions; i++)
@@ -1205,7 +1184,7 @@ xdnd_set_actions (GdkX11DragContext *context_x11)
       if (actions & xdnd_actions_table[i].action)
         {
           actions &= ~xdnd_actions_table[i].action;
-          atomlist[n_atoms] = gdk_x11_atom_to_xatom_for_display (display, xdnd_actions_table[i].atom);
+          atomlist[n_atoms] = gdk_x11_get_xatom_by_name_for_display (display, xdnd_actions_table[i].name);
           n_atoms++;
         }
     }
