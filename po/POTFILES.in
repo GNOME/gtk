@@ -12,6 +12,7 @@ gdk/gdkdisplay.c
 gdk/gdkdisplaymanager.c
 gdk/gdkdnd.c
 gdk/gdkdrawcontext.c
+gdk/gdkevents.c
 gdk/gdkglcontext.c
 gdk/gdkpango.c
 gdk/gdkseat.c
