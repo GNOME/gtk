@@ -2448,11 +2448,19 @@ static void
 gdk_x11_window_set_transient_for (GdkWindow *window,
 				  GdkWindow *parent)
 {
-  if (!GDK_WINDOW_DESTROYED (window) && !GDK_WINDOW_DESTROYED (parent) &&
-      WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+    return;
+
+  /* XSetTransientForHint() doesn't allow unsetting, so do it manually */
+  if (!GDK_WINDOW_DESTROYED (parent))
     XSetTransientForHint (GDK_WINDOW_XDISPLAY (window), 
 			  GDK_WINDOW_XID (window),
 			  GDK_WINDOW_XID (parent));
+  else
+    XDeleteProperty (GDK_WINDOW_XDISPLAY (window),
+                     GDK_WINDOW_XID (window),
+                     gdk_x11_get_xatom_by_name_for_display (GDK_WINDOW_DISPLAY (window), "WM_TRANSIENT_FOR"));
 }
 
 GdkCursor *

@@ -3382,8 +3382,7 @@ gtk_window_transient_parent_unrealized (GtkWidget *parent,
 					GtkWidget *window)
 {
   if (_gtk_widget_get_realized (window))
-    gdk_property_delete (_gtk_widget_get_window (window),
-			 gdk_atom_intern_static_string ("WM_TRANSIENT_FOR"));
+    gdk_window_set_transient_for (_gtk_widget_get_window (window), NULL);
 }
 
 static void
