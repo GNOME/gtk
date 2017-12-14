@@ -145,21 +145,6 @@ _gdk_x11_precache_atoms (GdkDisplay          *display,
 }
 
 /**
- * gdk_x11_atom_to_xatom:
- * @atom: A #GdkAtom 
- * 
- * Converts from a #GdkAtom to the X atom for the default GDK display
- * with the same string value.
- * 
- * Returns: the X atom corresponding to @atom.
- **/
-Atom
-gdk_x11_atom_to_xatom (GdkAtom atom)
-{
-  return gdk_x11_atom_to_xatom_for_display (gdk_display_get_default (), atom);
-}
-
-/**
  * gdk_x11_xatom_to_atom_for_display:
  * @display: (type GdkX11Display): A #GdkDisplay
  * @xatom: an X atom 
@@ -217,21 +202,6 @@ gdk_x11_xatom_to_atom_for_display (GdkDisplay *display,
 }
 
 /**
- * gdk_x11_xatom_to_atom:
- * @xatom: an X atom for the default GDK display
- * 
- * Convert from an X atom for the default display to the corresponding
- * #GdkAtom.
- * 
- * Returns: (transfer none): the corresponding G#dkAtom.
- **/
-GdkAtom
-gdk_x11_xatom_to_atom (Atom xatom)
-{
-  return gdk_x11_xatom_to_atom_for_display (gdk_display_get_default (), xatom);
-}
-
-/**
  * gdk_x11_get_xatom_by_name_for_display:
  * @display: (type GdkX11Display): a #GdkDisplay
  * @atom_name: a string
@@ -273,23 +243,6 @@ _gdk_x11_get_xatom_for_display_printf (GdkDisplay    *display,
 }
 
 /**
- * gdk_x11_get_xatom_by_name:
- * @atom_name: a string
- * 
- * Returns the X atom for GDK’s default display corresponding to @atom_name.
- * This function caches the result, so if called repeatedly it is much
- * faster than XInternAtom(), which is a round trip to the server each time.
- * 
- * Returns: a X atom for GDK’s default display.
- **/
-Atom
-gdk_x11_get_xatom_by_name (const gchar *atom_name)
-{
-  return gdk_x11_get_xatom_by_name_for_display (gdk_display_get_default (),
-						atom_name);
-}
-
-/**
  * gdk_x11_get_xatom_name_for_display:
  * @display: (type GdkX11Display): the #GdkDisplay where @xatom is defined
  * @xatom: an X atom 
@@ -311,24 +264,5 @@ gdk_x11_get_xatom_name_for_display (GdkDisplay *display,
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
   return (const char *)gdk_x11_xatom_to_atom_for_display (display, xatom);
-}
-
-/**
- * gdk_x11_get_xatom_name:
- * @xatom: an X atom for GDK’s default display
- * 
- * Returns the name of an X atom for GDK’s default display. This
- * function is meant mainly for debugging, so for convenience, unlike
- * XAtomName() and the result 
- * doesn’t need to be freed. Also, this function will never return %NULL, 
- * even if @xatom is invalid.
- * 
- * Returns: name of the X atom; this string is owned by GTK+,
- *   so it shouldn’t be modifed or freed. 
- **/
-const gchar *
-gdk_x11_get_xatom_name (Atom xatom)
-{
-  return (const char *)gdk_x11_xatom_to_atom (xatom);
 }
 

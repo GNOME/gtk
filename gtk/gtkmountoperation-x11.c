@@ -136,7 +136,7 @@ get_utf8_property (GdkDisplay *display,
   char *retval;
   Atom utf8_string;
 
-  utf8_string = gdk_x11_get_xatom_by_name ("UTF8_STRING");
+  utf8_string = gdk_x11_get_xatom_by_name_for_display (display, "UTF8_STRING");
 
   gdk_x11_display_error_trap_push (display);
   type = None;
@@ -167,7 +167,7 @@ get_utf8_property (GdkDisplay *display,
   if (!g_utf8_validate (val, nitems, NULL))
     {
       g_warning ("Property %s contained invalid UTF-8",
-                 gdk_x11_get_xatom_name (atom));
+                 gdk_x11_get_xatom_name_for_display (display, atom));
       XFree (val);
       return NULL;
     }
@@ -365,7 +365,7 @@ read_rgb_icon (GdkDisplay *display,
   data = NULL;
   result = XGetWindowProperty (xdisplay,
                                xwindow,
-                               gdk_x11_get_xatom_by_name ("_NET_WM_ICON"),
+                               gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_ICON"),
                                0, G_MAXLONG,
                                False, XA_CARDINAL, &type, &format, &nitems,
                                &bytes_after, (void*)&data);
