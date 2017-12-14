@@ -102,23 +102,6 @@ typedef cairo_rectangle_int_t         GdkRectangle;
  */
 typedef const char                   *GdkAtom;
 
-/**
- * GDK_ATOM_TO_POINTER:
- * @atom: a #GdkAtom.
- *
- * Converts a #GdkAtom into a pointer type.
- */
-#define GDK_ATOM_TO_POINTER(atom) ((gpointer) (atom))
-
-/**
- * GDK_POINTER_TO_ATOM:
- * @ptr: a pointer containing a #GdkAtom.
- *
- * Extracts a #GdkAtom from a pointer. The #GdkAtom must have been
- * stored in the pointer with GDK_ATOM_TO_POINTER().
- */
-#define GDK_POINTER_TO_ATOM(ptr)  ((GdkAtom)(ptr))
-
 /* Forward declarations of commonly used types */
 typedef struct _GdkRGBA               GdkRGBA;
 typedef struct _GdkContentFormats     GdkContentFormats;

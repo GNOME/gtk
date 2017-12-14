@@ -47,12 +47,10 @@ insert_atom_pair (GdkDisplay *display,
       display_x11->atom_to_virtual = g_hash_table_new (g_direct_hash, NULL);
     }
   
-  g_hash_table_insert (display_x11->atom_from_virtual, 
-		       GDK_ATOM_TO_POINTER (virtual_atom), 
+  g_hash_table_insert (display_x11->atom_from_virtual, (gpointer)virtual_atom, 
 		       GUINT_TO_POINTER (xatom));
   g_hash_table_insert (display_x11->atom_to_virtual,
-		       GUINT_TO_POINTER (xatom), 
-		       GDK_ATOM_TO_POINTER (virtual_atom));
+		       GUINT_TO_POINTER (xatom), (gpointer)virtual_atom);
 }
 
 static Atom
@@ -62,8 +60,7 @@ lookup_cached_xatom (GdkDisplay *display,
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
 
   if (display_x11->atom_from_virtual)
-    return GPOINTER_TO_UINT (g_hash_table_lookup (display_x11->atom_from_virtual,
-						  GDK_ATOM_TO_POINTER (atom)));
+    return GPOINTER_TO_UINT (g_hash_table_lookup (display_x11->atom_from_virtual, atom));
 
   return None;
 }
@@ -192,8 +189,8 @@ gdk_x11_xatom_to_atom_for_display (GdkDisplay *display,
   display_x11 = GDK_X11_DISPLAY (display);
   
   if (display_x11->atom_to_virtual)
-    virtual_atom = GDK_POINTER_TO_ATOM (g_hash_table_lookup (display_x11->atom_to_virtual,
-							     GUINT_TO_POINTER (xatom)));
+    virtual_atom = g_hash_table_lookup (display_x11->atom_to_virtual,
+				     GUINT_TO_POINTER (xatom));
   
   if (!virtual_atom)
     {

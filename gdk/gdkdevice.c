@@ -1236,7 +1236,7 @@ gdk_device_list_axes (GdkDevice *device)
       GdkAxisInfo axis_info;
 
       axis_info = g_array_index (device->axes, GdkAxisInfo, i);
-      axes = g_list_prepend (axes, GDK_ATOM_TO_POINTER (axis_info.label));
+      axes = g_list_prepend (axes, axis_info.label);
     }
 
   return g_list_reverse (axes);
