@@ -772,11 +772,11 @@ gsk_vulkan_image_finalize (GObject *object)
    * the VkImage */
   if (self->memory)
     {
-      gsk_vulkan_memory_free (self->memory);
-
       vkDestroyImage (gdk_vulkan_context_get_device (self->vulkan),
                       self->vk_image,
                       NULL);
+
+      gsk_vulkan_memory_free (self->memory);
     }
 
   g_object_unref (self->vulkan);
