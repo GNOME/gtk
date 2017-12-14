@@ -227,8 +227,7 @@ gdk_wayland_drop_context_set_status (GdkDragContext *context,
   context_wayland = GDK_WAYLAND_DRAG_CONTEXT (context);
 
   display = gdk_device_get_display (gdk_drag_context_get_device (context));
-  wl_offer = gdk_wayland_selection_get_offer (display,
-                                              gdk_drag_get_selection (context));
+  wl_offer = gdk_wayland_selection_get_offer (display);
 
   if (!wl_offer)
     return;
@@ -300,11 +299,9 @@ gdk_wayland_drag_context_drop_finish (GdkDragContext *context,
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   GdkWaylandDragContext *wayland_context;
   struct wl_data_offer *wl_offer;
-  GdkAtom selection;
 
   wayland_context = GDK_WAYLAND_DRAG_CONTEXT (context);
-  selection = gdk_drag_get_selection (context);
-  wl_offer = gdk_wayland_selection_get_offer (display, selection);
+  wl_offer = gdk_wayland_selection_get_offer (display);
 
   if (wl_offer && success && wayland_context->selected_action &&
       wayland_context->selected_action != GDK_ACTION_ASK)
@@ -316,7 +313,7 @@ gdk_wayland_drag_context_drop_finish (GdkDragContext *context,
         wl_data_offer_finish (wl_offer);
     }
 
-  gdk_wayland_selection_set_offer (display, selection, NULL);
+  gdk_wayland_selection_set_offer (display, NULL);
 }
 
 static void
@@ -344,8 +341,7 @@ gdk_wayland_drag_context_read_async (GdkDragContext      *context,
   GDK_NOTE (DND, char *s = gdk_content_formats_to_string (formats);
                  g_printerr ("%p: read for %s\n", context, s);
                  g_free (s); );
-  dnd_formats = gdk_wayland_selection_get_targets (display,
-                                                   gdk_drag_get_selection (context));                      
+  dnd_formats = gdk_wayland_selection_get_targets (display);
   mime_type = gdk_content_formats_match_mime_type (formats, dnd_formats);
   if (mime_type == NULL)
     {
@@ -354,8 +350,7 @@ gdk_wayland_drag_context_read_async (GdkDragContext      *context,
       return;
     }
   /* offer formats should be empty if we have no offer */
-  offer = gdk_wayland_selection_get_offer (display,
-                                           gdk_drag_get_selection (context));
+  offer = gdk_wayland_selection_get_offer (display);
   g_assert (offer);
 
   g_task_set_task_data (task, (gpointer) mime_type, NULL);
@@ -397,12 +392,6 @@ static gboolean
 gdk_wayland_drag_context_drop_status (GdkDragContext *context)
 {
   return FALSE;
-}
-
-static GdkAtom
-gdk_wayland_drag_context_get_selection (GdkDragContext *context)
-{
-  return gdk_atom_intern_static_string ("GdkWaylandSelection");
 }
 
 static void
@@ -510,7 +499,6 @@ gdk_wayland_drag_context_class_init (GdkWaylandDragContextClass *klass)
   context_class->read_async = gdk_wayland_drag_context_read_async;
   context_class->read_finish = gdk_wayland_drag_context_read_finish;
   context_class->drop_status = gdk_wayland_drag_context_drop_status;
-  context_class->get_selection = gdk_wayland_drag_context_get_selection;
   context_class->get_drag_window = gdk_wayland_drag_context_get_drag_window;
   context_class->set_hotspot = gdk_wayland_drag_context_set_hotspot;
   context_class->drop_done = gdk_wayland_drag_context_drop_done;
@@ -568,8 +556,7 @@ _gdk_wayland_window_drag_begin (GdkWindow          *window,
   context_wayland->dnd_window = create_dnd_window (gdk_window_get_display (window));
   context_wayland->dnd_surface = gdk_wayland_window_get_wl_surface (context_wayland->dnd_window);
   context_wayland->data_source =
-  gdk_wayland_selection_get_data_source (window,
-                                         gdk_wayland_drag_context_get_selection (context));
+  gdk_wayland_selection_get_data_source (window);
 
   mimetypes = gdk_content_formats_get_mime_types (context->formats, &n_mimetypes);
   for (i = 0; i < n_mimetypes; i++)
@@ -624,8 +611,7 @@ gdk_wayland_drop_context_update_targets (GdkDragContext *context)
   device = gdk_drag_context_get_device (context);
   display = gdk_device_get_display (device);
   gdk_content_formats_unref (context->formats);
-  context->formats = gdk_wayland_selection_get_targets (display,
-                                                        gdk_drag_get_selection (context));
+  context->formats = gdk_wayland_selection_get_targets (display);
   if (context->formats)
     gdk_content_formats_ref (context->formats);
   else

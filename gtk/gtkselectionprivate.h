@@ -38,7 +38,6 @@ G_BEGIN_DECLS
 struct _GtkSelectionData
 {
   /*< private >*/
-  GdkAtom       selection;
   GdkAtom       target;
   GdkAtom       type;
   gint          format;

@@ -45,8 +45,6 @@ GDK_AVAILABLE_IN_ALL
 GdkContentFormats *     gtk_content_formats_add_uri_targets       (GdkContentFormats *list) G_GNUC_WARN_UNUSED_RESULT;
 
 GDK_AVAILABLE_IN_ALL
-GdkAtom       gtk_selection_data_get_selection (const GtkSelectionData *selection_data);
-GDK_AVAILABLE_IN_ALL
 GdkAtom       gtk_selection_data_get_target    (const GtkSelectionData *selection_data);
 GDK_AVAILABLE_IN_ALL
 GdkAtom       gtk_selection_data_get_data_type (const GtkSelectionData *selection_data);

@@ -176,14 +176,6 @@ _gdk_broadway_window_register_dnd (GdkWindow      *window)
 {
 }
 
-static GdkAtom
-gdk_broadway_drag_context_get_selection (GdkDragContext *context)
-{
-  g_return_val_if_fail (context != NULL, NULL);
-
-  return NULL;
-}
-
 static gboolean
 gdk_broadway_drag_context_drop_status (GdkDragContext *context)
 {
@@ -213,5 +205,4 @@ gdk_broadway_drag_context_class_init (GdkBroadwayDragContextClass *klass)
   context_class->drop_reply = gdk_broadway_drag_context_drop_reply;
   context_class->drop_finish = gdk_broadway_drag_context_drop_finish;
   context_class->drop_status = gdk_broadway_drag_context_drop_status;
-  context_class->get_selection = gdk_broadway_drag_context_get_selection;
 }

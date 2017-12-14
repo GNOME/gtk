@@ -231,7 +231,6 @@ static void        gdk_x11_drag_context_drop_finish (GdkDragContext  *context,
                                                      gboolean         success,
                                                      guint32          time_);
 static gboolean    gdk_x11_drag_context_drop_status (GdkDragContext  *context);
-static GdkAtom     gdk_x11_drag_context_get_selection (GdkDragContext  *context);
 static GdkWindow * gdk_x11_drag_context_get_drag_window (GdkDragContext *context);
 static void        gdk_x11_drag_context_set_hotspot (GdkDragContext  *context,
                                                      gint             hot_x,
@@ -272,7 +271,7 @@ gdk_x11_drag_context_read_got_stream (GObject      *source,
           targets->next = NULL;
           g_task_set_task_data (task, next, (GDestroyNotify) g_slist_free);
           gdk_x11_selection_input_stream_new_async (gdk_drag_context_get_display (context),
-                                                    gdk_drag_get_selection (context),
+                                                    "XdndSelection",
                                                     next->data,
                                                     CurrentTime,
                                                     g_task_get_priority (task),
@@ -342,7 +341,7 @@ gdk_x11_drag_context_read_async (GdkDragContext      *context,
   GDK_NOTE(DND, g_printerr ("new read for %s (%u other options)\n",
                             (char *) targets->data, g_slist_length (targets->next)));
   gdk_x11_selection_input_stream_new_async (gdk_drag_context_get_display (context),
-                                            gdk_drag_get_selection (context),
+                                            "XdndSelection",
                                             targets->data,
                                             CurrentTime,
                                             io_priority,
@@ -392,7 +391,6 @@ gdk_x11_drag_context_class_init (GdkX11DragContextClass *klass)
   context_class->drop_status = gdk_x11_drag_context_drop_status;
   context_class->read_async = gdk_x11_drag_context_read_async;
   context_class->read_finish = gdk_x11_drag_context_read_finish;
-  context_class->get_selection = gdk_x11_drag_context_get_selection;
   context_class->get_drag_window = gdk_x11_drag_context_get_drag_window;
   context_class->set_hotspot = gdk_x11_drag_context_set_hotspot;
   context_class->drop_done = gdk_x11_drag_context_drop_done;
@@ -2586,15 +2584,6 @@ _gdk_x11_window_register_dnd (GdkWindow *window)
                    gdk_x11_get_xatom_by_name_for_display (display, "XdndAware"),
                    XA_ATOM, 32, PropModeReplace,
                    (guchar *)&xdnd_version, 1);
-}
-
-static GdkAtom
-gdk_x11_drag_context_get_selection (GdkDragContext *context)
-{
-  if (context->protocol == GDK_DRAG_PROTO_XDND)
-    return gdk_atom_intern_static_string ("XdndSelection");
-  else
-    return NULL;
 }
 
 static gboolean

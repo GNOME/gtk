@@ -33,31 +33,8 @@
 
 #include <string.h>
 
-typedef struct _SelectionBuffer SelectionBuffer;
 typedef struct _SelectionData SelectionData;
-typedef struct _StoredSelection StoredSelection;
 typedef struct _DataOfferData DataOfferData;
-
-struct _SelectionBuffer
-{
-  GInputStream *stream;
-  GCancellable *cancellable;
-  GByteArray *data;
-  GList *requestors;
-  GdkAtom selection;
-  GdkAtom target;
-  gint ref_count;
-};
-
-struct _StoredSelection
-{
-  GdkWindow *source;
-  GCancellable *cancellable;
-  guchar *data;
-  gsize data_len;
-  GdkAtom type;
-  gint fd;
-};
 
 struct _DataOfferData
 {
@@ -71,21 +48,11 @@ struct _SelectionData
   DataOfferData *offer;
 };
 
-enum {
-  ATOM_DND,
-  N_ATOMS
-};
-
-static GdkAtom atoms[N_ATOMS] = { 0 };
-
 struct _GdkWaylandSelection
 {
   /* Destination-side data */
-  SelectionData selections[N_ATOMS];
+  SelectionData selection;
   GHashTable *offers; /* Currently alive offers, Hashtable of wl_data_offer->DataOfferData */
-
-  /* Source-side data */
-  StoredSelection stored_selection;
 
   struct wl_data_source *dnd_source; /* Owned by the GdkDragContext */
 };
@@ -117,15 +84,11 @@ gdk_wayland_selection_new (void)
 {
   GdkWaylandSelection *selection;
 
-  /* init atoms */
-  atoms[ATOM_DND] = gdk_atom_intern_static_string ("GdkWaylandSelection");
-
   selection = g_new0 (GdkWaylandSelection, 1);
 
   selection->offers =
     g_hash_table_new_full (NULL, NULL, NULL,
                            (GDestroyNotify) data_offer_data_free);
-  selection->stored_selection.fd = -1;
   return selection;
 }
 
@@ -133,16 +96,6 @@ void
 gdk_wayland_selection_free (GdkWaylandSelection *selection)
 {
   g_hash_table_destroy (selection->offers);
-  g_free (selection->stored_selection.data);
-
-  if (selection->stored_selection.cancellable)
-    {
-      g_cancellable_cancel (selection->stored_selection.cancellable);
-      g_object_unref (selection->stored_selection.cancellable);
-    }
-
-  if (selection->stored_selection.fd > 0)
-    close (selection->stored_selection.fd);
 
   if (selection->dnd_source)
     wl_data_source_destroy (selection->dnd_source);
@@ -243,13 +196,9 @@ static const struct wl_data_offer_listener data_offer_listener = {
 };
 
 static SelectionData *
-selection_lookup_offer_by_atom (GdkWaylandSelection *selection,
-                                GdkAtom              selection_atom)
+selection_lookup_offer_by_atom (GdkWaylandSelection *selection)
 {
-  if (selection_atom == atoms[ATOM_DND])
-    return &selection->selections[ATOM_DND];
-  else
-    return NULL;
+  return &selection->selection;
 }
 
 void
@@ -293,7 +242,6 @@ gdk_wayland_selection_steal_offer (GdkDisplay *display,
 
 void
 gdk_wayland_selection_set_offer (GdkDisplay *display,
-                                 GdkAtom     selection_atom,
                                  gpointer    wl_offer)
 {
   GdkWaylandSelection *selection = gdk_wayland_display_get_selection (display);
@@ -303,12 +251,12 @@ gdk_wayland_selection_set_offer (GdkDisplay *display,
 
   info = g_hash_table_lookup (selection->offers, wl_offer);
 
-  prev_offer = gdk_wayland_selection_get_offer (display, selection_atom);
+  prev_offer = gdk_wayland_selection_get_offer (display);
 
   if (prev_offer)
     g_hash_table_remove (selection->offers, prev_offer);
 
-  selection_data = selection_lookup_offer_by_atom (selection, selection_atom);
+  selection_data = selection_lookup_offer_by_atom (selection);
 
   if (selection_data)
     {
@@ -317,13 +265,12 @@ gdk_wayland_selection_set_offer (GdkDisplay *display,
 }
 
 gpointer
-gdk_wayland_selection_get_offer (GdkDisplay *display,
-                                 GdkAtom     selection_atom)
+gdk_wayland_selection_get_offer (GdkDisplay *display)
 {
   GdkWaylandSelection *selection = gdk_wayland_display_get_selection (display);
   const SelectionData *data;
 
-  data = selection_lookup_offer_by_atom (selection, selection_atom);
+  data = selection_lookup_offer_by_atom (selection);
 
   if (data && data->offer)
     return data->offer->offer_data;
@@ -332,13 +279,12 @@ gdk_wayland_selection_get_offer (GdkDisplay *display,
 }
 
 GdkContentFormats *
-gdk_wayland_selection_get_targets (GdkDisplay *display,
-                                   GdkAtom     selection_atom)
+gdk_wayland_selection_get_targets (GdkDisplay *display)
 {
   GdkWaylandSelection *selection = gdk_wayland_display_get_selection (display);
   const SelectionData *data;
 
-  data = selection_lookup_offer_by_atom (selection, selection_atom);
+  data = selection_lookup_offer_by_atom (selection);
 
   if (data && data->offer)
     return data->offer->targets;
@@ -407,16 +353,13 @@ data_source_cancelled (void                  *data,
   GdkWaylandSelection *wayland_selection = data;
   GdkDragContext *context;
   GdkDisplay *display;
-  GdkAtom atom;
 
   GDK_NOTE (EVENTS,
             g_message ("data source cancelled, source = %p", source));
 
   display = gdk_display_get_default ();
 
-  if (source == wayland_selection->dnd_source)
-    atom = atoms[ATOM_DND];
-  else
+  if (source != wayland_selection->dnd_source)
     return;
 
   context = gdk_wayland_drag_context_lookup_by_data_source (source);
@@ -424,7 +367,7 @@ data_source_cancelled (void                  *data,
   if (context)
     gdk_drag_context_cancel (context, GDK_DRAG_CANCEL_ERROR);
 
-  gdk_wayland_selection_unset_data_source (display, atom);
+  gdk_wayland_selection_unset_data_source (display);
 }
 
 static void
@@ -485,24 +428,15 @@ static const struct wl_data_source_listener data_source_listener = {
 };
 
 struct wl_data_source *
-gdk_wayland_selection_get_data_source (GdkWindow *owner,
-                                       GdkAtom    selection)
+gdk_wayland_selection_get_data_source (GdkWindow *owner)
 {
   GdkDisplay *display = gdk_window_get_display (owner);
   GdkWaylandSelection *wayland_selection = gdk_wayland_display_get_selection (display);
   gpointer source = NULL;
   GdkWaylandDisplay *display_wayland;
 
-  if (selection == atoms[ATOM_DND])
-    {
-      if (wayland_selection->dnd_source)
-        return wayland_selection->dnd_source;
-    }
-  else
-    return NULL;
-
-  if (!owner)
-    return NULL;
+  if (wayland_selection->dnd_source)
+    return wayland_selection->dnd_source;
 
   display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (owner));
 
@@ -511,22 +445,17 @@ gdk_wayland_selection_get_data_source (GdkWindow *owner,
                                &data_source_listener,
                                wayland_selection);
 
-  if (selection == atoms[ATOM_DND])
-    wayland_selection->dnd_source = source;
+  wayland_selection->dnd_source = source;
 
   return source;
 }
 
 void
-gdk_wayland_selection_unset_data_source (GdkDisplay *display,
-                                         GdkAtom     selection)
+gdk_wayland_selection_unset_data_source (GdkDisplay *display)
 {
   GdkWaylandSelection *wayland_selection = gdk_wayland_display_get_selection (display);
 
-  if (selection == atoms[ATOM_DND])
-    {
-      wayland_selection->dnd_source = NULL;
-    }
+  wayland_selection->dnd_source = NULL;
 }
 
 gint
@@ -643,7 +572,7 @@ gdk_wayland_selection_set_current_offer_actions (GdkDisplay *display,
   struct wl_data_offer *offer;
   uint32_t all_actions = 0;
 
-  offer = gdk_wayland_selection_get_offer (display, atoms[ATOM_DND]);
+  offer = gdk_wayland_selection_get_offer (display);
 
   if (!offer)
     return FALSE;

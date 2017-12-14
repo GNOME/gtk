@@ -261,7 +261,6 @@ gtk_drag_get_data_finish (GtkDragGetData *data,
 
   site = g_object_get_data (G_OBJECT (data->widget), "gtk-drag-dest");
 
-  sdata.selection = gdk_drag_get_selection (data->context);
   sdata.target = data->mime_type;
   sdata.type = data->mime_type;
   sdata.format = 8;
@@ -1015,7 +1014,6 @@ gtk_drag_content_write_mime_type_async (GdkContentProvider  *provider,
   g_task_set_priority (task, io_priority);
   g_task_set_source_tag (task, gtk_drag_content_write_mime_type_async);
 
-  sdata.selection = gdk_drag_get_selection (content->context);
   sdata.target = gdk_atom_intern (mime_type, FALSE);
   sdata.length = -1;
   sdata.display = gtk_widget_get_display (content->widget);

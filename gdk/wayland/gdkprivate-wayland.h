@@ -201,16 +201,12 @@ void gdk_wayland_selection_ensure_primary_offer (GdkDisplay                     
 GdkContentFormats *gdk_wayland_selection_steal_offer (GdkDisplay *display, gpointer wl_offer);
 
 void gdk_wayland_selection_set_offer (GdkDisplay           *display,
-                                      GdkAtom               selection,
                                       gpointer              offer);
-gpointer gdk_wayland_selection_get_offer (GdkDisplay *display,
-                                          GdkAtom     selection);
-GdkContentFormats *gdk_wayland_selection_get_targets (GdkDisplay *display,
-                                                      GdkAtom     selection);
+gpointer gdk_wayland_selection_get_offer (GdkDisplay *display);
+GdkContentFormats *gdk_wayland_selection_get_targets (GdkDisplay *display);
 
-struct wl_data_source * gdk_wayland_selection_get_data_source (GdkWindow *owner,
-                                                               GdkAtom    selection);
-void gdk_wayland_selection_unset_data_source (GdkDisplay *display, GdkAtom selection);
+struct wl_data_source * gdk_wayland_selection_get_data_source (GdkWindow *owner);
+void gdk_wayland_selection_unset_data_source (GdkDisplay *display);
 gboolean gdk_wayland_selection_set_current_offer_actions (GdkDisplay *display,
                                                           uint32_t    actions);
 

@@ -693,22 +693,6 @@ gdk_drag_drop_succeeded (GdkDragContext *context)
   return GDK_DRAG_CONTEXT_GET_CLASS (context)->drop_status (context);
 }
 
-/**
- * gdk_drag_get_selection:
- * @context: a #GdkDragContext.
- *
- * Returns the selection atom for the current source window.
- *
- * Returns: (transfer none): the selection atom, or %NULL
- */
-GdkAtom
-gdk_drag_get_selection (GdkDragContext *context)
-{
-  g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
-
-  return GDK_DRAG_CONTEXT_GET_CLASS (context)->get_selection (context);
-}
-
 static void
 gdk_drag_context_write_done (GObject      *content,
                              GAsyncResult *result,

@@ -1080,7 +1080,6 @@ data_device_enter (void                  *data,
 {
   GdkWaylandSeat *seat = data;
   GdkWindow *dest_window, *dnd_owner;
-  GdkAtom selection;
 
   dest_window = wl_surface_get_user_data (surface);
 
@@ -1098,8 +1097,6 @@ data_device_enter (void                  *data,
 
   gdk_wayland_drop_context_update_targets (seat->drop_context);
 
-  selection = gdk_drag_get_selection (seat->drop_context);
-
   dnd_owner = seat->foreign_dnd_window;
 
   _gdk_wayland_drag_context_set_source_window (seat->drop_context, dnd_owner);
@@ -1112,9 +1109,7 @@ data_device_enter (void                  *data,
   _gdk_wayland_drag_context_emit_event (seat->drop_context, GDK_DRAG_ENTER,
                                         GDK_CURRENT_TIME);
 
-  gdk_wayland_selection_set_offer (seat->display, selection, offer);
-
-  /* emit_selection_owner_change (dest_window, selection); */
+  gdk_wayland_selection_set_offer (seat->display, offer);
 }
 
 static void

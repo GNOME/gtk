@@ -3266,7 +3266,6 @@ gdk_win32_drag_context_class_init (GdkWin32DragContextClass *klass)
   context_class->drop_reply = gdk_win32_drag_context_drop_reply;
   context_class->drop_finish = gdk_win32_drag_context_drop_finish;
   context_class->drop_status = gdk_win32_drag_context_drop_status;
-  context_class->get_selection = gdk_win32_drag_context_get_selection;
 
   context_class->get_drag_window = gdk_win32_drag_context_get_drag_window;
   context_class->set_hotspot = gdk_win32_drag_context_set_hotspot;

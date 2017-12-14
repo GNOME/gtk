@@ -274,24 +274,6 @@ gtk_content_formats_add_uri_targets (GdkContentFormats *list)
 }
 
 /**
- * gtk_selection_data_get_selection:
- * @selection_data: a pointer to a #GtkSelectionData-struct.
- *
- * Retrieves the selection #GdkAtom of the selection data.
- *
- * Returns: (transfer none): the selection #GdkAtom of the selection data.
- *
- * Since: 2.16
- **/
-GdkAtom
-gtk_selection_data_get_selection (const GtkSelectionData *selection_data)
-{
-  g_return_val_if_fail (selection_data != NULL, 0);
-
-  return selection_data->selection;
-}
-
-/**
  * gtk_selection_data_get_target:
  * @selection_data: a pointer to a #GtkSelectionData-struct.
  *

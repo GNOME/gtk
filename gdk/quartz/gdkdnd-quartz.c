@@ -126,13 +126,6 @@ _gdk_quartz_window_register_dnd (GdkWindow *window)
   /* FIXME: Implement */
 }
 
-static GdkAtom
-gdk_quartz_drag_context_get_selection (GdkDragContext *context)
-{
-  /* FIXME: Implement */
-  return NULL;
-}
-
 static gboolean
 gdk_quartz_drag_context_drop_status (GdkDragContext *context)
 {
@@ -173,5 +166,4 @@ gdk_quartz_drag_context_class_init (GdkQuartzDragContextClass *klass)
   context_class->drop_reply = gdk_quartz_drag_context_drop_reply;
   context_class->drop_finish = gdk_quartz_drag_context_drop_finish;
   context_class->drop_status = gdk_quartz_drag_context_drop_status;
-  context_class->get_selection = gdk_quartz_drag_context_get_selection;
 }

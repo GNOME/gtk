@@ -805,7 +805,6 @@ gdk_cursor_get_type
 <FILE>dnd</FILE>
 GdkDragContext
 GdkDragCancelReason
-gdk_drag_get_selection
 gdk_drop_reply
 gdk_drag_drop_done
 gdk_drag_begin

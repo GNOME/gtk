@@ -115,8 +115,6 @@ GDK_AVAILABLE_IN_ALL
 void             gdk_drop_finish        (GdkDragContext   *context,
                                          gboolean          success,
                                          guint32           time_);
-GDK_AVAILABLE_IN_ALL
-GdkAtom          gdk_drag_get_selection (GdkDragContext   *context);
 
 GDK_AVAILABLE_IN_3_94
 void                    gdk_drop_read_async             (GdkDragContext        *context,

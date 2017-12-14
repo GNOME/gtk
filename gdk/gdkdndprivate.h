@@ -65,7 +65,6 @@ struct _GdkDragContextClass {
                                 gint             x_root,
                                 gint             y_root,
                                 GdkDragProtocol *protocol);
-  GdkAtom     (*get_selection) (GdkDragContext  *context);
   gboolean    (*drag_motion)   (GdkDragContext  *context,
                                 GdkWindow       *dest_window,
                                 GdkDragProtocol  protocol,
