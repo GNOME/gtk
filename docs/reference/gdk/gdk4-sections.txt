@@ -407,13 +407,8 @@ gdk_content_formats_get_type
 <TITLE>Properties and Atoms</TITLE>
 <FILE>properties</FILE>
 GdkAtom
-GDK_ATOM_TO_POINTER
-GDK_POINTER_TO_ATOM
 gdk_text_property_to_utf8_list_for_display
 gdk_utf8_to_string_target
-gdk_atom_intern
-gdk_atom_intern_static_string
-gdk_atom_name
 </SECTION>
 
 <SECTION>
