@@ -2013,6 +2013,7 @@ _gdk_set_window_state (GdkWindow      *window,
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_TEMP: /* ? */
       gdk_display_put_event (display, temp_event);
+      g_object_notify (G_OBJECT (window), "state");
       break;
     case GDK_WINDOW_FOREIGN:
     case GDK_WINDOW_ROOT:

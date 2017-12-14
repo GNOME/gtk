@@ -100,6 +100,7 @@ enum {
   PROP_0,
   PROP_CURSOR,
   PROP_DISPLAY,
+  PROP_STATE,
   LAST_PROP
 };
 
@@ -275,6 +276,13 @@ gdk_window_class_init (GdkWindowClass *klass)
                            GDK_TYPE_DISPLAY,
                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
+  properties[PROP_STATE] =
+      g_param_spec_flags ("state",
+                          P_("State"),
+                          P_("State"),
+                          GDK_TYPE_WINDOW_STATE, GDK_WINDOW_STATE_WITHDRAWN,
+                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   /**
@@ -433,6 +441,10 @@ gdk_window_get_property (GObject    *object,
 
     case PROP_DISPLAY:
       g_value_set_object (value, window->display);
+      break;
+
+    case PROP_STATE:
+      g_value_set_flags (value, window->state);
       break;
 
     default:
@@ -1345,6 +1357,8 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 	      cairo_region_destroy (window->clip_region);
 	      window->clip_region = NULL;
 	    }
+
+          g_object_notify_by_pspec (G_OBJECT (window), properties[PROP_STATE]);
 	}
       break;
     }
@@ -3343,6 +3357,7 @@ gdk_window_show_internal (GdkWindow *window, gboolean raise)
   else
     {
       window->state = 0;
+      g_object_notify_by_pspec (G_OBJECT (window), properties[PROP_STATE]);
     }
 
   did_show = _gdk_window_update_viewable (window);
@@ -3622,7 +3637,10 @@ gdk_window_hide (GdkWindow *window)
 				     GDK_WINDOW_STATE_WITHDRAWN);
     }
   else if (was_mapped)
-    window->state = GDK_WINDOW_STATE_WITHDRAWN;
+    {
+      window->state = GDK_WINDOW_STATE_WITHDRAWN;
+      g_object_notify_by_pspec (G_OBJECT (window), properties[PROP_STATE]);
+    }
 
   if (was_mapped)
     {
