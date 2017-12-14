@@ -97,14 +97,6 @@ GDK_AVAILABLE_IN_3_94
 GdkClipboard *          gdk_display_get_clipboard               (GdkDisplay     *display);
 GDK_AVAILABLE_IN_3_94
 GdkClipboard *          gdk_display_get_primary_clipboard       (GdkDisplay     *display);
-GDK_AVAILABLE_IN_ALL
-gboolean gdk_display_supports_clipboard_persistence (GdkDisplay    *display);
-GDK_AVAILABLE_IN_ALL
-void     gdk_display_store_clipboard                (GdkDisplay    *display,
-                                                     GdkWindow     *clipboard_window,
-                                                     guint32        time_,
-                                                     const GdkAtom *targets,
-                                                     gint           n_targets);
 
 GDK_AVAILABLE_IN_ALL
 gboolean gdk_display_supports_shapes           (GdkDisplay    *display);

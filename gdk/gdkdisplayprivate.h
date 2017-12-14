@@ -131,13 +131,6 @@ struct _GdkDisplayClass
   gboolean                   (*supports_cursor_alpha) (GdkDisplay *display);
   gboolean                   (*supports_cursor_color) (GdkDisplay *display);
 
-  gboolean                   (*supports_clipboard_persistence)  (GdkDisplay *display);
-  void                       (*store_clipboard)    (GdkDisplay    *display,
-                                                    GdkWindow     *clipboard_window,
-                                                    guint32        time_,
-                                                    const GdkAtom *targets,
-                                                    gint           n_targets);
-
   void                       (*get_default_cursor_size) (GdkDisplay *display,
                                                          guint      *width,
                                                          guint      *height);

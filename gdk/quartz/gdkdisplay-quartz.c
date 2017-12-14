@@ -112,13 +112,6 @@ gdk_quartz_display_flush (GdkDisplay *display)
 }
 
 static gboolean
-gdk_quartz_display_supports_clipboard_persistence (GdkDisplay *display)
-{
-  /* FIXME: Implement */
-  return FALSE;
-}
-
-static gboolean
 gdk_quartz_display_supports_shapes (GdkDisplay *display)
 {
   /* FIXME: Implement */
@@ -130,16 +123,6 @@ gdk_quartz_display_supports_input_shapes (GdkDisplay *display)
 {
   /* FIXME: Implement */
   return FALSE;
-}
-
-static void
-gdk_quartz_display_store_clipboard (GdkDisplay    *display,
-                                    GdkWindow     *clipboard_window,
-                                    guint32        time_,
-                                    const GdkAtom *targets,
-                                    gint           n_targets)
-{
-  /* FIXME: Implement */
 }
 
 static gulong
@@ -241,8 +224,6 @@ gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
   display_class->queue_events = _gdk_quartz_display_queue_events;
   display_class->has_pending = _gdk_quartz_display_has_pending;
   display_class->get_default_group = gdk_quartz_display_get_default_group;
-  display_class->supports_clipboard_persistence = gdk_quartz_display_supports_clipboard_persistence;
-  display_class->store_clipboard = gdk_quartz_display_store_clipboard;
   display_class->supports_shapes = gdk_quartz_display_supports_shapes;
   display_class->supports_input_shapes = gdk_quartz_display_supports_input_shapes;
   display_class->get_default_cursor_size = _gdk_quartz_display_get_default_cursor_size;

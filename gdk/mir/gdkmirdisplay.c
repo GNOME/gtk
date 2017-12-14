@@ -383,12 +383,6 @@ gdk_mir_display_supports_input_shapes (GdkDisplay *display)
 }
 
 static gboolean
-gdk_mir_display_supports_clipboard_persistence (GdkDisplay *display)
-{
-  return FALSE;
-}
-
-static gboolean
 gdk_mir_display_supports_cursor_alpha (GdkDisplay *display)
 {
   return FALSE;
@@ -398,15 +392,6 @@ static gboolean
 gdk_mir_display_supports_cursor_color (GdkDisplay *display)
 {
   return FALSE;
-}
-
-static void
-gdk_mir_display_store_clipboard (GdkDisplay    *display,
-                                 GdkWindow     *clipboard_window,
-                                 guint32        time_,
-                                 const GdkAtom *targets,
-                                 gint           n_targets)
-{
 }
 
 static void
@@ -827,10 +812,8 @@ gdk_mir_display_class_init (GdkMirDisplayClass *klass)
   display_class->get_default_group = gdk_mir_display_get_default_group;
   display_class->supports_shapes = gdk_mir_display_supports_shapes;
   display_class->supports_input_shapes = gdk_mir_display_supports_input_shapes;
-  display_class->supports_clipboard_persistence = gdk_mir_display_supports_clipboard_persistence;
   display_class->supports_cursor_alpha = gdk_mir_display_supports_cursor_alpha;
   display_class->supports_cursor_color = gdk_mir_display_supports_cursor_color;
-  display_class->store_clipboard = gdk_mir_display_store_clipboard;
   display_class->get_default_cursor_size = gdk_mir_display_get_default_cursor_size;
   display_class->get_maximal_cursor_size = gdk_mir_display_get_maximal_cursor_size;
   display_class->get_app_launch_context = gdk_mir_display_get_app_launch_context;

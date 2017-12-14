@@ -811,21 +811,6 @@ gdk_wayland_display_get_default_group (GdkDisplay *display)
 }
 
 static gboolean
-gdk_wayland_display_supports_clipboard_persistence (GdkDisplay *display)
-{
-  return FALSE;
-}
-
-static void
-gdk_wayland_display_store_clipboard (GdkDisplay    *display,
-				     GdkWindow     *clipboard_window,
-				     guint32        time_,
-				     const GdkAtom *targets,
-				     gint           n_targets)
-{
-}
-
-static gboolean
 gdk_wayland_display_supports_shapes (GdkDisplay *display)
 {
   return FALSE;
@@ -989,8 +974,6 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
   display_class->has_pending = gdk_wayland_display_has_pending;
   display_class->queue_events = _gdk_wayland_display_queue_events;
   display_class->get_default_group = gdk_wayland_display_get_default_group;
-  display_class->supports_clipboard_persistence = gdk_wayland_display_supports_clipboard_persistence;
-  display_class->store_clipboard = gdk_wayland_display_store_clipboard;
   display_class->supports_shapes = gdk_wayland_display_supports_shapes;
   display_class->supports_input_shapes = gdk_wayland_display_supports_input_shapes;
   display_class->get_app_launch_context = _gdk_wayland_display_get_app_launch_context;

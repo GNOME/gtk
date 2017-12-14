@@ -2381,63 +2381,6 @@ gdk_x11_display_request_selection_notification (GdkDisplay *display,
     return FALSE;
 }
 
-static gboolean
-gdk_x11_display_supports_clipboard_persistence (GdkDisplay *display)
-{
-  Atom clipboard_manager;
-
-  /* It might make sense to cache this */
-  clipboard_manager = gdk_x11_get_xatom_by_name_for_display (display, "CLIPBOARD_MANAGER");
-  return XGetSelectionOwner (GDK_X11_DISPLAY (display)->xdisplay, clipboard_manager) != None;
-}
-
-static void
-gdk_x11_display_store_clipboard (GdkDisplay    *display,
-				 GdkWindow     *clipboard_window,
-				 guint32        time_,
-				 const GdkAtom *targets,
-				 gint           n_targets)
-{
-  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
-  Atom clipboard_manager, save_targets;
-
-  g_return_if_fail (GDK_WINDOW_IS_X11 (clipboard_window));
-
-  clipboard_manager = gdk_x11_get_xatom_by_name_for_display (display, "CLIPBOARD_MANAGER");
-  save_targets = gdk_x11_get_xatom_by_name_for_display (display, "SAVE_TARGETS");
-
-  gdk_x11_display_error_trap_push (display);
-
-  if (XGetSelectionOwner (display_x11->xdisplay, clipboard_manager) != None)
-    {
-      Atom property_name = None;
-      Atom *xatoms;
-      int i;
-
-      if (n_targets > 0)
-        {
-          property_name = gdk_x11_get_xatom_by_name_for_display (display, "GDK_SELECTION");
-
-	  xatoms = g_new (Atom, n_targets);
-	  for (i = 0; i < n_targets; i++)
-	    xatoms[i] = gdk_x11_atom_to_xatom_for_display (display, targets[i]);
-
-	  XChangeProperty (display_x11->xdisplay, GDK_WINDOW_XID (clipboard_window),
-			   property_name, XA_ATOM,
-			   32, PropModeReplace, (guchar *)xatoms, n_targets);
-	  g_free (xatoms);
-
-	}
-
-      XConvertSelection (display_x11->xdisplay,
-                         clipboard_manager, save_targets, property_name,
-                         GDK_WINDOW_XID (clipboard_window), time_);
-
-    }
-  gdk_x11_display_error_trap_pop_ignored (display);
-
-}
-
 /**
  * gdk_x11_display_get_user_time:
  * @display: (type GdkX11Display): a #GdkDisplay
@@ -3127,8 +3070,6 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->has_pending = gdk_x11_display_has_pending;
   display_class->queue_events = _gdk_x11_display_queue_events;
   display_class->get_default_group = gdk_x11_display_get_default_group;
-  display_class->supports_clipboard_persistence = gdk_x11_display_supports_clipboard_persistence;
-  display_class->store_clipboard = gdk_x11_display_store_clipboard;
   display_class->supports_shapes = gdk_x11_display_supports_shapes;
   display_class->supports_input_shapes = gdk_x11_display_supports_input_shapes;
   display_class->get_app_launch_context = _gdk_x11_display_get_app_launch_context;

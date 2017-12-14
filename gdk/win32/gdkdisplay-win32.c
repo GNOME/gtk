@@ -679,35 +679,6 @@ failed:
 }
 
 static gboolean
-gdk_win32_display_supports_clipboard_persistence (GdkDisplay *display)
-{
-  return TRUE;
-}
-
-static void
-gdk_win32_display_store_clipboard (GdkDisplay    *display,
-                                   GdkWindow     *clipboard_window,
-                                   guint32        time_,
-                                   const GdkAtom *targets,
-                                   gint           n_targets)
-{
-  GdkEvent tmp_event;
-  SendMessage (GDK_WINDOW_HWND (clipboard_window), WM_RENDERALLFORMATS, 0, 0);
-
-  memset (&tmp_event, 0, sizeof (tmp_event));
-  tmp_event.selection.type = GDK_SELECTION_NOTIFY;
-  tmp_event.selection.window = clipboard_window;
-  tmp_event.selection.send_event = FALSE;
-  tmp_event.selection.selection = _gdk_win32_selection_atom (GDK_WIN32_ATOM_INDEX_CLIPBOARD_MANAGER);
-  tmp_event.selection.target = 0;
-  tmp_event.selection.property = NULL;
-  tmp_event.selection.requestor = 0;
-  tmp_event.selection.time = GDK_CURRENT_TIME;
-
-  gdk_event_put (&tmp_event);
-}
-
-static gboolean
 gdk_win32_display_supports_shapes (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
@@ -1181,8 +1152,6 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
   display_class->queue_events = _gdk_win32_display_queue_events;
   display_class->get_default_group = gdk_win32_display_get_default_group;
 
-  display_class->supports_clipboard_persistence = gdk_win32_display_supports_clipboard_persistence;
-  display_class->store_clipboard = gdk_win32_display_store_clipboard;
   display_class->supports_shapes = gdk_win32_display_supports_shapes;
   display_class->supports_input_shapes = gdk_win32_display_supports_input_shapes;
 

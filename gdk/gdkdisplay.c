@@ -1184,56 +1184,6 @@ gdk_display_get_primary_clipboard (GdkDisplay *display)
 }
 
 /**
- * gdk_display_supports_clipboard_persistence:
- * @display: a #GdkDisplay
- *
- * Returns whether the speicifed display supports clipboard
- * persistance; i.e. if it’s possible to store the clipboard data after an
- * application has quit. On X11 this checks if a clipboard daemon is
- * running.
- *
- * Returns: %TRUE if the display supports clipboard persistance.
- *
- * Since: 2.6
- */
-gboolean
-gdk_display_supports_clipboard_persistence (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
-
-  return GDK_DISPLAY_GET_CLASS (display)->supports_clipboard_persistence (display);
-}
-
-/**
- * gdk_display_store_clipboard:
- * @display:          a #GdkDisplay
- * @clipboard_window: a #GdkWindow belonging to the clipboard owner
- * @time_:            a timestamp
- * @targets:          (array length=n_targets) (nullable): an array of targets
- *                    that should be saved, or %NULL
- *                    if all available targets should be saved.
- * @n_targets:        length of the @targets array
- *
- * Issues a request to the clipboard manager to store the
- * clipboard data. On X11, this is a special program that works
- * according to the
- * [FreeDesktop Clipboard Specification](http://www.freedesktop.org/Standards/clipboard-manager-spec).
- *
- * Since: 2.6
- */
-void
-gdk_display_store_clipboard (GdkDisplay    *display,
-			     GdkWindow     *clipboard_window,
-			     guint32        time_,
-			     const GdkAtom *targets,
-			     gint           n_targets)
-{
-  g_return_if_fail (GDK_IS_DISPLAY (display));
-
-  GDK_DISPLAY_GET_CLASS (display)->store_clipboard (display, clipboard_window, time_, targets, n_targets);
-}
-
-/**
  * gdk_display_supports_shapes:
  * @display: a #GdkDisplay
  *
