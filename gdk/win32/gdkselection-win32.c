@@ -2422,24 +2422,26 @@ _gdk_win32_selection_property_change (GdkWin32Selection *win32_sel,
     }
   else
     {
-      gchar *prop_name = gdk_atom_name (property);
-      gchar *type_name = gdk_atom_name (type);
-      gchar *datastring = _gdk_win32_data_to_string (data, MIN (10, format*nelements/8));
+      GDK_NOTE (DND, {
+          gchar *prop_name = gdk_atom_name (property);
+          gchar *type_name = gdk_atom_name (type);
+          gchar *datastring = _gdk_win32_data_to_string (data, MIN (10, format*nelements/8));
 
-      g_warning ("Unsupported property change on window 0x%p, %s property %s, %d-bit, target 0x%x of %d bytes: %s",
-                 window,
-                 (mode == GDK_PROP_MODE_REPLACE ? "REPLACE" :
-                  (mode == GDK_PROP_MODE_PREPEND ? "PREPEND" :
-                   (mode == GDK_PROP_MODE_APPEND ? "APPEND" :
-                    "???"))),
-                 prop_name,
-                 format,
-                 type_name,
-                 nelements,
-                 datastring);
-      g_free (datastring);
-      g_free (prop_name);
-      g_free (type_name);
+          g_warning ("Unsupported property change on window 0x%p, %s property %s, %d-bit, target 0x%x of %d bytes: %s",
+                     window,
+                     (mode == GDK_PROP_MODE_REPLACE ? "REPLACE" :
+                      (mode == GDK_PROP_MODE_PREPEND ? "PREPEND" :
+                       (mode == GDK_PROP_MODE_APPEND ? "APPEND" :
+                        "???"))),
+                     prop_name,
+                     format,
+                     type_name,
+                     nelements,
+                     datastring);
+          g_free (datastring);
+          g_free (prop_name);
+          g_free (type_name);
+        });
     }
 }
 
