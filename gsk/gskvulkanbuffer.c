@@ -80,11 +80,11 @@ gsk_vulkan_buffer_new_download (GdkVulkanContext  *context,
 void
 gsk_vulkan_buffer_free (GskVulkanBuffer *self)
 {
-  gsk_vulkan_memory_free (self->memory);
-
   vkDestroyBuffer (gdk_vulkan_context_get_device (self->vulkan),
                    self->vk_buffer,
                    NULL);
+
+  gsk_vulkan_memory_free (self->memory);
 
   g_object_unref (self->vulkan);
 
