@@ -1662,8 +1662,8 @@ gdk_x11_display_open (const gchar *display_name)
    * notification, and then setup the initial state of
    * is_composited to avoid a race condition here.
    */
-  gdk_display_request_selection_notification (display,
-					      gdk_x11_xatom_to_atom_for_display (display, get_cm_atom (display)));
+  gdk_x11_display_request_selection_notification (display,
+                                                  gdk_x11_xatom_to_atom_for_display (display, get_cm_atom (display)));
   gdk_display_set_composited (GDK_DISPLAY (display),
                               XGetSelectionOwner (GDK_DISPLAY_XDISPLAY (display), get_cm_atom (display)) != None);
 
@@ -2356,17 +2356,9 @@ gdk_x11_display_notify_startup_complete (GdkDisplay  *display,
   g_free (free_this);
 }
 
-static gboolean
-gdk_x11_display_supports_selection_notification (GdkDisplay *display)
-{
-  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
-
-  return display_x11->have_xfixes;
-}
-
-static gboolean
+gboolean
 gdk_x11_display_request_selection_notification (GdkDisplay *display,
-						GdkAtom     selection)
+						const char *selection)
 
 {
 #ifdef HAVE_XFIXES
@@ -2375,8 +2367,7 @@ gdk_x11_display_request_selection_notification (GdkDisplay *display,
 
   if (display_x11->have_xfixes)
     {
-      atom = gdk_x11_atom_to_xatom_for_display (display, 
-						selection);
+      atom = gdk_x11_get_xatom_by_name_for_display (display, selection);
       XFixesSelectSelectionInput (display_x11->xdisplay, 
 				  display_x11->leader_window,
 				  atom,
@@ -3136,8 +3127,6 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->has_pending = gdk_x11_display_has_pending;
   display_class->queue_events = _gdk_x11_display_queue_events;
   display_class->get_default_group = gdk_x11_display_get_default_group;
-  display_class->supports_selection_notification = gdk_x11_display_supports_selection_notification;
-  display_class->request_selection_notification = gdk_x11_display_request_selection_notification;
   display_class->supports_clipboard_persistence = gdk_x11_display_supports_clipboard_persistence;
   display_class->store_clipboard = gdk_x11_display_store_clipboard;
   display_class->supports_shapes = gdk_x11_display_supports_shapes;

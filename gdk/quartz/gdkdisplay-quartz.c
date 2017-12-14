@@ -112,24 +112,6 @@ gdk_quartz_display_flush (GdkDisplay *display)
 }
 
 static gboolean
-gdk_quartz_display_supports_selection_notification (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
-
-  /* FIXME: Implement */
-  return FALSE;
-}
-
-static gboolean
-gdk_quartz_display_request_selection_notification (GdkDisplay *display,
-                                                   GdkAtom     selection)
-
-{
-  /* FIXME: Implement */
-  return FALSE;
-}
-
-static gboolean
 gdk_quartz_display_supports_clipboard_persistence (GdkDisplay *display)
 {
   /* FIXME: Implement */
@@ -259,8 +241,6 @@ gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
   display_class->queue_events = _gdk_quartz_display_queue_events;
   display_class->has_pending = _gdk_quartz_display_has_pending;
   display_class->get_default_group = gdk_quartz_display_get_default_group;
-  display_class->supports_selection_notification = gdk_quartz_display_supports_selection_notification;
-  display_class->request_selection_notification = gdk_quartz_display_request_selection_notification;
   display_class->supports_clipboard_persistence = gdk_quartz_display_supports_clipboard_persistence;
   display_class->store_clipboard = gdk_quartz_display_store_clipboard;
   display_class->supports_shapes = gdk_quartz_display_supports_shapes;

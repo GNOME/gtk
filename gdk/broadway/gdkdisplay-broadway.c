@@ -359,20 +359,6 @@ gdk_broadway_display_notify_startup_complete (GdkDisplay  *display,
 }
 
 static gboolean
-gdk_broadway_display_supports_selection_notification (GdkDisplay *display)
-{
-  return FALSE;
-}
-
-static gboolean
-gdk_broadway_display_request_selection_notification (GdkDisplay *display,
-						     GdkAtom     selection)
-
-{
-    return FALSE;
-}
-
-static gboolean
 gdk_broadway_display_supports_clipboard_persistence (GdkDisplay *display)
 {
   return FALSE;
@@ -558,8 +544,6 @@ gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
   display_class->has_pending = gdk_broadway_display_has_pending;
   display_class->queue_events = _gdk_broadway_display_queue_events;
   display_class->get_default_group = gdk_broadway_display_get_default_group;
-  display_class->supports_selection_notification = gdk_broadway_display_supports_selection_notification;
-  display_class->request_selection_notification = gdk_broadway_display_request_selection_notification;
   display_class->supports_clipboard_persistence = gdk_broadway_display_supports_clipboard_persistence;
   display_class->store_clipboard = gdk_broadway_display_store_clipboard;
   display_class->supports_shapes = gdk_broadway_display_supports_shapes;

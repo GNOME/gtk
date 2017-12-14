@@ -504,14 +504,6 @@ gdk_win32_display_get_default_group (GdkDisplay *display)
   return NULL;
 }
 
-static gboolean
-gdk_win32_display_supports_selection_notification (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
-
-  return TRUE;
-}
-
 static HWND _hwnd_next_viewer = NULL;
 
 /*
@@ -684,43 +676,6 @@ failed:
   g_critical ("Failed to install clipboard viewer");
   UnregisterClass (MAKEINTRESOURCE (klass), _gdk_app_hmodule);
   return FALSE;
-}
-
-static gboolean
-gdk_win32_display_request_selection_notification (GdkDisplay *display,
-                                                  GdkAtom     selection)
-
-{
-  GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
-  gboolean ret = FALSE;
-  gchar *selection_name = gdk_atom_name (selection);
-
-  GDK_NOTE (DND,
-            g_print ("gdk_display_request_selection_notification (..., %s)",
-                     selection_name));
-
-  if (selection == GDK_SELECTION_CLIPBOARD ||
-      selection == GDK_SELECTION_PRIMARY)
-    {
-      if (display_win32->clipboard_hwnd == NULL)
-        {
-          if (register_clipboard_notification (display))
-            GDK_NOTE (DND, g_print (" registered"));
-          else
-            GDK_NOTE (DND, g_print (" failed to register"));
-        }
-      ret = (display_win32->clipboard_hwnd != NULL);
-    }
-  else
-    {
-      GDK_NOTE (DND, g_print (" unsupported"));
-      ret = FALSE;
-    }
-
-  g_free (selection_name);
-
-  GDK_NOTE (DND, g_print (" -> %s\n", ret ? "TRUE" : "FALSE"));
-  return ret;
 }
 
 static gboolean
@@ -1226,8 +1181,6 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
   display_class->queue_events = _gdk_win32_display_queue_events;
   display_class->get_default_group = gdk_win32_display_get_default_group;
 
-  display_class->supports_selection_notification = gdk_win32_display_supports_selection_notification;
-  display_class->request_selection_notification = gdk_win32_display_request_selection_notification;
   display_class->supports_clipboard_persistence = gdk_win32_display_supports_clipboard_persistence;
   display_class->store_clipboard = gdk_win32_display_store_clipboard;
   display_class->supports_shapes = gdk_win32_display_supports_shapes;
@@ -1244,9 +1197,6 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
   display_class->create_window_impl = _gdk_win32_display_create_window_impl;
 
   display_class->get_keymap = _gdk_win32_display_get_keymap;
-  display_class->send_selection_notify = _gdk_win32_display_send_selection_notify;
-  display_class->get_selection_property = _gdk_win32_display_get_selection_property;
-  display_class->convert_selection = _gdk_win32_display_convert_selection;
   display_class->text_property_to_utf8_list = _gdk_win32_display_text_property_to_utf8_list;
   display_class->utf8_to_string_target = _gdk_win32_display_utf8_to_string_target;
   display_class->make_gl_context_current = _gdk_win32_display_make_gl_context_current;

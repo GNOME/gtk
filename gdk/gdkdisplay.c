@@ -1144,50 +1144,6 @@ gdk_display_get_default_group (GdkDisplay *display)
 }
 
 /**
- * gdk_display_supports_selection_notification:
- * @display: a #GdkDisplay
- *
- * Returns whether #GdkEventOwnerChange events will be
- * sent when the owner of a selection changes.
- *
- * Returns: whether #GdkEventOwnerChange events will
- *               be sent.
- *
- * Since: 2.6
- **/
-gboolean
-gdk_display_supports_selection_notification (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
-
-  return GDK_DISPLAY_GET_CLASS (display)->supports_selection_notification (display);
-}
-
-/**
- * gdk_display_request_selection_notification:
- * @display: a #GdkDisplay
- * @selection: the #GdkAtom naming the selection for which
- *             ownership change notification is requested
- *
- * Request #GdkEventOwnerChange events for ownership changes
- * of the selection named by the given atom.
- *
- * Returns: whether #GdkEventOwnerChange events will
- *               be sent.
- *
- * Since: 2.6
- **/
-gboolean
-gdk_display_request_selection_notification (GdkDisplay *display,
-					    GdkAtom     selection)
-
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
-
-  return GDK_DISPLAY_GET_CLASS (display)->request_selection_notification (display, selection);
-}
-
-/**
  * gdk_display_get_clipboard:
  * @display: a #GdkDisplay
  *

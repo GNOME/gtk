@@ -400,19 +400,6 @@ gdk_mir_display_supports_cursor_color (GdkDisplay *display)
   return FALSE;
 }
 
-static gboolean
-gdk_mir_display_supports_selection_notification (GdkDisplay *display)
-{
-  return FALSE;
-}
-
-static gboolean
-gdk_mir_display_request_selection_notification (GdkDisplay *display,
-                                                GdkAtom     selection)
-{
-  return FALSE;
-}
-
 static void
 gdk_mir_display_store_clipboard (GdkDisplay    *display,
                                  GdkWindow     *clipboard_window,
@@ -843,8 +830,6 @@ gdk_mir_display_class_init (GdkMirDisplayClass *klass)
   display_class->supports_clipboard_persistence = gdk_mir_display_supports_clipboard_persistence;
   display_class->supports_cursor_alpha = gdk_mir_display_supports_cursor_alpha;
   display_class->supports_cursor_color = gdk_mir_display_supports_cursor_color;
-  display_class->supports_selection_notification = gdk_mir_display_supports_selection_notification;
-  display_class->request_selection_notification = gdk_mir_display_request_selection_notification;
   display_class->store_clipboard = gdk_mir_display_store_clipboard;
   display_class->get_default_cursor_size = gdk_mir_display_get_default_cursor_size;
   display_class->get_maximal_cursor_size = gdk_mir_display_get_maximal_cursor_size;

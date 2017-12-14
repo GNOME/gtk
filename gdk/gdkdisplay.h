@@ -93,12 +93,6 @@ void     gdk_display_get_maximal_cursor_size   (GdkDisplay    *display,
 GDK_AVAILABLE_IN_ALL
 GdkWindow *gdk_display_get_default_group       (GdkDisplay *display); 
 
-GDK_AVAILABLE_IN_ALL
-gboolean gdk_display_supports_selection_notification (GdkDisplay *display);
-GDK_AVAILABLE_IN_ALL
-gboolean gdk_display_request_selection_notification  (GdkDisplay *display,
-                                                      GdkAtom     selection);
-
 GDK_AVAILABLE_IN_3_94
 GdkClipboard *          gdk_display_get_clipboard               (GdkDisplay     *display);
 GDK_AVAILABLE_IN_3_94

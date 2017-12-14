@@ -168,15 +168,17 @@ struct _GdkX11DisplayClass
 {
   GdkDisplayClass parent_class;
 
-  gboolean              (* xevent)                      (GdkX11Display          *display,
-                                                         const XEvent           *event);
+  gboolean              (* xevent)                              (GdkX11Display          *display,
+                                                                 const XEvent           *event);
 };
 
-GdkX11Screen *_gdk_x11_display_screen_for_xrootwin (GdkDisplay  *display,
-                                                    Window       xrootwin);
-void       _gdk_x11_display_error_event         (GdkDisplay  *display,
-                                                 XErrorEvent *error);
-gsize      gdk_x11_display_get_max_request_size (GdkDisplay *display);
+GdkX11Screen *  _gdk_x11_display_screen_for_xrootwin            (GdkDisplay             *display,
+                                                                 Window                  xrootwin);
+void            _gdk_x11_display_error_event                    (GdkDisplay             *display,
+                                                                 XErrorEvent            *error);
+gsize           gdk_x11_display_get_max_request_size            (GdkDisplay             *display);
+gboolean        gdk_x11_display_request_selection_notification  (GdkDisplay             *display,
+                                                                 const char             *selection);
 
 GdkFilterReturn _gdk_wm_protocols_filter        (GdkXEvent   *xev,
                                                  GdkEvent    *event,

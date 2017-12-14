@@ -813,7 +813,7 @@ gdk_x11_clipboard_new (GdkDisplay  *display,
   cb->selection = g_strdup (selection);
   cb->xselection = gdk_x11_get_xatom_by_name_for_display (display, selection);
 
-  gdk_display_request_selection_notification (display, gdk_atom_intern (selection, FALSE));
+  gdk_x11_display_request_selection_notification (display, selection);
   g_signal_connect (display, "xevent", G_CALLBACK (gdk_x11_clipboard_xevent), cb);
   gdk_x11_clipboard_claim_remote (cb, CurrentTime);
 
