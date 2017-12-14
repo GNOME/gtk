@@ -129,17 +129,17 @@ init_atoms (void)
 
   if (!utf8_atom)
     {
-      utf8_atom = gdk_atom_intern_static_string ("UTF8_STRING");
-      text_atom = gdk_atom_intern_static_string ("TEXT");
-      ctext_atom = gdk_atom_intern_static_string ("COMPOUND_TEXT");
-      text_plain_atom = gdk_atom_intern_static_string ("text/plain");
-      text_plain_utf8_atom = gdk_atom_intern_static_string ("text/plain;charset=utf-8");
+      utf8_atom = g_intern_static_string ("UTF8_STRING");
+      text_atom = g_intern_static_string ("TEXT");
+      ctext_atom = g_intern_static_string ("COMPOUND_TEXT");
+      text_plain_atom = g_intern_static_string ("text/plain");
+      text_plain_utf8_atom = g_intern_static_string ("text/plain;charset=utf-8");
       g_get_charset (&charset);
       tmp = g_strdup_printf ("text/plain;charset=%s", charset);
-      text_plain_locale_atom = gdk_atom_intern (tmp, FALSE);
+      text_plain_locale_atom = g_intern_string (tmp);
       g_free (tmp);
 
-      text_uri_list_atom = gdk_atom_intern_static_string ("text/uri-list");
+      text_uri_list_atom = g_intern_static_string ("text/uri-list");
     }
 }
 
@@ -170,7 +170,7 @@ gtk_content_formats_add_text_targets (GdkContentFormats *list)
   gdk_content_formats_builder_add_mime_type (builder, utf8_atom);  
   gdk_content_formats_builder_add_mime_type (builder, ctext_atom);  
   gdk_content_formats_builder_add_mime_type (builder, text_atom);  
-  gdk_content_formats_builder_add_mime_type (builder, gdk_atom_intern_static_string ("STRING"));  
+  gdk_content_formats_builder_add_mime_type (builder, g_intern_static_string ("STRING"));  
   gdk_content_formats_builder_add_mime_type (builder, text_plain_utf8_atom);  
   if (!g_get_charset (NULL))
     gdk_content_formats_builder_add_mime_type (builder, text_plain_locale_atom);  
@@ -461,7 +461,7 @@ selection_set_string (GtkSelectionData *selection_data,
   if (latin1)
     {
       gtk_selection_data_set (selection_data,
-			      gdk_atom_intern_static_string ("STRING"),
+			      g_intern_static_string ("STRING"),
 			      8, (guchar *) latin1, strlen (latin1));
       g_free (latin1);
       
@@ -684,7 +684,7 @@ gtk_selection_data_set_text (GtkSelectionData     *selection_data,
 			      8, (guchar *)str, len);
       return TRUE;
     }
-  else if (selection_data->target == gdk_atom_intern_static_string ("STRING"))
+  else if (selection_data->target == g_intern_static_string ("STRING"))
     {
       return selection_set_string (selection_data, str, len);
     }
@@ -727,7 +727,7 @@ gtk_selection_data_get_text (const GtkSelectionData *selection_data)
   init_atoms ();
   
   if (selection_data->length >= 0 &&
-      (selection_data->type == gdk_atom_intern_static_string ("STRING") ||
+      (selection_data->type == g_intern_static_string ("STRING") ||
        selection_data->type == ctext_atom ||
        selection_data->type == utf8_atom))
     {
@@ -794,7 +794,7 @@ gtk_selection_data_set_pixbuf (GtkSelectionData *selection_data,
       mimes = gdk_pixbuf_format_get_mime_types (fmt);
       for (m = mimes; *m; m++)
 	{
-	  atom = gdk_atom_intern (*m, FALSE);
+	  atom = g_intern_string (*m);
 	  if (selection_data->target == atom)
 	    {
 	      str = NULL;
@@ -1113,7 +1113,7 @@ gtk_selection_data_get_targets (const GtkSelectionData  *selection_data,
 
   if (selection_data->length >= 0 &&
       selection_data->format == 32 &&
-      selection_data->type == gdk_atom_intern_static_string ("ATOM"))
+      selection_data->type == g_intern_static_string ("ATOM"))
     {
       if (targets)
 	*targets = g_memdup (selection_data->data, selection_data->length);
@@ -1164,7 +1164,7 @@ gtk_targets_include_text (GdkAtom *targets,
     {
       if (targets[i] == utf8_atom ||
 	  targets[i] == text_atom ||
-	  targets[i] == gdk_atom_intern_static_string ("STRING") ||
+	  targets[i] == g_intern_static_string ("STRING") ||
 	  targets[i] == ctext_atom ||
 	  targets[i] == text_plain_atom ||
 	  targets[i] == text_plain_utf8_atom ||

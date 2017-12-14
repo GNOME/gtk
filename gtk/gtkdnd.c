@@ -596,7 +596,7 @@ gtk_drag_selection_received (GtkWidget        *widget,
   context = g_object_get_data (G_OBJECT (widget), "drag-context");
 
   target = gtk_selection_data_get_target (selection_data);
-  if (target == gdk_atom_intern_static_string ("DELETE"))
+  if (target == g_intern_static_string ("DELETE"))
     {
       gdk_drop_finish (context, TRUE, time);
     }
@@ -1014,7 +1014,7 @@ gtk_drag_content_write_mime_type_async (GdkContentProvider  *provider,
   g_task_set_priority (task, io_priority);
   g_task_set_source_tag (task, gtk_drag_content_write_mime_type_async);
 
-  sdata.target = gdk_atom_intern (mime_type, FALSE);
+  sdata.target = g_intern_string (mime_type);
   sdata.length = -1;
   sdata.display = gtk_widget_get_display (content->widget);
   
@@ -1562,9 +1562,9 @@ gtk_drag_selection_get (GtkWidget        *widget,
   static GdkAtom null_atom = NULL;
 
   if (!null_atom)
-    null_atom = gdk_atom_intern_static_string ("NULL");
+    null_atom = g_intern_static_string ("NULL");
 
-  if (gtk_selection_data_get_target (selection_data) == gdk_atom_intern_static_string ("DELETE"))
+  if (gtk_selection_data_get_target (selection_data) == g_intern_static_string ("DELETE"))
     {
       g_signal_emit_by_name (info->widget,
                              "drag-data-delete", 

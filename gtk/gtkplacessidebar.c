@@ -1977,7 +1977,7 @@ drag_data_get_callback (GtkWidget        *widget,
   GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (user_data);
   GdkAtom target = gtk_selection_data_get_target (data);
 
-  if (target == gdk_atom_intern_static_string ("DND_GTK_SIDEBAR_ROW"))
+  if (target == g_intern_static_string ("DND_GTK_SIDEBAR_ROW"))
     {
       gtk_selection_data_set (data,
                               target,
@@ -2021,7 +2021,7 @@ drag_data_received_callback (GtkWidget        *list_box,
       else
         {
           sidebar->drag_list = NULL;
-          if (gtk_selection_data_get_target (selection_data) == gdk_atom_intern_static_string ("DND_GTK_SIDEBAR_ROW"))
+          if (gtk_selection_data_get_target (selection_data) == g_intern_static_string ("DND_GTK_SIDEBAR_ROW"))
             sidebar->drag_data_info = DND_GTK_SIDEBAR_ROW;
         }
       sidebar->drag_data_received = TRUE;

@@ -240,7 +240,7 @@ gdk_wayland_drop_context_set_status (GdkDragContext *context,
       mimetypes = gdk_content_formats_get_mime_types (context->formats, &n_mimetypes);
       for (i = 0; i < n_mimetypes; i++)
         {
-          if (mimetypes[i] != gdk_atom_intern_static_string ("DELETE"))
+          if (mimetypes[i] != g_intern_static_string ("DELETE"))
             break;
         }
 

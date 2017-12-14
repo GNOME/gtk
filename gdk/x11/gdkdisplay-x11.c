@@ -520,7 +520,7 @@ gdk_check_wm_state_changed (GdkWindow *window)
     }
 
   if (!gdk_x11_screen_supports_net_wm_hint (screen,
-                                            gdk_atom_intern_static_string ("_NET_WM_STATE_FOCUSED")))
+                                            g_intern_static_string ("_NET_WM_STATE_FOCUSED")))
     toplevel->have_focused = TRUE;
 
   /* When have_sticky is turned on, we have to check the DESKTOP property
@@ -847,7 +847,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
            */
           if (x11_screen &&
               !gdk_x11_screen_supports_net_wm_hint (x11_screen,
-                                                    gdk_atom_intern_static_string ("_NET_WM_STATE_HIDDEN")))
+                                                    g_intern_static_string ("_NET_WM_STATE_HIDDEN")))
             {
               /* If we are shown (not withdrawn) and get an unmap, it means we were
                * iconified in the X sense. If we are withdrawn, and get an unmap, it

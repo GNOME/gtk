@@ -3087,7 +3087,7 @@ gtk_notebook_drag_motion (GtkWidget      *widget,
 
   stop_scrolling (notebook);
   target = gtk_drag_dest_find_target (widget, context, NULL);
-  tab_target = gdk_atom_intern_static_string ("GTK_NOTEBOOK_TAB");
+  tab_target = g_intern_static_string ("GTK_NOTEBOOK_TAB");
 
   if (target == tab_target)
     {
@@ -3172,7 +3172,7 @@ gtk_notebook_drag_drop (GtkWidget        *widget,
   GdkAtom target, tab_target;
 
   target = gtk_drag_dest_find_target (widget, context, NULL);
-  tab_target = gdk_atom_intern_static_string ("GTK_NOTEBOOK_TAB");
+  tab_target = g_intern_static_string ("GTK_NOTEBOOK_TAB");
 
   if (target == tab_target)
     {
@@ -3274,7 +3274,7 @@ gtk_notebook_drag_data_get (GtkWidget        *widget,
   GdkAtom target;
 
   target = gtk_selection_data_get_target (data);
-  if (target == gdk_atom_intern_static_string ("GTK_NOTEBOOK_TAB"))
+  if (target == g_intern_static_string ("GTK_NOTEBOOK_TAB"))
     {
       gtk_selection_data_set (data,
                               target,
@@ -3283,7 +3283,7 @@ gtk_notebook_drag_data_get (GtkWidget        *widget,
                               sizeof (gpointer));
       priv->rootwindow_drop = FALSE;
     }
-  else if (target == gdk_atom_intern_static_string ("application/x-rootwindow-drop"))
+  else if (target == g_intern_static_string ("application/x-rootwindow-drop"))
     {
       gtk_selection_data_set (data, target, 8, NULL, 0);
       priv->rootwindow_drop = TRUE;
@@ -3304,7 +3304,7 @@ gtk_notebook_drag_data_received (GtkWidget        *widget,
   source_widget = gtk_drag_get_source_widget (context);
 
   if (source_widget &&
-      gtk_selection_data_get_target (data) == gdk_atom_intern_static_string ("GTK_NOTEBOOK_TAB"))
+      gtk_selection_data_get_target (data) == g_intern_static_string ("GTK_NOTEBOOK_TAB"))
     {
       child = (void*) gtk_selection_data_get_data (data);
 

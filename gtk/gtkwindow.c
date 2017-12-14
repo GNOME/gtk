@@ -4117,7 +4117,7 @@ gtk_window_supports_client_shadow (GtkWindow *window)
   if (GDK_IS_X11_DISPLAY (display))
     {
       if (!gdk_x11_screen_supports_net_wm_hint (gdk_x11_display_get_screen (display),
-                                                gdk_atom_intern_static_string ("_GTK_FRAME_EXTENTS")))
+                                                g_intern_static_string ("_GTK_FRAME_EXTENTS")))
         return FALSE;
     }
 #endif

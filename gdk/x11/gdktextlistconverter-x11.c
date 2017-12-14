@@ -174,7 +174,7 @@ gdk_x11_text_list_converter_encode (GdkX11TextListConverter *conv,
       if (gdk_x11_display_utf8_to_compound_text (conv->display, tmp,
                                                  &encoding, &format, &text, &new_length))
         {
-          if (encoding == gdk_atom_intern (conv->encoding, FALSE) &&
+          if (encoding == g_intern_string (conv->encoding) &&
               format == conv->format)
             {
               result = write_output (outbuf, outbuf_size, bytes_written, text, new_length, error);

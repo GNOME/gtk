@@ -109,11 +109,11 @@ _gdk_quartz_display_text_property_to_utf8_list (GdkDisplay    *display,
   g_return_val_if_fail (text != NULL, 0);
   g_return_val_if_fail (length >= 0, 0);
 
-  if (encoding == gdk_atom_intern_static_string ("STRING"))
+  if (encoding == g_intern_static_string ("STRING"))
     {
       return make_list ((gchar *)text, length, TRUE, list);
     }
-  else if (encoding == gdk_atom_intern_static_string ("UTF8_STRING"))
+  else if (encoding == g_intern_static_string ("UTF8_STRING"))
     {
       return make_list ((gchar *)text, length, FALSE, list);
     }
@@ -132,15 +132,15 @@ GdkAtom
 gdk_quartz_pasteboard_type_to_atom_libgtk_only (NSString *type)
 {
   if ([type isEqualToString:NSStringPboardType])
-    return gdk_atom_intern_static_string ("UTF8_STRING");
+    return g_intern_static_string ("UTF8_STRING");
   else if ([type isEqualToString:NSTIFFPboardType])
-    return gdk_atom_intern_static_string ("image/tiff");
+    return g_intern_static_string ("image/tiff");
   else if ([type isEqualToString:NSColorPboardType])
-    return gdk_atom_intern_static_string ("application/x-color");
+    return g_intern_static_string ("application/x-color");
   else if ([type isEqualToString:NSURLPboardType])
-    return gdk_atom_intern_static_string ("text/uri-list");
+    return g_intern_static_string ("text/uri-list");
   else
-    return gdk_atom_intern ([type UTF8String], FALSE);
+    return g_intern_string ([type UTF8String]);
 }
 
 NSString *

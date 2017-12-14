@@ -41,7 +41,7 @@ drag_data_get (GtkWidget        *widget,
                gpointer          data)
 {
   gtk_selection_data_set (selection_data,
-                          gdk_atom_intern_static_string ("GTK_LIST_BOX_ROW"),
+                          g_intern_static_string ("GTK_LIST_BOX_ROW"),
                           32,
                           (const guchar *)&widget,
                           sizeof (gpointer));

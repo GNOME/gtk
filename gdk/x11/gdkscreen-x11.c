@@ -156,7 +156,7 @@ get_current_desktop (GdkX11Screen *screen)
   int workspace = 0;
 
   if (!gdk_x11_screen_supports_net_wm_hint (screen,
-                                            gdk_atom_intern_static_string ("_NET_CURRENT_DESKTOP")))
+                                            g_intern_static_string ("_NET_CURRENT_DESKTOP")))
     return workspace;
 
   display = GDK_DISPLAY_XDISPLAY (GDK_SCREEN_DISPLAY (screen));
@@ -208,7 +208,7 @@ gdk_x11_screen_get_work_area (GdkX11Screen *x11_screen,
   area->height = HeightOfScreen (x11_screen->xscreen);
 
   if (!gdk_x11_screen_supports_net_wm_hint (x11_screen,
-                                            gdk_atom_intern_static_string ("_NET_WORKAREA")))
+                                            g_intern_static_string ("_NET_WORKAREA")))
     return;
 
   if (workarea == None)
@@ -1248,7 +1248,7 @@ get_netwm_cardinal_property (GdkX11Screen *x11_screen,
   gulong bytes_after;
   guchar *data;
 
-  atom = gdk_atom_intern_static_string (name);
+  atom = g_intern_static_string (name);
 
   if (!gdk_x11_screen_supports_net_wm_hint (x11_screen, atom))
     return 0;

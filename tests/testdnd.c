@@ -407,7 +407,7 @@ source_drag_data_get  (GtkWidget          *widget,
 		       guint               time,
 		       gpointer            data)
 {
-  if (gtk_selection_data_get_target (selection_data) == gdk_atom_intern_static_string ("application/x-rootwindow-drop"))
+  if (gtk_selection_data_get_target (selection_data) == g_intern_static_string ("application/x-rootwindow-drop"))
     g_print ("I was dropped on the rootwin\n");
   else
     gtk_selection_data_set (selection_data,

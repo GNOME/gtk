@@ -7852,10 +7852,10 @@ gtk_text_view_drag_data_get (GtkWidget        *widget,
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
   GtkTextBuffer *buffer = gtk_text_view_get_buffer (text_view);
 
-  if (gtk_selection_data_get_target (selection_data) == gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"))
+  if (gtk_selection_data_get_target (selection_data) == g_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"))
     {
       gtk_selection_data_set (selection_data,
-                              gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"),
+                              g_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"),
                               8, /* bytes */
                               (void*)&buffer,
                               sizeof (buffer));
@@ -8109,7 +8109,7 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
 
   gtk_text_buffer_begin_user_action (buffer);
 
-  if (gtk_selection_data_get_target (selection_data) == gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"))
+  if (gtk_selection_data_get_target (selection_data) == g_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"))
     {
       GtkTextBuffer *src_buffer = NULL;
       GtkTextIter start, end;

@@ -213,7 +213,7 @@ static gboolean
 gdk_x11_window_supports_edge_constraints (GdkWindow *window)
 {
   return gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
-                                              gdk_atom_intern_static_string ("_GTK_EDGE_CONSTRAINTS"));
+                                              g_intern_static_string ("_GTK_EDGE_CONSTRAINTS"));
 }
 
 static void
@@ -437,7 +437,7 @@ gdk_x11_window_end_frame (GdkWindow *window)
 
       if (impl->frame_sync_enabled &&
           gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
-					       gdk_atom_intern_static_string ("_NET_WM_FRAME_DRAWN")))
+					       g_intern_static_string ("_NET_WM_FRAME_DRAWN")))
         {
           impl->toplevel->frame_pending = TRUE;
           _gdk_frame_clock_freeze (gdk_window_get_frame_clock (window));
@@ -1721,7 +1721,7 @@ get_netwm_cardinal_property (GdkWindow   *window,
   gulong bytes_after;
   guchar *data;
 
-  atom = gdk_atom_intern_static_string (name);
+  atom = g_intern_static_string (name);
 
   if (!gdk_x11_screen_supports_net_wm_hint (x11_screen, atom))
     return 0;
@@ -1779,7 +1779,7 @@ gdk_x11_window_move_to_desktop (GdkWindow *window,
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  atom = gdk_atom_intern_static_string ("_NET_WM_DESKTOP");
+  atom = g_intern_static_string ("_NET_WM_DESKTOP");
   if (!gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window), atom))
     return;
 
@@ -1819,7 +1819,7 @@ gdk_x11_window_focus (GdkWindow *window,
   display = GDK_WINDOW_DISPLAY (window);
 
   if (gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
-					   gdk_atom_intern_static_string ("_NET_ACTIVE_WINDOW")))
+					   g_intern_static_string ("_NET_ACTIVE_WINDOW")))
     {
       XClientMessageEvent xclient;
 
@@ -2031,7 +2031,7 @@ gdk_x11_window_set_modal_hint (GdkWindow *window,
 
   if (GDK_WINDOW_IS_MAPPED (window))
     gdk_wmspec_change_state (modal, window,
-			     gdk_atom_intern_static_string ("_NET_WM_STATE_MODAL"), 
+			     g_intern_static_string ("_NET_WM_STATE_MODAL"), 
 			     NULL);
 }
 
@@ -2052,7 +2052,7 @@ gdk_x11_window_set_skip_taskbar_hint (GdkWindow *window,
 
   if (GDK_WINDOW_IS_MAPPED (window))
     gdk_wmspec_change_state (skips_taskbar, window,
-			     gdk_atom_intern_static_string ("_NET_WM_STATE_SKIP_TASKBAR"),
+			     g_intern_static_string ("_NET_WM_STATE_SKIP_TASKBAR"),
 			     NULL);
 }
 
@@ -2073,7 +2073,7 @@ gdk_x11_window_set_skip_pager_hint (GdkWindow *window,
   
   if (GDK_WINDOW_IS_MAPPED (window))
     gdk_wmspec_change_state (skips_pager, window,
-			     gdk_atom_intern_static_string ("_NET_WM_STATE_SKIP_PAGER"), 
+			     g_intern_static_string ("_NET_WM_STATE_SKIP_PAGER"), 
 			     NULL);
 }
 
@@ -2590,7 +2590,7 @@ gdk_x11_window_get_frame_extents (GdkWindow    *window,
 
   /* first try: use _NET_FRAME_EXTENTS */
   if (gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
-                                           gdk_atom_intern_static_string ("_NET_FRAME_EXTENTS")) &&
+                                           g_intern_static_string ("_NET_FRAME_EXTENTS")) &&
       XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), xwindow,
                           gdk_x11_get_xatom_by_name_for_display (display,
                                                                   "_NET_FRAME_EXTENTS"),
@@ -2639,7 +2639,7 @@ gdk_x11_window_get_frame_extents (GdkWindow    *window,
   root = GDK_WINDOW_XROOTWIN (window);
 
   if (gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
-                                           gdk_atom_intern_static_string ("_NET_VIRTUAL_ROOTS")) &&
+                                           g_intern_static_string ("_NET_VIRTUAL_ROOTS")) &&
       XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), root,
 			  gdk_x11_get_xatom_by_name_for_display (display, 
 								 "_NET_VIRTUAL_ROOTS"),
@@ -2919,7 +2919,7 @@ gdk_x11_window_set_user_time (GdkWindow *window,
 
   if (toplevel->focus_window != None &&
       gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
-                                           gdk_atom_intern_static_string ("_NET_WM_USER_TIME_WINDOW")))
+                                           g_intern_static_string ("_NET_WM_USER_TIME_WINDOW")))
     xid = toplevel->focus_window;
   else
     xid = GDK_WINDOW_XID (window);
@@ -3309,7 +3309,7 @@ gdk_x11_window_iconify (GdkWindow *window)
                                    0,
                                    GDK_WINDOW_STATE_ICONIFIED);
       gdk_wmspec_change_state (TRUE, window,
-                               gdk_atom_intern_static_string ("_NET_WM_STATE_HIDDEN"),
+                               g_intern_static_string ("_NET_WM_STATE_HIDDEN"),
                                NULL);
     }
 }
@@ -3325,7 +3325,7 @@ gdk_x11_window_deiconify (GdkWindow *window)
     {  
       gdk_window_show (window);
       gdk_wmspec_change_state (FALSE, window,
-                               gdk_atom_intern_static_string ("_NET_WM_STATE_HIDDEN"),
+                               g_intern_static_string ("_NET_WM_STATE_HIDDEN"),
                                NULL);
     }
   else
@@ -3335,7 +3335,7 @@ gdk_x11_window_deiconify (GdkWindow *window)
                                    GDK_WINDOW_STATE_ICONIFIED,
                                    0);
       gdk_wmspec_change_state (FALSE, window,
-                               gdk_atom_intern_static_string ("_NET_WM_STATE_HIDDEN"),
+                               g_intern_static_string ("_NET_WM_STATE_HIDDEN"),
                                NULL);
     }
 }
@@ -3357,7 +3357,7 @@ gdk_x11_window_stick (GdkWindow *window)
 
       /* Request stick during viewport scroll */
       gdk_wmspec_change_state (TRUE, window,
-			       gdk_atom_intern_static_string ("_NET_WM_STATE_STICKY"),
+			       g_intern_static_string ("_NET_WM_STATE_STICKY"),
 			       NULL);
 
       /* Request desktop 0xFFFFFFFF */
@@ -3399,7 +3399,7 @@ gdk_x11_window_unstick (GdkWindow *window)
     {
       /* Request unstick from viewport */
       gdk_wmspec_change_state (FALSE, window,
-			       gdk_atom_intern_static_string ("_NET_WM_STATE_STICKY"),
+			       g_intern_static_string ("_NET_WM_STATE_STICKY"),
 			       NULL);
 
       move_to_current_desktop (window);
@@ -3423,8 +3423,8 @@ gdk_x11_window_maximize (GdkWindow *window)
 
   if (GDK_WINDOW_IS_MAPPED (window))
     gdk_wmspec_change_state (TRUE, window,
-			     gdk_atom_intern_static_string ("_NET_WM_STATE_MAXIMIZED_VERT"),
-			     gdk_atom_intern_static_string ("_NET_WM_STATE_MAXIMIZED_HORZ"));
+			     g_intern_static_string ("_NET_WM_STATE_MAXIMIZED_VERT"),
+			     g_intern_static_string ("_NET_WM_STATE_MAXIMIZED_HORZ"));
   else
     gdk_synthesize_window_state (window,
 				 0,
@@ -3440,8 +3440,8 @@ gdk_x11_window_unmaximize (GdkWindow *window)
 
   if (GDK_WINDOW_IS_MAPPED (window))
     gdk_wmspec_change_state (FALSE, window,
-			     gdk_atom_intern_static_string ("_NET_WM_STATE_MAXIMIZED_VERT"),
-			     gdk_atom_intern_static_string ("_NET_WM_STATE_MAXIMIZED_HORZ"));
+			     g_intern_static_string ("_NET_WM_STATE_MAXIMIZED_VERT"),
+			     g_intern_static_string ("_NET_WM_STATE_MAXIMIZED_HORZ"));
   else
     gdk_synthesize_window_state (window,
 				 GDK_WINDOW_STATE_MAXIMIZED,
@@ -3550,7 +3550,7 @@ gdk_x11_window_fullscreen (GdkWindow *window)
   if (GDK_WINDOW_IS_MAPPED (window))
     {
       gdk_wmspec_change_state (TRUE, window,
-			       gdk_atom_intern_static_string ("_NET_WM_STATE_FULLSCREEN"),
+			       g_intern_static_string ("_NET_WM_STATE_FULLSCREEN"),
                                NULL);
       /* Actual XRandR layout may have change since we computed the fullscreen
        * monitors in GDK_FULLSCREEN_ON_ALL_MONITORS mode.
@@ -3590,7 +3590,7 @@ gdk_x11_window_unfullscreen (GdkWindow *window)
 
   if (GDK_WINDOW_IS_MAPPED (window))
     gdk_wmspec_change_state (FALSE, window,
-			     gdk_atom_intern_static_string ("_NET_WM_STATE_FULLSCREEN"),
+			     g_intern_static_string ("_NET_WM_STATE_FULLSCREEN"),
                              NULL);
 
   else
@@ -3613,10 +3613,10 @@ gdk_x11_window_set_keep_above (GdkWindow *window,
     {
       if (setting)
 	gdk_wmspec_change_state (FALSE, window,
-				 gdk_atom_intern_static_string ("_NET_WM_STATE_BELOW"),
+				 g_intern_static_string ("_NET_WM_STATE_BELOW"),
 				 NULL);
       gdk_wmspec_change_state (setting, window,
-			       gdk_atom_intern_static_string ("_NET_WM_STATE_ABOVE"),
+			       g_intern_static_string ("_NET_WM_STATE_ABOVE"),
 			       NULL);
     }
   else
@@ -3638,10 +3638,10 @@ gdk_x11_window_set_keep_below (GdkWindow *window, gboolean setting)
     {
       if (setting)
 	gdk_wmspec_change_state (FALSE, window,
-				 gdk_atom_intern_static_string ("_NET_WM_STATE_ABOVE"),
+				 g_intern_static_string ("_NET_WM_STATE_ABOVE"),
 				 NULL);
       gdk_wmspec_change_state (setting, window,
-			       gdk_atom_intern_static_string ("_NET_WM_STATE_BELOW"),
+			       g_intern_static_string ("_NET_WM_STATE_BELOW"),
 			       NULL);
     }
   else
@@ -4590,7 +4590,7 @@ _should_perform_ewmh_drag (GdkWindow *window,
 
   if ((!info->last_slave || gdk_device_get_source (info->last_slave) != GDK_SOURCE_TOUCHSCREEN) &&
       gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
-                                           gdk_atom_intern_static_string ("_NET_WM_MOVERESIZE")))
+                                           g_intern_static_string ("_NET_WM_MOVERESIZE")))
     return TRUE;
 
   return FALSE;
@@ -4881,7 +4881,7 @@ gdk_x11_window_show_window_menu (GdkWindow *window,
     }
 
   if (!gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
-                                            gdk_atom_intern_static_string ("_GTK_SHOW_WINDOW_MENU")))
+                                            g_intern_static_string ("_GTK_SHOW_WINDOW_MENU")))
     return FALSE;
 
   gdk_event_get_root_coords (event, &x_root, &y_root);

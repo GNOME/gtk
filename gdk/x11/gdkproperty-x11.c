@@ -126,7 +126,7 @@ _gdk_x11_precache_atoms (GdkDisplay          *display,
   n_xatoms = 0;
   for (i = 0; i < n_atoms; i++)
     {
-      GdkAtom atom = gdk_atom_intern_static_string (atom_names[i]);
+      GdkAtom atom = g_intern_static_string (atom_names[i]);
       if (lookup_cached_xatom (display, atom) == None)
 	{
 	  atoms[n_xatoms] = atom;
@@ -209,7 +209,7 @@ gdk_x11_xatom_to_atom_for_display (GdkDisplay *display,
 	}
       else
 	{
-	  virtual_atom = gdk_atom_intern (name, FALSE);
+	  virtual_atom = g_intern_string (name);
 	  XFree (name);
 	  
 	  insert_atom_pair (display, virtual_atom, xatom);
@@ -252,8 +252,7 @@ gdk_x11_get_xatom_by_name_for_display (GdkDisplay  *display,
 				       const gchar *atom_name)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), None);
-  return gdk_x11_atom_to_xatom_for_display (display,
-					    gdk_atom_intern (atom_name, FALSE));
+  return gdk_x11_atom_to_xatom_for_display (display, g_intern_string (atom_name));
 }
 
 Atom

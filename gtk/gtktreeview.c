@@ -7593,7 +7593,7 @@ gtk_tree_view_drag_data_get (GtkWidget        *widget,
     goto done;
 
   /* If drag_data_get does nothing, try providing row data. */
-  if (gtk_selection_data_get_target (selection_data) == gdk_atom_intern_static_string ("GTK_TREE_MODEL_ROW"))
+  if (gtk_selection_data_get_target (selection_data) == g_intern_static_string ("GTK_TREE_MODEL_ROW"))
     {
       gtk_tree_set_row_drag_data (selection_data,
 				  model,
@@ -7706,7 +7706,7 @@ gtk_tree_view_drag_motion (GtkWidget        *widget,
 	  add_scroll_timeout (tree_view);
 	}
 
-      if (target == gdk_atom_intern_static_string ("GTK_TREE_MODEL_ROW"))
+      if (target == g_intern_static_string ("GTK_TREE_MODEL_ROW"))
         {
           /* Request data so we can use the source row when
            * determining whether to accept the drop

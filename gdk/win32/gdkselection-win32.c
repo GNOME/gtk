@@ -366,38 +366,38 @@ gdk_win32_selection_init (GdkWin32Selection *win32_selection)
   win32_selection->known_atoms = atoms;
   win32_selection->known_clipboard_formats = cfs;
 
-  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_GDK_SELECTION) = gdk_atom_intern_static_string ("GDK_SELECTION");
-  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_CLIPBOARD_MANAGER) = gdk_atom_intern_static_string ("CLIPBOARD_MANAGER");
-  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_WM_TRANSIENT_FOR) = gdk_atom_intern_static_string ("WM_TRANSIENT_FOR");
-  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_TARGETS) = gdk_atom_intern_static_string ("TARGETS");
-  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_DELETE) = gdk_atom_intern_static_string ("DELETE");
-  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_SAVE_TARGETS) = gdk_atom_intern_static_string ("SAVE_TARGETS");
-  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_UTF8_STRING) = gdk_atom_intern_static_string ("UTF8_STRING");
-  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_TEXT) = gdk_atom_intern_static_string ("TEXT");
-  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_COMPOUND_TEXT) = gdk_atom_intern_static_string ("COMPOUND_TEXT");
-  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_TEXT_URI_LIST) = gdk_atom_intern_static_string ("text/uri-list");
-  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_TEXT_HTML) = gdk_atom_intern_static_string ("text/html");
-  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_IMAGE_PNG) = gdk_atom_intern_static_string ("image/png");
-  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_IMAGE_JPEG) = gdk_atom_intern_static_string ("image/jpeg");
-  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_IMAGE_BMP) = gdk_atom_intern_static_string ("image/bmp");
-  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_IMAGE_GIF) = gdk_atom_intern_static_string ("image/gif");
+  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_GDK_SELECTION) = g_intern_static_string ("GDK_SELECTION");
+  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_CLIPBOARD_MANAGER) = g_intern_static_string ("CLIPBOARD_MANAGER");
+  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_WM_TRANSIENT_FOR) = g_intern_static_string ("WM_TRANSIENT_FOR");
+  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_TARGETS) = g_intern_static_string ("TARGETS");
+  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_DELETE) = g_intern_static_string ("DELETE");
+  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_SAVE_TARGETS) = g_intern_static_string ("SAVE_TARGETS");
+  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_UTF8_STRING) = g_intern_static_string ("UTF8_STRING");
+  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_TEXT) = g_intern_static_string ("TEXT");
+  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_COMPOUND_TEXT) = g_intern_static_string ("COMPOUND_TEXT");
+  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_TEXT_URI_LIST) = g_intern_static_string ("text/uri-list");
+  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_TEXT_HTML) = g_intern_static_string ("text/html");
+  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_IMAGE_PNG) = g_intern_static_string ("image/png");
+  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_IMAGE_JPEG) = g_intern_static_string ("image/jpeg");
+  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_IMAGE_BMP) = g_intern_static_string ("image/bmp");
+  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_IMAGE_GIF) = g_intern_static_string ("image/gif");
 
-  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_LOCAL_DND_SELECTION) = gdk_atom_intern_static_string ("LocalDndSelection");
-  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_DROPFILES_DND) = gdk_atom_intern_static_string ("DROPFILES_DND");
-  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_OLE2_DND) = gdk_atom_intern_static_string ("OLE2_DND");
+  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_LOCAL_DND_SELECTION) = g_intern_static_string ("LocalDndSelection");
+  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_DROPFILES_DND) = g_intern_static_string ("DROPFILES_DND");
+  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_OLE2_DND) = g_intern_static_string ("OLE2_DND");
 
-  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_PNG)= gdk_atom_intern_static_string ("PNG");
-  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_JFIF) = gdk_atom_intern_static_string ("JFIF");
-  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_GIF) = gdk_atom_intern_static_string ("GIF");
+  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_PNG)= g_intern_static_string ("PNG");
+  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_JFIF) = g_intern_static_string ("JFIF");
+  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_GIF) = g_intern_static_string ("GIF");
 
   /* These are a bit unusual. It's here to allow GTK+ applications
    * to actually support CF_DIB and Shell ID List clipboard formats on their own,
    * instead of allowing GDK to use them internally for interoperability.
    */
-  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_CF_DIB) = gdk_atom_intern_static_string ("CF_DIB");
-  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_CFSTR_SHELLIDLIST) = gdk_atom_intern_static_string (CFSTR_SHELLIDLIST);
-  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_CF_UNICODETEXT) = gdk_atom_intern_static_string ("CF_UNICODETEXT");
-  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_CF_TEXT) = gdk_atom_intern_static_string ("CF_TEXT");
+  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_CF_DIB) = g_intern_static_string ("CF_DIB");
+  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_CFSTR_SHELLIDLIST) = g_intern_static_string (CFSTR_SHELLIDLIST);
+  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_CF_UNICODETEXT) = g_intern_static_string ("CF_UNICODETEXT");
+  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_CF_TEXT) = g_intern_static_string ("CF_TEXT");
 
   /* MS Office 2007, at least, offers images in common file formats
    * using clipboard format names like "PNG" and "JFIF". So we follow
@@ -448,7 +448,7 @@ gdk_win32_selection_init (GdkWin32Selection *win32_selection)
       gchar **mime_type;
 
       for (mime_type = mime_types; *mime_type != NULL; mime_type++)
-	win32_selection->known_pixbuf_formats[i++] = gdk_atom_intern (*mime_type, FALSE);
+	win32_selection->known_pixbuf_formats[i++] = g_intern_string (*mime_type);
     }
 
   g_slist_free (pixbuf_formats);
@@ -1050,7 +1050,7 @@ _gdk_win32_add_format_to_targets (UINT     format,
 
   if (format_name != NULL)
     {
-      target_atom = gdk_atom_intern (format_name, FALSE);
+      target_atom = g_intern_string (format_name);
       GDK_NOTE (DND, g_print ("Maybe add as-is format %s (0x%p)\n", format_name, target_atom));
       g_free (format_name);
       if (array && target_atom != 0)
@@ -2544,7 +2544,7 @@ gdk_text_property_to_text_list_for_display (GdkDisplay   *display,
   if (!list)
     return 0;
 
-  if (encoding == gdk_atom_intern_static_string ("STRING"))
+  if (encoding == g_intern_static_string ("STRING"))
     source_charset = g_strdup ("ISO-8859-1");
   else if (encoding == _gdk_win32_selection_atom (GDK_WIN32_ATOM_INDEX_UTF8_STRING))
     source_charset = g_strdup ("UTF-8");
@@ -2655,7 +2655,7 @@ _gdk_win32_display_text_property_to_utf8_list (GdkDisplay    *display,
   g_return_val_if_fail (text != NULL, 0);
   g_return_val_if_fail (length >= 0, 0);
 
-  if (encoding == gdk_atom_intern_static_string ("STRING"))
+  if (encoding == g_intern_static_string ("STRING"))
     {
       return make_list ((gchar *)text, length, TRUE, list);
     }

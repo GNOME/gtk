@@ -1013,7 +1013,7 @@ xdnd_initialize_actions (void)
 
   xdnd_actions_initialized = TRUE;
   for (i = 0; i < xdnd_n_actions; i++)
-    xdnd_actions_table[i].atom = gdk_atom_intern_static_string (xdnd_actions_table[i].name);
+    xdnd_actions_table[i].atom = g_intern_static_string (xdnd_actions_table[i].name);
 }
 
 static GdkDragAction

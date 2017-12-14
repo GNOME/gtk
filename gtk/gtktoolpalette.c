@@ -213,8 +213,8 @@ gtk_tool_palette_init (GtkToolPalette *palette)
 
   if (dnd_target_atom_item == NULL)
     {
-      dnd_target_atom_item = gdk_atom_intern_static_string (dnd_targets[0]);
-      dnd_target_atom_group = gdk_atom_intern_static_string (dnd_targets[1]);
+      dnd_target_atom_item = g_intern_static_string (dnd_targets[0]);
+      dnd_target_atom_group = g_intern_static_string (dnd_targets[1]);
     }
 
   gtk_widget_set_has_window (GTK_WIDGET (palette), FALSE);

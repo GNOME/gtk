@@ -121,11 +121,11 @@ _gdk_broadway_display_text_property_to_utf8_list (GdkDisplay    *display,
   g_return_val_if_fail (length >= 0, 0);
   g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
 
-  if (encoding == gdk_atom_intern_static_string ("STRING"))
+  if (encoding == g_intern_static_string ("STRING"))
     {
       return make_list ((gchar *)text, length, TRUE, list);
     }
-  else if (encoding == gdk_atom_intern_static_string ("UTF8_STRING"))
+  else if (encoding == g_intern_static_string ("UTF8_STRING"))
     {
       return make_list ((gchar *)text, length, FALSE, list);
     }
