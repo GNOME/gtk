@@ -6891,11 +6891,15 @@ gtk_widget_real_state_flags_changed (GtkWidget     *widget,
 static void
 gtk_widget_real_style_updated (GtkWidget *widget)
 {
+  GtkCssStyleChange *change = NULL;
+
   gtk_widget_update_alpha (widget);
 
   if (widget->priv->context)
+    change = gtk_style_context_get_change (widget->priv->context);
+
+  if (change)
     {
-      GtkCssStyleChange *change = gtk_style_context_get_change (widget->priv->context);
       const gboolean has_text = gtk_widget_peek_pango_context (widget) != NULL;
 
       if (has_text && gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT))
@@ -6903,8 +6907,7 @@ gtk_widget_real_style_updated (GtkWidget *widget)
 
       if (widget->priv->anchored)
         {
-          if (change == NULL ||
-              gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_SIZE) ||
+          if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_SIZE) ||
               (has_text && gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT_SIZE)))
             {
               gtk_widget_queue_resize (widget);
