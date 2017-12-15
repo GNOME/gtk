@@ -227,8 +227,6 @@ struct _GtkWidget
  * @selection_notify_event:
  * @proximity_in_event:
  * @proximity_out_event:
- * @window_state_event: Signal emitted when the state of the toplevel
- *   window associated to the widget changes.
  * @grab_broken_event: Signal emitted when a pointer or keyboard grab
  *   on a window belonging to widget gets broken.
  * @selection_get:
@@ -371,8 +369,6 @@ struct _GtkWidgetClass
 					 GdkEventProximity   *event);
   gboolean (* proximity_out_event)	(GtkWidget	     *widget,
 					 GdkEventProximity   *event);
-  gboolean (* window_state_event)	(GtkWidget	     *widget,
-					 GdkEventWindowState *event);
   gboolean (* grab_broken_event)        (GtkWidget           *widget,
                                          GdkEventGrabBroken  *event);
 

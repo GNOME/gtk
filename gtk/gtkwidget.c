@@ -522,7 +522,6 @@ enum {
   UNMAP_EVENT,
   PROXIMITY_IN_EVENT,
   PROXIMITY_OUT_EVENT,
-  WINDOW_STATE_EVENT,
   GRAB_BROKEN_EVENT,
   DRAG_BEGIN,
   DRAG_END,
@@ -1040,7 +1039,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->focus_out_event = gtk_widget_real_focus_out_event;
   klass->map_event = NULL;
   klass->unmap_event = NULL;
-  klass->window_state_event = NULL;
   klass->selection_received = NULL;
   klass->proximity_in_event = NULL;
   klass->proximity_out_event = NULL;
@@ -2816,34 +2814,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  GDK_TYPE_DRAG_CONTEXT,
 		  GTK_TYPE_SELECTION_DATA | G_SIGNAL_TYPE_STATIC_SCOPE,
 		  G_TYPE_UINT);
-
-  /**
-   * GtkWidget::window-state-event:
-   * @widget: the object which received the signal
-   * @event: (type Gdk.EventWindowState): the #GdkEventWindowState which
-   *   triggered this signal.
-   *
-   * The ::window-state-event will be emitted when the state of the
-   * toplevel window associated to the @widget changes.
-   *
-   * To receive this signal the #GdkWindow associated to the widget
-   * needs to enable the #GDK_STRUCTURE_MASK mask. GDK will enable
-   * this mask automatically for all new windows.
-   *
-   * Returns: %TRUE to stop other handlers from being invoked for the
-   *   event. %FALSE to propagate the event further.
-   */
-  widget_signals[WINDOW_STATE_EVENT] =
-    g_signal_new (I_("window-state-event"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, window_state_event),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__OBJECT,
-		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT);
-  g_signal_set_va_marshaller (widget_signals[WINDOW_STATE_EVENT], G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__OBJECTv);
 
 /**
    * GtkWidget::grab-broken-event:
@@ -6534,7 +6504,6 @@ gtk_widget_event_internal (GtkWidget      *widget,
     case GDK_CONFIGURE:
     case GDK_MAP:
     case GDK_UNMAP:
-    case GDK_WINDOW_STATE:
       return gtk_widget_emit_event_signals (widget, event);
     default:
       break;
@@ -6647,9 +6616,6 @@ gtk_widget_emit_event_signals (GtkWidget      *widget,
 	  break;
 	case GDK_UNMAP:
 	  signal_num = UNMAP_EVENT;
-	  break;
-	case GDK_WINDOW_STATE:
-	  signal_num = WINDOW_STATE_EVENT;
 	  break;
 	case GDK_PROXIMITY_IN:
 	  signal_num = PROXIMITY_IN_EVENT;
