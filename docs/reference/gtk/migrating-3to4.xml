@@ -209,6 +209,15 @@
     </section>
 
     <section>
+      <title>Adapt to GdkKeymap API changes</title>
+      <para>
+        The way to get a keymap has changed slightly. gdk_keymap_get_default() has
+        been dropped, and gdk_keymap_get_for_display() has been renamed to
+        gdk_display_get_keymap().
+      </para>
+    </section>
+
+    <section>
       <title>Adapt to GtkHeaderBar API changes</title>
       <para>
         The gtk_header_bar_set_show_close_button() function has been renamed to
