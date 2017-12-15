@@ -2832,17 +2832,20 @@ gtk_list_box_move_cursor (GtkListBox      *box,
               GSequenceIter *cursor_iter;
               GSequenceIter *next_iter;
 
-              /* A NULL row should only happen when the list box didn't
-               * have enough rows to fill its height and the user made
-               * a page movement down, so the count must be positive */
-              g_assert (count > 0);
-
-              cursor_iter = ROW_PRIV (priv->cursor_row)->iter;
-              next_iter = gtk_list_box_get_last_visible (box, cursor_iter);
-
-              if (next_iter)
+              if (count > 0)
                 {
-                  row = g_sequence_get (next_iter);
+                  cursor_iter = ROW_PRIV (priv->cursor_row)->iter;
+                  next_iter = gtk_list_box_get_last_visible (box, cursor_iter);
+
+                  if (next_iter)
+                    {
+                      row = g_sequence_get (next_iter);
+                      end_y = ROW_PRIV (row)->y;
+                    }
+                }
+              else
+                {
+                  row = gtk_list_box_get_row_at_index (box, 0);
                   end_y = ROW_PRIV (row)->y;
                 }
             }
