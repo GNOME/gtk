@@ -82,6 +82,8 @@ struct _GtkHeaderBarPrivate
 
   GtkWidget *titlebar_icon;
 
+  GdkWindowState state;
+
   guint shows_app_menu : 1;
 };
 
@@ -1761,6 +1763,8 @@ gtk_header_bar_set_child_property (GtkContainer *container,
     }
 }
 
+static void window_state_changed (GtkWidget *widget);
+
 static void
 gtk_header_bar_realize (GtkWidget *widget)
 {
@@ -1773,6 +1777,8 @@ gtk_header_bar_realize (GtkWidget *widget)
                             G_CALLBACK (_gtk_header_bar_update_window_buttons), widget);
   g_signal_connect_swapped (settings, "notify::gtk-decoration-layout",
                             G_CALLBACK (_gtk_header_bar_update_window_buttons), widget);
+  g_signal_connect_swapped (_gtk_widget_get_window (widget), "notify::state",
+                            G_CALLBACK (window_state_changed), widget);
   _gtk_header_bar_update_window_buttons (GTK_HEADER_BAR (widget));
 }
 
@@ -1784,19 +1790,22 @@ gtk_header_bar_unrealize (GtkWidget *widget)
   settings = gtk_widget_get_settings (widget);
 
   g_signal_handlers_disconnect_by_func (settings, _gtk_header_bar_update_window_buttons, widget);
+  g_signal_handlers_disconnect_by_func (_gtk_widget_get_window (widget), window_state_changed, widget);
 
   GTK_WIDGET_CLASS (gtk_header_bar_parent_class)->unrealize (widget);
 }
 
-static gboolean
-window_state_changed (GtkWidget           *window,
-                      GdkEventWindowState *event,
-                      gpointer             data)
+static void
+window_state_changed (GtkWidget *widget)
 {
-  GtkHeaderBar *bar = GTK_HEADER_BAR (data);
+  GtkHeaderBar *bar = GTK_HEADER_BAR (widget);
+  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
   GdkWindowState changed, new_state;
 
-  gdk_event_get_window_state ((GdkEvent *)event, &changed, &new_state);
+  new_state = gdk_window_get_state (_gtk_widget_get_window (widget));
+  changed = new_state ^ priv->state;
+  priv->state = new_state;
+
   if (changed & (GDK_WINDOW_STATE_FULLSCREEN |
                  GDK_WINDOW_STATE_MAXIMIZED |
                  GDK_WINDOW_STATE_TILED |
@@ -1805,26 +1814,13 @@ window_state_changed (GtkWidget           *window,
                  GDK_WINDOW_STATE_BOTTOM_TILED |
                  GDK_WINDOW_STATE_LEFT_TILED))
     _gtk_header_bar_update_window_buttons (bar);
-
-  return FALSE;
 }
 
 static void
 gtk_header_bar_hierarchy_changed (GtkWidget *widget,
                                   GtkWidget *previous_toplevel)
 {
-  GtkWidget *toplevel;
   GtkHeaderBar *bar = GTK_HEADER_BAR (widget);
-
-  toplevel = gtk_widget_get_toplevel (widget);
-
-  if (previous_toplevel)
-    g_signal_handlers_disconnect_by_func (previous_toplevel,
-                                          window_state_changed, widget);
-
-  if (toplevel)
-    g_signal_connect_after (toplevel, "window-state-event",
-                            G_CALLBACK (window_state_changed), widget);
 
   _gtk_header_bar_update_window_buttons (bar);
 }
@@ -1997,6 +1993,7 @@ gtk_header_bar_init (GtkHeaderBar *bar)
   priv->decoration_layout = NULL;
   priv->decoration_layout_set = FALSE;
   priv->shows_app_menu = FALSE;
+  priv->state = GDK_WINDOW_STATE_WITHDRAWN;
 
   init_sizing_box (bar);
   construct_label_box (bar);
