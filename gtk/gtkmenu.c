@@ -1118,37 +1118,6 @@ gtk_menu_get_child_property (GtkContainer *container,
     }
 }
 
-static gboolean
-gtk_menu_window_event (GtkWidget *window,
-                       GdkEvent  *event,
-                       GtkWidget *menu)
-{
-  gboolean handled = FALSE;
-
-  g_object_ref (window);
-  g_object_ref (menu);
-
-  switch ((guint) gdk_event_get_event_type (event))
-    {
-    case GDK_WINDOW_STATE:
-      /* Window for the menu has been closed by the display server or by GDK.
-       * Update the internal state as if the user had clicked outside the
-       * menu
-       */
-      if (event->window_state.new_window_state & GDK_WINDOW_STATE_WITHDRAWN &&
-          event->window_state.changed_mask & GDK_WINDOW_STATE_WITHDRAWN)
-        gtk_menu_shell_deactivate (GTK_MENU_SHELL(menu));
-      break;
-    default:
-      break;
-    }
-
-  g_object_unref (window);
-  g_object_unref (menu);
-
-  return handled;
-}
-
 static void
 gtk_menu_init (GtkMenu *menu)
 {
@@ -1160,7 +1129,6 @@ gtk_menu_init (GtkMenu *menu)
 
   priv->toplevel = gtk_window_new (GTK_WINDOW_POPUP);
   gtk_container_add (GTK_CONTAINER (priv->toplevel), GTK_WIDGET (menu));
-  g_signal_connect (priv->toplevel, "event", G_CALLBACK (gtk_menu_window_event), menu);
   g_signal_connect (priv->toplevel, "destroy", G_CALLBACK (gtk_widget_destroyed), &priv->toplevel);
   gtk_window_set_resizable (GTK_WINDOW (priv->toplevel), FALSE);
   gtk_window_set_mnemonic_modifier (GTK_WINDOW (priv->toplevel), 0);
