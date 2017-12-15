@@ -7230,3 +7230,48 @@ gdk_window_supports_edge_constraints (GdkWindow *window)
   else
     return FALSE;
 }
+
+void
+gdk_window_set_state (GdkWindow      *window,
+                      GdkWindowState  new_state)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (new_state == window->state)
+    return; /* No actual work to do, nothing changed. */
+
+  /* Actually update the field in GdkWindow, this is sort of an odd
+   * place to do it, but seems like the safest since it ensures we expose no
+   * inconsistent state to the user.
+   */
+
+  window->state = new_state;
+
+  _gdk_window_update_viewable (window);
+
+  /* We only really send the event to toplevels, since
+   * all the window states don't apply to non-toplevels.
+   * Non-toplevels do use the GDK_WINDOW_STATE_WITHDRAWN flag
+   * internally so we needed to update window->state.
+   */
+  switch (window->window_type)
+    {
+    case GDK_WINDOW_TOPLEVEL:
+    case GDK_WINDOW_TEMP: /* ? */
+      g_object_notify (G_OBJECT (window), "state");
+      break;
+    case GDK_WINDOW_FOREIGN:
+    case GDK_WINDOW_ROOT:
+    case GDK_WINDOW_CHILD:
+    default:
+      break;
+    }
+}
+
+void
+gdk_synthesize_window_state (GdkWindow     *window,
+                             GdkWindowState unset_flags,
+                             GdkWindowState set_flags)
+{
+  gdk_window_set_state (window, (window->state | set_flags) & ~unset_flags);
+}

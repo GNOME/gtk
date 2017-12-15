@@ -1385,7 +1385,7 @@ xdg_surface_configure (void                   *data,
                        (new_state & GDK_WINDOW_STATE_FOCUSED) ? " focused" : "",
                        (new_state & GDK_WINDOW_STATE_TILED) ? " tiled" : ""));
 
-  _gdk_set_window_state (window, new_state);
+  gdk_window_set_state (window, new_state);
   zxdg_surface_v6_ack_configure (xdg_surface, serial);
   if (impl->hint != GDK_WINDOW_TYPE_HINT_DIALOG &&
       new_state & GDK_WINDOW_STATE_FOCUSED)

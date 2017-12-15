@@ -1937,56 +1937,6 @@ gdk_get_show_events (void)
   return (_gdk_debug_flags & GDK_DEBUG_EVENTS) != 0;
 }
 
-void
-_gdk_set_window_state (GdkWindow      *window,
-                       GdkWindowState  new_state)
-{
-  GdkDisplay *display = gdk_window_get_display (window);
-  GdkWindowState old;
-
-  g_return_if_fail (window != NULL);
-
-  if (new_state == window->state)
-    return; /* No actual work to do, nothing changed. */
-
-  /* Actually update the field in GdkWindow, this is sort of an odd
-   * place to do it, but seems like the safest since it ensures we expose no
-   * inconsistent state to the user.
-   */
-
-  window->state = new_state;
-
-  _gdk_window_update_viewable (window);
-
-  /* We only really send the event to toplevels, since
-   * all the window states don't apply to non-toplevels.
-   * Non-toplevels do use the GDK_WINDOW_STATE_WITHDRAWN flag
-   * internally so we needed to update window->state.
-   */
-  switch (window->window_type)
-    {
-    case GDK_WINDOW_TOPLEVEL:
-    case GDK_WINDOW_TEMP: /* ? */
-      g_object_notify (G_OBJECT (window), "state");
-      break;
-    case GDK_WINDOW_FOREIGN:
-    case GDK_WINDOW_ROOT:
-    case GDK_WINDOW_CHILD:
-    default:
-      break;
-    }
-}
-
-void
-gdk_synthesize_window_state (GdkWindow     *window,
-                             GdkWindowState unset_flags,
-                             GdkWindowState set_flags)
-{
-  g_return_if_fail (window != NULL);
-
-  _gdk_set_window_state (window, (window->state | set_flags) & ~unset_flags);
-}
-
 static GdkEventSequence *
 gdk_event_sequence_copy (GdkEventSequence *sequence)
 {
