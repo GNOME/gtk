@@ -856,7 +856,6 @@ gdk_event_get_time (const GdkEvent *event)
         return event->pad_axis.time;
       case GDK_PAD_GROUP_MODE:
         return event->pad_group_mode.time;
-      case GDK_CLIENT_EVENT:
       case GDK_CONFIGURE:
       case GDK_FOCUS_CHANGE:
       case GDK_NOTHING:
@@ -927,7 +926,6 @@ gdk_event_get_state (const GdkEvent        *event,
       case GDK_LEAVE_NOTIFY:
 	*state =  event->crossing.state;
         return TRUE;
-      case GDK_CLIENT_EVENT:
       case GDK_CONFIGURE:
       case GDK_FOCUS_CHANGE:
       case GDK_PROXIMITY_IN:

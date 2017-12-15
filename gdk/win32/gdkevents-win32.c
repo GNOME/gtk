@@ -796,7 +796,6 @@ _gdk_win32_print_event (const GdkEvent *event)
     CASE (GDK_DRAG_STATUS);
     CASE (GDK_DROP_START);
     CASE (GDK_DROP_FINISHED);
-    CASE (GDK_CLIENT_EVENT);
     CASE (GDK_SCROLL);
     CASE (GDK_WINDOW_STATE);
     CASE (GDK_OWNER_CHANGE);
@@ -896,9 +895,6 @@ _gdk_win32_print_event (const GdkEvent *event)
 		 event->dnd.context->is_source ? "SOURCE" : "DEST",
 		 event->dnd.context->source_window == NULL ? NULL : GDK_WINDOW_HWND (event->dnd.context->source_window),
 		 event->dnd.context->dest_window == NULL ? NULL : GDK_WINDOW_HWND (event->dnd.context->dest_window));
-      break;
-    case GDK_CLIENT_EVENT:
-      /* no more GdkEventClient */
       break;
     case GDK_SCROLL:
       g_print ("(%.4g,%.4g) (%.4g,%.4g) %s ",

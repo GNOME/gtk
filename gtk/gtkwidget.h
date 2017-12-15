@@ -222,9 +222,6 @@ struct _GtkWidget
  * @map_event: Signal emitted when the widget’s window is mapped.
  * @unmap_event: Signal will be emitted when the widget’s window is
  *   unmapped.
- * @property_notify_event: Signal will be emitted when a property on
- *   the widget’s window has been changed or deleted.
- * @selection_notify_event:
  * @proximity_in_event:
  * @proximity_out_event:
  * @grab_broken_event: Signal emitted when a pointer or keyboard grab

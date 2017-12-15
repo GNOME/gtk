@@ -243,7 +243,6 @@ typedef GdkFilterReturn (*GdkFilterFunc) (GdkXEvent *xevent,
  *   has changed.
  * @GDK_DROP_START: a drop operation onto the window has started.
  * @GDK_DROP_FINISHED: the drop operation initiated by the window has completed.
- * @GDK_CLIENT_EVENT: a message has been received from another application.
  * @GDK_SCROLL: the scroll wheel was turned
  * @GDK_GRAB_BROKEN: a pointer or keyboard grab was broken. This event type
  *   was added in 2.8.
@@ -304,7 +303,6 @@ typedef enum
   GDK_DRAG_STATUS,
   GDK_DROP_START,
   GDK_DROP_FINISHED,
-  GDK_CLIENT_EVENT,
   GDK_SCROLL,
   GDK_GRAB_BROKEN,
   GDK_DAMAGE,

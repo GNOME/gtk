@@ -5509,7 +5509,6 @@ _gdk_make_event (GdkWindow    *window,
     case GDK_CONFIGURE:
     case GDK_MAP:
     case GDK_UNMAP:
-    case GDK_CLIENT_EVENT:
     case GDK_DELETE:
     case GDK_DESTROY:
     case GDK_EXPOSE:
