@@ -218,6 +218,8 @@ struct _GtkWindowPrivate
   GdkMonitor *initial_fullscreen_monitor;
   guint      edge_constraints;
 
+  GdkWindowState state;
+
   /* The following flags are initially TRUE (before a window is mapped).
    * They cause us to compute a configure request that involves
    * default-only parameters. Once mapped, we set them to FALSE.
@@ -428,8 +430,7 @@ static gint gtk_window_focus_in_event     (GtkWidget         *widget,
 					   GdkEventFocus     *event);
 static gint gtk_window_focus_out_event    (GtkWidget         *widget,
 					   GdkEventFocus     *event);
-static gboolean gtk_window_state_event    (GtkWidget          *widget,
-                                           GdkEventWindowState *event);
+static void window_state_changed          (GtkWidget          *widget);
 static void gtk_window_remove             (GtkContainer      *container,
                                            GtkWidget         *widget);
 static void gtk_window_check_resize       (GtkContainer      *container);
@@ -806,7 +807,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->focus_out_event = gtk_window_focus_out_event;
   widget_class->focus = gtk_window_focus;
   widget_class->move_focus = gtk_window_move_focus;
-  widget_class->window_state_event = gtk_window_state_event;
   widget_class->measure = gtk_window_measure;
   widget_class->state_flags_changed = gtk_window_state_flags_changed;
   widget_class->style_updated = gtk_window_style_updated;
@@ -1919,6 +1919,8 @@ gtk_window_init (GtkWindow *window)
   priv->decorated = TRUE;
   priv->mnemonic_modifier = GDK_MOD1_MASK;
   priv->display = gdk_display_get_default ();
+
+  priv->state = GDK_WINDOW_STATE_WITHDRAWN;
 
   priv->accept_focus = TRUE;
   priv->focus_on_map = TRUE;
@@ -6869,6 +6871,7 @@ gtk_window_realize (GtkWidget *widget)
     }
 
   gtk_widget_set_window (widget, gdk_window);
+  g_signal_connect_swapped (gdk_window, "notify::state", G_CALLBACK (window_state_changed), widget);
   gtk_widget_register_window (widget, gdk_window);
   gtk_widget_set_realized (widget, TRUE);
 
@@ -7003,6 +7006,10 @@ gtk_window_unrealize (GtkWidget *widget)
   gsk_renderer_unrealize (priv->renderer);
   g_clear_object (&priv->renderer);
 
+  g_signal_handlers_disconnect_by_func (_gtk_widget_get_window (widget),
+                                        G_CALLBACK (window_state_changed),
+                                        widget);
+
   GTK_WIDGET_CLASS (gtk_window_parent_class)->unrealize (widget);
 
   priv->hardcoded_window = NULL;
@@ -7047,6 +7054,11 @@ update_window_style_classes (GtkWindow *window)
       else
         gtk_style_context_remove_class (context, "tiled-left");
     }
+
+  if (priv->maximized)
+    gtk_style_context_add_class (context, "maximized");
+  else
+    gtk_style_context_remove_class (context, "maximized");
 
   if (priv->maximized)
     gtk_style_context_add_class (context, "maximized");
@@ -7264,11 +7276,10 @@ gtk_window_configure_event (GtkWidget         *widget,
 }
 
 static void
-update_edge_constraints (GtkWindow           *window,
-                         GdkEventWindowState *event)
+update_edge_constraints (GtkWindow      *window,
+                         GdkWindowState  state)
 {
   GtkWindowPrivate *priv = window->priv;
-  GdkWindowState state = event->new_window_state;
 
   priv->edge_constraints = (state & GDK_WINDOW_STATE_TOP_TILED) |
                            (state & GDK_WINDOW_STATE_TOP_RESIZABLE) |
@@ -7282,47 +7293,49 @@ update_edge_constraints (GtkWindow           *window,
   priv->tiled = (state & GDK_WINDOW_STATE_TILED) ? 1 : 0;
 }
 
-static gboolean
-gtk_window_state_event (GtkWidget           *widget,
-                        GdkEventWindowState *event)
+static void
+window_state_changed (GtkWidget *widget)
 {
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = window->priv;
+  GdkWindowState new_window_state;
+  GdkWindowState changed_mask;
 
-  if (event->changed_mask & GDK_WINDOW_STATE_FOCUSED)
+  new_window_state = gdk_window_get_state (_gtk_widget_get_window (widget));
+  changed_mask = new_window_state ^ priv->state;
+  priv->state = new_window_state;
+
+  if (changed_mask & GDK_WINDOW_STATE_FOCUSED)
     ensure_state_flag_backdrop (widget);
 
-  if (event->changed_mask & GDK_WINDOW_STATE_FULLSCREEN)
+  if (changed_mask & GDK_WINDOW_STATE_FULLSCREEN)
     {
       priv->fullscreen =
-        (event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN) ? 1 : 0;
+        (new_window_state & GDK_WINDOW_STATE_FULLSCREEN) ? 1 : 0;
     }
 
-  if (event->changed_mask & GDK_WINDOW_STATE_MAXIMIZED)
+  if (changed_mask & GDK_WINDOW_STATE_MAXIMIZED)
     {
       priv->maximized =
-        (event->new_window_state & GDK_WINDOW_STATE_MAXIMIZED) ? 1 : 0;
+        (new_window_state & GDK_WINDOW_STATE_MAXIMIZED) ? 1 : 0;
       g_object_notify_by_pspec (G_OBJECT (widget), window_props[PROP_IS_MAXIMIZED]);
     }
 
-  update_edge_constraints (window, event);
+  update_edge_constraints (window, new_window_state);
 
-  if (event->changed_mask & (GDK_WINDOW_STATE_FULLSCREEN |
-                             GDK_WINDOW_STATE_MAXIMIZED |
-                             GDK_WINDOW_STATE_TILED |
-                             GDK_WINDOW_STATE_TOP_TILED |
-                             GDK_WINDOW_STATE_RIGHT_TILED |
-                             GDK_WINDOW_STATE_BOTTOM_TILED |
-                             GDK_WINDOW_STATE_LEFT_TILED))
+  if (changed_mask & (GDK_WINDOW_STATE_FULLSCREEN |
+                      GDK_WINDOW_STATE_MAXIMIZED |
+                      GDK_WINDOW_STATE_TILED |
+                      GDK_WINDOW_STATE_TOP_TILED |
+                      GDK_WINDOW_STATE_RIGHT_TILED |
+                      GDK_WINDOW_STATE_BOTTOM_TILED |
+                      GDK_WINDOW_STATE_LEFT_TILED))
     {
       update_window_style_classes (window);
       update_window_buttons (window);
       gtk_widget_queue_resize (widget);
     }
-
-  return FALSE;
 }
-
 
 /* the accel_key and accel_mods fields of the key have to be setup
  * upon calling this function. it’ll then return whether that key
