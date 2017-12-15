@@ -471,8 +471,6 @@ gdk_threads_add_timeout_seconds_full
 <FILE>keys</FILE>
 GdkKeymap
 GdkKeymapKey
-gdk_keymap_get_default
-gdk_keymap_get_for_display
 gdk_keymap_lookup_key
 gdk_keymap_translate_keyboard_state
 gdk_keymap_get_entries_for_keyval

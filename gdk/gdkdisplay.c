@@ -1459,24 +1459,6 @@ _gdk_display_create_window (GdkDisplay *display)
 }
 
 /**
- * gdk_keymap_get_for_display:
- * @display: the #GdkDisplay.
- *
- * Returns the #GdkKeymap attached to @display.
- *
- * Returns: (transfer none): the #GdkKeymap attached to @display.
- *
- * Since: 2.2
- */
-GdkKeymap*
-gdk_keymap_get_for_display (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-
-  return GDK_DISPLAY_GET_CLASS (display)->get_keymap (display);
-}
-
-/**
  * gdk_display_get_keymap:
  * @display: the #GdkDisplay
  *
