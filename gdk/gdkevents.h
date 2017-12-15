@@ -239,10 +239,7 @@ typedef GdkFilterReturn (*GdkFilterFunc) (GdkXEvent *xevent,
  * @GDK_DRAG_LEAVE: the mouse has left the window while a drag is in progress.
  * @GDK_DRAG_MOTION: the mouse has moved in the window while a drag is in
  *   progress.
- * @GDK_DRAG_STATUS: the status of the drag operation initiated by the window
- *   has changed.
  * @GDK_DROP_START: a drop operation onto the window has started.
- * @GDK_DROP_FINISHED: the drop operation initiated by the window has completed.
  * @GDK_SCROLL: the scroll wheel was turned
  * @GDK_GRAB_BROKEN: a pointer or keyboard grab was broken. This event type
  *   was added in 2.8.
@@ -298,9 +295,7 @@ typedef enum
   GDK_DRAG_ENTER,
   GDK_DRAG_LEAVE,
   GDK_DRAG_MOTION,
-  GDK_DRAG_STATUS,
   GDK_DROP_START,
-  GDK_DROP_FINISHED,
   GDK_SCROLL,
   GDK_GRAB_BROKEN,
   GDK_TOUCH_BEGIN,

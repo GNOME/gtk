@@ -436,8 +436,7 @@ struct _GdkEventGrabBroken {
 /**
  * GdkEventDND:
  * @type: the type of the event (%GDK_DRAG_ENTER, %GDK_DRAG_LEAVE,
- *   %GDK_DRAG_MOTION, %GDK_DRAG_STATUS, %GDK_DROP_START or
- *   %GDK_DROP_FINISHED).
+ *   %GDK_DRAG_MOTION or %GDK_DROP_START)
  * @window: the window which received the event.
  * @send_event: %TRUE if the event was sent explicitly.
  * @context: the #GdkDragContext for the current DND operation.

@@ -1874,9 +1874,6 @@ gtk_main_do_event (GdkEvent *event)
       /* Crossing event propagation happens during picking */
       break;
 
-    case GDK_DRAG_STATUS:
-    case GDK_DROP_FINISHED:
-      break;
     case GDK_DRAG_ENTER:
     case GDK_DRAG_LEAVE:
     case GDK_DRAG_MOTION:

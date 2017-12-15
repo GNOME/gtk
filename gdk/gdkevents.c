@@ -645,9 +645,7 @@ gdk_event_copy (const GdkEvent *event)
     case GDK_DRAG_ENTER:
     case GDK_DRAG_LEAVE:
     case GDK_DRAG_MOTION:
-    case GDK_DRAG_STATUS:
     case GDK_DROP_START:
-    case GDK_DROP_FINISHED:
       g_object_ref (event->dnd.context);
       break;
 
@@ -733,9 +731,7 @@ gdk_event_finalize (GObject *object)
     case GDK_DRAG_ENTER:
     case GDK_DRAG_LEAVE:
     case GDK_DRAG_MOTION:
-    case GDK_DRAG_STATUS:
     case GDK_DROP_START:
-    case GDK_DROP_FINISHED:
       if (event->dnd.context != NULL)
         g_object_unref (event->dnd.context);
       break;
@@ -842,9 +838,7 @@ gdk_event_get_time (const GdkEvent *event)
       case GDK_DRAG_ENTER:
       case GDK_DRAG_LEAVE:
       case GDK_DRAG_MOTION:
-      case GDK_DRAG_STATUS:
       case GDK_DROP_START:
-      case GDK_DROP_FINISHED:
 	return event->dnd.time;
       case GDK_PAD_BUTTON_PRESS:
       case GDK_PAD_BUTTON_RELEASE:
@@ -930,9 +924,7 @@ gdk_event_get_state (const GdkEvent        *event,
       case GDK_DRAG_ENTER:
       case GDK_DRAG_LEAVE:
       case GDK_DRAG_MOTION:
-      case GDK_DRAG_STATUS:
       case GDK_DROP_START:
-      case GDK_DROP_FINISHED:
       case GDK_NOTHING:
       case GDK_DELETE:
       case GDK_DESTROY:
@@ -1077,9 +1069,7 @@ gdk_event_get_root_coords (const GdkEvent *event,
     case GDK_DRAG_ENTER:
     case GDK_DRAG_LEAVE:
     case GDK_DRAG_MOTION:
-    case GDK_DRAG_STATUS:
     case GDK_DROP_START:
-    case GDK_DROP_FINISHED:
       x = event->dnd.x_root;
       y = event->dnd.y_root;
       break;
@@ -2115,9 +2105,7 @@ gdk_event_get_drag_context (const GdkEvent  *event,
   if (event->any.type == GDK_DRAG_ENTER ||
       event->any.type == GDK_DRAG_LEAVE ||
       event->any.type == GDK_DRAG_MOTION ||
-      event->any.type == GDK_DRAG_STATUS ||
-      event->any.type == GDK_DROP_START ||
-      event->any.type == GDK_DROP_FINISHED)
+      event->any.type == GDK_DROP_START)
     {
       *context = event->dnd.context;
       return TRUE;

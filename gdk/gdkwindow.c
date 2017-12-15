@@ -5489,9 +5489,7 @@ _gdk_make_event (GdkWindow    *window,
     case GDK_DRAG_ENTER:
     case GDK_DRAG_LEAVE:
     case GDK_DRAG_MOTION:
-    case GDK_DRAG_STATUS:
     case GDK_DROP_START:
-    case GDK_DROP_FINISHED:
       event->dnd.time = the_time;
       break;
 

@@ -107,9 +107,7 @@ _gdk_wayland_drag_context_emit_event (GdkDragContext *context,
     case GDK_DRAG_ENTER:
     case GDK_DRAG_LEAVE:
     case GDK_DRAG_MOTION:
-    case GDK_DRAG_STATUS:
     case GDK_DROP_START:
-    case GDK_DROP_FINISHED:
       break;
     default:
       return;
@@ -191,7 +189,6 @@ gdk_wayland_drag_context_drag_motion (GdkDragContext *context,
     {
       context->dest_window = dest_window ? g_object_ref (dest_window) : NULL;
       _gdk_wayland_drag_context_set_coords (context, x_root, y_root);
-      _gdk_wayland_drag_context_emit_event (context, GDK_DRAG_STATUS, time);
     }
 
   gdk_wayland_drag_context_set_action (context, suggested_action);

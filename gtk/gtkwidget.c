@@ -6551,9 +6551,7 @@ gtk_widget_emit_event_signals (GtkWidget      *widget,
         case GDK_DRAG_ENTER:
         case GDK_DRAG_LEAVE:
         case GDK_DRAG_MOTION:
-        case GDK_DRAG_STATUS:
         case GDK_DROP_START:
-        case GDK_DROP_FINISHED:
         case GDK_EVENT_LAST:
         case GDK_TOUCHPAD_SWIPE:
         case GDK_TOUCHPAD_PINCH:

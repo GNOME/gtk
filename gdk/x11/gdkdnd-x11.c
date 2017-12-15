@@ -1067,13 +1067,6 @@ xdnd_status_filter (GdkXEvent *xev,
       if (context_x11->drag_status == GDK_DRAG_STATUS_MOTION_WAIT)
         context_x11->drag_status = GDK_DRAG_STATUS_DRAG;
 
-      event->any.send_event = FALSE;
-      event->any.type = GDK_DRAG_STATUS;
-      event->dnd.context = context;
-      gdk_event_set_device (event, gdk_drag_context_get_device (context));
-      g_object_ref (context);
-
-      event->dnd.time = GDK_CURRENT_TIME; /* FIXME? */
       if (!(action != 0) != !(flags & 1))
         {
           GDK_NOTE (DND,
@@ -1083,7 +1076,11 @@ xdnd_status_filter (GdkXEvent *xev,
 
       context->action = xdnd_action_from_atom (display, action);
 
-      return GDK_FILTER_TRANSLATE;
+      if (context->action != context_x11->current_action)
+        {
+          context_x11->current_action = action;
+          g_signal_emit_by_name (context, "action-changed", action);
+        }
     }
 
   return GDK_FILTER_REMOVE;
@@ -1112,18 +1109,16 @@ xdnd_finished_filter (GdkXEvent *xev,
 
   if (context)
     {
+      g_object_ref (context);
+
       context_x11 = GDK_X11_DRAG_CONTEXT (context);
       if (context_x11->version == 5)
         context_x11->drop_failed = xevent->xclient.data.l[1] == 0;
 
-      event->any.type = GDK_DROP_FINISHED;
-      event->dnd.context = context;
-      gdk_event_set_device (event, gdk_drag_context_get_device (context));
-      g_object_ref (context);
+      g_signal_emit_by_name (context, "dnd-finished");
+      gdk_drag_drop_done (context, !context_x11->drop_failed);
 
-      event->dnd.time = GDK_CURRENT_TIME; /* FIXME? */
-
-      return GDK_FILTER_TRANSLATE;
+      g_object_unref (context);
     }
 
   return GDK_FILTER_REMOVE;
@@ -1218,25 +1213,17 @@ send_client_message_async_cb (Window   window,
       context->dest_window &&
       window == GDK_WINDOW_XID (context->dest_window))
     {
-      GdkEvent *temp_event;
       GdkX11DragContext *context_x11 = data;
 
       g_object_unref (context->dest_window);
       context->dest_window = NULL;
       context->action = 0;
-
+      if (context->action != context_x11->current_action)
+        {
+          context_x11->current_action = 0;
+          g_signal_emit_by_name (context, "action-changed", 0);
+        }
       context_x11->drag_status = GDK_DRAG_STATUS_DRAG;
-
-      temp_event = gdk_event_new (GDK_DRAG_STATUS);
-      temp_event->any.window = g_object_ref (context->source_window);
-      temp_event->any.send_event = TRUE;
-      temp_event->dnd.context = g_object_ref (context);
-      temp_event->dnd.time = GDK_CURRENT_TIME;
-      gdk_event_set_device (temp_event, gdk_drag_context_get_device (context));
-
-      gdk_display_put_event (gdk_drag_context_get_display (context), temp_event);
-
-      g_object_unref (temp_event);
     }
 
   g_object_unref (context);
@@ -2282,8 +2269,6 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
 
   if (context->dest_window != dest_window)
     {
-      GdkEvent *temp_event;
-
       /* Send a leave to the last destination */
       gdk_drag_do_leave (context_x11, time);
       context_x11->drag_status = GDK_DRAG_STATUS_DRAG;
@@ -2327,19 +2312,11 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
       /* Push a status event, to let the client know that
        * the drag changed
        */
-      temp_event = gdk_event_new (GDK_DRAG_STATUS);
-      temp_event->any.window = g_object_ref (context->source_window);
-      /* We use this to signal a synthetic status. Perhaps
-       * we should use an extra field...
-       */
-      temp_event->any.send_event = TRUE;
-
-      temp_event->dnd.context = g_object_ref (context);
-      temp_event->dnd.time = time;
-      gdk_event_set_device (temp_event, gdk_drag_context_get_device (context));
-
-      gdk_display_put_event (gdk_drag_context_get_display (context), temp_event);
-      g_object_unref (temp_event);
+      if (context->action != context_x11->current_action)
+        {
+          context_x11->current_action = context->action;
+          g_signal_emit_by_name (context, "action-changed", context->action);
+        }
     }
   else
     {
@@ -2366,7 +2343,6 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
 
             case GDK_DRAG_PROTO_ROOTWIN:
               {
-                GdkEvent *temp_event;
                 /* GTK+ traditionally has used application/x-rootwin-drop,
                  * but the XDND spec specifies x-rootwindow-drop.
                  */
@@ -2376,15 +2352,11 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
                 else
                   context->action = 0;
 
-                temp_event = gdk_event_new (GDK_DRAG_STATUS);
-                temp_event->any.window = g_object_ref (context->source_window);
-                temp_event->any.send_event = FALSE;
-                temp_event->dnd.context = g_object_ref (context);
-                temp_event->dnd.time = time;
-                gdk_event_set_device (temp_event, gdk_drag_context_get_device (context));
-
-                gdk_display_put_event (gdk_drag_context_get_display (context), temp_event);
-                g_object_unref (temp_event);
+                if (context->action != context_x11->current_action)
+                  {
+                    context_x11->current_action = context->action;
+                    g_signal_emit_by_name (context, "action-changed", context->action);
+                  }
               }
               break;
             case GDK_DRAG_PROTO_MOTIF:
@@ -3294,41 +3266,6 @@ gdk_dnd_handle_button_event (GdkDragContext       *context,
   return TRUE;
 }
 
-static gboolean
-gdk_dnd_handle_drag_status (GdkDragContext    *context,
-                            const GdkEventDND *event)
-{
-  GdkX11DragContext *context_x11 = GDK_X11_DRAG_CONTEXT (context);
-  GdkDragAction action;
-
-  if (context != event->context)
-    return FALSE;
-
-  action = gdk_drag_context_get_selected_action (context);
-
-  if (action != context_x11->current_action)
-    {
-      context_x11->current_action = action;
-      g_signal_emit_by_name (context, "action-changed", action);
-    }
-
-  return TRUE;
-}
-
-static gboolean
-gdk_dnd_handle_drop_finished (GdkDragContext *context,
-                              const GdkEventDND *event)
-{
-  GdkX11DragContext *x11_context = GDK_X11_DRAG_CONTEXT (context);
-
-  if (context != event->context)
-    return FALSE;
-
-  g_signal_emit_by_name (context, "dnd-finished");
-  gdk_drag_drop_done (context, !x11_context->drop_failed);
-  return TRUE;
-}
-
 gboolean
 gdk_x11_drag_context_handle_event (GdkDragContext *context,
                                    const GdkEvent *event)
@@ -3337,7 +3274,7 @@ gdk_x11_drag_context_handle_event (GdkDragContext *context,
 
   if (!context->is_source)
     return FALSE;
-  if (!x11_context->grab_seat && event->any.type != GDK_DROP_FINISHED)
+  if (!x11_context->grab_seat)
     return FALSE;
 
   switch ((guint) event->any.type)
@@ -3351,10 +3288,6 @@ gdk_x11_drag_context_handle_event (GdkDragContext *context,
       return gdk_dnd_handle_key_event (context, &event->key);
     case GDK_GRAB_BROKEN:
       return gdk_dnd_handle_grab_broken_event (context, &event->grab_broken);
-    case GDK_DRAG_STATUS:
-      return gdk_dnd_handle_drag_status (context, &event->dnd);
-    case GDK_DROP_FINISHED:
-      return gdk_dnd_handle_drop_finished (context, &event->dnd);
     default:
       break;
     }
