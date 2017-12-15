@@ -246,8 +246,6 @@ typedef GdkFilterReturn (*GdkFilterFunc) (GdkXEvent *xevent,
  * @GDK_SCROLL: the scroll wheel was turned
  * @GDK_GRAB_BROKEN: a pointer or keyboard grab was broken. This event type
  *   was added in 2.8.
- * @GDK_DAMAGE: the content of the window has been changed. This event type
- *   was added in 2.14.
  * @GDK_TOUCH_BEGIN: A new touch event sequence has just started. This event
  *   type was added in 3.4.
  * @GDK_TOUCH_UPDATE: A touch event sequence has been updated. This event type
@@ -305,7 +303,6 @@ typedef enum
   GDK_DROP_FINISHED,
   GDK_SCROLL,
   GDK_GRAB_BROKEN,
-  GDK_DAMAGE,
   GDK_TOUCH_BEGIN,
   GDK_TOUCH_UPDATE,
   GDK_TOUCH_END,

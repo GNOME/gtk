@@ -652,7 +652,6 @@ gdk_event_copy (const GdkEvent *event)
       break;
 
     case GDK_EXPOSE:
-    case GDK_DAMAGE:
       if (event->expose.region)
         new_event->expose.region = cairo_region_copy (event->expose.region);
       break;
@@ -755,7 +754,6 @@ gdk_event_finalize (GObject *object)
       break;
 
     case GDK_EXPOSE:
-    case GDK_DAMAGE:
       if (event->expose.region)
 	cairo_region_destroy (event->expose.region);
       break;
@@ -859,7 +857,6 @@ gdk_event_get_time (const GdkEvent *event)
       case GDK_CONFIGURE:
       case GDK_FOCUS_CHANGE:
       case GDK_NOTHING:
-      case GDK_DAMAGE:
       case GDK_DELETE:
       case GDK_DESTROY:
       case GDK_EXPOSE:
@@ -930,7 +927,6 @@ gdk_event_get_state (const GdkEvent        *event,
       case GDK_FOCUS_CHANGE:
       case GDK_PROXIMITY_IN:
       case GDK_PROXIMITY_OUT:
-      case GDK_DAMAGE:
       case GDK_DRAG_ENTER:
       case GDK_DRAG_LEAVE:
       case GDK_DRAG_MOTION:

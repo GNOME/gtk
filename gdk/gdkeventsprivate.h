@@ -65,7 +65,7 @@ struct _GdkEventAny
 
 /**
  * GdkEventExpose:
- * @type: the type of the event (%GDK_EXPOSE or %GDK_DAMAGE).
+ * @type: the type of the event (%GDK_EXPOSE)
  * @window: the window which received the event.
  * @send_event: %TRUE if the event was sent explicitly.
  * @area: bounding box of @region.
