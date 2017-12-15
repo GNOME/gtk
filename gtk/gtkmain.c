@@ -1811,7 +1811,6 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_MAP:
     case GDK_UNMAP:
     case GDK_CLIENT_EVENT:
-    case GDK_WINDOW_STATE:
     case GDK_GRAB_BROKEN:
     case GDK_DAMAGE:
       if (!_gtk_widget_captured_event (event_widget, event))
