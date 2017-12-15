@@ -32,11 +32,13 @@ counting_destroy (gpointer data)
 static void
 test_basic (void)
 {
+  GdkKeymap *keymap;
   GtkKeyHash *hash;
   GSList *keys;
 
+  keymap = gdk_keymap_get_for_display (gdk_display_get_default ());
   count = 0;
-  hash = _gtk_key_hash_new (gdk_keymap_get_default (), counting_destroy);
+  hash = _gtk_key_hash_new (keymap, counting_destroy);
 
   keys = _gtk_key_hash_lookup (hash, 0, 0, 0, 0);
   g_assert (keys == NULL);
@@ -68,6 +70,7 @@ test_lookup (GtkKeyHash      *hash,
              gint             n_results,
              ...)
 {
+  GdkKeymap *keymap;
   va_list ap;
   gint d;
   GSList *res, *l;
@@ -75,7 +78,9 @@ test_lookup (GtkKeyHash      *hash,
   GdkKeymapKey *keys;
   gint n_keys;
 
-  gdk_keymap_get_entries_for_keyval (gdk_keymap_get_default (), keyval, &keys, &n_keys);
+  keymap = gdk_keymap_get_for_display (gdk_display_get_default ());
+
+  gdk_keymap_get_entries_for_keyval (keymap, keyval, &keys, &n_keys);
   if (n_keys == 0)
     return;
 
@@ -115,6 +120,7 @@ add_entries (GtkKeyHash *hash,
 static void
 test_match (void)
 {
+  GdkKeymap *keymap;
   GtkKeyHash *hash;
   static Entry entries[] = {
     { GDK_KEY_a, GDK_CONTROL_MASK },
@@ -124,7 +130,9 @@ test_match (void)
     {  0, 0 }
   };
 
-  hash = _gtk_key_hash_new (gdk_keymap_get_default (), NULL);
+  keymap = gdk_keymap_get_for_display (gdk_display_get_default ());
+
+  hash = _gtk_key_hash_new (keymap, NULL);
   add_entries (hash, entries);
 
   test_lookup (hash, GDK_KEY_a, GDK_CONTROL_MASK, DEFAULT_MASK, 4, 1, 1, 2, 2);
@@ -139,13 +147,16 @@ test_match (void)
 static gboolean
 hyper_equals_super (void)
 {
+  GdkKeymap *keymap;
   GdkModifierType mods1, mods2;
 
+  keymap = gdk_keymap_get_for_display (gdk_display_get_default ());
+
   mods1 = GDK_HYPER_MASK;
-  gdk_keymap_map_virtual_modifiers (gdk_keymap_get_default (), &mods1);
+  gdk_keymap_map_virtual_modifiers (keymap, &mods1);
   mods1 = mods1 & ~GDK_HYPER_MASK;
   mods2 = GDK_SUPER_MASK;
-  gdk_keymap_map_virtual_modifiers (gdk_keymap_get_default (), &mods2);
+  gdk_keymap_map_virtual_modifiers (keymap, &mods2);
   mods2 = mods2 & ~GDK_SUPER_MASK;
 
   return mods1 == mods2;
@@ -154,6 +165,7 @@ hyper_equals_super (void)
 static void
 test_virtual (void)
 {
+  GdkKeymap *keymap;
   GtkKeyHash *hash;
   static Entry entries[] = {
     { GDK_KEY_a, GDK_SUPER_MASK },
@@ -163,7 +175,9 @@ test_virtual (void)
     {  0, 0 }
   };
 
-  hash = _gtk_key_hash_new (gdk_keymap_get_default (), NULL);
+  keymap = gdk_keymap_get_for_display (gdk_display_get_default ());
+
+  hash = _gtk_key_hash_new (keymap, NULL);
   add_entries (hash, entries);
 
   test_lookup (hash, GDK_KEY_a, GDK_SUPER_MASK, DEFAULT_MASK, 2, 1, 1);
@@ -179,7 +193,7 @@ test_virtual (void)
       test_lookup (hash, GDK_KEY_d, GDK_HYPER_MASK, DEFAULT_MASK, 0);
 
       mods = GDK_HYPER_MASK;
-      gdk_keymap_map_virtual_modifiers (gdk_keymap_get_default (), &mods);
+      gdk_keymap_map_virtual_modifiers (keymap, &mods);
       test_lookup (hash, GDK_KEY_d, mods, DEFAULT_MASK, 0);
     }
 

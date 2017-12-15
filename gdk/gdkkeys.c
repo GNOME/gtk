@@ -59,11 +59,10 @@
  *
  * # Groups # {#key-group-explanation}
  *
- * One #GdkKeymap object exists for each user display. gdk_keymap_get_default()
- * returns the #GdkKeymap for the default display; to obtain keymaps for other
- * displays, use gdk_keymap_get_for_display(). A keymap
- * is a mapping from #GdkKeymapKey to key values. You can think of a #GdkKeymapKey
- * as a representation of a symbol printed on a physical keyboard key. That is, it
+ * One #GdkKeymap object exists for each user display. To obtain keymaps for
+ * a display, use gdk_keymap_get_for_display(). A keymap is a mapping from
+ * #GdkKeymapKey to key values. You can think of a #GdkKeymapKey as a
+ * representation of a symbol printed on a physical keyboard key. That is, it
  * contains three pieces of information. First, it contains the hardware keycode;
  * this is an identifying number for a physical key. Second, it contains the
  * “level” of the key. The level indicates which symbol on the
@@ -269,19 +268,6 @@ gdk_keyval_is_lower (guint keyval)
       return lower_val == keyval;
     }
   return FALSE;
-}
-
-/**
- * gdk_keymap_get_default:
- *
- * Returns the #GdkKeymap attached to the default display.
- *
- * Returns: (transfer none): the #GdkKeymap attached to the default display.
- */
-GdkKeymap*
-gdk_keymap_get_default (void)
-{
-  return gdk_keymap_get_for_display (gdk_display_get_default ());
 }
 
 /**

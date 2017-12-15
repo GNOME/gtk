@@ -81,8 +81,6 @@ GDK_AVAILABLE_IN_ALL
 GType gdk_keymap_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GdkKeymap* gdk_keymap_get_default     (void);
-GDK_AVAILABLE_IN_ALL
 GdkKeymap* gdk_keymap_get_for_display (GdkDisplay *display);
 
 GDK_AVAILABLE_IN_ALL
