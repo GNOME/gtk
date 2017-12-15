@@ -5647,7 +5647,7 @@ get_better_cursor (GtkLabel *label,
 		   gint      *y)
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-  GdkKeymap *keymap = gdk_keymap_get_for_display (gtk_widget_get_display (GTK_WIDGET (label)));
+  GdkKeymap *keymap = gdk_display_get_keymap (gtk_widget_get_display (GTK_WIDGET (label)));
   PangoDirection keymap_direction = gdk_keymap_get_direction (keymap);
   PangoDirection cursor_direction = get_cursor_direction (label);
   gboolean split_cursor;
@@ -5753,7 +5753,7 @@ gtk_label_move_visually (GtkLabel *label,
 	strong = TRUE;
       else
 	{
-	  GdkKeymap *keymap = gdk_keymap_get_for_display (gtk_widget_get_display (GTK_WIDGET (label)));
+	  GdkKeymap *keymap = gdk_display_get_keymap (gtk_widget_get_display (GTK_WIDGET (label)));
 	  PangoDirection keymap_direction = gdk_keymap_get_direction (keymap);
 
 	  strong = keymap_direction == get_cursor_direction (label);

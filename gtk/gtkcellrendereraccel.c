@@ -589,7 +589,7 @@ gtk_cell_editable_widget_key_press_event (GtkWidget   *widget,
     }
   else
     {
-      _gtk_translate_keyboard_accel_state (gdk_keymap_get_for_display (display),
+      _gtk_translate_keyboard_accel_state (gdk_display_get_keymap (display),
                                            keycode,
                                            state,
                                            gtk_accelerator_get_default_mod_mask (),

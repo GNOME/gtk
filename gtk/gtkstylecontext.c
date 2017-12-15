@@ -1907,7 +1907,7 @@ gtk_render_insertion_cursor (GtkStyleContext *context,
                 "gtk-split-cursor", &split_cursor,
                 NULL);
 
-  keymap_direction = gdk_keymap_get_direction (gdk_keymap_get_for_display (priv->display));
+  keymap_direction = gdk_keymap_get_direction (gdk_display_get_keymap (priv->display));
 
   pango_layout_get_cursor_pos (layout, index, &strong_pos, &weak_pos);
 
@@ -1992,7 +1992,7 @@ gtk_snapshot_render_insertion_cursor (GtkSnapshot     *snapshot,
                 "gtk-split-cursor", &split_cursor,
                 NULL);
 
-  keymap_direction = gdk_keymap_get_direction (gdk_keymap_get_for_display (priv->display));
+  keymap_direction = gdk_keymap_get_direction (gdk_display_get_keymap (priv->display));
 
   pango_layout_get_cursor_pos (layout, index, &strong_pos, &weak_pos);
 

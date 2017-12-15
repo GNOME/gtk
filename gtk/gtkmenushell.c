@@ -1528,7 +1528,7 @@ gtk_menu_shell_get_key_hash (GtkMenuShell *menu_shell,
   if (!priv->key_hash && create)
     {
       GtkMnemonicHash *mnemonic_hash = gtk_menu_shell_get_mnemonic_hash (menu_shell, FALSE);
-      GdkKeymap *keymap = gdk_keymap_get_for_display (gtk_widget_get_display (widget));
+      GdkKeymap *keymap = gdk_display_get_keymap (gtk_widget_get_display (widget));
 
       if (!mnemonic_hash)
         return NULL;

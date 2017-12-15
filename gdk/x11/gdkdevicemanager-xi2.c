@@ -1406,7 +1406,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
     case XI_KeyRelease:
       {
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
-        GdkKeymap *keymap = gdk_keymap_get_for_display (display);
+        GdkKeymap *keymap = gdk_display_get_keymap (display);
         GdkModifierType consumed, state;
 
         GDK_NOTE (EVENTS,

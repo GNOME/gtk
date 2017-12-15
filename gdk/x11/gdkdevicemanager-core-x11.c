@@ -193,7 +193,7 @@ translate_key_event (GdkDisplay              *display,
                      GdkEvent                *event,
                      const XEvent            *xevent)
 {
-  GdkKeymap *keymap = gdk_keymap_get_for_display (display);
+  GdkKeymap *keymap = gdk_display_get_keymap (display);
   GdkModifierType consumed, state;
 
   event->any.type = xevent->xany.type == KeyPress ? GDK_KEY_PRESS : GDK_KEY_RELEASE;

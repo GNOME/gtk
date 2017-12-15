@@ -13696,7 +13696,7 @@ gtk_widget_get_modifier_mask (GtkWidget         *widget,
 
   display = gtk_widget_get_display (widget);
 
-  return gdk_keymap_get_modifier_mask (gdk_keymap_get_for_display (display),
+  return gdk_keymap_get_modifier_mask (gdk_display_get_keymap (display),
                                        intent);
 }
 

@@ -1361,7 +1361,7 @@ gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
 
           if (keyval && accelerator_codes != NULL)
             {
-              GdkKeymap *keymap = gdk_keymap_get_for_display (gdk_display_get_default ());
+              GdkKeymap *keymap = gdk_display_get_keymap (gdk_display_get_default ());
               GdkKeymapKey *keys;
               gint n_keys, i, j;
 
@@ -1483,7 +1483,7 @@ gtk_accelerator_name_with_keycode (GdkDisplay      *display,
   if (display == NULL)
     display = gdk_display_manager_get_default_display (gdk_display_manager_get ());
 
-  gdk_keymap_add_virtual_modifiers (gdk_keymap_get_for_display (display), &accelerator_mods);
+  gdk_keymap_add_virtual_modifiers (gdk_display_get_keymap (display), &accelerator_mods);
   gtk_name = gtk_accelerator_name (accelerator_key, accelerator_mods);
 
   if (!accelerator_key)
@@ -1670,7 +1670,7 @@ gtk_accelerator_get_label_with_keycode (GdkDisplay      *display,
   if (display == NULL)
     display = gdk_display_manager_get_default_display (gdk_display_manager_get ());
 
-  gdk_keymap_add_virtual_modifiers (gdk_keymap_get_for_display (display), &accelerator_mods);
+  gdk_keymap_add_virtual_modifiers (gdk_display_get_keymap (display), &accelerator_mods);
   gtk_label = gtk_accelerator_get_label (accelerator_key, accelerator_mods);
 
   if (!accelerator_key)
@@ -1759,7 +1759,7 @@ gtk_accelerator_get_default_mod_mask (void)
         return GDK_CONTROL_MASK | GDK_SHIFT_MASK | GDK_MOD1_MASK;
 
       default_accel_mod_mask =
-          gdk_keymap_get_modifier_mask (gdk_keymap_get_for_display (display),
+          gdk_keymap_get_modifier_mask (gdk_display_get_keymap (display),
 				        GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK);
     }
 

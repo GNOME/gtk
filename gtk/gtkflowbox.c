@@ -3007,9 +3007,9 @@ gtk_flow_box_add_move_binding (GtkBindingSet   *binding_set,
   display = gdk_display_get_default ();
   if (display)
     {
-      extend_mod_mask = gdk_keymap_get_modifier_mask (gdk_keymap_get_for_display (display),
+      extend_mod_mask = gdk_keymap_get_modifier_mask (gdk_display_get_keymap (display),
                                                       GDK_MODIFIER_INTENT_EXTEND_SELECTION);
-      modify_mod_mask = gdk_keymap_get_modifier_mask (gdk_keymap_get_for_display (display),
+      modify_mod_mask = gdk_keymap_get_modifier_mask (gdk_display_get_keymap (display),
                                                       GDK_MODIFIER_INTENT_MODIFY_SELECTION);
     }
 

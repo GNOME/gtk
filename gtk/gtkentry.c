@@ -2768,7 +2768,7 @@ gtk_entry_dispose (GObject *object)
       priv->buffer = NULL;
     }
 
-  keymap = gdk_keymap_get_for_display (gtk_widget_get_display (GTK_WIDGET (object)));
+  keymap = gdk_display_get_keymap (gtk_widget_get_display (GTK_WIDGET (object)));
   g_signal_handlers_disconnect_by_func (keymap, keymap_state_changed, entry);
   g_signal_handlers_disconnect_by_func (keymap, keymap_direction_changed, entry);
   G_OBJECT_CLASS (gtk_entry_parent_class)->dispose (object);
@@ -4250,7 +4250,7 @@ gtk_entry_focus_in (GtkWidget     *widget,
 
   gtk_widget_queue_draw (widget);
 
-  keymap = gdk_keymap_get_for_display (gtk_widget_get_display (widget));
+  keymap = gdk_display_get_keymap (gtk_widget_get_display (widget));
 
   if (priv->editable)
     {
@@ -4295,7 +4295,7 @@ gtk_entry_focus_out (GtkWidget     *widget,
 
   gtk_widget_queue_draw (widget);
 
-  keymap = gdk_keymap_get_for_display (gtk_widget_get_display (widget));
+  keymap = gdk_display_get_keymap (gtk_widget_get_display (widget));
 
   if (priv->editable)
     {
@@ -4846,7 +4846,7 @@ get_better_cursor_x (GtkEntry *entry,
 		     gint      offset)
 {
   GtkEntryPrivate *priv = entry->priv;
-  GdkKeymap *keymap = gdk_keymap_get_for_display (gtk_widget_get_display (GTK_WIDGET (entry)));
+  GdkKeymap *keymap = gdk_display_get_keymap (gtk_widget_get_display (GTK_WIDGET (entry)));
   PangoDirection keymap_direction = gdk_keymap_get_direction (keymap);
   gboolean split_cursor;
   
@@ -5701,7 +5701,7 @@ gtk_entry_create_layout (GtkEntry *entry,
           if (gtk_widget_has_focus (widget))
 	    {
 	      GdkDisplay *display = gtk_widget_get_display (widget);
-	      GdkKeymap *keymap = gdk_keymap_get_for_display (display);
+	      GdkKeymap *keymap = gdk_display_get_keymap (display);
 	      if (gdk_keymap_get_direction (keymap) == PANGO_DIRECTION_RTL)
 		pango_dir = PANGO_DIRECTION_RTL;
 	      else
@@ -6372,7 +6372,7 @@ gtk_entry_move_visually (GtkEntry *entry,
 	strong = TRUE;
       else
 	{
-	  GdkKeymap *keymap = gdk_keymap_get_for_display (gtk_widget_get_display (GTK_WIDGET (entry)));
+	  GdkKeymap *keymap = gdk_display_get_keymap (gtk_widget_get_display (GTK_WIDGET (entry)));
 	  PangoDirection keymap_direction = gdk_keymap_get_direction (keymap);
 
 	  strong = keymap_direction == priv->resolved_dir;

@@ -5402,7 +5402,7 @@ gtk_text_view_focus_in_event (GtkWidget *widget, GdkEventFocus *event)
       gtk_text_view_check_cursor_blink (text_view);
     }
 
-  g_signal_connect (gdk_keymap_get_for_display (gtk_widget_get_display (widget)),
+  g_signal_connect (gdk_display_get_keymap (gtk_widget_get_display (widget)),
 		    "direction-changed",
 		    G_CALLBACK (keymap_direction_changed), text_view);
   gtk_text_view_check_keymap_direction (text_view);
@@ -5437,7 +5437,7 @@ gtk_text_view_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
       gtk_text_layout_set_cursor_visible (priv->layout, FALSE);
     }
 
-  g_signal_handlers_disconnect_by_func (gdk_keymap_get_for_display (gtk_widget_get_display (widget)),
+  g_signal_handlers_disconnect_by_func (gdk_display_get_keymap (gtk_widget_get_display (widget)),
 					keymap_direction_changed,
 					text_view);
   gtk_text_view_selection_bubble_popup_unset (text_view);
@@ -7532,7 +7532,7 @@ gtk_text_view_check_keymap_direction (GtkTextView *text_view)
   if (priv->layout)
     {
       GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (text_view));
-      GdkKeymap *keymap = gdk_keymap_get_for_display (gtk_widget_get_display (GTK_WIDGET (text_view)));
+      GdkKeymap *keymap = gdk_display_get_keymap (gtk_widget_get_display (GTK_WIDGET (text_view)));
       GtkTextDirection new_cursor_dir;
       GtkTextDirection new_keyboard_dir;
       gboolean split_cursor;

@@ -10313,7 +10313,7 @@ gtk_window_get_key_hash (GtkWindow *window)
   if (key_hash)
     return key_hash;
   
-  key_hash = _gtk_key_hash_new (gdk_keymap_get_for_display (window->priv->display),
+  key_hash = _gtk_key_hash_new (gdk_display_get_keymap (window->priv->display),
 				(GDestroyNotify)window_key_entry_destroy);
   _gtk_window_keys_foreach (window, add_to_key_hash, key_hash);
   g_object_set_qdata (G_OBJECT (window), quark_gtk_window_key_hash, key_hash);

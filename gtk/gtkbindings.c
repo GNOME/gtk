@@ -1554,7 +1554,7 @@ gtk_bindings_activate (GObject         *object,
   modifiers = modifiers & BINDING_MOD_MASK () & ~GDK_RELEASE_MASK;
 
   display = gtk_widget_get_display (GTK_WIDGET (object));
-  key_hash = binding_key_hash_for_keymap (gdk_keymap_get_for_display (display));
+  key_hash = binding_key_hash_for_keymap (gdk_display_get_keymap (display));
 
   entries = _gtk_key_hash_lookup_keyval (key_hash, keyval, modifiers);
 
@@ -1593,7 +1593,7 @@ gtk_bindings_activate_event (GObject     *object,
     return FALSE;
 
   display = gtk_widget_get_display (GTK_WIDGET (object));
-  key_hash = binding_key_hash_for_keymap (gdk_keymap_get_for_display (display));
+  key_hash = binding_key_hash_for_keymap (gdk_display_get_keymap (display));
 
   gdk_event_get_keycode ((GdkEvent *)event, &keycode);
   gdk_event_get_state ((GdkEvent *)event, &state);

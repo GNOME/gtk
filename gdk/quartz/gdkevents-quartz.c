@@ -1136,7 +1136,7 @@ fill_key_event (GdkWindow    *window,
   gdk_event_set_device (event, device_manager->core_keyboard);
   gdk_event_set_seat (event, gdk_device_get_seat (device_manager->core_keyboard));
   
-  gdk_keymap_translate_keyboard_state (gdk_keymap_get_for_display (_gdk_display),
+  gdk_keymap_translate_keyboard_state (gdk_display_get_keymap (_gdk_display),
 				       event->key.hardware_keycode,
 				       event->key.state, 
 				       event->key.group,
@@ -1190,7 +1190,7 @@ fill_key_event (GdkWindow    *window,
    * mapped to. Since we only have one virtual modifier in the quartz
    * backend, calling the standard function will do.
    */
-  gdk_keymap_add_virtual_modifiers (gdk_keymap_get_for_display (_gdk_display),
+  gdk_keymap_add_virtual_modifiers (gdk_display_get_keymap (_gdk_display),
                                     &event->key.state);
 
   event->key.string = NULL;

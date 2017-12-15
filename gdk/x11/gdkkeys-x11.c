@@ -1416,7 +1416,7 @@ gdk_x11_keymap_get_group_for_state (GdkKeymap *keymap,
   else
 #endif
     {
-      GdkX11Keymap *keymap_impl = GDK_X11_KEYMAP (gdk_keymap_get_for_display (display));
+      GdkX11Keymap *keymap_impl = GDK_X11_KEYMAP (gdk_display_get_keymap (display));
       update_keymaps (keymap_impl);
       return (state & keymap_impl->group_switch_mask) ? 1 : 0;
     }

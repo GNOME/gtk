@@ -366,7 +366,7 @@ gtk_im_multicontext_filter_keypress (GtkIMContext *context,
       display = gdk_window_get_display (gdk_event_get_window ((GdkEvent *) event));
 
       no_text_input_mask =
-        gdk_keymap_get_modifier_mask (gdk_keymap_get_for_display (display),
+        gdk_keymap_get_modifier_mask (gdk_display_get_keymap (display),
                                       GDK_MODIFIER_INTENT_NO_TEXT_INPUT);
 
       if (gdk_event_get_event_type ((GdkEvent *) event) == GDK_KEY_PRESS &&

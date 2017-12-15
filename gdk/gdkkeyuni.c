@@ -907,7 +907,7 @@ gdk_keyval_to_unicode (guint keyval)
   if (GDK_IS_WIN32_DISPLAY (gdk_display_get_default ()) &&
       keyval == 0xffae)
     {
-      GdkWin32Keymap *keymap = GDK_WIN32_KEYMAP (gdk_keymap_get_for_display (gdk_display_get_default ()));
+      GdkWin32Keymap *keymap = GDK_WIN32_KEYMAP (gdk_display_get_keymap (gdk_display_get_default ()));
 
       return (guint32) _gdk_win32_keymap_get_decimal_mark (keymap);
     }

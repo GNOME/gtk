@@ -1710,7 +1710,7 @@ gdk_event_triggers_context_menu (const GdkEvent *event)
 
       display = gdk_window_get_display (bevent->any.window);
 
-      modifier = gdk_keymap_get_modifier_mask (gdk_keymap_get_for_display (display),
+      modifier = gdk_keymap_get_modifier_mask (gdk_display_get_keymap (display),
                                                GDK_MODIFIER_INTENT_CONTEXT_MENU);
 
       if (modifier != 0 &&

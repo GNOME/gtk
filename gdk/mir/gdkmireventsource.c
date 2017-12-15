@@ -301,7 +301,7 @@ handle_key_event (GdkWindow *window, const MirInputEvent *event)
 
   _gdk_mir_window_impl_get_cursor_state (impl, NULL, NULL, NULL, &button_state);
   modifier_state = get_modifier_state (mir_keyboard_event_modifiers (keyboard_event), button_state);
-  keymap = gdk_keymap_get_for_display (gdk_window_get_display (window));
+  keymap = gdk_display_get_keymap (gdk_window_get_display (window));
 
   generate_key_event (window,
                       mir_keyboard_event_action (keyboard_event) == mir_keyboard_action_up ? GDK_KEY_RELEASE : GDK_KEY_PRESS,

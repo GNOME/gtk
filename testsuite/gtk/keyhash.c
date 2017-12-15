@@ -36,7 +36,7 @@ test_basic (void)
   GtkKeyHash *hash;
   GSList *keys;
 
-  keymap = gdk_keymap_get_for_display (gdk_display_get_default ());
+  keymap = gdk_display_get_keymap (gdk_display_get_default ());
   count = 0;
   hash = _gtk_key_hash_new (keymap, counting_destroy);
 
@@ -78,7 +78,7 @@ test_lookup (GtkKeyHash      *hash,
   GdkKeymapKey *keys;
   gint n_keys;
 
-  keymap = gdk_keymap_get_for_display (gdk_display_get_default ());
+  keymap = gdk_display_get_keymap (gdk_display_get_default ());
 
   gdk_keymap_get_entries_for_keyval (keymap, keyval, &keys, &n_keys);
   if (n_keys == 0)
@@ -130,7 +130,7 @@ test_match (void)
     {  0, 0 }
   };
 
-  keymap = gdk_keymap_get_for_display (gdk_display_get_default ());
+  keymap = gdk_display_get_keymap (gdk_display_get_default ());
 
   hash = _gtk_key_hash_new (keymap, NULL);
   add_entries (hash, entries);
@@ -150,7 +150,7 @@ hyper_equals_super (void)
   GdkKeymap *keymap;
   GdkModifierType mods1, mods2;
 
-  keymap = gdk_keymap_get_for_display (gdk_display_get_default ());
+  keymap = gdk_display_get_keymap (gdk_display_get_default ());
 
   mods1 = GDK_HYPER_MASK;
   gdk_keymap_map_virtual_modifiers (keymap, &mods1);
@@ -175,7 +175,7 @@ test_virtual (void)
     {  0, 0 }
   };
 
-  keymap = gdk_keymap_get_for_display (gdk_display_get_default ());
+  keymap = gdk_display_get_keymap (gdk_display_get_default ());
 
   hash = _gtk_key_hash_new (keymap, NULL);
   add_entries (hash, entries);

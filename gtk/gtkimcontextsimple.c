@@ -1096,7 +1096,7 @@ static guint
 canonical_hex_keyval (GdkEventKey *event)
 {
   GdkWindow *window = gdk_event_get_window ((GdkEvent *) event);
-  GdkKeymap *keymap = gdk_keymap_get_for_display (gdk_window_get_display (window));
+  GdkKeymap *keymap = gdk_display_get_keymap (gdk_window_get_display (window));
   guint keyval, event_keyval;
   guint *keyvals = NULL;
   gint n_vals = 0;
@@ -1157,7 +1157,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   GtkIMContextSimplePrivate *priv = context_simple->priv;
   GdkWindow *window = gdk_event_get_window ((GdkEvent *) event);
   GdkDisplay *display = gdk_window_get_display (window);
-  GdkKeymap *keymap = gdk_keymap_get_for_display (display);
+  GdkKeymap *keymap = gdk_display_get_keymap (display);
   GSList *tmp_list;
   int n_compose = 0;
   GdkModifierType hex_mod_mask;

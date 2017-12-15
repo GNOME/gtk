@@ -60,7 +60,7 @@
  * # Groups # {#key-group-explanation}
  *
  * One #GdkKeymap object exists for each user display. To obtain keymaps for
- * a display, use gdk_keymap_get_for_display(). A keymap is a mapping from
+ * a display, use gdk_display_get_keymap(). A keymap is a mapping from
  * #GdkKeymapKey to key values. You can think of a #GdkKeymapKey as a
  * representation of a symbol printed on a physical keyboard key. That is, it
  * contains three pieces of information. First, it contains the hardware keycode;
