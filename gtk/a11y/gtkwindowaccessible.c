@@ -72,21 +72,6 @@ gtk_window_accessible_notify_gtk (GObject    *obj,
     GTK_WIDGET_ACCESSIBLE_CLASS (gtk_window_accessible_parent_class)->notify_gtk (obj, pspec);
 }
 
-static gboolean
-window_state_event_cb (GtkWidget           *widget,
-                       GdkEventWindowState *event)
-{
-  AtkObject* obj;
-  GdkWindowState changed, new_state;
-
-  gdk_event_get_window_state ((GdkEvent *)event, &changed, &new_state);
-  obj = gtk_widget_get_accessible (widget);
-  atk_object_notify_state_change (obj, ATK_STATE_ICONIFIED,
-                                  (new_state & GDK_WINDOW_STATE_ICONIFIED) != 0);
-
-  return FALSE;
-}
-
 static void
 gtk_window_accessible_initialize (AtkObject *obj,
                                   gpointer   data)
@@ -95,7 +80,6 @@ gtk_window_accessible_initialize (AtkObject *obj,
 
   ATK_OBJECT_CLASS (gtk_window_accessible_parent_class)->initialize (obj, data);
 
-  g_signal_connect (data, "window-state-event", G_CALLBACK (window_state_event_cb), NULL);
   _gtk_widget_accessible_set_layer (GTK_WIDGET_ACCESSIBLE (obj), ATK_LAYER_WINDOW);
 
   if (gtk_window_get_window_type (GTK_WINDOW (widget)) == GTK_WINDOW_POPUP)
