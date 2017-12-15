@@ -406,7 +406,7 @@ gdk_x11_drag_context_finalize (GObject *object)
 {
   GdkDragContext *context = GDK_DRAG_CONTEXT (object);
   GdkX11DragContext *x11_context = GDK_X11_DRAG_CONTEXT (object);
-  GdkWindow *drag_window;
+  GdkWindow *drag_window, *ipc_window;
 
   if (context->source_window)
     {
@@ -420,11 +420,14 @@ gdk_x11_drag_context_finalize (GObject *object)
   contexts = g_list_remove (contexts, context);
 
   drag_window = context->drag_window;
+  ipc_window = x11_context->ipc_window;
 
   G_OBJECT_CLASS (gdk_x11_drag_context_parent_class)->finalize (object);
 
   if (drag_window)
     gdk_window_destroy (drag_window);
+  if (ipc_window)
+    gdk_window_destroy (ipc_window);
 }
 
 /* Drag Contexts */
@@ -2978,7 +2981,10 @@ _gdk_x11_window_drag_begin (GdkWindow          *window,
 
   context->protocol = GDK_DRAG_PROTO_XDND;
   x11_context->actions = actions;
-  x11_context->ipc_window = g_object_ref (window);
+  x11_context->ipc_window = gdk_window_new_popup (display, &(GdkRectangle) { -99, -99, 1, 1 });
+  if (gdk_window_get_group (window))
+    gdk_window_set_group (x11_context->ipc_window, window);
+  gdk_window_show (x11_context->ipc_window);
 
   x11_context->drag_window = create_drag_window (display);
 
@@ -2994,9 +3000,9 @@ _gdk_x11_window_drag_begin (GdkWindow          *window,
   xselection = gdk_x11_get_xatom_by_name_for_display (display, "XdndSelection");
   XSetSelectionOwner (GDK_DISPLAY_XDISPLAY (display),
                       xselection,
-                      GDK_WINDOW_XID (window),
+                      GDK_WINDOW_XID (x11_context->ipc_window),
                       x11_context->timestamp);
-  if (XGetSelectionOwner (GDK_DISPLAY_XDISPLAY (display), xselection) != GDK_WINDOW_XID (window))
+  if (XGetSelectionOwner (GDK_DISPLAY_XDISPLAY (display), xselection) != GDK_WINDOW_XID (x11_context->ipc_window))
     {
       GDK_NOTE(DND, g_printerr ("failed XSetSelectionOwner() on \"XdndSelection\", aborting DND\n"));
       g_object_unref (context);
