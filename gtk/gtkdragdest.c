@@ -28,7 +28,6 @@
 
 #include "gtkdnd.h"
 #include "gtkdndprivate.h"
-#include "gtkselectionprivate.h"
 #include "gtkintl.h"
 
 

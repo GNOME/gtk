@@ -45,7 +45,6 @@
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
-#include "gtkselectionprivate.h"
 #include "gtksettingsprivate.h"
 #include "gtksizegroup-private.h"
 #include "gtkwidget.h"
