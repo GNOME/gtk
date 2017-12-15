@@ -5281,6 +5281,9 @@ emulate_resize_drag (GdkWindow     *window,
 {
   MoveResizeData *mv_resize = get_move_resize_data (GDK_WINDOW_DISPLAY (window), TRUE);
 
+  if (mv_resize->moveresize_window != NULL)
+    return; /* already a drag operation in progress */
+
   mv_resize->is_resize = TRUE;
   mv_resize->moveresize_button = button;
   mv_resize->resize_edge = edge;
@@ -5311,7 +5314,10 @@ emulate_move_drag (GdkWindow     *window,
                    guint32        timestamp)
 {
   MoveResizeData *mv_resize = get_move_resize_data (GDK_WINDOW_DISPLAY (window), TRUE);
-  
+
+  if (mv_resize->moveresize_window != NULL)
+    return; /* already a drag operation in progress */
+
   mv_resize->is_resize = FALSE;
   mv_resize->device = device;
   mv_resize->moveresize_button = button;
