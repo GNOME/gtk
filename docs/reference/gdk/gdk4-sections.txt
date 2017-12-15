@@ -102,6 +102,7 @@ gdk_display_get_monitor_at_window
 gdk_display_get_clipboard
 gdk_display_get_primary_clipboard
 gdk_display_get_setting
+gdk_display_get_keymap
 
 <SUBSECTION Standard>
 GDK_DISPLAY

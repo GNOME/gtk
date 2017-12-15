@@ -1476,6 +1476,24 @@ gdk_keymap_get_for_display (GdkDisplay *display)
   return GDK_DISPLAY_GET_CLASS (display)->get_keymap (display);
 }
 
+/**
+ * gdk_display_get_keymap:
+ * @display: the #GdkDisplay
+ *
+ * Returns the #GdkKeymap attached to @display.
+ *
+ * Returns: (transfer none): the #GdkKeymap attached to @display.
+ *
+ * Since: 3.94
+ */
+GdkKeymap *
+gdk_display_get_keymap (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  return GDK_DISPLAY_GET_CLASS (display)->get_keymap (display);
+}
+
 /*< private >
  * gdk_display_make_gl_context_current:
  * @display: a #GdkDisplay
