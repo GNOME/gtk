@@ -140,10 +140,6 @@ static void gtk_drag_cancel_internal           (GtkDragSourceInfo *info,
                                                 GtkDragResult      result,
                                                 guint32            time);
 
-static void gtk_drag_selection_get             (GtkWidget         *widget, 
-                                                GtkSelectionData  *selection_data,
-                                                guint32            time,
-                                                gpointer           data);
 static void gtk_drag_remove_icon               (GtkDragSourceInfo *info);
 static void gtk_drag_source_info_destroy       (GtkDragSourceInfo *info);
 
@@ -1181,9 +1177,6 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   g_signal_connect (context, "cancel",
                     G_CALLBACK (gtk_drag_context_cancel_cb), info);
 
-  g_signal_connect (info->ipc_widget, "selection-get",
-                    G_CALLBACK (gtk_drag_selection_get), info);
-
   return info->context;
 }
 
@@ -1553,35 +1546,6 @@ gtk_drag_drop (GtkDragSourceInfo *info,
  * Source side callbacks.
  */
 static void
-gtk_drag_selection_get (GtkWidget        *widget, 
-                        GtkSelectionData *selection_data,
-                        guint32           time,
-                        gpointer          data)
-{
-  GtkDragSourceInfo *info = data;
-  static GdkAtom null_atom = NULL;
-
-  if (!null_atom)
-    null_atom = g_intern_static_string ("NULL");
-
-  if (gtk_selection_data_get_target (selection_data) == g_intern_static_string ("DELETE"))
-    {
-      g_signal_emit_by_name (info->widget,
-                             "drag-data-delete", 
-                             info->context);
-      gtk_selection_data_set (selection_data, null_atom, 8, NULL, 0);
-    }
-  else if (gdk_content_formats_contain_mime_type (info->target_list, 
-                                                  gtk_selection_data_get_target (selection_data)))
-    {
-      g_signal_emit_by_name (info->widget, "drag-data-get",
-                             info->context,
-                             selection_data,
-                             time);
-    }
-}
-
-static void
 gtk_drag_remove_icon (GtkDragSourceInfo *info)
 {
   if (info->icon_widget)
@@ -1624,10 +1588,6 @@ gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
                                         info);
   g_signal_handlers_disconnect_by_func (info->context,
                                         gtk_drag_context_cancel_cb,
-                                        info);
-
-  g_signal_handlers_disconnect_by_func (info->ipc_widget,
-                                        gtk_drag_selection_get,
                                         info);
 
   g_signal_emit_by_name (info->widget, "drag-end", info->context);
