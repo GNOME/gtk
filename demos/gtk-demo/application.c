@@ -469,22 +469,33 @@ demo_application_window_size_allocate (GtkWidget           *widget,
     gtk_window_get_size (GTK_WINDOW (window), &window->width, &window->height);
 }
 
-static gboolean
-demo_application_window_state_event (GtkWidget           *widget,
-                                     GdkEventWindowState *event)
+static void
+window_state_changed (GtkWidget *widget)
 {
   DemoApplicationWindow *window = (DemoApplicationWindow *)widget;
-  gboolean res = GDK_EVENT_PROPAGATE;
-  GdkWindowState changed, new_state;
+  GdkWindowState new_state;
 
-  if (GTK_WIDGET_CLASS (demo_application_window_parent_class)->window_state_event)
-    res = GTK_WIDGET_CLASS (demo_application_window_parent_class)->window_state_event (widget, event);
-
-  gdk_event_get_window_state ((GdkEvent *)event, &changed, &new_state);
+  new_state = gdk_window_get_state (gtk_widget_get_window (widget));
   window->maximized = (new_state & GDK_WINDOW_STATE_MAXIMIZED) != 0;
   window->fullscreen = (new_state & GDK_WINDOW_STATE_FULLSCREEN) != 0;
+}
 
-  return res;
+static void
+demo_application_window_realize (GtkWidget *widget)
+{
+  GTK_WIDGET_CLASS (demo_application_window_parent_class)->realize (widget);
+
+  g_signal_connect_swapped (gtk_widget_get_window (widget), "notify::state",
+                            G_CALLBACK (window_state_changed), widget);
+}
+
+static void
+demo_application_window_unrealize (GtkWidget *widget)
+{
+  g_signal_handlers_disconnect_by_func (gtk_widget_get_window (widget),
+                                        window_state_changed, widget);
+
+  GTK_WIDGET_CLASS (demo_application_window_parent_class)->unrealize (widget);
 }
 
 static void
@@ -506,7 +517,8 @@ demo_application_window_class_init (DemoApplicationWindowClass *class)
   object_class->constructed = demo_application_window_constructed;
 
   widget_class->size_allocate = demo_application_window_size_allocate;
-  widget_class->window_state_event = demo_application_window_state_event;
+  widget_class->realize = demo_application_window_realize;
+  widget_class->unrealize = demo_application_window_unrealize;
   widget_class->destroy = demo_application_window_destroy;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/application_demo/application.ui");
