@@ -406,24 +406,6 @@ struct _GdkEventProximity
 };
 
 /**
- * GdkEventWindowState:
- * @type: the type of the event (%GDK_WINDOW_STATE).
- * @window: the window which received the event.
- * @send_event: %TRUE if the event was sent explicitly.
- * @changed_mask: mask specifying what flags have changed.
- * @new_window_state: the new window state, a combination of
- *   #GdkWindowState bits.
- *
- * Generated when the state of a toplevel window changes.
- */
-struct _GdkEventWindowState
-{
-  GdkEventAny any;
-  GdkWindowState changed_mask;
-  GdkWindowState new_window_state;
-};
-
-/**
  * GdkEventGrabBroken:
  * @type: the type of the event (%GDK_GRAB_BROKEN)
  * @window: the window which received the event, i.e. the window
@@ -640,7 +622,6 @@ struct _GdkEventPadGroupMode {
  * @configure: a #GdkEventConfigure
  * @proximity: a #GdkEventProximity
  * @dnd: a #GdkEventDND
- * @window_state: a #GdkEventWindowState
  * @grab_broken: a #GdkEventGrabBroken
  * @touchpad_swipe: a #GdkEventTouchpadSwipe
  * @touchpad_pinch: a #GdkEventTouchpadPinch
@@ -693,7 +674,6 @@ union _GdkEvent
   GdkEventConfigure	    configure;
   GdkEventProximity	    proximity;
   GdkEventDND               dnd;
-  GdkEventWindowState       window_state;
   GdkEventGrabBroken        grab_broken;
   GdkEventTouchpadSwipe     touchpad_swipe;
   GdkEventTouchpadPinch     touchpad_pinch;

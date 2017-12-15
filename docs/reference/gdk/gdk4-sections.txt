@@ -723,7 +723,6 @@ GdkEventConfigure
 GdkEventProperty
 GdkEventDND
 GdkEventProximity
-GdkEventWindowState
 GdkEventOwnerChange
 GdkEventGrabBroken
 GdkEventTouchpadSwipe

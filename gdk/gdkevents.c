@@ -866,7 +866,6 @@ gdk_event_get_time (const GdkEvent *event)
       case GDK_EXPOSE:
       case GDK_MAP:
       case GDK_UNMAP:
-      case GDK_WINDOW_STATE:
       case GDK_GRAB_BROKEN:
       case GDK_EVENT_LAST:
       default:
@@ -946,7 +945,6 @@ gdk_event_get_state (const GdkEvent        *event,
       case GDK_EXPOSE:
       case GDK_MAP:
       case GDK_UNMAP:
-      case GDK_WINDOW_STATE:
       case GDK_GRAB_BROKEN:
       case GDK_PAD_BUTTON_PRESS:
       case GDK_PAD_BUTTON_RELEASE:
@@ -1939,59 +1937,17 @@ gdk_get_show_events (void)
   return (_gdk_debug_flags & GDK_DEBUG_EVENTS) != 0;
 }
 
-static GList *
-gdk_get_pending_window_state_event_link (GdkWindow *window)
-{
-  GdkDisplay *display = gdk_window_get_display (window);
-  GList *tmp_list;
-
-  for (tmp_list = display->queued_events; tmp_list; tmp_list = tmp_list->next)
-    {
-      GdkEvent *event = tmp_list->data;
-
-      if (event->any.type == GDK_WINDOW_STATE &&
-          event->any.window == window)
-        return tmp_list;
-    }
-
-  return NULL;
-}
-
 void
 _gdk_set_window_state (GdkWindow      *window,
                        GdkWindowState  new_state)
 {
   GdkDisplay *display = gdk_window_get_display (window);
-  GdkEvent *temp_event;
   GdkWindowState old;
-  GList *pending_event_link;
 
   g_return_if_fail (window != NULL);
 
   if (new_state == window->state)
     return; /* No actual work to do, nothing changed. */
-
-  temp_event = gdk_event_new (GDK_WINDOW_STATE);
-
-  temp_event->any.window = g_object_ref (window);
-  temp_event->any.send_event = FALSE;
-  temp_event->window_state.new_window_state = new_state;
-
-  pending_event_link = gdk_get_pending_window_state_event_link (window);
-  if (pending_event_link)
-    {
-      old = window->old_state;
-      _gdk_event_queue_remove_link (display, pending_event_link);
-      gdk_event_free (pending_event_link->data);
-      g_list_free_1 (pending_event_link);
-    }
-  else
-    {
-      old = window->state;
-      window->old_state = old;
-    }
-
-  temp_event->window_state.changed_mask = new_state ^ old;
 
   /* Actually update the field in GdkWindow, this is sort of an odd
    * place to do it, but seems like the safest since it ensures we expose no
@@ -2000,8 +1956,7 @@ _gdk_set_window_state (GdkWindow      *window,
 
   window->state = new_state;
 
-  if (temp_event->window_state.changed_mask & GDK_WINDOW_STATE_WITHDRAWN)
-    _gdk_window_update_viewable (window);
+  _gdk_window_update_viewable (window);
 
   /* We only really send the event to toplevels, since
    * all the window states don't apply to non-toplevels.
@@ -2012,7 +1967,6 @@ _gdk_set_window_state (GdkWindow      *window,
     {
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_TEMP: /* ? */
-      gdk_display_put_event (display, temp_event);
       g_object_notify (G_OBJECT (window), "state");
       break;
     case GDK_WINDOW_FOREIGN:
@@ -2021,8 +1975,6 @@ _gdk_set_window_state (GdkWindow      *window,
     default:
       break;
     }
-
-  gdk_event_free (temp_event);
 }
 
 void
@@ -2454,33 +2406,6 @@ gdk_event_get_grab_window (const GdkEvent  *event,
   if (event->any.type == GDK_GRAB_BROKEN)
     {
       *window = event->grab_broken.grab_window;
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-/**
- * gdk_event_get_window_state:
- * @event: a #GdkEvent
- * @changed: (out):
- * @new_state: (out):
- * 
- * Returns: %TRUE on success, otherwise %FALSE
- **/
-gboolean
-gdk_event_get_window_state (const GdkEvent *event,
-                            GdkWindowState *changed,
-                            GdkWindowState *new_state)
-
-{
-  if (!event)
-    return FALSE;
-
-  if (event->any.type == GDK_WINDOW_STATE)
-    {
-      *changed = event->window_state.changed_mask;
-      *new_state = event->window_state.new_window_state;
       return TRUE;
     }
 

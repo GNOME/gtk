@@ -137,7 +137,6 @@ typedef struct _GdkEventCrossing    GdkEventCrossing;
 typedef struct _GdkEventConfigure   GdkEventConfigure;
 typedef struct _GdkEventProximity   GdkEventProximity;
 typedef struct _GdkEventDND         GdkEventDND;
-typedef struct _GdkEventWindowState GdkEventWindowState;
 typedef struct _GdkEventSetting     GdkEventSetting;
 typedef struct _GdkEventGrabBroken  GdkEventGrabBroken;
 typedef struct _GdkEventTouchpadSwipe GdkEventTouchpadSwipe;
@@ -246,8 +245,6 @@ typedef GdkFilterReturn (*GdkFilterFunc) (GdkXEvent *xevent,
  * @GDK_DROP_FINISHED: the drop operation initiated by the window has completed.
  * @GDK_CLIENT_EVENT: a message has been received from another application.
  * @GDK_SCROLL: the scroll wheel was turned
- * @GDK_WINDOW_STATE: the state of a window has changed. See #GdkWindowState
- *   for the possible window states
  * @GDK_GRAB_BROKEN: a pointer or keyboard grab was broken. This event type
  *   was added in 2.8.
  * @GDK_DAMAGE: the content of the window has been changed. This event type
@@ -309,7 +306,6 @@ typedef enum
   GDK_DROP_FINISHED     = 27,
   GDK_CLIENT_EVENT	= 28,
   GDK_SCROLL            = 31,
-  GDK_WINDOW_STATE      = 32,
   GDK_GRAB_BROKEN       = 35,
   GDK_DAMAGE            = 36,
   GDK_TOUCH_BEGIN       = 37,
@@ -673,10 +669,6 @@ gboolean       gdk_event_get_touch_emulating_pointer (const GdkEvent *event,
 GDK_AVAILABLE_IN_3_92
 gboolean       gdk_event_get_grab_window (const GdkEvent  *event,
                                           GdkWindow      **window);
-GDK_AVAILABLE_IN_3_92
-gboolean       gdk_event_get_window_state (const GdkEvent  *event,
-                                           GdkWindowState  *changed,
-                                           GdkWindowState  *new_state);
 GDK_AVAILABLE_IN_3_92
 gboolean       gdk_event_get_focus_in (const GdkEvent *event,
                                        gboolean       *focus_in);
