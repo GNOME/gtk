@@ -5740,22 +5740,20 @@ create_wmhints (GtkWidget *widget)
     gtk_widget_destroy (window);
 }
 
-
 /*
  * Window state tracking
  */
 
-static gint
-window_state_callback (GtkWidget *widget,
-                       GdkEventWindowState *event,
-                       gpointer data)
+static void
+window_state_callback (GdkWindow  *window,
+                       GParamSpec *pspec,
+                       GtkWidget  *label)
 {
-  GtkWidget *label = data;
   gchar *msg;
-  GdkWindowState changed, new_state;
+  GdkWindowState new_state;
 
-  gdk_event_get_window_state ((GdkEvent *)event, &changed, &new_state);
-  msg = g_strconcat (gtk_window_get_title (GTK_WINDOW (widget)), ": ",
+  new_state = gdk_window_get_state (window);
+  msg = g_strconcat ((const char *)g_object_get_data (G_OBJECT (label), "title"), ": ",
                      (new_state & GDK_WINDOW_STATE_WITHDRAWN) ?
                      "withdrawn" : "not withdrawn", ", ",
                      (new_state & GDK_WINDOW_STATE_ICONIFIED) ?
@@ -5765,18 +5763,16 @@ window_state_callback (GtkWidget *widget,
                      (new_state & GDK_WINDOW_STATE_MAXIMIZED) ?
                      "maximized" : "not maximized", ", ",
                      (new_state & GDK_WINDOW_STATE_FULLSCREEN) ?
-                     "fullscreen" : "not fullscreen",
+                     "fullscreen" : "not fullscreen", ", ",
                      (new_state & GDK_WINDOW_STATE_ABOVE) ?
                      "above" : "not above", ", ",
                      (new_state & GDK_WINDOW_STATE_BELOW) ?
                      "below" : "not below", ", ",
                      NULL);
-  
+
   gtk_label_set_text (GTK_LABEL (label), msg);
 
   g_free (msg);
-
-  return FALSE;
 }
 
 static GtkWidget*
@@ -5798,10 +5794,10 @@ tracking_label (GtkWidget *window)
   gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
   gtk_box_pack_start (GTK_BOX (hbox), label);
 
-  g_signal_connect (window,
-		    "window_state_event",
-		    G_CALLBACK (window_state_callback),
-		    label);
+  g_object_set_data (G_OBJECT (label), "title", (gpointer)gtk_window_get_title (GTK_WINDOW (window)));
+  g_signal_connect (gtk_widget_get_window (window), "notify::state",
+                    G_CALLBACK (window_state_callback),
+                    label);
 
   button = gtk_button_new_with_label ("Deiconify");
   g_signal_connect_object (button,
@@ -6030,6 +6026,9 @@ create_window_states (GtkWidget *widget)
       controls = get_state_controls (normal);
       gtk_container_add (GTK_CONTAINER (normal), controls);
       
+      gtk_widget_realize (iconified);
+      gtk_widget_realize (normal);
+
       label = tracking_label (iconified);
       gtk_container_add (GTK_CONTAINER (box1), label);
 
