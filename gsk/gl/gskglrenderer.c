@@ -1038,6 +1038,240 @@ render_cross_fade_node (GskGLRenderer       *self,
   ops_draw (builder, vertex_data);
 }
 
+static inline void
+apply_viewport_op (const Program  *program,
+                   const RenderOp *op)
+{
+  OP_PRINT (" -> New Viewport: %f, %f, %f, %f", op->viewport.origin.x, op->viewport.origin.y, op->viewport.size.width, op->viewport.size.height);
+  glUniform4f (program->viewport_location,
+               op->viewport.origin.x, op->viewport.origin.y,
+               op->viewport.size.width, op->viewport.size.height);
+  glViewport (0, 0, op->viewport.size.width, op->viewport.size.height);
+}
+
+static inline void
+apply_modelview_op (const Program  *program,
+                    const RenderOp *op)
+{
+  float mat[16];
+
+  OP_PRINT (" -> Modelview");
+  graphene_matrix_to_float (&op->modelview, mat);
+  glUniformMatrix4fv (program->modelview_location, 1, GL_FALSE, mat);
+}
+
+static inline void
+apply_projection_op (const Program  *program,
+                     const RenderOp *op)
+{
+  float mat[16];
+
+  OP_PRINT (" -> Projection");
+  graphene_matrix_to_float (&op->projection, mat);
+  glUniformMatrix4fv (program->projection_location, 1, GL_FALSE, mat);
+}
+
+static inline void
+apply_program_op (const Program  *program,
+                  const RenderOp *op)
+{
+  OP_PRINT (" -> Program: %d", op->program->index);
+  glUseProgram (op->program->id);
+}
+
+static inline void
+apply_render_target_op (GskGLRenderer  *self,
+                        const Program  *program,
+                        const RenderOp *op)
+{
+  OP_PRINT (" -> Render Target: %d", op->render_target_id);
+
+  glBindFramebuffer (GL_FRAMEBUFFER, op->render_target_id);
+
+  if (op->render_target_id != 0)
+    glDisable (GL_SCISSOR_TEST);
+  else
+    gsk_gl_renderer_setup_render_mode (self); /* Reset glScissor etc. */
+}
+
+static inline void
+apply_color_op (const Program  *program,
+                const RenderOp *op)
+{
+  OP_PRINT (" -> Color: (%f, %f, %f, %f)", op->color.red, op->color.green, op->color.blue, op->color.alpha);
+  /* TODO: We use color.color_location here and this is right for all three of the programs above,
+   *       but that's just a coincidence. */
+  glUniform4f (program->color.color_location,
+               op->color.red, op->color.green, op->color.blue, op->color.alpha);
+}
+
+static inline void
+apply_opacity_op (const Program  *program,
+                  const RenderOp *op)
+{
+  OP_PRINT (" -> Opacity %f", op->opacity);
+  glUniform1f (program->alpha_location, op->opacity);
+}
+
+static inline void
+apply_source_texture_op (const Program  *program,
+                         const RenderOp *op)
+{
+  g_assert(op->texture_id != 0);
+  OP_PRINT (" -> New texture: %d", op->texture_id);
+  /* Use texture unit 0 for the source */
+  glUniform1i (program->source_location, 0);
+  glActiveTexture (GL_TEXTURE0);
+  glBindTexture (GL_TEXTURE_2D, op->texture_id);
+}
+
+static inline void
+apply_color_matrix_op (const Program  *program,
+                       const RenderOp *op)
+{
+  float mat[16];
+  float vec[4];
+  OP_PRINT (" -> Color Matrix");
+  graphene_matrix_to_float (&op->color_matrix.matrix, mat);
+  glUniformMatrix4fv (program->color_matrix.color_matrix_location, 1, GL_FALSE, mat);
+
+  graphene_vec4_to_float (&op->color_matrix.offset, vec);
+  glUniform4fv (program->color_matrix.color_offset_location, 1, vec);
+}
+
+static inline void
+apply_clip_op (const Program  *program,
+               const RenderOp *op)
+{
+  OP_PRINT (" -> Clip (%f, %f, %f, %f) (%f, %f, %f, %f), (%f, %f, %f, %f)",
+            op->clip.bounds.origin.x, op->clip.bounds.origin.y,
+            op->clip.bounds.size.width, op->clip.bounds.size.height,
+            op->clip.corner[0].width,
+            op->clip.corner[1].width,
+            op->clip.corner[2].width,
+            op->clip.corner[3].width,
+            op->clip.corner[0].height,
+            op->clip.corner[1].height,
+            op->clip.corner[2].height,
+            op->clip.corner[3].height);
+  glUniform4f (program->clip_location,
+               op->clip.bounds.origin.x, op->clip.bounds.origin.y,
+               op->clip.bounds.size.width, op->clip.bounds.size.height);
+
+  glUniform4f (program->clip_corner_widths_location,
+               op->clip.corner[0].width,
+               op->clip.corner[1].width,
+               op->clip.corner[2].width,
+               op->clip.corner[3].width);
+  glUniform4f (program->clip_corner_heights_location,
+               op->clip.corner[0].height,
+               op->clip.corner[1].height,
+               op->clip.corner[2].height,
+               op->clip.corner[3].height);
+}
+
+static inline void
+apply_inset_shadow_op (const Program  *program,
+                       const RenderOp *op)
+{
+  OP_PRINT (" -> inset shadow. Color: (%f, %f, %f, %f), Offset: (%f, %f), Spread: %f, Outline: (%f, %f, %f, %f) Corner widths: (%f, %f, %f, %f), Corner Heights: (%f, %f, %f, %f)",
+            op->inset_shadow.color[0],
+            op->inset_shadow.color[1],
+            op->inset_shadow.color[2],
+            op->inset_shadow.color[3],
+            op->inset_shadow.offset[0],
+            op->inset_shadow.offset[1],
+            op->inset_shadow.spread,
+            op->inset_shadow.outline[0],
+            op->inset_shadow.outline[1],
+            op->inset_shadow.outline[2],
+            op->inset_shadow.outline[3],
+            op->inset_shadow.corner_widths[0],
+            op->inset_shadow.corner_widths[1],
+            op->inset_shadow.corner_widths[2],
+            op->inset_shadow.corner_widths[3],
+            op->inset_shadow.corner_heights[0],
+            op->inset_shadow.corner_heights[1],
+            op->inset_shadow.corner_heights[2],
+            op->inset_shadow.corner_heights[3]);
+  glUniform4fv (program->inset_shadow.color_location, 1, op->inset_shadow.color);
+  glUniform2fv (program->inset_shadow.offset_location, 1, op->inset_shadow.offset);
+  glUniform1f (program->inset_shadow.spread_location, op->inset_shadow.spread);
+  glUniform4fv (program->inset_shadow.outline_location, 1, op->inset_shadow.outline);
+  glUniform4fv (program->inset_shadow.corner_widths_location, 1, op->inset_shadow.corner_widths);
+  glUniform4fv (program->inset_shadow.corner_heights_location, 1, op->inset_shadow.corner_heights);
+}
+static inline void
+apply_outset_shadow_op (const Program  *program,
+                        const RenderOp *op)
+{
+  OP_PRINT (" -> outset shadow");
+  glUniform4fv (program->outset_shadow.color_location, 1, op->outset_shadow.color);
+  glUniform2fv (program->outset_shadow.offset_location, 1, op->outset_shadow.offset);
+  glUniform1f (program->outset_shadow.spread_location, op->outset_shadow.spread);
+  glUniform4fv (program->outset_shadow.outline_location, 1, op->outset_shadow.outline);
+  glUniform4fv (program->outset_shadow.corner_widths_location, 1, op->outset_shadow.corner_widths);
+  glUniform4fv (program->outset_shadow.corner_heights_location, 1, op->outset_shadow.corner_heights);
+}
+
+static inline void
+apply_linear_gradient_op (const Program  *program,
+                          const RenderOp *op)
+{
+  OP_PRINT (" -> Linear gradient");
+  glUniform1i (program->linear_gradient.num_color_stops_location,
+               op->linear_gradient.n_color_stops);
+  glUniform4fv (program->linear_gradient.color_stops_location,
+                op->linear_gradient.n_color_stops,
+                op->linear_gradient.color_stops);
+  glUniform1fv (program->linear_gradient.color_offsets_location,
+                op->linear_gradient.n_color_stops,
+                op->linear_gradient.color_offsets);
+  glUniform2f (program->linear_gradient.start_point_location,
+               op->linear_gradient.start_point.x, op->linear_gradient.start_point.y);
+  glUniform2f (program->linear_gradient.end_point_location,
+               op->linear_gradient.end_point.x, op->linear_gradient.end_point.y);
+}
+
+static inline void
+apply_border_op (const Program  *program,
+                 const RenderOp *op)
+{
+  OP_PRINT (" -> Border (%f, %f, %f, %f)",
+            op->border.widths[0], op->border.widths[1], op->border.widths[2], op->border.widths[3]);
+  glUniform4fv (program->border.widths_location, 1, op->border.widths);
+}
+
+static inline void
+apply_border_color_op (const Program  *program,
+                       const RenderOp *op)
+{
+  OP_PRINT (" -> Border color (%f, %f, %f, %f)",
+            op->border.color[0], op->border.color[1], op->border.color[2], op->border.color[3]);
+  glUniform4fv (program->border.color_location, 1, op->border.color);
+}
+
+static inline void
+apply_blur_op (const Program  *program,
+               const RenderOp *op)
+{
+  OP_PRINT (" -> Blur");
+  glUniform1f (program->blur.blur_radius_location, op->blur.radius);
+  glUniform2f (program->blur.blur_size_location, op->blur.size.width, op->blur.size.height);
+}
+
+static inline void
+apply_cross_fade_op (const Program  *program,
+                     const RenderOp *op)
+{
+  /* End texture id */
+  glUniform1i (program->cross_fade.source2_location, 1);
+  glActiveTexture (GL_TEXTURE0 + 1);
+  glBindTexture (GL_TEXTURE_2D, op->cross_fade.source2);
+  /* progress */
+  glUniform1f (program->cross_fade.progress_location, op->cross_fade.progress);
+}
+
 static void
 gsk_gl_renderer_dispose (GObject *gobject)
 {
@@ -1646,8 +1880,6 @@ static void
 gsk_gl_renderer_render_ops (GskGLRenderer *self,
                             gsize          vertex_data_size)
 {
-  float mat[16];
-  float vec[4];
   guint i;
   guint n_ops = self->render_ops->len;
   const Program *program = NULL;
@@ -1710,35 +1942,20 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
       switch (op->op)
         {
         case OP_CHANGE_PROJECTION:
-          graphene_matrix_to_float (&op->projection, mat);
-          glUniformMatrix4fv (program->projection_location, 1, GL_FALSE, mat);
-          OP_PRINT (" -> Projection");
-          /*graphene_matrix_print (&op->projection);*/
+          apply_projection_op (program, op);
           break;
 
         case OP_CHANGE_MODELVIEW:
-          graphene_matrix_to_float (&op->modelview, mat);
-          glUniformMatrix4fv (program->modelview_location, 1, GL_FALSE, mat);
-          OP_PRINT (" -> Modelview");
-          /*graphene_matrix_print (&op->modelview);*/
+          apply_modelview_op (program, op);
           break;
 
         case OP_CHANGE_PROGRAM:
+          apply_program_op (program, op);
           program = op->program;
-          glUseProgram (op->program->id);
-          OP_PRINT (" -> Program: %d", op->program->index);
           break;
 
         case OP_CHANGE_RENDER_TARGET:
-          OP_PRINT (" -> Render Target: %d", op->render_target_id);
-
-          glBindFramebuffer (GL_FRAMEBUFFER, op->render_target_id);
-
-          if (op->render_target_id != 0)
-            glDisable (GL_SCISSOR_TEST);
-          else
-            gsk_gl_renderer_setup_render_mode (self); /* Reset glScissor etc. */
-
+          apply_render_target_op (self, program, op);
           break;
 
         case OP_CLEAR:
@@ -1747,162 +1964,58 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
           break;
 
         case OP_CHANGE_VIEWPORT:
-          OP_PRINT (" -> New Viewport: %f, %f, %f, %f", op->viewport.origin.x, op->viewport.origin.y, op->viewport.size.width, op->viewport.size.height);
-          glUniform4f (program->viewport_location,
-                       op->viewport.origin.x, op->viewport.origin.y,
-                       op->viewport.size.width, op->viewport.size.height);
-          glViewport (0, 0, op->viewport.size.width, op->viewport.size.height);
+          apply_viewport_op (program, op);
           break;
 
         case OP_CHANGE_OPACITY:
-          OP_PRINT (" -> Opacity %f", op->opacity);
-          glUniform1f (program->alpha_location, op->opacity);
+          apply_opacity_op (program, op);
           break;
 
         case OP_CHANGE_COLOR_MATRIX:
-          OP_PRINT (" -> Color Matrix");
-          g_assert (program == &self->color_matrix_program);
-          graphene_matrix_to_float (&op->color_matrix.matrix, mat);
-          glUniformMatrix4fv (program->color_matrix.color_matrix_location, 1, GL_FALSE, mat);
-
-          graphene_vec4_to_float (&op->color_matrix.offset, vec);
-          glUniform4fv (program->color_matrix.color_offset_location, 1, vec);
+          apply_color_matrix_op (program, op);
           break;
 
         case OP_CHANGE_COLOR:
-          OP_PRINT (" -> Color: (%f, %f, %f, %f)", op->color.red, op->color.green, op->color.blue, op->color.alpha);
           g_assert (program == &self->color_program || program == &self->coloring_program ||
                     program == &self->shadow_program);
-          /* TODO: We use color.color_location here and this is right for all three of the programs above,
-           *       but that's just a coincidence. */
-          glUniform4f (program->color.color_location,
-                       op->color.red, op->color.green, op->color.blue, op->color.alpha);
+          apply_color_op (program, op);
           break;
 
         case OP_CHANGE_BORDER_COLOR:
-          OP_PRINT (" -> Border color (%f, %f, %f, %f)",
-                    op->border.color[0], op->border.color[1], op->border.color[2], op->border.color[3]);
-          g_assert (program == &self->border_program);
-          glUniform4fv (program->border.color_location, 1, op->border.color);
+          apply_border_color_op (program, op);
           break;
 
         case OP_CHANGE_CLIP:
-          OP_PRINT (" -> Clip (%f, %f, %f, %f) (%f, %f, %f, %f), (%f, %f, %f, %f)",
-                    op->clip.bounds.origin.x, op->clip.bounds.origin.y,
-                    op->clip.bounds.size.width, op->clip.bounds.size.height,
-                    op->clip.corner[0].width,
-                    op->clip.corner[1].width,
-                    op->clip.corner[2].width,
-                    op->clip.corner[3].width,
-                    op->clip.corner[0].height,
-                    op->clip.corner[1].height,
-                    op->clip.corner[2].height,
-                    op->clip.corner[3].height);
-          glUniform4f (program->clip_location,
-                       op->clip.bounds.origin.x, op->clip.bounds.origin.y,
-                       op->clip.bounds.size.width, op->clip.bounds.size.height);
-
-          glUniform4f (program->clip_corner_widths_location,
-                       op->clip.corner[0].width,
-                       op->clip.corner[1].width,
-                       op->clip.corner[2].width,
-                       op->clip.corner[3].width);
-          glUniform4f (program->clip_corner_heights_location,
-                       op->clip.corner[0].height,
-                       op->clip.corner[1].height,
-                       op->clip.corner[2].height,
-                       op->clip.corner[3].height);
+          apply_clip_op (program, op);
           break;
 
         case OP_CHANGE_SOURCE_TEXTURE:
-          g_assert(op->texture_id != 0);
-          OP_PRINT (" -> New texture: %d", op->texture_id);
-          /* Use texture unit 0 for the source */
-          glUniform1i (program->source_location, 0);
-          glActiveTexture (GL_TEXTURE0);
-          glBindTexture (GL_TEXTURE_2D, op->texture_id);
-
+          apply_source_texture_op (program, op);
           break;
 
         case OP_CHANGE_CROSS_FADE:
           g_assert (program == &self->cross_fade_program);
-          /* End texture id */
-          glUniform1i (program->cross_fade.source2_location, 1);
-          glActiveTexture (GL_TEXTURE0 + 1);
-          glBindTexture (GL_TEXTURE_2D, op->cross_fade.source2);
-          /* progress */
-          glUniform1f (program->cross_fade.progress_location, op->cross_fade.progress);
+          apply_cross_fade_op (program, op);
           break;
 
         case OP_CHANGE_LINEAR_GRADIENT:
-          OP_PRINT (" -> Linear gradient");
-          glUniform1i (program->linear_gradient.num_color_stops_location,
-                       op->linear_gradient.n_color_stops);
-          glUniform4fv (program->linear_gradient.color_stops_location,
-                        op->linear_gradient.n_color_stops,
-                        op->linear_gradient.color_stops);
-          glUniform1fv (program->linear_gradient.color_offsets_location,
-                        op->linear_gradient.n_color_stops,
-                        op->linear_gradient.color_offsets);
-          glUniform2f (program->linear_gradient.start_point_location,
-                       op->linear_gradient.start_point.x, op->linear_gradient.start_point.y);
-          glUniform2f (program->linear_gradient.end_point_location,
-                       op->linear_gradient.end_point.x, op->linear_gradient.end_point.y);
+          apply_linear_gradient_op (program, op);
           break;
 
        case OP_CHANGE_BLUR:
-          OP_PRINT (" -> Blur");
-          g_assert (program == &self->blur_program);
-          glUniform1f (program->blur.blur_radius_location, op->blur.radius);
-          glUniform2f (program->blur.blur_size_location, op->blur.size.width, op->blur.size.height);
+          apply_blur_op (program, op);
           break;
 
        case OP_CHANGE_INSET_SHADOW:
-          OP_PRINT (" -> inset shadow. Color: (%f, %f, %f, %f), Offset: (%f, %f), Spread: %f, Outline: (%f, %f, %f, %f) Corner widths: (%f, %f, %f, %f), Corner Heights: (%f, %f, %f, %f)",
-                    op->inset_shadow.color[0],
-                    op->inset_shadow.color[1],
-                    op->inset_shadow.color[2],
-                    op->inset_shadow.color[3],
-                    op->inset_shadow.offset[0],
-                    op->inset_shadow.offset[1],
-                    op->inset_shadow.spread,
-                    op->inset_shadow.outline[0],
-                    op->inset_shadow.outline[1],
-                    op->inset_shadow.outline[2],
-                    op->inset_shadow.outline[3],
-                    op->inset_shadow.corner_widths[0],
-                    op->inset_shadow.corner_widths[1],
-                    op->inset_shadow.corner_widths[2],
-                    op->inset_shadow.corner_widths[3],
-                    op->inset_shadow.corner_heights[0],
-                    op->inset_shadow.corner_heights[1],
-                    op->inset_shadow.corner_heights[2],
-                    op->inset_shadow.corner_heights[3]);
-          g_assert (program == &self->inset_shadow_program);
-          glUniform4fv (program->inset_shadow.color_location, 1, op->inset_shadow.color);
-          glUniform2fv (program->inset_shadow.offset_location, 1, op->inset_shadow.offset);
-          glUniform1f (program->inset_shadow.spread_location, op->inset_shadow.spread);
-          glUniform4fv (program->inset_shadow.outline_location, 1, op->inset_shadow.outline);
-          glUniform4fv (program->inset_shadow.corner_widths_location, 1, op->inset_shadow.corner_widths);
-          glUniform4fv (program->inset_shadow.corner_heights_location, 1, op->inset_shadow.corner_heights);
+          apply_inset_shadow_op (program, op);
           break;
 
        case OP_CHANGE_OUTSET_SHADOW:
-          OP_PRINT (" -> outset shadow");
-          g_assert (program == &self->outset_shadow_program);
-          glUniform4fv (program->outset_shadow.color_location, 1, op->outset_shadow.color);
-          glUniform2fv (program->outset_shadow.offset_location, 1, op->outset_shadow.offset);
-          glUniform1f (program->outset_shadow.spread_location, op->outset_shadow.spread);
-          glUniform4fv (program->outset_shadow.outline_location, 1, op->outset_shadow.outline);
-          glUniform4fv (program->outset_shadow.corner_widths_location, 1, op->outset_shadow.corner_widths);
-          glUniform4fv (program->outset_shadow.corner_heights_location, 1, op->outset_shadow.corner_heights);
+          apply_outset_shadow_op (program, op);
           break;
 
         case OP_CHANGE_BORDER:
-          OP_PRINT (" -> Border (%f, %f, %f, %f)",
-                    op->border.widths[0], op->border.widths[1], op->border.widths[2], op->border.widths[3]);
-          g_assert (program == &self->border_program);
-          glUniform4fv (program->border.widths_location, 1, op->border.widths);
+          apply_border_op (program, op);
           break;
 
         case OP_DRAW:
