@@ -117,7 +117,7 @@ scale[.fine-tune]
       <programlisting><![CDATA[
 button, entry {
   color: #ff00ea;
-  font: 12px "Comic Sans"
+  font: 12px "Comic Sans";
 }
 ]]></programlisting>
     </example>
@@ -136,8 +136,8 @@ button, entry {
       The syntax for @import rules is as follows:
     </para>
 
-<literallayout><code>〈import rule〉 = @import [ 〈url〉 | 〈string〉] ;</code>
-<code>〈url〉 = url( 〈string〉)</code>
+<literallayout><code>〈import rule〉 = @import [ 〈url〉 | 〈string〉 ]</code>
+<code>〈url〉 = url( 〈string〉 )</code>
 </literallayout>
 
     <example><title>An example for using the @import rule</title>
@@ -181,7 +181,7 @@ button, entry {
       <title>Theme labels that are descendants of a window</title>
       <programlisting><![CDATA[
 window label {
-  background-color: #898989
+  background-color: #898989;
 }
 ]]></programlisting>
     </example>
@@ -190,7 +190,7 @@ window label {
       <title>Theme notebooks, and anything within</title>
       <programlisting><![CDATA[
 notebook {
-  background-color: #a939f0
+  background-color: #a939f0;
 }
 ]]></programlisting>
     </example>
@@ -201,7 +201,7 @@ notebook {
 combobox,
 notebook > entry {
   color: @fg_color;
-  background-color: #1209a2
+  background-color: #1209a2;
 }
 ]]></programlisting>
     </example>
@@ -210,7 +210,7 @@ notebook > entry {
       <title>Theme any widget within a GtkBox</title>
       <programlisting><![CDATA[
 box * {
-  font: 20px Sans
+  font: 20px Sans;
 }
 ]]></programlisting>
     </example>
@@ -219,7 +219,7 @@ box * {
       <title>Theme a label named title-label</title>
       <programlisting><![CDATA[
 label#title-label {
-  font: 15px Sans
+  font: 15px Sans;
 }
 ]]></programlisting>
     </example>
@@ -228,7 +228,7 @@ label#title-label {
       <title>Theme any widget named main-entry</title>
       <programlisting><![CDATA[
 #main-entry {
-  background-color: #f0a810
+  background-color: #f0a810;
 }
 ]]></programlisting>
     </example>
@@ -246,7 +246,7 @@ label#title-label {
       <title>Theme the entry of a GtkSpinButton</title>
       <programlisting><![CDATA[
 spinbutton entry {
-  color: 900185;
+  color: #900185;
 }
 ]]></programlisting>
     </example>
@@ -508,8 +508,8 @@ checkbutton:indeterminate {
     </para>
 
 <literallayout><code>〈color〉 = currentColor | transparent | 〈color name〉 | 〈rgb color〉 | 〈rgba color〉 | 〈hex color〉 | 〈gtk color〉</code>
-<code>〈rgb color 〉 = rgb( 〈number〉, 〈number〉, 〈number〉 ) | rgb( 〈percentage〉, 〈percentage〉, 〈percentage〉 )</code>
-<code>〈rgba color 〉 = rgba(〈number〉, 〈number〉, 〈number〉, 〈alpha value〉) | rgba( 〈percentage〉, 〈percentage〉, 〈percentage〉, 〈alpha value〉 )</code>
+<code>〈rgb color〉 = rgb( 〈number〉, 〈number〉, 〈number〉 ) | rgb( 〈percentage〉, 〈percentage〉, 〈percentage〉 )</code>
+<code>〈rgba color〉 = rgba( 〈number〉, 〈number〉, 〈number〉, 〈alpha value〉 ) | rgba( 〈percentage〉, 〈percentage〉, 〈percentage〉, 〈alpha value〉 )</code>
 <code>〈hex color〉 = #〈hex digits〉</code>
 <code>〈alpha value〉 = 〈number〉</code>, clamped to values between 0 and 1
 </literallayout>
@@ -546,7 +546,7 @@ checkbutton:indeterminate {
       GTK+ adds several additional ways to specify colors.
     </para>
 
-<literallayout><code>〈gtk color〉 = 〈symbolic color〉 | 〈color expression〉| 〈win32 color〉</code>
+<literallayout><code>〈gtk color〉 = 〈symbolic color〉 | 〈color expression〉 | 〈win32 color〉</code>
 </literallayout>
 
     <para>
@@ -570,7 +570,7 @@ checkbutton:indeterminate {
 @define-color bg_color #f9a039;
 
 * {
-background-color: @bg_color;
+  background-color: @bg_color;
 }
 ]]></programlisting>
     </example>
@@ -590,14 +590,15 @@ background-color: @bg_color;
       number from 0 to 1 and applies that as the opacity of the supplied color.
     </para>
 
-<literallayout><code>〈color expression〉 = lighter(〈color〉) | darker(〈color〉) | shade(〈color〉,〈number〉) | alpha(〈color〉,〈number〉) | mix(〈color〉,〈color〉,〈number〉)</code>
+<literallayout><code>〈color expression〉 = lighter( 〈color〉 ) | darker( 〈color〉 ) | shade( 〈color〉, 〈number〉 ) |</code>
+<code>                     alpha( 〈color〉, 〈number〉 ) | mix( 〈color〉, 〈color〉, 〈number〉 )</code>
 </literallayout>
 
     <para>
       On Windows, GTK+ allows to refer to system colors, as follows:
     </para>
 
-<literallayout><code>〈win32 color〉 = -gtk-win32-color( 〈name〉, 〈integer〉)</code>
+<literallayout><code>〈win32 color〉 = -gtk-win32-color( 〈name〉, 〈integer〉 )</code>
 </literallayout>
 
   </refsect2>
@@ -611,8 +612,8 @@ background-color: @bg_color;
     </para>
 
 <literallayout><code>〈image〉 = 〈url〉 | 〈crossfade〉 | 〈alternatives〉 | 〈gradient〉 | 〈gtk image〉</code>
-<code>〈crossfade〉 = cross-fade( 〈percentage〉, 〈image〉, 〈image〉)</code>
-<code>〈alternatives〉 = image([ 〈image〉, ]* [ 〈image〉 | 〈color〉 ])</code>
+<code>〈crossfade〉 = cross-fade( 〈percentage〉, 〈image〉, 〈image〉 )</code>
+<code>〈alternatives〉 = image([ 〈image〉, ]* [ 〈image〉 | 〈color〉 ] )</code>
 <code>〈gradient〉 = 〈linear gradient〉 | 〈radial gradient〉</code>
 <code>〈linear gradient〉 = [ linear-gradient | repeating-linear-gradient ] (</code>
 <code>                      [ [ 〈angle〉 | to 〈side or corner〉 ] , ]?</code>
@@ -621,7 +622,7 @@ background-color: @bg_color;
 <code>                      [ [ 〈shape〉 || 〈size〉 ] [ at 〈position〉 ]? , | at 〈position〉, ]?</code>
 <code>                      〈color stops〉 )</code>
 <code>〈side or corner〉 = [ left | right ] || [ top | bottom ]</code>
-<code>〈color stops〉 =  〈color stop〉 [ , 〈color stop〉]+</code>
+<code>〈color stops〉 =  〈color stop〉 [ , 〈color stop〉 ]+</code>
 <code>〈color stop〉 = 〈color〉 [ 〈percentage〉 | 〈length〉 ]?</code>
 <code>〈shape〉 = circle | ellipse</code>
 <code>〈size〉 = 〈extent keyword〉 | 〈length〉 | [ 〈length〉 | 〈percentage〉 ]{1,2}</code>
@@ -774,7 +775,7 @@ arrow.fancy {
       CSS, this can be done with the -gtk-scaled syntax.
     </para>
 
-<literallayout><code>〈scaled image〉 = -gtk-scaled( 〈image〉[, 〈image〉]* )</code>
+<literallayout><code>〈scaled image〉 = -gtk-scaled( 〈image〉[ , 〈image〉 ]* )</code>
 </literallayout>
 
     <para>
@@ -793,7 +794,7 @@ arrow {
 ]]></programlisting>
     </example>
 
-<literallayout><code>〈recolored image〉 = -gtk-recolor( 〈url〉[, 〈color palette〉] )</code>
+<literallayout><code>〈recolored image〉 = -gtk-recolor( 〈url〉 [ , 〈color palette〉 ] )</code>
 </literallayout>
 
     <para>
@@ -819,7 +820,7 @@ arrow {
     </para>
 
 <literallayout><code>〈win32 theme part〉 = -gtk-win32-theme-part( 〈name〉, 〈integer〉 〈integer〉</code>
-<code>                                              [, [ over( 〈integer〉 〈integer〉 [ , 〈alpha value〉]? ) | margins( 〈integer〉{1,4} ) ] ]* )</code>
+<code>                                              [ , [ over( 〈integer〉 〈integer〉 [ , 〈alpha value〉 ]? ) | margins( 〈integer〉{1,4} ) ] ]* )</code>
 </literallayout>
 
   </refsect2>
@@ -870,7 +871,7 @@ arrow {
 
 <literallayout><code>〈keyframe rule〉 = @keyframes 〈name〉 { 〈animation rule〉 }</code>
 <code>〈animation rule〉 = 〈animation selector〉 { 〈declaration〉* }</code>
-<code>〈animation selector〉 = 〈single animation selector〉 [ , 〈single animation selector  ]*</code>
+<code>〈animation selector〉 = 〈single animation selector〉 [ , 〈single animation selector〉 ]*</code>
 <code>〈single animation selector〉 = from | to | 〈percentage〉</code>
 </literallayout>
 
@@ -920,10 +921,10 @@ spinner {
       The syntax for @binding-set rules is as follows:
     </para>
 
-<literallayout><code>〈binding set rule〉 = @binding-set 〈binding name〉{ [ [ 〈binding〉 | 〈unbinding〉] ; ]* }</code>
+<literallayout><code>〈binding set rule〉 = @binding-set 〈binding name〉 { [ [ 〈binding〉 | 〈unbinding〉 ] ; ]* }</code>
 <code>〈binding〉 = bind "〈accelerator〉" { 〈signal emission〉* }</code>
-<code>〈signal emission〉 = "〈signal name〉" ( [ 〈argument〉[ , 〈argument〉]* ]? }</code>
-<code>〈unbinding〉 = unbind "〈accelerator〉" ;</code>
+<code>〈signal emission〉 = "〈signal name〉" ( [ 〈argument〉 [ , 〈argument〉 ]* ]? }</code>
+<code>〈unbinding〉 = unbind "〈accelerator〉"</code>
 </literallayout>
 
     <para>
