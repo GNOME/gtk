@@ -1142,7 +1142,7 @@ xdnd_set_targets (GdkX11DragContext *context_x11)
     atomlist[i] = gdk_x11_get_xatom_by_name_for_display (display, atoms[i]);
 
   XChangeProperty (GDK_DISPLAY_XDISPLAY (display),
-                   GDK_WINDOW_XID (context->source_window),
+                   GDK_WINDOW_XID (context_x11->ipc_window),
                    gdk_x11_get_xatom_by_name_for_display (display, "XdndTypeList"),
                    XA_ATOM, 32, PropModeReplace,
                    (guchar *)atomlist, n_atoms);
@@ -1188,7 +1188,7 @@ xdnd_set_actions (GdkX11DragContext *context_x11)
     }
 
   XChangeProperty (GDK_DISPLAY_XDISPLAY (display),
-                   GDK_WINDOW_XID (context->source_window),
+                   GDK_WINDOW_XID (context_x11->ipc_window),
                    gdk_x11_get_xatom_by_name_for_display (display, "XdndActionList"),
                    XA_ATOM, 32, PropModeReplace,
                    (guchar *)atomlist, n_atoms);
@@ -1314,7 +1314,7 @@ xdnd_send_enter (GdkX11DragContext *context_x11)
   xev.xclient.window = context_x11->drop_xid
                            ? context_x11->drop_xid
                            : GDK_WINDOW_XID (context->dest_window);
-  xev.xclient.data.l[0] = GDK_WINDOW_XID (context->source_window);
+  xev.xclient.data.l[0] = GDK_WINDOW_XID (context_x11->ipc_window);
   xev.xclient.data.l[1] = (context_x11->version << 24); /* version */
   xev.xclient.data.l[2] = 0;
   xev.xclient.data.l[3] = 0;
@@ -1322,7 +1322,7 @@ xdnd_send_enter (GdkX11DragContext *context_x11)
 
   GDK_NOTE(DND,
            g_message ("Sending enter source window %#lx XDND protocol version %d\n",
-                      GDK_WINDOW_XID (context->source_window), context_x11->version));
+                      GDK_WINDOW_XID (context_x11->ipc_window), context_x11->version));
   atoms = gdk_content_formats_get_mime_types (context->formats, &n_atoms);
 
   if (n_atoms > 3)
@@ -1362,7 +1362,7 @@ xdnd_send_leave (GdkX11DragContext *context_x11)
   xev.xclient.window = context_x11->drop_xid
                            ? context_x11->drop_xid
                            : GDK_WINDOW_XID (context->dest_window);
-  xev.xclient.data.l[0] = GDK_WINDOW_XID (context->source_window);
+  xev.xclient.data.l[0] = GDK_WINDOW_XID (context_x11->ipc_window);
   xev.xclient.data.l[1] = 0;
   xev.xclient.data.l[2] = 0;
   xev.xclient.data.l[3] = 0;
@@ -1392,7 +1392,7 @@ xdnd_send_drop (GdkX11DragContext *context_x11,
   xev.xclient.window = context_x11->drop_xid
                            ? context_x11->drop_xid
                            : GDK_WINDOW_XID (context->dest_window);
-  xev.xclient.data.l[0] = GDK_WINDOW_XID (context->source_window);
+  xev.xclient.data.l[0] = GDK_WINDOW_XID (context_x11->ipc_window);
   xev.xclient.data.l[1] = 0;
   xev.xclient.data.l[2] = time;
   xev.xclient.data.l[3] = 0;
@@ -1425,7 +1425,7 @@ xdnd_send_motion (GdkX11DragContext *context_x11,
   xev.xclient.window = context_x11->drop_xid
                            ? context_x11->drop_xid
                            : GDK_WINDOW_XID (context->dest_window);
-  xev.xclient.data.l[0] = GDK_WINDOW_XID (context->source_window);
+  xev.xclient.data.l[0] = GDK_WINDOW_XID (context_x11->ipc_window);
   xev.xclient.data.l[1] = 0;
   xev.xclient.data.l[2] = (x_root << 16) | y_root;
   xev.xclient.data.l[3] = time;
@@ -2968,8 +2968,6 @@ _gdk_x11_window_drag_begin (GdkWindow          *window,
   x11_context = GDK_X11_DRAG_CONTEXT (context);
 
   context->is_source = TRUE;
-  context->source_window = window;
-  g_object_ref (window);
 
   g_signal_connect (display, "xevent", G_CALLBACK (gdk_x11_drag_context_xevent), context);
 
@@ -2991,6 +2989,9 @@ _gdk_x11_window_drag_begin (GdkWindow          *window,
   if (gdk_window_get_group (window))
     gdk_window_set_group (x11_context->ipc_window, window);
   gdk_window_show (x11_context->ipc_window);
+
+  context->source_window = x11_context->ipc_window;
+  g_object_ref (context->source_window);
 
   x11_context->drag_window = create_drag_window (display);
 
