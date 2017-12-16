@@ -534,7 +534,6 @@ _gdk_wayland_window_drag_begin (GdkWindow          *window,
   GdkWaylandDragContext *context_wayland;
   GdkDragContext *context;
   GdkWaylandDisplay *display_wayland;
-  GdkWindow *toplevel;
   const char *const *mimetypes;
   gsize i, n_mimetypes;
 
@@ -561,8 +560,6 @@ _gdk_wayland_window_drag_begin (GdkWindow          *window,
       wl_data_source_offer (context_wayland->data_source, mimetypes[i]);
     }
 
-  toplevel = _gdk_device_window_at_position (device, NULL, NULL, NULL, TRUE);
-
   if (display_wayland->data_device_manager_version >=
       WL_DATA_SOURCE_SET_ACTIONS_SINCE_VERSION)
     {
@@ -572,7 +569,7 @@ _gdk_wayland_window_drag_begin (GdkWindow          *window,
 
   wl_data_device_start_drag (gdk_wayland_device_get_data_device (device),
                              context_wayland->data_source,
-                             gdk_wayland_window_get_wl_surface (toplevel),
+                             gdk_wayland_window_get_wl_surface (window),
 			     context_wayland->dnd_surface,
                              _gdk_wayland_display_get_serial (display_wayland));
 
