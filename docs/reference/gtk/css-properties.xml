@@ -661,12 +661,12 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>CSS allows other values</entry>
             </row>
             <row>
-              <entry>border‑right‑width</entry>
+              <entry>border‑left‑width</entry>
               <entry><code>〈length〉</code></entry>
               <entry><code>0px</code></entry>
               <entry></entry>
               <entry>✓</entry>
-              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-right-width">CSS2</ulink>,
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-left-width">CSS2</ulink>,
                      <ulink url="https://www.w3.org/TR/css3-background/#the-border-width">CSS3</ulink></entry>
               <entry>CSS allows other values</entry>
             </row>
