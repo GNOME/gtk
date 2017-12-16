@@ -1024,7 +1024,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
             </row>
             <row>
               <entry>border‑radius</entry>
-              <entry><code>[ 〈length〉 | 〈percentage〉 ]{1,4} [ / [ 〈length〉 | 〈percentage> ]{1,4} ]?</code></entry>
+              <entry><code>[ 〈length〉 | 〈percentage〉 ]{1,4} [ / [ 〈length〉 | 〈percentage〉 ]{1,4} ]?</code></entry>
               <entry>see individual properties</entry>
               <entry><ulink url="https://www.w3.org/TR/css3-background/#border-radius">CSS3</ulink></entry>
               <entry></entry>
@@ -1145,7 +1145,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
             </row>
             <row>
               <entry>‑gtk‑outline‑radius</entry>
-              <entry><code>[ 〈length〉|〈percentage〉 ]{1,4} [ / [〈length〉 | 〈percentage> ]{1,4} ]?</code></entry>
+              <entry><code>[ 〈length〉|〈percentage〉 ]{1,4} [ / [〈length〉 | 〈percentage〉 ]{1,4} ]?</code></entry>
               <entry>see individual properties</entry>
               <entry></entry>
               <entry></entry>
