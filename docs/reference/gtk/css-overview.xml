@@ -21,11 +21,6 @@ Overview of CSS in GTK+
 Formatting conventions:
 We use
 
-‑ U+2011 Non-breaking Hyphen
-
-to control line breaks in the Name and Value columns.
-We use
-
 〈 U+2329 Left-pointing Angle Bracket
 〉 U+232A Right-pointing Angle Bracket
 
@@ -381,31 +376,31 @@ checkbutton:indeterminate {
             <entry>GTK+ uses the widget name as ID</entry>
           </row>
           <row>
-            <entry>E:nth‑child(〈nth‑child〉)</entry>
+            <entry>E:nth-child(〈nth-child〉)</entry>
             <entry>any E node which is the n-th child of its parent node</entry>
             <entry><ulink url="https://www.w3.org/TR/css3-selectors/#structural-pseudos">CSS</ulink></entry>
             <entry></entry>
           </row>
           <row>
-            <entry>E:nth‑last‑child(〈nth‑child〉)</entry>
+            <entry>E:nth-last-child(〈nth-child〉)</entry>
             <entry>any E node which is the n-th child of its parent node, counting from the end</entry>
             <entry><ulink url="https://www.w3.org/TR/css3-selectors/#structural-pseudos">CSS</ulink></entry>
             <entry></entry>
           </row>
           <row>
-            <entry>E:first‑child</entry>
+            <entry>E:first-child</entry>
             <entry>any E node which is the first child of its parent node</entry>
             <entry><ulink url="https://www.w3.org/TR/css3-selectors/#structural-pseudos">CSS</ulink></entry>
             <entry></entry>
           </row>
           <row>
-            <entry>E:last‑child</entry>
+            <entry>E:last-child</entry>
             <entry>any E node which is the last child of its parent node</entry>
             <entry><ulink url="https://www.w3.org/TR/css3-selectors/#structural-pseudos">CSS</ulink></entry>
             <entry></entry>
           </row>
           <row>
-            <entry>E:only‑child</entry>
+            <entry>E:only-child</entry>
             <entry>any E node which is the only child of its parent node</entry>
             <entry><ulink url="https://www.w3.org/TR/css3-selectors/#structural-pseudos">CSS</ulink></entry>
             <entry>Equivalent to E:first-child:last-child</entry>
@@ -622,7 +617,7 @@ background-color: @bg_color;
 <code>〈linear gradient〉 = [ linear-gradient | repeating-linear-gradient ] (</code>
 <code>                      [ [ 〈angle〉 | to 〈side or corner〉 ] , ]?</code>
 <code>                      〈color stops〉 )</code>
-<code>〈radial gradient〉 = [ radial‑gradient | repeating‑radial‑gradient ] (</code>
+<code>〈radial gradient〉 = [ radial-gradient | repeating-radial-gradient ] (</code>
 <code>                      [ [ 〈shape〉 || 〈size〉 ] [ at 〈position〉 ]? , | at 〈position〉, ]?</code>
 <code>                      〈color stops〉 )</code>
 <code>〈side or corner〉 = [ left | right ] || [ top | bottom ]</code>
