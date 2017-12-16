@@ -4,13 +4,13 @@
 ]>
 <refentry id="chap-css-overview">
 <refmeta>
-<refentrytitle>GTK+ CSS</refentrytitle>
+<refentrytitle>GTK+ CSS Overview</refentrytitle>
 <manvolnum>3</manvolnum>
 <refmiscinfo>GTK Library</refmiscinfo>
 </refmeta>
 
 <refnamediv>
-<refname>GTK+ CSS</refname>
+<refname>GTK+ CSS Overview</refname>
 <refpurpose>
 Overview of CSS in GTK+
 </refpurpose>
