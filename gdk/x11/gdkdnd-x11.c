@@ -478,7 +478,7 @@ precache_target_list (GdkDragContext *context)
 
       atoms = gdk_content_formats_get_mime_types (context->formats, &n_atoms);
 
-      _gdk_x11_precache_atoms (GDK_WINDOW_DISPLAY (context->source_window),
+      _gdk_x11_precache_atoms (gdk_drag_context_get_display (context),
                                (const gchar **) atoms,
                                n_atoms);
     }
@@ -1134,14 +1134,14 @@ xdnd_set_targets (GdkX11DragContext *context_x11)
   Atom *atomlist;
   const char * const *atoms;
   gsize i, n_atoms;
-  GdkDisplay *display = GDK_WINDOW_DISPLAY (context->source_window);
+  GdkDisplay *display = gdk_drag_context_get_display (context);
 
   atoms = gdk_content_formats_get_mime_types (context->formats, &n_atoms);
   atomlist = g_new (Atom, n_atoms);
   for (i = 0; i < n_atoms; i++)
     atomlist[i] = gdk_x11_get_xatom_by_name_for_display (display, atoms[i]);
 
-  XChangeProperty (GDK_WINDOW_XDISPLAY (context->source_window),
+  XChangeProperty (GDK_DISPLAY_XDISPLAY (display),
                    GDK_WINDOW_XID (context->source_window),
                    gdk_x11_get_xatom_by_name_for_display (display, "XdndTypeList"),
                    XA_ATOM, 32, PropModeReplace,
@@ -1160,7 +1160,7 @@ xdnd_set_actions (GdkX11DragContext *context_x11)
   gint i;
   gint n_atoms;
   guint actions;
-  GdkDisplay *display = GDK_WINDOW_DISPLAY (context->source_window);
+  GdkDisplay *display = gdk_drag_context_get_display (context);
 
   actions = context->actions;
   n_atoms = 0;
@@ -1187,7 +1187,7 @@ xdnd_set_actions (GdkX11DragContext *context_x11)
         }
     }
 
-  XChangeProperty (GDK_WINDOW_XDISPLAY (context->source_window),
+  XChangeProperty (GDK_DISPLAY_XDISPLAY (display),
                    GDK_WINDOW_XID (context->source_window),
                    gdk_x11_get_xatom_by_name_for_display (display, "XdndActionList"),
                    XA_ATOM, 32, PropModeReplace,
@@ -1303,7 +1303,7 @@ static void
 xdnd_send_enter (GdkX11DragContext *context_x11)
 {
   GdkDragContext *context = GDK_DRAG_CONTEXT (context_x11);
-  GdkDisplay *display = GDK_WINDOW_DISPLAY (context->dest_window);
+  GdkDisplay *display = gdk_drag_context_get_display (context);
   const char * const *atoms;
   gsize i, n_atoms;
   XEvent xev;
@@ -1353,7 +1353,7 @@ static void
 xdnd_send_leave (GdkX11DragContext *context_x11)
 {
   GdkDragContext *context = GDK_DRAG_CONTEXT (context_x11);
-  GdkDisplay *display = GDK_WINDOW_DISPLAY (context->source_window);
+  GdkDisplay *display = gdk_drag_context_get_display (context);
   XEvent xev;
 
   xev.xclient.type = ClientMessage;
@@ -1383,7 +1383,7 @@ xdnd_send_drop (GdkX11DragContext *context_x11,
                 guint32            time)
 {
   GdkDragContext *context = GDK_DRAG_CONTEXT (context_x11);
-  GdkDisplay *display = GDK_WINDOW_DISPLAY (context->source_window);
+  GdkDisplay *display = gdk_drag_context_get_display (context);
   XEvent xev;
 
   xev.xclient.type = ClientMessage;
@@ -1416,7 +1416,7 @@ xdnd_send_motion (GdkX11DragContext *context_x11,
                   guint32            time)
 {
   GdkDragContext *context = GDK_DRAG_CONTEXT (context_x11);
-  GdkDisplay *display = GDK_WINDOW_DISPLAY (context->source_window);
+  GdkDisplay *display = gdk_drag_context_get_display (context);
   XEvent xev;
 
   xev.xclient.type = ClientMessage;
@@ -1521,7 +1521,7 @@ static void
 xdnd_read_actions (GdkX11DragContext *context_x11)
 {
   GdkDragContext *context = GDK_DRAG_CONTEXT (context_x11);
-  GdkDisplay *display = GDK_WINDOW_DISPLAY (context->source_window);
+  GdkDisplay *display = gdk_drag_context_get_display (context);
   Atom type;
   int format;
   gulong nitems, after;
@@ -1609,7 +1609,7 @@ xdnd_source_window_filter (GdkXEvent *xev,
 {
   XEvent *xevent = (XEvent *)xev;
   GdkX11DragContext *context_x11 = cb_data;
-  GdkDisplay *display = GDK_WINDOW_DISPLAY(event->any.window);
+  GdkDisplay *display = gdk_drag_context_get_display (GDK_DRAG_CONTEXT (context_x11));
 
   if ((xevent->xany.type == PropertyNotify) &&
       (xevent->xproperty.atom == gdk_x11_get_xatom_by_name_for_display (display, "XdndActionList")))
@@ -1630,7 +1630,9 @@ xdnd_manage_source_filter (GdkDragContext *context,
   if (!GDK_WINDOW_DESTROYED (window) &&
       gdk_window_get_window_type (window) == GDK_WINDOW_FOREIGN)
     {
-      gdk_x11_display_error_trap_push (GDK_WINDOW_DISPLAY (window));
+      GdkDisplay *display = gdk_drag_context_get_display (context);
+
+      gdk_x11_display_error_trap_push (display);
 
       if (add_filter)
         {
@@ -1650,7 +1652,7 @@ xdnd_manage_source_filter (GdkDragContext *context,
            */
         }
 
-      gdk_x11_display_error_trap_pop_ignored (GDK_WINDOW_DISPLAY (window));
+      gdk_x11_display_error_trap_pop_ignored (display);
     }
 }
 
@@ -2144,7 +2146,7 @@ gdk_x11_drag_context_find_window (GdkDragContext  *context,
   Window dest;
   GdkWindow *dest_window;
 
-  display = GDK_WINDOW_DISPLAY (context->source_window);
+  display = gdk_drag_context_get_display (context);
 
   window_cache = drag_context_find_window_cache (context_x11, display);
 
@@ -2431,7 +2433,7 @@ gdk_x11_drag_context_drag_status (GdkDragContext *context,
   XEvent xev;
   GdkDisplay *display;
 
-  display = GDK_WINDOW_DISPLAY (context->source_window);
+  display = gdk_drag_context_get_display (context);
 
   context->action = action;
 
@@ -2472,7 +2474,7 @@ gdk_x11_drag_context_drop_finish (GdkDragContext *context,
 {
   if (context->protocol == GDK_DRAG_PROTO_XDND)
     {
-      GdkDisplay *display = GDK_WINDOW_DISPLAY (context->source_window);
+      GdkDisplay *display = gdk_drag_context_get_display (context);
       XEvent xev;
 
       if (success && gdk_drag_context_get_selected_action (context) == GDK_ACTION_MOVE)
@@ -2804,6 +2806,7 @@ drag_context_grab (GdkDragContext *context)
   GdkX11DragContext *x11_context = GDK_X11_DRAG_CONTEXT (context);
   GdkDevice *device = gdk_drag_context_get_device (context);
   GdkSeatCapabilities capabilities;
+  GdkDisplay *display;
   Window root;
   GdkSeat *seat;
   gint keycode, i;
@@ -2812,7 +2815,8 @@ drag_context_grab (GdkDragContext *context)
   if (!x11_context->ipc_window)
     return FALSE;
 
-  root = GDK_DISPLAY_XROOTWIN (GDK_WINDOW_DISPLAY (x11_context->ipc_window));
+  display = gdk_drag_context_get_display (context);
+  root = GDK_DISPLAY_XROOTWIN (display);
   seat = gdk_device_get_seat (gdk_drag_context_get_device (context));
 
 #ifdef XINPUT_2
@@ -2836,7 +2840,7 @@ drag_context_grab (GdkDragContext *context)
 
   for (i = 0; i < G_N_ELEMENTS (grab_keys); ++i)
     {
-      keycode = XKeysymToKeycode (GDK_WINDOW_XDISPLAY (x11_context->ipc_window),
+      keycode = XKeysymToKeycode (GDK_DISPLAY_XDISPLAY (display),
                                   grab_keys[i].keysym);
       if (keycode == NoSymbol)
         continue;
@@ -2861,7 +2865,7 @@ drag_context_grab (GdkDragContext *context)
           num_mods = 1;
           mods.modifiers = grab_keys[i].modifiers;
 
-          XIGrabKeycode (GDK_WINDOW_XDISPLAY (x11_context->ipc_window),
+          XIGrabKeycode (GDK_DISPLAY_XDISPLAY (display),
                          deviceid,
                          keycode,
                          root,
@@ -2875,7 +2879,7 @@ drag_context_grab (GdkDragContext *context)
       else
 #endif
         {
-          XGrabKey (GDK_WINDOW_XDISPLAY (x11_context->ipc_window),
+          XGrabKey (GDK_DISPLAY_XDISPLAY (display),
                     keycode, grab_keys[i].modifiers,
                     root,
                     FALSE,
@@ -2893,6 +2897,7 @@ static void
 drag_context_ungrab (GdkDragContext *context)
 {
   GdkX11DragContext *x11_context = GDK_X11_DRAG_CONTEXT (context);
+  GdkDisplay *display;
   GdkDevice *keyboard;
   Window root;
   gint keycode, i;
@@ -2902,13 +2907,14 @@ drag_context_ungrab (GdkDragContext *context)
 
   gdk_seat_ungrab (x11_context->grab_seat);
 
+  display = gdk_drag_context_get_display (context);
   keyboard = gdk_seat_get_keyboard (x11_context->grab_seat);
-  root = GDK_DISPLAY_XROOTWIN (GDK_WINDOW_DISPLAY (x11_context->ipc_window));
+  root = GDK_DISPLAY_XROOTWIN (display);
   g_clear_object (&x11_context->grab_seat);
 
   for (i = 0; i < G_N_ELEMENTS (grab_keys); ++i)
     {
-      keycode = XKeysymToKeycode (GDK_WINDOW_XDISPLAY (x11_context->ipc_window),
+      keycode = XKeysymToKeycode (GDK_DISPLAY_XDISPLAY (display),
                                   grab_keys[i].keysym);
       if (keycode == NoSymbol)
         continue;
@@ -2922,7 +2928,7 @@ drag_context_ungrab (GdkDragContext *context)
           num_mods = 1;
           mods.modifiers = grab_keys[i].modifiers;
 
-          XIUngrabKeycode (GDK_WINDOW_XDISPLAY (x11_context->ipc_window),
+          XIUngrabKeycode (GDK_DISPLAY_XDISPLAY (display),
                            gdk_x11_device_get_id (keyboard),
                            keycode,
                            root,
@@ -2932,7 +2938,7 @@ drag_context_ungrab (GdkDragContext *context)
       else
 #endif /* XINPUT_2 */
         {
-          XUngrabKey (GDK_WINDOW_XDISPLAY (x11_context->ipc_window),
+          XUngrabKey (GDK_DISPLAY_XDISPLAY (display),
                       keycode, grab_keys[i].modifiers,
                       root);
         }

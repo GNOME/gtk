@@ -1297,7 +1297,7 @@ gtk_drag_set_icon_widget_internal (GdkDragContext *context,
     {
       GdkDisplay *display;
 
-      display = gdk_window_get_display (gdk_drag_context_get_source_window (context));
+      display = gdk_drag_context_get_display (context);
 
       info->icon_window = gtk_window_new (GTK_WINDOW_POPUP);
       gtk_window_set_type_hint (GTK_WINDOW (info->icon_window), GDK_WINDOW_TYPE_HINT_DND);
