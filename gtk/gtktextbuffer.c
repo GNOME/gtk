@@ -3827,7 +3827,7 @@ remove_all_selection_clipboards (GtkTextBuffer *buffer)
  * @override_location: (allow-none): location to insert pasted text, or %NULL
  * @default_editable: whether the buffer is editable by default
  *
- * Pastes the contents of a clipboard. If @override_location is %NULL, the
+ * Pastes the contents of a clipboard. If @override_location is %NULL, the
  * pasted text will be inserted at the cursor position, or the buffer selection
  * will be replaced if the selection is non-empty.
  *
