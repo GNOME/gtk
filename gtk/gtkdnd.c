@@ -98,10 +98,6 @@ static GtkWidget    *gtk_drag_get_ipc_widget            (GtkWidget *widget);
 static GtkWidget    *gtk_drag_get_ipc_widget_for_display(GdkDisplay*display);
 static void          gtk_drag_release_ipc_widget (GtkWidget      *widget);
 
-static void     gtk_drag_selection_received     (GtkWidget        *widget,
-                                                 GtkSelectionData *selection_data,
-                                                 guint             time,
-                                                 gpointer          data);
 static gboolean gtk_drag_find_widget            (GtkWidget        *widget,
                                                  GdkDragContext   *context,
                                                  GtkDragDestInfo  *info,
@@ -575,74 +571,6 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
     default:
       g_assert_not_reached ();
     }
-}
-
-static void
-gtk_drag_selection_received (GtkWidget        *widget,
-                             GtkSelectionData *selection_data,
-                             guint             time,
-                             gpointer          data)
-{
-  GdkDragContext *context;
-  GtkWidget *drop_widget;
-  GdkAtom target;
-
-  drop_widget = data;
-
-  context = g_object_get_data (G_OBJECT (widget), "drag-context");
-
-  target = gtk_selection_data_get_target (selection_data);
-  if (target == g_intern_static_string ("DELETE"))
-    {
-      gdk_drop_finish (context, TRUE, time);
-    }
-  else
-    {
-      GtkDragDestSite *site;
-
-      site = g_object_get_data (G_OBJECT (drop_widget), "gtk-drag-dest");
-
-      if (site && site->target_list)
-        {
-          if (gdk_content_formats_contain_mime_type (site->target_list, target))
-            {
-              if (!(site->flags & GTK_DEST_DEFAULT_DROP) ||
-                  gtk_selection_data_get_length (selection_data) >= 0)
-                g_signal_emit_by_name (drop_widget,
-                                       "drag-data-received",
-                                       context,
-                                       selection_data,
-                                       time);
-            }
-        }
-      else
-        {
-          g_signal_emit_by_name (drop_widget,
-                                 "drag-data-received",
-                                 context,
-                                 selection_data,
-                                 time);
-        }
-      
-      if (site && site->flags & GTK_DEST_DEFAULT_DROP)
-        {
-
-          gtk_drag_finish (context, 
-                           (gtk_selection_data_get_length (selection_data) >= 0),
-                           time);
-        }
-      
-      g_object_unref (drop_widget);
-    }
-
-  g_signal_handlers_disconnect_by_func (widget,
-                                        gtk_drag_selection_received,
-                                        data);
-  
-  g_object_set_data (G_OBJECT (widget), I_("drag-context"), NULL);
-  g_object_unref (context);
-
-  gtk_drag_release_ipc_widget (widget);
 }
 
 static gboolean
