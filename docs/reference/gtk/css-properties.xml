@@ -71,11 +71,12 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
     </para>
 
 <literallayout>
-<code>〈win32 theme size〉 = 〈win32 size〉| 〈win32 part size〉</code>
+<code>〈win32 theme size〉 = 〈win32 size〉 | 〈win32 part size〉</code>
 <code>〈win32 size〉 = -gtk-win32-size ( 〈theme name〉, 〈metric id〉 )</code>
 <code>〈win32 part size〉 = [ -gtk-win32-part-width | -gtk-win32-part-height |</code>
-<code>                         -gtk-win32-part-border-top | -gtk-win32-part-border-right |</code>
-<code>                         -gtk-win32-part-border-bottom | -gtk-win32-part-border-left ] ( 〈theme name〉 , 〈integer〉 , 〈integer〉 )</code>
+<code>                      -gtk-win32-part-border-top | -gtk-win32-part-border-right |</code>
+<code>                      -gtk-win32-part-border-bottom | -gtk-win32-part-border-left ]</code>
+<code>                    ( 〈theme name〉 , 〈integer〉 , 〈integer〉 )</code>
 </literallayout>
 
 <literallayout><code>〈calc expression〉 = calc( 〈calc sum〉 )</code>
@@ -451,7 +452,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
       </table>
 
 <literallayout><code>〈transform〉 = matrix( 〈number〉 [ , 〈number〉 ]{5} ) | translate( 〈length〉, 〈length〉 ) | translateX( 〈length〉 ) | translateY( 〈length〉 ) |</code>
-<code>                scale( 〈number〉[ , 〈number〉 ]? ) | scaleX( 〈number〉 ) | scaleY( 〈number〉 ) | rotate( 〈angle〉 ) | skew( 〈angle〉 [ , 〈angle〉 ]? ) |</code>
+<code>                scale( 〈number〉 [ , 〈number〉 ]? ) | scaleX( 〈number〉 ) | scaleY( 〈number〉 ) | rotate( 〈angle〉 ) | skew( 〈angle〉 [ , 〈angle〉 ]? ) |</code>
 <code>                skewX( 〈angle〉 ) |  skewY( 〈angle〉 )</code>
 <code>〈color palette〉 = default | 〈name〉 〈color〉 [ , 〈name〉 〈color〉 ]*</code>
 </literallayout>
@@ -1014,7 +1015,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
             </row>
             <row>
               <entry><phrase role="nowrap">-gtk-outline-radius</phrase></entry>
-              <entry><code>[ 〈length〉|〈percentage〉 ]{1,4} [ / [〈length〉 | 〈percentage〉 ]{1,4} ]?</code></entry>
+              <entry><code>[ 〈length〉 | 〈percentage〉 ]{1,4} [ / [ 〈length〉 | 〈percentage〉 ]{1,4} ]?</code></entry>
               <entry>see individual properties</entry>
               <entry></entry>
               <entry></entry>
@@ -1085,7 +1086,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
             </row>
             <row>
               <entry><phrase role="nowrap">background-repeat</phrase></entry>
-              <entry><code>〈bg-repeat 〉[ , 〈bg-repeat〉 ]*</code></entry>
+              <entry><code>〈bg-repeat〉 [ , 〈bg-repeat〉 ]*</code></entry>
               <entry><code>repeat</code></entry>
               <entry></entry>
               <entry></entry>
@@ -1095,7 +1096,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
             </row>
             <row>
               <entry><phrase role="nowrap">background-image</phrase></entry>
-              <entry><code>〈bg-image〉[ , 〈bg-image〉 ]*</code></entry>
+              <entry><code>〈bg-image〉 [ , 〈bg-image〉 ]*</code></entry>
               <entry><code>none</code></entry>
               <entry></entry>
               <entry>✓</entry>
@@ -1146,8 +1147,10 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
 <code>〈bg-repeat〉 = repeat-x | repeat-y | [ no-repeat | repeat | round | space ]{1,2}</code>
 <code>〈bg-image〉 = 〈image〉 | none</code>
 <code>〈bg-layer〉 = 〈bg-image〉 || 〈position〉 [ / 〈bg-size〉 ]? || 〈bg-repeat〉 || 〈box〉 || 〈box〉</code>
-<code>〈final-bg-layer〉 = 〈bg-image〉 || 〈position〉 [ / 〈bg-size〉 ]? || 〈bg-repeat〉 || 〈box〉 || 〈box〉|| 〈color〉</code>
-<code>〈blend-mode〉 = color || color-burn || color-dodge || darken || difference || exclusion || hard-light || hue || lighten || luminosity || multiply || normal || overlay || saturate || screen || soft-light</code>
+<code>〈final-bg-layer〉 = 〈bg-image〉 || 〈position〉 [ / 〈bg-size〉 ]? || 〈bg-repeat〉 || 〈box〉 || 〈box〉 || 〈color〉</code>
+<code>〈blend-mode〉 = color || color-burn || color-dodge || darken || difference || exclusion ||</code>
+<code>               hard-light || hue || lighten || luminosity || multiply || normal || overlay ||</code>
+<code>               saturate || screen || soft-light</code>
 <code>〈box shadow〉 = inset? &amp;&amp; 〈length〉{2,4}? &amp;&amp; 〈color〉?</code>
 </literallayout>
 
@@ -1189,7 +1192,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
             </row>
             <row>
               <entry><phrase role="nowrap">transition-timing-function</phrase></entry>
-              <entry><code>〈single-timing-function〉[ , 〈single-timing-function〉 ]*</code></entry>
+              <entry><code>〈single-timing-function〉 [ , 〈single-timing-function〉 ]*</code></entry>
               <entry><code>ease</code></entry>
               <entry></entry>
               <entry></entry>
@@ -1224,8 +1227,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
       </table>
 
 <literallayout><code>〈single-timing-function〉 = ease | linear | ease-in | ease-out | ease-in-out |</code>
-<code>                             step-start | step-end | steps( 〈integer〉 [ , [ start | end ] ]? ) |</code>
-<code>                             cubic-bezier( 〈number〉, 〈number〉, 〈number〉, 〈number〉 )</code>
+<code>                           step-start | step-end | steps( 〈integer〉 [ , [ start | end ] ]? ) |</code>
+<code>                           cubic-bezier( 〈number〉, 〈number〉, 〈number〉, 〈number〉 )</code>
 <code>〈single-transition〉 = [ none | 〈property name〉 ] || 〈time〉 || 〈single-transition-timing-function〉 || 〈time〉</code>
 </literallayout>
 
@@ -1319,7 +1322,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
           <tbody>
             <row>
               <entry><phrase role="nowrap">animation</phrase></entry>
-              <entry><code>〈single-animation〉 [ , 〈single-animation〉]*</code></entry>
+              <entry><code>〈single-animation〉 [ , 〈single-animation〉 ]*</code></entry>
               <entry>see individual properties</entry>
               <entry><ulink url="https://www.w3.org/TR/css3-animations/#animation">CSS3</ulink></entry>
               <entry></entry>
@@ -1334,7 +1337,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
 <code>〈single-animation-play-state〉 = running | paused</code>
 <code>〈single-animation-fill-mode〉 = none | forwards | backwards | both</code>
 <code>〈single-animation〉 = 〈single-animation-name〉 || 〈time〉 || 〈single-timing-function〉 || 〈time〉 ||</code>
-<code>                       〈single-animation-iteration-count〉 || 〈single-animation-direction〉 || 〈single-animation-play-state〉 || 〈single-animation-fill-mode〉</code>
+<code>                     〈single-animation-iteration-count〉 || 〈single-animation-direction〉 ||</code>
+<code>                     〈single-animation-play-state〉 || 〈single-animation-fill-mode〉</code>
 </literallayout>
 
       <table pgwide="1">
