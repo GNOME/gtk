@@ -4,15 +4,15 @@
 ]>
 <refentry id="chap-css-properties">
 <refmeta>
-<refentrytitle>GTK+ CSS</refentrytitle>
+<refentrytitle>GTK+ CSS Properties</refentrytitle>
 <manvolnum>3</manvolnum>
 <refmiscinfo>GTK Library</refmiscinfo>
 </refmeta>
 
 <refnamediv>
-<refname>GTK+ CSS</refname>
+<refname>GTK+ CSS Properties</refname>
 <refpurpose>
-GTK+ CSS Properties
+CSS Properties in GTK+
 </refpurpose>
 </refnamediv>
 
