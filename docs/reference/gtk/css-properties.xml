@@ -22,7 +22,6 @@ Formatting conventions:
 We use
 
 ‑ U+2011 Non-breaking Hyphen
-  U+00A0 No-break Space
 
 to control line breaks in the Name and Value columns.
 We use
@@ -944,7 +943,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
             </row>
             <row>
               <entry>border‑image‑width</entry>
-              <entry><code>[ 〈length〉 | 〈number〉 | 〈percentage〉 | auto ]{1,4}</code></entry>
+              <entry><code>[ 〈length〉 | 〈number〉 | 〈percentage〉 | auto ]{1,4}</code></entry>
               <entry><code>1</code></entry>
               <entry></entry>
               <entry></entry>
@@ -1145,7 +1144,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
             </row>
             <row>
               <entry>‑gtk‑outline‑radius</entry>
-              <entry><code>[ 〈length〉|〈percentage〉 ]{1,4} [ / [〈length〉 | 〈percentage〉 ]{1,4} ]?</code></entry>
+              <entry><code>[ 〈length〉|〈percentage〉 ]{1,4} [ / [〈length〉 | 〈percentage〉 ]{1,4} ]?</code></entry>
               <entry>see individual properties</entry>
               <entry></entry>
               <entry></entry>
@@ -1206,7 +1205,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
             </row>
             <row>
               <entry>background‑position</entry>
-              <entry><code>〈position〉 [ , 〈position〉 ]*</code></entry>
+              <entry><code>〈position〉 [ , 〈position〉 ]*</code></entry>
               <entry><code>0</code></entry>
               <entry></entry>
               <entry>✓</entry>
@@ -1216,7 +1215,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
             </row>
             <row>
               <entry>background‑repeat</entry>
-              <entry><code>〈bg-repeat 〉[ , 〈bg-repeat〉 ]*</code></entry>
+              <entry><code>〈bg-repeat 〉[ , 〈bg-repeat〉 ]*</code></entry>
               <entry><code>repeat</code></entry>
               <entry></entry>
               <entry></entry>
@@ -1226,7 +1225,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
             </row>
             <row>
               <entry>background‑image</entry>
-              <entry><code>〈bg-image〉[ , 〈bg-image〉 ]*</code></entry>
+              <entry><code>〈bg-image〉[ , 〈bg-image〉 ]*</code></entry>
               <entry><code>none</code></entry>
               <entry></entry>
               <entry>✓</entry>
@@ -1236,7 +1235,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
             </row>
             <row>
               <entry>background-blend-mode</entry>
-              <entry><code>〈blend-mode〉 [ , 〈blend-mode〉 ]*</code></entry>
+              <entry><code>〈blend-mode〉 [ , 〈blend-mode〉 ]*</code></entry>
               <entry><code>normal</code></entry>
               <entry></entry>
               <entry></entry>
@@ -1245,7 +1244,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
             </row>
             <row>
               <entry>box‑shadow</entry>
-              <entry><code>none | 〈box shadow〉 [ , 〈box shadow〉 ]*</code></entry>
+              <entry><code>none | 〈box shadow〉 [ , 〈box shadow〉 ]*</code></entry>
               <entry><code>none</code></entry>
               <entry></entry>
               <entry>✓</entry>
@@ -1320,7 +1319,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
             </row>
             <row>
               <entry>transition‑timing‑function</entry>
-              <entry><code>〈single‑timing‑function〉[ , 〈single‑timing‑function〉 ]*</code></entry>
+              <entry><code>〈single‑timing‑function〉[ , 〈single‑timing‑function〉 ]*</code></entry>
               <entry><code>ease</code></entry>
               <entry></entry>
               <entry></entry>
@@ -1398,7 +1397,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
             </row>
             <row>
               <entry>animation‑iteration-count</entry>
-              <entry><code>〈single‑animation‑iteration‑count〉 [ , 〈single‑animation‑iteration‑count〉 ]*</code></entry>
+              <entry><code>〈single‑animation‑iteration‑count〉 [ , 〈single‑animation‑iteration‑count〉 ]*</code></entry>
               <entry><code>1</code></entry>
               <entry></entry>
               <entry></entry>

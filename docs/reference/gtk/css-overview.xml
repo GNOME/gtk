@@ -22,7 +22,6 @@ Formatting conventions:
 We use
 
 ‑ U+2011 Non-breaking Hyphen
-  U+00A0 No-break Space
 
 to control line breaks in the Name and Value columns.
 We use
