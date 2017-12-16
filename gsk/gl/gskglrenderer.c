@@ -1921,6 +1921,8 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
   /* Done drawing, destroy the buffer again.
    * TODO: Can we reuse the memory, though? */
   g_free (vertex_data);
+  glDeleteVertexArrays (1, &vao_id);
+  glDeleteBuffers (1, &buffer_id);
 }
 
 static void
