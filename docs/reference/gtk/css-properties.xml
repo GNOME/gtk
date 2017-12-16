@@ -123,7 +123,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
           </thead>
           <tbody>
             <row>
-              <entry>color</entry>
+              <entry><phrase role="nowrap">color</phrase></entry>
               <entry><code>〈color〉</code></entry>
               <entry><code>rgba(1,1,1,1)</code></entry>
               <entry>✓</entry>
@@ -133,7 +133,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>opacity</entry>
+              <entry><phrase role="nowrap">opacity</phrase></entry>
               <entry><code>〈alpha value〉</code></entry>
               <entry><code>1</code></entry>
               <entry></entry>
@@ -142,7 +142,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>filter</entry>
+              <entry><phrase role="nowrap">filter</phrase></entry>
               <entry><code>none | 〈filter-function-list〉</code></entry>
               <entry><code>none</code></entry>
               <entry></entry>
@@ -182,7 +182,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
           </thead>
           <tbody>
             <row>
-              <entry>font-family</entry>
+              <entry><phrase role="nowrap">font-family</phrase></entry>
               <entry><code>〈family name〉 [ , 〈family name〉 ]*</code></entry>
               <entry>gtk-font-name setting</entry>
               <entry>✓</entry>
@@ -192,7 +192,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>font-size</entry>
+              <entry><phrase role="nowrap">font-size</phrase></entry>
               <entry><code>〈absolute size〉 | 〈relative size〉 | 〈length〉 | 〈percentage〉</code></entry>
               <entry>gtk-font-name setting</entry>
               <entry>✓</entry>
@@ -202,7 +202,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>font-style</entry>
+              <entry><phrase role="nowrap">font-style</phrase></entry>
               <entry><code>normal | oblique | italic</code></entry>
               <entry><code>normal</code></entry>
               <entry>✓</entry>
@@ -212,7 +212,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>font-variant</entry>
+              <entry><phrase role="nowrap">font-variant</phrase></entry>
               <entry><code>normal | small-caps</code></entry>
               <entry><code>normal</code></entry>
               <entry>✓</entry>
@@ -222,7 +222,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>only CSS2 values supported</entry>
             </row>
             <row>
-              <entry>font-weight</entry>
+              <entry><phrase role="nowrap">font-weight</phrase></entry>
               <entry><code>normal | bold | bolder | lighter | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900</code></entry>
               <entry><code>normal</code></entry>
               <entry>✓</entry>
@@ -232,7 +232,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>normal is synonymous with 400, bold with 700</entry>
             </row>
             <row>
-              <entry>font-stretch</entry>
+              <entry><phrase role="nowrap">font-stretch</phrase></entry>
               <entry><code>ultra-condensed | extra-condensed | condensed | semi-condensed | normal | semi-expanded | expanded | extra-expanded | ultra-expanded</code></entry>
               <entry><code>normal</code></entry>
               <entry>✓</entry>
@@ -241,7 +241,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>-gtk-dpi</entry>
+              <entry><phrase role="nowrap">-gtk-dpi</phrase></entry>
               <entry><code>〈number〉</code></entry>
               <entry>screen resolution</entry>
               <entry>✓</entry>
@@ -329,7 +329,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
           </thead>
           <tbody>
             <row>
-              <entry>font</entry>
+              <entry><phrase role="nowrap">font</phrase></entry>
               <entry><code>[ 〈font-style〉 || 〈font-variant〉 || 〈font-weight〉 || 〈font-stretch〉 ]? 〈font-size〉 〈font-family〉</code></entry>
               <entry>see individual properties</entry>
               <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/fonts.html#font-shorthand">CSS2</ulink>,
@@ -377,7 +377,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
           </thead>
           <tbody>
             <row>
-              <entry>caret-color</entry>
+              <entry><phrase role="nowrap">caret-color</phrase></entry>
               <entry><code>〈color〉</code></entry>
               <entry><code>currentColor</code></entry>
               <entry>✓</entry>
@@ -386,7 +386,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>CSS allows an auto value</entry>
             </row>
             <row>
-              <entry>-gtk-secondary-caret-color</entry>
+              <entry><phrase role="nowrap">-gtk-secondary-caret-color</phrase></entry>
               <entry><code>〈color〉</code></entry>
               <entry><code>currentColor</code></entry>
               <entry>✓</entry>
@@ -413,7 +413,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
           </thead>
           <tbody>
             <row>
-              <entry>letter-spacing</entry>
+              <entry><phrase role="nowrap">letter-spacing</phrase></entry>
               <entry><code>〈length〉</code></entry>
               <entry><code>0px</code></entry>
               <entry>✓</entry>
@@ -422,7 +422,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>text-decoration-line</entry>
+              <entry><phrase role="nowrap">text-decoration-line</phrase></entry>
               <entry><code>none | underline | line-through</code></entry>
               <entry><code>none</code></entry>
               <entry></entry>
@@ -432,7 +432,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>CSS allows overline</entry>
             </row>
             <row>
-              <entry>text-decoration-color</entry>
+              <entry><phrase role="nowrap">text-decoration-color</phrase></entry>
               <entry><code>〈color〉</code></entry>
               <entry><code>currentColor</code></entry>
               <entry></entry>
@@ -441,7 +441,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>text-decoration-style</entry>
+              <entry><phrase role="nowrap">text-decoration-style</phrase></entry>
               <entry><code>solid | double | wavy</code></entry>
               <entry><code>solid</code></entry>
               <entry></entry>
@@ -450,7 +450,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>CSS allows dashed and dotted</entry>
             </row>
             <row>
-              <entry>text-shadow</entry>
+              <entry><phrase role="nowrap">text-shadow</phrase></entry>
               <entry><code>none | 〈shadow〉</code></entry>
               <entry><code>none</code></entry>
               <entry>✓</entry>
@@ -466,7 +466,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
           </thead>
           <tbody>
             <row>
-              <entry>text-decoration</entry>
+              <entry><phrase role="nowrap">text-decoration</phrase></entry>
               <entry><code>〈text-decoration-line〉 || 〈text-decoration-style〉 || 〈text-decoration-color〉</code></entry>
               <entry>see individual properties</entry>
               <entry><ulink url="https://www.w3.org/TR/css-text-decor-3/#text-decoration-property">CSS3</ulink></entry>
@@ -494,7 +494,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
           </thead>
           <tbody>
             <row>
-              <entry>-gtk-icon-source</entry>
+              <entry><phrase role="nowrap">-gtk-icon-source</phrase></entry>
               <entry><code>builtin | 〈image〉 | none</code></entry>
               <entry><code>builtin</code></entry>
               <entry></entry>
@@ -503,7 +503,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>-gtk-icon-transform</entry>
+              <entry><phrase role="nowrap">-gtk-icon-transform</phrase></entry>
               <entry><code>none | 〈transform〉+</code></entry>
               <entry><code>none</code></entry>
               <entry></entry>
@@ -512,7 +512,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>-gtk-icon-style</entry>
+              <entry><phrase role="nowrap">-gtk-icon-style</phrase></entry>
               <entry><code>requested | regular | symbolic</code></entry>
               <entry><code>requested</code></entry>
               <entry>✓</entry>
@@ -521,7 +521,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>Determines the preferred style for application-loaded icons</entry>
             </row>
             <row>
-              <entry>-gtk-icon-theme</entry>
+              <entry><phrase role="nowrap">-gtk-icon-theme</phrase></entry>
               <entry><code>〈name〉</code></entry>
               <entry>current icon theme</entry>
               <entry>✓</entry>
@@ -530,7 +530,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>The icon theme to use with -gtk-icontheme(). Since 3.20</entry>
             </row>
             <row>
-              <entry>-gtk-icon-palette</entry>
+              <entry><phrase role="nowrap">-gtk-icon-palette</phrase></entry>
               <entry><code>〈color palette〉</code></entry>
               <entry><code>default</code></entry>
               <entry>✓</entry>
@@ -539,7 +539,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>Used to recolor symbolic icons (both application-loaded and from -gtk-icontheme()). Since 3.20</entry>
             </row>
             <row>
-              <entry>-gtk-icon-shadow</entry>
+              <entry><phrase role="nowrap">-gtk-icon-shadow</phrase></entry>
               <entry><code>none | 〈shadow〉</code></entry>
               <entry><code>none</code></entry>
               <entry>✓</entry>
@@ -548,7 +548,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>-gtk-icon-filter</entry>
+              <entry><phrase role="nowrap">-gtk-icon-filter</phrase></entry>
               <entry><code>none | 〈filter-function-list〉</code></entry>
               <entry><code>none</code></entry>
               <entry>✓</entry>
@@ -557,7 +557,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>-gtk-icon-size</entry>
+              <entry><phrase role="nowrap">-gtk-icon-size</phrase></entry>
               <entry><code>〈length〉</code></entry>
               <entry><code>none</code></entry>
               <entry>✓</entry>
@@ -614,7 +614,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
           </thead>
           <tbody>
             <row>
-              <entry>min-width</entry>
+              <entry><phrase role="nowrap">min-width</phrase></entry>
               <entry><code>〈length〉</code></entry>
               <entry><code>0px</code></entry>
               <entry></entry>
@@ -624,7 +624,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>CSS allows percentages</entry>
             </row>
             <row>
-              <entry>min-height</entry>
+              <entry><phrase role="nowrap">min-height</phrase></entry>
               <entry><code>〈length〉</code></entry>
               <entry><code>0px</code></entry>
               <entry></entry>
@@ -634,7 +634,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>CSS allows percentages</entry>
             </row>
             <row>
-              <entry>margin-top</entry>
+              <entry><phrase role="nowrap">margin-top</phrase></entry>
               <entry><code>〈length〉</code></entry>
               <entry><code>0px</code></entry>
               <entry></entry>
@@ -644,7 +644,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>CSS allows percentages or auto</entry>
             </row>
             <row>
-              <entry>margin-right</entry>
+              <entry><phrase role="nowrap">margin-right</phrase></entry>
               <entry><code>〈length〉</code></entry>
               <entry><code>0px</code></entry>
               <entry></entry>
@@ -654,7 +654,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>CSS allows percentages or auto</entry>
             </row>
             <row>
-              <entry>margin-bottom</entry>
+              <entry><phrase role="nowrap">margin-bottom</phrase></entry>
               <entry><code>〈length〉</code></entry>
               <entry><code>0px</code></entry>
               <entry></entry>
@@ -664,7 +664,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>CSS allows percentages or auto</entry>
             </row>
             <row>
-              <entry>margin-left</entry>
+              <entry><phrase role="nowrap">margin-left</phrase></entry>
               <entry><code>〈length〉</code></entry>
               <entry><code>0px</code></entry>
               <entry></entry>
@@ -674,7 +674,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>CSS allows percentages or auto</entry>
             </row>
             <row>
-              <entry>padding-top</entry>
+              <entry><phrase role="nowrap">padding-top</phrase></entry>
               <entry><code>〈length〉</code></entry>
               <entry><code>0px</code></entry>
               <entry></entry>
@@ -684,7 +684,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>CSS allows percentages</entry>
             </row>
             <row>
-              <entry>padding-right</entry>
+              <entry><phrase role="nowrap">padding-right</phrase></entry>
               <entry><code>〈length〉</code></entry>
               <entry><code>0px</code></entry>
               <entry></entry>
@@ -694,7 +694,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>CSS allows percentages</entry>
             </row>
             <row>
-              <entry>padding-bottom</entry>
+              <entry><phrase role="nowrap">padding-bottom</phrase></entry>
               <entry><code>〈length〉</code></entry>
               <entry><code>0px</code></entry>
               <entry></entry>
@@ -704,7 +704,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>CSS allows percentages</entry>
             </row>
             <row>
-              <entry>padding-left</entry>
+              <entry><phrase role="nowrap">padding-left</phrase></entry>
               <entry><code>〈length〉</code></entry>
               <entry><code>0px</code></entry>
               <entry></entry>
@@ -721,7 +721,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
           </thead>
           <tbody>
             <row>
-              <entry>margin</entry>
+              <entry><phrase role="nowrap">margin</phrase></entry>
               <entry><code>〈length〉{1,4}</code></entry>
               <entry>see individual properties</entry>
               <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-margin">CSS2</ulink>,
@@ -729,7 +729,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>a 'four sides' shorthand</entry>
             </row>
             <row>
-              <entry>padding</entry>
+              <entry><phrase role="nowrap">padding</phrase></entry>
               <entry><code>〈length〉{1,4}</code></entry>
               <entry>see individual properties</entry>
               <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-padding">CSS2</ulink>,
@@ -750,7 +750,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
           </thead>
           <tbody>
             <row>
-              <entry>border-top-width</entry>
+              <entry><phrase role="nowrap">border-top-width</phrase></entry>
               <entry><code>〈length〉</code></entry>
               <entry><code>0px</code></entry>
               <entry></entry>
@@ -760,7 +760,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>CSS allows other values</entry>
             </row>
             <row>
-              <entry>border-right-width</entry>
+              <entry><phrase role="nowrap">border-right-width</phrase></entry>
               <entry><code>〈length〉</code></entry>
               <entry><code>0px</code></entry>
               <entry></entry>
@@ -770,7 +770,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>CSS allows other values</entry>
             </row>
             <row>
-              <entry>border-bottom-width</entry>
+              <entry><phrase role="nowrap">border-bottom-width</phrase></entry>
               <entry><code>〈length〉</code></entry>
               <entry><code>0px</code></entry>
               <entry></entry>
@@ -780,7 +780,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>CSS allows other values</entry>
             </row>
             <row>
-              <entry>border-right-width</entry>
+              <entry><phrase role="nowrap">border-right-width</phrase></entry>
               <entry><code>〈length〉</code></entry>
               <entry><code>0px</code></entry>
               <entry></entry>
@@ -790,7 +790,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>CSS allows other values</entry>
             </row>
             <row>
-              <entry>border-top-style</entry>
+              <entry><phrase role="nowrap">border-top-style</phrase></entry>
               <entry><code>〈border style〉</code></entry>
               <entry><code>none</code></entry>
               <entry></entry>
@@ -800,7 +800,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>border-right-style</entry>
+              <entry><phrase role="nowrap">border-right-style</phrase></entry>
               <entry><code>〈border style〉</code></entry>
               <entry><code>none</code></entry>
               <entry></entry>
@@ -810,7 +810,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>border-bottom-style</entry>
+              <entry><phrase role="nowrap">border-bottom-style</phrase></entry>
               <entry><code>〈border style〉</code></entry>
               <entry><code>none</code></entry>
               <entry></entry>
@@ -820,7 +820,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>border-left-style</entry>
+              <entry><phrase role="nowrap">border-left-style</phrase></entry>
               <entry><code>〈border style〉</code></entry>
               <entry><code>none</code></entry>
               <entry></entry>
@@ -830,7 +830,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>border-top-right-radius</entry>
+              <entry><phrase role="nowrap">border-top-right-radius</phrase></entry>
               <entry><code>〈corner radius〉</code></entry>
               <entry><code>0</code></entry>
               <entry></entry>
@@ -840,7 +840,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>border-bottom-right-radius</entry>
+              <entry><phrase role="nowrap">border-bottom-right-radius</phrase></entry>
               <entry><code>〈corner radius〉</code></entry>
               <entry><code>0</code></entry>
               <entry></entry>
@@ -850,7 +850,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>border-bottom-left-radius</entry>
+              <entry><phrase role="nowrap">border-bottom-left-radius</phrase></entry>
               <entry><code>〈corner radius〉</code></entry>
               <entry><code>0</code></entry>
               <entry></entry>
@@ -860,7 +860,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>border-top-left-radius</entry>
+              <entry><phrase role="nowrap">border-top-left-radius</phrase></entry>
               <entry><code>〈corner radius〉</code></entry>
               <entry><code>0</code></entry>
               <entry></entry>
@@ -870,7 +870,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>border-top-color</entry>
+              <entry><phrase role="nowrap">border-top-color</phrase></entry>
               <entry><code>〈color〉</code></entry>
               <entry><code>currentColor</code></entry>
               <entry></entry>
@@ -880,7 +880,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>border-right-color</entry>
+              <entry><phrase role="nowrap">border-right-color</phrase></entry>
               <entry><code>〈color〉</code></entry>
               <entry><code>currentColor</code></entry>
               <entry></entry>
@@ -890,7 +890,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>border-bottom-color</entry>
+              <entry><phrase role="nowrap">border-bottom-color</phrase></entry>
               <entry><code>〈color〉</code></entry>
               <entry><code>currentColor</code></entry>
               <entry></entry>
@@ -900,7 +900,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>border-left-color</entry>
+              <entry><phrase role="nowrap">border-left-color</phrase></entry>
               <entry><code>〈color〉</code></entry>
               <entry><code>currentColor</code></entry>
               <entry></entry>
@@ -910,7 +910,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>border-image-source</entry>
+              <entry><phrase role="nowrap">border-image-source</phrase></entry>
               <entry><code>〈image〉 | none</code></entry>
               <entry><code>none</code></entry>
               <entry></entry>
@@ -919,7 +919,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>border-image-repeat</entry>
+              <entry><phrase role="nowrap">border-image-repeat</phrase></entry>
               <entry><code>〈border repeat〉{1,2}</code></entry>
               <entry><code>stretch</code></entry>
               <entry></entry>
@@ -928,7 +928,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>border-image-slice</entry>
+              <entry><phrase role="nowrap">border-image-slice</phrase></entry>
               <entry><code>[ 〈number〉 | 〈percentage〉 ]{1,4} &amp;&amp; fill?</code></entry>
               <entry><code>100%</code></entry>
               <entry></entry>
@@ -937,7 +937,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>a 'four sides' shorthand</entry>
             </row>
             <row>
-              <entry>border-image-width</entry>
+              <entry><phrase role="nowrap">border-image-width</phrase></entry>
               <entry><code>[ 〈length〉 | 〈number〉 | 〈percentage〉 | auto ]{1,4}</code></entry>
               <entry><code>1</code></entry>
               <entry></entry>
@@ -954,7 +954,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
           </thead>
           <tbody>
             <row>
-              <entry>border-width</entry>
+              <entry><phrase role="nowrap">border-width</phrase></entry>
               <entry><code>〈length〉{1,4}</code></entry>
               <entry>see individual properties</entry>
               <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-width">CSS2</ulink>,
@@ -962,7 +962,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>a 'four sides' shorthand</entry>
             </row>
             <row>
-              <entry>border-style</entry>
+              <entry><phrase role="nowrap">border-style</phrase></entry>
               <entry><code>〈border style〉{1,4}</code></entry>
               <entry>see individual properties</entry>
               <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-style">CSS2</ulink>,
@@ -970,14 +970,14 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>a 'four sides' shorthand</entry>
             </row>
             <row>
-              <entry>border-color</entry>
+              <entry><phrase role="nowrap">border-color</phrase></entry>
               <entry><code>〈color〉{1,4}</code></entry>
               <entry>see individual properties</entry>
               <entry><ulink url="https://www.w3.org/TR/css3-background/#border-color">CSS3</ulink></entry>
               <entry>a 'four sides' shorthand</entry>
             </row>
             <row>
-              <entry>border-top</entry>
+              <entry><phrase role="nowrap">border-top</phrase></entry>
               <entry><code>〈length〉 || 〈border style〉 || 〈color〉</code></entry>
               <entry>see individual properties</entry>
               <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-top">CSS2</ulink>,
@@ -985,7 +985,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>border-left</entry>
+              <entry><phrase role="nowrap">border-left</phrase></entry>
               <entry><code>〈length〉 || 〈border style〉 || 〈color〉</code></entry>
               <entry>see individual properties</entry>
               <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-left">CSS2</ulink>,
@@ -993,7 +993,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>border-bottom</entry>
+              <entry><phrase role="nowrap">border-bottom</phrase></entry>
               <entry><code>〈length〉 || 〈border style〉 || 〈color〉</code></entry>
               <entry>see individual properties</entry>
               <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-bottom">CSS2</ulink>,
@@ -1001,7 +1001,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>border-right</entry>
+              <entry><phrase role="nowrap">border-right</phrase></entry>
               <entry><code>〈length〉 || 〈border style〉 || 〈color〉</code></entry>
               <entry>see individual properties</entry>
               <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-right">CSS2</ulink>,
@@ -1009,7 +1009,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>border</entry>
+              <entry><phrase role="nowrap">border</phrase></entry>
               <entry><code>〈length〉 || 〈border style〉 || 〈color〉</code></entry>
               <entry>see individual properties</entry>
               <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-right">CSS2</ulink>,
@@ -1017,14 +1017,14 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>border-radius</entry>
+              <entry><phrase role="nowrap">border-radius</phrase></entry>
               <entry><code>[ 〈length〉 | 〈percentage〉 ]{1,4} [ / [ 〈length〉 | 〈percentage〉 ]{1,4} ]?</code></entry>
               <entry>see individual properties</entry>
               <entry><ulink url="https://www.w3.org/TR/css3-background/#border-radius">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
-              <entry>border-image</entry>
+              <entry><phrase role="nowrap">border-image</phrase></entry>
               <entry><code>〈border-image-source〉 || 〈border-image-slice〉 [ / 〈border-image-width〉 | / 〈border-image-width〉? / 〈border-image-outset〉 ]? || 〈border-image-repeat〉</code></entry>
               <entry>see individual properties</entry>
               <entry><ulink url="https://www.w3.org/TR/css3-background/#border-image">CSS3</ulink></entry>
@@ -1048,7 +1048,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
           </thead>
           <tbody>
             <row>
-              <entry>outline-style</entry>
+              <entry><phrase role="nowrap">outline-style</phrase></entry>
               <entry><code>none | solid | inset | outset | hidden | dotted | dashed | double  | groove | ridge</code></entry>
               <entry><code>none</code></entry>
               <entry></entry>
@@ -1058,7 +1058,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>outline-width</entry>
+              <entry><phrase role="nowrap">outline-width</phrase></entry>
               <entry><code>〈length〉</code></entry>
               <entry><code>0px</code></entry>
               <entry></entry>
@@ -1068,7 +1068,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>outline-color</entry>
+              <entry><phrase role="nowrap">outline-color</phrase></entry>
               <entry><code>〈color〉</code></entry>
               <entry><code>currentColor</code></entry>
               <entry></entry>
@@ -1078,7 +1078,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>outline-offset</entry>
+              <entry><phrase role="nowrap">outline-offset</phrase></entry>
               <entry><code>〈length〉</code></entry>
               <entry><code>0px</code></entry>
               <entry></entry>
@@ -1087,7 +1087,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>-gtk-outline-top-left-radius</entry>
+              <entry><phrase role="nowrap">-gtk-outline-top-left-radius</phrase></entry>
               <entry><code>〈corner radius〉</code></entry>
               <entry><code>0</code></entry>
               <entry></entry>
@@ -1096,7 +1096,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>-gtk-outline-top-right-radius</entry>
+              <entry><phrase role="nowrap">-gtk-outline-top-right-radius</phrase></entry>
               <entry><code>〈corner radius〉</code></entry>
               <entry><code>0</code></entry>
               <entry></entry>
@@ -1105,7 +1105,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>-gtk-outline-bottom-right-radius</entry>
+              <entry><phrase role="nowrap">-gtk-outline-bottom-right-radius</phrase></entry>
               <entry><code>〈corner radius〉</code></entry>
               <entry><code>0</code></entry>
               <entry></entry>
@@ -1114,7 +1114,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>-gtk-outline-bottom-left-radius</entry>
+              <entry><phrase role="nowrap">-gtk-outline-bottom-left-radius</phrase></entry>
               <entry><code>〈corner radius〉</code></entry>
               <entry><code>0</code></entry>
               <entry></entry>
@@ -1130,7 +1130,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
           </thead>
           <tbody>
             <row>
-              <entry>outline</entry>
+              <entry><phrase role="nowrap">outline</phrase></entry>
               <entry><code>〈outline-color〉 || 〈outline-style〉 || 〈outline-width〉</code></entry>
               <entry>see individual properties</entry>
               <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/ui.html#propdef-outline">CSS2</ulink>,
@@ -1138,7 +1138,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>-gtk-outline-radius</entry>
+              <entry><phrase role="nowrap">-gtk-outline-radius</phrase></entry>
               <entry><code>[ 〈length〉|〈percentage〉 ]{1,4} [ / [〈length〉 | 〈percentage〉 ]{1,4} ]?</code></entry>
               <entry>see individual properties</entry>
               <entry></entry>
@@ -1162,7 +1162,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
           </thead>
           <tbody>
             <row>
-              <entry>background-color</entry>
+              <entry><phrase role="nowrap">background-color</phrase></entry>
               <entry><code>〈color〉</code></entry>
               <entry><code>rgba(0,0,0,0)</code></entry>
               <entry></entry>
@@ -1172,7 +1172,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>background-clip</entry>
+              <entry><phrase role="nowrap">background-clip</phrase></entry>
               <entry><code>〈box〉 [ , 〈box〉 ]*</code></entry>
               <entry><code>border-box</code></entry>
               <entry></entry>
@@ -1181,7 +1181,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>background-origin</entry>
+              <entry><phrase role="nowrap">background-origin</phrase></entry>
               <entry><code>〈box〉 [ , 〈box〉 ]*</code></entry>
               <entry><code>padding-box</code></entry>
               <entry></entry>
@@ -1190,7 +1190,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>background-size</entry>
+              <entry><phrase role="nowrap">background-size</phrase></entry>
               <entry><code>〈bg-size〉 [ , 〈bg-size〉 ]*</code></entry>
               <entry><code>auto</code></entry>
               <entry></entry>
@@ -1199,7 +1199,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>background-position</entry>
+              <entry><phrase role="nowrap">background-position</phrase></entry>
               <entry><code>〈position〉 [ , 〈position〉 ]*</code></entry>
               <entry><code>0</code></entry>
               <entry></entry>
@@ -1209,7 +1209,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>background-repeat</entry>
+              <entry><phrase role="nowrap">background-repeat</phrase></entry>
               <entry><code>〈bg-repeat 〉[ , 〈bg-repeat〉 ]*</code></entry>
               <entry><code>repeat</code></entry>
               <entry></entry>
@@ -1219,7 +1219,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>background-image</entry>
+              <entry><phrase role="nowrap">background-image</phrase></entry>
               <entry><code>〈bg-image〉[ , 〈bg-image〉 ]*</code></entry>
               <entry><code>none</code></entry>
               <entry></entry>
@@ -1229,7 +1229,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>not supported: urls without quotes, colors in crossfades</entry>
             </row>
             <row>
-              <entry>background-blend-mode</entry>
+              <entry><phrase role="nowrap">background-blend-mode</phrase></entry>
               <entry><code>〈blend-mode〉 [ , 〈blend-mode〉 ]*</code></entry>
               <entry><code>normal</code></entry>
               <entry></entry>
@@ -1238,7 +1238,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>only affects multiple backgrounds</entry>
             </row>
             <row>
-              <entry>box-shadow</entry>
+              <entry><phrase role="nowrap">box-shadow</phrase></entry>
               <entry><code>none | 〈box shadow〉 [ , 〈box shadow〉 ]*</code></entry>
               <entry><code>none</code></entry>
               <entry></entry>
@@ -1295,7 +1295,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
           </thead>
           <tbody>
             <row>
-              <entry>transition-property</entry>
+              <entry><phrase role="nowrap">transition-property</phrase></entry>
               <entry><code>none | all | 〈property name〉 [ , 〈property name〉 ]*</code></entry>
               <entry><code>all</code></entry>
               <entry></entry>
@@ -1304,7 +1304,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>transition-duration</entry>
+              <entry><phrase role="nowrap">transition-duration</phrase></entry>
               <entry><code>〈time〉 [ , 〈time〉 ]*</code></entry>
               <entry><code>0s</code></entry>
               <entry></entry>
@@ -1313,7 +1313,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>transition-timing-function</entry>
+              <entry><phrase role="nowrap">transition-timing-function</phrase></entry>
               <entry><code>〈single-timing-function〉[ , 〈single-timing-function〉 ]*</code></entry>
               <entry><code>ease</code></entry>
               <entry></entry>
@@ -1322,7 +1322,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>transition-delay</entry>
+              <entry><phrase role="nowrap">transition-delay</phrase></entry>
               <entry><code>〈time〉 [ , 〈time〉 ]*</code></entry>
               <entry><code>0s</code></entry>
               <entry></entry>
@@ -1338,7 +1338,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
           </thead>
           <tbody>
             <row>
-              <entry>transition</entry>
+              <entry><phrase role="nowrap">transition</phrase></entry>
               <entry><code>〈single-transition〉 [ , 〈single-transition〉 ]*</code></entry>
               <entry>see individual properties</entry>
               <entry><ulink url="https://www.w3.org/TR/css3-transitions/#transition">CSS3</ulink></entry>
@@ -1364,7 +1364,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
           </thead>
           <tbody>
             <row>
-              <entry>animation-name</entry>
+              <entry><phrase role="nowrap">animation-name</phrase></entry>
               <entry><code>〈single-animation-name〉 [ , 〈single-animation-name〉 ]*</code></entry>
               <entry><code>none</code></entry>
               <entry></entry>
@@ -1373,7 +1373,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>animation-duration</entry>
+              <entry><phrase role="nowrap">animation-duration</phrase></entry>
               <entry><code>〈time〉 [ , 〈time〉 ]*</code></entry>
               <entry><code>0s</code></entry>
               <entry></entry>
@@ -1382,7 +1382,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>animation-timing-function</entry>
+              <entry><phrase role="nowrap">animation-timing-function</phrase></entry>
               <entry><code>〈single-timing-function〉 [ , 〈single-timing-function〉 ]*</code></entry>
               <entry><code>ease</code></entry>
               <entry></entry>
@@ -1391,7 +1391,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>animation-iteration-count</entry>
+              <entry><phrase role="nowrap">animation-iteration-count</phrase></entry>
               <entry><code>〈single-animation-iteration-count〉 [ , 〈single-animation-iteration-count〉 ]*</code></entry>
               <entry><code>1</code></entry>
               <entry></entry>
@@ -1400,7 +1400,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>animation-direction</entry>
+              <entry><phrase role="nowrap">animation-direction</phrase></entry>
               <entry><code>〈single-animation-direction〉 [ , 〈single-animation-direction〉 ]*</code></entry>
               <entry><code>normal</code></entry>
               <entry></entry>
@@ -1409,7 +1409,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>animation-play-state</entry>
+              <entry><phrase role="nowrap">animation-play-state</phrase></entry>
               <entry><code>〈single-animation-play-state〉 [ , 〈single-animation-play-state〉 ]*</code></entry>
               <entry><code>running</code></entry>
               <entry></entry>
@@ -1418,7 +1418,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>animation-delay</entry>
+              <entry><phrase role="nowrap">animation-delay</phrase></entry>
               <entry><code>〈time〉 [ , 〈time〉 ]*</code></entry>
               <entry><code>0s</code></entry>
               <entry></entry>
@@ -1427,7 +1427,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>animation-fill-mode</entry>
+              <entry><phrase role="nowrap">animation-fill-mode</phrase></entry>
               <entry><code>〈single-animation-fill-mode〉 [ , 〈single-animation-fill-mode〉 ]*</code></entry>
               <entry><code>none</code></entry>
               <entry></entry>
@@ -1443,7 +1443,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
           </thead>
           <tbody>
             <row>
-              <entry>animation</entry>
+              <entry><phrase role="nowrap">animation</phrase></entry>
               <entry><code>〈single-animation〉 [ , 〈single-animation〉]*</code></entry>
               <entry>see individual properties</entry>
               <entry><ulink url="https://www.w3.org/TR/css3-animations/#animation">CSS3</ulink></entry>
@@ -1472,7 +1472,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
           </thead>
           <tbody>
             <row>
-              <entry>-gtk-key-bindings</entry>
+              <entry><phrase role="nowrap">-gtk-key-bindings</phrase></entry>
               <entry><code>none | 〈binding name〉 [ , 〈binding name〉 ]*</code></entry>
               <entry><code>none</code></entry>
               <entry></entry>
