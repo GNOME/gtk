@@ -1594,7 +1594,7 @@ gtk_scale_value_style_changed (GtkCssNode        *node,
 {
   if (change == NULL ||
       gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT_ATTRS) ||
-      gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT))
+      gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_FONT))
     {
       gtk_scale_clear_value_layout (scale);
       gtk_widget_queue_resize (GTK_WIDGET (scale));
@@ -1608,7 +1608,7 @@ gtk_scale_mark_style_changed (GtkCssNode        *node,
 {
   if (change == NULL ||
       gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT_ATTRS) ||
-      gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT))
+      gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_FONT))
     {
       GtkCssNode *widget_node;
       GtkWidget *scale;

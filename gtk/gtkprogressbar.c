@@ -1521,7 +1521,7 @@ gtk_progress_bar_text_style_changed (GtkCssNode        *node,
 {
   if (change == NULL ||
       gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT_ATTRS) ||
-      gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT))
+      gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_FONT))
     {
       gtk_widget_queue_resize (GTK_WIDGET (pbar));
     }
