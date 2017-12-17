@@ -539,12 +539,17 @@ colord_client_connect_cb (GObject *source_object,
   gboolean ret;
   GError *error = NULL;
   GtkPrinterCups *printer = GTK_PRINTER_CUPS (user_data);
+  static gboolean colord_warned = FALSE;
 
   ret = cd_client_connect_finish (CD_CLIENT (source_object),
                                   res, &error);
   if (!ret)
     {
-      g_warning ("failed to contact colord: %s", error->message);
+      if (!colord_warned)
+        {
+          g_warning ("failed to contact colord: %s", error->message);
+          colord_warned = TRUE;
+        }
       g_error_free (error);
     }
 
