@@ -57,31 +57,6 @@ _gdk_quartz_window_drag_begin (GdkWindow *window,
   return _gdk_quartz_drag_source_context;
 }
 
-static gboolean
-gdk_quartz_drag_context_drag_motion (GdkDragContext  *context,
-                                     GdkWindow       *dest_window,
-                                     GdkDragProtocol  protocol,
-                                     gint             x_root,
-                                     gint             y_root,
-                                     GdkDragAction    suggested_action,
-                                     GdkDragAction    possible_actions,
-                                     guint32          time)
-{
-  /* FIXME: Implement */
-  return FALSE;
-}
-
-static GdkWindow *
-gdk_quartz_drag_context_find_window (GdkDragContext  *context,
-                                     GdkWindow       *drag_window,
-                                     gint             x_root,
-                                     gint             y_root,
-                                     GdkDragProtocol *protocol)
-{
-  /* FIXME: Implement */
-  return NULL;
-}
-
 static void
 gdk_quartz_drag_context_drag_drop (GdkDragContext *context,
                                    guint32         time)
@@ -158,9 +133,7 @@ gdk_quartz_drag_context_class_init (GdkQuartzDragContextClass *klass)
 
   object_class->finalize = gdk_quartz_drag_context_finalize;
 
-  context_class->find_window = gdk_quartz_drag_context_find_window;
   context_class->drag_status = gdk_quartz_drag_context_drag_status;
-  context_class->drag_motion = gdk_quartz_drag_context_drag_motion;
   context_class->drag_abort = gdk_quartz_drag_context_drag_abort;
   context_class->drag_drop = gdk_quartz_drag_context_drag_drop;
   context_class->drop_reply = gdk_quartz_drag_context_drop_reply;

@@ -104,33 +104,6 @@ _gdk_broadway_window_drag_begin (GdkWindow          *window,
   return new_context;
 }
 
-static GdkWindow *
-gdk_broadway_drag_context_find_window (GdkDragContext  *context,
-				       GdkWindow       *drag_window,
-				       gint             x_root,
-				       gint             y_root,
-				       GdkDragProtocol *protocol)
-{
-  g_return_val_if_fail (context != NULL, NULL);
-  return NULL;
-}
-
-static gboolean
-gdk_broadway_drag_context_drag_motion (GdkDragContext *context,
-				       GdkWindow      *dest_window,
-				       GdkDragProtocol protocol,
-				       gint            x_root,
-				       gint            y_root,
-				       GdkDragAction   suggested_action,
-				       GdkDragAction   possible_actions,
-				       guint32         time)
-{
-  g_return_val_if_fail (context != NULL, FALSE);
-  g_return_val_if_fail (dest_window == NULL || GDK_WINDOW_IS_BROADWAY (dest_window), FALSE);
-
-  return FALSE;
-}
-
 static void
 gdk_broadway_drag_context_drag_drop (GdkDragContext *context,
 				     guint32         time)
@@ -197,9 +170,7 @@ gdk_broadway_drag_context_class_init (GdkBroadwayDragContextClass *klass)
 
   object_class->finalize = gdk_broadway_drag_context_finalize;
 
-  context_class->find_window = gdk_broadway_drag_context_find_window;
   context_class->drag_status = gdk_broadway_drag_context_drag_status;
-  context_class->drag_motion = gdk_broadway_drag_context_drag_motion;
   context_class->drag_abort = gdk_broadway_drag_context_drag_abort;
   context_class->drag_drop = gdk_broadway_drag_context_drag_drop;
   context_class->drop_reply = gdk_broadway_drag_context_drop_reply;

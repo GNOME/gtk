@@ -381,9 +381,7 @@ gdk_x11_drag_context_class_init (GdkX11DragContextClass *klass)
 
   object_class->finalize = gdk_x11_drag_context_finalize;
 
-  context_class->find_window = gdk_x11_drag_context_find_window;
   context_class->drag_status = gdk_x11_drag_context_drag_status;
-  context_class->drag_motion = gdk_x11_drag_context_drag_motion;
   context_class->drag_abort = gdk_x11_drag_context_drag_abort;
   context_class->drag_drop = gdk_x11_drag_context_drag_drop;
   context_class->drop_reply = gdk_x11_drag_context_drop_reply;
@@ -2231,7 +2229,7 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
        * the XDND protocol version, and in particular doesn't know
        * that gdk_drag_find_window() has the side-effect
        * of setting context_x11->version, and therefore sometimes call
-       * gdk_drag_motion() without a prior call to
+       * gdk_x11_drag_context_drag_motion() without a prior call to
        * gdk_drag_find_window(). This happens, e.g.
        * when GTK+ is proxying DND events to embedded windows.
        */
@@ -2370,7 +2368,7 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
             case GDK_DRAG_PROTO_LOCAL:
             case GDK_DRAG_PROTO_WAYLAND:
             case GDK_DRAG_PROTO_NONE:
-              g_warning ("Invalid drag protocol %u in gdk_drag_motion()", context->protocol);
+              g_warning ("Invalid drag protocol %u in gdk_x11_drag_context_drag_motion()", context->protocol);
               break;
             default:
               break;
@@ -3131,12 +3129,12 @@ gdk_drag_update (GdkDragContext  *context,
   gdk_drag_get_current_actions (mods, GDK_BUTTON_PRIMARY, x11_context->actions,
                                 &action, &possible_actions);
 
-  gdk_drag_find_window (context,
-                        x11_context->drag_window,
-                        x_root, y_root, &dest_window, &protocol);
+  dest_window = gdk_x11_drag_context_find_window (context,
+                                                  x11_context->drag_window,
+                                                  x_root, y_root, &protocol);
 
-  gdk_drag_motion (context, dest_window, protocol, x_root, y_root,
-                   action, possible_actions, evtime);
+  gdk_x11_drag_context_drag_motion (context, dest_window, protocol, x_root, y_root,
+                                    action, possible_actions, evtime);
 }
 
 static gboolean

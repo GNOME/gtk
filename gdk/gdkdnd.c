@@ -506,38 +506,6 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
   g_object_class_install_properties (object_class, N_PROPERTIES, properties);
 }
 
-/*
- * gdk_drag_find_window:
- * @context: a #GdkDragContext
- * @drag_window: a window which may be at the pointer position, but
- *     should be ignored, since it is put up by the drag source as an icon
- * @x_root: the x position of the pointer in root coordinates
- * @y_root: the y position of the pointer in root coordinates
- * @dest_window: (out): location to store the destination window in
- * @protocol: (out): location to store the DND protocol in
- *
- * Finds the destination window and DND protocol to use at the
- * given pointer position.
- *
- * This function is called by the drag source to obtain the
- * @dest_window and @protocol parameters for gdk_drag_motion().
- *
- * Since: 2.2
- */
-void
-gdk_drag_find_window (GdkDragContext  *context,
-                      GdkWindow       *drag_window,
-                      gint             x_root,
-                      gint             y_root,
-                      GdkWindow      **dest_window,
-                      GdkDragProtocol *protocol)
-{
-  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
-
-  *dest_window = GDK_DRAG_CONTEXT_GET_CLASS (context)
-      ->find_window (context, drag_window, x_root, y_root, protocol);
-}
-
 /**
  * gdk_drag_status:
  * @context: a #GdkDragContext
@@ -558,48 +526,6 @@ gdk_drag_status (GdkDragContext *context,
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
 
   GDK_DRAG_CONTEXT_GET_CLASS (context)->drag_status (context, action, time_);
-}
-
-/*
- * gdk_drag_motion:
- * @context: a #GdkDragContext
- * @dest_window: the new destination window, obtained by
- *     gdk_drag_find_window()
- * @protocol: the DND protocol in use, obtained by gdk_drag_find_window()
- * @x_root: the x position of the pointer in root coordinates
- * @y_root: the y position of the pointer in root coordinates
- * @suggested_action: the suggested action
- * @possible_actions: the possible actions
- * @time_: the timestamp for this operation
- *
- * Updates the drag context when the pointer moves or the
- * set of actions changes.
- *
- * This function is called by the drag source.
- *
- * Returns:
- */
-gboolean
-gdk_drag_motion (GdkDragContext *context,
-                 GdkWindow      *dest_window,
-                 GdkDragProtocol protocol,
-                 gint            x_root,
-                 gint            y_root,
-                 GdkDragAction   suggested_action,
-                 GdkDragAction   possible_actions,
-                 guint32         time_)
-{
-  g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), FALSE);
-
-  return GDK_DRAG_CONTEXT_GET_CLASS (context)
-       ->drag_motion (context,
-                      dest_window,
-                      protocol,
-                      x_root,
-                      y_root,
-                      suggested_action,
-                      possible_actions,
-                      time_);
 }
 
 /*

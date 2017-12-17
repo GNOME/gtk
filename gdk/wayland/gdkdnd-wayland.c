@@ -130,29 +130,6 @@ _gdk_wayland_drag_context_emit_event (GdkDragContext *context,
   g_object_unref (event);
 }
 
-static GdkWindow *
-gdk_wayland_drag_context_find_window (GdkDragContext  *context,
-				      GdkWindow       *drag_window,
-				      gint             x_root,
-				      gint             y_root,
-				      GdkDragProtocol *protocol)
-{
-  GdkDevice *device;
-  GdkWindow *window;
-
-  device = gdk_drag_context_get_device (context);
-  window = gdk_device_get_window_at_position (device, NULL, NULL);
-
-  if (window)
-    {
-      window = gdk_window_get_toplevel (window);
-      *protocol = GDK_DRAG_PROTO_WAYLAND;
-      return g_object_ref (window);
-    }
-
-  return NULL;
-}
-
 static inline uint32_t
 gdk_to_wl_actions (GdkDragAction action)
 {
@@ -173,27 +150,6 @@ gdk_wayland_drag_context_set_action (GdkDragContext *context,
                                      GdkDragAction   action)
 {
   context->suggested_action = context->action = action;
-}
-
-static gboolean
-gdk_wayland_drag_context_drag_motion (GdkDragContext *context,
-				      GdkWindow      *dest_window,
-				      GdkDragProtocol protocol,
-				      gint            x_root,
-				      gint            y_root,
-				      GdkDragAction   suggested_action,
-				      GdkDragAction   possible_actions,
-				      guint32         time)
-{
-  if (context->dest_window != dest_window)
-    {
-      context->dest_window = dest_window ? g_object_ref (dest_window) : NULL;
-      _gdk_wayland_drag_context_set_coords (context, x_root, y_root);
-    }
-
-  gdk_wayland_drag_context_set_action (context, suggested_action);
-
-  return context->dest_window != NULL;
 }
 
 static void
@@ -485,9 +441,7 @@ gdk_wayland_drag_context_class_init (GdkWaylandDragContextClass *klass)
 
   object_class->finalize = gdk_wayland_drag_context_finalize;
 
-  context_class->find_window = gdk_wayland_drag_context_find_window;
   context_class->drag_status = gdk_wayland_drag_context_drag_status;
-  context_class->drag_motion = gdk_wayland_drag_context_drag_motion;
   context_class->drag_abort = gdk_wayland_drag_context_drag_abort;
   context_class->drag_drop = gdk_wayland_drag_context_drag_drop;
   context_class->drop_reply = gdk_wayland_drag_context_drop_reply;
