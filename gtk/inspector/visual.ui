@@ -2,7 +2,7 @@
 <interface domain="gtk30">
   <object class="GtkAdjustment" id="scale_adjustment">
     <property name="lower">1</property>
-    <property name="upper">2</property>
+    <property name="upper">3</property>
     <property name="step-increment">1</property>
     <property name="page-increment">1</property>
   </object>
