@@ -202,7 +202,6 @@ shell_command_substitute_file (const gchar *cmd,
   return g_string_free (final, FALSE);
 }
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 gtk_print_operation_unix_launch_preview (GtkPrintOperation *op,
                                          cairo_surface_t   *surface,
@@ -343,7 +342,6 @@ gtk_print_operation_unix_launch_preview (GtkPrintOperation *op,
   g_free (data);
   g_free (settings_filename);
 }
-G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 unix_finish_send  (GtkPrintJob  *job,
