@@ -58,6 +58,23 @@ typedef enum {
   GDK_DRAG_STATUS_DROP
 } GtkDragStatus;
 
+/*
+ * GdkDragProtocol:
+ * @GDK_DRAG_PROTO_NONE: no protocol.
+ * @GDK_DRAG_PROTO_XDND: The Xdnd protocol.
+ * @GDK_DRAG_PROTO_ROOTWIN: An extension to the Xdnd protocol for
+ *  unclaimed root window drops.
+ *
+ * Used in #GdkDragContext to indicate the protocol according to
+ * which DND is done.
+ */
+typedef enum
+{
+  GDK_DRAG_PROTO_NONE = 0,
+  GDK_DRAG_PROTO_XDND,
+  GDK_DRAG_PROTO_ROOTWIN
+} GdkDragProtocol;
+
 typedef struct {
   guint32 xid;
   gint x, y, width, height;
@@ -79,6 +96,8 @@ struct _GdkWindowCache {
 struct _GdkX11DragContext
 {
   GdkDragContext context;
+
+  GdkDragProtocol protocol;
 
   gint start_x;                /* Where the drag started */
   gint start_y;
@@ -408,7 +427,7 @@ gdk_x11_drag_context_finalize (GObject *object)
 
   if (context->source_window)
     {
-      if ((context->protocol == GDK_DRAG_PROTO_XDND) && !context->is_source)
+      if ((x11_context->protocol == GDK_DRAG_PROTO_XDND) && !context->is_source)
         xdnd_manage_source_filter (context, context->source_window, FALSE);
     }
 
@@ -1762,7 +1781,7 @@ xdnd_enter_filter (GdkXEvent *xev,
                               NULL);
   context = (GdkDragContext *)context_x11;
 
-  context->protocol = GDK_DRAG_PROTO_XDND;
+  context_x11->protocol = GDK_DRAG_PROTO_XDND;
   context_x11->version = version;
 
   /* FIXME: Should extend DnD protocol to have device info */
@@ -1859,7 +1878,7 @@ xdnd_leave_filter (GdkXEvent *xev,
   xdnd_precache_atoms (display);
 
   if ((display_x11->current_dest_drag != NULL) &&
-      (display_x11->current_dest_drag->protocol == GDK_DRAG_PROTO_XDND) &&
+      (GDK_X11_DRAG_CONTEXT (display_x11->current_dest_drag)->protocol == GDK_DRAG_PROTO_XDND) &&
       (GDK_WINDOW_XID (display_x11->current_dest_drag->source_window) == source_window))
     {
       event->any.type = GDK_DRAG_LEAVE;
@@ -1908,7 +1927,7 @@ xdnd_position_filter (GdkXEvent *xev,
   context = display_x11->current_dest_drag;
 
   if ((context != NULL) &&
-      (context->protocol == GDK_DRAG_PROTO_XDND) &&
+      (GDK_X11_DRAG_CONTEXT (context)->protocol == GDK_DRAG_PROTO_XDND) &&
       (GDK_WINDOW_XID (context->source_window) == source_window))
     {
       impl = GDK_WINDOW_IMPL_X11 (event->any.window->impl);
@@ -1968,7 +1987,7 @@ xdnd_drop_filter (GdkXEvent *xev,
   context = display_x11->current_dest_drag;
 
   if ((context != NULL) &&
-      (context->protocol == GDK_DRAG_PROTO_XDND) &&
+      (GDK_X11_DRAG_CONTEXT (context)->protocol == GDK_DRAG_PROTO_XDND) &&
       (GDK_WINDOW_XID (context->source_window) == source_window))
     {
       context_x11 = GDK_X11_DRAG_CONTEXT (context);
@@ -2028,17 +2047,12 @@ gdk_drag_do_leave (GdkX11DragContext *context_x11,
 
   if (context->dest_window)
     {
-      switch (context->protocol)
+      switch (context_x11->protocol)
         {
         case GDK_DRAG_PROTO_XDND:
           xdnd_send_leave (context_x11);
           break;
         case GDK_DRAG_PROTO_ROOTWIN:
-        case GDK_DRAG_PROTO_MOTIF:
-        case GDK_DRAG_PROTO_WIN32_DROPFILES:
-        case GDK_DRAG_PROTO_OLE2:
-        case GDK_DRAG_PROTO_LOCAL:
-        case GDK_DRAG_PROTO_WAYLAND:
         case GDK_DRAG_PROTO_NONE:
         default:
           break;
@@ -2182,7 +2196,7 @@ gdk_x11_drag_context_find_window (GdkDragContext  *context,
       dest_window = context->dest_window;
       if (dest_window)
         g_object_ref (dest_window);
-      *protocol = context->protocol;
+      *protocol = context_x11->protocol;
     }
 
   return dest_window;
@@ -2283,7 +2297,7 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
           context->dest_window = dest_window;
           context_x11->drop_xid = context_x11->dest_xid;
           g_object_ref (context->dest_window);
-          context->protocol = protocol;
+          context_x11->protocol = protocol;
 
           switch (protocol)
             {
@@ -2292,11 +2306,6 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
               break;
 
             case GDK_DRAG_PROTO_ROOTWIN:
-            case GDK_DRAG_PROTO_MOTIF:
-            case GDK_DRAG_PROTO_WIN32_DROPFILES:
-            case GDK_DRAG_PROTO_OLE2:
-            case GDK_DRAG_PROTO_LOCAL:
-            case GDK_DRAG_PROTO_WAYLAND:
             case GDK_DRAG_PROTO_NONE:
             default:
               break;
@@ -2338,7 +2347,7 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
 
       if (context_x11->drag_status == GDK_DRAG_STATUS_DRAG)
         {
-          switch (context->protocol)
+          switch (context_x11->protocol)
             {
             case GDK_DRAG_PROTO_XDND:
               xdnd_send_motion (context_x11, x_root * impl->window_scale, y_root * impl->window_scale, suggested_action, time);
@@ -2362,13 +2371,8 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
                   }
               }
               break;
-            case GDK_DRAG_PROTO_MOTIF:
-            case GDK_DRAG_PROTO_WIN32_DROPFILES:
-            case GDK_DRAG_PROTO_OLE2:
-            case GDK_DRAG_PROTO_LOCAL:
-            case GDK_DRAG_PROTO_WAYLAND:
             case GDK_DRAG_PROTO_NONE:
-              g_warning ("Invalid drag protocol %u in gdk_x11_drag_context_drag_motion()", context->protocol);
+              g_warning ("Invalid drag protocol %u in gdk_x11_drag_context_drag_motion()", context_x11->protocol);
               break;
             default:
               break;
@@ -2396,7 +2400,7 @@ gdk_x11_drag_context_drag_drop (GdkDragContext *context,
 
   if (context->dest_window)
     {
-      switch (context->protocol)
+      switch (context_x11->protocol)
         {
         case GDK_DRAG_PROTO_XDND:
           xdnd_send_drop (context_x11, time);
@@ -2408,13 +2412,8 @@ gdk_x11_drag_context_drag_drop (GdkDragContext *context,
         case GDK_DRAG_PROTO_NONE:
           g_warning ("GDK_DRAG_PROTO_NONE is not valid in gdk_drag_drop()");
           break;
-        case GDK_DRAG_PROTO_MOTIF:
-        case GDK_DRAG_PROTO_WIN32_DROPFILES:
-        case GDK_DRAG_PROTO_OLE2:
-        case GDK_DRAG_PROTO_LOCAL:
-        case GDK_DRAG_PROTO_WAYLAND:
         default:
-          g_warning ("Drag protocol %u is not valid in gdk_drag_drop()", context->protocol);
+          g_warning ("Drag protocol %u is not valid in gdk_drag_drop()", context_x11->protocol);
           break;
         }
     }
@@ -2435,7 +2434,7 @@ gdk_x11_drag_context_drag_status (GdkDragContext *context,
 
   context->action = action;
 
-  if (context->protocol == GDK_DRAG_PROTO_XDND)
+  if (context_x11->protocol == GDK_DRAG_PROTO_XDND)
     {
       xev.xclient.type = ClientMessage;
       xev.xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "XdndStatus");
@@ -2470,7 +2469,7 @@ gdk_x11_drag_context_drop_finish (GdkDragContext *context,
                                   gboolean        success,
                                   guint32         time)
 {
-  if (context->protocol == GDK_DRAG_PROTO_XDND)
+  if (GDK_X11_DRAG_CONTEXT (context)->protocol == GDK_DRAG_PROTO_XDND)
     {
       GdkDisplay *display = gdk_drag_context_get_display (context);
       XEvent xev;
@@ -2981,7 +2980,7 @@ _gdk_x11_window_drag_begin (GdkWindow          *window,
   x11_context->last_x = x_root;
   x11_context->last_y = y_root;
 
-  context->protocol = GDK_DRAG_PROTO_XDND;
+  x11_context->protocol = GDK_DRAG_PROTO_XDND;
   x11_context->actions = actions;
   x11_context->ipc_window = gdk_window_new_popup (display, &(GdkRectangle) { -99, -99, 1, 1 });
   if (gdk_window_get_group (window))
