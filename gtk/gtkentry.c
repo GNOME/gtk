@@ -8983,8 +8983,11 @@ gtk_entry_drag_motion (GtkWidget        *widget,
       priv->dnd_position = -1;
     }
 
+  if (show_placeholder_text (entry))
+    priv->dnd_position = -1;
+
   gdk_drag_status (context, suggested_action, time);
-  if (priv->dnd_position == -1)
+  if (suggested_action == 0)
     gtk_drag_unhighlight (widget);
   else
     gtk_drag_highlight (widget);
