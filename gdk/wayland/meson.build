@@ -45,17 +45,18 @@ wayland_scanner = find_program('wayland-scanner')
 
 # Format:
 #  - protocol name
-#  - protocol stability ('stable' or 'unstable')
+#  - protocol stability ('private', 'stable' or 'unstable')
 #  - protocol version (if stability is 'unstable')
 proto_sources = [
-  ['gtk-shell', 'stable', ],
-  ['gtk-primary-selection', 'stable', ],
+  ['gtk-shell', 'private', ],
+  ['gtk-primary-selection', 'private', ],
   ['pointer-gestures', 'unstable', 'v1', ],
   ['xdg-shell', 'unstable', 'v6', ],
+  ['xdg-shell', 'stable', ],
   ['xdg-foreign', 'unstable', 'v1', ],
   ['tablet', 'unstable', 'v2', ],
   ['keyboard-shortcuts-inhibit', 'unstable', 'v1', ],
-  ['server-decoration', 'stable' ],
+  ['server-decoration', 'private' ],
 ]
 
 gdk_wayland_gen_headers = []
@@ -65,6 +66,9 @@ foreach p: proto_sources
   proto_stability = p.get(1)
 
   if proto_stability == 'stable'
+    output_base = proto_name
+    input = join_paths(proto_dir, '@0@/@1@/@2@.xml'.format(proto_stability, proto_name, output_base))
+  elif proto_stability == 'private'
     output_base = proto_name
     input = 'protocol/@0@.xml'.format(proto_name)
   else
