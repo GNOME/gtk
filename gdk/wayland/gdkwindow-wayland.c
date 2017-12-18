@@ -1499,7 +1499,9 @@ gdk_wayland_window_handle_configure (GdkWindow *window,
   impl->pending.state = 0;
 
   fixed_size =
-    new_state & (GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_TILED);
+    new_state & (GDK_WINDOW_STATE_MAXIMIZED |
+                 GDK_WINDOW_STATE_FULLSCREEN |
+                 GDK_WINDOW_STATE_TILED);
 
   saved_size = (width == 0 && height == 0);
   /* According to xdg_shell, an xdg_surface.configure with size 0x0
@@ -1778,10 +1780,13 @@ gdk_wayland_window_create_xdg_toplevel (GdkWindow *window)
   const gchar *app_id;
   GdkScreen *screen = gdk_window_get_screen (window);
   struct wl_output *fullscreen_output = NULL;
+
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (impl->initial_fullscreen_monitor >= 0 &&
       impl->initial_fullscreen_monitor < gdk_screen_get_n_monitors (screen))
-      fullscreen_output = _gdk_wayland_screen_get_wl_output (screen, impl->initial_fullscreen_monitor);
+    fullscreen_output =
+      _gdk_wayland_screen_get_wl_output (screen,
+                                         impl->initial_fullscreen_monitor);
 G_GNUC_END_IGNORE_DEPRECATIONS
 
   gdk_window_freeze_updates (window);
