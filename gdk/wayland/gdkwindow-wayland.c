@@ -1430,7 +1430,9 @@ gdk_wayland_window_handle_configure (GdkWindow *window,
   impl->pending.state = 0;
 
   fixed_size =
-    new_state & (GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_TILED);
+    new_state & (GDK_WINDOW_STATE_MAXIMIZED |
+                 GDK_WINDOW_STATE_FULLSCREEN |
+                 GDK_WINDOW_STATE_TILED);
 
   saved_size = (width == 0 && height == 0);
   /* According to xdg_shell, an xdg_surface.configure with size 0x0
