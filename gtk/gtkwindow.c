@@ -7639,6 +7639,7 @@ do_focus_change (GtkWidget *widget,
         continue;
 
       fevent = gdk_event_new (GDK_FOCUS_CHANGE);
+      gdk_event_set_display (fevent, gtk_widget_get_display (widget));
 
       fevent->any.type = GDK_FOCUS_CHANGE;
       fevent->any.window = window;
