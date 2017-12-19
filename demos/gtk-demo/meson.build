@@ -94,7 +94,7 @@ gtkdemo_resources = gnome.compile_resources('gtkdemo_resources',
                                             source_dir: '.')
 
 executable('gtk4-demo',
-           'main.c', 'gtkfishbowl.c', demos, demos_h, gtkdemo_resources,
+           'main.c', 'gtkfishbowl.c', 'fontplane.c', demos, demos_h, gtkdemo_resources,
            c_args: gtkdemo_args,
            dependencies: gtkdemo_deps,
            include_directories: confinc,
