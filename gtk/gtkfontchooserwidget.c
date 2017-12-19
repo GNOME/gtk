@@ -547,19 +547,7 @@ gtk_font_chooser_widget_update_preview_attributes (GtkFontChooserWidget *fontcho
 }
 
 static void
-row_inserted_cb (GtkTreeModel *model,
-                 GtkTreePath  *path,
-                 GtkTreeIter  *iter,
-                 gpointer      user_data)
-{
-  GtkFontChooserWidget *fontchooser = user_data;
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
-
-  gtk_stack_set_visible_child_name (GTK_STACK (priv->list_stack), "list");
-}
-
-static void
-row_deleted_cb  (GtkTreeModel *model,
+rows_changed_cb (GtkTreeModel *model,
                  GtkTreePath  *path,
                  gpointer      user_data)
 {
@@ -568,6 +556,8 @@ row_deleted_cb  (GtkTreeModel *model,
 
   if (gtk_tree_model_iter_n_children (model, NULL) == 0)
     gtk_stack_set_visible_child_name (GTK_STACK (priv->list_stack), "empty");
+  else
+    gtk_stack_set_visible_child_name (GTK_STACK (priv->list_stack), "list");
 }
 
 static void
@@ -670,9 +660,7 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, row_activated_cb);
   gtk_widget_class_bind_template_callback (widget_class, gtk_font_chooser_widget_set_cell_size);
   gtk_widget_class_bind_template_callback (widget_class, resize_by_scroll_cb);
-  gtk_widget_class_bind_template_callback (widget_class, row_deleted_cb);
-  gtk_widget_class_bind_template_callback (widget_class, row_inserted_cb);
-  gtk_widget_class_bind_template_callback (widget_class, row_deleted_cb);
+  gtk_widget_class_bind_template_callback (widget_class, rows_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, size_change_cb);
   gtk_widget_class_bind_template_callback (widget_class, output_cb);
 
@@ -788,10 +776,8 @@ gtk_font_chooser_widget_load_fonts (GtkFontChooserWidget *fontchooser,
   qsort (families, n_families, sizeof (PangoFontFamily *), cmp_families);
 
   g_signal_handlers_block_by_func (priv->family_face_list, cursor_changed_cb, fontchooser);
-  g_signal_handlers_block_by_func (priv->filter_model, row_deleted_cb, fontchooser);
+  g_signal_handlers_block_by_func (priv->filter_model, rows_changed_cb, fontchooser);
   gtk_list_store_clear (list_store);
-  g_signal_handlers_unblock_by_func (priv->filter_model, row_deleted_cb, fontchooser);
-  g_signal_handlers_unblock_by_func (priv->family_face_list, cursor_changed_cb, fontchooser);
 
   /* Iterate over families and faces */
   for (i = 0; i < n_families; i++)
@@ -829,17 +815,16 @@ gtk_font_chooser_widget_load_fonts (GtkFontChooserWidget *fontchooser,
 
   g_free (families);
 
+  rows_changed_cb (priv->filter_model, NULL, fontchooser);
+
+  g_signal_handlers_unblock_by_func (priv->filter_model, rows_changed_cb, fontchooser);
+  g_signal_handlers_unblock_by_func (priv->family_face_list, cursor_changed_cb, fontchooser);
+
   /* now make sure the font list looks right */
   if (!gtk_font_chooser_widget_find_font (fontchooser, priv->font_desc, &priv->font_iter))
     memset (&priv->font_iter, 0, sizeof (GtkTreeIter));
 
   gtk_font_chooser_widget_ensure_selection (fontchooser);
-
-  /* We block row_deleted_cb when reloading, now manually switch to the
-   * "empty" pane if the filter model is empty.
-   */
-  if (gtk_tree_model_iter_n_children (priv->filter_model, NULL) == 0)
-    gtk_stack_set_visible_child_name (GTK_STACK (priv->list_stack), "empty");
 }
 
 static gboolean
