@@ -138,8 +138,6 @@ static void gtk_font_chooser_widget_finalize             (GObject         *objec
 static void gtk_font_chooser_widget_screen_changed       (GtkWidget       *widget,
                                                           GdkScreen       *previous_screen);
 
-static void gtk_font_chooser_widget_style_updated        (GtkWidget       *widget);
-
 static gboolean gtk_font_chooser_widget_find_font        (GtkFontChooserWidget *fontchooser,
                                                           const PangoFontDescription *font_desc,
                                                           GtkTreeIter          *iter);
@@ -580,7 +578,6 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   g_type_ensure (G_TYPE_THEMED_ICON);
 
   widget_class->screen_changed = gtk_font_chooser_widget_screen_changed;
-  widget_class->style_updated = gtk_font_chooser_widget_style_updated;
 
   gobject_class->finalize = gtk_font_chooser_widget_finalize;
   gobject_class->set_property = gtk_font_chooser_widget_set_property;
@@ -1061,16 +1058,6 @@ gtk_font_chooser_widget_screen_changed (GtkWidget *widget,
   if (previous_screen == gtk_widget_get_screen (widget))
     return;
 
-  gtk_font_chooser_widget_load_fonts (fontchooser, FALSE);
-}
-
-static void
-gtk_font_chooser_widget_style_updated (GtkWidget *widget)
-{
-  GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (widget);
-
-  GTK_WIDGET_CLASS (gtk_font_chooser_widget_parent_class)->style_updated (widget);
- 
   gtk_font_chooser_widget_load_fonts (fontchooser, FALSE);
 }
 
