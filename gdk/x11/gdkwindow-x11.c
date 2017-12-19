@@ -2453,7 +2453,7 @@ gdk_x11_window_set_transient_for (GdkWindow *window,
     return;
 
   /* XSetTransientForHint() doesn't allow unsetting, so do it manually */
-  if (!GDK_WINDOW_DESTROYED (parent))
+  if (!parent || !GDK_WINDOW_DESTROYED (parent))
     XSetTransientForHint (GDK_WINDOW_XDISPLAY (window), 
 			  GDK_WINDOW_XID (window),
 			  GDK_WINDOW_XID (parent));
