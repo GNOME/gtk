@@ -3059,8 +3059,9 @@ _gtk_range_get_wheel_delta (GtkRange       *range,
     }
   else if (gdk_event_get_scroll_direction ((GdkEvent *) event, &direction))
     {
-      if (direction == GDK_SCROLL_DOWN ||
-          direction == GDK_SCROLL_LEFT)
+      if (direction == GDK_SCROLL_LEFT ||
+          (priv->orientation == GTK_ORIENTATION_VERTICAL && direction == GDK_SCROLL_UP) ||
+          (priv->orientation == GTK_ORIENTATION_HORIZONTAL && direction == GDK_SCROLL_DOWN))
         delta = - scroll_unit;
       else
         delta = scroll_unit;
