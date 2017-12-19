@@ -159,7 +159,8 @@ static void add_offscreen_ops                 (GskGLRenderer   *self,
                                                float            max_y,
                                                GskRenderNode   *child_node,
                                                int             *texture_id,
-                                               gboolean        *is_offscreen);
+                                               gboolean        *is_offscreen,
+                                               gboolean         force_offscreen);
 static void gsk_gl_renderer_add_render_ops     (GskGLRenderer   *self,
                                                 GskRenderNode   *node,
                                                 RenderOpBuilder *builder);
@@ -748,7 +749,7 @@ render_color_matrix_node (GskGLRenderer       *self,
 
   add_offscreen_ops (self, builder, min_x, max_x, min_y, max_y,
                      gsk_color_matrix_node_get_child (node),
-                     &texture_id, &is_offscreen);
+                     &texture_id, &is_offscreen, FALSE);
 
   ops_set_program (builder, &self->color_matrix_program);
   ops_set_color_matrix (builder,
@@ -792,7 +793,7 @@ render_blur_node (GskGLRenderer       *self,
   RenderOp op;
   add_offscreen_ops (self, builder, min_x, max_x, min_y, max_y,
                      gsk_blur_node_get_child (node),
-                     &texture_id, &is_offscreen);
+                     &texture_id, &is_offscreen, FALSE);
 
   ops_set_program (builder, &self->blur_program);
   op.op = OP_CHANGE_BLUR;
@@ -952,7 +953,7 @@ render_shadow_node (GskGLRenderer       *self,
 
       add_offscreen_ops (self, builder,
                          dx + min_x, dx + max_x, dy + min_y, dy + max_y,
-                         shadow_child, &texture_id, &is_offscreen);
+                         shadow_child, &texture_id, &is_offscreen, FALSE);
 
       ops_offset (builder, prev_dx, prev_dy);
 
@@ -1007,7 +1008,7 @@ render_cross_fade_node (GskGLRenderer       *self,
   float progress = gsk_cross_fade_node_get_progress (node);
   int start_texture_id;
   int end_texture_id;
-  gboolean is_offscreen;
+  gboolean is_offscreen1, is_offscreen2;
   RenderOp op;
   const GskQuadVertex vertex_data[GL_N_VERTICES] = {
     { { min_x, min_y }, { 0, 1 }, },
@@ -1023,10 +1024,10 @@ render_cross_fade_node (GskGLRenderer       *self,
    * start and the end node might be a lot smaller than that. */
 
   add_offscreen_ops (self, builder, min_x, max_x, min_y, max_y, start_node,
-                         &start_texture_id, &is_offscreen);
+                     &start_texture_id, &is_offscreen1, TRUE);
 
   add_offscreen_ops (self, builder, min_x, max_x, min_y, max_y, end_node,
-                     &end_texture_id, &is_offscreen);
+                     &end_texture_id, &is_offscreen2, TRUE);
 
   ops_set_program (builder, &self->cross_fade_program);
   op.op = OP_CHANGE_CROSS_FADE;
@@ -1818,7 +1819,8 @@ add_offscreen_ops (GskGLRenderer   *self,
                    float            max_y,
                    GskRenderNode   *child_node,
                    int             *texture_id,
-                   gboolean        *is_offscreen)
+                   gboolean        *is_offscreen,
+                   gboolean         force_offscreen)
 {
   int render_target;
   int prev_render_target;
@@ -1831,7 +1833,7 @@ add_offscreen_ops (GskGLRenderer   *self,
 
   /* We need the child node as a texture. If it already is one, we don't need to draw
    * it on a framebuffer of course. */
-  if (gsk_render_node_get_node_type (child_node) == GSK_TEXTURE_NODE)
+  if (gsk_render_node_get_node_type (child_node) == GSK_TEXTURE_NODE && !force_offscreen)
     {
       GdkTexture *texture = gsk_texture_node_get_texture (child_node);
       int gl_min_filter = GL_NEAREST, gl_mag_filter = GL_NEAREST;
