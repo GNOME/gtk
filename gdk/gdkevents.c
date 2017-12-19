@@ -364,7 +364,6 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
 {
   GList *tmp_list;
   GList *pending_motions = NULL;
-  GList *history = NULL;
   GdkWindow *pending_motion_window = NULL;
   GdkDevice *pending_motion_device = NULL;
   GdkEvent *last_motion = NULL;
@@ -405,8 +404,6 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
   while (pending_motions && pending_motions->next != NULL)
     {
       GList *next = pending_motions->next;
-
-      history = g_list_prepend (history, pending_motions->data);
 
       if (last_motion &&
           (last_motion->motion.state &
