@@ -15,8 +15,8 @@
   </object>
   <object class="GtkTreeModelFilter" id="filter_model">
     <property name="child-model">model</property>
-    <signal name="row-deleted" handler="rows_changed_cb" swapped="no"/>
-    <signal name="row-inserted" handler="rows_changed_cb" swapped="no"/>
+    <signal name="row-deleted" handler="rows_changed_cb" swapped="yes"/>
+    <signal name="row-inserted" handler="rows_changed_cb" swapped="yes"/>
   </object>
   <object class="GtkAdjustment" id="slider_adjustment">
     <property name="upper">100</property>

@@ -547,14 +547,11 @@ gtk_font_chooser_widget_update_preview_attributes (GtkFontChooserWidget *fontcho
 }
 
 static void
-rows_changed_cb (GtkTreeModel *model,
-                 GtkTreePath  *path,
-                 gpointer      user_data)
+rows_changed_cb (GtkFontChooserWidget *fontchooser)
 {
-  GtkFontChooserWidget *fontchooser = user_data;
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
 
-  if (gtk_tree_model_iter_n_children (model, NULL) == 0)
+  if (gtk_tree_model_iter_n_children (priv->filter_model, NULL) == 0)
     gtk_stack_set_visible_child_name (GTK_STACK (priv->list_stack), "empty");
   else
     gtk_stack_set_visible_child_name (GTK_STACK (priv->list_stack), "list");
@@ -815,7 +812,7 @@ gtk_font_chooser_widget_load_fonts (GtkFontChooserWidget *fontchooser,
 
   g_free (families);
 
-  rows_changed_cb (priv->filter_model, NULL, fontchooser);
+  rows_changed_cb (fontchooser);
 
   g_signal_handlers_unblock_by_func (priv->filter_model, rows_changed_cb, fontchooser);
   g_signal_handlers_unblock_by_func (priv->family_face_list, cursor_changed_cb, fontchooser);
