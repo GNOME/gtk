@@ -977,35 +977,20 @@ gtk_font_chooser_widget_get_preview_text_height (GtkFontChooserWidget *fontchoos
 
 static PangoAttrList *
 gtk_font_chooser_widget_get_preview_attributes (GtkFontChooserWidget       *fontchooser,
-                                                const PangoFontDescription *font_desc,
-                                                gsize                       first_line_len)
+                                                const PangoFontDescription *font_desc)
 {
   PangoAttribute *attribute;
   PangoAttrList *attrs;
 
   attrs = pango_attr_list_new ();
 
-  attribute = pango_attr_weight_new (PANGO_WEIGHT_BOLD);
-  attribute->end_index = first_line_len;
-  pango_attr_list_insert (attrs, attribute);
-
-  attribute = pango_attr_scale_new (PANGO_SCALE_SMALL);
-  attribute->end_index = first_line_len;
-  pango_attr_list_insert (attrs, attribute);
-
   if (font_desc)
     {
       attribute = pango_attr_font_desc_new (font_desc);
-      attribute->start_index = first_line_len;
       pango_attr_list_insert (attrs, attribute);
     }
 
-  attribute = pango_attr_fallback_new (FALSE);
-  attribute->start_index = first_line_len;
-  pango_attr_list_insert (attrs, attribute);
-
   attribute = pango_attr_size_new_absolute (gtk_font_chooser_widget_get_preview_text_height (fontchooser));
-  attribute->start_index = first_line_len;
   pango_attr_list_insert (attrs, attribute);
 
   return attrs;
@@ -1021,29 +1006,25 @@ gtk_font_chooser_widget_cell_data_func (GtkTreeViewColumn *column,
   GtkFontChooserWidget *fontchooser = user_data;
   GtkDelayedFontDescription *desc;
   PangoAttrList *attrs;
-  char *preview_title, *text;
-  gsize first_line_len;
+  char *preview_title;
 
   gtk_tree_model_get (tree_model, iter,
                       PREVIEW_TITLE_COLUMN, &preview_title,
                       FONT_DESC_COLUMN, &desc,
                       -1);
 
-  text = g_strconcat (preview_title, "\n", fontchooser->priv->preview_text, NULL);
-  first_line_len = strlen (preview_title) + 1;
-
   attrs = gtk_font_chooser_widget_get_preview_attributes (fontchooser,
-                                                          gtk_delayed_font_description_get (desc),
-                                                          first_line_len);
+              gtk_delayed_font_description_get (desc));
 
   g_object_set (cell,
+                "xpad", 20,
+                "ypad", 10,
                 "attributes", attrs,
-                "text", text,
+                "text", preview_title,
                 NULL);
 
   gtk_delayed_font_description_unref (desc);
   pango_attr_list_unref (attrs);
-  g_free (text);
   g_free (preview_title);
 }
 
@@ -1056,13 +1037,13 @@ gtk_font_chooser_widget_set_cell_size (GtkFontChooserWidget *fontchooser)
 
   gtk_cell_renderer_set_fixed_size (priv->family_face_cell, -1, -1);
 
-  attrs = gtk_font_chooser_widget_get_preview_attributes (fontchooser, 
-                                                          NULL,
-                                                          1);
+  attrs = gtk_font_chooser_widget_get_preview_attributes (fontchooser, NULL);
   
   g_object_set (priv->family_face_cell,
+                "xpad", 20,
+                "ypad", 10,
                 "attributes", attrs,
-                "text", "x\nx",
+                "text", "x",
                 NULL);
 
   pango_attr_list_unref (attrs);
