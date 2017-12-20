@@ -1163,6 +1163,62 @@ dialog_destroy (GtkWidget *widget,
   font_button->priv->font_dialog = NULL;
 } 
 
+static void
+add_css_variations (GString    *s,
+                    const char *variations)
+{
+  const char *p;
+  const char *sep = "";
+
+  if (variations == NULL || variations[0] == '\0')
+    {
+      g_string_append (s, "normal");
+      return;
+    }
+
+  p = variations;
+  while (p && *p)
+    {
+      const char *start;
+      const char *end, *end2;
+      double value;
+      char name[5];
+
+      while (g_ascii_isspace (*p)) p++;
+
+      start = p;
+      end = strchr (p, ',');
+      if (end && (end - p < 6))
+        goto skip;
+
+      name[0] = p[0];
+      name[1] = p[1];
+      name[2] = p[2];
+      name[3] = p[3];
+      name[4] = '\0';
+
+      p += 4;
+      while (g_ascii_isspace (*p)) p++;
+      if (*p == '=') p++;
+
+      if (p - start < 5)
+        goto skip;
+
+      value = g_ascii_strtod (p, (char **) &end2);
+
+      while (end2 && g_ascii_isspace (*end2)) end2++;
+
+      if (end2 && (*end2 != ',' && *end2 != '\0'))
+        goto skip;
+
+      g_string_append_printf (s, "%s\"%s\" %g", sep, name, value);
+      sep = ", ";
+
+skip:
+      p = end ? end + 1 : NULL;
+    }
+}
+
 static gchar *
 pango_font_description_to_css (PangoFontDescription *desc)
 {
@@ -1284,7 +1340,17 @@ pango_font_description_to_css (PangoFontDescription *desc)
     }
   if (set & PANGO_FONT_MASK_SIZE)
     {
-      g_string_append_printf (s, "font-size: %dpt", pango_font_description_get_size (desc) / PANGO_SCALE);
+      g_string_append_printf (s, "font-size: %dpt; ", pango_font_description_get_size (desc) / PANGO_SCALE);
+    }
+
+  if (set & PANGO_FONT_MASK_VARIATIONS)
+    {
+      const char *variations;
+
+      g_string_append (s, "font-variation-settings: ");
+      variations = pango_font_description_get_variations (desc);
+      add_css_variations (s, variations);
+      g_string_append (s, "; ");
     }
 
   g_string_append (s, "}");
