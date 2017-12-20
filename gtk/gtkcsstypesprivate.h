@@ -100,10 +100,10 @@ typedef guint64 GtkCssChange;
  *   see @GTK_CSS_AFFECTS_FONT.
  * @GTK_CSS_AFFECTS_BACKGROUND: The background rendering is affected.
  * @GTK_CSS_AFFECTS_BORDER: The border styling is affected.
- * @GTK_CSS_AFFECTS_FONT: The font is affected and should be reloaded
- *   if it was cached.
- * @GTK_CSS_AFFECTS_TEXT: Text rendering is affected.
+ * @GTK_CSS_AFFECTS_ICON_SIZE: Icon size is affected.
  * @GTK_CSS_AFFECTS_TEXT_ATTRS: Text attributes are affected.
+ * @GTK_CSS_AFFECTS_TEXT_SIZE: Text size is affected.
+ * @GTK_CSS_AFFECTS_TEXT_CLIP: Text clipping is affected.
  * @GTK_CSS_AFFECTS_ICON: Fullcolor icons and their rendering is affected.
  * @GTK_CSS_AFFECTS_SYMBOLIC_ICON: Symbolic icons and their rendering is affected.
  * @GTK_CSS_AFFECTS_OUTLINE: The outline styling is affected. Outlines
@@ -115,7 +115,8 @@ typedef guint64 GtkCssChange;
  *   on the allocated size of the element. Changes in these properties
  *   should cause a recomputation of the element's allocated size.
  * @GTK_CSS_AFFECTS_POSTEFFECT: An effect is applied after drawing that changes
- *   the drawing.
+ * @GTK_CSS_AFFECTS_TEXT: Affects anything related to text rendering.
+ * @GTK_CSS_AFFECTS_REDRAW: Affects anything that requires redraw.
  *
  * The generic effects that a CSS property can have. If a value is
  * set, then the property will have an influence on that feature.
