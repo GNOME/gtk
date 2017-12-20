@@ -59,6 +59,7 @@
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkcssstringvalueprivate.h"
 #include "gtkcsstransformvalueprivate.h"
+#include "gtkcssfontvariationsvalueprivate.h"
 #include "gtktypebuiltins.h"
 
 /*** REGISTRATION ***/
@@ -662,6 +663,13 @@ parse_font_feature_settings (GtkCssStyleProperty *property,
                              GtkCssParser        *parser)
 {
   return gtk_css_font_features_value_parse (parser);
+}
+
+static GtkCssValue *
+parse_font_variation_settings (GtkCssStyleProperty *property,
+                               GtkCssParser        *parser)
+{
+  return gtk_css_font_variations_value_parse (parser);
 }
 
 static GtkCssValue *
@@ -1816,4 +1824,12 @@ _gtk_css_style_property_init_properties (void)
                                           parse_font_feature_settings,
                                           NULL,
                                           gtk_css_font_features_value_new_default ());
+  gtk_css_style_property_register        ("font-variation-settings",
+                                          GTK_CSS_PROPERTY_FONT_VARIATION_SETTINGS,
+                                          G_TYPE_NONE,
+                                          GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
+                                          GTK_CSS_AFFECTS_TEXT_ATTRS | GTK_CSS_AFFECTS_TEXT_SIZE,
+                                          parse_font_variation_settings,
+                                          NULL,
+                                          gtk_css_font_variations_value_new_default ());
 }

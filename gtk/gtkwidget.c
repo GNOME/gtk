@@ -76,6 +76,7 @@
 #include "gtkdebugupdatesprivate.h"
 #include "gsk/gskdebugprivate.h"
 #include "gtkeventcontrollerlegacyprivate.h"
+#include "gtkcssfontvariationsvalueprivate.h"
 
 #include "inspector/window.h"
 
@@ -8580,15 +8581,23 @@ update_pango_context (GtkWidget    *widget,
   GtkStyleContext *style_context;
   GtkSettings *settings;
   cairo_font_options_t *font_options;
+  GtkCssValue *value;
+  char *variations;
 
   style_context = _gtk_widget_get_style_context (widget);
   gtk_style_context_get (style_context,
                          "font", &font_desc,
                          NULL);
 
+  value = _gtk_style_context_peek_property (_gtk_widget_get_style_context (widget), GTK_CSS_PROPERTY_FONT_VARIATION_SETTINGS);
+  variations = gtk_css_font_variations_value_get_variations (value);
+
+  pango_font_description_set_variations (font_desc, variations);
+
   pango_context_set_font_description (context, font_desc);
 
   pango_font_description_free (font_desc);
+  g_free (variations);
 
   pango_context_set_base_dir (context,
 			      _gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR ?
