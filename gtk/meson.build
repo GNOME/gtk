@@ -86,6 +86,7 @@ gtk_public_sources = files([
   'gtkcssenumvalue.c',
   'gtkcssfiltervalue.c',
   'gtkcssfontfeaturesvalue.c',
+  'gtkcssfontvariationsvalue.c',
   'gtkcssiconthemevalue.c',
   'gtkcssimage.c',
   'gtkcssimagebuiltin.c',
