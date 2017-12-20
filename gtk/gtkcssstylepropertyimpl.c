@@ -657,6 +657,12 @@ parse_font_variant_east_asian (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+parse_font_feature_settings (GtkCssStyleProperty *property,
+                             GtkCssParser        *parser)
+{
+  return gtk_css_font_features_value_parse (parser);
+}
+
 box_shadow_value_parse (GtkCssStyleProperty *property,
                         GtkCssParser        *parser)
 {
@@ -1800,4 +1806,12 @@ _gtk_css_style_property_init_properties (void)
                                           color_parse,
                                           color_query,
                                           _gtk_css_color_value_new_current_color ());
+  gtk_css_style_property_register        ("font-feature-settings",
+                                          GTK_CSS_PROPERTY_FONT_FEATURE_SETTINGS,
+                                          G_TYPE_NONE,
+                                          GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
+                                          GTK_CSS_AFFECTS_TEXT_ATTRS | GTK_CSS_AFFECTS_TEXT_SIZE,
+                                          parse_font_feature_settings,
+                                          NULL,
+                                          gtk_css_font_features_value_new_default ());
 }
