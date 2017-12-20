@@ -663,6 +663,7 @@ parse_font_feature_settings (GtkCssStyleProperty *property,
   return gtk_css_font_features_value_parse (parser);
 }
 
+static GtkCssValue *
 box_shadow_value_parse (GtkCssStyleProperty *property,
                         GtkCssParser        *parser)
 {
