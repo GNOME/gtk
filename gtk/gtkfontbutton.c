@@ -103,7 +103,6 @@ enum
 {
   PROP_0,
   PROP_TITLE,
-  PROP_FONT_NAME,
   PROP_USE_FONT,
   PROP_USE_SIZE,
   PROP_SHOW_STYLE,
@@ -134,6 +133,10 @@ static void dialog_destroy                          (GtkWidget         *widget,
 /* Auxiliary functions */
 static void gtk_font_button_label_use_font          (GtkFontButton     *gfs);
 static void gtk_font_button_update_font_info        (GtkFontButton     *gfs);
+
+static void        gtk_font_button_set_font_name (GtkFontButton *button,
+                                                  const char    *fontname);
+static const char *gtk_font_button_get_font_name (GtkFontButton *button);
 
 static guint font_button_signals[LAST_SIGNAL] = { 0 };
 
@@ -510,21 +513,6 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
                                                         GTK_PARAM_READWRITE));
 
   /**
-   * GtkFontButton:font-name:
-   * 
-   * The name of the currently selected font.
-   *
-   * Since: 2.4
-   */
-  g_object_class_install_property (gobject_class,
-                                   PROP_FONT_NAME,
-                                   g_param_spec_string ("font-name",
-                                                        P_("Font name"),
-                                                        P_("The name of the selected font"),
-                                                        _("Sans 12"),
-                                                        GTK_PARAM_READWRITE));
-
-  /**
    * GtkFontButton:use-font:
    * 
    * If this property is set to %TRUE, the label will be drawn 
@@ -707,7 +695,6 @@ gtk_font_button_set_property (GObject      *object,
       gtk_font_button_take_font_desc (font_button, g_value_dup_boxed (value));
       break;
     case GTK_FONT_CHOOSER_PROP_FONT:
-    case PROP_FONT_NAME:
       gtk_font_button_set_font_name (font_button, g_value_get_string (value));
       break;
     case PROP_USE_FONT:
@@ -751,7 +738,6 @@ gtk_font_button_get_property (GObject    *object,
       g_value_set_boxed (value, gtk_font_button_get_font_desc (font_button));
       break;
     case GTK_FONT_CHOOSER_PROP_FONT:
-    case PROP_FONT_NAME:
       g_value_set_string (value, gtk_font_button_get_font_name (font_button));
       break;
     case PROP_USE_FONT:
@@ -1034,23 +1020,7 @@ gtk_font_button_set_show_size (GtkFontButton *font_button,
     }
 } 
 
-
-/**
- * gtk_font_button_get_font_name:
- * @font_button: a #GtkFontButton
- *
- * Retrieves the name of the currently selected font. This name includes
- * style and size information as well. If you want to render something
- * with the font, use this string with pango_font_description_from_string() .
- * If you’re interested in peeking certain values (family name,
- * style, size, weight) just query these properties from the
- * #PangoFontDescription object.
- *
- * Returns: an internal copy of the font name which must not be freed.
- *
- * Since: 2.4
- */
-const gchar *
+static const gchar *
 gtk_font_button_get_font_name (GtkFontButton *font_button)
 {
   g_return_val_if_fail (GTK_IS_FONT_BUTTON (font_button), NULL);
@@ -1058,30 +1028,14 @@ gtk_font_button_get_font_name (GtkFontButton *font_button)
   return font_button->priv->fontname;
 }
 
-/**
- * gtk_font_button_set_font_name:
- * @font_button: a #GtkFontButton
- * @fontname: Name of font to display in font chooser dialog
- *
- * Sets or updates the currently-displayed font in font picker dialog.
- *
- * Returns: %TRUE
- *
- * Since: 2.4
- */
-gboolean 
+static void
 gtk_font_button_set_font_name (GtkFontButton *font_button,
                                const gchar    *fontname)
 {
   PangoFontDescription *font_desc;
 
-  g_return_val_if_fail (GTK_IS_FONT_BUTTON (font_button), FALSE);
-  g_return_val_if_fail (fontname != NULL, FALSE);
-
   font_desc = pango_font_description_from_string (fontname);
   gtk_font_button_take_font_desc (font_button, font_desc);
-
-  return TRUE;
 }
 
 static void

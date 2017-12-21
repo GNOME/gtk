@@ -93,11 +93,6 @@ GDK_AVAILABLE_IN_ALL
 void                  gtk_font_button_set_use_size   (GtkFontButton *font_button,
                                                       gboolean       use_size);
 GDK_AVAILABLE_IN_ALL
-const gchar *         gtk_font_button_get_font_name  (GtkFontButton *font_button);
-GDK_AVAILABLE_IN_ALL
-gboolean              gtk_font_button_set_font_name  (GtkFontButton *font_button,
-                                                      const gchar   *fontname);
-GDK_AVAILABLE_IN_ALL
 gboolean              gtk_font_button_get_show_style (GtkFontButton *font_button);
 GDK_AVAILABLE_IN_ALL
 void                  gtk_font_button_set_show_style (GtkFontButton *font_button,
