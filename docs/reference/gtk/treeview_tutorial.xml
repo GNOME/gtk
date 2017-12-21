@@ -1,0 +1,282 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+]>
+<refentry id="TreeWidget">
+  <refmeta>
+    <refentrytitle>TreeView Widget Tutorial</refentrytitle>
+    <manvolnum>3</manvolnum>
+    <refmiscinfo>GTK Library</refmiscinfo>
+  </refmeta>
+
+  <refnamediv>
+    <refname>TreeView Widget Tutorial</refname>
+    <refpurpose>Tutorial for GtkTreeModel, GtkTreeView, and related classes</refpurpose>
+  </refnamediv>
+
+  <refsect1>
+    <title>Overview</title>
+
+    <para>#GtkTreeView is a widget that display single or multi-columned lists and trees, using data stored inside a #GtkTreeModel implementation.</para>
+
+    <para>The goal of this tutorial is to present an introduction to the most commonly used aspects of #GtkTreeView, and to demonstrate how the various components and concepts work together.</para>
+
+    <para>Another goal of this tutorial is to increase the familiarity of the design patterns used by the #GtkTreeView and its related classes, as they are commonly employed not only in other parts of GTK, but also by other libraries built on top of the GObject type system.</para>
+
+    <refsect2>
+      <title>A tree view example</title>
+
+      <para>For the impatient, here is a small idiomatic #GtkTreeView example, which can be used as a guide for typical use of this widget.</para>
+
+      <informalexample><programlisting role="C"><![CDATA[
+/* You can compile this example using:
+ *
+ *   cc `pkg-config --cflags gtk+-3.0` -o treeview-example treeview-example.c `pkg-config --libs gtk+-3.0`
+ *
+ */
+
+#include <gtk/gtk.h>
+
+/* This enumeration lists the columns in the model; we use identifiers in
+ * place of plain integers as they improve the readability of the code
+ */
+enum {
+  COLUMN_NAME,
+  COLUMN_AGE,
+
+  N_COLUMNS
+};
+
+static GtkTreeModel *
+create_and_fill_model (void)
+{
+  /* We create the storage for our data, which will then be used as the
+   * model of the GtkTreeView widget. The model contains two columns,
+   * the first holding strings, and the second holding unsigned integers;
+   * all GtkTreeModel implementation can store any value that can be
+   * represented through a GType
+   */
+  GtkListStore *store = gtk_list_store_new (N_COLUMNS,
+                                            G_TYPE_STRING, /* COLUMN_NAME */
+                                            G_TYPE_UINT    /* COLUMN_AGE */);
+
+  /* Insert a row in the store, using the first slot; indices begin with
+   * zero
+   *
+   * We specify all the columns we wish to set a value for, terminating
+   * the arguments list with -1
+   */
+  gtk_list_store_insert_with_values (store, 0,
+                                     COLUMN_NAME, "Heinz El-mann",
+                                     COLUMN_AGE, 51,
+                                     -1);
+
+  /* We can also use insert_with_values() to append a row */
+  gtk_list_store_insert_with_values (store, -1,
+                                     COLUMN_NAME, "Joe Bungop",
+                                     COLUMN_AGE, 23,
+                                     -1);
+
+  /* Same as above, but using an iterator */
+  GtkTreeIter iter;
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter,
+                      COLUMN_NAME, "Jane Doe",
+                      COLUMN_AGE, 91,
+                      -1);
+
+  return GTK_TREE_MODEL (store);
+}
+
+static GtkWidget *
+create_view_and_model (void)
+{
+  /* Our view widget */
+  GtkWidget *view = gtk_tree_view_new ();
+  GtkCellRenderer *renderer;
+
+  /* We create the renderer for the first column in the model */
+  renderer = gtk_cell_renderer_text_new ();
+
+  /* We insert a new column into the tree view widget, in order to
+   * display the "name" column of the model; we want this column to
+   * be the first, and have a title of "Name"; we add the text
+   * renderer, and we bind the "text" property on it to the contents
+   * of the column in the model using the COLUMN_NAME identifier. The
+   * tree view widget will transfer the ownership of the cell renderer
+   * instance to itself
+   */
+  gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                               0,
+                                               "Name",
+                                               renderer,
+                                               "text", COLUMN_NAME,
+                                               NULL);
+
+  /* Same as above, but for the COLUMN_AGE column */
+  renderer = gtk_cell_renderer_text_new ();
+  gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+                                               1,
+                                               "Age",
+                                               renderer,
+                                               "text", COLUMN_AGE,
+                                               NULL);
+
+  /* We now create the model, and assign it to the tree view widget */
+  GtkTreeModel *model = create_and_fill_model ();
+  gtk_tree_view_set_model (GTK_TREE_VIEW (view), model);
+
+  /* The treeview acquires a reference on the model, so we can release
+   * ours; this means that the model will automatically be collected
+   * once the widget is destroyed
+   /
+  g_object_unref (model);
+
+  return view;
+}
+
+static void
+on_activate (GtkApplication *application)
+{
+  GtkWidget *window = gtk_application_window_new (application);
+  GtkWidget *view = create_view_and_model ();
+
+  gtk_container_add (GTK_CONTAINER (window), view);
+
+  gtk_widget_show_all (window);
+}
+
+int
+main (void)
+{
+  GtkApplication *app = gtk_application_new ("org.gtk.TreeViewExample", G_APPLICATION_FLAGS_NONE);
+
+  g_signal_connect (app, "activate", G_CALLBACK (on_activate), NULL);
+
+  return g_application_run (G_APPLICATION (app), 0, NULL);
+}
+]]></programlisting></informalexample>
+    </refsect2>
+  </refsect1>
+
+  <refsect1>
+    <title>Components of a tree view</title>
+
+    <para>The most important concept underlying #GtkTreeView is that of
+      complete separation between data and how that data is displayed on
+      the screen. This is commonly known as the Model/View/Controller
+      design pattern (or <emphasis>MVC</emphasis>). Data of various
+      types (strings, numbers, images, etc.) is stored in a 'model'; the
+      'view' is then told which data to display, where to display it, and
+      how to display it; additionally, any change to the model will be
+      propagated to the view automatically. One of the advantages of this
+      approach is that you can have multiple views that display the same
+      data (a directory tree for example) in different ways, or in the
+      same way multiple times, with only one copy of the underlying data.
+      This avoids duplication of data and programming effort if the same
+      data is re-used in different contexts. Also, when the data in the
+      model is updated, all views automatically get updated as well.</para>
+
+    <para>So, while #GtkTreeModel instances are used to store data, there
+      are other components that determine which data is going to be
+      displayed in a #GtkTreeView widget, and how it is displayed. These
+      components are #GtkTreeViewColumn and #GtkCellRenderer.</para>
+
+    <para>A #GtkTreeView contains one or more #GtkTreeViewColumns. Each
+      column may have a clickable column header with a column title, and
+      can be resized and sorted. Columns by themselves do not display any
+      data until one or ore #GtkCellRenderers are packed into them.</para>
+
+    <para>#GtkCellRenderers are not widgets; each renderer has multiple
+      properties that can be bound to a column in the model, and will be
+      used to render the contents of the #GtkTreeView widget.</para>
+
+  </refsect1>
+
+  <refsect1>
+    <title>Models</title>
+
+    <para>FIXME</para>
+
+    <refsect2>
+      <title>How data is stored inside models</title>
+
+      <para>FIXME</para>
+    </refsect2>
+
+    <refsect2 id="model-refs-iterator">
+      <title>Refering to rows: iterators</title>
+
+      <para>FIXME</para>
+    </refsect2>
+
+    <refsect2 id="model-refs-path">
+      <title>Refering to rows: paths</title>
+
+      <para>FIXME</para>
+    </refsect2>
+
+    <refsect2 id="model-refs-reference">
+      <title>Refering to rows: references</title>
+
+      <para>FIXME</para>
+    </refsect2>
+
+    <refsect2 id="model-populating">
+      <title>Populating a model with data</title>
+
+      <para>FIXME</para>
+    </refsect2>
+
+    <refsect2 id="model-iterating">
+      <title>Iterating over a model</title>
+
+      <para>FIXME</para>
+    </refsect2>
+
+    <refsect2 id="model-retrieving">
+      <title>Retrieving data from a model</title>
+
+      <para>FIXME</para>
+    </refsect2>
+
+    <refsect2 id="model-removing">
+      <title>Removing data from a model</title>
+
+      <para>FIXME</para>
+    </refsect2>
+
+  </refsect1>
+
+  <refsect1>
+    <title>Columns and renderers</title>
+
+    <para>FIXME</para>
+
+    <refsect2 id="renderer">
+      <title>Cell renderers</title>
+
+      <para>FIXME</para>
+    </refsect2>
+
+    <refsect2 id="attributes">
+      <title>Column attributes</title>
+
+      <para>FIXME</para>
+    </refsect2>
+
+    <refsect2 id="cell-data-func">
+      <title>Cell data functions</title>
+
+      <para>FIXME</para>
+    </refsect2>
+
+    <refsect2 id="text-rendering">
+      <title>Text rendering</title>
+
+      <para>FIXME</para>
+    </refsect2>
+
+  </refsect1>
+
+</refentry>
