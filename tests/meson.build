@@ -128,6 +128,7 @@ gtk_tests = [
   ['testgridbaseline'],
   ['showrendernode'],
   ['testborderdrawing'],
+  ['testoutsetshadowdrawing'],
 ]
 
 if os_linux
