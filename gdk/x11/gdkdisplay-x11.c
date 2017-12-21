@@ -2906,6 +2906,14 @@ gdk_x11_display_get_max_request_size (GdkDisplay *display)
   return size;
 }
 
+/**
+ * gdk_x11_display_get_screen:
+ * @display: a #GdkX11Display
+ *
+ * Retrieves the #GdkX11Screen of the @display.
+ *
+ * Returns: (transfer none): the #GdkX11Screen
+ */
 GdkX11Screen *
 gdk_x11_display_get_screen (GdkDisplay *display)
 {
