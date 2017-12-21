@@ -44,6 +44,7 @@
 #include "gtkcsscornervalueprivate.h"
 #include "gtkcsseasevalueprivate.h"
 #include "gtkcssfiltervalueprivate.h"
+#include "gtkcssfontfeaturesvalueprivate.h"
 #include "gtkcssiconthemevalueprivate.h"
 #include "gtkcssimageprivate.h"
 #include "gtkcssimagebuiltinprivate.h"
