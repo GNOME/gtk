@@ -2142,7 +2142,7 @@ gdk_x11_display_get_xscreen (GdkDisplay *display)
  *
  * Returns the root X window used by #GdkDisplay.
  *
- * Returns: (transfer none): an X Window
+ * Returns: an X Window
  *
  * Since: 3.94
  */
