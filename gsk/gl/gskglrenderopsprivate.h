@@ -89,9 +89,6 @@ typedef struct
       int corner_heights_location;
     } inset_shadow;
     struct {
-      int color_location;
-      int spread_location;
-      int offset_location;
       int outline_location;
       int corner_widths_location;
       int corner_heights_location;

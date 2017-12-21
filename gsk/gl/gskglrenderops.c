@@ -117,7 +117,8 @@ ops_set_modelview (RenderOpBuilder         *builder,
   graphene_matrix_t prev_mv;
   RenderOp *last_op;
 
-  if (memcmp (&builder->program_state[builder->current_program->index].modelview, modelview,
+  if (builder->current_program &&
+      memcmp (&builder->program_state[builder->current_program->index].modelview, modelview,
               sizeof (graphene_matrix_t)) == 0)
     return *modelview;
 
