@@ -453,13 +453,12 @@ gdk_display_is_closed  (GdkDisplay  *display)
  * Gets the next #GdkEvent to be processed for @display, fetching events from the
  * windowing system if necessary.
  * 
- * Returns: (nullable): the next #GdkEvent to be processed, or %NULL
- * if no events are pending. The returned #GdkEvent should be freed
- * with gdk_event_free().
+ * Returns: (nullable) (transfer full): the next #GdkEvent to be processed,
+ *   or %NULL if no events are pending
  *
  * Since: 2.2
- **/
-GdkEvent*
+ */
+GdkEvent *
 gdk_display_get_event (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
@@ -479,13 +478,12 @@ gdk_display_get_event (GdkDisplay *display)
  * not get more events from the windowing system.  It only checks the events
  * that have already been moved to the GDK event queue.)
  * 
- * Returns: (nullable): a copy of the first #GdkEvent on the event
- * queue, or %NULL if no events are in the queue. The returned
- * #GdkEvent should be freed with g_object_unref().
+ * Returns: (nullable) (transfer full): the first #GdkEvent on the
+ *   event queue
  *
  * Since: 2.2
  **/
-GdkEvent*
+GdkEvent *
 gdk_display_peek_event (GdkDisplay *display)
 {
   GList *tmp_list;
@@ -494,10 +492,10 @@ gdk_display_peek_event (GdkDisplay *display)
 
   tmp_list = _gdk_event_queue_find_first (display);
   
-  if (tmp_list)
+  if (tmp_list != NULL)
     return g_object_ref (tmp_list->data);
-  else
-    return NULL;
+
+  return NULL;
 }
 
 static void
@@ -1149,8 +1147,8 @@ gdk_display_get_default_group (GdkDisplay *display)
  *
  * Gets the clipboard used for copy/paste operations.
  *
- * Returns: the display's clipboard
- **/
+ * Returns: (transfer none): the display's clipboard
+ */
 GdkClipboard *
 gdk_display_get_clipboard (GdkDisplay *display)
 {
@@ -1170,8 +1168,8 @@ gdk_display_get_clipboard (GdkDisplay *display)
  * primary clipboard is not supported natively, GDK emulates this clipboard
  * locally.
  *
- * Returns: the primary clipboard
- **/
+ * Returns: (transfer none): the primary clipboard
+ */
 GdkClipboard *
 gdk_display_get_primary_clipboard (GdkDisplay *display)
 {
