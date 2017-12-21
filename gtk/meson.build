@@ -604,7 +604,7 @@ if os_unix
   ]
   install_headers(gtk_unix_print_headers, subdir: 'gtk-4.0/unix-print/gtk')
 
-  gtk_sources += files([
+  gtk_unix_print_sources = files([
     'gtkcustompaperunixdialog.c',
     'gtkpagesetupunixdialog.c',
     'gtkprintbackend.c',
@@ -618,15 +618,19 @@ if os_unix
     'gtkprintunixdialog.c',
     'gtksearchenginetracker.c',
   ])
+
+  gtk_sources += gtk_unix_print_sources
 endif
 
 if os_win32
-  gtk_sources += [
+  gtk_win32_print_sources = files([
     'gtkprint-win32.c',
     'gtkprintoperation-win32.c',
     'gtkfilechoosernativewin32.c',
     'gtkwin32.c',
-  ]
+  ])
+
+  gtk_sources += gtk_win32_print_sources
 
   if cc.has_header_symbol('windows.h', 'IPrintDialogCallback')
     cdata.set('HAVE_IPRINTDIALOGCALLBACK', 1)
@@ -650,14 +654,14 @@ if win32_enabled
 endif
 
 if quartz_enabled
-  gtk_sources += [
+  gtk_sources += files([
     'gtksearchenginequartz.c',
     'gtkmountoperation-stub.c',
     'gtkapplication-quartz.c',
     'gtkapplication-quartz-menu.c',
     'gtkfilechoosernativequartz.c',
     'gtkquartz.c',
-  ]
+  ])
   gtk_cargs += ['-xobjective-c']  # FIXME? maybe add_languages() instead?
 endif
 
@@ -981,12 +985,26 @@ if build_gir
   gsk_gir_dep = declare_dependency(dependencies: [gdk_gir_dep, graphene_dep], sources: gsk_gir)
   gtk_dep_sources += gsk_gir
 
+  gtk_introspection_sources = [
+    gtk_public_headers,
+    gtk_public_sources,
+    dnd_sources,
+    a11y_headers,
+    a11y_sources,
+    gtktypebuiltins_h,
+    gtkversion,
+  ]
+
+  if os_unix
+    gtk_introspection_sources += gtk_unix_print_sources
+  endif
+
+  if os_win32
+    gtk_introspection_sources += gtk_win32_print_sources
+  endif
 
   gtk_gir = gnome.generate_gir(libgtk,
-                               sources: gtk_public_headers + gtk_public_sources + dnd_sources + a11y_headers + a11y_sources + [
-                                 gtktypebuiltins_h,
-                                 gtkversion,
-                               ],
+                               sources: gtk_introspection_sources,
                                namespace: 'Gtk',
                                nsversion: gtk_api_version,
                                identifier_prefix: 'Gtk',
