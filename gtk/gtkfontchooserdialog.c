@@ -149,6 +149,8 @@ gtk_font_chooser_dialog_class_init (GtkFontChooserDialogClass *klass)
 
   _gtk_font_chooser_install_properties (gobject_class);
 
+  widget_class->key_press_event = gtk_font_chooser_dialog_key_press_event;
+
   /* Bind class to template
    */
   gtk_widget_class_set_template_from_resource (widget_class,

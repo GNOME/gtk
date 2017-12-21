@@ -22,6 +22,7 @@
 #include <string.h>
 
 #include <atk/atk.h>
+#include <pango/pango.h>
 
 #include "gtkfontchooserwidget.h"
 #include "gtkfontchooserwidgetprivate.h"
@@ -51,11 +52,19 @@
 #include "gtkwidget.h"
 #include "gtksettings.h"
 #include "gtkdialog.h"
+#include "gtkcombobox.h"
+#include "gtkcelllayout.h"
+#include "gtkbutton.h"
+#include "gtkrevealer.h"
+#include "gtklistbox.h"
+#include "gtkpopover.h"
 
 #if defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT)
 #include <pango/pangofc-font.h>
 #include <freetype/freetype.h>
 #include <freetype/ftmm.h>
+#include "language-names.h"
+#include "script-names.h"
 #endif
 
 /**
@@ -89,6 +98,7 @@ struct _GtkFontChooserWidgetPrivate
 {
   GtkWidget    *grid;
   GtkWidget    *search_entry;
+
   GtkWidget    *family_face_list;
   GtkTreeViewColumn *family_face_column;
   GtkCellRenderer *family_face_cell;
@@ -96,6 +106,21 @@ struct _GtkFontChooserWidgetPrivate
   GtkWidget    *list_stack;
   GtkTreeModel *model;
   GtkTreeModel *filter_model;
+
+  GtkWidget    *filter_popover;
+  GtkWidget    *script_filter_revealer;
+  GtkWidget    *script_filter_button;
+  GtkWidget    *script_filter_button_label;
+  GtkWidget    *script_list;
+  GtkWidget    *script_filter_entry;
+  char         *script_term;
+
+  GtkWidget    *language_filter_revealer;
+  GtkWidget    *language_filter_button;
+  GtkWidget    *language_filter_button_label;
+  GtkWidget    *language_list;
+  GtkWidget    *language_filter_entry;
+  char         *language_term;
 
   GtkWidget       *preview;
   gchar           *preview_text;
@@ -115,6 +140,9 @@ struct _GtkFontChooserWidgetPrivate
   GtkFontFilterFunc filter_func;
   gpointer          filter_data;
   GDestroyNotify    filter_data_destroy;
+
+  PangoScript script;
+  PangoLanguage *language;
 
   guint last_fontconfig_timestamp;
 
@@ -173,6 +201,7 @@ static void     gtk_font_chooser_widget_set_show_preview_entry (GtkFontChooserWi
 static void     gtk_font_chooser_widget_set_cell_size          (GtkFontChooserWidget *fontchooser);
 static void     gtk_font_chooser_widget_load_fonts             (GtkFontChooserWidget *fontchooser,
                                                                 gboolean              force);
+static void     gtk_font_chooser_widget_populate_filters       (GtkFontChooserWidget *fontchooser);
 static gboolean visible_func                                   (GtkTreeModel *model,
 								GtkTreeIter  *iter,
 								gpointer      user_data);
@@ -185,6 +214,31 @@ static void                gtk_font_chooser_widget_set_level (GtkFontChooserWidg
                                                               GtkFontChooserLevel   level);
 static GtkFontChooserLevel gtk_font_chooser_widget_get_level (GtkFontChooserWidget *fontchooser);
 
+static void script_filter_button_clicked (GtkButton            *button,
+                                          GtkFontChooserWidget *fontchooser);
+static void script_row_activated (GtkListBox           *list,
+                                  GtkListBoxRow        *row,
+                                  GtkFontChooserWidget *fontchooser);
+static void show_script_list (GtkFontChooserWidget *fontchooser);
+static void hide_script_list (GtkFontChooserWidget *fontchooser,
+                              gboolean              animate);
+static void script_filter_changed (GtkFontChooserWidget *fontchooser);
+static void script_filter_stop (GtkFontChooserWidget *fontchooser);
+static void script_filter_activated (GtkFontChooserWidget *fontchooser);
+static void language_filter_button_clicked (GtkButton            *button,
+                                            GtkFontChooserWidget *fontchooser);
+static void language_row_activated (GtkListBox           *list,
+                                    GtkListBoxRow        *row,
+                                    GtkFontChooserWidget *fontchooser);
+static void show_language_list (GtkFontChooserWidget *fontchooser);
+static void hide_language_list (GtkFontChooserWidget *fontchooser,
+                                gboolean              animate);
+static void language_filter_changed (GtkFontChooserWidget *fontchooser);
+static void language_filter_stop (GtkFontChooserWidget *fontchooser);
+static void language_filter_activated (GtkFontChooserWidget *fontchooser);
+static void popover_notify (GObject              *object,
+                            GParamSpec           *pspec,
+                            GtkFontChooserWidget *fontchooser);
 
 static void gtk_font_chooser_widget_iface_init (GtkFontChooserIface *iface);
 
@@ -197,6 +251,8 @@ typedef struct _GtkDelayedFontDescription GtkDelayedFontDescription;
 struct _GtkDelayedFontDescription {
   PangoFontFace        *face;
   PangoFontDescription *desc;
+  PangoScript          *scripts;
+  int                   n_scripts;
   guint                 ref_count;
 };
 
@@ -209,6 +265,8 @@ gtk_delayed_font_description_new (PangoFontFace *face)
 
   result->face = g_object_ref (face);
   result->desc = NULL;
+  result->scripts = NULL;
+  result->n_scripts = -1;
   result->ref_count = 1;
 
   return result;
@@ -233,6 +291,8 @@ gtk_delayed_font_description_unref (GtkDelayedFontDescription *desc)
   g_object_unref (desc->face);
   if (desc->desc)
     pango_font_description_free (desc->desc);
+
+  g_free (desc->scripts);
 
   g_slice_free (GtkDelayedFontDescription, desc);
 }
@@ -679,6 +739,18 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, grid);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, font_grid);
 
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, filter_popover);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, script_filter_revealer);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, script_filter_button);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, script_filter_button_label);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, script_list);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, script_filter_entry);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, language_filter_revealer);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, language_filter_button);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, language_filter_button_label);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, language_list);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, language_filter_entry);
+
   gtk_widget_class_bind_template_callback (widget_class, text_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, stop_search_cb);
   gtk_widget_class_bind_template_callback (widget_class, cursor_changed_cb);
@@ -688,6 +760,17 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, rows_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, size_change_cb);
   gtk_widget_class_bind_template_callback (widget_class, output_cb);
+  gtk_widget_class_bind_template_callback (widget_class, script_filter_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, script_row_activated);
+  gtk_widget_class_bind_template_callback (widget_class, script_filter_changed);
+  gtk_widget_class_bind_template_callback (widget_class, script_filter_stop);
+  gtk_widget_class_bind_template_callback (widget_class, script_filter_activated);
+  gtk_widget_class_bind_template_callback (widget_class, language_filter_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, language_row_activated);
+  gtk_widget_class_bind_template_callback (widget_class, language_filter_changed);
+  gtk_widget_class_bind_template_callback (widget_class, language_filter_stop);
+  gtk_widget_class_bind_template_callback (widget_class, language_filter_activated);
+  gtk_widget_class_bind_template_callback (widget_class, popover_notify);
 
   gtk_widget_class_set_css_name (widget_class, I_("fontchooser"));
 }
@@ -775,7 +858,7 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
 
   /* Setup treeview/model auxilary functions */
   gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (priv->filter_model),
-                                          visible_func, (gpointer)priv, NULL);
+                                          visible_func, fontchooser, NULL);
 
   gtk_tree_view_column_set_cell_data_func (priv->family_face_column,
                                            priv->family_face_cell,
@@ -785,6 +868,7 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
 
   /* Load data and set initial style-dependent parameters */
   gtk_font_chooser_widget_load_fonts (fontchooser, TRUE);
+  gtk_font_chooser_widget_populate_filters (fontchooser);
   gtk_font_chooser_widget_set_cell_size (fontchooser);
   gtk_font_chooser_widget_take_font_desc (fontchooser, NULL);
 }
@@ -912,17 +996,571 @@ gtk_font_chooser_widget_load_fonts (GtkFontChooserWidget *fontchooser,
   gtk_font_chooser_widget_ensure_selection (fontchooser);
 }
 
+static GtkWidget *
+script_row_new (const char  *title,
+                PangoScript  script,
+                gboolean     active)
+{
+  GtkWidget *label;
+  GtkWidget *image;
+  GtkWidget *box;
+  GtkWidget *row;
+  char *term;
+  char *key;
+
+  label = gtk_label_new (title);
+  g_object_set (label, "margin", 10, NULL);
+  gtk_label_set_xalign (GTK_LABEL (label), 0);
+  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+  gtk_widget_set_hexpand (label, TRUE);
+  image = gtk_image_new_from_icon_name ("object-select-symbolic");
+  g_object_set (image,
+                "margin-top", 10,
+                "margin-bottom", 10,
+                "margin-end", 10,
+                NULL);
+  gtk_style_context_add_class (gtk_widget_get_style_context (image), "dim-label");
+  gtk_widget_set_opacity (image, active ? 1 : 0);
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_container_add (GTK_CONTAINER (box), image);
+  row = gtk_list_box_row_new ();
+  gtk_container_add (GTK_CONTAINER (row), box);
+  g_object_set_data (G_OBJECT (row), "script", GINT_TO_POINTER (script));
+  term = g_utf8_casefold (title, -1);
+  g_object_set_data_full (G_OBJECT (row), "term", term, g_free);
+  key = g_utf8_collate_key (term, -1);
+  g_object_set_data_full (G_OBJECT (row), "key", key, g_free);
+  g_object_set_data (G_OBJECT (row), "label", label);
+  g_object_set_data (G_OBJECT (row), "image", image);
+
+  return row;
+}
+
+static void
+script_row_activated (GtkListBox           *list,
+                      GtkListBoxRow        *row,
+                      GtkFontChooserWidget *fontchooser)
+{
+  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkWidget *label;
+  const char *title;
+  GtkWidget *child;
+  GtkWidget *image;
+
+  priv->script = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (row), "script"));
+
+  label = GTK_WIDGET (g_object_get_data (G_OBJECT (row), "label"));
+  title = gtk_label_get_label (GTK_LABEL (label));
+  gtk_label_set_label (GTK_LABEL (priv->script_filter_button_label), title);
+
+  gtk_font_chooser_widget_refilter_font_list (fontchooser);
+
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (list));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      image = GTK_WIDGET (g_object_get_data (G_OBJECT (child), "image"));
+      if (image)
+        gtk_widget_set_opacity (image, 0);
+    }
+
+  image = GTK_WIDGET (g_object_get_data (G_OBJECT (row), "image"));
+  gtk_widget_set_opacity (image, 1);
+
+  hide_script_list (fontchooser, TRUE);
+}
+
+static gboolean
+script_filter_func (GtkListBoxRow *row,
+                    gpointer       data)
+{
+  GtkFontChooserWidget *fontchooser = data;
+  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  PangoScript script;
+  const char *term;
+
+  if (priv->script_term == NULL)
+    return TRUE;
+
+  term = (const char *)g_object_get_data (G_OBJECT (row), "term");
+
+  return g_str_has_prefix (term, priv->script_term);
+}
+
+static int
+script_sort_func (GtkListBoxRow *row1,
+                  GtkListBoxRow *row2,
+                  gpointer       data)
+{
+  const char *key1, *key2;
+
+  key1 = (const char *)g_object_get_data (G_OBJECT (row1), "key");
+  key2 = (const char *)g_object_get_data (G_OBJECT (row2), "key");
+
+  if (key1 == NULL)
+    return -1;
+  else if (key2 == NULL)
+    return 1;
+  else
+    return strcmp (key1, key2);
+}
+
+static void
+show_script_list (GtkFontChooserWidget *fontchooser)
+{
+  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+
+  gtk_widget_hide (priv->script_filter_button);
+  gtk_widget_show (priv->script_filter_revealer);
+  gtk_revealer_set_reveal_child (GTK_REVEALER (priv->script_filter_revealer), TRUE);
+}
+
+static void
+hide_script_list (GtkFontChooserWidget *fontchooser,
+                  gboolean              animate)
+{
+  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+
+  gtk_entry_set_text (GTK_ENTRY (priv->script_filter_entry), "");
+  gtk_widget_show (priv->script_filter_button);
+  if (!animate)
+    gtk_revealer_set_transition_type (GTK_REVEALER (priv->script_filter_revealer),
+                                      GTK_REVEALER_TRANSITION_TYPE_NONE);
+  gtk_revealer_set_reveal_child (GTK_REVEALER (priv->script_filter_revealer), FALSE);
+  if (!animate)
+    gtk_revealer_set_transition_type (GTK_REVEALER (priv->script_filter_revealer),
+                                      GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN);
+}
+
+static void
+script_filter_button_clicked (GtkButton            *button,
+                              GtkFontChooserWidget *fontchooser)
+{
+  hide_language_list (fontchooser, TRUE);
+  show_script_list (fontchooser);
+}
+
+static void
+script_filter_changed (GtkFontChooserWidget *fontchooser)
+{
+  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  const char *term;
+
+  term = gtk_entry_get_text (GTK_ENTRY (priv->script_filter_entry));
+  g_free (priv->script_term);
+  priv->script_term = g_utf8_casefold (term, -1);
+  gtk_list_box_invalidate_filter (GTK_LIST_BOX (priv->script_list));
+}
+
+static void
+script_filter_stop (GtkFontChooserWidget *fontchooser)
+{
+  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+
+  gtk_entry_set_text (GTK_ENTRY (priv->script_filter_entry), "");
+}
+
+static void
+script_filter_activated (GtkFontChooserWidget *fontchooser)
+{
+  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GList *children, *l;
+  GtkWidget *row;
+
+  row = NULL;
+  children = gtk_container_get_children (GTK_CONTAINER (priv->script_list));
+  for (l = children; l; l = l->next)
+    {
+      GtkWidget *r = l->data;
+
+      if (!script_filter_func (GTK_LIST_BOX_ROW (r), fontchooser))
+        continue;
+
+      if (row != NULL)
+        {
+          /* more than one match, don't activate */
+          g_list_free (children);
+          return;
+        }
+
+      row = r;
+    }
+  g_list_free (children);
+
+  gtk_widget_activate (row);
+}
+
+static GtkWidget *
+language_row_new (const char    *title,
+                  PangoLanguage *language,
+                  gboolean       active)
+{
+  GtkWidget *label;
+  GtkWidget *image;
+  GtkWidget *box;
+  GtkWidget *row;
+  char *term;
+  char *key;
+
+  label = gtk_label_new (title);
+  g_object_set (label, "margin", 10, NULL);
+  gtk_label_set_xalign (GTK_LABEL (label), 0);
+  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+  gtk_widget_set_hexpand (label, TRUE);
+  image = gtk_image_new_from_icon_name ("object-select-symbolic");
+  g_object_set (image,
+                "margin-top", 10,
+                "margin-bottom", 10,
+                "margin-end", 10,
+                NULL);
+  gtk_style_context_add_class (gtk_widget_get_style_context (image), "dim-label");
+  gtk_widget_set_opacity (image, active ? 1 : 0);
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_container_add (GTK_CONTAINER (box), image);
+  row = gtk_list_box_row_new ();
+  gtk_container_add (GTK_CONTAINER (row), box);
+  g_object_set_data (G_OBJECT (row), "language", language);
+  term = g_utf8_casefold (title, -1);
+  g_object_set_data_full (G_OBJECT (row), "term", term, g_free);
+  key = g_utf8_collate_key (term, -1);
+  g_object_set_data_full (G_OBJECT (row), "key", key, g_free);
+  g_object_set_data (G_OBJECT (row), "label", label);
+  g_object_set_data (G_OBJECT (row), "image", image);
+
+  return row;
+}
+
+static void
+language_row_activated (GtkListBox           *list,
+                        GtkListBoxRow        *row,
+                        GtkFontChooserWidget *fontchooser)
+{
+  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  const char *title;
+  GtkWidget *child;
+  GtkWidget *image;
+
+  priv->language = (PangoLanguage *) g_object_get_data (G_OBJECT (row), "language");
+
+  title = gtk_label_get_label (GTK_LABEL (g_object_get_data (G_OBJECT (row), "label")));
+  gtk_label_set_label (GTK_LABEL (priv->language_filter_button_label), title);
+
+  gtk_font_chooser_widget_refilter_font_list (fontchooser);
+
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (list));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      image = GTK_WIDGET (g_object_get_data (G_OBJECT (child), "image"));
+      if (image)
+        gtk_widget_set_opacity (image, 0);
+    }
+
+  image = GTK_WIDGET (g_object_get_data (G_OBJECT (row), "image"));
+  gtk_widget_set_opacity (image, 1);
+
+  hide_language_list (fontchooser, TRUE);
+}
+
+static gboolean
+language_filter_func (GtkListBoxRow        *row,
+                      gpointer              data)
+{
+  GtkFontChooserWidget *fontchooser = data;
+  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  const char *term;
+
+  if (priv->language_term == NULL)
+    return TRUE;
+
+  term = (const char *)g_object_get_data (G_OBJECT (row), "term");
+
+  return g_str_has_prefix (term, priv->language_term);
+}
+
+static int
+language_sort_func (GtkListBoxRow *row1,
+                    GtkListBoxRow *row2,
+                    gpointer       data)
+{
+  const char *key1, *key2;
+
+  key1 = (const char *)g_object_get_data (G_OBJECT (row1), "key");
+  key2 = (const char *)g_object_get_data (G_OBJECT (row2), "key");
+
+  if (key1 == NULL)
+    return -1;
+  else if (key2 == NULL)
+    return 1;
+  else
+    return strcmp (key1, key2);
+}
+
+static void
+gtk_font_chooser_widget_populate_filters (GtkFontChooserWidget *fontchooser)
+{
+  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+#if defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT)
+
+  FcPattern *pat;
+  FcObjectSet *os;
+  FcFontSet *fs;
+  FcLangSet *ls;
+  FcStrSet *ss;
+  FcStrList *sl;
+  int i;
+  GHashTable *all_langs;
+  GHashTable *all_scripts;
+  GHashTableIter iter;
+  char *s;
+
+  pat = FcPatternCreate ();
+  os = FcObjectSetCreate ();
+  FcObjectSetAdd (os, FC_LANG);
+  fs = FcFontList (0, pat, os);
+  FcObjectSetDestroy (os);
+  FcPatternDestroy (pat);
+  all_langs = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+  for (i = 0; i < fs->nfont; i++)
+    {
+      FcPatternGetLangSet (fs->fonts[i], FC_LANG, 0, (FcLangSet **)&ls);
+      ss = FcLangSetGetLangs (ls);
+      sl = FcStrListCreate (ss);
+      FcStrListFirst (sl);
+      while ((s = (char *)FcStrListNext (sl)))
+        {
+          if (!g_hash_table_contains (all_langs, s))
+            g_hash_table_add (all_langs, g_strdup (s));
+        }
+      FcStrListDone (sl);
+      FcStrSetDestroy (ss);
+    }
+
+  gtk_container_add (GTK_CONTAINER (priv->script_list), script_row_new (_("All Scripts"), 0, TRUE));
+  gtk_container_add (GTK_CONTAINER (priv->language_list), language_row_new (_("All Languages"), NULL, TRUE));
+
+  all_scripts = g_hash_table_new (NULL, NULL);
+
+  g_hash_table_iter_init (&iter, all_langs);
+  while (g_hash_table_iter_next (&iter, (gpointer *)&s, NULL))
+    {
+      PangoLanguage *lang = pango_language_from_string (s);
+
+      if (lang)
+        {
+          const char *name = get_language_name (lang);
+          if (name)
+            gtk_container_add (GTK_CONTAINER (priv->language_list), language_row_new (name, lang, FALSE));
+        }
+
+      if (lang)
+        {
+          const PangoScript *scripts;
+          int num_scripts;
+
+          scripts = pango_language_get_scripts (lang, &num_scripts);
+          for (i = 0; i < num_scripts; i++)
+            {
+              const char *name;
+
+              if (g_hash_table_contains (all_scripts, GINT_TO_POINTER (scripts[i])))
+                continue;
+
+              g_hash_table_add (all_scripts, GINT_TO_POINTER (scripts[i]));
+              name = get_script_name ((GUnicodeScript)scripts[i]);
+              if (name)
+                gtk_container_add (GTK_CONTAINER (priv->script_list), script_row_new (name, scripts[i], FALSE));
+            }
+        }
+    }
+
+  g_hash_table_unref (all_scripts);
+  g_hash_table_unref (all_langs);
+
+  gtk_list_box_set_filter_func (GTK_LIST_BOX (priv->language_list), language_filter_func, fontchooser, NULL);
+  gtk_list_box_set_sort_func (GTK_LIST_BOX (priv->language_list), language_sort_func, fontchooser, NULL);
+
+  gtk_list_box_set_filter_func (GTK_LIST_BOX (priv->script_list), script_filter_func, fontchooser, NULL);
+  gtk_list_box_set_sort_func (GTK_LIST_BOX (priv->script_list), script_sort_func, fontchooser, NULL);
+#endif
+}
+
+static void
+show_language_list (GtkFontChooserWidget *fontchooser)
+{
+  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+
+  gtk_widget_hide (priv->language_filter_button);
+  gtk_widget_show (priv->language_filter_revealer);
+  gtk_revealer_set_reveal_child (GTK_REVEALER (priv->language_filter_revealer), TRUE);
+}
+
+static void
+hide_language_list (GtkFontChooserWidget *fontchooser,
+                    gboolean              animate)
+{
+  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+
+  gtk_entry_set_text (GTK_ENTRY (priv->language_filter_entry), "");
+  gtk_widget_show (priv->language_filter_button);
+  if (!animate)
+    gtk_revealer_set_transition_type (GTK_REVEALER (priv->language_filter_revealer),
+                                      GTK_REVEALER_TRANSITION_TYPE_NONE);
+  gtk_revealer_set_reveal_child (GTK_REVEALER (priv->language_filter_revealer), FALSE);
+  if (!animate)
+    gtk_revealer_set_transition_type (GTK_REVEALER (priv->language_filter_revealer),
+                                      GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN);
+}
+
+static void
+language_filter_button_clicked (GtkButton            *button,
+                                GtkFontChooserWidget *fontchooser)
+{
+  hide_script_list (fontchooser, TRUE);
+  show_language_list (fontchooser);
+}
+
+static void
+language_filter_changed (GtkFontChooserWidget *fontchooser)
+{
+  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  const char *term;
+
+  term = gtk_entry_get_text (GTK_ENTRY (priv->language_filter_entry));
+  g_free (priv->language_term);
+  priv->language_term = g_utf8_casefold (term, -1);
+  gtk_list_box_invalidate_filter (GTK_LIST_BOX (priv->language_list));
+}
+
+static void
+language_filter_stop (GtkFontChooserWidget *fontchooser)
+{
+  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+
+  gtk_entry_set_text (GTK_ENTRY (priv->language_filter_entry), "");
+}
+
+static void
+language_filter_activated (GtkFontChooserWidget *fontchooser)
+{
+  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GList *children, *l;
+  GtkWidget *row;
+
+  row = NULL;
+  children = gtk_container_get_children (GTK_CONTAINER (priv->language_list));
+  for (l = children; l; l = l->next)
+    {
+      GtkWidget *r = l->data;
+
+      if (!language_filter_func (GTK_LIST_BOX_ROW (r), fontchooser))
+        continue;
+
+      if (row != NULL)
+        {
+          /* more than one match, don't activate */
+          g_list_free (children);
+          return;
+        }
+
+      row = r;
+    }
+  g_list_free (children);
+
+  gtk_widget_activate (row);
+}
+
+static void
+popover_notify (GObject              *object,
+                GParamSpec           *pspec,
+                GtkFontChooserWidget *fontchooser)
+{
+  hide_script_list (fontchooser, FALSE);
+  hide_language_list (fontchooser, FALSE);
+}
+
+static gboolean
+is_alias_family (PangoFontFamily *family)
+{
+  const char *family_name;
+
+  family_name = pango_font_family_get_name (family);
+
+  switch (family_name[0])
+    {
+    case 'm':
+    case 'M':
+      return (g_ascii_strcasecmp (family_name, "monospace") == 0);
+    case 's':
+    case 'S':
+      return (g_ascii_strcasecmp (family_name, "sans") == 0 ||
+              g_ascii_strcasecmp (family_name, "serif") == 0);
+    default:
+      return FALSE;
+    }
+
+  return FALSE;
+}
+
 static gboolean
 visible_func (GtkTreeModel *model,
               GtkTreeIter  *iter,
               gpointer      user_data)
 {
-  GtkFontChooserWidgetPrivate *priv = user_data;
+  GtkFontChooserWidget *fontchooser = user_data;
+  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
   gboolean result = TRUE;
   const gchar *search_text;
   gchar **split_terms;
   gchar *font_name, *font_name_casefold;
   guint i;
+
+  if (priv->script != 0 || priv->language != NULL)
+    {
+      PangoFontFamily *family;
+      PangoFontFace *face;
+      PangoLanguage **languages;
+      int n_languages;
+      int i;
+      gboolean is_alias;
+
+      gtk_tree_model_get (priv->model, iter,
+                          FAMILY_COLUMN, &family,
+                          FACE_COLUMN, &face,
+                          -1);
+
+      pango_font_face_get_languages (face, &languages, &n_languages);
+      is_alias = is_alias_family (family);
+
+      g_object_unref (face);
+      g_object_unref (family);
+
+      if (!is_alias)
+        {
+          gboolean script_found;
+          gboolean language_found;
+
+          if (n_languages == 0)
+            return FALSE;
+
+          script_found = priv->script == 0;
+          language_found = priv->language == NULL;
+
+          for (i = 0; i < n_languages; i++)
+            {
+              if (priv->script != 0 &&
+                  pango_language_includes_script (languages[i], priv->script))
+                script_found = TRUE;
+              if (priv->language != NULL && priv->language == languages[i])
+                language_found = TRUE;
+            }
+
+          if (!script_found || !language_found)
+            return FALSE;
+        }
+    }
 
   if (priv->filter_func != NULL)
     {
@@ -938,7 +1576,7 @@ visible_func (GtkTreeModel *model,
 
       g_object_unref (family);
       g_object_unref (face);
-      
+
       if (!result)
         return FALSE;
     }
@@ -1092,6 +1730,9 @@ gtk_font_chooser_widget_finalize (GObject *object)
 
   if (priv->axes)
     g_hash_table_unref (priv->axes);
+
+  g_free (priv->script_term);
+  g_free (priv->language_term);
 
   G_OBJECT_CLASS (gtk_font_chooser_widget_parent_class)->finalize (object);
 }
@@ -1712,6 +2353,44 @@ gtk_font_chooser_widget_handle_event (GtkWidget   *widget,
   GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (widget);
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
   GdkEvent *event = (GdkEvent *)key_event;
+
+  if (gdk_event_get_event_type (event) == GDK_KEY_PRESS)
+    {
+      GdkModifierType state;
+      guint keyval;
+
+      gdk_event_get_state (event, &state);
+      gdk_event_get_keyval (event, &keyval);
+
+      if (gtk_widget_is_visible (priv->filter_popover))
+        {
+          if (gtk_revealer_get_child_revealed (GTK_REVEALER (priv->script_filter_revealer)))
+            {
+              gtk_widget_grab_focus (priv->script_filter_entry);
+              return gtk_widget_event (priv->script_filter_entry, event);
+            }
+
+          if (gtk_revealer_get_child_revealed (GTK_REVEALER (priv->language_filter_revealer)))
+            {
+              gtk_widget_grab_focus (priv->language_filter_entry);
+              return gtk_widget_event (priv->language_filter_entry, event);
+            }
+
+          if (keyval == GDK_KEY_Escape)
+            {
+              gtk_popover_popdown (GTK_POPOVER (priv->filter_popover));
+              return GDK_EVENT_STOP;
+            }
+        }
+      else
+        {
+          if ((state & GDK_MOD1_MASK) > 0 && keyval == GDK_KEY_Down)
+            {
+              gtk_popover_popup (GTK_POPOVER (priv->filter_popover));
+              return GDK_EVENT_STOP;
+            }
+        }
+    }
 
   return gtk_search_entry_handle_event (GTK_SEARCH_ENTRY (priv->search_entry), event);
 }

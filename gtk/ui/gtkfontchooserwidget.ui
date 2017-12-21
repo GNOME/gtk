@@ -36,23 +36,34 @@
         <property name="row-spacing">6</property>
         <property name="column-spacing">6</property>
         <child>
-          <object class="GtkSearchEntry" id="search_entry">
-            <property name="can-focus">1</property>
-            <property name="hexpand">1</property>
-            <property name="activates-default">1</property>
-            <property name="primary-icon-name">edit-find-symbolic</property>
-            <property name="primary-icon-activatable">0</property>
-            <property name="secondary-icon-activatable">0</property>
-            <property name="primary-icon-sensitive">0</property>
-            <property name="secondary-icon-sensitive">0</property>
-            <property name="placeholder-text" translatable="yes">Search font name</property>
-            <signal name="search-changed" handler="text_changed_cb" swapped="no"/>
-            <signal name="stop-search" handler="stop_search_cb" swapped="no"/>
+          <object class="GtkBox">
+            <style>
+              <class name="linked"/>
+            </style>
+            <child>
+              <object class="GtkSearchEntry" id="search_entry">
+                <property name="can-focus">1</property>
+                <property name="hexpand">1</property>
+                <property name="activates-default">1</property>
+                <property name="primary-icon-name">edit-find-symbolic</property>
+                <property name="primary-icon-activatable">0</property>
+                <property name="secondary-icon-activatable">0</property>
+                <property name="primary-icon-sensitive">0</property>
+                <property name="secondary-icon-sensitive">0</property>
+                <property name="placeholder-text" translatable="yes">Search font name</property>
+                <signal name="search-changed" handler="text_changed_cb" swapped="no"/>
+                <signal name="stop-search" handler="stop_search_cb" swapped="no"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuButton" id="filter_button">
+                <property name="popover">filter_popover</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left-attach">0</property>
             <property name="top-attach">0</property>
-            <property name="width">2</property>
           </packing>
         </child>
         <child>
@@ -201,7 +212,6 @@
           <packing>
             <property name="left-attach">0</property>
             <property name="top-attach">1</property>
-            <property name="width">2</property>
           </packing>
         </child>
       </object>
@@ -210,5 +220,155 @@
   <object class="GThemedIcon" id="fonticon">
     <property name="names">font-x-generic-symbolic
 emblem-documents-symbolic</property>
+  </object>
+  <object class="GtkPopover" id="filter_popover">
+    <property name="width-request">300</property>
+    <signal name="notify::visible" handler="popover_notify"/>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="margin">20</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="label" translatable="yes">Script</property>
+            <property name="xalign">0</property>
+            <property name="margin-bottom">10</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="script_filter_button">
+            <signal name="clicked" handler="script_filter_button_clicked"/>
+            <child>
+              <object class="GtkBox">
+                <property name="spacing">10</property>
+                <child>
+                  <object class="GtkLabel" id="script_filter_button_label">
+                    <property name="xalign">0</property>
+                    <property name="max-width-chars">25</property>
+                    <property name="label" translatable="yes">Any script</property>
+                    <property name="hexpand">1</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">1</property>
+                    <property name="icon-name">pan-down-symbolic</property>
+                    <property name="icon-size">1</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkRevealer" id="script_filter_revealer">
+            <property name="margin-bottom">20</property>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <property name="spacing">10</property>
+                <child>
+                  <object class="GtkSearchEntry" id="script_filter_entry">
+                    <property name="placeholder-text" translatable="yes">Search…</property>
+                    <signal name="search-changed" handler="script_filter_changed" swapped="yes"/>
+                    <signal name="stop-search" handler="script_filter_stop" swapped="yes"/>
+                    <signal name="activate" handler="script_filter_activated" swapped="yes"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkScrolledWindow">
+                    <property name="shadow-type">in</property>
+                    <property name="hscrollbar-policy">never</property>
+                    <property name="vscrollbar-policy">automatic</property>
+                    <property name="propagate-natural-height">1</property>
+                    <property name="max-content-height">200</property>
+                    <child>
+                      <object class="GtkListBox" id="script_list">
+                        <property name="visible">1</property>
+                        <property name="selection-mode">none</property>
+                        <signal name="row-activated" handler="script_row_activated"/>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="label" translatable="yes">Language</property>
+            <property name="xalign">0</property>
+            <property name="margin-bottom">10</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="language_filter_button">
+            <signal name="clicked" handler="language_filter_button_clicked"/>
+            <child>
+              <object class="GtkBox">
+                <property name="spacing">10</property>
+                <child>
+                  <object class="GtkLabel" id="language_filter_button_label">
+                    <property name="xalign">0</property>
+                    <property name="max-width-chars">25</property>
+                    <property name="label" translatable="yes">Any language</property>
+                    <property name="hexpand">1</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">1</property>
+                    <property name="icon-name">pan-down-symbolic</property>
+                    <property name="icon-size">1</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkRevealer" id="language_filter_revealer">
+            <property name="margin-bottom">20</property>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <property name="spacing">10</property>
+                <child>
+                  <object class="GtkSearchEntry" id="language_filter_entry">
+                    <property name="placeholder-text" translatable="yes">Search…</property>
+                    <signal name="search-changed" handler="language_filter_changed" swapped="yes"/>
+                    <signal name="stop-search" handler="language_filter_stop" swapped="yes"/>
+                    <signal name="activate" handler="language_filter_activated" swapped="yes"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkScrolledWindow">
+                    <property name="shadow-type">in</property>
+                    <property name="hscrollbar-policy">never</property>
+                    <property name="vscrollbar-policy">automatic</property>
+                    <property name="propagate-natural-height">1</property>
+                    <property name="max-content-height">200</property>
+                    <child>
+                      <object class="GtkListBox" id="language_list">
+                        <property name="visible">1</property>
+                        <property name="selection-mode">none</property>
+                        <signal name="row-activated" handler="language_row_activated"/>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
   </object>
 </interface>

@@ -5,6 +5,8 @@ subdir('inspector')
 gtk_public_sources = files([
   'fallback-c89.c',
   'fnmatch.c',
+  'language-names.c',
+  'script-names.c',
   'gdkpixbufutils.c',
   'gtkaboutdialog.c',
   'gtkaccelgroup.c',
