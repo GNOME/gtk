@@ -426,7 +426,6 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
         append_separated (s, "ruby 1");
     }
 
-g_print ("before: %s\n", s->str);
   value = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_FEATURE_SETTINGS);
   settings = gtk_css_font_features_value_get_features (value);
   if (settings)
@@ -434,7 +433,6 @@ g_print ("before: %s\n", s->str);
       append_separated (s, settings);
       g_free (settings);
     }
-g_print ("after: %s\n", s->str);
 
   attrs = add_pango_attr (attrs, pango_attr_font_features_new (s->str));
   g_string_free (s, TRUE);
