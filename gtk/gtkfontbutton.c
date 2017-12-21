@@ -90,6 +90,8 @@ struct _GtkFontButtonPrivate
   gpointer              font_filter_data;
   GDestroyNotify        font_filter_data_destroy;
   GtkCssProvider       *provider;
+
+  GtkFontChooserLevel level;
 };
 
 /* Signals */
@@ -137,6 +139,8 @@ static void gtk_font_button_update_font_info        (GtkFontButton     *gfs);
 static void        gtk_font_button_set_font_name (GtkFontButton *button,
                                                   const char    *fontname);
 static const char *gtk_font_button_get_font_name (GtkFontButton *button);
+static void        gtk_font_button_set_level     (GtkFontButton       *font_button,
+                                                  GtkFontChooserLevel  level);
 
 static guint font_button_signals[LAST_SIGNAL] = { 0 };
 
@@ -693,6 +697,9 @@ gtk_font_button_set_property (GObject      *object,
     case GTK_FONT_CHOOSER_PROP_FONT_DESC:
       gtk_font_button_take_font_desc (font_button, g_value_dup_boxed (value));
       break;
+    case GTK_FONT_CHOOSER_PROP_LEVEL:
+      gtk_font_button_set_level (font_button, g_value_get_enum (value));
+      break;
     case GTK_FONT_CHOOSER_PROP_FONT:
       gtk_font_button_set_font_name (font_button, g_value_get_string (value));
       break;
@@ -721,6 +728,7 @@ gtk_font_button_get_property (GObject    *object,
                               GParamSpec *pspec)
 {
   GtkFontButton *font_button = GTK_FONT_BUTTON (object);
+  GtkFontButtonPrivate *priv = font_button->priv;
   
   switch (param_id) 
     {
@@ -735,6 +743,9 @@ gtk_font_button_get_property (GObject    *object,
       break;
     case GTK_FONT_CHOOSER_PROP_FONT_DESC:
       g_value_set_boxed (value, gtk_font_button_get_font_desc (font_button));
+      break;
+    case GTK_FONT_CHOOSER_PROP_LEVEL:
+      g_value_set_enum (value, priv->level);
       break;
     case GTK_FONT_CHOOSER_PROP_FONT:
       g_value_set_string (value, gtk_font_button_get_font_name (font_button));
@@ -1056,7 +1067,9 @@ gtk_font_button_clicked (GtkButton *button,
 
       if (priv->font_map)
         gtk_font_chooser_set_font_map (font_dialog, priv->font_map);
+
       gtk_font_chooser_set_show_preview_entry (font_dialog, priv->show_preview_entry);
+      g_object_set (font_dialog, "level", priv->level, NULL);
 
       if (priv->preview_text)
         {
@@ -1373,3 +1386,25 @@ gtk_font_button_update_font_info (GtkFontButton *font_button)
 
   gtk_font_button_label_use_font (font_button);
 } 
+
+static void
+gtk_font_button_set_level (GtkFontButton       *button,
+                           GtkFontChooserLevel  level)
+{
+  GtkFontButtonPrivate *priv = button->priv;
+
+  if (priv->level == level)
+    return;
+
+  priv->level = level;
+
+  if (priv->font_dialog)
+    g_object_set (priv->font_dialog, "level", level, NULL);
+
+  g_object_set (button,
+                "show-size", level == GTK_FONT_CHOOSER_LEVEL_FONT,
+                "show-style", level != GTK_FONT_CHOOSER_LEVEL_FAMILY,
+                NULL);
+
+  g_object_notify (G_OBJECT (button), "level");
+}
