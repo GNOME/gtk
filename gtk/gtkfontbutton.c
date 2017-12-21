@@ -70,8 +70,6 @@ struct _GtkFontButtonPrivate
 
   guint         use_font : 1;
   guint         use_size : 1;
-  guint         show_style : 1;
-  guint         show_size : 1;
   guint         show_preview_entry : 1;
 
   GtkWidget     *button;
@@ -106,9 +104,7 @@ enum
   PROP_0,
   PROP_TITLE,
   PROP_USE_FONT,
-  PROP_USE_SIZE,
-  PROP_SHOW_STYLE,
-  PROP_SHOW_SIZE
+  PROP_USE_SIZE
 };
 
 /* Prototypes */
@@ -548,39 +544,6 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkFontButton:show-style:
-   * 
-   * If this property is set to %TRUE, the name of the selected font style 
-   * will be shown in the label. For a more WYSIWYG way to show the selected 
-   * style, see the ::use-font property. 
-   *
-   * Since: 2.4
-   */
-  g_object_class_install_property (gobject_class,
-                                   PROP_SHOW_STYLE,
-                                   g_param_spec_boolean ("show-style",
-                                                         P_("Show style"),
-                                                         P_("Whether the selected font style is shown in the label"),
-                                                         TRUE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  /**
-   * GtkFontButton:show-size:
-   * 
-   * If this property is set to %TRUE, the selected font size will be shown 
-   * in the label. For a more WYSIWYG way to show the selected size, see the 
-   * ::use-size property. 
-   *
-   * Since: 2.4
-   */
-  g_object_class_install_property (gobject_class,
-                                   PROP_SHOW_SIZE,
-                                   g_param_spec_boolean ("show-size",
-                                                         P_("Show size"),
-                                                         P_("Whether selected font size is shown in the label"),
-                                                         TRUE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-
-  /**
    * GtkFontButton::font-set:
    * @widget: the object which received the signal.
    * 
@@ -637,8 +600,6 @@ gtk_font_button_init (GtkFontButton *font_button)
   /* Initialize fields */
   font_button->priv->use_font = FALSE;
   font_button->priv->use_size = FALSE;
-  font_button->priv->show_style = TRUE;
-  font_button->priv->show_size = TRUE;
   font_button->priv->show_preview_entry = TRUE;
   font_button->priv->font_dialog = NULL;
   font_button->priv->font_family = NULL;
@@ -709,12 +670,6 @@ gtk_font_button_set_property (GObject      *object,
     case PROP_USE_SIZE:
       gtk_font_button_set_use_size (font_button, g_value_get_boolean (value));
       break;
-    case PROP_SHOW_STYLE:
-      gtk_font_button_set_show_style (font_button, g_value_get_boolean (value));
-      break;
-    case PROP_SHOW_SIZE:
-      gtk_font_button_set_show_size (font_button, g_value_get_boolean (value));
-      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
@@ -755,12 +710,6 @@ gtk_font_button_get_property (GObject    *object,
       break;
     case PROP_USE_SIZE:
       g_value_set_boolean (value, gtk_font_button_get_use_size (font_button));
-      break;
-    case PROP_SHOW_STYLE:
-      g_value_set_boolean (value, gtk_font_button_get_show_style (font_button));
-      break;
-    case PROP_SHOW_SIZE:
-      g_value_set_boolean (value, gtk_font_button_get_show_size (font_button));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -935,101 +884,6 @@ gtk_font_button_set_use_size (GtkFontButton *font_button,
     }
 } 
 
-/**
- * gtk_font_button_get_show_style:
- * @font_button: a #GtkFontButton
- * 
- * Returns whether the name of the font style will be shown in the label.
- * 
- * Returns: whether the font style will be shown in the label.
- *
- * Since: 2.4
- **/
-gboolean 
-gtk_font_button_get_show_style (GtkFontButton *font_button)
-{
-  g_return_val_if_fail (GTK_IS_FONT_BUTTON (font_button), FALSE);
-
-  return font_button->priv->show_style;
-}
-
-/**
- * gtk_font_button_set_show_style:
- * @font_button: a #GtkFontButton
- * @show_style: %TRUE if font style should be displayed in label.
- *
- * If @show_style is %TRUE, the font style will be displayed along with name of the selected font.
- *
- * Since: 2.4
- */
-void
-gtk_font_button_set_show_style (GtkFontButton *font_button,
-                                gboolean       show_style)
-{
-  g_return_if_fail (GTK_IS_FONT_BUTTON (font_button));
-  
-  show_style = (show_style != FALSE);
-  if (font_button->priv->show_style != show_style) 
-    {
-      font_button->priv->show_style = show_style;
-      
-      gtk_font_button_update_font_info (font_button);
-  
-      g_object_notify (G_OBJECT (font_button), "show-style");
-    }
-} 
-
-
-/**
- * gtk_font_button_get_show_size:
- * @font_button: a #GtkFontButton
- * 
- * Returns whether the font size will be shown in the label.
- * 
- * Returns: whether the font size will be shown in the label.
- *
- * Since: 2.4
- **/
-gboolean 
-gtk_font_button_get_show_size (GtkFontButton *font_button)
-{
-  g_return_val_if_fail (GTK_IS_FONT_BUTTON (font_button), FALSE);
-
-  return font_button->priv->show_size;
-}
-
-/**
- * gtk_font_button_set_show_size:
- * @font_button: a #GtkFontButton
- * @show_size: %TRUE if font size should be displayed in dialog.
- *
- * If @show_size is %TRUE, the font size will be displayed along with the name of the selected font.
- *
- * Since: 2.4
- */
-void
-gtk_font_button_set_show_size (GtkFontButton *font_button,
-                               gboolean       show_size)
-{
-  g_return_if_fail (GTK_IS_FONT_BUTTON (font_button));
-  
-  show_size = (show_size != FALSE);
-
-  if (font_button->priv->show_size != show_size) 
-    {
-      font_button->priv->show_size = show_size;
-
-      if (font_button->priv->show_size)
-	gtk_widget_show (font_button->priv->font_size_box);
-      else
-	gtk_widget_hide (font_button->priv->font_size_box);
-      
-      gtk_font_button_update_font_info (font_button);
-
-      g_object_notify (G_OBJECT (font_button), "show-size");
-    }
-} 
-
 static const gchar *
 gtk_font_button_get_font_name (GtkFontButton *font_button)
 {
@@ -1069,7 +923,7 @@ gtk_font_button_clicked (GtkButton *button,
         gtk_font_chooser_set_font_map (font_dialog, priv->font_map);
 
       gtk_font_chooser_set_show_preview_entry (font_dialog, priv->show_preview_entry);
-      g_object_set (font_dialog, "level", priv->level, NULL);
+      gtk_font_chooser_set_level (GTK_FONT_CHOOSER (font_dialog), priv->level);
 
       if (priv->preview_text)
         {
@@ -1430,28 +1284,33 @@ gtk_font_button_update_font_info (GtkFontButton *font_button)
   else
     face_name = "";
 
-  if (priv->show_style)
-    family_style = g_strconcat (fam_name, " ", face_name, NULL);
-  else
+  if (priv->level == GTK_FONT_CHOOSER_LEVEL_FAMILY)
     family_style = g_strdup (fam_name);
+  else
+    family_style = g_strconcat (fam_name, " ", face_name, NULL);
 
   gtk_label_set_text (GTK_LABEL (font_button->priv->font_label), family_style);
   g_free (family_style);
 
-  if (font_button->priv->show_size) 
+  if (priv->level == GTK_FONT_CHOOSER_LEVEL_FONT)
     {
       /* mirror Pango, which doesn't translate this either */
       gchar *size = g_strdup_printf ("%2.4g%s",
                                      pango_font_description_get_size (priv->font_desc) / (double)PANGO_SCALE,
                                      pango_font_description_get_size_is_absolute (priv->font_desc) ? "px" : "");
-      
+
       gtk_label_set_text (GTK_LABEL (font_button->priv->size_label), size);
-      
+
       g_free (size);
+
+      gtk_widget_show (font_button->priv->font_size_box);
     }
+  else
+    gtk_widget_hide (font_button->priv->font_size_box);
+
 
   gtk_font_button_label_use_font (font_button);
-} 
+}
 
 static void
 gtk_font_button_set_level (GtkFontButton       *button,
@@ -1465,12 +1324,9 @@ gtk_font_button_set_level (GtkFontButton       *button,
   priv->level = level;
 
   if (priv->font_dialog)
-    g_object_set (priv->font_dialog, "level", level, NULL);
+    gtk_font_chooser_set_level (GTK_FONT_CHOOSER (priv->font_dialog), level);
 
-  g_object_set (button,
-                "show-size", level == GTK_FONT_CHOOSER_LEVEL_FONT,
-                "show-style", level != GTK_FONT_CHOOSER_LEVEL_FAMILY,
-                NULL);
+  gtk_font_button_update_font_info (button);
 
   g_object_notify (G_OBJECT (button), "level");
 }
