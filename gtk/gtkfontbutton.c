@@ -383,7 +383,6 @@ gtk_font_button_take_font_desc (GtkFontButton        *font_button,
 
   g_object_notify (G_OBJECT (font_button), "font");
   g_object_notify (G_OBJECT (font_button), "font-desc");
-  g_object_notify (G_OBJECT (font_button), "font-name");
 
   g_object_thaw_notify (object);
 }
@@ -587,7 +586,7 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
    *
    * Note that this signal is only emitted when the user
    * changes the font. If you need to react to programmatic font changes
-   * as well, use the notify::font-name signal.
+   * as well, use the notify::font signal.
    *
    * Since: 2.4
    */
@@ -787,7 +786,7 @@ gtk_font_button_new (void)
 GtkWidget *
 gtk_font_button_new_with_font (const gchar *fontname)
 {
-  return g_object_new (GTK_TYPE_FONT_BUTTON, "font-name", fontname, NULL);
+  return g_object_new (GTK_TYPE_FONT_BUTTON, "font", fontname, NULL);
 } 
 
 /**
@@ -1147,7 +1146,6 @@ response_cb (GtkDialog *dialog,
 
   g_object_notify (G_OBJECT (font_button), "font");
   g_object_notify (G_OBJECT (font_button), "font-desc");
-  g_object_notify (G_OBJECT (font_button), "font-name");
 
   g_object_thaw_notify (object);
 

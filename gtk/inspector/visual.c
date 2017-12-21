@@ -559,7 +559,7 @@ static void
 init_font (GtkInspectorVisual *vis)
 {
   g_object_bind_property (gtk_settings_get_default (), "gtk-font-name",
-                          vis->priv->font_button, "font-name",
+                          vis->priv->font_button, "font",
                           G_BINDING_BIDIRECTIONAL|G_BINDING_SYNC_CREATE);
 }
 
