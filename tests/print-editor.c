@@ -343,7 +343,8 @@ custom_widget_apply (GtkPrintOperation *operation,
 		     PrintData *data)
 {
   const char *selected_font;
-  selected_font = gtk_font_button_get_font_name  (GTK_FONT_BUTTON (data->font_button));
+  selected_font = gtk_font_chooser_get_font (GTK_FONT_CHOOSER (data->font_button));
+
   g_free (data->font);
   data->font = g_strdup (selected_font);
 }
