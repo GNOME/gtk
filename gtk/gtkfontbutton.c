@@ -572,7 +572,7 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
    *
    * Note that this signal is only emitted when the user
    * changes the font. If you need to react to programmatic font changes
-   * as well, use the notify::font-name signal.
+   * as well, use the notify::font signal.
    *
    * Since: 2.4
    */
@@ -710,7 +710,7 @@ gtk_font_button_get_property (GObject    *object,
       break;
     case GTK_FONT_CHOOSER_PROP_FONT:
     case PROP_FONT_NAME:
-      g_value_set_string (value, gtk_font_button_get_font_name (font_button));
+      g_value_set_string (value, font_button->priv->fontname);
       break;
     case PROP_USE_FONT:
       g_value_set_boolean (value, gtk_font_button_get_use_font (font_button));
@@ -759,7 +759,7 @@ gtk_font_button_new (void)
 GtkWidget *
 gtk_font_button_new_with_font (const gchar *fontname)
 {
-  return g_object_new (GTK_TYPE_FONT_BUTTON, "font-name", fontname, NULL);
+  return g_object_new (GTK_TYPE_FONT_BUTTON, "font", fontname, NULL);
 } 
 
 /**
