@@ -44,6 +44,24 @@ typedef gboolean (*GtkFontFilterFunc) (const PangoFontFamily *family,
                                        const PangoFontFace   *face,
                                        gpointer               data);
 
+/**
+ * GtkFontChooserLevel:
+ * @GTK_FONT_CHOOSER_LEVEL_FONT: Select an individual
+ *    font, including a size. An example would be: "Arial Bold 11"
+ * @GTK_FONT_CHOOSER_LEVEL_FACE: Select a font face,
+ *    without a size. An example would be: "Arial Bold"
+ * @GTK_FONT_CHOOSER_LEVEL_FAMILY: Select a font family, without
+ *    specifying the face. An example would be: "Arial"
+ *
+ * This enumeration specifies the granularity of font selection
+ * that is desired in a font chooser.
+ */
+typedef enum {
+  GTK_FONT_CHOOSER_LEVEL_FONT,
+  GTK_FONT_CHOOSER_LEVEL_FACE,
+  GTK_FONT_CHOOSER_LEVEL_FAMILY
+} GtkFontChooserLevel;
+
 #define GTK_TYPE_FONT_CHOOSER			(gtk_font_chooser_get_type ())
 #define GTK_FONT_CHOOSER(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_FONT_CHOOSER, GtkFontChooser))
 #define GTK_IS_FONT_CHOOSER(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_FONT_CHOOSER))
@@ -122,6 +140,12 @@ void             gtk_font_chooser_set_font_map             (GtkFontChooser   *fo
                                                             PangoFontMap     *fontmap);
 GDK_AVAILABLE_IN_3_18
 PangoFontMap *   gtk_font_chooser_get_font_map             (GtkFontChooser   *fontchooser);
+GDK_AVAILABLE_IN_3_94
+void             gtk_font_chooser_set_level                (GtkFontChooser   *fontchooser,
+                                                            GtkFontChooserLevel level);
+GDK_AVAILABLE_IN_3_94
+GtkFontChooserLevel
+                 gtk_font_chooser_get_level                (GtkFontChooser   *fontchooser);
 
 G_END_DECLS
 

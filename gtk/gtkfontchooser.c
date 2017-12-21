@@ -106,6 +106,22 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
+   * GtkFontChooser:level:
+   *
+   * The level of granularity to offer for selecting fonts.
+   *
+   * Since: 3.94
+   */
+  g_object_interface_install_property
+     (iface,
+      g_param_spec_enum ("level",
+                         P_("Selection level"),
+                         P_("Whether to select family, face or font"),
+                         GTK_TYPE_FONT_CHOOSER_LEVEL,
+                         GTK_FONT_CHOOSER_LEVEL_FONT,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
+  /**
    * GtkFontChooser::font-activated:
    * @self: the object which received the signal
    * @fontname: the font name
@@ -480,4 +496,43 @@ gtk_font_chooser_get_font_map (GtkFontChooser *fontchooser)
     fontmap = GTK_FONT_CHOOSER_GET_IFACE (fontchooser)->get_font_map (fontchooser);
 
   return fontmap;
+}
+
+/**
+ * gtk_font_chooser_set_level:
+ * @fontchooser: a #GtkFontChooser
+ * @level: the desired level of granularity
+ *
+ * Sets the desired level of granularity for selecting fonts.
+ *
+ * Since: 3.94
+ */
+void
+gtk_font_chooser_set_level (GtkFontChooser      *fontchooser,
+                            GtkFontChooserLevel  level)
+{
+  g_return_if_fail (GTK_IS_FONT_CHOOSER (fontchooser));
+
+  g_object_set (fontchooser, "level", level, NULL);
+}
+
+/**
+ * gtk_font_chooser_get_level:
+ * @fontchooser: a #GtkFontChooser
+ *
+ * Returns the current level of granularity for selecting fonts.
+ *
+ * Returns: the current granularity level
+ * Since: 3.94
+ */
+GtkFontChooserLevel
+gtk_font_chooser_get_level (GtkFontChooser *fontchooser)
+{
+  GtkFontChooserLevel level;
+
+  g_return_val_if_fail (GTK_IS_FONT_CHOOSER (fontchooser), 0);
+
+  g_object_get (fontchooser, "level", &level, NULL);
+
+  return level;
 }

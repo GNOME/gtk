@@ -118,7 +118,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel">
+                  <object class="GtkLabel" id="size_label">
                     <property name="visible">1</property>
                     <property name="label" translatable="yes">Size</property>
                     <property name="xalign">0</property>
