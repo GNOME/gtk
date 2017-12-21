@@ -4659,7 +4659,8 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 
   /**
    * GtkPlacesSidebar::show-starred-location:
-   * @sidebar: the object which received the signal.
+   * @sidebar: the object which received the signal
+   * @flags: the flags for the operation
    *
    * The places sidebar emits this signal when it needs the calling
    * application to present a way to show the starred files. In GNOME,
