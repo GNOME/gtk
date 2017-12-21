@@ -9,12 +9,27 @@
 
 #include "gtkfishbowl.h"
 
+const char *const css =
+".blurred-button {"
+"  box-shadow: 0px 0px 5px 10px rgba(0, 0, 0, 0.5);"
+"}"
+"";
+
 GtkWidget *fishbowl;
 
 static GtkWidget *
 create_button (void)
 {
-  return gtk_button_new_with_label ("Button");;
+  return gtk_button_new_with_label ("Button");
+}
+static GtkWidget *
+create_blurred_button (void)
+{
+  GtkWidget *w = gtk_button_new ();
+
+  gtk_style_context_add_class (gtk_widget_get_style_context (w), "blurred-button");
+
+  return w;
 }
 
 static GtkWidget *
@@ -69,12 +84,13 @@ static const struct {
   const char *name;
   GtkWidget * (*create_func) (void);
 } widget_types[] = {
-  { "Button",     create_button      },
-  { "Fontbutton", create_font_button },
-  { "Levelbar"  , create_level_bar   },
-  { "Label"     , create_label       },
-  { "Spinner"   , create_spinner     },
-  { "Spinbutton", create_spinbutton  },
+  { "Button",     create_button         },
+  { "Blurbutton", create_blurred_button },
+  { "Fontbutton", create_font_button    },
+  { "Levelbar"  , create_level_bar      },
+  { "Label"     , create_label          },
+  { "Spinner"   , create_spinner        },
+  { "Spinbutton", create_spinbutton     },
 };
 
 static int selected_widget_type = -1;
@@ -295,6 +311,18 @@ GtkWidget *
 do_widgetbowl (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
+  static GtkCssProvider *provider = NULL;
+
+  gtk_init ();
+
+  if (provider == NULL)
+    {
+      provider = gtk_css_provider_new ();
+      gtk_css_provider_load_from_data (provider, css, -1);
+      gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                                  GTK_STYLE_PROVIDER (provider),
+                                                  GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    }
 
   if (!window)
     {
