@@ -601,9 +601,9 @@ copy_time_coord (const GdkTimeCoord *coord)
  * Copies a #GdkEvent, copying or incrementing the reference count of the
  * resources associated with it (e.g. #GdkWindow’s and strings).
  * 
- * Returns: a copy of @event. The returned #GdkEvent should be freed with
- * gdk_event_free().
- **/
+ * Returns: (transfer full): a copy of @event. The returned #GdkEvent should
+ *   be freed with gdk_event_free().
+ */
 GdkEvent*
 gdk_event_copy (const GdkEvent *event)
 {
@@ -1848,6 +1848,14 @@ gdk_event_set_display (GdkEvent   *event,
   event->any.display = display;
 }
 
+/**
+ * gdk_event_get_display:
+ * @event: a #GdkEvent
+ *
+ * Retrieves the #GdkDisplay associated to the @event.
+ *
+ * Returns: (transfer none) (nullable): a #GdkDisplay
+ */
 GdkDisplay *
 gdk_event_get_display (const GdkEvent *event)
 {
@@ -2495,6 +2503,16 @@ gdk_event_get_axes (GdkEvent  *event,
   return FALSE;
 }
 
+/**
+ * gdk_event_get_history:
+ * @event: a #GdkEvent of type %GDK_MOTION_NOTIFY
+ *
+ * Retrieves the history of the @event motion, as a list of time and
+ * coordinates.
+ *
+ * Returns: (transfer container) (element-type GdkTimeCoord) (nullable): a list
+ *   of time and coordinates
+ */
 GList *
 gdk_event_get_history (const GdkEvent *event)
 {
