@@ -255,6 +255,78 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
               <entry></entry>
             </row>
+            <row>
+              <entry>font-kerning</entry>
+              <entry><code>auto | normal | none </code></entry>
+              <entry>auto</entry>
+              <entry>✓</entry>
+              <entry></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-fonts/#font-kerning-prop">CSS3</ulink></entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>font-variant-ligatures</entry>
+              <entry><code>normal | none | [ 〈common-lig-values〉|| 〈discretionary-lig-values〉|| 〈historical-lig-values〉|| 〈contextual-alt-values〉]</code></entry>
+              <entry>normal</entry>
+              <entry>✓</entry>
+              <entry></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-fonts/#font-variant-ligatures-prop">CSS3</ulink></entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>font-variant-position</entry>
+              <entry><code>normal | sub | super</code></entry>
+              <entry>normal</entry>
+              <entry>✓</entry>
+              <entry></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-fonts/#font-variant-position-prop">CSS3</ulink></entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>font-variant-caps</entry>
+              <entry><code>normal | small-caps | all-small-caps | petite-caps | all-petite-caps | unicase | titling-caps</code></entry>
+              <entry>normal</entry>
+              <entry>✓</entry>
+              <entry></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-fonts/#font-variant-position-prop">CSS3</ulink></entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>font-variant-numeric</entry>
+              <entry><code>normal | [ 〈numeric-figure-values〉|| 〈numeric-spacing-values〉|| 〈numeric-fraction-values〉|| ordinal || slashed-zero ]</code></entry>
+              <entry>normal</entry>
+              <entry>✓</entry>
+              <entry></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-fonts/#font-variant-numeric-prop">CSS3</ulink></entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>font-variant-alternates</entry>
+              <entry><code>normal | [ stylistic(〈feature-value-name〉) || historical-forms || styleset(〈feature-value-name〉#) || character-variant(〈feature-value-name〉#) || swash(〈feature-value-name〉) || ornaments(〈feature-value-name〉) || annotation(〈feature-value-name〉) ]</code></entry>
+              <entry>normal</entry>
+              <entry>✓</entry>
+              <entry></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-fonts/#font-variant-alternates-prop">CSS3</ulink></entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>font-variant-east-asian</entry>
+              <entry><code>normal | [ 〈east-asian-variant-values〉 || 〈east-asian-width-values〉 || ruby ]</code></entry>
+              <entry>normal</entry>
+              <entry>✓</entry>
+              <entry></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-fonts/#font-variant-east-asian-prop">CSS3</ulink></entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry>font-feature-settings</entry>
+              <entry><code>normal | 〈feature-tag-value〉&num; </code></entry>
+              <entry>normal</entry>
+              <entry>✓</entry>
+              <entry>></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-fonts/#font-feature-settings-prop">CSS3</ulink></entry>
+              <entry></entry>
+            </row>
           </tbody>
         </tgroup>
         <tgroup cols="5">
@@ -270,12 +342,29 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
 <ulink url="https://www.w3.org/TR/css3-fonts/#font-prop">CSS3</ulink></entry>
               <entry>CSS allows line-height, etc</entry>
             </row>
+            <row>
+              <entry>font-variant</entry>
+              <entry><code>normal | none | [ 〈common-lig-values〉 || 〈discretionary-lig-values〉 || 〈historical-lig-values〉 || 〈contextual-alt-values〉 || stylistic(>〈feature-value-name〉) || historical-forms || styleset(〈feature-value-name〉 #) || character-variant(〈feature-value-name〉 #) || swash(〈feature-value-name〉) || ornaments(〈feature-value-name〉) || annotation(〈feature-value-name〉) || [ small-caps | all-small-caps | petite-caps | all-petite-caps | unicase | titling-caps ] || 〈numeric-figure-values〉 || 〈numeric-spacing-values〉 || 〈numeric-fraction-values〉 || ordinal || slashed-zero || 〈east-asian-variant-values〉 || 〈east-asian-width-values〉 || ruby ]</code></entry>
+              <entry>see individual properties</entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-fonts/#font-variant-prop">CSS3</ulink></entry>
+              <entry></entry>
+            </row>
           </tbody>
         </tgroup>
       </table>
 
 <literallayout><code>〈absolute size〉 = xx-small | x-small | small | medium | large | x-large | xx-large</code>
 <code>〈relative size〉 = larger | smaller</code>
+<code>〈common-lig-values〉 = [ common-ligatures| no-common-ligatures ]</code>
+<code>〈discretionary-lig-values〉 = [ discretionary-ligatures | no-discretionary-ligatures ]</code>
+<code>〈historical-lig-values〉 = [ historical-ligatures | no-historical-ligatures ]</code>
+<code>〈contextual-alt-values〉 = [ contextual | no-contextual ]</code>
+<code>〈numeric-figure-values〉 = [ lining-nums | oldstyle-nums ]</code>
+<code>〈numeric-spacing-values〉 = [ proportional-nums | tabular-nums ]</code>
+<code>〈numeric-fraction-values〉 = [ diagonal-fractions | stacked-fractions ]</code>
+<code>〈east-asian-variant-values〉 = [ jis78 | jis83 | jis90 | jis04 | simplified | traditional ]</code>
+<code>〈east-asian-width-values〉 = [ full-width | proportional-width ]</code>
+<code>〈feature-tag-value〉 = 〈string〉[ 〈integer〉| on | off ]?</code>
 </literallayout>
 
       <para>
