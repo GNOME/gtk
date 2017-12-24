@@ -54,27 +54,6 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkLabel">
-                        <property name="label" translatable="yes">Script &amp; Language</property>
-                        <property name="xalign">0</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkComboBox" id="script_lang">
-                        <property name="can-focus">1</property>
-                        <signal name="changed" handler="script_changed" swapped="no"/>
-                        <child>
-                          <object class="GtkCellRendererText"/>
-                          <attributes>
-                            <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
                       <object class="GtkExpander">
                         <child type="label">
                           <object class="GtkLabel">
@@ -89,6 +68,19 @@
                         <child>
                           <object class="GtkBox" id="feature_list">
                             <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkComboBox" id="script_lang">
+                                <property name="can-focus">1</property>
+                                <property name="margin-top">10</property>
+                                <signal name="changed" handler="script_changed" swapped="no"/>
+                                <child>
+                                  <object class="GtkCellRendererText"/>
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -197,7 +189,6 @@
                 <property name="width-chars">50</property>
                 <property name="max-width-chars">50</property>
                 <property name="hexpand">1</property>
-                <property name="vexpand">0</property>
                 <style>
                   <class name="monospace"/>
                 </style>

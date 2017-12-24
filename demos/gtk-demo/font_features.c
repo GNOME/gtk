@@ -68,58 +68,76 @@ get_feature_display_name (unsigned int tag)
 static void update_display (void);
 
 static void
+feat_clicked (GtkWidget *feat,
+              gpointer   data)
+{
+  g_signal_handlers_block_by_func (feat, feat_clicked, NULL);
+
+  if (gtk_check_button_get_inconsistent (GTK_CHECK_BUTTON (feat)))
+    {
+      gtk_check_button_set_inconsistent (GTK_CHECK_BUTTON (feat), FALSE);
+      gtk_widget_set_opacity (gtk_widget_get_first_child (feat), 1);
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (feat), TRUE);
+    }
+  else if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (feat)))
+    {
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (feat), FALSE);
+    }
+  else
+    {
+      gtk_check_button_set_inconsistent (GTK_CHECK_BUTTON (feat), TRUE);
+      gtk_widget_set_opacity (gtk_widget_get_first_child (feat), 0);
+    }
+
+  g_signal_handlers_unblock_by_func (feat, feat_clicked, NULL);
+}
+
+static void
 add_check_group (GtkWidget   *box,
                  const char  *title,
                  const char **tags)
 {
   GtkWidget *label;
   GtkWidget *group;
+  PangoAttrList *attrs;
   int i;
+
+  group = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  gtk_widget_set_halign (group, GTK_ALIGN_START);
 
   label = gtk_label_new (title);
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
   gtk_widget_set_halign (label, GTK_ALIGN_START);
-  g_object_set (label, "margin-top", 10, NULL);
-  gtk_container_add (GTK_CONTAINER (box), label);
+  g_object_set (label, "margin-top", 10, "margin-bottom", 10, NULL);
+  attrs = pango_attr_list_new ();
+  pango_attr_list_insert (attrs, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
+  gtk_label_set_attributes (GTK_LABEL (label), attrs);
+  pango_attr_list_unref (attrs);
+  gtk_container_add (GTK_CONTAINER (group), label);
 
-  group = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_widget_set_halign (group, GTK_ALIGN_START);
-  g_object_set (group,
-                "margin-start", 20,
-                "margin-end", 20,
-                "margin-top", 10,
-                "margin-top", 10,
-                NULL);
   for (i = 0; tags[i]; i++)
     {
       unsigned int tag;
-      GtkWidget *row;
-      GtkWidget *icon;
-      GtkWidget *dflt;
       GtkWidget *feat;
       FeatureItem *item;
 
       tag = hb_tag_from_string (tags[i], -1);
 
-      row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-      icon = gtk_image_new_from_icon_name ("object-select-symbolic");
-      dflt = gtk_check_button_new ();
       feat = gtk_check_button_new_with_label (get_feature_display_name (tag));
+      gtk_check_button_set_inconsistent (GTK_CHECK_BUTTON (feat), TRUE);
+      gtk_widget_set_opacity (gtk_widget_get_first_child (feat), 0);
 
       g_signal_connect (feat, "notify::active", G_CALLBACK (update_display), NULL);
-      g_object_bind_property (dflt, "active", feat, "sensitive", G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-      g_signal_connect (dflt, "notify::active", G_CALLBACK (update_display), NULL);
+      g_signal_connect (feat, "notify::inconsistent", G_CALLBACK (update_display), NULL);
+      g_signal_connect (feat, "clicked", G_CALLBACK (feat_clicked), NULL);
 
-      gtk_container_add (GTK_CONTAINER (row), icon);
-      gtk_container_add (GTK_CONTAINER (row), dflt);
-      gtk_container_add (GTK_CONTAINER (row), feat);
-      gtk_container_add (GTK_CONTAINER (group), row);
+      gtk_container_add (GTK_CONTAINER (group), feat);
 
       item = g_new (FeatureItem, 1);
       item->name = tags[i];
       item->tag = tag;
-      item->icon = icon;
-      item->dflt = dflt;
+      item->icon = NULL;
+      item->dflt = NULL;
       item->feat = feat;
 
       feature_items = g_list_prepend (feature_items, item);
@@ -137,26 +155,24 @@ add_radio_group (GtkWidget *box,
   GtkWidget *group;
   int i;
   GtkWidget *group_button = NULL;
+  PangoAttrList *attrs;
+
+  group = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  gtk_widget_set_halign (group, GTK_ALIGN_START);
 
   label = gtk_label_new (title);
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
   gtk_widget_set_halign (label, GTK_ALIGN_START);
-  g_object_set (label, "margin-top", 10, NULL);
-  gtk_container_add (GTK_CONTAINER (box), label);
+  g_object_set (label, "margin-top", 10, "margin-bottom", 10, NULL);
+  attrs = pango_attr_list_new ();
+  pango_attr_list_insert (attrs, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
+  gtk_label_set_attributes (GTK_LABEL (label), attrs);
+  pango_attr_list_unref (attrs);
+  gtk_container_add (GTK_CONTAINER (group), label);
 
-  group = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_widget_set_halign (group, GTK_ALIGN_START);
-  g_object_set (group,
-                "margin-start", 20,
-                "margin-end", 20,
-                "margin-top", 10,
-                "margin-top", 10,
-                NULL);
   for (i = 0; tags[i]; i++)
     {
       unsigned int tag;
-      GtkWidget *row;
-      GtkWidget *icon;
       GtkWidget *feat;
       FeatureItem *item;
       const char *name;
@@ -164,23 +180,20 @@ add_radio_group (GtkWidget *box,
       tag = hb_tag_from_string (tags[i], -1);
       name = get_feature_display_name (tag);
 
-      row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-      icon = gtk_image_new_from_icon_name ("object-select-symbolic");
       feat = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (group_button),
                                                           name ? name : _("Default"));
       if (group_button == NULL)
         group_button = feat;
 
       g_signal_connect (feat, "notify::active", G_CALLBACK (update_display), NULL);
+      g_object_set_data (G_OBJECT (feat), "default", group_button);
 
-      gtk_container_add (GTK_CONTAINER (row), icon);
-      gtk_container_add (GTK_CONTAINER (row), feat);
-      gtk_container_add (GTK_CONTAINER (group), row);
+      gtk_container_add (GTK_CONTAINER (group), feat);
 
       item = g_new (FeatureItem, 1);
       item->name = tags[i];
       item->tag = tag;
-      item->icon = icon;
+      item->icon = NULL;
       item->dflt = NULL;
       item->feat = feat;
 
@@ -244,8 +257,11 @@ update_display (void)
               has_feature = TRUE;
             }
         }
-      else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (item->dflt)))
+      else if (GTK_IS_CHECK_BUTTON (item->feat))
         {
+          if (gtk_check_button_get_inconsistent (GTK_CHECK_BUTTON (item->feat)))
+            continue;
+
           if (has_feature)
             g_string_append (s, ", ");
           g_string_append (s, item->name);
@@ -369,6 +385,26 @@ tag_pair_equal (gconstpointer a, gconstpointer b)
   return pair_a->script_tag == pair_b->script_tag && pair_a->lang_tag == pair_b->lang_tag;
 }
 
+static int
+script_sort_func (GtkTreeModel *model,
+                  GtkTreeIter  *a,
+                  GtkTreeIter  *b,
+                  gpointer      user_data)
+{
+  char *sa, *sb;
+  int ret;
+
+  gtk_tree_model_get (model, a, 0, &sa, -1);
+  gtk_tree_model_get (model, b, 0, &sb, -1);
+
+  ret = strcmp (sa, sb);
+
+  g_free (sa);
+  g_free (sb);
+
+  return ret;
+}
+
 static void
 update_script_combo (void)
 {
@@ -471,7 +507,7 @@ update_script_combo (void)
         }
 
       if (pair->lang_tag == HB_OT_TAG_DEFAULT_LANGUAGE)
-        langname = "Default";
+        name = g_strdup_printf ("%s Script", scriptname);
       else
         {
           hb_tag_to_string (pair->lang_tag, langbuf);
@@ -486,9 +522,9 @@ update_script_combo (void)
                   break;
                 }
             }
-        }
 
-      name = g_strdup_printf ("%s - %s", scriptname, langname);
+          name = g_strdup (langname);
+        }
 
       gtk_list_store_insert_with_values (store, NULL, -1,
                                          0, name,
@@ -496,12 +532,16 @@ update_script_combo (void)
                                          2, pair->lang_index,
                                          3, pair->lang_tag,
                                          -1);
-
       g_free (name);
     }
 
   g_hash_table_destroy (tags);
 
+  gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (store),
+                                           script_sort_func, NULL, NULL);
+  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
+                                        GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID,
+                                        GTK_SORT_ASCENDING);
   gtk_combo_box_set_model (GTK_COMBO_BOX (script_lang), GTK_TREE_MODEL (store));
   gtk_combo_box_set_active (GTK_COMBO_BOX (script_lang), 0);
 }
@@ -521,7 +561,8 @@ update_features (void)
   for (l = feature_items; l; l = l->next)
     {
       FeatureItem *item = l->data;
-      gtk_widget_set_opacity (item->icon, 0);
+      gtk_widget_hide (item->feat);
+      gtk_widget_hide (gtk_widget_get_parent (item->feat));
     }
 
   /* set feature presence checks from the font features */
@@ -565,7 +606,20 @@ update_features (void)
                 {
                   FeatureItem *item = l->data;
                   if (item->tag == features[j])
-                    gtk_widget_set_opacity (item->icon, 0.5);
+                    {
+                      gtk_widget_show (item->feat);
+                      gtk_widget_show (gtk_widget_get_parent (item->feat));
+                      if (GTK_IS_RADIO_BUTTON (item->feat))
+                        {
+                          GtkWidget *def = GTK_WIDGET (g_object_get_data (G_OBJECT (item->feat), "default"));
+                          gtk_widget_show (def);
+                        }
+                      else if (GTK_IS_CHECK_BUTTON (item->feat))
+                        {
+                          gtk_check_button_set_inconsistent (GTK_CHECK_BUTTON (item->feat), TRUE);
+                          gtk_widget_set_opacity (gtk_widget_get_first_child (item->feat), 0);
+                        }
+                    }
                 }
             }
         }
