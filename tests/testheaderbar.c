@@ -2,9 +2,7 @@
 
 static const gchar css[] =
  ".main.background { "
- " background-image: -gtk-gradient (linear, center top, center bottom, "
- "      from (red), "
- "      to (blue)); "
+ " background-image: linear-gradient(to bottom, red, blue);"
  " border-width: 0px; "
  "}"
  ".titlebar.backdrop { "
@@ -13,9 +11,7 @@ static const gchar css[] =
  " border-radius: 10px 10px 0px 0px; "
  "}"
  ".titlebar { "
- " background-image: -gtk-gradient (linear, center top, center bottom, "
- "      from (white), "
- "      to (@bg_color)); "
+ " background-image: linear-gradient(to bottom, white, @bg_color);"
  " border-radius: 10px 10px 0px 0px; "
  "}";
 
