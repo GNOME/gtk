@@ -1,10 +1,8 @@
 
 #include<gtk/gtk.h>
 
-#define BOX_SHADOW "box-shadow: 10px 20px 5px 40px #0f0;"
-
-#define COLOR " #0f0;"
-/*#define COLOR " red;"*/
+/*#define COLOR " #0f0;"*/
+#define COLOR " red;"
 
 static const char *css =
 ".one {"
@@ -29,10 +27,10 @@ static const char *css =
 ".four {"
 "  all: unset;"
 "  min-width: 100px;"
-"  min-height:100px;"
+"  min-height: 100px;"
 "  box-shadow: 10px 20px 5px 40px" COLOR
 "  border-radius: 30px; "
-"margin-right: 50px;"
+"  margin-right: 50px;"
 "}"
 ".five {"
 "  all: unset;"
@@ -41,20 +39,21 @@ static const char *css =
 "  border-radius: 30px; "
 "  box-shadow: 10px 20px 0px 40px" COLOR
 "}"
-#if 0
+/* This is the default CSD drop shadow from (current) Adwaita */
 ".b1 {"
 "  all: unset;"
 "  min-width: 100px;"
 "  min-height:100px;"
-"  border-top: 30px solid black;"
-"  border-radius: 0px;"
+"  border-radius: 7px 7px 0px 0px;"
+"  box-shadow: 0px 3px 9px 1px rgba(0, 0, 0, 0.5);"
 "}"
+#if 0
 ".b2 {"
 "  all: unset;"
 "  min-width: 100px;"
 "  min-height:100px;"
-"  border-bottom: 30px solid black;"
-"  border-radius: 0px;"
+"  border-radius: 7px 7px 0 0;"
+"  box-shadow: 0 0 0 30px green;"
 "}"
 ".b3 {"
 "  all: unset;"
@@ -71,6 +70,7 @@ static const char *css =
 "  border-radius: 40px;"
 "}"
 #endif
+""
 ;
 
 
@@ -125,10 +125,10 @@ main (int argc, char **argv)
 
 
   /* Bottom */
-  /*w = gtk_button_new ();*/
-  /*gtk_widget_set_valign (w, GTK_ALIGN_CENTER);*/
-  /*gtk_style_context_add_class (gtk_widget_get_style_context (w), "b1");*/
-  /*gtk_container_add (GTK_CONTAINER (bottom), w);*/
+  w = gtk_button_new ();
+  gtk_widget_set_valign (w, GTK_ALIGN_CENTER);
+  gtk_style_context_add_class (gtk_widget_get_style_context (w), "b1");
+  gtk_container_add (GTK_CONTAINER (bottom), w);
 
   /*w = gtk_button_new ();*/
   /*gtk_widget_set_valign (w, GTK_ALIGN_CENTER);*/
