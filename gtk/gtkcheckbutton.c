@@ -562,8 +562,10 @@ gtk_check_button_set_inconsistent (GtkCheckButton *check_button,
   g_return_if_fail (GTK_IS_CHECK_BUTTON (check_button));
 
   inconsistent = !!inconsistent;
-  if (inconsistent != priv->inconsistent)
+  if (priv->inconsistent != inconsistent)
     {
+      priv->inconsistent = inconsistent;
+
       if (inconsistent)
         gtk_widget_set_state_flags (GTK_WIDGET (check_button), GTK_STATE_FLAG_INCONSISTENT, FALSE);
       else
