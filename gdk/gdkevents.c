@@ -471,11 +471,9 @@ gdk_event_handler_set (GdkEventFunc   func,
  * 
  * Creates a new event of the given type. All fields are set to 0.
  * 
- * Returns: a newly-allocated #GdkEvent. The returned #GdkEvent 
- * should be freed with gdk_event_free().
- *
+ * Returns: a newly-allocated #GdkEvent. Free with g_object_unref()
  * Since: 2.2
- **/
+ */
 GdkEvent*
 gdk_event_new (GdkEventType type)
 {
@@ -572,7 +570,7 @@ gdk_event_set_pointer_emulated (GdkEvent *event,
 
 /**
  * gdk_event_get_pointer_emulated:
- * #event: a #GdkEvent
+ * @event: a #GdkEvent
  *
  * Returns whether this event is an 'emulated' pointer event (typically
  * from a touch event), as opposed to a real one.
@@ -596,12 +594,11 @@ copy_time_coord (const GdkTimeCoord *coord)
 /**
  * gdk_event_copy:
  * @event: a #GdkEvent
- * 
+ *
  * Copies a #GdkEvent, copying or incrementing the reference count of the
  * resources associated with it (e.g. #GdkWindow’s and strings).
- * 
- * Returns: (transfer full): a copy of @event. The returned #GdkEvent should
- *   be freed with gdk_event_free().
+ *
+ * Returns: (transfer full): a copy of @event. Free with g_object_unref()
  */
 GdkEvent*
 gdk_event_copy (const GdkEvent *event)
@@ -694,12 +691,11 @@ gdk_event_copy (const GdkEvent *event)
 /**
  * gdk_event_free:
  * @event:  a #GdkEvent.
- * 
+ *
  * Frees a #GdkEvent, freeing or decrementing any resources associated with it.
- * Note that this function should only be called with events returned from
- * functions such as gdk_event_peek(), gdk_event_get(), gdk_event_copy()
- * and gdk_event_new().
- **/
+ *
+ * This is equivalent to g_object_unref().
+ */
 void
 gdk_event_free (GdkEvent *event)
 {
@@ -866,17 +862,18 @@ gdk_event_get_time (const GdkEvent *event)
  * gdk_event_get_state:
  * @event: (allow-none): a #GdkEvent or %NULL
  * @state: (out): return location for state
- * 
- * If the event contains a “state” field, puts that field in @state. Otherwise
- * stores an empty state (0). Returns %TRUE if there was a state field
- * in the event. @event may be %NULL, in which case it’s treated
+ *
+ * If the event contains a “state” field, puts that field in @state.
+ *
+ * Otherwise stores an empty state (0).
+ * @event may be %NULL, in which case it’s treated
  * as if the event had no state field.
- * 
- * Returns: %TRUE if there was a state field in the event 
+ *
+ * Returns: %TRUE if there was a state field in the event
  **/
 gboolean
-gdk_event_get_state (const GdkEvent        *event,
-                     GdkModifierType       *state)
+gdk_event_get_state (const GdkEvent  *event,
+                     GdkModifierType *state)
 {
   g_return_val_if_fail (state != NULL, FALSE);
   
@@ -948,9 +945,9 @@ gdk_event_get_state (const GdkEvent        *event,
  * @event: a #GdkEvent
  * @x_win: (out) (optional): location to put event window x coordinate
  * @y_win: (out) (optional): location to put event window y coordinate
- * 
+ *
  * Extract the event window relative x/y coordinates from an event.
- * 
+ *
  * Returns: %TRUE if the event delivered event window coordinates
  **/
 gboolean
@@ -960,7 +957,7 @@ gdk_event_get_coords (const GdkEvent *event,
 {
   gdouble x = 0, y = 0;
   gboolean fetched = TRUE;
-  
+
   g_return_val_if_fail (event != NULL, FALSE);
 
   switch ((guint) event->any.type)
@@ -1020,9 +1017,9 @@ gdk_event_get_coords (const GdkEvent *event,
  * @event: a #GdkEvent
  * @x_root: (out) (optional): location to put root window x coordinate
  * @y_root: (out) (optional): location to put root window y coordinate
- * 
+ *
  * Extract the root window relative x/y coordinates from an event.
- * 
+ *
  * Returns: %TRUE if the event delivered root window coordinates
  **/
 gboolean
@@ -1303,8 +1300,10 @@ gdk_event_get_keycode (const GdkEvent *event,
 /**
  * gdk_event_get_key_group:
  * @event: a #GdkEvent
- * @group: (out):
- * 
+ * @group: (out): return location for the key group
+ *
+ * Extracts the key group from an event.
+ *
  * Returns: %TRUE on success, otherwise %FALSE
  **/
 gboolean
@@ -1331,8 +1330,11 @@ gdk_event_get_key_group (const GdkEvent *event,
 /**
  * gdk_event_get_string:
  * @event: a #GdkEvent
- * @string: (out) (transfer none):
- * 
+ * @string: (out) (transfer none): return location for the string
+ *
+ * Extracts a string from an event. The string is an
+ * approximation of the keyval in a key event.
+ *
  * Returns: %TRUE on success, otherwise %FALSE
  **/
 gboolean
@@ -1359,8 +1361,11 @@ gdk_event_get_string (const GdkEvent  *event,
 /**
  * gdk_event_get_key_is_modifier:
  * @event: a #GdkEvent
- * @is_modifier: (out):
- * 
+ * @is_modifier: (out): return location for the value
+ *
+ * Extracts whether the event is a key event for
+ * a modifier key.
+ *
  * Returns: %TRUE on success, otherwise %FALSE
  **/
 gboolean
@@ -1494,10 +1499,10 @@ gdk_event_is_scroll_stop_event (const GdkEvent *event)
  * @event: a #GdkEvent
  * @axis_use: the axis use to look for
  * @value: (out): location to store the value found
- * 
+ *
  * Extract the axis value for a particular axis use from
  * an event structure.
- * 
+ *
  * Returns: %TRUE if the specified axis was found, otherwise %FALSE
  **/
 gboolean
@@ -1508,11 +1513,11 @@ gdk_event_get_axis (const GdkEvent *event,
   gdouble *axes;
 
   g_return_val_if_fail (event != NULL, FALSE);
-  
+
   if (axis_use == GDK_AXIS_X || axis_use == GDK_AXIS_Y)
     {
       gdouble x, y;
-      
+
       switch ((guint) event->any.type)
 	{
         case GDK_MOTION_NOTIFY:
@@ -1840,6 +1845,13 @@ gdk_events_get_center (GdkEvent *event1,
   return TRUE;
 }
 
+/**
+ * gdk_event_set_display:
+ * @event: a #GdkEvent
+ * @display: a #GdkDisplay
+ *
+ * Sets the display that an event is associated with.
+ */
 void
 gdk_event_set_display (GdkEvent   *event,
                        GdkDisplay *display)
@@ -2103,8 +2115,10 @@ gdk_event_is_sent (const GdkEvent *event)
 /**
  * gdk_event_get_drag_context:
  * @event: a #GdkEvent
- * @context: (out) (transfer none):
- * 
+ * @context: (out) (transfer none): return location for the drag context
+ *
+ * Gets the drag context from a DND event.
+ *
  * Returns: %TRUE on success, otherwise %FALSE
  **/
 gboolean
@@ -2129,8 +2143,10 @@ gdk_event_get_drag_context (const GdkEvent  *event,
 /**
  * gdk_event_get_crossing_mode:
  * @event: a #GdkEvent
- * @mode: (out):
- * 
+ * @mode: (out): return location for the crossing mode
+ *
+ * Extracts the crossing mode from an event.
+ *
  * Returns: %TRUE on success, otherwise %FALSE
  **/
 gboolean
@@ -2153,8 +2169,10 @@ gdk_event_get_crossing_mode (const GdkEvent  *event,
 /**
  * gdk_event_get_crossing_detail:
  * @event: a #GdkEvent
- * @detail: (out):
- * 
+ * @detail: (out): return location for the crossing detail
+ *
+ * Extracts the crossing detail from an event.
+ *
  * Returns: %TRUE on success, otherwise %FALSE
  **/
 gboolean
@@ -2177,8 +2195,10 @@ gdk_event_get_crossing_detail (const GdkEvent *event,
 /**
  * gdk_event_get_touchpad_gesture_phase:
  * @event: a #GdkEvent
- * @phase: (out):
- * 
+ * @phase: (out): Return location for the gesture phase
+ *
+ * Extracts the touchpad gesture phase from a touchpad event.
+ *
  * Returns: %TRUE on success, otherwise %FALSE
  **/
 gboolean
@@ -2205,8 +2225,10 @@ gdk_event_get_touchpad_gesture_phase (const GdkEvent          *event,
 /**
  * gdk_event_get_touchpad_gesture_n_fingers:
  * @event: a #GdkEvent
- * @n_fingers: (out):
- * 
+ * @n_fingers: (out): return location for the number of fingers
+ *
+ * Extracts the number of fingers from a touchpad event.
+ *
  * Returns: %TRUE on success, otherwise %FALSE
  **/
 gboolean
@@ -2233,9 +2255,11 @@ gdk_event_get_touchpad_gesture_n_fingers (const GdkEvent *event,
 /**
  * gdk_event_get_touchpad_deltas:
  * @event: a #GdkEvent
- * @dx: (out):
- * @dy: (out):
- * 
+ * @dx: (out): return location for x
+ * @dy: (out): return location for y
+ *
+ * Extracts delta information from a touchpad event.
+ *
  * Returns: %TRUE on success, otherwise %FALSE
  **/
 gboolean
@@ -2265,8 +2289,10 @@ gdk_event_get_touchpad_deltas (const GdkEvent *event,
 /**
  * gdk_event_get_touchpad_angle_delta:
  * @event: a #GdkEvent
- * @delta: (out):
- * 
+ * @delta: (out): Return location for angle
+ *
+ * Extracts the angle from a touchpad event.
+ *
  * Returns: %TRUE on success, otherwise %FALSE
  **/
 gboolean
@@ -2288,8 +2314,10 @@ gdk_event_get_touchpad_angle_delta (const GdkEvent *event,
 /**
  * gdk_event_get_touchpad_scale:
  * @event: a #GdkEvent
- * @scale: (out):
- * 
+ * @scale: (out): Return location for scale
+ *
+ * Extracts the scale from a touchpad event.
+ *
  * Returns: %TRUE on success, otherwise %FALSE
  **/
 gboolean
@@ -2311,8 +2339,10 @@ gdk_event_get_touchpad_scale (const GdkEvent *event,
 /**
  * gdk_event_get_touch_emulating_pointer:
  * @event: a #GdkEvent
- * @emulating: (out):
- * 
+ * @emulating: (out): Return location for information
+ *
+ * Extracts whether a touch event is emulating a pointer event.
+ *
  * Returns: %TRUE on success, otherwise %FALSE
  **/
 gboolean
@@ -2336,8 +2366,10 @@ gdk_event_get_touch_emulating_pointer (const GdkEvent *event,
 /**
  * gdk_event_get_grab_window:
  * @event: a #GdkEvent
- * @window: (out) (transfer none):
- * 
+ * @window: (out) (transfer none): Return location for the grab window
+ *
+ * Extracts the grab window from a grab broken event.
+ *
  * Returns: %TRUE on success, otherwise %FALSE
  **/
 gboolean
@@ -2359,8 +2391,10 @@ gdk_event_get_grab_window (const GdkEvent  *event,
 /**
  * gdk_event_get_focus_in:
  * @event: a #GdkEvent
- * @focus_in: (out):
- * 
+ * @focus_in: (out): return location for focus direction
+ *
+ * Extracts whether this is a focus-in or focus-out event.
+ *
  * Returns: %TRUE on success, otherwise %FALSE
  **/
 gboolean
@@ -2382,9 +2416,11 @@ gdk_event_get_focus_in (const GdkEvent *event,
 /**
  * gdk_event_get_pad_group_mode:
  * @event: a #GdkEvent
- * @group: (out):
- * @mode: (out):
- * 
+ * @group: (out): return location for the group
+ * @mode: (out): return location for the mode
+ *
+ * Extracts group and mode information from a pad event.
+ *
  * Returns: %TRUE on success, otherwise %FALSE
  **/
 gboolean
@@ -2422,8 +2458,11 @@ gdk_event_get_pad_group_mode (const GdkEvent *event,
 /**
  * gdk_event_get_pad_button:
  * @event: a #GdkEvent
- * @button: (out):
- * 
+ * @button: (out): Return location for the button
+ *
+ * Extracts information about the pressed button from
+ * a pad event.
+ *
  * Returns: %TRUE on success, otherwise %FALSE
  **/
 gboolean
@@ -2446,9 +2485,11 @@ gdk_event_get_pad_button (const GdkEvent *event,
 /**
  * gdk_event_get_pad_axis_value:
  * @event: a #GdkEvent
- * @index: (out):
- * @value: (out):
- * 
+ * @index: (out): Return location for the axis index
+ * @value: (out): Return location for the axis value
+ *
+ * Extracts the information from a pad event.
+ *
  * Returns: %TRUE on success, otherwise %FALSE
  **/
 gboolean
@@ -2475,7 +2516,9 @@ gdk_event_get_pad_axis_value (const GdkEvent *event,
  * @event: a #GdkEvent
  * @axes: (transfer none) (out) (array length=n_axes): the array of values for all axes
  * @n_axes: (out): the length of array
- * 
+ *
+ * Extracts all axis values from an event.
+ *
  * Returns: %TRUE on success, otherwise %FALSE
  **/
 gboolean
