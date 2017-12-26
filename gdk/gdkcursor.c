@@ -48,7 +48,9 @@
  *
  * Cursors by themselves are not very interesting, they must be
  * bound to a window for users to see them. This is done with
- * gdk_window_set_cursor(). 
+ * gdk_window_set_cursor() or gdk_window_set_device_cursor().
+ * Applications will typically use higher-level GTK+ functions such
+ * as gtk_widget_set_cursor() instead.
  *
  * Cursors are not bound to a given #GdkDisplay, so they can be shared.
  * However, the appearance of cursors may vary when used on different
@@ -57,7 +59,7 @@
  * There are multiple ways to create cursors. The platform's own cursors
  * can be created with gdk_cursor_new_from_name(). That function lists
  * the commonly available names that are shared with the CSS specification.
- * Other names may be available, depending on the platform in use.  
+ * Other names may be available, depending on the platform in use.
  * Another option to create a cursor is to use gdk_cursor_new_from_texture()
  * and provide an image to use for the cursor. Depending on the #GdkDisplay
  * in use, the type of supported images may be limited. See
