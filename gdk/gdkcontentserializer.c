@@ -39,6 +39,12 @@
  * data transfers.
  */
 
+/**
+ * GdkContentSerializer:
+ *
+ * Contains only private fields and should not be directly accessed.
+ */
+
 typedef struct _Serializer Serializer;
 
 struct _Serializer 
@@ -369,6 +375,17 @@ gdk_content_serializer_return_error (GdkContentSerializer *serializer,
   gdk_content_serializer_return_success (serializer);
 }
 
+/**
+ * gdk_content_register_serializer:
+ * @type: the type of objects that the function can serialize
+ * @mime_type: the mime type to serialize to
+ * @serialize: the callback
+ * @data: data that @serialize can access
+ * @notify: destroy notify for @data
+ *
+ * Registers a function to convert objects of the given @type to
+ * a serialized representation with the given mime type.
+ */
 void
 gdk_content_register_serializer (GType                    type,
                                  const char              *mime_type,
@@ -418,6 +435,15 @@ lookup_serializer (const char *mime_type,
   return NULL;
 }
 
+/**
+ * gdk_content_formats_union_serialize_gtypes:
+ * @formats: a #GdkContentFormats
+ *
+ * Add GTypes for the mime types in @formats for which serializers are
+ * registered.
+ *
+ * Return: a new #GdkContentFormats
+ */
 GdkContentFormats *
 gdk_content_formats_union_serialize_gtypes (GdkContentFormats *formats)
 {
@@ -444,6 +470,15 @@ gdk_content_formats_union_serialize_gtypes (GdkContentFormats *formats)
   return gdk_content_formats_builder_free (builder);
 }
 
+/**
+ * gdk_content_formats_union_serialize_mime_types:
+ * @formats: a #GdkContentFormats
+ *
+ * Add mime types for GTypes in @formats for which serializers are
+ * registered.
+ *
+ * Return: a new #GdkContentFormats
+ */
 GdkContentFormats *
 gdk_content_formats_union_serialize_mime_types (GdkContentFormats *formats)
 {
@@ -481,6 +516,20 @@ serialize_not_found (GdkContentSerializer *serializer)
   gdk_content_serializer_return_error (serializer, error);
 }
 
+/**
+ * gdk_content_serialize_async:
+ * @stream: a #GOutputStream to write the serialized content to
+ * @mime_type: the mime type to serialize to
+ * @value: the content to serialize
+ * @io_priority: the io priority of the operation
+ * @cancellable: (nullable): optional #GCancellable object
+ * @callback: (scope async): callback to call when the operation is done
+ * @user_data: (closure): data to pass to the callback function
+ *
+ * Serialize content and write it to the given output stream, asynchronously.
+ * When the operation is finished, @callback will be called. You can then
+ * call gdk_content_serialize_finish() to get the result of the operation.
+ */
 void
 gdk_content_serialize_async (GOutputStream       *stream,
                              const char          *mime_type,
@@ -509,6 +558,16 @@ gdk_content_serialize_async (GOutputStream       *stream,
                               user_data);
 }
 
+/**
+ * gdk_content_serialize_finish:
+ * @result: the #GAsyncResult
+ * @error: return location for an error
+ *
+ * Finishes a content serialization operation.
+ *
+ * Returns: %TRUE if the operation was successful, %FALSE if an
+ *   error occurred. In this case, @error is set
+ */
 gboolean
 gdk_content_serialize_finish (GAsyncResult  *result,
                               GError       **error)

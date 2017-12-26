@@ -30,11 +30,11 @@
 /**
  * SECTION:gdkcontentdeserializer
  * @Short_description: Deserialize content for transfer
- * @Title: GdkContentSerializer
- * @See_also: #GdkContentDeserializer
+ * @Title: GdkContentDeserializer
+ * @See_also: #GdkContentSerializer
  *
- * A GdkContentDeserializer is used to deserialize content for inter-application
- * data transfers.
+ * A GdkContentDeserializer is used to deserialize content received via
+ * inter-application data transfers.
  */
 
 typedef struct _Deserializer Deserializer;
@@ -366,6 +366,17 @@ gdk_content_deserializer_return_error (GdkContentDeserializer *deserializer,
   gdk_content_deserializer_return_success (deserializer);
 }
 
+/**
+ * gdk_content_register_deserializer:
+ * @mime_type: the mime type which the function can deserialize from
+ * @type: the type of objects that the function creates
+ * @deserialize: the callback
+ * @data: data that @deserialize can access
+ * @notify: destroy notify for @data
+ *
+ * Registers a function to create objects of a given @type from
+ * a serialized representation with the given mime type.
+ */
 void
 gdk_content_register_deserializer (const char                *mime_type,
                                    GType                      type,
@@ -415,6 +426,15 @@ lookup_deserializer (const char *mime_type,
   return NULL;
 }
 
+/**
+ * gdk_content_formats_union_deserialize_gtypes:
+ * @formats: a #GdkContentFormats
+ *
+ * Add GTypes for mime types in @formats for which deserializers are
+ * registered.
+ *
+ * Return: a new #GdkContentFormats
+ */
 GdkContentFormats *
 gdk_content_formats_union_deserialize_gtypes (GdkContentFormats *formats)
 {
@@ -441,6 +461,15 @@ gdk_content_formats_union_deserialize_gtypes (GdkContentFormats *formats)
   return gdk_content_formats_builder_free (builder);
 }
 
+/**
+ * gdk_content_formats_union_deserialize_mime_types:
+ * @formats: a #GdkContentFormats
+ *
+ * Add mime types for GTypes in @formats for which deserializers are
+ * registered.
+ *
+ * Return: a new #GdkContentFormats
+ */
 GdkContentFormats *
 gdk_content_formats_union_deserialize_mime_types (GdkContentFormats *formats)
 {
@@ -478,6 +507,20 @@ deserialize_not_found (GdkContentDeserializer *deserializer)
   gdk_content_deserializer_return_error (deserializer, error);
 }
 
+/**
+ * gdk_content_deserialize_async:
+ * @stream: a #GInputStream to read the serialized content from
+ * @mime_type: the mime type to deserialize from
+ * @type: the GType to deserialize from
+ * @io_priority: the io priority of the operation
+ * @cancellable: (nullable): optional #GCancellable object
+ * @callback: (scope async): callback to call when the operation is done
+ * @user_data: (closure): data to pass to the callback function
+ *
+ * Read content from the given input stream and deserialize it, asynchronously.
+ * When the operation is finished, @callback will be called. You can then
+ * call gdk_content_deserialize_finish() to get the result of the operation.
+ */
 void
 gdk_content_deserialize_async (GInputStream        *stream,
                                const char          *mime_type,
@@ -506,6 +549,17 @@ gdk_content_deserialize_async (GInputStream        *stream,
                                 user_data);
 }
 
+/**
+ * gdk_content_deserialize_finish:
+ * @result: the #GAsyncResult
+ * @value: return location for the result of the operation
+ * @error: return location for an error
+ *
+ * Finishes a content deserialization operation.
+ *
+ * Returns: %TRUE if the operation was successful. In this case, @value is set.
+ *          %FALSE if an error occurred. In this case, @error is set
+ */
 gboolean
 gdk_content_deserialize_finish (GAsyncResult  *result,
                                 GValue        *value,
