@@ -319,6 +319,16 @@ gdk_display_class_init (GdkDisplayClass *class)
                   g_cclosure_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1, GDK_TYPE_MONITOR);
 
+  /**
+   * GdkDisplay::setting-changed:
+   * @display: the object on which the signal is emitted
+   * @setting: the name of the setting that changed
+   *
+   * The ::setting-changed signal is emitted whenever a setting
+   * changes its value.
+   *
+   * Since: 3.94
+   */
   signals[SETTING_CHANGED] =
     g_signal_new (g_intern_static_string ("setting-changed"),
 		  G_OBJECT_CLASS_TYPE (object_class),
