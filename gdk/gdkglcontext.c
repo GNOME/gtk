@@ -21,10 +21,10 @@
 /**
  * SECTION:gdkglcontext
  * @Title: GdkGLContext
- * @Short_description: OpenGL context
+ * @Short_description: OpenGL draw context
  *
  * #GdkGLContext is an object representing the platform-specific
- * OpenGL drawing context.
+ * OpenGL draw context.
  *
  * #GdkGLContexts are created for a #GdkWindow using
  * gdk_window_create_gl_context(), and the context will match the

@@ -31,16 +31,16 @@
 /**
  * SECTION:gdkvulkancontext
  * @Title: GdkVulkanContext
- * @Short_description: Vulkan context
+ * @Short_description: Vulkan draw context
  *
  * #GdkVulkanContext is an object representing the platform-specific
- * Vulkan drawing context.
+ * Vulkan draw context.
  *
  * #GdkVulkanContexts are created for a #GdkWindow using
  * gdk_window_create_vulkan_context(), and the context will match the
  * the characteristics of the window.
  *
- * Support for #GdkGLContext is platform-specific, context creation
+ * Support for #GdkVulkanContext is platform-specific, context creation
  * can fail, returning %NULL context.
  */
 

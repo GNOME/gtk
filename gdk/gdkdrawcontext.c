@@ -28,7 +28,7 @@
 /**
  * SECTION:gdkdrawcontext
  * @Title: GdkDrawContext
- * @Short_description: Drawing context base class
+ * @Short_description: Base class for draw contexts
  *
  * #GdkDrawContext is the base object used by contexts implementing different
  * rendering methods, such as #GdkGLContext or #GdkVulkanContext. It provides
