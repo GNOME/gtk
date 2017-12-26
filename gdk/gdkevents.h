@@ -562,8 +562,6 @@ void       gdk_event_set_source_device  (GdkEvent        *event,
                                          GdkDevice       *device);
 GDK_AVAILABLE_IN_ALL
 GdkDevice* gdk_event_get_source_device  (const GdkEvent  *event);
-GDK_AVAILABLE_IN_ALL
-void       gdk_event_request_motions    (const GdkEventMotion *event);
 GDK_AVAILABLE_IN_3_4
 gboolean   gdk_event_triggers_context_menu (const GdkEvent *event);
 
