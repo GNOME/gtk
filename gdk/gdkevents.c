@@ -45,9 +45,8 @@
  * system.
  *
  * In GTK+ applications the events are handled automatically in
- * gtk_main_do_event() and passed on to the appropriate widgets, so these
- * functions are rarely needed. Though some of the fields in the
- * [Event Structures][gdk3-Event-Structures] are useful.
+ * gtk_main_do_event() and passed on to the appropriate widgets,
+ * so these functions are rarely needed.
  */
 
 

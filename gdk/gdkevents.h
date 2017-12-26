@@ -38,18 +38,6 @@
 G_BEGIN_DECLS
 
 
-/**
- * SECTION:event_structs
- * @Short_description: Data structures specific to each type of event
- * @Title: Event Structures
- *
- * The event structures contain data specific to each type of event in GDK.
- *
- * > A common mistake is to forget to set the event mask of a widget so that
- * > the required events are received.
- */
-
-
 #define GDK_TYPE_EVENT          (gdk_event_get_type ())
 #define GDK_TYPE_EVENT_SEQUENCE (gdk_event_sequence_get_type ())
 
@@ -337,9 +325,6 @@ typedef enum
  * %GDK_TOUCHPAD_GESTURE_PHASE_CANCEL, this should be used as a hint
  * to undo any visible/permanent changes that were done throughout the
  * progress of the gesture.
- *
- * See also #GdkEventTouchpadSwipe and #GdkEventTouchpadPinch.
- *
  */
 typedef enum
 {
@@ -356,9 +341,9 @@ typedef enum
  * @GDK_SCROLL_LEFT: the window is scrolled to the left.
  * @GDK_SCROLL_RIGHT: the window is scrolled to the right.
  * @GDK_SCROLL_SMOOTH: the scrolling is determined by the delta values
- *   in #GdkEventScroll. See gdk_event_get_scroll_deltas(). Since: 3.4
+ *   in scroll events. See gdk_event_get_scroll_deltas(). Since: 3.4
  *
- * Specifies the direction for #GdkEventScroll.
+ * Specifies the direction for scroll events.
  */
 typedef enum
 {
@@ -385,7 +370,7 @@ typedef enum
  *   common ancestor.
  * @GDK_NOTIFY_UNKNOWN: an unknown type of enter/leave event occurred.
  *
- * Specifies the kind of crossing for #GdkEventCrossing.
+ * Specifies the kind of crossing for enter and leave events.
  *
  * See the X11 protocol specification of LeaveNotify for
  * full details of crossing event generation.
@@ -417,7 +402,7 @@ typedef enum
  *   a mouse taking control of the pointer after a touch device), this event
  *   is synthetic as the pointer didn’t leave the window.
  *
- * Specifies the crossing mode for #GdkEventCrossing.
+ * Specifies the crossing mode for enter and leave events.
  */
 typedef enum
 {

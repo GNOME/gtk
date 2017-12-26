@@ -180,6 +180,7 @@ GdkGravity
 GdkAnchorHints
 GdkWindowEdge
 GdkWindowTypeHint
+GdkWindowState
 gdk_window_new_toplevel
 gdk_window_new_popup
 gdk_window_new_temp
@@ -346,6 +347,7 @@ GDK_TYPE_WINDOW_TYPE
 GDK_TYPE_WINDOW_TYPE_HINT
 GDK_TYPE_WM_DECORATION
 GDK_TYPE_WM_FUNCTION
+GDK_TYPE_WINDOW_STATE
 
 <SUBSECTION Private>
 gdk_window_get_type
@@ -640,8 +642,12 @@ gdk_seat_capabilities_get_type
 <SECTION>
 <TITLE>Events</TITLE>
 <FILE>events</FILE>
+GdkEvent
 GdkEventType
 GdkEventMask
+GdkScrollDirection
+GdkCrossingMode
+GdkNotifyType
 GDK_CURRENT_TIME
 GDK_PRIORITY_EVENTS
 GDK_PRIORITY_REDRAW
@@ -714,53 +720,13 @@ gdk_event_get_device_tool
 gdk_event_set_device_tool
 
 <SUBSECTION Standard>
+GDK_TYPE_EVENT
 GDK_TYPE_EVENT_MASK
 GDK_TYPE_EVENT_TYPE
-</SECTION>
-
-<SECTION>
-<TITLE>Event Structures</TITLE>
-<FILE>event_structs</FILE>
-GdkEvent
-
-<SUBSECTION>
-GdkEventAny
-GdkEventKey
-GdkEventButton
-GdkEventTouch
-GdkEventScroll
-GdkEventMotion
-GdkEventExpose
-GdkEventCrossing
-GdkEventFocus
-GdkEventConfigure
-GdkEventDND
-GdkEventProximity
-GdkEventGrabBroken
-GdkEventTouchpadSwipe
-GdkEventTouchpadPinch
-GdkEventPadButton
-GdkEventPadAxis
-GdkEventPadGroupMode
-
-<SUBSECTION>
-GdkScrollDirection
-GdkCrossingMode
-GdkNotifyType
-GdkWindowState
-
-<SUBSECTION Standard>
 GDK_TYPE_CROSSING_MODE
-GDK_TYPE_EVENT
-GDK_TYPE_NOTIFY_TYPE
-GDK_TYPE_PROPERTY_STATE
 GDK_TYPE_SCROLL_DIRECTION
-GDK_TYPE_WINDOW_STATE
-GDK_TYPE_OWNER_CHANGE
-
-<SUBSECTION Private>
+GDK_TYPE_NOTIFY_TYPE
 gdk_event_get_type
-gdk_owner_change_get_type
 </SECTION>
 
 <SECTION>
