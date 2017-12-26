@@ -425,6 +425,12 @@ gdk_clipboard_class_init (GdkClipboardClass *class)
                          G_PARAM_STATIC_STRINGS |
                          G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GdkClipboard::changed:
+   * @clipboard: the object on which the signal was emitted
+   *
+   * The ::changed signal is emitted when the clipboard changes ownership.
+   */
   signals[CHANGED] =
     g_signal_new ("changed",
                   G_TYPE_FROM_CLASS (class),

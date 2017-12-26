@@ -165,6 +165,14 @@ gdk_content_serializer_run (const char              *mime_type,
   serialize_func (serializer);
 }
 
+/**
+ * gdk_content_serializer_get_mime_type:
+ * @serializer: a #GdkContentSerializer
+ *
+ * Gets the mime type to serialize to.
+ *
+ * Returns: (transfer none): the mime type for the current operation
+ */
 const char *
 gdk_content_serializer_get_mime_type (GdkContentSerializer *serializer)
 {
@@ -173,6 +181,14 @@ gdk_content_serializer_get_mime_type (GdkContentSerializer *serializer)
   return serializer->mime_type;
 }
 
+/**
+ * gdk_content_serializer_get_gtype:
+ * @serializer: a #GdkContentSerializer
+ *
+ * Gets the GType to of the object to serialize.
+ *
+ * Returns: (transfer none): the GType for the current operation
+ */
 GType
 gdk_content_serializer_get_gtype (GdkContentSerializer *serializer)
 {
@@ -181,6 +197,14 @@ gdk_content_serializer_get_gtype (GdkContentSerializer *serializer)
   return G_VALUE_TYPE (&serializer->value);
 }
 
+/**
+ * gdk_content_serializer_get_value:
+ * @serializer: a #GdkContentSerializer
+ *
+ * Gets the #GValue to read the object to serialize from.
+ *
+ * Returns: (transfer none): the #GValue for the current operation
+ */
 const GValue *
 gdk_content_serializer_get_value (GdkContentSerializer *serializer)
 {
@@ -189,6 +213,14 @@ gdk_content_serializer_get_value (GdkContentSerializer *serializer)
   return &serializer->value;
 }
 
+/**
+ * gdk_content_serializer_get_output_stream:
+ * @serializer: a #GdkContentSerializer
+ *
+ * Gets the output stream that was passed to gdk_content_serialize_async().
+ *
+ * Returns: (transfer none): the output stream for the current operation
+ */
 GOutputStream *
 gdk_content_serializer_get_output_stream (GdkContentSerializer *serializer)
 {
@@ -197,6 +229,14 @@ gdk_content_serializer_get_output_stream (GdkContentSerializer *serializer)
   return serializer->stream;
 }
 
+/**
+ * gdk_content_serializer_get_priority:
+ * @serializer: a #GdkContentSerializer
+ *
+ * Gets the io priority that was passed to gdk_content_serialize_async().
+ *
+ * Returns: the io priority for the current operation
+ */
 int
 gdk_content_serializer_get_priority (GdkContentSerializer *serializer)
 {
@@ -205,6 +245,14 @@ gdk_content_serializer_get_priority (GdkContentSerializer *serializer)
   return serializer->priority;
 }
 
+/**
+ * gdk_content_serializer_get_cancellable:
+ * @serializer: a #GdkContentSerializer
+ *
+ * Gets the cancellable that was passed to gdk_content_serialize_async().
+ *
+ * Returns: (transfer none): the cancellable for the current operation
+ */
 GCancellable *
 gdk_content_serializer_get_cancellable (GdkContentSerializer *serializer)
 {
@@ -213,6 +261,14 @@ gdk_content_serializer_get_cancellable (GdkContentSerializer *serializer)
   return serializer->cancellable;
 }
 
+/**
+ * gdk_content_serializer_get_user_data:
+ * @serializer: a #GdkContentSerializer
+ *
+ * Gets the user data that was passed when the serializer was registered.
+ *
+ * Returns: (transfer none): the user data for this serializer
+ */
 gpointer
 gdk_content_serializer_get_user_data (GdkContentSerializer *serializer)
 {
@@ -221,6 +277,14 @@ gdk_content_serializer_get_user_data (GdkContentSerializer *serializer)
   return serializer->user_data;
 }
 
+/**
+ * gdk_content_serializer_set_task_data:
+ * @serializer: a #GdkContentSerializer
+ * @data: data to associate with this operation
+ * @notify: destroy notify for @data
+ *
+ * Associate data with the current serialization operation.
+ */
 void
 gdk_content_serializer_set_task_data (GdkContentSerializer   *serializer,
                                       gpointer                data,
@@ -235,6 +299,14 @@ gdk_content_serializer_set_task_data (GdkContentSerializer   *serializer,
   serializer->task_notify = notify;
 }
 
+/**
+ * gdk_content_serializer_get_task_data:
+ * @serializer: a #GdkContentSerializer
+ *
+ * Gets the data that was associated with @serializer via gdk_content_serializer_set_task_data().
+ *
+ * Returns: (transfer none): the task data for @serializer
+ */
 gpointer
 gdk_content_serializer_get_task_data (GdkContentSerializer *serializer)
 {
@@ -256,6 +328,12 @@ gdk_content_serializer_emit_callback (gpointer data)
   return G_SOURCE_REMOVE;
 }
 
+/**
+ * gdk_content_serializer_return_success:
+ * @serializer: a #GdkContentSerializer
+ *
+ * Indicate that the serialization has been successfully completed.
+ */
 void
 gdk_content_serializer_return_success (GdkContentSerializer *serializer)
 {
@@ -270,6 +348,14 @@ gdk_content_serializer_return_success (GdkContentSerializer *serializer)
   /* NB: the idle will destroy our reference */
 }
 
+/**
+ * gdk_content_serializer_return_error:
+ * @serializer: a #GdkContentSerializer
+ * @error: a #GError
+ *
+ * Indicate that the serialization has ended with an error.
+ * This function consumes @error.
+ */
 void
 gdk_content_serializer_return_error (GdkContentSerializer *serializer,
                                      GError               *error)

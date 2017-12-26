@@ -162,6 +162,14 @@ gdk_content_deserializer_run (const char                *mime_type,
   deserialize_func (deserializer);
 }
 
+/**
+ * gdk_content_deserializer_get_mime_type:
+ * @deserializer: a #GdkContentDeserializer
+ *
+ * Gets the mime type to deserialize from.
+ *
+ * Returns: (transfer none): the mime type for the current operation
+ */
 const char *
 gdk_content_deserializer_get_mime_type (GdkContentDeserializer *deserializer)
 {
@@ -170,6 +178,14 @@ gdk_content_deserializer_get_mime_type (GdkContentDeserializer *deserializer)
   return deserializer->mime_type;
 }
 
+/**
+ * gdk_content_deserializer_get_gtype:
+ * @deserializer: a #GdkContentDeserializer
+ *
+ * Gets the GType to create an instance of.
+ *
+ * Returns: (transfer none): the GType for the current operation
+ */
 GType
 gdk_content_deserializer_get_gtype (GdkContentDeserializer *deserializer)
 {
@@ -178,6 +194,14 @@ gdk_content_deserializer_get_gtype (GdkContentDeserializer *deserializer)
   return G_VALUE_TYPE (&deserializer->value);
 }
 
+/**
+ * gdk_content_deserializer_get_value:
+ * @deserializer: a #GdkContentDeserializer
+ *
+ * Gets the #GValue to store the deserialized object in.
+ *
+ * Returns: (transfer none): the #GValue for the current operation
+ */
 GValue *
 gdk_content_deserializer_get_value (GdkContentDeserializer *deserializer)
 {
@@ -186,6 +210,14 @@ gdk_content_deserializer_get_value (GdkContentDeserializer *deserializer)
   return &deserializer->value;
 }
 
+/**
+ * gdk_content_deserializer_get_input_stream:
+ * @deserializer: a #GdkContentDeserializer
+ *
+ * Gets the input stream that was passed to gdk_content_deserialize_async().
+ *
+ * Returns: (transfer none): the input stream for the current operation
+ */
 GInputStream *
 gdk_content_deserializer_get_input_stream (GdkContentDeserializer *deserializer)
 {
@@ -194,6 +226,14 @@ gdk_content_deserializer_get_input_stream (GdkContentDeserializer *deserializer)
   return deserializer->stream;
 }
 
+/**
+ * gdk_content_deserializer_get_priority:
+ * @deserializer: a #GdkContentDeserializer
+ *
+ * Gets the io priority that was passed to gdk_content_deserialize_async().
+ *
+ * Returns: the io priority for the current operation
+ */
 int
 gdk_content_deserializer_get_priority (GdkContentDeserializer *deserializer)
 {
@@ -202,6 +242,14 @@ gdk_content_deserializer_get_priority (GdkContentDeserializer *deserializer)
   return deserializer->priority;
 }
 
+/**
+ * gdk_content_deserializer_get_cancellable:
+ * @deserializer: a #GdkContentDeserializer
+ *
+ * Gets the cancellable that was passed to gdk_content_deserialize_async().
+ *
+ * Returns: (transfer none): the cancellable for the current operation
+ */
 GCancellable *
 gdk_content_deserializer_get_cancellable (GdkContentDeserializer *deserializer)
 {
@@ -210,6 +258,14 @@ gdk_content_deserializer_get_cancellable (GdkContentDeserializer *deserializer)
   return deserializer->cancellable;
 }
 
+/**
+ * gdk_content_deserializer_get_user_data:
+ * @deserializer: a #GdkContentDeserializer
+ *
+ * Gets the user data that was passed when the deserializer was registered.
+ *
+ * Returns: (transfer none): the user data for this deserializer
+ */
 gpointer
 gdk_content_deserializer_get_user_data (GdkContentDeserializer *deserializer)
 {
@@ -218,6 +274,14 @@ gdk_content_deserializer_get_user_data (GdkContentDeserializer *deserializer)
   return deserializer->user_data;
 }
 
+/**
+ * gdk_content_deserializer_set_task_data:
+ * @deserializer: a #GdkContentDeserializer
+ * @data: data to associate with this operation
+ * @notify: destroy notify for @data
+ *
+ * Associate data with the current deserialization operation.
+ */
 void
 gdk_content_deserializer_set_task_data (GdkContentDeserializer *deserializer,
                                         gpointer                data,
@@ -232,6 +296,14 @@ gdk_content_deserializer_set_task_data (GdkContentDeserializer *deserializer,
   deserializer->task_notify = notify;
 }
 
+/**
+ * gdk_content_deserializer_get_task_data:
+ * @deserializer: a #GdkContentDeserializer
+ *
+ * Gets the data that was associated with @deserializer via gdk_content_deserializer_set_task_data().
+ *
+ * Returns: (transfer none): the task data for @deserializer
+ */
 gpointer
 gdk_content_deserializer_get_task_data (GdkContentDeserializer *deserializer)
 {
@@ -253,6 +325,12 @@ gdk_content_deserializer_emit_callback (gpointer data)
   return G_SOURCE_REMOVE;
 }
 
+/**
+ * gdk_content_deserializer_return_success:
+ * @deserializer: a #GdkContentDeserializer
+ *
+ * Indicate that the deserialization has been successfully completed.
+ */
 void
 gdk_content_deserializer_return_success (GdkContentDeserializer *deserializer)
 {
@@ -267,6 +345,14 @@ gdk_content_deserializer_return_success (GdkContentDeserializer *deserializer)
   /* NB: the idle will destroy our reference */
 }
 
+/**
+ * gdk_content_deserializer_return_error:
+ * @deserializer: a #GdkContentDeserializer
+ * @error: a #GError
+ *
+ * Indicate that the deserialization has ended with an error.
+ * This function consumes @error.
+ */
 void
 gdk_content_deserializer_return_error (GdkContentDeserializer *deserializer,
                                        GError                 *error)
