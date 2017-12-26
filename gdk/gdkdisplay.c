@@ -1901,6 +1901,20 @@ gdk_display_emit_opened (GdkDisplay *display)
   g_signal_emit (display, signals[OPENED], 0);
 }
 
+/**
+ * gdk_display_get_setting:
+ * @display: a #GdkDisplay
+ * @name: the name of the setting
+ * @value: location to store the value of the setting
+ *
+ * Retrieves a desktop-wide setting such as double-click time
+ * for the @display.
+ *
+ * Returns: %TRUE if the setting existed and a value was stored
+ *   in @value, %FALSE otherwise
+ *
+ * Since: 3.94
+ */
 gboolean
 gdk_display_get_setting (GdkDisplay *display,
                          const char *name,
