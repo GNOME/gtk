@@ -66,12 +66,26 @@
 G_BEGIN_DECLS
 
 
-/* Type definitions for the basic structures.
+/**
+ * GdkPoint:
+ * @x: the x coordinate of the point
+ * @y: the y coordinate of the point
+ *
+ * Defines the x and y coordinates of a point.
  */
+struct _GdkPoint
+{
+  gint x;
+  gint y;
+};
 typedef struct _GdkPoint              GdkPoint;
 
 /**
  * GdkRectangle:
+ * @x: the x coordinate of the top left corner
+ * @y: the y coordinate of the top left corner
+ * @width: the width of the rectangle
+ * @height: the height of the rectangle
  *
  * Defines the position and size of a rectangle. It is identical to
  * #cairo_rectangle_int_t.
@@ -418,19 +432,6 @@ typedef enum
   GDK_TABLET_PAD_MASK           = 1 << 25,
   GDK_ALL_EVENTS_MASK           = 0x3FFFFFE
 } GdkEventMask;
-
-/**
- * GdkPoint:
- * @x: the x coordinate of the point.
- * @y: the y coordinate of the point.
- *
- * Defines the x and y coordinates of a point.
- */
-struct _GdkPoint
-{
-  gint x;
-  gint y;
-};
 
 /**
  * GdkGLError:

@@ -52,6 +52,12 @@
  * ]|
  */
 
+/**
+ * GdkAppLaunchContext:
+ *
+ * The GdkAppLaunchContext struct contains only private fields
+ * and should not be accessed directly.
+ */
 
 static void    gdk_app_launch_context_finalize    (GObject           *object);
 static gchar * gdk_app_launch_context_get_display (GAppLaunchContext *context,
