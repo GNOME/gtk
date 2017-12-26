@@ -42,6 +42,13 @@
  * relationships.
  */
 
+/**
+ * GdkDevice:
+ *
+ * The GdkDevice struct contains only private fields and
+ * should not be accessed directly.
+ */
+
 typedef struct _GdkAxisInfo GdkAxisInfo;
 
 struct _GdkAxisInfo

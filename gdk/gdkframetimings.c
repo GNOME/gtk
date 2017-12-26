@@ -34,6 +34,13 @@
  * quality metrics for the application’s display, such as latency and jitter.
  */
 
+/**
+ * GdkFrameTimings:
+ *
+ * The GdkFrameTimings struct contains only private fields and
+ * should not be accessed directly.
+ */
+
 G_DEFINE_BOXED_TYPE (GdkFrameTimings, gdk_frame_timings,
                      gdk_frame_timings_ref,
                      gdk_frame_timings_unref)

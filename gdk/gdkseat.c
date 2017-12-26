@@ -36,6 +36,13 @@
  * that belong to a user.
  */
 
+/**
+ * GdkSeat:
+ *
+ * The GdkSeat struct contains only private fields and
+ * should not be accessed directly.
+ */
+
 typedef struct _GdkSeatPrivate GdkSeatPrivate;
 
 struct _GdkSeatPrivate

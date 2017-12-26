@@ -55,6 +55,13 @@
  * which provides a #GInputStream object.
  */
 
+/**
+ * GdkClipboard:
+ *
+ * The GdkClipboard struct contains only private fields and should not be
+ * accessed directly.
+ */
+
 typedef struct _GdkClipboardPrivate GdkClipboardPrivate;
 
 struct _GdkClipboardPrivate

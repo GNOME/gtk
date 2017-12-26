@@ -85,6 +85,13 @@ static GList *contexts = NULL;
  */
 
 /**
+ * GdkDragContext:
+ *
+ * The GdkDragContext struct contains only private fields and
+ * should not be accessed directly.
+ */
+
+/**
  * gdk_drag_context_get_display:
  * @context: a #GdkDragContext
  *

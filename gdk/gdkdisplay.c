@@ -63,6 +63,12 @@
  * with gdk-display_get_monitor() and similar APIs.
  */
 
+/**
+ * GdkDisplay:
+ *
+ * The GdkDisplay struct contains only private field and should not
+ * be accessed directly.
+ */
 enum
 {
   PROP_0,

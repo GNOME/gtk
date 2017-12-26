@@ -32,6 +32,13 @@
  * #GdkDrawingContext is available since GDK 3.22
  */
 
+/**
+ * GdkDrawingContext:
+ *
+ * The GdkDrawingContext struct contains only private fields and should not
+ * be accessed directly.
+ */
+
 #include "config.h"
 
 #include <cairo-gobject.h>

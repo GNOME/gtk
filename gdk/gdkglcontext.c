@@ -76,6 +76,13 @@
  * that is currently set by calling gdk_gl_context_clear_current().
  */
 
+/**
+ * GdkGLContext:
+ *
+ * The GdkGLContext struct contains only private fields and
+ * should not be accessed directly.
+ */
+
 #include "config.h"
 
 #include "gdkglcontextprivate.h"

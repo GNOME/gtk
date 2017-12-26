@@ -38,6 +38,12 @@ G_BEGIN_DECLS
 
 typedef struct _GdkContentProviderClass GdkContentProviderClass;
 
+/**
+ * GdkContentProvider:
+ *
+ * Should not be directly accessed.
+ */
+
 struct _GdkContentProvider
 {
   GObject parent;

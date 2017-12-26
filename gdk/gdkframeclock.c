@@ -67,6 +67,13 @@
  * they will stay exactly synchronized.
  */
 
+/**
+ * GdkFrameClock:
+ *
+ * The GdkFrameClock struct contains only private fields and
+ * should not be accessed directly.
+ */
+
 enum {
   FLUSH_EVENTS,
   BEFORE_PAINT,

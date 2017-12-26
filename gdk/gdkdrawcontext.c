@@ -34,8 +34,18 @@
  * rendering methods, such as #GdkGLContext or #GdkVulkanContext. It provides
  * shared functionality between those contexts.
  *
- * You will always interact with one of those subclasses.
+ * You will always interact with one of those s.ubclasses.
+ *
+ * A GdkDrawContext is always associated with a single toplevel window.
  */
+
+/**
+ * GdkDrawContext:
+ *
+ * The GdkDrawContext struct contains only private fields and should not
+ * be accessed directly.
+ */
+
 typedef struct _GdkDrawContextPrivate GdkDrawContextPrivate;
 
 struct _GdkDrawContextPrivate {

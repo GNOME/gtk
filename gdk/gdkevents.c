@@ -49,6 +49,19 @@
  * so these functions are rarely needed.
  */
 
+/**
+ * GdkEvent:
+ *
+ * The GdkEvent struct contains only private fields and
+ * should not be accessed directly.
+ */
+
+/**
+ * GdkEventSequence:
+ *
+ * GdkEventSequence is an opaque type representing a sequence
+ * of related touch events.
+ */
 
 typedef struct _GdkIOClosure GdkIOClosure;
 

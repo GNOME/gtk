@@ -68,6 +68,12 @@
  * each #GtkButton has a #GdkWindow associated with it.
  */
 
+/**
+ * GdkWindow:
+ *
+ * The GdkWindow struct contains only private fields and
+ * should not be accessed directly.
+ */
 
 /* Historically a GdkWindow always matches a platform native window,
  * be it a toplevel window or a child window. In this setup the

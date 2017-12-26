@@ -109,6 +109,12 @@
  * ]|
  */
 
+/**
+ * GdkDisplayManager:
+ *
+ * The GdkDisplayManager struct contains only private fields and
+ * should not be accessed directly.
+ */
 
 enum {
   PROP_0,

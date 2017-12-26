@@ -42,6 +42,13 @@
  *
  */
 
+/**
+ * GdkDevicePad:
+ *
+ * The GdkDevicePad struct contains only private fields and
+ * should not be accessed directly.
+ */
+
 #include "config.h"
 
 #include "gdkdevicepad.h"
