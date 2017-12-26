@@ -44,6 +44,13 @@
  * can fail, returning %NULL context.
  */
 
+/**
+ * GdkVulkanContext:
+ *
+ * The GdkVulkanContext struct contains only private fields and should not
+ * be accessed directly.
+ */
+
 typedef struct _GdkVulkanContextPrivate GdkVulkanContextPrivate;
 
 struct _GdkVulkanContextPrivate {
@@ -515,6 +522,14 @@ gdk_vulkan_context_initable_init (GInitableIface *iface)
   iface->init = gdk_vulkan_context_real_init;
 }
 
+/**
+ * gdk_vulkan_context_get_instance:
+ * @context: a #GdkVulkanContext
+ *
+ * Gets the Vulkan instance that is associated with @context.
+ *
+ * Returns: (transfer none): the VkInstance
+ */
 VkInstance
 gdk_vulkan_context_get_instance (GdkVulkanContext *context)
 {
@@ -523,6 +538,14 @@ gdk_vulkan_context_get_instance (GdkVulkanContext *context)
   return gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context))->vk_instance;
 }
 
+/**
+ * gdk_vulkan_context_get_physical_device:
+ * @context: a #GdkVulkanContext
+ *
+ * Gets the Vulkan physical device that this context is using.
+ *
+ * Returns: (transfer none): the VkPhysicalDevice
+ */
 VkPhysicalDevice
 gdk_vulkan_context_get_physical_device (GdkVulkanContext *context)
 {
@@ -531,6 +554,14 @@ gdk_vulkan_context_get_physical_device (GdkVulkanContext *context)
   return gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context))->vk_physical_device;
 }
 
+/**
+ * gdk_vulkan_context_get_device:
+ * @context: a #GdkVulkanContext
+ *
+ * Gets the Vulkan device that this context is using.
+ *
+ * Returns: (transfer none): the VkDevice
+ */
 VkDevice
 gdk_vulkan_context_get_device (GdkVulkanContext *context)
 {
@@ -539,6 +570,14 @@ gdk_vulkan_context_get_device (GdkVulkanContext *context)
   return gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context))->vk_device;
 }
 
+/**
+ * gdk_vulkan_context_get_queue:
+ * @context: a #GdkVulkanContext
+ *
+ * Gets the Vulkan queue that this context is using.
+ *
+ * Returns: (transfer none): the VkQueue
+ */
 VkQueue
 gdk_vulkan_context_get_queue (GdkVulkanContext *context)
 {
@@ -547,6 +586,15 @@ gdk_vulkan_context_get_queue (GdkVulkanContext *context)
   return gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context))->vk_queue;
 }
 
+/**
+ * gdk_vulkan_context_get_queue_family_index:
+ * @context: a #GdkVulkanContext
+ *
+ * Gets the family index for the queue that this context is using.
+ * See vkGetPhysicalDeviceQueueFamilyProperties().
+ *
+ * Returns: the index
+ */
 uint32_t
 gdk_vulkan_context_get_queue_family_index (GdkVulkanContext *context)
 {
@@ -555,6 +603,14 @@ gdk_vulkan_context_get_queue_family_index (GdkVulkanContext *context)
   return gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context))->vk_queue_family_index;
 }
 
+/**
+ * gdk_vulkan_context_get_image_format:
+ * @context: a #GdkVulkanContext
+ *
+ * Gets the image format that this context is using.
+ *
+ * Returns: (transfer none): the VkFormat
+ */
 VkFormat
 gdk_vulkan_context_get_image_format (GdkVulkanContext *context)
 {
@@ -565,6 +621,14 @@ gdk_vulkan_context_get_image_format (GdkVulkanContext *context)
   return priv->image_format.format;
 }
 
+/**
+ * gdk_vulkan_context_get_n_images:
+ * @context: a #GdkVulkanContext
+ *
+ * Gets the number of images that this context is using in its swap chain.
+ *
+ * Returns: the number of images
+ */
 uint32_t
 gdk_vulkan_context_get_n_images (GdkVulkanContext *context)
 {
@@ -575,6 +639,15 @@ gdk_vulkan_context_get_n_images (GdkVulkanContext *context)
   return priv->n_images;
 }
 
+/**
+ * gdk_vulkan_context_get_image:
+ * @context: a #GdkVulkanContext
+ * @id: the index of the image to return
+ *
+ * Gets the image with index @id that this context is using.
+ *
+ * Returns: (transfer none): the VkImage
+ */
 VkImage
 gdk_vulkan_context_get_image (GdkVulkanContext *context,
                               guint             id)
@@ -587,6 +660,18 @@ gdk_vulkan_context_get_image (GdkVulkanContext *context,
   return priv->images[id];
 }
 
+/**
+ * gdk_vulkan_context_get_draw_index:
+ * @context: a #GdkVulkanContext
+ *
+ * Gets the index of the image that is currently being drawn.
+ *
+ * This function can only be used between gdk_window_begin_draw_frame() and
+ * gdk_window_end_draw_frame() calls for the toplevel window that the
+ * @context is associated with.
+ *
+ * Returns: the index of the images that is being drawn
+ */
 uint32_t
 gdk_vulkan_context_get_draw_index (GdkVulkanContext *context)
 {
@@ -598,6 +683,19 @@ gdk_vulkan_context_get_draw_index (GdkVulkanContext *context)
   return priv->draw_index;
 }
 
+/**
+ * gdk_vulkan_context_get_draw_semaphore:
+ * @context: a #GdkVulkanContext
+ *
+ * Gets the Vulkan semaphore that protects access to the image that is
+ * currently being drawn.
+ *
+ * This function can only be used between gdk_window_begin_draw_frame() and
+ * gdk_window_end_draw_frame() calls for the toplevel window that the
+ * @context is associated with.
+ *
+ * Returns: (transfer none): the VkSemaphore
+ */
 VkSemaphore
 gdk_vulkan_context_get_draw_semaphore (GdkVulkanContext *context)
 {
