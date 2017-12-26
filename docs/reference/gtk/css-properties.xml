@@ -569,7 +569,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>✓</entry>
               <entry></entry>
               <entry></entry>
-              <entry>Determines the size at which icons are displayed</entry>
+              <entry>Determines the size at which icons are displayed. See GtkIconSize</entry>
             </row>
           </tbody>
         </tgroup>

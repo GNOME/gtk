@@ -5300,6 +5300,7 @@ GtkShadowType
 GtkStateFlags
 GtkToolbarStyle
 GtkSortType
+GtkIconSize
 
 </SECTION>
 

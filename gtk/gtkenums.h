@@ -183,6 +183,10 @@ typedef enum
  *
  * Icon sizes default to being inherited. Where they cannot be
  * inherited, text size is the default.
+ *
+ * All widgets which use GtkIconSize set the normal-icons or large-icons
+ * style classes correspondingly, and let themes determine the actual size
+ * to be used with the -gtk-icon-size CSS property.
  */
 typedef enum
 {
