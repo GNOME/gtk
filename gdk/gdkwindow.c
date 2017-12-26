@@ -64,8 +64,7 @@
  * It’s a low-level object, used to implement high-level objects such as
  * #GtkWidget and #GtkWindow on the GTK+ level. A #GtkWindow is a toplevel
  * window, the thing a user might think of as a “window” with a titlebar
- * and so on; a #GtkWindow may contain many #GdkWindows. For example,
- * each #GtkButton has a #GdkWindow associated with it.
+ * and so on; a #GtkWindow may contain many sub-GdkWindows.
  */
 
 /**
