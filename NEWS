@@ -1,3 +1,169 @@
+Overview of Changes in GTK+ 3.93.0
+==================================
+
+Major changes:
+
+* GdkScreen has been removed. All screen-related APIs have equivalents
+  in GdkDisplay. This affects APIs in both GDK and GTK, for example,
+  the GtkWidget::screen-changed signal has been replaced by a new
+  ::display-changed signal. As part of this change, there is no longer
+  a GdkWindow representing the root window. The X11 backend has APIs
+  to get X screens and root windows.
+
+* GdkVisual has been removed.
+
+* GdkDeviceManager has been replaced by GdkSeat. 
+
+* Clipboard handling has been moved from GTK to GDK, and has been
+  modernized to provide an extensible, asynchronous, stream-based API.
+  This affects APIs in both GDK and GTK. GdkSelection has been replaced
+  by GdkContentFormats, GdkContentProvider, GdkContentSerializer and
+  GdkContentDeserializer. Selection-related events and APIs have
+  been removed.
+  This conversion is complete for copy-paste, the drag-and-drop APIs
+  are still in flux.
+
+* The GdkCursor API has been modernized. We no longer have the
+  GdkCursorType enumeration. Instead, can be created from names
+  or from GdkTextures. In GTK, we now have gtk_widget_set_cursor().
+
+* Settings and window-state changes have been converted from events
+  to signals on GdkDisplay and GdkWindow, respectively.
+
+* GdkEvent has been converted to an opaque GObject.
+
+* The GL renderer in GSK has been substantially completed, and is now
+  on par with the Vulkan renderer.
+
+* The use of GdkPixbuf in APIs has been reduced, and the GskTexture
+  object has been moved to GDK as GdkTexture, to take its place. This
+  change affects both GDK and GTK, for example the GtkAboutDialog::logo
+  property now accepts a GdkTexture. As part of these changes,
+  support for GdkPixbufAnimation has been dropped.
+
+* The handling of icon sizes has been changed. The GtkIconSize
+  enumeration allows selection normal or large icons now, and the
+  actual icon size is determined by the theme, using the -gtk-icon-size
+  CSS property. Among other things, this allows animating icon size changes.
+
+Smaller changes:
+
+* Build system:
+ - Meson can now be used to build GTK+ on Windows
+ - We install print backends again
+ - libepoxy 1.4 is required
+ - libcloudproviders 0.2.5 is required
+
+* GDK:
+ - gdk_keymap_get_for_display has been renamed to gdk_display_get_keymap
+ - We are no longer reading the GDK_DPI_SCALE environment variable
+ - The GdkX11Display::xevent signal has been added (to eventually replace event filters)
+ - gdk_pango_context_get_for_screen and gdk_pango_context_get have been dropped
+ - Default-display wrappers like gdk_set_double_click_time, gdk_beep, gdk_flush or
+   gdk_notify_startup_complete have been dropped
+ - gdk_display_set_program_class has been moved to the X11 backend
+ - The gdk_error_trap_push/pop APIs have been dropped, the X11 backend still has them
+
+* Wayland:
+ - The Wayland backend now implements the KDE server-side decoration protocol
+
+* Broadway:
+ - Broadway has been ported to GSK
+ - Only Unix domain sockets are supported now (we are passing fds to upload textures)
+
+* GSK:
+ - We use cached textures for icons now
+ - We also use cached textures for symbolic icons, and recolor using a shader
+ - The glyph cache supports hi-dpi
+ - Some render node APIs have been tweaked: cairo, text, transform nodes
+ - GskRenderer::scale-factor and GskRenderer::viewport have been dropped
+ - gsk_render_node_set_scaling_filters has been dropped
+
+* GTK:
+ - A new event controller, GtkEventControllerMotion, is intended to replace
+   most remaining uses of ::motion-notify-event
+ - New APIS: gtk_widget_contains and gtk_widget_pick
+ - gtk_widget_get_content_size has been replaced by gtk_widget_get_width/height
+ - The GtkWidget:parent-set signal has been dropped
+ - GtkHeaderBar::show-close-button has been renamed to ::show-title-buttons
+ - GtkFontButton::font-name has been replaced by GtkFontChooser::font
+ - The GtkTextTag::event signal has been dropped
+ - The text buffer serialization API has been removed
+ - We longer install 'semi-private' headers like gtktextlayout.h or gtktextdisplay.h
+ - gtk_application_is_inhibited has been dropped
+
+* Theming:
+ - Focus rendering has been changed. Outlines are always rendered now, and
+   we set the :focus and :focus(visible) pseudo-classes on elements to allow
+   the theme control over where to render focus rectangles
+ - The font-feature-settings CSS property is supported
+ - The -gtk-icon-size custom CSS property allows theme control of icon sizes
+
+* Emoji:
+ - We support Ctrl-. and Ctrl-; to pop up the Emoji chooser
+ - The Emoji chooser is also available in GtkTextView
+ - We avoid overly wide fallback rendering with some EmojiOne fonts
+
+* GtkInspector:
+ - The inspector shows more render node details
+ - The UI has been slightly reorganized
+
+* Bugs fixed:
+ 668590 Need to check result of g_bus_get()
+ 773299 Ensure GTK+-4.x builds and works on Windows (MSVC in particular)
+ 775279 early calls to libepoxy cause all gtk3 programs to abort when ther...
+ 777072 window shrinks when restored from maximized
+ 779009 Missing property-change::accessible-description events when the to...
+ 779862 Deprecate/rename gtk_header_bar_set_show_close_button() et. al.
+ 783995 Monitor API inconsistencies across X11 & Wayland
+ 784314 entry completion regression on wayland
+ 785176 Add an item for favorite files in the GtkPlacesSidebar
+ 785210 meson: Support build on Windows (using Visual Studio at least)
+ 786123 GtkPlacesSidebar: Add support for libcloudproviders
+ 787089 win32: GtkWindow of type GTK_WINDOW_POPUP/GDK_WINDOW_TEMP leaks me...
+ 787128 Re-add FUSE network mounts in local-only mode
+ 787142 Avoid assertion failed warnings from pango_layout_get_cursor_pos()...
+ 787665 gdk_frame_clock_get_frame_time is irregular and causing stuttering
+ 788841 Fix gtk_actionable_set_detailed_action_name API inconsistency
+ 788898 Inspector: Default paned split position/ratio between tree and pro...
+ 789054 Firefox crashes @gdk_window_begin_move_drag() on WM without _NET_W...
+ 789134 gtk3-icon-browser: the copy button is not centred on the dialog
+ 789149 GtkGestureZoom leaks the list of sequences while calculating the d...
+ 789160 Add Windows compatible emoji shortcuts
+ 789163 Fitzpatrick modifier selection requires lifting mouse button
+ 789198 gdk: add accessor for GdkEventOwnerChange::reason
+ 789213 Two Windows with GLAreas go horribly wrong
+ 789327 appchooserwidget: Don't limit application list unconditionally
+ 789357 Regression in 3.22.23: GDK_WINDOW_STATE_TILED flag is never set
+ 789678 [GtkAboutDialog] GTK_LICENSE_AGPL_3_0 does not work
+ 789733 Adwaita/HC: Fix entry.flat not being flat
+ 789777 Resolving undefined reference to gdk_get_default_root_window
+ 789870 gtk+4, GtkWindow: Several bugs when icon became a cairo_surface_t
+ 790029 GtkTextView: Support gtk 3.22.19's emoji chooser
+ 790031 GtkClipboardClearFunc is not being called
+ 790171 gtk+4, GtkCssImageIconTheme: Don't unref a NULL pointer
+ 790201 Settings in ~/.config/gtk-3.0/settings.ini ignored with GDK_BACKEN...
+ 790287 gtk+4, GtkWindow: icon_from_list() does not scale down large icons
+ 790489 broadway: Add missing dependency to build
+ 790920 Add GdkSeat convenience API
+ 790963 Thread safety issue in gtk_application_impl_dbus_startup
+ 791062 Fix mapping window with complete xdg-foreign state
+ 791176 GtkFileChooser: gtk4 defaults local_only to FALSE so docs need to ...
+ 791281 Backport size allocation optimization from master to 3.22
+ 791363 Shadow vertical offset is wrong when scaling is > 2
+ 791549 gtklistbox: Crash on page-up on GtkListBox
+ 791650 Do not warn about missing colord systemd service unit
+ 791926 Cannot build gtk4 with documentation enabled
+ 791927 Using '#!/usr/bin/perl' in scripts is not portable
+
+* Updated translations:
+ Arabic
+ Czech
+ Polish
+ Russian
+ Serbian
+
+
 Overview of Changes in GTK+ 3.92.1, 重庆市
 ==========================================
 
