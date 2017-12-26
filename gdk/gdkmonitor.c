@@ -37,6 +37,13 @@
  * gdk_display_get_monitor_at_window().
  */
 
+/**
+ * GdkMonitor:
+ *
+ * The GdkMonitor struct contains only private fields and should not
+ * be accessed directly.
+ */
+
 enum {
   PROP_0,
   PROP_DISPLAY,
@@ -247,6 +254,13 @@ gdk_monitor_class_init (GdkMonitorClass *class)
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
+  /**
+   * GdkMonitor::invalidate:
+   * @monitor: the object on which this signal was emitted
+   *
+   * The ::invalidate signal gets emitted when the output represented
+   * by @monitor gets disconnected.
+   */
   signals[INVALIDATE] = g_signal_new (g_intern_static_string ("invalidate"),
                                       G_TYPE_FROM_CLASS (object_class),
                                       G_SIGNAL_RUN_FIRST,
