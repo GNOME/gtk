@@ -66,12 +66,12 @@ void                  gdk_notify_startup_complete_with_id (const gchar* startup_
 
 /* Push and pop error handlers for X errors
  */
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22_FOR(gdk_x11_display_error_trap_push)
 void                           gdk_error_trap_push        (void);
 /* warn unused because you could use pop_ignored otherwise */
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22_FOR(gdk_x11_display_error_trap_pop)
 G_GNUC_WARN_UNUSED_RESULT gint gdk_error_trap_pop         (void);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22_FOR(gdk_x11_display_error_trap_pop_ignored)
 void                           gdk_error_trap_pop_ignored (void);
 
 
@@ -114,13 +114,13 @@ gint gdk_screen_width_mm  (void) G_GNUC_CONST;
 GDK_DEPRECATED_IN_3_22
 gint gdk_screen_height_mm (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22_FOR(gdk_display_set_double_click_time)
 void gdk_set_double_click_time (guint msec);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22_FOR(gdk_display_beep)
 void gdk_beep (void);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22_FOR(gdk_display_flush)
 void gdk_flush (void);
 
 GDK_AVAILABLE_IN_ALL

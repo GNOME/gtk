@@ -80,7 +80,7 @@ struct _GdkKeymapKey
 GDK_AVAILABLE_IN_ALL
 GType gdk_keymap_get_type (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22_FOR(gdk_keymap_get_for_display)
 GdkKeymap* gdk_keymap_get_default     (void);
 GDK_AVAILABLE_IN_ALL
 GdkKeymap* gdk_keymap_get_for_display (GdkDisplay *display);
