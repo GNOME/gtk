@@ -46,27 +46,24 @@
  * @Short_description: Controls a set of monitors and their associated input devices
  * @Title: GdkDisplay
  *
- * #GdkDisplay objects purpose are two fold:
+ * GdkDisplay objects are the GDK representation of a workstation.
  *
- * - To manage and provide information about input devices (pointers and keyboards)
- *
- * - To manage and provide information about output devices (monitors)
- *
- * GdkDisplay objects are the GDK representation of a workstation, consisting
- * of a keyboard, a pointing device (such as a mouse) and one or more screens.
+ * Their purpose are two-fold:
+ * - To manage and provide information about input devices (pointers, keyboards, etc)
+ * - To manage and provide information about output devices (monitors, projectors, etc)
  *
  * Most of the input device handling has been factored out into separate #GdkSeat
  * objects. Every display has a one or more seats, which can be accessed with
  * gdk_display_get_default_seat() and gdk_display_list_seats().
  *
  * Output devices are represented by #GdkMonitor objects, which can be accessed
- * with gdk-display_get_monitor() and similar APIs.
+ * with gdk_display_get_monitor() and similar APIs.
  */
 
 /**
  * GdkDisplay:
  *
- * The GdkDisplay struct contains only private field and should not
+ * The GdkDisplay struct contains only private fields and should not
  * be accessed directly.
  */
 enum
