@@ -15,6 +15,7 @@ private_headers = [
   'gdkdisplayprivate.h',
   'gdkdndprivate.h',
   'gdkdrawcontextprivate.h',
+  'gdkeventsprivate.h',
   'gdkframeclockprivate.h',
   'gdkglcontextprivate.h',
   'gdkkeysprivate.h',
@@ -27,9 +28,18 @@ private_headers = [
   'gdkvisualprivate.h',
   'gdkvulkancontextprivate.h',
   'keyname-table.h',
+  'x11/gdkprivate-x11.h',
+  'x11/gdkeventsource.h',
+  'wayland/keyboard-shortcuts-inhibit-unstable-v1-client-protocol.h',
+  'wayland/pointer-gestures-unstable-v1-client-protocol.h',
+  'wayland/server-decoration-client-protocol.h',
+  'wayland/tablet-unstable-v2-client-protocol.h',
+  'wayland/xdg-foreign-unstable-v1-client-protocol.h',
+  'wayland/xdg-shell-unstable-v6-client-protocol.h',
   'win32',
   'quartz',
-  'broadway'
+  'broadway',
+  'mir'
 ]
 
 images = [

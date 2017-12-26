@@ -41,7 +41,7 @@ struct _GdkEventClass
   GObjectClass object_class;
 };
 
-/**
+/*
  * GdkEventAny:
  * @type: the type of the event.
  * @window: the window which received the event.
@@ -63,7 +63,7 @@ struct _GdkEventAny
   GdkDisplay *display;
 };
 
-/**
+/*
  * GdkEventExpose:
  * @type: the type of the event (%GDK_EXPOSE)
  * @window: the window which received the event.
@@ -86,7 +86,7 @@ struct _GdkEventExpose
   gint count; /* If non-zero, how many more events follow. */
 };
 
-/**
+/*
  * GdkEventMotion:
  * @type: the type of the event.
  * @window: the window which received the event.
@@ -124,7 +124,7 @@ struct _GdkEventMotion
   GList *history;
 };
 
-/**
+/*
  * GdkEventButton:
  * @type: the type of the event (%GDK_BUTTON_PRESS or %GDK_BUTTON_RELEASE).
  * @window: the window which received the event.
@@ -164,7 +164,7 @@ struct _GdkEventButton
   gdouble x_root, y_root;
 };
 
-/**
+/*
  * GdkEventTouch:
  * @type: the type of the event (%GDK_TOUCH_BEGIN, %GDK_TOUCH_UPDATE,
  *   %GDK_TOUCH_END, %GDK_TOUCH_CANCEL)
@@ -212,7 +212,7 @@ struct _GdkEventTouch
   gdouble x_root, y_root;
 };
 
-/**
+/*
  * GdkEventScroll:
  * @type: the type of the event (%GDK_SCROLL).
  * @window: the window which received the event.
@@ -258,7 +258,7 @@ struct _GdkEventScroll
   guint is_stop : 1;
 };
 
-/**
+/*
  * GdkEventKey:
  * @type: the type of the event (%GDK_KEY_PRESS or %GDK_KEY_RELEASE).
  * @window: the window which received the event.
@@ -303,7 +303,7 @@ struct _GdkEventKey
   guint is_modifier : 1;
 };
 
-/**
+/*
  * GdkEventCrossing:
  * @type: the type of the event (%GDK_ENTER_NOTIFY or %GDK_LEAVE_NOTIFY).
  * @window: the window which received the event.
@@ -344,7 +344,7 @@ struct _GdkEventCrossing
   guint state;
 };
 
-/**
+/*
  * GdkEventFocus:
  * @type: the type of the event (%GDK_FOCUS_CHANGE).
  * @window: the window which received the event.
@@ -360,7 +360,7 @@ struct _GdkEventFocus
   gint16 in;
 };
 
-/**
+/*
  * GdkEventConfigure:
  * @type: the type of the event (%GDK_CONFIGURE).
  * @window: the window which received the event.
@@ -380,7 +380,7 @@ struct _GdkEventConfigure
   gint height;
 };
 
-/**
+/*
  * GdkEventProximity:
  * @type: the type of the event (%GDK_PROXIMITY_IN or %GDK_PROXIMITY_OUT).
  * @window: the window which received the event.
@@ -405,7 +405,7 @@ struct _GdkEventProximity
   guint32 time;
 };
 
-/**
+/*
  * GdkEventGrabBroken:
  * @type: the type of the event (%GDK_GRAB_BROKEN)
  * @window: the window which received the event, i.e. the window
@@ -433,7 +433,7 @@ struct _GdkEventGrabBroken {
   GdkWindow *grab_window;
 };
 
-/**
+/*
  * GdkEventDND:
  * @type: the type of the event (%GDK_DRAG_ENTER, %GDK_DRAG_LEAVE,
  *   %GDK_DRAG_MOTION or %GDK_DROP_START)
@@ -456,7 +456,7 @@ struct _GdkEventDND {
   gshort x_root, y_root;
 };
 
-/**
+/*
  * GdkEventTouchpadSwipe:
  * @type: the type of the event (%GDK_TOUCHPAD_SWIPE)
  * @window: the window which received the event
@@ -491,7 +491,7 @@ struct _GdkEventTouchpadSwipe {
   guint state;
 };
 
-/**
+/*
  * GdkEventTouchpadPinch:
  * @type: the type of the event (%GDK_TOUCHPAD_PINCH)
  * @window: the window which received the event
@@ -532,7 +532,7 @@ struct _GdkEventTouchpadPinch {
   guint state;
 };
 
-/**
+/*
  * GdkEventPadButton:
  * @type: the type of the event (%GDK_PAD_BUTTON_PRESS or %GDK_PAD_BUTTON_RELEASE).
  * @window: the window which received the event.
@@ -556,7 +556,7 @@ struct _GdkEventPadButton {
   guint mode;
 };
 
-/**
+/*
  * GdkEventPadAxis:
  * @type: the type of the event (%GDK_PAD_RING or %GDK_PAD_STRIP).
  * @window: the window which received the event.
@@ -583,7 +583,7 @@ struct _GdkEventPadAxis {
   gdouble value;
 };
 
-/**
+/*
  * GdkEventPadGroupMode:
  * @type: the type of the event (%GDK_PAD_GROUP_MODE).
  * @window: the window which received the event.
@@ -606,7 +606,7 @@ struct _GdkEventPadGroupMode {
   guint mode;
 };
 
-/**
+/*
  * GdkEvent:
  * @type: the #GdkEventType
  * @any: a #GdkEventAny

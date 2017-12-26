@@ -2083,6 +2083,14 @@ gdk_event_get_user_data (const GdkEvent *event)
   return g_object_get_qdata (G_OBJECT (event), quark_event_user_data);
 }
 
+/**
+ * gdk_event_is_sent:
+ * @event: a #GdkEvent
+ *
+ * Returns whether the event was sent explicitly.
+ *
+ * Returns: %TRUE if the event was sent explicitly
+ */
 gboolean
 gdk_event_is_sent (const GdkEvent *event)
 {
