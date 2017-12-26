@@ -67,6 +67,14 @@ GDK_AVAILABLE_IN_3_94
 Cursor        gdk_x11_display_get_xcursor      (GdkDisplay  *display,
                                                 GdkCursor   *cursor);
 
+/**
+ * GDK_DISPLAY_XDISPLAY:
+ * @display: a #GdkDisplay
+ *
+ * Returns the display of a #GdkDisplay.
+ *
+ * Returns: an Xlib Display*
+ */
 #define GDK_DISPLAY_XDISPLAY(display) (gdk_x11_display_get_xdisplay (display))
 
 GDK_AVAILABLE_IN_ALL
