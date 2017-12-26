@@ -587,11 +587,6 @@ cairo_region_t *gdk_window_get_clip_region  (GdkWindow          *window);
 GDK_AVAILABLE_IN_ALL
 cairo_region_t *gdk_window_get_visible_region(GdkWindow         *window);
 
-
-GDK_AVAILABLE_IN_3_16
-void	      gdk_window_mark_paint_from_clip (GdkWindow          *window,
-					       cairo_t            *cr);
-
 GDK_AVAILABLE_IN_3_90
 GdkDrawingContext *gdk_window_begin_draw_frame  (GdkWindow            *window,
                                                  GdkDrawContext       *context,
