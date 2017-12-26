@@ -174,6 +174,14 @@
     </section>
 
     <section>
+      <title>Stop using GdkVisual</title>
+      <para>
+        This object is not useful with current GTK+ drawing APIs and has been removed
+        without replacement.
+      </para>
+    </section>
+
+    <section>
       <title>Stop using GdkDeviceManager</title>
       <para>
         The GdkDeviceManager object has been removed in GTK+ 4. Most of its APIs already
@@ -209,11 +217,18 @@
     </section>
 
     <section>
+      <title>Stop using gdk_window_set_event_compression</title>
+      <para>
+        Event compression is now always enabled. If you need to see the uncoalesced
+        motion history, use gdk_event_get_motion_history().
+      </para>
+    </section>
+
+    <section>
       <title>Adapt to GdkKeymap API changes</title>
       <para>
-        The way to get a keymap has changed slightly. gdk_keymap_get_default() has
-        been dropped, and gdk_keymap_get_for_display() has been renamed to
-        gdk_display_get_keymap().
+        The way to get a keymap has changed slightly. gdk_keymap_get_for_display() has
+        been renamed to gdk_display_get_keymap().
       </para>
     </section>
 
@@ -221,7 +236,8 @@
       <title>Adapt to GtkHeaderBar API changes</title>
       <para>
         The gtk_header_bar_set_show_close_button() function has been renamed to
-        the more accurate name gtk_header_bar_set_show_title_buttons().
+        the more accurate name gtk_header_bar_set_show_title_buttons(). The corresponding
+        getter and the property itself have also been renamed.
       </para>
     </section>
 
@@ -297,7 +313,7 @@
     <section>
       <title>Use gtk_widget_measure</title>
       <para>
-        gtk_widget_measure replaces the various gtk_widget_get_preferred_ functions
+        gtk_widget_measure() replaces the various gtk_widget_get_preferred_ functions
         for querying sizes.
       </para>
     </section>
@@ -318,8 +334,8 @@
       </para>
       <para>
         If you are using a #GtkDrawingArea for custom drawing, you need to switch
-        to using gtk_drawing_area_set_draw_func() to set a draw function. This is
-        pretty much a direct replacement for a #GtkWidget::draw signal handler.
+        to using gtk_drawing_area_set_draw_func() to set a draw function instead
+        of connnecting a handler to the #GtkWidget::draw signal.
       </para>
     </section>
 
@@ -334,6 +350,20 @@
     </section>
 
     <section>
+      <title>Widgets are now visible by default</title>
+      <para>
+        The default value of #GtkWidget::visible in GTK+ 4 is %TRUE, so you no
+        longer need to explicitly show all your widgets. On the flip side, you
+        need to hide widgets that are not meant to be visible from the start.
+      </para>
+      <para>
+        A convenient way to remove unnecessary property assignments like this
+        from ui files it run the command <command>gtk4-builder-tool simplify --replace</command>
+        on them.
+      </para>
+    </section>
+
+    <section>
       <title>Adapt to changes in animated hiding and showing of widgets</title>
       <para>
         Widgets that appear and disappear with an animation, such as GtkPopover,
@@ -344,7 +374,7 @@
     </section>
 
     <section>
-      <title>Stop passing commandline arguments to gtk_init()</title>
+      <title>Stop passing commandline arguments to gtk_init</title>
       <para>
         The gtk_init() and gtk_init_check() functions no longer accept commandline
         arguments. Just call them without arguments. Other initialization functions
@@ -358,28 +388,31 @@
     <section>
       <title>GdkPixbuf is deemphasized</title>
       <para>
-        A number of GdkPixbuf-based APIs have been removed. The available replacements
-        are either using cairo_surface_t or the newly introduced GdkTexture class
+        A number of #GdkPixbuf-based APIs have been removed. The available replacements
+        are either using #GIcon, cairo_surface_t or the newly introduced #GdkTexture class
         instead.
       </para>
       <para>
-        If you are still dealing with pixbufs, you will likely want to use
-        gdk_texture_new_for_pixbuf() to convert them to texture objects where needed.
+        If you are dealing with pixbufs, you can use gdk_texture_new_for_pixbuf()
+        to convert them to texture objects where needed.
       </para>
     </section>
 
     <section>
       <title>GtkWidget event signals are deemphasized</title>
       <para>
-        GtkGesture classes have already been introduced in GTK+ 3 to handle input for
-        many cases. In GTK+ 4, even more are available, such as GtkEventControllerScroll.
+        Event controllers and #GtkGestures have already been introduced in GTK+ 3 to handle
+        input for many cases. In GTK+ 4, even more are available, such as #GtkEventControllerScroll
+        and GtkEventControllerMotion, and the traditional widget signals for handling input,
+        such as #GtkWidget::motion-event or #GtkWidget::event have been deprecated.
       </para>
     </section>
 
     <section>
-      <title>The gtk_window_fullscreen_on_monitor() API has changed</title>
+      <title>The gtk_window_fullscreen_on_monitor API has changed</title>
       <para>
-        Instead of a monitor number, it now takes a GdkMonitor argument.
+        Instead of a monitor number, gtk_window_fullscreen_on_monitor() now takes a
+        #GdkMonitor argument.
       </para>
     </section>
 
@@ -399,14 +432,20 @@
     </section>
 
     <section>
-      <title>Adapt to icon-size API changes</title>
+      <title>Adapt to icon size API changes</title>
       <para>
         Instead of the existing extensible set of symbolic icon sizes, GTK+ now only
-        supports normal and large icons. The actual sizes can be defined by themes via
-        the CSS property -gtk-icon-size.
+        supports normal and large icons with the #GtkIconSize enumeration. The actual sizes
+        can be defined by themes via the CSS property -gtk-icon-size.
       </para>
       <para>
-        The GtkCellRendererPixbuf::stock-size property has been renamed to ::icon-size.
+        GtkImage setters like gtk_image_set_from_icon_name() no longer take a #GtkIconSize
+        argument. You can use the separate gtk_image_set_icon_size() setter if you need
+        to override the icon size.
+      </para>
+      <para>
+        The ::stock-size property of GtkCellRendererPixbuf has been renamed to
+        #GtkCellRendererPixbuf:icon-size.
       </para>
     </section>
   </section>
