@@ -39,12 +39,6 @@
  * data transfers.
  */
 
-/**
- * GdkContentSerializer:
- *
- * Contains only private fields and should not be directly accessed.
- */
-
 typedef struct _Serializer Serializer;
 
 struct _Serializer 
