@@ -23,6 +23,8 @@
 
 #include "open-type-layout.h"
 #include "fontplane.h"
+#include "script-names.h"
+#include "language-names.h"
 
 
 #define MAKE_TAG(a,b,c,d) (unsigned int)(((a) << 24) | ((b) << 16) | ((c) <<  8) | (d))
@@ -315,52 +317,6 @@ get_pango_font (void)
   return pango_context_load_font (context, desc);
 }
 
-static struct { const char *name; hb_script_t script; } script_names[] = {
-  { "Common", HB_SCRIPT_COMMON },
-  { "Inherited", HB_SCRIPT_INHERITED },
-  { "Unknown", HB_SCRIPT_UNKNOWN },
-  { "Arabic", HB_SCRIPT_ARABIC },
-  { "Armenian", HB_SCRIPT_ARMENIAN },
-  { "Bengali", HB_SCRIPT_BENGALI },
-  { "Cyrillic", HB_SCRIPT_CYRILLIC },
-  { "Devanagari", HB_SCRIPT_DEVANAGARI },
-  { "Georgian", HB_SCRIPT_GEORGIAN },
-  { "Greek", HB_SCRIPT_GREEK },
-  { "Gujarati", HB_SCRIPT_GUJARATI },
-  { "Gurmukhi", HB_SCRIPT_GURMUKHI },
-  { "Hangul", HB_SCRIPT_HANGUL },
-  { "Han", HB_SCRIPT_HAN },
-  { "Hebrew", HB_SCRIPT_HEBREW },
-  { "Hiragana", HB_SCRIPT_HIRAGANA },
-  { "Kannada", HB_SCRIPT_KANNADA },
-  { "Katakana", HB_SCRIPT_KATAKANA },
-  { "Lao", HB_SCRIPT_LAO },
-  { "Latin", HB_SCRIPT_LATIN },
-  { "Malayalam", HB_SCRIPT_MALAYALAM },
-  { "Oriya", HB_SCRIPT_ORIYA },
-  { "Tamil", HB_SCRIPT_TAMIL },
-  { "Telugu", HB_SCRIPT_TELUGU },
-  { "Thai", HB_SCRIPT_THAI },
-  { "Tibetan", HB_SCRIPT_TIBETAN },
-  { "Bopomofo", HB_SCRIPT_BOPOMOFO }
-  /* FIXME: complete */
-};
-
-static struct { const char *name; hb_tag_t tag; } language_names[] = {
-  { "Arabic", HB_TAG ('A','R','A',' ') },
-  { "Romanian", HB_TAG ('R','O','M',' ') },
-  { "Skolt Sami", HB_TAG ('S','K','S',' ') },
-  { "Northern Sami", HB_TAG ('N','S','M',' ') },
-  { "Kildin Sami", HB_TAG ('K','S','M',' ') },
-  { "Moldavian", HB_TAG ('M','O','L',' ') },
-  { "Turkish", HB_TAG ('T','R','K',' ') },
-  { "Azerbaijani", HB_TAG ('A','Z','E',' ') },
-  { "Crimean Tatar", HB_TAG ('C','R','T',' ') },
-  { "Serbian", HB_TAG ('S','R','B',' ') },
-  { "German", HB_TAG ('D','E','U',' ') }
-  /* FIXME: complete */
-};
-
 typedef struct {
   hb_tag_t script_tag;
   hb_tag_t lang_tag;
@@ -410,7 +366,7 @@ update_script_combo (void)
 {
   GtkListStore *store;
   hb_font_t *hb_font;
-  gint i, j, k, l;
+  gint i, j, k;
   FT_Face ft_face;
   PangoFont *pango_font;
   GHashTable *tags;
@@ -483,48 +439,30 @@ update_script_combo (void)
       char langbuf[5];
       char *name;
 
+      hb_tag_to_string (pair->script_tag, scriptbuf);
+      scriptbuf[4] = 0;
+
+      hb_tag_to_string (pair->lang_tag, langbuf);
+      langbuf[4] = 0;
+
       if (pair->script_tag == HB_OT_TAG_DEFAULT_SCRIPT)
         scriptname = "Default";
       else if (pair->script_tag == HB_TAG ('m','a','t','h'))
         scriptname = "Math";
       else
-        {
-          hb_script_t script;
+        scriptname = get_script_name_for_tag (pair->script_tag);
 
-          hb_tag_to_string (pair->script_tag, scriptbuf);
-          scriptbuf[4] = 0;
-          scriptname = scriptbuf;
+      if (!scriptname)
+        scriptname = scriptbuf;
 
-          script = hb_script_from_iso15924_tag (pair->script_tag);
-          for (k = 0; k < G_N_ELEMENTS (script_names); k++)
-            {
-              if (script == script_names[k].script)
-                {
-                  scriptname = script_names[k].name;
-                  break;
-                }
-            }
-        }
+      langname = get_language_name_for_tag (pair->lang_tag);
+      if (!langname)
+        langname = langbuf;
 
       if (pair->lang_tag == HB_OT_TAG_DEFAULT_LANGUAGE)
         name = g_strdup_printf ("%s Script", scriptname);
       else
-        {
-          hb_tag_to_string (pair->lang_tag, langbuf);
-          langbuf[4] = 0;
-          langname = langbuf;
-
-          for (l = 0; l < G_N_ELEMENTS (language_names); l++)
-            {
-              if (pair->lang_tag == language_names[l].tag)
-                {
-                  langname = language_names[l].name;
-                  break;
-                }
-            }
-
-          name = g_strdup (langname);
-        }
+        name = g_strdup (langname);
 
       gtk_list_store_insert_with_values (store, NULL, -1,
                                          0, name,
