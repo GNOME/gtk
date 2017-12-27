@@ -414,6 +414,7 @@ static gboolean gtk_label_focus         (GtkWidget         *widget,
                                          GtkDirectionType   direction);
 
 static void gtk_label_realize           (GtkWidget        *widget);
+static void gtk_label_unrealize         (GtkWidget        *widget);
 static void gtk_label_unmap             (GtkWidget        *widget);
 
 static void gtk_label_motion            (GtkEventControllerMotion *controller,
@@ -599,6 +600,7 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->query_tooltip = gtk_label_query_tooltip;
   widget_class->snapshot = gtk_label_snapshot;
   widget_class->realize = gtk_label_realize;
+  widget_class->unrealize = gtk_label_unrealize;
   widget_class->unmap = gtk_label_unmap;
   widget_class->hierarchy_changed = gtk_label_hierarchy_changed;
   widget_class->display_changed = gtk_label_display_changed;
@@ -4145,6 +4147,21 @@ gtk_label_realize (GtkWidget *widget)
 
   if (priv->select_info)
     gtk_label_set_selectable_hint (label);
+}
+
+static void
+gtk_label_unrealize (GtkWidget *widget)
+{
+  GtkLabel *label = GTK_LABEL (widget);
+  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
+  GdkClipboard *clipboard;
+
+  clipboard = gtk_widget_get_primary_clipboard (widget);
+  if (priv->select_info &&
+      gdk_clipboard_get_content (clipboard) == priv->select_info->provider)
+    gdk_clipboard_set_content (clipboard, NULL);
+
+  GTK_WIDGET_CLASS (gtk_label_parent_class)->unrealize (widget);
 }
 
 static void
