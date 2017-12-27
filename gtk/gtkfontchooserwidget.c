@@ -24,6 +24,7 @@
 #include <atk/atk.h>
 
 #include "gtkfontchooserwidget.h"
+#include "gtkfontchooserwidgetprivate.h"
 
 #include "gtkadjustment.h"
 #include "gtkbuildable.h"
@@ -1400,4 +1401,15 @@ gtk_font_chooser_widget_iface_init (GtkFontChooserIface *iface)
   iface->set_filter_func = gtk_font_chooser_widget_set_filter_func;
   iface->set_font_map = gtk_font_chooser_widget_set_font_map;
   iface->get_font_map = gtk_font_chooser_widget_get_font_map;
+}
+
+gboolean
+gtk_font_chooser_widget_handle_event (GtkWidget   *widget,
+                                      GdkEventKey *key_event)
+{
+  GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (widget);
+  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GdkEvent *event = (GdkEvent *)key_event;
+
+  return gtk_search_entry_handle_event (GTK_SEARCH_ENTRY (priv->search_entry), event);
 }
