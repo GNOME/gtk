@@ -198,7 +198,7 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 						      P_("The GtkIconSize value that specifies the size of the rendered icon"),
                                                       GTK_TYPE_ICON_SIZE,
 						      GTK_ICON_SIZE_INHERIT,
-						      GTK_PARAM_READWRITE));
+						      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkCellRendererPixbuf:icon-name:
@@ -337,6 +337,19 @@ take_image_definition (GtkCellRendererPixbuf *cellpixbuf,
 }
 
 static void
+gtk_cell_renderer_pixbuf_set_icon_size (GtkCellRendererPixbuf *cellpixbuf,
+                                        GtkIconSize            icon_size)
+{
+  GtkCellRendererPixbufPrivate *priv = cellpixbuf->priv;
+
+  if (priv->icon_size == icon_size)
+    return;
+
+  priv->icon_size = icon_size;
+  g_object_notify (G_OBJECT (cellpixbuf), "icon-size");
+}
+
+static void
 gtk_cell_renderer_pixbuf_set_property (GObject      *object,
 				       guint         param_id,
 				       const GValue *value,
@@ -373,7 +386,7 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
       take_image_definition (cellpixbuf, gtk_image_definition_new_texture (g_value_get_object (value)));
       break;
     case PROP_ICON_SIZE:
-      priv->icon_size = g_value_get_enum (value);
+      gtk_cell_renderer_pixbuf_set_icon_size (cellpixbuf, g_value_get_enum (value));
       break;
     case PROP_ICON_NAME:
       take_image_definition (cellpixbuf, gtk_image_definition_new_icon_name (g_value_get_string (value)));
