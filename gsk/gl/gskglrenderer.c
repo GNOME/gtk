@@ -2377,10 +2377,13 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
   render_op_builder.current_projection = projection;
   render_op_builder.current_modelview = modelview;
   render_op_builder.current_viewport = *viewport;
-  render_op_builder.current_render_target = self->texture_id;
   render_op_builder.current_opacity = 1.0f;
   render_op_builder.render_ops = self->render_ops;
   gsk_rounded_rect_init_from_rect (&render_op_builder.current_clip, &self->viewport, 0.0f);
+
+  if (self->texture_id != 0)
+    ops_set_render_target (&render_op_builder, self->texture_id);
+
   gsk_gl_renderer_add_render_ops (self, root, &render_op_builder);
 
   /*g_message ("Ops: %u", self->render_ops->len);*/
