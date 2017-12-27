@@ -18,14 +18,12 @@
     <property name="expand">0</property>
     <child>
       <object class="GtkScrolledWindow" id="scrolledwindow">
-        <property name="visible">1</property>
         <property name="can-focus">1</property>
         <property name="hscrollbar-policy">never</property>
         <property name="shadow-type">in</property>
         <property name="vexpand">1</property>
         <child>
           <object class="GtkTreeView" id="recent_view">
-            <property name="visible">1</property>
             <property name="can-focus">1</property>
             <property name="has-tooltip">1</property>
             <property name="headers-visible">0</property>
@@ -45,8 +43,7 @@
               <object class="GtkTreeViewColumn" id="icon_column">
                 <property name="title">icon</property>
                 <child>
-                  <object class="GtkCellRendererPixbuf" id="icon_renderer">
-                  </object>
+                  <object class="GtkCellRendererPixbuf" id="icon_renderer"/>
                 </child>
               </object>
             </child>
@@ -73,7 +70,6 @@
         <property name="spacing">12</property>
         <child>
           <object class="GtkComboBoxText" id="filter_combo">
-            <property name="visible">1</property>
             <property name="tooltip-text" translatable="yes">Select which type of documents are shown</property>
             <property name="focus-on-click">0</property>
             <property name="entry-text-column">0</property>

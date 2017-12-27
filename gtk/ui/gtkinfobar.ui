@@ -4,14 +4,11 @@
   <template class="GtkInfoBar" parent="GtkBox">
     <child>
       <object class="GtkRevealer" id="revealer">
-        <property name="visible">1</property>
         <property name="reveal-child">1</property>
         <child>
           <object class="GtkBox" id="content">
-            <property name="visible">1</property>
             <child>
               <object class="GtkBox" id="content_area">
-                <property name="visible">1</property>
                 <property name="spacing">16</property>
                 <property name="margin">8</property>
                 <property name="hexpand">1</property>
@@ -19,7 +16,6 @@
             </child>
             <child>
               <object class="GtkButtonBox" id="action_area">
-                <property name="visible">1</property>
                 <property name="spacing">6</property>
                 <property name="margin">6</property>
                 <property name="layout-style">end</property>

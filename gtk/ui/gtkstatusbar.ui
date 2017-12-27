@@ -2,7 +2,6 @@
 <interface domain="gtk40">
   <!-- interface-requires gtk+ 3.10 -->
   <template class="GtkStatusbar" parent="GtkWidget">
-    <property name="hexpand">0</property>
     <child>
       <object class="GtkFrame" id="frame">
         <property name="shadow-type">none</property>

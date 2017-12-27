@@ -229,7 +229,6 @@
                                 <child>
                                   <object class="GtkActionBar" id="remote_warning_bar">
                                     <property name="visible">0</property>
-
                                     <child type="center">
                                       <object class="GtkLabel">
                                         <property name="label" translatable="yes">Remote location — only searching the current folder</property>
@@ -402,7 +401,7 @@
           <object class="GtkEntry" id="new_folder_name_entry">
             <property name="width-chars">25</property>
             <property name="activates-default">1</property>
-            <property name="hexpand">true</property>
+            <property name="hexpand">1</property>
             <signal name="changed" handler="new_folder_name_changed"/>
           </object>
           <packing>
@@ -427,8 +426,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkFileChooserErrorStack" id="new_folder_error_stack">
-          </object>
+          <object class="GtkFileChooserErrorStack" id="new_folder_error_stack"/>
           <packing>
             <property name="left-attach">0</property>
             <property name="top-attach">2</property>
@@ -486,8 +484,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkFileChooserErrorStack" id="rename_file_error_stack">
-          </object>
+          <object class="GtkFileChooserErrorStack" id="rename_file_error_stack"/>
           <packing>
             <property name="left-attach">0</property>
             <property name="top-attach">2</property>

@@ -33,8 +33,8 @@
             </child>
             <child>
               <object class="GtkImage" id="end_icon_widget">
-                <property name="visible">False</property>
-                <property name="hexpand">True</property>
+                <property name="visible">0</property>
+                <property name="hexpand">1</property>
                 <property name="halign">end</property>
                 <property name="valign">center</property>
                 <style>

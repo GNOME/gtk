@@ -6,7 +6,6 @@
     <property name="type-hint">dialog</property>
     <child internal-child="headerbar">
       <object class="GtkHeaderBar" id="headerbar1">
-        <property name="visible">1</property>
         <property name="show-title-buttons">1</property>
         <child type="title">
           <object class="GtkStackSwitcher" id="stack_switcher">
@@ -23,20 +22,17 @@
         <property name="margin">5</property>
         <child>
           <object class="GtkBox" id="box">
-            <property name="visible">1</property>
             <property name="orientation">vertical</property>
             <property name="spacing">12</property>
             <property name="margin">5</property>
             <property name="vexpand">1</property>
             <child>
               <object class="GtkImage" id="logo_image">
-                <property name="visible">1</property>
                 <property name="icon-name">image-missing</property>
               </object>
             </child>
             <child>
               <object class="GtkLabel" id="name_label">
-                <property name="visible">1</property>
                 <property name="label">name label</property>
                 <property name="justify">center</property>
                 <property name="selectable">1</property>
@@ -49,14 +45,12 @@
               <object class="GtkStack" id="stack">
                 <property name="width-request">400</property>
                 <property name="height-request">100</property>
-                <property name="visible">1</property>
                 <property name="transition-type">over-up-down</property>
                 <property name="transition-duration">600</property>
                 <property name="vexpand">1</property>
                 <signal name="notify::visible-child" handler="stack_visible_child_notify" swapped="no"/>
                 <child>
                   <object class="GtkBox" id="page_vbox">
-                    <property name="visible">1</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">8</property>
                     <child>
@@ -119,19 +113,16 @@
                     <property name="spacing">8</property>
                     <child>
                       <object class="GtkScrolledWindow" id="scrolledwindow1">
-                        <property name="visible">1</property>
                         <property name="hscrollbar-policy">never</property>
                         <property name="shadow-type">in</property>
                         <property name="vexpand">1</property>
                         <child>
                           <object class="GtkViewport" id="viewport1">
-                            <property name="visible">1</property>
                             <style>
                               <class name="view"/>
                             </style>
                             <child>
                               <object class="GtkGrid" id="credits_grid">
-                                <property name="visible">1</property>
                                 <property name="halign">center</property>
                                 <property name="valign">start</property>
                                 <property name="orientation">vertical</property>
@@ -157,13 +148,11 @@
                     <property name="spacing">8</property>
                     <child>
                       <object class="GtkScrolledWindow" id="scrolledwindow2">
-                        <property name="visible">1</property>
                         <property name="hscrollbar-policy">never</property>
                         <property name="shadow-type">in</property>
                         <property name="vexpand">1</property>
                         <child>
                           <object class="GtkTextView" id="license_view">
-                            <property name="visible">1</property>
                             <property name="editable">0</property>
                             <property name="left-margin">8</property>
                             <property name="right-margin">8</property>
@@ -186,13 +175,11 @@
                     <property name="spacing">8</property>
                     <child>
                       <object class="GtkScrolledWindow">
-                        <property name="visible">1</property>
                         <property name="hscrollbar-policy">never</property>
                         <property name="shadow-type">in</property>
                         <property name="vexpand">1</property>
                         <child>
                           <object class="GtkTextView" id="system_view">
-                            <property name="visible">1</property>
                             <property name="editable">0</property>
                             <property name="left-margin">8</property>
                             <property name="right-margin">8</property>

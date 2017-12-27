@@ -4,15 +4,12 @@
   <template class="GtkAssistant" parent="GtkWindow">
     <child type="titlebar">
       <object class="GtkHeaderBar" id="headerbar">
-        <property name="visible">1</property>
       </object>
     </child>
     <child>
       <object class="GtkBox" id="main_box">
-        <property name="visible">1</property>
         <child>
           <object class="GtkBox" id="sidebar">
-            <property name="visible">1</property>
             <property name="orientation">vertical</property>
             <style>
               <class name="sidebar"/>
@@ -21,12 +18,10 @@
         </child>
         <child>
           <object class="GtkBox" id="content_box">
-            <property name="visible">1</property>
             <property name="orientation">vertical</property>
             <property name="hexpand">1</property>
             <child>
               <object class="GtkNotebook" id="content">
-                <property name="visible">1</property>
                 <property name="can-focus">1</property>
                 <property name="show-tabs">0</property>
                 <property name="show-border">0</property>
@@ -37,7 +32,6 @@
             </child>
             <child>
               <object class="GtkBox" id="action_area">
-                <property name="visible">1</property>
                 <property name="halign">end</property>
                 <property name="spacing">6</property>
                 <property name="margin">6</property>
@@ -61,7 +55,6 @@
                 <child>
                   <object class="GtkButton" id="forward">
                     <property name="label" translatable="yes">_Next</property>
-                    <property name="visible">1</property>
                     <property name="can-focus">1</property>
                     <property name="can-default">1</property>
                     <property name="receives-default">1</property>
@@ -79,7 +72,6 @@
                 <child>
                   <object class="GtkButton" id="back">
                     <property name="label" translatable="yes">_Back</property>
-                    <property name="visible">1</property>
                     <property name="can-focus">1</property>
                     <property name="receives-default">1</property>
                     <property name="use-underline">1</property>
@@ -114,7 +106,6 @@
                   <object class="GtkButton" id="cancel">
                     <property name="visible">0</property>
                     <property name="label" translatable="yes">_Cancel</property>
-                    <property name="visible">1</property>
                     <property name="can-focus">1</property>
                     <property name="receives-default">1</property>
                     <property name="use-underline">1</property>
