@@ -66,6 +66,7 @@
 #include "gtkeventcontrollerscroll.h"
 #include "gtktypebuiltins.h"
 #include "gtkmarshalers.h"
+#include "gtkprivate.h"
 
 #define SCROLL_CAPTURE_THRESHOLD_MS 150
 
@@ -210,7 +211,7 @@ gtk_event_controller_scroll_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_FLAGS:
-      scroll->flags = g_value_get_flags (value);
+      gtk_event_controller_scroll_set_flags (scroll, g_value_get_flags (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -372,7 +373,7 @@ gtk_event_controller_scroll_class_init (GtkEventControllerScrollClass *klass)
                         P_("Flags"),
                         GTK_TYPE_EVENT_CONTROLLER_SCROLL_FLAGS,
                         GTK_EVENT_CONTROLLER_SCROLL_NONE,
-                        G_PARAM_READWRITE);
+                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkEventControllerScroll::scroll-begin:
@@ -487,11 +488,11 @@ gtk_event_controller_scroll_set_flags (GtkEventControllerScroll      *scroll,
 {
   g_return_if_fail (GTK_IS_EVENT_CONTROLLER_SCROLL (scroll));
 
-  if (scroll->flags != flags)
-    {
-      scroll->flags = flags;
-      g_object_notify (G_OBJECT (scroll), "flags");
-    }
+  if (scroll->flags == flags)
+    return;
+
+  scroll->flags = flags;
+  g_object_notify_by_pspec (G_OBJECT (scroll), pspecs[PROP_FLAGS]);
 }
 
 /**
