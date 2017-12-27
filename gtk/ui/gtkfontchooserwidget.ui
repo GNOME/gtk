@@ -214,6 +214,30 @@
             <property name="top-attach">1</property>
           </packing>
         </child>
+        <child>
+          <object class="GtkExpander" id="feature_expander">
+            <property name="label" translatable="yes">Font Features</property>
+            <child>
+              <object class="GtkBox" id="feature_box">
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkComboBox" id="feature_language_combo">
+                    <child>
+                      <object class="GtkCellRendererText"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">2</property>
+          </packing>
+        </child>
       </object>
     </child>
   </template>

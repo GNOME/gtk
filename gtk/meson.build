@@ -827,6 +827,10 @@ gtk_deps = [
   graphene_dep,
 ]
 
+if harfbuzz_dep.found() and pangoft_dep.found()
+  gtk_deps += [ harfbuzz_dep, ]
+endif
+
 if x11_enabled
   x11_data_prefix = dependency('x11').get_pkgconfig_variable('prefix')
 
