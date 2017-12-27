@@ -1363,6 +1363,19 @@ check_buffer_contents (GtkTextBuffer *buffer,
 }
 
 static void
+wait_for_changed (GtkTextBuffer *buffer)
+{
+  GMainLoop *loop;
+  gulong id;
+
+  loop = g_main_loop_new (NULL, FALSE);
+  id = g_signal_connect_swapped (buffer, "changed", G_CALLBACK (g_main_loop_quit), loop);
+  g_main_loop_run (loop);
+  g_signal_handler_disconnect (buffer, id);
+  g_main_loop_unref (loop);
+}
+
+static void
 test_clipboard (void)
 {
   GdkClipboard *clipboard;
@@ -1386,6 +1399,8 @@ test_clipboard (void)
 
   gtk_text_buffer_get_end_iter (buffer, &end);
   gtk_text_buffer_paste_clipboard (buffer, clipboard, &end, TRUE);
+  wait_for_changed (buffer);
+
   check_buffer_contents (buffer, "defabc");
 
   /* Simple copy & paste */
@@ -1396,6 +1411,8 @@ test_clipboard (void)
 
   gtk_text_buffer_get_start_iter (buffer, &start);
   gtk_text_buffer_paste_clipboard (buffer, clipboard, &start, TRUE);
+  wait_for_changed (buffer);
+
   check_buffer_contents (buffer, "abcdefabc");
 
   /* Replace the selection when pasting */
@@ -1410,6 +1427,8 @@ test_clipboard (void)
   gtk_text_buffer_get_end_iter (buffer, &end);
   gtk_text_buffer_select_range (buffer, &start, &end);
   gtk_text_buffer_paste_clipboard (buffer, clipboard, NULL, TRUE);
+  wait_for_changed (buffer);
+
   check_buffer_contents (buffer, "abcabc");
 
   /* Copy & paste text with tags.
@@ -1428,6 +1447,8 @@ test_clipboard (void)
   gtk_text_buffer_select_range (buffer, &start, &end);
   gtk_text_buffer_copy_clipboard (buffer, clipboard);
   gtk_text_buffer_paste_clipboard (buffer, clipboard, NULL, TRUE);
+  wait_for_changed (buffer);
+
   check_buffer_contents (buffer, "abcdef");
 
   gtk_text_buffer_get_iter_at_offset (buffer, &start, 3);
