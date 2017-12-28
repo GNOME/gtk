@@ -2524,6 +2524,8 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
   int i, j;
   GList *l;
 
+  gtk_widget_hide (priv->feature_language_combo);
+
   for (l = priv->feature_items; l; l = l->next)
     {
       FeatureItem *item = l->data;
@@ -2574,6 +2576,7 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
 
               gtk_widget_show (item->feat);
               gtk_widget_show (gtk_widget_get_parent (item->feat));
+              gtk_widget_show (priv->feature_language_combo);
 
               if (GTK_IS_RADIO_BUTTON (item->feat))
                 {
