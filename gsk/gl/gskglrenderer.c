@@ -2365,9 +2365,7 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
                               viewport->origin.y + viewport->size.height,
                               ORTHO_NEAR_PLANE,
                               ORTHO_FAR_PLANE);
-
-  if (self->texture_id == 0)
-    graphene_matrix_scale (&projection, 1, -1, 1);
+  graphene_matrix_scale (&projection, 1, -1, 1);
 
   gsk_gl_driver_begin_frame (self->gl_driver);
   gsk_gl_glyph_cache_begin_frame (&self->glyph_cache);
@@ -2431,8 +2429,9 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
   GdkTexture *texture;
   int stride;
-  guchar *data;
+  guchar *data, *data2;
   int width, height;
+  int x, y;
 
   g_return_val_if_fail (self->gl_context != NULL, NULL);
 
@@ -2448,6 +2447,8 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
   gsk_gl_renderer_clear (self);
   gsk_gl_driver_end_frame (self->gl_driver);
 
+  g_assert (self->texture_id != 0);
+
   /* Render the actual scene */
   gsk_gl_renderer_do_render (renderer, root, viewport, 1);
 
@@ -2461,8 +2462,14 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
   glReadPixels (0, 0, width, height, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, data);
   gsk_gl_driver_end_frame (self->gl_driver);
 
+  data2 = g_malloc (height * stride);
+  for (y = 0; y < height; y ++)
+    for (x = 0; x < stride; x ++)
+      data2[(height - 1 - y) * stride + x] = data[y * stride + x];
+
+  g_free (data);
   /* Create texture from the downloaded data */
-  texture = gdk_texture_new_for_data (data, width, height, stride);
+  texture = gdk_texture_new_for_data (g_steal_pointer (&data2), width, height, stride);
 
   return texture;
 }
