@@ -133,6 +133,7 @@ struct _GtkFontChooserWidgetPrivate
   GtkWidget    *monospace_filter_check;
 
   GtkWidget       *preview;
+  GtkWidget       *preview2;
   gchar           *preview_text;
   gboolean         show_preview_entry;
 
@@ -753,6 +754,7 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, model);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, filter_model);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, preview);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, preview2);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, size_label);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, size_spin);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, size_slider);
@@ -2940,5 +2942,14 @@ gtk_font_chooser_widget_tweak_font (GtkWidget *widget,
 {
   GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (widget);
 
-  gtk_stack_set_visible_child_name (GTK_STACK (fontchooser->priv->stack), tweak ? "tweaks" : "list");
+  if (tweak)
+    {
+      gtk_entry_grab_focus_without_selecting (GTK_ENTRY (fontchooser->priv->preview2));
+      gtk_stack_set_visible_child_name (GTK_STACK (fontchooser->priv->stack), "tweaks");
+    }
+  else
+    {
+      gtk_entry_grab_focus_without_selecting (GTK_ENTRY (fontchooser->priv->search_entry));
+      gtk_stack_set_visible_child_name (GTK_STACK (fontchooser->priv->stack), "list");
+    }
 }
