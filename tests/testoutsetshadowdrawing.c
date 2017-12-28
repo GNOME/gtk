@@ -45,7 +45,7 @@ static const char *css =
 "  min-width: 100px;"
 "  min-height:100px;"
 "  border-radius: 7px 7px 0px 0px;"
-"  box-shadow: 0px 3px 9px 1px rgba(0, 0, 0, 0.5);"
+"  box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.5);"
 "}"
 #if 0
 ".b2 {"
@@ -111,6 +111,7 @@ main (int argc, char **argv)
   w = gtk_button_new ();
   gtk_widget_set_valign (w, GTK_ALIGN_CENTER);
   gtk_style_context_add_class (gtk_widget_get_style_context (w), "three");
+  gtk_widget_set_opacity (w, 0.7);
   gtk_container_add (GTK_CONTAINER (top), w);
 
   w = gtk_button_new ();
