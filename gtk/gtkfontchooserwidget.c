@@ -2694,13 +2694,14 @@ gtk_font_chooser_widget_merge_font_desc (GtkFontChooserWidget       *fontchooser
         }
 
       gtk_font_chooser_widget_update_marks (fontchooser);
+
+#if defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT)
+      gtk_font_chooser_widget_update_font_features (fontchooser);
+      gtk_font_chooser_widget_update_font_variations (fontchooser);
+#endif
     }
 
   gtk_font_chooser_widget_update_preview_attributes (fontchooser);
-#if defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT)
-  gtk_font_chooser_widget_update_font_features (fontchooser);
-  gtk_font_chooser_widget_update_font_variations (fontchooser);
-#endif
 
   g_object_notify (G_OBJECT (fontchooser), "font");
   g_object_notify (G_OBJECT (fontchooser), "font-desc");
