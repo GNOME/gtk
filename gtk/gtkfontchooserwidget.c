@@ -143,6 +143,7 @@ struct _GtkFontChooserWidgetPrivate
 
   GtkWidget *font_grid;
 
+  GtkWidget       *axis_grid;
   GtkWidget       *feature_box;
   GtkWidget       *feature_language_combo;
 
@@ -761,6 +762,7 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, stack);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, grid);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, font_grid);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, axis_grid);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, feature_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, feature_language_combo);
 
@@ -2081,7 +2083,7 @@ add_axis (GtkFontChooserWidget *fontchooser,
   axis->label = gtk_label_new (name);
   gtk_widget_set_halign (axis->label, GTK_ALIGN_START);
   gtk_widget_set_valign (axis->label, GTK_ALIGN_BASELINE);
-  gtk_grid_attach (GTK_GRID (priv->font_grid), axis->label, 0, row, 1, 1);
+  gtk_grid_attach (GTK_GRID (priv->axis_grid), axis->label, 0, row, 1, 1);
   axis->adjustment = gtk_adjustment_new ((double)FixedToFloat(value),
                                          (double)FixedToFloat(ax->minimum),
                                          (double)FixedToFloat(ax->maximum),
@@ -2092,11 +2094,11 @@ add_axis (GtkFontChooserWidget *fontchooser,
   gtk_widget_set_hexpand (axis->scale, TRUE);
   gtk_widget_set_size_request (axis->scale, 100, -1);
   gtk_scale_set_draw_value (GTK_SCALE (axis->scale), FALSE);
-  gtk_grid_attach (GTK_GRID (priv->font_grid), axis->scale, 1, row, 1, 1);
+  gtk_grid_attach (GTK_GRID (priv->axis_grid), axis->scale, 1, row, 1, 1);
   axis->spin = gtk_spin_button_new (axis->adjustment, 0, 0);
   g_signal_connect (axis->spin, "output", G_CALLBACK (output_cb), fontchooser);
   gtk_widget_set_valign (axis->spin, GTK_ALIGN_BASELINE);
-  gtk_grid_attach (GTK_GRID (priv->font_grid), axis->spin, 2, row, 1, 1);
+  gtk_grid_attach (GTK_GRID (priv->axis_grid), axis->spin, 2, row, 1, 1);
 
   g_hash_table_add (priv->axes, axis);
 
@@ -2150,7 +2152,7 @@ gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchoose
         }
 
       for (i = 0; i < ft_mm_var->num_axis; i++)
-        add_axis (fontchooser, ft_face, &ft_mm_var->axis[i], coords[i], i + 4);
+        add_axis (fontchooser, ft_face, &ft_mm_var->axis[i], coords[i], i + 1);
 
       g_free (coords);
       free (ft_mm_var);
