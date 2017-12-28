@@ -122,6 +122,8 @@ struct _GtkFontChooserWidgetPrivate
   GtkWidget    *language_filter_entry;
   char         *language_term;
 
+  GtkWidget    *monospace_filter_check;
+
   GtkWidget       *preview;
   gchar           *preview_text;
   gboolean         show_preview_entry;
@@ -750,6 +752,7 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, language_filter_button_label);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, language_list);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, language_filter_entry);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, monospace_filter_check);
 
   gtk_widget_class_bind_template_callback (widget_class, text_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, stop_search_cb);
@@ -771,6 +774,7 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, language_filter_stop);
   gtk_widget_class_bind_template_callback (widget_class, language_filter_activated);
   gtk_widget_class_bind_template_callback (widget_class, popover_notify);
+  gtk_widget_class_bind_template_callback (widget_class, gtk_font_chooser_widget_refilter_font_list);
 
   gtk_widget_class_set_css_name (widget_class, I_("fontchooser"));
 }
@@ -1560,6 +1564,23 @@ visible_func (GtkTreeModel *model,
           if (!script_found || !language_found)
             return FALSE;
         }
+    }
+
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->monospace_filter_check)))
+    {
+      PangoFontFamily *family;
+
+      gtk_tree_model_get (priv->model, iter,
+                          FAMILY_COLUMN, &family,
+                          -1);
+
+      if (!pango_font_family_is_monospace (family))
+        result = FALSE;
+
+      g_object_unref (family);
+
+      if (!result)
+        return FALSE;
     }
 
   if (priv->filter_func != NULL)

@@ -368,6 +368,12 @@ emblem-documents-symbolic</property>
             </child>
           </object>
         </child>
+        <child>
+          <object class="GtkCheckButton" id="monospace_filter_check">
+            <property name="label" translatable="yes">Only monospace</property>
+            <signal name="notify::active" handler="gtk_font_chooser_widget_refilter_font_list" swapped="yes"/>
+          </object>
+        </child>
       </object>
     </child>
   </object>
