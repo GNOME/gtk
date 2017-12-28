@@ -36,6 +36,8 @@
 #include "gtkwidget.h"
 #include "gtksettings.h"
 #include "gtkdialogprivate.h"
+#include "gtktogglebutton.h"
+#include "gtkheaderbar.h"
 
 struct _GtkFontChooserDialogPrivate
 {
@@ -43,6 +45,7 @@ struct _GtkFontChooserDialogPrivate
 
   GtkWidget *select_button;
   GtkWidget *cancel_button;
+  GtkWidget *tweak_button;
 };
 
 /**
@@ -137,6 +140,51 @@ gtk_font_chooser_dialog_key_press_event (GtkWidget   *dialog,
 }
 
 static void
+tweak_font (GtkFontChooserDialog *dialog)
+{
+  gtk_font_chooser_widget_tweak_font (dialog->priv->fontchooser,
+                                      gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->priv->tweak_button)));
+}
+
+static void
+setup_tweak_button (GtkFontChooserDialog *dialog)
+{
+  gboolean use_header;
+
+  if (dialog->priv->tweak_button)
+    return;
+
+  g_object_get (dialog, "use-header-bar", &use_header, NULL);
+  if (use_header)
+    {
+      GtkWidget *button;
+      GtkWidget *header;
+
+      button = gtk_toggle_button_new ();
+      gtk_widget_set_focus_on_click (button, FALSE);
+      gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+      gtk_button_set_icon_name (button, "emblem-system-symbolic");
+
+      header = gtk_dialog_get_header_bar (GTK_DIALOG (dialog));
+      gtk_header_bar_pack_end (GTK_HEADER_BAR (header), button);
+
+      g_signal_connect_swapped (button, "notify::active", G_CALLBACK (tweak_font), dialog);
+
+      dialog->priv->tweak_button = button;
+    }
+}
+
+static void
+gtk_font_chooser_dialog_map (GtkWidget *widget)
+{
+  GtkFontChooserDialog *dialog = GTK_FONT_CHOOSER_DIALOG (widget);
+
+  setup_tweak_button (dialog);
+
+  GTK_WIDGET_CLASS (gtk_font_chooser_dialog_parent_class)->map (widget);
+}
+
+static void
 gtk_font_chooser_dialog_class_init (GtkFontChooserDialogClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
@@ -146,6 +194,7 @@ gtk_font_chooser_dialog_class_init (GtkFontChooserDialogClass *klass)
   gobject_class->set_property = gtk_font_chooser_dialog_set_property;
 
   widget_class->key_press_event = gtk_font_chooser_dialog_key_press_event;
+  widget_class->map = gtk_font_chooser_dialog_map;
 
   _gtk_font_chooser_install_properties (gobject_class);
 
@@ -157,7 +206,10 @@ gtk_font_chooser_dialog_class_init (GtkFontChooserDialogClass *klass)
 					       "/org/gtk/libgtk/ui/gtkfontchooserdialog.ui");
 
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserDialog, fontchooser);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserDialog, select_button);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserDialog, cancel_button);
   gtk_widget_class_bind_template_callback (widget_class, font_activated_cb);
+  gtk_widget_class_bind_template_callback (widget_class, tweak_font);
 }
 
 static void
@@ -170,9 +222,6 @@ gtk_font_chooser_dialog_init (GtkFontChooserDialog *fontchooserdiag)
 
   gtk_widget_init_template (GTK_WIDGET (fontchooserdiag));
   gtk_dialog_set_use_header_bar_from_setting (GTK_DIALOG (fontchooserdiag));
-
-  priv->select_button = gtk_dialog_get_widget_for_response (GTK_DIALOG (fontchooserdiag), GTK_RESPONSE_OK);
-  priv->cancel_button = gtk_dialog_get_widget_for_response (GTK_DIALOG (fontchooserdiag), GTK_RESPONSE_CANCEL);
 
   _gtk_font_chooser_set_delegate (GTK_FONT_CHOOSER (fontchooserdiag),
                                   GTK_FONT_CHOOSER (priv->fontchooser));
