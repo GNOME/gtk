@@ -869,8 +869,7 @@ render_inset_shadow_node (GskGLRenderer       *self,
 static inline void
 render_outset_shadow_node (GskGLRenderer       *self,
                            GskRenderNode       *node,
-                           RenderOpBuilder     *builder,
-                           const GskQuadVertex *vertex_data)
+                           RenderOpBuilder     *builder)
 {
   const GskRoundedRect *outline = gsk_outset_shadow_node_peek_outline (node);
   GskRoundedRect offset_outline;
@@ -2134,7 +2133,7 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
     break;
 
     case GSK_OUTSET_SHADOW_NODE:
-      render_outset_shadow_node (self, node, builder, vertex_data);
+      render_outset_shadow_node (self, node, builder);
     break;
 
     case GSK_SHADOW_NODE:
