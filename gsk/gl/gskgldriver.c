@@ -320,7 +320,7 @@ gsk_gl_driver_get_texture (GskGLDriver *driver,
   return NULL;
 }
 
-static Fbo *
+static const Fbo *
 gsk_gl_driver_get_fbo (GskGLDriver *driver,
                        int          texture_id)
 {
@@ -587,7 +587,7 @@ gsk_gl_driver_bind_render_target (GskGLDriver *driver,
                                   int          texture_id)
 {
   int status;
-  Fbo *f;
+  const Fbo *f;
 
   g_return_val_if_fail (GSK_IS_GL_DRIVER (driver), FALSE);
   g_return_val_if_fail (driver->in_frame, FALSE);
@@ -600,11 +600,6 @@ gsk_gl_driver_bind_render_target (GskGLDriver *driver,
     }
 
   f = gsk_gl_driver_get_fbo (driver, texture_id);
-  if (f == NULL)
-    {
-      g_critical ("No render target associated to texture %d found.", texture_id);
-      return FALSE;
-    }
 
   if (f != driver->bound_fbo)
     {
