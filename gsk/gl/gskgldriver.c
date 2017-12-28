@@ -9,22 +9,22 @@
 #include <gdk/gdk.h>
 #include <epoxy/gl.h>
 
+ typedef struct {
+  GLuint fbo_id;
+  GLuint depth_stencil_id;
+} Fbo;
+
 typedef struct {
   GLuint texture_id;
   int width;
   int height;
   GLuint min_filter;
   GLuint mag_filter;
-  GArray *fbos;
+  Fbo fbo;
   GdkTexture *user;
   guint in_use : 1;
   guint permanent : 1;
 } Texture;
-
-typedef struct {
-  GLuint fbo_id;
-  GLuint depth_stencil_id;
-} Fbo;
 
 struct _GskGLDriver
 {
@@ -68,6 +68,15 @@ texture_new (void)
   return g_slice_new0 (Texture);
 }
 
+static inline void
+fbo_clear (const Fbo *f)
+{
+  if (f->depth_stencil_id != 0)
+    glDeleteRenderbuffers (1, &f->depth_stencil_id);
+
+  glDeleteFramebuffers (1, &f->fbo_id);
+}
+
 static void
 texture_free (gpointer data)
 {
@@ -76,21 +85,13 @@ texture_free (gpointer data)
   if (t->user)
     gdk_texture_clear_render_data (t->user);
 
-  g_clear_pointer (&t->fbos, g_array_unref);
+  if (t->fbo.fbo_id != 0)
+    fbo_clear (&t->fbo);
+
   glDeleteTextures (1, &t->texture_id);
   g_slice_free (Texture, t);
 }
 
-static void
-fbo_clear (gpointer data)
-{
-  Fbo *f = data;
-
-  if (f->depth_stencil_id != 0)
-    glDeleteRenderbuffers (1, &f->depth_stencil_id);
-
-  glDeleteFramebuffers (1, &f->fbo_id);
-}
 
 static void
 gsk_gl_driver_finalize (GObject *gobject)
@@ -262,7 +263,6 @@ gsk_gl_driver_collect_textures (GskGLDriver *driver)
   GHashTableIter iter;
   gpointer value_p = NULL;
   int old_size;
-  /*return;*/
 
   g_return_val_if_fail (GSK_IS_GL_DRIVER (driver), 0);
   g_return_val_if_fail (!driver->in_frame, 0);
@@ -280,7 +280,12 @@ gsk_gl_driver_collect_textures (GskGLDriver *driver)
       if (t->in_use)
         {
           t->in_use = FALSE;
-          g_clear_pointer (&t->fbos, g_array_unref);
+
+          if (t->fbo.fbo_id != 0)
+            {
+              fbo_clear (&t->fbo);
+              t->fbo.fbo_id = 0;
+            }
         }
       else
         g_hash_table_iter_remove (&iter);
@@ -321,10 +326,10 @@ gsk_gl_driver_get_fbo (GskGLDriver *driver,
 {
   Texture *t = gsk_gl_driver_get_texture (driver, texture_id);
 
-  if (t->fbos == NULL)
+  if (t->fbo.fbo_id == 0)
     return &driver->default_fbo;
 
-  return &g_array_index (t->fbos, Fbo, 0);
+  return &t->fbo;
 }
 
 static Texture *
@@ -478,7 +483,6 @@ gsk_gl_driver_create_render_target (GskGLDriver *driver,
 {
   GLuint fbo_id, depth_stencil_buffer_id;
   Texture *t;
-  Fbo f;
 
   g_return_val_if_fail (GSK_IS_GL_DRIVER (driver), -1);
   g_return_val_if_fail (driver->in_frame, -1);
@@ -487,11 +491,8 @@ gsk_gl_driver_create_render_target (GskGLDriver *driver,
   if (t == NULL)
     return -1;
 
-  if (t->fbos == NULL)
-    {
-      t->fbos = g_array_new (FALSE, FALSE, sizeof (Fbo));
-      g_array_set_clear_func (t->fbos, fbo_clear);
-    }
+  if (t->fbo.fbo_id != 0)
+    fbo_clear (&t->fbo);
 
   glGenFramebuffers (1, &fbo_id);
   glBindFramebuffer (GL_FRAMEBUFFER, fbo_id);
@@ -520,10 +521,8 @@ gsk_gl_driver_create_render_target (GskGLDriver *driver,
                                       GL_RENDERBUFFER, depth_stencil_buffer_id);
     }
 
-  f.fbo_id = fbo_id;
-  f.depth_stencil_id = depth_stencil_buffer_id;
-
-  g_array_append_val (t->fbos, f);
+  t->fbo.fbo_id = fbo_id;
+  t->fbo.depth_stencil_id = depth_stencil_buffer_id;
 
   g_assert_cmpint (glCheckFramebufferStatus (GL_FRAMEBUFFER), ==, GL_FRAMEBUFFER_COMPLETE);
   glBindFramebuffer (GL_FRAMEBUFFER, driver->default_fbo.fbo_id);
