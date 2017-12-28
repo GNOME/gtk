@@ -1,5 +1,15 @@
 #include <gtk/gtk.h>
 
+static char *write_to_filename = NULL;
+static gboolean compare_node;
+
+static GOptionEntry options[] = {
+  { "write", 'o', 0, G_OPTION_ARG_STRING, &write_to_filename, "Write PNG file", NULL },
+  { "compare", 'c', 0, G_OPTION_ARG_NONE, &compare_node, "Compare render to render_texture", NULL },
+  { NULL }
+};
+
+
 
 typedef struct _GtkNodeView      GtkNodeView;
 typedef struct _GtkNodeViewClass GtkNodeViewClass;
@@ -23,6 +33,34 @@ GType gtk_node_view_get_type (void) G_GNUC_CONST;
 
 
 G_DEFINE_TYPE(GtkNodeView, gtk_node_view, GTK_TYPE_WIDGET)
+
+static void
+gtk_node_view_measure (GtkWidget      *widget,
+                       GtkOrientation  orientation,
+                       int             for_size,
+                       int            *minimum,
+                       int            *natural,
+                       int            *minimum_baseline,
+                       int            *natural_baseline)
+{
+  GtkNodeView *self = GTK_NODE_VIEW (widget);
+  graphene_rect_t bounds;
+
+
+  if (self->node == NULL)
+    return;
+
+  gsk_render_node_get_bounds (self->node, &bounds);
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      *minimum = *natural = bounds.origin.x + bounds.size.width;
+    }
+  else /* VERTICAL */
+    {
+      *minimum = *natural = bounds.origin.y + bounds.size.height;
+    }
+}
 
 static void
 gtk_node_view_snapshot (GtkWidget   *widget,
@@ -67,6 +105,7 @@ gtk_node_view_class_init (GtkNodeViewClass *klass)
 
   object_class->finalize = gtk_node_view_finalize;
 
+  widget_class->measure = gtk_node_view_measure;
   widget_class->snapshot = gtk_node_view_snapshot;
 }
 
@@ -77,15 +116,27 @@ main (int argc, char **argv)
   GtkWidget *nodeview;
   char *contents;
   gsize len;
-  GError *error = NULL;
   GBytes *bytes;
   graphene_rect_t node_bounds;
+  GOptionContext *option_context;
+  GError *error = NULL;
 
-  if (argc != 2)
+  option_context = g_option_context_new ("NODE-FILE [-o OUTPUT] [--compare]");
+  g_option_context_add_main_entries (option_context, options, NULL);
+
+  if (argc < 2)
     {
-      printf ("Usage: showrendernode NODEFILE\n");
+      printf ("Usage: showrendernode NODEFILE [-o OUTPUT] [--compare]\n");
       return 0;
     }
+
+  if (!g_option_context_parse (option_context, &argc, &argv, &error))
+    {
+      g_printerr ("Option parsing failed: %s\n", error->message);
+      return 1;
+    }
+
+  g_message ("Compare: %d, write to filename: %s", compare_node, write_to_filename);
 
   gtk_init ();
 
@@ -93,7 +144,6 @@ main (int argc, char **argv)
   nodeview = g_object_new (GTK_TYPE_NODE_VIEW, NULL);
 
   gtk_window_set_decorated (GTK_WINDOW (window), FALSE);
-  gtk_container_add (GTK_CONTAINER (window), nodeview);
 
   g_file_get_contents (argv[1], &contents, &len, &error);
   if (error)
@@ -108,10 +158,59 @@ main (int argc, char **argv)
 
   if (GTK_NODE_VIEW (nodeview)->node == NULL)
     {
-      g_test_message ("Invalid node file: %s\n", error->message);
+      g_critical ("Invalid node file: %s", error->message);
       g_clear_error (&error);
-      g_test_fail ();
       return -1;
+    }
+
+  if (write_to_filename != NULL)
+    {
+      GdkWindow *window = gdk_window_new_toplevel (gdk_display_get_default(), 10 , 10);
+      GskRenderer *renderer = gsk_renderer_new_for_window (window);
+      GdkTexture *texture = gsk_renderer_render_texture (renderer, GTK_NODE_VIEW (nodeview)->node, NULL);
+      cairo_surface_t *rendered_surface;
+
+      g_message ("Writing .node file to .png using %s", G_OBJECT_TYPE_NAME (renderer));
+
+      g_assert (texture != NULL);
+
+      rendered_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                                     gdk_texture_get_width (texture),
+                                                     gdk_texture_get_height (texture));
+      gdk_texture_download (texture,
+                            cairo_image_surface_get_data (rendered_surface),
+                            cairo_image_surface_get_stride (rendered_surface));
+      cairo_surface_mark_dirty (rendered_surface);
+
+      cairo_surface_write_to_png (rendered_surface, write_to_filename);
+
+      gsk_renderer_unrealize (renderer);
+
+      g_object_unref (texture);
+      g_object_unref (renderer);
+      g_object_unref (window);
+    }
+
+  if (compare_node)
+    {
+      GtkWidget *box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
+      GdkWindow *gdk_window = gdk_window_new_toplevel (gdk_display_get_default(), 10 , 10);
+      GskRenderer *renderer = gsk_renderer_new_for_window (gdk_window);
+      GdkTexture *texture = gsk_renderer_render_texture (renderer, GTK_NODE_VIEW (nodeview)->node, NULL);
+      GtkWidget *image = gtk_image_new_from_texture (texture);
+
+      gtk_container_add (GTK_CONTAINER (box), nodeview);
+      gtk_container_add (GTK_CONTAINER (box), image);
+      gtk_container_add (GTK_CONTAINER (window), box);
+
+      gsk_renderer_unrealize (renderer);
+      g_object_unref (texture);
+      g_object_unref (renderer);
+      g_object_unref (gdk_window);
+    }
+  else
+    {
+      gtk_container_add (GTK_CONTAINER (window), nodeview);
     }
 
   gsk_render_node_get_bounds (GTK_NODE_VIEW (nodeview)->node, &node_bounds);
