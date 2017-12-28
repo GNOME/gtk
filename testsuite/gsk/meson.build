@@ -45,9 +45,9 @@ gl_tests = [
 ]
 
 foreach gl_test : gl_tests
-  test(gl_test[0], compare_render,
-       args: [join_paths(meson.current_source_dir(), gl_test[1]),
-              join_paths(meson.current_source_dir(), gl_test[2])],
+  test('GL ' + gl_test[0], compare_render,
+       args: [join_paths(meson.current_source_dir(), 'gl', gl_test[1]),
+              join_paths(meson.current_source_dir(), 'gl', gl_test[2])],
        env: [ 'GIO_USE_VOLUME_MONITOR=unix',
               'GSETTINGS_BACKEND=memory',
               'GTK_CSD=1',
