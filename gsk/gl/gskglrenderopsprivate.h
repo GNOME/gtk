@@ -79,6 +79,7 @@ typedef struct
     struct {
       int blur_radius_location;
       int blur_size_location;
+      int dir_location;
     } blur;
     struct {
       int color_location;
@@ -138,6 +139,7 @@ typedef struct
     struct {
       float radius;
       graphene_size_t size;
+      float dir[2];
     } blur;
     struct {
       float outline[4];

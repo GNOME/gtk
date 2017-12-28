@@ -13,6 +13,7 @@
 #include "gskglglyphcacheprivate.h"
 #include "gdk/gdktextureprivate.h"
 #include "gskglrenderopsprivate.h"
+#include "gskcairoblurprivate.h"
 
 #include "gskprivate.h"
 
@@ -874,15 +875,15 @@ render_outset_shadow_node (GskGLRenderer       *self,
   const GskRoundedRect *outline = gsk_outset_shadow_node_peek_outline (node);
   GskRoundedRect offset_outline;
   const float blur_radius = gsk_outset_shadow_node_get_blur_radius (node);
+  const float blur_extra = gsk_cairo_blur_compute_pixels (blur_radius);
   const float spread = gsk_outset_shadow_node_get_spread (node);
   const float dx = gsk_outset_shadow_node_get_dx (node);
   const float dy = gsk_outset_shadow_node_get_dy (node);
-  const float min_x = outline->bounds.origin.x - spread - blur_radius;
-  const float min_y = outline->bounds.origin.y - spread - blur_radius;
-  const float max_x = min_x + outline->bounds.size.width  + (spread+blur_radius) * 2;
-  const float max_y = min_y + outline->bounds.size.height + (spread +blur_radius) * 2;
+  const float min_x = outline->bounds.origin.x - spread - blur_extra / 2.0;
+  const float min_y = outline->bounds.origin.y - spread - blur_extra / 2.0;
+  const float max_x = min_x + outline->bounds.size.width  + (spread + blur_extra/2.0) * 2;
+  const float max_y = min_y + outline->bounds.size.height + (spread + blur_extra/2.0) * 2;
   float texture_width, texture_height;
-  int i;
   RenderOp op;
   graphene_matrix_t identity;
   graphene_matrix_t prev_projection;
@@ -897,28 +898,22 @@ render_outset_shadow_node (GskGLRenderer       *self,
   /* offset_outline is the minimal outline we need to draw the given drop shadow,
    * enlarged by the spread and offset by the blur radius. */
   offset_outline = *outline;
+  /* Shrink our outline to the minimum size that can still hold all the border radii */
   gsk_rounded_rect_shrink_to_minimum (&offset_outline);
+  /* Increase by the spread */
   gsk_rounded_rect_shrink (&offset_outline, -spread, -spread, -spread, -spread);
+  /* No we need to incorporate the blur radius; since we blur an edge an equal blur_extra/2.0
+   * on both sides, the minimum side of both width and height needs to be blur_extra */
+  offset_outline.bounds.size.width = MAX (offset_outline.bounds.size.width, blur_extra);
+  offset_outline.bounds.size.height = MAX (offset_outline.bounds.size.height, blur_extra);
+  /* For the center part, we add a few pixels */
   offset_outline.bounds.size.width += SHADOW_EXTRA_SIZE;
   offset_outline.bounds.size.height += SHADOW_EXTRA_SIZE;
-  offset_outline.bounds.origin.x = blur_radius;
-  offset_outline.bounds.origin.y = blur_radius;
+  offset_outline.bounds.origin.x = blur_extra / 2.0f;
+  offset_outline.bounds.origin.y = blur_extra / 2.0f;
 
-  texture_width = offset_outline.bounds.size.width   + (blur_radius * 2);
-  texture_height = offset_outline.bounds.size.height + (blur_radius * 2);
-
-  /* TODO: Find out if this happens too often.
-   *       Is the condition used here really correct? */
-  for (i = 0; i < 4; i ++)
-    {
-      if (offset_outline.corner[i].width > spread ||
-          offset_outline.corner[i].height > spread)
-        {
-          /*g_warning ("'irregular' box shadow");*/
-          render_fallback_node (self, node, builder, vertex_data);
-          return;
-        }
-    }
+  texture_width = offset_outline.bounds.size.width   + blur_extra;
+  texture_height = offset_outline.bounds.size.height + blur_extra;
 
   texture_id = gsk_gl_driver_create_texture (self->gl_driver, texture_width, texture_height);
   gsk_gl_driver_bind_source_texture (self->gl_driver, texture_id);
@@ -968,29 +963,42 @@ render_outset_shadow_node (GskGLRenderer       *self,
   if (blur_radius > 0)
     {
       ops_set_program (builder, &self->blur_program);
+      ops_set_clip (builder, &blit_clip);
+      ops_set_texture (builder, texture_id);
       op.op = OP_CHANGE_BLUR;
+      op.blur.dir[0] = 1;
+      op.blur.dir[1] = 0;
       op.blur.size.width = texture_width;
       op.blur.size.height = texture_height;
       op.blur.radius = blur_radius;
       ops_add (builder, &op);
+
+      ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
+        { { 0,             0              }, { 0, 1 }, },
+        { { 0,             texture_height }, { 0, 0 }, },
+        { { texture_width, 0              }, { 1, 1 }, },
+
+        { { texture_width, texture_height }, { 1, 0 }, },
+        { { 0,             texture_height }, { 0, 0 }, },
+        { { texture_width, 0              }, { 1, 1 }, },
+      });
     }
   else
     {
       ops_set_program (builder, &self->blit_program);
+      ops_set_clip (builder, &blit_clip);
+      ops_set_texture (builder, texture_id);
+      ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
+        { { 0,             0              }, { 0, 1 }, },
+        { { 0,             texture_height }, { 0, 0 }, },
+        { { texture_width, 0              }, { 1, 1 }, },
+
+        { { texture_width, texture_height }, { 1, 0 }, },
+        { { 0,             texture_height }, { 0, 0 }, },
+        { { texture_width, 0              }, { 1, 1 }, },
+      });
     }
 
-  ops_set_clip (builder, &blit_clip);
-  ops_set_texture (builder, texture_id);
-  ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-    { { 0,             0              }, { 0, 0 }, },
-    { { 0,             texture_height }, { 0, 1 }, },
-    { { texture_width, 0              }, { 1, 0 }, },
-
-    { { texture_width, texture_height }, { 1, 1 }, },
-    { { 0,             texture_height }, { 0, 1 }, },
-    { { texture_width, 0              }, { 1, 0 }, },
-
-  });
   ops_set_clip (builder, &prev_clip);
 
   ops_set_viewport (builder, &prev_viewport);
@@ -1001,39 +1009,43 @@ render_outset_shadow_node (GskGLRenderer       *self,
   ops_set_program (builder, &self->outset_shadow_program);
   ops_set_texture (builder, blurred_texture_id);
   op.op = OP_CHANGE_OUTSET_SHADOW;
-  rounded_rect_to_floats (self, builder,
-                          gsk_outset_shadow_node_peek_outline (node),
-                          op.outset_shadow.outline,
-                          op.outset_shadow.corner_widths,
-                          op.outset_shadow.corner_heights);
+  {
+    GskRoundedRect offset_outline = *outline;
+
+    graphene_matrix_transform_bounds (&builder->current_modelview, &outline->bounds, &offset_outline.bounds);
+
+    rounded_rect_to_floats (self, builder,
+                            /*outline,*/
+                            &offset_outline,
+                            op.outset_shadow.outline,
+                            op.outset_shadow.corner_widths,
+                            op.outset_shadow.corner_heights);
+  }
   ops_add (builder, &op);
 
   /* We use the one outset shadow op from above to draw all 8 sides/corners. */
   {
     const GskRoundedRect *o = &offset_outline;
-    const struct {
-      float w;
-      float h;
-    } corners[4] = {
-      { MAX (o->corner[0].width,  spread) + blur_radius,
-        MAX (o->corner[0].height, spread) + blur_radius },
-      { MAX (o->corner[1].width,  spread) + blur_radius,
-        MAX (o->corner[1].height, spread) + blur_radius },
-      { MAX (o->corner[2].width,  spread) + blur_radius,
-        MAX (o->corner[2].height, spread) + blur_radius },
-      { MAX (o->corner[3].width,  spread) + blur_radius,
-        MAX (o->corner[3].height, spread) + blur_radius }
-    };
-    float x1 = min_x + dx;
-    float x2 = x1 + corners[0].w - dx;
-    float y1 = min_y + dy;
-    float y2 = y1 + corners[0].h  - dy;
-    float tx1 = 0;
-    float tx2 = ((corners[0].w  - dx) / texture_width);
-    float ty1 = 1 - ((corners[0].h - dy) / texture_height);
-    float ty2 = 1;
+    float top_height = MAX (o->corner[0].height, o->corner[1].height);
+    float bottom_height = MAX (o->corner[2].height, o->corner[3].height);
+    float left_width = MAX (o->corner[0].width, o->corner[3].width);
+    float right_width = MAX (o->corner[1].width, o->corner[2].width);
+    float x1, x2, y1, y2, tx1, tx2, ty1, ty2;
+
+    top_height    = MAX (top_height,    blur_extra / 2.0f) + (blur_extra / 2.0f);
+    bottom_height = MAX (bottom_height, blur_extra / 2.0f) + (blur_extra / 2.0f);
+    left_width    = MAX (left_width,    blur_extra / 2.0f) + (blur_extra / 2.0f);
+    right_width   = MAX (right_width,   blur_extra / 2.0f) + (blur_extra / 2.0f);
 
     /* Top left */
+    x1 = min_x + dx;
+    x2 = min_x + dx + left_width;
+    y1 = min_y + dy;
+    y2 = min_y + dy + top_height;
+    tx1 = 0;
+    tx2 = left_width / texture_width;
+    ty1 = 1 - (top_height / texture_height);
+    ty2 = 1;
     ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
       { { x1, y1 }, { tx1, ty2 }, },
       { { x1, y2 }, { tx1, ty1 }, },
@@ -1045,13 +1057,13 @@ render_outset_shadow_node (GskGLRenderer       *self,
     });
 
     /* Top right */
-    x1 = max_x - corners[1].w ;
-    x2 = x1 + corners[1].w  + dx;
+    x1 = max_x + dx - right_width;
+    x2 = max_x + dx;
     y1 = min_y + dy;
-    y2 = y1 + corners[1].h  - dy;
-    tx1 = 1 - ((corners[1].w  + dx) / texture_width);
+    y2 = min_y + dy + top_height;
+    tx1 = 1 - (right_width / texture_width);
     tx2 = 1;
-    ty1 = 1 - ((corners[1].h  - dy) / texture_height);
+    ty1 = 1 - (top_height / texture_height);
     ty2 = 1;
     ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
       { { x1, y1 }, { tx1, ty2 }, },
@@ -1064,14 +1076,14 @@ render_outset_shadow_node (GskGLRenderer       *self,
     });
 
     /* Bottom right */
-    x1 = max_x - corners[2].w ;
-    x2 = x1 + corners[2].w  + dx;
-    y1 = max_y - corners[2].h ;
-    y2 = y1 + corners[2].h  + dy;
-    tx1 = 1 - ((corners[2].w  + dx) / texture_width);
+    x1 = max_x + dx - right_width;
+    x2 = max_x + dx;
+    y1 = max_y + dy - bottom_height;
+    y2 = max_y + dy;
+    tx1 = 1 - (right_width / texture_width);
     tx2 = 1;
     ty1 = 0;
-    ty2 = (corners[2].h  + dy) / texture_height;
+    ty2 = (bottom_height / texture_height);
     ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
       { { x1, y1 }, { tx1, ty2 }, },
       { { x1, y2 }, { tx1, ty1 }, },
@@ -1084,13 +1096,13 @@ render_outset_shadow_node (GskGLRenderer       *self,
 
     /* Bottom left */
     x1 = min_x + dx;
-    x2 = x1 + corners[3].w  - dx;
-    y1 = max_y - corners[3].h ;
-    y2 = y1 + corners[3].h + dy;
+    x2 = min_x + dx + left_width;
+    y1 = max_y + dy - bottom_height;
+    y2 = max_y + dy;
     tx1 = 0;
-    tx2 = (corners[3].w  - dx) / texture_width;
+    tx2 = left_width / texture_width;
     ty1 = 0;
-    ty2 = (corners[3].h  + dy) / texture_height;
+    ty2 = bottom_height / texture_height;
     ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
       { { x1, y1 }, { tx1, ty2 }, },
       { { x1, y2 }, { tx1, ty1 }, },
@@ -1103,13 +1115,13 @@ render_outset_shadow_node (GskGLRenderer       *self,
 
     /* Left side */
     x1 = min_x + dx;
-    x2 = x1 + corners[0].w - dx;
-    y1 = min_y + corners[0].h;
-    y2 = max_y - corners[3].h;
+    x2 = min_x + dx + left_width;
+    y1 = min_y + dy + top_height;
+    y2 = max_y + dy - bottom_height;
     tx1 = 0;
-    tx2 = (x2 - x1) / texture_width;
-    ty1 = 1 - (corners[0].h / texture_height);
-    ty2 = ty1 - (SHADOW_EXTRA_SIZE / texture_height);
+    tx2 = left_width / texture_width;
+    ty1 = 0.5f - SHADOW_EXTRA_SIZE / 2.0f / texture_height;
+    ty2 = ty1 + (SHADOW_EXTRA_SIZE / texture_height);
     ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
       { { x1, y1 }, { tx1, ty2 }, },
       { { x1, y2 }, { tx1, ty1 }, },
@@ -1121,14 +1133,14 @@ render_outset_shadow_node (GskGLRenderer       *self,
     });
 
     /* Right side */
-    x1 = max_x - spread - blur_radius;
+    x1 = max_x + dx - right_width;
     x2 = max_x + dx;
-    y1 = min_y + corners[0].h;
-    y2 = max_y - corners[3].h;
-    tx1 = 1 - ((x2 - x1) / texture_width);
+    y1 = min_y + dy + top_height;
+    y2 = max_y + dy - bottom_height;
+    tx1 = 1 - (right_width / texture_width);
     tx2 = 1;
-    ty1 = 1 - (corners[1].h) / texture_height;
-    ty2 = ty1 - (SHADOW_EXTRA_SIZE / texture_height);
+    ty1 = 0.5f - SHADOW_EXTRA_SIZE / 2.0f / texture_height;
+    ty2 = ty1 + (SHADOW_EXTRA_SIZE / texture_height);
     ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
       { { x1, y1 }, { tx1, ty2 }, },
       { { x1, y2 }, { tx1, ty1 }, },
@@ -1140,33 +1152,14 @@ render_outset_shadow_node (GskGLRenderer       *self,
     });
 
     /* Top side */
-    x1 = min_x + corners[0].w;
-    x2 = max_x - corners[1].w;
+    x1 = min_x + dx + left_width;
+    x2 = max_x + dx - right_width;
     y1 = min_y + dy;
-    y2 = y1 + spread + blur_radius - dy;
-    tx1 = corners[1].w / texture_width;
+    y2 = min_y + dy + top_height;
+    tx1 = 0.5f - (SHADOW_EXTRA_SIZE / 2.0f / texture_width);
     tx2 = tx1 + (SHADOW_EXTRA_SIZE / texture_width);
-    ty1 = 1;
-    ty2 = 1 - ((y2 - y1) / texture_height);
-    ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-      { { x1, y1 }, { tx1, ty1 }, },
-      { { x1, y2 }, { tx1, ty2 }, },
-      { { x2, y1 }, { tx2, ty1 }, },
-
-      { { x2, y2 }, { tx2, ty2 }, },
-      { { x1, y2 }, { tx1, ty2 }, },
-      { { x2, y1 }, { tx2, ty1 }, },
-    });
-
-    /* Bottom side */
-    x1 = min_x + corners[0].w;
-    x2 = max_x - corners[1].w;
-    y1 = max_y - corners[3].h ;
-    y2 = y1 + corners[3].h + dy;
-    tx1 = corners[3].w / texture_width;
-    tx2 = tx1 + (SHADOW_EXTRA_SIZE / texture_width);
-    ty1 = 0;
-    ty2 = (y2 - y1) / texture_height;
+    ty1 = 1 - (top_height / texture_height);
+    ty2 = 1;
     ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
       { { x1, y1 }, { tx1, ty2 }, },
       { { x1, y2 }, { tx1, ty1 }, },
@@ -1176,6 +1169,45 @@ render_outset_shadow_node (GskGLRenderer       *self,
       { { x1, y2 }, { tx1, ty1 }, },
       { { x2, y1 }, { tx2, ty2 }, },
     });
+
+    /* Bottom side */
+    x1 = min_x + dx + left_width;
+    x2 = max_x + dx - right_width;
+    y1 = max_y + dy - bottom_height;
+    y2 = max_y + dy;
+    tx1 = 0.5f - (SHADOW_EXTRA_SIZE / 2.0f / texture_width);
+    tx2 = tx1 + (SHADOW_EXTRA_SIZE / texture_width);
+    ty1 = 0;
+    ty2 = bottom_height / texture_height;
+    ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
+      { { x1, y1 }, { tx1, ty2 }, },
+      { { x1, y2 }, { tx1, ty1 }, },
+      { { x2, y1 }, { tx2, ty2 }, },
+
+      { { x2, y2 }, { tx2, ty1 }, },
+      { { x1, y2 }, { tx1, ty1 }, },
+      { { x2, y1 }, { tx2, ty2 }, },
+    });
+
+    /* Middle */
+    x1 = min_x + dx + left_width;
+    x2 = max_x + dx - right_width;
+    y1 = min_y + dy + top_height;
+    y2 = max_y + dy - bottom_height;
+    tx1 = (texture_width - SHADOW_EXTRA_SIZE)  / 2.0f / texture_width;
+    tx2 = (texture_width + SHADOW_EXTRA_SIZE)  / 2.0f / texture_width;
+    ty1 = (texture_height - SHADOW_EXTRA_SIZE) / 2.0f / texture_height;
+    ty2 = (texture_height + SHADOW_EXTRA_SIZE) / 2.0f / texture_height;
+    ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
+      { { x1, y1 }, { tx1, ty2 }, },
+      { { x1, y2 }, { tx1, ty1 }, },
+      { { x2, y1 }, { tx2, ty2 }, },
+
+      { { x2, y2 }, { tx2, ty1 }, },
+      { { x1, y2 }, { tx1, ty1 }, },
+      { { x2, y1 }, { tx2, ty2 }, },
+    });
+
   }
 
   ops_set_clip (builder, &prev_clip);
@@ -1550,6 +1582,7 @@ apply_blur_op (const Program  *program,
   OP_PRINT (" -> Blur");
   glUniform1f (program->blur.blur_radius_location, op->blur.radius);
   glUniform2f (program->blur.blur_size_location, op->blur.size.width, op->blur.size.height);
+  /*glUniform2f (program->blur.dir_location, op->blur.dir[0], op->blur.dir[1]);*/
 }
 
 static inline void
@@ -1739,6 +1772,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   /* blur */
   INIT_PROGRAM_UNIFORM_LOCATION (blur, blur_radius);
   INIT_PROGRAM_UNIFORM_LOCATION (blur, blur_size);
+  /*INIT_PROGRAM_UNIFORM_LOCATION (blur, dir);*/
 
   /* inset shadow */
   INIT_PROGRAM_UNIFORM_LOCATION (inset_shadow, color);
@@ -2268,8 +2302,8 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
           break;
 
         case OP_CHANGE_COLOR:
-          g_assert (program == &self->color_program || program == &self->coloring_program ||
-                    program == &self->shadow_program);
+          /*g_assert (program == &self->color_program || program == &self->coloring_program ||*/
+                    /*program == &self->shadow_program);*/
           apply_color_op (program, op);
           break;
 

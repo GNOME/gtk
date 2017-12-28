@@ -15,6 +15,6 @@ void main() {
   RoundedRect outline = RoundedRect(vec4(u_outline.xy, u_outline.xy + u_outline.zw), u_corner_widths, u_corner_heights);
 
   vec4 color = Texture(u_source, vUv);
-  color *= (1 - clamp(rounded_rect_coverage (outline, f.xy), 0, 1));
-  setOutputColor(color);
+  color = color * (1 -  clamp(rounded_rect_coverage (outline, f.xy), 0, 1));
+  setOutputColor(color * u_alpha);
 }
