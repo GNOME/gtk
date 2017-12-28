@@ -1038,175 +1038,202 @@ render_outset_shadow_node (GskGLRenderer       *self,
     right_width   = MAX (right_width,   blur_extra / 2.0f) + (blur_extra / 2.0f);
 
     /* Top left */
-    x1 = min_x + dx;
-    x2 = min_x + dx + left_width;
-    y1 = min_y + dy;
-    y2 = min_y + dy + top_height;
-    tx1 = 0;
-    tx2 = left_width / texture_width;
-    ty1 = 1 - (top_height / texture_height);
-    ty2 = 1;
-    ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-      { { x1, y1 }, { tx1, ty2 }, },
-      { { x1, y2 }, { tx1, ty1 }, },
-      { { x2, y1 }, { tx2, ty2 }, },
+    if (top_height > 0 && left_width > 0)
+      {
+        x1 = min_x + dx;
+        x2 = min_x + dx + left_width;
+        y1 = min_y + dy;
+        y2 = min_y + dy + top_height;
+        tx1 = 0;
+        tx2 = left_width / texture_width;
+        ty1 = 1 - (top_height / texture_height);
+        ty2 = 1;
+        ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
+          { { x1, y1 }, { tx1, ty2 }, },
+          { { x1, y2 }, { tx1, ty1 }, },
+          { { x2, y1 }, { tx2, ty2 }, },
 
-      { { x2, y2 }, { tx2, ty1 }, },
-      { { x1, y2 }, { tx1, ty1 }, },
-      { { x2, y1 }, { tx2, ty2 }, },
-    });
+          { { x2, y2 }, { tx2, ty1 }, },
+          { { x1, y2 }, { tx1, ty1 }, },
+          { { x2, y1 }, { tx2, ty2 }, },
+        });
+      }
 
     /* Top right */
-    x1 = max_x + dx - right_width;
-    x2 = max_x + dx;
-    y1 = min_y + dy;
-    y2 = min_y + dy + top_height;
-    tx1 = 1 - (right_width / texture_width);
-    tx2 = 1;
-    ty1 = 1 - (top_height / texture_height);
-    ty2 = 1;
-    ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-      { { x1, y1 }, { tx1, ty2 }, },
-      { { x1, y2 }, { tx1, ty1 }, },
-      { { x2, y1 }, { tx2, ty2 }, },
+    if (top_height > 0 && right_width > 0)
+      {
+        x1 = max_x + dx - right_width;
+        x2 = max_x + dx;
+        y1 = min_y + dy;
+        y2 = min_y + dy + top_height;
+        tx1 = 1 - (right_width / texture_width);
+        tx2 = 1;
+        ty1 = 1 - (top_height / texture_height);
+        ty2 = 1;
+        ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
+          { { x1, y1 }, { tx1, ty2 }, },
+          { { x1, y2 }, { tx1, ty1 }, },
+          { { x2, y1 }, { tx2, ty2 }, },
 
-      { { x2, y2 }, { tx2, ty1 }, },
-      { { x1, y2 }, { tx1, ty1 }, },
-      { { x2, y1 }, { tx2, ty2 }, },
-    });
+          { { x2, y2 }, { tx2, ty1 }, },
+          { { x1, y2 }, { tx1, ty1 }, },
+          { { x2, y1 }, { tx2, ty2 }, },
+        });
+      }
 
     /* Bottom right */
-    x1 = max_x + dx - right_width;
-    x2 = max_x + dx;
-    y1 = max_y + dy - bottom_height;
-    y2 = max_y + dy;
-    tx1 = 1 - (right_width / texture_width);
-    tx2 = 1;
-    ty1 = 0;
-    ty2 = (bottom_height / texture_height);
-    ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-      { { x1, y1 }, { tx1, ty2 }, },
-      { { x1, y2 }, { tx1, ty1 }, },
-      { { x2, y1 }, { tx2, ty2 }, },
+    if (bottom_height > 0 && left_width > 0)
+      {
+        x1 = max_x + dx - right_width;
+        x2 = max_x + dx;
+        y1 = max_y + dy - bottom_height;
+        y2 = max_y + dy;
+        tx1 = 1 - (right_width / texture_width);
+        tx2 = 1;
+        ty1 = 0;
+        ty2 = (bottom_height / texture_height);
+        ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
+          { { x1, y1 }, { tx1, ty2 }, },
+          { { x1, y2 }, { tx1, ty1 }, },
+          { { x2, y1 }, { tx2, ty2 }, },
 
-      { { x2, y2 }, { tx2, ty1 }, },
-      { { x1, y2 }, { tx1, ty1 }, },
-      { { x2, y1 }, { tx2, ty2 }, },
-    });
+          { { x2, y2 }, { tx2, ty1 }, },
+          { { x1, y2 }, { tx1, ty1 }, },
+          { { x2, y1 }, { tx2, ty2 }, },
+        });
+      }
 
     /* Bottom left */
-    x1 = min_x + dx;
-    x2 = min_x + dx + left_width;
-    y1 = max_y + dy - bottom_height;
-    y2 = max_y + dy;
-    tx1 = 0;
-    tx2 = left_width / texture_width;
-    ty1 = 0;
-    ty2 = bottom_height / texture_height;
-    ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-      { { x1, y1 }, { tx1, ty2 }, },
-      { { x1, y2 }, { tx1, ty1 }, },
-      { { x2, y1 }, { tx2, ty2 }, },
+    if (bottom_height > 0 && left_width > 0)
+      {
+        x1 = min_x + dx;
+        x2 = min_x + dx + left_width;
+        y1 = max_y + dy - bottom_height;
+        y2 = max_y + dy;
+        tx1 = 0;
+        tx2 = left_width / texture_width;
+        ty1 = 0;
+        ty2 = bottom_height / texture_height;
+        ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
+          { { x1, y1 }, { tx1, ty2 }, },
+          { { x1, y2 }, { tx1, ty1 }, },
+          { { x2, y1 }, { tx2, ty2 }, },
 
-      { { x2, y2 }, { tx2, ty1 }, },
-      { { x1, y2 }, { tx1, ty1 }, },
-      { { x2, y1 }, { tx2, ty2 }, },
-    });
+          { { x2, y2 }, { tx2, ty1 }, },
+          { { x1, y2 }, { tx1, ty1 }, },
+          { { x2, y1 }, { tx2, ty2 }, },
+        });
+      }
 
     /* Left side */
-    x1 = min_x + dx;
-    x2 = min_x + dx + left_width;
-    y1 = min_y + dy + top_height;
-    y2 = max_y + dy - bottom_height;
-    tx1 = 0;
-    tx2 = left_width / texture_width;
-    ty1 = 0.5f - SHADOW_EXTRA_SIZE / 2.0f / texture_height;
-    ty2 = ty1 + (SHADOW_EXTRA_SIZE / texture_height);
-    ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-      { { x1, y1 }, { tx1, ty2 }, },
-      { { x1, y2 }, { tx1, ty1 }, },
-      { { x2, y1 }, { tx2, ty2 }, },
+    if (left_width > 0)
+      {
+        x1 = min_x + dx;
+        x2 = min_x + dx + left_width;
+        y1 = min_y + dy + top_height;
+        y2 = max_y + dy - bottom_height;
+        tx1 = 0;
+        tx2 = left_width / texture_width;
+        ty1 = 0.5f - SHADOW_EXTRA_SIZE / 2.0f / texture_height;
+        ty2 = ty1 + (SHADOW_EXTRA_SIZE / texture_height);
+        ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
+          { { x1, y1 }, { tx1, ty2 }, },
+          { { x1, y2 }, { tx1, ty1 }, },
+          { { x2, y1 }, { tx2, ty2 }, },
 
-      { { x2, y2 }, { tx2, ty1 }, },
-      { { x1, y2 }, { tx1, ty1 }, },
-      { { x2, y1 }, { tx2, ty2 }, },
-    });
+          { { x2, y2 }, { tx2, ty1 }, },
+          { { x1, y2 }, { tx1, ty1 }, },
+          { { x2, y1 }, { tx2, ty2 }, },
+        });
+      }
 
     /* Right side */
-    x1 = max_x + dx - right_width;
-    x2 = max_x + dx;
-    y1 = min_y + dy + top_height;
-    y2 = max_y + dy - bottom_height;
-    tx1 = 1 - (right_width / texture_width);
-    tx2 = 1;
-    ty1 = 0.5f - SHADOW_EXTRA_SIZE / 2.0f / texture_height;
-    ty2 = ty1 + (SHADOW_EXTRA_SIZE / texture_height);
-    ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-      { { x1, y1 }, { tx1, ty2 }, },
-      { { x1, y2 }, { tx1, ty1 }, },
-      { { x2, y1 }, { tx2, ty2 }, },
+    if (right_width > 0)
+      {
+        x1 = max_x + dx - right_width;
+        x2 = max_x + dx;
+        y1 = min_y + dy + top_height;
+        y2 = max_y + dy - bottom_height;
+        tx1 = 1 - (right_width / texture_width);
+        tx2 = 1;
+        ty1 = 0.5f - SHADOW_EXTRA_SIZE / 2.0f / texture_height;
+        ty2 = ty1 + (SHADOW_EXTRA_SIZE / texture_height);
+        ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
+          { { x1, y1 }, { tx1, ty2 }, },
+          { { x1, y2 }, { tx1, ty1 }, },
+          { { x2, y1 }, { tx2, ty2 }, },
 
-      { { x2, y2 }, { tx2, ty1 }, },
-      { { x1, y2 }, { tx1, ty1 }, },
-      { { x2, y1 }, { tx2, ty2 }, },
-    });
+          { { x2, y2 }, { tx2, ty1 }, },
+          { { x1, y2 }, { tx1, ty1 }, },
+          { { x2, y1 }, { tx2, ty2 }, },
+        });
+      }
 
     /* Top side */
-    x1 = min_x + dx + left_width;
-    x2 = max_x + dx - right_width;
-    y1 = min_y + dy;
-    y2 = min_y + dy + top_height;
-    tx1 = 0.5f - (SHADOW_EXTRA_SIZE / 2.0f / texture_width);
-    tx2 = tx1 + (SHADOW_EXTRA_SIZE / texture_width);
-    ty1 = 1 - (top_height / texture_height);
-    ty2 = 1;
-    ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-      { { x1, y1 }, { tx1, ty2 }, },
-      { { x1, y2 }, { tx1, ty1 }, },
-      { { x2, y1 }, { tx2, ty2 }, },
+    if (top_height > 0)
+      {
+        x1 = min_x + dx + left_width;
+        x2 = max_x + dx - right_width;
+        y1 = min_y + dy;
+        y2 = min_y + dy + top_height;
+        tx1 = 0.5f - (SHADOW_EXTRA_SIZE / 2.0f / texture_width);
+        tx2 = tx1 + (SHADOW_EXTRA_SIZE / texture_width);
+        ty1 = 1 - (top_height / texture_height);
+        ty2 = 1;
+        ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
+          { { x1, y1 }, { tx1, ty2 }, },
+          { { x1, y2 }, { tx1, ty1 }, },
+          { { x2, y1 }, { tx2, ty2 }, },
 
-      { { x2, y2 }, { tx2, ty1 }, },
-      { { x1, y2 }, { tx1, ty1 }, },
-      { { x2, y1 }, { tx2, ty2 }, },
-    });
+          { { x2, y2 }, { tx2, ty1 }, },
+          { { x1, y2 }, { tx1, ty1 }, },
+          { { x2, y1 }, { tx2, ty2 }, },
+        });
+      }
 
     /* Bottom side */
-    x1 = min_x + dx + left_width;
-    x2 = max_x + dx - right_width;
-    y1 = max_y + dy - bottom_height;
-    y2 = max_y + dy;
-    tx1 = 0.5f - (SHADOW_EXTRA_SIZE / 2.0f / texture_width);
-    tx2 = tx1 + (SHADOW_EXTRA_SIZE / texture_width);
-    ty1 = 0;
-    ty2 = bottom_height / texture_height;
-    ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-      { { x1, y1 }, { tx1, ty2 }, },
-      { { x1, y2 }, { tx1, ty1 }, },
-      { { x2, y1 }, { tx2, ty2 }, },
+    if (bottom_height > 0)
+      {
+        x1 = min_x + dx + left_width;
+        x2 = max_x + dx - right_width;
+        y1 = max_y + dy - bottom_height;
+        y2 = max_y + dy;
+        tx1 = 0.5f - (SHADOW_EXTRA_SIZE / 2.0f / texture_width);
+        tx2 = tx1 + (SHADOW_EXTRA_SIZE / texture_width);
+        ty1 = 0;
+        ty2 = bottom_height / texture_height;
+        ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
+          { { x1, y1 }, { tx1, ty2 }, },
+          { { x1, y2 }, { tx1, ty1 }, },
+          { { x2, y1 }, { tx2, ty2 }, },
 
-      { { x2, y2 }, { tx2, ty1 }, },
-      { { x1, y2 }, { tx1, ty1 }, },
-      { { x2, y1 }, { tx2, ty2 }, },
-    });
+          { { x2, y2 }, { tx2, ty1 }, },
+          { { x1, y2 }, { tx1, ty1 }, },
+          { { x2, y1 }, { tx2, ty2 }, },
+        });
+      }
 
     /* Middle */
     x1 = min_x + dx + left_width;
     x2 = max_x + dx - right_width;
     y1 = min_y + dy + top_height;
     y2 = max_y + dy - bottom_height;
-    tx1 = (texture_width - SHADOW_EXTRA_SIZE)  / 2.0f / texture_width;
-    tx2 = (texture_width + SHADOW_EXTRA_SIZE)  / 2.0f / texture_width;
-    ty1 = (texture_height - SHADOW_EXTRA_SIZE) / 2.0f / texture_height;
-    ty2 = (texture_height + SHADOW_EXTRA_SIZE) / 2.0f / texture_height;
-    ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-      { { x1, y1 }, { tx1, ty2 }, },
-      { { x1, y2 }, { tx1, ty1 }, },
-      { { x2, y1 }, { tx2, ty2 }, },
+    if (x2 > x1 && y2 > y1)
+      {
+        tx1 = (texture_width - SHADOW_EXTRA_SIZE)  / 2.0f / texture_width;
+        tx2 = (texture_width + SHADOW_EXTRA_SIZE)  / 2.0f / texture_width;
+        ty1 = (texture_height - SHADOW_EXTRA_SIZE) / 2.0f / texture_height;
+        ty2 = (texture_height + SHADOW_EXTRA_SIZE) / 2.0f / texture_height;
+        ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
+          { { x1, y1 }, { tx1, ty2 }, },
+          { { x1, y2 }, { tx1, ty1 }, },
+          { { x2, y1 }, { tx2, ty2 }, },
 
-      { { x2, y2 }, { tx2, ty1 }, },
-      { { x1, y2 }, { tx1, ty1 }, },
-      { { x2, y1 }, { tx2, ty2 }, },
-    });
+          { { x2, y2 }, { tx2, ty1 }, },
+          { { x1, y2 }, { tx1, ty1 }, },
+          { { x2, y1 }, { tx2, ty2 }, },
+        });
+      }
 
   }
 
