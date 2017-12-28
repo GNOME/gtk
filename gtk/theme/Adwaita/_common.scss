@@ -3627,7 +3627,7 @@ row {
  * Expanders *
  *************/
 expander {
-  arrow {
+  title > arrow {
     min-width: 16px;
     min-height: 16px;
     -gtk-icon-source: -gtk-icontheme('pan-end-symbolic');
