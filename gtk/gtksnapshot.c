@@ -589,6 +589,10 @@ gtk_snapshot_collect_clip (GtkSnapshot      *snapshot,
   if (graphene_rect_contains_rect (&state->data.clip.bounds, &node->bounds))
     return node;
 
+  if (state->data.clip.bounds.size.width == 0 ||
+      state->data.clip.bounds.size.height == 0)
+    return NULL;
+
   clip_node = gsk_clip_node_new (node, &state->data.clip.bounds);
   if (name)
     gsk_render_node_set_name (clip_node, name);
