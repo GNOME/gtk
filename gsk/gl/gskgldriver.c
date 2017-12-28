@@ -51,15 +51,6 @@ struct _GskGLDriver
   gboolean in_frame : 1;
 };
 
-enum
-{
-  PROP_GL_CONTEXT = 1,
-
-  N_PROPS
-};
-
-static GParamSpec *gsk_gl_driver_properties[N_PROPS];
-
 G_DEFINE_TYPE (GskGLDriver, gsk_gl_driver, G_TYPE_OBJECT)
 
 static Texture *
@@ -106,47 +97,7 @@ gsk_gl_driver_finalize (GObject *gobject)
   if (self->gl_context == gdk_gl_context_get_current ())
     gdk_gl_context_clear_current ();
 
-  g_clear_object (&self->gl_context);
-
   G_OBJECT_CLASS (gsk_gl_driver_parent_class)->finalize (gobject);
-}
-
-static void
-gsk_gl_driver_set_property (GObject      *gobject,
-                            guint         prop_id,
-                            const GValue *value,
-                            GParamSpec   *pspec)
-{
-  GskGLDriver *self = GSK_GL_DRIVER (gobject);
-
-  switch (prop_id)
-    {
-    case PROP_GL_CONTEXT:
-      self->gl_context = g_value_dup_object (value);
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
-    }
-}
-
-static void
-gsk_gl_driver_get_property (GObject    *gobject,
-                            guint       prop_id,
-                            GValue     *value,
-                            GParamSpec *pspec)
-{
-  GskGLDriver *self = GSK_GL_DRIVER (gobject);
-
-  switch (prop_id)
-    {
-    case PROP_GL_CONTEXT:
-      g_value_set_object (value, self->gl_context);
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
-    }
 }
 
 static void
@@ -154,16 +105,7 @@ gsk_gl_driver_class_init (GskGLDriverClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  gobject_class->set_property = gsk_gl_driver_set_property;
-  gobject_class->get_property = gsk_gl_driver_get_property;
   gobject_class->finalize = gsk_gl_driver_finalize;
-
-  gsk_gl_driver_properties[PROP_GL_CONTEXT] =
-    g_param_spec_object ("gl-context", "GL Context", "The GL context used by the driver",
-                         GDK_TYPE_GL_CONTEXT,
-                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
-
-  g_object_class_install_properties (gobject_class, N_PROPS, gsk_gl_driver_properties);
 }
 
 static void
@@ -193,11 +135,13 @@ gsk_gl_driver_init (GskGLDriver *self)
 GskGLDriver *
 gsk_gl_driver_new (GdkGLContext *context)
 {
+  GskGLDriver *self;
   g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), NULL);
 
-  return g_object_new (GSK_TYPE_GL_DRIVER,
-                       "gl-context", context,
-                       NULL);
+  self = (GskGLDriver *) g_object_new (GSK_TYPE_GL_DRIVER, NULL);
+  self->gl_context = context;
+
+  return self;
 }
 
 void
