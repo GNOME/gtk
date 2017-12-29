@@ -171,7 +171,9 @@ gsk_gl_driver_begin_frame (GskGLDriver *self)
 
   glActiveTexture (GL_TEXTURE0);
 
+#ifdef G_ENABLE_DEBUG
   gsk_profiler_reset (self->profiler);
+#endif
 }
 
 void
@@ -185,6 +187,7 @@ gsk_gl_driver_end_frame (GskGLDriver *self)
 
   self->default_fbo.fbo_id = 0;
 
+#ifdef G_ENABLE_DEBUG
   GSK_NOTE (OPENGL,
             g_print ("Textures created: %ld\n"
                      " Textures reused: %ld\n"
@@ -192,6 +195,8 @@ gsk_gl_driver_end_frame (GskGLDriver *self)
                      gsk_profiler_counter_get (self->profiler, self->counters.created_textures),
                      gsk_profiler_counter_get (self->profiler, self->counters.reused_textures),
                      gsk_profiler_counter_get (self->profiler, self->counters.surface_uploads)));
+#endif
+
   GSK_NOTE (OPENGL,
             g_print ("*** Frame end: textures=%d\n",
                      g_hash_table_size (self->textures)));
@@ -324,7 +329,10 @@ create_texture (GskGLDriver *self,
       GSK_NOTE (OPENGL, g_print ("Reusing Texture(%d) for size %dx%d\n",
                                  t->texture_id, t->width, t->height));
       t->in_use = TRUE;
+
+#ifdef G_ENABLE_DEBUG
       gsk_profiler_counter_inc (self->profiler, self->counters.reused_textures);
+#endif
       return t;
     }
 
@@ -338,7 +346,9 @@ create_texture (GskGLDriver *self,
   t->mag_filter = GL_NEAREST;
   t->in_use = TRUE;
   g_hash_table_insert (self->textures, GINT_TO_POINTER (texture_id), t);
+#ifdef G_ENABLE_DEBUG
   gsk_profiler_counter_inc (self->profiler, self->counters.created_textures);
+#endif
 
   return t;
 }
@@ -613,7 +623,10 @@ gsk_gl_driver_init_texture_with_surface (GskGLDriver     *self,
   gsk_gl_driver_set_texture_parameters (self, min_filter, mag_filter);
 
   gdk_cairo_surface_upload_to_gl (surface, GL_TEXTURE_2D, t->width, t->height, NULL);
+
+#ifdef G_ENABLE_DEBUG
   gsk_profiler_counter_inc (self->profiler, self->counters.surface_uploads);
+#endif
 
   t->min_filter = min_filter;
   t->mag_filter = mag_filter;

@@ -1971,11 +1971,9 @@ gsk_gl_renderer_clear_tree (GskGLRenderer *self)
   gdk_gl_context_make_current (self->gl_context);
 
   g_array_remove_range (self->render_ops, 0, self->render_ops->len);
-
   removed_textures = gsk_gl_driver_collect_textures (self->gl_driver);
 
-  GSK_NOTE (OPENGL, g_print ("Collected: %d textures\n",
-                             removed_textures));
+  GSK_NOTE (OPENGL, g_print ("Collected: %d textures\n", removed_textures));
 }
 
 static void
