@@ -251,7 +251,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>font-kerning</entry>
+              <entry><phrase role="nowrap">font-kerning</phrase></entry>
               <entry><code>auto | normal | none </code></entry>
               <entry>auto</entry>
               <entry>✓</entry>
@@ -260,7 +260,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>font-variant-ligatures</entry>
+              <entry><phrase role="nowrap">font-variant-ligatures</phrase></entry>
               <entry><code>normal | none | [ 〈common-lig-values〉|| 〈discretionary-lig-values〉|| 〈historical-lig-values〉|| 〈contextual-alt-values〉]</code></entry>
               <entry>normal</entry>
               <entry>✓</entry>
@@ -269,7 +269,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>font-variant-position</entry>
+              <entry><phrase role="nowrap">font-variant-position</phrase></entry>
               <entry><code>normal | sub | super</code></entry>
               <entry>normal</entry>
               <entry>✓</entry>
@@ -278,7 +278,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>font-variant-caps</entry>
+              <entry><phrase role="nowrap">font-variant-caps</phrase></entry>
               <entry><code>normal | small-caps | all-small-caps | petite-caps | all-petite-caps | unicase | titling-caps</code></entry>
               <entry>normal</entry>
               <entry>✓</entry>
@@ -287,7 +287,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>font-variant-numeric</entry>
+              <entry><phrase role="nowrap">font-variant-numeric</phrase></entry>
               <entry><code>normal | [ 〈numeric-figure-values〉|| 〈numeric-spacing-values〉|| 〈numeric-fraction-values〉|| ordinal || slashed-zero ]</code></entry>
               <entry>normal</entry>
               <entry>✓</entry>
@@ -296,7 +296,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>font-variant-alternates</entry>
+              <entry><phrase role="nowrap">font-variant-alternates</phrase></entry>
               <entry><code>normal | [ stylistic(〈feature-value-name〉) || historical-forms || styleset(〈feature-value-name〉#) || character-variant(〈feature-value-name〉#) || swash(〈feature-value-name〉) || ornaments(〈feature-value-name〉) || annotation(〈feature-value-name〉) ]</code></entry>
               <entry>normal</entry>
               <entry>✓</entry>
@@ -305,7 +305,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>font-variant-east-asian</entry>
+              <entry><phrase role="nowrap">font-variant-east-asian</phrase></entry>
               <entry><code>normal | [ 〈east-asian-variant-values〉 || 〈east-asian-width-values〉 || ruby ]</code></entry>
               <entry>normal</entry>
               <entry>✓</entry>
@@ -314,7 +314,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry></entry>
             </row>
             <row>
-              <entry>font-feature-settings</entry>
+              <entry><phrase role="nowrap">font-feature-settings</phrase></entry>
               <entry><code>normal | 〈feature-tag-value〉&num; </code></entry>
               <entry>normal</entry>
               <entry>✓</entry>
@@ -338,7 +338,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>CSS allows line-height, etc</entry>
             </row>
             <row>
-              <entry>font-variant</entry>
+              <entry><phrase role="nowrap">font-variant</phrase></entry>
               <entry><code>normal | none | [ 〈common-lig-values〉 || 〈discretionary-lig-values〉 || 〈historical-lig-values〉 || 〈contextual-alt-values〉 || stylistic(>〈feature-value-name〉) || historical-forms || styleset(〈feature-value-name〉 #) || character-variant(〈feature-value-name〉 #) || swash(〈feature-value-name〉) || ornaments(〈feature-value-name〉) || annotation(〈feature-value-name〉) || [ small-caps | all-small-caps | petite-caps | all-petite-caps | unicase | titling-caps ] || 〈numeric-figure-values〉 || 〈numeric-spacing-values〉 || 〈numeric-fraction-values〉 || ordinal || slashed-zero || 〈east-asian-variant-values〉 || 〈east-asian-width-values〉 || ruby ]</code></entry>
               <entry>see individual properties</entry>
               <entry><ulink url="https://www.w3.org/TR/css3-fonts/#font-variant-prop">CSS3</ulink></entry>
