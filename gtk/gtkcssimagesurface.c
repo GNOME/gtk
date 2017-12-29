@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include "gtkcssimagesurfaceprivate.h"
+#include <math.h>
 
 G_DEFINE_TYPE (GtkCssImageSurface, _gtk_css_image_surface, GTK_TYPE_CSS_IMAGE)
 
@@ -51,15 +52,39 @@ gtk_css_image_surface_draw (GtkCssImage *image,
   image_width = cairo_image_surface_get_width (surface->surface);
   image_height = cairo_image_surface_get_height (surface->surface);
 
-  if (image_width == 0 || image_height == 0)
+  if (image_width == 0 || image_height == 0 || width <= 0 || height <= 0)
     return;
 
+  /* Update cache image if size is different */
+  if (surface->cache == NULL   ||
+      ABS (width - surface->width) > 0.001 ||
+      ABS (height - surface->height) > 0.001)
+    {
+      cairo_t *cache;
+
+      /* Save original size to preserve precision */
+      surface->width = width;
+      surface->height = height;
+
+      /* Destroy old cache if any */
+      g_clear_pointer (&surface->cache, cairo_surface_destroy);
+
+      /* Image big enough to contain scaled image with subpixel precision */
+      surface->cache = cairo_surface_create_similar_image (surface->surface,
+                                                           CAIRO_FORMAT_ARGB32,
+                                                           ceil (width),
+                                                           ceil (height));
+      cache = cairo_create (surface->cache);
+      cairo_rectangle (cache, 0, 0, width, height);
+      cairo_scale (cache, width / image_width, height / image_height);
+      cairo_set_source_surface (cache, surface->surface, 0, 0);
+      cairo_fill (cache);
+
+      cairo_destroy (cache);
+    }
+
   cairo_rectangle (cr, 0, 0, width, height);
-  cairo_scale (cr,
-               width / image_width,
-               height / image_height);
-  cairo_set_source_surface (cr, surface->surface, 0, 0);
-  cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_PAD);
+  cairo_set_source_surface (cr, surface->cache ? surface->cache : surface->surface, 0, 0);
   cairo_fill (cr);
 }
 

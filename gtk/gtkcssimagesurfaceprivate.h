@@ -39,6 +39,9 @@ struct _GtkCssImageSurface
   GtkCssImage parent;
 
   cairo_surface_t *surface;             /* the surface we render - guaranteed to be an image surface */
+  cairo_surface_t *cache;               /* the scaled surface - to avoid scaling every time we need to draw */
+  double width;                         /* original cache width */
+  double height;                        /* original cache height */
 };
 
 struct _GtkCssImageSurfaceClass
