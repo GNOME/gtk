@@ -43,7 +43,6 @@ struct _GskGLDriver
   GHashTable *textures;
 
   const Texture *bound_source_texture;
-  const Texture *bound_mask_texture;
   const Fbo *bound_fbo;
 
   int max_texture_size;
@@ -182,7 +181,6 @@ gsk_gl_driver_end_frame (GskGLDriver *self)
   g_return_if_fail (self->in_frame);
 
   self->bound_source_texture = NULL;
-  self->bound_mask_texture = NULL;
   self->bound_fbo = NULL;
 
   self->default_fbo.fbo_id = 0;
@@ -499,33 +497,6 @@ gsk_gl_driver_bind_source_texture (GskGLDriver *driver,
     }
 }
 
-void
-gsk_gl_driver_bind_mask_texture (GskGLDriver *driver,
-                                 int          texture_id)
-{
-  Texture *t;
-
-  g_return_if_fail (GSK_IS_GL_DRIVER (driver));
-  g_return_if_fail (driver->in_frame);
-
-  t = gsk_gl_driver_get_texture (driver, texture_id);
-  if (t == NULL)
-    {
-      g_critical ("No texture %d found.", texture_id);
-      return;
-    }
-
-  if (driver->bound_mask_texture != t)
-    {
-      glActiveTexture (GL_TEXTURE0 + 1);
-      glBindTexture (GL_TEXTURE_2D, t->texture_id);
-
-      glActiveTexture (GL_TEXTURE0);
-
-      driver->bound_mask_texture = t;
-    }
-}
-
 gboolean
 gsk_gl_driver_bind_render_target (GskGLDriver *driver,
                                   int          texture_id)
@@ -599,7 +570,7 @@ gsk_gl_driver_init_texture_empty (GskGLDriver *driver,
       return;
     }
 
-  if (!(driver->bound_source_texture == t || driver->bound_mask_texture == t))
+  if (driver->bound_source_texture != t)
     {
       g_critical ("You must bind the texture before initializing it.");
       return;
@@ -633,7 +604,7 @@ gsk_gl_driver_init_texture_with_surface (GskGLDriver     *self,
       return;
     }
 
-  if (!(self->bound_source_texture == t || self->bound_mask_texture == t))
+  if (self->bound_source_texture != t)
     {
       g_critical ("You must bind the texture before initializing it.");
       return;

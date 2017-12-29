@@ -40,8 +40,6 @@ int             gsk_gl_driver_create_render_target      (GskGLDriver     *driver
 
 void            gsk_gl_driver_bind_source_texture       (GskGLDriver     *driver,
                                                          int              texture_id);
-void            gsk_gl_driver_bind_mask_texture         (GskGLDriver     *driver,
-                                                         int              texture_id);
 gboolean        gsk_gl_driver_bind_render_target        (GskGLDriver     *driver,
                                                          int              texture_id);
 
