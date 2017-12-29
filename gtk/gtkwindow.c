@@ -4552,7 +4552,7 @@ gtk_window_realize_icon (GtkWindow *window)
 
   info->realized = TRUE;
 
-  gdk_window_set_icon_list (_gtk_widget_get_window (widget), icon_list);
+  gdk_window_set_icon_list (gdk_window, icon_list);
   if (GTK_IS_HEADER_BAR (priv->title_box))
     _gtk_header_bar_update_window_icon (GTK_HEADER_BAR (priv->title_box), window);
 
