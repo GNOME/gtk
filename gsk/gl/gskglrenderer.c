@@ -1869,6 +1869,7 @@ static void
 gsk_gl_renderer_unrealize (GskRenderer *renderer)
 {
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
+  guint i;
 
   if (self->gl_context == NULL)
     return;
@@ -1880,13 +1881,8 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
    */
   g_array_set_size (self->render_ops, 0);
 
-
-  glDeleteProgram (self->blend_program.id);
-  glDeleteProgram (self->blit_program.id);
-  glDeleteProgram (self->color_program.id);
-  glDeleteProgram (self->coloring_program.id);
-  glDeleteProgram (self->color_matrix_program.id);
-  glDeleteProgram (self->linear_gradient_program.id);
+  for (i = 0; i < GL_N_PROGRAMS; i ++)
+    glDeleteProgram (self->programs[i].id);
 
   gsk_gl_renderer_destroy_buffers (self);
 
