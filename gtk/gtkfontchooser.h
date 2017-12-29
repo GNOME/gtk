@@ -146,6 +146,10 @@ void             gtk_font_chooser_set_level                (GtkFontChooser   *fo
 GDK_AVAILABLE_IN_3_94
 GtkFontChooserLevel
                  gtk_font_chooser_get_level                (GtkFontChooser   *fontchooser);
+GDK_AVAILABLE_IN_3_94
+char *           gtk_font_chooser_get_font_features        (GtkFontChooser   *fontchooser);
+GDK_AVAILABLE_IN_3_94
+char *           gtk_font_chooser_get_language             (GtkFontChooser   *fontchooser);
 
 G_END_DECLS
 

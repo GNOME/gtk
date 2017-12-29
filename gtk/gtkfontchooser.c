@@ -79,6 +79,22 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
                           PANGO_TYPE_FONT_DESCRIPTION,
                           GTK_PARAM_READWRITE));
 
+  g_object_interface_install_property
+     (iface,
+      g_param_spec_string ("font-features",
+                          P_("Font features"),
+                          P_("Font features as a string"),
+                          "",
+                          GTK_PARAM_READABLE));
+
+  g_object_interface_install_property
+     (iface,
+      g_param_spec_string ("language",
+                          P_("Language"),
+                          P_("Language for which features have been selected"),
+                          "",
+                          GTK_PARAM_READABLE));
+
   /**
    * GtkFontChooser:preview-text:
    *
@@ -536,3 +552,28 @@ gtk_font_chooser_get_level (GtkFontChooser *fontchooser)
 
   return level;
 }
+
+char *
+gtk_font_chooser_get_font_features (GtkFontChooser *fontchooser)
+{
+  char *text;
+
+  g_return_val_if_fail (GTK_IS_FONT_CHOOSER (fontchooser), NULL);
+
+  g_object_get (fontchooser, "font-features", &text, NULL);
+
+  return text;
+}
+
+char *
+gtk_font_chooser_get_language (GtkFontChooser *fontchooser)
+{
+  char *text;
+
+  g_return_val_if_fail (GTK_IS_FONT_CHOOSER (fontchooser), NULL);
+
+  g_object_get (fontchooser, "language", &text, NULL);
+
+  return text;
+}
+

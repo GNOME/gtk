@@ -296,6 +296,7 @@
                           <object class="GtkComboBox" id="feature_language_combo">
                             <property name="halign">start</property>
                             <property name="margin-top">10</property>
+                            <signal name="changed" handler="update_language" swapped="yes"/>
                             <child>
                               <object class="GtkCellRendererText"/>
                               <attributes>
