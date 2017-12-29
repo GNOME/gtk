@@ -372,6 +372,14 @@ update_script_combo (void)
   GHashTable *tags;
   GHashTableIter iter;
   TagPair *pair;
+  char *lang;
+  hb_tag_t active;
+  GtkTreeIter active_iter;
+  gboolean have_active = FALSE;
+
+  lang = gtk_font_chooser_get_language (GTK_FONT_CHOOSER (font));
+  active = hb_ot_tag_from_language (hb_language_from_string (lang, -1));
+  g_free (lang);
 
   store = gtk_list_store_new (4, G_TYPE_STRING, G_TYPE_UINT, G_TYPE_UINT, G_TYPE_UINT);
 
@@ -384,7 +392,7 @@ update_script_combo (void)
   pair = g_new (TagPair, 1);
   pair->script_tag = HB_OT_TAG_DEFAULT_SCRIPT;
   pair->lang_tag = HB_OT_TAG_DEFAULT_LANGUAGE;
-  g_hash_table_insert (tags, pair, g_strdup ("Default"));
+  g_hash_table_add (tags, pair);
 
   if (hb_font)
     {
@@ -403,13 +411,6 @@ update_script_combo (void)
             {
               hb_tag_t languages[80];
               unsigned int language_count = G_N_ELEMENTS (languages);
-
-              pair = g_new (TagPair, 1);
-              pair->script_tag = scripts[j];
-              pair->lang_tag = HB_OT_TAG_DEFAULT_LANGUAGE;
-              pair->script_index = j;
-              pair->lang_index = HB_OT_LAYOUT_DEFAULT_LANGUAGE_INDEX;
-              g_hash_table_add (tags, pair);
 
               hb_ot_layout_script_get_language_tags (hb_face, tables[i], j, 0, &language_count, languages);
               for (k = 0; k < language_count; k++)
@@ -433,44 +434,34 @@ update_script_combo (void)
   g_hash_table_iter_init (&iter, tags);
   while (g_hash_table_iter_next (&iter, (gpointer *)&pair, NULL))
     {
-      const char *scriptname;
-      char scriptbuf[5];
       const char *langname;
       char langbuf[5];
-      char *name;
-
-      hb_tag_to_string (pair->script_tag, scriptbuf);
-      scriptbuf[4] = 0;
-
-      hb_tag_to_string (pair->lang_tag, langbuf);
-      langbuf[4] = 0;
-
-      if (pair->script_tag == HB_OT_TAG_DEFAULT_SCRIPT)
-        scriptname = "Default";
-      else if (pair->script_tag == HB_TAG ('m','a','t','h'))
-        scriptname = "Math";
-      else
-        scriptname = get_script_name_for_tag (pair->script_tag);
-
-      if (!scriptname)
-        scriptname = scriptbuf;
-
-      langname = get_language_name_for_tag (pair->lang_tag);
-      if (!langname)
-        langname = langbuf;
+      GtkTreeIter iter;
 
       if (pair->lang_tag == HB_OT_TAG_DEFAULT_LANGUAGE)
-        name = g_strdup_printf ("%s Script", scriptname);
+        langname = NC_("Language", "Default");
       else
-        name = g_strdup (langname);
+        {
+          langname = get_language_name_for_tag (pair->lang_tag);
+          if (!langname)
+            {
+              hb_tag_to_string (pair->lang_tag, langbuf);
+              langbuf[4] = 0;
+              langname = langbuf;
+            }
+        }
 
-      gtk_list_store_insert_with_values (store, NULL, -1,
-                                         0, name,
+      gtk_list_store_insert_with_values (store, &iter, -1,
+                                         0, langname,
                                          1, pair->script_index,
                                          2, pair->lang_index,
                                          3, pair->lang_tag,
                                          -1);
-      g_free (name);
+      if (pair->lang_tag == active)
+        {
+          have_active = TRUE;
+          active_iter = iter;
+        }
     }
 
   g_hash_table_destroy (tags);
@@ -481,7 +472,10 @@ update_script_combo (void)
                                         GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID,
                                         GTK_SORT_ASCENDING);
   gtk_combo_box_set_model (GTK_COMBO_BOX (script_lang), GTK_TREE_MODEL (store));
-  gtk_combo_box_set_active (GTK_COMBO_BOX (script_lang), 0);
+  if (have_active)
+    gtk_combo_box_set_active_iter (GTK_COMBO_BOX (script_lang), &active_iter);
+  else
+    gtk_combo_box_set_active_iter (GTK_COMBO_BOX (script_lang), 0);
 }
 
 static void
@@ -501,6 +495,8 @@ update_features (void)
       FeatureItem *item = l->data;
       gtk_widget_hide (item->feat);
       gtk_widget_hide (gtk_widget_get_parent (item->feat));
+      if (strcmp (item->name, "xxxx") == 0)
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (item->feat), TRUE);
     }
 
   /* set feature presence checks from the font features */
@@ -522,6 +518,7 @@ update_features (void)
     {
       hb_tag_t tables[2] = { HB_OT_TAG_GSUB, HB_OT_TAG_GPOS };
       hb_face_t *hb_face;
+      char *feat;
 
       hb_face = hb_font_get_face (hb_font);
 
@@ -543,6 +540,7 @@ update_features (void)
               for (l = feature_items; l; l = l->next)
                 {
                   FeatureItem *item = l->data;
+
                   if (item->tag == features[j])
                     {
                       gtk_widget_show (item->feat);
@@ -560,6 +558,37 @@ update_features (void)
                     }
                 }
             }
+        }
+
+      feat = gtk_font_chooser_get_font_features (GTK_FONT_CHOOSER (font));
+      if (feat)
+        {
+          for (l = feature_items; l; l = l->next)
+            {
+              FeatureItem *item = l->data;
+              char buf[5];
+              char *p;
+
+              hb_tag_to_string (item->tag, buf);
+              buf[4] = 0;
+
+              p = strstr (feat, buf);
+              if (p)
+                {
+                  if (GTK_IS_RADIO_BUTTON (item->feat))
+                    {
+                      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (item->feat), p[5] == '1');
+                    }
+                  else if (GTK_IS_CHECK_BUTTON (item->feat))
+                    {
+                      gtk_check_button_set_inconsistent (GTK_CHECK_BUTTON (item->feat), FALSE);
+                      gtk_widget_set_opacity (gtk_widget_get_first_child (item->feat), 1);
+                      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (item->feat), p[5] == '1');
+                    }
+                }
+            }
+
+          g_free (feat);
         }
 
       hb_face_destroy (hb_face);
@@ -1446,6 +1475,7 @@ static void
 font_changed (void)
 {
   update_script_combo ();
+  update_features ();
   update_font_variations ();
 }
 
