@@ -68,8 +68,6 @@ typedef enum
 
 /**
  * GtkTextViewLayer:
- * @GTK_TEXT_VIEW_LAYER_BELOW: Old deprecated layer, use %GTK_TEXT_VIEW_LAYER_BELOW_TEXT instead
- * @GTK_TEXT_VIEW_LAYER_ABOVE: Old deprecated layer, use %GTK_TEXT_VIEW_LAYER_ABOVE_TEXT instead
  * @GTK_TEXT_VIEW_LAYER_BELOW_TEXT: The layer rendered below the text (but above the background).  Since: 3.20
  * @GTK_TEXT_VIEW_LAYER_ABOVE_TEXT: The layer rendered above the text.  Since: 3.20
  *
@@ -78,8 +76,6 @@ typedef enum
  */
 typedef enum
 {
-  GTK_TEXT_VIEW_LAYER_BELOW,
-  GTK_TEXT_VIEW_LAYER_ABOVE,
   GTK_TEXT_VIEW_LAYER_BELOW_TEXT,
   GTK_TEXT_VIEW_LAYER_ABOVE_TEXT
 } GtkTextViewLayer;

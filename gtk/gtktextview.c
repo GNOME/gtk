@@ -5530,10 +5530,6 @@ draw_text (GtkWidget *widget,
   if (GTK_TEXT_VIEW_GET_CLASS (text_view)->draw_layer != NULL)
     {
       cairo_save (cr);
-      GTK_TEXT_VIEW_GET_CLASS (text_view)->draw_layer (text_view, GTK_TEXT_VIEW_LAYER_BELOW, cr);
-      cairo_restore (cr);
-
-      cairo_save (cr);
       cairo_translate (cr, -priv->xoffset, -priv->yoffset);
       GTK_TEXT_VIEW_GET_CLASS (text_view)->draw_layer (text_view, GTK_TEXT_VIEW_LAYER_BELOW_TEXT, cr);
       cairo_restore (cr);
@@ -5543,10 +5539,6 @@ draw_text (GtkWidget *widget,
 
   if (GTK_TEXT_VIEW_GET_CLASS (text_view)->draw_layer != NULL)
     {
-      cairo_save (cr);
-      GTK_TEXT_VIEW_GET_CLASS (text_view)->draw_layer (text_view, GTK_TEXT_VIEW_LAYER_ABOVE, cr);
-      cairo_restore (cr);
-
       cairo_save (cr);
       cairo_translate (cr, -priv->xoffset, -priv->yoffset);
       GTK_TEXT_VIEW_GET_CLASS (text_view)->draw_layer (text_view, GTK_TEXT_VIEW_LAYER_ABOVE_TEXT, cr);

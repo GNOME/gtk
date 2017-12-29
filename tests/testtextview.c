@@ -24,7 +24,7 @@ static void my_text_view_draw_layer (GtkTextView       *textview,
 				     GtkTextViewLayer   layer,
 				     cairo_t           *cr)
 {
-  if (layer == GTK_TEXT_VIEW_LAYER_BELOW)
+  if (layer == GTK_TEXT_VIEW_LAYER_BELOW_TEXT)
     draw_background (GTK_WIDGET (textview), cr);
 }
 
