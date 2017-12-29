@@ -1,4 +1,4 @@
-gsk_private_source_shaders = [
+gsk_private_gl_shaders = [
   'resources/glsl/blend.fs.glsl',
   'resources/glsl/blend.vs.glsl',
   'resources/glsl/blit.fs.glsl',
@@ -102,7 +102,7 @@ gsk_resources_xml = configure_file(output: 'gsk.resources.xml',
                                    command: [
                                      find_program('gen-gsk-gresources-xml.py'),
                                      '@OUTPUT@',
-                                     gsk_private_source_shaders,
+                                     gsk_private_gl_shaders,
                                      gsk_private_vulkan_compiled_shaders,
                                      gsk_private_vulkan_shaders
                                    ])
