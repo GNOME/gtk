@@ -142,6 +142,7 @@ struct _GtkFontChooserWidgetPrivate
   GtkWidget *size_label;
   GtkWidget *size_spin;
   GtkWidget *size_slider;
+  GtkWidget *size_slider2;
 
   GtkWidget *font_grid;
 
@@ -521,6 +522,7 @@ gtk_font_chooser_widget_update_marks (GtkFontChooserWidget *fontchooser)
     }
 
   gtk_scale_clear_marks (GTK_SCALE (priv->size_slider));
+  gtk_scale_clear_marks (GTK_SCALE (priv->size_slider2));
 
   adj        = gtk_range_get_adjustment (GTK_RANGE (priv->size_slider));
   spin_adj   = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (priv->size_spin));
@@ -547,6 +549,9 @@ gtk_font_chooser_widget_update_marks (GtkFontChooserWidget *fontchooser)
   for (i = 0; i < n_sizes; i++)
     {
       gtk_scale_add_mark (GTK_SCALE (priv->size_slider),
+                          sizes[i],
+                          GTK_POS_BOTTOM, NULL);
+      gtk_scale_add_mark (GTK_SCALE (priv->size_slider2),
                           sizes[i],
                           GTK_POS_BOTTOM, NULL);
     }
@@ -790,6 +795,7 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, size_label);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, size_spin);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, size_slider);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, size_slider2);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, stack);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, grid);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, font_grid);
