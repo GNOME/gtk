@@ -52,7 +52,83 @@ typedef struct {
 
 static GList *feature_items;
 
+typedef struct {
+  unsigned int start;
+  unsigned int end;
+  PangoFontDescription *desc;
+  char *features;
+  PangoLanguage *language;
+} Range;
+
+static GList *ranges;
+
 static void add_font_variations (GString *s);
+
+static void
+free_range (gpointer data)
+{
+  Range *range = data;
+
+  if (range->desc)
+    pango_font_description_free (range->desc);
+  g_free (range->features);
+  g_free (range);
+}
+
+static int
+compare_range (gconstpointer a, gconstpointer b)
+{
+  const Range *ra = a;
+  const Range *rb = b;
+
+  if (ra->start < rb->start)
+    return -1;
+  else if (ra->start > rb->start)
+    return 1;
+  else if (ra->end < rb->end)
+    return 1;
+  else if (ra->end > rb->end)
+    return -1;
+
+  return 0;
+}
+
+static void
+ensure_range (unsigned int          start,
+              unsigned int          end,
+              PangoFontDescription *desc,
+              const char           *features,
+              PangoLanguage        *language)
+{
+  GList *l;
+  Range *range;
+
+  for (l = ranges; l; l = l->next)
+    {
+      Range *r = l->data;
+
+      if (r->start == start && r->end == end)
+        {
+          range = r;
+          goto set;
+        }
+    }
+
+  range = g_new0 (Range, 1);
+  range->start = start;
+  range->end = end;
+
+  ranges = g_list_insert_sorted (ranges, range, compare_range);
+
+set:
+  if (range->desc)
+    pango_font_description_free (range->desc);
+  if (desc)
+    range->desc = pango_font_description_copy (desc);
+  g_free (range->features);
+  range->features = g_strdup (features);
+  range->language = language;
+}
 
 static const char *
 get_feature_display_name (unsigned int tag)
@@ -71,6 +147,14 @@ get_feature_display_name (unsigned int tag)
 static void update_display (void);
 
 static void
+set_inconsistent (GtkCheckButton *button,
+                  gboolean        inconsistent)
+{
+  gtk_check_button_set_inconsistent (GTK_CHECK_BUTTON (button), inconsistent);
+  gtk_widget_set_opacity (gtk_widget_get_first_child (GTK_WIDGET (button)), inconsistent ? 0.0 : 1.0);
+}
+
+static void
 feat_clicked (GtkWidget *feat,
               gpointer   data)
 {
@@ -78,8 +162,7 @@ feat_clicked (GtkWidget *feat,
 
   if (gtk_check_button_get_inconsistent (GTK_CHECK_BUTTON (feat)))
     {
-      gtk_check_button_set_inconsistent (GTK_CHECK_BUTTON (feat), FALSE);
-      gtk_widget_set_opacity (gtk_widget_get_first_child (feat), 1);
+      set_inconsistent (GTK_CHECK_BUTTON (feat), FALSE);
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (feat), TRUE);
     }
   else if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (feat)))
@@ -88,8 +171,7 @@ feat_clicked (GtkWidget *feat,
     }
   else
     {
-      gtk_check_button_set_inconsistent (GTK_CHECK_BUTTON (feat), TRUE);
-      gtk_widget_set_opacity (gtk_widget_get_first_child (feat), 0);
+      set_inconsistent (GTK_CHECK_BUTTON (feat), TRUE);
     }
 
   g_signal_handlers_unblock_by_func (feat, feat_clicked, NULL);
@@ -127,8 +209,7 @@ add_check_group (GtkWidget   *box,
       tag = hb_tag_from_string (tags[i], -1);
 
       feat = gtk_check_button_new_with_label (get_feature_display_name (tag));
-      gtk_check_button_set_inconsistent (GTK_CHECK_BUTTON (feat), TRUE);
-      gtk_widget_set_opacity (gtk_widget_get_first_child (feat), 0);
+      set_inconsistent (GTK_CHECK_BUTTON (feat), TRUE);
 
       g_signal_connect (feat, "notify::active", G_CALLBACK (update_display), NULL);
       g_signal_connect (feat, "notify::inconsistent", G_CALLBACK (update_display), NULL);
@@ -210,33 +291,44 @@ static void
 update_display (void)
 {
   GString *s;
-  char *font_desc;
-  char *font_settings;
   const char *text;
   gboolean has_feature;
-  hb_tag_t lang_tag;
-  GtkTreeModel *model;
   GtkTreeIter iter;
-  const char *lang;
+  GtkTreeModel *model;
   PangoFontDescription *desc;
-  char *tmp;
   GList *l;
+  PangoAttrList *attrs;
+  PangoAttribute *attr;
+  gint ins, bound;
+  guint start, end;
+  PangoLanguage *lang;
+  char *font_desc;
+  char *features;
 
   text = gtk_entry_get_text (GTK_ENTRY (entry));
 
+  if (gtk_label_get_selection_bounds (GTK_LABEL (label), &ins, &bound))
+    {
+      start = g_utf8_offset_to_pointer (text, ins) - text;
+      end = g_utf8_offset_to_pointer (text, bound) - text;
+    }
+  else
+    {
+      start = PANGO_ATTR_INDEX_FROM_TEXT_BEGINNING;
+      end = PANGO_ATTR_INDEX_TO_TEXT_END;
+    }
+
   desc = gtk_font_chooser_get_font_desc (GTK_FONT_CHOOSER (font));
-  pango_font_description_unset_fields (desc, PANGO_FONT_MASK_VARIATIONS);
-  tmp = pango_font_description_to_string (desc);
 
-  s = g_string_new (tmp);
-
-  g_free (tmp);
-  pango_font_description_free (desc);
-
+  s = g_string_new ("");
   add_font_variations (s);
-  font_desc = g_string_free (s, FALSE);
+  if (s->len > 0)
+    {
+      pango_font_description_set_variations (desc, s->str);
+      g_string_free (s, TRUE);
+    }
 
-  gtk_label_set_text (GTK_LABEL (description), font_desc);
+  font_desc = pango_font_description_to_string (desc);
 
   s = g_string_new ("");
 
@@ -276,34 +368,58 @@ update_display (void)
         }
     }
 
-  font_settings = g_string_free (s, FALSE);
-
-  gtk_label_set_text (GTK_LABEL (settings), font_settings);
+  features = g_string_free (s, FALSE);
 
   if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (script_lang), &iter))
     {
+      hb_tag_t lang_tag;
+
       model = gtk_combo_box_get_model (GTK_COMBO_BOX (script_lang));
       gtk_tree_model_get (model, &iter,
                           3, &lang_tag,
                           -1);
 
-      lang = hb_language_to_string (hb_ot_tag_to_language (lang_tag));
+      lang = pango_language_from_string (hb_language_to_string (hb_ot_tag_to_language (lang_tag)));
     }
   else
     lang = NULL;
 
-  s = g_string_new ("");
-  g_string_append_printf (s, "<span font_desc='%s' font_features='%s'", font_desc, font_settings);
-  if (lang)
-    g_string_append_printf (s, " lang='%s'", lang);
-  g_string_append_printf (s, ">%s</span>", text);
+  ensure_range (start, end, desc, features, lang);
 
-  gtk_label_set_markup (GTK_LABEL (label), s->str);
+  attrs = pango_attr_list_new ();
 
-  g_string_free (s, TRUE);
+  for (l = ranges; l; l = l->next)
+    {
+      Range *range = l->data;
+
+      attr = pango_attr_font_desc_new (range->desc);
+      attr->start_index = range->start;
+      attr->end_index = range->end;
+      pango_attr_list_insert (attrs, attr);
+
+      attr = pango_attr_font_features_new (range->features);
+      attr->start_index = range->start;
+      attr->end_index = range->end;
+      pango_attr_list_insert (attrs, attr);
+
+      if (range->language)
+        {
+          attr = pango_attr_language_new (range->language);
+          attr->start_index = range->start;
+          attr->end_index = range->end;
+          pango_attr_list_insert (attrs, attr);
+        }
+    }
+
+  gtk_label_set_text (GTK_LABEL (description), font_desc);
+  gtk_label_set_text (GTK_LABEL (settings), features);
+  gtk_label_set_text (GTK_LABEL (label), text);
+  gtk_label_set_attributes (GTK_LABEL (label), attrs);
 
   g_free (font_desc);
-  g_free (font_settings);
+  pango_font_description_free (desc);
+  g_free (features);
+  pango_attr_list_unref (attrs);
 }
 
 static PangoFont *
@@ -538,6 +654,12 @@ update_features (void)
 
           for (j = 0; j < count; j++)
             {
+#if 0
+              char buf[5];
+              hb_tag_to_string (features[j], buf);
+              buf[4] = 0;
+              g_print ("%s present in %s\n", buf, i == 0 ? "GSUB" : "GPOS");
+#endif
               for (l = feature_items; l; l = l->next)
                 {
                   FeatureItem *item = l->data;
@@ -553,8 +675,7 @@ update_features (void)
                         }
                       else if (GTK_IS_CHECK_BUTTON (item->feat))
                         {
-                          gtk_check_button_set_inconsistent (GTK_CHECK_BUTTON (item->feat), TRUE);
-                          gtk_widget_set_opacity (gtk_widget_get_first_child (item->feat), 0);
+                          set_inconsistent (GTK_CHECK_BUTTON (item->feat), TRUE);
                         }
                     }
                 }
@@ -582,8 +703,7 @@ update_features (void)
                     }
                   else if (GTK_IS_CHECK_BUTTON (item->feat))
                     {
-                      gtk_check_button_set_inconsistent (GTK_CHECK_BUTTON (item->feat), FALSE);
-                      gtk_widget_set_opacity (gtk_widget_get_first_child (item->feat), 1);
+                      set_inconsistent (GTK_CHECK_BUTTON (item->feat), FALSE);
                       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (item->feat), p[5] == '1');
                     }
                 }
@@ -641,7 +761,7 @@ add_font_variations (GString *s)
   GHashTableIter iter;
   Axis *axis;
   char buf[G_ASCII_DTOSTR_BUF_SIZE];
-  char *sep = " @";
+  char *sep = "";
 
   g_hash_table_iter_init (&iter, axes);
   while (g_hash_table_iter_next (&iter, (gpointer *)NULL, (gpointer *)&axis))
@@ -1492,16 +1612,24 @@ reset_features (void)
 {
   GList *l;
 
+  gtk_label_select_region (GTK_LABEL (label), 0, 0);
+
+  g_list_free_full (ranges, free_range);
+  ranges = NULL;
+
   for (l = feature_items; l; l = l->next)
     {
       FeatureItem *item = l->data;
 
-      if (strcmp (item->name, "xxxx") == 0)
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (item->feat), TRUE);
+      if (GTK_IS_RADIO_BUTTON (item->feat))
+        {
+          if (strcmp (item->name, "xxxx") == 0)
+            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (item->feat), TRUE);
+        }
       else if (GTK_IS_CHECK_BUTTON (item->feat))
         {
           gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (item->feat), FALSE);
-          gtk_widget_set_sensitive (item->feat, FALSE);
+          set_inconsistent (GTK_CHECK_BUTTON (item->feat), TRUE);
         }
     }
 }
