@@ -120,13 +120,13 @@
           <object class="GtkBox">
             <property name="visible">1</property>
             <property name="orientation">vertical</property>
+            <property name="hexpand">1</property>
+            <property name="vexpand">1</property>
+            <property name="margin">20</property>
+            <property name="spacing">20</property>
             <child>
               <object class="GtkStack" id="stack">
                 <property name="visible">1</property>
-                <property name="margin-start">20</property>
-                <property name="margin-end">20</property>
-                <property name="margin-top">20</property>
-                <property name="margin-bottom">20</property>
                 <child>
                   <object class="GtkLabel" id="label">
                     <property name="visible">1</property>
@@ -134,7 +134,6 @@
                     <property name="xalign">0</property>
                     <property name="yalign">0</property>
                     <property name="valign">start</property>
-                    <signal name="button-press-event" handler="switch_to_entry"/>
                   </object>
                   <packing>
                     <property name="name">label</property>
@@ -149,7 +148,7 @@
 
 Τάχιστη αλώπηξ βαφής ψημένη γη, δρασκελίζει υπέρ νωθρού κυνός</property>
                     <signal name="key-press-event" handler="entry_key_press"/>
-                    <signal name="activate" handler="switch_to_label"/>
+                    <signal name="activate" handler="stop_edit"/>
                     <property name="valign">start</property>
                     <property name="width-chars">50</property>
                   </object>
@@ -163,9 +162,6 @@
               <object class="GtkLabel" id="settings">
                 <property name="visible">1</property>
                 <property name="wrap">1</property>
-                <property name="margin-start">20</property>
-                <property name="margin-end">20</property>
-                <property name="margin-bottom">20</property>
                 <property name="xalign">0</property>
                 <property name="valign">end</property>
                 <property name="width-chars">50</property>
@@ -178,12 +174,12 @@
               </object>
             </child>
             <child>
+              <object class="GtkBox">
+                <property name="orientation">horizontal</property>
+            <child>
               <object class="GtkLabel" id="description">
                 <property name="visible">1</property>
                 <property name="wrap">1</property>
-                <property name="margin-start">20</property>
-                <property name="margin-end">20</property>
-                <property name="margin-bottom">20</property>
                 <property name="xalign">0</property>
                 <property name="valign">end</property>
                 <property name="width-chars">50</property>
@@ -194,8 +190,14 @@
                 </style>
               </object>
             </child>
-            <property name="hexpand">1</property>
-            <property name="vexpand">1</property>
+                <child>
+                  <object class="GtkToggleButton" id="edit_toggle">
+                    <property name="icon-name">document-edit-symbolic</property>
+                    <signal name="toggled" handler="toggle_edit"/>
+                  </object>
+                </child>
+              </object>
+            </child>
           </object>
         </child>
       </object>

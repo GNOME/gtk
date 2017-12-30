@@ -40,6 +40,7 @@ static GtkWidget *entry;
 static GtkWidget *variations_heading;
 static GtkWidget *variations_grid;
 static GtkWidget *instance_combo;
+static GtkWidget *edit_toggle;
 
 typedef struct {
   unsigned int tag;
@@ -1512,6 +1513,7 @@ switch_to_entry (void)
 {
   text = g_strdup (gtk_entry_get_text (GTK_ENTRY (entry)));
   gtk_stack_set_visible_child_name (GTK_STACK (stack), "entry");
+  gtk_widget_grab_focus (entry);
 }
 
 static void
@@ -1521,6 +1523,21 @@ switch_to_label (void)
   text = NULL;
   gtk_stack_set_visible_child_name (GTK_STACK (stack), "label");
   update_display ();
+}
+
+static void
+toggle_edit (void)
+{
+  if (strcmp (gtk_stack_get_visible_child_name (GTK_STACK (stack)), "label") == 0)
+    switch_to_entry ();
+  else
+    switch_to_label ();
+}
+
+static void
+stop_edit (void)
+{
+  gtk_button_clicked (GTK_BUTTON (edit_toggle));
 }
 
 static gboolean
@@ -1533,7 +1550,7 @@ entry_key_press (GtkEntry *entry, GdkEventKey *event)
   if (keyval == GDK_KEY_Escape)
     {
       gtk_entry_set_text (GTK_ENTRY (entry), text);
-      switch_to_label ();
+      stop_edit ();
       return GDK_EVENT_STOP;
     }
 
@@ -1556,8 +1573,8 @@ do_font_features (GtkWidget *do_widget)
       gtk_builder_add_callback_symbol (builder, "font_changed", font_changed);
       gtk_builder_add_callback_symbol (builder, "script_changed", script_changed);
       gtk_builder_add_callback_symbol (builder, "reset", reset_features);
-      gtk_builder_add_callback_symbol (builder, "switch_to_entry", switch_to_entry);
-      gtk_builder_add_callback_symbol (builder, "switch_to_label", switch_to_label);
+      gtk_builder_add_callback_symbol (builder, "stop_edit", G_CALLBACK (stop_edit));
+      gtk_builder_add_callback_symbol (builder, "toggle_edit", G_CALLBACK (toggle_edit));
       gtk_builder_add_callback_symbol (builder, "entry_key_press", G_CALLBACK (entry_key_press));
       gtk_builder_connect_signals (builder, NULL);
 
@@ -1571,6 +1588,7 @@ do_font_features (GtkWidget *do_widget)
       script_lang = GTK_WIDGET (gtk_builder_get_object (builder, "script_lang"));
       stack = GTK_WIDGET (gtk_builder_get_object (builder, "stack"));
       entry = GTK_WIDGET (gtk_builder_get_object (builder, "entry"));
+      edit_toggle = GTK_WIDGET (gtk_builder_get_object (builder, "edit_toggle"));
 
       add_check_group (feature_list, _("Kerning"), (const char *[]){ "kern", NULL });
       add_check_group (feature_list, _("Ligatures"), (const char *[]){ "liga",
