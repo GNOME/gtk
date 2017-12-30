@@ -370,9 +370,6 @@ gsk_gl_driver_get_texture_for_texture (GskGLDriver *driver,
   Texture *t;
   cairo_surface_t *surface;
 
-  g_return_val_if_fail (GSK_IS_GL_DRIVER (driver), -1);
-  g_return_val_if_fail (GDK_IS_TEXTURE (texture), -1);
-
   t = gdk_texture_get_render_data (texture, driver);
 
   if (t)
