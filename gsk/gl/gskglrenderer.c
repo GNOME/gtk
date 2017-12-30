@@ -385,10 +385,8 @@ render_text_node (GskGLRenderer   *self,
 
       /* e.g. whitespace */
       if (glyph->draw_width <= 0 || glyph->draw_height <= 0)
-        {
-          x_position += gi->geometry.width;
-          continue;
-        }
+        goto next;
+
       cx = (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
       cy = (double)(gi->geometry.y_offset) / PANGO_SCALE;
 
@@ -405,20 +403,17 @@ render_text_node (GskGLRenderer   *self,
       glyph_w = glyph->draw_width;
       glyph_h = glyph->draw_height;
 
-      {
-        const GskQuadVertex vertex_data[GL_N_VERTICES] = {
-          { { glyph_x,           glyph_y           }, { tx,  ty  }, },
-          { { glyph_x,           glyph_y + glyph_h }, { tx,  ty2 }, },
-          { { glyph_x + glyph_w, glyph_y           }, { tx2, ty  }, },
+      ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
+        { { glyph_x,           glyph_y           }, { tx,  ty  }, },
+        { { glyph_x,           glyph_y + glyph_h }, { tx,  ty2 }, },
+        { { glyph_x + glyph_w, glyph_y           }, { tx2, ty  }, },
 
-          { { glyph_x + glyph_w, glyph_y + glyph_h }, { tx2, ty2 }, },
-          { { glyph_x,           glyph_y + glyph_h }, { tx,  ty2 }, },
-          { { glyph_x + glyph_w, glyph_y           }, { tx2, ty  }, },
-        };
+        { { glyph_x + glyph_w, glyph_y + glyph_h }, { tx2, ty2 }, },
+        { { glyph_x,           glyph_y + glyph_h }, { tx,  ty2 }, },
+        { { glyph_x + glyph_w, glyph_y           }, { tx2, ty  }, },
+      });
 
-        ops_draw (builder, vertex_data);
-      }
-
+next:
       x_position += gi->geometry.width;
     }
 }
