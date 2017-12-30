@@ -136,6 +136,7 @@ struct _GtkFontChooserWidgetPrivate
 
   GtkWidget       *preview;
   GtkWidget       *preview2;
+  GtkWidget       *font_name_label;
   gchar           *preview_text;
   gboolean         show_preview_entry;
 
@@ -669,6 +670,7 @@ gtk_font_chooser_widget_update_preview_attributes (GtkFontChooserWidget *fontcho
     pango_attr_list_insert (attrs, pango_attr_language_new (priv->font_language));
 
   gtk_entry_set_attributes (GTK_ENTRY (priv->preview), attrs);
+
   pango_attr_list_unref (attrs);
 }
 
@@ -802,6 +804,7 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, axis_grid);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, feature_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, feature_language_combo);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, font_name_label);
 
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, filter_popover);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, script_filter_revealer);
@@ -2029,6 +2032,49 @@ gtk_font_chooser_widget_set_font (GtkFontChooserWidget *fontchooser,
 }
 
 static void
+gtk_font_chooser_widget_update_font_name (GtkFontChooserWidget *fontchooser,
+                                          GtkTreeSelection     *selection)
+{
+  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  PangoFontFamily *family;
+  PangoFontFace *face;
+  GtkDelayedFontDescription *desc;
+  const PangoFontDescription *font_desc;
+  PangoAttrList *attrs;
+  const char *fam_name;
+  const char *face_name;
+  char *title;
+
+  gtk_tree_selection_get_selected (selection, &model, &iter);
+  gtk_tree_model_get (model, &iter,
+                      FAMILY_COLUMN, &family,
+                      FACE_COLUMN, &face,
+                      FONT_DESC_COLUMN, &desc,
+                      -1);
+
+  fam_name = pango_font_family_get_name (family);
+  face_name = pango_font_face_get_face_name (face);
+  font_desc = gtk_delayed_font_description_get (desc);
+
+  g_object_unref (family);
+  g_object_unref (face);
+
+  if (priv->level == GTK_FONT_CHOOSER_LEVEL_FAMILY)
+    title = g_strdup (fam_name);
+  else
+    title = g_strconcat (fam_name, " ", face_name, NULL);
+
+  attrs = gtk_font_chooser_widget_get_preview_attributes (fontchooser, font_desc);
+  gtk_label_set_attributes (GTK_LABEL (priv->font_name_label), attrs);
+  pango_attr_list_unref (attrs);
+
+  gtk_label_set_label (GTK_LABEL (priv->font_name_label), title);
+  g_free (title);
+}
+
+static void
 selection_changed (GtkTreeSelection     *selection,
                    GtkFontChooserWidget *fontchooser)
 {
@@ -2039,6 +2085,7 @@ selection_changed (GtkTreeSelection     *selection,
 
   if (gtk_tree_selection_count_selected_rows (selection) > 0)
     {
+      gtk_font_chooser_widget_update_font_name (fontchooser, selection);
       g_simple_action_set_enabled (G_SIMPLE_ACTION (priv->tweak_action), TRUE);
     }
   else

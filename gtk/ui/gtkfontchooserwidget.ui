@@ -226,6 +226,16 @@
             <property name="orientation">vertical</property>
             <property name="spacing">6</property>
             <child>
+              <object class="GtkLabel" id="font_name_label">
+                <property name="margin-top">6</property>
+                <property name="margin-bottom">6</property>
+                <property name="margin-start">12</property>
+                <property name="margin-end">12</property>
+                <property name="ellipsize">end</property>
+                <property name="xalign">0</property>
+              </object>
+            </child>
+            <child>
               <object class="GtkEntry" id="preview2">
                 <property name="can-focus">1</property>
                 <property name="placeholder-text" translatable="yes">Preview text</property>
