@@ -281,7 +281,9 @@ gtk_inspector_on_inspect (GtkWidget          *button,
   g_object_unref (cursor);
   iw->grabbed = status == GDK_GRAB_SUCCESS;
 
-  g_signal_connect (iw->invisible, "event", G_CALLBACK (property_query_event), iw);
+  g_signal_connect (iw->invisible, "button-release-event", G_CALLBACK (property_query_event), iw);
+  g_signal_connect (iw->invisible, "motion-notify-event", G_CALLBACK (property_query_event), iw);
+  g_signal_connect (iw->invisible, "key-press-event", G_CALLBACK (property_query_event), iw);
 
   gtk_grab_add (GTK_WIDGET (iw->invisible));
   deemphasize_window (GTK_WIDGET (iw));
