@@ -101,7 +101,6 @@ gtk_tests = [
   ['testscrolledge'],
   ['testcellarea'],
   ['testswitch'],
-  ['testtoplevelembed'],
   ['testnoscreen'],
   ['testtreepos'],
   ['testsensitive'],
