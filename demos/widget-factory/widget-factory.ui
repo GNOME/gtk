@@ -3271,7 +3271,7 @@ microphone-sensitivity-medium-symbolic</property>
     <property name="text" translatable="yes">Do something?</property>
     <property name="secondary-text" translatable="yes">If you do something,
 bad things might happen.</property>
-    <signal name="delete-event" handler="gtk_widget_hide_on_delete"/>
+    <property name="hide-on-close">1</property>
     <child type="action">
       <object class="GtkButton" id="cancel_info_dialog">
         <property name="label" translatable="yes">_Cancel</property>
@@ -3295,7 +3295,7 @@ bad things might happen.</property>
     <property name="modal">1</property>
     <property name="use-header-bar">1</property>
     <property name="title" translatable="yes">Zelda</property>
-    <signal name="delete-event" handler="gtk_widget_hide_on_delete"/>
+    <property name="hide-on-close">1</property>
     <child internal-child="vbox">
       <object class="GtkBox">
         <child>
@@ -3331,7 +3331,7 @@ bad things might happen.</property>
     <property name="resizable">0</property>
     <property name="use-header-bar">1</property>
     <property name="title" translatable="yes">Settings</property>
-    <signal name="delete-event" handler="gtk_widget_hide_on_delete"/>
+    <property name="hide-on-close">1</property>
     <child internal-child="vbox">
       <object class="GtkBox">
         <child>
@@ -3452,7 +3452,7 @@ bad things might happen.</property>
     <property name="modal">1</property>
     <property name="use-header-bar">1</property>
     <property name="title" translatable="yes">Choose one</property>
-    <signal name="delete-event" handler="gtk_widget_hide_on_delete"/>
+    <property name="hide-on-close">1</property>
     <child internal-child="vbox">
       <object class="GtkBox">
         <child>
