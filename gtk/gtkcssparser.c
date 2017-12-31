@@ -44,6 +44,9 @@ struct _GtkCssParser
 
   const char            *line_start;
   guint                  line;
+
+  /* Use this for parsing identifiers, names and strings. */
+  GString               *ident_str;
 };
 
 GtkCssParser *
@@ -68,6 +71,8 @@ _gtk_css_parser_new (const char            *data,
   parser->line_start = data;
   parser->line = 0;
 
+  parser->ident_str = NULL;
+
   return parser;
 }
 
@@ -78,6 +83,9 @@ _gtk_css_parser_free (GtkCssParser *parser)
 
   if (parser->file)
     g_object_unref (parser->file);
+
+  if (parser->ident_str)
+    g_string_free (parser->ident_str, TRUE);
 
   g_slice_free (GtkCssParser, parser);
 }
@@ -390,6 +398,21 @@ _gtk_css_parser_read_char (GtkCssParser *parser,
   return FALSE;
 }
 
+static char *
+_gtk_css_parser_get_ident (GtkCssParser *parser)
+{
+  char *result;
+  gsize len;
+
+  len = parser->ident_str->len;
+
+  result = g_new (char, len + 1);
+  memcpy (result, parser->ident_str->str, len + 1);
+  g_string_set_size (parser->ident_str, 0);
+
+  return result;
+}
+
 char *
 _gtk_css_parser_try_name (GtkCssParser *parser,
                           gboolean      skip_whitespace)
@@ -398,7 +421,10 @@ _gtk_css_parser_try_name (GtkCssParser *parser,
 
   g_return_val_if_fail (GTK_IS_CSS_PARSER (parser), NULL);
 
-  name = g_string_new (NULL);
+  if (parser->ident_str == NULL)
+    parser->ident_str = g_string_new (NULL);
+
+  name = parser->ident_str;
 
   while (_gtk_css_parser_read_char (parser, name, NMCHAR))
     ;
@@ -406,7 +432,7 @@ _gtk_css_parser_try_name (GtkCssParser *parser,
   if (skip_whitespace)
     _gtk_css_parser_skip_whitespace (parser);
 
-  return g_string_free (name, FALSE);
+  return _gtk_css_parser_get_ident (parser);
 }
 
 char *
@@ -420,7 +446,10 @@ _gtk_css_parser_try_ident (GtkCssParser *parser,
 
   start = parser->data;
   
-  ident = g_string_new (NULL);
+  if (parser->ident_str == NULL)
+    parser->ident_str = g_string_new (NULL);
+
+  ident = parser->ident_str;
 
   if (*parser->data == '-')
     {
@@ -431,7 +460,7 @@ _gtk_css_parser_try_ident (GtkCssParser *parser,
   if (!_gtk_css_parser_read_char (parser, ident, NMSTART))
     {
       parser->data = start;
-      g_string_free (ident, TRUE);
+      g_string_set_size (ident, 0);
       return NULL;
     }
 
@@ -441,7 +470,7 @@ _gtk_css_parser_try_ident (GtkCssParser *parser,
   if (skip_whitespace)
     _gtk_css_parser_skip_whitespace (parser);
 
-  return g_string_free (ident, FALSE);
+  return _gtk_css_parser_get_ident (parser);
 }
 
 gboolean
@@ -469,7 +498,12 @@ _gtk_css_parser_read_string (GtkCssParser *parser)
     }
   
   parser->data++;
-  str = g_string_new (NULL);
+
+  if (parser->ident_str == NULL)
+    parser->ident_str = g_string_new (NULL);
+
+  str = parser->ident_str;
+  g_assert (str->len == 0);
 
   while (TRUE)
     {
@@ -490,7 +524,7 @@ _gtk_css_parser_read_string (GtkCssParser *parser)
             {
               parser->data++;
               _gtk_css_parser_skip_whitespace (parser);
-              return g_string_free (str, FALSE);
+              return _gtk_css_parser_get_ident (parser);
             }
           
           g_string_append_c (str, *parser->data);
@@ -499,12 +533,12 @@ _gtk_css_parser_read_string (GtkCssParser *parser)
         case '\0':
           /* FIXME: position */
           _gtk_css_parser_error (parser, "Missing end quote in string.");
-          g_string_free (str, TRUE);
+          g_string_set_size (str, 0);
           return NULL;
         default:
           _gtk_css_parser_error (parser, 
                                  "Invalid character in string. Must be escaped.");
-          g_string_free (str, TRUE);
+          g_string_set_size (str, 0);
           return NULL;
         }
     }
