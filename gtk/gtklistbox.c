@@ -104,6 +104,7 @@ typedef struct
   GtkWidget *scrollable_parent;
   GtkAdjustment *adjustment;
   gboolean activate_single_click;
+  gboolean accept_unpaired_release;
 
   GtkGesture *multipress_gesture;
 
@@ -151,6 +152,7 @@ enum {
   PROP_0,
   PROP_SELECTION_MODE,
   PROP_ACTIVATE_ON_SINGLE_CLICK,
+  PROP_ACCEPT_UNPAIRED_RELEASE,
   LAST_PROPERTY
 };
 
@@ -232,6 +234,8 @@ static void                 gtk_list_box_select_all_between             (GtkList
                                                                          gboolean             modify);
 static gboolean             gtk_list_box_unselect_all_internal          (GtkListBox          *box);
 static void                 gtk_list_box_selected_rows_changed          (GtkListBox          *box);
+static void                 gtk_list_box_set_accept_unpaired_release    (GtkListBox          *box,
+                                                                         gboolean             accept);
 
 static void gtk_list_box_multipress_gesture_pressed  (GtkGestureMultiPress *gesture,
                                                       guint                 n_press,
@@ -310,6 +314,9 @@ gtk_list_box_get_property (GObject    *obj,
     case PROP_ACTIVATE_ON_SINGLE_CLICK:
       g_value_set_boolean (value, priv->activate_single_click);
       break;
+    case PROP_ACCEPT_UNPAIRED_RELEASE:
+      g_value_set_boolean (value, priv->accept_unpaired_release);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
       break;
@@ -331,6 +338,9 @@ gtk_list_box_set_property (GObject      *obj,
       break;
     case PROP_ACTIVATE_ON_SINGLE_CLICK:
       gtk_list_box_set_activate_on_single_click (box, g_value_get_boolean (value));
+      break;
+    case PROP_ACCEPT_UNPAIRED_RELEASE:
+      gtk_list_box_set_accept_unpaired_release (box, g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
@@ -413,6 +423,13 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
                           P_("Activate on Single Click"),
                           P_("Activate row on a single click"),
                           TRUE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  properties[PROP_ACCEPT_UNPAIRED_RELEASE] =
+    g_param_spec_boolean ("accept-unpaired-release",
+                          P_("Accept unpaired release"),
+                          P_("Accept unpaired release"),
+                          FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROPERTY, properties);
@@ -1400,6 +1417,17 @@ gtk_list_box_get_activate_on_single_click (GtkListBox *box)
   return BOX_PRIV (box)->activate_single_click;
 }
 
+void
+gtk_list_box_set_accept_unpaired_release (GtkListBox *box,
+                                          gboolean    accept)
+{
+  if (BOX_PRIV (box)->accept_unpaired_release == accept)
+    return;
+
+  BOX_PRIV (box)->accept_unpaired_release = accept;
+
+  g_object_notify_by_pspec (G_OBJECT (box), properties[PROP_ACCEPT_UNPAIRED_RELEASE]);
+}
 
 static void
 gtk_list_box_add_move_binding (GtkBindingSet   *binding_set,
@@ -1791,7 +1819,7 @@ gtk_list_box_multipress_unpaired_release (GtkGestureMultiPress *gesture,
   GtkListBoxPrivate *priv = BOX_PRIV (box);
   GtkListBoxRow *row;
 
-  if (!priv->activate_single_click)
+  if (!priv->activate_single_click || !priv->accept_unpaired_release)
     return;
 
   row = gtk_list_box_get_row_at_y (box, y);

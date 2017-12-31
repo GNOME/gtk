@@ -112,6 +112,9 @@ static void gtk_flow_box_bound_model_changed (GListModel *list,
                                               guint       added,
                                               gpointer    user_data);
 
+static void gtk_flow_box_set_accept_unpaired_release (GtkFlowBox *box,
+                                                      gboolean    accept);
+
 static void gtk_flow_box_check_model_compat  (GtkFlowBox *box);
 
 static void
@@ -616,6 +619,7 @@ enum {
   PROP_MAX_CHILDREN_PER_LINE,
   PROP_SELECTION_MODE,
   PROP_ACTIVATE_ON_SINGLE_CLICK,
+  PROP_ACCEPT_UNPAIRED_RELEASE,
 
   /* orientable */
   PROP_ORIENTATION,
@@ -642,6 +646,7 @@ struct _GtkFlowBoxPrivate {
   GtkAdjustment    *hadjustment;
   GtkAdjustment    *vadjustment;
   gboolean          activate_on_single_click;
+  gboolean          accept_unpaired_release;
 
   guint16           min_children_per_line;
   guint16           max_children_per_line;
@@ -2686,7 +2691,7 @@ gtk_flow_box_multipress_unpaired_release (GtkGestureMultiPress *gesture,
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
   GtkFlowBoxChild *child;
 
-  if (!priv->activate_on_single_click)
+  if (!priv->activate_on_single_click || !priv->accept_unpaired_release)
     return;
 
   child = gtk_flow_box_get_child_at_pos (box, x, y);
@@ -3302,6 +3307,9 @@ gtk_flow_box_get_property (GObject    *object,
     case PROP_ACTIVATE_ON_SINGLE_CLICK:
       g_value_set_boolean (value, priv->activate_on_single_click);
       break;
+    case PROP_ACCEPT_UNPAIRED_RELEASE:
+      g_value_set_boolean (value, priv->accept_unpaired_release);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -3349,6 +3357,9 @@ gtk_flow_box_set_property (GObject      *object,
       break;
     case PROP_ACTIVATE_ON_SINGLE_CLICK:
       gtk_flow_box_set_activate_on_single_click (box, g_value_get_boolean (value));
+      break;
+    case PROP_ACCEPT_UNPAIRED_RELEASE:
+      gtk_flow_box_set_accept_unpaired_release (box, g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -3443,6 +3454,13 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                           P_("Activate on Single Click"),
                           P_("Activate row on a single click"),
                           TRUE,
+                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  props[PROP_ACCEPT_UNPAIRED_RELEASE] =
+    g_param_spec_boolean ("accept-unpaired-release",
+                          P_("Accept unpaired release"),
+                          P_("Accept an unpaired release event"),
+                          FALSE,
                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -4387,7 +4405,18 @@ gtk_flow_box_get_activate_on_single_click (GtkFlowBox *box)
 
   return BOX_PRIV (box)->activate_on_single_click;
 }
- 
+
+static void
+gtk_flow_box_set_accept_unpaired_release (GtkFlowBox *box,
+                                          gboolean    accept)
+{
+  if (BOX_PRIV (box)->accept_unpaired_release == accept)
+    return;
+
+  BOX_PRIV (box)->accept_unpaired_release = accept;
+  g_object_notify_by_pspec (G_OBJECT (box), props[PROP_ACCEPT_UNPAIRED_RELEASE]);
+}
+
  /* Selection handling {{{2 */
 
 /**
