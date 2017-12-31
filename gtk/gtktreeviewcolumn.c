@@ -820,7 +820,13 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
   priv->button = gtk_button_new ();
   g_object_ref_sink (priv->button);
 
-  g_signal_connect (priv->button, "event",
+  g_signal_connect (priv->button, "button-press-event",
+		    G_CALLBACK (gtk_tree_view_column_button_event),
+		    tree_column);
+  g_signal_connect (priv->button, "button-release-event",
+		    G_CALLBACK (gtk_tree_view_column_button_event),
+		    tree_column);
+  g_signal_connect (priv->button, "leave-notify-event",
 		    G_CALLBACK (gtk_tree_view_column_button_event),
 		    tree_column);
   g_signal_connect (priv->button, "clicked",
