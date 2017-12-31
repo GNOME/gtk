@@ -11018,8 +11018,7 @@ gtk_window_set_debugging (gboolean enable,
     {
       gtk_inspector_init ();
       inspector_window = gtk_inspector_window_new ();
-      g_signal_connect (inspector_window, "delete-event",
-                        G_CALLBACK (gtk_widget_hide_on_delete), NULL);
+      gtk_window_set_hide_on_close (GTK_WINDOW (inspector_window), TRUE);
 
       if (warn)
         {
