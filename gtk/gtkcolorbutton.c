@@ -490,16 +490,6 @@ gtk_color_button_new_with_rgba (const GdkRGBA *rgba)
 }
 
 static gboolean
-dialog_delete_event (GtkWidget *dialog,
-                     GdkEvent  *event,
-                     gpointer   user_data)
-{
-  g_signal_emit_by_name (dialog, "response", GTK_RESPONSE_CANCEL);
-
-  return TRUE;
-}
-
-static gboolean
 dialog_destroy (GtkWidget *widget,
                 gpointer   data)
 {
@@ -550,6 +540,7 @@ ensure_dialog (GtkColorButton *button)
   parent = gtk_widget_get_toplevel (GTK_WIDGET (button));
 
   priv->cs_dialog = dialog = gtk_color_chooser_dialog_new (priv->title, NULL);
+  gtk_window_set_hide_on_close (GTK_WINDOW (dialog), TRUE);
 
   if (gtk_widget_is_toplevel (parent) && GTK_IS_WINDOW (parent))
   {
@@ -564,8 +555,6 @@ ensure_dialog (GtkColorButton *button)
                     G_CALLBACK (dialog_response), button);
   g_signal_connect (dialog, "destroy",
                     G_CALLBACK (dialog_destroy), button);
-  g_signal_connect (dialog, "delete-event",
-                    G_CALLBACK (dialog_delete_event), button);
 }
 
 
