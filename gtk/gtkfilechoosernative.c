@@ -522,14 +522,6 @@ gtk_file_chooser_native_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_file_chooser_native_parent_class)->finalize (object);
 }
 
-static gint
-override_delete_handler (GtkDialog *dialog,
-                         GdkEventAny *event,
-                         gpointer data)
-{
-  return TRUE; /* Do not destroy */
-}
-
 static void
 gtk_file_chooser_native_init (GtkFileChooserNative *self)
 {
@@ -540,13 +532,8 @@ gtk_file_chooser_native_init (GtkFileChooserNative *self)
   self->cancel_button = gtk_dialog_add_button (GTK_DIALOG (self->dialog), _("_Cancel"), GTK_RESPONSE_CANCEL);
   self->accept_button = gtk_dialog_add_button (GTK_DIALOG (self->dialog), _("_Open"), GTK_RESPONSE_ACCEPT);
 
-  gtk_dialog_set_default_response (GTK_DIALOG (self->dialog),
-                                   GTK_RESPONSE_ACCEPT);
-  /* We don't want to destroy on delete event, instead we hide in the response cb */
-  g_signal_connect (self->dialog,
-                    "delete-event",
-                    G_CALLBACK (override_delete_handler),
-                    NULL);
+  gtk_dialog_set_default_response (GTK_DIALOG (self->dialog), GTK_RESPONSE_ACCEPT);
+  gtk_window_set_hide_on_close (GTK_WINDOW (self->dialog), TRUE);
 
   /* This is used, instead of the standard delegate, to ensure that signals are not delegated. */
   g_object_set_qdata (G_OBJECT (self), GTK_FILE_CHOOSER_DELEGATE_QUARK, self->dialog);
