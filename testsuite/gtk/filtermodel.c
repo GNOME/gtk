@@ -6397,33 +6397,6 @@ specific_bug_621076 (void)
   gtk_tree_store_set (store, &item_iter, 0, "invisible-3:1", -1);
   signal_monitor_assert_is_empty (monitor);
 
-#if 0
-  {
-    GtkWidget *window;
-    GtkTreeViewColumn *col;
-
-    gtk_tree_view_expand_all (GTK_TREE_VIEW (view));
-
-    col = gtk_tree_view_column_new_with_attributes ("foo",
-        gtk_cell_renderer_text_new (),
-        "text", 0, NULL);
-    gtk_tree_view_append_column (GTK_TREE_VIEW (view), col);
-
-    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    g_signal_connect (window, "delete-event",
-        G_CALLBACK (gtk_widget_destroy), NULL);
-    g_signal_connect (window, "destroy",
-        G_CALLBACK (gtk_main_quit), NULL);
-
-    gtk_container_add (GTK_CONTAINER (window), view);
-
-    gtk_widget_show (view);
-    gtk_widget_show (window);
-
-    gtk_main ();
-  }
-#endif
-
   /* Cleanup */
   signal_monitor_free (monitor);
   g_object_unref (view);
