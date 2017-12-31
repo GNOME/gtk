@@ -931,6 +931,8 @@ gtk_font_button_clicked (GtkButton *button,
       parent = gtk_widget_get_toplevel (GTK_WIDGET (font_button));
 
       priv->font_dialog = gtk_font_chooser_dialog_new (priv->title, NULL);
+      gtk_window_set_hide_on_close (GTK_WINDOW (priv->font_dialog), TRUE);
+
       font_dialog = GTK_FONT_CHOOSER (font_button->priv->font_dialog);
 
       if (priv->font_map)
@@ -974,16 +976,13 @@ gtk_font_button_clicked (GtkButton *button,
 
       g_signal_connect (font_dialog, "destroy",
                         G_CALLBACK (dialog_destroy), font_button);
-
-      g_signal_connect (font_dialog, "delete-event",
-                        G_CALLBACK (gtk_widget_hide_on_delete), NULL);
     }
-  
+
   if (!gtk_widget_get_visible (font_button->priv->font_dialog))
     {
       font_dialog = GTK_FONT_CHOOSER (font_button->priv->font_dialog);
       gtk_font_chooser_set_font_desc (font_dialog, font_button->priv->font_desc);
-    } 
+    }
 
   gtk_window_present (GTK_WINDOW (font_button->priv->font_dialog));
 }
