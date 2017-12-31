@@ -17,6 +17,12 @@
 #define LARGE_WIDTH 240
 #define LARGE_HEIGHT 240
 
+static gboolean
+focus_handled (void)
+{
+  return TRUE;
+}
+
 static WidgetInfo *
 new_widget_info (const char *name,
 		 GtkWidget  *widget,
@@ -42,7 +48,7 @@ new_widget_info (const char *name,
     }
   info->no_focus = TRUE;
 
-  g_signal_connect (info->window, "focus", G_CALLBACK (gtk_true), NULL);
+  g_signal_connect (info->window, "focus", G_CALLBACK (focus_handled), NULL);
 
   switch (size)
     {
