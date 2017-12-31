@@ -957,41 +957,29 @@ render_outset_shadow_node (GskGLRenderer       *self,
   if (blur_radius > 0)
     {
       ops_set_program (builder, &self->blur_program);
-      ops_set_clip (builder, &blit_clip);
-      ops_set_texture (builder, texture_id);
       op.op = OP_CHANGE_BLUR;
-      op.blur.dir[0] = 1;
-      op.blur.dir[1] = 0;
       op.blur.size.width = texture_width;
       op.blur.size.height = texture_height;
       op.blur.radius = blur_radius;
       ops_add (builder, &op);
-
-      ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-        { { 0,             0              }, { 0, 1 }, },
-        { { 0,             texture_height }, { 0, 0 }, },
-        { { texture_width, 0              }, { 1, 1 }, },
-
-        { { texture_width, texture_height }, { 1, 0 }, },
-        { { 0,             texture_height }, { 0, 0 }, },
-        { { texture_width, 0              }, { 1, 1 }, },
-      });
     }
   else
     {
       ops_set_program (builder, &self->blit_program);
-      ops_set_clip (builder, &blit_clip);
-      ops_set_texture (builder, texture_id);
-      ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-        { { 0,             0              }, { 0, 1 }, },
-        { { 0,             texture_height }, { 0, 0 }, },
-        { { texture_width, 0              }, { 1, 1 }, },
-
-        { { texture_width, texture_height }, { 1, 0 }, },
-        { { 0,             texture_height }, { 0, 0 }, },
-        { { texture_width, 0              }, { 1, 1 }, },
-      });
     }
+
+  ops_set_clip (builder, &blit_clip);
+  ops_set_texture (builder, texture_id);
+  ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
+    { { 0,             0              }, { 0, 1 }, },
+    { { 0,             texture_height }, { 0, 0 }, },
+    { { texture_width, 0              }, { 1, 1 }, },
+
+    { { texture_width, texture_height }, { 1, 0 }, },
+    { { 0,             texture_height }, { 0, 0 }, },
+    { { texture_width, 0              }, { 1, 1 }, },
+  });
+
 
   ops_set_clip (builder, &prev_clip);
 
