@@ -276,6 +276,7 @@ show_variations (GtkEmojiChooser *chooser,
   gtk_flow_box_set_max_children_per_line (GTK_FLOW_BOX (box), 6);
   gtk_flow_box_set_activate_on_single_click (GTK_FLOW_BOX (box), TRUE);
   gtk_flow_box_set_selection_mode (GTK_FLOW_BOX (box), GTK_SELECTION_NONE);
+  g_object_set (box, "accept-unpaired-release", TRUE, NULL);
   gtk_container_add (GTK_CONTAINER (popover), view);
   gtk_container_add (GTK_CONTAINER (view), box);
 
