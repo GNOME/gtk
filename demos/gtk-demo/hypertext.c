@@ -268,7 +268,7 @@ do_hypertext (GtkWidget *do_widget)
       gtk_text_view_set_right_margin (GTK_TEXT_VIEW (view), 20);
       g_signal_connect (view, "key-press-event",
                         G_CALLBACK (key_press_event), NULL);
-      g_signal_connect (view, "event-after",
+      g_signal_connect (view, "event",
                         G_CALLBACK (event_after), NULL);
       g_signal_connect (view, "motion-notify-event",
                         G_CALLBACK (motion_notify_event), NULL);
