@@ -9384,9 +9384,8 @@ gtk_window_present_with_time (GtkWindow *window,
  * in which case the window will be iconified before it ever appears
  * onscreen.
  *
- * You can track iconification via the “window-state-event” signal
- * on #GtkWidget.
- **/
+ * You can track iconification via the #GdkWindow::state property.
+ */
 void
 gtk_window_iconify (GtkWindow *window)
 {
@@ -9412,8 +9411,7 @@ gtk_window_iconify (GtkWindow *window)
  * [window manager][gtk-X11-arch])) could iconify it
  * again before your code which assumes deiconification gets to run.
  *
- * You can track iconification via the “window-state-event” signal
- * on #GtkWidget.
+ * You can track iconification via the #GdkWindow::state property.
  **/
 void
 gtk_window_deiconify (GtkWindow *window)
@@ -9444,8 +9442,7 @@ gtk_window_deiconify (GtkWindow *window)
  *
  * It’s permitted to call this function before showing a window.
  *
- * You can track stickiness via the “window-state-event” signal
- * on #GtkWidget.
+ * You can track iconification via the #GdkWindow::state property.
  **/
 void
 gtk_window_stick (GtkWindow *window)
@@ -9473,8 +9470,7 @@ gtk_window_stick (GtkWindow *window)
  * stick it again. But normally the window will
  * end up stuck. Just don’t write code that crashes if not.
  *
- * You can track stickiness via the “window-state-event” signal
- * on #GtkWidget.
+ * You can track iconification via the #GdkWindow::state property.
  **/
 void
 gtk_window_unstick (GtkWindow *window)
@@ -9507,9 +9503,8 @@ gtk_window_unstick (GtkWindow *window)
  * in which case the window will be maximized when it appears onscreen
  * initially.
  *
- * You can track maximization via the “window-state-event” signal
- * on #GtkWidget, or by listening to notifications on the
- * #GtkWindow:is-maximized property.
+ * You can track iconification via the #GdkWindow::state property
+ * or by listening to notifications on the #GtkWindow:is-maximized property.
  **/
 void
 gtk_window_maximize (GtkWindow *window)
@@ -9537,8 +9532,7 @@ gtk_window_maximize (GtkWindow *window)
  * managers honor requests to unmaximize. But normally the window will
  * end up unmaximized. Just don’t write code that crashes if not.
  *
- * You can track maximization via the “window-state-event” signal
- * on #GtkWidget.
+ * You can track iconification via the #GdkWindow::state property
  **/
 void
 gtk_window_unmaximize (GtkWindow *window)
@@ -9567,8 +9561,7 @@ gtk_window_unmaximize (GtkWindow *window)
  * windows. But normally the window will end up fullscreen. Just
  * don’t write code that crashes if not.
  *
- * You can track the fullscreen state via the “window-state-event” signal
- * on #GtkWidget.
+ * You can track iconification via the #GdkWindow::state property
  *
  * Since: 2.2
  **/
@@ -9608,8 +9601,7 @@ unset_fullscreen_monitor (GtkWindow *window)
  * Asks to place @window in the fullscreen state. Note that you shouldn't assume
  * the window is definitely full screen afterward.
  *
- * You can track the fullscreen state via the "window-state-event" signal
- * on #GtkWidget.
+ * You can track iconification via the #GdkWindow::state property
  */
 void
 gtk_window_fullscreen_on_monitor (GtkWindow  *window,
@@ -9654,8 +9646,7 @@ gtk_window_fullscreen_on_monitor (GtkWindow  *window,
  * windows. But normally the window will end up restored to its normal
  * state. Just don’t write code that crashes if not.
  *
- * You can track the fullscreen state via the “window-state-event” signal
- * on #GtkWidget.
+ * You can track iconification via the #GdkWindow::state property
  *
  * Since: 2.2
  **/
@@ -9692,8 +9683,7 @@ gtk_window_unfullscreen (GtkWindow *window)
  * in which case the window will be kept above when it appears onscreen
  * initially.
  *
- * You can track the above state via the “window-state-event” signal
- * on #GtkWidget.
+ * You can track iconification via the #GdkWindow::state property
  *
  * Note that, according to the
  * [Extended Window Manager Hints Specification](http://www.freedesktop.org/Standards/wm-spec),
@@ -9739,8 +9729,7 @@ gtk_window_set_keep_above (GtkWindow *window,
  * in which case the window will be kept below when it appears onscreen
  * initially.
  *
- * You can track the below state via the “window-state-event” signal
- * on #GtkWidget.
+ * You can track iconification via the #GdkWindow::state property
  *
  * Note that, according to the
  * [Extended Window Manager Hints Specification](http://www.freedesktop.org/Standards/wm-spec),
