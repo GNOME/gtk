@@ -191,9 +191,8 @@ static void      gtk_dialog_add_buttons_valist   (GtkDialog    *dialog,
                                                   const gchar  *first_button_text,
                                                   va_list       args);
 
-static gboolean  gtk_dialog_delete_event_handler (GtkWidget    *widget,
-                                                  GdkEventAny  *event,
-                                                  gpointer      user_data);
+static gboolean  gtk_dialog_delete_event         (GtkWidget    *widget,
+                                                  GdkEventAny  *event);
 static void      gtk_dialog_map                  (GtkWidget    *widget);
 
 static void      gtk_dialog_close                (GtkDialog    *dialog);
@@ -522,6 +521,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
   gobject_class->finalize = gtk_dialog_finalize;
 
   widget_class->map = gtk_dialog_map;
+  widget_class->delete_event = gtk_dialog_delete_event;
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_DIALOG);
 
@@ -595,7 +595,6 @@ gtk_dialog_class_init (GtkDialogClass *class)
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkDialog, headerbar);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkDialog, action_area);
   gtk_widget_class_bind_template_child_private (widget_class, GtkDialog, action_box);
-  gtk_widget_class_bind_template_callback (widget_class, gtk_dialog_delete_event_handler);
 
   gtk_widget_class_set_css_name (widget_class, I_("dialog"));
 }
@@ -623,15 +622,13 @@ gtk_dialog_buildable_interface_init (GtkBuildableIface *iface)
 }
 
 static gboolean
-gtk_dialog_delete_event_handler (GtkWidget   *widget,
-                                 GdkEventAny *event,
-                                 gpointer     user_data)
+gtk_dialog_delete_event (GtkWidget   *widget,
+                         GdkEventAny *event)
 {
-  /* emit response signal */
+  /* emit response signal, this will shut down the loop if we are in gtk_dialog_run */
   gtk_dialog_response (GTK_DIALOG (widget), GTK_RESPONSE_DELETE_EVENT);
 
-  /* Do the destroy by default */
-  return FALSE;
+  return GTK_WIDGET_CLASS (gtk_dialog_parent_class)->delete_event (widget, event);
 }
 
 static GList *
@@ -783,7 +780,7 @@ gtk_dialog_new_empty (const gchar     *title,
  * any positive number, or one of the values in the #GtkResponseType
  * enumeration. If the user clicks one of these dialog buttons,
  * #GtkDialog will emit the #GtkDialog::response signal with the corresponding
- * response ID. If a #GtkDialog receives the #GtkWidget::delete-event signal,
+ * response ID. If a #GtkDialog receives a delete event,
  * it will emit ::response with a response ID of #GTK_RESPONSE_DELETE_EVENT.
  * However, destroying a dialog does not emit the ::response signal;
  * so be careful relying on ::response when using the
@@ -1119,18 +1116,6 @@ run_response_handler (GtkDialog *dialog,
   shutdown_loop (ri);
 }
 
-static gint
-run_delete_handler (GtkDialog *dialog,
-                    GdkEventAny *event,
-                    gpointer data)
-{
-  RunInfo *ri = data;
-
-  shutdown_loop (ri);
-
-  return TRUE; /* Do not destroy */
-}
-
 static void
 run_destroy_handler (GtkDialog *dialog, gpointer data)
 {
@@ -1155,8 +1140,8 @@ run_destroy_handler (GtkDialog *dialog, gpointer data)
  * gtk_widget_show() on the dialog for you. Note that you still
  * need to show any children of the dialog yourself.
  *
- * During gtk_dialog_run(), the default behavior of #GtkWidget::delete-event
- * is disabled; if the dialog receives ::delete_event, it will not be
+ * During gtk_dialog_run(), the default behavior of delete events
+ * is disabled; if the dialog receives a delete event, it will not be
  * destroyed as windows usually are, and gtk_dialog_run() will return
  * #GTK_RESPONSE_DELETE_EVENT. Also, during gtk_dialog_run() the dialog
  * will be modal. You can force gtk_dialog_run() to return at any time by
@@ -1198,18 +1183,19 @@ gtk_dialog_run (GtkDialog *dialog)
 {
   RunInfo ri = { NULL, GTK_RESPONSE_NONE, NULL, FALSE };
   gboolean was_modal;
+  gboolean was_hide_on_close;
   gulong response_handler;
   gulong unmap_handler;
   gulong destroy_handler;
-  gulong delete_handler;
 
   g_return_val_if_fail (GTK_IS_DIALOG (dialog), -1);
 
   g_object_ref (dialog);
 
   was_modal = gtk_window_get_modal (GTK_WINDOW (dialog));
-  if (!was_modal)
-    gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+  was_hide_on_close = gtk_window_get_hide_on_close (GTK_WINDOW (dialog));
+  gtk_window_set_hide_on_close (GTK_WINDOW (dialog), TRUE);
 
   if (!gtk_widget_get_visible (GTK_WIDGET (dialog)))
     gtk_widget_show (GTK_WIDGET (dialog));
@@ -1224,12 +1210,6 @@ gtk_dialog_run (GtkDialog *dialog)
     g_signal_connect (dialog,
                       "unmap",
                       G_CALLBACK (run_unmap_handler),
-                      &ri);
-
-  delete_handler =
-    g_signal_connect (dialog,
-                      "delete-event",
-                      G_CALLBACK (run_delete_handler),
                       &ri);
 
   destroy_handler =
@@ -1250,12 +1230,11 @@ gtk_dialog_run (GtkDialog *dialog)
 
   if (!ri.destroyed)
     {
-      if (!was_modal)
-        gtk_window_set_modal (GTK_WINDOW(dialog), FALSE);
+      gtk_window_set_modal (GTK_WINDOW (dialog), was_modal);
+      gtk_window_set_hide_on_close (GTK_WINDOW (dialog), was_hide_on_close);
 
       g_signal_handler_disconnect (dialog, response_handler);
       g_signal_handler_disconnect (dialog, unmap_handler);
-      g_signal_handler_disconnect (dialog, delete_handler);
       g_signal_handler_disconnect (dialog, destroy_handler);
     }
 
