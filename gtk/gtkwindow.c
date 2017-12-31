@@ -264,6 +264,7 @@ struct _GtkWindowPrivate
   guint    tiled                     : 1;
 
   guint    use_subsurface            : 1;
+  guint    hide_on_close             : 1;
 
   GdkWindowTypeHint type_hint;
 
@@ -309,6 +310,7 @@ enum {
   PROP_DEFAULT_WIDTH,
   PROP_DEFAULT_HEIGHT,
   PROP_DESTROY_WITH_PARENT,
+  PROP_HIDE_ON_CLOSE,
   PROP_ICON,
   PROP_ICON_NAME,
   PROP_DISPLAY,
@@ -415,6 +417,8 @@ static void gtk_window_size_allocate      (GtkWidget           *widget,
                                            const GtkAllocation *allocation,
                                            int                  baseline,
                                            GtkAllocation       *out_clip);
+static gboolean gtk_window_delete_event   (GtkWidget         *widget,
+                                           GdkEventAny       *event);
 static gboolean gtk_window_map_event      (GtkWidget         *widget,
                                            GdkEventAny       *event);
 static gint gtk_window_configure_event    (GtkWidget         *widget,
@@ -798,6 +802,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->realize = gtk_window_realize;
   widget_class->unrealize = gtk_window_unrealize;
   widget_class->size_allocate = gtk_window_size_allocate;
+  widget_class->delete_event = gtk_window_delete_event;
   widget_class->configure_event = gtk_window_configure_event;
   widget_class->event = gtk_window_event;
   widget_class->key_press_event = gtk_window_key_press_event;
@@ -906,6 +911,14 @@ gtk_window_class_init (GtkWindowClass *klass)
                             P_("If this window should be destroyed when the parent is destroyed"),
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  window_props[PROP_HIDE_ON_CLOSE] =
+      g_param_spec_boolean ("hide-on-close",
+                            P_("Hide on close"),
+                            P_("If this window should be hidden when the user clicks the close button"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
 
   window_props[PROP_ICON] =
       g_param_spec_object ("icon",
@@ -2042,6 +2055,9 @@ gtk_window_set_property (GObject      *object,
     case PROP_DESTROY_WITH_PARENT:
       gtk_window_set_destroy_with_parent (window, g_value_get_boolean (value));
       break;
+    case PROP_HIDE_ON_CLOSE:
+      gtk_window_set_hide_on_close (window, g_value_get_boolean (value));
+      break;
     case PROP_ICON:
       gtk_window_set_icon (window,
                            g_value_get_object (value));
@@ -2152,6 +2168,9 @@ gtk_window_get_property (GObject      *object,
       break;
     case PROP_DESTROY_WITH_PARENT:
       g_value_set_boolean (value, priv->destroy_with_parent);
+      break;
+    case PROP_HIDE_ON_CLOSE:
+      g_value_set_boolean (value, priv->hide_on_close);
       break;
     case PROP_ICON:
       g_value_set_object (value, gtk_window_get_icon (window));
@@ -4055,6 +4074,50 @@ gtk_window_get_destroy_with_parent (GtkWindow *window)
   return window->priv->destroy_with_parent;
 }
 
+/**
+ * gtk_window_set_hide_on_close:
+ * @window: a #GtkWindow
+ * @setting: whether to hide the window when it is closed
+ *
+ * If @setting is %TRUE, then clicking the close button on the window
+ * will not destroy it, but only hide it.
+ *
+ * Since: 3.94
+ */
+void
+gtk_window_set_hide_on_close (GtkWindow *window,
+                              gboolean   setting)
+{
+  GtkWindowPrivate *priv = window->priv;
+
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  if (priv->hide_on_close == setting)
+    return;
+
+  priv->hide_on_close = setting;
+
+  g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_HIDE_ON_CLOSE]);
+}
+
+/**
+ * gtk_window_get_hide_on_close:
+ * @window: a #GtkWindow
+ *
+ * Returns whether the window will be hidden when the close button is clicked.
+ *
+ * Returns: %TRUE if the window will be hidden
+ *
+ * Since: 3.94
+ */
+gboolean
+gtk_window_get_hide_on_close (GtkWindow *window)
+{
+  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
+
+  return window->priv->hide_on_close;
+}
+
 static GtkWindowGeometryInfo*
 gtk_window_get_geometry_info (GtkWindow *window,
 			      gboolean   create)
@@ -5905,6 +5968,22 @@ gtk_window_destroy (GtkWidget *widget)
    gtk_window_free_key_hash (window);
 
   GTK_WIDGET_CLASS (gtk_window_parent_class)->destroy (widget);
+}
+
+static gboolean
+gtk_window_delete_event (GtkWidget   *widget,
+                         GdkEventAny *event)
+{
+  GtkWindow *window = GTK_WINDOW (widget);
+  GtkWindowPrivate *priv = window->priv;
+
+  if (priv->hide_on_close)
+    {
+      gtk_widget_hide (widget);
+      return GDK_EVENT_STOP;
+    }
+
+  return GDK_EVENT_PROPAGATE;
 }
 
 static void

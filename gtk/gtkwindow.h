@@ -227,6 +227,11 @@ void       gtk_window_set_destroy_with_parent  (GtkWindow           *window,
                                                 gboolean             setting);
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_window_get_destroy_with_parent  (GtkWindow           *window);
+GDK_AVAILABLE_IN_3_94
+void       gtk_window_set_hide_on_close        (GtkWindow           *window,
+                                                gboolean             setting);
+GDK_AVAILABLE_IN_3_94
+gboolean   gtk_window_get_hide_on_close        (GtkWindow           *window);
 GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_mnemonics_visible    (GtkWindow           *window,
                                                 gboolean             setting);
