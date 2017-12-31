@@ -5519,6 +5519,12 @@ gtk_tree_view_search_key_cancels_search (guint keyval)
 }
 
 static gboolean
+no_popup (void)
+{
+  return TRUE;
+}
+
+static gboolean
 gtk_tree_view_key_press (GtkWidget   *widget,
 			 GdkEventKey *event)
 {
@@ -5713,7 +5719,7 @@ gtk_tree_view_key_press (GtkWidget   *widget,
           gtk_widget_realize (search_window);
 
           popup_menu_id = g_signal_connect (tree_view->priv->search_entry,
-                                            "popup-menu", G_CALLBACK (gtk_true),
+                                            "popup-menu", G_CALLBACK (no_popup),
                                             NULL);
 
           /* Because we keep the focus on the treeview, we need to forward the
