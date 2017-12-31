@@ -1032,28 +1032,6 @@ gtk_drag_begin_internal (GtkWidget          *widget,
  * when the application is starting drags itself, and is not needed when
  * gtk_drag_source_set() is used.
  *
- * The @event is used to retrieve the timestamp that will be used internally to
- * grab the pointer.  If @event is %NULL, then %GDK_CURRENT_TIME will be used.
- * However, you should try to pass a real event in all cases, since that can be
- * used to get information about the drag.
- *
- * Generally there are three cases when you want to start a drag by hand by
- * calling this function:
- *
- * 1. During a #GtkWidget::button-press-event handler, if you want to start a drag
- * immediately when the user presses the mouse button.  Pass the @event
- * that you have in your #GtkWidget::button-press-event handler.
- *
- * 2. During a #GtkWidget::motion-notify-event handler, if you want to start a drag
- * when the mouse moves past a certain threshold distance after a button-press.
- * Pass the @event that you have in your #GtkWidget::motion-notify-event handler.
- *
- * 3. During a timeout handler, if you want to start a drag after the mouse
- * button is held down for some time.  Try to save the last event that you got
- * from the mouse, using g_object_ref(), and pass it to this function
- * (remember to free the event with g_object_unref() when you are done).
- * If you can really not pass a real event, pass %NULL instead.
- *
  * Returns: (transfer none): the context for this drag
  *
  * Since: 3.10
