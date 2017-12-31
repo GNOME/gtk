@@ -323,9 +323,6 @@ static void     chooser_update_preview_cb        (GtkFileChooser *dialog,
 static void     chooser_notify_cb                (GObject        *dialog,
 						  GParamSpec     *pspec,
 						  gpointer        user_data);
-static gboolean dialog_delete_event_cb           (GtkWidget      *dialog,
-						  GdkEvent       *event,
-						  gpointer        user_data);
 static void     dialog_response_cb               (GtkDialog      *dialog,
 						  gint            response,
 						  gpointer        user_data);
@@ -837,12 +834,11 @@ gtk_file_chooser_button_constructed (GObject *object)
   else /* dialog set */
     {
       priv->chooser = GTK_FILE_CHOOSER (priv->dialog);
+      gtk_window_set_hide_on_close (GTK_WINDOW (priv->chooser), TRUE);
 
       if (!gtk_window_get_title (GTK_WINDOW (priv->dialog)))
         gtk_file_chooser_button_set_title (button, _(DEFAULT_TITLE));
 
-      g_signal_connect (priv->dialog, "delete-event",
-                        G_CALLBACK (dialog_delete_event_cb), object);
       g_signal_connect (priv->dialog, "response",
                         G_CALLBACK (dialog_response_cb), object);
 
@@ -2875,16 +2871,6 @@ chooser_notify_cb (GObject    *dialog,
       gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter_model));
       update_combo_box (user_data);
     }
-}
-
-static gboolean
-dialog_delete_event_cb (GtkWidget *dialog,
-			GdkEvent  *event,
-		        gpointer   user_data)
-{
-  g_signal_emit_by_name (dialog, "response", GTK_RESPONSE_DELETE_EVENT);
-
-  return TRUE;
 }
 
 static void
