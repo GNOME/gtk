@@ -189,7 +189,6 @@ gtk_cell_renderer_spinner_update_size (GtkCellRendererSpinner *cell,
 {
   GtkCellRendererSpinnerPrivate *priv = cell->priv;
   GtkStyleContext *context;
-  GtkIconHelper icon_helper;
   GtkCssNode *node;
   GtkCssStyle *style;
 
@@ -202,7 +201,6 @@ gtk_cell_renderer_spinner_update_size (GtkCellRendererSpinner *cell,
   style = gtk_css_node_get_style (node);
   priv->size = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_SIZE), 100);
 
-  gtk_icon_helper_destroy (&icon_helper);
   gtk_style_context_restore (context);
 }
 
