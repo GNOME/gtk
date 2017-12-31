@@ -297,11 +297,8 @@ _gtk_text_handle_ensure_widget (GtkTextHandle         *handle,
 
       g_signal_connect (widget, "draw",
                         G_CALLBACK (gtk_text_handle_widget_draw), handle);
-      g_signal_connect (widget, "button-press-event", G_CALLBACK (gtk_text_handle_widget_event), handle);
-      g_signal_connect (widget, "button-release-event", G_CALLBACK (gtk_text_handle_widget_event), handle);
-      g_signal_connect (widget, "enter-notify-event", G_CALLBACK (gtk_text_handle_widget_event), handle);
-      g_signal_connect (widget, "leave-notify-event", G_CALLBACK (gtk_text_handle_widget_event), handle);
-      g_signal_connect (widget, "motion-notify-event", G_CALLBACK (gtk_text_handle_widget_event), handle);
+      g_signal_connect (widget, "event",
+                        G_CALLBACK (gtk_text_handle_widget_event), handle);
       g_signal_connect (widget, "style-updated",
                         G_CALLBACK (gtk_text_handle_widget_style_updated),
                         handle);
