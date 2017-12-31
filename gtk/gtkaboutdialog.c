@@ -2510,11 +2510,9 @@ gtk_show_about_dialog (GtkWindow   *parent,
   if (!dialog)
     {
       dialog = gtk_about_dialog_new ();
+      gtk_window_set_hide_on_close (GTK_WINDOW (dialog), TRUE);
 
       g_object_ref_sink (dialog);
-
-      g_signal_connect (dialog, "delete-event",
-                        G_CALLBACK (gtk_widget_hide_on_delete), NULL);
 
       /* Close dialog on user response */
       g_signal_connect (dialog, "response",
