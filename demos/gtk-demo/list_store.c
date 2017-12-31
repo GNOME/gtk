@@ -296,8 +296,7 @@ do_list_store (GtkWidget *do_widget)
 
       /* finish & show */
       gtk_window_set_default_size (GTK_WINDOW (window), 280, 250);
-      g_signal_connect (window, "delete-event",
-                        G_CALLBACK (window_closed), NULL);
+      g_signal_connect (window, "destroy", G_CALLBACK (window_closed), NULL);
     }
 
   if (!gtk_widget_get_visible (window))
