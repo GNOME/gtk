@@ -120,11 +120,6 @@ GDK_AVAILABLE_IN_ALL
 gboolean   gtk_main_iteration_do   (gboolean            blocking);
 
 GDK_AVAILABLE_IN_ALL
-gboolean   gtk_true                (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_false               (void) G_GNUC_CONST;
-
-GDK_AVAILABLE_IN_ALL
 void       gtk_grab_add            (GtkWidget          *widget);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_grab_get_current    (void);

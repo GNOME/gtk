@@ -4815,10 +4815,6 @@ GtkModuleInitFunc
 GtkModuleDisplayInitFunc
 
 <SUBSECTION>
-gtk_true
-gtk_false
-
-<SUBSECTION>
 gtk_grab_add
 gtk_grab_get_current
 gtk_grab_remove
