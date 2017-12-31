@@ -29,9 +29,7 @@ place_popup (GtkWidget *parent,
 }
 
 static gboolean
-on_map_event (GtkWidget *parent,
-              GdkEvent  *event,
-              gpointer   data)
+on_map (GtkWidget *parent)
 {
   GtkWidget *popup, *da;
 
@@ -59,7 +57,7 @@ main (int argc, char *argv[])
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
   g_signal_connect (window, "destroy", gtk_main_quit, NULL);
-  g_signal_connect (window, "map-event", G_CALLBACK (on_map_event), NULL);
+  g_signal_connect (window, "map", G_CALLBACK (on_map), NULL);
 
   gtk_widget_show (window);
 
