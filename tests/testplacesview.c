@@ -18,7 +18,7 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (win), view);
   gtk_widget_show (win);
 
-  g_signal_connect (win, "delete-event", G_CALLBACK (gtk_main_quit), win);
+  g_signal_connect (win, "destroy", G_CALLBACK (gtk_main_quit), win);
 
   gtk_main ();
 

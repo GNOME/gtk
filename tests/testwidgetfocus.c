@@ -287,7 +287,7 @@ main()
   gtk_window_set_decorated (GTK_WINDOW (window), FALSE);
 
   gtk_container_add (GTK_CONTAINER (window), widget);
-  g_signal_connect (window, "delete-event", G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
 
   gtk_widget_show (window);
 

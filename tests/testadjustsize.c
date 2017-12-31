@@ -66,8 +66,7 @@ open_test_window (void)
   test_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (test_window), "Tests");
 
-  g_signal_connect (test_window, "delete-event",
-                    G_CALLBACK (gtk_main_quit), test_window);
+  g_signal_connect (test_window, "destroy", G_CALLBACK (gtk_main_quit), test_window);
 
   gtk_window_set_resizable (GTK_WINDOW (test_window), FALSE);
 
@@ -132,8 +131,7 @@ open_control_window (void)
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Controls");
 
-  g_signal_connect (window, "delete-event",
-                    G_CALLBACK (gtk_main_quit), window);
+  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (window), box);
@@ -232,8 +230,7 @@ open_alignment_window (void)
   test_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (test_window), "Alignment");
 
-  g_signal_connect (test_window, "delete-event",
-                    G_CALLBACK (gtk_main_quit), test_window);
+  g_signal_connect (test_window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
 
   gtk_window_set_resizable (GTK_WINDOW (test_window), TRUE);
   gtk_window_set_default_size (GTK_WINDOW (test_window), 500, 500);
@@ -294,8 +291,7 @@ open_margin_window (void)
   test_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (test_window), "Margin");
 
-  g_signal_connect (test_window, "delete-event",
-                    G_CALLBACK (gtk_main_quit), test_window);
+  g_signal_connect (test_window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
 
   gtk_window_set_resizable (GTK_WINDOW (test_window), TRUE);
 
@@ -321,8 +317,7 @@ open_valigned_label_window (void)
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
-  g_signal_connect (test_window, "delete-event",
-                    G_CALLBACK (gtk_main_quit), test_window);
+  g_signal_connect (test_window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_widget_show (box);

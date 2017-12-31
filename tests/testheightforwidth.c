@@ -831,24 +831,6 @@ create_window (void)
   return window;
 }
 
-static gboolean
-main_window_delete_cb (GtkWidget *widget, GdkEvent *event, gpointer user_data)
-{
-  gsize i;
-
-  for (i = 0; i < G_N_ELEMENTS (interfaces); ++i)
-    {
-      if (interfaces[i].window)
-        gtk_widget_destroy (interfaces[i].window);
-    }
-
-  gtk_widget_destroy (widget);
-
-  gtk_main_quit ();
-
-  return TRUE;
-}
-
 int
 main (int argc, char *argv[])
 {
@@ -858,8 +840,7 @@ main (int argc, char *argv[])
 
   window = create_window ();
 
-  g_signal_connect (window, "delete-event",
-                    G_CALLBACK (main_window_delete_cb), window);
+  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
 
   gtk_widget_show (window);
 

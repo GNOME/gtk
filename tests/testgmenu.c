@@ -597,15 +597,6 @@ create_add_remove_buttons (GActionGroup *group,
 #define BUS_NAME "org.gtk.TestMenus"
 #define OBJ_PATH "/org/gtk/TestMenus"
 
-static gboolean
-on_delete_event (GtkWidget   *widget,
-		 GdkEvent    *event,
-		 gpointer     user_data)
-{
-  gtk_main_quit ();
-  return TRUE;
-}
-
 int
 main (int argc, char *argv[])
 {
@@ -639,7 +630,7 @@ main (int argc, char *argv[])
     }
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  g_signal_connect (window, "delete-event", G_CALLBACK(on_delete_event), NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_container_add (GTK_CONTAINER (window), box);
 

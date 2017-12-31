@@ -445,13 +445,9 @@ create_calendar(void)
     calendar_data.settings[i] = 0;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_hide_on_close (GTK_WINDOW (window), TRUE);
   gtk_window_set_title (GTK_WINDOW (window), "GtkCalendar Example");
-  g_signal_connect (window, "destroy",
-		    G_CALLBACK (gtk_main_quit),
-		    NULL);
-  g_signal_connect (window, "delete-event",
-		    G_CALLBACK (gtk_false),
-		    NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
 
   hpaned = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
 

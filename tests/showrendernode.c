@@ -218,7 +218,7 @@ main (int argc, char **argv)
                      MAX (600, node_bounds.size.width),
                      MAX (500, node_bounds.size.height));
 
-  g_signal_connect (window, "delete-event", G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
   gtk_widget_show (window);
   gtk_main ();
 

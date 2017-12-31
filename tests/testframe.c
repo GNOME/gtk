@@ -153,7 +153,7 @@ int main (int argc, char **argv)
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 300);
 
-  g_signal_connect (window, "delete-event", gtk_main_quit, NULL);
+  g_signal_connect (window, "destroy", gtk_main_quit, NULL);
 
   vbox = GTK_BOX (gtk_box_new (GTK_ORIENTATION_VERTICAL, 5));
   g_object_set (vbox, "margin", 12, NULL);

@@ -70,8 +70,7 @@ main (int argc,
 
   gtk_widget_show (toplevel);
 
-  g_signal_connect (toplevel, "delete-event",
-		    G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (toplevel, "destroy", G_CALLBACK (gtk_main_quit), NULL);
 
   gtk_main ();
 

@@ -1939,14 +1939,10 @@ create_listbox (GtkWidget *widget)
       int i;
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_hide_on_close (GTK_WINDOW (window), TRUE);
       gtk_window_set_display (GTK_WINDOW (window), display);
 
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed),
-                        &window);
-      g_signal_connect (window, "delete-event",
-                        G_CALLBACK (gtk_true),
-                        NULL);
+      g_signal_connect (window, "destroy", G_CALLBACK (gtk_widget_destroyed), &window);
 
       gtk_window_set_title (GTK_WINDOW (window), "listbox");
 
@@ -2283,15 +2279,11 @@ create_menus (GtkWidget *widget)
       GdkDisplay *display = gtk_widget_get_display (widget);
       
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_hide_on_close (GTK_WINDOW (window), TRUE);
 
       gtk_window_set_display (GTK_WINDOW (window), display);
       
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window);
-      g_signal_connect (window, "delete-event",
-			G_CALLBACK (gtk_true),
-			NULL);
+      g_signal_connect (window, "destroy", G_CALLBACK (gtk_widget_destroyed), &window);
       
       accel_group = gtk_accel_group_new ();
       gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
@@ -7928,12 +7920,7 @@ create_main_window (void)
   gtk_window_move (GTK_WINDOW (window), 50, 20);
   gtk_window_set_default_size (GTK_WINDOW (window), -1, 400);
 
-  g_signal_connect (window, "destroy",
-		    G_CALLBACK (gtk_main_quit),
-		    NULL);
-  g_signal_connect (window, "delete-event",
-		    G_CALLBACK (gtk_false),
-		    NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
 
   box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (window), box1);

@@ -635,8 +635,7 @@ main (int argc, char *argv[])
 
   window = create_window ();
 
-  g_signal_connect (window, "delete-event",
-                    G_CALLBACK (gtk_main_quit), window);
+  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
 
   gtk_widget_show (window);
 
