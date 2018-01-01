@@ -208,8 +208,6 @@ struct _GtkWidget
  *   enters the widget’s window.
  * @leave_notify_event: Will be emitted when the pointer leaves the
  *   widget’s window.
- * @configure_event: Signal will be emitted when the size, position or
- *   stacking of the widget’s window has changed.
  * @focus_in_event: Signal emitted when the keyboard focus enters the
  * widget’s window.
  * @focus_out_event: Signal emitted when the keyboard focus leaves the
@@ -334,8 +332,6 @@ struct _GtkWidgetClass
 					 GdkEventCrossing    *event);
   gboolean (* leave_notify_event)	(GtkWidget	     *widget,
 					 GdkEventCrossing    *event);
-  gboolean (* configure_event)		(GtkWidget	     *widget,
-					 GdkEventConfigure   *event);
   gboolean (* focus_in_event)		(GtkWidget	     *widget,
 					 GdkEventFocus       *event);
   gboolean (* focus_out_event)		(GtkWidget	     *widget,

@@ -497,7 +497,6 @@ enum {
   KEY_RELEASE_EVENT,
   ENTER_NOTIFY_EVENT,
   LEAVE_NOTIFY_EVENT,
-  CONFIGURE_EVENT,
   FOCUS_IN_EVENT,
   FOCUS_OUT_EVENT,
   GRAB_BROKEN_EVENT,
@@ -1009,7 +1008,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->key_release_event = gtk_widget_real_key_release_event;
   klass->enter_notify_event = NULL;
   klass->leave_notify_event = NULL;
-  klass->configure_event = NULL;
   klass->focus_in_event = gtk_widget_real_focus_in_event;
   klass->focus_out_event = gtk_widget_real_focus_out_event;
   klass->drag_begin = NULL;
@@ -2129,34 +2127,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT);
   g_signal_set_va_marshaller (widget_signals[LEAVE_NOTIFY_EVENT], G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__OBJECTv);
-
-  /**
-   * GtkWidget::configure-event:
-   * @widget: the object which received the signal
-   * @event: (type Gdk.EventConfigure): the #GdkEventConfigure which triggered
-   *   this signal.
-   *
-   * The ::configure-event signal will be emitted when the size, position or
-   * stacking of the @widget's window has changed.
-   *
-   * To receive this signal, the #GdkWindow associated to the widget needs
-   * to enable the #GDK_STRUCTURE_MASK mask. GDK will enable this mask
-   * automatically for all new windows.
-   *
-   * Returns: %TRUE to stop other handlers from being invoked for the event.
-   *   %FALSE to propagate the event further.
-   */
-  widget_signals[CONFIGURE_EVENT] =
-    g_signal_new (I_("configure-event"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, configure_event),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__OBJECT,
-		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT);
-  g_signal_set_va_marshaller (widget_signals[CONFIGURE_EVENT], G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_BOOLEAN__OBJECTv);
 
   /**
@@ -6338,6 +6308,7 @@ gtk_widget_emit_event_signals (GtkWidget      *widget,
 	case GDK_DESTROY:
 	case GDK_MAP:
 	case GDK_UNMAP:
+	case GDK_CONFIGURE:
 	case GDK_NOTHING:
 	  signal_num = -1;
 	  break;
@@ -6364,9 +6335,6 @@ gtk_widget_emit_event_signals (GtkWidget      *widget,
 	  break;
 	case GDK_FOCUS_CHANGE:
 	  signal_num = event->focus_change.in ? FOCUS_IN_EVENT : FOCUS_OUT_EVENT;
-	  break;
-	case GDK_CONFIGURE:
-	  signal_num = CONFIGURE_EVENT;
 	  break;
 	case GDK_GRAB_BROKEN:
 	  signal_num = GRAB_BROKEN_EVENT;
