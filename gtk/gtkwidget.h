@@ -204,8 +204,6 @@ struct _GtkWidget
  *   pressed.
  * @motion_notify_event: Signal emitted when the pointer moves over
  *   the widget’s #GdkWindow.
- * @delete_event: Signal emitted if a user requests that a toplevel
- *   window is closed.
  * @destroy_event: Signal is emitted when a #GdkWindow is destroyed.
  * @key_press_event: Signal emitted when a key is pressed.
  * @key_release_event: Signal is emitted when a key is released.
@@ -338,8 +336,6 @@ struct _GtkWidgetClass
 					 GdkEventScroll      *event);
   gboolean (* motion_notify_event)	(GtkWidget	     *widget,
 					 GdkEventMotion      *event);
-  gboolean (* delete_event)		(GtkWidget	     *widget,
-					 GdkEventAny	     *event);
   gboolean (* destroy_event)		(GtkWidget	     *widget,
 					 GdkEventAny	     *event);
   gboolean (* key_press_event)		(GtkWidget	     *widget,

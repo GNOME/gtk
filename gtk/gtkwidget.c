@@ -494,7 +494,6 @@ enum {
   BUTTON_RELEASE_EVENT,
   SCROLL_EVENT,
   MOTION_NOTIFY_EVENT,
-  DELETE_EVENT,
   DESTROY_EVENT,
   KEY_PRESS_EVENT,
   KEY_RELEASE_EVENT,
@@ -1016,7 +1015,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->button_release_event = gtk_widget_real_button_event;
   klass->motion_notify_event = gtk_widget_real_motion_event;
   klass->touch_event = gtk_widget_real_touch_event;
-  klass->delete_event = NULL;
   klass->destroy_event = NULL;
   klass->key_press_event = gtk_widget_real_key_press_event;
   klass->key_release_event = gtk_widget_real_key_release_event;
@@ -2075,32 +2073,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT);
   g_signal_set_va_marshaller (widget_signals[MOTION_NOTIFY_EVENT], G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__OBJECTv);
-
-  /**
-   * GtkWidget::delete-event:
-   * @widget: the object which received the signal
-   * @event: the event which triggered this signal
-   *
-   * The ::delete-event signal is emitted if a user requests that
-   * a toplevel window is closed. The default handler for this signal
-   * destroys the window. Connecting gtk_widget_hide_on_delete() to
-   * this signal will cause the window to be hidden instead, so that
-   * it can later be shown again without reconstructing it.
-   *
-   * Returns: %TRUE to stop other handlers from being invoked for the event.
-   *   %FALSE to propagate the event further.
-   */
-  widget_signals[DELETE_EVENT] =
-    g_signal_new (I_("delete-event"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, delete_event),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__OBJECT,
-		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT);
-  g_signal_set_va_marshaller (widget_signals[DELETE_EVENT], G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_BOOLEAN__OBJECTv);
 
   /**
@@ -6549,6 +6521,7 @@ gtk_widget_emit_event_signals (GtkWidget      *widget,
         case GDK_PAD_STRIP:
         case GDK_PAD_GROUP_MODE:
 	case GDK_EXPOSE:
+	case GDK_DELETE:
 	case GDK_NOTHING:
 	  signal_num = -1;
 	  break;
@@ -6569,9 +6542,6 @@ gtk_widget_emit_event_signals (GtkWidget      *widget,
 	  break;
 	case GDK_MOTION_NOTIFY:
 	  signal_num = MOTION_NOTIFY_EVENT;
-	  break;
-	case GDK_DELETE:
-	  signal_num = DELETE_EVENT;
 	  break;
 	case GDK_DESTROY:
 	  signal_num = DESTROY_EVENT;
