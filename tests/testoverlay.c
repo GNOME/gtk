@@ -315,8 +315,10 @@ test_builder (void)
 }
 
 static void
-on_enter (GtkWidget *child, GdkEventCrossing *event, GtkWidget *overlay)
+on_enter (GtkEventController *controller, GtkWidget *overlay)
 {
+  GtkWidget *child = gtk_event_controller_get_widget (controller);
+
   if (gtk_widget_get_halign (child) == GTK_ALIGN_START)
     gtk_widget_set_halign (child, GTK_ALIGN_END);
   else
@@ -336,6 +338,7 @@ test_chase (void)
   GtkTextBuffer *buffer;
   gchar *contents;
   gsize len;
+  GtkEventController *controller;
 
   win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (win), "Chase");
@@ -369,8 +372,10 @@ test_chase (void)
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), child);
   g_object_set (child, "margin", 4, NULL);
 
-  g_signal_connect (child, "enter-notify-event",
-                    G_CALLBACK (on_enter), overlay);
+  controller = gtk_event_controller_motion_new (child);
+  g_object_set_data_full (G_OBJECT (child), "motion", controller, g_object_unref);
+  g_signal_connect (controller, "enter", G_CALLBACK (on_enter), overlay);
+
   return win;
 }
 
