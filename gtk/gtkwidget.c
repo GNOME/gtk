@@ -492,7 +492,6 @@ enum {
   EVENT_AFTER,
   BUTTON_PRESS_EVENT,
   BUTTON_RELEASE_EVENT,
-  SCROLL_EVENT,
   MOTION_NOTIFY_EVENT,
   KEY_PRESS_EVENT,
   KEY_RELEASE_EVENT,
@@ -2004,36 +2003,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT);
   g_signal_set_va_marshaller (widget_signals[TOUCH_EVENT], G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__OBJECTv);
-
-  /**
-   * GtkWidget::scroll-event:
-   * @widget: the object which received the signal.
-   * @event: (type Gdk.EventScroll): the #GdkEventScroll which triggered
-   *   this signal.
-   *
-   * The ::scroll-event signal is emitted when a button in the 4 to 7
-   * range is pressed. Wheel mice are usually configured to generate
-   * button press events for buttons 4 and 5 when the wheel is turned.
-   *
-   * To receive this signal, the #GdkWindow associated to the widget needs
-   * to enable the #GDK_SCROLL_MASK mask.
-   *
-   * This signal will be sent to the grab widget if there is one.
-   *
-   * Returns: %TRUE to stop other handlers from being invoked for the event.
-   *   %FALSE to propagate the event further.
-   */
-  widget_signals[SCROLL_EVENT] =
-    g_signal_new (I_("scroll-event"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST | G_SIGNAL_DEPRECATED,
-		  G_STRUCT_OFFSET (GtkWidgetClass, scroll_event),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__OBJECT,
-		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT);
-  g_signal_set_va_marshaller (widget_signals[SCROLL_EVENT], G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_BOOLEAN__OBJECTv);
 
   /**
@@ -6382,6 +6351,7 @@ gtk_widget_emit_event_signals (GtkWidget      *widget,
         case GDK_PAD_GROUP_MODE:
 	case GDK_PROXIMITY_IN:
 	case GDK_PROXIMITY_OUT:
+	case GDK_SCROLL:
 	case GDK_EXPOSE:
 	case GDK_DELETE:
 	case GDK_DESTROY:
@@ -6398,9 +6368,6 @@ gtk_widget_emit_event_signals (GtkWidget      *widget,
         case GDK_TOUCH_END:
         case GDK_TOUCH_CANCEL:
 	  signal_num = TOUCH_EVENT;
-	  break;
-	case GDK_SCROLL:
-	  signal_num = SCROLL_EVENT;
 	  break;
 	case GDK_BUTTON_RELEASE:
 	  signal_num = BUTTON_RELEASE_EVENT;
