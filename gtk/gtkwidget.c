@@ -501,8 +501,6 @@ enum {
   CONFIGURE_EVENT,
   FOCUS_IN_EVENT,
   FOCUS_OUT_EVENT,
-  PROXIMITY_IN_EVENT,
-  PROXIMITY_OUT_EVENT,
   GRAB_BROKEN_EVENT,
   DRAG_BEGIN,
   DRAG_END,
@@ -1019,8 +1017,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->configure_event = NULL;
   klass->focus_in_event = gtk_widget_real_focus_in_event;
   klass->focus_out_event = gtk_widget_real_focus_out_event;
-  klass->proximity_in_event = NULL;
-  klass->proximity_out_event = NULL;
   klass->drag_begin = NULL;
   klass->drag_end = NULL;
   klass->drag_data_delete = NULL;
@@ -2262,58 +2258,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT);
   g_signal_set_va_marshaller (widget_signals[FOCUS_OUT_EVENT], G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__OBJECTv);
-
-  /**
-   * GtkWidget::proximity-in-event:
-   * @widget: the object which received the signal
-   * @event: (type Gdk.EventProximity): the #GdkEventProximity which triggered
-   *   this signal.
-   *
-   * To receive this signal the #GdkWindow associated to the widget needs
-   * to enable the #GDK_PROXIMITY_IN_MASK mask.
-   *
-   * This signal will be sent to the grab widget if there is one.
-   *
-   * Returns: %TRUE to stop other handlers from being invoked for the event.
-   *   %FALSE to propagate the event further.
-   */
-  widget_signals[PROXIMITY_IN_EVENT] =
-    g_signal_new (I_("proximity-in-event"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST | G_SIGNAL_DEPRECATED,
-		  G_STRUCT_OFFSET (GtkWidgetClass, proximity_in_event),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__OBJECT,
-		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT);
-  g_signal_set_va_marshaller (widget_signals[PROXIMITY_IN_EVENT], G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__OBJECTv);
-
-  /**
-   * GtkWidget::proximity-out-event:
-   * @widget: the object which received the signal
-   * @event: (type Gdk.EventProximity): the #GdkEventProximity which triggered
-   *   this signal.
-   *
-   * To receive this signal the #GdkWindow associated to the widget needs
-   * to enable the #GDK_PROXIMITY_OUT_MASK mask.
-   *
-   * This signal will be sent to the grab widget if there is one.
-   *
-   * Returns: %TRUE to stop other handlers from being invoked for the event.
-   *   %FALSE to propagate the event further.
-   */
-  widget_signals[PROXIMITY_OUT_EVENT] =
-    g_signal_new (I_("proximity-out-event"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST | G_SIGNAL_DEPRECATED,
-		  G_STRUCT_OFFSET (GtkWidgetClass, proximity_out_event),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__OBJECT,
-		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT);
-  g_signal_set_va_marshaller (widget_signals[PROXIMITY_OUT_EVENT], G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_BOOLEAN__OBJECTv);
 
   /**
@@ -6436,6 +6380,8 @@ gtk_widget_emit_event_signals (GtkWidget      *widget,
         case GDK_PAD_RING:
         case GDK_PAD_STRIP:
         case GDK_PAD_GROUP_MODE:
+	case GDK_PROXIMITY_IN:
+	case GDK_PROXIMITY_OUT:
 	case GDK_EXPOSE:
 	case GDK_DELETE:
 	case GDK_DESTROY:
@@ -6479,12 +6425,6 @@ gtk_widget_emit_event_signals (GtkWidget      *widget,
 	  break;
 	case GDK_CONFIGURE:
 	  signal_num = CONFIGURE_EVENT;
-	  break;
-	case GDK_PROXIMITY_IN:
-	  signal_num = PROXIMITY_IN_EVENT;
-	  break;
-	case GDK_PROXIMITY_OUT:
-	  signal_num = PROXIMITY_OUT_EVENT;
 	  break;
 	case GDK_GRAB_BROKEN:
 	  signal_num = GRAB_BROKEN_EVENT;
