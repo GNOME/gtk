@@ -7057,21 +7057,17 @@ scroll_test_draw (GtkDrawingArea *darea,
   cairo_fill (cr);
 }
 
-static gint
-scroll_test_scroll (GtkWidget *widget, GdkEventScroll *event,
-		    GtkAdjustment *adjustment)
+static void
+scroll_test_scroll (GtkEventControllerScroll *scroll,
+                    double                    dx,
+                    double                    dy,
+		    GtkAdjustment            *adjustment)
 {
-  GdkScrollDirection direction;
   gdouble new_value;
 
-  gdk_event_get_scroll_direction ((GdkEvent *)event, &direction);
-  new_value = gtk_adjustment_get_value (adjustment) + (direction == GDK_SCROLL_UP ?
-				    -gtk_adjustment_get_page_increment (adjustment) / 2:
-				    gtk_adjustment_get_page_increment (adjustment) / 2);
+  new_value = gtk_adjustment_get_value (adjustment) + dy * gtk_adjustment_get_page_increment (adjustment) / 2;
   new_value = CLAMP (new_value, gtk_adjustment_get_lower (adjustment), gtk_adjustment_get_upper (adjustment) - gtk_adjustment_get_page_size (adjustment));
-  gtk_adjustment_set_value (adjustment, new_value);  
-  
-  return TRUE;
+  gtk_adjustment_set_value (adjustment, new_value);
 }
 
 static void
@@ -7116,6 +7112,7 @@ create_scroll_test (GtkWidget *widget)
   GtkWidget *drawing_area;
   GtkWidget *scrollbar;
   GtkAdjustment *adjustment;
+  GtkEventController *controller;
 
   if (!window)
     {
@@ -7157,9 +7154,10 @@ create_scroll_test (GtkWidget *widget)
 
       g_signal_connect (drawing_area, "configure_event",
 			G_CALLBACK (scroll_test_configure), adjustment);
-      g_signal_connect (drawing_area, "scroll_event",
-			G_CALLBACK (scroll_test_scroll), adjustment);
-      
+      controller = gtk_event_controller_scroll_new (drawing_area, GTK_EVENT_CONTROLLER_SCROLL_VERTICAL);
+      g_object_set_data_full (G_OBJECT (drawing_area), "scroll", controller, g_object_unref);
+      g_signal_connect (controller, "scroll", G_CALLBACK (scroll_test_scroll), adjustment);
+
       g_signal_connect (adjustment, "value_changed",
 			G_CALLBACK (scroll_test_adjustment_changed),
 			drawing_area);
