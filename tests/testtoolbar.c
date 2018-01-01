@@ -679,7 +679,7 @@ main (gint argc, gchar **argv)
 
   gtk_widget_show (window);
 
-  g_signal_connect (window, "delete_event", G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
   
   g_signal_connect (toolbar, "popup_context_menu", G_CALLBACK (popup_context_menu), NULL);
   

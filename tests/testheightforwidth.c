@@ -793,8 +793,7 @@ test_clicked (GtkWidget     *button,
 
       interface->window = (GtkWidget *)gtk_builder_get_object (builder, "window");
 
-      g_signal_connect (interface->window, "delete_event",
-                        G_CALLBACK (gtk_widget_hide_on_delete), NULL);
+      gtk_window_set_hide_on_close (GTK_WINDOW (interface->window), TRUE);
 
       g_object_unref (builder);
     }

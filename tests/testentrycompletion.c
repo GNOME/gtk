@@ -299,7 +299,7 @@ main (int argc, char *argv[])
   gtk_init ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  g_signal_connect (window, "delete_event", gtk_main_quit, NULL);
+  g_signal_connect (window, "destroy", gtk_main_quit, NULL);
   
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
   gtk_container_add (GTK_CONTAINER (window), vbox);

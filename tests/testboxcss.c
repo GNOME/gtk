@@ -162,8 +162,7 @@ main (gint argc, gchar **argv)
   
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
-  g_signal_connect (window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
-  g_signal_connect (window, "delete_event", G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
 
   main_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (window), main_box);

@@ -2682,7 +2682,8 @@ static GtkWidget *sw_float_parent;
 static gulong sw_destroyed_handler = 0;
 
 static gboolean
-scrolled_windows_delete_cb (GtkWidget *widget, GdkEventAny *event, GtkWidget *scrollwin)
+scrolled_windows_delete_cb (GtkWidget *widget,
+                            GtkWidget *scrollwin)
 {
   g_object_ref (scrollwin);
   gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (scrollwin)), scrollwin);
@@ -2751,7 +2752,7 @@ scrolled_windows_remove (GtkWidget *dialog, gint response, GtkWidget *scrollwin)
       sw_destroyed_handler =
 	g_signal_connect (sw_parent, "destroy",
 			  G_CALLBACK (scrolled_windows_destroy_cb), scrollwin);
-      g_signal_connect (sw_float_parent, "delete_event",
+      g_signal_connect (sw_float_parent, "close-request",
 			G_CALLBACK (scrolled_windows_delete_cb), scrollwin);
     }
 }

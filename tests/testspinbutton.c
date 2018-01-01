@@ -21,9 +21,7 @@
 static gint num_windows = 0;
 
 static gboolean
-on_delete_event (GtkWidget *w,
-                 GdkEvent *event,
-                 gpointer user_data)
+on_delete (GtkWindow *w)
 {
   num_windows--;
   if (num_windows == 0)
@@ -39,7 +37,7 @@ prepare_window_for_orientation (GtkOrientation orientation)
   int max;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  g_signal_connect (window, "delete_event", G_CALLBACK (on_delete_event), NULL);
+  g_signal_connect (window, "close-request", G_CALLBACK (on_delete), NULL);
 
   mainbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
   gtk_container_add (GTK_CONTAINER (window), mainbox);

@@ -298,8 +298,7 @@ main (int argc, char *argv[])
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Tooltips test");
-  g_signal_connect (window, "delete_event",
-		    G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   gtk_container_add (GTK_CONTAINER (window), box);
