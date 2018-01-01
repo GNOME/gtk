@@ -32,7 +32,9 @@
 @define-color wm_button_active_color_b shade(#000, 0.89);
 @define-color wm_button_active_color_c shade(#000, 0.9);
 @define-color content_view_bg #111;
-* { padding: 0; -GtkToolButton-icon-spacing: 4; -GtkTextView-error-underline-color: #cc0000; -gtk-icon-style: symbolic; -GtkScrolledWindow-scrollbar-spacing: 0; -GtkToolItemGroup-expander-size: 11; -GtkTreeView-horizontal-separator: 4; -GtkDialog-button-spacing: 4; -GtkDialog-action-area-border: 0; outline-color: currentColor; outline-style: dashed; outline-offset: -4px; outline-width: 2px; -gtk-outline-radius: 2px; }
+* { padding: 0; -gtk-icon-style: symbolic; outline-style: none; }
+
+*:focus(visible) { outline-color: currentColor; outline-style: dashed; outline-offset: -4px; outline-width: 2px; -gtk-outline-radius: 2px; }
 
 /*************** Base States * */
 .background { color: #fff; background-color: #000; }
@@ -51,6 +53,10 @@
 .gtkstyle-fallback:disabled { background-color: #070707; color: gray; }
 
 .gtkstyle-fallback:selected { background-color: #ddd; color: #000; }
+
+.normal-icons { -gtk-icon-size: 16px; }
+
+.large-icons { -gtk-icon-size: 32px; }
 
 .view, textview text, iconview { color: #fff; background-color: #111; }
 
@@ -162,7 +168,7 @@ button.titlebutton:disabled, button:disabled { border-width: 2px; border-style: 
 
 button.titlebutton:disabled:active, button.titlebutton:disabled:checked, button:disabled:active, button:disabled:checked { border-width: 2px; border-style: solid; color: gray; border-color: #494949; background-image: none; background-color: #070707; }
 
-button.titlebutton:backdrop, button:backdrop { border-width: 2px; border-style: solid; color: #fff; background-color: #000; border-color: #737373; background-image: none; -gtk-icon-effect: none; }
+button.titlebutton:backdrop, button:backdrop { border-width: 2px; border-style: solid; color: #fff; background-color: #000; border-color: #737373; background-image: none; -gtk-icon-filter: none; }
 
 button.titlebutton:backdrop:active, button.titlebutton:backdrop:checked, button:backdrop:active, button:backdrop:checked { border-width: 2px; border-style: solid; color: black; background-color: #737373; border-color: #737373; background-image: none; }
 
@@ -544,7 +550,7 @@ window.csd > .titlebar:not(headerbar) { padding: 0; background-color: transparen
 .path-bar button image { padding-top: 1px; }
 
 /************** Tree Views * */
-treeview.view { -GtkTreeView-grid-line-width: 1; -GtkTreeView-grid-line-pattern: ''; -GtkTreeView-tree-line-width: 1; -GtkTreeView-tree-line-pattern: ''; -GtkTreeView-expander-size: 16; border-left-color: #888888; border-top-color: #000; }
+treeview.view { border-left-color: #888888; border-top-color: #000; }
 
 treeview.view:selected { border-radius: 0; }
 
@@ -808,8 +814,6 @@ notebook tab button > image { padding: 2px; }
 /************** Scrollbars * */
 scrollbar { background-color: #0a0a0a; transition: 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94); }
 
-* { -GtkScrollbar-has-backward-stepper: false; -GtkScrollbar-has-forward-stepper: false; }
-
 scrollbar.top { border-bottom: 1px solid gray; }
 
 scrollbar.bottom { border-top: 1px solid gray; }
@@ -916,7 +920,7 @@ checkbutton.text-button:disabled:active, checkbutton.text-button:disabled:indete
 
 checkbutton.text-button:disabled:active:backdrop, checkbutton.text-button:disabled:indeterminate:backdrop, checkbutton.text-button:disabled:backdrop, radiobutton.text-button:disabled:active:backdrop, radiobutton.text-button:disabled:indeterminate:backdrop, radiobutton.text-button:disabled:backdrop { color: gray; }
 
-check, radio { margin: 0 4px; min-height: 14px; min-width: 14px; border: 1px solid; -gtk-icon-source: none; border-width: 2px; border-style: solid; color: #fff; background-image: none; background-color: #000; border-color: gray; }
+check, radio { margin: 0 4px; min-height: 14px; min-width: 14px; border: 1px solid; -gtk-icon-source: none; -gtk-icon-size: 14px; border-width: 2px; border-style: solid; color: #fff; background-image: none; background-color: #000; border-color: gray; }
 
 check:only-child, radio:only-child { margin: 0; }
 
@@ -1234,11 +1238,11 @@ row:hover, row.activatable:hover { transition: none; }
 .app-notification border, .app-notification.frame border { border-width: 0; }
 
 /************* Expanders * */
-expander arrow { min-width: 16px; min-height: 16px; -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
+expander title > arrow { min-width: 16px; min-height: 16px; -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
 
-expander arrow:dir(rtl) { -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
+expander title > arrow:dir(rtl) { -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
 
-expander arrow:checked { -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
+expander title > arrow:checked { -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
 
 expander title:hover arrow { color: white; }
 

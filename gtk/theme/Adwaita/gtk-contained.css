@@ -1,11 +1,17 @@
 * { padding: 0; -gtk-secondary-caret-color: #4a90d9; }
 
-button:focus(visible), checkbutton:focus(visible), radiobutton:focus(visible), switch:focus(visible), scale:focus(visible), label:focus(visible), row:focus(visible) { outline-color: alpha(currentColor,0.3); outline-style: dashed; outline-offset: -3px; outline-width: 1px; -gtk-outline-radius: 2px; }
+button:focus(visible), checkbutton:focus(visible), radiobutton:focus(visible), switch:focus(visible), scale:focus(visible), label:focus(visible), row:focus(visible), flowboxchild:focus(visible) { outline-color: alpha(currentColor,0.3); outline-style: dashed; outline-offset: -3px; outline-width: 1px; -gtk-outline-radius: 2px; }
 
 /*************** Base States * */
 .background { color: #2e3436; background-color: #e8e8e7; }
 
 .background:backdrop { color: #8b8e8f; background-color: #e8e8e7; text-shadow: none; -gtk-icon-shadow: none; }
+
+.normal-icons { -gtk-icon-size: 16px; }
+
+.large-icons { -gtk-icon-size: 32px; }
+
+image.drag-icon { -gtk-icon-size: 32px; }
 
 /* These wildcard seems unavoidable, need to investigate. Wildcards are bad and troublesome, use them with care, or better, just don't. Everytime a wildcard is used a kitten dies, painfully. */
 *:disabled { -gtk-icon-filter: opacity(0.5); }
@@ -48,7 +54,7 @@ flowbox flowboxchild:selected { outline-offset: -2px; }
 
 .content-view .tile:disabled { background-color: transparent; }
 
-label { caret-color: currentColor; border-radius: 99px;}
+label { caret-color: currentColor; }
 
 label.separator { color: #2e3436; }
 
@@ -1160,13 +1166,13 @@ menu menuitem check, menu menuitem radio { margin: 0; }
 
 menu menuitem check, menu menuitem check:hover, menu menuitem check:disabled, menu menuitem radio, menu menuitem radio:hover, menu menuitem radio:disabled { min-height: 14px; min-width: 14px; background-image: none; background-color: transparent; box-shadow: none; -gtk-icon-shadow: none; color: inherit; border-color: currentColor; }
 
-check { border-radius: 3px; }
+check { border-radius: 3px; -gtk-icon-size: 14px; }
 
 check:checked { -gtk-icon-source: -gtk-scaled(-gtk-recolor(url("assets/check-symbolic.symbolic.png")), -gtk-recolor(url("assets/check@2-symbolic.symbolic.png"))); }
 
 check:indeterminate { -gtk-icon-source: -gtk-scaled(-gtk-recolor(url("assets/dash-symbolic.symbolic.png")), -gtk-recolor(url("assets/dash@2-symbolic.symbolic.png"))); }
 
-treeview.view radio:selected:focus, treeview.view radio:selected, radio { border-radius: 100%; }
+treeview.view radio:selected:focus, treeview.view radio:selected, radio { border-radius: 100%; -gtk-icon-size: 14px; }
 
 treeview.view radio:checked:selected, radio:checked { -gtk-icon-source: -gtk-scaled(-gtk-recolor(url("assets/bullet-symbolic.symbolic.png")), -gtk-recolor(url("assets/bullet@2-symbolic.symbolic.png"))); }
 
@@ -1584,11 +1590,11 @@ row.activatable:selected:backdrop { background-color: #4a90d9; }
 .app-notification border, .app-notification.frame border { border: none; }
 
 /************* Expanders * */
-expander arrow { min-width: 16px; min-height: 16px; -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
+expander title > arrow { min-width: 16px; min-height: 16px; -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
 
-expander arrow:dir(rtl) { -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
+expander title > arrow:dir(rtl) { -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
 
-expander arrow:checked { -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
+expander title > arrow:checked { -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
 
 expander title:hover arrow { color: #748489; }
 
