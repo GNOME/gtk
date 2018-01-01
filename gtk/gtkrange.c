@@ -3055,6 +3055,7 @@ _gtk_range_get_wheel_delta (GtkRange       *range,
   gdouble page_increment;
   gdouble scroll_unit;
   GdkScrollDirection direction;
+  GtkOrientation move_orientation;
 
   page_size = gtk_adjustment_get_page_size (adjustment);
   page_increment = gtk_adjustment_get_page_increment (adjustment);
@@ -3070,22 +3071,31 @@ _gtk_range_get_wheel_delta (GtkRange       *range,
       scroll_unit = 1;
 #endif
 
-      if (gtk_orientable_get_orientation (GTK_ORIENTABLE (range)) == GTK_ORIENTATION_HORIZONTAL)
-        delta = (dx ? dx : -dy) * scroll_unit;
+      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL && dx != 0)
+        {
+          move_orientation = GTK_ORIENTATION_HORIZONTAL;
+          delta = dx * scroll_unit;
+        }
       else
-        delta = dy * scroll_unit;
+        {
+          move_orientation = GTK_ORIENTATION_VERTICAL;
+          delta = dy * scroll_unit;
+        }
     }
   else if (gdk_event_get_scroll_direction ((GdkEvent *) event, &direction))
     {
-      if (direction == GDK_SCROLL_LEFT ||
-          (priv->orientation == GTK_ORIENTATION_VERTICAL && direction == GDK_SCROLL_UP) ||
-          (priv->orientation == GTK_ORIENTATION_HORIZONTAL && direction == GDK_SCROLL_DOWN))
+      if (direction == GDK_SCROLL_LEFT || direction == GDK_SCROLL_RIGHT)
+        move_orientation = GTK_ORIENTATION_HORIZONTAL;
+      else
+        move_orientation = GTK_ORIENTATION_VERTICAL;
+
+      if (direction == GDK_SCROLL_LEFT || direction == GDK_SCROLL_UP)
         delta = - scroll_unit;
       else
         delta = scroll_unit;
     }
 
-  if (priv->inverted)
+  if (delta != 0 && should_invert_move (range, move_orientation))
     delta = - delta;
 
   return delta;
