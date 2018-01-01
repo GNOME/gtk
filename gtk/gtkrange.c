@@ -2494,28 +2494,28 @@ gtk_range_scroll (GtkRange     *range,
   switch (scroll)
     {
     case GTK_SCROLL_STEP_LEFT:
-      if (should_invert (range))
+      if (should_invert_move (range, GTK_ORIENTATION_HORIZONTAL))
         step_forward (range);
       else
         step_back (range);
       break;
                     
     case GTK_SCROLL_STEP_UP:
-      if (should_invert (range))
+      if (should_invert_move (range, GTK_ORIENTATION_VERTICAL))
         step_forward (range);
       else
         step_back (range);
       break;
 
     case GTK_SCROLL_STEP_RIGHT:
-      if (should_invert (range))
+      if (should_invert_move (range, GTK_ORIENTATION_HORIZONTAL))
         step_back (range);
       else
         step_forward (range);
       break;
                     
     case GTK_SCROLL_STEP_DOWN:
-      if (should_invert (range))
+      if (should_invert_move (range, GTK_ORIENTATION_VERTICAL))
         step_back (range);
       else
         step_forward (range);
@@ -2530,28 +2530,28 @@ gtk_range_scroll (GtkRange     *range,
       break;
 
     case GTK_SCROLL_PAGE_LEFT:
-      if (should_invert (range))
+      if (should_invert_move (range, GTK_ORIENTATION_HORIZONTAL))
         page_forward (range);
       else
         page_back (range);
       break;
                     
     case GTK_SCROLL_PAGE_UP:
-      if (should_invert (range))
+      if (should_invert_move (range, GTK_ORIENTATION_VERTICAL))
         page_forward (range);
       else
         page_back (range);
       break;
 
     case GTK_SCROLL_PAGE_RIGHT:
-      if (should_invert (range))
+      if (should_invert_move (range, GTK_ORIENTATION_HORIZONTAL))
         page_back (range);
       else
         page_forward (range);
       break;
                     
     case GTK_SCROLL_PAGE_DOWN:
-      if (should_invert (range))
+      if (should_invert_move (range, GTK_ORIENTATION_VERTICAL))
         page_back (range);
       else
         page_forward (range);
