@@ -1475,8 +1475,8 @@ create_rotated_text (GtkWidget *widget)
 gint upositionx = 0;
 gint upositiony = 0;
 
-static gint
-uposition_configure (GtkWidget *window)
+static gboolean
+configure_event (GtkWidget *window)
 {
   GtkLabel *lx;
   GtkLabel *ly;
@@ -1500,9 +1500,9 @@ uposition_stop_configure (GtkToggleButton *toggle,
 			  GObject         *window)
 {
   if (gtk_toggle_button_get_active (toggle))
-    g_signal_handlers_block_by_func (window, G_CALLBACK (uposition_configure), NULL);
+    g_signal_handlers_block_by_func (window, G_CALLBACK (configure_event), NULL);
   else
-    g_signal_handlers_unblock_by_func (window, G_CALLBACK (uposition_configure), NULL);
+    g_signal_handlers_unblock_by_func (window, G_CALLBACK (configure_event), NULL);
 }
 
 static void
@@ -1521,12 +1521,9 @@ create_saved_position (GtkWidget *widget)
       GtkWidget *label;
       GtkWidget *any;
 
-      window = g_object_connect (g_object_new (GTK_TYPE_WINDOW,
-						 "type", GTK_WINDOW_TOPLEVEL,
-						 "title", "Saved Position",
-						 NULL),
-				 "signal::configure_event", uposition_configure, NULL,
-				 NULL);
+      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_title (GTK_WINDOW (window), "Saved Position");
+      g_signal_connect (window, "event", G_CALLBACK (configure_event), NULL);
 
       gtk_window_move (GTK_WINDOW (window), upositionx, upositiony);
 
@@ -6048,7 +6045,7 @@ create_window_states (GtkWidget *widget)
 
 static gint
 configure_event_callback (GtkWidget *widget,
-                          GdkEventConfigure *event,
+                          GdkEvent *event,
                           gpointer data)
 {
   GtkWidget *label = data;
@@ -6221,10 +6218,7 @@ window_controls (GtkWidget *window)
   label = gtk_label_new ("<no configure events>");
   gtk_box_pack_start (GTK_BOX (vbox), label);
 
-  g_signal_connect (window,
-		    "configure_event",
-		    G_CALLBACK (configure_event_callback),
-		    label);
+  g_signal_connect (window, "event", G_CALLBACK (configure_event_callback), label);
 
   adjustment = gtk_adjustment_new (10.0, -2000.0, 2000.0, 1.0, 5.0, 0.0);
   spin = gtk_spin_button_new (adjustment, 0, 0);
