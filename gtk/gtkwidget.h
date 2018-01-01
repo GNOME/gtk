@@ -226,8 +226,6 @@ struct _GtkWidget
  * @proximity_out_event:
  * @grab_broken_event: Signal emitted when a pointer or keyboard grab
  *   on a window belonging to widget gets broken.
- * @selection_get:
- * @selection_received:
  * @drag_begin: Signal emitted on the drag source when a drag is
  *   started.
  * @drag_end: Signal emitted on the drag source when a drag is
@@ -368,14 +366,6 @@ struct _GtkWidgetClass
 					 GdkEventProximity   *event);
   gboolean (* grab_broken_event)        (GtkWidget           *widget,
                                          GdkEventGrabBroken  *event);
-
-  /* selection */
-  void     (* selection_get)       (GtkWidget          *widget,
-				    GtkSelectionData   *selection_data,
-				    guint               time_);
-  void     (* selection_received)  (GtkWidget          *widget,
-				    GtkSelectionData   *selection_data,
-				    guint               time_);
 
   /* Source side drag signals */
   void     (* drag_begin)          (GtkWidget         *widget,

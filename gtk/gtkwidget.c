@@ -1038,7 +1038,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->focus_out_event = gtk_widget_real_focus_out_event;
   klass->map_event = NULL;
   klass->unmap_event = NULL;
-  klass->selection_received = NULL;
   klass->proximity_in_event = NULL;
   klass->proximity_out_event = NULL;
   klass->drag_begin = NULL;
