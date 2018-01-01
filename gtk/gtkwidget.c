@@ -501,8 +501,6 @@ enum {
   CONFIGURE_EVENT,
   FOCUS_IN_EVENT,
   FOCUS_OUT_EVENT,
-  MAP_EVENT,
-  UNMAP_EVENT,
   PROXIMITY_IN_EVENT,
   PROXIMITY_OUT_EVENT,
   GRAB_BROKEN_EVENT,
@@ -1021,8 +1019,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->configure_event = NULL;
   klass->focus_in_event = gtk_widget_real_focus_in_event;
   klass->focus_out_event = gtk_widget_real_focus_out_event;
-  klass->map_event = NULL;
-  klass->unmap_event = NULL;
   klass->proximity_in_event = NULL;
   klass->proximity_out_event = NULL;
   klass->drag_begin = NULL;
@@ -2266,60 +2262,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT);
   g_signal_set_va_marshaller (widget_signals[FOCUS_OUT_EVENT], G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__OBJECTv);
-
-  /**
-   * GtkWidget::map-event:
-   * @widget: the object which received the signal
-   * @event: (type Gdk.EventAny): the #GdkEventAny which triggered this signal.
-   *
-   * The ::map-event signal will be emitted when the @widget's window is
-   * mapped. A window is mapped when it becomes visible on the screen.
-   *
-   * To receive this signal, the #GdkWindow associated to the widget needs
-   * to enable the #GDK_STRUCTURE_MASK mask. GDK will enable this mask
-   * automatically for all new windows.
-   *
-   * Returns: %TRUE to stop other handlers from being invoked for the event.
-   *   %FALSE to propagate the event further.
-   */
-  widget_signals[MAP_EVENT] =
-    g_signal_new (I_("map-event"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, map_event),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__OBJECT,
-		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT);
-  g_signal_set_va_marshaller (widget_signals[MAP_EVENT], G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__OBJECTv);
-
-  /**
-   * GtkWidget::unmap-event:
-   * @widget: the object which received the signal
-   * @event: (type Gdk.EventAny): the #GdkEventAny which triggered this signal
-   *
-   * The ::unmap-event signal will be emitted when the @widget's window is
-   * unmapped. A window is unmapped when it becomes invisible on the screen.
-   *
-   * To receive this signal, the #GdkWindow associated to the widget needs
-   * to enable the #GDK_STRUCTURE_MASK mask. GDK will enable this mask
-   * automatically for all new windows.
-   *
-   * Returns: %TRUE to stop other handlers from being invoked for the event.
-   *   %FALSE to propagate the event further.
-   */
-  widget_signals[UNMAP_EVENT] =
-    g_signal_new (I_("unmap-event"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, unmap_event),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__OBJECT,
-		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT);
-  g_signal_set_va_marshaller (widget_signals[UNMAP_EVENT], G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_BOOLEAN__OBJECTv);
 
   /**
@@ -6497,6 +6439,8 @@ gtk_widget_emit_event_signals (GtkWidget      *widget,
 	case GDK_EXPOSE:
 	case GDK_DELETE:
 	case GDK_DESTROY:
+	case GDK_MAP:
+	case GDK_UNMAP:
 	case GDK_NOTHING:
 	  signal_num = -1;
 	  break;
@@ -6535,12 +6479,6 @@ gtk_widget_emit_event_signals (GtkWidget      *widget,
 	  break;
 	case GDK_CONFIGURE:
 	  signal_num = CONFIGURE_EVENT;
-	  break;
-	case GDK_MAP:
-	  signal_num = MAP_EVENT;
-	  break;
-	case GDK_UNMAP:
-	  signal_num = UNMAP_EVENT;
 	  break;
 	case GDK_PROXIMITY_IN:
 	  signal_num = PROXIMITY_IN_EVENT;

@@ -216,9 +216,6 @@ struct _GtkWidget
  * widget’s window.
  * @focus_out_event: Signal emitted when the keyboard focus leaves the
  * widget’s window.
- * @map_event: Signal emitted when the widget’s window is mapped.
- * @unmap_event: Signal will be emitted when the widget’s window is
- *   unmapped.
  * @proximity_in_event:
  * @proximity_out_event:
  * @grab_broken_event: Signal emitted when a pointer or keyboard grab
@@ -349,10 +346,6 @@ struct _GtkWidgetClass
 					 GdkEventFocus       *event);
   gboolean (* focus_out_event)		(GtkWidget	     *widget,
 					 GdkEventFocus       *event);
-  gboolean (* map_event)		(GtkWidget	     *widget,
-					 GdkEventAny	     *event);
-  gboolean (* unmap_event)		(GtkWidget	     *widget,
-					 GdkEventAny	     *event);
   gboolean (* proximity_in_event)	(GtkWidget	     *widget,
 					 GdkEventProximity   *event);
   gboolean (* proximity_out_event)	(GtkWidget	     *widget,
