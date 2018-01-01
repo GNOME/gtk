@@ -4516,8 +4516,7 @@ create_display_screen (GtkWidget *widget)
 
 /* Event Watcher
  */
-static gulong event_watcher_enter_id = 0;
-static gulong event_watcher_leave_id = 0;
+static gulong event_watcher_id = 0;
 
 static gboolean
 event_watcher (GSignalInvocationHint *ihint,
@@ -4525,9 +4524,16 @@ event_watcher (GSignalInvocationHint *ihint,
 	       const GValue          *param_values,
 	       gpointer               data)
 {
-  g_print ("Watch: \"%s\" emitted for %s\n",
-	   g_signal_name (ihint->signal_id),
-	   G_OBJECT_TYPE_NAME (g_value_get_object (param_values + 0)));
+  GObject *object;
+  GdkEvent *event;
+
+  object = g_value_get_object (param_values + 0);
+  event = g_value_get_object (param_values + 1);
+  if (gdk_event_get_event_type (event) == GDK_ENTER_NOTIFY ||
+      gdk_event_get_event_type (event) == GDK_LEAVE_NOTIFY)
+    g_print ("Watch: \"%s\" emitted for %s\n",
+             g_enum_to_string (GDK_TYPE_EVENT_TYPE, gdk_event_get_event_type (event)),
+             G_OBJECT_TYPE_NAME (object));
 
   return TRUE;
 }
@@ -4535,32 +4541,27 @@ event_watcher (GSignalInvocationHint *ihint,
 static void
 event_watcher_down (void)
 {
-  if (event_watcher_enter_id)
+  if (event_watcher_id)
     {
       guint signal_id;
 
-      signal_id = g_signal_lookup ("enter_notify_event", GTK_TYPE_WIDGET);
-      g_signal_remove_emission_hook (signal_id, event_watcher_enter_id);
-      event_watcher_enter_id = 0;
-      signal_id = g_signal_lookup ("leave_notify_event", GTK_TYPE_WIDGET);
-      g_signal_remove_emission_hook (signal_id, event_watcher_leave_id);
-      event_watcher_leave_id = 0;
+      signal_id = g_signal_lookup ("event", GTK_TYPE_WIDGET);
+      g_signal_remove_emission_hook (signal_id, event_watcher_id);
+      event_watcher_id = 0;
     }
 }
 
 static void
 event_watcher_toggle (void)
 {
-  if (event_watcher_enter_id)
+  if (event_watcher_id)
     event_watcher_down ();
   else
     {
       guint signal_id;
 
-      signal_id = g_signal_lookup ("enter_notify_event", GTK_TYPE_WIDGET);
-      event_watcher_enter_id = g_signal_add_emission_hook (signal_id, 0, event_watcher, NULL, NULL);
-      signal_id = g_signal_lookup ("leave_notify_event", GTK_TYPE_WIDGET);
-      event_watcher_leave_id = g_signal_add_emission_hook (signal_id, 0, event_watcher, NULL, NULL);
+      signal_id = g_signal_lookup ("event", GTK_TYPE_WIDGET);
+      event_watcher_id = g_signal_add_emission_hook (signal_id, 0, event_watcher, NULL, NULL);
     }
 }
 
