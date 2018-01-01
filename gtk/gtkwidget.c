@@ -3983,13 +3983,18 @@ gtk_widget_real_show (GtkWidget *widget)
     }
 }
 
-static void
+static gboolean
 gtk_widget_show_map_callback (GtkWidget *widget, GdkEvent *event, gint *flag)
 {
-  *flag = TRUE;
-  g_signal_handlers_disconnect_by_func (widget,
-					gtk_widget_show_map_callback,
-					flag);
+  if (gdk_event_get_event_type (event) == GDK_MAP)
+    {
+      *flag = TRUE;
+      g_signal_handlers_disconnect_by_func (widget,
+                                            gtk_widget_show_map_callback,
+					    flag);
+    }
+
+  return FALSE;
 }
 
 /**
@@ -4015,7 +4020,7 @@ gtk_widget_show_now (GtkWidget *widget)
     {
       gtk_widget_show (widget);
 
-      g_signal_connect (widget, "map-event",
+      g_signal_connect (widget, "event",
 			G_CALLBACK (gtk_widget_show_map_callback),
 			&flag);
 
