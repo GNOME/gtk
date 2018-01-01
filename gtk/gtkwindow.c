@@ -287,7 +287,6 @@ static const char *dnd_dest_targets [] = {
 
 enum {
   SET_FOCUS,
-  FRAME_EVENT,
   ACTIVATE_FOCUS,
   ACTIVATE_DEFAULT,
   KEYS_CHANGED,
