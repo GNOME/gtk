@@ -235,21 +235,6 @@ motion_notify_event (GtkWidget *widget, GdkEventMotion *event)
   return TRUE;
 }
 
-/* We track the next two events to know when we need to draw a
-   cursor */
-
-static gint
-proximity_out_event (GtkWidget *widget, GdkEventProximity *event)
-{
-  return TRUE;
-}
-
-static gint
-leave_notify_event (GtkWidget *widget, GdkEventCrossing *event)
-{
-  return TRUE;
-}
-
 void
 quit (void)
 {
@@ -298,11 +283,6 @@ main (int argc, char *argv[])
 		    G_CALLBACK (button_press_event), NULL);
   g_signal_connect (drawing_area, "key_press_event",
 		    G_CALLBACK (key_press_event), NULL);
-
-  g_signal_connect (drawing_area, "leave_notify_event",
-		    G_CALLBACK (leave_notify_event), NULL);
-  g_signal_connect (drawing_area, "proximity_out_event",
-		    G_CALLBACK (proximity_out_event), NULL);
 
   gtk_widget_set_can_focus (drawing_area, TRUE);
   gtk_widget_grab_focus (drawing_area);
