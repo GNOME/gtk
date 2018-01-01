@@ -7148,6 +7148,8 @@ create_scroll_test (GtkWidget *widget)
       scroll_test_pos = 0.0;
 
       drawing_area = gtk_drawing_area_new ();
+      gtk_widget_set_hexpand (drawing_area, TRUE);
+      gtk_widget_set_vexpand (drawing_area, TRUE);
       gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (drawing_area), 200);
       gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (drawing_area), 200);
       gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (drawing_area),
