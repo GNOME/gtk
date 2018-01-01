@@ -2246,6 +2246,7 @@ gtk_range_scroll_controller_scroll (GtkEventControllerScroll *scroll,
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
   gdouble scroll_unit, delta;
   gboolean handled;
+  GtkOrientation move_orientation;
 
 #ifdef GDK_WINDOWING_QUARTZ
   scroll_unit = 1;
@@ -2253,12 +2254,18 @@ gtk_range_scroll_controller_scroll (GtkEventControllerScroll *scroll,
   scroll_unit = gtk_adjustment_get_page_increment (priv->adjustment);
 #endif
 
-  if (gtk_orientable_get_orientation (GTK_ORIENTABLE (range)) == GTK_ORIENTATION_HORIZONTAL)
-    delta = (dx ? dx : -dy) * scroll_unit;
+  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL && dx != 0)
+    {
+      move_orientation = GTK_ORIENTATION_HORIZONTAL;
+      delta = dx * scroll_unit;
+    }
   else
-    delta = dy * scroll_unit;
+    {
+      move_orientation = GTK_ORIENTATION_VERTICAL;
+      delta = dy * scroll_unit;
+    }
 
-  if (priv->inverted)
+  if (delta != 0 && should_invert_move (range, move_orientation))
     delta = - delta;
 
   g_signal_emit (range, signals[CHANGE_VALUE], 0,
