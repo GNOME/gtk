@@ -2767,7 +2767,8 @@ expander {
     &:dir(rtl) { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic-rtl'); }
     &:checked { -gtk-icon-source: -gtk-icontheme('pan-down-symbolic'); }
   }
-  title:hover arrow {
+
+  title:hover > arrow {
     color: lighten($fg_color,30%); //only lightens the arrow
   }
 }

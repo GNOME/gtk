@@ -1576,7 +1576,7 @@ expander title > arrow:dir(rtl) { -gtk-icon-source: -gtk-icontheme("pan-end-symb
 
 expander title > arrow:checked { -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
 
-expander title:hover arrow { color: white; }
+expander title:hover > arrow { color: white; }
 
 /************ Calendar * */
 calendar { color: white; border: 1px solid #1b1f20; }
