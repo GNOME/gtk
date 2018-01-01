@@ -32,39 +32,46 @@
 static cairo_surface_t *surface = NULL;
 
 /* Create a new backing surface of the appropriate size */
-static gint
-configure_event (GtkWidget *widget, GdkEventConfigure *event)
+static void
+size_allocate (GtkWidget     *widget,
+               GtkAllocation *allocation,
+               int            baseline,
+               GdkRectangle  *clip,
+               gpointer       data)
 {
-  GtkAllocation allocation;
-  cairo_t *cr;
-
   if (surface)
-    cairo_surface_destroy (surface);
+    {
+      cairo_surface_destroy (surface);
+      surface = NULL;
+    }
 
-  gtk_widget_get_allocation (widget, &allocation);
+  if (gtk_widget_get_window (widget))
+    {
+      cairo_t *cr;
 
-  surface = gdk_window_create_similar_surface (gtk_widget_get_window (widget),
-                                               CAIRO_CONTENT_COLOR,
-                                               allocation.width,
-                                               allocation.height);
-  cr = cairo_create (surface);
+      surface = gdk_window_create_similar_surface (gtk_widget_get_window (widget),
+                                                   CAIRO_CONTENT_COLOR,
+                                                   gtk_widget_get_width (widget),
+                                                   gtk_widget_get_height (widget));
+      cr = cairo_create (surface);
 
-  cairo_set_source_rgb (cr, 1, 1, 1);
-  cairo_paint (cr);
+      cairo_set_source_rgb (cr, 1, 1, 1);
+      cairo_paint (cr);
 
-  cairo_destroy (cr);
-
-  return TRUE;
+      cairo_destroy (cr);
+    }
 }
 
 /* Refill the screen from the backing surface */
-static gboolean
-draw (GtkWidget *widget, cairo_t *cr)
+static void
+draw (GtkDrawingArea *drawing_area,
+      cairo_t        *cr,
+      int             width,
+      int             height,
+      gpointer        data)
 {
   cairo_set_source_surface (cr, surface, 0, 0);
   cairo_paint (cr);
-
-  return FALSE;
 }
 
 /* Draw a rectangle on the screen, size depending on pressure,
@@ -280,10 +287,8 @@ main (int argc, char *argv[])
 
   /* Signals used to handle backing surface */
 
-  g_signal_connect (drawing_area, "draw",
-		    G_CALLBACK (draw), NULL);
-  g_signal_connect (drawing_area, "configure_event",
-		    G_CALLBACK (configure_event), NULL);
+  gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (drawing_area), draw, NULL, NULL);
+  g_signal_connect (drawing_area, "size-allocate", G_CALLBACK (size_allocate), NULL);
 
   /* Event signals */
 
