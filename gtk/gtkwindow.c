@@ -419,8 +419,8 @@ static void gtk_window_size_allocate      (GtkWidget           *widget,
                                            GtkAllocation       *out_clip);
 static gboolean gtk_window_close_request  (GtkWindow         *window);
 static gboolean gtk_window_emit_close_request (GtkWindow *window);
-static gint gtk_window_configure_event    (GtkWidget         *widget,
-					   GdkEventConfigure *event);
+static gboolean gtk_window_configure_event (GtkWidget         *widget,
+					    GdkEvent          *event);
 static gboolean gtk_window_event          (GtkWidget         *widget,
                                            GdkEvent          *event);
 static gint gtk_window_key_press_event    (GtkWidget         *widget,
@@ -799,7 +799,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->realize = gtk_window_realize;
   widget_class->unrealize = gtk_window_unrealize;
   widget_class->size_allocate = gtk_window_size_allocate;
-  widget_class->configure_event = gtk_window_configure_event;
   widget_class->event = gtk_window_event;
   widget_class->key_press_event = gtk_window_key_press_event;
   widget_class->key_release_event = gtk_window_key_release_event;
@@ -7265,9 +7264,9 @@ gtk_window_size_allocate (GtkWidget           *widget,
     gtk_widget_size_allocate (child, &child_allocation, -1, out_clip);
 }
 
-static gint
-gtk_window_configure_event (GtkWidget         *widget,
-			    GdkEventConfigure *event)
+static gboolean
+gtk_window_configure_event (GtkWidget *widget,
+			    GdkEvent  *event)
 {
   GtkAllocation allocation;
   GtkWindow *window = GTK_WINDOW (widget);
@@ -7291,8 +7290,8 @@ gtk_window_configure_event (GtkWidget         *widget,
    */
   _gtk_widget_get_allocation (widget, &allocation);
   if (priv->configure_request_count == 0 &&
-      (allocation.width == event->width &&
-       allocation.height == event->height))
+      (allocation.width == ((GdkEventConfigure *)event)->width &&
+       allocation.height == ((GdkEventConfigure *)event)->height))
     {
       return TRUE;
     }
@@ -7673,6 +7672,10 @@ gtk_window_event (GtkWidget *widget,
            */
           gdk_window_hide (_gtk_widget_get_window (widget));
         }
+    }
+  else if (event_type == GDK_CONFIGURE)
+    {
+      return gtk_window_configure_event (widget, event);
     }
   else if (widget != gtk_get_event_target (event))
     return gtk_window_handle_wm_event (GTK_WINDOW (widget), event, FALSE);
