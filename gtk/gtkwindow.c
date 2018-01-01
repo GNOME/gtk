@@ -419,8 +419,6 @@ static void gtk_window_size_allocate      (GtkWidget           *widget,
                                            GtkAllocation       *out_clip);
 static gboolean gtk_window_close_request  (GtkWindow         *window);
 static gboolean gtk_window_emit_close_request (GtkWindow *window);
-static gboolean gtk_window_map_event      (GtkWidget         *widget,
-                                           GdkEventAny       *event);
 static gint gtk_window_configure_event    (GtkWidget         *widget,
 					   GdkEventConfigure *event);
 static gboolean gtk_window_event          (GtkWidget         *widget,
@@ -797,7 +795,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->show = gtk_window_show;
   widget_class->hide = gtk_window_hide;
   widget_class->map = gtk_window_map;
-  widget_class->map_event = gtk_window_map_event;
   widget_class->unmap = gtk_window_unmap;
   widget_class->realize = gtk_window_realize;
   widget_class->unrealize = gtk_window_unrealize;
@@ -6343,24 +6340,6 @@ gtk_window_map (GtkWidget *widget)
     gtk_application_handle_window_map (priv->application, window);
 }
 
-static gboolean
-gtk_window_map_event (GtkWidget   *widget,
-                      GdkEventAny *event)
-{
-  if (!_gtk_widget_get_mapped (widget))
-    {
-      /* we should be be unmapped, but are getting a MapEvent, this may happen
-       * to toplevel XWindows if mapping was intercepted by a window manager
-       * and an unmap request occoured while the MapRequestEvent was still
-       * being handled. we work around this situaiton here by re-requesting
-       * the window being unmapped. more details can be found in:
-       *   http://bugzilla.gnome.org/show_bug.cgi?id=316180
-       */
-      gdk_window_hide (_gtk_widget_get_window (widget));
-    }
-  return FALSE;
-}
-
 static void
 gtk_window_unmap (GtkWidget *widget)
 {
@@ -7672,10 +7651,28 @@ static gboolean
 gtk_window_event (GtkWidget *widget,
                   GdkEvent  *event)
 {
-  if (gdk_event_get_event_type (event) == GDK_DELETE)
+  GdkEventType event_type;
+
+  event_type = gdk_event_get_event_type (event);
+
+  if (event_type == GDK_DELETE)
     {
       if (gtk_window_emit_close_request (GTK_WINDOW (widget)))
         return GDK_EVENT_STOP;
+    }
+  else if (event_type == GDK_MAP)
+    {
+      if (!_gtk_widget_get_mapped (widget))
+        {
+          /* we should be be unmapped, but are getting a MapEvent, this may happen
+           * to toplevel XWindows if mapping was intercepted by a window manager
+           * and an unmap request occoured while the MapRequestEvent was still
+           * being handled. we work around this situaiton here by re-requesting
+           * the window being unmapped. more details can be found in:
+           *   http://bugzilla.gnome.org/show_bug.cgi?id=316180
+           */
+          gdk_window_hide (_gtk_widget_get_window (widget));
+        }
     }
   else if (widget != gtk_get_event_target (event))
     return gtk_window_handle_wm_event (GTK_WINDOW (widget), event, FALSE);
