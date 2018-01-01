@@ -200,7 +200,6 @@ struct _GtkWindowPrivate
   gchar   *wm_role;
 
   guint    keys_changed_handler;
-  guint    delete_event_handler;
 
   guint32  initial_timestamp;
 
@@ -292,6 +291,7 @@ enum {
   ACTIVATE_DEFAULT,
   KEYS_CHANGED,
   ENABLE_DEBUGGING,
+  CLOSE_REQUEST,
   LAST_SIGNAL
 };
 
@@ -417,8 +417,8 @@ static void gtk_window_size_allocate      (GtkWidget           *widget,
                                            const GtkAllocation *allocation,
                                            int                  baseline,
                                            GtkAllocation       *out_clip);
-static gboolean gtk_window_delete_event   (GtkWidget         *widget,
-                                           GdkEventAny       *event);
+static gboolean gtk_window_close_request  (GtkWindow         *window);
+static gboolean gtk_window_emit_close_request (GtkWindow *window);
 static gboolean gtk_window_map_event      (GtkWidget         *widget,
                                            GdkEventAny       *event);
 static gint gtk_window_configure_event    (GtkWidget         *widget,
@@ -802,7 +802,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->realize = gtk_window_realize;
   widget_class->unrealize = gtk_window_unrealize;
   widget_class->size_allocate = gtk_window_size_allocate;
-  widget_class->delete_event = gtk_window_delete_event;
   widget_class->configure_event = gtk_window_configure_event;
   widget_class->event = gtk_window_event;
   widget_class->key_press_event = gtk_window_key_press_event;
@@ -828,6 +827,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   klass->activate_focus = gtk_window_real_activate_focus;
   klass->keys_changed = gtk_window_keys_changed;
   klass->enable_debugging = gtk_window_enable_debugging;
+  klass->close_request = gtk_window_close_request;
 
   window_props[PROP_TYPE] =
       g_param_spec_enum ("type",
@@ -1258,6 +1258,25 @@ gtk_window_class_init (GtkWindowClass *klass)
                   G_TYPE_BOOLEAN,
                   1, G_TYPE_BOOLEAN);
 
+  /**
+   * GtkWindow::close-request:
+   * @window: the window on which the signal is emitted
+   *
+   * The ::close-request signal is emitted when the user clicks on the close
+   * button of the window.
+   *
+   * Return: %TRUE to stop other handlers from being invoked for the signal
+   */
+  window_signals[CLOSE_REQUEST] =
+    g_signal_new (I_("close-request"),
+                  G_TYPE_FROM_CLASS (gobject_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkWindowClass, close_request),
+                  _gtk_boolean_handled_accumulator, NULL,
+                  NULL,
+                  G_TYPE_BOOLEAN,
+                  0);
+
   /*
    * Key bindings
    */
@@ -1334,26 +1353,6 @@ _gtk_window_toggle_maximized (GtkWindow *window)
     gtk_window_maximize (window);
 }
 
-static gboolean
-send_delete_event (gpointer data)
-{
-  GtkWidget *window = data;
-  GtkWindowPrivate *priv = GTK_WINDOW (window)->priv;
-
-  GdkEvent *event;
-
-  event = gdk_event_new (GDK_DELETE);
-
-  event->any.window = g_object_ref (_gtk_widget_get_window (window));
-  event->any.send_event = TRUE;
-  priv->delete_event_handler = 0;
-
-  gtk_main_do_event (event);
-  g_object_unref (event);
-
-  return G_SOURCE_REMOVE;
-}
-
 /**
  * gtk_window_close:
  * @window: a #GtkWindow
@@ -1372,8 +1371,12 @@ gtk_window_close (GtkWindow *window)
   if (!_gtk_widget_get_realized (GTK_WIDGET (window)))
     return;
 
-  window->priv->delete_event_handler = gdk_threads_add_idle_full (G_PRIORITY_DEFAULT, send_delete_event, window, NULL);
-  g_source_set_name_by_id (window->priv->delete_event_handler, "[gtk+] send_delete_event");
+  g_object_ref (window);
+
+  if (!gtk_window_emit_close_request (window))
+    gtk_widget_destroy (GTK_WIDGET (window));
+
+  g_object_unref (window);
 }
 
 static void
@@ -5971,19 +5974,27 @@ gtk_window_destroy (GtkWidget *widget)
 }
 
 static gboolean
-gtk_window_delete_event (GtkWidget   *widget,
-                         GdkEventAny *event)
+gtk_window_close_request (GtkWindow *window)
 {
-  GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = window->priv;
 
   if (priv->hide_on_close)
     {
-      gtk_widget_hide (widget);
-      return GDK_EVENT_STOP;
+      gtk_widget_hide (GTK_WIDGET (window));
+      return TRUE;
     }
 
-  return GDK_EVENT_PROPAGATE;
+  return FALSE;
+}
+
+static gboolean
+gtk_window_emit_close_request (GtkWindow *window)
+{
+  gboolean handled;
+
+  g_signal_emit (window, window_signals[CLOSE_REQUEST], 0, &handled);
+
+  return handled;
 }
 
 static void
@@ -6010,12 +6021,6 @@ gtk_window_finalize (GObject *object)
     {
       g_source_remove (priv->keys_changed_handler);
       priv->keys_changed_handler = 0;
-    }
-
-  if (priv->delete_event_handler)
-    {
-      g_source_remove (priv->delete_event_handler);
-      priv->delete_event_handler = 0;
     }
 
 #ifdef GDK_WINDOWING_X11
@@ -7667,7 +7672,12 @@ static gboolean
 gtk_window_event (GtkWidget *widget,
                   GdkEvent  *event)
 {
-  if (widget != gtk_get_event_target (event))
+  if (gdk_event_get_event_type (event) == GDK_DELETE)
+    {
+      if (gtk_window_emit_close_request (GTK_WINDOW (widget)))
+        return GDK_EVENT_STOP;
+    }
+  else if (widget != gtk_get_event_target (event))
     return gtk_window_handle_wm_event (GTK_WINDOW (widget), event, FALSE);
 
   return GDK_EVENT_PROPAGATE;
@@ -8228,8 +8238,7 @@ close_window_clicked (GtkMenuItem *menuitem,
 {
   GtkWindow *window = (GtkWindow *)user_data;
 
-  if (window->priv->delete_event_handler == 0)
-    send_delete_event (window);
+  gtk_window_close (window);
 }
 
 static void

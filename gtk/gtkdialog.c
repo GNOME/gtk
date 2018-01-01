@@ -191,8 +191,7 @@ static void      gtk_dialog_add_buttons_valist   (GtkDialog    *dialog,
                                                   const gchar  *first_button_text,
                                                   va_list       args);
 
-static gboolean  gtk_dialog_delete_event         (GtkWidget    *widget,
-                                                  GdkEventAny  *event);
+static gboolean  gtk_dialog_close_request        (GtkWindow    *window);
 static void      gtk_dialog_map                  (GtkWidget    *widget);
 
 static void      gtk_dialog_close                (GtkDialog    *dialog);
@@ -510,10 +509,12 @@ gtk_dialog_class_init (GtkDialogClass *class)
 {
   GObjectClass *gobject_class;
   GtkWidgetClass *widget_class;
+  GtkWindowClass *window_class;
   GtkBindingSet *binding_set;
 
   gobject_class = G_OBJECT_CLASS (class);
   widget_class = GTK_WIDGET_CLASS (class);
+  window_class = GTK_WINDOW_CLASS (class);
 
   gobject_class->constructed  = gtk_dialog_constructed;
   gobject_class->set_property = gtk_dialog_set_property;
@@ -521,7 +522,8 @@ gtk_dialog_class_init (GtkDialogClass *class)
   gobject_class->finalize = gtk_dialog_finalize;
 
   widget_class->map = gtk_dialog_map;
-  widget_class->delete_event = gtk_dialog_delete_event;
+
+  window_class->close_request = gtk_dialog_close_request;
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_DIALOG);
 
@@ -622,13 +624,12 @@ gtk_dialog_buildable_interface_init (GtkBuildableIface *iface)
 }
 
 static gboolean
-gtk_dialog_delete_event (GtkWidget   *widget,
-                         GdkEventAny *event)
+gtk_dialog_close_request (GtkWindow *window)
 {
   /* emit response signal, this will shut down the loop if we are in gtk_dialog_run */
-  gtk_dialog_response (GTK_DIALOG (widget), GTK_RESPONSE_DELETE_EVENT);
+  gtk_dialog_response (GTK_DIALOG (window), GTK_RESPONSE_DELETE_EVENT);
 
-  return GTK_WIDGET_CLASS (gtk_dialog_parent_class)->delete_event (widget, event);
+  return GTK_WINDOW_CLASS (gtk_dialog_parent_class)->close_request (window);
 }
 
 static GList *

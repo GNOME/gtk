@@ -67,6 +67,7 @@ struct _GtkWindow
  *   mnemonics that are associated with window changes.
  * @enable_debugging: Class handler for the #GtkWindow::enable-debugging
  *   keybinding signal. Since: 3.14
+ * @close_request: Class handler for the #GtkWindow::close-request signal. Since: 3.94
  */
 struct _GtkWindowClass
 {
@@ -84,6 +85,7 @@ struct _GtkWindowClass
   void	   (* keys_changed)     (GtkWindow *window);
   gboolean (* enable_debugging) (GtkWindow *window,
                                  gboolean   toggle);
+  gboolean (* close_request)    (GtkWindow *window);
 
   /*< private >*/
 

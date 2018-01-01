@@ -133,8 +133,8 @@ struct _GtkAssistantPrivate
 static void     gtk_assistant_destroy            (GtkWidget         *widget);
 static void     gtk_assistant_map                (GtkWidget         *widget);
 static void     gtk_assistant_unmap              (GtkWidget         *widget);
-static gboolean gtk_assistant_delete_event       (GtkWidget         *widget,
-                                                  GdkEventAny       *event);
+static gboolean gtk_assistant_close_request      (GtkWindow         *window);
+
 static void     gtk_assistant_add                (GtkContainer      *container,
                                                   GtkWidget         *page);
 static void     gtk_assistant_remove             (GtkContainer      *container,
@@ -377,11 +377,13 @@ gtk_assistant_class_init (GtkAssistantClass *class)
   GObjectClass *gobject_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
+  GtkWindowClass *window_class;
   GtkBindingSet *binding_set;
 
   gobject_class   = (GObjectClass *) class;
   widget_class    = (GtkWidgetClass *) class;
   container_class = (GtkContainerClass *) class;
+  window_class    = (GtkWindowClass *) class;
 
   gobject_class->constructed  = gtk_assistant_constructed;
   gobject_class->set_property = gtk_assistant_set_property;
@@ -390,7 +392,6 @@ gtk_assistant_class_init (GtkAssistantClass *class)
   widget_class->destroy = gtk_assistant_destroy;
   widget_class->map = gtk_assistant_map;
   widget_class->unmap = gtk_assistant_unmap;
-  widget_class->delete_event = gtk_assistant_delete_event;
 
   gtk_widget_class_set_accessible_type (widget_class, _gtk_assistant_accessible_get_type ());
 
@@ -398,6 +399,8 @@ gtk_assistant_class_init (GtkAssistantClass *class)
   container_class->remove = gtk_assistant_remove;
   container_class->set_child_property = gtk_assistant_set_child_property;
   container_class->get_child_property = gtk_assistant_get_child_property;
+
+  window_class->close_request = gtk_assistant_close_request;
 
   /**
    * GtkAssistant::cancel:
@@ -1333,17 +1336,16 @@ gtk_assistant_unmap (GtkWidget *widget)
 }
 
 static gboolean
-gtk_assistant_delete_event (GtkWidget   *widget,
-                            GdkEventAny *event)
+gtk_assistant_close_request (GtkWindow *window)
 {
-  GtkAssistant *assistant = GTK_ASSISTANT (widget);
+  GtkAssistant *assistant = GTK_ASSISTANT (window);
   GtkAssistantPrivate *priv = assistant->priv;
 
   /* Do not allow cancelling in the middle of a progress page */
   if (priv->current_page &&
       (priv->current_page->type != GTK_ASSISTANT_PAGE_PROGRESS ||
        priv->current_page->complete))
-    g_signal_emit (widget, signals [CANCEL], 0, NULL);
+    g_signal_emit (assistant, signals [CANCEL], 0, NULL);
 
   return TRUE;
 }
