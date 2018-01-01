@@ -494,7 +494,6 @@ enum {
   BUTTON_RELEASE_EVENT,
   SCROLL_EVENT,
   MOTION_NOTIFY_EVENT,
-  DESTROY_EVENT,
   KEY_PRESS_EVENT,
   KEY_RELEASE_EVENT,
   ENTER_NOTIFY_EVENT,
@@ -1015,7 +1014,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->button_release_event = gtk_widget_real_button_event;
   klass->motion_notify_event = gtk_widget_real_motion_event;
   klass->touch_event = gtk_widget_real_touch_event;
-  klass->destroy_event = NULL;
   klass->key_press_event = gtk_widget_real_key_press_event;
   klass->key_release_event = gtk_widget_real_key_release_event;
   klass->enter_notify_event = NULL;
@@ -2073,35 +2071,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT);
   g_signal_set_va_marshaller (widget_signals[MOTION_NOTIFY_EVENT], G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__OBJECTv);
-
-  /**
-   * GtkWidget::destroy-event:
-   * @widget: the object which received the signal.
-   * @event: the event which triggered this signal
-   *
-   * The ::destroy-event signal is emitted when a #GdkWindow is destroyed.
-   * You rarely get this signal, because most widgets disconnect themselves
-   * from their window before they destroy it, so no widget owns the
-   * window at destroy time.
-   *
-   * To receive this signal, the #GdkWindow associated to the widget needs
-   * to enable the #GDK_STRUCTURE_MASK mask. GDK will enable this mask
-   * automatically for all new windows.
-   *
-   * Returns: %TRUE to stop other handlers from being invoked for the event.
-   *   %FALSE to propagate the event further.
-   */
-  widget_signals[DESTROY_EVENT] =
-    g_signal_new (I_("destroy-event"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, destroy_event),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__OBJECT,
-		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT);
-  g_signal_set_va_marshaller (widget_signals[DESTROY_EVENT], G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_BOOLEAN__OBJECTv);
 
   /**
@@ -6522,6 +6491,7 @@ gtk_widget_emit_event_signals (GtkWidget      *widget,
         case GDK_PAD_GROUP_MODE:
 	case GDK_EXPOSE:
 	case GDK_DELETE:
+	case GDK_DESTROY:
 	case GDK_NOTHING:
 	  signal_num = -1;
 	  break;
@@ -6542,10 +6512,6 @@ gtk_widget_emit_event_signals (GtkWidget      *widget,
 	  break;
 	case GDK_MOTION_NOTIFY:
 	  signal_num = MOTION_NOTIFY_EVENT;
-	  break;
-	case GDK_DESTROY:
-	  signal_num = DESTROY_EVENT;
-	  _gtk_tooltip_hide (widget);
 	  break;
 	case GDK_KEY_PRESS:
 	  signal_num = KEY_PRESS_EVENT;
