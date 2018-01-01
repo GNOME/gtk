@@ -1631,33 +1631,34 @@ on_status_toplevel_notify_display (GtkWindow    *toplevel,
  * the status window to follow it.
  */
 static gboolean
-on_status_toplevel_configure (GtkWidget         *toplevel,
-			      GdkEventConfigure *event,
-			      StatusWindow      *status_window)
+on_status_toplevel_configure (GtkWidget     *toplevel,
+			      GdkEvent      *event,
+			      StatusWindow  *status_window)
 {
-  GdkRectangle rect;
-  GtkRequisition requisition;
-  gint y;
-  gint height;
-
-  if (status_window->window)
+  if (gdk_event_get_event_type (event) == GDK_CONFIGURE)
     {
-      height = DisplayHeight(GDK_WINDOW_XDISPLAY (gtk_widget_get_window (toplevel)), 0);
+      GdkRectangle rect;
+      GtkRequisition requisition;
+      gint y;
+      gint height;
 
-      gdk_window_get_frame_extents (gtk_widget_get_window (toplevel),
-                                    &rect);
-      gtk_widget_get_preferred_size ( (status_window->window),
-                                 &requisition, NULL);
+      if (status_window->window)
+        {
+          height = DisplayHeight(GDK_WINDOW_XDISPLAY (gtk_widget_get_window (toplevel)), 0);
 
-      if (rect.y + rect.height + requisition.height < height)
-	y = rect.y + rect.height;
-      else
-	y = height - requisition.height;
-      
-      gtk_window_move (GTK_WINDOW (status_window->window), rect.x, y);
+          gdk_window_get_frame_extents (gtk_widget_get_window (toplevel), &rect);
+          gtk_widget_get_preferred_size ( (status_window->window), &requisition, NULL);
+
+          if (rect.y + rect.height + requisition.height < height)
+	    y = rect.y + rect.height;
+          else
+	    y = height - requisition.height;
+
+          gtk_window_move (GTK_WINDOW (status_window->window), rect.x, y);
+        }
     }
 
-  return FALSE;
+  return GDK_EVENT_PROPAGATE;
 }
 
 /* Frees a status window and removes its link from the status_windows list
@@ -1707,7 +1708,7 @@ status_window_get (GtkWidget *toplevel)
   g_signal_connect (toplevel, "destroy",
 		    G_CALLBACK (on_status_toplevel_destroy),
 		    status_window);
-  g_signal_connect (toplevel, "configure-event",
+  g_signal_connect (toplevel, "event",
 		    G_CALLBACK (on_status_toplevel_configure),
 		    status_window);
   g_signal_connect (toplevel, "notify::display",
