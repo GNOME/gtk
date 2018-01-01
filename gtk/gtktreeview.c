@@ -821,8 +821,9 @@ static gboolean gtk_tree_view_search_delete_event       (GtkWidget        *widge
 static gboolean gtk_tree_view_search_button_press_event (GtkWidget        *widget,
 							 GdkEventButton   *event,
 							 GtkTreeView      *tree_view);
-static gboolean gtk_tree_view_search_scroll_event       (GtkWidget        *entry,
-							 GdkEventScroll   *event,
+static void     gtk_tree_view_search_scroll_event       (GtkWidget        *entry,
+							 gdouble           dx,
+                                                         gdouble           dy,
 							 GtkTreeView      *tree_view);
 static gboolean gtk_tree_view_search_key_press_event    (GtkWidget        *entry,
 							 GdkEventKey      *event,
@@ -10645,6 +10646,7 @@ gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
 {
   GtkWidget *frame, *vbox, *toplevel;
   GdkDisplay *display;
+  GtkEventController *controller;
 
   if (tree_view->priv->search_custom_entry_set)
     return;
@@ -10688,7 +10690,11 @@ gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
   g_signal_connect (tree_view->priv->search_window, "button-press-event",
 		    G_CALLBACK (gtk_tree_view_search_button_press_event),
 		    tree_view);
-  g_signal_connect (tree_view->priv->search_window, "scroll-event",
+  controller = gtk_event_controller_scroll_new (tree_view->priv->search_window,
+                                                GTK_EVENT_CONTROLLER_SCROLL_VERTICAL);
+  g_object_set_data_full (G_OBJECT (tree_view->priv->search_window), "scroll",
+                          controller, g_object_unref);
+  g_signal_connect (controller, "scroll",
 		    G_CALLBACK (gtk_tree_view_search_scroll_event),
 		    tree_view);
 
@@ -14456,31 +14462,24 @@ gtk_tree_view_search_button_press_event (GtkWidget *widget,
   return TRUE;
 }
 
-static gboolean
-gtk_tree_view_search_scroll_event (GtkWidget *widget,
-				   GdkEventScroll *event,
+static void
+gtk_tree_view_search_scroll_event (GtkWidget   *widget,
+                                   gdouble      dx,
+                                   gdouble      dy,
 				   GtkTreeView *tree_view)
 {
-  gboolean retval = FALSE;
   GdkScrollDirection direction;
 
-  if (!gdk_event_get_scroll_direction ((GdkEvent *) event, &direction))
-    return retval;
+  direction = dy > 0 ? GDK_SCROLL_DOWN : GDK_SCROLL_UP;
 
   if (direction == GDK_SCROLL_UP)
-    {
-      gtk_tree_view_search_move (widget, tree_view, TRUE);
-      retval = TRUE;
-    }
+    gtk_tree_view_search_move (widget, tree_view, TRUE);
   else if (direction == GDK_SCROLL_DOWN)
-    {
-      gtk_tree_view_search_move (widget, tree_view, FALSE);
-      retval = TRUE;
-    }
+    gtk_tree_view_search_move (widget, tree_view, FALSE);
 
   /* renew the flush timeout */
-  if (retval && tree_view->priv->typeselect_flush_timeout
-      && !tree_view->priv->search_custom_entry_set)
+  if (tree_view->priv->typeselect_flush_timeout &&
+      !tree_view->priv->search_custom_entry_set)
     {
       g_source_remove (tree_view->priv->typeselect_flush_timeout);
       tree_view->priv->typeselect_flush_timeout =
@@ -14489,8 +14488,6 @@ gtk_tree_view_search_scroll_event (GtkWidget *widget,
 		       tree_view);
       g_source_set_name_by_id (tree_view->priv->typeselect_flush_timeout, "[gtk+] gtk_tree_view_search_entry_flush_timeout");
     }
-
-  return retval;
 }
 
 static gboolean
