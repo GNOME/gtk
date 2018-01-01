@@ -516,7 +516,6 @@ enum {
   QUERY_TOOLTIP,
   DRAG_FAILED,
   STYLE_UPDATED,
-  TOUCH_EVENT,
   LAST_SIGNAL
 };
 
@@ -627,8 +626,6 @@ static gboolean		gtk_widget_real_focus_in_event   	 (GtkWidget       *widget,
 								  GdkEventFocus   *event);
 static gboolean		gtk_widget_real_focus_out_event   	(GtkWidget        *widget,
 								 GdkEventFocus    *event);
-static gboolean         gtk_widget_real_touch_event             (GtkWidget        *widget,
-                                                                 GdkEventTouch    *event);
 static gboolean         gtk_widget_real_grab_broken_event       (GtkWidget          *widget,
                                                                  GdkEventGrabBroken *event);
 static gboolean		gtk_widget_real_focus			(GtkWidget        *widget,
@@ -1008,7 +1005,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->button_press_event = gtk_widget_real_button_event;
   klass->button_release_event = gtk_widget_real_button_event;
   klass->motion_notify_event = gtk_widget_real_motion_event;
-  klass->touch_event = gtk_widget_real_touch_event;
   klass->key_press_event = gtk_widget_real_key_press_event;
   klass->key_release_event = gtk_widget_real_key_release_event;
   klass->enter_notify_event = NULL;
@@ -1991,18 +1987,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT);
   g_signal_set_va_marshaller (widget_signals[BUTTON_RELEASE_EVENT], G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__OBJECTv);
-
-  widget_signals[TOUCH_EVENT] =
-    g_signal_new (I_("touch-event"),
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_DEPRECATED,
-                  G_STRUCT_OFFSET (GtkWidgetClass, touch_event),
-                  _gtk_boolean_handled_accumulator, NULL,
-                  _gtk_marshal_BOOLEAN__OBJECT,
-                  G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT);
-  g_signal_set_va_marshaller (widget_signals[TOUCH_EVENT], G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_BOOLEAN__OBJECTv);
 
   /**
@@ -6036,13 +6020,6 @@ gtk_widget_real_focus_out_event (GtkWidget     *widget,
 }
 
 static gboolean
-gtk_widget_real_touch_event (GtkWidget     *widget,
-                             GdkEventTouch *event)
-{
-  return GDK_EVENT_PROPAGATE;
-}
-
-static gboolean
 gtk_widget_real_grab_broken_event (GtkWidget          *widget,
                                    GdkEventGrabBroken *event)
 {
@@ -6352,6 +6329,10 @@ gtk_widget_emit_event_signals (GtkWidget      *widget,
 	case GDK_PROXIMITY_IN:
 	case GDK_PROXIMITY_OUT:
 	case GDK_SCROLL:
+        case GDK_TOUCH_BEGIN:
+        case GDK_TOUCH_UPDATE:
+        case GDK_TOUCH_END:
+        case GDK_TOUCH_CANCEL:
 	case GDK_EXPOSE:
 	case GDK_DELETE:
 	case GDK_DESTROY:
@@ -6363,12 +6344,6 @@ gtk_widget_emit_event_signals (GtkWidget      *widget,
 	case GDK_BUTTON_PRESS:
 	  signal_num = BUTTON_PRESS_EVENT;
           break;
-        case GDK_TOUCH_BEGIN:
-        case GDK_TOUCH_UPDATE:
-        case GDK_TOUCH_END:
-        case GDK_TOUCH_CANCEL:
-	  signal_num = TOUCH_EVENT;
-	  break;
 	case GDK_BUTTON_RELEASE:
 	  signal_num = BUTTON_RELEASE_EVENT;
 	  break;

@@ -402,9 +402,6 @@ struct _GtkWidgetClass
 
   void         (* style_updated)          (GtkWidget *widget);
 
-  gboolean     (* touch_event)            (GtkWidget     *widget,
-                                           GdkEventTouch *event);
-
   void         (* snapshot)                    (GtkWidget            *widget,
                                                 GtkSnapshot          *snapshot);
 
