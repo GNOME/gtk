@@ -17,39 +17,44 @@ clear_surface (void)
 }
 
 /* Create a new surface of the appropriate size to store our scribbles */
-static gboolean
-configure_event_cb (GtkWidget         *widget,
-                    GdkEventConfigure *event,
-                    gpointer           data)
+static void
+size_allocate_cb (GtkWidget     *widget,
+                  GtkAllocation *alloc,
+                  int            baseline,
+                  GdkRectangle  *clip,
+                  gpointer       data)
 {
   if (surface)
-    cairo_surface_destroy (surface);
+    {
+      cairo_surface_destroy (surface);
+      surface = NULL;
+    }
 
-  surface = gdk_window_create_similar_surface (gtk_widget_get_window (widget),
-                                               CAIRO_CONTENT_COLOR,
-                                               gtk_widget_get_width (widget),
-                                               gtk_widget_get_height (widget));
+  if (gtk_widget_get_window (widget))
+    {
+      surface = gdk_window_create_similar_surface (gtk_widget_get_window (widget),
+                                                   CAIRO_CONTENT_COLOR,
+                                                   gtk_widget_get_width (widget),
+                                                   gtk_widget_get_height (widget));
 
-  /* Initialize the surface to white */
-  clear_surface ();
-
-  /* We've handled the configure event, no need for further processing. */
-  return TRUE;
+      /* Initialize the surface to white */
+      clear_surface ();
+    }
 }
 
 /* Redraw the screen from the surface. Note that the ::draw
  * signal receives a ready-to-be-used cairo_t that is already
  * clipped to only draw the exposed areas of the widget
  */
-static gboolean
-draw_cb (GtkWidget *widget,
-         cairo_t   *cr,
-         gpointer   data)
+static void
+draw_cb (GtkDrawingArea *drawing_area,
+         cairo_t        *cr,
+         int             width,
+         int             height,
+         gpointer        data)
 {
   cairo_set_source_surface (cr, surface, 0, 0);
   cairo_paint (cr);
-
-  return FALSE;
 }
 
 /* Draw a rectangle on the surface at the given position */
@@ -162,11 +167,10 @@ activate (GtkApplication *app,
 
   gtk_container_add (GTK_CONTAINER (frame), drawing_area);
 
-  /* Signals used to handle the backing surface */
-  g_signal_connect (drawing_area, "draw",
-                    G_CALLBACK (draw_cb), NULL);
-  g_signal_connect (drawing_area,"configure-event",
-                    G_CALLBACK (configure_event_cb), NULL);
+  gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (drawing_area), draw_cb, NULL, NULL);
+
+  g_signal_connect_after (drawing_area, "size-allocate",
+                          G_CALLBACK (size_allocate_cb), NULL);
 
   /* Event signals */
   g_signal_connect (drawing_area, "motion-notify-event",
