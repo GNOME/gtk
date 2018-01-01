@@ -54,6 +54,7 @@
 #include "gtkradiobutton.h"
 #include "gtkcombobox.h"
 #include "gtkgesturemultipress.h"
+#include "gtkeventcontrollerscroll.h"
 
 #if defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT)
 #include <pango/pangofc-font.h>
@@ -551,40 +552,19 @@ cursor_changed_cb (GtkTreeView *treeview,
   gtk_delayed_font_description_unref (desc);
 }
 
-static gboolean
-resize_by_scroll_cb (GtkWidget      *scrolled_window,
-                     GdkEventScroll *event,
-                     gpointer        user_data)
+static void
+resize_by_scroll_cb (GtkEventControllerScroll *controller,
+                     double                    dx,
+                     double                    dy,
+                     gpointer                  user_data)
 {
   GtkFontChooserWidget *fc = user_data;
   GtkFontChooserWidgetPrivate *priv = fc->priv;
   GtkAdjustment *adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (priv->size_spin));
-  GdkScrollDirection direction;
-  gdouble delta_x, delta_y;
 
-  if (!gdk_event_get_scroll_direction ((GdkEvent *) event, &direction))
-    return GDK_EVENT_PROPAGATE;
-
-  gdk_event_get_scroll_deltas ((GdkEvent *) event, &delta_x, &delta_y);
-
-  if (direction == GDK_SCROLL_UP || direction == GDK_SCROLL_RIGHT)
-    gtk_adjustment_set_value (adj,
-                              gtk_adjustment_get_value (adj) +
-                              gtk_adjustment_get_step_increment (adj));
-  else if (direction == GDK_SCROLL_DOWN || direction == GDK_SCROLL_LEFT)
-    gtk_adjustment_set_value (adj,
-                              gtk_adjustment_get_value (adj) -
-                              gtk_adjustment_get_step_increment (adj));
-  else if (direction == GDK_SCROLL_SMOOTH && delta_x != 0.0)
-    gtk_adjustment_set_value (adj,
-                              gtk_adjustment_get_value (adj) +
-                              gtk_adjustment_get_step_increment (adj) * delta_x);
-  else if (direction == GDK_SCROLL_SMOOTH && delta_y != 0.0)
-    gtk_adjustment_set_value (adj,
-                              gtk_adjustment_get_value (adj) -
-                              gtk_adjustment_get_step_increment (adj) * delta_y);
-
-  return TRUE;
+  gtk_adjustment_set_value (adj,
+                            gtk_adjustment_get_value (adj) +
+                            gtk_adjustment_get_step_increment (adj) * dx);
 }
 
 static void
@@ -638,6 +618,16 @@ gtk_font_chooser_widget_map (GtkWidget *widget)
   g_simple_action_set_state (G_SIMPLE_ACTION (priv->tweak_action), g_variant_new_boolean (FALSE));
 
   GTK_WIDGET_CLASS (gtk_font_chooser_widget_parent_class)->map (widget);
+}
+
+static void
+setup_scroll_resize (GtkWidget            *widget,
+                     GtkFontChooserWidget *fontchooser)
+{
+  GtkEventController *controller;
+
+  controller = gtk_event_controller_scroll_new (widget, GTK_EVENT_CONTROLLER_SCROLL_HORIZONTAL);
+  g_signal_connect (controller, "scroll", G_CALLBACK (resize_by_scroll_cb), fontchooser);
 }
 
 static void
@@ -748,7 +738,6 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, cursor_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, row_activated_cb);
   gtk_widget_class_bind_template_callback (widget_class, gtk_font_chooser_widget_set_cell_size);
-  gtk_widget_class_bind_template_callback (widget_class, resize_by_scroll_cb);
   gtk_widget_class_bind_template_callback (widget_class, rows_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, size_change_cb);
   gtk_widget_class_bind_template_callback (widget_class, output_cb);
@@ -871,6 +860,9 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
                                            gtk_font_chooser_widget_cell_data_func,
                                            fontchooser,
                                            NULL);
+
+  setup_scroll_resize (priv->preview, fontchooser);
+  setup_scroll_resize (priv->size_slider, fontchooser);
 
   priv->tweak_action = G_ACTION (g_simple_action_new_stateful ("tweak", NULL, g_variant_new_boolean (FALSE)));
   g_signal_connect (priv->tweak_action, "change-state", G_CALLBACK (change_tweak), fontchooser);
