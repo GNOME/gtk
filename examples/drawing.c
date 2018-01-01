@@ -77,64 +77,48 @@ draw_brush (GtkWidget *widget,
   gtk_widget_queue_draw_area (widget, x - 3, y - 3, 6, 6);
 }
 
-/* Handle button press events by either drawing a rectangle
- * or clearing the surface, depending on which button was pressed.
- * The ::button-press signal handler receives a GdkEventButton
- * struct which contains this information.
- */
-static gboolean
-button_press_event_cb (GtkWidget      *widget,
-                       GdkEventButton *event,
-                       gpointer        data)
+static double start_x;
+static double start_y;
+
+static void
+drag_begin (GtkGestureDrag *gesture,
+            double          x,
+            double          y,
+            GtkWidget      *area)
 {
-  guint button;
-  double x, y;
+  start_x = x;
+  start_y = y;
 
-  /* paranoia check, in case we haven't gotten a configure event */
-  if (surface == NULL)
-    return FALSE;
-
-  gdk_event_get_button ((GdkEvent *)event, &button);
-  gdk_event_get_coords ((GdkEvent *)event, &x, &y);
-
-  if (button == GDK_BUTTON_PRIMARY)
-    {
-      draw_brush (widget, x, y);
-    }
-  else if (button == GDK_BUTTON_SECONDARY)
-    {
-      clear_surface ();
-      gtk_widget_queue_draw (widget);
-    }
-
-  /* We've handled the event, stop processing */
-  return TRUE;
+  draw_brush (area, x, y);
 }
 
-/* Handle motion events by continuing to draw if button 1 is
- * still held down. The ::motion-notify signal handler receives
- * a GdkEventMotion struct which contains this information.
- */
-static gboolean
-motion_notify_event_cb (GtkWidget      *widget,
-                        GdkEventMotion *event,
-                        gpointer        data)
+static void
+drag_update (GtkGestureDrag *gesture,
+             double          x,
+             double          y,
+             GtkWidget      *area)
 {
-  double x, y;
-  GdkModifierType state;
+  draw_brush (area, start_x + x, start_y + y);
+}
 
-  /* paranoia check, in case we haven't gotten a configure event */
-  if (surface == NULL)
-    return FALSE;
+static void
+drag_end (GtkGestureDrag *gesture,
+          double          x,
+          double          y,
+          GtkWidget      *area)
+{
+  draw_brush (area, start_x + x, start_y + y);
+}
 
-  gdk_event_get_state ((GdkEvent *)event, &state);
-  gdk_event_get_coords ((GdkEvent *)event, &x, &y);
-
-  if (state & GDK_BUTTON1_MASK)
-    draw_brush (widget, x, y);
-
-  /* We've handled it, stop processing */
-  return TRUE;
+static void
+pressed (GtkGestureMultiPress *gesture,
+         int                   n_press,
+         double                x,
+         double                y,
+         GtkWidget            *area)
+{
+  clear_surface ();
+  gtk_widget_queue_draw (area);
 }
 
 static void
@@ -151,6 +135,8 @@ activate (GtkApplication *app,
   GtkWidget *window;
   GtkWidget *frame;
   GtkWidget *drawing_area;
+  GtkGesture *drag;
+  GtkGesture *press;
 
   window = gtk_application_window_new (app);
   gtk_window_set_title (GTK_WINDOW (window), "Drawing Area");
@@ -172,11 +158,19 @@ activate (GtkApplication *app,
   g_signal_connect_after (drawing_area, "size-allocate",
                           G_CALLBACK (size_allocate_cb), NULL);
 
-  /* Event signals */
-  g_signal_connect (drawing_area, "motion-notify-event",
-                    G_CALLBACK (motion_notify_event_cb), NULL);
-  g_signal_connect (drawing_area, "button-press-event",
-                    G_CALLBACK (button_press_event_cb), NULL);
+  drag = gtk_gesture_drag_new (drawing_area);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (drag), GDK_BUTTON_PRIMARY);
+  g_object_set_data_full (G_OBJECT (drawing_area), "drag", drag, g_object_unref);
+
+  g_signal_connect (drag, "drag-begin", G_CALLBACK (drag_begin), drawing_area);
+  g_signal_connect (drag, "drag-update", G_CALLBACK (drag_update), drawing_area);
+  g_signal_connect (drag, "drag-begin", G_CALLBACK (drag_end), drawing_area);
+
+  press = gtk_gesture_multi_press_new (drawing_area);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (press), GDK_BUTTON_SECONDARY);
+  g_object_set_data_full (G_OBJECT (drawing_area), "press", press, g_object_unref);
+
+  g_signal_connect (press, "pressed", G_CALLBACK (pressed), drawing_area);
 
   gtk_widget_show (window);
 }
