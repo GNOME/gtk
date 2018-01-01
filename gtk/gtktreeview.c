@@ -815,9 +815,6 @@ static void     gtk_tree_view_search_activate           (GtkEntry         *entry
 static gboolean gtk_tree_view_real_search_enable_popdown(gpointer          data);
 static void     gtk_tree_view_search_enable_popdown     (GtkWidget        *widget,
 							 gpointer          data);
-static gboolean gtk_tree_view_search_delete_event       (GtkWidget        *widget,
-							 GdkEventAny      *event,
-							 GtkTreeView      *tree_view);
 static gboolean gtk_tree_view_search_button_press_event (GtkWidget        *widget,
 							 GdkEventButton   *event,
 							 GtkTreeView      *tree_view);
@@ -10681,9 +10678,6 @@ gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
   gtk_window_set_transient_for (GTK_WINDOW (tree_view->priv->search_window),
                                 GTK_WINDOW (toplevel));
 
-  g_signal_connect (tree_view->priv->search_window, "delete-event",
-		    G_CALLBACK (gtk_tree_view_search_delete_event),
-		    tree_view);
   g_signal_connect (tree_view->priv->search_window, "key-press-event",
 		    G_CALLBACK (gtk_tree_view_search_key_press_event),
 		    tree_view);
@@ -14433,18 +14427,6 @@ gtk_tree_view_search_enable_popdown (GtkWidget *widget,
   guint id;
   id = gdk_threads_add_timeout_full (G_PRIORITY_HIGH, 200, gtk_tree_view_real_search_enable_popdown, g_object_ref (data), g_object_unref);
   g_source_set_name_by_id (id, "[gtk+] gtk_tree_view_real_search_enable_popdown");
-}
-
-static gboolean
-gtk_tree_view_search_delete_event (GtkWidget *widget,
-				   GdkEventAny *event,
-				   GtkTreeView *tree_view)
-{
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-
-  gtk_tree_view_search_window_hide (widget, tree_view, NULL);
-
-  return TRUE;
 }
 
 static gboolean
