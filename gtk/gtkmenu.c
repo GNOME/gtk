@@ -240,12 +240,16 @@ static void     gtk_menu_snapshot          (GtkWidget        *widget,
                                             GtkSnapshot      *snapshot);
 static gboolean gtk_menu_key_press         (GtkWidget        *widget,
                                             GdkEventKey      *event);
-static gboolean gtk_menu_motion_notify     (GtkWidget        *widget,
-                                            GdkEventMotion   *event);
-static gboolean gtk_menu_enter_notify      (GtkWidget        *widget,
-                                            GdkEventCrossing *event);
-static gboolean gtk_menu_leave_notify      (GtkWidget        *widget,
-                                            GdkEventCrossing *event);
+static void     gtk_menu_motion            (GtkEventController *controller,
+                                            double              x,
+                                            double              y,
+                                            gpointer            user_data);
+static void     gtk_menu_enter             (GtkEventController *controller,
+                                            double              x,
+                                            double              y,
+                                            gpointer            user_data);
+static void     gtk_menu_leave             (GtkEventController *controller,
+                                            gpointer            user_data);
 static void     gtk_menu_scroll_to         (GtkMenu          *menu,
                                             gint              offset);
 static void     gtk_menu_grab_notify       (GtkWidget        *widget,
@@ -516,9 +520,6 @@ gtk_menu_class_init (GtkMenuClass *class)
   widget_class->show = gtk_menu_show;
   widget_class->snapshot = gtk_menu_snapshot;
   widget_class->key_press_event = gtk_menu_key_press;
-  widget_class->motion_notify_event = gtk_menu_motion_notify;
-  widget_class->enter_notify_event = gtk_menu_enter_notify;
-  widget_class->leave_notify_event = gtk_menu_leave_notify;
   widget_class->focus = gtk_menu_focus;
   widget_class->can_activate_accel = gtk_menu_real_can_activate_accel;
   widget_class->grab_notify = gtk_menu_grab_notify;
@@ -1178,6 +1179,12 @@ gtk_menu_init (GtkMenu *menu)
                                      GTK_EVENT_CONTROLLER_SCROLL_VERTICAL);
   g_signal_connect (priv->scroll_controller, "scroll",
                     G_CALLBACK (gtk_menu_scroll_controller_scroll), menu);
+
+  priv->motion_controller =
+    gtk_event_controller_motion_new (GTK_WIDGET (menu));
+  g_signal_connect (priv->motion_controller, "enter", G_CALLBACK (gtk_menu_enter), menu);
+  g_signal_connect (priv->motion_controller, "motion", G_CALLBACK (gtk_menu_motion), menu);
+  g_signal_connect (priv->motion_controller, "leave", G_CALLBACK (gtk_menu_leave), menu);
 }
 
 static void
@@ -3143,31 +3150,37 @@ gtk_menu_has_navigation_triangle (GtkMenu *menu)
   return priv->navigation_height && priv->navigation_width;
 }
 
-static gboolean
-gtk_menu_motion_notify (GtkWidget      *widget,
-                        GdkEventMotion *event)
+static void
+gtk_menu_motion (GtkEventController *controller,
+                 double              x,
+                 double              y,
+                 gpointer            user_data)
 {
   GtkWidget *menu_item;
   GtkMenu *menu;
   GtkMenuShell *menu_shell;
   GtkWidget *parent;
   GdkDevice *source_device;
+  GdkEventMotion *event;
 
-  source_device = gdk_event_get_source_device ((GdkEvent *) event);
+  menu_item = GTK_WIDGET (user_data);
 
-  if (GTK_IS_MENU (widget) &&
+  event = (GdkEventMotion *)gtk_get_current_event (); /* FIXME: controller event */
+
+  source_device = gdk_event_get_source_device ((GdkEvent *)event);
+
+  if (GTK_IS_MENU (menu_item) &&
       gdk_device_get_source (source_device) != GDK_SOURCE_TOUCHSCREEN)
     {
-      GtkMenuPrivate *priv = GTK_MENU(widget)->priv;
+      GtkMenuPrivate *priv = GTK_MENU(menu_item)->priv;
 
       if (priv->ignore_button_release)
         priv->ignore_button_release = FALSE;
 
-      gtk_menu_handle_scrolling (GTK_MENU (widget), event->x_root, event->y_root,
-                                 TRUE, TRUE);
+      gtk_menu_handle_scrolling (GTK_MENU (menu_item), event->x_root, event->y_root, TRUE, TRUE);
     }
 
-  /* We received the event for one of two reasons:
+  /*We received the event for one of two reasons:
    *
    * a) We are the active menu, and did gtk_grab_add()
    * b) The widget is a child of ours, and the event was propagated
@@ -3176,12 +3189,10 @@ gtk_menu_motion_notify (GtkWidget      *widget,
    * is the parent of the menu item, for a), we need to find that menu,
    * which may be different from 'widget'.
    */
-  menu_item = gtk_get_event_widget ((GdkEvent*) event);
   parent = gtk_widget_get_parent (menu_item);
   if (!GTK_IS_MENU_ITEM (menu_item) ||
       !GTK_IS_MENU (parent))
-    return FALSE;
-
+    return;
   menu_shell = GTK_MENU_SHELL (parent);
   menu = GTK_MENU (menu_shell);
 
@@ -3191,7 +3202,7 @@ gtk_menu_motion_notify (GtkWidget      *widget,
   /* Check to see if we are within an active submenu's navigation region
    */
   if (gtk_menu_navigating_submenu (menu, event->x_root, event->y_root))
-    return TRUE;
+    return;
 
   /* Make sure we pop down if we enter a non-selectable menu item, so we
    * don't show a submenu when the cursor is outside the stay-up triangle.
@@ -3202,10 +3213,7 @@ gtk_menu_motion_notify (GtkWidget      *widget,
        * a chance to do some bookkeeping about the menuitem.
        */
       gtk_menu_shell_select_item (menu_shell, menu_item);
-      return FALSE;
     }
-
-  return FALSE;
 }
 
 static void
@@ -3478,54 +3486,58 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
     }
 }
 
-static gboolean
-gtk_menu_enter_notify (GtkWidget        *widget,
-                       GdkEventCrossing *event)
+static void
+gtk_menu_enter (GtkEventController *controller,
+                double              x,
+                double              y,
+                gpointer            user_data)
 {
   GdkDevice *source_device;
+  GdkEventCrossing *event;
+
+  event = (GdkEventCrossing *)gtk_get_current_event ();
 
   if (event->mode == GDK_CROSSING_GTK_GRAB ||
       event->mode == GDK_CROSSING_GTK_UNGRAB ||
       event->mode == GDK_CROSSING_STATE_CHANGED)
-    return TRUE;
+    return;
 
   source_device = gdk_event_get_source_device ((GdkEvent *) event);
 
   if (gdk_device_get_source (source_device) != GDK_SOURCE_TOUCHSCREEN)
     {
-      GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget);
+      GtkMenuShell *menu_shell = GTK_MENU_SHELL (user_data);
 
       if (!menu_shell->priv->ignore_enter)
-        gtk_menu_handle_scrolling (GTK_MENU (widget),
+        gtk_menu_handle_scrolling (GTK_MENU (user_data),
                                    event->x_root, event->y_root, TRUE, TRUE);
     }
-
-  return GDK_EVENT_STOP;
 }
 
-static gboolean
-gtk_menu_leave_notify (GtkWidget        *widget,
-                       GdkEventCrossing *event)
+static void
+gtk_menu_leave (GtkEventController *controller,
+                gpointer            user_data)
 {
   GtkMenu *menu;
   GdkDevice *source_device;
+  GdkEventCrossing *event;
+
+  event = (GdkEventCrossing *)gtk_get_current_event ();
 
   if (event->mode == GDK_CROSSING_GTK_GRAB ||
       event->mode == GDK_CROSSING_GTK_UNGRAB ||
       event->mode == GDK_CROSSING_STATE_CHANGED)
-    return TRUE;
+    return;
 
-  menu = GTK_MENU (widget);
+  menu = GTK_MENU (user_data);
 
   if (gtk_menu_navigating_submenu (menu, event->x_root, event->y_root))
-    return TRUE;
+    return;
 
   source_device = gdk_event_get_source_device ((GdkEvent *) event);
 
   if (gdk_device_get_source (source_device) != GDK_SOURCE_TOUCHSCREEN)
     gtk_menu_handle_scrolling (menu, event->x_root, event->y_root, FALSE, TRUE);
-
-  return GDK_EVENT_STOP;
 }
 
 static gboolean
