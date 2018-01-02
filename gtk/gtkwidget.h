@@ -204,10 +204,6 @@ struct _GtkWidget
  *   the widget’s #GdkWindow.
  * @key_press_event: Signal emitted when a key is pressed.
  * @key_release_event: Signal is emitted when a key is released.
- * @enter_notify_event: Signal event will be emitted when the pointer
- *   enters the widget’s window.
- * @leave_notify_event: Will be emitted when the pointer leaves the
- *   widget’s window.
  * @focus_in_event: Signal emitted when the keyboard focus enters the
  * widget’s window.
  * @focus_out_event: Signal emitted when the keyboard focus leaves the
@@ -328,10 +324,6 @@ struct _GtkWidgetClass
 					 GdkEventKey	     *event);
   gboolean (* key_release_event)	(GtkWidget	     *widget,
 					 GdkEventKey	     *event);
-  gboolean (* enter_notify_event)	(GtkWidget	     *widget,
-					 GdkEventCrossing    *event);
-  gboolean (* leave_notify_event)	(GtkWidget	     *widget,
-					 GdkEventCrossing    *event);
   gboolean (* focus_in_event)		(GtkWidget	     *widget,
 					 GdkEventFocus       *event);
   gboolean (* focus_out_event)		(GtkWidget	     *widget,
