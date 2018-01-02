@@ -11441,7 +11441,7 @@ gtk_window_maybe_update_cursor (GtkWindow *window,
           if (grab_widget && grab_widget != widget &&
               !gtk_widget_is_ancestor (widget, grab_widget))
             continue;
-          if (grab_widget != widget &&
+          if (target != widget &&
               !gtk_widget_is_ancestor (target, widget))
             continue;
         }
