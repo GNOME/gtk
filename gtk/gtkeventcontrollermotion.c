@@ -67,9 +67,15 @@ gtk_event_controller_motion_handle_event (GtkEventController *controller,
 
   type = gdk_event_get_event_type (event);
   if (type == GDK_ENTER_NOTIFY)
-    g_signal_emit (controller, signals[ENTER], 0);
+    {
+      double x, y;
+      gdk_event_get_coords (event, &x, &y);
+      g_signal_emit (controller, signals[ENTER], 0, x, y);
+    }
   else if (type == GDK_LEAVE_NOTIFY)
-    g_signal_emit (controller, signals[LEAVE], 0);
+    {
+      g_signal_emit (controller, signals[LEAVE], 0);
+    }
   else if (type == GDK_MOTION_NOTIFY)
     {
       double x, y;
@@ -92,6 +98,8 @@ gtk_event_controller_motion_class_init (GtkEventControllerMotionClass *klass)
   /**
    * GtkEventControllerMotion::enter:
    * @controller: The object that received the signal
+   * @x: the x coordinate
+   * @y: the y coordinate
    *
    * Signals that the pointer has entered the widget.
    */
@@ -101,7 +109,8 @@ gtk_event_controller_motion_class_init (GtkEventControllerMotionClass *klass)
                   G_SIGNAL_RUN_FIRST,
                   0, NULL, NULL,
                   NULL,
-                  G_TYPE_NONE, 0);
+                  G_TYPE_NONE, 2, G_TYPE_DOUBLE, G_TYPE_DOUBLE);
+
   /**
    * GtkEventControllerMotion::leave:
    * @controller: The object that received the signal
@@ -113,7 +122,7 @@ gtk_event_controller_motion_class_init (GtkEventControllerMotionClass *klass)
                   GTK_TYPE_EVENT_CONTROLLER_MOTION,
                   G_SIGNAL_RUN_FIRST,
                   0, NULL, NULL,
-		  NULL,
+        	  NULL,
                   G_TYPE_NONE, 0);
 
   /**
