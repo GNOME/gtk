@@ -153,12 +153,6 @@ static gboolean gtk_entry_completion_action_button_press (GtkWidget          *wi
                                                           gpointer            user_data);
 static void     gtk_entry_completion_selection_changed   (GtkTreeSelection   *selection,
                                                           gpointer            data);
-static gboolean gtk_entry_completion_list_enter_notify   (GtkWidget          *widget,
-                                                          GdkEventCrossing   *event,
-                                                          gpointer            data);
-static gboolean gtk_entry_completion_list_motion_notify  (GtkWidget          *widget,
-                                                          GdkEventMotion     *event,
-                                                          gpointer            data);
 static void     gtk_entry_completion_insert_action       (GtkEntryCompletion *completion,
                                                           gint                index,
                                                           const gchar        *string,
@@ -542,12 +536,6 @@ gtk_entry_completion_constructed (GObject *object)
   g_signal_connect (priv->tree_view, "button-press-event",
                     G_CALLBACK (gtk_entry_completion_list_button_press),
                     completion);
-  g_signal_connect (priv->tree_view, "enter-notify-event",
-                    G_CALLBACK (gtk_entry_completion_list_enter_notify),
-                    completion);
-  g_signal_connect (priv->tree_view, "motion-notify-event",
-                    G_CALLBACK (gtk_entry_completion_list_motion_notify),
-                    completion);
 
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (priv->tree_view), FALSE);
   gtk_tree_view_set_hover_selection (GTK_TREE_VIEW (priv->tree_view), TRUE);
@@ -582,12 +570,6 @@ gtk_entry_completion_constructed (GObject *object)
   g_object_ref_sink (priv->action_view);
   g_signal_connect (priv->action_view, "button-press-event",
                     G_CALLBACK (gtk_entry_completion_action_button_press),
-                    completion);
-  g_signal_connect (priv->action_view, "enter-notify-event",
-                    G_CALLBACK (gtk_entry_completion_list_enter_notify),
-                    completion);
-  g_signal_connect (priv->action_view, "motion-notify-event",
-                    G_CALLBACK (gtk_entry_completion_list_motion_notify),
                     completion);
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (priv->action_view), FALSE);
   gtk_tree_view_set_hover_selection (GTK_TREE_VIEW (priv->action_view), TRUE);
@@ -1467,29 +1449,6 @@ gtk_entry_completion_get_text_column (GtkEntryCompletion *completion)
 
 /* private */
 
-static gboolean
-gtk_entry_completion_list_enter_notify (GtkWidget        *widget,
-                                        GdkEventCrossing *event,
-                                        gpointer          data)
-{
-  GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (data);
-
-  return completion->priv->ignore_enter;
-}
-
-static gboolean
-gtk_entry_completion_list_motion_notify (GtkWidget      *widget,
-                                         GdkEventMotion *event,
-                                         gpointer        data)
-{
-  GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (data);
-
-  completion->priv->ignore_enter = FALSE;
-
-  return FALSE;
-}
-
-
 /* some nasty size requisition */
 void
 _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
@@ -1637,8 +1596,6 @@ gtk_entry_completion_popup (GtkEntryCompletion *completion)
   if (completion->priv->has_grab)
     return;
 
-  completion->priv->ignore_enter = TRUE;
-
   gtk_widget_show (completion->priv->vbox);
 
   /* default on no match */
@@ -1676,8 +1633,6 @@ _gtk_entry_completion_popdown (GtkEntryCompletion *completion)
 {
   if (!gtk_widget_get_mapped (completion->priv->popup_window))
     return;
-
-  completion->priv->ignore_enter = FALSE;
 
   if (completion->priv->has_grab)
     {

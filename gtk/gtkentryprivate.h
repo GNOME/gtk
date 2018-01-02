@@ -24,6 +24,7 @@
 #include <gtk/gtkentrycompletion.h>
 #include <gtk/gtkentry.h>
 #include <gtk/gtkspinbutton.h>
+#include <gtk/gtkeventcontrollermotion.h>
 
 G_BEGIN_DECLS
 
@@ -59,7 +60,6 @@ struct _GtkEntryCompletionPrivate
   gint current_selected;
 
   guint first_sel_changed : 1;
-  guint ignore_enter      : 1;
   guint has_completion    : 1;
   guint inline_completion : 1;
   guint popup_completion  : 1;
