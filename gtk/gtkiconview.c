@@ -156,10 +156,12 @@ static void             gtk_icon_view_size_allocate             (GtkWidget      
                                                                  GtkAllocation       *out_clip);
 static void             gtk_icon_view_snapshot                  (GtkWidget          *widget,
                                                                  GtkSnapshot        *snapshot);
-static gboolean         gtk_icon_view_motion                    (GtkWidget          *widget,
-								 GdkEventMotion     *event);
-static gboolean         gtk_icon_view_leave                     (GtkWidget          *widget,
-								 GdkEventCrossing   *event);
+static void             gtk_icon_view_motion                    (GtkEventController *controller,
+                                                                 double              x,
+                                                                 double              y,
+                                                                 gpointer            user_data);
+static void             gtk_icon_view_leave                     (GtkEventController *controller,
+                                                                 gpointer            user_data);
 static void             gtk_icon_view_button_press              (GtkGestureMultiPress *gesture,
                                                                  int                   n_press,
                                                                  double                x,
@@ -301,8 +303,10 @@ static void     gtk_icon_view_drag_data_received (GtkWidget        *widget,
                                                   GdkDragContext   *context,
                                                   GtkSelectionData *selection_data,
                                                   guint             time);
-static gboolean gtk_icon_view_maybe_begin_drag   (GtkIconView             *icon_view,
-					   	  GdkEventMotion          *event);
+static gboolean gtk_icon_view_maybe_begin_drag   (GtkIconView      *icon_view,
+                                                  double            x,
+                                                  double            y,
+                                                  GdkDevice        *device);
 
 static void     remove_scroll_timeout            (GtkIconView *icon_view);
 
@@ -355,8 +359,6 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   widget_class->measure = gtk_icon_view_measure;
   widget_class->size_allocate = gtk_icon_view_size_allocate;
   widget_class->snapshot = gtk_icon_view_snapshot;
-  widget_class->motion_notify_event = gtk_icon_view_motion;
-  widget_class->leave_notify_event = gtk_icon_view_leave;
   widget_class->key_press_event = gtk_icon_view_key_press;
   widget_class->key_release_event = gtk_icon_view_key_release;
   widget_class->drag_begin = gtk_icon_view_drag_begin;
@@ -978,6 +980,12 @@ gtk_icon_view_init (GtkIconView *icon_view)
                     icon_view);
   g_signal_connect (icon_view->priv->press_gesture, "released", G_CALLBACK (gtk_icon_view_button_release),
                     icon_view);
+
+  icon_view->priv->motion_controller = gtk_event_controller_motion_new (GTK_WIDGET (icon_view));
+  g_signal_connect (icon_view->priv->motion_controller, "leave", G_CALLBACK (gtk_icon_view_leave),
+                    icon_view);
+  g_signal_connect (icon_view->priv->motion_controller, "motion", G_CALLBACK (gtk_icon_view_motion),
+                    icon_view);
 }
 
 /* GObject methods */
@@ -1027,6 +1035,7 @@ gtk_icon_view_dispose (GObject *object)
     }
 
   g_clear_object (&priv->press_gesture);
+  g_clear_object (&priv->motion_controller);
 
   G_OBJECT_CLASS (gtk_icon_view_parent_class)->dispose (object);
 }
@@ -1800,30 +1809,35 @@ _gtk_icon_view_get_item_at_widget_coords (GtkIconView      *icon_view,
                                             only_in_cell, cell_at_pos);
 }
 
-static gboolean
-gtk_icon_view_motion (GtkWidget      *widget,
-		      GdkEventMotion *event)
+static void
+gtk_icon_view_motion (GtkEventController *controller,
+                      double              x,
+                      double              y,
+                      gpointer            user_data)
 {
   GtkIconView *icon_view;
   gint abs_y;
-  
-  icon_view = GTK_ICON_VIEW (widget);
+  GdkDevice *device;
 
-  gdk_event_get_coords ((const GdkEvent *)event, &icon_view->priv->mouse_x, &icon_view->priv->mouse_y);
+  icon_view = GTK_ICON_VIEW (user_data);
 
-  gtk_icon_view_maybe_begin_drag (icon_view, event);
+  icon_view->priv->mouse_x = x;
+  icon_view->priv->mouse_y = y;
+
+  device = gtk_get_current_event_device (); /* FIXME: controller device */
+  gtk_icon_view_maybe_begin_drag (icon_view, x, y, device);
 
   if (icon_view->priv->doing_rubberband)
     {
       int height;
       gtk_icon_view_update_rubberband (icon_view);
-      
+
       abs_y = icon_view->priv->mouse_y - icon_view->priv->height *
 	(gtk_adjustment_get_value (icon_view->priv->vadjustment) /
 	 (gtk_adjustment_get_upper (icon_view->priv->vadjustment) -
 	  gtk_adjustment_get_lower (icon_view->priv->vadjustment)));
 
-      height = gtk_widget_get_height (widget);
+      height = gtk_widget_get_height (GTK_WIDGET (icon_view));
 
 
       if (abs_y < 0 || abs_y > height)
@@ -1842,7 +1856,7 @@ gtk_icon_view_motion (GtkWidget      *widget,
 	    g_source_set_name_by_id (icon_view->priv->scroll_timeout_id, "[gtk+] rubberband_scroll_timeout");
 	  }
  	}
-      else 
+      else
 	remove_scroll_timeout (icon_view);
     }
   else
@@ -1873,18 +1887,16 @@ gtk_icon_view_motion (GtkWidget      *widget,
           icon_view->priv->last_prelight = item;
         }
     }
-  
-  return TRUE;
 }
 
-static gboolean
-gtk_icon_view_leave (GtkWidget        *widget,
-                     GdkEventCrossing *event)
+static void
+gtk_icon_view_leave (GtkEventController *controller,
+                     gpointer            user_data)
 {
   GtkIconView *icon_view;
   GtkIconViewPrivate *priv;
 
-  icon_view = GTK_ICON_VIEW (widget);
+  icon_view = GTK_ICON_VIEW (user_data);
   priv = icon_view->priv;
 
   if (priv->last_prelight)
@@ -1892,8 +1904,6 @@ gtk_icon_view_leave (GtkWidget        *widget,
       gtk_icon_view_queue_draw_item (icon_view, priv->last_prelight);
       priv->last_prelight = NULL;
     }
-
-  return FALSE;
 }
 
 static void
@@ -6140,21 +6150,21 @@ get_logical_destination (GtkIconView *icon_view,
 }
 
 static gboolean
-gtk_icon_view_maybe_begin_drag (GtkIconView    *icon_view,
-				GdkEventMotion *event)
+gtk_icon_view_maybe_begin_drag (GtkIconView *icon_view,
+                                double       x,
+                                double       y,
+                                GdkDevice   *device)
 {
   GtkWidget *widget = GTK_WIDGET (icon_view);
   GdkDragContext *context;
   GtkTreePath *path = NULL;
   GtkTreeModel *model;
   gboolean retval = FALSE;
-  gdouble x, y;
 
   if (!icon_view->priv->source_set)
     goto out;
 
-  if (icon_view->priv->pressed_button < 0 ||
-      !gdk_event_get_coords ((GdkEvent *) event, &x, &y))
+  if (icon_view->priv->pressed_button < 0)
     goto out;
 
   if (!gtk_drag_check_threshold (GTK_WIDGET (icon_view),
@@ -6187,18 +6197,18 @@ gtk_icon_view_maybe_begin_drag (GtkIconView    *icon_view,
    */
 
   /* Now we can begin the drag */
-  
+
   retval = TRUE;
 
   context = gtk_drag_begin_with_coordinates (widget,
-                                             gdk_event_get_device ((GdkEvent*) event),
+                                             device,
                                              gtk_drag_source_get_target_list (widget),
                                              icon_view->priv->source_actions,
                                              icon_view->priv->press_start_x,
                                              icon_view->priv->press_start_y);
 
   set_source_row (context, model, path);
-  
+
  out:
   if (path)
     gtk_tree_path_free (path);
@@ -6207,7 +6217,7 @@ gtk_icon_view_maybe_begin_drag (GtkIconView    *icon_view,
 }
 
 /* Source side drag signals */
-static void 
+static void
 gtk_icon_view_drag_begin (GtkWidget      *widget,
 			  GdkDragContext *context)
 {

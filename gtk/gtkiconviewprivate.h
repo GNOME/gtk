@@ -18,6 +18,7 @@
 #include "gtk/gtkiconview.h"
 #include "gtk/gtkcssnodeprivate.h"
 #include "gtk/gtkgesturemultipress.h"
+#include "gtk/gtkeventcontrollermotion.h"
 
 #ifndef __GTK_ICON_VIEW_PRIVATE_H__
 #define __GTK_ICON_VIEW_PRIVATE_H__
@@ -60,6 +61,7 @@ struct _GtkIconViewPrivate
   GList *items;
 
   GtkGesture *press_gesture;
+  GtkEventController *motion_controller;
 
   GtkAdjustment *hadjustment;
   GtkAdjustment *vadjustment;
