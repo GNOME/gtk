@@ -59,6 +59,7 @@
 #include "gtksettingsprivate.h"
 #include "gtksnapshotprivate.h"
 #include "gtkwidgetpath.h"
+#include "gtkeventcontrollermotion.h"
 #include "a11y/gtktreeviewaccessibleprivate.h"
 
 
@@ -457,6 +458,7 @@ struct _GtkTreeViewPrivate
   GtkGesture *column_multipress_gesture;
   GtkGesture *drag_gesture; /* Rubberbanding, row DnD */
   GtkGesture *column_drag_gesture; /* Column reordering, resizing */
+  GtkEventController *motion_controller;
 
   /* Tooltip support */
   gint tooltip_column;
@@ -600,12 +602,6 @@ static gboolean gtk_tree_view_key_press            (GtkWidget        *widget,
 						    GdkEventKey      *event);
 static gboolean gtk_tree_view_key_release          (GtkWidget        *widget,
 						    GdkEventKey      *event);
-static gboolean gtk_tree_view_motion               (GtkWidget        *widget,
-						    GdkEventMotion   *event);
-static gboolean gtk_tree_view_enter_notify         (GtkWidget        *widget,
-						    GdkEventCrossing *event);
-static gboolean gtk_tree_view_leave_notify         (GtkWidget        *widget,
-						    GdkEventCrossing *event);
 
 static void     gtk_tree_view_set_focus_child      (GtkContainer     *container,
 						    GtkWidget        *child);
@@ -926,6 +922,16 @@ static void gtk_tree_view_drag_gesture_end                  (GtkGestureDrag *ges
                                                              gdouble         offset_x,
                                                              gdouble         offset_y,
                                                              GtkTreeView    *tree_view);
+static void gtk_tree_view_motion_controller_enter           (GtkEventControllerMotion *controller,
+                                                             double                    x,
+                                                             double                    y,
+                                                             GtkTreeView              *tree_view);
+static void gtk_tree_view_motion_controller_leave           (GtkEventControllerMotion *controller,
+                                                             GtkTreeView              *tree_view);
+static void gtk_tree_view_motion_controller_motion          (GtkEventControllerMotion *controller,
+                                                             double                    x,
+                                                             double                    y,
+                                                             GtkTreeView              *tree_view);
 
 static guint tree_view_signals [LAST_SIGNAL] = { 0 };
 static GParamSpec *tree_view_props [LAST_PROP] = { NULL };
@@ -968,12 +974,9 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   widget_class->unrealize = gtk_tree_view_unrealize;
   widget_class->measure = gtk_tree_view_measure;
   widget_class->size_allocate = gtk_tree_view_size_allocate;
-  widget_class->motion_notify_event = gtk_tree_view_motion;
   widget_class->snapshot = gtk_tree_view_snapshot;
   widget_class->key_press_event = gtk_tree_view_key_press;
   widget_class->key_release_event = gtk_tree_view_key_release;
-  widget_class->enter_notify_event = gtk_tree_view_enter_notify;
-  widget_class->leave_notify_event = gtk_tree_view_leave_notify;
   widget_class->focus_out_event = gtk_tree_view_focus_out;
   widget_class->drag_begin = gtk_tree_view_drag_begin;
   widget_class->drag_end = gtk_tree_view_drag_end;
@@ -1755,6 +1758,14 @@ gtk_tree_view_init (GtkTreeView *tree_view)
                     G_CALLBACK (gtk_tree_view_column_drag_gesture_end), tree_view);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->column_drag_gesture),
                                               GTK_PHASE_CAPTURE);
+
+  priv->motion_controller = gtk_event_controller_motion_new (GTK_WIDGET (tree_view));
+  g_signal_connect (priv->motion_controller, "enter",
+                    G_CALLBACK (gtk_tree_view_motion_controller_enter), tree_view);
+  g_signal_connect (priv->motion_controller, "leave",
+                    G_CALLBACK (gtk_tree_view_motion_controller_leave), tree_view);
+  g_signal_connect (priv->motion_controller, "motion",
+                    G_CALLBACK (gtk_tree_view_motion_controller_motion), tree_view);
 }
 
 
@@ -2139,6 +2150,7 @@ gtk_tree_view_destroy (GtkWidget *widget)
   g_clear_object (&tree_view->priv->drag_gesture);
   g_clear_object (&tree_view->priv->column_multipress_gesture);
   g_clear_object (&tree_view->priv->column_drag_gesture);
+  g_clear_object (&tree_view->priv->motion_controller);
 
   GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->destroy (widget);
 }
@@ -4409,20 +4421,17 @@ gtk_tree_view_drag_gesture_update (GtkGestureDrag *gesture,
     }
 }
 
-static gboolean
-gtk_tree_view_motion (GtkWidget      *widget,
-		      GdkEventMotion *event)
+static void
+gtk_tree_view_motion_controller_motion (GtkEventControllerMotion *controller,
+                                        double                    x,
+                                        double                    y,
+                                        GtkTreeView              *tree_view)
 {
-  GtkTreeView *tree_view;
   GtkRBTree *tree;
   GtkRBNode *node;
   gint new_y;
   GList *list;
   gboolean cursor_set = FALSE;
-  gdouble x, y;
-
-  tree_view = (GtkTreeView *) widget;
-  gdk_event_get_coords ((GdkEvent *) event, &x, &y);
 
   if (tree_view->priv->tree)
     {
@@ -4450,16 +4459,14 @@ gtk_tree_view_motion (GtkWidget      *widget,
 
       if (_gtk_tree_view_column_coords_in_resize_rect (column, x, y))
         {
-          gtk_widget_set_cursor_from_name (widget, "col-resize");
+          gtk_widget_set_cursor_from_name (GTK_WIDGET (tree_view), "col-resize");
           cursor_set = TRUE;
           break;
         }
     }
 
   if (!cursor_set)
-    gtk_widget_set_cursor (widget, NULL);
-
-  return GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->motion_notify_event (widget, event);
+    gtk_widget_set_cursor (GTK_WIDGET (tree_view), NULL);
 }
 
 /* Invalidate the focus rectangle near the edge of the bin_window; used when
@@ -5745,22 +5752,18 @@ gtk_tree_view_key_release (GtkWidget   *widget,
   return GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->key_release_event (widget, event);
 }
 
-/* FIXME Is this function necessary? Can I get an enter_notify event
- * w/o either an expose event or a mouse motion event?
- */
-static gboolean
-gtk_tree_view_enter_notify (GtkWidget        *widget,
-			    GdkEventCrossing *event)
+static void
+gtk_tree_view_motion_controller_enter (GtkEventControllerMotion *controller,
+                                       double                    x,
+                                       double                    y,
+                                       GtkTreeView              *tree_view)
 {
-  GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
   GtkRBTree *tree;
   GtkRBNode *node;
-  gdouble x, y;
   gint new_y;
 
-  if (tree_view->priv->tree == NULL ||
-      !gdk_event_get_coords ((GdkEvent *) event, &x, &y))
-    return FALSE;
+  if (tree_view->priv->tree == NULL)
+    return;
 
   /* find the node internally */
   new_y = TREE_WINDOW_Y_TO_RBTREE_Y(tree_view, y);
@@ -5774,18 +5777,12 @@ gtk_tree_view_enter_notify (GtkWidget        *widget,
   if ((tree_view->priv->button_pressed_node == NULL) ||
       (tree_view->priv->button_pressed_node == node))
     prelight_or_select (tree_view, tree, node, x, y);
-
-  return TRUE;
 }
 
-static gboolean
-gtk_tree_view_leave_notify (GtkWidget        *widget,
-			    GdkEventCrossing *event)
+static void
+gtk_tree_view_motion_controller_leave (GtkEventControllerMotion *controller,
+                                       GtkTreeView              *tree_view)
 {
-  GtkTreeView *tree_view;
-
-  tree_view = GTK_TREE_VIEW (widget);
-
   if (tree_view->priv->prelight_node)
     _gtk_tree_view_queue_draw_node (tree_view,
                                    tree_view->priv->prelight_tree,
@@ -5798,8 +5795,6 @@ gtk_tree_view_leave_notify (GtkWidget        *widget,
   prelight_or_select (tree_view,
 		      NULL, NULL,
 		      -1000, -1000); /* coords not possibly over an arrow */
-
-  return TRUE;
 }
 
 
