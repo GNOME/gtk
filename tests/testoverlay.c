@@ -315,7 +315,10 @@ test_builder (void)
 }
 
 static void
-on_enter (GtkEventController *controller, GtkWidget *overlay)
+on_enter (GtkEventController *controller,
+          double              x,
+          double              y,
+          GtkWidget          *overlay)
 {
   GtkWidget *child = gtk_event_controller_get_widget (controller);
 
