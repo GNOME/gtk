@@ -489,7 +489,6 @@ enum {
   MOVE_FOCUS,
   KEYNAV_FAILED,
   EVENT,
-  EVENT_AFTER,
   BUTTON_PRESS_EVENT,
   BUTTON_RELEASE_EVENT,
   MOTION_NOTIFY_EVENT,
@@ -1900,26 +1899,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  GDK_TYPE_EVENT);
   g_signal_set_va_marshaller (widget_signals[EVENT], G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_BOOLEAN__OBJECTv);
-
-  /**
-   * GtkWidget::event-after:
-   * @widget: the object which received the signal.
-   * @event: the #GdkEvent which triggered this signal
-   *
-   * After the emission of the #GtkWidget::event signal and (optionally)
-   * the second more specific signal, ::event-after will be emitted
-   * regardless of the previous two signals handlers return values.
-   *
-   */
-  widget_signals[EVENT_AFTER] =
-    g_signal_new (I_("event-after"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_DEPRECATED,
-		  0,
-		  NULL, NULL,
-		  NULL,
-		  G_TYPE_NONE, 1,
-		  GDK_TYPE_EVENT);
 
   /**
    * GtkWidget::button-press-event:
@@ -6242,10 +6221,6 @@ gtk_widget_emit_event_signals (GtkWidget      *widget,
           return_val |= handled;
         }
     }
-  if (WIDGET_REALIZED_FOR_EVENT (widget, event))
-    g_signal_emit (widget, widget_signals[EVENT_AFTER], 0, event);
-  else
-    return_val = TRUE;
 
   g_object_unref (widget);
 
