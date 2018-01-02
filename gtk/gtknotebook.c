@@ -201,6 +201,7 @@ struct _GtkNotebookPrivate
   GList         *switch_tab;
 
   GtkGesture    *press_gesture;
+  GtkEventController *motion_controller;
 
   guint32        timer;
 
@@ -369,8 +370,10 @@ static void gtk_notebook_size_allocate       (GtkWidget           *widget,
 static void gtk_notebook_snapshot            (GtkWidget        *widget,
                                               GtkSnapshot      *snapshot);
 static gboolean gtk_notebook_popup_menu      (GtkWidget        *widget);
-static gboolean gtk_notebook_motion_notify   (GtkWidget        *widget,
-                                              GdkEventMotion   *event);
+static void gtk_notebook_motion              (GtkEventController *controller,
+                                              double              x,
+                                              double              y,
+                                              gpointer            user_data);
 static void gtk_notebook_grab_notify         (GtkWidget          *widget,
                                               gboolean            was_grabbed);
 static void gtk_notebook_state_flags_changed (GtkWidget          *widget,
@@ -671,7 +674,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   widget_class->size_allocate = gtk_notebook_size_allocate;
   widget_class->snapshot = gtk_notebook_snapshot;
   widget_class->popup_menu = gtk_notebook_popup_menu;
-  widget_class->motion_notify_event = gtk_notebook_motion_notify;
   widget_class->grab_notify = gtk_notebook_grab_notify;
   widget_class->state_flags_changed = gtk_notebook_state_flags_changed;
   widget_class->focus = gtk_notebook_focus;
@@ -1120,6 +1122,8 @@ gtk_notebook_init (GtkNotebook *notebook)
   g_signal_connect (priv->press_gesture, "pressed", G_CALLBACK (gtk_notebook_gesture_pressed), notebook);
   g_signal_connect (priv->press_gesture, "released", G_CALLBACK (gtk_notebook_gesture_released), notebook);
 
+  priv->motion_controller = gtk_event_controller_motion_new (GTK_WIDGET (notebook));
+  g_signal_connect (priv->motion_controller, "motion", G_CALLBACK (gtk_notebook_motion), notebook);
 
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (notebook)),
                                GTK_STYLE_CLASS_FRAME);
@@ -1603,6 +1607,7 @@ gtk_notebook_finalize (GObject *object)
   GtkNotebookPrivate *priv = notebook->priv;
 
   g_clear_object (&priv->press_gesture);
+  g_clear_object (&priv->motion_controller);
   gtk_widget_unparent (priv->box);
 
   G_OBJECT_CLASS (gtk_notebook_parent_class)->finalize (object);
@@ -2676,23 +2681,27 @@ check_threshold (GtkNotebook *notebook,
   return !gdk_rectangle_contains_point (&rectangle, current_x, current_y);
 }
 
-static gboolean
-gtk_notebook_motion_notify (GtkWidget      *widget,
-                            GdkEventMotion *event)
+static void
+gtk_notebook_motion (GtkEventController *controller,
+                     double              x,
+                     double              y,
+                     gpointer            user_data)
 {
+  GtkWidget *widget = GTK_WIDGET (user_data);
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
   GtkNotebookPage *page;
-  gdouble x, y;
   guint state;
+  GdkEventMotion *event;
+
+  event = (GdkEventMotion *)gtk_get_current_event (); /* FIXME: controller event */
 
   page = priv->cur_page;
+  if (!page)
+    return;
 
-
-  if (!page ||
-      !gdk_event_get_state ((GdkEvent *) event, &state) ||
-      !gdk_event_get_coords ((GdkEvent *) event, &x, &y))
-    return FALSE;
+  if (!gdk_event_get_state ((GdkEvent *) event, &state))
+    return;
 
   if (!(state & GDK_BUTTON1_MASK) &&
       priv->pressed_button != 0)
@@ -2705,7 +2714,7 @@ gtk_notebook_motion_notify (GtkWidget      *widget,
   priv->mouse_y = y;
 
   if (priv->pressed_button == 0)
-    return FALSE;
+    return;
 
   if (page->detachable &&
       check_threshold (notebook, priv->mouse_x, priv->mouse_y))
@@ -2716,7 +2725,7 @@ gtk_notebook_motion_notify (GtkWidget      *widget,
                                        gdk_event_get_device ((GdkEvent*) event),
                                        priv->source_targets, GDK_ACTION_MOVE,
                                        priv->drag_begin_x, priv->drag_begin_y);
-      return TRUE;
+      return;
     }
 
   if (page->reorderable &&
@@ -2757,8 +2766,6 @@ gtk_notebook_motion_notify (GtkWidget      *widget,
 
   if (priv->operation == DRAG_OPERATION_REORDER)
     gtk_widget_queue_allocate (priv->tabs_widget);
-
-  return TRUE;
 }
 
 static void
