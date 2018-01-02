@@ -124,8 +124,8 @@ static gint gtk_menu_shell_key_press         (GtkWidget         *widget,
                                               GdkEventKey       *event);
 static void gtk_menu_shell_display_changed   (GtkWidget         *widget,
                                               GdkDisplay        *previous_display);
-static gboolean gtk_menu_shell_grab_broken       (GtkWidget         *widget,
-                                              GdkEventGrabBroken *event);
+static gboolean gtk_menu_shell_event         (GtkWidget         *widget,
+                                              GdkEvent          *event);
 static void gtk_menu_shell_add               (GtkContainer      *container,
                                               GtkWidget         *widget);
 static void gtk_menu_shell_remove            (GtkContainer      *container,
@@ -180,7 +180,7 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
 
   widget_class->button_press_event = gtk_menu_shell_button_press;
   widget_class->button_release_event = gtk_menu_shell_button_release;
-  widget_class->grab_broken_event = gtk_menu_shell_grab_broken;
+  widget_class->event = gtk_menu_shell_event;
   widget_class->key_press_event = gtk_menu_shell_key_press;
   widget_class->display_changed = gtk_menu_shell_display_changed;
 
@@ -681,23 +681,28 @@ gtk_menu_shell_button_press (GtkWidget      *widget,
 }
 
 static gboolean
-gtk_menu_shell_grab_broken (GtkWidget          *widget,
-                            GdkEventGrabBroken *event)
+gtk_menu_shell_event (GtkWidget *widget,
+                      GdkEvent  *event)
 {
   GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget);
   GtkMenuShellPrivate *priv = menu_shell->priv;
   GdkWindow *window;
 
-  gdk_event_get_grab_window ((GdkEvent *)event, &window);
-
-  if (priv->have_xgrab && window == NULL)
+  if (gdk_event_get_event_type (event) == GDK_GRAB_BROKEN)
     {
-      /* Unset the active menu item so gtk_menu_popdown() doesn't see it. */
-      gtk_menu_shell_deselect (menu_shell);
-      gtk_menu_shell_deactivate_and_emit_done (menu_shell);
+      gdk_event_get_grab_window (event, &window);
+
+      if (priv->have_xgrab && window == NULL)
+        {
+          /* Unset the active menu item so gtk_menu_popdown() doesn't see it. */
+          gtk_menu_shell_deselect (menu_shell);
+          gtk_menu_shell_deactivate_and_emit_done (menu_shell);
+        }
+
+      return GDK_EVENT_STOP;
     }
 
-  return TRUE;
+  return GDK_EVENT_PROPAGATE;
 }
 
 static gint
