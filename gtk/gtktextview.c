@@ -238,6 +238,7 @@ struct _GtkTextViewPrivate
 
   GtkGesture *multipress_gesture;
   GtkGesture *drag_gesture;
+  GtkEventController *motion_controller;
 
   GtkCssNode *selection_node;
 
@@ -416,8 +417,10 @@ static gint gtk_text_view_focus_in_event       (GtkWidget        *widget,
                                                 GdkEventFocus    *event);
 static gint gtk_text_view_focus_out_event      (GtkWidget        *widget,
                                                 GdkEventFocus    *event);
-static gint gtk_text_view_motion_event         (GtkWidget        *widget,
-                                                GdkEventMotion   *event);
+static void gtk_text_view_motion               (GtkEventController *controller,
+                                                double              x,
+                                                double              y,
+                                                gpointer            user_data);
 static void gtk_text_view_snapshot             (GtkWidget        *widget,
                                                 GtkSnapshot      *snapshot);
 static gboolean gtk_text_view_focus            (GtkWidget        *widget,
@@ -720,7 +723,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->key_release_event = gtk_text_view_key_release_event;
   widget_class->focus_in_event = gtk_text_view_focus_in_event;
   widget_class->focus_out_event = gtk_text_view_focus_out_event;
-  widget_class->motion_notify_event = gtk_text_view_motion_event;
   widget_class->snapshot = gtk_text_view_snapshot;
   widget_class->focus = gtk_text_view_focus;
   widget_class->drag_begin = gtk_text_view_drag_begin;
@@ -1724,6 +1726,9 @@ gtk_text_view_init (GtkTextView *text_view)
   g_signal_connect (priv->drag_gesture, "drag-end",
                     G_CALLBACK (gtk_text_view_drag_gesture_end),
                     widget);
+
+  priv->motion_controller = gtk_event_controller_motion_new (widget);
+  g_signal_connect (priv->motion_controller, "motion", G_CALLBACK (gtk_text_view_motion), widget);
 
   priv->selection_node = gtk_css_node_new ();
   gtk_css_node_set_name (priv->selection_node, I_("selection"));
@@ -3633,6 +3638,7 @@ gtk_text_view_finalize (GObject *object)
 
   g_object_unref (priv->multipress_gesture);
   g_object_unref (priv->drag_gesture);
+  g_object_unref (priv->motion_controller);
 
   if (priv->tabs)
     pango_tab_array_free (priv->tabs);
@@ -4736,8 +4742,10 @@ gtk_text_view_obscure_mouse_cursor (GtkTextView *text_view)
   if (text_view->priv->mouse_cursor_obscured)
     return;
 
+g_print ("obscuring mouse cursor\n");
+
   gtk_widget_set_cursor_from_name (GTK_WIDGET (text_view), "none");
-  
+
   text_view->priv->mouse_cursor_obscured = TRUE;
 }
 
@@ -4746,6 +4754,7 @@ gtk_text_view_unobscure_mouse_cursor (GtkTextView *text_view)
 {
   if (text_view->priv->mouse_cursor_obscured)
     {
+g_print ("unobscuring mouse cursor\n");
       gtk_widget_set_cursor_from_name (GTK_WIDGET (text_view), "text");
       text_view->priv->mouse_cursor_obscured = FALSE;
     }
@@ -5454,14 +5463,13 @@ gtk_text_view_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
   return FALSE;
 }
 
-static gboolean
-gtk_text_view_motion_event (GtkWidget *widget, GdkEventMotion *event)
+static void
+gtk_text_view_motion (GtkEventController *controller,
+                      double              x,
+                      double              y,
+                      gpointer            user_data)
 {
-  GtkTextView *text_view = GTK_TEXT_VIEW (widget);
-
-  gtk_text_view_unobscure_mouse_cursor (text_view);
-
-  return GTK_WIDGET_CLASS (gtk_text_view_parent_class)->motion_notify_event (widget, event);
+  gtk_text_view_unobscure_mouse_cursor (GTK_TEXT_VIEW (user_data));
 }
 
 static void
