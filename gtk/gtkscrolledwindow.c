@@ -253,6 +253,8 @@ struct _GtkScrolledWindowPrivate
   /* Scroll event controller */
   GtkEventController *scroll_controller;
 
+  GtkEventController *motion_controller;
+
   gdouble drag_start_x;
   gdouble drag_start_y;
 
@@ -429,19 +431,17 @@ add_tab_bindings (GtkBindingSet    *binding_set,
                                 GTK_TYPE_DIRECTION_TYPE, direction);
 }
 
-static gboolean
-gtk_scrolled_window_leave_notify (GtkWidget        *widget,
-                                  GdkEventCrossing *event)
+static void
+motion_controller_leave (GtkEventController *controller,
+                         GtkScrolledWindow  *scrolled_window)
 {
-  GtkScrolledWindowPrivate *priv = GTK_SCROLLED_WINDOW (widget)->priv;
+  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
 
   if (priv->use_indicators)
     {
       indicator_set_over (&priv->hindicator, FALSE);
       indicator_set_over (&priv->vindicator, FALSE);
     }
-
-  return GDK_EVENT_PROPAGATE;
 }
 
 static void
@@ -525,7 +525,6 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   widget_class->grab_notify = gtk_scrolled_window_grab_notify;
   widget_class->realize = gtk_scrolled_window_realize;
   widget_class->unrealize = gtk_scrolled_window_unrealize;
-  widget_class->leave_notify_event = gtk_scrolled_window_leave_notify;
   widget_class->direction_changed = gtk_scrolled_window_direction_changed;
 
   container_class->add = gtk_scrolled_window_add;
@@ -2016,6 +2015,10 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
                     G_CALLBACK (scroll_controller_scroll_end), scrolled_window);
   g_signal_connect (priv->scroll_controller, "decelerate",
                     G_CALLBACK (scroll_controller_decelerate), scrolled_window);
+
+  priv->motion_controller = gtk_event_controller_motion_new (widget);
+  g_signal_connect (priv->motion_controller, "leave",
+                    G_CALLBACK (motion_controller_leave), scrolled_window);
 }
 
 /**
