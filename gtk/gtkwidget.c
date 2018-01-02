@@ -497,7 +497,6 @@ enum {
   KEY_RELEASE_EVENT,
   FOCUS_IN_EVENT,
   FOCUS_OUT_EVENT,
-  GRAB_BROKEN_EVENT,
   DRAG_BEGIN,
   DRAG_END,
   DRAG_DATA_DELETE,
@@ -623,8 +622,6 @@ static gboolean		gtk_widget_real_focus_in_event   	 (GtkWidget       *widget,
 								  GdkEventFocus   *event);
 static gboolean		gtk_widget_real_focus_out_event   	(GtkWidget        *widget,
 								 GdkEventFocus    *event);
-static gboolean         gtk_widget_real_grab_broken_event       (GtkWidget          *widget,
-                                                                 GdkEventGrabBroken *event);
 static gboolean		gtk_widget_real_focus			(GtkWidget        *widget,
 								 GtkDirectionType  direction);
 static void             gtk_widget_real_move_focus              (GtkWidget        *widget,
@@ -1015,7 +1012,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->drag_data_received = NULL;
   klass->display_changed = NULL;
   klass->can_activate_accel = gtk_widget_real_can_activate_accel;
-  klass->grab_broken_event = gtk_widget_real_grab_broken_event;
   klass->query_tooltip = gtk_widget_real_query_tooltip;
   klass->style_updated = gtk_widget_real_style_updated;
 
@@ -2489,35 +2485,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  GDK_TYPE_DRAG_CONTEXT,
 		  GTK_TYPE_SELECTION_DATA | G_SIGNAL_TYPE_STATIC_SCOPE,
 		  G_TYPE_UINT);
-
-/**
-   * GtkWidget::grab-broken-event:
-   * @widget: the object which received the signal
-   * @event: (type Gdk.EventGrabBroken): the #GdkEventGrabBroken event
-   *
-   * Emitted when a pointer or keyboard grab on a window belonging
-   * to @widget gets broken.
-   *
-   * On X11, this happens when the grab window becomes unviewable
-   * (i.e. it or one of its ancestors is unmapped), or if the same
-   * application grabs the pointer or keyboard again.
-   *
-   * Returns: %TRUE to stop other handlers from being invoked for
-   *   the event. %FALSE to propagate the event further.
-   *
-   * Since: 2.8
-   */
-  widget_signals[GRAB_BROKEN_EVENT] =
-    g_signal_new (I_("grab-broken-event"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, grab_broken_event),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__OBJECT,
-		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT);
-  g_signal_set_va_marshaller (widget_signals[GRAB_BROKEN_EVENT], G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__OBJECTv);
 
   /**
    * GtkWidget::query-tooltip:
@@ -5927,13 +5894,6 @@ gtk_widget_real_focus_out_event (GtkWidget     *widget,
   return FALSE;
 }
 
-static gboolean
-gtk_widget_real_grab_broken_event (GtkWidget          *widget,
-                                   GdkEventGrabBroken *event)
-{
-  return GDK_EVENT_PROPAGATE;
-}
-
 #define WIDGET_REALIZED_FOR_EVENT(widget, event) \
      (event->any.type == GDK_FOCUS_CHANGE || _gtk_widget_get_realized(widget))
 
@@ -6249,6 +6209,7 @@ gtk_widget_emit_event_signals (GtkWidget      *widget,
 	case GDK_CONFIGURE:
 	case GDK_ENTER_NOTIFY:
 	case GDK_LEAVE_NOTIFY:
+	case GDK_GRAB_BROKEN:
 	case GDK_NOTHING:
 	  signal_num = -1;
 	  break;
@@ -6269,9 +6230,6 @@ gtk_widget_emit_event_signals (GtkWidget      *widget,
 	  break;
 	case GDK_FOCUS_CHANGE:
 	  signal_num = event->focus_change.in ? FOCUS_IN_EVENT : FOCUS_OUT_EVENT;
-	  break;
-	case GDK_GRAB_BROKEN:
-	  signal_num = GRAB_BROKEN_EVENT;
 	  break;
 	default:
 	  g_warning ("gtk_widget_event(): unhandled event type: %d", event->any.type);

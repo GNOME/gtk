@@ -208,8 +208,6 @@ struct _GtkWidget
  * widget’s window.
  * @focus_out_event: Signal emitted when the keyboard focus leaves the
  * widget’s window.
- * @grab_broken_event: Signal emitted when a pointer or keyboard grab
- *   on a window belonging to widget gets broken.
  * @drag_begin: Signal emitted on the drag source when a drag is
  *   started.
  * @drag_end: Signal emitted on the drag source when a drag is
@@ -328,8 +326,6 @@ struct _GtkWidgetClass
 					 GdkEventFocus       *event);
   gboolean (* focus_out_event)		(GtkWidget	     *widget,
 					 GdkEventFocus       *event);
-  gboolean (* grab_broken_event)        (GtkWidget           *widget,
-                                         GdkEventGrabBroken  *event);
 
   /* Source side drag signals */
   void     (* drag_begin)          (GtkWidget         *widget,
