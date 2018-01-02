@@ -577,7 +577,7 @@ gdk_texture_download_surface (GdkTexture *texture)
 /**
  * gdk_texture_download:
  * @texture: a #GdkTexture
- * @data: pointer to enough memory to be filled with the
+ * @data: (array): pointer to enough memory to be filled with the
  *     downloaded data of @texture
  * @stride: rowstride in bytes
  *
