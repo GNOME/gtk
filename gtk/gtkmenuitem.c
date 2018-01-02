@@ -138,10 +138,12 @@ static void gtk_menu_item_get_property   (GObject          *object,
                                           GValue           *value,
                                           GParamSpec       *pspec);
 static void gtk_menu_item_destroy        (GtkWidget        *widget);
-static gboolean gtk_menu_item_enter      (GtkWidget        *widget,
-                                          GdkEventCrossing *event);
-static gboolean gtk_menu_item_leave      (GtkWidget        *widget,
-                                          GdkEventCrossing *event);
+static void gtk_menu_item_enter          (GtkEventController *controller,
+                                          double              x,
+                                          double              y,
+                                          gpointer            user_data);
+static void gtk_menu_item_leave          (GtkEventController *controller,
+                                          gpointer            user_data);
 static void gtk_menu_item_parent_cb      (GObject          *object,
                                           GParamSpec       *pspec,
                                           gpointer          user_data);
@@ -510,8 +512,6 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
 
   widget_class->destroy = gtk_menu_item_destroy;
   widget_class->size_allocate = gtk_menu_item_size_allocate;
-  widget_class->enter_notify_event = gtk_menu_item_enter;
-  widget_class->leave_notify_event = gtk_menu_item_leave;
   widget_class->mnemonic_activate = gtk_menu_item_mnemonic_activate;
   widget_class->can_activate_accel = gtk_menu_item_can_activate_accel;
   widget_class->measure = gtk_menu_item_measure;
@@ -691,6 +691,10 @@ gtk_menu_item_init (GtkMenuItem *menu_item)
     priv->submenu_direction = GTK_DIRECTION_RIGHT;
   priv->submenu_placement = GTK_TOP_BOTTOM;
   priv->timer = 0;
+
+  priv->motion_controller = gtk_event_controller_motion_new (GTK_WIDGET (menu_item));
+  g_signal_connect (priv->motion_controller, "enter", G_CALLBACK (gtk_menu_item_enter), menu_item);
+  g_signal_connect (priv->motion_controller, "leave", G_CALLBACK (gtk_menu_item_leave), menu_item);
 }
 
 /**
@@ -750,6 +754,7 @@ gtk_menu_item_dispose (GObject *object)
   GtkMenuItem *menu_item = GTK_MENU_ITEM (object);
   GtkMenuItemPrivate *priv = menu_item->priv;
 
+  g_clear_object (&priv->motion_controller);
   g_clear_object (&priv->action_helper);
 
   if (priv->arrow_widget)
@@ -1128,44 +1133,46 @@ gtk_menu_item_toggle_size_allocate (GtkMenuItem *menu_item,
   g_signal_emit (menu_item, menu_item_signals[TOGGLE_SIZE_ALLOCATE], 0, allocation);
 }
 
-static gboolean
-gtk_menu_item_enter (GtkWidget        *widget,
-                     GdkEventCrossing *event)
+static void
+gtk_menu_item_enter (GtkEventController *controller,
+                     double              x,
+                     double              y,
+                     gpointer            user_data)
 {
+  GtkMenuItem *menu_item = GTK_MENU_ITEM (user_data);
   GtkWidget *menu_shell;
   GdkCrossingMode mode;
+  GdkEvent *event;
+
+  event = gtk_get_current_event (); /* FIXME controller event */
 
   gdk_event_get_crossing_mode ((GdkEvent *)event, &mode);
 
   if (mode == GDK_CROSSING_GTK_GRAB ||
       mode == GDK_CROSSING_GTK_UNGRAB ||
       mode == GDK_CROSSING_STATE_CHANGED)
-    return GDK_EVENT_STOP;
+    return;
 
   if (gdk_event_get_device ((GdkEvent*) event) ==
       gdk_event_get_source_device ((GdkEvent*) event))
-    return GDK_EVENT_STOP;
+    return;
 
-  menu_shell = gtk_widget_get_parent (widget);
+  menu_shell = gtk_widget_get_parent (GTK_WIDGET (menu_item));
 
-  if (GTK_IS_MENU_SHELL (menu_shell) && GTK_IS_MENU_ITEM (widget) &&
+  if (GTK_IS_MENU_SHELL (menu_shell) &&
       GTK_MENU_SHELL (menu_shell)->priv->active)
-    gtk_menu_shell_select_item (GTK_MENU_SHELL (menu_shell), widget);
-
-  return GDK_EVENT_STOP;
+    gtk_menu_shell_select_item (GTK_MENU_SHELL (menu_shell), GTK_WIDGET (menu_item));
 }
 
-static gboolean
-gtk_menu_item_leave (GtkWidget        *widget,
-                     GdkEventCrossing *event)
+static void
+gtk_menu_item_leave (GtkEventController *controller,
+                     gpointer            user_data)
 {
-  GtkMenuItem *menu_item = GTK_MENU_ITEM (widget);
-  GtkWidget *menu_shell = gtk_widget_get_parent (widget);
+  GtkMenuItem *menu_item = GTK_MENU_ITEM (user_data);
+  GtkWidget *menu_shell = gtk_widget_get_parent (GTK_WIDGET (menu_item));
 
   if (GTK_IS_MENU_SHELL (menu_shell) && !menu_item->priv->submenu)
     gtk_menu_shell_deselect (GTK_MENU_SHELL (menu_shell));
-
-  return GDK_EVENT_STOP;
 }
 
 static void
