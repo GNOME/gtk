@@ -119,8 +119,8 @@ static void gtk_button_get_property   (GObject            *object,
 static void gtk_button_display_changed (GtkWidget         *widget,
 				        GdkDisplay        *previous_display);
 static void gtk_button_unrealize (GtkWidget * widget);
-static gint gtk_button_grab_broken (GtkWidget * widget,
-				    GdkEventGrabBroken * event);
+static gboolean gtk_button_event       (GtkWidget *widget,
+				        GdkEvent  *event);
 static gint gtk_button_key_release (GtkWidget * widget, GdkEventKey * event);
 static void gtk_real_button_clicked (GtkButton * button);
 static void gtk_real_button_activate  (GtkButton          *button);
@@ -202,7 +202,7 @@ gtk_button_class_init (GtkButtonClass *klass)
   widget_class->measure = gtk_button_measure_;
   widget_class->display_changed = gtk_button_display_changed;
   widget_class->unrealize = gtk_button_unrealize;
-  widget_class->grab_broken_event = gtk_button_grab_broken;
+  widget_class->event = gtk_button_event;
   widget_class->key_release_event = gtk_button_key_release;
   widget_class->state_flags_changed = gtk_button_state_flags_changed;
   widget_class->grab_notify = gtk_button_grab_notify;
@@ -757,14 +757,18 @@ gtk_button_do_release (GtkButton *button,
 }
 
 static gboolean
-gtk_button_grab_broken (GtkWidget          *widget,
-			GdkEventGrabBroken *event)
+gtk_button_event (GtkWidget *widget,
+                  GdkEvent  *event)
 {
   GtkButton *button = GTK_BUTTON (widget);
-  
-  gtk_button_do_release (button, FALSE);
 
-  return TRUE;
+  if (gdk_event_get_event_type (event) == GDK_GRAB_BROKEN)
+    {
+      gtk_button_do_release (button, FALSE);
+      return GDK_EVENT_STOP;
+    }
+
+  return GDK_EVENT_PROPAGATE;
 }
 
 static gboolean
