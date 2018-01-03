@@ -187,10 +187,19 @@ gtk_search_bar_handle_event_for_entry (GtkSearchBar *bar,
  *   return gtk_search_bar_handle_event (bar, event);
  * }
  *
- * g_signal_connect (window,
- *                  "key-press-event",
- *                   G_CALLBACK (on_key_press_event),
- *                   search_bar);
+ * static void
+ * create_toplevel (void)
+ * {
+ *   GtkWidget *window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+ *   GtkWindow *search_bar = gtk_search_bar_new ();
+ *
+ *  // Add more widgets to the window...
+ *
+ *   g_signal_connect (window,
+ *                    "key-press-event",
+ *                     G_CALLBACK (on_key_press_event),
+ *                     search_bar);
+ * }
  * ]|
  *
  * Returns: %GDK_EVENT_STOP if the key press event resulted
