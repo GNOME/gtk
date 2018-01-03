@@ -17,6 +17,7 @@ demos/gtk-demo/event_axes.c
 demos/gtk-demo/expander.c
 demos/gtk-demo/filtermodel.ui
 demos/gtk-demo/fishbowl.ui
+demos/gtk-demo/font_features.c
 demos/gtk-demo/font-features.ui
 demos/gtk-demo/iconview.c
 demos/gtk-demo/infobar.c
@@ -28,6 +29,7 @@ demos/gtk-demo/offscreen_window2.c
 demos/gtk-demo/popover.ui
 demos/gtk-demo/revealer.ui
 demos/gtk-demo/scale.ui
+demos/gtk-demo/script-names.c
 demos/gtk-demo/search_entry.c
 demos/gtk-demo/shortcuts-boxes.ui
 demos/gtk-demo/shortcuts-builder.ui
