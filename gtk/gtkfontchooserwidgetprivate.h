@@ -25,6 +25,8 @@ G_BEGIN_DECLS
 gboolean gtk_font_chooser_widget_handle_event (GtkWidget   *widget,
                                                GdkEventKey *event);
 
+GAction *gtk_font_chooser_widget_get_tweak_action (GtkWidget *fontchooser);
+
 G_END_DECLS
 
 #endif /* __GTK_FONT_CHOOSER_WIDGET_PRIVATE_H__ */
