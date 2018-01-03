@@ -163,6 +163,7 @@
     <file>flowbox.c</file>
     <file>foreigndrawing.c</file>
     <file>font_features.c</file>
+    <file>fontplane.c</file>
     <file>gestures.c</file>
     <file>glarea.c</file>
     <file>headerbar.c</file>
@@ -224,6 +225,7 @@
   </gresource>
   <gresource prefix="/font_features">
     <file>font-features.ui</file>
+    <file>fontplane.c</file>
   </gresource>
   <gresource prefix="/spinbutton">
     <file>spinbutton.ui</file>
