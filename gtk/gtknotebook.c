@@ -7949,7 +7949,8 @@ gtk_notebook_get_tab_detachable (GtkNotebook *notebook,
  *    notebook = gtk_drag_get_source_widget (context);
  *    child = (void*) gtk_selection_data_get_data (data);
  *
- *    process_widget (*child);
+ *    // process_widget (*child);
+ *
  *    gtk_notebook_detach_tab (GTK_NOTEBOOK (notebook), *child);
  *  }
  * ]|
