@@ -2164,8 +2164,17 @@ gtk_list_store_has_default_sort_func (GtkTreeSortable *sortable)
  * `gtk_list_store_insert_with_values (list_store, iter, position...)`
  * has the same effect as calling
  * |[<!-- language="C" -->
- * gtk_list_store_insert (list_store, iter, position);
- * gtk_list_store_set (list_store, iter, ...);
+ * static void
+ * insert_value (GtkListStore *list_store,
+ *               GtkTreeIter  *iter,
+ *               int           position)
+ * {
+ *   gtk_list_store_insert (list_store, iter, position);
+ *   gtk_list_store_set (list_store,
+ *                       iter
+ *                       // ...
+ *                       );
+ * }
  * ]|
  * with the difference that the former will only emit a row_inserted signal,
  * while the latter will emit row_inserted, row_changed and, if the list store
