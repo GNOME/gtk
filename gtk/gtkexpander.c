@@ -43,12 +43,6 @@
  * connection as follows:
  *
  * |[<!-- language="C" -->
- * expander = gtk_expander_new_with_mnemonic ("_More Options");
- * g_signal_connect (expander, "notify::expanded",
- *                   G_CALLBACK (expander_callback), NULL);
- *
- * ...
- *
  * static void
  * expander_callback (GObject    *object,
  *                    GParamSpec *param_spec,
@@ -66,6 +60,16 @@
  *     {
  *       // Hide or destroy widgets
  *     }
+ * }
+ *
+ * static void
+ * create_expander (void)
+ * {
+ *   GtkWidget *expander = gtk_expander_new_with_mnemonic ("_More Options");
+ *   g_signal_connect (expander, "notify::expanded",
+ *                     G_CALLBACK (expander_callback), NULL);
+ *
+ *   // ...
  * }
  * ]|
  *
