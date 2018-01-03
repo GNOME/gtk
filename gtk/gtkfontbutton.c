@@ -83,6 +83,8 @@ struct _GtkFontButtonPrivate
   PangoFontFace        *font_face;
   PangoFontMap         *font_map;
   gint                  font_size;
+  char                 *font_features;
+  char                 *language;
   gchar                *preview_text;
   GtkFontFilterFunc     font_filter;
   gpointer              font_filter_data;
@@ -159,6 +161,12 @@ clear_font_data (GtkFontButton *font_button)
 
   g_free (priv->fontname);
   priv->fontname = NULL;
+
+  g_free (priv->font_features);
+  priv->font_features = NULL;
+
+  g_free (priv->language);
+  priv->language = NULL;
 }
 
 static void
@@ -699,6 +707,12 @@ gtk_font_button_get_property (GObject    *object,
     case GTK_FONT_CHOOSER_PROP_FONT_DESC:
       g_value_set_boxed (value, gtk_font_button_get_font_desc (font_button));
       break;
+    case GTK_FONT_CHOOSER_PROP_FONT_FEATURES:
+      g_value_set_string (value, priv->font_features);
+      break;
+    case GTK_FONT_CHOOSER_PROP_LANGUAGE:
+      g_value_set_string (value, priv->language);
+      break;
     case GTK_FONT_CHOOSER_PROP_LEVEL:
       g_value_set_enum (value, priv->level);
       break;
@@ -1007,6 +1021,10 @@ response_cb (GtkDialog *dialog,
   if (priv->font_face)
     g_object_ref (priv->font_face);
   priv->font_size = gtk_font_chooser_get_font_size (font_chooser);
+  g_free (priv->font_features);
+  priv->font_features = gtk_font_chooser_get_font_features (font_chooser);
+  g_free (priv->language);
+  priv->language = gtk_font_chooser_get_language (font_chooser);
 
   /* Set label font */
   gtk_font_button_update_font_info (font_button);
@@ -1031,7 +1049,9 @@ dialog_destroy (GtkWidget *widget,
 } 
 
 static gchar *
-pango_font_description_to_css (PangoFontDescription *desc)
+pango_font_description_to_css (PangoFontDescription *desc,
+                               const char           *features,
+                               const char           *language)
 {
   GString *s;
   PangoFontMask set;
@@ -1153,6 +1173,10 @@ pango_font_description_to_css (PangoFontDescription *desc)
     {
       g_string_append_printf (s, "font-size: %dpt", pango_font_description_get_size (desc) / PANGO_SCALE);
     }
+  if (features)
+    {
+      g_string_append_printf (s, "font-feature-settings: %s;", features);
+    }
 
   g_string_append (s, "}");
 
@@ -1193,7 +1217,7 @@ gtk_font_button_label_use_font (GtkFontButton *font_button)
       if (!priv->use_size)
         pango_font_description_unset_fields (desc, PANGO_FONT_MASK_SIZE);
 
-      data = pango_font_description_to_css (desc);
+      data = pango_font_description_to_css (desc, priv->font_features, priv->language);
       gtk_css_provider_load_from_data (priv->provider, data, -1);
 
       g_free (data);

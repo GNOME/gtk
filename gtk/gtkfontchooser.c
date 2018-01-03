@@ -122,6 +122,39 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
+   * GtkFontChooser:font-features:
+   *
+   * The selected font features, in a format that is compatible with
+   * CSS and with Pango attributes.
+   *
+   * Since: 3.94
+   */
+  g_object_interface_install_property
+     (iface,
+      g_param_spec_string ("font-features",
+                          P_("Font features"),
+                          P_("Font features as a string"),
+                          "",
+                          GTK_PARAM_READABLE));
+
+  /**
+   * GtkFontChooser:language:
+   *
+   * The language for which the #GtkFontChooser:font-features were
+   * selected, in a format that is compatible with CSS and with Pango
+   * attributes.
+   *
+   * Since: 3.94
+   */
+  g_object_interface_install_property
+     (iface,
+      g_param_spec_string ("language",
+                          P_("Language"),
+                          P_("Language for which features have been selected"),
+                          "",
+                          GTK_PARAM_READABLE));
+
+  /**
    * GtkFontChooser::font-activated:
    * @self: the object which received the signal
    * @fontname: the font name
@@ -535,4 +568,46 @@ gtk_font_chooser_get_level (GtkFontChooser *fontchooser)
   g_object_get (fontchooser, "level", &level, NULL);
 
   return level;
+}
+
+/**
+ * gtk_font_chooser_get_font_features:
+ * @fontchooser: a #GtkFontChooser
+ *
+ * Gets the currently-selected font features.
+ *
+ * Returns: the currently selected font features
+ * Since: 3.94
+ */
+char *
+gtk_font_chooser_get_font_features (GtkFontChooser *fontchooser)
+{
+  char *text;
+
+  g_return_val_if_fail (GTK_IS_FONT_CHOOSER (fontchooser), NULL);
+
+  g_object_get (fontchooser, "font-features", &text, NULL);
+
+  return text;
+}
+
+/**
+ * gtk_font_chooser_get_language:
+ * @fontchooser: a #GtkFontChooser
+ *
+ * Gets the currently-selected language for font features.
+ *
+ * Returns: the currently selected language
+ * Since: 3.94
+ */
+char *
+gtk_font_chooser_get_language (GtkFontChooser *fontchooser)
+{
+  char *text;
+
+  g_return_val_if_fail (GTK_IS_FONT_CHOOSER (fontchooser), NULL);
+
+  g_object_get (fontchooser, "language", &text, NULL);
+
+  return text;
 }
