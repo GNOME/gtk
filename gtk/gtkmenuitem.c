@@ -71,6 +71,8 @@
  *
  * An example for setting markup and accelerator on a MenuItem:
  * |[<!-- language="C" -->
+ * GtkWidget *menu_item = gtk_menu_item_new_with_label ("Example Menu Item");
+ *
  * GtkWidget *child = gtk_bin_get_child (GTK_BIN (menu_item));
  * gtk_label_set_markup (GTK_LABEL (child), "<i>new label</i> with <b>markup</b>");
  * gtk_accel_label_set_accel (GTK_ACCEL_LABEL (child), GDK_KEY_1, 0);
