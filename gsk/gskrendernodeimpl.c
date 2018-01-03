@@ -767,6 +767,14 @@ static const GskRenderNodeClass GSK_TEXTURE_NODE_CLASS = {
   gsk_texture_node_deserialize
 };
 
+/**
+ * gsk_texture_node_get_texture:
+ * @node: a #GskRenderNode
+ *
+ * Returns: (transfer none): the #GdkTexture
+ *
+ * Since: 3.94
+ */
 GdkTexture *
 gsk_texture_node_get_texture (GskRenderNode *node)
 {
