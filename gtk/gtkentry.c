@@ -7906,13 +7906,8 @@ gtk_entry_get_overwrite_mode (GtkEntry *entry)
  * Retrieves the contents of the entry widget.
  * See also gtk_editable_get_chars().
  *
- * This is equivalent to:
- *
- * |[<!-- language="C" -->
- * GtkEntryBuffer *buffer;
- * buffer = gtk_entry_get_buffer (entry);
- * gtk_entry_buffer_get_text (buffer);
- * ]|
+ * This is equivalent to getting @entry's #GtkEntryBuffer and calling
+ * gtk_entry_buffer_get_text() on it.
  *
  * Returns: a pointer to the contents of the widget as a
  *      string. This string points to internally allocated
@@ -7938,12 +7933,8 @@ gtk_entry_get_text (GtkEntry *entry)
  * the current contents are longer than the given length, then they
  * will be truncated to fit.
  *
- * This is equivalent to:
- *
- * |[<!-- language="C" -->
- * GtkEntryBuffer *buffer;
- * buffer = gtk_entry_get_buffer (entry);
- * gtk_entry_buffer_set_max_length (buffer, max);
+ * This is equivalent to getting @entry's #GtkEntryBuffer and
+ * calling gtk_entry_buffer_set_max_length() on it.
  * ]|
  **/
 void
@@ -7961,13 +7952,8 @@ gtk_entry_set_max_length (GtkEntry     *entry,
  * Retrieves the maximum allowed length of the text in
  * @entry. See gtk_entry_set_max_length().
  *
- * This is equivalent to:
- *
- * |[<!-- language="C" -->
- * GtkEntryBuffer *buffer;
- * buffer = gtk_entry_get_buffer (entry);
- * gtk_entry_buffer_get_max_length (buffer);
- * ]|
+ * This is equivalent to getting @entry's #GtkEntryBuffer and
+ * calling gtk_entry_buffer_get_max_length() on it.
  *
  * Returns: the maximum allowed number of characters
  *               in #GtkEntry, or 0 if there is no maximum.
@@ -7987,13 +7973,9 @@ gtk_entry_get_max_length (GtkEntry *entry)
  * Retrieves the current length of the text in
  * @entry. 
  *
- * This is equivalent to:
- *
- * |[<!-- language="C" -->
- * GtkEntryBuffer *buffer;
- * buffer = gtk_entry_get_buffer (entry);
- * gtk_entry_buffer_get_length (buffer);
- * ]|
+ * This is equivalent to getting @entry's #GtkEntryBuffer and
+ * calling gtk_entry_buffer_get_length() on it.
+
  *
  * Returns: the current number of characters
  *               in #GtkEntry, or 0 if there are none.
