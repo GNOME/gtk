@@ -5,6 +5,8 @@ subdir('inspector')
 gtk_public_sources = files([
   'fallback-c89.c',
   'fnmatch.c',
+  'language-names.c',
+  'script-names.c',
   'gdkpixbufutils.c',
   'gtkaboutdialog.c',
   'gtkaccelgroup.c',
@@ -823,6 +825,10 @@ gtk_deps = [
   libm,
   graphene_dep,
 ]
+
+if harfbuzz_dep.found() and pangoft_dep.found()
+  gtk_deps += [ harfbuzz_dep, ]
+endif
 
 if x11_enabled
   x11_data_prefix = dependency('x11').get_pkgconfig_variable('prefix')
