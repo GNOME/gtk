@@ -819,6 +819,17 @@ gdk_drag_context_write_finish (GdkDragContext *context,
   return g_task_propagate_boolean (G_TASK (result), error); 
 }
 
+/**
+ * gdk_drop_read_async:
+ * @context: a #GdkDragContext
+ * @mime_types: (array zero-terminated=1) (element-type utf8):
+ * @io_priority:
+ * @cancellable:
+ * @callback:
+ * @user_data: (closure):
+ *
+ * Since: 3.94
+ */
 void
 gdk_drop_read_async (GdkDragContext      *context,
                      const char         **mime_types,
@@ -846,6 +857,17 @@ gdk_drop_read_async (GdkDragContext      *context,
   gdk_content_formats_unref (formats);
 }
 
+/**
+ * gdk_drop_read_finish:
+ * @context: a #GdkDragContext
+ * @out_mime_type: (out) (type utf8):
+ * @result:
+ * @error:
+ *
+ * Returns: (nullable) (transfer full): the #GInputStream, or %NULL
+ *
+ * Since: 3.94
+ */
 GInputStream *
 gdk_drop_read_finish (GdkDragContext *context,
                       const char    **out_mime_type,
