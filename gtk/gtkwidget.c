@@ -426,6 +426,12 @@
  *   gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (klass),
  *                                                 FooWidget, goodbye_button);
  * }
+ *
+ * static void
+ * foo_widget_init (FooWidget *widget)
+ * {
+ *
+ * }
  * ]|
  *
  * You can also use gtk_widget_class_bind_template_callback() to connect a signal
@@ -11518,14 +11524,21 @@ gtk_widget_add_device_events (GtkWidget    *widget,
  * inside a #GtkSocket within the same application.
  *
  * To reliably find the toplevel #GtkWindow, use
- * gtk_widget_get_toplevel() and call gtk_widget_is_toplevel()
- * on the result.
+ * gtk_widget_get_toplevel() and call GTK_IS_WINDOW()
+ * on the result. For instance, to get the title of a widget's toplevel
+ * window, one might use:
  * |[<!-- language="C" -->
- *  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
- *  if (gtk_widget_is_toplevel (toplevel))
- *    {
- *      // Perform action on toplevel.
- *    }
+ * static const char *
+ * get_widget_toplevel_title (GtkWidget *widget)
+ * {
+ *   GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
+ *   if (GTK_IS_WINDOW (toplevel))
+ *     {
+ *       return gtk_window_get_title (GTK_WINDOW (toplevel));
+ *     }
+ *
+ *   return NULL;
+ * }
  * ]|
  *
  * Returns: (transfer none): the topmost ancestor of @widget, or @widget itself
