@@ -184,7 +184,7 @@ gdk_content_deserializer_get_mime_type (GdkContentDeserializer *deserializer)
  *
  * Gets the GType to create an instance of.
  *
- * Returns: (transfer none): the GType for the current operation
+ * Returns: the GType for the current operation
  */
 GType
 gdk_content_deserializer_get_gtype (GdkContentDeserializer *deserializer)

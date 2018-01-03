@@ -187,7 +187,7 @@ gdk_content_serializer_get_mime_type (GdkContentSerializer *serializer)
  *
  * Gets the GType to of the object to serialize.
  *
- * Returns: (transfer none): the GType for the current operation
+ * Returns: the GType for the current operation
  */
 GType
 gdk_content_serializer_get_gtype (GdkContentSerializer *serializer)
