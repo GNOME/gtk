@@ -811,10 +811,6 @@ GDK_AVAILABLE_IN_3_94
 GtkWidget *  gtk_widget_pick                  (GtkWidget  *widget,
                                                gdouble     x,
                                                gdouble     y);
-/* Hide widget and return TRUE.
- */
-GDK_AVAILABLE_IN_ALL
-gboolean     gtk_widget_hide_on_delete	(GtkWidget	*widget);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_reset_style       (GtkWidget      *widget);

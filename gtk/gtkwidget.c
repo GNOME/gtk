@@ -3783,30 +3783,6 @@ gtk_widget_real_hide (GtkWidget *widget)
     }
 }
 
-/**
- * gtk_widget_hide_on_delete:
- * @widget: a #GtkWidget
- *
- * Utility function; intended to be connected to the #GtkWidget::delete-event
- * signal on a #GtkWindow. The function calls gtk_widget_hide() on its
- * argument, then returns %TRUE. If connected to ::delete-event, the
- * result is that clicking the close button for a window (on the
- * window frame, top right corner usually) will hide but not destroy
- * the window. By default, GTK+ destroys windows when ::delete-event
- * is received.
- *
- * Returns: %TRUE
- **/
-gboolean
-gtk_widget_hide_on_delete (GtkWidget *widget)
-{
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-
-  gtk_widget_hide (widget);
-
-  return TRUE;
-}
-
 static void
 update_cursor_on_state_change (GtkWidget *widget)
 {

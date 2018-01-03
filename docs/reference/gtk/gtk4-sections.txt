@@ -4456,7 +4456,6 @@ gtk_widget_get_toplevel
 gtk_widget_get_ancestor
 gtk_widget_is_ancestor
 gtk_widget_translate_coordinates
-gtk_widget_hide_on_delete
 gtk_widget_set_direction
 GtkTextDirection
 gtk_widget_get_direction
