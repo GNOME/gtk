@@ -2087,7 +2087,7 @@ update_font_features (GtkFontChooserWidget *fontchooser)
   GString *s;
   GList *l;
 
-  s = g_string_new ("\"kern\" 1, \"curs\" 1, \"lfbd\" 1, \"rfbd\" 1, \"mark\" 1, \"mkmk\" 1, \"mset\" 1, \"ccmp\" 1, \"rlig\" 1, \"rclt\" 1, \"rvrn\" 1");
+  s = g_string_new ("");
 
   for (l = priv->feature_items; l; l = l->next)
     {
@@ -2101,7 +2101,9 @@ update_font_features (GtkFontChooserWidget *fontchooser)
           if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (item->feat)) &&
               strcmp (item->name, "xxxx") != 0)
             {
-              g_string_append (s, ", \"");
+              if (s->len > 0)
+                g_string_append (s, ", ");
+              g_string_append (s, "\"");
               g_string_append (s, item->name);
               g_string_append (s, "\" 1");
             }
@@ -2111,6 +2113,8 @@ update_font_features (GtkFontChooserWidget *fontchooser)
           if (gtk_check_button_get_inconsistent (GTK_CHECK_BUTTON (item->feat)))
             continue;
 
+          if (s->len > 0)
+            g_string_append (s, ", ");
           g_string_append (s, ", \"");
           g_string_append (s, item->name);
           if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (item->feat)))
