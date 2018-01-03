@@ -250,7 +250,7 @@ do_drawingarea (GtkWidget *do_widget)
 
       g_signal_connect (drag, "drag-begin", G_CALLBACK (drag_begin), da);
       g_signal_connect (drag, "drag-update", G_CALLBACK (drag_update), da);
-      g_signal_connect (drag, "drag-begin", G_CALLBACK (drag_end), da);
+      g_signal_connect (drag, "drag-end", G_CALLBACK (drag_end), da);
     }
 
   if (!gtk_widget_get_visible (window))

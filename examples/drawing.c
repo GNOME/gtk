@@ -42,8 +42,8 @@ size_allocate_cb (GtkWidget     *widget,
     }
 }
 
-/* Redraw the screen from the surface. Note that the ::draw
- * signal receives a ready-to-be-used cairo_t that is already
+/* Redraw the screen from the surface. Note that the draw
+ * callback receives a ready-to-be-used cairo_t that is already
  * clipped to only draw the exposed areas of the widget
  */
 static void
@@ -164,7 +164,7 @@ activate (GtkApplication *app,
 
   g_signal_connect (drag, "drag-begin", G_CALLBACK (drag_begin), drawing_area);
   g_signal_connect (drag, "drag-update", G_CALLBACK (drag_update), drawing_area);
-  g_signal_connect (drag, "drag-begin", G_CALLBACK (drag_end), drawing_area);
+  g_signal_connect (drag, "drag-end", G_CALLBACK (drag_end), drawing_area);
 
   press = gtk_gesture_multi_press_new (drawing_area);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (press), GDK_BUTTON_SECONDARY);
