@@ -937,6 +937,7 @@ gtk_dialog_new_empty (const gchar     *title,
  *
  * Here’s a simple example:
  * |[<!-- language="C" -->
+ *  GtkWidget *main_app_window; // Window the dialog should show up on
  *  GtkWidget *dialog;
  *  GtkDialogFlags flags = GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT;
  *  dialog = gtk_dialog_new_with_buttons ("My dialog",
@@ -1325,14 +1326,17 @@ run_destroy_handler (GtkDialog *dialog, gpointer data)
  *
  * Typical usage of this function might be:
  * |[<!-- language="C" -->
- *   gint result = gtk_dialog_run (GTK_DIALOG (dialog));
+ *   GtkWidget *dialog = gtk_dialog_new ();
+ *   // Set up dialog...
+ *
+ *   int result = gtk_dialog_run (GTK_DIALOG (dialog));
  *   switch (result)
  *     {
  *       case GTK_RESPONSE_ACCEPT:
- *          do_application_specific_something ();
+ *          // do_application_specific_something ();
  *          break;
  *       default:
- *          do_nothing_since_dialog_was_cancelled ();
+ *          // do_nothing_since_dialog_was_cancelled ();
  *          break;
  *     }
  *   gtk_widget_destroy (dialog);

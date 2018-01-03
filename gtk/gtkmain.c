@@ -59,9 +59,10 @@
  * int
  * main (int argc, char **argv)
  * {
+ *  GtkWidget *mainwin;
  *   // Initialize i18n support with bindtextdomain(), etc.
  *
- *   ...
+ *   // ...
  *
  *   // Initialize the widget set
  *   gtk_init (&argc, &argv);
@@ -71,7 +72,7 @@
  *
  *   // Set up our GUI elements
  *
- *   ...
+ *   // ...
  *
  *   // Show the application window
  *   gtk_widget_show_all (mainwin);

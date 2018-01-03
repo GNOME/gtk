@@ -114,8 +114,8 @@
  *                                                          "I’m the second radio button.");
  *
  *    // Pack them into a box, then show all the widgets
- *    gtk_box_pack_start (GTK_BOX (box), radio1, TRUE, TRUE, 2);
- *    gtk_box_pack_start (GTK_BOX (box), radio2, TRUE, TRUE, 2);
+ *    gtk_box_pack_start (GTK_BOX (box), radio1);
+ *    gtk_box_pack_start (GTK_BOX (box), radio2);
  *    gtk_container_add (GTK_CONTAINER (window), box);
  *    gtk_widget_show_all (window);
  *    return;
@@ -383,9 +383,9 @@ gtk_radio_button_set_group (GtkRadioButton *radio_button,
  *   GtkRadioButton *radio_button;
  *   GtkRadioButton *last_button;
  *
- *   while ( ...more buttons to add... )
+ *   while (some_condition)
  *     {
- *        radio_button = gtk_radio_button_new (...);
+ *        radio_button = gtk_radio_button_new (NULL);
  *
  *        gtk_radio_button_join_group (radio_button, last_button);
  *        last_button = radio_button;
