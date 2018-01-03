@@ -1547,7 +1547,7 @@ static struct {
   { FT_MAKE_TAG ('o', 'p', 's', 'z'), N_("Optical Size") },
 };
 
-static void
+static gboolean
 add_axis (GtkFontChooserWidget *fontchooser,
           FT_Face               face,
           FT_Var_Axis          *ax,
@@ -1601,10 +1601,14 @@ add_axis (GtkFontChooserWidget *fontchooser,
       gtk_widget_hide (axis->label);
       gtk_widget_hide (axis->scale);
       gtk_widget_hide (axis->spin);
+
+      return FALSE;
     }
+
+  return TRUE;
 }
 
-static void
+static gboolean
 gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchooser)
 {
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
@@ -1612,9 +1616,10 @@ gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchoose
   FT_Face ft_face;
   FT_MM_Var *ft_mm_var;
   FT_Error ret;
+  gboolean has_axis = FALSE;
 
   if (priv->updating_variations)
-    return;
+    return FALSE;
 
   g_hash_table_foreach (priv->axes, axis_remove, NULL);
   g_hash_table_remove_all (priv->axes);
@@ -1644,7 +1649,10 @@ gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchoose
         }
 
       for (i = 0; i < ft_mm_var->num_axis; i++)
-        add_axis (fontchooser, ft_face, &ft_mm_var->axis[i], coords[i], i + 4);
+        {
+          if (add_axis (fontchooser, ft_face, &ft_mm_var->axis[i], coords[i], i + 4))
+            has_axis = TRUE;
+        }
 
       g_free (coords);
       free (ft_mm_var);
@@ -1652,6 +1660,8 @@ gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchoose
 
   pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
   g_object_unref (pango_font);
+
+  return has_axis;
 }
 
 /* OpenType features */
@@ -1993,7 +2003,7 @@ gtk_font_chooser_widget_populate_features (GtkFontChooserWidget *fontchooser)
   update_font_features (fontchooser);
 }
 
-static void
+static gboolean
 gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
 {
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
@@ -2006,6 +2016,7 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
   guint lang_index = 0;
   int i, j;
   GList *l;
+  gboolean has_feature = FALSE;
 
   gtk_widget_hide (priv->feature_language_combo);
 
@@ -2057,6 +2068,7 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
               if (item->tag != features[j])
                 continue;
 
+              has_feature = TRUE;
               gtk_widget_show (item->feat);
               gtk_widget_show (gtk_widget_get_parent (item->feat));
               gtk_widget_show (priv->feature_language_combo);
@@ -2078,6 +2090,8 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
 
   pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
   g_object_unref (pango_font);
+
+  return has_feature;
 }
 
 static void
@@ -2196,22 +2210,25 @@ gtk_font_chooser_widget_merge_font_desc (GtkFontChooserWidget       *fontchooser
   if (mask & (PANGO_FONT_MASK_FAMILY | PANGO_FONT_MASK_STYLE | PANGO_FONT_MASK_VARIANT |
               PANGO_FONT_MASK_WEIGHT | PANGO_FONT_MASK_STRETCH))
     {
+      gboolean has_tweak = FALSE;
+
       if (&priv->font_iter != iter)
         {
           if (iter == NULL)
             memset (&priv->font_iter, 0, sizeof (GtkTreeIter));
           else
             memcpy (&priv->font_iter, iter, sizeof (GtkTreeIter));
-          
+
           gtk_font_chooser_widget_ensure_selection (fontchooser);
         }
 
       gtk_font_chooser_widget_update_marks (fontchooser);
 
 #if defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT)
-      gtk_font_chooser_widget_update_font_variations (fontchooser);
-      gtk_font_chooser_widget_update_font_features (fontchooser);
+      has_tweak = gtk_font_chooser_widget_update_font_variations (fontchooser) ||
+                  gtk_font_chooser_widget_update_font_features (fontchooser);
 #endif
+      g_simple_action_set_enabled (G_SIMPLE_ACTION (priv->tweak_action), has_tweak);
     }
 
   gtk_font_chooser_widget_update_preview_attributes (fontchooser);
