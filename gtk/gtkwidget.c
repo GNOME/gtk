@@ -106,7 +106,15 @@
  * - #GtkWidgetClass.measure()
  *
  * There are some important things to keep in mind when implementing
- * height-for-width and when using it in container implementations.
+ * height-for-width and when using it in widget implementations.
+ *
+ * If you implement a direct #GtkWidget subclass that supports
+ * height-for-width or width-for-height geometry management for
+ * itself or its child widgets, the #GtkWidgetClass.get_request_mode()
+ * virtual function must be implemented as well and return the widget's
+ * preferred request mode. The default implementation of this virtual function
+ * returns %GTK_SIZE_REQUEST_CONSTANT_SIZE, which means that the widget will only ever
+ * get -1 passed as the for_size value to its #GtkWidgetClass.measure() implementation.
  *
  * The geometry management system will query a widget hierarchy in
  * only one orientation at a time. When widgets are initially queried
@@ -117,8 +125,8 @@
  * %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH mode:
  * First, the default minimum and natural width for each widget
  * in the interface will be computed using gtk_widget_measure() with an orientation
- * or %GTK_ORIENTATION_HORIZONTAL and a for_size of -1.
- * Because the preferred widths for each container depend on the preferred
+ * of %GTK_ORIENTATION_HORIZONTAL and a for_size of -1.
+ * Because the preferred widths for each widget depend on the preferred
  * widths of their children, this information propagates up the hierarchy,
  * and finally a minimum and natural width is determined for the entire
  * toplevel. Next, the toplevel will use the minimum width to query for the
@@ -133,8 +141,8 @@
  * dimensions it can go on to allocate itself a reasonable size (or a size
  * previously specified with gtk_window_set_default_size()). During the
  * recursive allocation process it’s important to note that request cycles
- * will be recursively executed while container widgets allocate their children.
- * Each container widget, once allocated a size, will go on to first share the
+ * will be recursively executed while widgets allocate their children.
+ * Each widget, once allocated a size, will go on to first share the
  * space in one orientation among its children and then request each child's
  * height for its target allocated width or its width for allocated height,
  * depending. In this way a #GtkWidget will typically be requested its size
@@ -143,77 +151,57 @@
  * requested. For this reason, #GtkWidget caches a  small number of results
  * to avoid re-querying for the same sizes in one allocation cycle.
  *
- * See
- * [GtkContainer’s geometry management section][container-geometry-management]
- * to learn more about how height-for-width allocations are performed
- * by container widgets.
- *
  * If a widget does move content around to intelligently use up the
  * allocated size then it must support the request in both
  * #GtkSizeRequestModes even if the widget in question only
  * trades sizes in a single orientation.
  *
  * For instance, a #GtkLabel that does height-for-width word wrapping
- * will not expect to have #GtkWidgetClass.get_preferred_height() called
- * because that call is specific to a width-for-height request. In this
+ * will not expect to have #GtkWidgetClass.measure() with an orientation of
+ * %GTK_ORIENTATION_VERTICAL called because that call is specific to a
+ * width-for-height request. In this
  * case the label must return the height required for its own minimum
  * possible width. By following this rule any widget that handles
  * height-for-width or width-for-height requests will always be allocated
  * at least enough space to fit its own content.
  *
  * Here are some examples of how a %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH widget
- * generally deals with width-for-height requests, for #GtkWidgetClass.get_preferred_height()
- * it will do:
+ * generally deals with width-for-height requests:
  *
  * |[<!-- language="C" -->
  * static void
- * foo_widget_get_preferred_height (GtkWidget *widget,
- *                                  gint *min_height,
- *                                  gint *nat_height)
+ * foo_widget_measure (GtkWidget      *widget,
+ *                     GtkOrientation  orientation,
+ *                     int             for_size,
+ *                     int            *minimum_size,
+ *                     int            *natural_size,
+ *                     int            *minimum_baseline,
+ *                     int            *natural_baseline)
  * {
- *    if (i_am_in_height_for_width_mode)
- *      {
- *        gint min_width, nat_width;
+ *   if (orientation == GTK_ORIENTATION_HORIZONTAL)
+ *     {
+ *       // Calculate minimum and natural width
+ *     }
+ *   else // VERTICAL
+ *     {
+ *        if (i_am_in_height_for_width_mode)
+ *          {
+ *            int min_width;
  *
- *        GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget,
- *                                                            &min_width,
- *                                                            &nat_width);
- *        GTK_WIDGET_GET_CLASS (widget)->get_preferred_height_for_width
- *                                                           (widget,
- *                                                            min_width,
- *                                                            min_height,
- *                                                            nat_height);
- *      }
- *    else
- *      {
- *         ... some widgets do both. For instance, if a GtkLabel is
- *         rotated to 90 degrees it will return the minimum and
- *         natural height for the rotated label here.
- *      }
- * }
- * ]|
+ *            // First, get the minimum width of our widget
+ *            GTK_WIDGET_GET_CLASS (widget)->measure (widget, GTK_ORIENTATION_HORIZONTAL, -1,
+ *                                                    &min_width, NULL, NULL, NULL);
  *
- * And in #GtkWidgetClass.get_preferred_width_for_height() it will simply return
- * the minimum and natural width:
- * |[<!-- language="C" -->
- * static void
- * foo_widget_get_preferred_width_for_height (GtkWidget *widget,
- *                                            gint for_height,
- *                                            gint *min_width,
- *                                            gint *nat_width)
- * {
- *    if (i_am_in_height_for_width_mode)
- *      {
- *        GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget,
- *                                                            min_width,
- *                                                            nat_width);
- *      }
- *    else
- *      {
- *         ... again if a widget is sometimes operating in
- *         width-for-height mode (like a rotated GtkLabel) it can go
- *         ahead and do its real width for height calculation here.
- *      }
+ *            // Now use the minimum width to retrieve the minmimum and natural height to display
+ *            // that width.
+ *            GTK_WIDGET_GET_CLASS (widget)->measure (widget, GTK_ORIENTATION_VERTICAL, min_width,
+ *                                                    minimum_size, natural_size, NULL, NULL);
+ *          }
+ *        else
+ *          {
+ *            // ... some widgets do both.
+ *          }
+ *    }
  * }
  * ]|
  *
@@ -221,42 +209,32 @@
  * allocation. For example, when computing height it may need to also
  * compute width. Or when deciding how to use an allocation, the widget
  * may need to know its natural size. In these cases, the widget should
- * be careful to call its virtual methods directly, like this:
+ * be careful to call its virtual methods directly, like in the code
+ * example above.
  *
- * |[<!-- language="C" -->
- * GTK_WIDGET_GET_CLASS(widget)->get_preferred_width (widget,
- *                                                    &min,
- *                                                    &natural);
- * ]|
- *
- * It will not work to use the wrapper functions, such as
- * gtk_widget_get_preferred_width() inside your own size request
- * implementation. These return a request adjusted by #GtkSizeGroup
- * and by the #GtkWidgetClass.adjust_size_request() virtual method. If a
- * widget used the wrappers inside its virtual method implementations,
+ * It will not work to use the wrapper function gtk_widget_measure()
+ * inside your own #GtkWidgetClass.size-allocate() implementation.
+ * These return a request adjusted by #GtkSizeGroup, the widget's align and expand flags
+ * as well as its CSS style.
+ * If a widget used the wrappers inside its virtual method implementations,
  * then the adjustments (such as widget margins) would be applied
  * twice. GTK+ therefore does not allow this and will warn if you try
  * to do it.
  *
  * Of course if you are getting the size request for
- * another widget, such as a child of a
- * container, you must use the wrapper APIs.
+ * another widget, such as a child widget, you must use gtk_widget_measure().
  * Otherwise, you would not properly consider widget margins,
  * #GtkSizeGroup, and so forth.
  *
  * Since 3.10 GTK+ also supports baseline vertical alignment of widgets. This
  * means that widgets are positioned such that the typographical baseline of
  * widgets in the same row are aligned. This happens if a widget supports baselines,
- * has a vertical alignment of %GTK_ALIGN_BASELINE, and is inside a container
+ * has a vertical alignment of %GTK_ALIGN_BASELINE, and is inside a widget
  * that supports baselines and has a natural “row” that it aligns to the baseline,
  * or a baseline assigned to it by the grandparent.
  *
- * Baseline alignment support for a widget is done by the #GtkWidgetClass.get_preferred_height_and_baseline_for_width()
- * virtual function. It allows you to report a baseline in combination with the
- * minimum and natural height. If there is no baseline you can return -1 to indicate
- * this. The default implementation of this virtual function calls into the
- * #GtkWidgetClass.get_preferred_height() and #GtkWidgetClass.get_preferred_height_for_width(),
- * so if baselines are not supported it doesn’t need to be implemented.
+ * Baseline alignment support for a widget is also done by the #GtkWidgetClass.measure()
+ * virtual function. It allows you to report a both a minimum and natural 
  *
  * If a widget ends up baseline aligned it will be allocated all the space in the parent
  * as if it was %GTK_ALIGN_FILL, but the selected baseline can be found via gtk_widget_get_allocated_baseline().
@@ -1896,7 +1874,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *
    * Returns: %TRUE if stopping keyboard navigation is fine, %FALSE
    *          if the emitting widget should try to handle the keyboard
-   *          navigation attempt in its parent container(s).
+   *          navigation attempt in its parent widget(s).
    *
    * Since: 2.12
    **/

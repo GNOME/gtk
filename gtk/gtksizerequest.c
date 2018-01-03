@@ -392,6 +392,9 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
  * this functions will compute the minimum and natural width of @widget if
  * it is allocated at a height of 300 pixels.
  *
+ * See [GtkWidget’s geometry management section][geometry-management] for
+ * a more details on implementing #GtkWidgetClass.measure().
+ *
  * Since: 3.90
  */
 void
