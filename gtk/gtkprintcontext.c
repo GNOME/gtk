@@ -69,7 +69,7 @@
  *   cairo_stroke (cr);
  *
  *   // Draw some text
- *   layout = gtk_print_context_create_layout (context);
+ *   layout = gtk_print_context_create_pango_layout (context);
  *   pango_layout_set_text (layout, "Hello World! Printing is easy", -1);
  *   desc = pango_font_description_from_string ("sans 28");
  *   pango_layout_set_font_description (layout, desc);

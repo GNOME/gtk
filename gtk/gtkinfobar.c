@@ -73,17 +73,18 @@
  * by using gtk_info_bar_set_message_type(). GTK+ may use the message type
  * to determine how the message is displayed.
  *
- * A simple example for using a GtkInfoBar:
+ * A simple example for using a #GtkInfoBar:
  * |[<!-- language="C" -->
- * // set up info bar
- * GtkWidget *widget;
+ * GtkWidget *widget, *message_label, *content_area;
+ * GtkWidget *grid;
  * GtkInfoBar *bar;
  *
+ * // set up info bar
  * widget = gtk_info_bar_new ();
  * bar = GTK_INFO_BAR (widget);
+ * grid = gtk_grid_new ();
  *
  * message_label = gtk_label_new ("");
- * gtk_widget_show (message_label);
  * content_area = gtk_info_bar_get_content_area (bar);
  * gtk_container_add (GTK_CONTAINER (content_area),
  *                    message_label);
@@ -98,10 +99,10 @@
  *                  widget,
  *                  0, 2, 1, 1);
  *
- * ...
+ * // ...
  *
  * // show an error message
- * gtk_label_set_text (GTK_LABEL (message_label), message);
+ * gtk_label_set_text (GTK_LABEL (message_label), "An error occurred!");
  * gtk_info_bar_set_message_type (bar,
  *                                GTK_MESSAGE_ERROR);
  * gtk_widget_show (bar);
