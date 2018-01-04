@@ -438,10 +438,12 @@ gtk_places_view_row_set_busy (GtkPlacesViewRow *row,
     {
       gtk_stack_set_visible_child (row->mount_stack, GTK_WIDGET (row->busy_spinner));
       gtk_widget_set_child_visible (GTK_WIDGET (row->mount_stack), TRUE);
+      gtk_spinner_start (row->busy_spinner);
     }
   else
     {
       gtk_widget_set_child_visible (GTK_WIDGET (row->mount_stack), FALSE);
+      gtk_spinner_stop (row->busy_spinner);
     }
 }
 

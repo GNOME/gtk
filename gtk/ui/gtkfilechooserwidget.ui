@@ -100,7 +100,6 @@
                                     <child>
                                       <object class="GtkSpinner" id="search_spinner">
                                         <property name="visible">0</property>
-                                        <property name="active">1</property>
                                       </object>
                                       <packing>
                                         <property name="pack-type">end</property>
