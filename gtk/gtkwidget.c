@@ -911,11 +911,14 @@ gtk_widget_real_contains (GtkWidget *widget,
                           gdouble    y)
 {
   GtkAllocation own_alloc;
+  graphene_rect_t widget_bounds;
 
   gtk_widget_get_own_allocation (widget, &own_alloc);
-  
+  graphene_rect_init (&widget_bounds, own_alloc.x, own_alloc.y, own_alloc.width, own_alloc.height);
+
   /* XXX: This misses rounded rects */
-  return gdk_rectangle_contains_point (&own_alloc, x, y);
+  return graphene_rect_contains_point (&widget_bounds,
+                                       &(graphene_point_t){x, y});
 }
 
 static GtkWidget *
