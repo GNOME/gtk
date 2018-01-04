@@ -14488,7 +14488,8 @@ _gtk_widget_consumes_motion (GtkWidget        *widget,
     {
       data = l->data;
 
-      if (data->controller == NULL)
+      if (data->controller == NULL ||
+          !GTK_IS_GESTURE (data->controller))
         continue;
 
       if ((!GTK_IS_GESTURE_SINGLE (data->controller) ||
