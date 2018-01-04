@@ -44,7 +44,7 @@
                 <property name="relief">none</property>
                 <property name="sensitive">0</property>
                 <property name="icon-name">document-save-as-symbolic</property>
-                <property name="tooltip-text" translatable="yes">Save recorded frames</property>
+                <property name="tooltip-text" translatable="yes">Save selected node</property>
                 <signal name="clicked" handler="render_node_save"/>
               </object>
               <packing>
