@@ -246,7 +246,6 @@ extern const gint        _gdk_x11_event_mask_table_size;
 #define GDK_WINDOW_SCREEN(win)        (GDK_X11_DISPLAY (gdk_window_get_display (win))->screen)
 #define GDK_WINDOW_DISPLAY(win)       (gdk_window_get_display (win))
 #define GDK_WINDOW_XROOTWIN(win)      (GDK_X11_SCREEN (GDK_WINDOW_SCREEN (win))->xroot_window)
-#define GDK_GC_DISPLAY(gc)            (GDK_SCREEN_DISPLAY (GDK_GC_X11(gc)->screen))
 #define GDK_WINDOW_IS_X11(win)        (GDK_IS_WINDOW_IMPL_X11 ((win)->impl))
 
 /* override some macros from gdkx.h with direct-access variants */
