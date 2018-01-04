@@ -87,6 +87,8 @@ gnome.gtkdoc('gdk4',
              main_xml: 'gdk4-docs.xml',
              src_dir: [
 	       join_paths(meson.source_root(), 'gdk'),
+	       join_paths(meson.source_root(), 'gdk', 'x11'),
+	       join_paths(meson.source_root(), 'gdk', 'wayland'),
 	       join_paths(meson.build_root(), 'gdk'),
 	     ],
              dependencies: libgtk_dep,
