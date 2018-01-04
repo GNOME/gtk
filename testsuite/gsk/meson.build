@@ -42,6 +42,7 @@ gl_tests = [
   ['outset shadow blurred simple', 'outset_shadow_blurred_simple.node', 'outset_shadow_blurred_simple.gl.png'],
   ['outset shadow blurred small', 'outset_shadow_blurred_small.node', 'outset_shadow_blurred_small.gl.png'],
   ['outset shadow blurred offset', 'outset_shadow_blurred_offset.node', 'outset_shadow_blurred_offset.gl.png'],
+  ['Text with alpha', 'text_alpha.node', 'text_alpha.gl.png']
 ]
 
 foreach gl_test : gl_tests
