@@ -2115,11 +2115,7 @@ update_font_features (GtkFontChooserWidget *fontchooser)
           if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (item->feat)) &&
               strcmp (item->name, "xxxx") != 0)
             {
-              if (s->len > 0)
-                g_string_append (s, ", ");
-              g_string_append (s, "\"");
-              g_string_append (s, item->name);
-              g_string_append (s, "\" 1");
+              g_string_append_printf (s, "%s\"%s\" %d", s->len > 0 ? ", " : "", item->name, 1);
             }
         }
       else if (GTK_IS_CHECK_BUTTON (item->feat))
@@ -2127,14 +2123,9 @@ update_font_features (GtkFontChooserWidget *fontchooser)
           if (gtk_check_button_get_inconsistent (GTK_CHECK_BUTTON (item->feat)))
             continue;
 
-          if (s->len > 0)
-            g_string_append (s, ", ");
-          g_string_append (s, ", \"");
-          g_string_append (s, item->name);
-          if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (item->feat)))
-            g_string_append (s, "\" 1");
-          else
-            g_string_append (s, " 0");
+          g_string_append_printf (s, "%s\"%s\" %d",
+                                  s->len > 0 ? ", " : "", item->name,
+                                  gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (item->feat)));
         }
     }
 
