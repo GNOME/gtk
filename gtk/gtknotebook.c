@@ -5425,6 +5425,7 @@ gtk_notebook_real_switch_page (GtkNotebook     *notebook,
   update_arrow_state (notebook);
 
   gtk_widget_queue_resize (GTK_WIDGET (notebook));
+  gtk_widget_queue_resize (priv->tabs_widget);
   g_object_notify_by_pspec (G_OBJECT (notebook), properties[PROP_PAGE]);
 }
 
