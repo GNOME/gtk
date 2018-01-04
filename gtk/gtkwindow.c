@@ -1619,7 +1619,7 @@ drag_gesture_update_cb (GtkGestureDrag *gesture,
 
       sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
       event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
-      event_widget = gtk_get_event_widget ((GdkEvent *) event);
+      event_widget = gtk_get_event_target (event);
 
       /* Check whether the target widget should be left alone at handling
        * the sequence, this is better done late to give room for gestures
