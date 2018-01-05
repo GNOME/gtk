@@ -7,14 +7,14 @@
 # Djihed Afifi <djihed@gmail.com>, 2006.
 # Seba Barto <nanoosaamar@yahoo.com>, 2006.
 # Anas Afif Emad <anas.e87@gmail.com>, 2008.
-# Khaled Hosny <khaledhosny@eglug.org>, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017.
+# Khaled Hosny <khaledhosny@eglug.org>, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018.
 # Abderrahim Kitouni <a.kitouni@gmail.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-03 11:47+0200\n"
-"PO-Revision-Date: 2017-11-03 11:58+0200\n"
+"POT-Creation-Date: 2018-01-05 14:51+0200\n"
+"PO-Revision-Date: 2018-01-05 15:31+0200\n"
 "Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
 "Language: ar\n"
@@ -26,20 +26,47 @@ msgstr ""
 "X-Generator: Virtaal 1.0.0-beta1\n"
 "X-Project-Style: gnome\n"
 
-#: gdk/broadway/gdkbroadway-server.c:144
+#: gdk/broadway/gdkbroadway-server.c:130
 #, c-format
 msgid "Broadway display type not supported: %s"
 msgstr "نوع عرض برودواي غير مدعوم: %s"
 
-#: gdk/gdkwindow.c:1880
+#: gdk/gdkclipboard.c:239
+msgid "This clipboard cannot store data."
+msgstr "لا يمكن لهذه الحافظة تخزين البيانات."
+
+#: gdk/gdkclipboard.c:294 gdk/gdkclipboard.c:797 gdk/gdkclipboard.c:1094
+msgid "Cannot read from empty clipboard."
+msgstr "لا يمكن القراءة من حافظة خالية."
+
+#: gdk/gdkclipboard.c:325 gdk/gdkclipboard.c:1144 gdk/gdkdnd.c:803
+msgid "No compatible formats to transfer clipboard contents."
+msgstr "لا توجد أنساق مدعومة لتحويل محتوى الحافظة."
+
+#: gdk/gdkcontentprovider.c:108 gdk/gdkcontentproviderimpl.c:215
+#: gtk/gtkdnd.c:867
+#, c-format
+msgid "Cannot provide contents as “%s”"
+msgstr "لا يمكن توفير المحتوى بنوع ”%s“"
+
+#: gdk/gdkcontentprovider.c:129
+#, c-format
+msgid "Cannot provide contents as %s"
+msgstr "لا يمكن توفير المحتوى بنوع %s"
+
+#: gdk/gdkdnd.c:354
+msgid "Reading not implemented."
+msgstr "القراءة غير منفّذة."
+
+#: gdk/gdkwindow.c:1878
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "عُطّل دعم GL باستخدام GDK_DEBUG"
 
-#: gdk/gdkwindow.c:1891
+#: gdk/gdkwindow.c:1889
 msgid "The current backend does not support OpenGL"
-msgstr ""
+msgstr "لا تدعم الخلفية الحالية OpenGL"
 
-#: gdk/gdkwindow.c:1984
+#: gdk/gdkwindow.c:1982
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "عُطّل دعم Vulkan باستخدام GDK_DEBUG"
 
@@ -420,26 +447,26 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "تعليق"
 
-#: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:2088
-#: gdk/wayland/gdkglcontext-wayland.c:433 gdk/win32/gdkglcontext-win32.c:754
-#: gdk/x11/gdkglcontext-x11.c:1216
+#: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:1754
+#: gdk/wayland/gdkglcontext-wayland.c:433 gdk/win32/gdkglcontext-win32.c:772
+#: gdk/x11/gdkglcontext-x11.c:1213
 msgid "No GL implementation is available"
 msgstr "لا تتوفر أي تنفيذات لمعيار GL"
 
 #: gdk/mir/gdkmirglcontext.c:89 gdk/wayland/gdkglcontext-wayland.c:144
-#: gdk/win32/gdkglcontext-win32.c:688 gdk/x11/gdkglcontext-x11.c:663
-#: gdk/x11/gdkglcontext-x11.c:713
+#: gdk/win32/gdkglcontext-win32.c:706 gdk/x11/gdkglcontext-x11.c:662
+#: gdk/x11/gdkglcontext-x11.c:712
 msgid "Unable to create a GL context"
 msgstr "تعذّر إنشاء سياق GL"
 
-#: gdk/mir/gdkmirwindowimpl.c:2050 gdk/mir/gdkmirwindowimpl.c:2060
+#: gdk/mir/gdkmirwindowimpl.c:1716 gdk/mir/gdkmirwindowimpl.c:1726
 #: gdk/wayland/gdkglcontext-wayland.c:394
-#: gdk/wayland/gdkglcontext-wayland.c:404 gdk/win32/gdkglcontext-win32.c:643
-#: gdk/x11/gdkglcontext-x11.c:911
+#: gdk/wayland/gdkglcontext-wayland.c:404 gdk/win32/gdkglcontext-win32.c:660
+#: gdk/x11/gdkglcontext-x11.c:910
 msgid "No available configurations for the given pixel format"
 msgstr "لا تتوفر أي إعدادات لنسق البكسلات المُعطى"
 
-#: gdk/mir/gdkmirwindowimpl.c:2096
+#: gdk/mir/gdkmirwindowimpl.c:1762
 msgid "3.2 core GL profile is not available on EGL implementation"
 msgstr ""
 
@@ -447,53 +474,57 @@ msgstr ""
 msgid "Not implemented on OS X"
 msgstr "غير مطبّق في ماك أو إس عشرة"
 
+#: gdk/wayland/gdkclipboard-wayland.c:228 gdk/wayland/gdkdnd-wayland.c:346
+#: gdk/wayland/gdkprimary-wayland.c:311 gdk/x11/gdkclipboard-x11.c:743
+#: gdk/x11/gdkdnd-x11.c:337
+msgid "No compatible transfer format found"
+msgstr "لم يعثر على نسق نقل متوافق"
+
 #: gdk/wayland/gdkglcontext-wayland.c:441
 msgid "Core GL is not available on EGL implementation"
 msgstr ""
 
 #. Description of --sync in --help output
-#: gdk/win32/gdkmain-win32.c:53
-#, fuzzy
+#: gdk/win32/gdkmain-win32.c:56
 msgid "Don’t batch GDI requests"
 msgstr "لا ترسل طلبات GDI دفعة واحدة"
 
 #. Description of --no-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:55
-#, fuzzy
+#: gdk/win32/gdkmain-win32.c:58
 msgid "Don’t use the Wintab API for tablet support"
 msgstr "لا تستخدم Wintab API لدعم اللوحة"
 
 #. Description of --ignore-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:57
+#: gdk/win32/gdkmain-win32.c:60
 msgid "Same as --no-wintab"
 msgstr "مثل --no-wintab"
 
 #. Description of --use-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:59
+#: gdk/win32/gdkmain-win32.c:62
 msgid "Do use the Wintab API [default]"
 msgstr "لا تستخدم Wintab API [مبدئي]"
 
 #. Description of --max-colors=COLORS in --help output
-#: gdk/win32/gdkmain-win32.c:61
+#: gdk/win32/gdkmain-win32.c:64
 msgid "Size of the palette in 8 bit mode"
 msgstr "حجم لوح الألوان في نمط 8 بتة"
 
 #. Placeholder in --max-colors=COLORS in --help output
-#: gdk/win32/gdkmain-win32.c:62
+#: gdk/win32/gdkmain-win32.c:65
 msgid "COLORS"
 msgstr "ألوان"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:292
+#: gdk/x11/gdkapplaunchcontext-x11.c:291
 #, c-format
 msgid "Starting %s"
 msgstr "يجري بدء %s"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:305
+#: gdk/x11/gdkapplaunchcontext-x11.c:304
 #, c-format
 msgid "Opening %s"
 msgstr "يجري فتح %s"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:310
+#: gdk/x11/gdkapplaunchcontext-x11.c:309
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
@@ -504,10 +535,45 @@ msgstr[3] "يجري فتح %Id عناصر"
 msgstr[4] "يجري فتح %Id عنصرا"
 msgstr[5] "يجري فتح %Id عنصر"
 
-#: gdk/x11/gdkglcontext-x11.c:939
+#: gdk/x11/gdkclipboard-x11.c:430
+msgid "Clipboard manager could not store selection."
+msgstr "تعذّر على مدير الحافظة حفظ التحديد."
+
+#: gdk/x11/gdkclipboard-x11.c:596
+msgid "Cannot store clipboard. No clipboard manager is active."
+msgstr ""
+
+#: gdk/x11/gdkglcontext-x11.c:938
 #, c-format
 msgid "No available configurations for the given RGBA pixel format"
 msgstr "لا تتوفر أي إعدادات لنسق البكسلات المُعطى"
+
+#: gdk/x11/gdkselectioninputstream-x11.c:461
+#, c-format
+msgid "Format %s not supported"
+msgstr ""
+
+#: gdk/x11/gdktextlistconverter-x11.c:65 gdk/x11/gdktextlistconverter-x11.c:105
+msgid "Not enough space in destination"
+msgstr ""
+
+#: gdk/x11/gdktextlistconverter-x11.c:91 gdk/x11/gdktextlistconverter-x11.c:138
+msgid "Need complete input to do conversion"
+msgstr ""
+
+#: gdk/x11/gdktextlistconverter-x11.c:159
+#: gdk/x11/gdktextlistconverter-x11.c:193
+msgid "Invalid byte sequence in conversion input"
+msgstr ""
+
+#: gdk/x11/gdktextlistconverter-x11.c:185
+msgid "Invalid formats in compound text conversion."
+msgstr ""
+
+#: gdk/x11/gdktextlistconverter-x11.c:202
+#, c-format
+msgid "Unsupported encoding “%s”"
+msgstr "ترميز غير مدعوم ”%s“"
 
 #: gtk/a11y/gtkbooleancellaccessible.c:43
 msgctxt "Action description"
@@ -540,7 +606,7 @@ msgid "Edit"
 msgstr "تحرير"
 
 #: gtk/a11y/gtkcellaccessible.c:259 gtk/a11y/gtkcolorswatchaccessible.c:149
-#: gtk/a11y/gtkentryaccessible.c:1546 gtk/a11y/gtkexpanderaccessible.c:281
+#: gtk/a11y/gtkentryaccessible.c:1550 gtk/a11y/gtkexpanderaccessible.c:281
 msgctxt "Action name"
 msgid "Activate"
 msgstr "تنشيط"
@@ -595,7 +661,7 @@ msgctxt "Action description"
 msgid "Presses the combobox"
 msgstr "يضغط المربع المنسدل"
 
-#: gtk/a11y/gtkentryaccessible.c:1555
+#: gtk/a11y/gtkentryaccessible.c:1559
 msgctxt "Action description"
 msgid "Activates the entry"
 msgstr "يُنشّط المدخلة"
@@ -605,384 +671,384 @@ msgctxt "Action description"
 msgid "Activates the expander"
 msgstr "يُنشّط المُوسّع"
 
-#: gtk/a11y/gtkimageaccessible.c:53
+#: gtk/a11y/gtkimageaccessible.c:54
 msgctxt "Stock label"
 msgid "_About"
 msgstr "_عنْ"
 
-#: gtk/a11y/gtkimageaccessible.c:54
+#: gtk/a11y/gtkimageaccessible.c:55
 msgctxt "Stock label"
 msgid "_Add"
 msgstr "أ_ضف"
 
-#: gtk/a11y/gtkimageaccessible.c:55
+#: gtk/a11y/gtkimageaccessible.c:56
 msgctxt "Stock label"
 msgid "_Bold"
 msgstr "_عريض"
 
-#: gtk/a11y/gtkimageaccessible.c:56
+#: gtk/a11y/gtkimageaccessible.c:57
 msgctxt "Stock label"
 msgid "_CD-ROM"
 msgstr "ا_سطوانة"
 
-#: gtk/a11y/gtkimageaccessible.c:57
+#: gtk/a11y/gtkimageaccessible.c:58
 msgctxt "Stock label"
 msgid "_Clear"
 msgstr "ا_مسح"
 
-#: gtk/a11y/gtkimageaccessible.c:58
+#: gtk/a11y/gtkimageaccessible.c:59
 msgctxt "Stock label"
 msgid "_Close"
 msgstr "أ_غلق"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:399 gtk/gtkwindow.c:8201
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:400 gtk/gtkwindow.c:8211
 msgid "Minimize"
 msgstr "صغّر"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:422 gtk/gtkwindow.c:8210
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:423 gtk/gtkwindow.c:8220
 msgid "Maximize"
 msgstr "كبِّر"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:422 gtk/gtkwindow.c:8167
+#: gtk/a11y/gtkimageaccessible.c:62 gtk/gtkheaderbar.c:423 gtk/gtkwindow.c:8177
 msgid "Restore"
 msgstr "استعِد"
 
-#: gtk/a11y/gtkimageaccessible.c:62
+#: gtk/a11y/gtkimageaccessible.c:63
 msgctxt "Stock label"
 msgid "_Copy"
 msgstr "ا_نسخ"
 
-#: gtk/a11y/gtkimageaccessible.c:63
+#: gtk/a11y/gtkimageaccessible.c:64
 msgctxt "Stock label"
 msgid "Cu_t"
 msgstr "_قصّ"
 
-#: gtk/a11y/gtkimageaccessible.c:64
+#: gtk/a11y/gtkimageaccessible.c:65
 msgctxt "Stock label"
 msgid "_Delete"
 msgstr "ا_حذف"
 
-#: gtk/a11y/gtkimageaccessible.c:65
+#: gtk/a11y/gtkimageaccessible.c:66
 msgctxt "Stock label"
 msgid "Error"
 msgstr "خطأ"
 
-#: gtk/a11y/gtkimageaccessible.c:66
+#: gtk/a11y/gtkimageaccessible.c:67
 msgctxt "Stock label"
 msgid "Information"
 msgstr "معلومات"
 
-#: gtk/a11y/gtkimageaccessible.c:67
+#: gtk/a11y/gtkimageaccessible.c:68
 msgctxt "Stock label"
 msgid "Question"
 msgstr "سؤال"
 
-#: gtk/a11y/gtkimageaccessible.c:68
+#: gtk/a11y/gtkimageaccessible.c:69
 msgctxt "Stock label"
 msgid "Warning"
 msgstr "تحذير"
 
-#: gtk/a11y/gtkimageaccessible.c:69
+#: gtk/a11y/gtkimageaccessible.c:70
 msgctxt "Stock label"
 msgid "_Execute"
 msgstr "_نفِّذ"
 
-#: gtk/a11y/gtkimageaccessible.c:70
+#: gtk/a11y/gtkimageaccessible.c:71
 msgctxt "Stock label"
 msgid "_File"
 msgstr "_ملف"
 
-#: gtk/a11y/gtkimageaccessible.c:71
+#: gtk/a11y/gtkimageaccessible.c:72
 msgctxt "Stock label"
 msgid "_Find"
 msgstr "ا_بحث"
 
-#: gtk/a11y/gtkimageaccessible.c:72
+#: gtk/a11y/gtkimageaccessible.c:73
 msgctxt "Stock label"
 msgid "Find and _Replace"
 msgstr "ابحث وا_ستبدِل"
 
-#: gtk/a11y/gtkimageaccessible.c:73
+#: gtk/a11y/gtkimageaccessible.c:74
 msgctxt "Stock label"
 msgid "_Floppy"
 msgstr "ق_رص مرن"
 
-#: gtk/a11y/gtkimageaccessible.c:74
+#: gtk/a11y/gtkimageaccessible.c:75
 msgctxt "Stock label"
 msgid "_Fullscreen"
 msgstr "ملء ال_شاشة"
 
-#: gtk/a11y/gtkimageaccessible.c:75
+#: gtk/a11y/gtkimageaccessible.c:76
 msgctxt "Stock label, navigation"
 msgid "_Bottom"
 msgstr "_قعر"
 
-#: gtk/a11y/gtkimageaccessible.c:76
+#: gtk/a11y/gtkimageaccessible.c:77
 msgctxt "Stock label, navigation"
 msgid "_First"
 msgstr "أ_ول"
 
-#: gtk/a11y/gtkimageaccessible.c:77
+#: gtk/a11y/gtkimageaccessible.c:78
 msgctxt "Stock label, navigation"
 msgid "_Last"
 msgstr "آ_خر"
 
-#: gtk/a11y/gtkimageaccessible.c:78
+#: gtk/a11y/gtkimageaccessible.c:79
 msgctxt "Stock label, navigation"
 msgid "_Top"
 msgstr "_قمة"
 
-#: gtk/a11y/gtkimageaccessible.c:79
+#: gtk/a11y/gtkimageaccessible.c:80
 msgctxt "Stock label, navigation"
 msgid "_Back"
 msgstr "خل_ف"
 
-#: gtk/a11y/gtkimageaccessible.c:80
+#: gtk/a11y/gtkimageaccessible.c:81
 msgctxt "Stock label, navigation"
 msgid "_Down"
 msgstr "أ_سفل"
 
-#: gtk/a11y/gtkimageaccessible.c:81
+#: gtk/a11y/gtkimageaccessible.c:82
 msgctxt "Stock label, navigation"
 msgid "_Forward"
 msgstr "أ_مام"
 
-#: gtk/a11y/gtkimageaccessible.c:82
+#: gtk/a11y/gtkimageaccessible.c:83
 msgctxt "Stock label, navigation"
 msgid "_Up"
 msgstr "ف_وق"
 
-#: gtk/a11y/gtkimageaccessible.c:83
+#: gtk/a11y/gtkimageaccessible.c:84
 msgctxt "Stock label"
 msgid "_Hard Disk"
 msgstr "قرص _صلب"
 
-#: gtk/a11y/gtkimageaccessible.c:84
+#: gtk/a11y/gtkimageaccessible.c:85
 msgctxt "Stock label"
 msgid "_Help"
 msgstr "م_ساعدة"
 
-#: gtk/a11y/gtkimageaccessible.c:85
+#: gtk/a11y/gtkimageaccessible.c:86
 msgctxt "Stock label"
 msgid "_Home"
 msgstr "ال_منزل"
 
-#: gtk/a11y/gtkimageaccessible.c:86
+#: gtk/a11y/gtkimageaccessible.c:87
 msgctxt "Stock label"
 msgid "Increase Indent"
 msgstr "زِد المحاذاة"
 
-#: gtk/a11y/gtkimageaccessible.c:87
+#: gtk/a11y/gtkimageaccessible.c:88
 msgctxt "Stock label"
 msgid "_Italic"
 msgstr "_مائل"
 
-#: gtk/a11y/gtkimageaccessible.c:88
+#: gtk/a11y/gtkimageaccessible.c:89
 msgctxt "Stock label"
 msgid "_Jump to"
 msgstr "ا_قفز إلى"
 
-#: gtk/a11y/gtkimageaccessible.c:89
+#: gtk/a11y/gtkimageaccessible.c:90
 msgctxt "Stock label"
 msgid "_Center"
 msgstr "_وسّط"
 
-#: gtk/a11y/gtkimageaccessible.c:90
+#: gtk/a11y/gtkimageaccessible.c:91
 msgctxt "Stock label"
 msgid "_Fill"
 msgstr "ا_ملأ"
 
-#: gtk/a11y/gtkimageaccessible.c:91
+#: gtk/a11y/gtkimageaccessible.c:92
 msgctxt "Stock label"
 msgid "_Left"
 msgstr "_يسار"
 
-#: gtk/a11y/gtkimageaccessible.c:92
+#: gtk/a11y/gtkimageaccessible.c:93
 msgctxt "Stock label"
 msgid "_Right"
 msgstr "ي_مين"
 
-#: gtk/a11y/gtkimageaccessible.c:93
+#: gtk/a11y/gtkimageaccessible.c:94
 msgctxt "Stock label"
 msgid "_Leave Fullscreen"
 msgstr "_غادر ملء الشاشة"
 
-#: gtk/a11y/gtkimageaccessible.c:94
+#: gtk/a11y/gtkimageaccessible.c:95
 msgctxt "Stock label, media"
 msgid "_Forward"
 msgstr "أ_مام"
 
-#: gtk/a11y/gtkimageaccessible.c:95
+#: gtk/a11y/gtkimageaccessible.c:96
 msgctxt "Stock label, media"
 msgid "_Next"
 msgstr "_جديد"
 
-#: gtk/a11y/gtkimageaccessible.c:96
+#: gtk/a11y/gtkimageaccessible.c:97
 msgctxt "Stock label, media"
 msgid "P_ause"
 msgstr "أُلبِ_ث"
 
-#: gtk/a11y/gtkimageaccessible.c:97
+#: gtk/a11y/gtkimageaccessible.c:98
 msgctxt "Stock label, media"
 msgid "_Play"
 msgstr "_شغّل"
 
-#: gtk/a11y/gtkimageaccessible.c:98
+#: gtk/a11y/gtkimageaccessible.c:99
 msgctxt "Stock label, media"
 msgid "Pre_vious"
 msgstr "ال_سابق"
 
-#: gtk/a11y/gtkimageaccessible.c:99
+#: gtk/a11y/gtkimageaccessible.c:100
 msgctxt "Stock label, media"
 msgid "_Record"
 msgstr "س_جّل"
 
-#: gtk/a11y/gtkimageaccessible.c:100
+#: gtk/a11y/gtkimageaccessible.c:101
 msgctxt "Stock label, media"
 msgid "R_ewind"
 msgstr "_رجوع"
 
-#: gtk/a11y/gtkimageaccessible.c:101
+#: gtk/a11y/gtkimageaccessible.c:102
 msgctxt "Stock label, media"
 msgid "_Stop"
 msgstr "_قف"
 
-#: gtk/a11y/gtkimageaccessible.c:102
+#: gtk/a11y/gtkimageaccessible.c:103
 msgctxt "Stock label"
 msgid "_Network"
 msgstr "_شبكة"
 
-#: gtk/a11y/gtkimageaccessible.c:103
+#: gtk/a11y/gtkimageaccessible.c:104
 msgctxt "Stock label"
 msgid "_New"
 msgstr "_جديد"
 
-#: gtk/a11y/gtkimageaccessible.c:104
+#: gtk/a11y/gtkimageaccessible.c:105
 msgctxt "Stock label"
 msgid "_Open"
 msgstr "ا_فتح"
 
-#: gtk/a11y/gtkimageaccessible.c:105
+#: gtk/a11y/gtkimageaccessible.c:106
 msgctxt "Stock label"
 msgid "_Paste"
 msgstr "أ_لصق"
 
-#: gtk/a11y/gtkimageaccessible.c:106
+#: gtk/a11y/gtkimageaccessible.c:107
 msgctxt "Stock label"
 msgid "_Print"
 msgstr "ا_طبع"
 
-#: gtk/a11y/gtkimageaccessible.c:107
+#: gtk/a11y/gtkimageaccessible.c:108
 msgctxt "Stock label"
 msgid "Print Pre_view"
 msgstr "_معاينة الطباعة"
 
-#: gtk/a11y/gtkimageaccessible.c:108
+#: gtk/a11y/gtkimageaccessible.c:109
 msgctxt "Stock label"
 msgid "_Properties"
 msgstr "_الخصائص"
 
-#: gtk/a11y/gtkimageaccessible.c:109
+#: gtk/a11y/gtkimageaccessible.c:110
 msgctxt "Stock label"
 msgid "_Quit"
 msgstr "أ_نهِ"
 
-#: gtk/a11y/gtkimageaccessible.c:110
+#: gtk/a11y/gtkimageaccessible.c:111
 msgctxt "Stock label"
 msgid "_Redo"
 msgstr "أ_عد"
 
-#: gtk/a11y/gtkimageaccessible.c:111
+#: gtk/a11y/gtkimageaccessible.c:112
 msgctxt "Stock label"
 msgid "_Refresh"
 msgstr "_حدِّث"
 
-#: gtk/a11y/gtkimageaccessible.c:112
+#: gtk/a11y/gtkimageaccessible.c:113
 msgctxt "Stock label"
 msgid "_Remove"
 msgstr "ا_حذِف"
 
-#: gtk/a11y/gtkimageaccessible.c:113
+#: gtk/a11y/gtkimageaccessible.c:114
 msgctxt "Stock label"
 msgid "_Revert"
 msgstr "ا_عكس"
 
-#: gtk/a11y/gtkimageaccessible.c:114
+#: gtk/a11y/gtkimageaccessible.c:115
 msgctxt "Stock label"
 msgid "_Save"
 msgstr "ا_حفظ"
 
-#: gtk/a11y/gtkimageaccessible.c:115
+#: gtk/a11y/gtkimageaccessible.c:116
 msgctxt "Stock label"
 msgid "Save _As"
 msgstr "احفظ با_سم"
 
-#: gtk/a11y/gtkimageaccessible.c:116
+#: gtk/a11y/gtkimageaccessible.c:117
 msgctxt "Stock label"
 msgid "Select _All"
 msgstr "اختر ال_كل"
 
-#: gtk/a11y/gtkimageaccessible.c:117
+#: gtk/a11y/gtkimageaccessible.c:118
 msgctxt "Stock label"
 msgid "_Ascending"
 msgstr "_تصاعدي"
 
-#: gtk/a11y/gtkimageaccessible.c:118
+#: gtk/a11y/gtkimageaccessible.c:119
 msgctxt "Stock label"
 msgid "_Descending"
 msgstr "_تنازلي"
 
-#: gtk/a11y/gtkimageaccessible.c:119
+#: gtk/a11y/gtkimageaccessible.c:120
 msgctxt "Stock label"
 msgid "_Spell Check"
 msgstr "_تدقيق إملائي"
 
-#: gtk/a11y/gtkimageaccessible.c:120
+#: gtk/a11y/gtkimageaccessible.c:121
 msgctxt "Stock label"
 msgid "_Stop"
 msgstr "_قف"
 
-#: gtk/a11y/gtkimageaccessible.c:121
+#: gtk/a11y/gtkimageaccessible.c:122
 msgctxt "Stock label"
 msgid "_Strikethrough"
 msgstr "اش_طب"
 
-#: gtk/a11y/gtkimageaccessible.c:122
+#: gtk/a11y/gtkimageaccessible.c:123
 msgctxt "Stock label"
 msgid "_Underline"
 msgstr "_سطِّر"
 
-#: gtk/a11y/gtkimageaccessible.c:123
+#: gtk/a11y/gtkimageaccessible.c:124
 msgctxt "Stock label"
 msgid "_Undo"
 msgstr "_تراجع"
 
-#: gtk/a11y/gtkimageaccessible.c:124
+#: gtk/a11y/gtkimageaccessible.c:125
 msgctxt "Stock label"
 msgid "Decrease Indent"
 msgstr "اخفض المحاذاة"
 
-#: gtk/a11y/gtkimageaccessible.c:125
+#: gtk/a11y/gtkimageaccessible.c:126
 msgctxt "Stock label"
 msgid "_Normal Size"
 msgstr "_الحجم العادي"
 
-#: gtk/a11y/gtkimageaccessible.c:126
+#: gtk/a11y/gtkimageaccessible.c:127
 msgctxt "Stock label"
 msgid "Best _Fit"
 msgstr "أفضل _ملاءمة"
 
-#: gtk/a11y/gtkimageaccessible.c:127
+#: gtk/a11y/gtkimageaccessible.c:128
 msgctxt "Stock label"
 msgid "Zoom _In"
 msgstr "_قرّب"
 
-#: gtk/a11y/gtkimageaccessible.c:128
+#: gtk/a11y/gtkimageaccessible.c:129
 msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "_بعّد"
 
-#: gtk/a11y/gtkmenubuttonaccessible.c:102 gtk/inspector/window.ui:402
+#: gtk/a11y/gtkmenubuttonaccessible.c:102 gtk/inspector/window.ui:372
 msgid "Menu"
 msgstr "قائمة"
 
@@ -1025,132 +1091,132 @@ msgctxt "Action description"
 msgid "Toggles the switch"
 msgstr ""
 
-#: gtk/encodesymbolic.c:38
+#: gtk/encodesymbolic.c:39
 msgid "Output to this directory instead of cwd"
 msgstr ""
 
-#: gtk/encodesymbolic.c:266
+#: gtk/encodesymbolic.c:91
 #, c-format
 msgid "Invalid size %s\n"
 msgstr ""
 
-#: gtk/encodesymbolic.c:279 gtk/gtk-builder-tool.c:668
+#: gtk/encodesymbolic.c:103 gtk/encodesymbolic.c:110 gtk/gtk-builder-tool.c:668
 #, c-format
 msgid "Can’t load file: %s\n"
 msgstr ""
 
-#: gtk/encodesymbolic.c:307 gtk/encodesymbolic.c:313
+#: gtk/encodesymbolic.c:140 gtk/encodesymbolic.c:146
 #, c-format
 msgid "Can’t save file %s: %s\n"
 msgstr ""
 
-#: gtk/encodesymbolic.c:319
+#: gtk/encodesymbolic.c:152
 msgid "Can’t close stream"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:117 gtk/ui/gtkaboutdialog.ui:181
+#: gtk/gtkaboutdialog.c:118 gtk/ui/gtkaboutdialog.ui:168
 msgid "License"
 msgstr "الترخيص"
 
-#: gtk/gtkaboutdialog.c:118
+#: gtk/gtkaboutdialog.c:119
 msgid "Custom License"
 msgstr "ترخيص مخصّص"
 
-#: gtk/gtkaboutdialog.c:119
+#: gtk/gtkaboutdialog.c:120
 msgid "GNU General Public License, version 2 or later"
 msgstr "رخصة جنو العمومية، الإصدارة 2 أو أحدث"
 
-#: gtk/gtkaboutdialog.c:120
+#: gtk/gtkaboutdialog.c:121
 msgid "GNU General Public License, version 3 or later"
 msgstr "رخصة جنو العمومية، الإصدارة 3 أو أحدث"
 
-#: gtk/gtkaboutdialog.c:121
+#: gtk/gtkaboutdialog.c:122
 msgid "GNU Lesser General Public License, version 2.1 or later"
 msgstr "رخصة جنو العمومية الصغرى، الإصدارة 2.1 أو أحدث"
 
-#: gtk/gtkaboutdialog.c:122
+#: gtk/gtkaboutdialog.c:123
 msgid "GNU Lesser General Public License, version 3 or later"
 msgstr "رخصة جنو العمومية الصغرى، الإصدارة 3 أو أحدث"
 
-#: gtk/gtkaboutdialog.c:123
+#: gtk/gtkaboutdialog.c:124
 msgid "BSD 2-Clause License"
 msgstr "رخصة BSD ثنائية البنود"
 
-#: gtk/gtkaboutdialog.c:124
+#: gtk/gtkaboutdialog.c:125
 msgid "The MIT License (MIT)"
 msgstr "رخصة MIT"
 
-#: gtk/gtkaboutdialog.c:125
+#: gtk/gtkaboutdialog.c:126
 msgid "Artistic License 2.0"
 msgstr "الرخصة الفنية 2.0"
 
-#: gtk/gtkaboutdialog.c:126
+#: gtk/gtkaboutdialog.c:127
 msgid "GNU General Public License, version 2 only"
 msgstr "رخصة جنو العمومية، الإصدارة 2 فقط"
 
-#: gtk/gtkaboutdialog.c:127
+#: gtk/gtkaboutdialog.c:128
 msgid "GNU General Public License, version 3 only"
 msgstr "رخصة جنو العمومية، الإصدارة 3 فقط"
 
-#: gtk/gtkaboutdialog.c:128
+#: gtk/gtkaboutdialog.c:129
 msgid "GNU Lesser General Public License, version 2.1 only"
 msgstr "رخصة جنو العمومية الصغرى، الإصدارة 2.1 فقط"
 
-#: gtk/gtkaboutdialog.c:129
+#: gtk/gtkaboutdialog.c:130
 msgid "GNU Lesser General Public License, version 3 only"
 msgstr "رخصة جنو العمومية الصغرى، الإصدارة 3 فقط"
 
-#: gtk/gtkaboutdialog.c:130
+#: gtk/gtkaboutdialog.c:131
 msgid "GNU Affero General Public License, version 3 or later"
 msgstr "رخصة جنو أفّيرو العمومية، الإصدارة 3 أو أحدث"
 
-#: gtk/gtkaboutdialog.c:749
+#: gtk/gtkaboutdialog.c:748
 msgid "C_redits"
 msgstr "إ_شادات"
 
-#: gtk/gtkaboutdialog.c:760
+#: gtk/gtkaboutdialog.c:759
 msgid "_License"
 msgstr "ال_ترخيص"
 
-#: gtk/gtkaboutdialog.c:771 gtk/gtkcustompaperunixdialog.c:329
-#: gtk/gtkmessagedialog.c:848 gtk/ui/gtkassistant.ui:134
+#: gtk/gtkaboutdialog.c:770 gtk/gtkcustompaperunixdialog.c:329
+#: gtk/gtkmessagedialog.c:847 gtk/ui/gtkassistant.ui:125
 msgid "_Close"
 msgstr "أ_غلق"
 
-#: gtk/gtkaboutdialog.c:1061
+#: gtk/gtkaboutdialog.c:1043
 msgid "Could not show link"
 msgstr "تعذّر إظهار الوصلة"
 
-#: gtk/gtkaboutdialog.c:1098
+#: gtk/gtkaboutdialog.c:1080
 msgid "Website"
 msgstr "الموقع"
 
 #. used for the application menu on MacOS.  %s is replaced with the application name.
-#: gtk/gtkaboutdialog.c:1148 gtk/ui/gtkapplication-quartz.ui:7
+#: gtk/gtkaboutdialog.c:1130 gtk/ui/gtkapplication-quartz.ui:7
 #, c-format
 msgid "About %s"
 msgstr "عنْ %s"
 
-#: gtk/gtkaboutdialog.c:2406
+#: gtk/gtkaboutdialog.c:2400
 msgid "Created by"
 msgstr "أنشئه"
 
-#: gtk/gtkaboutdialog.c:2409
+#: gtk/gtkaboutdialog.c:2403
 msgid "Documented by"
 msgstr "وثّقه"
 
-#: gtk/gtkaboutdialog.c:2419
+#: gtk/gtkaboutdialog.c:2413
 msgid "Translated by"
 msgstr "ترجَمَهُ"
 
-#: gtk/gtkaboutdialog.c:2424
+#: gtk/gtkaboutdialog.c:2418
 msgid "Artwork by"
 msgstr "جمَّلَهُ"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: gtk/gtkaboutdialog.c:2598
+#: gtk/gtkaboutdialog.c:2592
 #, c-format
 msgid ""
 "This program comes with absolutely no warranty.\n"
@@ -1274,28 +1340,28 @@ msgstr "انس الارتباط"
 msgid "Failed to start GNOME Software"
 msgstr "فشل بدأ برمجيات جنوم"
 
-#: gtk/gtkappchooserwidget.c:635
+#: gtk/gtkappchooserwidget.c:633
 msgid "Default Application"
 msgstr "التطبيق المبدئي"
 
-#: gtk/gtkappchooserwidget.c:685
+#: gtk/gtkappchooserwidget.c:683
 #, c-format
 msgid "No applications found for “%s”."
 msgstr "لا توجد أي تطبيقات لفتح ”%s“."
 
-#: gtk/gtkappchooserwidget.c:768
+#: gtk/gtkappchooserwidget.c:766
 msgid "Recommended Applications"
 msgstr "التطبيقات المُزكّاة"
 
-#: gtk/gtkappchooserwidget.c:783
+#: gtk/gtkappchooserwidget.c:781
 msgid "Related Applications"
 msgstr "التطبيقات المتعلقة"
 
-#: gtk/gtkappchooserwidget.c:797
+#: gtk/gtkappchooserwidget.c:795
 msgid "Other Applications"
 msgstr "التطبيقات الأخرى"
 
-#: gtk/gtkapplicationwindow.c:340 gtk/gtkprintoperation-unix.c:485
+#: gtk/gtkapplicationwindow.c:340 gtk/gtkprintoperation-unix.c:483
 #: gtk/gtkprintoperation-win32.c:1465 gtk/inspector/prop-editor.c:1623
 msgid "Application"
 msgstr "تطبيق"
@@ -1381,7 +1447,7 @@ msgstr ""
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: gtk/gtkcalendar.c:776
+#: gtk/gtkcalendar.c:783
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1389,7 +1455,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:814
+#: gtk/gtkcalendar.c:821
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:7"
 
@@ -1398,7 +1464,7 @@ msgstr "calendar:week_start:7"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1645
+#: gtk/gtkcalendar.c:1636
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "2000"
@@ -1413,7 +1479,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1676 gtk/gtkcalendar.c:2301
+#: gtk/gtkcalendar.c:1667 gtk/gtkcalendar.c:2277
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1429,7 +1495,7 @@ msgstr "%Id"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1708 gtk/gtkcalendar.c:2193
+#: gtk/gtkcalendar.c:1699 gtk/gtkcalendar.c:2169
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1445,7 +1511,7 @@ msgstr "%Id"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1962
+#: gtk/gtkcalendar.c:1942
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -1480,7 +1546,7 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%Id ٪"
 
-#: gtk/gtkcolorbutton.c:228 gtk/gtkcolorbutton.c:410
+#: gtk/gtkcolorbutton.c:226 gtk/gtkcolorbutton.c:407
 msgid "Pick a Color"
 msgstr "انتقِ لونًا"
 
@@ -1697,7 +1763,7 @@ msgstr "أنشئ لونًا مخصّصًا"
 msgid "Custom color %d: %s"
 msgstr "اللون المخصص %d: %s"
 
-#: gtk/gtkcolorplane.c:429
+#: gtk/gtkcolorplane.c:417
 msgid "Color Plane"
 msgstr "مجال الألوان"
 
@@ -1711,7 +1777,7 @@ msgctxt "Color channel"
 msgid "Alpha"
 msgstr "ألفا"
 
-#: gtk/gtkcolorswatch.c:300
+#: gtk/gtkcolorswatch.c:294
 msgid "C_ustomize"
 msgstr "_خصّص"
 
@@ -1726,7 +1792,7 @@ msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: gtk/gtkcustompaperunixdialog.c:405 gtk/gtkprintunixdialog.c:3344
+#: gtk/gtkcustompaperunixdialog.c:405 gtk/gtkprintunixdialog.c:3313
 msgid "Manage Custom Sizes"
 msgstr "أدِر المقاسات المخصّصة"
 
@@ -1747,84 +1813,84 @@ msgstr "الحواف من الطابعة…"
 msgid "Custom Size %d"
 msgstr "مقاس مخصّص %Id"
 
-#: gtk/gtkcustompaperunixdialog.c:1109
+#: gtk/gtkcustompaperunixdialog.c:1108
 msgid "_Width:"
 msgstr "ال_عرض:"
 
-#: gtk/gtkcustompaperunixdialog.c:1120
+#: gtk/gtkcustompaperunixdialog.c:1119
 msgid "_Height:"
 msgstr "الا_رتفاع:"
 
-#: gtk/gtkcustompaperunixdialog.c:1131
+#: gtk/gtkcustompaperunixdialog.c:1130
 msgid "Paper Size"
 msgstr "مقاس الورقة"
 
-#: gtk/gtkcustompaperunixdialog.c:1140
+#: gtk/gtkcustompaperunixdialog.c:1139
 msgid "_Top:"
 msgstr "_فوق:"
 
-#: gtk/gtkcustompaperunixdialog.c:1151
+#: gtk/gtkcustompaperunixdialog.c:1150
 msgid "_Bottom:"
 msgstr "_تحت:"
 
-#: gtk/gtkcustompaperunixdialog.c:1162
+#: gtk/gtkcustompaperunixdialog.c:1161
 msgid "_Left:"
 msgstr "_يسار:"
 
-#: gtk/gtkcustompaperunixdialog.c:1173
+#: gtk/gtkcustompaperunixdialog.c:1172
 msgid "_Right:"
 msgstr "_يمين:"
 
-#: gtk/gtkcustompaperunixdialog.c:1212
+#: gtk/gtkcustompaperunixdialog.c:1211
 msgid "Paper Margins"
 msgstr "حواف الورق"
 
-#: gtk/gtkentry.c:8507 gtk/gtklabel.c:6092 gtk/gtktextview.c:9278
+#: gtk/gtkentry.c:8549 gtk/gtklabel.c:6172 gtk/gtktextview.c:8775
 msgid "Cu_t"
 msgstr "_قصّ"
 
-#: gtk/gtkentry.c:8511 gtk/gtklabel.c:6093 gtk/gtktextview.c:9282
+#: gtk/gtkentry.c:8553 gtk/gtklabel.c:6173 gtk/gtktextview.c:8779
 msgid "_Copy"
 msgstr "ا_نسخ"
 
-#: gtk/gtkentry.c:8515 gtk/gtklabel.c:6094 gtk/gtktextview.c:9284
+#: gtk/gtkentry.c:8557 gtk/gtklabel.c:6174 gtk/gtktextview.c:8781
 msgid "_Paste"
 msgstr "أ_لصق"
 
-#: gtk/gtkentry.c:8518 gtk/gtkfilechooserwidget.c:1484
-#: gtk/gtkfilechooserwidget.c:2279 gtk/gtklabel.c:6096 gtk/gtktextview.c:9287
+#: gtk/gtkentry.c:8560 gtk/gtkfilechooserwidget.c:1476
+#: gtk/gtkfilechooserwidget.c:2197 gtk/gtklabel.c:6176 gtk/gtktextview.c:8784
 msgid "_Delete"
 msgstr "ا_حذف"
 
-#: gtk/gtkentry.c:8529 gtk/gtklabel.c:6105 gtk/gtktextview.c:9301
+#: gtk/gtkentry.c:8571 gtk/gtklabel.c:6185 gtk/gtktextview.c:8798
 msgid "Select _All"
 msgstr "اختر ال_كل"
 
-#: gtk/gtkentry.c:8539
+#: gtk/gtkentry.c:8581 gtk/gtktextview.c:8808
 msgid "Insert _Emoji"
 msgstr "أدرج إ_موجي"
 
-#: gtk/gtkentry.c:8713 gtk/gtktextview.c:9526
+#: gtk/gtkentry.c:8733 gtk/gtktextview.c:9011
 msgid "Select all"
 msgstr "اختر الكل"
 
-#: gtk/gtkentry.c:8716 gtk/gtktextview.c:9529
+#: gtk/gtkentry.c:8736 gtk/gtktextview.c:9014
 msgid "Cut"
 msgstr "قصّ"
 
-#: gtk/gtkentry.c:8719 gtk/gtktextview.c:9532
+#: gtk/gtkentry.c:8739 gtk/gtktextview.c:9017
 msgid "Copy"
 msgstr "انسخ"
 
-#: gtk/gtkentry.c:8722 gtk/gtktextview.c:9535
+#: gtk/gtkentry.c:8742 gtk/gtktextview.c:9020
 msgid "Paste"
 msgstr "ألصق"
 
-#: gtk/gtkentry.c:9669
+#: gtk/gtkentry.c:9678
 msgid "Caps Lock is on"
 msgstr "زر الحروف العالية مفعّل"
 
-#: gtk/gtkentry.c:9941
+#: gtk/gtkentry.c:9953
 msgid "Insert Emoji"
 msgstr "أدرج إموجي"
 
@@ -1832,7 +1898,7 @@ msgstr "أدرج إموجي"
 msgid "Select a File"
 msgstr "اختر ملفًا"
 
-#: gtk/gtkfilechooserbutton.c:107 gtk/gtkplacessidebar.c:1040
+#: gtk/gtkfilechooserbutton.c:107 gtk/gtkplacessidebar.c:1084
 msgid "Desktop"
 msgstr "سطح المكتب"
 
@@ -1840,7 +1906,7 @@ msgstr "سطح المكتب"
 msgid "(None)"
 msgstr "(لا شيء)"
 
-#: gtk/gtkfilechooserbutton.c:2202
+#: gtk/gtkfilechooserbutton.c:2125
 msgid "Other…"
 msgstr "أخرى…"
 
@@ -1905,31 +1971,31 @@ msgid "A file with that name already exists"
 msgstr "يوجد بالفعل ملف بهذا الاسم"
 
 #: gtk/gtkfilechoosernative.c:540 gtk/gtkfilechoosernative.c:625
-#: gtk/gtkfilechooserwidget.c:1483 gtk/gtkfilechooserwidget.c:6362
-#: gtk/gtkmessagedialog.c:852 gtk/gtkmessagedialog.c:861
+#: gtk/gtkfilechooserwidget.c:1475 gtk/gtkfilechooserwidget.c:6264
+#: gtk/gtkmessagedialog.c:851 gtk/gtkmessagedialog.c:860
 #: gtk/gtkmountoperation.c:542 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
-#: gtk/gtkprintunixdialog.c:674 gtk/gtkprintunixdialog.c:741
+#: gtk/gtkprintunixdialog.c:660 gtk/gtkprintunixdialog.c:727
 #: gtk/gtkwindow.c:10956 gtk/inspector/css-editor.c:201
-#: gtk/inspector/recorder.c:704 gtk/ui/gtkappchooserdialog.ui:54
-#: gtk/ui/gtkassistant.ui:116 gtk/ui/gtkcolorchooserdialog.ui:34
-#: gtk/ui/gtkfontchooserdialog.ui:28
+#: gtk/inspector/recorder.c:720 gtk/ui/gtkappchooserdialog.ui:49
+#: gtk/ui/gtkassistant.ui:108 gtk/ui/gtkcolorchooserdialog.ui:32
+#: gtk/ui/gtkfontchooserdialog.ui:26
 msgid "_Cancel"
 msgstr "أ_لغِ"
 
 #. Open item is always present
 #: gtk/gtkfilechoosernative.c:541 gtk/gtkfilechoosernative.c:619
-#: gtk/gtkplacessidebar.c:3525 gtk/gtkplacessidebar.c:3586
-#: gtk/gtkplacesview.c:1627
+#: gtk/gtkplacessidebar.c:3565 gtk/gtkplacessidebar.c:3634
+#: gtk/gtkplacesview.c:1617
 msgid "_Open"
 msgstr "ا_فتح"
 
 #: gtk/gtkfilechoosernative.c:619 gtk/inspector/css-editor.c:202
-#: gtk/inspector/recorder.c:705
+#: gtk/inspector/recorder.c:721
 msgid "_Save"
 msgstr "ا_حفظ"
 
-#: gtk/gtkfilechoosernativequartz.c:331 gtk/ui/gtkfilechooserwidget.ui:350
+#: gtk/gtkfilechoosernativequartz.c:331 gtk/ui/gtkfilechooserwidget.ui:348
 msgid "Select which types of files are shown"
 msgstr "اختر أنواع الملفات التي ستعرض"
 
@@ -1942,15 +2008,15 @@ msgstr "اختر أنواع الملفات التي ستعرض"
 msgid "%1$s on %2$s"
 msgstr "%1$s على %2$s"
 
-#: gtk/gtkfilechooserwidget.c:375
+#: gtk/gtkfilechooserwidget.c:368
 msgid "Type name of new folder"
 msgstr "اكتب اسما للمجلد الجديد"
 
-#: gtk/gtkfilechooserwidget.c:793
+#: gtk/gtkfilechooserwidget.c:785
 msgid "The folder could not be created"
 msgstr "تعذّر إنشاء المجلّد"
 
-#: gtk/gtkfilechooserwidget.c:806
+#: gtk/gtkfilechooserwidget.c:798
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1958,207 +2024,207 @@ msgstr ""
 "تعذّر إنشاء المجلد بسبب وجود ملف يحمل نفس الاسم. حاول استخدام اسم آخر للمجلد، "
 "أو غيّر اسم الملف أولا."
 
-#: gtk/gtkfilechooserwidget.c:821
+#: gtk/gtkfilechooserwidget.c:813
 msgid "You need to choose a valid filename."
 msgstr "عليك اختيار اسم ملف سليم"
 
-#: gtk/gtkfilechooserwidget.c:824
+#: gtk/gtkfilechooserwidget.c:816
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "تعذّر إنشاء ملف داخل %s لأنه ليس مجلدا"
 
-#: gtk/gtkfilechooserwidget.c:834
+#: gtk/gtkfilechooserwidget.c:826
 msgid "Cannot create file as the filename is too long"
 msgstr "تعذّر إنشاء الملف لأن اسمه طويل جدًا"
 
-#: gtk/gtkfilechooserwidget.c:835
+#: gtk/gtkfilechooserwidget.c:827
 msgid "Try using a shorter name."
 msgstr "جرب اسمًا أقصر"
 
-#: gtk/gtkfilechooserwidget.c:845
+#: gtk/gtkfilechooserwidget.c:837
 msgid "You may only select folders"
 msgstr "يمكن اختيار المجلدات فقط"
 
-#: gtk/gtkfilechooserwidget.c:846
+#: gtk/gtkfilechooserwidget.c:838
 msgid "The item that you selected is not a folder try using a different item."
 msgstr "العنصر الذي اخترته ليس مجلدا، جرب استخدام اسم آخر."
 
-#: gtk/gtkfilechooserwidget.c:854
+#: gtk/gtkfilechooserwidget.c:846
 msgid "Invalid file name"
 msgstr "اسم ملف غير صالح"
 
-#: gtk/gtkfilechooserwidget.c:863
+#: gtk/gtkfilechooserwidget.c:855
 msgid "The folder contents could not be displayed"
 msgstr "تعذّر عرض محتويات المجلد."
 
-#: gtk/gtkfilechooserwidget.c:871
+#: gtk/gtkfilechooserwidget.c:863
 msgid "The file could not be deleted"
 msgstr "تعذّر حذف هذا الملف"
 
-#: gtk/gtkfilechooserwidget.c:879
+#: gtk/gtkfilechooserwidget.c:871
 msgid "The file could not be moved to the Trash"
 msgstr "تعذّر نقل الملف إلى المهملات"
 
-#: gtk/gtkfilechooserwidget.c:1479
+#: gtk/gtkfilechooserwidget.c:1471
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
 msgstr "أمتأكد من أنك تريد حذف ”%s“ نهائيا؟"
 
-#: gtk/gtkfilechooserwidget.c:1482
+#: gtk/gtkfilechooserwidget.c:1474
 msgid "If you delete an item, it will be permanently lost."
 msgstr "إذا حذفت عنصر، سيضيع نهائيا."
 
-#: gtk/gtkfilechooserwidget.c:1610
+#: gtk/gtkfilechooserwidget.c:1602
 msgid "The file could not be renamed"
 msgstr "تعذّر تغيير اسم الملف"
 
-#: gtk/gtkfilechooserwidget.c:1925
+#: gtk/gtkfilechooserwidget.c:1846
 msgid "Could not select file"
 msgstr "تعذّر اختيار الملف"
 
-#: gtk/gtkfilechooserwidget.c:2274
+#: gtk/gtkfilechooserwidget.c:2192
 msgid "_Visit File"
 msgstr "_زُر هذا الملف"
 
-#: gtk/gtkfilechooserwidget.c:2275
+#: gtk/gtkfilechooserwidget.c:2193
 msgid "_Open With File Manager"
 msgstr "ا_فتح بمدير الملفات"
 
-#: gtk/gtkfilechooserwidget.c:2276
+#: gtk/gtkfilechooserwidget.c:2194
 msgid "_Copy Location"
 msgstr "ا_نسخ الموقع"
 
-#: gtk/gtkfilechooserwidget.c:2277
+#: gtk/gtkfilechooserwidget.c:2195
 msgid "_Add to Bookmarks"
 msgstr "أ_ضف للعلامات"
 
-#: gtk/gtkfilechooserwidget.c:2278 gtk/gtkplacessidebar.c:2639
-#: gtk/ui/gtkfilechooserwidget.ui:475
+#: gtk/gtkfilechooserwidget.c:2196 gtk/gtkplacessidebar.c:2679
+#: gtk/ui/gtkfilechooserwidget.ui:472
 msgid "_Rename"
 msgstr "_غيّر الاسم"
 
-#: gtk/gtkfilechooserwidget.c:2280
+#: gtk/gtkfilechooserwidget.c:2198
 msgid "_Move to Trash"
 msgstr "ا_نقل إلى المهملات"
 
-#: gtk/gtkfilechooserwidget.c:2284
+#: gtk/gtkfilechooserwidget.c:2202
 msgid "Show _Hidden Files"
 msgstr "أظهر الملفات ال_مخفيّة"
 
-#: gtk/gtkfilechooserwidget.c:2285
+#: gtk/gtkfilechooserwidget.c:2203
 msgid "Show _Size Column"
 msgstr "أظهر _عمود الحجم"
 
-#: gtk/gtkfilechooserwidget.c:2286
+#: gtk/gtkfilechooserwidget.c:2204
 msgid "Show _Time"
 msgstr "أ_ظهر الوقت"
 
-#: gtk/gtkfilechooserwidget.c:2287
+#: gtk/gtkfilechooserwidget.c:2205
 msgid "Sort _Folders before Files"
 msgstr "رتّب ال_مجلدات قبل الملفات"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2619 gtk/inspector/css-node-tree.ui:141
-#: gtk/ui/gtkfilechooserwidget.ui:183 gtk/ui/gtkprintunixdialog.ui:124
+#: gtk/gtkfilechooserwidget.c:2537 gtk/inspector/css-node-tree.ui:141
+#: gtk/ui/gtkfilechooserwidget.ui:182 gtk/ui/gtkprintunixdialog.ui:118
 msgid "Location"
 msgstr "الموقع"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2708
+#: gtk/gtkfilechooserwidget.c:2626
 msgid "_Name:"
 msgstr "الا_سم:"
 
-#: gtk/gtkfilechooserwidget.c:3326
+#: gtk/gtkfilechooserwidget.c:3244
 msgid "Searching"
 msgstr "يبحث"
 
-#: gtk/gtkfilechooserwidget.c:3331 gtk/gtkfilechooserwidget.c:3345
+#: gtk/gtkfilechooserwidget.c:3249 gtk/gtkfilechooserwidget.c:3263
 #, c-format
 msgid "Searching in %s"
 msgstr "يبحث في %s"
 
-#: gtk/gtkfilechooserwidget.c:3355
+#: gtk/gtkfilechooserwidget.c:3273
 msgid "Enter location"
 msgstr "اكتب موقعًا"
 
-#: gtk/gtkfilechooserwidget.c:3357
+#: gtk/gtkfilechooserwidget.c:3275
 msgid "Enter location or URL"
 msgstr "اكتب موقعًا أو مسارًا"
 
-#: gtk/gtkfilechooserwidget.c:4381 gtk/gtkfilechooserwidget.c:7271
-#: gtk/ui/gtkfilechooserwidget.ui:211
+#: gtk/gtkfilechooserwidget.c:4283 gtk/gtkfilechooserwidget.c:7178
+#: gtk/ui/gtkfilechooserwidget.ui:210
 msgid "Modified"
 msgstr "معدّل"
 
-#: gtk/gtkfilechooserwidget.c:4659
+#: gtk/gtkfilechooserwidget.c:4561
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "تعذّرت قراءة محتويات %s"
 
-#: gtk/gtkfilechooserwidget.c:4663
+#: gtk/gtkfilechooserwidget.c:4565
 msgid "Could not read the contents of the folder"
 msgstr "تعذّرت قراءة محتويات المجلّد"
 
 #. Translators: see g_date_time_format() for details on the format
-#: gtk/gtkfilechooserwidget.c:4793 gtk/gtkfilechooserwidget.c:4841
+#: gtk/gtkfilechooserwidget.c:4695 gtk/gtkfilechooserwidget.c:4743
 msgid "%H:%M"
 msgstr "%OH:%OM"
 
-#: gtk/gtkfilechooserwidget.c:4795 gtk/gtkfilechooserwidget.c:4843
+#: gtk/gtkfilechooserwidget.c:4697 gtk/gtkfilechooserwidget.c:4745
 msgid "%l:%M %p"
 msgstr "%l:%M %p"
 
-#: gtk/gtkfilechooserwidget.c:4799
+#: gtk/gtkfilechooserwidget.c:4701
 msgid "Yesterday"
 msgstr "أمس"
 
-#: gtk/gtkfilechooserwidget.c:4807
+#: gtk/gtkfilechooserwidget.c:4709
 msgid "%-e %b"
 msgstr "%-e %b"
 
-#: gtk/gtkfilechooserwidget.c:4811
+#: gtk/gtkfilechooserwidget.c:4713
 msgid "%-e %b %Y"
 msgstr "%-e %b %Y"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: gtk/gtkfilechooserwidget.c:5046 gtk/inspector/prop-editor.c:1626
+#: gtk/gtkfilechooserwidget.c:4948 gtk/inspector/prop-editor.c:1626
 #: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "مجهول"
 
-#: gtk/gtkfilechooserwidget.c:5085 gtk/gtkplacessidebar.c:1025
+#: gtk/gtkfilechooserwidget.c:4987 gtk/gtkplacessidebar.c:1069
 msgid "Home"
 msgstr "المنزل"
 
-#: gtk/gtkfilechooserwidget.c:5578
+#: gtk/gtkfilechooserwidget.c:5480
 msgid "Cannot change to folder because it is not local"
 msgstr "تعذّر الانتقال إلى المجلّد لأنه غير محلي"
 
-#: gtk/gtkfilechooserwidget.c:6355 gtk/gtkprintunixdialog.c:665
+#: gtk/gtkfilechooserwidget.c:6257 gtk/gtkprintunixdialog.c:651
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "هناك ملف باسم ”%s“ موجود حاليا. أتريد استبداله؟"
 
-#: gtk/gtkfilechooserwidget.c:6358 gtk/gtkprintunixdialog.c:669
+#: gtk/gtkfilechooserwidget.c:6260 gtk/gtkprintunixdialog.c:655
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr "الملف موجود بالفعل في ”%s“.  استبداله سيكتب فوق محتواه."
 
-#: gtk/gtkfilechooserwidget.c:6363 gtk/gtkprintunixdialog.c:677
+#: gtk/gtkfilechooserwidget.c:6265 gtk/gtkprintunixdialog.c:663
 msgid "_Replace"
 msgstr "است_بدِل"
 
-#: gtk/gtkfilechooserwidget.c:6571
+#: gtk/gtkfilechooserwidget.c:6473
 msgid "You do not have access to the specified folder."
 msgstr "لا تملك الوصول إلى المجلد المحدد."
 
-#: gtk/gtkfilechooserwidget.c:7195
+#: gtk/gtkfilechooserwidget.c:7102
 msgid "Could not send the search request"
 msgstr "تعذّر إرسال طلب البحث"
 
-#: gtk/gtkfilechooserwidget.c:7481
+#: gtk/gtkfilechooserwidget.c:7388
 msgid "Accessed"
 msgstr "آخر وصول"
 
@@ -2171,41 +2237,94 @@ msgstr "آخر وصول"
 msgid "File System"
 msgstr "نظام ملفات"
 
-#: gtk/gtkfontbutton.c:367 gtk/gtkfontbutton.c:524
+#: gtk/gtkfontbutton.c:378
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: gtk/gtkfontbutton.c:509 gtk/gtkfontbutton.c:656
+#: gtk/gtkfontbutton.c:519 gtk/gtkfontbutton.c:616
 msgid "Pick a Font"
 msgstr "اختر خطًا"
 
-#: gtk/gtkfontbutton.c:631 gtk/inspector/visual.ui:221
+#: gtk/gtkfontbutton.c:593 gtk/inspector/visual.ui:221
 msgid "Font"
 msgstr "الخطّ"
 
-#: gtk/gtkfontbutton.c:1396
+#: gtk/gtkfontbutton.c:1305
 msgctxt "font"
 msgid "None"
 msgstr "لا شيء"
+
+#: gtk/gtkfontchooserwidget.c:1544
+msgid "Width"
+msgstr "العرض"
+
+#: gtk/gtkfontchooserwidget.c:1545
+msgid "Weight"
+msgstr "الوزن"
+
+#: gtk/gtkfontchooserwidget.c:1546
+msgid "Italic"
+msgstr "مائل"
+
+#: gtk/gtkfontchooserwidget.c:1547
+msgid "Slant"
+msgstr "منحرف"
+
+#: gtk/gtkfontchooserwidget.c:1548
+msgid "Optical Size"
+msgstr "الحجم البصري"
+
+#: gtk/gtkfontchooserwidget.c:1681
+msgctxt "Language"
+msgid "Default"
+msgstr "المبدئية"
+
+#: gtk/gtkfontchooserwidget.c:1967 gtk/inspector/prop-editor.c:1613
+msgid "Default"
+msgstr "المبدئي"
+
+#: gtk/gtkfontchooserwidget.c:1997
+msgid "Ligatures"
+msgstr "الاقترانات"
+
+#: gtk/gtkfontchooserwidget.c:1998
+msgid "Letter Case"
+msgstr "حالة الحروف"
+
+#: gtk/gtkfontchooserwidget.c:1999
+msgid "Number Case"
+msgstr "حالة الأرقام"
+
+#: gtk/gtkfontchooserwidget.c:2000
+msgid "Number Spacing"
+msgstr "تباعد الأرقام"
+
+#: gtk/gtkfontchooserwidget.c:2001
+msgid "Number Formatting"
+msgstr "تنسيق الأرقام"
+
+#: gtk/gtkfontchooserwidget.c:2002
+msgid "Character Variants"
+msgstr "تنويعات الحروف"
 
 #: gtk/gtkglarea.c:298
 msgid "OpenGL context creation failed"
 msgstr ""
 
-#: gtk/gtkheaderbar.c:374
+#: gtk/gtkheaderbar.c:376
 msgid "Application menu"
 msgstr "قائمة التطبيق"
 
-#: gtk/gtkheaderbar.c:440 gtk/gtkwindow.c:8237
+#: gtk/gtkheaderbar.c:441 gtk/gtkwindow.c:8247
 msgid "Close"
 msgstr "أغلق"
 
-#: gtk/gtkicontheme.c:2300 gtk/gtkicontheme.c:2365
+#: gtk/gtkicontheme.c:2287 gtk/gtkicontheme.c:2352
 #, c-format
 msgid "Icon “%s” not present in theme %s"
 msgstr "الأيقونة ”%s“ غير موجودة في السِمة %s"
 
-#: gtk/gtkicontheme.c:3974 gtk/gtkicontheme.c:4375
+#: gtk/gtkicontheme.c:3929 gtk/gtkicontheme.c:4329
 msgid "Failed to load icon"
 msgstr "فشل تحميل الأيقونة"
 
@@ -2219,29 +2338,29 @@ msgctxt "input method menu"
 msgid "None"
 msgstr "لا شيء"
 
-#: gtk/gtkinfobar.c:1057 gtk/gtkmessagedialog.c:353
+#: gtk/gtkinfobar.c:1058 gtk/gtkmessagedialog.c:352
 msgid "Information"
 msgstr "معلومات"
 
-#: gtk/gtkinfobar.c:1061 gtk/gtkmessagedialog.c:357
+#: gtk/gtkinfobar.c:1062 gtk/gtkmessagedialog.c:356
 msgid "Question"
 msgstr "سؤال"
 
-#: gtk/gtkinfobar.c:1065 gtk/gtkmessagedialog.c:361
+#: gtk/gtkinfobar.c:1066 gtk/gtkmessagedialog.c:360
 msgid "Warning"
 msgstr "تحذير"
 
-#: gtk/gtkinfobar.c:1069 gtk/gtkmessagedialog.c:365
+#: gtk/gtkinfobar.c:1070 gtk/gtkmessagedialog.c:364
 msgid "Error"
 msgstr "عُطل"
 
 #. Open Link
-#: gtk/gtklabel.c:6073
+#: gtk/gtklabel.c:6153
 msgid "_Open Link"
 msgstr "ا_فتح الوصلة"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6082
+#: gtk/gtklabel.c:6162
 msgid "Copy _Link Address"
 msgstr "ا_نسخ عنوان الوصلة"
 
@@ -2298,19 +2417,19 @@ msgstr ""
 msgid "%s: error launching application: %s\n"
 msgstr ""
 
-#: gtk/gtklinkbutton.c:368
+#: gtk/gtklinkbutton.c:360
 msgid "Copy URL"
 msgstr "انسخ المسار"
 
-#: gtk/gtklinkbutton.c:513
+#: gtk/gtklinkbutton.c:504
 msgid "Invalid URI"
 msgstr "عنوان غير صحيح"
 
-#: gtk/gtklockbutton.c:275 gtk/ui/gtklockbutton.ui:23
+#: gtk/gtklockbutton.c:275 gtk/ui/gtklockbutton.ui:22
 msgid "Lock"
 msgstr "أوصِد"
 
-#: gtk/gtklockbutton.c:284 gtk/ui/gtklockbutton.ui:29
+#: gtk/gtklockbutton.c:284 gtk/ui/gtklockbutton.ui:28
 msgid "Unlock"
 msgstr "افتح"
 
@@ -2343,20 +2462,20 @@ msgstr ""
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:934
+#: gtk/gtkmain.c:933
 msgid "default:LTR"
 msgstr "default:RTL"
 
-#: gtk/gtkmessagedialog.c:844 gtk/gtkmessagedialog.c:862
+#: gtk/gtkmessagedialog.c:843 gtk/gtkmessagedialog.c:861
 #: gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:10957
 msgid "_OK"
 msgstr "_نعم"
 
-#: gtk/gtkmessagedialog.c:856
+#: gtk/gtkmessagedialog.c:855
 msgid "_No"
 msgstr "_لا"
 
-#: gtk/gtkmessagedialog.c:857
+#: gtk/gtkmessagedialog.c:856
 msgid "_Yes"
 msgstr "_نعم"
 
@@ -2419,32 +2538,32 @@ msgid "Cannot kill process with PID %d. Operation is not implemented."
 msgstr "تعذّر قتل العملية ذات المعرّف %d. أمر غير مدعومة."
 
 #. translators: this string is a name for the 'less' command
-#: gtk/gtkmountoperation-x11.c:955
+#: gtk/gtkmountoperation-x11.c:974
 msgid "Terminal Pager"
 msgstr "متصحّف الطرفية"
 
-#: gtk/gtkmountoperation-x11.c:956
+#: gtk/gtkmountoperation-x11.c:975
 msgid "Top Command"
 msgstr "الأمر Top"
 
-#: gtk/gtkmountoperation-x11.c:957
+#: gtk/gtkmountoperation-x11.c:976
 msgid "Bourne Again Shell"
 msgstr "صدفة برن ثانيا"
 
-#: gtk/gtkmountoperation-x11.c:958
+#: gtk/gtkmountoperation-x11.c:977
 msgid "Bourne Shell"
 msgstr "صدفة برن"
 
-#: gtk/gtkmountoperation-x11.c:959
+#: gtk/gtkmountoperation-x11.c:978
 msgid "Z Shell"
 msgstr "صدفة زِد"
 
-#: gtk/gtkmountoperation-x11.c:1056
+#: gtk/gtkmountoperation-x11.c:1075
 #, c-format
 msgid "Cannot end process with PID %d: %s"
 msgstr "تعذّر إنهاء العملية ذات المعرف %d:‏ %s"
 
-#: gtk/gtknotebook.c:4324 gtk/gtknotebook.c:6581
+#: gtk/gtknotebook.c:4316 gtk/gtknotebook.c:6573
 #, c-format
 msgid "Page %u"
 msgstr "صفحة %Iu"
@@ -2453,7 +2572,7 @@ msgstr "صفحة %Iu"
 msgid "Not a valid page setup file"
 msgstr "ملف تثبيت صفحة غير سليم"
 
-#: gtk/gtkpagesetupunixdialog.c:197 gtk/ui/gtkassistant.ui:47
+#: gtk/gtkpagesetupunixdialog.c:197 gtk/ui/gtkassistant.ui:41
 msgid "_Apply"
 msgstr "_طبّق"
 
@@ -2480,258 +2599,266 @@ msgstr ""
 "فوق: %s %s\n"
 "تحت: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:871 gtk/gtkprintunixdialog.c:3398
+#: gtk/gtkpagesetupunixdialog.c:871 gtk/gtkprintunixdialog.c:3367
 msgid "Manage Custom Sizes…"
 msgstr "أدِر المقاسات المخصّصة…"
 
 #: gtk/gtkpagesetupunixdialog.c:893 gtk/ui/gtkpagesetupunixdialog.ui:30
-#: gtk/ui/gtkprintunixdialog.ui:811
+#: gtk/ui/gtkprintunixdialog.ui:758
 msgid "Page Setup"
 msgstr "إعداد الصفحة"
 
-#: gtk/gtkpathbar.c:1519
+#: gtk/gtkpathbar.c:1342
 msgid "File System Root"
 msgstr "جذر نظام الملفات"
 
-#: gtk/gtkplacessidebar.c:1014
-msgid "Recent"
-msgstr "مستخدمة مؤخرا"
-
-#: gtk/gtkplacessidebar.c:1016
-msgid "Recent files"
-msgstr "الملفات المستخدمة مؤخرا"
-
-#: gtk/gtkplacessidebar.c:1027
-msgid "Open your personal folder"
-msgstr "افتح مجلدك الشخصي"
-
-#: gtk/gtkplacessidebar.c:1042
-msgid "Open the contents of your desktop in a folder"
-msgstr "افتح محتويات سطح المكتب في مجلد"
-
-#: gtk/gtkplacessidebar.c:1056
-msgid "Enter Location"
-msgstr "اكتب موقعًا"
-
-#: gtk/gtkplacessidebar.c:1058
-msgid "Manually enter a location"
-msgstr "اكتب موقعًا"
-
-#: gtk/gtkplacessidebar.c:1068
-msgid "Trash"
-msgstr "المهملات"
-
-#: gtk/gtkplacessidebar.c:1070
-msgid "Open the trash"
-msgstr "افتح المهملات"
-
 #. translators: %s is the name of a cloud provider for files
-#: gtk/gtkplacessidebar.c:1113
+#: gtk/gtkplacessidebar.c:959
 #, c-format
 msgid "Open %s"
 msgstr "افتح %s"
 
-#: gtk/gtkplacessidebar.c:1194 gtk/gtkplacessidebar.c:1222
-#: gtk/gtkplacessidebar.c:1421
+#: gtk/gtkplacessidebar.c:1047
+msgid "Recent"
+msgstr "مستخدمة مؤخرا"
+
+#: gtk/gtkplacessidebar.c:1049
+msgid "Recent files"
+msgstr "الملفات المستخدمة مؤخرا"
+
+#: gtk/gtkplacessidebar.c:1058
+msgid "Starred"
+msgstr "عليها نجمة"
+
+#: gtk/gtkplacessidebar.c:1060
+msgid "Favorite files"
+msgstr "الملفات المفضلة"
+
+#: gtk/gtkplacessidebar.c:1071
+msgid "Open your personal folder"
+msgstr "افتح مجلدك الشخصي"
+
+#: gtk/gtkplacessidebar.c:1086
+msgid "Open the contents of your desktop in a folder"
+msgstr "افتح محتويات سطح المكتب في مجلد"
+
+#: gtk/gtkplacessidebar.c:1100
+msgid "Enter Location"
+msgstr "اكتب موقعًا"
+
+#: gtk/gtkplacessidebar.c:1102
+msgid "Manually enter a location"
+msgstr "اكتب موقعًا"
+
+#: gtk/gtkplacessidebar.c:1112
+msgid "Trash"
+msgstr "المهملات"
+
+#: gtk/gtkplacessidebar.c:1114
+msgid "Open the trash"
+msgstr "افتح المهملات"
+
+#: gtk/gtkplacessidebar.c:1225 gtk/gtkplacessidebar.c:1253
+#: gtk/gtkplacessidebar.c:1452
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "أوصل و افتح ”%s“"
 
-#: gtk/gtkplacessidebar.c:1310
+#: gtk/gtkplacessidebar.c:1341
 msgid "Open the contents of the file system"
 msgstr "افتح محتويات نظام الملفات"
 
-#: gtk/gtkplacessidebar.c:1396
+#: gtk/gtkplacessidebar.c:1427
 msgid "New bookmark"
 msgstr "علامة جديدة"
 
-#: gtk/gtkplacessidebar.c:1398
+#: gtk/gtkplacessidebar.c:1429
 msgid "Add a new bookmark"
 msgstr "أضف علامة جديدة"
 
-#: gtk/gtkplacessidebar.c:1466
+#: gtk/gtkplacessidebar.c:1497
 msgid "Other Locations"
 msgstr "أماكن أخرى"
 
-#: gtk/gtkplacessidebar.c:1467
+#: gtk/gtkplacessidebar.c:1498
 msgid "Show other locations"
 msgstr "أظهر الأماكن الأخرى"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: gtk/gtkplacessidebar.c:2262 gtk/gtkplacessidebar.c:3606
+#: gtk/gtkplacessidebar.c:2298 gtk/gtkplacessidebar.c:3654
 msgid "_Start"
 msgstr "اب_دأ"
 
-#: gtk/gtkplacessidebar.c:2263 gtk/gtkplacessidebar.c:3607
+#: gtk/gtkplacessidebar.c:2299 gtk/gtkplacessidebar.c:3655
 msgid "_Stop"
 msgstr "أو_قف"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: gtk/gtkplacessidebar.c:2270
+#: gtk/gtkplacessidebar.c:2306
 msgid "_Power On"
 msgstr "_شغّل"
 
-#: gtk/gtkplacessidebar.c:2271
+#: gtk/gtkplacessidebar.c:2307
 msgid "_Safely Remove Drive"
 msgstr "أزِل المشغّل بأ_مان"
 
-#: gtk/gtkplacessidebar.c:2275
+#: gtk/gtkplacessidebar.c:2311
 msgid "_Connect Drive"
 msgstr "أ_وصل المشغّل"
 
-#: gtk/gtkplacessidebar.c:2276
+#: gtk/gtkplacessidebar.c:2312
 msgid "_Disconnect Drive"
 msgstr "ا_فصل المشغّل"
 
-#: gtk/gtkplacessidebar.c:2280
+#: gtk/gtkplacessidebar.c:2316
 msgid "_Start Multi-disk Device"
 msgstr "اب_دأ المشغّل متعدد الأقراص"
 
-#: gtk/gtkplacessidebar.c:2281
+#: gtk/gtkplacessidebar.c:2317
 msgid "_Stop Multi-disk Device"
 msgstr "أو_قف المشغّل متعدد الأقراص"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: gtk/gtkplacessidebar.c:2286
+#: gtk/gtkplacessidebar.c:2322
 msgid "_Unlock Device"
 msgstr "ا_فتح قفل الجهاز"
 
-#: gtk/gtkplacessidebar.c:2287
+#: gtk/gtkplacessidebar.c:2323
 msgid "_Lock Device"
 msgstr "أ_وصد الجهاز"
 
-#: gtk/gtkplacessidebar.c:2325 gtk/gtkplacessidebar.c:3291
+#: gtk/gtkplacessidebar.c:2361 gtk/gtkplacessidebar.c:3331
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "تعذّر بدء ”%s“"
 
-#: gtk/gtkplacessidebar.c:2355
+#: gtk/gtkplacessidebar.c:2391
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "تعذّر الوصول إلى ”%s“"
 
-#: gtk/gtkplacessidebar.c:2564
+#: gtk/gtkplacessidebar.c:2604
 msgid "This name is already taken"
 msgstr "هذا الاسم مستخدم من قبل"
 
-#: gtk/gtkplacessidebar.c:2633 gtk/inspector/actions.ui:43
+#: gtk/gtkplacessidebar.c:2673 gtk/inspector/actions.ui:43
 #: gtk/inspector/css-node-tree.ui:39 gtk/inspector/object-tree.ui:92
-#: gtk/ui/gtkfilechooserwidget.ui:165 gtk/ui/gtkfilechooserwidget.ui:451
+#: gtk/ui/gtkfilechooserwidget.ui:164 gtk/ui/gtkfilechooserwidget.ui:448
 msgid "Name"
 msgstr "الاسم"
 
-#: gtk/gtkplacessidebar.c:2832
+#: gtk/gtkplacessidebar.c:2872
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "تعذر فصْل ”%s“"
 
-#: gtk/gtkplacessidebar.c:3008
+#: gtk/gtkplacessidebar.c:3048
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "تعذّر إيقاف ”%s“"
 
-#: gtk/gtkplacessidebar.c:3037
+#: gtk/gtkplacessidebar.c:3077
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "تعذّر إخراج ”%s“"
 
-#: gtk/gtkplacessidebar.c:3066 gtk/gtkplacessidebar.c:3095
+#: gtk/gtkplacessidebar.c:3106 gtk/gtkplacessidebar.c:3135
 #, c-format
 msgid "Unable to eject %s"
 msgstr "تعذّر إخراج %s"
 
-#: gtk/gtkplacessidebar.c:3243
+#: gtk/gtkplacessidebar.c:3283
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "تعذّر جس ”%s“ للتأكد من التغيرات في الوسائط"
 
-#: gtk/gtkplacessidebar.c:3529 gtk/gtkplacessidebar.c:3589
-#: gtk/gtkplacesview.c:1636
+#: gtk/gtkplacessidebar.c:3571 gtk/gtkplacessidebar.c:3637
+#: gtk/gtkplacesview.c:1626
 msgid "Open in New _Tab"
 msgstr "افتح في _لسان جديد"
 
-#: gtk/gtkplacessidebar.c:3533 gtk/gtkplacessidebar.c:3592
-#: gtk/gtkplacesview.c:1646
+#: gtk/gtkplacessidebar.c:3577 gtk/gtkplacessidebar.c:3640
+#: gtk/gtkplacesview.c:1636
 msgid "Open in New _Window"
 msgstr "افتح في _نافذة جديدة"
 
-#: gtk/gtkplacessidebar.c:3596
+#: gtk/gtkplacessidebar.c:3644
 msgid "_Add Bookmark"
 msgstr "أ_ضف علامة"
 
-#: gtk/gtkplacessidebar.c:3597
+#: gtk/gtkplacessidebar.c:3645
 msgid "_Remove"
 msgstr "ا_حذِف"
 
-#: gtk/gtkplacessidebar.c:3598
+#: gtk/gtkplacessidebar.c:3646
 msgid "Rename…"
 msgstr "غيّر الاسم…"
 
-#: gtk/gtkplacessidebar.c:3602 gtk/gtkplacesview.c:1677
+#: gtk/gtkplacessidebar.c:3650 gtk/gtkplacesview.c:1667
 msgid "_Mount"
 msgstr "أو_صِل"
 
-#: gtk/gtkplacessidebar.c:3603 gtk/gtkplacesview.c:1668
+#: gtk/gtkplacessidebar.c:3651 gtk/gtkplacesview.c:1658
 msgid "_Unmount"
 msgstr "ا_فصل"
 
-#: gtk/gtkplacessidebar.c:3604
+#: gtk/gtkplacessidebar.c:3652
 msgid "_Eject"
 msgstr "أ_خرج"
 
-#: gtk/gtkplacessidebar.c:3605
+#: gtk/gtkplacessidebar.c:3653
 msgid "_Detect Media"
 msgstr "_تعرف على الوسائط"
 
-#: gtk/gtkplacessidebar.c:4057 gtk/gtkplacesview.c:1115
+#: gtk/gtkplacessidebar.c:4103 gtk/gtkplacesview.c:1106
 msgid "Computer"
 msgstr "الحاسوب"
 
-#: gtk/gtkplacesview.c:891
+#: gtk/gtkplacesview.c:882
 msgid "Searching for network locations"
 msgstr "يبحث عن أماكن الشبكة"
 
-#: gtk/gtkplacesview.c:898
+#: gtk/gtkplacesview.c:889
 msgid "No network locations found"
 msgstr "لم يُعثر على أي أماكن شبكة"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1226 gtk/gtkplacesview.c:1301
+#: gtk/gtkplacesview.c:1216 gtk/gtkplacesview.c:1291
 msgid "Unable to access location"
 msgstr "تعذر الوصول إلى المكان"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1244 gtk/ui/gtkplacesview.ui:407
+#: gtk/gtkplacesview.c:1234 gtk/ui/gtkplacesview.ui:407
 msgid "Con_nect"
 msgstr "ا_تّصل"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1364
+#: gtk/gtkplacesview.c:1354
 msgid "Unable to unmount volume"
 msgstr "تعذر فصْل الجزء"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1464
+#: gtk/gtkplacesview.c:1454
 msgid "Cance_l"
 msgstr "أ_لغِ"
 
-#: gtk/gtkplacesview.c:1668
+#: gtk/gtkplacesview.c:1658
 msgid "_Disconnect"
 msgstr "ا_قطع الاتصال"
 
-#: gtk/gtkplacesview.c:1677
+#: gtk/gtkplacesview.c:1667
 msgid "_Connect"
 msgstr "ا_تّصل"
 
-#: gtk/gtkplacesview.c:1820
+#: gtk/gtkplacesview.c:1810
 msgid "Unable to get remote server location"
 msgstr "تعذّر جلب مكان الخادوم البعيد"
 
-#: gtk/gtkplacesview.c:1959 gtk/gtkplacesview.c:1968
+#: gtk/gtkplacesview.c:1998 gtk/gtkplacesview.c:2007
 msgid "Networks"
 msgstr "الشبكات"
 
-#: gtk/gtkplacesview.c:1959 gtk/gtkplacesview.c:1968
+#: gtk/gtkplacesview.c:1998 gtk/gtkplacesview.c:2007
 msgid "On This Computer"
 msgstr "على هذا الحاسوب"
 
@@ -2750,11 +2877,11 @@ msgstr[3] "متاح ‏%s \\ ‏%s"
 msgstr[4] "متاح ‏%s \\ ‏%s"
 msgstr[5] "متاح ‏%s \\ ‏%s"
 
-#: gtk/gtkplacesviewrow.c:470
+#: gtk/gtkplacesviewrow.c:467
 msgid "Disconnect"
 msgstr "اقطع الاتصال"
 
-#: gtk/gtkplacesviewrow.c:470 gtk/ui/gtkplacesviewrow.ui:69
+#: gtk/gtkplacesviewrow.c:467 gtk/ui/gtkplacesviewrow.ui:62
 #: gtk/ui/gtksidebarrow.ui:51
 msgid "Unmount"
 msgstr "افصل"
@@ -2763,7 +2890,7 @@ msgstr "افصل"
 msgid "Authentication"
 msgstr "الاستيثاق"
 
-#: gtk/gtkprintbackend.c:835
+#: gtk/gtkprintbackend.c:836
 msgid "_Remember password"
 msgstr "_تذكر كلمة السر"
 
@@ -2771,8 +2898,8 @@ msgstr "_تذكر كلمة السر"
 msgid "Select a filename"
 msgstr "اختر اسم ملف"
 
-#: gtk/gtkprinteroptionwidget.c:546 gtk/ui/gtkappchooserdialog.ui:60
-#: gtk/ui/gtkcolorchooserdialog.ui:40 gtk/ui/gtkfontchooserdialog.ui:34
+#: gtk/gtkprinteroptionwidget.c:546 gtk/ui/gtkappchooserdialog.ui:54
+#: gtk/ui/gtkcolorchooserdialog.ui:37 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Select"
 msgstr "ا_ختر"
 
@@ -2858,7 +2985,7 @@ msgstr "السبب الأكثر احتمالاً هو عدم القدرة على
 
 #. window
 #: gtk/gtkprintoperation-portal.c:233 gtk/gtkprintoperation-portal.c:544
-#: gtk/gtkprintoperation-portal.c:621 gtk/gtkprintunixdialog.c:3420
+#: gtk/gtkprintoperation-portal.c:621 gtk/gtkprintunixdialog.c:3389
 msgid "Print"
 msgstr "اطبع"
 
@@ -2917,19 +3044,19 @@ msgstr "معالج غير صحيح ل PrintDlgEx"
 msgid "Unspecified error"
 msgstr "خطأ غير محدد"
 
-#: gtk/gtkprintunixdialog.c:740
+#: gtk/gtkprintunixdialog.c:726
 msgid "Pre_view"
 msgstr "_معاينة"
 
-#: gtk/gtkprintunixdialog.c:742
+#: gtk/gtkprintunixdialog.c:728
 msgid "_Print"
 msgstr "ا_طبع"
 
-#: gtk/gtkprintunixdialog.c:865
+#: gtk/gtkprintunixdialog.c:851
 msgid "Getting printer information failed"
 msgstr "فشل جلب معلومات الطابعة"
 
-#: gtk/gtkprintunixdialog.c:2075
+#: gtk/gtkprintunixdialog.c:2061
 msgid "Getting printer information…"
 msgstr "يجلب معلومات الطابعة…"
 
@@ -2939,63 +3066,63 @@ msgstr "يجلب معلومات الطابعة…"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:3127
+#: gtk/gtkprintunixdialog.c:3096
 #: modules/printbackends/cups/gtkprintbackendcups.c:5434
 msgid "Left to right, top to bottom"
 msgstr "من اليسار لليمين، ومن الأعلى للأسفل"
 
-#: gtk/gtkprintunixdialog.c:3127
+#: gtk/gtkprintunixdialog.c:3096
 #: modules/printbackends/cups/gtkprintbackendcups.c:5434
 msgid "Left to right, bottom to top"
 msgstr "من اليسار لليمين، ومن الأسفل للأعلى"
 
-#: gtk/gtkprintunixdialog.c:3128
+#: gtk/gtkprintunixdialog.c:3097
 #: modules/printbackends/cups/gtkprintbackendcups.c:5435
 msgid "Right to left, top to bottom"
 msgstr "من اليمين لليسار، ومن الأعلى للأسفل"
 
-#: gtk/gtkprintunixdialog.c:3128
+#: gtk/gtkprintunixdialog.c:3097
 #: modules/printbackends/cups/gtkprintbackendcups.c:5435
 msgid "Right to left, bottom to top"
 msgstr "من اليمين لليسار، ومن الأسفل للأعلى"
 
-#: gtk/gtkprintunixdialog.c:3129
+#: gtk/gtkprintunixdialog.c:3098
 #: modules/printbackends/cups/gtkprintbackendcups.c:5436
 msgid "Top to bottom, left to right"
 msgstr "من الأعلى للأسفل، ومن اليسار لليمين"
 
-#: gtk/gtkprintunixdialog.c:3129
+#: gtk/gtkprintunixdialog.c:3098
 #: modules/printbackends/cups/gtkprintbackendcups.c:5436
 msgid "Top to bottom, right to left"
 msgstr "من الأعلى للأسفل، ومن اليمين لليسار"
 
-#: gtk/gtkprintunixdialog.c:3130
+#: gtk/gtkprintunixdialog.c:3099
 #: modules/printbackends/cups/gtkprintbackendcups.c:5437
 msgid "Bottom to top, left to right"
 msgstr "من الأسفل للأعلى، ومن اليسار لليمين"
 
-#: gtk/gtkprintunixdialog.c:3130
+#: gtk/gtkprintunixdialog.c:3099
 #: modules/printbackends/cups/gtkprintbackendcups.c:5437
 msgid "Bottom to top, right to left"
 msgstr "من الأسفل للأعلى، ومن اليمين لليسار"
 
-#: gtk/gtkprintunixdialog.c:3134 gtk/gtkprintunixdialog.c:3147
+#: gtk/gtkprintunixdialog.c:3103 gtk/gtkprintunixdialog.c:3116
 msgid "Page Ordering"
 msgstr "ترتيب الصفحات"
 
-#: gtk/gtkprintunixdialog.c:3163
+#: gtk/gtkprintunixdialog.c:3132
 msgid "Left to right"
 msgstr "من اليسار لليمين"
 
-#: gtk/gtkprintunixdialog.c:3164
+#: gtk/gtkprintunixdialog.c:3133
 msgid "Right to left"
 msgstr "من اليمين لليسار"
 
-#: gtk/gtkprintunixdialog.c:3176
+#: gtk/gtkprintunixdialog.c:3145
 msgid "Top to bottom"
 msgstr "من الأعلى للأسفل"
 
-#: gtk/gtkprintunixdialog.c:3177
+#: gtk/gtkprintunixdialog.c:3146
 msgid "Bottom to top"
 msgstr "من الأسفل للأعلى"
 
@@ -3005,36 +3132,36 @@ msgctxt "progress bar label"
 msgid "%.0f %%"
 msgstr "%I.0f ٪"
 
-#: gtk/gtkrecentchooserdefault.c:1012 gtk/gtkrecentchooserdefault.c:1049
+#: gtk/gtkrecentchooserdefault.c:976 gtk/gtkrecentchooserdefault.c:1013
 #, c-format
 msgid "No item for URI “%s” found"
 msgstr "لا يوجد عنصر للعنوان ”%s“"
 
-#: gtk/gtkrecentchooserdefault.c:1176
+#: gtk/gtkrecentchooserdefault.c:1140
 msgid "Untitled filter"
 msgstr "مرشّح من دون عنوان"
 
-#: gtk/gtkrecentchooserdefault.c:1509
+#: gtk/gtkrecentchooserdefault.c:1438
 msgid "Could not remove item"
 msgstr "تعذّر حذف عنصر"
 
-#: gtk/gtkrecentchooserdefault.c:1553
+#: gtk/gtkrecentchooserdefault.c:1481
 msgid "Could not clear list"
 msgstr "تعذّر مسح القائمة"
 
-#: gtk/gtkrecentchooserdefault.c:1637
+#: gtk/gtkrecentchooserdefault.c:1565
 msgid "Copy _Location"
 msgstr "ا_نسخ الموقع"
 
-#: gtk/gtkrecentchooserdefault.c:1648
+#: gtk/gtkrecentchooserdefault.c:1576
 msgid "_Remove From List"
 msgstr "ا_حذف من القائمة"
 
-#: gtk/gtkrecentchooserdefault.c:1655
+#: gtk/gtkrecentchooserdefault.c:1583
 msgid "_Clear List"
 msgstr "ا_مسح القائمة"
 
-#: gtk/gtkrecentchooserdefault.c:1667
+#: gtk/gtkrecentchooserdefault.c:1595
 msgid "Show _Private Resources"
 msgstr "أظهِر الموارِد ال_خاصة"
 
@@ -3086,19 +3213,19 @@ msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%Id. %s"
 
-#: gtk/gtkrecentmanager.c:1062 gtk/gtkrecentmanager.c:1075
-#: gtk/gtkrecentmanager.c:1212 gtk/gtkrecentmanager.c:1222
-#: gtk/gtkrecentmanager.c:1274 gtk/gtkrecentmanager.c:1283
+#: gtk/gtkrecentmanager.c:1057 gtk/gtkrecentmanager.c:1070
+#: gtk/gtkrecentmanager.c:1207 gtk/gtkrecentmanager.c:1217
+#: gtk/gtkrecentmanager.c:1269 gtk/gtkrecentmanager.c:1278
 #, c-format
 msgid "Unable to find an item with URI “%s”"
 msgstr "لا يُمكن العثور على عنصر بالعنوان ”%s“"
 
-#: gtk/gtkrecentmanager.c:1298
+#: gtk/gtkrecentmanager.c:1293
 #, c-format
 msgid "Unable to move the item with URI “%s” to “%s”"
 msgstr ""
 
-#: gtk/gtkrecentmanager.c:2436
+#: gtk/gtkrecentmanager.c:2428
 #, c-format
 msgid "No registered application with name “%s” for item with URI “%s” found"
 msgstr "لا يوجد أي تطبيق مسجّل بالاسم ”%s“ لعناصر مسار ”%s“"
@@ -3174,17 +3301,17 @@ msgid "Search Results"
 msgstr "نتائج البحث"
 
 #. Translators: This is placeholder text for the search entry in the shortcuts window
-#: gtk/gtkshortcutswindow.c:961
+#: gtk/gtkshortcutswindow.c:960
 msgid "Search Shortcuts"
 msgstr "اختصارات البحث"
 
-#: gtk/gtkshortcutswindow.c:1018 gtk/ui/gtkemojichooser.ui:275
-#: gtk/ui/gtkfilechooserwidget.ui:280
+#: gtk/gtkshortcutswindow.c:1017 gtk/ui/gtkemojichooser.ui:275
+#: gtk/ui/gtkfilechooserwidget.ui:278
 msgid "No Results Found"
 msgstr "لا نتائج"
 
-#: gtk/gtkshortcutswindow.c:1024 gtk/ui/gtkemojichooser.ui:288
-#: gtk/ui/gtkfilechooserwidget.ui:293 gtk/ui/gtkplacesview.ui:368
+#: gtk/gtkshortcutswindow.c:1023 gtk/ui/gtkemojichooser.ui:288
+#: gtk/ui/gtkfilechooserwidget.ui:291 gtk/ui/gtkplacesview.ui:368
 msgid "Try a different search"
 msgstr "جرب بحثًا آخر"
 
@@ -3192,7 +3319,7 @@ msgstr "جرب بحثًا آخر"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: gtk/gtkswitch.c:657
+#: gtk/gtkswitch.c:656
 msgctxt "switch"
 msgid "ON"
 msgstr "❙"
@@ -3200,173 +3327,60 @@ msgstr "❙"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: gtk/gtkswitch.c:663
+#: gtk/gtkswitch.c:662
 msgctxt "switch"
 msgid "OFF"
 msgstr "○"
 
-#: gtk/gtktextbufferrichtext.c:658
-#, c-format
-msgid "Unknown error when trying to deserialize %s"
-msgstr "حدث خطأ مجهول عند محاولة فتح %s"
-
-#: gtk/gtktextbufferrichtext.c:717
-#, c-format
-msgid "No deserialize function found for format %s"
-msgstr "لا وظيفة تفكيك موجودة للنوع %s"
-
-#: gtk/gtktextbufferserialize.c:709 gtk/gtktextbufferserialize.c:735
-#, c-format
-msgid "Both “id” and “name” were found on the <%s> element"
-msgstr "كلا ”id“ و ”name“ لم يعثر عليهما في العنصر <%s>"
-
-#: gtk/gtktextbufferserialize.c:719 gtk/gtktextbufferserialize.c:745
-#, c-format
-msgid "The attribute “%s” was found twice on the <%s> element"
-msgstr "الصفة ”%s“ معادة مرتان في نفس العنصر <%s>"
-
-#: gtk/gtktextbufferserialize.c:761
-#, c-format
-msgid "<%s> element has invalid ID “%s”"
-msgstr "معرّف العنصر <%s> غير صحيح ”%s“"
-
-#: gtk/gtktextbufferserialize.c:771
-#, c-format
-msgid "<%s> element has neither a “name” nor an “id” attribute"
-msgstr "العنصر <%s> ليس له لا صفة ”name“ و لا ”id“"
-
-#: gtk/gtktextbufferserialize.c:858
-#, c-format
-msgid "Attribute “%s” repeated twice on the same <%s> element"
-msgstr "الصفة ”%s“ مكررة مرتان في نفس العنصر <%s>"
-
-#: gtk/gtktextbufferserialize.c:876 gtk/gtktextbufferserialize.c:901
-#, c-format
-msgid "Attribute “%s” is invalid on <%s> element in this context"
-msgstr "الصفة ”%s“ خاطئة في العنصر <%s> في هذا السياق"
-
-#: gtk/gtktextbufferserialize.c:940
-#, c-format
-msgid "Tag “%s” has not been defined."
-msgstr "لم يتم تعريف الوسم ”%s“."
-
-#: gtk/gtktextbufferserialize.c:952
-msgid "Anonymous tag found and tags can not be created."
-msgstr "وُجِد وسم مجهول و لا يمكن إنشاؤه."
-
-#: gtk/gtktextbufferserialize.c:963
-#, c-format
-msgid "Tag “%s” does not exist in buffer and tags can not be created."
-msgstr "الوسم ”%s“ غير موجود في النص و لا يمكن إنشاؤه."
-
-#: gtk/gtktextbufferserialize.c:1064 gtk/gtktextbufferserialize.c:1139
-#: gtk/gtktextbufferserialize.c:1244 gtk/gtktextbufferserialize.c:1318
-#, c-format
-msgid "Element <%s> is not allowed below <%s>"
-msgstr "العنصر <%s> غير مسموح به تحت <%s>"
-
-#: gtk/gtktextbufferserialize.c:1095
-#, c-format
-msgid "“%s” is not a valid attribute type"
-msgstr "‏”%s“ قيمة غير سليمة لصفة"
-
-#: gtk/gtktextbufferserialize.c:1103
-#, c-format
-msgid "“%s” is not a valid attribute name"
-msgstr "‏”%s“ قيمة غير سليمة لاسم صفة"
-
-#: gtk/gtktextbufferserialize.c:1113
-#, c-format
-msgid "“%s” could not be converted to a value of type “%s” for attribute “%s”"
-msgstr "لا يمكن تحويل ”%s“ إلى قيمة من نوع ”%s“ للخاصية  ”%s“"
-
-#: gtk/gtktextbufferserialize.c:1122
-#, c-format
-msgid "“%s” is not a valid value for attribute “%s”"
-msgstr "‏”%s“ قيمة غير سليمة لاسم الصفة ”%s“"
-
-#: gtk/gtktextbufferserialize.c:1207
-#, c-format
-msgid "Tag “%s” already defined"
-msgstr "الوسم ”%s“ معرف مسبقًا"
-
-#: gtk/gtktextbufferserialize.c:1220
-#, c-format
-msgid "Tag “%s” has invalid priority “%s”"
-msgstr "الوسم ”%s“ له خاصية غير صالحة ”%s“"
-
-#: gtk/gtktextbufferserialize.c:1273
-#, c-format
-msgid "Outermost element in text must be <text_view_markup> not <%s>"
-msgstr "العنصر العلوي في نص يجب أن يكون <text_view_markup> و ليس <%s>"
-
-#: gtk/gtktextbufferserialize.c:1282 gtk/gtktextbufferserialize.c:1298
-#, c-format
-msgid "A <%s> element has already been specified"
-msgstr "عنصر <%s> تم تحديده بالفعل"
-
-#: gtk/gtktextbufferserialize.c:1304
-msgid "A <text> element can’t occur before a <tags> element"
-msgstr "العنصر<text> لا يمكن أن يظهر قبل العنصر <tags>"
-
-#: gtk/gtktextbufferserialize.c:1705
-msgid "Serialized data is malformed"
-msgstr "البيانات المرسلة غير صالحة"
-
-#: gtk/gtktextbufferserialize.c:1784
-msgid ""
-"Serialized data is malformed. First section isn’t GTKTEXTBUFFERCONTENTS-0001"
-msgstr "البيانات المرسلة غير صالحة. القسم الأول ليس GTKTEXTBUFFERCONTENTS-0001"
-
-#: gtk/gtktextutil.c:57
+#: gtk/gtktextutil.c:55
 msgid "LRM _Left-to-right mark"
 msgstr "علامة يسار إلى _يمين (LRM)"
 
-#: gtk/gtktextutil.c:58
+#: gtk/gtktextutil.c:56
 msgid "RLM _Right-to-left mark"
 msgstr "علامة ي_مين إلى يسار (RLM)"
 
-#: gtk/gtktextutil.c:59
+#: gtk/gtktextutil.c:57
 msgid "LRE Left-to-right _embedding"
 msgstr "_غرس يسار إلى يمين (LRE)"
 
-#: gtk/gtktextutil.c:60
+#: gtk/gtktextutil.c:58
 msgid "RLE Right-to-left e_mbedding"
 msgstr "غ_رس يمين إلى يسار (RLE)"
 
-#: gtk/gtktextutil.c:61
+#: gtk/gtktextutil.c:59
 msgid "LRO Left-to-right _override"
 msgstr "_تخطي يسار إلى يمين (LRO)"
 
-#: gtk/gtktextutil.c:62
+#: gtk/gtktextutil.c:60
 msgid "RLO Right-to-left o_verride"
 msgstr "ت_خطي يمين إلى يسار (RLO)"
 
-#: gtk/gtktextutil.c:63
+#: gtk/gtktextutil.c:61
 msgid "PDF _Pop directional formatting"
 msgstr "أوقف تن_سيق الاتجاه (PDF)"
 
-#: gtk/gtktextutil.c:64
+#: gtk/gtktextutil.c:62
 msgid "ZWS _Zero width space"
 msgstr "مسافة _صفرية العرض (ZWS)"
 
-#: gtk/gtktextutil.c:65
+#: gtk/gtktextutil.c:63
 msgid "ZWJ Zero width _joiner"
 msgstr "_واصل صفري العرض (ZWJ)"
 
-#: gtk/gtktextutil.c:66
+#: gtk/gtktextutil.c:64
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "_فاصل صفري العرض (ZWNJ)"
 
-#: gtk/gtkvolumebutton.c:189
+#: gtk/gtkvolumebutton.c:190
 msgid "Adjusts the volume"
 msgstr "يضبط الصوت"
 
-#: gtk/gtkvolumebutton.c:232
+#: gtk/gtkvolumebutton.c:233
 msgid "Muted"
 msgstr "صامت"
 
-#: gtk/gtkvolumebutton.c:236
+#: gtk/gtkvolumebutton.c:237
 msgid "Full Volume"
 msgstr "شدة الصوت القصوى"
 
@@ -3375,21 +3389,21 @@ msgstr "شدة الصوت القصوى"
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
 #.
-#: gtk/gtkvolumebutton.c:249
+#: gtk/gtkvolumebutton.c:250
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%Id ٪"
 
-#: gtk/gtkwindow.c:8185
+#: gtk/gtkwindow.c:8195
 msgid "Move"
 msgstr "انقل"
 
-#: gtk/gtkwindow.c:8193
+#: gtk/gtkwindow.c:8203
 msgid "Resize"
 msgstr "غيّر الحجم"
 
-#: gtk/gtkwindow.c:8224
+#: gtk/gtkwindow.c:8234
 msgid "Always on Top"
 msgstr "دائما في القمّة"
 
@@ -3479,22 +3493,22 @@ msgstr "القيمة"
 msgid "Show data"
 msgstr "اعرض البيانات"
 
-#: gtk/inspector/general.c:339
+#: gtk/inspector/general.c:340
 msgctxt "GL version"
 msgid "None"
 msgstr "لا شيء"
 
-#: gtk/inspector/general.c:340
+#: gtk/inspector/general.c:341
 msgctxt "GL vendor"
 msgid "None"
 msgstr "لا شيء"
 
-#: gtk/inspector/general.c:442
+#: gtk/inspector/general.c:443
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "لا شيء"
 
-#: gtk/inspector/general.c:443 gtk/inspector/general.c:444
+#: gtk/inspector/general.c:444 gtk/inspector/general.c:445
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "لا شيء"
@@ -3519,27 +3533,27 @@ msgstr "العرض"
 msgid "RGBA Visual"
 msgstr ""
 
-#: gtk/inspector/general.ui:453
+#: gtk/inspector/general.ui:452
 msgid "Composited"
 msgstr "مُركّب"
 
-#: gtk/inspector/general.ui:498
+#: gtk/inspector/general.ui:496
 msgid "GL Version"
 msgstr "إصدارة GL"
 
-#: gtk/inspector/general.ui:531
+#: gtk/inspector/general.ui:529
 msgid "GL Vendor"
 msgstr ""
 
-#: gtk/inspector/general.ui:577
+#: gtk/inspector/general.ui:575
 msgid "Vulkan Device"
 msgstr ""
 
-#: gtk/inspector/general.ui:610
+#: gtk/inspector/general.ui:608
 msgid "Vulkan API version"
 msgstr ""
 
-#: gtk/inspector/general.ui:643
+#: gtk/inspector/general.ui:641
 msgid "Vulkan driver version"
 msgstr ""
 
@@ -3602,7 +3616,7 @@ msgstr "الودجة المبدئية"
 #: gtk/inspector/misc-info.ui:183 gtk/inspector/misc-info.ui:226
 #: gtk/inspector/misc-info.ui:430 gtk/inspector/prop-editor.c:1025
 #: gtk/inspector/prop-editor.c:1209 gtk/inspector/prop-editor.c:1333
-#: gtk/inspector/prop-editor.c:1443 gtk/inspector/window.ui:325
+#: gtk/inspector/prop-editor.c:1443 gtk/inspector/window.ui:299
 msgid "Properties"
 msgstr "الخصائص"
 
@@ -3638,39 +3652,39 @@ msgstr ""
 msgid "Tick Callback"
 msgstr ""
 
-#: gtk/inspector/misc-info.ui:486
+#: gtk/inspector/misc-info.ui:485
 msgid "Frame Count"
 msgstr "عدد الإطارات"
 
-#: gtk/inspector/misc-info.ui:518
+#: gtk/inspector/misc-info.ui:517
 msgid "Frame Rate"
 msgstr "معدل الإطارات"
 
-#: gtk/inspector/misc-info.ui:550
+#: gtk/inspector/misc-info.ui:549
 msgid "Accessible Role"
 msgstr ""
 
-#: gtk/inspector/misc-info.ui:582
+#: gtk/inspector/misc-info.ui:581
 msgid "Accessible Name"
 msgstr ""
 
-#: gtk/inspector/misc-info.ui:616
+#: gtk/inspector/misc-info.ui:615
 msgid "Accessible Description"
 msgstr ""
 
-#: gtk/inspector/misc-info.ui:650
+#: gtk/inspector/misc-info.ui:649
 msgid "Mapped"
 msgstr ""
 
-#: gtk/inspector/misc-info.ui:684
+#: gtk/inspector/misc-info.ui:682
 msgid "Realized"
 msgstr ""
 
-#: gtk/inspector/misc-info.ui:718
+#: gtk/inspector/misc-info.ui:715
 msgid "Is Toplevel"
 msgstr ""
 
-#: gtk/inspector/misc-info.ui:752
+#: gtk/inspector/misc-info.ui:748
 msgid "Child Visible"
 msgstr ""
 
@@ -3753,10 +3767,6 @@ msgstr ""
 msgid "Reset"
 msgstr ""
 
-#: gtk/inspector/prop-editor.c:1613
-msgid "Default"
-msgstr ""
-
 #: gtk/inspector/prop-editor.c:1616
 msgid "Theme"
 msgstr ""
@@ -3781,7 +3791,7 @@ msgstr ""
 msgid "Defined At"
 msgstr ""
 
-#: gtk/inspector/recorder.c:672
+#: gtk/inspector/recorder.c:688
 msgid "Saving RenderNode failed"
 msgstr ""
 
@@ -3798,8 +3808,9 @@ msgid "Add debug nodes"
 msgstr ""
 
 #: gtk/inspector/recorder.ui:47
-msgid "Save recorded frames"
-msgstr ""
+#, fuzzy
+msgid "Save selected node"
+msgstr "اختر مجلدًا"
 
 #: gtk/inspector/resource-list.ui:82
 msgid "Path"
@@ -3809,7 +3820,8 @@ msgstr ""
 msgid "Count"
 msgstr ""
 
-#: gtk/inspector/resource-list.ui:112 gtk/ui/gtkfilechooserwidget.ui:199
+#: gtk/inspector/resource-list.ui:112 gtk/ui/gtkfilechooserwidget.ui:198
+#: gtk/ui/gtkfontchooserwidget.ui:124 gtk/ui/gtkfontchooserwidget.ui:254
 msgid "Size"
 msgstr "الحجم"
 
@@ -4032,91 +4044,103 @@ msgstr ""
 msgid "Texture Rectangle Extension"
 msgstr ""
 
-#: gtk/inspector/window.ui:31
+#: gtk/inspector/window.ui:27
 msgid "Select an Object"
 msgstr ""
 
-#: gtk/inspector/window.ui:45 gtk/inspector/window.ui:98
+#: gtk/inspector/window.ui:39 gtk/inspector/window.ui:93
 msgid "Show Details"
 msgstr ""
 
-#: gtk/inspector/window.ui:59
+#: gtk/inspector/window.ui:52
 msgid "Show all Objects"
 msgstr ""
 
-#: gtk/inspector/window.ui:80
-msgid "Collect Statistics"
-msgstr ""
-
-#: gtk/inspector/window.ui:111
+#: gtk/inspector/window.ui:105
 msgid "Show all Resources"
 msgstr ""
 
-#: gtk/inspector/window.ui:222
+#: gtk/inspector/window.ui:122
+msgid "Collect Statistics"
+msgstr ""
+
+#: gtk/inspector/window.ui:205
 msgid "Trace signal emissions on this object"
 msgstr ""
 
-#: gtk/inspector/window.ui:230
+#: gtk/inspector/window.ui:212
 msgid "Clear log"
 msgstr ""
 
-#: gtk/inspector/window.ui:313
+#: gtk/inspector/window.ui:288
 msgid "Miscellaneous"
 msgstr "متفرقات"
 
-#: gtk/inspector/window.ui:336
+#: gtk/inspector/window.ui:309
 msgid "Signals"
 msgstr ""
 
-#: gtk/inspector/window.ui:347
+#: gtk/inspector/window.ui:320
 msgid "Child Properties"
 msgstr ""
 
-#: gtk/inspector/window.ui:356
+#: gtk/inspector/window.ui:328
 msgid "Class Hierarchy"
 msgstr ""
 
-#: gtk/inspector/window.ui:365
+#: gtk/inspector/window.ui:336
 msgid "CSS Selector"
 msgstr ""
 
-#: gtk/inspector/window.ui:374
+#: gtk/inspector/window.ui:344
 msgid "CSS Nodes"
 msgstr ""
 
-#: gtk/inspector/window.ui:381
+#: gtk/inspector/window.ui:351
 msgid "Size Groups"
 msgstr ""
 
-#: gtk/inspector/window.ui:388
+#: gtk/inspector/window.ui:358
 msgid "Data"
 msgstr ""
 
-#: gtk/inspector/window.ui:395
+#: gtk/inspector/window.ui:365
 msgid "Actions"
 msgstr ""
 
-#: gtk/inspector/window.ui:411
+#: gtk/inspector/window.ui:381
 msgid "Gestures"
 msgstr ""
 
-#: gtk/inspector/window.ui:420
+#: gtk/inspector/window.ui:390
 msgid "Magnifier"
 msgstr ""
 
-#: gtk/inspector/window.ui:433
+#: gtk/inspector/window.ui:403
 msgid "Objects"
 msgstr ""
 
-#: gtk/inspector/window.ui:443
-msgid "Statistics"
+#: gtk/inspector/window.ui:421 gtk/ui/gtkprintunixdialog.ui:379
+msgid "General"
+msgstr "عامّ"
+
+#: gtk/inspector/window.ui:429
+msgid "Visual"
 msgstr ""
 
-#: gtk/inspector/window.ui:453
+#: gtk/inspector/window.ui:438
 msgid "Resources"
 msgstr ""
 
-#: gtk/inspector/window.ui:462
+#: gtk/inspector/window.ui:447
+msgid "Statistics"
+msgstr ""
+
+#: gtk/inspector/window.ui:455
+msgid "Global"
+msgstr ""
+
+#: gtk/inspector/window.ui:463
 msgid "CSS"
 msgstr ""
 
@@ -4124,13 +4148,705 @@ msgstr ""
 msgid "Recorder"
 msgstr ""
 
-#: gtk/inspector/window.ui:480
-msgid "Visual"
-msgstr ""
+#: gtk/open-type-layout.h:13
+msgctxt "OpenType layout"
+msgid "Access All Alternates"
+msgstr "الوصول لكل البدائل"
 
-#: gtk/inspector/window.ui:489 gtk/ui/gtkprintunixdialog.ui:405
-msgid "General"
-msgstr "عامّ"
+#: gtk/open-type-layout.h:14
+msgctxt "OpenType layout"
+msgid "Above-base Forms"
+msgstr "أشكال فوق القاعدة"
+
+#: gtk/open-type-layout.h:15
+msgctxt "OpenType layout"
+msgid "Above-base Mark Positioning"
+msgstr "تموضع الحركات فوق القاعدة"
+
+#: gtk/open-type-layout.h:16
+msgctxt "OpenType layout"
+msgid "Above-base Substitutions"
+msgstr "استبدالات فوق القاعدة"
+
+#: gtk/open-type-layout.h:17
+msgctxt "OpenType layout"
+msgid "Alternative Fractions"
+msgstr "كسور بديلة"
+
+#: gtk/open-type-layout.h:18
+msgctxt "OpenType layout"
+msgid "Akhands"
+msgstr "محارف أخند"
+
+#: gtk/open-type-layout.h:19
+msgctxt "OpenType layout"
+msgid "Below-base Forms"
+msgstr "أشكال تحت القاعدة"
+
+#: gtk/open-type-layout.h:20
+msgctxt "OpenType layout"
+msgid "Below-base Mark Positioning"
+msgstr "تموضع الحركات تحت القاعدة"
+
+#: gtk/open-type-layout.h:21
+msgctxt "OpenType layout"
+msgid "Below-base Substitutions"
+msgstr "استبدالات تحت القاعدة"
+
+#: gtk/open-type-layout.h:22
+msgctxt "OpenType layout"
+msgid "Contextual Alternates"
+msgstr "بدائل سياقية"
+
+#: gtk/open-type-layout.h:23
+msgctxt "OpenType layout"
+msgid "Case-Sensitive Forms"
+msgstr "أشكال حساسة للحالة"
+
+#: gtk/open-type-layout.h:24
+msgctxt "OpenType layout"
+msgid "Glyph Composition / Decomposition"
+msgstr "تجميع \\ تفكيك المحارف"
+
+#: gtk/open-type-layout.h:25
+msgctxt "OpenType layout"
+msgid "Conjunct Form After Ro"
+msgstr "أشكال متصلة بعد رو"
+
+#: gtk/open-type-layout.h:26
+msgctxt "OpenType layout"
+msgid "Conjunct Forms"
+msgstr "أشكال متصلة"
+
+#: gtk/open-type-layout.h:27
+msgctxt "OpenType layout"
+msgid "Contextual Ligatures"
+msgstr "اقترانات سياقية"
+
+#: gtk/open-type-layout.h:28
+msgctxt "OpenType layout"
+msgid "Centered CJK Punctuation"
+msgstr "علامات ترقيم ص‌ي‌ك الموسّطة"
+
+#: gtk/open-type-layout.h:29
+msgctxt "OpenType layout"
+msgid "Capital Spacing"
+msgstr "تباعد الحروف الكبيرة"
+
+#: gtk/open-type-layout.h:30
+msgctxt "OpenType layout"
+msgid "Contextual Swash"
+msgstr "ذيول زخرفية سياقية"
+
+#: gtk/open-type-layout.h:31
+msgctxt "OpenType layout"
+msgid "Cursive Positioning"
+msgstr "تموضع متصل"
+
+#: gtk/open-type-layout.h:32
+msgctxt "OpenType layout"
+msgid "Petite Capitals From Capitals"
+msgstr "حروف كبيرة متوسطة من الحروف الكبيرة"
+
+#: gtk/open-type-layout.h:33
+msgctxt "OpenType layout"
+msgid "Small Capitals From Capitals"
+msgstr "حروف كبيرة مصغرة من الحروف الكبيرة"
+
+#: gtk/open-type-layout.h:34
+msgctxt "OpenType layout"
+msgid "Distances"
+msgstr "المسافات"
+
+#: gtk/open-type-layout.h:35
+msgctxt "OpenType layout"
+msgid "Discretionary Ligatures"
+msgstr "اقترانات اختيارية"
+
+#: gtk/open-type-layout.h:36
+msgctxt "OpenType layout"
+msgid "Denominators"
+msgstr "مقامات"
+
+#: gtk/open-type-layout.h:37
+msgctxt "OpenType layout"
+msgid "Dotless Forms"
+msgstr "أشكال غير منقوطة"
+
+#: gtk/open-type-layout.h:38
+msgctxt "OpenType layout"
+msgid "Expert Forms"
+msgstr "أشكال متخصصة"
+
+#: gtk/open-type-layout.h:39
+msgctxt "OpenType layout"
+msgid "Final Glyph on Line Alternates"
+msgstr "بدائل آخر محرف في السطر"
+
+#: gtk/open-type-layout.h:40
+msgctxt "OpenType layout"
+msgid "Terminal Forms #2"
+msgstr "أشكال نهائية ٢"
+
+#: gtk/open-type-layout.h:41
+msgctxt "OpenType layout"
+msgid "Terminal Forms #3"
+msgstr "أشكال نهائية ٣"
+
+#: gtk/open-type-layout.h:42
+msgctxt "OpenType layout"
+msgid "Terminal Forms"
+msgstr "أشكال نهائية"
+
+#: gtk/open-type-layout.h:43
+msgctxt "OpenType layout"
+msgid "Flattened accent forms"
+msgstr "أشكال مسطحة من الحركات"
+
+#: gtk/open-type-layout.h:44
+msgctxt "OpenType layout"
+msgid "Fractions"
+msgstr "كسور"
+
+#: gtk/open-type-layout.h:45
+msgctxt "OpenType layout"
+msgid "Full Widths"
+msgstr "عرض كامل"
+
+#: gtk/open-type-layout.h:46
+msgctxt "OpenType layout"
+msgid "Half Forms"
+msgstr "أشكال النصف"
+
+#: gtk/open-type-layout.h:47
+msgctxt "OpenType layout"
+msgid "Halant Forms"
+msgstr "أشكال هالانت"
+
+#: gtk/open-type-layout.h:48
+msgctxt "OpenType layout"
+msgid "Alternate Half Widths"
+msgstr "بدائل نصف العرض"
+
+#: gtk/open-type-layout.h:49
+msgctxt "OpenType layout"
+msgid "Historical Forms"
+msgstr "أشكال تاريخية"
+
+#: gtk/open-type-layout.h:50
+msgctxt "OpenType layout"
+msgid "Horizontal Kana Alternates"
+msgstr "بدائل كانا أفقية"
+
+#: gtk/open-type-layout.h:51
+msgctxt "OpenType layout"
+msgid "Historical Ligatures"
+msgstr "اقترانات تاريخية"
+
+#: gtk/open-type-layout.h:52
+msgctxt "OpenType layout"
+msgid "Hangul"
+msgstr "هانگول"
+
+#: gtk/open-type-layout.h:53
+msgctxt "OpenType layout"
+msgid "Hojo Kanji Forms"
+msgstr "أشكال هوجو كانجي"
+
+#: gtk/open-type-layout.h:54
+msgctxt "OpenType layout"
+msgid "Half Widths"
+msgstr "نصف العرض"
+
+#: gtk/open-type-layout.h:55
+msgctxt "OpenType layout"
+msgid "Initial Forms"
+msgstr "أشكال أولية"
+
+#: gtk/open-type-layout.h:56
+msgctxt "OpenType layout"
+msgid "Isolated Forms"
+msgstr "أشكال منفصلة"
+
+#: gtk/open-type-layout.h:57
+msgctxt "OpenType layout"
+msgid "Italics"
+msgstr "مائل"
+
+#: gtk/open-type-layout.h:58
+msgctxt "OpenType layout"
+msgid "Justification Alternates"
+msgstr "بدائل المساواة"
+
+#: gtk/open-type-layout.h:59
+msgctxt "OpenType layout"
+msgid "JIS78 Forms"
+msgstr "أشكال JIS78"
+
+#: gtk/open-type-layout.h:60
+msgctxt "OpenType layout"
+msgid "JIS83 Forms"
+msgstr "أشكال JIS83"
+
+#: gtk/open-type-layout.h:61
+msgctxt "OpenType layout"
+msgid "JIS90 Forms"
+msgstr "أشكال JIS90"
+
+#: gtk/open-type-layout.h:62
+msgctxt "OpenType layout"
+msgid "JIS2004 Forms"
+msgstr "أشكال JIS2004"
+
+#: gtk/open-type-layout.h:63
+msgctxt "OpenType layout"
+msgid "Kerning"
+msgstr "تأليف الأحرف"
+
+#: gtk/open-type-layout.h:64
+msgctxt "OpenType layout"
+msgid "Left Bounds"
+msgstr "حدود اليسار"
+
+#: gtk/open-type-layout.h:65
+msgctxt "OpenType layout"
+msgid "Standard Ligatures"
+msgstr "اقترانات قياسية"
+
+#: gtk/open-type-layout.h:66
+msgctxt "OpenType layout"
+msgid "Leading Jamo Forms"
+msgstr "أشكال جامو البادئة"
+
+#: gtk/open-type-layout.h:67
+msgctxt "OpenType layout"
+msgid "Lining Figures"
+msgstr "أرقام متراصفة"
+
+#: gtk/open-type-layout.h:68
+msgctxt "OpenType layout"
+msgid "Localized Forms"
+msgstr "أشكال محلية"
+
+#: gtk/open-type-layout.h:69
+msgctxt "OpenType layout"
+msgid "Left-to-right alternates"
+msgstr "بدائل من اليسار لليمين"
+
+#: gtk/open-type-layout.h:70
+msgctxt "OpenType layout"
+msgid "Left-to-right mirrored forms"
+msgstr "أشكال معكوسة من اليسار لليمين"
+
+#: gtk/open-type-layout.h:71
+msgctxt "OpenType layout"
+msgid "Mark Positioning"
+msgstr "تموضع الحركات"
+
+#: gtk/open-type-layout.h:72
+msgctxt "OpenType layout"
+msgid "Medial Forms #2"
+msgstr "أشكال متوسطة ٢"
+
+#: gtk/open-type-layout.h:73
+msgctxt "OpenType layout"
+msgid "Medial Forms"
+msgstr "أشكال متوسطة"
+
+#: gtk/open-type-layout.h:74
+msgctxt "OpenType layout"
+msgid "Mathematical Greek"
+msgstr "يوناني رياضياتي"
+
+#: gtk/open-type-layout.h:75
+msgctxt "OpenType layout"
+msgid "Mark to Mark Positioning"
+msgstr "تموضع الحركات على الحركات"
+
+#: gtk/open-type-layout.h:76
+msgctxt "OpenType layout"
+msgid "Mark Positioning via Substitution"
+msgstr "تموضع الحركات بالاستبدال"
+
+#: gtk/open-type-layout.h:77
+msgctxt "OpenType layout"
+msgid "Alternate Annotation Forms"
+msgstr "أشكال تعليق بديلة"
+
+#: gtk/open-type-layout.h:78
+msgctxt "OpenType layout"
+msgid "NLC Kanji Forms"
+msgstr "أشكال NLC كانجي"
+
+#: gtk/open-type-layout.h:79
+msgctxt "OpenType layout"
+msgid "Nukta Forms"
+msgstr "أشكال النقطة"
+
+#: gtk/open-type-layout.h:80
+msgctxt "OpenType layout"
+msgid "Numerators"
+msgstr "بسط"
+
+#: gtk/open-type-layout.h:81
+msgctxt "OpenType layout"
+msgid "Oldstyle Figures"
+msgstr "أرقام عتيقة الطراز"
+
+#: gtk/open-type-layout.h:82
+msgctxt "OpenType layout"
+msgid "Optical Bounds"
+msgstr "حدود بصرية"
+
+#: gtk/open-type-layout.h:83
+msgctxt "OpenType layout"
+msgid "Ordinals"
+msgstr "أرقام ترتيبية"
+
+#: gtk/open-type-layout.h:84
+msgctxt "OpenType layout"
+msgid "Ornaments"
+msgstr "زخارف"
+
+#: gtk/open-type-layout.h:85
+msgctxt "OpenType layout"
+msgid "Proportional Alternate Widths"
+msgstr "عرض تناسبي بديل"
+
+#: gtk/open-type-layout.h:86
+msgctxt "OpenType layout"
+msgid "Petite Capitals"
+msgstr "حروف كبيرة متوسطة"
+
+#: gtk/open-type-layout.h:87
+msgctxt "OpenType layout"
+msgid "Proportional Kana"
+msgstr "كانا تناسبية"
+
+#: gtk/open-type-layout.h:88
+msgctxt "OpenType layout"
+msgid "Proportional Figures"
+msgstr "أرقام تناسبية"
+
+#: gtk/open-type-layout.h:89
+msgctxt "OpenType layout"
+msgid "Pre-Base Forms"
+msgstr "أشكال قبل القاعدة"
+
+#: gtk/open-type-layout.h:90
+msgctxt "OpenType layout"
+msgid "Pre-base Substitutions"
+msgstr "استبدالات قبل القاعدة"
+
+#: gtk/open-type-layout.h:91
+msgctxt "OpenType layout"
+msgid "Post-base Forms"
+msgstr "أشكال بعد القاعدة"
+
+#: gtk/open-type-layout.h:92
+msgctxt "OpenType layout"
+msgid "Post-base Substitutions"
+msgstr "استبدالات بعد القاعدة"
+
+#: gtk/open-type-layout.h:93
+msgctxt "OpenType layout"
+msgid "Proportional Widths"
+msgstr "عرض تناسبي"
+
+#: gtk/open-type-layout.h:94
+msgctxt "OpenType layout"
+msgid "Quarter Widths"
+msgstr "ربع العرض"
+
+#: gtk/open-type-layout.h:95
+msgctxt "OpenType layout"
+msgid "Randomize"
+msgstr "عشوائي"
+
+#: gtk/open-type-layout.h:96
+msgctxt "OpenType layout"
+msgid "Required Contextual Alternates"
+msgstr "بدائل سياقية ضرورية"
+
+#: gtk/open-type-layout.h:97
+msgctxt "OpenType layout"
+msgid "Rakar Forms"
+msgstr "أشكال راكار"
+
+#: gtk/open-type-layout.h:98
+msgctxt "OpenType layout"
+msgid "Required Ligatures"
+msgstr "اقترانات ضرورية"
+
+#: gtk/open-type-layout.h:99
+msgctxt "OpenType layout"
+msgid "Reph Forms"
+msgstr "أشكال رِف"
+
+#: gtk/open-type-layout.h:100
+msgctxt "OpenType layout"
+msgid "Right Bounds"
+msgstr "حدود اليمين"
+
+#: gtk/open-type-layout.h:101
+msgctxt "OpenType layout"
+msgid "Right-to-left alternates"
+msgstr "بدائل من اليمين لليسار"
+
+#: gtk/open-type-layout.h:102
+msgctxt "OpenType layout"
+msgid "Right-to-left mirrored forms"
+msgstr "أشكال معكوسة من اليمين لليسار"
+
+#: gtk/open-type-layout.h:103
+msgctxt "OpenType layout"
+msgid "Ruby Notation Forms"
+msgstr "أشكال تعليقات روبي"
+
+#: gtk/open-type-layout.h:104
+msgctxt "OpenType layout"
+msgid "Required Variation Alternates"
+msgstr "بدائل تنويعية ضرورية"
+
+#: gtk/open-type-layout.h:105
+msgctxt "OpenType layout"
+msgid "Stylistic Alternates"
+msgstr "بدائل أسلوبية"
+
+#: gtk/open-type-layout.h:106
+msgctxt "OpenType layout"
+msgid "Scientific Inferiors"
+msgstr "محارف علمية سفلى"
+
+#: gtk/open-type-layout.h:107
+msgctxt "OpenType layout"
+msgid "Optical size"
+msgstr "الحجم البصري"
+
+#: gtk/open-type-layout.h:108
+msgctxt "OpenType layout"
+msgid "Small Capitals"
+msgstr "حروف كبيرة مصغرة"
+
+#: gtk/open-type-layout.h:109
+msgctxt "OpenType layout"
+msgid "Simplified Forms"
+msgstr "أشكال مبسطة"
+
+#: gtk/open-type-layout.h:110
+msgctxt "OpenType layout"
+msgid "Stylistic Set 1"
+msgstr "طقم أسلوبي ١"
+
+#: gtk/open-type-layout.h:111
+msgctxt "OpenType layout"
+msgid "Stylistic Set 2"
+msgstr "طقم أسلوبي ٢"
+
+#: gtk/open-type-layout.h:112
+msgctxt "OpenType layout"
+msgid "Stylistic Set 3"
+msgstr "طقم أسلوبي ٣"
+
+#: gtk/open-type-layout.h:113
+msgctxt "OpenType layout"
+msgid "Stylistic Set 4"
+msgstr "طقم أسلوبي ٤"
+
+#: gtk/open-type-layout.h:114
+msgctxt "OpenType layout"
+msgid "Stylistic Set 5"
+msgstr "طقم أسلوبي ٥"
+
+#: gtk/open-type-layout.h:115
+msgctxt "OpenType layout"
+msgid "Stylistic Set 6"
+msgstr "طقم أسلوبي ٦"
+
+#: gtk/open-type-layout.h:116
+msgctxt "OpenType layout"
+msgid "Stylistic Set 7"
+msgstr "طقم أسلوبي ٧"
+
+#: gtk/open-type-layout.h:117
+msgctxt "OpenType layout"
+msgid "Stylistic Set 8"
+msgstr "طقم أسلوبي ٨"
+
+#: gtk/open-type-layout.h:118
+msgctxt "OpenType layout"
+msgid "Stylistic Set 9"
+msgstr "طقم أسلوبي ٩"
+
+#: gtk/open-type-layout.h:119
+msgctxt "OpenType layout"
+msgid "Stylistic Set 10"
+msgstr "طقم أسلوبي ١٠"
+
+#: gtk/open-type-layout.h:120
+msgctxt "OpenType layout"
+msgid "Stylistic Set 11"
+msgstr "طقم أسلوبي ١١"
+
+#: gtk/open-type-layout.h:121
+msgctxt "OpenType layout"
+msgid "Stylistic Set 12"
+msgstr "طقم أسلوبي ١٢"
+
+#: gtk/open-type-layout.h:122
+msgctxt "OpenType layout"
+msgid "Stylistic Set 13"
+msgstr "طقم أسلوبي ١٣"
+
+#: gtk/open-type-layout.h:123
+msgctxt "OpenType layout"
+msgid "Stylistic Set 14"
+msgstr "طقم أسلوبي ١٤"
+
+#: gtk/open-type-layout.h:124
+msgctxt "OpenType layout"
+msgid "Stylistic Set 15"
+msgstr "طقم أسلوبي ١٥"
+
+#: gtk/open-type-layout.h:125
+msgctxt "OpenType layout"
+msgid "Stylistic Set 16"
+msgstr "طقم أسلوبي ١٦"
+
+#: gtk/open-type-layout.h:126
+msgctxt "OpenType layout"
+msgid "Stylistic Set 17"
+msgstr "طقم أسلوبي ١٧"
+
+#: gtk/open-type-layout.h:127
+msgctxt "OpenType layout"
+msgid "Stylistic Set 18"
+msgstr "طقم أسلوبي ١٨"
+
+#: gtk/open-type-layout.h:128
+msgctxt "OpenType layout"
+msgid "Stylistic Set 19"
+msgstr "طقم أسلوبي ١٩"
+
+#: gtk/open-type-layout.h:129
+msgctxt "OpenType layout"
+msgid "Stylistic Set 20"
+msgstr "طقم أسلوبي ٢٠"
+
+#: gtk/open-type-layout.h:130
+msgctxt "OpenType layout"
+msgid "Math script style alternates"
+msgstr "بدائل محارف الأس الرياضياتية"
+
+#: gtk/open-type-layout.h:131
+msgctxt "OpenType layout"
+msgid "Stretching Glyph Decomposition"
+msgstr "تفكيك محارف مطالة"
+
+#: gtk/open-type-layout.h:132
+msgctxt "OpenType layout"
+msgid "Subscript"
+msgstr "حرف تحتي"
+
+#: gtk/open-type-layout.h:133
+msgctxt "OpenType layout"
+msgid "Superscript"
+msgstr "حرف فوقي"
+
+#: gtk/open-type-layout.h:134
+msgctxt "OpenType layout"
+msgid "Swash"
+msgstr "ذيل زخرفي"
+
+#: gtk/open-type-layout.h:135
+msgctxt "OpenType layout"
+msgid "Titling"
+msgstr "عنونة"
+
+#: gtk/open-type-layout.h:136
+msgctxt "OpenType layout"
+msgid "Trailing Jamo Forms"
+msgstr "أشكال جامو المتأخرة"
+
+#: gtk/open-type-layout.h:137
+msgctxt "OpenType layout"
+msgid "Traditional Name Forms"
+msgstr "أشكال الأسماء التقليدي"
+
+#: gtk/open-type-layout.h:138
+msgctxt "OpenType layout"
+msgid "Tabular Figures"
+msgstr "أرقام جدولة"
+
+#: gtk/open-type-layout.h:139
+msgctxt "OpenType layout"
+msgid "Traditional Forms"
+msgstr "أشكال تقليدية"
+
+#: gtk/open-type-layout.h:140
+msgctxt "OpenType layout"
+msgid "Third Widths"
+msgstr "ثلث العرض"
+
+#: gtk/open-type-layout.h:141
+msgctxt "OpenType layout"
+msgid "Unicase"
+msgstr "موحد الحالة"
+
+#: gtk/open-type-layout.h:142
+msgctxt "OpenType layout"
+msgid "Alternate Vertical Metrics"
+msgstr "مقاسات رأسية بديلة"
+
+#: gtk/open-type-layout.h:143
+msgctxt "OpenType layout"
+msgid "Vattu Variants"
+msgstr "بدائل ڤاتو"
+
+#: gtk/open-type-layout.h:144
+msgctxt "OpenType layout"
+msgid "Vertical Writing"
+msgstr "كتابة رأسية"
+
+#: gtk/open-type-layout.h:145
+msgctxt "OpenType layout"
+msgid "Alternate Vertical Half Metrics"
+msgstr "مقاسات نصفية رأسية بديلة"
+
+#: gtk/open-type-layout.h:146
+msgctxt "OpenType layout"
+msgid "Vowel Jamo Forms"
+msgstr "أشكال جامو للحروف المتحركة"
+
+#: gtk/open-type-layout.h:147
+msgctxt "OpenType layout"
+msgid "Vertical Kana Alternates"
+msgstr "بدائل كانا رأسية"
+
+#: gtk/open-type-layout.h:148
+msgctxt "OpenType layout"
+msgid "Vertical Kerning"
+msgstr "تأليف الأحرف الرأسي"
+
+#: gtk/open-type-layout.h:149
+msgctxt "OpenType layout"
+msgid "Proportional Alternate Vertical Metrics"
+msgstr "مقاسات تناسبية رأسية بديلة"
+
+#: gtk/open-type-layout.h:150
+msgctxt "OpenType layout"
+msgid "Vertical Alternates and Rotation"
+msgstr "بدائل رأسية و استدارة"
+
+#: gtk/open-type-layout.h:151
+msgctxt "OpenType layout"
+msgid "Vertical Alternates for Rotation"
+msgstr "بدائل رأسية للاستدارة"
+
+#: gtk/open-type-layout.h:152
+msgctxt "OpenType layout"
+msgid "Slashed Zero"
+msgstr "صفر بشرطة"
 
 #: gtk/paper_names_offsets.c:4
 msgctxt "paper size"
@@ -5042,27 +5758,727 @@ msgctxt "paper size"
 msgid "ROC 8k"
 msgstr "ROC 8k"
 
-#: gtk/ui/gtkaboutdialog.ui:112
+#: gtk/script-names.c:16
+msgctxt "Script"
+msgid "Arabic"
+msgstr "عربي"
+
+#: gtk/script-names.c:17
+msgctxt "Script"
+msgid "Armenian"
+msgstr "أرمني"
+
+#: gtk/script-names.c:18
+msgctxt "Script"
+msgid "Bengali"
+msgstr "بنغالي"
+
+#: gtk/script-names.c:19
+msgctxt "Script"
+msgid "Bopomofo"
+msgstr "بوبوموفو"
+
+#: gtk/script-names.c:20
+msgctxt "Script"
+msgid "Cherokee"
+msgstr "شيروكي"
+
+#: gtk/script-names.c:21
+msgctxt "Script"
+msgid "Coptic"
+msgstr "قبطي"
+
+#: gtk/script-names.c:22
+msgctxt "Script"
+msgid "Cyrillic"
+msgstr "سريلي"
+
+#: gtk/script-names.c:23
+msgctxt "Script"
+msgid "Deseret"
+msgstr "ديزرت"
+
+#: gtk/script-names.c:24
+msgctxt "Script"
+msgid "Devanagari"
+msgstr "ديفاناجاري"
+
+#: gtk/script-names.c:25
+msgctxt "Script"
+msgid "Ethiopic"
+msgstr "اثيوبي"
+
+#: gtk/script-names.c:26
+msgctxt "Script"
+msgid "Georgian"
+msgstr "جورجي"
+
+#: gtk/script-names.c:27
+msgctxt "Script"
+msgid "Gothic"
+msgstr "قوطي"
+
+#: gtk/script-names.c:28
+msgctxt "Script"
+msgid "Greek"
+msgstr "يوناني"
+
+#: gtk/script-names.c:29
+msgctxt "Script"
+msgid "Gujarati"
+msgstr "كوجراتي"
+
+#: gtk/script-names.c:30
+msgctxt "Script"
+msgid "Gurmukhi"
+msgstr "جورموخي"
+
+#: gtk/script-names.c:31
+msgctxt "Script"
+msgid "Han"
+msgstr "هان"
+
+#: gtk/script-names.c:32
+msgctxt "Script"
+msgid "Hangul"
+msgstr "هانگول"
+
+#: gtk/script-names.c:33
+msgctxt "Script"
+msgid "Hebrew"
+msgstr "عبري"
+
+#: gtk/script-names.c:34
+msgctxt "Script"
+msgid "Hiragana"
+msgstr "هيراگانا"
+
+#: gtk/script-names.c:35
+msgctxt "Script"
+msgid "Kannada"
+msgstr "كنادا"
+
+#: gtk/script-names.c:36
+msgctxt "Script"
+msgid "Katakana"
+msgstr "كتاكنا"
+
+#: gtk/script-names.c:37
+msgctxt "Script"
+msgid "Khmer"
+msgstr "خميري"
+
+#: gtk/script-names.c:38
+msgctxt "Script"
+msgid "Lao"
+msgstr "لاو"
+
+#: gtk/script-names.c:39
+msgctxt "Script"
+msgid "Latin"
+msgstr "لاتيني"
+
+#: gtk/script-names.c:40
+msgctxt "Script"
+msgid "Malayalam"
+msgstr "ملايلام"
+
+#: gtk/script-names.c:41
+msgctxt "Script"
+msgid "Mongolian"
+msgstr "منغولي"
+
+#: gtk/script-names.c:42
+msgctxt "Script"
+msgid "Myanmar"
+msgstr "مينماري"
+
+#: gtk/script-names.c:43
+msgctxt "Script"
+msgid "Ogham"
+msgstr "أوغام"
+
+#: gtk/script-names.c:44
+msgctxt "Script"
+msgid "Old Italic"
+msgstr "إيطالي قديم"
+
+#: gtk/script-names.c:45
+msgctxt "Script"
+msgid "Oriya"
+msgstr "أوريا"
+
+#: gtk/script-names.c:46
+msgctxt "Script"
+msgid "Runic"
+msgstr "روني"
+
+#: gtk/script-names.c:47
+msgctxt "Script"
+msgid "Sinhala"
+msgstr "سنهالا"
+
+#: gtk/script-names.c:48
+msgctxt "Script"
+msgid "Syriac"
+msgstr "سرياني"
+
+#: gtk/script-names.c:49
+msgctxt "Script"
+msgid "Tamil"
+msgstr "تاميلي"
+
+#: gtk/script-names.c:50
+msgctxt "Script"
+msgid "Telugu"
+msgstr "تلوغو"
+
+#: gtk/script-names.c:51
+msgctxt "Script"
+msgid "Thaana"
+msgstr "تانا"
+
+#: gtk/script-names.c:52
+msgctxt "Script"
+msgid "Thai"
+msgstr "تايلندي"
+
+#: gtk/script-names.c:53
+msgctxt "Script"
+msgid "Tibetan"
+msgstr "تبيتي"
+
+#: gtk/script-names.c:54
+msgctxt "Script"
+msgid "Canadian Aboriginal"
+msgstr "سكان كندا الأصليين"
+
+#: gtk/script-names.c:55
+msgctxt "Script"
+msgid "Yi"
+msgstr "يي"
+
+#: gtk/script-names.c:56
+msgctxt "Script"
+msgid "Tagalog"
+msgstr "تگالوگ"
+
+#: gtk/script-names.c:57
+msgctxt "Script"
+msgid "Hanunoo"
+msgstr "هنونو"
+
+#: gtk/script-names.c:58
+msgctxt "Script"
+msgid "Buhid"
+msgstr "بوهيدي"
+
+#: gtk/script-names.c:59
+msgctxt "Script"
+msgid "Tagbanwa"
+msgstr "تاغبنوا"
+
+#: gtk/script-names.c:60
+msgctxt "Script"
+msgid "Braille"
+msgstr "بريل"
+
+#: gtk/script-names.c:61
+msgctxt "Script"
+msgid "Cypriot"
+msgstr "قبرصي"
+
+#: gtk/script-names.c:62
+msgctxt "Script"
+msgid "Limbu"
+msgstr "لمبو"
+
+#: gtk/script-names.c:63
+msgctxt "Script"
+msgid "Osmanya"
+msgstr "عثمانيا"
+
+#: gtk/script-names.c:64
+msgctxt "Script"
+msgid "Shavian"
+msgstr "شافيان"
+
+#: gtk/script-names.c:65
+msgctxt "Script"
+msgid "Linear B"
+msgstr "خطي ب"
+
+#: gtk/script-names.c:66
+msgctxt "Script"
+msgid "Tai Le"
+msgstr "تاي لي"
+
+#: gtk/script-names.c:67
+msgctxt "Script"
+msgid "Ugaritic"
+msgstr "أوغاريتي"
+
+#: gtk/script-names.c:68
+msgctxt "Script"
+msgid "New Tai Lue"
+msgstr "تاي لو الجديد"
+
+#: gtk/script-names.c:69
+msgctxt "Script"
+msgid "Buginese"
+msgstr "بوجيني"
+
+#: gtk/script-names.c:70
+msgctxt "Script"
+msgid "Glagolitic"
+msgstr "گلاگولي"
+
+#: gtk/script-names.c:71
+msgctxt "Script"
+msgid "Tifinagh"
+msgstr "تفناغ"
+
+#: gtk/script-names.c:72
+msgctxt "Script"
+msgid "Syloti Nagri"
+msgstr "سيولتي ناغري"
+
+#: gtk/script-names.c:73
+msgctxt "Script"
+msgid "Old Persian"
+msgstr "فارسي قديم"
+
+#: gtk/script-names.c:74
+msgctxt "Script"
+msgid "Kharoshthi"
+msgstr "خاروشذي"
+
+#: gtk/script-names.c:75
+msgctxt "Script"
+msgid "Unknown"
+msgstr "مجهول"
+
+#: gtk/script-names.c:76
+msgctxt "Script"
+msgid "Balinese"
+msgstr "باليني"
+
+#: gtk/script-names.c:77
+msgctxt "Script"
+msgid "Cuneiform"
+msgstr "مسماري"
+
+#: gtk/script-names.c:78
+msgctxt "Script"
+msgid "Phoenician"
+msgstr "فينيقي"
+
+#: gtk/script-names.c:79
+msgctxt "Script"
+msgid "Phags-pa"
+msgstr "فاگس-با"
+
+#: gtk/script-names.c:80
+msgctxt "Script"
+msgid "N'Ko"
+msgstr "نكو"
+
+#: gtk/script-names.c:81
+msgctxt "Script"
+msgid "Kayah Li"
+msgstr "كاياه لي"
+
+#: gtk/script-names.c:82
+msgctxt "Script"
+msgid "Lepcha"
+msgstr "ليبشا"
+
+#: gtk/script-names.c:83
+msgctxt "Script"
+msgid "Rejang"
+msgstr "ريجانگ"
+
+#: gtk/script-names.c:84
+msgctxt "Script"
+msgid "Sundanese"
+msgstr "سُنداني"
+
+#: gtk/script-names.c:85
+msgctxt "Script"
+msgid "Saurashtra"
+msgstr "سوراشترا"
+
+#: gtk/script-names.c:86
+msgctxt "Script"
+msgid "Cham"
+msgstr "تشام"
+
+#: gtk/script-names.c:87
+msgctxt "Script"
+msgid "Ol Chiki"
+msgstr "أُول تشيكي"
+
+#: gtk/script-names.c:88
+msgctxt "Script"
+msgid "Vai"
+msgstr "فاي"
+
+#: gtk/script-names.c:89
+msgctxt "Script"
+msgid "Carian"
+msgstr "كاريان"
+
+#: gtk/script-names.c:90
+msgctxt "Script"
+msgid "Lycian"
+msgstr "ليشياني"
+
+#: gtk/script-names.c:91
+msgctxt "Script"
+msgid "Lydian"
+msgstr "ليديان"
+
+#: gtk/script-names.c:92
+msgctxt "Script"
+msgid "Avestan"
+msgstr "أفستاني"
+
+#: gtk/script-names.c:93
+msgctxt "Script"
+msgid "Bamum"
+msgstr "باموم"
+
+#: gtk/script-names.c:94
+msgctxt "Script"
+msgid "Egyptian Hieroglpyhs"
+msgstr "هيروغليفي مصري"
+
+#: gtk/script-names.c:95
+msgctxt "Script"
+msgid "Imperial Aramaic"
+msgstr "آرامي ملكي"
+
+#: gtk/script-names.c:96
+msgctxt "Script"
+msgid "Inscriptional Pahlavi"
+msgstr "بهلوي نحتي"
+
+#: gtk/script-names.c:97
+msgctxt "Script"
+msgid "Inscriptional Parthian"
+msgstr "بارثيان نحتي"
+
+#: gtk/script-names.c:98
+msgctxt "Script"
+msgid "Javanese"
+msgstr "جاوي"
+
+#: gtk/script-names.c:99
+msgctxt "Script"
+msgid "Kaithi"
+msgstr "كياثي"
+
+#: gtk/script-names.c:100
+msgctxt "Script"
+msgid "Lisu"
+msgstr "ليسو"
+
+#: gtk/script-names.c:101
+msgctxt "Script"
+msgid "Meetei Mayek"
+msgstr "ميتي مايك"
+
+#: gtk/script-names.c:102
+msgctxt "Script"
+msgid "Old South Arabian"
+msgstr "عربي جنوبي قديم"
+
+#: gtk/script-names.c:103
+msgctxt "Script"
+msgid "Old Turkic"
+msgstr "تركي قديم"
+
+#: gtk/script-names.c:104
+msgctxt "Script"
+msgid "Samaritan"
+msgstr "سامري"
+
+#: gtk/script-names.c:105
+msgctxt "Script"
+msgid "Tai Tham"
+msgstr "تام تايلندي"
+
+#: gtk/script-names.c:106
+msgctxt "Script"
+msgid "Tai Viet"
+msgstr "ڤيت تايلندي"
+
+#: gtk/script-names.c:107
+msgctxt "Script"
+msgid "Batak"
+msgstr "باتاك"
+
+#: gtk/script-names.c:108
+msgctxt "Script"
+msgid "Brahmi"
+msgstr "برهمي"
+
+#: gtk/script-names.c:109
+msgctxt "Script"
+msgid "Mandaic"
+msgstr "مندياني"
+
+#: gtk/script-names.c:110
+msgctxt "Script"
+msgid "Chakma"
+msgstr "شاكما"
+
+#: gtk/script-names.c:111
+msgctxt "Script"
+msgid "Meroitic Cursive"
+msgstr "مروية متصلة"
+
+#: gtk/script-names.c:112
+msgctxt "Script"
+msgid "Meroitic Hieroglyphs"
+msgstr "مروية هيروغليفية"
+
+#: gtk/script-names.c:113
+msgctxt "Script"
+msgid "Miao"
+msgstr "مياو"
+
+#: gtk/script-names.c:114
+msgctxt "Script"
+msgid "Sharada"
+msgstr "شارادا"
+
+#: gtk/script-names.c:115
+msgctxt "Script"
+msgid "Sora Sompeng"
+msgstr "سورا سُمپِنگ"
+
+#: gtk/script-names.c:116
+msgctxt "Script"
+msgid "Takri"
+msgstr "تاكري"
+
+#: gtk/script-names.c:117
+msgctxt "Script"
+msgid "Bassa"
+msgstr "باسّا"
+
+#: gtk/script-names.c:118
+msgctxt "Script"
+msgid "Caucasian Albanian"
+msgstr "ألباني قوقازي"
+
+#: gtk/script-names.c:119
+msgctxt "Script"
+msgid "Duployan"
+msgstr ""
+
+#: gtk/script-names.c:120
+msgctxt "Script"
+msgid "Elbasan"
+msgstr "إلباسان"
+
+#: gtk/script-names.c:121
+msgctxt "Script"
+msgid "Grantha"
+msgstr "گرانتا"
+
+#: gtk/script-names.c:122
+msgctxt "Script"
+msgid "Kjohki"
+msgstr ""
+
+#: gtk/script-names.c:123
+msgctxt "Script"
+msgid "Khudawadi, Sindhi"
+msgstr ""
+
+#: gtk/script-names.c:124
+msgctxt "Script"
+msgid "Linear A"
+msgstr "خطي أ"
+
+#: gtk/script-names.c:125
+msgctxt "Script"
+msgid "Mahajani"
+msgstr "مهاجاني"
+
+#: gtk/script-names.c:126
+msgctxt "Script"
+msgid "Manichaean"
+msgstr "مانوية"
+
+#: gtk/script-names.c:127
+msgctxt "Script"
+msgid "Mende Kikakui"
+msgstr ""
+
+#: gtk/script-names.c:128
+msgctxt "Script"
+msgid "Modi"
+msgstr "مودي"
+
+#: gtk/script-names.c:129
+msgctxt "Script"
+msgid "Mro"
+msgstr ""
+
+#: gtk/script-names.c:130
+msgctxt "Script"
+msgid "Nabataean"
+msgstr "نبطي"
+
+#: gtk/script-names.c:131
+msgctxt "Script"
+msgid "Old North Arabian"
+msgstr "عربي شمالي قديم"
+
+#: gtk/script-names.c:132
+msgctxt "Script"
+msgid "Old Permic"
+msgstr "برمي قديم"
+
+#: gtk/script-names.c:133
+msgctxt "Script"
+msgid "Pahawh Hmong"
+msgstr "باهوه همونج"
+
+#: gtk/script-names.c:134
+msgctxt "Script"
+msgid "Palmyrene"
+msgstr "تدمري"
+
+#: gtk/script-names.c:135
+msgctxt "Script"
+msgid "Pau Cin Hau"
+msgstr "باو سين هاو"
+
+#: gtk/script-names.c:136
+msgctxt "Script"
+msgid "Psalter Pahlavi"
+msgstr "بهلوي مزاميري"
+
+#: gtk/script-names.c:137
+msgctxt "Script"
+msgid "Siddham"
+msgstr "سدهام"
+
+#: gtk/script-names.c:138
+msgctxt "Script"
+msgid "Tirhuta"
+msgstr "ترهوتا"
+
+#: gtk/script-names.c:139
+msgctxt "Script"
+msgid "Warang Citi"
+msgstr "وارانج سيتي"
+
+#: gtk/script-names.c:140
+msgctxt "Script"
+msgid "Ahom"
+msgstr "آهام"
+
+#: gtk/script-names.c:141
+msgctxt "Script"
+msgid "Anatolian Hieroglyphs"
+msgstr "هيروغليفي أناضولي"
+
+#: gtk/script-names.c:142
+msgctxt "Script"
+msgid "Hatran"
+msgstr "هتران"
+
+#: gtk/script-names.c:143
+msgctxt "Script"
+msgid "Multani"
+msgstr "ملتاني"
+
+#: gtk/script-names.c:144
+msgctxt "Script"
+msgid "Old Hungarian"
+msgstr "نمساوي قديمة"
+
+#: gtk/script-names.c:145
+msgctxt "Script"
+msgid "Signwriting"
+msgstr "كتابة الإشارة"
+
+#: gtk/script-names.c:146
+msgctxt "Script"
+msgid "Adlam"
+msgstr "أدلام"
+
+#: gtk/script-names.c:147
+msgctxt "Script"
+msgid "Bhaiksuki"
+msgstr ""
+
+#: gtk/script-names.c:148
+msgctxt "Script"
+msgid "Marchen"
+msgstr ""
+
+#: gtk/script-names.c:149
+msgctxt "Script"
+msgid "Newa"
+msgstr "نيوا"
+
+#: gtk/script-names.c:150
+msgctxt "Script"
+msgid "Osage"
+msgstr "أوساج"
+
+#: gtk/script-names.c:151
+msgctxt "Script"
+msgid "Tangut"
+msgstr "تانگوت"
+
+#: gtk/script-names.c:152
+msgctxt "Script"
+msgid "Masaram Gondi"
+msgstr ""
+
+#: gtk/script-names.c:153
+msgctxt "Script"
+msgid "Nushu"
+msgstr ""
+
+#: gtk/script-names.c:154
+msgctxt "Script"
+msgid "Soyombo"
+msgstr "سويومبو"
+
+#: gtk/script-names.c:155
+msgctxt "Script"
+msgid "Zanabazar Square"
+msgstr "مربعات زانابازار"
+
+#: gtk/ui/gtkaboutdialog.ui:106
 msgid "About"
 msgstr "عنْ"
 
-#: gtk/ui/gtkaboutdialog.ui:150
+#: gtk/ui/gtkaboutdialog.ui:141
 msgid "Credits"
 msgstr "إشادات"
 
-#: gtk/ui/gtkaboutdialog.ui:212
+#: gtk/ui/gtkaboutdialog.ui:195
 msgid "System"
 msgstr "النظام"
 
-#: gtk/ui/gtkappchooserdialog.ui:71
+#: gtk/ui/gtkappchooserdialog.ui:65
 msgid "_View All Applications"
 msgstr "أ_ظهر كل التطبيقات"
 
-#: gtk/ui/gtkappchooserdialog.ui:79
+#: gtk/ui/gtkappchooserdialog.ui:72
 msgid "_Find New Applications"
 msgstr "اب_حث عن تطبيقات جديدة"
 
-#: gtk/ui/gtkappchooserwidget.ui:116
+#: gtk/ui/gtkappchooserwidget.ui:111
 msgid "No applications found."
 msgstr "لم يُعثر على أي تطبيقات."
 
@@ -5098,15 +6514,15 @@ msgstr "أظهر الكل"
 msgid "Quit %s"
 msgstr "أنهِ %s"
 
-#: gtk/ui/gtkassistant.ui:63
+#: gtk/ui/gtkassistant.ui:57
 msgid "_Next"
 msgstr "أ_مام"
 
-#: gtk/ui/gtkassistant.ui:81
+#: gtk/ui/gtkassistant.ui:74
 msgid "_Back"
 msgstr "خل_ف"
 
-#: gtk/ui/gtkassistant.ui:99
+#: gtk/ui/gtkassistant.ui:91
 msgid "_Finish"
 msgstr "أ_نهِ"
 
@@ -5199,19 +6615,19 @@ msgstr "أعلام"
 msgid "Create Folder"
 msgstr "أنشئ مجلّدًا"
 
-#: gtk/ui/gtkfilechooserwidget.ui:144
+#: gtk/ui/gtkfilechooserwidget.ui:143
 msgid "Files"
 msgstr "ملفات"
 
-#: gtk/ui/gtkfilechooserwidget.ui:235
+#: gtk/ui/gtkfilechooserwidget.ui:233
 msgid "Remote location — only searching the current folder"
 msgstr "مكان بعيد — نبحث في المجلد الحالي فقط"
 
-#: gtk/ui/gtkfilechooserwidget.ui:390
+#: gtk/ui/gtkfilechooserwidget.ui:388
 msgid "Folder Name"
 msgstr "اسم المجلّد"
 
-#: gtk/ui/gtkfilechooserwidget.ui:416
+#: gtk/ui/gtkfilechooserwidget.ui:414
 msgid "_Create"
 msgstr "أن_شئ"
 
@@ -5223,43 +6639,43 @@ msgstr "اختر خطًا"
 msgid "Search font name"
 msgstr "ابحث باسم الخط"
 
-#: gtk/ui/gtkfontchooserwidget.ui:97
+#: gtk/ui/gtkfontchooserwidget.ui:93
 msgid "Font Family"
 msgstr "عائلة الخطوط"
 
-#: gtk/ui/gtkfontchooserwidget.ui:118
+#: gtk/ui/gtkfontchooserwidget.ui:113 gtk/ui/gtkfontchooserwidget.ui:229
 msgid "Preview text"
 msgstr "نصّ المعاينة"
 
-#: gtk/ui/gtkfontchooserwidget.ui:184
+#: gtk/ui/gtkfontchooserwidget.ui:185
 msgid "No Fonts Found"
 msgstr "لم يُعثر على أي خطوط"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:48
+#: gtk/ui/gtkpagesetupunixdialog.ui:46
 msgid "_Format for:"
 msgstr "_صيغة:"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:81 gtk/ui/gtkprintunixdialog.ui:714
+#: gtk/ui/gtkpagesetupunixdialog.ui:77 gtk/ui/gtkprintunixdialog.ui:667
 msgid "_Paper size:"
 msgstr "_مقاس الورقة:"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:123
+#: gtk/ui/gtkpagesetupunixdialog.ui:116
 msgid "_Orientation:"
 msgstr "الا_تجاه:"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:153 gtk/ui/gtkprintunixdialog.ui:761
+#: gtk/ui/gtkpagesetupunixdialog.ui:141 gtk/ui/gtkprintunixdialog.ui:711
 msgid "Portrait"
 msgstr "طوليّ"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:189 gtk/ui/gtkprintunixdialog.ui:763
+#: gtk/ui/gtkpagesetupunixdialog.ui:172 gtk/ui/gtkprintunixdialog.ui:713
 msgid "Reverse portrait"
 msgstr "طوليّ مقلوب"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:225 gtk/ui/gtkprintunixdialog.ui:762
+#: gtk/ui/gtkpagesetupunixdialog.ui:203 gtk/ui/gtkprintunixdialog.ui:712
 msgid "Landscape"
 msgstr "عرضيّ"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:260 gtk/ui/gtkprintunixdialog.ui:764
+#: gtk/ui/gtkpagesetupunixdialog.ui:233 gtk/ui/gtkprintunixdialog.ui:714
 msgid "Reverse landscape"
 msgstr "عرضيّ مقلوب"
 
@@ -5267,7 +6683,7 @@ msgstr "عرضيّ مقلوب"
 msgid "Down Path"
 msgstr "المسار السفلي"
 
-#: gtk/ui/gtkpathbar.ui:33
+#: gtk/ui/gtkpathbar.ui:28
 msgid "Up Path"
 msgstr "المسار العلوي"
 
@@ -5348,37 +6764,37 @@ msgstr "اتصل ب_خادوم"
 msgid "Enter server address…"
 msgstr "أدخل عنوان الخادوم…"
 
-#: gtk/ui/gtkprintunixdialog.ui:113
+#: gtk/ui/gtkprintunixdialog.ui:107
 msgid "Printer"
 msgstr "الطابعة"
 
 #. this is the header for the printer status column in the print dialog
-#: gtk/ui/gtkprintunixdialog.ui:135
+#: gtk/ui/gtkprintunixdialog.ui:129
 msgid "Status"
 msgstr "الحالة"
 
-#: gtk/ui/gtkprintunixdialog.ui:176
+#: gtk/ui/gtkprintunixdialog.ui:166
 msgid "Range"
 msgstr "المدى"
 
-#: gtk/ui/gtkprintunixdialog.ui:193
+#: gtk/ui/gtkprintunixdialog.ui:182
 msgid "_All Pages"
 msgstr "_كل الصفحات"
 
-#: gtk/ui/gtkprintunixdialog.ui:208
+#: gtk/ui/gtkprintunixdialog.ui:196
 msgid "C_urrent Page"
 msgstr "الصفحة ال_حالية"
 
-#: gtk/ui/gtkprintunixdialog.ui:225
+#: gtk/ui/gtkprintunixdialog.ui:212
 msgid "Se_lection"
 msgstr "ال_تحديد:"
 
-#: gtk/ui/gtkprintunixdialog.ui:241
+#: gtk/ui/gtkprintunixdialog.ui:228
 msgid "Pag_es:"
 msgstr "_صفحات:"
 
-#: gtk/ui/gtkprintunixdialog.ui:244 gtk/ui/gtkprintunixdialog.ui:262
-#: gtk/ui/gtkprintunixdialog.ui:268
+#: gtk/ui/gtkprintunixdialog.ui:230 gtk/ui/gtkprintunixdialog.ui:247
+#: gtk/ui/gtkprintunixdialog.ui:253
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1–3, 7, 11"
@@ -5386,112 +6802,112 @@ msgstr ""
 "حدد مدى أو أكثر من أرقام الصفحات،\n"
 " مثلا: 1-3,7,11"
 
-#: gtk/ui/gtkprintunixdialog.ui:267
+#: gtk/ui/gtkprintunixdialog.ui:252
 msgid "Pages"
 msgstr "صفحات"
 
-#: gtk/ui/gtkprintunixdialog.ui:299
+#: gtk/ui/gtkprintunixdialog.ui:282
 msgid "Copies"
 msgstr "نُسَخْ"
 
-#: gtk/ui/gtkprintunixdialog.ui:319
+#: gtk/ui/gtkprintunixdialog.ui:300
 msgid "Copie_s:"
 msgstr "نُسَ_خ:"
 
-#: gtk/ui/gtkprintunixdialog.ui:344
+#: gtk/ui/gtkprintunixdialog.ui:324
 msgid "C_ollate"
 msgstr "_صفحة بصفحة"
 
-#: gtk/ui/gtkprintunixdialog.ui:358
+#: gtk/ui/gtkprintunixdialog.ui:336
 msgid "_Reverse"
 msgstr "م_قلوب"
 
-#: gtk/ui/gtkprintunixdialog.ui:429
+#: gtk/ui/gtkprintunixdialog.ui:399
 msgid "Layout"
 msgstr "التصميم"
 
-#: gtk/ui/gtkprintunixdialog.ui:449
+#: gtk/ui/gtkprintunixdialog.ui:417
 msgid "T_wo-sided:"
 msgstr "ذو _وجهين:"
 
-#: gtk/ui/gtkprintunixdialog.ui:474
+#: gtk/ui/gtkprintunixdialog.ui:441
 msgid "Pages per _side:"
 msgstr "الصفحات في كل _جهة:"
 
-#: gtk/ui/gtkprintunixdialog.ui:501
+#: gtk/ui/gtkprintunixdialog.ui:467
 msgid "Page or_dering:"
 msgstr "_ترتيب الصفحات:"
 
-#: gtk/ui/gtkprintunixdialog.ui:527
+#: gtk/ui/gtkprintunixdialog.ui:492
 msgid "_Only print:"
 msgstr "الطباعة _فقط:"
 
-#: gtk/ui/gtkprintunixdialog.ui:544
+#: gtk/ui/gtkprintunixdialog.ui:508
 msgid "All sheets"
 msgstr "كل الورقات"
 
-#: gtk/ui/gtkprintunixdialog.ui:545
+#: gtk/ui/gtkprintunixdialog.ui:509
 msgid "Even sheets"
 msgstr "الورقات الزوجية"
 
-#: gtk/ui/gtkprintunixdialog.ui:546
+#: gtk/ui/gtkprintunixdialog.ui:510
 msgid "Odd sheets"
 msgstr "الورقات الفردية"
 
-#: gtk/ui/gtkprintunixdialog.ui:559
+#: gtk/ui/gtkprintunixdialog.ui:522
 msgid "Sc_ale:"
 msgstr "_المقياس:"
 
-#: gtk/ui/gtkprintunixdialog.ui:619
+#: gtk/ui/gtkprintunixdialog.ui:577
 msgid "Paper"
 msgstr "ورق"
 
-#: gtk/ui/gtkprintunixdialog.ui:639
+#: gtk/ui/gtkprintunixdialog.ui:595
 msgid "Paper _type:"
 msgstr "_نوع الورق:"
 
-#: gtk/ui/gtkprintunixdialog.ui:664
+#: gtk/ui/gtkprintunixdialog.ui:619
 msgid "Paper _source:"
 msgstr "_مصدر الورق:"
 
-#: gtk/ui/gtkprintunixdialog.ui:689
+#: gtk/ui/gtkprintunixdialog.ui:643
 msgid "Output t_ray:"
 msgstr "_لوحة الخرْج:"
 
-#: gtk/ui/gtkprintunixdialog.ui:743
+#: gtk/ui/gtkprintunixdialog.ui:694
 msgid "Or_ientation:"
 msgstr "الا_تجاه:"
 
-#: gtk/ui/gtkprintunixdialog.ui:833
+#: gtk/ui/gtkprintunixdialog.ui:778
 msgid "Job Details"
 msgstr "تفاصيل المهمّة"
 
-#: gtk/ui/gtkprintunixdialog.ui:853
+#: gtk/ui/gtkprintunixdialog.ui:796
 msgid "Pri_ority:"
 msgstr "الأو_لوية:"
 
-#: gtk/ui/gtkprintunixdialog.ui:877
+#: gtk/ui/gtkprintunixdialog.ui:819
 msgid "_Billing info:"
 msgstr " _معلومات الدفع:"
 
-#: gtk/ui/gtkprintunixdialog.ui:920
+#: gtk/ui/gtkprintunixdialog.ui:860
 msgid "Print Document"
 msgstr "اطبع المستند"
 
 #. this is one of the choices for the print at option in the print dialog
-#: gtk/ui/gtkprintunixdialog.ui:937
+#: gtk/ui/gtkprintunixdialog.ui:876
 msgid "_Now"
 msgstr "الآ_ن"
 
 #. this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.
-#: gtk/ui/gtkprintunixdialog.ui:953
+#: gtk/ui/gtkprintunixdialog.ui:891
 msgid "A_t:"
 msgstr "_في:"
 
 #. Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.
-#: gtk/ui/gtkprintunixdialog.ui:957 gtk/ui/gtkprintunixdialog.ui:959
-#: gtk/ui/gtkprintunixdialog.ui:978 gtk/ui/gtkprintunixdialog.ui:980
-#: gtk/ui/gtkprintunixdialog.ui:985
+#: gtk/ui/gtkprintunixdialog.ui:894 gtk/ui/gtkprintunixdialog.ui:896
+#: gtk/ui/gtkprintunixdialog.ui:914 gtk/ui/gtkprintunixdialog.ui:916
+#: gtk/ui/gtkprintunixdialog.ui:921
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
@@ -5499,61 +6915,61 @@ msgstr ""
 "حدد وقت الطباعة،\n"
 "مثلا: 15:30، 2:35 م، 14:15:20، 11:46:30 ص، 4 م"
 
-#: gtk/ui/gtkprintunixdialog.ui:984
+#: gtk/ui/gtkprintunixdialog.ui:920
 msgid "Time of print"
 msgstr "وقت الطباعة"
 
 #. this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets 'released'.
-#: gtk/ui/gtkprintunixdialog.ui:998
+#: gtk/ui/gtkprintunixdialog.ui:934
 msgid "On _hold"
 msgstr "قيد الان_تظار"
 
-#: gtk/ui/gtkprintunixdialog.ui:1002 gtk/ui/gtkprintunixdialog.ui:1003
+#: gtk/ui/gtkprintunixdialog.ui:937 gtk/ui/gtkprintunixdialog.ui:938
 msgid "Hold the job until it is explicitly released"
 msgstr "احجز المهمّة حتّى تطلق صراحة"
 
-#: gtk/ui/gtkprintunixdialog.ui:1039
+#: gtk/ui/gtkprintunixdialog.ui:972
 msgid "Add Cover Page"
 msgstr "أضِف صفحة غلاف"
 
 #. this is the label used for the option in the print dialog that controls the front cover page.
-#: gtk/ui/gtkprintunixdialog.ui:1059
+#: gtk/ui/gtkprintunixdialog.ui:990
 msgid "Be_fore:"
 msgstr "ق_بل:"
 
 #. this is the label used for the option in the print dialog that controls the back cover page.
-#: gtk/ui/gtkprintunixdialog.ui:1083
+#: gtk/ui/gtkprintunixdialog.ui:1013
 msgid "_After:"
 msgstr "ب_عد:"
 
-#: gtk/ui/gtkprintunixdialog.ui:1124
+#: gtk/ui/gtkprintunixdialog.ui:1053
 msgid "Job"
 msgstr "مَهمّة"
 
 #. This will appear as a tab label in the print dialog.
-#: gtk/ui/gtkprintunixdialog.ui:1158
+#: gtk/ui/gtkprintunixdialog.ui:1084
 msgid "Image Quality"
 msgstr "جودة الصورة"
 
 #. This will appear as a tab label in the print dialog.
-#: gtk/ui/gtkprintunixdialog.ui:1191
+#: gtk/ui/gtkprintunixdialog.ui:1114
 msgid "Color"
 msgstr "اللون"
 
 #. This will appear as a tab label in the print dialog. It's a typographical term, as in "Binding and finishing"
-#: gtk/ui/gtkprintunixdialog.ui:1224
+#: gtk/ui/gtkprintunixdialog.ui:1144
 msgid "Finishing"
 msgstr "يجري الإنهاء"
 
-#: gtk/ui/gtkprintunixdialog.ui:1257
+#: gtk/ui/gtkprintunixdialog.ui:1174
 msgid "Advanced"
 msgstr "متقدّم"
 
-#: gtk/ui/gtkprintunixdialog.ui:1278
+#: gtk/ui/gtkprintunixdialog.ui:1192
 msgid "Some of the settings in the dialog conflict"
 msgstr "بعض الإعدادات في الحوار تتعارض"
 
-#: gtk/ui/gtkrecentchooserdefault.ui:78
+#: gtk/ui/gtkrecentchooserdefault.ui:73
 msgid "Select which type of documents are shown"
 msgstr "اختر أنواع المستندات التي ستعرض"
 
@@ -6389,6 +7805,79 @@ msgstr "ناتج-اختبار.%s"
 msgid "Print to Test Printer"
 msgstr "اطبع إلى طابعة اختبار"
 
+#~ msgid "Unknown error when trying to deserialize %s"
+#~ msgstr "حدث خطأ مجهول عند محاولة فتح %s"
+
+#~ msgid "No deserialize function found for format %s"
+#~ msgstr "لا وظيفة تفكيك موجودة للنوع %s"
+
+#~ msgid "Both “id” and “name” were found on the <%s> element"
+#~ msgstr "كلا ”id“ و ”name“ لم يعثر عليهما في العنصر <%s>"
+
+#~ msgid "The attribute “%s” was found twice on the <%s> element"
+#~ msgstr "الصفة ”%s“ معادة مرتان في نفس العنصر <%s>"
+
+#~ msgid "<%s> element has invalid ID “%s”"
+#~ msgstr "معرّف العنصر <%s> غير صحيح ”%s“"
+
+#~ msgid "<%s> element has neither a “name” nor an “id” attribute"
+#~ msgstr "العنصر <%s> ليس له لا صفة ”name“ و لا ”id“"
+
+#~ msgid "Attribute “%s” repeated twice on the same <%s> element"
+#~ msgstr "الصفة ”%s“ مكررة مرتان في نفس العنصر <%s>"
+
+#~ msgid "Attribute “%s” is invalid on <%s> element in this context"
+#~ msgstr "الصفة ”%s“ خاطئة في العنصر <%s> في هذا السياق"
+
+#~ msgid "Tag “%s” has not been defined."
+#~ msgstr "لم يتم تعريف الوسم ”%s“."
+
+#~ msgid "Anonymous tag found and tags can not be created."
+#~ msgstr "وُجِد وسم مجهول و لا يمكن إنشاؤه."
+
+#~ msgid "Tag “%s” does not exist in buffer and tags can not be created."
+#~ msgstr "الوسم ”%s“ غير موجود في النص و لا يمكن إنشاؤه."
+
+#~ msgid "Element <%s> is not allowed below <%s>"
+#~ msgstr "العنصر <%s> غير مسموح به تحت <%s>"
+
+#~ msgid "“%s” is not a valid attribute type"
+#~ msgstr "‏”%s“ قيمة غير سليمة لصفة"
+
+#~ msgid "“%s” is not a valid attribute name"
+#~ msgstr "‏”%s“ قيمة غير سليمة لاسم صفة"
+
+#~ msgid ""
+#~ "“%s” could not be converted to a value of type “%s” for attribute “%s”"
+#~ msgstr "لا يمكن تحويل ”%s“ إلى قيمة من نوع ”%s“ للخاصية  ”%s“"
+
+#~ msgid "“%s” is not a valid value for attribute “%s”"
+#~ msgstr "‏”%s“ قيمة غير سليمة لاسم الصفة ”%s“"
+
+#~ msgid "Tag “%s” already defined"
+#~ msgstr "الوسم ”%s“ معرف مسبقًا"
+
+#~ msgid "Tag “%s” has invalid priority “%s”"
+#~ msgstr "الوسم ”%s“ له خاصية غير صالحة ”%s“"
+
+#~ msgid "Outermost element in text must be <text_view_markup> not <%s>"
+#~ msgstr "العنصر العلوي في نص يجب أن يكون <text_view_markup> و ليس <%s>"
+
+#~ msgid "A <%s> element has already been specified"
+#~ msgstr "عنصر <%s> تم تحديده بالفعل"
+
+#~ msgid "A <text> element can’t occur before a <tags> element"
+#~ msgstr "العنصر<text> لا يمكن أن يظهر قبل العنصر <tags>"
+
+#~ msgid "Serialized data is malformed"
+#~ msgstr "البيانات المرسلة غير صالحة"
+
+#~ msgid ""
+#~ "Serialized data is malformed. First section isn’t "
+#~ "GTKTEXTBUFFERCONTENTS-0001"
+#~ msgstr ""
+#~ "البيانات المرسلة غير صالحة. القسم الأول ليس GTKTEXTBUFFERCONTENTS-0001"
+
 #~ msgid "Error parsing option --gdk-debug"
 #~ msgstr "حدث خطأ أثناء تحليل الخيار ‪--gdk-debug‬"
 
@@ -6458,9 +7947,6 @@ msgstr "اطبع إلى طابعة اختبار"
 
 #~ msgid "Amount of red light in the color."
 #~ msgstr "كمية الضوء الأحمر في اللون."
-
-#~ msgid "_Green:"
-#~ msgstr "أ_خضر:"
 
 #~ msgid "Amount of green light in the color."
 #~ msgstr "كمية الضوء الأخضر في اللون."
@@ -6533,9 +8019,6 @@ msgstr "اطبع إلى طابعة اختبار"
 
 #~ msgid "abcdefghijk ABCDEFGHIJK"
 #~ msgstr "أبجد هوز حطي كلمن abcdefg ABCDEFG"
-
-#~ msgid "_Family:"
-#~ msgstr "ال_عائلة:"
 
 #~ msgid "_Style:"
 #~ msgstr "الأ_سلوب:"
@@ -7039,9 +8522,6 @@ msgstr "اطبع إلى طابعة اختبار"
 
 #~ msgid "Connect as u_ser:"
 #~ msgstr "اتصل كم_ستخدم"
-
-#~ msgid "Select a folder"
-#~ msgstr "اختر مجلدًا"
 
 #~ msgid "Caps Lock and Num Lock are on"
 #~ msgstr "زر الحروف العالية والأرقام مفعل"
