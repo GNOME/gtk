@@ -3890,52 +3890,17 @@ gsk_text_node_draw (GskRenderNode *node,
                     cairo_t       *cr)
 {
   GskTextNode *self = (GskTextNode *) node;
-  int i, count;
-  int x_position = 0;
-  cairo_scaled_font_t *scaled_font;
-  cairo_glyph_t *cairo_glyphs;
-  cairo_glyph_t stack_glyphs[STACK_ARRAY_LENGTH (cairo_glyph_t)];
+  PangoGlyphString glyphs;
 
-  scaled_font = pango_cairo_font_get_scaled_font ((PangoCairoFont *)self->font);
-  if (G_UNLIKELY (!scaled_font || cairo_scaled_font_status (scaled_font) != CAIRO_STATUS_SUCCESS))
-    return;
+  glyphs.num_glyphs = self->num_glyphs;
+  glyphs.glyphs = self->glyphs;
+  glyphs.log_clusters = NULL;
 
   cairo_save (cr);
 
-  cairo_translate (cr, self->x, self->y);
-  cairo_set_scaled_font (cr, scaled_font);
   gdk_cairo_set_source_rgba (cr, &self->color);
-
-  if (self->num_glyphs > (int) G_N_ELEMENTS (stack_glyphs))
-    cairo_glyphs = g_new (cairo_glyph_t, self->num_glyphs);
-  else
-    cairo_glyphs = stack_glyphs;
-
-  count = 0;
-  for (i = 0; i < self->num_glyphs; i++)
-    {
-      PangoGlyphInfo *gi = &self->glyphs[i];
-
-      if (gi->glyph != PANGO_GLYPH_EMPTY)
-        {
-          double cx = (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
-          double cy = (double)(gi->geometry.y_offset) / PANGO_SCALE;
-
-          if (!(gi->glyph & PANGO_GLYPH_UNKNOWN_FLAG))
-            {
-              cairo_glyphs[count].index = gi->glyph;
-              cairo_glyphs[count].x = cx;
-              cairo_glyphs[count].y = cy;
-              count++;
-            }
-        }
-      x_position += gi->geometry.width;
-    }
-
-  cairo_show_glyphs (cr, cairo_glyphs, count);
-
-  if (cairo_glyphs != stack_glyphs)
-    g_free (cairo_glyphs);
+  cairo_translate (cr, self->x, self->y);
+  pango_cairo_show_glyph_string (cr, self->font, &glyphs);
 
   cairo_restore (cr);
 }
