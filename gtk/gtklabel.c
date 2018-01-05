@@ -3921,7 +3921,8 @@ gtk_label_snapshot (GtkWidget   *widget,
         {
           gint range[2];
           cairo_region_t *range_clip;
-          cairo_rectangle_int_t clip_extents;
+          cairo_rectangle_int_t clip_rect;
+          int i;
 
           range[0] = info->selection_anchor;
           range[1] = info->selection_end;
@@ -3936,12 +3937,15 @@ gtk_label_snapshot (GtkWidget   *widget,
           gtk_style_context_save_to_node (context, info->selection_node);
 
           range_clip = gdk_pango_layout_get_clip_region (priv->layout, lx, ly, range, 1);
-          cairo_region_get_extents (range_clip, &clip_extents);
+          for (i = 0; i < cairo_region_num_rectangles (range_clip); i++)
+            {
+              cairo_region_get_rectangle (range_clip, i, &clip_rect);
 
-          gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_FROM_RECT (&clip_extents), "Selected Text");
-          gtk_snapshot_render_background (snapshot, context, x, 0, width, height);
-          gtk_snapshot_render_layout (snapshot, context, lx, ly, priv->layout);
-          gtk_snapshot_pop (snapshot);
+              gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_FROM_RECT (&clip_rect), "Selected Text");
+              gtk_snapshot_render_background (snapshot, context, x, 0, width, height);
+              gtk_snapshot_render_layout (snapshot, context, lx, ly, priv->layout);
+              gtk_snapshot_pop (snapshot);
+            }
 
           cairo_region_destroy (range_clip);
 
@@ -3953,7 +3957,8 @@ gtk_label_snapshot (GtkWidget   *widget,
           GtkLabelLink *active_link;
           gint range[2];
           cairo_region_t *range_clip;
-          cairo_rectangle_int_t clip_extents;
+          cairo_rectangle_int_t clip_rect;
+          int i;
           GdkRectangle rect;
 
           if (info->selectable &&
@@ -3980,12 +3985,15 @@ gtk_label_snapshot (GtkWidget   *widget,
               gtk_style_context_save_to_node (context, active_link->cssnode);
 
               range_clip = gdk_pango_layout_get_clip_region (priv->layout, lx, ly, range, 1);
-              cairo_region_get_extents (range_clip, &clip_extents);
+              for (i = 0; i < cairo_region_num_rectangles (range_clip); i++)
+                {
+                  cairo_region_get_rectangle (range_clip, i, &clip_rect);
 
-              gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_FROM_RECT (&clip_extents), "Active Link");
-              gtk_snapshot_render_background (snapshot, context, x, 0, width, height);
-              gtk_snapshot_render_layout (snapshot, context, lx, ly, priv->layout);
-              gtk_snapshot_pop (snapshot);
+                  gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_FROM_RECT (&clip_rect), "Active Link");
+                  gtk_snapshot_render_background (snapshot, context, x, 0, width, height);
+                  gtk_snapshot_render_layout (snapshot, context, lx, ly, priv->layout);
+                  gtk_snapshot_pop (snapshot);
+                }
 
               cairo_region_destroy (range_clip);
 
