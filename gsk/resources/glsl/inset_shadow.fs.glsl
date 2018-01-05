@@ -23,5 +23,5 @@ void main() {
   color = color * clamp (rounded_rect_coverage (outline, f.xy) -
                          rounded_rect_coverage (inside, f.xy - offset),
                          0.0, 1.0);
-  setOutputColor(color);
+  setOutputColor(color * u_alpha);
 }
