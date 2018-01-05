@@ -100,6 +100,7 @@ gdk_wayland_primary_claim_remote (GdkWaylandPrimary                  *cb,
   if (cb->source)
     {
       GDK_NOTE (CLIPBOARD, g_printerr ("%p: Ignoring clipboard offer for self\n", cb));
+      gdk_content_formats_unref (formats);
       return;
     }
 
