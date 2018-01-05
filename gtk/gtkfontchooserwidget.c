@@ -1399,6 +1399,7 @@ gtk_font_chooser_widget_update_font_name (GtkFontChooserWidget *fontchooser,
 
   g_object_unref (family);
   g_object_unref (face);
+  gtk_delayed_font_description_unref (desc);
 
   if (priv->level == GTK_FONT_CHOOSER_LEVEL_FAMILY)
     title = g_strdup (fam_name);
