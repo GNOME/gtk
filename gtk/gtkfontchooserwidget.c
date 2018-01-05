@@ -2086,7 +2086,7 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
             }
         }
 
-      hb_face_destroy (hb_face);
+      hb_font_destroy (hb_font);
     }
 
   pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
