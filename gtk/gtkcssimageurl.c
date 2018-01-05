@@ -136,6 +136,16 @@ gtk_css_image_url_compute (GtkCssImage      *image,
 }
 
 static gboolean
+gtk_css_image_url_equal (GtkCssImage *image1,
+                         GtkCssImage *image2)
+{
+  GtkCssImageUrl *url1 = GTK_CSS_IMAGE_URL (image1);
+  GtkCssImageUrl *url2 = GTK_CSS_IMAGE_URL (image2);
+
+  return g_file_equal (url1->file, url2->file);
+}
+
+static gboolean
 gtk_css_image_url_parse (GtkCssImage  *image,
                          GtkCssParser *parser)
 {
@@ -181,6 +191,7 @@ _gtk_css_image_url_class_init (GtkCssImageUrlClass *klass)
   image_class->snapshot = gtk_css_image_url_snapshot;
   image_class->parse = gtk_css_image_url_parse;
   image_class->print = gtk_css_image_url_print;
+  image_class->equal = gtk_css_image_url_equal;
 
   object_class->dispose = gtk_css_image_url_dispose;
 }
