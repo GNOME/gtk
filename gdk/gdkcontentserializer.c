@@ -850,12 +850,12 @@ init (void)
           gdk_content_register_serializer (GDK_TYPE_TEXTURE,
                                            *m,
                                            pixbuf_serializer,
-                                           g_strdup (gdk_pixbuf_format_get_name (fmt)),
+                                           gdk_pixbuf_format_get_name (fmt),
                                            g_free);
           gdk_content_register_serializer (GDK_TYPE_PIXBUF,
                                            *m,
                                            pixbuf_serializer,
-                                           g_strdup (gdk_pixbuf_format_get_name (fmt)),
+                                           gdk_pixbuf_format_get_name (fmt),
                                            g_free);
 	}
       g_strfreev (mimes);
