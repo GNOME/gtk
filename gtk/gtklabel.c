@@ -3216,6 +3216,7 @@ gtk_label_finalize (GObject *object)
       g_object_unref (priv->select_info->drag_gesture);
       g_object_unref (priv->select_info->multipress_gesture);
       g_object_unref (priv->select_info->motion_controller);
+      g_object_unref (priv->select_info->provider);
     }
 
   gtk_label_clear_links (label);
