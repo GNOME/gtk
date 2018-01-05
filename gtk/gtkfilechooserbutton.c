@@ -994,8 +994,11 @@ gtk_file_chooser_button_finalize (GObject *object)
   if (priv->current_folder_while_inactive)
     g_object_unref (priv->current_folder_while_inactive);
 
-  if (priv->model != NULL)
-    g_object_unref (priv->model);
+  if (priv->model)
+    {
+      model_remove_rows (button, 0, gtk_tree_model_iter_n_children (priv->model, NULL));
+      g_object_unref (priv->model);
+    }
 
   G_OBJECT_CLASS (gtk_file_chooser_button_parent_class)->finalize (object);
 }
