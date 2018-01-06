@@ -1876,26 +1876,26 @@ gtk_cell_renderer_text_populate_popup (GtkEntry *entry,
                     G_CALLBACK (gtk_cell_renderer_text_popup_unmap), data);
 }
 
-static gboolean
-gtk_cell_renderer_text_focus_out_event (GtkWidget *entry,
-		                        GdkEvent  *event,
-					gpointer   data)
+static void
+gtk_cell_renderer_text_focus_changed (GtkWidget  *entry,
+                                      GParamSpec *pspec,
+                                      gpointer    data)
 {
   GtkCellRendererTextPrivate *priv;
 
   priv = GTK_CELL_RENDERER_TEXT (data)->priv;
 
+  if (gtk_widget_has_focus (entry))
+    return;
+
   if (priv->in_entry_menu)
-    return FALSE;
+    return;
 
   g_object_set (entry,
                 "editing-canceled", TRUE,
                 NULL);
   gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (entry));
   gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (entry));
-
-  /* entry needs focus-out-event */
-  return FALSE;
 }
 
 static GtkCellEditable *
@@ -1944,8 +1944,8 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
 		    "editing-done",
 		    G_CALLBACK (gtk_cell_renderer_text_editing_done),
 		    celltext);
-  priv->focus_out_id = g_signal_connect_after (priv->entry, "focus-out-event",
-					       G_CALLBACK (gtk_cell_renderer_text_focus_out_event),
+  priv->focus_out_id = g_signal_connect_after (priv->entry, "notify::has-focus",
+					       G_CALLBACK (gtk_cell_renderer_text_focus_changed),
 					       celltext);
   priv->populate_popup_id =
     g_signal_connect (priv->entry, "populate-popup",
