@@ -258,8 +258,8 @@ static void gtk_spin_button_size_allocate  (GtkWidget           *widget,
                                             const GtkAllocation *allocation,
                                             int                  baseline,
                                             GtkAllocation       *out_clip);
-static gint gtk_spin_button_focus_out      (GtkWidget          *widget,
-                                            GdkEventFocus      *event);
+static gboolean gtk_spin_button_event      (GtkWidget          *widget,
+                                            GdkEvent           *event);
 static void gtk_spin_button_grab_notify    (GtkWidget          *widget,
                                             gboolean            was_grabbed);
 static void gtk_spin_button_state_flags_changed  (GtkWidget     *widget,
@@ -321,7 +321,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   widget_class->measure = gtk_spin_button_measure;
   widget_class->size_allocate = gtk_spin_button_size_allocate;
   widget_class->key_release_event = gtk_spin_button_key_release;
-  widget_class->focus_out_event = gtk_spin_button_focus_out;
+  widget_class->event = gtk_spin_button_event;
   widget_class->grab_notify = gtk_spin_button_grab_notify;
   widget_class->state_flags_changed = gtk_spin_button_state_flags_changed;
 
@@ -1086,16 +1086,27 @@ gtk_spin_button_size_allocate (GtkWidget           *widget,
   gtk_widget_size_allocate (priv->box, allocation, baseline, out_clip);
 }
 
-static gint
-gtk_spin_button_focus_out (GtkWidget     *widget,
-                           GdkEventFocus *event)
+static gboolean
+gtk_spin_button_event (GtkWidget *widget,
+                       GdkEvent  *event)
 {
   GtkSpinButton *spin_button = GTK_SPIN_BUTTON (widget);
 
-  if (gtk_editable_get_editable (GTK_EDITABLE (spin_button->priv->entry)))
-    gtk_spin_button_update (spin_button);
+  if (gdk_event_get_event_type (event) == GDK_FOCUS_CHANGE)
+    {
+      gboolean focus_in;
 
-  return GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->focus_out_event (widget, event);
+      gdk_event_get_focus_in (event, &focus_in);
+      if (!focus_in)
+        {
+          if (gtk_editable_get_editable (GTK_EDITABLE (spin_button->priv->entry)))
+            gtk_spin_button_update (spin_button);
+        }
+
+      return GDK_EVENT_PROPAGATE;
+    }
+
+  return GDK_EVENT_PROPAGATE;
 }
 
 static void
