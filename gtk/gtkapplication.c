@@ -164,13 +164,16 @@ struct _GtkApplicationPrivate
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkApplication, gtk_application, G_TYPE_APPLICATION)
 
-static gboolean
-gtk_application_focus_in_event_cb (GtkWindow      *window,
-                                   GdkEventFocus  *event,
-                                   GtkApplication *application)
+static void
+gtk_application_window_active_cb (GtkWindow      *window,
+                                  GParamSpec     *pspec,
+                                  GtkApplication *application)
 {
   GtkApplicationPrivate *priv = application->priv;
   GList *link;
+
+  if (!gtk_window_is_active (window))
+    return;
 
   /* Keep the window list sorted by most-recently-focused. */
   link = g_list_find (priv->windows, window);
@@ -184,8 +187,6 @@ gtk_application_focus_in_event_cb (GtkWindow      *window,
     gtk_application_impl_active_window_changed (application->priv->impl, window);
 
   g_object_notify_by_pspec (G_OBJECT (application), gtk_application_props[PROP_ACTIVE_WINDOW]);
-
-  return GDK_EVENT_PROPAGATE;
 }
 
 static void
@@ -399,8 +400,8 @@ gtk_application_window_added (GtkApplication *application,
   gtk_window_set_application (window, application);
   g_application_hold (G_APPLICATION (application));
 
-  g_signal_connect (window, "focus-in-event",
-                    G_CALLBACK (gtk_application_focus_in_event_cb),
+  g_signal_connect (window, "notify::is-active",
+                    G_CALLBACK (gtk_application_window_active_cb),
                     application);
 
   gtk_application_impl_window_added (priv->impl, window);
@@ -423,7 +424,7 @@ gtk_application_window_removed (GtkApplication *application,
     gtk_application_impl_window_removed (priv->impl, window);
 
   g_signal_handlers_disconnect_by_func (window,
-                                        gtk_application_focus_in_event_cb,
+                                        gtk_application_window_active_cb,
                                         application);
 
   g_application_release (G_APPLICATION (application));
