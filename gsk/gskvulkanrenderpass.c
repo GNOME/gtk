@@ -413,24 +413,21 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
           {
             const PangoGlyphInfo *gi = &glyphs[i];
 
-            if (gi->glyph != PANGO_GLYPH_EMPTY && !(gi->glyph & PANGO_GLYPH_UNKNOWN_FLAG))
+            texture_index = gsk_vulkan_renderer_cache_glyph (renderer, (PangoFont *)font, gi->glyph, op.text.scale);
+            if (op.text.texture_index == G_MAXUINT)
+              op.text.texture_index = texture_index;
+            if (texture_index != op.text.texture_index)
               {
-                texture_index = gsk_vulkan_renderer_cache_glyph (renderer, (PangoFont *)font, gi->glyph, op.text.scale);
-                if (op.text.texture_index == G_MAXUINT)
-                  op.text.texture_index = texture_index;
-                if (texture_index != op.text.texture_index)
-                  {
-                     op.text.num_glyphs = count;
+                op.text.num_glyphs = count;
 
-                     g_array_append_val (self->render_ops, op);
+                g_array_append_val (self->render_ops, op);
 
-                     count = 1;
-                     op.text.start_glyph = i;
-                     op.text.texture_index = texture_index;
-                  }
-                else
-                  count++;
+                count = 1;
+                op.text.start_glyph = i;
+                op.text.texture_index = texture_index;
               }
+            else
+              count++;
           }
 
         if (op.text.texture_index != G_MAXUINT && count != 0)

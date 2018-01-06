@@ -122,26 +122,22 @@ gsk_vulkan_color_text_pipeline_collect_vertex_data (GskVulkanColorTextPipeline *
         {
           double cx = (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
           double cy = (double)(gi->geometry.y_offset) / PANGO_SCALE;
+          GskVulkanColorTextInstance *instance = &instances[count];
+          GskVulkanCachedGlyph *glyph;
 
-          if (!(gi->glyph & PANGO_GLYPH_UNKNOWN_FLAG))
-            {
-              GskVulkanColorTextInstance *instance = &instances[count];
-              GskVulkanCachedGlyph *glyph;
+          glyph = gsk_vulkan_renderer_get_cached_glyph (renderer, font, gi->glyph, scale);
 
-              glyph = gsk_vulkan_renderer_get_cached_glyph (renderer, font, gi->glyph, scale);
+          instance->tex_rect[0] = glyph->tx;
+          instance->tex_rect[1] = glyph->ty;
+          instance->tex_rect[2] = glyph->tw;
+          instance->tex_rect[3] = glyph->th;
 
-              instance->tex_rect[0] = glyph->tx;
-              instance->tex_rect[1] = glyph->ty;
-              instance->tex_rect[2] = glyph->tw;
-              instance->tex_rect[3] = glyph->th;
+          instance->rect[0] = x + cx + glyph->draw_x;
+          instance->rect[1] = y + cy + glyph->draw_y;
+          instance->rect[2] = glyph->draw_width;
+          instance->rect[3] = glyph->draw_height;
 
-              instance->rect[0] = x + cx + glyph->draw_x;
-              instance->rect[1] = y + cy + glyph->draw_y;
-              instance->rect[2] = glyph->draw_width;
-              instance->rect[3] = glyph->draw_height;
-
-              count++;
-           }
+          count++;
        }
      x_position += gi->geometry.width;
    }

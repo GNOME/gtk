@@ -251,8 +251,8 @@ render_glyph (Atlas          *atlas,
   GskVulkanCachedGlyph *value = glyph->value;
   cairo_surface_t *surface;
   cairo_t *cr;
-  cairo_scaled_font_t *scaled_font;
-  cairo_glyph_t cg;
+  PangoGlyphString glyphs;
+  PangoGlyphInfo gi;
 
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
                                         value->draw_width * key->scale / 1024,
@@ -260,19 +260,20 @@ render_glyph (Atlas          *atlas,
   cairo_surface_set_device_scale (surface, key->scale / 1024.0, key->scale / 1024.0);
 
   cr = cairo_create (surface);
-
-  scaled_font = pango_cairo_font_get_scaled_font ((PangoCairoFont *)key->font);
-  if (G_UNLIKELY (!scaled_font || cairo_scaled_font_status (scaled_font) != CAIRO_STATUS_SUCCESS))
-    return;
-
-  cairo_set_scaled_font (cr, scaled_font);
   cairo_set_source_rgba (cr, 1, 1, 1, 1);
 
-  cg.index = key->glyph;
-  cg.x = - value->draw_x;
-  cg.y = - value->draw_y;
+  gi.glyph = key->glyph;
+  gi.geometry.width = value->draw_width * 1024;
+  if (key->glyph & PANGO_GLYPH_UNKNOWN_FLAG)
+    gi.geometry.x_offset = 0;
+  else
+    gi.geometry.x_offset = - value->draw_x * 1024;
+  gi.geometry.y_offset = - value->draw_y * 1024;
 
-  cairo_show_glyphs (cr, &cg, 1);
+  glyphs.num_glyphs = 1;
+  glyphs.glyphs = &gi;
+
+  pango_cairo_show_glyph_string (cr, key->font, &glyphs);
 
   cairo_destroy (cr);
 
