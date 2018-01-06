@@ -60,7 +60,7 @@
                   </object>
                 </child>
                 <signal name="activate" handler="entry_apply" swapped="no"/>
-                <signal name="focus-out-event" handler="entry_focus_out" swapped="no"/>
+                <signal name="notify::has-focus" handler="entry_focus_changed" swapped="no"/>
                 <signal name="notify::text" handler="entry_text_changed" swapped="no"/>
               </object>
               <packing>

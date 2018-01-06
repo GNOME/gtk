@@ -126,13 +126,13 @@ entry_apply (GtkWidget      *entry,
   g_free (text);
 }
 
-static gboolean
-entry_focus_out (GtkWidget      *entry,
-                 GdkEventFocus  *event,
-                 GtkColorEditor *editor)
+static void
+entry_focus_changed (GtkWidget      *entry,
+                     GParamSpec     *pspec,
+                     GtkColorEditor *editor)
 {
-  entry_apply (entry, editor);
-  return FALSE;
+  if (!gtk_widget_has_focus (entry))
+    entry_apply (entry, editor);
 }
 
 static void
@@ -487,7 +487,7 @@ gtk_color_editor_class_init (GtkColorEditorClass *class)
   gtk_widget_class_bind_template_callback (widget_class, get_child_position);
   gtk_widget_class_bind_template_callback (widget_class, entry_text_changed);
   gtk_widget_class_bind_template_callback (widget_class, entry_apply);
-  gtk_widget_class_bind_template_callback (widget_class, entry_focus_out);
+  gtk_widget_class_bind_template_callback (widget_class, entry_focus_changed);
   gtk_widget_class_bind_template_callback (widget_class, popup_edit);
 }
 
