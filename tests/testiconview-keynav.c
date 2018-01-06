@@ -178,33 +178,28 @@ keynav_failed (GtkWidget        *view,
   return FALSE;
 }
 
-static gboolean
-focus_out (GtkWidget     *view,
-           GdkEventFocus *event,
-           gpointer       data)
+static void
+focus_changed (GtkWidget  *view,
+               GParamSpec *pspec,
+                gpointer   data)
 {
-  gtk_icon_view_unselect_all (GTK_ICON_VIEW (view));
-
-  return FALSE;
-}
-
-static gboolean
-focus_in (GtkWidget     *view,
-          GdkEventFocus *event,
-          gpointer       data)
-{
-  GtkTreePath *path;
-
-  if (!gtk_icon_view_get_cursor (GTK_ICON_VIEW (view), &path, NULL))
+  if (gtk_widget_has_focus (view))
     {
-      path = gtk_tree_path_new_from_indices (0, -1);
-      gtk_icon_view_set_cursor (GTK_ICON_VIEW (view), path, NULL, FALSE);
+      GtkTreePath *path;
+
+      if (!gtk_icon_view_get_cursor (GTK_ICON_VIEW (view), &path, NULL))
+        {
+          path = gtk_tree_path_new_from_indices (0, -1);
+          gtk_icon_view_set_cursor (GTK_ICON_VIEW (view), path, NULL, FALSE);
+        }
+
+      gtk_icon_view_select_path (GTK_ICON_VIEW (view), path);
+      gtk_tree_path_free (path);
     }
-
-  gtk_icon_view_select_path (GTK_ICON_VIEW (view), path);
-  gtk_tree_path_free (path);
-
-  return FALSE;
+  else
+    {
+      gtk_icon_view_unselect_all (GTK_ICON_VIEW (view));
+    }
 }
 
 #define CSS \
@@ -254,18 +249,10 @@ main (int argc, char *argv[])
                                 NULL);
   views.view2 = get_view (FALSE);
 
-  g_signal_connect (views.view1, "keynav-failed",
-                    G_CALLBACK (keynav_failed), &views);
-  g_signal_connect (views.view2, "keynav-failed",
-                    G_CALLBACK (keynav_failed), &views);
-  g_signal_connect (views.view1, "focus-in-event",
-                    G_CALLBACK (focus_in), NULL);
-  g_signal_connect (views.view1, "focus-out-event",
-                    G_CALLBACK (focus_out), NULL);
-  g_signal_connect (views.view2, "focus-in-event",
-                    G_CALLBACK (focus_in), NULL);
-  g_signal_connect (views.view2, "focus-out-event",
-                    G_CALLBACK (focus_out), NULL);
+  g_signal_connect (views.view1, "keynav-failed", G_CALLBACK (keynav_failed), &views);
+  g_signal_connect (views.view2, "keynav-failed", G_CALLBACK (keynav_failed), &views);
+  g_signal_connect (views.view1, "notify::has-focus", G_CALLBACK (focus_changed), &views);
+  g_signal_connect (views.view2, "notify::has-focus", G_CALLBACK (focus_changed), &views);
 
   gtk_container_add (GTK_CONTAINER (vbox), views.header1);
   gtk_container_add (GTK_CONTAINER (vbox), views.view1);
