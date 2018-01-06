@@ -421,10 +421,8 @@ static gint   gtk_entry_key_press            (GtkWidget        *widget,
 					      GdkEventKey      *event);
 static gint   gtk_entry_key_release          (GtkWidget        *widget,
 					      GdkEventKey      *event);
-static gint   gtk_entry_focus_in             (GtkWidget        *widget,
-					      GdkEventFocus    *event);
-static gint   gtk_entry_focus_out            (GtkWidget        *widget,
-					      GdkEventFocus    *event);
+static void   gtk_entry_focus_in             (GtkWidget        *widget);
+static void   gtk_entry_focus_out            (GtkWidget        *widget);
 static void   gtk_entry_grab_focus           (GtkWidget        *widget);
 static void   gtk_entry_style_updated        (GtkWidget        *widget);
 static gboolean gtk_entry_query_tooltip      (GtkWidget        *widget,
@@ -801,8 +799,6 @@ gtk_entry_class_init (GtkEntryClass *class)
   widget_class->event = gtk_entry_event;
   widget_class->key_press_event = gtk_entry_key_press;
   widget_class->key_release_event = gtk_entry_key_release;
-  widget_class->focus_in_event = gtk_entry_focus_in;
-  widget_class->focus_out_event = gtk_entry_focus_out;
   widget_class->grab_focus = gtk_entry_grab_focus;
   widget_class->style_updated = gtk_entry_style_updated;
   widget_class->query_tooltip = gtk_entry_query_tooltip;
@@ -3609,6 +3605,20 @@ gtk_entry_event (GtkWidget *widget,
 
   gdk_event_get_coords (event, &x, &y);
 
+  if (gdk_event_get_event_type (event) == GDK_FOCUS_CHANGE)
+    {
+      gboolean focus_in;
+
+      gdk_event_get_focus_in (event, &focus_in);
+
+      if (focus_in)
+        gtk_entry_focus_in (widget);
+      else
+        gtk_entry_focus_out (widget);
+
+      return GDK_EVENT_PROPAGATE;
+    }
+
   if (gdk_event_get_event_type (event) == GDK_MOTION_NOTIFY &&
       priv->mouse_cursor_obscured)
     {
@@ -3634,8 +3644,6 @@ gtk_entry_event (GtkWidget *widget,
 
   if (!icon_info)
     return GDK_EVENT_PROPAGATE;
-
-
 
   if (!gtk_widget_get_sensitive (icon_info->widget))
     return GDK_EVENT_STOP;
@@ -4240,9 +4248,8 @@ out:
   return retval;
 }
 
-static gint
-gtk_entry_focus_in (GtkWidget     *widget,
-		    GdkEventFocus *event)
+static void
+gtk_entry_focus_in (GtkWidget *widget)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
@@ -4274,13 +4281,10 @@ gtk_entry_focus_in (GtkWidget     *widget,
       gtk_entry_reset_blink_time (entry);
       gtk_entry_check_cursor_blink (entry);
     }
-
-  return GDK_EVENT_PROPAGATE;
 }
 
-static gint
-gtk_entry_focus_out (GtkWidget     *widget,
-		     GdkEventFocus *event)
+static void
+gtk_entry_focus_out (GtkWidget *widget)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
@@ -4320,8 +4324,6 @@ gtk_entry_focus_out (GtkWidget     *widget,
   completion = gtk_entry_get_completion (entry);
   if (completion)
     _gtk_entry_completion_popdown (completion);
-
-  return GDK_EVENT_PROPAGATE;
 }
 
 void
@@ -9201,8 +9203,8 @@ blink_cb (gpointer data)
  
   if (!gtk_widget_has_focus (GTK_WIDGET (entry)))
     {
-      g_warning ("GtkEntry - did not receive focus-out-event. If you\n"
-		 "connect a handler to this signal, it must return\n"
+      g_warning ("GtkEntry - did not receive a focus-out event.\n"
+		 "If you handle this event, you must return\n"
 		 "GDK_EVENT_PROPAGATE so the entry gets the event as well");
 
       gtk_entry_check_cursor_blink (entry);
@@ -9662,7 +9664,7 @@ remove_capslock_feedback (GtkEntry *entry)
     {
       gtk_entry_set_icon_from_icon_name (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
       priv->caps_lock_warning_shown = FALSE;
-    } 
+    }
 }
 
 static void
@@ -9672,8 +9674,10 @@ keymap_state_changed (GdkKeymap *keymap,
   GtkEntryPrivate *priv = entry->priv;
   char *text = NULL;
 
-  if (gtk_entry_get_display_mode (entry) != DISPLAY_NORMAL && priv->caps_lock_warning)
-    { 
+  if (priv->editable &&
+      gtk_entry_get_display_mode (entry) != DISPLAY_NORMAL &&
+      priv->caps_lock_warning)
+    {
       if (gdk_keymap_get_caps_lock_state (keymap))
         text = _("Caps Lock is on");
     }
