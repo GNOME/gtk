@@ -246,21 +246,24 @@ gtk_cell_renderer_spin_set_property (GObject      *object,
     }
 }
 
-static gboolean
-gtk_cell_renderer_spin_focus_out_event (GtkWidget *widget,
-					GdkEvent  *event,
-					gpointer   data)
+static void
+gtk_cell_renderer_spin_focus_changed (GtkWidget  *widget,
+                                      GParamSpec *pspec,
+                                      gpointer    data)
 {
   const gchar *path;
   const gchar *new_text;
   gboolean canceled;
+
+  if (gtk_widget_has_focus (widget))
+    return;
 
   g_object_get (widget,
                 "editing-canceled", &canceled,
                 NULL);
 
   g_signal_handlers_disconnect_by_func (widget,
-					gtk_cell_renderer_spin_focus_out_event,
+					gtk_cell_renderer_spin_focus_changed,
 					data);
 
   gtk_cell_renderer_stop_editing (GTK_CELL_RENDERER (data), canceled);
@@ -272,8 +275,6 @@ gtk_cell_renderer_spin_focus_out_event (GtkWidget *widget,
       new_text = gtk_entry_get_text (GTK_ENTRY (widget));
       g_signal_emit_by_name (data, "edited", path, new_text);
     }
-  
-  return FALSE;
 }
 
 static gboolean
@@ -343,8 +344,8 @@ gtk_cell_renderer_spin_start_editing (GtkCellRenderer      *cell,
   g_object_set_data_full (G_OBJECT (spin), GTK_CELL_RENDERER_SPIN_PATH,
 			  g_strdup (path), g_free);
 
-  g_signal_connect (G_OBJECT (spin), "focus-out-event",
-		    G_CALLBACK (gtk_cell_renderer_spin_focus_out_event),
+  g_signal_connect (G_OBJECT (spin), "notify::has-focus",
+		    G_CALLBACK (gtk_cell_renderer_spin_focus_changed),
 		    cell);
   g_signal_connect (G_OBJECT (spin), "key-press-event",
 		    G_CALLBACK (gtk_cell_renderer_spin_key_press_event),
