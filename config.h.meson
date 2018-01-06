@@ -293,3 +293,5 @@
 #mesondefine HAVE_HARFBUZZ
 
 #mesondefine HAVE_PANGOFT
+
+#mesondefine ISO_CODES_PREFIX

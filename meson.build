@@ -336,6 +336,7 @@ harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9', required: false)
 xkbdep         = dependency('xkbcommon', version: xkbcommon_req, required: wayland_enabled)
 graphene_dep   = dependency('graphene-gobject-1.0', version: graphene_req,
                             fallback: ['graphene', 'graphene_dep'])
+iso_codes_dep  = dependency('iso-codes', required: false)
 
 fontconfig_dep = [] # only used in x11 backend
 atkbridge_dep  = [] # only used in x11 backend
@@ -348,6 +349,12 @@ endif
 
 cdata.set('HAVE_HARFBUZZ', harfbuzz_dep.found())
 cdata.set('HAVE_PANGOFT', pangoft_dep.found())
+
+if iso_codes_dep.found()
+  cdata.set_quoted('ISO_CODES_PREFIX', iso_codes_dep.get_pkgconfig_variable('prefix'))
+else
+  cdata.set_quoted('ISO_CODES_PREFIX', '/usr')
+endif
 
 backend_immodules = []
 
