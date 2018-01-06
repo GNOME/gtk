@@ -3,7 +3,7 @@
 
 #include <gdk/gdk.h>
 
-#include "gsk/gskvulkancommandpoolprivate.h"
+#include "gskvulkancommandpoolprivate.h"
 
 G_BEGIN_DECLS
 

@@ -3,7 +3,7 @@
 
 #include <gdk/gdk.h>
 #include <graphene.h>
-#include <gsk/gskvulkanclipprivate.h>
+#include "gskvulkanclipprivate.h"
 
 G_BEGIN_DECLS
 

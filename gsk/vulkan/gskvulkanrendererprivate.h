@@ -4,7 +4,7 @@
 #include <vulkan/vulkan.h>
 #include <gsk/gskrenderer.h>
 
-#include "gsk/gskvulkanimageprivate.h"
+#include "gskvulkanimageprivate.h"
 
 G_BEGIN_DECLS
 

@@ -4,9 +4,9 @@
 #include <gdk/gdk.h>
 #include <gsk/gskrendernode.h>
 
-#include "gsk/gskvulkanimageprivate.h"
-#include "gsk/gskvulkanpipelineprivate.h"
-#include "gsk/gskvulkanrenderpassprivate.h"
+#include "gskvulkanimageprivate.h"
+#include "gskvulkanpipelineprivate.h"
+#include "gskvulkanrenderpassprivate.h"
 #include "gsk/gskprivate.h"
 
 G_BEGIN_DECLS

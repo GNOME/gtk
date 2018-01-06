@@ -59,7 +59,7 @@
 #include "gskbroadwayrendererprivate.h"
 #endif
 #ifdef GDK_RENDERING_VULKAN
-#include "gskvulkanrendererprivate.h"
+#include "vulkan/gskvulkanrendererprivate.h"
 #endif
 
 typedef struct
