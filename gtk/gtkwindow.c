@@ -427,10 +427,8 @@ static gint gtk_window_key_press_event    (GtkWidget         *widget,
 					   GdkEventKey       *event);
 static gint gtk_window_key_release_event  (GtkWidget         *widget,
 					   GdkEventKey       *event);
-static gint gtk_window_focus_in_event     (GtkWidget         *widget,
-					   GdkEventFocus     *event);
-static gint gtk_window_focus_out_event    (GtkWidget         *widget,
-					   GdkEventFocus     *event);
+static void gtk_window_focus_in           (GtkWidget         *widget);
+static void gtk_window_focus_out          (GtkWidget         *widget);
 static void window_state_changed          (GtkWidget          *widget);
 static void gtk_window_remove             (GtkContainer      *container,
                                            GtkWidget         *widget);
@@ -802,8 +800,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->event = gtk_window_event;
   widget_class->key_press_event = gtk_window_key_press_event;
   widget_class->key_release_event = gtk_window_key_release_event;
-  widget_class->focus_in_event = gtk_window_focus_in_event;
-  widget_class->focus_out_event = gtk_window_focus_out_event;
   widget_class->focus = gtk_window_focus;
   widget_class->move_focus = gtk_window_move_focus;
   widget_class->measure = gtk_window_measure;
@@ -7654,7 +7650,19 @@ gtk_window_event (GtkWidget *widget,
 
   event_type = gdk_event_get_event_type (event);
 
-  if (event_type == GDK_DELETE)
+  if (event_type == GDK_FOCUS_CHANGE)
+    {
+      gboolean focus_in;
+
+      gdk_event_get_focus_in (event, &focus_in);
+      if (focus_in)
+        gtk_window_focus_in (widget);
+      else
+        gtk_window_focus_out (widget);
+
+      return GDK_EVENT_PROPAGATE;
+    }
+  else if (event_type == GDK_DELETE)
     {
       if (gtk_window_emit_close_request (GTK_WINDOW (widget)))
         return GDK_EVENT_STOP;
@@ -7771,9 +7779,8 @@ gtk_window_has_mnemonic_modifier_pressed (GtkWindow *window)
   return retval;
 }
 
-static gint
-gtk_window_focus_in_event (GtkWidget     *widget,
-			   GdkEventFocus *event)
+static void
+gtk_window_focus_in (GtkWidget *widget)
 {
   GtkWindow *window = GTK_WINDOW (widget);
 
@@ -7789,13 +7796,10 @@ gtk_window_focus_in_event (GtkWidget     *widget,
       if (gtk_window_has_mnemonic_modifier_pressed (window))
         _gtk_window_schedule_mnemonics_visible (window);
     }
-
-  return FALSE;
 }
 
-static gint
-gtk_window_focus_out_event (GtkWidget     *widget,
-			    GdkEventFocus *event)
+static void
+gtk_window_focus_out (GtkWidget *widget)
 {
   GtkWindow *window = GTK_WINDOW (widget);
 
@@ -7803,8 +7807,6 @@ gtk_window_focus_out_event (GtkWidget     *widget,
 
   /* set the mnemonic-visible property to false */
   gtk_window_set_mnemonics_visible (window, FALSE);
-
-  return FALSE;
 }
 
 static GtkWindowPopover *
