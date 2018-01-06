@@ -45,18 +45,21 @@ G_DEFINE_TYPE_WITH_CODE (GtkWidgetAccessible, gtk_widget_accessible, GTK_TYPE_AC
 
 /* Translate GtkWidget::focus-in/out-event to AtkObject::focus-event */
 static gboolean
-focus_cb (GtkWidget     *widget,
-          GdkEventFocus *event)
+focus_cb (GtkWidget *widget,
+          GdkEvent  *event)
 {
-  AtkObject *obj;
-  gboolean in;
+  if (gdk_event_get_event_type (event) == GDK_FOCUS_CHANGE)
+    {
+      AtkObject *obj;
+      gboolean in;
 
-  obj = gtk_widget_get_accessible (widget);
+      obj = gtk_widget_get_accessible (widget);
 
-  gdk_event_get_focus_in ((GdkEvent *)event, &in);
-  g_signal_emit_by_name (obj, "focus-event", in);
+      gdk_event_get_focus_in (event, &in);
+      g_signal_emit_by_name (obj, "focus-event", in);
+    }
 
-  return FALSE;
+  return GDK_EVENT_PROPAGATE;
 }
 
 /* Translate GtkWidget property change notification to the notify_gtk vfunc */
@@ -134,8 +137,7 @@ gtk_widget_accessible_initialize (AtkObject *obj,
 
   widget = GTK_WIDGET (data);
 
-  g_signal_connect_after (widget, "focus-in-event", G_CALLBACK (focus_cb), NULL);
-  g_signal_connect_after (widget, "focus-out-event", G_CALLBACK (focus_cb), NULL);
+  g_signal_connect_after (widget, "event", G_CALLBACK (focus_cb), NULL);
   g_signal_connect (widget, "notify", G_CALLBACK (notify_cb), NULL);
   g_signal_connect (widget, "size-allocate", G_CALLBACK (size_allocate_cb), NULL);
   g_signal_connect (widget, "map", G_CALLBACK (map_cb), NULL);
@@ -465,7 +467,7 @@ gtk_widget_accessible_notify_gtk (GObject    *obj,
 
   if (g_strcmp0 (pspec->name, "has-focus") == 0)
     /*
-     * We use focus-in-event and focus-out-event signals to catch
+     * We use focus change events to catch
      * focus changes so we ignore this.
      */
     return;
