@@ -4236,7 +4236,7 @@ gtk_icon_view_get_path_at_pos (GtkIconView *icon_view,
  * @x: The x position to be identified
  * @y: The y position to be identified
  * @path: (out) (allow-none): Return location for the path, or %NULL
- * @cell: (out) (allow-none): Return location for the renderer
+ * @cell: (out) (allow-none) (transfer none): Return location for the renderer
  *   responsible for the cell at (@x, @y), or %NULL
  * 
  * Returns: %TRUE if an item exists at the specified position
