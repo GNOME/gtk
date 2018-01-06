@@ -373,8 +373,7 @@ render_text_node (GskGLRenderer   *self,
       double cx;
       double cy;
 
-      if (gi->glyph == PANGO_GLYPH_EMPTY ||
-          (gi->glyph & PANGO_GLYPH_UNKNOWN_FLAG) > 0)
+      if (gi->glyph == PANGO_GLYPH_EMPTY)
         continue;
 
       glyph = gsk_gl_glyph_cache_lookup (&self->glyph_cache,
