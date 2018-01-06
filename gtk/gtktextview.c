@@ -413,10 +413,10 @@ static gint gtk_text_view_key_press_event      (GtkWidget        *widget,
                                                 GdkEventKey      *event);
 static gint gtk_text_view_key_release_event    (GtkWidget        *widget,
                                                 GdkEventKey      *event);
-static gint gtk_text_view_focus_in_event       (GtkWidget        *widget,
-                                                GdkEventFocus    *event);
-static gint gtk_text_view_focus_out_event      (GtkWidget        *widget,
-                                                GdkEventFocus    *event);
+static void gtk_text_view_focus_in             (GtkWidget        *widget);
+static void gtk_text_view_focus_out            (GtkWidget        *widget);
+static gint gtk_text_view_event                (GtkWidget        *widget,
+                                                GdkEvent         *event);
 static void gtk_text_view_motion               (GtkEventController *controller,
                                                 double              x,
                                                 double              y,
@@ -721,8 +721,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->size_allocate = gtk_text_view_size_allocate;
   widget_class->key_press_event = gtk_text_view_key_press_event;
   widget_class->key_release_event = gtk_text_view_key_release_event;
-  widget_class->focus_in_event = gtk_text_view_focus_in_event;
-  widget_class->focus_out_event = gtk_text_view_focus_out_event;
+  widget_class->event = gtk_text_view_event;
   widget_class->snapshot = gtk_text_view_snapshot;
   widget_class->focus = gtk_text_view_focus;
   widget_class->drag_begin = gtk_text_view_drag_begin;
@@ -5389,8 +5388,8 @@ keymap_direction_changed (GdkKeymap   *keymap,
   gtk_text_view_check_keymap_direction (text_view);
 }
 
-static gint
-gtk_text_view_focus_in_event (GtkWidget *widget, GdkEventFocus *event)
+static void
+gtk_text_view_focus_in (GtkWidget *widget)
 {
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
@@ -5400,7 +5399,7 @@ gtk_text_view_focus_in_event (GtkWidget *widget, GdkEventFocus *event)
 
   gtk_widget_queue_draw (widget);
 
-  DV(g_print (G_STRLOC": focus_in_event\n"));
+  DV(g_print (G_STRLOC": focus_in\n"));
 
   gtk_text_view_reset_blink_time (text_view);
 
@@ -5420,12 +5419,10 @@ gtk_text_view_focus_in_event (GtkWidget *widget, GdkEventFocus *event)
       priv->need_im_reset = TRUE;
       gtk_im_context_focus_in (priv->im_context);
     }
-
-  return FALSE;
 }
 
-static gint
-gtk_text_view_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
+static void
+gtk_text_view_focus_out (GtkWidget *widget)
 {
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
@@ -5437,8 +5434,8 @@ gtk_text_view_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
 
   gtk_widget_queue_draw (widget);
 
-  DV(g_print (G_STRLOC": focus_out_event\n"));
-  
+  DV(g_print (G_STRLOC": focus_out\n"));
+
   if (cursor_visible (text_view) && priv->layout)
     {
       gtk_text_view_check_cursor_blink (text_view);
@@ -5459,8 +5456,26 @@ gtk_text_view_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
       priv->need_im_reset = TRUE;
       gtk_im_context_focus_out (priv->im_context);
     }
+}
 
-  return FALSE;
+static gboolean
+gtk_text_view_event (GtkWidget *widget,
+                     GdkEvent  *event)
+{
+  if (gdk_event_get_event_type (event) == GDK_FOCUS_CHANGE)
+    {
+      gboolean focus_in;
+
+      gdk_event_get_focus_in (event, &focus_in);
+      if (focus_in)
+        gtk_text_view_focus_in (widget);
+      else
+        gtk_text_view_focus_out (widget);
+
+      return GDK_EVENT_PROPAGATE;
+    }
+
+  return GDK_EVENT_PROPAGATE;
 }
 
 static void
@@ -5841,9 +5856,9 @@ blink_cb (gpointer data)
 
   if (!gtk_widget_has_focus (GTK_WIDGET (text_view)))
     {
-      g_warning ("GtkTextView - did not receive focus-out-event. If you\n"
-                 "connect a handler to this signal, it must return\n"
-                 "FALSE so the text view gets the event as well");
+      g_warning ("GtkTextView - did not receive a focus-out.\n"
+                 "If you handle this event, you must return\n"
+                 "GDK_EVENT_PROPAGATE so the text view gets the event as well");
 
       gtk_text_view_check_cursor_blink (text_view);
 
