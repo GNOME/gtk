@@ -204,10 +204,6 @@ struct _GtkWidget
  *   the widget’s #GdkWindow.
  * @key_press_event: Signal emitted when a key is pressed.
  * @key_release_event: Signal is emitted when a key is released.
- * @focus_in_event: Signal emitted when the keyboard focus enters the
- * widget’s window.
- * @focus_out_event: Signal emitted when the keyboard focus leaves the
- * widget’s window.
  * @drag_begin: Signal emitted on the drag source when a drag is
  *   started.
  * @drag_end: Signal emitted on the drag source when a drag is
@@ -322,10 +318,6 @@ struct _GtkWidgetClass
 					 GdkEventKey	     *event);
   gboolean (* key_release_event)	(GtkWidget	     *widget,
 					 GdkEventKey	     *event);
-  gboolean (* focus_in_event)		(GtkWidget	     *widget,
-					 GdkEventFocus       *event);
-  gboolean (* focus_out_event)		(GtkWidget	     *widget,
-					 GdkEventFocus       *event);
 
   /* Source side drag signals */
   void     (* drag_begin)          (GtkWidget         *widget,

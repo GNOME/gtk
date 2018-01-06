@@ -494,8 +494,6 @@ enum {
   MOTION_NOTIFY_EVENT,
   KEY_PRESS_EVENT,
   KEY_RELEASE_EVENT,
-  FOCUS_IN_EVENT,
-  FOCUS_OUT_EVENT,
   DRAG_BEGIN,
   DRAG_END,
   DRAG_DATA_DELETE,
@@ -617,10 +615,6 @@ static gboolean		gtk_widget_real_key_press_event   	(GtkWidget        *widget,
 								 GdkEventKey      *event);
 static gboolean		gtk_widget_real_key_release_event 	(GtkWidget        *widget,
 								 GdkEventKey      *event);
-static gboolean		gtk_widget_real_focus_in_event   	 (GtkWidget       *widget,
-								  GdkEventFocus   *event);
-static gboolean		gtk_widget_real_focus_out_event   	(GtkWidget        *widget,
-								 GdkEventFocus    *event);
 static gboolean		gtk_widget_real_focus			(GtkWidget        *widget,
 								 GtkDirectionType  direction);
 static void             gtk_widget_real_move_focus              (GtkWidget        *widget,
@@ -1000,8 +994,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->motion_notify_event = gtk_widget_real_motion_event;
   klass->key_press_event = gtk_widget_real_key_press_event;
   klass->key_release_event = gtk_widget_real_key_release_event;
-  klass->focus_in_event = gtk_widget_real_focus_in_event;
-  klass->focus_out_event = gtk_widget_real_focus_out_event;
   klass->drag_begin = NULL;
   klass->drag_end = NULL;
   klass->drag_data_delete = NULL;
@@ -2040,60 +2032,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT);
   g_signal_set_va_marshaller (widget_signals[KEY_RELEASE_EVENT], G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__OBJECTv);
-
-  /**
-   * GtkWidget::focus-in-event:
-   * @widget: the object which received the signal
-   * @event: (type Gdk.EventFocus): the #GdkEventFocus which triggered
-   *   this signal.
-   *
-   * The ::focus-in-event signal will be emitted when the keyboard focus
-   * enters the @widget's window.
-   *
-   * To receive this signal, the #GdkWindow associated to the widget needs
-   * to enable the #GDK_FOCUS_CHANGE_MASK mask.
-   *
-   * Returns: %TRUE to stop other handlers from being invoked for the event.
-   *   %FALSE to propagate the event further.
-   */
-  widget_signals[FOCUS_IN_EVENT] =
-    g_signal_new (I_("focus-in-event"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, focus_in_event),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__OBJECT,
-		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT);
-  g_signal_set_va_marshaller (widget_signals[FOCUS_IN_EVENT], G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__OBJECTv);
-
-  /**
-   * GtkWidget::focus-out-event:
-   * @widget: the object which received the signal
-   * @event: (type Gdk.EventFocus): the #GdkEventFocus which triggered this
-   *   signal.
-   *
-   * The ::focus-out-event signal will be emitted when the keyboard focus
-   * leaves the @widget's window.
-   *
-   * To receive this signal, the #GdkWindow associated to the widget needs
-   * to enable the #GDK_FOCUS_CHANGE_MASK mask.
-   *
-   * Returns: %TRUE to stop other handlers from being invoked for the event.
-   *   %FALSE to propagate the event further.
-   */
-  widget_signals[FOCUS_OUT_EVENT] =
-    g_signal_new (I_("focus-out-event"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, focus_out_event),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__OBJECT,
-		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT);
-  g_signal_set_va_marshaller (widget_signals[FOCUS_OUT_EVENT], G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_BOOLEAN__OBJECTv);
 
   /**
@@ -5831,24 +5769,6 @@ gtk_widget_real_key_release_event (GtkWidget         *widget,
   return gtk_bindings_activate_event (G_OBJECT (widget), event);
 }
 
-static gboolean
-gtk_widget_real_focus_in_event (GtkWidget     *widget,
-                                GdkEventFocus *event)
-{
-  gtk_widget_queue_draw (widget);
-
-  return FALSE;
-}
-
-static gboolean
-gtk_widget_real_focus_out_event (GtkWidget     *widget,
-                                 GdkEventFocus *event)
-{
-  gtk_widget_queue_draw (widget);
-
-  return FALSE;
-}
-
 #define WIDGET_REALIZED_FOR_EVENT(widget, event) \
      (event->any.type == GDK_FOCUS_CHANGE || _gtk_widget_get_realized(widget))
 
@@ -6165,6 +6085,7 @@ gtk_widget_emit_event_signals (GtkWidget      *widget,
 	case GDK_ENTER_NOTIFY:
 	case GDK_LEAVE_NOTIFY:
 	case GDK_GRAB_BROKEN:
+	case GDK_FOCUS_CHANGE:
 	case GDK_NOTHING:
 	  signal_num = -1;
 	  break;
@@ -6182,9 +6103,6 @@ gtk_widget_emit_event_signals (GtkWidget      *widget,
 	  break;
 	case GDK_KEY_RELEASE:
 	  signal_num = KEY_RELEASE_EVENT;
-	  break;
-	case GDK_FOCUS_CHANGE:
-	  signal_num = event->focus_change.in ? FOCUS_IN_EVENT : FOCUS_OUT_EVENT;
 	  break;
 	default:
 	  g_warning ("gtk_widget_event(): unhandled event type: %d", event->any.type);
