@@ -393,15 +393,13 @@ gtk_cell_renderer_combo_editing_done (GtkCellEditable *combo,
   g_free (new_text);
 }
 
-static gboolean
-gtk_cell_renderer_combo_focus_out_event (GtkWidget *widget,
-					 GdkEvent  *event,
-					 gpointer   data)
+static void
+gtk_cell_renderer_combo_focus_change (GtkWidget  *widget,
+                                      GParamSpec *pspec,
+                                      gpointer    data)
 {
-  
-  gtk_cell_renderer_combo_editing_done (GTK_CELL_EDITABLE (widget), data);
-
-  return FALSE;
+  if (!gtk_widget_has_focus (widget))
+    gtk_cell_renderer_combo_editing_done (GTK_CELL_EDITABLE (widget), data);
 }
 
 typedef struct 
@@ -520,8 +518,8 @@ gtk_cell_renderer_combo_start_editing (GtkCellRenderer     *cell,
   g_signal_connect (GTK_CELL_EDITABLE (combo), "changed",
 		    G_CALLBACK (gtk_cell_renderer_combo_changed),
 		    cell_combo);
-  priv->focus_out_id = g_signal_connect (combo, "focus-out-event",
-                                         G_CALLBACK (gtk_cell_renderer_combo_focus_out_event),
+  priv->focus_out_id = g_signal_connect (combo, "notify::has-focus",
+                                         G_CALLBACK (gtk_cell_renderer_combo_focus_change),
                                          cell_combo);
 
   priv->combo = combo;
