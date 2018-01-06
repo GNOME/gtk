@@ -605,8 +605,8 @@ static gboolean gtk_tree_view_key_release          (GtkWidget        *widget,
 
 static void     gtk_tree_view_set_focus_child      (GtkContainer     *container,
 						    GtkWidget        *child);
-static gint     gtk_tree_view_focus_out            (GtkWidget        *widget,
-						    GdkEventFocus    *event);
+static gboolean gtk_tree_view_event                (GtkWidget        *widget,
+                                                    GdkEvent         *event);
 static gint     gtk_tree_view_focus                (GtkWidget        *widget,
 						    GtkDirectionType  direction);
 static void     gtk_tree_view_grab_focus           (GtkWidget        *widget);
@@ -977,7 +977,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   widget_class->snapshot = gtk_tree_view_snapshot;
   widget_class->key_press_event = gtk_tree_view_key_press;
   widget_class->key_release_event = gtk_tree_view_key_release;
-  widget_class->focus_out_event = gtk_tree_view_focus_out;
+  widget_class->event = gtk_tree_view_event;
   widget_class->drag_begin = gtk_tree_view_drag_begin;
   widget_class->drag_end = gtk_tree_view_drag_end;
   widget_class->drag_data_get = gtk_tree_view_drag_data_get;
@@ -5798,21 +5798,33 @@ gtk_tree_view_motion_controller_leave (GtkEventControllerMotion *controller,
 }
 
 
-static gint
-gtk_tree_view_focus_out (GtkWidget     *widget,
-			 GdkEventFocus *event)
+static gboolean
+gtk_tree_view_event (GtkWidget *widget,
+                     GdkEvent  *event)
 {
   GtkTreeView *tree_view;
 
   tree_view = GTK_TREE_VIEW (widget);
 
-  gtk_widget_queue_draw (widget);
+  if (gdk_event_get_event_type (event) == GDK_FOCUS_CHANGE)
+    {
+      gboolean focus_in;
 
-  /* destroy interactive search dialog */
-  if (tree_view->priv->search_window)
-    gtk_tree_view_search_window_hide (tree_view->priv->search_window, tree_view,
-                                      gdk_event_get_device ((GdkEvent *) event));
-  return FALSE;
+      gdk_event_get_focus_in (event, &focus_in);
+      if (!focus_in)
+        {
+          gtk_widget_queue_draw (widget);
+
+          /* destroy interactive search dialog */
+          if (tree_view->priv->search_window)
+            gtk_tree_view_search_window_hide (tree_view->priv->search_window, tree_view,
+                                              gdk_event_get_device ((GdkEvent *) event));
+        }
+
+      return GDK_EVENT_PROPAGATE;
+    }
+
+  return GDK_EVENT_PROPAGATE;
 }
 
 
