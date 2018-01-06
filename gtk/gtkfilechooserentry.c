@@ -84,10 +84,10 @@ static guint signals[LAST_SIGNAL] = { 0 };
 static void     gtk_file_chooser_entry_finalize       (GObject          *object);
 static void     gtk_file_chooser_entry_dispose        (GObject          *object);
 static void     gtk_file_chooser_entry_grab_focus     (GtkWidget        *widget);
-static gboolean gtk_file_chooser_entry_tab_handler    (GtkWidget *widget,
-						       GdkEventKey *event);
-static gboolean gtk_file_chooser_entry_focus_out_event (GtkWidget       *widget,
-							GdkEventFocus   *event);
+static gboolean gtk_file_chooser_entry_tab_handler    (GtkWidget        *widget,
+                                                       GdkEventKey      *event);
+static gboolean gtk_file_chooser_entry_event          (GtkWidget       *widget,
+                                                       GdkEvent        *event);
 
 #ifdef G_OS_WIN32
 static gint     insert_text_callback      (GtkFileChooserEntry *widget,
@@ -169,7 +169,7 @@ _gtk_file_chooser_entry_class_init (GtkFileChooserEntryClass *class)
   gobject_class->dispatch_properties_changed = gtk_file_chooser_entry_dispatch_properties_changed;
 
   widget_class->grab_focus = gtk_file_chooser_entry_grab_focus;
-  widget_class->focus_out_event = gtk_file_chooser_entry_focus_out_event;
+  widget_class->event = gtk_file_chooser_entry_event;
 
   signals[HIDE_ENTRY] =
     g_signal_new (I_("hide-entry"),
@@ -541,14 +541,24 @@ gtk_file_chooser_entry_tab_handler (GtkWidget *widget,
 }
 
 static gboolean
-gtk_file_chooser_entry_focus_out_event (GtkWidget     *widget,
-					GdkEventFocus *event)
+gtk_file_chooser_entry_event (GtkWidget *widget,
+                              GdkEvent  *event)
 {
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (widget);
 
-  set_complete_on_load (chooser_entry, FALSE);
- 
-  return GTK_WIDGET_CLASS (_gtk_file_chooser_entry_parent_class)->focus_out_event (widget, event);
+  if (gdk_event_get_event_type (event) == GDK_FOCUS_CHANGE)
+    {
+      gboolean focus_in;
+
+      gdk_event_get_focus_in (event, &focus_in);
+
+      if (!focus_in)
+        set_complete_on_load (chooser_entry, FALSE);
+
+      return GDK_EVENT_PROPAGATE;
+    }
+
+  return GDK_EVENT_PROPAGATE;
 }
 
 static void
