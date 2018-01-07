@@ -37,6 +37,7 @@
 #include "gtkorientable.h"
 #include "gtkscrolledwindow.h"
 #include "gtklabel.h"
+#include "gtkgesturemultipress.h"
 
 #include <string.h>
 #include <glib/gi18n-lib.h>
@@ -96,6 +97,7 @@ struct _GtkAppChooserWidgetPrivate {
   GAppInfoMonitor *monitor;
 
   GtkWidget *popup_menu;
+  GtkGesture *multipress_gesture;
 };
 
 enum {
@@ -178,18 +180,15 @@ refresh_and_emit_app_selected (GtkAppChooserWidget *self,
 }
 
 static GAppInfo *
-get_app_info_for_event (GtkAppChooserWidget *self,
-                        GdkEventButton      *event)
+get_app_info_for_coords (GtkAppChooserWidget *self,
+                         double               x,
+                         double               y)
 {
   GtkTreePath *path = NULL;
   GtkTreeIter iter;
   GtkTreeModel *model;
   GAppInfo *info;
   gboolean recommended;
-  gdouble x, y;
-
-  if (!gdk_event_get_coords ((GdkEvent *) event, &x, &y))
-    return GDK_EVENT_PROPAGATE;
 
   if (!gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (self->priv->program_list),
                                       x, y,
@@ -226,50 +225,42 @@ popup_menu_detach (GtkWidget *attach_widget,
   self->priv->popup_menu = NULL;
 }
 
-static gboolean
-widget_button_press_event_cb (GtkWidget      *widget,
-                              GdkEventButton *event,
-                              gpointer        user_data)
+static void
+gtk_app_chooser_row_pressed_cb (GtkGesture *gesture,
+                                int         n_press,
+                                double      x,
+                                double      y,
+                                gpointer    user_data)
 {
   GtkAppChooserWidget *self = user_data;
-  guint button;
+  GAppInfo *info;
+  GtkWidget *menu;
+  GList *children;
+  gint n_children;
 
-  if (gdk_event_get_button ((GdkEvent *) event, &button) &&
-      button == GDK_BUTTON_SECONDARY &&
-      gdk_event_get_event_type ((GdkEvent *) event) == GDK_BUTTON_PRESS)
-    {
-      GAppInfo *info;
-      GtkWidget *menu;
-      GList *children;
-      gint n_children;
+  info = get_app_info_for_coords (self, x, y);
 
-      info = get_app_info_for_event (self, event);
+  if (info == NULL)
+    return;
 
-      if (info == NULL)
-        return FALSE;
+  if (self->priv->popup_menu)
+    gtk_widget_destroy (self->priv->popup_menu);
 
-      if (self->priv->popup_menu)
-        gtk_widget_destroy (self->priv->popup_menu);
+  self->priv->popup_menu = menu = gtk_menu_new ();
+  gtk_menu_attach_to_widget (GTK_MENU (menu), GTK_WIDGET (self), popup_menu_detach);
 
-      self->priv->popup_menu = menu = gtk_menu_new ();
-      gtk_menu_attach_to_widget (GTK_MENU (menu), GTK_WIDGET (self), popup_menu_detach);
+  g_signal_emit (self, signals[SIGNAL_POPULATE_POPUP], 0, menu, info);
 
-      g_signal_emit (self, signals[SIGNAL_POPULATE_POPUP], 0, menu, info);
+  g_object_unref (info);
 
-      g_object_unref (info);
+  /* see if clients added menu items to this container */
+  children = gtk_container_get_children (GTK_CONTAINER (menu));
+  n_children = g_list_length (children);
 
-      /* see if clients added menu items to this container */
-      children = gtk_container_get_children (GTK_CONTAINER (menu));
-      n_children = g_list_length (children);
+  if (n_children > 0) /* actually popup the menu */
+    gtk_menu_popup_at_pointer (GTK_MENU (menu), NULL);
 
-      if (n_children > 0)
-        /* actually popup the menu */
-        gtk_menu_popup_at_pointer (GTK_MENU (menu), (GdkEvent *) event);
-
-      g_list_free (children);
-    }
-
-  return FALSE;
+  g_list_free (children);
 }
 
 static gboolean
@@ -928,6 +919,7 @@ gtk_app_chooser_widget_finalize (GObject *object)
   g_free (self->priv->default_text);
   g_signal_handlers_disconnect_by_func (self->priv->monitor, app_info_changed, self);
   g_object_unref (self->priv->monitor);
+  g_object_unref (self->priv->multipress_gesture);
 
   G_OBJECT_CLASS (gtk_app_chooser_widget_parent_class)->finalize (object);
 }
@@ -1172,7 +1164,6 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkAppChooserWidget, overlay);
   gtk_widget_class_bind_template_callback (widget_class, refresh_and_emit_app_selected);
   gtk_widget_class_bind_template_callback (widget_class, program_list_selection_activated);
-  gtk_widget_class_bind_template_callback (widget_class, widget_button_press_event_cb);
 
   gtk_widget_class_set_css_name (widget_class, I_("appchooser"));
 }
@@ -1218,6 +1209,11 @@ gtk_app_chooser_widget_init (GtkAppChooserWidget *self)
   self->priv->monitor = g_app_info_monitor_get ();
   g_signal_connect (self->priv->monitor, "changed",
 		    G_CALLBACK (app_info_changed), self);
+
+  self->priv->multipress_gesture = gtk_gesture_multi_press_new (self->priv->program_list);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (self->priv->multipress_gesture), GDK_BUTTON_SECONDARY);
+  g_signal_connect (self->priv->multipress_gesture, "pressed",
+                    G_CALLBACK (gtk_app_chooser_row_pressed_cb), self);
 }
 
 static GAppInfo *

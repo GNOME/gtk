@@ -43,7 +43,6 @@
                 <property name="can-focus">1</property>
                 <property name="model">program_list_sort</property>
                 <property name="headers-visible">0</property>
-                <signal name="button-press-event" handler="widget_button_press_event_cb" swapped="no"/>
                 <signal name="row-activated" handler="program_list_selection_activated" swapped="no"/>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection" id="treeview-selection2">
