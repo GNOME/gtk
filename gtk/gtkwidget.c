@@ -14610,7 +14610,7 @@ gtk_widget_maybe_add_debug_render_nodes (GtkWidget             *widget,
       gtk_snapshot_append_color (snapshot, &padding_color, &bounds, "Padding left");
 
       graphene_rect_init (&bounds,
-                          priv->allocation.width - margin.left - border.right - padding.right,
+                          priv->allocation.width - margin.right - border.right - padding.right,
                           margin.top + border.top + padding.top,
                           padding.right,
                           priv->allocation.height - margin.top - margin.bottom - border.top - border.bottom - padding.top - padding.bottom);
