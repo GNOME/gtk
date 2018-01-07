@@ -2298,28 +2298,6 @@ list_popup_menu_cb (GtkWidget            *widget,
   return TRUE;
 }
 
-static void
-get_selection_modifiers (GtkWidget       *widget,
-                         GdkEventButton  *event,
-                         gboolean        *modify,
-                         gboolean        *extend)
-{
-  GdkModifierType mask;
-  guint state;
-
-  *modify = FALSE;
-  *extend = FALSE;
-
-  mask = gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_MODIFY_SELECTION);
-  gdk_event_get_state ((GdkEvent *) event, &state);
-
-  if ((state & mask) == mask)
-    *modify = TRUE;
-  mask = gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_EXTEND_SELECTION);
-  if ((state & mask) == mask)
-    *extend = TRUE;
-}
-
 /* Callback used when a button is pressed on the file list.  We trap button 3 to
  * bring up a popup menu.
  */
@@ -2330,44 +2308,11 @@ list_button_press_event_cb (GtkWidget            *widget,
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
   static gboolean in_press = FALSE;
-  GtkTreePath *path;
-  GtkTreeViewColumn *column;
-  GdkDevice *device;
-  gboolean modify, extend, is_touchscreen;
-  guint button;
-  gdouble x, y;
+  double x;
+  double y;
 
   if (in_press)
     return FALSE;
-
-  if (!gdk_event_get_button ((GdkEvent *) event, &button) ||
-      !gdk_event_get_coords ((GdkEvent *) event, &x, &y))
-    return GDK_EVENT_PROPAGATE;
-
-  device = gdk_event_get_source_device ((GdkEvent *) event);
-  is_touchscreen = gtk_simulate_touchscreen () ||
-                   gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN;
-
-  get_selection_modifiers (widget, event, &modify, &extend);
-  if (!is_touchscreen &&
-      !modify && !extend &&
-      gdk_event_get_event_type ((GdkEvent *) event) == GDK_BUTTON_PRESS &&
-      button == GDK_BUTTON_PRIMARY &&
-      gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (priv->browse_files_tree_view),
-                                     x, y, &path, &column, NULL, NULL))
-    {
-      GtkTreeSelection *selection;
-
-      selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->browse_files_tree_view));
-      if (gtk_tree_selection_path_is_selected (selection, path))
-        {
-          list_row_activated (GTK_TREE_VIEW (priv->browse_files_tree_view), path, column, impl);
-          gtk_tree_path_free (path);
-          return TRUE;
-        }
-
-      gtk_tree_path_free (path);
-    }
 
   if (!gdk_event_triggers_context_menu ((GdkEvent *) event))
     return FALSE;
@@ -2375,6 +2320,8 @@ list_button_press_event_cb (GtkWidget            *widget,
   in_press = TRUE;
   gtk_widget_event (priv->browse_files_tree_view, (GdkEvent *) event);
   in_press = FALSE;
+
+  gdk_event_get_coords ((GdkEvent *)event, &x, &y);
 
   file_list_show_popover (impl, x, y);
 
