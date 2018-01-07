@@ -71,12 +71,17 @@
  * If gtk_container_add() has added a #GtkViewport for you, you can remove
  * both your added child widget from the #GtkViewport, and the #GtkViewport
  * from the GtkScrolledWindow, like this:
+ *
  * |[<!-- language="C" -->
  * GtkWidget *scrolled_window = gtk_scrolled_window_new (NULL, NULL);
  * GtkWidget *child_widget = gtk_button_new ();
  *
  * // GtkButton is not a GtkScrollable, so GtkScrolledWindow will automatically
  * // add a GtkViewport.
+ * gtk_container_add (GTK_CONTAINER (scrolled_window),
+ *                    child_widget);
+ *
+ * // Either of these will result in child_widget being unparented:
  * gtk_container_remove (GTK_CONTAINER (scrolled_window),
  *                       child_widget);
  * // or
