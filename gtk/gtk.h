@@ -156,7 +156,6 @@
 #include <gtk/gtkpagesetup.h>
 #include <gtk/gtkpapersize.h>
 #include <gtk/gtkpaned.h>
-#include <gtk/gtkplacessidebar.h>
 #include <gtk/gtkpopover.h>
 #include <gtk/gtkpopovermenu.h>
 #include <gtk/gtkprintcontext.h>

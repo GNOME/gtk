@@ -2056,44 +2056,6 @@ gtk_paned_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkplacessidebar</FILE>
-<TITLE>GtkPlacesSidebar</TITLE>
-GtkPlacesSidebar
-GtkPlacesOpenFlags
-gtk_places_sidebar_new
-gtk_places_sidebar_set_open_flags
-gtk_places_sidebar_get_open_flags
-gtk_places_sidebar_set_location
-gtk_places_sidebar_get_location
-gtk_places_sidebar_set_show_recent
-gtk_places_sidebar_get_show_recent
-gtk_places_sidebar_set_show_desktop
-gtk_places_sidebar_get_show_desktop
-gtk_places_sidebar_add_shortcut
-gtk_places_sidebar_remove_shortcut
-gtk_places_sidebar_list_shortcuts
-gtk_places_sidebar_get_nth_bookmark
-gtk_places_sidebar_get_local_only
-gtk_places_sidebar_set_local_only
-gtk_places_sidebar_get_show_enter_location
-gtk_places_sidebar_set_show_enter_location
-gtk_places_sidebar_get_show_trash
-gtk_places_sidebar_set_show_trash
-gtk_places_sidebar_get_show_other_locations
-gtk_places_sidebar_set_show_other_locations
-gtk_places_sidebar_set_drop_targets_visible
-<SUBSECTION Standard>
-GTK_PLACES_SIDEBAR
-GTK_IS_PLACES_SIDEBAR
-GTK_TYPE_PLACES_SIDEBAR
-GTK_PLACES_SIDEBAR_CLASS
-GTK_IS_PLACES_SIDEBAR_CLASS
-GTK_PLACES_SIDEBAR_GET_CLASS
-<SUBSECTION Private>
-gtk_places_sidebar_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtkprogressbar</FILE>
 <TITLE>GtkProgressBar</TITLE>
 GtkProgressBar

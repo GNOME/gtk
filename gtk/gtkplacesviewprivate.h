@@ -24,7 +24,7 @@
 #endif
 
 #include <gtk/gtkbox.h>
-#include <gtk/gtkplacessidebar.h>
+#include <gtk/gtkplacessidebarprivate.h>
 
 G_BEGIN_DECLS
 

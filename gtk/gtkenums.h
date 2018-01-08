@@ -1034,4 +1034,10 @@ typedef enum
 } GtkPopoverConstraint;
 
 
+typedef enum {
+  GTK_PLACES_OPEN_NORMAL     = 1 << 0,
+  GTK_PLACES_OPEN_NEW_TAB    = 1 << 1,
+  GTK_PLACES_OPEN_NEW_WINDOW = 1 << 2
+} GtkPlacesOpenFlags;
+
 #endif /* __GTK_ENUMS_H__ */

@@ -388,8 +388,10 @@ test_type (gconstpointer data)
   if (g_type_is_a (type, GTK_TYPE_FILE_CHOOSER_BUTTON) ||
       g_type_is_a (type, GTK_TYPE_FILE_CHOOSER_DIALOG) ||
       g_type_is_a (type, GTK_TYPE_FILE_CHOOSER_WIDGET) ||
-      g_type_is_a (type, GTK_TYPE_FILE_CHOOSER_NATIVE) ||
-      g_type_is_a (type, GTK_TYPE_PLACES_SIDEBAR))
+      g_type_is_a (type, GTK_TYPE_FILE_CHOOSER_NATIVE))
+    return;
+
+  if (g_str_equal (g_type_name (type), "GtkPlacesSidebar"))
     return;
 
   /* These rely on a d-bus session bus */

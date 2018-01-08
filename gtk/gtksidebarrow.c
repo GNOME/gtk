@@ -21,7 +21,6 @@
 #include "gtksidebarrowprivate.h"
 /* For section and place type enums */
 #include "gtkplacessidebarprivate.h"
-#include "gtkplacessidebar.h"
 #include "gtkwidget.h"
 #include "gtkimage.h"
 #include "gtklabel.h"

@@ -49,7 +49,6 @@
 #include "gtkmountoperation.h"
 #include "gtkpaned.h"
 #include "gtkpathbar.h"
-#include "gtkplacessidebar.h"
 #include "gtkplacessidebarprivate.h"
 #include "gtkplacesviewprivate.h"
 #include "gtkprivate.h"

@@ -504,7 +504,6 @@ gtk_public_headers = files([
   'gtkpagesetup.h',
   'gtkpaned.h',
   'gtkpapersize.h',
-  'gtkplacessidebar.h',
   'gtkpopover.h',
   'gtkpopovermenu.h',
   'gtkprintcontext.h',

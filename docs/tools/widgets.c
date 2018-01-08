@@ -1244,25 +1244,6 @@ create_headerbar (void)
 }
 
 static WidgetInfo *
-create_placessidebar (void)
-{
-  GtkWidget *bar;
-  GtkWidget *vbox;
-
-  bar = gtk_places_sidebar_new ();
-  gtk_widget_set_size_request (bar, 150, 300);
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
-  gtk_widget_set_halign (bar, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (bar, GTK_ALIGN_CENTER);
-
-  gtk_box_pack_start (GTK_BOX (vbox), bar);
-  gtk_box_pack_start (GTK_BOX (vbox),
-                      gtk_label_new ("Places Sidebar"));
-
-  return new_widget_info ("placessidebar", vbox, ASIS);
-}
-
-static WidgetInfo *
 create_stack (void)
 {
   GtkWidget *stack;
@@ -1485,7 +1466,6 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_list_box());
   retval = g_list_prepend (retval, create_flow_box());
   retval = g_list_prepend (retval, create_headerbar ());
-  retval = g_list_prepend (retval, create_placessidebar ());
   retval = g_list_prepend (retval, create_stack ());
   retval = g_list_prepend (retval, create_stack_switcher ());
   retval = g_list_prepend (retval, create_toolpalette ());
