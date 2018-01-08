@@ -18,7 +18,7 @@ vec4 blur_pixel (in vec2 uv) {
 
   for (int y = -half_radius; y < half_radius; y ++) {
     float fy = Gaussian (radius / 2.0, float(y));
-    float offset_y = y * pixel_size_x;
+    float offset_y = y * pixel_size_y;
 
     for (int x = -half_radius; x < half_radius; x ++) {
       float fx = Gaussian (radius / 2.0, float(x));
