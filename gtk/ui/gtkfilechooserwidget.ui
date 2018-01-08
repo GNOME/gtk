@@ -143,7 +143,6 @@
                                             <property name="AtkObject::accessible-name" translatable="yes">Files</property>
                                           </object>
                                         </child>
-                                        <signal name="button-press-event" handler="list_button_press_event_cb" swapped="no"/>
                                         <signal name="drag-data-received" handler="file_list_drag_data_received_cb" swapped="no"/>
                                         <signal name="drag-drop" handler="file_list_drag_drop_cb" swapped="no"/>
                                         <signal name="drag-begin" handler="file_list_drag_begin_cb" swapped="no"/>

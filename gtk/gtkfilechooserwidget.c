@@ -77,6 +77,7 @@
 #include "gtkseparator.h"
 #include "gtkmodelbutton.h"
 #include "gtkgesturelongpress.h"
+#include "gtkgesturemultipress.h"
 #include "gtkdebug.h"
 #include "gtkfilechoosererrorstackprivate.h"
 
@@ -250,6 +251,7 @@ struct _GtkFileChooserWidgetPrivate {
   GFile *rename_file_source_file;
 
   GtkGesture *long_press_gesture;
+  GtkGesture *multipress_gesture;
 
   GtkFileSystemModel *browse_files_model;
   char *browse_files_last_selected_name;
@@ -2301,31 +2303,39 @@ list_popup_menu_cb (GtkWidget            *widget,
 /* Callback used when a button is pressed on the file list.  We trap button 3 to
  * bring up a popup menu.
  */
-static gboolean
-list_button_press_event_cb (GtkWidget            *widget,
-                            GdkEventButton       *event,
-                            GtkFileChooserWidget *impl)
-{
-  GtkFileChooserWidgetPrivate *priv = impl->priv;
-  static gboolean in_press = FALSE;
+
+typedef struct {
+  GtkFileChooserWidget *impl;
   double x;
   double y;
+} PopoverData;
 
-  if (in_press)
-    return FALSE;
+static gboolean
+file_list_show_popover_in_idle (gpointer data)
+{
+  PopoverData *pd = data;
 
-  if (!gdk_event_triggers_context_menu ((GdkEvent *) event))
-    return FALSE;
+  file_list_show_popover (pd->impl, pd->x, pd->y);
+  g_free (data);
 
-  in_press = TRUE;
-  gtk_widget_event (priv->browse_files_tree_view, (GdkEvent *) event);
-  in_press = FALSE;
+  return G_SOURCE_REMOVE;
+}
 
-  gdk_event_get_coords ((GdkEvent *)event, &x, &y);
+static void
+multi_press_cb (GtkGesture           *gesture,
+                int                   n_press,
+                double                x,
+                double                y,
+                GtkFileChooserWidget *impl)
+{
+  PopoverData *pd;
 
-  file_list_show_popover (impl, x, y);
+  pd = g_new (PopoverData, 1);
+  pd->impl = impl;
+  pd->x = x;
+  pd->y = y;
 
-  return TRUE;
+  g_idle_add (file_list_show_popover_in_idle, pd);
 }
 
 static void
@@ -3537,6 +3547,7 @@ gtk_file_chooser_widget_dispose (GObject *object)
     }
 
   g_clear_object (&priv->long_press_gesture);
+  g_clear_object (&priv->multipress_gesture);
 
   G_OBJECT_CLASS (gtk_file_chooser_widget_parent_class)->dispose (object);
 }
@@ -8381,7 +8392,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_callback (widget_class, file_list_drag_data_received_cb);
   gtk_widget_class_bind_template_callback (widget_class, list_popup_menu_cb);
   gtk_widget_class_bind_template_callback (widget_class, file_list_query_tooltip_cb);
-  gtk_widget_class_bind_template_callback (widget_class, list_button_press_event_cb);
   gtk_widget_class_bind_template_callback (widget_class, list_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, file_list_drag_begin_cb);
   gtk_widget_class_bind_template_callback (widget_class, file_list_drag_motion_cb);
@@ -8541,6 +8551,11 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->long_press_gesture), TRUE);
   g_signal_connect (priv->long_press_gesture, "pressed",
                     G_CALLBACK (long_press_cb), impl);
+
+  priv->multipress_gesture = gtk_gesture_multi_press_new (priv->browse_files_tree_view);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture), GDK_BUTTON_SECONDARY);
+  g_signal_connect (priv->multipress_gesture, "pressed",
+                    G_CALLBACK (multi_press_cb), impl);
 
   /* Setup various attributes and callbacks in the UI
    * which cannot be done with GtkBuilder.
