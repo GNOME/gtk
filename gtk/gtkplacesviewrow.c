@@ -34,6 +34,7 @@
 #include "gtkspinner.h"
 #include "gtkstack.h"
 #include "gtktypebuiltins.h"
+#include "gtkgesturemultipress.h"
 #else
 #include <gtk/gtk.h>
 #endif
@@ -54,6 +55,8 @@ struct _GtkPlacesViewRow
   GVolume       *volume;
   GMount        *mount;
   GFile         *file;
+
+  GtkGesture    *gesture;
 
   GCancellable  *cancellable;
 
@@ -193,6 +196,16 @@ measure_available_space (GtkPlacesViewRow *row)
 }
 
 static void
+pressed_cb (GtkGesture       *gesture,
+            int               n_pressed,
+            double            x,
+            double            y,
+            GtkPlacesViewRow *row)
+{
+  g_signal_emit_by_name (row, "popup-menu", 0);
+}
+
+static void
 gtk_places_view_row_finalize (GObject *object)
 {
   GtkPlacesViewRow *self = GTK_PLACES_VIEW_ROW (object);
@@ -203,6 +216,7 @@ gtk_places_view_row_finalize (GObject *object)
   g_clear_object (&self->mount);
   g_clear_object (&self->file);
   g_clear_object (&self->cancellable);
+  g_clear_object (&self->gesture);
 
   G_OBJECT_CLASS (gtk_places_view_row_parent_class)->finalize (object);
 }
@@ -384,6 +398,10 @@ static void
 gtk_places_view_row_init (GtkPlacesViewRow *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  self->gesture = gtk_gesture_multi_press_new (GTK_WIDGET (self));
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (self->gesture), GDK_BUTTON_SECONDARY);
+  g_signal_connect (self->gesture, "pressed", G_CALLBACK (pressed_cb), self);
 }
 
 GtkWidget*

@@ -99,9 +99,6 @@ struct _GtkPlacesViewPrivate
 static void        mount_volume                                  (GtkPlacesView *view,
                                                                   GVolume       *volume);
 
-static gboolean    on_button_press_event                         (GtkPlacesViewRow *row,
-                                                                  GdkEventButton   *event);
-
 static void        on_eject_button_clicked                       (GtkWidget        *widget,
                                                                   GtkPlacesViewRow *row);
 
@@ -662,15 +659,7 @@ insert_row (GtkPlacesView *view,
 
   g_object_set_data (G_OBJECT (row), "is-network", GINT_TO_POINTER (is_network));
 
-  g_signal_connect_swapped (GTK_PLACES_VIEW_ROW (row),
-                            "button-press-event",
-                            G_CALLBACK (on_button_press_event),
-                            row);
-
-  g_signal_connect (row,
-                    "popup-menu",
-                    G_CALLBACK (on_row_popup_menu),
-                    row);
+  g_signal_connect (row, "popup-menu", G_CALLBACK (on_row_popup_menu), row);
 
   g_signal_connect (gtk_places_view_row_get_eject_button (GTK_PLACES_VIEW_ROW (row)),
                     "clicked",
@@ -1695,22 +1684,6 @@ on_row_popup_menu (GtkPlacesViewRow *row)
 {
   popup_menu (row, NULL);
   return TRUE;
-}
-
-static gboolean
-on_button_press_event (GtkPlacesViewRow *row,
-                       GdkEventButton   *event)
-{
-  if (row &&
-      gdk_event_triggers_context_menu ((GdkEvent*) event) &&
-      gdk_event_get_event_type ((GdkEvent *)event) == GDK_BUTTON_PRESS)
-    {
-      popup_menu (row, event);
-
-      return TRUE;
-    }
-
-  return FALSE;
 }
 
 static gboolean
