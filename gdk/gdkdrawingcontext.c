@@ -260,7 +260,7 @@ gdk_cairo_get_drawing_context (cairo_t *cr)
  * #GdkDrawingContext is valid, that is between a call to
  * gdk_window_begin_draw_frame() and gdk_window_end_draw_frame().
  *
- * Returns: (transfer none): a Cairo context to be used to draw
+ * Returns: (transfer none) (nullable): a Cairo context to be used to draw
  *   the contents of the #GdkWindow. The context is owned by the
  *   #GdkDrawingContext and should not be destroyed. %NULL is
  *   returned when a paint context is in used.
