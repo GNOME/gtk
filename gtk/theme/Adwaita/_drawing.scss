@@ -192,39 +192,24 @@
   //
   // normal button
   //
+
     color: $tc;
-    outline-color: transparentize($tc, 0.7);
-    border-color: if($c != $bg_color, _border_color($c), $borders_color);
-    border-bottom-color: if($c != $bg_color, _border_color($c, true), $alt_borders_color);
-    $button_fill: if($variant == 'light', linear-gradient(to bottom, $c, darken($c, 4%) 60%, darken($c, 10%)),
-                                          linear-gradient(to bottom, darken($c, 2%), darken($c, 4%) 60%, darken($c, 6%))) !global;
-    background-image: $button_fill;
-    @include _button_text_shadow($tc, $c);
-    @include _shadows(inset 0 1px $_hilight_color, $_button_edge);
+    border-color: darken($c,25%);
+    background-image: image(darken($c, 3%));
+    box-shadow: inset 0 -2px mix($c, darken($c,25%), 65%);
   }
 
   @else if $t==hover {
   //
   // hovered button
   //
-    color: $tc;
-    outline-color: transparentize($tc, 0.7);
-    border-color: if($c != $bg_color, _border_color($c), $borders_color);
-    border-bottom-color: if($c != $bg_color, _border_color($c, true), $alt_borders_color);
-    @if $variant == 'light' {
-      $button_fill: linear-gradient(to bottom, lighten($c, 6%), $c 60%, darken($c, 4%)) !global;
-      @include _button_text_shadow($tc, lighten($c, 6%));
-      @include _shadows(inset 0 1px _button_hilight_color(lighten($c, 6%)), $_button_edge);
-    }
-    @else {
-      $button_fill: linear-gradient(to bottom, lighten($c, 1%), darken($c, 2%) 60%, darken($c, 4%)) !global;
-      @include _button_text_shadow($tc,lighten($c, 6%));
-      @include _shadows(inset 0 1px _button_hilight_color(darken($c, 2%)), $_button_edge);
-    }
-    background-image: $button_fill;
+    background-image: image(lighten($c, 2%));
+    box-shadow: inset 0 -2px mix($c, darken($c,25%), 70%);
+
   }
 
-  @if $t==normal-alt {
+  
+@if $t==normal-alt {
   //
   // normal button alternative look
   //
@@ -276,15 +261,9 @@
   //
   // pushed button
   //
-    color: $tc;
-    outline-color: transparentize($tc, 0.7);
-    border-color: if($c != $bg_color, _border_color($c), $borders_color);
-    $button_fill: image(darken($c, 6%)) !global;
-    background-image: $button_fill;
-    @include _shadows(inset 0 1px transparentize($_hilight_color, 1), $_button_edge);
 
-    text-shadow: none;
-    -gtk-icon-shadow: none;
+     background-image: image(mix($c, darken($c,25%), 55%));
+     box-shadow: none;
   }
 
   @else if $t==insensitive {
@@ -500,14 +479,14 @@
 // $hc: top highlight color
 // $ov: a background layer for background shorthand (hence no commas!)
 //
-  $gradient: linear-gradient(to top, darken($c, 13%), darken($c, 2%) 2px, $c 3px);
+  $gradient: image($c);
 
   @if $variant == 'dark' { $gradient: linear-gradient(to top, darken($c, 3%), darken($c, 1%) 2px, $c 3px); }
 
   @if $ov != none { background: $c $ov, $gradient; }
   @else { background: $c $gradient; }
 
-  box-shadow: inset 0 1px $hc; // top highlight
+//  box-shadow: inset 0 1px $hc; // top highlight
 }
 
 @mixin overshoot($p, $t:normal, $c:$fg_color) {

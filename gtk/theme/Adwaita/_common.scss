@@ -1468,7 +1468,7 @@ headerbar {
   min-height: 46px;
   border-width: 0 0 1px;
   border-style: solid;
-  border-color: $alt_borders_color;
+  border-color: $borders_color;
   border-radius: 0;
 
   @include headerbar_fill;
@@ -3698,7 +3698,7 @@ row {
  * Expanders *
  *************/
 expander {
-  title > arrow {
+  arrow {
     min-width: 16px;
     min-height: 16px;
     -gtk-icon-source: -gtk-icontheme('pan-end-symbolic');
