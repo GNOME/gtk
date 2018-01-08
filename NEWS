@@ -1,3 +1,51 @@
+Overview of Changes from GTK+ 2.24.31 to 2.24.32
+================================================
+
+* Build:
+ - Support Visual Studio 2017
+
+* Bug fixes:
+ 136059 Ctrl-navigation works in opposite direction in right-to-left text
+ 165385 Win32 keyboard handling still incomplete
+ 358970 gtk_scale_set_digits does not cause value to be rounded if draw-value...
+ 468868 Popup of "appears-as-list" ComboBox does not change screen with its t...
+ 554057 Calling gtk_menu_shell_select_item() on GtkMenuBar can break grabs (a...
+ 569581 Using the US-Intl keyboard layout causes unexpected character combina...
+ 618160 Documentation for gtk_combo_box_get_active_iter is unclear
+ 658111 gtk_label_set_pattern() is reset by a call to gtk_box_pack_start()
+ 676550 Adding underlines to Label with gtk_label_set_pattern() does not work
+ 696624 Japanese (Korean/Chinese) XIM input mode indicator has not been worki...
+ 701296 gtkfixed accepts toplevel windows into its children list after gtk_wi...
+ 729651 Crash in GtkFileChooserButton with appears-as-list
+ 734946 Implement GContentType on OSX
+ 768722 Keyboard shortcuts for russian characters doesn't work
+ 769214 keyval field not filled correctly for Pause key
+ 772389 Appending a character to a GtkEntry control in overwrite mode rings t...
+ 772794 segfault when on unchecked XListInputDevices return value
+ 773587 recent-manager: Add a limit to the list's size
+ 776909 gtk_adjustment_clamp_page: Conditional jump or move depends on uninit...
+ 777683 SIGBUS due to gdk_x11_window_set_opacity
+ 778542 Use UTF-8 encoding for tooltips on files in the "recently used" list
+ 778811 Enter submenus when activating their parent item
+ 779009 Missing property-change::accessible-description events when the toolt...
+ 779081 GtkTextView: expose API to get Pango line direction
+ 779605 GLib-CRITICAL Source ID xxx was not found when attempting to remove it
+ 781020 GIMP UI vector icons are drawn way too small
+ 781605 GtkVolumeButton limited to 10 values
+ 785165 Set translation domain for parameter_string in gtk_init_with_args
+ 785672 Entry: Setting icon tooltip to empty disables tooltip on whole widget
+ 786771 Critical about mismatched GdkDisplays when opening Inspector combobox
+ 787158 gtk_widget_get_preferred_width on GtkToolbar gives wrong minimum width
+ 787195 gtk_toolbar_set_show_arrow does not show an arrow
+ 787410 entry: fix memory leak
+ 788577 Global -GtkComboBox-appears-as-list breaks opening menu-mode CBs by k...
+
+* Translation updates:
+ Hungarian
+ Indonesian
+ Polish
+
+
 Overview of Changes from GTK+ 2.24.30 to 2.24.31
 ================================================
 
