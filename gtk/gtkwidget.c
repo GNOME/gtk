@@ -12796,7 +12796,7 @@ gtk_widget_contains (GtkWidget  *widget,
  * @x: X coordinate to test, relative to @widget's origin
  * @y: Y coordinate to test, relative to @widget's origin
  *
- * Finds the descendant of widget (including widget itself) closest
+ * Finds the descendant of @widget (including @widget itself) closest
  * to the screen at the point (@x, @y). The point must be given in
  * widget coordinates, so (0, 0) is assumed to be the top left of
  * @widget's content area.
