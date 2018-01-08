@@ -1670,7 +1670,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   GskShaderBuilder *builder;
   GError *shader_error = NULL;
   int i;
-  static struct {
+  static const struct {
     const char *name;
     const char *vs;
     const char *fs;
