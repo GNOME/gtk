@@ -4476,27 +4476,6 @@ invalidate_empty_focus (GtkTreeView *tree_view)
   gtk_widget_queue_draw (GTK_WIDGET (tree_view));
 }
 
-/* Draws background and a focus rectangle near the edge of the bin_window;
- * used when the tree is empty.
- */
-static void
-snapshot_empty (GtkTreeView *tree_view,
-                GtkSnapshot *snapshot)
-{
-  GtkWidget *widget = GTK_WIDGET (tree_view);
-  GtkStyleContext *context;
-
-  context = gtk_widget_get_style_context (widget);
-
-  if (gtk_widget_has_visible_focus (widget))
-    {
-      gtk_snapshot_render_focus (snapshot, context,
-                                 0, 0,
-                                 gtk_widget_get_width (widget),
-                                 gtk_widget_get_height (widget));
-    }
-}
-
 typedef enum {
   GTK_TREE_VIEW_GRID_LINE,
   GTK_TREE_VIEW_TREE_LINE,
@@ -4657,10 +4636,7 @@ gtk_tree_view_bin_snapshot (GtkWidget   *widget,
   context = gtk_widget_get_style_context (widget);
 
   if (tree_view->priv->tree == NULL)
-    {
-      snapshot_empty (tree_view, snapshot);
-      return;
-    }
+    return;
 
   bin_window_width = gtk_widget_get_width (GTK_WIDGET (tree_view));
   bin_window_height = gtk_widget_get_height(GTK_WIDGET (tree_view));
