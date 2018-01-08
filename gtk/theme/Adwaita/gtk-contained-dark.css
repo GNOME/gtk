@@ -1267,6 +1267,14 @@ scale value { color: alpha(currentColor,0.55); }
 
 scale marks { color: alpha(currentColor,0.55); }
 
+scale marks.top { margin-bottom: 6px; margin-top: -12px; }
+
+scale marks.bottom { margin-top: 6px; margin-bottom: -12px; }
+
+scale marks.top { margin-right: 6px; margin-left: -12px; }
+
+scale marks.bottom { margin-left: 6px; margin-right: -12px; }
+
 scale.fine-tune marks.top { margin-bottom: 6px; margin-top: -9px; }
 
 scale.fine-tune marks.bottom { margin-top: 6px; margin-bottom: -9px; }
