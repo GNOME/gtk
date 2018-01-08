@@ -1,5 +1,5 @@
-uniform float u_blur_radius = 40.0;
-uniform vec2 u_blur_size = vec2(393, 393);
+uniform float u_blur_radius;// = 40.0;
+uniform vec2 u_blur_size;// = vec2(393, 393);
 
 float Gaussian (float sigma, float x) {
   return exp ( - (x * x) / (2.0 * sigma * sigma));
@@ -18,11 +18,11 @@ vec4 blur_pixel (in vec2 uv) {
 
   for (int y = -half_radius; y < half_radius; y ++) {
     float fy = Gaussian (radius / 2.0, float(y));
-    float offset_y = y * pixel_size_y;
+    float offset_y = float(y) * pixel_size_y;
 
     for (int x = -half_radius; x < half_radius; x ++) {
       float fx = Gaussian (radius / 2.0, float(x));
-      float offset_x = x * pixel_size_x;
+      float offset_x = float(x) * pixel_size_x;
 
       vec4 c = Texture(u_source, uv + vec2(offset_x, offset_y));
       total += fx * fy;

@@ -7,6 +7,6 @@ void main() {
   vec4 source2 = Texture(u_source2, vUv); // end child
 
   float p = u_progress;
-  vec4 color = ((1 - p) * source1) + (p * source2);
+  vec4 color = ((1.0 - p) * source1) + (p * source2);
   setOutputColor(color);
 }

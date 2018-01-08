@@ -1,4 +1,4 @@
-uniform vec4 u_color = vec4(1, 0, 1, 1);
+uniform vec4 u_color;// = vec4(1, 0, 1, 1);
 uniform vec4 u_widths;
 
 // For border we abuse, ehm, re-use, the global clip
