@@ -86,9 +86,6 @@ gtk_theming_background_snapshot_color (GtkThemingBackground *bg,
      (gtk_css_style_get_value (bg->style, GTK_CSS_PROPERTY_BACKGROUND_CLIP), 
       n_values - 1));
 
-  if (gdk_rgba_is_clear (bg_color))
-    return;
-
   if (gsk_rounded_rect_is_rectilinear (&bg->boxes[clip]))
     {
       gtk_snapshot_append_color (snapshot,
@@ -658,7 +655,8 @@ gtk_css_style_snapshot_background (GtkCssStyle      *style,
         gtk_snapshot_push_blend (snapshot, blend_mode, "Background<%u>Blend<%u>", idx, blend_mode);
     }
 
-  gtk_theming_background_snapshot_color (&bg, snapshot, bg_color, background_image);
+  if (!gdk_rgba_is_clear (bg_color))
+    gtk_theming_background_snapshot_color (&bg, snapshot, bg_color, background_image);
 
   for (idx = number_of_layers - 1; idx >= 0; idx--)
     {
