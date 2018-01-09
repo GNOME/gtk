@@ -75,10 +75,10 @@ _gtk_theming_background_paint_color (GtkThemingBackground *bg,
 }
 
 static void
-gtk_theming_background_snapshot_color (GtkThemingBackground *bg,
-                                       GtkSnapshot          *snapshot,
-                                       const GdkRGBA        *bg_color,
-                                       GtkCssValue          *background_image)
+gtk_theming_background_snapshot_color (const GtkThemingBackground *bg,
+                                       GtkSnapshot                *snapshot,
+                                       const GdkRGBA              *bg_color,
+                                       const GtkCssValue          *background_image)
 {
   gint n_values = _gtk_css_array_value_get_n_values (background_image);
   GtkCssArea clip = _gtk_css_area_value_get 
