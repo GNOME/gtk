@@ -229,13 +229,17 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
         {
           if (orientation == GTK_ORIENTATION_HORIZONTAL)
             {
-              g_warning ("%s %p reported min width %d and natural width %d in measure() with for_size=%d; natural size must be >= min size",
-                         G_OBJECT_TYPE_NAME (widget), widget, min_size, nat_size, for_size);
+              g_warning ("%s %p (%s) reported min width %d and natural width %d in measure() with for_size=%d; natural size must be >= min size",
+                         G_OBJECT_TYPE_NAME (widget), widget,
+                         gtk_css_node_get_name (gtk_widget_get_css_node (widget)),
+                         min_size, nat_size, for_size);
             }
           else
             {
-              g_warning ("%s %p reported min height %d and natural height %d in measure() with for_size=%d; natural size must be >= min size",
-                         G_OBJECT_TYPE_NAME (widget), widget, min_size, nat_size, for_size);
+              g_warning ("%s %p (%s) reported min height %d and natural height %d in measure() with for_size=%d; natural size must be >= min size",
+                         G_OBJECT_TYPE_NAME (widget), widget,
+                         gtk_css_node_get_name (gtk_widget_get_css_node (widget)),
+                         min_size, nat_size, for_size);
 
             }
 
@@ -243,8 +247,9 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
         }
       else if (G_UNLIKELY (min_size < 0))
         {
-          g_warning ("%s %p reported min %s %d, but sizes must be >= 0",
+          g_warning ("%s %p (%s) reported min %s %d, but sizes must be >= 0",
                      G_OBJECT_TYPE_NAME (widget), widget,
+                     gtk_css_node_get_name (gtk_widget_get_css_node (widget)),
                      orientation == GTK_ORIENTATION_HORIZONTAL ? "width" : "height",
                      min_size);
           min_size = 0;
