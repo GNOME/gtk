@@ -149,6 +149,7 @@ gdk_vulkan_strerror (VkResult result)
     case VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR:
     case VK_RESULT_RANGE_SIZE:
     case VK_RESULT_MAX_ENUM:
+    case VK_ERROR_NOT_PERMITTED_EXT:
     default:
       return "Unknown Vulkan error.";
   }
