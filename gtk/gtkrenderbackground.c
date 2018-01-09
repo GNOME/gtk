@@ -623,9 +623,9 @@ gtk_css_style_snapshot_background (GtkCssStyle      *style,
   GtkCssValue *background_image;
   GtkCssValue *box_shadow;
   GtkCssValue *blend_modes;
-  GskBlendMode blend_mode;
   const GdkRGBA *bg_color;
   gint number_of_layers;
+  GskBlendMode *blend_mode_values;
 
   background_image = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BACKGROUND_IMAGE);
   bg_color = _gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
@@ -646,13 +646,15 @@ gtk_css_style_snapshot_background (GtkCssStyle      *style,
 
   blend_modes = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BACKGROUND_BLEND_MODE);
   number_of_layers = _gtk_css_array_value_get_n_values (background_image);
+  blend_mode_values = g_alloca (sizeof (GskBlendMode) * number_of_layers);
 
   for (idx = number_of_layers - 1; idx >= 0; idx--)
     {
-      blend_mode = _gtk_css_blend_mode_value_get (_gtk_css_array_value_get_nth (blend_modes, idx));
+      blend_mode_values[idx] = _gtk_css_blend_mode_value_get (_gtk_css_array_value_get_nth (blend_modes, idx));
 
-      if (blend_mode != GSK_BLEND_MODE_DEFAULT)
-        gtk_snapshot_push_blend (snapshot, blend_mode, "Background<%u>Blend<%u>", idx, blend_mode);
+      if (blend_mode_values[idx] != GSK_BLEND_MODE_DEFAULT)
+        gtk_snapshot_push_blend (snapshot, blend_mode_values[idx], "Background<%u>Blend<%u>",
+                                 idx, blend_mode_values[idx]);
     }
 
   if (!gdk_rgba_is_clear (bg_color))
@@ -660,9 +662,7 @@ gtk_css_style_snapshot_background (GtkCssStyle      *style,
 
   for (idx = number_of_layers - 1; idx >= 0; idx--)
     {
-      blend_mode = _gtk_css_blend_mode_value_get (_gtk_css_array_value_get_nth (blend_modes, idx));
-
-      if (blend_mode == GSK_BLEND_MODE_DEFAULT)
+      if (blend_mode_values[idx] == GSK_BLEND_MODE_DEFAULT)
         {
           gtk_theming_background_snapshot_layer (&bg, idx, snapshot);
         }
