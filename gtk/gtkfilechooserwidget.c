@@ -8580,6 +8580,7 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
    */
   g_type_ensure (GTK_TYPE_PATH_BAR);
   g_type_ensure (GTK_TYPE_PLACES_VIEW);
+  g_type_ensure (GTK_TYPE_PLACES_SIDEBAR);
   g_type_ensure (GTK_TYPE_FILE_CHOOSER_ERROR_STACK);
 
   gtk_widget_init_template (GTK_WIDGET (impl));
