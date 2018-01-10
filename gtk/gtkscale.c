@@ -124,7 +124,8 @@
  * added depending on what marks are present.
  *
  * If the scale is displaying the value (see #GtkScale:draw-value), there is
- * subnode with name value.
+ * subnode with name value. This node will get the .top or .bottom style classes
+ * similar to the marks node.
  */
 
 

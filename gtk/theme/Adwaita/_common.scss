@@ -3055,6 +3055,9 @@ scale {
       }
     }
 
+    >value.top    { margin-bottom: 9px; }
+    >value.bottom { margin-top: 9px; }
+
     &.fine-tune indicator { min-height: ($_marks_length - 3px); }
   }
 
@@ -3070,6 +3073,9 @@ scale {
         min-width: $_marks_length;
       }
     }
+
+    >value.top    { margin-bottom: 9px; }
+    >value.bottom { margin-top: 9px; }
 
     &.fine-tune indicator { min-width: ($_marks_length - 3px); }
   }

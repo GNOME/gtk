@@ -1281,6 +1281,10 @@ scale.horizontal > marks.bottom { margin-top: 6px; }
 
 scale.horizontal > marks indicator { background-color: currentColor; min-height: 6px; min-width: 1px; }
 
+scale.horizontal > value.top { margin-bottom: 9px; }
+
+scale.horizontal > value.bottom { margin-top: 9px; }
+
 scale.horizontal.fine-tune indicator { min-height: 3px; }
 
 scale.vertical > marks { color: alpha(currentColor,0.55); }
@@ -1290,6 +1294,10 @@ scale.vertical > marks.top { margin-right: 6px; }
 scale.vertical > marks.bottom { margin-left: 6px; }
 
 scale.vertical > marks indicator { background-color: currentColor; min-height: 1px; min-width: 6px; }
+
+scale.vertical > value.top { margin-bottom: 9px; }
+
+scale.vertical > value.bottom { margin-top: 9px; }
 
 scale.vertical.fine-tune indicator { min-width: 3px; }
 
