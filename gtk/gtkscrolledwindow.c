@@ -2081,7 +2081,7 @@ gtk_scrolled_window_set_hadjustment (GtkScrolledWindow *scrolled_window,
     {
       priv->hscrollbar = gtk_scrollbar_new (GTK_ORIENTATION_HORIZONTAL, hadjustment);
 
-      gtk_widget_set_parent (priv->hscrollbar, GTK_WIDGET (scrolled_window));
+      gtk_widget_insert_before (priv->hscrollbar, GTK_WIDGET (scrolled_window), priv->vscrollbar);
       update_scrollbar_positions (scrolled_window);
     }
   else
@@ -2156,7 +2156,7 @@ gtk_scrolled_window_set_vadjustment (GtkScrolledWindow *scrolled_window,
     {
       priv->vscrollbar = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL, vadjustment);
 
-      gtk_widget_set_parent (priv->vscrollbar, GTK_WIDGET (scrolled_window));
+      gtk_widget_insert_after (priv->vscrollbar, GTK_WIDGET (scrolled_window), priv->hscrollbar);
       update_scrollbar_positions (scrolled_window);
     }
   else
@@ -3575,7 +3575,7 @@ gtk_scrolled_window_add (GtkContainer *container,
     }
 
   _gtk_bin_set_child (bin, scrollable_child);
-  gtk_widget_set_parent (scrollable_child, GTK_WIDGET (bin));
+  gtk_widget_insert_after (scrollable_child, GTK_WIDGET (bin), NULL);
 
   g_object_set (scrollable_child, "hadjustment", hadj, "vadjustment", vadj, NULL);
 }
@@ -3805,14 +3805,6 @@ setup_indicator (GtkScrolledWindow *scrolled_window,
 
   indicator->scrollbar = scrollbar;
 
-  /* FIXME: This shouldn't be necessary anymore, but it is for scrollbars
-   * to receive events.
-   */
-  g_object_ref (scrollbar);
-  gtk_widget_unparent (scrollbar);
-  gtk_widget_set_parent (scrollbar, GTK_WIDGET (scrolled_window));
-  g_object_unref (scrollbar);
-
   gtk_style_context_add_class (context, "overlay-indicator");
   g_signal_connect (adjustment, "value-changed",
                     G_CALLBACK (indicator_value_changed), indicator);
@@ -3858,14 +3850,6 @@ remove_indicator (GtkScrolledWindow *scrolled_window,
       gtk_widget_remove_tick_callback (scrollbar, indicator->tick_id);
       indicator->tick_id = 0;
     }
-
-  /* FIXME: This shouldn't be necessary anymore, but it is for scrollbars
-   * to receive events.
-   */
-  g_object_ref (scrollbar);
-  gtk_widget_unparent (scrollbar);
-  gtk_widget_set_parent (scrollbar, GTK_WIDGET (scrolled_window));
-  g_object_unref (scrollbar);
 
   gtk_widget_set_opacity (scrollbar, 1.0);
   indicator->current_pos = 1.0;
