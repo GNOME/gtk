@@ -291,10 +291,6 @@ nevertheless.
       <listitem><para>Information about cursor objects (only win32)</para></listitem>
     </varlistentry>
     <varlistentry>
-      <term>dnd</term>
-      <listitem><para>Information about drag-and-drop</para></listitem>
-    </varlistentry>
-    <varlistentry>
       <term>eventloop</term>
       <listitem><para>Information about event loop operation (mostly Quartz)</para></listitem>
     </varlistentry>
@@ -305,6 +301,34 @@ nevertheless.
     <varlistentry>
       <term>nograbs</term>
       <listitem><para>Turn off all pointer and keyboard grabs</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>frames</term>
+      <listitem><para>Information about the frame clock</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>settings</term>
+      <listitem><para>Information about xsettings</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>selection</term>
+      <listitem><para>Information about selections</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>clipboard</term>
+      <listitem><para>Information about clipboards</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>dnd</term>
+      <listitem><para>Information about drag-and-drop</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>opengl</term>
+      <listitem><para>Information about OpenGL</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>vulkan</term>
+      <listitem><para>Information about Vulkan</para></listitem>
     </varlistentry>
 
   </variablelist>
