@@ -124,12 +124,15 @@ gtk_magnifier_snapshot (GtkWidget   *widget,
   gtk_widget_snapshot (priv->inspected, &inspected_snapshot);
   inspected_node = gtk_snapshot_finish (&inspected_snapshot);
 
-  graphene_matrix_init_identity (&transform);
-  graphene_matrix_scale (&transform, priv->magnification, priv->magnification, 1);
+  if (inspected_node != NULL)
+    {
+      graphene_matrix_init_identity (&transform);
+      graphene_matrix_scale (&transform, priv->magnification, priv->magnification, 1);
 
-  gtk_snapshot_push_transform (snapshot, &transform, "Magnifier transform");
-  gtk_snapshot_append_node (snapshot, inspected_node);
-  gtk_snapshot_pop (snapshot);
+      gtk_snapshot_push_transform (snapshot, &transform, "Magnifier transform");
+      gtk_snapshot_append_node (snapshot, inspected_node);
+      gtk_snapshot_pop (snapshot);
+    }
 
 
   g_signal_handler_unblock (priv->inspected, priv->draw_handler);
