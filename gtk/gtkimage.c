@@ -43,11 +43,11 @@
  * SECTION:gtkimage
  * @Short_description: A widget displaying an image
  * @Title: GtkImage
- * @See_also:#GdkPixbuf
+ * @SeeAlso: #GdkTexture
  *
  * The #GtkImage widget displays an image. Various kinds of object
  * can be displayed as an image; most typically, you would load a
- * #GdkPixbuf ("pixel buffer") from a file, and then display that.
+ * #GdkTexture from a file, and then display that.
  * There’s a convenience function to do this, gtk_image_new_from_file(),
  * used as follows:
  * |[<!-- language="C" -->
@@ -58,8 +58,8 @@
  * “broken image” icon similar to that used in many web browsers.
  * If you want to handle errors in loading the file yourself,
  * for example by displaying an error message, then load the image with
- * gdk_pixbuf_new_from_file(), then create the #GtkImage with
- * gtk_image_new_from_pixbuf().
+ * gdk_texture_new_from_file(), then create the #GtkImage with
+ * gtk_image_new_from_texture().
  *
  * Sometimes an application will want to avoid depending on external data
  * files, such as image files. See the documentation of #GResource for details.
