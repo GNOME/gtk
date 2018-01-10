@@ -145,11 +145,13 @@ static gboolean gtk_entry_completion_popup_key_event     (GtkWidget          *wi
 static gboolean gtk_entry_completion_popup_button_press  (GtkWidget          *widget,
                                                           GdkEventButton     *event,
                                                           gpointer            user_data);
-static gboolean gtk_entry_completion_list_button_press   (GtkWidget          *widget,
-                                                          GdkEventButton     *event,
+static void     gtk_entry_completion_list_activated      (GtkTreeView        *treeview,
+                                                          GtkTreePath        *path,
+                                                          GtkTreeViewColumn  *column,
                                                           gpointer            user_data);
-static gboolean gtk_entry_completion_action_button_press (GtkWidget          *widget,
-                                                          GdkEventButton     *event,
+static void     gtk_entry_completion_action_activated    (GtkTreeView        *treeview,
+                                                          GtkTreePath        *path,
+                                                          GtkTreeViewColumn  *column,
                                                           gpointer            user_data);
 static void     gtk_entry_completion_selection_changed   (GtkTreeSelection   *selection,
                                                           gpointer            data);
@@ -533,12 +535,13 @@ gtk_entry_completion_constructed (GObject *object)
 
   /* completions */
   priv->tree_view = gtk_tree_view_new ();
-  g_signal_connect (priv->tree_view, "button-press-event",
-                    G_CALLBACK (gtk_entry_completion_list_button_press),
+  g_signal_connect (priv->tree_view, "row-activated",
+                    G_CALLBACK (gtk_entry_completion_list_activated),
                     completion);
 
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (priv->tree_view), FALSE);
   gtk_tree_view_set_hover_selection (GTK_TREE_VIEW (priv->tree_view), TRUE);
+  gtk_tree_view_set_activate_on_single_click (GTK_TREE_VIEW (priv->tree_view), TRUE);
 
   sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->tree_view));
   gtk_tree_selection_set_mode (sel, GTK_SELECTION_SINGLE);
@@ -568,11 +571,12 @@ gtk_entry_completion_constructed (GObject *object)
   priv->action_view =
     gtk_tree_view_new_with_model (GTK_TREE_MODEL (priv->actions));
   g_object_ref_sink (priv->action_view);
-  g_signal_connect (priv->action_view, "button-press-event",
-                    G_CALLBACK (gtk_entry_completion_action_button_press),
+  g_signal_connect (priv->action_view, "row-activated",
+                    G_CALLBACK (gtk_entry_completion_action_activated),
                     completion);
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (priv->action_view), FALSE);
   gtk_tree_view_set_hover_selection (GTK_TREE_VIEW (priv->action_view), TRUE);
+  gtk_tree_view_set_activate_on_single_click (GTK_TREE_VIEW (priv->action_view), TRUE);
 
   sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->action_view));
   gtk_tree_selection_set_mode (sel, GTK_SELECTION_SINGLE);
@@ -925,77 +929,48 @@ gtk_entry_completion_popup_button_press (GtkWidget      *widget,
   return TRUE;
 }
 
-static gboolean
-gtk_entry_completion_list_button_press (GtkWidget      *widget,
-                                        GdkEventButton *event,
-                                        gpointer        user_data)
+static void
+gtk_entry_completion_list_activated (GtkTreeView       *treeview,
+                                     GtkTreePath       *path,
+                                     GtkTreeViewColumn *column,
+                                     gpointer           user_data)
 {
   GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (user_data);
-  GtkTreePath *path = NULL;
-  gdouble x, y;
+  GtkTreeIter iter;
+  gboolean entry_set;
+  GtkTreeModel *model;
+  GtkTreeIter child_iter;
 
-  if (!gtk_widget_get_mapped (completion->priv->popup_window) ||
-      !gdk_event_get_coords ((GdkEvent *) event, &x, &y))
-    return FALSE;
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (completion->priv->filter_model), &iter, path);
+  gtk_tree_model_filter_convert_iter_to_child_iter (completion->priv->filter_model,
+                                                    &child_iter,
+                                                    &iter);
+  model = gtk_tree_model_filter_get_model (completion->priv->filter_model);
 
-  if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (widget),
-                                     x, y, &path, NULL, NULL, NULL))
-    {
-      GtkTreeIter iter;
-      gboolean entry_set;
-      GtkTreeModel *model;
-      GtkTreeIter child_iter;
+  g_signal_handler_block (completion->priv->entry,
+                          completion->priv->changed_id);
+  g_signal_emit (completion, entry_completion_signals[MATCH_SELECTED],
+                 0, model, &child_iter, &entry_set);
+  g_signal_handler_unblock (completion->priv->entry,
+                            completion->priv->changed_id);
 
-      gtk_tree_model_get_iter (GTK_TREE_MODEL (completion->priv->filter_model),
-                               &iter, path);
-      gtk_tree_path_free (path);
-      gtk_tree_model_filter_convert_iter_to_child_iter (completion->priv->filter_model,
-                                                        &child_iter,
-                                                        &iter);
-      model = gtk_tree_model_filter_get_model (completion->priv->filter_model);
-
-      g_signal_handler_block (completion->priv->entry,
-                              completion->priv->changed_id);
-      g_signal_emit (completion, entry_completion_signals[MATCH_SELECTED],
-                     0, model, &child_iter, &entry_set);
-      g_signal_handler_unblock (completion->priv->entry,
-                                completion->priv->changed_id);
-
-      _gtk_entry_completion_popdown (completion);
-
-      return TRUE;
-    }
-
-  return FALSE;
+  _gtk_entry_completion_popdown (completion);
 }
 
-static gboolean
-gtk_entry_completion_action_button_press (GtkWidget      *widget,
-                                          GdkEventButton *event,
-                                          gpointer        user_data)
+static void
+gtk_entry_completion_action_activated (GtkTreeView       *treeview,
+                                       GtkTreePath       *path,
+                                       GtkTreeViewColumn *column,
+                                       gpointer           user_data)
 {
   GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (user_data);
-  GtkTreePath *path = NULL;
-  gdouble x, y;
-
-  if (!gtk_widget_get_mapped (completion->priv->popup_window) ||
-      !gdk_event_get_coords ((GdkEvent *) event, &x, &y))
-    return FALSE;
 
   gtk_entry_reset_im_context (GTK_ENTRY (completion->priv->entry));
 
-  if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (widget),
-                                     x, y, &path, NULL, NULL, NULL))
-    {
-      g_signal_emit (completion, entry_completion_signals[ACTION_ACTIVATED],
-                     0, gtk_tree_path_get_indices (path)[0]);
-      gtk_tree_path_free (path);
+  g_signal_emit (completion, entry_completion_signals[ACTION_ACTIVATED],
+                 0, gtk_tree_path_get_indices (path)[0]);
 
-      _gtk_entry_completion_popdown (completion);
-      return TRUE;
-    }
-
-  return FALSE;
+  _gtk_entry_completion_popdown (completion);
 }
 
 static void
