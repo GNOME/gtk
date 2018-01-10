@@ -157,7 +157,6 @@ static const GDebugKey gtk_debug_keys[] = {
   { "tree", GTK_DEBUG_TREE },
   { "updates", GTK_DEBUG_UPDATES },
   { "keybindings", GTK_DEBUG_KEYBINDINGS },
-  { "multihead", GTK_DEBUG_MULTIHEAD },
   { "modules", GTK_DEBUG_MODULES },
   { "geometry", GTK_DEBUG_GEOMETRY },
   { "icontheme", GTK_DEBUG_ICONTHEME },
