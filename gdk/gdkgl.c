@@ -469,7 +469,7 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
   guint target;
 
   paint_context = gdk_gl_context_get_current ();
-  if ((_gdk_gl_flags & GDK_GL_SOFTWARE_DRAW_SURFACE) == 0 &&
+  if ((_gdk_gl_flags & GDK_GL_SOFTWARE_DRAW) == 0 &&
       paint_context &&
       GDK_GL_CONTEXT_GET_CLASS (paint_context)->texture_from_surface &&
       GDK_GL_CONTEXT_GET_CLASS (paint_context)->texture_from_surface (paint_context, surface, region))

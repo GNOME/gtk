@@ -74,7 +74,6 @@ struct _GtkInspectorVisualPrivate
   GtkWidget *gl_box;
   GtkWidget *gl_combo;
   GtkWidget *software_gl_switch;
-  GtkWidget *software_surface_switch;
   GtkWidget *texture_rectangle_switch;
 
   GtkAdjustment *focus_adjustment;
@@ -774,19 +773,15 @@ init_gl (GtkInspectorVisual *vis)
                                _("Not settable at runtime.\nUse GDK_GL=always or GDK_GL=disable instead"));
 
   gtk_switch_set_active (GTK_SWITCH (vis->priv->software_gl_switch),
-                         flags & GDK_GL_SOFTWARE_DRAW_GL);
-  gtk_switch_set_active (GTK_SWITCH (vis->priv->software_surface_switch),
-                         flags & GDK_GL_SOFTWARE_DRAW_SURFACE);
+                         flags & GDK_GL_SOFTWARE_DRAW);
   gtk_switch_set_active (GTK_SWITCH (vis->priv->texture_rectangle_switch),
                          flags & GDK_GL_TEXTURE_RECTANGLE);
 
   if (flags & GDK_GL_DISABLE)
     {
       gtk_widget_set_sensitive (vis->priv->software_gl_switch, FALSE);
-      gtk_widget_set_sensitive (vis->priv->software_surface_switch, FALSE);
       gtk_widget_set_sensitive (vis->priv->texture_rectangle_switch, FALSE);
       gtk_widget_set_tooltip_text (vis->priv->software_gl_switch, _("GL rendering is disabled"));
-      gtk_widget_set_tooltip_text (vis->priv->software_surface_switch, _("GL rendering is disabled"));
       gtk_widget_set_tooltip_text (vis->priv->texture_rectangle_switch, _("GL rendering is disabled"));
     }
 }
@@ -829,13 +824,7 @@ update_gl_flag (GtkSwitch  *sw,
 static void
 software_gl_activate (GtkSwitch *sw)
 {
-  update_gl_flag (sw, GDK_GL_SOFTWARE_DRAW_GL);
-}
-
-static void
-software_surface_activate (GtkSwitch *sw)
-{
-  update_gl_flag (sw, GDK_GL_SOFTWARE_DRAW_SURFACE);
+  update_gl_flag (sw, GDK_GL_SOFTWARE_DRAW);
 }
 
 static void
@@ -914,7 +903,6 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, gl_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, gl_combo);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, software_gl_switch);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, software_surface_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, texture_rectangle_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, font_scale_entry);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, font_scale_adjustment);
@@ -926,7 +914,6 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, layout_activate);
   gtk_widget_class_bind_template_callback (widget_class, widget_resize_activate);
   gtk_widget_class_bind_template_callback (widget_class, software_gl_activate);
-  gtk_widget_class_bind_template_callback (widget_class, software_surface_activate);
   gtk_widget_class_bind_template_callback (widget_class, texture_rectangle_activate);
 }
 

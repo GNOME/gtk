@@ -138,9 +138,7 @@ static GCallback gdk_threads_unlock = NULL;
 static const GDebugKey gdk_gl_keys[] = {
   { "disable",               GDK_GL_DISABLE },
   { "always",                GDK_GL_ALWAYS },
-  { "software-draw",         GDK_GL_SOFTWARE_DRAW_GL | GDK_GL_SOFTWARE_DRAW_SURFACE} ,
-  { "software-draw-gl",      GDK_GL_SOFTWARE_DRAW_GL },
-  { "software-draw-surface", GDK_GL_SOFTWARE_DRAW_SURFACE },
+  { "software-draw",         GDK_GL_SOFTWARE_DRAW } ,
   { "texture-rectangle",     GDK_GL_TEXTURE_RECTANGLE },
   { "legacy",                GDK_GL_LEGACY },
   { "gles",                  GDK_GL_GLES },

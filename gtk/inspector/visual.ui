@@ -724,38 +724,6 @@
                         <property name="margin">10</property>
                         <property name="spacing">40</property>
                         <child>
-                          <object class="GtkLabel" id="software_surface_label">
-                            <property name="visible">True</property>
-                            <property name="label" translatable="yes">Software Surfaces</property>
-                            <property name="halign">start</property>
-                            <property name="valign">baseline</property>
-                            <property name="xalign">0.0</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkSwitch" id="software_surface_switch">
-                            <property name="visible">True</property>
-                            <property name="halign">end</property>
-                            <property name="valign">baseline</property>
-                            <property name="hexpand">1</property>
-                            <signal name="notify::active" handler="software_surface_activate"/>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkListBoxRow">
-                    <property name="visible">True</property>
-                    <property name="activatable">False</property>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="visible">True</property>
-                        <property name="orientation">horizontal</property>
-                        <property name="margin">10</property>
-                        <property name="spacing">40</property>
-                        <child>
                           <object class="GtkLabel" id="texture_rectangle_label">
                             <property name="visible">True</property>
                             <property name="label" translatable="yes">Texture Rectangle Extension</property>
@@ -803,7 +771,6 @@
       <widget name="touchscreen_label"/>
       <widget name="gl_label"/>
       <widget name="software_gl_label"/>
-      <widget name="software_surface_label"/>
       <widget name="texture_rectangle_label"/>
     </widgets>
   </object>

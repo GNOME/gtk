@@ -309,7 +309,8 @@ nevertheless.
 
   </variablelist>
   The special value <literal>all</literal> can be used to turn on all
-  debug options.
+  debug options. The special value <literal>help</literal> can be used
+  to obtain a list of all supported debug options.
   </para>
 </formalpara>
 
@@ -393,6 +394,44 @@ nevertheless.
     a *, which means: try all remaining backends. The special value "help" can
     be used to make GDK print out a list of all available backends.
     For more information about selecting backends, see the gdk_display_manager_get() function.
+  </para>
+</formalpara>
+
+<formalpara>
+  <title><envar>GDK_GL</envar></title>
+
+  <para>
+    This variable can be set to a list of options that influence various aspects
+    of the OpenGL support in GTK+.
+  <variablelist>
+    <varlistentry>
+      <term>disable</term>
+      <listitem><para>Disable OpenGL support</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>always</term>
+      <listitem><para>Always use OpenGL for rendering</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>software-draw</term>
+      <listitem><para>Use software rendering</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>texture-rectangle</term>
+      <listitem><para>Use the texture rectangle extension</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>legacy</term>
+      <listitem><para>Use a legacy OpenGL context</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>gles</term>
+      <listitem><para>Use a GLES context</para></listitem>
+    </varlistentry>
+  </variablelist>
+  The special value <literal>all</literal> can be used to turn on all
+  options. The special value <literal>help</literal> can be used
+  to obtain a list of all supported options.
   </para>
 </formalpara>
 

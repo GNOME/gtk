@@ -81,11 +81,10 @@ typedef enum {
 typedef enum {
   GDK_GL_DISABLE                = 1 << 0,
   GDK_GL_ALWAYS                 = 1 << 1,
-  GDK_GL_SOFTWARE_DRAW_GL       = 1 << 2,
-  GDK_GL_SOFTWARE_DRAW_SURFACE  = 1 << 3,
-  GDK_GL_TEXTURE_RECTANGLE      = 1 << 4,
-  GDK_GL_LEGACY                 = 1 << 5,
-  GDK_GL_GLES                   = 1 << 6
+  GDK_GL_SOFTWARE_DRAW          = 1 << 2,
+  GDK_GL_TEXTURE_RECTANGLE      = 1 << 3,
+  GDK_GL_LEGACY                 = 1 << 4,
+  GDK_GL_GLES                   = 1 << 5
 } GdkGLFlags;
 
 typedef enum {
