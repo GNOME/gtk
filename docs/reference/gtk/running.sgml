@@ -460,6 +460,28 @@ nevertheless.
 </formalpara>
 
 <formalpara>
+  <title><envar>GDK_VULKAN</envar></title>
+
+  <para>
+    This variable can be set to a list of options that influence various aspects
+    of the Vulkan support in GTK+.
+  <variablelist>
+    <varlistentry>
+      <term>disable</term>
+      <listitem><para>Disable Vulkan support</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>validate </term>
+      <listitem><para>Enable the Vulkan validation layer</para></listitem>
+    </varlistentry>
+  </variablelist>
+  The special value <literal>all</literal> can be used to turn on all
+  options. The special value <literal>help</literal> can be used
+  to obtain a list of all supported options.
+  </para>
+</formalpara>
+
+<formalpara>
   <title><envar>GTK_CSD</envar></title>
 
   <para>
