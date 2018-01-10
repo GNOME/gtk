@@ -1265,16 +1265,6 @@ row:selected scale slider:disabled, row:selected scale slider { border-color: #0
 
 scale value { color: alpha(currentColor,0.55); }
 
-scale marks { color: alpha(currentColor,0.55); }
-
-scale marks.top { margin-bottom: 6px; margin-top: -12px; }
-
-scale marks.bottom { margin-top: 6px; margin-bottom: -12px; }
-
-scale marks.top { margin-right: 6px; margin-left: -12px; }
-
-scale marks.bottom { margin-left: 6px; margin-right: -12px; }
-
 scale.fine-tune marks.top { margin-bottom: 6px; margin-top: -9px; }
 
 scale.fine-tune marks.bottom { margin-top: 6px; margin-bottom: -9px; }
@@ -1283,11 +1273,23 @@ scale.fine-tune marks.top { margin-right: 6px; margin-left: -9px; }
 
 scale.fine-tune marks.bottom { margin-left: 6px; margin-right: -9px; }
 
-scale.horizontal indicator { background-color: currentColor; min-height: 6px; min-width: 1px; }
+scale.horizontal > marks { color: alpha(currentColor,0.55); }
+
+scale.horizontal > marks.top { margin-bottom: 6px; }
+
+scale.horizontal > marks.bottom { margin-top: 6px; }
+
+scale.horizontal > marks indicator { background-color: currentColor; min-height: 6px; min-width: 1px; }
 
 scale.horizontal.fine-tune indicator { min-height: 3px; }
 
-scale.vertical indicator { background-color: currentColor; min-height: 1px; min-width: 6px; }
+scale.vertical > marks { color: alpha(currentColor,0.55); }
+
+scale.vertical > marks.top { margin-right: 6px; }
+
+scale.vertical > marks.bottom { margin-left: 6px; }
+
+scale.vertical > marks indicator { background-color: currentColor; min-height: 1px; min-width: 6px; }
 
 scale.vertical.fine-tune indicator { min-width: 3px; }
 
