@@ -3076,9 +3076,10 @@ gtk_entry_get_text_allocation (GtkEntry     *entry,
 {
   GtkEntryPrivate *priv = entry->priv;
 
-  gtk_widget_get_own_allocation (GTK_WIDGET (entry), allocation);
   allocation->x = priv->text_x;
+  allocation->y = 0;
   allocation->width = priv->text_width;
+  allocation->height = gtk_widget_get_height (GTK_WIDGET (entry));
 }
 
 static void
