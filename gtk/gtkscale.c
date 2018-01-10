@@ -561,8 +561,9 @@ gtk_scale_size_allocate (GtkWidget           *widget,
                               GTK_ORIENTATION_VERTICAL, -1,
                               &marks_height, NULL,
                               NULL, NULL);
-          marks_rect = range_rect;
+          marks_rect.x = 0;
           marks_rect.y = 0;
+          marks_rect.width = range_rect.width;
           marks_rect.height = marks_height;
           gtk_widget_size_allocate (priv->top_marks_widget, &marks_rect, -1, &marks_clip);
           gdk_rectangle_union (out_clip, &marks_clip, out_clip);
@@ -574,8 +575,9 @@ gtk_scale_size_allocate (GtkWidget           *widget,
                               GTK_ORIENTATION_VERTICAL, -1,
                               &marks_height, NULL,
                               NULL, NULL);
-          marks_rect = range_rect;
-          marks_rect.y += range_rect.height;
+          marks_rect.x = 0;
+          marks_rect.y = range_rect.y + range_rect.height;
+          marks_rect.width = range_rect.width;
           marks_rect.height = marks_height;
           gtk_widget_size_allocate (priv->bottom_marks_widget, &marks_rect, -1, &marks_clip);
           gdk_rectangle_union (out_clip, &marks_clip, out_clip);
@@ -591,8 +593,8 @@ gtk_scale_size_allocate (GtkWidget           *widget,
                               GTK_ORIENTATION_HORIZONTAL, -1,
                               &marks_width, NULL,
                               NULL, NULL);
-          marks_rect = range_rect;
-          marks_rect.x -= marks_width;
+          marks_rect.x = 0;
+          marks_rect.y = 0;
           marks_rect.width = marks_width;
           gtk_widget_size_allocate (priv->top_marks_widget, &marks_rect, -1, &marks_clip);
           gdk_rectangle_union (out_clip, &marks_clip, out_clip);
@@ -605,8 +607,10 @@ gtk_scale_size_allocate (GtkWidget           *widget,
                               &marks_width, NULL,
                               NULL, NULL);
           marks_rect = range_rect;
-          marks_rect.x += range_rect.width;
+          marks_rect.x = range_rect.x + range_rect.width;
+          marks_rect.y = 0;
           marks_rect.width = marks_width;
+          marks_rect.height = range_rect.height;
           gtk_widget_size_allocate (priv->bottom_marks_widget, &marks_rect, -1, &marks_clip);
           gdk_rectangle_union (out_clip, &marks_clip, out_clip);
         }
