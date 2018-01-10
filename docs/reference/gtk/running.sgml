@@ -471,13 +471,24 @@ nevertheless.
       <listitem><para>Disable Vulkan support</para></listitem>
     </varlistentry>
     <varlistentry>
-      <term>validate </term>
+      <term>validate</term>
       <listitem><para>Enable the Vulkan validation layer</para></listitem>
     </varlistentry>
   </variablelist>
   The special value <literal>all</literal> can be used to turn on all
   options. The special value <literal>help</literal> can be used
   to obtain a list of all supported options.
+  </para>
+</formalpara>
+
+<formalpara>
+  <title><envar>GDK_VULKAN_DEVICE</envar></title>
+
+  <para>
+    This variable can be set to the index of a Vulkan device to override the
+    default selection of the device that is used for Vulkan rendering.
+    The special value <literal>list</literal> can be used to obtain a list
+    of all Vulkan devices.
   </para>
 </formalpara>
 
