@@ -295,20 +295,12 @@ nevertheless.
       <listitem><para>Information about drag-and-drop</para></listitem>
     </varlistentry>
     <varlistentry>
-      <term>draw</term>
-      <listitem><para>Information about drawing operations (only win32)</para></listitem>
-    </varlistentry>
-    <varlistentry>
       <term>eventloop</term>
       <listitem><para>Information about event loop operation (mostly Quartz)</para></listitem>
     </varlistentry>
     <varlistentry>
       <term>misc</term>
       <listitem><para>Miscellaneous information</para></listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>nogl</term>
-      <listitem><para>Turn off OpenGL. GDK will behave as if OpenGL support was not available.</para></listitem>
     </varlistentry>
     <varlistentry>
       <term>nograbs</term>
