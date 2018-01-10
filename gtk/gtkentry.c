@@ -3389,22 +3389,21 @@ gtk_entry_snapshot (GtkWidget   *widget,
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
-  graphene_rect_t bounds;
   int i;
-
-  graphene_rect_init (&bounds,
-                      0, 0,
-                      gtk_widget_get_width (widget),
-                      gtk_widget_get_height (widget));
-
-  gtk_snapshot_push_clip (snapshot, &bounds, "Entry Clip");
 
   /* Draw progress */
   if (priv->progress_widget && gtk_widget_get_visible (priv->progress_widget))
     gtk_widget_snapshot_child (widget, priv->progress_widget, snapshot);
 
-  /* Draw text and cursor */
+  gtk_snapshot_push_clip (snapshot,
+                          &GRAPHENE_RECT_INIT (
+                            priv->text_x,
+                            0,
+                            priv->text_width,
+                            gtk_widget_get_height (widget)),
+                          "Entry Clip");
 
+  /* Draw text and cursor */
   if (priv->dnd_position != -1)
     gtk_entry_draw_cursor (GTK_ENTRY (widget), snapshot, CURSOR_DND);
 
@@ -3416,6 +3415,8 @@ gtk_entry_snapshot (GtkWidget   *widget,
       priv->selection_bound == priv->current_pos && priv->cursor_visible)
     gtk_entry_draw_cursor (GTK_ENTRY (widget), snapshot, CURSOR_STANDARD);
 
+  gtk_snapshot_pop (snapshot);
+
   /* Draw icons */
   for (i = 0; i < MAX_ICONS; i++)
     {
@@ -3426,8 +3427,6 @@ gtk_entry_snapshot (GtkWidget   *widget,
     }
 
   gtk_entry_draw_undershoot (entry, snapshot);
-
-  gtk_snapshot_pop (snapshot);
 }
 
 static void
