@@ -93,7 +93,7 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GdkVulkanContext, gdk_vulkan_context, GDK_TYPE
 const char *
 gdk_vulkan_strerror (VkResult result)
 {
-  switch (result)
+  switch ((int)result)
   {
     case VK_SUCCESS:
       return "Command successfully completed.";
