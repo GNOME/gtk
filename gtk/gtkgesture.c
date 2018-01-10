@@ -54,10 +54,9 @@
  * target widget, and gestures that are attached to containers above the widget
  * get a chance to interact with the event before it reaches the target.
  *
- * After the capture phase, GTK+ emits the traditional #GtkWidget::button-press-event,
- * #GtkWidget::button-release-event, #GtkWidget::touch-event, etc signals. Gestures
- * with the %GTK_PHASE_TARGET phase are fed events from the default #GtkWidget::event
- * handlers.
+ * After the capture phase, GTK+ emits the traditional #GtkWidget::event signal.
+ * Gestures with the %GTK_PHASE_TARGET phase are fed events from the default
+ * #GtkWidget::event handlers.
  *
  * In the bubble phase, events are propagated up from the target widget to the
  * toplevel, and gestures that are attached to containers above the widget get
