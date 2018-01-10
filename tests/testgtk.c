@@ -3756,16 +3756,20 @@ cursor_model (void)
   return (GtkTreeModel *)store;
 }
 
-static gint
-cursor_event (GtkWidget *widget,
-              GdkEvent  *event,
-              GtkWidget *entry)
+static void
+cursor_pressed_cb (GtkGesture *gesture,
+                   int         n_pressed,
+                   double      x,
+                   double      y,
+                   GtkWidget  *entry)
 {
+  GtkWidget *widget;
   const gchar *name;
   gint i;
   const gint n = G_N_ELEMENTS (cursor_names);
-  GdkEventType type;
-  guint button;
+  int button;
+
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
 
   name = (const gchar *)g_object_get_data (G_OBJECT (widget), "name");
   if (name != NULL)
@@ -3777,23 +3781,13 @@ cursor_event (GtkWidget *widget,
   else
     i = 0;
 
-  type = gdk_event_get_event_type (event);
-  gdk_event_get_button (event, &button);
-  if (type == GDK_BUTTON_PRESS &&
-      (button == GDK_BUTTON_PRIMARY ||
-       button == GDK_BUTTON_SECONDARY))
-    {
-      if (button == GDK_BUTTON_PRIMARY)
-        i = (i + 1) % n;
-      else
-        i = (i + n - 1) % n;
+  button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
+  if (button == GDK_BUTTON_PRIMARY)
+    i = (i + 1) % n;
+  else
+    i = (i + n - 1) % n;
 
-      gtk_entry_set_text (GTK_ENTRY (entry), cursor_names[i]);
-
-      return TRUE;
-    }
-
-  return FALSE;
+  gtk_entry_set_text (GTK_ENTRY (entry), cursor_names[i]);
 }
 
 static void
@@ -3862,6 +3856,7 @@ create_cursors (GtkWidget *widget)
   GtkEntryCompletion *completion;
   GtkTreeModel *model;
   gboolean cursor_demo = FALSE;
+  GtkGesture *gesture;
 
   if (!window)
     {
@@ -3950,8 +3945,10 @@ create_cursors (GtkWidget *widget)
       gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (darea), 80);
       gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (darea), cursor_draw, NULL, NULL);
       gtk_container_add (GTK_CONTAINER (frame), darea);
-      g_signal_connect (darea, "button_press_event",
-			G_CALLBACK (cursor_event), entry);
+      gesture = gtk_gesture_multi_press_new (darea);
+      gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
+      g_signal_connect (gesture, "pressed", G_CALLBACK (cursor_pressed_cb), entry);
+      g_object_set_data_full (G_OBJECT (darea), "gesture", gesture, g_object_unref);
       gtk_widget_show (darea);
 
       g_signal_connect (entry, "changed",
