@@ -306,14 +306,6 @@ nevertheless.
       <term>nograbs</term>
       <listitem><para>Turn off all pointer and keyboard grabs</para></listitem>
     </varlistentry>
-    <varlistentry>
-      <term>xinerama</term>
-      <listitem><para>Simulate a multi-monitor setup</para></listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>xim</term>
-      <listitem><para>Information about XIM support</para></listitem>
-    </varlistentry>
 
   </variablelist>
   The special value <literal>all</literal> can be used to turn on all
