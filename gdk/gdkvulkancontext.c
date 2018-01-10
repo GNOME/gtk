@@ -712,7 +712,10 @@ static gboolean
 gdk_display_create_vulkan_device (GdkDisplay  *display,
                                   GError     **error)
 {
-  uint32_t i, j;
+  uint32_t i, j, k;
+  const char *override;
+  gboolean list_devices;
+  int first, last;
 
   uint32_t n_devices = 0;
   GDK_VK_CHECK(vkEnumeratePhysicalDevices, display->vk_instance, &n_devices, NULL);
@@ -729,25 +732,90 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
   devices = g_newa (VkPhysicalDevice, n_devices);
   GDK_VK_CHECK(vkEnumeratePhysicalDevices, display->vk_instance, &n_devices, devices);
 
-  for (i = 0; i < n_devices; i++)
+  first = 0;
+  last = n_devices;
+
+  override = g_getenv ("GDK_VULKAN_DEVICE");
+  list_devices = FALSE;
+  if (override)
     {
-      VkPhysicalDeviceProperties props;
+      if (g_strcmp0 (override, "list") == 0)
+        list_devices = TRUE;
+      else
+        {
+          gint64 device_idx;
+          GError *error = NULL;
 
-      vkGetPhysicalDeviceProperties (devices[i], &props);
+          if (!g_ascii_string_to_signed (override, 10, 0, G_MAXINT, &device_idx, &error))
+            {
+              g_warning ("Failed to parse %s: %s", "GDK_VULKAN_DEVICE", error->message);
+              g_error_free (error);
+              device_idx = -1;
+            }
 
-      GDK_NOTE (VULKAN, g_print ("Vulkan Device %u:\n", i));
-      GDK_NOTE (VULKAN, g_print ("    %s (%u)\n", props.deviceName, props.deviceType));
-      GDK_NOTE (VULKAN, g_print ("    vendor ID: 0x%Xu\n", props.vendorID));
-      GDK_NOTE (VULKAN, g_print ("    device ID: 0x%Xu\n", props.deviceID));
-      GDK_NOTE (VULKAN, g_print ("    API version %u.%u.%u\n",
-                                 VK_VERSION_MAJOR (props.apiVersion),
-                                 VK_VERSION_MINOR (props.apiVersion),
-                                 VK_VERSION_PATCH (props.apiVersion)));
-      GDK_NOTE (VULKAN, g_print ("    driver version %u.%u.%u\n",
-                                 VK_VERSION_MAJOR (props.driverVersion),
-                                 VK_VERSION_MINOR (props.driverVersion),
-                                 VK_VERSION_PATCH (props.driverVersion)));
+          if (device_idx < 0 || device_idx >= n_devices)
+            g_warning ("%s value out of range, ignoring", "GDK_VULKAN_DEVICE");
+          else
+            {
+              first = device_idx;
+              last = first + 1;
+            }
+        }
+    }
 
+  if (list_devices || GDK_DEBUG_CHECK (VULKAN))
+    {
+      for (i = 0; i < n_devices; i++)
+        {
+          VkPhysicalDeviceProperties props;
+          VkQueueFamilyProperties *queue_props;
+          uint32_t n_queue_props;
+          const char *device_type[] = {
+            "Other", "Integrated GPU", "Discrete GPU", "Virtual GPU", "CPU"
+          };
+          struct {
+            int bit;
+            const char *name;
+          } queue_caps[] = {
+            { VK_QUEUE_GRAPHICS_BIT, "graphics" },
+            { VK_QUEUE_COMPUTE_BIT, "compute" },
+            { VK_QUEUE_TRANSFER_BIT, "transfer" },
+            { VK_QUEUE_SPARSE_BINDING_BIT, "sparse binding" }
+          };
+
+          vkGetPhysicalDeviceProperties (devices[i], &props);
+          vkGetPhysicalDeviceQueueFamilyProperties (devices[i], &n_queue_props, NULL);
+          queue_props = g_newa (VkQueueFamilyProperties, n_queue_props);
+          vkGetPhysicalDeviceQueueFamilyProperties (devices[i], &n_queue_props, queue_props);
+
+          g_print ("Vulkan Device %u:\n", i);
+          g_print ("    %s (%s)\n", props.deviceName, device_type[props.deviceType]);
+          g_print ("    Vendor ID: 0x%Xu\n", props.vendorID);
+          g_print ("    Device ID: 0x%Xu\n", props.deviceID);
+          g_print ("    API version %u.%u.%u\n",
+                   VK_VERSION_MAJOR (props.apiVersion),
+                   VK_VERSION_MINOR (props.apiVersion),
+                   VK_VERSION_PATCH (props.apiVersion));
+          for (j = 0; j < n_queue_props; j++)
+            {
+              const char *sep = "";
+
+              g_print ("    Queue %d: ", j);
+              for (k = 0; k < G_N_ELEMENTS (queue_caps); k++)
+                {
+                  if (queue_props[j].queueFlags & queue_caps[k].bit)
+                    {
+                      g_print ("%s%s", sep, queue_caps[k].name);
+                      sep = "/";
+                    }
+                }
+              g_print ("\n");
+            }
+        }
+    }
+
+  for (i = first; i < last; i++)
+    {
       uint32_t n_queue_props;
       vkGetPhysicalDeviceQueueFamilyProperties (devices[i], &n_queue_props, NULL);
       VkQueueFamilyProperties *queue_props = g_newa (VkQueueFamilyProperties, n_queue_props);
@@ -755,10 +823,9 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
 
       for (j = 0; j < n_queue_props; j++)
         {
-          GDK_NOTE (VULKAN, g_print ("    queue %u/%u: %s\n", j, n_queue_props, queue_props[j].queueFlags & VK_QUEUE_GRAPHICS_BIT ? "graphics" : "no graphics"));
           if (queue_props[j].queueFlags & VK_QUEUE_GRAPHICS_BIT)
             {
-              GDK_NOTE (VULKAN, g_print ("    => trying this queue\n"));
+              GDK_NOTE (VULKAN, g_print ("Using Vulkan device %u, queue %u\n", i, j));
               if (GDK_VK_CHECK (vkCreateDevice, devices[i],
                                                 &(VkDeviceCreateInfo) {
                                                     VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
