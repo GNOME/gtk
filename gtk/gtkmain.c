@@ -153,7 +153,6 @@ DisplayDebugFlags debug_flags[N_DEBUG_DISPLAYS];
 
 #ifdef G_ENABLE_DEBUG
 static const GDebugKey gtk_debug_keys[] = {
-  { "misc", GTK_DEBUG_MISC },
   { "text", GTK_DEBUG_TEXT },
   { "tree", GTK_DEBUG_TREE },
   { "updates", GTK_DEBUG_UPDATES },

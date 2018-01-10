@@ -69,10 +69,6 @@ additional environment variables.
       <listitem><para>Keybindings</para></listitem>
     </varlistentry>
     <varlistentry>
-      <term>misc</term>
-      <listitem><para>Miscellaneous information</para></listitem>
-    </varlistentry>
-    <varlistentry>
       <term>modules</term>
       <listitem><para>Loading of modules</para></listitem>
     </varlistentry>

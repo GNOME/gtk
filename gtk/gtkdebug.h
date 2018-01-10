@@ -35,7 +35,6 @@
 G_BEGIN_DECLS
 
 typedef enum {
-  GTK_DEBUG_MISC            = 1 << 0,
   GTK_DEBUG_TEXT            = 1 << 1,
   GTK_DEBUG_TREE            = 1 << 2,
   GTK_DEBUG_UPDATES         = 1 << 3,
