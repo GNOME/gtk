@@ -739,7 +739,7 @@ gsk_renderer_new_for_window (GdkWindow *window)
         {
           if (verbose || GSK_DEBUG_CHECK (RENDERER))
             {
-              g_print ("Using renderer of type '%s' for display '%s'\n",
+              g_print ("Using renderer of type '%s' for window '%s'\n",
                        G_OBJECT_TYPE_NAME (renderer),
                        G_OBJECT_TYPE_NAME (window));
             }
