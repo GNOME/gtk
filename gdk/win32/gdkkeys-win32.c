@@ -1210,9 +1210,10 @@ gdk_win32_keymap_get_direction (GdkKeymap *gdk_keymap)
 {
   HKL active_hkl;
   GdkWin32Keymap *keymap;
+  GdkKeymap *default_keymap = gdk_display_get_keymap (gdk_display_get_default ());
 
-  if (gdk_keymap == NULL || gdk_keymap != gdk_keymap_get_default ())
-    keymap = GDK_WIN32_KEYMAP (gdk_keymap_get_default ());
+  if (gdk_keymap == NULL || gdk_keymap != default_keymap)
+    keymap = GDK_WIN32_KEYMAP (default_keymap);
   else
     keymap = GDK_WIN32_KEYMAP (gdk_keymap);
 
@@ -1233,9 +1234,10 @@ gdk_win32_keymap_have_bidi_layouts (GdkKeymap *gdk_keymap)
   gboolean        have_rtl = FALSE;
   gboolean        have_ltr = FALSE;
   gint            group;
+  GdkKeymap      *default_keymap = gdk_display_get_keymap (gdk_display_get_default ());
 
-  if (gdk_keymap == NULL || gdk_keymap != gdk_keymap_get_default ())
-    keymap = GDK_WIN32_KEYMAP (gdk_keymap_get_default ());
+  if (gdk_keymap == NULL || gdk_keymap != default_keymap)
+    keymap = GDK_WIN32_KEYMAP (default_keymap);
   else
     keymap = GDK_WIN32_KEYMAP (gdk_keymap);
 
@@ -1283,6 +1285,7 @@ gdk_win32_keymap_get_entries_for_keyval (GdkKeymap     *gdk_keymap,
                                          gint          *n_keys)
 {
   GArray *retval;
+  GdkKeymap *default_keymap = gdk_display_get_keymap (gdk_display_get_default ());
 
   g_return_val_if_fail (gdk_keymap == NULL || GDK_IS_KEYMAP (gdk_keymap), FALSE);
   g_return_val_if_fail (keys != NULL, FALSE);
@@ -1292,13 +1295,13 @@ gdk_win32_keymap_get_entries_for_keyval (GdkKeymap     *gdk_keymap,
   retval = g_array_new (FALSE, FALSE, sizeof (GdkKeymapKey));
 
   /* Accept only the default keymap */
-  if (gdk_keymap == NULL || gdk_keymap == gdk_keymap_get_default ())
+  if (gdk_keymap == NULL || gdk_keymap == default_keymap)
     {
       gint vk;
       GdkWin32Keymap *keymap;
 
       if (gdk_keymap == NULL)
-        keymap = GDK_WIN32_KEYMAP (gdk_keymap_get_default ());
+        keymap = GDK_WIN32_KEYMAP (default_keymap);
       else
         keymap = GDK_WIN32_KEYMAP (gdk_keymap);
 
@@ -1375,6 +1378,7 @@ gdk_win32_keymap_get_entries_for_keycode (GdkKeymap     *gdk_keymap,
   GArray         *keyval_array;
   gint            group;
   GdkWin32Keymap *keymap;
+  GdkKeymap      *default_keymap = gdk_display_get_keymap (gdk_display_get_default ());
 
   g_return_val_if_fail (gdk_keymap == NULL || GDK_IS_KEYMAP (gdk_keymap), FALSE);
   g_return_val_if_fail (n_entries != NULL, FALSE);
@@ -1382,7 +1386,7 @@ gdk_win32_keymap_get_entries_for_keycode (GdkKeymap     *gdk_keymap,
   if (hardware_keycode <= 0 ||
       hardware_keycode >= KEY_STATE_SIZE ||
       (keys == NULL && keyvals == NULL) ||
-      (gdk_keymap != NULL && gdk_keymap != gdk_keymap_get_default ()))
+      (gdk_keymap != NULL && gdk_keymap != default_keymap))
     {
       /* Wrong keycode or NULL output arrays or wrong keymap */
       if (keys)
@@ -1404,7 +1408,7 @@ gdk_win32_keymap_get_entries_for_keycode (GdkKeymap     *gdk_keymap,
   else
     keyval_array = NULL;
 
-  keymap = GDK_WIN32_KEYMAP (gdk_keymap_get_default ());
+  keymap = GDK_WIN32_KEYMAP (default_keymap);
   update_keymap (GDK_KEYMAP (keymap));
 
   for (group = 0; group < keymap->layout_handles->len; group++)
@@ -1466,15 +1470,16 @@ gdk_win32_keymap_lookup_key (GdkKeymap          *gdk_keymap,
 {
   guint sym;
   GdkWin32Keymap *keymap;
+  GdkKeymap      *default_keymap = gdk_display_get_keymap (gdk_display_get_default ());
 
   g_return_val_if_fail (gdk_keymap == NULL || GDK_IS_KEYMAP (gdk_keymap), 0);
   g_return_val_if_fail (key != NULL, 0);
 
   /* Accept only the default keymap */
-  if (gdk_keymap != NULL && gdk_keymap != gdk_keymap_get_default ())
+  if (gdk_keymap != NULL && gdk_keymap != default_keymap)
     return 0;
 
-  keymap = GDK_WIN32_KEYMAP (gdk_keymap_get_default ());
+  keymap = GDK_WIN32_KEYMAP (default_keymap);
   update_keymap (GDK_KEYMAP (keymap));
 
   if (key->keycode >= KEY_STATE_SIZE ||
@@ -1505,6 +1510,7 @@ gdk_win32_keymap_translate_keyboard_state (GdkKeymap       *gdk_keymap,
   guint *keygroup;
   GdkWin32KeyLevelState shift_level;
   GdkModifierType modifiers = GDK_SHIFT_MASK | GDK_LOCK_MASK | GDK_MOD2_MASK;
+  GdkKeymap *default_keymap = gdk_display_get_keymap (gdk_display_get_default ());
 
   g_return_val_if_fail (gdk_keymap == NULL || GDK_IS_KEYMAP (gdk_keymap), FALSE);
 
@@ -1522,13 +1528,13 @@ gdk_win32_keymap_translate_keyboard_state (GdkKeymap       *gdk_keymap,
     *consumed_modifiers = 0;
 
   /* Accept only the default keymap */
-  if (gdk_keymap != NULL && gdk_keymap != gdk_keymap_get_default ())
+  if (gdk_keymap != NULL && gdk_keymap != default_keymap)
     return FALSE;
 
   if (hardware_keycode >= KEY_STATE_SIZE)
     return FALSE;
 
-  keymap = GDK_WIN32_KEYMAP (gdk_keymap_get_default ());
+  keymap = GDK_WIN32_KEYMAP (default_keymap);
   update_keymap (GDK_KEYMAP (keymap));
 
   if (group < 0 || group >= keymap->layout_handles->len)
