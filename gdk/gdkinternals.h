@@ -57,48 +57,36 @@ struct _GdkEventFilter {
 };
 
 typedef enum {
-  GDK_DEBUG_MISC          = 1 <<  0,
-  GDK_DEBUG_EVENTS        = 1 <<  1,
-  GDK_DEBUG_DND           = 1 <<  2,
-  GDK_DEBUG_NOGRABS       = 1 <<  3,
-  GDK_DEBUG_INPUT         = 1 <<  4,
-  GDK_DEBUG_CURSOR        = 1 <<  5,
-  GDK_DEBUG_EVENTLOOP     = 1 <<  6,
-  GDK_DEBUG_FRAMES        = 1 <<  7,
-  GDK_DEBUG_SETTINGS      = 1 <<  8,
-  GDK_DEBUG_OPENGL        = 1 <<  9,
-  GDK_DEBUG_VULKAN        = 1 << 10,
-  GDK_DEBUG_SELECTION     = 1 << 11,
-  GDK_DEBUG_CLIPBOARD     = 1 << 12
-} GdkDebugFlag;
-
-typedef enum {
-  GDK_RENDERING_MODE_SIMILAR = 0,
-  GDK_RENDERING_MODE_IMAGE,
-  GDK_RENDERING_MODE_RECORDING
-} GdkRenderingMode;
-
-typedef enum {
-  GDK_GL_DISABLE                = 1 << 0,
-  GDK_GL_ALWAYS                 = 1 << 1,
-  GDK_GL_SOFTWARE_DRAW          = 1 << 2,
-  GDK_GL_TEXTURE_RECTANGLE      = 1 << 3,
-  GDK_GL_LEGACY                 = 1 << 4,
-  GDK_GL_GLES                   = 1 << 5
-} GdkGLFlags;
-
-typedef enum {
-  GDK_VULKAN_DISABLE                = 1 << 0,
-  GDK_VULKAN_VALIDATE               = 1 << 1,
-} GdkVulkanFlags;
+  GDK_DEBUG_MISC            = 1 <<  0,
+  GDK_DEBUG_EVENTS          = 1 <<  1,
+  GDK_DEBUG_DND             = 1 <<  2,
+  GDK_DEBUG_INPUT           = 1 <<  3,
+  GDK_DEBUG_EVENTLOOP       = 1 <<  4,
+  GDK_DEBUG_FRAMES          = 1 <<  5,
+  GDK_DEBUG_SETTINGS        = 1 <<  6,
+  GDK_DEBUG_OPENGL          = 1 <<  7,
+  GDK_DEBUG_VULKAN          = 1 <<  8,
+  GDK_DEBUG_SELECTION       = 1 <<  9,
+  GDK_DEBUG_CLIPBOARD       = 1 << 10,
+  /* flags below are influencing behavior */
+  GDK_DEBUG_NOGRABS         = 1 << 11,
+  GDK_DEBUG_GL_DISABLE      = 1 << 12,
+  GDK_DEBUG_GL_ALWAYS       = 1 << 13,
+  GDK_DEBUG_GL_SOFTWARE     = 1 << 14,
+  GDK_DEBUG_GL_TEXTURE_RECT = 1 << 15,
+  GDK_DEBUG_GL_LEGACY       = 1 << 16,
+  GDK_DEBUG_GL_GLES         = 1 << 17,
+  GDK_DEBUG_VULKAN_DISABLE  = 1 << 18,
+  GDK_DEBUG_VULKAN_VALIDATE = 1 << 19,
+  GDK_DEBUG_CAIRO_IMAGE     = 1 << 20,
+  GDK_DEBUG_CAIRO_RECORDING = 1 << 21
+} GdkDebugFlags;
 
 extern GList            *_gdk_default_filters;
 extern GdkWindow        *_gdk_parent_root;
 
 extern guint _gdk_debug_flags;
-extern guint _gdk_gl_flags;
-extern guint _gdk_vulkan_flags;
-extern GdkRenderingMode    _gdk_rendering_mode;
+
 
 #ifdef G_ENABLE_DEBUG
 
@@ -108,10 +96,13 @@ extern GdkRenderingMode    _gdk_rendering_mode;
     if (GDK_DEBUG_CHECK (type))                                 \
        { action; };                          } G_STMT_END
 
+#define GDK_DISPLAY_DEBUG_CHECK(display,type) G_UNLIKELY(gdk_display_get_debug_flags (display) & GDK_DEBUG_##type)
+
 #else /* !G_ENABLE_DEBUG */
 
 #define GDK_DEBUG_CHECK(type) 0
 #define GDK_NOTE(type,action)
+#define GDK_DISPLAY_DEBUG_CHECK(display,type) 0
 
 #endif /* G_ENABLE_DEBUG */
 

@@ -105,7 +105,7 @@ struct _GdkDisplay
   guint rgba : 1;
   guint composited : 1;
 
-  GdkRenderingMode rendering_mode;
+  GdkDebugFlags debug_flags;
 
   GList *seats;
 };

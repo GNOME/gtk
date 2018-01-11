@@ -941,7 +941,7 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
                                  VK_VERSION_MINOR (layers[i].specVersion),
                                  VK_VERSION_PATCH (layers[i].specVersion),
                                  layers[i].description));
-      if ((_gdk_vulkan_flags & GDK_VULKAN_VALIDATE) &&
+      if (GDK_DEBUG_CHECK (VULKAN_VALIDATE) &&
           g_str_equal (layers[i].layerName, "VK_LAYER_LUNARG_standard_validation"))
         {
           g_ptr_array_add (used_layers, (gpointer) "VK_LAYER_LUNARG_standard_validation");
@@ -949,7 +949,7 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
         }
     }
 
-  if ((_gdk_vulkan_flags & GDK_VULKAN_VALIDATE) && !validate)
+  if (GDK_DEBUG_CHECK (VULKAN_VALIDATE) && !validate)
     {
       g_warning ("Vulkan validation layers were requested, but not found. Running without.");
     }

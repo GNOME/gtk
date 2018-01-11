@@ -758,26 +758,22 @@ keynav_failed (GtkWidget *widget, GtkDirectionType direction, GtkInspectorVisual
 static void
 init_gl (GtkInspectorVisual *vis)
 {
-  GdkGLFlags flags;
+  GdkDebugFlags flags = gdk_display_get_debug_flags (gdk_display_get_default ());
 
-  flags = gdk_gl_get_flags ();
-
-  if (flags & GDK_GL_ALWAYS)
+  if (flags & GDK_DEBUG_GL_ALWAYS)
     gtk_combo_box_set_active_id (GTK_COMBO_BOX (vis->priv->gl_combo), "always");
-  else if (flags & GDK_GL_DISABLE)
+  else if (flags & GDK_DEBUG_GL_DISABLE)
     gtk_combo_box_set_active_id (GTK_COMBO_BOX (vis->priv->gl_combo), "disable");
   else
     gtk_combo_box_set_active_id (GTK_COMBO_BOX (vis->priv->gl_combo), "maybe");
   gtk_widget_set_sensitive (vis->priv->gl_combo, FALSE);
   gtk_widget_set_tooltip_text (vis->priv->gl_combo,
-                               _("Not settable at runtime.\nUse GDK_GL=always or GDK_GL=disable instead"));
+                               _("Not settable at runtime.\nUse GDK_DEBUG=gl-always or GDK_DEBUG=gl-disable instead"));
 
-  gtk_switch_set_active (GTK_SWITCH (vis->priv->software_gl_switch),
-                         flags & GDK_GL_SOFTWARE_DRAW);
-  gtk_switch_set_active (GTK_SWITCH (vis->priv->texture_rectangle_switch),
-                         flags & GDK_GL_TEXTURE_RECTANGLE);
+  gtk_switch_set_active (GTK_SWITCH (vis->priv->software_gl_switch), flags & GDK_DEBUG_GL_SOFTWARE);
+  gtk_switch_set_active (GTK_SWITCH (vis->priv->texture_rectangle_switch), flags & GDK_DEBUG_GL_TEXTURE_RECT);
 
-  if (flags & GDK_GL_DISABLE)
+  if (flags & GDK_DEBUG_GL_DISABLE)
     {
       gtk_widget_set_sensitive (vis->priv->software_gl_switch, FALSE);
       gtk_widget_set_sensitive (vis->priv->texture_rectangle_switch, FALSE);
@@ -789,9 +785,14 @@ init_gl (GtkInspectorVisual *vis)
 static void
 init_rendering_mode (GtkInspectorVisual *vis)
 {
-  GdkRenderingMode mode;
+  GdkDebugFlags flags = gdk_display_get_debug_flags (gdk_display_get_default ());
+  int mode = 0;
 
-  mode = gdk_display_get_rendering_mode (gdk_display_get_default ());
+  if (flags & GDK_DEBUG_CAIRO_IMAGE)
+    mode = 1;
+  else if (flags & GDK_DEBUG_CAIRO_RECORDING)
+    mode = 2;
+
   gtk_combo_box_set_active (GTK_COMBO_BOX (vis->priv->rendering_mode_combo), mode);
 }
 
@@ -799,38 +800,44 @@ static void
 rendering_mode_changed (GtkComboBox        *c,
                         GtkInspectorVisual *vis)
 {
-  GdkRenderingMode mode;
+  GdkDebugFlags flags = gdk_display_get_debug_flags (gdk_display_get_default ());
+  int mode;
 
   mode = gtk_combo_box_get_active (c);
-  gdk_display_set_rendering_mode (gdk_display_get_default (), mode);
+
+  flags = flags & ~(GDK_DEBUG_CAIRO_IMAGE | GDK_DEBUG_CAIRO_RECORDING);
+  if (mode == 1)
+    flags = flags | GDK_DEBUG_CAIRO_IMAGE;
+  else if (mode == 2)
+    flags = flags | GDK_DEBUG_CAIRO_RECORDING;
+
+  gdk_display_set_debug_flags (gdk_display_get_default (), flags);
 }
 
 static void
-update_gl_flag (GtkSwitch  *sw,
-                GdkGLFlags  flag)
+update_gl_flag (GtkSwitch     *sw,
+                GdkDebugFlags  flag)
 {
-  GdkGLFlags flags;
-
-  flags = gdk_gl_get_flags ();
+  GdkDebugFlags flags = gdk_display_get_debug_flags (gdk_display_get_default ());
 
   if (gtk_switch_get_active (sw))
     flags |= flag;
   else
     flags &= ~flag;
 
-  gdk_gl_set_flags (flags);
+  gdk_display_set_debug_flags (gdk_display_get_default (), flags);
 }
 
 static void
 software_gl_activate (GtkSwitch *sw)
 {
-  update_gl_flag (sw, GDK_GL_SOFTWARE_DRAW);
+  update_gl_flag (sw, GDK_DEBUG_GL_SOFTWARE);
 }
 
 static void
 texture_rectangle_activate (GtkSwitch *sw)
 {
-  update_gl_flag (sw, GDK_GL_TEXTURE_RECTANGLE);
+  update_gl_flag (sw, GDK_DEBUG_GL_TEXTURE_RECT);
 }
 
 static void

@@ -56,9 +56,9 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
   gdk_gl_context_get_required_version (context, &major, &minor);
   debug_bit = gdk_gl_context_get_debug_enabled (context);
   forward_bit = gdk_gl_context_get_forward_compatible (context);
-  legacy_bit = (_gdk_gl_flags & GDK_GL_LEGACY) != 0 ||
+  legacy_bit = GDK_DEBUG_CHECK (GL_LEGACY) ||
                (share != NULL && gdk_gl_context_is_legacy (share));
-  use_es = (_gdk_gl_flags & GDK_GL_GLES) != 0 ||
+  use_es = GDK_DEBUG_CHECK (GL_GLES) ||
            (share != NULL && gdk_gl_context_get_use_es (share));
 
   flags = 0;

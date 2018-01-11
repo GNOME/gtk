@@ -582,11 +582,9 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
   compat_bit = gdk_gl_context_get_forward_compatible (context);
 
   /* If there is no glXCreateContextAttribsARB() then we default to legacy */
-  legacy_bit = !display_x11->has_glx_create_context ||
-               (_gdk_gl_flags & GDK_GL_LEGACY) != 0;
+  legacy_bit = !display_x11->has_glx_create_context || GDK_DEBUG_CHECK (GL_LEGACY);
 
-  es_bit = ((_gdk_gl_flags & GDK_GL_GLES) != 0 ||
-            (share != NULL && gdk_gl_context_get_use_es (share))) &&
+  es_bit = (GDK_DEBUG_CHECK (GL_GLES) || (share != NULL && gdk_gl_context_get_use_es (share))) &&
            (display_x11->has_glx_create_context && display_x11->has_glx_create_es2_context);
 
   /* We cannot share legacy contexts with core profile ones, so the
@@ -793,7 +791,7 @@ gdk_x11_screen_init_gl (GdkX11Screen *screen)
   if (display_x11->have_glx)
     return TRUE;
 
-  if (_gdk_gl_flags & GDK_GL_DISABLE)
+  if (GDK_DEBUG_CHECK (GL_DISABLE))
     return FALSE;
 
   dpy = gdk_x11_display_get_xdisplay (display);

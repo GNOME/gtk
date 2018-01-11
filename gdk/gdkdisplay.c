@@ -379,7 +379,7 @@ gdk_display_init (GdkDisplay *display)
   display->pointers_info = g_hash_table_new_full (NULL, NULL, NULL,
                                                   (GDestroyNotify) free_pointer_info);
 
-  display->rendering_mode = _gdk_rendering_mode;
+  display->debug_flags = _gdk_debug_flags;
 
   display->composited = TRUE;
   display->rgba = TRUE;
@@ -1502,17 +1502,17 @@ gdk_display_make_gl_context_current (GdkDisplay   *display,
   return GDK_DISPLAY_GET_CLASS (display)->make_gl_context_current (display, context);
 }
 
-GdkRenderingMode
-gdk_display_get_rendering_mode (GdkDisplay *display)
+GdkDebugFlags
+gdk_display_get_debug_flags (GdkDisplay *display)
 {
-  return display->rendering_mode;
+  return display->debug_flags;
 }
 
 void
-gdk_display_set_rendering_mode (GdkDisplay       *display,
-                                GdkRenderingMode  mode)
+gdk_display_set_debug_flags (GdkDisplay    *display,
+                             GdkDebugFlags  flags)
 {
-  display->rendering_mode = mode;
+  display->debug_flags = flags;
 }
 
 /**

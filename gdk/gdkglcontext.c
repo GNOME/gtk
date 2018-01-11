@@ -571,7 +571,7 @@ gdk_gl_context_set_required_version (GdkGLContext *context,
   /* Enforce a minimum context version number of 3.2 */
   version = (major * 100) + minor;
 
-  if (priv->use_es > 0 || (_gdk_gl_flags & GDK_GL_GLES) != 0)
+  if (priv->use_es > 0 || GDK_DEBUG_CHECK (GL_GLES))
     min_ver = 200;
   else
     min_ver = 302;
@@ -607,7 +607,7 @@ gdk_gl_context_get_required_version (GdkGLContext *context,
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
 
-  if (priv->use_es > 0 || (_gdk_gl_flags & GDK_GL_GLES) != 0)
+  if (priv->use_es > 0 || GDK_DEBUG_CHECK (GL_GLES))
     {
       default_major = 2;
       default_minor = 0;
@@ -812,7 +812,7 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
         priv->is_legacy = TRUE;
     }
 
-  if (!priv->use_es && G_UNLIKELY (_gdk_gl_flags & GDK_GL_TEXTURE_RECTANGLE))
+  if (!priv->use_es && GDK_DEBUG_CHECK (GL_TEXTURE_RECT))
     priv->use_texture_rectangle = TRUE;
   else if (has_npot)
     priv->use_texture_rectangle = FALSE;
@@ -1008,33 +1008,4 @@ gdk_gl_context_get_current (void)
   current = g_private_get (&thread_current_context);
 
   return current;
-}
-
-/**
- * gdk_gl_get_flags:
- *
- * Returns the currently active GL flags.
- *
- * Returns: the GL flags
- *
- * Since: 3.16
- */
-GdkGLFlags
-gdk_gl_get_flags (void)
-{
-  return _gdk_gl_flags;
-}
-
-/**
- * gdk_gl_set_flags:
- * @flags: #GdkGLFlags to set
- *
- * Sets GL flags.
- *
- * Since: 3.16
- */
-void
-gdk_gl_set_flags (GdkGLFlags flags)
-{
-  _gdk_gl_flags = flags;
 }

@@ -135,35 +135,30 @@ static GMutex gdk_threads_mutex;
 static GCallback gdk_threads_lock = NULL;
 static GCallback gdk_threads_unlock = NULL;
 
-static const GDebugKey gdk_gl_keys[] = {
-  { "disable",               GDK_GL_DISABLE },
-  { "always",                GDK_GL_ALWAYS },
-  { "software-draw",         GDK_GL_SOFTWARE_DRAW } ,
-  { "texture-rectangle",     GDK_GL_TEXTURE_RECTANGLE },
-  { "legacy",                GDK_GL_LEGACY },
-  { "gles",                  GDK_GL_GLES },
-};
-
-static const GDebugKey gdk_vulkan_keys[] = {
-  { "disable",               GDK_VULKAN_DISABLE },
-  { "validate",              GDK_VULKAN_VALIDATE },
-};
-
 #ifdef G_ENABLE_DEBUG
 static const GDebugKey gdk_debug_keys[] = {
-  { "events",        GDK_DEBUG_EVENTS },
-  { "misc",          GDK_DEBUG_MISC },
-  { "dnd",           GDK_DEBUG_DND },
-  { "nograbs",       GDK_DEBUG_NOGRABS },
-  { "input",         GDK_DEBUG_INPUT },
-  { "cursor",        GDK_DEBUG_CURSOR },
-  { "eventloop",     GDK_DEBUG_EVENTLOOP },
-  { "frames",        GDK_DEBUG_FRAMES },
-  { "settings",      GDK_DEBUG_SETTINGS },
-  { "opengl",        GDK_DEBUG_OPENGL },
-  { "vulkan",        GDK_DEBUG_VULKAN },
-  { "selection",     GDK_DEBUG_SELECTION },
-  { "clipboard",     GDK_DEBUG_CLIPBOARD }
+  { "misc",            GDK_DEBUG_MISC },
+  { "events",          GDK_DEBUG_EVENTS },
+  { "dnd",             GDK_DEBUG_DND },
+  { "input",           GDK_DEBUG_INPUT },
+  { "eventloop",       GDK_DEBUG_EVENTLOOP },
+  { "frames",          GDK_DEBUG_FRAMES },
+  { "settings",        GDK_DEBUG_SETTINGS },
+  { "opengl",          GDK_DEBUG_OPENGL },
+  { "vulkan",          GDK_DEBUG_VULKAN },
+  { "selection",       GDK_DEBUG_SELECTION },
+  { "clipboard",       GDK_DEBUG_CLIPBOARD },
+  { "nograbs",         GDK_DEBUG_NOGRABS },
+  { "gl-disable",      GDK_DEBUG_GL_DISABLE },
+  { "gl-always",       GDK_DEBUG_GL_ALWAYS },
+  { "gl-software",     GDK_DEBUG_GL_SOFTWARE },
+  { "gl-texture-rect", GDK_DEBUG_GL_TEXTURE_RECT },
+  { "gl-legacy",       GDK_DEBUG_GL_LEGACY },
+  { "gl-gles",         GDK_DEBUG_GL_GLES },
+  { "vulkan-disable",  GDK_DEBUG_VULKAN_DISABLE },
+  { "vulkan-validate", GDK_DEBUG_VULKAN_VALIDATE },
+  { "cairo-image",     GDK_DEBUG_CAIRO_IMAGE },
+  { "cairo-recording", GDK_DEBUG_CAIRO_RECORDING }
 };
 #endif
 
@@ -186,9 +181,6 @@ gdk_ensure_resources (void)
 void
 gdk_pre_parse (void)
 {
-  const char *rendering_mode;
-  const gchar *gl_string, *vulkan_string;
-
   gdk_initialized = TRUE;
 
   gdk_ensure_resources ();
@@ -202,29 +194,6 @@ gdk_pre_parse (void)
                                               G_N_ELEMENTS (gdk_debug_keys));
   }
 #endif  /* G_ENABLE_DEBUG */
-
-  gl_string = getenv("GDK_GL");
-  if (gl_string != NULL)
-    _gdk_gl_flags = g_parse_debug_string (gl_string,
-                                          (GDebugKey *) gdk_gl_keys,
-                                          G_N_ELEMENTS (gdk_gl_keys));
-
-  vulkan_string = getenv("GDK_VULKAN");
-  if (vulkan_string != NULL)
-    _gdk_vulkan_flags = g_parse_debug_string (vulkan_string,
-                                              (GDebugKey *) gdk_vulkan_keys,
-                                              G_N_ELEMENTS (gdk_vulkan_keys));
-
-  rendering_mode = g_getenv ("GDK_RENDERING");
-  if (rendering_mode)
-    {
-      if (g_str_equal (rendering_mode, "similar"))
-        _gdk_rendering_mode = GDK_RENDERING_MODE_SIMILAR;
-      else if (g_str_equal (rendering_mode, "image"))
-        _gdk_rendering_mode = GDK_RENDERING_MODE_IMAGE;
-      else if (g_str_equal (rendering_mode, "recording"))
-        _gdk_rendering_mode = GDK_RENDERING_MODE_RECORDING;
-    }
 }
 
 /*< private >
