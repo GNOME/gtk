@@ -1713,6 +1713,8 @@ gtk_main_do_event (GdkEvent *event)
   if (!event_widget)
     goto cleanup;
 
+  gdk_event_set_user_data (event, G_OBJECT (event_widget));
+
   window_group = gtk_main_get_window_group (event_widget);
   device = gdk_event_get_device (event);
 
@@ -1752,8 +1754,6 @@ gtk_main_do_event (GdkEvent *event)
    */
   if (check_event_in_child_popover (event_widget, grab_widget))
     grab_widget = event_widget;
-
-  gdk_event_set_user_data (event, G_OBJECT (event_widget));
 
   /* If the widget receiving events is actually blocked by another
    * device GTK+ grab
