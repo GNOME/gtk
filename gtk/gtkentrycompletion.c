@@ -142,8 +142,8 @@ static gboolean gtk_entry_completion_visible_func        (GtkTreeModel       *mo
 static gboolean gtk_entry_completion_popup_key_event     (GtkWidget          *widget,
                                                           GdkEventKey        *event,
                                                           gpointer            user_data);
-static gboolean gtk_entry_completion_popup_button_press  (GtkWidget          *widget,
-                                                          GdkEventButton     *event,
+static gboolean gtk_entry_completion_popup_event         (GtkWidget          *widget,
+                                                          GdkEvent           *event,
                                                           gpointer            user_data);
 static void     gtk_entry_completion_list_activated      (GtkTreeView        *treeview,
                                                           GtkTreePath        *path,
@@ -603,8 +603,8 @@ gtk_entry_completion_constructed (GObject *object)
   g_signal_connect (priv->popup_window, "key-release-event",
                     G_CALLBACK (gtk_entry_completion_popup_key_event),
                     completion);
-  g_signal_connect (priv->popup_window, "button-press-event",
-                    G_CALLBACK (gtk_entry_completion_popup_button_press),
+  g_signal_connect (priv->popup_window, "event",
+                    G_CALLBACK (gtk_entry_completion_popup_event),
                     completion);
 
   popup_frame = gtk_frame_new (NULL);
@@ -914,19 +914,22 @@ gtk_entry_completion_popup_key_event (GtkWidget   *widget,
 }
 
 static gboolean
-gtk_entry_completion_popup_button_press (GtkWidget      *widget,
-                                         GdkEventButton *event,
-                                         gpointer        user_data)
+gtk_entry_completion_popup_event (GtkWidget *widget,
+                                  GdkEvent  *event,
+                                  gpointer   user_data)
 {
   GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (user_data);
 
+  if (gdk_event_get_event_type (event) != GDK_BUTTON_PRESS)
+    return GDK_EVENT_PROPAGATE;
+
   if (!gtk_widget_get_mapped (completion->priv->popup_window))
-    return FALSE;
+    return GDK_EVENT_PROPAGATE;
 
   /* if we come here, it's usually time to popdown */
   _gtk_entry_completion_popdown (completion);
 
-  return TRUE;
+  return GDK_EVENT_STOP;
 }
 
 static void
