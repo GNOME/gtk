@@ -80,6 +80,9 @@ struct _GdkKeymapKey
 GDK_AVAILABLE_IN_ALL
 GType gdk_keymap_get_type (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_3_94
+GdkDisplay *   gdk_keymap_get_display              (GdkKeymap           *keymap);
+
 GDK_AVAILABLE_IN_ALL
 guint          gdk_keymap_lookup_key               (GdkKeymap           *keymap,
 						    const GdkKeymapKey  *key);

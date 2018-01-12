@@ -98,6 +98,11 @@
  * gdk_keymap_translate_keyboard_state() just to get the keyval.
  */
 
+enum {
+  PROP_0,
+  PROP_DISPLAY,
+  LAST_PROP
+};
 
 enum {
   DIRECTION_CHANGED,
@@ -106,21 +111,69 @@ enum {
   LAST_SIGNAL
 };
 
+static GParamSpec *props[LAST_PROP] = { NULL, };
+static guint signals[LAST_SIGNAL] = { 0 };
 
 static GdkModifierType gdk_keymap_real_get_modifier_mask (GdkKeymap         *keymap,
                                                           GdkModifierIntent  intent);
 
-
-static guint signals[LAST_SIGNAL] = { 0 };
-
 G_DEFINE_TYPE (GdkKeymap, gdk_keymap, G_TYPE_OBJECT)
+
+static void
+gdk_keymap_get_property (GObject    *object,
+                         guint       prop_id,
+                         GValue     *value,
+                         GParamSpec *pspec)
+{
+  GdkKeymap *keymap = GDK_KEYMAP (object);
+
+  switch (prop_id)
+    {
+    case PROP_DISPLAY:
+      g_value_set_object (value, keymap->display);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+gdk_keymap_set_property (GObject      *object,
+                         guint         prop_id,
+                         const GValue *value,
+                         GParamSpec   *pspec)
+{
+  GdkKeymap *keymap = GDK_KEYMAP (object);
+
+  switch (prop_id)
+    {
+    case PROP_DISPLAY:
+      keymap->display = g_value_get_object (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
 
 static void
 gdk_keymap_class_init (GdkKeymapClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->get_property = gdk_keymap_get_property;
+  object_class->set_property = gdk_keymap_set_property;
+
   klass->get_modifier_mask = gdk_keymap_real_get_modifier_mask;
+
+  props[PROP_DISPLAY] =
+    g_param_spec_object ("display",
+                         "Display",
+                         "The display of the keymap",
+                         GDK_TYPE_DISPLAY,
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, LAST_PROP, props);
 
   /**
    * GdkKeymap::direction-changed:
@@ -183,6 +236,14 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
 static void
 gdk_keymap_init (GdkKeymap *keymap)
 {
+}
+
+GdkDisplay *
+gdk_keymap_get_display (GdkKeymap *keymap)
+{
+  g_return_val_if_fail (GDK_IS_KEYMAP (keymap), NULL);
+
+  return keymap->display;
 }
 
 /* Other key-handling stuff
