@@ -128,6 +128,13 @@
                     <property name="name">statistics</property>
                   </packing>
                 </child>
+                <child>
+                  <object class="GtkBox">
+                  </object>
+                  <packing>
+                    <property name="name">logs</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="name">global</property>
@@ -445,6 +452,14 @@
                   <packing>
                     <property name="name">statistics</property>
                     <property name="title" translatable="yes">Statistics</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkInspectorLogs">
+                  </object>
+                  <packing>
+                    <property name="name">logs</property>
+                    <property name="title" translatable="yes">Logging</property>
                   </packing>
                 </child>
               </object>

@@ -13,6 +13,7 @@ inspector_sources = files(
   'gtktreemodelrendernode.c',
   'init.c',
   'inspect-button.c',
+  'logs.c',
   'magnifier.c',
   'menu.c',
   'misc-info.c',
