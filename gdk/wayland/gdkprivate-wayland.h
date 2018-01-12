@@ -45,7 +45,7 @@
 
 #define GDK_WINDOW_IS_WAYLAND(win)    (GDK_IS_WINDOW_IMPL_WAYLAND (((GdkWindow *)win)->impl))
 
-GdkKeymap *_gdk_wayland_keymap_new (void);
+GdkKeymap *_gdk_wayland_keymap_new (GdkDisplay *display);
 void       _gdk_wayland_keymap_update_from_fd (GdkKeymap *keymap,
                                                uint32_t   format,
                                                uint32_t   fd,

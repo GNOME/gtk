@@ -896,7 +896,7 @@ _gdk_wayland_display_get_keymap (GdkDisplay *display)
     return _gdk_wayland_device_get_keymap (core_keyboard);
 
   if (!tmp_keymap)
-    tmp_keymap = _gdk_wayland_keymap_new ();
+    tmp_keymap = _gdk_wayland_keymap_new (display);
 
   return tmp_keymap;
 }

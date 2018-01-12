@@ -540,13 +540,14 @@ update_direction (GdkWaylandKeymap *keymap)
 }
 
 GdkKeymap *
-_gdk_wayland_keymap_new (void)
+_gdk_wayland_keymap_new (GdkDisplay *display)
 {
   GdkWaylandKeymap *keymap;
   struct xkb_context *context;
   struct xkb_rule_names names;
 
   keymap = g_object_new (_gdk_wayland_keymap_get_type(), NULL);
+  GDK_KEYMAP (keymap)->display = display;
 
   context = xkb_context_new (0);
 

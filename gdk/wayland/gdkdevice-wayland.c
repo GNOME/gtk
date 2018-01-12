@@ -4764,7 +4764,7 @@ _gdk_wayland_display_create_seat (GdkWaylandDisplay *display_wayland,
                        "display", display_wayland,
                        NULL);
   seat->id = id;
-  seat->keymap = _gdk_wayland_keymap_new ();
+  seat->keymap = _gdk_wayland_keymap_new (display);
   seat->display = display;
   seat->touches = g_hash_table_new_full (NULL, NULL, NULL, (GDestroyNotify) g_free);
   seat->foreign_dnd_window = create_foreign_dnd_window (display);
