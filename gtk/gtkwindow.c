@@ -8976,7 +8976,7 @@ gtk_window_move_resize (GtkWindow *window)
   else
     {
       GtkAllocation allocation, clip;
-      GtkRequisition minsize;
+      int min_width, min_height;
 
       /* Handle any position changes.
        */
@@ -8986,15 +8986,18 @@ gtk_window_move_resize (GtkWindow *window)
                            new_request.x, new_request.y);
         }
 
-      gtk_widget_get_preferred_size (widget, &minsize, NULL);
+      gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, current_height,
+                          &min_width, NULL, NULL, NULL);
+      gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL, current_width,
+                          &min_height, NULL, NULL, NULL);
 
       /* Our configure request didn't change size, but maybe some of
        * our child widgets have. Run a size allocate with our current
        * size to make sure that we re-layout our child widgets. */
       allocation.x = 0;
       allocation.y = 0;
-      allocation.width = MAX (current_width, minsize.width);
-      allocation.height = MAX (current_height, minsize.height);
+      allocation.width = MAX (current_width, min_width);
+      allocation.height = MAX (current_height, min_height);
 
       gtk_widget_size_allocate (widget, &allocation, -1, &clip);
     }
