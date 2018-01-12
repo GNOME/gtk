@@ -422,21 +422,6 @@ gtk_tooltip_trigger_tooltip_query (GdkDisplay *display)
   gtk_tooltip_handle_event_internal (GDK_MOTION_NOTIFY, window, x, y);
 }
 
-/* private functions */
-
-static void
-gtk_tooltip_reset (GtkTooltip *tooltip)
-{
-  gtk_tooltip_set_markup (tooltip, NULL);
-  gtk_tooltip_set_icon (tooltip, NULL);
-  gtk_tooltip_set_tip_area (tooltip, NULL);
-
-  /* See if the custom widget is again set from the query-tooltip
-   * callback.
-   */
-  tooltip->custom_was_reset = FALSE;
-}
-
 static void
 gtk_tooltip_window_hide (GtkWidget *widget,
 			 gpointer   user_data)
@@ -788,7 +773,15 @@ gtk_tooltip_run_requery (GtkWidget  **widget,
   gboolean has_tooltip = FALSE;
   gboolean return_value = FALSE;
 
-  gtk_tooltip_reset (tooltip);
+  /* Reset tooltip */
+  gtk_tooltip_set_markup (tooltip, NULL);
+  gtk_tooltip_set_icon (tooltip, NULL);
+  gtk_tooltip_set_tip_area (tooltip, NULL);
+
+  /* See if the custom widget is again set from the query-tooltip
+   * callback.
+   */
+  tooltip->custom_was_reset = FALSE;
 
   do
     {
