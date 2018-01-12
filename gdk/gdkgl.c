@@ -455,6 +455,7 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
 			     cairo_region_t  *region)
 {
   GdkGLContext *paint_context;
+  GdkDisplay *display;
   cairo_surface_t *image;
   double device_x_offset, device_y_offset;
   cairo_rectangle_int_t rect, e;
@@ -469,8 +470,13 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
   guint target;
 
   paint_context = gdk_gl_context_get_current ();
-  if (GDK_DEBUG_CHECK (GL_SOFTWARE) == 0 &&
-      paint_context &&
+  if (paint_context)
+    display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (paint_context));
+  else
+    display = NULL;
+
+  if (paint_context &&
+      GDK_DISPLAY_DEBUG_CHECK (display, GL_SOFTWARE) == 0 &&
       GDK_GL_CONTEXT_GET_CLASS (paint_context)->texture_from_surface &&
       GDK_GL_CONTEXT_GET_CLASS (paint_context)->texture_from_surface (paint_context, surface, region))
     return;

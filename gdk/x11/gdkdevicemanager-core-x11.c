@@ -223,7 +223,7 @@ translate_key_event (GdkDisplay              *display,
   _gdk_x11_event_translate_keyboard_string (&event->key);
 
 #ifdef G_ENABLE_DEBUG
-  if (GDK_DEBUG_CHECK (EVENTS))
+  if (GDK_DISPLAY_DEBUG_CHECK (display, EVENTS))
     {
       g_message ("%s:\t\twindow: %ld     key: %12s  %d",
                  event->any.type == GDK_KEY_PRESS ? "key press  " : "key release",
@@ -467,7 +467,7 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
       break;
 
     case ButtonPress:
-      GDK_NOTE (EVENTS,
+      GDK_DISPLAY_NOTE (display, EVENTS,
                 g_message ("button press:\t\twindow: %ld  x,y: %d %d  button: %d",
                            xevent->xbutton.window,
                            xevent->xbutton.x, xevent->xbutton.y,
@@ -537,7 +537,7 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
       break;
 
     case ButtonRelease:
-      GDK_NOTE (EVENTS,
+      GDK_DISPLAY_NOTE (display, EVENTS,
                 g_message ("button release:\twindow: %ld  x,y: %d %d  button: %d",
                            xevent->xbutton.window,
                            xevent->xbutton.x, xevent->xbutton.y,
@@ -574,7 +574,7 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
       break;
 
     case MotionNotify:
-      GDK_NOTE (EVENTS,
+      GDK_DISPLAY_NOTE (display, EVENTS,
                 g_message ("motion notify:\t\twindow: %ld  x,y: %d %d  hint: %s",
                            xevent->xmotion.window,
                            xevent->xmotion.x, xevent->xmotion.y,
@@ -603,7 +603,7 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
       break;
 
     case EnterNotify:
-      GDK_NOTE (EVENTS,
+      GDK_DISPLAY_NOTE (display, EVENTS,
                 g_message ("enter notify:\t\twindow: %ld  detail: %d subwin: %ld",
                            xevent->xcrossing.window,
                            xevent->xcrossing.detail,
@@ -644,7 +644,7 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
       break;
 
     case LeaveNotify:
-      GDK_NOTE (EVENTS,
+      GDK_DISPLAY_NOTE (display, EVENTS,
                 g_message ("leave notify:\t\twindow: %ld  detail: %d subwin: %ld",
                            xevent->xcrossing.window,
                            xevent->xcrossing.detail, xevent->xcrossing.subwindow));
@@ -808,7 +808,7 @@ _gdk_device_manager_core_handle_focus (GdkWindow *window,
   g_return_if_fail (GDK_IS_DEVICE (device));
   g_return_if_fail (source_device == NULL || GDK_IS_DEVICE (source_device));
 
-  GDK_NOTE (EVENTS,
+  GDK_DISPLAY_NOTE (gdk_window_get_display (window), EVENTS,
             g_message ("focus out:\t\twindow: %ld, detail: %s, mode: %s",
                        GDK_WINDOW_XID (window),
                        notify_details[detail],

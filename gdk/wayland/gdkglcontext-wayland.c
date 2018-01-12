@@ -56,9 +56,9 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
   gdk_gl_context_get_required_version (context, &major, &minor);
   debug_bit = gdk_gl_context_get_debug_enabled (context);
   forward_bit = gdk_gl_context_get_forward_compatible (context);
-  legacy_bit = GDK_DEBUG_CHECK (GL_LEGACY) ||
+  legacy_bit = GDK_DISPLAY_DEBUG_CHECK (display, GL_LEGACY) ||
                (share != NULL && gdk_gl_context_is_legacy (share));
-  use_es = GDK_DEBUG_CHECK (GL_GLES) ||
+  use_es = GDK_DISPLAY_DEBUG_CHECK (display, GL_GLES) ||
            (share != NULL && gdk_gl_context_get_use_es (share));
 
   flags = 0;
@@ -102,7 +102,8 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
   context_attribs[i++] = EGL_NONE;
   g_assert (i < N_EGL_ATTRS);
 
-  GDK_NOTE (OPENGL, g_message ("Creating EGL context version %d.%d (debug:%s, forward:%s, legacy:%s, es:%s)",
+  GDK_DISPLAY_NOTE (display, OPENGL,
+            g_message ("Creating EGL context version %d.%d (debug:%s, forward:%s, legacy:%s, es:%s)",
                                major, minor,
                                debug_bit ? "yes" : "no",
                                forward_bit ? "yes" : "no",
@@ -129,7 +130,8 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
       legacy_bit = TRUE;
       use_es = FALSE;
 
-      GDK_NOTE (OPENGL, g_message ("eglCreateContext failed, switching to legacy"));
+      GDK_DISPLAY_NOTE (display, OPENGL,
+                g_message ("eglCreateContext failed, switching to legacy"));
       ctx = eglCreateContext (display_wayland->egl_display,
                               context_wayland->egl_config,
                               share != NULL ? GDK_WAYLAND_GL_CONTEXT (share)->egl_context
@@ -145,7 +147,7 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
       return FALSE;
     }
 
-  GDK_NOTE (OPENGL, g_message ("Created EGL context[%p]", ctx));
+  GDK_DISPLAY_NOTE (display, OPENGL, g_message ("Created EGL context[%p]", ctx));
 
   context_wayland->egl_context = ctx;
 
@@ -338,7 +340,7 @@ gdk_wayland_display_init_gl (GdkDisplay *display)
   display_wayland->have_egl_surfaceless_context =
     epoxy_has_egl_extension (dpy, "EGL_KHR_surfaceless_context");
 
-  GDK_NOTE (OPENGL,
+  GDK_DISPLAY_NOTE (display, OPENGL,
             g_message ("EGL API version %d.%d found\n"
                        " - Vendor: %s\n"
                        " - Version: %s\n"
@@ -472,7 +474,7 @@ gdk_wayland_gl_context_dispose (GObject *gobject)
         eglMakeCurrent(display_wayland->egl_display, EGL_NO_SURFACE, EGL_NO_SURFACE,
                        EGL_NO_CONTEXT);
 
-      GDK_NOTE (OPENGL, g_message ("Destroying EGL context"));
+      GDK_DISPLAY_NOTE (display, OPENGL, g_message ("Destroying EGL context"));
 
       eglDestroyContext (display_wayland->egl_display,
                          context_wayland->egl_context);

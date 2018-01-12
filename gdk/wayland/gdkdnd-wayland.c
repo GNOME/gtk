@@ -335,7 +335,7 @@ gdk_wayland_drag_context_read_async (GdkDragContext      *context,
   g_task_set_priority (task, io_priority);
   g_task_set_source_tag (task, gdk_wayland_drag_context_read_async);
 
-  GDK_NOTE (DND, char *s = gdk_content_formats_to_string (formats);
+  GDK_DISPLAY_NOTE (display, DND, char *s = gdk_content_formats_to_string (formats);
                  g_printerr ("%p: read for %s\n", context, s);
                  g_free (s); );
   dnd_formats = gdk_wayland_selection_get_targets (display);

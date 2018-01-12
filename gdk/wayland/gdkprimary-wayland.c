@@ -99,14 +99,14 @@ gdk_wayland_primary_claim_remote (GdkWaylandPrimary                  *cb,
 
   if (cb->source)
     {
-      GDK_NOTE (CLIPBOARD, g_printerr ("%p: Ignoring clipboard offer for self\n", cb));
+      GDK_DISPLAY_NOTE (gdk_clipboard_get_display (GDK_CLIPBOARD (cb)), CLIPBOARD, g_printerr ("%p: Ignoring clipboard offer for self\n", cb));
       gdk_content_formats_unref (formats);
       return;
     }
 
   gdk_wayland_primary_discard_offer (cb);
 
-  GDK_NOTE (CLIPBOARD, char *s = gdk_content_formats_to_string (formats);
+  GDK_DISPLAY_NOTE (gdk_clipboard_get_display (GDK_CLIPBOARD (cb)), CLIPBOARD, char *s = gdk_content_formats_to_string (formats);
                        g_printerr ("%p: remote clipboard claim for %s\n", cb, s);
                        g_free (s); );
   cb->offer_formats = formats;
@@ -125,7 +125,7 @@ primary_offer_offer (void                               *data,
 
   if (cb->pending != offer)
     {
-      GDK_NOTE (SELECTION, g_printerr ("%p: offer for unknown selection %p of %s\n",
+      GDK_DISPLAY_NOTE (gdk_clipboard_get_display (GDK_CLIPBOARD (cb)), SELECTION, g_printerr ("%p: offer for unknown selection %p of %s\n",
                                        cb, offer, type));
       return;
     }
@@ -144,7 +144,7 @@ primary_selection_data_offer (void                                *data,
 {
   GdkWaylandPrimary *cb = data;
 
-  GDK_NOTE (SELECTION, g_printerr ("%p: new primary offer %p\n",
+  GDK_DISPLAY_NOTE (gdk_clipboard_get_display (GDK_CLIPBOARD (cb)), SELECTION, g_printerr ("%p: new primary offer %p\n",
                                    cb, offer));
 
   gdk_wayland_primary_discard_pending (cb);
@@ -173,7 +173,7 @@ primary_selection_selection (void                                *data,
 
   if (cb->pending != offer)
     {
-      GDK_NOTE (SELECTION, g_printerr ("%p: ignoring unknown data offer %p\n",
+      GDK_DISPLAY_NOTE (gdk_clipboard_get_display (GDK_CLIPBOARD (cb)), SELECTION, g_printerr ("%p: ignoring unknown data offer %p\n",
                                        cb, offer));
       return;
     }
@@ -199,7 +199,7 @@ gdk_wayland_primary_write_done (GObject      *clipboard,
 
   if (!gdk_clipboard_write_finish (GDK_CLIPBOARD (clipboard), result, &error))
     {
-      GDK_NOTE (SELECTION, g_printerr ("%p: failed to write stream: %s\n", clipboard, error->message));
+      GDK_DISPLAY_NOTE (gdk_clipboard_get_display (GDK_CLIPBOARD (clipboard)), SELECTION, g_printerr ("%p: failed to write stream: %s\n", clipboard, error->message));
       g_error_free (error);
     }
 }
@@ -213,7 +213,7 @@ gdk_wayland_primary_data_source_send (void                                *data,
   GdkWaylandPrimary *cb = GDK_WAYLAND_PRIMARY (data);
   GOutputStream *stream;
 
-  GDK_NOTE (SELECTION, g_printerr ("%p: data source send request for %s on fd %d\n",
+  GDK_DISPLAY_NOTE (gdk_clipboard_get_display (GDK_CLIPBOARD (data)), SELECTION, g_printerr ("%p: data source send request for %s on fd %d\n",
                                    source, mime_type, fd));
 
   mime_type = gdk_intern_mime_type (mime_type);
@@ -235,7 +235,7 @@ gdk_wayland_primary_data_source_cancelled (void                                *
 {
   GdkWaylandPrimary *cb = GDK_WAYLAND_PRIMARY (data);
 
-  GDK_NOTE (CLIPBOARD, g_printerr ("%p: data source cancelled\n", data));
+  GDK_DISPLAY_NOTE (gdk_clipboard_get_display (GDK_CLIPBOARD (data)), CLIPBOARD, g_printerr ("%p: data source cancelled\n", data));
 
   if (cb->source == source)
     {
@@ -302,7 +302,7 @@ gdk_wayland_primary_read_async (GdkClipboard        *clipboard,
   g_task_set_priority (task, io_priority);
   g_task_set_source_tag (task, gdk_wayland_primary_read_async);
 
-  GDK_NOTE (CLIPBOARD, char *s = gdk_content_formats_to_string (formats);
+  GDK_DISPLAY_NOTE (gdk_clipboard_get_display (clipboard), CLIPBOARD, char *s = gdk_content_formats_to_string (formats);
                        g_printerr ("%p: read for %s\n", cb, s);
                        g_free (s); );
   mime_type = gdk_content_formats_match_mime_type (formats, cb->offer_formats);

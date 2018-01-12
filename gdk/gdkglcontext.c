@@ -555,6 +555,7 @@ gdk_gl_context_set_required_version (GdkGLContext *context,
                                      int           minor)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+  GdkDisplay *display;
   int version, min_ver;
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
@@ -571,7 +572,9 @@ gdk_gl_context_set_required_version (GdkGLContext *context,
   /* Enforce a minimum context version number of 3.2 */
   version = (major * 100) + minor;
 
-  if (priv->use_es > 0 || GDK_DEBUG_CHECK (GL_GLES))
+  display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
+
+  if (priv->use_es > 0 || GDK_DISPLAY_DEBUG_CHECK (display, GL_GLES))
     min_ver = 200;
   else
     min_ver = 302;
@@ -602,12 +605,15 @@ gdk_gl_context_get_required_version (GdkGLContext *context,
                                      int          *minor)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+  GdkDisplay *display;
   int default_major, default_minor;
   int maj, min;
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
 
-  if (priv->use_es > 0 || GDK_DEBUG_CHECK (GL_GLES))
+  display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
+
+  if (priv->use_es > 0 || GDK_DISPLAY_DEBUG_CHECK (display, GL_GLES))
     {
       default_major = 2;
       default_minor = 0;
@@ -769,6 +775,7 @@ static void
 gdk_gl_context_check_extensions (GdkGLContext *context)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+  GdkDisplay *display;
   gboolean has_npot, has_texture_rectangle;
 
   if (!priv->realized)
@@ -812,7 +819,9 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
         priv->is_legacy = TRUE;
     }
 
-  if (!priv->use_es && GDK_DEBUG_CHECK (GL_TEXTURE_RECT))
+  display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
+
+  if (!priv->use_es && GDK_DISPLAY_DEBUG_CHECK (display, GL_TEXTURE_RECT))
     priv->use_texture_rectangle = TRUE;
   else if (has_npot)
     priv->use_texture_rectangle = FALSE;
@@ -821,8 +830,8 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
   else
     g_warning ("GL implementation doesn't support any form of non-power-of-two textures");
 
-  GDK_NOTE (OPENGL,
-            g_message ("%s version: %d.%d (%s)\n"
+  GDK_DISPLAY_NOTE (display, OPENGL,
+    g_message ("%s version: %d.%d (%s)\n"
                        "* GLSL version: %s\n"
                        "* Extensions checked:\n"
                        " - GL_ARB_texture_non_power_of_two: %s\n"

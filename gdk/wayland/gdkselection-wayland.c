@@ -159,7 +159,7 @@ data_offer_source_actions (void                 *data,
 
   drop_context->actions = _wl_to_gdk_actions (source_actions);
 
-  GDK_NOTE (EVENTS,
+  GDK_DISPLAY_NOTE (display, EVENTS,
             g_message ("data offer source actions, offer %p, actions %d", wl_data_offer, source_actions));
 
   if (gdk_drag_context_get_dest_window (drop_context))
@@ -311,7 +311,7 @@ gdk_wayland_drag_context_write_done (GObject      *context,
 
   if (!gdk_drag_context_write_finish (GDK_DRAG_CONTEXT (context), result, &error))
     {
-      GDK_NOTE(DND, g_printerr ("%p: failed to write stream: %s\n", context, error->message));
+      GDK_DISPLAY_NOTE (gdk_drag_context_get_display (GDK_DRAG_CONTEXT (context)), DND, g_printerr ("%p: failed to write stream: %s\n", context, error->message));
       g_error_free (error);
     }
 }
@@ -329,7 +329,7 @@ data_source_send (void                  *data,
   if (!context)
     return;
 
-  GDK_NOTE (DND, g_printerr ("%p: data source send request for %s on fd %d\n",
+  GDK_DISPLAY_NOTE (gdk_drag_context_get_display (context), DND, g_printerr ("%p: data source send request for %s on fd %d\n",
                              source, mime_type, fd));
 
   //mime_type = gdk_intern_mime_type (mime_type);
@@ -354,10 +354,10 @@ data_source_cancelled (void                  *data,
   GdkDragContext *context;
   GdkDisplay *display;
 
-  GDK_NOTE (EVENTS,
-            g_message ("data source cancelled, source = %p", source));
-
   display = gdk_display_get_default ();
+
+  GDK_DISPLAY_NOTE (display, EVENTS,
+            g_message ("data source cancelled, source = %p", source));
 
   if (source != wayland_selection->dnd_source)
     return;
@@ -405,14 +405,13 @@ data_source_action (void                  *data,
 {
   GdkDragContext *context;
 
-  GDK_NOTE (EVENTS,
-            g_message ("data source action, source = %p action=%x",
-                       source, action));
-
   context = gdk_wayland_drag_context_lookup_by_data_source (source);
-
   if (!context)
     return;
+
+  GDK_DISPLAY_NOTE (gdk_drag_context_get_display (context), EVENTS,
+            g_message ("data source action, source = %p action=%x",
+                       source, action));
 
   context->action = _wl_to_gdk_actions (action);
   g_signal_emit_by_name (context, "action-changed", context->action);

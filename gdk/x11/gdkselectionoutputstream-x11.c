@@ -111,14 +111,14 @@ gdk_x11_pending_selection_notify_send (GdkX11PendingSelectionNotify *notify,
   notify->n_pending--;
   if (notify->n_pending)
     {
-      GDK_NOTE(SELECTION, g_printerr ("%s:%s: not sending SelectionNotify yet, %zu streams still pending\n",
+      GDK_DISPLAY_NOTE (display, SELECTION, g_printerr ("%s:%s: not sending SelectionNotify yet, %zu streams still pending\n",
                                       gdk_x11_get_xatom_name_for_display (display, notify->xevent.selection),
                                       gdk_x11_get_xatom_name_for_display (display, notify->xevent.target),
                                       notify->n_pending));
       return;
     }
 
-  GDK_NOTE(SELECTION, g_printerr ("%s:%s: sending SelectionNotify reporting %s\n",
+  GDK_DISPLAY_NOTE (display, SELECTION, g_printerr ("%s:%s: sending SelectionNotify reporting %s\n",
                                   gdk_x11_get_xatom_name_for_display (display, notify->xevent.selection),
                                   gdk_x11_get_xatom_name_for_display (display, notify->xevent.target),
                                   success ? "success" : "failure"));
@@ -131,7 +131,7 @@ gdk_x11_pending_selection_notify_send (GdkX11PendingSelectionNotify *notify,
 
   if (XSendEvent (xdisplay, notify->xevent.requestor, False, NoEventMask, (XEvent*) &notify->xevent) == 0)
     {
-      GDK_NOTE(SELECTION, g_printerr ("%s:%s: failed to XSendEvent()\n",
+      GDK_DISPLAY_NOTE (display, SELECTION, g_printerr ("%s:%s: failed to XSendEvent()\n",
                                       gdk_x11_get_xatom_name_for_display (display, notify->xevent.selection),
                                       gdk_x11_get_xatom_name_for_display (display, notify->xevent.target)));
     }
@@ -140,7 +140,7 @@ gdk_x11_pending_selection_notify_send (GdkX11PendingSelectionNotify *notify,
   error = gdk_x11_display_error_trap_pop (display);
   if (error != Success)
     {
-      GDK_NOTE(SELECTION, g_printerr ("%s:%s: X error during write: %d\n",
+      GDK_DISPLAY_NOTE (display, SELECTION, g_printerr ("%s:%s: X error during write: %d\n",
                                       gdk_x11_get_xatom_name_for_display (display, notify->xevent.selection),
                                       gdk_x11_get_xatom_name_for_display (display, notify->xevent.target),
                                       error));
@@ -241,7 +241,7 @@ gdk_x11_selection_output_stream_perform_flush (GdkX11SelectionOutputStream *stre
       XWindowAttributes attrs;
 
       priv->incr = TRUE;
-      GDK_NOTE(SELECTION, g_printerr ("%s:%s: initiating INCR transfer\n",
+      GDK_DISPLAY_NOTE (priv->display, SELECTION, g_printerr ("%s:%s: initiating INCR transfer\n",
                                       priv->selection, priv->target));
 
       XGetWindowAttributes (xdisplay,
@@ -271,7 +271,7 @@ gdk_x11_selection_output_stream_perform_flush (GdkX11SelectionOutputStream *stre
                        PropModeReplace,
                        priv->data->data,
                        n_elements);
-      GDK_NOTE(SELECTION, g_printerr ("%s:%s: wrote %zu/%u bytes\n",
+      GDK_DISPLAY_NOTE (priv->display, SELECTION, g_printerr ("%s:%s: wrote %zu/%u bytes\n",
                                       priv->selection, priv->target, n_elements * element_size, priv->data->len));
       g_byte_array_remove_range (priv->data, 0, n_elements * element_size);
       if (priv->data->len < element_size)
@@ -292,7 +292,7 @@ gdk_x11_selection_output_stream_perform_flush (GdkX11SelectionOutputStream *stre
   error = gdk_x11_display_error_trap_pop (priv->display);
   if (error != Success)
     {
-      GDK_NOTE(SELECTION, g_printerr ("%s:%s: X error during write: %d\n",
+      GDK_DISPLAY_NOTE (priv->display, SELECTION, g_printerr ("%s:%s: X error during write: %d\n",
                                       priv->selection, priv->target, error));
     }
 
@@ -328,7 +328,7 @@ gdk_x11_selection_output_stream_write (GOutputStream  *output_stream,
 
   g_mutex_lock (&priv->mutex);
   g_byte_array_append (priv->data, buffer, count);
-  GDK_NOTE(SELECTION, g_printerr ("%s:%s: wrote %zu bytes, %u total now\n",
+  GDK_NOTE (SELECTION, g_printerr ("%s:%s: wrote %zu bytes, %u total now\n",
                                   priv->selection, priv->target, count, priv->data->len));
   g_mutex_unlock (&priv->mutex);
 
@@ -361,7 +361,7 @@ gdk_x11_selection_output_stream_write_async (GOutputStream        *output_stream
 
   g_mutex_lock (&priv->mutex);
   g_byte_array_append (priv->data, buffer, count);
-  GDK_NOTE(SELECTION, g_printerr ("%s:%s: async wrote %zu bytes, %u total now\n",
+  GDK_NOTE (SELECTION, g_printerr ("%s:%s: async wrote %zu bytes, %u total now\n",
                                   priv->selection, priv->target, count, priv->data->len));
   g_mutex_unlock (&priv->mutex);
 
@@ -412,8 +412,8 @@ gdk_x11_selection_output_request_flush (GdkX11SelectionOutputStream *stream)
   needs_flush = gdk_x11_selection_output_stream_needs_flush_unlocked (stream);
   g_mutex_unlock (&priv->mutex);
 
-  GDK_NOTE(SELECTION, g_printerr ("%s:%s: requested flush%s\n",
-                                  priv->selection, priv->target, needs_flush ? "" : ", but not needed"));
+   GDK_NOTE (SELECTION, g_printerr ("%s:%s: requested flush%s\n",
+                                  priv->selection, priv->target, needs_flush ?"" : ", but not needed"));
   return needs_flush;
 }
 
@@ -612,7 +612,7 @@ gdk_x11_selection_output_stream_xevent (GdkDisplay   *display,
           xevent->xproperty.state != PropertyDelete)
         return FALSE;
 
-      GDK_NOTE(SELECTION, g_printerr ("%s:%s: got PropertyNotify Delete during INCR\n",
+      GDK_DISPLAY_NOTE (display, SELECTION, g_printerr ("%s:%s: got PropertyNotify Delete during INCR\n",
                                       priv->selection, priv->target));
       priv->delete_pending = FALSE;
       if (gdk_x11_selection_output_stream_needs_flush (stream) &&
@@ -672,7 +672,7 @@ print_atoms (GdkDisplay *display,
              const Atom *atoms,
              gsize       n_atoms)
 {
-  GDK_NOTE(CLIPBOARD,
+  GDK_DISPLAY_NOTE (display, CLIPBOARD,
            gsize i;
             
            g_printerr ("%s: %s [ ", selection, prefix);
@@ -694,7 +694,7 @@ handle_targets_done (GObject      *stream,
 
   if (!g_output_stream_write_all_finish (G_OUTPUT_STREAM (stream), result, &bytes_written, &error))
     {
-      GDK_NOTE(CLIPBOARD, g_printerr ("---: failed to send targets after %zu bytes: %s\n",
+      GDK_NOTE (CLIPBOARD, g_printerr ("---: failed to send targets after %zu bytes: %s\n",
                                       bytes_written, error->message));
       g_error_free (error);
     }
@@ -741,7 +741,7 @@ handle_timestamp_done (GObject      *stream,
 
   if (!g_output_stream_write_all_finish (G_OUTPUT_STREAM (stream), result, &bytes_written, &error))
     {
-      GDK_NOTE(CLIPBOARD, g_printerr ("---: failed to send timestamp after %zu bytes: %s\n",
+      GDK_NOTE (CLIPBOARD, g_printerr ("---: failed to send timestamp after %zu bytes: %s\n",
                                       bytes_written, error->message));
       g_error_free (error);
     }
@@ -905,13 +905,13 @@ gdk_x11_selection_output_streams_request (GdkDisplay                   *display,
                                   &n_atoms, &nbytes, (guchar **) &atoms);
       if (error != Success)
         {
-          GDK_NOTE(SELECTION, g_printerr ("%s: XGetProperty() during MULTIPLE failed with %d\n",
+          GDK_DISPLAY_NOTE (display, SELECTION, g_printerr ("%s: XGetProperty() during MULTIPLE failed with %d\n",
                                           selection, error));
         }
       else if (prop_format != 32 ||
                prop_type != gdk_x11_get_xatom_by_name_for_display (display, "ATOM_PAIR"))
         {
-          GDK_NOTE(SELECTION, g_printerr ("%s: XGetProperty() type/format should be ATOM_PAIR/32 but is %s/%d\n",
+          GDK_DISPLAY_NOTE (display, SELECTION, g_printerr ("%s: XGetProperty() type/format should be ATOM_PAIR/32 but is %s/%d\n",
                                           selection, gdk_x11_get_xatom_name_for_display (display, prop_type), prop_format));
         }
       else if (n_atoms < 2)
@@ -925,7 +925,7 @@ gdk_x11_selection_output_streams_request (GdkDisplay                   *display,
           print_atoms (display, selection, "MULTIPLE request", atoms, n_atoms);
           if (n_atoms % 2)
             {
-              GDK_NOTE(SELECTION, g_printerr ("%s: Number of atoms is uneven at %lu, ignoring last element\n",
+              GDK_DISPLAY_NOTE (display, SELECTION, g_printerr ("%s: Number of atoms is uneven at %lu, ignoring last element\n",
                                               selection, n_atoms));
               n_atoms &= ~1;
             }
@@ -939,14 +939,14 @@ gdk_x11_selection_output_streams_request (GdkDisplay                   *display,
               if (atoms[2 * i] == None || atoms[2 * i + 1] == None)
                 {
                   success = FALSE;
-                  GDK_NOTE(SELECTION, g_printerr ("%s: None not allowed as atom in MULTIPLE request\n",
+                  GDK_DISPLAY_NOTE (display, SELECTION, g_printerr ("%s: None not allowed as atom in MULTIPLE request\n",
                                                   selection));
                   gdk_x11_pending_selection_notify_send (notify, display, FALSE);
                 }
               else if (atoms[2 * i] == gdk_x11_get_xatom_by_name_for_display (display, "MULTIPLE"))
                 {
                   success = FALSE;
-                  GDK_NOTE(SELECTION, g_printerr ("%s: MULTIPLE as target in MULTIPLE request would cause recursion\n",
+                  GDK_DISPLAY_NOTE (display, SELECTION, g_printerr ("%s: MULTIPLE as target in MULTIPLE request would cause recursion\n",
                                                   selection));
                   gdk_x11_pending_selection_notify_send (notify, display, FALSE);
                 }

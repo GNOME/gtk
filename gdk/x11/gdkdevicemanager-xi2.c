@@ -193,7 +193,7 @@ translate_valuator_class (GdkDisplay          *display,
     label = NULL;
 
   _gdk_device_add_axis (device, label, use, min, max, resolution);
-  GDK_NOTE (INPUT, g_message ("\n\taxis: %s %s", (const char *)label, use == GDK_AXIS_IGNORE ? "(ignored)" : "(used)"));
+  GDK_DISPLAY_NOTE (display, INPUT, g_message ("\n\taxis: %s %s", (const char *)label, use == GDK_AXIS_IGNORE ? "(ignored)" : "(used)"));
 }
 
 static void
@@ -244,7 +244,7 @@ translate_device_classes (GdkDisplay      *display,
             else
               direction = GDK_SCROLL_RIGHT;
 
-            GDK_NOTE (INPUT,
+            GDK_DISPLAY_NOTE (display, INPUT,
                       g_message ("\n\tscroll valuator %d: %s, increment %f",
                                  scroll_info->number,
                                  scroll_info->scroll_type == XIScrollTypeVertical
@@ -471,7 +471,7 @@ create_device (GdkX11DeviceManagerXI2 *device_manager,
       break;
     }
 
-  GDK_NOTE (INPUT,
+  GDK_DISPLAY_NOTE (display, INPUT,
             ({
               const gchar *type_names[] = { "master", "slave", "floating" };
               const gchar *source_names[] = { "mouse", "pen", "eraser", "cursor", "keyboard", "direct touch", "indirect touch", "trackpoint", "pad" };
@@ -1410,7 +1410,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         GdkKeymap *keymap = gdk_display_get_keymap (display);
         GdkModifierType consumed, state;
 
-        GDK_NOTE (EVENTS,
+        GDK_DISPLAY_NOTE (display, EVENTS,
                   g_message ("key %s:\twindow %ld\n"
                              "\tdevice:%u\n"
                              "\tsource device:%u\n"
@@ -1470,7 +1470,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
       {
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
 
-        GDK_NOTE (EVENTS,
+        GDK_DISPLAY_NOTE (display, EVENTS,
                   g_message ("button %s:\twindow %ld\n"
                              "\tdevice:%u\n"
                              "\tsource device:%u\n"
@@ -1607,7 +1607,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             if (delta_x == 0.0 && delta_y == 0.0)
               event->scroll.is_stop = TRUE;
 
-            GDK_NOTE(EVENTS,
+            GDK_DISPLAY_NOTE (display, EVENTS,
                      g_message ("smooth scroll: \n\tdevice: %u\n\tsource device: %u\n\twindow %ld\n\tdeltas: %f %f",
                                 xev->deviceid, xev->sourceid,
                                 xev->event, delta_x, delta_y));
@@ -1667,7 +1667,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
       {
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
 
-        GDK_NOTE(EVENTS,
+        GDK_DISPLAY_NOTE (display, EVENTS,
                  g_message ("touch %s:\twindow %ld\n\ttouch id: %u\n\tpointer emulating: %s",
                             ev->evtype == XI_TouchBegin ? "begin" : "end",
                             xev->event,
@@ -1734,7 +1734,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
       {
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
 
-        GDK_NOTE(EVENTS,
+        GDK_DISPLAY_NOTE (display, EVENTS,
                  g_message ("touch update:\twindow %ld\n\ttouch id: %u\n\tpointer emulating: %s",
                             xev->event,
                             xev->detail,
@@ -1788,7 +1788,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
       {
         XIEnterEvent *xev = (XIEnterEvent *) ev;
 
-        GDK_NOTE (EVENTS,
+        GDK_DISPLAY_NOTE (display, EVENTS,
                   g_message ("%s notify:\twindow %ld\n\tsubwindow:%ld\n"
                              "\tdevice: %u\n\tsource device: %u\n"
                              "\tnotify type: %u\n\tcrossing mode: %u",

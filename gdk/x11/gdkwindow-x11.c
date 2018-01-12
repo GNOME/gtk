@@ -410,8 +410,7 @@ gdk_x11_window_end_frame (GdkWindow *window)
 
   if (impl->toplevel->current_counter_value % 2 == 1)
     {
-#ifdef G_ENABLE_DEBUG
-      if (GDK_DEBUG_CHECK (FRAMES))
+      if (GDK_DISPLAY_DEBUG_CHECK (gdk_window_get_display (window), FRAMES))
         {
           XImage *image = XGetImage (GDK_WINDOW_XDISPLAY (window),
                                      GDK_WINDOW_XID (window),
@@ -420,7 +419,6 @@ gdk_x11_window_end_frame (GdkWindow *window)
                                      ZPixmap);
           XDestroyImage (image);
         }
-#endif /* G_ENABLE_DEBUG */
 
       /* An increment of 3 means that the frame was not drawn as fast as possible,
        * but rather at a particular time. This can trigger different handling from

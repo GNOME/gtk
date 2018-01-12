@@ -133,7 +133,7 @@ xdg_shell_ping (void                 *data,
 
   _gdk_wayland_display_update_serial (display_wayland, serial);
 
-  GDK_NOTE (EVENTS,
+  GDK_DISPLAY_NOTE (GDK_DISPLAY (data), EVENTS,
             g_message ("ping, shell %p, serial %u\n", xdg_shell, serial));
 
   zxdg_shell_v6_pong (xdg_shell, serial);

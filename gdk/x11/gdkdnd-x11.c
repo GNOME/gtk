@@ -266,7 +266,7 @@ gdk_x11_drag_context_read_got_stream (GObject      *source,
         {
           GdkDragContext *context = GDK_DRAG_CONTEXT (g_task_get_source_object (task));
 
-          GDK_NOTE (DND, g_printerr ("reading %s failed, trying %s next\n",
+          GDK_DISPLAY_NOTE (gdk_drag_context_get_display (context), DND, g_printerr ("reading %s failed, trying %s next\n",
                                      (char *) targets->data, (char *) next->data));
           targets->next = NULL;
           g_task_set_task_data (task, next, (GDestroyNotify) g_slist_free);
@@ -296,7 +296,7 @@ gdk_x11_drag_context_read_got_stream (GObject      *source,
             {
               g_assert (special_targets[i].mime_type != NULL);
 
-              GDK_NOTE(CLIPBOARD, g_printerr ("%s: reading with converter from %s to %s\n",
+              GDK_DISPLAY_NOTE (CLIPBOARD, g_printerr ("%s: reading with converter from %s to %s\n",
                                               cb->selection, mime_type, special_targets[i].mime_type));
               mime_type = g_intern_string (special_targets[i].mime_type);
               g_task_set_task_data (task, g_slist_prepend (NULL, (gpointer) mime_type), (GDestroyNotify) g_slist_free);
@@ -306,7 +306,7 @@ gdk_x11_drag_context_read_got_stream (GObject      *source,
         }
 #endif
 
-      GDK_NOTE(DND, g_printerr ("reading DND as %s now\n",
+      GDK_NOTE (DND, g_printerr ("reading DND as %s now\n",
                                 mime_type));
       g_task_return_pointer (task, stream, g_object_unref);
     }
@@ -338,7 +338,7 @@ gdk_x11_drag_context_read_async (GdkDragContext      *context,
       return;
     }
 
-  GDK_NOTE(DND, g_printerr ("new read for %s (%u other options)\n",
+  GDK_DISPLAY_NOTE (gdk_drag_context_get_display (context), DND, g_printerr ("new read for %s (%u other options)\n",
                             (char *) targets->data, g_slist_length (targets->next)));
   gdk_x11_selection_input_stream_new_async (gdk_drag_context_get_display (context),
                                             "XdndSelection",
@@ -1057,12 +1057,12 @@ xdnd_status_filter (GdkXEvent *xev,
       gdk_window_get_window_type (event->any.window) == GDK_WINDOW_FOREIGN)
     return GDK_FILTER_CONTINUE;                 /* Not for us */
 
-  GDK_NOTE (DND,
-            g_message ("XdndStatus: dest_window: %#x  action: %ld",
-                       dest_window, action));
-
   display = gdk_window_get_display (event->any.window);
   context = gdk_drag_context_find (display, TRUE, xevent->xclient.window, dest_window);
+
+  GDK_DISPLAY_NOTE (display, DND,
+            g_message ("XdndStatus: dest_window: %#x  action: %ld",
+                       dest_window, action));
 
   if (context)
     {
@@ -1072,7 +1072,7 @@ xdnd_status_filter (GdkXEvent *xev,
 
       if (!(action != 0) != !(flags & 1))
         {
-          GDK_NOTE (DND,
+          GDK_DISPLAY_NOTE (display, DND,
                     g_warning ("Received status event with flags not corresponding to action!"));
           action = 0;
         }
@@ -1104,11 +1104,11 @@ xdnd_finished_filter (GdkXEvent *xev,
       gdk_window_get_window_type (event->any.window) == GDK_WINDOW_FOREIGN)
     return GDK_FILTER_CONTINUE;                 /* Not for us */
 
-  GDK_NOTE (DND,
-            g_message ("XdndFinished: dest_window: %#x", dest_window));
-
   display = gdk_window_get_display (event->any.window);
   context = gdk_drag_context_find (display, TRUE, xevent->xclient.window, dest_window);
+
+  GDK_DISPLAY_NOTE (display, DND,
+            g_message ("XdndFinished: dest_window: %#x", dest_window));
 
   if (context)
     {
@@ -1205,7 +1205,7 @@ send_client_message_async_cb (Window   window,
                               gpointer data)
 {
   GdkDragContext *context = data;
-  GDK_NOTE (DND,
+  GDK_DISPLAY_NOTE (gdk_drag_context_get_display (context), DND,
             g_message ("Got async callback for #%lx, success = %d",
                        window, success));
 
@@ -1320,7 +1320,7 @@ xdnd_send_enter (GdkX11DragContext *context_x11)
   xev.xclient.data.l[3] = 0;
   xev.xclient.data.l[4] = 0;
 
-  GDK_NOTE(DND,
+  GDK_DISPLAY_NOTE (display, DND,
            g_message ("Sending enter source window %#lx XDND protocol version %d\n",
                       GDK_WINDOW_XID (context_x11->ipc_window), context_x11->version));
   atoms = gdk_content_formats_get_mime_types (context->formats, &n_atoms);
@@ -1341,7 +1341,7 @@ xdnd_send_enter (GdkX11DragContext *context_x11)
 
   if (!xdnd_send_xevent (context_x11, context->dest_window, FALSE, &xev))
     {
-      GDK_NOTE (DND,
+      GDK_DISPLAY_NOTE (display, DND,
                 g_message ("Send event to %lx failed",
                            GDK_WINDOW_XID (context->dest_window)));
       g_object_unref (context->dest_window);
@@ -1370,7 +1370,7 @@ xdnd_send_leave (GdkX11DragContext *context_x11)
 
   if (!xdnd_send_xevent (context_x11, context->dest_window, FALSE, &xev))
     {
-      GDK_NOTE (DND,
+      GDK_DISPLAY_NOTE (display, DND,
                 g_message ("Send event to %lx failed",
                            GDK_WINDOW_XID (context->dest_window)));
       g_object_unref (context->dest_window);
@@ -1400,7 +1400,7 @@ xdnd_send_drop (GdkX11DragContext *context_x11,
 
   if (!xdnd_send_xevent (context_x11, context->dest_window, FALSE, &xev))
     {
-      GDK_NOTE (DND,
+      GDK_DISPLAY_NOTE (display, DND,
                 g_message ("Send event to %lx failed",
                            GDK_WINDOW_XID (context->dest_window)));
       g_object_unref (context->dest_window);
@@ -1433,7 +1433,7 @@ xdnd_send_motion (GdkX11DragContext *context_x11,
 
   if (!xdnd_send_xevent (context_x11, context->dest_window, FALSE, &xev))
     {
-      GDK_NOTE (DND,
+      GDK_DISPLAY_NOTE (display, DND,
                 g_message ("Send event to %lx failed",
                            GDK_WINDOW_XID (context->dest_window)));
       g_object_unref (context->dest_window);
@@ -1477,7 +1477,7 @@ xdnd_check_dest (GdkDisplay *display,
             }
           else
             {
-              GDK_NOTE (DND,
+              GDK_DISPLAY_NOTE (display, DND,
                         g_warning ("Invalid XdndProxy property on window %ld", win));
             }
 
@@ -1502,7 +1502,7 @@ xdnd_check_dest (GdkDisplay *display,
             }
           else
             {
-              GDK_NOTE (DND,
+              GDK_DISPLAY_NOTE (display, DND,
                         g_warning ("Invalid XdndAware property on window %ld", win));
             }
 
@@ -1554,7 +1554,7 @@ xdnd_read_actions (GdkX11DragContext *context_x11)
           context_x11->xdnd_have_actions = TRUE;
 
 #ifdef G_ENABLE_DEBUG
-          if (GDK_DEBUG_CHECK (DND))
+          if (GDK_DISPLAY_DEBUG_CHECK (display, DND))
             {
               GString *action_str = g_string_new (NULL);
               if (context->actions & GDK_ACTION_MOVE)
@@ -1742,14 +1742,14 @@ xdnd_enter_filter (GdkXEvent *xev,
 
   xdnd_precache_atoms (display);
 
-  GDK_NOTE (DND,
+  GDK_DISPLAY_NOTE (display, DND,
             g_message ("XdndEnter: source_window: %#x, version: %#x",
                        source_window, version));
 
   if (version < 3)
     {
       /* Old source ignore */
-      GDK_NOTE (DND, g_message ("Ignored old XdndEnter message"));
+      GDK_DISPLAY_NOTE (display, DND, g_message ("Ignored old XdndEnter message"));
       return GDK_FILTER_REMOVE;
     }
 
@@ -1820,7 +1820,7 @@ xdnd_enter_filter (GdkXEvent *xev,
   g_ptr_array_unref (formats);
 
 #ifdef G_ENABLE_DEBUG
-  if (GDK_DEBUG_CHECK (DND))
+  if (GDK_DISPLAY_DEBUG_CHECK (display, DND))
     print_target_list (context->formats);
 #endif /* G_ENABLE_DEBUG */
 
@@ -1851,12 +1851,12 @@ xdnd_leave_filter (GdkXEvent *xev,
       gdk_window_get_window_type (event->any.window) == GDK_WINDOW_FOREIGN)
     return GDK_FILTER_CONTINUE;                 /* Not for us */
 
-  GDK_NOTE (DND,
-            g_message ("XdndLeave: source_window: %#x",
-                       source_window));
-
   display = GDK_WINDOW_DISPLAY (event->any.window);
   display_x11 = GDK_X11_DISPLAY (display);
+
+  GDK_DISPLAY_NOTE (display, DND,
+            g_message ("XdndLeave: source_window: %#x",
+                       source_window));
 
   xdnd_precache_atoms (display);
 
@@ -1898,12 +1898,12 @@ xdnd_position_filter (GdkXEvent *xev,
        gdk_window_get_window_type (event->any.window) == GDK_WINDOW_FOREIGN)
      return GDK_FILTER_CONTINUE;                        /* Not for us */
 
-  GDK_NOTE (DND,
-            g_message ("XdndPosition: source_window: %#x position: (%d, %d)  time: %d  action: %ld",
-                       source_window, x_root, y_root, time, action));
-
   display = GDK_WINDOW_DISPLAY (event->any.window);
   display_x11 = GDK_X11_DISPLAY (display);
+
+  GDK_DISPLAY_NOTE (display, DND,
+            g_message ("XdndPosition: source_window: %#x position: (%d, %d)  time: %d  action: %ld",
+                       source_window, x_root, y_root, time, action));
 
   xdnd_precache_atoms (display);
 
@@ -1958,12 +1958,12 @@ xdnd_drop_filter (GdkXEvent *xev,
       gdk_window_get_window_type (event->any.window) == GDK_WINDOW_FOREIGN)
     return GDK_FILTER_CONTINUE;                 /* Not for us */
 
-  GDK_NOTE (DND,
-            g_message ("XdndDrop: source_window: %#x  time: %d",
-                       source_window, time));
-
   display = GDK_WINDOW_DISPLAY (event->any.window);
   display_x11 = GDK_X11_DISPLAY (display);
+
+  GDK_DISPLAY_NOTE (display, DND,
+            g_message ("XdndDrop: source_window: %#x  time: %d",
+                       source_window, time));
 
   xdnd_precache_atoms (display);
 
@@ -2084,13 +2084,13 @@ _gdk_x11_display_get_drag_protocol (GdkDisplay      *display,
           *protocol = GDK_DRAG_PROTO_XDND;
           *version = 5;
           xdnd_precache_atoms (display);
-          GDK_NOTE (DND, g_message ("Entering local Xdnd window %#x\n", (guint) xid));
+          GDK_DISPLAY_NOTE (display, DND, g_message ("Entering local Xdnd window %#x\n", (guint) xid));
           return xid;
         }
       else if (_gdk_x11_display_is_root_window (display, xid))
         {
           *protocol = GDK_DRAG_PROTO_ROOTWIN;
-          GDK_NOTE (DND, g_message ("Entering root window\n"));
+          GDK_DISPLAY_NOTE (display, DND, g_message ("Entering root window\n"));
           return xid;
         }
     }
@@ -2098,7 +2098,7 @@ _gdk_x11_display_get_drag_protocol (GdkDisplay      *display,
     {
       *protocol = GDK_DRAG_PROTO_XDND;
       xdnd_precache_atoms (display);
-      GDK_NOTE (DND, g_message ("Entering Xdnd window %#x\n", (guint) xid));
+      GDK_DISPLAY_NOTE (display, DND, g_message ("Entering Xdnd window %#x\n", (guint) xid));
       return retval;
     }
   else
@@ -2111,7 +2111,7 @@ _gdk_x11_display_get_drag_protocol (GdkDisplay      *display,
 
       if (rootwin)
         {
-          GDK_NOTE (DND, g_message ("Entering root window\n"));
+          GDK_DISPLAY_NOTE (display, DND, g_message ("Entering root window\n"));
           *protocol = GDK_DRAG_PROTO_ROOTWIN;
           return xid;
         }
@@ -2451,7 +2451,7 @@ gdk_x11_drag_context_drag_status (GdkDragContext *context,
       xev.xclient.data.l[4] = xdnd_action_to_atom (display, action);
       if (!xdnd_send_xevent (context_x11, context->source_window, FALSE, &xev))
         {
-          GDK_NOTE (DND,
+          GDK_DISPLAY_NOTE (display, DND,
                     g_message ("Send event to %lx failed",
                                GDK_WINDOW_XID (context->source_window)));
         }
@@ -2510,7 +2510,7 @@ gdk_x11_drag_context_drop_finish (GdkDragContext *context,
 
       if (!xdnd_send_xevent (GDK_X11_DRAG_CONTEXT (context), context->source_window, FALSE, &xev))
         {
-          GDK_NOTE (DND,
+          GDK_DISPLAY_NOTE (display, DND,
                     g_message ("Send event to %lx failed",
                                GDK_WINDOW_XID (context->source_window)));
         }
@@ -2580,7 +2580,7 @@ gdk_x11_drag_context_default_output_done (GObject      *context,
 
   if (!gdk_drag_context_write_finish (GDK_DRAG_CONTEXT (context), result, &error))
     {
-      GDK_NOTE(DND, g_printerr ("failed to write stream: %s\n", error->message));
+      GDK_DISPLAY_NOTE (gdk_drag_context_get_display (GDK_DRAG_CONTEXT (context)), DND, g_printerr ("failed to write stream: %s\n", error->message));
       g_error_free (error);
     }
 }
@@ -2624,12 +2624,12 @@ gdk_x11_drag_context_xevent (GdkDisplay   *display,
 
       if (xevent->xselectionclear.time < x11_context->timestamp)
         {
-          GDK_NOTE(CLIPBOARD, g_printerr ("ignoring SelectionClear with too old timestamp (%lu vs %lu)\n",
+          GDK_DISPLAY_NOTE (display, CLIPBOARD, g_printerr ("ignoring SelectionClear with too old timestamp (%lu vs %lu)\n",
                                           xevent->xselectionclear.time, x11_context->timestamp));
           return FALSE;
         }
 
-      GDK_NOTE(CLIPBOARD, g_printerr ("got SelectionClear, aborting DND\n"));
+      GDK_DISPLAY_NOTE (display, CLIPBOARD, g_printerr ("got SelectionClear, aborting DND\n"));
       gdk_drag_context_cancel (context, GDK_DRAG_CANCEL_ERROR);
       return TRUE;
 
@@ -2648,12 +2648,12 @@ gdk_x11_drag_context_xevent (GdkDisplay   *display,
 
         if (xevent->xselectionrequest.requestor == None)
           {
-            GDK_NOTE(CLIPBOARD, g_printerr ("got SelectionRequest for %s @ %s with NULL window, ignoring\n",
+            GDK_DISPLAY_NOTE (display, CLIPBOARD, g_printerr ("got SelectionRequest for %s @ %s with NULL window, ignoring\n",
                                             target, property));
             return TRUE;
           }
         
-        GDK_NOTE(CLIPBOARD, g_printerr ("got SelectionRequest for %s @ %s\n",
+        GDK_DISPLAY_NOTE (display, CLIPBOARD, g_printerr ("got SelectionRequest for %s @ %s\n",
                                         target, property));
 
         gdk_x11_selection_output_streams_create (display,
@@ -3011,7 +3011,7 @@ _gdk_x11_window_drag_begin (GdkWindow          *window,
                       x11_context->timestamp);
   if (XGetSelectionOwner (GDK_DISPLAY_XDISPLAY (display), xselection) != GDK_WINDOW_XID (x11_context->ipc_window))
     {
-      GDK_NOTE(DND, g_printerr ("failed XSetSelectionOwner() on \"XdndSelection\", aborting DND\n"));
+      GDK_DISPLAY_NOTE (display, DND, g_printerr ("failed XSetSelectionOwner() on \"XdndSelection\", aborting DND\n"));
       g_object_unref (context);
       return NULL;
     }

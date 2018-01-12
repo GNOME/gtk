@@ -703,15 +703,14 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
   switch (xevent->type)
     {
     case KeymapNotify:
-      GDK_NOTE (EVENTS,
-		g_message ("keymap notify"));
+      GDK_DISPLAY_NOTE (display, EVENTS, g_message ("keymap notify"));
 
       /* Not currently handled */
       return_val = FALSE;
       break;
 
     case Expose:
-      GDK_NOTE (EVENTS,
+      GDK_DISPLAY_NOTE (display, EVENTS,
 		g_message ("expose:\t\twindow: %ld  %d	x,y: %d %d  w,h: %d %d%s",
 			   xevent->xexpose.window, xevent->xexpose.count,
 			   xevent->xexpose.x, xevent->xexpose.y,
@@ -748,7 +747,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	GdkRectangle expose_rect;
         int x2, y2;
 
-        GDK_NOTE (EVENTS,
+        GDK_DISPLAY_NOTE (display, EVENTS,
 		  g_message ("graphics expose:\tdrawable: %ld",
 			     xevent->xgraphicsexpose.drawable));
 
@@ -774,7 +773,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 
     case VisibilityNotify:
 #ifdef G_ENABLE_DEBUG
-      if (GDK_DEBUG_CHECK (EVENTS))
+      if (GDK_DISPLAY_DEBUG_CHECK (display, EVENTS))
 	switch (xevent->xvisibility.state)
 	  {
 	  case VisibilityFullyObscured:
@@ -798,7 +797,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       break;
 
     case CreateNotify:
-      GDK_NOTE (EVENTS,
+      GDK_DISPLAY_NOTE (display, EVENTS,
 		g_message ("create notify:\twindow: %ld  x,y: %d %d	w,h: %d %d  b-w: %d  parent: %ld	 ovr: %d",
 			   xevent->xcreatewindow.window,
 			   xevent->xcreatewindow.x,
@@ -812,7 +811,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       break;
 
     case DestroyNotify:
-      GDK_NOTE (EVENTS,
+      GDK_DISPLAY_NOTE (display, EVENTS,
 		g_message ("destroy notify:\twindow: %ld",
 			   xevent->xdestroywindow.window));
 
@@ -832,7 +831,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       break;
 
     case UnmapNotify:
-      GDK_NOTE (EVENTS,
+      GDK_DISPLAY_NOTE (display, EVENTS,
 		g_message ("unmap notify:\t\twindow: %ld",
 			   xevent->xmap.window));
 
@@ -876,7 +875,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       break;
 
     case MapNotify:
-      GDK_NOTE (EVENTS,
+      GDK_DISPLAY_NOTE (display, EVENTS,
 		g_message ("map notify:\t\twindow: %ld",
 			   xevent->xmap.window));
 
@@ -898,7 +897,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       break;
 
     case ReparentNotify:
-      GDK_NOTE (EVENTS,
+      GDK_DISPLAY_NOTE (display, EVENTS,
 		g_message ("reparent notify:\twindow: %ld  x,y: %d %d  parent: %ld	ovr: %d",
 			   xevent->xreparent.window,
 			   xevent->xreparent.x,
@@ -911,7 +910,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       break;
 
     case ConfigureNotify:
-      GDK_NOTE (EVENTS,
+      GDK_DISPLAY_NOTE (display, EVENTS,
 		g_message ("configure notify:\twindow: %ld  x,y: %d %d	w,h: %d %d  b-w: %d  above: %ld	 ovr: %d%s",
 			   xevent->xconfigure.window,
 			   xevent->xconfigure.x,
@@ -1008,7 +1007,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       break;
 
     case PropertyNotify:
-      GDK_NOTE (EVENTS,
+      GDK_DISPLAY_NOTE (display, EVENTS,
 		g_message ("property notify:\twindow: %ld, atom(%ld): %s%s%s",
 			   xevent->xproperty.window,
 			   xevent->xproperty.atom,
@@ -1042,7 +1041,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       break;
 
     case ColormapNotify:
-      GDK_NOTE (EVENTS,
+      GDK_DISPLAY_NOTE (display, EVENTS,
 		g_message ("colormap notify:\twindow: %ld",
 			   xevent->xcolormap.window));
 
@@ -1051,7 +1050,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       break;
 
     case ClientMessage:
-      GDK_NOTE (EVENTS,
+      GDK_DISPLAY_NOTE (display, EVENTS,
                 g_message ("client message:\twindow: %ld",
                            xevent->xclient.window));
 
@@ -1060,7 +1059,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       break;
 
     case MappingNotify:
-      GDK_NOTE (EVENTS,
+      GDK_DISPLAY_NOTE (display, EVENTS,
 		g_message ("mapping notify"));
 
       /* Let XLib know that there is a new keyboard mapping.
@@ -1272,7 +1271,7 @@ _gdk_wm_protocols_filter (GdkXEvent *xev,
 
               timings->complete = TRUE;
 #ifdef G_ENABLE_DEBUG
-              if (GDK_DEBUG_CHECK (FRAMES))
+              if (GDK_DISPLAY_DEBUG_CHECK (display, FRAMES))
                 _gdk_frame_clock_debug_print_timings (clock, timings);
 #endif /* G_ENABLE_DEBUG */
             }
@@ -1294,7 +1293,7 @@ _gdk_wm_protocols_filter (GdkXEvent *xev,
    *  the event is passed along to the program,
    *  which should then destroy the window.
    */
-      GDK_NOTE (EVENTS,
+      GDK_DISPLAY_NOTE (display, EVENTS,
 		g_message ("delete window:\t\twindow: %ld",
 			   xevent->xclient.window));
 

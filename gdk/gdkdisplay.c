@@ -1505,7 +1505,7 @@ gdk_display_make_gl_context_current (GdkDisplay   *display,
 GdkDebugFlags
 gdk_display_get_debug_flags (GdkDisplay *display)
 {
-  return display->debug_flags;
+  return display ? display->debug_flags : _gdk_debug_flags;
 }
 
 void

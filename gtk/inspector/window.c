@@ -51,6 +51,8 @@
 #include "gtkmodulesprivate.h"
 #include "gtkwindow.h"
 #include "gtkwindowgroup.h"
+#include "gtkprivate.h"
+#include "gdk-private.h"
 
 G_DEFINE_TYPE (GtkInspectorWindow, gtk_inspector_window, GTK_TYPE_WINDOW)
 
@@ -321,6 +323,9 @@ get_inspector_display (void)
 
       g_object_set_data_full (G_OBJECT (display), "gsk-renderer",
                               g_strdup (name), g_free);
+
+      gdk_display_set_debug_flags (display, 0);
+      gtk_set_display_debug_flags (display, 0);
     }
 
   if (!display)

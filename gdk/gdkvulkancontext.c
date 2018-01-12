@@ -245,7 +245,8 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
     }
   else
     {
-      GDK_NOTE (VULKAN, g_warning ("Vulkan swapchain doesn't do transparency. Using opaque swapchain instead."));
+      GDK_DISPLAY_NOTE (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context)),
+                        VULKAN, g_warning ("Vulkan swapchain doesn't do transparency. Using opaque swapchain instead."));
       composite_alpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
     }
 
@@ -762,7 +763,7 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
         }
     }
 
-  if (list_devices || GDK_DEBUG_CHECK (VULKAN))
+  if (list_devices || GDK_DISPLAY_DEBUG_CHECK (display, VULKAN))
     {
       for (i = 0; i < n_devices; i++)
         {
@@ -824,7 +825,7 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
         {
           if (queue_props[j].queueFlags & VK_QUEUE_GRAPHICS_BIT)
             {
-              GDK_NOTE (VULKAN, g_print ("Using Vulkan device %u, queue %u\n", i, j));
+              GDK_DISPLAY_NOTE (display, VULKAN, g_print ("Using Vulkan device %u, queue %u\n", i, j));
               if (GDK_VK_CHECK (vkCreateDevice, devices[i],
                                                 &(VkDeviceCreateInfo) {
                                                     VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
@@ -913,11 +914,12 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
 
   for (i = 0; i < n_extensions; i++)
     {
-      GDK_NOTE (VULKAN, g_print ("Extension available: %s v%u.%u.%u\n",
+      if (GDK_DISPLAY_DEBUG_CHECK (display, VULKAN))
+        g_print ("Extension available: %s v%u.%u.%u\n",
                                  extensions[i].extensionName,
                                  VK_VERSION_MAJOR (extensions[i].specVersion),
                                  VK_VERSION_MINOR (extensions[i].specVersion),
-                                 VK_VERSION_PATCH (extensions[i].specVersion)));
+                                 VK_VERSION_PATCH (extensions[i].specVersion));
 
       if (g_str_equal (extensions[i].extensionName, VK_EXT_DEBUG_REPORT_EXTENSION_NAME))
         {
@@ -935,13 +937,14 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
 
   for (i = 0; i < n_layers; i++)
     {
-      GDK_NOTE (VULKAN, g_print ("Layer available: %s v%u.%u.%u (%s)\n",
+      if (GDK_DISPLAY_DEBUG_CHECK (display, VULKAN))
+        g_print ("Layer available: %s v%u.%u.%u (%s)\n",
                                  layers[i].layerName,
                                  VK_VERSION_MAJOR (layers[i].specVersion),
                                  VK_VERSION_MINOR (layers[i].specVersion),
                                  VK_VERSION_PATCH (layers[i].specVersion),
-                                 layers[i].description));
-      if (GDK_DEBUG_CHECK (VULKAN_VALIDATE) &&
+                                 layers[i].description);
+      if (GDK_DISPLAY_DEBUG_CHECK (display, VULKAN_VALIDATE) &&
           g_str_equal (layers[i].layerName, "VK_LAYER_LUNARG_standard_validation"))
         {
           g_ptr_array_add (used_layers, (gpointer) "VK_LAYER_LUNARG_standard_validation");
@@ -949,7 +952,7 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
         }
     }
 
-  if (GDK_DEBUG_CHECK (VULKAN_VALIDATE) && !validate)
+  if (GDK_DISPLAY_DEBUG_CHECK (display, VULKAN_VALIDATE) && !validate)
     {
       g_warning ("Vulkan validation layers were requested, but not found. Running without.");
     }

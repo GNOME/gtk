@@ -444,8 +444,7 @@ frame_callback (void               *data,
   GdkFrameClock *clock = gdk_window_get_frame_clock (window);
   GdkFrameTimings *timings;
 
-  GDK_NOTE (EVENTS,
-            g_message ("frame %p", window));
+  GDK_DISPLAY_NOTE (GDK_DISPLAY (display_wayland), EVENTS, g_message ("frame %p", window));
 
   wl_callback_destroy (callback);
 
@@ -1212,7 +1211,7 @@ surface_enter (void              *data,
   GdkWindow *window = GDK_WINDOW (data);
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
-  GDK_NOTE (EVENTS,
+  GDK_DISPLAY_NOTE (gdk_window_get_display (window), EVENTS,
             g_message ("surface enter, window %p output %p", window, output));
 
   impl->display_server.outputs = g_slist_prepend (impl->display_server.outputs, output);
@@ -1228,7 +1227,7 @@ surface_leave (void              *data,
   GdkWindow *window = GDK_WINDOW (data);
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
-  GDK_NOTE (EVENTS,
+  GDK_DISPLAY_NOTE (gdk_window_get_display (window), EVENTS,
             g_message ("surface leave, window %p output %p", window, output));
 
   impl->display_server.outputs = g_slist_remove (impl->display_server.outputs, output);
@@ -1377,7 +1376,7 @@ xdg_surface_configure (void                   *data,
       gdk_wayland_window_configure (window, width, height, impl->scale);
     }
 
-  GDK_NOTE (EVENTS,
+  GDK_DISPLAY_NOTE (gdk_window_get_display (window), EVENTS,
             g_message ("configure, window %p %dx%d,%s%s%s%s",
                        window, width, height,
                        (new_state & GDK_WINDOW_STATE_FULLSCREEN) ? " fullscreen" : "",
@@ -1441,14 +1440,14 @@ xdg_toplevel_close (void                    *data,
   GdkDisplay *display;
   GdkEvent *event;
 
-  GDK_NOTE (EVENTS,
-            g_message ("close %p", window));
+  display = gdk_window_get_display (window);
+
+  GDK_DISPLAY_NOTE (display, EVENTS, g_message ("close %p", window));
 
   event = gdk_event_new (GDK_DELETE);
   event->any.window = g_object_ref (window);
   event->any.send_event = TRUE;
 
-  display = gdk_window_get_display (window);
   _gdk_wayland_display_deliver_event (display, event);
 }
 
@@ -1546,8 +1545,7 @@ xdg_popup_done (void                 *data,
 {
   GdkWindow *window = GDK_WINDOW (data);
 
-  GDK_NOTE (EVENTS,
-            g_message ("done %p", window));
+  GDK_DISPLAY_NOTE (gdk_window_get_display (window), EVENTS, g_message ("done %p", window));
 
   gdk_window_hide (window);
 }

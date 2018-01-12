@@ -998,7 +998,7 @@ gdk_window_new (GdkDisplay    *display,
 
   g_signal_connect (display, "seat-removed", G_CALLBACK (seat_removed_cb), window);
 
-  if (GDK_DEBUG_CHECK (GL_ALWAYS))
+  if (GDK_DISPLAY_DEBUG_CHECK (display, GL_ALWAYS))
     {
       GError *error = NULL;
 
@@ -1871,7 +1871,7 @@ gdk_window_get_paint_gl_context (GdkWindow  *window,
 {
   GError *internal_error = NULL;
 
-  if (GDK_DEBUG_CHECK (GL_DISABLE))
+  if (GDK_DISPLAY_DEBUG_CHECK (window->display, GL_DISABLE))
     {
       g_set_error_literal (error, GDK_GL_ERROR,
                            GDK_GL_ERROR_NOT_AVAILABLE,
@@ -1976,7 +1976,7 @@ gdk_window_create_vulkan_context (GdkWindow  *window,
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-  if (GDK_DEBUG_CHECK (VULKAN_DISABLE))
+  if (GDK_DISPLAY_DEBUG_CHECK (window->display, VULKAN_DISABLE))
     {
       g_set_error_literal (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_NOT_AVAILABLE,
                            _("Vulkan support disabled via GDK_DEBUG"));
@@ -5781,13 +5781,13 @@ gdk_window_create_similar_surface (GdkWindow *     window,
   sx = sy = 1;
   cairo_surface_get_device_scale (window_surface, &sx, &sy);
 
-  if (GDK_DEBUG_CHECK (CAIRO_RECORDING))
+  if (GDK_DISPLAY_DEBUG_CHECK (window->display, CAIRO_RECORDING))
     {
       cairo_rectangle_t rect = { 0, 0, width * sx, height *sy };
       surface = cairo_recording_surface_create (content, &rect);
       cairo_surface_set_device_scale (surface, sx, sy);
     }
-  else if (GDK_DEBUG_CHECK (CAIRO_IMAGE))
+  else if (GDK_DISPLAY_DEBUG_CHECK (window->display, CAIRO_IMAGE))
     {
       surface = cairo_image_surface_create (content == CAIRO_CONTENT_COLOR ? CAIRO_FORMAT_RGB24 :
                                             content == CAIRO_CONTENT_ALPHA ? CAIRO_FORMAT_A8 : CAIRO_FORMAT_ARGB32,
