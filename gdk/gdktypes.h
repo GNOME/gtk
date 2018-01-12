@@ -310,15 +310,6 @@ typedef enum
   GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK,
 } GdkModifierIntent;
 
-typedef enum
-{
-  GDK_OK          = 0,
-  GDK_ERROR       = -1,
-  GDK_ERROR_PARAM = -2,
-  GDK_ERROR_FILE  = -3,
-  GDK_ERROR_MEM   = -4
-} GdkStatus;
-
 /**
  * GdkGrabStatus:
  * @GDK_GRAB_SUCCESS: the resource was successfully grabbed.
