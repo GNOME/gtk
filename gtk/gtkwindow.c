@@ -4163,6 +4163,9 @@ on_titlebar_title_notify (GtkHeaderBar *titlebar,
  *
  * Sets a custom titlebar for @window.
  *
+ * A typical widget used here is #GtkHeaderBar, as it provides various features
+ * expected of a titlebar while allowing the addition of child widgets to it.
+ *
  * If you set a custom titlebar, GTK+ will do its best to convince
  * the window manager not to put its own titlebar on the window.
  * Depending on the system, this function may not work for a window
