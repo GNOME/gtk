@@ -2928,9 +2928,10 @@ gdk_x11_display_get_keymap (GdkDisplay *display)
   display_x11 = GDK_X11_DISPLAY (display);
 
   if (!display_x11->keymap)
-    display_x11->keymap = g_object_new (GDK_TYPE_X11_KEYMAP, NULL);
-
-  display_x11->keymap->display = display;
+    {
+      display_x11->keymap = g_object_new (GDK_TYPE_X11_KEYMAP, NULL);
+      display_x11->keymap->display = display; /* beware of ref cycle */
+    }
 
   return display_x11->keymap;
 }
