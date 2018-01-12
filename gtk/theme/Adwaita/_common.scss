@@ -4051,7 +4051,7 @@ tooltip {
                                               // very dark backgrounds
   }
 
-  padding: 4px; /* not working */
+  padding: 4px;
   border-radius: 5px;
   box-shadow: none; // otherwise it gets inherited by windowframe.csd
   text-shadow: 0 1px black;
@@ -4060,7 +4060,6 @@ tooltip {
   decoration { background-color: transparent; }
 
   * { // Yeah this is ugly
-    padding: 4px;
     background-color: transparent;
     color: white;
   }
