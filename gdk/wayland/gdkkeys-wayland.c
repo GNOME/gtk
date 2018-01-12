@@ -625,7 +625,7 @@ _gdk_wayland_keymap_update_from_fd (GdkKeymap *keymap,
       return;
     }
 
-  GDK_DISPLAY_NOTE (keymap->display, INPUT, g_print ("keymap:\n%s\n", map_str));
+  GDK_DISPLAY_NOTE (keymap->display, INPUT, g_message ("keymap:\n%s", map_str));
 
   xkb_keymap = xkb_keymap_new_from_string (context, map_str, format, 0);
   munmap (map_str, size);

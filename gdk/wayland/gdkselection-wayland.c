@@ -311,7 +311,7 @@ gdk_wayland_drag_context_write_done (GObject      *context,
 
   if (!gdk_drag_context_write_finish (GDK_DRAG_CONTEXT (context), result, &error))
     {
-      GDK_DISPLAY_NOTE (gdk_drag_context_get_display (GDK_DRAG_CONTEXT (context)), DND, g_printerr ("%p: failed to write stream: %s\n", context, error->message));
+      GDK_DISPLAY_NOTE (gdk_drag_context_get_display (GDK_DRAG_CONTEXT (context)), DND, g_message ("%p: failed to write stream: %s", context, error->message));
       g_error_free (error);
     }
 }
@@ -329,7 +329,7 @@ data_source_send (void                  *data,
   if (!context)
     return;
 
-  GDK_DISPLAY_NOTE (gdk_drag_context_get_display (context), DND, g_printerr ("%p: data source send request for %s on fd %d\n",
+  GDK_DISPLAY_NOTE (gdk_drag_context_get_display (context), DND, g_message ("%p: data source send request for %s on fd %d\n",
                              source, mime_type, fd));
 
   //mime_type = gdk_intern_mime_type (mime_type);
