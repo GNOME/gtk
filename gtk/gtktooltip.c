@@ -101,10 +101,6 @@ struct _GtkTooltip
   GObject parent_instance;
 
   GtkWidget *window;
-  GtkWidget *box;
-  GtkWidget *image;
-  GtkWidget *label;
-  GtkWidget *custom_widget;
 
   GtkWindow *current_window;
   GtkWidget *keyboard_widget;
