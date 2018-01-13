@@ -466,7 +466,6 @@
                             <items>
                               <item translatable="yes" id="similar">Similar</item>
                               <item translatable="yes" id="image">Image</item>
-                              <item translatable="yes" id="recording">Recording</item>
                             </items>
                           </object>
                         </child>

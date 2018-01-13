@@ -77,8 +77,7 @@ typedef enum {
   GDK_DEBUG_GL_GLES         = 1 << 16,
   GDK_DEBUG_VULKAN_DISABLE  = 1 << 17,
   GDK_DEBUG_VULKAN_VALIDATE = 1 << 18,
-  GDK_DEBUG_CAIRO_IMAGE     = 1 << 19,
-  GDK_DEBUG_CAIRO_RECORDING = 1 << 20
+  GDK_DEBUG_CAIRO_IMAGE     = 1 << 19
 } GdkDebugFlags;
 
 extern GList            *_gdk_default_filters;

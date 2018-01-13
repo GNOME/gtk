@@ -788,8 +788,6 @@ init_rendering_mode (GtkInspectorVisual *vis)
 
   if (flags & GDK_DEBUG_CAIRO_IMAGE)
     mode = 1;
-  else if (flags & GDK_DEBUG_CAIRO_RECORDING)
-    mode = 2;
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (vis->priv->rendering_mode_combo), mode);
 }
@@ -803,11 +801,9 @@ rendering_mode_changed (GtkComboBox        *c,
 
   mode = gtk_combo_box_get_active (c);
 
-  flags = flags & ~(GDK_DEBUG_CAIRO_IMAGE | GDK_DEBUG_CAIRO_RECORDING);
+  flags = flags & ~GDK_DEBUG_CAIRO_IMAGE;
   if (mode == 1)
     flags = flags | GDK_DEBUG_CAIRO_IMAGE;
-  else if (mode == 2)
-    flags = flags | GDK_DEBUG_CAIRO_RECORDING;
 
   gdk_display_set_debug_flags (gdk_display_get_default (), flags);
 }

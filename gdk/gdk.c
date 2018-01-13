@@ -156,8 +156,7 @@ static const GDebugKey gdk_debug_keys[] = {
   { "gl-gles",         GDK_DEBUG_GL_GLES },
   { "vulkan-disable",  GDK_DEBUG_VULKAN_DISABLE },
   { "vulkan-validate", GDK_DEBUG_VULKAN_VALIDATE },
-  { "cairo-image",     GDK_DEBUG_CAIRO_IMAGE },
-  { "cairo-recording", GDK_DEBUG_CAIRO_RECORDING }
+  { "cairo-image",     GDK_DEBUG_CAIRO_IMAGE }
 };
 #endif
 
