@@ -119,7 +119,7 @@ static int check_dir_mtime (const char        *dir,
 gboolean
 is_cache_up_to_date (const gchar *path)
 {
-  struct stat path_stat, cache_stat;
+  GStatBuf path_stat, cache_stat;
   gchar *cache_path;
   int retval; 
   
@@ -1478,7 +1478,7 @@ build_cache (const gchar *path)
 #endif
   GHashTable *files;
   FILE *cache;
-  struct stat path_stat, cache_stat;
+  GStatBuf path_stat, cache_stat;
   struct utimbuf utime_buf;
   GList *directories = NULL;
   int fd;

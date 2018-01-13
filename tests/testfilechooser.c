@@ -21,13 +21,13 @@
 
 #include <string.h>
 #include <sys/types.h>
-#include <sys/stat.h>
 #include <stdlib.h>
 #include <time.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
 #include <gtk/gtk.h>
+#include <glib/gstdio.h>
 
 #ifdef G_OS_WIN32
 #  include <io.h>
@@ -189,7 +189,7 @@ my_new_from_file_at_size (const char *filename,
 	GdkPixbufLoader *loader;
 	GdkPixbuf       *pixbuf;
 	int              info[2];
-	struct stat st;
+	GStatBuf st;
 
 	guchar buffer [4096];
 	int length;
@@ -198,7 +198,7 @@ my_new_from_file_at_size (const char *filename,
 	g_return_val_if_fail (filename != NULL, NULL);
         g_return_val_if_fail (width > 0 && height > 0, NULL);
 
-	if (stat (filename, &st) != 0) {
+	if (g_stat (filename, &st) != 0) {
                 int errsv = errno;
 
 		g_set_error (error,
@@ -298,8 +298,8 @@ update_preview_cb (GtkFileChooser *chooser)
 	}
       else
 	{
-	  struct stat buf;
-	  if (stat (filename, &buf) == 0)
+	  GStatBuf buf;
+	  if (g_stat (filename, &buf) == 0)
 	    {
 	      gchar *preview_text;
 	      gchar *size_str;

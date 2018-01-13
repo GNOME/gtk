@@ -92,8 +92,8 @@ _gtk_icon_cache_new_for_path (const gchar *path)
 
   gchar *cache_filename;
   gint fd = -1;
-  struct stat st;
-  struct stat path_st;
+  GStatBuf st;
+  GStatBuf path_st;
   CacheInfo info;
 
    /* Check if we have a cache file */

@@ -1,15 +1,13 @@
 #include "config.h"
 #include <glib.h>
-
-#include <sys/stat.h>
-#include <stdlib.h>
+#include <glib/gstdio.h>
 
 static gboolean
 file_exists (const char *filename)
 {
-  struct stat statbuf;
+  GStatBuf statbuf;
 
-  return stat (filename, &statbuf) == 0;
+  return g_stat (filename, &statbuf) == 0;
 }
 
 void

@@ -35,7 +35,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/stat.h>
 #include <math.h>
 #include <time.h>
 #ifdef HAVE_UNISTD_H
@@ -46,6 +45,7 @@
 #include "gtk/gtk.h"
 #include "gdk/gdk.h"
 #include "gdk/gdkkeysyms.h"
+#include "glib/gstdio.h"
 
 #ifdef G_OS_WIN32
 #define sleep(n) _sleep(n)
@@ -59,9 +59,9 @@
 gboolean
 file_exists (const char *filename)
 {
-  struct stat statbuf;
+  GStatBuf statbuf;
 
-  return stat (filename, &statbuf) == 0;
+  return g_stat (filename, &statbuf) == 0;
 }
 
 GtkWidget *
