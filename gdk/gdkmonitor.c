@@ -32,8 +32,8 @@
  *
  * GdkMonitor objects represent the individual outputs that are
  * associated with a #GdkDisplay. GdkDisplay has APIs to enumerate
- * monitors with gdk_display_get_monitors() and to find particular
- * monitors with gdk_display_get_primary_monitor() or
+ * monitors with gdk_display_get_n_monitors() and gdk_display_get_monitor(), and
+ * to find particular monitors with gdk_display_get_primary_monitor() or
  * gdk_display_get_monitor_at_window().
  *
  * GdkMonitor was introduced in GTK+ 3.22 and supersedes earlier
