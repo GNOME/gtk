@@ -6,16 +6,14 @@
 G_BEGIN_DECLS
 
 typedef enum {
-  GSK_DEBUG_RENDER_NODE = 1 << 0,
-  GSK_DEBUG_RENDERER    = 1 << 1,
-  GSK_DEBUG_CAIRO       = 1 << 2,
-  GSK_DEBUG_OPENGL      = 1 << 3,
-  GSK_DEBUG_SHADERS     = 1 << 4,
-  GSK_DEBUG_TRANSFORMS  = 1 << 5,
-  GSK_DEBUG_SURFACE     = 1 << 6,
-  GSK_DEBUG_VULKAN      = 1 << 7,
-  GSK_DEBUG_FALLBACK    = 1 << 8,
-  GSK_DEBUG_GLYPH_CACHE = 1 << 9
+  GSK_DEBUG_RENDERER    = 1 << 0,
+  GSK_DEBUG_CAIRO       = 1 << 1,
+  GSK_DEBUG_OPENGL      = 1 << 2,
+  GSK_DEBUG_SHADERS     = 1 << 3,
+  GSK_DEBUG_SURFACE     = 1 << 4,
+  GSK_DEBUG_VULKAN      = 1 << 5,
+  GSK_DEBUG_FALLBACK    = 1 << 6,
+  GSK_DEBUG_GLYPH_CACHE = 1 << 7
 } GskDebugFlags;
 
 #define GSK_DEBUG_ANY ((1 << 9) - 1)
