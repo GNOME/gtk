@@ -71,15 +71,14 @@ typedef enum {
   /* flags below are influencing behavior */
   GDK_DEBUG_NOGRABS         = 1 << 11,
   GDK_DEBUG_GL_DISABLE      = 1 << 12,
-  GDK_DEBUG_GL_ALWAYS       = 1 << 13,
-  GDK_DEBUG_GL_SOFTWARE     = 1 << 14,
-  GDK_DEBUG_GL_TEXTURE_RECT = 1 << 15,
-  GDK_DEBUG_GL_LEGACY       = 1 << 16,
-  GDK_DEBUG_GL_GLES         = 1 << 17,
-  GDK_DEBUG_VULKAN_DISABLE  = 1 << 18,
-  GDK_DEBUG_VULKAN_VALIDATE = 1 << 19,
-  GDK_DEBUG_CAIRO_IMAGE     = 1 << 20,
-  GDK_DEBUG_CAIRO_RECORDING = 1 << 21
+  GDK_DEBUG_GL_SOFTWARE     = 1 << 13,
+  GDK_DEBUG_GL_TEXTURE_RECT = 1 << 14,
+  GDK_DEBUG_GL_LEGACY       = 1 << 15,
+  GDK_DEBUG_GL_GLES         = 1 << 16,
+  GDK_DEBUG_VULKAN_DISABLE  = 1 << 17,
+  GDK_DEBUG_VULKAN_VALIDATE = 1 << 18,
+  GDK_DEBUG_CAIRO_IMAGE     = 1 << 19,
+  GDK_DEBUG_CAIRO_RECORDING = 1 << 20
 } GdkDebugFlags;
 
 extern GList            *_gdk_default_filters;

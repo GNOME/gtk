@@ -150,7 +150,6 @@ static const GDebugKey gdk_debug_keys[] = {
   { "clipboard",       GDK_DEBUG_CLIPBOARD },
   { "nograbs",         GDK_DEBUG_NOGRABS },
   { "gl-disable",      GDK_DEBUG_GL_DISABLE },
-  { "gl-always",       GDK_DEBUG_GL_ALWAYS },
   { "gl-software",     GDK_DEBUG_GL_SOFTWARE },
   { "gl-texture-rect", GDK_DEBUG_GL_TEXTURE_RECT },
   { "gl-legacy",       GDK_DEBUG_GL_LEGACY },

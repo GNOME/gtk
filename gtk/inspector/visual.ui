@@ -672,7 +672,6 @@
                             <property name="hexpand">1</property>
                             <items>
                               <item translatable="yes" id="maybe">When Needed</item>
-                              <item translatable="yes" id="always">Always</item>
                               <item translatable="yes" id="disable">Disabled</item>
                             </items>
                           </object>

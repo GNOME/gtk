@@ -760,15 +760,13 @@ init_gl (GtkInspectorVisual *vis)
 {
   GdkDebugFlags flags = gdk_display_get_debug_flags (gdk_display_get_default ());
 
-  if (flags & GDK_DEBUG_GL_ALWAYS)
-    gtk_combo_box_set_active_id (GTK_COMBO_BOX (vis->priv->gl_combo), "always");
-  else if (flags & GDK_DEBUG_GL_DISABLE)
+  if (flags & GDK_DEBUG_GL_DISABLE)
     gtk_combo_box_set_active_id (GTK_COMBO_BOX (vis->priv->gl_combo), "disable");
   else
     gtk_combo_box_set_active_id (GTK_COMBO_BOX (vis->priv->gl_combo), "maybe");
   gtk_widget_set_sensitive (vis->priv->gl_combo, FALSE);
   gtk_widget_set_tooltip_text (vis->priv->gl_combo,
-                               _("Not settable at runtime.\nUse GDK_DEBUG=gl-always or GDK_DEBUG=gl-disable instead"));
+                               _("Not settable at runtime.\nUse GDK_DEBUG=gl-disable instead"));
 
   gtk_switch_set_active (GTK_SWITCH (vis->priv->software_gl_switch), flags & GDK_DEBUG_GL_SOFTWARE);
   gtk_switch_set_active (GTK_SWITCH (vis->priv->texture_rectangle_switch), flags & GDK_DEBUG_GL_TEXTURE_RECT);

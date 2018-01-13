@@ -998,17 +998,6 @@ gdk_window_new (GdkDisplay    *display,
 
   g_signal_connect (display, "seat-removed", G_CALLBACK (seat_removed_cb), window);
 
-  if (GDK_DISPLAY_DEBUG_CHECK (display, GL_ALWAYS))
-    {
-      GError *error = NULL;
-
-      if (gdk_window_get_paint_gl_context (window, &error) == NULL)
-        {
-          g_warning ("Unable to force GL enabled: %s", error->message);
-          g_error_free (error);
-        }
-    }
-
   return window;
 }
 
