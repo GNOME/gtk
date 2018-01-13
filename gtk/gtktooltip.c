@@ -621,8 +621,8 @@ static void
 get_bounding_box (GtkWidget    *widget,
                   GdkRectangle *bounds)
 {
+  GtkWidget *toplevel;
   GtkAllocation allocation;
-  GtkBorder border = { 0, };
   GdkWindow *window;
   gint x, y;
   gint w, h;
@@ -636,12 +636,32 @@ get_bounding_box (GtkWidget    *widget,
     window = gtk_widget_get_window (widget);
 
   gtk_widget_get_allocation (widget, &allocation);
+
+  x = allocation.x;
+  y = allocation.y;
+  w = allocation.width;
+  h = allocation.height;
+
+  toplevel = gtk_widget_get_toplevel (widget);
+  if (GTK_IS_WINDOW (toplevel) && !GTK_IS_WINDOW (widget))
+    {
+      GtkWidget *parent = gtk_widget_get_parent (widget);
+
+      gtk_widget_translate_coordinates (parent, toplevel,
+                                        x, y,
+                                        &x, &y);
+    }
+
   if (GTK_IS_WINDOW (widget))
-    _gtk_window_get_shadow_width (GTK_WINDOW (widget), &border);
-  x = allocation.x + border.left;
-  y = allocation.y + border.right;
-  w = allocation.width - border.left - border.right;
-  h = allocation.height - border.top - border.bottom;
+    {
+      GtkBorder border = { 0, };
+
+      _gtk_window_get_shadow_width (GTK_WINDOW (widget), &border);
+      x += border.left;
+      y += border.right;
+      w -= border.left + border.right;
+      h -= border.top + border.bottom;
+    }
 
   gdk_window_get_root_coords (window, x, y, &x1, &y1);
   gdk_window_get_root_coords (window, x + w, y, &x2, &y2);
