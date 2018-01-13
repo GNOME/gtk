@@ -105,8 +105,8 @@ struct _GtkWindowClass
  * #GTK_WINDOW_POPUP are ignored by the window manager; window manager
  * keybindings won’t work on them, the window manager won’t decorate the
  * window with a frame, many GTK+ features that rely on the window
- * manager will not work (e.g. resize grips and
- * maximization/minimization). #GTK_WINDOW_POPUP is used to implement
+ * manager will not work (e.g. maximization/minimization).
+ * #GTK_WINDOW_POPUP is used to implement
  * widgets such as #GtkMenu or tooltips that you normally don’t think of
  * as windows per se. Nearly all windows should be #GTK_WINDOW_TOPLEVEL.
  * In particular, do not use #GTK_WINDOW_POPUP just to turn off
