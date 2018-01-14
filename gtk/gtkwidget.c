@@ -75,6 +75,7 @@
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkdebugupdatesprivate.h"
 #include "gsk/gskdebugprivate.h"
+#include "gsk/gskrendererprivate.h"
 #include "gtkeventcontrollerlegacyprivate.h"
 #include "gtkcssfontvariationsvalueprivate.h"
 
@@ -14829,10 +14830,11 @@ gtk_widget_snapshot (GtkWidget   *widget,
 }
 
 static gboolean
-should_record_names (GtkWidget *widget)
+should_record_names (GtkWidget   *widget,
+                     GskRenderer *renderer)
 {
   return gtk_inspector_is_recording (widget) ||
-         gsk_check_debug_flags (GSK_DEBUG_ANY);
+         ((gsk_renderer_get_debug_flags (renderer) & GSK_DEBUG_ANY)  != 0);
 }
 
 void
@@ -14859,7 +14861,7 @@ gtk_widget_render (GtkWidget            *widget,
 
   gtk_snapshot_init (&snapshot,
                      renderer,
-                     should_record_names (widget),
+                     should_record_names (widget, renderer),
                      clip,
                      "Render<%s>", G_OBJECT_TYPE_NAME (widget));
   cairo_region_destroy (clip);
