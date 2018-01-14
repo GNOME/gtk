@@ -751,7 +751,7 @@ do_theme_change (GtkIconTheme *icon_theme)
   if (!priv->themes_valid)
     return;
 
-  GTK_NOTE (ICONTHEME,
+  GTK_DISPLAY_NOTE (icon_theme->priv->display, ICONTHEME,
             g_message ("change to icon theme \"%s\"", priv->current_theme));
   blow_themes (icon_theme);
 
@@ -1382,7 +1382,7 @@ load_themes (GtkIconTheme *icon_theme)
   g_get_current_time (&tv);
   priv->last_stat_time = tv.tv_sec;
 
-  GTK_NOTE (ICONTHEME, {
+  GTK_DISPLAY_NOTE (icon_theme->priv->display, ICONTHEME, {
     GList *l;
     GString *s;
     s = g_string_new ("Current icon themes ");
@@ -1668,7 +1668,7 @@ real_choose_icon (GtkIconTheme       *icon_theme,
   use_builtin = flags & GTK_ICON_LOOKUP_USE_BUILTIN;
 
   /* This is used in the icontheme unit test */
-  GTK_NOTE (ICONTHEME,
+  GTK_DISPLAY_NOTE (priv->display, ICONTHEME,
             for (i = 0; icon_names[i]; i++)
               g_message ("\tlookup name: %s", icon_names[i]));
 
@@ -1987,7 +1987,8 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *icon_theme,
   g_return_val_if_fail ((flags & GTK_ICON_LOOKUP_NO_SVG) == 0 ||
                         (flags & GTK_ICON_LOOKUP_FORCE_SVG) == 0, NULL);
 
-  GTK_NOTE (ICONTHEME, g_message ("looking up icon %s", icon_name));
+  GTK_DISPLAY_NOTE (icon_theme->priv->display, ICONTHEME,
+                    g_message ("looking up icon %s", icon_name));
 
   return gtk_icon_theme_lookup_icon_for_scale (icon_theme, icon_name,
                                                size, 1, flags);
@@ -2028,7 +2029,8 @@ gtk_icon_theme_lookup_icon_for_scale (GtkIconTheme       *icon_theme,
                         (flags & GTK_ICON_LOOKUP_FORCE_SVG) == 0, NULL);
   g_return_val_if_fail (scale >= 1, NULL);
 
-  GTK_NOTE (ICONTHEME, g_message ("looking up icon %s for scale %d", icon_name, scale));
+  GTK_DISPLAY_NOTE (icon_theme->priv->display, ICONTHEME,
+                    g_message ("looking up icon %s for scale %d", icon_name, scale));
 
   if (flags & GTK_ICON_LOOKUP_GENERIC_FALLBACK)
     {
@@ -3116,7 +3118,8 @@ scan_directory (GtkIconThemePrivate *icon_theme,
   GDir *gdir;
   const gchar *name;
 
-  GTK_NOTE (ICONTHEME, g_message ("scanning directory %s", full_dir));
+  GTK_DISPLAY_NOTE (icon_theme->display, ICONTHEME,
+                    g_message ("scanning directory %s", full_dir));
 
   gdir = g_dir_open (full_dir, 0, NULL);
 
@@ -3154,7 +3157,8 @@ scan_resources (GtkIconThemePrivate  *icon_theme,
   gint i;
   gchar **children;
 
-  GTK_NOTE (ICONTHEME, g_message ("scanning resources %s", full_dir));
+  GTK_DISPLAY_NOTE (icon_theme->display, ICONTHEME,
+                    g_message ("scanning resources %s", full_dir));
 
   children = g_resources_enumerate_children (full_dir, 0, NULL);
   if (!children)
