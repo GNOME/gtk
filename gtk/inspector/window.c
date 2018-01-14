@@ -49,10 +49,11 @@
 #include "gtkstack.h"
 #include "gtktreeviewcolumn.h"
 #include "gtkmodulesprivate.h"
-#include "gtkwindow.h"
+#include "gtkwindowprivate.h"
 #include "gtkwindowgroup.h"
 #include "gtkprivate.h"
 #include "gdk-private.h"
+#include "gskrendererprivate.h"
 
 G_DEFINE_TYPE (GtkInspectorWindow, gtk_inspector_window, GTK_TYPE_WINDOW)
 
@@ -244,12 +245,24 @@ object_details_changed (GtkWidget          *combo,
 }
 
 static void
+gtk_inspector_window_realize (GtkWidget *widget)
+{
+  GskRenderer *renderer;
+
+  GTK_WIDGET_CLASS (gtk_inspector_window_parent_class)->realize (widget);
+
+  renderer = gtk_window_get_renderer (GTK_WINDOW (widget));
+  gsk_renderer_set_debug_flags (renderer, 0);
+}
+
+static void
 gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = gtk_inspector_window_constructed;
+  widget_class->realize = gtk_inspector_window_realize;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/window.ui");
 
