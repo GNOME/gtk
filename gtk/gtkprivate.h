@@ -117,10 +117,15 @@ guint gtk_get_display_debug_flags (GdkDisplay *display);
 #ifdef G_ENABLE_DEBUG
 
 #define GTK_DISPLAY_DEBUG_CHECK(display,type) G_UNLIKELY (gtk_get_display_debug_flags (display) & GTK_DEBUG_##type)
+#define GTK_DISPLAY_NOTE(display,type,action) \
+  G_STMT_START { \
+  if (GTK_DISPLAY_DEBUG_CHECK (display,type)) { action; }; \
+  } G_STMT_END
 
 #else
 
 #define GTK_DISPLAY_DEBUG_CHECK(display,type) 0
+#define GTK_DISPLAY_NOTE(display,type,action)
 
 #endif /* G_ENABLE_DEBUG */
 
