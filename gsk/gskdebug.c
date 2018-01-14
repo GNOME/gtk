@@ -9,18 +9,14 @@ static const GDebugKey gsk_debug_keys[] = {
   { "surface", GSK_DEBUG_SURFACE },
   { "vulkan", GSK_DEBUG_VULKAN },
   { "fallback", GSK_DEBUG_FALLBACK },
-  { "glyphcache", GSK_DEBUG_GLYPH_CACHE }
+  { "glyphcache", GSK_DEBUG_GLYPH_CACHE },
+  { "geometry", GSK_DEBUG_GEOMETRY },
+  { "full-redraw", GSK_DEBUG_FULL_REDRAW},
+  { "sync", GSK_DEBUG_SYNC },
+  { "vulkan-staging-image", GSK_DEBUG_VULKAN_STAGING_IMAGE },
+  { "vulkan-staging-buffer", GSK_DEBUG_VULKAN_STAGING_BUFFER }
 };
 #endif
-
-static const GDebugKey gsk_rendering_keys[] = {
-  { "geometry", GSK_RENDERING_MODE_GEOMETRY },
-  { "shaders", GSK_RENDERING_MODE_SHADERS },
-  { "sync", GSK_RENDERING_MODE_SYNC },
-  { "full-redraw", GSK_RENDERING_MODE_FULL_REDRAW},
-  { "staging-image", GSK_RENDERING_MODE_STAGING_IMAGE },
-  { "staging-buffer", GSK_RENDERING_MODE_STAGING_BUFFER }
-};
 
 static guint gsk_debug_flags;
 
@@ -57,24 +53,4 @@ gsk_get_debug_flags (void)
   init_debug_flags ();
 
   return gsk_debug_flags;
-}
-
-gboolean
-gsk_check_rendering_flags (GskRenderingMode flags)
-{
-  static volatile gsize gsk_rendering_flags__set;
-  static guint gsk_rendering_flags;
-
-  if (g_once_init_enter (&gsk_rendering_flags__set))
-    {
-      const char *env = g_getenv ("GSK_RENDERING_MODE");
-
-      gsk_rendering_flags = g_parse_debug_string (env,
-                                                  (GDebugKey *) gsk_rendering_keys,
-                                                  G_N_ELEMENTS (gsk_rendering_keys));
-
-      g_once_init_leave (&gsk_rendering_flags__set, TRUE);
-    }
-
-  return (gsk_rendering_flags & flags) != 0;
 }

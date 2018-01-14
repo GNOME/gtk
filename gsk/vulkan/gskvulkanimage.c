@@ -532,9 +532,9 @@ gsk_vulkan_image_new_from_data (GskVulkanUploader *uploader,
                                 gsize              height,
                                 gsize              stride)
 {
-  if (GSK_RENDER_MODE_CHECK (STAGING_BUFFER))
+  if (GSK_DEBUG_CHECK (VULKAN_STAGING_BUFFER))
     return gsk_vulkan_image_new_from_data_via_staging_buffer (uploader, data, width, height, stride);
-  if (GSK_RENDER_MODE_CHECK (STAGING_IMAGE))
+  else if (GSK_DEBUG_CHECK (VULKAN_STAGING_IMAGE))
     return gsk_vulkan_image_new_from_data_via_staging_image (uploader, data, width, height, stride);
   else
     return gsk_vulkan_image_new_from_data_directly (uploader, data, width, height, stride);

@@ -291,7 +291,7 @@ gsk_vulkan_renderer_init (GskVulkanRenderer *self)
   self->profile_counters.texture_pixels = gsk_profiler_add_counter (profiler, "texture-pixels", "Texture pixels", TRUE);
 
   self->profile_timers.cpu_time = gsk_profiler_add_timer (profiler, "cpu-time", "CPU time", FALSE, TRUE);
-  if (GSK_RENDER_MODE_CHECK (SYNC))
+  if (GSK_RENDERER_DEBUG_CHECK (GSK_RENDERER (self), SYNC))
     self->profile_timers.gpu_time = gsk_profiler_add_timer (profiler, "gpu-time", "GPU time", FALSE, TRUE);
 #endif
 }

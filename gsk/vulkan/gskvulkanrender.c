@@ -581,7 +581,7 @@ gsk_vulkan_render_draw (GskVulkanRender *self)
   GList *l;
 
 #ifdef G_ENABLE_DEBUG
-  if (GSK_RENDER_MODE_CHECK (SYNC))
+  if (GSK_RENDERER_DEBUG_CHECK (self->renderer, SYNC))
     gsk_profiler_timer_begin (gsk_renderer_get_profiler (self->renderer), self->gpu_time_timer);
 #endif
 
@@ -612,7 +612,8 @@ gsk_vulkan_render_draw (GskVulkanRender *self)
                                              l->next != NULL ? VK_NULL_HANDLE : self->fence);
     }
 
-  if (GSK_RENDER_MODE_CHECK (SYNC))
+#ifdef G_ENABLE_DEBUG
+  if (GSK_RENDERER_DEBUG_CHECK (self->renderer, SYNC))
     {
       GskProfiler *profiler;
       gint64 gpu_time;
@@ -627,6 +628,7 @@ gsk_vulkan_render_draw (GskVulkanRender *self)
       gpu_time = gsk_profiler_timer_end (profiler, self->gpu_time_timer);
       gsk_profiler_timer_set (profiler, self->gpu_time_timer, gpu_time);
     }
+#endif
 }
 
 GdkTexture *

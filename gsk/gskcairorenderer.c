@@ -107,7 +107,8 @@ gsk_cairo_renderer_render (GskRenderer   *renderer,
 
   g_return_if_fail (cr != NULL);
 
-  if (GSK_RENDER_MODE_CHECK (GEOMETRY))
+#ifdef G_ENABLE_DEBUG
+  if (GSK_RENDERER_DEBUG_CHECK (renderer, GEOMETRY))
     {
       cairo_save (cr);
       cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
@@ -118,6 +119,7 @@ gsk_cairo_renderer_render (GskRenderer   *renderer,
       cairo_stroke (cr);
       cairo_restore (cr);
     }
+#endif
 
   gsk_cairo_renderer_do_render (renderer, cr, root);
 }

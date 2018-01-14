@@ -1723,7 +1723,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
     }
 
 #ifdef G_ENABLE_DEBUG
-  if (GSK_RENDER_MODE_CHECK (SHADERS))
+  if (GSK_RENDERER_DEBUG_CHECK (GSK_RENDERER (self), SHADERS))
     gsk_shader_builder_add_define (builder, "GSK_DEBUG", "1");
 #endif
 

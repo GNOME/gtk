@@ -6,36 +6,30 @@
 G_BEGIN_DECLS
 
 typedef enum {
-  GSK_DEBUG_RENDERER    = 1 << 0,
-  GSK_DEBUG_CAIRO       = 1 << 1,
-  GSK_DEBUG_OPENGL      = 1 << 2,
-  GSK_DEBUG_SHADERS     = 1 << 3,
-  GSK_DEBUG_SURFACE     = 1 << 4,
-  GSK_DEBUG_VULKAN      = 1 << 5,
-  GSK_DEBUG_FALLBACK    = 1 << 6,
-  GSK_DEBUG_GLYPH_CACHE = 1 << 7
+  GSK_DEBUG_RENDERER              = 1 <<  0,
+  GSK_DEBUG_CAIRO                 = 1 <<  1,
+  GSK_DEBUG_OPENGL                = 1 <<  2,
+  GSK_DEBUG_SHADERS               = 1 <<  3,
+  GSK_DEBUG_SURFACE               = 1 <<  4,
+  GSK_DEBUG_VULKAN                = 1 <<  5,
+  GSK_DEBUG_FALLBACK              = 1 <<  6,
+  GSK_DEBUG_GLYPH_CACHE           = 1 <<  7,
+  /* flags below may affect behavior */
+  GSK_DEBUG_GEOMETRY              = 1 <<  8,
+  GSK_DEBUG_FULL_REDRAW           = 1 <<  9,
+  GSK_DEBUG_SYNC                  = 1 << 10,
+  GSK_DEBUG_VULKAN_STAGING_IMAGE  = 1 << 11,
+  GSK_DEBUG_VULKAN_STAGING_BUFFER = 1 << 12
 } GskDebugFlags;
 
-#define GSK_DEBUG_ANY ((1 << 8) - 1)
-
-typedef enum {
-  GSK_RENDERING_MODE_GEOMETRY       = 1 << 0,
-  GSK_RENDERING_MODE_SHADERS        = 1 << 1,
-  GSK_RENDERING_MODE_SYNC           = 1 << 2,
-  GSK_RENDERING_MODE_FULL_REDRAW    = 1 << 3,
-  GSK_RENDERING_MODE_STAGING_IMAGE  = 1 << 4,
-  GSK_RENDERING_MODE_STAGING_BUFFER = 1 << 5
-} GskRenderingMode;
+#define GSK_DEBUG_ANY ((1 << 13) - 1)
 
 GskDebugFlags gsk_get_debug_flags (void);
 gboolean gsk_check_debug_flags (GskDebugFlags flags);
 
-gboolean gsk_check_rendering_flags (GskRenderingMode flags);
-
 #ifdef G_ENABLE_DEBUG
 
 #define GSK_DEBUG_CHECK(type)           G_UNLIKELY (gsk_check_debug_flags (GSK_DEBUG_ ## type))
-#define GSK_RENDER_MODE_CHECK(type)     G_UNLIKELY (gsk_check_rendering_flags (GSK_RENDERING_MODE_ ## type))
 #define GSK_RENDERER_DEBUG_CHECK(renderer,type) \
   G_UNLIKELY ((gsk_renderer_get_debug_flags (renderer) & GSK_DEBUG_ ## type) != 0)
 
@@ -50,7 +44,6 @@ gboolean gsk_check_rendering_flags (GskRenderingMode flags);
 
 #else
 
-#define GSK_RENDER_MODE_CHECK(type)     0
 #define GSK_DEBUG_CHECK(type)           0
 #define GSK_RENDERER_DEBUG_CHECK(renderer,type) 0
 #define GSK_NOTE(type,action)
