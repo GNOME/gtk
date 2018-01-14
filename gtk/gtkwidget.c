@@ -5054,6 +5054,7 @@ gtk_widget_size_allocate (GtkWidget           *widget,
   GtkCssStyle *style;
   GtkBorder margin, border, padding;
   GtkAllocation new_clip;
+  GdkDisplay *display;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (baseline >= -1);
@@ -5069,8 +5070,8 @@ gtk_widget_size_allocate (GtkWidget           *widget,
     }
 
 #ifdef G_ENABLE_DEBUG
-  if (GTK_DEBUG_CHECK (RESIZE) &&
-      GTK_DISPLAY_DEBUG_CHECK (gtk_widget_get_display (widget), RESIZE))
+  display = gtk_widget_get_display (widget);
+  if (GTK_DISPLAY_DEBUG_CHECK (display, RESIZE))
     {
       priv->highlight_resize = TRUE;
       gtk_widget_queue_draw (widget);
@@ -5083,7 +5084,7 @@ gtk_widget_size_allocate (GtkWidget           *widget,
                  gtk_widget_get_name (widget), widget);
     }
 
-  if (GTK_DEBUG_CHECK (GEOMETRY))
+  if (GTK_DISPLAY_DEBUG_CHECK (display, GEOMETRY))
     {
       gint depth;
       GtkWidget *parent;
@@ -5261,7 +5262,7 @@ gtk_widget_size_allocate (GtkWidget           *widget,
 
   /* Size allocation is god... after consulting god, no further requests or allocations are needed */
 #ifdef G_ENABLE_DEBUG
-  if (GTK_DEBUG_CHECK (GEOMETRY) && gtk_widget_get_resize_needed (widget))
+  if (GTK_DISPLAY_DEBUG_CHECK (display, GEOMETRY) && gtk_widget_get_resize_needed (widget))
     {
       g_warning ("%s %p or a child called gtk_widget_queue_resize() during size_allocate().",
                  gtk_widget_get_name (widget), widget);
@@ -12656,7 +12657,7 @@ gtk_widget_set_clip (GtkWidget           *widget,
   priv->clip.height += shadow.top + shadow.bottom;
 
 #ifdef G_ENABLE_DEBUG
-  if (GTK_DEBUG_CHECK (GEOMETRY))
+  if (GTK_DISPLAY_DEBUG_CHECK (gtk_widget_get_display (widget), GEOMETRY))
     {
       gint depth;
       GtkWidget *parent;
@@ -14645,8 +14646,7 @@ gtk_widget_maybe_add_debug_render_nodes (GtkWidget             *widget,
     }
 
 #ifdef G_ENABLE_DEBUG
-  if (GTK_DISPLAY_DEBUG_CHECK (display, RESIZE) &&
-      priv->highlight_resize)
+  if (GTK_DISPLAY_DEBUG_CHECK (display, RESIZE) && priv->highlight_resize)
     {
       GdkRGBA blue = {0, 0, 1, 0.2};
       graphene_rect_t bounds;
@@ -14662,8 +14662,6 @@ gtk_widget_maybe_add_debug_render_nodes (GtkWidget             *widget,
       priv->highlight_resize = FALSE;
       gtk_widget_queue_draw (widget);
     }
-#endif
-
   if (GTK_DISPLAY_DEBUG_CHECK (display, GEOMETRY))
     {
       GdkRGBA clip_color = {0, 0, 1, 0.7};
@@ -14695,6 +14693,7 @@ gtk_widget_maybe_add_debug_render_nodes (GtkWidget             *widget,
       gtk_snapshot_append_color (snapshot, &clip_color, &bounds, "Clip right");
 
     }
+#endif
 }
 
 void
