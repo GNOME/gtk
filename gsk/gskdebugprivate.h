@@ -25,6 +25,8 @@ typedef enum {
 #define GSK_DEBUG_ANY ((1 << 13) - 1)
 
 GskDebugFlags gsk_get_debug_flags (void);
+void          gsk_set_debug_flags (GskDebugFlags flags);
+
 gboolean gsk_check_debug_flags (GskDebugFlags flags);
 
 #ifdef G_ENABLE_DEBUG

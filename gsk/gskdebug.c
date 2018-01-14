@@ -43,7 +43,6 @@ gboolean
 gsk_check_debug_flags (GskDebugFlags flags)
 {
   init_debug_flags ();
-
   return (gsk_debug_flags & flags) != 0;
 }
 
@@ -51,6 +50,12 @@ GskDebugFlags
 gsk_get_debug_flags (void)
 {
   init_debug_flags ();
-
   return gsk_debug_flags;
+}
+
+void
+gsk_set_debug_flags (GskDebugFlags flags)
+{
+  init_debug_flags ();
+  gsk_debug_flags = flags;
 }
