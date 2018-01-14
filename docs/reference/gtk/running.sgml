@@ -45,10 +45,6 @@ additional environment variables.
       <listitem><para>Actions and menu models</para></listitem>
     </varlistentry>
     <varlistentry>
-      <term>baselines</term>
-      <listitem><para>Show baselines</para></listitem>
-    </varlistentry>
-    <varlistentry>
       <term>builder</term>
       <listitem><para>GtkBuilder support</para></listitem>
     </varlistentry>
@@ -61,20 +57,12 @@ additional environment variables.
       <listitem><para>Icon themes</para></listitem>
     </varlistentry>
     <varlistentry>
-      <term>interactive</term>
-      <listitem><para>Open the <link linkend="interactive-debugging">interactive debugger</link></para></listitem>
-    </varlistentry>
-    <varlistentry>
       <term>keybindings</term>
       <listitem><para>Keybindings</para></listitem>
     </varlistentry>
     <varlistentry>
       <term>modules</term>
       <listitem><para>Loading of modules</para></listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>no-css-cache</term>
-      <listitem><para>Bypass caching for CSS style properties</para></listitem>
     </varlistentry>
     <varlistentry>
       <term>printing</term>
@@ -89,12 +77,27 @@ additional environment variables.
       <listitem><para>Text widget internals</para></listitem>
     </varlistentry>
     <varlistentry>
+      <term>tree</term>
+      <listitem><para>Tree widget internals</para></listitem>
+    </varlistentry>
+  </variablelist>
+  A number of keys are influencing behavior instead of just logging:
+  <variablelist>
+    <varlistentry>
+      <term>interactive</term>
+      <listitem><para>Open the <link linkend="interactive-debugging">interactive debugger</link></para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>no-css-cache</term>
+      <listitem><para>Bypass caching for CSS style properties</para></listitem>
+    </varlistentry>
+    <varlistentry>
       <term>touchscreen</term>
       <listitem><para>Pretend the pointer is a touchscreen device</para></listitem>
     </varlistentry>
     <varlistentry>
-      <term>tree</term>
-      <listitem><para>Tree widget internals</para></listitem>
+      <term>baselines</term>
+      <listitem><para>Show baselines</para></listitem>
     </varlistentry>
     <varlistentry>
       <term>updates</term>
@@ -299,10 +302,6 @@ nevertheless.
       <listitem><para>Miscellaneous information</para></listitem>
     </varlistentry>
     <varlistentry>
-      <term>nograbs</term>
-      <listitem><para>Turn off all pointer and keyboard grabs</para></listitem>
-    </varlistentry>
-    <varlistentry>
       <term>frames</term>
       <listitem><para>Information about the frame clock</para></listitem>
     </varlistentry>
@@ -330,7 +329,46 @@ nevertheless.
       <term>vulkan</term>
       <listitem><para>Information about Vulkan</para></listitem>
     </varlistentry>
-
+  </variablelist>
+  A number of options affect behavior instead of logging:
+  <variablelist>
+    <varlistentry>
+      <term>nograbs</term>
+      <listitem><para>Turn off all pointer and keyboard grabs</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>gl-disable</term>
+      <listitem><para>Disable OpenGL support</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>gl-software</term>
+      <listitem><para>Force OpenGL software rendering</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>gl-texture-rect</term>
+      <listitem><para>Use the OpenGL texture rectangle extension, if available</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>gl-legacy</term>
+      <listitem><para>Use a legacy OpenGL context</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>gl-legacy</term>
+      <listitem><para>Use a GLES OpenGL context</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>vulkan-disable</term>
+      <listitem><para>Disable Vulkan support</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>vulkan-validate</term>
+      <listitem><para>Load the Vulkan validation layer, if available</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>cairo-image</term>
+      <listitem><para>Use image surfaces for cairo rendering. This essentially
+         turns off all hardware acceleration with the cairo renderer</para></listitem>
+    </varlistentry>
   </variablelist>
   The special value <literal>all</literal> can be used to turn on all
   debug options. The special value <literal>help</literal> can be used
@@ -338,38 +376,65 @@ nevertheless.
   </para>
 </formalpara>
 
-<formalpara>
-  <title><envar>GDK_RENDERING</envar></title>
+<formalpara id="GSK-Debug-Options">
+  <title><envar>GSK_DEBUG</envar></title>
 
   <para>
-    If set, selects the way how GDK creates similar surfaces. This affects both the
-    functionality of the function gdk_window_create_similar_surface() as well as the
-    way GDK creates backing surfaces for double buffering. The following values can
-    be used:
-    <variablelist>
-
-      <varlistentry>
-        <term>similar</term>
-        <listitem><para>Create similar surfaces to the window in use. This is the
-          default behavior when the variable is not set.</para></listitem>
-      </varlistentry>
-
-      <varlistentry>
-        <term>image</term>
-        <listitem><para>Always create image surfaces. This essentially turns off
-          all hardware acceleration inside GTK.</para></listitem>
-      </varlistentry>
-
-      <varlistentry>
-        <term>recording</term>
-        <listitem><para>Always create recording surfaces. This causes bare rendering
-          to the backend without the creation of intermediate surfaces (Pixmaps in X)
-          and will likely cause flicker.</para></listitem>
-      </varlistentry>
-
-    </variablelist>
-    All other values will be ignored and fall back to the default behavior. More
-    values might be added in the future. 
+  If GTK+ has been configured with <option>--enable-debug=yes</option>,
+  this variable can be set to a list of debug options, which cause GSK
+  to print out different types of debugging information.
+  <variablelist>
+    <varlistentry>
+      <term>renderer</term>
+      <listitem><para>General renderer information</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>cairo</term>
+      <listitem><para>cairo renderer information</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>opengl</term>
+      <listitem><para>OpenGL renderer information</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>vulkan</term>
+      <listitem><para>Vulkan renderer information</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>fallback</term>
+      <listitem><para>Information about fallbacks</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>glyphcache</term>
+      <listitem><para>Information about glyph caching</para></listitem>
+    </varlistentry>
+  </variablelist>
+  A number of options affect behavior instead of logging:
+  <variablelist>
+    <varlistentry>
+      <term>geometry</term>
+      <listitem><para>Show borders</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>full-redraw</term>
+      <listitem><para>Force full redraws for every frame</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>sync</term>
+      <listitem><para>Sync after each frame</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>vulkan-staging-image</term>
+      <listitem><para>Use a staging image for Vulkan texture upload</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>vulkan-staging-buffer</term>
+      <listitem><para>Use a staging buffer for Vulkan texture upload</para></listitem>
+    </varlistentry>
+  </variablelist>
+  The special value <literal>all</literal> can be used to turn on all
+  debug options. The special value <literal>help</literal> can be used
+  to obtain a list of all supported debug options.
   </para>
 </formalpara>
 
@@ -418,66 +483,6 @@ nevertheless.
     a *, which means: try all remaining backends. The special value "help" can
     be used to make GDK print out a list of all available backends.
     For more information about selecting backends, see the gdk_display_manager_get() function.
-  </para>
-</formalpara>
-
-<formalpara>
-  <title><envar>GDK_GL</envar></title>
-
-  <para>
-    This variable can be set to a list of options that influence various aspects
-    of the OpenGL support in GTK+.
-  <variablelist>
-    <varlistentry>
-      <term>disable</term>
-      <listitem><para>Disable OpenGL support</para></listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>always</term>
-      <listitem><para>Always use OpenGL for rendering</para></listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>software-draw</term>
-      <listitem><para>Use software rendering</para></listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>texture-rectangle</term>
-      <listitem><para>Use the texture rectangle extension</para></listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>legacy</term>
-      <listitem><para>Use a legacy OpenGL context</para></listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>gles</term>
-      <listitem><para>Use a GLES context</para></listitem>
-    </varlistentry>
-  </variablelist>
-  The special value <literal>all</literal> can be used to turn on all
-  options. The special value <literal>help</literal> can be used
-  to obtain a list of all supported options.
-  </para>
-</formalpara>
-
-<formalpara>
-  <title><envar>GDK_VULKAN</envar></title>
-
-  <para>
-    This variable can be set to a list of options that influence various aspects
-    of the Vulkan support in GTK+.
-  <variablelist>
-    <varlistentry>
-      <term>disable</term>
-      <listitem><para>Disable Vulkan support</para></listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>validate</term>
-      <listitem><para>Enable the Vulkan validation layer</para></listitem>
-    </varlistentry>
-  </variablelist>
-  The special value <literal>all</literal> can be used to turn on all
-  options. The special value <literal>help</literal> can be used
-  to obtain a list of all supported options.
   </para>
 </formalpara>
 
