@@ -22,12 +22,13 @@ static const GDebugKey gsk_rendering_keys[] = {
   { "staging-buffer", GSK_RENDERING_MODE_STAGING_BUFFER }
 };
 
-gboolean
-gsk_check_debug_flags (GskDebugFlags flags)
+static guint gsk_debug_flags;
+
+static void
+init_debug_flags (void)
 {
 #ifdef G_ENABLE_DEBUG
   static volatile gsize gsk_debug_flags__set;
-  static guint gsk_debug_flags;
 
   if (g_once_init_enter (&gsk_debug_flags__set))
     {
@@ -39,11 +40,23 @@ gsk_check_debug_flags (GskDebugFlags flags)
 
       g_once_init_leave (&gsk_debug_flags__set, TRUE);
     }
+#endif
+}
+
+gboolean
+gsk_check_debug_flags (GskDebugFlags flags)
+{
+  init_debug_flags ();
 
   return (gsk_debug_flags & flags) != 0;
-#else
-  return FALSE;
-#endif
+}
+
+GskDebugFlags
+gsk_get_debug_flags (void)
+{
+  init_debug_flags ();
+
+  return gsk_debug_flags;
 }
 
 gboolean

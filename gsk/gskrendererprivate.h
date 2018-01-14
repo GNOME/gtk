@@ -21,6 +21,7 @@
 
 #include "gskrenderer.h"
 #include "gskprofilerprivate.h"
+#include "gskdebugprivate.h"
 
 G_BEGIN_DECLS
 
@@ -68,6 +69,10 @@ cairo_surface_t *       gsk_renderer_create_cairo_surface       (GskRenderer    
                                                                  int             height);
 
 GskProfiler *           gsk_renderer_get_profiler               (GskRenderer    *renderer);
+
+GskDebugFlags           gsk_renderer_get_debug_flags            (GskRenderer   *renderer);
+void                    gsk_renderer_set_debug_flags            (GskRenderer   *renderer,
+                                                                 GskDebugFlags  flags);
 
 G_END_DECLS
 

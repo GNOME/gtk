@@ -80,6 +80,7 @@ free_atlas (gpointer v)
 
 void
 gsk_gl_glyph_cache_init (GskGLGlyphCache *self,
+                         GskRenderer     *renderer,
                          GskGLDriver     *gl_driver)
 {
   self->hash_table = g_hash_table_new_full (glyph_cache_hash, glyph_cache_equal,
@@ -87,6 +88,7 @@ gsk_gl_glyph_cache_init (GskGLGlyphCache *self,
   self->atlases = g_ptr_array_new_with_free_func (free_atlas);
   g_ptr_array_add (self->atlases, create_atlas (self));
 
+  self->renderer = renderer;
   self->gl_driver = gl_driver;
 }
 
@@ -214,7 +216,7 @@ add_to_cache (GskGLGlyphCache  *cache,
   atlas->num_glyphs++;
 
 #ifdef G_ENABLE_DEBUG
-  if (GSK_DEBUG_CHECK(GLYPH_CACHE))
+  if (GSK_RENDERER_DEBUG_CHECK (cache->renderer, GLYPH_CACHE))
     {
       g_print ("Glyph cache:\n");
       for (i = 0; i < cache->atlases->len; i++)
@@ -296,8 +298,8 @@ upload_dirty_glyphs (GskGLGlyphCache *self,
   for (l = atlas->dirty_glyphs, i = 0; l; l = l->next, i++)
     render_glyph (atlas, (DirtyGlyph *)l->data, &regions[i]);
 
-  GSK_NOTE (GLYPH_CACHE,
-            g_print ("uploading %d glyphs to cache\n", num_regions));
+  GSK_RENDERER_NOTE (self->renderer, GLYPH_CACHE,
+            g_message ("uploading %d glyphs to cache", num_regions));
 
 
   gsk_gl_image_upload_regions (atlas->image, self->gl_driver, num_regions, regions);
@@ -425,8 +427,8 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self)
 
       if (atlas->old_pixels > MAX_OLD * atlas->width * atlas->height)
         {
-          GSK_NOTE(GLYPH_CACHE,
-                   g_print ("Dropping atlas %d (%g.2%% old)\n",
+          GSK_RENDERER_NOTE(self->renderer, GLYPH_CACHE,
+                   g_message ("Dropping atlas %d (%g.2%% old)",
                             i, 100.0 * (double)atlas->old_pixels / (double)(atlas->width * atlas->height)));
 
           if (atlas->image)
@@ -448,5 +450,5 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self)
         }
     }
 
-  GSK_NOTE(GLYPH_CACHE, g_print ("Dropped %d glyphs\n", dropped));
+  GSK_RENDERER_NOTE(self->renderer, GLYPH_CACHE, g_message ("Dropped %d glyphs", dropped));
 }

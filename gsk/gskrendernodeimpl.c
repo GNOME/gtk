@@ -1953,7 +1953,7 @@ gsk_cairo_node_get_draw_context (GskRenderNode *node,
                    node->bounds.size.width, node->bounds.size.height);
   cairo_clip (res);
 
-  if (GSK_DEBUG_CHECK (SURFACE))
+  if (GSK_RENDERER_DEBUG_CHECK (renderer, SURFACE))
     {
       const char *prefix;
       prefix = g_getenv ("GSK_DEBUG_PREFIX");
@@ -2198,7 +2198,7 @@ gsk_transform_node_draw (GskRenderNode *node,
 
   if (graphene_matrix_to_2d (&self->transform, &ctm.xx, &ctm.yx, &ctm.xy, &ctm.yy, &ctm.x0, &ctm.y0))
     {
-      GSK_NOTE (CAIRO, g_print ("CTM = { .xx = %g, .yx = %g, .xy = %g, .yy = %g, .x0 = %g, .y0 = %g }\n",
+      GSK_NOTE (CAIRO, g_message ("CTM = { .xx = %g, .yx = %g, .xy = %g, .yy = %g, .x0 = %g, .y0 = %g }",
                                 ctm.xx, ctm.yx,
                                 ctm.xy, ctm.yy,
                                 ctm.x0, ctm.y0));

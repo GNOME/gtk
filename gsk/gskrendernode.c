@@ -241,7 +241,7 @@ gsk_render_node_draw (GskRenderNode *node,
 
   if (!GSK_RENDER_MODE_CHECK (GEOMETRY))
     {
-      GSK_NOTE (CAIRO, g_print ("CLIP = { .x = %g, .y = %g, .width = %g, .height = %g }\n",
+      GSK_NOTE (CAIRO, g_message ("CLIP = { .x = %g, .y = %g, .width = %g, .height = %g }",
                                 node->bounds.origin.x, node->bounds.origin.y,
                                 node->bounds.size.width, node->bounds.size.height));
 
@@ -249,7 +249,7 @@ gsk_render_node_draw (GskRenderNode *node,
       cairo_clip (cr);
     }
 
-  GSK_NOTE (CAIRO, g_print ("Rendering node %s[%p]\n",
+  GSK_NOTE (CAIRO, g_message ("Rendering node %s[%p]",
                             node->name ? node->name : node->node_class->type_name,
                             node));
 

@@ -1624,7 +1624,7 @@ gsk_gl_renderer_create_buffers (GskGLRenderer *self,
   if (self->has_buffers)
     return;
 
-  GSK_NOTE (OPENGL, g_print ("Creating buffers (w:%d, h:%d, scale:%d)\n", width, height, scale_factor));
+  GSK_RENDERER_NOTE (GSK_RENDERER (self), OPENGL, g_message ("Creating buffers (w:%d, h:%d, scale:%d)", width, height, scale_factor));
 
   if (self->texture_id == 0)
     {
@@ -1650,7 +1650,7 @@ gsk_gl_renderer_destroy_buffers (GskGLRenderer *self)
   if (!self->has_buffers)
     return;
 
-  GSK_NOTE (OPENGL, g_print ("Destroying buffers\n"));
+  GSK_RENDERER_NOTE (GSK_RENDERER (self), OPENGL, g_message ("Destroying buffers"));
 
   gdk_gl_context_make_current (self->gl_context);
 
@@ -1838,11 +1838,11 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
   self->gl_profiler = gsk_gl_profiler_new (self->gl_context);
   self->gl_driver = gsk_gl_driver_new (self->gl_context);
 
-  GSK_NOTE (OPENGL, g_print ("Creating buffers and programs\n"));
+  GSK_RENDERER_NOTE (renderer, OPENGL, g_message ("Creating buffers and programs"));
   if (!gsk_gl_renderer_create_programs (self, error))
     return FALSE;
 
-  gsk_gl_glyph_cache_init (&self->glyph_cache, self->gl_driver);
+  gsk_gl_glyph_cache_init (&self->glyph_cache, renderer, self->gl_driver);
 
   return TRUE;
 }
@@ -1931,7 +1931,7 @@ gsk_gl_renderer_resize_viewport (GskGLRenderer         *self,
   int width = viewport->size.width;
   int height = viewport->size.height;
 
-  GSK_NOTE (OPENGL, g_print ("glViewport(0, 0, %d, %d) [scale:%d]\n",
+  GSK_RENDERER_NOTE (GSK_RENDERER (self), OPENGL, g_message ("glViewport(0, 0, %d, %d) [scale:%d]",
                              width,
                              height,
                              self->scale_factor));
@@ -1955,13 +1955,13 @@ gsk_gl_renderer_clear_tree (GskGLRenderer *self)
   g_array_remove_range (self->render_ops, 0, self->render_ops->len);
   removed_textures = gsk_gl_driver_collect_textures (self->gl_driver);
 
-  GSK_NOTE (OPENGL, g_print ("Collected: %d textures\n", removed_textures));
+  GSK_RENDERER_NOTE (GSK_RENDERER (self), OPENGL, g_message ("Collected: %d textures", removed_textures));
 }
 
 static void
 gsk_gl_renderer_clear (GskGLRenderer *self)
 {
-  GSK_NOTE (OPENGL, g_print ("Clearing viewport\n"));
+  GSK_RENDERER_NOTE (GSK_RENDERER (self), OPENGL, g_message ("Clearing viewport"));
   glClearColor (0, 0, 0, 0);
   glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
@@ -2386,7 +2386,7 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
 
   if (self->gl_context == NULL)
     {
-      GSK_NOTE (OPENGL, g_print ("No valid GL context associated to the renderer"));
+      GSK_RENDERER_NOTE (renderer, OPENGL, g_message ("No valid GL context associated to the renderer"));
       return;
     }
 

@@ -154,7 +154,7 @@ gsk_gl_driver_begin_frame (GskGLDriver *self)
   if (self->max_texture_size < 0)
     {
       glGetIntegerv (GL_MAX_TEXTURE_SIZE, (GLint *) &self->max_texture_size);
-      GSK_NOTE (OPENGL, g_print ("GL max texture size: %d\n", self->max_texture_size));
+      GSK_NOTE (OPENGL, g_message ("GL max texture size: %d", self->max_texture_size));
     }
 
   glBindFramebuffer (GL_FRAMEBUFFER, 0);
@@ -189,16 +189,16 @@ gsk_gl_driver_end_frame (GskGLDriver *self)
 
 #ifdef G_ENABLE_DEBUG
   GSK_NOTE (OPENGL,
-            g_print ("Textures created: %ld\n"
+            g_message ("Textures created: %ld\n"
                      " Textures reused: %ld\n"
-                     " Surface uploads: %ld\n",
+                     " Surface uploads: %ld",
                      gsk_profiler_counter_get (self->profiler, self->counters.created_textures),
                      gsk_profiler_counter_get (self->profiler, self->counters.reused_textures),
                      gsk_profiler_counter_get (self->profiler, self->counters.surface_uploads)));
 #endif
 
   GSK_NOTE (OPENGL,
-            g_print ("*** Frame end: textures=%d\n",
+            g_message ("*** Frame end: textures=%d",
                      g_hash_table_size (self->textures)));
 
   self->in_frame = FALSE;
@@ -326,7 +326,7 @@ create_texture (GskGLDriver *self,
   t = find_texture_by_size (self->textures, width, height);
   if (t != NULL && !t->in_use && t->user == NULL)
     {
-      GSK_NOTE (OPENGL, g_print ("Reusing Texture(%d) for size %dx%d\n",
+      GSK_NOTE (OPENGL, g_message ("Reusing Texture(%d) for size %dx%d",
                                  t->texture_id, t->width, t->height));
       t->in_use = TRUE;
 

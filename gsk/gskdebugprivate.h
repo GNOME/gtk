@@ -16,7 +16,7 @@ typedef enum {
   GSK_DEBUG_GLYPH_CACHE = 1 << 7
 } GskDebugFlags;
 
-#define GSK_DEBUG_ANY ((1 << 9) - 1)
+#define GSK_DEBUG_ANY ((1 << 8) - 1)
 
 typedef enum {
   GSK_RENDERING_MODE_GEOMETRY       = 1 << 0,
@@ -27,6 +27,7 @@ typedef enum {
   GSK_RENDERING_MODE_STAGING_BUFFER = 1 << 5
 } GskRenderingMode;
 
+GskDebugFlags gsk_get_debug_flags (void);
 gboolean gsk_check_debug_flags (GskDebugFlags flags);
 
 gboolean gsk_check_rendering_flags (GskRenderingMode flags);
@@ -34,25 +35,26 @@ gboolean gsk_check_rendering_flags (GskRenderingMode flags);
 #ifdef G_ENABLE_DEBUG
 
 #define GSK_DEBUG_CHECK(type)           G_UNLIKELY (gsk_check_debug_flags (GSK_DEBUG_ ## type))
-#define GSK_DEBUG_CHECK2(type1,type2)   G_UNLIKELY (gsk_check_debug_flags (GSK_DEBUG_ ## type1 | GSK_DEBUG_ ## type2))
 #define GSK_RENDER_MODE_CHECK(type)     G_UNLIKELY (gsk_check_rendering_flags (GSK_RENDERING_MODE_ ## type))
+#define GSK_RENDERER_DEBUG_CHECK(renderer,type) \
+  G_UNLIKELY ((gsk_renderer_get_debug_flags (renderer) & GSK_DEBUG_ ## type) != 0)
 
 #define GSK_NOTE(type,action)   G_STMT_START {  \
   if (GSK_DEBUG_CHECK (type)) {                 \
     action;                                     \
   }                             } G_STMT_END
-
-#define GSK_NOTE2(type1,type2,action)   G_STMT_START {  \
-  if (GSK_DEBUG_CHECK2 (type1, type2)) {                \
-    action;                                             \
+#define GSK_RENDERER_NOTE(renderer,type,action)   G_STMT_START {  \
+  if (GSK_RENDERER_DEBUG_CHECK (renderer,type)) {                 \
+    action;                                     \
   }                             } G_STMT_END
+
 #else
 
 #define GSK_RENDER_MODE_CHECK(type)     0
 #define GSK_DEBUG_CHECK(type)           0
-#define GSK_DEBUG_CHECK2(type1,type2)   0
+#define GSK_RENDERER_DEBUG_CHECK(renderer,type) 0
 #define GSK_NOTE(type,action)
-#define GSK_NOTE2(type1,type2,action)
+#define GSK_RENDERER_NOTE(renderer,type,action)
 
 #endif
 

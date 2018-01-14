@@ -3,12 +3,14 @@
 
 #include "gskgldriverprivate.h"
 #include "gskglimageprivate.h"
+#include "gskrendererprivate.h"
 #include <pango/pango.h>
 #include <gdk/gdk.h>
 
 typedef struct
 {
   GskGLDriver *gl_driver;
+  GskRenderer *renderer;
 
   GHashTable *hash_table;
   GPtrArray *atlases;
@@ -45,6 +47,7 @@ typedef struct
 } GskGLCachedGlyph;
 
 void                     gsk_gl_glyph_cache_init            (GskGLGlyphCache        *self,
+                                                             GskRenderer            *renderer,
                                                              GskGLDriver            *gl_driver);
 void                     gsk_gl_glyph_cache_free            (GskGLGlyphCache        *self);
 void                     gsk_gl_glyph_cache_begin_frame     (GskGLGlyphCache        *self);

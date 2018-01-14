@@ -11,7 +11,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE(GskVulkanGlyphCache, gsk_vulkan_glyph_cache, GSK, VULKAN_GLYPH_CACHE, GObject)
 
-GskVulkanGlyphCache  *gsk_vulkan_glyph_cache_new            (GdkVulkanContext *vulkan);
+GskVulkanGlyphCache  *gsk_vulkan_glyph_cache_new            (GskRenderer         *renderer,
+                                                             GdkVulkanContext    *vulkan);
 
 GskVulkanImage *     gsk_vulkan_glyph_cache_get_glyph_image (GskVulkanGlyphCache *cache,
                                                              GskVulkanUploader   *uploader,

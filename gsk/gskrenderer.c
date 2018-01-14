@@ -76,6 +76,8 @@ typedef struct
 
   GskProfiler *profiler;
 
+  GskDebugFlags debug_flags;
+
   gboolean is_realized : 1;
 } GskRendererPrivate;
 
@@ -314,6 +316,7 @@ gsk_renderer_init (GskRenderer *self)
   GskRendererPrivate *priv = gsk_renderer_get_instance_private (self);
 
   priv->profiler = gsk_profiler_new ();
+  priv->debug_flags = gsk_get_debug_flags ();
 }
 
 /**
@@ -515,7 +518,7 @@ gsk_renderer_render_texture (GskRenderer           *renderer,
   texture = GSK_RENDERER_GET_CLASS (renderer)->render_texture (renderer, root, viewport);
 
 #ifdef G_ENABLE_DEBUG
-  if (GSK_DEBUG_CHECK (RENDERER))
+  if (GSK_RENDERER_DEBUG_CHECK (renderer, RENDERER))
     {
       GString *buf = g_string_new ("*** Texture stats ***\n\n");
 
@@ -569,7 +572,7 @@ gsk_renderer_render (GskRenderer       *renderer,
   GSK_RENDERER_GET_CLASS (renderer)->render (renderer, root);
 
 #ifdef G_ENABLE_DEBUG
-  if (GSK_DEBUG_CHECK (RENDERER))
+  if (GSK_RENDERER_DEBUG_CHECK (renderer, RENDERER))
     {
       GString *buf = g_string_new ("*** Frame stats ***\n\n");
 
@@ -737,7 +740,7 @@ gsk_renderer_new_for_window (GdkWindow *window)
 
       if (gsk_renderer_realize (renderer, window, &error))
         {
-          if (verbose || GSK_DEBUG_CHECK (RENDERER))
+          if (verbose || GSK_RENDERER_DEBUG_CHECK (renderer, RENDERER))
             {
               g_print ("Using renderer of type '%s' for window '%s'\n",
                        G_OBJECT_TYPE_NAME (renderer),
@@ -746,7 +749,7 @@ gsk_renderer_new_for_window (GdkWindow *window)
           return renderer;
         }
 
-      if (verbose || GSK_DEBUG_CHECK (RENDERER))
+      if (verbose || GSK_RENDERER_DEBUG_CHECK (renderer, RENDERER))
         {
           g_print ("Failed to realize renderer of type '%s' for window '%s': %s\n",
                    G_OBJECT_TYPE_NAME (renderer),
@@ -846,3 +849,23 @@ gsk_renderer_end_draw_frame (GskRenderer       *renderer,
   GSK_RENDERER_GET_CLASS (renderer)->end_draw_frame (renderer, context);
 }
 
+GskDebugFlags
+gsk_renderer_get_debug_flags (GskRenderer *renderer)
+{
+  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
+
+  g_return_val_if_fail (GSK_IS_RENDERER (renderer), 0);
+
+  return priv->debug_flags;
+}
+
+void
+gsk_renderer_set_debug_flags (GskRenderer   *renderer,
+                              GskDebugFlags  flags)
+{
+  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
+
+  g_return_if_fail (GSK_IS_RENDERER (renderer));
+
+  priv->debug_flags = flags;
+}
