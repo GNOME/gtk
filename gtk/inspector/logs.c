@@ -205,6 +205,7 @@ gtk_inspector_logs_class_init (GtkInspectorLogsClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorLogs, modules);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorLogs, printing);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorLogs, tree);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorLogs, text);
   gtk_widget_class_bind_template_callback (widget_class, flag_toggled);
 }
 
