@@ -30,10 +30,8 @@
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
-#include "gtkrenderbackgroundprivate.h"
 #include "gtkscrollable.h"
 #include "gtksnapshot.h"
-#include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 
