@@ -52,6 +52,7 @@
 #include "gtksettings.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkdialogprivate.h"
+#include "gtkgesturemultipress.h"
 
 #include <glib/gprintf.h>
 
@@ -131,6 +132,8 @@ struct _GtkMountOperationPrivate {
   /* for the show-processes dialog */
   GtkWidget *process_tree_view;
   GtkListStore *process_list_store;
+
+  GtkGesture *multipress_gesture;
 };
 
 enum {
@@ -227,6 +230,8 @@ gtk_mount_operation_finalize (GObject *object)
 
   if (priv->handler)
     g_object_unref (priv->handler);
+
+  g_object_unref (priv->multipress_gesture);
 
   G_OBJECT_CLASS (gtk_mount_operation_parent_class)->finalize (object);
 }
@@ -1340,22 +1345,22 @@ on_popup_menu_for_process_tree_view (GtkWidget *widget,
   return do_popup_menu_for_process_tree_view (widget, NULL, op);
 }
 
-static gboolean
-on_button_press_event_for_process_tree_view (GtkWidget      *widget,
-                                             GdkEventButton *event,
-                                             gpointer        user_data)
+static void
+multi_press_cb (GtkGesture *gesture,
+                int         n_press,
+                double      x,
+                double      y,
+                gpointer    user_data)
 {
   GtkMountOperation *op = GTK_MOUNT_OPERATION (user_data);
-  gboolean ret;
+  const GdkEvent *event;
+  GdkEventSequence *sequence;
+  GtkWidget *widget;
 
-  ret = FALSE;
-
-  if (gdk_event_triggers_context_menu ((GdkEvent *) event))
-    {
-      ret = do_popup_menu_for_process_tree_view (widget, (GdkEvent *) event, op);
-    }
-
-  return ret;
+  sequence = gtk_gesture_get_last_updated_sequence (gesture);
+  event = gtk_gesture_get_last_event (gesture, sequence);
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
+  do_popup_menu_for_process_tree_view (widget, event, op);
 }
 
 static GtkWidget *
@@ -1467,9 +1472,11 @@ create_show_processes_dialog (GtkMountOperation *op,
   g_signal_connect (tree_view, "popup-menu",
                     G_CALLBACK (on_popup_menu_for_process_tree_view),
                     op);
-  g_signal_connect (tree_view, "button-press-event",
-                    G_CALLBACK (on_button_press_event_for_process_tree_view),
-                    op);
+
+  priv->multipress_gesture = gtk_gesture_multi_press_new (tree_view);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture), GDK_BUTTON_SECONDARY);
+  g_signal_connect (priv->multipress_gesture, "pressed",
+                    G_CALLBACK (multi_press_cb), op);
 
   list_store = gtk_list_store_new (3,
                                    GDK_TYPE_TEXTURE,
