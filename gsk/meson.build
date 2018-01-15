@@ -10,6 +10,7 @@ gsk_private_gl_shaders = [
   'resources/glsl/blur.fs.glsl',
   'resources/glsl/inset_shadow.fs.glsl',
   'resources/glsl/outset_shadow.fs.glsl',
+  'resources/glsl/unblurred_outset_shadow.fs.glsl',
   'resources/glsl/shadow.fs.glsl',
   'resources/glsl/border.fs.glsl',
   'resources/glsl/cross_fade.fs.glsl',

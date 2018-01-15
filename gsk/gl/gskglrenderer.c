@@ -209,6 +209,7 @@ struct _GskGLRenderer
       Program blur_program;
       Program inset_shadow_program;
       Program outset_shadow_program;
+      Program unblurred_outset_shadow_program;
       Program shadow_program;
       Program border_program;
       Program cross_fade_program;
@@ -861,6 +862,36 @@ render_inset_shadow_node (GskGLRenderer       *self,
 }
 
 static inline void
+render_unblurred_outset_shadow_node (GskGLRenderer       *self,
+                                     GskRenderNode       *node,
+                                     RenderOpBuilder     *builder,
+                                     const GskQuadVertex *vertex_data)
+{
+  const float spread = gsk_outset_shadow_node_get_spread (node);
+  GskRoundedRect r = *gsk_outset_shadow_node_peek_outline (node);
+  RenderOp op;
+
+  op.op = OP_CHANGE_UNBLURRED_OUTSET_SHADOW;
+  rgba_to_float (gsk_outset_shadow_node_peek_color (node), op.unblurred_outset_shadow.color);
+
+  gsk_rounded_rect_shrink (&r, -spread, -spread, -spread, -spread);
+
+  rounded_rect_to_floats (self, builder,
+                          &r,
+                          op.unblurred_outset_shadow.outline,
+                          op.unblurred_outset_shadow.corner_widths,
+                          op.unblurred_outset_shadow.corner_heights);
+
+  op.unblurred_outset_shadow.spread = gsk_outset_shadow_node_get_spread (node) * self->scale_factor;
+  op.unblurred_outset_shadow.offset[0] = gsk_outset_shadow_node_get_dx (node) * self->scale_factor;
+  op.unblurred_outset_shadow.offset[1] = -gsk_outset_shadow_node_get_dy (node) * self->scale_factor;
+
+  ops_set_program (builder, &self->unblurred_outset_shadow_program);
+  ops_add (builder, &op);
+  ops_draw (builder, vertex_data);
+}
+
+static inline void
 render_outset_shadow_node (GskGLRenderer       *self,
                            GskRenderNode       *node,
                            RenderOpBuilder     *builder)
@@ -953,19 +984,12 @@ render_outset_shadow_node (GskGLRenderer       *self,
   gsk_rounded_rect_init_from_rect (&blit_clip,
                                    &GRAPHENE_RECT_INIT (0, 0, texture_width, texture_height), 0.0f);
 
-  if (blur_radius > 0)
-    {
-      ops_set_program (builder, &self->blur_program);
-      op.op = OP_CHANGE_BLUR;
-      op.blur.size.width = texture_width;
-      op.blur.size.height = texture_height;
-      op.blur.radius = blur_radius;
-      ops_add (builder, &op);
-    }
-  else
-    {
-      ops_set_program (builder, &self->blit_program);
-    }
+  ops_set_program (builder, &self->blur_program);
+  op.op = OP_CHANGE_BLUR;
+  op.blur.size.width = texture_width;
+  op.blur.size.height = texture_height;
+  op.blur.radius = blur_radius;
+  ops_add (builder, &op);
 
   ops_set_clip (builder, &blit_clip);
   ops_set_texture (builder, texture_id);
@@ -1536,6 +1560,22 @@ apply_inset_shadow_op (const Program  *program,
   glUniform4fv (program->inset_shadow.corner_widths_location, 1, op->inset_shadow.corner_widths);
   glUniform4fv (program->inset_shadow.corner_heights_location, 1, op->inset_shadow.corner_heights);
 }
+
+static inline void
+apply_unblurred_outset_shadow_op (const Program  *program,
+                                  const RenderOp *op)
+{
+  OP_PRINT (" -> unblurred outset shadow");
+  glUniform4fv (program->unblurred_outset_shadow.color_location, 1, op->unblurred_outset_shadow.color);
+  glUniform2fv (program->unblurred_outset_shadow.offset_location, 1, op->unblurred_outset_shadow.offset);
+  glUniform1f (program->unblurred_outset_shadow.spread_location, op->unblurred_outset_shadow.spread);
+  glUniform4fv (program->unblurred_outset_shadow.outline_location, 1, op->unblurred_outset_shadow.outline);
+  glUniform4fv (program->unblurred_outset_shadow.corner_widths_location, 1,
+                op->unblurred_outset_shadow.corner_widths);
+  glUniform4fv (program->unblurred_outset_shadow.corner_heights_location, 1,
+                op->unblurred_outset_shadow.corner_heights);
+}
+
 static inline void
 apply_outset_shadow_op (const Program  *program,
                         const RenderOp *op)
@@ -1684,6 +1724,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
     { "blur",            "blit.vs.glsl",  "blur.fs.glsl" },
     { "inset shadow",    "blit.vs.glsl",  "inset_shadow.fs.glsl" },
     { "outset shadow",   "blit.vs.glsl",  "outset_shadow.fs.glsl" },
+    { "unblurred outset shadow",   "blit.vs.glsl",  "unblurred_outset_shadow.fs.glsl" },
     { "shadow",          "blit.vs.glsl",  "shadow.fs.glsl" },
     { "border",          "blit.vs.glsl",  "border.fs.glsl" },
     { "cross fade",      "blit.vs.glsl",  "cross_fade.fs.glsl" },
@@ -1794,6 +1835,14 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   INIT_PROGRAM_UNIFORM_LOCATION (outset_shadow, outline);
   INIT_PROGRAM_UNIFORM_LOCATION (outset_shadow, corner_widths);
   INIT_PROGRAM_UNIFORM_LOCATION (outset_shadow, corner_heights);
+
+  /* unblurred outset shadow */
+  INIT_PROGRAM_UNIFORM_LOCATION (unblurred_outset_shadow, color);
+  INIT_PROGRAM_UNIFORM_LOCATION (unblurred_outset_shadow, spread);
+  INIT_PROGRAM_UNIFORM_LOCATION (unblurred_outset_shadow, offset);
+  INIT_PROGRAM_UNIFORM_LOCATION (unblurred_outset_shadow, outline);
+  INIT_PROGRAM_UNIFORM_LOCATION (unblurred_outset_shadow, corner_widths);
+  INIT_PROGRAM_UNIFORM_LOCATION (unblurred_outset_shadow, corner_heights);
 
   /* shadow */
   INIT_PROGRAM_UNIFORM_LOCATION (shadow, color);
@@ -2109,7 +2158,10 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
     break;
 
     case GSK_OUTSET_SHADOW_NODE:
-      render_outset_shadow_node (self, node, builder);
+      if (gsk_outset_shadow_node_get_blur_radius (node) > 0)
+        render_outset_shadow_node (self, node, builder);
+      else
+        render_unblurred_outset_shadow_node (self, node, builder, vertex_data);
     break;
 
     case GSK_SHADOW_NODE:
@@ -2344,6 +2396,10 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
 
         case OP_CHANGE_BORDER:
           apply_border_op (program, op);
+          break;
+
+        case OP_CHANGE_UNBLURRED_OUTSET_SHADOW:
+          apply_unblurred_outset_shadow_op (program, op);
           break;
 
         case OP_DRAW:
