@@ -137,33 +137,32 @@ print_axes (GdkDevice *device, gdouble *axes)
     }
 }
 
-static gint
-button_press_event (GtkWidget *widget, GdkEventButton *event)
+static void
+drag_begin (GtkGesture *gesture,
+            double      x,
+            double      y,
+            GtkWidget  *widget)
 {
-  guint button;
-
-  gdk_event_get_button ((GdkEvent *)event, &button);
-
-  if (button == GDK_BUTTON_PRIMARY && surface != NULL)
+  if (surface != NULL)
     {
       gdouble pressure = 0.5;
       GdkDevice *device;
       gdouble *axes;
       guint n_axes;
       gdouble x, y;
+      GdkEvent *event;
 
-      device = gdk_event_get_device ((GdkEvent *)event);
-      gdk_event_get_axes ((GdkEvent *)event, &axes, &n_axes);
-      gdk_event_get_coords ((GdkEvent *)event, &x, &y);
+      event = gtk_get_current_event ();
+      device = gdk_event_get_device (event);
+      gdk_event_get_axes (event, &axes, &n_axes);
+      gdk_event_get_coords (event, &x, &y);
 
       print_axes (device, axes);
-      gdk_event_get_axis ((GdkEvent *)event, GDK_AXIS_PRESSURE, &pressure);
+      gdk_event_get_axis (event, GDK_AXIS_PRESSURE, &pressure);
       draw_brush (widget, gdk_device_get_source (device), x, y, pressure);
 
       motion_time = gdk_event_get_time ((GdkEvent *)event);
     }
-
-  return TRUE;
 }
 
 static gint
@@ -181,58 +180,38 @@ key_press_event (GtkWidget *widget, GdkEventKey *event)
   return TRUE;
 }
 
-static gint
-motion_notify_event (GtkWidget *widget, GdkEventMotion *event)
+static void
+drag_update (GtkGesture *gesture,
+             double      x,
+             double      y,
+             GtkWidget  *widget)
 {
-  GdkTimeCoord **events;
-  gint n_events;
-  int i;
   GdkModifierType state;
   GdkDevice *device;
   gdouble *axes;
+  GdkEvent *event;
   guint n_axes;
+  double start_x, start_y;
 
-  gdk_event_get_state ((GdkEvent *)event, &state);
-  device = gdk_event_get_device ((GdkEvent *)event);
+  event = gtk_get_current_event ();
+  gdk_event_get_state (event, &state);
+  device = gdk_event_get_device (event);
+
+  gtk_gesture_drag_get_start_point (GTK_GESTURE_DRAG (gesture), &start_x, &start_y);
 
   if (state & GDK_BUTTON1_MASK && surface != NULL)
     {
-      if (gdk_device_get_history (device,
-                                  gdk_event_get_window ((GdkEvent *)event),
-				  motion_time,
-                                  gdk_event_get_time ((GdkEvent *)event),
-				  &events, &n_events))
-	{
-	  for (i=0; i<n_events; i++)
-	    {
-	      double x = 0, y = 0, pressure = 0.5;
+      double pressure = 0.5;
 
-	      gdk_device_get_axis (device, events[i]->axes, GDK_AXIS_X, &x);
-	      gdk_device_get_axis (device, events[i]->axes, GDK_AXIS_Y, &y);
-	      gdk_device_get_axis (device, events[i]->axes, GDK_AXIS_PRESSURE, &pressure);
-	      draw_brush (widget, gdk_device_get_source (device), x, y, pressure);
+      gdk_event_get_axis (event, GDK_AXIS_PRESSURE, &pressure);
 
-	      print_axes (device, events[i]->axes);
-	    }
-	  gdk_device_free_history (events, n_events);
-	}
-      else
-	{
-	  double pressure = 0.5;
-          gdouble x, y;
+      draw_brush (widget, gdk_device_get_source (device), start_x + x, start_y + y, pressure);
 
-	  gdk_event_get_axis ((GdkEvent *)event, GDK_AXIS_PRESSURE, &pressure);
-
-          gdk_event_get_coords ((GdkEvent *)event, &x, &y);
-	  draw_brush (widget, gdk_device_get_source (device), x, y, pressure);
-	}
-      motion_time = gdk_event_get_time ((GdkEvent *)event);
+      motion_time = gdk_event_get_time (event);
     }
 
-  gdk_event_get_axes ((GdkEvent *)event, &axes, &n_axes);
+  gdk_event_get_axes (event, &axes, &n_axes);
   print_axes (device, axes);
-
-  return TRUE;
 }
 
 void
@@ -248,6 +227,7 @@ main (int argc, char *argv[])
   GtkWidget *drawing_area;
   GtkWidget *vbox;
   GtkWidget *button;
+  GtkGesture *gesture;
 
   gtk_init ();
 
@@ -275,12 +255,14 @@ main (int argc, char *argv[])
   gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (drawing_area), draw, NULL, NULL);
   g_signal_connect (drawing_area, "size-allocate", G_CALLBACK (size_allocate), NULL);
 
-  /* Event signals */
+  gesture = gtk_gesture_drag_new (drawing_area);
+  g_object_set_data_full (G_OBJECT (drawing_area), "gesture",
+                          gesture, g_object_unref);
+  g_signal_connect (gesture, "drag-begin",
+                    G_CALLBACK (drag_begin), drawing_area);
+  g_signal_connect (gesture, "drag-update",
+                    G_CALLBACK (drag_update), drawing_area);
 
-  g_signal_connect (drawing_area, "motion_notify_event",
-		    G_CALLBACK (motion_notify_event), NULL);
-  g_signal_connect (drawing_area, "button_press_event",
-		    G_CALLBACK (button_press_event), NULL);
   g_signal_connect (drawing_area, "key_press_event",
 		    G_CALLBACK (key_press_event), NULL);
 
