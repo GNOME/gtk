@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-13 20:09+0000\n"
-"PO-Revision-Date: 2018-01-14 20:50+0100\n"
+"POT-Creation-Date: 2018-01-14 22:05+0000\n"
+"PO-Revision-Date: 2018-01-15 22:18+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -59,15 +59,15 @@ msgstr "Nie można dostarczyć zawartości jako %s"
 msgid "Reading not implemented."
 msgstr "Odczyt nie jest zaimplementowany."
 
-#: gdk/gdkwindow.c:1878
+#: gdk/gdkwindow.c:1867
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Obsługa GL została wyłączona przez zmienną GDK_DEBUG"
 
-#: gdk/gdkwindow.c:1889
+#: gdk/gdkwindow.c:1878
 msgid "The current backend does not support OpenGL"
 msgstr "Bieżący mechanizm nie obsługuje OpenGL"
 
-#: gdk/gdkwindow.c:1982
+#: gdk/gdkwindow.c:1971
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Obsługa Vulkan została wyłączona przez zmienną GDK_DEBUG"
 
@@ -449,21 +449,21 @@ msgid "Suspend"
 msgstr "Uśpienie"
 
 #: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:1754
-#: gdk/wayland/gdkglcontext-wayland.c:433 gdk/win32/gdkglcontext-win32.c:772
-#: gdk/x11/gdkglcontext-x11.c:1213
+#: gdk/wayland/gdkglcontext-wayland.c:435 gdk/win32/gdkglcontext-win32.c:772
+#: gdk/x11/gdkglcontext-x11.c:1211
 msgid "No GL implementation is available"
 msgstr "Brak dostępnej implementacji GL"
 
-#: gdk/mir/gdkmirglcontext.c:89 gdk/wayland/gdkglcontext-wayland.c:144
-#: gdk/win32/gdkglcontext-win32.c:706 gdk/x11/gdkglcontext-x11.c:662
-#: gdk/x11/gdkglcontext-x11.c:712
+#: gdk/mir/gdkmirglcontext.c:89 gdk/wayland/gdkglcontext-wayland.c:146
+#: gdk/win32/gdkglcontext-win32.c:706 gdk/x11/gdkglcontext-x11.c:660
+#: gdk/x11/gdkglcontext-x11.c:710
 msgid "Unable to create a GL context"
 msgstr "Nie można utworzyć kontekstu GL"
 
 #: gdk/mir/gdkmirwindowimpl.c:1716 gdk/mir/gdkmirwindowimpl.c:1726
-#: gdk/wayland/gdkglcontext-wayland.c:394
-#: gdk/wayland/gdkglcontext-wayland.c:404 gdk/win32/gdkglcontext-win32.c:660
-#: gdk/x11/gdkglcontext-x11.c:910
+#: gdk/wayland/gdkglcontext-wayland.c:396
+#: gdk/wayland/gdkglcontext-wayland.c:406 gdk/win32/gdkglcontext-win32.c:660
+#: gdk/x11/gdkglcontext-x11.c:908
 msgid "No available configurations for the given pixel format"
 msgstr "Brak dostępnych konfiguracji dla podanego formatu pikseli"
 
@@ -475,13 +475,13 @@ msgstr "Profil GL „3.2 Core” nie jest dostępny w implementacji EGL"
 msgid "Not implemented on OS X"
 msgstr "Niezaimplementowane w systemie OS X"
 
-#: gdk/wayland/gdkclipboard-wayland.c:228 gdk/wayland/gdkdnd-wayland.c:346
-#: gdk/wayland/gdkprimary-wayland.c:312 gdk/x11/gdkclipboard-x11.c:743
+#: gdk/wayland/gdkclipboard-wayland.c:231 gdk/wayland/gdkdnd-wayland.c:346
+#: gdk/wayland/gdkprimary-wayland.c:312 gdk/x11/gdkclipboard-x11.c:751
 #: gdk/x11/gdkdnd-x11.c:337
 msgid "No compatible transfer format found"
 msgstr "Nie odnaleziono zgodnego formatu przesyłania"
 
-#: gdk/wayland/gdkglcontext-wayland.c:441
+#: gdk/wayland/gdkglcontext-wayland.c:443
 msgid "Core GL is not available on EGL implementation"
 msgstr "GL „Core” nie jest dostępne w implementacji EGL"
 
@@ -533,15 +533,15 @@ msgstr[0] "Otwieranie %d elementu"
 msgstr[1] "Otwieranie %d elementów"
 msgstr[2] "Otwieranie %d elementów"
 
-#: gdk/x11/gdkclipboard-x11.c:430
+#: gdk/x11/gdkclipboard-x11.c:435
 msgid "Clipboard manager could not store selection."
 msgstr "Menedżer schowka nie może przechować zaznaczenia."
 
-#: gdk/x11/gdkclipboard-x11.c:596
+#: gdk/x11/gdkclipboard-x11.c:603
 msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr "Nie można przechować schowka. Żaden menedżer schowka nie jest aktywny."
 
-#: gdk/x11/gdkglcontext-x11.c:938
+#: gdk/x11/gdkglcontext-x11.c:936
 #, c-format
 msgid "No available configurations for the given RGBA pixel format"
 msgstr "Brak dostępnych konfiguracji dla podanego formatu pikseli RGBA"
@@ -1046,7 +1046,7 @@ msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "Po_mniejsz"
 
-#: gtk/a11y/gtkmenubuttonaccessible.c:102 gtk/inspector/window.ui:372
+#: gtk/a11y/gtkmenubuttonaccessible.c:102 gtk/inspector/window.ui:379
 msgid "Menu"
 msgstr "Menu"
 
@@ -2341,12 +2341,12 @@ msgstr "Menu programu"
 msgid "Close"
 msgstr "Zamknij"
 
-#: gtk/gtkicontheme.c:2287 gtk/gtkicontheme.c:2352
+#: gtk/gtkicontheme.c:2289 gtk/gtkicontheme.c:2354
 #, c-format
 msgid "Icon “%s” not present in theme %s"
 msgstr "Brak ikony „%s” w motywie %s"
 
-#: gtk/gtkicontheme.c:3929 gtk/gtkicontheme.c:4329
+#: gtk/gtkicontheme.c:3933 gtk/gtkicontheme.c:4333
 msgid "Failed to load icon"
 msgstr "Wczytanie ikony się nie powiodło"
 
@@ -3656,7 +3656,7 @@ msgstr "Domyślny widżet"
 #: gtk/inspector/misc-info.ui:183 gtk/inspector/misc-info.ui:226
 #: gtk/inspector/misc-info.ui:430 gtk/inspector/prop-editor.c:1025
 #: gtk/inspector/prop-editor.c:1209 gtk/inspector/prop-editor.c:1333
-#: gtk/inspector/prop-editor.c:1443 gtk/inspector/window.ui:299
+#: gtk/inspector/prop-editor.c:1443 gtk/inspector/window.ui:306
 msgid "Properties"
 msgstr "Właściwości"
 
@@ -3961,15 +3961,15 @@ msgstr "Mechanizm nie obsługuje skalowania okien"
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
 msgstr "Ustawienie jest zakodowane przez zmienną GTK_TEST_TOUCHSCREEN"
 
-#: gtk/inspector/visual.c:773
+#: gtk/inspector/visual.c:769
 msgid ""
 "Not settable at runtime.\n"
-"Use GDK_GL=always or GDK_GL=disable instead"
+"Use GDK_DEBUG=gl-disable instead"
 msgstr ""
 "Nie można ustawić podczas uruchamiania.\n"
-"Zamiast tego należy użyć zmiennej GDK_GL=always lub GDK_GL=disable"
+"Zamiast tego należy użyć zmiennej GDK_DEBUG=gl-disable"
 
-#: gtk/inspector/visual.c:784 gtk/inspector/visual.c:785
+#: gtk/inspector/visual.c:778 gtk/inspector/visual.c:779
 msgid "GL rendering is disabled"
 msgstr "Rysowanie za pomocą GL jest wyłączone"
 
@@ -4033,51 +4033,43 @@ msgstr "Podobny"
 msgid "Image"
 msgstr "Obraz"
 
-#: gtk/inspector/visual.ui:469
-msgid "Recording"
-msgstr "Nagrywanie"
-
-#: gtk/inspector/visual.ui:490
+#: gtk/inspector/visual.ui:489
 msgid "Show Graphic Updates"
 msgstr "Wyświetlanie aktualizacji grafiki"
 
-#: gtk/inspector/visual.ui:522
+#: gtk/inspector/visual.ui:521
 msgid "Show Baselines"
 msgstr "Wyświetlanie linii bazowych"
 
-#: gtk/inspector/visual.ui:554
+#: gtk/inspector/visual.ui:553
 msgid "Show Layout Borders"
 msgstr "Wyświetlanie krawędzi układu"
 
-#: gtk/inspector/visual.ui:586
+#: gtk/inspector/visual.ui:585
 msgid "Show Widget Resizes"
 msgstr "Wyświetlanie zmian rozmiaru okien"
 
-#: gtk/inspector/visual.ui:618
+#: gtk/inspector/visual.ui:617
 msgid "Simulate Touchscreen"
 msgstr "Symulacja ekranu dotykowego"
 
-#: gtk/inspector/visual.ui:661
+#: gtk/inspector/visual.ui:660
 msgid "GL Rendering"
 msgstr "Rysowanie za pomocą GL"
 
-#: gtk/inspector/visual.ui:674
+#: gtk/inspector/visual.ui:673
 msgid "When Needed"
 msgstr "W razie potrzeby"
 
-#: gtk/inspector/visual.ui:675
-msgid "Always"
-msgstr "Zawsze"
-
-#: gtk/inspector/visual.ui:676
+#: gtk/inspector/visual.ui:674
 msgid "Disabled"
 msgstr "Wyłączone"
 
-#: gtk/inspector/visual.ui:697
+#: gtk/inspector/visual.ui:695
 msgid "Software GL"
 msgstr "Programowe GL"
 
-#: gtk/inspector/visual.ui:729
+#: gtk/inspector/visual.ui:727
 msgid "Texture Rectangle Extension"
 msgstr "Rozszerzenie prostokątów tekstur"
 
@@ -4101,87 +4093,91 @@ msgstr "Wyświetla wszystkie zasoby"
 msgid "Collect Statistics"
 msgstr "Zbiera statystyki"
 
-#: gtk/inspector/window.ui:205
+#: gtk/inspector/window.ui:212
 msgid "Trace signal emissions on this object"
 msgstr "Śledzi emisję sygnałów w tym obiekcie"
 
-#: gtk/inspector/window.ui:212
+#: gtk/inspector/window.ui:219
 msgid "Clear log"
 msgstr "Czyści dziennik"
 
-#: gtk/inspector/window.ui:288
+#: gtk/inspector/window.ui:295
 msgid "Miscellaneous"
 msgstr "Różne"
 
-#: gtk/inspector/window.ui:309
+#: gtk/inspector/window.ui:316
 msgid "Signals"
 msgstr "Sygnały"
 
-#: gtk/inspector/window.ui:320
+#: gtk/inspector/window.ui:327
 msgid "Child Properties"
 msgstr "Właściwości potomka"
 
-#: gtk/inspector/window.ui:328
+#: gtk/inspector/window.ui:335
 msgid "Class Hierarchy"
 msgstr "Hierarchia klas"
 
-#: gtk/inspector/window.ui:336
+#: gtk/inspector/window.ui:343
 msgid "CSS Selector"
 msgstr "Wybór CSS"
 
-#: gtk/inspector/window.ui:344
+#: gtk/inspector/window.ui:351
 msgid "CSS Nodes"
 msgstr "Węzły CSS"
 
-#: gtk/inspector/window.ui:351
+#: gtk/inspector/window.ui:358
 msgid "Size Groups"
 msgstr "Grupy rozmiarów"
 
-#: gtk/inspector/window.ui:358
+#: gtk/inspector/window.ui:365
 msgid "Data"
 msgstr "Dane"
 
-#: gtk/inspector/window.ui:365
+#: gtk/inspector/window.ui:372
 msgid "Actions"
 msgstr "Działania"
 
-#: gtk/inspector/window.ui:381
+#: gtk/inspector/window.ui:388
 msgid "Gestures"
 msgstr "Gesty"
 
-#: gtk/inspector/window.ui:390
+#: gtk/inspector/window.ui:397
 msgid "Magnifier"
 msgstr "Lupa"
 
-#: gtk/inspector/window.ui:403
+#: gtk/inspector/window.ui:410
 msgid "Objects"
 msgstr "Obiekty"
 
-#: gtk/inspector/window.ui:421 gtk/ui/gtkprintunixdialog.ui:379
+#: gtk/inspector/window.ui:428 gtk/ui/gtkprintunixdialog.ui:379
 msgid "General"
 msgstr "Ogólne"
 
-#: gtk/inspector/window.ui:429
+#: gtk/inspector/window.ui:436
 msgid "Visual"
 msgstr "Wizualne"
 
-#: gtk/inspector/window.ui:438
+#: gtk/inspector/window.ui:445
 msgid "Resources"
 msgstr "Zasoby"
 
-#: gtk/inspector/window.ui:447
+#: gtk/inspector/window.ui:454
 msgid "Statistics"
 msgstr "Statystyki"
 
-#: gtk/inspector/window.ui:455
+#: gtk/inspector/window.ui:462
+msgid "Logging"
+msgstr "Dziennik"
+
+#: gtk/inspector/window.ui:470
 msgid "Global"
 msgstr "Globalne"
 
-#: gtk/inspector/window.ui:463
+#: gtk/inspector/window.ui:478
 msgid "CSS"
 msgstr "CSS"
 
-#: gtk/inspector/window.ui:471
+#: gtk/inspector/window.ui:486
 msgid "Recorder"
 msgstr "Nagrywanie"
 
@@ -6698,7 +6694,7 @@ msgstr "_Rozmiar papieru:"
 
 #: gtk/ui/gtkpagesetupunixdialog.ui:116
 msgid "_Orientation:"
-msgstr "_Położenie:"
+msgstr "_Orientacja:"
 
 #: gtk/ui/gtkpagesetupunixdialog.ui:141 gtk/ui/gtkprintunixdialog.ui:711
 msgid "Portrait"
