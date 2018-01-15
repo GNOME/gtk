@@ -72,12 +72,12 @@ void            gdk_display_unref_vulkan                        (GdkDisplay     
 
 #else /* !GDK_RENDERING_VULKAN */
 
+
 static inline gboolean
 gdk_display_ref_vulkan (GdkDisplay  *display,
                         GError     **error)
 {
-  GDK_NOTE (VULKAN, g_print ("Support for Vulkan disabled at compile-time"));
-
+  GDK_DISPLAY_NOTE (display, VULKAN, g_message ("Support for Vulkan disabled at compile-time"));
   g_set_error_literal (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_UNSUPPORTED,
                        "Vulkan support was not enabled at compile time.");
 
