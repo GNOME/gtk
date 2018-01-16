@@ -231,7 +231,8 @@ gtk_mount_operation_finalize (GObject *object)
   if (priv->handler)
     g_object_unref (priv->handler);
 
-  g_object_unref (priv->multipress_gesture);
+  if (priv->multipress_gesture)
+    g_object_unref (priv->multipress_gesture);
 
   G_OBJECT_CLASS (gtk_mount_operation_parent_class)->finalize (object);
 }
