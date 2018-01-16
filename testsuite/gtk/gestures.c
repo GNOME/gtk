@@ -203,15 +203,20 @@ typedef struct {
 } LegacyData;
 
 static gboolean
-legacy_cb (GtkWidget *w, GdkEventButton *button, gpointer data)
+legacy_cb (GtkWidget *w, GdkEvent *button, gpointer data)
 {
-  LegacyData *ld = data;
+  if (gdk_event_get_event_type (button) == GDK_BUTTON_PRESS)
+    {
+      LegacyData *ld = data;
 
-  if (ld->str->len > 0)
-    g_string_append (ld->str, ", ");
-  g_string_append_printf (ld->str, "legacy %s", gtk_widget_get_name (w));
+      if (ld->str->len > 0)
+        g_string_append (ld->str, ", ");
+      g_string_append_printf (ld->str, "legacy %s", gtk_widget_get_name (w));
 
-  return ld->exit;
+      return ld->exit;
+    }
+
+  return GDK_EVENT_PROPAGATE;
 }
 
 typedef struct {
@@ -372,7 +377,7 @@ add_legacy (GtkWidget *w, GString *str, gboolean exit)
   data = g_new (LegacyData, 1);
   data->str = str;
   data->exit = exit;
-  g_signal_connect (w, "button-press-event", G_CALLBACK (legacy_cb), data);
+  g_signal_connect (w, "event", G_CALLBACK (legacy_cb), data);
 }
 
 static void
