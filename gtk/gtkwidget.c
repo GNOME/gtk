@@ -4405,6 +4405,8 @@ gtk_widget_queue_draw_region (GtkWidget            *widget,
                               const cairo_region_t *region)
 {
   GtkWidget *windowed_parent;
+  cairo_rectangle_int_t self_clip;
+  cairo_region_t *clip_region = NULL;
   cairo_region_t *region2;
   int x, y;
   GtkCssStyle *parent_style;
@@ -4419,7 +4421,6 @@ gtk_widget_queue_draw_region (GtkWidget            *widget,
   if (!_gtk_widget_get_mapped (widget))
     return;
 
-
   if (!_gtk_widget_get_parent (widget))
     {
       g_assert (_gtk_widget_get_has_window (widget));
@@ -4427,6 +4428,15 @@ gtk_widget_queue_draw_region (GtkWidget            *widget,
       windowed_parent = widget;
       goto invalidate;
     }
+
+  /* priv->clip is in parent coordinates, transform it to @widget coordinates. */
+  self_clip = widget->priv->clip;
+  self_clip.x -= widget->priv->allocation.x;
+  self_clip.y -= widget->priv->allocation.y;
+  clip_region = cairo_region_create_rectangle (&self_clip);
+
+  region2 = cairo_region_copy (region);
+  cairo_region_intersect (region2, clip_region);
 
   /* Look for the parent with a window and invalidate @region in there. */
   windowed_parent = widget;
@@ -4457,7 +4467,6 @@ gtk_widget_queue_draw_region (GtkWidget            *widget,
   x += border.left + padding.left;
   y += border.top + padding.top;
 
-  region2 = cairo_region_copy (region);
   cairo_region_translate (region2, x, y);
 
 invalidate:
@@ -4465,6 +4474,9 @@ invalidate:
   gdk_window_invalidate_region (_gtk_widget_get_window (widget), region2, TRUE);
 
   cairo_region_destroy (region2);
+
+  if (clip_region)
+    cairo_region_destroy (clip_region);
 }
 
 
