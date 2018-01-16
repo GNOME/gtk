@@ -958,13 +958,8 @@ gtk_box_get_size (GtkWidget      *widget,
 	    {
               if (private->homogeneous)
                 {
-                  int largest;
-
-                  largest = child_minimum;
-                  minimum = MAX (minimum, largest);
-
-                  largest = child_natural;
-                  natural = MAX (natural, largest);
+                  minimum = MAX (minimum, child_minimum);
+                  natural = MAX (natural, child_natural);
                 }
               else
                 {
