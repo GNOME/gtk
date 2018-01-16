@@ -281,12 +281,9 @@ static void  check_unmount_and_eject       (GMount   *mount,
                                             GDrive   *drive,
                                             gboolean *show_unmount,
                                             gboolean *show_eject);
-static gboolean on_button_press_event (GtkWidget      *widget,
-                                       GdkEventButton *event,
-                                       GtkSidebarRow  *sidebar);
-static gboolean on_button_release_event (GtkWidget      *widget,
-                                         GdkEventButton *event,
-                                         GtkSidebarRow  *sidebar);
+static gboolean on_row_event (GtkWidget     *widget,
+                              GdkEvent      *event,
+                              GtkSidebarRow *sidebar);
 static void popup_menu_cb    (GtkSidebarRow   *row);
 static void long_press_cb    (GtkGesture      *gesture,
                               gdouble          x,
@@ -495,10 +492,8 @@ add_place (GtkPlacesSidebar            *sidebar,
 
   g_signal_connect_swapped (eject_button, "clicked",
                             G_CALLBACK (eject_or_unmount_bookmark), row);
-  g_signal_connect (GTK_SIDEBAR_ROW (row), "button-press-event",
-                    G_CALLBACK (on_button_press_event), row);
-  g_signal_connect (GTK_SIDEBAR_ROW (row), "button-release-event",
-                    G_CALLBACK (on_button_release_event), row);
+  g_signal_connect (GTK_SIDEBAR_ROW (row), "event",
+                    G_CALLBACK (on_row_event), row);
 
   gtk_container_add (GTK_CONTAINER (sidebar->list_box), GTK_WIDGET (row));
 
@@ -3721,71 +3716,69 @@ on_row_activated (GtkListBox    *list_box,
 }
 
 static gboolean
-on_button_press_event (GtkWidget      *widget,
-                       GdkEventButton *event,
-                       GtkSidebarRow  *row)
+on_row_event (GtkWidget     *widget,
+              GdkEvent      *event,
+              GtkSidebarRow *row)
 {
   GtkPlacesSidebar *sidebar;
   GtkPlacesSidebarSectionType section_type;
+  GtkPlacesSidebarPlaceType row_type;
   gdouble x, y;
 
-  g_object_get (GTK_SIDEBAR_ROW (row),
+  g_object_get (row,
                 "sidebar", &sidebar,
                 "section_type", &section_type,
+                "place-type", &row_type,
                 NULL);
 
-  if (section_type == SECTION_BOOKMARKS)
+  if (gdk_event_get_event_type (event) == GDK_BUTTON_PRESS)
     {
-      gdk_event_get_coords ((GdkEvent *) event, &x, &y);
-      sidebar->drag_row = GTK_WIDGET (row);
-      sidebar->drag_row_x = (gint)x;
-      sidebar->drag_row_y = (gint)y;
+      if (section_type == SECTION_BOOKMARKS)
+        {
+          gdk_event_get_coords ((GdkEvent *) event, &x, &y);
+          sidebar->drag_row = GTK_WIDGET (row);
+          sidebar->drag_row_x = (gint)x;
+          sidebar->drag_row_y = (gint)y;
 
-      sidebar->drag_x = x;
-      sidebar->drag_y = y;
+          sidebar->drag_x = x;
+          sidebar->drag_y = y;
+        }
+
+      g_object_unref (sidebar);
     }
+  else if (gdk_event_get_event_type (event) == GDK_BUTTON_RELEASE)
+    {
+      gboolean ret = FALSE;
+      guint button, state;
 
-  g_object_unref (sidebar);
+      if (row &&
+          gdk_event_get_button (event, &button) &&
+          gdk_event_get_state (event, &state))
+        {
+          if (button == 1)
+            ret = FALSE;
+          else if (button == 2)
+            {
+              GtkPlacesOpenFlags open_flags = GTK_PLACES_OPEN_NORMAL;
+
+              open_flags = (state & GDK_CONTROL_MASK) ?
+                            GTK_PLACES_OPEN_NEW_WINDOW :
+                            GTK_PLACES_OPEN_NEW_TAB;
+
+              open_row (GTK_SIDEBAR_ROW (row), open_flags);
+              ret = TRUE;
+            }
+          else if (button == 3)
+            {
+              if (row_type != PLACES_CONNECT_TO_SERVER)
+                show_row_popover (GTK_SIDEBAR_ROW (row));
+            }
+        }
+
+      return ret;
+    }
 
   return FALSE;
-}
-
-static gboolean
-on_button_release_event (GtkWidget      *widget,
-                         GdkEventButton *event,
-                         GtkSidebarRow  *row)
-{
-  gboolean ret = FALSE;
-  GtkPlacesSidebarPlaceType row_type;
-  guint button, state;
-
-  if (event && row &&
-      gdk_event_get_button ((GdkEvent *) event, &button) &&
-      gdk_event_get_state ((GdkEvent *) event, &state))
-    {
-      g_object_get (row, "place-type", &row_type, NULL);
-
-      if (button == 1)
-        ret = FALSE;
-      else if (button == 2)
-        {
-          GtkPlacesOpenFlags open_flags = GTK_PLACES_OPEN_NORMAL;
-
-          open_flags = (state & GDK_CONTROL_MASK) ?
-                        GTK_PLACES_OPEN_NEW_WINDOW :
-                        GTK_PLACES_OPEN_NEW_TAB;
-
-          open_row (GTK_SIDEBAR_ROW (row), open_flags);
-          ret = TRUE;
-        }
-      else if (button == 3)
-        {
-          if (row_type != PLACES_CONNECT_TO_SERVER)
-            show_row_popover (GTK_SIDEBAR_ROW (row));
-        }
-    }
-
-  return ret;
 }
 
 static void
