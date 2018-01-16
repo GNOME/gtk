@@ -811,8 +811,10 @@ static void     gtk_tree_view_search_activate           (GtkEntry         *entry
 static gboolean gtk_tree_view_real_search_enable_popdown(gpointer          data);
 static void     gtk_tree_view_search_enable_popdown     (GtkWidget        *widget,
 							 gpointer          data);
-static gboolean gtk_tree_view_search_button_press_event (GtkWidget        *widget,
-							 GdkEventButton   *event,
+static void     gtk_tree_view_search_pressed_cb         (GtkGesture       *gesture,
+                                                         int               n_press,
+                                                         double            x,
+                                                         double            y,
 							 GtkTreeView      *tree_view);
 static void     gtk_tree_view_search_scroll_event       (GtkWidget        *entry,
 							 gdouble           dx,
@@ -10651,6 +10653,7 @@ gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
   GtkWidget *frame, *vbox, *toplevel;
   GdkDisplay *display;
   GtkEventController *controller;
+  GtkGesture *gesture;
 
   if (tree_view->priv->search_custom_entry_set)
     return;
@@ -10688,9 +10691,12 @@ gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
   g_signal_connect (tree_view->priv->search_window, "key-press-event",
 		    G_CALLBACK (gtk_tree_view_search_key_press_event),
 		    tree_view);
-  g_signal_connect (tree_view->priv->search_window, "button-press-event",
-		    G_CALLBACK (gtk_tree_view_search_button_press_event),
-		    tree_view);
+  gesture = gtk_gesture_multi_press_new (tree_view->priv->search_window);
+  g_object_set_data_full (G_OBJECT (tree_view->priv->search_window), "gesture",
+                          gesture, g_object_unref);
+  g_signal_connect (gesture, "pressed",
+                    G_CALLBACK (gtk_tree_view_search_pressed_cb), tree_view);
+
   controller = gtk_event_controller_scroll_new (tree_view->priv->search_window,
                                                 GTK_EVENT_CONTROLLER_SCROLL_VERTICAL);
   g_object_set_data_full (G_OBJECT (tree_view->priv->search_window), "scroll",
@@ -14436,19 +14442,23 @@ gtk_tree_view_search_enable_popdown (GtkWidget *widget,
   g_source_set_name_by_id (id, "[gtk+] gtk_tree_view_real_search_enable_popdown");
 }
 
-static gboolean
-gtk_tree_view_search_button_press_event (GtkWidget *widget,
-					 GdkEventButton *event,
-					 GtkTreeView *tree_view)
+static void
+gtk_tree_view_search_pressed_cb (GtkGesture  *gesture,
+                                 int          n_press,
+                                 double       x,
+                                 double       y,
+                                 GtkTreeView *tree_view)
 {
   GdkDevice *keyb_device;
+  GdkEventSequence *sequence;
+  const GdkEvent *event;
+  GtkWidget *widget;
 
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-
-  keyb_device = gdk_device_get_associated_device (gdk_event_get_device ((GdkEvent *) event));
+  sequence = gtk_gesture_get_last_updated_sequence (gesture);
+  event = gtk_gesture_get_last_event (gesture, sequence);
+  keyb_device = gdk_device_get_associated_device (gdk_event_get_device (event));
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
   gtk_tree_view_search_window_hide (widget, tree_view, keyb_device);
-
-  return TRUE;
 }
 
 static void
