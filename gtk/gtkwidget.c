@@ -7575,16 +7575,7 @@ gtk_widget_propagate_hierarchy_changed_recurse (GtkWidget *widget,
 
       priv->anchored = new_anchored;
 
-      /* This can only happen with gtk_widget_reparent() */
-      if (priv->realized)
-        {
-          if (new_anchored)
-            gtk_widget_connect_frame_clock (widget,
-                                            gtk_widget_get_frame_clock (widget));
-          else
-            gtk_widget_disconnect_frame_clock (widget,
-                                               gtk_widget_get_frame_clock (info->previous_toplevel));
-        }
+      g_assert (!priv->realized);
 
       g_signal_emit (widget, widget_signals[HIERARCHY_CHANGED], 0, info->previous_toplevel);
       do_display_change (widget, info->previous_display, info->new_display);
