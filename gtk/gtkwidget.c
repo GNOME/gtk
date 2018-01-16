@@ -489,8 +489,6 @@ enum {
   MOVE_FOCUS,
   KEYNAV_FAILED,
   EVENT,
-  BUTTON_PRESS_EVENT,
-  BUTTON_RELEASE_EVENT,
   KEY_PRESS_EVENT,
   KEY_RELEASE_EVENT,
   DRAG_BEGIN,
@@ -606,8 +604,6 @@ static gboolean _gtk_widget_run_controllers      (GtkWidget           *widget,
 static void	gtk_widget_dispatch_child_properties_changed	(GtkWidget        *object,
 								 guint             n_pspecs,
 								 GParamSpec      **pspecs);
-static gboolean         gtk_widget_real_button_event            (GtkWidget        *widget,
-                                                                 GdkEventButton   *event);
 static gboolean		gtk_widget_real_key_press_event   	(GtkWidget        *widget,
 								 GdkEventKey      *event);
 static gboolean		gtk_widget_real_key_release_event 	(GtkWidget        *widget,
@@ -986,8 +982,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->move_focus = gtk_widget_real_move_focus;
   klass->keynav_failed = gtk_widget_real_keynav_failed;
   klass->event = NULL;
-  klass->button_press_event = gtk_widget_real_button_event;
-  klass->button_release_event = gtk_widget_real_button_event;
   klass->key_press_event = gtk_widget_real_key_press_event;
   klass->key_release_event = gtk_widget_real_key_release_event;
   klass->drag_begin = NULL;
@@ -1881,64 +1875,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT);
   g_signal_set_va_marshaller (widget_signals[EVENT], G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__OBJECTv);
-
-  /**
-   * GtkWidget::button-press-event:
-   * @widget: the object which received the signal.
-   * @event: (type Gdk.EventButton): the #GdkEventButton which triggered
-   *   this signal.
-   *
-   * The ::button-press-event signal will be emitted when a button
-   * (typically from a mouse) is pressed.
-   *
-   * To receive this signal, the #GdkWindow associated to the
-   * widget needs to enable the #GDK_BUTTON_PRESS_MASK mask.
-   *
-   * This signal will be sent to the grab widget if there is one.
-   *
-   * Returns: %TRUE to stop other handlers from being invoked for the event.
-   *   %FALSE to propagate the event further.
-   */
-  widget_signals[BUTTON_PRESS_EVENT] =
-    g_signal_new (I_("button-press-event"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST | G_SIGNAL_DEPRECATED,
-		  G_STRUCT_OFFSET (GtkWidgetClass, button_press_event),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__OBJECT,
-		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT);
-  g_signal_set_va_marshaller (widget_signals[BUTTON_PRESS_EVENT], G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__OBJECTv);
-
-  /**
-   * GtkWidget::button-release-event:
-   * @widget: the object which received the signal.
-   * @event: (type Gdk.EventButton): the #GdkEventButton which triggered
-   *   this signal.
-   *
-   * The ::button-release-event signal will be emitted when a button
-   * (typically from a mouse) is released.
-   *
-   * To receive this signal, the #GdkWindow associated to the
-   * widget needs to enable the #GDK_BUTTON_RELEASE_MASK mask.
-   *
-   * This signal will be sent to the grab widget if there is one.
-   *
-   * Returns: %TRUE to stop other handlers from being invoked for the event.
-   *   %FALSE to propagate the event further.
-   */
-  widget_signals[BUTTON_RELEASE_EVENT] =
-    g_signal_new (I_("button-release-event"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST | G_SIGNAL_DEPRECATED,
-		  G_STRUCT_OFFSET (GtkWidgetClass, button_release_event),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__OBJECT,
-		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT);
-  g_signal_set_va_marshaller (widget_signals[BUTTON_RELEASE_EVENT], G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_BOOLEAN__OBJECTv);
 
   /**
@@ -5704,13 +5640,6 @@ gtk_widget_draw (GtkWidget *widget,
 }
 
 static gboolean
-gtk_widget_real_button_event (GtkWidget      *widget,
-                              GdkEventButton *event)
-{
-  return GDK_EVENT_PROPAGATE;
-}
-
-static gboolean
 gtk_widget_real_key_press_event (GtkWidget         *widget,
 				 GdkEventKey       *event)
 {
@@ -6042,14 +5971,10 @@ gtk_widget_emit_event_signals (GtkWidget      *widget,
 	case GDK_GRAB_BROKEN:
 	case GDK_FOCUS_CHANGE:
 	case GDK_MOTION_NOTIFY:
+	case GDK_BUTTON_PRESS:
+	case GDK_BUTTON_RELEASE:
 	case GDK_NOTHING:
 	  signal_num = -1;
-	  break;
-	case GDK_BUTTON_PRESS:
-	  signal_num = BUTTON_PRESS_EVENT;
-          break;
-	case GDK_BUTTON_RELEASE:
-	  signal_num = BUTTON_RELEASE_EVENT;
 	  break;
 	case GDK_KEY_PRESS:
 	  signal_num = KEY_PRESS_EVENT;

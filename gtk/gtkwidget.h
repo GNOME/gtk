@@ -196,10 +196,6 @@ struct _GtkWidget
  *   more specific, signal that matches the type of event delivered
  *   (e.g. "key-press-event") and finally a generic "event-after"
  *   signal.
- * @button_press_event: Signal will be emitted when a button
- *   (typically from a mouse) is pressed.
- * @button_release_event: Signal will be emitted when a button
- *   (typically from a mouse) is released.
  * @key_press_event: Signal emitted when a key is pressed.
  * @key_release_event: Signal is emitted when a key is released.
  * @drag_begin: Signal emitted on the drag source when a drag is
@@ -306,10 +302,6 @@ struct _GtkWidgetClass
   /* events */
   gboolean (* event)			(GtkWidget	     *widget,
 					 GdkEvent	     *event);
-  gboolean (* button_press_event)	(GtkWidget	     *widget,
-					 GdkEventButton      *event);
-  gboolean (* button_release_event)	(GtkWidget	     *widget,
-					 GdkEventButton      *event);
   gboolean (* key_press_event)		(GtkWidget	     *widget,
 					 GdkEventKey	     *event);
   gboolean (* key_release_event)	(GtkWidget	     *widget,
