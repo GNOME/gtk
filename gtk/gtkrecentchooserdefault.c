@@ -60,6 +60,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkorientable.h"
 #include "gtkwindowgroup.h"
+#include "gtkgesturemultipress.h"
 
 #include "gtkrecentmanager.h"
 #include "gtkrecentfilter.h"
@@ -109,6 +110,8 @@ typedef struct
   GtkWidget *recent_popup_menu_clear_item;
   GtkWidget *recent_popup_menu_show_private_item;
  
+  GtkGesture *multipress_gesture;
+
   guint load_id;
   GList *recent_items;
   gint n_recent_items;
@@ -233,10 +236,13 @@ static void remove_item_activated_cb  (GtkMenuItem       *menu_item,
 static void show_private_toggled_cb   (GtkCheckMenuItem  *menu_item,
 				       gpointer           user_data);
 
+static void multi_press_cb            (GtkGesture        *gesture,
+                                       int                n_press,
+                                       double             x,
+                                       double             y,
+                                       gpointer           user_data);
+
 static gboolean recent_view_popup_menu_cb   (GtkWidget      *widget,
-					     gpointer        user_data);
-static gboolean recent_view_button_press_cb (GtkWidget      *widget,
-					     GdkEventButton *event,
 					     gpointer        user_data);
 
 static void     recent_view_drag_begin_cb         (GtkWidget        *widget,
@@ -313,7 +319,6 @@ _gtk_recent_chooser_default_class_init (GtkRecentChooserDefaultClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, row_activated_cb);
   gtk_widget_class_bind_template_callback (widget_class, filter_combo_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, recent_view_popup_menu_cb);
-  gtk_widget_class_bind_template_callback (widget_class, recent_view_button_press_cb);
   gtk_widget_class_bind_template_callback (widget_class, recent_view_drag_begin_cb);
   gtk_widget_class_bind_template_callback (widget_class, recent_view_drag_data_get_cb);
   gtk_widget_class_bind_template_callback (widget_class, recent_view_query_tooltip_cb);
@@ -367,6 +372,11 @@ _gtk_recent_chooser_default_init (GtkRecentChooserDefault *impl)
 		       NULL,
 		       GDK_ACTION_COPY);
   gtk_drag_source_add_uri_targets (priv->recent_view);
+
+  priv->multipress_gesture = gtk_gesture_multi_press_new (priv->recent_view);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture), GDK_BUTTON_SECONDARY);
+  g_signal_connect (priv->multipress_gesture, "pressed",
+                    G_CALLBACK (multi_press_cb), impl);
 }
 
 static void
@@ -552,6 +562,8 @@ gtk_recent_chooser_default_finalize (GObject *object)
       impl->priv->sort_data_destroy = NULL;
     }
   
+  g_object_unref (impl->priv->multipress_gesture);
+
   impl->priv->sort_data = NULL;
   impl->priv->sort_func = NULL;
   
@@ -1631,36 +1643,31 @@ recent_view_popup_menu_cb (GtkWidget *widget,
   return TRUE;
 }
 
-static gboolean
-recent_view_button_press_cb (GtkWidget      *widget,
-			     GdkEventButton *event,
-			     gpointer        user_data)
+static void
+multi_press_cb (GtkGesture *gesture,
+                int         n_press,
+                double      x,
+                double      y,
+                gpointer    user_data)
 {
   GtkRecentChooserDefault *impl = GTK_RECENT_CHOOSER_DEFAULT (user_data);
-  gdouble x, y;
+  GtkTreePath *path;
+  GdkEventSequence *sequence;
+  const GdkEvent *event;
 
-  if (gdk_event_triggers_context_menu ((GdkEvent *) event) &&
-      gdk_event_get_coords ((GdkEvent *) event, &x, &y))
-    {
-      GtkTreePath *path;
-      gboolean res;
+  if (!gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (impl->priv->recent_view),
+                                      x, y, &path,
+                                      NULL, NULL, NULL))
+    return;
 
-      res = gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (impl->priv->recent_view),
-                                           x, y, &path,
-					   NULL, NULL, NULL);
-      if (!res)
-        return FALSE;
+  /* select the path before creating the popup menu */
+  gtk_tree_selection_select_path (impl->priv->selection, path);
+  gtk_tree_path_free (path);
 
-      /* select the path before creating the popup menu */
-      gtk_tree_selection_select_path (impl->priv->selection, path);
-      gtk_tree_path_free (path);
-      
-      recent_view_menu_popup (impl, event);
+  sequence = gtk_gesture_get_last_updated_sequence (gesture);
+  event = gtk_gesture_get_last_event (gesture, sequence);
 
-      return TRUE;
-    }
-  
-  return FALSE;
+  recent_view_menu_popup (impl, (GdkEventButton *)event);
 }
 
 static void
