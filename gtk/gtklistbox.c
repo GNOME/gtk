@@ -3007,7 +3007,7 @@ gtk_list_box_row_focus (GtkWidget        *widget,
   else if (gtk_widget_get_focus_child (widget) != NULL)
     {
       /* Child has focus, always navigate inside it first */
-      if (gtk_widget_child_focus (child, direction))
+      if (gtk_widget_child_focus (gtk_widget_get_focus_child (widget), direction))
         return TRUE;
 
       /* If exiting child container to the left, select row  */
