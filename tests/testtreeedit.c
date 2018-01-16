@@ -133,19 +133,16 @@ edited (GtkCellRendererText *cell,
   gtk_tree_path_free (path);
 }
 
-static gboolean
-button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer callback_data)
+static void
+pressed_cb (GtkGesture *gesture,
+            int         n_press,
+            double      x,
+            double      y,
+            GtkWidget  *widget)
 {
-        double x, y;
-
-        gdk_event_get_coords ((GdkEvent *)event, &x, &y);
-	/* Deselect if people click outside any row. */
-	if (!gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (widget), x, y, NULL, NULL, NULL, NULL)) {
-		gtk_tree_selection_unselect_all (gtk_tree_view_get_selection (GTK_TREE_VIEW (widget)));
-	}
-
-	/* Let the default code run in any case; it won't reselect anything. */
-	return FALSE;
+  /* Deselect if people click outside any row. */
+  if (!gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (widget), x, y, NULL, NULL, NULL, NULL))
+    gtk_tree_selection_unselect_all (gtk_tree_view_get_selection (GTK_TREE_VIEW (widget)));
 }
 
 typedef struct {
@@ -230,7 +227,8 @@ main (gint argc, gchar **argv)
   GtkTreeViewColumn *column;
   GtkCellArea *area;
   CallbackData callback[4];
-  
+  GtkGesture *gesture;
+
   gtk_init ();
 
   if (g_getenv ("RTL"))
@@ -253,7 +251,9 @@ main (gint argc, gchar **argv)
 
   tree_model = create_model ();
   tree_view = gtk_tree_view_new_with_model (tree_model);
-  g_signal_connect (tree_view, "button_press_event", G_CALLBACK (button_press_event), NULL);
+  gesture = gtk_gesture_multi_press_new (tree_view);
+  g_signal_connect (gesture, "pressed", G_CALLBACK (pressed_cb), tree_view);
+  g_object_set_data_full (G_OBJECT (tree_view), "gesture", gesture, g_object_unref);
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (tree_view), TRUE);
 
   column = gtk_tree_view_column_new ();
