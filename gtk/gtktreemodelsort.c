@@ -1768,7 +1768,7 @@ gtk_tree_model_sort_has_default_sort_func (GtkTreeSortable *sortable)
 {
   GtkTreeModelSort *tree_model_sort = (GtkTreeModelSort *)sortable;
 
-  return (tree_model_sort->priv->default_sort_func != NULL);
+  return (tree_model_sort->priv->default_sort_func != NO_SORT_FUNC);
 }
 
 /* DragSource interface */
