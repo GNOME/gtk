@@ -88,11 +88,12 @@ find_toplevel_at_pointer (GdkDisplay *display)
 }
 
 static gboolean
-button_release_event_cb (GtkWidget       *widget,
-                         GdkEventButton  *event,
-                         gboolean        *clicked)
+release_event_cb (GtkWidget *widget,
+                  GdkEvent  *event,
+                  gboolean  *clicked)
 {
-  *clicked = TRUE;
+  if (gdk_event_get_event_type (event) == GDK_BUTTON_RELEASE)
+    *clicked = TRUE;
   return TRUE;
 }
 
@@ -133,10 +134,10 @@ query_for_toplevel (GdkDisplay *display,
     {
       gboolean clicked = FALSE;
 
-      g_signal_connect (popup, "button-release-event",
-                        G_CALLBACK (button_release_event_cb), &clicked);
+      g_signal_connect (popup, "event",
+                        G_CALLBACK (release_event_cb), &clicked);
 
-      /* Process events until clicked is set by button_release_event_cb.
+      /* Process events until clicked is set by our button release event handler.
        * We pass in may_block=TRUE since we want to wait if there
        * are no events currently.
        */
