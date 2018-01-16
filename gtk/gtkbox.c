@@ -923,14 +923,13 @@ gtk_box_get_size (GtkWidget      *widget,
 {
   GtkBox *box = GTK_BOX (widget);
   GtkBoxPrivate *private = gtk_box_get_instance_private (box);
-  GList *children;
   gint nvis_children;
   gint minimum, natural;
   gint minimum_above, natural_above;
   gint minimum_below, natural_below;
   gboolean have_baseline;
   gint min_baseline, nat_baseline;
-
+  GtkWidget *child;
 
   have_baseline = FALSE;
   minimum = natural = 0;
@@ -940,16 +939,16 @@ gtk_box_get_size (GtkWidget      *widget,
 
   nvis_children = 0;
 
-  for (children = private->children; children; children = children->next)
+  for (child = _gtk_widget_get_first_child (widget);
+       child != NULL;
+       child = _gtk_widget_get_next_sibling (child))
     {
-      GtkBoxChild *child = children->data;
-
-      if (_gtk_widget_get_visible (child->widget))
+      if (_gtk_widget_get_visible (child))
         {
           gint child_minimum, child_natural;
           gint child_minimum_baseline = -1, child_natural_baseline = -1;
 
-          gtk_widget_measure (child->widget,
+          gtk_widget_measure (child,
                               orientation,
                               -1,
                               &child_minimum, &child_natural,
@@ -1032,17 +1031,10 @@ gtk_box_get_size (GtkWidget      *widget,
 	}
     }
 
-  if (minimum_size)
-    *minimum_size = minimum;
-
-  if (natural_size)
-    *natural_size = natural;
-
-  if (minimum_baseline)
-    *minimum_baseline = min_baseline;
-
-  if (natural_baseline)
-    *natural_baseline = nat_baseline;
+  *minimum_size = minimum;
+  *natural_size = natural;
+  *minimum_baseline = min_baseline;
+  *natural_baseline = nat_baseline;
 }
 
 static void
