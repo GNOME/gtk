@@ -151,11 +151,9 @@
     </para>
 
     <para>
-      Next, the #GtkWidget::event signal is emitted, then the appropriate signal
-      for the event in question, for example #GtkWidget::motion-notify-event.
+      Next, the #GtkWidget::event signal is emitted.
       Handling these signals was the primary way to handle input in GTK+ widgets
-      before gestures were introduced. If the widget is realized, the
-      #GtkWidget::event-after signal is emitted. The signals are emitted from
+      before gestures were introduced. The signal is emitted from
       the target widget up to the top-level, as part of the “bubble” phase.
     </para>
 
