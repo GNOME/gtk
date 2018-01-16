@@ -1371,41 +1371,33 @@ gtk_popover_size_allocate (GtkWidget           *widget,
 }
 
 static gboolean
-gtk_popover_button_press (GtkWidget      *widget,
-                          GdkEventButton *event)
+gtk_popover_event (GtkWidget *widget,
+                   GdkEvent  *event)
 {
   GtkPopover *popover = GTK_POPOVER (widget);
 
-  if (gdk_event_get_event_type ((GdkEvent *) event) != GDK_BUTTON_PRESS)
-    return GDK_EVENT_PROPAGATE;
+  if (gdk_event_get_event_type (event) == GDK_BUTTON_PRESS)
+    popover->priv->button_pressed = TRUE;
+  else if (gdk_event_get_event_type (event) == GDK_BUTTON_RELEASE)
+    {
+      GtkAllocation child_alloc;
+      GtkWidget *child;
+      gdouble x, y;
 
-  popover->priv->button_pressed = TRUE;
+      child = gtk_bin_get_child (GTK_BIN (widget));
 
-  return GDK_EVENT_PROPAGATE;
-}
+      if (!popover->priv->button_pressed ||
+          !gdk_event_get_coords (event, &x, &y))
+        return GDK_EVENT_PROPAGATE;
 
-static gboolean
-gtk_popover_button_release (GtkWidget      *widget,
-			    GdkEventButton *event)
-{
-  GtkPopover *popover = GTK_POPOVER (widget);
-  GtkAllocation child_alloc;
-  GtkWidget *child;
-  gdouble x, y;
+      gtk_widget_get_allocation (child, &child_alloc);
 
-  child = gtk_bin_get_child (GTK_BIN (widget));
-
-  if (!popover->priv->button_pressed ||
-      !gdk_event_get_coords ((GdkEvent *) event, &x, &y))
-    return GDK_EVENT_PROPAGATE;
-
-  gtk_widget_get_allocation (child, &child_alloc);
-
-  if (x < child_alloc.x ||
-      x > child_alloc.x + child_alloc.width ||
-      y < child_alloc.y ||
-      y > child_alloc.y + child_alloc.height)
-    gtk_popover_popdown (popover);
+      if (x < child_alloc.x ||
+          x > child_alloc.x + child_alloc.width ||
+          y < child_alloc.y ||
+          y > child_alloc.y + child_alloc.height)
+        gtk_popover_popdown (popover);
+    }
 
   return GDK_EVENT_PROPAGATE;
 }
@@ -1584,8 +1576,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   widget_class->measure = gtk_popover_measure;
   widget_class->size_allocate = gtk_popover_size_allocate;
   widget_class->snapshot = gtk_popover_snapshot;
-  widget_class->button_press_event = gtk_popover_button_press;
-  widget_class->button_release_event = gtk_popover_button_release;
+  widget_class->event = gtk_popover_event;
   widget_class->key_press_event = gtk_popover_key_press;
   widget_class->grab_focus = gtk_popover_grab_focus;
   widget_class->focus = gtk_popover_focus;
