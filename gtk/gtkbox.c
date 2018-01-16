@@ -1223,15 +1223,11 @@ gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
 	}
     }
 
-  if (minimum_baseline)
-    *minimum_baseline = computed_minimum_baseline;
-  if (natural_baseline)
-    *natural_baseline = computed_natural_baseline;
-
-  if (minimum_size)
     *minimum_size = computed_minimum;
-  if (natural_size)
     *natural_size = MAX (computed_natural, computed_natural_below + computed_natural_above);
+
+    *minimum_baseline = computed_minimum_baseline;
+    *natural_baseline = computed_natural_baseline;
 }
 
 static void
