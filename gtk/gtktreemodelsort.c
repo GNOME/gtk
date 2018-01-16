@@ -1684,6 +1684,9 @@ gtk_tree_model_sort_set_sort_column_id (GtkTreeSortable *sortable,
   GtkTreeModelSort *tree_model_sort = (GtkTreeModelSort *)sortable;
   GtkTreeModelSortPrivate *priv = tree_model_sort->priv;
 
+  if (priv->sort_column_id == sort_column_id && priv->order == order)
+    return;
+
   if (sort_column_id != GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID)
     {
       if (sort_column_id != GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID)
@@ -1699,17 +1702,6 @@ gtk_tree_model_sort_set_sort_column_id (GtkTreeSortable *sortable,
         }
       else
         g_return_if_fail (priv->default_sort_func != NULL);
-
-      if (priv->sort_column_id == sort_column_id)
-        {
-          if (sort_column_id != GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID)
-	    {
-	      if (priv->order == order)
-	        return;
-	    }
-          else
-	    return;
-        }
     }
 
   priv->sort_column_id = sort_column_id;
