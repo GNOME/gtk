@@ -1555,11 +1555,7 @@ gtk_notebook_get_property (GObject         *object,
  * gtk_notebook_map
  * gtk_notebook_unmap
  * gtk_notebook_snapshot
- * gtk_notebook_scroll
  * gtk_notebook_popup_menu
- * gtk_notebook_enter_notify
- * gtk_notebook_leave_notify
- * gtk_notebook_motion_notify
  * gtk_notebook_drag_begin
  * gtk_notebook_drag_end
  * gtk_notebook_drag_failed
