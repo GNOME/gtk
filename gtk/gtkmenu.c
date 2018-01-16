@@ -47,7 +47,7 @@
  *
  * |[<!-- language="C" -->
  *   // connect our handler which will popup the menu
- *   g_signal_connect_swapped (window, "button_press_event",
+ *   g_signal_connect_swapped (window, "event",
  *	G_CALLBACK (my_popup_handler), menu);
  * ]|
  *
@@ -3076,14 +3076,14 @@ gtk_menu_released_cb (GtkGestureMultiPress *gesture,
     }
 
   /*  Don't pass down to menu shell if a non-menuitem part of the menu
-   *  was clicked (see comment in button_press()).
+   *  was clicked (see comment in gtk_menu_pressed_cb()).
    */
   if (GTK_IS_MENU_SHELL (gtk_get_event_widget ((GdkEvent *) event)) &&
       pointer_in_menu_window (GTK_WIDGET (menu), button_event->x_root, button_event->y_root))
     {
       /*  Ugly: make sure menu_shell->button gets reset to 0 when we
        *  bail out early here so it is in a consistent state for the
-       *  next button_press/button_release in GtkMenuShell.
+       *  next button press or release in GtkMenuShell.
        *  See bug #449371.
        */
       if (GTK_MENU_SHELL (menu)->priv->active)
