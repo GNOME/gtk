@@ -32,13 +32,16 @@ test_widget (const gchar *label, const gchar *color)
 static GtkOrientation o;
 
 static gboolean
-toggle_orientation (GtkWidget *window, GdkEventButton *event, GtkGrid *grid)
+toggle_orientation (GtkWidget *window, GdkEvent *event, GtkGrid *grid)
 {
-  o = 1 - o;
+  if (gdk_event_get_event_type (event) == GDK_BUTTON_PRESS)
+    {
+      o = 1 - o;
 
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (grid), o);
+      gtk_orientable_set_orientation (GTK_ORIENTABLE (grid), o);
+    }
 
-  return FALSE;
+  return GDK_EVENT_PROPAGATE;
 }
 
 static void
@@ -52,7 +55,7 @@ simple_grid (void)
   gtk_window_set_title (GTK_WINDOW (window), "Orientation");
   grid = gtk_grid_new ();
   gtk_container_add (GTK_CONTAINER (window), grid);
-  g_signal_connect (window, "button-press-event", G_CALLBACK (toggle_orientation), grid);
+  g_signal_connect (window, "event", G_CALLBACK (toggle_orientation), grid);
 
   gtk_grid_set_column_spacing (GTK_GRID (grid), 5);
   gtk_grid_set_row_spacing (GTK_GRID (grid), 5);
