@@ -491,7 +491,6 @@ enum {
   EVENT,
   BUTTON_PRESS_EVENT,
   BUTTON_RELEASE_EVENT,
-  MOTION_NOTIFY_EVENT,
   KEY_PRESS_EVENT,
   KEY_RELEASE_EVENT,
   DRAG_BEGIN,
@@ -609,8 +608,6 @@ static void	gtk_widget_dispatch_child_properties_changed	(GtkWidget        *obje
 								 GParamSpec      **pspecs);
 static gboolean         gtk_widget_real_button_event            (GtkWidget        *widget,
                                                                  GdkEventButton   *event);
-static gboolean         gtk_widget_real_motion_event            (GtkWidget        *widget,
-                                                                 GdkEventMotion   *event);
 static gboolean		gtk_widget_real_key_press_event   	(GtkWidget        *widget,
 								 GdkEventKey      *event);
 static gboolean		gtk_widget_real_key_release_event 	(GtkWidget        *widget,
@@ -991,7 +988,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->event = NULL;
   klass->button_press_event = gtk_widget_real_button_event;
   klass->button_release_event = gtk_widget_real_button_event;
-  klass->motion_notify_event = gtk_widget_real_motion_event;
   klass->key_press_event = gtk_widget_real_key_press_event;
   klass->key_release_event = gtk_widget_real_key_release_event;
   klass->drag_begin = NULL;
@@ -1140,11 +1136,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  * A value of %TRUE indicates that @widget can have a tooltip, in this case
  * the widget will be queried using #GtkWidget::query-tooltip to determine
  * whether it will provide a tooltip or not.
- *
- * Note that setting this property to %TRUE for the first time will change
- * the event masks of the GdkWindows of this widget to include leave-notify
- * and motion-notify events.  This cannot and will not be undone when the
- * property is set to %FALSE again.
  *
  * Since: 2.12
  */
@@ -1948,35 +1939,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT);
   g_signal_set_va_marshaller (widget_signals[BUTTON_RELEASE_EVENT], G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__OBJECTv);
-
-  /**
-   * GtkWidget::motion-notify-event:
-   * @widget: the object which received the signal.
-   * @event: (type Gdk.EventMotion): the #GdkEventMotion which triggered
-   *   this signal.
-   *
-   * The ::motion-notify-event signal is emitted when the pointer moves
-   * over the widget's #GdkWindow.
-   *
-   * To receive this signal, the #GdkWindow associated to the widget
-   * needs to enable the #GDK_POINTER_MOTION_MASK mask.
-   *
-   * This signal will be sent to the grab widget if there is one.
-   *
-   * Returns: %TRUE to stop other handlers from being invoked for the event.
-   *   %FALSE to propagate the event further.
-   */
-  widget_signals[MOTION_NOTIFY_EVENT] =
-    g_signal_new (I_("motion-notify-event"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST | G_SIGNAL_DEPRECATED,
-		  G_STRUCT_OFFSET (GtkWidgetClass, motion_notify_event),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__OBJECT,
-		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT);
-  g_signal_set_va_marshaller (widget_signals[MOTION_NOTIFY_EVENT], G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_BOOLEAN__OBJECTv);
 
   /**
@@ -5749,13 +5711,6 @@ gtk_widget_real_button_event (GtkWidget      *widget,
 }
 
 static gboolean
-gtk_widget_real_motion_event (GtkWidget      *widget,
-                              GdkEventMotion *event)
-{
-  return GDK_EVENT_PROPAGATE;
-}
-
-static gboolean
 gtk_widget_real_key_press_event (GtkWidget         *widget,
 				 GdkEventKey       *event)
 {
@@ -6086,6 +6041,7 @@ gtk_widget_emit_event_signals (GtkWidget      *widget,
 	case GDK_LEAVE_NOTIFY:
 	case GDK_GRAB_BROKEN:
 	case GDK_FOCUS_CHANGE:
+	case GDK_MOTION_NOTIFY:
 	case GDK_NOTHING:
 	  signal_num = -1;
 	  break;
@@ -6094,9 +6050,6 @@ gtk_widget_emit_event_signals (GtkWidget      *widget,
           break;
 	case GDK_BUTTON_RELEASE:
 	  signal_num = BUTTON_RELEASE_EVENT;
-	  break;
-	case GDK_MOTION_NOTIFY:
-	  signal_num = MOTION_NOTIFY_EVENT;
 	  break;
 	case GDK_KEY_PRESS:
 	  signal_num = KEY_PRESS_EVENT;

@@ -200,8 +200,6 @@ struct _GtkWidget
  *   (typically from a mouse) is pressed.
  * @button_release_event: Signal will be emitted when a button
  *   (typically from a mouse) is released.
- * @motion_notify_event: Signal emitted when the pointer moves over
- *   the widget’s #GdkWindow.
  * @key_press_event: Signal emitted when a key is pressed.
  * @key_release_event: Signal is emitted when a key is released.
  * @drag_begin: Signal emitted on the drag source when a drag is
@@ -312,8 +310,6 @@ struct _GtkWidgetClass
 					 GdkEventButton      *event);
   gboolean (* button_release_event)	(GtkWidget	     *widget,
 					 GdkEventButton      *event);
-  gboolean (* motion_notify_event)	(GtkWidget	     *widget,
-					 GdkEventMotion      *event);
   gboolean (* key_press_event)		(GtkWidget	     *widget,
 					 GdkEventKey	     *event);
   gboolean (* key_release_event)	(GtkWidget	     *widget,
