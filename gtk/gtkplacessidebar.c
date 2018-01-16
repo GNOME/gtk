@@ -1696,20 +1696,23 @@ stop_drop_feedback (GtkPlacesSidebar *sidebar)
 }
 
 static gboolean
-on_motion_notify_event (GtkWidget      *widget,
-                        GdkEventMotion *event,
-                        gpointer        user_data)
+sidebar_event_cb (GtkWidget *widget,
+                  GdkEvent  *event,
+                  gpointer   user_data)
 {
   GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (user_data);
   guint state;
   double x, y;
 
-  if (sidebar->drag_row == NULL || sidebar->dragging_over)
-    return FALSE;
+  if (gdk_event_get_event_type (event) != GDK_MOTION_NOTIFY)
+    return GDK_EVENT_PROPAGATE;
 
-  if (!gdk_event_get_state ((GdkEvent *) event, &state) ||
+  if (sidebar->drag_row == NULL || sidebar->dragging_over)
+    return GDK_EVENT_PROPAGATE;
+
+  if (!gdk_event_get_state (event, &state) ||
       !(state & GDK_BUTTON1_MASK))
-    return FALSE;
+    return GDK_EVENT_PROPAGATE;
 
   gdk_event_get_coords ((GdkEvent *) event, &x, &y);
 
@@ -1725,7 +1728,7 @@ on_motion_notify_event (GtkWidget      *widget,
                                        sidebar->drag_x, sidebar->drag_y);
     }
 
-  return FALSE;
+  return GDK_EVENT_PROPAGATE;
 }
 
 static void
@@ -4071,8 +4074,8 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
   sidebar->source_targets = gdk_content_formats_new (dnd_source_targets, G_N_ELEMENTS (dnd_source_targets));
   sidebar->source_targets = gtk_content_formats_add_text_targets (sidebar->source_targets);
 
-  g_signal_connect (sidebar->list_box, "motion-notify-event",
-                    G_CALLBACK (on_motion_notify_event), sidebar);
+  g_signal_connect (sidebar->list_box, "event",
+                    G_CALLBACK (sidebar_event_cb), sidebar);
   g_signal_connect (sidebar->list_box, "drag-begin",
                     G_CALLBACK (drag_begin_callback), sidebar);
   g_signal_connect (sidebar->list_box, "drag-motion",
