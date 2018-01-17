@@ -1303,13 +1303,7 @@ gtk_box_measure (GtkWidget      *widget,
       if (private->orientation != orientation)
         gtk_box_compute_size_for_opposing_orientation (box, for_size, minimum, natural, minimum_baseline, natural_baseline);
       else
-        {
-          if (minimum_baseline)
-            *minimum_baseline = -1;
-          if (natural_baseline)
-            *natural_baseline = -1;
-          gtk_box_compute_size_for_orientation (box, for_size, minimum, natural);
-        }
+        gtk_box_compute_size_for_orientation (box, for_size, minimum, natural);
     }
 }
 
