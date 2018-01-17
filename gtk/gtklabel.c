@@ -3305,19 +3305,6 @@ gtk_label_get_measuring_layout (GtkLabel *   label,
 }
 
 static void
-gtk_label_update_layout_width (GtkLabel *label)
-{
-  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-
-  g_assert (priv->layout);
-
-  if (priv->ellipsize || priv->wrap)
-    pango_layout_set_width (priv->layout, gtk_widget_get_width (GTK_WIDGET (label)) * PANGO_SCALE);
-  else
-    pango_layout_set_width (priv->layout, -1);
-}
-
-static void
 gtk_label_update_layout_attributes (GtkLabel *label)
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
@@ -3424,7 +3411,8 @@ gtk_label_ensure_layout (GtkLabel *label)
       if (priv->lines > 0)
         pango_layout_set_height (priv->layout, - priv->lines);
 
-      gtk_label_update_layout_width (label);
+      if (priv->ellipsize || priv->wrap)
+        pango_layout_set_width (priv->layout, gtk_widget_get_width (GTK_WIDGET (label)) * PANGO_SCALE);
     }
 }
 
@@ -3736,7 +3724,13 @@ gtk_label_size_allocate (GtkWidget           *widget,
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
 
   if (priv->layout)
-    gtk_label_update_layout_width (label);
+    {
+      if (priv->ellipsize || priv->wrap)
+        pango_layout_set_width (priv->layout,
+                                allocation->width * PANGO_SCALE);
+      else
+        pango_layout_set_width (priv->layout, -1);
+    }
 
   gtk_label_get_ink_rect (label, out_clip);
 }
