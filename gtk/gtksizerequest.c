@@ -154,7 +154,6 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
   if (!found_in_cache)
     {
       int adjusted_min, adjusted_natural;
-      int adjusted_for_size = for_size;
       int reported_min_size = 0;
       int reported_nat_size = 0;
 
@@ -188,29 +187,26 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
         }
       else
         {
-          int dummy = 0;
+          int adjusted_for_size;
           int minimum_for_size = 0;
           int natural_for_size = 0;
+          int dummy = 0;
 
-          /* Pull the base natural size from the cache as it's needed to adjust
+          /* Pull the minimum for_size from the cache as it's needed to adjust
            * the proposed 'for_size' */
-          widget_class->measure (widget, OPPOSITE_ORIENTATION (orientation), -1,
-                                 &minimum_for_size, &natural_for_size, &dummy, &dummy);
-
-          gtk_widget_adjust_size_allocation (widget,
-                                             OPPOSITE_ORIENTATION (orientation),
-                                             &minimum_for_size,
-                                             &natural_for_size,
-                                             &dummy,
-                                             &adjusted_for_size);
-
-          /* adjusted_for_size now without widget margins */
-          adjusted_for_size -= css_extra_for_size;
+          gtk_widget_measure (widget, OPPOSITE_ORIENTATION (orientation), -1,
+                              &minimum_for_size, &natural_for_size, NULL, NULL);
 
           /* TODO: Warn if the given for_size is too small? */
+          if (for_size < MAX (minimum_for_size, css_min_for_size))
+            for_size = MAX (minimum_for_size, css_min_for_size);
 
-          if (adjusted_for_size < MAX (minimum_for_size, css_min_for_size))
-            adjusted_for_size = MAX (minimum_for_size, css_min_for_size);
+          adjusted_for_size = for_size;
+          gtk_widget_adjust_size_allocation (widget, OPPOSITE_ORIENTATION (orientation),
+                                             &for_size, &natural_for_size,
+                                             &dummy, &adjusted_for_size);
+
+          adjusted_for_size -= css_extra_for_size;
 
           push_recursion_check (widget, orientation);
           widget_class->measure (widget,
