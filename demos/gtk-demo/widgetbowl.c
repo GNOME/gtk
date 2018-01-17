@@ -8,6 +8,7 @@
 #include <gtk/gtk.h>
 
 #include "gtkfishbowl.h"
+#include "gtkgears.h"
 
 const char *const css =
 ".blurred-button {"
@@ -80,6 +81,16 @@ create_label (void)
   return w;
 }
 
+static GtkWidget *
+create_gears (void)
+{
+  GtkWidget *w = gtk_gears_new ();
+
+  gtk_widget_set_size_request (w, 100, 100);
+
+  return w;
+}
+
 static const struct {
   const char *name;
   GtkWidget * (*create_func) (void);
@@ -91,6 +102,7 @@ static const struct {
   { "Label"     , create_label          },
   { "Spinner"   , create_spinner        },
   { "Spinbutton", create_spinbutton     },
+  { "Gears",      create_gears          },
 };
 
 static int selected_widget_type = -1;
