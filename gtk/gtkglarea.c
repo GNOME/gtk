@@ -582,6 +582,13 @@ gtk_gl_area_snapshot (GtkWidget   *widget,
   int w, h, scale;
   GLenum status;
 
+  scale = gtk_widget_get_scale_factor (widget);
+  w = gtk_widget_get_width (widget) * scale;
+  h = gtk_widget_get_height (widget) * scale;
+
+  if (w == 0 || h == 0)
+    return;
+
   if (priv->error != NULL)
     {
       gtk_gl_area_draw_error_screen (area,
@@ -602,10 +609,6 @@ gtk_gl_area_snapshot (GtkWidget   *widget,
    glEnable (GL_DEPTH_TEST);
  else
    glDisable (GL_DEPTH_TEST);
-
-  scale = gtk_widget_get_scale_factor (widget);
-  w = gtk_widget_get_width (widget) * scale;
-  h = gtk_widget_get_height (widget) * scale;
 
   status = glCheckFramebufferStatusEXT (GL_FRAMEBUFFER_EXT);
   if (status == GL_FRAMEBUFFER_COMPLETE_EXT)
@@ -647,7 +650,7 @@ gtk_gl_area_snapshot (GtkWidget   *widget,
     }
   else
     {
-      g_warning ("fb setup not supported");
+      g_warning ("fb setup not supported (%x)", status);
     }
 }
 
