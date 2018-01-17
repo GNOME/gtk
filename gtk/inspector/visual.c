@@ -547,7 +547,7 @@ init_cursor_size (GtkInspectorVisual *vis)
 
   g_object_get (gtk_settings_get_default (), "gtk-cursor-theme-size", &size, NULL);
   if (size == 0)
-    size = gdk_display_get_default_cursor_size (gdk_display_get_default ());
+    size = 32;
 
   gtk_adjustment_set_value (vis->priv->scale_adjustment, (gdouble)size);
   g_signal_connect (vis->priv->cursor_size_adjustment, "value-changed",

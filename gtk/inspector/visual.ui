@@ -19,8 +19,8 @@
     <property name="page-increment">1</property>
   </object>
   <object class="GtkAdjustment" id="cursor_size_adjustment">
-    <property name="lower">24</property>
-    <property name="upper">64</property>
+    <property name="lower">16</property>
+    <property name="upper">128</property>
     <property name="step-increment">8</property>
     <property name="page-increment">8</property>
     <property name="page-size">0</property>
