@@ -27,6 +27,7 @@
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkrender.h"
+#include "gtksnapshot.h"
 
 #include <epoxy/gl.h>
 
@@ -150,7 +151,6 @@ typedef struct {
   int required_gl_version;
 
   guint frame_buffer;
-  guint render_buffer;
   guint texture;
   guint depth_stencil_buffer;
 
@@ -377,31 +377,9 @@ gtk_gl_area_ensure_buffers (GtkGLArea *area)
 
   glGenFramebuffersEXT (1, &priv->frame_buffer);
 
-  if (priv->has_alpha)
+  if (priv->texture == 0)
     {
-      /* For alpha we use textures as that is required for blending to work */
-      if (priv->texture == 0)
-        glGenTextures (1, &priv->texture);
-
-      /* Delete old render buffer if any */
-      if (priv->render_buffer != 0)
-        {
-          glDeleteRenderbuffersEXT(1, &priv->render_buffer);
-          priv->render_buffer = 0;
-        }
-    }
-  else
-    {
-    /* For non-alpha we use render buffers so we can blit instead of texture the result */
-      if (priv->render_buffer == 0)
-        glGenRenderbuffersEXT (1, &priv->render_buffer);
-
-      /* Delete old texture if any */
-      if (priv->texture != 0)
-        {
-          glDeleteTextures(1, &priv->texture);
-          priv->texture = 0;
-        }
+      glGenTextures (1, &priv->texture);
     }
 
   if ((priv->has_depth_buffer || priv->has_stencil_buffer))
@@ -448,12 +426,6 @@ gtk_gl_area_allocate_buffers (GtkGLArea *area)
         glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
       else
         glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
-    }
-
-  if (priv->render_buffer)
-    {
-      glBindRenderbuffer (GL_RENDERBUFFER, priv->render_buffer);
-      glRenderbufferStorage (GL_RENDERBUFFER, GL_RGB8, width, height);
     }
 
   if (priv->has_depth_buffer || priv->has_stencil_buffer)
@@ -504,9 +476,6 @@ gtk_gl_area_attach_buffers (GtkGLArea *area)
   if (priv->texture)
     glFramebufferTexture2D (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
                             GL_TEXTURE_2D, priv->texture, 0);
-  else if (priv->render_buffer)
-    glFramebufferRenderbufferEXT (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
-                                  GL_RENDERBUFFER_EXT, priv->render_buffer);
 
   if (priv->depth_stencil_buffer)
     {
@@ -529,15 +498,9 @@ gtk_gl_area_delete_buffers (GtkGLArea *area)
 
   priv->have_buffers = FALSE;
 
-  if (priv->render_buffer != 0)
-    {
-      glDeleteRenderbuffersEXT (1, &priv->render_buffer);
-      priv->render_buffer = 0;
-    }
-
   if (priv->texture != 0)
     {
-      glDeleteTextures(1, &priv->texture);
+      glDeleteTextures (1, &priv->texture);
       priv->texture = 0;
     }
 
@@ -596,10 +559,10 @@ gtk_gl_area_size_allocate (GtkWidget           *widget,
 }
 
 static void
-gtk_gl_area_draw_error_screen (GtkGLArea *area,
-                               cairo_t   *cr,
-                               gint       width,
-                               gint       height)
+gtk_gl_area_draw_error_screen (GtkGLArea   *area,
+                               GtkSnapshot *snapshot,
+                               gint         width,
+                               gint         height)
 {
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
   PangoLayout *layout;
@@ -610,17 +573,18 @@ gtk_gl_area_draw_error_screen (GtkGLArea *area,
   pango_layout_set_width (layout, width * PANGO_SCALE);
   pango_layout_set_alignment (layout, PANGO_ALIGN_CENTER);
   pango_layout_get_pixel_size (layout, NULL, &layout_height);
-  gtk_render_layout (gtk_widget_get_style_context (GTK_WIDGET (area)),
-                     cr,
-                     0, (height - layout_height) / 2,
-                     layout);
+
+  gtk_snapshot_render_layout (snapshot,
+                              gtk_widget_get_style_context (GTK_WIDGET (area)),
+                              0, (height - layout_height) / 2,
+                              layout);
 
   g_object_unref (layout);
 }
 
-static gboolean
-gtk_gl_area_draw (GtkWidget *widget,
-                  cairo_t   *cr)
+static void
+gtk_gl_area_snapshot (GtkWidget   *widget,
+                      GtkSnapshot *snapshot)
 {
   GtkGLArea *area = GTK_GL_AREA (widget);
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
@@ -631,14 +595,14 @@ gtk_gl_area_draw (GtkWidget *widget,
   if (priv->error != NULL)
     {
       gtk_gl_area_draw_error_screen (area,
-                                     cr,
+                                     snapshot,
                                      gtk_widget_get_width (widget),
                                      gtk_widget_get_height (widget));
-      return FALSE;
+      return;
     }
 
   if (priv->context == NULL)
-    return FALSE;
+    return;
 
   gtk_gl_area_make_current (area);
 
@@ -656,6 +620,8 @@ gtk_gl_area_draw (GtkWidget *widget,
   status = glCheckFramebufferStatusEXT (GL_FRAMEBUFFER_EXT);
   if (status == GL_FRAMEBUFFER_COMPLETE_EXT)
     {
+      GdkTexture *texture;
+
       if (priv->needs_render || priv->auto_render)
         {
           if (priv->needs_resize)
@@ -669,19 +635,30 @@ gtk_gl_area_draw (GtkWidget *widget,
 
       priv->needs_render = FALSE;
 
-      gdk_cairo_draw_from_gl (cr,
-                              gtk_widget_get_window (widget),
-                              priv->texture ? priv->texture : priv->render_buffer,
-                              priv->texture ? GL_TEXTURE : GL_RENDERBUFFER,
-                              scale, 0, 0, w, h);
-      gtk_gl_area_make_current (area);
+      /* FIXME: the texture may be kept in use for a longer time (eg by
+       * the backend, or by the inspector, so we really need a pool of
+       * GL textures here, and use a destroy notify on the texture to
+       * put the GL texture back in the pool when it is no longer in use.
+       */
+      texture = gdk_texture_new_for_gl (priv->context,
+                                        priv->texture,
+                                        gtk_widget_get_width (widget),
+                                        gtk_widget_get_height (widget),
+                                        NULL, NULL);
+
+      gtk_snapshot_append_texture (snapshot,
+                                   texture,
+                                   &GRAPHENE_RECT_INIT (0, 0,
+                                                        gtk_widget_get_width (widget),
+                                                        gtk_widget_get_height (widget)),
+                                   "GL Area");
+
+      g_object_unref (texture);
     }
   else
     {
       g_warning ("fb setup not supported");
     }
-
-  return TRUE;
 }
 
 static gboolean
@@ -708,7 +685,7 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
   widget_class->realize = gtk_gl_area_realize;
   widget_class->unrealize = gtk_gl_area_unrealize;
   widget_class->size_allocate = gtk_gl_area_size_allocate;
-  widget_class->draw = gtk_gl_area_draw;
+  widget_class->snapshot = gtk_gl_area_snapshot;
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_DRAWING_AREA);
 
