@@ -3081,10 +3081,6 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->supports_shapes = gdk_x11_display_supports_shapes;
   display_class->supports_input_shapes = gdk_x11_display_supports_input_shapes;
   display_class->get_app_launch_context = _gdk_x11_display_get_app_launch_context;
-  display_class->get_default_cursor_size = _gdk_x11_display_get_default_cursor_size;
-  display_class->get_maximal_cursor_size = _gdk_x11_display_get_maximal_cursor_size;
-  display_class->supports_cursor_alpha = _gdk_x11_display_supports_cursor_alpha;
-  display_class->supports_cursor_color = _gdk_x11_display_supports_cursor_color;
 
   display_class->get_next_serial = gdk_x11_display_get_next_serial;
   display_class->notify_startup_complete = gdk_x11_display_notify_startup_complete;

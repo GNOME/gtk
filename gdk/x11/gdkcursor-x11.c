@@ -226,26 +226,6 @@ gdk_x11_cursor_create_for_name (GdkDisplay *display,
   return xcursor;
 }
 
-gboolean
-_gdk_x11_display_supports_cursor_alpha (GdkDisplay *display)
-{
-  return XcursorSupportsARGB (GDK_DISPLAY_XDISPLAY (display));
-}
-
-gboolean
-_gdk_x11_display_supports_cursor_color (GdkDisplay *display)
-{
-  return XcursorSupportsARGB (GDK_DISPLAY_XDISPLAY (display));
-}
-
-void
-_gdk_x11_display_get_default_cursor_size (GdkDisplay *display,
-                                          guint      *width,
-                                          guint      *height)
-{
-  *width = *height = XcursorGetDefaultSize (GDK_DISPLAY_XDISPLAY (display));
-}
-
 #else
 
 static Cursor
@@ -276,41 +256,7 @@ gdk_x11_cursor_create_for_name (GdkDisplay  *display,
   return None;
 }
 
-gboolean
-_gdk_x11_display_supports_cursor_alpha (GdkDisplay *display)
-{
-  return FALSE;
-}
-
-gboolean
-_gdk_x11_display_supports_cursor_color (GdkDisplay *display)
-{
-  return FALSE;
-}
-
-void
-_gdk_x11_display_get_default_cursor_size (GdkDisplay *display,
-                                          guint      *width,
-                                          guint      *height)
-{
-  /* no idea, really */
-  *width = *height = 20;
-  return;
-}
-
 #endif
-
-void
-_gdk_x11_display_get_maximal_cursor_size (GdkDisplay *display,
-                                          guint       *width,
-                                          guint       *height)
-{
-  g_return_if_fail (GDK_IS_DISPLAY (display));
-
-  XQueryBestCursor (GDK_DISPLAY_XDISPLAY (display),
-                    GDK_SCREEN_XROOTWIN (GDK_X11_DISPLAY (display)->screen),
-                    128, 128, width, height);
-}
 
 /**
  * gdk_x11_display_set_cursor_theme:

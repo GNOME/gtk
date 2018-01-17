@@ -128,15 +128,6 @@ struct _GdkDisplayClass
   GdkWindow *                (*get_default_group)  (GdkDisplay *display);
   gboolean                   (*supports_shapes)       (GdkDisplay *display);
   gboolean                   (*supports_input_shapes) (GdkDisplay *display);
-  gboolean                   (*supports_cursor_alpha) (GdkDisplay *display);
-  gboolean                   (*supports_cursor_color) (GdkDisplay *display);
-
-  void                       (*get_default_cursor_size) (GdkDisplay *display,
-                                                         guint      *width,
-                                                         guint      *height);
-  void                       (*get_maximal_cursor_size) (GdkDisplay *display,
-                                                         guint      *width,
-                                                         guint      *height);
 
   GdkAppLaunchContext *      (*get_app_launch_context) (GdkDisplay *display);
 

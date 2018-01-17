@@ -304,33 +304,3 @@ _gdk_wayland_cursor_get_next_image_index (GdkWaylandDisplay *display,
   *next_image_delay = 0;
   return current_image_index;
 }
-
-void
-_gdk_wayland_display_get_default_cursor_size (GdkDisplay *display,
-					      guint       *width,
-					      guint       *height)
-{
-  *width = 32;
-  *height = 32;
-}
-
-void
-_gdk_wayland_display_get_maximal_cursor_size (GdkDisplay *display,
-					      guint       *width,
-					      guint       *height)
-{
-  *width = 256;
-  *height = 256;
-}
-
-gboolean
-_gdk_wayland_display_supports_cursor_alpha (GdkDisplay *display)
-{
-  return TRUE;
-}
-
-gboolean
-_gdk_wayland_display_supports_cursor_color (GdkDisplay *display)
-{
-  return TRUE;
-}
