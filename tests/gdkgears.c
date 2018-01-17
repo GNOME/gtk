@@ -8,14 +8,6 @@
  ************************************************************************/
 
 static void
-toggle_alpha (GtkWidget *checkbutton,
-              GtkWidget *gears)
-{
-  gtk_gl_area_set_has_alpha (GTK_GL_AREA (gears),
-                             gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(checkbutton)));
-}
-
-static void
 toggle_overlay (GtkWidget *checkbutton,
 		GtkWidget *revealer)
 {
@@ -186,13 +178,6 @@ main (int argc, char *argv[])
   gtk_widget_show (check);
   g_signal_connect (check, "toggled",
                     G_CALLBACK (toggle_spin), spinner);
-
-  check = gtk_check_button_new_with_label ("Alpha");
-  gtk_box_pack_end (GTK_BOX (hbox), check);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), FALSE);
-  gtk_widget_show (check);
-  g_signal_connect (check, "toggled",
-                    G_CALLBACK (toggle_alpha), gears);
 
   check = gtk_check_button_new_with_label ("Overlay");
   gtk_box_pack_end (GTK_BOX (hbox), check);

@@ -99,11 +99,6 @@ void            gtk_gl_area_get_required_version        (GtkGLArea    *area,
                                                          gint         *major,
                                                          gint         *minor);
 GDK_AVAILABLE_IN_3_16
-gboolean        gtk_gl_area_get_has_alpha               (GtkGLArea    *area);
-GDK_AVAILABLE_IN_3_16
-void            gtk_gl_area_set_has_alpha               (GtkGLArea    *area,
-                                                         gboolean      has_alpha);
-GDK_AVAILABLE_IN_3_16
 gboolean        gtk_gl_area_get_has_depth_buffer        (GtkGLArea    *area);
 GDK_AVAILABLE_IN_3_16
 void            gtk_gl_area_set_has_depth_buffer        (GtkGLArea    *area,

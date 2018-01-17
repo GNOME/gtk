@@ -154,7 +154,6 @@ typedef struct {
   guint texture;
   guint depth_stencil_buffer;
 
-  gboolean has_alpha;
   gboolean has_depth_buffer;
   gboolean has_stencil_buffer;
 
@@ -168,7 +167,6 @@ enum {
   PROP_0,
 
   PROP_CONTEXT,
-  PROP_HAS_ALPHA,
   PROP_HAS_DEPTH_BUFFER,
   PROP_HAS_STENCIL_BUFFER,
   PROP_USE_ES,
@@ -219,10 +217,6 @@ gtk_gl_area_set_property (GObject      *gobject,
       gtk_gl_area_set_auto_render (self, g_value_get_boolean (value));
       break;
 
-    case PROP_HAS_ALPHA:
-      gtk_gl_area_set_has_alpha (self, g_value_get_boolean (value));
-      break;
-
     case PROP_HAS_DEPTH_BUFFER:
       gtk_gl_area_set_has_depth_buffer (self, g_value_get_boolean (value));
       break;
@@ -252,10 +246,6 @@ gtk_gl_area_get_property (GObject    *gobject,
     {
     case PROP_AUTO_RENDER:
       g_value_set_boolean (value, priv->auto_render);
-      break;
-
-    case PROP_HAS_ALPHA:
-      g_value_set_boolean (value, priv->has_alpha);
       break;
 
     case PROP_HAS_DEPTH_BUFFER:
@@ -733,27 +723,6 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
                           G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkGLArea:has-alpha:
-   *
-   * If set to %TRUE the buffer allocated by the widget will have an alpha channel
-   * component, and when rendering to the window the result will be composited over
-   * whatever is below the widget.
-   *
-   * If set to %FALSE there will be no alpha channel, and the buffer will fully
-   * replace anything below the widget.
-   *
-   * Since: 3.16
-   */
-  obj_props[PROP_HAS_ALPHA] =
-    g_param_spec_boolean ("has-alpha",
-                          P_("Has alpha"),
-                          P_("Whether the color buffer has an alpha component"),
-                          FALSE,
-                          GTK_PARAM_READWRITE |
-                          G_PARAM_STATIC_STRINGS |
-                          G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
    * GtkGLArea:has-depth-buffer:
    *
    * If set to %TRUE the widget will allocate and enable a depth buffer for the
@@ -1069,60 +1038,6 @@ gtk_gl_area_get_required_version (GtkGLArea *area,
     *major = priv->required_gl_version / 10;
   if (minor != NULL)
     *minor = priv->required_gl_version % 10;
-}
-
-/**
- * gtk_gl_area_get_has_alpha:
- * @area: a #GtkGLArea
- *
- * Returns whether the area has an alpha component.
- *
- * Returns: %TRUE if the @area has an alpha component, %FALSE otherwise
- *
- * Since: 3.16
- */
-gboolean
-gtk_gl_area_get_has_alpha (GtkGLArea *area)
-{
-  GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
-
-  g_return_val_if_fail (GTK_IS_GL_AREA (area), FALSE);
-
-  return priv->has_alpha;
-}
-
-/**
- * gtk_gl_area_set_has_alpha:
- * @area: a #GtkGLArea
- * @has_alpha: %TRUE to add an alpha component
- *
- * If @has_alpha is %TRUE the buffer allocated by the widget will have
- * an alpha channel component, and when rendering to the window the
- * result will be composited over whatever is below the widget.
- *
- * If @has_alpha is %FALSE there will be no alpha channel, and the
- * buffer will fully replace anything below the widget.
- *
- * Since: 3.16
- */
-void
-gtk_gl_area_set_has_alpha (GtkGLArea *area,
-                           gboolean   has_alpha)
-{
-  GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
-
-  g_return_if_fail (GTK_IS_GL_AREA (area));
-
-  has_alpha = !!has_alpha;
-
-  if (priv->has_alpha != has_alpha)
-    {
-      priv->has_alpha = has_alpha;
-
-      g_object_notify (G_OBJECT (area), "has-alpha");
-
-      gtk_gl_area_delete_buffers (area);
-    }
 }
 
 /**
