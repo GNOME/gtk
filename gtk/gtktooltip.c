@@ -708,7 +708,9 @@ gtk_tooltip_position (GtkTooltip *tooltip,
 
   /* Position the tooltip */
 
-  cursor_size = gdk_display_get_default_cursor_size (display);
+  g_object_get (gtk_widget_get_settings (GTK_WIDGET (tooltip->current_window)),
+                "gtk-cursor-theme-size", &cursor_size,
+                NULL);
 
   /* Try below */
   x = bounds.x + bounds.width / 2 - width / 2;
