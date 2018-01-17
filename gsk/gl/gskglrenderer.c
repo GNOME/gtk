@@ -202,6 +202,7 @@ struct _GskGLRenderer
     struct {
       Program blend_program;
       Program blit_program;
+      Program flip_program;
       Program color_program;
       Program coloring_program;
       Program color_matrix_program;
@@ -597,7 +598,10 @@ render_texture_node (GskGLRenderer       *self,
                                                       texture,
                                                       gl_min_filter,
                                                       gl_mag_filter);
-  ops_set_program (builder, &self->blit_program);
+  if (GDK_IS_GL_TEXTURE (texture))
+    ops_set_program (builder, &self->flip_program);
+  else
+    ops_set_program (builder, &self->blit_program);
   ops_set_texture (builder, texture_id);
   ops_draw (builder, vertex_data);
 }
@@ -1717,6 +1721,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   } program_definitions[] = {
     { "blend",           "blend.vs.glsl", "blend.fs.glsl" },
     { "blit",            "blit.vs.glsl",  "blit.fs.glsl" },
+    { "flip",            "flip.vs.glsl",  "blit.fs.glsl" },
     { "color",           "blit.vs.glsl",  "color.fs.glsl" },
     { "coloring",        "blit.vs.glsl",  "coloring.fs.glsl" },
     { "color matrix",    "blit.vs.glsl",  "color_matrix.fs.glsl" },

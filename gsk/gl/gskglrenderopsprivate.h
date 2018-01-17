@@ -10,7 +10,7 @@
 #include "gskglrendererprivate.h"
 
 #define GL_N_VERTICES 6
-#define GL_N_PROGRAMS 13
+#define GL_N_PROGRAMS 14
 
 enum {
   OP_NONE,
