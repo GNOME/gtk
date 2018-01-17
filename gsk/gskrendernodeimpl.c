@@ -1953,7 +1953,7 @@ gsk_cairo_node_get_draw_context (GskRenderNode *node,
                    node->bounds.size.width, node->bounds.size.height);
   cairo_clip (res);
 
-  if (GSK_RENDERER_DEBUG_CHECK (renderer, SURFACE))
+  if (renderer && GSK_RENDERER_DEBUG_CHECK (renderer, SURFACE))
     {
       const char *prefix;
       prefix = g_getenv ("GSK_DEBUG_PREFIX");
