@@ -39,6 +39,8 @@
 #include "gdkinternals.h"
 #include "gdkcairo.h"
 
+#include <epoxy/gl.h>
+
 /**
  * SECTION:gdktexture
  * @Short_description: Image data for display
@@ -432,6 +434,88 @@ gdk_pixbuf_texture_init (GdkPixbufTexture *self)
 {
 }
 
+/* GdkGLTexture */
+
+
+struct _GdkGLTexture {
+  GdkTexture parent_instance;
+
+  GdkGLContext *context;
+  int id;
+
+  GDestroyNotify destroy;
+  gpointer data;
+};
+
+struct _GdkGLTextureClass {
+  GdkTextureClass parent_class;
+};
+
+G_DEFINE_TYPE (GdkGLTexture, gdk_gl_texture, GDK_TYPE_TEXTURE)
+
+static void
+gdk_gl_texture_dispose (GObject *object)
+{
+  GdkGLTexture *self = GDK_GL_TEXTURE (object);
+
+  g_object_unref (self->context);
+
+  if (self->destroy)
+    self->destroy (self->data);
+
+  G_OBJECT_CLASS (gdk_gl_texture_parent_class)->dispose (object);
+}
+
+static void
+gdk_gl_texture_download (GdkTexture *texture,
+                         guchar     *data,
+                         gsize       stride)
+{
+  GdkGLTexture *self = GDK_GL_TEXTURE (texture);
+  cairo_surface_t *surface;
+  cairo_t *cr;
+  GdkWindow *window;
+
+  surface = cairo_image_surface_create_for_data (data,
+                                                 CAIRO_FORMAT_ARGB32,
+                                                 texture->width, texture->height,
+                                                 stride);
+
+  cr = cairo_create (surface);
+  window = gdk_gl_context_get_window (self->context);
+  gdk_cairo_draw_from_gl (cr, window, self->id, GL_TEXTURE, 1, 0, 0, texture->width, texture->height);
+  cairo_destroy (cr);
+  cairo_surface_finish (surface);
+  cairo_surface_destroy (surface);
+}
+
+static void
+gdk_gl_texture_class_init (GdkGLTextureClass *klass)
+{
+  GdkTextureClass *texture_class = GDK_TEXTURE_CLASS (klass);
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  texture_class->download = gdk_gl_texture_download;
+  gobject_class->dispose = gdk_gl_texture_dispose;
+}
+
+static void
+gdk_gl_texture_init (GdkGLTexture *self)
+{
+}
+
+GdkGLContext *
+gdk_gl_texture_get_context (GdkGLTexture *self)
+{
+  return self->context;
+}
+
+int
+gdk_gl_texture_get_id (GdkGLTexture *self)
+{
+  return self->id;
+}
+
 /**
  * gdk_texture_new_for_pixbuf:
  * @pixbuf: a #GdkPixbuf
@@ -530,6 +614,31 @@ gdk_texture_new_from_file (GFile   *file,
   g_object_unref (pixbuf);
 
   return texture;
+}
+
+GdkTexture *
+gdk_texture_new_for_gl (GdkGLContext   *context,
+                        int             id,
+                        int             width,
+                        int             height,
+                        GDestroyNotify  destroy,
+                        gpointer        data)
+{
+  GdkGLTexture *self;
+
+  g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), NULL);
+
+  self = g_object_new (GDK_TYPE_GL_TEXTURE,
+                       "width", width,
+                       "height", height,
+                       NULL);
+
+  self->context = g_object_ref (context);
+  self->id = id;
+  self->destroy = destroy;
+  self->data = data;
+
+  return GDK_TEXTURE (self);
 }
 
 /**

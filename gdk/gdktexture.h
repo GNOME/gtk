@@ -26,6 +26,7 @@
 #include <gdk/gdkversionmacros.h>
 #include <gdk/gdktypes.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
+#include <gdk/gdkglcontext.h>
 
 G_BEGIN_DECLS
 
@@ -54,6 +55,14 @@ GdkTexture *            gdk_texture_new_from_resource          (const char      
 GDK_AVAILABLE_IN_3_94
 GdkTexture *            gdk_texture_new_from_file              (GFile           *file,
                                                                 GError         **error);
+
+GDK_AVAILABLE_IN_3_94
+GdkTexture *            gdk_texture_new_for_gl                 (GdkGLContext    *context,
+                                                                int              id,
+                                                                int              width,
+                                                                int              height,
+                                                                GDestroyNotify   destroy,
+                                                                gpointer         data);
 
 GDK_AVAILABLE_IN_3_94
 int                     gdk_texture_get_width                  (GdkTexture      *texture);

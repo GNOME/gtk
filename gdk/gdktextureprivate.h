@@ -44,6 +44,13 @@ void                    gdk_texture_clear_render_data   (GdkTexture             
 gpointer                gdk_texture_get_render_data     (GdkTexture             *self,
                                                          gpointer                key);
 
+#define GDK_TYPE_GL_TEXTURE (gdk_gl_texture_get_type ())
+
+G_DECLARE_FINAL_TYPE (GdkGLTexture, gdk_gl_texture, GDK, GL_TEXTURE, GdkTexture)
+
+GdkGLContext *          gdk_gl_texture_get_context      (GdkGLTexture           *self);
+int                     gdk_gl_texture_get_id           (GdkGLTexture           *self);
+
 G_END_DECLS
 
 #endif /* __GDK_TEXTURE_PRIVATE_H__ */
