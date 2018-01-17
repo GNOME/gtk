@@ -1169,9 +1169,6 @@ gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
                 }
             }
 
-          child_size = child_size;
-
-
           child_minimum_baseline = child_natural_baseline = -1;
           /* Assign the child's position. */
           gtk_widget_measure (child->widget,
