@@ -19,7 +19,7 @@ if pc.returncode != 0:
 
 # Now read the generated file again and remove all WL_EXPORTs
 content = ""
-with open(out_file, 'r') as content_file:
+with open(out_file, 'r', encoding='utf-8') as content_file:
     content = content_file.read()
 
 content = content.replace('WL_EXPORT ', '')

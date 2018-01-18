@@ -33,7 +33,7 @@ demos = []
 for demo_file in in_files:
     filename =  demo_file[demo_file.rfind('/')+1:]
     demo_name = filename.replace(".c", "")
-    with open(demo_file, 'r') as f:
+    with open(demo_file, 'r', encoding='utf-8') as f:
         title = f.readline().replace("/*", "").strip()
 
 
