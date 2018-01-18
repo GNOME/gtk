@@ -5,26 +5,22 @@
     <property name="title" translatable="yes">Stack</property>
     <child>
       <object class="GtkGrid">
-        <property name="visible">1</property>
         <child>
           <object class="GtkStackSwitcher">
-            <property name="visible">1</property>
             <property name="stack">stack</property>
             <property name="halign">center</property>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkStack" id="stack">
-            <property name="visible">1</property>
-            <property name="can_focus">1</property>
+            <property name="can-focus">1</property>
             <property name="transition-type">crossfade</property>
             <child>
               <object class="GtkImage">
-                <property name="visible">1</property>
                 <property name="margin-top">20</property>
                 <property name="margin-bottom">20</property>
                 <property name="icon-name">gtk3-demo</property>
@@ -37,9 +33,7 @@
             <child>
               <object class="GtkCheckButton">
                 <property name="label" translatable="yes">Page 2</property>
-                <property name="visible">1</property>
-                <property name="can_focus">1</property>
-                <property name="draw_indicator">1</property>
+                <property name="can-focus">1</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
               </object>
@@ -50,7 +44,6 @@
             </child>
             <child>
               <object class="GtkSpinner">
-                <property name="visible">1</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
                 <property name="active">1</property>
@@ -62,8 +55,8 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">1</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
       </object>

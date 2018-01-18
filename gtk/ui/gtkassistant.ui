@@ -3,8 +3,7 @@
   <!-- interface-requires gtk+ 3.10 -->
   <template class="GtkAssistant" parent="GtkWindow">
     <child type="titlebar">
-      <object class="GtkHeaderBar" id="headerbar">
-      </object>
+      <object class="GtkHeaderBar" id="headerbar"/>
     </child>
     <child>
       <object class="GtkBox" id="main_box">

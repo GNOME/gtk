@@ -5,7 +5,6 @@
     <property name="orientation">vertical</property>
     <child>
       <object class="GtkToolbar">
-        <property name="visible">1</property>
         <property name="hexpand">1</property>
         <property name="show-arrow">0</property>
         <style>
@@ -13,11 +12,10 @@
         </style>
         <child>
           <object class="GtkToggleToolButton">
-            <property name="visible">1</property>
             <property name="label" translatable="yes">Normal</property>
-            <property name="use_underline">1</property>
-            <property name="is_important">1</property>
-            <property name="icon_name">edit-find</property>
+            <property name="use-underline">1</property>
+            <property name="is-important">1</property>
+            <property name="icon-name">edit-find</property>
           </object>
           <packing>
             <property name="homogeneous">1</property>
@@ -25,11 +23,10 @@
         </child>
         <child>
           <object class="GtkToggleToolButton">
-            <property name="visible">1</property>
             <property name="label" translatable="yes">Active</property>
-            <property name="use_underline">1</property>
-            <property name="is_important">1</property>
-            <property name="icon_name">edit-find</property>
+            <property name="use-underline">1</property>
+            <property name="is-important">1</property>
+            <property name="icon-name">edit-find</property>
             <property name="active">1</property>
           </object>
           <packing>
@@ -38,12 +35,11 @@
         </child>
         <child>
           <object class="GtkToggleToolButton">
-            <property name="visible">1</property>
             <property name="sensitive">0</property>
             <property name="label" translatable="yes">Insensitive</property>
-            <property name="use_underline">1</property>
-            <property name="is_important">1</property>
-            <property name="icon_name">edit-find</property>
+            <property name="use-underline">1</property>
+            <property name="is-important">1</property>
+            <property name="icon-name">edit-find</property>
           </object>
           <packing>
             <property name="homogeneous">1</property>
@@ -51,11 +47,10 @@
         </child>
         <child>
           <object class="GtkToggleToolButton">
-            <property name="visible">1</property>
             <property name="label" translatable="yes">Raised</property>
-            <property name="use_underline">1</property>
-            <property name="is_important">1</property>
-            <property name="icon_name">edit-find</property>
+            <property name="use-underline">1</property>
+            <property name="is-important">1</property>
+            <property name="icon-name">edit-find</property>
             <style>
               <class name="raised"/>
             </style>
@@ -66,11 +61,10 @@
         </child>
         <child>
           <object class="GtkToggleToolButton">
-            <property name="visible">1</property>
             <property name="label" translatable="yes">Raised Active</property>
-            <property name="use_underline">1</property>
-            <property name="is_important">1</property>
-            <property name="icon_name">edit-find</property>
+            <property name="use-underline">1</property>
+            <property name="is-important">1</property>
+            <property name="icon-name">edit-find</property>
             <property name="active">1</property>
             <style>
               <class name="raised"/>
@@ -82,12 +76,11 @@
         </child>
         <child>
           <object class="GtkToggleToolButton">
-            <property name="visible">1</property>
             <property name="sensitive">0</property>
             <property name="label" translatable="yes">Insensitive Active</property>
-            <property name="use_underline">1</property>
-            <property name="icon_name">edit-find</property>
-            <property name="is_important">1</property>
+            <property name="use-underline">1</property>
+            <property name="icon-name">edit-find</property>
+            <property name="is-important">1</property>
             <property name="active">1</property>
           </object>
           <packing>
@@ -96,12 +89,10 @@
         </child>
         <child>
           <object class="GtkToolItem">
-            <property name="visible">1</property>
             <child>
               <object class="GtkEntry" id="entry1">
-                <property name="visible">1</property>
-                <property name="can_focus">1</property>
-                <property name="invisible_char">•</property>
+                <property name="can-focus">1</property>
+                <property name="invisible-char">•</property>
                 <property name="placeholder-text" translatable="yes">Search...</property>
                 <property name="secondary-icon-name">edit-find-symbolic</property>
               </object>
@@ -110,11 +101,9 @@
         </child>
         <child>
           <object class="GtkToolItem">
-            <property name="visible">1</property>
             <child>
               <object class="GtkSwitch" id="switch1">
-                <property name="visible">1</property>
-                <property name="can_focus">1</property>
+                <property name="can-focus">1</property>
               </object>
             </child>
           </object>
@@ -123,7 +112,6 @@
     </child>
     <child>
       <object class="GtkBox">
-        <property name="visible">1</property>
         <property name="valign">center</property>
         <property name="halign">center</property>
         <style>
@@ -132,17 +120,15 @@
         <child>
           <object class="GtkButton">
             <property name="label" translatable="yes">Hi, I am a button</property>
-            <property name="visible">1</property>
-            <property name="can_focus">1</property>
-            <property name="receives_default">1</property>
+            <property name="can-focus">1</property>
+            <property name="receives-default">1</property>
           </object>
         </child>
         <child>
           <object class="GtkButton">
-            <property name="label" translatable="yes">And I'm another button</property>
-            <property name="visible">1</property>
-            <property name="can_focus">1</property>
-            <property name="receives_default">1</property>
+            <property name="label" translatable="yes">And I&apos;m another button</property>
+            <property name="can-focus">1</property>
+            <property name="receives-default">1</property>
           </object>
           <packing>
             <property name="position">1</property>
@@ -151,9 +137,8 @@
         <child>
           <object class="GtkButton">
             <property name="label" translatable="yes">This is a button party!</property>
-            <property name="visible">1</property>
-            <property name="can_focus">1</property>
-            <property name="receives_default">1</property>
+            <property name="can-focus">1</property>
+            <property name="receives-default">1</property>
           </object>
           <packing>
             <property name="position">2</property>
@@ -163,7 +148,6 @@
     </child>
     <child>
       <object class="GtkToolbar">
-        <property name="visible">1</property>
         <property name="hexpand">1</property>
         <property name="toolbar-style">icons</property>
         <style>
@@ -171,10 +155,9 @@
         </style>
         <child>
           <object class="GtkToggleToolButton">
-            <property name="visible">1</property>
             <property name="label" translatable="yes">Normal</property>
-            <property name="use_underline">1</property>
-            <property name="icon_name">list-add-symbolic</property>
+            <property name="use-underline">1</property>
+            <property name="icon-name">list-add-symbolic</property>
           </object>
           <packing>
             <property name="homogeneous">1</property>
@@ -182,10 +165,9 @@
         </child>
         <child>
           <object class="GtkToggleToolButton">
-            <property name="visible">1</property>
             <property name="label" translatable="yes">Normal</property>
-            <property name="use_underline">1</property>
-            <property name="icon_name">list-add-symbolic</property>
+            <property name="use-underline">1</property>
+            <property name="icon-name">list-add-symbolic</property>
           </object>
           <packing>
             <property name="homogeneous">1</property>
@@ -194,8 +176,8 @@
         <child>
           <object class="GtkToggleToolButton">
             <property name="label" translatable="yes">Active</property>
-            <property name="use_underline">1</property>
-            <property name="icon_name">list-remove-symbolic</property>
+            <property name="use-underline">1</property>
+            <property name="icon-name">list-remove-symbolic</property>
             <property name="active">1</property>
           </object>
           <packing>
@@ -204,10 +186,9 @@
         </child>
         <child>
           <object class="GtkToggleToolButton">
-            <property name="visible">1</property>
             <property name="label" translatable="yes">Active</property>
-            <property name="use_underline">1</property>
-            <property name="icon_name">list-remove-symbolic</property>
+            <property name="use-underline">1</property>
+            <property name="icon-name">list-remove-symbolic</property>
             <property name="active">1</property>
           </object>
           <packing>
@@ -216,11 +197,10 @@
         </child>
         <child>
           <object class="GtkToggleToolButton">
-            <property name="visible">1</property>
             <property name="sensitive">0</property>
             <property name="label" translatable="yes">Insensitive</property>
-            <property name="use_underline">1</property>
-            <property name="icon_name">edit-find-symbolic</property>
+            <property name="use-underline">1</property>
+            <property name="icon-name">edit-find-symbolic</property>
           </object>
           <packing>
             <property name="homogeneous">1</property>
@@ -228,11 +208,10 @@
         </child>
         <child>
           <object class="GtkToggleToolButton">
-            <property name="visible">1</property>
             <property name="sensitive">0</property>
             <property name="label" translatable="yes">Insensitive Active</property>
-            <property name="use_underline">1</property>
-            <property name="icon_name">go-up-symbolic</property>
+            <property name="use-underline">1</property>
+            <property name="icon-name">go-up-symbolic</property>
             <property name="active">1</property>
           </object>
           <packing>
@@ -243,12 +222,9 @@
     </child>
     <child>
       <object class="GtkBox">
-        <property name="visible">1</property>
         <property name="spacing">10</property>
-        <property name="orientation">horizontal</property>
         <child>
           <object class="GtkButton">
-            <property name="visible">1</property>
             <property name="label">Plain</property>
             <property name="halign">end</property>
             <property name="hexpand">1</property>
@@ -257,7 +233,6 @@
         </child>
         <child>
           <object class="GtkButton">
-            <property name="visible">1</property>
             <property name="label">Destructive</property>
             <style>
               <class name="destructive-action"/>
@@ -266,7 +241,6 @@
         </child>
         <child>
           <object class="GtkButton">
-            <property name="visible">1</property>
             <property name="label">Suggested</property>
             <style>
               <class name="suggested-action"/>

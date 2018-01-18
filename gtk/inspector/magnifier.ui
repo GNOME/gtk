@@ -4,11 +4,7 @@
     <property name="orientation">vertical</property>
     <child>
       <object class="GtkScrolledWindow">
-        <property name="visible">True</property>
-        <property name="hscrollbar-policy">automatic</property>
-        <property name="vscrollbar-policy">automatic</property>
-        <property name="expand">True</property>
-        <property name="shadow-type">none</property>
+        <property name="expand">1</property>
         <child>
           <object class="GtkMagnifier" id="magnifier">
             <property name="visible">True</property>

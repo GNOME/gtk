@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.8 -->
-  <object class="IconStore" id="store">
-  </object>
+  <object class="IconStore" id="store"/>
   <object class="GtkTreeModelFilter" id="filter_model">
-    <property name="child_model">store</property>
+    <property name="child-model">store</property>
   </object>
   <template class="IconBrowserWindow" parent="GtkApplicationWindow">
     <property name="title" translatable="yes">Icon Browser</property>
@@ -13,26 +12,22 @@
     <signal name="key-press-event" handler="key_press_event_cb"/>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header">
-        <property name="visible">True</property>
         <property name="title" translatable="yes">Icon Browser</property>
-        <property name="show-title-buttons">True</property>
+        <property name="show-title-buttons">1</property>
         <child type="title">
           <object class="GtkBox">
-            <property name="visible">True</property>
             <style>
               <class name="linked"/>
             </style>
             <child>
               <object class="GtkRadioButton" id="normal_radio">
-                <property name="visible">True</property>
-                <property name="draw_indicator">False</property>
+                <property name="draw-indicator">0</property>
                 <property name="label" translatable="yes">Normal</property>
               </object>
             </child>
             <child>
               <object class="GtkRadioButton" id="symbolic_radio">
-                <property name="visible">True</property>
-                <property name="draw_indicator">False</property>
+                <property name="draw-indicator">0</property>
                 <property name="label" translatable="yes">Symbolic</property>
                 <property name="group">normal_radio</property>
                 <signal name="toggled" handler="symbolic_toggled"/>
@@ -42,13 +37,11 @@
         </child>
         <child>
           <object class="GtkToggleButton" id="search">
-            <property name="visible">True</property>
             <style>
               <class name="image-button"/>
             </style>
             <child>
               <object class="GtkImage" id="search-icon">
-                <property name="visible">True</property>
                 <property name="icon-name">edit-find-symbolic</property>
               </object>
             </child>
@@ -61,32 +54,24 @@
     </child>
     <child>
       <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="orientation">horizontal</property>
         <child>
           <object class="GtkListBox" id="context_list">
-            <property name="visible">True</property>
-            <property name="selection_mode">single</property>
             <signal name="selected-rows-changed" handler="selected_context_changed"/>
           </object>
         </child>
         <child>
           <object class="GtkSeparator">
-            <property name="visible">True</property>
             <property name="orientation">vertical</property>
           </object>
         </child>
         <child>
           <object class="GtkBox" id="content_box">
-            <property name="visible">True</property>
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkSearchBar" id="searchbar">
-                <property name="visible">True</property>
                 <property name="search-mode-enabled" bind-source="search" bind-property="active" bind-flags="bidirectional"/>
                 <child>
                   <object class="GtkSearchEntry" id="searchentry">
-                    <property name="visible">True</property>
                     <signal name="search-changed" handler="search_text_changed"/>
                   </object>
                 </child>
@@ -94,16 +79,13 @@
             </child>
             <child>
               <object class="GtkScrolledWindow" id="sw">
-                <property name="visible">True</property>
-                <property name="expand">True</property>
+                <property name="expand">1</property>
                 <property name="hscrollbar-policy">never</property>
-                <property name="vscrollbar-policy">automatic</property>
                 <child>
                   <object class="GtkIconView" id="list">
-                    <property name="visible">True</property>
                     <property name="model">filter_model</property>
                     <property name="selection-mode">none</property>
-                    <property name="activate-on-single-click">True</property>
+                    <property name="activate-on-single-click">1</property>
                     <signal name="item_activated" handler="item_activated"/>
                     <child>
                       <object class="GtkCellRendererPixbuf" id="cell">
@@ -116,7 +98,6 @@
                       <object class="GtkCellRendererText" id="text_cell">
                         <property name="xpad">10</property>
                         <property name="ypad">10</property>
-                        <property name="xalign">0.5</property>
                       </object>
                     </child>
                   </object>
@@ -137,22 +118,20 @@
     </widgets>
   </object>
   <object class="GtkDialog" id="details">
-    <property name="modal">True</property>
+    <property name="modal">1</property>
     <property name="use-header-bar">1</property>
-    <property name="resizable">False</property>
+    <property name="resizable">0</property>
     <property name="hide-on-close">1</property>
     <child internal-child="vbox">
       <object class="GtkBox">
         <child>
           <object class="GtkGrid">
-            <property name="visible">True</property>
             <property name="margin">10</property>
             <property name="row-spacing">18</property>
             <property name="column-spacing">18</property>
             <property name="halign">center</property>
             <child>
               <object class="GtkImage" id="image1">
-                <property name="visible">True</property>
                 <property name="halign">center</property>
                 <property name="valign">end</property>
               </object>
@@ -163,7 +142,6 @@
             </child>
             <child>
               <object class="GtkImage" id="image2">
-                <property name="visible">True</property>
                 <property name="halign">center</property>
                 <property name="valign">end</property>
               </object>
@@ -174,7 +152,6 @@
             </child>
             <child>
               <object class="GtkImage" id="image3">
-                <property name="visible">True</property>
                 <property name="halign">center</property>
                 <property name="valign">end</property>
               </object>
@@ -185,7 +162,6 @@
             </child>
             <child>
               <object class="GtkImage" id="image4">
-                <property name="visible">True</property>
                 <property name="halign">center</property>
                 <property name="valign">end</property>
               </object>
@@ -196,7 +172,6 @@
             </child>
             <child>
               <object class="GtkImage" id="image5">
-                <property name="visible">True</property>
                 <property name="halign">center</property>
                 <property name="valign">end</property>
               </object>
@@ -207,7 +182,6 @@
             </child>
             <child>
               <object class="GtkImage" id="image6">
-                <property name="visible">True</property>
                 <property name="halign">center</property>
                 <property name="valign">end</property>
               </object>
@@ -216,10 +190,8 @@
                 <property name="top-attach">1</property>
               </packing>
             </child>
-
             <child>
               <object class="GtkLabel" id="label1">
-                <property name="visible">True</property>
                 <property name="halign">center</property>
                 <property name="valign">baseline</property>
                 <property name="label">16×16</property>
@@ -234,7 +206,6 @@
             </child>
             <child>
               <object class="GtkLabel" id="label2">
-                <property name="visible">True</property>
                 <property name="halign">center</property>
                 <property name="valign">baseline</property>
                 <property name="label">24×24</property>
@@ -249,7 +220,6 @@
             </child>
             <child>
               <object class="GtkLabel" id="label3">
-                <property name="visible">True</property>
                 <property name="halign">center</property>
                 <property name="valign">baseline</property>
                 <property name="label">32×32</property>
@@ -264,7 +234,6 @@
             </child>
             <child>
               <object class="GtkLabel" id="label4">
-                <property name="visible">True</property>
                 <property name="halign">center</property>
                 <property name="valign">baseline</property>
                 <property name="label">48×48</property>
@@ -279,7 +248,6 @@
             </child>
             <child>
               <object class="GtkLabel" id="label5">
-                <property name="visible">True</property>
                 <property name="halign">center</property>
                 <property name="valign">baseline</property>
                 <property name="label">64×64</property>
@@ -294,7 +262,6 @@
             </child>
             <child>
               <object class="GtkLabel" id="label6">
-                <property name="visible">True</property>
                 <property name="halign">center</property>
                 <property name="valign">baseline</property>
                 <property name="label">scalable</property>
@@ -311,7 +278,6 @@
         </child>
         <child>
           <object class="GtkButton">
-            <property name="visible">True</property>
             <property name="label" translatable="yes">Copy to Clipboard</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
@@ -322,8 +288,7 @@
         <child>
           <object class="GtkLabel" id="description">
             <property name="margin">10</property>
-            <property name="visible">True</property>
-            <property name="wrap">True</property>
+            <property name="wrap">1</property>
             <property name="max-width-chars">60</property>
             <property name="valign">start</property>
           </object>

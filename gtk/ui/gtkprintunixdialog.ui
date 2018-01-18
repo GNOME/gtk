@@ -48,7 +48,6 @@
     <property name="step-increment">1</property>
   </object>
   <template class="GtkPrintUnixDialog" parent="GtkDialog">
-    <property name="can-focus">False</property>
     <property name="type-hint">dialog</property>
     <signal name="notify::page-setup" handler="redraw_page_layout_preview" swapped="no"/>
     <signal name="response" handler="error_dialogs" swapped="no"/>
@@ -425,8 +424,6 @@
                                 </child>
                                 <child>
                                   <object class="GtkPrinterOptionWidget" id="duplex">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
                                     <property name="valign">baseline</property>
                                   </object>
                                   <packing>
@@ -449,8 +446,6 @@
                                 </child>
                                 <child>
                                   <object class="GtkPrinterOptionWidget" id="pages_per_sheet">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
                                     <property name="valign">baseline</property>
                                     <signal name="changed" handler="redraw_page_layout_preview" object="GtkPrintUnixDialog" swapped="yes"/>
                                     <signal name="changed" handler="update_number_up_layout" object="GtkPrintUnixDialog" swapped="yes"/>
@@ -475,8 +470,6 @@
                                 </child>
                                 <child>
                                   <object class="GtkPrinterOptionWidget" id="number_up_layout">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
                                     <property name="valign">baseline</property>
                                     <signal name="changed" handler="redraw_page_layout_preview" object="GtkPrintUnixDialog" swapped="yes"/>
                                   </object>
@@ -603,8 +596,6 @@
                                 </child>
                                 <child>
                                   <object class="GtkPrinterOptionWidget" id="paper_type">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
                                     <property name="valign">baseline</property>
                                   </object>
                                   <packing>
@@ -627,8 +618,6 @@
                                 </child>
                                 <child>
                                   <object class="GtkPrinterOptionWidget" id="paper_source">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
                                     <property name="valign">baseline</property>
                                   </object>
                                   <packing>
@@ -651,8 +640,6 @@
                                 </child>
                                 <child>
                                   <object class="GtkPrinterOptionWidget" id="output_tray">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
                                     <property name="valign">baseline</property>
                                   </object>
                                   <packing>
@@ -803,10 +790,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkPrinterOptionWidget" id="job_prio">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                              </object>
+                              <object class="GtkPrinterOptionWidget" id="job_prio"/>
                               <packing>
                                 <property name="left-attach">1</property>
                                 <property name="top-attach">0</property>
@@ -826,10 +810,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkPrinterOptionWidget" id="billing_info">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                              </object>
+                              <object class="GtkPrinterOptionWidget" id="billing_info"/>
                               <packing>
                                 <property name="left-attach">1</property>
                                 <property name="top-attach">1</property>
@@ -997,10 +978,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkPrinterOptionWidget" id="cover_before">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                              </object>
+                              <object class="GtkPrinterOptionWidget" id="cover_before"/>
                               <packing>
                                 <property name="left-attach">1</property>
                                 <property name="top-attach">0</property>
@@ -1020,10 +998,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkPrinterOptionWidget" id="cover_after">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                              </object>
+                              <object class="GtkPrinterOptionWidget" id="cover_after"/>
                               <packing>
                                 <property name="left-attach">1</property>
                                 <property name="top-attach">1</property>

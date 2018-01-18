@@ -4,23 +4,19 @@
   <object class="GtkWindow" id="window1">
     <child type="titlebar">
       <object class="GtkHeaderBar">
-        <property name="visible">1</property>
         <property name="show-title-buttons">1</property>
         <property name="title" translatable="yes">Model Button</property>
       </object>
     </child>
     <child>
       <object class="GtkBox">
-        <property name="visible">1</property>
         <property name="orientation">vertical</property>
         <property name="margin">80</property>
         <child>
           <object class="GtkMenuButton">
-            <property name="visible">1</property>
             <property name="popover">thing_a</property>
             <child>
               <object class="GtkLabel">
-                <property name="visible">1</property>
                 <property name="label">Color</property>
                 <property name="hexpand">1</property>
               </object>
@@ -29,11 +25,9 @@
         </child>
         <child>
           <object class="GtkMenuButton">
-            <property name="visible">1</property>
             <property name="popover">thing_b</property>
             <child>
               <object class="GtkLabel">
-                <property name="visible">1</property>
                 <property name="label">Flavors</property>
                 <property name="hexpand">1</property>
               </object>
@@ -42,11 +36,9 @@
         </child>
         <child>
           <object class="GtkMenuButton">
-            <property name="visible">1</property>
             <property name="popover">thing_c</property>
             <child>
               <object class="GtkLabel">
-                <property name="visible">1</property>
                 <property name="label">Tools</property>
                 <property name="hexpand">1</property>
               </object>
@@ -59,32 +51,25 @@
   <object class="GtkPopover" id="thing_a">
     <child>
       <object class="GtkBox">
-        <property name="visible">1</property>
         <property name="margin">10</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkModelButton">
-            <property name="visible">1</property>
             <property name="action-name">win.color</property>
-            <property name="action-target">'red'</property>
             <property name="text">Red</property>
             <property name="inverted">1</property>
           </object>
         </child>
         <child>
           <object class="GtkModelButton">
-            <property name="visible">1</property>
             <property name="action-name">win.color</property>
-            <property name="action-target">'green'</property>
             <property name="text">Green</property>
             <property name="inverted">1</property>
           </object>
         </child>
         <child>
           <object class="GtkModelButton">
-            <property name="visible">1</property>
             <property name="action-name">win.color</property>
-            <property name="action-target">'blue'</property>
             <property name="text">Blue</property>
             <property name="inverted">1</property>
           </object>
@@ -95,32 +80,27 @@
   <object class="GtkPopover" id="thing_b">
     <child>
       <object class="GtkBox">
-        <property name="visible">1</property>
         <property name="margin">10</property>
         <property name="orientation">vertical</property>
         <property name="spacing">10</property>
         <child>
           <object class="GtkModelButton">
-            <property name="visible">1</property>
             <property name="action-name">win.chocolate</property>
             <property name="text">Chocolate</property>
           </object>
         </child>
         <child>
           <object class="GtkModelButton">
-            <property name="visible">1</property>
             <property name="action-name">win.vanilla</property>
             <property name="text">Vanilla</property>
           </object>
         </child>
         <child>
           <object class="GtkSeparator">
-            <property name="visible">1</property>
           </object>
         </child>
         <child>
           <object class="GtkModelButton">
-            <property name="visible">1</property>
             <property name="action-name">win.sprinkles</property>
             <property name="text">Add Sprinkles</property>
           </object>
@@ -131,13 +111,11 @@
   <object class="GtkPopover" id="thing_c">
     <child>
       <object class="GtkBox">
-        <property name="visible">1</property>
         <property name="margin">10</property>
         <property name="orientation">vertical</property>
         <property name="spacing">10</property>
         <child>
           <object class="GtkModelButton">
-            <property name="visible">1</property>
             <property name="text">Hammer</property>
             <property name="role">check</property>
             <signal name="clicked" handler="tool_clicked"/>
@@ -145,7 +123,6 @@
         </child>
         <child>
           <object class="GtkModelButton">
-            <property name="visible">1</property>
             <property name="text">Screwdriver</property>
             <property name="role">check</property>
             <signal name="clicked" handler="tool_clicked"/>
@@ -153,7 +130,6 @@
         </child>
         <child>
           <object class="GtkModelButton">
-            <property name="visible">1</property>
             <property name="text">Drill</property>
             <property name="role">check</property>
             <signal name="clicked" handler="tool_clicked"/>

@@ -4,7 +4,6 @@
     <property name="expand">0</property>
     <child>
       <object class="GtkBox">
-        <property name="visible">true</property>
         <property name="orientation">vertical</property>
         <property name="margin-start">60</property>
         <property name="margin-end">60</property>
@@ -13,25 +12,19 @@
         <property name="spacing">10</property>
         <child>
           <object class="GtkFrame">
-            <property name="visible">True</property>
             <property name="halign">center</property>
             <child>
               <object class="GtkListBox">
-                <property name="visible">True</property>
                 <property name="selection-mode">none</property>
                 <child>
                   <object class="GtkListBoxRow" id="address_row">
-                    <property name="visible">True</property>
-                    <property name="activatable">False</property>
+                    <property name="activatable">0</property>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">True</property>
-                        <property name="orientation">horizontal</property>
                         <property name="margin">10</property>
                         <property name="spacing">40</property>
                         <child>
                           <object class="GtkLabel" id="address_label">
-                            <property name="visible">True</property>
                             <property name="label" translatable="yes">Address</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
@@ -41,8 +34,7 @@
                         </child>
                         <child>
                           <object class="GtkLabel" id="address">
-                            <property name="visible">True</property>
-                            <property name="selectable">True</property>
+                            <property name="selectable">1</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                           </object>
@@ -53,17 +45,13 @@
                 </child>
                 <child>
                   <object class="GtkListBoxRow" id="refcount_row">
-                    <property name="visible">True</property>
-                    <property name="activatable">False</property>
+                    <property name="activatable">0</property>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">True</property>
-                        <property name="orientation">horizontal</property>
                         <property name="margin">10</property>
                         <property name="spacing">40</property>
                         <child>
                           <object class="GtkLabel" id="refcount_label">
-                            <property name="visible">True</property>
                             <property name="label" translatable="yes">Reference Count</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
@@ -73,8 +61,7 @@
                         </child>
                         <child>
                           <object class="GtkLabel" id="refcount">
-                            <property name="visible">True</property>
-                            <property name="selectable">True</property>
+                            <property name="selectable">1</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                           </object>
@@ -85,17 +72,13 @@
                 </child>
                 <child>
                   <object class="GtkListBoxRow" id="state_row">
-                    <property name="visible">True</property>
-                    <property name="activatable">False</property>
+                    <property name="activatable">0</property>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">True</property>
-                        <property name="orientation">horizontal</property>
                         <property name="margin">10</property>
                         <property name="spacing">40</property>
                         <child>
                           <object class="GtkLabel" id="state_label">
-                            <property name="visible">True</property>
                             <property name="label" translatable="yes">State</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
@@ -105,8 +88,7 @@
                         </child>
                         <child>
                           <object class="GtkLabel" id="state">
-                            <property name="visible">True</property>
-                            <property name="selectable">True</property>
+                            <property name="selectable">1</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                           </object>
@@ -117,17 +99,13 @@
                 </child>
                 <child>
                   <object class="GtkListBoxRow" id="buildable_id_row">
-                    <property name="visible">True</property>
-                    <property name="activatable">False</property>
+                    <property name="activatable">0</property>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">True</property>
-                        <property name="orientation">horizontal</property>
                         <property name="margin">10</property>
                         <property name="spacing">40</property>
                         <child>
                           <object class="GtkLabel" id="buildable_id_label">
-                            <property name="visible">True</property>
                             <property name="label" translatable="yes">Buildable ID</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
@@ -137,8 +115,7 @@
                         </child>
                         <child>
                           <object class="GtkLabel" id="buildable_id">
-                            <property name="visible">True</property>
-                            <property name="selectable">True</property>
+                            <property name="selectable">1</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                           </object>
@@ -149,17 +126,13 @@
                 </child>
                 <child>
                   <object class="GtkListBoxRow" id="default_widget_row">
-                    <property name="visible">True</property>
-                    <property name="activatable">False</property>
+                    <property name="activatable">0</property>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">True</property>
-                        <property name="orientation">horizontal</property>
                         <property name="margin">10</property>
                         <property name="spacing">40</property>
                         <child>
                           <object class="GtkLabel" id="default_widget_label">
-                            <property name="visible">True</property>
                             <property name="label" translatable="yes">Default Widget</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
@@ -169,15 +142,13 @@
                         </child>
                         <child>
                           <object class="GtkLabel" id="default_widget">
-                            <property name="visible">True</property>
-                            <property name="selectable">True</property>
+                            <property name="selectable">1</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                           </object>
                         </child>
                         <child>
                           <object class="GtkButton" id="default_widget_button">
-                            <property name="visible">True</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="label" translatable="yes">Properties</property>
@@ -188,20 +159,15 @@
                     </child>
                   </object>
                 </child>
-
                 <child>
                   <object class="GtkListBoxRow" id="focus_widget_row">
-                    <property name="visible">True</property>
-                    <property name="activatable">False</property>
+                    <property name="activatable">0</property>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">True</property>
-                        <property name="orientation">horizontal</property>
                         <property name="margin">10</property>
                         <property name="spacing">40</property>
                         <child>
                           <object class="GtkLabel" id="focus_widget_label">
-                            <property name="visible">True</property>
                             <property name="label" translatable="yes">Focus Widget</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
@@ -211,8 +177,7 @@
                         </child>
                         <child>
                           <object class="GtkLabel" id="focus_widget">
-                            <property name="visible">True</property>
-                            <property name="selectable">True</property>
+                            <property name="selectable">1</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="ellipsize">end</property>
@@ -220,7 +185,6 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="focus_widget_button">
-                            <property name="visible">True</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="label" translatable="yes">Properties</property>
@@ -231,20 +195,15 @@
                     </child>
                   </object>
                 </child>
-
                 <child>
                   <object class="GtkListBoxRow" id="mnemonic_label_row">
-                    <property name="visible">True</property>
-                    <property name="activatable">False</property>
+                    <property name="activatable">0</property>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">True</property>
-                        <property name="orientation">horizontal</property>
                         <property name="margin">10</property>
                         <property name="spacing">40</property>
                         <child>
                           <object class="GtkLabel">
-                            <property name="visible">True</property>
                             <property name="label" translatable="yes">Mnemonic Label</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
@@ -254,8 +213,6 @@
                         </child>
                         <child>
                           <object class="GtkBox" id="mnemonic_label">
-                            <property name="visible">True</property>
-                            <property name="orientation">horizontal</property>
                             <property name="spacing">10</property>
                             <property name="halign">end</property>
                           </object>
@@ -264,20 +221,15 @@
                     </child>
                   </object>
                 </child>
-
                 <child>
                   <object class="GtkListBoxRow" id="request_mode_row">
-                    <property name="visible">true</property>
-                    <property name="activatable">false</property>
+                    <property name="activatable">0</property>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">true</property>
-                        <property name="orientation">horizontal</property>
                         <property name="margin">10</property>
                         <property name="spacing">40</property>
                         <child>
                           <object class="GtkLabel">
-                            <property name="visible">true</property>
                             <property name="label" translatable="yes">Request Mode</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
@@ -287,7 +239,6 @@
                         </child>
                         <child>
                           <object class="GtkLabel" id="request_mode">
-                            <property name="visible">true</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                           </object>
@@ -296,20 +247,15 @@
                     </child>
                   </object>
                 </child>
-
                 <child>
                   <object class="GtkListBoxRow" id="allocated_size_row">
-                    <property name="visible">true</property>
-                    <property name="activatable">false</property>
+                    <property name="activatable">0</property>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">true</property>
-                        <property name="orientation">horizontal</property>
                         <property name="margin">10</property>
                         <property name="spacing">40</property>
                         <child>
                           <object class="GtkLabel">
-                            <property name="visible">true</property>
                             <property name="label" translatable="yes">Allocation</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
@@ -319,7 +265,6 @@
                         </child>
                         <child>
                           <object class="GtkLabel" id="allocated_size">
-                            <property name="visible">true</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                           </object>
@@ -328,20 +273,15 @@
                     </child>
                   </object>
                 </child>
-
                 <child>
                   <object class="GtkListBoxRow" id="baseline_row">
-                    <property name="visible">true</property>
-                    <property name="activatable">false</property>
+                    <property name="activatable">0</property>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">true</property>
-                        <property name="orientation">horizontal</property>
                         <property name="margin">10</property>
                         <property name="spacing">40</property>
                         <child>
                           <object class="GtkLabel">
-                            <property name="visible">true</property>
                             <property name="label" translatable="yes">Baseline</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
@@ -351,7 +291,6 @@
                         </child>
                         <child>
                           <object class="GtkLabel" id="baseline">
-                            <property name="visible">true</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                           </object>
@@ -360,20 +299,15 @@
                     </child>
                   </object>
                 </child>
-
                 <child>
                   <object class="GtkListBoxRow" id="clip_area_row">
-                    <property name="visible">true</property>
-                    <property name="activatable">false</property>
+                    <property name="activatable">0</property>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">true</property>
-                        <property name="orientation">horizontal</property>
                         <property name="margin">10</property>
                         <property name="spacing">40</property>
                         <child>
                           <object class="GtkLabel">
-                            <property name="visible">true</property>
                             <property name="label" translatable="yes">Clip Area</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
@@ -383,7 +317,6 @@
                         </child>
                         <child>
                           <object class="GtkLabel" id="clip_area">
-                            <property name="visible">true</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                           </object>
@@ -392,20 +325,15 @@
                     </child>
                   </object>
                 </child>
-
                 <child>
                   <object class="GtkListBoxRow" id="frame_clock_row">
-                    <property name="visible">True</property>
-                    <property name="activatable">False</property>
+                    <property name="activatable">0</property>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">True</property>
-                        <property name="orientation">horizontal</property>
                         <property name="margin">10</property>
                         <property name="spacing">40</property>
                         <child>
                           <object class="GtkLabel" id="frame_clock_label">
-                            <property name="visible">True</property>
                             <property name="label" translatable="yes">Frame Clock</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
@@ -415,8 +343,7 @@
                         </child>
                         <child>
                           <object class="GtkLabel" id="frame_clock">
-                            <property name="visible">True</property>
-                            <property name="selectable">True</property>
+                            <property name="selectable">1</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="ellipsize">end</property>
@@ -424,7 +351,6 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="frame_clock_button">
-                            <property name="visible">True</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="label" translatable="yes">Properties</property>
@@ -435,20 +361,15 @@
                     </child>
                   </object>
                 </child>
-
                 <child>
                   <object class="GtkListBoxRow" id="tick_callback_row">
-                    <property name="visible">true</property>
-                    <property name="activatable">false</property>
+                    <property name="activatable">0</property>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">true</property>
-                        <property name="orientation">horizontal</property>
                         <property name="margin">10</property>
                         <property name="spacing">40</property>
                         <child>
                           <object class="GtkLabel">
-                            <property name="visible">true</property>
                             <property name="label" translatable="yes">Tick Callback</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
@@ -458,7 +379,6 @@
                         </child>
                         <child>
                           <object class="GtkImage" id="tick_callback">
-                            <property name="visible">true</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="icon-name">object-select-symbolic</property>
@@ -468,20 +388,15 @@
                     </child>
                   </object>
                 </child>
-
                 <child>
                   <object class="GtkListBoxRow" id="framecount_row">
-                    <property name="visible">true</property>
-                    <property name="activatable">false</property>
+                    <property name="activatable">0</property>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">true</property>
-                        <property name="orientation">horizontal</property>
                         <property name="margin">10</property>
                         <property name="spacing">40</property>
                         <child>
                           <object class="GtkLabel">
-                            <property name="visible">true</property>
                             <property name="label" translatable="yes">Frame Count</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
@@ -491,7 +406,6 @@
                         </child>
                         <child>
                           <object class="GtkLabel" id="framecount">
-                            <property name="visible">true</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                           </object>
@@ -500,20 +414,15 @@
                     </child>
                   </object>
                 </child>
-
                 <child>
                   <object class="GtkListBoxRow" id="framerate_row">
-                    <property name="visible">true</property>
-                    <property name="activatable">false</property>
+                    <property name="activatable">0</property>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">true</property>
-                        <property name="orientation">horizontal</property>
                         <property name="margin">10</property>
                         <property name="spacing">40</property>
                         <child>
                           <object class="GtkLabel">
-                            <property name="visible">true</property>
                             <property name="label" translatable="yes">Frame Rate</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
@@ -523,7 +432,6 @@
                         </child>
                         <child>
                           <object class="GtkLabel" id="framerate">
-                            <property name="visible">true</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                           </object>
@@ -532,20 +440,15 @@
                     </child>
                   </object>
                 </child>
-
                 <child>
                   <object class="GtkListBoxRow" id="accessible_role_row">
-                    <property name="visible">true</property>
-                    <property name="activatable">false</property>
+                    <property name="activatable">0</property>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">true</property>
-                        <property name="orientation">horizontal</property>
                         <property name="margin">10</property>
                         <property name="spacing">40</property>
                         <child>
                           <object class="GtkLabel">
-                            <property name="visible">true</property>
                             <property name="label" translatable="yes">Accessible Role</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
@@ -555,7 +458,6 @@
                         </child>
                         <child>
                           <object class="GtkLabel" id="accessible_role">
-                            <property name="visible">true</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                           </object>
@@ -564,20 +466,15 @@
                     </child>
                   </object>
                 </child>
-
                 <child>
                   <object class="GtkListBoxRow" id="accessible_name_row">
-                    <property name="visible">true</property>
-                    <property name="activatable">false</property>
+                    <property name="activatable">0</property>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">true</property>
-                        <property name="orientation">horizontal</property>
                         <property name="margin">10</property>
                         <property name="spacing">40</property>
                         <child>
                           <object class="GtkLabel">
-                            <property name="visible">true</property>
                             <property name="label" translatable="yes">Accessible Name</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
@@ -587,7 +484,6 @@
                         </child>
                         <child>
                           <object class="GtkLabel" id="accessible_name">
-                            <property name="visible">true</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="ellipsize">end</property>
@@ -598,20 +494,15 @@
                     </child>
                   </object>
                 </child>
-
                 <child>
                   <object class="GtkListBoxRow" id="accessible_description_row">
-                    <property name="visible">true</property>
-                    <property name="activatable">false</property>
+                    <property name="activatable">0</property>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">true</property>
-                        <property name="orientation">horizontal</property>
                         <property name="margin">10</property>
                         <property name="spacing">40</property>
                         <child>
                           <object class="GtkLabel">
-                            <property name="visible">true</property>
                             <property name="label" translatable="yes">Accessible Description</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
@@ -621,7 +512,6 @@
                         </child>
                         <child>
                           <object class="GtkLabel" id="accessible_description">
-                            <property name="visible">true</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="ellipsize">end</property>
@@ -632,20 +522,15 @@
                     </child>
                   </object>
                 </child>
-
                 <child>
                   <object class="GtkListBoxRow" id="mapped_row">
-                    <property name="visible">true</property>
-                    <property name="activatable">false</property>
+                    <property name="activatable">0</property>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">true</property>
-                        <property name="orientation">horizontal</property>
                         <property name="margin">10</property>
                         <property name="spacing">40</property>
                         <child>
                           <object class="GtkLabel">
-                            <property name="visible">true</property>
                             <property name="label" translatable="yes">Mapped</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
@@ -655,7 +540,6 @@
                         </child>
                         <child>
                           <object class="GtkImage" id="mapped">
-                            <property name="visible">true</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="icon-name">object-select-symbolic</property>
@@ -665,20 +549,15 @@
                     </child>
                   </object>
                 </child>
-
                 <child>
                   <object class="GtkListBoxRow" id="realized_row">
-                    <property name="visible">true</property>
-                    <property name="activatable">false</property>
+                    <property name="activatable">0</property>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">true</property>
-                        <property name="orientation">horizontal</property>
                         <property name="margin">10</property>
                         <property name="spacing">40</property>
                         <child>
                           <object class="GtkLabel">
-                            <property name="visible">true</property>
                             <property name="label" translatable="yes">Realized</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
@@ -688,7 +567,6 @@
                         </child>
                         <child>
                           <object class="GtkImage" id="realized">
-                            <property name="visible">true</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="icon-name">object-select-symbolic</property>
@@ -698,20 +576,15 @@
                     </child>
                   </object>
                 </child>
-
                 <child>
                   <object class="GtkListBoxRow" id="is_toplevel_row">
-                    <property name="visible">true</property>
-                    <property name="activatable">false</property>
+                    <property name="activatable">0</property>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">true</property>
-                        <property name="orientation">horizontal</property>
                         <property name="margin">10</property>
                         <property name="spacing">40</property>
                         <child>
                           <object class="GtkLabel">
-                            <property name="visible">true</property>
                             <property name="label" translatable="yes">Is Toplevel</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
@@ -721,7 +594,6 @@
                         </child>
                         <child>
                           <object class="GtkImage" id="is_toplevel">
-                            <property name="visible">true</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="icon-name">object-select-symbolic</property>
@@ -731,20 +603,15 @@
                     </child>
                   </object>
                 </child>
-
                 <child>
                   <object class="GtkListBoxRow" id="child_visible_row">
-                    <property name="visible">true</property>
-                    <property name="activatable">false</property>
+                    <property name="activatable">0</property>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">true</property>
-                        <property name="orientation">horizontal</property>
                         <property name="margin">10</property>
                         <property name="spacing">40</property>
                         <child>
                           <object class="GtkLabel">
-                            <property name="visible">true</property>
                             <property name="label" translatable="yes">Child Visible</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
@@ -754,7 +621,6 @@
                         </child>
                         <child>
                           <object class="GtkImage" id="child_visible">
-                            <property name="visible">true</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="icon-name">object-select-symbolic</property>
@@ -764,7 +630,6 @@
                     </child>
                   </object>
                 </child>
-
               </object>
             </child>
           </object>
@@ -773,7 +638,6 @@
     </child>
   </template>
   <object class="GtkSizeGroup">
-    <property name="mode">horizontal</property>
     <widgets>
       <widget name="address_label"/>
       <widget name="refcount_label"/>
@@ -785,4 +649,3 @@
     </widgets>
   </object>
 </interface>
-

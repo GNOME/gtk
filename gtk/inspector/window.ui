@@ -3,7 +3,6 @@
   <object class="GtkAdjustment" id="magnification_adjustment">
     <property name="lower">1.0</property>
     <property name="upper">5.0</property>
-    <property name="page-size">0.0</property>
     <property name="page-increment">0.1</property>
     <property name="step-increment">0.1</property>
     <property name="value">2.0</property>
@@ -70,15 +69,13 @@
               <object class="GtkStack" id="global_button_stack">
                 <property name="visible-child-name" bind-source="global_stack" bind-property="visible-child-name"/>
                 <child>
-                  <object class="GtkBox">
-                  </object>
+                  <object class="GtkBox"/>
                   <packing>
                     <property name="name">general</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox">
-                  </object>
+                  <object class="GtkBox"/>
                   <packing>
                     <property name="name">visual</property>
                   </packing>
@@ -129,8 +126,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox">
-                  </object>
+                  <object class="GtkBox"/>
                   <packing>
                     <property name="name">logs</property>
                   </packing>
@@ -141,15 +137,13 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox">
-              </object>
+              <object class="GtkBox"/>
               <packing>
                 <property name="name">css</property>
               </packing>
             </child>
             <child>
-              <object class="GtkBox">
-              </object>
+              <object class="GtkBox"/>
               <packing>
                 <property name="name">recorder</property>
               </packing>
@@ -195,15 +189,13 @@
                         <child>
                           <object class="GtkStack" id="object_start_stack">
                             <child>
-                              <object class="GtkBox">
-                              </object>
+                              <object class="GtkBox"/>
                               <packing>
                                 <property name="name">empty</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="orientation">horizontal</property>
                                 <property name="spacing">6</property>
                                 <property name="margin">6</property>
                                 <child>
@@ -227,16 +219,15 @@
                             </child>
                             <child>
                               <object class="GtkScale">
-                                <property name="orientation">horizontal</property>
                                 <property name="width-request">150</property>
-                                <property name="draw-value">False</property>
+                                <property name="draw-value">0</property>
                                 <property name="adjustment">magnification_adjustment</property>
                                 <marks>
-                                  <mark value="1.0" position="bottom"/>
-                                  <mark value="2.0" position="bottom"/>
-                                  <mark value="3.0" position="bottom"/>
-                                  <mark value="4.0" position="bottom"/>
-                                  <mark value="5.0" position="bottom"/>
+                                  <mark value="1.0" position="bottom"></mark>
+                                  <mark value="2.0" position="bottom"></mark>
+                                  <mark value="3.0" position="bottom"></mark>
+                                  <mark value="4.0" position="bottom"></mark>
+                                  <mark value="5.0" position="bottom"></mark>
                                 </marks>
                               </object>
                               <packing>
@@ -247,16 +238,13 @@
                         </child>
                       </object>
                     </child>
-
-
                     <child type="center">
                       <object class="GtkStack" id="object_center_stack">
                         <property name="transition-type">crossfade</property>
                         <property name="hexpand">1</property>
                         <property name="halign">center</property>
                         <child>
-                          <object class="GtkLabel" id="object_title">
-                          </object>
+                          <object class="GtkLabel" id="object_title"/>
                           <packing>
                             <property name="name">title</property>
                           </packing>
@@ -328,24 +316,21 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkInspectorObjectHierarchy" id="object_hierarchy">
-                      </object>
+                      <object class="GtkInspectorObjectHierarchy" id="object_hierarchy"/>
                       <packing>
                         <property name="name">hierarchy</property>
                         <property name="title" translatable="yes">Class Hierarchy</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkInspectorSelector" id="selector">
-                      </object>
+                      <object class="GtkInspectorSelector" id="selector"/>
                       <packing>
                         <property name="name">selector</property>
                         <property name="title" translatable="yes">CSS Selector</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkInspectorCssNodeTree" id="widget_css_node_tree">
-                      </object>
+                      <object class="GtkInspectorCssNodeTree" id="widget_css_node_tree"/>
                       <packing>
                         <property name="name">css-nodes</property>
                         <property name="title" translatable="yes">CSS Nodes</property>
@@ -412,7 +397,6 @@
         </child>
         <child>
           <object class="GtkBox">
-            <property name="orientation">horizontal</property>
             <child>
               <object class="GtkStackSidebar">
                 <property name="stack">global_stack</property>
@@ -421,16 +405,14 @@
             <child>
               <object class="GtkStack" id="global_stack">
                 <child>
-                  <object class="GtkInspectorGeneral">
-                  </object>
+                  <object class="GtkInspectorGeneral"/>
                   <packing>
                     <property name="name">general</property>
                     <property name="title" translatable="yes">General</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkInspectorVisual">
-                  </object>
+                  <object class="GtkInspectorVisual"/>
                   <packing>
                     <property name="name">visual</property>
                     <property name="title" translatable="yes">Visual</property>
@@ -455,8 +437,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkInspectorLogs">
-                  </object>
+                  <object class="GtkInspectorLogs"/>
                   <packing>
                     <property name="name">logs</property>
                     <property name="title" translatable="yes">Logging</property>
@@ -471,16 +452,14 @@
           </packing>
         </child>
         <child>
-          <object class="GtkInspectorCssEditor">
-          </object>
+          <object class="GtkInspectorCssEditor"/>
           <packing>
             <property name="name">css</property>
             <property name="title" translatable="yes">CSS</property>
           </packing>
         </child>
         <child>
-          <object class="GtkInspectorRecorder" id="widget_recorder">
-          </object>
+          <object class="GtkInspectorRecorder" id="widget_recorder"/>
           <packing>
             <property name="name">recorder</property>
             <property name="title" translatable="yes">Recorder</property>

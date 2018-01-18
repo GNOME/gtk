@@ -9,20 +9,17 @@
     <property name="orientation">vertical</property>
     <child>
       <object class="GtkScrolledWindow">
-        <property name="visible">True</property>
         <property name="hscrollbar-policy">never</property>
-        <property name="vscrollbar-policy">automatic</property>
-        <property name="expand">True</property>
+        <property name="expand">1</property>
         <child>
           <object class="GtkTreeView" id="tree">
-            <property name="visible">True</property>
             <property name="model">model</property>
-            <property name="enable-search">False</property>
-            <property name="headers-visible">False</property>
+            <property name="enable-search">0</property>
+            <property name="headers-visible">0</property>
             <property name="enable-tree-lines">1</property>
             <property name="show-expanders">0</property>
             <property name="level-indentation">18</property>
-           <child internal-child="selection">
+            <child internal-child="selection">
               <object class="GtkTreeSelection">
                 <property name="mode">none</property>
               </object>

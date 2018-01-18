@@ -34,14 +34,12 @@
     <property name="title" translatable="yes">Filter Model</property>
     <child>
       <object class="GtkGrid" id="grid1">
-        <property name="visible">1</property>
         <property name="margin">10</property>
-        <property name="row_spacing">10</property>
-        <property name="column_spacing">10</property>
-        <property name="column_homogeneous">1</property>
+        <property name="row-spacing">10</property>
+        <property name="column-spacing">10</property>
+        <property name="column-homogeneous">1</property>
         <child>
           <object class="GtkLabel" id="label1">
-            <property name="visible">1</property>
             <property name="label" translatable="yes">Original</property>
             <property name="xalign">0</property>
             <attributes>
@@ -49,16 +47,15 @@
             </attributes>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkTreeView" id="treeview1">
-            <property name="visible">1</property>
-            <property name="can_focus">1</property>
+            <property name="can-focus">1</property>
             <property name="model">liststore1</property>
-            <property name="headers_clickable">0</property>
+            <property name="headers-clickable">0</property>
             <child internal-child="selection">
               <object class="GtkTreeSelection" id="treeview-selection1"/>
             </child>
@@ -86,16 +83,15 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">1</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkTreeView" id="treeview2">
-            <property name="visible">1</property>
-            <property name="can_focus">1</property>
-            <property name="headers_clickable">0</property>
-            <property name="search_column">0</property>
+            <property name="can-focus">1</property>
+            <property name="headers-clickable">0</property>
+            <property name="search-column">0</property>
             <child internal-child="selection">
               <object class="GtkTreeSelection" id="treeview-selection3"/>
             </child>
@@ -135,13 +131,12 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">1</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label2">
-            <property name="visible">1</property>
             <property name="label" translatable="yes">Computed Columns</property>
             <property name="xalign">0</property>
             <attributes>
@@ -149,13 +144,12 @@
             </attributes>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">0</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label3">
-            <property name="visible">1</property>
             <property name="label" translatable="yes">Filtered</property>
             <property name="xalign">0</property>
             <attributes>
@@ -163,16 +157,15 @@
             </attributes>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">2</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkTreeView" id="treeview3">
-            <property name="visible">1</property>
-            <property name="can_focus">1</property>
-            <property name="headers_clickable">0</property>
-            <property name="search_column">0</property>
+            <property name="can-focus">1</property>
+            <property name="headers-clickable">0</property>
+            <property name="search-column">0</property>
             <child internal-child="selection">
               <object class="GtkTreeSelection" id="treeview-selection5"/>
             </child>
@@ -194,8 +187,8 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">3</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">3</property>
           </packing>
         </child>
       </object>

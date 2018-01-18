@@ -12,18 +12,14 @@
     <property name="orientation">vertical</property>
     <child>
       <object class="GtkPaned" id="paned">
-        <property name="visible">1</property>
         <property name="wide-handle">1</property>
-        <property name="orientation">horizontal</property>
         <property name="position">400</property>
         <child>
           <object class="GtkScrolledWindow">
-            <property name="visible">1</property>
             <property name="expand">1</property>
             <property name="min-content-height">100</property>
             <child>
               <object class="GtkTreeView" id="node_tree">
-                <property name="visible">1</property>
                 <property name="search-column">0</property>
                 <property name="enable-search">0</property>
                 <property name="enable-grid-lines">vertical</property>
@@ -91,16 +87,13 @@
         </child>
         <child>
           <object class="GtkBox">
-            <property name="visible">1</property>
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkScrolledWindow">
-                <property name="visible">1</property>
                 <property name="expand">1</property>
                 <property name="min-content-height">100</property>
                 <child>
                   <object class="GtkTreeView" id="prop_tree">
-                    <property name="visible">1</property>
                     <property name="model">prop_model</property>
                     <property name="search-column">0</property>
                     <property name="enable-search">0</property>

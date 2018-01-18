@@ -24,8 +24,6 @@
   </object>
   <object class="GdkCursor" id="none_cursor_image">
     <property name="texture">resource:///cursors/none_cursor.png</property>
-    <property name="hotspot-x">0</property>
-    <property name="hotspot-y">0</property>
   </object>
   <object class="GdkCursor" id="none_cursor_fallback">
     <property name="name">none</property>
@@ -33,8 +31,6 @@
   </object>
   <object class="GdkCursor" id="none_cursor_image_fallback">
     <property name="texture">resource:///cursors/none_cursor.png</property>
-    <property name="hotspot-x">0</property>
-    <property name="hotspot-y">0</property>
     <property name="fallback">none_cursor</property>
   </object>
   <object class="GdkCursor" id="gtk-logo_cursor">
@@ -650,15 +646,14 @@
     <property name="fallback">zoom-out_cursor</property>
   </object>
   <object class="GtkWindow" id="window">
-    <property name="default_width">300</property>
-    <property name="default_height">300</property>
+    <property name="default-width">300</property>
+    <property name="default-height">300</property>
     <property name="title">Cursors</property>
     <child>
       <object class="GtkScrolledWindow">
         <property name="hscrollbar-policy">never</property>
-        <property name="vscrollbar-policy">automatic</property>
-        <property name="propagate-natural-height">True</property>
-        <property name="hexpand">True</property>
+        <property name="propagate-natural-height">1</property>
+        <property name="hexpand">1</property>
         <child>
           <object class="GtkBox">
             <property name="orientation">vertical</property>
@@ -675,10 +670,9 @@
                     </style>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -692,7 +686,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -700,7 +694,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">default_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "default" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;default&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -716,7 +710,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">default_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "default" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;default&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -724,7 +718,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">default_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "default" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;default&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -733,10 +727,9 @@
                     </child>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -750,7 +743,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -758,7 +751,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">none_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "none" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;none&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -774,7 +767,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">none_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "none" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;none&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -782,7 +775,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">none_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "none" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;none&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -791,10 +784,9 @@
                     </child>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -808,7 +800,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -816,7 +808,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">gtk-logo_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "gtk-logo" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;gtk-logo&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -832,7 +824,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">gtk-logo_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "gtk-logo" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;gtk-logo&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -840,7 +832,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">gtk-logo_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "gtk-logo" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;gtk-logo&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -853,7 +845,7 @@
             </child>
             <child>
               <object class="GtkFrame">
-                <property name="hexpand">True</property>
+                <property name="hexpand">1</property>
                 <child>
                   <object class="GtkListBox">
                     <property name="selection-mode">none</property>
@@ -862,10 +854,9 @@
                     </style>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -879,7 +870,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -887,7 +878,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">context-menu_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "context-menu" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;context-menu&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -903,7 +894,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">context-menu_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "context-menu" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;context-menu&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -911,7 +902,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">context-menu_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "context-menu" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;context-menu&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -920,10 +911,9 @@
                     </child>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -937,7 +927,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -945,7 +935,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">help_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "help" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;help&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -961,7 +951,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">help_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "help" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;help&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -969,7 +959,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">help_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "help" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;help&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -978,10 +968,9 @@
                     </child>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -995,7 +984,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -1003,7 +992,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">pointer_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "pointer" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;pointer&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -1019,7 +1008,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">pointer_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "pointer" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;pointer&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -1027,7 +1016,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">pointer_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "pointer" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;pointer&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -1036,10 +1025,9 @@
                     </child>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -1053,7 +1041,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -1061,7 +1049,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">progress_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "progress" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;progress&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -1077,7 +1065,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">progress_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "progress" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;progress&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -1085,7 +1073,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">progress_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "progress" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;progress&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -1094,10 +1082,9 @@
                     </child>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -1111,7 +1098,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -1119,7 +1106,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">wait_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "wait" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;wait&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -1135,7 +1122,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">wait_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "wait" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;wait&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -1143,7 +1130,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">wait_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "wait" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;wait&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -1156,7 +1143,7 @@
             </child>
             <child>
               <object class="GtkFrame">
-                <property name="hexpand">True</property>
+                <property name="hexpand">1</property>
                 <child>
                   <object class="GtkListBox">
                     <property name="selection-mode">none</property>
@@ -1165,10 +1152,9 @@
                     </style>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -1182,7 +1168,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -1190,7 +1176,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">cell_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "cell" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;cell&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -1206,7 +1192,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">cell_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "cell" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;cell&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -1214,7 +1200,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">cell_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "cell" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;cell&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -1223,10 +1209,9 @@
                     </child>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -1240,7 +1225,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -1248,7 +1233,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">crosshair_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "crosshair" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;crosshair&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -1264,7 +1249,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">crosshair_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "crosshair" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;crosshair&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -1272,7 +1257,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">crosshair_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "crosshair" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;crosshair&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -1281,10 +1266,9 @@
                     </child>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -1298,7 +1282,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -1306,7 +1290,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">text_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "text" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;text&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -1322,7 +1306,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">text_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "text" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;text&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -1330,7 +1314,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">text_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "text" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;text&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -1339,10 +1323,9 @@
                     </child>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -1356,7 +1339,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -1364,7 +1347,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">vertical-text_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "vertical-text" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;vertical-text&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -1380,7 +1363,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">vertical-text_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "vertical-text" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;vertical-text&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -1388,7 +1371,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">vertical-text_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "vertical-text" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;vertical-text&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -1401,7 +1384,7 @@
             </child>
             <child>
               <object class="GtkFrame">
-                <property name="hexpand">True</property>
+                <property name="hexpand">1</property>
                 <child>
                   <object class="GtkListBox">
                     <property name="selection-mode">none</property>
@@ -1410,10 +1393,9 @@
                     </style>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -1427,7 +1409,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -1435,7 +1417,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">alias_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "alias" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;alias&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -1451,7 +1433,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">alias_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "alias" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;alias&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -1459,7 +1441,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">alias_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "alias" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;alias&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -1468,10 +1450,9 @@
                     </child>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -1485,7 +1466,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -1493,7 +1474,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">copy_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "copy" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;copy&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -1509,7 +1490,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">copy_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "copy" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;copy&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -1517,7 +1498,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">copy_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "copy" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;copy&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -1526,10 +1507,9 @@
                     </child>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -1543,7 +1523,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -1551,7 +1531,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">move_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "move" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;move&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -1567,7 +1547,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">move_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "move" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;move&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -1575,7 +1555,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">move_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "move" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;move&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -1584,10 +1564,9 @@
                     </child>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -1601,7 +1580,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -1609,7 +1588,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">no-drop_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "no-drop" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;no-drop&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -1625,7 +1604,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">no-drop_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "no-drop" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;no-drop&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -1633,7 +1612,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">no-drop_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "no-drop" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;no-drop&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -1642,10 +1621,9 @@
                     </child>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -1659,7 +1637,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -1667,7 +1645,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">not-allowed_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "not-allowed" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;not-allowed&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -1683,7 +1661,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">not-allowed_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "not-allowed" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;not-allowed&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -1691,7 +1669,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">not-allowed_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "not-allowed" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;not-allowed&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -1700,10 +1678,9 @@
                     </child>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -1717,7 +1694,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -1725,7 +1702,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">grab_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "grab" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;grab&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -1741,7 +1718,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">grab_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "grab" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;grab&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -1749,7 +1726,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">grab_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "grab" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;grab&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -1758,10 +1735,9 @@
                     </child>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -1775,7 +1751,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -1783,7 +1759,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">grabbing_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "grabbing" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;grabbing&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -1799,7 +1775,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">grabbing_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "grabbing" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;grabbing&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -1807,7 +1783,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">grabbing_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "grabbing" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;grabbing&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -1820,7 +1796,7 @@
             </child>
             <child>
               <object class="GtkFrame">
-                <property name="hexpand">True</property>
+                <property name="hexpand">1</property>
                 <child>
                   <object class="GtkListBox">
                     <property name="selection-mode">none</property>
@@ -1829,10 +1805,9 @@
                     </style>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -1846,7 +1821,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -1854,7 +1829,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">all-scroll_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "all-scroll" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;all-scroll&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -1870,7 +1845,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">all-scroll_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "all-scroll" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;all-scroll&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -1878,7 +1853,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">all-scroll_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "all-scroll" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;all-scroll&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -1887,10 +1862,9 @@
                     </child>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -1904,7 +1878,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -1912,7 +1886,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">col-resize_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "col-resize" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;col-resize&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -1928,7 +1902,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">col-resize_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "col-resize" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;col-resize&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -1936,7 +1910,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">col-resize_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "col-resize" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;col-resize&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -1945,10 +1919,9 @@
                     </child>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -1962,7 +1935,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -1970,7 +1943,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">row-resize_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "row-resize" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;row-resize&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -1986,7 +1959,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">row-resize_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "row-resize" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;row-resize&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -1994,7 +1967,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">row-resize_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "row-resize" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;row-resize&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -2003,10 +1976,9 @@
                     </child>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -2020,7 +1992,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -2028,7 +2000,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">n-resize_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "n-resize" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;n-resize&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -2044,7 +2016,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">n-resize_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "n-resize" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;n-resize&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -2052,7 +2024,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">n-resize_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "n-resize" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;n-resize&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -2061,10 +2033,9 @@
                     </child>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -2078,7 +2049,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -2086,7 +2057,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">e-resize_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "e-resize" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;e-resize&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -2102,7 +2073,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">e-resize_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "e-resize" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;e-resize&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -2110,7 +2081,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">e-resize_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "e-resize" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;e-resize&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -2119,10 +2090,9 @@
                     </child>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -2136,7 +2106,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -2144,7 +2114,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">s-resize_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "s-resize" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;s-resize&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -2160,7 +2130,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">s-resize_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "s-resize" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;s-resize&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -2168,7 +2138,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">s-resize_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "s-resize" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;s-resize&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -2177,10 +2147,9 @@
                     </child>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -2194,7 +2163,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -2202,7 +2171,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">w-resize_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "w-resize" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;w-resize&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -2218,7 +2187,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">w-resize_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "w-resize" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;w-resize&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -2226,7 +2195,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">w-resize_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "w-resize" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;w-resize&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -2235,10 +2204,9 @@
                     </child>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -2252,7 +2220,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -2260,7 +2228,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">ne-resize_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "ne-resize" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;ne-resize&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -2276,7 +2244,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">ne-resize_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "ne-resize" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;ne-resize&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -2284,7 +2252,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">ne-resize_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "ne-resize" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;ne-resize&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -2293,10 +2261,9 @@
                     </child>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -2310,7 +2277,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -2318,7 +2285,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">nw-resize_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "nw-resize" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;nw-resize&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -2334,7 +2301,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">nw-resize_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "nw-resize" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;nw-resize&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -2342,7 +2309,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">nw-resize_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "nw-resize" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;nw-resize&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -2351,10 +2318,9 @@
                     </child>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -2368,7 +2334,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -2376,7 +2342,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">sw-resize_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "sw-resize" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;sw-resize&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -2392,7 +2358,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">sw-resize_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "sw-resize" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;sw-resize&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -2400,7 +2366,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">sw-resize_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "sw-resize" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;sw-resize&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -2409,10 +2375,9 @@
                     </child>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -2426,7 +2391,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -2434,7 +2399,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">se-resize_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "se-resize" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;se-resize&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -2450,7 +2415,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">se-resize_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "se-resize" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;se-resize&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -2458,7 +2423,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">se-resize_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "se-resize" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;se-resize&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -2467,10 +2432,9 @@
                     </child>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -2484,7 +2448,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -2492,7 +2456,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">ew-resize_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "ew-resize" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;ew-resize&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -2508,7 +2472,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">ew-resize_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "ew-resize" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;ew-resize&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -2516,7 +2480,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">ew-resize_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "ew-resize" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;ew-resize&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -2525,10 +2489,9 @@
                     </child>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -2542,7 +2505,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -2550,7 +2513,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">ns-resize_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "ns-resize" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;ns-resize&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -2566,7 +2529,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">ns-resize_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "ns-resize" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;ns-resize&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -2574,7 +2537,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">ns-resize_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "ns-resize" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;ns-resize&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -2583,10 +2546,9 @@
                     </child>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -2600,7 +2562,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -2608,7 +2570,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">nesw-resize_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "nesw-resize" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;nesw-resize&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -2624,7 +2586,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">nesw-resize_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "nesw-resize" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;nesw-resize&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -2632,7 +2594,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">nesw-resize_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "nesw-resize" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;nesw-resize&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -2641,10 +2603,9 @@
                     </child>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -2658,7 +2619,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -2666,7 +2627,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">nwse-resize_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "nwse-resize" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;nwse-resize&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -2682,7 +2643,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">nwse-resize_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "nwse-resize" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;nwse-resize&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -2690,7 +2651,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">nwse-resize_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "nwse-resize" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;nwse-resize&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -2703,7 +2664,7 @@
             </child>
             <child>
               <object class="GtkFrame">
-                <property name="hexpand">True</property>
+                <property name="hexpand">1</property>
                 <child>
                   <object class="GtkListBox">
                     <property name="selection-mode">none</property>
@@ -2712,10 +2673,9 @@
                     </style>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -2729,7 +2689,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -2737,7 +2697,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">zoom-in_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "zoom-in" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;zoom-in&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -2753,7 +2713,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">zoom-in_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "zoom-in" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;zoom-in&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -2761,7 +2721,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">zoom-in_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "zoom-in" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;zoom-in&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
@@ -2770,10 +2730,9 @@
                     </child>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="activatable">False</property>
+                        <property name="activatable">0</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
                             <property name="margin">10</property>
                             <property name="spacing">10</property>
                             <child>
@@ -2787,7 +2746,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">1</property>
                               </object>
                             </child>
                             <child>
@@ -2795,7 +2754,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">zoom-out_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The "zoom-out" named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;zoom-out&quot; named cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -2811,7 +2770,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">zoom-out_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The "zoom-out" named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;zoom-out&quot; named cursor falling back to an image cursor.</property>
                               </object>
                             </child>
                             <child>
@@ -2819,7 +2778,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">zoom-out_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the "zoom-out" cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;zoom-out&quot; cursor.</property>
                               </object>
                             </child>
                           </object>
