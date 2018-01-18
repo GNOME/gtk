@@ -4888,7 +4888,13 @@ gtk_widget_translate_coordinates (GtkWidget  *src_widget,
 
   ancestor = gtk_widget_common_ancestor (src_widget, dest_widget);
   if (!ancestor || !_gtk_widget_get_realized (src_widget) || !_gtk_widget_get_realized (dest_widget))
-    return FALSE;
+    {
+      if (dest_x)
+        *dest_x = 0;
+      if (dest_y)
+        *dest_y = 0;
+      return FALSE;
+    }
 
 
   parent = src_widget;
