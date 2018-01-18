@@ -4513,7 +4513,7 @@ gtk_widget_size_allocate (GtkWidget           *widget,
   gboolean size_changed;
   gboolean baseline_changed;
   gboolean position_changed;
-  gint natural_width, natural_height, dummy;
+  gint natural_width, natural_height, dummy = 0;
   gint min_width, min_height;
   GtkCssStyle *style;
   GtkBorder margin, border, padding;
