@@ -80,7 +80,13 @@ get_property_pspec (MyParserData *data,
 
   type = g_type_from_name (class_name);
   if (type == G_TYPE_INVALID)
-    return NULL;
+    {
+      GtkBuilder *builder = gtk_builder_new ();
+      type = gtk_builder_get_type_from_name (builder, class_name);
+      g_object_unref (builder);
+      if (type == G_TYPE_INVALID)
+        return NULL;
+    }
 
   class = g_type_class_ref (type);
   canonical_name = g_strdup (property_name);
@@ -197,7 +203,6 @@ needs_explicit_setting (MyParserData *data,
     { "GtkGrid", "top-attach", 1 },
     { "GtkWidget", "hexpand", 0 },
     { "GtkWidget", "vexpand", 0 },
-    { "GtkVBox", "expand", 1 },
     { NULL, NULL, 0 }
   };
   gchar *canonical_name;
