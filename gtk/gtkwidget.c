@@ -13891,6 +13891,10 @@ gtk_widget_reset_controllers (GtkWidget *widget)
   for (l = priv->event_controllers; l; l = l->next)
     {
       controller_data = l->data;
+
+      if (controller_data->controller == NULL)
+        continue;
+
       gtk_event_controller_reset (controller_data->controller);
     }
 }
