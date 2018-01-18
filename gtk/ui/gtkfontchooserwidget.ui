@@ -146,6 +146,7 @@
                       <object class="GtkSpinButton" id="size_spin">
                         <property name="can-focus">1</property>
                         <property name="adjustment">spin_adjustment</property>
+                        <property name="valign">center</property>
                         <signal name="output" handler="output_cb"/>
                       </object>
                       <packing>
@@ -274,6 +275,7 @@
                           <object class="GtkSpinButton" id="size_spin2">
                             <property name="can-focus">1</property>
                             <property name="adjustment">spin_adjustment</property>
+                            <property name="valign">center</property>
                             <signal name="output" handler="output_cb"/>
                           </object>
                           <packing>
