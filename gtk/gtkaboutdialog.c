@@ -239,7 +239,6 @@ static void                 set_cursor_if_appropriate       (GtkAboutDialog     
 static void                 populate_credits_page           (GtkAboutDialog     *about);
 static void                 populate_license_page           (GtkAboutDialog     *about);
 static void                 populate_system_page            (GtkAboutDialog     *about);
-static void                 close_cb                        (GtkAboutDialog     *about);
 static gboolean             gtk_about_dialog_activate_link  (GtkAboutDialog     *about,
                                                              const gchar        *uri);
 static gboolean             emit_activate_link              (GtkAboutDialog     *about,
@@ -2474,11 +2473,16 @@ gtk_about_dialog_new (void)
 }
 
 static void
-close_cb (GtkAboutDialog *about)
+close_cb (GtkAboutDialog *about,
+          int             response_id,
+          gpointer        user_data)
 {
-  switch_page (about, "main");
+  if (response_id == GTK_RESPONSE_DELETE_EVENT)
+    {
+      switch_page (about, "main");
 
-  gtk_widget_hide (GTK_WIDGET (about));
+      gtk_widget_hide (GTK_WIDGET (about));
+    }
 }
 
 /**
