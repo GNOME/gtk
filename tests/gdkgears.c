@@ -96,6 +96,17 @@ moar_gears (GtkButton *button, gpointer data)
   gtk_widget_show (gears);
 }
 
+static void
+less_gears (GtkButton *button, gpointer data)
+{
+  GtkContainer *container = GTK_CONTAINER (data);
+  GtkWidget *gears;
+
+  gears = gtk_widget_get_last_child (GTK_WIDGET (container));
+  if (gears)
+    gtk_widget_destroy (gears);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -213,9 +224,13 @@ main (int argc, char *argv[])
   gtk_widget_show (bbox);
 
   button = gtk_button_new_with_label ("Moar gears!");
-  gtk_widget_set_hexpand (button, TRUE);
   gtk_container_add (GTK_CONTAINER (bbox), button);
   g_signal_connect (button, "clicked", G_CALLBACK (moar_gears), extra_hbox);
+  gtk_widget_show (button);
+
+  button = gtk_button_new_with_label ("Less gears!");
+  gtk_container_add (GTK_CONTAINER (bbox), button);
+  g_signal_connect (button, "clicked", G_CALLBACK (less_gears), extra_hbox);
   gtk_widget_show (button);
 
   button = gtk_button_new_with_label ("Quit");
