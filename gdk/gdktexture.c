@@ -541,6 +541,19 @@ gdk_gl_texture_get_id (GdkGLTexture *self)
   return self->id;
 }
 
+/**
+ * gdk_texture_release_gl:
+ * @texture: a #GdkTexture wrapping a GL texture
+ *
+ * Releases the GL resources held by a #GdkTexture that
+ * was created with gdk_texture_new_for_gl().
+ *
+ * The texture contents are still available via the
+ * gdk_texture_download() function, after this function
+ * has been called.
+ *
+ * Since: 3.94
+ */
 void
 gdk_texture_release_gl (GdkTexture *texture)
 {
@@ -676,6 +689,26 @@ gdk_texture_new_from_file (GFile   *file,
   return texture;
 }
 
+/**
+ * gdk_texture_new_for_gl:
+ * @context: a #GdkGLContext
+ * @id: the ID of a texture that was created with @context
+ * @width: the nominal width of the texture
+ * @height: the nominal height of the texture
+ * @destroy: a destroy notify that will be called when the GL resources
+ *           are released
+ * @data: data that gets passed to @destroy
+ *
+ * Creates a new texture for an existing GL texture.
+ *
+ * Note that the GL texture must not be modified until @destroy is called,
+ * which will happen when the GdkTexture object is finalized, or due to
+ * an explicit call of gdk_texture_release_gl().
+ *
+ * Return value: A newly-created #GdkTexture
+ *
+ * Since: 3.94
+ **/
 GdkTexture *
 gdk_texture_new_for_gl (GdkGLContext   *context,
                         int             id,
