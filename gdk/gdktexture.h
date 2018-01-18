@@ -65,6 +65,9 @@ GdkTexture *            gdk_texture_new_for_gl                 (GdkGLContext    
                                                                 gpointer         data);
 
 GDK_AVAILABLE_IN_3_94
+void                    gdk_texture_release_gl                 (GdkTexture      *texture);
+
+GDK_AVAILABLE_IN_3_94
 int                     gdk_texture_get_width                  (GdkTexture      *texture);
 GDK_AVAILABLE_IN_3_94
 int                     gdk_texture_get_height                 (GdkTexture      *texture);

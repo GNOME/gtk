@@ -443,6 +443,8 @@ struct _GdkGLTexture {
   GdkGLContext *context;
   int id;
 
+  cairo_surface_t *saved;
+
   GDestroyNotify destroy;
   gpointer data;
 };
@@ -458,10 +460,21 @@ gdk_gl_texture_dispose (GObject *object)
 {
   GdkGLTexture *self = GDK_GL_TEXTURE (object);
 
-  g_object_unref (self->context);
-
   if (self->destroy)
-    self->destroy (self->data);
+    {
+      self->destroy (self->data);
+      self->destroy = NULL;
+      self->data = NULL;
+    }
+
+  g_clear_object (&self->context);
+  self->id = 0;
+
+  if (self->saved)
+    {
+      cairo_surface_destroy (self->saved);
+      self->saved = NULL;
+    }
 
   G_OBJECT_CLASS (gdk_gl_texture_parent_class)->dispose (object);
 }
@@ -474,7 +487,6 @@ gdk_gl_texture_download (GdkTexture *texture,
   GdkGLTexture *self = GDK_GL_TEXTURE (texture);
   cairo_surface_t *surface;
   cairo_t *cr;
-  GdkWindow *window;
 
   surface = cairo_image_surface_create_for_data (data,
                                                  CAIRO_FORMAT_ARGB32,
@@ -482,8 +494,21 @@ gdk_gl_texture_download (GdkTexture *texture,
                                                  stride);
 
   cr = cairo_create (surface);
-  window = gdk_gl_context_get_window (self->context);
-  gdk_cairo_draw_from_gl (cr, window, self->id, GL_TEXTURE, 1, 0, 0, texture->width, texture->height);
+
+  if (self->saved)
+    {
+      cairo_set_source_surface (cr, self->saved, 0, 0);
+      cairo_paint (cr);
+    }
+  else
+    {
+      GdkWindow *window;
+
+      window = gdk_gl_context_get_window (self->context);
+      gdk_cairo_draw_from_gl (cr, window, self->id, GL_TEXTURE, 1, 0, 0,
+                              texture->width, texture->height);
+    }
+
   cairo_destroy (cr);
   cairo_surface_finish (surface);
   cairo_surface_destroy (surface);
@@ -514,6 +539,41 @@ int
 gdk_gl_texture_get_id (GdkGLTexture *self)
 {
   return self->id;
+}
+
+void
+gdk_texture_release_gl (GdkTexture *texture)
+{
+  GdkGLTexture *self;
+  GdkWindow *window;
+  cairo_t *cr;
+
+  g_return_if_fail (GDK_IS_GL_TEXTURE (texture));
+
+  self = GDK_GL_TEXTURE (texture);
+
+  g_return_if_fail (self->saved == NULL);
+
+  self->saved = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                            texture->width, texture->height);
+
+  cr = cairo_create (self->saved);
+
+  window = gdk_gl_context_get_window (self->context);
+  gdk_cairo_draw_from_gl (cr, window, self->id, GL_TEXTURE, 1, 0, 0,
+                          texture->width, texture->height);
+
+  cairo_destroy (cr);
+
+  if (self->destroy)
+    {
+      self->destroy (self->data);
+      self->destroy = NULL;
+      self->data = NULL;
+    }
+
+  g_clear_object (&self->context);
+  self->id = 0;
 }
 
 /**
