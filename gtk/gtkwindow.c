@@ -264,6 +264,7 @@ struct _GtkWindowPrivate
 
   guint    use_subsurface            : 1;
   guint    hide_on_close             : 1;
+  guint    in_emit_close_request     : 1;
 
   GdkWindowTypeHint type_hint;
 
@@ -1361,6 +1362,9 @@ void
 gtk_window_close (GtkWindow *window)
 {
   if (!_gtk_widget_get_realized (GTK_WIDGET (window)))
+    return;
+
+  if (window->priv->in_emit_close_request)
     return;
 
   g_object_ref (window);
@@ -5982,9 +5986,17 @@ gtk_window_close_request (GtkWindow *window)
 static gboolean
 gtk_window_emit_close_request (GtkWindow *window)
 {
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   gboolean handled;
 
+  /* Avoid re-entrancy issues when calling gtk_window_close from a
+   * close-request handler */
+  if (priv->in_emit_close_request)
+    return TRUE;
+
+  priv->in_emit_close_request = TRUE;
   g_signal_emit (window, window_signals[CLOSE_REQUEST], 0, &handled);
+  priv->in_emit_close_request = FALSE;
 
   return handled;
 }
