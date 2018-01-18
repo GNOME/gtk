@@ -120,6 +120,9 @@ recordings_list_row_selected (GtkListBox           *box,
     }
 
   gtk_tree_view_expand_all (GTK_TREE_VIEW (priv->render_node_tree));
+
+  if (recording)
+    g_object_unref (recording);
 }
 
 static void
@@ -772,6 +775,8 @@ gtk_inspector_recorder_recordings_list_create_widget (gpointer item,
       for (i = 0; i < g_list_model_get_n_items (priv->recordings); i++)
         {
           GtkInspectorRecording *r = g_list_model_get_item (priv->recordings, i);
+
+          g_object_unref (r);
 
           if (r == recording)
             break;
