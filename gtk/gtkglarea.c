@@ -202,17 +202,6 @@ static guint area_signals[LAST_SIGNAL] = { 0, };
 G_DEFINE_TYPE_WITH_PRIVATE (GtkGLArea, gtk_gl_area, GTK_TYPE_WIDGET)
 
 static void
-gtk_gl_area_dispose (GObject *gobject)
-{
-  GtkGLArea *area = GTK_GL_AREA (gobject);
-  GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
-
-  g_clear_object (&priv->context);
-
-  G_OBJECT_CLASS (gtk_gl_area_parent_class)->dispose (gobject);
-}
-
-static void
 gtk_gl_area_set_property (GObject      *gobject,
                           guint         prop_id,
                           const GValue *value,
@@ -891,7 +880,6 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
 
   gobject_class->set_property = gtk_gl_area_set_property;
   gobject_class->get_property = gtk_gl_area_get_property;
-  gobject_class->dispose = gtk_gl_area_dispose;
   gobject_class->notify = gtk_gl_area_notify;
 
   g_object_class_install_properties (gobject_class, LAST_PROP, obj_props);
