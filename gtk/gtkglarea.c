@@ -385,11 +385,15 @@ delete_one_texture (gpointer data)
 {
   Texture *texture = data;
 
+  if (texture->holder)
+    gdk_texture_release_gl (texture->holder);
+
   if (texture->id != 0)
     {
       glDeleteTextures (1, &texture->id);
       texture->id = 0;
     }
+
   g_free (texture);
 }
 
