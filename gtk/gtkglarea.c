@@ -623,13 +623,9 @@ gtk_gl_area_unrealize (GtkWidget *widget)
 
   if (priv->context != NULL)
     {
-      if (priv->have_buffers)
-        {
-          gtk_gl_area_make_current (area);
-          gtk_gl_area_delete_buffers (area);
-        }
-
-       gtk_gl_area_delete_textures (area);
+      gtk_gl_area_make_current (area);
+      gtk_gl_area_delete_buffers (area);
+      gtk_gl_area_delete_textures (area);
 
       /* Make sure to unset the context if current */
       if (priv->context == gdk_gl_context_get_current ())
