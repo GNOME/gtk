@@ -141,7 +141,30 @@ object_tree_widget_forall (GObject              *object,
                            ObjectTreeForallFunc  forall_func,
                            gpointer              forall_data)
 {
+  struct {
+    GtkPropagationPhase  phase;
+    const gchar         *name;
+  } phases[] = {
+    { GTK_PHASE_CAPTURE, "capture" },
+    { GTK_PHASE_TARGET,  "target" },
+    { GTK_PHASE_BUBBLE,  "bubble" },
+    { GTK_PHASE_NONE,    "" }
+  };
+  gint i;
   GtkWidget *child;
+
+  for (i = 0; i < G_N_ELEMENTS (phases); i++)
+    {
+      GList *list, *l;
+
+      list = _gtk_widget_list_controllers (GTK_WIDGET (object), phases[i].phase);
+      for (l = list; l; l = l->next)
+        {
+          GObject *controller = l->data;
+          forall_func (controller, phases[i].name, forall_data);
+        }
+      g_list_free (list);
+    }
 
    if (gtk_widget_is_toplevel (GTK_WIDGET (object)))
      {
