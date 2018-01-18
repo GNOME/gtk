@@ -4741,8 +4741,6 @@ gtk_text_view_obscure_mouse_cursor (GtkTextView *text_view)
   if (text_view->priv->mouse_cursor_obscured)
     return;
 
-g_print ("obscuring mouse cursor\n");
-
   gtk_widget_set_cursor_from_name (GTK_WIDGET (text_view), "none");
 
   text_view->priv->mouse_cursor_obscured = TRUE;
@@ -4753,7 +4751,6 @@ gtk_text_view_unobscure_mouse_cursor (GtkTextView *text_view)
 {
   if (text_view->priv->mouse_cursor_obscured)
     {
-g_print ("unobscuring mouse cursor\n");
       gtk_widget_set_cursor_from_name (GTK_WIDGET (text_view), "text");
       text_view->priv->mouse_cursor_obscured = FALSE;
     }
