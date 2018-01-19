@@ -6782,6 +6782,75 @@ specific_bug_679910 (void)
   g_object_unref (store);
 }
 
+static int row_changed_count;
+static int filter_row_changed_count;
+
+static void
+row_changed (GtkTreeModel *model,
+             GtkTreePath  *path,
+             GtkTreeIter  *iter,
+             gpointer data)
+{
+  int *count = data;
+
+  (*count)++;
+}
+
+static void
+test_row_changed (void)
+{
+  GtkTreeModel *filter;
+  GtkListStore *store;
+  GtkTreeIter iter1, iter2, iter3;
+  GtkTreeIter fiter1, fiter2, fiter3;
+
+  store = gtk_list_store_new (1, G_TYPE_INT);
+  filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (store), NULL);
+
+  gtk_list_store_append (store, &iter1);
+  gtk_list_store_append (store, &iter2);
+  gtk_list_store_append (store, &iter3);
+
+  gtk_tree_model_filter_convert_child_iter_to_iter (GTK_TREE_MODEL_FILTER (filter), &fiter1, &iter1);
+  gtk_tree_model_filter_convert_child_iter_to_iter (GTK_TREE_MODEL_FILTER (filter), &fiter2, &iter2);
+  gtk_tree_model_filter_convert_child_iter_to_iter (GTK_TREE_MODEL_FILTER (filter), &fiter3, &iter3);
+
+  g_signal_connect (store, "row-changed", G_CALLBACK (row_changed), &row_changed_count);
+  g_signal_connect (filter, "row-changed", G_CALLBACK (row_changed), &filter_row_changed_count);
+
+  row_changed_count = 0;
+  filter_row_changed_count = 0;
+
+  gtk_list_store_set (store, &iter1, 0, 1, -1);
+  gtk_list_store_set (store, &iter2, 0, 1, -1);
+  gtk_list_store_set (store, &iter3, 0, 1, -1);
+
+  g_assert (row_changed_count == 3);
+  g_assert (filter_row_changed_count == 0);
+
+  row_changed_count = 0;
+  filter_row_changed_count = 0;
+
+  gtk_tree_model_ref_node (filter, &fiter1);
+  gtk_tree_model_ref_node (filter, &fiter2);
+  gtk_tree_model_ref_node (filter, &fiter3);
+
+  gtk_list_store_set (store, &iter1, 0, 2, -1);
+  gtk_list_store_set (store, &iter2, 0, 2, -1);
+  gtk_list_store_set (store, &iter3, 0, 2, -1);
+
+  g_assert (row_changed_count == 3);
+  g_assert (filter_row_changed_count == 3);
+
+  gtk_tree_model_unref_node (filter, &fiter1);
+  gtk_tree_model_unref_node (filter, &fiter2);
+  gtk_tree_model_unref_node (filter, &fiter3);
+
+  g_object_unref (filter);
+  g_object_unref (store);
+}
+
+
 /* main */
 
 void
@@ -7143,4 +7212,6 @@ register_filter_model_tests (void)
                    specific_bug_659022_row_deleted_free_level);
   g_test_add_func ("/TreeModelFilter/specific/bug-679910",
                    specific_bug_679910);
+
+  g_test_add_func ("/TreeModelFilter/signal/row-changed", test_row_changed);
 }
