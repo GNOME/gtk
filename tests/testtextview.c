@@ -214,11 +214,6 @@ main (int argc, char **argv)
   create_tags (buffer);
   anchor = insert_text (buffer);
 
-  gtk_widget_show (button);
-  gtk_widget_show (button2);
-  gtk_widget_show (textview);
-  gtk_widget_show (sw);
-
   gtk_container_add (GTK_CONTAINER (window), sw);
   gtk_container_add (GTK_CONTAINER (sw), textview);
   gtk_text_view_add_child_in_window (GTK_TEXT_VIEW (textview),

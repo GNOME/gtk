@@ -81,25 +81,18 @@ create_recent_chooser_menu (gint limit)
 
   menuitem = gtk_separator_menu_item_new ();
   gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), menuitem);
-  gtk_widget_show (menuitem);
 
   menuitem = gtk_menu_item_new_with_label ("Test prepend");
   gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), menuitem);
-  gtk_widget_show (menuitem);
 
   menuitem = gtk_separator_menu_item_new ();
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-  gtk_widget_show (menuitem);
 
   menuitem = gtk_menu_item_new_with_label ("Test append");
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-  gtk_widget_show (menuitem);
 
   menuitem = gtk_menu_item_new_with_mnemonic ("Clear");
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-  gtk_widget_show (menuitem);
-
-  gtk_widget_show (menu);
 
   return menu;
 }
@@ -115,27 +108,20 @@ create_file_menu (GtkAccelGroup *accelgroup)
 
   menuitem = gtk_menu_item_new_with_mnemonic ("_New");
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-  gtk_widget_show (menuitem);
 
   menuitem = gtk_menu_item_new_with_mnemonic ("_Open");
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-  gtk_widget_show (menuitem);
 
   menuitem = gtk_menu_item_new_with_mnemonic ("_Open Recent");
   recentmenu = create_recent_chooser_menu (-1);
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), recentmenu);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-  gtk_widget_show (menuitem);
 
   menuitem = gtk_separator_menu_item_new ();
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-  gtk_widget_show (menuitem);
 
   menuitem = gtk_menu_item_new_with_mnemonic ("_Quit");
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-  gtk_widget_show (menuitem);
-
-  gtk_widget_show (menu);
 
   return menu;
 }
@@ -164,27 +150,22 @@ main (int argc, char *argv[])
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (window), box);
-  gtk_widget_show (box);
 
   menubar = gtk_menu_bar_new ();
   gtk_box_pack_start (GTK_BOX (box), menubar);
-  gtk_widget_show (menubar);
 
   menu = create_file_menu (accel_group);
   menuitem = gtk_menu_item_new_with_mnemonic ("_File");
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
   gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
-  gtk_widget_show (menuitem);
 
   menu = create_recent_chooser_menu (4);
   menuitem = gtk_menu_item_new_with_mnemonic ("_Recently Used");
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
   gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
-  gtk_widget_show (menuitem);
 
   label = gtk_label_new ("No recent item selected");
   gtk_box_pack_start (GTK_BOX (box), label);
-  gtk_widget_show (label);
 
   button = gtk_button_new_with_label ("Close");
   g_signal_connect_swapped (button, "clicked",
@@ -193,7 +174,6 @@ main (int argc, char *argv[])
   gtk_box_pack_end (GTK_BOX (box), button);
   gtk_widget_set_can_default (button, TRUE);
   gtk_widget_grab_default (button);
-  gtk_widget_show (button);
 
   gtk_widget_show (window);
 
