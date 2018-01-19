@@ -89,6 +89,7 @@
                         <child internal-child="selection">
                           <object class="GtkTreeSelection" id="treeview-selection1">
                             <property name="mode">browse</property>
+                            <signal name="changed" handler="selection_changed"/>
                           </object>
                         </child>
                         <child>
