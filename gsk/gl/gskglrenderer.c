@@ -1327,21 +1327,20 @@ render_shadow_node (GskGLRenderer       *self,
       prev_dx = builder->dx;
       prev_dy = builder->dy;
 
-      ops_offset (builder, dx, dy);
-
       if (gsk_render_node_get_node_type (shadow_child) == GSK_TEXT_NODE)
         {
+          ops_offset (builder, dx, dy);
           render_text_node (self, shadow_child, builder, &shadow->color, TRUE);
           ops_offset (builder, prev_dx, prev_dy);
           continue;
         }
 
+      /* Draw the child offscreen, without the offset. */
       add_offscreen_ops (self, builder,
-                         dx + min_x, dx + max_x, dy + min_y, dy + max_y,
+                         min_x, max_x, min_y, max_y,
                          shadow_child, &texture_id, &is_offscreen, FALSE);
 
-      ops_offset (builder, prev_dx, prev_dy);
-
+      ops_offset (builder, dx, dy);
       ops_set_program (builder, &self->shadow_program);
       ops_set_color (builder, &shadow->color);
       ops_set_texture (builder, texture_id);
@@ -1373,6 +1372,8 @@ render_shadow_node (GskGLRenderer       *self,
 
           ops_draw (builder, vertex_data);
         }
+
+      ops_offset (builder, prev_dx, prev_dy);
     }
 
   /* Now draw the child normally */
