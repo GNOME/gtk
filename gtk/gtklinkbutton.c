@@ -124,9 +124,6 @@ static void gtk_link_button_pressed_cb (GtkGestureMultiPress *gesture,
 
 static gboolean gtk_link_button_activate_link (GtkLinkButton *link_button);
 
-static void     set_hand_cursor (GtkWidget *widget,
-				 gboolean   show_hand);
-
 static const char *link_drop_types[] = {
   "text/uri-list",
   "_NETSCAPE_URL"
@@ -249,7 +246,7 @@ gtk_link_button_init (GtkLinkButton *link_button)
   context = gtk_widget_get_style_context (GTK_WIDGET (link_button));
   gtk_style_context_add_class (context, "link");
 
-  set_hand_cursor (GTK_WIDGET (link_button), TRUE);
+  gtk_widget_set_cursor_from_name (GTK_WIDGET (link_button), "pointer");
 }
 
 static void
@@ -305,16 +302,6 @@ gtk_link_button_set_property (GObject      *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
-}
-
-static void
-set_hand_cursor (GtkWidget *widget,
-		 gboolean   show_hand)
-{
-  if (show_hand)
-    gtk_widget_set_cursor_from_name (widget, "pointer");
-  else
-    gtk_widget_set_cursor (widget, NULL);
 }
 
 static void
