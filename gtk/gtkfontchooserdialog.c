@@ -160,6 +160,20 @@ gtk_font_chooser_dialog_class_init (GtkFontChooserDialogClass *klass)
 }
 
 static void
+update_button (GtkFontChooserDialog *dialog)
+{
+  GtkFontChooserDialogPrivate *priv = dialog->priv;
+  PangoFontDescription *desc;
+
+  desc = gtk_font_chooser_get_font_desc (GTK_FONT_CHOOSER (priv->fontchooser));
+
+  gtk_widget_set_sensitive (priv->select_button, desc != NULL);
+
+  if (desc)
+    pango_font_description_free (desc);
+}
+
+static void
 gtk_font_chooser_dialog_init (GtkFontChooserDialog *fontchooserdiag)
 {
   GtkFontChooserDialogPrivate *priv;
@@ -182,6 +196,10 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   _gtk_font_chooser_set_delegate (GTK_FONT_CHOOSER (fontchooserdiag),
                                   GTK_FONT_CHOOSER (priv->fontchooser));
+
+  g_signal_connect_swapped (priv->fontchooser, "notify::font-desc",
+                            G_CALLBACK (update_button), fontchooserdiag);
+  update_button (fontchooserdiag);
 }
 
 /**
