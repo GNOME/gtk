@@ -648,10 +648,6 @@ static AtkObject*	gtk_widget_ref_accessible		(AtkImplementor *implementor);
 static gboolean         gtk_widget_real_can_activate_accel      (GtkWidget *widget,
                                                                  guint      signal_id);
 
-static void             gtk_widget_get_origin_relative_to_parent(GtkWidget        *widget,
-                                                                 int              *origin_x,
-                                                                 int              *origin_y);
-
 static void             gtk_widget_real_set_has_tooltip         (GtkWidget *widget,
 								 gboolean   has_tooltip,
 								 gboolean   force);
@@ -4830,7 +4826,7 @@ gtk_widget_common_ancestor (GtkWidget *widget_a,
   return widget_a;
 }
 
-static void
+void
 gtk_widget_get_origin_relative_to_parent (GtkWidget *widget,
                                           int       *origin_x,
                                           int       *origin_y)

@@ -332,6 +332,12 @@ gboolean          gtk_widget_emit_event_signals            (GtkWidget      *widg
 
 void              gtk_widget_init_legacy_controller        (GtkWidget *widget);
 
+void              gtk_widget_get_origin_relative_to_parent (GtkWidget        *widget,
+                                                            int              *origin_x,
+                                                            int              *origin_y);
+
+
+
 
 /* inline getters */
 
