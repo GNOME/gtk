@@ -3466,6 +3466,8 @@ gtk_icon_view_row_inserted (GtkTreeModel *model,
   if (gtk_tree_path_get_depth (path) > 1)
     return;
 
+  gtk_tree_model_ref_node (model, iter);
+
   index = gtk_tree_path_get_indices(path)[0];
 
   item = gtk_icon_view_item_new ();
@@ -3502,10 +3504,14 @@ gtk_icon_view_row_deleted (GtkTreeModel *model,
   GtkIconViewItem *item;
   GList *list, *next;
   gboolean emit = FALSE;
+  GtkTreeIter iter;
 
   /* ignore changes in branches */
   if (gtk_tree_path_get_depth (path) > 1)
     return;
+
+  gtk_tree_model_get_iter (model, &iter, path);
+  gtk_tree_model_unref_node (model, &iter);
 
   index = gtk_tree_path_get_indices(path)[0];
 
