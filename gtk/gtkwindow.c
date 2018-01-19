@@ -6027,6 +6027,10 @@ gtk_window_finalize (GObject *object)
       priv->keys_changed_handler = 0;
     }
 
+  g_signal_handlers_disconnect_by_func (gdk_display_get_default_seat (priv->display),
+                                        device_removed_cb,
+                                        window);
+
 #ifdef GDK_WINDOWING_X11
   g_signal_handlers_disconnect_by_func (gtk_settings_get_for_display (priv->display),
                                         gtk_window_on_theme_variant_changed,
