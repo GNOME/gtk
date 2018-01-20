@@ -715,7 +715,7 @@ oLIBS="$LIBS"
 LIBS="$LIBS $GDK_WLIBS"
 # The following is necessary for Linux libc-5.4.38
 AC_MSG_CHECKING(if iswalnum() and friends are properly defined)
-AC_TRY_LINK([#include <stdlib.h>],[
+AC_TRY_LINK([#include <stdlib.h>
 #if (defined(HAVE_WCTYPE_H) || defined(HAVE_WCHAR_H))
 #  ifdef HAVE_WCTYPE_H
 #    include <wctype.h>
@@ -726,7 +726,7 @@ AC_TRY_LINK([#include <stdlib.h>],[
 #  endif
 #else
 #  define iswalnum(c) ((wchar_t)(c) <= 0xFF && isalnum(c))
-#endif
+#endif],[
 iswalnum((wchar_t) 0);
 ], gdk_working_wctype=yes, gdk_working_wctype=no)
 LIBS="$oLIBS"
