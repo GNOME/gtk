@@ -25,7 +25,6 @@
 #include "gtkcelllayout.h"
 #include "gtkcellrenderertext.h"
 #include "gtkcellview.h"
-#include "gtkcontainerprivate.h"
 #include "gtkframe.h"
 #include "gtkiconprivate.h"
 #include "gtkbox.h"
@@ -34,8 +33,6 @@
 #include "gtkmenuprivate.h"
 #include "gtkmenushellprivate.h"
 #include "gtktogglebutton.h"
-#include "gtkwidgetpath.h"
-#include "gtkwidgetprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkcomboboxprivate.h"
@@ -48,7 +45,6 @@
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
 
-#include "gtkentryprivate.h"
 #include "a11y/gtkcomboboxaccessible.h"
 
 
