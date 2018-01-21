@@ -14076,7 +14076,6 @@ gtk_widget_snapshot (GtkWidget   *widget,
 {
   GtkWidgetClass *klass = GTK_WIDGET_GET_CLASS (widget);
   GtkWidgetPrivate *priv;
-  graphene_rect_t bounds;
   GtkCssValue *filter_value;
   RenderMode mode;
   double opacity;
@@ -14117,12 +14116,6 @@ gtk_widget_snapshot (GtkWidget   *widget,
   filter_value = _gtk_style_context_peek_property (_gtk_widget_get_style_context (widget), GTK_CSS_PROPERTY_FILTER);
   gtk_css_filter_value_push_snapshot (filter_value, snapshot);
 
-  graphene_rect_init (&bounds,
-                      offset_clip.x,
-                      offset_clip.y,
-                      offset_clip.width,
-                      offset_clip.height);
-
   style = gtk_css_node_get_style (priv->cssnode);
   get_box_margin (style, &margin);
   get_box_border (style, &border);
@@ -14133,8 +14126,15 @@ gtk_widget_snapshot (GtkWidget   *widget,
   if (mode == RENDER_DRAW)
     {
       cairo_t *cr;
+      graphene_rect_t bounds;
 
-      cr = gtk_snapshot_append_cairo (snapshot, 
+      graphene_rect_init (&bounds,
+                          offset_clip.x,
+                          offset_clip.y,
+                          offset_clip.width,
+                          offset_clip.height);
+
+      cr = gtk_snapshot_append_cairo (snapshot,
                                       &bounds, "Fallback<%s>",
                                       G_OBJECT_TYPE_NAME (widget));
       gtk_widget_draw_internal (widget, cr);
@@ -14171,8 +14171,15 @@ gtk_widget_snapshot (GtkWidget   *widget,
            */
           gboolean result;
           cairo_t *cr;
+          graphene_rect_t bounds;
 
-          cr = gtk_snapshot_append_cairo (snapshot, 
+          graphene_rect_init (&bounds,
+                              offset_clip.x,
+                              offset_clip.y,
+                              offset_clip.width,
+                              offset_clip.height);
+
+          cr = gtk_snapshot_append_cairo (snapshot,
                                           &bounds,
                                           "DrawSignalContents<%s>", G_OBJECT_TYPE_NAME (widget));
           g_signal_emit (widget, widget_signals[DRAW], 0, cr, &result);
