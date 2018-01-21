@@ -60,7 +60,10 @@ gdk_vulkan_handle_result (VkResult    res,
                           const char *called_function)
 {
   if (res != VK_SUCCESS)
-    GDK_NOTE (VULKAN, g_printerr ("%s(): %s (%d)\n", called_function, gdk_vulkan_strerror (res), res));
+    {
+      GDK_NOTE (VULKAN, g_printerr ("%s(): %s (%d)\n", called_function, gdk_vulkan_strerror (res), res));
+    }
+
   return res;
 }
 
