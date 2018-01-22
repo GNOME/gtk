@@ -279,7 +279,9 @@ gtk_gesture_multi_press_end (GtkGesture       *gesture,
   current = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   gtk_gesture_get_point (gesture, current, &x, &y);
 
-  g_signal_emit (gesture, signals[RELEASED], 0, priv->n_release, x, y);
+  if (gtk_gesture_get_sequence_state (gesture, current) != GTK_EVENT_SEQUENCE_DENIED)
+    g_signal_emit (gesture, signals[RELEASED], 0, priv->n_release, x, y);
+
   priv->n_release = 0;
 }
 
