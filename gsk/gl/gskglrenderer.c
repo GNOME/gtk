@@ -1041,18 +1041,11 @@ render_outset_shadow_node (GskGLRenderer       *self,
   ops_set_program (builder, &self->outset_shadow_program);
   ops_set_texture (builder, blurred_texture_id);
   op.op = OP_CHANGE_OUTSET_SHADOW;
-  {
-    GskRoundedRect offset_outline = *outline;
-
-    graphene_matrix_transform_bounds (&builder->current_modelview, &outline->bounds, &offset_outline.bounds);
-
-    rounded_rect_to_floats (self, builder,
-                            /*outline,*/
-                            &offset_outline,
-                            op.outset_shadow.outline,
-                            op.outset_shadow.corner_widths,
-                            op.outset_shadow.corner_heights);
-  }
+  rounded_rect_to_floats (self, builder,
+                          outline,
+                          op.outset_shadow.outline,
+                          op.outset_shadow.corner_widths,
+                          op.outset_shadow.corner_heights);
   ops_add (builder, &op);
 
   /* We use the one outset shadow op from above to draw all 8 sides/corners. */
