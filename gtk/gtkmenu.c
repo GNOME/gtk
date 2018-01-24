@@ -1924,7 +1924,6 @@ gtk_menu_popup_at_rect (GtkMenu            *menu,
                         const GdkEvent     *trigger_event)
 {
   GtkMenuPrivate *priv;
-  GdkEvent *current_event = NULL;
   GdkDevice *device = NULL;
   guint button = 0;
   guint32 activate_time = GDK_CURRENT_TIME;
@@ -1942,8 +1941,7 @@ gtk_menu_popup_at_rect (GtkMenu            *menu,
 
   if (!trigger_event)
     {
-      current_event = gtk_get_current_event ();
-      trigger_event = current_event;
+      trigger_event = gtk_get_current_event ();
     }
 
   if (trigger_event)
@@ -1964,8 +1962,6 @@ gtk_menu_popup_at_rect (GtkMenu            *menu,
                            NULL,
                            button,
                            activate_time);
-
-  g_clear_object (&current_event);
 }
 
 /**
