@@ -78,6 +78,7 @@
 #include "gtkmodelbutton.h"
 #include "gtkgesturelongpress.h"
 #include "gtkgesturemultipress.h"
+#include "gtkeventcontrollerkey.h"
 #include "gtkdebug.h"
 #include "gtkfilechoosererrorstackprivate.h"
 
@@ -252,6 +253,7 @@ struct _GtkFileChooserWidgetPrivate {
 
   GtkGesture *long_press_gesture;
   GtkGesture *multipress_gesture;
+  GtkEventController *key_controller;
 
   GtkFileSystemModel *browse_files_model;
   char *browse_files_last_selected_name;
@@ -1264,12 +1266,12 @@ places_sidebar_show_error_message_cb (GtkPlacesSidebar *sidebar,
 }
 
 static gboolean
-key_is_left_or_right (GdkEventKey *event)
+key_is_left_or_right (const GdkEvent *event)
 {
   guint modifiers, keyval, state;
 
-  if (!gdk_event_get_keyval ((GdkEvent *) event, &keyval) ||
-      !gdk_event_get_state ((GdkEvent *) event, &state))
+  if (!gdk_event_get_keyval (event, &keyval) ||
+      !gdk_event_get_state (event, &state))
     return FALSE;
 
   modifiers = gtk_accelerator_get_default_mod_mask ();
@@ -1283,14 +1285,12 @@ key_is_left_or_right (GdkEventKey *event)
 
 static gboolean
 should_trigger_location_entry (GtkFileChooserWidget *impl,
-                               GdkEventKey          *event)
+                               guint                 keyval,
+                               GdkModifierType       state)
 {
   GdkModifierType no_text_input_mask;
-  guint keyval, state;
 
-  if (impl->priv->operation_mode == OPERATION_MODE_SEARCH ||
-      !gdk_event_get_keyval ((GdkEvent *) event, &keyval) ||
-      !gdk_event_get_state ((GdkEvent *) event, &state))
+  if (impl->priv->operation_mode == OPERATION_MODE_SEARCH)
     return FALSE;
 
   no_text_input_mask =
@@ -1313,15 +1313,19 @@ should_trigger_location_entry (GtkFileChooserWidget *impl,
  * pressed.
  */
 static gboolean
-browse_files_key_press_event_cb (GtkWidget   *widget,
-                                 GdkEventKey *event,
-                                 gpointer     data)
+key_press_cb (GtkEventController *controller,
+              guint               keyval,
+              guint               keycode,
+              GdkModifierType     state,
+              gpointer            data)
 {
   GtkFileChooserWidget *impl = (GtkFileChooserWidget *) data;
   GtkFileChooserWidgetPrivate *priv = impl->priv;
-  guint keyval, state;
+  const GdkEvent *event;
 
-  if (should_trigger_location_entry (impl, event) &&
+  event = gtk_get_current_event ();
+
+  if (should_trigger_location_entry (impl, keyval, state) &&
       (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
        priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER))
     {
@@ -1329,17 +1333,16 @@ browse_files_key_press_event_cb (GtkWidget   *widget,
 
       gdk_event_get_string ((GdkEvent *)event, &string);
       location_popup_handler (impl, string);
-      return TRUE;
+      return GDK_EVENT_STOP;
     }
 
   if (key_is_left_or_right (event))
     {
       if (gtk_widget_child_focus (priv->places_sidebar, GTK_DIR_LEFT))
-        return TRUE;
+        return GDK_EVENT_STOP;
     }
 
-  if (!gdk_event_get_keyval ((GdkEvent *) event, &keyval) ||
-      !gdk_event_get_state ((GdkEvent *) event, &state))
+  if (!gdk_event_get_state (event, &state))
     return GDK_EVENT_PROPAGATE;
 
   if ((keyval == GDK_KEY_Return
@@ -1351,6 +1354,7 @@ browse_files_key_press_event_cb (GtkWidget   *widget,
       && !(priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
            priv->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER))
     {
+      GtkWidget *widget = GTK_WIDGET (impl);
       GtkWindow *window;
 
       window = get_toplevel (widget);
@@ -1366,7 +1370,7 @@ browse_files_key_press_event_cb (GtkWidget   *widget,
             {
               gtk_window_activate_default (window);
 
-              return TRUE;
+              return GDK_EVENT_STOP;
             }
         }
     }
@@ -1375,10 +1379,10 @@ browse_files_key_press_event_cb (GtkWidget   *widget,
       priv->operation_mode == OPERATION_MODE_SEARCH)
     {
       gtk_search_entry_handle_event (GTK_SEARCH_ENTRY (priv->search_entry), (GdkEvent *)event);
-      return TRUE;
+      return GDK_EVENT_STOP;
     }
 
-  return FALSE;
+  return GDK_EVENT_PROPAGATE;
 }
 
 static gboolean
@@ -1387,8 +1391,12 @@ gtk_file_chooser_widget_key_press_event (GtkWidget   *widget,
 {
   GtkFileChooserWidget *impl = (GtkFileChooserWidget *) widget;
   GtkFileChooserWidgetPrivate *priv = impl->priv;
+  guint keyval, state;
 
-  if (should_trigger_location_entry (impl, event))
+  gdk_event_get_keyval ((GdkEvent *)event, &keyval);
+  gdk_event_get_state ((GdkEvent *)event, &state);
+
+  if (should_trigger_location_entry (impl, keyval, state))
     {
       if (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
           priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
@@ -3548,6 +3556,7 @@ gtk_file_chooser_widget_dispose (GObject *object)
 
   g_clear_object (&priv->long_press_gesture);
   g_clear_object (&priv->multipress_gesture);
+  g_clear_object (&priv->key_controller);
 
   G_OBJECT_CLASS (gtk_file_chooser_widget_parent_class)->dispose (object);
 }
@@ -8382,7 +8391,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, box);
 
   /* And a *lot* of callbacks to bind ... */
-  gtk_widget_class_bind_template_callback (widget_class, browse_files_key_press_event_cb);
   gtk_widget_class_bind_template_callback (widget_class, file_list_drag_drop_cb);
   gtk_widget_class_bind_template_callback (widget_class, file_list_drag_data_received_cb);
   gtk_widget_class_bind_template_callback (widget_class, list_popup_menu_cb);
@@ -8552,8 +8560,12 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
   g_signal_connect (priv->multipress_gesture, "pressed",
                     G_CALLBACK (multi_press_cb), impl);
 
+  priv->key_controller = gtk_event_controller_key_new (priv->browse_files_tree_view);
+  g_signal_connect (priv->key_controller, "key-pressed",
+                    G_CALLBACK (key_press_cb), impl);
+
   /* Setup various attributes and callbacks in the UI
-   * which cannot be done with GtkBuilder.
+   * which cannot be done with GtkBuilder
    */
   post_process_ui (impl);
 
