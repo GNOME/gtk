@@ -261,8 +261,6 @@ struct _GtkEntryPrivate
   guint         invisible_char_set      : 1;
   guint         mouse_cursor_obscured   : 1;
   guint         need_im_reset           : 1;
-  guint         progress_pulse_mode     : 1;
-  guint         progress_pulse_way_back : 1;
   guint         real_changed            : 1;
   guint         resolved_dir            : 4; /* PangoDirection */
   guint         select_words            : 1;
