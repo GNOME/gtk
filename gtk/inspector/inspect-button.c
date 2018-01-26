@@ -64,7 +64,7 @@ inspector_pick (GtkWidget *widget,
 
       gtk_widget_get_origin_relative_to_parent (child, &dx, &dy);
 
-      picked = inspector_pick (child, x - dx, y - dy);
+      picked = GTK_WIDGET_GET_CLASS (child)->pick (child, x - dx, y - dy);
       if (picked)
         return picked;
     }
