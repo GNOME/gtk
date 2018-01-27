@@ -2219,6 +2219,8 @@ add_offscreen_ops (GskGLRenderer   *self,
                    gboolean        *is_offscreen,
                    gboolean         force_offscreen)
 {
+  const float width = max_x - min_x;
+  const float height = max_y - min_y;
   int render_target;
   int prev_render_target;
   RenderOp op;
@@ -2245,7 +2247,7 @@ add_offscreen_ops (GskGLRenderer   *self,
       return;
     }
 
-  *texture_id = gsk_gl_driver_create_texture (self->gl_driver, max_x - min_x, max_y - min_y);
+  *texture_id = gsk_gl_driver_create_texture (self->gl_driver, width, height);
   gsk_gl_driver_bind_source_texture (self->gl_driver, *texture_id);
   gsk_gl_driver_init_texture_empty (self->gl_driver, *texture_id);
   render_target = gsk_gl_driver_create_render_target (self->gl_driver, *texture_id, TRUE, TRUE);
@@ -2263,7 +2265,7 @@ add_offscreen_ops (GskGLRenderer   *self,
   ops_add (builder, &op);
   prev_projection = ops_set_projection (builder, &item_proj);
   prev_modelview = ops_set_modelview (builder, &identity);
-  prev_viewport = ops_set_viewport (builder, &GRAPHENE_RECT_INIT (min_x, min_y, max_x - min_x, max_y - min_y));
+  prev_viewport = ops_set_viewport (builder, &GRAPHENE_RECT_INIT (min_x, min_y, width, height));
 
   gsk_gl_renderer_add_render_ops (self, child_node, builder);
 
