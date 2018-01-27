@@ -146,7 +146,6 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testvolumebutton		\
 	testscrolledwindow		\
 	testscrolledge			\
-	testswitch			\
 	testcellarea			\
 	testswitch			\
 	styleexamples			\
