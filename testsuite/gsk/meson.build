@@ -44,7 +44,8 @@ gl_tests = [
   ['outset shadow blurred offset', 'outset_shadow_blurred_offset.node', 'outset_shadow_blurred_offset.gl.png'],
   ['outset shadow transformed', 'outset_shadow_translated.node', 'outset_shadow_translated.gl.png'],
   ['Text with alpha', 'text_alpha.node', 'text_alpha.gl.png'],
-  ['Transform in Shadow', 'shadow_transform1.node', 'shadow_transform1.gl.png']
+  ['Transform in Shadow', 'shadow_transform1.node', 'shadow_transform1.gl.png'],
+  ['Clipped crossfade', 'clipped_cross_fade.node', 'clipped_cross_fade.gl.png'],
 ]
 
 foreach gl_test : gl_tests
