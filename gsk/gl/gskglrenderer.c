@@ -2232,6 +2232,7 @@ add_offscreen_ops (GskGLRenderer   *self,
   graphene_matrix_t prev_modelview;
   graphene_rect_t prev_viewport;
   graphene_matrix_t item_proj;
+  GskRoundedRect prev_clip;
 
   /* We need the child node as a texture. If it already is one, we don't need to draw
    * it on a framebuffer of course. */
@@ -2268,10 +2269,14 @@ add_offscreen_ops (GskGLRenderer   *self,
   ops_add (builder, &op);
   prev_projection = ops_set_projection (builder, &item_proj);
   prev_modelview = ops_set_modelview (builder, &identity);
-  prev_viewport = ops_set_viewport (builder, &GRAPHENE_RECT_INIT (min_x, min_y, width, height));
+  prev_viewport = ops_set_viewport (builder, &GRAPHENE_RECT_INIT (min_x, min_y,
+                                                                  width, height));
+  prev_clip = ops_set_clip (builder,
+                            &GSK_ROUNDED_RECT_INIT (min_x, min_y, width, height));
 
   gsk_gl_renderer_add_render_ops (self, child_node, builder);
 
+  ops_set_clip (builder, &prev_clip);
   ops_set_viewport (builder, &prev_viewport);
   ops_set_modelview (builder, &prev_modelview);
   ops_set_projection (builder, &prev_projection);
