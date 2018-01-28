@@ -124,7 +124,8 @@ static const LicenseInfo gtk_license_info [] = {
   { N_("GNU General Public License, version 3 only"), "https://www.gnu.org/licenses/gpl-3.0.html" },
   { N_("GNU Lesser General Public License, version 2.1 only"), "https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html" },
   { N_("GNU Lesser General Public License, version 3 only"), "https://www.gnu.org/licenses/lgpl-3.0.html" },
-  { N_("GNU Affero General Public License, version 3 or later"), "https://www.gnu.org/licenses/agpl-3.0.html" }
+  { N_("GNU Affero General Public License, version 3 or later"), "https://www.gnu.org/licenses/agpl-3.0.html" },
+  { N_("GNU Affero General Public License, version 3 only"), "https://www.gnu.org/licenses/agpl-3.0.html" }
 };
 
 typedef struct
@@ -2459,7 +2460,7 @@ gtk_about_dialog_set_license_type (GtkAboutDialog *about,
 
   g_return_if_fail (GTK_IS_ABOUT_DIALOG (about));
   g_return_if_fail (license_type >= GTK_LICENSE_UNKNOWN &&
-                    license_type <= GTK_LICENSE_AGPL_3_0);
+                    license_type <= GTK_LICENSE_AGPL_3_0_ONLY);
 
   priv = about->priv;
 
