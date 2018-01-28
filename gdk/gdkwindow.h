@@ -452,6 +452,10 @@ GdkWindow *   gdk_window_new_toplevel          (GdkDisplay    *display,
 GDK_AVAILABLE_IN_3_90
 GdkWindow *   gdk_window_new_popup             (GdkDisplay    *display,
                                                 const GdkRectangle *position);
+GDK_AVAILABLE_IN_3_94
+GdkWindow *   gdk_window_new_subsurface        (GdkWindow          *parent,
+                                                const GdkRectangle *position);
+
 GDK_AVAILABLE_IN_3_90
 GdkWindow *   gdk_window_new_temp              (GdkDisplay    *display);
 GDK_AVAILABLE_IN_3_90

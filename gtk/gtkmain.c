@@ -1546,6 +1546,7 @@ handle_pointing_event (GdkEvent *event)
     return widget;
 
   toplevel_widget = gtk_widget_get_toplevel (widget);
+g_print ("pointing event on %s\n", G_OBJECT_TYPE_NAME (toplevel_widget));
   if (!GTK_IS_WINDOW (toplevel_widget))
     return widget;
 

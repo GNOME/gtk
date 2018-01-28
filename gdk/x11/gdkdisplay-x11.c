@@ -992,8 +992,14 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	    }
 	  if (!is_substructure)
 	    {
-	      window->x = event->configure.x;
-	      window->y = event->configure.y;
+              if (window->x != event->configure.x ||
+                  window->y != event->configure.y)
+                {
+	          window->x = event->configure.x;
+	          window->y = event->configure.y;
+
+                  gdk_x11_window_update_position (window_impl);
+                }
 
               if (window_impl->unscaled_width != xevent->xconfigure.width ||
                   window_impl->unscaled_height != xevent->xconfigure.height)

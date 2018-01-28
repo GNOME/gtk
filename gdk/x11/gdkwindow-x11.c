@@ -113,10 +113,12 @@ static void        gdk_window_impl_x11_finalize   (GObject            *object);
 #define WINDOW_IS_TOPLEVEL_OR_FOREIGN(window)           \
   (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TOPLEVEL ||   \
    GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP ||       \
+   GDK_WINDOW_TYPE (window) == GDK_WINDOW_SUBSURFACE || \
    GDK_WINDOW_TYPE (window) == GDK_WINDOW_FOREIGN)
 
 #define WINDOW_IS_TOPLEVEL(window)                      \
   (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TOPLEVEL ||   \
+   GDK_WINDOW_TYPE (window) == GDK_WINDOW_SUBSURFACE || \
    GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP)
 
 /* Return whether time1 is considered later than time2 as far as xserver
@@ -510,8 +512,15 @@ gdk_window_impl_x11_finalize (GObject *object)
   g_return_if_fail (GDK_IS_WINDOW_IMPL_X11 (object));
 
   impl = GDK_WINDOW_IMPL_X11 (object);
-
   wrapper = impl->wrapper;
+
+  if (wrapper->transient_for)
+    {
+      GdkWindowImplX11 *x11_parent;
+
+      x11_parent = GDK_WINDOW_IMPL_X11 (wrapper->transient_for->impl);
+      x11_parent->transients = g_list_remove (x11_parent->transients, wrapper);
+    }
 
   if (WINDOW_IS_TOPLEVEL (wrapper) && impl->toplevel->in_frame)
     unhook_surface_changed (wrapper);
@@ -900,6 +909,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
     {
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_TEMP:
+    case GDK_WINDOW_SUBSURFACE:
       if (window->parent)
         {
           /* The common code warns for this case */
@@ -928,7 +938,8 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
       xattributes.colormap = gdk_x11_display_get_window_colormap (display_x11);
       xattributes_mask |= CWColormap;
 
-      if (window->window_type == GDK_WINDOW_TEMP)
+      if (window->window_type == GDK_WINDOW_TEMP ||
+          window->window_type == GDK_WINDOW_SUBSURFACE)
         {
           xattributes.save_under = True;
           xattributes.override_redirect = True;
@@ -944,7 +955,8 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
     {
       class = InputOnly;
 
-      if (window->window_type == GDK_WINDOW_TEMP)
+      if (window->window_type == GDK_WINDOW_TEMP ||
+          window->window_type == GDK_WINDOW_SUBSURFACE)
         {
           xattributes.override_redirect = True;
           xattributes_mask |= CWOverrideRedirect;
@@ -992,6 +1004,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
 
   switch (GDK_WINDOW_TYPE (window))
     {
+    case GDK_WINDOW_SUBSURFACE:
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_TEMP:
       gdk_window_set_title (window, get_default_title ());
@@ -1450,6 +1463,7 @@ gdk_window_x11_hide (GdkWindow *window)
     {
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_TEMP: /* ? */
+    case GDK_WINDOW_SUBSURFACE:
       gdk_window_withdraw (window);
       return;
       
@@ -1583,6 +1597,17 @@ gdk_window_x11_move_resize (GdkWindow *window,
                             gint       width,
                             gint       height)
 {
+  if (gdk_window_get_window_type (window) == GDK_WINDOW_SUBSURFACE)
+    {
+      GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
+
+      impl->offset_x = x;
+      impl->offset_y = y;
+
+      x = window->transient_for->x + impl->offset_x;
+      y = window->transient_for->y + impl->offset_y;
+    }
+
   if (with_move && (width < 0 && height < 0))
     window_x11_move (window, x, y);
   else
@@ -1591,6 +1616,23 @@ gdk_window_x11_move_resize (GdkWindow *window,
         window_x11_move_resize (window, x, y, width, height);
       else
         window_x11_resize (window, width, height);
+    }
+}
+
+void
+gdk_x11_window_update_position (GdkWindowImplX11 *impl)
+{
+  GList *l;
+
+  for (l = impl->transients; l; l = l->next)
+    {
+      GdkWindow *window = l->data;
+
+      if (gdk_window_get_window_type (window) == GDK_WINDOW_SUBSURFACE)
+        {
+          GdkWindowImplX11 *win_impl = GDK_WINDOW_IMPL_X11 (window->impl);
+          gdk_window_x11_move_resize (window, TRUE, win_impl->offset_x, win_impl->offset_y, window->width, window->height);
+        }
     }
 }
 
@@ -2446,19 +2488,34 @@ static void
 gdk_x11_window_set_transient_for (GdkWindow *window,
 				  GdkWindow *parent)
 {
+  GdkWindowImplX11 *x11_parent;
+
   if (GDK_WINDOW_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   /* XSetTransientForHint() doesn't allow unsetting, so do it manually */
   if (parent && !GDK_WINDOW_DESTROYED (parent))
-    XSetTransientForHint (GDK_WINDOW_XDISPLAY (window), 
-			  GDK_WINDOW_XID (window),
-			  GDK_WINDOW_XID (parent));
+    {
+      XSetTransientForHint (GDK_WINDOW_XDISPLAY (window),
+                            GDK_WINDOW_XID (window),
+                            GDK_WINDOW_XID (parent));
+
+      x11_parent = GDK_WINDOW_IMPL_X11 (parent->impl);
+      x11_parent->transients = g_list_prepend (x11_parent->transients, window);
+    }
   else
-    XDeleteProperty (GDK_WINDOW_XDISPLAY (window),
-                     GDK_WINDOW_XID (window),
-                     gdk_x11_get_xatom_by_name_for_display (GDK_WINDOW_DISPLAY (window), "WM_TRANSIENT_FOR"));
+    {
+      if (window->transient_for)
+        {
+          x11_parent = GDK_WINDOW_IMPL_X11 (window->transient_for->impl);
+          x11_parent->transients = g_list_remove (x11_parent->transients, window);
+        }
+
+      XDeleteProperty (GDK_WINDOW_XDISPLAY (window),
+                       GDK_WINDOW_XID (window),
+                       gdk_x11_get_xatom_by_name_for_display (GDK_WINDOW_DISPLAY (window), "WM_TRANSIENT_FOR"));
+    }
 }
 
 GdkCursor *

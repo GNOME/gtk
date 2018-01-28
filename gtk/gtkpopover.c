@@ -472,36 +472,21 @@ gtk_popover_realize (GtkWidget *widget)
 {
   GtkAllocation allocation;
   GdkWindow *window;
+  GtkWidget *toplevel;
+  GskRenderer *renderer;
 
+  toplevel = gtk_widget_get_toplevel (widget);
   gtk_widget_get_window_allocation (widget, &allocation);
 
-  /* We want to use subsurfaces for popovers, so they can extend outside
-   * the main window, but for that, we first need to have clean subsurface
-   * support that works with GSK.
-   */
-#if 0
-  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
-    {
-      GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
-
-      g_assert (GTK_IS_WINDOW (toplevel));
-
-      window = gdk_wayland_window_new_subsurface (gtk_widget_get_display (toplevel),
-                                                  &allocation);
-
-      gdk_window_set_transient_for (window,
-                                    gtk_widget_get_window (toplevel));
-    }
-  else
-#endif
-    {
-      window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
-                                     &allocation);
-    }
+  window = gdk_window_new_subsurface (gtk_widget_get_window (toplevel),
+                                      &allocation);
 
   gtk_widget_set_window (widget, window);
   gtk_widget_register_window (widget, window);
   gtk_widget_set_realized (widget, TRUE);
+
+  renderer = gsk_renderer_new_for_window (window);
+  g_object_set_data_full (G_OBJECT (window), "renderer", renderer, g_object_unref);
 }
 
 static void
@@ -1021,6 +1006,7 @@ gtk_popover_update_shape (GtkPopover *popover)
   GdkWindow *win;
   cairo_t *cr;
 
+  return;
 #ifdef GDK_WINDOWING_WAYLAND
   if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
     return;

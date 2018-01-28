@@ -5446,6 +5446,13 @@ static GskRenderer *
 gtk_widget_get_renderer (GtkWidget *widget)
 {
   GtkWidget *toplevel;
+  GdkWindow *window;
+  GskRenderer *renderer;
+
+  window = gtk_widget_get_window (widget);
+  renderer = g_object_get_data (G_OBJECT (window), "renderer");
+  if (renderer)
+    return renderer;
 
   toplevel = _gtk_widget_get_toplevel (widget);
   if (_gtk_widget_is_toplevel (toplevel))

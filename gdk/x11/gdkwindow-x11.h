@@ -89,6 +89,14 @@ struct _GdkWindowImplX11
 #if defined (HAVE_XCOMPOSITE) && defined(HAVE_XDAMAGE) && defined (HAVE_XFIXES)
   Damage damage;
 #endif
+
+  /* Subsurfaces are positioned relative to their transient parent.
+   * We keep the offset here.
+   */
+  int offset_x;
+  int offset_y;
+
+  GList *transients;
 };
  
 struct _GdkWindowImplX11Class 
@@ -191,8 +199,10 @@ GdkToplevelX11 *_gdk_x11_window_get_toplevel        (GdkWindow *window);
 GdkCursor      *_gdk_x11_window_get_cursor          (GdkWindow *window);
 
 void            _gdk_x11_window_update_size         (GdkWindowImplX11 *impl);
+void            gdk_x11_window_update_position      (GdkWindowImplX11 *impl);
 void            _gdk_x11_window_set_window_scale    (GdkWindow *window,
 						     int        scale);
+
 
 G_END_DECLS
 

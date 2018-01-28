@@ -458,12 +458,6 @@ gdk_window_get_property (GObject    *object,
     }
 }
 
-static gboolean
-gdk_window_is_subsurface (GdkWindow *window)
-{
-   return window->window_type == GDK_WINDOW_SUBSURFACE;
-}
-
 static GdkWindow *
 gdk_window_get_impl_window (GdkWindow *window)
 {
@@ -700,10 +694,7 @@ recompute_visible_regions_internal (GdkWindow *private,
   old_abs_y = private->abs_y;
 
   /* Update absolute position */
-  if ((gdk_window_has_impl (private) &&
-       private->window_type != GDK_WINDOW_SUBSURFACE) ||
-      (gdk_window_is_toplevel (private) &&
-       private->window_type == GDK_WINDOW_SUBSURFACE))
+  if (gdk_window_has_impl (private))
     {
       /* Native windows and toplevel subsurfaces start here */
       private->abs_x = 0;
@@ -745,7 +736,7 @@ recompute_visible_regions_internal (GdkWindow *private,
 	    cairo_region_intersect (new_clip, private->shape);
 	}
       else
-	  new_clip = cairo_region_create ();
+        new_clip = cairo_region_create ();
 
       if (private->clip_region == NULL ||
 	  !cairo_region_equal (private->clip_region, new_clip))
@@ -855,7 +846,7 @@ get_native_device_event_mask (GdkWindow *private,
 
       mask = private->event_mask;
 
-      /* We need thse for all native windows so we can
+      /* We need these for all native windows so we can
 	 emulate events on children: */
       mask |=
 	GDK_EXPOSURE_MASK |
@@ -929,13 +920,6 @@ gdk_window_new (GdkDisplay    *display,
 		   "a window of type GDK_WINDOW_ROOT");
       break;
     case GDK_WINDOW_SUBSURFACE:
-#ifdef GDK_WINDOWING_WAYLAND
-      if (!GDK_IS_WAYLAND_DISPLAY (display))
-        {
-          g_warning (G_STRLOC "Subsurface windows can only be used on Wayland");
-          return NULL;
-        }
-#endif
       break;
     case GDK_WINDOW_CHILD:
       if (GDK_WINDOW_TYPE (parent) == GDK_WINDOW_ROOT ||
@@ -974,11 +958,6 @@ gdk_window_new (GdkDisplay    *display,
 
       native = TRUE; /* Always use native windows for toplevels */
     }
-
-#ifdef GDK_WINDOWING_WAYLAND
-  if (window->window_type == GDK_WINDOW_SUBSURFACE)
-    native = TRUE; /* Always use native windows for subsurfaces as well */
-#endif
 
   if (native)
     {
@@ -1062,6 +1041,41 @@ gdk_window_new_popup (GdkDisplay         *display,
   attr.window_type = GDK_WINDOW_TEMP;
 
   return gdk_window_new (display, NULL, &attr);
+}
+
+/**
+ * gdk_window_new_subsurface: (constructor)
+ * @parent: the parent window
+ * @position: placement of the window relative to @parent
+ *
+ * Creates a new toplevel window that is attached to @parent.
+ * The window will bypass window management and move together
+ * with its parent.
+ *
+ * Returns: (transfer full): the new #GdkWindow
+ *
+ * Since: 3.94
+ **/
+GdkWindow *
+gdk_window_new_subsurface (GdkWindow          *parent,
+                           const GdkRectangle *position)
+{
+  GdkWindowAttr attr;
+  GdkWindow *window;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (parent), NULL);
+
+  attr.wclass = GDK_INPUT_OUTPUT;
+  attr.x = position->x;
+  attr.y = position->y;
+  attr.width = position->width;
+  attr.height = position->height;
+  attr.window_type = GDK_WINDOW_SUBSURFACE;
+
+  window = gdk_window_new (gdk_window_get_display (parent), NULL, &attr);
+  gdk_window_set_transient_for (window, parent);
+
+  return window;
 }
 
 /**
@@ -1547,9 +1561,6 @@ gdk_window_get_parent (GdkWindow *window)
 {
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
 
-  if (gdk_window_is_subsurface (window))
-    return window->transient_for;
-  else
     return window->parent;
 }
 
@@ -1570,8 +1581,7 @@ gdk_window_get_toplevel (GdkWindow *window)
 {
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
 
-  while (window->window_type == GDK_WINDOW_CHILD ||
-         window->window_type == GDK_WINDOW_SUBSURFACE)
+  while (window->window_type == GDK_WINDOW_CHILD)
     {
       if (gdk_window_is_toplevel (window))
 	break;

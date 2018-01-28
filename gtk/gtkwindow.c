@@ -6953,7 +6953,11 @@ gtk_window_realize (GtkWidget *widget)
   gtk_widget_set_realized (widget, TRUE);
 
   if (priv->renderer == NULL)
-    priv->renderer = gsk_renderer_new_for_window (gdk_window);
+    {
+      priv->renderer = gsk_renderer_new_for_window (gdk_window);
+      g_object_set_data_full (G_OBJECT (gdk_window), "renderer",
+                              g_object_ref (priv->renderer), g_object_unref);
+    }
 
   if (priv->transient_parent &&
       _gtk_widget_get_realized (GTK_WIDGET (priv->transient_parent)))
@@ -9385,11 +9389,13 @@ gtk_window_snapshot (GtkWidget   *widget,
         gtk_widget_snapshot_child (widget, child, snapshot);
     }
 
+#if 0
   for (l = priv->popovers.head; l; l = l->next)
     {
       GtkWindowPopover *data = l->data;
       gtk_widget_snapshot_child (widget, data->widget, snapshot);
     }
+#endif
 
   gtk_debug_updates_snapshot (widget, snapshot);
 }
