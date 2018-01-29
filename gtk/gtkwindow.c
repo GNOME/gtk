@@ -11292,6 +11292,11 @@ gtk_window_update_pointer_focus_on_state_change (GtkWindow *window,
 
       gtk_pointer_focus_ref (focus);
 
+      if (focus->grab_widget &&
+          (focus->grab_widget == widget ||
+           gtk_widget_is_ancestor (focus->grab_widget, widget)))
+        gtk_pointer_focus_set_implicit_grab (focus, NULL);
+
       if (GTK_WIDGET (focus->toplevel) == widget)
         {
           /* Unmapping the toplevel, remove pointer focus */
