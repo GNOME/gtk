@@ -2805,9 +2805,7 @@ gtk_range_calc_slider (GtkRange *range)
 
   gtk_widget_set_visible (priv->slider_widget, visible);
 
-  if (priv->has_origin)
-    gtk_widget_queue_allocate (priv->trough_widget);
-
+  gtk_widget_queue_allocate (priv->trough_widget);
   gtk_range_update_mouse_location (range);
 }
 
