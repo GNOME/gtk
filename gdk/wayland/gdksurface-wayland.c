@@ -2530,6 +2530,7 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
   unset_transient_for_exported (surface);
 
   _gdk_wayland_surface_clear_saved_size (surface);
+  drop_cairo_surfaces (surface);
   impl->pending_commit = FALSE;
   impl->mapped = FALSE;
 }
@@ -2813,7 +2814,6 @@ gdk_wayland_surface_destroy (GdkSurface *surface,
   g_return_if_fail (!foreign_destroy);
 
   gdk_wayland_surface_hide_surface (surface);
-  drop_cairo_surfaces (surface);
 
   if (surface->parent == NULL)
     {
