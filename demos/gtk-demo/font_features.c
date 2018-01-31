@@ -1669,12 +1669,12 @@ stop_edit (void)
 }
 
 static gboolean
-entry_key_press (GtkEntry *entry, GdkEventKey *event)
+entry_key_press (GtkEventController *controller,
+                 guint               keyval,
+                 guint               keycode,
+                 GdkModifierType     modifiers,
+                 GtkEntry           *entry)
 {
-  guint keyval;
-
-  gdk_event_get_keyval ((GdkEvent *)event, &keyval);
-
   if (keyval == GDK_KEY_Escape)
     {
       gtk_entry_set_text (GTK_ENTRY (entry), text);
@@ -1694,6 +1694,7 @@ do_font_features (GtkWidget *do_widget)
     {
       GtkBuilder *builder;
       GtkWidget *feature_list;
+      GtkEventController *controller;
 
       builder = gtk_builder_new_from_resource ("/font_features/font-features.ui");
 
@@ -1703,7 +1704,6 @@ do_font_features (GtkWidget *do_widget)
       gtk_builder_add_callback_symbol (builder, "reset", reset_features);
       gtk_builder_add_callback_symbol (builder, "stop_edit", G_CALLBACK (stop_edit));
       gtk_builder_add_callback_symbol (builder, "toggle_edit", G_CALLBACK (toggle_edit));
-      gtk_builder_add_callback_symbol (builder, "entry_key_press", G_CALLBACK (entry_key_press));
       gtk_builder_connect_signals (builder, NULL);
 
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
@@ -1717,6 +1717,10 @@ do_font_features (GtkWidget *do_widget)
       stack = GTK_WIDGET (gtk_builder_get_object (builder, "stack"));
       entry = GTK_WIDGET (gtk_builder_get_object (builder, "entry"));
       edit_toggle = GTK_WIDGET (gtk_builder_get_object (builder, "edit_toggle"));
+
+      controller = gtk_event_controller_key_new (entry);
+      g_object_set_data_full (G_OBJECT (entry), "controller", controller, g_object_unref);
+      g_signal_connect (controller, "key-pressed", G_CALLBACK (entry_key_press), entry);
 
       add_check_group (feature_list, _("Kerning"), (const char *[]){ "kern", NULL });
       add_check_group (feature_list, _("Ligatures"), (const char *[]){ "liga",
