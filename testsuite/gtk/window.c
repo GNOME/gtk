@@ -40,11 +40,13 @@ on_draw (GtkDrawingArea *da,
 }
 
 static gboolean
-on_keypress (GtkWidget *widget)
+on_keypress (GtkWidget *widget,
+             GdkEvent  *event)
 {
-  gtk_main_quit ();
+  if (gdk_event_get_event_type (event) == GDK_KEY_PRESS)
+    gtk_main_quit ();
 
-  return TRUE;
+  return GDK_EVENT_PROPAGATE;
 }
 
 static void
@@ -56,7 +58,7 @@ test_default_size (void)
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   if (interactive)
-    g_signal_connect (window, "key-press-event", G_CALLBACK (on_keypress), NULL);
+    g_signal_connect (window, "event", G_CALLBACK (on_keypress), NULL);
 
   da = gtk_drawing_area_new ();
   gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), on_draw, NULL, NULL);
@@ -133,7 +135,7 @@ test_resize (void)
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   if (interactive)
-    g_signal_connect (window, "key-press-event", G_CALLBACK (on_keypress), NULL);
+    g_signal_connect (window, "event", G_CALLBACK (on_keypress), NULL);
 
   da = gtk_drawing_area_new ();
   gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), on_draw, NULL, NULL);
