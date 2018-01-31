@@ -105,14 +105,14 @@ follow_if_link (GtkWidget   *text_view,
 /* Links can be activated by pressing Enter.
  */
 static gboolean
-key_press_event (GtkWidget *text_view,
-                 GdkEventKey *event)
+key_pressed (GtkEventController *controller,
+             guint               keyval,
+             guint               keycode,
+             GdkModifierType     modifiers,
+             GtkWidget          *text_view)
 {
   GtkTextIter iter;
   GtkTextBuffer *buffer;
-  guint keyval;
-
-  gdk_event_get_keyval ((GdkEvent *)event, &keyval);
 
   switch (keyval)
     {
@@ -128,7 +128,7 @@ key_press_event (GtkWidget *text_view,
         break;
     }
 
-  return FALSE;
+  return GDK_EVENT_PROPAGATE;
 }
 
 static void set_cursor_if_appropriate (GtkTextView *text_view,
@@ -241,6 +241,7 @@ do_hypertext (GtkWidget *do_widget)
       GtkWidget *view;
       GtkWidget *sw;
       GtkTextBuffer *buffer;
+      GtkEventController *controller;
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_title (GTK_WINDOW (window), "Hypertext");
@@ -255,8 +256,9 @@ do_hypertext (GtkWidget *do_widget)
       gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (view), GTK_WRAP_WORD);
       gtk_text_view_set_left_margin (GTK_TEXT_VIEW (view), 20);
       gtk_text_view_set_right_margin (GTK_TEXT_VIEW (view), 20);
-      g_signal_connect (view, "key-press-event",
-                        G_CALLBACK (key_press_event), NULL);
+      controller = gtk_event_controller_key_new (view);
+      g_object_set_data_full (G_OBJECT (view), "controller", controller, g_object_unref);
+      g_signal_connect (controller, "key-pressed", G_CALLBACK (key_pressed), view);
       g_signal_connect (view, "event",
                         G_CALLBACK (event_cb), NULL);
 

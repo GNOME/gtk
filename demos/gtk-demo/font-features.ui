@@ -132,7 +132,6 @@
 Разъяренный чтец эгоистично бьёт пятью жердями шустрого фехтовальщика. Наш банк вчера же выплатил Ф.Я. Эйхгольду комиссию за ценные вещи. Эх, чужак, общий съём цен шляп (юфть) – вдрызг! В чащах юга жил бы цитрус? Да, но фальшивый экземпляр!
 
 Τάχιστη αλώπηξ βαφής ψημένη γη, δρασκελίζει υπέρ νωθρού κυνός</property>
-                    <signal name="key-press-event" handler="entry_key_press"/>
                     <signal name="activate" handler="stop_edit"/>
                     <property name="valign">start</property>
                     <property name="width-chars">50</property>
