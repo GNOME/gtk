@@ -31,7 +31,10 @@ window_key_press_event_cb (GtkWidget    *widget,
 			   GdkEvent     *event,
 			   GtkSearchBar *bar)
 {
-  return gtk_search_bar_handle_event (bar, event);
+  if (gdk_event_get_event_type (event) == GDK_KEY_PRESS)
+    return gtk_search_bar_handle_event (bar, event);
+
+  return GDK_EVENT_PROPAGATE;
 }
 
 static void
@@ -99,8 +102,7 @@ do_search_entry2 (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (vbox), searchbar);
 
       /* Hook the search bar to key presses */
-      g_signal_connect (window, "key-press-event",
-                        G_CALLBACK (window_key_press_event_cb), searchbar);
+      g_signal_connect (window, "event", G_CALLBACK (window_key_press_event_cb), searchbar);
 
       /* Help */
       label = gtk_label_new ("Start Typing to search");
