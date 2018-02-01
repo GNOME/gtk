@@ -235,6 +235,14 @@ gdk_keymap_init (GdkKeymap *keymap)
 {
 }
 
+/**
+ * gdk_keymap_get_display:
+ * @keymap: a #GdkKeymap
+ *
+ * Retrieves the #GdkDisplay associated to the @keymap.
+ *
+ * Returns: (transfer none): a #GdkDisplay
+ */
 GdkDisplay *
 gdk_keymap_get_display (GdkKeymap *keymap)
 {
