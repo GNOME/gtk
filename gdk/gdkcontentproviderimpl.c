@@ -168,7 +168,7 @@ gdk_content_provider_bytes_ref_formats (GdkContentProvider *provider)
 
   builder = gdk_content_formats_builder_new ();
   gdk_content_formats_builder_add_mime_type (builder, content->mime_type);
-  return gdk_content_formats_builder_free (builder);
+  return gdk_content_formats_builder_free_to_formats (builder);
 }
 
 static void

@@ -243,7 +243,7 @@ gdk_x11_clipboard_formats_from_atoms (GdkDisplay *display,
         }
     }
 
-  return gdk_content_formats_builder_free (builder);
+  return gdk_content_formats_builder_free_to_formats (builder);
 }
 
 static void

@@ -461,7 +461,7 @@ gdk_content_formats_union_serialize_gtypes (GdkContentFormats *formats)
 
   gdk_content_formats_unref (formats);
 
-  return gdk_content_formats_builder_free (builder);
+  return gdk_content_formats_builder_free_to_formats (builder);
 }
 
 /**
@@ -496,7 +496,7 @@ gdk_content_formats_union_serialize_mime_types (GdkContentFormats *formats)
 
   gdk_content_formats_unref (formats);
 
-  return gdk_content_formats_builder_free (builder);
+  return gdk_content_formats_builder_free_to_formats (builder);
 }
 
 static void

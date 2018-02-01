@@ -176,7 +176,7 @@ gtk_content_formats_add_text_targets (GdkContentFormats *list)
     gdk_content_formats_builder_add_mime_type (builder, text_plain_locale_atom);  
   gdk_content_formats_builder_add_mime_type (builder, text_plain_atom);  
 
-  return gdk_content_formats_builder_free (builder);
+  return gdk_content_formats_builder_free_to_formats (builder);
 }
 
 /**
@@ -243,7 +243,7 @@ gtk_content_formats_add_image_targets (GdkContentFormats *list,
 
   g_slist_free (formats);
 
-  return gdk_content_formats_builder_free (builder);
+  return gdk_content_formats_builder_free_to_formats (builder);
 }
 
 /**
@@ -270,7 +270,7 @@ gtk_content_formats_add_uri_targets (GdkContentFormats *list)
 
   gdk_content_formats_builder_add_mime_type (builder, text_uri_list_atom);  
 
-  return gdk_content_formats_builder_free (builder);
+  return gdk_content_formats_builder_free_to_formats (builder);
 }
 
 /**

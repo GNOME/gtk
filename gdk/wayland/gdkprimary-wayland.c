@@ -58,7 +58,7 @@ gdk_wayland_primary_discard_pending (GdkWaylandPrimary *cb)
 {
   if (cb->pending_builder)
     {
-      GdkContentFormats *ignore = gdk_content_formats_builder_free (cb->pending_builder);
+      GdkContentFormats *ignore = gdk_content_formats_builder_free_to_formats (cb->pending_builder);
       gdk_content_formats_unref (ignore);
       cb->pending_builder = NULL;
     }
@@ -178,7 +178,7 @@ primary_selection_selection (void                                *data,
       return;
     }
 
-  formats = gdk_content_formats_builder_free (cb->pending_builder);
+  formats = gdk_content_formats_builder_free_to_formats (cb->pending_builder);
   cb->pending_builder = NULL;
   cb->pending = NULL;
 

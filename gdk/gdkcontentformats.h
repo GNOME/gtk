@@ -77,12 +77,23 @@ GDK_AVAILABLE_IN_3_94
 gboolean                gdk_content_formats_contain_mime_type   (const GdkContentFormats        *formats,
                                                                  const char                     *mime_type);
 
+#define GDK_TYPE_CONTENT_FORMATS_BUILDER (gdk_content_formats_builder_get_type ())
+
 typedef struct _GdkContentFormatsBuilder GdkContentFormatsBuilder;
 
 GDK_AVAILABLE_IN_3_94
-GdkContentFormatsBuilder*gdk_content_formats_builder_new        (void);
+GType                   gdk_content_formats_builder_get_type    (void) G_GNUC_CONST;
+
 GDK_AVAILABLE_IN_3_94
-GdkContentFormats *     gdk_content_formats_builder_free        (GdkContentFormatsBuilder       *builder) G_GNUC_WARN_UNUSED_RESULT;
+GdkContentFormatsBuilder *gdk_content_formats_builder_new        (void);
+GDK_AVAILABLE_IN_3_94
+GdkContentFormatsBuilder *gdk_content_formats_builder_ref       (GdkContentFormatsBuilder       *builder);
+GDK_AVAILABLE_IN_3_94
+void                    gdk_content_formats_builder_unref       (GdkContentFormatsBuilder       *builder);
+GDK_AVAILABLE_IN_3_94
+GdkContentFormats *     gdk_content_formats_builder_free_to_formats (GdkContentFormatsBuilder  *builder) G_GNUC_WARN_UNUSED_RESULT;
+GDK_AVAILABLE_IN_3_94
+GdkContentFormats *     gdk_content_formats_builder_to_formats  (GdkContentFormatsBuilder  *builder) G_GNUC_WARN_UNUSED_RESULT;
 GDK_AVAILABLE_IN_3_94
 void                    gdk_content_formats_builder_add_formats (GdkContentFormatsBuilder       *builder,
                                                                  const GdkContentFormats        *formats);

@@ -307,7 +307,7 @@ gdk_content_formats_union (GdkContentFormats       *first,
   gdk_content_formats_unref (first);
   gdk_content_formats_builder_add_formats (builder, second);
 
-  return gdk_content_formats_builder_free (builder);
+  return gdk_content_formats_builder_free_to_formats (builder);
 }
 
 static gboolean
@@ -510,11 +510,21 @@ gdk_content_formats_get_mime_types (GdkContentFormats *formats,
 
 struct _GdkContentFormatsBuilder
 {
+  int ref_count;
+
+  /* (element-type GType) */
   GSList *gtypes;
   gsize n_gtypes;
+
+  /* (element-type utf8) (interned) */
   GSList *mime_types;
   gsize n_mime_types;
 };
+
+G_DEFINE_BOXED_TYPE (GdkContentFormatsBuilder,
+                     gdk_content_formats_builder,
+                     gdk_content_formats_builder_ref,
+                     gdk_content_formats_builder_unref)
 
 /**
  * gdk_content_formats_builder_new:
@@ -528,19 +538,106 @@ struct _GdkContentFormatsBuilder
 GdkContentFormatsBuilder *
 gdk_content_formats_builder_new (void)
 {
-  return g_slice_new0 (GdkContentFormatsBuilder);
+  GdkContentFormatsBuilder *builder;
+
+  builder = g_slice_new0 (GdkContentFormatsBuilder);
+  builder->ref_count = 1;
+
+  return builder;
 }
 
 /**
- * gdk_content_formats_builder_free:
+ * gdk_content_formats_builder_ref:
  * @builder: a #GdkContentFormatsBuilder
  *
- * Frees @builder and creates a new #GdkContentFormats from it.
+ * Acquires a reference on the given @builder.
  *
- * Returns: a new #GdkContentFormats with all the formats added to @builder
- **/
+ * This function is intended primarily for bindings. #GdkContentFormatsBuilder objects
+ * should not be kept around.
+ *
+ * Returns: (transfer none): the given #GdkContentFormatsBuilder with
+ *   its reference count increased
+ */
+GdkContentFormatsBuilder *
+gdk_content_formats_builder_ref (GdkContentFormatsBuilder *builder)
+{
+  g_return_val_if_fail (builder != NULL, NULL);
+  g_return_val_if_fail (builder->ref_count > 0, NULL);
+
+  builder->ref_count += 1;
+
+  return builder;
+}
+
+static void
+gdk_content_formats_builder_clear (GdkContentFormatsBuilder *builder)
+{
+  g_clear_pointer (&builder->gtypes, g_slist_free);
+  g_clear_pointer (&builder->mime_types, g_slist_free);
+}
+
+/**
+ * gdk_content_formats_builder_unref:
+ * @builder: a #GdkContentFormatsBuilder
+ *
+ * Releases a reference on the given @builder.
+ */
+void
+gdk_content_formats_builder_unref (GdkContentFormatsBuilder *builder)
+{
+  g_return_if_fail (builder != NULL);
+  g_return_if_fail (builder->ref_count > 0);
+
+  builder->ref_count -= 1;
+
+  if (builder->ref_count > 0)
+    return;
+  
+  gdk_content_formats_builder_clear (builder);
+  g_slice_free (GdkContentFormatsBuilder, builder);
+}
+
+/**
+ * gdk_content_formats_builder_free_to_formats: (skip)
+ * @builder: a #GdkContentFormatsBuilder
+ *
+ * Creates a new #GdkContentFormats from the current state of the
+ * given @builder, and frees the @builder instance.
+ *
+ * Returns: (transfer full): the newly created #GdkContentFormats
+ *   with all the formats added to @builder
+ */
 GdkContentFormats *
-gdk_content_formats_builder_free (GdkContentFormatsBuilder *builder)
+gdk_content_formats_builder_free_to_formats (GdkContentFormatsBuilder *builder)
+{
+  GdkContentFormats *res;
+
+  g_return_val_if_fail (builder != NULL, NULL);
+
+  res = gdk_content_formats_builder_to_formats (builder);
+
+  gdk_content_formats_builder_unref (builder);
+
+  return res;
+}
+
+/**
+ * gdk_content_formats_builder_to_formats:
+ * @builder: a #GdkContentFormatsBuilder
+ *
+ * Creates a new #GdkContentFormats from the given @builder.
+ *
+ * The given #GdkContentFormatsBuilder is reset once this function returns;
+ * you cannot call this function multiple times on the same @builder instance.
+ *
+ * This function is intended primarily for bindings. C code should use
+ * gdk_content_formats_builder_free_to_formats().
+ *
+ * Returns: (transfer full): the newly created #GdkContentFormats
+ *   with all the formats added to @builder
+ */
+GdkContentFormats *
+gdk_content_formats_builder_to_formats (GdkContentFormatsBuilder *builder)
 {
   GdkContentFormats *result;
   GType *gtypes;
@@ -567,9 +664,7 @@ gdk_content_formats_builder_free (GdkContentFormatsBuilder *builder)
   result = gdk_content_formats_new_take (gtypes, builder->n_gtypes,
                                          mime_types, builder->n_mime_types);
 
-  g_slist_free (builder->gtypes);
-  g_slist_free (builder->mime_types);
-  g_slice_free (GdkContentFormatsBuilder, builder);
+  gdk_content_formats_builder_clear (builder);
 
   return result;
 }

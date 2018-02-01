@@ -124,7 +124,7 @@ data_offer_offer (void                 *data,
   gdk_content_formats_builder_add_formats (builder, info->targets);
   gdk_content_formats_builder_add_mime_type (builder, type);
   gdk_content_formats_unref (info->targets);
-  info->targets = gdk_content_formats_builder_free (builder);
+  info->targets = gdk_content_formats_builder_free_to_formats (builder);
 }
 
 static inline GdkDragAction

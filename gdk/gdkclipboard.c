@@ -820,7 +820,7 @@ gdk_clipboard_read_value_internal (GdkClipboard        *clipboard,
 
   builder = gdk_content_formats_builder_new ();
   gdk_content_formats_builder_add_gtype (builder, type);
-  formats = gdk_content_formats_builder_free (builder);
+  formats = gdk_content_formats_builder_free_to_formats (builder);
   formats = gdk_content_formats_union_deserialize_mime_types (formats);
 
   gdk_clipboard_read_internal (clipboard,
