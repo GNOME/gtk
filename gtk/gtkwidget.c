@@ -4801,7 +4801,7 @@ gtk_widget_translate_coordinates (GtkWidget  *src_widget,
  * We use this for event coordinates.
  *
  * We should probably decide for only one of the 2 versions at some point */
-static gboolean
+gboolean
 gtk_widget_translate_coordinatesf (GtkWidget  *src_widget,
                                    GtkWidget  *dest_widget,
                                    double      src_x,
