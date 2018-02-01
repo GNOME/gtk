@@ -702,7 +702,7 @@ static void
 free_dir_mtime (IconThemeDirMtime *dir_mtime)
 {
   if (dir_mtime->cache)
-    _gtk_icon_cache_unref (dir_mtime->cache);
+    gtk_icon_cache_unref (dir_mtime->cache);
 
   g_free (dir_mtime->dir);
   g_slice_free (IconThemeDirMtime, dir_mtime);
@@ -1347,7 +1347,7 @@ load_themes (GtkIconTheme *icon_theme)
       dir_mtime->mtime = stat_buf.st_mtime;
       dir_mtime->exists = TRUE;
 
-      dir_mtime->cache = _gtk_icon_cache_new_for_path (dir);
+      dir_mtime->cache = gtk_icon_cache_new_for_path (dir);
       if (dir_mtime->cache != NULL)
         continue;
 
@@ -2393,7 +2393,7 @@ gtk_icon_theme_has_icon (GtkIconTheme *icon_theme,
       IconThemeDirMtime *dir_mtime = l->data;
       GtkIconCache *cache = dir_mtime->cache;
       
-      if (cache && _gtk_icon_cache_has_icon (cache, icon_name))
+      if (cache && gtk_icon_cache_has_icon (cache, icon_name))
         return TRUE;
     }
 
@@ -2740,7 +2740,7 @@ static void
 theme_dir_destroy (IconThemeDir *dir)
 {
   if (dir->cache)
-    _gtk_icon_cache_unref (dir->cache);
+    gtk_icon_cache_unref (dir->cache);
   if (dir->icons)
     g_hash_table_destroy (dir->icons);
   
@@ -2854,7 +2854,7 @@ theme_dir_get_icon_suffix (IconThemeDir *dir,
 
   if (dir->cache)
     {
-      suffix = (IconSuffix)_gtk_icon_cache_get_icon_flags (dir->cache,
+      suffix = (IconSuffix)gtk_icon_cache_get_icon_flags (dir->cache,
                                                            icon_name,
                                                            dir->subdir_index);
 
@@ -2862,7 +2862,7 @@ theme_dir_get_icon_suffix (IconThemeDir *dir,
         {
           /* Look for foo-symbolic.symbolic.png, as the cache only stores the ".png" suffix */
           char *icon_name_with_prefix = g_strconcat (icon_name, ".symbolic", NULL);
-          symbolic_suffix = (IconSuffix)_gtk_icon_cache_get_icon_flags (dir->cache,
+          symbolic_suffix = (IconSuffix)gtk_icon_cache_get_icon_flags (dir->cache,
                                                                         icon_name_with_prefix,
                                                                         dir->subdir_index);
           g_free (icon_name_with_prefix);
@@ -3031,7 +3031,7 @@ theme_lookup_icon (IconTheme   *theme,
 
       if (min_dir->cache)
         {
-          icon_info->cache_pixbuf = _gtk_icon_cache_get_icon (min_dir->cache, icon_name,
+          icon_info->cache_pixbuf = gtk_icon_cache_get_icon (min_dir->cache, icon_name,
                                                               min_dir->subdir_index);
         }
 
@@ -3057,7 +3057,7 @@ theme_list_icons (IconTheme  *theme,
           context == 0)
         {
           if (dir->cache)
-            _gtk_icon_cache_add_icons (dir->cache, dir->subdir, icons);
+            gtk_icon_cache_add_icons (dir->cache, dir->subdir, icons);
           else
             g_hash_table_foreach (dir->icons, add_key_to_hash, icons);
         }
@@ -3077,7 +3077,7 @@ theme_has_icon (IconTheme   *theme,
 
       if (dir->cache)
         {
-          if (_gtk_icon_cache_has_icon (dir->cache, icon_name))
+          if (gtk_icon_cache_has_icon (dir->cache, icon_name))
             return TRUE;
         }
       else
@@ -3274,7 +3274,7 @@ theme_subdir_load (GtkIconTheme *icon_theme,
           if (dir_mtime->cache == NULL)
             {
               /* This will return NULL if the cache doesn't exist or is outdated */
-              dir_mtime->cache = _gtk_icon_cache_new_for_path (dir_mtime->dir);
+              dir_mtime->cache = gtk_icon_cache_new_for_path (dir_mtime->dir);
             }
 
           dir = g_new0 (IconThemeDir, 1);
@@ -3291,9 +3291,9 @@ theme_subdir_load (GtkIconTheme *icon_theme,
 
           if (dir_mtime->cache != NULL)
             {
-              dir->cache = _gtk_icon_cache_ref (dir_mtime->cache);
-              dir->subdir_index = _gtk_icon_cache_get_directory_index (dir->cache, dir->subdir);
-              has_icons = _gtk_icon_cache_has_icons (dir->cache, dir->subdir);
+              dir->cache = gtk_icon_cache_ref (dir_mtime->cache);
+              dir->subdir_index = gtk_icon_cache_get_directory_index (dir->cache, dir->subdir);
+              has_icons = gtk_icon_cache_has_icons (dir->cache, dir->subdir);
             }
           else
             {
