@@ -41,7 +41,7 @@
 #include "gtkcsspalettevalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkdebug.h"
-#include "gtkiconcache.h"
+#include "gtkiconcacheprivate.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtksettingsprivate.h"

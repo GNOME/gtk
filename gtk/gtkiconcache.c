@@ -18,7 +18,7 @@
 #include "config.h"
 
 #include "gtkdebug.h"
-#include "gtkiconcache.h"
+#include "gtkiconcacheprivate.h"
 #include "gtkiconcachevalidator.h"
 
 #include <glib/gstdio.h>
