@@ -116,6 +116,7 @@
 #include <gtk/gtkgesturepan.h>
 #include <gtk/gtkgesturerotate.h>
 #include <gtk/gtkgesturesingle.h>
+#include <gtk/gtkgesturestylus.h>
 #include <gtk/gtkgestureswipe.h>
 #include <gtk/gtkgesturezoom.h>
 #include <gtk/gtkglarea.h>
