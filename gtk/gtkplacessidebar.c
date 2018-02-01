@@ -63,7 +63,11 @@
 #include "gtkmodelbutton.h"
 #include "gtkprivate.h"
 
-/**
+/*< private >
+ * SECTION:gtkplacessidebar
+ * @Title: GtkPlacesSidebar
+ * @Short_description: The locations sidebar for the file selection widget
+ *
  * #GtkPlacesSidebar is a widget that displays a list of frequently-used places in the
  * file system:  the user’s home directory, the user’s bookmarks, and volumes and drives.
  * This widget is used as a sidebar in #GtkFileChooser and may be used by file managers
