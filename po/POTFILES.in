@@ -162,6 +162,7 @@ gtk/gtkgesturemultipress.c
 gtk/gtkgesturepan.c
 gtk/gtkgesturerotate.c
 gtk/gtkgesturesingle.c
+gtk/gtkgesturestylus.c
 gtk/gtkgestureswipe.c
 gtk/gtkgesturezoom.c
 gtk/gtkglarea.c

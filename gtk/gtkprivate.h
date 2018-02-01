@@ -93,6 +93,13 @@ void             gtk_propagate_event_internal  (GtkWidget       *widget,
                                                 GdkEvent        *event,
                                                 GtkWidget       *topmost);
 
+gboolean         gtk_widget_translate_coordinatesf (GtkWidget  *src_widget,
+                                                    GtkWidget  *dest_widget,
+                                                    double      src_x,
+                                                    double      src_y,
+                                                    double     *dest_x,
+                                                    double     *dest_y);
+
 GtkWidget *     _gtk_toplevel_pick (GtkWindow *toplevel,
                                     gdouble    x,
                                     gdouble    y,
