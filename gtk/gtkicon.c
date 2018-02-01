@@ -33,6 +33,13 @@
  * but a widget is needed for other reasons.
  */
 
+struct _GtkIcon
+{
+  GtkWidget parent;
+
+  GtkCssImageBuiltinType image;
+};
+
 G_DEFINE_TYPE (GtkIcon, gtk_icon, GTK_TYPE_WIDGET)
 
 static void
