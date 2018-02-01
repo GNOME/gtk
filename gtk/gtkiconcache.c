@@ -19,7 +19,7 @@
 
 #include "gtkdebug.h"
 #include "gtkiconcacheprivate.h"
-#include "gtkiconcachevalidator.h"
+#include "gtkiconcachevalidatorprivate.h"
 
 #include <glib/gstdio.h>
 #include <gdk-pixbuf/gdk-pixdata.h>

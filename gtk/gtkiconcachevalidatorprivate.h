@@ -14,9 +14,8 @@
  * You should have received a copy of the GNU Library General Public
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __GTK_ICON_CACHE_VALIDATOR_H__
-#define __GTK_ICON_CACHE_VALIDATOR_H__
-
+#ifndef __GTK_ICON_CACHE_VALIDATOR_PRIVATE_H__
+#define __GTK_ICON_CACHE_VALIDATOR_PRIVATE_H__
 
 #include <glib.h>
 
@@ -35,8 +34,8 @@ typedef struct {
   gint flags;
 } CacheInfo;
 
-gboolean _gtk_icon_cache_validate (CacheInfo *info);
+gboolean gtk_icon_cache_validate (CacheInfo *info);
 
 G_END_DECLS
 
-#endif  /* __GTK_ICON_CACHE_VALIDATOR_H__ */
+#endif  /* __GTK_ICON_CACHE_VALIDATOR_PRIVATE_H__ */
