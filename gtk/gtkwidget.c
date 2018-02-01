@@ -8351,9 +8351,9 @@ gtk_widget_child_focus (GtkWidget       *widget,
  * navigation outside the widget, e.g. by calling
  * gtk_widget_child_focus() on the widget’s toplevel.
  *
- * The default ::keynav-failed handler returns %TRUE for
+ * The default ::keynav-failed handler returns %FALSE for
  * %GTK_DIR_TAB_FORWARD and %GTK_DIR_TAB_BACKWARD. For the other
- * values of #GtkDirectionType it returns %FALSE.
+ * values of #GtkDirectionType it returns %TRUE.
  *
  * Whenever the default handler returns %TRUE, it also calls
  * gtk_widget_error_bell() to notify the user of the failed keyboard
