@@ -467,6 +467,7 @@ icon_browser_window_init (IconBrowserWindow *win)
   setup_image_dnd (win->image3);
   setup_image_dnd (win->image4);
   setup_image_dnd (win->image5);
+  setup_image_dnd (win->image6);
   setup_scalable_image_dnd (win->image6);
 
   win->contexts = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, context_free);
