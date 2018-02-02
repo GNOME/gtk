@@ -121,7 +121,7 @@
 #include "gtkseparator.h"
 #include "gtkmodelbutton.h"
 #include "gtkwidgetprivate.h"
-#include "gtkactionmuxer.h"
+#include "gtkactionmuxerprivate.h"
 #include "gtkmenutracker.h"
 #include "gtkstack.h"
 #include "gtksizegroup.h"

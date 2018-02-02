@@ -20,11 +20,9 @@
 #include "config.h"
 
 #include "gtkmenutrackeritem.h"
-#include "gtkactionmuxer.h"
+#include "gtkactionmuxerprivate.h"
 #include "gtkdebug.h"
 #include "gtkintl.h"
-
-#include "gtkactionmuxer.h"
 
 #include <string.h>
 

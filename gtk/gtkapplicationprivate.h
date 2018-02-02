@@ -24,7 +24,7 @@
 #include "gtkapplicationwindow.h"
 #include "gtkwindowprivate.h"
 
-#include "gtkactionmuxer.h"
+#include "gtkactionmuxerprivate.h"
 #include "gtkapplicationaccelsprivate.h"
 
 G_BEGIN_DECLS

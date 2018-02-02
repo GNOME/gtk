@@ -19,7 +19,7 @@
 
 #include "config.h"
 
-#include "gtkactionmuxer.h"
+#include "gtkactionmuxerprivate.h"
 
 #include "gtkactionobservable.h"
 #include "gtkactionobserver.h"

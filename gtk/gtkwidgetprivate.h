@@ -29,7 +29,7 @@
 #include "gtkwidget.h"
 #include "gtkcontainer.h"
 #include "gtkeventcontroller.h"
-#include "gtkactionmuxer.h"
+#include "gtkactionmuxerprivate.h"
 #include "gtksizerequestcacheprivate.h"
 
 G_BEGIN_DECLS
