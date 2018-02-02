@@ -2283,7 +2283,7 @@ gtk_notebook_gesture_pressed (GtkGestureMultiPress *gesture,
   button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
 
-  if (gdk_event_get_event_type (event) != GDK_BUTTON_PRESS || !priv->children)
+  if (!priv->children)
     return;
 
   arrow = gtk_notebook_get_arrow (notebook, x, y);
