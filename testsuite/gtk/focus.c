@@ -24,7 +24,7 @@ test_window_focus (void)
 
   g_assert (gtk_window_get_focus (GTK_WINDOW (window)) == entry1);
 
-  gtk_widget_show_now (window);
+  gtk_widget_show (window);
 
   g_assert (gtk_window_get_focus (GTK_WINDOW (window)) == entry1);
 
