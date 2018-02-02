@@ -620,8 +620,6 @@ gdk_event_prepare (GSource *source,
 {
   gboolean retval;
 
-  gdk_threads_enter ();
-
   /* The prepare stage is the stage before the main loop starts polling
    * and dispatching events. The autorelease poll is drained here for
    * the preceding main loop iteration or, in case of the first iteration,
@@ -655,8 +653,6 @@ gdk_event_prepare (GSource *source,
     retval = (_gdk_event_queue_find_first (_gdk_display) != NULL ||
               _gdk_quartz_event_loop_check_pending ());
 
-  gdk_threads_leave ();
-
   return retval;
 }
 
@@ -665,15 +661,11 @@ gdk_event_check (GSource *source)
 {
   gboolean retval;
 
-  gdk_threads_enter ();
-
   if (_gdk_display->event_pause_count > 0)
     retval = _gdk_event_queue_find_first (_gdk_display) != NULL;
   else
     retval = (_gdk_event_queue_find_first (_gdk_display) != NULL ||
               _gdk_quartz_event_loop_check_pending ());
-
-  gdk_threads_leave ();
 
   return retval;
 }
@@ -685,8 +677,6 @@ gdk_event_dispatch (GSource     *source,
 {
   GdkEvent *event;
 
-  gdk_threads_enter ();
-
   _gdk_quartz_display_queue_events (_gdk_display);
 
   event = _gdk_event_unqueue (_gdk_display);
@@ -697,8 +687,6 @@ gdk_event_dispatch (GSource     *source,
 
       gdk_event_free (event);
     }
-
-  gdk_threads_leave ();
 
   return TRUE;
 }

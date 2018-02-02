@@ -351,8 +351,6 @@ gtk_application_before_emit (GApplication *g_application,
 {
   GtkApplication *application = GTK_APPLICATION (g_application);
 
-  gdk_threads_enter ();
-
   gtk_application_impl_before_emit (application->priv->impl, platform_data);
 }
 
@@ -360,7 +358,6 @@ static void
 gtk_application_after_emit (GApplication *application,
                             GVariant     *platform_data)
 {
-  gdk_threads_leave ();
 }
 
 static void

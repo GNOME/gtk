@@ -1732,9 +1732,7 @@ _gdk_quartz_display_queue_events (GdkDisplay *display)
 	  g_list_free_1 (node);
 	  gdk_event_free (event);
 
-          gdk_threads_leave ();
           [NSApp sendEvent:nsevent];
-          gdk_threads_enter ();
         }
 
       _gdk_quartz_event_loop_release_event (nsevent);

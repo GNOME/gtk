@@ -979,11 +979,7 @@ gtk_main (void)
   main_loops = g_slist_prepend (main_loops, loop);
 
   if (g_main_loop_is_running (main_loops->data))
-    {
-      gdk_threads_leave ();
-      g_main_loop_run (loop);
-      gdk_threads_enter ();
-    }
+    g_main_loop_run (loop);
 
   main_loops = g_slist_remove (main_loops, loop);
 
@@ -1056,11 +1052,7 @@ gtk_main_sync (void)
   g_source_set_name_by_id (store_timeout, "[gtk+] gtk_main_sync clipboard store timeout");
 
   if (g_main_loop_is_running (store.store_loop))
-    {
-      gdk_threads_leave ();
-      g_main_loop_run (store.store_loop);
-      gdk_threads_enter ();
-    }
+    g_main_loop_run (store.store_loop);
   
   g_cancellable_cancel (cancel);
   g_object_unref (cancel);
@@ -1124,13 +1116,7 @@ gtk_main_quit (void)
 gboolean
 gtk_events_pending (void)
 {
-  gboolean result;
-
-  gdk_threads_leave ();
-  result = g_main_context_pending (NULL);
-  gdk_threads_enter ();
-
-  return result;
+  return g_main_context_pending (NULL);
 }
 
 /**
@@ -1149,9 +1135,7 @@ gtk_events_pending (void)
 gboolean
 gtk_main_iteration (void)
 {
-  gdk_threads_leave ();
   g_main_context_iteration (NULL, TRUE);
-  gdk_threads_enter ();
 
   if (main_loops)
     return !g_main_loop_is_running (main_loops->data);
@@ -1173,9 +1157,7 @@ gtk_main_iteration (void)
 gboolean
 gtk_main_iteration_do (gboolean blocking)
 {
-  gdk_threads_leave ();
   g_main_context_iteration (NULL, blocking);
-  gdk_threads_enter ();
 
   if (main_loops)
     return !g_main_loop_is_running (main_loops->data);

@@ -4735,15 +4735,12 @@ file_system_model_got_thumbnail (GObject      *object,
   if (queried == NULL)
     return;
 
-  gdk_threads_enter ();
-
   /* now we know model is valid */
 
   /* file was deleted */
   if (!_gtk_file_system_model_get_iter_for_file (model, &iter, file))
     {
       g_object_unref (queried);
-      gdk_threads_leave ();
       return;
     }
 
@@ -4757,8 +4754,6 @@ file_system_model_got_thumbnail (GObject      *object,
 
   g_object_unref (info);
   g_object_unref (queried);
-
-  gdk_threads_leave ();
 }
 
 static gboolean

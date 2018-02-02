@@ -1220,11 +1220,7 @@ gtk_dialog_run (GtkDialog *dialog)
                       &ri);
 
   ri.loop = g_main_loop_new (NULL, FALSE);
-
-  gdk_threads_leave ();
   g_main_loop_run (ri.loop);
-  gdk_threads_enter ();
-
   g_main_loop_unref (ri.loop);
 
   ri.loop = NULL;

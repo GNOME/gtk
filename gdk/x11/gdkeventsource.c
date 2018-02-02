@@ -409,8 +409,6 @@ gdk_event_source_prepare (GSource *source,
   GdkDisplay *display = ((GdkEventSource*) source)->display;
   gboolean retval;
 
-  gdk_threads_enter ();
-
   *timeout = -1;
 
   if (display->event_pause_count > 0)
@@ -418,8 +416,6 @@ gdk_event_source_prepare (GSource *source,
   else
     retval = (_gdk_event_queue_find_first (display) != NULL ||
               gdk_check_xpending (display));
-
-  gdk_threads_leave ();
 
   return retval;
 }
@@ -430,8 +426,6 @@ gdk_event_source_check (GSource *source)
   GdkEventSource *event_source = (GdkEventSource*) source;
   gboolean retval;
 
-  gdk_threads_enter ();
-
   if (event_source->display->event_pause_count > 0)
     retval = _gdk_event_queue_find_first (event_source->display) != NULL;
   else if (event_source->event_poll_fd.revents & G_IO_IN)
@@ -439,8 +433,6 @@ gdk_event_source_check (GSource *source)
               gdk_check_xpending (event_source->display));
   else
     retval = FALSE;
-
-  gdk_threads_leave ();
 
   return retval;
 }
@@ -491,8 +483,6 @@ gdk_event_source_dispatch (GSource     *source,
   GdkDisplay *display = ((GdkEventSource*) source)->display;
   GdkEvent *event;
 
-  gdk_threads_enter ();
-
   event = gdk_display_get_event (display);
 
   if (event)
@@ -501,8 +491,6 @@ gdk_event_source_dispatch (GSource     *source,
 
       g_object_unref (event);
     }
-
-  gdk_threads_leave ();
 
   return TRUE;
 }

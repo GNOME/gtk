@@ -553,8 +553,6 @@ cups_print_cb (GtkPrintBackendCups *print_backend,
   GError *error = NULL;
   CupsPrintStreamData *ps = user_data;
 
-  gdk_threads_enter ();
-
   GTK_NOTE (PRINTING,
             g_print ("CUPS Backend: %s\n", G_STRFUNC));
 
@@ -589,8 +587,6 @@ cups_print_cb (GtkPrintBackendCups *print_backend,
 
   if (error)
     g_error_free (error);
-
-  gdk_threads_leave ();
 }
 
 typedef struct {
@@ -1709,12 +1705,10 @@ cups_request_job_info_cb (GtkPrintBackendCups *print_backend,
   int state;
   gboolean done;
 
-  gdk_threads_enter ();
-
   if (data->job == NULL)
     {
       cups_job_poll_data_free (data);
-      goto done;
+      return;
     }
 
   data->counter++;
@@ -1781,9 +1775,6 @@ cups_request_job_info_cb (GtkPrintBackendCups *print_backend,
     }
   else
     cups_job_poll_data_free (data);
-
-done:
-  gdk_threads_leave ();
 }
 
 static void
@@ -2682,8 +2673,6 @@ cups_request_printer_info_cb (GtkPrintBackendCups *cups_backend,
   gboolean          status_changed = FALSE;
   ipp_t            *response;
 
-  gdk_threads_enter ();
-
   GTK_NOTE (PRINTING,
             g_print ("CUPS Backend: %s\n", G_STRFUNC));
 
@@ -2783,8 +2772,6 @@ done:
     }
 
   printer_setup_info_free (info);
-
-  gdk_threads_leave ();
 }
 
 static void
@@ -3454,8 +3441,6 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
   gchar *remote_default_printer = NULL;
   GList *iter;
 
-  gdk_threads_enter ();
-
   list_has_changed = FALSE;
 
   GTK_NOTE (PRINTING,
@@ -3669,8 +3654,6 @@ done:
       set_default_printer (cups_backend, cups_backend->avahi_default_printer);
     }
 #endif
-
-  gdk_threads_leave ();
 }
 
 static void
@@ -3790,8 +3773,6 @@ cups_request_ppd_cb (GtkPrintBackendCups *print_backend,
   GtkPrinter *printer;
   struct stat data_info;
 
-  gdk_threads_enter ();
-
   GTK_NOTE (PRINTING,
             g_print ("CUPS Backend: %s\n", G_STRFUNC));
 
@@ -3815,7 +3796,7 @@ cups_request_ppd_cb (GtkPrintBackendCups *print_backend,
 
       g_signal_emit_by_name (printer, "details-acquired", success);
 
-      goto done;
+      return;
     }
 #endif
 
@@ -3846,15 +3827,12 @@ cups_request_ppd_cb (GtkPrintBackendCups *print_backend,
                                  GTK_PRINTER_CUPS (printer)->port,
                                  GTK_PRINT_BACKEND_CUPS (gtk_printer_get_backend (printer)));
 
-      goto done;
+      return;
     }
 #endif
 
   gtk_printer_set_has_details (printer, TRUE);
   g_signal_emit_by_name (printer, "details-acquired", TRUE);
-
-done:
-  gdk_threads_leave ();
 }
 
 static gboolean
@@ -4204,8 +4182,6 @@ cups_request_default_printer_cb (GtkPrintBackendCups *print_backend,
   ipp_attribute_t *attr;
   GtkPrinter *printer;
 
-  gdk_threads_enter ();
-
   if (gtk_cups_result_is_error (result))
     {
       if (gtk_cups_result_get_error_type (result) == GTK_CUPS_ERROR_AUTH &&
@@ -4242,8 +4218,6 @@ cups_request_default_printer_cb (GtkPrintBackendCups *print_backend,
    */
   if (print_backend->list_printers_poll != 0)
     cups_request_printer_list (print_backend);
-
-  gdk_threads_leave ();
 }
 
 static gboolean

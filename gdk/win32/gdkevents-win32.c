@@ -3979,8 +3979,6 @@ gdk_event_prepare (GSource *source,
   GdkWin32EventSource *event_source = (GdkWin32EventSource *)source;
   gboolean retval;
 
-  gdk_threads_enter ();
-
   *timeout = -1;
 
   if (event_source->display->event_pause_count > 0)
@@ -3989,8 +3987,6 @@ gdk_event_prepare (GSource *source,
     retval = (_gdk_event_queue_find_first (event_source->display) != NULL ||
               (modal_win32_dialog == NULL &&
                GetQueueStatus (QS_ALLINPUT) != 0));
-
-  gdk_threads_leave ();
 
   return retval;
 }
@@ -4001,8 +3997,6 @@ gdk_event_check (GSource *source)
   GdkWin32EventSource *event_source = (GdkWin32EventSource *)source;
   gboolean retval;
 
-  gdk_threads_enter ();
-
   if (event_source->display->event_pause_count > 0)
     retval = _gdk_event_queue_find_first (event_source->display) != NULL;
   else if (event_source->event_poll_fd.revents & G_IO_IN)
@@ -4011,8 +4005,6 @@ gdk_event_check (GSource *source)
                GetQueueStatus (QS_ALLINPUT) != 0));
   else
     retval = FALSE;
-
-  gdk_threads_leave ();
 
   return retval;
 }
@@ -4024,8 +4016,6 @@ gdk_event_dispatch (GSource     *source,
 {
   GdkWin32EventSource *event_source = (GdkWin32EventSource *)source;
   GdkEvent *event;
-
-  gdk_threads_enter ();
 
   _gdk_win32_display_queue_events (event_source->display);
   event = _gdk_event_unqueue (event_source->display);
@@ -4046,8 +4036,6 @@ gdk_event_dispatch (GSource     *source,
           sel_win32->dnd_source_state = GDK_WIN32_DND_NONE;
         }
     }
-
-  gdk_threads_leave ();
 
   return TRUE;
 }
