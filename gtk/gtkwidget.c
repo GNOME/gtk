@@ -4861,11 +4861,10 @@ gtk_widget_get_origin_relative_to_parent (GtkWidget *widget,
  *
  * Translate coordinates relative to @src_widget’s allocation to coordinates
  * relative to @dest_widget’s allocations. In order to perform this
- * operation, both widgets must be realized, and must share a common
- * toplevel.
+ * operation, both widget must share a common toplevel.
  *
- * Returns: %FALSE if either widget was not realized, or there
- *   was no common ancestor. In this case, nothing is stored in
+ * Returns: %FALSE if @src_widget and @dest_widget have no common
+ *   ancestor. In this case, nothing is stored in
  *   *@dest_x and *@dest_y. Otherwise %TRUE.
  **/
 gboolean
@@ -4883,7 +4882,7 @@ gtk_widget_translate_coordinates (GtkWidget  *src_widget,
   g_return_val_if_fail (GTK_IS_WIDGET (dest_widget), FALSE);
 
   ancestor = gtk_widget_common_ancestor (src_widget, dest_widget);
-  if (!ancestor || !_gtk_widget_get_realized (src_widget) || !_gtk_widget_get_realized (dest_widget))
+  if (!ancestor)
     {
       if (dest_x)
         *dest_x = 0;
