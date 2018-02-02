@@ -441,7 +441,7 @@ struct _GdkGLTexture {
   GdkTexture parent_instance;
 
   GdkGLContext *context;
-  int id;
+  guint id;
 
   cairo_surface_t *saved;
 
@@ -535,7 +535,7 @@ gdk_gl_texture_get_context (GdkGLTexture *self)
   return self->context;
 }
 
-int
+guint
 gdk_gl_texture_get_id (GdkGLTexture *self)
 {
   return self->id;
@@ -711,7 +711,7 @@ gdk_texture_new_from_file (GFile   *file,
  **/
 GdkTexture *
 gdk_texture_new_for_gl (GdkGLContext   *context,
-                        int             id,
+                        guint           id,
                         int             width,
                         int             height,
                         GDestroyNotify  destroy,

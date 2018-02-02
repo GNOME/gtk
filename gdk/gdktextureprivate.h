@@ -49,7 +49,7 @@ gpointer                gdk_texture_get_render_data     (GdkTexture             
 G_DECLARE_FINAL_TYPE (GdkGLTexture, gdk_gl_texture, GDK, GL_TEXTURE, GdkTexture)
 
 GdkGLContext *          gdk_gl_texture_get_context      (GdkGLTexture           *self);
-int                     gdk_gl_texture_get_id           (GdkGLTexture           *self);
+guint                   gdk_gl_texture_get_id           (GdkGLTexture           *self);
 
 G_END_DECLS
 
