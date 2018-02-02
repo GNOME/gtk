@@ -7074,8 +7074,6 @@ drag_scan_timeout (gpointer data)
   GdkRectangle visible_rect;
   GdkSeat *seat;
 
-  gdk_threads_enter ();
-
   tree_view = GTK_TREE_VIEW (data);
 
   seat = gdk_display_get_default_seat (gtk_widget_get_display (GTK_WIDGET (tree_view)));
@@ -7110,8 +7108,6 @@ drag_scan_timeout (gpointer data)
           gtk_tree_path_free (path);
         }
     }
-
-  gdk_threads_leave ();
 
   return TRUE;
 }

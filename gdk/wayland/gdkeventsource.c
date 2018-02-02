@@ -115,8 +115,6 @@ gdk_event_source_dispatch (GSource     *base,
   GdkDisplay *display = source->display;
   GdkEvent *event;
 
-  gdk_threads_enter ();
-
   event = gdk_display_get_event (display);
 
   if (event)
@@ -125,8 +123,6 @@ gdk_event_source_dispatch (GSource     *base,
 
       g_object_unref (event);
     }
-
-  gdk_threads_leave ();
 
   return TRUE;
 }

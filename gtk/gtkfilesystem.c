@@ -103,13 +103,9 @@ volumes_changed (GVolumeMonitor *volume_monitor,
 		 gpointer        volume,
 		 gpointer        user_data)
 {
-  GtkFileSystem *file_system;
+  GtkFileSystem *file_system = user_data;
 
-  gdk_threads_enter ();
-
-  file_system = GTK_FILE_SYSTEM (user_data);
   g_signal_emit (file_system, fs_signals[VOLUMES_CHANGED], 0, volume);
-  gdk_threads_leave ();
 }
 
 static void
@@ -413,10 +409,8 @@ query_info_callback (GObject      *source_object,
 
   if (async_data->callback)
     {
-      gdk_threads_enter ();
       ((GtkFileSystemGetInfoCallback) async_data->callback) (async_data->cancellable,
 							     file_info, error, async_data->data);
-      gdk_threads_leave ();
     }
 
   if (file_info)
@@ -473,11 +467,9 @@ drive_poll_for_media_cb (GObject      *source_object,
   g_drive_poll_for_media_finish (G_DRIVE (source_object), result, &error);
   async_data = (AsyncFuncData *) user_data;
 
-  gdk_threads_enter ();
   ((GtkFileSystemVolumeMountCallback) async_data->callback) (async_data->cancellable,
 							     (GtkFileSystemVolume *) source_object,
 							     error, async_data->data);
-  gdk_threads_leave ();
 
   if (error)
     g_error_free (error);
@@ -494,11 +486,9 @@ volume_mount_cb (GObject      *source_object,
   g_volume_mount_finish (G_VOLUME (source_object), result, &error);
   async_data = (AsyncFuncData *) user_data;
 
-  gdk_threads_enter ();
   ((GtkFileSystemVolumeMountCallback) async_data->callback) (async_data->cancellable,
 							     (GtkFileSystemVolume *) source_object,
 							     error, async_data->data);
-  gdk_threads_leave ();
 
   if (error)
     g_error_free (error);
@@ -565,10 +555,8 @@ enclosing_volume_mount_cb (GObject      *source_object,
   if (error && g_error_matches (error, G_IO_ERROR, G_IO_ERROR_ALREADY_MOUNTED))
     g_clear_error (&error);
 
-  gdk_threads_enter ();
   ((GtkFileSystemVolumeMountCallback) async_data->callback) (async_data->cancellable, volume,
 							     error, async_data->data);
-  gdk_threads_leave ();
 
   if (error)
     g_error_free (error);

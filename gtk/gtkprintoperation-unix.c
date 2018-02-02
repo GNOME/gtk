@@ -390,11 +390,7 @@ unix_end_run (GtkPrintOperation *op,
     {
       g_object_ref (op);
       if (!op_unix->data_sent)
-	{
-	  gdk_threads_leave ();  
-	  g_main_loop_run (op_unix->loop);
-	  gdk_threads_enter ();  
-	}
+	g_main_loop_run (op_unix->loop);
       g_main_loop_unref (op_unix->loop);
       op_unix->loop = NULL;
       g_object_unref (op);
@@ -881,10 +877,7 @@ gtk_print_operation_unix_run_dialog (GtkPrintOperation *op,
       find_printer (printer_name,
 		    (GFunc) found_printer, &rdata);
 
-      gdk_threads_leave ();  
       g_main_loop_run (rdata.loop);
-      gdk_threads_enter ();  
-
       g_main_loop_unref (rdata.loop);
       rdata.loop = NULL;
     }

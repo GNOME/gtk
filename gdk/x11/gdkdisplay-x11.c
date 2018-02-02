@@ -1731,11 +1731,7 @@ process_internal_connection (GIOChannel  *gioc,
 {
   GdkInternalConnection *connection = (GdkInternalConnection *)data;
 
-  gdk_threads_enter ();
-
   XProcessInternalConnection ((Display*)connection->display, connection->fd);
-
-  gdk_threads_leave ();
 
   return TRUE;
 }

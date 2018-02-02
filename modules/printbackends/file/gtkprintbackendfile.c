@@ -378,11 +378,10 @@ typedef struct {
   GDestroyNotify dnotify;
 } _PrintStreamData;
 
-/* expects GDK lock to be held */
 static void
-file_print_cb_locked (GtkPrintBackendFile *print_backend,
-                      GError              *error,
-                      gpointer            user_data)
+file_print_cb (GtkPrintBackendFile *print_backend,
+               GError              *error,
+               gpointer            user_data)
 {
   gchar *uri;
 
@@ -399,7 +398,9 @@ file_print_cb_locked (GtkPrintBackendFile *print_backend,
     ps->dnotify (ps->user_data);
 
   gtk_print_job_set_status (ps->job,
-			    (error != NULL)?GTK_PRINT_STATUS_FINISHED_ABORTED:GTK_PRINT_STATUS_FINISHED);
+			    (error != NULL)
+                              ? GTK_PRINT_STATUS_FINISHED_ABORTED
+                              : GTK_PRINT_STATUS_FINISHED);
 
   recent_manager = gtk_recent_manager_get_default ();
   uri = output_file_from_settings (gtk_print_job_get_settings (ps->job), NULL);
@@ -410,18 +411,6 @@ file_print_cb_locked (GtkPrintBackendFile *print_backend,
     g_object_unref (ps->job);
 
   g_free (ps);
-}
-
-static void
-file_print_cb (GtkPrintBackendFile *print_backend,
-               GError              *error,
-               gpointer            user_data)
-{
-  gdk_threads_enter ();
-
-  file_print_cb_locked (print_backend, error, user_data);
-
-  gdk_threads_leave ();
 }
 
 static gboolean
@@ -515,8 +504,8 @@ gtk_print_backend_file_print_stream (GtkPrintBackend        *print_backend,
 error:
   if (internal_error != NULL)
     {
-      file_print_cb_locked (GTK_PRINT_BACKEND_FILE (print_backend),
-                            internal_error, ps);
+      file_print_cb (GTK_PRINT_BACKEND_FILE (print_backend),
+                     internal_error, ps);
 
       g_error_free (internal_error);
       return;

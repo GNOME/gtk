@@ -201,10 +201,7 @@ bookmarks_file_changed (GFileMonitor      *monitor,
     case G_FILE_MONITOR_EVENT_DELETED:
       g_slist_free_full (manager->bookmarks, _gtk_bookmark_free);
       manager->bookmarks = read_bookmarks (file);
-
-      gdk_threads_enter ();
       notify_changed (manager);
-      gdk_threads_leave ();
       break;
 
     case G_FILE_MONITOR_EVENT_ATTRIBUTE_CHANGED:

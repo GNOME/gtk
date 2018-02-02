@@ -641,9 +641,7 @@ gtk_native_dialog_run (GtkNativeDialog *self)
 
   gtk_native_dialog_show (self);
 
-  gdk_threads_leave ();
   g_main_loop_run (priv->run_loop);
-  gdk_threads_enter ();
 
   g_signal_handler_disconnect (self, response_handler);
 

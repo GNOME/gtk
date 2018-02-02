@@ -1137,8 +1137,6 @@ gtk_file_system_model_got_files (GObject *object, GAsyncResult *res, gpointer da
   GList *walk, *files;
   GError *error = NULL;
 
-  gdk_threads_enter ();
-
   files = g_file_enumerator_next_files_finish (enumerator, res, &error);
 
   if (files)
@@ -1203,8 +1201,6 @@ gtk_file_system_model_got_files (GObject *object, GAsyncResult *res, gpointer da
       if (error)
         g_error_free (error);
     }
-
-  gdk_threads_leave ();
 }
 
 static void
@@ -1221,16 +1217,12 @@ gtk_file_system_model_query_done (GObject *     object,
   if (info == NULL)
     return;
 
-  gdk_threads_enter ();
-
   _gtk_file_system_model_update_file (model, file, info);
 
   id = node_get_for_file (model, file);
   gtk_file_system_model_sort_node (model, id);
 
   g_object_unref (info);
-
-  gdk_threads_leave ();
 }
 
 static void
@@ -1255,9 +1247,7 @@ gtk_file_system_model_monitor_change (GFileMonitor *      monitor,
                                  model);
         break;
       case G_FILE_MONITOR_EVENT_DELETED:
-	gdk_threads_enter ();
         remove_file (model, file);
-	gdk_threads_leave ();
         break;
       case G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
         /* FIXME: use freeze/thaw with this somehow? */
@@ -1279,8 +1269,6 @@ gtk_file_system_model_got_enumerator (GObject *dir, GAsyncResult *res, gpointer 
   GtkFileSystemModel *model = data;
   GFileEnumerator *enumerator;
   GError *error = NULL;
-
-  gdk_threads_enter ();
 
   enumerator = g_file_enumerate_children_finish (G_FILE (dir), res, &error);
   if (enumerator == NULL)
@@ -1310,8 +1298,6 @@ gtk_file_system_model_got_enumerator (GObject *dir, GAsyncResult *res, gpointer 
                           G_CALLBACK (gtk_file_system_model_monitor_change),
                           model);
     }
-
-  gdk_threads_leave ();
 }
 
 static void

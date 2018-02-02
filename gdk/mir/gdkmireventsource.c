@@ -708,8 +708,6 @@ gdk_mir_event_source_dispatch (GSource     *g_source,
    * back here again.
    */
 
-  gdk_threads_enter ();
-
   event = gdk_display_get_event (source->display);
 
   if (event)
@@ -718,8 +716,6 @@ gdk_mir_event_source_dispatch (GSource     *g_source,
 
       gdk_event_free (event);
     }
-
-  gdk_threads_leave ();
 
   return TRUE;
 }

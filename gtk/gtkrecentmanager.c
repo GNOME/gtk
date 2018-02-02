@@ -546,9 +546,7 @@ gtk_recent_manager_monitor_changed (GFileMonitor      *monitor,
     case G_FILE_MONITOR_EVENT_CHANGED:
     case G_FILE_MONITOR_EVENT_CREATED:
     case G_FILE_MONITOR_EVENT_DELETED:
-      gdk_threads_enter ();
       gtk_recent_manager_changed (manager);
-      gdk_threads_leave ();
       break;
 
     case G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
@@ -814,8 +812,6 @@ gtk_recent_manager_add_item_query_info (GObject      *source_object,
   recent_data.groups = NULL;
   recent_data.is_private = FALSE;
 
-  gdk_threads_enter ();
-
   /* Ignore return value, this can't fail anyway since all required
    * fields are set
    */
@@ -823,8 +819,6 @@ gtk_recent_manager_add_item_query_info (GObject      *source_object,
 
   manager->priv->is_dirty = TRUE;
   gtk_recent_manager_changed (manager);
-
-  gdk_threads_leave ();
 
   g_free (recent_data.mime_type);
   g_free (recent_data.app_name);

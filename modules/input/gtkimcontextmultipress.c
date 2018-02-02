@@ -201,8 +201,6 @@ on_timeout (gpointer data)
 {
   GtkImContextMultipress *multipress_context;
 
-  gdk_threads_enter ();
-
   multipress_context = GTK_IM_CONTEXT_MULTIPRESS (data);
 
   /* A certain amount of time has passed, so we will assume that the user
@@ -210,8 +208,6 @@ on_timeout (gpointer data)
   accept_character (multipress_context, multipress_context->tentative_match);
 
   multipress_context->timeout_id = 0;
-
-  gdk_threads_leave ();
 
   return G_SOURCE_REMOVE; /* don't call me again */
 }

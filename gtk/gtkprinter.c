@@ -1267,10 +1267,7 @@ gtk_enumerate_printers (GtkPrinterFunc func,
   if (wait && printer_list->backends)
     {
       printer_list->loop = g_main_loop_new (NULL, FALSE);
-
-      gdk_threads_leave ();  
       g_main_loop_run (printer_list->loop);
-      gdk_threads_enter ();  
     }
 }
 
