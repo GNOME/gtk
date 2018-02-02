@@ -138,6 +138,7 @@ main(int argc, char **argv)
                             cairo_image_surface_get_data (surface),
                             cairo_image_surface_get_stride (surface));
       cairo_surface_mark_dirty (surface);
+      gsk_renderer_unrealize (renderer);
       g_object_unref (texture);
       g_object_unref (window);
       g_object_unref (renderer);
