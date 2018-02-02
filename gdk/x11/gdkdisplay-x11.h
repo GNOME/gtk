@@ -44,7 +44,7 @@ struct _GdkX11Display
   GdkX11Screen *screen;
   GList *screens;
   GList *toplevels;
-  GdkX11DeviceManagerCore *device_manager;
+  GdkX11DeviceManagerXI2 *device_manager;
 
   GSource *event_source;
 

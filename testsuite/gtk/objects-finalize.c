@@ -110,7 +110,6 @@ main (int argc, char **argv)
 	  all_types[i] != GDK_TYPE_X11_WINDOW &&
 	  all_types[i] != GDK_TYPE_X11_SCREEN &&
 	  all_types[i] != GDK_TYPE_X11_DISPLAY &&
-	  all_types[i] != GDK_TYPE_X11_DEVICE_MANAGER_CORE &&
 	  all_types[i] != GDK_TYPE_X11_DEVICE_MANAGER_XI2 &&
 	  all_types[i] != GDK_TYPE_X11_GL_CONTEXT &&
 #endif
