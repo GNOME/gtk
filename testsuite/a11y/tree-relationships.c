@@ -219,7 +219,7 @@ static void
 process_pending_idles ()
 {
   GMainLoop *loop = g_main_loop_new (NULL, FALSE);
-  gdk_threads_add_idle (quit_loop, loop);
+  g_idle_add (quit_loop, loop);
   g_main_loop_run (loop);
 }
 

@@ -180,7 +180,7 @@ send_batch (SearchThreadData *data)
       batch->hits = data->hits;
       batch->thread_data = data;
 
-      id = gdk_threads_add_idle (search_thread_add_hits_idle, batch);
+      id = g_idle_add (search_thread_add_hits_idle, batch);
       g_source_set_name_by_id (id, "[gtk+] search_thread_add_hits_idle");
     }
 
@@ -287,7 +287,7 @@ search_thread_func (gpointer user_data)
   if (!g_cancellable_is_cancelled (data->cancellable))
     send_batch (data);
 
-  id = gdk_threads_add_idle (search_thread_done_idle, data);
+  id = g_idle_add (search_thread_done_idle, data);
   g_source_set_name_by_id (id, "[gtk+] search_thread_done_idle");
 
   return NULL;

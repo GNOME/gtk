@@ -1051,10 +1051,10 @@ gtk_recent_chooser_menu_populate (GtkRecentChooserMenu *menu)
   /* remove our menu items first */
   gtk_recent_chooser_menu_dispose_items (menu);
 
-  priv->populate_id = gdk_threads_add_idle_full (G_PRIORITY_HIGH_IDLE + 30,
-  					         idle_populate_func,
-					         pdata,
-                                                 idle_populate_clean_up);
+  priv->populate_id = g_idle_add_full (G_PRIORITY_HIGH_IDLE + 30,
+                                       idle_populate_func,
+                                       pdata,
+                                       idle_populate_clean_up);
   g_source_set_name_by_id (priv->populate_id, "[gtk+] idle_populate_func");
 }
 

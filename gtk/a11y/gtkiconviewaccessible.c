@@ -113,7 +113,7 @@ gtk_icon_view_item_accessible_do_action (AtkAction *action,
 
   if (!item->action_idle_handler)
     {
-      item->action_idle_handler = gdk_threads_add_idle (idle_do_action, item);
+      item->action_idle_handler = g_idle_add (idle_do_action, item);
       g_source_set_name_by_id (item->action_idle_handler, "[gtk+] idle_do_action");
     }
 

@@ -771,10 +771,10 @@ reload_recent_items (GtkRecentChooserDefault *impl)
   set_busy_cursor (impl, TRUE);
 
   impl->priv->load_state = LOAD_EMPTY;
-  impl->priv->load_id = gdk_threads_add_idle_full (G_PRIORITY_HIGH_IDLE + 30,
-                                             load_recent_items,
-                                             impl,
-                                             cleanup_after_load);
+  impl->priv->load_id = g_idle_add_full (G_PRIORITY_HIGH_IDLE + 30,
+                                         load_recent_items,
+                                         impl,
+                                         cleanup_after_load);
   g_source_set_name_by_id (impl->priv->load_id, "[gtk+] load_recent_items");
 }
 

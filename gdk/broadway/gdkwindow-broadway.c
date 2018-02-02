@@ -115,7 +115,7 @@ queue_flush (GdkWindow *window)
 {
   if (flush_id == 0)
     {
-      flush_id = gdk_threads_add_idle (flush_idle, NULL);
+      flush_id = g_idle_add (flush_idle, NULL);
       g_source_set_name_by_id (flush_id, "[gtk+] flush_idle");
     }
 }

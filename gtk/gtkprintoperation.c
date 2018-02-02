@@ -639,10 +639,10 @@ preview_ready (GtkPrintOperationPreview *preview,
 
   g_object_ref (preview);
       
-  id = gdk_threads_add_idle_full (G_PRIORITY_DEFAULT_IDLE + 10,
-				  preview_print_idle,
-				  pop,
-				  preview_print_idle_done);
+  id = g_idle_add_full (G_PRIORITY_DEFAULT_IDLE + 10,
+                        preview_print_idle,
+                        pop,
+                        preview_print_idle_done);
   g_source_set_name_by_id (id, "[gtk+] preview_print_idle");
 }
 
@@ -3076,10 +3076,10 @@ print_pages (GtkPrintOperation       *op,
       priv->manual_number_up_layout = gtk_print_settings_get_number_up_layout (priv->print_settings);
     }
   
-  priv->print_pages_idle_id = gdk_threads_add_idle_full (G_PRIORITY_DEFAULT_IDLE + 10,
-					                 print_pages_idle, 
-					                 data, 
-					                 print_pages_idle_done);
+  priv->print_pages_idle_id = g_idle_add_full (G_PRIORITY_DEFAULT_IDLE + 10,
+                                               print_pages_idle,
+                                               data,
+                                               print_pages_idle_done);
   g_source_set_name_by_id (priv->print_pages_idle_id, "[gtk+] print_pages_idle");
   
   /* Recursive main loop to make sure we don't exit  on sync operations  */
