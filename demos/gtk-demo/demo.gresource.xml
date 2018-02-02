@@ -181,6 +181,7 @@
     <file>modelbutton.c</file>
     <file>overlay.c</file>
     <file>overlay2.c</file>
+    <file>paint.c</file>
     <file>pagesetup.c</file>
     <file>paintable.c</file>
     <file>paintable_animated.c</file>

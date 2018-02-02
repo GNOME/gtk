@@ -45,6 +45,7 @@ demos = files([
   'modelbutton.c',
   'overlay.c',
   'overlay2.c',
+  'paint.c',
   'paintable.c',
   'paintable_animated.c',
   'paintable_mediastream.c',
