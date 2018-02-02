@@ -136,7 +136,7 @@ prepare_callback (GtkWidget *widget, GtkWidget *page)
     {
       gtk_assistant_set_page_complete (GTK_ASSISTANT (widget), page, FALSE);
       gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (page), 0.0);
-      gdk_threads_add_timeout (300, (GSourceFunc) progress_timeout, widget);
+      g_timeout_add (300, (GSourceFunc) progress_timeout, widget);
     }
   else
     g_print ("prepare: %d\n", gtk_assistant_get_current_page (GTK_ASSISTANT (widget)));

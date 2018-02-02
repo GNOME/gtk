@@ -2076,8 +2076,7 @@ deliver_key_event (GdkWaylandSeat *seat,
 
   timeout = (seat->repeat_deadline - now) / 1000L;
 
-  seat->repeat_timer =
-    gdk_threads_add_timeout (timeout, keyboard_repeat, seat);
+  seat->repeat_timer = g_timeout_add (timeout, keyboard_repeat, seat);
   g_source_set_name_by_id (seat->repeat_timer, "[gtk+] keyboard_repeat");
 }
 

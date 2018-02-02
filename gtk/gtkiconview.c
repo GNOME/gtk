@@ -1851,8 +1851,7 @@ gtk_icon_view_motion (GtkEventController *controller,
 	  icon_view->priv->event_last_y = icon_view->priv->mouse_x;
 
 	  if (icon_view->priv->scroll_timeout_id == 0) {
-	    icon_view->priv->scroll_timeout_id = gdk_threads_add_timeout (30, rubberband_scroll_timeout, 
-								icon_view);
+	    icon_view->priv->scroll_timeout_id = g_timeout_add (30, rubberband_scroll_timeout, icon_view);
 	    g_source_set_name_by_id (icon_view->priv->scroll_timeout_id, "[gtk+] rubberband_scroll_timeout");
 	  }
  	}
@@ -6397,8 +6396,7 @@ gtk_icon_view_drag_motion (GtkWidget      *widget,
     {
       if (icon_view->priv->scroll_timeout_id == 0)
 	{
-	  icon_view->priv->scroll_timeout_id =
-	    gdk_threads_add_timeout (50, drag_scroll_timeout, icon_view);
+	  icon_view->priv->scroll_timeout_id = g_timeout_add (50, drag_scroll_timeout, icon_view);
 	  g_source_set_name_by_id (icon_view->priv->scroll_timeout_id, "[gtk+] drag_scroll_timeout");
 	}
 

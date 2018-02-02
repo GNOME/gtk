@@ -469,7 +469,7 @@ popup_leave	   (GtkWidget	       *widget,
       if (!popdown_timer)
 	{
 	  g_print ("added popdown\n");
-	  popdown_timer = gdk_threads_add_timeout (500, popdown_cb, NULL);
+	  popdown_timer = g_timeout_add (500, popdown_cb, NULL);
 	}
     }
 }
@@ -519,7 +519,7 @@ popup_cb (gpointer data)
       popped_up = TRUE;
     }
 
-  popdown_timer = gdk_threads_add_timeout (500, popdown_cb, NULL);
+  popdown_timer = g_timeout_add (500, popdown_cb, NULL);
   g_print ("added popdown\n");
 
   popup_timer = FALSE;
@@ -535,7 +535,7 @@ popsite_motion	   (GtkWidget	       *widget,
 		    guint               time)
 {
   if (!popup_timer)
-    popup_timer = gdk_threads_add_timeout (500, popup_cb, NULL);
+    popup_timer = g_timeout_add (500, popup_cb, NULL);
 
   return TRUE;
 }

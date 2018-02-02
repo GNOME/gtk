@@ -965,10 +965,10 @@ gtk_tooltip_hide_tooltip (GtkTooltip *tooltip)
       if (!tooltip->browse_mode_timeout_id)
         {
 	  tooltip->browse_mode_timeout_id =
-	    gdk_threads_add_timeout_full (0, timeout,
-					  tooltip_browse_mode_expired,
-					  g_object_ref (tooltip),
-					  g_object_unref);
+	    g_timeout_add_full (0, timeout,
+                                tooltip_browse_mode_expired,
+                                g_object_ref (tooltip),
+                                g_object_unref);
 	  g_source_set_name_by_id (tooltip->browse_mode_timeout_id, "[gtk+] tooltip_browse_mode_expired");
 	}
     }
@@ -1029,10 +1029,10 @@ gtk_tooltip_start_delay (GdkDisplay *display)
   else
     timeout = HOVER_TIMEOUT;
 
-  tooltip->timeout_id = gdk_threads_add_timeout_full (0, timeout,
-						      tooltip_popup_timeout,
-						      g_object_ref (display),
-						      g_object_unref);
+  tooltip->timeout_id = g_timeout_add_full (0, timeout,
+                                            tooltip_popup_timeout,
+                                            g_object_ref (display),
+                                            g_object_unref);
   g_source_set_name_by_id (tooltip->timeout_id, "[gtk+] tooltip_popup_timeout");
 }
 

@@ -5877,16 +5877,16 @@ blink_cb (gpointer data)
     } 
   else if (visible)
     {
-      priv->blink_timeout = gdk_threads_add_timeout (get_cursor_time (text_view) * CURSOR_OFF_MULTIPLIER / CURSOR_DIVIDER,
-						     blink_cb,
-						     text_view);
+      priv->blink_timeout = g_timeout_add (get_cursor_time (text_view) * CURSOR_OFF_MULTIPLIER / CURSOR_DIVIDER,
+                                           blink_cb,
+                                           text_view);
       g_source_set_name_by_id (priv->blink_timeout, "[gtk+] blink_cb");
     }
   else 
     {
-      priv->blink_timeout = gdk_threads_add_timeout (get_cursor_time (text_view) * CURSOR_ON_MULTIPLIER / CURSOR_DIVIDER,
-						     blink_cb,
-						     text_view);
+      priv->blink_timeout = g_timeout_add (get_cursor_time (text_view) * CURSOR_ON_MULTIPLIER / CURSOR_DIVIDER,
+                                           blink_cb,
+                                           text_view);
       g_source_set_name_by_id (priv->blink_timeout, "[gtk+] blink_cb");
       priv->blink_time += get_cursor_time (text_view);
     }
@@ -5935,9 +5935,9 @@ gtk_text_view_check_cursor_blink (GtkTextView *text_view)
 	    {
 	      gtk_text_layout_set_cursor_visible (priv->layout, TRUE);
 	      
-	      priv->blink_timeout = gdk_threads_add_timeout (get_cursor_time (text_view) * CURSOR_OFF_MULTIPLIER / CURSOR_DIVIDER,
-							     blink_cb,
-							     text_view);
+	      priv->blink_timeout = g_timeout_add (get_cursor_time (text_view) * CURSOR_OFF_MULTIPLIER / CURSOR_DIVIDER,
+                                                   blink_cb,
+                                                   text_view);
 	      g_source_set_name_by_id (priv->blink_timeout, "[gtk+] blink_cb");
 	    }
 	}
@@ -5967,9 +5967,9 @@ gtk_text_view_pend_cursor_blink (GtkTextView *text_view)
       gtk_text_view_stop_cursor_blink (text_view);
       gtk_text_layout_set_cursor_visible (priv->layout, TRUE);
       
-      priv->blink_timeout = gdk_threads_add_timeout (get_cursor_time (text_view) * CURSOR_PEND_MULTIPLIER / CURSOR_DIVIDER,
-						     blink_cb,
-						     text_view);
+      priv->blink_timeout = g_timeout_add (get_cursor_time (text_view) * CURSOR_PEND_MULTIPLIER / CURSOR_DIVIDER,
+                                           blink_cb,
+                                           text_view);
       g_source_set_name_by_id (priv->blink_timeout, "[gtk+] blink_cb");
     }
 }
@@ -7327,8 +7327,7 @@ gtk_text_view_drag_gesture_update (GtkGestureDrag *gesture,
   if (text_view->priv->scroll_timeout != 0) /* reset on every motion event */
     g_source_remove (text_view->priv->scroll_timeout);
 
-  text_view->priv->scroll_timeout =
-    gdk_threads_add_timeout (50, selection_scan_timeout, text_view);
+  text_view->priv->scroll_timeout = g_timeout_add (50, selection_scan_timeout, text_view);
   g_source_set_name_by_id (text_view->priv->scroll_timeout, "[gtk+] selection_scan_timeout");
 
   gtk_text_view_selection_bubble_popup_unset (text_view);
@@ -8021,8 +8020,7 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
 
   if (!priv->scroll_timeout)
   {
-    priv->scroll_timeout =
-      gdk_threads_add_timeout (100, drag_scan_timeout, text_view);
+    priv->scroll_timeout = g_timeout_add (100, drag_scan_timeout, text_view);
     g_source_set_name_by_id (text_view->priv->scroll_timeout, "[gtk+] drag_scan_timeout");
   }
 
@@ -9086,9 +9084,7 @@ gtk_text_view_selection_bubble_popup_set (GtkTextView *text_view)
   if (priv->selection_bubble_timeout_id)
     g_source_remove (priv->selection_bubble_timeout_id);
 
-  priv->selection_bubble_timeout_id =
-    gdk_threads_add_timeout (50, gtk_text_view_selection_bubble_popup_show,
-                             text_view);
+  priv->selection_bubble_timeout_id = g_timeout_add (50, gtk_text_view_selection_bubble_popup_show, text_view);
   g_source_set_name_by_id (priv->selection_bubble_timeout_id, "[gtk+] gtk_text_view_selection_bubble_popup_cb");
 }
 

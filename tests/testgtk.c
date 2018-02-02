@@ -2884,9 +2884,7 @@ entry_toggle_progress (GtkWidget *checkbutton,
 {
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbutton)))
     {
-      guint timeout = gdk_threads_add_timeout (100,
-                                               entry_progress_timeout,
-                                               entry);
+      guint timeout = g_timeout_add (100, entry_progress_timeout, entry);
       g_object_set_data_full (G_OBJECT (entry), "timeout-id",
                               GUINT_TO_POINTER (timeout),
                               entry_remove_timeout);

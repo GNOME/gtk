@@ -327,9 +327,9 @@ gtk_stack_switcher_drag_motion (GtkWidget      *widget,
 
   if (button && !priv->switch_timer)
     {
-      priv->switch_timer = gdk_threads_add_timeout (TIMEOUT_EXPAND,
-                                                    gtk_stack_switcher_switch_timeout,
-                                                    self);
+      priv->switch_timer = g_timeout_add (TIMEOUT_EXPAND,
+                                          gtk_stack_switcher_switch_timeout,
+                                          self);
       g_source_set_name_by_id (priv->switch_timer, "[gtk+] gtk_stack_switcher_switch_timeout");
     }
 

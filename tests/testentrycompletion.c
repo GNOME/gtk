@@ -389,7 +389,7 @@ main (int argc, char *argv[])
   gtk_entry_completion_set_text_column (completion, 0);
 
   /* Fill the completion dynamically */
-  gdk_threads_add_timeout (1000, (GSourceFunc) animation_timer, completion);
+  g_timeout_add (1000, (GSourceFunc) animation_timer, completion);
 
   /* Fourth entry */
   gtk_box_pack_start (GTK_BOX (vbox), gtk_label_new ("Model-less entry completion"));

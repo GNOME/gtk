@@ -1568,9 +1568,7 @@ _gtk_menu_item_popup_submenu (GtkWidget *widget,
           info->menu_item = menu_item;
           info->trigger_event = gtk_get_current_event ();
 
-          priv->timer = gdk_threads_add_timeout (popup_delay,
-                                                 gtk_menu_item_popup_timeout,
-                                                 info);
+          priv->timer = g_timeout_add (popup_delay, gtk_menu_item_popup_timeout, info);
           g_source_set_name_by_id (priv->timer, "[gtk+] gtk_menu_item_popup_timeout");
 
           return;
