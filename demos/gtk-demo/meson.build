@@ -45,6 +45,7 @@ demos = files([
   'modelbutton.c',
   'overlay.c',
   'overlay2.c',
+  'paint.c',
   'panes.c',
   'pickers.c',
   'pixbufs.c',
