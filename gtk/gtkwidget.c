@@ -11813,7 +11813,7 @@ gtk_widget_queue_tooltip_query (GtkWidget *widget)
 
   if (tooltip_query_id == 0)
     {
-      tooltip_query_id = gdk_threads_add_idle (tooltip_query_idle, NULL);
+      tooltip_query_id = g_idle_add (tooltip_query_idle, NULL);
       g_source_set_name_by_id (tooltip_query_id, "[gtk+] tooltip_query_idle");
     }
 }

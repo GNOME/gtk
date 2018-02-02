@@ -2930,7 +2930,7 @@ _gtk_window_notify_keys_changed (GtkWindow *window)
 
   if (!priv->keys_changed_handler)
     {
-      priv->keys_changed_handler = gdk_threads_add_idle (handle_keys_changed, window);
+      priv->keys_changed_handler = g_idle_add (handle_keys_changed, window);
       g_source_set_name_by_id (priv->keys_changed_handler, "[gtk+] handle_keys_changed");
     }
 }
@@ -11027,7 +11027,7 @@ gtk_window_update_debugging (void)
   if (inspector_window &&
       gtk_window_update_debugging_id == 0)
     {
-      gtk_window_update_debugging_id = gdk_threads_add_idle (update_debugging, NULL);
+      gtk_window_update_debugging_id = g_idle_add (update_debugging, NULL);
       g_source_set_name_by_id (gtk_window_update_debugging_id, "[gtk+] gtk_window_update_debugging");
     }
 }

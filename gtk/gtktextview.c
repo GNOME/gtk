@@ -2659,10 +2659,10 @@ queue_update_im_spot_location (GtkTextView *text_view)
    * so we don't wait until the entire buffer has been validated. */
   if (!priv->im_spot_idle)
     {
-      priv->im_spot_idle = gdk_threads_add_idle_full (GTK_TEXT_VIEW_PRIORITY_VALIDATE - 1,
-						      do_update_im_spot_location,
-						      text_view,
-						      NULL);
+      priv->im_spot_idle = g_idle_add_full (GTK_TEXT_VIEW_PRIORITY_VALIDATE - 1,
+                                            do_update_im_spot_location,
+                                            text_view,
+                                            NULL);
       g_source_set_name_by_id (priv->im_spot_idle, "[gtk+] do_update_im_spot_location");
     }
 }
@@ -4397,7 +4397,7 @@ gtk_text_view_invalidate (GtkTextView *text_view)
   
   if (!priv->first_validate_idle)
     {
-      priv->first_validate_idle = gdk_threads_add_idle_full (GTK_PRIORITY_RESIZE - 2, first_validate_callback, text_view, NULL);
+      priv->first_validate_idle = g_idle_add_full (GTK_PRIORITY_RESIZE - 2, first_validate_callback, text_view, NULL);
       g_source_set_name_by_id (priv->first_validate_idle, "[gtk+] first_validate_callback");
       DV (g_print (G_STRLOC": adding first validate idle %d\n",
                    priv->first_validate_idle));
@@ -4405,7 +4405,7 @@ gtk_text_view_invalidate (GtkTextView *text_view)
       
   if (!priv->incremental_validate_idle)
     {
-      priv->incremental_validate_idle = gdk_threads_add_idle_full (GTK_TEXT_VIEW_PRIORITY_VALIDATE, incremental_validate_callback, text_view, NULL);
+      priv->incremental_validate_idle = g_idle_add_full (GTK_TEXT_VIEW_PRIORITY_VALIDATE, incremental_validate_callback, text_view, NULL);
       g_source_set_name_by_id (priv->incremental_validate_idle, "[gtk+] incremental_validate_callback");
       DV (g_print (G_STRLOC": adding incremental validate idle %d\n",
                    priv->incremental_validate_idle));

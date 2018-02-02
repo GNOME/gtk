@@ -734,9 +734,10 @@ queue_theme_changed (GtkIconTheme *icon_theme)
 
   if (!priv->theme_changed_idle)
     {
-      priv->theme_changed_idle =
-        gdk_threads_add_idle_full (GTK_PRIORITY_RESIZE - 2,
-                                   theme_changed_idle, icon_theme, NULL);
+      priv->theme_changed_idle = g_idle_add_full (GTK_PRIORITY_RESIZE - 2,
+                                                  theme_changed_idle,
+                                                  icon_theme,
+                                                  NULL);
       g_source_set_name_by_id (priv->theme_changed_idle, "[gtk+] theme_changed_idle");
     }
 }

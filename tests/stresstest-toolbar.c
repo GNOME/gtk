@@ -142,7 +142,7 @@ main (gint argc, gchar **argv)
 
   gtk_widget_show (GTK_WIDGET (info.window));
   
-  gdk_threads_add_idle (stress_test_old_api, &info);
+  g_idle_add (stress_test_old_api, &info);
 
   gtk_widget_show (GTK_WIDGET (info.window));
   

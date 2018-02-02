@@ -1935,8 +1935,7 @@ schedule_idle_mark_conflicts (GtkPrintUnixDialog *dialog)
   if (priv->mark_conflicts_id != 0)
     return;
 
-  priv->mark_conflicts_id = gdk_threads_add_idle (mark_conflicts_callback,
-                                        dialog);
+  priv->mark_conflicts_id = g_idle_add (mark_conflicts_callback, dialog);
   g_source_set_name_by_id (priv->mark_conflicts_id, "[gtk+] mark_conflicts_callback");
 }
 
