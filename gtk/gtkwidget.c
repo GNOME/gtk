@@ -14165,7 +14165,8 @@ gtk_widget_snapshot (GtkWidget   *widget,
 
       /* Offset to content allocation */
       gtk_snapshot_offset (snapshot, margin.left + padding.left + border.left, margin.top + border.top + padding.top);
-      klass->snapshot (widget, snapshot);
+      if (gtk_widget_get_width (widget) > 0 || gtk_widget_get_height (widget) > 0)
+        klass->snapshot (widget, snapshot);
       gtk_snapshot_offset (snapshot, - (margin.left + padding.left + border.left), -(margin.top + border.top + padding.top));
 
       if (g_signal_has_handler_pending (widget, widget_signals[DRAW], 0, FALSE))
