@@ -121,7 +121,6 @@ gtk_private_sources = files([
   'gtkprivate.c',
   'gtkprogresstracker.c',
   'gtkquery.c',
-  'gtkrecentchooserutils.c',
   'gtksearchengine.c',
   'gtksearchenginemodel.c',
   'gtksearchenginesimple.c',
@@ -280,12 +279,6 @@ gtk_public_sources = files([
   'gtkradiotoolbutton.c',
   'gtkrange.c',
   'gtkrbtree.c',
-  'gtkrecentchooser.c',
-  'gtkrecentchooserdefault.c',
-  'gtkrecentchooserdialog.c',
-  'gtkrecentchoosermenu.c',
-  'gtkrecentchooserwidget.c',
-  'gtkrecentfilter.c',
   'gtkrecentmanager.c',
   'gtkrender.c',
   'gtkrenderbackground.c',
@@ -377,7 +370,6 @@ gtk_private_type_headers = files([
 
 gtk_private_headers = gtk_private_type_headers + files([
   'gtkrbtree.h',
-  'gtkrecentchooserutils.h',
 ])
 
 gtk_public_headers = files([
@@ -521,11 +513,6 @@ gtk_public_headers = files([
   'gtkradiomenuitem.h',
   'gtkradiotoolbutton.h',
   'gtkrange.h',
-  'gtkrecentchooser.h',
-  'gtkrecentchooserdialog.h',
-  'gtkrecentchoosermenu.h',
-  'gtkrecentchooserwidget.h',
-  'gtkrecentfilter.h',
   'gtkrecentmanager.h',
   'gtkrender.h',
   'gtkrevealer.h',

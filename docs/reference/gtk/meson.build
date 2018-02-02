@@ -112,7 +112,6 @@ images = [
   'images/printdialog.png',
   'images/progressbar.png',
   'images/radio-group.png',
-  'images/recentchooserdialog.png',
   'images/right-center.png',
   'images/right-end.png',
   'images/right-start.png',

@@ -72,8 +72,6 @@ gtk_tests = [
   ['testoverlay'],
   ['testoverlaystyleclass'],
   ['testprint', ['testprintfileoperation.c']],
-  ['testrecentchooser'],
-  ['testrecentchoosermenu'],
   ['testscale'],
   ['testselectionmode'],
   ['testspinbutton'],

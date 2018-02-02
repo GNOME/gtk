@@ -449,25 +449,6 @@ create_action_bar (void)
 }
 
 static WidgetInfo *
-create_recent_chooser_dialog (void)
-{
-  WidgetInfo *info;
-  GtkWidget *widget;
-
-  widget = gtk_recent_chooser_dialog_new ("Recent Chooser Dialog",
-					  NULL,
-					  "Cancel", GTK_RESPONSE_CANCEL,
-					  "Open", GTK_RESPONSE_ACCEPT,
-					  NULL); 
-  gtk_window_set_default_size (GTK_WINDOW (widget), 505, 305);
-  
-  info = new_widget_info ("recentchooserdialog", widget, ASIS);
-  info->include_decorations = TRUE;
-
-  return info;
-}
-
-static WidgetInfo *
 create_text_view (void)
 {
   GtkWidget *widget;
@@ -1511,7 +1492,6 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_window ());
   retval = g_list_prepend (retval, create_filesel ());
   retval = g_list_prepend (retval, create_assistant ());
-  retval = g_list_prepend (retval, create_recent_chooser_dialog ());
   retval = g_list_prepend (retval, create_page_setup_dialog ());
   retval = g_list_prepend (retval, create_print_dialog ());
   retval = g_list_prepend (retval, create_volume_button ());

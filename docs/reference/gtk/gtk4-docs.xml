@@ -276,11 +276,6 @@
     <chapter id="RecentDocuments">
       <title>Recently Used Documents</title>
       <xi:include href="xml/gtkrecentmanager.xml" />
-      <xi:include href="xml/gtkrecentchooser.xml" />
-      <xi:include href="xml/gtkrecentchooserdialog.xml" />
-      <xi:include href="xml/gtkrecentchoosermenu.xml" />
-      <xi:include href="xml/gtkrecentchooserwidget.xml" />
-      <xi:include href="xml/gtkrecentfilter.xml" />
     </chapter>
 
     <chapter id="ApplicationChoosing">

@@ -198,9 +198,6 @@
     <link linkend="GtkFileChooserDialog">
       <inlinegraphic fileref="filechooser.png" format="PNG"></inlinegraphic>
     </link>
-    <link linkend="GtkRecentChooserDialog">
-      <inlinegraphic fileref="recentchooserdialog.png" format="PNG"></inlinegraphic>
-    </link>
     <link linkend="GtkFontChooserDialog">
       <inlinegraphic fileref="fontchooser.png" format="PNG"></inlinegraphic>
     </link>
