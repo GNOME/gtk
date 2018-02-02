@@ -69,7 +69,7 @@
 #include "gtkintl.h"
 #include "a11y/gtkbuttonaccessible.h"
 #include "gtkapplicationprivate.h"
-#include "gtkactionhelper.h"
+#include "gtkactionhelperprivate.h"
 #include "gtkcontainerprivate.h"
 
 /* Time out before giving up on getting a key release when animating

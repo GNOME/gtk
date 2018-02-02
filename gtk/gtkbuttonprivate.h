@@ -19,7 +19,7 @@
 #ifndef __GTK_BUTTON_PRIVATE_H__
 #define __GTK_BUTTON_PRIVATE_H__
 
-#include "gtkactionhelper.h"
+#include "gtkactionhelperprivate.h"
 #include "gtkgesturesingle.h"
 
 G_BEGIN_DECLS

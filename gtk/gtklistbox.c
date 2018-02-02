@@ -17,7 +17,7 @@
 
 #include "config.h"
 
-#include "gtkactionhelper.h"
+#include "gtkactionhelperprivate.h"
 #include "gtkadjustmentprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtklistbox.h"

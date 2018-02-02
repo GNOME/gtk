@@ -59,7 +59,7 @@
 #include "gtkmarshalers.h"
 #include "gtkactionable.h"
 #include "a11y/gtkswitchaccessible.h"
-#include "gtkactionhelper.h"
+#include "gtkactionhelperprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkprogresstrackerprivate.h"
 #include "gtksettingsprivate.h"

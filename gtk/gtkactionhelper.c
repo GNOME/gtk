@@ -17,10 +17,9 @@
  * Authors: Ryan Lortie <desrt@desrt.ca>
  */
 
-#include "gtkactionhelper.h"
+#include "gtkactionhelperprivate.h"
 #include "gtkactionobservable.h"
 
-#include "gtkwidget.h"
 #include "gtkwidgetprivate.h"
 #include "gtkdebug.h"
 #include "gtkmodelbutton.h"

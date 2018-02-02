@@ -19,7 +19,7 @@
 #define __GTK_MENU_ITEM_PRIVATE_H__
 
 #include <gtk/gtkmenuitem.h>
-#include <gtk/gtkactionhelper.h>
+#include <gtk/gtkactionhelperprivate.h>
 #include <gtk/gtkcssnodeprivate.h>
 #include <gtk/gtkeventcontrollermotion.h>
 
