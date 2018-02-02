@@ -319,6 +319,9 @@ gdk_texture_new_for_data (const guchar *data,
   cairo_surface_t *original, *copy;
   cairo_t *cr;
 
+  g_return_val_if_fail (width > 0, NULL);
+  g_return_val_if_fail (height > 0, NULL);
+
   original = cairo_image_surface_create_for_data ((guchar *) data, CAIRO_FORMAT_ARGB32, width, height, stride);
   copy = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
 
@@ -353,6 +356,8 @@ gdk_texture_new_for_surface (cairo_surface_t *surface)
   GdkCairoTexture *texture;
 
   g_return_val_if_fail (cairo_surface_get_type (surface) == CAIRO_SURFACE_TYPE_IMAGE, NULL);
+  g_return_val_if_fail (cairo_image_surface_get_width (surface) > 0, NULL);
+  g_return_val_if_fail (cairo_image_surface_get_height (surface) > 0, NULL);
 
   texture = g_object_new (GDK_TYPE_CAIRO_TEXTURE,
                           "width", cairo_image_surface_get_width (surface),
@@ -720,6 +725,9 @@ gdk_texture_new_for_gl (GdkGLContext   *context,
   GdkGLTexture *self;
 
   g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), NULL);
+  g_return_val_if_fail (id != 0, NULL);
+  g_return_val_if_fail (width > 0, NULL);
+  g_return_val_if_fail (height > 0, NULL);
 
   self = g_object_new (GDK_TYPE_GL_TEXTURE,
                        "width", width,
