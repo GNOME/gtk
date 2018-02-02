@@ -3380,11 +3380,11 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
                                     ? -MENU_SCROLL_STEP2
                                     : -MENU_SCROLL_STEP1;
 
-              priv->scroll_timeout =
-                gdk_threads_add_timeout (scroll_fast
-                                           ? MENU_SCROLL_TIMEOUT2
-                                           : MENU_SCROLL_TIMEOUT1,
-                                         gtk_menu_scroll_timeout, menu);
+              priv->scroll_timeout = g_timeout_add (scroll_fast
+                                                      ? MENU_SCROLL_TIMEOUT2
+                                                      : MENU_SCROLL_TIMEOUT1,
+                                                    gtk_menu_scroll_timeout,
+                                                    menu);
               g_source_set_name_by_id (priv->scroll_timeout, "[gtk+] gtk_menu_scroll_timeout");
             }
           else if (!enter && !in_arrow && priv->upper_arrow_prelight)
@@ -3451,11 +3451,11 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
                                     ? MENU_SCROLL_STEP2
                                     : MENU_SCROLL_STEP1;
 
-              priv->scroll_timeout =
-                gdk_threads_add_timeout (scroll_fast
-                                           ? MENU_SCROLL_TIMEOUT2
-                                           : MENU_SCROLL_TIMEOUT1,
-                                         gtk_menu_scroll_timeout, menu);
+              priv->scroll_timeout = g_timeout_add (scroll_fast
+                                                      ? MENU_SCROLL_TIMEOUT2
+                                                      : MENU_SCROLL_TIMEOUT1,
+                                                    gtk_menu_scroll_timeout,
+                                                    menu);
               g_source_set_name_by_id (priv->scroll_timeout, "[gtk+] gtk_menu_scroll_timeout");
             }
           else if (!enter && !in_arrow && priv->lower_arrow_prelight)

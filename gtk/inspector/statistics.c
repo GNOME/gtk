@@ -151,9 +151,7 @@ toggle_record (GtkToggleButton        *button,
 
   if (gtk_toggle_button_get_active (button))
     {
-      sl->priv->update_source_id = gdk_threads_add_timeout_seconds (1,
-                                                                    update_type_counts,
-                                                                    sl);
+      sl->priv->update_source_id = g_timeout_add_seconds (1, update_type_counts, sl);
       update_type_counts (sl);
     }
   else

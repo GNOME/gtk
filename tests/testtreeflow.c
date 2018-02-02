@@ -165,7 +165,7 @@ main (int argc, char *argv[])
   g_signal_connect (button, "realize", G_CALLBACK (gtk_widget_grab_focus), NULL);
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 400);
   gtk_widget_show (window);
-  gdk_threads_add_timeout (1000, (GSourceFunc) futz, NULL);
+  g_timeout_add (1000, (GSourceFunc) futz, NULL);
   gtk_main ();
   return 0;
 }

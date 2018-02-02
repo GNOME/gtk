@@ -542,7 +542,7 @@ map (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_inspector_misc_info_parent_class)->map (widget);
 
-  sl->priv->update_source_id = gdk_threads_add_timeout_seconds (1, update_info, sl);
+  sl->priv->update_source_id = g_timeout_add_seconds (1, update_info, sl);
   update_info (sl);
 }
 

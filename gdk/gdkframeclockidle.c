@@ -237,22 +237,22 @@ maybe_start_idle (GdkFrameClockIdle *clock_idle)
 
       if (priv->flush_idle_id == 0 && RUN_FLUSH_IDLE (priv))
         {
-          priv->flush_idle_id = gdk_threads_add_timeout_full (GDK_PRIORITY_EVENTS + 1,
-                                                              min_interval,
-                                                              gdk_frame_clock_flush_idle,
-                                                              g_object_ref (clock_idle),
-                                                              (GDestroyNotify) g_object_unref);
+          priv->flush_idle_id = g_timeout_add_full (GDK_PRIORITY_EVENTS + 1,
+                                                    min_interval,
+                                                    gdk_frame_clock_flush_idle,
+                                                    g_object_ref (clock_idle),
+                                                    (GDestroyNotify) g_object_unref);
           g_source_set_name_by_id (priv->flush_idle_id, "[gtk+] gdk_frame_clock_flush_idle");
         }
 
       if (!priv->in_paint_idle &&
 	  priv->paint_idle_id == 0 && RUN_PAINT_IDLE (priv))
         {
-          priv->paint_idle_id = gdk_threads_add_timeout_full (GDK_PRIORITY_REDRAW,
-                                                              min_interval,
-                                                              gdk_frame_clock_paint_idle,
-                                                              g_object_ref (clock_idle),
-                                                              (GDestroyNotify) g_object_unref);
+          priv->paint_idle_id = g_timeout_add_full (GDK_PRIORITY_REDRAW,
+                                                    min_interval,
+                                                    gdk_frame_clock_paint_idle,
+                                                    g_object_ref (clock_idle),
+                                                    (GDestroyNotify) g_object_unref);
           g_source_set_name_by_id (priv->paint_idle_id, "[gtk+] gdk_frame_clock_paint_idle");
         }
     }
@@ -364,7 +364,7 @@ gdk_frame_clock_paint_idle (void *data)
               /* We are likely not getting precisely even callbacks in real
                * time, particularly if the event loop is busy.
                * This is a documented limitation in the precision of
-               * gdk_threads_add_timeout_full and g_timeout_add_full.
+               * g_timeout_add_full().
                *
                * In order to avoid this imprecision from compounding between
                * frames and affecting visual smoothness, we correct frame_time

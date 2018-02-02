@@ -584,7 +584,7 @@ gtk_expander_drag_motion (GtkWidget        *widget,
 
   if (!priv->expanded && !priv->expand_timer)
     {
-      priv->expand_timer = gdk_threads_add_timeout (TIMEOUT_EXPAND, (GSourceFunc) expand_timeout, expander);
+      priv->expand_timer = g_timeout_add (TIMEOUT_EXPAND, (GSourceFunc) expand_timeout, expander);
       g_source_set_name_by_id (priv->expand_timer, "[gtk+] expand_timeout");
     }
 

@@ -829,9 +829,7 @@ gtk_real_button_activate (GtkButton *button)
           priv->grab_keyboard = device;
 	}
 
-      priv->activate_timeout = gdk_threads_add_timeout (ACTIVATE_TIMEOUT,
-						button_activate_timeout,
-						button);
+      priv->activate_timeout = g_timeout_add (ACTIVATE_TIMEOUT, button_activate_timeout, button);
       g_source_set_name_by_id (priv->activate_timeout, "[gtk+] button_activate_timeout");
       priv->button_down = TRUE;
       gtk_button_update_state (button);

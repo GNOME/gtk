@@ -10690,7 +10690,7 @@ _gtk_window_schedule_mnemonics_visible (GtkWindow *window)
     return;
 
   window->priv->mnemonics_display_timeout_id =
-    gdk_threads_add_timeout (MNEMONICS_DELAY, schedule_mnemonics_visible_cb, window);
+    g_timeout_add (MNEMONICS_DELAY, schedule_mnemonics_visible_cb, window);
   g_source_set_name_by_id (window->priv->mnemonics_display_timeout_id, "[gtk+] schedule_mnemonics_visible_cb");
 }
 

@@ -1146,11 +1146,10 @@ gtk_file_system_model_got_files (GObject *object, GAsyncResult *res, gpointer da
       if (model->dir_thaw_source == 0)
         {
           freeze_updates (model);
-          model->dir_thaw_source = gdk_threads_add_timeout_full (IO_PRIORITY + 1,
-                                                                 50,
-                                                                 thaw_func,
-                                                                 model,
-                                                                 NULL);
+          model->dir_thaw_source = g_timeout_add_full (IO_PRIORITY + 1, 50,
+                                                       thaw_func,
+                                                       model,
+                                                       NULL);
           g_source_set_name_by_id (model->dir_thaw_source, "[gtk+] thaw_func");
         }
 

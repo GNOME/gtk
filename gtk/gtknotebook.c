@@ -2738,9 +2738,9 @@ gtk_notebook_motion (GtkEventController *controller,
           if (!priv->dnd_timer)
             {
               priv->has_scrolled = TRUE;
-              priv->dnd_timer = gdk_threads_add_timeout (TIMEOUT_REPEAT * SCROLL_DELAY_FACTOR,
+              priv->dnd_timer = g_timeout_add (TIMEOUT_REPEAT * SCROLL_DELAY_FACTOR,
                                                scroll_notebook_timer,
-                                               (gpointer) notebook);
+                                               notebook);
               g_source_set_name_by_id (priv->dnd_timer, "[gtk+] scroll_notebook_timer");
             }
         }
@@ -3138,9 +3138,7 @@ gtk_notebook_drag_motion (GtkWidget      *widget,
 
       if (!priv->switch_tab_timer)
         {
-          priv->switch_tab_timer = gdk_threads_add_timeout (TIMEOUT_EXPAND,
-                                                  gtk_notebook_switch_tab_timeout,
-                                                  widget);
+          priv->switch_tab_timer = g_timeout_add (TIMEOUT_EXPAND, gtk_notebook_switch_tab_timeout, widget);
           g_source_set_name_by_id (priv->switch_tab_timer, "[gtk+] gtk_notebook_switch_tab_timeout");
         }
     }
@@ -4127,9 +4125,9 @@ gtk_notebook_timer (GtkNotebook *notebook)
       if (priv->need_timer)
         {
           priv->need_timer = FALSE;
-          priv->timer = gdk_threads_add_timeout (TIMEOUT_REPEAT * SCROLL_DELAY_FACTOR,
-                                           (GSourceFunc) gtk_notebook_timer,
-                                           (gpointer) notebook);
+          priv->timer = g_timeout_add (TIMEOUT_REPEAT * SCROLL_DELAY_FACTOR,
+                                       (GSourceFunc) gtk_notebook_timer,
+                                       notebook);
           g_source_set_name_by_id (priv->timer, "[gtk+] gtk_notebook_timer");
         }
       else
@@ -4146,9 +4144,9 @@ gtk_notebook_set_scroll_timer (GtkNotebook *notebook)
 
   if (!priv->timer)
     {
-      priv->timer = gdk_threads_add_timeout (TIMEOUT_INITIAL,
-                                       (GSourceFunc) gtk_notebook_timer,
-                                       (gpointer) notebook);
+      priv->timer = g_timeout_add (TIMEOUT_INITIAL,
+                                   (GSourceFunc) gtk_notebook_timer,
+                                   notebook);
       g_source_set_name_by_id (priv->timer, "[gtk+] gtk_notebook_timer");
       priv->need_timer = TRUE;
     }

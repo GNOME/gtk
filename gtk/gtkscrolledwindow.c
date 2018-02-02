@@ -1161,7 +1161,7 @@ check_update_scrollbar_proximity (GtkScrolledWindow *sw,
     indicator_set_over (indicator, TRUE);
   else if (indicator_close && !on_other_scrollbar)
     {
-      indicator->over_timeout_id = gdk_threads_add_timeout (30, enable_over_timeout_cb, indicator);
+      indicator->over_timeout_id = g_timeout_add (30, enable_over_timeout_cb, indicator);
       g_source_set_name_by_id (indicator->over_timeout_id, "[gtk+] enable_over_timeout_cb");
     }
   else
@@ -1381,7 +1381,7 @@ scroll_controller_scroll (GtkEventControllerScroll *scroll,
       _gtk_scrolled_window_get_overshoot (scrolled_window, NULL, NULL))
     {
       priv->scroll_events_overshoot_id =
-        gdk_threads_add_timeout (50, start_scroll_deceleration_cb, scrolled_window);
+        g_timeout_add (50, start_scroll_deceleration_cb, scrolled_window);
       g_source_set_name_by_id (priv->scroll_events_overshoot_id,
                                "[gtk+] start_scroll_deceleration_cb");
     }

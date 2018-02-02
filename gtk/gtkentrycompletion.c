@@ -2463,7 +2463,7 @@ gtk_entry_completion_changed (GtkWidget *widget,
     completion->priv->device = device;
 
   completion->priv->completion_timeout =
-    gdk_threads_add_timeout (COMPLETION_TIMEOUT,
+    g_timeout_add (COMPLETION_TIMEOUT,
                    gtk_entry_completion_timeout,
                    completion);
   g_source_set_name_by_id (completion->priv->completion_timeout, "[gtk+] gtk_entry_completion_timeout");

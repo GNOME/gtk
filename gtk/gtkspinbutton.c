@@ -775,7 +775,7 @@ start_spinning (GtkSpinButton *spin,
     {
       priv->timer_step = step;
       priv->need_timer = TRUE;
-      priv->timer = gdk_threads_add_timeout (TIMEOUT_INITIAL,
+      priv->timer = g_timeout_add (TIMEOUT_INITIAL,
                                    (GSourceFunc) gtk_spin_button_timer,
                                    (gpointer) spin);
       g_source_set_name_by_id (priv->timer, "[gtk+] gtk_spin_button_timer");
@@ -1153,9 +1153,9 @@ gtk_spin_button_timer (GtkSpinButton *spin_button)
       if (priv->need_timer)
         {
           priv->need_timer = FALSE;
-          priv->timer = gdk_threads_add_timeout (TIMEOUT_REPEAT,
-                                              (GSourceFunc) gtk_spin_button_timer,
-                                              (gpointer) spin_button);
+          priv->timer = g_timeout_add (TIMEOUT_REPEAT,
+                                       (GSourceFunc) gtk_spin_button_timer,
+                                       spin_button);
           g_source_set_name_by_id (priv->timer, "[gtk+] gtk_spin_button_timer");
         }
       else

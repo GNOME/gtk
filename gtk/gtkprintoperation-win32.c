@@ -517,7 +517,7 @@ win32_poll_status_timeout (GtkPrintOperation *op)
   win32_poll_status (op);
 
   if (!gtk_print_operation_is_finished (op)) {
-    op_win32->timeout_id = gdk_threads_add_timeout (STATUS_POLLING_TIME,
+    op_win32->timeout_id = g_timeout_add (STATUS_POLLING_TIME,
 					  (GSourceFunc)win32_poll_status_timeout,
 					  op);
     g_source_set_name_by_id (op_win32->timeout_id, "[gtk+] win32_poll_status_timeout");
@@ -561,7 +561,7 @@ win32_end_run (GtkPrintOperation *op,
     {
       op_win32->printerHandle = printerHandle;
       win32_poll_status (op);
-      op_win32->timeout_id = gdk_threads_add_timeout (STATUS_POLLING_TIME,
+      op_win32->timeout_id = g_timeout_add (STATUS_POLLING_TIME,
 					    (GSourceFunc)win32_poll_status_timeout,
 					    op);
       g_source_set_name_by_id (op_win32->timeout_id, "[gtk+] win32_poll_status_timeout");

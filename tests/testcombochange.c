@@ -215,7 +215,7 @@ on_animate (void)
 {
   n_animations += 20;
  
-  timer = gdk_threads_add_timeout (1000, (GSourceFunc) animation_timer, NULL);
+  timer = g_timeout_add (1000, (GSourceFunc) animation_timer, NULL);
 }
 
 int

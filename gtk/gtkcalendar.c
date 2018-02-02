@@ -2486,10 +2486,10 @@ calendar_timer (gpointer data)
       if (priv->need_timer)
         {
           priv->need_timer = FALSE;
-          priv->timer = gdk_threads_add_timeout_full (G_PRIORITY_DEFAULT_IDLE,
+          priv->timer = g_timeout_add_full (G_PRIORITY_DEFAULT_IDLE,
                                             TIMEOUT_REPEAT * SCROLL_DELAY_FACTOR,
                                             (GSourceFunc) calendar_timer,
-                                            (gpointer) calendar, NULL);
+                                            calendar, NULL);
           g_source_set_name_by_id (priv->timer, "[gtk+] calendar_timer");
         }
       else
@@ -2510,10 +2510,10 @@ calendar_start_spinning (GtkCalendar *calendar,
   if (!priv->timer)
     {
       priv->need_timer = TRUE;
-      priv->timer = gdk_threads_add_timeout_full (G_PRIORITY_DEFAULT_IDLE,
+      priv->timer = g_timeout_add_full (G_PRIORITY_DEFAULT_IDLE,
                                         TIMEOUT_INITIAL,
                                         (GSourceFunc) calendar_timer,
-                                        (gpointer) calendar, NULL);
+                                        calendar, NULL);
       g_source_set_name_by_id (priv->timer, "[gtk+] calendar_timer");
     }
 }

@@ -2001,7 +2001,7 @@ queue_open_clipboard (GdkWin32ClipboardQueueAction  action,
   if (win32_sel->clipboard_opened_for == INVALID_HANDLE_VALUE &&
       clipboard_queue == NULL)
     {
-      id = gdk_threads_add_timeout_seconds (1, (GSourceFunc) open_clipboard_timeout, NULL);
+      id = g_timeout_add_seconds (1, (GSourceFunc) open_clipboard_timeout, NULL);
       g_source_set_name_by_id (id, "[gdk-win32] open_clipboard_timeout");
       GDK_NOTE (DND, g_print ("Started open clipboard timer\n"));
     }
