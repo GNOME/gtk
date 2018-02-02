@@ -2176,7 +2176,7 @@ gtk_tree_view_map_buttons (GtkTreeView *tree_view)
 	  button = gtk_tree_view_column_get_button (column);
 
           if (gtk_tree_view_column_get_visible (column) && button)
-            gtk_widget_show_now (button);
+            gtk_widget_show (button);
 
           if (gtk_widget_get_visible (button) &&
               !gtk_widget_get_mapped (button))
