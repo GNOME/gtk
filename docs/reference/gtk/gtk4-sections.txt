@@ -4209,7 +4209,6 @@ gtk_widget_in_destruction
 gtk_widget_destroyed
 gtk_widget_unparent
 gtk_widget_show
-gtk_widget_show_now
 gtk_widget_hide
 gtk_widget_map
 gtk_widget_unmap

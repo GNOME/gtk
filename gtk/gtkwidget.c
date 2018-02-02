@@ -3508,54 +3508,6 @@ gtk_widget_real_show (GtkWidget *widget)
     }
 }
 
-static gboolean
-gtk_widget_show_map_callback (GtkWidget *widget, GdkEvent *event, gint *flag)
-{
-  if (gdk_event_get_event_type (event) == GDK_MAP)
-    {
-      *flag = TRUE;
-      g_signal_handlers_disconnect_by_func (widget,
-                                            gtk_widget_show_map_callback,
-					    flag);
-    }
-
-  return FALSE;
-}
-
-/**
- * gtk_widget_show_now:
- * @widget: a #GtkWidget
- *
- * Shows a widget. If the widget is an unmapped toplevel widget
- * (i.e. a #GtkWindow that has not yet been shown), enter the main
- * loop and wait for the window to actually be mapped. Be careful;
- * because the main loop is running, anything can happen during
- * this function.
- **/
-void
-gtk_widget_show_now (GtkWidget *widget)
-{
-  gint flag = FALSE;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  /* make sure we will get event */
-  if (!_gtk_widget_get_mapped (widget) &&
-      _gtk_widget_is_toplevel (widget))
-    {
-      gtk_widget_show (widget);
-
-      g_signal_connect (widget, "event",
-			G_CALLBACK (gtk_widget_show_map_callback),
-			&flag);
-
-      while (!flag)
-	gtk_main_iteration ();
-    }
-  else
-    gtk_widget_show (widget);
-}
-
 /**
  * gtk_widget_hide:
  * @widget: a #GtkWidget
