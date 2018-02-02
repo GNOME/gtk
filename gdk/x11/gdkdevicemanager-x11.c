@@ -17,9 +17,7 @@
 
 #include "config.h"
 
-#ifdef XINPUT_2
 #include "gdkx11devicemanager-xi2.h"
-#endif
 #include "gdkinternals.h"
 #include "gdkprivate-x11.h"
 #include "gdkdisplay-x11.h"
@@ -33,7 +31,6 @@
 GdkX11DeviceManagerXI2 *
 _gdk_x11_device_manager_new (GdkDisplay *display)
 {
-#ifdef XINPUT_2
   int opcode, firstevent, firsterror;
   Display *xdisplay;
 
@@ -62,7 +59,6 @@ _gdk_x11_device_manager_new (GdkDisplay *display)
 
           return device_manager_xi2;
         }
-#endif /* XINPUT_2 */
     }
 
   g_error ("Xinput2 is missing on this X server");
@@ -88,10 +84,8 @@ gdk_x11_device_manager_lookup (GdkX11DeviceManagerXI2 *device_manager,
 
   g_return_val_if_fail (GDK_IS_X11_DEVICE_MANAGER_XI2 (device_manager), NULL);
 
-#ifdef XINPUT_2
   device = _gdk_x11_device_manager_xi2_lookup (GDK_X11_DEVICE_MANAGER_XI2 (device_manager),
                                                device_id);
-#endif /* XINPUT_2 */
 
   return device;
 }
@@ -111,9 +105,7 @@ gdk_x11_device_get_id (GdkDevice *device)
 
   g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
 
-#ifdef XINPUT_2
   device_id = _gdk_x11_device_xi2_get_id (GDK_X11_DEVICE_XI2 (device));
-#endif /* XINPUT_2 */
 
   return device_id;
 }

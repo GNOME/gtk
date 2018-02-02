@@ -499,6 +499,8 @@ if x11_enabled
     if has_allow_touch_evens and has_scroll_class_info
       cdata.set('XINPUT_2_2', 1)
     endif
+  else
+    error('XInput2 support is required when building the X11 backend.')
   endif
 
   enable_xinerama = get_option('xinerama')

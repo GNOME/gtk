@@ -37,9 +37,7 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
-#ifdef XINPUT_2
 #include <X11/extensions/XInput2.h>
-#endif
 
 #include <cairo-xlib.h>
 
@@ -148,7 +146,6 @@ void _gdk_x11_device_check_extension_events   (GdkDevice  *device);
 
 GdkX11DeviceManagerXI2 *_gdk_x11_device_manager_new (GdkDisplay *display);
 
-#ifdef XINPUT_2
 guchar * _gdk_x11_device_xi2_translate_event_mask (GdkX11DeviceManagerXI2 *device_manager_xi2,
                                                    GdkEventMask            event_mask,
                                                    gint                   *len);
@@ -178,7 +175,6 @@ gdouble  gdk_x11_device_xi2_get_last_axis_value (GdkX11DeviceXI2 *device,
 void     gdk_x11_device_xi2_store_axes          (GdkX11DeviceXI2 *device,
                                                  gdouble         *axes,
                                                  gint             n_axes);
-#endif
 
 void     _gdk_x11_event_translate_keyboard_string (GdkEventKey *event);
 

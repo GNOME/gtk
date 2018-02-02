@@ -1893,10 +1893,8 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                 if (toplevel->has_pointer &&
                     !x11_screen->wmspec_check_window &&
                     xev->mode != NotifyGrab &&
-#ifdef XINPUT_2
                     xev->mode != XINotifyPassiveGrab &&
                     xev->mode != XINotifyPassiveUngrab &&
-#endif /* XINPUT_2 */
                     xev->mode != NotifyUngrab)
                   toplevel->has_pointer_focus = (xev->evtype == XI_FocusIn) ? FALSE : TRUE;
 
@@ -1904,10 +1902,8 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
               case NotifyNonlinear:
               case NotifyNonlinearVirtual:
                 if (xev->mode != NotifyGrab &&
-#ifdef XINPUT_2
                     xev->mode != XINotifyPassiveGrab &&
                     xev->mode != XINotifyPassiveUngrab &&
-#endif /* XINPUT_2 */
                     xev->mode != NotifyUngrab)
                   toplevel->has_focus_window = (xev->evtype == XI_FocusIn) ? TRUE : FALSE;
                     /* We pretend that the focus moves to the grab
@@ -1924,10 +1920,8 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                  */
                 if (!x11_screen->wmspec_check_window &&
                     xev->mode != NotifyGrab &&
-#ifdef XINPUT_2
                     xev->mode != XINotifyPassiveGrab &&
                     xev->mode != XINotifyPassiveUngrab &&
-#endif /* XINPUT_2 */
                     xev->mode != NotifyUngrab)
                   toplevel->has_pointer_focus = (xev->evtype == XI_FocusIn) ? TRUE : FALSE;
                     break;
