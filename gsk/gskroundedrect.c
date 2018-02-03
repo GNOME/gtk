@@ -362,7 +362,7 @@ gsk_rounded_rect_contains_point (const GskRoundedRect   *self,
     return FALSE;
 
   if (self->bounds.origin.x + self->corner[GSK_CORNER_BOTTOM_LEFT].width > point->x &&
-      self->bounds.origin.y + self->bounds.size.height - self->corner[GSK_CORNER_BOTTOM_LEFT].height > point->y &&
+      self->bounds.origin.y + self->bounds.size.height - self->corner[GSK_CORNER_BOTTOM_LEFT].height < point->y &&
       !ellipsis_contains_point (&self->corner[GSK_CORNER_BOTTOM_LEFT],
                                 &GRAPHENE_POINT_INIT (
                                     self->bounds.origin.x + self->corner[GSK_CORNER_BOTTOM_LEFT].width - point->x,
@@ -371,7 +371,7 @@ gsk_rounded_rect_contains_point (const GskRoundedRect   *self,
     return FALSE;
 
   if (self->bounds.origin.x + self->bounds.size.width - self->corner[GSK_CORNER_BOTTOM_RIGHT].width < point->x &&
-      self->bounds.origin.y + self->bounds.size.height - self->corner[GSK_CORNER_BOTTOM_RIGHT].height > point->y &&
+      self->bounds.origin.y + self->bounds.size.height - self->corner[GSK_CORNER_BOTTOM_RIGHT].height < point->y &&
       !ellipsis_contains_point (&self->corner[GSK_CORNER_BOTTOM_RIGHT],
                                 &GRAPHENE_POINT_INIT (
                                     self->bounds.origin.x + self->bounds.size.width - self->corner[GSK_CORNER_BOTTOM_RIGHT].width - point->x,
