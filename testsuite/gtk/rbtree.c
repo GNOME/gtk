@@ -19,7 +19,7 @@
 
 #include <locale.h>
 
-#include "../../gtk/gtkrbtree.h"
+#include "../../gtk/gtkrbtreeprivate.h"
 
 /* _gtk_rbtree_test */
 

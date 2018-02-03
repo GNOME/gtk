@@ -28,7 +28,7 @@
 
 #include "gtkadjustmentprivate.h"
 #include "gtkcssnumbervalueprivate.h"
-#include "gtkrbtree.h"
+#include "gtkrbtreeprivate.h"
 #include "gtktreednd.h"
 #include "gtktreeprivate.h"
 #include "gtkcellrenderer.h"

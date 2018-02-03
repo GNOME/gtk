@@ -21,7 +21,7 @@
 
 #include <gtk/gtktreeview.h>
 #include <gtk/gtktreeselection.h>
-#include <gtk/gtkrbtree.h>
+#include <gtk/gtkrbtreeprivate.h>
 
 G_BEGIN_DECLS
 

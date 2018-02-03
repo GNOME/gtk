@@ -366,10 +366,6 @@ gtk_private_type_headers = files([
   'gtkeventcontrollerlegacyprivate.h',
 ])
 
-gtk_private_headers = gtk_private_type_headers + files([
-  'gtkrbtree.h',
-])
-
 gtk_public_headers = files([
   'gtkaboutdialog.h',
   'gtkaccelgroup.h',
@@ -748,7 +744,6 @@ typefuncs = custom_target('gtktypefuncs.inc',
                           input: gdk_headers +
                             gtk_public_headers +
                             gtk_deprecated_headers +
-                            gtk_private_headers +
                             [ gtktypebuiltins_h, ] +
                             [ gdkenum_h, gskenum_h, ],
                           command: [

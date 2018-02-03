@@ -19,7 +19,7 @@
 #include <string.h>
 #include "gtktreeselection.h"
 #include "gtktreeprivate.h"
-#include "gtkrbtree.h"
+#include "gtkrbtreeprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"

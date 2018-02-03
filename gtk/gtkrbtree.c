@@ -16,7 +16,7 @@
  */
 
 #include "config.h"
-#include "gtkrbtree.h"
+#include "gtkrbtreeprivate.h"
 #include "gtkdebug.h"
 
 static GtkRBNode * _gtk_rbnode_new                (GtkRBTree  *tree,

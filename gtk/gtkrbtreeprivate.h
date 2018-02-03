@@ -1,4 +1,4 @@
-/* gtkrbtree.h
+/* gtkrbtreeprivate.h
  * Copyright (C) 2000  Red Hat, Inc.,  Jonathan Blandford <jrb@redhat.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -17,8 +17,8 @@
 
 /* A Red-Black Tree implementation used specifically by GtkTreeView.
  */
-#ifndef __GTK_RBTREE_H__
-#define __GTK_RBTREE_H__
+#ifndef __GTK_RBTREE_PRIVATE_H__
+#define __GTK_RBTREE_PRIVATE_H__
 
 #include <glib.h>
 
@@ -169,4 +169,4 @@ gint       _gtk_rbtree_get_depth        (GtkRBTree              *tree);
 G_END_DECLS
 
 
-#endif /* __GTK_RBTREE_H__ */
+#endif /* __GTK_RBTREE_PRIVATE_H__ */
