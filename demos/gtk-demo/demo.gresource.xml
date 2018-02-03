@@ -201,7 +201,6 @@
     <file>textview.c</file>
     <file>textscroll.c</file>
     <file>theming_style_classes.c</file>
-    <file>toolpalette.c</file>
     <file>transparent.c</file>
     <file>tree_store.c</file>
     <file>textmask.c</file>

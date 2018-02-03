@@ -801,40 +801,6 @@ create_toolbar (void)
 }
 
 static WidgetInfo *
-create_toolpalette (void)
-{
-  GtkWidget *widget, *group;
-  GtkToolItem *item;
-
-  widget = gtk_tool_palette_new ();
-  group = gtk_tool_item_group_new ("Tools");
-  gtk_container_add (GTK_CONTAINER (widget), group);
-  item = gtk_tool_button_new (NULL, NULL);
-  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "help-about");
-  gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
-  item = gtk_tool_button_new (NULL, NULL);
-  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "document-new");
-  gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
-  item = gtk_tool_button_new (NULL, NULL);
-  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "folder");
-  gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
-
-  group = gtk_tool_item_group_new ("More tools");
-  gtk_container_add (GTK_CONTAINER (widget), group);
-  item = gtk_tool_button_new (NULL, NULL);
-  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "edit-cut");
-  gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
-  item = gtk_tool_button_new (NULL, NULL);
-  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "edit-find");
-  gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
-  item = gtk_tool_button_new (NULL, NULL);
-  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "document-properties");
-  gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
-
-  return new_widget_info ("toolpalette", widget, MEDIUM);
-}
-
-static WidgetInfo *
 create_menubar (void)
 {
   GtkWidget *widget, *vbox, *item;
@@ -1455,7 +1421,6 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_headerbar ());
   retval = g_list_prepend (retval, create_stack ());
   retval = g_list_prepend (retval, create_stack_switcher ());
-  retval = g_list_prepend (retval, create_toolpalette ());
   retval = g_list_prepend (retval, create_spinner ());
   retval = g_list_prepend (retval, create_about_dialog ());
   retval = g_list_prepend (retval, create_accel_label ());

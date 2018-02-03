@@ -66,7 +66,6 @@ demos = files([
   'textview.c',
   'textscroll.c',
   'theming_style_classes.c',
-  'toolpalette.c',
   'transparent.c',
   'tree_store.c',
 ])

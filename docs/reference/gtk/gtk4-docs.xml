@@ -183,8 +183,6 @@
       <xi:include href="xml/gtktoolshell.xml" />
       <xi:include href="xml/gtktoolbar.xml" />
       <xi:include href="xml/gtktoolitem.xml" />
-      <xi:include href="xml/gtktoolpalette.xml" />
-      <xi:include href="xml/gtktoolitemgroup.xml" />
       <xi:include href="xml/gtkseparatortoolitem.xml" />
       <xi:include href="xml/gtktoolbutton.xml" />
       <xi:include href="xml/gtkmenutoolbutton.xml" />

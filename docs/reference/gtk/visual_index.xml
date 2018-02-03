@@ -168,9 +168,6 @@
     <link linkend="GtkToolbar">
       <inlinegraphic fileref="toolbar.png" format="PNG"></inlinegraphic>
     </link>
-    <link linkend="GtkToolPalette">
-      <inlinegraphic fileref="toolpalette.png" format="PNG"></inlinegraphic>
-    </link>
     <link linkend="GtkPlacesSidebar">
       <inlinegraphic fileref="placessidebar.png" format="PNG"></inlinegraphic>
     </link>

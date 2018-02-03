@@ -132,7 +132,6 @@ images = [
   'images/switch.png',
   'images/toggle-button.png',
   'images/toolbar.png',
-  'images/toolpalette.png',
   'images/tree-view-coordinates.png',
   'images/up-center.png',
   'images/up-end.png',
