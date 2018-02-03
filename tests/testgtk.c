@@ -4401,98 +4401,6 @@ create_display_screen (GtkWidget *widget)
   gtk_widget_show (window);
 }
 
-/* Event Watcher
- */
-static gulong event_watcher_id = 0;
-
-static gboolean
-event_watcher (GSignalInvocationHint *ihint,
-	       guint                  n_param_values,
-	       const GValue          *param_values,
-	       gpointer               data)
-{
-  GObject *object;
-  GdkEvent *event;
-
-  object = g_value_get_object (param_values + 0);
-  event = g_value_get_object (param_values + 1);
-  if (gdk_event_get_event_type (event) == GDK_ENTER_NOTIFY ||
-      gdk_event_get_event_type (event) == GDK_LEAVE_NOTIFY)
-    g_print ("Watch: \"%s\" emitted for %s\n",
-             g_enum_to_string (GDK_TYPE_EVENT_TYPE, gdk_event_get_event_type (event)),
-             G_OBJECT_TYPE_NAME (object));
-
-  return TRUE;
-}
-
-static void
-event_watcher_down (void)
-{
-  if (event_watcher_id)
-    {
-      guint signal_id;
-
-      signal_id = g_signal_lookup ("event", GTK_TYPE_WIDGET);
-      g_signal_remove_emission_hook (signal_id, event_watcher_id);
-      event_watcher_id = 0;
-    }
-}
-
-static void
-event_watcher_toggle (void)
-{
-  if (event_watcher_id)
-    event_watcher_down ();
-  else
-    {
-      guint signal_id;
-
-      signal_id = g_signal_lookup ("event", GTK_TYPE_WIDGET);
-      event_watcher_id = g_signal_add_emission_hook (signal_id, 0, event_watcher, NULL, NULL);
-    }
-}
-
-static void
-create_event_watcher (GtkWidget *widget)
-{
-  GtkWidget *content_area;
-  GtkWidget *button;
-
-  if (!dialog_window)
-    {
-      dialog_window = gtk_dialog_new ();
-      gtk_window_set_display (GTK_WINDOW (dialog_window),
-			      gtk_widget_get_display (widget));
-
-      g_signal_connect (dialog_window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&dialog_window);
-      g_signal_connect (dialog_window, "destroy",
-			G_CALLBACK (event_watcher_down),
-			NULL);
-
-      content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog_window));
-
-      gtk_window_set_title (GTK_WINDOW (dialog_window), "Event Watcher");
-      gtk_widget_set_size_request (dialog_window, 200, 110);
-
-      button = gtk_toggle_button_new_with_label ("Activate Watch");
-      g_signal_connect (button, "clicked",
-			G_CALLBACK (event_watcher_toggle),
-			NULL);
-      gtk_box_pack_start (GTK_BOX (content_area), button);
-      gtk_widget_show (button);
-
-      gtk_dialog_add_button (GTK_DIALOG (dialog_window), "Close", GTK_RESPONSE_CLOSE);
-      g_signal_connect (dialog_window, "response", G_CALLBACK (gtk_widget_destroy), NULL);
-    }
-
-  if (!gtk_widget_get_visible (dialog_window))
-    gtk_widget_show (dialog_window);
-  else
-    gtk_widget_destroy (dialog_window);
-}
-
 /*
  * GtkRange
  */
@@ -7591,7 +7499,6 @@ struct {
   { "dialog", create_dialog },
   { "display", create_display_screen, TRUE },
   { "entry", create_entry },
-  { "event watcher", create_event_watcher },
   { "expander", create_expander },
   { "flipping", create_flipping },
   { "focus", create_focus },
