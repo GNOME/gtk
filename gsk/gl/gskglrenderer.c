@@ -190,9 +190,6 @@ struct _GskGLRenderer
 
   graphene_rect_t viewport;
 
-  guint texture_id;
-
-
   GdkGLContext *gl_context;
   GskGLDriver *gl_driver;
   GskGLProfiler *gl_profiler;
@@ -1679,54 +1676,6 @@ gsk_gl_renderer_dispose (GObject *gobject)
   G_OBJECT_CLASS (gsk_gl_renderer_parent_class)->dispose (gobject);
 }
 
-static void
-gsk_gl_renderer_create_buffers (GskGLRenderer *self,
-                                int            width,
-                                int            height,
-                                int            scale_factor)
-{
-  if (self->has_buffers)
-    return;
-
-  GSK_RENDERER_NOTE (GSK_RENDERER (self), OPENGL, g_message ("Creating buffers (w:%d, h:%d, scale:%d)", width, height, scale_factor));
-
-  if (self->texture_id == 0)
-    {
-      self->texture_id = gsk_gl_driver_create_texture (self->gl_driver,
-                                                       width * scale_factor,
-                                                       height * scale_factor);
-      gsk_gl_driver_bind_source_texture (self->gl_driver, self->texture_id);
-      gsk_gl_driver_init_texture_empty (self->gl_driver, self->texture_id);
-    }
-
-  gsk_gl_driver_create_render_target (self->gl_driver, self->texture_id, TRUE, TRUE);
-  gsk_gl_driver_bind_render_target (self->gl_driver, self->texture_id);
-
-  self->has_buffers = TRUE;
-}
-
-static void
-gsk_gl_renderer_destroy_buffers (GskGLRenderer *self)
-{
-  if (self->gl_context == NULL)
-    return;
-
-  if (!self->has_buffers)
-    return;
-
-  GSK_RENDERER_NOTE (GSK_RENDERER (self), OPENGL, g_message ("Destroying buffers"));
-
-  gdk_gl_context_make_current (self->gl_context);
-
-  if (self->texture_id != 0)
-    {
-      gsk_gl_driver_destroy_texture (self->gl_driver, self->texture_id);
-      self->texture_id = 0;
-    }
-
-  self->has_buffers = FALSE;
-}
-
 static gboolean
 gsk_gl_renderer_create_programs (GskGLRenderer  *self,
                                  GError        **error)
@@ -2455,6 +2404,7 @@ static void
 gsk_gl_renderer_do_render (GskRenderer           *renderer,
                            GskRenderNode         *root,
                            const graphene_rect_t *viewport,
+                           int                    texture_id,
                            int                    scale_factor)
 {
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
@@ -2500,8 +2450,8 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
   render_op_builder.render_ops = self->render_ops;
   gsk_rounded_rect_init_from_rect (&render_op_builder.current_clip, &self->viewport, 0.0f);
 
-  if (self->texture_id != 0)
-    ops_set_render_target (&render_op_builder, self->texture_id);
+  if (texture_id != 0)
+    ops_set_render_target (&render_op_builder, texture_id);
 
   gsk_gl_renderer_add_render_ops (self, root, &render_op_builder);
 
@@ -2549,10 +2499,9 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
 {
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
   GdkTexture *texture;
-  int stride;
-  guchar *data, *data2;
   int width, height;
-  int x, y;
+  guint texture_id;
+  guint fbo_id;
 
   g_return_val_if_fail (self->gl_context != NULL, NULL);
 
@@ -2564,35 +2513,30 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
 
   /* Prepare our framebuffer */
   gsk_gl_driver_begin_frame (self->gl_driver);
-  gsk_gl_renderer_create_buffers (self, width, height, 1);
+  glGenTextures (1, &texture_id);
+  glBindTexture (GL_TEXTURE_2D, texture_id);
+
+  if (gdk_gl_context_get_use_es (self->gl_context))
+    glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+  else
+    glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
+
+  glGenFramebuffers (1, &fbo_id);
+  glBindFramebuffer (GL_FRAMEBUFFER, fbo_id);
+  glFramebufferTexture2D (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_id, 0);
+  g_assert_cmpint (glCheckFramebufferStatus (GL_FRAMEBUFFER), ==, GL_FRAMEBUFFER_COMPLETE);
+
   gsk_gl_renderer_clear (self);
   gsk_gl_driver_end_frame (self->gl_driver);
 
-  g_assert (self->texture_id != 0);
-
   /* Render the actual scene */
-  gsk_gl_renderer_do_render (renderer, root, viewport, 1);
+  gsk_gl_renderer_do_render (renderer, root, viewport, texture_id, 1);
 
-  /* Prepare memory for the glReadPixels call */
-  stride = cairo_format_stride_for_width (CAIRO_FORMAT_ARGB32, width);
-  data = g_malloc (height * stride);
+  texture = gdk_texture_new_for_gl (self->gl_context,
+                                    texture_id,
+                                    width, height,
+                                    NULL, NULL);
 
-  /* Bind our framebuffer again and read from it */
-  gsk_gl_driver_begin_frame (self->gl_driver);
-  gsk_gl_driver_bind_render_target (self->gl_driver, self->texture_id);
-  glReadPixels (0, 0, width, height, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, data);
-  gsk_gl_driver_end_frame (self->gl_driver);
-
-  data2 = g_malloc (height * stride);
-  for (y = 0; y < height; y ++)
-    for (x = 0; x < stride; x ++)
-      data2[(height - 1 - y) * stride + x] = data[y * stride + x];
-
-  g_free (data);
-  /* Create texture from the downloaded data */
-  texture = gdk_texture_new_for_data (g_steal_pointer (&data2), width, height, stride);
-
-  gsk_gl_renderer_destroy_buffers (self);
   gsk_gl_renderer_clear_tree (self);
   return texture;
 }
@@ -2615,11 +2559,10 @@ gsk_gl_renderer_render (GskRenderer   *renderer,
   viewport.size.width = gdk_window_get_width (window) * self->scale_factor;
   viewport.size.height = gdk_window_get_height (window) * self->scale_factor;
 
-  gsk_gl_renderer_do_render (renderer, root, &viewport, self->scale_factor);
+  gsk_gl_renderer_do_render (renderer, root, &viewport, 0, self->scale_factor);
 
   gdk_gl_context_make_current (self->gl_context);
   gsk_gl_renderer_clear_tree (self);
-  gsk_gl_renderer_destroy_buffers (self);
 }
 
 static void
