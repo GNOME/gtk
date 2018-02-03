@@ -2055,13 +2055,14 @@ gsk_container_node_deserialize (GVariant  *variant,
   gsize i, n_children;
   guint32 child_type;
   GVariant *child_variant;
+  GskRenderNode **children;
 
   if (!check_variant_type (variant, GSK_CONTAINER_NODE_VARIANT_TYPE, error))
     return NULL;
 
   i = 0;
   n_children = g_variant_iter_init (&iter, variant);
-  GskRenderNode **children = g_newa (GskRenderNode *, n_children);
+  children = g_new (GskRenderNode *, n_children);
 
   while (g_variant_iter_loop (&iter, "(uv)", &child_type, &child_variant))
     {
@@ -2071,6 +2072,7 @@ gsk_container_node_deserialize (GVariant  *variant,
           guint j;
           for (j = 0; j < i; j++)
             gsk_render_node_unref (children[j]);
+          g_free (children);
           g_variant_unref (child_variant);
           return NULL;
         }
@@ -2081,6 +2083,7 @@ gsk_container_node_deserialize (GVariant  *variant,
 
   for (i = 0; i < n_children; i++)
     gsk_render_node_unref (children[i]);
+  g_free (children);
 
   return result;
 }
