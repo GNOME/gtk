@@ -1939,8 +1939,6 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
   for (i = 0; i < GL_N_PROGRAMS; i ++)
     glDeleteProgram (self->programs[i].id);
 
-  gsk_gl_renderer_destroy_buffers (self);
-
   gsk_gl_glyph_cache_free (&self->glyph_cache);
 
   g_clear_object (&self->gl_profiler);
@@ -2594,6 +2592,8 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
   /* Create texture from the downloaded data */
   texture = gdk_texture_new_for_data (g_steal_pointer (&data2), width, height, stride);
 
+  gsk_gl_renderer_destroy_buffers (self);
+  gsk_gl_renderer_clear_tree (self);
   return texture;
 }
 
