@@ -228,9 +228,6 @@ gtk/gtkradiobutton.c
 gtk/gtkradiomenuitem.c
 gtk/gtkradiotoolbutton.c
 gtk/gtkrange.c
-gtk/gtkrecentchooser.c
-gtk/gtkrecentchooserdefault.c
-gtk/gtkrecentchoosermenu.c
 gtk/gtkrecentmanager.c
 gtk/gtkrevealer.c
 gtk/gtkscalebutton.c
@@ -355,7 +352,6 @@ gtk/ui/gtkpathbar.ui
 gtk/ui/gtkplacesviewrow.ui
 gtk/ui/gtkplacesview.ui
 gtk/ui/gtkprintunixdialog.ui
-gtk/ui/gtkrecentchooserdefault.ui
 gtk/ui/gtkscalebutton.ui
 gtk/ui/gtksidebarrow.ui
 gtk/ui/gtkstatusbar.ui
