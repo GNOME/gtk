@@ -39,47 +39,33 @@
  * Other composite widgets such as the #GtkNotebook can pop up a
  * #GtkMenu as well.
  *
- * Applications can display a #GtkMenu as a popup menu by calling the 
+ * Applications can display a #GtkMenu as a popup menu by calling the
  * gtk_menu_popup() function.  The example below shows how an application
- * can pop up a menu when the 3rd mouse button is pressed.  
+ * can pop up a menu when the 3rd mouse button is pressed.
  *
  * ## Connecting the popup signal handler.
  *
  * |[<!-- language="C" -->
  *   // connect our handler which will popup the menu
- *   g_signal_connect_swapped (window, "event",
- *	G_CALLBACK (my_popup_handler), menu);
+ *   gesture = gtk_gesture_multi_press_new (window);
+ *   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture),
+ *                                  GDK_BUTTON_SECONDARY);
+ *   g_signal_connect (gesture, "event", G_CALLBACK (my_popup_handler), menu);
  * ]|
  *
  * ## Signal handler which displays a popup menu.
  *
  * |[<!-- language="C" -->
- * static gint
- * my_popup_handler (GtkWidget *widget, GdkEvent *event)
+ * static void
+ * my_popup_handler (GtkGesture *gesture,
+ *                   guint       n_press,
+ *                   double      x,
+ *                   double      y,
+ *                   gpointer    data)
  * {
- *   GtkMenu *menu;
- *   guint button;
+ *   GtkMenu *menu = data;
  *
- *   g_return_val_if_fail (widget != NULL, FALSE);
- *   g_return_val_if_fail (GTK_IS_MENU (widget), FALSE);
- *   g_return_val_if_fail (event != NULL, FALSE);
- *
- *   // The "widget" is the menu that was supplied when
- *   // g_signal_connect_swapped() was called.
- *   menu = GTK_MENU (widget);
- *
- *   if (gdk_event_get_event_type (event) == GDK_BUTTON_PRESS)
- *     {
- *       gdk_event_get_button (event, &button);
- *       if (button == GDK_BUTTON_SECONDARY)
- *         {
- *           gtk_menu_popup (menu, NULL, NULL, NULL, NULL,
- *                           button, gdk_event_get_time (event));
- *           return TRUE;
- *         }
- *     }
- *
- *   return FALSE;
+ *   gtk_menu_popup (menu, NULL, NULL, NULL, NULL, button, GDK_CURRENT_TIME);
  * }
  * ]|
  *
