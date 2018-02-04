@@ -1372,7 +1372,7 @@ gtk_gl_area_make_current (GtkGLArea *area)
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
 
   g_return_if_fail (GTK_IS_GL_AREA (area));
-  g_return_if_fail (gtk_widget_get_realized (GTK_WIDGET (widget)));
+  g_return_if_fail (gtk_widget_get_realized (GTK_WIDGET (area)));
 
   if (priv->context != NULL)
     gdk_gl_context_make_current (priv->context);
