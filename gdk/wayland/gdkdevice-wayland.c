@@ -3772,7 +3772,7 @@ tablet_pad_ring_handle_angle (void                          *data,
   GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (pad->seat);
 
   GDK_DISPLAY_NOTE (seat->display, EVENTS,
-            g_message ("tablet pad ring handle angle, %s ring = %p angle = %f",
+            g_message ("tablet pad ring handle angle, ring = %p angle = %f",
                        wp_tablet_pad_ring, wl_fixed_to_double (angle)));
 
   group->axis_tmp_info.value = wl_fixed_to_double (angle);
