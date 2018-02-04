@@ -35,7 +35,9 @@
 #include "gtkpopover.h"
 #include "gtksearchentry.h"
 #include "gtklabel.h"
+#include "gtkmain.h"
 #include "gtkstack.h"
+#include "gtkeventcontrollerkey.h"
 
 enum
 {
@@ -82,18 +84,22 @@ search_close_clicked (GtkWidget            *button,
 }
 
 static gboolean
-key_press_event (GtkWidget            *window,
-                 GdkEvent             *event,
-                 GtkInspectorPropList *pl)
+key_pressed (GtkEventController   *controller,
+             guint                 keyval,
+             guint                 keycode,
+             GdkModifierType       state,
+             GtkInspectorPropList *pl)
 {
   if (!gtk_widget_get_mapped (GTK_WIDGET (pl)))
     return GDK_EVENT_PROPAGATE;
 
-  if (gtk_search_entry_handle_event (GTK_SEARCH_ENTRY (pl->priv->search_entry), event))
+  if (gtk_search_entry_handle_event (GTK_SEARCH_ENTRY (pl->priv->search_entry),
+                                     gtk_get_current_event ()))
     {
       gtk_stack_set_visible_child (GTK_STACK (pl->priv->search_stack), pl->priv->search_entry);
       return GDK_EVENT_STOP;
     }
+
   return GDK_EVENT_PROPAGATE;
 }
 
@@ -101,10 +107,16 @@ static void
 hierarchy_changed (GtkWidget *widget,
                    GtkWidget *previous_toplevel)
 {
+  GtkEventController *controller;
+  GtkWidget *toplevel;
+
   if (previous_toplevel)
-    g_signal_handlers_disconnect_by_func (previous_toplevel, key_press_event, widget);
-  g_signal_connect (gtk_widget_get_toplevel (widget), "key-press-event",
-                    G_CALLBACK (key_press_event), widget);
+    g_object_set_data (G_OBJECT (previous_toplevel), "controller", NULL);
+
+  toplevel = gtk_widget_get_toplevel (widget);
+  controller = gtk_event_controller_key_new (toplevel);
+  g_object_set_data_full (G_OBJECT (toplevel), "controller", controller, g_object_unref);
+  g_signal_connect (controller, "key-pressed", G_CALLBACK (key_pressed), widget);
 }
 
 static void

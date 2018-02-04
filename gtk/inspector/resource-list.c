@@ -391,15 +391,13 @@ move_search_to_row (GtkInspectorResourceList *sl,
 }
 
 static gboolean
-key_press_event (GtkWidget                *window,
-                 GdkEvent                 *event,
-                 GtkInspectorResourceList *sl)
+key_pressed (GtkEventController       *controller,
+             guint                     keyval,
+             guint                     keycode,
+             GdkModifierType           state,
+             GtkInspectorResourceList *sl)
 {
-  guint keyval, state;
-
-  if (gtk_widget_get_mapped (GTK_WIDGET (sl)) &&
-      gdk_event_get_keyval (event, &keyval) &&
-      gdk_event_get_state (event, &state))
+  if (gtk_widget_get_mapped (GTK_WIDGET (sl)))
     {
       GdkModifierType default_accel;
       gboolean search_started;
@@ -463,7 +461,8 @@ key_press_event (GtkWidget                *window,
           return GDK_EVENT_STOP;
         }
 
-      return gtk_search_bar_handle_event (GTK_SEARCH_BAR (sl->priv->search_bar), event);
+      return gtk_search_bar_handle_event (GTK_SEARCH_BAR (sl->priv->search_bar),
+                                          gtk_get_current_event ());
     }
   else
     return GDK_EVENT_PROPAGATE;
@@ -473,10 +472,16 @@ static void
 on_hierarchy_changed (GtkWidget *widget,
                       GtkWidget *previous_toplevel)
 {
+  GtkEventController *controller;
+  GtkWidget *toplevel;
+
   if (previous_toplevel)
-    g_signal_handlers_disconnect_by_func (previous_toplevel, key_press_event, widget);
-  g_signal_connect (gtk_widget_get_toplevel (widget), "key-press-event",
-                    G_CALLBACK (key_press_event), widget);
+    g_object_set_data (G_OBJECT (previous_toplevel), "controller", NULL);
+
+  toplevel = gtk_widget_get_toplevel (widget);
+  controller = gtk_event_controller_key_new (toplevel);
+  g_object_set_data_full (G_OBJECT (toplevel), "controller", controller, g_object_unref);
+  g_signal_connect (controller, "key-pressed", G_CALLBACK (key_pressed), widget);
 }
 
 static void
