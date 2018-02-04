@@ -503,22 +503,6 @@ gdk_rectangle_get_type
 </SECTION>
 
 <SECTION>
-<TITLE>Threads</TITLE>
-<FILE>threads</FILE>
-GDK_THREADS_ENTER
-GDK_THREADS_LEAVE
-gdk_threads_init
-gdk_threads_enter
-gdk_threads_leave
-gdk_threads_add_idle
-gdk_threads_add_idle_full
-gdk_threads_add_timeout
-gdk_threads_add_timeout_full
-gdk_threads_add_timeout_seconds
-gdk_threads_add_timeout_seconds_full
-</SECTION>
-
-<SECTION>
 <TITLE>Keyboard Handling</TITLE>
 <FILE>keys</FILE>
 GdkKeymap
