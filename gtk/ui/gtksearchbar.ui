@@ -8,44 +8,26 @@
         <child>
           <object class="GtkBox" id="tool_box">
             <property name="spacing">6</property>
-            <property name="margin">6</property>
-            <child>
-              <object class="GtkBox" id="box_left">
-                <property name="halign">start</property>
-                <property name="hexpand">1</property>
-                <property name="orientation">vertical</property>
-              </object>
-            </child>
             <child>
               <object class="GtkBox" id="box_center">
                 <property name="halign">center</property>
                 <property name="orientation">vertical</property>
+                <property name="hexpand">1</property>
               </object>
               <packing>
                 <property name="position">1</property>
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="box_right">
-                <property name="halign">end</property>
-                <property name="hexpand">1</property>
-                <property name="orientation">vertical</property>
-                <child>
-                  <object class="GtkButton" id="close_button">
-                    <property name="visible">0</property>
-                    <property name="can-focus">1</property>
-                    <property name="receives-default">1</property>
-                    <property name="relief">none</property>
-                    <style>
-                      <class name="close"/>
-                    </style>
-                    <child>
-                      <object class="GtkImage" id="close_image">
-                        <property name="icon-name">window-close-symbolic</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
+              <object class="GtkButton" id="close_button">
+                <property name="visible">0</property>
+                <property name="can-focus">1</property>
+                <property name="receives-default">1</property>
+                <property name="relief">none</property>
+                <property name="icon-name">window-close-symbolic</property>
+                <style>
+                  <class name="close"/>
+                </style>
               </object>
               <packing>
                 <property name="position">2</property>
@@ -56,11 +38,4 @@
       </object>
     </child>
   </template>
-  <object class="GtkSizeGroup" id="sizegroup">
-    <property name="mode">both</property>
-    <widgets>
-      <widget name="box_left"/>
-      <widget name="box_right"/>
-    </widgets>
-  </object>
 </interface>
