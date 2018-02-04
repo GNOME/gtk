@@ -1404,6 +1404,13 @@ searchbar,
   padding: 0px;
 }
 
+searchbar {
+  padding: 0px;
+  >revealer>box {
+    padding: 6px;
+  }
+}
+
 %darkbar {
   border-style: solid;
   border-color: $borders_color;

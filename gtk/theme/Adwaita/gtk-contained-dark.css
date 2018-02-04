@@ -585,6 +585,8 @@ toolbar:not(.inline-toolbar):not(.osd) switch, toolbar:not(.inline-toolbar):not(
 
 searchbar, .location-bar { border-width: 0 0 1px; padding: 0px; }
 
+searchbar > revealer > box { padding: 6px; }
+
 .inline-toolbar, searchbar, .location-bar { border-style: solid; border-color: #1b1f20; background-color: #2c3133; }
 
 .inline-toolbar:backdrop, searchbar:backdrop, .location-bar:backdrop { border-color: #202425; background-color: #2c3233; box-shadow: none; transition: 200ms ease-out; }
