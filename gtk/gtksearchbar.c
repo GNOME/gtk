@@ -321,6 +321,23 @@ gtk_search_bar_add (GtkContainer *container,
 }
 
 static void
+gtk_search_bar_remove (GtkContainer *container,
+                       GtkWidget    *child)
+{
+  GtkSearchBar *bar = GTK_SEARCH_BAR (container);
+  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
+
+  if (priv->box_center == NULL)
+    {
+      GTK_CONTAINER_CLASS (gtk_search_bar_parent_class)->remove (container, child);
+    }
+  else
+    {
+      gtk_container_remove (GTK_CONTAINER (priv->box_center), child);
+    }
+}
+
+static void
 gtk_search_bar_set_property (GObject      *object,
                              guint         prop_id,
                              const GValue *value,
@@ -390,6 +407,7 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
   object_class->get_property = gtk_search_bar_get_property;
 
   container_class->add = gtk_search_bar_add;
+  container_class->remove = gtk_search_bar_remove;
 
   /**
    * GtkSearchBar:search-mode-enabled:
