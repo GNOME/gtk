@@ -28,6 +28,7 @@
 #include "gtkplacesviewprivate.h"
 #include "gtkplacesviewrowprivate.h"
 #include "gtktypebuiltins.h"
+#include "gtkeventcontrollerkey.h"
 
 /*
  * SECTION:gtkplacesview
@@ -81,6 +82,7 @@ struct _GtkPlacesViewPrivate
 
   GtkEntryCompletion            *address_entry_completion;
   GtkListStore                  *completion_store;
+  GtkEventController            *key_controller;
 
   GCancellable                  *networks_fetching_cancellable;
 
@@ -414,6 +416,7 @@ gtk_places_view_finalize (GObject *object)
   g_clear_object (&priv->networks_fetching_cancellable);
   g_clear_object (&priv->path_size_group);
   g_clear_object (&priv->space_size_group);
+  g_clear_object (&priv->key_controller);
 
   G_OBJECT_CLASS (gtk_places_view_parent_class)->finalize (object);
 }
@@ -1687,51 +1690,46 @@ on_row_popup_menu (GtkPlacesViewRow *row)
 }
 
 static gboolean
-on_key_press_event (GtkWidget     *widget,
-                    GdkEventKey   *event,
-                    GtkPlacesView *view)
+on_key_press_event (GtkEventController *controller,
+                    guint               keyval,
+                    guint               keycode,
+                    GdkModifierType     state,
+                    GtkPlacesView      *view)
 {
   GtkPlacesViewPrivate *priv;
-  guint keyval, state;
+  GdkModifierType modifiers;
 
   priv = gtk_places_view_get_instance_private (view);
 
-  if (event &&
-      gdk_event_get_keyval ((GdkEvent *) event, &keyval) &&
-      gdk_event_get_state ((GdkEvent *) event, &state))
+  modifiers = gtk_accelerator_get_default_mod_mask ();
+
+  if (keyval == GDK_KEY_Return ||
+      keyval == GDK_KEY_KP_Enter ||
+      keyval == GDK_KEY_ISO_Enter ||
+      keyval == GDK_KEY_space)
     {
-      guint modifiers;
+      GtkWidget *focus_widget;
+      GtkWindow *toplevel;
 
-      modifiers = gtk_accelerator_get_default_mod_mask ();
+      priv->current_open_flags = GTK_PLACES_OPEN_NORMAL;
+      toplevel = get_toplevel (GTK_WIDGET (view));
 
-      if (keyval == GDK_KEY_Return ||
-          keyval == GDK_KEY_KP_Enter ||
-          keyval == GDK_KEY_ISO_Enter ||
-          keyval == GDK_KEY_space)
-        {
-          GtkWidget *focus_widget;
-          GtkWindow *toplevel;
+      if (!toplevel)
+        return FALSE;
 
-          priv->current_open_flags = GTK_PLACES_OPEN_NORMAL;
-          toplevel = get_toplevel (GTK_WIDGET (view));
+      focus_widget = gtk_window_get_focus (toplevel);
 
-          if (!toplevel)
-            return FALSE;
+      if (!GTK_IS_PLACES_VIEW_ROW (focus_widget))
+        return FALSE;
 
-          focus_widget = gtk_window_get_focus (toplevel);
+      if ((state & modifiers) == GDK_SHIFT_MASK)
+        priv->current_open_flags = GTK_PLACES_OPEN_NEW_TAB;
+      else if ((state & modifiers) == GDK_CONTROL_MASK)
+        priv->current_open_flags = GTK_PLACES_OPEN_NEW_WINDOW;
 
-          if (!GTK_IS_PLACES_VIEW_ROW (focus_widget))
-            return FALSE;
+      activate_row (view, GTK_PLACES_VIEW_ROW (focus_widget), priv->current_open_flags);
 
-          if ((state & modifiers) == GDK_SHIFT_MASK)
-            priv->current_open_flags = GTK_PLACES_OPEN_NEW_TAB;
-          else if ((state & modifiers) == GDK_CONTROL_MASK)
-            priv->current_open_flags = GTK_PLACES_OPEN_NEW_WINDOW;
-
-          activate_row (view, GTK_PLACES_VIEW_ROW (focus_widget), priv->current_open_flags);
-
-          return TRUE;
-        }
+      return TRUE;
     }
 
   return FALSE;
@@ -2255,7 +2253,6 @@ gtk_places_view_class_init (GtkPlacesViewClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_address_entry_text_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_address_entry_show_help_pressed);
   gtk_widget_class_bind_template_callback (widget_class, on_connect_button_clicked);
-  gtk_widget_class_bind_template_callback (widget_class, on_key_press_event);
   gtk_widget_class_bind_template_callback (widget_class, on_listbox_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_recent_servers_listbox_row_activated);
 
@@ -2273,6 +2270,8 @@ gtk_places_view_init (GtkPlacesView *self)
   priv->open_flags = GTK_PLACES_OPEN_NORMAL;
   priv->path_size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
   priv->space_size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+  priv->key_controller = gtk_event_controller_key_new (GTK_WIDGET (self));
+  g_signal_connect (priv->key_controller, "key-pressed", G_CALLBACK (on_key_press_event), self);
 
   gtk_widget_init_template (GTK_WIDGET (self));
 }
