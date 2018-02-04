@@ -127,10 +127,6 @@ gtk_radio_button_get_type
 gtk_radio_menu_item_get_type
 gtk_radio_tool_button_get_type
 gtk_range_get_type
-gtk_recent_chooser_get_type
-gtk_recent_chooser_dialog_get_type
-gtk_recent_chooser_menu_get_type
-gtk_recent_chooser_widget_get_type
 gtk_recent_manager_get_type
 gtk_revealer_get_type
 gtk_scale_button_get_type
@@ -172,8 +168,6 @@ gtk_toggle_tool_button_get_type
 gtk_toolbar_get_type
 gtk_tool_button_get_type
 gtk_tool_item_get_type
-gtk_tool_item_group_get_type
-gtk_tool_palette_get_type
 gtk_tree_drag_dest_get_type
 gtk_tree_drag_source_get_type
 gtk_tree_model_filter_get_type
