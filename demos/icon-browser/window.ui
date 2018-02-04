@@ -9,7 +9,6 @@
     <property name="title" translatable="yes">Icon Browser</property>
     <property name="default-width">1024</property>
     <property name="default-height">768</property>
-    <signal name="key-press-event" handler="key_press_event_cb"/>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header">
         <property name="title" translatable="yes">Icon Browser</property>
