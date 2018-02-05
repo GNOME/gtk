@@ -1792,7 +1792,8 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
         gtk_css_provider_postprocess (css_provider);
     }
 
-  g_bytes_unref (free_bytes);
+  if (free_bytes)
+    g_bytes_unref (free_bytes);
 
   if (error)
     {
