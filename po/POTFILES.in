@@ -18,8 +18,6 @@ gdk/gdkpango.c
 gdk/gdkseat.c
 gdk/gdkwindow.c
 gdk/keyname-table.h
-gdk/mir/gdkmirglcontext.c
-gdk/mir/gdkmirwindowimpl.c
 gdk/quartz/gdkglcontext-quartz.c
 gdk/wayland/gdkclipboard-wayland.c
 gdk/wayland/gdkdnd-wayland.c
