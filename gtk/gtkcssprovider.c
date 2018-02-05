@@ -1386,17 +1386,17 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
                                 const char     *text)
 {
   GtkCssScanner *scanner;
-  char *free_data = NULL;
+  GBytes *bytes;
 
   if (text == NULL)
     {
       GError *load_error = NULL;
 
-      if (g_file_load_contents (file, NULL,
-                                &free_data, NULL,
-                                NULL, &load_error))
+      bytes = g_file_load_bytes (file, NULL, NULL, &load_error);
+
+      if (bytes)
         {
-          text = free_data;
+          text = g_bytes_get_data (bytes, NULL);
         }
       else
         {
@@ -1428,6 +1428,10 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
             }
         }
     }
+  else
+    {
+      bytes = NULL;
+    }
 
   if (text)
     {
@@ -1445,7 +1449,8 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
         gtk_css_provider_postprocess (css_provider);
     }
 
-  g_free (free_data);
+  if (bytes)
+    g_bytes_unref (bytes);
 }
 
 /**
