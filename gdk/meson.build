@@ -165,7 +165,7 @@ gdk_deps = [
   fontconfig_dep,
   platform_gio_dep,
   pangocairo_dep,
-  vulkan_lib
+  vulkan_dep,
 ]
 
 # add generated gdk sources

@@ -550,26 +550,34 @@ endif
 # Check for Vulkan support
 # TODO: move to gsk subfolder maybe? Or will it be used elsewhere too?
 have_vulkan = false
-vulkan_lib = []
-
-if cc.get_id() == 'msvc'
-  vulkan_libname = 'vulkan-1'
-else
-  vulkan_libname = 'vulkan'
-endif
+vulkan_pkg_found = false
+vulkan_dep = []
 
 enable_vulkan = get_option('enable-vulkan')
-if enable_vulkan != 'no'
-  vulkan_lib = cc.find_library(vulkan_libname, required: false)
-  if vulkan_lib.found() and cc.has_function('vkCreateInstance', dependencies: vulkan_lib) and cc.has_header('vulkan/vulkan.h')
+if enable_vulkan == 'no'
+  message('Vulkan support explicitly disabled')
+else
+  vulkan_dep = dependency('vulkan', required: false)
+  if vulkan_dep.found()
     have_vulkan = true
-    pc_gdk_extra_libs += ['-l@0@'.format(vulkan_libname)]
-  elif enable_vulkan == 'yes'
+    vulkan_pkg_found = true
+  else
+    if cc.get_id() == 'msvc'
+      vulkan_libname = 'vulkan-1'
+    else
+      vulkan_libname = 'vulkan'
+    endif
+    vulkan_dep = cc.find_library(vulkan_libname, required: false)
+    if vulkan_lib.found() and cc.has_function('vkCreateInstance', dependencies: vulkan_lib) and cc.has_header('vulkan/vulkan.h')
+      have_vulkan = true
+      pc_gdk_extra_libs += ['-l@0@'.format(vulkan_libname)]
+    endif
+  endif
+  if enable_vulkan == 'yes' and not have_vulkan
     error('Vulkan support not found, but was explicitly requested.')
   endif
-else
-  message('Vulkan support explicitly disabled')
 endif
+
 
 if cloudproviders_enabled
   cloudproviders_dep = dependency('cloudproviders', required: true)
@@ -622,6 +630,10 @@ if cairo_pkg_found
 endif
 if cairogobj_pkg_found
   gdk_packages += ' '.join([ ' cairo-gobject', cairo_req ])
+endif
+
+if vulkan_pkg_found
+  gdk_packages += 'vulkan'
 endif
 
 pkgconf.set('GDK_PACKAGES', gdk_packages)
