@@ -208,7 +208,6 @@
       <xi:include href="xml/gtkfontbutton.xml" />
       <xi:include href="xml/gtkfontchooserwidget.xml" />
       <xi:include href="xml/gtkfontchooserdialog.xml" />
-      <xi:include href="xml/gtkplacessidebar.xml" />
     </chapter>
 
     <chapter id="Ornaments">
