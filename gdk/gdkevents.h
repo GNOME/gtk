@@ -615,7 +615,7 @@ GDK_AVAILABLE_IN_ALL
 gboolean       gdk_event_get_axes      (GdkEvent  *event,
                                         gdouble  **axes,
                                         guint     *n_axes);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GList        * gdk_event_get_motion_history (const GdkEvent  *event);
 
 G_END_DECLS
