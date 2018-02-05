@@ -568,7 +568,7 @@ else
       vulkan_libname = 'vulkan'
     endif
     vulkan_dep = cc.find_library(vulkan_libname, required: false)
-    if vulkan_lib.found() and cc.has_function('vkCreateInstance', dependencies: vulkan_lib) and cc.has_header('vulkan/vulkan.h')
+    if vulkan_dep.found() and cc.has_function('vkCreateInstance', dependencies: vulkan_dep) and cc.has_header('vulkan/vulkan.h')
       have_vulkan = true
       pc_gdk_extra_libs += ['-l@0@'.format(vulkan_libname)]
     endif
