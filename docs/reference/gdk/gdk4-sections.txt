@@ -593,7 +593,7 @@ gdk_device_get_position
 gdk_device_get_position_double
 gdk_device_get_window_at_position
 gdk_device_get_window_at_position_double
-gdk_device_get_motion_history
+gdk_device_get_history
 gdk_device_free_history
 GdkTimeCoord
 gdk_device_get_axis
@@ -728,7 +728,7 @@ gdk_event_get_crossing_mode
 gdk_event_get_drag_context
 gdk_event_get_focus_in
 gdk_event_get_grab_window
-gdk_event_get_history
+gdk_event_get_motion_history
 gdk_event_get_key_group
 gdk_event_get_key_is_modifier
 gdk_event_get_pad_axis_value
