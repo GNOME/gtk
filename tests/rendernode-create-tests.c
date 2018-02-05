@@ -148,7 +148,7 @@ rounded_backgrounds (guint n)
 GskRenderNode *
 colors (guint n)
 {
-  GskRenderNode **nodes = g_newa (GskRenderNode *, 10 * n);
+  GskRenderNode **nodes = g_new (GskRenderNode *, 10 * n);
   GskRenderNode *container;
   graphene_rect_t bounds;
   GdkRGBA color;
@@ -169,6 +169,7 @@ colors (guint n)
 
   for (i = 0; i < 10 * n; i++)
     gsk_render_node_unref (nodes[i]);
+  g_free (nodes);
 
   return container;
 }
@@ -357,16 +358,31 @@ const char *example =
 GskRenderNode *
 text (guint n)
 {
-  GskRenderNode **nodes = g_newa (GskRenderNode *, n);
+  GPtrArray *nodes;
   GskRenderNode *container;
   PangoFontDescription *desc;
   PangoContext *context;
   PangoLayout *layout;
   GtkSettings *settings;
+  char *usr_dict_words;
+  char **words;
+  gsize n_words;
   int dpi_int;
   int i;
 
+  if (g_file_get_contents ("/usr/share/dict/words", &usr_dict_words, NULL, NULL))
+    {
+      words = g_strsplit (usr_dict_words, "\n", -1);
+      g_free (usr_dict_words);
+    }
+  else
+    {
+      words = g_strsplit ("the quick brown fox jumps over the lazy dog", " ", -1);
+    }
+  n_words = g_strv_length (words);
+
   context = pango_font_map_create_context (pango_cairo_font_map_get_default ());
+  nodes = g_ptr_array_new_with_free_func ((GDestroyNotify) gsk_render_node_unref);
 
   settings = gtk_settings_get_default ();
   g_object_get (settings, "gtk-xft-dpi", &dpi_int, NULL);
@@ -376,17 +392,16 @@ text (guint n)
   desc = pango_font_description_new ();
   pango_font_description_set_family (desc, "Cantarell");
   layout = pango_layout_new (context);
-  pango_layout_set_text (layout, example, -1);
 
   for (i = 0; i < n; i++)
     {
       PangoFont *font;
       PangoLayoutIter *iter;
-      PangoGlyphString *glyphs;
       PangoLayoutRun *run;
       GdkRGBA color;
-      int x, y;
+      int x, y, width, height;
 
+      pango_layout_set_text (layout, words[g_random_int_range (0, n_words)], -1);
       if (g_random_boolean ())
         pango_font_description_set_style (desc, PANGO_STYLE_ITALIC);
       else
@@ -396,38 +411,38 @@ text (guint n)
       pango_font_description_set_size (desc, PANGO_SCALE * g_random_int_range (8,32));
 
       font = pango_context_load_font (context, desc);
-
       pango_layout_set_font_description (layout, desc);
+
+      pango_layout_get_pixel_size (layout, &width, &height);
+      x = width >= 1000 ? 0 : g_random_int_range (0, 1000 - width);
+      y = height >= 1000 ? 0 : g_random_int_range (0, 1000 - height);
+      hsv_to_rgb (&color, g_random_double (), g_random_double_range (0.5, 1.0), g_random_double_range (0.15, 0.75));
+
       iter = pango_layout_get_iter (layout);
       do
         {
-          if (g_random_boolean ())
-            pango_layout_iter_next_run (iter);
-          if (g_random_boolean ())
-            pango_layout_iter_next_run (iter);
           run = pango_layout_iter_get_run (iter);
+          if (run != NULL)
+            {
+              GskRenderNode *node;
+              
+              node = gsk_text_node_new (font, run->glyphs, &color, x, y);
+              if (node)
+                g_ptr_array_add (nodes, node);
+            }
         }
-      while (run == NULL);
-
-      glyphs = run->glyphs;
-
-      x = g_random_int_range (0, 1000);
-      y = g_random_int_range (0, 1000);
-
-      hsv_to_rgb (&color, g_random_double (), g_random_double_range (0.15, 0.4), g_random_double_range (0.6, 0.85));
-
-      nodes[i] = gsk_text_node_new (font, glyphs, &color, x, y);
-
+      while (pango_layout_iter_next_run (iter));
       pango_layout_iter_free (iter);
+
       g_object_unref (font);
     }
 
   pango_font_description_free (desc);
+  g_object_unref (layout);
 
-  container = gsk_container_node_new (nodes, n);
-
-  for (i = 0; i < n; i++)
-    gsk_render_node_unref (nodes[i]);
+  container = gsk_container_node_new ((GskRenderNode **) nodes->pdata, nodes->len);
+  g_ptr_array_unref (nodes);
+  g_strfreev (words);
 
   return container;
 }
