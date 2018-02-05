@@ -316,7 +316,7 @@ get_event_mask_from_ns_event (NSEvent *nsevent)
     case NSOtherMouseUp:
       return GDK_BUTTON_RELEASE_MASK;
     case NSMouseMoved:
-      return GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK;
+      return GDK_POINTER_MOTION_MASK;
     case NSScrollWheel:
       /* Since applications that want button press events can get
        * scroll events on X11 (since scroll wheel events are really
@@ -324,20 +324,18 @@ get_event_mask_from_ns_event (NSEvent *nsevent)
        */
       return GDK_SCROLL_MASK | GDK_BUTTON_PRESS_MASK;
     case NSLeftMouseDragged:
-      return (GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK |
+      return (GDK_POINTER_MOTION_MASK |
 	      GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | 
 	      GDK_BUTTON1_MASK);
     case NSRightMouseDragged:
-      return (GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK |
+      return (GDK_POINTER_MOTION_MASK |
 	      GDK_BUTTON_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | 
 	      GDK_BUTTON3_MASK);
     case NSOtherMouseDragged:
       {
 	GdkEventMask mask;
 
-	mask = (GDK_POINTER_MOTION_MASK |
-		GDK_POINTER_MOTION_HINT_MASK |
-		GDK_BUTTON_MOTION_MASK);
+	mask = (GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK);
 
 	if (get_mouse_button_from_ns_event (nsevent) == 2)
 	  mask |= (GDK_BUTTON2_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | 
@@ -535,7 +533,6 @@ generate_motion_event (GdkWindow *window)
   /* FIXME event->axes */
   event->motion.state = _gdk_quartz_events_get_current_keyboard_modifiers () |
                         _gdk_quartz_events_get_current_mouse_modifiers ();
-  event->motion.is_hint = FALSE;
   device_manager = GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_device_manager);
   event->motion.device = device_manager->core_pointer;
   gdk_event_set_seat (event, gdk_device_get_seat (device_manager->core_pointer));
@@ -1070,7 +1067,6 @@ fill_motion_event (GdkWindow *window,
   /* FIXME event->axes */
   event->motion.state = get_keyboard_modifiers_from_ns_event (nsevent) |
                         _gdk_quartz_events_get_current_mouse_modifiers ();
-  event->motion.is_hint = FALSE;
   device_manager = GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_device_manager);
   event->motion.device = device_manager->core_pointer;
   gdk_event_set_seat (event, gdk_device_get_seat (device_manager->core_pointer));

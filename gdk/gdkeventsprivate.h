@@ -99,8 +99,6 @@ struct _GdkEventExpose
  * @state: (type GdkModifierType): a bit-mask representing the state of
  *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
  *   buttons. See #GdkModifierType.
- * @is_hint: set to 1 if this event is just a hint, see the
- *   %GDK_POINTER_MOTION_HINT_MASK value of #GdkEventMask.
  * @device: the master device that the event originated from. Use
  * gdk_event_get_source_device() to get the slave device.
  * @x_root: the x coordinate of the pointer relative to the root of the
@@ -118,7 +116,6 @@ struct _GdkEventMotion
   gdouble y;
   gdouble *axes;
   guint state;
-  gint16 is_hint;
   GdkDeviceTool *tool;
   gdouble x_root, y_root;
   GList *history;

@@ -1482,7 +1482,6 @@ pointer_handle_motion (void              *data,
   event->motion.time = time;
   event->motion.axes = NULL;
   event->motion.state = device_get_modifiers (seat->master_pointer);
-  event->motion.is_hint = 0;
   gdk_event_set_display (event, seat->display);
 
   get_coordinates (seat->master_pointer,
@@ -3525,7 +3524,6 @@ tablet_tool_handle_motion (void                      *data,
   gdk_event_set_device_tool (event, tool->tool);
   event->motion.time = tablet->pointer_info.time;
   event->motion.state = device_get_modifiers (tablet->master);
-  event->motion.is_hint = FALSE;
   gdk_event_set_display (event, seat->display);
 
   get_coordinates (tablet->master,

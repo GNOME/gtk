@@ -1123,7 +1123,6 @@ gdk_input_other_event (GdkDisplay *display,
       else
         {
           event->motion.time = _gdk_win32_get_next_tick (msg->time);
-          event->motion.is_hint = FALSE;
           gdk_event_set_device (event, device_manager->core_pointer);
           gdk_event_set_source_device (event, GDK_DEVICE (source_device));
           gdk_event_set_seat (event, gdk_device_get_seat (device_manager->core_pointer));

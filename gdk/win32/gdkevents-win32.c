@@ -815,10 +815,9 @@ _gdk_win32_print_event (const GdkEvent *event)
 	       event->expose.count);
       break;
     case GDK_MOTION_NOTIFY:
-      g_print ("(%.4g,%.4g) (%.4g,%.4g) %s",
+      g_print ("(%.4g,%.4g) (%.4g,%.4g)",
 	       event->motion.x, event->motion.y,
-	       event->motion.x_root, event->motion.y_root,
-	       event->motion.is_hint ? "HINT " : "");
+	       event->motion.x_root, event->motion.y_root);
       print_event_state (event->motion.state);
       break;
     case GDK_BUTTON_PRESS:
@@ -2947,7 +2946,6 @@ gdk_event_translate (MSG  *msg,
 	  event->motion.y_root = current_root_y;
 	  event->motion.axes = NULL;
 	  event->motion.state = build_pointer_event_state (msg);
-	  event->motion.is_hint = FALSE;
 	  gdk_event_set_device (event, device_manager_win32->core_pointer);
 	  gdk_event_set_source_device (event, device_manager_win32->system_pointer);
           gdk_event_set_seat (event, gdk_device_get_seat (device_manager_win32->core_pointer));

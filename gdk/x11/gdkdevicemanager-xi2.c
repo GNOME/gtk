@@ -1643,9 +1643,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
         event->motion.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
 
-        /* There doesn't seem to be motion hints in XI */
-        event->motion.is_hint = FALSE;
-
         event->motion.axes = translate_axes (device,
                                              event->motion.x,
                                              event->motion.y,

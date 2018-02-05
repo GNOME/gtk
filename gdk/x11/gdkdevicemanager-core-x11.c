@@ -595,7 +595,6 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
       event->motion.y_root = (gdouble) xevent->xmotion.y_root / scale;
       event->motion.axes = NULL;
       event->motion.state = (GdkModifierType) xevent->xmotion.state;
-      event->motion.is_hint = xevent->xmotion.is_hint;
       gdk_event_set_device (event, device_manager->core_pointer);
 
       gdk_event_set_display (event, display);
