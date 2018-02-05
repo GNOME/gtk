@@ -2560,9 +2560,6 @@ gtk_notebook_gesture_released (GtkGestureMultiPress *gesture,
   if (!event)
     return;
 
-  if (gdk_event_get_event_type (event) != GDK_BUTTON_RELEASE)
-    return;
-
   if (priv->pressed_button != button)
     return;
 
