@@ -433,8 +433,6 @@ gtk_calendar_class_init (GtkCalendarClass *class)
  * GtkCalendar:show-heading:
  *
  * Determines whether a heading is displayed.
- *
- * Since: 2.4
  */
   g_object_class_install_property (gobject_class,
                                    PROP_SHOW_HEADING,
@@ -448,8 +446,6 @@ gtk_calendar_class_init (GtkCalendarClass *class)
  * GtkCalendar:show-day-names:
  *
  * Determines whether day names are displayed.
- *
- * Since: 2.4
  */
   g_object_class_install_property (gobject_class,
                                    PROP_SHOW_DAY_NAMES,
@@ -462,8 +458,6 @@ gtk_calendar_class_init (GtkCalendarClass *class)
  * GtkCalendar:no-month-change:
  *
  * Determines whether the selected month can be changed.
- *
- * Since: 2.4
  */
   g_object_class_install_property (gobject_class,
                                    PROP_NO_MONTH_CHANGE,
@@ -477,8 +471,6 @@ gtk_calendar_class_init (GtkCalendarClass *class)
  * GtkCalendar:show-week-numbers:
  *
  * Determines whether week numbers are displayed.
- *
- * Since: 2.4
  */
   g_object_class_install_property (gobject_class,
                                    PROP_SHOW_WEEK_NUMBERS,
@@ -493,8 +485,6 @@ gtk_calendar_class_init (GtkCalendarClass *class)
  *
  * Width of a detail cell, in characters.
  * A value of 0 allows any width. See gtk_calendar_set_detail_func().
- *
- * Since: 2.14
  */
   g_object_class_install_property (gobject_class,
                                    PROP_DETAIL_WIDTH_CHARS,
@@ -509,8 +499,6 @@ gtk_calendar_class_init (GtkCalendarClass *class)
  *
  * Height of a detail cell, in rows.
  * A value of 0 allows any width. See gtk_calendar_set_detail_func().
- *
- * Since: 2.14
  */
   g_object_class_install_property (gobject_class,
                                    PROP_DETAIL_HEIGHT_ROWS,
@@ -526,8 +514,6 @@ gtk_calendar_class_init (GtkCalendarClass *class)
  * Determines whether details are shown directly in the widget, or if they are
  * available only as tooltip. When this property is set days with details are
  * marked.
- *
- * Since: 2.14
  */
   g_object_class_install_property (gobject_class,
                                    PROP_SHOW_DETAILS,
@@ -3107,8 +3093,6 @@ gtk_calendar_new (void)
  * Returns the current display options of @calendar.
  *
  * Returns: the display options.
- *
- * Since: 2.4
  **/
 GtkCalendarDisplayOptions
 gtk_calendar_get_display_options (GtkCalendar         *calendar)
@@ -3125,8 +3109,6 @@ gtk_calendar_get_display_options (GtkCalendar         *calendar)
  *
  * Sets display options (whether to display the heading and the month
  * headings).
- *
- * Since: 2.4
  **/
 void
 gtk_calendar_set_display_options (GtkCalendar          *calendar,
@@ -3344,8 +3326,6 @@ gtk_calendar_mark_day (GtkCalendar *calendar,
  * Returns if the @day of the @calendar is already marked.
  *
  * Returns: whether the day is marked.
- *
- * Since: 3.0
  */
 gboolean
 gtk_calendar_get_day_is_marked (GtkCalendar *calendar,
@@ -3439,8 +3419,6 @@ gtk_calendar_get_date (GtkCalendar *calendar,
  * The size of the details area can be restricted by setting the
  * #GtkCalendar:detail-width-chars and #GtkCalendar:detail-height-rows
  * properties.
- *
- * Since: 2.14
  */
 void
 gtk_calendar_set_detail_func (GtkCalendar           *calendar,
@@ -3473,8 +3451,6 @@ gtk_calendar_set_detail_func (GtkCalendar           *calendar,
  *
  * Updates the width of detail cells.
  * See #GtkCalendar:detail-width-chars.
- *
- * Since: 2.14
  */
 void
 gtk_calendar_set_detail_width_chars (GtkCalendar *calendar,
@@ -3501,8 +3477,6 @@ gtk_calendar_set_detail_width_chars (GtkCalendar *calendar,
  *
  * Updates the height of detail cells.
  * See #GtkCalendar:detail-height-rows.
- *
- * Since: 2.14
  */
 void
 gtk_calendar_set_detail_height_rows (GtkCalendar *calendar,
@@ -3529,8 +3503,6 @@ gtk_calendar_set_detail_height_rows (GtkCalendar *calendar,
  * Queries the width of detail cells, in characters.
  * See #GtkCalendar:detail-width-chars.
  *
- * Since: 2.14
- *
  * Returns: The width of detail cells, in characters.
  */
 gint
@@ -3547,8 +3519,6 @@ gtk_calendar_get_detail_width_chars (GtkCalendar *calendar)
  *
  * Queries the height of detail cells, in rows.
  * See #GtkCalendar:detail-width-chars.
- *
- * Since: 2.14
  *
  * Returns: The height of detail cells, in rows.
  */

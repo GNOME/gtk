@@ -69,7 +69,7 @@ GDK_AVAILABLE_IN_ALL
 void                 gtk_scrollable_set_vscroll_policy     (GtkScrollable       *scrollable,
 							    GtkScrollablePolicy  policy);
 
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 gboolean             gtk_scrollable_get_border             (GtkScrollable       *scrollable,
                                                             GtkBorder           *border);
 

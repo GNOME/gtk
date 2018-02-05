@@ -407,8 +407,6 @@ gtk_assistant_class_init (GtkAssistantClass *class)
    * @assistant: the #GtkAssistant
    *
    * The ::cancel signal is emitted when then the cancel button is clicked.
-   *
-   * Since: 2.10
    */
   signals[CANCEL] =
     g_signal_new (I_("cancel"),
@@ -429,8 +427,6 @@ gtk_assistant_class_init (GtkAssistantClass *class)
    *
    * A handler for this signal can do any preparations which are
    * necessary before showing @page.
-   *
-   * Since: 2.10
    */
   signals[PREPARE] =
     g_signal_new (I_("prepare"),
@@ -456,8 +452,6 @@ gtk_assistant_class_init (GtkAssistantClass *class)
    * %GTK_ASSISTANT_PAGE_PROGRESS after the confirmation page and handle
    * this operation within the #GtkAssistant::prepare signal of the progress
    * page.
-   *
-   * Since: 2.10
    */
   signals[APPLY] =
     g_signal_new (I_("apply"),
@@ -475,8 +469,6 @@ gtk_assistant_class_init (GtkAssistantClass *class)
    * The ::close signal is emitted either when the close button of
    * a summary page is clicked, or when the apply button in the last
    * page in the flow (of type %GTK_ASSISTANT_PAGE_CONFIRM) is clicked.
-   *
-   * Since: 2.10
    */
   signals[CLOSE] =
     g_signal_new (I_("close"),
@@ -507,8 +499,6 @@ gtk_assistant_class_init (GtkAssistantClass *class)
    *
    * For technical reasons, this property is declared as an integer
    * property, but you should only set it to %TRUE or %FALSE.
-   *
-   * Since: 3.12
    */
   g_object_class_install_property (gobject_class,
                                    PROP_USE_HEADER_BAR,
@@ -522,8 +512,6 @@ gtk_assistant_class_init (GtkAssistantClass *class)
    * GtkAssistant:page-type:
    *
    * The type of the assistant page.
-   *
-   * Since: 2.10
    */
   gtk_container_class_install_child_property (container_class,
                                               CHILD_PROP_PAGE_TYPE,
@@ -538,8 +526,6 @@ gtk_assistant_class_init (GtkAssistantClass *class)
    * GtkAssistant:title:
    *
    * The title of the page.
-   *
-   * Since: 2.10
    */
   gtk_container_class_install_child_property (container_class,
                                               CHILD_PROP_PAGE_TITLE,
@@ -555,8 +541,6 @@ gtk_assistant_class_init (GtkAssistantClass *class)
    * Setting the "complete" child property to %TRUE marks a page as
    * complete (i.e.: all the required fields are filled out). GTK+ uses
    * this information to control the sensitivity of the navigation buttons.
-   *
-   * Since: 2.10
    */
   gtk_container_class_install_child_property (container_class,
                                               CHILD_PROP_PAGE_COMPLETE,
@@ -1398,8 +1382,6 @@ gtk_assistant_remove (GtkContainer *container,
  * Creates a new #GtkAssistant.
  *
  * Returns: a newly created #GtkAssistant
- *
- * Since: 2.10
  */
 GtkWidget*
 gtk_assistant_new (void)
@@ -1420,8 +1402,6 @@ gtk_assistant_new (void)
  * Returns: The index (starting from 0) of the current
  *     page in the @assistant, or -1 if the @assistant has no pages,
  *     or no current page.
- *
- * Since: 2.10
  */
 gint
 gtk_assistant_get_current_page (GtkAssistant *assistant)
@@ -1451,8 +1431,6 @@ gtk_assistant_get_current_page (GtkAssistant *assistant)
  * Note that this will only be necessary in custom buttons,
  * as the @assistant flow can be set with
  * gtk_assistant_set_forward_page_func().
- *
- * Since: 2.10
  */
 void
 gtk_assistant_set_current_page (GtkAssistant *assistant,
@@ -1500,8 +1478,6 @@ gtk_assistant_set_current_page (GtkAssistant *assistant,
  *
  * This function is for use when creating pages of the
  * #GTK_ASSISTANT_PAGE_CUSTOM type.
- *
- * Since: 3.0
  */
 void
 gtk_assistant_next_page (GtkAssistant *assistant)
@@ -1525,8 +1501,6 @@ gtk_assistant_next_page (GtkAssistant *assistant)
  *
  * This function is for use when creating pages of the
  * #GTK_ASSISTANT_PAGE_CUSTOM type.
- *
- * Since: 3.0
  */
 void
 gtk_assistant_previous_page (GtkAssistant *assistant)
@@ -1563,8 +1537,6 @@ gtk_assistant_previous_page (GtkAssistant *assistant)
  * Returns the number of pages in the @assistant
  *
  * Returns: the number of pages in the @assistant
- *
- * Since: 2.10
  */
 gint
 gtk_assistant_get_n_pages (GtkAssistant *assistant)
@@ -1588,8 +1560,6 @@ gtk_assistant_get_n_pages (GtkAssistant *assistant)
  *
  * Returns: (nullable) (transfer none): the child widget, or %NULL
  *     if @page_num is out of bounds
- *
- * Since: 2.10
  */
 GtkWidget*
 gtk_assistant_get_nth_page (GtkAssistant *assistant,
@@ -1625,8 +1595,6 @@ gtk_assistant_get_nth_page (GtkAssistant *assistant,
  * Prepends a page to the @assistant.
  *
  * Returns: the index (starting at 0) of the inserted page
- *
- * Since: 2.10
  */
 gint
 gtk_assistant_prepend_page (GtkAssistant *assistant,
@@ -1646,8 +1614,6 @@ gtk_assistant_prepend_page (GtkAssistant *assistant,
  * Appends a page to the @assistant.
  *
  * Returns: the index (starting at 0) of the inserted page
- *
- * Since: 2.10
  */
 gint
 gtk_assistant_append_page (GtkAssistant *assistant,
@@ -1669,8 +1635,6 @@ gtk_assistant_append_page (GtkAssistant *assistant,
  * Inserts a page in the @assistant at a given position.
  *
  * Returns: the index (starting from 0) of the inserted page
- *
- * Since: 2.10
  */
 gint
 gtk_assistant_insert_page (GtkAssistant *assistant,
@@ -1755,8 +1719,6 @@ gtk_assistant_insert_page (GtkAssistant *assistant,
  *     or -1 to remove the last page
  *
  * Removes the @page_num’s page from @assistant.
- *
- * Since: 3.2
  */
 void
 gtk_assistant_remove_page (GtkAssistant *assistant,
@@ -1787,8 +1749,6 @@ gtk_assistant_remove_page (GtkAssistant *assistant,
  * Setting @page_func to %NULL will make the assistant to
  * use the default forward function, which just goes to the
  * next visible page.
- *
- * Since: 2.10
  */
 void
 gtk_assistant_set_forward_page_func (GtkAssistant         *assistant,
@@ -1843,8 +1803,6 @@ add_to_action_area (GtkAssistant *assistant,
  * @child: a #GtkWidget
  *
  * Adds a widget to the action area of a #GtkAssistant.
- *
- * Since: 2.10
  */
 void
 gtk_assistant_add_action_widget (GtkAssistant *assistant,
@@ -1877,8 +1835,6 @@ gtk_assistant_add_action_widget (GtkAssistant *assistant,
  * @child: a #GtkWidget
  *
  * Removes a widget from the action area of a #GtkAssistant.
- *
- * Since: 2.10
  */
 void
 gtk_assistant_remove_action_widget (GtkAssistant *assistant,
@@ -1912,8 +1868,6 @@ gtk_assistant_remove_action_widget (GtkAssistant *assistant,
  *
  * The title is displayed in the header area of the assistant
  * when @page is the current page.
- *
- * Since: 2.10
  */
 void
 gtk_assistant_set_page_title (GtkAssistant *assistant,
@@ -1951,8 +1905,6 @@ gtk_assistant_set_page_title (GtkAssistant *assistant,
  * Gets the title for @page.
  *
  * Returns: the title for @page
- *
- * Since: 2.10
  */
 const gchar*
 gtk_assistant_get_page_title (GtkAssistant *assistant,
@@ -1982,8 +1934,6 @@ gtk_assistant_get_page_title (GtkAssistant *assistant,
  * Sets the page type for @page.
  *
  * The page type determines the page behavior in the @assistant.
- *
- * Since: 2.10
  */
 void
 gtk_assistant_set_page_type (GtkAssistant         *assistant,
@@ -2030,8 +1980,6 @@ gtk_assistant_set_page_type (GtkAssistant         *assistant,
  * Gets the page type of @page.
  *
  * Returns: the page type of @page
- *
- * Since: 2.10
  */
 GtkAssistantPageType
 gtk_assistant_get_page_type (GtkAssistant *assistant,
@@ -2062,8 +2010,6 @@ gtk_assistant_get_page_type (GtkAssistant *assistant,
  *
  * This will make @assistant update the buttons state
  * to be able to continue the task.
- *
- * Since: 2.10
  */
 void
 gtk_assistant_set_page_complete (GtkAssistant *assistant,
@@ -2104,8 +2050,6 @@ gtk_assistant_set_page_complete (GtkAssistant *assistant,
  * Gets whether @page is complete.
  *
  * Returns: %TRUE if @page is complete.
- *
- * Since: 2.10
  */
 gboolean
 gtk_assistant_get_page_complete (GtkAssistant *assistant,
@@ -2134,8 +2078,6 @@ gtk_assistant_get_page_complete (GtkAssistant *assistant,
  *
  * Sets whether the assistant is adding padding around
  * the page.
- *
- * Since: 3.18
  */
 void
 gtk_assistant_set_page_has_padding (GtkAssistant *assistant,
@@ -2174,7 +2116,6 @@ gtk_assistant_set_page_has_padding (GtkAssistant *assistant,
  * Gets whether page has padding.
  *
  * Returns: %TRUE if @page has padding
- * Since: 3.18
  */
 gboolean
 gtk_assistant_get_page_has_padding (GtkAssistant *assistant,
@@ -2208,8 +2149,6 @@ gtk_assistant_get_page_has_padding (GtkAssistant *assistant,
  * One situation where it can be necessary to call this
  * function is when changing a value on the current page
  * affects the future page flow of the assistant.
- *
- * Since: 2.10
  */
 void
 gtk_assistant_update_buttons_state (GtkAssistant *assistant)
@@ -2232,8 +2171,6 @@ gtk_assistant_update_buttons_state (GtkAssistant *assistant)
  * or undone. For example, showing a progress page to track
  * a long-running, unreversible operation after the user has
  * clicked apply on a confirmation page.
- *
- * Since: 2.22
  */
 void
 gtk_assistant_commit (GtkAssistant *assistant)

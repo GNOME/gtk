@@ -575,8 +575,6 @@ gtk_cell_renderer_toggle_set_active (GtkCellRendererToggle *toggle,
  * gtk_cell_renderer_toggle_set_activatable().
  *
  * Returns: %TRUE if the cell renderer is activatable.
- *
- * Since: 2.18
  **/
 gboolean
 gtk_cell_renderer_toggle_get_activatable (GtkCellRendererToggle *toggle)
@@ -592,8 +590,6 @@ gtk_cell_renderer_toggle_get_activatable (GtkCellRendererToggle *toggle)
  * @setting: the value to set.
  *
  * Makes the cell renderer activatable.
- *
- * Since: 2.18
  **/
 void
 gtk_cell_renderer_toggle_set_activatable (GtkCellRendererToggle *toggle,

@@ -236,8 +236,6 @@ G_DEFINE_TYPE_WITH_CODE (GtkFileChooserNative, gtk_file_chooser_native, GTK_TYPE
  *
  * Returns: (nullable): The custom label, or %NULL for the default. This string
  * is owned by GTK+ and should not be modified or freed
- *
- * Since: 3.20
  **/
 const char *
 gtk_file_chooser_native_get_accept_label (GtkFileChooserNative *self)
@@ -259,8 +257,6 @@ gtk_file_chooser_native_get_accept_label (GtkFileChooserNative *self)
  * underscores). The first underlined character represents a keyboard
  * accelerator called a mnemonic.
  * Pressing Alt and that key activates the button.
- *
- * Since: 3.20
  **/
 void
 gtk_file_chooser_native_set_accept_label (GtkFileChooserNative *self,
@@ -282,8 +278,6 @@ gtk_file_chooser_native_set_accept_label (GtkFileChooserNative *self,
  *
  * Returns: (nullable): The custom label, or %NULL for the default. This string
  * is owned by GTK+ and should not be modified or freed
- *
- * Since: 3.20
  **/
 const char *
 gtk_file_chooser_native_get_cancel_label (GtkFileChooserNative *self)
@@ -305,8 +299,6 @@ gtk_file_chooser_native_get_cancel_label (GtkFileChooserNative *self)
  * underscores). The first underlined character represents a keyboard
  * accelerator called a mnemonic.
  * Pressing Alt and that key activates the button.
- *
- * Since: 3.20
  **/
 void
 gtk_file_chooser_native_set_cancel_label (GtkFileChooserNative *self,
@@ -550,8 +542,6 @@ gtk_file_chooser_native_init (GtkFileChooserNative *self)
  * Creates a new #GtkFileChooserNative.
  *
  * Returns: a new #GtkFileChooserNative
- *
- * Since: 3.20
  **/
 GtkFileChooserNative *
 gtk_file_chooser_native_new (const gchar          *title,

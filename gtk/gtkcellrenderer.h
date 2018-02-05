@@ -220,7 +220,7 @@ void               gtk_cell_renderer_get_aligned_area               (GtkCellRend
 								     GtkCellRendererState flags,
 								     const GdkRectangle *cell_area,
 								     GdkRectangle       *aligned_area);
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 void             gtk_cell_renderer_snapshot       (GtkCellRenderer      *cell,
                                                    GtkSnapshot          *snapshot,
 						   GtkWidget            *widget,

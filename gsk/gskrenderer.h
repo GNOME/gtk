@@ -35,38 +35,38 @@ G_BEGIN_DECLS
 
 typedef struct _GskRendererClass        GskRendererClass;
 
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 GType gsk_renderer_get_type (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 GskRenderer *           gsk_renderer_new_for_window             (GdkWindow               *window);
 
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 GdkWindow *             gsk_renderer_get_window                 (GskRenderer             *renderer);
 
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 GdkDisplay *            gsk_renderer_get_display                (GskRenderer             *renderer);
 
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 gboolean                gsk_renderer_realize                    (GskRenderer             *renderer,
                                                                  GdkWindow               *window,
                                                                  GError                 **error);
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 void                    gsk_renderer_unrealize                  (GskRenderer             *renderer);
 
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 GdkTexture *            gsk_renderer_render_texture             (GskRenderer             *renderer,
                                                                  GskRenderNode           *root,
                                                                  const graphene_rect_t   *viewport);
 
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 GdkDrawingContext *     gsk_renderer_begin_draw_frame           (GskRenderer             *renderer,
                                                                  const cairo_region_t    *region);
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 void                    gsk_renderer_render                     (GskRenderer             *renderer,
                                                                  GskRenderNode           *root,
                                                                  GdkDrawingContext       *context);
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 void                    gsk_renderer_end_draw_frame             (GskRenderer             *renderer,
                                                                  GdkDrawingContext       *context);
 

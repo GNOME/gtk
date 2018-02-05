@@ -1182,8 +1182,6 @@ gtk_header_bar_size_allocate (GtkWidget           *widget,
  * Sets the title of the #GtkHeaderBar. The title should help a user
  * identify the current view. A good title should not include the
  * application name.
- *
- * Since: 3.10
  */
 void
 gtk_header_bar_set_title (GtkHeaderBar *bar,
@@ -1216,8 +1214,6 @@ gtk_header_bar_set_title (GtkHeaderBar *bar,
  * Returns: (nullable): the title of the header, or %NULL if none has
  *    been set explicitly. The returned string is owned by the widget
  *    and must not be modified or freed.
- *
- * Since: 3.10
  */
 const gchar *
 gtk_header_bar_get_title (GtkHeaderBar *bar)
@@ -1240,8 +1236,6 @@ gtk_header_bar_get_title (GtkHeaderBar *bar)
  * Note that GtkHeaderBar by default reserves room for the subtitle,
  * even if none is currently set. If this is not desired, set the
  * #GtkHeaderBar:has-subtitle property to %FALSE.
- *
- * Since: 3.10
  */
 void
 gtk_header_bar_set_subtitle (GtkHeaderBar *bar,
@@ -1277,8 +1271,6 @@ gtk_header_bar_set_subtitle (GtkHeaderBar *bar,
  * Returns: (nullable): the subtitle of the header, or %NULL if none has
  *    been set explicitly. The returned string is owned by the widget
  *    and must not be modified or freed.
- *
- * Since: 3.10
  */
 const gchar *
 gtk_header_bar_get_subtitle (GtkHeaderBar *bar)
@@ -1305,8 +1297,6 @@ gtk_header_bar_get_subtitle (GtkHeaderBar *bar)
  *
  * You should set the custom title to %NULL, for the header title
  * label to be visible again.
- *
- * Since: 3.10
  */
 void
 gtk_header_bar_set_custom_title (GtkHeaderBar *bar,
@@ -1369,8 +1359,6 @@ gtk_header_bar_set_custom_title (GtkHeaderBar *bar,
  *
  * Returns: (nullable) (transfer none): the custom title widget
  *    of the header, or %NULL if none has been set explicitly.
- *
- * Since: 3.10
  */
 GtkWidget *
 gtk_header_bar_get_custom_title (GtkHeaderBar *bar)
@@ -1934,8 +1922,6 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
    *
    * See gtk_header_bar_set_decoration_layout() for information
    * about the format of this string.
-   *
-   * Since: 3.12
    */
   header_bar_props[PROP_DECORATION_LAYOUT] =
       g_param_spec_string ("decoration-layout",
@@ -1948,8 +1934,6 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
    * GtkHeaderBar:decoration-layout-set:
    *
    * Set to %TRUE if #GtkHeaderBar:decoration-layout is set.
-   *
-   * Since: 3.12
    */
   header_bar_props[PROP_DECORATION_LAYOUT_SET] =
       g_param_spec_boolean ("decoration-layout-set",
@@ -1963,8 +1947,6 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
    *
    * If %TRUE, reserve space for a subtitle, even if none
    * is currently set.
-   *
-   * Since: 3.12
    */
   header_bar_props[PROP_HAS_SUBTITLE] =
       g_param_spec_boolean ("has-subtitle",
@@ -2030,8 +2012,6 @@ gtk_header_bar_buildable_init (GtkBuildableIface *iface)
  *
  * Adds @child to @bar, packed with reference to the
  * start of the @bar.
- *
- * Since: 3.10
  */
 void
 gtk_header_bar_pack_start (GtkHeaderBar *bar,
@@ -2047,8 +2027,6 @@ gtk_header_bar_pack_start (GtkHeaderBar *bar,
  *
  * Adds @child to @bar, packed with reference to the
  * end of the @bar.
- *
- * Since: 3.10
  */
 void
 gtk_header_bar_pack_end (GtkHeaderBar *bar,
@@ -2063,8 +2041,6 @@ gtk_header_bar_pack_end (GtkHeaderBar *bar,
  * Creates a new #GtkHeaderBar widget.
  *
  * Returns: a new #GtkHeaderBar
- *
- * Since: 3.10
  */
 GtkWidget *
 gtk_header_bar_new (void)
@@ -2080,8 +2056,6 @@ gtk_header_bar_new (void)
  * title buttons.
  *
  * Returns: %TRUE if title buttons are shown
- *
- * Since: 3.94
  */
 gboolean
 gtk_header_bar_get_show_title_buttons (GtkHeaderBar *bar)
@@ -2102,8 +2076,6 @@ gtk_header_bar_get_show_title_buttons (GtkHeaderBar *bar)
  *
  * Sets whether this header bar shows the standard window
  * title buttons including close, maximize, and minimize.
- *
- * Since: 3.94
  */
 void
 gtk_header_bar_set_show_title_buttons (GtkHeaderBar *bar,
@@ -2132,8 +2104,6 @@ gtk_header_bar_set_show_title_buttons (GtkHeaderBar *bar,
  *
  * Sets whether the header bar should reserve space
  * for a subtitle, even if none is currently set.
- *
- * Since: 3.12
  */
 void
 gtk_header_bar_set_has_subtitle (GtkHeaderBar *bar,
@@ -2167,8 +2137,6 @@ gtk_header_bar_set_has_subtitle (GtkHeaderBar *bar,
  *
  * Returns: %TRUE if the header bar reserves space
  *     for a subtitle
- *
- * Since: 3.12
  */
 gboolean
 gtk_header_bar_get_has_subtitle (GtkHeaderBar *bar)
@@ -2205,8 +2173,6 @@ gtk_header_bar_get_has_subtitle (GtkHeaderBar *bar)
  *
  * For example, “menu:minimize,maximize,close” specifies a menu
  * on the left, and minimize, maximize and close buttons on the right.
- *
- * Since: 3.12
  */
 void
 gtk_header_bar_set_decoration_layout (GtkHeaderBar *bar,
@@ -2235,8 +2201,6 @@ gtk_header_bar_set_decoration_layout (GtkHeaderBar *bar,
  * gtk_header_bar_set_decoration_layout().
  *
  * Returns: the decoration layout
- *
- * Since: 3.12 
  */
 const gchar *
 gtk_header_bar_get_decoration_layout (GtkHeaderBar *bar)

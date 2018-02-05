@@ -679,8 +679,6 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
    * @is_expanded: whether the view is currently showing the children of this row
    *
    * This signal is emitted whenever applying attributes to @area from @model
-   *
-   * Since: 3.0
    */
   cell_area_signals[SIGNAL_APPLY_ATTRIBUTES] =
     g_signal_new (I_("apply-attributes"),
@@ -708,8 +706,6 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
    *
    * Indicates that editing has started on @renderer and that @editable
    * should be added to the owning cell-layouting widget at @cell_area.
-   *
-   * Since: 3.0
    */
   cell_area_signals[SIGNAL_ADD_EDITABLE] =
     g_signal_new (I_("add-editable"),
@@ -733,8 +729,6 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
    *
    * Indicates that editing finished on @renderer and that @editable
    * should be removed from the owning cell-layouting widget.
-   *
-   * Since: 3.0
    */
   cell_area_signals[SIGNAL_REMOVE_EDITABLE] =
     g_signal_new (I_("remove-editable"),
@@ -761,8 +755,6 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
    * currently focused renderer did not change, this is
    * because focus may change to the same renderer in the
    * same cell area for a different row of data.
-   *
-   * Since: 3.0
    */
   cell_area_signals[SIGNAL_FOCUS_CHANGED] =
     g_signal_new (I_("focus-changed"),
@@ -780,8 +772,6 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
    * GtkCellArea:focus-cell:
    *
    * The cell in the area that currently has focus
-   *
-   * Since: 3.0
    */
   g_object_class_install_property (object_class,
                                    PROP_FOCUS_CELL,
@@ -798,8 +788,6 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
    *
    * This property is read-only and only changes as
    * a result of a call gtk_cell_area_activate_cell().
-   *
-   * Since: 3.0
    */
   g_object_class_install_property (object_class,
                                    PROP_EDITED_CELL,
@@ -816,8 +804,6 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
    *
    * This property is read-only and only changes as
    * a result of a call gtk_cell_area_activate_cell().
-   *
-   * Since: 3.0
    */
   g_object_class_install_property (object_class,
                                    PROP_EDIT_WIDGET,
@@ -1605,8 +1591,6 @@ gtk_cell_area_buildable_custom_tag_end (GtkBuildable *buildable,
  * @renderer: the #GtkCellRenderer to add to @area
  *
  * Adds @renderer to @area with the default child cell properties.
- *
- * Since: 3.0
  */
 void
 gtk_cell_area_add (GtkCellArea        *area,
@@ -1624,8 +1608,6 @@ gtk_cell_area_add (GtkCellArea        *area,
  * @renderer: the #GtkCellRenderer to remove from @area
  *
  * Removes @renderer from @area.
- *
- * Since: 3.0
  */
 void
 gtk_cell_area_remove (GtkCellArea        *area,
@@ -1682,8 +1664,6 @@ get_has_renderer (GtkCellRenderer  *renderer,
  * Checks if @area contains @renderer.
  *
  * Returns: %TRUE if @renderer is in the @area.
- *
- * Since: 3.0
  */
 gboolean
 gtk_cell_area_has_renderer (GtkCellArea     *area,
@@ -1706,8 +1686,6 @@ gtk_cell_area_has_renderer (GtkCellArea     *area,
  * @callback_data: user provided data pointer
  *
  * Calls @callback for every #GtkCellRenderer in @area.
- *
- * Since: 3.0
  */
 void
 gtk_cell_area_foreach (GtkCellArea        *area,
@@ -1732,8 +1710,6 @@ gtk_cell_area_foreach (GtkCellArea        *area,
  *
  * Calls @callback for every #GtkCellRenderer in @area with the
  * allocated rectangle inside @cell_area.
- *
- * Since: 3.0
  */
 void
 gtk_cell_area_foreach_alloc (GtkCellArea          *area,
@@ -1767,8 +1743,6 @@ gtk_cell_area_foreach_alloc (GtkCellArea          *area,
  * Delegates event handling to a #GtkCellArea.
  *
  * Returns: %TRUE if the event was handled by @area.
- *
- * Since: 3.0
  */
 gint
 gtk_cell_area_event (GtkCellArea          *area,
@@ -1809,8 +1783,6 @@ gtk_cell_area_event (GtkCellArea          *area,
  *
  * Snapshots @area’s cells according to @area’s layout onto at
  * the given coordinates.
- *
- * Since: 3.90
  */
 void
 gtk_cell_area_snapshot (GtkCellArea          *area,
@@ -1864,8 +1836,6 @@ get_cell_allocation (GtkCellRenderer        *renderer,
  *
  * Derives the allocation of @renderer inside @area if @area
  * were to be renderered in @cell_area.
- *
- * Since: 3.0
  */
 void
 gtk_cell_area_get_cell_allocation (GtkCellArea          *area,
@@ -1922,8 +1892,6 @@ get_cell_by_position (GtkCellRenderer     *renderer,
  * returns the full cell allocation for it inside @cell_area.
  *
  * Returns: (transfer none): the #GtkCellRenderer at @x and @y.
- *
- * Since: 3.0
  */
 GtkCellRenderer *
 gtk_cell_area_get_cell_at_position (GtkCellArea          *area,
@@ -1967,8 +1935,6 @@ gtk_cell_area_get_cell_at_position (GtkCellArea          *area,
  * which was used to request the size of those rows of data).
  *
  * Returns: (transfer full): a newly created #GtkCellAreaContext which can be used with @area.
- *
- * Since: 3.0
  */
 GtkCellAreaContext *
 gtk_cell_area_create_context (GtkCellArea *area)
@@ -1996,8 +1962,6 @@ gtk_cell_area_create_context (GtkCellArea *area)
  * to be displayed.
  *
  * Returns: (transfer full): a newly created #GtkCellAreaContext copy of @context.
- *
- * Since: 3.0
  */
 GtkCellAreaContext *
 gtk_cell_area_copy_context (GtkCellArea        *area,
@@ -2017,8 +1981,6 @@ gtk_cell_area_copy_context (GtkCellArea        *area,
  * or a width-for-height layout.
  *
  * Returns: The #GtkSizeRequestMode preferred by @area.
- *
- * Since: 3.0
  */
 GtkSizeRequestMode
 gtk_cell_area_get_request_mode (GtkCellArea *area)
@@ -2044,8 +2006,6 @@ gtk_cell_area_get_request_mode (GtkCellArea *area)
  * to check the @minimum_width and @natural_width of this call but rather to
  * consult gtk_cell_area_context_get_preferred_width() after a series of
  * requests.
- *
- * Since: 3.0
  */
 void
 gtk_cell_area_get_preferred_width (GtkCellArea        *area,
@@ -2084,8 +2044,6 @@ gtk_cell_area_get_preferred_width (GtkCellArea        *area,
  * requested with gtk_cell_area_get_preferred_width() again and then
  * the full width of the requested rows checked again with
  * gtk_cell_area_context_get_preferred_width().
- *
- * Since: 3.0
  */
 void
 gtk_cell_area_get_preferred_height_for_width (GtkCellArea        *area,
@@ -2120,8 +2078,6 @@ gtk_cell_area_get_preferred_height_for_width (GtkCellArea        *area,
  * to check the @minimum_height and @natural_height of this call but rather to
  * consult gtk_cell_area_context_get_preferred_height() after a series of
  * requests.
- *
- * Since: 3.0
  */
 void
 gtk_cell_area_get_preferred_height (GtkCellArea        *area,
@@ -2160,8 +2116,6 @@ gtk_cell_area_get_preferred_height (GtkCellArea        *area,
  * requested with gtk_cell_area_get_preferred_height() again and then
  * the full height of the requested rows checked again with
  * gtk_cell_area_context_get_preferred_height().
- *
- * Since: 3.0
  */
 void
 gtk_cell_area_get_preferred_width_for_height (GtkCellArea        *area,
@@ -2193,8 +2147,6 @@ gtk_cell_area_get_preferred_width_for_height (GtkCellArea        *area,
  *
  * Connects an @attribute to apply values from @column for the
  * #GtkTreeModel in use.
- *
- * Since: 3.0
  */
 void
 gtk_cell_area_attribute_connect (GtkCellArea        *area,
@@ -2262,8 +2214,6 @@ gtk_cell_area_attribute_connect (GtkCellArea        *area,
  * Disconnects @attribute for the @renderer in @area so that
  * attribute will no longer be updated with values from the
  * model.
- *
- * Since: 3.0
  */
 void
 gtk_cell_area_attribute_disconnect (GtkCellArea        *area,
@@ -2308,8 +2258,6 @@ gtk_cell_area_attribute_disconnect (GtkCellArea        *area,
  * or -1 if the attribute is not mapped.
  *
  * Returns: the model column, or -1
- *
- * Since: 3.14
  */
 gint
 gtk_cell_area_attribute_get_column (GtkCellArea     *area,
@@ -2349,8 +2297,6 @@ gtk_cell_area_attribute_get_column (GtkCellArea     *area,
  *
  * Applies any connected attributes to the renderers in
  * @area by pulling the values from @tree_model.
- *
- * Since: 3.0
  */
 void
 gtk_cell_area_apply_attributes (GtkCellArea  *area,
@@ -2380,8 +2326,6 @@ gtk_cell_area_apply_attributes (GtkCellArea  *area,
  * Returns: The current #GtkTreePath string for the current
  * attributes applied to @area. This string belongs to the area and
  * should not be freed.
- *
- * Since: 3.0
  */
 const gchar *
 gtk_cell_area_get_current_path_string (GtkCellArea *area)
@@ -2406,8 +2350,6 @@ gtk_cell_area_get_current_path_string (GtkCellArea *area)
  * @pspec: the #GParamSpec for the property
  *
  * Installs a cell property on a cell area class.
- *
- * Since: 3.0
  */
 void
 gtk_cell_area_class_install_cell_property (GtkCellAreaClass   *aclass,
@@ -2445,8 +2387,6 @@ gtk_cell_area_class_install_cell_property (GtkCellAreaClass   *aclass,
  *
  * Returns: (transfer none): the #GParamSpec of the child property
  *   or %NULL if @aclass has no child property with that name.
- *
- * Since: 3.0
  */
 GParamSpec*
 gtk_cell_area_class_find_cell_property (GtkCellAreaClass   *aclass,
@@ -2471,8 +2411,6 @@ gtk_cell_area_class_find_cell_property (GtkCellAreaClass   *aclass,
  * Returns: (array length=n_properties) (transfer container): a newly
  *     allocated %NULL-terminated array of #GParamSpec*.  The array
  *     must be freed with g_free().
- *
- * Since: 3.0
  */
 GParamSpec**
 gtk_cell_area_class_list_cell_properties (GtkCellAreaClass  *aclass,
@@ -2502,8 +2440,6 @@ gtk_cell_area_class_list_cell_properties (GtkCellAreaClass  *aclass,
  *
  * Adds @renderer to @area, setting cell properties at the same time.
  * See gtk_cell_area_add() and gtk_cell_area_cell_set() for more details.
- *
- * Since: 3.0
  */
 void
 gtk_cell_area_add_with_properties (GtkCellArea        *area,
@@ -2542,8 +2478,6 @@ gtk_cell_area_add_with_properties (GtkCellArea        *area,
  *           with @first_prop_name
  *
  * Sets one or more cell properties for @cell in @area.
- *
- * Since: 3.0
  */
 void
 gtk_cell_area_cell_set (GtkCellArea        *area,
@@ -2570,8 +2504,6 @@ gtk_cell_area_cell_set (GtkCellArea        *area,
  *     optionally by more name/return location pairs, followed by %NULL
  *
  * Gets the values of one or more cell properties for @renderer in @area.
- *
- * Since: 3.0
  */
 void
 gtk_cell_area_cell_get (GtkCellArea        *area,
@@ -2643,8 +2575,6 @@ area_set_cell_property (GtkCellArea     *area,
  *           with @first_prop_name
  *
  * Sets one or more cell properties for @renderer in @area.
- *
- * Since: 3.0
  */
 void
 gtk_cell_area_cell_set_valist (GtkCellArea        *area,
@@ -2705,8 +2635,6 @@ gtk_cell_area_cell_set_valist (GtkCellArea        *area,
  *     optionally by more name/return location pairs, followed by %NULL
  *
  * Gets the values of one or more cell properties for @renderer in @area.
- *
- * Since: 3.0
  */
 void
 gtk_cell_area_cell_get_valist (GtkCellArea        *area,
@@ -2764,8 +2692,6 @@ gtk_cell_area_cell_get_valist (GtkCellArea        *area,
  * @value: the value to set the cell property to
  *
  * Sets a cell property for @renderer in @area.
- *
- * Since: 3.0
  */
 void
 gtk_cell_area_cell_set_property (GtkCellArea        *area,
@@ -2802,8 +2728,6 @@ gtk_cell_area_cell_set_property (GtkCellArea        *area,
  * @value: a location to return the value
  *
  * Gets the value of a cell property for @renderer in @area.
- *
- * Since: 3.0
  */
 void
 gtk_cell_area_cell_get_property (GtkCellArea        *area,
@@ -2873,8 +2797,6 @@ gtk_cell_area_cell_get_property (GtkCellArea        *area,
  * after applying new attributes to @area.
  *
  * Returns: whether @area can do anything when activated.
- *
- * Since: 3.0
  */
 gboolean
 gtk_cell_area_is_activatable (GtkCellArea *area)
@@ -2898,8 +2820,6 @@ gtk_cell_area_is_activatable (GtkCellArea *area)
  * to how it lays out cells.
  *
  * Returns: %TRUE if focus remains inside @area as a result of this call.
- *
- * Since: 3.0
  */
 gboolean
 gtk_cell_area_focus (GtkCellArea      *area,
@@ -2925,8 +2845,6 @@ gtk_cell_area_focus (GtkCellArea      *area,
  * can also activate a widget if it currently has the focus.
  *
  * Returns: Whether @area was successfully activated.
- *
- * Since: 3.0
  */
 gboolean
 gtk_cell_area_activate (GtkCellArea         *area,
@@ -2953,8 +2871,6 @@ gtk_cell_area_activate (GtkCellArea         *area,
  * #GtkCellAreaClass.focus() or #GtkCellAreaClass.event(),
  * however it can also be used to implement functions such
  * as gtk_tree_view_set_cursor_on_cell().
- *
- * Since: 3.0
  */
 void
 gtk_cell_area_set_focus_cell (GtkCellArea     *area,
@@ -2995,8 +2911,6 @@ gtk_cell_area_set_focus_cell (GtkCellArea     *area,
  * Retrieves the currently focused cell for @area
  *
  * Returns: (transfer none): the currently focused cell in @area.
- *
- * Since: 3.0
  */
 GtkCellRenderer *
 gtk_cell_area_get_focus_cell (GtkCellArea *area)
@@ -3027,8 +2941,6 @@ gtk_cell_area_get_focus_cell (GtkCellArea *area)
  *
  * Events handled by focus siblings can also activate the given
  * focusable @renderer.
- *
- * Since: 3.0
  */
 void
 gtk_cell_area_add_focus_sibling (GtkCellArea     *area,
@@ -3072,8 +2984,6 @@ gtk_cell_area_add_focus_sibling (GtkCellArea     *area,
  *
  * Removes @sibling from @renderer’s focus sibling list
  * (see gtk_cell_area_add_focus_sibling()).
- *
- * Since: 3.0
  */
 void
 gtk_cell_area_remove_focus_sibling (GtkCellArea     *area,
@@ -3111,8 +3021,6 @@ gtk_cell_area_remove_focus_sibling (GtkCellArea     *area,
  * (see gtk_cell_area_add_focus_sibling()).
  *
  * Returns: %TRUE if @sibling is a focus sibling of @renderer
- *
- * Since: 3.0
  */
 gboolean
 gtk_cell_area_is_focus_sibling (GtkCellArea     *area,
@@ -3150,8 +3058,6 @@ gtk_cell_area_is_focus_sibling (GtkCellArea     *area,
  *
  * Returns: (element-type GtkCellRenderer) (transfer none): A #GList of #GtkCellRenderers.
  *       The returned list is internal and should not be freed.
- *
- * Since: 3.0
  */
 const GList *
 gtk_cell_area_get_focus_siblings (GtkCellArea     *area,
@@ -3182,8 +3088,6 @@ gtk_cell_area_get_focus_siblings (GtkCellArea     *area,
  *
  * Returns: (nullable) (transfer none): the #GtkCellRenderer for which @renderer
  *    is a sibling, or %NULL.
- *
- * Since: 3.0
  */
 GtkCellRenderer *
 gtk_cell_area_get_focus_from_sibling (GtkCellArea          *area,
@@ -3325,8 +3229,6 @@ gtk_cell_area_set_edit_widget (GtkCellArea     *area,
  * being edited.
  *
  * Returns: (transfer none): The currently edited #GtkCellRenderer
- *
- * Since: 3.0
  */
 GtkCellRenderer   *
 gtk_cell_area_get_edited_cell (GtkCellArea *area)
@@ -3348,8 +3250,6 @@ gtk_cell_area_get_edited_cell (GtkCellArea *area)
  * to edit the currently edited cell.
  *
  * Returns: (transfer none): The currently active #GtkCellEditable widget
- *
- * Since: 3.0
  */
 GtkCellEditable *
 gtk_cell_area_get_edit_widget (GtkCellArea *area)
@@ -3379,8 +3279,6 @@ gtk_cell_area_get_edit_widget (GtkCellArea *area)
  * implementation.
  *
  * Returns: whether cell activation was successful
- *
- * Since: 3.0
  */
 gboolean
 gtk_cell_area_activate_cell (GtkCellArea          *area,
@@ -3476,8 +3374,6 @@ gtk_cell_area_activate_cell (GtkCellArea          *area,
  * edit widget.
  *
  * See gtk_cell_area_get_edited_cell() and gtk_cell_area_get_edit_widget().
- *
- * Since: 3.0
  */
 void
 gtk_cell_area_stop_editing (GtkCellArea *area,
@@ -3532,8 +3428,6 @@ gtk_cell_area_stop_editing (GtkCellArea *area,
  * This is a convenience function for #GtkCellArea implementations
  * to get the inner area where a given #GtkCellRenderer will be
  * rendered. It removes any padding previously added by gtk_cell_area_request_renderer().
- *
- * Since: 3.0
  */
 void
 gtk_cell_area_inner_cell_area (GtkCellArea        *area,
@@ -3576,8 +3470,6 @@ gtk_cell_area_inner_cell_area (GtkCellArea        *area,
  * function to request size and then use gtk_cell_area_inner_cell_area()
  * at render and event time since this function will add padding
  * around the cell for focus painting.
- *
- * Since: 3.0
  */
 void
 gtk_cell_area_request_renderer (GtkCellArea        *area,

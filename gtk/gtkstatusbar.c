@@ -478,8 +478,6 @@ gtk_statusbar_remove (GtkStatusbar *statusbar,
  *
  * Forces the removal of all messages from a statusbar's
  * stack with the exact @context_id.
- *
- * Since: 2.22
  */
 void
 gtk_statusbar_remove_all (GtkStatusbar *statusbar,
@@ -539,8 +537,6 @@ gtk_statusbar_remove_all (GtkStatusbar *statusbar,
  * Retrieves the box containing the label widget.
  *
  * Returns: (type Gtk.Box) (transfer none): a #GtkBox
- *
- * Since: 2.20
  */
 GtkWidget*
 gtk_statusbar_get_message_area (GtkStatusbar *statusbar)

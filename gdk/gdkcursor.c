@@ -322,8 +322,6 @@ gdk_cursor_equal (gconstpointer a,
  *
  * Returns: (nullable): a new #GdkCursor, or %NULL if there is no
  *   cursor with the given name
- *
- * Since: 2.8
  */
 GdkCursor*
 gdk_cursor_new_from_name (const gchar *name,
@@ -361,8 +359,6 @@ gdk_cursor_new_from_name (const gchar *name,
  * sufficently new version of the X Render extension.
  *
  * Returns: a new #GdkCursor.
- *
- * Since: 3.94
  */
 GdkCursor *
 gdk_cursor_new_from_texture (GdkTexture *texture,
@@ -397,8 +393,6 @@ gdk_cursor_new_from_texture (GdkTexture *texture,
  *
  * Returns: (transfer none): the fallback of the cursor or %NULL to use
  *     the default cursor as fallback.
- *
- * Since: 3.94
  */
 GdkCursor *
 gdk_cursor_get_fallback (GdkCursor *cursor)
@@ -417,8 +411,6 @@ gdk_cursor_get_fallback (GdkCursor *cursor)
  *
  * Returns: (transfer none): the name of the cursor or %NULL if it is not
  *     a named cursor
- *
- * Since: 3.94
  */
 const char *
 gdk_cursor_get_name (GdkCursor *cursor)
@@ -437,8 +429,6 @@ gdk_cursor_get_name (GdkCursor *cursor)
  *
  * Returns: (transfer none): the texture for cursor or %NULL if it is a
  *     named cursor
- *
- * Since: 3.94
  */
 GdkTexture *
 gdk_cursor_get_texture (GdkCursor *cursor)
@@ -456,8 +446,6 @@ gdk_cursor_get_texture (GdkCursor *cursor)
  * pixel that will be directly above the cursor.
  *
  * Returns: the horizontal offset of the hotspot or 0 for named cursors
- *
- * Since: 3.94
  */
 int
 gdk_cursor_get_hotspot_x (GdkCursor *cursor)
@@ -475,8 +463,6 @@ gdk_cursor_get_hotspot_x (GdkCursor *cursor)
  * pixel that will be directly above the cursor.
  *
  * Returns: the vertical offset of the hotspot or 0 for named cursors
- *
- * Since: 3.94
  */
 int
 gdk_cursor_get_hotspot_y (GdkCursor *cursor)

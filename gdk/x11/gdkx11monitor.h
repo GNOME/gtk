@@ -37,10 +37,10 @@ G_BEGIN_DECLS
 typedef struct _GdkX11Monitor      GdkX11Monitor;
 typedef struct _GdkX11MonitorClass GdkX11MonitorClass;
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 GType             gdk_x11_monitor_get_type            (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 XID               gdk_x11_monitor_get_output          (GdkMonitor *monitor);
 
 G_END_DECLS

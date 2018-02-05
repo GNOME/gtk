@@ -83,12 +83,12 @@ typedef enum {
 GDK_AVAILABLE_IN_ALL
 GType            gdk_drag_context_get_type             (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GdkDisplay *     gdk_drag_context_get_display          (GdkDragContext *context);
 GDK_AVAILABLE_IN_ALL
 GdkDevice *      gdk_drag_context_get_device           (GdkDragContext *context);
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GdkContentFormats *gdk_drag_context_get_formats        (GdkDragContext *context);
 GDK_AVAILABLE_IN_ALL
 GdkDragAction    gdk_drag_context_get_actions          (GdkDragContext *context);
@@ -116,14 +116,14 @@ void             gdk_drop_finish        (GdkDragContext   *context,
                                          gboolean          success,
                                          guint32           time_);
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void                    gdk_drop_read_async             (GdkDragContext        *context,
                                                          const char           **mime_types,
                                                          int                    io_priority,
                                                          GCancellable          *cancellable,
                                                          GAsyncReadyCallback    callback,
                                                          gpointer               user_data);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GInputStream *          gdk_drop_read_finish            (GdkDragContext        *context,
                                                          const char           **out_mime_type,
                                                          GAsyncResult          *result,
@@ -142,14 +142,14 @@ GdkDragContext *        gdk_drag_begin                  (GdkWindow              
 GDK_AVAILABLE_IN_ALL
 gboolean        gdk_drag_drop_succeeded (GdkDragContext *context);
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 void            gdk_drag_drop_done   (GdkDragContext *context,
                                       gboolean        success);
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 GdkWindow      *gdk_drag_context_get_drag_window (GdkDragContext *context);
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 void            gdk_drag_context_set_hotspot (GdkDragContext *context,
                                               gint            hot_x,
                                               gint            hot_y);

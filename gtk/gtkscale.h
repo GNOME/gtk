@@ -93,10 +93,10 @@ void              gtk_scale_set_draw_value     (GtkScale        *scale,
                                                 gboolean         draw_value);
 GDK_AVAILABLE_IN_ALL
 gboolean          gtk_scale_get_draw_value     (GtkScale        *scale);
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 void              gtk_scale_set_has_origin     (GtkScale        *scale,
                                                 gboolean         has_origin);
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 gboolean          gtk_scale_get_has_origin     (GtkScale        *scale);
 GDK_AVAILABLE_IN_ALL
 void              gtk_scale_set_value_pos      (GtkScale        *scale,

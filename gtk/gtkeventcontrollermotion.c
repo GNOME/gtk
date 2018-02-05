@@ -155,8 +155,6 @@ gtk_event_controller_motion_init (GtkEventControllerMotion *motion)
  * for the given @widget.
  *
  * Returns: a new #GtkEventControllerMotion
- *
- * Since: 3.94
  **/
 GtkEventController *
 gtk_event_controller_motion_new (GtkWidget *widget)

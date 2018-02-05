@@ -39,66 +39,66 @@ G_BEGIN_DECLS
 typedef struct _GtkGesture GtkGesture;
 typedef struct _GtkGestureClass GtkGestureClass;
 
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 GType       gtk_gesture_get_type             (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 GdkDevice * gtk_gesture_get_device           (GtkGesture       *gesture);
 
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 gboolean    gtk_gesture_set_state            (GtkGesture            *gesture,
                                               GtkEventSequenceState  state);
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 GtkEventSequenceState
             gtk_gesture_get_sequence_state   (GtkGesture            *gesture,
                                               GdkEventSequence      *sequence);
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 gboolean    gtk_gesture_set_sequence_state   (GtkGesture            *gesture,
                                               GdkEventSequence      *sequence,
                                               GtkEventSequenceState  state);
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 GList     * gtk_gesture_get_sequences        (GtkGesture       *gesture);
 
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 GdkEventSequence * gtk_gesture_get_last_updated_sequence
                                              (GtkGesture       *gesture);
 
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 gboolean    gtk_gesture_handles_sequence     (GtkGesture       *gesture,
                                               GdkEventSequence *sequence);
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 const GdkEvent *
             gtk_gesture_get_last_event       (GtkGesture       *gesture,
                                               GdkEventSequence *sequence);
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 gboolean    gtk_gesture_get_point            (GtkGesture       *gesture,
                                               GdkEventSequence *sequence,
                                               gdouble          *x,
                                               gdouble          *y);
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 gboolean    gtk_gesture_get_bounding_box     (GtkGesture       *gesture,
                                               GdkRectangle     *rect);
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 gboolean    gtk_gesture_get_bounding_box_center
                                              (GtkGesture       *gesture,
                                               gdouble          *x,
                                               gdouble          *y);
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 gboolean    gtk_gesture_is_active            (GtkGesture       *gesture);
 
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 gboolean    gtk_gesture_is_recognized        (GtkGesture       *gesture);
 
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 void        gtk_gesture_group                (GtkGesture       *group_gesture,
                                               GtkGesture       *gesture);
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 void        gtk_gesture_ungroup              (GtkGesture       *gesture);
 
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 GList *     gtk_gesture_get_group            (GtkGesture       *gesture);
 
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 gboolean    gtk_gesture_is_grouped_with      (GtkGesture       *gesture,
                                               GtkGesture       *other);
 

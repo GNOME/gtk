@@ -344,8 +344,6 @@ gtk_button_box_get_layout (GtkButtonBox *widget)
  * Returns whether @child should appear in a secondary group of children.
  *
  * Returns: whether @child should appear in a secondary group of children.
- *
- * Since: 2.4
  **/
 gboolean
 gtk_button_box_get_child_secondary (GtkButtonBox *widget,
@@ -1056,8 +1054,6 @@ gtk_button_box_size_allocate (GtkWidget           *widget,
  * Creates a new #GtkButtonBox.
  *
  * Returns: a new #GtkButtonBox.
- *
- * Since: 3.0
  */
 GtkWidget *
 gtk_button_box_new (GtkOrientation orientation)
@@ -1076,8 +1072,6 @@ gtk_button_box_new (GtkOrientation orientation)
  * sizing.
  *
  * Returns: %TRUE if the child is not subject to homogenous sizing
- *
- * Since: 3.2
  */
 gboolean
 gtk_button_box_get_child_non_homogeneous (GtkButtonBox *widget,
@@ -1096,8 +1090,6 @@ gtk_button_box_get_child_non_homogeneous (GtkButtonBox *widget,
  * @non_homogeneous: the new value
  *
  * Sets whether the child is exempted from homogeous sizing.
- *
- * Since: 3.2
  */
 void
 gtk_button_box_set_child_non_homogeneous (GtkButtonBox *widget,

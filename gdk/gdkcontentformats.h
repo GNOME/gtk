@@ -30,50 +30,50 @@ G_BEGIN_DECLS
 
 #define GDK_TYPE_CONTENT_FORMATS    (gdk_content_formats_get_type ())
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 const char *            gdk_intern_mime_type                    (const char                     *string);
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GType                   gdk_content_formats_get_type            (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GdkContentFormats *     gdk_content_formats_new                 (const char                    **mime_types,
                                                                  guint                           n_mime_types);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GdkContentFormats *     gdk_content_formats_new_for_gtype       (GType                           type);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GdkContentFormats *     gdk_content_formats_ref                 (GdkContentFormats              *formats);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void                    gdk_content_formats_unref               (GdkContentFormats              *formats);
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void                    gdk_content_formats_print               (GdkContentFormats              *formats,
                                                                  GString                        *string);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 char *                  gdk_content_formats_to_string           (GdkContentFormats              *formats);
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 const GType *           gdk_content_formats_get_gtypes          (GdkContentFormats              *formats,
                                                                  gsize                          *n_gtypes);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 const char * const *    gdk_content_formats_get_mime_types      (GdkContentFormats              *formats,
                                                                  gsize                          *n_mime_types);
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GdkContentFormats *     gdk_content_formats_union               (GdkContentFormats              *first,
                                                                  const GdkContentFormats        *second) G_GNUC_WARN_UNUSED_RESULT;
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 gboolean                gdk_content_formats_match               (const GdkContentFormats        *first,
                                                                  const GdkContentFormats        *second);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GType                   gdk_content_formats_match_gtype         (const GdkContentFormats        *first,
                                                                  const GdkContentFormats        *second);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 const char *            gdk_content_formats_match_mime_type     (const GdkContentFormats        *first,
                                                                  const GdkContentFormats        *second);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 gboolean                gdk_content_formats_contain_gtype       (const GdkContentFormats        *formats,
                                                                  GType                           type);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 gboolean                gdk_content_formats_contain_mime_type   (const GdkContentFormats        *formats,
                                                                  const char                     *mime_type);
 
@@ -81,32 +81,32 @@ gboolean                gdk_content_formats_contain_mime_type   (const GdkConten
 
 typedef struct _GdkContentFormatsBuilder GdkContentFormatsBuilder;
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GType                   gdk_content_formats_builder_get_type    (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GdkContentFormatsBuilder *gdk_content_formats_builder_new        (void);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GdkContentFormatsBuilder *gdk_content_formats_builder_ref       (GdkContentFormatsBuilder       *builder);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void                    gdk_content_formats_builder_unref       (GdkContentFormatsBuilder       *builder);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GdkContentFormats *     gdk_content_formats_builder_free_to_formats (GdkContentFormatsBuilder  *builder) G_GNUC_WARN_UNUSED_RESULT;
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GdkContentFormats *     gdk_content_formats_builder_to_formats  (GdkContentFormatsBuilder  *builder) G_GNUC_WARN_UNUSED_RESULT;
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void                    gdk_content_formats_builder_add_formats (GdkContentFormatsBuilder       *builder,
                                                                  const GdkContentFormats        *formats);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void                    gdk_content_formats_builder_add_mime_type(GdkContentFormatsBuilder      *builder,
                                                                  const char                     *mime_type);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void                    gdk_content_formats_builder_add_gtype   (GdkContentFormatsBuilder       *builder,
                                                                  GType                           type);
 
 /* dunno where else to put this */
 #define GDK_TYPE_FILE_LIST (gdk_file_list_get_type ())
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GType     gdk_file_list_get_type  (void) G_GNUC_CONST;
 
 

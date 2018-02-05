@@ -84,8 +84,6 @@ gtk_tool_shell_real_get_ellipsize_mode (GtkToolShell *shell)
  * instead.
  *
  * Returns: the current orientation of @shell
- *
- * Since: 2.14
  **/
 GtkOrientation
 gtk_tool_shell_get_orientation (GtkToolShell *shell)
@@ -102,8 +100,6 @@ gtk_tool_shell_get_orientation (GtkToolShell *shell)
  * instead.
  *
  * Returns: the current style of @shell
- *
- * Since: 2.14
  **/
 GtkToolbarStyle
 gtk_tool_shell_get_style (GtkToolShell *shell)
@@ -121,8 +117,6 @@ gtk_tool_shell_get_style (GtkToolShell *shell)
  *
  * Tool items must not call this function directly, but rely on
  * gtk_tool_item_rebuild_menu() instead.
- *
- * Since: 2.14
  **/
 void
 gtk_tool_shell_rebuild_menu (GtkToolShell *shell)
@@ -142,8 +136,6 @@ gtk_tool_shell_rebuild_menu (GtkToolShell *shell)
  * instead.
  *
  * Returns: the current text orientation of @shell
- *
- * Since: 2.20
  **/
 GtkOrientation
 gtk_tool_shell_get_text_orientation (GtkToolShell *shell)
@@ -162,8 +154,6 @@ gtk_tool_shell_get_text_orientation (GtkToolShell *shell)
  * instead.
  *
  * Returns: the current text alignment of @shell
- *
- * Since: 2.20
  **/
 gfloat
 gtk_tool_shell_get_text_alignment (GtkToolShell *shell)
@@ -182,8 +172,6 @@ gtk_tool_shell_get_text_alignment (GtkToolShell *shell)
  * instead.
  *
  * Returns: the current ellipsize mode of @shell
- *
- * Since: 2.20
  **/
 PangoEllipsizeMode
 gtk_tool_shell_get_ellipsize_mode (GtkToolShell *shell)
@@ -202,8 +190,6 @@ gtk_tool_shell_get_ellipsize_mode (GtkToolShell *shell)
  * instead.
  *
  * Returns: (transfer none): the current text size group of @shell
- *
- * Since: 2.20
  **/
 GtkSizeGroup *
 gtk_tool_shell_get_text_size_group (GtkToolShell *shell)

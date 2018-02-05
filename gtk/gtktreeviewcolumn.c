@@ -372,8 +372,6 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
    *
    * Logical sort column ID this column sorts on when selected for sorting. Setting the sort column ID makes the column header
    * clickable. Set to -1 to make the column unsortable.
-   *
-   * Since: 2.18
    **/
   tree_column_props[PROP_SORT_COLUMN_ID] =
       g_param_spec_int ("sort-column-id",
@@ -390,8 +388,6 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
    *
    * If no area is specified when creating the tree view column with gtk_tree_view_column_new_with_area() 
    * a horizontally oriented #GtkCellAreaBox will be used.
-   *
-   * Since: 3.0
    */
   tree_column_props[PROP_CELL_AREA] =
       g_param_spec_object ("cell-area",
@@ -1500,8 +1496,6 @@ gtk_tree_view_column_new (void)
  * Creates a new #GtkTreeViewColumn using @area to render its cells.
  * 
  * Returns: A newly created #GtkTreeViewColumn.
- *
- * Since: 3.0
  */
 GtkTreeViewColumn *
 gtk_tree_view_column_new_with_area (GtkCellArea *area)
@@ -1954,8 +1948,6 @@ gtk_tree_view_column_get_width (GtkTreeViewColumn *tree_column)
  * Returns the current X offset of @tree_column in pixels.
  * 
  * Returns: The current X offset of @tree_column.
- *
- * Since: 3.2
  */
 gint
 gtk_tree_view_column_get_x_offset (GtkTreeViewColumn *tree_column)
@@ -2309,8 +2301,6 @@ gtk_tree_view_column_get_title (GtkTreeViewColumn *tree_column)
  *
  * Along with “fixed-width”, the “expand” property changes when the column is
  * resized by the user.
- *
- * Since: 2.4
  **/
 void
 gtk_tree_view_column_set_expand (GtkTreeViewColumn *tree_column,
@@ -2344,8 +2334,6 @@ gtk_tree_view_column_set_expand (GtkTreeViewColumn *tree_column,
  * Returns %TRUE if the column expands to fill available space.
  *
  * Returns: %TRUE if the column expands to fill available space.
- *
- * Since: 2.4
  **/
 gboolean
 gtk_tree_view_column_get_expand (GtkTreeViewColumn *tree_column)
@@ -2888,8 +2876,6 @@ gtk_tree_view_column_cell_is_visible (GtkTreeViewColumn *tree_column)
  *
  * Sets the current keyboard focus to be at @cell, if the column contains
  * 2 or more editable and activatable cells.
- *
- * Since: 2.2
  **/
 void
 gtk_tree_view_column_focus_cell (GtkTreeViewColumn *tree_column,
@@ -2992,8 +2978,6 @@ gtk_tree_view_column_cell_get_position (GtkTreeViewColumn *tree_column,
  *
  * Flags the column, and the cell renderers added to this column, to have
  * their sizes renegotiated.
- *
- * Since: 2.8
  **/
 void
 gtk_tree_view_column_queue_resize (GtkTreeViewColumn *tree_column)
@@ -3014,8 +2998,6 @@ gtk_tree_view_column_queue_resize (GtkTreeViewColumn *tree_column)
  *
  * Returns: (nullable) (transfer none): The tree view wherein @column has
  *     been inserted if any, %NULL otherwise.
- *
- * Since: 2.12
  */
 GtkWidget *
 gtk_tree_view_column_get_tree_view (GtkTreeViewColumn *tree_column)
@@ -3032,8 +3014,6 @@ gtk_tree_view_column_get_tree_view (GtkTreeViewColumn *tree_column)
  * Returns the button used in the treeview column header
  *
  * Returns: (transfer none): The button for the column header.
- *
- * Since: 3.0
  */
 GtkWidget *
 gtk_tree_view_column_get_button (GtkTreeViewColumn *tree_column)

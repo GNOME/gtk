@@ -303,8 +303,6 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
    * another item.
    *
    * Returns: %TRUE to stop the signal emission, %FALSE to continue
-   *
-   * Since: 2.12
    */
   menu_shell_signals[MOVE_SELECTED] =
     g_signal_new (I_("move-selected"),
@@ -328,8 +326,6 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
    * parameter.
    *
    * The inverse of this signal is the GtkContainer::removed signal.
-   *
-   * Since: 3.2
    **/
   menu_shell_signals[INSERT] =
     g_signal_new (I_("insert"),
@@ -388,8 +384,6 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
    * A boolean that determines whether the menu and its submenus grab the
    * keyboard focus. See gtk_menu_shell_set_take_focus() and
    * gtk_menu_shell_get_take_focus().
-   *
-   * Since: 2.8
    **/
   g_object_class_install_property (object_class,
                                    PROP_TAKE_FOCUS,
@@ -1218,8 +1212,6 @@ gtk_menu_shell_move_selected (GtkMenuShell  *menu_shell,
  *                    popped up initially.
  *
  * Select the first visible or selectable child of the menu shell.
- *
- * Since: 2.2
  */
 void
 gtk_menu_shell_select_first (GtkMenuShell *menu_shell,
@@ -1469,8 +1461,6 @@ _gtk_menu_shell_get_popup_delay (GtkMenuShell *menu_shell)
  * @menu_shell: a #GtkMenuShell
  *
  * Cancels the selection within the menu shell.
- *
- * Since: 2.4
  */
 void
 gtk_menu_shell_cancel (GtkMenuShell *menu_shell)
@@ -1639,8 +1629,6 @@ _gtk_menu_shell_get_grab_device (GtkMenuShell *menu_shell)
  * Returns %TRUE if the menu shell will take the keyboard focus on popup.
  *
  * Returns: %TRUE if the menu shell will take the keyboard focus on popup.
- *
- * Since: 2.8
  */
 gboolean
 gtk_menu_shell_get_take_focus (GtkMenuShell *menu_shell)
@@ -1680,8 +1668,6 @@ gtk_menu_shell_get_take_focus (GtkMenuShell *menu_shell)
  * To avoid confusing the user, menus with @take_focus set to %FALSE
  * should not display mnemonics or accelerators, since it cannot be
  * guaranteed that they will work.
- *
- * Since: 2.8
  */
 void
 gtk_menu_shell_set_take_focus (GtkMenuShell *menu_shell,
@@ -1707,8 +1693,6 @@ gtk_menu_shell_set_take_focus (GtkMenuShell *menu_shell,
  * Gets the currently selected item.
  *
  * Returns: (transfer none): the currently selected item
- *
- * Since: 3.0
  */
 GtkWidget *
 gtk_menu_shell_get_selected_item (GtkMenuShell *menu_shell)
@@ -1728,8 +1712,6 @@ gtk_menu_shell_get_selected_item (GtkMenuShell *menu_shell)
  * from which it was opened up.
  *
  * Returns: (transfer none): the parent #GtkMenuShell
- *
- * Since: 3.0
  */
 GtkWidget *
 gtk_menu_shell_get_parent_shell (GtkMenuShell *menu_shell)
@@ -1925,8 +1907,6 @@ gtk_menu_shell_tracker_insert_func (GtkMenuTrackerItem *item,
  * gtk_menu_new_from_model() or gtk_menu_bar_new_from_model() or just
  * directly passing the #GMenuModel to gtk_application_set_app_menu() or
  * gtk_application_set_menubar().
- *
- * Since: 3.6
  */
 void
 gtk_menu_shell_bind_model (GtkMenuShell *menu_shell,

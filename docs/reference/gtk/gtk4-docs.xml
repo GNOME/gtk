@@ -384,58 +384,6 @@
     <title>Index of deprecated symbols</title>
     <xi:include href="xml/api-index-deprecated.xml"><xi:fallback /></xi:include>
   </index>
-  <index id="api-index-3-0" role="3.0">
-    <title>Index of new symbols in 3.0</title>
-    <xi:include href="xml/api-index-3.0.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-3-2" role="3.2">
-    <title>Index of new symbols in 3.2</title>
-    <xi:include href="xml/api-index-3.2.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-3-4" role="3.4">
-    <title>Index of new symbols in 3.4</title>
-    <xi:include href="xml/api-index-3.4.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-3-6" role="3.6">
-    <title>Index of new symbols in 3.6</title>
-    <xi:include href="xml/api-index-3.6.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-3-8" role="3.8">
-    <title>Index of new symbols in 3.8</title>
-    <xi:include href="xml/api-index-3.8.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-3-10" role="3.10">
-    <title>Index of new symbols in 3.10</title>
-    <xi:include href="xml/api-index-3.10.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-3-12" role="3.12">
-    <title>Index of new symbols in 3.12</title>
-    <xi:include href="xml/api-index-3.12.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-3-14" role="3.14">
-    <title>Index of new symbols in 3.14</title>
-    <xi:include href="xml/api-index-3.14.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-3-16" role="3.16">
-    <title>Index of new symbols in 3.16</title>
-    <xi:include href="xml/api-index-3.16.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-3-18" role="3.18">
-    <title>Index of new symbols in 3.18</title>
-    <xi:include href="xml/api-index-3.18.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-3-20" role="3.20">
-    <title>Index of new symbols in 3.20</title>
-    <xi:include href="xml/api-index-3.20.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-3-22" role="3.22">
-    <title>Index of new symbols in 3.22</title>
-    <xi:include href="xml/api-index-3.22.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-3-90" role="3.90">
-    <title>Index of new symbols in 3.90</title>
-    <xi:include href="xml/api-index-3.90.xml"><xi:fallback /></xi:include>
-  </index>
 
   <xi:include href="xml/annotation-glossary.xml"><xi:fallback /></xi:include>
 

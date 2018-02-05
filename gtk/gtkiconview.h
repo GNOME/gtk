@@ -194,10 +194,10 @@ GDK_AVAILABLE_IN_ALL
 gboolean       gtk_icon_view_get_visible_range (GtkIconView      *icon_view,
 						GtkTreePath     **start_path,
 						GtkTreePath     **end_path);
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 void           gtk_icon_view_set_activate_on_single_click (GtkIconView  *icon_view,
                                                            gboolean      single);
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 gboolean       gtk_icon_view_get_activate_on_single_click (GtkIconView  *icon_view);
 
 GDK_AVAILABLE_IN_ALL
@@ -289,7 +289,7 @@ GDK_AVAILABLE_IN_ALL
 cairo_surface_t       *gtk_icon_view_create_drag_icon         (GtkIconView              *icon_view,
 							       GtkTreePath              *path);
 
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_icon_view_get_cell_rect                          (GtkIconView     *icon_view,
 							       GtkTreePath     *path,
 							       GtkCellRenderer *cell,

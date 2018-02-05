@@ -98,10 +98,10 @@ void     gtk_app_chooser_button_set_heading           (GtkAppChooserButton *self
 GDK_AVAILABLE_IN_ALL
 const gchar *
          gtk_app_chooser_button_get_heading           (GtkAppChooserButton *self);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 void     gtk_app_chooser_button_set_show_default_item (GtkAppChooserButton *self,
                                                        gboolean             setting);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_app_chooser_button_get_show_default_item (GtkAppChooserButton *self);
 
 G_END_DECLS

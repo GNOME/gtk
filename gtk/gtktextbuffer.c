@@ -419,8 +419,6 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
    *
    * The text content of the buffer. Without child widgets and images,
    * see gtk_text_buffer_get_text() for more information.
-   *
-   * Since: 2.8
    */
   text_buffer_props[PROP_TEXT] =
       g_param_spec_string ("text",
@@ -433,8 +431,6 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
    * GtkTextBuffer:has-selection:
    *
    * Whether the buffer has some text currently selected.
-   *
-   * Since: 2.10
    */
   text_buffer_props[PROP_HAS_SELECTION] =
       g_param_spec_boolean ("has-selection",
@@ -449,8 +445,6 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
    * The position of the insert mark (as offset from the beginning
    * of the buffer). It is useful for getting notified when the
    * cursor moves.
-   *
-   * Since: 2.10
    */
   text_buffer_props[PROP_CURSOR_POSITION] =
       g_param_spec_int ("cursor-position",
@@ -465,8 +459,6 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
    *
    * The list of targets this buffer supports for clipboard copying
    * and as DND source.
-   *
-   * Since: 2.10
    */
   text_buffer_props[PROP_COPY_TARGET_LIST] =
       g_param_spec_boxed ("copy-target-list",
@@ -480,8 +472,6 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
    *
    * The list of targets this buffer supports for clipboard pasting
    * and as DND destination.
-   *
-   * Since: 2.10
    */
   text_buffer_props[PROP_PASTE_TARGET_LIST] =
       g_param_spec_boxed ("paste-target-list",
@@ -838,8 +828,6 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
    * The paste-done signal is emitted after paste operation has been completed.
    * This is useful to properly scroll the view to the end of the pasted text.
    * See gtk_text_buffer_paste_clipboard() for more details.
-   * 
-   * Since: 2.16
    */ 
   signals[PASTE_DONE] =
     g_signal_new (I_("paste-done"),
@@ -2338,8 +2326,6 @@ gtk_text_buffer_create_mark (GtkTextBuffer     *buffer,
  *
  * Emits the #GtkTextBuffer::mark-set signal as notification of the mark's
  * initial placement.
- *
- * Since: 2.12
  **/
 void
 gtk_text_buffer_add_mark (GtkTextBuffer     *buffer,
@@ -2628,8 +2614,6 @@ gtk_text_buffer_place_cursor (GtkTextBuffer     *buffer,
  * inefficient since the temporarily-selected region will force stuff
  * to be recalculated. This function moves them as a unit, which can
  * be optimized.
- *
- * Since: 2.4
  **/
 void
 gtk_text_buffer_select_range (GtkTextBuffer     *buffer,
@@ -3314,8 +3298,6 @@ gtk_text_buffer_set_modified (GtkTextBuffer *buffer,
  * Indicates whether the buffer has some text currently selected.
  * 
  * Returns: %TRUE if the there is text selected
- *
- * Since: 2.10
  **/
 gboolean
 gtk_text_buffer_get_has_selection (GtkTextBuffer *buffer)
@@ -3821,8 +3803,6 @@ gtk_text_buffer_delete_selection (GtkTextBuffer *buffer,
  * re-initialized to point to the location where text was deleted. 
  *
  * Returns: %TRUE if the buffer was modified
- *
- * Since: 2.6
  **/
 gboolean
 gtk_text_buffer_backspace (GtkTextBuffer *buffer,
@@ -4722,8 +4702,6 @@ gtk_text_buffer_insert_with_attributes (GtkTextBuffer *buffer,
  * #GtkTextBuffer::insert-text signal, possibly multiple times; insertion
  * actually occurs in the default handler for the signal. @iter will point
  * to the end of the inserted text on return.
- *
- * Since: 3.16
  */
 void
 gtk_text_buffer_insert_markup (GtkTextBuffer *buffer,

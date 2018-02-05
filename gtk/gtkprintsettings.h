@@ -171,8 +171,6 @@ void              gtk_print_settings_set_int                 (GtkPrintSettings  
  *
  * The key used by the “Print to file” printer to store the
  * directory to which the output should be written.
- *
- * Since: 3.6
  */
 #define GTK_PRINT_SETTINGS_OUTPUT_DIR       "output-dir"
 
@@ -182,8 +180,6 @@ void              gtk_print_settings_set_int                 (GtkPrintSettings  
  * The key used by the “Print to file” printer to store the file
  * name of the output without the path to the directory and the
  * file extension.
- *
- * Since: 3.6
  */
 #define GTK_PRINT_SETTINGS_OUTPUT_BASENAME  "output-basename"
 
@@ -344,9 +340,9 @@ GDK_AVAILABLE_IN_ALL
 void                  gtk_print_settings_set_output_bin        (GtkPrintSettings   *settings,
 								const gchar        *output_bin);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 GVariant             *gtk_print_settings_to_gvariant           (GtkPrintSettings   *settings);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 GtkPrintSettings     *gtk_print_settings_new_from_gvariant     (GVariant           *variant);
 
 

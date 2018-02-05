@@ -92,8 +92,6 @@
  * # CSS nodes
  *
  * GtkFontChooserWidget has a single CSS node with name fontchooser.
- *
- * Since: 3.2
  */
 
 struct _GtkFontChooserWidgetPrivate
@@ -880,8 +878,6 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
  * Creates a new #GtkFontChooserWidget.
  *
  * Returns: a new #GtkFontChooserWidget
- *
- * Since: 3.2
  */
 GtkWidget *
 gtk_font_chooser_widget_new (void)

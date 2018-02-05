@@ -180,8 +180,6 @@ gtk_separator_tool_item_get_property (GObject      *object,
  * Create a new #GtkSeparatorToolItem
  * 
  * Returns: the new #GtkSeparatorToolItem
- * 
- * Since: 2.4
  */
 GtkToolItem *
 gtk_separator_tool_item_new (void)
@@ -202,8 +200,6 @@ gtk_separator_tool_item_new (void)
  * See gtk_separator_tool_item_set_draw().
  * 
  * Returns: %TRUE if @item is drawn as a line, or just blank.
- * 
- * Since: 2.4
  */
 gboolean
 gtk_separator_tool_item_get_draw (GtkSeparatorToolItem *item)
@@ -221,8 +217,6 @@ gtk_separator_tool_item_get_draw (GtkSeparatorToolItem *item)
  * Whether @item is drawn as a vertical line, or just blank.
  * Setting this to %FALSE along with gtk_tool_item_set_expand() is useful
  * to create an item that forces following items to the end of the toolbar.
- * 
- * Since: 2.4
  */
 void
 gtk_separator_tool_item_set_draw (GtkSeparatorToolItem *item,

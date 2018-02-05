@@ -64,8 +64,6 @@
  * Often, GtkSearchEntry will be fed events by means of being
  * placed inside a #GtkSearchBar. If that is not the case,
  * you can use gtk_search_entry_handle_event() to pass events.
- *
- * Since: 3.6
  */
 
 enum {
@@ -169,8 +167,6 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
    *
    * The #GtkSearchEntry::search-changed signal is emitted with a short
    * delay of 150 milliseconds after the last change to the entry text.
-   *
-   * Since: 3.10
    */
   signals[SEARCH_CHANGED] =
     g_signal_new (I_("search-changed"),
@@ -193,8 +189,6 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
    * matches.
    *
    * The default bindings for this signal is Ctrl-g.
-   *
-   * Since: 3.16
    */
   signals[NEXT_MATCH] =
     g_signal_new (I_("next-match"),
@@ -217,8 +211,6 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
    * matches.
    *
    * The default bindings for this signal is Ctrl-Shift-g.
-   *
-   * Since: 3.16
    */
   signals[PREVIOUS_MATCH] =
     g_signal_new (I_("previous-match"),
@@ -240,8 +232,6 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
    * entry in this case.
    *
    * The default bindings for this signal is Escape.
-   *
-   * Since: 3.16
    */
   signals[STOP_SEARCH] =
     g_signal_new (I_("stop-search"),
@@ -380,8 +370,6 @@ gtk_search_entry_init (GtkSearchEntry *entry)
  * empty, and a clear icon when it isn't.
  *
  * Returns: a new #GtkSearchEntry
- *
- * Since: 3.6
  */
 GtkWidget *
 gtk_search_entry_new (void)
@@ -438,8 +426,6 @@ gtk_search_entry_is_keynav_event (GdkEvent *event)
  * Returns: %GDK_EVENT_STOP if the key press event resulted
  *     in a search beginning or continuing, %GDK_EVENT_PROPAGATE
  *     otherwise.
- *
- * Since: 3.16
  */
 gboolean
 gtk_search_entry_handle_event (GtkSearchEntry *entry,

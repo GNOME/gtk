@@ -135,8 +135,6 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
    * GtkAdjustment:value:
    *
    * The value of the adjustment.
-   *
-   * Since: 2.4
    */
   adjustment_props[PROP_VALUE] =
       g_param_spec_double ("value",
@@ -150,8 +148,6 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
    * GtkAdjustment:lower:
    *
    * The minimum value of the adjustment.
-   *
-   * Since: 2.4
    */
   adjustment_props[PROP_LOWER] =
       g_param_spec_double ("lower",
@@ -168,8 +164,6 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
    * Note that values will be restricted by
    * `upper - page-size` if the page-size
    * property is nonzero.
-   *
-   * Since: 2.4
    */
   adjustment_props[PROP_UPPER] =
       g_param_spec_double ("upper",
@@ -183,8 +177,6 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
    * GtkAdjustment:step-increment:
    *
    * The step increment of the adjustment.
-   *
-   * Since: 2.4
    */
   adjustment_props[PROP_STEP_INCREMENT] =
       g_param_spec_double ("step-increment",
@@ -198,8 +190,6 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
    * GtkAdjustment:page-increment:
    *
    * The page increment of the adjustment.
-   *
-   * Since: 2.4
    */
   adjustment_props[PROP_PAGE_INCREMENT] =
       g_param_spec_double ("page-increment",
@@ -216,8 +206,6 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
    * Note that the page-size is irrelevant and should be set to zero
    * if the adjustment is used for a simple scalar value, e.g. in a
    * #GtkSpinButton.
-   *
-   * Since: 2.4
    */
   adjustment_props[PROP_PAGE_SIZE] =
       g_param_spec_double ("page-size",
@@ -588,8 +576,6 @@ gtk_adjustment_animate_to_value (GtkAdjustment *adjustment,
  * Retrieves the minimum value of the adjustment.
  *
  * Returns: The current minimum value of the adjustment
- *
- * Since: 2.14
  **/
 gdouble
 gtk_adjustment_get_lower (GtkAdjustment *adjustment)
@@ -619,8 +605,6 @@ gtk_adjustment_get_lower (GtkAdjustment *adjustment)
  * Alternatively, using a single g_object_set() for all the properties
  * to change, or using gtk_adjustment_configure() has the same effect
  * of compressing #GtkAdjustment::changed emissions.
- *
- * Since: 2.14
  **/
 void
 gtk_adjustment_set_lower (GtkAdjustment *adjustment,
@@ -641,8 +625,6 @@ gtk_adjustment_set_lower (GtkAdjustment *adjustment,
  * Retrieves the maximum value of the adjustment.
  *
  * Returns: The current maximum value of the adjustment
- *
- * Since: 2.14
  **/
 gdouble
 gtk_adjustment_get_upper (GtkAdjustment *adjustment)
@@ -667,8 +649,6 @@ gtk_adjustment_get_upper (GtkAdjustment *adjustment)
  * See gtk_adjustment_set_lower() about how to compress multiple
  * emissions of the #GtkAdjustment::changed signal when setting
  * multiple adjustment properties.
- *
- * Since: 2.14
  **/
 void
 gtk_adjustment_set_upper (GtkAdjustment *adjustment,
@@ -689,8 +669,6 @@ gtk_adjustment_set_upper (GtkAdjustment *adjustment,
  * Retrieves the step increment of the adjustment.
  *
  * Returns: The current step increment of the adjustment.
- *
- * Since: 2.14
  **/
 gdouble
 gtk_adjustment_get_step_increment (GtkAdjustment *adjustment)
@@ -712,8 +690,6 @@ gtk_adjustment_get_step_increment (GtkAdjustment *adjustment)
  * See gtk_adjustment_set_lower() about how to compress multiple
  * emissions of the #GtkAdjustment::changed signal when setting
  * multiple adjustment properties.
- *
- * Since: 2.14
  **/
 void
 gtk_adjustment_set_step_increment (GtkAdjustment *adjustment,
@@ -734,8 +710,6 @@ gtk_adjustment_set_step_increment (GtkAdjustment *adjustment,
  * Retrieves the page increment of the adjustment.
  *
  * Returns: The current page increment of the adjustment
- *
- * Since: 2.14
  **/
 gdouble
 gtk_adjustment_get_page_increment (GtkAdjustment *adjustment)
@@ -757,8 +731,6 @@ gtk_adjustment_get_page_increment (GtkAdjustment *adjustment)
  * See gtk_adjustment_set_lower() about how to compress multiple
  * emissions of the #GtkAdjustment::changed signal when setting
  * multiple adjustment properties.
- *
- * Since: 2.14
  **/
 void
 gtk_adjustment_set_page_increment (GtkAdjustment *adjustment,
@@ -779,8 +751,6 @@ gtk_adjustment_set_page_increment (GtkAdjustment *adjustment,
  * Retrieves the page size of the adjustment.
  *
  * Returns: The current page size of the adjustment
- *
- * Since: 2.14
  **/
 gdouble
 gtk_adjustment_get_page_size (GtkAdjustment *adjustment)
@@ -802,8 +772,6 @@ gtk_adjustment_get_page_size (GtkAdjustment *adjustment)
  * See gtk_adjustment_set_lower() about how to compress multiple
  * emissions of the GtkAdjustment::changed signal when setting
  * multiple adjustment properties.
- *
- * Since: 2.14
  **/
 void
 gtk_adjustment_set_page_size (GtkAdjustment *adjustment,
@@ -833,8 +801,6 @@ gtk_adjustment_set_page_size (GtkAdjustment *adjustment,
  * #GtkAdjustment::changed signal. See gtk_adjustment_set_lower()
  * for an alternative way of compressing multiple emissions of
  * #GtkAdjustment::changed into one.
- *
- * Since: 2.14
  **/
 void
 gtk_adjustment_configure (GtkAdjustment *adjustment,
@@ -936,8 +902,6 @@ gtk_adjustment_clamp_page (GtkAdjustment *adjustment,
  * Gets the smaller of step increment and page increment.
  *
  * Returns: the minimum increment of @adjustment
- *
- * Since: 3.2
  */
 gdouble
 gtk_adjustment_get_minimum_increment (GtkAdjustment *adjustment)

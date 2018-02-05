@@ -206,8 +206,6 @@ gtk_native_dialog_class_init (GtkNativeDialogClass *class)
    * GtkNativeDialog:title:
    *
    * The title of the dialog window
-   *
-   * Since: 3.20
    */
   native_props[PROP_TITLE] =
     g_param_spec_string ("title",
@@ -220,8 +218,6 @@ gtk_native_dialog_class_init (GtkNativeDialogClass *class)
    * GtkNativeDialog:modal:
    *
    * Whether the window should be modal with respect to its transient parent.
-   *
-   * Since: 3.20
    */
   native_props[PROP_MODAL] =
     g_param_spec_boolean ("modal",
@@ -234,8 +230,6 @@ gtk_native_dialog_class_init (GtkNativeDialogClass *class)
    * GtkNativeDialog:visible:
    *
    * Whether the window is currenlty visible.
-   *
-   * Since: 3.20
    */
   native_props[PROP_VISIBLE] =
     g_param_spec_boolean ("visible",
@@ -248,8 +242,6 @@ gtk_native_dialog_class_init (GtkNativeDialogClass *class)
    * GtkNativeDialog:transient-for:
    *
    * The transient parent of the dialog, or %NULL for none.
-   *
-   * Since: 3.20
    */
   native_props[PROP_TRANSIENT_FOR] =
     g_param_spec_object ("transient-for",
@@ -271,8 +263,6 @@ gtk_native_dialog_class_init (GtkNativeDialogClass *class)
    *
    * If you call gtk_native_dialog_hide() before the user responds to
    * the dialog this signal will not be emitted.
-   *
-   * Since: 3.20
    */
   native_signals[RESPONSE] =
     g_signal_new (I_("response"),
@@ -300,8 +290,6 @@ gtk_native_dialog_init (GtkNativeDialog *self)
  * will be emitted.
  *
  * Multiple calls while the dialog is visible will be ignored.
- *
- * Since: 3.20
  **/
 void
 gtk_native_dialog_show (GtkNativeDialog *self)
@@ -333,8 +321,6 @@ gtk_native_dialog_show (GtkNativeDialog *self)
  * until after the next call to gtk_native_dialog_show().
  *
  * If the dialog is not visible this does nothing.
- *
- * Since: 3.20
  **/
 void
 gtk_native_dialog_hide (GtkNativeDialog *self)
@@ -374,8 +360,6 @@ gtk_native_dialog_hide (GtkNativeDialog *self)
  * Note that this does not release any reference to the object (as opposed to
  * destroying a GtkWindow) because there is no reference from the windowing
  * system to the #GtkNativeDialog.
- *
- * Since: 3.20
  **/
 void
 gtk_native_dialog_destroy (GtkNativeDialog *self)
@@ -403,8 +387,6 @@ _gtk_native_dialog_emit_response (GtkNativeDialog *self,
  * Determines whether the dialog is visible.
  *
  * Returns: %TRUE if the dialog is visible
- *
- * Since: 3.20
  **/
 gboolean
 gtk_native_dialog_get_visible (GtkNativeDialog *self)
@@ -427,8 +409,6 @@ gtk_native_dialog_get_visible (GtkNativeDialog *self)
  * gtk_native_dialog_set_transient_for() to make the dialog transient for the
  * parent; most [window managers][gtk-X11-arch]
  * will then disallow lowering the dialog below the parent.
- *
- * Since: 3.20
  **/
 void
 gtk_native_dialog_set_modal (GtkNativeDialog *self,
@@ -454,8 +434,6 @@ gtk_native_dialog_set_modal (GtkNativeDialog *self,
  * Returns whether the dialog is modal. See gtk_native_dialog_set_modal().
  *
  * Returns: %TRUE if the dialog is set to be modal
- *
- * Since: 3.20
  **/
 gboolean
 gtk_native_dialog_get_modal (GtkNativeDialog *self)
@@ -473,8 +451,6 @@ gtk_native_dialog_get_modal (GtkNativeDialog *self)
  * @title: title of the dialog
  *
  * Sets the title of the #GtkNativeDialog.
- *
- * Since: 3.20
  **/
 void
 gtk_native_dialog_set_title (GtkNativeDialog *self,
@@ -499,8 +475,6 @@ gtk_native_dialog_set_title (GtkNativeDialog *self,
  * Returns: (nullable): the title of the dialog, or %NULL if none has
  *    been set explicitly. The returned string is owned by the widget
  *    and must not be modified or freed.
- *
- * Since: 3.20
  **/
 const char *
 gtk_native_dialog_get_title (GtkNativeDialog *self)
@@ -524,8 +498,6 @@ gtk_native_dialog_get_title (GtkNativeDialog *self)
  * main window.
  *
  * Passing %NULL for @parent unsets the current transient window.
- *
- * Since: 3.20
  */
 void
 gtk_native_dialog_set_transient_for (GtkNativeDialog *self,
@@ -548,8 +520,6 @@ gtk_native_dialog_set_transient_for (GtkNativeDialog *self,
  *
  * Returns: (nullable) (transfer none): the transient parent for this window,
  * or %NULL if no transient parent has been set.
- *
- * Since: 3.20
  **/
 GtkWindow *
 gtk_native_dialog_get_transient_for (GtkNativeDialog *self)
@@ -608,8 +578,6 @@ run_response_cb (GtkNativeDialog *self,
  * be triggered during a gtk_nautilus_dialog_run() call.
  *
  * Returns: response ID
- *
- * Since: 3.20
  **/
 gint
 gtk_native_dialog_run (GtkNativeDialog *self)

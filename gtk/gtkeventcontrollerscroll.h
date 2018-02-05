@@ -50,8 +50,6 @@ typedef struct _GtkEventControllerScrollClass GtkEventControllerScrollClass;
  * @GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES: Emit scroll on both axes.
  *
  * Describes the behavior of a #GtkEventControllerScroll.
- *
- * Since: 3.93
  **/
 typedef enum {
   GTK_EVENT_CONTROLLER_SCROLL_NONE       = 0,
@@ -62,16 +60,16 @@ typedef enum {
   GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES  = (GTK_EVENT_CONTROLLER_SCROLL_VERTICAL | GTK_EVENT_CONTROLLER_SCROLL_HORIZONTAL),
 } GtkEventControllerScrollFlags;
 
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 GType               gtk_event_controller_scroll_get_type  (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 GtkEventController *gtk_event_controller_scroll_new (GtkWidget                     *widget,
                                                      GtkEventControllerScrollFlags  flags);
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 void                gtk_event_controller_scroll_set_flags (GtkEventControllerScroll      *scroll,
                                                            GtkEventControllerScrollFlags  flags);
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 GtkEventControllerScrollFlags
                     gtk_event_controller_scroll_get_flags (GtkEventControllerScroll      *scroll);
 

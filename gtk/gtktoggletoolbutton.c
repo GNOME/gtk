@@ -106,8 +106,6 @@ gtk_toggle_tool_button_class_init (GtkToggleToolButtonClass *klass)
    * GtkToggleToolButton:active:
    *
    * If the toggle tool button should be pressed in.
-   *
-   * Since: 2.8
    */
   g_object_class_install_property (object_class,
                                    PROP_ACTIVE,
@@ -311,8 +309,6 @@ button_toggled (GtkWidget           *widget,
  * Returns a new #GtkToggleToolButton
  * 
  * Returns: a newly created #GtkToggleToolButton
- * 
- * Since: 2.4
  **/
 GtkToolItem *
 gtk_toggle_tool_button_new (void)
@@ -333,8 +329,6 @@ gtk_toggle_tool_button_new (void)
  * Sets the status of the toggle tool button. Set to %TRUE if you
  * want the GtkToggleButton to be “pressed in”, and %FALSE to raise it.
  * This action causes the toggled signal to be emitted.
- * 
- * Since: 2.4
  **/
 void
 gtk_toggle_tool_button_set_active (GtkToggleToolButton *button,
@@ -359,8 +353,6 @@ gtk_toggle_tool_button_set_active (GtkToggleToolButton *button,
  * Returns %TRUE if the toggle button is pressed in and %FALSE if it is raised.
  * 
  * Returns: %TRUE if the toggle tool button is pressed in, %FALSE if not
- * 
- * Since: 2.4
  **/
 gboolean
 gtk_toggle_tool_button_get_active (GtkToggleToolButton *button)

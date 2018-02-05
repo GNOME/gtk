@@ -138,8 +138,6 @@ gtk_invisible_destroy (GtkWidget *widget)
  * Creates a new #GtkInvisible object for a specified display.
  *
  * Returns: a newly created #GtkInvisible object
- *
- * Since: 3.94
  **/
 GtkWidget* 
 gtk_invisible_new_for_display (GdkDisplay *display)
@@ -168,8 +166,6 @@ gtk_invisible_new (void)
  * @display: a #GdkDisplay.
  *
  * Sets the #GdkDisplay where the #GtkInvisible object will be displayed.
- *
- * Since: 3.94
  **/ 
 void
 gtk_invisible_set_display (GtkInvisible *invisible,
@@ -212,8 +208,6 @@ gtk_invisible_set_display (GtkInvisible *invisible,
  * Returns the #GdkDisplay object associated with @invisible
  *
  * Returns: (transfer none): the associated #GdkDisplay.
- *
- * Since: 3.94
  **/
 GdkDisplay *
 gtk_invisible_get_display (GtkInvisible *invisible)

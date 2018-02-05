@@ -857,8 +857,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * to the padding from the theme.
    *
    * Don't confuse this property with #GtkWidget:margin-top.
-   *
-   * Since: 3.18
    */
   g_object_class_install_property (gobject_class,
                                    PROP_TOP_MARGIN,
@@ -878,8 +876,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * to the padding from the theme.
    *
    * Don't confuse this property with #GtkWidget:margin-bottom.
-   *
-   * Since: 3.18
    */
   g_object_class_install_property (gobject_class,
                                    PROP_BOTTOM_MARGIN,
@@ -946,8 +942,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
     * Setting this to a non-%NULL value overrides the
     * system-wide IM module setting. See the GtkSettings 
     * #GtkSettings:gtk-im-module property.
-    *
-    * Since: 2.16
     */
    g_object_class_install_property (gobject_class,
                                     PROP_IM_MODULE,
@@ -964,8 +958,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    *
    * This property can be used by on-screen keyboards and other input
    * methods to adjust their behaviour.
-   *
-   * Since: 3.6
    */
   g_object_class_install_property (gobject_class,
                                    PROP_INPUT_PURPOSE,
@@ -982,8 +974,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    *
    * Additional hints (beyond #GtkTextView:input-purpose) that
    * allow input methods to fine-tune their behaviour.
-   *
-   * Since: 3.6
    */
   g_object_class_install_property (gobject_class,
                                    PROP_INPUT_HINTS,
@@ -999,8 +989,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    *
    * If :populate-all is %TRUE, the #GtkTextView::populate-popup
    * signal is also emitted for touch popups.
-   *
-   * Since: 3.8
    */
   g_object_class_install_property (gobject_class,
                                    PROP_POPULATE_ALL,
@@ -1015,8 +1003,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    *
    * If %TRUE, set the %GTK_STYLE_CLASS_MONOSPACE style class on the
    * text view to indicate that a monospace font is desired.
-   *
-   * Since: 3.16
    */
   g_object_class_install_property (gobject_class,
                                    PROP_MONOSPACE,
@@ -1358,8 +1344,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    *
    * This signal is only emitted if the text at the given position
    * is actually editable.
-   *
-   * Since: 2.20
    */
   signals[PREEDIT_CHANGED] =
     g_signal_new_class_handler (I_("preedit-changed"),
@@ -1384,7 +1368,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    *
    * Returns: %GDK_EVENT_STOP to stop other handlers from being invoked for the
    *   event. %GDK_EVENT_PROPAGATE to propagate the event further.
-   * Since: 3.16
    */
   signals[EXTEND_SELECTION] =
     g_signal_new (I_("extend-selection"),
@@ -1408,8 +1391,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * which gets emitted to present the Emoji chooser for the @text_view.
    *
    * The default bindings for this signal are Ctrl-. and Ctrl-;
-   *
-   * Since: 3.22.27
    */
   signals[INSERT_EMOJI] =
     g_signal_new (I_("insert-emoji"),
@@ -2024,8 +2005,6 @@ gtk_text_view_get_buffer (GtkTextView *text_view)
  * The rectangle position is in buffer coordinates; use
  * gtk_text_view_buffer_to_window_coords() to convert these
  * coordinates to coordinates for one of the windows in the text view.
- *
- * Since: 3.0
  **/
 void
 gtk_text_view_get_cursor_locations (GtkTextView       *text_view,
@@ -2103,8 +2082,6 @@ gtk_text_view_get_iter_at_location (GtkTextView *text_view,
  * characters.
  *
  * Returns: %TRUE if the position is over text
- *
- * Since: 2.6
  **/
 gboolean
 gtk_text_view_get_iter_at_position (GtkTextView *text_view,
@@ -3252,8 +3229,6 @@ gtk_text_view_get_right_margin (GtkTextView *text_view)
  *
  * Note that this function is confusingly named.
  * In CSS terms, the value set here is padding.
- *
- * Since: 3.18
  */
 void
 gtk_text_view_set_top_margin (GtkTextView *text_view,
@@ -3286,8 +3261,6 @@ gtk_text_view_set_top_margin (GtkTextView *text_view,
  * Gets the top margin for text in the @text_view.
  *
  * Returns: top margin in pixels
- *
- * Since: 3.18
  **/
 gint
 gtk_text_view_get_top_margin (GtkTextView *text_view)
@@ -3306,8 +3279,6 @@ gtk_text_view_get_top_margin (GtkTextView *text_view)
  *
  * Note that this function is confusingly named.
  * In CSS terms, the value set here is padding.
- *
- * Since: 3.18
  */
 void
 gtk_text_view_set_bottom_margin (GtkTextView *text_view,
@@ -3336,8 +3307,6 @@ gtk_text_view_set_bottom_margin (GtkTextView *text_view,
  * Gets the bottom margin for text in the @text_view.
  *
  * Returns: bottom margin in pixels
- *
- * Since: 3.18
  */
 gint
 gtk_text_view_get_bottom_margin (GtkTextView *text_view)
@@ -3528,8 +3497,6 @@ gtk_text_view_get_cursor_visible (GtkTextView *text_view)
  * This function should be called in response to user input
  * (e.g. from derived classes that override the textview's
  * #GtkWidget::key-press-event handler).
- *
- * Since: 3.20
  */
 void
 gtk_text_view_reset_cursor_blink (GtkTextView *text_view)
@@ -6857,8 +6824,6 @@ gtk_text_view_toggle_overwrite (GtkTextView *text_view)
  * Returns whether the #GtkTextView is in overwrite mode or not.
  *
  * Returns: whether @text_view is in overwrite mode or not.
- * 
- * Since: 2.4
  **/
 gboolean
 gtk_text_view_get_overwrite (GtkTextView *text_view)
@@ -6874,8 +6839,6 @@ gtk_text_view_get_overwrite (GtkTextView *text_view)
  * @overwrite: %TRUE to turn on overwrite mode, %FALSE to turn it off
  *
  * Changes the #GtkTextView overwrite mode.
- *
- * Since: 2.4
  **/
 void
 gtk_text_view_set_overwrite (GtkTextView *text_view,
@@ -6899,8 +6862,6 @@ gtk_text_view_set_overwrite (GtkTextView *text_view,
  * If @accepts_tab is %TRUE, a tab character is inserted. If @accepts_tab 
  * is %FALSE the keyboard focus is moved to the next widget in the focus 
  * chain.
- * 
- * Since: 2.4
  **/
 void
 gtk_text_view_set_accepts_tab (GtkTextView *text_view,
@@ -6927,8 +6888,6 @@ gtk_text_view_set_accepts_tab (GtkTextView *text_view,
  * 
  * Returns: %TRUE if pressing the Tab key inserts a tab character, 
  *   %FALSE if pressing the Tab key moves the keyboard focus.
- * 
- * Since: 2.4
  **/
 gboolean
 gtk_text_view_get_accepts_tab (GtkTextView *text_view)
@@ -7725,8 +7684,6 @@ gtk_text_view_destroy_layout (GtkTextView *text_view)
  *
  * This can be necessary in the case where modifying the buffer
  * would confuse on-going input method behavior.
- *
- * Since: 2.22
  */
 void
 gtk_text_view_reset_im_context (GtkTextView *text_view)
@@ -7777,8 +7734,6 @@ gtk_text_view_reset_im_context (GtkTextView *text_view)
  * ]|
  *
  * Returns: %TRUE if the input method handled the key event.
- *
- * Since: 2.22
  */
 gboolean
 gtk_text_view_im_context_filter_keypress (GtkTextView  *text_view,
@@ -10058,8 +10013,6 @@ gtk_text_view_move_visually (GtkTextView *text_view,
  * Sets the #GtkTextView:input-purpose property which
  * can be used by on-screen keyboards and other input
  * methods to adjust their behaviour.
- *
- * Since: 3.6
  */
 
 void
@@ -10084,10 +10037,7 @@ gtk_text_view_set_input_purpose (GtkTextView     *text_view,
  * @text_view: a #GtkTextView
  *
  * Gets the value of the #GtkTextView:input-purpose property.
- *
- * Since: 3.6
  */
-
 GtkInputPurpose
 gtk_text_view_get_input_purpose (GtkTextView *text_view)
 {
@@ -10109,8 +10059,6 @@ gtk_text_view_get_input_purpose (GtkTextView *text_view)
  *
  * Sets the #GtkTextView:input-hints property, which
  * allows input methods to fine-tune their behaviour.
- *
- * Since: 3.6
  */
 
 void
@@ -10135,10 +10083,7 @@ gtk_text_view_set_input_hints (GtkTextView   *text_view,
  * @text_view: a #GtkTextView
  *
  * Gets the value of the #GtkTextView:input-hints property.
- *
- * Since: 3.6
  */
-
 GtkInputHints
 gtk_text_view_get_input_hints (GtkTextView *text_view)
 {
@@ -10161,8 +10106,6 @@ gtk_text_view_get_input_hints (GtkTextView *text_view)
  * Sets the #GtkTextView:monospace property, which
  * indicates that the text view should use monospace
  * fonts.
- *
- * Since: 3.16
  */
 void
 gtk_text_view_set_monospace (GtkTextView *text_view,
@@ -10193,8 +10136,6 @@ gtk_text_view_set_monospace (GtkTextView *text_view,
  * Gets the value of the #GtkTextView:monospace property.
  *
  * Return: %TRUE if monospace fonts are desired
- *
- * Since: 3.16
  */
 gboolean
 gtk_text_view_get_monospace (GtkTextView *text_view)

@@ -1260,8 +1260,6 @@ gtk_app_chooser_widget_iface_init (GtkAppChooserIface *iface)
  * that can handle content of the given type.
  *
  * Returns: a newly created #GtkAppChooserWidget
- *
- * Since: 3.0
  */
 GtkWidget *
 gtk_app_chooser_widget_new (const gchar *content_type)
@@ -1278,8 +1276,6 @@ gtk_app_chooser_widget_new (const gchar *content_type)
  *
  * Sets whether the app chooser should show the default handler
  * for the content type in a separate section.
- *
- * Since: 3.0
  */
 void
 gtk_app_chooser_widget_set_show_default (GtkAppChooserWidget *self,
@@ -1305,8 +1301,6 @@ gtk_app_chooser_widget_set_show_default (GtkAppChooserWidget *self,
  * property.
  *
  * Returns: the value of #GtkAppChooserWidget:show-default
- *
- * Since: 3.0
  */
 gboolean
 gtk_app_chooser_widget_get_show_default (GtkAppChooserWidget *self)
@@ -1323,8 +1317,6 @@ gtk_app_chooser_widget_get_show_default (GtkAppChooserWidget *self)
  *
  * Sets whether the app chooser should show recommended applications
  * for the content type in a separate section.
- *
- * Since: 3.0
  */
 void
 gtk_app_chooser_widget_set_show_recommended (GtkAppChooserWidget *self,
@@ -1350,8 +1342,6 @@ gtk_app_chooser_widget_set_show_recommended (GtkAppChooserWidget *self,
  * property.
  *
  * Returns: the value of #GtkAppChooserWidget:show-recommended
- *
- * Since: 3.0
  */
 gboolean
 gtk_app_chooser_widget_get_show_recommended (GtkAppChooserWidget *self)
@@ -1368,8 +1358,6 @@ gtk_app_chooser_widget_get_show_recommended (GtkAppChooserWidget *self)
  *
  * Sets whether the app chooser should show related applications
  * for the content type in a separate section.
- *
- * Since: 3.0
  */
 void
 gtk_app_chooser_widget_set_show_fallback (GtkAppChooserWidget *self,
@@ -1395,8 +1383,6 @@ gtk_app_chooser_widget_set_show_fallback (GtkAppChooserWidget *self,
  * property.
  *
  * Returns: the value of #GtkAppChooserWidget:show-fallback
- *
- * Since: 3.0
  */
 gboolean
 gtk_app_chooser_widget_get_show_fallback (GtkAppChooserWidget *self)
@@ -1413,8 +1399,6 @@ gtk_app_chooser_widget_get_show_fallback (GtkAppChooserWidget *self)
  *
  * Sets whether the app chooser should show applications
  * which are unrelated to the content type.
- *
- * Since: 3.0
  */
 void
 gtk_app_chooser_widget_set_show_other (GtkAppChooserWidget *self,
@@ -1440,8 +1424,6 @@ gtk_app_chooser_widget_set_show_other (GtkAppChooserWidget *self,
  * property.
  *
  * Returns: the value of #GtkAppChooserWidget:show-other
- *
- * Since: 3.0
  */
 gboolean
 gtk_app_chooser_widget_get_show_other (GtkAppChooserWidget *self)
@@ -1458,8 +1440,6 @@ gtk_app_chooser_widget_get_show_other (GtkAppChooserWidget *self)
  *
  * Sets whether the app chooser should show all applications
  * in a flat list.
- *
- * Since: 3.0
  */
 void
 gtk_app_chooser_widget_set_show_all (GtkAppChooserWidget *self,
@@ -1485,8 +1465,6 @@ gtk_app_chooser_widget_set_show_all (GtkAppChooserWidget *self,
  * property.
  *
  * Returns: the value of #GtkAppChooserWidget:show-all
- *
- * Since: 3.0
  */
 gboolean
 gtk_app_chooser_widget_get_show_all (GtkAppChooserWidget *self)
@@ -1529,8 +1507,6 @@ gtk_app_chooser_widget_set_default_text (GtkAppChooserWidget *self,
  * that can handle the content type.
  *
  * Returns: the value of #GtkAppChooserWidget:default-text
- *
- * Since: 3.0
  */
 const gchar *
 gtk_app_chooser_widget_get_default_text (GtkAppChooserWidget *self)

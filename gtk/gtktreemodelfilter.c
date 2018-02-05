@@ -3763,8 +3763,6 @@ gtk_tree_model_filter_set_root (GtkTreeModelFilter *filter,
  * and @root as the virtual root.
  *
  * Returns: (transfer full): A new #GtkTreeModel.
- *
- * Since: 2.4
  */
 GtkTreeModel *
 gtk_tree_model_filter_new (GtkTreeModel *child_model,
@@ -3785,8 +3783,6 @@ gtk_tree_model_filter_new (GtkTreeModel *child_model,
  * Returns a pointer to the child model of @filter.
  *
  * Returns: (transfer none): A pointer to a #GtkTreeModel.
- *
- * Since: 2.4
  */
 GtkTreeModel *
 gtk_tree_model_filter_get_model (GtkTreeModelFilter *filter)
@@ -3838,8 +3834,6 @@ gtk_tree_model_filter_get_model (GtkTreeModelFilter *filter)
  * Note that gtk_tree_model_filter_set_visible_func() or
  * gtk_tree_model_filter_set_visible_column() can only be called
  * once for a given filter model.
- *
- * Since: 2.4
  */
 void
 gtk_tree_model_filter_set_visible_func (GtkTreeModelFilter            *filter,
@@ -3877,8 +3871,6 @@ gtk_tree_model_filter_set_visible_func (GtkTreeModelFilter            *filter,
  *
  * Note that gtk_tree_model_filter_set_modify_func()
  * can only be called once for a given filter model.
- *
- * Since: 2.4
  */
 void
 gtk_tree_model_filter_set_modify_func (GtkTreeModelFilter           *filter,
@@ -3915,8 +3907,6 @@ gtk_tree_model_filter_set_modify_func (GtkTreeModelFilter           *filter,
  * Note that gtk_tree_model_filter_set_visible_func() or
  * gtk_tree_model_filter_set_visible_column() can only be called
  * once for a given filter model.
- *
- * Since: 2.4
  */
 void
 gtk_tree_model_filter_set_visible_column (GtkTreeModelFilter *filter,
@@ -3945,8 +3935,6 @@ gtk_tree_model_filter_set_visible_column (GtkTreeModelFilter *filter,
  *
  * Returns: %TRUE, if @filter_iter was set, i.e. if @child_iter is a
  * valid iterator pointing to a visible row in child model.
- *
- * Since: 2.4
  */
 gboolean
 gtk_tree_model_filter_convert_child_iter_to_iter (GtkTreeModelFilter *filter,
@@ -3987,8 +3975,6 @@ gtk_tree_model_filter_convert_child_iter_to_iter (GtkTreeModelFilter *filter,
  * @filter_iter: A valid #GtkTreeIter pointing to a row on @filter.
  *
  * Sets @child_iter to point to the row pointed to by @filter_iter.
- *
- * Since: 2.4
  */
 void
 gtk_tree_model_filter_convert_iter_to_child_iter (GtkTreeModelFilter *filter,
@@ -4126,8 +4112,6 @@ gtk_real_tree_model_filter_convert_child_path_to_path (GtkTreeModelFilter *filte
  * is returned.
  *
  * Returns: (nullable) (transfer full): A newly allocated #GtkTreePath, or %NULL.
- *
- * Since: 2.4
  */
 GtkTreePath *
 gtk_tree_model_filter_convert_child_path_to_path (GtkTreeModelFilter *filter,
@@ -4169,8 +4153,6 @@ gtk_tree_model_filter_convert_child_path_to_path (GtkTreeModelFilter *filter,
  * does not point to a location in the child model, %NULL is returned.
  *
  * Returns: (nullable) (transfer full): A newly allocated #GtkTreePath, or %NULL.
- *
- * Since: 2.4
  */
 GtkTreePath *
 gtk_tree_model_filter_convert_path_to_child_path (GtkTreeModelFilter *filter,
@@ -4252,8 +4234,6 @@ gtk_tree_model_filter_refilter_helper (GtkTreeModel *model,
  *
  * Emits ::row_changed for each row in the child model, which causes
  * the filter to re-evaluate whether a row is visible or not.
- *
- * Since: 2.4
  */
 void
 gtk_tree_model_filter_refilter (GtkTreeModelFilter *filter)
@@ -4276,8 +4256,6 @@ gtk_tree_model_filter_refilter (GtkTreeModelFilter *filter)
  * being filtered is static (and doesn’t change often) and there has been
  * a lot of unreffed access to nodes. As a side effect of this function,
  * all unreffed iters will be invalid.
- *
- * Since: 2.4
  */
 void
 gtk_tree_model_filter_clear_cache (GtkTreeModelFilter *filter)

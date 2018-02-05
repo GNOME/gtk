@@ -701,8 +701,6 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    * the accelerators that are associated with the action
    * via gtk_application_set_accels_for_action(), and setting
    * #GtkShortcutsShortcut::accelerator is not necessary.
-   *
-   * Since: 3.22
    */
   properties[PROP_ACTION_NAME] =
     g_param_spec_string ("action-name",

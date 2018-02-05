@@ -221,8 +221,6 @@ _gdk_win32_display_init_monitors (GdkWin32Display *win32_display)
  * by the application (GTK+ applications can learn about
  * cursor theme changes by listening for change notification
  * for the corresponding #GtkSetting).
- *
- * Since: 3.18
  */
 void
 gdk_win32_display_set_cursor_theme (GdkDisplay  *display,

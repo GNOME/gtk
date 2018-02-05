@@ -58,26 +58,26 @@ struct _GtkRevealerClass {
   GtkBinClass parent_class;
 };
 
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 GType                      gtk_revealer_get_type                (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 GtkWidget*                 gtk_revealer_new                     (void);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 gboolean                   gtk_revealer_get_reveal_child        (GtkRevealer               *revealer);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 void                       gtk_revealer_set_reveal_child        (GtkRevealer               *revealer,
                                                                  gboolean                   reveal_child);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 gboolean                   gtk_revealer_get_child_revealed      (GtkRevealer               *revealer);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 guint                      gtk_revealer_get_transition_duration (GtkRevealer               *revealer);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 void                       gtk_revealer_set_transition_duration (GtkRevealer               *revealer,
                                                                  guint                      duration);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 void                       gtk_revealer_set_transition_type     (GtkRevealer               *revealer,
                                                                  GtkRevealerTransitionType  transition);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 GtkRevealerTransitionType  gtk_revealer_get_transition_type     (GtkRevealer               *revealer);
 
 

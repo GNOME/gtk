@@ -149,8 +149,6 @@ init_atoms (void)
  * 
  * Appends the text targets supported by #GtkSelectionData to
  * the target list. All targets are added with the same @info.
- * 
- * Since: 2.6
  **/
 GdkContentFormats *
 gtk_content_formats_add_text_targets (GdkContentFormats *list)
@@ -187,8 +185,6 @@ gtk_content_formats_add_text_targets (GdkContentFormats *list)
  * 
  * Appends the image targets supported by #GtkSelectionData to
  * the target list. All targets are added with the same @info.
- * 
- * Since: 2.6
  **/
 GdkContentFormats *
 gtk_content_formats_add_image_targets (GdkContentFormats *list,
@@ -252,8 +248,6 @@ gtk_content_formats_add_image_targets (GdkContentFormats *list,
  * 
  * Appends the URI targets supported by #GtkSelectionData to
  * the target list. All targets are added with the same @info.
- * 
- * Since: 2.6
  **/
 GdkContentFormats *
 gtk_content_formats_add_uri_targets (GdkContentFormats *list)
@@ -280,8 +274,6 @@ gtk_content_formats_add_uri_targets (GdkContentFormats *list)
  * Retrieves the target of the selection.
  *
  * Returns: (transfer none): the target of the selection.
- *
- * Since: 2.14
  **/
 GdkAtom
 gtk_selection_data_get_target (const GtkSelectionData *selection_data)
@@ -298,8 +290,6 @@ gtk_selection_data_get_target (const GtkSelectionData *selection_data)
  * Retrieves the data type of the selection.
  *
  * Returns: (transfer none): the data type of the selection.
- *
- * Since: 2.14
  **/
 GdkAtom
 gtk_selection_data_get_data_type (const GtkSelectionData *selection_data)
@@ -316,8 +306,6 @@ gtk_selection_data_get_data_type (const GtkSelectionData *selection_data)
  * Retrieves the format of the selection.
  *
  * Returns: the format of the selection.
- *
- * Since: 2.14
  **/
 gint
 gtk_selection_data_get_format (const GtkSelectionData *selection_data)
@@ -335,8 +323,6 @@ gtk_selection_data_get_format (const GtkSelectionData *selection_data)
  * Retrieves the raw data of the selection.
  *
  * Returns: (array) (element-type guint8): the raw data of the selection.
- *
- * Since: 2.14
  **/
 const guchar*
 gtk_selection_data_get_data (const GtkSelectionData *selection_data)
@@ -353,8 +339,6 @@ gtk_selection_data_get_data (const GtkSelectionData *selection_data)
  * Retrieves the length of the raw data of the selection.
  *
  * Returns: the length of the data of the selection.
- *
- * Since: 2.14
  */
 gint
 gtk_selection_data_get_length (const GtkSelectionData *selection_data)
@@ -372,8 +356,6 @@ gtk_selection_data_get_length (const GtkSelectionData *selection_data)
  * Retrieves the raw data of the selection along with its length.
  *
  * Returns: (array length=length): the raw data of the selection
- *
- * Since: 3.0
  */
 const guchar*
 gtk_selection_data_get_data_with_length (const GtkSelectionData *selection_data,
@@ -393,8 +375,6 @@ gtk_selection_data_get_data_with_length (const GtkSelectionData *selection_data,
  * Retrieves the display of the selection.
  *
  * Returns: (transfer none): the display of the selection.
- *
- * Since: 2.14
  **/
 GdkDisplay *
 gtk_selection_data_get_display (const GtkSelectionData *selection_data)
@@ -768,8 +748,6 @@ gtk_selection_data_get_text (const GtkSelectionData *selection_data)
  * 
  * Returns: %TRUE if the selection was successfully set,
  *   otherwise %FALSE.
- *
- * Since: 2.6
  **/
 gboolean
 gtk_selection_data_set_pixbuf (GtkSelectionData *selection_data,
@@ -835,8 +813,6 @@ gtk_selection_data_set_pixbuf (GtkSelectionData *selection_data,
  * 
  * Returns: %TRUE if the selection was successfully set,
  *   otherwise %FALSE.
- *
- * Since: 3.94
  **/
 gboolean
 gtk_selection_data_set_surface (GtkSelectionData *selection_data,
@@ -866,8 +842,6 @@ gtk_selection_data_set_surface (GtkSelectionData *selection_data,
  *   cairo surface, a newly allocated surface is returned, otherwise
  *   %NULL.  If the result is non-%NULL it must be freed with
  *   g_object_unref().
- *
- * Since: 3.94
  **/
 cairo_surface_t *
 gtk_selection_data_get_surface (GtkSelectionData *selection_data)
@@ -893,8 +867,6 @@ gtk_selection_data_get_surface (GtkSelectionData *selection_data)
  *   #GdkPixbuf, a newly allocated pixbuf is returned, otherwise
  *   %NULL.  If the result is non-%NULL it must be freed with
  *   g_object_unref().
- *
- * Since: 2.6
  **/
 GdkPixbuf *
 gtk_selection_data_get_pixbuf (const GtkSelectionData *selection_data)
@@ -935,8 +907,6 @@ gtk_selection_data_get_pixbuf (const GtkSelectionData *selection_data)
  * 
  * Returns: %TRUE if the selection was successfully set,
  *   otherwise %FALSE.
- *
- * Since: 3.94
  **/
 gboolean
 gtk_selection_data_set_texture (GtkSelectionData *selection_data,
@@ -966,8 +936,6 @@ gtk_selection_data_set_texture (GtkSelectionData *selection_data,
  *   #GdkTexture, a newly allocated texture is returned, otherwise
  *   %NULL.  If the result is non-%NULL it must be freed with
  *   g_object_unref().
- *
- * Since: 3.94
  **/
 GdkTexture *
 gtk_selection_data_get_texture (const GtkSelectionData *selection_data)
@@ -999,8 +967,6 @@ gtk_selection_data_get_texture (const GtkSelectionData *selection_data)
  * 
  * Returns: %TRUE if the selection was successfully set,
  *   otherwise %FALSE.
- *
- * Since: 2.6
  **/
 gboolean
 gtk_selection_data_set_uris (GtkSelectionData  *selection_data,
@@ -1056,8 +1022,6 @@ gtk_selection_data_set_uris (GtkSelectionData  *selection_data,
  *   URIs, a newly allocated %NULL-terminated string array
  *   containing the URIs, otherwise %NULL. If the result is
  *   non-%NULL it must be freed with g_strfreev().
- *
- * Since: 2.6
  **/
 gchar **
 gtk_selection_data_get_uris (const GtkSelectionData *selection_data)
@@ -1143,8 +1107,6 @@ gtk_selection_data_get_targets (const GtkSelectionData  *selection_data,
  * 
  * Returns: %TRUE if @targets include a suitable target for text,
  *   otherwise %FALSE.
- *
- * Since: 2.10
  **/
 gboolean 
 gtk_targets_include_text (GdkAtom *targets,
@@ -1221,8 +1183,6 @@ gtk_selection_data_targets_include_text (const GtkSelectionData *selection_data)
  * 
  * Returns: %TRUE if @targets include a suitable target for images,
  *   otherwise %FALSE.
- *
- * Since: 2.10
  **/
 gboolean 
 gtk_targets_include_image (GdkAtom *targets,
@@ -1262,8 +1222,6 @@ gtk_targets_include_image (GdkAtom *targets,
  * 
  * Returns: %TRUE if @selection_data holds a list of targets,
  *   and a suitable target for images is included, otherwise %FALSE.
- *
- * Since: 2.6
  **/
 gboolean 
 gtk_selection_data_targets_include_image (const GtkSelectionData *selection_data,
@@ -1296,8 +1254,6 @@ gtk_selection_data_targets_include_image (const GtkSelectionData *selection_data
  * 
  * Returns: %TRUE if @targets include a suitable target for uri lists,
  *   otherwise %FALSE.
- *
- * Since: 2.10
  **/
 gboolean 
 gtk_targets_include_uri (GdkAtom *targets,
@@ -1335,8 +1291,6 @@ gtk_targets_include_uri (GdkAtom *targets,
  * 
  * Returns: %TRUE if @selection_data holds a list of targets,
  *   and a suitable target for URI lists is included, otherwise %FALSE.
- *
- * Since: 2.10
  **/
 gboolean
 gtk_selection_data_targets_include_uri (const GtkSelectionData *selection_data)

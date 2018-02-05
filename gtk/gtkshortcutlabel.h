@@ -34,23 +34,23 @@ G_BEGIN_DECLS
 typedef struct _GtkShortcutLabel      GtkShortcutLabel;
 typedef struct _GtkShortcutLabelClass GtkShortcutLabelClass;
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 GType        gtk_shortcut_label_get_type        (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 GtkWidget   *gtk_shortcut_label_new             (const gchar      *accelerator);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 const gchar *gtk_shortcut_label_get_accelerator (GtkShortcutLabel *self);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 void         gtk_shortcut_label_set_accelerator (GtkShortcutLabel *self,
                                                  const gchar      *accelerator);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 const gchar *gtk_shortcut_label_get_disabled_text (GtkShortcutLabel *self);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 void         gtk_shortcut_label_set_disabled_text (GtkShortcutLabel *self,
                                                    const gchar      *disabled_text);
 

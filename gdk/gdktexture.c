@@ -61,8 +61,6 @@
  * GdkTexture:
  *
  * The `GdkTexture` structure contains only private data.
- *
- * Since: 3.94
  */
 
 enum {
@@ -177,8 +175,6 @@ gdk_texture_class_init (GdkTextureClass *klass)
    * GdkTexture:width:
    *
    * The width of the texture.
-   *
-   * Since: 3.94
    */
   properties[PROP_WIDTH] =
     g_param_spec_int ("width",
@@ -196,8 +192,6 @@ gdk_texture_class_init (GdkTextureClass *klass)
    * GdkTexture:height:
    *
    * The height of the texture.
-   *
-   * Since: 3.94
    */
   properties[PROP_HEIGHT] =
     g_param_spec_int ("height",
@@ -306,8 +300,6 @@ gdk_cairo_texture_init (GdkCairoTexture *self)
  * The data is assumed to be in CAIRO_FORMAT_ARGB32 format.
  *
  * Returns: a new #GdkTexture
- *
- * Since: 3.94
  */
 GdkTexture *
 gdk_texture_new_for_data (const guchar *data,
@@ -347,8 +339,6 @@ gdk_texture_new_for_data (const guchar *data,
  * @surface must be an image surface with format CAIRO_FORMAT_ARGB32.
  *
  * Returns: a new #GdkTexture
- *
- * Since: 3.94
  */
 GdkTexture *
 gdk_texture_new_for_surface (cairo_surface_t *surface)
@@ -556,8 +546,6 @@ gdk_gl_texture_get_id (GdkGLTexture *self)
  * The texture contents are still available via the
  * gdk_texture_download() function, after this function
  * has been called.
- *
- * Since: 3.94
  */
 void
 gdk_texture_release_gl (GdkTexture *texture)
@@ -601,8 +589,6 @@ gdk_texture_release_gl (GdkTexture *texture)
  * Creates a new texture object representing the GdkPixbuf.
  *
  * Returns: a new #GdkTexture
- *
- * Since: 3.94
  */
 GdkTexture *
 gdk_texture_new_for_pixbuf (GdkPixbuf *pixbuf)
@@ -634,8 +620,6 @@ gdk_texture_new_for_pixbuf (GdkPixbuf *pixbuf)
  * gdk_texture_new_from_file() to load it.
  *
  * Return value: A newly-created texture
- *
- * Since: 3.94
  */
 GdkTexture *
 gdk_texture_new_from_resource (const char *resource_path)
@@ -665,8 +649,6 @@ gdk_texture_new_from_resource (const char *resource_path)
  * detected automatically. If %NULL is returned, then @error will be set.
  *
  * Return value: A newly-created #GdkTexture or %NULL if an error occured.
- *
- * Since: 3.94
  **/
 GdkTexture *
 gdk_texture_new_from_file (GFile   *file,
@@ -711,8 +693,6 @@ gdk_texture_new_from_file (GFile   *file,
  * an explicit call of gdk_texture_release_gl().
  *
  * Return value: A newly-created #GdkTexture
- *
- * Since: 3.94
  **/
 GdkTexture *
 gdk_texture_new_for_gl (GdkGLContext   *context,
@@ -749,8 +729,6 @@ gdk_texture_new_for_gl (GdkGLContext   *context,
  * Returns the width of @texture.
  *
  * Returns: the width of the #GdkTexture
- *
- * Since: 3.94
  */
 int
 gdk_texture_get_width (GdkTexture *texture)
@@ -767,8 +745,6 @@ gdk_texture_get_width (GdkTexture *texture)
  * Returns the height of the @texture.
  *
  * Returns: the height of the #GdkTexture
- *
- * Since: 3.94
  */
 int
 gdk_texture_get_height (GdkTexture *texture)
@@ -809,8 +785,6 @@ gdk_texture_download_surface (GdkTexture *texture)
  *                       cairo_image_surface_get_stride (surface));
  * cairo_surface_mark_dirty (surface);
  * ]|
- *
- * Since: 3.94
  **/
 void
 gdk_texture_download (GdkTexture *texture,

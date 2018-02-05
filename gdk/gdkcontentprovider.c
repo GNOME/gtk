@@ -174,8 +174,6 @@ gdk_content_provider_class_init (GdkContentProviderClass *class)
    * GdkContentProvider:formats:
    *
    * The possible formats that the provider can provide its data in.
-   *
-   * Since: 3.94
    */
   properties[PROP_FORMATS] =
     g_param_spec_boxed ("formats",
@@ -190,8 +188,6 @@ gdk_content_provider_class_init (GdkContentProviderClass *class)
    * GdkContentProvider:storable-formats:
    *
    * The subset of formats that clipboard managers should store this provider's data in.
-   *
-   * Since: 3.94
    */
   properties[PROP_STORABLE_FORMATS] =
     g_param_spec_boxed ("storable-formats",
@@ -206,8 +202,6 @@ gdk_content_provider_class_init (GdkContentProviderClass *class)
    * GdkContentProvider:content-changed:
    *
    * Emitted whenever the content provided by this provider has changed.
-   *
-   * Since: 3.94
    */
   signals[CONTENT_CHANGED] =
     g_signal_new ("content-changed",

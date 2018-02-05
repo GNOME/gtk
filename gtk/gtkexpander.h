@@ -115,10 +115,10 @@ void                  gtk_expander_set_label_fill      (GtkExpander *expander,
 						        gboolean     label_fill);
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_expander_get_label_fill      (GtkExpander *expander);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 void                  gtk_expander_set_resize_toplevel (GtkExpander *expander,
                                                         gboolean     resize_toplevel);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 gboolean              gtk_expander_get_resize_toplevel (GtkExpander *expander);
 
 G_END_DECLS

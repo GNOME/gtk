@@ -1393,8 +1393,6 @@ gdk_x11_keymap_translate_keyboard_state (GdkKeymap       *keymap,
  * directly includes an is_modifier field.
  *
  * Returns: the index of the active keyboard group for the event
- *
- * Since: 3.6
  */
 gint
 gdk_x11_keymap_get_group_for_state (GdkKeymap *keymap,
@@ -1484,8 +1482,6 @@ gdk_x11_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
  * an is_modifier field.
  *
  * Returns: %TRUE if the hardware keycode is a modifier key
- *
- * Since: 3.6
  */
 gboolean
 gdk_x11_keymap_key_is_modifier (GdkKeymap *keymap,

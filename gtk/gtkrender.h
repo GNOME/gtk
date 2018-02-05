@@ -60,7 +60,7 @@ void        gtk_render_background  (GtkStyleContext     *context,
                                     gdouble              width,
                                     gdouble              height);
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 void        gtk_render_background_get_clip  (GtkStyleContext     *context,
                                              gdouble              x,
                                              gdouble              y,
@@ -134,13 +134,13 @@ void        gtk_render_activity    (GtkStyleContext     *context,
                                     gdouble              y,
                                     gdouble              width,
                                     gdouble              height);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void        gtk_render_icon        (GtkStyleContext     *context,
                                     cairo_t             *cr,
                                     GdkTexture          *texture,
                                     gdouble              x,
                                     gdouble              y);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 void        gtk_render_icon_surface (GtkStyleContext    *context,
 				     cairo_t            *cr,
 				     cairo_surface_t    *surface,

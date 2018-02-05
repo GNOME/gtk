@@ -36,60 +36,60 @@ G_BEGIN_DECLS
 
 #define GDK_GL_ERROR       (gdk_gl_error_quark ())
 
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 GQuark gdk_gl_error_quark (void);
 
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 GType gdk_gl_context_get_type (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 GdkDisplay *            gdk_gl_context_get_display              (GdkGLContext  *context);
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 GdkWindow *             gdk_gl_context_get_window               (GdkGLContext  *context);
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 GdkGLContext *          gdk_gl_context_get_shared_context       (GdkGLContext  *context);
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 void                    gdk_gl_context_get_version              (GdkGLContext  *context,
                                                                  int           *major,
                                                                  int           *minor);
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 gboolean                gdk_gl_context_is_legacy                (GdkGLContext  *context);
 
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 void                    gdk_gl_context_set_required_version     (GdkGLContext  *context,
                                                                  int            major,
                                                                  int            minor);
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 void                    gdk_gl_context_get_required_version     (GdkGLContext  *context,
                                                                  int           *major,
                                                                  int           *minor);
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 void                    gdk_gl_context_set_debug_enabled        (GdkGLContext  *context,
                                                                  gboolean       enabled);
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 gboolean                gdk_gl_context_get_debug_enabled        (GdkGLContext  *context);
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 void                    gdk_gl_context_set_forward_compatible   (GdkGLContext  *context,
                                                                  gboolean       compatible);
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 gboolean                gdk_gl_context_get_forward_compatible   (GdkGLContext  *context);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 void                    gdk_gl_context_set_use_es               (GdkGLContext  *context,
                                                                  int            use_es);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 gboolean                gdk_gl_context_get_use_es               (GdkGLContext  *context);
 
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 gboolean                gdk_gl_context_realize                  (GdkGLContext  *context,
                                                                  GError       **error);
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 cairo_region_t *        gdk_gl_context_get_damage               (GdkGLContext  *context);
 
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 void                    gdk_gl_context_make_current             (GdkGLContext  *context);
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 GdkGLContext *          gdk_gl_context_get_current              (void);
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 void                    gdk_gl_context_clear_current            (void);
 
 G_END_DECLS

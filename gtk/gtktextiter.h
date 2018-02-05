@@ -103,7 +103,7 @@ GDK_AVAILABLE_IN_ALL
 GtkTextIter *gtk_text_iter_copy     (const GtkTextIter *iter);
 GDK_AVAILABLE_IN_ALL
 void         gtk_text_iter_free     (GtkTextIter       *iter);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 void         gtk_text_iter_assign   (GtkTextIter       *iter,
                                      const GtkTextIter *other);
 
@@ -169,7 +169,7 @@ GDK_AVAILABLE_IN_ALL
 GSList  *gtk_text_iter_get_toggled_tags  (const GtkTextIter  *iter,
                                           gboolean            toggled_on);
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_text_iter_starts_tag        (const GtkTextIter  *iter,
                                           GtkTextTag         *tag);
 
@@ -259,7 +259,7 @@ gboolean gtk_text_iter_forward_word_ends    (GtkTextIter *iter,
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_text_iter_backward_word_starts (GtkTextIter *iter,
                                              gint         count);
-                                             
+
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_text_iter_forward_visible_line   (GtkTextIter *iter);
 GDK_AVAILABLE_IN_ALL

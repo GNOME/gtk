@@ -1550,8 +1550,6 @@ gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
  *
  * To track errors while loading CSS, connect to the
  * #GtkCssProvider::parsing-error signal.
- *
- * Since: 3.16
  */
 void
 gtk_css_provider_load_from_resource (GtkCssProvider *css_provider,
@@ -1948,8 +1946,6 @@ gtk_css_provider_print_keyframes (GHashTable *keyframes,
  * this @provider.
  *
  * Returns: a new string representing the @provider.
- *
- * Since: 3.2
  **/
 char *
 gtk_css_provider_to_string (GtkCssProvider *provider)

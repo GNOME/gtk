@@ -186,8 +186,6 @@ static const GDebugKey gtk_debug_keys[] = {
  * have included when compiling your code.
  *
  * Returns: the major version number of the GTK+ library
- *
- * Since: 3.0
  */
 guint
 gtk_get_major_version (void)
@@ -207,8 +205,6 @@ gtk_get_major_version (void)
  * GTK+ headers you have included when compiling your code.
  *
  * Returns: the minor version number of the GTK+ library
- *
- * Since: 3.0
  */
 guint
 gtk_get_minor_version (void)
@@ -228,8 +224,6 @@ gtk_get_minor_version (void)
  * GTK+ headers you have included when compiling your code.
  *
  * Returns: the micro version number of the GTK+ library
- *
- * Since: 3.0
  */
 guint
 gtk_get_micro_version (void)
@@ -246,8 +240,6 @@ gtk_get_micro_version (void)
  * worry about it.
  *
  * Returns: the binary age of the GTK+ library
- *
- * Since: 3.0
  */
 guint
 gtk_get_binary_age (void)
@@ -264,8 +256,6 @@ gtk_get_binary_age (void)
  * worry about it.
  *
  * Returns: the interface age of the GTK+ library
- *
- * Since: 3.0
  */
 guint
 gtk_get_interface_age (void)
@@ -917,8 +907,6 @@ gtk_init_check_abi_check (int num_checks, size_t sizeof_GtkWindow, size_t sizeof
  * ]|
  *
  * Returns: the #GtkTextDirection of the current locale
- *
- * Since: 3.12
  */
 GtkTextDirection
 gtk_get_locale_direction (void)
@@ -2175,8 +2163,6 @@ gtk_grab_remove (GtkWidget *widget)
  * associated pointer or keyboard (if any) are delivered to @widget.
  * If the @block_others parameter is %TRUE, any other devices will be
  * unable to interact with @widget during the grab.
- *
- * Since: 3.0
  */
 void
 gtk_device_grab_add (GtkWidget *widget,
@@ -2207,8 +2193,6 @@ gtk_device_grab_add (GtkWidget *widget,
  *
  * You have to pair calls to gtk_device_grab_add() and
  * gtk_device_grab_remove().
- *
- * Since: 3.0
  */
 void
 gtk_device_grab_remove (GtkWidget *widget,
@@ -2346,8 +2330,6 @@ gtk_get_event_widget (const GdkEvent *event)
  * receiver of the event.
  *
  * Returns: (transfer none) (nullable): the target widget, or %NULL
- *
- * Since: 3.92
  */
 GtkWidget *
 gtk_get_event_target (const GdkEvent *event)
@@ -2366,8 +2348,6 @@ gtk_get_event_target (const GdkEvent *event)
  *
  * Returns: (transfer none) (nullable): the widget in the target stack
  * with the given type, or %NULL
- *
- * Since: 3.92
  */
 GtkWidget *
 gtk_get_event_target_with_type (GdkEvent *event,

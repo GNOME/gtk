@@ -194,8 +194,6 @@ _gtk_print_context_get_fontmap (GtkPrintContext *context)
  * an internal print preview, it is not needed for printing,
  * since GTK+ itself creates a suitable cairo context in that
  * case.
- *
- * Since: 2.10 
  */
 void
 gtk_print_context_set_cairo_context (GtkPrintContext *context,
@@ -373,8 +371,6 @@ _gtk_print_context_set_page_setup (GtkPrintContext *context,
  * #GtkPrintContext.
  *
  * Returns: (transfer none): the cairo context of @context
- *
- * Since: 2.10
  */
 cairo_t *
 gtk_print_context_get_cairo_context (GtkPrintContext *context)
@@ -392,8 +388,6 @@ gtk_print_context_get_cairo_context (GtkPrintContext *context)
  * dimensions of the #GtkPrintContext.
  *
  * Returns: (transfer none): the page setup of @context
- *
- * Since: 2.10
  */
 GtkPageSetup *
 gtk_print_context_get_page_setup (GtkPrintContext *context)
@@ -410,8 +404,6 @@ gtk_print_context_get_page_setup (GtkPrintContext *context)
  * Obtains the width of the #GtkPrintContext, in pixels.
  *
  * Returns: the width of @context
- *
- * Since: 2.10 
  */
 gdouble
 gtk_print_context_get_width (GtkPrintContext *context)
@@ -439,8 +431,6 @@ gtk_print_context_get_width (GtkPrintContext *context)
  * Obtains the height of the #GtkPrintContext, in pixels.
  *
  * Returns: the height of @context
- *
- * Since: 2.10
  */
 gdouble
 gtk_print_context_get_height (GtkPrintContext *context)
@@ -469,8 +459,6 @@ gtk_print_context_get_height (GtkPrintContext *context)
  * in dots per inch.
  *
  * Returns: the horizontal resolution of @context
- *
- * Since: 2.10
  */
 gdouble
 gtk_print_context_get_dpi_x (GtkPrintContext *context)
@@ -488,8 +476,6 @@ gtk_print_context_get_dpi_x (GtkPrintContext *context)
  * in dots per inch.
  *
  * Returns: the vertical resolution of @context
- *
- * Since: 2.10
  */
 gdouble
 gtk_print_context_get_dpi_y (GtkPrintContext *context)
@@ -510,8 +496,6 @@ gtk_print_context_get_dpi_y (GtkPrintContext *context)
  * Obtains the hardware printer margins of the #GtkPrintContext, in units.
  *
  * Returns: %TRUE if the hard margins were retrieved
- *
- * Since: 2.20
  */
 gboolean
 gtk_print_context_get_hard_margins (GtkPrintContext *context,
@@ -563,8 +547,6 @@ _gtk_print_context_set_hard_margins (GtkPrintContext *context,
  * with the #GtkPrintContext.
  *
  * Returns: (transfer none): the font map of @context
- *
- * Since: 2.10
  */
 PangoFontMap *
 gtk_print_context_get_pango_fontmap (GtkPrintContext *context)
@@ -582,8 +564,6 @@ gtk_print_context_get_pango_fontmap (GtkPrintContext *context)
  * #GtkPrintContext.
  *
  * Returns: (transfer full): a new Pango context for @context
- * 
- * Since: 2.10
  */
 PangoContext *
 gtk_print_context_create_pango_context (GtkPrintContext *context)
@@ -616,8 +596,6 @@ gtk_print_context_create_pango_context (GtkPrintContext *context)
  * with the #GtkPrintContext.
  * 
  * Returns: (transfer full): a new Pango layout for @context
- *
- * Since: 2.10
  */
 PangoLayout *
 gtk_print_context_create_pango_layout (GtkPrintContext *context)

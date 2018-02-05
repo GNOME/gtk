@@ -164,9 +164,9 @@ void     gtk_paper_size_to_key_file            (GtkPaperSize *size,
 					        GKeyFile     *key_file,
 					        const gchar  *group_name);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 GtkPaperSize *gtk_paper_size_new_from_gvariant (GVariant     *variant);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 GVariant     *gtk_paper_size_to_gvariant       (GtkPaperSize *paper_size);
 
 G_END_DECLS

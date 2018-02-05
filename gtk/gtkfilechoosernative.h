@@ -30,24 +30,24 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_FILE_CHOOSER_NATIVE             (gtk_file_chooser_native_get_type ())
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkFileChooserNative, gtk_file_chooser_native, GTK, FILE_CHOOSER_NATIVE, GtkNativeDialog)
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 GtkFileChooserNative *gtk_file_chooser_native_new (const gchar          *title,
                                                    GtkWindow            *parent,
                                                    GtkFileChooserAction  action,
                                                    const gchar          *accept_label,
                                                    const gchar          *cancel_label);
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 const char *gtk_file_chooser_native_get_accept_label (GtkFileChooserNative *self);
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 void        gtk_file_chooser_native_set_accept_label (GtkFileChooserNative *self,
                                                       const char           *accept_label);
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 const char *gtk_file_chooser_native_get_cancel_label (GtkFileChooserNative *self);
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 void        gtk_file_chooser_native_set_cancel_label (GtkFileChooserNative *self,
                                                       const char           *cancel_label);
 

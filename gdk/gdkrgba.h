@@ -52,9 +52,9 @@ GdkRGBA * gdk_rgba_copy      (const GdkRGBA *rgba);
 GDK_AVAILABLE_IN_ALL
 void      gdk_rgba_free      (GdkRGBA       *rgba);
 
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 gboolean  gdk_rgba_is_clear  (const GdkRGBA *rgba);
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 gboolean  gdk_rgba_is_opaque (const GdkRGBA *rgba);
 
 GDK_AVAILABLE_IN_ALL

@@ -523,8 +523,6 @@ gtk_gl_area_allocate_texture (GtkGLArea *area)
  * This function is automatically called before emitting the
  * #GtkGLArea::render signal, and doesn't normally need to be called
  * by application code.
- *
- * Since: 3.16
  */
 void
 gtk_gl_area_attach_buffers (GtkGLArea *area)
@@ -794,8 +792,6 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
    * The #GtkGLArea widget is responsible for creating the #GdkGLContext
    * instance. If you need to render with other kinds of buffers (stencil,
    * depth, etc), use render buffers.
-   *
-   * Since: 3.16
    */
   obj_props[PROP_CONTEXT] =
     g_param_spec_object ("context",
@@ -817,8 +813,6 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
    * In order to force a rendering gtk_gl_area_queue_render() must be called.
    * This mode is useful when the scene changes seldomly, but takes a long time
    * to redraw.
-   *
-   * Since: 3.16
    */
   obj_props[PROP_AUTO_RENDER] =
     g_param_spec_boolean ("auto-render",
@@ -834,8 +828,6 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
    *
    * If set to %TRUE the widget will allocate and enable a depth buffer for the
    * target framebuffer.
-   *
-   * Since: 3.16
    */
   obj_props[PROP_HAS_DEPTH_BUFFER] =
     g_param_spec_boolean ("has-depth-buffer",
@@ -851,8 +843,6 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
    *
    * If set to %TRUE the widget will allocate and enable a stencil buffer for the
    * target framebuffer.
-   *
-   * Since: 3.16
    */
   obj_props[PROP_HAS_STENCIL_BUFFER] =
     g_param_spec_boolean ("has-stencil-buffer",
@@ -870,8 +860,6 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
    * OpenGL ES instead of OpenGL.
    *
    * See also: gdk_gl_context_set_use_es()
-   *
-   * Since: 3.22
    */
   obj_props[PROP_USE_ES] =
     g_param_spec_boolean ("use-es",
@@ -901,8 +889,6 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
    *
    * Returns: %TRUE to stop other handlers from being invoked for the event.
    *   %FALSE to propagate the event further.
-   *
-   * Since: 3.16
    */
   area_signals[RENDER] =
     g_signal_new (I_("render"),
@@ -929,8 +915,6 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
    * is emitted.
    *
    * The default handler sets up the GL viewport.
-   *
-   * Since: 3.16
    */
   area_signals[RESIZE] =
     g_signal_new (I_("resize"),
@@ -958,8 +942,6 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
    *
    * Returns: (transfer full): a newly created #GdkGLContext;
    *     the #GtkGLArea widget will take ownership of the returned value.
-   *
-   * Since: 3.16
    */
   area_signals[CREATE_CONTEXT] =
     g_signal_new (I_("create-context"),
@@ -989,8 +971,6 @@ gtk_gl_area_init (GtkGLArea *area)
  * Creates a new #GtkGLArea widget.
  *
  * Returns: (transfer full): the newly created #GtkGLArea
- *
- * Since: 3.16
  */
 GtkWidget *
 gtk_gl_area_new (void)
@@ -1006,8 +986,6 @@ gtk_gl_area_new (void)
  * Sets an error on the area which will be shown instead of the
  * GL rendering. This is useful in the #GtkGLArea::create-context
  * signal if GL context creation fails.
- *
- * Since: 3.16
  */
 void
 gtk_gl_area_set_error (GtkGLArea    *area,
@@ -1029,8 +1007,6 @@ gtk_gl_area_set_error (GtkGLArea    *area,
  * Gets the current error set on the @area.
  *
  * Returns: (nullable) (transfer none): the #GError or %NULL
- *
- * Since: 3.16
  */
 GError *
 gtk_gl_area_get_error (GtkGLArea *area)
@@ -1051,8 +1027,6 @@ gtk_gl_area_get_error (GtkGLArea *area)
  *
  * You should check the capabilities of the #GdkGLContext before drawing
  * with either API.
- *
- * Since: 3.22
  */
 void
 gtk_gl_area_set_use_es (GtkGLArea *area,
@@ -1081,8 +1055,6 @@ gtk_gl_area_set_use_es (GtkGLArea *area,
  *
  * Returns: %TRUE if the #GtkGLArea should create an OpenGL ES context
  *   and %FALSE otherwise
- *
- * Since: 3.22
  */
 gboolean
 gtk_gl_area_get_use_es (GtkGLArea *area)
@@ -1104,8 +1076,6 @@ gtk_gl_area_get_use_es (GtkGLArea *area)
  * for the widget.
  *
  * This function must be called before the area has been realized.
- *
- * Since: 3.16
  */
 void
 gtk_gl_area_set_required_version (GtkGLArea *area,
@@ -1128,8 +1098,6 @@ gtk_gl_area_set_required_version (GtkGLArea *area,
  *
  * Retrieves the required version of OpenGL set
  * using gtk_gl_area_set_required_version().
- *
- * Since: 3.16
  */
 void
 gtk_gl_area_get_required_version (GtkGLArea *area,
@@ -1153,8 +1121,6 @@ gtk_gl_area_get_required_version (GtkGLArea *area,
  * Returns whether the area has a depth buffer.
  *
  * Returns: %TRUE if the @area has a depth buffer, %FALSE otherwise
- *
- * Since: 3.16
  */
 gboolean
 gtk_gl_area_get_has_depth_buffer (GtkGLArea *area)
@@ -1174,8 +1140,6 @@ gtk_gl_area_get_has_depth_buffer (GtkGLArea *area)
  * If @has_depth_buffer is %TRUE the widget will allocate and
  * enable a depth buffer for the target framebuffer. Otherwise
  * there will be none.
- *
- * Since: 3.16
  */
 void
 gtk_gl_area_set_has_depth_buffer (GtkGLArea *area,
@@ -1204,8 +1168,6 @@ gtk_gl_area_set_has_depth_buffer (GtkGLArea *area,
  * Returns whether the area has a stencil buffer.
  *
  * Returns: %TRUE if the @area has a stencil buffer, %FALSE otherwise
- *
- * Since: 3.16
  */
 gboolean
 gtk_gl_area_get_has_stencil_buffer (GtkGLArea *area)
@@ -1225,8 +1187,6 @@ gtk_gl_area_get_has_stencil_buffer (GtkGLArea *area)
  * If @has_stencil_buffer is %TRUE the widget will allocate and
  * enable a stencil buffer for the target framebuffer. Otherwise
  * there will be none.
- *
- * Since: 3.16
  */
 void
 gtk_gl_area_set_has_stencil_buffer (GtkGLArea *area,
@@ -1259,8 +1219,6 @@ gtk_gl_area_set_has_stencil_buffer (GtkGLArea *area,
  * This is only needed when the gtk_gl_area_set_auto_render() has
  * been called with a %FALSE value. The default behaviour is to
  * emit #GtkGLArea::render on each draw.
- *
- * Since: 3.16
  */
 void
 gtk_gl_area_queue_render (GtkGLArea *area)
@@ -1282,8 +1240,6 @@ gtk_gl_area_queue_render (GtkGLArea *area)
  * Returns whether the area is in auto render mode or not.
  *
  * Returns: %TRUE if the @area is auto rendering, %FALSE otherwise
- *
- * Since: 3.16
  */
 gboolean
 gtk_gl_area_get_auto_render (GtkGLArea *area)
@@ -1309,8 +1265,6 @@ gtk_gl_area_get_auto_render (GtkGLArea *area)
  * unless the window is resized. In order to force a rendering
  * gtk_gl_area_queue_render() must be called. This mode is useful when
  * the scene changes seldomly, but takes a long time to redraw.
- *
- * Since: 3.16
  */
 void
 gtk_gl_area_set_auto_render (GtkGLArea *area,
@@ -1340,8 +1294,6 @@ gtk_gl_area_set_auto_render (GtkGLArea *area,
  * Retrieves the #GdkGLContext used by @area.
  *
  * Returns: (transfer none): the #GdkGLContext
- *
- * Since: 3.16
  */
 GdkGLContext *
 gtk_gl_area_get_context (GtkGLArea *area)
@@ -1363,8 +1315,6 @@ gtk_gl_area_get_context (GtkGLArea *area)
  * This function is automatically called before emitting the
  * #GtkGLArea::render signal, and doesn't normally need to be called
  * by application code.
- *
- * Since: 3.16
  */
 void
 gtk_gl_area_make_current (GtkGLArea *area)

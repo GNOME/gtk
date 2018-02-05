@@ -192,8 +192,6 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
   /* GtkSpinner:active:
    *
    * Whether the spinner is active
-   *
-   * Since: 2.20
    */
   g_object_class_install_property (gobject_class,
                                    PROP_ACTIVE,
@@ -219,8 +217,6 @@ gtk_spinner_init (GtkSpinner *spinner)
  * Returns a new spinner widget. Not yet started.
  *
  * Returns: a new #GtkSpinner
- *
- * Since: 2.20
  */
 GtkWidget *
 gtk_spinner_new (void)
@@ -233,8 +229,6 @@ gtk_spinner_new (void)
  * @spinner: a #GtkSpinner
  *
  * Starts the animation of the spinner.
- *
- * Since: 2.20
  */
 void
 gtk_spinner_start (GtkSpinner *spinner)
@@ -249,8 +243,6 @@ gtk_spinner_start (GtkSpinner *spinner)
  * @spinner: a #GtkSpinner
  *
  * Stops the animation of the spinner.
- *
- * Since: 2.20
  */
 void
 gtk_spinner_stop (GtkSpinner *spinner)

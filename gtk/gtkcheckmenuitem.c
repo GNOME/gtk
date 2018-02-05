@@ -421,8 +421,6 @@ gtk_check_menu_item_get_inconsistent (GtkCheckMenuItem *check_menu_item)
  * @draw_as_radio: whether @check_menu_item is drawn like a #GtkRadioMenuItem
  *
  * Sets whether @check_menu_item is drawn like a #GtkRadioMenuItem
- *
- * Since: 2.4
  **/
 void
 gtk_check_menu_item_set_draw_as_radio (GtkCheckMenuItem *check_menu_item,
@@ -459,8 +457,6 @@ gtk_check_menu_item_set_draw_as_radio (GtkCheckMenuItem *check_menu_item,
  * Returns whether @check_menu_item looks like a #GtkRadioMenuItem
  * 
  * Returns: Whether @check_menu_item looks like a #GtkRadioMenuItem
- * 
- * Since: 2.4
  **/
 gboolean
 gtk_check_menu_item_get_draw_as_radio (GtkCheckMenuItem *check_menu_item)

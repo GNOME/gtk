@@ -74,19 +74,19 @@ struct _GtkPadActionEntry {
   gchar *action_name;
 };
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 GType gtk_pad_controller_get_type           (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 GtkPadController *gtk_pad_controller_new    (GtkWindow        *window,
                                              GActionGroup     *group,
                                              GdkDevice        *pad);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 void  gtk_pad_controller_set_action_entries (GtkPadController        *controller,
                                              const GtkPadActionEntry *entries,
                                              gint                     n_entries);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 void  gtk_pad_controller_set_action         (GtkPadController *controller,
                                              GtkPadActionType  type,
                                              gint              index,

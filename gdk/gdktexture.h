@@ -40,23 +40,23 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkTexture, g_object_unref)
 typedef struct _GdkTextureClass        GdkTextureClass;
 
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GType                   gdk_texture_get_type                   (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GdkTexture *            gdk_texture_new_for_data               (const guchar    *data,
                                                                 int              width,
                                                                 int              height,
                                                                 int              stride);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GdkTexture *            gdk_texture_new_for_pixbuf             (GdkPixbuf       *pixbuf);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GdkTexture *            gdk_texture_new_from_resource          (const char      *resource_path);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GdkTexture *            gdk_texture_new_from_file              (GFile           *file,
                                                                 GError         **error);
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GdkTexture *            gdk_texture_new_for_gl                 (GdkGLContext    *context,
                                                                 guint            id,
                                                                 int              width,
@@ -64,15 +64,15 @@ GdkTexture *            gdk_texture_new_for_gl                 (GdkGLContext    
                                                                 GDestroyNotify   destroy,
                                                                 gpointer         data);
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void                    gdk_texture_release_gl                 (GdkTexture      *texture);
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 int                     gdk_texture_get_width                  (GdkTexture      *texture);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 int                     gdk_texture_get_height                 (GdkTexture      *texture);
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void                    gdk_texture_download                   (GdkTexture      *texture,
                                                                 guchar          *data,
                                                                 gsize            stride);

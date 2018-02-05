@@ -1073,8 +1073,6 @@ gtk_list_store_set_valist_internal (GtkListStore *list_store,
  * varargs. This function is mainly intended for 
  * language-bindings and in case the number of columns to
  * change is not known until run-time.
- *
- * Since: 2.12
  */
 void
 gtk_list_store_set_valuesv (GtkListStore *list_store,
@@ -1445,8 +1443,6 @@ gtk_list_store_clear (GtkListStore *list_store)
  * Checks if the given iter is a valid iter for this #GtkListStore.
  *
  * Returns: %TRUE if the iter is valid, %FALSE if the iter is invalid.
- *
- * Since: 2.2
  **/
 gboolean
 gtk_list_store_iter_is_valid (GtkListStore *list_store,
@@ -1680,8 +1676,6 @@ gtk_list_store_reorder_func (GSequenceIter *a,
  *
  * Reorders @store to follow the order indicated by @new_order. Note that
  * this function only works with unsorted stores.
- *
- * Since: 2.2
  **/
 void
 gtk_list_store_reorder (GtkListStore *store,
@@ -1774,8 +1768,6 @@ generate_order (GSequence *seq,
  *
  * Swaps @a and @b in @store. Note that this function only works with
  * unsorted stores.
- *
- * Since: 2.2
  **/
 void
 gtk_list_store_swap (GtkListStore *store,
@@ -1843,8 +1835,6 @@ gtk_list_store_move_to (GtkListStore *store,
  * Moves @iter in @store to the position before @position. Note that this
  * function only works with unsorted stores. If @position is %NULL, @iter
  * will be moved to the end of the list.
- *
- * Since: 2.2
  **/
 void
 gtk_list_store_move_before (GtkListStore *store,
@@ -1876,8 +1866,6 @@ gtk_list_store_move_before (GtkListStore *store,
  * Moves @iter in @store to the position after @position. Note that this
  * function only works with unsorted stores. If @position is %NULL, @iter
  * will be moved to the start of the list.
- *
- * Since: 2.2
  **/
 void
 gtk_list_store_move_after (GtkListStore *store,
@@ -2182,8 +2170,6 @@ gtk_list_store_has_default_sort_func (GtkTreeSortable *sortable)
  * repeatedly can affect the performance of the program,
  * gtk_list_store_insert_with_values() should generally be preferred when
  * inserting rows in a sorted list store.
- *
- * Since: 2.6
  */
 void
 gtk_list_store_insert_with_values (GtkListStore *list_store,
@@ -2259,8 +2245,6 @@ gtk_list_store_insert_with_values (GtkListStore *list_store,
  * takes the columns and values as two arrays, instead of
  * varargs. This function is mainly intended for 
  * language-bindings.
- *
- * Since: 2.6
  */
 void
 gtk_list_store_insert_with_valuesv (GtkListStore *list_store,

@@ -420,7 +420,7 @@ typedef enum
 GDK_AVAILABLE_IN_ALL
 GType     gdk_event_get_type            (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 GType     gdk_event_sequence_get_type   (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
@@ -430,7 +430,7 @@ GdkEvent* gdk_event_copy     		(const GdkEvent *event);
 GDK_AVAILABLE_IN_ALL
 void	  gdk_event_free     		(GdkEvent 	*event);
 
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 GdkWindow *gdk_event_get_window         (const GdkEvent *event);
 
 GDK_AVAILABLE_IN_ALL
@@ -442,7 +442,7 @@ GDK_AVAILABLE_IN_ALL
 gboolean  gdk_event_get_coords		(const GdkEvent  *event,
 					 gdouble	 *x_win,
 					 gdouble	 *y_win);
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 void      gdk_event_set_coords          (GdkEvent *event,
                                          gdouble   x,
                                          gdouble   y);
@@ -450,42 +450,42 @@ GDK_AVAILABLE_IN_ALL
 gboolean  gdk_event_get_root_coords	(const GdkEvent *event,
 					 gdouble	*x_root,
 					 gdouble	*y_root);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 gboolean  gdk_event_get_button          (const GdkEvent *event,
                                          guint          *button);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 gboolean  gdk_event_get_click_count     (const GdkEvent *event,
                                          guint          *click_count);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 gboolean  gdk_event_get_keyval          (const GdkEvent *event,
                                          guint          *keyval);
 
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 void      gdk_event_set_keyval          (GdkEvent *event,
                                          guint     keyval);
 
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 gboolean  gdk_event_get_keycode         (const GdkEvent *event,
                                          guint16        *keycode);
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 gboolean  gdk_event_get_key_is_modifier (const GdkEvent *event,
                                          gboolean       *is_modifier);
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 gboolean  gdk_event_get_key_group       (const GdkEvent *event,
                                          guint          *group);
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 gboolean  gdk_event_get_string          (const GdkEvent  *event,
                                          const char     **string);
 
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 gboolean gdk_event_get_scroll_direction (const GdkEvent *event,
                                          GdkScrollDirection *direction);
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 gboolean  gdk_event_get_scroll_deltas   (const GdkEvent *event,
                                          gdouble         *delta_x,
                                          gdouble         *delta_y);
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 gboolean  gdk_event_is_scroll_stop_event (const GdkEvent *event);
 
 GDK_AVAILABLE_IN_ALL
@@ -502,7 +502,7 @@ void       gdk_event_set_source_device  (GdkEvent        *event,
                                          GdkDevice       *device);
 GDK_AVAILABLE_IN_ALL
 GdkDevice* gdk_event_get_source_device  (const GdkEvent  *event);
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 gboolean   gdk_event_triggers_context_menu (const GdkEvent *event);
 
 GDK_AVAILABLE_IN_ALL
@@ -524,19 +524,19 @@ void	  gdk_event_handler_set 	(GdkEventFunc    func,
 					 gpointer        data,
 					 GDestroyNotify  notify);
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void       gdk_event_set_display        (GdkEvent        *event,
                                          GdkDisplay      *display);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GdkDisplay *gdk_event_get_display       (const GdkEvent  *event);
 
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 GdkEventSequence *gdk_event_get_event_sequence (const GdkEvent *event);
 
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 GdkEventType gdk_event_get_event_type   (const GdkEvent *event);
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 GdkSeat  *gdk_event_get_seat            (const GdkEvent *event);
 
 GDK_AVAILABLE_IN_ALL
@@ -544,74 +544,74 @@ void	  gdk_set_show_events		(gboolean	 show_events);
 GDK_AVAILABLE_IN_ALL
 gboolean  gdk_get_show_events		(void);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 GdkDeviceTool *gdk_event_get_device_tool (const GdkEvent *event);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 void           gdk_event_set_device_tool (GdkEvent       *event,
                                           GdkDeviceTool  *tool);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 int            gdk_event_get_scancode    (GdkEvent *event);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 gboolean       gdk_event_get_pointer_emulated (GdkEvent *event);
 
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 void           gdk_event_set_user_data (GdkEvent *event,
                                         GObject  *user_data);
 
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 gboolean       gdk_event_is_sent       (const GdkEvent *event);
 
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 gboolean       gdk_event_get_drag_context (const GdkEvent  *event,
                                            GdkDragContext **context);
 
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 gboolean       gdk_event_get_crossing_mode (const GdkEvent  *event,
                                             GdkCrossingMode *mode);
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 gboolean       gdk_event_get_crossing_detail (const GdkEvent *event,
                                               GdkNotifyType  *detail);
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 gboolean       gdk_event_get_touchpad_gesture_phase (const GdkEvent          *event,
                                                      GdkTouchpadGesturePhase *phase);
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 gboolean       gdk_event_get_touchpad_gesture_n_fingers (const GdkEvent *event,
                                                          guint          *n_fingers);
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 gboolean       gdk_event_get_touchpad_deltas (const GdkEvent *event,
                                               double         *dx,
                                               double         *dy);
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 gboolean       gdk_event_get_touchpad_angle_delta (const GdkEvent *event,
                                                    double         *delta);
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 gboolean       gdk_event_get_touchpad_scale (const GdkEvent *event,
                                              double         *scale);
 
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 gboolean       gdk_event_get_touch_emulating_pointer (const GdkEvent *event,
                                                       gboolean       *emulating);
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 gboolean       gdk_event_get_grab_window (const GdkEvent  *event,
                                           GdkWindow      **window);
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 gboolean       gdk_event_get_focus_in (const GdkEvent *event,
                                        gboolean       *focus_in);
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 gboolean       gdk_event_get_pad_group_mode (const GdkEvent *event,
                                              guint          *group,
                                              guint          *mode);
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 gboolean       gdk_event_get_pad_button (const GdkEvent *event,
                                          guint          *button);
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 gboolean       gdk_event_get_pad_axis_value (const GdkEvent *event,
                                              guint          *index,
                                              gdouble        *value);
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 gboolean       gdk_event_get_axes      (GdkEvent  *event,
                                         gdouble  **axes,
                                         guint     *n_axes);

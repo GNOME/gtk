@@ -55,11 +55,11 @@ cairo_region_t *
            gdk_cairo_region_create_from_surface
                                         (cairo_surface_t      *surface);
 
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 cairo_surface_t * gdk_cairo_surface_create_from_pixbuf      (const GdkPixbuf *pixbuf,
                                                              int scale,
                                                              GdkWindow *for_window);
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 void       gdk_cairo_draw_from_gl (cairo_t              *cr,
                                    GdkWindow            *window,
                                    int                   source,
@@ -70,10 +70,10 @@ void       gdk_cairo_draw_from_gl (cairo_t              *cr,
                                    int                   width,
                                    int                   height);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 GdkDrawingContext *     gdk_cairo_get_drawing_context   (cairo_t *cr);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 void      gdk_cairo_surface_upload_to_gl (cairo_surface_t *surface,
                                           int              target,
                                           int              width,

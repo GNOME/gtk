@@ -83,10 +83,10 @@ struct _GdkSeat
   GObject parent_instance;
 };
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 GType          gdk_seat_get_type         (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 GdkGrabStatus  gdk_seat_grab             (GdkSeat                *seat,
                                           GdkWindow              *window,
                                           GdkSeatCapabilities     capabilities,
@@ -95,26 +95,26 @@ GdkGrabStatus  gdk_seat_grab             (GdkSeat                *seat,
                                           const GdkEvent         *event,
                                           GdkSeatGrabPrepareFunc  prepare_func,
                                           gpointer                prepare_func_data);
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 void           gdk_seat_ungrab           (GdkSeat                *seat);
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 GdkDisplay *   gdk_seat_get_display      (GdkSeat             *seat);
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 GdkSeatCapabilities
                gdk_seat_get_capabilities (GdkSeat             *seat);
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 GList *        gdk_seat_get_slaves       (GdkSeat             *seat,
                                           GdkSeatCapabilities  capabilities);
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 GdkDevice *    gdk_seat_get_pointer      (GdkSeat             *seat);
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 GdkDevice *    gdk_seat_get_keyboard     (GdkSeat             *seat);
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GList *        gdk_seat_get_master_pointers (GdkSeat             *seat,
                                              GdkSeatCapabilities  capabilities);
 

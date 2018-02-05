@@ -918,8 +918,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    * The desired maximum width of the entry, in characters.
    * If this property is set to -1, the width will be calculated
    * automatically.
-   *
-   * Since: 3.12
    */
   entry_props[PROP_MAX_WIDTH_CHARS] =
       g_param_spec_int ("max-width-chars",
@@ -949,8 +947,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    *
    * The horizontal alignment, from 0 (left) to 1 (right).
    * Reversed for RTL layouts.
-   *
-   * Since: 2.4
    */
   entry_props[PROP_XALIGN] =
       g_param_spec_float ("xalign",
@@ -964,8 +960,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    * GtkEntry:truncate-multiline:
    *
    * When %TRUE, pasted multi-line text is truncated to the first line.
-   *
-   * Since: 2.10
    */
   entry_props[PROP_TRUNCATE_MULTILINE] =
       g_param_spec_boolean ("truncate-multiline",
@@ -978,8 +972,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    * GtkEntry:overwrite-mode:
    *
    * If text is overwritten when typing in the #GtkEntry.
-   *
-   * Since: 2.14
    */
   entry_props[PROP_OVERWRITE_MODE] =
       g_param_spec_boolean ("overwrite-mode",
@@ -992,8 +984,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    * GtkEntry:text-length:
    *
    * The length of the text in the #GtkEntry.
-   *
-   * Since: 2.14
    */
   entry_props[PROP_TEXT_LENGTH] =
       g_param_spec_uint ("text-length",
@@ -1007,8 +997,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    * GtkEntry:invisible-char-set:
    *
    * Whether the invisible char has been set for the #GtkEntry.
-   *
-   * Since: 2.16
    */
   entry_props[PROP_INVISIBLE_CHAR_SET] =
       g_param_spec_boolean ("invisible-char-set",
@@ -1025,8 +1013,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    * Note that the warning is shown using a secondary icon, and thus
    * does not work if you are using the secondary icon position for some
    * other purpose.
-   *
-   * Since: 2.16
    */
   entry_props[PROP_CAPS_LOCK_WARNING] =
       g_param_spec_boolean ("caps-lock-warning",
@@ -1039,8 +1025,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    * GtkEntry:progress-fraction:
    *
    * The current fraction of the task that's been completed.
-   *
-   * Since: 2.16
    */
   entry_props[PROP_PROGRESS_FRACTION] =
       g_param_spec_double ("progress-fraction",
@@ -1055,8 +1039,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    *
    * The fraction of total entry width to move the progress
    * bouncing block for each call to gtk_entry_progress_pulse().
-   *
-   * Since: 2.16
    */
   entry_props[PROP_PROGRESS_PULSE_STEP] =
       g_param_spec_double ("progress-pulse-step",
@@ -1071,8 +1053,6 @@ gtk_entry_class_init (GtkEntryClass *class)
   *
   * The text that will be displayed in the #GtkEntry when it is empty
   * and unfocused.
-  *
-  * Since: 3.2
   */
   entry_props[PROP_PLACEHOLDER_TEXT] =
       g_param_spec_string ("placeholder-text",
@@ -1085,8 +1065,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    * GtkEntry:primary-icon-texture:
    *
    * A #GdkTexture to use as the primary icon for the entry.
-   *
-   * Since: 3.94
    */
   entry_props[PROP_TEXTURE_PRIMARY] =
       g_param_spec_object ("primary-icon-texture",
@@ -1099,8 +1077,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    * GtkEntry:secondary-icon-texture:
    *
    * A #GtkTexture to use as the secondary icon for the entry.
-   *
-   * Since: 3.94
    */
   entry_props[PROP_TEXTURE_SECONDARY] =
       g_param_spec_object ("secondary-icon-texture",
@@ -1113,8 +1089,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    * GtkEntry:primary-icon-name:
    *
    * The icon name to use for the primary icon for the entry.
-   *
-   * Since: 2.16
    */
   entry_props[PROP_ICON_NAME_PRIMARY] =
       g_param_spec_string ("primary-icon-name",
@@ -1127,8 +1101,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    * GtkEntry:secondary-icon-name:
    *
    * The icon name to use for the secondary icon for the entry.
-   *
-   * Since: 2.16
    */
   entry_props[PROP_ICON_NAME_SECONDARY] =
       g_param_spec_string ("secondary-icon-name",
@@ -1141,8 +1113,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    * GtkEntry:primary-icon-gicon:
    *
    * The #GIcon to use for the primary icon for the entry.
-   *
-   * Since: 2.16
    */
   entry_props[PROP_GICON_PRIMARY] =
       g_param_spec_object ("primary-icon-gicon",
@@ -1155,8 +1125,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    * GtkEntry:secondary-icon-gicon:
    *
    * The #GIcon to use for the secondary icon for the entry.
-   *
-   * Since: 2.16
    */
   entry_props[PROP_GICON_SECONDARY] =
       g_param_spec_object ("secondary-icon-gicon",
@@ -1169,8 +1137,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    * GtkEntry:primary-icon-storage-type:
    *
    * The representation which is used for the primary icon of the entry.
-   *
-   * Since: 2.16
    */
   entry_props[PROP_STORAGE_TYPE_PRIMARY] =
       g_param_spec_enum ("primary-icon-storage-type",
@@ -1184,8 +1150,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    * GtkEntry:secondary-icon-storage-type:
    *
    * The representation which is used for the secondary icon of the entry.
-   *
-   * Since: 2.16
    */
   entry_props[PROP_STORAGE_TYPE_SECONDARY] =
       g_param_spec_enum ("secondary-icon-storage-type",
@@ -1205,8 +1169,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    *
    * Sensitive, but non-activatable icons can be used for purely
    * informational purposes.
-   *
-   * Since: 2.16
    */
   entry_props[PROP_ACTIVATABLE_PRIMARY] =
       g_param_spec_boolean ("primary-icon-activatable",
@@ -1225,8 +1187,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    *
    * Sensitive, but non-activatable icons can be used for purely
    * informational purposes.
-   *
-   * Since: 2.16
    */
   entry_props[PROP_ACTIVATABLE_SECONDARY] =
       g_param_spec_boolean ("secondary-icon-activatable",
@@ -1246,8 +1206,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    *
    * An icon should be set insensitive if the action that would trigger
    * when clicked is currently not available.
-   *
-   * Since: 2.16
    */
   entry_props[PROP_SENSITIVE_PRIMARY] =
       g_param_spec_boolean ("primary-icon-sensitive",
@@ -1267,8 +1225,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    *
    * An icon should be set insensitive if the action that would trigger
    * when clicked is currently not available.
-   *
-   * Since: 2.16
    */
   entry_props[PROP_SENSITIVE_SECONDARY] =
       g_param_spec_boolean ("secondary-icon-sensitive",
@@ -1283,8 +1239,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    * The contents of the tooltip on the primary icon.
    *
    * Also see gtk_entry_set_icon_tooltip_text().
-   *
-   * Since: 2.16
    */
   entry_props[PROP_TOOLTIP_TEXT_PRIMARY] =
       g_param_spec_string ("primary-icon-tooltip-text",
@@ -1299,8 +1253,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    * The contents of the tooltip on the secondary icon.
    *
    * Also see gtk_entry_set_icon_tooltip_text().
-   *
-   * Since: 2.16
    */
   entry_props[PROP_TOOLTIP_TEXT_SECONDARY] =
       g_param_spec_string ("secondary-icon-tooltip-text",
@@ -1316,8 +1268,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    * with the [Pango text markup language][PangoMarkupFormat].
    *
    * Also see gtk_entry_set_icon_tooltip_markup().
-   *
-   * Since: 2.16
    */
   entry_props[PROP_TOOLTIP_MARKUP_PRIMARY] =
       g_param_spec_string ("primary-icon-tooltip-markup",
@@ -1333,8 +1283,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    * with the [Pango text markup language][PangoMarkupFormat].
    *
    * Also see gtk_entry_set_icon_tooltip_markup().
-   *
-   * Since: 2.16
    */
   entry_props[PROP_TOOLTIP_MARKUP_SECONDARY] =
       g_param_spec_string ("secondary-icon-tooltip-markup",
@@ -1352,8 +1300,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    * Setting this to a non-%NULL value overrides the
    * system-wide IM module setting. See the GtkSettings
    * #GtkSettings:gtk-im-module property.
-   *
-   * Since: 2.16
    */
   entry_props[PROP_IM_MODULE] =
       g_param_spec_string ("im-module",
@@ -1366,8 +1312,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    * GtkEntry:completion:
    *
    * The auxiliary completion object to use with the entry.
-   *
-   * Since: 3.2
    */
   entry_props[PROP_COMPLETION] =
       g_param_spec_object ("completion",
@@ -1387,8 +1331,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    * Note that setting the purpose to %GTK_INPUT_PURPOSE_PASSWORD or
    * %GTK_INPUT_PURPOSE_PIN is independent from setting
    * #GtkEntry:visibility.
-   *
-   * Since: 3.6
    */
   entry_props[PROP_INPUT_PURPOSE] =
       g_param_spec_enum ("input-purpose",
@@ -1403,8 +1345,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    *
    * Additional hints (beyond #GtkEntry:input-purpose) that
    * allow input methods to fine-tune their behaviour.
-   *
-   * Since: 3.6
    */
   entry_props[PROP_INPUT_HINTS] =
       g_param_spec_flags ("input-hints",
@@ -1423,8 +1363,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    *
    * The #PangoAttribute's @start_index and @end_index must refer to the
    * #GtkEntryBuffer text, i.e. without the preedit string.
-   *
-   * Since: 3.6
    */
   entry_props[PROP_ATTRIBUTES] =
       g_param_spec_boxed ("attributes",
@@ -1438,8 +1376,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    *
    * If :populate-all is %TRUE, the #GtkEntry::populate-popup
    * signal is also emitted for touch popups.
-   *
-   * Since: 3.8
    */
   entry_props[PROP_POPULATE_ALL] =
       g_param_spec_boolean ("populate-all",
@@ -1452,8 +1388,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    * GtkEntry::tabs:
    *
    * A list of tabstops to apply to the text of the entry.
-   *
-   * Since: 3.8
    */
   entry_props[PROP_TABS] =
       g_param_spec_boxed ("tabs",
@@ -1467,8 +1401,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    *
    * When this is %TRUE, the entry will show an emoji icon in the secondary
    * icon position that brings up the Emoji chooser when clicked.
-   *
-   * Since: 3.22.19
    */
   entry_props[PROP_SHOW_EMOJI_ICON] =
       g_param_spec_boolean ("show-emoji-icon",
@@ -1729,8 +1661,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    *
    * The ::icon-press signal is emitted when an activatable icon
    * is clicked.
-   *
-   * Since: 2.16
    */
   signals[ICON_PRESS] =
     g_signal_new (I_("icon-press"),
@@ -1751,8 +1681,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    *
    * The ::icon-release signal is emitted on the button release from a
    * mouse click over an activatable icon.
-   *
-   * Since: 2.16
    */
   signals[ICON_RELEASE] =
     g_signal_new (I_("icon-release"),
@@ -1773,8 +1701,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    * If an input method is used, the typed text will not immediately
    * be committed to the buffer. So if you are interested in the text,
    * connect to this signal.
-   *
-   * Since: 2.20
    */
   signals[PREEDIT_CHANGED] =
     g_signal_new_class_handler (I_("preedit-changed"),
@@ -1796,8 +1722,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    * which gets emitted to present the Emoji chooser for the @entry.
    *
    * The default bindings for this signal are Ctrl-. and Ctrl-;
-   *
-   * Since: 3.22.27
    */
   signals[INSERT_EMOJI] =
     g_signal_new (I_("insert-emoji"),
@@ -4366,8 +4290,6 @@ gtk_entry_grab_focus (GtkWidget *widget)
  * You only want to call this on some special entries
  * which the user usually doesn't want to replace all text in,
  * such as search-as-you-type entries.
- *
- * Since: 3.16
  */
 void
 gtk_entry_grab_focus_without_selecting (GtkEntry *entry)
@@ -6043,8 +5965,6 @@ gtk_entry_handle_drag_finished (GtkTextHandle         *handle,
  *
  * This can be necessary in the case where modifying the buffer
  * would confuse on-going input method behavior.
- *
- * Since: 2.22
  */
 void
 gtk_entry_reset_im_context (GtkEntry *entry)
@@ -6077,8 +5997,6 @@ gtk_entry_reset_im_context (GtkEntry *entry)
  * See gtk_text_view_reset_im_context() for an example of use.
  *
  * Returns: %TRUE if the input method handled the key event.
- *
- * Since: 2.22
  */
 gboolean
 gtk_entry_im_context_filter_keypress (GtkEntry    *entry,
@@ -6752,8 +6670,6 @@ gtk_entry_new (void)
  * Creates a new entry with the specified text buffer.
  *
  * Returns: a new #GtkEntry
- *
- * Since: 2.18
  */
 GtkWidget*
 gtk_entry_new_with_buffer (GtkEntryBuffer *buffer)
@@ -6785,8 +6701,6 @@ get_buffer (GtkEntry *entry)
  * Get the #GtkEntryBuffer object which holds the text for
  * this widget.
  *
- * Since: 2.18
- *
  * Returns: (transfer none): A #GtkEntryBuffer object.
  */
 GtkEntryBuffer*
@@ -6804,8 +6718,6 @@ gtk_entry_get_buffer (GtkEntry *entry)
  *
  * Set the #GtkEntryBuffer object which holds the text for
  * this widget.
- *
- * Since: 2.18
  */
 void
 gtk_entry_set_buffer (GtkEntry       *entry,
@@ -7015,8 +6927,6 @@ gtk_entry_get_invisible_char (GtkEntry *entry)
  * Unsets the invisible char previously set with
  * gtk_entry_set_invisible_char(). So that the
  * default invisible char is used again.
- *
- * Since: 2.16
  **/
 void
 gtk_entry_unset_invisible_char (GtkEntry *entry)
@@ -7050,8 +6960,6 @@ gtk_entry_unset_invisible_char (GtkEntry *entry)
  * @overwrite: new value
  *
  * Sets whether the text is overwritten when typing in the #GtkEntry.
- *
- * Since: 2.14
  **/
 void
 gtk_entry_set_overwrite_mode (GtkEntry *entry,
@@ -7076,8 +6984,6 @@ gtk_entry_set_overwrite_mode (GtkEntry *entry,
  * Gets the value set by gtk_entry_set_overwrite_mode().
  *
  * Returns: whether the text is overwritten when typing.
- *
- * Since: 2.14
  **/
 gboolean
 gtk_entry_get_overwrite_mode (GtkEntry *entry)
@@ -7167,8 +7073,6 @@ gtk_entry_get_max_length (GtkEntry *entry)
  *
  * Returns: the current number of characters
  *               in #GtkEntry, or 0 if there are none.
- *
- * Since: 2.14
  **/
 guint16
 gtk_entry_get_text_length (GtkEntry *entry)
@@ -7278,8 +7182,6 @@ gtk_entry_get_width_chars (GtkEntry *entry)
  * @n_chars: the new desired maximum width, in characters
  *
  * Sets the desired maximum width in characters of @entry.
- *
- * Since: 3.12
  */
 void
 gtk_entry_set_max_width_chars (GtkEntry *entry,
@@ -7307,8 +7209,6 @@ gtk_entry_set_max_width_chars (GtkEntry *entry,
  * See gtk_entry_set_max_width_chars().
  *
  * Returns: the maximum width of the entry, in characters
- *
- * Since: 3.12
  */
 gint
 gtk_entry_get_max_width_chars (GtkEntry *entry)
@@ -7518,8 +7418,6 @@ gtk_entry_get_layout_offsets (GtkEntry *entry,
  * Sets the alignment for the contents of the entry. This controls
  * the horizontal positioning of the contents when the displayed
  * text is shorter than the width of the entry.
- *
- * Since: 2.4
  **/
 void
 gtk_entry_set_alignment (GtkEntry *entry, gfloat xalign)
@@ -7550,8 +7448,6 @@ gtk_entry_set_alignment (GtkEntry *entry, gfloat xalign)
  * Gets the value set by gtk_entry_set_alignment().
  *
  * Returns: the alignment
- *
- * Since: 2.4
  **/
 gfloat
 gtk_entry_get_alignment (GtkEntry *entry)
@@ -7570,8 +7466,6 @@ gtk_entry_get_alignment (GtkEntry *entry)
  * Sets the icon shown in the specified position using a #GdkTexture
  *
  * If @texture is %NULL, no icon will be shown in the specified position.
- *
- * Since: 3.94
  */
 void
 gtk_entry_set_icon_from_texture (GtkEntry             *entry,
@@ -7632,8 +7526,6 @@ gtk_entry_set_icon_from_texture (GtkEntry             *entry,
  * instead.
  *
  * If @icon_name is %NULL, no icon will be shown in the specified position.
- *
- * Since: 2.16
  */
 void
 gtk_entry_set_icon_from_icon_name (GtkEntry             *entry,
@@ -7690,8 +7582,6 @@ gtk_entry_set_icon_from_icon_name (GtkEntry             *entry,
  * instead.
  *
  * If @icon is %NULL, no icon will be shown in the specified position.
- *
- * Since: 2.16
  */
 void
 gtk_entry_set_icon_from_gicon (GtkEntry             *entry,
@@ -7742,8 +7632,6 @@ gtk_entry_set_icon_from_gicon (GtkEntry             *entry,
  * @activatable: %TRUE if the icon should be activatable
  *
  * Sets whether the icon is activatable.
- *
- * Since: 2.16
  */
 void
 gtk_entry_set_icon_activatable (GtkEntry             *entry,
@@ -7785,8 +7673,6 @@ gtk_entry_set_icon_activatable (GtkEntry             *entry,
  * Returns whether the icon is activatable.
  *
  * Returns: %TRUE if the icon is activatable.
- *
- * Since: 2.16
  */
 gboolean
 gtk_entry_get_icon_activatable (GtkEntry             *entry,
@@ -7815,8 +7701,6 @@ gtk_entry_get_icon_activatable (GtkEntry             *entry,
  *
  * Returns: (transfer none) (nullable): A #GdkTexture, or %NULL if no icon is
  *     set for this position or the icon set is not a #GdkTexture.
- *
- * Since: 3.94
  */
 GdkTexture *
 gtk_entry_get_icon_texture (GtkEntry             *entry,
@@ -7849,8 +7733,6 @@ gtk_entry_get_icon_texture (GtkEntry             *entry,
  *
  * Returns: (transfer none) (nullable): A #GIcon, or %NULL if no icon is set
  *     or if the icon is not a #GIcon
- *
- * Since: 2.16
  */
 GIcon *
 gtk_entry_get_icon_gicon (GtkEntry             *entry,
@@ -7882,8 +7764,6 @@ gtk_entry_get_icon_gicon (GtkEntry             *entry,
  *
  * Returns: (nullable): An icon name, or %NULL if no icon is set or if the icon
  *          wasn’t set from an icon name
- *
- * Since: 2.16
  */
 const gchar *
 gtk_entry_get_icon_name (GtkEntry             *entry,
@@ -7912,8 +7792,6 @@ gtk_entry_get_icon_name (GtkEntry             *entry,
  *             sensitive or insensitive
  *
  * Sets the sensitivity for the specified icon.
- *
- * Since: 2.16
  */
 void
 gtk_entry_set_icon_sensitive (GtkEntry             *entry,
@@ -7955,8 +7833,6 @@ gtk_entry_set_icon_sensitive (GtkEntry             *entry,
  * Returns whether the icon appears sensitive or insensitive.
  *
  * Returns: %TRUE if the icon is sensitive.
- *
- * Since: 2.16
  */
 gboolean
 gtk_entry_get_icon_sensitive (GtkEntry             *entry,
@@ -7988,8 +7864,6 @@ gtk_entry_get_icon_sensitive (GtkEntry             *entry,
  * the return value will be %GTK_IMAGE_EMPTY.
  *
  * Returns: image representation being used
- *
- * Since: 2.16
  **/
 GtkImageType
 gtk_entry_get_icon_storage_type (GtkEntry             *entry,
@@ -8024,8 +7898,6 @@ gtk_entry_get_icon_storage_type (GtkEntry             *entry,
  * signal handler.
  *
  * Returns: the index of the icon at the given position, or -1
- *
- * Since: 2.16
  */
 gint
 gtk_entry_get_icon_at_pos (GtkEntry *entry,
@@ -8075,8 +7947,6 @@ gtk_entry_get_icon_at_pos (GtkEntry *entry,
  * #GtkWidget::drag-begin signal to set a different icon. Note that you 
  * have to use g_signal_connect_after() to ensure that your signal handler
  * gets executed after the default handler.
- *
- * Since: 2.16
  */
 void
 gtk_entry_set_icon_drag_source (GtkEntry             *entry,
@@ -8116,8 +7986,6 @@ gtk_entry_set_icon_drag_source (GtkEntry             *entry,
  *
  * Returns: index of the icon which is the source of the current
  *          DND operation, or -1.
- *
- * Since: 2.16
  */
 gint
 gtk_entry_get_current_icon_drag_source (GtkEntry *entry)
@@ -8157,8 +8025,6 @@ gtk_entry_get_current_icon_drag_source (GtkEntry *entry)
  * with the icon's allocation, relative to @entry's allocation.
  *
  * See also gtk_entry_get_text_area()
- *
- * Since: 3.0
  */
 void
 gtk_entry_get_icon_area (GtkEntry             *entry,
@@ -8228,8 +8094,6 @@ ensure_has_tooltip (GtkEntry *entry)
  * 
  * Returns: (nullable): the tooltip text, or %NULL. Free the returned
  *     string with g_free() when done.
- * 
- * Since: 2.16
  */
 gchar *
 gtk_entry_get_icon_tooltip_text (GtkEntry             *entry,
@@ -8275,8 +8139,6 @@ gtk_entry_get_icon_tooltip_text (GtkEntry             *entry,
  * which suppresses icon tooltips too. You can resolve this by then calling
  * gtk_widget_set_has_tooltip() to set GtkWidget:has-tooltip back to %TRUE, or
  * setting at least one non-empty tooltip on any icon achieves the same result.
- *
- * Since: 2.16
  */
 void
 gtk_entry_set_icon_tooltip_text (GtkEntry             *entry,
@@ -8322,8 +8184,6 @@ gtk_entry_set_icon_tooltip_text (GtkEntry             *entry,
  * 
  * Returns: (nullable): the tooltip text, or %NULL. Free the returned
  *     string with g_free() when done.
- * 
- * Since: 2.16
  */
 gchar *
 gtk_entry_get_icon_tooltip_markup (GtkEntry             *entry,
@@ -8359,8 +8219,6 @@ gtk_entry_get_icon_tooltip_markup (GtkEntry             *entry,
  *
  * See also gtk_widget_set_tooltip_markup() and 
  * gtk_entry_set_icon_tooltip_text().
- *
- * Since: 2.16
  */
 void
 gtk_entry_set_icon_tooltip_markup (GtkEntry             *entry,
@@ -9305,8 +9163,6 @@ gtk_entry_reset_blink_time (GtkEntry *entry)
  * All further configuration of the completion mechanism is done on
  * @completion using the #GtkEntryCompletion API. Completion is disabled if
  * @completion is set to %NULL.
- *
- * Since: 2.4
  */
 void
 gtk_entry_set_completion (GtkEntry           *entry,
@@ -9352,8 +9208,6 @@ gtk_entry_set_completion (GtkEntry           *entry,
  *
  * Returns: (transfer none): The auxiliary completion object currently
  *     in use by @entry.
- *
- * Since: 2.4
  */
 GtkEntryCompletion *
 gtk_entry_get_completion (GtkEntry *entry)
@@ -9380,8 +9234,6 @@ gtk_entry_get_completion (GtkEntry *entry)
  *
  * The adjustment has to be in pixel units and in the same coordinate system 
  * as the entry. 
- * 
- * Since: 2.12
  */
 void
 gtk_entry_set_cursor_hadjustment (GtkEntry      *entry,
@@ -9409,8 +9261,6 @@ gtk_entry_set_cursor_hadjustment (GtkEntry      *entry,
  *
  * Returns: (transfer none) (nullable): the horizontal cursor adjustment, or %NULL
  *   if none has been set.
- *
- * Since: 2.12
  */
 GtkAdjustment*
 gtk_entry_get_cursor_hadjustment (GtkEntry *entry)
@@ -9445,8 +9295,6 @@ gtk_entry_ensure_progress_widget (GtkEntry *entry)
  * Causes the entry’s progress indicator to “fill in” the given
  * fraction of the bar. The fraction should be between 0.0 and 1.0,
  * inclusive.
- *
- * Since: 2.16
  */
 void
 gtk_entry_set_progress_fraction (GtkEntry *entry,
@@ -9480,8 +9328,6 @@ gtk_entry_set_progress_fraction (GtkEntry *entry,
  * See gtk_entry_set_progress_fraction().
  *
  * Returns: a fraction from 0.0 to 1.0
- *
- * Since: 2.16
  */
 gdouble
 gtk_entry_get_progress_fraction (GtkEntry *entry)
@@ -9503,8 +9349,6 @@ gtk_entry_get_progress_fraction (GtkEntry *entry)
  *
  * Sets the fraction of total entry width to move the progress
  * bouncing block for each call to gtk_entry_progress_pulse().
- *
- * Since: 2.16
  */
 void
 gtk_entry_set_progress_pulse_step (GtkEntry *entry,
@@ -9532,8 +9376,6 @@ gtk_entry_set_progress_pulse_step (GtkEntry *entry,
  * Retrieves the pulse step set with gtk_entry_set_progress_pulse_step().
  *
  * Returns: a fraction from 0.0 to 1.0
- *
- * Since: 2.16
  */
 gdouble
 gtk_entry_get_progress_pulse_step (GtkEntry *entry)
@@ -9558,8 +9400,6 @@ gtk_entry_get_progress_pulse_step (GtkEntry *entry)
  * gtk_entry_progress_pulse() causes the block to move by a little bit
  * (the amount of movement per pulse is determined by
  * gtk_entry_set_progress_pulse_step()).
- *
- * Since: 2.16
  */
 void
 gtk_entry_progress_pulse (GtkEntry *entry)
@@ -9586,8 +9426,6 @@ gtk_entry_progress_pulse (GtkEntry *entry)
  * is given the initial focus in a window. Sometimes this can be
  * worked around by delaying the initial focus setting until the
  * first key event arrives.
- *
- * Since: 3.2
  **/
 void
 gtk_entry_set_placeholder_text (GtkEntry    *entry,
@@ -9618,8 +9456,6 @@ gtk_entry_set_placeholder_text (GtkEntry    *entry,
  *
  * Returns: a pointer to the placeholder text as a string. This string points to internally allocated
  * storage in the widget and must not be freed, modified or stored.
- *
- * Since: 3.2
  **/
 const gchar *
 gtk_entry_get_placeholder_text (GtkEntry *entry)
@@ -9695,8 +9531,6 @@ keymap_state_changed (GdkKeymap *keymap,
  * Sets the #GtkEntry:input-purpose property which
  * can be used by on-screen keyboards and other input
  * methods to adjust their behaviour.
- *
- * Since: 3.6
  */
 void
 gtk_entry_set_input_purpose (GtkEntry        *entry,
@@ -9720,8 +9554,6 @@ gtk_entry_set_input_purpose (GtkEntry        *entry,
  * @entry: a #GtkEntry
  *
  * Gets the value of the #GtkEntry:input-purpose property.
- *
- * Since: 3.6
  */
 GtkInputPurpose
 gtk_entry_get_input_purpose (GtkEntry *entry)
@@ -9744,8 +9576,6 @@ gtk_entry_get_input_purpose (GtkEntry *entry)
  *
  * Sets the #GtkEntry:input-hints property, which
  * allows input methods to fine-tune their behaviour.
- *
- * Since: 3.6
  */
 void
 gtk_entry_set_input_hints (GtkEntry      *entry,
@@ -9769,8 +9599,6 @@ gtk_entry_set_input_hints (GtkEntry      *entry,
  * @entry: a #GtkEntry
  *
  * Gets the value of the #GtkEntry:input-hints property.
- *
- * Since: 3.6
  */
 GtkInputHints
 gtk_entry_get_input_hints (GtkEntry *entry)
@@ -9793,8 +9621,6 @@ gtk_entry_get_input_hints (GtkEntry *entry)
  *
  * Sets a #PangoAttrList; the attributes in the list are applied to the
  * entry text.
- *
- * Since: 3.6
  */
 void
 gtk_entry_set_attributes (GtkEntry      *entry,
@@ -9825,8 +9651,6 @@ gtk_entry_set_attributes (GtkEntry      *entry,
  *
  * Returns: (transfer none) (nullable): the attribute list, or %NULL
  *     if none was set.
- *
- * Since: 3.6
  */
 PangoAttrList *
 gtk_entry_get_attributes (GtkEntry *entry)
@@ -9843,8 +9667,6 @@ gtk_entry_get_attributes (GtkEntry *entry)
  *
  * Sets a #PangoTabArray; the tabstops in the array are applied to the entry
  * text.
- *
- * Since: 3.10
  */
 
 void
@@ -9877,8 +9699,6 @@ gtk_entry_set_tabs (GtkEntry      *entry,
  * any.
  *
  * Returns: (nullable) (transfer none): the tabstops, or %NULL if none was set.
- *
- * Since: 3.10
  */
 
 PangoTabArray *

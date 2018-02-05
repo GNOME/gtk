@@ -160,8 +160,6 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
    * GtkEventController:widget:
    *
    * The widget receiving the #GdkEvents that the controller will handle.
-   *
-   * Since: 3.14
    */
   properties[PROP_WIDGET] =
       g_param_spec_object ("widget",
@@ -173,8 +171,6 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
    * GtkEventController:propagation-phase:
    *
    * The propagation phase at which this controller will handle events.
-   *
-   * Since: 3.14
    */
   properties[PROP_PROPAGATION_PHASE] =
       g_param_spec_enum ("propagation-phase",
@@ -206,8 +202,6 @@ gtk_event_controller_init (GtkEventController *controller)
  *
  * Returns: %TRUE if the event was potentially useful to trigger the
  *          controller action
- *
- * Since: 3.14
  **/
 gboolean
 gtk_event_controller_handle_event (GtkEventController *controller,
@@ -241,8 +235,6 @@ gtk_event_controller_handle_event (GtkEventController *controller,
  * Returns the #GtkWidget this controller relates to.
  *
  * Returns: (transfer none): a #GtkWidget
- *
- * Since: 3.14
  **/
 GtkWidget *
 gtk_event_controller_get_widget (GtkEventController *controller)
@@ -263,8 +255,6 @@ gtk_event_controller_get_widget (GtkEventController *controller)
  * Resets the @controller to a clean state. Every interaction
  * the controller did through gtk_event_controll_handle_event()
  * will be dropped at this point.
- *
- * Since: 3.14
  **/
 void
 gtk_event_controller_reset (GtkEventController *controller)
@@ -286,8 +276,6 @@ gtk_event_controller_reset (GtkEventController *controller)
  * Gets the propagation phase at which @controller handles events.
  *
  * Returns: the propagation phase
- *
- * Since: 3.14
  **/
 GtkPropagationPhase
 gtk_event_controller_get_propagation_phase (GtkEventController *controller)
@@ -311,8 +299,6 @@ gtk_event_controller_get_propagation_phase (GtkEventController *controller)
  * If @phase is %GTK_PHASE_NONE, no automatic event handling will be
  * performed, but other additional gesture maintenance will. In that phase,
  * the events can be managed by calling gtk_event_controller_handle_event().
- *
- * Since: 3.14
  **/
 void
 gtk_event_controller_set_propagation_phase (GtkEventController  *controller,

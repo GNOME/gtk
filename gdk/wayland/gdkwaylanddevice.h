@@ -52,13 +52,13 @@ struct wl_pointer   *gdk_wayland_device_get_wl_pointer      (GdkDevice *device);
 GDK_AVAILABLE_IN_ALL
 struct wl_keyboard  *gdk_wayland_device_get_wl_keyboard     (GdkDevice *device);
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 struct wl_seat      *gdk_wayland_seat_get_wl_seat           (GdkSeat   *seat);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 const gchar         *gdk_wayland_device_get_node_path       (GdkDevice *device);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 void                 gdk_wayland_device_pad_set_feedback (GdkDevice           *device,
                                                           GdkDevicePadFeature  element,
                                                           guint                idx,

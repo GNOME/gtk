@@ -52,7 +52,7 @@ struct _GdkWin32VulkanContextClass
   GdkVulkanContextClass parent_class;
 };
 
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 GType gdk_win32_vulkan_context_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS

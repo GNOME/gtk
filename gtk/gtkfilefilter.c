@@ -394,8 +394,6 @@ gtk_file_filter_buildable_custom_tag_end (GtkBuildable *buildable,
  * ]|
  * 
  * Returns: a new #GtkFileFilter
- * 
- * Since: 2.4
  **/
 GtkFileFilter *
 gtk_file_filter_new (void)
@@ -412,8 +410,6 @@ gtk_file_filter_new (void)
  * Sets the human-readable name of the filter; this is the string
  * that will be displayed in the file selector user interface if
  * there is a selectable list of filters.
- * 
- * Since: 2.4
  **/
 void
 gtk_file_filter_set_name (GtkFileFilter *filter,
@@ -435,8 +431,6 @@ gtk_file_filter_set_name (GtkFileFilter *filter,
  * Returns: (nullable): The human-readable name of the filter,
  *   or %NULL. This value is owned by GTK+ and must not
  *   be modified or freed.
- * 
- * Since: 2.4
  **/
 const gchar *
 gtk_file_filter_get_name (GtkFileFilter *filter)
@@ -460,8 +454,6 @@ file_filter_add_rule (GtkFileFilter *filter,
  * @mime_type: name of a MIME type
  * 
  * Adds a rule allowing a given mime type to @filter.
- * 
- * Since: 2.4
  **/
 void
 gtk_file_filter_add_mime_type (GtkFileFilter *filter,
@@ -486,8 +478,6 @@ gtk_file_filter_add_mime_type (GtkFileFilter *filter,
  * @pattern: a shell style glob
  * 
  * Adds a rule allowing a shell style glob to a filter.
- * 
- * Since: 2.4
  **/
 void
 gtk_file_filter_add_pattern (GtkFileFilter *filter,
@@ -512,8 +502,6 @@ gtk_file_filter_add_pattern (GtkFileFilter *filter,
  * 
  * Adds a rule allowing image files in the formats supported
  * by GdkPixbuf.
- * 
- * Since: 2.6
  **/
 void
 gtk_file_filter_add_pixbuf_formats (GtkFileFilter *filter)
@@ -545,8 +533,6 @@ gtk_file_filter_add_pixbuf_formats (GtkFileFilter *filter)
  * about what sorts of information that the filter function needs;
  * this allows GTK+ to avoid retrieving expensive information when
  * it isn’t needed by the filter.
- * 
- * Since: 2.4
  **/
 void
 gtk_file_filter_add_custom (GtkFileFilter         *filter,
@@ -583,8 +569,6 @@ gtk_file_filter_add_custom (GtkFileFilter         *filter,
  * 
  * Returns: bitfield of flags indicating needed fields when
  *   calling gtk_file_filter_filter()
- * 
- * Since: 2.4
  **/
 GtkFileFilterFlags
 gtk_file_filter_get_needed (GtkFileFilter *filter)
@@ -734,8 +718,6 @@ _gtk_file_filter_get_as_patterns (GtkFileFilter      *filter)
  * #GtkFileChooser.
  * 
  * Returns: %TRUE if the file should be displayed
- * 
- * Since: 2.4
  **/
 gboolean
 gtk_file_filter_filter (GtkFileFilter           *filter,
@@ -822,8 +804,6 @@ gtk_file_filter_filter (GtkFileFilter           *filter,
  * Serialize a file filter to an a{sv} variant.
  *
  * Returns: (transfer none): a new, floating, #GVariant
- *
- * Since: 3.22
  */
 GVariant *
 gtk_file_filter_to_gvariant (GtkFileFilter *filter)
@@ -878,8 +858,6 @@ gtk_file_filter_to_gvariant (GtkFileFilter *filter)
  * the format produced by gtk_file_filter_to_gvariant().
  *
  * Returns: (transfer full): a new #GtkFileFilter object
- *
- * Since: 3.22
  */
 GtkFileFilter *
 gtk_file_filter_new_from_gvariant (GVariant *variant)

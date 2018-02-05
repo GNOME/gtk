@@ -219,8 +219,6 @@ gtk_paper_size_new_from_info (const PaperInfo *info)
  *
  * Returns: a new #GtkPaperSize, use gtk_paper_size_free()
  * to free it
- *
- * Since: 2.10
  */
 GtkPaperSize *
 gtk_paper_size_new (const gchar *name)
@@ -311,8 +309,6 @@ improve_displayname (const gchar *name)
  *
  * Returns: a new #GtkPaperSize, use gtk_paper_size_free()
  * to free it
- *
- * Since: 2.10
  */
 GtkPaperSize *
 gtk_paper_size_new_from_ppd (const gchar *ppd_name,
@@ -392,8 +388,6 @@ gtk_paper_size_new_from_ppd (const gchar *ppd_name,
  *
  * Returns: a new #GtkPaperSize, use gtk_paper_size_free()
  * to free it
- *
- * Since: 3.16
  */
 GtkPaperSize *
 gtk_paper_size_new_from_ipp (const gchar *ipp_name,
@@ -481,8 +475,6 @@ gtk_paper_size_new_from_ipp (const gchar *ipp_name,
  *
  * Returns: a new #GtkPaperSize object, use gtk_paper_size_free()
  * to free it
- *
- * Since: 2.10
  */
 GtkPaperSize *
 gtk_paper_size_new_custom (const gchar *name,
@@ -514,8 +506,6 @@ gtk_paper_size_new_custom (const gchar *name,
  * Copies an existing #GtkPaperSize.
  *
  * Returns: a copy of @other
- *
- * Since: 2.10
  */
 GtkPaperSize *
 gtk_paper_size_copy (GtkPaperSize *other)
@@ -545,8 +535,6 @@ gtk_paper_size_copy (GtkPaperSize *other)
  * @size: a #GtkPaperSize
  *
  * Free the given #GtkPaperSize object.
- *
- * Since: 2.10
  */
 void
 gtk_paper_size_free (GtkPaperSize *size)
@@ -567,8 +555,6 @@ gtk_paper_size_free (GtkPaperSize *size)
  *
  * Returns: %TRUE, if @size1 and @size2
  * represent the same paper size
- *
- * Since: 2.10
  */
 gboolean
 gtk_paper_size_is_equal (GtkPaperSize *size1,
@@ -590,8 +576,6 @@ gtk_paper_size_is_equal (GtkPaperSize *size1,
  *
  * Returns:  (element-type GtkPaperSize) (transfer full): a newly allocated list of newly
  *    allocated #GtkPaperSize objects
- *
- * Since: 2.12
  */
 GList *
 gtk_paper_size_get_paper_sizes (gboolean include_custom)
@@ -636,8 +620,6 @@ gtk_paper_size_get_paper_sizes (gboolean include_custom)
  * Gets the name of the #GtkPaperSize.
  *
  * Returns: the name of @size
- *
- * Since: 2.10
  */
 const gchar *
 gtk_paper_size_get_name (GtkPaperSize *size)
@@ -655,8 +637,6 @@ gtk_paper_size_get_name (GtkPaperSize *size)
  * Gets the human-readable name of the #GtkPaperSize.
  *
  * Returns: the human-readable name of @size
- *
- * Since: 2.10
  */
 const gchar *
 gtk_paper_size_get_display_name (GtkPaperSize *size)
@@ -680,8 +660,6 @@ gtk_paper_size_get_display_name (GtkPaperSize *size)
  * may be %NULL.
  *
  * Returns: the PPD name of @size
- *
- * Since: 2.10
  */
 const gchar *
 gtk_paper_size_get_ppd_name (GtkPaperSize *size)
@@ -702,8 +680,6 @@ gtk_paper_size_get_ppd_name (GtkPaperSize *size)
  * units of @unit.
  *
  * Returns: the paper width
- *
- * Since: 2.10
  */
 gdouble
 gtk_paper_size_get_width (GtkPaperSize *size,
@@ -721,8 +697,6 @@ gtk_paper_size_get_width (GtkPaperSize *size,
  * units of @unit.
  *
  * Returns: the paper height
- *
- * Since: 2.10
  */
 gdouble
 gtk_paper_size_get_height (GtkPaperSize *size,
@@ -767,8 +741,6 @@ gtk_paper_size_is_ipp (GtkPaperSize *size)
  * @unit: the unit for @width and @height
  *
  * Changes the dimensions of a @size to @width x @height.
- *
- * Since: 2.10
  */
 void
 gtk_paper_size_set_size (GtkPaperSize *size,
@@ -794,8 +766,6 @@ gtk_paper_size_set_size (GtkPaperSize *size,
  *
  * Returns: the name of the default paper size. The string
  * is owned by GTK+ and should not be modified.
- *
- * Since: 2.10
  */
 const gchar *
 gtk_paper_size_get_default (void)
@@ -862,8 +832,6 @@ gtk_paper_size_get_default (void)
  * Gets the default top margin for the #GtkPaperSize.
  *
  * Returns: the default top margin
- *
- * Since: 2.10
  */
 gdouble
 gtk_paper_size_get_default_top_margin (GtkPaperSize *size,
@@ -883,8 +851,6 @@ gtk_paper_size_get_default_top_margin (GtkPaperSize *size,
  * Gets the default bottom margin for the #GtkPaperSize.
  *
  * Returns: the default bottom margin
- *
- * Since: 2.10
  */
 gdouble
 gtk_paper_size_get_default_bottom_margin (GtkPaperSize *size,
@@ -912,8 +878,6 @@ gtk_paper_size_get_default_bottom_margin (GtkPaperSize *size,
  * Gets the default left margin for the #GtkPaperSize.
  *
  * Returns: the default left margin
- *
- * Since: 2.10
  */
 gdouble
 gtk_paper_size_get_default_left_margin (GtkPaperSize *size,
@@ -933,8 +897,6 @@ gtk_paper_size_get_default_left_margin (GtkPaperSize *size,
  * Gets the default right margin for the #GtkPaperSize.
  *
  * Returns: the default right margin
- *
- * Since: 2.10
  */
 gdouble
 gtk_paper_size_get_default_right_margin (GtkPaperSize *size,
@@ -958,8 +920,6 @@ gtk_paper_size_get_default_right_margin (GtkPaperSize *size,
  *
  * Returns: a new #GtkPaperSize object with the restored
  *     paper size, or %NULL if an error occurred
- *
- * Since: 2.12
  */
 GtkPaperSize *
 gtk_paper_size_new_from_key_file (GKeyFile     *key_file,
@@ -1045,8 +1005,6 @@ out:
  * @group_name: the group to add the settings to in @key_file
  *
  * This function adds the paper size from @size to @key_file.
- *
- * Since: 2.12
  */
 void
 gtk_paper_size_to_key_file (GtkPaperSize *size,
@@ -1086,8 +1044,6 @@ gtk_paper_size_to_key_file (GtkPaperSize *size,
  * Serialize a paper size to an a{sv} variant.
  *
  * Returns: (transfer none): a new, floating, #GVariant
- *
- * Since: 3.22
  */
 GVariant *
 gtk_paper_size_to_gvariant (GtkPaperSize *paper_size)
@@ -1125,8 +1081,6 @@ gtk_paper_size_to_gvariant (GtkPaperSize *paper_size)
  * the format produced by gtk_paper_size_to_gvariant().
  *
  * Returns: (transfer full): a new #GtkPaperSize object
- *
- * Since: 3.22
  */
 GtkPaperSize *
 gtk_paper_size_new_from_gvariant (GVariant *variant)

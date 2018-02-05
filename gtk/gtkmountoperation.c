@@ -1650,8 +1650,6 @@ gtk_mount_operation_aborted (GMountOperation *op)
  * Creates a new #GtkMountOperation
  *
  * Returns: a new #GtkMountOperation
- *
- * Since: 2.14
  */
 GMountOperation *
 gtk_mount_operation_new (GtkWindow *parent)
@@ -1672,8 +1670,6 @@ gtk_mount_operation_new (GtkWindow *parent)
  * a window.
  *
  * Returns: %TRUE if @op is currently displaying a window
- *
- * Since: 2.14
  */
 gboolean
 gtk_mount_operation_is_showing (GtkMountOperation *op)
@@ -1690,8 +1686,6 @@ gtk_mount_operation_is_showing (GtkMountOperation *op)
  *
  * Sets the transient parent for windows shown by the
  * #GtkMountOperation.
- *
- * Since: 2.14
  */
 void
 gtk_mount_operation_set_parent (GtkMountOperation *op,
@@ -1736,8 +1730,6 @@ gtk_mount_operation_set_parent (GtkMountOperation *op,
  * Gets the transient parent used by the #GtkMountOperation
  *
  * Returns: (transfer none): the transient parent for windows shown by @op
- *
- * Since: 2.14
  */
 GtkWindow *
 gtk_mount_operation_get_parent (GtkMountOperation *op)
@@ -1753,8 +1745,6 @@ gtk_mount_operation_get_parent (GtkMountOperation *op)
  * @display: a #Gdk
  *
  * Sets the display to show windows of the #GtkMountOperation on.
- *
- * Since: 3.94
  */
 void
 gtk_mount_operation_set_display (GtkMountOperation *op,
@@ -1789,8 +1779,6 @@ gtk_mount_operation_set_display (GtkMountOperation *op,
  * will be shown.
  *
  * Returns: (transfer none): the display on which windows of @op are shown
- *
- * Since: 3.94
  */
 GdkDisplay *
 gtk_mount_operation_get_display (GtkMountOperation *op)

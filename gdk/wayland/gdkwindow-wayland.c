@@ -3706,8 +3706,6 @@ _gdk_wayland_window_set_grab_seat (GdkWindow *window,
  * Creates a new subsurface window.
  *
  * Returns: (transfer full): the new #GdkWindow
- *
- * Since: 3.90
  **/
 GdkWindow *
 gdk_wayland_window_new_subsurface (GdkDisplay         *display,
@@ -3735,8 +3733,6 @@ gdk_wayland_window_new_subsurface (GdkDisplay         *display,
  * Returns the Wayland surface of a #GdkWindow.
  *
  * Returns: (transfer none): a Wayland wl_surface
- *
- * Since: 3.8
  */
 struct wl_surface *
 gdk_wayland_window_get_wl_surface (GdkWindow *window)
@@ -3873,8 +3869,6 @@ gdk_wayland_window_get_gtk_surface (GdkWindow *window)
  *     g_signal_connect (window, "realize", G_CALLBACK (widget_realize_cb), NULL);
  *   }
  * ]|
- *
- * Since: 3.10
  */
 void
 gdk_wayland_window_set_use_custom_surface (GdkWindow *window)
@@ -3989,8 +3983,6 @@ static const struct zxdg_exported_v1_listener xdg_exported_listener = {
  * obtained from the Wayland compositor. The handle can be passed
  * to other processes, for the purpose of marking windows as transient
  * for out-of-process surfaces.
- *
- * Since: 3.22
  */
 
 static gboolean
@@ -4027,8 +4019,6 @@ gdk_wayland_window_is_exported (GdkWindow *window)
  *
  * Return value: %TRUE if the handle has been requested, %FALSE if
  *     an error occurred.
- *
- * Since: 3.22
  */
 gboolean
 gdk_wayland_window_export_handle (GdkWindow                *window,
@@ -4079,8 +4069,6 @@ gdk_wayland_window_export_handle (GdkWindow                *window,
  *
  * Note that this API depends on an unstable Wayland protocol,
  * and thus may require changes in the future.
- *
- * Since: 3.22
  */
 void
 gdk_wayland_window_unexport_handle (GdkWindow *window)
@@ -4134,8 +4122,6 @@ static const struct zxdg_imported_v1_listener xdg_imported_listener = {
  *
  * Return value: %TRUE if the window has been marked as transient,
  *     %FALSE if an error occurred.
- *
- * Since: 3.22
  */
 gboolean
 gdk_wayland_window_set_transient_for_exported (GdkWindow *window,

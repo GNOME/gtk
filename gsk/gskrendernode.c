@@ -53,8 +53,6 @@
  * GskRenderNode: (ref-func gsk_render_node_ref) (unref-func gsk_render_node_unref)
  *
  * The `GskRenderNode` structure contains only private data.
- *
- * Since: 3.90
  */
 
 G_DEFINE_BOXED_TYPE (GskRenderNode, gsk_render_node,
@@ -103,8 +101,6 @@ gsk_render_node_new (const GskRenderNodeClass *node_class, gsize extra_size)
  * Acquires a reference on the given #GskRenderNode.
  *
  * Returns: (transfer none): the #GskRenderNode with an additional reference
- *
- * Since: 3.90
  */
 GskRenderNode *
 gsk_render_node_ref (GskRenderNode *node)
@@ -124,8 +120,6 @@ gsk_render_node_ref (GskRenderNode *node)
  *
  * If the reference was the last, the resources associated to the @node are
  * freed.
- *
- * Since: 3.90
  */
 void
 gsk_render_node_unref (GskRenderNode *node)
@@ -143,8 +137,6 @@ gsk_render_node_unref (GskRenderNode *node)
  * Returns the type of the @node.
  *
  * Returns: the type of the #GskRenderNode
- *
- * Since: 3.90
  */
 GskRenderNodeType
 gsk_render_node_get_node_type (GskRenderNode *node)
@@ -161,8 +153,6 @@ gsk_render_node_get_node_type (GskRenderNode *node)
  *
  * Retrieves the boundaries of the @node. The node will not draw outside
  * of its boundaries.
- *
- * Since: 3.90
  */
 void
 gsk_render_node_get_bounds (GskRenderNode   *node,
@@ -182,8 +172,6 @@ gsk_render_node_get_bounds (GskRenderNode   *node,
  * Sets the name of the node.
  *
  * A name is generally useful for debugging purposes.
- *
- * Since: 3.90
  */
 void
 gsk_render_node_set_name (GskRenderNode *node,
@@ -204,8 +192,6 @@ gsk_render_node_set_name (GskRenderNode *node,
  *
  * Returns: (nullable): The name previously set via
  *     gsk_render_node_set_name() or %NULL
- *
- * Since: 3.90
  **/
 const char *
 gsk_render_node_get_name (GskRenderNode *node)

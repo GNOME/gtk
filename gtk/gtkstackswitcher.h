@@ -55,14 +55,14 @@ struct _GtkStackSwitcherClass
   void (*_gtk_reserved4) (void);
 };
 
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 GType        gtk_stack_switcher_get_type          (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 GtkWidget *  gtk_stack_switcher_new               (void);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 void         gtk_stack_switcher_set_stack         (GtkStackSwitcher *switcher,
                                                    GtkStack         *stack);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 GtkStack *   gtk_stack_switcher_get_stack         (GtkStackSwitcher *switcher);
 
 G_END_DECLS

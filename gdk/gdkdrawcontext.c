@@ -136,8 +136,6 @@ gdk_draw_context_class_init (GdkDrawContextClass *klass)
    * GdkDrawContext:display:
    *
    * The #GdkDisplay used to create the #GdkDrawContext.
-   *
-   * Since: 3.90
    */
   pspecs[PROP_DISPLAY] =
     g_param_spec_object ("display",
@@ -151,8 +149,6 @@ gdk_draw_context_class_init (GdkDrawContextClass *klass)
    * GdkDrawContext:window:
    *
    * The #GdkWindow the gl context is bound to.
-   *
-   * Since: 3.90
    */
   pspecs[PROP_WINDOW] =
     g_param_spec_object ("window",
@@ -180,8 +176,6 @@ gdk_draw_context_init (GdkDrawContext *self)
  * onto it.
  *
  * Returns: %TRUE if the context is between begin_frame() and end_frame() calls.
- *
- * Since: 3.90
  */
 gboolean
 gdk_draw_context_is_drawing (GdkDrawContext *context)
@@ -205,8 +199,6 @@ gdk_draw_context_is_drawing (GdkDrawContext *context)
  * The function does not clear the background. Clearing the backgroud is the
  * job of the renderer. The contents of the backbuffer are undefined after this
  * function call.
- *
- * Since: 3.90
  */
 void
 gdk_draw_context_begin_frame (GdkDrawContext *context,
@@ -234,8 +226,6 @@ gdk_draw_context_begin_frame (GdkDrawContext *context,
  * This function may call `glFlush()` implicitly before returning; it
  * is not recommended to call `glFlush()` explicitly before calling
  * this function.
- *
- * Since: 3.16
  */
 void
 gdk_draw_context_end_frame (GdkDrawContext *context,
@@ -259,8 +249,6 @@ gdk_draw_context_end_frame (GdkDrawContext *context,
  * Retrieves the #GdkDisplay the @context is created for
  *
  * Returns: (nullable) (transfer none): a #GdkDisplay or %NULL
- *
- * Since: 3.90
  */
 GdkDisplay *
 gdk_draw_context_get_display (GdkDrawContext *context)
@@ -279,8 +267,6 @@ gdk_draw_context_get_display (GdkDrawContext *context)
  * Retrieves the #GdkWindow used by the @context.
  *
  * Returns: (nullable) (transfer none): a #GdkWindow or %NULL
- *
- * Since: 3.90
  */
 GdkWindow *
 gdk_draw_context_get_window (GdkDrawContext *context)

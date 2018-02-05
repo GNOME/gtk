@@ -59,23 +59,23 @@ struct _GtkColorChooserInterface
   gpointer padding[12];
 };
 
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 GType    gtk_color_chooser_get_type        (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 void     gtk_color_chooser_get_rgba       (GtkColorChooser *chooser,
                                            GdkRGBA         *color);
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 void     gtk_color_chooser_set_rgba       (GtkColorChooser *chooser,
                                            const GdkRGBA   *color);
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_color_chooser_get_use_alpha  (GtkColorChooser *chooser);
 
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 void     gtk_color_chooser_set_use_alpha  (GtkColorChooser *chooser,
                                            gboolean         use_alpha);
 
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 void     gtk_color_chooser_add_palette    (GtkColorChooser *chooser,
                                            GtkOrientation   orientation,
                                            gint             colors_per_line,

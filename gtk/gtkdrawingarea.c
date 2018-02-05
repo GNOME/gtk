@@ -276,8 +276,6 @@ gtk_drawing_area_class_init (GtkDrawingAreaClass *class)
    * GtkDrawingArea:content-width
    *
    * The content width. See gtk_drawing_area_set_content_width() for details.
-   *
-   * Since: 3.90
    */
   props[PROP_CONTENT_WIDTH] =
     g_param_spec_int ("content-width",
@@ -290,8 +288,6 @@ gtk_drawing_area_class_init (GtkDrawingAreaClass *class)
    * GtkDrawingArea:content-height
    *
    * The content height. See gtk_drawing_area_set_content_height() for details.
-   *
-   * Since: 3.90
    */
   props[PROP_CONTENT_HEIGHT] =
     g_param_spec_int ("content-height",
@@ -336,8 +332,6 @@ gtk_drawing_area_new (void)
  * that.
  *
  * If the width is set to 0 (the default), the drawing area may disappear.
- *
- * Since: 3.90
  **/
 void
 gtk_drawing_area_set_content_width (GtkDrawingArea *self,
@@ -364,8 +358,6 @@ gtk_drawing_area_set_content_width (GtkDrawingArea *self,
  * Retrieves the value previously set via gtk_drawing_area_set_content_width().
  *
  * Returns: The width requested for content of the drawing area
- *
- * Since: 3.90
  **/
 int
 gtk_drawing_area_get_content_width (GtkDrawingArea *self)
@@ -389,8 +381,6 @@ gtk_drawing_area_get_content_width (GtkDrawingArea *self)
  * that.
  *
  * If the height is set to 0 (the default), the drawing area may disappear.
- *
- * Since: 3.90
  **/
 void
 gtk_drawing_area_set_content_height (GtkDrawingArea *self,
@@ -417,8 +407,6 @@ gtk_drawing_area_set_content_height (GtkDrawingArea *self,
  * Retrieves the value previously set via gtk_drawing_area_set_content_height().
  *
  * Returns: The height requested for content of the drawing area
- *
- * Since: 3.90
  **/
 int
 gtk_drawing_area_get_content_height (GtkDrawingArea *self)
@@ -450,8 +438,6 @@ gtk_drawing_area_get_content_height (GtkDrawingArea *self)
  *
  * If what you are drawing does change, call gtk_widget_queue_draw() on the
  * drawing area. This will call a redraw and will call @draw_func again.
- *
- * Since: 3.90
  */
 void
 gtk_drawing_area_set_draw_func (GtkDrawingArea         *self,

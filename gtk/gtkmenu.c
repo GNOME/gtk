@@ -583,9 +583,6 @@ gtk_menu_class_init (GtkMenuClass *class)
    * gtk_menu_popup_at_pointer (), #GtkMenu:anchor-hints,
    * #GtkMenu:rect-anchor-dx, #GtkMenu:rect-anchor-dy, and
    * #GtkMenu:menu-type-hint.
-   *
-   * Since: 3.22
-   * Stability: Unstable
    */
   menu_signals[POPPED_UP] =
     g_signal_new_class_handler (I_("popped-up"),
@@ -607,8 +604,6 @@ gtk_menu_class_init (GtkMenuClass *class)
    *
    * The index of the currently selected menu item, or -1 if no
    * menu item is selected.
-   *
-   * Since: 2.14
    **/
   g_object_class_install_property (gobject_class,
                                    PROP_ACTIVE,
@@ -622,8 +617,6 @@ gtk_menu_class_init (GtkMenuClass *class)
    * GtkMenu:accel-group:
    *
    * The accel group holding accelerators for the menu.
-   *
-   * Since: 2.14
    **/
   g_object_class_install_property (gobject_class,
                                    PROP_ACCEL_GROUP,
@@ -637,8 +630,6 @@ gtk_menu_class_init (GtkMenuClass *class)
    * GtkMenu:accel-path:
    *
    * An accel path used to conveniently construct accel paths of child items.
-   *
-   * Since: 2.14
    **/
   g_object_class_install_property (gobject_class,
                                    PROP_ACCEL_PATH,
@@ -654,8 +645,6 @@ gtk_menu_class_init (GtkMenuClass *class)
    * The widget the menu is attached to. Setting this property attaches
    * the menu without a #GtkMenuDetachFunc. If you need to use a detacher,
    * use gtk_menu_attach_to_widget() directly.
-   *
-   * Since: 2.14
    **/
   g_object_class_install_property (gobject_class,
                                    PROP_ATTACH_WIDGET,
@@ -669,8 +658,6 @@ gtk_menu_class_init (GtkMenuClass *class)
    * GtkMenu:monitor:
    *
    * The monitor the menu will be popped up on.
-   *
-   * Since: 2.14
    **/
   g_object_class_install_property (gobject_class,
                                    PROP_MONITOR,
@@ -690,8 +677,6 @@ gtk_menu_class_init (GtkMenuClass *class)
    * for special-purposes such as tabular menus. Regular menus that
    * are connected to a menu bar or context menus should reserve
    * toggle space for consistency.
-   *
-   * Since: 2.18
    */
   g_object_class_install_property (gobject_class,
                                    PROP_RESERVE_TOGGLE_SIZE,
@@ -718,9 +703,6 @@ gtk_menu_class_init (GtkMenuClass *class)
    * See gtk_menu_popup_at_rect (), gtk_menu_popup_at_widget (),
    * gtk_menu_popup_at_pointer (), #GtkMenu:rect-anchor-dx,
    * #GtkMenu:rect-anchor-dy, #GtkMenu:menu-type-hint, and #GtkMenu::popped-up.
-   *
-   * Since: 3.22
-   * Stability: Unstable
    */
   g_object_class_install_property (gobject_class,
                                    PROP_ANCHOR_HINTS,
@@ -747,9 +729,6 @@ gtk_menu_class_init (GtkMenuClass *class)
    * See gtk_menu_popup_at_rect (), gtk_menu_popup_at_widget (),
    * gtk_menu_popup_at_pointer (), #GtkMenu:anchor-hints,
    * #GtkMenu:rect-anchor-dy, #GtkMenu:menu-type-hint, and #GtkMenu::popped-up.
-   *
-   * Since: 3.22
-   * Stability: Unstable
    */
   g_object_class_install_property (gobject_class,
                                    PROP_RECT_ANCHOR_DX,
@@ -774,9 +753,6 @@ gtk_menu_class_init (GtkMenuClass *class)
    * See gtk_menu_popup_at_rect (), gtk_menu_popup_at_widget (),
    * gtk_menu_popup_at_pointer (), #GtkMenu:anchor-hints,
    * #GtkMenu:rect-anchor-dx, #GtkMenu:menu-type-hint, and #GtkMenu::popped-up.
-   *
-   * Since: 3.22
-   * Stability: Unstable
    */
   g_object_class_install_property (gobject_class,
                                    PROP_RECT_ANCHOR_DY,
@@ -801,9 +777,6 @@ gtk_menu_class_init (GtkMenuClass *class)
    * See gtk_menu_popup_at_rect (), gtk_menu_popup_at_widget (),
    * gtk_menu_popup_at_pointer (), #GtkMenu:anchor-hints,
    * #GtkMenu:rect-anchor-dx, #GtkMenu:rect-anchor-dy, and #GtkMenu::popped-up.
-   *
-   * Since: 3.22
-   * Stability: Unstable
    */
   g_object_class_install_property (gobject_class,
                                    PROP_MENU_TYPE_HINT,
@@ -1767,8 +1740,6 @@ gtk_menu_popup_internal (GtkMenu             *menu,
  * a mouse click or key press) that caused the initiation of the popup.
  * Only if no such event is available, gtk_get_current_event_time() can
  * be used instead.
- *
- * Since: 3.0
  */
 void
 gtk_menu_popup_for_device (GtkMenu             *menu,
@@ -1911,9 +1882,6 @@ get_device_for_event (const GdkEvent *event)
  * Other properties that influence the behaviour of this function are
  * #GtkMenu:anchor-hints and #GtkMenu:menu-type-hint. Connect to the
  * #GtkMenu::popped-up signal to find out how it was actually positioned.
- *
- * Since: 3.22
- * Stability: Unstable
  */
 void
 gtk_menu_popup_at_rect (GtkMenu            *menu,
@@ -1997,9 +1965,6 @@ gtk_menu_popup_at_rect (GtkMenu            *menu,
  * Other properties that influence the behaviour of this function are
  * #GtkMenu:anchor-hints and #GtkMenu:menu-type-hint. Connect to the
  * #GtkMenu::popped-up signal to find out how it was actually positioned.
- *
- * Since: 3.22
- * Stability: Unstable
  */
 void
 gtk_menu_popup_at_widget (GtkMenu        *menu,
@@ -2079,9 +2044,6 @@ gtk_menu_popup_at_widget (GtkMenu        *menu,
  * #GtkMenu:anchor-hints, #GtkMenu:rect-anchor-dx, #GtkMenu:rect-anchor-dy, and
  * #GtkMenu:menu-type-hint. Connect to the #GtkMenu::popped-up signal to find
  * out how it was actually positioned.
- *
- * Since: 3.22
- * Stability: Unstable
  */
 void
 gtk_menu_popup_at_pointer (GtkMenu        *menu,
@@ -2165,9 +2127,6 @@ get_arrows_border (GtkMenu   *menu,
  * positioning @menu. Connect this to the #GtkMenu::popped-up signal to keep the
  * contents of the menu vertically aligned with their ideal position, for combo
  * boxes for example.
- *
- * Since: 3.22
- * Stability: Private
  */
 void
 gtk_menu_update_scroll_offset (GtkMenu            *menu,
@@ -2437,8 +2396,6 @@ gtk_menu_set_accel_path (GtkMenu     *menu,
  * Retrieves the accelerator path set on the menu.
  *
  * Returns: the accelerator path set on the menu.
- *
- * Since: 2.14
  */
 const gchar*
 gtk_menu_get_accel_path (GtkMenu *menu)
@@ -4281,8 +4238,6 @@ gtk_menu_select_item (GtkMenuShell *menu_shell,
  *           determined by the widget the menu is attached to
  *
  * Sets the #GdkDisplay on which the menu will be displayed.
- *
- * Since: 3.94
  */
 void
 gtk_menu_set_display (GtkMenu    *menu,
@@ -4321,8 +4276,6 @@ gtk_menu_set_display (GtkMenu    *menu,
  * (Columns and rows are indexed from zero).
  *
  * Note that this function is not related to gtk_menu_detach().
- *
- * Since: 2.4
  */
 void
 gtk_menu_attach (GtkMenu   *menu,
@@ -4692,8 +4645,6 @@ gtk_menu_real_move_scroll (GtkMenu       *menu,
  * returned by a #GtkMenuPositionFunc, since, for very long menus,
  * these coordinates may extend beyond the monitor boundaries or even
  * the screen boundaries.
- *
- * Since: 2.4
  */
 void
 gtk_menu_set_monitor (GtkMenu *menu,
@@ -4718,8 +4669,6 @@ gtk_menu_set_monitor (GtkMenu *menu,
  *
  * Returns: the number of the monitor on which the menu should
  *    be popped up or -1, if no monitor has been set
- *
- * Since: 2.14
  */
 gint
 gtk_menu_get_monitor (GtkMenu *menu)
@@ -4735,8 +4684,6 @@ gtk_menu_get_monitor (GtkMenu *menu)
  * @monitor: the monitor to place the menu on
  *
  * Places @menu on the given monitor.
- *
- * Since: 3.22
  */
 void
 gtk_menu_place_on_monitor (GtkMenu    *menu,
@@ -4773,8 +4720,6 @@ gtk_menu_place_on_monitor (GtkMenu    *menu,
  *
  * Returns: (element-type GtkWidget) (transfer none): the list
  *     of menus attached to his widget.
- *
- * Since: 2.6
  */
 GList*
 gtk_menu_get_for_attach_widget (GtkWidget *widget)
@@ -4826,8 +4771,6 @@ gtk_menu_grab_notify (GtkWidget *widget,
  *
  * Sets whether the menu should reserve space for drawing toggles
  * or icons, regardless of their actual presence.
- *
- * Since: 2.18
  */
 void
 gtk_menu_set_reserve_toggle_size (GtkMenu  *menu,
@@ -4856,8 +4799,6 @@ gtk_menu_set_reserve_toggle_size (GtkMenu  *menu,
  * icons, regardless of their actual presence.
  *
  * Returns: Whether the menu reserves toggle space
- *
- * Since: 2.18
  */
 gboolean
 gtk_menu_get_reserve_toggle_size (GtkMenu *menu)
@@ -4883,8 +4824,6 @@ gtk_menu_get_reserve_toggle_size (GtkMenu *menu)
  * attach widget or on any of its parent widgets.
  *
  * Returns: a new #GtkMenu
- *
- * Since: 3.4
  */
 GtkWidget *
 gtk_menu_new_from_model (GMenuModel *model)

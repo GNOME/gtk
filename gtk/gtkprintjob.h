@@ -95,7 +95,7 @@ GDK_AVAILABLE_IN_ALL
 gboolean                 gtk_print_job_set_source_file        (GtkPrintJob              *job,
 							       const gchar              *filename,
 							       GError                  **error);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 gboolean                 gtk_print_job_set_source_fd          (GtkPrintJob              *job,
 							       int                       fd,
 							       GError                  **error);

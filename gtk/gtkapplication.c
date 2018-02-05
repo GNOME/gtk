@@ -600,8 +600,6 @@ gtk_application_class_init (GtkApplicationClass *class)
    *
    * Emitted when a #GtkWindow is added to @application through
    * gtk_application_add_window().
-   *
-   * Since: 3.2
    */
   gtk_application_signals[WINDOW_ADDED] =
     g_signal_new (I_("window-added"), GTK_TYPE_APPLICATION, G_SIGNAL_RUN_FIRST,
@@ -618,8 +616,6 @@ gtk_application_class_init (GtkApplicationClass *class)
    * Emitted when a #GtkWindow is removed from @application,
    * either as a side-effect of being destroyed or explicitly
    * through gtk_application_remove_window().
-   *
-   * Since: 3.2
    */
   gtk_application_signals[WINDOW_REMOVED] =
     g_signal_new (I_("window-removed"), GTK_TYPE_APPLICATION, G_SIGNAL_RUN_FIRST,
@@ -632,8 +628,6 @@ gtk_application_class_init (GtkApplicationClass *class)
    * GtkApplication:register-session:
    *
    * Set this property to %TRUE to register with the session manager.
-   *
-   * Since: 3.4
    */
   gtk_application_props[PROP_REGISTER_SESSION] =
     g_param_spec_boolean ("register-session",
@@ -697,8 +691,6 @@ gtk_application_class_init (GtkApplicationClass *class)
  * GTK+ 3.6 or later.
  *
  * Returns: a new #GtkApplication instance
- *
- * Since: 3.0
  */
 GtkApplication *
 gtk_application_new (const gchar       *application_id,
@@ -732,8 +724,6 @@ gtk_application_new (const gchar       *application_id,
  *
  * GTK+ will keep the @application running as long as it has
  * any windows.
- *
- * Since: 3.0
  **/
 void
 gtk_application_add_window (GtkApplication *application,
@@ -767,8 +757,6 @@ gtk_application_add_window (GtkApplication *application,
  *
  * The application may stop running as a result of a call to this
  * function.
- *
- * Since: 3.0
  **/
 void
 gtk_application_remove_window (GtkApplication *application,
@@ -797,8 +785,6 @@ gtk_application_remove_window (GtkApplication *application,
  * deletion.
  *
  * Returns: (element-type GtkWindow) (transfer none): a #GList of #GtkWindow
- *
- * Since: 3.0
  **/
 GList *
 gtk_application_get_windows (GtkApplication *application)
@@ -820,8 +806,6 @@ gtk_application_get_windows (GtkApplication *application)
  *
  * Returns: (nullable) (transfer none): the window with ID @id, or
  *   %NULL if there is no window with this ID
- *
- * Since: 3.6
  */
 GtkWindow *
 gtk_application_get_window_by_id (GtkApplication *application,
@@ -854,8 +838,6 @@ gtk_application_get_window_by_id (GtkApplication *application,
  *
  * Returns: (transfer none) (nullable): the active window, or %NULL if
  *   there isn't one.
- *
- * Since: 3.6
  **/
 GtkWindow *
 gtk_application_get_active_window (GtkApplication *application)
@@ -914,8 +896,6 @@ gtk_application_update_accels (GtkApplication *application)
  * replaced with your own.
  *
  * Returns: %TRUE if you should set an app menu
- *
- * Since: 3.14
  **/
 gboolean
 gtk_application_prefers_app_menu (GtkApplication *application)
@@ -948,8 +928,6 @@ gtk_application_prefers_app_menu (GtkApplication *application)
  *
  * Use the base #GActionMap interface to add actions, to respond to the user
  * selecting these menu items.
- *
- * Since: 3.4
  */
 void
 gtk_application_set_app_menu (GtkApplication *application,
@@ -980,8 +958,6 @@ gtk_application_set_app_menu (GtkApplication *application,
  *
  * Returns: (transfer none) (nullable): the application menu of @application
  *   or %NULL if no application menu has been set.
- *
- * Since: 3.4
  */
 GMenuModel *
 gtk_application_get_app_menu (GtkApplication *application)
@@ -1014,8 +990,6 @@ gtk_application_get_app_menu (GtkApplication *application)
  *
  * Use the base #GActionMap interface to add actions, to respond to the
  * user selecting these menu items.
- *
- * Since: 3.4
  */
 void
 gtk_application_set_menubar (GtkApplication *application,
@@ -1045,8 +1019,6 @@ gtk_application_set_menubar (GtkApplication *application,
  * gtk_application_set_menubar().
  *
  * Returns: (transfer none): the menubar for windows of @application
- *
- * Since: 3.4
  */
 GMenuModel *
 gtk_application_get_menubar (GtkApplication *application)
@@ -1067,8 +1039,6 @@ gtk_application_get_menubar (GtkApplication *application)
  *     marked as idle (and possibly locked)
  *
  * Types of user actions that may be blocked by gtk_application_inhibit().
- *
- * Since: 3.4
  */
 
 /**
@@ -1105,8 +1075,6 @@ gtk_application_get_menubar (GtkApplication *application)
  *     request. It should be used as an argument to gtk_application_uninhibit()
  *     in order to remove the request. If the platform does not support
  *     inhibiting or the request failed for some reason, 0 is returned.
- *
- * Since: 3.4
  */
 guint
 gtk_application_inhibit (GtkApplication             *application,
@@ -1128,8 +1096,6 @@ gtk_application_inhibit (GtkApplication             *application,
  *
  * Removes an inhibitor that has been established with gtk_application_inhibit().
  * Inhibitors are also cleared when the application exits.
- *
- * Since: 3.4
  */
 void
 gtk_application_uninhibit (GtkApplication *application,
@@ -1170,8 +1136,6 @@ gtk_application_get_application_accels (GtkApplication *application)
  *
  * Returns: (transfer full): a %NULL-terminated array of strings,
  *     free with g_strfreev() when done
- *
- * Since: 3.12
  */
 gchar **
 gtk_application_list_action_descriptions (GtkApplication *application)
@@ -1198,8 +1162,6 @@ gtk_application_list_action_descriptions (GtkApplication *application)
  *
  * For the @detailed_action_name, see g_action_parse_detailed_name() and
  * g_action_print_detailed_name().
- *
- * Since: 3.12
  */
 void
 gtk_application_set_accels_for_action (GtkApplication      *application,
@@ -1234,8 +1196,6 @@ gtk_application_set_accels_for_action (GtkApplication      *application,
  *
  * Returns: (transfer full): accelerators for @detailed_action_name, as
  *     a %NULL-terminated array. Free with g_strfreev() when no longer needed
- *
- * Since: 3.12
  */
 gchar **
 gtk_application_get_accels_for_action (GtkApplication *application,
@@ -1270,8 +1230,6 @@ gtk_application_get_accels_for_action (GtkApplication *application,
  * If you are unsure, check it with gtk_accelerator_parse() first.
  *
  * Returns: (transfer full): a %NULL-terminated array of actions for @accel
- *
- * Since: 3.14
  */
 gchar **
 gtk_application_get_actions_for_accel (GtkApplication *application,
@@ -1326,8 +1284,6 @@ gtk_application_handle_window_map (GtkApplication *application,
  *
  * Returns: (transfer none): Gets the menu with the
  *     given id from the automatically loaded resources
- *
- * Since: 3.14
  */
 GMenu *
 gtk_application_get_menu_by_id (GtkApplication *application,

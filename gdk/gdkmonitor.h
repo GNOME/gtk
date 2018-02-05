@@ -62,34 +62,34 @@ typedef enum {
   GDK_SUBPIXEL_LAYOUT_VERTICAL_BGR
 } GdkSubpixelLayout;
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 GType             gdk_monitor_get_type            (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 GdkDisplay  *     gdk_monitor_get_display         (GdkMonitor   *monitor);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 void              gdk_monitor_get_geometry        (GdkMonitor   *monitor,
                                                    GdkRectangle *geometry);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 void              gdk_monitor_get_workarea        (GdkMonitor   *monitor,
                                                    GdkRectangle *workarea);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 int               gdk_monitor_get_width_mm        (GdkMonitor   *monitor);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 int               gdk_monitor_get_height_mm       (GdkMonitor   *monitor);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 const char *      gdk_monitor_get_manufacturer    (GdkMonitor   *monitor);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 const char *      gdk_monitor_get_model           (GdkMonitor   *monitor);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 int               gdk_monitor_get_scale_factor    (GdkMonitor   *monitor);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 int               gdk_monitor_get_refresh_rate    (GdkMonitor   *monitor);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 GdkSubpixelLayout gdk_monitor_get_subpixel_layout (GdkMonitor   *monitor);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 gboolean          gdk_monitor_is_primary          (GdkMonitor   *monitor);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 gboolean          gdk_monitor_is_valid            (GdkMonitor   *monitor);
 
 G_END_DECLS

@@ -1692,8 +1692,6 @@ gdk_x11_display_open (const gchar *display_name)
  *
  * The X11 backend uses the program class to set the class name part
  * of the `WM_CLASS` property on toplevel windows; see the ICCCM.
- *
- * Since: 3.94
  */
 void
 gdk_x11_display_set_program_class (GdkDisplay *display,
@@ -1903,8 +1901,6 @@ gdk_x11_display_get_default_group (GdkDisplay *display)
  * To ungrab the display again, use gdk_x11_display_ungrab(). 
  *
  * gdk_x11_display_grab()/gdk_x11_display_ungrab() calls can be nested.
- *
- * Since: 2.2
  **/
 void
 gdk_x11_display_grab (GdkDisplay *display)
@@ -1926,8 +1922,6 @@ gdk_x11_display_grab (GdkDisplay *display)
  * 
  * Ungrab @display after it has been grabbed with 
  * gdk_x11_display_grab(). 
- *
- * Since: 2.2
  **/
 void
 gdk_x11_display_ungrab (GdkDisplay *display)
@@ -2032,8 +2026,6 @@ gdk_x11_display_finalize (GObject *object)
  * Find the #GdkDisplay corresponding to @xdisplay, if any exists.
  * 
  * Returns: (transfer none) (type GdkX11Display): the #GdkDisplay, if found, otherwise %NULL.
- *
- * Since: 2.2
  **/
 GdkDisplay *
 gdk_x11_lookup_xdisplay (Display *xdisplay)
@@ -2114,8 +2106,6 @@ _gdk_x11_display_screen_for_xrootwin (GdkDisplay *display,
  * Returns the X display of a #GdkDisplay.
  *
  * Returns: (transfer none): an X display
- *
- * Since: 2.2
  */
 Display *
 gdk_x11_display_get_xdisplay (GdkDisplay *display)
@@ -2132,8 +2122,6 @@ gdk_x11_display_get_xdisplay (GdkDisplay *display)
  * Returns the X Screen used by #GdkDisplay.
  *
  * Returns: (transfer none): an X Screen
- *
- * Since: 3.94
  */
 Screen *
 gdk_x11_display_get_xscreen (GdkDisplay *display)
@@ -2150,8 +2138,6 @@ gdk_x11_display_get_xscreen (GdkDisplay *display)
  * Returns the root X window used by #GdkDisplay.
  *
  * Returns: an X Window
- *
- * Since: 3.94
  */
 Window
 gdk_x11_display_get_xrootwindow (GdkDisplay *display)
@@ -2289,8 +2275,6 @@ broadcast_xmessage (GdkDisplay *display,
  * not normally need to call it directly. See the
  * [Startup Notification Protocol specification](http://standards.freedesktop.org/startup-notification-spec/startup-notification-latest.txt)
  * for definitions of the message types and keys that can be used.
- *
- * Since: 2.12
  **/
 void
 gdk_x11_display_broadcast_startup_message (GdkDisplay *display,
@@ -2398,8 +2382,6 @@ gdk_x11_display_request_selection_notification (GdkDisplay *display,
  * movements. See gdk_x11_window_set_user_time().
  *
  * Returns: the timestamp of the last user interaction 
- *
- * Since: 2.8
  */
 guint32
 gdk_x11_display_get_user_time (GdkDisplay *display)
@@ -2427,8 +2409,6 @@ gdk_x11_display_supports_input_shapes (GdkDisplay *display)
  * Gets the startup notification ID for a display.
  * 
  * Returns: the startup notification ID for @display
- *
- * Since: 2.12
  */
 const gchar *
 gdk_x11_display_get_startup_notification_id (GdkDisplay *display)
@@ -2455,8 +2435,6 @@ gdk_x11_display_get_startup_notification_id (GdkDisplay *display)
  * The startup ID is also what is used to signal that the startup is
  * complete (for example, when opening a window or when calling
  * gdk_notify_startup_complete()).
- *
- * Since: 3.0
  **/
 void
 gdk_x11_display_set_startup_notification_id (GdkDisplay  *display,
@@ -2528,8 +2506,6 @@ gdk_x11_display_set_startup_notification_id (GdkDisplay  *display,
  *
  * This function should only be needed in unusual circumstances, e.g.
  * when filtering XInput extension events on the root window.
- *
- * Since: 2.4
  **/
 void
 gdk_x11_register_standard_event_type (GdkDisplay *display,
@@ -2679,8 +2655,6 @@ delete_outdated_error_traps (GdkX11Display *display_x11)
  * with this function.
  *
  * See also gdk_error_trap_push() to push a trap on all displays.
- *
- * Since: 3.0
  */
 void
 gdk_x11_display_error_trap_push (GdkDisplay *display)
@@ -2785,8 +2759,6 @@ gdk_x11_display_error_trap_pop_internal (GdkDisplay *display,
  *
  * Once the scale is set by this call it will not change in response
  * to later user configuration changes.
- *
- * Since: 3.10
  */
 void
 gdk_x11_display_set_window_scale (GdkDisplay *display,
@@ -2833,8 +2805,6 @@ gdk_x11_display_set_window_scale (GdkDisplay *display,
  * See gdk_error_trap_pop() for the all-displays-at-once
  * equivalent.
  *
- * Since: 3.0
- *
  * Returns: X error code or 0 on success
  */
 gint
@@ -2856,8 +2826,6 @@ gdk_x11_display_error_trap_pop (GdkDisplay *display)
  *
  * See gdk_error_trap_pop_ignored() for the all-displays-at-once
  * equivalent.
- *
- * Since: 3.0
  */
 void
 gdk_x11_display_error_trap_pop_ignored (GdkDisplay *display)
@@ -2878,8 +2846,6 @@ gdk_x11_display_error_trap_pop_ignored (GdkDisplay *display)
  *
  * See the X Session Management Library documentation for more information on
  * session management and the Inter-Client Communication Conventions Manual
- *
- * Since: 2.24
  */
 void
 gdk_x11_set_sm_client_id (const gchar *sm_client_id)

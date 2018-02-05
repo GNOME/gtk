@@ -68,8 +68,8 @@ typedef enum
 
 /**
  * GtkTextViewLayer:
- * @GTK_TEXT_VIEW_LAYER_BELOW_TEXT: The layer rendered below the text (but above the background).  Since: 3.20
- * @GTK_TEXT_VIEW_LAYER_ABOVE_TEXT: The layer rendered above the text.  Since: 3.20
+ * @GTK_TEXT_VIEW_LAYER_BELOW_TEXT: The layer rendered below the text (but above the background).
+ * @GTK_TEXT_VIEW_LAYER_ABOVE_TEXT: The layer rendered above the text.
  *
  * Used to reference the layers of #GtkTextView for the purpose of customized
  * drawing with the ::draw_layer vfunc.
@@ -89,8 +89,6 @@ typedef enum
  *
  * Granularity types that extend the text selection. Use the
  * #GtkTextView::extend-selection signal to customize the selection.
- *
- * Since: 3.16
  */
 typedef enum
 {
@@ -144,16 +142,15 @@ struct _GtkTextView
  *   keybinding signal.
  * @create_buffer: The create_buffer vfunc is called to create a #GtkTextBuffer
  *   for the text view. The default implementation is to just call
- *   gtk_text_buffer_new(). Since: 3.10
+ *   gtk_text_buffer_new().
  * @draw_layer: The draw_layer vfunc is called before and after the text
  *   view is drawing its own text. Applications can override this vfunc
  *   in a subclass to draw customized content underneath or above the
  *   text. In the %GTK_TEXT_VIEW_LAYER_BELOW_TEXT and %GTK_TEXT_VIEW_LAYER_ABOVE_TEXT
  *   the drawing is done in the buffer coordinate space, but the older (deprecated)
  *   layers %GTK_TEXT_VIEW_LAYER_BELOW and %GTK_TEXT_VIEW_LAYER_ABOVE work in viewport
- *   coordinates, which makes them unnecessarily hard to use. Since: 3.14
- * @extend_selection: The class handler for the #GtkTextView::extend-selection
- *   signal. Since 3.16
+ *   coordinates, which makes them unnecessarily hard to use.
+ * @extend_selection: The class handler for the #GtkTextView::extend-selection signal.
  */
 struct _GtkTextViewClass
 {
@@ -241,7 +238,7 @@ void           gtk_text_view_set_cursor_visible    (GtkTextView   *text_view,
 GDK_AVAILABLE_IN_ALL
 gboolean       gtk_text_view_get_cursor_visible    (GtkTextView   *text_view);
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 void           gtk_text_view_reset_cursor_blink    (GtkTextView   *text_view);
 
 GDK_AVAILABLE_IN_ALL
@@ -398,15 +395,15 @@ void             gtk_text_view_set_right_margin       (GtkTextView      *text_vi
                                                        gint              right_margin);
 GDK_AVAILABLE_IN_ALL
 gint             gtk_text_view_get_right_margin       (GtkTextView      *text_view);
-GDK_AVAILABLE_IN_3_18
+GDK_AVAILABLE_IN_ALL
 void             gtk_text_view_set_top_margin         (GtkTextView      *text_view,
                                                        gint              top_margin);
-GDK_AVAILABLE_IN_3_18
+GDK_AVAILABLE_IN_ALL
 gint             gtk_text_view_get_top_margin         (GtkTextView      *text_view);
-GDK_AVAILABLE_IN_3_18
+GDK_AVAILABLE_IN_ALL
 void             gtk_text_view_set_bottom_margin      (GtkTextView      *text_view,
                                                        gint              bottom_margin);
-GDK_AVAILABLE_IN_3_18
+GDK_AVAILABLE_IN_ALL
 gint             gtk_text_view_get_bottom_margin       (GtkTextView      *text_view);
 GDK_AVAILABLE_IN_ALL
 void             gtk_text_view_set_indent             (GtkTextView      *text_view,
@@ -419,22 +416,22 @@ void             gtk_text_view_set_tabs               (GtkTextView      *text_vi
 GDK_AVAILABLE_IN_ALL
 PangoTabArray*   gtk_text_view_get_tabs               (GtkTextView      *text_view);
 
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 void             gtk_text_view_set_input_purpose      (GtkTextView      *text_view,
                                                        GtkInputPurpose   purpose);
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 GtkInputPurpose  gtk_text_view_get_input_purpose      (GtkTextView      *text_view);
 
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 void             gtk_text_view_set_input_hints        (GtkTextView      *text_view,
                                                        GtkInputHints     hints);
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 GtkInputHints    gtk_text_view_get_input_hints        (GtkTextView      *text_view);
 
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 void             gtk_text_view_set_monospace          (GtkTextView      *text_view,
                                                        gboolean          monospace);
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 gboolean         gtk_text_view_get_monospace          (GtkTextView      *text_view);
 
 G_END_DECLS

@@ -38,14 +38,14 @@ GtkWidgetPath * gtk_widget_path_new                 (void);
 
 GDK_AVAILABLE_IN_ALL
 GtkWidgetPath * gtk_widget_path_copy                (const GtkWidgetPath *path);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 GtkWidgetPath * gtk_widget_path_ref                 (GtkWidgetPath       *path);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 void            gtk_widget_path_unref               (GtkWidgetPath       *path);
 GDK_AVAILABLE_IN_ALL
 void            gtk_widget_path_free                (GtkWidgetPath       *path);
 
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 char *          gtk_widget_path_to_string           (const GtkWidgetPath *path);
 GDK_AVAILABLE_IN_ALL
 gint            gtk_widget_path_length              (const GtkWidgetPath *path);
@@ -56,12 +56,12 @@ gint            gtk_widget_path_append_type         (GtkWidgetPath       *path,
 GDK_AVAILABLE_IN_ALL
 void            gtk_widget_path_prepend_type        (GtkWidgetPath       *path,
                                                      GType                type);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 gint            gtk_widget_path_append_with_siblings(GtkWidgetPath       *path,
                                                      GtkWidgetPath       *siblings,
                                                      guint                sibling_index);
 /* gtk_widget_path_append_for_widget() is declared in gtkwidget.c */
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 gint            gtk_widget_path_append_for_widget   (GtkWidgetPath       *path,
                                                      GtkWidget           *widget);
 
@@ -72,10 +72,10 @@ GDK_AVAILABLE_IN_ALL
 void                gtk_widget_path_iter_set_object_type  (GtkWidgetPath       *path,
                                                            gint                 pos,
                                                            GType                type);
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 const char *        gtk_widget_path_iter_get_object_name  (const GtkWidgetPath *path,
                                                            gint                 pos);
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 void                gtk_widget_path_iter_set_object_name  (GtkWidgetPath       *path,
                                                            gint                 pos,
                                                            const char          *name);
@@ -102,10 +102,10 @@ GDK_AVAILABLE_IN_ALL
 gboolean               gtk_widget_path_iter_has_qname (const GtkWidgetPath *path,
                                                        gint                 pos,
                                                        GQuark               qname);
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 GtkStateFlags          gtk_widget_path_iter_get_state (const GtkWidgetPath *path,
                                                        gint                 pos);
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 void                   gtk_widget_path_iter_set_state (GtkWidgetPath       *path,
                                                        gint                 pos,
                                                        GtkStateFlags        state);

@@ -252,8 +252,6 @@ gtk_accel_group_new (void)
  *
  * Returns: %TRUE if there are 1 or more locks on the @accel_group,
  *     %FALSE otherwise.
- *
- * Since: 2.14
  */
 gboolean
 gtk_accel_group_get_is_locked (GtkAccelGroup *accel_group)
@@ -271,8 +269,6 @@ gtk_accel_group_get_is_locked (GtkAccelGroup *accel_group)
  * @accel_group. For example, #GDK_CONTROL_MASK, #GDK_SHIFT_MASK, etc.
  *
  * Returns: the modifier mask for this accel group.
- *
- * Since: 2.14
  */
 GdkModifierType
 gtk_accel_group_get_modifier_mask (GtkAccelGroup *accel_group)
@@ -1188,8 +1184,6 @@ is_keycode (const gchar *string)
  *
  * If the parse fails, @accelerator_key, @accelerator_mods and
  * @accelerator_codes will be set to 0 (zero).
- *
- * Since: 3.4
  */
 void
 gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
@@ -1469,8 +1463,6 @@ gtk_accelerator_parse (const gchar     *accelerator,
  * should use gtk_accelerator_parse() instead.
  *
  * Returns: a newly allocated accelerator name.
- *
- * Since: 3.4
  */
 gchar *
 gtk_accelerator_name_with_keycode (GdkDisplay      *display,
@@ -1656,8 +1648,6 @@ gtk_accelerator_name (guint           accelerator_key,
  * should use gtk_accelerator_parse() instead.
  *
  * Returns: a newly-allocated string representing the accelerator.
- *
- * Since: 3.4
  */
 gchar *
 gtk_accelerator_get_label_with_keycode (GdkDisplay      *display,
@@ -1693,8 +1683,6 @@ gtk_accelerator_get_label_with_keycode (GdkDisplay      *display,
  * which can be used to represent the accelerator to the user.
  *
  * Returns: a newly-allocated string representing the accelerator.
- *
- * Since: 2.6
  */
 gchar*
 gtk_accelerator_get_label (guint           accelerator_key,

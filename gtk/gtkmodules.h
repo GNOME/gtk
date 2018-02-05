@@ -44,8 +44,6 @@ typedef void     (*GtkModuleInitFunc)        (gint        *argc,
  *
  * A multihead-aware GTK+ module may have a gtk_module_display_init() function
  * with this prototype. GTK+ calls this function for each opened display.
- *
- * Since: 2.2
  */
 typedef void     (*GtkModuleDisplayInitFunc) (GdkDisplay   *display);
 

@@ -363,8 +363,6 @@ gtk_range_class_init (GtkRangeClass *class)
    *
    * Returns: %TRUE to prevent other handlers from being invoked for
    *     the signal, %FALSE to propagate the signal further
-   *
-   * Since: 2.6
    */
   signals[CHANGE_VALUE] =
     g_signal_new (I_("change-value"),
@@ -399,8 +397,6 @@ gtk_range_class_init (GtkRangeClass *class)
    * The show-fill-level property controls whether fill level indicator
    * graphics are displayed on the trough. See
    * gtk_range_set_show_fill_level().
-   *
-   * Since: 2.12
    **/
   properties[PROP_SHOW_FILL_LEVEL] =
       g_param_spec_boolean ("show-fill-level",
@@ -415,8 +411,6 @@ gtk_range_class_init (GtkRangeClass *class)
    * The restrict-to-fill-level property controls whether slider
    * movement is restricted to an upper boundary set by the
    * fill level. See gtk_range_set_restrict_to_fill_level().
-   *
-   * Since: 2.12
    **/
   properties[PROP_RESTRICT_TO_FILL_LEVEL] =
       g_param_spec_boolean ("restrict-to-fill-level",
@@ -430,8 +424,6 @@ gtk_range_class_init (GtkRangeClass *class)
    *
    * The fill level (e.g. prebuffering of a network stream).
    * See gtk_range_set_fill_level().
-   *
-   * Since: 2.12
    **/
   properties[PROP_FILL_LEVEL] =
       g_param_spec_double ("fill-level",
@@ -446,8 +438,6 @@ gtk_range_class_init (GtkRangeClass *class)
    *
    * The number of digits to round the value to when
    * it changes, or -1. See #GtkRange::change-value.
-   *
-   * Since: 2.24
    */
   properties[PROP_ROUND_DIGITS] =
       g_param_spec_int ("round-digits",
@@ -817,8 +807,6 @@ gtk_range_get_inverted (GtkRange *range)
  * horizontal and its direction is %GTK_TEXT_DIR_RTL.
  *
  * See gtk_widget_get_direction().
- *
- * Since: 2.18
  **/
 void
 gtk_range_set_flippable (GtkRange *range,
@@ -849,8 +837,6 @@ gtk_range_set_flippable (GtkRange *range,
  * Gets the value set by gtk_range_set_flippable().
  *
  * Returns: %TRUE if the range is flippable
- *
- * Since: 2.18
  **/
 gboolean
 gtk_range_get_flippable (GtkRange *range)
@@ -869,8 +855,6 @@ gtk_range_get_flippable (GtkRange *range)
  * depends on its adjustment’s page size.
  *
  * This function is useful mainly for #GtkRange subclasses.
- *
- * Since: 2.20
  **/
 void
 gtk_range_set_slider_size_fixed (GtkRange *range,
@@ -900,8 +884,6 @@ gtk_range_set_slider_size_fixed (GtkRange *range,
  * See gtk_range_set_slider_size_fixed().
  *
  * Returns: whether the range’s slider has a fixed size.
- *
- * Since: 2.20
  **/
 gboolean
 gtk_range_get_slider_size_fixed (GtkRange *range)
@@ -920,8 +902,6 @@ gtk_range_get_slider_size_fixed (GtkRange *range)
  * in coordinates relative to @range's origin.
  *
  * This function is useful mainly for #GtkRange subclasses.
- *
- * Since: 2.20
  **/
 void
 gtk_range_get_range_rect (GtkRange     *range,
@@ -945,8 +925,6 @@ gtk_range_get_range_rect (GtkRange     *range,
  * in widget->window coordinates.
  *
  * This function is useful mainly for #GtkRange subclasses.
- *
- * Since: 2.20
  **/
 void
 gtk_range_get_slider_range (GtkRange *range,
@@ -1099,8 +1077,6 @@ gtk_range_get_value (GtkRange *range)
  * Sets whether a graphical fill level is show on the trough. See
  * gtk_range_set_fill_level() for a general description of the fill
  * level concept.
- *
- * Since: 2.12
  **/
 void
 gtk_range_set_show_fill_level (GtkRange *range,
@@ -1142,8 +1118,6 @@ gtk_range_set_show_fill_level (GtkRange *range,
  * Gets whether the range displays the fill level graphically.
  *
  * Returns: %TRUE if @range shows the fill level.
- *
- * Since: 2.12
  **/
 gboolean
 gtk_range_get_show_fill_level (GtkRange *range)
@@ -1161,8 +1135,6 @@ gtk_range_get_show_fill_level (GtkRange *range)
  * Sets whether the slider is restricted to the fill level. See
  * gtk_range_set_fill_level() for a general description of the fill
  * level concept.
- *
- * Since: 2.12
  **/
 void
 gtk_range_set_restrict_to_fill_level (GtkRange *range,
@@ -1192,8 +1164,6 @@ gtk_range_set_restrict_to_fill_level (GtkRange *range,
  * Gets whether the range is restricted to the fill level.
  *
  * Returns: %TRUE if @range is restricted to the fill level.
- *
- * Since: 2.12
  **/
 gboolean
 gtk_range_get_restrict_to_fill_level (GtkRange *range)
@@ -1225,8 +1195,6 @@ gtk_range_get_restrict_to_fill_level (GtkRange *range)
  * to values which are smaller than the fill level. This is controller
  * by gtk_range_set_restrict_to_fill_level() and is by default
  * enabled.
- *
- * Since: 2.12
  **/
 void
 gtk_range_set_fill_level (GtkRange *range,
@@ -1258,8 +1226,6 @@ gtk_range_set_fill_level (GtkRange *range,
  * Gets the current position of the fill level indicator.
  *
  * Returns: The current fill level
- *
- * Since: 2.12
  **/
 gdouble
 gtk_range_get_fill_level (GtkRange *range)
@@ -3000,8 +2966,6 @@ _gtk_range_get_stop_positions (GtkRange  *range,
  *
  * Sets the number of digits to round the value to when
  * it changes. See #GtkRange::change-value.
- *
- * Since: 2.24
  */
 void
 gtk_range_set_round_digits (GtkRange *range,
@@ -3025,8 +2989,6 @@ gtk_range_set_round_digits (GtkRange *range,
  * it changes. See #GtkRange::change-value.
  *
  * Returns: the number of digits to round to
- *
- * Since: 2.24
  */
 gint
 gtk_range_get_round_digits (GtkRange *range)

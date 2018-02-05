@@ -175,8 +175,6 @@ gboolean                 gtk_printer_get_hard_margins      (GtkPrinter       *pr
  * a reference to it after the function has returned.
  *
  * Returns: %TRUE to stop the enumeration, %FALSE to continue
- *
- * Since: 2.10
  */
 typedef gboolean (*GtkPrinterFunc) (GtkPrinter *printer,
 				    gpointer    data);

@@ -51,27 +51,27 @@ struct _GtkActionableInterface
                                                  GVariant      *target_value);
 };
 
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 GType                   gtk_actionable_get_type                         (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 const gchar *           gtk_actionable_get_action_name                  (GtkActionable *actionable);
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 void                    gtk_actionable_set_action_name                  (GtkActionable *actionable,
                                                                          const gchar   *action_name);
 
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 GVariant *              gtk_actionable_get_action_target_value          (GtkActionable *actionable);
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 void                    gtk_actionable_set_action_target_value          (GtkActionable *actionable,
                                                                          GVariant      *target_value);
 
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 void                    gtk_actionable_set_action_target                (GtkActionable *actionable,
                                                                          const gchar   *format_string,
                                                                          ...);
 
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 void                    gtk_actionable_set_detailed_action_name         (GtkActionable *actionable,
                                                                          const gchar   *detailed_action_name);
 

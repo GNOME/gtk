@@ -90,8 +90,6 @@ typedef void    (*GtkCallback)     (GtkWidget        *widget,
  *
  * Returns: %G_SOURCE_CONTINUE if the tick callback should continue to be called,
  *  %G_SOURCE_REMOVE if the tick callback should be removed.
- *
- * Since: 3.8
  */
 typedef gboolean (*GtkTickCallback) (GtkWidget     *widget,
                                      GdkFrameClock *frame_clock,
@@ -430,9 +428,9 @@ GDK_AVAILABLE_IN_ALL
 void	   gtk_widget_queue_resize	  (GtkWidget	       *widget);
 GDK_AVAILABLE_IN_ALL
 void	   gtk_widget_queue_resize_no_redraw (GtkWidget *widget);
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 void       gtk_widget_queue_allocate      (GtkWidget           *widget);
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 GdkFrameClock* gtk_widget_get_frame_clock (GtkWidget           *widget);
 
 GDK_AVAILABLE_IN_ALL
@@ -443,7 +441,7 @@ void	   gtk_widget_size_allocate	  (GtkWidget           *widget,
 
 GDK_AVAILABLE_IN_ALL
 GtkSizeRequestMode  gtk_widget_get_request_mode               (GtkWidget      *widget);
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 void gtk_widget_measure (GtkWidget      *widget,
                          GtkOrientation  orientation,
                          int             for_size,
@@ -512,14 +510,14 @@ GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_has_focus           (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_is_focus            (GtkWidget           *widget);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_has_visible_focus   (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_grab_focus          (GtkWidget           *widget);
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 void       gtk_widget_set_focus_on_click  (GtkWidget           *widget,
                                            gboolean             focus_on_click);
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_get_focus_on_click  (GtkWidget           *widget);
 
 GDK_AVAILABLE_IN_ALL
@@ -620,10 +618,10 @@ void                  gtk_widget_set_window             (GtkWidget    *widget,
                                                          GdkWindow    *window);
 GDK_AVAILABLE_IN_ALL
 GdkWindow           * gtk_widget_get_window             (GtkWidget    *widget);
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_register_window        (GtkWidget    *widget,
                                                          GdkWindow    *window);
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_unregister_window      (GtkWidget    *widget,
                                                          GdkWindow    *window);
 
@@ -631,9 +629,9 @@ GDK_AVAILABLE_IN_ALL
 int                   gtk_widget_get_allocated_width    (GtkWidget     *widget);
 GDK_AVAILABLE_IN_ALL
 int                   gtk_widget_get_allocated_height   (GtkWidget     *widget);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 int                   gtk_widget_get_allocated_baseline (GtkWidget     *widget);
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_get_allocated_size     (GtkWidget     *widget,
                                                          GtkAllocation *allocation,
                                                          int           *baseline);
@@ -641,12 +639,12 @@ void                  gtk_widget_get_allocated_size     (GtkWidget     *widget,
 GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_get_allocation         (GtkWidget     *widget,
                                                          GtkAllocation *allocation);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 int                   gtk_widget_get_width              (GtkWidget     *widget);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 int                   gtk_widget_get_height             (GtkWidget     *widget);
 
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_get_clip               (GtkWidget     *widget,
                                                          GtkAllocation *clip);
 
@@ -667,10 +665,10 @@ GDK_AVAILABLE_IN_ALL
 void       gtk_widget_get_size_request    (GtkWidget           *widget,
                                            gint                *width,
                                            gint                *height);
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 void	   gtk_widget_set_opacity	  (GtkWidget	       *widget,
 					   double		opacity);
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 double	   gtk_widget_get_opacity	  (GtkWidget	       *widget);
 
 GDK_AVAILABLE_IN_ALL
@@ -679,15 +677,15 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget*   gtk_widget_get_ancestor	(GtkWidget	*widget,
 					 GType		 widget_type);
 
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 gint          gtk_widget_get_scale_factor (GtkWidget *widget);
 GDK_AVAILABLE_IN_ALL
 GdkDisplay *  gtk_widget_get_display     (GtkWidget *widget);
 GDK_AVAILABLE_IN_ALL
 GtkSettings*  gtk_widget_get_settings    (GtkWidget *widget);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GdkClipboard *gtk_widget_get_clipboard   (GtkWidget *widget);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GdkClipboard *gtk_widget_get_primary_clipboard (GtkWidget *widget);
 
 
@@ -727,10 +725,10 @@ void             gtk_widget_set_support_multidevice (GtkWidget      *widget,
                                                      gboolean        support_multidevice);
 
 /* Accessibility support */
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 void             gtk_widget_class_set_accessible_type    (GtkWidgetClass     *widget_class,
                                                           GType               type);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 void             gtk_widget_class_set_accessible_role    (GtkWidgetClass     *widget_class,
                                                           AtkRole             role);
 GDK_AVAILABLE_IN_ALL
@@ -748,14 +746,14 @@ GtkAlign gtk_widget_get_valign        (GtkWidget *widget);
 GDK_AVAILABLE_IN_ALL
 void     gtk_widget_set_valign        (GtkWidget *widget,
                                        GtkAlign   align);
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 gint     gtk_widget_get_margin_start  (GtkWidget *widget);
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 void     gtk_widget_set_margin_start  (GtkWidget *widget,
                                        gint       margin);
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 gint     gtk_widget_get_margin_end    (GtkWidget *widget);
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 void     gtk_widget_set_margin_end    (GtkWidget *widget,
                                        gint       margin);
 GDK_AVAILABLE_IN_ALL
@@ -781,11 +779,11 @@ gboolean     gtk_widget_translate_coordinates (GtkWidget  *src_widget,
 					       gint       *dest_x,
 					       gint       *dest_y);
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 gboolean     gtk_widget_contains              (GtkWidget  *widget,
                                                gdouble     x,
                                                gdouble     y);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GtkWidget *  gtk_widget_pick                  (GtkWidget  *widget,
                                                gdouble     x,
                                                gdouble     y);
@@ -797,10 +795,10 @@ GDK_AVAILABLE_IN_ALL
 PangoContext *gtk_widget_create_pango_context (GtkWidget   *widget);
 GDK_AVAILABLE_IN_ALL
 PangoContext *gtk_widget_get_pango_context    (GtkWidget   *widget);
-GDK_AVAILABLE_IN_3_18
+GDK_AVAILABLE_IN_ALL
 void gtk_widget_set_font_options (GtkWidget                  *widget,
                                   const cairo_font_options_t *options);
-GDK_AVAILABLE_IN_3_18
+GDK_AVAILABLE_IN_ALL
 const cairo_font_options_t *gtk_widget_get_font_options (GtkWidget *widget);
 GDK_AVAILABLE_IN_ALL
 PangoLayout  *gtk_widget_create_pango_layout  (GtkWidget   *widget,
@@ -828,13 +826,13 @@ GDK_AVAILABLE_IN_ALL
 void	     gtk_widget_input_shape_combine_region (GtkWidget *widget,
                                                     cairo_region_t *region);
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void                    gtk_widget_set_cursor                   (GtkWidget              *widget,
                                                                  GdkCursor              *cursor);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void                    gtk_widget_set_cursor_from_name         (GtkWidget              *widget,
                                                                  const char             *name);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GdkCursor *             gtk_widget_get_cursor                   (GtkWidget              *widget);
 
 GDK_AVAILABLE_IN_ALL
@@ -887,30 +885,30 @@ GtkStyleContext * gtk_widget_get_style_context (GtkWidget *widget);
 GDK_AVAILABLE_IN_ALL
 GtkWidgetPath *   gtk_widget_get_path (GtkWidget *widget);
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 void              gtk_widget_class_set_css_name (GtkWidgetClass *widget_class,
                                                  const char     *name);
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 const char *      gtk_widget_class_get_css_name (GtkWidgetClass *widget_class);
 
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 GdkModifierType   gtk_widget_get_modifier_mask (GtkWidget         *widget,
                                                 GdkModifierIntent  intent);
 
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 void                    gtk_widget_insert_action_group                  (GtkWidget    *widget,
                                                                          const gchar  *name,
                                                                          GActionGroup *group);
 
 
 
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 guint gtk_widget_add_tick_callback (GtkWidget       *widget,
                                     GtkTickCallback  callback,
                                     gpointer         user_data,
                                     GDestroyNotify   notify);
 
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 void gtk_widget_remove_tick_callback (GtkWidget       *widget,
                                       guint            id);
 
@@ -923,8 +921,6 @@ void gtk_widget_remove_tick_callback (GtkWidget       *widget,
  *
  * This macro is a convenience wrapper around the
  * gtk_widget_class_bind_template_callback_full() function.
- *
- * Since: 3.10
  */
 #define gtk_widget_class_bind_template_callback(widget_class, callback) \
   gtk_widget_class_bind_template_callback_full (GTK_WIDGET_CLASS (widget_class), \
@@ -944,8 +940,6 @@ void gtk_widget_remove_tick_callback (GtkWidget       *widget,
  *
  * This macro will use the offset of the @member_name inside the @TypeName
  * instance structure.
- *
- * Since: 3.10
  */
 #define gtk_widget_class_bind_template_child(widget_class, TypeName, member_name) \
   gtk_widget_class_bind_template_child_full (widget_class, \
@@ -968,8 +962,6 @@ void gtk_widget_remove_tick_callback (GtkWidget       *widget,
  *
  * This macro will use the offset of the @member_name inside the @TypeName
  * instance structure.
- *
- * Since: 3.10
  */
 #define gtk_widget_class_bind_template_child_internal(widget_class, TypeName, member_name) \
   gtk_widget_class_bind_template_child_full (widget_class, \
@@ -991,8 +983,6 @@ void gtk_widget_remove_tick_callback (GtkWidget       *widget,
  * This macro will use the offset of the @member_name inside the @TypeName
  * private data structure (it uses G_PRIVATE_OFFSET(), so the private struct
  * must be added with G_ADD_PRIVATE()).
- *
- * Since: 3.10
  */
 #define gtk_widget_class_bind_template_child_private(widget_class, TypeName, member_name) \
   gtk_widget_class_bind_template_child_full (widget_class, \
@@ -1015,8 +1005,6 @@ void gtk_widget_remove_tick_callback (GtkWidget       *widget,
  *
  * This macro will use the offset of the @member_name inside the @TypeName
  * private data structure.
- *
- * Since: 3.10
  */
 #define gtk_widget_class_bind_template_child_internal_private(widget_class, TypeName, member_name) \
   gtk_widget_class_bind_template_child_full (widget_class, \
@@ -1024,66 +1012,66 @@ void gtk_widget_remove_tick_callback (GtkWidget       *widget,
                                              TRUE, \
                                              G_PRIVATE_OFFSET (TypeName, member_name))
 
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 void    gtk_widget_init_template                        (GtkWidget             *widget);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 GObject *gtk_widget_get_template_child                  (GtkWidget             *widget,
 						         GType                  widget_type,
 						         const gchar           *name);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 void    gtk_widget_class_set_template                   (GtkWidgetClass        *widget_class,
 						         GBytes                *template_bytes);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 void    gtk_widget_class_set_template_from_resource     (GtkWidgetClass        *widget_class,
 						         const gchar           *resource_name);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 void    gtk_widget_class_bind_template_callback_full    (GtkWidgetClass        *widget_class,
 						         const gchar           *callback_name,
 						         GCallback              callback_symbol);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 void    gtk_widget_class_set_connect_func               (GtkWidgetClass        *widget_class,
 						         GtkBuilderConnectFunc  connect_func,
 						         gpointer               connect_data,
 						         GDestroyNotify         connect_data_destroy);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 void    gtk_widget_class_bind_template_child_full       (GtkWidgetClass        *widget_class,
 						         const gchar           *name,
 						         gboolean               internal_child,
 						         gssize                 struct_offset);
 
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 GActionGroup           *gtk_widget_get_action_group     (GtkWidget             *widget,
                                                          const gchar           *prefix);
 
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 const gchar **          gtk_widget_list_action_prefixes (GtkWidget             *widget);
 
-GDK_AVAILABLE_IN_3_18
+GDK_AVAILABLE_IN_ALL
 void                    gtk_widget_set_font_map         (GtkWidget             *widget,
                                                          PangoFontMap          *font_map);
-GDK_AVAILABLE_IN_3_18
+GDK_AVAILABLE_IN_ALL
 PangoFontMap *          gtk_widget_get_font_map         (GtkWidget             *widget);
 
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 GtkWidget *             gtk_widget_get_first_child      (GtkWidget *widget);
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 GtkWidget *             gtk_widget_get_last_child       (GtkWidget *widget);
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 GtkWidget *             gtk_widget_get_next_sibling     (GtkWidget *widget);
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 GtkWidget *             gtk_widget_get_prev_sibling     (GtkWidget *widget);
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 void                    gtk_widget_insert_after         (GtkWidget *widget,
                                                          GtkWidget *parent,
                                                          GtkWidget *previous_sibling);
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 void                    gtk_widget_insert_before        (GtkWidget *widget,
                                                          GtkWidget *parent,
                                                          GtkWidget *next_sibling);
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 void                    gtk_widget_set_focus_child      (GtkWidget *widget,
                                                          GtkWidget *child);
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 void                    gtk_widget_snapshot_child       (GtkWidget   *widget,
                                                          GtkWidget   *child,
                                                          GtkSnapshot *snapshot);

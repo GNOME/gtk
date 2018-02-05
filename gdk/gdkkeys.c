@@ -178,8 +178,6 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
    *
    * The ::direction-changed signal gets emitted when the direction of
    * the keymap changes.
-   *
-   * Since: 2.0
    */
   signals[DIRECTION_CHANGED] =
     g_signal_new (g_intern_static_string ("direction-changed"),
@@ -196,8 +194,6 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
    *
    * The ::keys-changed signal is emitted when the mapping represented by
    * @keymap changes.
-   *
-   * Since: 2.2
    */
   signals[KEYS_CHANGED] =
     g_signal_new (g_intern_static_string ("keys-changed"),
@@ -216,8 +212,6 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
    * The ::state-changed signal is emitted when the state of the
    * keyboard changes, e.g when Caps Lock is turned on or off.
    * See gdk_keymap_get_caps_lock_state().
-   *
-   * Since: 2.16
    */
   signals[STATE_CHANGED] =
     g_signal_new (g_intern_static_string ("state-changed"),
@@ -362,8 +356,6 @@ gdk_keymap_get_direction (GdkKeymap *keymap)
  * languages are in use.
  *
  * Returns: %TRUE if there are layouts in both directions, %FALSE otherwise
- *
- * Since: 2.12
  **/
 gboolean
 gdk_keymap_have_bidi_layouts (GdkKeymap *keymap)
@@ -380,8 +372,6 @@ gdk_keymap_have_bidi_layouts (GdkKeymap *keymap)
  * Returns whether the Caps Lock modifer is locked.
  *
  * Returns: %TRUE if Caps Lock is on
- *
- * Since: 2.16
  */
 gboolean
 gdk_keymap_get_caps_lock_state (GdkKeymap *keymap)
@@ -398,8 +388,6 @@ gdk_keymap_get_caps_lock_state (GdkKeymap *keymap)
  * Returns whether the Num Lock modifer is locked.
  *
  * Returns: %TRUE if Num Lock is on
- *
- * Since: 3.0
  */
 gboolean
 gdk_keymap_get_num_lock_state (GdkKeymap *keymap)
@@ -416,8 +404,6 @@ gdk_keymap_get_num_lock_state (GdkKeymap *keymap)
  * Returns whether the Scroll Lock modifer is locked.
  *
  * Returns: %TRUE if Scroll Lock is on
- *
- * Since: 3.18
  */
 gboolean
 gdk_keymap_get_scroll_lock_state (GdkKeymap *keymap)
@@ -434,8 +420,6 @@ gdk_keymap_get_scroll_lock_state (GdkKeymap *keymap)
  * Returns the current modifier state.
  *
  * Returns: the current modifier state.
- *
- * Since: 3.4
  */
 guint
 gdk_keymap_get_modifier_state (GdkKeymap *keymap)
@@ -641,8 +625,6 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
  *
  * This function is useful when matching key events against
  * accelerators.
- *
- * Since: 2.20
  */
 void
 gdk_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
@@ -669,8 +651,6 @@ gdk_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
  *     same non-virtual modifier. Note that %FALSE is also returned
  *     if a virtual modifier is mapped to a non-virtual modifier that
  *     was already set in @state.
- *
- * Since: 2.20
  */
 gboolean
 gdk_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
@@ -730,8 +710,6 @@ gdk_keymap_real_get_modifier_mask (GdkKeymap         *keymap,
  * expected result.
  *
  * Returns: the modifier mask used for @intent.
- *
- * Since: 3.4
  **/
 GdkModifierType
 gdk_keymap_get_modifier_mask (GdkKeymap         *keymap,

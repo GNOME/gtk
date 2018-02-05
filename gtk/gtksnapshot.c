@@ -170,8 +170,6 @@ gtk_snapshot_init (GtkSnapshot          *snapshot,
  *
  * Creates a new render node, appends it to the current render
  * node of @snapshot, and makes it the new current render node.
- *
- * Since: 3.90
  */
 void
 gtk_snapshot_push (GtkSnapshot           *snapshot,
@@ -1101,8 +1099,6 @@ gtk_snapshot_finish (GtkSnapshot *snapshot)
  *
  * Removes the top element from the stack of render nodes,
  * and appends it to the node underneath it.
- *
- * Since: 3.90
  */
 void
 gtk_snapshot_pop (GtkSnapshot *snapshot)
@@ -1125,8 +1121,6 @@ gtk_snapshot_pop (GtkSnapshot *snapshot)
  * rendered with.
  *
  * Returns: (transfer none): the #GskRenderer
- *
- * Since: 3.90
  */
 GskRenderer *
 gtk_snapshot_get_renderer (const GtkSnapshot *snapshot)
@@ -1141,8 +1135,6 @@ gtk_snapshot_get_renderer (const GtkSnapshot *snapshot)
  * @y: vertical translation
  *
  * Appends a translation by (@x, @y) to the current transformation.
- *
- * Since: 3.90
  */
 void
 gtk_snapshot_offset (GtkSnapshot *snapshot,
@@ -1230,8 +1222,6 @@ gtk_snapshot_append_node (GtkSnapshot   *snapshot,
  *
  * Returns: a cairo_t suitable for drawing the contents of the newly
  *     created render node
- *
- * Since: 3.90
  */
 cairo_t *
 gtk_snapshot_append_cairo (GtkSnapshot           *snapshot,
@@ -1394,8 +1384,6 @@ gtk_snapshot_append_color (GtkSnapshot           *snapshot,
  * Tests whether the rectangle is entirely outside the clip region of @snapshot.
  *
  * Returns: %TRUE if @bounds is entirely outside the clip region
- *
- * Since: 3.90
  */
 gboolean
 gtk_snapshot_clips_rect (GtkSnapshot                 *snapshot,
@@ -1427,8 +1415,6 @@ gtk_snapshot_clips_rect (GtkSnapshot                 *snapshot,
  * Creates a render node for the CSS background according to @context,
  * and appends it to the current node of @snapshot, without changing
  * the current node.
- *
- * Since: 3.90
  */
 void
 gtk_snapshot_render_background (GtkSnapshot     *snapshot,
@@ -1460,8 +1446,6 @@ gtk_snapshot_render_background (GtkSnapshot     *snapshot,
  * Creates a render node for the CSS border according to @context,
  * and appends it to the current node of @snapshot, without changing
  * the current node.
- *
- * Since: 3.90
  */
 void
 gtk_snapshot_render_frame (GtkSnapshot     *snapshot,
@@ -1493,8 +1477,6 @@ gtk_snapshot_render_frame (GtkSnapshot     *snapshot,
  * Creates a render node for the focus outline according to @context,
  * and appends it to the current node of @snapshot, without changing
  * the current node.
- *
- * Since: 3.90
  */
 void
 gtk_snapshot_render_focus (GtkSnapshot     *snapshot,
@@ -1525,8 +1507,6 @@ gtk_snapshot_render_focus (GtkSnapshot     *snapshot,
  * Creates a render node for rendering @layout according to the style
  * information in @context, and appends it to the current node of @snapshot,
  * without changing the current node.
- *
- * Since: 3.90
  */
 void
 gtk_snapshot_render_layout (GtkSnapshot     *snapshot,
@@ -1568,8 +1548,6 @@ gtk_snapshot_render_layout (GtkSnapshot     *snapshot,
  * @n_stops: the number of elements in @color_stops
  *
  * Appends a linear gradient node with the given stops to @snapshot.
- *
- * Since: 3.94
  */
 void
 gtk_snapshot_append_linear_gradient (GtkSnapshot            *snapshot,
@@ -1648,8 +1626,6 @@ gtk_snapshot_append_linear_gradient (GtkSnapshot            *snapshot,
  * @n_stops: the number of elements in @color_stops
  *
  * Appends a repeating linear gradient node with the given stops to @snapshot.
- *
- * Since: 3.94
  */
 void
 gtk_snapshot_append_repeating_linear_gradient (GtkSnapshot            *snapshot,

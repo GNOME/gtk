@@ -90,8 +90,6 @@ gsk_rounded_rect_normalize_in_place (GskRoundedRect *self)
  * before returning.
  *
  * Returns: (transfer none): the initialized rectangle
- *
- * Since: 3.90
  */
 GskRoundedRect *
 gsk_rounded_rect_init (GskRoundedRect        *self,
@@ -123,8 +121,6 @@ gsk_rounded_rect_init (GskRoundedRect        *self,
  * make sure the source is normalized.
  *
  * Returns: (transfer none): the initialized rectangle
- *
- * Since: 3.90
  */
 GskRoundedRect *
 gsk_rounded_rect_init_copy (GskRoundedRect       *self,
@@ -166,8 +162,6 @@ gsk_rounded_rect_init_from_rect (GskRoundedRect        *self,
  * and ensure that the corner values are positive and the corners do not overlap.
  *
  * Returns: (transfer none): the normalized rectangle
- *
- * Since: 3.90
  */
 GskRoundedRect *
 gsk_rounded_rect_normalize (GskRoundedRect *self)
@@ -188,8 +182,6 @@ gsk_rounded_rect_normalize (GskRoundedRect *self)
  * The size and corners of the rectangle are unchanged.
  *
  * Returns: (transfer none): the offset rectangle
- *
- * Since: 3.90
  */
 GskRoundedRect *
 gsk_rounded_rect_offset (GskRoundedRect *self,

@@ -3374,8 +3374,6 @@ page_name_func (GtkCellLayout   *cell_layout,
  * Creates a new #GtkPrintUnixDialog.
  *
  * Returns: a new #GtkPrintUnixDialog
- *
- * Since: 2.10
  */
 GtkWidget *
 gtk_print_unix_dialog_new (const gchar *title,
@@ -3398,8 +3396,6 @@ gtk_print_unix_dialog_new (const gchar *title,
  * Gets the currently selected printer.
  *
  * Returns: (transfer none): the currently selected printer
- *
- * Since: 2.10
  */
 GtkPrinter *
 gtk_print_unix_dialog_get_selected_printer (GtkPrintUnixDialog *dialog)
@@ -3415,8 +3411,6 @@ gtk_print_unix_dialog_get_selected_printer (GtkPrintUnixDialog *dialog)
  * @page_setup: a #GtkPageSetup
  *
  * Sets the page setup of the #GtkPrintUnixDialog.
- *
- * Since: 2.10
  */
 void
 gtk_print_unix_dialog_set_page_setup (GtkPrintUnixDialog *dialog,
@@ -3447,8 +3441,6 @@ gtk_print_unix_dialog_set_page_setup (GtkPrintUnixDialog *dialog,
  * Gets the page setup that is used by the #GtkPrintUnixDialog.
  *
  * Returns: (transfer none): the page setup of @dialog.
- *
- * Since: 2.10
  */
 GtkPageSetup *
 gtk_print_unix_dialog_get_page_setup (GtkPrintUnixDialog *dialog)
@@ -3465,8 +3457,6 @@ gtk_print_unix_dialog_get_page_setup (GtkPrintUnixDialog *dialog)
  * Gets the page setup that is used by the #GtkPrintUnixDialog.
  *
  * Returns: whether a page setup was set by user.
- *
- * Since: 2.18
  */
 gboolean
 gtk_print_unix_dialog_get_page_setup_set (GtkPrintUnixDialog *dialog)
@@ -3483,8 +3473,6 @@ gtk_print_unix_dialog_get_page_setup_set (GtkPrintUnixDialog *dialog)
  *
  * Sets the current page number. If @current_page is not -1, this enables
  * the current page choice for the range of pages to print.
- *
- * Since: 2.10
  */
 void
 gtk_print_unix_dialog_set_current_page (GtkPrintUnixDialog *dialog,
@@ -3514,8 +3502,6 @@ gtk_print_unix_dialog_set_current_page (GtkPrintUnixDialog *dialog,
  * Gets the current page of the #GtkPrintUnixDialog.
  *
  * Returns: the current page of @dialog
- *
- * Since: 2.10
  */
 gint
 gtk_print_unix_dialog_get_current_page (GtkPrintUnixDialog *dialog)
@@ -3579,8 +3565,6 @@ set_active_printer (GtkPrintUnixDialog *dialog,
  * Sets the #GtkPrintSettings for the #GtkPrintUnixDialog. Typically,
  * this is used to restore saved print settings from a previous print
  * operation before the print dialog is shown.
- *
- * Since: 2.10
  **/
 void
 gtk_print_unix_dialog_set_settings (GtkPrintUnixDialog *dialog,
@@ -3646,8 +3630,6 @@ gtk_print_unix_dialog_set_settings (GtkPrintUnixDialog *dialog,
  * if don’t want to keep it.
  *
  * Returns: a new #GtkPrintSettings object with the values from @dialog
- *
- * Since: 2.10
  */
 GtkPrintSettings *
 gtk_print_unix_dialog_get_settings (GtkPrintUnixDialog *dialog)
@@ -3714,8 +3696,6 @@ gtk_print_unix_dialog_get_settings (GtkPrintUnixDialog *dialog)
  * @tab_label: the widget to use as tab label
  *
  * Adds a custom tab to the print dialog.
- *
- * Since: 2.10
  */
 void
 gtk_print_unix_dialog_add_custom_tab (GtkPrintUnixDialog *dialog,
@@ -3738,8 +3718,6 @@ gtk_print_unix_dialog_add_custom_tab (GtkPrintUnixDialog *dialog,
  * you pass #GTK_PRINT_CAPABILITY_SCALE. If you don’t pass that, then
  * the dialog will only let you select the scale if the printing
  * system automatically handles scaling.
- *
- * Since: 2.10
  */
 void
 gtk_print_unix_dialog_set_manual_capabilities (GtkPrintUnixDialog   *dialog,
@@ -3774,8 +3752,6 @@ gtk_print_unix_dialog_set_manual_capabilities (GtkPrintUnixDialog   *dialog,
  * Gets the value of #GtkPrintUnixDialog:manual-capabilities property.
  *
  * Returns: the printing capabilities
- *
- * Since: 2.18
  */
 GtkPrintCapabilities
 gtk_print_unix_dialog_get_manual_capabilities (GtkPrintUnixDialog *dialog)
@@ -3791,8 +3767,6 @@ gtk_print_unix_dialog_get_manual_capabilities (GtkPrintUnixDialog *dialog)
  * @support_selection: %TRUE to allow print selection
  *
  * Sets whether the print dialog allows user to print a selection.
- *
- * Since: 2.18
  */
 void
 gtk_print_unix_dialog_set_support_selection (GtkPrintUnixDialog *dialog,
@@ -3834,8 +3808,6 @@ gtk_print_unix_dialog_set_support_selection (GtkPrintUnixDialog *dialog,
  * Gets the value of #GtkPrintUnixDialog:support-selection property.
  *
  * Returns: whether the application supports print of selection
- *
- * Since: 2.18
  */
 gboolean
 gtk_print_unix_dialog_get_support_selection (GtkPrintUnixDialog *dialog)
@@ -3851,8 +3823,6 @@ gtk_print_unix_dialog_get_support_selection (GtkPrintUnixDialog *dialog)
  * @has_selection: %TRUE indicates that a selection exists
  *
  * Sets whether a selection exists.
- *
- * Since: 2.18
  */
 void
 gtk_print_unix_dialog_set_has_selection (GtkPrintUnixDialog *dialog,
@@ -3888,8 +3858,6 @@ gtk_print_unix_dialog_set_has_selection (GtkPrintUnixDialog *dialog,
  * Gets the value of #GtkPrintUnixDialog:has-selection property.
  *
  * Returns: whether there is a selection
- *
- * Since: 2.18
  */
 gboolean
 gtk_print_unix_dialog_get_has_selection (GtkPrintUnixDialog *dialog)
@@ -3905,8 +3873,6 @@ gtk_print_unix_dialog_get_has_selection (GtkPrintUnixDialog *dialog)
  * @embed: embed page setup selection
  *
  * Embed page size combo box and orientation combo box into page setup page.
- *
- * Since: 2.18
  */
 void
 gtk_print_unix_dialog_set_embed_page_setup (GtkPrintUnixDialog *dialog,
@@ -3956,8 +3922,6 @@ gtk_print_unix_dialog_set_embed_page_setup (GtkPrintUnixDialog *dialog,
  * Gets the value of #GtkPrintUnixDialog:embed-page-setup property.
  *
  * Returns: whether there is a selection
- *
- * Since: 2.18
  */
 gboolean
 gtk_print_unix_dialog_get_embed_page_setup (GtkPrintUnixDialog *dialog)

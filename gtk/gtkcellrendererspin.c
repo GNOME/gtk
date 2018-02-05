@@ -105,8 +105,6 @@ gtk_cell_renderer_spin_class_init (GtkCellRendererSpinClass *klass)
    *
    * The adjustment that holds the value of the spinbutton. 
    * This must be non-%NULL for the cell renderer to be editable.
-   *
-   * Since: 2.10
    */
   g_object_class_install_property (object_class,
 				   PROP_ADJUSTMENT,
@@ -121,8 +119,6 @@ gtk_cell_renderer_spin_class_init (GtkCellRendererSpinClass *klass)
    * GtkCellRendererSpin:climb-rate:
    *
    * The acceleration rate when you hold down a button.
-   *
-   * Since: 2.10
    */
   g_object_class_install_property (object_class,
 				   PROP_CLIMB_RATE,
@@ -135,8 +131,6 @@ gtk_cell_renderer_spin_class_init (GtkCellRendererSpinClass *klass)
    * GtkCellRendererSpin:digits:
    *
    * The number of decimal places to display.
-   *
-   * Since: 2.10
    */
   g_object_class_install_property (object_class,
 				   PROP_DIGITS,
@@ -362,8 +356,6 @@ gtk_cell_renderer_spin_start_editing (GtkCellRenderer      *cell,
  * Creates a new #GtkCellRendererSpin. 
  *
  * Returns: a new #GtkCellRendererSpin
- *
- * Since: 2.10
  */
 GtkCellRenderer *
 gtk_cell_renderer_spin_new (void)

@@ -705,8 +705,6 @@ gtk_label_class_init (GtkLabelClass *class)
      * if they need to control activation of URIs programmatically.
      *
      * The default bindings for this signal are all forms of the Enter key.
-     *
-     * Since: 2.18
      */
     signals[ACTIVATE_CURRENT_LINK] =
       g_signal_new_class_handler (I_("activate-current-link"),
@@ -727,8 +725,6 @@ gtk_label_class_init (GtkLabelClass *class)
      * which is to call gtk_show_uri_on_window().
      *
      * Returns: %TRUE if the link has been activated
-     *
-     * Since: 2.18
      */
     signals[ACTIVATE_LINK] =
       g_signal_new (I_("activate-link"),
@@ -797,8 +793,6 @@ gtk_label_class_init (GtkLabelClass *class)
    * inside the labels size allocation. Compare this to #GtkWidget:halign,
    * which determines how the labels size allocation is positioned in the
    * space available for the label.
-   *
-   * Since: 3.16
    */
   label_props[PROP_XALIGN] =
       g_param_spec_float ("xalign",
@@ -815,8 +809,6 @@ gtk_label_class_init (GtkLabelClass *class)
    * inside the labels size allocation. Compare this to #GtkWidget:valign,
    * which determines how the labels size allocation is positioned in the
    * space available for the label.
-   *
-   * Since: 3.16
    */
   label_props[PROP_YALIGN] =
       g_param_spec_float ("yalign",
@@ -846,8 +838,6 @@ gtk_label_class_init (GtkLabelClass *class)
    * If line wrapping is on (see the #GtkLabel:wrap property) this controls
    * how the line wrapping is done. The default is %PANGO_WRAP_WORD, which
    * means wrap on word boundaries.
-   *
-   * Since: 2.10
    */
   label_props[PROP_WRAP_MODE] =
       g_param_spec_enum ("wrap-mode",
@@ -909,8 +899,6 @@ gtk_label_class_init (GtkLabelClass *class)
    * the #GtkNotebook tab-expand child property is set to %TRUE. Other ways
    * to set a label's width are gtk_widget_set_size_request() and
    * gtk_label_set_width_chars().
-   *
-   * Since: 2.6
    */
   label_props[PROP_ELLIPSIZE] =
       g_param_spec_enum ("ellipsize",
@@ -929,8 +917,6 @@ gtk_label_class_init (GtkLabelClass *class)
    * See the section on [text layout][label-text-layout]
    * for details of how #GtkLabel:width-chars and #GtkLabel:max-width-chars
    * determine the width of ellipsized and wrapped labels.
-   *
-   * Since: 2.6
    **/
   label_props[PROP_WIDTH_CHARS] =
       g_param_spec_int ("width-chars",
@@ -948,8 +934,6 @@ gtk_label_class_init (GtkLabelClass *class)
    * is always set to ascent + descent of the font. This can be an
    * advantage in situations where resizing the label because of text
    * changes would be distracting, e.g. in a statusbar.
-   *
-   * Since: 2.6
    **/
   label_props[PROP_SINGLE_LINE_MODE] =
       g_param_spec_boolean ("single-line-mode",
@@ -967,8 +951,6 @@ gtk_label_class_init (GtkLabelClass *class)
    * See the section on [text layout][label-text-layout]
    * for details of how #GtkLabel:width-chars and #GtkLabel:max-width-chars
    * determine the width of ellipsized and wrapped labels.
-   *
-   * Since: 2.6
    **/
   label_props[PROP_MAX_WIDTH_CHARS] =
       g_param_spec_int ("max-width-chars",
@@ -984,8 +966,6 @@ gtk_label_class_init (GtkLabelClass *class)
    * Set this property to %TRUE to make the label track which links
    * have been visited. It will then apply the #GTK_STATE_FLAG_VISITED
    * when rendering this link, in addition to #GTK_STATE_FLAG_LINK.
-   *
-   * Since: 2.18
    */
   label_props[PROP_TRACK_VISITED_LINKS] =
       g_param_spec_boolean ("track-visited-links",
@@ -1001,8 +981,6 @@ gtk_label_class_init (GtkLabelClass *class)
    * should be limited. This property has no effect if the
    * label is not wrapping or ellipsized. Set this property to
    * -1 if you don't want to limit the number of lines.
-   *
-   * Since: 3.10
    */
   label_props[PROP_LINES] =
       g_param_spec_int ("lines",
@@ -2949,8 +2927,6 @@ gtk_label_get_justify (GtkLabel *label)
  *
  * Sets the mode used to ellipsize (add an ellipsis: "...") to the text 
  * if there is not enough space to render the entire string.
- *
- * Since: 2.6
  **/
 void
 gtk_label_set_ellipsize (GtkLabel          *label,
@@ -2980,8 +2956,6 @@ gtk_label_set_ellipsize (GtkLabel          *label,
  * Returns the ellipsizing position of the label. See gtk_label_set_ellipsize().
  *
  * Returns: #PangoEllipsizeMode
- *
- * Since: 2.6
  **/
 PangoEllipsizeMode
 gtk_label_get_ellipsize (GtkLabel *label)
@@ -2999,8 +2973,6 @@ gtk_label_get_ellipsize (GtkLabel *label)
  * @n_chars: the new desired width, in characters.
  * 
  * Sets the desired width in characters of @label to @n_chars.
- * 
- * Since: 2.6
  **/
 void
 gtk_label_set_width_chars (GtkLabel *label,
@@ -3026,8 +2998,6 @@ gtk_label_set_width_chars (GtkLabel *label,
  * gtk_label_set_width_chars().
  * 
  * Returns: the width of the label in characters.
- * 
- * Since: 2.6
  **/
 gint
 gtk_label_get_width_chars (GtkLabel *label)
@@ -3045,8 +3015,6 @@ gtk_label_get_width_chars (GtkLabel *label)
  * @n_chars: the new desired maximum width, in characters.
  * 
  * Sets the desired maximum width in characters of @label to @n_chars.
- * 
- * Since: 2.6
  **/
 void
 gtk_label_set_max_width_chars (GtkLabel *label,
@@ -3073,8 +3041,6 @@ gtk_label_set_max_width_chars (GtkLabel *label,
  * gtk_label_set_width_chars().
  * 
  * Returns: the maximum width of the label in characters.
- * 
- * Since: 2.6
  **/
 gint
 gtk_label_get_max_width_chars (GtkLabel *label)
@@ -3148,8 +3114,6 @@ gtk_label_get_line_wrap (GtkLabel *label)
  * If line wrapping is on (see gtk_label_set_line_wrap()) this controls how
  * the line wrapping is done. The default is %PANGO_WRAP_WORD which means
  * wrap on word boundaries.
- *
- * Since: 2.10
  **/
 void
 gtk_label_set_line_wrap_mode (GtkLabel *label,
@@ -3175,8 +3139,6 @@ gtk_label_set_line_wrap_mode (GtkLabel *label,
  * Returns line wrap mode used by the label. See gtk_label_set_line_wrap_mode().
  *
  * Returns: %TRUE if the lines of the label are automatically wrapped.
- *
- * Since: 2.10
  */
 PangoWrapMode
 gtk_label_get_line_wrap_mode (GtkLabel *label)
@@ -5611,8 +5573,6 @@ gtk_label_get_use_underline (GtkLabel *label)
  * @single_line_mode: %TRUE if the label should be in single line mode
  *
  * Sets whether the label is in single line mode.
- *
- * Since: 2.6
  */
 void
 gtk_label_set_single_line_mode (GtkLabel *label,
@@ -5642,8 +5602,6 @@ gtk_label_set_single_line_mode (GtkLabel *label,
  * Returns whether the label is in single line mode.
  *
  * Returns: %TRUE when the label is in single line mode.
- *
- * Since: 2.6
  **/
 gboolean
 gtk_label_get_single_line_mode  (GtkLabel *label)
@@ -6327,8 +6285,6 @@ gtk_label_get_current_link (GtkLabel *label)
  *
  * Returns: the currently active URI. The string is owned by GTK+ and must
  *   not be freed or modified.
- *
- * Since: 2.18
  */
 const gchar *
 gtk_label_get_current_uri (GtkLabel *label)
@@ -6352,8 +6308,6 @@ gtk_label_get_current_uri (GtkLabel *label)
  *
  * Sets whether the label should keep track of clicked
  * links (and use a different color for them).
- *
- * Since: 2.18
  */
 void
 gtk_label_set_track_visited_links (GtkLabel *label,
@@ -6384,8 +6338,6 @@ gtk_label_set_track_visited_links (GtkLabel *label,
  * of clicked links.
  *
  * Returns: %TRUE if clicked links are remembered
- *
- * Since: 2.18
  */
 gboolean
 gtk_label_get_track_visited_links (GtkLabel *label)
@@ -6480,8 +6432,6 @@ _gtk_label_get_selection_bound (GtkLabel *label)
  * should be limited. This has no effect if the label is not wrapping
  * or ellipsized. Set this to -1 if you don’t want to limit the
  * number of lines.
- *
- * Since: 3.10
  */
 void
 gtk_label_set_lines (GtkLabel *label,
@@ -6508,8 +6458,6 @@ gtk_label_set_lines (GtkLabel *label,
  * label should be limited. See gtk_label_set_lines().
  *
  * Returns: The number of lines
- *
- * Since: 3.10
  */
 gint
 gtk_label_get_lines (GtkLabel *label)
@@ -6661,8 +6609,6 @@ _gtk_label_get_link_focused (GtkLabel *label,
  * @xalign: the new xalign value, between 0 and 1
  *
  * Sets the #GtkLabel:xalign property for @label.
- *
- * Since: 3.16
  */
 void
 gtk_label_set_xalign (GtkLabel *label,
@@ -6690,8 +6636,6 @@ gtk_label_set_xalign (GtkLabel *label,
  * Gets the #GtkLabel:xalign property for @label.
  *
  * Returns: the xalign property
- *
- * Since: 3.16
  */
 gfloat
 gtk_label_get_xalign (GtkLabel *label)
@@ -6709,8 +6653,6 @@ gtk_label_get_xalign (GtkLabel *label)
  * @yalign: the new yalign value, between 0 and 1
  *
  * Sets the #GtkLabel:yalign property for @label.
- *
- * Since: 3.16
  */
 void
 gtk_label_set_yalign (GtkLabel *label,
@@ -6738,8 +6680,6 @@ gtk_label_set_yalign (GtkLabel *label,
  * Gets the #GtkLabel:yalign property for @label.
  *
  * Returns: the yalign property
- *
- * Since: 3.16
  */
 gfloat
 gtk_label_get_yalign (GtkLabel *label)

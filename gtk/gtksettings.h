@@ -89,7 +89,7 @@ GDK_AVAILABLE_IN_ALL
 GType           gtk_settings_get_type                (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkSettings*    gtk_settings_get_default             (void);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GtkSettings*    gtk_settings_get_for_display         (GdkDisplay *display);
 
 /* --- precoded parsing functions --- */
@@ -114,7 +114,7 @@ gboolean gtk_rc_property_parse_border      (const GParamSpec *pspec,
                                             const GString    *gstring,
                                             GValue           *property_value);
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 void     gtk_settings_reset_property       (GtkSettings            *settings,
                                             const gchar            *name);
 

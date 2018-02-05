@@ -740,8 +740,6 @@ gtk_center_box_init (GtkCenterBox *self)
  * Creates a new #GtkCenterBox.
  *
  * Returns: the new #GtkCenterBox.
- *
- * Since: 3.92
  */
 GtkWidget *
 gtk_center_box_new (void)
@@ -755,8 +753,6 @@ gtk_center_box_new (void)
  * @child: (nullable): the new start widget, or %NULL
  *
  * Sets the start widget. To remove the existing start widget, pass %NULL.
- *
- * Since: 3.92
  */
 void
 gtk_center_box_set_start_widget (GtkCenterBox *self,
@@ -778,8 +774,6 @@ gtk_center_box_set_start_widget (GtkCenterBox *self,
  * @child: (nullable): the new center widget, or %NULL
  *
  * Sets the center widget. To remove the existing center widget, pas %NULL.
- *
- * Since: 3.92
  */
 void
 gtk_center_box_set_center_widget (GtkCenterBox *self,
@@ -801,8 +795,6 @@ gtk_center_box_set_center_widget (GtkCenterBox *self,
  * @child: (nullable): the new end widget, or %NULL
  *
  * Sets the end widget. To remove the existing end widget, pass %NULL.
- *
- * Since: 3.92
  */
 void
 gtk_center_box_set_end_widget (GtkCenterBox *self,
@@ -825,8 +817,6 @@ gtk_center_box_set_end_widget (GtkCenterBox *self,
  * Gets the start widget, or %NULL if there is none.
  *
  * Returns: (transfer none) (nullable): the start widget.
- *
- * Since: 3.92
  */
 GtkWidget *
 gtk_center_box_get_start_widget (GtkCenterBox *self)
@@ -841,8 +831,6 @@ gtk_center_box_get_start_widget (GtkCenterBox *self)
  * Gets the center widget, or %NULL if there is none.
  *
  * Returns: (transfer none) (nullable): the center widget.
- *
- * Since: 3.92
  */
 GtkWidget *
 gtk_center_box_get_center_widget (GtkCenterBox *self)
@@ -857,8 +845,6 @@ gtk_center_box_get_center_widget (GtkCenterBox *self)
  * Gets the end widget, or %NULL if there is none.
  *
  * Returns: (transfer none) (nullable): the end widget.
- *
- * Since: 3.92
  */
 GtkWidget *
 gtk_center_box_get_end_widget (GtkCenterBox *self)
@@ -878,8 +864,6 @@ gtk_center_box_get_end_widget (GtkCenterBox *self)
  * requested, and the baseline is not allocated by the parent then
  * @position is used to allocate the baseline wrt. the extra space
  * available.
- *
- * Since: 3.92
  */
 void
 gtk_center_box_set_baseline_position (GtkCenterBox        *self,
@@ -902,8 +886,6 @@ gtk_center_box_set_baseline_position (GtkCenterBox        *self,
  * Gets the value set by gtk_center_box_set_baseline_position().
  *
  * Returns: the baseline position
- *
- * Since: 3.92
  */
 GtkBaselinePosition
 gtk_center_box_get_baseline_position (GtkCenterBox *self)

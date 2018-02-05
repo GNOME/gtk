@@ -73,8 +73,6 @@ typedef enum
  * value determines whether the file chooser will present the stock
  * confirmation dialog, accept the user’s choice of a filename, or
  * let the user choose another filename.
- *
- * Since: 2.8
  */
 typedef enum
 {
@@ -155,7 +153,7 @@ gboolean             gtk_file_chooser_get_create_folders (GtkFileChooser *choose
 GDK_AVAILABLE_IN_ALL
 void        gtk_file_chooser_set_current_name  (GtkFileChooser *chooser,
 					        const gchar    *name);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 gchar *gtk_file_chooser_get_current_name (GtkFileChooser *chooser);
 
 /* Filename manipulation
@@ -304,20 +302,20 @@ gboolean gtk_file_chooser_remove_shortcut_folder_uri (GtkFileChooser *chooser,
 GDK_AVAILABLE_IN_ALL
 GSList *gtk_file_chooser_list_shortcut_folder_uris   (GtkFileChooser *chooser);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 void        gtk_file_chooser_add_choice              (GtkFileChooser  *chooser,
                                                       const char      *id,
                                                       const char      *label,
                                                       const char     **options,
                                                       const char     **option_labels);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 void        gtk_file_chooser_remove_choice           (GtkFileChooser  *chooser,
                                                       const char      *id);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 void        gtk_file_chooser_set_choice              (GtkFileChooser  *chooser,
                                                       const char      *id,
                                                       const char      *option);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 const char *gtk_file_chooser_get_choice              (GtkFileChooser  *chooser,
                                                       const char      *id);
 

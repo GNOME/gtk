@@ -754,8 +754,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
    * GtkNotebook:group-name:
    *
    * Group name for tab drag and drop.
-   *
-   * Since: 2.24
    */
   properties[PROP_GROUP_NAME] =
       g_param_spec_string ("group-name",
@@ -889,8 +887,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
    *
    * the ::page-reordered signal is emitted in the notebook
    * right after a page has been reordered.
-   *
-   * Since: 2.10
    */
   notebook_signals[PAGE_REORDERED] =
     g_signal_new (I_("page-reordered"),
@@ -910,8 +906,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
    *
    * the ::page-removed signal is emitted in the notebook
    * right after a page is removed from the notebook.
-   *
-   * Since: 2.10
    */
   notebook_signals[PAGE_REMOVED] =
     g_signal_new (I_("page-removed"),
@@ -931,8 +925,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
    *
    * the ::page-added signal is emitted in the notebook
    * right after a page is added to the notebook.
-   *
-   * Since: 2.10
    */
   notebook_signals[PAGE_ADDED] =
     g_signal_new (I_("page-added"),
@@ -963,8 +955,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
    *
    * Returns: (transfer none): a #GtkNotebook that @page should be
    *     added to, or %NULL.
-   *
-   * Since: 2.12
    */
   notebook_signals[CREATE_WINDOW] =
     g_signal_new (I_("create-window"),
@@ -3197,8 +3187,6 @@ gtk_notebook_drag_drop (GtkWidget        *widget,
  * but additionally informs the notebook that the removal
  * is happening as part of a tab DND operation, which should
  * not be cancelled.
- *
- * Since: 3.16
  */
 void
 gtk_notebook_detach_tab (GtkNotebook *notebook,
@@ -5934,8 +5922,6 @@ gtk_notebook_get_nth_page (GtkNotebook *notebook,
  * Gets the number of pages in a notebook.
  *
  * Returns: the number of pages in the notebook
- *
- * Since: 2.2
  */
 gint
 gtk_notebook_get_n_pages (GtkNotebook *notebook)
@@ -6960,8 +6946,6 @@ gtk_notebook_reorder_child (GtkNotebook *notebook,
  * Notebooks with the same name will be able to exchange tabs
  * via drag and drop. A notebook with a %NULL group name will
  * not be able to exchange tabs with any other notebook.
- *
- * Since: 2.24
  */
 void
 gtk_notebook_set_group_name (GtkNotebook *notebook,
@@ -6991,8 +6975,6 @@ gtk_notebook_set_group_name (GtkNotebook *notebook,
  * Gets the current group name for @notebook.
  *
  * Returns: (nullable) (transfer none): the group name, or %NULL if none is set
- *
- * Since: 2.24
  */
 const gchar *
 gtk_notebook_get_group_name (GtkNotebook *notebook)
@@ -7010,8 +6992,6 @@ gtk_notebook_get_group_name (GtkNotebook *notebook)
  * Gets whether the tab can be reordered via drag and drop or not.
  *
  * Returns: %TRUE if the tab is reorderable.
- *
- * Since: 2.10
  */
 gboolean
 gtk_notebook_get_tab_reorderable (GtkNotebook *notebook,
@@ -7036,8 +7016,6 @@ gtk_notebook_get_tab_reorderable (GtkNotebook *notebook,
  *
  * Sets whether the notebook tab can be reordered
  * via drag and drop or not.
- *
- * Since: 2.10
  */
 void
 gtk_notebook_set_tab_reorderable (GtkNotebook *notebook,
@@ -7077,8 +7055,6 @@ gtk_notebook_set_tab_reorderable (GtkNotebook *notebook,
  * Returns whether the tab contents can be detached from @notebook.
  *
  * Returns: %TRUE if the tab is detachable.
- *
- * Since: 2.10
  */
 gboolean
 gtk_notebook_get_tab_detachable (GtkNotebook *notebook,
@@ -7143,8 +7119,6 @@ gtk_notebook_get_tab_detachable (GtkNotebook *notebook,
  *
  * If you want a notebook to accept drags from other widgets,
  * you will have to set your own DnD code to do it.
- *
- * Since: 2.10
  */
 void
 gtk_notebook_set_tab_detachable (GtkNotebook *notebook,
@@ -7177,8 +7151,6 @@ gtk_notebook_set_tab_detachable (GtkNotebook *notebook,
  *
  * Returns: (nullable) (transfer none): The action widget with the given
  * @pack_type or %NULL when this action widget has not been set
- *
- * Since: 2.20
  */
 GtkWidget*
 gtk_notebook_get_action_widget (GtkNotebook *notebook,
@@ -7201,8 +7173,6 @@ gtk_notebook_get_action_widget (GtkNotebook *notebook,
  *
  * Note that action widgets are “internal” children of the notebook and thus
  * not included in the list returned from gtk_container_foreach().
- *
- * Since: 2.20
  */
 void
 gtk_notebook_set_action_widget (GtkNotebook *notebook,

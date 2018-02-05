@@ -178,8 +178,6 @@ struct _GtkStyleContextClass
  * A CSS class to match labels.
  *
  * Refer to individual widget documentation for used style classes.
- *
- * Since: 3.16
  */
 #define GTK_STYLE_CLASS_LABEL "label"
 
@@ -261,8 +259,6 @@ struct _GtkStyleContextClass
  * A CSS class that gets added to windows which have client-side decorations.
  *
  * Refer to individual widget documentation for used style classes.
- *
- * Since: 3.14
  */
 #define GTK_STYLE_CLASS_CSD "csd"
 
@@ -300,8 +296,6 @@ struct _GtkStyleContextClass
  * and text views.
  *
  * Refer to individual widget documentation for used style classes.
- *
- * Since: 3.16
  */
 #define GTK_STYLE_CLASS_TOUCH_SELECTION "touch-selection"
 
@@ -356,8 +350,6 @@ struct _GtkStyleContextClass
  * A CSS class to match statusbars.
  *
  * Refer to individual widget documentation for used style classes.
- *
- * Since: 3.16
  */
 #define GTK_STYLE_CLASS_STATUSBAR "statusbar"
 
@@ -792,8 +784,6 @@ struct _GtkStyleContextClass
  * a toplevel window.
  *
  * Refer to individual widget documentation for used style classes.
- *
- * Since: 3.14
  */
 #define GTK_STYLE_CLASS_TITLE "title"
 
@@ -804,8 +794,6 @@ struct _GtkStyleContextClass
  * a toplevel window.
  *
  * Refer to individual widget documentation for used style classes.
- *
- * Since: 3.14
  */
 #define GTK_STYLE_CLASS_SUBTITLE "subtitle"
 
@@ -817,8 +805,6 @@ struct _GtkStyleContextClass
  * a hidden page that changed state.
  *
  * Refer to individual widget documentation for used style classes.
- *
- * Since: 3.12
  */
 #define GTK_STYLE_CLASS_NEEDS_ATTENTION "needs-attention"
 
@@ -829,8 +815,6 @@ struct _GtkStyleContextClass
  * primary suggested action in a specific context.
  *
  * Refer to individual widget documentation for used style classes.
- *
- * Since: 3.12
  */
 #define GTK_STYLE_CLASS_SUGGESTED_ACTION "suggested-action"
 
@@ -842,8 +826,6 @@ struct _GtkStyleContextClass
  * to the user.
  *
  * Refer to individual widget documentation for used style classes.
- *
- * Since: 3.12
  */
 #define GTK_STYLE_CLASS_DESTRUCTIVE_ACTION "destructive-action"
 
@@ -853,8 +835,6 @@ struct _GtkStyleContextClass
  * A CSS class that matches popovers.
  *
  * Refer to individual widget documentation for used style classes.
- *
- * Since: 3.14
  */
 #define GTK_STYLE_CLASS_POPOVER "popover"
 
@@ -866,8 +846,6 @@ struct _GtkStyleContextClass
  * A CSS class that is added to the toplevel windows used for menus.
  *
  * Refer to individual widget documentation for used style classes.
- *
- * Since: 3.14
  */
 #define GTK_STYLE_CLASS_POPUP "popup"
 
@@ -877,8 +855,6 @@ struct _GtkStyleContextClass
  * A CSS class that is added to message dialogs.
  *
  * Refer to individual widget documentation for used style classes.
- *
- * Since: 3.14
  */
 #define GTK_STYLE_CLASS_MESSAGE_DIALOG "message-dialog"
 
@@ -890,8 +866,6 @@ struct _GtkStyleContextClass
  * without it.
  *
  * Refer to individual widget documentation for used style classes.
- *
- * Since: 3.14
  */
 #define GTK_STYLE_CLASS_FLAT "flat"
 
@@ -912,8 +886,6 @@ struct _GtkStyleContextClass
  * area.
  *
  * Refer to individual widget documentation for used style classes.
- *
- * Since: 3.14
  */
 #define GTK_STYLE_CLASS_OVERSHOOT "overshoot"
 
@@ -925,8 +897,6 @@ struct _GtkStyleContextClass
  * by scrolling.
  *
  * Refer to individual widget documentation for used style classes.
- *
- * Since: 3.16
  */
 #define GTK_STYLE_CLASS_UNDERSHOOT "undershoot"
 
@@ -939,8 +909,6 @@ struct _GtkStyleContextClass
  * style it as black text on white background.
  *
  * Refer to individual widget documentation for used style classes.
- *
- * Since: 3.16
  */
 #define GTK_STYLE_CLASS_PAPER "paper"
 
@@ -951,8 +919,6 @@ struct _GtkStyleContextClass
  * a monospace font.
  *
  * Refer to individual widget documentation for used style classes.
- *
- * Since: 3.16
  */
 #define GTK_STYLE_CLASS_MONOSPACE "monospace"
 
@@ -963,8 +929,6 @@ struct _GtkStyleContextClass
  * Used by #GtkPaned.
  *
  * Refer to individual widget documentation for used style classes.
- *
- * Since: 3.16
  */
 #define GTK_STYLE_CLASS_WIDE "wide"
 
@@ -974,11 +938,11 @@ GType gtk_style_context_get_type (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkStyleContext * gtk_style_context_new (void);
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void gtk_style_context_add_provider_for_display    (GdkDisplay       *display,
                                                     GtkStyleProvider *provider,
                                                     guint             priority);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void gtk_style_context_remove_provider_for_display (GdkDisplay       *display,
                                                     GtkStyleProvider *provider);
 
@@ -1018,10 +982,10 @@ void          gtk_style_context_set_state    (GtkStyleContext *context,
 GDK_AVAILABLE_IN_ALL
 GtkStateFlags gtk_style_context_get_state    (GtkStyleContext *context);
 
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 void          gtk_style_context_set_scale    (GtkStyleContext *context,
                                               gint             scale);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 gint          gtk_style_context_get_scale    (GtkStyleContext *context);
 
 GDK_AVAILABLE_IN_ALL
@@ -1029,7 +993,7 @@ void          gtk_style_context_set_path     (GtkStyleContext *context,
                                               GtkWidgetPath   *path);
 GDK_AVAILABLE_IN_ALL
 const GtkWidgetPath * gtk_style_context_get_path (GtkStyleContext *context);
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 void          gtk_style_context_set_parent   (GtkStyleContext *context,
                                               GtkStyleContext *parent);
 GDK_AVAILABLE_IN_ALL
@@ -1054,10 +1018,10 @@ void        gtk_style_context_set_display (GtkStyleContext *context,
 GDK_AVAILABLE_IN_ALL
 GdkDisplay *gtk_style_context_get_display (GtkStyleContext *context);
 
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 void           gtk_style_context_set_frame_clock (GtkStyleContext *context,
                                                   GdkFrameClock   *frame_clock);
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 GdkFrameClock *gtk_style_context_get_frame_clock (GtkStyleContext *context);
 
 GDK_AVAILABLE_IN_ALL
@@ -1069,10 +1033,10 @@ gboolean gtk_style_context_lookup_color (GtkStyleContext *context,
 GDK_AVAILABLE_IN_ALL
 void gtk_style_context_get_color            (GtkStyleContext *context,
                                              GdkRGBA         *color);
-GDK_DEPRECATED_IN_3_16_FOR(gtk_render_background)
+GDK_DEPRECATED_FOR(gtk_render_background)
 void gtk_style_context_get_background_color (GtkStyleContext *context,
                                              GdkRGBA         *color);
-GDK_DEPRECATED_IN_3_16_FOR(gtk_render_frame)
+GDK_DEPRECATED_FOR(gtk_render_frame)
 void gtk_style_context_get_border_color     (GtkStyleContext *context,
                                              GdkRGBA         *color);
 
@@ -1089,7 +1053,7 @@ void gtk_style_context_get_margin           (GtkStyleContext *context,
 GDK_AVAILABLE_IN_ALL
 void gtk_style_context_reset_widgets        (GdkDisplay      *display);
 
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 void        gtk_render_insertion_cursor
                                    (GtkStyleContext     *context,
                                     cairo_t             *cr,
@@ -1105,7 +1069,7 @@ typedef enum {
   GTK_STYLE_CONTEXT_PRINT_SHOW_STYLE   = 1 << 1
 } GtkStyleContextPrintFlags;
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 char * gtk_style_context_to_string (GtkStyleContext           *context,
                                     GtkStyleContextPrintFlags  flags);
 

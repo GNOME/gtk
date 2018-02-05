@@ -229,8 +229,6 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
    * showing text (even if the actual text is blank), set
    * #GtkProgressBar:show-text to %TRUE and #GtkProgressBar:text
    * to the empty string (not %NULL).
-   *
-   * Since: 3.0
    */
   progress_props[PROP_SHOW_TEXT] =
       g_param_spec_boolean ("show-text",
@@ -250,8 +248,6 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
    * %PANGO_ELLIPSIZE_NONE has the side-effect that the progress bar requests
    * only enough space to display the ellipsis ("..."). Another means to set a
    * progress bar's width is gtk_widget_set_size_request().
-   *
-   * Since: 2.6
    */
   progress_props[PROP_ELLIPSIZE] =
       g_param_spec_enum ("ellipsize",
@@ -1015,8 +1011,6 @@ gtk_progress_bar_set_text (GtkProgressBar *pbar,
  * To make a progress bar that is styled and sized suitably for containing
  * text (even if the actual text is blank), set #GtkProgressBar:show-text to
  * %TRUE and #GtkProgressBar:text to the empty string (not %NULL).
- *
- * Since: 3.0
  */
 void
 gtk_progress_bar_set_show_text (GtkProgressBar *pbar,
@@ -1070,8 +1064,6 @@ gtk_progress_bar_set_show_text (GtkProgressBar *pbar,
  * See gtk_progress_bar_set_show_text().
  *
  * Returns: %TRUE if text is shown in the progress bar
- *
- * Since: 3.0
  */
 gboolean
 gtk_progress_bar_get_show_text (GtkProgressBar *pbar)
@@ -1237,8 +1229,6 @@ gtk_progress_bar_get_inverted (GtkProgressBar *pbar)
  *
  * Sets the mode used to ellipsize (add an ellipsis: "...") the
  * text if there is not enough space to render the entire string.
- *
- * Since: 2.6
  */
 void
 gtk_progress_bar_set_ellipsize (GtkProgressBar     *pbar,
@@ -1272,8 +1262,6 @@ gtk_progress_bar_set_ellipsize (GtkProgressBar     *pbar,
  * See gtk_progress_bar_set_ellipsize().
  *
  * Returns: #PangoEllipsizeMode
- *
- * Since: 2.6
  */
 PangoEllipsizeMode
 gtk_progress_bar_get_ellipsize (GtkProgressBar *pbar)

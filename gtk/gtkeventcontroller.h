@@ -41,22 +41,22 @@ G_BEGIN_DECLS
 #define GTK_EVENT_CONTROLLER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GTK_TYPE_EVENT_CONTROLLER, GtkEventControllerClass))
 
 
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 GType        gtk_event_controller_get_type       (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 GtkWidget  * gtk_event_controller_get_widget     (GtkEventController *controller);
 
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 gboolean     gtk_event_controller_handle_event   (GtkEventController *controller,
                                                   const GdkEvent     *event);
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 void         gtk_event_controller_reset          (GtkEventController *controller);
 
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 GtkPropagationPhase gtk_event_controller_get_propagation_phase (GtkEventController *controller);
 
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 void                gtk_event_controller_set_propagation_phase (GtkEventController  *controller,
                                                                 GtkPropagationPhase  phase);
 

@@ -86,8 +86,6 @@ struct _GtkRecentData
  *
  * #GtkRecentManager-struct contains only private data
  * and should be accessed using the provided API.
- *
- * Since: 2.10
  */
 struct _GtkRecentManager
 {
@@ -101,8 +99,6 @@ struct _GtkRecentManager
  * GtkRecentManagerClass:
  *
  * #GtkRecentManagerClass contains only private data.
- *
- * Since: 2.10
  */
 struct _GtkRecentManagerClass
 {
@@ -134,8 +130,6 @@ struct _GtkRecentManagerClass
  * @GTK_RECENT_MANAGER_ERROR_UNKNOWN: unspecified error.
  *
  * Error codes for #GtkRecentManager operations
- *
- * Since: 2.10
  */
 typedef enum
 {
@@ -152,8 +146,6 @@ typedef enum
  * GTK_RECENT_MANAGER_ERROR:
  *
  * The #GError domain for #GtkRecentManager errors.
- *
- * Since: 2.10
  */
 #define GTK_RECENT_MANAGER_ERROR	(gtk_recent_manager_error_quark ())
 GDK_AVAILABLE_IN_ALL

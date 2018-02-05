@@ -401,8 +401,6 @@ gtk_overlay_remove (GtkContainer *container,
  * A widget’s index in the @overlay children list determines which order
  * the children are drawn if they overlap. The first child is drawn at
  * the bottom. It also affects the default focus chain order.
- *
- * Since: 3.18
  */
 void
 gtk_overlay_reorder_overlay (GtkOverlay *overlay,
@@ -738,8 +736,6 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
    * GtkOverlay:pass-through:
    *
    * Pass through input, does not affect main child.
-   *
-   * Since: 3.18
    */
   gtk_container_class_install_child_property (container_class, CHILD_PROP_PASS_THROUGH,
       g_param_spec_boolean ("pass-through", P_("Pass Through"), P_("Pass through input, does not affect main child"),
@@ -750,8 +746,6 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
    * GtkOverlay:blur:
    *
    * Blur the content behind this child with a Gaussian blur of this radius.
-   *
-   * Since: 3.92
    */
   gtk_container_class_install_child_property (container_class, CHILD_PROP_BLUR,
       g_param_spec_double ("blur", P_("Blur Radius"), P_("Apply a blur to the content behind this child"),
@@ -761,8 +755,6 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
    * GtkOverlay:index:
    *
    * The index of the overlay in the parent, -1 for the main child.
-   *
-   * Since: 3.18
    */
   gtk_container_class_install_child_property (container_class, CHILD_PROP_INDEX,
 					      g_param_spec_int ("index",
@@ -846,8 +838,6 @@ gtk_overlay_buildable_init (GtkBuildableIface *iface)
  * Creates a new #GtkOverlay.
  *
  * Returns: a new #GtkOverlay object.
- *
- * Since: 3.2
  */
 GtkWidget *
 gtk_overlay_new (void)
@@ -867,8 +857,6 @@ gtk_overlay_new (void)
  *
  * The position at which @widget is placed is determined
  * from its #GtkWidget:halign and #GtkWidget:valign properties.
- *
- * Since: 3.2
  */
 void
 gtk_overlay_add_overlay (GtkOverlay *overlay,
@@ -899,8 +887,6 @@ gtk_overlay_add_overlay (GtkOverlay *overlay,
  *
  * Convenience function to set the value of the #GtkOverlay:pass-through
  * child property for @widget.
- *
- * Since: 3.18
  */
 void
 gtk_overlay_set_overlay_pass_through (GtkOverlay *overlay,
@@ -924,8 +910,6 @@ gtk_overlay_set_overlay_pass_through (GtkOverlay *overlay,
  * child property for @widget.
  *
  * Returns: whether the widget is a pass through child.
- *
- * Since: 3.18
  */
 gboolean
 gtk_overlay_get_overlay_pass_through (GtkOverlay *overlay,

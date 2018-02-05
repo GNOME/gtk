@@ -131,8 +131,6 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
    * GtkCellRendererAccel:accel-key:
    *
    * The keyval of the accelerator.
-   *
-   * Since: 2.10
    */
   g_object_class_install_property (object_class,
                                    PROP_ACCEL_KEY,
@@ -148,8 +146,6 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
    * GtkCellRendererAccel:accel-mods:
    *
    * The modifier mask of the accelerator.
-   *
-   * Since: 2.10
    */
   g_object_class_install_property (object_class,
                                    PROP_ACCEL_MODS,
@@ -166,8 +162,6 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
    * The hardware keycode of the accelerator. Note that the hardware keycode is
    * only relevant if the key does not have a keyval. Normally, the keyboard
    * configuration should assign keyvals to all keys.
-   *
-   * Since: 2.10
    */ 
   g_object_class_install_property (object_class,
                                    PROP_KEYCODE,
@@ -186,8 +180,6 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
    * they are, consumed modifiers are suppressed, only accelerators
    * accepted by GTK+ are allowed, and the accelerators are rendered
    * in the same way as they are in menus.
-   *
-   * Since: 2.10
    */
   g_object_class_install_property (object_class,
                                    PROP_ACCEL_MODE,
@@ -207,8 +199,6 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
    * @hardware_keycode: the keycode of the new accelerator
    *
    * Gets emitted when the user has selected a new accelerator.
-   *
-   * Since: 2.10
    */
   signals[ACCEL_EDITED] = g_signal_new (I_("accel-edited"),
                                         GTK_TYPE_CELL_RENDERER_ACCEL,
@@ -228,8 +218,6 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
    * @path_string: the path identifying the row of the edited cell
    *
    * Gets emitted when the user has removed the accelerator.
-   *
-   * Since: 2.10
    */
   signals[ACCEL_CLEARED] = g_signal_new (I_("accel-cleared"),
                                          GTK_TYPE_CELL_RENDERER_ACCEL,
@@ -248,8 +236,6 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
  * Creates a new #GtkCellRendererAccel.
  * 
  * Returns: the new cell renderer
- *
- * Since: 2.10
  */
 GtkCellRenderer *
 gtk_cell_renderer_accel_new (void)

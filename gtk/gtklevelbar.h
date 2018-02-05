@@ -40,8 +40,6 @@ G_BEGIN_DECLS
  * GTK_LEVEL_BAR_OFFSET_LOW:
  *
  * The name used for the stock low offset included by #GtkLevelBar.
- *
- * Since: 3.6
  */
 #define GTK_LEVEL_BAR_OFFSET_LOW  "low"
 
@@ -49,8 +47,6 @@ G_BEGIN_DECLS
  * GTK_LEVEL_BAR_OFFSET_HIGH:
  *
  * The name used for the stock high offset included by #GtkLevelBar.
- *
- * Since: 3.6
  */
 #define GTK_LEVEL_BAR_OFFSET_HIGH "high"
 
@@ -58,8 +54,6 @@ G_BEGIN_DECLS
  * GTK_LEVEL_BAR_OFFSET_FULL:
  *
  * The name used for the stock full offset included by #GtkLevelBar.
- *
- * Since: 3.20
  */
 #define GTK_LEVEL_BAR_OFFSET_FULL "full"
 
@@ -85,55 +79,55 @@ struct _GtkLevelBarClass {
   gpointer padding[16];
 };
 
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 GType      gtk_level_bar_get_type           (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_level_bar_new                (void);
 
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_level_bar_new_for_interval   (gdouble      min_value,
                                              gdouble      max_value);
 
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 void       gtk_level_bar_set_mode           (GtkLevelBar *self,
                                              GtkLevelBarMode mode);
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 GtkLevelBarMode gtk_level_bar_get_mode      (GtkLevelBar *self);
 
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 void       gtk_level_bar_set_value          (GtkLevelBar *self,
                                              gdouble      value);
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 gdouble    gtk_level_bar_get_value          (GtkLevelBar *self);
 
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 void       gtk_level_bar_set_min_value      (GtkLevelBar *self,
                                              gdouble      value);
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 gdouble    gtk_level_bar_get_min_value      (GtkLevelBar *self);
 
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 void       gtk_level_bar_set_max_value      (GtkLevelBar *self,
                                              gdouble      value);
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 gdouble    gtk_level_bar_get_max_value      (GtkLevelBar *self);
 
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 void       gtk_level_bar_set_inverted       (GtkLevelBar *self,
                                              gboolean     inverted);
 
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 gboolean   gtk_level_bar_get_inverted       (GtkLevelBar *self);
 
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 void       gtk_level_bar_add_offset_value   (GtkLevelBar *self,
                                              const gchar *name,
                                              gdouble      value);
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 void       gtk_level_bar_remove_offset_value (GtkLevelBar *self,
                                               const gchar *name);
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 gboolean   gtk_level_bar_get_offset_value   (GtkLevelBar *self,
                                              const gchar *name,
                                              gdouble     *value);

@@ -176,11 +176,11 @@ GdkWindow *
                                  (GdkDevice         *device,
                                   gint              *win_x,
                                   gint              *win_y);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 void     gdk_device_get_position_double (GdkDevice         *device,
                                          gdouble           *x,
                                          gdouble           *y);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 GdkWindow *
          gdk_device_get_window_at_position_double
                                  (GdkDevice         *device,
@@ -223,7 +223,7 @@ GList *      gdk_device_list_slave_devices    (GdkDevice     *device);
 GDK_AVAILABLE_IN_ALL
 GdkDeviceType gdk_device_get_device_type (GdkDevice *device);
 
-GDK_DEPRECATED_IN_3_20_FOR(gdk_seat_grab)
+GDK_DEPRECATED_FOR(gdk_seat_grab)
 GdkGrabStatus gdk_device_grab        (GdkDevice        *device,
                                       GdkWindow        *window,
                                       GdkGrabOwnership  grab_ownership,
@@ -232,7 +232,7 @@ GdkGrabStatus gdk_device_grab        (GdkDevice        *device,
                                       GdkCursor        *cursor,
                                       guint32           time_);
 
-GDK_DEPRECATED_IN_3_20_FOR(gdk_seat_ungrab)
+GDK_DEPRECATED_FOR(gdk_seat_ungrab)
 void          gdk_device_ungrab      (GdkDevice        *device,
                                       guint32           time_);
 
@@ -241,18 +241,18 @@ void          gdk_device_warp        (GdkDevice        *device,
                                       gint              x,
                                       gint              y);
 
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 GdkWindow *gdk_device_get_last_event_window (GdkDevice *device);
 
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 const gchar *gdk_device_get_vendor_id       (GdkDevice *device);
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 const gchar *gdk_device_get_product_id      (GdkDevice *device);
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 GdkSeat     *gdk_device_get_seat            (GdkDevice *device);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 GdkAxisFlags gdk_device_get_axes            (GdkDevice *device);
 
 G_END_DECLS

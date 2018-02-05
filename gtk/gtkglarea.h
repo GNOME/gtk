@@ -43,8 +43,6 @@ typedef struct _GtkGLAreaClass          GtkGLAreaClass;
  * GtkGLArea:
  *
  * A #GtkWidget used for drawing with OpenGL.
- *
- * Since: 3.16
  */
 struct _GtkGLArea
 {
@@ -59,8 +57,6 @@ struct _GtkGLArea
  * @create_context: class closure for the #GtkGLArea::create-context signal
  *
  * The `GtkGLAreaClass` structure contains only private data.
- *
- * Since: 3.16
  */
 struct _GtkGLAreaClass
 {
@@ -79,56 +75,56 @@ struct _GtkGLAreaClass
   gpointer _padding[6];
 };
 
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 GType gtk_gl_area_get_type (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 GtkWidget *     gtk_gl_area_new                         (void);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 void            gtk_gl_area_set_use_es                  (GtkGLArea    *area,
                                                          gboolean      use_es);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 gboolean        gtk_gl_area_get_use_es                  (GtkGLArea    *area);
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 void            gtk_gl_area_set_required_version        (GtkGLArea    *area,
                                                          gint          major,
                                                          gint          minor);
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 void            gtk_gl_area_get_required_version        (GtkGLArea    *area,
                                                          gint         *major,
                                                          gint         *minor);
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 gboolean        gtk_gl_area_get_has_depth_buffer        (GtkGLArea    *area);
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 void            gtk_gl_area_set_has_depth_buffer        (GtkGLArea    *area,
                                                          gboolean      has_depth_buffer);
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 gboolean        gtk_gl_area_get_has_stencil_buffer      (GtkGLArea    *area);
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 void            gtk_gl_area_set_has_stencil_buffer      (GtkGLArea    *area,
                                                          gboolean      has_stencil_buffer);
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 gboolean        gtk_gl_area_get_auto_render             (GtkGLArea    *area);
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 void            gtk_gl_area_set_auto_render             (GtkGLArea    *area,
                                                          gboolean      auto_render);
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 void           gtk_gl_area_queue_render                 (GtkGLArea    *area);
 
 
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 GdkGLContext *  gtk_gl_area_get_context                 (GtkGLArea    *area);
 
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 void            gtk_gl_area_make_current                (GtkGLArea    *area);
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 void            gtk_gl_area_attach_buffers              (GtkGLArea    *area);
 
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 void            gtk_gl_area_set_error                   (GtkGLArea    *area,
                                                          const GError *error);
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 GError *        gtk_gl_area_get_error                   (GtkGLArea    *area);
 
 G_END_DECLS

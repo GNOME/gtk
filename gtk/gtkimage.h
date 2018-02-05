@@ -110,13 +110,13 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_image_new_from_resource  (const gchar     *resource_path);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_image_new_from_pixbuf    (GdkPixbuf       *pixbuf);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_image_new_from_texture   (GdkTexture      *texture);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_image_new_from_icon_name (const gchar     *icon_name);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_image_new_from_gicon     (GIcon           *icon);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_image_new_from_surface   (cairo_surface_t *surface);
 
 GDK_AVAILABLE_IN_ALL
@@ -130,7 +130,7 @@ void gtk_image_set_from_resource  (GtkImage        *image,
 GDK_AVAILABLE_IN_ALL
 void gtk_image_set_from_pixbuf    (GtkImage        *image,
                                    GdkPixbuf       *pixbuf);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void gtk_image_set_from_texture   (GtkImage        *image,
                                    GdkTexture      *texture);
 GDK_AVAILABLE_IN_ALL
@@ -139,22 +139,22 @@ void gtk_image_set_from_icon_name (GtkImage        *image,
 GDK_AVAILABLE_IN_ALL
 void gtk_image_set_from_gicon     (GtkImage        *image,
 				   GIcon           *icon);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 void gtk_image_set_from_surface   (GtkImage        *image,
 				   cairo_surface_t *surface);
 GDK_AVAILABLE_IN_ALL
 void gtk_image_set_pixel_size     (GtkImage        *image,
 				   gint             pixel_size);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void gtk_image_set_icon_size      (GtkImage        *image,
                                    GtkIconSize      icon_size);
 
 GDK_AVAILABLE_IN_ALL
 GtkImageType gtk_image_get_storage_type (GtkImage   *image);
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 cairo_surface_t *gtk_image_get_surface (GtkImage *image);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GdkTexture *gtk_image_get_texture  (GtkImage       *image);
 
 GDK_AVAILABLE_IN_ALL
@@ -163,7 +163,7 @@ GDK_AVAILABLE_IN_ALL
 GIcon *    gtk_image_get_gicon     (GtkImage              *image);
 GDK_AVAILABLE_IN_ALL
 gint       gtk_image_get_pixel_size (GtkImage             *image);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GtkIconSize gtk_image_get_icon_size (GtkImage             *image);
 
 G_END_DECLS

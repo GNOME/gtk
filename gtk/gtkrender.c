@@ -79,8 +79,6 @@ gtk_do_render_check (GtkStyleContext *context,
  * Typical checkmark rendering:
  *
  * ![](checks.png)
- *
- * Since: 3.0
  **/
 void
 gtk_render_check (GtkStyleContext *context,
@@ -137,8 +135,6 @@ gtk_do_render_option (GtkStyleContext *context,
  * Typical option mark rendering:
  *
  * ![](options.png)
- *
- * Since: 3.0
  **/
 void
 gtk_render_option (GtkStyleContext *context,
@@ -207,8 +203,6 @@ gtk_do_render_arrow (GtkStyleContext *context,
  * Typical arrow rendering at 0, 1⁄2 π;, π; and 3⁄2 π:
  *
  * ![](arrows.png)
- *
- * Since: 3.0
  **/
 void
 gtk_render_arrow (GtkStyleContext *context,
@@ -242,8 +236,6 @@ gtk_render_arrow (GtkStyleContext *context,
  * `background-image`, `border-width` and `border-radius`:
  *
  * ![](background.png)
- *
- * Since: 3.0.
  **/
 void
 gtk_render_background (GtkStyleContext *context,
@@ -275,8 +267,6 @@ gtk_render_background (GtkStyleContext *context,
  * Returns the area that will be affected (i.e. drawn to) when
  * calling gtk_render_background() for the given @context and
  * rectangle.
- *
- * Since: 3.20
  */
 void
 gtk_render_background_get_clip (GtkStyleContext *context,
@@ -311,8 +301,6 @@ gtk_render_background_get_clip (GtkStyleContext *context,
  * `border-color`, `border-width`, `border-radius` and junctions:
  *
  * ![](frames.png)
- *
- * Since: 3.0
  **/
 void
 gtk_render_frame (GtkStyleContext *context,
@@ -387,8 +375,6 @@ gtk_do_render_expander (GtkStyleContext *context,
  * Typical expander rendering:
  *
  * ![](expanders.png)
- *
- * Since: 3.0
  **/
 void
 gtk_render_expander (GtkStyleContext *context,
@@ -421,8 +407,6 @@ gtk_render_expander (GtkStyleContext *context,
  * Typical focus rendering:
  *
  * ![](focus.png)
- *
- * Since: 3.0
  **/
 void
 gtk_render_focus (GtkStyleContext *context,
@@ -500,8 +484,6 @@ gtk_do_render_layout (GtkStyleContext *context,
  * @layout: the #PangoLayout to render
  *
  * Renders @layout on the coordinates @x, @y
- *
- * Since: 3.0
  **/
 void
 gtk_render_layout (GtkStyleContext *context,
@@ -553,8 +535,6 @@ gtk_do_render_line (GtkStyleContext *context,
  * @y1: Y coordinate for the end of the line
  *
  * Renders a line from (x0, y0) to (x1, y1).
- *
- * Since: 3.0
  **/
 void
 gtk_render_line (GtkStyleContext *context,
@@ -608,8 +588,6 @@ gtk_do_render_slider (GtkStyleContext *context,
  * Typical slider rendering:
  *
  * ![](sliders.png)
- *
- * Since: 3.0
  **/
 void
 gtk_render_slider (GtkStyleContext *context,
@@ -722,8 +700,6 @@ gtk_css_style_render_frame_gap (GtkCssStyle     *style,
  * Typical rendering of a frame with a gap:
  *
  * ![](frame-gap.png)
- *
- * Since: 3.0
  **/
 void
 gtk_render_frame_gap (GtkStyleContext *context,
@@ -797,8 +773,6 @@ gtk_do_render_handle (GtkStyleContext *context,
  * Handles rendered for the paned and grip classes:
  *
  * ![](handles.png)
- *
- * Since: 3.0
  **/
 void
 gtk_render_handle (GtkStyleContext *context,
@@ -829,8 +803,6 @@ gtk_render_handle (GtkStyleContext *context,
  * Renders an activity indicator (such as in #GtkSpinner).
  * The state %GTK_STATE_FLAG_CHECKED determines whether there is
  * activity going on.
- *
- * Since: 3.0
  **/
 void
 gtk_render_activity (GtkStyleContext *context,
@@ -865,8 +837,6 @@ gtk_render_activity (GtkStyleContext *context,
  *
  * You probably want to use gtk_render_icon_surface() instead, if you
  * already have a Cairo surface.
- *
- * Since: 3.2
  **/
 void
 gtk_render_icon (GtkStyleContext *context,
@@ -899,8 +869,6 @@ gtk_render_icon (GtkStyleContext *context,
  * @y: Y position for the @incon
  *
  * Renders the icon in @surface at the specified @x and @y coordinates.
- *
- * Since: 3.10
  **/
 void
 gtk_render_icon_surface (GtkStyleContext *context,

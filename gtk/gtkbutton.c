@@ -622,8 +622,6 @@ gtk_button_new_with_label (const gchar *label)
  * will be updated appropriately.
  *
  * Returns: a new #GtkButton displaying the themed icon
- *
- * Since: 3.10
  */
 GtkWidget*
 gtk_button_new_from_icon_name (const gchar *icon_name)
@@ -1086,8 +1084,6 @@ gtk_button_grab_notify (GtkWidget *widget,
  * Adds a #GtkImage with the given icon name as a child. The icon will be
  * of size %GTK_ICON_SIZE_BUTTON. If @button already contains a child widget,
  * that child widget will be removed and replaced with the image.
- *
- * Since: 3.90
  */
 void
 gtk_button_set_icon_name (GtkButton  *button,
@@ -1129,8 +1125,6 @@ gtk_button_set_icon_name (GtkButton  *button,
  * Returns the icon name set via gtk_button_set_icon_name().
  *
  * Returns: (nullable): The icon name set via gtk_button_set_icon_name()
- *
- * Since: 3.90
  */
 const char *
 gtk_button_get_icon_name (GtkButton *button)

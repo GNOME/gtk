@@ -112,8 +112,6 @@ gtk_cell_renderer_spinner_class_init (GtkCellRendererSpinnerClass *klass)
   /* GtkCellRendererSpinner:active:
    *
    * Whether the spinner is active (ie. shown) in the cell
-   *
-   * Since: 2.20
    */
   g_object_class_install_property (object_class,
                                    PROP_ACTIVE,
@@ -131,8 +129,6 @@ gtk_cell_renderer_spinner_class_init (GtkCellRendererSpinnerClass *klass)
    *
    * By default, the #GtkSpinner widget draws one full cycle of the animation,
    * consisting of 12 frames, in 750 milliseconds.
-   *
-   * Since: 2.20
    */
   g_object_class_install_property (object_class,
                                    PROP_PULSE,
@@ -146,8 +142,6 @@ gtk_cell_renderer_spinner_class_init (GtkCellRendererSpinnerClass *klass)
    * GtkCellRendererSpinner:size:
    *
    * The #GtkIconSize value that specifies the size of the rendered spinner.
-   *
-   * Since: 2.20
    */
   g_object_class_install_property (object_class,
                                    PROP_SIZE,
@@ -174,8 +168,6 @@ gtk_cell_renderer_spinner_init (GtkCellRendererSpinner *cell)
  * activity.
  *
  * Returns: a new #GtkCellRenderer
- *
- * Since: 2.20
  */
 GtkCellRenderer *
 gtk_cell_renderer_spinner_new (void)

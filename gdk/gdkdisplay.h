@@ -61,9 +61,9 @@ void        gdk_display_close                  (GdkDisplay  *display);
 GDK_AVAILABLE_IN_ALL
 gboolean    gdk_display_is_closed          (GdkDisplay  *display);
 
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 gboolean    gdk_display_is_composited      (GdkDisplay  *display);
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 gboolean    gdk_display_is_rgba            (GdkDisplay  *display);
 
 GDK_AVAILABLE_IN_ALL
@@ -82,9 +82,9 @@ GdkDisplay *gdk_display_get_default (void);
 GDK_AVAILABLE_IN_ALL
 GdkWindow *gdk_display_get_default_group       (GdkDisplay *display); 
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GdkClipboard *          gdk_display_get_clipboard               (GdkDisplay     *display);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GdkClipboard *          gdk_display_get_primary_clipboard       (GdkDisplay     *display);
 
 GDK_AVAILABLE_IN_ALL
@@ -98,31 +98,31 @@ void     gdk_display_notify_startup_complete   (GdkDisplay    *display,
 GDK_AVAILABLE_IN_ALL
 GdkAppLaunchContext *gdk_display_get_app_launch_context (GdkDisplay *display);
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 GdkSeat * gdk_display_get_default_seat (GdkDisplay *display);
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 GList   * gdk_display_list_seats       (GdkDisplay *display);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 int          gdk_display_get_n_monitors        (GdkDisplay *display);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 GdkMonitor * gdk_display_get_monitor           (GdkDisplay *display,
                                                 int         monitor_num);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 GdkMonitor * gdk_display_get_primary_monitor   (GdkDisplay *display);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 GdkMonitor * gdk_display_get_monitor_at_point  (GdkDisplay *display,
                                                 int         x,
                                                 int         y);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 GdkMonitor * gdk_display_get_monitor_at_window (GdkDisplay *display,
                                                 GdkWindow  *window);
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GdkKeymap *  gdk_display_get_keymap  (GdkDisplay *display);
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 gboolean     gdk_display_get_setting (GdkDisplay *display,
                                       const char *name,
                                       GValue     *value);

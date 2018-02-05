@@ -199,7 +199,7 @@ GtkTreePath *gtk_tree_path_new_from_string  (const gchar       *path);
 GDK_AVAILABLE_IN_ALL
 GtkTreePath *gtk_tree_path_new_from_indices (gint               first_index,
 					     ...);
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 GtkTreePath *gtk_tree_path_new_from_indicesv (gint             *indices,
 					      gsize             length);
 GDK_AVAILABLE_IN_ALL
@@ -396,7 +396,7 @@ void gtk_tree_model_rows_reordered        (GtkTreeModel *tree_model,
 					   GtkTreePath  *path,
 					   GtkTreeIter  *iter,
 					   gint         *new_order);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 void gtk_tree_model_rows_reordered_with_length (GtkTreeModel *tree_model,
 						GtkTreePath  *path,
 						GtkTreeIter  *iter,

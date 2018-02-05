@@ -395,8 +395,6 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
  *
  * See [GtkWidget’s geometry management section][geometry-management] for
  * a more details on implementing #GtkWidgetClass.measure().
- *
- * Since: 3.90
  */
 void
 gtk_widget_measure (GtkWidget        *widget,
@@ -484,8 +482,6 @@ gtk_widget_measure (GtkWidget        *widget,
  * capabilities.
  *
  * Returns: The #GtkSizeRequestMode preferred by @widget.
- *
- * Since: 3.0
  */
 GtkSizeRequestMode
 gtk_widget_get_request_mode (GtkWidget *widget)
@@ -598,8 +594,6 @@ _gtk_widget_get_preferred_size_and_baseline (GtkWidget      *widget,
  *
  * Use gtk_widget_measure() if you want to support
  * baseline alignment.
- *
- * Since: 3.0
  */
 void
 gtk_widget_get_preferred_size (GtkWidget      *widget,

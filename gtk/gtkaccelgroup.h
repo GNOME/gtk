@@ -78,8 +78,6 @@ typedef gboolean (*GtkAccelGroupActivate) (GtkAccelGroup  *accel_group,
  * @key: 
  * @closure: 
  * @data: (closure):
- * 
- * Since: 2.2
  */
 typedef gboolean (*GtkAccelGroupFindFunc) (GtkAccelKey    *key,
 					   GClosure       *closure,
@@ -202,7 +200,7 @@ GDK_AVAILABLE_IN_ALL
 void	 gtk_accelerator_parse		      (const gchar     *accelerator,
 					       guint	       *accelerator_key,
 					       GdkModifierType *accelerator_mods);
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 void gtk_accelerator_parse_with_keycode       (const gchar     *accelerator,
                                                guint           *accelerator_key,
                                                guint          **accelerator_codes,
@@ -210,7 +208,7 @@ void gtk_accelerator_parse_with_keycode       (const gchar     *accelerator,
 GDK_AVAILABLE_IN_ALL
 gchar*	 gtk_accelerator_name		      (guint	        accelerator_key,
 					       GdkModifierType  accelerator_mods);
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 gchar*	 gtk_accelerator_name_with_keycode    (GdkDisplay      *display,
                                                guint            accelerator_key,
                                                guint            keycode,
@@ -218,7 +216,7 @@ gchar*	 gtk_accelerator_name_with_keycode    (GdkDisplay      *display,
 GDK_AVAILABLE_IN_ALL
 gchar*   gtk_accelerator_get_label            (guint           accelerator_key,
                                                GdkModifierType accelerator_mods);
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 gchar*   gtk_accelerator_get_label_with_keycode (GdkDisplay      *display,
                                                  guint            accelerator_key,
                                                  guint            keycode,

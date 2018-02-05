@@ -50,21 +50,21 @@ typedef enum {
   GDK_DEVICE_PAD_FEATURE_STRIP
 } GdkDevicePadFeature;
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 GType gdk_device_pad_get_type          (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 gint  gdk_device_pad_get_n_groups      (GdkDevicePad *pad);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 gint  gdk_device_pad_get_group_n_modes (GdkDevicePad *pad,
                                         gint          group_idx);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 gint  gdk_device_pad_get_n_features    (GdkDevicePad        *pad,
                                         GdkDevicePadFeature  feature);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 gint  gdk_device_pad_get_feature_group (GdkDevicePad        *pad,
                                         GdkDevicePadFeature  feature,
                                         gint                 feature_idx);

@@ -1929,8 +1929,6 @@ logical_to_physical (GtkToolbar *toolbar,
  * hierarchy. When an item is set as drop highlight item it can not
  * added to any widget hierarchy or used as highlight item for another
  * toolbar.
- * 
- * Since: 2.4
  **/
 void
 gtk_toolbar_set_drop_highlight_item (GtkToolbar  *toolbar,
@@ -2371,8 +2369,6 @@ gtk_toolbar_new (void)
  * Insert a #GtkToolItem into the toolbar at position @pos. If @pos is
  * 0 the item is prepended to the start of the toolbar. If @pos is
  * negative, the item is appended to the end of the toolbar.
- *
- * Since: 2.4
  **/
 void
 gtk_toolbar_insert (GtkToolbar  *toolbar,
@@ -2399,8 +2395,6 @@ gtk_toolbar_insert (GtkToolbar  *toolbar,
  * It is an error if @item is not a child of the toolbar.
  * 
  * Returns: the position of item on the toolbar.
- * 
- * Since: 2.4
  **/
 gint
 gtk_toolbar_get_item_index (GtkToolbar  *toolbar,
@@ -2506,8 +2500,6 @@ gtk_toolbar_unset_style (GtkToolbar *toolbar)
  * Returns the number of items on the toolbar.
  * 
  * Returns: the number of items on the toolbar
- * 
- * Since: 2.4
  **/
 gint
 gtk_toolbar_get_n_items (GtkToolbar *toolbar)
@@ -2531,8 +2523,6 @@ gtk_toolbar_get_n_items (GtkToolbar *toolbar)
  *
  * Returns: (nullable) (transfer none): The @n'th #GtkToolItem on @toolbar,
  *     or %NULL if there isn’t an @n'th item.
- *
- * Since: 2.4
  **/
 GtkToolItem *
 gtk_toolbar_get_nth_item (GtkToolbar *toolbar,
@@ -2570,8 +2560,6 @@ gtk_toolbar_get_nth_item (GtkToolbar *toolbar,
  * or #GtkToolItem::create-menu-proxy, will be available in an overflow menu,
  * which can be opened by an added arrow button. If %FALSE, @toolbar will
  * request enough size to fit all of its child items without any overflow.
- * 
- * Since: 2.4
  **/
 void
 gtk_toolbar_set_show_arrow (GtkToolbar *toolbar,
@@ -2605,8 +2593,6 @@ gtk_toolbar_set_show_arrow (GtkToolbar *toolbar,
  * See gtk_toolbar_set_show_arrow().
  * 
  * Returns: %TRUE if the toolbar has an overflow menu.
- * 
- * Since: 2.4
  **/
 gboolean
 gtk_toolbar_get_show_arrow (GtkToolbar *toolbar)
@@ -2630,8 +2616,6 @@ gtk_toolbar_get_show_arrow (GtkToolbar *toolbar)
  * @x and @y are in @toolbar coordinates.
  * 
  * Returns: The position corresponding to the point (@x, @y) on the toolbar.
- * 
- * Since: 2.4
  **/
 gint
 gtk_toolbar_get_drop_index (GtkToolbar *toolbar,

@@ -272,8 +272,6 @@ gsk_renderer_class_init (GskRendererClass *klass)
    * GskRenderer:display:
    *
    * The #GdkDisplay used by the #GskRenderer.
-   *
-   * Since: 3.90
    */
   gsk_renderer_properties[PROP_DISPLAY] =
     g_param_spec_object ("display",
@@ -296,8 +294,6 @@ gsk_renderer_class_init (GskRendererClass *klass)
    * GskRenderer:drawing-context:
    *
    * The drawing context used when rendering.
-   *
-   * Since: 3.90
    */
   gsk_renderer_properties[PROP_DRAWING_CONTEXT] =
     g_param_spec_object ("drawing-context",
@@ -327,8 +323,6 @@ gsk_renderer_init (GskRenderer *self)
  * has not been realized yet, %NULL will be returned.
  *
  * Returns: (transfer none) (nullable): a #GdkWindow
- *
- * Since: 3.90
  */
 GdkWindow *
 gsk_renderer_get_window (GskRenderer *renderer)
@@ -383,8 +377,6 @@ gsk_renderer_get_drawing_context (GskRenderer *renderer)
  * Retrieves the #GdkDisplay used when creating the #GskRenderer.
  *
  * Returns: (transfer none): a #GdkDisplay
- *
- * Since: 3.90
  */
 GdkDisplay *
 gsk_renderer_get_display (GskRenderer *renderer)
@@ -403,8 +395,6 @@ gsk_renderer_get_display (GskRenderer *renderer)
  * Checks whether the @renderer is realized or not.
  *
  * Returns: %TRUE if the #GskRenderer was realized, and %FALSE otherwise
- *
- * Since: 3.90
  */
 gboolean
 gsk_renderer_is_realized (GskRenderer *renderer)
@@ -424,8 +414,6 @@ gsk_renderer_is_realized (GskRenderer *renderer)
  *
  * Creates the resources needed by the @renderer to render the scene
  * graph.
- *
- * Since: 3.90
  */
 gboolean
 gsk_renderer_realize (GskRenderer  *renderer,
@@ -456,8 +444,6 @@ gsk_renderer_realize (GskRenderer  *renderer,
  * @renderer: a #GskRenderer
  *
  * Releases all the resources created by gsk_renderer_realize().
- *
- * Since: 3.90
  */
 void
 gsk_renderer_unrealize (GskRenderer *renderer)
@@ -490,8 +476,6 @@ gsk_renderer_unrealize (GskRenderer *renderer)
  * transform node and pass that node instead.
  *
  * Returns: (transfer full): a #GdkTexture with the rendered contents of @root.
- *
- * Since: 3.90
  */
 GdkTexture *
 gsk_renderer_render_texture (GskRenderer           *renderer,
@@ -550,8 +534,6 @@ gsk_renderer_render_texture (GskRenderer           *renderer,
  *
  * The @renderer will acquire a reference on the #GskRenderNode tree while
  * the rendering is in progress.
- *
- * Since: 3.90
  */
 void
 gsk_renderer_render (GskRenderer       *renderer,
@@ -710,8 +692,6 @@ static struct {
  * The renderer will be realized when it is returned.
  *
  * Returns: (transfer full) (nullable): a #GskRenderer
- *
- * Since: 3.90
  */
 GskRenderer *
 gsk_renderer_new_for_window (GdkWindow *window)
@@ -786,8 +766,6 @@ gsk_renderer_create_cairo_surface (GskRenderer    *renderer,
  *
  * Returns: (transfer none): a #GdkDrawingContext context that should be used to
  * draw the contents of the @renderer. This context is owned by GDK.
- *
- * Since: 3.90
  */
 GdkDrawingContext *
 gsk_renderer_begin_draw_frame (GskRenderer          *renderer,
@@ -831,8 +809,6 @@ gsk_renderer_begin_draw_frame (GskRenderer          *renderer,
  *
  * Calls to gsk_renderer_begin_draw_frame() and gsk_renderer_end_draw_frame()
  * must be paired.
- *
- * Since: 3.90
  */
 void
 gsk_renderer_end_draw_frame (GskRenderer       *renderer,

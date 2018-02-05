@@ -445,16 +445,16 @@ struct _GdkWindowClass
  */
 GDK_AVAILABLE_IN_ALL
 GType         gdk_window_get_type              (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 GdkWindow *   gdk_window_new_toplevel          (GdkDisplay    *display,
                                                 int            width,
                                                 int            height);
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 GdkWindow *   gdk_window_new_popup             (GdkDisplay    *display,
                                                 const GdkRectangle *position);
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 GdkWindow *   gdk_window_new_temp              (GdkDisplay    *display);
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 GdkWindow *   gdk_window_new_child             (GdkWindow     *parent,
                                                 const GdkRectangle *position);
 
@@ -572,10 +572,10 @@ GDK_AVAILABLE_IN_ALL
 void gdk_window_merge_child_input_shapes   (GdkWindow       *window);
 
 
-GDK_AVAILABLE_IN_3_18
+GDK_AVAILABLE_IN_ALL
 void gdk_window_set_pass_through (GdkWindow *window,
                                   gboolean   pass_through);
-GDK_AVAILABLE_IN_3_18
+GDK_AVAILABLE_IN_ALL
 gboolean gdk_window_get_pass_through (GdkWindow *window);
 
 /*
@@ -633,11 +633,11 @@ cairo_region_t *gdk_window_get_clip_region  (GdkWindow          *window);
 GDK_AVAILABLE_IN_ALL
 cairo_region_t *gdk_window_get_visible_region(GdkWindow         *window);
 
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 GdkDrawingContext *gdk_window_begin_draw_frame  (GdkWindow            *window,
                                                  GdkDrawContext       *context,
                                                  const cairo_region_t *region);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 void          gdk_window_end_draw_frame    (GdkWindow            *window,
                                             GdkDrawingContext    *context);
 
@@ -714,7 +714,7 @@ GDK_AVAILABLE_IN_ALL
 void          gdk_window_get_frame_extents (GdkWindow     *window,
                                             GdkRectangle  *rect);
 
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 gint          gdk_window_get_scale_factor  (GdkWindow     *window);
 
 GDK_AVAILABLE_IN_ALL
@@ -723,7 +723,7 @@ GdkWindow *   gdk_window_get_device_position (GdkWindow       *window,
                                               gint            *x,
                                               gint            *y,
                                               GdkModifierType *mask);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 GdkWindow *   gdk_window_get_device_position_double (GdkWindow       *window,
                                                      GdkDevice       *device,
                                                      gdouble         *x,
@@ -738,7 +738,7 @@ GDK_AVAILABLE_IN_ALL
 GList *	      gdk_window_get_children	 (GdkWindow	  *window);
 GDK_AVAILABLE_IN_ALL
 GList *       gdk_window_peek_children   (GdkWindow       *window);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 GList *       gdk_window_get_children_with_user_data (GdkWindow *window,
 						      gpointer   user_data);
 
@@ -782,7 +782,7 @@ cairo_surface_t *
                                           cairo_content_t  content,
                                           int              width,
                                           int              height);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 cairo_surface_t *
               gdk_window_create_similar_image_surface (GdkWindow *window,
 						       cairo_format_t format,
@@ -806,13 +806,13 @@ GDK_AVAILABLE_IN_ALL
 void          gdk_window_unmaximize      (GdkWindow       *window);
 GDK_AVAILABLE_IN_ALL
 void          gdk_window_fullscreen      (GdkWindow       *window);
-GDK_AVAILABLE_IN_3_18
+GDK_AVAILABLE_IN_ALL
 void          gdk_window_fullscreen_on_monitor (GdkWindow      *window,
                                                 GdkMonitor     *monitor);
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 void          gdk_window_set_fullscreen_mode (GdkWindow   *window,
                                           GdkFullscreenMode mode);
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 GdkFullscreenMode
               gdk_window_get_fullscreen_mode (GdkWindow   *window);
 GDK_AVAILABLE_IN_ALL
@@ -836,7 +836,7 @@ void gdk_window_begin_resize_drag            (GdkWindow     *window,
                                               gint           root_x,
                                               gint           root_y,
                                               guint32        timestamp);
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 void gdk_window_begin_resize_drag_for_device (GdkWindow     *window,
                                               GdkWindowEdge  edge,
                                               GdkDevice     *device,
@@ -850,7 +850,7 @@ void gdk_window_begin_move_drag              (GdkWindow     *window,
                                               gint           root_x,
                                               gint           root_y,
                                               guint32        timestamp);
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 void gdk_window_begin_move_drag_for_device   (GdkWindow     *window,
                                               GdkDevice     *device,
                                               gint           button,
@@ -911,27 +911,27 @@ GDK_AVAILABLE_IN_ALL
 gboolean   gdk_window_get_support_multidevice (GdkWindow *window);
 
 /* Frame clock */
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 GdkFrameClock* gdk_window_get_frame_clock      (GdkWindow     *window);
 
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 void       gdk_window_set_opaque_region        (GdkWindow      *window,
                                                 cairo_region_t *region);
 
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 void       gdk_window_set_shadow_width         (GdkWindow      *window,
                                                 gint            left,
                                                 gint            right,
                                                 gint            top,
                                                 gint            bottom);
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 gboolean  gdk_window_show_window_menu          (GdkWindow      *window,
                                                 GdkEvent       *event);
 
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 GdkGLContext * gdk_window_create_gl_context    (GdkWindow      *window,
                                                 GError        **error);
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 GdkVulkanContext *
                gdk_window_create_vulkan_context(GdkWindow      *window,
                                                 GError        **error);

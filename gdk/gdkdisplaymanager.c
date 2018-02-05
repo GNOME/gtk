@@ -149,8 +149,6 @@ gdk_display_manager_class_init (GdkDisplayManagerClass *klass)
    * @display: the opened display
    *
    * The ::display-opened signal is emitted when a display is opened.
-   *
-   * Since: 2.2
    */
   signals[DISPLAY_OPENED] =
     g_signal_new (g_intern_static_string ("display-opened"),
@@ -246,8 +244,6 @@ static const gchar *allowed_backends;
  * This call must happen prior to gdk_display_open(),
  * gtk_init(), or gtk_init_check()
  * in order to take effect.
- *
- * Since: 3.10
  */
 void
 gdk_set_allowed_backends (const gchar *backends)
@@ -296,8 +292,6 @@ static GdkBackend gdk_backends[] = {
  * Returns: (transfer none): The global #GdkDisplayManager singleton;
  *     gdk_parse_args(), gdk_init(), or gdk_init_check() must have
  *     been called first.
- *
- * Since: 2.2
  **/
 GdkDisplayManager*
 gdk_display_manager_get (void)
@@ -318,8 +312,6 @@ gdk_display_manager_get (void)
  *
  * Returns: (nullable) (transfer none): a #GdkDisplay, or %NULL if
  *     there is no default display.
- *
- * Since: 2.2
  */
 GdkDisplay *
 gdk_display_manager_get_default_display (GdkDisplayManager *manager)
@@ -336,8 +328,6 @@ gdk_display_manager_get_default_display (GdkDisplayManager *manager)
  *
  * Returns: (nullable) (transfer none): a #GdkDisplay, or %NULL if
  *   there is no default display.
- *
- * Since: 2.2
  */
 GdkDisplay *
 gdk_display_get_default (void)
@@ -351,8 +341,6 @@ gdk_display_get_default (void)
  * @display: a #GdkDisplay
  * 
  * Sets @display as the default display.
- *
- * Since: 2.2
  **/
 void
 gdk_display_manager_set_default_display (GdkDisplayManager *manager,
@@ -375,8 +363,6 @@ gdk_display_manager_set_default_display (GdkDisplayManager *manager,
  * Returns: (transfer container) (element-type GdkDisplay): a newly
  *     allocated #GSList of #GdkDisplay objects. Free with g_slist_free()
  *     when you are done with it.
- *
- * Since: 2.2
  **/
 GSList *
 gdk_display_manager_list_displays (GdkDisplayManager *manager)
@@ -393,8 +379,6 @@ gdk_display_manager_list_displays (GdkDisplayManager *manager)
  *
  * Returns: (nullable) (transfer none): a #GdkDisplay, or %NULL if the
  *     display could not be opened
- *
- * Since: 3.0
  */
 GdkDisplay *
 gdk_display_manager_open_display (GdkDisplayManager *manager,

@@ -274,8 +274,6 @@ gtk_builder_class_init (GtkBuilderClass *klass)
   * have been marked as translatable in interface descriptions.
   * If the translation domain is %NULL, #GtkBuilder uses gettext(),
   * otherwise g_dgettext().
-  *
-  * Since: 2.12
   */
   builder_props[PROP_TRANSLATION_DOMAIN] =
       g_param_spec_string ("translation-domain",
@@ -1021,8 +1019,6 @@ _gtk_builder_finish (GtkBuilder *builder)
  * gtk_builder_new_from_resource() or gtk_builder_new_from_string().
  *
  * Returns: a new (empty) #GtkBuilder object
- *
- * Since: 2.12
  **/
 GtkBuilder *
 gtk_builder_new (void)
@@ -1053,8 +1049,6 @@ gtk_builder_new (void)
  * thing to do when an error is detected is to call g_error().
  *
  * Returns: A positive value on success, 0 if an error occurred
- *
- * Since: 2.12
  **/
 guint
 gtk_builder_add_from_file (GtkBuilder   *builder,
@@ -1118,8 +1112,6 @@ gtk_builder_add_from_file (GtkBuilder   *builder,
  * #GtkTreeModel), you have to explicitly list all of them in @object_ids.
  *
  * Returns: A positive value on success, 0 if an error occurred
- *
- * Since: 2.14
  **/
 guint
 gtk_builder_add_objects_from_file (GtkBuilder   *builder,
@@ -1242,8 +1234,6 @@ gtk_builder_extend_with_template (GtkBuilder   *builder,
  * to call g_error().
  *
  * Returns: A positive value on success, 0 if an error occurred
- *
- * Since: 3.4
  **/
 guint
 gtk_builder_add_from_resource (GtkBuilder   *builder,
@@ -1319,8 +1309,6 @@ gtk_builder_add_from_resource (GtkBuilder   *builder,
  * #GtkTreeModel), you have to explicitly list all of them in @object_ids.
  *
  * Returns: A positive value on success, 0 if an error occurred
- *
- * Since: 3.4
  **/
 guint
 gtk_builder_add_objects_from_resource (GtkBuilder   *builder,
@@ -1398,8 +1386,6 @@ gtk_builder_add_objects_from_resource (GtkBuilder   *builder,
  * to call g_error().
  *
  * Returns: A positive value on success, 0 if an error occurred
- *
- * Since: 2.12
  **/
 guint
 gtk_builder_add_from_string (GtkBuilder   *builder,
@@ -1453,8 +1439,6 @@ gtk_builder_add_from_string (GtkBuilder   *builder,
  * #GtkTreeModel), you have to explicitly list all of them in @object_ids.
  *
  * Returns: A positive value on success, 0 if an error occurred
- *
- * Since: 2.14
  **/
 guint
 gtk_builder_add_objects_from_string (GtkBuilder   *builder,
@@ -1501,8 +1485,6 @@ gtk_builder_add_objects_from_string (GtkBuilder   *builder,
  *
  * Returns: (nullable) (transfer none): the object named @name or %NULL if
  *    it could not be found in the object tree.
- *
- * Since: 2.12
  **/
 GObject *
 gtk_builder_get_object (GtkBuilder  *builder,
@@ -1525,8 +1507,6 @@ gtk_builder_get_object (GtkBuilder  *builder,
  * Returns: (element-type GObject) (transfer container): a newly-allocated #GSList containing all the objects
  *   constructed by the #GtkBuilder instance. It should be freed by
  *   g_slist_free()
- *
- * Since: 2.12
  **/
 GSList *
 gtk_builder_get_objects (GtkBuilder *builder)
@@ -1551,8 +1531,6 @@ gtk_builder_get_objects (GtkBuilder *builder)
  *
  * Sets the translation domain of @builder.
  * See #GtkBuilder:translation-domain.
- *
- * Since: 2.12
  **/
 void
 gtk_builder_set_translation_domain (GtkBuilder  *builder,
@@ -1577,8 +1555,6 @@ gtk_builder_set_translation_domain (GtkBuilder  *builder,
  *
  * Returns: the translation domain. This string is owned
  * by the builder object and must not be modified or freed.
- *
- * Since: 2.12
  **/
 const gchar *
 gtk_builder_get_translation_domain (GtkBuilder *builder)
@@ -1596,8 +1572,6 @@ gtk_builder_get_translation_domain (GtkBuilder *builder)
  *
  * Add @object to the @builder object pool so it can be referenced just like any
  * other object built by builder.
- *
- * Since: 3.8
  **/
 void
 gtk_builder_expose_object (GtkBuilder    *builder,
@@ -1682,8 +1656,6 @@ gtk_builder_connect_signals_default (GtkBuilder    *builder,
  * On Linux and Unices, this is not necessary; applications should instead
  * be compiled with the -Wl,--export-dynamic CFLAGS, and linked against
  * gmodule-export-2.0.
- *
- * Since: 2.12
  **/
 void
 gtk_builder_connect_signals (GtkBuilder *builder,
@@ -1723,8 +1695,6 @@ gtk_builder_connect_signals (GtkBuilder *builder,
  * could be useful where the programmer wants more control over the signal
  * connection process. Note that this function can only be called once,
  * subsequent calls will do nothing.
- *
- * Since: 2.12
  */
 
 /**
@@ -1736,8 +1706,6 @@ gtk_builder_connect_signals (GtkBuilder *builder,
  * This function can be thought of the interpreted language binding
  * version of gtk_builder_connect_signals(), except that it does not
  * require GModule to function correctly.
- *
- * Since: 2.12
  */
 void
 gtk_builder_connect_signals_full (GtkBuilder            *builder,
@@ -1824,8 +1792,6 @@ gtk_builder_connect_signals_full (GtkBuilder            *builder,
  * #GError from the #GTK_BUILDER_ERROR domain.
  *
  * Returns: %TRUE on success
- *
- * Since: 2.12
  */
 gboolean
 gtk_builder_value_from_string (GtkBuilder   *builder,
@@ -1901,8 +1867,6 @@ gtk_builder_value_from_string (GtkBuilder   *builder,
  * #GError from the #GTK_BUILDER_ERROR domain.
  *
  * Returns: %TRUE on success
- *
- * Since: 2.12
  */
 gboolean
 gtk_builder_value_from_string_type (GtkBuilder   *builder,
@@ -2420,8 +2384,6 @@ error:
  *
  * Returns: the #GType found for @type_name or #G_TYPE_INVALID
  *   if no type was found
- *
- * Since: 2.12
  */
 GType
 gtk_builder_get_type_from_name (GtkBuilder  *builder,
@@ -2507,8 +2469,6 @@ _gtk_builder_get_template_type (GtkBuilder *builder)
  * for any callback symbols that are added. Using this method allows for better
  * encapsulation as it does not require that callback symbols be declared in
  * the global namespace.
- *
- * Since: 3.10
  */
 void
 gtk_builder_add_callback_symbol (GtkBuilder  *builder,
@@ -2535,8 +2495,6 @@ gtk_builder_add_callback_symbol (GtkBuilder  *builder,
  *
  * A convenience function to add many callbacks instead of calling
  * gtk_builder_add_callback_symbol() for each symbol.
- *
- * Since: 3.10
  */
 void
 gtk_builder_add_callback_symbols (GtkBuilder  *builder,
@@ -2584,8 +2542,6 @@ gtk_builder_add_callback_symbols (GtkBuilder  *builder,
  * using gtk_builder_connect_signals_full()
  *
  * Returns: (nullable): The callback symbol in @builder for @callback_name, or %NULL
- *
- * Since: 3.10
  */
 GCallback
 gtk_builder_lookup_callback_symbol (GtkBuilder  *builder,
@@ -2612,8 +2568,6 @@ gtk_builder_lookup_callback_symbol (GtkBuilder  *builder,
  * user interface descriptions that are shipped as part of your program.
  *
  * Returns: a #GtkBuilder containing the described interface
- *
- * Since: 3.10
  **/
 GtkBuilder *
 gtk_builder_new_from_file (const gchar *filename)
@@ -2639,8 +2593,6 @@ gtk_builder_new_from_file (const gchar *filename)
  * description, then the program will be aborted.
  *
  * Returns: a #GtkBuilder containing the described interface
- *
- * Since: 3.10
  **/
 GtkBuilder *
 gtk_builder_new_from_resource (const gchar *resource_path)
@@ -2671,8 +2623,6 @@ gtk_builder_new_from_resource (const gchar *resource_path)
  * from untrusted sources.
  *
  * Returns: a #GtkBuilder containing the interface described by @string
- *
- * Since: 3.10
  **/
 GtkBuilder *
 gtk_builder_new_from_string (const gchar *string,
@@ -2697,8 +2647,6 @@ gtk_builder_new_from_string (const gchar *string,
  *
  * You only need this function if there is more than one #GApplication
  * in your process. @application cannot be %NULL.
- *
- * Since: 3.10
  **/
 void
 gtk_builder_set_application (GtkBuilder     *builder,
@@ -2728,8 +2676,6 @@ gtk_builder_set_application (GtkBuilder     *builder,
  *
  * Returns: (nullable) (transfer none): the application being used by the builder,
  *     or %NULL
- *
- * Since: 3.10
  **/
 GtkApplication *
 gtk_builder_get_application (GtkBuilder *builder)

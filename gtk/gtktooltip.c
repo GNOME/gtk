@@ -234,8 +234,6 @@ gtk_tooltip_dispose (GObject *object)
  * Sets the text of the tooltip to be @markup, which is marked up
  * with the [Pango text markup language][PangoMarkupFormat].
  * If @markup is %NULL, the label will be hidden.
- *
- * Since: 2.12
  */
 void
 gtk_tooltip_set_markup (GtkTooltip  *tooltip,
@@ -253,8 +251,6 @@ gtk_tooltip_set_markup (GtkTooltip  *tooltip,
  *
  * Sets the text of the tooltip to be @text. If @text is %NULL, the label
  * will be hidden. See also gtk_tooltip_set_markup().
- *
- * Since: 2.12
  */
 void
 gtk_tooltip_set_text (GtkTooltip  *tooltip,
@@ -272,8 +268,6 @@ gtk_tooltip_set_text (GtkTooltip  *tooltip,
  *
  * Sets the icon of the tooltip (which is in front of the text) to be
  * @texture.  If @texure is %NULL, the image will be hidden.
- *
- * Since: 3.94
  */
 void
 gtk_tooltip_set_icon (GtkTooltip *tooltip,
@@ -293,8 +287,6 @@ gtk_tooltip_set_icon (GtkTooltip *tooltip,
  * Sets the icon of the tooltip (which is in front of the text) to be
  * the icon indicated by @icon_name with the size indicated
  * by @size.  If @icon_name is %NULL, the image will be hidden.
- *
- * Since: 2.14
  */
 void
 gtk_tooltip_set_icon_from_icon_name (GtkTooltip  *tooltip,
@@ -314,8 +306,6 @@ gtk_tooltip_set_icon_from_icon_name (GtkTooltip  *tooltip,
  * Sets the icon of the tooltip (which is in front of the text)
  * to be the icon indicated by @gicon with the size indicated
  * by @size. If @gicon is %NULL, the image will be hidden.
- *
- * Since: 2.20
  */
 void
 gtk_tooltip_set_icon_from_gicon (GtkTooltip  *tooltip,
@@ -338,9 +328,6 @@ gtk_tooltip_set_icon_from_gicon (GtkTooltip  *tooltip,
  * By default a box with a #GtkImage and #GtkLabel is embedded in 
  * the tooltip, which can be configured using gtk_tooltip_set_markup() 
  * and gtk_tooltip_set_icon().
-
- *
- * Since: 2.12
  */
 void
 gtk_tooltip_set_custom (GtkTooltip *tooltip,
@@ -370,8 +357,6 @@ gtk_tooltip_set_custom (GtkTooltip *tooltip,
  * For setting tooltips on #GtkTreeView, please refer to the convenience
  * functions for this: gtk_tree_view_set_tooltip_row() and
  * gtk_tree_view_set_tooltip_cell().
- *
- * Since: 2.12
  */
 void
 gtk_tooltip_set_tip_area (GtkTooltip         *tooltip,
@@ -396,8 +381,6 @@ gtk_tooltip_set_tip_area (GtkTooltip         *tooltip,
  * visible tooltip, or to show/hide the current tooltip.  This function is
  * useful to call when, for example, the state of the widget changed by a
  * key press.
- *
- * Since: 2.12
  */
 void
 gtk_tooltip_trigger_tooltip_query (GdkDisplay *display)

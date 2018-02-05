@@ -186,8 +186,6 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
    * #GtkOrientable interface which has its own @orientation
    * property. However we redefine the property here in order to
    * override its default horizontal orientation.
-   *
-   * Since: 2.14
    **/
   g_object_class_override_property (gobject_class,
 				    PROP_ORIENTATION,
@@ -229,8 +227,6 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
    * It is recommended to use at least 3 icons so that the
    * #GtkScaleButton reflects the current value of the scale
    * better for the users.
-   *
-   * Since: 2.12
    */
   g_object_class_install_property (gobject_class,
                                    PROP_ICONS,
@@ -247,8 +243,6 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
    *
    * The ::value-changed signal is emitted when the value field has
    * changed.
-   *
-   * Since: 2.12
    */
   signals[VALUE_CHANGED] =
     g_signal_new (I_("value-changed"),
@@ -268,8 +262,6 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
    * which gets emitted to popup the scale widget.
    *
    * The default bindings for this signal are Space, Enter and Return.
-   *
-   * Since: 2.12
    */
   signals[POPUP] =
     g_signal_new_class_handler (I_("popup"),
@@ -289,8 +281,6 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
    * which gets emitted to popdown the scale widget.
    *
    * The default binding for this signal is Escape.
-   *
-   * Since: 2.12
    */
   signals[POPDOWN] =
     g_signal_new_class_handler (I_("popdown"),
@@ -535,8 +525,6 @@ gtk_scale_button_dispose (GObject *object)
  * a stepping of @step.
  *
  * Returns: a new #GtkScaleButton
- *
- * Since: 2.12
  */
 GtkWidget *
 gtk_scale_button_new (gdouble       min,
@@ -564,8 +552,6 @@ gtk_scale_button_new (gdouble       min,
  * Gets the current value of the scale button.
  *
  * Returns: current value of the scale button
- *
- * Since: 2.12
  */
 gdouble
 gtk_scale_button_get_value (GtkScaleButton * button)
@@ -588,8 +574,6 @@ gtk_scale_button_get_value (GtkScaleButton * button)
  * the minimum or maximum range values, it will be clamped to fit
  * inside them. The scale button emits the #GtkScaleButton::value-changed
  * signal if the value changes.
- *
- * Since: 2.12
  */
 void
 gtk_scale_button_set_value (GtkScaleButton *button,
@@ -612,8 +596,6 @@ gtk_scale_button_set_value (GtkScaleButton *button,
  *
  * Sets the icons to be used by the scale button.
  * For details, see the #GtkScaleButton:icons property.
- *
- * Since: 2.12
  */
 void
 gtk_scale_button_set_icons (GtkScaleButton  *button,
@@ -642,8 +624,6 @@ gtk_scale_button_set_icons (GtkScaleButton  *button,
  * See gtk_range_get_adjustment() for details.
  *
  * Returns: (transfer none): the adjustment associated with the scale
- *
- * Since: 2.12
  */
 GtkAdjustment*
 gtk_scale_button_get_adjustment	(GtkScaleButton *button)
@@ -661,8 +641,6 @@ gtk_scale_button_get_adjustment	(GtkScaleButton *button)
  * Sets the #GtkAdjustment to be used as a model
  * for the #GtkScaleButton’s scale.
  * See gtk_range_set_adjustment() for details.
- *
- * Since: 2.12
  */
 void
 gtk_scale_button_set_adjustment	(GtkScaleButton *button,
@@ -695,8 +673,6 @@ gtk_scale_button_set_adjustment	(GtkScaleButton *button,
  * Retrieves the plus button of the #GtkScaleButton.
  *
  * Returns: (transfer none) (type Gtk.Button): the plus button of the #GtkScaleButton as a #GtkButton
- *
- * Since: 2.14
  */
 GtkWidget *
 gtk_scale_button_get_plus_button (GtkScaleButton *button)
@@ -713,8 +689,6 @@ gtk_scale_button_get_plus_button (GtkScaleButton *button)
  * Retrieves the minus button of the #GtkScaleButton.
  *
  * Returns: (transfer none) (type Gtk.Button): the minus button of the #GtkScaleButton as a #GtkButton
- *
- * Since: 2.14
  */
 GtkWidget *
 gtk_scale_button_get_minus_button (GtkScaleButton *button)
@@ -731,8 +705,6 @@ gtk_scale_button_get_minus_button (GtkScaleButton *button)
  * Retrieves the popup of the #GtkScaleButton.
  *
  * Returns: (transfer none): the popup of the #GtkScaleButton
- *
- * Since: 2.14
  */
 GtkWidget *
 gtk_scale_button_get_popup (GtkScaleButton *button)

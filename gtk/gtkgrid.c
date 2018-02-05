@@ -1893,8 +1893,6 @@ gtk_grid_attach_next_to (GtkGrid         *grid,
  * cell whose upper left corner is at @left, @top.
  *
  * Returns: (transfer none) (nullable): the child at the given position, or %NULL
- *
- * Since: 3.2
  */
 GtkWidget *
 gtk_grid_get_child_at (GtkGrid *grid,
@@ -1931,8 +1929,6 @@ gtk_grid_get_child_at (GtkGrid *grid,
  * Children which are attached at or below this position
  * are moved one row down. Children which span across this
  * position are grown to span the new row.
- *
- * Since: 3.2
  */
 void
 gtk_grid_insert_row (GtkGrid *grid,
@@ -1988,8 +1984,6 @@ gtk_grid_insert_row (GtkGrid *grid,
  * spanning children that overlap this row have their
  * height reduced by one, and children below the row
  * are moved up.
- *
- * Since: 3.10
  */
 void
 gtk_grid_remove_row (GtkGrid *grid,
@@ -2036,8 +2030,6 @@ gtk_grid_remove_row (GtkGrid *grid,
  * Children which are attached at or to the right of this position
  * are moved one column to the right. Children which span across this
  * position are grown to span the new column.
- *
- * Since: 3.2
  */
 void
 gtk_grid_insert_column (GtkGrid *grid,
@@ -2085,8 +2077,6 @@ gtk_grid_insert_column (GtkGrid *grid,
  * spanning children that overlap this column have their
  * width reduced by one, and children after the column
  * are moved to the left.
- *
- * Since: 3.10
  */
 void
 gtk_grid_remove_column (GtkGrid *grid,
@@ -2136,8 +2126,6 @@ gtk_grid_remove_column (GtkGrid *grid,
  * determined by @side. If @side is %GTK_POS_TOP or %GTK_POS_BOTTOM,
  * a row is inserted. If @side is %GTK_POS_LEFT of %GTK_POS_RIGHT,
  * a column is inserted.
- *
- * Since: 3.2
  */
 void
 gtk_grid_insert_next_to (GtkGrid         *grid,
@@ -2408,8 +2396,6 @@ get_row_properties_or_default (GtkGrid      *grid,
  *
  * Sets how the baseline should be positioned on @row of the
  * grid, in case that row is assigned more space than is requested.
- *
- * Since: 3.10
  */
 void
 gtk_grid_set_row_baseline_position (GtkGrid            *grid,
@@ -2441,8 +2427,6 @@ gtk_grid_set_row_baseline_position (GtkGrid            *grid,
  * %GTK_BASELINE_POSITION_CENTER.
  *
  * Returns: the baseline position of @row
- *
- * Since: 3.10
  */
 GtkBaselinePosition
 gtk_grid_get_row_baseline_position (GtkGrid      *grid,
@@ -2466,8 +2450,6 @@ gtk_grid_get_row_baseline_position (GtkGrid      *grid,
  * Each row in the grid can have its own local baseline, but only
  * one of those is global, meaning it will be the baseline in the
  * parent of the @grid.
- *
- * Since: 3.10
  */
 void
 gtk_grid_set_baseline_row (GtkGrid *grid,
@@ -2494,8 +2476,6 @@ gtk_grid_set_baseline_row (GtkGrid *grid,
  * Returns which row defines the global baseline of @grid.
  *
  * Returns: the row index defining the global baseline
- *
- * Since: 3.10
  */
 gint
 gtk_grid_get_baseline_row (GtkGrid *grid)

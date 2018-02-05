@@ -29,26 +29,26 @@ G_BEGIN_DECLS
 
 typedef struct _GdkFrameTimings GdkFrameTimings;
 
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 GType            gdk_frame_timings_get_type (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 GdkFrameTimings *gdk_frame_timings_ref   (GdkFrameTimings *timings);
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 void             gdk_frame_timings_unref (GdkFrameTimings *timings);
 
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 gint64           gdk_frame_timings_get_frame_counter     (GdkFrameTimings *timings);
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 gboolean         gdk_frame_timings_get_complete          (GdkFrameTimings *timings);
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 gint64           gdk_frame_timings_get_frame_time        (GdkFrameTimings *timings);
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 gint64           gdk_frame_timings_get_presentation_time (GdkFrameTimings *timings);
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 gint64           gdk_frame_timings_get_refresh_interval  (GdkFrameTimings *timings);
 
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 gint64           gdk_frame_timings_get_predicted_presentation_time (GdkFrameTimings *timings);
 
 G_END_DECLS

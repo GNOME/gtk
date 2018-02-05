@@ -29,9 +29,9 @@
 G_BEGIN_DECLS
 
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GdkContentProvider *    gdk_content_provider_new_for_value              (const GValue           *value);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GdkContentProvider *    gdk_content_provider_new_for_bytes              (const char             *mime_type,
                                                                          GBytes                 *bytes);
 

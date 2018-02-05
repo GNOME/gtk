@@ -996,8 +996,6 @@ gdk_wayland_device_pad_init (GdkWaylandDevicePad *pad)
  * Returns the Wayland wl_seat of a #GdkDevice.
  *
  * Returns: (transfer none): a Wayland wl_seat
- *
- * Since: 3.10
  */
 struct wl_seat *
 gdk_wayland_device_get_wl_seat (GdkDevice *device)
@@ -1017,8 +1015,6 @@ gdk_wayland_device_get_wl_seat (GdkDevice *device)
  * Returns the Wayland wl_pointer of a #GdkDevice.
  *
  * Returns: (transfer none): a Wayland wl_pointer
- *
- * Since: 3.10
  */
 struct wl_pointer *
 gdk_wayland_device_get_wl_pointer (GdkDevice *device)
@@ -1038,8 +1034,6 @@ gdk_wayland_device_get_wl_pointer (GdkDevice *device)
  * Returns the Wayland wl_keyboard of a #GdkDevice.
  *
  * Returns: (transfer none): a Wayland wl_keyboard
- *
- * Since: 3.10
  */
 struct wl_keyboard *
 gdk_wayland_device_get_wl_keyboard (GdkDevice *device)
@@ -5031,8 +5025,6 @@ gdk_wayland_device_set_selection (GdkDevice             *gdk_device,
  * Returns the Wayland wl_seat of a #GdkSeat.
  *
  * Returns: (transfer none): a Wayland wl_seat
- *
- * Since: 3.20
  */
 struct wl_seat *
 gdk_wayland_seat_get_wl_seat (GdkSeat *seat)

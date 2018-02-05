@@ -33,20 +33,20 @@ G_BEGIN_DECLS
 
 typedef struct _GdkDrawingContextClass  GdkDrawingContextClass;
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 GType gdk_drawing_context_get_type (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 GdkWindow *     gdk_drawing_context_get_window          (GdkDrawingContext *context);
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 GdkDrawContext* gdk_drawing_context_get_paint_context   (GdkDrawingContext *context);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 cairo_region_t *gdk_drawing_context_get_clip            (GdkDrawingContext *context);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 gboolean        gdk_drawing_context_is_valid            (GdkDrawingContext *context);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 cairo_t *       gdk_drawing_context_get_cairo_context   (GdkDrawingContext *context);
 
 G_END_DECLS

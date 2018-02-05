@@ -365,8 +365,6 @@ gtk_event_controller_scroll_class_init (GtkEventControllerScrollClass *klass)
    * GtkEventControllerScroll:flags:
    *
    * The flags affecting event controller behavior
-   *
-   * Since: 3.93
    **/
   pspecs[PROP_FLAGS] =
     g_param_spec_flags ("flags",
@@ -459,8 +457,6 @@ gtk_event_controller_scroll_init (GtkEventControllerScroll *scroll)
  * for the given @widget.
  *
  * Returns: a new #GtkEventControllerScroll
- *
- * Since: 3.93
  **/
 GtkEventController *
 gtk_event_controller_scroll_new (GtkWidget                     *widget,
@@ -480,8 +476,6 @@ gtk_event_controller_scroll_new (GtkWidget                     *widget,
  * @flags: behavior flags
  *
  * Sets the flags conditioning scroll controller behavior.
- *
- * Since: 3.93
  **/
 void
 gtk_event_controller_scroll_set_flags (GtkEventControllerScroll      *scroll,
@@ -503,8 +497,6 @@ gtk_event_controller_scroll_set_flags (GtkEventControllerScroll      *scroll,
  * Gets the flags conditioning the scroll controller behavior.
  *
  * Returns: the controller flags.
- *
- * Since: 3.93
  **/
 GtkEventControllerScrollFlags
 gtk_event_controller_scroll_get_flags (GtkEventControllerScroll *scroll)

@@ -91,7 +91,7 @@ GType gtk_css_provider_get_type (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkCssProvider * gtk_css_provider_new (void);
 
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 char *           gtk_css_provider_to_string      (GtkCssProvider  *provider);
 
 GDK_AVAILABLE_IN_ALL
@@ -105,7 +105,7 @@ GDK_AVAILABLE_IN_ALL
 void             gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
                                                   const gchar     *path);
 
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 void             gtk_css_provider_load_from_resource (GtkCssProvider *css_provider,
                                                       const gchar    *resource_path);
 

@@ -402,8 +402,6 @@ gtk_pad_controller_init (GtkPadController *controller)
  * gtk_pad_controller_set_action().
  *
  * Returns: A newly created #GtkPadController
- *
- * Since: 3.22
  **/
 GtkPadController *
 gtk_pad_controller_new (GtkWindow    *window,
@@ -460,8 +458,6 @@ gtk_pad_controller_add_entry (GtkPadController        *controller,
  *
  * This is a convenience function to add a group of action entries on
  * @controller. See #GtkPadActionEntry and gtk_pad_controller_set_action().
- *
- * Since: 3.22
  **/
 void
 gtk_pad_controller_set_action_entries (GtkPadController        *controller,
@@ -495,8 +491,6 @@ gtk_pad_controller_set_action_entries (GtkPadController        *controller,
  * The given @label should be considered user-visible, so internationalization
  * rules apply. Some windowing systems may be able to use those for user
  * feedback.
- *
- * Since: 3.22
  **/
 void
 gtk_pad_controller_set_action (GtkPadController *controller,

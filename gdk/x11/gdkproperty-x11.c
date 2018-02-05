@@ -75,8 +75,6 @@ lookup_cached_xatom (GdkDisplay *display,
  * is converted to %None.
  *
  * Returns: the X atom corresponding to @atom, or %None
- *
- * Since: 2.2
  **/
 Atom
 gdk_x11_atom_to_xatom_for_display (GdkDisplay *display,
@@ -153,8 +151,6 @@ _gdk_x11_precache_atoms (GdkDisplay          *display,
  * #GdkAtom.
  * 
  * Returns: (transfer none): the corresponding #GdkAtom.
- *
- * Since: 2.2
  **/
 GdkAtom
 gdk_x11_xatom_to_atom_for_display (GdkDisplay *display,
@@ -211,8 +207,6 @@ gdk_x11_xatom_to_atom_for_display (GdkDisplay *display,
  * faster than XInternAtom(), which is a round trip to the server each time.
  * 
  * Returns: a X atom for a #GdkDisplay
- *
- * Since: 2.2
  **/
 Atom
 gdk_x11_get_xatom_by_name_for_display (GdkDisplay  *display,
@@ -254,8 +248,6 @@ _gdk_x11_get_xatom_for_display_printf (GdkDisplay    *display,
  *
  * Returns: name of the X atom; this string is owned by GDK,
  *   so it shouldn’t be modifed or freed. 
- *
- * Since: 2.2
  **/
 const gchar *
 gdk_x11_get_xatom_name_for_display (GdkDisplay *display,

@@ -491,8 +491,6 @@ gtk_lock_button_clicked (GtkButton *button)
  * Creates a new lock button which reflects the @permission.
  *
  * Returns: a new #GtkLockButton
- *
- * Since: 3.2
  */
 GtkWidget *
 gtk_lock_button_new (GPermission *permission)
@@ -509,8 +507,6 @@ gtk_lock_button_new (GPermission *permission)
  * Obtains the #GPermission object that controls @button.
  *
  * Returns: (transfer none): the #GPermission of @button
- *
- * Since: 3.2
  */
 GPermission *
 gtk_lock_button_get_permission (GtkLockButton *button)
@@ -526,8 +522,6 @@ gtk_lock_button_get_permission (GtkLockButton *button)
  * @permission: (allow-none): a #GPermission object, or %NULL
  *
  * Sets the #GPermission object that controls @button.
- *
- * Since: 3.2
  */
 void
 gtk_lock_button_set_permission (GtkLockButton *button,

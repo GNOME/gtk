@@ -138,7 +138,7 @@ guint        gtk_builder_add_objects_from_file   (GtkBuilder    *builder,
                                                   const gchar   *filename,
                                                   gchar        **object_ids,
                                                   GError       **error);
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 guint        gtk_builder_add_objects_from_resource(GtkBuilder    *builder,
                                                   const gchar   *resource_path,
                                                   gchar        **object_ids,
@@ -154,7 +154,7 @@ GObject*     gtk_builder_get_object              (GtkBuilder    *builder,
                                                   const gchar   *name);
 GDK_AVAILABLE_IN_ALL
 GSList*      gtk_builder_get_objects             (GtkBuilder    *builder);
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 void         gtk_builder_expose_object           (GtkBuilder    *builder,
                                                   const gchar   *name,
                                                   GObject       *object);
@@ -186,32 +186,32 @@ gboolean     gtk_builder_value_from_string_type  (GtkBuilder    *builder,
                                                   const gchar  	*string,
                                                   GValue       	*value,
 						  GError       **error);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 GtkBuilder * gtk_builder_new_from_file           (const gchar   *filename);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 GtkBuilder * gtk_builder_new_from_resource       (const gchar   *resource_path);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 GtkBuilder * gtk_builder_new_from_string         (const gchar   *string,
                                                   gssize         length);
 
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 void         gtk_builder_add_callback_symbol     (GtkBuilder    *builder,
 						  const gchar   *callback_name,
 						  GCallback      callback_symbol);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 void         gtk_builder_add_callback_symbols    (GtkBuilder    *builder,
 						  const gchar   *first_callback_name,
 						  GCallback      first_callback_symbol,
 						  ...) G_GNUC_NULL_TERMINATED;
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 GCallback    gtk_builder_lookup_callback_symbol  (GtkBuilder    *builder,
 						  const gchar   *callback_name);
 
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 void         gtk_builder_set_application         (GtkBuilder     *builder,
                                                   GtkApplication *application);
 
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 GtkApplication * gtk_builder_get_application     (GtkBuilder     *builder);
 
 
@@ -226,7 +226,7 @@ GtkApplication * gtk_builder_get_application     (GtkBuilder     *builder);
 #define GTK_BUILDER_WARN_INVALID_CHILD_TYPE(object, type) \
   g_warning ("'%s' is not a valid child type of '%s'", type, g_type_name (G_OBJECT_TYPE (object)))
 
-GDK_AVAILABLE_IN_3_18
+GDK_AVAILABLE_IN_ALL
 guint     gtk_builder_extend_with_template  (GtkBuilder    *builder,
                                              GtkWidget     *widget,
                                              GType          template_type,                                                          const gchar   *buffer,

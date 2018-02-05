@@ -276,8 +276,6 @@ gdk_x11_cursor_create_for_name (GdkDisplay  *display,
  * by the application (GTK+ applications can learn about
  * cursor theme changes by listening for change notification
  * for the corresponding #GtkSetting).
- *
- * Since: 2.8
  */
 void
 gdk_x11_display_set_cursor_theme (GdkDisplay  *display,

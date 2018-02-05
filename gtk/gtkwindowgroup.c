@@ -206,8 +206,6 @@ gtk_window_group_remove_window (GtkWindowGroup *window_group,
  *
  * Returns: (element-type GtkWindow) (transfer container): A
  *   newly-allocated list of windows inside the group.
- *
- * Since: 2.14
  **/
 GList *
 gtk_window_group_list_windows (GtkWindowGroup *window_group)
@@ -240,8 +238,6 @@ gtk_window_group_list_windows (GtkWindowGroup *window_group)
  * see gtk_grab_add().
  *
  * Returns: (transfer none): the current grab widget of the group
- *
- * Since: 2.22
  */
 GtkWidget *
 gtk_window_group_get_current_grab (GtkWindowGroup *window_group)
@@ -361,8 +357,6 @@ _gtk_window_group_remove_device_grab (GtkWindowGroup *window_group,
  * Returns the current grab widget for @device, or %NULL if none.
  *
  * Returns: (nullable) (transfer none): The grab widget, or %NULL
- *
- * Since: 3.0
  */
 GtkWidget *
 gtk_window_group_get_current_device_grab (GtkWindowGroup *window_group,

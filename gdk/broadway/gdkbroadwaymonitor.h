@@ -37,7 +37,7 @@ G_BEGIN_DECLS
 typedef struct _GdkBroadwayMonitor      GdkBroadwayMonitor;
 typedef struct _GdkBroadwayMonitorClass GdkBroadwayMonitorClass;
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 GType             gdk_broadway_monitor_get_type            (void) G_GNUC_CONST;
 
 G_END_DECLS

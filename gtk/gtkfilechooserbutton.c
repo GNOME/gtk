@@ -406,8 +406,6 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
    *
    * Note that this signal is only emitted when the user
    * changes the file.
-   *
-   * Since: 2.12
    */
   file_chooser_button_signals[FILE_SET] =
     g_signal_new (I_("file-set"),
@@ -422,8 +420,6 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
    * GtkFileChooserButton:dialog:
    *
    * Instance of the #GtkFileChooserDialog associated with the button.
-   *
-   * Since: 2.6
    */
   g_object_class_install_property (gobject_class, PROP_DIALOG,
 				   g_param_spec_object ("dialog",
@@ -437,8 +433,6 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
    * GtkFileChooserButton:title:
    *
    * Title to put on the #GtkFileChooserDialog associated with the button.
-   *
-   * Since: 2.6
    */
   g_object_class_install_property (gobject_class, PROP_TITLE,
 				   g_param_spec_string ("title",
@@ -451,8 +445,6 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
    * GtkFileChooserButton:width-chars:
    *
    * The width of the entry and label inside the button, in characters.
-   *
-   * Since: 2.6
    */
   g_object_class_install_property (gobject_class, PROP_WIDTH_CHARS,
 				   g_param_spec_int ("width-chars",
@@ -2952,8 +2944,6 @@ native_response_cb (GtkFileChooserNative *native,
  * Creates a new file-selecting button widget.
  *
  * Returns: a new button widget.
- *
- * Since: 2.6
  */
 GtkWidget *
 gtk_file_chooser_button_new (const gchar          *title,
@@ -2984,8 +2974,6 @@ gtk_file_chooser_button_new (const gchar          *title,
  * order for the button to take over the file selected in the dialog.
  *
  * Returns: a new button widget.
- *
- * Since: 2.6
  */
 GtkWidget *
 gtk_file_chooser_button_new_with_dialog (GtkWidget *dialog)
@@ -3003,8 +2991,6 @@ gtk_file_chooser_button_new_with_dialog (GtkWidget *dialog)
  * @title: the new browse dialog title.
  *
  * Modifies the @title of the browse dialog used by @button.
- *
- * Since: 2.6
  */
 void
 gtk_file_chooser_button_set_title (GtkFileChooserButton *button,
@@ -3027,8 +3013,6 @@ gtk_file_chooser_button_set_title (GtkFileChooserButton *button,
  * should not be modified or freed.
  *
  * Returns: a pointer to the browse dialog’s title.
- *
- * Since: 2.6
  */
 const gchar *
 gtk_file_chooser_button_get_title (GtkFileChooserButton *button)
@@ -3048,8 +3032,6 @@ gtk_file_chooser_button_get_title (GtkFileChooserButton *button)
  * Retrieves the width in characters of the @button widget’s entry and/or label.
  *
  * Returns: an integer width (in characters) that the button will use to size itself.
- *
- * Since: 2.6
  */
 gint
 gtk_file_chooser_button_get_width_chars (GtkFileChooserButton *button)
@@ -3065,8 +3047,6 @@ gtk_file_chooser_button_get_width_chars (GtkFileChooserButton *button)
  * @n_chars: the new width, in characters.
  *
  * Sets the width (in characters) that @button will use to @n_chars.
- *
- * Since: 2.6
  */
 void
 gtk_file_chooser_button_set_width_chars (GtkFileChooserButton *button,

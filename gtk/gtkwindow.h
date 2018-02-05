@@ -66,8 +66,8 @@ struct _GtkWindow
  * @keys_changed: Signal gets emitted when the set of accelerators or
  *   mnemonics that are associated with window changes.
  * @enable_debugging: Class handler for the #GtkWindow::enable-debugging
- *   keybinding signal. Since: 3.14
- * @close_request: Class handler for the #GtkWindow::close-request signal. Since: 3.94
+ *   keybinding signal.
+ * @close_request: Class handler for the #GtkWindow::close-request signal.
  */
 struct _GtkWindowClass
 {
@@ -189,10 +189,10 @@ void       gtk_window_set_transient_for        (GtkWindow           *window,
 						GtkWindow           *parent);
 GDK_AVAILABLE_IN_ALL
 GtkWindow *gtk_window_get_transient_for        (GtkWindow           *window);
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_attached_to          (GtkWindow           *window, 
                                                 GtkWidget           *attach_widget);
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_window_get_attached_to          (GtkWindow           *window);
 GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_type_hint            (GtkWindow           *window, 
@@ -229,20 +229,20 @@ void       gtk_window_set_destroy_with_parent  (GtkWindow           *window,
                                                 gboolean             setting);
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_window_get_destroy_with_parent  (GtkWindow           *window);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_hide_on_close        (GtkWindow           *window,
                                                 gboolean             setting);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 gboolean   gtk_window_get_hide_on_close        (GtkWindow           *window);
 GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_mnemonics_visible    (GtkWindow           *window,
                                                 gboolean             setting);
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_window_get_mnemonics_visible    (GtkWindow           *window);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_focus_visible        (GtkWindow           *window,
                                                 gboolean             setting);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 gboolean   gtk_window_get_focus_visible        (GtkWindow           *window);
 
 GDK_AVAILABLE_IN_ALL
@@ -257,7 +257,7 @@ void       gtk_window_set_gravity              (GtkWindow           *window,
 GDK_AVAILABLE_IN_ALL
 GdkGravity gtk_window_get_gravity              (GtkWindow           *window);
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void	   gtk_window_set_display              (GtkWindow	    *window,
 						GdkDisplay          *display);
 
@@ -369,10 +369,10 @@ GDK_AVAILABLE_IN_ALL
 void     gtk_window_fullscreen    (GtkWindow *window);
 GDK_AVAILABLE_IN_ALL
 void     gtk_window_unfullscreen  (GtkWindow *window);
-GDK_AVAILABLE_IN_3_18
+GDK_AVAILABLE_IN_ALL
 void     gtk_window_fullscreen_on_monitor (GtkWindow  *window,
                                            GdkMonitor *monitor);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 void     gtk_window_close         (GtkWindow *window);
 GDK_AVAILABLE_IN_ALL
 void     gtk_window_set_keep_above    (GtkWindow *window, gboolean setting);
@@ -436,16 +436,16 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_window_set_application      (GtkWindow          *window,
                                                  GtkApplication     *application);
 
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 void     gtk_window_set_titlebar           (GtkWindow    *window,
                                             GtkWidget    *titlebar);
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_window_get_titlebar         (GtkWindow    *window);
 
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_window_is_maximized           (GtkWindow    *window);
 
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 void     gtk_window_set_interactive_debugging (gboolean enable);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWindow, g_object_unref)

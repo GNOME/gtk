@@ -500,8 +500,6 @@ connect_stack_signals (GtkStackSwitcher *switcher)
  * @stack: (allow-none): a #GtkStack
  *
  * Sets the stack to control.
- *
- * Since: 3.10
  */
 void
 gtk_stack_switcher_set_stack (GtkStackSwitcher *switcher,
@@ -544,8 +542,6 @@ gtk_stack_switcher_set_stack (GtkStackSwitcher *switcher,
  *
  * Returns: (nullable) (transfer none): the stack, or %NULL if
  *    none has been set explicitly.
- *
- * Since: 3.10
  */
 GtkStack *
 gtk_stack_switcher_get_stack (GtkStackSwitcher *switcher)
@@ -673,8 +669,6 @@ gtk_stack_switcher_class_init (GtkStackSwitcherClass *class)
    *
    * Use the "icon-size" property to change the size of the image displayed
    * when a #GtkStackSwitcher is displaying icons.
-   *
-   * Since: 3.20
    */
   g_object_class_install_property (object_class,
                                    PROP_ICON_SIZE,
@@ -703,8 +697,6 @@ gtk_stack_switcher_class_init (GtkStackSwitcherClass *class)
  * Create a new #GtkStackSwitcher.
  *
  * Returns: a new #GtkStackSwitcher.
- *
- * Since: 3.10
  */
 GtkWidget *
 gtk_stack_switcher_new (void)

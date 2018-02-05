@@ -848,8 +848,6 @@ _gdk_win32_display_make_gl_context_current (GdkDisplay *display,
  * Retrieves the version of the WGL implementation.
  *
  * Returns: %TRUE if WGL is available
- *
- * Since: 3.16
  */
 gboolean
 gdk_win32_display_get_wgl_version (GdkDisplay *display,

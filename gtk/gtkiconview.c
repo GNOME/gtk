@@ -387,8 +387,6 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * The ::selection-mode property specifies the selection mode of
    * icon view. If the mode is #GTK_SELECTION_MULTIPLE, rubberband selection
    * is enabled, for the other modes, only keyboard selection is possible.
-   *
-   * Since: 2.6
    */
   g_object_class_install_property (gobject_class,
 				   PROP_SELECTION_MODE,
@@ -406,8 +404,6 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * containing the pixbufs which are displayed. The pixbuf column must be 
    * of type #GDK_TYPE_PIXBUF. Setting this property to -1 turns off the
    * display of pixbufs.
-   *
-   * Since: 2.6
    */
   g_object_class_install_property (gobject_class,
 				   PROP_PIXBUF_COLUMN,
@@ -424,8 +420,6 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * containing the texts which are displayed. The text column must be 
    * of type #G_TYPE_STRING. If this property and the :markup-column 
    * property are both set to -1, no texts are displayed.   
-   *
-   * Since: 2.6
    */
   g_object_class_install_property (gobject_class,
 				   PROP_TEXT_COLUMN,
@@ -444,8 +438,6 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * of type #G_TYPE_STRING. If this property and the :text-column property 
    * are both set to column numbers, it overrides the text column.
    * If both are set to -1, no texts are displayed.   
-   *
-   * Since: 2.6
    */
   g_object_class_install_property (gobject_class,
 				   PROP_MARKUP_COLUMN,
@@ -469,8 +461,6 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * The columns property contains the number of the columns in which the
    * items should be displayed. If it is -1, the number of columns will
    * be chosen automatically to fill the available area.
-   *
-   * Since: 2.6
    */
   g_object_class_install_property (gobject_class,
 				   PROP_COLUMNS,
@@ -487,8 +477,6 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * The item-width property specifies the width to use for each item. 
    * If it is set to -1, the icon view will automatically determine a 
    * suitable item size.
-   *
-   * Since: 2.6
    */
   g_object_class_install_property (gobject_class,
 				   PROP_ITEM_WIDTH,
@@ -503,8 +491,6 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    *
    * The spacing property specifies the space which is inserted between
    * the cells (i.e. the icon and the text) of an item.
-   *
-   * Since: 2.6
    */
   g_object_class_install_property (gobject_class,
                                    PROP_SPACING,
@@ -519,8 +505,6 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    *
    * The row-spacing property specifies the space which is inserted between
    * the rows of the icon view.
-   *
-   * Since: 2.6
    */
   g_object_class_install_property (gobject_class,
                                    PROP_ROW_SPACING,
@@ -535,8 +519,6 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    *
    * The column-spacing property specifies the space which is inserted between
    * the columns of the icon view.
-   *
-   * Since: 2.6
    */
   g_object_class_install_property (gobject_class,
                                    PROP_COLUMN_SPACING,
@@ -551,8 +533,6 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    *
    * The margin property specifies the space which is inserted 
    * at the edges of the icon view.
-   *
-   * Since: 2.6
    */
   g_object_class_install_property (gobject_class,
                                    PROP_MARGIN,
@@ -567,8 +547,6 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    *
    * The item-orientation property specifies how the cells (i.e. the icon and
    * the text) of the item are positioned relative to each other.
-   *
-   * Since: 2.6
    */
   g_object_class_install_property (gobject_class,
 				   PROP_ITEM_ORIENTATION,
@@ -584,8 +562,6 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    *
    * The reorderable property specifies if the items can be reordered
    * by DND.
-   *
-   * Since: 2.8
    */
   g_object_class_install_property (gobject_class,
                                    PROP_REORDERABLE,
@@ -610,8 +586,6 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    *
    * The item-padding property specifies the padding around each
    * of the icon view's item.
-   *
-   * Since: 2.18
    */
   g_object_class_install_property (gobject_class,
                                    PROP_ITEM_PADDING,
@@ -628,8 +602,6 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    *
    * If no area is specified when creating the icon view with gtk_icon_view_new_with_area() 
    * a #GtkCellAreaBox will be used.
-   *
-   * Since: 3.0
    */
   g_object_class_install_property (gobject_class,
 				   PROP_CELL_AREA,
@@ -644,8 +616,6 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    *
    * The activate-on-single-click property specifies whether the "item-activated" signal
    * will be emitted after a single click.
-   *
-   * Since: 3.8
    */
   g_object_class_install_property (gobject_class,
                                    PROP_ACTIVATE_ON_SINGLE_CLICK,
@@ -2032,8 +2002,6 @@ gtk_icon_view_remove_editable (GtkCellArea            *area,
  * This function is often followed by `gtk_widget_grab_focus 
  * (icon_view)` in order to give keyboard focus to the widget.  
  * Please note that editing can only happen when the widget is realized.
- *
- * Since: 2.8
  **/
 void
 gtk_icon_view_set_cursor (GtkIconView     *icon_view,
@@ -2088,8 +2056,6 @@ gtk_icon_view_set_cursor (GtkIconView     *icon_view,
  * The returned #GtkTreePath must be freed with gtk_tree_path_free().
  *
  * Returns: %TRUE if the cursor is set.
- *
- * Since: 2.8
  **/
 gboolean
 gtk_icon_view_get_cursor (GtkIconView      *icon_view,
@@ -3978,8 +3944,6 @@ gtk_icon_view_move_cursor_start_end (GtkIconView *icon_view,
  * This function only works if the model is set, and @path is a valid row on 
  * the model. If the model changes before the @icon_view is realized, the 
  * centered path will be modified to reflect this change.
- *
- * Since: 2.8
  **/
 void
 gtk_icon_view_scroll_to_path (GtkIconView *icon_view,
@@ -4172,8 +4136,6 @@ _gtk_icon_view_set_cell_data (GtkIconView     *icon_view,
  * Creates a new #GtkIconView widget
  * 
  * Returns: A newly created #GtkIconView widget
- *
- * Since: 2.6
  **/
 GtkWidget *
 gtk_icon_view_new (void)
@@ -4189,8 +4151,6 @@ gtk_icon_view_new (void)
  * specified @area to layout cells inside the icons.
  * 
  * Returns: A newly created #GtkIconView widget
- *
- * Since: 3.0
  **/
 GtkWidget *
 gtk_icon_view_new_with_area (GtkCellArea *area)
@@ -4205,8 +4165,6 @@ gtk_icon_view_new_with_area (GtkCellArea *area)
  * Creates a new #GtkIconView widget with the model @model.
  * 
  * Returns: A newly created #GtkIconView widget.
- *
- * Since: 2.6 
  **/
 GtkWidget *
 gtk_icon_view_new_with_model (GtkTreeModel *model)
@@ -4222,8 +4180,6 @@ gtk_icon_view_new_with_model (GtkTreeModel *model)
  * 
  * Returns: (nullable) (transfer full): The #GtkTreePath corresponding
  * to the icon or %NULL if no icon exists at that position.
- *
- * Since: 2.6 
  **/
 GtkTreePath *
 gtk_icon_view_get_path_at_pos (GtkIconView *icon_view,
@@ -4255,8 +4211,6 @@ gtk_icon_view_get_path_at_pos (GtkIconView *icon_view,
  *   responsible for the cell at (@x, @y), or %NULL
  * 
  * Returns: %TRUE if an item exists at the specified position
- *
- * Since: 2.8
  **/
 gboolean 
 gtk_icon_view_get_item_at_pos (GtkIconView      *icon_view,
@@ -4299,8 +4253,6 @@ gtk_icon_view_get_item_at_pos (GtkIconView      *icon_view,
  * This function is only valid if @icon_view is realized.
  *
  * Returns: %FALSE if there is no such item, %TRUE otherwise
- *
- * Since: 3.6
  */
 gboolean
 gtk_icon_view_get_cell_rect (GtkIconView     *icon_view,
@@ -4350,8 +4302,6 @@ gtk_icon_view_get_cell_rect (GtkIconView     *icon_view,
  * Sets the tip area of @tooltip to be the area covered by the item at @path.
  * See also gtk_icon_view_set_tooltip_column() for a simpler alternative.
  * See also gtk_tooltip_set_tip_area().
- * 
- * Since: 2.12
  */
 void 
 gtk_icon_view_set_tooltip_item (GtkIconView     *icon_view,
@@ -4375,8 +4325,6 @@ gtk_icon_view_set_tooltip_item (GtkIconView     *icon_view,
  * the item pointed to by @path. See also gtk_tooltip_set_tip_area().
  *
  * See also gtk_icon_view_set_tooltip_column() for a simpler alternative.
- *
- * Since: 2.12
  */
 void
 gtk_icon_view_set_tooltip_cell (GtkIconView     *icon_view,
@@ -4420,8 +4368,6 @@ gtk_icon_view_set_tooltip_cell (GtkIconView     *icon_view,
  * that row and the corresponding model.
  *
  * Returns: whether or not the given tooltip context points to a item
- *
- * Since: 2.12
  */
 gboolean
 gtk_icon_view_get_tooltip_context (GtkIconView   *icon_view,
@@ -4519,8 +4465,6 @@ gtk_icon_view_set_tooltip_query_cb (GtkWidget  *widget,
  *
  * Note that the signal handler sets the text with gtk_tooltip_set_markup(),
  * so &, <, etc have to be escaped in the text.
- *
- * Since: 2.12
  */
 void
 gtk_icon_view_set_tooltip_column (GtkIconView *icon_view,
@@ -4561,8 +4505,6 @@ gtk_icon_view_set_tooltip_column (GtkIconView *icon_view,
  *
  * Returns: the index of the tooltip column that is currently being
  * used, or -1 if this is disabled.
- *
- * Since: 2.12
  */
 gint
 gtk_icon_view_get_tooltip_column (GtkIconView *icon_view)
@@ -4585,8 +4527,6 @@ gtk_icon_view_get_tooltip_column (GtkIconView *icon_view)
  * Both paths should be freed with gtk_tree_path_free() after use.
  * 
  * Returns: %TRUE, if valid paths were placed in @start_path and @end_path
- *
- * Since: 2.8
  **/
 gboolean
 gtk_icon_view_get_visible_range (GtkIconView  *icon_view,
@@ -4642,8 +4582,6 @@ gtk_icon_view_get_visible_range (GtkIconView  *icon_view,
  * 
  * Calls a function for each selected icon. Note that the model or
  * selection cannot be modified from within this function.
- *
- * Since: 2.6 
  **/
 void
 gtk_icon_view_selected_foreach (GtkIconView           *icon_view,
@@ -4670,8 +4608,6 @@ gtk_icon_view_selected_foreach (GtkIconView           *icon_view,
  * @mode: The selection mode
  * 
  * Sets the selection mode of the @icon_view.
- *
- * Since: 2.6 
  **/
 void
 gtk_icon_view_set_selection_mode (GtkIconView      *icon_view,
@@ -4698,8 +4634,6 @@ gtk_icon_view_set_selection_mode (GtkIconView      *icon_view,
  * Gets the selection mode of the @icon_view.
  *
  * Returns: the current selection mode
- *
- * Since: 2.6 
  **/
 GtkSelectionMode
 gtk_icon_view_get_selection_mode (GtkIconView *icon_view)
@@ -4718,8 +4652,6 @@ gtk_icon_view_get_selection_mode (GtkIconView *icon_view)
  * If the @icon_view already has a model set, it will remove
  * it before setting the new model.  If @model is %NULL, then
  * it will unset the old model.
- *
- * Since: 2.6 
  **/
 void
 gtk_icon_view_set_model (GtkIconView *icon_view,
@@ -4844,8 +4776,6 @@ gtk_icon_view_set_model (GtkIconView *icon_view,
  *
  * Returns: (nullable) (transfer none): A #GtkTreeModel, or %NULL if none is
  *     currently being used.
- *
- * Since: 2.6 
  **/
 GtkTreeModel *
 gtk_icon_view_get_model (GtkIconView *icon_view)
@@ -4958,8 +4888,6 @@ update_pixbuf_cell (GtkIconView *icon_view)
  * 
  * Sets the column with text for @icon_view to be @column. The text
  * column must be of type #G_TYPE_STRING.
- *
- * Since: 2.6 
  **/
 void
 gtk_icon_view_set_text_column (GtkIconView *icon_view,
@@ -5001,8 +4929,6 @@ gtk_icon_view_set_text_column (GtkIconView *icon_view,
  * Returns the column with text for @icon_view.
  *
  * Returns: the text column, or -1 if it’s unset.
- *
- * Since: 2.6
  */
 gint
 gtk_icon_view_get_text_column (GtkIconView  *icon_view)
@@ -5021,8 +4947,6 @@ gtk_icon_view_get_text_column (GtkIconView  *icon_view)
  * @column. The markup column must be of type #G_TYPE_STRING.
  * If the markup column is set to something, it overrides
  * the text column set by gtk_icon_view_set_text_column().
- *
- * Since: 2.6
  **/
 void
 gtk_icon_view_set_markup_column (GtkIconView *icon_view,
@@ -5064,8 +4988,6 @@ gtk_icon_view_set_markup_column (GtkIconView *icon_view,
  * Returns the column with markup text for @icon_view.
  *
  * Returns: the markup column, or -1 if it’s unset.
- *
- * Since: 2.6
  */
 gint
 gtk_icon_view_get_markup_column (GtkIconView  *icon_view)
@@ -5082,8 +5004,6 @@ gtk_icon_view_get_markup_column (GtkIconView  *icon_view)
  * 
  * Sets the column with pixbufs for @icon_view to be @column. The pixbuf
  * column must be of type #GDK_TYPE_PIXBUF
- *
- * Since: 2.6 
  **/
 void
 gtk_icon_view_set_pixbuf_column (GtkIconView *icon_view,
@@ -5126,8 +5046,6 @@ gtk_icon_view_set_pixbuf_column (GtkIconView *icon_view,
  * Returns the column with pixbufs for @icon_view.
  *
  * Returns: the pixbuf column, or -1 if it’s unset.
- *
- * Since: 2.6
  */
 gint
 gtk_icon_view_get_pixbuf_column (GtkIconView  *icon_view)
@@ -5143,8 +5061,6 @@ gtk_icon_view_get_pixbuf_column (GtkIconView  *icon_view)
  * @path: The #GtkTreePath to be selected.
  * 
  * Selects the row at @path.
- *
- * Since: 2.6
  **/
 void
 gtk_icon_view_select_path (GtkIconView *icon_view,
@@ -5170,8 +5086,6 @@ gtk_icon_view_select_path (GtkIconView *icon_view,
  * @path: The #GtkTreePath to be unselected.
  * 
  * Unselects the row at @path.
- *
- * Since: 2.6
  **/
 void
 gtk_icon_view_unselect_path (GtkIconView *icon_view,
@@ -5207,8 +5121,6 @@ gtk_icon_view_unselect_path (GtkIconView *icon_view,
  * ]|
  *
  * Returns: (element-type GtkTreePath) (transfer full): A #GList containing a #GtkTreePath for each selected row.
- *
- * Since: 2.6
  **/
 GList *
 gtk_icon_view_get_selected_items (GtkIconView *icon_view)
@@ -5239,8 +5151,6 @@ gtk_icon_view_get_selected_items (GtkIconView *icon_view)
  * 
  * Selects all the icons. @icon_view must has its selection mode set
  * to #GTK_SELECTION_MULTIPLE.
- *
- * Since: 2.6
  **/
 void
 gtk_icon_view_select_all (GtkIconView *icon_view)
@@ -5274,8 +5184,6 @@ gtk_icon_view_select_all (GtkIconView *icon_view)
  * @icon_view: A #GtkIconView.
  * 
  * Unselects all the icons.
- *
- * Since: 2.6
  **/
 void
 gtk_icon_view_unselect_all (GtkIconView *icon_view)
@@ -5302,8 +5210,6 @@ gtk_icon_view_unselect_all (GtkIconView *icon_view)
  * selected. If @path does not point to a valid location, %FALSE is returned.
  * 
  * Returns: %TRUE if @path is selected.
- *
- * Since: 2.6
  **/
 gboolean
 gtk_icon_view_path_is_selected (GtkIconView *icon_view,
@@ -5333,8 +5239,6 @@ gtk_icon_view_path_is_selected (GtkIconView *icon_view,
  * displayed. Row numbers start at 0.
  *
  * Returns: The row in which the item is displayed
- *
- * Since: 2.22
  */
 gint
 gtk_icon_view_get_item_row (GtkIconView *icon_view,
@@ -5364,8 +5268,6 @@ gtk_icon_view_get_item_row (GtkIconView *icon_view,
  * displayed. Column numbers start at 0.
  *
  * Returns: The column in which the item is displayed
- *
- * Since: 2.22
  */
 gint
 gtk_icon_view_get_item_column (GtkIconView *icon_view,
@@ -5392,8 +5294,6 @@ gtk_icon_view_get_item_column (GtkIconView *icon_view,
  * @path: The #GtkTreePath to be activated
  * 
  * Activates the item determined by @path.
- *
- * Since: 2.6
  **/
 void
 gtk_icon_view_item_activated (GtkIconView      *icon_view,
@@ -5412,8 +5312,6 @@ gtk_icon_view_item_activated (GtkIconView      *icon_view,
  * 
  * Sets the ::item-orientation property which determines whether the labels 
  * are drawn beside the icons instead of below.
- *
- * Since: 2.6
  **/
 void 
 gtk_icon_view_set_item_orientation (GtkIconView    *icon_view,
@@ -5451,8 +5349,6 @@ gtk_icon_view_set_item_orientation (GtkIconView    *icon_view,
  * whether the labels are drawn beside the icons instead of below. 
  * 
  * Returns: the relative position of texts and icons 
- *
- * Since: 2.6
  **/
 GtkOrientation
 gtk_icon_view_get_item_orientation (GtkIconView *icon_view)
@@ -5472,8 +5368,6 @@ gtk_icon_view_get_item_orientation (GtkIconView *icon_view)
  * many columns the icons are arranged. If @columns is
  * -1, the number of columns will be chosen automatically 
  * to fill the available area. 
- *
- * Since: 2.6
  */
 void 
 gtk_icon_view_set_columns (GtkIconView *icon_view,
@@ -5501,8 +5395,6 @@ gtk_icon_view_set_columns (GtkIconView *icon_view,
  * Returns the value of the ::columns property.
  * 
  * Returns: the number of columns, or -1
- *
- * Since: 2.6
  */
 gint
 gtk_icon_view_get_columns (GtkIconView *icon_view)
@@ -5520,8 +5412,6 @@ gtk_icon_view_get_columns (GtkIconView *icon_view)
  * Sets the ::item-width property which specifies the width 
  * to use for each item. If it is set to -1, the icon view will 
  * automatically determine a suitable item size.
- *
- * Since: 2.6
  */
 void 
 gtk_icon_view_set_item_width (GtkIconView *icon_view,
@@ -5551,8 +5441,6 @@ gtk_icon_view_set_item_width (GtkIconView *icon_view,
  * Returns the value of the ::item-width property.
  * 
  * Returns: the width of a single item, or -1
- *
- * Since: 2.6
  */
 gint
 gtk_icon_view_get_item_width (GtkIconView *icon_view)
@@ -5571,8 +5459,6 @@ gtk_icon_view_get_item_width (GtkIconView *icon_view)
  * Sets the ::spacing property which specifies the space 
  * which is inserted between the cells (i.e. the icon and 
  * the text) of an item.
- *
- * Since: 2.6
  */
 void 
 gtk_icon_view_set_spacing (GtkIconView *icon_view,
@@ -5600,8 +5486,6 @@ gtk_icon_view_set_spacing (GtkIconView *icon_view,
  * Returns the value of the ::spacing property.
  * 
  * Returns: the space between cells 
- *
- * Since: 2.6
  */
 gint
 gtk_icon_view_get_spacing (GtkIconView *icon_view)
@@ -5618,8 +5502,6 @@ gtk_icon_view_get_spacing (GtkIconView *icon_view)
  * 
  * Sets the ::row-spacing property which specifies the space 
  * which is inserted between the rows of the icon view.
- *
- * Since: 2.6
  */
 void 
 gtk_icon_view_set_row_spacing (GtkIconView *icon_view,
@@ -5647,8 +5529,6 @@ gtk_icon_view_set_row_spacing (GtkIconView *icon_view,
  * Returns the value of the ::row-spacing property.
  * 
  * Returns: the space between rows
- *
- * Since: 2.6
  */
 gint
 gtk_icon_view_get_row_spacing (GtkIconView *icon_view)
@@ -5665,8 +5545,6 @@ gtk_icon_view_get_row_spacing (GtkIconView *icon_view)
  * 
  * Sets the ::column-spacing property which specifies the space 
  * which is inserted between the columns of the icon view.
- *
- * Since: 2.6
  */
 void 
 gtk_icon_view_set_column_spacing (GtkIconView *icon_view,
@@ -5694,8 +5572,6 @@ gtk_icon_view_set_column_spacing (GtkIconView *icon_view,
  * Returns the value of the ::column-spacing property.
  * 
  * Returns: the space between columns
- *
- * Since: 2.6
  */
 gint
 gtk_icon_view_get_column_spacing (GtkIconView *icon_view)
@@ -5713,8 +5589,6 @@ gtk_icon_view_get_column_spacing (GtkIconView *icon_view)
  * Sets the ::margin property which specifies the space 
  * which is inserted at the top, bottom, left and right 
  * of the icon view.
- *
- * Since: 2.6
  */
 void 
 gtk_icon_view_set_margin (GtkIconView *icon_view,
@@ -5742,8 +5616,6 @@ gtk_icon_view_set_margin (GtkIconView *icon_view,
  * Returns the value of the ::margin property.
  * 
  * Returns: the space at the borders 
- *
- * Since: 2.6
  */
 gint
 gtk_icon_view_get_margin (GtkIconView *icon_view)
@@ -5760,8 +5632,6 @@ gtk_icon_view_get_margin (GtkIconView *icon_view)
  *
  * Sets the #GtkIconView:item-padding property which specifies the padding
  * around each of the icon view’s items.
- *
- * Since: 2.18
  */
 void
 gtk_icon_view_set_item_padding (GtkIconView *icon_view,
@@ -5789,8 +5659,6 @@ gtk_icon_view_set_item_padding (GtkIconView *icon_view,
  * Returns the value of the ::item-padding property.
  * 
  * Returns: the padding around items
- *
- * Since: 2.18
  */
 gint
 gtk_icon_view_get_item_padding (GtkIconView *icon_view)
@@ -6569,8 +6437,6 @@ gtk_icon_view_drag_data_received (GtkWidget        *widget,
  *
  * Turns @icon_view into a drag source for automatic DND. Calling this
  * method sets #GtkIconView:reorderable to %FALSE.
- *
- * Since: 2.8
  **/
 void
 gtk_icon_view_enable_model_drag_source (GtkIconView              *icon_view,
@@ -6599,8 +6465,6 @@ gtk_icon_view_enable_model_drag_source (GtkIconView              *icon_view,
  *
  * Turns @icon_view into a drop destination for automatic DND. Calling this
  * method sets #GtkIconView:reorderable to %FALSE.
- *
- * Since: 2.8
  **/
 void 
 gtk_icon_view_enable_model_drag_dest (GtkIconView       *icon_view,
@@ -6624,8 +6488,6 @@ gtk_icon_view_enable_model_drag_dest (GtkIconView       *icon_view,
  * 
  * Undoes the effect of gtk_icon_view_enable_model_drag_source(). Calling this
  * method sets #GtkIconView:reorderable to %FALSE.
- *
- * Since: 2.8
  **/
 void
 gtk_icon_view_unset_model_drag_source (GtkIconView *icon_view)
@@ -6647,8 +6509,6 @@ gtk_icon_view_unset_model_drag_source (GtkIconView *icon_view)
  * 
  * Undoes the effect of gtk_icon_view_enable_model_drag_dest(). Calling this
  * method sets #GtkIconView:reorderable to %FALSE.
- *
- * Since: 2.8
  **/
 void
 gtk_icon_view_unset_model_drag_dest (GtkIconView *icon_view)
@@ -6672,8 +6532,6 @@ gtk_icon_view_unset_model_drag_dest (GtkIconView *icon_view)
  * @pos: Specifies where to drop, relative to the item
  *
  * Sets the item that is highlighted for feedback.
- *
- * Since: 2.8
  */
 void
 gtk_icon_view_set_drag_dest_item (GtkIconView              *icon_view,
@@ -6732,8 +6590,6 @@ gtk_icon_view_set_drag_dest_item (GtkIconView              *icon_view,
  * @pos: (out) (allow-none): Return location for the drop position, or %NULL
  * 
  * Gets information about the item that is highlighted for feedback.
- *
- * Since: 2.8
  **/
 void
 gtk_icon_view_get_drag_dest_item (GtkIconView              *icon_view,
@@ -6766,8 +6622,6 @@ gtk_icon_view_get_drag_dest_item (GtkIconView              *icon_view,
  * Determines the destination item for a given position.
  * 
  * Returns: whether there is an item at the given position.
- *
- * Since: 2.8
  **/
 gboolean
 gtk_icon_view_get_dest_item_at_pos (GtkIconView              *icon_view,
@@ -6827,8 +6681,6 @@ gtk_icon_view_get_dest_item_at_pos (GtkIconView              *icon_view,
  * This image is used for a drag icon.
  *
  * Returns: (transfer full): a newly-allocated surface of the drag icon.
- * 
- * Since: 2.8
  **/
 cairo_surface_t *
 gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
@@ -6896,8 +6748,6 @@ gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
  * See gtk_icon_view_set_reorderable().
  *
  * Returns: %TRUE if the list can be reordered.
- *
- * Since: 2.8
  **/
 gboolean
 gtk_icon_view_get_reorderable (GtkIconView *icon_view)
@@ -6929,8 +6779,6 @@ static const char *item_formats[] = {
  * This function does not give you any degree of control over the order -- any
  * reordering is allowed.  If more control is needed, you should probably
  * handle drag and drop manually.
- *
- * Since: 2.8
  **/
 void
 gtk_icon_view_set_reorderable (GtkIconView *icon_view,
@@ -6973,8 +6821,6 @@ gtk_icon_view_set_reorderable (GtkIconView *icon_view,
  *
  * Causes the #GtkIconView::item-activated signal to be emitted on
  * a single click instead of a double click.
- *
- * Since: 3.8
  **/
 void
 gtk_icon_view_set_activate_on_single_click (GtkIconView *icon_view,
@@ -6998,8 +6844,6 @@ gtk_icon_view_set_activate_on_single_click (GtkIconView *icon_view,
  * Gets the setting set by gtk_icon_view_set_activate_on_single_click().
  *
  * Returns: %TRUE if item-activated will be emitted on a single click
- *
- * Since: 3.8
  **/
 gboolean
 gtk_icon_view_get_activate_on_single_click (GtkIconView *icon_view)

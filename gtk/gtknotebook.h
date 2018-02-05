@@ -277,7 +277,7 @@ GDK_AVAILABLE_IN_ALL
 void gtk_notebook_set_tab_detachable      (GtkNotebook *notebook,
 					   GtkWidget   *child,
 					   gboolean     detachable);
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 void gtk_notebook_detach_tab              (GtkNotebook *notebook,
                                            GtkWidget   *child);
 

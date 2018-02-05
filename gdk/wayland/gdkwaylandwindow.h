@@ -45,7 +45,7 @@ typedef struct _GdkWaylandWindowClass GdkWaylandWindowClass;
 GDK_AVAILABLE_IN_ALL
 GType                    gdk_wayland_window_get_type             (void);
 
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 GdkWindow *              gdk_wayland_window_new_subsurface       (GdkDisplay            *display,
                                                                   const GdkRectangle    *position);
 GDK_AVAILABLE_IN_ALL
@@ -54,7 +54,7 @@ struct wl_surface       *gdk_wayland_window_get_wl_surface       (GdkWindow *win
 GDK_AVAILABLE_IN_ALL
 void                     gdk_wayland_window_set_use_custom_surface (GdkWindow *window);
 
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 void                     gdk_wayland_window_set_dbus_properties_libgtk_only (GdkWindow  *window,
 									     const char *application_id,
 									     const char *app_menu_path,
@@ -67,16 +67,16 @@ typedef void (*GdkWaylandWindowExported) (GdkWindow  *window,
                                           const char *handle,
                                           gpointer    user_data);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 gboolean                 gdk_wayland_window_export_handle (GdkWindow               *window,
                                                            GdkWaylandWindowExported callback,
                                                            gpointer                 user_data,
                                                            GDestroyNotify           destroy_func);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 void                     gdk_wayland_window_unexport_handle (GdkWindow *window);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 gboolean                 gdk_wayland_window_set_transient_for_exported (GdkWindow *window,
                                                                         char      *parent_handle_str);
 

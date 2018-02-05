@@ -354,8 +354,6 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
    * The submenu child property specifies the name of the submenu
    * If it is %NULL or "main", the child is used as the main menu,
    * which is shown initially when the popover is mapped.
-   *
-   * Since: 3.16
    */
   gtk_container_class_install_child_property (container_class,
                                               CHILD_PROP_SUBMENU,
@@ -380,8 +378,6 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
  * Creates a new popover menu.
  *
  * Returns: a new #GtkPopoverMenu
- *
- * Since: 3.16
  */
 GtkWidget *
 gtk_popover_menu_new (void)
@@ -403,8 +399,6 @@ gtk_popover_menu_new (void)
  * when the #GtkModelButton:menu-name property is set,
  * so this function is only needed when you are using
  * other kinds of widgets to initiate menu changes.
- *
- * Since: 3.16
  */
 void
 gtk_popover_menu_open_submenu (GtkPopoverMenu *popover,

@@ -850,8 +850,6 @@ gtk_window_class_init (GtkWindowClass *klass)
    * The :startup-id is a write-only property for setting window's
    * startup notification identifier. See gtk_window_set_startup_id()
    * for more details.
-   *
-   * Since: 2.12
    */
   window_props[PROP_STARTUP_ID] =
       g_param_spec_string ("startup-id",
@@ -927,8 +925,6 @@ gtk_window_class_init (GtkWindowClass *klass)
    *
    * This property is maintained by GTK+ based on user input,
    * and should not be set by applications.
-   *
-   * Since: 2.20
    */
   window_props[PROP_MNEMONICS_VISIBLE] =
       g_param_spec_boolean ("mnemonics-visible",
@@ -944,8 +940,6 @@ gtk_window_class_init (GtkWindowClass *klass)
    *
    * This property is maintained by GTK+ based on user input
    * and should not be set by applications.
-   *
-   * Since: 2.20
    */
   window_props[PROP_FOCUS_VISIBLE] =
       g_param_spec_boolean ("focus-visible",
@@ -959,8 +953,6 @@ gtk_window_class_init (GtkWindowClass *klass)
    *
    * The :icon-name property specifies the name of the themed icon to
    * use as the window icon. See #GtkIconTheme for more details.
-   *
-   * Since: 2.6
    */
   window_props[PROP_ICON_NAME] =
       g_param_spec_string ("icon-name",
@@ -1016,8 +1008,6 @@ gtk_window_class_init (GtkWindowClass *klass)
    * GtkWindow:accept-focus:
    *
    * Whether the window should receive the input focus.
-   *
-   * Since: 2.4
    */
   window_props[PROP_ACCEPT_FOCUS] =
       g_param_spec_boolean ("accept-focus",
@@ -1030,8 +1020,6 @@ gtk_window_class_init (GtkWindowClass *klass)
    * GtkWindow:focus-on-map:
    *
    * Whether the window should receive the input focus when mapped.
-   *
-   * Since: 2.6
    */
   window_props[PROP_FOCUS_ON_MAP] =
       g_param_spec_boolean ("focus-on-map",
@@ -1044,8 +1032,6 @@ gtk_window_class_init (GtkWindowClass *klass)
    * GtkWindow:decorated:
    *
    * Whether the window should be decorated by the window manager.
-   *
-   * Since: 2.4
    */
   window_props[PROP_DECORATED] =
       g_param_spec_boolean ("decorated",
@@ -1058,8 +1044,6 @@ gtk_window_class_init (GtkWindowClass *klass)
    * GtkWindow:deletable:
    *
    * Whether the window frame should have a close button.
-   *
-   * Since: 2.10
    */
   window_props[PROP_DELETABLE] =
       g_param_spec_boolean ("deletable",
@@ -1073,8 +1057,6 @@ gtk_window_class_init (GtkWindowClass *klass)
    *
    * The window gravity of the window. See gtk_window_move() and #GdkGravity for
    * more details about window gravity.
-   *
-   * Since: 2.4
    */
   window_props[PROP_GRAVITY] =
       g_param_spec_enum ("gravity",
@@ -1089,8 +1071,6 @@ gtk_window_class_init (GtkWindowClass *klass)
    *
    * The transient parent of the window. See gtk_window_set_transient_for() for
    * more details about transient windows.
-   *
-   * Since: 2.10
    */
   window_props[PROP_TRANSIENT_FOR] =
       g_param_spec_object ("transient-for",
@@ -1109,8 +1089,6 @@ gtk_window_class_init (GtkWindowClass *klass)
    * for instance a #GtkMenu created by a #GtkComboBox, a completion
    * popup window created by #GtkEntry or a typeahead search entry
    * created by #GtkTreeView.
-   *
-   * Since: 3.4
    */
   window_props[PROP_ATTACHED_TO] =
       g_param_spec_object ("attached-to",
@@ -1138,8 +1116,6 @@ gtk_window_class_init (GtkWindowClass *klass)
    * Normally, the connection between the application and the window
    * will remain until the window is destroyed, but you can explicitly
    * remove it by setting the :application property to %NULL.
-   *
-   * Since: 3.0
    */
   window_props[PROP_APPLICATION] =
       g_param_spec_object ("application",
@@ -1157,8 +1133,6 @@ gtk_window_class_init (GtkWindowClass *klass)
    *
    * This signal is emitted whenever the currently focused widget in
    * this window changes.
-   *
-   * Since: 2.24
    */
   window_signals[SET_FOCUS] =
     g_signal_new (I_("set-focus"),
@@ -1322,8 +1296,6 @@ gtk_window_class_init (GtkWindowClass *klass)
  * gtk_window_maximize() or gtk_window_unmaximize().
  *
  * Returns: whether the window has a maximized state.
- *
- * Since: 3.12
  */
 gboolean
 gtk_window_is_maximized (GtkWindow *window)
@@ -1355,8 +1327,6 @@ _gtk_window_toggle_maximized (GtkWindow *window)
  *
  * This function can be used with close buttons in custom
  * titlebars.
- *
- * Since: 3.10
  */
 void
 gtk_window_close (GtkWindow *window)
@@ -2687,8 +2657,6 @@ gtk_window_set_role (GtkWindow   *window,
  * function generating a window map event.
  *
  * This function is only useful on X11, not with other GTK+ targets.
- * 
- * Since: 2.12
  **/
 void
 gtk_window_set_startup_id (GtkWindow   *window,
@@ -2895,8 +2863,6 @@ gtk_window_set_default (GtkWindow *window,
  *
  * Returns: (nullable) (transfer none): the default widget, or %NULL
  * if there is none.
- *
- * Since: 2.14
  **/
 GtkWidget *
 gtk_window_get_default_widget (GtkWindow *window)
@@ -3567,8 +3533,6 @@ gtk_window_get_transient_for (GtkWindow *window)
  * between two toplevels instead.
  *
  * Passing %NULL for @attach_widget detaches the window.
- *
- * Since: 3.4
  **/
 void
 gtk_window_set_attached_to (GtkWindow *window,
@@ -3613,8 +3577,6 @@ gtk_window_set_attached_to (GtkWindow *window,
  *
  * Returns: (nullable) (transfer none): the widget where the window
  * is attached, or %NULL if the window is not attached to any widget.
- *
- * Since: 3.4
  **/
 GtkWidget *
 gtk_window_get_attached_to (GtkWindow *window)
@@ -3631,8 +3593,6 @@ gtk_window_get_attached_to (GtkWindow *window)
  * Gets the #GtkApplication associated with the window (if any).
  *
  * Returns: (nullable) (transfer none): a #GtkApplication, or %NULL
- *
- * Since: 3.0
  **/
 GtkApplication *
 gtk_window_get_application (GtkWindow *window)
@@ -3675,8 +3635,6 @@ gtk_window_release_application (GtkWindow *window)
  *
  * This is equivalent to calling gtk_application_remove_window() and/or
  * gtk_application_add_window() on the old/new applications as relevant.
- *
- * Since: 3.0
  **/
 void
 gtk_window_set_application (GtkWindow      *window,
@@ -3771,8 +3729,6 @@ gtk_window_get_type_hint (GtkWindow *window)
  * 
  * Windows may set a hint asking the desktop environment not to display
  * the window in the task bar. This function sets this hint.
- * 
- * Since: 2.2
  **/
 void
 gtk_window_set_skip_taskbar_hint (GtkWindow *window,
@@ -3803,8 +3759,6 @@ gtk_window_set_skip_taskbar_hint (GtkWindow *window,
  * Gets the value set by gtk_window_set_skip_taskbar_hint()
  * 
  * Returns: %TRUE if window shouldn’t be in taskbar
- * 
- * Since: 2.2
  **/
 gboolean
 gtk_window_get_skip_taskbar_hint (GtkWindow *window)
@@ -3824,8 +3778,6 @@ gtk_window_get_skip_taskbar_hint (GtkWindow *window)
  * (A "pager" is any desktop navigation tool such as a workspace
  * switcher that displays a thumbnail representation of the windows
  * on the screen.)
- * 
- * Since: 2.2
  **/
 void
 gtk_window_set_skip_pager_hint (GtkWindow *window,
@@ -3856,8 +3808,6 @@ gtk_window_set_skip_pager_hint (GtkWindow *window,
  * Gets the value set by gtk_window_set_skip_pager_hint().
  * 
  * Returns: %TRUE if window shouldn’t be in pager
- * 
- * Since: 2.2
  **/
 gboolean
 gtk_window_get_skip_pager_hint (GtkWindow *window)
@@ -3874,8 +3824,6 @@ gtk_window_get_skip_pager_hint (GtkWindow *window)
  * 
  * Windows may set a hint asking the desktop environment to draw
  * the users attention to the window. This function sets this hint.
- * 
- * Since: 2.8
  **/
 void
 gtk_window_set_urgency_hint (GtkWindow *window,
@@ -3906,8 +3854,6 @@ gtk_window_set_urgency_hint (GtkWindow *window,
  * Gets the value set by gtk_window_set_urgency_hint()
  * 
  * Returns: %TRUE if window is urgent
- * 
- * Since: 2.8
  **/
 gboolean
 gtk_window_get_urgency_hint (GtkWindow *window)
@@ -3924,8 +3870,6 @@ gtk_window_get_urgency_hint (GtkWindow *window)
  * 
  * Windows may set a hint asking the desktop environment not to receive
  * the input focus. This function sets this hint.
- * 
- * Since: 2.4
  **/
 void
 gtk_window_set_accept_focus (GtkWindow *window,
@@ -3956,8 +3900,6 @@ gtk_window_set_accept_focus (GtkWindow *window,
  * Gets the value set by gtk_window_set_accept_focus().
  * 
  * Returns: %TRUE if window should receive the input focus
- * 
- * Since: 2.4
  **/
 gboolean
 gtk_window_get_accept_focus (GtkWindow *window)
@@ -3975,8 +3917,6 @@ gtk_window_get_accept_focus (GtkWindow *window)
  * Windows may set a hint asking the desktop environment not to receive
  * the input focus when the window is mapped.  This function sets this
  * hint.
- * 
- * Since: 2.6
  **/
 void
 gtk_window_set_focus_on_map (GtkWindow *window,
@@ -4008,8 +3948,6 @@ gtk_window_set_focus_on_map (GtkWindow *window,
  * 
  * Returns: %TRUE if window should receive the input focus when
  * mapped.
- * 
- * Since: 2.6
  **/
 gboolean
 gtk_window_get_focus_on_map (GtkWindow *window)
@@ -4080,8 +4018,6 @@ gtk_window_get_destroy_with_parent (GtkWindow *window)
  *
  * If @setting is %TRUE, then clicking the close button on the window
  * will not destroy it, but only hide it.
- *
- * Since: 3.94
  */
 void
 gtk_window_set_hide_on_close (GtkWindow *window,
@@ -4106,8 +4042,6 @@ gtk_window_set_hide_on_close (GtkWindow *window,
  * Returns whether the window will be hidden when the close button is clicked.
  *
  * Returns: %TRUE if the window will be hidden
- *
- * Since: 3.94
  */
 gboolean
 gtk_window_get_hide_on_close (GtkWindow *window)
@@ -4233,8 +4167,6 @@ on_titlebar_title_notify (GtkHeaderBar *titlebar,
  * Depending on the system, this function may not work for a window
  * that is already visible, so you set the titlebar before calling
  * gtk_widget_show().
- *
- * Since: 3.10
  */
 void
 gtk_window_set_titlebar (GtkWindow *window,
@@ -4301,8 +4233,6 @@ out:
  * gtk_window_set_titlebar().
  *
  * Returns: (nullable) (transfer none): the custom titlebar, or %NULL
- *
- * Since: 3.16
  */
 GtkWidget *
 gtk_window_get_titlebar (GtkWindow *window)
@@ -4417,8 +4347,6 @@ gtk_window_get_decorated (GtkWindow *window)
  *
  * On Windows, this function always works, since there’s no window manager
  * policy involved.
- *
- * Since: 2.10
  */
 void
 gtk_window_set_deletable (GtkWindow *window,
@@ -4462,8 +4390,6 @@ gtk_window_set_deletable (GtkWindow *window,
  * via gtk_window_set_deletable().
  *
  * Returns: %TRUE if the window has been set to have a close button
- *
- * Since: 2.10
  **/
 gboolean
 gtk_window_get_deletable (GtkWindow *window)
@@ -4900,8 +4826,6 @@ update_themed_icon (GtkWindow *window)
  *
  * Note that this has nothing to do with the WM_ICON_NAME 
  * property which is mentioned in the ICCCM.
- *
- * Since: 2.6
  */
 void 
 gtk_window_set_icon_name (GtkWindow   *window,
@@ -4938,8 +4862,6 @@ gtk_window_set_icon_name (GtkWindow   *window,
  *
  * Returns: (nullable): the icon name or %NULL if the window has
  * no themed icon
- *
- * Since: 2.6
  */
 const gchar *
 gtk_window_get_icon_name (GtkWindow *window)
@@ -5020,8 +4942,6 @@ load_texture_verbosely (const char *filename,
  * with a surface created by loading the image from @filename.
  *
  * Returns: %TRUE if setting the icon succeeded.
- *
- * Since: 2.2
  **/
 gboolean
 gtk_window_set_icon_from_file (GtkWindow   *window,
@@ -5099,8 +5019,6 @@ gtk_window_set_default_icon_list (GList *list)
  *
  * Sets an icon to be used as fallback for windows that haven't
  * had gtk_window_set_icon() called on them from a surface.
- *
- * Since: 2.4
  **/
 void
 gtk_window_set_default_icon (GdkTexture *icon)
@@ -5121,8 +5039,6 @@ gtk_window_set_default_icon (GdkTexture *icon)
  * Sets an icon to be used as fallback for windows that haven't
  * had gtk_window_set_icon_list() called on them from a named
  * themed icon, see gtk_window_set_icon_name().
- *
- * Since: 2.6
  **/
 void
 gtk_window_set_default_icon_name (const gchar *name)
@@ -5171,8 +5087,6 @@ gtk_window_set_default_icon_name (const gchar *name)
  * gtk_window_set_default_icon_name().
  *
  * Returns: the fallback icon name for windows
- *
- * Since: 2.16
  */
 const gchar *
 gtk_window_get_default_icon_name (void)
@@ -5190,8 +5104,6 @@ gtk_window_get_default_icon_name (void)
  * on disk. Warns on failure if @err is %NULL.
  *
  * Returns: %TRUE if setting the icon succeeded.
- *
- * Since: 2.2
  **/
 gboolean
 gtk_window_set_default_icon_from_file (const gchar *filename,
@@ -7460,8 +7372,6 @@ _gtk_window_query_nonaccels (GtkWindow      *window,
  * overriding the standard key handling for a toplevel window.
  *
  * Returns: %TRUE if a widget in the focus chain handled the event.
- *
- * Since: 2.4
  */
 gboolean
 gtk_window_propagate_key_event (GtkWindow        *window,
@@ -9431,8 +9341,6 @@ gtk_window_present (GtkWindow *window)
  * Presents a window to the user in response to a user interaction.
  * If you need to present a window without a timestamp, use 
  * gtk_window_present(). See gtk_window_present() for details. 
- * 
- * Since: 2.8
  **/
 void
 gtk_window_present_with_time (GtkWindow *window,
@@ -9674,8 +9582,6 @@ gtk_window_unmaximize (GtkWindow *window)
  * don’t write code that crashes if not.
  *
  * You can track iconification via the #GdkWindow::state property
- *
- * Since: 2.2
  **/
 void
 gtk_window_fullscreen (GtkWindow *window)
@@ -9759,8 +9665,6 @@ gtk_window_fullscreen_on_monitor (GtkWindow  *window,
  * state. Just don’t write code that crashes if not.
  *
  * You can track iconification via the #GdkWindow::state property
- *
- * Since: 2.2
  **/
 void
 gtk_window_unfullscreen (GtkWindow *window)
@@ -9802,8 +9706,6 @@ gtk_window_unfullscreen (GtkWindow *window)
  * the above state is mainly meant for user preferences and should not
  * be used by applications e.g. for drawing attention to their
  * dialogs.
- *
- * Since: 2.4
  **/
 void
 gtk_window_set_keep_above (GtkWindow *window,
@@ -9848,8 +9750,6 @@ gtk_window_set_keep_above (GtkWindow *window,
  * the above state is mainly meant for user preferences and should not
  * be used by applications e.g. for drawing attention to their
  * dialogs.
- *
- * Since: 2.4
  **/
 void
 gtk_window_set_keep_below (GtkWindow *window,
@@ -10053,8 +9953,6 @@ gtk_window_begin_move_drag  (GtkWindow *window,
  * Sets the #GdkDisplay where the @window is displayed; if
  * the window is already mapped, it will be unmapped, and
  * then remapped on the new display.
- *
- * Since: 3.94
  */
 void
 gtk_window_set_display (GtkWindow  *window,
@@ -10156,8 +10054,6 @@ gtk_window_get_display (GtkWindow *window)
  * differently in an active window from a widget in an inactive window.
  * 
  * Returns: %TRUE if the window part of the current active window.
- *
- * Since: 2.4
  **/
 gboolean
 gtk_window_is_active (GtkWindow *window)
@@ -10176,8 +10072,6 @@ gtk_window_is_active (GtkWindow *window)
  * window group.
  *
  * Returns: (transfer none): the #GtkWindowGroup for a window or the default group
- *
- * Since: 2.10
  */
 GtkWindowGroup *
 gtk_window_get_group (GtkWindow *window)
@@ -10437,8 +10331,6 @@ gtk_window_free_key_hash (GtkWindow *window)
  * overriding the standard key handling for a toplevel window.
  *
  * Returns: %TRUE if a mnemonic or accelerator was found and activated.
- *
- * Since: 2.4
  */
 gboolean
 gtk_window_activate_key (GtkWindow   *window,
@@ -10587,8 +10479,6 @@ _gtk_window_set_is_active (GtkWindow *window,
  * In that example, you would disable startup notification
  * temporarily, show your splash screen, then re-enable it so that
  * showing the main window would automatically result in notification.
- * 
- * Since: 2.2
  **/
 void
 gtk_window_set_auto_startup_notification (gboolean setting)
@@ -10603,8 +10493,6 @@ gtk_window_set_auto_startup_notification (gboolean setting)
  * Gets the type of the window. See #GtkWindowType.
  *
  * Returns: the type of the window
- *
- * Since: 2.20
  **/
 GtkWindowType
 gtk_window_get_window_type (GtkWindow *window)
@@ -10622,8 +10510,6 @@ gtk_window_get_window_type (GtkWindow *window)
  *
  * Returns: %TRUE if mnemonics are supposed to be visible
  * in this window.
- *
- * Since: 2.20
  */
 gboolean
 gtk_window_get_mnemonics_visible (GtkWindow *window)
@@ -10639,8 +10525,6 @@ gtk_window_get_mnemonics_visible (GtkWindow *window)
  * @setting: the new value
  *
  * Sets the #GtkWindow:mnemonics-visible property.
- *
- * Since: 2.20
  */
 void
 gtk_window_set_mnemonics_visible (GtkWindow *window,
@@ -10702,8 +10586,6 @@ _gtk_window_schedule_mnemonics_visible (GtkWindow *window)
  *
  * Returns: %TRUE if “focus rectangles” are supposed to be visible
  *     in this window.
- *
- * Since: 3.2
  */
 gboolean
 gtk_window_get_focus_visible (GtkWindow *window)
@@ -10719,8 +10601,6 @@ gtk_window_get_focus_visible (GtkWindow *window)
  * @setting: the new value
  *
  * Sets the #GtkWindow:focus-visible property.
- *
- * Since: 3.2
  */
 void
 gtk_window_set_focus_visible (GtkWindow *window,
@@ -10753,8 +10633,6 @@ gtk_window_set_focus_visible (GtkWindow *window,
  * bindings which may need to keep the window alive until their
  * wrapper object is garbage collected. There is no justification
  * for ever calling this function in an application.
- *
- * Since: 3.0
  */
 void
 gtk_window_set_has_user_ref_count (GtkWindow *window,
@@ -11098,8 +10976,6 @@ gtk_window_set_debugging (gboolean enable,
  * Opens or closes the [interactive debugger][interactive-debugging],
  * which offers access to the widget hierarchy of the application
  * and to useful debugging tools.
- *
- * Since: 3.14
  */
 void
 gtk_window_set_interactive_debugging (gboolean enable)

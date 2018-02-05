@@ -117,8 +117,6 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
    *
    * Holds a tree model containing the possible values for the combo box. 
    * Use the text_column property to specify the column holding the values.
-   * 
-   * Since: 2.6
    */
   g_object_class_install_property (object_class,
 				   PROP_MODEL,
@@ -140,8 +138,6 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
    * 
    * #GtkCellRendererCombo automatically adds a text cell renderer for 
    * this column to its combo box.
-   *
-   * Since: 2.6
    */
   g_object_class_install_property (object_class,
                                    PROP_TEXT_COLUMN,
@@ -158,8 +154,6 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
    *
    * If %TRUE, the cell renderer will include an entry and allow to enter 
    * values other than the ones in the popup list. 
-   *
-   * Since: 2.6
    */
   g_object_class_install_property (object_class,
                                    PROP_HAS_ENTRY,
@@ -189,8 +183,6 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
    * the tree view will immediately cease the editing operating.  This
    * means that you most probably want to refrain from changing the model
    * until the combo cell renderer emits the edited or editing_canceled signal.
-   *
-   * Since: 2.14
    */
   cell_renderer_combo_signals[CHANGED] =
     g_signal_new (I_("changed"),
@@ -230,8 +222,6 @@ gtk_cell_renderer_combo_init (GtkCellRendererCombo *self)
  * a different string in each row of the #GtkTreeView.
  * 
  * Returns: the new cell renderer
- *
- * Since: 2.6
  */
 GtkCellRenderer *
 gtk_cell_renderer_combo_new (void)

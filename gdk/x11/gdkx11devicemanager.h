@@ -30,7 +30,7 @@
 
 G_BEGIN_DECLS
 
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 GdkDevice * gdk_x11_device_manager_lookup (GdkX11DeviceManagerCore *device_manager,
                                            gint                     device_id);
 GDK_AVAILABLE_IN_ALL

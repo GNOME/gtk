@@ -39,13 +39,13 @@ G_BEGIN_DECLS
 typedef struct _GtkGestureSwipe GtkGestureSwipe;
 typedef struct _GtkGestureSwipeClass GtkGestureSwipeClass;
 
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 GType        gtk_gesture_swipe_get_type  (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 GtkGesture * gtk_gesture_swipe_new       (GtkWidget *widget);
 
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 gboolean     gtk_gesture_swipe_get_velocity (GtkGestureSwipe *gesture,
                                              gdouble         *velocity_x,
                                              gdouble         *velocity_y);

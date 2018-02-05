@@ -109,8 +109,6 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
    * GtkFontChooser:level:
    *
    * The level of granularity to offer for selecting fonts.
-   *
-   * Since: 3.94
    */
   g_object_interface_install_property
      (iface,
@@ -126,8 +124,6 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
    *
    * The selected font features, in a format that is compatible with
    * CSS and with Pango attributes.
-   *
-   * Since: 3.94
    */
   g_object_interface_install_property
      (iface,
@@ -143,8 +139,6 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
    * The language for which the #GtkFontChooser:font-features were
    * selected, in a format that is compatible with CSS and with Pango
    * attributes.
-   *
-   * Since: 3.94
    */
   g_object_interface_install_property
      (iface,
@@ -187,8 +181,6 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
  * Returns: (nullable) (transfer none): A #PangoFontFamily representing the
  *     selected font family, or %NULL. The returned object is owned by @fontchooser
  *     and must not be modified or freed.
- *
- * Since: 3.2
  */
 PangoFontFamily *
 gtk_font_chooser_get_font_family (GtkFontChooser *fontchooser)
@@ -210,8 +202,6 @@ gtk_font_chooser_get_font_family (GtkFontChooser *fontchooser)
  * Returns: (nullable) (transfer none): A #PangoFontFace representing the
  *     selected font group details, or %NULL. The returned object is owned by
  *     @fontchooser and must not be modified or freed.
- *
- * Since: 3.2
  */
 PangoFontFace *
 gtk_font_chooser_get_font_face (GtkFontChooser *fontchooser)
@@ -229,8 +219,6 @@ gtk_font_chooser_get_font_face (GtkFontChooser *fontchooser)
  *
  * Returns: A n integer representing the selected font size,
  *     or -1 if no font size is selected.
- *
- * Since: 3.2
  */
 gint
 gtk_font_chooser_get_font_size (GtkFontChooser *fontchooser)
@@ -258,8 +246,6 @@ gtk_font_chooser_get_font_size (GtkFontChooser *fontchooser)
  * Returns: (nullable) (transfer full): A string with the name
  *     of the current font, or %NULL if  no font is selected. You must
  *     free this string with g_free().
- *
- * Since: 3.2
  */
 gchar *
 gtk_font_chooser_get_font (GtkFontChooser *fontchooser)
@@ -280,8 +266,6 @@ gtk_font_chooser_get_font (GtkFontChooser *fontchooser)
  * @fontname: a font name like “Helvetica 12” or “Times Bold 18”
  *
  * Sets the currently-selected font.
- *
- * Since: 3.2
  */
 void
 gtk_font_chooser_set_font (GtkFontChooser *fontchooser,
@@ -310,8 +294,6 @@ gtk_font_chooser_set_font (GtkFontChooser *fontchooser,
  *
  * Returns: (nullable) (transfer full): A #PangoFontDescription for the
  *     current font, or %NULL if  no font is selected.
- *
- * Since: 3.2
  */
 PangoFontDescription *
 gtk_font_chooser_get_font_desc (GtkFontChooser *fontchooser)
@@ -331,8 +313,6 @@ gtk_font_chooser_get_font_desc (GtkFontChooser *fontchooser)
  * @font_desc: a #PangoFontDescription
  *
  * Sets the currently-selected font from @font_desc.
- *
- * Since: 3.2
  */
 void
 gtk_font_chooser_set_font_desc (GtkFontChooser             *fontchooser,
@@ -352,8 +332,6 @@ gtk_font_chooser_set_font_desc (GtkFontChooser             *fontchooser,
  *
  * Returns: (transfer full): the text displayed in the
  *     preview area
- *
- * Since: 3.2
  */
 gchar *
 gtk_font_chooser_get_preview_text (GtkFontChooser *fontchooser)
@@ -374,8 +352,6 @@ gtk_font_chooser_get_preview_text (GtkFontChooser *fontchooser)
  *
  * Sets the text displayed in the preview area.
  * The @text is used to show how the selected font looks.
- *
- * Since: 3.2
  */
 void
 gtk_font_chooser_set_preview_text (GtkFontChooser *fontchooser,
@@ -395,8 +371,6 @@ gtk_font_chooser_set_preview_text (GtkFontChooser *fontchooser,
  *
  * Returns: %TRUE if the preview entry is shown
  *     or %FALSE if it is hidden.
- *
- * Since: 3.2
  */
 gboolean
 gtk_font_chooser_get_show_preview_entry (GtkFontChooser *fontchooser)
@@ -416,8 +390,6 @@ gtk_font_chooser_get_show_preview_entry (GtkFontChooser *fontchooser)
  * @show_preview_entry: whether to show the editable preview entry or not
  *
  * Shows or hides the editable preview entry.
- *
- * Since: 3.2
  */
 void
 gtk_font_chooser_set_show_preview_entry (GtkFontChooser *fontchooser,
@@ -438,8 +410,6 @@ gtk_font_chooser_set_show_preview_entry (GtkFontChooser *fontchooser,
  *
  * Adds a filter function that decides which fonts to display
  * in the font chooser.
- *
- * Since: 3.2
  */
 void
 gtk_font_chooser_set_filter_func (GtkFontChooser   *fontchooser,
@@ -493,8 +463,6 @@ _gtk_font_chooser_font_activated (GtkFontChooser *chooser,
  * context = gtk_widget_get_pango_context (label);
  * pango_context_set_font_map (context, fontmap);
  * ]|
- *
- * Since: 3.18
  */
 void
 gtk_font_chooser_set_font_map (GtkFontChooser *fontchooser,
@@ -515,8 +483,6 @@ gtk_font_chooser_set_font_map (GtkFontChooser *fontchooser,
  * or %NULL if it does not have one.
  *
  * Returns: (nullable) (transfer full): a #PangoFontMap, or %NULL
- *
- * Since: 3.18
  */
 PangoFontMap *
 gtk_font_chooser_get_font_map (GtkFontChooser *fontchooser)
@@ -537,8 +503,6 @@ gtk_font_chooser_get_font_map (GtkFontChooser *fontchooser)
  * @level: the desired level of granularity
  *
  * Sets the desired level of granularity for selecting fonts.
- *
- * Since: 3.94
  */
 void
 gtk_font_chooser_set_level (GtkFontChooser      *fontchooser,
@@ -556,7 +520,6 @@ gtk_font_chooser_set_level (GtkFontChooser      *fontchooser,
  * Returns the current level of granularity for selecting fonts.
  *
  * Returns: the current granularity level
- * Since: 3.94
  */
 GtkFontChooserLevel
 gtk_font_chooser_get_level (GtkFontChooser *fontchooser)
@@ -577,7 +540,6 @@ gtk_font_chooser_get_level (GtkFontChooser *fontchooser)
  * Gets the currently-selected font features.
  *
  * Returns: the currently selected font features
- * Since: 3.94
  */
 char *
 gtk_font_chooser_get_font_features (GtkFontChooser *fontchooser)
@@ -598,7 +560,6 @@ gtk_font_chooser_get_font_features (GtkFontChooser *fontchooser)
  * Gets the currently-selected language for font features.
  *
  * Returns: the currently selected language
- * Since: 3.94
  */
 char *
 gtk_font_chooser_get_language (GtkFontChooser *fontchooser)

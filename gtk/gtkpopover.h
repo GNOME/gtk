@@ -58,62 +58,62 @@ struct _GtkPopoverClass
   gpointer reserved[10];
 };
 
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 GType           gtk_popover_get_type        (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 GtkWidget *     gtk_popover_new             (GtkWidget             *relative_to);
 
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 GtkWidget *     gtk_popover_new_from_model  (GtkWidget             *relative_to,
                                              GMenuModel            *model);
 
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 void            gtk_popover_set_relative_to (GtkPopover            *popover,
                                              GtkWidget             *relative_to);
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 GtkWidget *     gtk_popover_get_relative_to (GtkPopover            *popover);
 
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 void            gtk_popover_set_pointing_to (GtkPopover            *popover,
                                              const GdkRectangle    *rect);
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 gboolean        gtk_popover_get_pointing_to (GtkPopover            *popover,
                                              GdkRectangle          *rect);
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 void            gtk_popover_set_position    (GtkPopover            *popover,
                                              GtkPositionType        position);
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 GtkPositionType gtk_popover_get_position    (GtkPopover            *popover);
 
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 void            gtk_popover_set_modal       (GtkPopover            *popover,
                                              gboolean               modal);
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 gboolean        gtk_popover_get_modal       (GtkPopover            *popover);
 
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 void            gtk_popover_bind_model      (GtkPopover            *popover,
                                              GMenuModel            *model,
                                              const gchar           *action_namespace);
 
-GDK_AVAILABLE_IN_3_18
+GDK_AVAILABLE_IN_ALL
 void            gtk_popover_set_default_widget (GtkPopover *popover,
                                                 GtkWidget  *widget);
-GDK_AVAILABLE_IN_3_18
+GDK_AVAILABLE_IN_ALL
 GtkWidget *     gtk_popover_get_default_widget (GtkPopover *popover);
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 void                 gtk_popover_set_constrain_to (GtkPopover           *popover,
                                                    GtkPopoverConstraint  constraint);
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 GtkPopoverConstraint gtk_popover_get_constrain_to (GtkPopover           *popover);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 void                 gtk_popover_popup            (GtkPopover *popover);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 void                 gtk_popover_popdown          (GtkPopover *popover);
 
 

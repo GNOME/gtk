@@ -187,8 +187,6 @@ gtk_printer_class_init (GtkPrinterClass *class)
    * This property is %TRUE if this printer is paused. 
    * A paused printer still accepts jobs, but it does 
    * not print them.
-   *
-   * Since: 2.14
    */
   g_object_class_install_property (G_OBJECT_CLASS (class),
                                    PROP_PAUSED,
@@ -201,9 +199,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
    * GtkPrinter:accepting-jobs:
    *
    * This property is %TRUE if the printer is accepting jobs.
-   *
-   * Since: 2.14
-   */ 
+   */
   g_object_class_install_property (G_OBJECT_CLASS (class),
                                    PROP_ACCEPTING_JOBS,
                                    g_param_spec_boolean ("accepting-jobs",
@@ -220,8 +216,6 @@ gtk_printer_class_init (GtkPrinterClass *class)
    * Gets emitted in response to a request for detailed information
    * about a printer from the print backend. The @success parameter
    * indicates if the information was actually obtained.
-   *
-   * Since: 2.10
    */
   signals[DETAILS_ACQUIRED] =
     g_signal_new (I_("details-acquired"),
@@ -383,8 +377,6 @@ gtk_printer_get_property (GObject    *object,
  * Creates a new #GtkPrinter.
  *
  * Returns: a new #GtkPrinter
- *
- * Since: 2.10
  **/
 GtkPrinter *
 gtk_printer_new (const gchar     *name,
@@ -409,8 +401,6 @@ gtk_printer_new (const gchar     *name,
  * Returns the backend of the printer.
  * 
  * Returns: (transfer none): the backend of @printer
- * 
- * Since: 2.10
  */
 GtkPrintBackend *
 gtk_printer_get_backend (GtkPrinter *printer)
@@ -427,8 +417,6 @@ gtk_printer_get_backend (GtkPrinter *printer)
  * Returns the name of the printer.
  * 
  * Returns: the name of @printer
- *
- * Since: 2.10
  */
 const gchar *
 gtk_printer_get_name (GtkPrinter *printer)
@@ -445,8 +433,6 @@ gtk_printer_get_name (GtkPrinter *printer)
  * Gets the description of the printer.
  * 
  * Returns: the description of @printer
- *
- * Since: 2.10
  */
 const gchar *
 gtk_printer_get_description (GtkPrinter *printer)
@@ -483,8 +469,6 @@ gtk_printer_set_description (GtkPrinter  *printer,
  * of the printer.
  * 
  * Returns: the state message of @printer
- *
- * Since: 2.10
  */
 const gchar *
 gtk_printer_get_state_message (GtkPrinter *printer)
@@ -521,8 +505,6 @@ gtk_printer_set_state_message (GtkPrinter  *printer,
  * Returns a description of the location of the printer.
  * 
  * Returns: the location of @printer
- *
- * Since: 2.10
  */
 const gchar *
 gtk_printer_get_location (GtkPrinter *printer)
@@ -559,8 +541,6 @@ gtk_printer_set_location (GtkPrinter  *printer,
  * Gets the name of the icon to use for the printer.
  * 
  * Returns: the icon name for @printer
- *
- * Since: 2.10
  */
 const gchar *
 gtk_printer_get_icon_name (GtkPrinter *printer)
@@ -592,8 +572,6 @@ gtk_printer_set_icon_name (GtkPrinter  *printer,
  * Gets the number of jobs currently queued on the printer.
  * 
  * Returns: the number of jobs on @printer
- *
- * Since: 2.10
  */
 gint 
 gtk_printer_get_job_count (GtkPrinter *printer)
@@ -630,8 +608,6 @@ gtk_printer_set_job_count (GtkPrinter *printer,
  * Returns whether the printer details are available.
  * 
  * Returns: %TRUE if @printer details are available
- *
- * Since: 2.12
  */
 gboolean
 gtk_printer_has_details (GtkPrinter *printer)
@@ -656,8 +632,6 @@ gtk_printer_set_has_details (GtkPrinter *printer,
  * accepts new jobs).
  * 
  * Returns: %TRUE if @printer is active
- *
- * Since: 2.10
  */
 gboolean
 gtk_printer_is_active (GtkPrinter *printer)
@@ -685,8 +659,6 @@ gtk_printer_set_is_active (GtkPrinter *printer,
  * printing them.
  * 
  * Returns: %TRUE if @printer is paused
- *
- * Since: 2.14
  */
 gboolean
 gtk_printer_is_paused (GtkPrinter *printer)
@@ -721,8 +693,6 @@ gtk_printer_set_is_paused (GtkPrinter *printer,
  * Returns whether the printer is accepting jobs
  * 
  * Returns: %TRUE if @printer is accepting jobs
- *
- * Since: 2.14
  */
 gboolean
 gtk_printer_is_accepting_jobs (GtkPrinter *printer)
@@ -759,8 +729,6 @@ gtk_printer_set_is_accepting_jobs (GtkPrinter *printer,
  * a CUPS class).
  * 
  * Returns: %TRUE if @printer is virtual
- *
- * Since: 2.10
  */
 gboolean
 gtk_printer_is_virtual (GtkPrinter *printer)
@@ -778,8 +746,6 @@ gtk_printer_is_virtual (GtkPrinter *printer)
  * PDF format.  
  *
  * Returns: %TRUE if @printer accepts PDF
- *
- * Since: 2.10
  */
 gboolean 
 gtk_printer_accepts_pdf (GtkPrinter *printer)
@@ -806,8 +772,6 @@ gtk_printer_set_accepts_pdf (GtkPrinter *printer,
  * PostScript format.  
  *
  * Returns: %TRUE if @printer accepts PostScript
- *
- * Since: 2.10
  */
 gboolean 
 gtk_printer_accepts_ps (GtkPrinter *printer)
@@ -851,8 +815,6 @@ gtk_printer_set_is_new (GtkPrinter *printer,
  * Returns whether the printer is the default printer.
  * 
  * Returns: %TRUE if @printer is the default
- *
- * Since: 2.10
  */
 gboolean
 gtk_printer_is_default (GtkPrinter *printer)
@@ -877,8 +839,6 @@ gtk_printer_set_is_default (GtkPrinter *printer,
  * 
  * Requests the printer details. When the details are available,
  * the #GtkPrinter::details-acquired signal will be emitted on @printer.
- * 
- * Since: 2.12
  */
 void
 gtk_printer_request_details (GtkPrinter *printer)
@@ -950,8 +910,6 @@ _gtk_printer_create_cairo_surface (GtkPrinter       *printer,
  * available, see gtk_printer_has_details() and gtk_printer_request_details().
  *
  * Returns: (element-type GtkPageSetup) (transfer full): a newly allocated list of newly allocated #GtkPageSetup s.
- *
- * Since: 2.12
  */
 GList  *
 gtk_printer_list_papers (GtkPrinter *printer)
@@ -971,8 +929,6 @@ gtk_printer_list_papers (GtkPrinter *printer)
  * Returns default page size of @printer.
  * 
  * Returns: a newly allocated #GtkPageSetup with default page size of the printer.
- *
- * Since: 2.14
  */
 GtkPageSetup  *
 gtk_printer_get_default_page_size (GtkPrinter *printer)
@@ -1000,8 +956,6 @@ gtk_printer_get_default_page_size (GtkPrinter *printer)
  * see gtk_printer_has_details() and gtk_printer_request_details().
  *
  * Returns: %TRUE iff the hard margins were retrieved
- *
- * Since: 2.20
  */
 gboolean
 gtk_printer_get_hard_margins (GtkPrinter *printer,
@@ -1029,8 +983,6 @@ gtk_printer_get_hard_margins (GtkPrinter *printer,
  * gtk_printer_has_details() and gtk_printer_request_details().
  *
  * Returns: the printer’s capabilities
- *
- * Since: 2.12
  */
 GtkPrintCapabilities
 gtk_printer_get_capabilities (GtkPrinter *printer)
@@ -1052,8 +1004,6 @@ gtk_printer_get_capabilities (GtkPrinter *printer)
  * 
  * Returns: 0 if the printer match, a negative value if @a < @b, 
  *   or a positive value if @a > @b
- *
- * Since: 2.10
  */
 gint
 gtk_printer_compare (GtkPrinter *a, 
@@ -1228,8 +1178,6 @@ list_printers_init (PrinterList     *printer_list,
  *
  * Calls a function for all #GtkPrinters. 
  * If @func returns %TRUE, the enumeration is stopped.
- *
- * Since: 2.10
  */
 void
 gtk_enumerate_printers (GtkPrinterFunc func,

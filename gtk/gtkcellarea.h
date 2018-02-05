@@ -308,7 +308,7 @@ gint                  gtk_cell_area_event                          (GtkCellArea 
                                                                     GdkEvent             *event,
                                                                     const GdkRectangle   *cell_area,
                                                                     GtkCellRendererState  flags);
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 void                  gtk_cell_area_snapshot                       (GtkCellArea          *area,
                                                                     GtkCellAreaContext   *context,
                                                                     GtkWidget            *widget,
@@ -388,7 +388,7 @@ GDK_AVAILABLE_IN_ALL
 void                  gtk_cell_area_attribute_disconnect           (GtkCellArea        *area,
                                                                     GtkCellRenderer    *renderer,
                                                                     const gchar        *attribute);
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 gint                  gtk_cell_area_attribute_get_column           (GtkCellArea        *area,
                                                                     GtkCellRenderer    *renderer,
                                                                     const gchar        *attribute);

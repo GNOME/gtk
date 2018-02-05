@@ -69,18 +69,18 @@
  * @GTK_STACK_TRANSITION_TYPE_SLIDE_DOWN: Slide from top down
  * @GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT: Slide from left or right according to the children order
  * @GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN: Slide from top down or bottom up according to the order
- * @GTK_STACK_TRANSITION_TYPE_OVER_UP: Cover the old page by sliding up. Since 3.12
- * @GTK_STACK_TRANSITION_TYPE_OVER_DOWN: Cover the old page by sliding down. Since: 3.12
- * @GTK_STACK_TRANSITION_TYPE_OVER_LEFT: Cover the old page by sliding to the left. Since: 3.12
- * @GTK_STACK_TRANSITION_TYPE_OVER_RIGHT: Cover the old page by sliding to the right. Since: 3.12
- * @GTK_STACK_TRANSITION_TYPE_UNDER_UP: Uncover the new page by sliding up. Since 3.12
- * @GTK_STACK_TRANSITION_TYPE_UNDER_DOWN: Uncover the new page by sliding down. Since: 3.12
- * @GTK_STACK_TRANSITION_TYPE_UNDER_LEFT: Uncover the new page by sliding to the left. Since: 3.12
- * @GTK_STACK_TRANSITION_TYPE_UNDER_RIGHT: Uncover the new page by sliding to the right. Since: 3.12
- * @GTK_STACK_TRANSITION_TYPE_OVER_UP_DOWN: Cover the old page sliding up or uncover the new page sliding down, according to order. Since: 3.12
- * @GTK_STACK_TRANSITION_TYPE_OVER_DOWN_UP: Cover the old page sliding down or uncover the new page sliding up, according to order. Since: 3.14
- * @GTK_STACK_TRANSITION_TYPE_OVER_LEFT_RIGHT: Cover the old page sliding left or uncover the new page sliding right, according to order. Since: 3.14
- * @GTK_STACK_TRANSITION_TYPE_OVER_RIGHT_LEFT: Cover the old page sliding right or uncover the new page sliding left, according to order. Since: 3.14
+ * @GTK_STACK_TRANSITION_TYPE_OVER_UP: Cover the old page by sliding up
+ * @GTK_STACK_TRANSITION_TYPE_OVER_DOWN: Cover the old page by sliding down
+ * @GTK_STACK_TRANSITION_TYPE_OVER_LEFT: Cover the old page by sliding to the left
+ * @GTK_STACK_TRANSITION_TYPE_OVER_RIGHT: Cover the old page by sliding to the right
+ * @GTK_STACK_TRANSITION_TYPE_UNDER_UP: Uncover the new page by sliding up
+ * @GTK_STACK_TRANSITION_TYPE_UNDER_DOWN: Uncover the new page by sliding down
+ * @GTK_STACK_TRANSITION_TYPE_UNDER_LEFT: Uncover the new page by sliding to the left
+ * @GTK_STACK_TRANSITION_TYPE_UNDER_RIGHT: Uncover the new page by sliding to the right
+ * @GTK_STACK_TRANSITION_TYPE_OVER_UP_DOWN: Cover the old page sliding up or uncover the new page sliding down, according to order
+ * @GTK_STACK_TRANSITION_TYPE_OVER_DOWN_UP: Cover the old page sliding down or uncover the new page sliding up, according to order
+ * @GTK_STACK_TRANSITION_TYPE_OVER_LEFT_RIGHT: Cover the old page sliding left or uncover the new page sliding right, according to order
+ * @GTK_STACK_TRANSITION_TYPE_OVER_RIGHT_LEFT: Cover the old page sliding right or uncover the new page sliding left, according to order
  *
  * These enumeration values describe the possible transitions
  * between pages in a #GtkStack widget.
@@ -331,8 +331,6 @@ gtk_stack_class_init (GtkStackClass *klass)
    * GtkStack:hhomogeneous:
    *
    * %TRUE if the stack allocates the same width for all children.
-   *
-   * Since: 3.16
    */
   stack_props[PROP_HHOMOGENEOUS] =
       g_param_spec_boolean ("hhomogeneous", P_("Horizontally homogeneous"), P_("Horizontally homogeneous sizing"),
@@ -343,8 +341,6 @@ gtk_stack_class_init (GtkStackClass *klass)
    * GtkStack:vhomogeneous:
    *
    * %TRUE if the stack allocates the same height for all children.
-   *
-   * Since: 3.16
    */
   stack_props[PROP_VHOMOGENEOUS] =
       g_param_spec_boolean ("vhomogeneous", P_("Vertically homogeneous"), P_("Vertically homogeneous sizing"),
@@ -414,8 +410,6 @@ gtk_stack_class_init (GtkStackClass *klass)
    * This is used by the #GtkStackSwitcher to change the appearance of the
    * corresponding button when a page needs attention and it is not the
    * current one.
-   *
-   * Since: 3.12
    */
   stack_child_props[CHILD_PROP_NEEDS_ATTENTION] =
     g_param_spec_boolean ("needs-attention",
@@ -436,8 +430,6 @@ gtk_stack_class_init (GtkStackClass *klass)
  * Creates a new #GtkStack container.
  *
  * Returns: a new #GtkStack
- *
- * Since: 3.10
  */
 GtkWidget *
 gtk_stack_new (void)
@@ -1098,8 +1090,6 @@ stack_child_visibility_notify_cb (GObject    *obj,
  * The child is identified by the @name. The @title
  * will be used by #GtkStackSwitcher to represent
  * @child in a tab bar, so it should be short.
- *
- * Since: 3.10
  */
 void
 gtk_stack_add_titled (GtkStack   *stack,
@@ -1125,8 +1115,6 @@ gtk_stack_add_titled (GtkStack   *stack,
  *
  * Adds a child to @stack.
  * The child is identified by the @name.
- *
- * Since: 3.10
  */
 void
 gtk_stack_add_named (GtkStack   *stack,
@@ -1233,8 +1221,6 @@ gtk_stack_remove (GtkContainer *container,
  * name.
  *
  * Returns: (transfer none) (nullable): the requested child of the #GtkStack
- *
- * Since: 3.12
  */
 GtkWidget *
 gtk_stack_get_child_by_name (GtkStack    *stack,
@@ -1270,8 +1256,6 @@ gtk_stack_get_child_by_name (GtkStack    *stack,
  * Since 3.16, homogeneity can be controlled separately
  * for horizontal and vertical size, with the
  * #GtkStack:hhomogeneous and #GtkStack:vhomogeneous.
- *
- * Since: 3.10
  */
 void
 gtk_stack_set_homogeneous (GtkStack *stack,
@@ -1315,8 +1299,6 @@ gtk_stack_set_homogeneous (GtkStack *stack,
  * See gtk_stack_set_homogeneous().
  *
  * Returns: whether @stack is homogeneous.
- *
- * Since: 3.10
  */
 gboolean
 gtk_stack_get_homogeneous (GtkStack *stack)
@@ -1337,8 +1319,6 @@ gtk_stack_get_homogeneous (GtkStack *stack)
  * If it is homogeneous, the #GtkStack will request the same
  * width for all its children. If it isn't, the stack
  * may change width when a different child becomes visible.
- *
- * Since: 3.16
  */
 void
 gtk_stack_set_hhomogeneous (GtkStack *stack,
@@ -1369,8 +1349,6 @@ gtk_stack_set_hhomogeneous (GtkStack *stack,
  * See gtk_stack_set_hhomogeneous().
  *
  * Returns: whether @stack is horizontally homogeneous.
- *
- * Since: 3.16
  */
 gboolean
 gtk_stack_get_hhomogeneous (GtkStack *stack)
@@ -1391,8 +1369,6 @@ gtk_stack_get_hhomogeneous (GtkStack *stack)
  * If it is homogeneous, the #GtkStack will request the same
  * height for all its children. If it isn't, the stack
  * may change height when a different child becomes visible.
- *
- * Since: 3.16
  */
 void
 gtk_stack_set_vhomogeneous (GtkStack *stack,
@@ -1423,8 +1399,6 @@ gtk_stack_set_vhomogeneous (GtkStack *stack,
  * See gtk_stack_set_vhomogeneous().
  *
  * Returns: whether @stack is vertically homogeneous.
- *
- * Since: 3.16
  */
 gboolean
 gtk_stack_get_vhomogeneous (GtkStack *stack)
@@ -1444,8 +1418,6 @@ gtk_stack_get_vhomogeneous (GtkStack *stack)
  * transitions between pages in @stack will take.
  *
  * Returns: the transition duration
- *
- * Since: 3.10
  */
 guint
 gtk_stack_get_transition_duration (GtkStack *stack)
@@ -1464,8 +1436,6 @@ gtk_stack_get_transition_duration (GtkStack *stack)
  *
  * Sets the duration that transitions between pages in @stack
  * will take.
- *
- * Since: 3.10
  */
 void
 gtk_stack_set_transition_duration (GtkStack *stack,
@@ -1491,8 +1461,6 @@ gtk_stack_set_transition_duration (GtkStack *stack,
  * for transitions between pages in @stack.
  *
  * Returns: the current transition type of @stack
- *
- * Since: 3.10
  */
 GtkStackTransitionType
 gtk_stack_get_transition_type (GtkStack *stack)
@@ -1516,8 +1484,6 @@ gtk_stack_get_transition_type (GtkStack *stack)
  * The transition type can be changed without problems
  * at runtime, so it is possible to change the animation
  * based on the page that is about to become current.
- *
- * Since: 3.10
  */
 void
 gtk_stack_set_transition_type (GtkStack              *stack,
@@ -1543,8 +1509,6 @@ gtk_stack_set_transition_type (GtkStack              *stack,
  * another.
  *
  * Returns: %TRUE if the transition is currently running, %FALSE otherwise.
- *
- * Since: 3.12
  */
 gboolean
 gtk_stack_get_transition_running (GtkStack *stack)
@@ -1566,8 +1530,6 @@ gtk_stack_get_transition_running (GtkStack *stack)
  * property is set to %TRUE, @stack will interpolate its size between
  * the current one and the one it'll take after changing the
  * visible child, according to the set transition duration.
- *
- * Since: 3.18
  */
 void
 gtk_stack_set_interpolate_size (GtkStack *stack,
@@ -1594,8 +1556,6 @@ gtk_stack_set_interpolate_size (GtkStack *stack,
  * the sizes of children on page switch.
  *
  * Returns: %TRUE if child sizes are interpolated
- *
- * Since: 3.18
  */
 gboolean
 gtk_stack_get_interpolate_size (GtkStack *stack)
@@ -1616,8 +1576,6 @@ gtk_stack_get_interpolate_size (GtkStack *stack)
  * there are no visible children.
  *
  * Returns: (transfer none) (nullable): the visible child of the #GtkStack
- *
- * Since: 3.10
  */
 GtkWidget *
 gtk_stack_get_visible_child (GtkStack *stack)
@@ -1637,8 +1595,6 @@ gtk_stack_get_visible_child (GtkStack *stack)
  * %NULL if there is no visible child.
  *
  * Returns: (transfer none) (nullable): the name of the visible child of the #GtkStack
- *
- * Since: 3.10
  */
 const gchar *
 gtk_stack_get_visible_child_name (GtkStack *stack)
@@ -1668,8 +1624,6 @@ gtk_stack_get_visible_child_name (GtkStack *stack)
  * Note that the @child widget has to be visible itself
  * (see gtk_widget_show()) in order to become the visible
  * child of @stack.
- *
- * Since: 3.10
  */
 void
 gtk_stack_set_visible_child (GtkStack  *stack,
@@ -1710,8 +1664,6 @@ gtk_stack_set_visible_child (GtkStack  *stack,
  * Note that the child widget has to be visible itself
  * (see gtk_widget_show()) in order to become the visible
  * child of @stack.
- *
- * Since: 3.10
  */
 void
 gtk_stack_set_visible_child_name (GtkStack   *stack,
@@ -1733,8 +1685,6 @@ gtk_stack_set_visible_child_name (GtkStack   *stack,
  * Note that the child widget has to be visible itself
  * (see gtk_widget_show()) in order to become the visible
  * child of @stack.
- *
- * Since: 3.10
  */
 void
 gtk_stack_set_visible_child_full (GtkStack               *stack,

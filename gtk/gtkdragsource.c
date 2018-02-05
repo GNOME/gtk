@@ -192,8 +192,6 @@ gtk_drag_source_unset (GtkWidget *widget)
  * drag-and-drop.
  *
  * Returns: (nullable) (transfer none): the #GdkContentFormats, or %NULL if none
- *
- * Since: 2.4
  */
 GdkContentFormats *
 gtk_drag_source_get_target_list (GtkWidget *widget)
@@ -215,8 +213,6 @@ gtk_drag_source_get_target_list (GtkWidget *widget)
  * Changes the target types that this widget offers for drag-and-drop.
  * The widget must first be made into a drag source with
  * gtk_drag_source_set().
- *
- * Since: 2.4
  */
 void
 gtk_drag_source_set_target_list (GtkWidget         *widget,
@@ -252,8 +248,6 @@ gtk_drag_source_set_target_list (GtkWidget         *widget,
  * are added with @info = 0. If you need another value, 
  * use gtk_content_formats_add_text_targets() and
  * gtk_drag_source_set_target_list().
- * 
- * Since: 2.6
  */
 void
 gtk_drag_source_add_text_targets (GtkWidget *widget)
@@ -279,8 +273,6 @@ gtk_drag_source_add_text_targets (GtkWidget *widget)
  * are added with @info = 0. If you need another value, 
  * use gtk_target_list_add_image_targets() and
  * gtk_drag_source_set_target_list().
- * 
- * Since: 2.6
  */
 void
 gtk_drag_source_add_image_targets (GtkWidget *widget)
@@ -306,8 +298,6 @@ gtk_drag_source_add_image_targets (GtkWidget *widget)
  * are added with @info = 0. If you need another value, 
  * use gtk_content_formats_add_uri_targets() and
  * gtk_drag_source_set_target_list().
- * 
- * Since: 2.6
  */
 void
 gtk_drag_source_add_uri_targets (GtkWidget *widget)
@@ -332,8 +322,6 @@ gtk_drag_source_add_uri_targets (GtkWidget *widget)
  * Sets the icon that will be used for drags from a particular widget
  * from a cairo surface. GTK+ retains a reference for @surface and will
  * release it when it is no longer needed.
- *
- * Since: 3.94
  */
 void
 gtk_drag_source_set_icon_surface (GtkWidget       *widget,
@@ -357,8 +345,6 @@ gtk_drag_source_set_icon_surface (GtkWidget       *widget,
  *
  * Sets the icon that will be used for drags from a particular source
  * to a themed icon. See the docs for #GtkIconTheme for more details.
- *
- * Since: 2.8
  */
 void
 gtk_drag_source_set_icon_name (GtkWidget   *widget,
@@ -383,8 +369,6 @@ gtk_drag_source_set_icon_name (GtkWidget   *widget,
  * 
  * Sets the icon that will be used for drags from a particular source
  * to @icon. See the docs for #GtkIconTheme for more details.
- *
- * Since: 3.2
  */
 void
 gtk_drag_source_set_icon_gicon (GtkWidget *widget,

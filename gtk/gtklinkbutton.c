@@ -154,8 +154,6 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
    * GtkLinkButton:uri:
    *
    * The URI bound to this button.
-   *
-   * Since: 2.10
    */
   g_object_class_install_property (gobject_class,
                                    PROP_URI,
@@ -170,8 +168,6 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
    *
    * The 'visited' state of this button. A visited link is drawn in a
    * different color.
-   *
-   * Since: 2.14
    */
   g_object_class_install_property (gobject_class,
                                    PROP_VISITED,
@@ -460,8 +456,6 @@ gtk_link_button_drag_data_get_cb (GtkWidget        *widget,
  * Creates a new #GtkLinkButton with the URI as its text.
  *
  * Returns: a new link button widget.
- *
- * Since: 2.10
  */
 GtkWidget *
 gtk_link_button_new (const gchar *uri)
@@ -510,8 +504,6 @@ gtk_link_button_new (const gchar *uri)
  * Creates a new #GtkLinkButton containing a label.
  *
  * Returns: (transfer none): a new link button widget.
- *
- * Since: 2.10
  */
 GtkWidget *
 gtk_link_button_new_with_label (const gchar *uri,
@@ -572,8 +564,6 @@ gtk_link_button_query_tooltip_cb (GtkWidget    *widget,
  *
  * Sets @uri as the URI where the #GtkLinkButton points. As a side-effect
  * this unsets the “visited” state of the button.
- *
- * Since: 2.10
  */
 void
 gtk_link_button_set_uri (GtkLinkButton *link_button,
@@ -602,8 +592,6 @@ gtk_link_button_set_uri (GtkLinkButton *link_button,
  *
  * Returns: a valid URI.  The returned string is owned by the link button
  *   and should not be modified or freed.
- *
- * Since: 2.10
  */
 const gchar *
 gtk_link_button_get_uri (GtkLinkButton *link_button)
@@ -620,8 +608,6 @@ gtk_link_button_get_uri (GtkLinkButton *link_button)
  *
  * Sets the “visited” state of the URI where the #GtkLinkButton
  * points.  See gtk_link_button_get_visited() for more details.
- *
- * Since: 2.14
  */
 void
 gtk_link_button_set_visited (GtkLinkButton *link_button,
@@ -661,8 +647,6 @@ gtk_link_button_set_visited (GtkLinkButton *link_button,
  * The state may also be changed using gtk_link_button_set_visited().
  *
  * Returns: %TRUE if the link has been visited, %FALSE otherwise
- *
- * Since: 2.14
  */
 gboolean
 gtk_link_button_get_visited (GtkLinkButton *link_button)

@@ -50,48 +50,48 @@ typedef struct _GdkContentDeserializer GdkContentDeserializer;
  */
 typedef void (* GdkContentDeserializeFunc) (GdkContentDeserializer *deserializer);
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GType                   gdk_content_deserializer_get_type               (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 const char *            gdk_content_deserializer_get_mime_type          (GdkContentDeserializer *deserializer);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GType                   gdk_content_deserializer_get_gtype              (GdkContentDeserializer *deserializer);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GValue *                gdk_content_deserializer_get_value              (GdkContentDeserializer *deserializer);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GInputStream *          gdk_content_deserializer_get_input_stream       (GdkContentDeserializer *deserializer);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 int                     gdk_content_deserializer_get_priority           (GdkContentDeserializer *deserializer);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GCancellable *          gdk_content_deserializer_get_cancellable        (GdkContentDeserializer *deserializer);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 gpointer                gdk_content_deserializer_get_user_data          (GdkContentDeserializer *deserializer);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void                    gdk_content_deserializer_set_task_data          (GdkContentDeserializer *deserializer,
                                                                          gpointer                data,
                                                                          GDestroyNotify          notify);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 gpointer                gdk_content_deserializer_get_task_data          (GdkContentDeserializer *deserializer);
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void                    gdk_content_deserializer_return_success         (GdkContentDeserializer *deserializer);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void                    gdk_content_deserializer_return_error           (GdkContentDeserializer *deserializer,
                                                                          GError                 *error);
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GdkContentFormats *     gdk_content_formats_union_deserialize_gtypes    (GdkContentFormats      *formats);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GdkContentFormats *     gdk_content_formats_union_deserialize_mime_types(GdkContentFormats      *formats);
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void                    gdk_content_register_deserializer               (const char             *mime_type,
                                                                          GType                   type,
                                                                          GdkContentDeserializeFunc deserialize,
                                                                          gpointer                data,
                                                                          GDestroyNotify          notify);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void                    gdk_content_deserialize_async                   (GInputStream           *stream,
                                                                          const char             *mime_type,
                                                                          GType                   type,
@@ -99,7 +99,7 @@ void                    gdk_content_deserialize_async                   (GInputS
                                                                          GCancellable           *cancellable,
                                                                          GAsyncReadyCallback     callback,
                                                                          gpointer                user_data);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 gboolean                gdk_content_deserialize_finish                  (GAsyncResult           *result,
                                                                          GValue                 *value,
                                                                          GError                **error);

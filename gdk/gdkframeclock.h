@@ -72,34 +72,34 @@ typedef enum {
   GDK_FRAME_CLOCK_PHASE_AFTER_PAINT   = 1 << 6
 } GdkFrameClockPhase;
 
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 GType    gdk_frame_clock_get_type             (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 gint64   gdk_frame_clock_get_frame_time            (GdkFrameClock *frame_clock);
 
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 void               gdk_frame_clock_request_phase (GdkFrameClock      *frame_clock,
                                                   GdkFrameClockPhase  phase);
 
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 void               gdk_frame_clock_begin_updating (GdkFrameClock      *frame_clock);
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 void               gdk_frame_clock_end_updating   (GdkFrameClock      *frame_clock);
 
 /* Frame history */
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 gint64           gdk_frame_clock_get_frame_counter (GdkFrameClock *frame_clock);
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 gint64           gdk_frame_clock_get_history_start (GdkFrameClock *frame_clock);
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 GdkFrameTimings *gdk_frame_clock_get_timings       (GdkFrameClock *frame_clock,
                                                     gint64         frame_counter);
 
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 GdkFrameTimings *gdk_frame_clock_get_current_timings (GdkFrameClock *frame_clock);
 
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 void gdk_frame_clock_get_refresh_info (GdkFrameClock *frame_clock,
                                        gint64         base_time,
                                        gint64        *refresh_interval_return,

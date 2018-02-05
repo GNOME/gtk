@@ -59,8 +59,6 @@ typedef struct _GtkDrawingAreaClass  GtkDrawingAreaClass;
  *
  * This function should exclusively redraw the contents of the drawing area
  * and must not call any widget functions that cause changes.
- *
- * Since: 3.90
  */
 typedef void (* GtkDrawingAreaDrawFunc)  (GtkDrawingArea *drawing_area,
                                           cairo_t        *cr,
@@ -90,17 +88,17 @@ GType      gtk_drawing_area_get_type (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_drawing_area_new      (void);
 
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 void            gtk_drawing_area_set_content_width      (GtkDrawingArea         *self,
                                                          int                     width);
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 int             gtk_drawing_area_get_content_width      (GtkDrawingArea         *self);
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 void            gtk_drawing_area_set_content_height     (GtkDrawingArea         *self,
                                                          int                     height);
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 int             gtk_drawing_area_get_content_height     (GtkDrawingArea         *self);
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 void            gtk_drawing_area_set_draw_func          (GtkDrawingArea         *self,
                                                          GtkDrawingAreaDrawFunc  draw_func,
                                                          gpointer                user_data,

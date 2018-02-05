@@ -191,8 +191,6 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
    * 
    * The primary text of the message dialog. If the dialog has 
    * a secondary text, this will appear as the title.
-   *
-   * Since: 2.10
    */
   g_object_class_install_property (gobject_class,
                                    PROP_TEXT,
@@ -207,8 +205,6 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
    * 
    * %TRUE if the primary text of the dialog includes Pango markup. 
    * See pango_parse_markup(). 
-   *
-   * Since: 2.10
    */
   g_object_class_install_property (gobject_class,
 				   PROP_USE_MARKUP,
@@ -222,8 +218,6 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
    * GtkMessageDialog:secondary-text:
    * 
    * The secondary text of the message dialog. 
-   *
-   * Since: 2.10
    */
   g_object_class_install_property (gobject_class,
                                    PROP_SECONDARY_TEXT,
@@ -238,8 +232,6 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
    * 
    * %TRUE if the secondary text of the dialog includes Pango markup. 
    * See pango_parse_markup(). 
-   *
-   * Since: 2.10
    */
   g_object_class_install_property (gobject_class,
 				   PROP_SECONDARY_USE_MARKUP,
@@ -255,8 +247,6 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
    * The #GtkBox that corresponds to the message area of this dialog.  See
    * gtk_message_dialog_get_message_area() for a detailed description of this
    * area.
-   *
-   * Since: 2.22
    */
   g_object_class_install_property (gobject_class,
 				   PROP_MESSAGE_AREA,
@@ -639,8 +629,6 @@ gtk_message_dialog_new (GtkWindow     *parent,
  * ]|
  * 
  * Returns: a new #GtkMessageDialog
- *
- * Since: 2.4
  **/
 GtkWidget*
 gtk_message_dialog_new_with_markup (GtkWindow     *parent,
@@ -679,8 +667,6 @@ gtk_message_dialog_new_with_markup (GtkWindow     *parent,
  * 
  * Sets the text of the message dialog to be @str, which is marked
  * up with the [Pango text markup language][PangoMarkupFormat].
- *
- * Since: 2.4
  **/
 void
 gtk_message_dialog_set_markup (GtkMessageDialog *message_dialog,
@@ -704,8 +690,6 @@ gtk_message_dialog_set_markup (GtkMessageDialog *message_dialog,
  *
  * Sets the secondary text of the message dialog to be @message_format
  * (with printf()-style).
- *
- * Since: 2.6
  */
 void
 gtk_message_dialog_format_secondary_text (GtkMessageDialog *message_dialog,
@@ -766,8 +750,6 @@ gtk_message_dialog_format_secondary_text (GtkMessageDialog *message_dialog,
  *                                             "%s", msg);
  * g_free (msg);
  * ]|
- *
- * Since: 2.6
  */
 void
 gtk_message_dialog_format_secondary_markup (GtkMessageDialog *message_dialog,
@@ -816,8 +798,6 @@ gtk_message_dialog_format_secondary_markup (GtkMessageDialog *message_dialog,
  *
  * Returns: (transfer none): A #GtkBox corresponding to the
  *     “message area” in the @message_dialog.
- *
- * Since: 2.22
  **/
 GtkWidget *
 gtk_message_dialog_get_message_area (GtkMessageDialog *message_dialog)

@@ -58,13 +58,13 @@ void           gtk_drag_source_add_image_targets (GtkWidget    *widget);
 GDK_AVAILABLE_IN_ALL
 void           gtk_drag_source_add_uri_targets   (GtkWidget    *widget);
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void gtk_drag_source_set_icon_surface (GtkWidget       *widget,
                                        cairo_surface_t *surface);
 GDK_AVAILABLE_IN_ALL
 void gtk_drag_source_set_icon_name    (GtkWidget       *widget,
 				       const gchar     *icon_name);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 void gtk_drag_source_set_icon_gicon   (GtkWidget       *widget,
 				       GIcon           *icon);
 

@@ -76,21 +76,21 @@ struct _GtkOverlayClass
   void (*_gtk_reserved8) (void);
 };
 
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 GType      gtk_overlay_get_type    (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_overlay_new         (void);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 void       gtk_overlay_add_overlay (GtkOverlay *overlay,
                                     GtkWidget  *widget);
-GDK_AVAILABLE_IN_3_18
+GDK_AVAILABLE_IN_ALL
 void       gtk_overlay_reorder_overlay (GtkOverlay     *overlay,
 					GtkWidget      *child,
 					gint            position);
-GDK_AVAILABLE_IN_3_18
+GDK_AVAILABLE_IN_ALL
 gboolean   gtk_overlay_get_overlay_pass_through (GtkOverlay *overlay,
 						 GtkWidget  *widget);
-GDK_AVAILABLE_IN_3_18
+GDK_AVAILABLE_IN_ALL
 void       gtk_overlay_set_overlay_pass_through (GtkOverlay *overlay,
 						 GtkWidget  *widget,
 						 gboolean    pass_through);

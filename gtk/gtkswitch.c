@@ -533,8 +533,6 @@ gtk_switch_class_init (GtkSwitchClass *klass)
    *
    * The backend state that is controlled by the switch. 
    * See #GtkSwitch::state-set for details.
-   *
-   * Since: 3.14
    */
   switch_props[PROP_STATE] =
     g_param_spec_boolean ("state",
@@ -595,8 +593,6 @@ gtk_switch_class_init (GtkSwitchClass *klass)
    * position of the switch.
    *
    * Returns: %TRUE to stop the signal emission
-   *
-   * Since: 3.14
    */
   signals[STATE_SET] =
     g_signal_new (I_("state-set"),
@@ -672,8 +668,6 @@ gtk_switch_init (GtkSwitch *self)
  * Creates a new #GtkSwitch widget.
  *
  * Returns: the newly created #GtkSwitch instance
- *
- * Since: 3.0
  */
 GtkWidget *
 gtk_switch_new (void)
@@ -687,8 +681,6 @@ gtk_switch_new (void)
  * @is_active: %TRUE if @sw should be active, and %FALSE otherwise
  *
  * Changes the state of @sw to the desired one.
- *
- * Since: 3.0
  */
 void
 gtk_switch_set_active (GtkSwitch *sw,
@@ -732,8 +724,6 @@ gtk_switch_set_active (GtkSwitch *sw,
  * Gets whether the #GtkSwitch is in its “on” or “off” state.
  *
  * Returns: %TRUE if the #GtkSwitch is active, and %FALSE otherwise
- *
- * Since: 3.0
  */
 gboolean
 gtk_switch_get_active (GtkSwitch *sw)
@@ -757,8 +747,6 @@ gtk_switch_get_active (GtkSwitch *sw)
  * called from a #GtkSwitch::state-set signal handler.
  *
  * See #GtkSwitch::state-set for details.
- *
- * Since: 3.14
  */
 void
 gtk_switch_set_state (GtkSwitch *sw,
@@ -795,8 +783,6 @@ gtk_switch_set_state (GtkSwitch *sw,
  * Gets the underlying state of the #GtkSwitch.
  *
  * Returns: the underlying state
- *
- * Since: 3.14
  */
 gboolean
 gtk_switch_get_state (GtkSwitch *sw)

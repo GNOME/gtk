@@ -61,46 +61,46 @@ struct _GtkMenuButtonClass
   void (*_gtk_reserved4) (void);
 };
 
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 GType        gtk_menu_button_get_type       (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 GtkWidget   *gtk_menu_button_new            (void);
 
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 void         gtk_menu_button_set_popup      (GtkMenuButton *menu_button,
                                              GtkWidget     *menu);
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 GtkMenu     *gtk_menu_button_get_popup      (GtkMenuButton *menu_button);
 
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 void         gtk_menu_button_set_popover    (GtkMenuButton *menu_button,
                                              GtkWidget     *popover);
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 GtkPopover  *gtk_menu_button_get_popover    (GtkMenuButton *menu_button);
 
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 void         gtk_menu_button_set_direction  (GtkMenuButton *menu_button,
                                              GtkArrowType   direction);
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 GtkArrowType gtk_menu_button_get_direction  (GtkMenuButton *menu_button);
 
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 void         gtk_menu_button_set_menu_model (GtkMenuButton *menu_button,
                                              GMenuModel    *menu_model);
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 GMenuModel  *gtk_menu_button_get_menu_model (GtkMenuButton *menu_button);
 
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 void         gtk_menu_button_set_align_widget (GtkMenuButton *menu_button,
                                                GtkWidget     *align_widget);
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 GtkWidget   *gtk_menu_button_get_align_widget (GtkMenuButton *menu_button);
 
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 void         gtk_menu_button_set_use_popover (GtkMenuButton *menu_button,
                                               gboolean       use_popover);
 
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 gboolean     gtk_menu_button_get_use_popover (GtkMenuButton *menu_button);
 
 

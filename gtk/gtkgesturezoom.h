@@ -39,13 +39,13 @@ G_BEGIN_DECLS
 typedef struct _GtkGestureZoom GtkGestureZoom;
 typedef struct _GtkGestureZoomClass GtkGestureZoomClass;
 
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 GType        gtk_gesture_zoom_get_type        (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 GtkGesture * gtk_gesture_zoom_new             (GtkWidget      *widget);
 
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 gdouble      gtk_gesture_zoom_get_scale_delta (GtkGestureZoom *gesture);
 
 G_END_DECLS

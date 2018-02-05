@@ -290,8 +290,6 @@ _gdk_x11_screen_init_visuals (GdkX11Screen *x11_screen,
  *
  * Returns: (transfer none) (type GdkX11Visual): the #GdkVisual (owned by the screen
  *   object), or %NULL if the visual ID wasn’t found.
- *
- * Since: 2.2
  */
 GdkX11Visual *
 gdk_x11_screen_lookup_visual (GdkX11Screen *x11_screen,

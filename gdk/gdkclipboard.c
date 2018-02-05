@@ -363,8 +363,6 @@ gdk_clipboard_class_init (GdkClipboardClass *class)
    * GdkClipboard:display:
    *
    * The #GdkDisplay that the clipboard belongs to.
-   *
-   * Since: 3.94
    */
   properties[PROP_DISPLAY] =
     g_param_spec_object ("display",
@@ -380,8 +378,6 @@ gdk_clipboard_class_init (GdkClipboardClass *class)
    * GdkClipboard:formats:
    *
    * The possible formats that the clipboard can provide its data in.
-   *
-   * Since: 3.94
    */
   properties[PROP_FORMATS] =
     g_param_spec_boxed ("formats",
@@ -396,8 +392,6 @@ gdk_clipboard_class_init (GdkClipboardClass *class)
    * GdkClipboard:local:
    *
    * %TRUE if the contents of the clipboard are owned by this process.
-   *
-   * Since: 3.94
    */
   properties[PROP_LOCAL] =
     g_param_spec_boolean ("local",
@@ -413,8 +407,6 @@ gdk_clipboard_class_init (GdkClipboardClass *class)
    *
    * The #GdkContentProvider or %NULL if the clipboard is empty or contents are
    * provided otherwise.
-   *
-   * Since: 3.94
    */
   properties[PROP_CONTENT] =
     g_param_spec_object ("content",

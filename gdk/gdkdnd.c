@@ -112,8 +112,6 @@ gdk_drag_context_get_display (GdkDragContext *context)
  * Retrieves the formats supported by this context.
  *
  * Returns: (transfer none): a #GdkContentFormats
- *
- * Since: 3.94
  **/
 GdkContentFormats *
 gdk_drag_context_get_formats (GdkDragContext *context)
@@ -131,8 +129,6 @@ gdk_drag_context_get_formats (GdkDragContext *context)
  * gdk_drag_context_get_suggested_action() returns %GDK_ACTION_ASK.
  *
  * Returns: the #GdkDragAction flags
- *
- * Since: 2.22
  **/
 GdkDragAction
 gdk_drag_context_get_actions (GdkDragContext *context)
@@ -149,8 +145,6 @@ gdk_drag_context_get_actions (GdkDragContext *context)
  * Determines the suggested drag action of the context.
  *
  * Returns: a #GdkDragAction value
- *
- * Since: 2.22
  **/
 GdkDragAction
 gdk_drag_context_get_suggested_action (GdkDragContext *context)
@@ -167,8 +161,6 @@ gdk_drag_context_get_suggested_action (GdkDragContext *context)
  * Determines the action chosen by the drag destination.
  *
  * Returns: a #GdkDragAction value
- *
- * Since: 2.22
  **/
 GdkDragAction
 gdk_drag_context_get_selected_action (GdkDragContext *context)
@@ -185,8 +177,6 @@ gdk_drag_context_get_selected_action (GdkDragContext *context)
  * Returns the #GdkWindow where the DND operation started.
  *
  * Returns: (transfer none): a #GdkWindow
- *
- * Since: 2.22
  **/
 GdkWindow *
 gdk_drag_context_get_source_window (GdkDragContext *context)
@@ -203,8 +193,6 @@ gdk_drag_context_get_source_window (GdkDragContext *context)
  * Returns the destination window for the DND operation.
  *
  * Returns: (transfer none): a #GdkWindow
- *
- * Since: 3.0
  **/
 GdkWindow *
 gdk_drag_context_get_dest_window (GdkDragContext *context)
@@ -384,8 +372,6 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
    *
    * The #GdkContentProvider or %NULL if the context is not a source-side
    * context.
-   *
-   * Since: 3.94
    */
   properties[PROP_CONTENT] =
     g_param_spec_object ("content",
@@ -401,8 +387,6 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
    * GdkDragContext:display:
    *
    * The #GdkDisplay that the drag context belongs to.
-   *
-   * Since: 3.94
    */
   properties[PROP_DISPLAY] =
     g_param_spec_object ("display",
@@ -418,8 +402,6 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
    * GdkDragContext:formats:
    *
    * The possible formats that the context can provide its data in.
-   *
-   * Since: 3.94
    */
   properties[PROP_FORMATS] =
     g_param_spec_boxed ("formats",
@@ -436,8 +418,6 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
    * @reason: The reason the context was cancelled
    *
    * The drag and drop operation was cancelled.
-   *
-   * Since: 3.20
    */
   signals[CANCEL] =
     g_signal_new (g_intern_static_string ("cancel"),
@@ -454,8 +434,6 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
    * @time: the time at which the drop happened.
    *
    * The drag and drop operation was performed on an accepting client.
-   *
-   * Since: 3.20
    */
   signals[DROP_PERFORMED] =
     g_signal_new (g_intern_static_string ("drop-performed"),
@@ -473,8 +451,6 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
    * The drag and drop operation was finished, the drag destination
    * finished reading all data. The drag source can now free all
    * miscellaneous data.
-   *
-   * Since: 3.20
    */
   signals[DND_FINISHED] =
     g_signal_new (g_intern_static_string ("dnd-finished"),
@@ -491,8 +467,6 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
    * @action: The action currently chosen
    *
    * A new action is being chosen for the drag and drop operation.
-   *
-   * Since: 3.20
    */
   signals[ACTION_CHANGED] =
     g_signal_new (g_intern_static_string ("action-changed"),
@@ -615,8 +589,6 @@ gdk_drop_finish (GdkDragContext *context,
  * meaningless at other times.
  *
  * Returns: %TRUE if the drop was successful.
- *
- * Since: 2.6
  **/
 gboolean
 gdk_drag_drop_succeeded (GdkDragContext *context)
@@ -753,8 +725,6 @@ gdk_drag_context_write_finish (GdkDragContext *context,
  * @cancellable:
  * @callback:
  * @user_data: (closure):
- *
- * Since: 3.94
  */
 void
 gdk_drop_read_async (GdkDragContext      *context,
@@ -791,8 +761,6 @@ gdk_drop_read_async (GdkDragContext      *context,
  * @error:
  *
  * Returns: (nullable) (transfer full): the #GInputStream, or %NULL
- *
- * Since: 3.94
  */
 GInputStream *
 gdk_drop_read_finish (GdkDragContext *context,
@@ -825,8 +793,6 @@ gdk_drop_read_finish (GdkDragContext *context,
  * the drag operation is over.
  *
  * Returns: (nullable) (transfer none): the drag window, or %NULL
- *
- * Since: 3.20
  */
 GdkWindow *
 gdk_drag_context_get_drag_window (GdkDragContext *context)
@@ -848,8 +814,6 @@ gdk_drag_context_get_drag_window (GdkDragContext *context)
  * Sets the position of the drag window that will be kept
  * under the cursor hotspot. Initially, the hotspot is at the
  * top left corner of the drag window.
- *
- * Since: 3.20
  */
 void
 gdk_drag_context_set_hotspot (GdkDragContext *context,
@@ -877,8 +841,6 @@ gdk_drag_context_set_hotspot (GdkDragContext *context,
  * The #GdkDragContext will only take the first gdk_drag_drop_done()
  * call as effective, if this function is called multiple times,
  * all subsequent calls will be ignored.
- *
- * Since: 3.20
  */
 void
 gdk_drag_drop_done (GdkDragContext *context,

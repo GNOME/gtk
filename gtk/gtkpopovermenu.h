@@ -46,13 +46,13 @@ struct _GtkPopoverMenuClass
   gpointer reserved[10];
 };
 
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 GType       gtk_popover_menu_get_type (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 GtkWidget * gtk_popover_menu_new      (void);
 
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 void        gtk_popover_menu_open_submenu (GtkPopoverMenu *popover,
                                            const gchar    *name);
 

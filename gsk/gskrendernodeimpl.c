@@ -130,8 +130,6 @@ gsk_color_node_peek_color (GskRenderNode *node)
  * the area given by @bounds.
  *
  * Returns: A new #GskRenderNode
- *
- * Since: 3.90
  */
 GskRenderNode *
 gsk_color_node_new (const GdkRGBA         *rgba,
@@ -313,8 +311,6 @@ static const GskRenderNodeClass GSK_REPEATING_LINEAR_GRADIENT_NODE_CLASS = {
  * points and color stops, and render that into the area given by @bounds.
  *
  * Returns: A new #GskRenderNode
- *
- * Since: 3.90
  */
 GskRenderNode *
 gsk_linear_gradient_node_new (const graphene_rect_t  *bounds,
@@ -361,8 +357,6 @@ gsk_linear_gradient_node_new (const graphene_rect_t  *bounds,
  * given by @bounds.
  *
  * Returns: A new #GskRenderNode
- *
- * Since: 3.90
  */
 GskRenderNode *
 gsk_repeating_linear_gradient_node_new (const graphene_rect_t  *bounds,
@@ -630,8 +624,6 @@ gsk_border_node_peek_colors (GskRenderNode *node)
  * colors.
  *
  * Returns: A new #GskRenderNode
- *
- * Since: 3.90
  */
 GskRenderNode *
 gsk_border_node_new (const GskRoundedRect     *outline,
@@ -772,8 +764,6 @@ static const GskRenderNodeClass GSK_TEXTURE_NODE_CLASS = {
  * @node: a #GskRenderNode
  *
  * Returns: (transfer none): the #GdkTexture
- *
- * Since: 3.94
  */
 GdkTexture *
 gsk_texture_node_get_texture (GskRenderNode *node)
@@ -794,8 +784,6 @@ gsk_texture_node_get_texture (GskRenderNode *node)
  * @texture into the area given by @bounds.
  *
  * Returns: A new #GskRenderNode
- *
- * Since: 3.90
  */
 GskRenderNode *
 gsk_texture_node_new (GdkTexture            *texture,
@@ -1290,8 +1278,6 @@ static const GskRenderNodeClass GSK_INSET_SHADOW_NODE_CLASS = {
  * into the box given by @outline.
  *
  * Returns: A new #GskRenderNode
- *
- * Since: 3.90
  */
 GskRenderNode *
 gsk_inset_shadow_node_new (const GskRoundedRect *outline,
@@ -1593,8 +1579,6 @@ static const GskRenderNodeClass GSK_OUTSET_SHADOW_NODE_CLASS = {
  * around the box given by @outline.
  *
  * Returns: A new #GskRenderNode
- *
- * Since: 3.90
  */
 GskRenderNode *
 gsk_outset_shadow_node_new (const GskRoundedRect *outline,
@@ -1872,8 +1856,6 @@ gsk_cairo_node_new_for_surface (const graphene_rect_t *bounds,
  * surface using gsk_cairo_node_get_draw_context()
  *
  * Returns: A new #GskRenderNode
- *
- * Since: 3.90
  */
 GskRenderNode *
 gsk_cairo_node_new (const graphene_rect_t *bounds)
@@ -1901,8 +1883,6 @@ gsk_cairo_node_new (const graphene_rect_t *bounds)
  *
  * Returns: (transfer full): a Cairo context used for drawing; use
  *   cairo_destroy() when done drawing
- *
- * Since: 3.90
  */
 cairo_t *
 gsk_cairo_node_get_draw_context (GskRenderNode *node,
@@ -2107,8 +2087,6 @@ static const GskRenderNodeClass GSK_CONTAINER_NODE_CLASS = {
  * The new node will acquire a reference to each of the children.
  *
  * Returns: (transfer full): the new #GskRenderNode
- *
- * Since: 3.90
  */
 GskRenderNode *
 gsk_container_node_new (GskRenderNode **children,
@@ -2136,8 +2114,6 @@ gsk_container_node_new (GskRenderNode **children,
  * Retrieves the number of direct children of @node.
  *
  * Returns: the number of children of the #GskRenderNode
- *
- * Since: 3.90
  */
 guint
 gsk_container_node_get_n_children (GskRenderNode *node)
@@ -2157,8 +2133,6 @@ gsk_container_node_get_n_children (GskRenderNode *node)
  * Gets one of the children of @container.
  *
  * Returns: the @idx'th child of @container
- *
- * Since: 3.90
  */
 GskRenderNode *
 gsk_container_node_get_child (GskRenderNode *node,
@@ -2296,8 +2270,6 @@ static const GskRenderNodeClass GSK_TRANSFORM_NODE_CLASS = {
  * with the given @transform.
  *
  * Returns: A new #GskRenderNode
- *
- * Since: 3.90
  */
 GskRenderNode *
 gsk_transform_node_new (GskRenderNode           *child,
@@ -2451,8 +2423,6 @@ static const GskRenderNodeClass GSK_OPACITY_NODE_CLASS = {
  * @opacity.
  *
  * Returns: A new #GskRenderNode
- *
- * Since: 3.90
  */
 GskRenderNode *
 gsk_opacity_node_new (GskRenderNode *child,
@@ -2693,8 +2663,6 @@ static const GskRenderNodeClass GSK_COLOR_MATRIX_NODE_CLASS = {
  * for every pixel.
  *
  * Returns: A new #GskRenderNode
- *
- * Since: 3.90
  */
 GskRenderNode *
 gsk_color_matrix_node_new (GskRenderNode           *child,
@@ -2880,8 +2848,6 @@ static const GskRenderNodeClass GSK_REPEAT_NODE_CLASS = {
  * the given @bounds.
  *
  * Returns: A new #GskRenderNode
- *
- * Since: 3.90
  */
 GskRenderNode *
 gsk_repeat_node_new (const graphene_rect_t *bounds,
@@ -3025,8 +2991,6 @@ static const GskRenderNodeClass GSK_CLIP_NODE_CLASS = {
  * given by @clip.
  *
  * Returns: A new #GskRenderNode
- *
- * Since: 3.90
  */
 GskRenderNode *
 gsk_clip_node_new (GskRenderNode         *child,
@@ -3188,8 +3152,6 @@ static const GskRenderNodeClass GSK_ROUNDED_CLIP_NODE_CLASS = {
  * given by @clip.
  *
  * Returns: A new #GskRenderNode
- *
- * Since: 3.90
  */
 GskRenderNode *
 gsk_rounded_clip_node_new (GskRenderNode         *child,
@@ -3414,8 +3376,6 @@ static const GskRenderNodeClass GSK_SHADOW_NODE_CLASS = {
  * @shadows below it.
  *
  * Returns: A new #GskRenderNode
- *
- * Since: 3.90
  */
 GskRenderNode *
 gsk_shadow_node_new (GskRenderNode         *child,
@@ -3630,8 +3590,6 @@ static const GskRenderNodeClass GSK_BLEND_NODE_CLASS = {
  * node onto the @bottom node.
  *
  * Returns: A new #GskRenderNode
- *
- * Since: 3.90
  */
 GskRenderNode *
 gsk_blend_node_new (GskRenderNode *bottom,
@@ -3802,8 +3760,6 @@ static const GskRenderNodeClass GSK_CROSS_FADE_NODE_CLASS = {
  * Creates a #GskRenderNode that will do a cross-fade between @start and @end.
  *
  * Returns: A new #GskRenderNode
- *
- * Since: 3.90
  */
 GskRenderNode *
 gsk_cross_fade_node_new (GskRenderNode *start,
@@ -4028,8 +3984,6 @@ static const GskRenderNodeClass GSK_TEXT_NODE_CLASS = {
  * color glyphs.
  *
  * Returns: a new text node, or %NULL
- *
- * Since: 3.92
  */
 GskRenderNode *
 gsk_text_node_new (PangoFont        *font,
@@ -4376,8 +4330,6 @@ static const GskRenderNodeClass GSK_BLUR_NODE_CLASS = {
  * @radius: the blur radius
  *
  * Creates a render node that blurs the child.
- *
- * Since: 3.92
  */
 GskRenderNode *
 gsk_blur_node_new (GskRenderNode *child,

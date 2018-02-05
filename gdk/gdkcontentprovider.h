@@ -91,18 +91,18 @@ struct _GdkContentProviderClass
 };
 
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GType                   gdk_content_provider_get_type                   (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GdkContentFormats *     gdk_content_provider_ref_formats                (GdkContentProvider     *provider);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GdkContentFormats *     gdk_content_provider_ref_storable_formats       (GdkContentProvider     *provider);
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void                    gdk_content_provider_content_changed            (GdkContentProvider     *provider);
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void                    gdk_content_provider_write_mime_type_async      (GdkContentProvider     *provider,
                                                                          const char             *mime_type,
                                                                          GOutputStream          *stream,
@@ -110,11 +110,11 @@ void                    gdk_content_provider_write_mime_type_async      (GdkCont
                                                                          GCancellable           *cancellable,
                                                                          GAsyncReadyCallback     callback,
                                                                          gpointer                user_data);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 gboolean                gdk_content_provider_write_mime_type_finish     (GdkContentProvider     *provider,
                                                                          GAsyncResult           *result,
                                                                          GError                **error);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 gboolean                gdk_content_provider_get_value                  (GdkContentProvider     *provider,
                                                                          GValue                 *value,
                                                                          GError                **error);

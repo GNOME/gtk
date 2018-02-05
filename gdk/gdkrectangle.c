@@ -145,8 +145,6 @@ gdk_rectangle_intersect (const GdkRectangle *src1,
  * Returns #TRUE if @rect contains the point described by @x and @y.
  *
  * Returns: #TRUE if @rect contains the point
- *
- * Since: 3.92
  **/
 gboolean
 gdk_rectangle_contains_point (const GdkRectangle *rect,
@@ -169,8 +167,6 @@ gdk_rectangle_contains_point (const GdkRectangle *rect,
  * Checks if the two given rectangles are equal.
  *
  * Returns: %TRUE if the rectangles are equal.
- *
- * Since: 3.20
  */
 gboolean
 gdk_rectangle_equal (const GdkRectangle *rect1,

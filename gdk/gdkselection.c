@@ -44,8 +44,6 @@
  * a list of UTF-8 strings.
  *
  * Returns: the number of strings in the resulting list
- *
- * Since: 2.2
  */
 gint
 gdk_text_property_to_utf8_list_for_display (GdkDisplay     *display,

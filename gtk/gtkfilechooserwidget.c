@@ -8569,8 +8569,6 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
  * #GtkFileChooserDialog.
  *
  * Returns: a new #GtkFileChooserWidget
- *
- * Since: 2.4
  **/
 GtkWidget *
 gtk_file_chooser_widget_new (GtkFileChooserAction action)

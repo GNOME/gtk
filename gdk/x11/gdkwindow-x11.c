@@ -1050,8 +1050,6 @@ x_event_mask_to_gdk_event_mask (long mask)
  * Returns: (transfer full): a #GdkWindow wrapper for the native
  *   window, or %NULL if the window has been destroyed. The wrapper
  *   will be newly created, if one doesn’t exist already.
- *
- * Since: 2.24
  */
 GdkWindow *
 gdk_x11_window_foreign_new_for_display (GdkDisplay *display,
@@ -1678,8 +1676,6 @@ gdk_window_x11_lower (GdkWindow *window)
  * window manager that supports multiple workspaces, as described
  * in the [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec) specification.
  * Will not do anything if the window is already on all workspaces.
- * 
- * Since: 2.8
  */
 void
 gdk_x11_window_move_to_current_desktop (GdkWindow *window)
@@ -1746,8 +1742,6 @@ get_netwm_cardinal_property (GdkWindow   *window,
  * Gets the number of the workspace @window is on.
  *
  * Returns: the current workspace of @window
- *
- * Since: 3.10
  */
 guint32
 gdk_x11_window_get_desktop (GdkWindow *window)
@@ -1765,8 +1759,6 @@ gdk_x11_window_get_desktop (GdkWindow *window)
  * Moves the window to the given workspace when running unde a
  * window manager that supports multiple workspaces, as described
  * in the [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec) specification.
- *
- * Since: 3.10
  */
 void
 gdk_x11_window_move_to_desktop (GdkWindow *window,
@@ -2888,8 +2880,6 @@ gdk_x11_window_set_focus_on_map (GdkWindow *window,
  * Note that this property is automatically updated by GDK, so this
  * function should only be used by applications which handle input
  * events bypassing GDK.
- *
- * Since: 2.6
  **/
 void
 gdk_x11_window_set_user_time (GdkWindow *window,
@@ -2945,8 +2935,6 @@ gdk_x11_window_set_user_time (GdkWindow *window,
  * This function modifies or removes an arbitrary X11 window
  * property of type UTF8_STRING.  If the given @window is
  * not a toplevel window, it is ignored.
- *
- * Since: 3.4
  */
 void
 gdk_x11_window_set_utf8_property  (GdkWindow *window,
@@ -3012,8 +3000,6 @@ gdk_x11_window_set_shadow_width (GdkWindow *window,
  * This is the same as gdk_window_set_shadow_width() but it only works
  * on GdkX11Window.
  *
- * Since: 3.10
- *
  * Deprecated: 3.12: Use gdk_window_set_shadow_width() instead.
  */
 void
@@ -3040,8 +3026,6 @@ gdk_x11_window_set_frame_extents (GdkWindow *window,
  * Note that this property is automatically updated by GTK+, so this
  * function should only be used by applications which do not use GTK+
  * to create toplevel windows.
- *
- * Since: 3.2
  */
 void
 gdk_x11_window_set_theme_variant (GdkWindow  *window,
@@ -4800,8 +4784,6 @@ gdk_x11_window_get_scale_factor (GdkWindow *window)
  * the window is not directly managed by the window manager, then frame
  * synchronziation may need to be disabled. This is the case for a window
  * embedded via the XEMBED protocol.
- *
- * Since: 3.8
  */
 void
 gdk_x11_window_set_frame_sync_enabled (GdkWindow *window,

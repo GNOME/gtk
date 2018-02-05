@@ -1432,8 +1432,6 @@ gtk_drag_set_icon_surface (GdkDragContext  *context,
  * size of the icon depends on the icon theme (the icon is
  * loaded at the symbolic size #GTK_ICON_SIZE_DND), thus 
  * @hot_x and @hot_y have to be used with care.
- *
- * Since: 2.8
  **/
 void 
 gtk_drag_set_icon_name (GdkDragContext *context,

@@ -58,14 +58,14 @@ Window   gdk_x11_window_get_xid           (GdkWindow   *window);
 GDK_AVAILABLE_IN_ALL
 void     gdk_x11_window_set_user_time     (GdkWindow   *window,
                                            guint32      timestamp);
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 void     gdk_x11_window_set_utf8_property    (GdkWindow *window,
 					      const gchar *name,
 					      const gchar *value);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 void     gdk_x11_window_set_theme_variant (GdkWindow   *window,
                                            const char  *variant);
-GDK_DEPRECATED_IN_3_12_FOR(gdk_window_set_shadow_width)
+GDK_DEPRECATED_FOR(gdk_window_set_shadow_width)
 void     gdk_x11_window_set_frame_extents (GdkWindow *window,
                                            int        left,
                                            int        right,
@@ -74,13 +74,13 @@ void     gdk_x11_window_set_frame_extents (GdkWindow *window,
 GDK_AVAILABLE_IN_ALL
 void     gdk_x11_window_move_to_current_desktop (GdkWindow   *window);
 
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 guint32  gdk_x11_window_get_desktop             (GdkWindow   *window);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 void     gdk_x11_window_move_to_desktop         (GdkWindow   *window,
                                                  guint32      desktop);
 
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 void     gdk_x11_window_set_frame_sync_enabled (GdkWindow *window,
                                                 gboolean   frame_sync_enabled);
 

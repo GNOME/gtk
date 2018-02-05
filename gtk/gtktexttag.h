@@ -102,7 +102,7 @@ gint         gtk_text_tag_get_priority (GtkTextTag        *tag);
 GDK_AVAILABLE_IN_ALL
 void         gtk_text_tag_set_priority (GtkTextTag        *tag,
                                         gint               priority);
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 void         gtk_text_tag_changed      (GtkTextTag        *tag,
                                         gboolean           size_changed);
 

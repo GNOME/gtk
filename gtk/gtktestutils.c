@@ -70,8 +70,6 @@
  *
  * Like gtk_init() and g_test_init(), any known arguments will be
  * processed and stripped from @argc and @argv.
- *
- * Since: 2.14
  **/
 void
 gtk_test_init (int    *argcp,
@@ -126,8 +124,6 @@ quit_main_loop_callback (GtkWidget     *widget,
  * This function is intended to be used for syncing with actions that
  * depend on @widget relayouting or on interaction with the display
  * server.
- *
- * Since: 3.10
  **/
 void
 gtk_test_widget_wait_for_draw (GtkWidget *widget)
@@ -158,8 +154,6 @@ static guint  n_all_registered_types = 0;
  *
  * Returns: (array length=n_types zero-terminated=1) (transfer none):
  *    0-terminated array of type ids
- *
- * Since: 2.14
  */
 const GType*
 gtk_test_list_all_types (guint *n_types)
@@ -175,8 +169,6 @@ gtk_test_list_all_types (guint *n_types)
  * Force registration of all core Gtk+ and Gdk object types.
  * This allowes to refer to any of those object types via
  * g_type_from_name() after calling this function.
- *
- * Since: 2.14
  **/
 void
 gtk_test_register_all_types (void)

@@ -61,13 +61,13 @@ struct _GtkSearchEntryClass
   void (*stop_search)    (GtkSearchEntry *entry);
 };
 
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 GType           gtk_search_entry_get_type       (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 GtkWidget*      gtk_search_entry_new            (void);
 
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 gboolean        gtk_search_entry_handle_event   (GtkSearchEntry *entry,
                                                  GdkEvent       *event);
 

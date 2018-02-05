@@ -271,8 +271,6 @@ gtk_scrollbar_init (GtkScrollbar *self)
  * Creates a new scrollbar with the given orientation.
  *
  * Returns:  the new #GtkScrollbar.
- *
- * Since: 3.0
  **/
 GtkWidget *
 gtk_scrollbar_new (GtkOrientation  orientation,

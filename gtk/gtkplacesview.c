@@ -2173,8 +2173,6 @@ gtk_places_view_class_init (GtkPlacesViewClass *klass)
    * in it. The calling application should display the contents of that
    * location; for example, a file manager should show a list of files in
    * the specified location.
-   *
-   * Since: 3.18
    */
   places_view_signals [OPEN_LOCATION] =
           g_signal_new (I_("open-location"),
@@ -2196,8 +2194,6 @@ gtk_places_view_class_init (GtkPlacesViewClass *klass)
    * application to present an error message.  Most of these messages
    * refer to mounting or unmounting media, for example, when a drive
    * cannot be started for some reason.
-   *
-   * Since: 3.18
    */
   places_view_signals [SHOW_ERROR_MESSAGE] =
           g_signal_new (I_("show-error-message"),
@@ -2291,8 +2287,6 @@ gtk_places_view_init (GtkPlacesView *self)
  * when the user makes a selection in the view.
  *
  * Returns: a newly created #GtkPlacesView
- *
- * Since: 3.18
  */
 GtkWidget *
 gtk_places_view_new (void)
@@ -2320,8 +2314,6 @@ gtk_places_view_new (void)
  *
  * Passing 0 for @flags will cause #GTK_PLACES_OPEN_NORMAL to always be sent
  * to callbacks for the “open-location” signal.
- *
- * Since: 3.18
  */
 void
 gtk_places_view_set_open_flags (GtkPlacesView      *view,
@@ -2347,8 +2339,6 @@ gtk_places_view_set_open_flags (GtkPlacesView      *view,
  * Gets the open flags.
  *
  * Returns: the #GtkPlacesOpenFlags of @view
- *
- * Since: 3.18
  */
 GtkPlacesOpenFlags
 gtk_places_view_get_open_flags (GtkPlacesView *view)
@@ -2417,8 +2407,6 @@ gtk_places_view_set_search_query (GtkPlacesView *view,
  * @view: a #GtkPlacesView
  *
  * Returns %TRUE if the view is loading locations.
- *
- * Since: 3.18
  */
 gboolean
 gtk_places_view_get_loading (GtkPlacesView *view)
@@ -2502,8 +2490,6 @@ gtk_places_view_set_fetching_networks (GtkPlacesView *view,
  * are displayed.
  *
  * Returns: %TRUE if only local volumes are shown, %FALSE otherwise.
- *
- * Since: 3.18
  */
 gboolean
 gtk_places_view_get_local_only (GtkPlacesView *view)
@@ -2523,8 +2509,6 @@ gtk_places_view_get_local_only (GtkPlacesView *view)
  * @local_only: %TRUE to hide remote locations, %FALSE to show.
  *
  * Sets the #GtkPlacesView::local-only property to @local_only.
- *
- * Since: 3.18
  */
 void
 gtk_places_view_set_local_only (GtkPlacesView *view,

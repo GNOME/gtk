@@ -52,8 +52,6 @@
  * When circumstances require it, GtkStackSidebar adds the
  * .needs-attention style class to the widgets representing the stack
  * pages.
- *
- * Since: 3.16
  */
 
 struct _GtkStackSidebarPrivate
@@ -459,8 +457,6 @@ gtk_stack_sidebar_class_init (GtkStackSidebarClass *klass)
  * Creates a new sidebar.
  *
  * Returns: the new #GtkStackSidebar
- *
- * Since: 3.16
  */
 GtkWidget *
 gtk_stack_sidebar_new (void)
@@ -477,8 +473,6 @@ gtk_stack_sidebar_new (void)
  *
  * The sidebar widget will automatically update according to the order
  * (packing) and items within the given #GtkStack.
- *
- * Since: 3.16
  */
 void
 gtk_stack_sidebar_set_stack (GtkStackSidebar *sidebar,
@@ -521,8 +515,6 @@ gtk_stack_sidebar_set_stack (GtkStackSidebar *sidebar,
  *
  * Returns: (nullable) (transfer none): the associated #GtkStack or
  *     %NULL if none has been set explicitly
- *
- * Since: 3.16
  */
 GtkStack *
 gtk_stack_sidebar_get_stack (GtkStackSidebar *sidebar)

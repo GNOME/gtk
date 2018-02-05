@@ -226,8 +226,6 @@ _gtk_tree_menu_class_init (GtkTreeMenuClass *class)
    * This signal is emitted to notify that a menu item in the #GtkTreeMenu
    * was activated and provides the path string from the #GtkTreeModel
    * to specify which row was selected.
-   *
-   * Since: 3.0
    */
   tree_menu_signals[SIGNAL_MENU_ACTIVATE] =
     g_signal_new (I_("menu-activate"),
@@ -242,8 +240,6 @@ _gtk_tree_menu_class_init (GtkTreeMenuClass *class)
    * GtkTreeMenu:model:
    *
    * The #GtkTreeModel from which the menu is constructed.
-   *
-   * Since: 3.0
    */
   g_object_class_install_property (object_class,
                                    PROP_MODEL,
@@ -265,8 +261,6 @@ _gtk_tree_menu_class_init (GtkTreeMenuClass *class)
    * If you dont provide a root for the #GtkTreeMenu then the whole
    * model will be added to the menu. Specifying a root allows you
    * to build a menu for a given #GtkTreePath and its children.
-   * 
-   * Since: 3.0
    */
   g_object_class_install_property (object_class,
                                    PROP_ROOT,
@@ -284,8 +278,6 @@ _gtk_tree_menu_class_init (GtkTreeMenuClass *class)
    *
    * You can provide a different cell area at object construction
    * time, otherwise the #GtkTreeMenu will use a #GtkCellAreaBox.
-   *
-   * Since: 3.0
    */
   g_object_class_install_property (object_class,
                                    PROP_CELL_AREA,
@@ -300,8 +292,6 @@ _gtk_tree_menu_class_init (GtkTreeMenuClass *class)
    *
    * If wrap-width is set to a positive value, items in the popup will be laid
    * out along multiple columns, starting a new row on reaching the wrap width.
-   *
-   * Since: 3.0
    */
   g_object_class_install_property (object_class,
                                    PROP_WRAP_WIDTH,
@@ -320,8 +310,6 @@ _gtk_tree_menu_class_init (GtkTreeMenuClass *class)
    * of type %G_TYPE_INT in the model. The value in that column for each item
    * will determine how many rows that item will span in the popup. Therefore,
    * values in this column must be greater than zero.
-   *
-   * Since: 3.0
    */
   g_object_class_install_property (object_class,
                                    PROP_ROW_SPAN_COL,
@@ -341,8 +329,6 @@ _gtk_tree_menu_class_init (GtkTreeMenuClass *class)
    * will determine how many columns that item will span in the popup.
    * Therefore, values in this column must be greater than zero, and the sum of
    * an item’s column position + span should not exceed #GtkTreeMenu:wrap-width.
-   *
-   * Since: 3.0
    */
   g_object_class_install_property (object_class,
                                    PROP_COL_SPAN_COL,
@@ -1396,8 +1382,6 @@ gtk_tree_menu_set_model_internal (GtkTreeMenu  *menu,
  * Creates a new #GtkTreeMenu.
  *
  * Returns: A newly created #GtkTreeMenu with no model or root.
- *
- * Since: 3.0
  */
 GtkWidget *
 _gtk_tree_menu_new (void)
@@ -1412,8 +1396,6 @@ _gtk_tree_menu_new (void)
  * Creates a new #GtkTreeMenu using @area to render its cells.
  *
  * Returns: A newly created #GtkTreeMenu with no model or root.
- *
- * Since: 3.0
  */
 GtkWidget *
 _gtk_tree_menu_new_with_area (GtkCellArea    *area)
@@ -1432,8 +1414,6 @@ _gtk_tree_menu_new_with_area (GtkCellArea    *area)
  * Creates a new #GtkTreeMenu hierarchy from the provided @model and @root using @area to render its cells.
  *
  * Returns: A newly created #GtkTreeMenu.
- *
- * Since: 3.0
  */
 GtkWidget *
 _gtk_tree_menu_new_full (GtkCellArea         *area,
@@ -1453,8 +1433,6 @@ _gtk_tree_menu_new_full (GtkCellArea         *area,
  * @model: (allow-none): the #GtkTreeModel to build the menu hierarchy from, or %NULL.
  *
  * Sets @model to be used to build the menu heirarhcy.
- *
- * Since: 3.0
  */
 void
 _gtk_tree_menu_set_model (GtkTreeMenu  *menu,
@@ -1476,8 +1454,6 @@ _gtk_tree_menu_set_model (GtkTreeMenu  *menu,
  *
  * Returns: (transfer none): the #GtkTreeModel which is used
  * for @menu’s hierarchy.
- *
- * Since: 3.0
  */
 GtkTreeModel *
 _gtk_tree_menu_get_model (GtkTreeMenu *menu)
@@ -1498,8 +1474,6 @@ _gtk_tree_menu_get_model (GtkTreeMenu *menu)
  *
  * Sets the root of a @menu’s hierarchy to be @path. @menu must already
  * have a model set and @path must point to a valid path inside the model.
- *
- * Since: 3.0
  */
 void
 _gtk_tree_menu_set_root (GtkTreeMenu *menu,
@@ -1532,8 +1506,6 @@ _gtk_tree_menu_set_root (GtkTreeMenu *menu,
  *
  * Returns: (transfer full) (allow-none): A newly created #GtkTreePath
  * pointing to the root of @menu which must be freed with gtk_tree_path_free().
- *
- * Since: 3.0
  */
 GtkTreePath *
 _gtk_tree_menu_get_root (GtkTreeMenu *menu)
@@ -1558,8 +1530,6 @@ _gtk_tree_menu_get_root (GtkTreeMenu *menu)
  * for @menu. If the wrap width is larger than 1, @menu is in table mode.
  *
  * Returns: the wrap width.
- *
- * Since: 3.0
  */
 gint
 _gtk_tree_menu_get_wrap_width (GtkTreeMenu *menu)
@@ -1580,8 +1550,6 @@ _gtk_tree_menu_get_wrap_width (GtkTreeMenu *menu)
  *
  * Sets the wrap width which is used to determine the number of columns
  * for @menu. If the wrap width is larger than 1, @menu is in table mode.
- *
- * Since: 3.0
  */
 void
 _gtk_tree_menu_set_wrap_width (GtkTreeMenu *menu,
@@ -1613,8 +1581,6 @@ _gtk_tree_menu_set_wrap_width (GtkTreeMenu *menu,
  * a menu item should span.
  *
  * Returns: the column in @menu’s model containing row span information, or -1.
- *
- * Since: 3.0
  */
 gint
 _gtk_tree_menu_get_row_span_column (GtkTreeMenu *menu)
@@ -1636,8 +1602,6 @@ _gtk_tree_menu_get_row_span_column (GtkTreeMenu *menu)
  * Sets the column with row span information for @menu to be @row_span.
  * The row span column contains integers which indicate how many rows
  * a menu item should span.
- *
- * Since: 3.0
  */
 void
 _gtk_tree_menu_set_row_span_column (GtkTreeMenu *menu,
@@ -1669,8 +1633,6 @@ _gtk_tree_menu_set_row_span_column (GtkTreeMenu *menu,
  * a menu item should span.
  *
  * Returns: the column in @menu’s model containing column span information, or -1.
- *
- * Since: 3.0
  */
 gint
 _gtk_tree_menu_get_column_span_column (GtkTreeMenu *menu)
@@ -1692,8 +1654,6 @@ _gtk_tree_menu_get_column_span_column (GtkTreeMenu *menu)
  * Sets the column with column span information for @menu to be @column_span.
  * The column span column contains integers which indicate how many columns
  * a menu item should span.
- *
- * Since: 3.0
  */
 void
 _gtk_tree_menu_set_column_span_column (GtkTreeMenu *menu,
@@ -1723,8 +1683,6 @@ _gtk_tree_menu_set_column_span_column (GtkTreeMenu *menu,
  * Gets the current #GtkTreeViewRowSeparatorFunc separator function.
  *
  * Returns: the current row separator function.
- *
- * Since: 3.0
  */
 GtkTreeViewRowSeparatorFunc
 _gtk_tree_menu_get_row_separator_func (GtkTreeMenu *menu)
@@ -1748,8 +1706,6 @@ _gtk_tree_menu_get_row_separator_func (GtkTreeMenu *menu)
  * Sets the row separator function, which is used to determine
  * whether a row should be drawn as a separator. If the row separator
  * function is %NULL, no separators are drawn. This is the default value.
- *
- * Since: 3.0
  */
 void
 _gtk_tree_menu_set_row_separator_func (GtkTreeMenu          *menu,

@@ -130,7 +130,7 @@ GDK_AVAILABLE_IN_ALL
 GType	   gtk_menu_get_type		  (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_menu_new			  (void);
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_menu_new_from_model        (GMenuModel *model);
 
 /* Display the menu onscreen */
@@ -152,20 +152,20 @@ void       gtk_menu_popup_for_device      (GtkMenu             *menu,
                                            GDestroyNotify       destroy,
                                            guint                button,
                                            guint32              activate_time);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 void       gtk_menu_popup_at_rect         (GtkMenu             *menu,
                                            GdkWindow           *rect_window,
                                            const GdkRectangle  *rect,
                                            GdkGravity           rect_anchor,
                                            GdkGravity           menu_anchor,
                                            const GdkEvent      *trigger_event);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 void       gtk_menu_popup_at_widget       (GtkMenu             *menu,
                                            GtkWidget           *widget,
                                            GdkGravity           widget_anchor,
                                            GdkGravity           menu_anchor,
                                            const GdkEvent      *trigger_event);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 void       gtk_menu_popup_at_pointer      (GtkMenu             *menu,
                                            const GdkEvent      *trigger_event);
 
@@ -224,7 +224,7 @@ void       gtk_menu_reorder_child         (GtkMenu             *menu,
                                            GtkWidget           *child,
                                            gint                position);
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void	   gtk_menu_set_display           (GtkMenu	       *menu,
 					   GdkDisplay          *display);
 
@@ -242,7 +242,7 @@ void       gtk_menu_set_monitor           (GtkMenu             *menu,
 GDK_AVAILABLE_IN_ALL
 gint       gtk_menu_get_monitor           (GtkMenu             *menu);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 void       gtk_menu_place_on_monitor      (GtkMenu             *menu,
                                            GdkMonitor          *monitor);
 

@@ -626,8 +626,6 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
    * The #GtkAppChooserButton:show-default-item property determines
    * whether the dropdown menu should show the default application
    * on top for the provided content type.
-   *
-   * Since: 3.2
    */
   properties[PROP_SHOW_DEFAULT_ITEM] =
     g_param_spec_boolean ("show-default-item",
@@ -765,8 +763,6 @@ real_insert_separator (GtkAppChooserButton *self,
  * that can handle content of the given type.
  *
  * Returns: a newly created #GtkAppChooserButton
- *
- * Since: 3.0
  */
 GtkWidget *
 gtk_app_chooser_button_new (const gchar *content_type)
@@ -784,8 +780,6 @@ gtk_app_chooser_button_new (const gchar *content_type)
  *
  * Appends a separator to the list of applications that is shown
  * in the popup.
- *
- * Since: 3.0
  */
 void
 gtk_app_chooser_button_append_separator (GtkAppChooserButton *self)
@@ -811,8 +805,6 @@ gtk_app_chooser_button_append_separator (GtkAppChooserButton *self)
  * #GtkAppChooserButton::custom-item-activated signal, to add a
  * callback for the activation of a particular custom item in the list.
  * See also gtk_app_chooser_button_append_separator().
- *
- * Since: 3.0
  */
 void
 gtk_app_chooser_button_append_custom_item (GtkAppChooserButton *self,
@@ -839,8 +831,6 @@ gtk_app_chooser_button_append_custom_item (GtkAppChooserButton *self,
  *
  * Use gtk_app_chooser_refresh() to bring the selection
  * to its initial state.
- *
- * Since: 3.0
  */
 void
 gtk_app_chooser_button_set_active_custom_item (GtkAppChooserButton *self,
@@ -869,8 +859,6 @@ gtk_app_chooser_button_set_active_custom_item (GtkAppChooserButton *self,
  * property.
  *
  * Returns: the value of #GtkAppChooserButton:show-dialog-item
- *
- * Since: 3.0
  */
 gboolean
 gtk_app_chooser_button_get_show_dialog_item (GtkAppChooserButton *self)
@@ -887,8 +875,6 @@ gtk_app_chooser_button_get_show_dialog_item (GtkAppChooserButton *self)
  *
  * Sets whether the dropdown menu of this button should show an
  * entry to trigger a #GtkAppChooserDialog.
- *
- * Since: 3.0
  */
 void
 gtk_app_chooser_button_set_show_dialog_item (GtkAppChooserButton *self,
@@ -912,8 +898,6 @@ gtk_app_chooser_button_set_show_dialog_item (GtkAppChooserButton *self,
  * property.
  *
  * Returns: the value of #GtkAppChooserButton:show-default-item
- *
- * Since: 3.2
  */
 gboolean
 gtk_app_chooser_button_get_show_default_item (GtkAppChooserButton *self)
@@ -930,8 +914,6 @@ gtk_app_chooser_button_get_show_default_item (GtkAppChooserButton *self)
  *
  * Sets whether the dropdown menu of this button should show the
  * default application for the given content type at top.
- *
- * Since: 3.2
  */
 void
 gtk_app_chooser_button_set_show_default_item (GtkAppChooserButton *self,

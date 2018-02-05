@@ -843,8 +843,6 @@ gdk_wayland_display_get_next_serial (GdkDisplay *display)
  * The startup ID is also what is used to signal that the startup is
  * complete (for example, when opening a window or when calling
  * gdk_notify_startup_complete()).
- *
- * Since: 3.22
  **/
 void
 gdk_wayland_display_set_startup_notification_id (GdkDisplay *display,
@@ -1120,8 +1118,6 @@ _gdk_wayland_display_update_serial (GdkWaylandDisplay *display_wayland,
  * Returns the Wayland wl_display of a #GdkDisplay.
  *
  * Returns: (transfer none): a Wayland wl_display
- *
- * Since: 3.8
  */
 struct wl_display *
 gdk_wayland_display_get_wl_display (GdkDisplay *display)
@@ -1138,8 +1134,6 @@ gdk_wayland_display_get_wl_display (GdkDisplay *display)
  * Returns the Wayland global singleton compositor of a #GdkDisplay.
  *
  * Returns: (transfer none): a Wayland wl_compositor
- *
- * Since: 3.8
  */
 struct wl_compositor *
 gdk_wayland_display_get_wl_compositor (GdkDisplay *display)

@@ -160,8 +160,6 @@ gdk_device_tool_new (guint64           serial,
  * physical tool (eg. a tablet pen) across program executions.
  *
  * Returns: The serial ID for this tool
- *
- * Since: 3.22
  **/
 guint64
 gdk_device_tool_get_serial (GdkDeviceTool *tool)
@@ -186,8 +184,6 @@ gdk_device_tool_get_serial (GdkDeviceTool *tool)
  * but having different hardware identificators.
  *
  * Returns: The hardware identificator of this tool.
- *
- * Since: 3.22
  **/
 guint64
 gdk_device_tool_get_hardware_id (GdkDeviceTool *tool)
@@ -205,8 +201,6 @@ gdk_device_tool_get_hardware_id (GdkDeviceTool *tool)
  *
  * Returns: The physical type for this tool. This can be used to figure out what
  * sort of pen is being used, such as an airbrush or a pencil.
- *
- * Since: 3.22
  **/
 GdkDeviceToolType
 gdk_device_tool_get_tool_type (GdkDeviceTool *tool)

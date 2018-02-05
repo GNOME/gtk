@@ -125,7 +125,7 @@ typedef enum
  *  content determines the size.
  * @GTK_POLICY_EXTERNAL: Don't show a scrollbar, but don't force the
  *  size to follow the content. This can be used e.g. to make multiple
- *  scrolled windows share a scrollbar. Since: 3.16
+ *  scrolled windows share a scrollbar.
  *
  * Determines how the size should be computed to achieve the one of the
  * visibility mode for the scrollbars.
@@ -190,46 +190,46 @@ gint           gtk_scrolled_window_get_min_content_height (GtkScrolledWindow *sc
 GDK_AVAILABLE_IN_ALL
 void           gtk_scrolled_window_set_min_content_height (GtkScrolledWindow *scrolled_window,
                                                            gint               height);
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 void           gtk_scrolled_window_set_kinetic_scrolling  (GtkScrolledWindow *scrolled_window,
                                                            gboolean           kinetic_scrolling);
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 gboolean       gtk_scrolled_window_get_kinetic_scrolling  (GtkScrolledWindow *scrolled_window);
 
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 void           gtk_scrolled_window_set_capture_button_press (GtkScrolledWindow *scrolled_window,
                                                              gboolean           capture_button_press);
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 gboolean       gtk_scrolled_window_get_capture_button_press (GtkScrolledWindow *scrolled_window);
 
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 void           gtk_scrolled_window_set_overlay_scrolling  (GtkScrolledWindow *scrolled_window,
                                                            gboolean           overlay_scrolling);
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 gboolean       gtk_scrolled_window_get_overlay_scrolling (GtkScrolledWindow   *scrolled_window);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 void           gtk_scrolled_window_set_max_content_width  (GtkScrolledWindow *scrolled_window,
                                                            gint               width);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 gint           gtk_scrolled_window_get_max_content_width  (GtkScrolledWindow *scrolled_window);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 void           gtk_scrolled_window_set_max_content_height (GtkScrolledWindow *scrolled_window,
                                                            gint               height);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 gint           gtk_scrolled_window_get_max_content_height (GtkScrolledWindow *scrolled_window);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 void           gtk_scrolled_window_set_propagate_natural_width  (GtkScrolledWindow *scrolled_window,
 								 gboolean           propagate);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 gboolean       gtk_scrolled_window_get_propagate_natural_width  (GtkScrolledWindow *scrolled_window);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 void           gtk_scrolled_window_set_propagate_natural_height (GtkScrolledWindow *scrolled_window,
 								 gboolean           propagate);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_ALL
 gboolean       gtk_scrolled_window_get_propagate_natural_height (GtkScrolledWindow *scrolled_window);
 
 G_END_DECLS

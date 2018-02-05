@@ -122,8 +122,6 @@ gdk_seat_class_init (GdkSeatClass *klass)
    *
    * The ::device-added signal is emitted when a new input
    * device is related to this seat.
-   *
-   * Since: 3.20
    */
   signals [DEVICE_ADDED] =
     g_signal_new (g_intern_static_string ("device-added"),
@@ -142,8 +140,6 @@ gdk_seat_class_init (GdkSeatClass *klass)
    *
    * The ::device-removed signal is emitted when an
    * input device is removed (e.g. unplugged).
-   *
-   * Since: 3.20
    */
   signals [DEVICE_REMOVED] =
     g_signal_new (g_intern_static_string ("device-removed"),
@@ -166,8 +162,6 @@ gdk_seat_class_init (GdkSeatClass *klass)
    * will emit the #GdkDevice::tool-changed signal accordingly.
    *
    * A same tool may be used by several devices.
-   *
-   * Since: 3.22
    */
   signals [TOOL_ADDED] =
     g_signal_new (g_intern_static_string ("tool-added"),
@@ -185,8 +179,6 @@ gdk_seat_class_init (GdkSeatClass *klass)
    *
    * This signal is emitted whenever a tool is no longer known
    * to this @seat.
-   *
-   * Since: 3.22
    */
   signals [TOOL_REMOVED] =
     g_signal_new (g_intern_static_string ("tool-removed"),
@@ -201,8 +193,6 @@ gdk_seat_class_init (GdkSeatClass *klass)
    * GdkSeat:display:
    *
    * #GdkDisplay of this seat.
-   *
-   * Since: 3.20
    */
   props[PROP_DISPLAY] =
     g_param_spec_object ("display",
@@ -228,8 +218,6 @@ gdk_seat_init (GdkSeat *seat)
  * Returns the capabilities this #GdkSeat currently has.
  *
  * Returns: the seat capabilities
- *
- * Since: 3.20
  **/
 GdkSeatCapabilities
 gdk_seat_get_capabilities (GdkSeat *seat)
@@ -290,8 +278,6 @@ gdk_seat_get_capabilities (GdkSeat *seat)
  * events that are emitted when the grab ends unvoluntarily.
  *
  * Returns: %GDK_GRAB_SUCCESS if the grab was successful.
- *
- * Since: 3.20
  **/
 GdkGrabStatus
 gdk_seat_grab (GdkSeat                *seat,
@@ -322,8 +308,6 @@ gdk_seat_grab (GdkSeat                *seat,
  * @seat: a #GdkSeat
  *
  * Releases a grab added through gdk_seat_grab().
- *
- * Since: 3.20
  **/
 void
 gdk_seat_ungrab (GdkSeat *seat)
@@ -346,8 +330,6 @@ gdk_seat_ungrab (GdkSeat *seat)
  * Returns: (transfer container) (element-type GdkDevice): A list of #GdkDevices.
  *          The list must be freed with g_list_free(), the elements are owned
  *          by GDK and must not be freed.
- *
- * Since: 3.20
  **/
 GList *
 gdk_seat_get_slaves (GdkSeat             *seat,
@@ -369,8 +351,6 @@ gdk_seat_get_slaves (GdkSeat             *seat,
  *
  * Returns: (transfer none) (nullable): a master #GdkDevice with pointer
  *          capabilities. This object is owned by GTK+ and must not be freed.
- *
- * Since: 3.20
  **/
 GdkDevice *
 gdk_seat_get_pointer (GdkSeat *seat)
@@ -391,8 +371,6 @@ gdk_seat_get_pointer (GdkSeat *seat)
  *
  * Returns: (transfer none) (nullable): a master #GdkDevice with keyboard
  *          capabilities. This object is owned by GTK+ and must not be freed.
- *
- * Since: 3.20
  **/
 GdkDevice *
 gdk_seat_get_keyboard (GdkSeat *seat)
@@ -480,8 +458,6 @@ gdk_seat_get_tool (GdkSeat *seat,
  *
  * Returns: (transfer container) (element-type GdkDevice): A list
  * of master pointing devices
- *
- * Since: 3.93.
  */
 GList *
 gdk_seat_get_master_pointers (GdkSeat             *seat,

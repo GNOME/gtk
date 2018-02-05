@@ -129,8 +129,6 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
    *
    * The "value" property determines the percentage to which the
    * progress bar will be "filled in".
-   *
-   * Since: 2.6
    **/
   g_object_class_install_property (object_class,
 				   PROP_VALUE,
@@ -147,8 +145,6 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
    * over the progress bar. Setting this property to %NULL causes the default 
    * label to be displayed. Setting this property to an empty string causes 
    * no label to be displayed.
-   *
-   * Since: 2.6
    **/
   g_object_class_install_property (object_class,
 				   PROP_TEXT,
@@ -171,8 +167,6 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
    *
    * To indicate that the activity has not started yet, set the property
    * to zero. To indicate completion, set the property to %G_MAXINT.
-   *
-   * Since: 2.12
    */
   g_object_class_install_property (object_class,
                                    PROP_PULSE,
@@ -188,8 +182,6 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
    * The "text-xalign" property controls the horizontal alignment of the
    * text in the progress bar.  Valid values range from 0 (left) to 1
    * (right).  Reserved for RTL layouts.
-   *
-   * Since: 2.12
    */
   g_object_class_install_property (object_class,
                                    PROP_TEXT_XALIGN,
@@ -205,8 +197,6 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
    * The "text-yalign" property controls the vertical alignment of the
    * text in the progress bar.  Valid values range from 0 (top) to 1
    * (bottom).
-   *
-   * Since: 2.12
    */
   g_object_class_install_property (object_class,
                                    PROP_TEXT_YALIGN,
@@ -259,8 +249,6 @@ gtk_cell_renderer_progress_init (GtkCellRendererProgress *cellprogress)
  * Creates a new #GtkCellRendererProgress. 
  *
  * Returns: the new cell renderer
- *
- * Since: 2.6
  **/
 GtkCellRenderer*
 gtk_cell_renderer_progress_new (void)

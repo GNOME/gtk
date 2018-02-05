@@ -79,7 +79,6 @@ _gdk_frame_timings_steal (GdkFrameTimings *timings,
  * Increases the reference count of @timings.
  *
  * Returns: @timings
- * Since: 3.8
  */
 GdkFrameTimings *
 gdk_frame_timings_ref (GdkFrameTimings *timings)
@@ -97,8 +96,6 @@ gdk_frame_timings_ref (GdkFrameTimings *timings)
  *
  * Decreases the reference count of @timings. If @timings
  * is no longer referenced, it will be freed.
- *
- * Since: 3.8
  */
 void
 gdk_frame_timings_unref (GdkFrameTimings *timings)
@@ -121,7 +118,6 @@ gdk_frame_timings_unref (GdkFrameTimings *timings)
  * this frame was drawn.
  *
  * Returns: the frame counter value for this frame
- * Since: 3.8
  */
 gint64
 gdk_frame_timings_get_frame_counter (GdkFrameTimings *timings)
@@ -145,7 +141,6 @@ gdk_frame_timings_get_frame_counter (GdkFrameTimings *timings)
  *
  * Returns: %TRUE if all information that will be available
  *  for the frame has been filled in.
- * Since: 3.8
  */
 gboolean
 gdk_frame_timings_get_complete (GdkFrameTimings *timings)
@@ -184,7 +179,6 @@ gdk_frame_timings_get_frame_time (GdkFrameTimings *timings)
  * Returns: the time the frame was displayed to the user, in the
  *  timescale of g_get_monotonic_time(), or 0 if no presentation
  *  time is available. See gdk_frame_timings_get_complete()
- * Since: 3.8
  */
 gint64
 gdk_frame_timings_get_presentation_time (GdkFrameTimings *timings)
@@ -211,7 +205,6 @@ gdk_frame_timings_get_presentation_time (GdkFrameTimings *timings)
  * Returns: The predicted time at which the frame will be presented,
  *  in the timescale of g_get_monotonic_time(), or 0 if no predicted
  *  presentation time is available.
- * Since: 3.8
  */
 gint64
 gdk_frame_timings_get_predicted_presentation_time (GdkFrameTimings *timings)
@@ -232,7 +225,6 @@ gdk_frame_timings_get_predicted_presentation_time (GdkFrameTimings *timings)
  * Returns: the refresh interval of the display, in microseconds,
  *  or 0 if the refresh interval is not available.
  *  See gdk_frame_timings_get_complete().
- * Since: 3.8
  */
 gint64
 gdk_frame_timings_get_refresh_interval (GdkFrameTimings *timings)

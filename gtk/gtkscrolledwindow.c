@@ -583,8 +583,6 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * GtkScrolledWindow:min-content-width:
    *
    * The minimum content width of @scrolled_window, or -1 if not set.
-   *
-   * Since: 3.0
    */
   properties[PROP_MIN_CONTENT_WIDTH] =
       g_param_spec_int ("min-content-width",
@@ -597,8 +595,6 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * GtkScrolledWindow:min-content-height:
    *
    * The minimum content height of @scrolled_window, or -1 if not set.
-   *
-   * Since: 3.0
    */
   properties[PROP_MIN_CONTENT_HEIGHT] =
       g_param_spec_int ("min-content-height",
@@ -612,8 +608,6 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    *
    * Whether kinetic scrolling is enabled or not. Kinetic scrolling
    * only applies to devices with source %GDK_SOURCE_TOUCHSCREEN.
-   *
-   * Since: 3.4
    */
   properties[PROP_KINETIC_SCROLLING] =
       g_param_spec_boolean ("kinetic-scrolling",
@@ -629,8 +623,6 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * scrollbars are only added as traditional widgets when a mouse
    * is present. Otherwise, they are overlayed on top of the content,
    * as narrow indicators.
-   *
-   * Since: 3.16
    */
   properties[PROP_OVERLAY_SCROLLING] =
       g_param_spec_boolean ("overlay-scrolling",
@@ -643,8 +635,6 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * GtkScrolledWindow:max-content-width:
    *
    * The maximum content width of @scrolled_window, or -1 if not set.
-   *
-   * Since: 3.22
    */
   properties[PROP_MAX_CONTENT_WIDTH] =
       g_param_spec_int ("max-content-width",
@@ -657,8 +647,6 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * GtkScrolledWindow:max-content-height:
    *
    * The maximum content height of @scrolled_window, or -1 if not set.
-   *
-   * Since: 3.22
    */
   properties[PROP_MAX_CONTENT_HEIGHT] =
       g_param_spec_int ("max-content-height",
@@ -675,8 +663,6 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    *
    * This is useful in cases where an attempt should be made to allocate exactly
    * enough space for the natural size of the child.
-   *
-   * Since: 3.22
    */
   properties[PROP_PROPAGATE_NATURAL_WIDTH] =
       g_param_spec_boolean ("propagate-natural-width",
@@ -693,8 +679,6 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    *
    * This is useful in cases where an attempt should be made to allocate exactly
    * enough space for the natural size of the child.
-   *
-   * Since: 3.22
    */
   properties[PROP_PROPAGATE_NATURAL_HEIGHT] =
       g_param_spec_boolean ("propagate-natural-height",
@@ -767,8 +751,6 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    *
    * Note: The @pos argument is LTR/RTL aware, so callers should be aware too
    * if intending to provide behavior on horizontal edges.
-   *
-   * Since: 3.16
    */
   signals[EDGE_OVERSHOT] =
     g_signal_new (I_("edge-overshot"),
@@ -792,8 +774,6 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    *
    * Note: The @pos argument is LTR/RTL aware, so callers should be aware too
    * if intending to provide behavior on horizontal edges.
-   *
-   * Since: 3.16
    */
   signals[EDGE_REACHED] =
     g_signal_new (I_("edge-reached"),
@@ -2255,8 +2235,6 @@ gtk_scrolled_window_get_vadjustment (GtkScrolledWindow *scrolled_window)
  * Returns the horizontal scrollbar of @scrolled_window.
  *
  * Returns: (transfer none): the horizontal scrollbar of the scrolled window.
- *
- * Since: 2.8
  */
 GtkWidget*
 gtk_scrolled_window_get_hscrollbar (GtkScrolledWindow *scrolled_window)
@@ -2273,8 +2251,6 @@ gtk_scrolled_window_get_hscrollbar (GtkScrolledWindow *scrolled_window)
  * Returns the vertical scrollbar of @scrolled_window.
  *
  * Returns: (transfer none): the vertical scrollbar of the scrolled window.
- *
- * Since: 2.8
  */
 GtkWidget*
 gtk_scrolled_window_get_vscrollbar (GtkScrolledWindow *scrolled_window)
@@ -2424,8 +2400,6 @@ gtk_scrolled_window_get_placement (GtkScrolledWindow *scrolled_window)
  *
  * See also gtk_scrolled_window_set_placement() and
  * gtk_scrolled_window_get_placement().
- *
- * Since: 2.10
  **/
 void
 gtk_scrolled_window_unset_placement (GtkScrolledWindow *scrolled_window)
@@ -2499,8 +2473,6 @@ gtk_scrolled_window_get_shadow_type (GtkScrolledWindow *scrolled_window)
  * Turns kinetic scrolling on or off.
  * Kinetic scrolling only applies to devices with source
  * %GDK_SOURCE_TOUCHSCREEN.
- *
- * Since: 3.4
  **/
 void
 gtk_scrolled_window_set_kinetic_scrolling (GtkScrolledWindow *scrolled_window,
@@ -2538,8 +2510,6 @@ gtk_scrolled_window_set_kinetic_scrolling (GtkScrolledWindow *scrolled_window,
  * Returns the specified kinetic scrolling behavior.
  *
  * Returns: the scrolling behavior flags.
- *
- * Since: 3.4
  */
 gboolean
 gtk_scrolled_window_get_kinetic_scrolling (GtkScrolledWindow *scrolled_window)
@@ -2565,8 +2535,6 @@ gtk_scrolled_window_get_kinetic_scrolling (GtkScrolledWindow *scrolled_window)
  * to %FALSE.
  *
  * This setting only has an effect if kinetic scrolling is enabled.
- *
- * Since: 3.4
  */
 void
 gtk_scrolled_window_set_capture_button_press (GtkScrolledWindow *scrolled_window,
@@ -2585,8 +2553,6 @@ gtk_scrolled_window_set_capture_button_press (GtkScrolledWindow *scrolled_window
  * scrolling. See gtk_scrolled_window_set_capture_button_press().
  *
  * Returns: %TRUE if button presses are captured during kinetic scrolling
- *
- * Since: 3.4
  */
 gboolean
 gtk_scrolled_window_get_capture_button_press (GtkScrolledWindow *scrolled_window)
@@ -3974,8 +3940,6 @@ gtk_scrolled_window_grab_notify (GtkWidget *widget,
  * Gets the minimum content width of @scrolled_window, or -1 if not set.
  *
  * Returns: the minimum content width
- *
- * Since: 3.0
  */
 gint
 gtk_scrolled_window_get_min_content_width (GtkScrolledWindow *scrolled_window)
@@ -3996,8 +3960,6 @@ gtk_scrolled_window_get_min_content_width (GtkScrolledWindow *scrolled_window)
  *
  * It is a programming error to set the minimum content width to a
  * value greater than #GtkScrolledWindow:max-content-width.
- *
- * Since: 3.0
  */
 void
 gtk_scrolled_window_set_min_content_width (GtkScrolledWindow *scrolled_window,
@@ -4028,8 +3990,6 @@ gtk_scrolled_window_set_min_content_width (GtkScrolledWindow *scrolled_window,
  * Gets the minimal content height of @scrolled_window, or -1 if not set.
  *
  * Returns: the minimal content height
- *
- * Since: 3.0
  */
 gint
 gtk_scrolled_window_get_min_content_height (GtkScrolledWindow *scrolled_window)
@@ -4050,8 +4010,6 @@ gtk_scrolled_window_get_min_content_height (GtkScrolledWindow *scrolled_window)
  *
  * It is a programming error to set the minimum content height to a
  * value greater than #GtkScrolledWindow:max-content-height.
- *
- * Since: 3.0
  */
 void
 gtk_scrolled_window_set_min_content_height (GtkScrolledWindow *scrolled_window,
@@ -4081,8 +4039,6 @@ gtk_scrolled_window_set_min_content_height (GtkScrolledWindow *scrolled_window,
  * @overlay_scrolling: whether to enable overlay scrolling
  *
  * Enables or disables overlay scrolling for this scrolled window.
- *
- * Since: 3.16
  */
 void
 gtk_scrolled_window_set_overlay_scrolling (GtkScrolledWindow *scrolled_window,
@@ -4111,8 +4067,6 @@ gtk_scrolled_window_set_overlay_scrolling (GtkScrolledWindow *scrolled_window,
  * Returns whether overlay scrolling is enabled for this scrolled window.
  *
  * Returns: %TRUE if overlay scrolling is enabled
- *
- * Since: 3.16
  */
 gboolean
 gtk_scrolled_window_get_overlay_scrolling (GtkScrolledWindow *scrolled_window)
@@ -4133,8 +4087,6 @@ gtk_scrolled_window_get_overlay_scrolling (GtkScrolledWindow *scrolled_window)
  *
  * It is a programming error to set the maximum content width to a value
  * smaller than #GtkScrolledWindow:min-content-width.
- *
- * Since: 3.22
  */
 void
 gtk_scrolled_window_set_max_content_width (GtkScrolledWindow *scrolled_window,
@@ -4163,8 +4115,6 @@ gtk_scrolled_window_set_max_content_width (GtkScrolledWindow *scrolled_window,
  * Returns the maximum content width set.
  *
  * Returns: the maximum content width, or -1
- *
- * Since: 3.22
  */
 gint
 gtk_scrolled_window_get_max_content_width (GtkScrolledWindow *scrolled_window)
@@ -4185,8 +4135,6 @@ gtk_scrolled_window_get_max_content_width (GtkScrolledWindow *scrolled_window)
  *
  * It is a programming error to set the maximum content height to a value
  * smaller than #GtkScrolledWindow:min-content-height.
- *
- * Since: 3.22
  */
 void
 gtk_scrolled_window_set_max_content_height (GtkScrolledWindow *scrolled_window,
@@ -4215,8 +4163,6 @@ gtk_scrolled_window_set_max_content_height (GtkScrolledWindow *scrolled_window,
  * Returns the maximum content height set.
  *
  * Returns: the maximum content height, or -1
- *
- * Since: 3.22
  */
 gint
 gtk_scrolled_window_get_max_content_height (GtkScrolledWindow *scrolled_window)
@@ -4233,8 +4179,6 @@ gtk_scrolled_window_get_max_content_height (GtkScrolledWindow *scrolled_window)
  *
  * Sets whether the natural width of the child should be calculated and propagated
  * through the scrolled windows requested natural width.
- *
- * Since: 3.22
  */
 void
 gtk_scrolled_window_set_propagate_natural_width (GtkScrolledWindow *scrolled_window,
@@ -4264,8 +4208,6 @@ gtk_scrolled_window_set_propagate_natural_width (GtkScrolledWindow *scrolled_win
  * through the scrolled windows requested natural width.
  *
  * Returns: whether natural width propagation is enabled.
- *
- * Since: 3.22
  */
 gboolean
 gtk_scrolled_window_get_propagate_natural_width (GtkScrolledWindow *scrolled_window)
@@ -4282,8 +4224,6 @@ gtk_scrolled_window_get_propagate_natural_width (GtkScrolledWindow *scrolled_win
  *
  * Sets whether the natural height of the child should be calculated and propagated
  * through the scrolled windows requested natural height.
- *
- * Since: 3.22
  */
 void
 gtk_scrolled_window_set_propagate_natural_height (GtkScrolledWindow *scrolled_window,
@@ -4313,8 +4253,6 @@ gtk_scrolled_window_set_propagate_natural_height (GtkScrolledWindow *scrolled_wi
  * through the scrolled windows requested natural height.
  *
  * Returns: whether natural height propagation is enabled.
- *
- * Since: 3.22
  */
 gboolean
 gtk_scrolled_window_get_propagate_natural_height (GtkScrolledWindow *scrolled_window)

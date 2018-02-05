@@ -79,8 +79,6 @@ window_handle_exported (GtkWindow  *window,
  * necessary for sandbox helpers to parent their dialogs properly.
  *
  * Returns: %TRUE on success, %FALSE on error
- *
- * Since: 3.22
  */
 gboolean
 gtk_show_uri_on_window (GtkWindow   *parent,

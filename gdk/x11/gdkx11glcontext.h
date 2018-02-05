@@ -36,10 +36,10 @@ G_BEGIN_DECLS
 typedef struct _GdkX11GLContext		GdkX11GLContext;
 typedef struct _GdkX11GLContextClass	GdkX11GLContextClass;
 
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 GType gdk_x11_gl_context_get_type (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_16
+GDK_AVAILABLE_IN_ALL
 gboolean        gdk_x11_display_get_glx_version (GdkDisplay *display,
                                                  gint       *major,
                                                  gint       *minor);

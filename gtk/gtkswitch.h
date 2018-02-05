@@ -92,10 +92,10 @@ void            gtk_switch_set_active   (GtkSwitch *sw,
 GDK_AVAILABLE_IN_ALL
 gboolean        gtk_switch_get_active   (GtkSwitch *sw);
 
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 void            gtk_switch_set_state   (GtkSwitch *sw,
                                         gboolean   state);
-GDK_AVAILABLE_IN_3_14
+GDK_AVAILABLE_IN_ALL
 gboolean        gtk_switch_get_state   (GtkSwitch *sw);
 
 G_END_DECLS

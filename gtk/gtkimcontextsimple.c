@@ -1678,8 +1678,6 @@ gtk_im_context_simple_add_table (GtkIMContextSimple *context_simple,
  * @compose_file: The path of compose file
  *
  * Adds an additional table from the X11 compose file.
- *
- * Since: 3.20
  */
 void
 gtk_im_context_simple_add_compose_file (GtkIMContextSimple *context_simple,

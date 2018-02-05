@@ -300,8 +300,6 @@ gtk_radio_menu_item_new_with_mnemonic (GSList *group,
  * Creates a new #GtkRadioMenuItem adding it to the same group as @group.
  *
  * Returns: (transfer none): The new #GtkRadioMenuItem
- *
- * Since: 2.4
  **/
 GtkWidget *
 gtk_radio_menu_item_new_from_widget (GtkRadioMenuItem *group)
@@ -329,8 +327,6 @@ gtk_radio_menu_item_new_from_widget (GtkRadioMenuItem *group)
  * The new #GtkRadioMenuItem is added to the same group as @group.
  *
  * Returns: (transfer none): The new #GtkRadioMenuItem
- *
- * Since: 2.4
  **/
 GtkWidget *
 gtk_radio_menu_item_new_with_mnemonic_from_widget (GtkRadioMenuItem *group,
@@ -355,8 +351,6 @@ gtk_radio_menu_item_new_with_mnemonic_from_widget (GtkRadioMenuItem *group,
  * The new #GtkRadioMenuItem is added to the same group as @group.
  *
  * Returns: (transfer none): The new #GtkRadioMenuItem
- *
- * Since: 2.4
  **/
 GtkWidget *
 gtk_radio_menu_item_new_with_label_from_widget (GtkRadioMenuItem *group,
@@ -414,8 +408,6 @@ gtk_radio_menu_item_class_init (GtkRadioMenuItemClass *klass)
    * GtkRadioMenuItem:group:
    * 
    * The radio menu item whose group this widget belongs to.
-   * 
-   * Since: 2.8
    */
   g_object_class_install_property (gobject_class,
 				   PROP_GROUP,
@@ -435,8 +427,6 @@ gtk_radio_menu_item_class_init (GtkRadioMenuItemClass *klass)
    * vice-versa, and when a button is moved from one group of 2 or
    * more menu items ton a different one, but not when the composition
    * of the group that a menu item belongs to changes.
-   *
-   * Since: 2.4
    */
   group_changed_signal = g_signal_new (I_("group-changed"),
 				       G_OBJECT_CLASS_TYPE (gobject_class),
@@ -590,8 +580,6 @@ gtk_radio_menu_item_activate (GtkMenuItem *menu_item)
  *       last_item = radio_item;
  *     }
  * ]|
- *
- * Since: 3.18
  */
 void
 gtk_radio_menu_item_join_group (GtkRadioMenuItem *radio_menu_item,

@@ -77,17 +77,17 @@ guchar * gtk_selection_data_get_text (const GtkSelectionData     *selection_data
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_selection_data_set_pixbuf   (GtkSelectionData  *selection_data,
                                           GdkPixbuf         *pixbuf);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 cairo_surface_t *gtk_selection_data_get_surface (GtkSelectionData *selection_data);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_selection_data_set_surface (GtkSelectionData  *selection_data,
                                          cairo_surface_t   *surface);
 GDK_AVAILABLE_IN_ALL
 GdkPixbuf *gtk_selection_data_get_pixbuf (const GtkSelectionData  *selection_data);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_selection_data_set_texture (GtkSelectionData *selection_data,
                                          GdkTexture       *texture);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GdkTexture *gtk_selection_data_get_texture (const GtkSelectionData *selection_data);
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_selection_data_set_uris (GtkSelectionData     *selection_data,

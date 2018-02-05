@@ -452,8 +452,6 @@ gtk_text_iter_free (GtkTextIter *iter)
  * is not useful in applications, because iterators can be assigned
  * with `GtkTextIter i = j;`. The
  * function is used by language bindings.
- *
- * Since: 3.2
  **/
 void
 gtk_text_iter_assign (GtkTextIter       *iter,
@@ -1166,7 +1164,6 @@ gtk_text_iter_get_toggled_tags  (const GtkTextIter  *iter,
  * parameters.
  *
  * Returns: whether @iter is the start of a range tagged with @tag
- * Since: 3.20
  **/
 gboolean
 gtk_text_iter_starts_tag (const GtkTextIter *iter,
@@ -2710,8 +2707,6 @@ gtk_text_iter_backward_lines (GtkTextIter *iter, gint count)
  * already at the end of the buffer.
  *
  * Returns: whether @iter can be dereferenced
- * 
- * Since: 2.8
  **/
 gboolean
 gtk_text_iter_forward_visible_line (GtkTextIter *iter)
@@ -2750,8 +2745,6 @@ gtk_text_iter_forward_visible_line (GtkTextIter *iter)
  * every iteration, if your first iteration is on line 0.)
  *
  * Returns: whether @iter moved
- *
- * Since: 2.8
  **/
 gboolean
 gtk_text_iter_backward_visible_line (GtkTextIter *iter)
@@ -2791,8 +2784,6 @@ gtk_text_iter_backward_visible_line (GtkTextIter *iter)
  * moves backward by 0 - @count lines.
  *
  * Returns: whether @iter moved and is dereferenceable
- * 
- * Since: 2.8
  **/
 gboolean
 gtk_text_iter_forward_visible_lines (GtkTextIter *iter,
@@ -2831,8 +2822,6 @@ gtk_text_iter_forward_visible_lines (GtkTextIter *iter,
  * moves forward by 0 - @count lines.
  *
  * Returns: whether @iter moved and is dereferenceable
- *
- * Since: 2.8
  **/
 gboolean
 gtk_text_iter_backward_visible_lines (GtkTextIter *iter,
@@ -3297,8 +3286,6 @@ gtk_text_iter_backward_word_starts (GtkTextIter      *iter,
  * algorithms).
  * 
  * Returns: %TRUE if @iter moved and is not the end iterator 
- *
- * Since: 2.4
  **/
 gboolean
 gtk_text_iter_forward_visible_word_end (GtkTextIter *iter)
@@ -3317,8 +3304,6 @@ gtk_text_iter_forward_visible_word_end (GtkTextIter *iter)
  * algorithms).
  * 
  * Returns: %TRUE if @iter moved and is not the end iterator 
- * 
- * Since: 2.4
  **/
 gboolean
 gtk_text_iter_backward_visible_word_start (GtkTextIter      *iter)
@@ -3334,8 +3319,6 @@ gtk_text_iter_backward_visible_word_start (GtkTextIter      *iter)
  * Calls gtk_text_iter_forward_visible_word_end() up to @count times.
  *
  * Returns: %TRUE if @iter moved and is not the end iterator 
- *
- * Since: 2.4
  **/
 gboolean
 gtk_text_iter_forward_visible_word_ends (GtkTextIter *iter,
@@ -3354,8 +3337,6 @@ gtk_text_iter_forward_visible_word_ends (GtkTextIter *iter,
  * Calls gtk_text_iter_backward_visible_word_start() up to @count times.
  *
  * Returns: %TRUE if @iter moved and is not the end iterator 
- * 
- * Since: 2.4
  **/
 gboolean
 gtk_text_iter_backward_visible_word_starts (GtkTextIter *iter,
@@ -3691,8 +3672,6 @@ gtk_text_iter_backward_cursor_positions (GtkTextIter *iter,
  * gtk_text_iter_forward_cursor_position() for details.
  * 
  * Returns: %TRUE if we moved and the new position is dereferenceable
- * 
- * Since: 2.4
  **/
 gboolean
 gtk_text_iter_forward_visible_cursor_position (GtkTextIter *iter)
@@ -3708,8 +3687,6 @@ gtk_text_iter_forward_visible_cursor_position (GtkTextIter *iter)
  * gtk_text_iter_backward_cursor_position() for details.
  * 
  * Returns: %TRUE if we moved and the new position is dereferenceable
- * 
- * Since: 2.4
  **/
 gboolean
 gtk_text_iter_backward_visible_cursor_position (GtkTextIter *iter)
@@ -3726,8 +3703,6 @@ gtk_text_iter_backward_visible_cursor_position (GtkTextIter *iter)
  * gtk_text_iter_forward_cursor_position() for details.
  * 
  * Returns: %TRUE if we moved and the new position is dereferenceable
- * 
- * Since: 2.4
  **/
 gboolean
 gtk_text_iter_forward_visible_cursor_positions (GtkTextIter *iter,
@@ -3747,8 +3722,6 @@ gtk_text_iter_forward_visible_cursor_positions (GtkTextIter *iter,
  * gtk_text_iter_backward_cursor_position() for details.
  * 
  * Returns: %TRUE if we moved and the new position is dereferenceable
- * 
- * Since: 2.4
  **/
 gboolean
 gtk_text_iter_backward_visible_cursor_positions (GtkTextIter *iter,

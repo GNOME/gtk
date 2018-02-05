@@ -50,48 +50,48 @@ typedef struct _GdkContentSerializer GdkContentSerializer;
  */
 typedef void (* GdkContentSerializeFunc) (GdkContentSerializer *serializer);
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GType                   gdk_content_serializer_get_type                 (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 const char *            gdk_content_serializer_get_mime_type            (GdkContentSerializer   *serializer);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GType                   gdk_content_serializer_get_gtype                (GdkContentSerializer   *serializer);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 const GValue *          gdk_content_serializer_get_value                (GdkContentSerializer   *serializer);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GOutputStream *         gdk_content_serializer_get_output_stream        (GdkContentSerializer   *serializer);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 int                     gdk_content_serializer_get_priority             (GdkContentSerializer   *serializer);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GCancellable *          gdk_content_serializer_get_cancellable          (GdkContentSerializer   *serializer);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 gpointer                gdk_content_serializer_get_user_data            (GdkContentSerializer   *serializer);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void                    gdk_content_serializer_set_task_data            (GdkContentSerializer   *serializer,
                                                                          gpointer                data,
                                                                          GDestroyNotify          notify);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 gpointer                gdk_content_serializer_get_task_data            (GdkContentSerializer   *serializer);
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void                    gdk_content_serializer_return_success           (GdkContentSerializer   *serializer);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void                    gdk_content_serializer_return_error             (GdkContentSerializer   *serializer,
                                                                          GError                 *error);
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GdkContentFormats *     gdk_content_formats_union_serialize_gtypes      (GdkContentFormats      *formats);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GdkContentFormats *     gdk_content_formats_union_serialize_mime_types  (GdkContentFormats      *formats);
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void                    gdk_content_register_serializer                 (GType                   type,
                                                                          const char             *mime_type,
                                                                          GdkContentSerializeFunc serialize,
                                                                          gpointer                data,
                                                                          GDestroyNotify          notify);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void                    gdk_content_serialize_async                     (GOutputStream          *stream,
                                                                          const char             *mime_type,
                                                                          const GValue           *value,
@@ -99,7 +99,7 @@ void                    gdk_content_serialize_async                     (GOutput
                                                                          GCancellable           *cancellable,
                                                                          GAsyncReadyCallback     callback,
                                                                          gpointer                user_data);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 gboolean                gdk_content_serialize_finish                    (GAsyncResult           *result,
                                                                          GError                **error);
 

@@ -69,29 +69,29 @@ struct _GtkSearchBarClass
   void (*_gtk_reserved4) (void);
 };
 
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 GType       gtk_search_bar_get_type        (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 GtkWidget*  gtk_search_bar_new             (void);
 
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 void        gtk_search_bar_connect_entry   (GtkSearchBar *bar,
                                             GtkEntry     *entry);
 
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 gboolean    gtk_search_bar_get_search_mode (GtkSearchBar *bar);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 void        gtk_search_bar_set_search_mode (GtkSearchBar *bar,
                                             gboolean      search_mode);
 
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 gboolean    gtk_search_bar_get_show_close_button (GtkSearchBar *bar);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 void        gtk_search_bar_set_show_close_button (GtkSearchBar *bar,
                                                   gboolean      visible);
 
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 gboolean    gtk_search_bar_handle_event    (GtkSearchBar *bar,
                                             GdkEvent     *event);
 

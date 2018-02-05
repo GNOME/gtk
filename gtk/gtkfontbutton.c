@@ -508,8 +508,6 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
    * GtkFontButton:title:
    * 
    * The title of the font chooser dialog.
-   *
-   * Since: 2.4
    */
   g_object_class_install_property (gobject_class,
                                    PROP_TITLE,
@@ -524,8 +522,6 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
    * 
    * If this property is set to %TRUE, the label will be drawn 
    * in the selected font.
-   *
-   * Since: 2.4
    */
   g_object_class_install_property (gobject_class,
                                    PROP_USE_FONT,
@@ -540,8 +536,6 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
    * 
    * If this property is set to %TRUE, the label will be drawn 
    * with the selected font size.
-   *
-   * Since: 2.4
    */
   g_object_class_install_property (gobject_class,
                                    PROP_USE_SIZE,
@@ -562,8 +556,6 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
    * Note that this signal is only emitted when the user
    * changes the font. If you need to react to programmatic font changes
    * as well, use the notify::font signal.
-   *
-   * Since: 2.4
    */
   font_button_signals[FONT_SET] = g_signal_new (I_("font-set"),
                                                 G_TYPE_FROM_CLASS (gobject_class),
@@ -738,8 +730,6 @@ gtk_font_button_get_property (GObject    *object,
  * Creates a new font picker widget.
  *
  * Returns: a new font picker widget.
- *
- * Since: 2.4
  */
 GtkWidget *
 gtk_font_button_new (void)
@@ -754,8 +744,6 @@ gtk_font_button_new (void)
  * Creates a new font picker widget.
  *
  * Returns: a new font picker widget.
- *
- * Since: 2.4
  */
 GtkWidget *
 gtk_font_button_new_with_font (const gchar *fontname)
@@ -769,8 +757,6 @@ gtk_font_button_new_with_font (const gchar *fontname)
  * @title: a string containing the font chooser dialog title
  *
  * Sets the title for the font chooser dialog.  
- *
- * Since: 2.4
  */
 void
 gtk_font_button_set_title (GtkFontButton *font_button, 
@@ -797,8 +783,6 @@ gtk_font_button_set_title (GtkFontButton *font_button,
  * Retrieves the title of the font chooser dialog.
  *
  * Returns: an internal copy of the title string which must not be freed.
- *
- * Since: 2.4
  */
 const gchar*
 gtk_font_button_get_title (GtkFontButton *font_button)
@@ -815,8 +799,6 @@ gtk_font_button_get_title (GtkFontButton *font_button)
  * Returns whether the selected font is used in the label.
  *
  * Returns: whether the selected font is used in the label.
- *
- * Since: 2.4
  */
 gboolean
 gtk_font_button_get_use_font (GtkFontButton *font_button)
@@ -832,8 +814,6 @@ gtk_font_button_get_use_font (GtkFontButton *font_button)
  * @use_font: If %TRUE, font name will be written using font chosen.
  *
  * If @use_font is %TRUE, the font name will be written using the selected font.  
- *
- * Since: 2.4
  */
 void  
 gtk_font_button_set_use_font (GtkFontButton *font_button,
@@ -861,8 +841,6 @@ gtk_font_button_set_use_font (GtkFontButton *font_button,
  * Returns whether the selected size is used in the label.
  *
  * Returns: whether the selected size is used in the label.
- *
- * Since: 2.4
  */
 gboolean
 gtk_font_button_get_use_size (GtkFontButton *font_button)
@@ -878,8 +856,6 @@ gtk_font_button_get_use_size (GtkFontButton *font_button)
  * @use_size: If %TRUE, font name will be written using the selected size.
  *
  * If @use_size is %TRUE, the font name will be written using the selected size.
- *
- * Since: 2.4
  */
 void  
 gtk_font_button_set_use_size (GtkFontButton *font_button,

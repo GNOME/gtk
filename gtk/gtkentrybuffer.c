@@ -43,8 +43,6 @@
  * text to be stored in an alternate location, such as non-pageable memory,
  * useful in the case of important passwords. Or a derived class could 
  * integrate with an application’s concept of undo/redo.
- *
- * Since: 2.18
  */
 
 /* Initial size of buffer, in bytes */
@@ -342,8 +340,6 @@ gtk_entry_buffer_class_init (GtkEntryBufferClass *klass)
    * GtkEntryBuffer:text:
    *
    * The contents of the buffer.
-   *
-   * Since: 2.18
    */
   entry_buffer_props[PROP_TEXT] =
       g_param_spec_string ("text",
@@ -356,8 +352,6 @@ gtk_entry_buffer_class_init (GtkEntryBufferClass *klass)
    * GtkEntryBuffer:length:
    *
    * The length (in characters) of the text in buffer.
-   *
-   * Since: 2.18
    */
    entry_buffer_props[PROP_LENGTH] =
        g_param_spec_uint ("length",
@@ -370,8 +364,6 @@ gtk_entry_buffer_class_init (GtkEntryBufferClass *klass)
    * GtkEntryBuffer:max-length:
    *
    * The maximum length (in characters) of the text in the buffer.
-   *
-   * Since: 2.18
    */
   entry_buffer_props[PROP_MAX_LENGTH] =
       g_param_spec_int ("max-length",
@@ -390,8 +382,6 @@ gtk_entry_buffer_class_init (GtkEntryBufferClass *klass)
    * @n_chars: The number of characters that were inserted.
    *
    * This signal is emitted after text is inserted into the buffer.
-   *
-   * Since: 2.18
    */
   signals[INSERTED_TEXT] = g_signal_new (I_("inserted-text"),
                                          GTK_TYPE_ENTRY_BUFFER,
@@ -411,8 +401,6 @@ gtk_entry_buffer_class_init (GtkEntryBufferClass *klass)
    * @n_chars: The number of characters that were deleted.
    *
    * This signal is emitted after text is deleted from the buffer.
-   *
-   * Since: 2.18
    */
   signals[DELETED_TEXT] =  g_signal_new (I_("deleted-text"),
                                          GTK_TYPE_ENTRY_BUFFER,
@@ -439,8 +427,6 @@ gtk_entry_buffer_class_init (GtkEntryBufferClass *klass)
  * Optionally, specify initial text to set in the buffer.
  *
  * Returns: A new GtkEntryBuffer object.
- *
- * Since: 2.18
  **/
 GtkEntryBuffer*
 gtk_entry_buffer_new (const gchar *initial_chars,
@@ -459,8 +445,6 @@ gtk_entry_buffer_new (const gchar *initial_chars,
  * Retrieves the length in characters of the buffer.
  *
  * Returns: The number of characters in the buffer.
- *
- * Since: 2.18
  **/
 guint
 gtk_entry_buffer_get_length (GtkEntryBuffer *buffer)
@@ -483,8 +467,6 @@ gtk_entry_buffer_get_length (GtkEntryBuffer *buffer)
  * See gtk_entry_buffer_get_length().
  *
  * Returns: The byte length of the buffer.
- *
- * Since: 2.18
  **/
 gsize
 gtk_entry_buffer_get_bytes (GtkEntryBuffer *buffer)
@@ -514,8 +496,6 @@ gtk_entry_buffer_get_bytes (GtkEntryBuffer *buffer)
  *      string. This string points to internally allocated
  *      storage in the buffer and must not be freed, modified or
  *      stored.
- *
- * Since: 2.18
  **/
 const gchar*
 gtk_entry_buffer_get_text (GtkEntryBuffer *buffer)
@@ -542,8 +522,6 @@ gtk_entry_buffer_get_text (GtkEntryBuffer *buffer)
  * and gtk_entry_buffer_insert_text().
  *
  * Note that @n_chars is in characters, not in bytes.
- *
- * Since: 2.18
  **/
 void
 gtk_entry_buffer_set_text (GtkEntryBuffer *buffer,
@@ -569,8 +547,6 @@ gtk_entry_buffer_set_text (GtkEntryBuffer *buffer,
  * Sets the maximum allowed length of the contents of the buffer. If
  * the current contents are longer than the given length, then they
  * will be truncated to fit.
- *
- * Since: 2.18
  **/
 void
 gtk_entry_buffer_set_max_length (GtkEntryBuffer *buffer,
@@ -599,8 +575,6 @@ gtk_entry_buffer_set_max_length (GtkEntryBuffer *buffer,
  *
  * Returns: the maximum allowed number of characters
  *               in #GtkEntryBuffer, or 0 if there is no maximum.
- *
- * Since: 2.18
  */
 gint
 gtk_entry_buffer_get_max_length (GtkEntryBuffer *buffer)
@@ -627,8 +601,6 @@ gtk_entry_buffer_get_max_length (GtkEntryBuffer *buffer)
  * Note that the position and length are in characters, not in bytes.
  *
  * Returns: The number of characters actually inserted.
- *
- * Since: 2.18
  */
 guint
 gtk_entry_buffer_insert_text (GtkEntryBuffer *buffer,
@@ -686,8 +658,6 @@ gtk_entry_buffer_insert_text (GtkEntryBuffer *buffer,
  * Note that the positions are specified in characters, not bytes.
  *
  * Returns: The number of characters deleted.
- *
- * Since: 2.18
  */
 guint
 gtk_entry_buffer_delete_text (GtkEntryBuffer *buffer,
@@ -721,8 +691,6 @@ gtk_entry_buffer_delete_text (GtkEntryBuffer *buffer,
  * @n_chars: number of characters inserted
  *
  * Used when subclassing #GtkEntryBuffer
- *
- * Since: 2.18
  */
 void
 gtk_entry_buffer_emit_inserted_text (GtkEntryBuffer *buffer,
@@ -741,8 +709,6 @@ gtk_entry_buffer_emit_inserted_text (GtkEntryBuffer *buffer,
  * @n_chars: number of characters deleted
  *
  * Used when subclassing #GtkEntryBuffer
- *
- * Since: 2.18
  */
 void
 gtk_entry_buffer_emit_deleted_text (GtkEntryBuffer *buffer,

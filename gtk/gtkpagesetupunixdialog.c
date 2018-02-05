@@ -880,8 +880,6 @@ page_name_func (GtkCellLayout   *cell_layout,
  * Creates a new page setup dialog.
  *
  * Returns: the new #GtkPageSetupUnixDialog
- *
- * Since: 2.10
  */
 GtkWidget *
 gtk_page_setup_unix_dialog_new (const gchar *title,
@@ -948,8 +946,6 @@ set_orientation (GtkPageSetupUnixDialog *dialog,
  *
  * Sets the #GtkPageSetup from which the page setup
  * dialog takes its values.
- *
- * Since: 2.10
  **/
 void
 gtk_page_setup_unix_dialog_set_page_setup (GtkPageSetupUnixDialog *dialog,
@@ -969,8 +965,6 @@ gtk_page_setup_unix_dialog_set_page_setup (GtkPageSetupUnixDialog *dialog,
  * Gets the currently selected page setup from the dialog.
  *
  * Returns: (transfer none): the current page setup
- *
- * Since: 2.10
  **/
 GtkPageSetup *
 gtk_page_setup_unix_dialog_get_page_setup (GtkPageSetupUnixDialog *dialog)
@@ -1027,8 +1021,6 @@ set_active_printer (GtkPageSetupUnixDialog *dialog,
  *
  * Sets the #GtkPrintSettings from which the page setup dialog
  * takes its values.
- *
- * Since: 2.10
  **/
 void
 gtk_page_setup_unix_dialog_set_print_settings (GtkPageSetupUnixDialog *dialog,
@@ -1066,8 +1058,6 @@ gtk_page_setup_unix_dialog_set_print_settings (GtkPageSetupUnixDialog *dialog,
  * Gets the current print settings from the dialog.
  *
  * Returns: (transfer none): the current print settings
- *
- * Since: 2.10
  **/
 GtkPrintSettings *
 gtk_page_setup_unix_dialog_get_print_settings (GtkPageSetupUnixDialog *dialog)

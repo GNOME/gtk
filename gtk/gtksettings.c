@@ -388,8 +388,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * Setting this to zero has the same effect as setting
    * #GtkSettings:gtk-cursor-blink to %FALSE.
-   *
-   * Since: 2.12
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-cursor-blink-timeout",
@@ -550,8 +548,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * Controls the direction of the sort indicators in sorted list and tree
    * views. By default an arrow pointing down means the column is sorted
    * in ascending order. When set to %TRUE, this order will be inverted.
-   *
-   * Since: 2.12
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-alternative-sort-arrows",
@@ -580,8 +576,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * gdk_window_beep(), the windowing system may offer ways to
    * configure the error bell in many ways, such as flashing the
    * window or similar visual effects.
-   *
-   * Since: 2.12
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-error-bell",
@@ -599,8 +593,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * A comma-separated list of print backends to use in the print
    * dialog. Available print backends depend on the GTK+ installation,
    * and may include "file", "cups", "lpr" or "papi".
-   *
-   * Since: 2.10
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-print-backends",
@@ -623,8 +615,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * The preview application is responsible for removing the pdf file
    * and the print settings file when it is done.
-   *
-   * Since: 2.10
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-print-preview-command",
@@ -640,8 +630,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * Whether menu items should have visible accelerators which can be
    * activated.
-   *
-   * Since: 2.12
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-enable-accels",
@@ -679,8 +667,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * resources list. Items older than this setting will be excised
    * from the list. If set to 0, the list will always be empty; if
    * set to -1, no item will be removed.
-   *
-   * Since: 2.14
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-recent-files-max-age",
@@ -712,8 +698,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * GTK+ itself does not support event sounds, you have to use a loadable
    * module like the one that comes with libcanberra.
-   *
-   * Since: 2.14
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-sound-theme-name",
@@ -734,8 +718,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * GTK+ itself does not support event sounds, you have to use a loadable
    * module like the one that comes with libcanberra.
-   *
-   * Since: 2.14
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-enable-input-feedback-sounds",
@@ -757,8 +739,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * GTK+ itself does not support event sounds, you have to use a loadable
    * module like the one that comes with libcanberra.
-   *
-   * Since: 2.14
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-enable-event-sounds",
@@ -780,8 +760,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * Whichever action you choose for the primary button, the other action will
    * be available by holding Shift and primary-clicking, or (since GTK+ 3.22.25)
    * clicking the middle mouse button.
-   *
-   * Since: 3.6
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-primary-button-warps-slider",
@@ -806,8 +784,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * Dark themes should not be used for documents, where large spaces are white/light
    * and the dark chrome creates too much contrast (web browser, text editor...).
-   *
-   * Since: 3.0
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-application-prefer-dark-theme",
@@ -833,8 +809,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * How long to show the last input character in hidden
    * entries. This value is in milliseconds. 0 disables showing the
    * last char. 600 is a good value for enabling it.
-   *
-   * Since: 2.10
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_uint ("gtk-entry-password-hint-timeout",
@@ -908,8 +882,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * Also note that the setting can be overridden with the
    * #GtkHeaderBar:decoration-layout property.
-   *
-   * Since: 3.12
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-decoration-layout",
@@ -927,8 +899,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * Recognized actions are minimize, toggle-maximize, menu, lower
    * or none.
-   *
-   * Since: 3.14
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-titlebar-double-click",
@@ -946,8 +916,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * Recognized actions are minimize, toggle-maximize, menu, lower
    * or none.
-   *
-   * Since: 3.14
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-titlebar-middle-click",
@@ -965,8 +933,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * Recognized actions are minimize, toggle-maximize, menu, lower
    * or none.
-   *
-   * Since: 3.14
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-titlebar-right-click",
@@ -988,8 +954,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * This setting does not affect custom dialogs using GtkDialog
    * directly, or message dialogs.
-   *
-   * Since: 3.12
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-dialogs-use-header",
@@ -1005,8 +969,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * Whether a middle click on a mouse should paste the
    * 'PRIMARY' clipboard content at the cursor location.
-   *
-   * Since: 3.4
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-enable-primary-paste",
@@ -1022,8 +984,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * Whether GTK+ should keep track of items inside the recently used
    * resources list. If set to %FALSE, the list will always be empty.
-   *
-   * Since: 3.8
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-recent-files-enabled",
@@ -1038,8 +998,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * GtkSettings:gtk-long-press-time:
    *
    * The time for a button or touch press to be considered a "long press".
-   *
-   * Since: 3.14
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_uint ("gtk-long-press-time",
@@ -1056,8 +1014,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * Whether GTK+ should make sure that text can be navigated with
    * a caret, even if it is not editable. This is useful when using
    * a screen reader.
-   *
-   * Since: 3.20
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-keynav-use-caret",
@@ -1243,8 +1199,6 @@ gtk_settings_create_for_display (GdkDisplay *display)
  * Gets the #GtkSettings object for @display, creating it if necessary.
  *
  * Returns: (transfer none): a #GtkSettings object.
- *
- * Since: 3.94
  */
 GtkSettings *
 gtk_settings_get_for_display (GdkDisplay *display)
@@ -2622,8 +2576,6 @@ _gtk_settings_get_setting_source (GtkSettings *settings,
  * application-specific value for a setting. After this call,
  * the setting will again follow the session-wide value for
  * this setting.
- *
- * Since: 3.20
  */
 void
 gtk_settings_reset_property (GtkSettings *settings,

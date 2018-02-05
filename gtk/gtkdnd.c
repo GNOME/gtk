@@ -1033,8 +1033,6 @@ gtk_drag_begin_internal (GtkWidget          *widget,
  * gtk_drag_source_set() is used.
  *
  * Returns: (transfer none): the context for this drag
- *
- * Since: 3.10
  */
 GdkDragContext *
 gtk_drag_begin_with_coordinates (GtkWidget         *widget,
@@ -1257,8 +1255,6 @@ gtk_drag_set_icon_texture (GdkDragContext *context,
  * size of the icon depends on the icon theme (the icon is
  * loaded at the symbolic size #GTK_ICON_SIZE_DND), thus 
  * @hot_x and @hot_y have to be used with care.
- *
- * Since: 2.8
  */
 void 
 gtk_drag_set_icon_name (GdkDragContext *context,
@@ -1288,8 +1284,6 @@ gtk_drag_set_icon_name (GdkDragContext *context,
  * Sets the icon for a given drag from the given @icon.
  * See the documentation for gtk_drag_set_icon_name()
  * for more details about using icons in drag and drop.
- *
- * Since: 3.2
  */
 void 
 gtk_drag_set_icon_gicon (GdkDragContext *context,
@@ -1535,8 +1529,6 @@ gtk_drag_check_threshold (GtkWidget *widget,
  *
  * If a drag is cancelled in this way, the @result argument of
  * #GtkWidget::drag-failed is set to @GTK_DRAG_RESULT_ERROR.
- *
- * Since: 3.16
  */
 void
 gtk_drag_cancel (GdkDragContext *context)

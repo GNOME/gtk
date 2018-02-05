@@ -696,8 +696,6 @@ gtk_file_chooser_dialog_new_valist (const gchar          *title,
  * gtk_dialog_new_with_buttons().
  *
  * Returns: a new #GtkFileChooserDialog
- *
- * Since: 2.4
  **/
 GtkWidget *
 gtk_file_chooser_dialog_new (const gchar          *title,

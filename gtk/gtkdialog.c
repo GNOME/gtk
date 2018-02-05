@@ -576,8 +576,6 @@ gtk_dialog_class_init (GtkDialogClass *class)
    *
    * For technical reasons, this property is declared as an integer
    * property, but you should only set it to %TRUE or %FALSE.
-   *
-   * Since: 3.12
    */
   g_object_class_install_property (gobject_class,
                                    PROP_USE_HEADER_BAR,
@@ -1250,8 +1248,6 @@ gtk_dialog_run (GtkDialog *dialog)
  *
  * Returns: (nullable) (transfer none): the @widget button that uses the given
  *     @response_id, or %NULL.
- *
- * Since: 2.20
  */
 GtkWidget*
 gtk_dialog_get_widget_for_response (GtkDialog *dialog,
@@ -1294,8 +1290,6 @@ gtk_dialog_get_widget_for_response (GtkDialog *dialog,
  *
  * Returns: the response id of @widget, or %GTK_RESPONSE_NONE
  *  if @widget doesn’t have a response id set.
- *
- * Since: 2.8
  */
 gint
 gtk_dialog_get_response_for_widget (GtkDialog *dialog,
@@ -1595,8 +1589,6 @@ gtk_dialog_get_action_area (GtkDialog *dialog)
  * #GtkDialog:use-header-bar property is %TRUE.
  *
  * Returns: (transfer none): the header bar
- *
- * Since: 3.12
  */
 GtkWidget *
 gtk_dialog_get_header_bar (GtkDialog *dialog)
@@ -1613,8 +1605,6 @@ gtk_dialog_get_header_bar (GtkDialog *dialog)
  * Returns the content area of @dialog.
  *
  * Returns: (type Gtk.Box) (transfer none): the content area #GtkBox.
- *
- * Since: 2.14
  **/
 GtkWidget *
 gtk_dialog_get_content_area (GtkDialog *dialog)

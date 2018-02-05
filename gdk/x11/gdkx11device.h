@@ -26,7 +26,7 @@
 
 G_BEGIN_DECLS
 
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 gint  gdk_x11_device_get_id  (GdkDevice *device);
 
 G_END_DECLS

@@ -956,8 +956,6 @@ gtk_scale_get_property (GObject      *object,
  * Creates a new #GtkScale.
  *
  * Returns: a new #GtkScale
- *
- * Since: 3.0
  **/
 GtkWidget *
 gtk_scale_new (GtkOrientation  orientation,
@@ -990,8 +988,6 @@ gtk_scale_new (GtkOrientation  orientation,
  * needs, use gtk_scale_set_digits() to correct it.
  *
  * Returns: a new #GtkScale
- *
- * Since: 3.0
  */
 GtkWidget *
 gtk_scale_new_with_range (GtkOrientation orientation,
@@ -1191,8 +1187,6 @@ gtk_scale_get_draw_value (GtkScale *scale)
  * If #GtkScale:has-origin is set to %TRUE (the default), the scale will
  * highlight the part of the trough between the origin (bottom or left side)
  * and the current value.
- *
- * Since: 3.4
  */
 void
 gtk_scale_set_has_origin (GtkScale *scale,
@@ -1219,8 +1213,6 @@ gtk_scale_set_has_origin (GtkScale *scale,
  * Returns whether the scale has an origin.
  *
  * Returns: %TRUE if the scale has an origin.
- * 
- * Since: 3.4
  */
 gboolean
 gtk_scale_get_has_origin (GtkScale *scale)
@@ -1614,8 +1606,6 @@ gtk_scale_finalize (GObject *object)
  *
  * Returns: (transfer none) (nullable): the #PangoLayout for this scale,
  *     or %NULL if the #GtkScale:draw-value property is %FALSE.
- *
- * Since: 2.4
  */
 PangoLayout *
 gtk_scale_get_layout (GtkScale *scale)
@@ -1641,8 +1631,6 @@ gtk_scale_get_layout (GtkScale *scale)
  *
  * If the #GtkScale:draw-value property is %FALSE, the return 
  * values are undefined.
- *
- * Since: 2.4
  */
 void 
 gtk_scale_get_layout_offsets (GtkScale *scale,
@@ -1683,8 +1671,6 @@ gtk_scale_mark_free (gpointer data)
  * @scale: a #GtkScale
  * 
  * Removes any marks that have been added with gtk_scale_add_mark().
- *
- * Since: 2.16
  */
 void
 gtk_scale_clear_marks (GtkScale *scale)
@@ -1741,8 +1727,6 @@ gtk_scale_clear_marks (GtkScale *scale)
  * If @markup is not %NULL, text is shown next to the tick mark.
  *
  * To remove marks from a scale, use gtk_scale_clear_marks().
- *
- * Since: 2.16
  */
 void
 gtk_scale_add_mark (GtkScale        *scale,

@@ -174,8 +174,6 @@ gdk_drawing_context_class_init (GdkDrawingContextClass *klass)
    * GdkDrawingContext:window:
    *
    * The #GdkWindow that created the drawing context.
-   *
-   * Since: 3.22
    */
   obj_property[PROP_WINDOW] =
     g_param_spec_object ("window", "Window", "The window that created the context",
@@ -187,8 +185,6 @@ gdk_drawing_context_class_init (GdkDrawingContextClass *klass)
    * GdkDrawingContext:clip:
    *
    * The clip region applied to the drawing context.
-   *
-   * Since: 3.22
    */
   obj_property[PROP_CLIP] =
     g_param_spec_boxed ("clip", "Clip", "The clip region of the context",
@@ -200,8 +196,6 @@ gdk_drawing_context_class_init (GdkDrawingContextClass *klass)
    * GdkDrawingContext:paint-context:
    *
    * The #GdkDrawContext used to draw or %NULL if Cairo is used.
-   *
-   * Since: 3.90
    */
   obj_property[PROP_PAINT_CONTEXT] =
     g_param_spec_object ("paint-context", "Paint context", "The context used to draw",
@@ -235,8 +229,6 @@ gdk_cairo_set_drawing_context (cairo_t           *cr,
  * context @cr.
  *
  * Returns: (transfer none) (nullable): a #GdkDrawingContext, if any is set
- *
- * Since: 3.22
  */
 GdkDrawingContext *
 gdk_cairo_get_drawing_context (cairo_t *cr)
@@ -264,8 +256,6 @@ gdk_cairo_get_drawing_context (cairo_t *cr)
  *   the contents of the #GdkWindow. The context is owned by the
  *   #GdkDrawingContext and should not be destroyed. %NULL is
  *   returned when a paint context is in used.
- *
- * Since: 3.22
  */
 cairo_t *
 gdk_drawing_context_get_cairo_context (GdkDrawingContext *context)
@@ -307,8 +297,6 @@ gdk_drawing_context_get_cairo_context (GdkDrawingContext *context)
  * Retrieves the window that created the drawing @context.
  *
  * Returns: (transfer none): a #GdkWindow
- *
- * Since: 3.22
  */
 GdkWindow *
 gdk_drawing_context_get_window (GdkDrawingContext *context)
@@ -327,8 +315,6 @@ gdk_drawing_context_get_window (GdkDrawingContext *context)
  * Retrieves the paint context used to draw with.
  *
  * Returns: (transfer none): a #GdkDrawContext or %NULL
- *
- * Since: 3.90
  */
 GdkDrawContext *
 gdk_drawing_context_get_paint_context (GdkDrawingContext *context)
@@ -347,8 +333,6 @@ gdk_drawing_context_get_paint_context (GdkDrawingContext *context)
  * Retrieves a copy of the clip region used when creating the @context.
  *
  * Returns: (transfer full) (nullable): a Cairo region
- *
- * Since: 3.22
  */
 cairo_region_t *
 gdk_drawing_context_get_clip (GdkDrawingContext *context)
@@ -370,8 +354,6 @@ gdk_drawing_context_get_clip (GdkDrawingContext *context)
  * Checks whether the given #GdkDrawingContext is valid.
  *
  * Returns: %TRUE if the context is valid
- *
- * Since: 3.22
  */
 gboolean
 gdk_drawing_context_is_valid (GdkDrawingContext *context)

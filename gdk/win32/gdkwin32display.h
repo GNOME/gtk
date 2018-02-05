@@ -52,12 +52,12 @@ typedef struct _GdkWin32DisplayClass GdkWin32DisplayClass;
 GDK_AVAILABLE_IN_ALL
 GType      gdk_win32_display_get_type            (void);
 
-GDK_AVAILABLE_IN_3_18
+GDK_AVAILABLE_IN_ALL
 void       gdk_win32_display_set_cursor_theme    (GdkDisplay  *display,
                                                   const gchar *name,
                                                   gint         size);
 
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 HCURSOR    gdk_win32_display_get_hcursor         (GdkDisplay  *display,
                                                   GdkCursor   *cursor);
 

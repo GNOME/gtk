@@ -271,8 +271,6 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
  * Creates a new #GtkRevealer.
  *
  * Returns: a newly created #GtkRevealer
- *
- * Since: 3.10
  */
 GtkWidget *
 gtk_revealer_new (void)
@@ -497,8 +495,6 @@ gtk_revealer_start_animation (GtkRevealer *revealer,
  *
  * The transition will be animated with the current
  * transition type of @revealer.
- *
- * Since: 3.10
  */
 void
 gtk_revealer_set_reveal_child (GtkRevealer *revealer,
@@ -525,8 +521,6 @@ gtk_revealer_set_reveal_child (GtkRevealer *revealer,
  * use gtk_revealer_get_child_revealed().
  *
  * Returns: %TRUE if the child is revealed.
- *
- * Since: 3.10
  */
 gboolean
 gtk_revealer_get_reveal_child (GtkRevealer *revealer)
@@ -546,8 +540,6 @@ gtk_revealer_get_reveal_child (GtkRevealer *revealer)
  * the transition to the revealed state is completed.
  *
  * Returns: %TRUE if the child is fully revealed
- *
- * Since: 3.10
  */
 gboolean
 gtk_revealer_get_child_revealed (GtkRevealer *revealer)
@@ -662,8 +654,6 @@ gtk_revealer_snapshot (GtkWidget   *widget,
  * transitions will take.
  *
  * Returns: the transition duration
- *
- * Since: 3.10
  */
 guint
 gtk_revealer_get_transition_duration (GtkRevealer *revealer)
@@ -681,8 +671,6 @@ gtk_revealer_get_transition_duration (GtkRevealer *revealer)
  * @duration: the new duration, in milliseconds
  *
  * Sets the duration that transitions will take.
- *
- * Since: 3.10
  */
 void
 gtk_revealer_set_transition_duration (GtkRevealer *revealer,
@@ -707,8 +695,6 @@ gtk_revealer_set_transition_duration (GtkRevealer *revealer,
  * for transitions in @revealer.
  *
  * Returns: the current transition type of @revealer
- *
- * Since: 3.10
  */
 GtkRevealerTransitionType
 gtk_revealer_get_transition_type (GtkRevealer *revealer)
@@ -728,8 +714,6 @@ gtk_revealer_get_transition_type (GtkRevealer *revealer)
  * Sets the type of animation that will be used for
  * transitions in @revealer. Available types include
  * various kinds of fades and slides.
- *
- * Since: 3.10
  */
 void
 gtk_revealer_set_transition_type (GtkRevealer               *revealer,

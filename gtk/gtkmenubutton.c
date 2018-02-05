@@ -485,8 +485,6 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
    * GtkMenuButton:popup:
    *
    * The #GtkMenu that will be popped up when the button is clicked.
-   *
-   * Since: 3.6
    */
   menu_button_props[PROP_POPUP] =
       g_param_spec_object ("popup",
@@ -504,8 +502,6 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
    *
    * See gtk_menu_button_set_menu_model() for the interaction with the
    * #GtkMenuButton:popup property.
-   *
-   * Since: 3.6
    */
   menu_button_props[PROP_MENU_MODEL] =
       g_param_spec_object ("menu-model",
@@ -518,8 +514,6 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
    * GtkMenuButton:align-widget:
    *
    * The #GtkWidget to use to align the menu with.
-   *
-   * Since: 3.6
    */
   menu_button_props[PROP_ALIGN_WIDGET] =
       g_param_spec_object ("align-widget",
@@ -533,8 +527,6 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
    *
    * The #GtkArrowType representing the direction in which the
    * menu or popover will be popped out.
-   *
-   * Since: 3.6
    */
   menu_button_props[PROP_DIRECTION] =
       g_param_spec_enum ("direction",
@@ -549,8 +541,6 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
    *
    * Whether to construct a #GtkPopover from the menu model,
    * or a #GtkMenu.
-   *
-   * Since: 3.12
    */
   menu_button_props[PROP_USE_POPOVER] =
       g_param_spec_boolean ("use-popover",
@@ -563,8 +553,6 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
    * GtkMenuButton:popover:
    *
    * The #GtkPopover that will be popped up when the button is clicked.
-   *
-   * Since: 3.12
    */
   menu_button_props[PROP_POPOVER] =
       g_param_spec_object ("popover",
@@ -643,8 +631,6 @@ gtk_menu_button_init (GtkMenuButton *menu_button)
  * with another #GtkWidget should you wish to.
  *
  * Returns: The newly created #GtkMenuButton widget
- *
- * Since: 3.6
  */
 GtkWidget *
 gtk_menu_button_new (void)
@@ -748,8 +734,6 @@ _gtk_menu_button_set_popup_with_func (GtkMenuButton                 *menu_button
  * Sets the #GtkMenu that will be popped up when the button is clicked,
  * or %NULL to disable the button. If #GtkMenuButton:menu-model or
  * #GtkMenuButton:popover are set, they will be set to %NULL.
- *
- * Since: 3.6
  */
 void
 gtk_menu_button_set_popup (GtkMenuButton *menu_button,
@@ -783,8 +767,6 @@ gtk_menu_button_set_popup (GtkMenuButton *menu_button,
  * returns %NULL.
  *
  * Returns: (nullable) (transfer none): a #GtkMenu or %NULL
- *
- * Since: 3.6
  */
 GtkMenu *
 gtk_menu_button_get_popup (GtkMenuButton *menu_button)
@@ -809,8 +791,6 @@ gtk_menu_button_get_popup (GtkMenuButton *menu_button)
  *
  * If #GtkMenuButton:popup or #GtkMenuButton:popover are already set,
  * their content will be lost and replaced by the newly created popup.
- *
- * Since: 3.6
  */
 void
 gtk_menu_button_set_menu_model (GtkMenuButton *menu_button,
@@ -865,8 +845,6 @@ gtk_menu_button_set_menu_model (GtkMenuButton *menu_button,
  * Returns the #GMenuModel used to generate the popup.
  *
  * Returns: (nullable) (transfer none): a #GMenuModel or %NULL
- *
- * Since: 3.6
  */
 GMenuModel *
 gtk_menu_button_get_menu_model (GtkMenuButton *menu_button)
@@ -906,8 +884,6 @@ set_align_widget_pointer (GtkMenuButton *menu_button,
  *
  * Note that this property is only used with menus currently,
  * and not for popovers.
- *
- * Since: 3.6
  */
 void
 gtk_menu_button_set_align_widget (GtkMenuButton *menu_button,
@@ -934,8 +910,6 @@ gtk_menu_button_set_align_widget (GtkMenuButton *menu_button,
  * Returns the parent #GtkWidget to use to line up with menu.
  *
  * Returns: (nullable) (transfer none): a #GtkWidget value or %NULL
- *
- * Since: 3.6
  */
 GtkWidget *
 gtk_menu_button_get_align_widget (GtkMenuButton *menu_button)
@@ -987,8 +961,6 @@ update_popover_direction (GtkMenuButton *menu_button)
  *
  * If you pass %GTK_ARROW_NONE for a @direction, the popup will behave
  * as if you passed %GTK_ARROW_DOWN (although you won’t see any arrows).
- *
- * Since: 3.6
  */
 void
 gtk_menu_button_set_direction (GtkMenuButton *menu_button,
@@ -1021,8 +993,6 @@ gtk_menu_button_set_direction (GtkMenuButton *menu_button,
  * Returns the direction the popup will be pointing at when popped up.
  *
  * Returns: a #GtkArrowType value
- *
- * Since: 3.6
  */
 GtkArrowType
 gtk_menu_button_get_direction (GtkMenuButton *menu_button)
@@ -1067,8 +1037,6 @@ gtk_menu_button_dispose (GObject *object)
  * Sets whether to construct a #GtkPopover instead of #GtkMenu
  * when gtk_menu_button_set_menu_model() is called. Note that
  * this property is only consulted when a new menu model is set.
- *
- * Since: 3.12
  */
 void
 gtk_menu_button_set_use_popover (GtkMenuButton *menu_button,
@@ -1105,8 +1073,6 @@ gtk_menu_button_set_use_popover (GtkMenuButton *menu_button,
  * from the menu model.
  *
  * Returns: %TRUE if using a #GtkPopover
- *
- * Since: 3.12
  */
 gboolean
 gtk_menu_button_get_use_popover (GtkMenuButton *menu_button)
@@ -1124,8 +1090,6 @@ gtk_menu_button_get_use_popover (GtkMenuButton *menu_button)
  * Sets the #GtkPopover that will be popped up when the button is
  * clicked, or %NULL to disable the button. If #GtkMenuButton:menu-model
  * or #GtkMenuButton:popup are set, they will be set to %NULL.
- *
- * Since: 3.12
  */
 void
 gtk_menu_button_set_popover (GtkMenuButton *menu_button,
@@ -1182,8 +1146,6 @@ gtk_menu_button_set_popover (GtkMenuButton *menu_button,
  * returns %NULL.
  *
  * Returns: (nullable) (transfer none): a #GtkPopover or %NULL
- *
- * Since: 3.12
  */
 GtkPopover *
 gtk_menu_button_get_popover (GtkMenuButton *menu_button)

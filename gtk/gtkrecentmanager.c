@@ -136,8 +136,6 @@ typedef struct
  *
  * #GtkRecentInfo constains all the meta-data
  * associated with an entry in the recently used files list.
- *
- * Since: 2.10
  */
 struct _GtkRecentInfo
 {
@@ -277,8 +275,6 @@ gtk_recent_manager_class_init (GtkRecentManagerClass *klass)
    *
    * The full path to the file to be used to store and read the
    * recently used resources list
-   *
-   * Since: 2.10
    */
   g_object_class_install_property (gobject_class,
                                    PROP_FILENAME,
@@ -292,8 +288,6 @@ gtk_recent_manager_class_init (GtkRecentManagerClass *klass)
    * GtkRecentManager:size:
    *
    * The size of the recently used resources list.
-   *
-   * Since: 2.10
    */
   g_object_class_install_property (gobject_class,
                                    PROP_SIZE,
@@ -310,8 +304,6 @@ gtk_recent_manager_class_init (GtkRecentManagerClass *klass)
    * Emitted when the current recently used resources manager changes
    * its contents, either by calling gtk_recent_manager_add_item() or
    * by another application.
-   *
-   * Since: 2.10
    */
   signal_changed =
     g_signal_new (I_("changed"),
@@ -738,8 +730,6 @@ build_recent_items_list (GtkRecentManager *manager)
  * needed. You should use gtk_recent_manager_get_default() instead.
  *
  * Returns: A newly created #GtkRecentManager object
- *
- * Since: 2.10
  */
 GtkRecentManager *
 gtk_recent_manager_new (void)
@@ -755,8 +745,6 @@ gtk_recent_manager_new (void)
  *
  * Returns: (transfer none): A unique #GtkRecentManager. Do not ref or
  *   unref it.
- *
- * Since: 2.10
  */
 GtkRecentManager *
 gtk_recent_manager_get_default (void)
@@ -845,8 +833,6 @@ gtk_recent_manager_add_item_query_info (GObject      *source_object,
  *
  * Returns: %TRUE if the new item was successfully added
  *   to the recently used resources list
- *
- * Since: 2.10
  */
 gboolean
 gtk_recent_manager_add_item (GtkRecentManager *manager,
@@ -900,8 +886,6 @@ gtk_recent_manager_add_item (GtkRecentManager *manager,
  *
  * Returns: %TRUE if the new item was successfully added to the
  *     recently used resources list, %FALSE otherwise
- *
- * Since: 2.10
  */
 gboolean
 gtk_recent_manager_add_full (GtkRecentManager    *manager,
@@ -1024,8 +1008,6 @@ gtk_recent_manager_add_full (GtkRecentManager    *manager,
  *
  * Returns: %TRUE if the item pointed by @uri has been successfully
  *   removed by the recently used resources list, and %FALSE otherwise
- *
- * Since: 2.10
  */
 gboolean
 gtk_recent_manager_remove_item (GtkRecentManager  *manager,
@@ -1082,8 +1064,6 @@ gtk_recent_manager_remove_item (GtkRecentManager  *manager,
  * with @uri inside the recent manager.
  *
  * Returns: %TRUE if the resource was found, %FALSE otherwise
- *
- * Since: 2.10
  */
 gboolean
 gtk_recent_manager_has_item (GtkRecentManager *manager,
@@ -1175,8 +1155,6 @@ build_recent_info (GBookmarkFile *bookmarks,
  *   about the resource pointed by @uri, or %NULL if the URI was
  *   not registered in the recently used resources list. Free with
  *   gtk_recent_info_unref().
- *
- * Since: 2.10
  */
 GtkRecentInfo *
 gtk_recent_manager_lookup_item (GtkRecentManager  *manager,
@@ -1238,8 +1216,6 @@ gtk_recent_manager_lookup_item (GtkRecentManager  *manager,
  * by the URIs, but only the URI used in the recently used resources list.
  *
  * Returns: %TRUE on success
- *
- * Since: 2.10
  */
 gboolean
 gtk_recent_manager_move_item (GtkRecentManager  *recent_manager,
@@ -1305,8 +1281,6 @@ gtk_recent_manager_move_item (GtkRecentManager  *recent_manager,
  *   newly allocated #GtkRecentInfo objects. Use
  *   gtk_recent_info_unref() on each item inside the list, and then
  *   free the list itself using g_list_free().
- *
- * Since: 2.10
  */
 GList *
 gtk_recent_manager_get_items (GtkRecentManager *manager)
@@ -1365,8 +1339,6 @@ purge_recent_items_list (GtkRecentManager  *manager,
  *
  * Returns: the number of items that have been removed from the
  *   recently used resources list
- *
- * Since: 2.10
  */
 gint
 gtk_recent_manager_purge_items (GtkRecentManager  *manager,
@@ -1550,8 +1522,6 @@ gtk_recent_info_free (GtkRecentInfo *recent_info)
  *
  * Returns: the recent info object with its reference count
  *     increased by one
- *
- * Since: 2.10
  */
 GtkRecentInfo *
 gtk_recent_info_ref (GtkRecentInfo *info)
@@ -1570,8 +1540,6 @@ gtk_recent_info_ref (GtkRecentInfo *info)
  *
  * Decreases the reference count of @info by one. If the reference
  * count reaches zero, @info is deallocated, and the memory freed.
- *
- * Since: 2.10
  */
 void
 gtk_recent_info_unref (GtkRecentInfo *info)
@@ -1593,8 +1561,6 @@ gtk_recent_info_unref (GtkRecentInfo *info)
  *
  * Returns: the URI of the resource. The returned string is
  *   owned by the recent manager, and should not be freed.
- *
- * Since: 2.10
  */
 const gchar *
 gtk_recent_info_get_uri (GtkRecentInfo *info)
@@ -1613,8 +1579,6 @@ gtk_recent_info_get_uri (GtkRecentInfo *info)
  *
  * Returns: the display name of the resource. The returned string
  *   is owned by the recent manager, and should not be freed.
- *
- * Since: 2.10
  */
 const gchar *
 gtk_recent_info_get_display_name (GtkRecentInfo *info)
@@ -1635,8 +1599,6 @@ gtk_recent_info_get_display_name (GtkRecentInfo *info)
  *
  * Returns: the description of the resource. The returned string
  *   is owned by the recent manager, and should not be freed.
- *
- * Since: 2.10
  **/
 const gchar *
 gtk_recent_info_get_description (GtkRecentInfo *info)
@@ -1654,8 +1616,6 @@ gtk_recent_info_get_description (GtkRecentInfo *info)
  *
  * Returns: the MIME type of the resource. The returned string
  *   is owned by the recent manager, and should not be freed.
- *
- * Since: 2.10
  */
 const gchar *
 gtk_recent_info_get_mime_type (GtkRecentInfo *info)
@@ -1677,8 +1637,6 @@ gtk_recent_info_get_mime_type (GtkRecentInfo *info)
  *
  * Returns: the number of seconds elapsed from system’s Epoch when
  *   the resource was added to the list, or -1 on failure.
- *
- * Since: 2.10
  */
 time_t
 gtk_recent_info_get_added (GtkRecentInfo *info)
@@ -1697,8 +1655,6 @@ gtk_recent_info_get_added (GtkRecentInfo *info)
  *
  * Returns: the number of seconds elapsed from system’s Epoch when
  *   the resource was last modified, or -1 on failure.
- *
- * Since: 2.10
  */
 time_t
 gtk_recent_info_get_modified (GtkRecentInfo *info)
@@ -1717,8 +1673,6 @@ gtk_recent_info_get_modified (GtkRecentInfo *info)
  *
  * Returns: the number of seconds elapsed from system’s Epoch when
  *   the resource was last visited, or -1 on failure.
- *
- * Since: 2.10
  */
 time_t
 gtk_recent_info_get_visited (GtkRecentInfo *info)
@@ -1737,8 +1691,6 @@ gtk_recent_info_get_visited (GtkRecentInfo *info)
  * applications that have registered them.
  *
  * Returns: %TRUE if the private flag was found, %FALSE otherwise
- *
- * Since: 2.10
  */
 gboolean
 gtk_recent_info_get_private_hint (GtkRecentInfo *info)
@@ -1797,8 +1749,6 @@ recent_app_info_free (RecentAppInfo *app_info)
  *   resource inside the recently used list, or %FALSE otherwise. The
  *   @app_exec string is owned by the #GtkRecentInfo and should not be
  *   modified or freed
- *
- * Since: 2.10
  */
 gboolean
 gtk_recent_info_get_application_info (GtkRecentInfo  *info,
@@ -1845,8 +1795,6 @@ gtk_recent_info_get_application_info (GtkRecentInfo  *info,
  * Returns: (array length=length zero-terminated=1) (transfer full):
  *     a newly allocated %NULL-terminated array of strings.
  *     Use g_strfreev() to free it.
- *
- * Since: 2.10
  */
 gchar **
 gtk_recent_info_get_applications (GtkRecentInfo *info,
@@ -1897,8 +1845,6 @@ gtk_recent_info_get_applications (GtkRecentInfo *info,
  *
  * Returns: %TRUE if an application with name @app_name was found,
  *   %FALSE otherwise
- *
- * Since: 2.10
  */
 gboolean
 gtk_recent_info_has_application (GtkRecentInfo *info,
@@ -1918,8 +1864,6 @@ gtk_recent_info_has_application (GtkRecentInfo *info,
  * recently used resource represented by @info.
  *
  * Returns: an application name. Use g_free() to free it.
- *
- * Since: 2.10
  */
 gchar *
 gtk_recent_info_last_application (GtkRecentInfo *info)
@@ -1952,8 +1896,6 @@ gtk_recent_info_last_application (GtkRecentInfo *info)
  *
  * Returns: (nullable) (transfer full): a #GIcon containing the icon, or %NULL.
  *   Use g_object_unref() when finished using the icon
- *
- * Since: 2.22
  */
 GIcon *
 gtk_recent_info_get_gicon (GtkRecentInfo *info)
@@ -1989,8 +1931,6 @@ gtk_recent_info_get_gicon (GtkRecentInfo *info)
  * scheme of its URI.
  *
  * Returns: %TRUE if the resource is local
- *
- * Since: 2.10
  */
 gboolean
 gtk_recent_info_is_local (GtkRecentInfo *info)
@@ -2009,8 +1949,6 @@ gtk_recent_info_is_local (GtkRecentInfo *info)
  * to local files.
  *
  * Returns: %TRUE if the resource exists
- *
- * Since: 2.10
  */
 gboolean
 gtk_recent_info_exists (GtkRecentInfo *info)
@@ -2047,8 +1985,6 @@ gtk_recent_info_exists (GtkRecentInfo *info)
  *
  * Returns: %TRUE if both #GtkRecentInfo-struct point to the same
  *   resource, %FALSE otherwise
- *
- * Since: 2.10
  */
 gboolean
 gtk_recent_info_match (GtkRecentInfo *info_a,
@@ -2195,8 +2131,6 @@ get_uri_shortname_for_display (const gchar *uri)
  *
  * Returns: A newly-allocated string in UTF-8 encoding
  *   free it with g_free()
- *
- * Since: 2.10
  */
 gchar *
 gtk_recent_info_get_short_name (GtkRecentInfo *info)
@@ -2223,8 +2157,6 @@ gtk_recent_info_get_short_name (GtkRecentInfo *info)
  *
  * Returns: (nullable): a newly allocated UTF-8 string containing the
  *   resource’s URI or %NULL. Use g_free() when done using it.
- *
- * Since: 2.10
  */
 gchar *
 gtk_recent_info_get_uri_display (GtkRecentInfo *info)
@@ -2262,8 +2194,6 @@ gtk_recent_info_get_uri_display (GtkRecentInfo *info)
  *
  * Returns: a positive integer containing the number of days
  *   elapsed since the time this resource was last modified
- *
- * Since: 2.10
  */
 gint
 gtk_recent_info_get_age (GtkRecentInfo *info)
@@ -2294,8 +2224,6 @@ gtk_recent_info_get_age (GtkRecentInfo *info)
  * Returns: (array length=length zero-terminated=1) (transfer full):
  *   a newly allocated %NULL terminated array of strings.
  *   Use g_strfreev() to free it.
- *
- * Since: 2.10
  */
 gchar **
 gtk_recent_info_get_groups (GtkRecentInfo *info,
@@ -2346,8 +2274,6 @@ gtk_recent_info_get_groups (GtkRecentInfo *info,
  * registered for the recently used item @info.
  *
  * Returns: %TRUE if the group was found
- *
- * Since: 2.10
  */
 gboolean
 gtk_recent_info_has_group (GtkRecentInfo *info,

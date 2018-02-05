@@ -508,8 +508,6 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
    *
    * The ::wrapped signal is emitted right after the spinbutton wraps
    * from its maximum to minimum value or vice-versa.
-   *
-   * Since: 2.10
    */
   spinbutton_signals[WRAPPED] =
     g_signal_new (I_("wrapped"),
@@ -2269,8 +2267,6 @@ gtk_spin_button_update (GtkSpinButton *spin_button)
  * @spin_button: a #GtkSpinButton
  *
  * Returns: (transfer none): The current text shown in the entry area of @spin_button.
- *
- * Since: 3.92
  */
 const char *
 gtk_spin_button_get_text (GtkSpinButton *spin_button)
@@ -2289,8 +2285,6 @@ gtk_spin_button_get_text (GtkSpinButton *spin_button)
  *
  * Sets the current text of the spinbutton. Note that setting this will not change
  * the value of the adjustment @spin_button.
- *
- * Since: 3.92
  */
 void
 gtk_spin_button_set_text (GtkSpinButton *spin_button,
@@ -2316,8 +2310,6 @@ gtk_spin_button_set_text (GtkSpinButton *spin_button,
  * See also #GtkEntry:max-width-chars
  *
  * Returns: the maximum width of the spin button, in characters
- *
- * Since: 3.92
  */
 int
 gtk_spin_button_get_max_width_chars (GtkSpinButton *spin_button)
@@ -2337,8 +2329,6 @@ gtk_spin_button_get_max_width_chars (GtkSpinButton *spin_button)
  * Sets the desired maximum width of @spin_button, in characters.
  * Note that this only applies to the entry area of @spin_button, not the
  * spin button. This is especially important for horizontal spinbuttons.
- *
- * Since: 3.92
  */
 void
 gtk_spin_button_set_max_width_chars (GtkSpinButton *spin_button,
@@ -2364,8 +2354,6 @@ gtk_spin_button_set_max_width_chars (GtkSpinButton *spin_button,
  *
  * Returns: The number of characters to request space for in the entry
  *          area of @spin_button
- *
- * Since: 3.92
  */
 int
 gtk_spin_button_get_width_chars (GtkSpinButton *spin_button)
@@ -2384,8 +2372,6 @@ gtk_spin_button_get_width_chars (GtkSpinButton *spin_button)
  *
  * Changes the size request of the entry area of @spin_button
  * to be about the right size for @width_chars characters.
- *
- * Since: 3.92
  */
 void
 gtk_spin_button_set_width_chars (GtkSpinButton *spin_button,

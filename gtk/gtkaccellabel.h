@@ -95,27 +95,27 @@ void	   gtk_accel_label_set_accel_closure (GtkAccelLabel *accel_label,
 					      GClosure	    *accel_closure);
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_accel_label_refetch           (GtkAccelLabel *accel_label);
-GDK_AVAILABLE_IN_3_6
+GDK_AVAILABLE_IN_ALL
 void       gtk_accel_label_set_accel         (GtkAccelLabel   *accel_label,
                                               guint            accelerator_key,
                                               GdkModifierType  accelerator_mods);
-GDK_AVAILABLE_IN_3_12
+GDK_AVAILABLE_IN_ALL
 void       gtk_accel_label_get_accel         (GtkAccelLabel   *accel_label,
                                               guint           *accelerator_key,
                                               GdkModifierType *accelerator_mods);
 
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 void      gtk_accel_label_set_label          (GtkAccelLabel   *accel_label,
                                               const char      *text);
 
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 const char * gtk_accel_label_get_label       (GtkAccelLabel   *accel_label);
 
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 void      gtk_accel_label_set_use_underline  (GtkAccelLabel   *accel_label,
                                               gboolean         setting);
 
-GDK_AVAILABLE_IN_3_92
+GDK_AVAILABLE_IN_ALL
 gboolean  gtk_accel_label_get_use_underline  (GtkAccelLabel   *accel_label);
 
 

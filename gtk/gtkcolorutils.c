@@ -198,8 +198,6 @@ rgb_to_hsv (gdouble *r,
  *
  * Input values must be in the [0.0, 1.0] range;
  * output values will be in the same range.
- *
- * Since: 2.14
  */
 void
 gtk_hsv_to_rgb (gdouble  h, gdouble  s, gdouble  v,
@@ -234,8 +232,6 @@ gtk_hsv_to_rgb (gdouble  h, gdouble  s, gdouble  v,
  *
  * Input values must be in the [0.0, 1.0] range;
  * output values will be in the same range.
- *
- * Since: 2.14
  */
 void
 gtk_rgb_to_hsv (gdouble  r, gdouble  g, gdouble  b,

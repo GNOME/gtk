@@ -55,7 +55,7 @@ GSList *           gdk_display_manager_list_displays       (GdkDisplayManager *m
 GDK_AVAILABLE_IN_ALL
 GdkDisplay *       gdk_display_manager_open_display        (GdkDisplayManager *manager,
                                                             const gchar       *name);
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_ALL
 void               gdk_set_allowed_backends                (const gchar       *backends);
 
 

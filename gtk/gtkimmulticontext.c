@@ -555,8 +555,6 @@ gtk_im_multicontext_delete_surrounding_cb (GtkIMContext      *slave,
  * Gets the id of the currently active slave of the @context.
  *
  * Returns: the id of the currently active slave
- *
- * Since: 2.16
  */
 const char *
 gtk_im_multicontext_get_context_id (GtkIMMulticontext *context)
@@ -575,8 +573,6 @@ gtk_im_multicontext_get_context_id (GtkIMMulticontext *context)
  *
  * This causes the currently active slave of @context to be
  * replaced by the slave corresponding to the new context id.
- *
- * Since: 2.16
  */
 void
 gtk_im_multicontext_set_context_id (GtkIMMulticontext *context,

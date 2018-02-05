@@ -961,8 +961,6 @@ get_page_setup_dialog (GtkWindow        *parent,
  * a problem.
  * 
  * Returns: (transfer full): a new #GtkPageSetup
- *
- * Since: 2.10
  */
 GtkPageSetup *
 gtk_print_run_page_setup_dialog (GtkWindow        *parent,
@@ -1004,8 +1002,6 @@ gtk_print_run_page_setup_dialog (GtkWindow        *parent,
  * In contrast to gtk_print_run_page_setup_dialog(), this function  returns after 
  * showing the page setup dialog on platforms that support this, and calls @done_cb 
  * from a signal handler for the ::response signal of the dialog.
- *
- * Since: 2.10
  */
 void
 gtk_print_run_page_setup_dialog_async (GtkWindow            *parent,

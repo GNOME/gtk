@@ -99,8 +99,6 @@
  * like one shape, which means that the border-width of the content node and the arrow
  * node should be the same. The arrow also does not support any border shape other than
  * solid, no border-radius, only one border width (border-bottom-width is used) and no box-shadow.
- *
- * Since: 3.12
  */
 
 #include "config.h"
@@ -1591,8 +1589,6 @@ gtk_popover_class_init (GtkPopoverClass *klass)
    * GtkPopover:relative-to:
    *
    * Sets the attached widget.
-   *
-   * Since: 3.12
    */
   properties[PROP_RELATIVE_TO] =
       g_param_spec_object ("relative-to",
@@ -1605,8 +1601,6 @@ gtk_popover_class_init (GtkPopoverClass *klass)
    * GtkPopover:pointing-to:
    *
    * Marks a specific rectangle to be pointed.
-   *
-   * Since: 3.12
    */
   properties[PROP_POINTING_TO] =
       g_param_spec_boxed ("pointing-to",
@@ -1619,8 +1613,6 @@ gtk_popover_class_init (GtkPopoverClass *klass)
    * GtkPopover:position
    *
    * Sets the preferred position of the popover.
-   *
-   * Since: 3.12
    */
   properties[PROP_POSITION] =
       g_param_spec_enum ("position",
@@ -1634,8 +1626,6 @@ gtk_popover_class_init (GtkPopoverClass *klass)
    *
    * Sets whether the popover is modal (so other elements in the window do not
    * receive input while the popover is visible).
-   *
-   * Since: 3.12
    */
   properties[PROP_MODAL] =
       g_param_spec_boolean ("modal",
@@ -1648,8 +1638,6 @@ gtk_popover_class_init (GtkPopoverClass *klass)
    * GtkPopover:constrain-to:
    *
    * Sets a constraint for the popover position.
-   *
-   * Since: 3.20
    */
   properties[PROP_CONSTRAIN_TO] =
       g_param_spec_enum ("constrain-to",
@@ -2043,8 +2031,6 @@ gtk_popover_update_preferred_position (GtkPopover      *popover,
  * Creates a new popover to point to @relative_to
  *
  * Returns: a new #GtkPopover
- *
- * Since: 3.12
  **/
 GtkWidget *
 gtk_popover_new (GtkWidget *relative_to)
@@ -2068,8 +2054,6 @@ gtk_popover_new (GtkWidget *relative_to)
  * widget, so if @relative_to is set to %NULL on an attached @popover, it
  * will be detached from its previous widget, and consequently destroyed
  * unless extra references are kept.
- *
- * Since: 3.12
  **/
 void
 gtk_popover_set_relative_to (GtkPopover *popover,
@@ -2091,8 +2075,6 @@ gtk_popover_set_relative_to (GtkPopover *popover,
  * Returns the widget @popover is currently attached to
  *
  * Returns: (transfer none): a #GtkWidget
- *
- * Since: 3.12
  **/
 GtkWidget *
 gtk_popover_get_relative_to (GtkPopover *popover)
@@ -2110,8 +2092,6 @@ gtk_popover_get_relative_to (GtkPopover *popover)
  * Sets the rectangle that @popover will point to, in the
  * coordinate space of the widget @popover is attached to,
  * see gtk_popover_set_relative_to().
- *
- * Since: 3.12
  **/
 void
 gtk_popover_set_pointing_to (GtkPopover         *popover,
@@ -2164,8 +2144,6 @@ gtk_popover_get_pointing_to (GtkPopover   *popover,
  * This preference will be respected where possible, although
  * on lack of space (eg. if close to the window edges), the
  * #GtkPopover may choose to appear on the opposite side
- *
- * Since: 3.12
  **/
 void
 gtk_popover_set_position (GtkPopover      *popover,
@@ -2203,8 +2181,6 @@ gtk_popover_get_position (GtkPopover *popover)
  * within the toplevel and grab the keyboard focus on it when being
  * displayed. Clicking outside the popover area or pressing Esc will
  * dismiss the popover and ungrab input.
- *
- * Since: 3.12
  **/
 void
 gtk_popover_set_modal (GtkPopover *popover,
@@ -2235,8 +2211,6 @@ gtk_popover_set_modal (GtkPopover *popover,
  * see the implications of this.
  *
  * Returns: #TRUE if @popover is modal
- *
- * Since: 3.12
  **/
 gboolean
 gtk_popover_get_modal (GtkPopover *popover)
@@ -2286,8 +2260,6 @@ back_to_main (GtkWidget *popover)
  * group with a “quit” action and inserted it with the name “mygroup”
  * then you would use the action name “mygroup.quit” in your
  * #GMenuModel.
- *
- * Since: 3.12
  */
 void
 gtk_popover_bind_model (GtkPopover  *popover,
@@ -2349,8 +2321,6 @@ gtk_popover_bind_model (GtkPopover  *popover,
  * on the menus attach widget or on any of its parent widgets.
  *
  * Returns: the new #GtkPopover
- *
- * Since: 3.12
  */
 GtkWidget *
 gtk_popover_new_from_model (GtkWidget  *relative_to,
@@ -2376,8 +2346,6 @@ gtk_popover_new_from_model (GtkWidget  *relative_to,
  * the popover is shown (see gtk_window_set_default()). #GtkPopover
  * remembers the previous default widget and reestablishes it
  * when the popover is dismissed.
- *
- * Since: 3.18
  */
 void
 gtk_popover_set_default_widget (GtkPopover *popover,
@@ -2412,8 +2380,6 @@ gtk_popover_set_default_widget (GtkPopover *popover,
  *
  * Returns: (nullable) (transfer none): the default widget,
  * or %NULL if there is none
- *
- * Since: 3.18
  */
 GtkWidget *
 gtk_popover_get_default_widget (GtkPopover *popover)
@@ -2434,8 +2400,6 @@ gtk_popover_get_default_widget (GtkPopover *popover)
  *
  * Note that not all platforms support placing popovers freely,
  * and may already impose constraints.
- *
- * Since: 3.20
  */
 void
 gtk_popover_set_constrain_to (GtkPopover           *popover,
@@ -2462,8 +2426,6 @@ gtk_popover_set_constrain_to (GtkPopover           *popover,
  * See gtk_popover_set_constrain_to().
  *
  * Returns: the constraint for placing this popover.
- *
- * Since: 3.20
  */
 GtkPopoverConstraint
 gtk_popover_get_constrain_to (GtkPopover *popover)
@@ -2482,8 +2444,6 @@ gtk_popover_get_constrain_to (GtkPopover *popover)
  * Pops @popover up. This is different than a gtk_widget_show() call
  * in that it shows the popover with a transition. If you want to show
  * the popover without a transition, use gtk_widget_show().
- *
- * Since: 3.22
  */
 void
 gtk_popover_popup (GtkPopover *popover)
@@ -2509,8 +2469,6 @@ gtk_popover_popup (GtkPopover *popover)
  * Pops @popover down.This is different than a gtk_widget_hide() call
  * in that it shows the popover with a transition. If you want to hide
  * the popover without a transition, use gtk_widget_hide().
- *
- * Since: 3.22
  */
 void
 gtk_popover_popdown (GtkPopover *popover)

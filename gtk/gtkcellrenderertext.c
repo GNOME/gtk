@@ -287,8 +287,6 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
    * GtkCellRendererText:background-rgba:
    *
    * Background color as a #GdkRGBA
-   *
-   * Since: 3.0
    */
   text_cell_renderer_props[PROP_BACKGROUND_RGBA] =
       g_param_spec_boxed ("background-rgba",
@@ -307,8 +305,6 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
    * GtkCellRendererText:foreground-rgba:
    *
    * Foreground color as a #GdkRGBA
-   *
-   * Since: 3.0
    */
   text_cell_renderer_props[PROP_FOREGROUND_RGBA] =
       g_param_spec_boxed ("foreground-rgba",
@@ -442,8 +438,6 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
    * does not have enough room to display the entire string. Setting it to
    * %PANGO_ELLIPSIZE_NONE turns off ellipsizing. See the wrap-width property
    * for another way of making the text fit into a given width.
-   *
-   * Since: 2.6
    */
   text_cell_renderer_props[PROP_ELLIPSIZE] =
       g_param_spec_enum ("ellipsize",
@@ -461,8 +455,6 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
    * The desired width of the cell, in characters. If this property is set to
    * -1, the width will be calculated automatically, otherwise the cell will
    * request either 3 characters or the property value, whichever is greater.
-   *
-   * Since: 2.6
    **/
   text_cell_renderer_props[PROP_WIDTH_CHARS] =
       g_param_spec_int ("width-chars",
@@ -483,8 +475,6 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
    * cell should not receive any greater allocation unless it is
    * set to expand in its #GtkCellLayout and all of the cell's siblings
    * have received their natural width.
-   *
-   * Since: 3.0
    **/
   text_cell_renderer_props[PROP_MAX_WIDTH_CHARS] =
       g_param_spec_int ("max-width-chars",
@@ -500,8 +490,6 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
    * Specifies how to break the string into multiple lines, if the cell
    * renderer does not have enough room to display the entire string.
    * This property has no effect unless the wrap-width property is set.
-   *
-   * Since: 2.8
    */
   text_cell_renderer_props[PROP_WRAP_MODE] =
       g_param_spec_enum ("wrap-mode",
@@ -519,8 +507,6 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
    * Specifies the minimum width at which the text is wrapped. The wrap-mode property can
    * be used to influence at what character positions the line breaks can be placed.
    * Setting wrap-width to -1 turns wrapping off.
-   *
-   * Since: 2.8
    */
   text_cell_renderer_props[PROP_WRAP_WIDTH] =
       g_param_spec_int ("wrap-width",
@@ -538,8 +524,6 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
    * Note that this property describes how to align the lines of text in
    * case there are several of them. The "xalign" property of #GtkCellRenderer,
    * on the other hand, sets the horizontal alignment of the whole text.
-   *
-   * Since: 2.10
    */
   text_cell_renderer_props[PROP_ALIGN] =
       g_param_spec_enum ("alignment",

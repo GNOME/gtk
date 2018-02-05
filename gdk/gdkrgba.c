@@ -67,8 +67,6 @@ G_DEFINE_BOXED_TYPE (GdkRGBA, gdk_rgba,
  * The result must be freed through gdk_rgba_free().
  *
  * Returns: A newly allocated #GdkRGBA, with the same contents as @rgba
- *
- * Since: 3.0
  */
 GdkRGBA *
 gdk_rgba_copy (const GdkRGBA *rgba)
@@ -81,8 +79,6 @@ gdk_rgba_copy (const GdkRGBA *rgba)
  * @rgba: a #GdkRGBA
  *
  * Frees a #GdkRGBA created with gdk_rgba_copy()
- *
- * Since: 3.0
  */
 void
 gdk_rgba_free (GdkRGBA *rgba)
@@ -98,8 +94,6 @@ gdk_rgba_free (GdkRGBA *rgba)
  * would not produce any change.
  *
  * Returns: %TRUE if the @rgba is clear
- *
- * Since: 3.90
  */
 gboolean
 gdk_rgba_is_clear (const GdkRGBA *rgba)
@@ -115,8 +109,6 @@ gdk_rgba_is_clear (const GdkRGBA *rgba)
  * will not retain any results from previous contents.
  *
  * Returns: %TRUE if the @rgba is opaque
- *
- * Since: 3.90
  */
 gboolean
 gdk_rgba_is_opaque (const GdkRGBA *rgba)
@@ -188,8 +180,6 @@ parse_rgb_value (const gchar  *str,
  * a is a floating point value in the range 0 to 1.
  *
  * Returns: %TRUE if the parsing succeeded
- *
- * Since: 3.0
  */
 gboolean
 gdk_rgba_parse (GdkRGBA     *rgba,
@@ -319,8 +309,6 @@ gdk_rgba_parse (GdkRGBA     *rgba,
  * table that stores #GdkRGBAs.
  *
  * Returns: The hash value for @p
- *
- * Since: 3.0
  */
 guint
 gdk_rgba_hash (gconstpointer p)
@@ -341,8 +329,6 @@ gdk_rgba_hash (gconstpointer p)
  * Compares two RGBA colors.
  *
  * Returns: %TRUE if the two colors compare equal
- *
- * Since: 3.0
  */
 gboolean
 gdk_rgba_equal (gconstpointer p1,
@@ -383,8 +369,6 @@ gdk_rgba_equal (gconstpointer p1,
  * different representation.
  *
  * Returns: A newly allocated text string
- *
- * Since: 3.0
  */
 gchar *
 gdk_rgba_to_string (const GdkRGBA *rgba)

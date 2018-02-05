@@ -71,15 +71,15 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_check_button_new_with_label    (const gchar *label);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_check_button_new_with_mnemonic (const gchar *label);
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 void       gtk_check_button_set_draw_indicator (GtkCheckButton *check_button,
                                                 gboolean        draw_indicator);
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 gboolean   gtk_check_button_get_draw_indicator (GtkCheckButton *check_button);
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 void       gtk_check_button_set_inconsistent   (GtkCheckButton *check_button,
                                                 gboolean        inconsistent);
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_ALL
 gboolean   gtk_check_button_get_inconsistent   (GtkCheckButton *check_button);
 
 G_END_DECLS

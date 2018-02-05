@@ -121,8 +121,6 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * GdkDevice:display:
    *
    * The #GdkDisplay the #GdkDevice pertains to.
-   *
-   * Since: 3.0
    */
   device_props[PROP_DISPLAY] =
       g_param_spec_object ("display",
@@ -135,8 +133,6 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * GdkDevice:name:
    *
    * The device name.
-   *
-   * Since: 3.0
    */
   device_props[PROP_NAME] =
       g_param_spec_string ("name",
@@ -149,8 +145,6 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * GdkDevice:type:
    *
    * Device role in the device manager.
-   *
-   * Since: 3.0
    */
   device_props[PROP_TYPE] =
       g_param_spec_enum ("type",
@@ -166,8 +160,6 @@ gdk_device_class_init (GdkDeviceClass *klass)
    *
    * Associated pointer or keyboard with this device, if any. Devices of type #GDK_DEVICE_TYPE_MASTER
    * always come in keyboard/pointer pairs. Other device types will have a %NULL associated device.
-   *
-   * Since: 3.0
    */
   device_props[PROP_ASSOCIATED_DEVICE] =
       g_param_spec_object ("associated-device",
@@ -180,8 +172,6 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * GdkDevice:input-source:
    *
    * Source type for the device.
-   *
-   * Since: 3.0
    */
   device_props[PROP_INPUT_SOURCE] =
       g_param_spec_enum ("input-source",
@@ -196,8 +186,6 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * GdkDevice:input-mode:
    *
    * Input mode for the device.
-   *
-   * Since: 3.0
    */
   device_props[PROP_INPUT_MODE] =
       g_param_spec_enum ("input-mode",
@@ -212,8 +200,6 @@ gdk_device_class_init (GdkDeviceClass *klass)
    *
    * Whether the device is represented by a cursor on the screen. Devices of type
    * %GDK_DEVICE_TYPE_MASTER will have %TRUE here.
-   *
-   * Since: 3.0
    */
   device_props[PROP_HAS_CURSOR] =
       g_param_spec_boolean ("has-cursor",
@@ -227,8 +213,6 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * GdkDevice:n-axes:
    *
    * Number of axes in the device.
-   *
-   * Since: 3.0
    */
   device_props[PROP_N_AXES] =
       g_param_spec_uint ("n-axes",
@@ -242,8 +226,6 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * GdkDevice:vendor-id:
    *
    * Vendor ID of this device, see gdk_device_get_vendor_id().
-   *
-   * Since: 3.16
    */
   device_props[PROP_VENDOR_ID] =
       g_param_spec_string ("vendor-id",
@@ -257,8 +239,6 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * GdkDevice:product-id:
    *
    * Product ID of this device, see gdk_device_get_product_id().
-   *
-   * Since: 3.16
    */
   device_props[PROP_PRODUCT_ID] =
       g_param_spec_string ("product-id",
@@ -272,8 +252,6 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * GdkDevice:seat:
    *
    * #GdkSeat of this device.
-   *
-   * Since: 3.20
    */
   device_props[PROP_SEAT] =
       g_param_spec_object ("seat",
@@ -289,8 +267,6 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * The maximal number of concurrent touches on a touch device.
    * Will be 0 if the device is not a touch device or if the number
    * of touches is unknown.
-   *
-   * Since: 3.20
    */
   device_props[PROP_NUM_TOUCHES] =
       g_param_spec_uint ("num-touches",
@@ -304,8 +280,6 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * GdkDevice:axes:
    *
    * The axes currently available for this device.
-   *
-   * Since: 3.22
    */
   device_props[PROP_AXES] =
     g_param_spec_flags ("axes",
@@ -350,8 +324,6 @@ gdk_device_class_init (GdkDeviceClass *klass)
    *
    * The ::tool-changed signal is emitted on pen/eraser
    * #GdkDevices whenever tools enter or leave proximity.
-   *
-   * Since: 3.22
    */
   signals[TOOL_CHANGED] =
     g_signal_new (g_intern_static_string ("tool-changed"),
@@ -566,8 +538,6 @@ gdk_device_get_state (GdkDevice       *device,
  * coordinates are those of its master pointer, this function
  * may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
  * unless there is an ongoing grab on them. See gdk_device_grab().
- *
- * Since: 3.10
  **/
 void
 gdk_device_get_position_double (GdkDevice        *device,
@@ -607,8 +577,6 @@ gdk_device_get_position_double (GdkDevice        *device,
  * coordinates are those of its master pointer, This function
  * may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
  * unless there is an ongoing grab on them, see gdk_device_grab().
- *
- * Since: 3.0
  **/
 void
 gdk_device_get_position (GdkDevice *device,
@@ -643,8 +611,6 @@ gdk_device_get_position (GdkDevice *device,
  *
  * Returns: (nullable) (transfer none): the #GdkWindow under the
  *   device position, or %NULL.
- *
- * Since: 3.0
  **/
 GdkWindow *
 gdk_device_get_window_at_position_double (GdkDevice  *device,
@@ -693,8 +659,6 @@ gdk_device_get_window_at_position_double (GdkDevice  *device,
  *
  * Returns: (nullable) (transfer none): the #GdkWindow under the
  * device position, or %NULL.
- *
- * Since: 3.0
  **/
 GdkWindow *
 gdk_device_get_window_at_position (GdkDevice  *device,
@@ -809,8 +773,6 @@ gdk_device_free_history (GdkTimeCoord **events,
  * Determines the name of the device.
  *
  * Returns: a name
- *
- * Since: 2.20
  **/
 const gchar *
 gdk_device_get_name (GdkDevice *device)
@@ -828,8 +790,6 @@ gdk_device_get_name (GdkDevice *device)
  * This is not meaningful for keyboard devices, which don't have a pointer.
  *
  * Returns: %TRUE if the pointer follows device motion
- *
- * Since: 2.20
  **/
 gboolean
 gdk_device_get_has_cursor (GdkDevice *device)
@@ -846,8 +806,6 @@ gdk_device_get_has_cursor (GdkDevice *device)
  * Determines the type of the device.
  *
  * Returns: a #GdkInputSource
- *
- * Since: 2.20
  **/
 GdkInputSource
 gdk_device_get_source (GdkDevice *device)
@@ -864,8 +822,6 @@ gdk_device_get_source (GdkDevice *device)
  * Determines the mode of the device.
  *
  * Returns: a #GdkInputSource
- *
- * Since: 2.20
  **/
 GdkInputMode
 gdk_device_get_mode (GdkDevice *device)
@@ -916,8 +872,6 @@ gdk_device_set_mode (GdkDevice    *device,
  * Returns the number of keys the device currently has.
  *
  * Returns: the number of keys.
- *
- * Since: 2.24
  **/
 gint
 gdk_device_get_n_keys (GdkDevice *device)
@@ -938,8 +892,6 @@ gdk_device_get_n_keys (GdkDevice *device)
  * and fill in @keyval and @modifiers with the keyval settings.
  *
  * Returns: %TRUE if keyval is set for @index.
- *
- * Since: 2.20
  **/
 gboolean
 gdk_device_get_key (GdkDevice       *device,
@@ -994,8 +946,6 @@ gdk_device_set_key (GdkDevice      *device,
  * Returns the axis use for @index_.
  *
  * Returns: a #GdkAxisUse specifying how the axis is used.
- *
- * Since: 2.20
  **/
 GdkAxisUse
 gdk_device_get_axis_use (GdkDevice *device,
@@ -1061,8 +1011,6 @@ gdk_device_set_axis_use (GdkDevice   *device,
  *
  * Returns: (transfer none): a #GdkDisplay. This memory is owned
  *          by GTK+, and must not be freed or unreffed.
- *
- * Since: 3.0
  **/
 GdkDisplay *
 gdk_device_get_display (GdkDevice *device)
@@ -1088,8 +1036,6 @@ gdk_device_get_display (GdkDevice *device)
  *
  * Returns: (nullable) (transfer none): The associated device, or
  *   %NULL
- *
- * Since: 3.0
  **/
 GdkDevice *
 gdk_device_get_associated_device (GdkDevice *device)
@@ -1196,8 +1142,6 @@ _gdk_device_remove_slave (GdkDevice *device,
  * Returns the device type for @device.
  *
  * Returns: the #GdkDeviceType for @device.
- *
- * Since: 3.0
  **/
 GdkDeviceType
 gdk_device_get_device_type (GdkDevice *device)
@@ -1214,8 +1158,6 @@ gdk_device_get_device_type (GdkDevice *device)
  * Returns the number of axes the device currently has.
  *
  * Returns: the number of axes.
- *
- * Since: 3.0
  **/
 gint
 gdk_device_get_n_axes (GdkDevice *device)
@@ -1235,8 +1177,6 @@ gdk_device_get_n_axes (GdkDevice *device)
  *
  * Returns: (transfer container) (element-type GdkAtom):
  *     A #GList of strings, free with g_list_free().
- *
- * Since: 3.0
  **/
 GList *
 gdk_device_list_axes (GdkDevice *device)
@@ -1270,8 +1210,6 @@ gdk_device_list_axes (GdkDevice *device)
  * by gdk_device_list_axes()
  *
  * Returns: %TRUE if the given axis use was found, otherwise %FALSE.
- *
- * Since: 3.0
  **/
 gboolean
 gdk_device_get_axis_value (GdkDevice  *device,
@@ -1415,9 +1353,7 @@ get_native_grab_event_mask (GdkEventMask grab_mask)
  *
  * Returns: %GDK_GRAB_SUCCESS if the grab was successful.
  *
- * Since: 3.0
- *
- * Deprecated: 3.20. Use gdk_seat_grab() instead.
+ * Deprecated: Use gdk_seat_grab() instead.
  **/
 GdkGrabStatus
 gdk_device_grab (GdkDevice        *device,
@@ -1478,8 +1414,6 @@ gdk_device_grab (GdkDevice        *device,
  *
  * Release any grab on @device.
  *
- * Since: 3.0
- *
  * Deprecated: 3.20. Use gdk_seat_ungrab() instead.
  */
 void
@@ -1508,8 +1442,6 @@ gdk_device_ungrab (GdkDevice  *device,
  * control of the user. This function was added to cover
  * some rare use cases like keyboard navigation support
  * for the color picker in the #GtkColorSelectionDialog.
- *
- * Since: 3.0
  **/
 void
 gdk_device_warp (GdkDevice  *device,
@@ -1857,8 +1789,6 @@ _gdk_device_window_at_position (GdkDevice        *device,
  * application's windows.
  *
  * Returns: (transfer none) (allow-none): the last window the device
- *
- * Since: 3.12
  */
 GdkWindow *
 gdk_device_get_last_event_window (GdkDevice *device)
@@ -1907,8 +1837,6 @@ gdk_device_get_last_event_window (GdkDevice *device)
  * ]|
  *
  * Returns: (nullable): the vendor ID, or %NULL
- *
- * Since: 3.16
  */
 const gchar *
 gdk_device_get_vendor_id (GdkDevice *device)
@@ -1928,8 +1856,6 @@ gdk_device_get_vendor_id (GdkDevice *device)
  * it. See gdk_device_get_vendor_id() for more information.
  *
  * Returns: (nullable): the product ID, or %NULL
- *
- * Since: 3.16
  */
 const gchar *
 gdk_device_get_product_id (GdkDevice *device)
@@ -1962,8 +1888,6 @@ gdk_device_set_seat (GdkDevice *device,
  *
  * Returns: (transfer none): A #GdkSeat. This memory is owned by GTK+ and
  *          must not be freed.
- *
- * Since: 3.20
  **/
 GdkSeat *
 gdk_device_get_seat (GdkDevice *device)
@@ -1978,8 +1902,6 @@ gdk_device_get_seat (GdkDevice *device)
  * @device: a #GdkDevice
  *
  * Returns the axes currently available on the device.
- *
- * Since: 3.22
  **/
 GdkAxisFlags
 gdk_device_get_axes (GdkDevice *device)

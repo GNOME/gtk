@@ -144,8 +144,6 @@ gtk_separator_class_init (GtkSeparatorClass *class)
  * Creates a new #GtkSeparator with the given orientation.
  *
  * Returns: a new #GtkSeparator.
- *
- * Since: 3.0
  */
 GtkWidget *
 gtk_separator_new (GtkOrientation orientation)

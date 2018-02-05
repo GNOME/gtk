@@ -259,8 +259,6 @@ gtk_drag_dest_set_target_list (GtkWidget     *widget,
  * are added with @info = 0. If you need another value,
  * use gtk_target_list_add_text_targets() and
  * gtk_drag_dest_set_target_list().
- *
- * Since: 2.6
  */
 void
 gtk_drag_dest_add_text_targets (GtkWidget *widget)
@@ -286,8 +284,6 @@ gtk_drag_dest_add_text_targets (GtkWidget *widget)
  * are added with @info = 0. If you need another value,
  * use gtk_target_list_add_image_targets() and
  * gtk_drag_dest_set_target_list().
- *
- * Since: 2.6
  */
 void
 gtk_drag_dest_add_image_targets (GtkWidget *widget)
@@ -313,8 +309,6 @@ gtk_drag_dest_add_image_targets (GtkWidget *widget)
  * are added with @info = 0. If you need another value,
  * use gtk_target_list_add_uri_targets() and
  * gtk_drag_dest_set_target_list().
- *
- * Since: 2.6
  */
 void
 gtk_drag_dest_add_uri_targets (GtkWidget *widget)
@@ -342,8 +336,6 @@ gtk_drag_dest_add_uri_targets (GtkWidget *widget)
  *
  * This may be used when a widget wants to do generic
  * actions regardless of the targets that the source offers.
- *
- * Since: 2.10
  */
 void
 gtk_drag_dest_set_track_motion (GtkWidget *widget,
@@ -369,8 +361,6 @@ gtk_drag_dest_set_track_motion (GtkWidget *widget,
  *
  * Returns: %TRUE if the widget always emits
  *   #GtkWidget::drag-motion events
- *
- * Since: 2.10
  */
 gboolean
 gtk_drag_dest_get_track_motion (GtkWidget *widget)

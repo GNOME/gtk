@@ -84,8 +84,6 @@ gdk_cairo_get_clip_rectangle (cairo_t      *cr,
  * @rgba: a #GdkRGBA
  *
  * Sets the specified #GdkRGBA as the source color of @cr.
- *
- * Since: 3.0
  */
 void
 gdk_cairo_set_source_rgba (cairo_t       *cr,
@@ -107,8 +105,6 @@ gdk_cairo_set_source_rgba (cairo_t       *cr,
  * @rectangle: a #GdkRectangle
  *
  * Adds the given rectangle to the current path of @cr.
- *
- * Since: 2.8
  */
 void
 gdk_cairo_rectangle (cairo_t            *cr,
@@ -128,8 +124,6 @@ gdk_cairo_rectangle (cairo_t            *cr,
  * @region: a #cairo_region_t
  *
  * Adds the given region to the current path of @cr.
- *
- * Since: 2.8
  */
 void
 gdk_cairo_region (cairo_t              *cr,
@@ -253,8 +247,6 @@ gdk_cairo_surface_paint_pixbuf (cairo_surface_t *surface,
  * the pixbuf.
  *
  * Returns: a new cairo surface, must be freed with cairo_surface_destroy()
- *
- * Since: 3.10
  */
 cairo_surface_t *
 gdk_cairo_surface_create_from_pixbuf (const GdkPixbuf *pixbuf,
@@ -296,8 +288,6 @@ gdk_cairo_surface_create_from_pixbuf (const GdkPixbuf *pixbuf,
  *
  * The pattern has an extend mode of %CAIRO_EXTEND_NONE and is aligned
  * so that the origin of @pixbuf is @pixbuf_x, @pixbuf_y.
- *
- * Since: 2.8
  */
 void
 gdk_cairo_set_source_pixbuf (cairo_t         *cr,

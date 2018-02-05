@@ -186,8 +186,6 @@ gdk_display_class_init (GdkDisplayClass *class)
    *
    * %TRUE if the display properly composits the alpha channel.
    * See gdk_display_is_composited() for details.
-   *
-   * Since: 3.90
    */
   props[PROP_COMPOSITED] =
     g_param_spec_boolean ("composited",
@@ -201,8 +199,6 @@ gdk_display_class_init (GdkDisplayClass *class)
    *
    * %TRUE if the display supports an alpha channel. See gdk_display_is_rgba()
    * for details.
-   *
-   * Since: 3.90
    */
   props[PROP_RGBA] =
     g_param_spec_boolean ("rgba",
@@ -236,8 +232,6 @@ gdk_display_class_init (GdkDisplayClass *class)
    *
    * The ::closed signal is emitted when the connection to the windowing
    * system for @display is closed.
-   *
-   * Since: 2.2
    */   
   signals[CLOSED] =
     g_signal_new (g_intern_static_string ("closed"),
@@ -257,8 +251,6 @@ gdk_display_class_init (GdkDisplayClass *class)
    *
    * The ::seat-added signal is emitted whenever a new seat is made
    * known to the windowing system.
-   *
-   * Since: 3.20
    */
   signals[SEAT_ADDED] =
     g_signal_new (g_intern_static_string ("seat-added"),
@@ -275,8 +267,6 @@ gdk_display_class_init (GdkDisplayClass *class)
    *
    * The ::seat-removed signal is emitted whenever a seat is removed
    * by the windowing system.
-   *
-   * Since: 3.20
    */
   signals[SEAT_REMOVED] =
     g_signal_new (g_intern_static_string ("seat-removed"),
@@ -293,8 +283,6 @@ gdk_display_class_init (GdkDisplayClass *class)
    *
    * The ::monitor-added signal is emitted whenever a monitor is
    * added.
-   *
-   * Since: 3.22
    */
   signals[MONITOR_ADDED] =
     g_signal_new (g_intern_static_string ("monitor-added"),
@@ -311,8 +299,6 @@ gdk_display_class_init (GdkDisplayClass *class)
    *
    * The ::monitor-removed signal is emitted whenever a monitor is
    * removed.
-   *
-   * Since: 3.22
    */
   signals[MONITOR_REMOVED] =
     g_signal_new (g_intern_static_string ("monitor-removed"),
@@ -329,8 +315,6 @@ gdk_display_class_init (GdkDisplayClass *class)
    *
    * The ::setting-changed signal is emitted whenever a setting
    * changes its value.
-   *
-   * Since: 3.94
    */
   signals[SETTING_CHANGED] =
     g_signal_new (g_intern_static_string ("setting-changed"),
@@ -422,8 +406,6 @@ gdk_display_finalize (GObject *object)
  *
  * Closes the connection to the windowing system for the given display,
  * and cleans up associated resources.
- *
- * Since: 2.2
  */
 void
 gdk_display_close (GdkDisplay *display)
@@ -448,8 +430,6 @@ gdk_display_close (GdkDisplay *display)
  * Finds out if the display has been closed.
  *
  * Returns: %TRUE if the display is closed.
- *
- * Since: 2.22
  */
 gboolean
 gdk_display_is_closed  (GdkDisplay  *display)
@@ -468,8 +448,6 @@ gdk_display_is_closed  (GdkDisplay  *display)
  * 
  * Returns: (nullable) (transfer full): the next #GdkEvent to be processed,
  *   or %NULL if no events are pending
- *
- * Since: 2.2
  */
 GdkEvent *
 gdk_display_get_event (GdkDisplay *display)
@@ -493,8 +471,6 @@ gdk_display_get_event (GdkDisplay *display)
  * 
  * Returns: (nullable) (transfer full): the first #GdkEvent on the
  *   event queue
- *
- * Since: 2.2
  **/
 GdkEvent *
 gdk_display_peek_event (GdkDisplay *display)
@@ -527,8 +503,6 @@ gdk_display_put_event_nocopy (GdkDisplay *display,
  *
  * Appends a copy of the given event onto the front of the event
  * queue for @display.
- *
- * Since: 2.2
  **/
 void
 gdk_display_put_event (GdkDisplay     *display,
@@ -1058,8 +1032,6 @@ gdk_display_device_is_grabbed (GdkDisplay *display,
  *
  * Returns: a string representing the display name. This string is owned
  * by GDK and should not be modified or freed.
- *
- * Since: 2.2
  */
 const gchar *
 gdk_display_get_name (GdkDisplay *display)
@@ -1074,8 +1046,6 @@ gdk_display_get_name (GdkDisplay *display)
  * @display: a #GdkDisplay
  *
  * Emits a short beep on @display
- *
- * Since: 2.2
  */
 void
 gdk_display_beep (GdkDisplay *display)
@@ -1098,8 +1068,6 @@ gdk_display_beep (GdkDisplay *display)
  *
  * This is most useful for X11. On windowing systems where requests are
  * handled synchronously, this function will do nothing.
- *
- * Since: 2.2
  */
 void
 gdk_display_sync (GdkDisplay *display)
@@ -1122,8 +1090,6 @@ gdk_display_sync (GdkDisplay *display)
  *
  * This is most useful for X11. On windowing systems where requests are
  * handled synchronously, this function will do nothing.
- *
- * Since: 2.4
  */
 void
 gdk_display_flush (GdkDisplay *display)
@@ -1143,8 +1109,6 @@ gdk_display_flush (GdkDisplay *display)
  *
  * Returns: (transfer none): The default group leader window
  * for @display
- *
- * Since: 2.4
  **/
 GdkWindow *
 gdk_display_get_default_group (GdkDisplay *display)
@@ -1202,8 +1166,6 @@ gdk_display_get_primary_clipboard (GdkDisplay *display)
  * be used to create shaped windows on @display.
  *
  * Returns: %TRUE if shaped windows are supported
- *
- * Since: 2.10
  */
 gboolean
 gdk_display_supports_shapes (GdkDisplay *display)
@@ -1221,8 +1183,6 @@ gdk_display_supports_shapes (GdkDisplay *display)
  * be used to modify the input shape of windows on @display.
  *
  * Returns: %TRUE if windows with modified input shape are supported
- *
- * Since: 2.10
  */
 gboolean
 gdk_display_supports_input_shapes (GdkDisplay *display)
@@ -1253,8 +1213,6 @@ gdk_display_real_get_app_launch_context (GdkDisplay *display)
  *
  * Returns: (transfer full): a new #GdkAppLaunchContext for @display.
  *     Free with g_object_unref() when done
- *
- * Since: 3.0
  */
 GdkAppLaunchContext *
 gdk_display_get_app_launch_context (GdkDisplay *display)
@@ -1272,8 +1230,6 @@ gdk_display_get_app_launch_context (GdkDisplay *display)
  *
  * Returns: (nullable) (transfer none): a #GdkDisplay, or %NULL if the
  *     display could not be opened
- *
- * Since: 2.2
  */
 GdkDisplay *
 gdk_display_open (const gchar *display_name)
@@ -1290,8 +1246,6 @@ gdk_display_open (const gchar *display_name)
  * to be processed.
  *
  * Returns: %TRUE if there are events ready to be processed.
- *
- * Since: 3.0
  */
 gboolean
 gdk_display_has_pending (GdkDisplay *display)
@@ -1320,8 +1274,6 @@ _gdk_display_get_next_serial (GdkDisplay *display)
  * with custom startup-notification identifier unless
  * gtk_window_set_auto_startup_notification() is called to
  * disable that feature.
- *
- * Since: 3.0
  */
 void
 gdk_display_notify_startup_complete (GdkDisplay  *display,
@@ -1390,8 +1342,6 @@ _gdk_display_create_window (GdkDisplay *display)
  * Returns the #GdkKeymap attached to @display.
  *
  * Returns: (transfer none): the #GdkKeymap attached to @display.
- *
- * Since: 3.94
  */
 GdkKeymap *
 gdk_display_get_keymap (GdkDisplay *display)
@@ -1445,8 +1395,6 @@ gdk_display_set_debug_flags (GdkDisplay    *display,
  *
  * Returns: Whether windows with RGBA visuals can reasonably be
  * expected to have their alpha channels drawn correctly on the screen.
- *
- * Since: 3.90
  **/
 gboolean
 gdk_display_is_composited (GdkDisplay *display)
@@ -1491,8 +1439,6 @@ gdk_display_set_composited (GdkDisplay *display,
  *
  * Returns: %TRUE if windows are created with an alpha channel or
  *     %FALSE if the display does not support this functionality.
- *
- * Since: 3.90
  **/
 gboolean
 gdk_display_is_rgba (GdkDisplay *display)
@@ -1569,8 +1515,6 @@ gdk_display_remove_seat (GdkDisplay *display,
  * Returns the default #GdkSeat for this display.
  *
  * Returns: (transfer none): the default seat.
- *
- * Since: 3.20
  **/
 GdkSeat *
 gdk_display_get_default_seat (GdkDisplay *display)
@@ -1592,8 +1536,6 @@ gdk_display_get_default_seat (GdkDisplay *display)
  *
  * Returns: (transfer container) (element-type GdkSeat): the
  *          list of seats known to the #GdkDisplay
- *
- * Since: 3.20
  **/
 GList *
 gdk_display_list_seats (GdkDisplay *display)
@@ -1613,7 +1555,6 @@ gdk_display_list_seats (GdkDisplay *display)
  * #GdkDisplay::monitor-added or #GdkDisplay::monitor-removed signal.
  *
  * Returns: the number of monitors
- * Since: 3.22
  */
 int
 gdk_display_get_n_monitors (GdkDisplay *display)
@@ -1635,7 +1576,6 @@ gdk_display_get_n_monitors (GdkDisplay *display)
  *
  * Returns: (nullable) (transfer none): the #GdkMonitor, or %NULL if
  *    @monitor_num is not a valid monitor number
- * Since: 3.22
  */
 GdkMonitor *
 gdk_display_get_monitor (GdkDisplay *display,
@@ -1663,8 +1603,6 @@ gdk_display_get_monitor (GdkDisplay *display,
  *
  * Returns: (transfer none): the primary monitor, or any monitor if no
  *     primary monitor is configured by the user
- *
- * Since: 3.22
  */
 GdkMonitor *
 gdk_display_get_primary_monitor (GdkDisplay *display)
@@ -1684,7 +1622,6 @@ gdk_display_get_primary_monitor (GdkDisplay *display)
  * or a nearby monitor if the point is not in any monitor.
  *
  * Returns: (transfer none): the monitor containing the point
- * Since: 3.22
  */
 GdkMonitor *
 gdk_display_get_monitor_at_point (GdkDisplay *display,
@@ -1745,7 +1682,6 @@ gdk_display_get_monitor_at_point (GdkDisplay *display,
  * of all monitors.
  *
  * Returns: (transfer none): the monitor with the largest overlap with @window
- * Since: 3.22
  */
 GdkMonitor *
 gdk_display_get_monitor_at_window (GdkDisplay *display,
@@ -1829,8 +1765,6 @@ gdk_display_emit_opened (GdkDisplay *display)
  *
  * Returns: %TRUE if the setting existed and a value was stored
  *   in @value, %FALSE otherwise
- *
- * Since: 3.94
  */
 gboolean
 gdk_display_get_setting (GdkDisplay *display,

@@ -230,9 +230,9 @@ gboolean               gtk_tree_view_get_headers_clickable         (GtkTreeView 
 GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_set_headers_clickable         (GtkTreeView               *tree_view,
 								    gboolean                   setting);
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 gboolean               gtk_tree_view_get_activate_on_single_click  (GtkTreeView               *tree_view);
-GDK_AVAILABLE_IN_3_8
+GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_set_activate_on_single_click  (GtkTreeView               *tree_view,
 								    gboolean                   single);
 
@@ -262,7 +262,7 @@ gint                   gtk_tree_view_insert_column_with_data_func  (GtkTreeView 
                                                                     gpointer                   data,
                                                                     GDestroyNotify             dnotify);
 
-GDK_AVAILABLE_IN_3_4
+GDK_AVAILABLE_IN_ALL
 guint                  gtk_tree_view_get_n_columns                 (GtkTreeView               *tree_view);
 GDK_AVAILABLE_IN_ALL
 GtkTreeViewColumn     *gtk_tree_view_get_column                    (GtkTreeView               *tree_view,

@@ -97,58 +97,58 @@ struct _GtkFontChooserIface
   gpointer padding[10];
 };
 
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 GType            gtk_font_chooser_get_type                 (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 PangoFontFamily *gtk_font_chooser_get_font_family          (GtkFontChooser   *fontchooser);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 PangoFontFace   *gtk_font_chooser_get_font_face            (GtkFontChooser   *fontchooser);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 gint             gtk_font_chooser_get_font_size            (GtkFontChooser   *fontchooser);
 
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 PangoFontDescription *
                  gtk_font_chooser_get_font_desc            (GtkFontChooser             *fontchooser);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 void             gtk_font_chooser_set_font_desc            (GtkFontChooser             *fontchooser,
                                                             const PangoFontDescription *font_desc);
 
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 gchar*           gtk_font_chooser_get_font                 (GtkFontChooser   *fontchooser);
 
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 void             gtk_font_chooser_set_font                 (GtkFontChooser   *fontchooser,
                                                             const gchar      *fontname);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 gchar*           gtk_font_chooser_get_preview_text         (GtkFontChooser   *fontchooser);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 void             gtk_font_chooser_set_preview_text         (GtkFontChooser   *fontchooser,
                                                             const gchar      *text);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 gboolean         gtk_font_chooser_get_show_preview_entry   (GtkFontChooser   *fontchooser);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 void             gtk_font_chooser_set_show_preview_entry   (GtkFontChooser   *fontchooser,
                                                             gboolean          show_preview_entry);
-GDK_AVAILABLE_IN_3_2
+GDK_AVAILABLE_IN_ALL
 void             gtk_font_chooser_set_filter_func          (GtkFontChooser   *fontchooser,
                                                             GtkFontFilterFunc filter,
                                                             gpointer          user_data,
                                                             GDestroyNotify    destroy);
-GDK_AVAILABLE_IN_3_18
+GDK_AVAILABLE_IN_ALL
 void             gtk_font_chooser_set_font_map             (GtkFontChooser   *fontchooser,
                                                             PangoFontMap     *fontmap);
-GDK_AVAILABLE_IN_3_18
+GDK_AVAILABLE_IN_ALL
 PangoFontMap *   gtk_font_chooser_get_font_map             (GtkFontChooser   *fontchooser);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 void             gtk_font_chooser_set_level                (GtkFontChooser   *fontchooser,
                                                             GtkFontChooserLevel level);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 GtkFontChooserLevel
                  gtk_font_chooser_get_level                (GtkFontChooser   *fontchooser);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 char *           gtk_font_chooser_get_font_features        (GtkFontChooser   *fontchooser);
-GDK_AVAILABLE_IN_3_94
+GDK_AVAILABLE_IN_ALL
 char *           gtk_font_chooser_get_language             (GtkFontChooser   *fontchooser);
 
 G_END_DECLS

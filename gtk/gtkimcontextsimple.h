@@ -69,7 +69,7 @@ void          gtk_im_context_simple_add_table (GtkIMContextSimple *context_simpl
 					       guint16            *data,
 					       gint                max_seq_len,
 					       gint                n_seqs);
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_ALL
 void          gtk_im_context_simple_add_compose_file (GtkIMContextSimple *context_simple,
                                                       const gchar        *compose_file);
 

@@ -853,8 +853,6 @@ gtk_container_child_type (GtkContainer *container)
  * This is an analogue of g_object_notify() for child properties.
  *
  * Also see gtk_widget_child_notify().
- *
- * Since: 3.2
  */
 void
 gtk_container_child_notify (GtkContainer *container,
@@ -912,8 +910,6 @@ gtk_container_child_notify (GtkContainer *container,
  * @pspec on the child.
  *
  * This is an analogue of g_object_notify_by_pspec() for child properties.
- *
- * Since: 3.18
  */
 void
 gtk_container_child_notify_by_pspec (GtkContainer *container,
@@ -1354,8 +1350,6 @@ gtk_container_class_install_child_property (GtkContainerClass *cclass,
  *     child properties
  *
  * Installs child properties on a container class.
- *
- * Since: 3.18
  */
 void
 gtk_container_class_install_child_properties (GtkContainerClass  *cclass,

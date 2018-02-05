@@ -201,8 +201,6 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
    * If this property is set to %TRUE, the color swatch on the button is
    * rendered against a checkerboard background to show its opacity and
    * the opacity slider is displayed in the color selection dialog.
-   *
-   * Since: 2.4
    */
   g_object_class_install_property (gobject_class,
                                    PROP_USE_ALPHA,
@@ -215,8 +213,6 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
    * GtkColorButton:title:
    *
    * The title of the color selection dialog
-   *
-   * Since: 2.4
    */
   g_object_class_install_property (gobject_class,
                                    PROP_TITLE,
@@ -230,8 +226,6 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
    * GtkColorButton:rgba:
    *
    * The RGBA color.
-   *
-   * Since: 3.0
    */
   g_object_class_install_property (gobject_class,
                                    PROP_RGBA,
@@ -253,8 +247,6 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
    * Note that this signal is only emitted when the user
    * changes the color. If you need to react to programmatic color changes
    * as well, use the notify::color signal.
-   *
-   * Since: 2.4
    */
   color_button_signals[COLOR_SET] = g_signal_new (I_("color-set"),
                                                   G_TYPE_FROM_CLASS (gobject_class),
@@ -273,8 +265,6 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
    * This property should be used in cases where the palette
    * in the editor would be redundant, such as when the color
    * button is already part of a palette.
-   *
-   * Since: 3.20
    */
   g_object_class_install_property (gobject_class,
                                    PROP_SHOW_EDITOR,
@@ -464,8 +454,6 @@ gtk_color_button_finalize (GObject *object)
  * color when the user finishes.
  *
  * Returns: a new color button
- *
- * Since: 2.4
  */
 GtkWidget *
 gtk_color_button_new (void)
@@ -480,8 +468,6 @@ gtk_color_button_new (void)
  * Creates a new color button.
  *
  * Returns: a new color button
- *
- * Since: 3.0
  */
 GtkWidget *
 gtk_color_button_new_with_rgba (const GdkRGBA *rgba)
@@ -628,8 +614,6 @@ set_use_alpha (GtkColorButton *button,
  * @title: String containing new window title
  *
  * Sets the title for the color selection dialog.
- *
- * Since: 2.4
  */
 void
 gtk_color_button_set_title (GtkColorButton *button,
@@ -657,8 +641,6 @@ gtk_color_button_set_title (GtkColorButton *button,
  * Gets the title of the color selection dialog.
  *
  * Returns: An internal string, do not free the return value
- *
- * Since: 2.4
  */
 const gchar *
 gtk_color_button_get_title (GtkColorButton *button)

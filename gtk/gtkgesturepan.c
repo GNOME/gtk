@@ -228,8 +228,6 @@ gtk_gesture_pan_class_init (GtkGesturePanClass *klass)
    * GtkGesturePan:orientation:
    *
    * The expected orientation of pan gestures.
-   *
-   * Since: 3.14
    */
   g_object_class_install_property (object_class,
                                    PROP_ORIENTATION,
@@ -248,8 +246,6 @@ gtk_gesture_pan_class_init (GtkGesturePanClass *klass)
    *
    * This signal is emitted once a panning gesture along the
    * expected axis is detected.
-   *
-   * Since: 3.14
    */
   signals[PAN] =
     g_signal_new (I_("pan"),
@@ -278,8 +274,6 @@ gtk_gesture_pan_init (GtkGesturePan *gesture)
  * Returns a newly created #GtkGesture that recognizes pan gestures.
  *
  * Returns: a newly created #GtkGesturePan
- *
- * Since: 3.14
  **/
 GtkGesture *
 gtk_gesture_pan_new (GtkWidget      *widget,
@@ -300,8 +294,6 @@ gtk_gesture_pan_new (GtkWidget      *widget,
  * Returns the orientation of the pan gestures that this @gesture expects.
  *
  * Returns: the expected orientation for pan gestures
- *
- * Since: 3.14
  */
 GtkOrientation
 gtk_gesture_pan_get_orientation (GtkGesturePan *gesture)
@@ -321,8 +313,6 @@ gtk_gesture_pan_get_orientation (GtkGesturePan *gesture)
  * @orientation: expected orientation
  *
  * Sets the orientation to be expected on pan gestures.
- *
- * Since: 3.14
  */
 void
 gtk_gesture_pan_set_orientation (GtkGesturePan  *gesture,

@@ -921,8 +921,6 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
    * Specifies whether the button is a plain, check or radio button.
    * When #GtkActionable:action-name is set, the role will be determined
    * from the action and does not have to be set explicitly.
-   *
-   * Since: 3.16
    */
   properties[PROP_ROLE] =
     g_param_spec_enum ("role",
@@ -937,8 +935,6 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
    *
    * A #GIcon that will be used if iconic appearance for the button is
    * desired.
-   *
-   * Since: 3.16
    */
   properties[PROP_ICON] = 
     g_param_spec_object ("icon",
@@ -951,8 +947,6 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
    * GtkModelButton:text:
    *
    * The label for the button.
-   *
-   * Since: 3.16
    */
   properties[PROP_TEXT] =
     g_param_spec_string ("text",
@@ -966,8 +960,6 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
    *
    * The state of the button. This is reflecting the state of the associated
    * #GAction.
-   *
-   * Since: 3.16
    */
   properties[PROP_ACTIVE] =
     g_param_spec_boolean ("active",
@@ -981,8 +973,6 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
    *
    * The name of a submenu to open when the button is activated.
    * If this is set, the button should not have an action associated with it.
-   *
-   * Since: 3.16
    */
   properties[PROP_MENU_NAME] =
     g_param_spec_string ("menu-name",
@@ -997,8 +987,6 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
    * Whether to show the submenu indicator at the opposite side than normal.
    * This property should be set for model buttons that 'go back' to a parent
    * menu.
-   *
-   * Since: 3.16
    */
   properties[PROP_INVERTED] =
     g_param_spec_boolean ("inverted",
@@ -1012,8 +1000,6 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
    *
    * Wether to render the button contents centered instead of left-aligned.
    * This property should be set for title-like items.
-   *
-   * Since: 3.16
    */
   properties[PROP_CENTERED] =
     g_param_spec_boolean ("centered",
@@ -1028,8 +1014,6 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
    * If this property is set, the button will show an icon if one is set.
    * If no icon is set, the text will be used. This is typically used for
    * horizontal sections of linked buttons.
-   *
-   * Since: 3.16
    */
   properties[PROP_ICONIC] =
     g_param_spec_boolean ("iconic",
@@ -1070,8 +1054,6 @@ gtk_model_button_init (GtkModelButton *button)
  * Creates a new GtkModelButton.
  *
  * Returns: the newly created #GtkModelButton widget
- *
- * Since: 3.16
  */
 GtkWidget *
 gtk_model_button_new (void)

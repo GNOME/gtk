@@ -179,8 +179,6 @@ gtk_print_job_class_init (GtkPrintJobClass *class)
    *
    * Gets emitted when the status of a job changes. The signal handler
    * can use gtk_print_job_get_status() to obtain the new status.
-   *
-   * Since: 2.10
    */
   signals[STATUS_CHANGED] =
     g_signal_new (I_("status-changed"),
@@ -291,8 +289,6 @@ gtk_print_job_finalize (GObject *object)
  * Creates a new #GtkPrintJob.
  *
  * Returns: a new #GtkPrintJob
- *
- * Since: 2.10
  **/
 GtkPrintJob *
 gtk_print_job_new (const gchar      *title,
@@ -317,8 +313,6 @@ gtk_print_job_new (const gchar      *title,
  * Gets the #GtkPrintSettings of the print job.
  * 
  * Returns: (transfer none): the settings of @job
- *
- * Since: 2.10
  */
 GtkPrintSettings *
 gtk_print_job_get_settings (GtkPrintJob *job)
@@ -335,8 +329,6 @@ gtk_print_job_get_settings (GtkPrintJob *job)
  * Gets the #GtkPrinter of the print job.
  * 
  * Returns: (transfer none): the printer of @job
- *
- * Since: 2.10
  */
 GtkPrinter *
 gtk_print_job_get_printer (GtkPrintJob *job)
@@ -353,8 +345,6 @@ gtk_print_job_get_printer (GtkPrintJob *job)
  * Gets the job title.
  * 
  * Returns: the title of @job
- *
- * Since: 2.10
  */
 const gchar *
 gtk_print_job_get_title (GtkPrintJob *job)
@@ -371,8 +361,6 @@ gtk_print_job_get_title (GtkPrintJob *job)
  * Gets the status of the print job.
  * 
  * Returns: the status of @job
- *
- * Since: 2.10
  */
 GtkPrintStatus
 gtk_print_job_get_status (GtkPrintJob *job)
@@ -412,8 +400,6 @@ gtk_print_job_set_status (GtkPrintJob   *job,
  * gtk_printer_accepts_pdf() and gtk_printer_accepts_ps().
  * 
  * Returns: %FALSE if an error occurred
- *
- * Since: 2.10
  **/
 gboolean
 gtk_print_job_set_source_file (GtkPrintJob *job,
@@ -460,8 +446,6 @@ gtk_print_job_set_source_file (GtkPrintJob *job,
  * instead of a filename.
  *
  * Returns: %FALSE if an error occurred
- *
- * Since: 3.22
  */
 gboolean
 gtk_print_job_set_source_fd (GtkPrintJob  *job,
@@ -487,8 +471,6 @@ gtk_print_job_set_source_fd (GtkPrintJob  *job,
  * the print job should be rendered.
  * 
  * Returns: (transfer none): the cairo surface of @job
- *
- * Since: 2.10
  **/
 cairo_surface_t *
 gtk_print_job_get_surface (GtkPrintJob  *job,
@@ -568,8 +550,6 @@ gtk_print_job_get_surface (GtkPrintJob  *job,
  * 
  * This function is often implemented using some form of polling, so it should
  * not be enabled unless needed.
- *
- * Since: 2.10
  */
 void
 gtk_print_job_set_track_print_status (GtkPrintJob *job,
@@ -599,8 +579,6 @@ gtk_print_job_set_track_print_status (GtkPrintJob *job,
  * For details, see gtk_print_job_set_track_print_status().
  *
  * Returns: %TRUE if print job status will be reported after printing
- *
- * Since: 2.10
  */
 gboolean
 gtk_print_job_get_track_print_status (GtkPrintJob *job)
@@ -701,8 +679,6 @@ gtk_print_job_get_property (GObject    *object,
  * @dnotify: destroy notify for @user_data
  * 
  * Sends the print job off to the printer.  
- * 
- * Since: 2.10
  **/
 void
 gtk_print_job_send (GtkPrintJob             *job,
@@ -733,8 +709,6 @@ gtk_print_job_send (GtkPrintJob             *job,
  * Gets the #GtkPrintPages setting for this job.
  *
  * Returns: the #GtkPrintPages setting
- *
- * Since: 3.0
  */
 GtkPrintPages
 gtk_print_job_get_pages (GtkPrintJob *job)
@@ -748,8 +722,6 @@ gtk_print_job_get_pages (GtkPrintJob *job)
  * @pages: the #GtkPrintPages setting
  *
  * Sets the #GtkPrintPages setting for this job.
- *
- * Since: 3.0
  */
 void
 gtk_print_job_set_pages (GtkPrintJob   *job,
@@ -767,8 +739,6 @@ gtk_print_job_set_pages (GtkPrintJob   *job,
  *
  * Returns: (array length=n_ranges) (transfer none): a pointer to an
  * array of #GtkPageRange structs
- *
- * Since: 3.0
  */
 GtkPageRange *
 gtk_print_job_get_page_ranges (GtkPrintJob *job,
@@ -786,8 +756,6 @@ gtk_print_job_get_page_ranges (GtkPrintJob *job,
  * @n_ranges: the length of the @ranges array
  *
  * Sets the page ranges for this job.
- *
- * Since: 3.0
  */
 void
 gtk_print_job_set_page_ranges (GtkPrintJob  *job,
@@ -806,8 +774,6 @@ gtk_print_job_set_page_ranges (GtkPrintJob  *job,
  * Gets the #GtkPageSet setting for this job.
  *
  * Returns: the #GtkPageSet setting
- *
- * Since: 3.0
  */
 GtkPageSet
 gtk_print_job_get_page_set (GtkPrintJob *job)
@@ -821,8 +787,6 @@ gtk_print_job_get_page_set (GtkPrintJob *job)
  * @page_set: a #GtkPageSet setting
  *
  * Sets the #GtkPageSet setting for this job.
- *
- * Since: 3.0
  */
 void
 gtk_print_job_set_page_set (GtkPrintJob *job,
@@ -838,8 +802,6 @@ gtk_print_job_set_page_set (GtkPrintJob *job,
  * Gets the number of copies of this job.
  *
  * Returns: the number of copies
- *
- * Since: 3.0
  */
 gint
 gtk_print_job_get_num_copies (GtkPrintJob *job)
@@ -853,8 +815,6 @@ gtk_print_job_get_num_copies (GtkPrintJob *job)
  * @num_copies: the number of copies
  *
  * Sets the number of copies for this job.
- *
- * Since: 3.0
  */
 void
 gtk_print_job_set_num_copies (GtkPrintJob *job,
@@ -870,8 +830,6 @@ gtk_print_job_set_num_copies (GtkPrintJob *job,
  * Gets the scale for this job (where 1.0 means unscaled).
  *
  * Returns: the scale
- *
- * Since: 3.0
  */
 gdouble
 gtk_print_job_get_scale (GtkPrintJob *job)
@@ -886,8 +844,6 @@ gtk_print_job_get_scale (GtkPrintJob *job)
  * @scale: the scale
  *
  * Sets the scale for this job (where 1.0 means unscaled).
- *
- * Since: 3.0
  */
 void
 gtk_print_job_set_scale (GtkPrintJob *job,
@@ -903,8 +859,6 @@ gtk_print_job_set_scale (GtkPrintJob *job,
  * Gets the n-up setting for this job.
  *
  * Returns: the n-up setting
- *
- * Since: 3.0
  */
 guint
 gtk_print_job_get_n_up (GtkPrintJob *job)
@@ -918,8 +872,6 @@ gtk_print_job_get_n_up (GtkPrintJob *job)
  * @n_up: the n-up value
  *
  * Sets the n-up setting for this job.
- *
- * Since: 3.0
  */
 void
 gtk_print_job_set_n_up (GtkPrintJob *job,
@@ -935,8 +887,6 @@ gtk_print_job_set_n_up (GtkPrintJob *job,
  * Gets the n-up layout setting for this job.
  *
  * Returns: the n-up layout
- *
- * Since: 3.0
  */
 GtkNumberUpLayout
 gtk_print_job_get_n_up_layout (GtkPrintJob *job)
@@ -950,8 +900,6 @@ gtk_print_job_get_n_up_layout (GtkPrintJob *job)
  * @layout: the n-up layout setting
  *
  * Sets the n-up layout setting for this job.
- *
- * Since: 3.0
  */
 void
 gtk_print_job_set_n_up_layout (GtkPrintJob       *job,
@@ -967,8 +915,6 @@ gtk_print_job_set_n_up_layout (GtkPrintJob       *job,
  * Gets whether the job is printed rotated.
  *
  * Returns: whether the job is printed rotated
- *
- * Since: 3.0
  */
 gboolean
 gtk_print_job_get_rotate (GtkPrintJob *job)
@@ -982,8 +928,6 @@ gtk_print_job_get_rotate (GtkPrintJob *job)
  * @rotate: whether to print rotated
  *
  * Sets whether this job is printed rotated.
- *
- * Since: 3.0
  */
 void
 gtk_print_job_set_rotate (GtkPrintJob *job,
@@ -999,8 +943,6 @@ gtk_print_job_set_rotate (GtkPrintJob *job,
  * Gets whether this job is printed collated.
  *
  * Returns: whether the job is printed collated
- *
- * Since: 3.0
  */
 gboolean
 gtk_print_job_get_collate (GtkPrintJob *job)
@@ -1014,8 +956,6 @@ gtk_print_job_get_collate (GtkPrintJob *job)
  * @collate: whether the job is printed collated
  *
  * Sets whether this job is printed collated.
- *
- * Since: 3.0
  */
 void
 gtk_print_job_set_collate (GtkPrintJob *job,
@@ -1031,8 +971,6 @@ gtk_print_job_set_collate (GtkPrintJob *job,
  * Gets whether this job is printed reversed.
  *
  * Returns: whether the job is printed reversed.
- *
- * Since: 3.0
  */
 gboolean
 gtk_print_job_get_reverse (GtkPrintJob *job)
@@ -1046,8 +984,6 @@ gtk_print_job_get_reverse (GtkPrintJob *job)
  * @reverse: whether the job is printed reversed
  *
  * Sets whether this job is printed reversed.
- *
- * Since: 3.0
  */
 void
 gtk_print_job_set_reverse (GtkPrintJob *job,

@@ -461,8 +461,6 @@ gtk_action_bar_buildable_interface_init (GtkBuildableIface *iface)
  *
  * Adds @child to @action_bar, packed with reference to the
  * start of the @action_bar.
- *
- * Since: 3.12
  */
 void
 gtk_action_bar_pack_start (GtkActionBar *action_bar,
@@ -480,8 +478,6 @@ gtk_action_bar_pack_start (GtkActionBar *action_bar,
  *
  * Adds @child to @action_bar, packed with reference to the
  * end of the @action_bar.
- *
- * Since: 3.12
  */
 void
 gtk_action_bar_pack_end (GtkActionBar *action_bar,
@@ -498,8 +494,6 @@ gtk_action_bar_pack_end (GtkActionBar *action_bar,
  * @center_widget: (allow-none): a widget to use for the center
  *
  * Sets the center widget for the #GtkActionBar.
- *
- * Since: 3.12
  */
 void
 gtk_action_bar_set_center_widget (GtkActionBar *action_bar,
@@ -517,8 +511,6 @@ gtk_action_bar_set_center_widget (GtkActionBar *action_bar,
  * Retrieves the center bar widget of the bar.
  *
  * Returns: (transfer none) (nullable): the center #GtkWidget or %NULL.
- *
- * Since: 3.12
  */
 GtkWidget *
 gtk_action_bar_get_center_widget (GtkActionBar *action_bar)
@@ -536,8 +528,6 @@ gtk_action_bar_get_center_widget (GtkActionBar *action_bar)
  * Creates a new #GtkActionBar widget.
  *
  * Returns: a new #GtkActionBar
- *
- * Since: 3.12
  */
 GtkWidget *
 gtk_action_bar_new (void)
@@ -556,8 +546,6 @@ gtk_action_bar_new (void)
  *
  * Note: this does not show or hide @action_bar in the #GtkWidget:visible sense,
  * so revealing has no effect if #GtkWidget:visible is %FALSE.
- *
- * Since: 3.90
  */
 void
 gtk_action_bar_set_revealed (GtkActionBar *action_bar,
@@ -582,8 +570,6 @@ gtk_action_bar_set_revealed (GtkActionBar *action_bar,
  * Gets the value of the #GtkActionBar:revealed property.
  *
  * Returns: the current value of the #GtkActionBar:revealed property.
- *
- * Since: 3.90
  */
 gboolean
 gtk_action_bar_get_revealed (GtkActionBar *action_bar)

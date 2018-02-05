@@ -605,8 +605,6 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
    * GtkMenuItem:submenu:
    *
    * The submenu attached to the menu item, or %NULL if it has none.
-   *
-   * Since: 2.12
    */
   menu_item_props[PROP_SUBMENU] =
       g_param_spec_object ("submenu",
@@ -621,8 +619,6 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
    * Sets the accelerator path of the menu item, through which runtime
    * changes of the menu item's accelerator caused by the user can be
    * identified and saved to persistant storage.
-   *
-   * Since: 2.14
    */
   menu_item_props[PROP_ACCEL_PATH] =
       g_param_spec_string ("accel-path",
@@ -635,8 +631,6 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
    * GtkMenuItem:label:
    *
    * The text for the child label.
-   *
-   * Since: 2.16
    */
   menu_item_props[PROP_LABEL] =
       g_param_spec_string ("label",
@@ -649,8 +643,6 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
    * GtkMenuItem:use-underline:
    *
    * %TRUE if underlines in the text indicate mnemonics.
-   *
-   * Since: 2.16
    */
   menu_item_props[PROP_USE_UNDERLINE] =
       g_param_spec_boolean ("use-underline",
@@ -1785,8 +1777,6 @@ gtk_menu_item_set_accel_path (GtkMenuItem *menu_item,
  *
  * Returns: (nullable) (transfer none): the accelerator path corresponding to
  *     this menu item’s functionality, or %NULL if not set
- *
- * Since: 2.14
  */
 const gchar *
 gtk_menu_item_get_accel_path (GtkMenuItem *menu_item)
@@ -1847,8 +1837,6 @@ gtk_menu_item_ensure_label (GtkMenuItem *menu_item)
  * @label: the text you want to set
  *
  * Sets @text on the @menu_item label
- *
- * Since: 2.16
  */
 void
 gtk_menu_item_set_label (GtkMenuItem *menu_item,
@@ -1867,8 +1855,6 @@ gtk_menu_item_set_label (GtkMenuItem *menu_item,
  *
  * Returns: The text in the @menu_item label. This is the internal
  *   string used by the label, and must not be modified.
- *
- * Since: 2.16
  */
 const gchar *
 gtk_menu_item_get_label (GtkMenuItem *menu_item)
@@ -1885,8 +1871,6 @@ gtk_menu_item_get_label (GtkMenuItem *menu_item)
  *
  * If true, an underline in the text indicates the next character
  * should be used for the mnemonic accelerator key.
- *
- * Since: 2.16
  */
 void
 gtk_menu_item_set_use_underline (GtkMenuItem *menu_item,
@@ -1916,8 +1900,6 @@ gtk_menu_item_set_use_underline (GtkMenuItem *menu_item,
  *
  * Returns: %TRUE if an embedded underline in the label
  *     indicates the mnemonic accelerator key.
- *
- * Since: 2.16
  */
 gboolean
 gtk_menu_item_get_use_underline (GtkMenuItem *menu_item)
@@ -1949,8 +1931,6 @@ gtk_menu_item_get_use_underline (GtkMenuItem *menu_item)
  *
  * There should be little need for applications to call
  * this functions.
- *
- * Since: 3.0
  */
 void
 gtk_menu_item_set_reserve_indicator (GtkMenuItem *menu_item,
@@ -1980,8 +1960,6 @@ gtk_menu_item_set_reserve_indicator (GtkMenuItem *menu_item,
  *
  * Returns: %TRUE if @menu_item always reserves space for the
  *     submenu indicator
- *
- * Since: 3.0
  */
 gboolean
 gtk_menu_item_get_reserve_indicator (GtkMenuItem *menu_item)

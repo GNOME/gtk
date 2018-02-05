@@ -962,8 +962,6 @@ gtk_accel_label_refetch (GtkAccelLabel *accel_label)
  * used regardless of any associated accel closure or widget.
  *
  * Providing an @accelerator_key of 0 removes the manual setting.
- *
- * Since: 3.6
  */
 void
 gtk_accel_label_set_accel (GtkAccelLabel   *accel_label,
@@ -986,8 +984,6 @@ gtk_accel_label_set_accel (GtkAccelLabel   *accel_label,
  *
  * Gets the keyval and modifier mask set with
  * gtk_accel_label_set_accel().
- *
- * Since: 3.12
  */
 void
 gtk_accel_label_get_accel (GtkAccelLabel   *accel_label,

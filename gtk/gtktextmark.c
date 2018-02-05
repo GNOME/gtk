@@ -255,8 +255,6 @@ gtk_text_mark_get_property (GObject    *object,
  * side of the text you’re typing).
  *
  * Returns: new #GtkTextMark
- *
- * Since: 2.12
  **/
 GtkTextMark *
 gtk_text_mark_new (const gchar *name,

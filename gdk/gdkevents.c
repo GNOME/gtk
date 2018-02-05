@@ -252,8 +252,6 @@ _gdk_event_queue_append (GdkDisplay *display,
  * the queue, onto the tail of the event queue.
  *
  * Returns: the newly appended list node.
- *
- * Since: 2.16
  */
 GList*
 _gdk_event_queue_insert_after (GdkDisplay *display,
@@ -280,8 +278,6 @@ _gdk_event_queue_insert_after (GdkDisplay *display,
  * the queue, onto the head of the event queue.
  *
  * Returns: the newly prepended list node.
- *
- * Since: 2.16
  */
 GList*
 _gdk_event_queue_insert_before (GdkDisplay *display,
@@ -485,7 +481,6 @@ gdk_event_handler_set (GdkEventFunc   func,
  * Creates a new event of the given type. All fields are set to 0.
  * 
  * Returns: a newly-allocated #GdkEvent. Free with g_object_unref()
- * Since: 2.2
  */
 GdkEvent*
 gdk_event_new (GdkEventType type)
@@ -589,8 +584,6 @@ gdk_event_set_pointer_emulated (GdkEvent *event,
  * from a touch event), as opposed to a real one.
  *
  * Returns: %TRUE if this event is emulated
- *
- * Since: 3.22
  */
 gboolean
 gdk_event_get_pointer_emulated (GdkEvent *event)
@@ -789,8 +782,6 @@ gdk_event_finalize (GObject *object)
  * Extracts the #GdkWindow associated with an event.
  *
  * Returns: (transfer none): The #GdkWindow associated with the event
- *
- * Since: 3.10
  */
 GdkWindow *
 gdk_event_get_window (const GdkEvent *event)
@@ -1159,8 +1150,6 @@ gdk_event_set_coords (GdkEvent *event,
  * Extract the button number from an event.
  *
  * Returns: %TRUE if the event delivered a button number
- *
- * Since: 3.2
  **/
 gboolean
 gdk_event_get_button (const GdkEvent *event,
@@ -1200,8 +1189,6 @@ gdk_event_get_button (const GdkEvent *event,
  * Extracts the click count from an event.
  *
  * Returns: %TRUE if the event delivered a click count
- *
- * Since: 3.2
  */
 gboolean
 gdk_event_get_click_count (const GdkEvent *event,
@@ -1237,8 +1224,6 @@ gdk_event_get_click_count (const GdkEvent *event,
  * Extracts the keyval from an event.
  *
  * Returns: %TRUE if the event delivered a key symbol
- *
- * Since: 3.2
  */
 gboolean
 gdk_event_get_keyval (const GdkEvent *event,
@@ -1283,8 +1268,6 @@ gdk_event_set_keyval (GdkEvent *event,
  * Also see gdk_event_get_scancode().
  *
  * Returns: %TRUE if the event delivered a hardware keycode
- *
- * Since: 3.2
  */
 gboolean
 gdk_event_get_keycode (const GdkEvent *event,
@@ -1410,8 +1393,6 @@ gdk_event_get_key_is_modifier (const GdkEvent *event,
  * Extracts the scroll direction from an event.
  *
  * Returns: %TRUE if the event delivered a scroll direction
- *
- * Since: 3.2
  */
 gboolean
 gdk_event_get_scroll_direction (const GdkEvent *event,
@@ -1448,8 +1429,6 @@ gdk_event_get_scroll_direction (const GdkEvent *event,
  * Retrieves the scroll deltas from a #GdkEvent
  *
  * Returns: %TRUE if the event contains smooth scroll information
- *
- * Since: 3.4
  **/
 gboolean
 gdk_event_get_scroll_deltas (const GdkEvent *event,
@@ -1498,8 +1477,6 @@ gdk_event_get_scroll_deltas (const GdkEvent *event,
  * Stop scroll events always have a a delta of 0/0.
  *
  * Returns: %TRUE if the event is a scroll stop event
- *
- * Since: 3.20
  */
 gboolean
 gdk_event_is_scroll_stop_event (const GdkEvent *event)
@@ -1599,8 +1576,6 @@ gdk_event_get_axis (const GdkEvent *event,
  * Sets the device for @event to @device. The event must
  * have been allocated by GTK+, for instance, by
  * gdk_event_copy().
- *
- * Since: 3.0
  **/
 void
 gdk_event_set_device (GdkEvent  *event,
@@ -1617,8 +1592,6 @@ gdk_event_set_device (GdkEvent  *event,
  * it, else it will return %NULL.
  *
  * Returns: (nullable) (transfer none): a #GdkDevice, or %NULL.
- *
- * Since: 3.0
  **/
 GdkDevice *
 gdk_event_get_device (const GdkEvent *event)
@@ -1637,8 +1610,6 @@ gdk_event_get_device (const GdkEvent *event)
  *
  * The event must have been allocated by GTK+,
  * for instance by gdk_event_copy().
- *
- * Since: 3.0
  **/
 void
 gdk_event_set_source_device (GdkEvent  *event,
@@ -1662,8 +1633,6 @@ gdk_event_set_source_device (GdkEvent  *event,
  * return %NULL.
  *
  * Returns: (nullable) (transfer none): a #GdkDevice, or %NULL.
- *
- * Since: 3.0
  **/
 GdkDevice *
 gdk_event_get_source_device (const GdkEvent *event)
@@ -1692,8 +1661,6 @@ gdk_event_get_source_device (const GdkEvent *event)
  * event->button == %GDK_BUTTON_SECONDARY.
  *
  * Returns: %TRUE if the event should trigger a context menu.
- *
- * Since: 3.4
  **/
 gboolean
 gdk_event_triggers_context_menu (const GdkEvent *event)
@@ -1766,8 +1733,6 @@ gdk_events_get_axis_distances (GdkEvent *event1,
  * (as in a straight line going from @event1 to @event2) will be returned.
  *
  * Returns: %TRUE if the distance could be calculated.
- *
- * Since: 3.0
  **/
 gboolean
 gdk_events_get_distance (GdkEvent *event1,
@@ -1791,8 +1756,6 @@ gdk_events_get_distance (GdkEvent *event1,
  * Y axis.
  *
  * Returns: %TRUE if the angle could be calculated.
- *
- * Since: 3.0
  **/
 gboolean
 gdk_events_get_angle (GdkEvent *event1,
@@ -1834,8 +1797,6 @@ gdk_events_get_angle (GdkEvent *event1,
  * will be returned in @x and @y.
  *
  * Returns: %TRUE if the center could be calculated.
- *
- * Since: 3.0
  **/
 gboolean
 gdk_events_get_center (GdkEvent *event1,
@@ -1901,8 +1862,6 @@ gdk_event_get_display (const GdkEvent *event)
  * to which the event belongs. Otherwise, return %NULL.
  *
  * Returns: (transfer none): the event sequence that the event belongs to
- *
- * Since: 3.4
  */
 GdkEventSequence *
 gdk_event_get_event_sequence (const GdkEvent *event)
@@ -1973,8 +1932,6 @@ G_DEFINE_BOXED_TYPE (GdkEventSequence, gdk_event_sequence,
  * Retrieves the type of the event.
  *
  * Returns: a #GdkEventType
- *
- * Since: 3.10
  */
 GdkEventType
 gdk_event_get_event_type (const GdkEvent *event)
@@ -1991,8 +1948,6 @@ gdk_event_get_event_type (const GdkEvent *event)
  * Returns the #GdkSeat this event was generated for.
  *
  * Returns: (transfer none): The #GdkSeat of this event
- *
- * Since: 3.20
  **/
 GdkSeat *
 gdk_event_get_seat (const GdkEvent *event)
@@ -2018,8 +1973,6 @@ gdk_event_get_seat (const GdkEvent *event)
  * persistently across runs, see gdk_device_tool_get_serial()
  *
  * Returns: (transfer none): The current device tool, or %NULL
- *
- * Since: 3.22
  **/
 GdkDeviceTool *
 gdk_event_get_device_tool (const GdkEvent *event)
@@ -2039,8 +1992,6 @@ gdk_event_get_device_tool (const GdkEvent *event)
  * @tool: (nullable): tool to set on the event, or %NULL
  *
  * Sets the device tool for this event, should be rarely used.
- *
- * Since: 3.22
  **/
 void
 gdk_event_set_device_tool (GdkEvent      *event,
@@ -2073,8 +2024,6 @@ gdk_event_set_scancode (GdkEvent *event,
  * some extended flags.
  *
  * Returns: The associated keyboard scancode or 0
- *
- * Since: 3.22
  **/
 int
 gdk_event_get_scancode (GdkEvent *event)

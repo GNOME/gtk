@@ -342,8 +342,6 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
    * GdkGLContext:shared-context:
    *
    * The #GdkGLContext that this context is sharing data with, or %NULL
-   *
-   * Since: 3.16
    */
   obj_pspecs[PROP_SHARED_CONTEXT] =
     g_param_spec_object ("shared-context",
@@ -446,8 +444,6 @@ gdk_gl_context_has_unpack_subimage (GdkGLContext *context)
  *
  * The #GdkGLContext must not be realized or made current prior to
  * calling this function.
- *
- * Since: 3.16
  */
 void
 gdk_gl_context_set_debug_enabled (GdkGLContext *context,
@@ -470,8 +466,6 @@ gdk_gl_context_set_debug_enabled (GdkGLContext *context,
  * Retrieves the value set using gdk_gl_context_set_debug_enabled().
  *
  * Returns: %TRUE if debugging is enabled
- *
- * Since: 3.16
  */
 gboolean
 gdk_gl_context_get_debug_enabled (GdkGLContext *context)
@@ -497,8 +491,6 @@ gdk_gl_context_get_debug_enabled (GdkGLContext *context)
  *
  * The #GdkGLContext must not be realized or made current prior to calling
  * this function.
- *
- * Since: 3.16
  */
 void
 gdk_gl_context_set_forward_compatible (GdkGLContext *context,
@@ -521,8 +513,6 @@ gdk_gl_context_set_forward_compatible (GdkGLContext *context,
  * Retrieves the value set using gdk_gl_context_set_forward_compatible().
  *
  * Returns: %TRUE if the context should be forward compatible
- *
- * Since: 3.16
  */
 gboolean
 gdk_gl_context_get_forward_compatible (GdkGLContext *context)
@@ -546,8 +536,6 @@ gdk_gl_context_get_forward_compatible (GdkGLContext *context)
  *
  * The #GdkGLContext must not be realized or made current prior to calling
  * this function.
- *
- * Since: 3.16
  */
 void
 gdk_gl_context_set_required_version (GdkGLContext *context,
@@ -596,8 +584,6 @@ gdk_gl_context_set_required_version (GdkGLContext *context,
  *
  * Retrieves the major and minor version requested by calling
  * gdk_gl_context_set_required_version().
- *
- * Since: 3.16
  */
 void
 gdk_gl_context_get_required_version (GdkGLContext *context,
@@ -662,8 +648,6 @@ gdk_gl_context_get_required_version (GdkGLContext *context,
  * kind of shader programs to load.
  *
  * Returns: %TRUE if the GL context is in legacy mode
- *
- * Since: 3.20
  */
 gboolean
 gdk_gl_context_is_legacy (GdkGLContext *context)
@@ -703,8 +687,6 @@ gdk_gl_context_set_is_legacy (GdkGLContext *context,
  * You should check the return value of gdk_gl_context_get_use_es() after
  * calling gdk_gl_context_realize() to decide whether to use the OpenGL or
  * OpenGL ES API, extensions, or shaders.
- *
- * Since: 3.22
  */
 void
 gdk_gl_context_set_use_es (GdkGLContext *context,
@@ -726,8 +708,6 @@ gdk_gl_context_set_use_es (GdkGLContext *context,
  * Checks whether the @context is using an OpenGL or OpenGL ES profile.
  *
  * Returns: %TRUE if the #GdkGLContext is using an OpenGL ES profile
- *
- * Since: 3.22
  */
 gboolean
 gdk_gl_context_get_use_es (GdkGLContext *context)
@@ -752,8 +732,6 @@ gdk_gl_context_get_use_es (GdkGLContext *context)
  * It is safe to call this function on a realized #GdkGLContext.
  *
  * Returns: %TRUE if the context is realized
- *
- * Since: 3.16
  */
 gboolean
 gdk_gl_context_realize (GdkGLContext  *context,
@@ -857,8 +835,6 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
  * @context: a #GdkGLContext
  *
  * Makes the @context the current one.
- *
- * Since: 3.16
  */
 void
 gdk_gl_context_make_current (GdkGLContext *context)
@@ -900,8 +876,6 @@ gdk_gl_context_make_current (GdkGLContext *context)
  * Retrieves the #GdkDisplay the @context is created for
  *
  * Returns: (nullable) (transfer none): a #GdkDisplay or %NULL
- *
- * Since: 3.16
  */
 GdkDisplay *
 gdk_gl_context_get_display (GdkGLContext *context)
@@ -918,8 +892,6 @@ gdk_gl_context_get_display (GdkGLContext *context)
  * Retrieves the #GdkWindow used by the @context.
  *
  * Returns: (nullable) (transfer none): a #GdkWindow or %NULL
- *
- * Since: 3.16
  */
 GdkWindow *
 gdk_gl_context_get_window (GdkGLContext *context)
@@ -936,8 +908,6 @@ gdk_gl_context_get_window (GdkGLContext *context)
  * Retrieves the #GdkGLContext that this @context share data with.
  *
  * Returns: (nullable) (transfer none): a #GdkGLContext or %NULL
- *
- * Since: 3.16
  */
 GdkGLContext *
 gdk_gl_context_get_shared_context (GdkGLContext *context)
@@ -958,8 +928,6 @@ gdk_gl_context_get_shared_context (GdkGLContext *context)
  * Retrieves the OpenGL version of the @context.
  *
  * The @context must be realized prior to calling this function.
- *
- * Since: 3.16
  */
 void
 gdk_gl_context_get_version (GdkGLContext *context,
@@ -984,8 +952,6 @@ gdk_gl_context_get_version (GdkGLContext *context,
  *
  * Any OpenGL call after this function returns will be ignored
  * until gdk_gl_context_make_current() is called.
- *
- * Since: 3.16
  */
 void
 gdk_gl_context_clear_current (void)
@@ -1006,8 +972,6 @@ gdk_gl_context_clear_current (void)
  * Retrieves the current #GdkGLContext.
  *
  * Returns: (nullable) (transfer none): the current #GdkGLContext, or %NULL
- *
- * Since: 3.16
  */
 GdkGLContext *
 gdk_gl_context_get_current (void)

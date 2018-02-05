@@ -160,8 +160,6 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 							GTK_PARAM_READWRITE));
   /**
    * GtkCellRendererPixbuf:surface:
-   *
-   * Since: 3.10
    */
   g_object_class_install_property (object_class,
 				   PROP_SURFACE,
@@ -173,8 +171,6 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 
   /**
    * GtkCellRendererPixbuf:texture:
-   *
-   * Since: 3.94
    */
   g_object_class_install_property (object_class,
 				   PROP_TEXTURE,
@@ -188,8 +184,6 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
    * GtkCellRendererPixbuf:icon-size:
    *
    * The #GtkIconSize value that specifies the size of the rendered icon.
-   *
-   * Since: 3.94
    */
   g_object_class_install_property (object_class,
 				   PROP_ICON_SIZE,
@@ -205,8 +199,6 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
    *
    * The name of the themed icon to display.
    * This property only has an effect if not overridden by the "pixbuf" property.
-   *
-   * Since: 2.8 
    */
   g_object_class_install_property (object_class,
 				   PROP_ICON_NAME,
@@ -222,8 +214,6 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
    * The GIcon representing the icon to display.
    * If the icon theme is changed, the image will be updated
    * automatically.
-   *
-   * Since: 2.14
    */
   g_object_class_install_property (object_class,
                                    PROP_GICON,

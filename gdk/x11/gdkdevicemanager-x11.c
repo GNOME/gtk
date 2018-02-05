@@ -88,8 +88,6 @@ _gdk_x11_device_manager_new (GdkDisplay *display)
  *
  * Returns: (transfer none) (allow-none) (type GdkX11DeviceCore): The #GdkDevice wrapping the device ID,
  *          or %NULL if the given ID doesn’t currently represent a device.
- *
- * Since: 3.2
  **/
 GdkDevice *
 gdk_x11_device_manager_lookup (GdkX11DeviceManagerCore *device_manager,
@@ -133,8 +131,6 @@ gdk_x11_device_manager_lookup (GdkX11DeviceManagerCore *device_manager,
  * > those managed via XInput 1.x), will return 0.
  *
  * Returns: the XInput2 device ID.
- *
- * Since: 3.2
  **/
 gint
 gdk_x11_device_get_id (GdkDevice *device)
@@ -170,8 +166,6 @@ gdk_x11_device_get_id (GdkDevice *device)
  * applications that do mixed GDK/Xlib calls could want to disable
  * multidevice support if such Xlib code deals with input devices in
  * any way and doesn’t observe the presence of XInput 2.
- *
- * Since: 3.0
  */
 void
 gdk_disable_multidevice (void)

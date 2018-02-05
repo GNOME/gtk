@@ -43,8 +43,6 @@ gtk_cell_editable_default_init (GtkCellEditableInterface *iface)
    * GtkCellEditable:editing-canceled:
    *
    * Indicates whether editing on the cell has been canceled.
-   *
-   * Since: 2.20
    */
   g_object_interface_install_property (iface,
                                        g_param_spec_boolean ("editing-canceled",

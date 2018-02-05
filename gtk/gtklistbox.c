@@ -300,8 +300,6 @@ static guint row_signals[ROW__LAST_SIGNAL] = { 0 };
  * Creates a new #GtkListBox container.
  *
  * Returns: a new #GtkListBox
- *
- * Since: 3.10
  */
 GtkWidget *
 gtk_list_box_new (void)
@@ -456,8 +454,6 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
    * When the @box is using #GTK_SELECTION_MULTIPLE, this signal will not
    * give you the full picture of selection changes, and you should use
    * the #GtkListBox::selected-rows-changed signal instead.
-   *
-   * Since: 3.10
    */
   signals[ROW_SELECTED] =
     g_signal_new (I_("row-selected"),
@@ -475,8 +471,6 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
    *
    * The ::selected-rows-changed signal is emitted when the
    * set of selected rows changes.
-   *
-   * Since: 3.14
    */
   signals[SELECTED_ROWS_CHANGED] = g_signal_new (I_("selected-rows-changed"),
                                                  GTK_TYPE_LIST_BOX,
@@ -495,8 +489,6 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
    * mode permits it.
    *
    * The default bindings for this signal is Ctrl-a.
-   *
-   * Since: 3.14
    */
   signals[SELECT_ALL] = g_signal_new (I_("select-all"),
                                       GTK_TYPE_LIST_BOX,
@@ -515,8 +507,6 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
    * mode permits it.
    *
    * The default bindings for this signal is Ctrl-Shift-a.
-   *
-   * Since: 3.14
    */
   signals[UNSELECT_ALL] = g_signal_new (I_("unselect-all"),
                                         GTK_TYPE_LIST_BOX,
@@ -532,8 +522,6 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
    * @row: the activated row
    *
    * The ::row-activated signal is emitted when a row has been activated by the user.
-   *
-   * Since: 3.10
    */
   signals[ROW_ACTIVATED] =
     g_signal_new (I_("row-activated"),
@@ -654,8 +642,6 @@ gtk_list_box_init (GtkListBox *box)
  * find all selected rows.
  *
  * Returns: (transfer none): the selected row
- *
- * Since: 3.10
  */
 GtkListBoxRow *
 gtk_list_box_get_selected_row (GtkListBox *box)
@@ -675,8 +661,6 @@ gtk_list_box_get_selected_row (GtkListBox *box)
  * list, %NULL is returned.
  *
  * Returns: (transfer none) (nullable): the child #GtkWidget or %NULL
- *
- * Since: 3.10
  */
 GtkListBoxRow *
 gtk_list_box_get_row_at_index (GtkListBox *box,
@@ -719,8 +703,6 @@ row_y_cmp_func (gconstpointer a,
  *
  * Returns: (transfer none) (nullable): the row or %NULL
  *   in case no row exists for the given y coordinate.
- *
- * Since: 3.10
  */
 GtkListBoxRow *
 gtk_list_box_get_row_at_y (GtkListBox *box,
@@ -747,8 +729,6 @@ gtk_list_box_get_row_at_y (GtkListBox *box,
  * @row: (allow-none): The row to select or %NULL
  *
  * Make @row the currently selected row.
- *
- * Since: 3.10
  */
 void
 gtk_list_box_select_row (GtkListBox    *box,
@@ -771,15 +751,13 @@ gtk_list_box_select_row (GtkListBox    *box,
     }
 }
 
-/**   
+/**
  * gtk_list_box_unselect_row:
  * @box: a #GtkListBox
  * @row: the row to unselected
  *
  * Unselects a single row of @box, if the selection mode allows it.
- *
- * Since: 3.14
- */                       
+ */
 void
 gtk_list_box_unselect_row (GtkListBox    *box,
                            GtkListBoxRow *row)
@@ -795,8 +773,6 @@ gtk_list_box_unselect_row (GtkListBox    *box,
  * @box: a #GtkListBox
  *
  * Select all children of @box, if the selection mode allows it.
- *
- * Since: 3.14
  */
 void
 gtk_list_box_select_all (GtkListBox *box)
@@ -818,8 +794,6 @@ gtk_list_box_select_all (GtkListBox *box)
  * @box: a #GtkListBox
  *
  * Unselect all children of @box, if the selection mode allows it.
- *
- * Since: 3.14
  */
 void
 gtk_list_box_unselect_all (GtkListBox *box)
@@ -854,8 +828,6 @@ gtk_list_box_selected_rows_changed (GtkListBox *box)
  *
  * A function used by gtk_list_box_selected_foreach().
  * It will be called on every selected child of the @box.
- *
- * Since: 3.14
  */
 
 /**
@@ -867,8 +839,6 @@ gtk_list_box_selected_rows_changed (GtkListBox *box)
  * Calls a function for each selected child.
  *
  * Note that the selection cannot be modified from within this function.
- *
- * Since: 3.14
  */
 void
 gtk_list_box_selected_foreach (GtkListBox            *box,
@@ -899,8 +869,6 @@ gtk_list_box_selected_foreach (GtkListBox            *box,
  * Returns: (element-type GtkListBoxRow) (transfer container):
  *     A #GList containing the #GtkWidget for each selected child.
  *     Free with g_list_free() when done.
- *
- * Since: 3.14
  */
 GList *
 gtk_list_box_get_selected_rows (GtkListBox *box)
@@ -930,8 +898,6 @@ gtk_list_box_get_selected_rows (GtkListBox *box)
  *
  * Sets the placeholder widget that is shown in the list when
  * it doesn't display any visible children.
- *
- * Since: 3.10
  */
 void
 gtk_list_box_set_placeholder (GtkListBox *box,
@@ -971,8 +937,6 @@ gtk_list_box_set_placeholder (GtkListBox *box,
  * a #GtkScrolledWindow the adjustment from that will
  * be picked up automatically, so there is no need
  * to manually do that.
- *
- * Since: 3.10
  */
 void
 gtk_list_box_set_adjustment (GtkListBox    *box,
@@ -998,8 +962,6 @@ gtk_list_box_set_adjustment (GtkListBox    *box,
  * for vertical scrolling.
  *
  * Returns: (transfer none): the adjustment
- *
- * Since: 3.10
  */
 GtkAdjustment *
 gtk_list_box_get_adjustment (GtkListBox *box)
@@ -1059,8 +1021,6 @@ gtk_list_box_parent_cb (GObject    *object,
  *
  * Sets how selection works in the listbox.
  * See #GtkSelectionMode for details.
- *
- * Since: 3.10
  */
 void
 gtk_list_box_set_selection_mode (GtkListBox       *box,
@@ -1098,8 +1058,6 @@ gtk_list_box_set_selection_mode (GtkListBox       *box,
  * Gets the selection mode of the listbox.
  *
  * Returns: a #GtkSelectionMode
- *
- * Since: 3.10
  */
 GtkSelectionMode
 gtk_list_box_get_selection_mode (GtkListBox *box)
@@ -1126,8 +1084,6 @@ gtk_list_box_get_selection_mode (GtkListBox *box)
  *
  * Note that using a filter function is incompatible with using a model
  * (see gtk_list_box_bind_model()).
- *
- * Since: 3.10
  */
 void
 gtk_list_box_set_filter_func (GtkListBox           *box,
@@ -1176,8 +1132,6 @@ gtk_list_box_set_filter_func (GtkListBox           *box,
  * the row before changes (either by gtk_list_box_row_changed() on the previous row, or when
  * the previous row becomes a different row). It is also called for all rows when
  * gtk_list_box_invalidate_headers() is called.
- *
- * Since: 3.10
  */
 void
 gtk_list_box_set_header_func (GtkListBox                 *box,
@@ -1207,8 +1161,6 @@ gtk_list_box_set_header_func (GtkListBox                 *box,
  * to an external factor. For instance, this would be used
  * if the filter function just looked for a specific search
  * string and the entry with the search string has changed.
- *
- * Since: 3.10
  */
 void
 gtk_list_box_invalidate_filter (GtkListBox *box)
@@ -1258,8 +1210,6 @@ gtk_list_box_css_node_foreach (gpointer data,
  * Update the sorting for all rows. Call this when result
  * of the sort function on the @box is changed due
  * to an external factor.
- *
- * Since: 3.10
  */
 void
 gtk_list_box_invalidate_sort (GtkListBox *box)
@@ -1300,8 +1250,6 @@ gtk_list_box_do_reseparate (GtkListBox *box)
  * Update the separators for all rows. Call this when result
  * of the header function on the @box is changed due
  * to an external factor.
- *
- * Since: 3.10
  */
 void
 gtk_list_box_invalidate_headers (GtkListBox *box)
@@ -1330,8 +1278,6 @@ gtk_list_box_invalidate_headers (GtkListBox *box)
  *
  * Note that using a sort function is incompatible with using a model
  * (see gtk_list_box_bind_model()).
- *
- * Since: 3.10
  */
 void
 gtk_list_box_set_sort_func (GtkListBox         *box,
@@ -1391,8 +1337,6 @@ gtk_list_box_got_row_changed (GtkListBox    *box,
  *
  * If @single is %TRUE, rows will be activated when you click on them,
  * otherwise you need to double-click.
- *
- * Since: 3.10
  */
 void
 gtk_list_box_set_activate_on_single_click (GtkListBox *box,
@@ -1417,8 +1361,6 @@ gtk_list_box_set_activate_on_single_click (GtkListBox *box,
  * Returns whether rows activate on single clicks.
  *
  * Returns: %TRUE if rows are activated on single click, %FALSE otherwise
- *
- * Since: 3.10
  */
 gboolean
 gtk_list_box_get_activate_on_single_click (GtkListBox *box)
@@ -2633,8 +2575,6 @@ gtk_list_box_size_allocate (GtkWidget           *widget,
  * Prepend a widget to the list. If a sort function is set, the widget will
  * actually be inserted at the calculated position and this function has the
  * same effect of gtk_container_add().
- *
- * Since: 3.10
  */
 void
 gtk_list_box_prepend (GtkListBox *box,
@@ -2675,8 +2615,6 @@ gtk_list_box_insert_css_node (GtkListBox    *box,
  *
  * If @position is -1, or larger than the total number of items in the
  * @box, then the @child will be appended to the end.
- *
- * Since: 3.10
  */
 void
 gtk_list_box_insert (GtkListBox *box,
@@ -2737,8 +2675,6 @@ gtk_list_box_insert (GtkListBox *box,
  *
  * If a row has previously been highlighted via gtk_list_box_drag_highlight_row()
  * it will have the highlight removed.
- *
- * Since: 3.10
  */
 void
 gtk_list_box_drag_unhighlight_row (GtkListBox *box)
@@ -2765,8 +2701,6 @@ gtk_list_box_drag_unhighlight_row (GtkListBox *box)
  *
  * The row will also be unhighlighted when the widget gets
  * a drag leave event.
- *
- * Since: 3.10
  */
 void
 gtk_list_box_drag_highlight_row (GtkListBox    *box,
@@ -2954,8 +2888,6 @@ gtk_list_box_move_cursor (GtkListBox      *box,
  * Creates a new #GtkListBoxRow, to be used as a child of a #GtkListBox.
  *
  * Returns: a new #GtkListBoxRow
- *
- * Since: 3.10
  */
 GtkWidget *
 gtk_list_box_row_new (void)
@@ -3090,8 +3022,6 @@ gtk_list_box_row_hide (GtkWidget *widget)
  * row functions into the row widgets themselves. Another alternative
  * is to call gtk_list_box_invalidate_sort() on any model change,
  * but that is more expensive.
- *
- * Since: 3.10
  */
 void
 gtk_list_box_row_changed (GtkListBoxRow *row)
@@ -3114,8 +3044,6 @@ gtk_list_box_row_changed (GtkListBoxRow *row)
  * set already, and if so to update the state of it.
  *
  * Returns: (transfer none) (nullable): the current header, or %NULL if none
- *
- * Since: 3.10
  */
 GtkWidget *
 gtk_list_box_row_get_header (GtkListBoxRow *row)
@@ -3133,8 +3061,6 @@ gtk_list_box_row_get_header (GtkListBoxRow *row)
  * Sets the current header of the @row. This is only allowed to be called
  * from a #GtkListBoxUpdateHeaderFunc. It will replace any existing
  * header in the row, and be shown in front of the row in the listbox.
- *
- * Since: 3.10
  */
 void
 gtk_list_box_row_set_header (GtkListBoxRow *row,
@@ -3163,8 +3089,6 @@ gtk_list_box_row_set_header (GtkListBoxRow *row,
  * Gets the current index of the @row in its #GtkListBox container.
  *
  * Returns: the index of the @row, or -1 if the @row is not in a listbox
- *
- * Since: 3.10
  */
 gint
 gtk_list_box_row_get_index (GtkListBoxRow *row)
@@ -3189,8 +3113,6 @@ gtk_list_box_row_get_index (GtkListBoxRow *row)
  * #GtkListBox container.
  *
  * Returns: %TRUE if @row is selected
- *
- * Since: 3.14
  */
 gboolean
 gtk_list_box_row_is_selected (GtkListBoxRow *row)
@@ -3241,8 +3163,6 @@ gtk_list_box_update_row_styles (GtkListBox *box)
  * @activatable: %TRUE to mark the row as activatable
  *
  * Set the #GtkListBoxRow:activatable property for this row.
- *
- * Since: 3.14
  */
 void
 gtk_list_box_row_set_activatable (GtkListBoxRow *row,
@@ -3269,8 +3189,6 @@ gtk_list_box_row_set_activatable (GtkListBoxRow *row,
  * for this row.
  *
  * Returns: %TRUE if the row is activatable
- *
- * Since: 3.14
  */
 gboolean
 gtk_list_box_row_get_activatable (GtkListBoxRow *row)
@@ -3286,8 +3204,6 @@ gtk_list_box_row_get_activatable (GtkListBoxRow *row)
  * @selectable: %TRUE to mark the row as selectable
  *
  * Set the #GtkListBoxRow:selectable property for this row.
- *
- * Since: 3.14
  */
 void
 gtk_list_box_row_set_selectable (GtkListBoxRow *row,
@@ -3317,8 +3233,6 @@ gtk_list_box_row_set_selectable (GtkListBoxRow *row,
  * for this row.
  *
  * Returns: %TRUE if the row is selectable
- *
- * Since: 3.14
  */
 gboolean
 gtk_list_box_row_get_selectable (GtkListBoxRow *row)
@@ -3504,8 +3418,6 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
    *
    * The property determines whether the #GtkListBox::row-activated
    * signal will be emitted for this row.
-   *
-   * Since: 3.14
    */
   row_properties[ROW_PROP_ACTIVATABLE] =
     g_param_spec_boolean ("activatable",
@@ -3518,8 +3430,6 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
    * GtkListBoxRow:selectable:
    *
    * The property determines whether this row can be selected.
-   *
-   * Since: 3.14
    */
   row_properties[ROW_PROP_SELECTABLE] =
     g_param_spec_boolean ("selectable",
@@ -3648,8 +3558,6 @@ gtk_list_box_check_model_compat (GtkListBox *box)
  * Note that using a model is incompatible with the filtering and sorting
  * functionality in GtkListBox. When using a model, filtering and sorting
  * should be implemented by the model.
- *
- * Since: 3.16
  */
 void
 gtk_list_box_bind_model (GtkListBox                 *box,

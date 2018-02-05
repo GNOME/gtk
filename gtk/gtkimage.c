@@ -187,8 +187,6 @@ gtk_image_class_init (GtkImageClass *class)
    * The "pixel-size" property can be used to specify a fixed size
    * overriding the #GtkImage:icon-size property for images of type
    * %GTK_IMAGE_ICON_NAME.
-   *
-   * Since: 2.6
    */
   image_props[PROP_PIXEL_SIZE] =
       g_param_spec_int ("pixel-size",
@@ -203,8 +201,6 @@ gtk_image_class_init (GtkImageClass *class)
    *
    * The name of the icon in the icon theme. If the icon theme is
    * changed, the image will be updated automatically.
-   *
-   * Since: 2.6
    */
   image_props[PROP_ICON_NAME] =
       g_param_spec_string ("icon-name",
@@ -219,8 +215,6 @@ gtk_image_class_init (GtkImageClass *class)
    * The GIcon displayed in the GtkImage. For themed icons,
    * If the icon theme is changed, the image will be updated
    * automatically.
-   *
-   * Since: 2.14
    */
   image_props[PROP_GICON] =
       g_param_spec_object ("gicon",
@@ -233,8 +227,6 @@ gtk_image_class_init (GtkImageClass *class)
    * GtkImage:resource:
    *
    * A path to a resource file to display.
-   *
-   * Since: 3.8
    */
   image_props[PROP_RESOURCE] =
       g_param_spec_string ("resource",
@@ -258,8 +250,6 @@ gtk_image_class_init (GtkImageClass *class)
    * standard icon names fallback. The value of this property
    * is only relevant for images of type %GTK_IMAGE_ICON_NAME
    * and %GTK_IMAGE_GICON.
-   *
-   * Since: 3.0
    */
   image_props[PROP_USE_FALLBACK] =
       g_param_spec_boolean ("use-fallback",
@@ -444,8 +434,6 @@ gtk_image_new_from_file   (const gchar *filename)
  * displaying the file.
  *
  * Returns: a new #GtkImage
- *
- * Since: 3.4
  **/
 GtkWidget*
 gtk_image_new_from_resource (const gchar *resource_path)
@@ -526,8 +514,6 @@ gtk_image_new_from_texture (GdkTexture *texture)
  * #GtkImage will add its own reference rather than adopting yours.
  * 
  * Returns: a new #GtkImage
- *
- * Since: 3.10
  **/
 GtkWidget*
 gtk_image_new_from_surface (cairo_surface_t *surface)
@@ -555,8 +541,6 @@ gtk_image_new_from_surface (cairo_surface_t *surface)
  * the icon size.
  *
  * Returns: a new #GtkImage displaying the themed icon
- *
- * Since: 2.6
  **/
 GtkWidget*
 gtk_image_new_from_icon_name (const gchar *icon_name)
@@ -584,8 +568,6 @@ gtk_image_new_from_icon_name (const gchar *icon_name)
  * the icon size.
  *
  * Returns: a new #GtkImage displaying the themed icon
- *
- * Since: 2.14
  **/
 GtkWidget*
 gtk_image_new_from_gicon (GIcon *icon)
@@ -870,8 +852,6 @@ gtk_image_set_from_pixbuf (GtkImage  *image,
  * Note: Before 3.94, this function was taking an extra icon size
  * argument. See gtk_image_set_icon_size() for another way to set
  * the icon size.
- *
- * Since: 2.6
  **/
 void
 gtk_image_set_from_icon_name  (GtkImage    *image,
@@ -903,8 +883,6 @@ gtk_image_set_from_icon_name  (GtkImage    *image,
  * Note: Before 3.94, this function was taking an extra icon size
  * argument. See gtk_image_set_icon_size() for another way to set
  * the icon size.
- *
- * Since: 2.14
  **/
 void
 gtk_image_set_from_gicon  (GtkImage       *image,
@@ -938,8 +916,6 @@ gtk_image_set_from_gicon  (GtkImage       *image,
  * @surface: (nullable): a cairo_surface_t or %NULL
  *
  * See gtk_image_new_from_surface() for details.
- * 
- * Since: 3.10
  **/
 void
 gtk_image_set_from_surface (GtkImage       *image,
@@ -973,8 +949,6 @@ gtk_image_set_from_surface (GtkImage       *image,
  * @texture: (nullable): a #GdkTexture or %NULL
  *
  * See gtk_image_new_from_texture() for details.
- * 
- * Since: 3.94
  **/
 void
 gtk_image_set_from_texture (GtkImage   *image,
@@ -1035,7 +1009,6 @@ gtk_image_get_storage_type (GtkImage *image)
  * 
  * Returns: (nullable) (transfer none): the displayed surface, or %NULL if
  *   the image is empty
- * Since: 3.94.0
  **/
 cairo_surface_t *
 gtk_image_get_surface (GtkImage *image)
@@ -1059,8 +1032,6 @@ gtk_image_get_surface (GtkImage *image)
  * 
  * Returns: (nullable) (transfer none): the displayed texture, or %NULL if
  *   the image is empty
- *
- * Since: 3.94
  **/
 GdkTexture *
 gtk_image_get_texture (GtkImage *image)
@@ -1087,8 +1058,6 @@ gtk_image_get_texture (GtkImage *image)
  * for a way to get the icon size.
  *
  * Returns: (transfer none) (allow-none): the icon name, or %NULL
- *
- * Since: 2.6
  **/
 const gchar *
 gtk_image_get_icon_name (GtkImage *image)
@@ -1115,8 +1084,6 @@ gtk_image_get_icon_name (GtkImage *image)
  * for a way to get the icon size.
  *
  * Returns: (transfer none) (allow-none): a #GIcon, or %NULL
- *
- * Since: 2.14
  **/
 GIcon *
 gtk_image_get_gicon (GtkImage *image)
@@ -1277,8 +1244,6 @@ gtk_image_get_definition (GtkImage *image)
  * @image: a #GtkImage
  *
  * Resets the image to be empty.
- *
- * Since: 2.8
  */
 void
 gtk_image_clear (GtkImage *image)
@@ -1368,8 +1333,6 @@ gtk_image_style_updated (GtkWidget *widget)
  * Sets the pixel size to use for named icons. If the pixel size is set
  * to a value != -1, it is used instead of the icon size set by
  * gtk_image_set_from_icon_name().
- *
- * Since: 2.6
  */
 void 
 gtk_image_set_pixel_size (GtkImage *image,
@@ -1394,8 +1357,6 @@ gtk_image_set_pixel_size (GtkImage *image,
  * Gets the pixel size used for named icons.
  *
  * Returns: the pixel size used for named icons.
- *
- * Since: 2.6
  */
 gint
 gtk_image_get_pixel_size (GtkImage *image)
@@ -1413,8 +1374,6 @@ gtk_image_get_pixel_size (GtkImage *image)
  * @icon_size: the new icon size
  *
  * Suggests an icon size to the theme for named icons.
- *
- * Since: 3.94
  */
 void
 gtk_image_set_icon_size (GtkImage    *image,
@@ -1439,8 +1398,6 @@ gtk_image_set_icon_size (GtkImage    *image,
  * Gets the icon size used by the @image when rendering icons.
  *
  * Returns: the image size used by icons
- *
- * Since: 3.90
  **/
 GtkIconSize
 gtk_image_get_icon_size (GtkImage *image)

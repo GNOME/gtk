@@ -324,8 +324,6 @@ gdk_gl_texture_quads (GdkGLContext *paint_context,
  * with alpha components, so make sure you use #GL_TEXTURE if using alpha.
  *
  * Calling this may change the current GL context.
- *
- * Since: 3.16
  */
 void
 gdk_cairo_draw_from_gl (cairo_t              *cr,
@@ -576,8 +574,6 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
  *   bound context
  *
  * Uploads the contents of a Cairo @surface to a GL texture @target.
- *
- * Since: 3.90
  */
 void
 gdk_cairo_surface_upload_to_gl (cairo_surface_t *surface,

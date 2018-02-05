@@ -206,8 +206,6 @@ gtk_gesture_zoom_class_init (GtkGestureZoomClass *klass)
    *
    * This signal is emitted whenever the distance between both tracked
    * sequences changes.
-   *
-   * Since: 3.14
    */
   signals[SCALE_CHANGED] =
     g_signal_new (I_("scale-changed"),
@@ -226,8 +224,6 @@ gtk_gesture_zoom_class_init (GtkGestureZoomClass *klass)
  * in/out gestures (usually known as pinch/zoom).
  *
  * Returns: a newly created #GtkGestureZoom
- *
- * Since: 3.14
  **/
 GtkGesture *
 gtk_gesture_zoom_new (GtkWidget *widget)
@@ -248,8 +244,6 @@ gtk_gesture_zoom_new (GtkWidget *widget)
  * considered 1:1). If @gesture is not active, 1 is returned.
  *
  * Returns: the scale delta
- *
- * Since: 3.14
  **/
 gdouble
 gtk_gesture_zoom_get_scale_delta (GtkGestureZoom *gesture)

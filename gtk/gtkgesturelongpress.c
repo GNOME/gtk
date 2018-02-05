@@ -297,8 +297,6 @@ gtk_gesture_long_press_class_init (GtkGestureLongPressClass *klass)
    *
    * This signal is emitted whenever a press goes unmoved/unreleased longer than
    * what the GTK+ defaults tell.
-   *
-   * Since: 3.14
    */
   signals[PRESSED] =
     g_signal_new (I_("pressed"),
@@ -313,8 +311,6 @@ gtk_gesture_long_press_class_init (GtkGestureLongPressClass *klass)
    *
    * This signal is emitted whenever a press moved too far, or was released
    * before #GtkGestureLongPress::pressed happened.
-   *
-   * Since: 3.14
    */
   signals[CANCELLED] =
     g_signal_new (I_("cancelled"),
@@ -332,8 +328,6 @@ gtk_gesture_long_press_class_init (GtkGestureLongPressClass *klass)
  * Returns a newly created #GtkGesture that recognizes long presses.
  *
  * Returns: a newly created #GtkGestureLongPress
- *
- * Since: 3.14
  **/
 GtkGesture *
 gtk_gesture_long_press_new (GtkWidget *widget)

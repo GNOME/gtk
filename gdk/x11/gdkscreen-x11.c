@@ -127,8 +127,6 @@ gdk_x11_screen_finalize (GObject *object)
  * extension, 0 is returned.
  *
  * Returns: the XID of the monitor
- *
- * Since: 2.14
  */
 XID
 gdk_x11_screen_get_monitor_output (GdkX11Screen *x11_screen,
@@ -261,8 +259,6 @@ out:
  * Returns the screen of a #GdkX11Screen.
  *
  * Returns: (transfer none): an Xlib Screen*
- *
- * Since: 2.2
  */
 Screen *
 gdk_x11_screen_get_xscreen (GdkX11Screen *screen)
@@ -278,8 +274,6 @@ gdk_x11_screen_get_xscreen (GdkX11Screen *screen)
  *
  * Returns: the position of @screen among the screens
  *     of its display
- *
- * Since: 2.2
  */
 int
 gdk_x11_screen_get_screen_number (GdkX11Screen *screen)
@@ -1078,8 +1072,6 @@ fetch_net_wm_check_window (GdkX11Screen *x11_screen)
  * a window manager change.
  *
  * Returns: %TRUE if the window manager supports @property
- *
- * Since: 2.2
  **/
 gboolean
 gdk_x11_screen_supports_net_wm_hint (GdkX11Screen *x11_screen,
@@ -1157,8 +1149,6 @@ gdk_x11_screen_supports_net_wm_hint (GdkX11Screen *x11_screen,
  * Returns: the name of the window manager screen @screen, or
  * "unknown" if the window manager is unknown. The string is owned by GDK
  * and should not be freed.
- *
- * Since: 2.2
  **/
 const char*
 gdk_x11_screen_get_window_manager_name (GdkX11Screen *x11_screen)
@@ -1278,8 +1268,6 @@ get_netwm_cardinal_property (GdkX11Screen *x11_screen,
  * [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec) specification.
  *
  * Returns: the number of workspaces, or 0 if workspaces are not supported
- *
- * Since: 3.10
  */
 guint32
 gdk_x11_screen_get_number_of_desktops (GdkX11Screen *screen)
@@ -1297,8 +1285,6 @@ gdk_x11_screen_get_number_of_desktops (GdkX11Screen *screen)
  * [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec) specification.
  *
  * Returns: the current workspace, or 0 if workspaces are not supported
- *
- * Since: 3.10
  */
 guint32
 gdk_x11_screen_get_current_desktop (GdkX11Screen *screen)

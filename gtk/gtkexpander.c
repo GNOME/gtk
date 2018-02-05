@@ -324,8 +324,6 @@ gtk_expander_class_init (GtkExpanderClass *klass)
    *
    * When this property is %TRUE, the expander will resize the toplevel
    * widget containing the expander upon expanding and collapsing.
-   *
-   * Since: 3.2
    */
   g_object_class_install_property (gobject_class,
                                    PROP_RESIZE_TOPLEVEL,
@@ -889,8 +887,6 @@ gtk_expander_measure (GtkWidget      *widget,
  * Creates a new expander using @label as the text of the label.
  *
  * Returns: a new #GtkExpander widget.
- *
- * Since: 2.4
  */
 GtkWidget *
 gtk_expander_new (const gchar *label)
@@ -911,8 +907,6 @@ gtk_expander_new (const gchar *label)
  * Pressing Alt and that key activates the button.
  *
  * Returns: a new #GtkExpander widget.
- *
- * Since: 2.4
  */
 GtkWidget *
 gtk_expander_new_with_mnemonic (const gchar *label)
@@ -931,8 +925,6 @@ gtk_expander_new_with_mnemonic (const gchar *label)
  * Sets the state of the expander. Set to %TRUE, if you want
  * the child widget to be revealed, and %FALSE if you want the
  * child widget to be hidden.
- *
- * Since: 2.4
  */
 void
 gtk_expander_set_expanded (GtkExpander *expander,
@@ -987,8 +979,6 @@ gtk_expander_set_expanded (GtkExpander *expander,
  * See gtk_expander_set_expanded().
  *
  * Returns: the current state of the expander
- *
- * Since: 2.4
  */
 gboolean
 gtk_expander_get_expanded (GtkExpander *expander)
@@ -1006,8 +996,6 @@ gtk_expander_get_expanded (GtkExpander *expander)
  * Sets the text of the label of the expander to @label.
  *
  * This will also clear any previously set labels.
- *
- * Since: 2.4
  */
 void
 gtk_expander_set_label (GtkExpander *expander,
@@ -1052,8 +1040,6 @@ gtk_expander_set_label (GtkExpander *expander,
  *
  * Returns: (nullable): The text of the label widget. This string is owned
  *     by the widget and must not be modified or freed.
- *
- * Since: 2.4
  */
 const gchar *
 gtk_expander_get_label (GtkExpander *expander)
@@ -1077,8 +1063,6 @@ gtk_expander_get_label (GtkExpander *expander)
  *
  * If true, an underline in the text of the expander label indicates
  * the next character should be used for the mnemonic accelerator key.
- *
- * Since: 2.4
  */
 void
 gtk_expander_set_use_underline (GtkExpander *expander,
@@ -1112,8 +1096,6 @@ gtk_expander_set_use_underline (GtkExpander *expander,
  *
  * Returns: %TRUE if an embedded underline in the expander
  *     label indicates the mnemonic accelerator keys
- *
- * Since: 2.4
  */
 gboolean
 gtk_expander_get_use_underline (GtkExpander *expander)
@@ -1131,8 +1113,6 @@ gtk_expander_get_use_underline (GtkExpander *expander)
  * Sets whether the text of the label contains markup in
  * [Pango’s text markup language][PangoMarkupFormat].
  * See gtk_label_set_markup().
- *
- * Since: 2.4
  */
 void
 gtk_expander_set_use_markup (GtkExpander *expander,
@@ -1166,8 +1146,6 @@ gtk_expander_set_use_markup (GtkExpander *expander,
  * See gtk_expander_set_use_markup().
  *
  * Returns: %TRUE if the label’s text will be parsed for markup
- *
- * Since: 2.4
  */
 gboolean
 gtk_expander_get_use_markup (GtkExpander *expander)
@@ -1184,8 +1162,6 @@ gtk_expander_get_use_markup (GtkExpander *expander)
  *
  * Set the label widget for the expander. This is the widget
  * that will appear embedded alongside the expander arrow.
- *
- * Since: 2.4
  */
 void
 gtk_expander_set_label_widget (GtkExpander *expander,
@@ -1236,8 +1212,6 @@ gtk_expander_set_label_widget (GtkExpander *expander,
  *
  * Returns: (nullable) (transfer none): the label widget,
  *     or %NULL if there is none
- *
- * Since: 2.4
  */
 GtkWidget *
 gtk_expander_get_label_widget (GtkExpander *expander)
@@ -1255,8 +1229,6 @@ gtk_expander_get_label_widget (GtkExpander *expander)
  *
  * Sets whether the label widget should fill all available
  * horizontal space allocated to @expander.
- *
- * Since: 2.22
  */
 void
 gtk_expander_set_label_fill (GtkExpander *expander,
@@ -1290,8 +1262,6 @@ gtk_expander_set_label_fill (GtkExpander *expander,
  *
  * Returns: %TRUE if the label widget will fill all
  *     available horizontal space
- *
- * Since: 2.22
  */
 gboolean
 gtk_expander_get_label_fill (GtkExpander *expander)
@@ -1308,8 +1278,6 @@ gtk_expander_get_label_fill (GtkExpander *expander)
  *
  * Sets whether the expander will resize the toplevel widget
  * containing the expander upon resizing and collpasing.
- *
- * Since: 3.2
  */
 void
 gtk_expander_set_resize_toplevel (GtkExpander *expander,
@@ -1332,8 +1300,6 @@ gtk_expander_set_resize_toplevel (GtkExpander *expander,
  * containing the expander upon resizing and collpasing.
  *
  * Returns: the “resize toplevel” setting.
- *
- * Since: 3.2
  */
 gboolean
 gtk_expander_get_resize_toplevel (GtkExpander *expander)

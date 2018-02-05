@@ -1297,8 +1297,6 @@ gdk_x11_display_make_gl_context_current (GdkDisplay   *display,
  * Retrieves the version of the GLX implementation.
  *
  * Returns: %TRUE if GLX is available
- *
- * Since: 3.16
  */
 gboolean
 gdk_x11_display_get_glx_version (GdkDisplay *display,

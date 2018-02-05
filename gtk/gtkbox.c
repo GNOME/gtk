@@ -1332,8 +1332,6 @@ gtk_box_init (GtkBox *box)
  * Creates a new #GtkBox.
  *
  * Returns: a new #GtkBox.
- *
- * Since: 3.0
  **/
 GtkWidget*
 gtk_box_new (GtkOrientation orientation,
@@ -1478,8 +1476,6 @@ gtk_box_get_spacing (GtkBox *box)
  * and the baseline is not allocated by the parent then
  * @position is used to allocate the baseline wrt the
  * extra space available.
- *
- * Since: 3.10
  */
 void
 gtk_box_set_baseline_position (GtkBox             *box,
@@ -1506,8 +1502,6 @@ gtk_box_set_baseline_position (GtkBox             *box,
  * Gets the value set by gtk_box_set_baseline_position().
  *
  * Returns: the baseline position
- *
- * Since: 3.10
  **/
 GtkBaselinePosition
 gtk_box_get_baseline_position (GtkBox *box)

@@ -416,8 +416,6 @@ gtk_paned_class_init (GtkPanedClass *class)
    * The smallest possible value for the position property.
    * This property is derived from the size and shrinkability
    * of the widget's children.
-   *
-   * Since: 2.4
    */
   g_object_class_install_property (object_class,
                                    PROP_MIN_POSITION,
@@ -433,8 +431,6 @@ gtk_paned_class_init (GtkPanedClass *class)
    * The largest possible value for the position property.
    * This property is derived from the size and shrinkability
    * of the widget's children.
-   *
-   * Since: 2.4
    */
   g_object_class_install_property (object_class,
                                    PROP_MAX_POSITION,
@@ -450,8 +446,6 @@ gtk_paned_class_init (GtkPanedClass *class)
    * Setting this property to %TRUE indicates that the paned needs
    * to provide stronger visual separation (e.g. because it separates
    * between two notebooks, whose tab rows would otherwise merge visually).
-   *
-   * Since: 3.16 
    */
   g_object_class_install_property (object_class,
                                    PROP_WIDE_HANDLE,
@@ -466,8 +460,6 @@ gtk_paned_class_init (GtkPanedClass *class)
    *
    * The "resize" child property determines whether the child expands and
    * shrinks along with the paned widget.
-   *
-   * Since: 2.4
    */
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_RESIZE,
@@ -482,8 +474,6 @@ gtk_paned_class_init (GtkPanedClass *class)
    *
    * The "shrink" child property determines whether the child can be made
    * smaller than its requisition.
-   *
-   * Since: 2.4
    */
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_SHRINK,
@@ -503,8 +493,6 @@ gtk_paned_class_init (GtkPanedClass *class)
    * which gets emitted to cycle the focus between the children of the paned.
    *
    * The default binding is f6.
-   *
-   * Since: 2.0
    */
   signals [CYCLE_CHILD_FOCUS] =
     g_signal_new (I_("cycle-child-focus"),
@@ -526,8 +514,6 @@ gtk_paned_class_init (GtkPanedClass *class)
    * move focus to the next widget in the focus chain.
    *
    * The default binding is Tab.
-   *
-   * Since: 2.0
    */
   signals [TOGGLE_HANDLE_FOCUS] =
     g_signal_new (I_("toggle-handle-focus"),
@@ -547,8 +533,6 @@ gtk_paned_class_init (GtkPanedClass *class)
    * [keybinding signal][GtkBindingSignal]
    * which gets emitted to move the handle when the user is using key bindings 
    * to move it.
-   *
-   * Since: 2.0
    */
   signals[MOVE_HANDLE] =
     g_signal_new (I_("move-handle"),
@@ -571,8 +555,6 @@ gtk_paned_class_init (GtkPanedClass *class)
    * the user to change position of the handle by using key bindings.
    *
    * The default binding for this signal is f8.
-   *
-   * Since: 2.0
    */
   signals [CYCLE_HANDLE_FOCUS] =
     g_signal_new (I_("cycle-handle-focus"),
@@ -594,8 +576,6 @@ gtk_paned_class_init (GtkPanedClass *class)
    * moving it using key bindings.
    *
    * The default binding for this signal is Return or Space.
-   *
-   * Since: 2.0
    */
   signals [ACCEPT_POSITION] =
     g_signal_new (I_("accept-position"),
@@ -617,8 +597,6 @@ gtk_paned_class_init (GtkPanedClass *class)
    * moving it.
    *
    * The default binding for this signal is Escape.
-   *
-   * Since: 2.0
    */
   signals [CANCEL_POSITION] =
     g_signal_new (I_("cancel-position"),
@@ -1656,8 +1634,6 @@ gtk_paned_direction_changed (GtkWidget        *widget,
  * Creates a new #GtkPaned widget.
  *
  * Returns: a new #GtkPaned.
- *
- * Since: 3.0
  **/
 GtkWidget *
 gtk_paned_new (GtkOrientation orientation)
@@ -1913,8 +1889,6 @@ gtk_paned_set_position (GtkPaned *paned,
  * Obtains the first child of the paned widget.
  * 
  * Returns: (nullable) (transfer none): first child, or %NULL if it is not set.
- *
- * Since: 2.4
  **/
 GtkWidget *
 gtk_paned_get_child1 (GtkPaned *paned)
@@ -1931,8 +1905,6 @@ gtk_paned_get_child1 (GtkPaned *paned)
  * Obtains the second child of the paned widget.
  * 
  * Returns: (nullable) (transfer none): second child, or %NULL if it is not set.
- *
- * Since: 2.4
  **/
 GtkWidget *
 gtk_paned_get_child2 (GtkPaned *paned)
@@ -2594,8 +2566,6 @@ gtk_paned_toggle_handle_focus (GtkPaned *paned)
  * @wide: the new value for the #GtkPaned:wide-handle property
  *
  * Sets the #GtkPaned:wide-handle property.
- *
- * Since: 3.16
  */
 void
 gtk_paned_set_wide_handle (GtkPaned *paned,
@@ -2627,8 +2597,6 @@ gtk_paned_set_wide_handle (GtkPaned *paned,
  * Gets the #GtkPaned:wide-handle property.
  *
  * Returns: %TRUE if the paned should have a wide handle
- *
- * Since: 3.16
  */
 gboolean
 gtk_paned_get_wide_handle (GtkPaned *paned)

@@ -58,8 +58,6 @@
  * # CSS names
  *
  * GtkColorChooserWidget has a single CSS node with name colorchooser.
- *
- * Since: 3.4
  */
 
 struct _GtkColorChooserWidgetPrivate
@@ -690,8 +688,6 @@ gtk_color_chooser_widget_class_init (GtkColorChooserWidgetClass *class)
    * The ::show-editor property is %TRUE when the color chooser
    * is showing the single-color editor. It can be set to switch
    * the color chooser into single-color editing mode.
-   *
-   * Since: 3.4
    */
   g_object_class_install_property (object_class, PROP_SHOW_EDITOR,
       g_param_spec_boolean ("show-editor", P_("Show editor"), P_("Show editor"),
@@ -826,8 +822,6 @@ gtk_color_chooser_widget_iface_init (GtkColorChooserInterface *iface)
  * Creates a new #GtkColorChooserWidget.
  *
  * Returns: a new #GtkColorChooserWidget
- *
- * Since: 3.4
  */
 GtkWidget *
 gtk_color_chooser_widget_new (void)

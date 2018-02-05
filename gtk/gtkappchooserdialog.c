@@ -704,8 +704,6 @@ set_parent_and_flags (GtkWidget      *dialog,
  * to allow the user to select an application for it.
  *
  * Returns: a newly created #GtkAppChooserDialog
- *
- * Since: 3.0
  **/
 GtkWidget *
 gtk_app_chooser_dialog_new (GtkWindow      *parent,
@@ -735,8 +733,6 @@ gtk_app_chooser_dialog_new (GtkWindow      *parent,
  * to allow the user to select an application for it.
  *
  * Returns: a newly created #GtkAppChooserDialog
- *
- * Since: 3.0
  **/
 GtkWidget *
 gtk_app_chooser_dialog_new_for_content_type (GtkWindow      *parent,
@@ -763,8 +759,6 @@ gtk_app_chooser_dialog_new_for_content_type (GtkWindow      *parent,
  * Returns the #GtkAppChooserWidget of this dialog.
  *
  * Returns: (transfer none): the #GtkAppChooserWidget of @self
- *
- * Since: 3.0
  */
 GtkWidget *
 gtk_app_chooser_dialog_get_widget (GtkAppChooserDialog *self)
