@@ -2567,7 +2567,7 @@ gdk_event_get_axes (GdkEvent  *event,
 }
 
 /**
- * gdk_event_get_history:
+ * gdk_event_get_motion_history:
  * @event: a #GdkEvent of type %GDK_MOTION_NOTIFY
  *
  * Retrieves the history of the @event motion, as a list of time and
@@ -2575,9 +2575,11 @@ gdk_event_get_axes (GdkEvent  *event,
  *
  * Returns: (transfer container) (element-type GdkTimeCoord) (nullable): a list
  *   of time and coordinates
+ *
+ * Since: 3.94
  */
 GList *
-gdk_event_get_history (const GdkEvent *event)
+gdk_event_get_motion_history (const GdkEvent *event)
 {
   if (event->any.type != GDK_MOTION_NOTIFY)
     return NULL;
