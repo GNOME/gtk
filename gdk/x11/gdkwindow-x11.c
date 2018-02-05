@@ -2990,29 +2990,6 @@ gdk_x11_window_set_shadow_width (GdkWindow *window,
 }
 
 /**
- * gdk_x11_window_set_frame_extents:
- * @window: (type GdkX11Window): a #GdkWindow
- * @left: The left extent
- * @right: The right extent
- * @top: The top extent
- * @bottom: The bottom extent
- *
- * This is the same as gdk_window_set_shadow_width() but it only works
- * on GdkX11Window.
- *
- * Deprecated: 3.12: Use gdk_window_set_shadow_width() instead.
- */
-void
-gdk_x11_window_set_frame_extents (GdkWindow *window,
-                                  int        left,
-                                  int        right,
-                                  int        top,
-                                  int        bottom)
-{
-  gdk_x11_window_set_shadow_width (window, left, right, top, bottom);
-}
-
-/**
  * gdk_x11_window_set_theme_variant:
  * @window: (type GdkX11Window): a #GdkWindow
  * @variant: the theme variant to export

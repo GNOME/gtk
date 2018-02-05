@@ -65,12 +65,6 @@ void     gdk_x11_window_set_utf8_property    (GdkWindow *window,
 GDK_AVAILABLE_IN_ALL
 void     gdk_x11_window_set_theme_variant (GdkWindow   *window,
                                            const char  *variant);
-GDK_DEPRECATED_FOR(gdk_window_set_shadow_width)
-void     gdk_x11_window_set_frame_extents (GdkWindow *window,
-                                           int        left,
-                                           int        right,
-                                           int        top,
-                                           int        bottom);
 GDK_AVAILABLE_IN_ALL
 void     gdk_x11_window_move_to_current_desktop (GdkWindow   *window);
 
