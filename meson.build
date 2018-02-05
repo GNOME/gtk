@@ -34,8 +34,6 @@ gdk_pixbuf_req     = '>= 2.30.0'
 introspection_req  = '>= 1.39.0'
 wayland_proto_req  = '>= 1.9'
 wayland_req        = '>= 1.9.91'
-mirclient_req      = '>= 0.22.0'
-mircookie_req      = '>= 0.17.0'
 graphene_req       = '>= 1.5.1'
 epoxy_req          = '>= 1.4'
 cloudproviders_req = '>= 0.2.5'
@@ -92,7 +90,6 @@ gtk_api_version = '4.0'
 x11_enabled            = get_option('enable-x11-backend')
 wayland_enabled        = get_option('enable-wayland-backend')
 broadway_enabled       = get_option('enable-broadway-backend')
-mir_enabled            = get_option('enable-mir-backend')
 quartz_enabled         = get_option('enable-quartz-backend')
 win32_enabled          = get_option('enable-win32-backend')
 cloudproviders_enabled = get_option('enable-cloudproviders')
@@ -364,7 +361,7 @@ cairo_backends = []
 foreach backend: [ ['cairo-xlib', cairo_req, x11_enabled],
                    ['cairo-win32', cairo_req, win32_enabled],
                    ['cairo-quartz', cairo_req, quartz_enabled],
-                   ['cairo', cairo_req, broadway_enabled or wayland_enabled or mir_enabled], ]
+                   ['cairo', cairo_req, broadway_enabled or wayland_enabled], ]
  backend_enabled = backend.get(2)
  cairo_backend_req = backend.get(1)
  cairo_backend = backend.get(0)
@@ -519,19 +516,6 @@ if x11_enabled
   cdata.set('HAVE_RANDR15', xrandr15_dep.found())
 endif
 
-mir_pkgs = []
-if mir_enabled
-  mirclient_dep = dependency('mirclient', version: mirclient_req)
-  mircookie_dep = dependency('mircookie', version: mircookie_req)
-  libcontent_hub_glib_dep = dependency('libcontenthub-glib')
-
-  mir_pkgs = [
-    'mirclient', mirclient_req,
-    'mircookie', mircookie_req,
-    'libcontent-hub-glib',
-  ]
-endif
-
 if broadway_enabled
   pc_gdk_extra_libs += ['-lz']
   backend_immodules += ['broadway']
@@ -653,7 +637,7 @@ pc_gdk_extra_libs += cairo_libs
 gio_pkgname = os_unix ? 'gio-unix-2.0' : 'gio-2.0'
 pkgconf.set('GDK_PRIVATE_PACKAGES',
             ' '.join([ gio_pkgname, glib_req,
-                       'epoxy', epoxy_req ] + x11_pkgs + wayland_pkgs + mir_pkgs + cairo_backends))
+                       'epoxy', epoxy_req ] + x11_pkgs + wayland_pkgs + cairo_backends))
 pkgconf.set('GSK_PRIVATE_PACKAGES', '') # all already in GDK_PRIVATE_PACKAGES
 pangoft2_pkgs = (wayland_enabled or x11_enabled) ? ['pangoft2'] : []
 pkgconf.set('GTK_PRIVATE_PACKAGES', ' '.join(atk_pkgs + pangoft2_pkgs))
@@ -671,7 +655,7 @@ pkg_install_dir = join_paths(get_option('libdir'), 'pkgconfig')
 pkgs = [ 'gtk+-4.0.pc' ]
 
 pkg_targets = ''
-foreach backend: [ 'broadway', 'mir', 'quartz', 'wayland', 'win32', 'x11', ]
+foreach backend: [ 'broadway', 'quartz', 'wayland', 'win32', 'x11', ]
   if get_variable('@0@_enabled'.format(backend))
     pkgs += ['gtk+-@0@-4.0.pc'.format(backend)]
     pkg_targets += ' ' + backend
