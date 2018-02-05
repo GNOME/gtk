@@ -13,8 +13,6 @@ gboolean        gdk_device_grab_info            (GdkDisplay  *display,
                                                  GdkWindow  **grab_window,
                                                  gboolean    *owner_events);
 
-void            gdk_add_option_entries          (GOptionGroup *group);
-
 void            gdk_pre_parse                   (void);
 
 void            gdk_window_freeze_toplevel_updates      (GdkWindow *window);
