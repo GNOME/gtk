@@ -1,5 +1,5 @@
-/* GSK - The GTK Scene Kit
- * Copyright 2016  Endless 
+/* GTK - The GIMP Toolkit
+ * Copyright 2018 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,21 +15,14 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GSK_H__
-#define __GSK_H__
 
-#define __GSK_H_INSIDE__
+#if !defined (__GSK_H_INSIDE__) && !defined (GSK_COMPILATION)
+#error "Only <gsk/gsk.h> can be included directly."
+#endif
 
-#include <gsk/gskenums.h>
-#include <gsk/gskrenderer.h>
-#include <gsk/gskrendernode.h>
-#include <gsk/gskroundedrect.h>
+#ifndef __GI_SCANNER__
 
-#include <gsk/gsktypes.h>
-#include <gsk/gskenumtypes.h>
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskRenderer, g_object_unref)
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskRenderNode, gsk_render_node_unref)
 
-#include <gsk/gsk-autocleanup.h>
-
-#undef __GSK_H_INSIDE__
-
-#endif /* __GSK_H__ */
+#endif
