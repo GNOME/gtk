@@ -113,6 +113,16 @@ gtk_cell_renderer_accel_init (GtkCellRendererAccel *cell_accel)
 }
 
 static void
+gtk_cell_renderer_accel_dispose (GObject *object)
+{
+  GtkCellRendererAccelPrivate *priv = GTK_CELL_RENDERER_ACCEL (object)->priv;
+
+  g_clear_object (&priv->sizing_label);
+
+  G_OBJECT_CLASS (gtk_cell_renderer_accel_parent_class)->dispose (object);
+}
+
+static void
 gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
 {
   GObjectClass *object_class;
@@ -123,6 +133,7 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
 
   object_class->set_property = gtk_cell_renderer_accel_set_property;
   object_class->get_property = gtk_cell_renderer_accel_get_property;
+  object_class->dispose = gtk_cell_renderer_accel_dispose;
 
   cell_renderer_class->get_preferred_width = gtk_cell_renderer_accel_get_preferred_width;
   cell_renderer_class->start_editing = gtk_cell_renderer_accel_start_editing;
@@ -396,7 +407,10 @@ gtk_cell_renderer_accel_get_preferred_width (GtkCellRenderer *cell,
   GtkRequisition min_req, nat_req;
 
   if (priv->sizing_label == NULL)
-    priv->sizing_label = gtk_label_new (_("New accelerator…"));
+    {
+      priv->sizing_label = gtk_label_new (_("New accelerator…"));
+      g_object_ref_sink (priv->sizing_label);
+    }
 
   gtk_widget_get_preferred_size (priv->sizing_label, &min_req, &nat_req);
 
