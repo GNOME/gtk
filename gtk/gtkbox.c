@@ -1231,21 +1231,20 @@ gtk_box_compute_size_for_orientation (GtkBox *box,
 				      gint   *natural_size)
 {
   GtkBoxPrivate *private = gtk_box_get_instance_private (box);
-  GList         *children;
+  GtkWidget *child;
   gint           nvis_children = 0;
   gint           required_size = 0, required_natural = 0, child_size, child_natural;
   gint           largest_child = 0, largest_natural = 0;
   gint           spacing = get_spacing (box);
 
-  for (children = private->children; children != NULL;
-       children = children->next)
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (box));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
     {
-      GtkBoxChild *child = children->data;
-
-      if (_gtk_widget_get_visible (child->widget))
+      if (_gtk_widget_get_visible (child))
         {
 
-          gtk_widget_measure (child->widget,
+          gtk_widget_measure (child,
                               private->orientation,
                               avail_size,
                               &child_size, &child_natural,
@@ -1276,11 +1275,8 @@ gtk_box_compute_size_for_orientation (GtkBox *box,
       required_natural  += (nvis_children - 1) * spacing;
     }
 
-  if (minimum_size)
-    *minimum_size = required_size;
-
-  if (natural_size)
-    *natural_size = required_natural;
+  *minimum_size = required_size;
+  *natural_size = required_natural;
 }
 
 
