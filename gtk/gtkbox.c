@@ -586,21 +586,21 @@ gtk_box_size_allocate (GtkWidget           *widget,
     {
       if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
 	{
-	  child_allocation.y = allocation->y;
+	  child_allocation.y = 0;
 	  child_allocation.height = allocation->height;
 	  if (packing == GTK_PACK_START)
-	    x = allocation->x;
+	    x = 0;
 	  else
-	    x = allocation->x + allocation->width;
+	    x = allocation->width;
 	}
       else
 	{
-	  child_allocation.x = allocation->x;
+	  child_allocation.x = 0;
 	  child_allocation.width = allocation->width;
 	  if (packing == GTK_PACK_START)
-	    y = allocation->y;
+	    y = 0;
 	  else
-	    y = allocation->y + allocation->height;
+	    y = allocation->height;
 	}
 
       for (i = 0, children = private->children;
@@ -642,7 +642,7 @@ gtk_box_size_allocate (GtkWidget           *widget,
 		}
 
 	      if (direction == GTK_TEXT_DIR_RTL)
-		child_allocation.x = allocation->x + allocation->width - (child_allocation.x - allocation->x) - child_allocation.width;
+		child_allocation.x = allocation->width - (child_allocation.x - allocation->x) - child_allocation.width;
 
 	    }
 	  else /* (private->orientation == GTK_ORIENTATION_VERTICAL) */
