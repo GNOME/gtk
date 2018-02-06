@@ -1839,8 +1839,6 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
 {
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
 
-  self->scale_factor = gdk_window_get_scale_factor (window);
-
   /* If we didn't get a GdkGLContext before realization, try creating
    * one now, for our exclusive use.
    */
@@ -2509,6 +2507,7 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
   width = ceilf (viewport->size.width);
   height = ceilf (viewport->size.height);
 
+  self->scale_factor = gdk_window_get_scale_factor (gsk_renderer_get_window (renderer));
   gdk_gl_context_make_current (self->gl_context);
 
   /* Prepare our framebuffer */
@@ -2552,6 +2551,7 @@ gsk_gl_renderer_render (GskRenderer   *renderer,
   if (self->gl_context == NULL)
     return;
 
+  self->scale_factor = gdk_window_get_scale_factor (window);
   gdk_gl_context_make_current (self->gl_context);
 
   viewport.origin.x = 0;
@@ -2585,8 +2585,6 @@ gsk_gl_renderer_init (GskGLRenderer *self)
 {
   gsk_ensure_resources ();
 
-
-  self->scale_factor = 1;
   self->render_ops = g_array_new (FALSE, FALSE, sizeof (RenderOp));
 
 #ifdef G_ENABLE_DEBUG
