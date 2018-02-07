@@ -23,6 +23,7 @@
 #ifndef XSETTINGS_CLIENT_H
 #define XSETTINGS_CLIENT_H
 
+#include <gdk/x11/gdkprivate-x11.h>
 #include <gdk/x11/gdkx11screen.h>
 
 void _gdk_x11_xsettings_init            (GdkX11Screen        *x11_screen);

@@ -170,24 +170,24 @@ static GrabKey grab_keys[] = {
 static GdkWindowCache *gdk_window_cache_ref   (GdkWindowCache *cache);
 static void            gdk_window_cache_unref (GdkWindowCache *cache);
 
-static GdkFilterReturn xdnd_enter_filter    (GdkXEvent *xev,
-                                             GdkEvent  *event,
-                                             gpointer   data);
-static GdkFilterReturn xdnd_leave_filter    (GdkXEvent *xev,
-                                             GdkEvent  *event,
-                                             gpointer   data);
-static GdkFilterReturn xdnd_position_filter (GdkXEvent *xev,
-                                             GdkEvent  *event,
-                                             gpointer   data);
-static GdkFilterReturn xdnd_status_filter   (GdkXEvent *xev,
-                                             GdkEvent  *event,
-                                             gpointer   data);
-static GdkFilterReturn xdnd_finished_filter (GdkXEvent *xev,
-                                             GdkEvent  *event,
-                                             gpointer   data);
-static GdkFilterReturn xdnd_drop_filter     (GdkXEvent *xev,
-                                             GdkEvent  *event,
-                                             gpointer   data);
+static GdkFilterReturn xdnd_enter_filter    (const XEvent *xevent,
+                                             GdkEvent     *event,
+                                             gpointer      data);
+static GdkFilterReturn xdnd_leave_filter    (const XEvent *xevent,
+                                             GdkEvent     *event,
+                                             gpointer      data);
+static GdkFilterReturn xdnd_position_filter (const XEvent *xevent,
+                                             GdkEvent     *event,
+                                             gpointer      data);
+static GdkFilterReturn xdnd_status_filter   (const XEvent *xevent,
+                                             GdkEvent     *event,
+                                             gpointer      data);
+static GdkFilterReturn xdnd_finished_filter (const XEvent *xevent,
+                                             GdkEvent     *event,
+                                             gpointer      data);
+static GdkFilterReturn xdnd_drop_filter     (const XEvent *xevent,
+                                             GdkEvent     *event,
+                                             gpointer      data);
 
 static void   xdnd_manage_source_filter (GdkDragContext *context,
                                          GdkWindow      *window,
@@ -1059,12 +1059,11 @@ xdnd_action_to_atom (GdkDisplay    *display,
 /* Source side */
 
 static GdkFilterReturn
-xdnd_status_filter (GdkXEvent *xev,
-                    GdkEvent  *event,
-                    gpointer   data)
+xdnd_status_filter (const XEvent *xevent,
+                    GdkEvent     *event,
+                    gpointer      data)
 {
   GdkDisplay *display;
-  XEvent *xevent = (XEvent *)xev;
   guint32 dest_window = xevent->xclient.data.l[0];
   guint32 flags = xevent->xclient.data.l[1];
   Atom action = xevent->xclient.data.l[4];
@@ -1107,12 +1106,11 @@ xdnd_status_filter (GdkXEvent *xev,
 }
 
 static GdkFilterReturn
-xdnd_finished_filter (GdkXEvent *xev,
-                      GdkEvent  *event,
-                      gpointer   data)
+xdnd_finished_filter (const XEvent *xevent,
+                      GdkEvent     *event,
+                      gpointer      data)
 {
   GdkDisplay *display;
-  XEvent *xevent = (XEvent *)xev;
   guint32 dest_window = xevent->xclient.data.l[0];
   GdkDragContext *context;
   GdkX11DragContext *context_x11;
@@ -1620,11 +1618,10 @@ xdnd_read_actions (GdkX11DragContext *context_x11)
  * and add this filter.
  */
 GdkFilterReturn
-xdnd_source_window_filter (GdkXEvent *xev,
-                           GdkEvent  *event,
-                           gpointer   data)
+xdnd_source_window_filter (const XEvent *xevent,
+                           GdkEvent     *event,
+                           gpointer      data)
 {
-  XEvent *xevent = (XEvent *)xev;
   GdkX11DragContext *context_x11;
   GdkDisplay *display;
 
@@ -1729,13 +1726,12 @@ xdnd_precache_atoms (GdkDisplay *display)
 }
 
 static GdkFilterReturn
-xdnd_enter_filter (GdkXEvent *xev,
-                   GdkEvent  *event,
-                   gpointer   cb_data)
+xdnd_enter_filter (const XEvent *xevent,
+                   GdkEvent     *event,
+                   gpointer      cb_data)
 {
   GdkDisplay *display;
   GdkX11Display *display_x11;
-  XEvent *xevent = (XEvent *)xev;
   GdkDragContext *context;
   GdkX11DragContext *context_x11;
   GdkSeat *seat;
@@ -1859,11 +1855,10 @@ xdnd_enter_filter (GdkXEvent *xev,
 }
 
 static GdkFilterReturn
-xdnd_leave_filter (GdkXEvent *xev,
-                   GdkEvent  *event,
-                   gpointer   data)
+xdnd_leave_filter (const XEvent *xevent,
+                   GdkEvent     *event,
+                   gpointer      data)
 {
-  XEvent *xevent = (XEvent *)xev;
   guint32 source_window = xevent->xclient.data.l[0];
   GdkDisplay *display;
   GdkX11Display *display_x11;
@@ -1899,12 +1894,11 @@ xdnd_leave_filter (GdkXEvent *xev,
 }
 
 static GdkFilterReturn
-xdnd_position_filter (GdkXEvent *xev,
-                      GdkEvent  *event,
-                      gpointer   data)
+xdnd_position_filter (const XEvent *xevent,
+                      GdkEvent     *event,
+                      gpointer      data)
 {
   GdkWindowImplX11 *impl;
-  XEvent *xevent = (XEvent *)xev;
   guint32 source_window = xevent->xclient.data.l[0];
   gint16 x_root = xevent->xclient.data.l[2] >> 16;
   gint16 y_root = xevent->xclient.data.l[2] & 0xffff;
@@ -1963,11 +1957,10 @@ xdnd_position_filter (GdkXEvent *xev,
 }
 
 static GdkFilterReturn
-xdnd_drop_filter (GdkXEvent *xev,
-                  GdkEvent  *event,
-                  gpointer   data)
+xdnd_drop_filter (const XEvent *xevent,
+                  GdkEvent     *event,
+                  gpointer      data)
 {
-  XEvent *xevent = (XEvent *)xev;
   guint32 source_window = xevent->xclient.data.l[0];
   guint32 time = xevent->xclient.data.l[2];
   GdkDisplay *display;
@@ -2014,11 +2007,10 @@ xdnd_drop_filter (GdkXEvent *xev,
 }
 
 GdkFilterReturn
-_gdk_x11_dnd_filter (GdkXEvent *xev,
-                     GdkEvent  *event,
-                     gpointer   data)
+_gdk_x11_dnd_filter (const XEvent *xevent,
+                     GdkEvent     *event,
+                     gpointer      data)
 {
-  XEvent *xevent = (XEvent *) xev;
   GdkDisplay *display;
   int i;
 
@@ -2035,7 +2027,7 @@ _gdk_x11_dnd_filter (GdkXEvent *xev,
       if (xevent->xclient.message_type != gdk_x11_get_xatom_by_name_for_display (display, xdnd_filters[i].atom_name))
         continue;
 
-      return xdnd_filters[i].func (xev, event, data);
+      return xdnd_filters[i].func (xevent, event, data);
     }
 
   return GDK_FILTER_CONTINUE;

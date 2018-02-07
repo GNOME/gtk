@@ -148,56 +148,6 @@ typedef union  _GdkEvent	    GdkEvent;
 typedef void (*GdkEventFunc) (GdkEvent *event,
 			      gpointer	data);
 
-/* Event filtering */
-
-/**
- * GdkXEvent:
- *
- * Used to represent native events (XEvents for the X11
- * backend, MSGs for Win32).
- */
-typedef void GdkXEvent;	  /* Can be cast to window system specific
-			   * even type, XEvent on X11, MSG on Win32.
-			   */
-
-/**
- * GdkFilterReturn:
- * @GDK_FILTER_CONTINUE: event not handled, continue processing.
- * @GDK_FILTER_TRANSLATE: native event translated into a GDK event and stored
- *  in the `event` structure that was passed in.
- * @GDK_FILTER_REMOVE: event handled, terminate processing.
- *
- * Specifies the result of applying a #GdkFilterFunc to a native event.
- */
-typedef enum {
-  GDK_FILTER_CONTINUE,	  /* Event not handled, continue processesing */
-  GDK_FILTER_TRANSLATE,	  /* Native event translated into a GDK event and
-                             stored in the "event" structure that was
-                             passed in */
-  GDK_FILTER_REMOVE	  /* Terminate processing, removing event */
-} GdkFilterReturn;
-
-/**
- * GdkFilterFunc:
- * @xevent: the native event to filter.
- * @event: the GDK event to which the X event will be translated.
- * @data: (closure): user data set when the filter was installed.
- *
- * Specifies the type of function used to filter native events before they are
- * converted to GDK events.
- *
- * When a filter is called, @event is unpopulated, except for
- * `event->window`. The filter may translate the native
- * event to a GDK event and store the result in @event, or handle it without
- * translation. If the filter translates the event and processing should
- * continue, it should return %GDK_FILTER_TRANSLATE.
- *
- * Returns: a #GdkFilterReturn value.
- */
-typedef GdkFilterReturn (*GdkFilterFunc) (GdkXEvent *xevent,
-					  GdkEvent *event,
-					  gpointer  data);
-
 /**
  * GdkEventType:
  * @GDK_NOTHING: a special code to indicate a null event.

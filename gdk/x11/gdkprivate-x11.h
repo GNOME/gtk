@@ -29,18 +29,29 @@
 #ifndef __GDK_PRIVATE_X11_H__
 #define __GDK_PRIVATE_X11_H__
 
-#include "gdkcursor.h"
-#include "gdkinternals.h"
-#include "gdkx.h"
-#include "gdkwindow-x11.h"
-#include "gdkscreen-x11.h"
-#include "gdkdisplay-x11.h"
-
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #ifdef XINPUT_2
 #include <X11/extensions/XInput2.h>
 #endif
+
+#include "gdkinternals.h"
+
+typedef enum {
+  GDK_FILTER_CONTINUE,
+  GDK_FILTER_TRANSLATE,
+  GDK_FILTER_REMOVE
+} GdkFilterReturn;
+
+typedef GdkFilterReturn (*GdkFilterFunc) (const XEvent *xevent,
+                                          GdkEvent     *event,
+                                          gpointer      data);
+
+#include "gdkcursor.h"
+#include "gdkx.h"
+#include "gdkwindow-x11.h"
+#include "gdkscreen-x11.h"
+#include "gdkdisplay-x11.h"
 
 #include <cairo-xlib.h>
 
@@ -202,14 +213,14 @@ Atom _gdk_x11_get_xatom_for_display_printf         (GdkDisplay    *display,
                                                     ...) G_GNUC_PRINTF (2, 3);
 
 GdkFilterReturn
-_gdk_x11_dnd_filter (GdkXEvent *xev,
-                     GdkEvent  *event,
-                     gpointer   data);
+_gdk_x11_dnd_filter (const XEvent *xevent,
+                     GdkEvent     *event,
+                     gpointer      data);
 
 GdkFilterReturn
-xdnd_source_window_filter (GdkXEvent *xev,
-                           GdkEvent  *event,
-                           gpointer   data);
+xdnd_source_window_filter (const XEvent *xevent,
+                           GdkEvent     *event,
+                           gpointer      data);
 
 typedef struct _GdkWindowCache GdkWindowCache;
 
