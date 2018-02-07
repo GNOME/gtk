@@ -1109,58 +1109,6 @@ gdk_window_new_child (GdkWindow          *parent,
   return gdk_window_new (gdk_window_get_display (parent), parent, &attr);
 }
 
-/**
- * _gdk_event_filter_unref:
- * @window: (allow-none): A #GdkWindow, or %NULL to be the global window
- * @filter: A window filter
- *
- * Release a reference to @filter.  Note this function may
- * mutate the list storage, so you need to handle this
- * if iterating over a list of filters.
- */
-void
-_gdk_event_filter_unref (GdkWindow       *window,
-			 GdkEventFilter  *filter)
-{
-  GList **filters;
-  GList *tmp_list;
-
-  if (window == NULL)
-    filters = &_gdk_default_filters;
-  else
-    filters = &window->filters;
-
-  tmp_list = *filters;
-  while (tmp_list)
-    {
-      GdkEventFilter *iter_filter = tmp_list->data;
-      GList *node;
-
-      node = tmp_list;
-      tmp_list = tmp_list->next;
-
-      if (iter_filter != filter)
-	continue;
-
-      g_assert (iter_filter->ref_count > 0);
-
-      filter->ref_count--;
-      if (filter->ref_count != 0)
-	continue;
-
-      *filters = g_list_remove_link (*filters, node);
-      g_free (filter);
-      g_list_free_1 (node);
-    }
-}
-
-static void
-window_remove_filters (GdkWindow *window)
-{
-  while (window->filters)
-    _gdk_event_filter_unref (window, window->filters->data);
-}
-
 static void
 update_pointer_info_foreach (GdkDisplay           *display,
                              GdkDevice            *device,
@@ -1253,12 +1201,6 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
     case GDK_WINDOW_SUBSURFACE:
       if (window->window_type == GDK_WINDOW_FOREIGN && !foreign_destroy)
 	{
-	  /* For historical reasons, we remove any filters
-	   * on a foreign window when it or a parent is destroyed;
-	   * this likely causes problems if two separate portions
-	   * of code are maintaining filter lists on a foreign window.
-	   */
-	  window_remove_filters (window);
 	}
       else
 	{
@@ -1327,8 +1269,6 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 	  window->state |= GDK_WINDOW_STATE_WITHDRAWN;
 	  window->parent = NULL;
 	  window->destroyed = TRUE;
-
-	  window_remove_filters (window);
 
 	  window_remove_from_pointer_info (window, display);
 
@@ -1650,110 +1590,6 @@ gdk_window_get_children_with_user_data (GdkWindow *window,
   return res;
 }
 
-
-/**
- * gdk_window_add_filter: (skip)
- * @window: (allow-none): a #GdkWindow
- * @function: filter callback
- * @data: data to pass to filter callback
- *
- * Adds an event filter to @window, allowing you to intercept events
- * before they reach GDK. This is a low-level operation and makes it
- * easy to break GDK and/or GTK+, so you have to know what you're
- * doing. Pass %NULL for @window to get all events for all windows,
- * instead of events for a specific window.
- *
- * If you are interested in X GenericEvents, bear in mind that
- * XGetEventData() has been already called on the event, and
- * XFreeEventData() must not be called within @function.
- **/
-void
-gdk_window_add_filter (GdkWindow     *window,
-		       GdkFilterFunc  function,
-		       gpointer       data)
-{
-  GList *tmp_list;
-  GdkEventFilter *filter;
-
-  g_return_if_fail (window == NULL || GDK_IS_WINDOW (window));
-
-  if (window && GDK_WINDOW_DESTROYED (window))
-    return;
-
-  /* Filters are for the native events on the native window, so
-     ensure there is a native window. */
-  if (window && !gdk_window_has_impl (window))
-    {
-      g_warning ("Filters only work on toplevel windows");
-      return;
-    }
-
-  if (window)
-    tmp_list = window->filters;
-  else
-    tmp_list = _gdk_default_filters;
-
-  while (tmp_list)
-    {
-      filter = (GdkEventFilter *)tmp_list->data;
-      if ((filter->function == function) && (filter->data == data))
-        {
-          filter->ref_count++;
-          return;
-        }
-      tmp_list = tmp_list->next;
-    }
-
-  filter = g_new (GdkEventFilter, 1);
-  filter->function = function;
-  filter->data = data;
-  filter->ref_count = 1;
-  filter->flags = 0;
-
-  if (window)
-    window->filters = g_list_append (window->filters, filter);
-  else
-    _gdk_default_filters = g_list_append (_gdk_default_filters, filter);
-}
-
-/**
- * gdk_window_remove_filter: (skip)
- * @window: a #GdkWindow
- * @function: previously-added filter function
- * @data: user data for previously-added filter function
- *
- * Remove a filter previously added with gdk_window_add_filter().
- */
-void
-gdk_window_remove_filter (GdkWindow     *window,
-                          GdkFilterFunc  function,
-                          gpointer       data)
-{
-  GList *tmp_list;
-  GdkEventFilter *filter;
-
-  g_return_if_fail (window == NULL || GDK_IS_WINDOW (window));
-
-  if (window)
-    tmp_list = window->filters;
-  else
-    tmp_list = _gdk_default_filters;
-
-  while (tmp_list)
-    {
-      filter = (GdkEventFilter *)tmp_list->data;
-      tmp_list = tmp_list->next;
-
-      if ((filter->function == function) && (filter->data == data))
-        {
-          filter->flags |= GDK_EVENT_FILTER_REMOVED;
-
-          _gdk_event_filter_unref (window, filter);
-
-          return;
-        }
-    }
-}
 
 /**
  * gdk_window_is_visible:

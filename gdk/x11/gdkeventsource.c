@@ -22,6 +22,7 @@
 #include "gdkinternals.h"
 #include "gdkwindow-x11.h"
 #include "gdkprivate-x11.h"
+#include "gdkdisplay-x11.h"
 #include "xsettings-client.h"
 
 
@@ -53,47 +54,6 @@ static GSourceFuncs event_funcs = {
   gdk_event_source_dispatch,
   gdk_event_source_finalize
 };
-
-static gint
-gdk_event_apply_filters (const XEvent *xevent,
-			 GdkEvent     *event,
-			 GdkWindow    *window)
-{
-  GList *tmp_list;
-  GdkFilterReturn result;
-
-  if (window == NULL)
-    tmp_list = _gdk_default_filters;
-  else
-    tmp_list = window->filters;
-
-  while (tmp_list)
-    {
-      GdkEventFilter *filter = (GdkEventFilter*) tmp_list->data;
-      GList *node;
-
-      if ((filter->flags & GDK_EVENT_FILTER_REMOVED) != 0)
-        {
-          tmp_list = tmp_list->next;
-          continue;
-        }
-
-      filter->ref_count++;
-      result = filter->function ((GdkXEvent *) xevent, event, filter->data);
-
-      /* Protect against unreffing the filter mutating the list */
-      node = tmp_list->next;
-
-      _gdk_event_filter_unref (window, filter);
-
-      tmp_list = node;
-
-      if (result != GDK_FILTER_CONTINUE)
-        return result;
-    }
-
-  return GDK_FILTER_CONTINUE;
-}
 
 static GdkWindow *
 gdk_event_source_get_filter_window (GdkEventSource      *event_source,
@@ -307,31 +267,16 @@ gdk_event_source_translate_event (GdkX11Display  *x11_display,
 
   if (result == GDK_FILTER_CONTINUE &&
       xevent->xany.window == XRootWindow (dpy, 0))
-    result = _gdk_wm_protocols_filter ((GdkXEvent *)xevent, event, NULL);
+    result = _gdk_wm_protocols_filter (xevent, event, NULL);
 
   if (result == GDK_FILTER_CONTINUE &&
       xevent->xany.window == XRootWindow (dpy, 0))
-    result = _gdk_x11_dnd_filter ((GdkXEvent *)xevent, event, NULL);
-
-  /* Run default filters */
-  if (result == GDK_FILTER_CONTINUE &&
-      _gdk_default_filters)
-    {
-      /* Apply global filters */
-      result = gdk_event_apply_filters (xevent, event, NULL);
-    }
+    result = _gdk_x11_dnd_filter (xevent, event, NULL);
 
   if (result == GDK_FILTER_CONTINUE && filter_window)
     {
       gpointer context = g_object_get_data (G_OBJECT (filter_window), "xdnd-source-context");
-      result = xdnd_source_window_filter ((GdkXEvent *)xevent, event, context);
-    }
-
-  if (result == GDK_FILTER_CONTINUE &&
-      filter_window && filter_window->filters)
-    {
-      /* Apply per-window filters */
-      result = gdk_event_apply_filters (xevent, event, filter_window);
+      result = xdnd_source_window_filter (xevent, event, context);
     }
 
   if (result != GDK_FILTER_CONTINUE)

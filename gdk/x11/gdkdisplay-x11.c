@@ -1197,11 +1197,10 @@ server_time_to_monotonic_time (GdkX11Display *display_x11,
 }
 
 GdkFilterReturn
-_gdk_wm_protocols_filter (GdkXEvent *xev,
-			  GdkEvent  *event,
-			  gpointer   data)
+_gdk_wm_protocols_filter (const XEvent *xevent,
+			  GdkEvent     *event,
+			  gpointer      data)
 {
-  XEvent *xevent = (XEvent *)xev;
   GdkWindow *win = event->any.window;
   GdkDisplay *display;
   Atom atom;

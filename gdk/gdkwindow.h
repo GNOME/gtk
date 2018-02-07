@@ -514,14 +514,6 @@ GDK_AVAILABLE_IN_ALL
 void          gdk_window_set_focus_on_map      (GdkWindow     *window,
 					        gboolean       focus_on_map);
 GDK_AVAILABLE_IN_ALL
-void          gdk_window_add_filter            (GdkWindow     *window,
-                                                GdkFilterFunc  function,
-                                                gpointer       data);
-GDK_AVAILABLE_IN_ALL
-void          gdk_window_remove_filter         (GdkWindow     *window,
-                                                GdkFilterFunc  function,
-                                                gpointer       data);
-GDK_AVAILABLE_IN_ALL
 void          gdk_window_scroll                (GdkWindow     *window,
                                                 gint           dx,
                                                 gint           dy);

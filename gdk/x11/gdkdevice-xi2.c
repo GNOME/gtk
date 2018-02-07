@@ -23,6 +23,7 @@
 #include "gdkintl.h"
 #include "gdkasync.h"
 #include "gdkprivate-x11.h"
+#include "gdkdisplay-x11.h"
 
 #include <stdlib.h>
 #include <X11/Xlib.h>

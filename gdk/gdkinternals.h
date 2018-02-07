@@ -42,19 +42,7 @@ G_BEGIN_DECLS
 
 /* Debugging support */
 
-typedef struct _GdkEventFilter         GdkEventFilter;
 typedef struct _GdkWindowAttr          GdkWindowAttr;
-
-typedef enum {
-  GDK_EVENT_FILTER_REMOVED = 1 << 0
-} GdkEventFilterFlags;
-
-struct _GdkEventFilter {
-  GdkFilterFunc function;
-  gpointer data;
-  GdkEventFilterFlags flags;
-  guint ref_count;
-};
 
 typedef enum {
   GDK_DEBUG_MISC            = 1 <<  0,
@@ -80,7 +68,6 @@ typedef enum {
   GDK_DEBUG_CAIRO_IMAGE     = 1 << 19
 } GdkDebugFlags;
 
-extern GList            *_gdk_default_filters;
 extern GdkWindow        *_gdk_parent_root;
 
 extern guint _gdk_debug_flags;
@@ -173,7 +160,6 @@ struct _GdkWindow
 
   gint8 toplevel_window_type;
 
-  GList *filters;
   GList *children;
   GList children_list_node;
 
@@ -266,9 +252,6 @@ struct _GdkWindow
 extern gint       _gdk_screen_number;
 
 GdkEvent* _gdk_event_unqueue (GdkDisplay *display);
-
-void _gdk_event_filter_unref        (GdkWindow      *window,
-				     GdkEventFilter *filter);
 
 void     gdk_event_set_pointer_emulated (GdkEvent *event,
                                          gboolean  emulated);

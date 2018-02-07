@@ -24,6 +24,7 @@
 #include "gdkinternals.h"
 #include "gdkwindow.h"
 #include "gdkprivate-x11.h"
+#include "gdkdisplay-x11.h"
 #include "gdkasync.h"
 
 #include <math.h>

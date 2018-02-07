@@ -24,6 +24,7 @@
 #endif
 #include "gdkinternals.h"
 #include "gdkprivate-x11.h"
+#include "gdkdisplay-x11.h"
 
 /* Defines for VCP/VCK, to be used too
  * for the core protocol device manager

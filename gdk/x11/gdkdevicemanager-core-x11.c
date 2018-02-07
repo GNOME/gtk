@@ -26,6 +26,7 @@
 #include "gdkdisplayprivate.h"
 #include "gdkeventtranslator.h"
 #include "gdkprivate-x11.h"
+#include "gdkdisplay-x11.h"
 #include "gdkkeysyms.h"
 
 
