@@ -245,7 +245,7 @@ selection_buffer_read_cb (GObject      *object,
 
   if (bytes)
     {
-      finished = g_bytes_get_size (bytes) < get_buffer_size ();
+      finished = g_bytes_get_size (bytes) == 0;
       selection_buffer_append_data (buffer,
                                     g_bytes_get_data (bytes, NULL),
                                     g_bytes_get_size (bytes));
