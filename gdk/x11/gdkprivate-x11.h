@@ -206,6 +206,11 @@ _gdk_x11_dnd_filter (GdkXEvent *xev,
                      GdkEvent  *event,
                      gpointer   data);
 
+GdkFilterReturn
+xdnd_source_window_filter (GdkXEvent *xev,
+                           GdkEvent  *event,
+                           gpointer   data);
+
 typedef struct _GdkWindowCache GdkWindowCache;
 
 GdkWindowCache *

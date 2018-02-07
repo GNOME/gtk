@@ -305,12 +305,26 @@ gdk_event_source_translate_event (GdkX11Display  *x11_display,
         result = gdk_window_cache_filter (xevent, event, cache);
     }
 
+  if (result == GDK_FILTER_CONTINUE &&
+      xevent->xany.window == XRootWindow (dpy, 0))
+    result = _gdk_wm_protocols_filter ((GdkXEvent *)xevent, event, NULL);
+
+  if (result == GDK_FILTER_CONTINUE &&
+      xevent->xany.window == XRootWindow (dpy, 0))
+    result = _gdk_x11_dnd_filter ((GdkXEvent *)xevent, event, NULL);
+
   /* Run default filters */
   if (result == GDK_FILTER_CONTINUE &&
       _gdk_default_filters)
     {
       /* Apply global filters */
       result = gdk_event_apply_filters (xevent, event, NULL);
+    }
+
+  if (result == GDK_FILTER_CONTINUE && filter_window)
+    {
+      gpointer context = g_object_get_data (G_OBJECT (filter_window), "xdnd-source-context");
+      result = xdnd_source_window_filter ((GdkXEvent *)xevent, event, context);
     }
 
   if (result == GDK_FILTER_CONTINUE &&
