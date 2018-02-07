@@ -331,11 +331,14 @@ widget_populate_popup_cb (GtkAppChooserWidget *widget,
 }
 
 static gboolean
-key_press_event_cb (GtkWidget    *widget,
-                    GdkEvent     *event,
-                    GtkSearchBar *bar)
+event_cb (GtkWidget    *widget,
+          GdkEvent     *event,
+          GtkSearchBar *bar)
 {
-  return gtk_search_bar_handle_event (bar, event);
+  if (gdk_event_get_event_type (event) == GDK_KEY_PRESS)
+    return gtk_search_bar_handle_event (bar, event);
+
+  return GDK_EVENT_PROPAGATE;
 }
 
 static void
@@ -372,8 +375,8 @@ construct_appchooser_widget (GtkAppChooserDialog *self)
 
   _gtk_app_chooser_widget_set_search_entry (GTK_APP_CHOOSER_WIDGET (self->priv->app_chooser_widget),
                                             GTK_ENTRY (self->priv->search_entry));
-  g_signal_connect (self, "key-press-event",
-                    G_CALLBACK (key_press_event_cb), self->priv->search_bar);
+  g_signal_connect (self, "event",
+                    G_CALLBACK (event_cb), self->priv->search_bar);
 }
 
 static void
