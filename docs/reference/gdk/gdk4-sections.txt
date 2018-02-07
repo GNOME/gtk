@@ -258,11 +258,6 @@ gdk_window_set_accept_focus
 gdk_window_get_accept_focus
 gdk_window_set_focus_on_map
 gdk_window_get_focus_on_map
-gdk_window_add_filter
-gdk_window_remove_filter
-GdkFilterFunc
-GdkFilterReturn
-GdkXEvent
 gdk_window_shape_combine_region
 gdk_window_set_child_shapes
 gdk_window_merge_child_shapes
