@@ -439,41 +439,91 @@ Public headers should never be included directly:
   #error "Only <gtk/gtk.h> can be included directly."
   #endif
 
-All headers should have inclusion guards (for internal usage)
-and C++ guards:
+Private headers should include the public header first, if one exists:
+
+  #ifndef __GTK_FOO_PRIVATE_H__
+  #define __GTK_FOO_PRIVATE_H__
+
+  #include "gtkfoo.h"
+
+  ...
+
+  #endif /* __GTK_FOO_PRIVATE_H__ */
+
+All headers should have inclusion guards:
 
   #ifndef __GTK_FOO_H__
   #define __GTK_FOO_H__
 
-  #include <gtk/gtk-bar.h>
+  ...
+
+  #endif /* __GTK_FOO_H__ */
+
+You can also use the "once" pragma instead of the classic pre-processor guard:
+
+  #pragma once
+
+Additionally, public headers should use C++ guards around their declarations:
 
   G_BEGIN_DECLS
+
+  GDK_AVAILABLE_IN_ALL
+  GType         gtk_foo_get_type        (void) G_GNUC_CONST;
+
+  GDK_AVAILABLE_IN_ALL
+  GtkWidget *   gtk_foo_new             (void);
 
   ...
 
   G_END_DECLS
 
-  #endif /* __GTK_FOO_H__ */
-
 + Includes
 
-GTK+ source files should never include the global gtk.h header, but
-instead include the individual headers that are needed. Every file must
-include config.h first, then its own header, then other GTK+ headers
-that it needs, then system and third-party headers that it needs.
+GTK+ source files must never include the global gtk.h header; instead, it
+should include the individual headers that are needed.
 
-  /* valid */
+Every source file must include config.h first, followed by the header matching
+the source file, either the public installed header, or the private header, if
+it exists.
+
   #include "config.h"
 
   #include "gtkfoo.h"
 
-  #include "gtkwidget.h"
+Source files should then include project headers, in alphabetical order,
+starting from headers in the current directory; then headers in
+sub-directories; and, finally, in paths relative to the top-level
+directory:
+
+  #include "config.h"
+
+  #include "gtkfooprivate.h"
+
   #include "gtkbutton.h"
+  #include "gtkwidget.h"
 
-  ...
+  #include "a11y/gtkwidgetaccessible.h"
 
+  #include "gdk/gdkwindowprivate.h"
+
+Finally, source files should include the system headers last:
+
+  #include "config.h"
+
+  #include "gtkbarprivate.h"
+
+  #include "gtkcontainerprivate.h"
+
+  #include "a11y/gtkcontaineraccessible.h"
+  #include "a11y/gtkwidgetaccessible.h"
+
+  #include "gdk/gdkwindowprivate.h"
+
+  #include <graphene.h>
   #include <string.h>
 
+Cyclic dependencies should be avoided if at all possible; for instance, you
+could use additional headers to break cycles.
 
 + GObject
 
@@ -484,7 +534,6 @@ Typedef declarations should be placed at the beginning of the file:
 
   typedef struct _GtkFoo          GtkFoo;
   typedef struct _GtkFooClass     GtkFooClass;
-  typedef struct _GtkFooPrivate   GtkFooPrivate;
 
 This includes enumeration types:
 
@@ -499,26 +548,21 @@ And callback types:
   typedef void (* GtkCallback) (GtkWidget *widget,
                                 gpointer   user_data);
 
-Instance structures should only contain the parent type, and optionally a
-pointer to a private data structure, and they should be annotated as
-"private" using the gtk-doc trigraph:
+Instance structures should only contain the parent type:
 
   struct _GtkFoo
   {
-    /*< private >*/
     GtkWidget parent_instance;
-
-    GtkFooPrivate *priv;
   };
 
-The private data pointer is optional and should be omitted in newly
-written classes.
+You should use the G_DECLARE_DERIVABLE_TYPE() and G_DECLARE_FINAL_TYPE()
+macros in newly written headers.
 
-Always use the G_DEFINE_TYPE(), G_DEFINE_TYPE_WITH_PRIVATE(), and
-G_DEFINE_TYPE_WITH_CODE() macros, or their abstract variants
-G_DEFINE_ABSTRACT_TYPE(), G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE(), and
-G_DEFINE_ABSTRACT_TYPE_WITH_CODE(); also, use the similar macros for
-defining interfaces and boxed types.
+Inside your source file, always use the G_DEFINE_TYPE(),
+G_DEFINE_TYPE_WITH_PRIVATE(), and G_DEFINE_TYPE_WITH_CODE() macros, or their
+abstract variants G_DEFINE_ABSTRACT_TYPE(),
+G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE(), and G_DEFINE_ABSTRACT_TYPE_WITH_CODE();
+also, use the similar macros for defining interfaces, quarks, and boxed types.
 
 All the properties should be stored inside the private data structure, which
 is defined inside the source file - or, if needed, inside a private header
@@ -526,14 +570,14 @@ file; the private header filename must end with "private.h" and must not be
 installed.
 
 The private data structure should only be accessed internally either using the
-pointer inside the instance structure, if one is available, or the generated
+pointer inside the instance structure, for legacy code, or the generated
 instance private data getter function for your type. You should never use the
 G_TYPE_INSTANCE_GET_PRIVATE() macro or the g_type_instance_get_private()
 function.
 
 Interface types should always have the dummy typedef for cast purposes:
 
-        typedef struct _GtkFoo              GtkFoo;
+        typedef struct _GtkFoo                  GtkFoo;
 
 The interface structure should have "Interface" postfixed to the dummy typedef:
 
@@ -564,19 +608,16 @@ Inline functions are usually preferable to private macros.
 
 Public macros should not be used unless they evaluate to a constant.
 
-+ Public API
++ Symbol visibility
 
-Avoid exporting variables as public API, since this is cumbersome on some
+Any symbol that is not explicitly annotated using a GDK_AVAILABLE_IN_*
+macro is considered internal, and not exported in the shared library.
+
+Never export variables as public API, since this is cumbersome on some
 platforms. It is always preferable to add getters and setters instead.
 
-All public functions must be listed in the gtk.symbols file.
-
-+ Private API
-
 Non-exported functions that are needed in more than one source file
-should be named "_gtk_...", and declared in a private header file.
-
-Underscore-prefixed functions are never exported.
+should be declared in a private header file.
 
 Non-exported functions that are only needed in one source file
 should be declared static.
@@ -638,4 +679,4 @@ of tabs, etc.
 
 It is ok to update the style of a code block or function when you
 are touching it anyway, but sweeping whitespace changes obscure the
-git history and should be avoided.
+source revision history, and should be avoided.
