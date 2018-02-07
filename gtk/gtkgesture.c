@@ -152,6 +152,7 @@ struct _PointData
 
   guint press_handled : 1;
   guint state : 2;
+  guint cancelled : 1;
 };
 
 struct _GtkGesturePrivate
@@ -252,6 +253,7 @@ _gtk_gesture_get_n_touchpad_points (GtkGesture *gesture,
 
   if (only_active &&
       (data->state == GTK_EVENT_SEQUENCE_DENIED ||
+       data->cancelled ||
        (event_type == GDK_TOUCHPAD_SWIPE && phase == GDK_TOUCHPAD_GESTURE_PHASE_END) ||
        (event_type == GDK_TOUCHPAD_PINCH && phase == GDK_TOUCHPAD_GESTURE_PHASE_END)))
     return 0;
@@ -281,6 +283,7 @@ _gtk_gesture_get_n_touch_points (GtkGesture *gesture,
 
       if (only_active &&
           (data->state == GTK_EVENT_SEQUENCE_DENIED ||
+           data->cancelled ||
            event_type == GDK_TOUCH_END ||
            event_type == GDK_BUTTON_RELEASE))
         continue;
@@ -584,15 +587,17 @@ _gtk_gesture_cancel_all (GtkGesture *gesture)
   GdkEventSequence *sequence;
   GtkGesturePrivate *priv;
   GHashTableIter iter;
+  PointData *data;
 
   priv = gtk_gesture_get_instance_private (gesture);
   g_hash_table_iter_init (&iter, priv->points);
 
-  while (g_hash_table_iter_next (&iter, (gpointer*) &sequence, NULL))
+  while (g_hash_table_iter_next (&iter, (gpointer*) &sequence, (gpointer*) &data))
     {
       g_signal_emit (gesture, signals[CANCEL], 0, sequence);
-      g_hash_table_iter_remove (&iter);
+      data->cancelled = TRUE;
       _gtk_gesture_check_recognized (gesture, sequence);
+      g_hash_table_iter_remove (&iter);
     }
 
   _gtk_gesture_check_empty (gesture);
@@ -1448,8 +1453,9 @@ _gtk_gesture_cancel_sequence (GtkGesture       *gesture,
     return FALSE;
 
   g_signal_emit (gesture, signals[CANCEL], 0, sequence);
-  _gtk_gesture_remove_point (gesture, data->event);
+  data->cancelled = TRUE;
   _gtk_gesture_check_recognized (gesture, sequence);
+  _gtk_gesture_remove_point (gesture, data->event);
 
   return TRUE;
 }
