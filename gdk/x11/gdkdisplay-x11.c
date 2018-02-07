@@ -2499,9 +2499,6 @@ gdk_x11_display_set_startup_notification_id (GdkDisplay  *display,
  * The registered events must have the window field in the same place
  * as core X events (this is not the case for e.g. XKB extension events).
  *
- * If an event type is registered, events of this type will go through
- * global and window-specific filters (see gdk_window_add_filter()).
- * Unregistered events will only go through global filters.
  * GDK may register the events of some X extensions on its own.
  *
  * This function should only be needed in unusual circumstances, e.g.

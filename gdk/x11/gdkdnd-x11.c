@@ -1619,14 +1619,20 @@ xdnd_read_actions (GdkX11DragContext *context_x11)
  * to continually send actions. So we select on PropertyChangeMask
  * and add this filter.
  */
-static GdkFilterReturn
+GdkFilterReturn
 xdnd_source_window_filter (GdkXEvent *xev,
                            GdkEvent  *event,
-                           gpointer   cb_data)
+                           gpointer   data)
 {
   XEvent *xevent = (XEvent *)xev;
-  GdkX11DragContext *context_x11 = cb_data;
-  GdkDisplay *display = gdk_drag_context_get_display (GDK_DRAG_CONTEXT (context_x11));
+  GdkX11DragContext *context_x11;
+  GdkDisplay *display;
+
+  if (!data)
+    return GDK_FILTER_CONTINUE;
+
+  context_x11 = data;
+  display = gdk_drag_context_get_display (GDK_DRAG_CONTEXT (context_x11));
 
   if ((xevent->xany.type == PropertyNotify) &&
       (xevent->xproperty.atom == gdk_x11_get_xatom_by_name_for_display (display, "XdndActionList")))
@@ -1656,13 +1662,11 @@ xdnd_manage_source_filter (GdkDragContext *context,
           gdk_window_set_events (window,
                                  gdk_window_get_events (window) |
                                  GDK_PROPERTY_CHANGE_MASK);
-          gdk_window_add_filter (window, xdnd_source_window_filter, context);
+          g_object_set_data (G_OBJECT (window), "xdnd-source-context", context);
         }
       else
         {
-          gdk_window_remove_filter (window,
-                                    xdnd_source_window_filter,
-                                    context);
+          g_object_set_data (G_OBJECT (window), "xdnd-source-context", NULL);
           /* Should we remove the GDK_PROPERTY_NOTIFY mask?
            * but we might want it for other reasons. (Like
            * INCR selection transactions).
