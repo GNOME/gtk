@@ -4507,14 +4507,17 @@ gtk_cell_editable_entry_activated (GtkEntry *entry, gpointer data)
 }
 
 static gboolean
-gtk_cell_editable_key_press_event (GtkEntry    *entry,
-				   GdkEventKey *key_event,
-				   gpointer     data)
+gtk_cell_editable_event (GtkEntry *entry,
+                         GdkEvent *event,
+                         gpointer  data)
 {
   GtkEntryPrivate *priv = entry->priv;
   guint keyval;
 
-  if (!gdk_event_get_keyval ((GdkEvent *) key_event, &keyval))
+  if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
+    return GDK_EVENT_PROPAGATE;
+
+  if (!gdk_event_get_keyval (event, &keyval))
     return GDK_EVENT_PROPAGATE;
 
   if (keyval == GDK_KEY_Escape)
@@ -4544,8 +4547,8 @@ gtk_entry_start_editing (GtkCellEditable *cell_editable,
 {
   g_signal_connect (cell_editable, "activate",
 		    G_CALLBACK (gtk_cell_editable_entry_activated), NULL);
-  g_signal_connect (cell_editable, "key-press-event",
-		    G_CALLBACK (gtk_cell_editable_key_press_event), NULL);
+  g_signal_connect (cell_editable, "event",
+		    G_CALLBACK (gtk_cell_editable_event), NULL);
 }
 
 static void
