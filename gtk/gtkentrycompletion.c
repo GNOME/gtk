@@ -2060,16 +2060,19 @@ keyval_is_cursor_move (guint keyval)
 }
 
 static gboolean
-gtk_entry_completion_key_press (GtkWidget   *widget,
-                                GdkEventKey *event,
-                                gpointer     user_data)
+gtk_entry_completion_event (GtkWidget *widget,
+                            GdkEvent  *event,
+                            gpointer   user_data)
 {
   gint matches, actions = 0;
   GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (user_data);
   guint keyval;
 
+  if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
+    return FALSE;
+
   if (!completion->priv->popup_completion ||
-      !gdk_event_get_keyval ((GdkEvent *) event, &keyval))
+      !gdk_event_get_keyval (event, &keyval))
     return FALSE;
 
   if (keyval == GDK_KEY_Return ||
@@ -2473,8 +2476,8 @@ connect_completion_signals (GtkEntryCompletion *completion)
   completion->priv->changed_id =
     g_signal_connect (completion->priv->entry, "changed",
                       G_CALLBACK (gtk_entry_completion_changed), completion);
-  g_signal_connect (completion->priv->entry, "key-press-event",
-                    G_CALLBACK (gtk_entry_completion_key_press), completion);
+  g_signal_connect (completion->priv->entry, "event",
+                    G_CALLBACK (gtk_entry_completion_event), completion);
 
     completion->priv->insert_text_id =
       g_signal_connect (completion->priv->entry, "insert-text",
@@ -2529,7 +2532,7 @@ disconnect_completion_signals (GtkEntryCompletion *completion)
       completion->priv->changed_id = 0;
     }
   g_signal_handlers_disconnect_by_func (completion->priv->entry,
-                                        G_CALLBACK (gtk_entry_completion_key_press), completion);
+                                        G_CALLBACK (gtk_entry_completion_event), completion);
   if (completion->priv->insert_text_id > 0 &&
       g_signal_handler_is_connected (completion->priv->entry,
                                      completion->priv->insert_text_id))
