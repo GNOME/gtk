@@ -19,15 +19,28 @@
 #include "config.h"
 
 #include "gtkshortcutswindowprivate.h"
+
+#include "gtkbindings.h"
+#include "gtkbox.h"
+#include "gtkgrid.h"
+#include "gtkheaderbar.h"
+#include "gtkintl.h"
+#include "gtklabel.h"
+#include "gtklistbox.h"
+#include "gtkmenubutton.h"
+#include "gtkpopover.h"
+#include "gtkprivate.h"
 #include "gtkscrolledwindow.h"
+#include "gtksearchbar.h"
+#include "gtksearchentry.h"
 #include "gtkshortcutssection.h"
 #include "gtkshortcutsgroup.h"
 #include "gtkshortcutsshortcutprivate.h"
-#include "gtksearchbar.h"
-#include "gtksearchentry.h"
+#include "gtksizegroup.h"
+#include "gtkstack.h"
+#include "gtktogglebutton.h"
+#include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
-#include "gtkprivate.h"
-#include "gtkintl.h"
 
 /**
  * SECTION:gtkshortcutswindow

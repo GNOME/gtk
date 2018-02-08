@@ -20,10 +20,14 @@
 
 #include "gtkshortcutsshortcutprivate.h"
 
+#include "gtkimage.h"
+#include "gtkintl.h"
+#include "gtklabel.h"
+#include "gtkprivate.h"
 #include "gtkshortcutlabel.h"
 #include "gtkshortcutswindowprivate.h"
-#include "gtkprivate.h"
-#include "gtkintl.h"
+#include "gtksizegroup.h"
+#include "gtktypebuiltins.h"
 
 /**
  * SECTION:gtkshortcutsshortcut

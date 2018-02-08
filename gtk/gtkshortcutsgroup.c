@@ -20,12 +20,13 @@
 
 #include "gtkshortcutsgroup.h"
 
-#include "gtkshortcutsshortcut.h"
+#include "gtkbox.h"
+#include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkorientable.h"
-#include "gtksizegroup.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
+#include "gtkshortcutsshortcut.h"
+#include "gtksizegroup.h"
 
 /**
  * SECTION:gtkshortcutsgroup

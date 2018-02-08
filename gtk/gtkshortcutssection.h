@@ -19,8 +19,11 @@
 #ifndef __GTK_SHORTCUTS_SECTION_H__
 #define __GTK_SHORTCUTS_SECTION_H__
 
-#include <gtk/gtkbox.h>
-#include <gtk/gtkshortcutsgroup.h>
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
+#include <gdk/gdk.h>
 
 G_BEGIN_DECLS
 

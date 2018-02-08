@@ -27,14 +27,14 @@
 
 #include "config.h"
 
-#include "gtkentry.h"
-#include "gtkbox.h"
-#include "gtkcenterbox.h"
+#include "gtksearchbar.h"
+
 #include "gtkbutton.h"
+#include "gtkcenterbox.h"
 #include "gtkentryprivate.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
-#include "gtksearchbar.h"
+#include "gtkrevealer.h"
 #include "gtksearchentryprivate.h"
 #include "gtksnapshot.h"
 

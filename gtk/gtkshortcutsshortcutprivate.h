@@ -27,6 +27,8 @@
 
 #include "gtkshortcutsshortcut.h"
 
+#include "gtkwindow.h"
+
 G_BEGIN_DECLS
 
 void gtk_shortcuts_shortcut_update_accel (GtkShortcutsShortcut *self,

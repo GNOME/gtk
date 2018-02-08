@@ -19,7 +19,11 @@
 #ifndef GTK_SHORTCUTS_SHORTCUT_H
 #define GTK_SHORTCUTS_SHORTCUT_H
 
-#include <gtk/gtk.h>
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
+#include <gdk/gdk.h>
 
 G_BEGIN_DECLS
 

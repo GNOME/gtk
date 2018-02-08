@@ -32,7 +32,8 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkrevealer.h>
+#include <gtk/gtkbin.h>
+#include <gtk/gtkentry.h>
 
 G_BEGIN_DECLS
 
