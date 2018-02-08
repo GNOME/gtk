@@ -33,6 +33,7 @@
 #include "gtklabel.h"
 #include "gtkspinbutton.h"
 #include "gtkstylecontext.h"
+#include "gtkeventcontrollerkey.h"
 
 #include <math.h>
 
@@ -59,6 +60,11 @@ struct _GtkColorEditorPrivate
   GtkAdjustment *s_adj;
   GtkAdjustment *v_adj;
   GtkAdjustment *a_adj;
+
+  GtkEventController *h_key;
+  GtkEventController *s_key;
+  GtkEventController *v_key;
+  GtkEventController *a_key;
 
   gint popup_position;
 
@@ -227,14 +233,13 @@ popup_edit (GtkWidget      *widget,
 }
 
 static gboolean
-popup_key_press (GtkWidget      *popup,
-                 GdkEventKey    *event,
-                 GtkColorEditor *editor)
+popup_key_pressed (GtkEventController *controller,
+                   guint               keyval,
+                   guint               keycode,
+                   GdkModifierType     state,
+                   GtkColorEditor     *editor)
 {
-  guint keyval;
-
-  if (gdk_event_get_keyval ((GdkEvent *) event, &keyval) &&
-      keyval == GDK_KEY_Escape)
+  if (keyval == GDK_KEY_Escape)
     {
       dismiss_current_popup (editor);
       return TRUE;
@@ -369,6 +374,15 @@ gtk_color_editor_init (GtkColorEditor *editor)
   gtk_overlay_add_overlay (GTK_OVERLAY (editor->priv->overlay), editor->priv->h_popup);
   gtk_overlay_add_overlay (GTK_OVERLAY (editor->priv->overlay), editor->priv->a_popup);
 
+  editor->priv->h_key = gtk_event_controller_key_new (editor->priv->h_entry);
+  g_signal_connect (editor->priv->h_key, "key-pressed", G_CALLBACK (popup_key_pressed), editor);
+  editor->priv->s_key = gtk_event_controller_key_new (editor->priv->s_entry);
+  g_signal_connect (editor->priv->s_key, "key-pressed", G_CALLBACK (popup_key_pressed), editor);
+  editor->priv->v_key = gtk_event_controller_key_new (editor->priv->v_entry);
+  g_signal_connect (editor->priv->v_key, "key-pressed", G_CALLBACK (popup_key_pressed), editor);
+  editor->priv->a_key = gtk_event_controller_key_new (editor->priv->a_entry);
+  g_signal_connect (editor->priv->a_key, "key-pressed", G_CALLBACK (popup_key_pressed), editor);
+
   gtk_style_context_remove_class (gtk_widget_get_style_context (editor->priv->swatch), "activatable");
 }
 
@@ -378,6 +392,11 @@ gtk_color_editor_dispose (GObject *object)
   GtkColorEditor *editor = GTK_COLOR_EDITOR (object);
 
   dismiss_current_popup (editor);
+
+  g_clear_object (&editor->priv->h_key);
+  g_clear_object (&editor->priv->s_key);
+  g_clear_object (&editor->priv->v_key);
+  g_clear_object (&editor->priv->a_key);
 
   G_OBJECT_CLASS (gtk_color_editor_parent_class)->dispose (object);
 }
@@ -482,7 +501,6 @@ gtk_color_editor_class_init (GtkColorEditorClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkColorEditor, a_adj);
 
   gtk_widget_class_bind_template_callback (widget_class, hsv_changed);
-  gtk_widget_class_bind_template_callback (widget_class, popup_key_press);
   gtk_widget_class_bind_template_callback (widget_class, dismiss_current_popup);
   gtk_widget_class_bind_template_callback (widget_class, get_child_position);
   gtk_widget_class_bind_template_callback (widget_class, entry_text_changed);
