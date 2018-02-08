@@ -34,8 +34,8 @@ Building and installing
 
 In order to build GTK+ you will need:
 
-  - a C99 compatible compiler
-  - Python 3
+  - [a C99 compatible compiler](https://wiki.gnome.org/Projects/GLib/CompilerRequirements)
+  - [Python 3](https://www.python.org/)
   - [Meson](http://mesonbuild.com)
   - [Ninja](https://ninja-build.org)
 
