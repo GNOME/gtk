@@ -101,40 +101,42 @@
 
 #include "config.h"
 
-#include <string.h>
-
-#include  <gobject/gvaluecollector.h>
+#include "gtkmenuprivate.h"
 
 #include "gtkaccellabel.h"
 #include "gtkaccelmap.h"
 #include "gtkadjustment.h"
 #include "gtkbindings.h"
-#include "gtkcheckmenuitem.h"
+#include "gtkbox.h"
 #include "gtkcheckmenuitemprivate.h"
+#include "gtkcssnodeprivate.h"
+#include "gtkcssstylepropertyprivate.h"
+#include "gtkdnd.h"
+#include "gtkeventcontrollerscroll.h"
+#include "gtkiconprivate.h"
+#include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
-#include "gtkmenuprivate.h"
 #include "gtkmenuitemprivate.h"
 #include "gtkmenushellprivate.h"
-#include "gtkwindow.h"
-#include "gtkbox.h"
+#include "gtkprivate.h"
 #include "gtkscrollbar.h"
 #include "gtksettings.h"
-#include "gtkprivate.h"
+#include "gtksnapshot.h"
+#include "gtkstylecontextprivate.h"
+#include "gtktypebuiltins.h"
 #include "gtkwidgetpath.h"
 #include "gtkwidgetprivate.h"
-#include "gtkdnd.h"
-#include "gtkintl.h"
-#include "gtktypebuiltins.h"
-#include "gtkwidgetprivate.h"
+#include "gtkwindowgroup.h"
 #include "gtkwindowprivate.h"
-#include "gtkcssnodeprivate.h"
-#include "gtkstylecontextprivate.h"
-#include "gtkcssstylepropertyprivate.h"
-#include "gtkiconprivate.h"
 
 #include "a11y/gtkmenuaccessible.h"
+
 #include "gdk/gdk-private.h"
+
+#include <gobject/gvaluecollector.h>
+#include <string.h>
+
 
 #define NAVIGATION_REGION_OVERSHOOT 50  /* How much the navigation region
                                          * extends below the submenu
