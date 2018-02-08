@@ -41,6 +41,9 @@
 #include "gtktogglebutton.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
+#include "gtkeventcontrollerkey.h"
+#include "gtkprivate.h"
+#include "gtkintl.h"
 
 /**
  * SECTION:gtkshortcutswindow
@@ -111,6 +114,7 @@ typedef struct
   GtkListBox     *list_box;
   GtkBox         *search_gestures;
   GtkBox         *search_shortcuts;
+  GtkEventController *controller;
 
   GtkWindow      *window;
   gulong          keys_changed_id;
@@ -646,6 +650,7 @@ gtk_shortcuts_window_finalize (GObject *object)
 
   g_clear_object (&priv->search_image_group);
   g_clear_object (&priv->search_text_group);
+  g_clear_object (&priv->controller);
 
   G_OBJECT_CLASS (gtk_shortcuts_window_parent_class)->finalize (object);
 }
@@ -852,14 +857,16 @@ gtk_shortcuts_window_class_init (GtkShortcutsWindowClass *klass)
 }
 
 static gboolean
-window_key_press_event_cb (GtkWidget *window,
-                           GdkEvent  *event,
-                           gpointer   data)
+window_key_pressed (GtkEventController *controller,
+                    guint               keyval,
+                    guint               keycode,
+                    GdkModifierType     state,
+                    gpointer            data)
 {
-  GtkShortcutsWindow *self = GTK_SHORTCUTS_WINDOW (window);
+  GtkShortcutsWindow *self = GTK_SHORTCUTS_WINDOW (gtk_event_controller_get_widget (controller));
   GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
 
-  return gtk_search_bar_handle_event (priv->search_bar, event);
+  return gtk_search_bar_handle_event (priv->search_bar, gtk_get_current_event ());
 }
 
 static void
@@ -878,8 +885,9 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
   gtk_window_set_resizable (GTK_WINDOW (self), FALSE);
   gtk_window_set_type_hint (GTK_WINDOW (self), GDK_SURFACE_TYPE_HINT_DIALOG);
 
-  g_signal_connect (self, "key-press-event",
-                    G_CALLBACK (window_key_press_event_cb), NULL);
+  priv->controller = gtk_event_controller_key_new (GTK_WIDGET (self));
+  g_signal_connect (priv->controller, "key-pressed",
+                    G_CALLBACK (window_key_pressed), NULL);
 
   priv->keywords = g_hash_table_new_full (NULL, NULL, NULL, g_free);
   priv->search_items_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
