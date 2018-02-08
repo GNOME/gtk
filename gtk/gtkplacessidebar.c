@@ -3386,17 +3386,19 @@ stop_shortcut_cb (GSimpleAction *action,
 }
 
 static gboolean
-on_key_press_event (GtkWidget        *widget,
-                    GdkEventKey      *event,
-                    GtkPlacesSidebar *sidebar)
+on_event (GtkWidget        *widget,
+          GdkEvent         *event,
+          GtkPlacesSidebar *sidebar)
 {
   guint modifiers;
   GtkListBoxRow *row;
   guint keyval, state;
 
-  if (event &&
-      gdk_event_get_keyval ((GdkEvent *) event, &keyval) &&
-      gdk_event_get_state ((GdkEvent *) event, &state))
+  if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
+    return GDK_EVENT_PROPAGATE;
+
+  if (gdk_event_get_keyval (event, &keyval) &&
+      gdk_event_get_state (event, &state))
     {
       row = gtk_list_box_get_selected_row (GTK_LIST_BOX (sidebar->list_box));
       if (row)
@@ -4051,8 +4053,8 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 
   g_signal_connect (sidebar->list_box, "row-activated",
                     G_CALLBACK (on_row_activated), sidebar);
-  g_signal_connect (sidebar->list_box, "key-press-event",
-                    G_CALLBACK (on_key_press_event), sidebar);
+  g_signal_connect (sidebar->list_box, "event",
+                    G_CALLBACK (on_event), sidebar);
 
   sidebar->long_press_gesture = gtk_gesture_long_press_new (GTK_WIDGET (sidebar));
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (sidebar->long_press_gesture), TRUE);
