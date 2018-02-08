@@ -34,7 +34,7 @@
   <object class="GtkTreeMenu" id="popup_widget">
     <property name="cell-area">area</property>
     <signal name="menu-activate" handler="gtk_combo_box_menu_activate" swapped="no"/>
-    <signal name="key-press-event" handler="gtk_combo_box_menu_key_press" swapped="no"/>
+    <signal name="event" handler="gtk_combo_box_menu_event" swapped="no"/>
     <signal name="show" handler="gtk_combo_box_menu_show" swapped="no"/>
     <signal name="hide" handler="gtk_combo_box_menu_hide" swapped="no"/>
   </object>
