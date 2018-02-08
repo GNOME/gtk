@@ -20,6 +20,8 @@
 
 #include <gtk/a11y/gtklockbuttonaccessible.h>
 
+#include <gtk/gtklockbutton.h>
+
 G_BEGIN_DECLS
 
 void  _gtk_lock_button_accessible_name_changed (GtkLockButton *lockbutton);

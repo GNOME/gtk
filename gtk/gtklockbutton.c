@@ -19,11 +19,15 @@
 #include "config.h"
 
 #include "gtklockbuttonprivate.h"
+
 #include "gtkbox.h"
 #include "gtkimage.h"
+#include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtksizegroup.h"
-#include "gtkintl.h"
+#include "gtkstack.h"
+#include "gtkstylecontext.h"
+
 #include "a11y/gtklockbuttonaccessibleprivate.h"
 
 /**
