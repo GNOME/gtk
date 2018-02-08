@@ -157,7 +157,6 @@
                 <property name="AtkObject::accessible-name" translatable="yes">Alpha</property>
               </object>
             </child>
-            <signal name="key-press-event" handler="popup_key_press" swapped="no"/>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -200,7 +199,6 @@
                 <property name="AtkObject::accessible-name" translatable="yes">Hue</property>
               </object>
             </child>
-            <signal name="key-press-event" handler="popup_key_press" swapped="no"/>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -253,7 +251,6 @@
                 <property name="AtkObject::accessible-name" translatable="yes">Saturation</property>
               </object>
             </child>
-            <signal name="key-press-event" handler="popup_key_press" swapped="no"/>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -271,7 +268,6 @@
                 <property name="AtkObject::accessible-name" translatable="yes">Value</property>
               </object>
             </child>
-            <signal name="key-press-event" handler="popup_key_press" swapped="no"/>
           </object>
           <packing>
             <property name="left-attach">1</property>
