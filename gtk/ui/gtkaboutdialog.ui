@@ -157,7 +157,6 @@
                             <property name="left-margin">8</property>
                             <property name="right-margin">8</property>
                             <property name="cursor-visible">0</property>
-                            <signal name="key-press-event" handler="text_view_key_press_event" swapped="no"/>
                           </object>
                         </child>
                       </object>
@@ -184,7 +183,6 @@
                             <property name="left-margin">8</property>
                             <property name="right-margin">8</property>
                             <property name="cursor-visible">0</property>
-                            <signal name="key-press-event" handler="text_view_key_press_event" swapped="no"/>
                           </object>
                         </child>
                       </object>

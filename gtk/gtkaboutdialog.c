@@ -60,6 +60,7 @@
 #include "gtkintl.h"
 #include "gtkdialogprivate.h"
 #include "gtkeventcontrollermotion.h"
+#include "gtkeventcontrollerkey.h"
 #include "gtkgesturemultipress.h"
 
 
@@ -188,6 +189,8 @@ struct _GtkAboutDialogPrivate
   GtkGesture *system_press;
   GtkEventController *license_motion;
   GtkEventController *system_motion;
+  GtkEventController *license_key;
+  GtkEventController *system_key;
 
   GtkLicense license_type;
 
@@ -244,8 +247,10 @@ static gboolean             gtk_about_dialog_activate_link  (GtkAboutDialog     
                                                              const gchar        *uri);
 static gboolean             emit_activate_link              (GtkAboutDialog     *about,
 							     const gchar        *uri);
-static gboolean             text_view_key_press_event       (GtkWidget          *text_view,
-							     GdkEventKey        *event,
+static gboolean             text_view_key_pressed           (GtkEventController *controller,
+                                                             guint               keyval,
+                                                             guint               keycode,
+                                                             GdkModifierType     state,
 							     GtkAboutDialog     *about);
 static void                 text_view_released              (GtkGestureMultiPress *press,
                                                              int                   n,
@@ -609,7 +614,6 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkAboutDialog, system_view);
 
   gtk_widget_class_bind_template_callback (widget_class, emit_activate_link);
-  gtk_widget_class_bind_template_callback (widget_class, text_view_key_press_event);
   gtk_widget_class_bind_template_callback (widget_class, stack_visible_child_notify);
 }
 
@@ -781,6 +785,10 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   g_signal_connect (priv->license_motion, "motion", G_CALLBACK (text_view_motion), about);
   priv->system_motion = gtk_event_controller_motion_new (priv->system_view);
   g_signal_connect (priv->system_motion, "motion", G_CALLBACK (text_view_motion), about);
+  priv->license_key = gtk_event_controller_key_new (priv->license_view);
+  g_signal_connect (priv->license_key, "key-pressed", G_CALLBACK (text_view_key_pressed), about);
+  priv->system_key = gtk_event_controller_key_new (priv->system_view);
+  g_signal_connect (priv->system_key, "key-pressed", G_CALLBACK (text_view_key_pressed), about);
 
   /* force defaults */
   gtk_about_dialog_set_program_name (about, NULL);
@@ -822,6 +830,8 @@ gtk_about_dialog_finalize (GObject *object)
   g_object_unref (priv->system_press);
   g_object_unref (priv->license_motion);
   g_object_unref (priv->system_motion);
+  g_object_unref (priv->license_key);
+  g_object_unref (priv->system_key);
 
   G_OBJECT_CLASS (gtk_about_dialog_parent_class)->finalize (object);
 }
@@ -1928,16 +1938,17 @@ follow_if_link (GtkAboutDialog *about,
 }
 
 static gboolean
-text_view_key_press_event (GtkWidget      *text_view,
-                           GdkEventKey    *event,
-                           GtkAboutDialog *about)
+text_view_key_pressed (GtkEventController *controller,
+                       guint               keyval,
+                       guint               keycode,
+                       GdkModifierType     state,
+                       GtkAboutDialog     *about)
 {
+  GtkWidget *text_view;
   GtkTextIter iter;
   GtkTextBuffer *buffer;
-  guint keyval;
 
-  if (!gdk_event_get_keyval ((GdkEvent *) event, &keyval))
-    return GDK_EVENT_PROPAGATE;
+  text_view = gtk_event_controller_get_widget (controller);
 
   switch (keyval)
     {
