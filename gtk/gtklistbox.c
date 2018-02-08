@@ -17,23 +17,30 @@
 
 #include "config.h"
 
+#include "gtklistbox.h"
+
 #include "gtkactionhelperprivate.h"
 #include "gtkadjustmentprivate.h"
+#include "gtkbindings.h"
+#include "gtkbuildable.h"
+#include "gtkcontainerprivate.h"
 #include "gtkcssnodeprivate.h"
-#include "gtklistbox.h"
-#include "gtkwidget.h"
+#include "gtkdnd.h"
+#include "gtkgesturemultipress.h"
+#include "gtkintl.h"
+#include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
+#include "gtkscrollable.h"
+#include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
-#include "gtkcontainerprivate.h"
+
+#include "a11y/gtklistboxaccessibleprivate.h"
+#include "a11y/gtklistboxrowaccessible.h"
 
 #include <float.h>
 #include <math.h>
 #include <string.h>
-
-#include "a11y/gtklistboxaccessibleprivate.h"
-#include "a11y/gtklistboxrowaccessible.h"
 
 /**
  * SECTION:gtklistbox
