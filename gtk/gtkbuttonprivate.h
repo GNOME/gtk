@@ -19,6 +19,8 @@
 #ifndef __GTK_BUTTON_PRIVATE_H__
 #define __GTK_BUTTON_PRIVATE_H__
 
+#include "gtkbutton.h"
+
 #include "gtkactionhelperprivate.h"
 #include "gtkgesturesingle.h"
 

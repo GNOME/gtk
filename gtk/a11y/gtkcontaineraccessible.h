@@ -22,7 +22,7 @@
 #error "Only <gtk/gtk-a11y.h> can be included directly."
 #endif
 
-#include <gtk/gtk.h>
+#include <gtk/gtkcontainer.h>
 #include <gtk/a11y/gtkwidgetaccessible.h>
 
 G_BEGIN_DECLS

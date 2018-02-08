@@ -26,30 +26,29 @@
 
 #include "gtkcontainerprivate.h"
 
-#include <stdarg.h>
-#include <string.h>
-#include <stdlib.h>
+#include "gtkadjustment.h"
+#include "gtkassistant.h"
+#include "gtkbuildable.h"
+#include "gtkbuilderprivate.h"
+#include "gtkintl.h"
+#include "gtkpopovermenu.h"
+#include "gtkprivate.h"
+#include "gtkmarshalers.h"
+#include "gtkshortcutssection.h"
+#include "gtkshortcutswindow.h"
+#include "gtksizerequest.h"
+#include "gtkstylecontextprivate.h"
+#include "gtktypebuiltins.h"
+#include "gtkwidgetprivate.h"
+#include "gtkwindow.h"
+
+#include "a11y/gtkcontaineraccessibleprivate.h"
 
 #include <gobject/gobjectnotifyqueue.c>
 #include <gobject/gvaluecollector.h>
-
-#include "gtkadjustment.h"
-#include "gtkbuildable.h"
-#include "gtkbuilderprivate.h"
-#include "gtktypebuiltins.h"
-#include "gtkprivate.h"
-#include "gtkmarshalers.h"
-#include "gtksizerequest.h"
-#include "gtkwidgetprivate.h"
-#include "gtkwindow.h"
-#include "gtkassistant.h"
-#include "gtkintl.h"
-#include "gtkstylecontextprivate.h"
-#include "a11y/gtkcontaineraccessible.h"
-#include "a11y/gtkcontaineraccessibleprivate.h"
-#include "gtkpopovermenu.h"
-#include "gtkshortcutswindow.h"
-
+#include <stdarg.h>
+#include <stdlib.h>
+#include <string.h>
 
 /* A handful of containers inside GTK+ are cheating and widgets
  * inside internal structure as direct children for the purpose

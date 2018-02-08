@@ -25,32 +25,39 @@
 
 #include "config.h"
 
+#include "gtknotebook.h"
+
+#include "gtkbindings.h"
+#include "gtkbox.h"
+#include "gtkbuildable.h"
+#include "gtkbutton.h"
+#include "gtkcssstylepropertyprivate.h"
+#include "gtkdnd.h"
+#include "gtkdragdest.h"
+#include "gtkeventcontrollermotion.h"
+#include "gtkgesturemultipress.h"
+#include "gtkgizmoprivate.h"
+#include "gtkiconprivate.h"
+#include "gtkintl.h"
+#include "gtklabel.h"
+#include "gtkmain.h"
+#include "gtkmarshalers.h"
+#include "gtkmenu.h"
+#include "gtkmenuitem.h"
+#include "gtkorientable.h"
+#include "gtksizerequest.h"
+#include "gtkstylecontextprivate.h"
+#include "gtkprivate.h"
+#include "gtkstack.h"
+#include "gtktypebuiltins.h"
+#include "gtkwidgetpath.h"
+#include "gtkwidgetprivate.h"
+
+#include "a11y/gtknotebookaccessible.h"
+
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
-
-#include "gtknotebook.h"
-
-#include "gtkmain.h"
-#include "gtkmenu.h"
-#include "gtkmenuitem.h"
-#include "gtklabel.h"
-#include "gtkintl.h"
-#include "gtkmarshalers.h"
-#include "gtkbindings.h"
-#include "gtkprivate.h"
-#include "gtkdnd.h"
-#include "gtkbuildable.h"
-#include "gtktypebuiltins.h"
-#include "gtkwidgetpath.h"
-#include "gtkcssstylepropertyprivate.h"
-#include "gtksizerequest.h"
-#include "gtkstylecontextprivate.h"
-#include "gtkwidgetprivate.h"
-#include "gtkiconprivate.h"
-#include "gtkgizmoprivate.h"
-#include "a11y/gtknotebookaccessible.h"
-
 
 /**
  * SECTION:gtknotebook

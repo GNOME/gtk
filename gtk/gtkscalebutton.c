@@ -36,28 +36,30 @@
 
 #include "gtkscalebutton.h"
 
-#include <math.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include "gtkadjustment.h"
 #include "gtkbindings.h"
+#include "gtkbox.h"
+#include "gtkbuttonprivate.h"
+#include "gtkeventcontrollerscroll.h"
 #include "gtkframe.h"
+#include "gtkgesture.h"
+#include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkorientable.h"
 #include "gtkpopover.h"
 #include "gtkprivate.h"
-#include "gtkscale.h"
 #include "gtkrangeprivate.h"
-#include "gtkbox.h"
+#include "gtkscale.h"
+#include "gtktypebuiltins.h"
 #include "gtkwindow.h"
 #include "gtkwindowprivate.h"
-#include "gtktypebuiltins.h"
-#include "gtkgesture.h"
-#include "gtkbuttonprivate.h"
-#include "gtkintl.h"
+
 #include "a11y/gtkscalebuttonaccessible.h"
+
+#include <math.h>
+#include <stdlib.h>
+#include <string.h>
 
 /**
  * SECTION:gtkscalebutton

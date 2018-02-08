@@ -109,24 +109,27 @@
 
 #include "config.h"
 
-#include <string.h>
-
 #include "gtkexpander.h"
 
-#include "gtklabel.h"
+#include "gtkbox.h"
 #include "gtkbuildable.h"
-#include "gtkcontainer.h"
+#include "gtkcontainerprivate.h"
+#include "gtkdnd.h"
+#include "gtkdragdest.h"
+#include "gtkiconprivate.h"
+#include "gtkgesturemultipress.h"
+#include "gtkgesturesingle.h"
+#include "gtkintl.h"
+#include "gtklabel.h"
 #include "gtkmarshalers.h"
 #include "gtkmain.h"
-#include "gtkintl.h"
 #include "gtkprivate.h"
-#include "gtkdnd.h"
-#include "a11y/gtkexpanderaccessible.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
-#include "gtkcontainerprivate.h"
-#include "gtkiconprivate.h"
 
+#include "a11y/gtkexpanderaccessible.h"
+
+#include <string.h>
 
 #define TIMEOUT_EXPAND 500
 

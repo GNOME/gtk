@@ -24,55 +24,63 @@
 
 #include "config.h"
 
-#include <cairo-gobject.h>
-
-#include "gtkwindow.h"
-
-#include <string.h>
-#include <stdlib.h>
-#include <errno.h>
-#include <limits.h>
-#include <graphene.h>
-
-#include "gtkprivate.h"
 #include "gtkwindowprivate.h"
+
 #include "gtkaccelgroupprivate.h"
+#include "gtkapplicationprivate.h"
 #include "gtkbindings.h"
+#include "gtkbox.h"
+#include "gtkbuildable.h"
+#include "gtkbuilderprivate.h"
+#include "gtkbutton.h"
+#include "gtkcheckbutton.h"
+#include "gtkcheckmenuitem.h"
 #include "gtkcontainerprivate.h"
 #include "gtkcsscornervalueprivate.h"
 #include "gtkcssiconthemevalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
+#include "gtkcssstylepropertyprivate.h"
 #include "gtkdebugupdatesprivate.h"
+#include "gtkdragdest.h"
+#include "gtkgesturedrag.h"
+#include "gtkgesturemultipress.h"
+#include "gtkgestureprivate.h"
+#include "gtkheaderbarprivate.h"
+#include "gtkicontheme.h"
+#include "gtkintl.h"
 #include "gtkkeyhash.h"
 #include "gtkmain.h"
+#include "gtkmarshalers.h"
+#include "gtkmessagedialog.h"
 #include "gtkmnemonichash.h"
+#include "gtkmenu.h"
 #include "gtkmenubar.h"
 #include "gtkmenushellprivate.h"
-#include "gtkicontheme.h"
-#include "gtkmarshalers.h"
-#include "gtkbuildable.h"
-#include "gtkbuilderprivate.h"
-#include "gtkwidgetprivate.h"
-#include "gtkcontainerprivate.h"
-#include "gtkintl.h"
+#include "gtkpointerfocusprivate.h"
+#include "gtkpopoverprivate.h"
+#include "gtkprivate.h"
+#include "gtkseparatormenuitem.h"
+#include "gtksettings.h"
+#include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
-#include "gtkbox.h"
-#include "gtkbutton.h"
-#include "gtkheaderbar.h"
-#include "gtkheaderbarprivate.h"
-#include "gtkpopoverprivate.h"
+#include "gtkwidgetprivate.h"
+#include "gtkwindowgroup.h"
+
 #include "a11y/gtkwindowaccessible.h"
 #include "a11y/gtkcontaineraccessibleprivate.h"
-#include "gtkapplicationprivate.h"
-#include "gtkgestureprivate.h"
 #include "inspector/init.h"
 #include "inspector/window.h"
-#include "gtkcssstylepropertyprivate.h"
-#include "gtkpointerfocusprivate.h"
 
 #include "gdk/gdk-private.h"
+
+#include <cairo-gobject.h>
+#include <errno.h>
+#include <graphene.h>
+#include <limits.h>
+#include <string.h>
+#include <stdlib.h>
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"

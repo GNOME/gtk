@@ -58,23 +58,24 @@
 
 #include "config.h"
 
-#include <atk/atk.h>
-
 #include "gtkassistant.h"
 
-#include "gtkbutton.h"
+#include "gtkbindings.h"
 #include "gtkbox.h"
+#include "gtkbuildable.h"
+#include "gtkbutton.h"
 #include "gtkframe.h"
-#include "gtknotebook.h"
+#include "gtkheaderbar.h"
+#include "gtkintl.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
+#include "gtknotebook.h"
+#include "gtkprivate.h"
 #include "gtksettings.h"
 #include "gtksizegroup.h"
 #include "gtksizerequest.h"
 #include "gtktypebuiltins.h"
-#include "gtkintl.h"
-#include "gtkprivate.h"
-#include "gtkbuildable.h"
+
 #include "a11y/gtkwindowaccessible.h"
 
 

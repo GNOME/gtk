@@ -53,22 +53,24 @@
 
 #include "gtklinkbutton.h"
 
-#include <string.h>
-
-#include "gtkdnd.h"
+#include "gtkdragsource.h"
+#include "gtkgesturemultipress.h"
+#include "gtkgesturesingle.h"
+#include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
-#include "gtksizerequest.h"
-#include "gtkshow.h"
-#include "gtktooltip.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
+#include "gtkshow.h"
+#include "gtksizerequest.h"
+#include "gtktooltip.h"
 #include "gtkwidgetprivate.h"
 
 #include "a11y/gtklinkbuttonaccessible.h"
+
+#include <string.h>
 
 struct _GtkLinkButtonPrivate
 {

@@ -18,50 +18,54 @@
 
 #include "config.h"
 
-#include <math.h>
-#include <string.h>
-
-#define GDK_COMPILATION
-#include "gdkeventsprivate.h"
-
 #include "gtktreeview.h"
 
 #include "gtkadjustmentprivate.h"
-#include "gtkcssnumbervalueprivate.h"
-#include "gtkrbtreeprivate.h"
-#include "gtktreednd.h"
-#include "gtktreeprivate.h"
-#include "gtkcellrenderer.h"
-#include "gtkmarshalers.h"
+#include "gtkbox.h"
+#include "gtkbindings.h"
 #include "gtkbuildable.h"
 #include "gtkbutton.h"
-#include "gtklabel.h"
-#include "gtkbox.h"
-#include "gtkintl.h"
-#include "gtkbindings.h"
-#include "gtkcontainer.h"
-#include "gtkentry.h"
-#include "gtkframe.h"
-#include "gtkmain.h"
-#include "gtktreemodelsort.h"
-#include "gtktooltip.h"
-#include "gtkscrollable.h"
 #include "gtkcelllayout.h"
-#include "gtkprivate.h"
-#include "gtkwidgetprivate.h"
-#include "gtkentryprivate.h"
-#include "gtkstylecontextprivate.h"
-#include "gtkcssstylepropertyprivate.h"
+#include "gtkcellrenderer.h"
+#include "gtkcontainer.h"
+#include "gtkcssnumbervalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
-#include "gtkrendericonprivate.h"
-#include "gtktypebuiltins.h"
+#include "gtkcssstylepropertyprivate.h"
+#include "gtkdragdest.h"
+#include "gtkdragsource.h"
+#include "gtkentryprivate.h"
+#include "gtkeventcontrollermotion.h"
+#include "gtkeventcontrollerscroll.h"
+#include "gtkframe.h"
+#include "gtkgesturedrag.h"
+#include "gtkgesturemultipress.h"
+#include "gtkgesturesingle.h"
+#include "gtkintl.h"
+#include "gtklabel.h"
 #include "gtkmain.h"
+#include "gtkmarshalers.h"
+#include "gtkprivate.h"
+#include "gtkrbtreeprivate.h"
+#include "gtkrendericonprivate.h"
+#include "gtkscrollable.h"
 #include "gtksettingsprivate.h"
 #include "gtksnapshotprivate.h"
+#include "gtkstylecontextprivate.h"
+#include "gtktooltip.h"
+#include "gtktreednd.h"
+#include "gtktreemodelsort.h"
+#include "gtktreeprivate.h"
+#include "gtktypebuiltins.h"
 #include "gtkwidgetpath.h"
-#include "gtkeventcontrollermotion.h"
+#include "gtkwidgetprivate.h"
+#include "gtkwindowgroup.h"
+
 #include "a11y/gtktreeviewaccessibleprivate.h"
 
+#include "gdk/gdkeventsprivate.h"
+
+#include <math.h>
+#include <string.h>
 
 /**
  * SECTION:gtktreeview

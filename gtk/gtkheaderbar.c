@@ -19,16 +19,24 @@
 
 #include "config.h"
 
-#include "gtkheaderbar.h"
 #include "gtkheaderbarprivate.h"
+
+#include "gtkbox.h"
+#include "gtkbutton.h"
+#include "gtkbuildable.h"
+#include "gtkcontainerprivate.h"
+#include "gtkcssnodeprivate.h"
+#include "gtkimage.h"
 #include "gtkintl.h"
+#include "gtklabel.h"
+#include "gtkmenubutton.h"
 #include "gtkprivate.h"
+#include "gtkseparator.h"
+#include "gtksizerequest.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
-#include "gtkcssnodeprivate.h"
 #include "gtkwindowprivate.h"
-#include "gtkwidgetprivate.h"
-#include "gtkcontainerprivate.h"
+
 #include "a11y/gtkcontaineraccessible.h"
 
 #include <string.h>

@@ -57,24 +57,24 @@
  */
 #include "config.h"
 
+#include "gtkmenushellprivate.h"
+
 #include "gtkbindings.h"
+#include "gtkintl.h"
 #include "gtkkeyhash.h"
-#include "gtklabel.h"
+#include "gtklabelprivate.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkmenubar.h"
 #include "gtkmenuitemprivate.h"
-#include "gtkmenushellprivate.h"
 #include "gtkmnemonichash.h"
+#include "gtkmodelmenuitem.h"
+#include "gtkprivate.h"
+#include "gtkseparatormenuitem.h"
+#include "gtktypebuiltins.h"
+#include "gtkwidgetprivate.h"
 #include "gtkwindow.h"
 #include "gtkwindowprivate.h"
-#include "gtkprivate.h"
-#include "gtkmain.h"
-#include "gtkintl.h"
-#include "gtktypebuiltins.h"
-#include "gtkmodelmenuitem.h"
-#include "gtkwidgetprivate.h"
-#include "gtklabelprivate.h"
 
 #include "a11y/gtkmenushellaccessible.h"
 

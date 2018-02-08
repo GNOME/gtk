@@ -20,6 +20,8 @@
 #ifndef __GTK_HEADER_BAR_PRIVATE_H__
 #define __GTK_HEADER_BAR_PRIVATE_H__
 
+#include "gtkheaderbar.h"
+
 G_BEGIN_DECLS
 
 gboolean     _gtk_header_bar_shows_app_menu        (GtkHeaderBar *bar);

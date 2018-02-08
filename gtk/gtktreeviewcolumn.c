@@ -19,23 +19,25 @@
 
 #include "gtktreeviewcolumn.h"
 
-#include <string.h>
-
-#include "gtktreeview.h"
-#include "gtktreeprivate.h"
-#include "gtkcelllayout.h"
-#include "gtkbutton.h"
-#include "gtklabel.h"
 #include "gtkbox.h"
-#include "gtkmarshalers.h"
-#include "gtkimage.h"
-#include "gtkcellareacontext.h"
+#include "gtkbutton.h"
 #include "gtkcellareabox.h"
-#include "gtkprivate.h"
+#include "gtkcellareacontext.h"
+#include "gtkcelllayout.h"
+#include "gtkframe.h"
+#include "gtkimage.h"
 #include "gtkintl.h"
+#include "gtklabel.h"
+#include "gtkmarshalers.h"
+#include "gtkprivate.h"
+#include "gtktreeprivate.h"
+#include "gtktreeview.h"
 #include "gtktypebuiltins.h"
-#include "a11y/gtktreeviewaccessibleprivate.h"
 #include "gtkwidgetprivate.h"
+
+#include "a11y/gtktreeviewaccessibleprivate.h"
+
+#include <string.h>
 
 
 /**

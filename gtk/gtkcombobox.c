@@ -17,36 +17,34 @@
 
 #include "config.h"
 
-#include "gtkcombobox.h"
+#include "gtkcomboboxprivate.h"
 
-#include "gtkcellareabox.h"
-#include "gtktreemenu.h"
 #include "gtkbindings.h"
+#include "gtkbox.h"
+#include "gtkcellareabox.h"
 #include "gtkcelllayout.h"
 #include "gtkcellrenderertext.h"
 #include "gtkcellview.h"
+#include "gtkeventcontrollerscroll.h"
 #include "gtkframe.h"
 #include "gtkiconprivate.h"
-#include "gtkbox.h"
+#include "gtkintl.h"
 #include "gtkliststore.h"
 #include "gtkmain.h"
+#include "gtkmarshalers.h"
+#include "gtkmenuitem.h"
 #include "gtkmenuprivate.h"
 #include "gtkmenushellprivate.h"
-#include "gtktogglebutton.h"
-#include "gtktypebuiltins.h"
 #include "gtkprivate.h"
-#include "gtkcomboboxprivate.h"
-
-#include <gobject/gvaluecollector.h>
-
-#include <string.h>
-#include <stdarg.h>
-
-#include "gtkmarshalers.h"
-#include "gtkintl.h"
+#include "gtktogglebutton.h"
+#include "gtktreemenu.h"
+#include "gtktypebuiltins.h"
 
 #include "a11y/gtkcomboboxaccessible.h"
 
+#include <gobject/gvaluecollector.h>
+#include <string.h>
+#include <stdarg.h>
 
 /**
  * SECTION:gtkcombobox

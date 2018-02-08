@@ -53,24 +53,27 @@
 
 #include "config.h"
 
-#include "gtkbutton.h"
 #include "gtkbuttonprivate.h"
 
-#include <string.h>
+#include "gtkactionhelperprivate.h"
+#include "gtkapplicationprivate.h"
+#include "gtkbox.h"
+#include "gtkcheckbutton.h"
+#include "gtkcontainerprivate.h"
+#include "gtkgesturemultipress.h"
+#include "gtkimage.h"
+#include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
-#include "gtkimage.h"
-#include "gtkbox.h"
+#include "gtkprivate.h"
 #include "gtksizerequest.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
-#include "gtkprivate.h"
-#include "gtkintl.h"
+
 #include "a11y/gtkbuttonaccessible.h"
-#include "gtkapplicationprivate.h"
-#include "gtkactionhelperprivate.h"
-#include "gtkcontainerprivate.h"
+
+#include <string.h>
 
 /* Time out before giving up on getting a key release when animating
  * the close button.
