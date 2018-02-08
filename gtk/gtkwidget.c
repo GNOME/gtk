@@ -24,62 +24,65 @@
 
 #include "config.h"
 
-#include <stdarg.h>
-#include <string.h>
-#include <locale.h>
-#include <math.h>
+#include "gtkwidgetprivate.h"
 
-#define GDK_COMPILATION
-#include "gdk/gdkeventsprivate.h"
-
-#include <gobject/gvaluecollector.h>
-#include <gobject/gobjectnotifyqueue.c>
-#include <cairo-gobject.h>
-
-#include "gtkcontainer.h"
 #include "gtkaccelmapprivate.h"
 #include "gtkaccelgroupprivate.h"
+#include "gtkaccessible.h"
+#include "gtkapplicationprivate.h"
+#include "gtkbindings.h"
+#include "gtkbuildable.h"
+#include "gtkbuilderprivate.h"
+#include "gtkcontainerprivate.h"
 #include "gtkcssfiltervalueprivate.h"
+#include "gtkcssfontvariationsvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
+#include "gtkcsswidgetnodeprivate.h"
+#include "gtkdebug.h"
+#include "gtkdebugupdatesprivate.h"
+#include "gtkeventcontrollerlegacyprivate.h"
+#include "gtkgesturedrag.h"
+#include "gtkgestureprivate.h"
+#include "gtkgesturesingle.h"
+#include "gtkgestureswipe.h"
 #include "gtkintl.h"
+#include "gtkinvisible.h"
 #include "gtkmarshalers.h"
+#include "gtkmain.h"
+#include "gtkmenu.h"
+#include "gtkpopover.h"
+#include "gtkprivate.h"
+#include "gtkrenderbackgroundprivate.h"
+#include "gtkrenderborderprivate.h"
+#include "gtkscrollable.h"
+#include "gtkselection.h"
 #include "gtksettingsprivate.h"
 #include "gtksizegroup-private.h"
-#include "gtkwidget.h"
-#include "gtkwidgetprivate.h"
-#include "gtkwindowprivate.h"
-#include "gtkcontainerprivate.h"
-#include "gtkbindings.h"
-#include "gtkprivate.h"
-#include "gtkaccessible.h"
-#include "gtktooltipprivate.h"
-#include "gtkinvisible.h"
-#include "gtkbuildable.h"
-#include "gtkbuilderprivate.h"
-#include "gtksizerequest.h"
-#include "gtkstylecontextprivate.h"
-#include "gtkcssprovider.h"
-#include "gtkcsswidgetnodeprivate.h"
-#include "gtkversion.h"
-#include "gtkdebug.h"
-#include "gtktypebuiltins.h"
-#include "a11y/gtkwidgetaccessible.h"
-#include "gtkapplicationprivate.h"
-#include "gtkgestureprivate.h"
-#include "gtkwidgetpathprivate.h"
 #include "gtksnapshotprivate.h"
-#include "gtkrenderborderprivate.h"
-#include "gtkrenderbackgroundprivate.h"
-#include "gtkcssshadowsvalueprivate.h"
-#include "gtkdebugupdatesprivate.h"
+#include "gtkstylecontextprivate.h"
+#include "gtktooltipprivate.h"
+#include "gtktypebuiltins.h"
+#include "gtkversion.h"
+#include "gtkwidgetpathprivate.h"
+#include "gtkwindowgroup.h"
+#include "gtkwindowprivate.h"
+
+#include "a11y/gtkwidgetaccessible.h"
+#include "inspector/window.h"
+
+#include "gdk/gdkeventsprivate.h"
 #include "gsk/gskdebugprivate.h"
 #include "gsk/gskrendererprivate.h"
-#include "gtkeventcontrollerlegacyprivate.h"
-#include "gtkcssfontvariationsvalueprivate.h"
 
-#include "inspector/window.h"
+#include <cairo-gobject.h>
+#include <gobject/gobjectnotifyqueue.c>
+#include <gobject/gvaluecollector.h>
+#include <locale.h>
+#include <math.h>
+#include <stdarg.h>
+#include <string.h>
 
 /* for the use of round() */
 #include "fallback-c89.c"

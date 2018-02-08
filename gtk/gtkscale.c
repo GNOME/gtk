@@ -25,28 +25,29 @@
 
 #include "config.h"
 
-#include <math.h>
-#include <stdlib.h>
-
-#include "gtkrangeprivate.h"
+#include "gtkscale.h"
 
 #include "gtkadjustment.h"
 #include "gtkbindings.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
+#include "gtkgizmoprivate.h"
 #include "gtkicontheme.h"
 #include "gtkintl.h"
+#include "gtklabel.h"
 #include "gtkmarshalers.h"
 #include "gtkorientable.h"
 #include "gtkprivate.h"
-#include "gtktypebuiltins.h"
+#include "gtkrangeprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkstylepropertyprivate.h"
+#include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
-#include "gtkcsswidgetnodeprivate.h"
-#include "gtkgizmoprivate.h"
 
 #include "a11y/gtkscaleaccessible.h"
+
+#include <math.h>
+#include <stdlib.h>
 
 
 /**

@@ -18,13 +18,13 @@
 #ifndef __GTK_ENTRY_PRIVATE_H__
 #define __GTK_ENTRY_PRIVATE_H__
 
-#include <gtk/gtktreeviewcolumn.h>
-#include <gtk/gtktreemodelfilter.h>
-#include <gtk/gtkliststore.h>
-#include <gtk/gtkentrycompletion.h>
-#include <gtk/gtkentry.h>
-#include <gtk/gtkspinbutton.h>
-#include <gtk/gtkeventcontrollermotion.h>
+#include "gtkentry.h"
+
+#include "gtkentrycompletion.h"
+#include "gtkeventcontrollermotion.h"
+#include "gtkliststore.h"
+#include "gtktreemodelfilter.h"
+#include "gtktreeviewcolumn.h"
 
 G_BEGIN_DECLS
 

@@ -25,16 +25,17 @@
 
 #include "config.h"
 
-#include <stdio.h>
-#include <math.h>
-
-#include "gtkrange.h"
 #include "gtkrangeprivate.h"
 
 #include "gtkadjustmentprivate.h"
 #include "gtkcolorscaleprivate.h"
-#include "gtkintl.h"
+#include "gtkeventcontrollerscroll.h"
+#include "gtkgesturedrag.h"
 #include "gtkgesturelongpressprivate.h"
+#include "gtkgesturemultipress.h"
+#include "gtkgizmoprivate.h"
+#include "gtkiconprivate.h"
+#include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkorientableprivate.h"
@@ -42,11 +43,13 @@
 #include "gtkscale.h"
 #include "gtkscrollbar.h"
 #include "gtktypebuiltins.h"
-#include "gtkwindow.h"
 #include "gtkwidgetprivate.h"
+#include "gtkwindow.h"
+
 #include "a11y/gtkrangeaccessible.h"
-#include "gtkgizmoprivate.h"
-#include "gtkiconprivate.h"
+
+#include <stdio.h>
+#include <math.h>
 
 /**
  * SECTION:gtkrange

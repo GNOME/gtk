@@ -25,11 +25,12 @@
 #ifndef __GTK_WIDGET_PRIVATE_H__
 #define __GTK_WIDGET_PRIVATE_H__
 
-#include "gtkcsstypesprivate.h"
 #include "gtkwidget.h"
-#include "gtkcontainer.h"
-#include "gtkeventcontroller.h"
+
 #include "gtkactionmuxerprivate.h"
+#include "gtkcontainer.h"
+#include "gtkcsstypesprivate.h"
+#include "gtkeventcontroller.h"
 #include "gtksizerequestcacheprivate.h"
 
 G_BEGIN_DECLS

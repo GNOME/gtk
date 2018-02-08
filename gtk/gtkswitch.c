@@ -53,17 +53,21 @@
 
 #include "gtkswitch.h"
 
-#include "gtkintl.h"
-#include "gtkprivate.h"
-#include "gtkwidget.h"
-#include "gtkmarshalers.h"
 #include "gtkactionable.h"
-#include "a11y/gtkswitchaccessible.h"
 #include "gtkactionhelperprivate.h"
-#include "gtkwidgetprivate.h"
+#include "gtkgesturemultipress.h"
+#include "gtkgesturepan.h"
+#include "gtkgesturesingle.h"
+#include "gtkgizmoprivate.h"
+#include "gtkintl.h"
+#include "gtklabel.h"
+#include "gtkmarshalers.h"
+#include "gtkprivate.h"
 #include "gtkprogresstrackerprivate.h"
 #include "gtksettingsprivate.h"
-#include "gtkgizmoprivate.h"
+#include "gtkwidgetprivate.h"
+
+#include "a11y/gtkswitchaccessible.h"
 
 #include "fallback-c89.c"
 

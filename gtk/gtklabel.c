@@ -24,17 +24,19 @@
 
 #include "config.h"
 
-#include <math.h>
-#include <string.h>
-
-#include "gtklabel.h"
 #include "gtklabelprivate.h"
+
 #include "gtkbindings.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
+#include "gtkcssnodeprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkdnd.h"
+#include "gtkeventcontrollermotion.h"
+#include "gtkgesturedrag.h"
+#include "gtkgesturemultipress.h"
+#include "gtkgesturesingle.h"
 #include "gtkimage.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
@@ -46,17 +48,18 @@
 #include "gtkprivate.h"
 #include "gtkseparatormenuitem.h"
 #include "gtkshow.h"
+#include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktextutil.h"
 #include "gtktooltip.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindow.h"
-#include "gtkcssnodeprivate.h"
-#include "gtkwidgetprivate.h"
-#include "gtkeventcontrollermotion.h"
 
 #include "a11y/gtklabelaccessibleprivate.h"
+
+#include <math.h>
+#include <string.h>
 
 /* this is in case rint() is not provided by the compiler, 
  * such as in the case of C89 compilers, like MSVC

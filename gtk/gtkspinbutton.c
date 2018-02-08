@@ -29,15 +29,16 @@
 
 #include "gtkspinbutton.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <string.h>
-#include <locale.h>
-
 #include "gtkadjustment.h"
 #include "gtkbindings.h"
+#include "gtkbox.h"
+#include "gtkbutton.h"
+#include "gtkcssstylepropertyprivate.h"
 #include "gtkentryprivate.h"
+#include "gtkeventcontrollermotion.h"
+#include "gtkeventcontrollerscroll.h"
+#include "gtkgesturemultipress.h"
+#include "gtkgestureswipe.h"
 #include "gtkicontheme.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
@@ -45,13 +46,18 @@
 #include "gtkorientableprivate.h"
 #include "gtkprivate.h"
 #include "gtksettings.h"
+#include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetpath.h"
 #include "gtkwidgetprivate.h"
-#include "gtkstylecontextprivate.h"
-#include "gtkcssstylepropertyprivate.h"
 
 #include "a11y/gtkspinbuttonaccessible.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <string.h>
+#include <locale.h>
 
 #define MIN_SPIN_BUTTON_WIDTH 30
 #define MAX_TIMER_CALLS       5

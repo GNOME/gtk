@@ -24,20 +24,22 @@
 
 #include "config.h"
 
-#include <math.h>
-#include <string.h>
-#include <cairo-gobject.h>
+#include "gtkimageprivate.h"
 
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkiconhelperprivate.h"
-#include "gtkimageprivate.h"
 #include "gtkicontheme.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
+#include "gtksnapshot.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 
 #include "a11y/gtkimageaccessible.h"
+
+#include <math.h>
+#include <string.h>
+#include <cairo-gobject.h>
 
 /**
  * SECTION:gtkimage

@@ -24,22 +24,24 @@
 
 #include "config.h"
 
-#include <string.h>
-
 #include "gtkprogressbar.h"
-#include "gtkorientableprivate.h"
-#include "gtkwidgetprivate.h"
-#include "gtkprivate.h"
-#include "gtkintl.h"
-#include "gtkcssshadowsvalueprivate.h"
-#include "gtkstylecontextprivate.h"
+
 #include "gtkcssnodeprivate.h"
-#include "gtkcssstylepropertyprivate.h"
 #include "gtkcssnumbervalueprivate.h"
-#include "gtkprogresstrackerprivate.h"
+#include "gtkcssshadowsvalueprivate.h"
+#include "gtkcssstylepropertyprivate.h"
 #include "gtkgizmoprivate.h"
+#include "gtkintl.h"
+#include "gtklabel.h"
+#include "gtkorientableprivate.h"
+#include "gtkprogresstrackerprivate.h"
+#include "gtkprivate.h"
+#include "gtkstylecontextprivate.h"
+#include "gtkwidgetprivate.h"
 
 #include "a11y/gtkprogressbaraccessible.h"
+
+#include <string.h>
 
 #include "fallback-c89.c"
 
