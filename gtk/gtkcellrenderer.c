@@ -16,12 +16,16 @@
  */
 
 #include "config.h"
+
 #include "gtkcellrenderer.h"
+
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
-#include "gtktypebuiltins.h"
 #include "gtkprivate.h"
+#include "gtksnapshot.h"
 #include "gtktreeprivate.h"
+#include "gtktypebuiltins.h"
+
 #include "a11y/gtkrenderercellaccessible.h"
 
 

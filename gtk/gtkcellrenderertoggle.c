@@ -16,16 +16,20 @@
  */
 
 #include "config.h"
-#include <stdlib.h>
+
 #include "gtkcellrenderertoggle.h"
+
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkrendericonprivate.h"
+#include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktreeprivate.h"
+
 #include "a11y/gtkbooleancellaccessible.h"
 
+#include <stdlib.h>
 
 /**
  * SECTION:gtkcellrenderertoggle

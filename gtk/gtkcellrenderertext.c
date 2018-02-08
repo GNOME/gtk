@@ -19,17 +19,18 @@
 
 #include "gtkcellrenderertext.h"
 
-#include <stdlib.h>
-
 #include "gtkeditable.h"
 #include "gtkentry.h"
-#include "gtksizerequest.h"
-#include "gtkmarshalers.h"
 #include "gtkintl.h"
+#include "gtkmarshalers.h"
 #include "gtkprivate.h"
+#include "gtksizerequest.h"
+#include "gtksnapshot.h"
 #include "gtktreeprivate.h"
+
 #include "a11y/gtktextcellaccessible.h"
 
+#include <stdlib.h>
 
 /**
  * SECTION:gtkcellrenderertext

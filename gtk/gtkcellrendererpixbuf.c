@@ -16,16 +16,21 @@
  */
 
 #include "config.h"
-#include <stdlib.h>
-#include <cairo-gobject.h>
+
 #include "gtkcellrendererpixbuf.h"
+
 #include "gtkiconhelperprivate.h"
 #include "gtkicontheme.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
+#include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"
+#include "gtktypebuiltins.h"
+
 #include "a11y/gtkimagecellaccessible.h"
 
+#include <cairo-gobject.h>
+#include <stdlib.h>
 
 /**
  * SECTION:gtkcellrendererpixbuf
