@@ -19,12 +19,12 @@
 #ifndef __GTK_DND_PRIVATE_H__
 #define __GTK_DND_PRIVATE_H__
 
+#include "gtkdnd.h"
 
-#include <gtk/gtkwidget.h>
-#include <gtk/gtkselection.h>
-#include <gtk/gtkdragdest.h>
-
+#include "gtkdragdest.h"
 #include "gtkimagedefinitionprivate.h"
+#include "gtkselection.h"
+#include "gtkwidget.h"
 
 typedef struct _GtkDragDestSite GtkDragDestSite;
 struct _GtkDragDestSite

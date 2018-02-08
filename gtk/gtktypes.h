@@ -29,6 +29,8 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
+#include <gdk/gdk.h>
+
 G_BEGIN_DECLS
 
 typedef struct _GtkAdjustment          GtkAdjustment;

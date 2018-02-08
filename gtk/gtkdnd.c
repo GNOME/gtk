@@ -24,27 +24,24 @@
 
 #include "config.h"
 
-#include "gtkdnd.h"
 #include "gtkdndprivate.h"
-#include "gtksettingsprivate.h"
-
-#include <math.h>
-#include <stdlib.h>
-#include <string.h>
-
-#include "gdk/gdk.h"
-
-#include "gdk/gdkcontentformatsprivate.h"
 
 #include "gtkdragdest.h"
 #include "gtkimageprivate.h"
 #include "gtkintl.h"
-#include "gtktooltipprivate.h"
-#include "gtkwindow.h"
+#include "gtkmain.h"
 #include "gtkselectionprivate.h"
+#include "gtksettingsprivate.h"
+#include "gtktooltipprivate.h"
+#include "gtkwidgetprivate.h"
 #include "gtkwindowgroup.h"
 #include "gtkwindowprivate.h"
-#include "gtkwidgetprivate.h"
+
+#include "gdk/gdkcontentformatsprivate.h"
+
+#include <math.h>
+#include <stdlib.h>
+#include <string.h>
 
 
 /**
