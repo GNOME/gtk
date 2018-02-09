@@ -53,6 +53,21 @@
     </section>
 
     <section>
+      <title>Enable diagnostic warnings</title>
+      <para>
+        Deprecations of properties and signals cannot be caught at compile
+        time, as both properties and signals are installed and used after
+        types have been instantiated. In order to catch deprecations and
+        changes in the run time components, you should use the
+        <envar>G_ENABLE_DIAGNOSTIC</envar> environment variable when
+        running your application, e.g.:
+        <programlisting>
+          G_ENABLE_DIAGNOSTIC=1 ./your-app
+        </programlisting>
+      </para>
+    </section>
+
+    <section>
       <title>Do not use widget style properties</title>
       <para>
         Style properties do not exist in GTK+ 4. You should stop using them in
