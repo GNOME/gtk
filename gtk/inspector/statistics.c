@@ -16,17 +16,21 @@
  */
 
 #include "config.h"
-#include <glib/gi18n-lib.h>
 
 #include "statistics.h"
 
 #include "graphdata.h"
-#include "gtkstack.h"
-#include "gtktreeview.h"
-#include "gtkcellrenderertext.h"
+
 #include "gtkcelllayout.h"
-#include "gtksearchbar.h"
+#include "gtkcellrenderertext.h"
 #include "gtklabel.h"
+#include "gtksearchbar.h"
+#include "gtkstack.h"
+#include "gtktogglebutton.h"
+#include "gtktreeselection.h"
+#include "gtktreeview.h"
+
+#include <glib/gi18n-lib.h>
 
 enum
 {

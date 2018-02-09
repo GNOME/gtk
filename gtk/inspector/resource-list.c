@@ -16,18 +16,21 @@
  */
 
 #include "config.h"
-#include <glib/gi18n-lib.h>
 
 #include "resource-list.h"
 
+#include "treewalk.h"
+
+#include "gtkbutton.h"
 #include "gtklabel.h"
-#include "gtkstack.h"
-#include "gtktextbuffer.h"
-#include "gtktreestore.h"
-#include "gtktreeselection.h"
 #include "gtksearchbar.h"
 #include "gtksearchentry.h"
-#include "treewalk.h"
+#include "gtkstack.h"
+#include "gtktextbuffer.h"
+#include "gtktreeselection.h"
+#include "gtktreestore.h"
+
+#include <glib/gi18n-lib.h>
 
 enum
 {

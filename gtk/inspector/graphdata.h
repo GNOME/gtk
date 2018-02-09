@@ -18,7 +18,7 @@
 #ifndef __GTK_GRAPH_DATA_H__
 #define __GTK_GRAPH_DATA_H__
 
-#include <gtk/gtk.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 

@@ -18,7 +18,7 @@
 #ifndef __GTK_CELL_RENDERER_GRAPH_H__
 #define __GTK_CELL_RENDERER_GRAPH_H__
 
-#include <gtk/gtk.h>
+#include <gtk/gtkcellrenderer.h>
 
 G_BEGIN_DECLS
 

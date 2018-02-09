@@ -21,6 +21,9 @@
 
 #include "graphdata.h"
 
+#include "gtksnapshot.h"
+#include "gtkstylecontext.h"
+
 enum {
   PROP_0,
   PROP_DATA,
