@@ -17,38 +17,40 @@
 
 #include "config.h"
 
-#include <string.h>
-
-#include "gtkiconview.h"
 #include "gtkiconviewprivate.h"
 
+#include "gtkaccessible.h"
 #include "gtkadjustmentprivate.h"
-#include "gtkcelllayout.h"
-#include "gtkcellrenderer.h"
+#include "gtkbindings.h"
 #include "gtkcellareabox.h"
 #include "gtkcellareacontext.h"
-#include "gtkcellrenderertext.h"
+#include "gtkcelllayout.h"
+#include "gtkcellrenderer.h"
 #include "gtkcellrendererpixbuf.h"
-#include "gtkorientable.h"
-#include "gtkmarshalers.h"
-#include "gtkbindings.h"
-#include "gtkdnd.h"
-#include "gtkmain.h"
-#include "gtkintl.h"
-#include "gtkaccessible.h"
-#include "gtkwindow.h"
-#include "gtkentry.h"
+#include "gtkcellrenderertext.h"
 #include "gtkcombobox.h"
+#include "gtkcssnodeprivate.h"
+#include "gtkdnd.h"
+#include "gtkdragdest.h"
+#include "gtkdragsource.h"
+#include "gtkentry.h"
+#include "gtkintl.h"
+#include "gtkmain.h"
+#include "gtkmarshalers.h"
+#include "gtkorientable.h"
+#include "gtkprivate.h"
 #include "gtkscrollable.h"
 #include "gtksizerequest.h"
 #include "gtksnapshotprivate.h"
+#include "gtkstylecontextprivate.h"
 #include "gtktreednd.h"
 #include "gtktypebuiltins.h"
-#include "gtkprivate.h"
-#include "gtkcssnodeprivate.h"
 #include "gtkwidgetprivate.h"
-#include "gtkstylecontextprivate.h"
+#include "gtkwindow.h"
+
 #include "a11y/gtkiconviewaccessibleprivate.h"
+
+#include <string.h>
 
 /**
  * SECTION:gtkiconview
