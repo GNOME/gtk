@@ -44,11 +44,6 @@
 #include "gtkmenushellprivate.h"
 #include "gtkprivate.h"
 
-#undef GDK_DEPRECATED
-#undef GDK_DEPRECATED_FOR
-#define GDK_DEPRECATED
-#define GDK_DEPRECATED_FOR(f)
-
 /* GObjectClass */
 static void      gtk_tree_menu_constructed                    (GObject            *object);
 static void      gtk_tree_menu_dispose                        (GObject            *object);
