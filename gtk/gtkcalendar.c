@@ -694,6 +694,7 @@ gtk_calendar_init (GtkCalendar *calendar)
 #ifdef G_OS_WIN32
   wchar_t wbuffer[100];
 #else
+  static const char *month_format = NULL;
   char buffer[255];
   time_t tmp_time;
 #endif
@@ -718,7 +719,7 @@ gtk_calendar_init (GtkCalendar *calendar)
       {
 #ifndef G_OS_WIN32
         tmp_time= (i+3)*86400;
-        strftime ( buffer, sizeof (buffer), "%a", gmtime (&tmp_time));
+        strftime (buffer, sizeof (buffer), "%a", gmtime (&tmp_time));
         default_abbreviated_dayname[i] = g_locale_to_utf8 (buffer, -1, NULL, NULL, NULL);
 #else
         if (!GetLocaleInfoW (GetThreadLocale (), LOCALE_SABBREVDAYNAME1 + (i+6)%7,
@@ -734,7 +735,21 @@ gtk_calendar_init (GtkCalendar *calendar)
       {
 #ifndef G_OS_WIN32
         tmp_time=i*2764800;
-        strftime ( buffer, sizeof (buffer), "%B", gmtime (&tmp_time));
+        if (G_UNLIKELY (month_format == NULL))
+          {
+            buffer[0] = '\0';
+            month_format = "%OB";
+            strftime (buffer, sizeof (buffer), month_format, gmtime (&tmp_time));
+            /* "%OB" is not supported in Linux with glibc < 2.27  */
+            if (!strcmp (buffer, "%OB") || !strcmp (buffer, "OB") || !strcmp (buffer, ""))
+              {
+                month_format = "%B";
+                strftime (buffer, sizeof (buffer), month_format, gmtime (&tmp_time));
+              }
+          }
+        else
+          strftime (buffer, sizeof (buffer), month_format, gmtime (&tmp_time));
+
         default_monthname[i] = g_locale_to_utf8 (buffer, -1, NULL, NULL, NULL);
 #else
         if (!GetLocaleInfoW (GetThreadLocale (), LOCALE_SMONTHNAME1 + i,
