@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 3.3.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-02-09 10:24+0000\n"
-"PO-Revision-Date: 2018-02-10 14:51+0800\n"
+"PO-Revision-Date: 2018-02-10 15:07+0800\n"
 "Last-Translator: Cheng-Chia Tseng <pswo10680@gmail.com>\n"
 "Language-Team: <>\n"
 "Language: zh_TW\n"
@@ -2519,11 +2519,11 @@ msgstr "昨天"
 
 #: gtk/gtkfilechooserwidget.c:4819
 msgid "%-e %b"
-msgstr "%b%e日"
+msgstr "%b%-e日"
 
 #: gtk/gtkfilechooserwidget.c:4823
 msgid "%-e %b %Y"
-msgstr "%Y年%b%e日"
+msgstr "%Y年%b%-e日"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
