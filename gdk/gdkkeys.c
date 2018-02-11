@@ -277,6 +277,8 @@ gdk_keyval_is_lower (guint keyval)
  * Returns the #GdkKeymap attached to the default display.
  *
  * Returns: (transfer none): the #GdkKeymap attached to the default display.
+ *
+ * Deprecated: 3.22: Use gdk_keymap_get_for_display() instead
  */
 GdkKeymap*
 gdk_keymap_get_default (void)
