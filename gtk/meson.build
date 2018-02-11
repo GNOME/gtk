@@ -929,9 +929,9 @@ if build_gir
                                symbol_prefix: 'gdk',
                                export_packages: 'gtk+-4.0',
                                includes: [ 'Gio-2.0', 'GdkPixbuf-2.0', 'Pango-1.0', 'cairo-1.0', ],
+                               header: 'gdk/gdk.h',
                                install: true,
                                extra_args: gir_args + [
-                                 '--c-include=gdk/gdk.h',
                                  '-DGDK_COMPILATION',
                                ])
   gdk_gir_dep = declare_dependency(sources: gdk_gir)
@@ -945,13 +945,11 @@ if build_gir
                                      identifier_prefix: 'Gdk',
                                      symbol_prefix: 'gdk',
                                      export_packages: 'gtk+-x11-4.0',
-                                     includes: [ 'Gio-2.0', 'GdkPixbuf-2.0', 'Pango-1.0', 'xlib-2.0', ],
+                                     includes: [ gdk_gir[0], 'Gio-2.0', 'GdkPixbuf-2.0', 'Pango-1.0', 'xlib-2.0', ],
                                      install: true,
                                      dependencies: gdk_gir_dep,
-                                     extra_args: [
-                                       '--quiet',
-                                       '--c-include=gdk/gdkx.h',
-                                       '--include-uninstalled=./gtk/Gdk-4.0.gir',
+                                     header: 'gdk/gdkx.h',
+                                     extra_args: gir_args + [
                                        '-DGDK_COMPILATION',
                                      ])
     gtk_dep_sources += gdk_x11_gir
@@ -964,12 +962,11 @@ if build_gir
                                identifier_prefix: 'Gsk',
                                symbol_prefix: 'gsk',
                                export_packages: 'gtk+-4.0',
-                               includes: [ 'Graphene-1.0', 'Gdk-4.0' ],
+                               includes: [ 'Graphene-1.0', gdk_gir[0] ],
+                               header: 'gsk/gsk.h',
                                install: true,
                                dependencies: [gdk_gir_dep, graphene_dep],
                                extra_args: gir_args + [
-                                 '--c-include=gsk/gsk.h',
-                                 '--include-uninstalled=./gtk/Gdk-4.0.gir',
                                  '-DGSK_COMPILATION',
                                ])
   gsk_gir_dep = declare_dependency(dependencies: [gdk_gir_dep, graphene_dep], sources: gsk_gir)
@@ -1000,13 +997,11 @@ if build_gir
                                identifier_prefix: 'Gtk',
                                symbol_prefix: 'gtk',
                                export_packages: 'gtk+-4.0',
-                               includes: [ 'Atk-1.0', ],
+                               includes: [ gdk_gir[0], gsk_gir[0], 'Atk-1.0', ],
+                               header: 'gtk/gtk.h',
                                install: true,
                                dependencies: gsk_gir_dep,
                                extra_args: gir_args + [
-                                 '--c-include=gtk/gtk.h',
-                                 '--include-uninstalled=./gtk/Gdk-4.0.gir',
-                                 '--include-uninstalled=./gtk/Gsk-4.0.gir',
                                  '-DGTK_COMPILATION',
                                ])
   gtk_dep_sources += gtk_gir
