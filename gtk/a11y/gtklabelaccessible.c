@@ -84,7 +84,7 @@ gtk_label_accessible_link_impl_get_hyperlink (AtkHyperlinkImpl *atk_impl)
 {
   GtkLabelAccessibleLinkImpl *impl = (GtkLabelAccessibleLinkImpl *)atk_impl;
 
-  return g_object_ref (impl->link);
+  return ATK_HYPERLINK (g_object_ref (impl->link));
 }
 
 static void

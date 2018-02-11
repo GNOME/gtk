@@ -469,7 +469,7 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
   if (cell == NULL)
     cell = create_cell (tree_view, accessible, tree, node, tv_col);
 
-  return g_object_ref (cell);
+  return ATK_OBJECT (g_object_ref (cell));
 }
 
 static AtkStateSet*
@@ -562,7 +562,7 @@ gtk_tree_view_accessible_ref_accessible_at_point (AtkComponent *component,
   if (cell == NULL)
     cell = create_cell (tree_view, GTK_TREE_VIEW_ACCESSIBLE (component), tree, node, column);
 
-  return g_object_ref (cell);
+  return ATK_OBJECT (g_object_ref (cell));
 }
 
 static void
