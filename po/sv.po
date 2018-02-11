@@ -1,17 +1,17 @@
 # Swedish messages for GTK+.
-# Copyright © 1999-2016 Free Software Foundation, Inc.
+# Copyright © 1999-2018 Free Software Foundation, Inc.
 # Tomas Ögren <stric@ing.umu.se>, 1999.
 # Christian Rose <menthos@menthos.com>, 2000, 2001, 2002, 2003, 2004, 2005.
 # Daniel Nylander <po@danielnylander.se>, 2006, 2007, 2008, 2009, 2010, 2011, 2012.
 # Josef Andersson <josef.andersson@fripost.org>, 2014.
-# Anders Jonsson <anders.jonsson@norsjovallen.se>, 2015, 2016.
+# Anders Jonsson <anders.jonsson@norsjovallen.se>, 2015, 2016, 2017, 2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-05 20:47+0000\n"
-"PO-Revision-Date: 2017-11-05 22:18+0100\n"
+"POT-Creation-Date: 2018-02-11 16:27+0000\n"
+"PO-Revision-Date: 2018-02-11 20:16+0100\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.4\n"
+"X-Generator: Poedit 2.0.5\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
@@ -75,7 +75,7 @@ msgstr "GDK-felsökningsflaggor att ställa in"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:244 gdk/gdk.c:247 gtk/gtkmain.c:470 gtk/gtkmain.c:473
+#: gdk/gdk.c:244 gdk/gdk.c:247 gtk/gtkmain.c:471 gtk/gtkmain.c:474
 msgid "FLAGS"
 msgstr "FLAGGOR"
 
@@ -502,32 +502,32 @@ msgid "Core GL is not available on EGL implementation"
 msgstr "Kärn-GL är inte tillgängligt på EGL-implementation"
 
 #. Description of --sync in --help output
-#: gdk/win32/gdkmain-win32.c:53
+#: gdk/win32/gdkmain-win32.c:56
 msgid "Don't batch GDI requests"
 msgstr "Samla inte GDI-förfrågningar i en batch"
 
 #. Description of --no-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:55
+#: gdk/win32/gdkmain-win32.c:58
 msgid "Don't use the Wintab API for tablet support"
 msgstr "Använd inte Wintab-API:t för stöd av ritbrädor"
 
 #. Description of --ignore-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:57
+#: gdk/win32/gdkmain-win32.c:60
 msgid "Same as --no-wintab"
 msgstr "Samma som --no-wintab"
 
 #. Description of --use-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:59
+#: gdk/win32/gdkmain-win32.c:62
 msgid "Do use the Wintab API [default]"
 msgstr "Använd inte Wintab-API:t [standard]"
 
 #. Description of --max-colors=COLORS in --help output
-#: gdk/win32/gdkmain-win32.c:61
+#: gdk/win32/gdkmain-win32.c:64
 msgid "Size of the palette in 8 bit mode"
 msgstr "Storlek på paletten i 8-bitarsläge"
 
 #. Placeholder in --max-colors=COLORS in --help output
-#: gdk/win32/gdkmain-win32.c:62
+#: gdk/win32/gdkmain-win32.c:65
 msgid "COLORS"
 msgstr "FÄRGER"
 
@@ -682,15 +682,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "S_täng"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:411 gtk/gtkwindow.c:9222
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9229
 msgid "Minimize"
 msgstr "Minimera"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:435 gtk/gtkwindow.c:9231
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9238
 msgid "Maximize"
 msgstr "Maximera"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:435 gtk/gtkwindow.c:9188
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9195
 msgid "Restore"
 msgstr "Återställ"
 
@@ -1239,7 +1239,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:673 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:12691 gtk/inspector/css-editor.c:201
+#: gtk/gtkwindow.c:12698 gtk/inspector/css-editor.c:201
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1288,7 +1288,7 @@ msgid "_Apply"
 msgstr "_Verkställ"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12692
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12699
 msgid "_OK"
 msgstr "_OK"
 
@@ -1508,53 +1508,57 @@ msgstr "GNU Lesser General Public License, version 3 endast"
 msgid "GNU Affero General Public License, version 3 or later"
 msgstr "GNU Affero General Public License, version 3 eller senare"
 
-#: gtk/gtkaboutdialog.c:696
+#: gtk/gtkaboutdialog.c:128
+msgid "GNU Affero General Public License, version 3 only"
+msgstr "GNU Affero General Public License, version 3 endast"
+
+#: gtk/gtkaboutdialog.c:697
 msgid "C_redits"
 msgstr "T_ack till"
 
-#: gtk/gtkaboutdialog.c:704
+#: gtk/gtkaboutdialog.c:705
 msgid "_License"
 msgstr "_Licens"
 
-#: gtk/gtkaboutdialog.c:713 gtk/gtkcustompaperunixdialog.c:329
+#: gtk/gtkaboutdialog.c:714 gtk/gtkcustompaperunixdialog.c:329
 #: gtk/gtkmessagedialog.c:948 gtk/ui/gtkassistant.ui:144
 msgid "_Close"
 msgstr "S_täng"
 
-#: gtk/gtkaboutdialog.c:997
+#: gtk/gtkaboutdialog.c:998
 msgid "Could not show link"
 msgstr "Kunde inte visa länken"
 
-#: gtk/gtkaboutdialog.c:1034
+#: gtk/gtkaboutdialog.c:1035
 msgid "Website"
 msgstr "Webbplats"
 
 #. used for the application menu on MacOS.  %s is replaced with the application name.
-#: gtk/gtkaboutdialog.c:1084 gtk/ui/gtkapplication-quartz.ui:7
+#: gtk/gtkaboutdialog.c:1085 gtk/ui/gtkapplication-quartz.ui:7
 #, c-format
 msgid "About %s"
 msgstr "Om %s"
 
-#: gtk/gtkaboutdialog.c:2311
+#: gtk/gtkaboutdialog.c:2312
 msgid "Created by"
 msgstr "Skapad av"
 
-#: gtk/gtkaboutdialog.c:2314
+#: gtk/gtkaboutdialog.c:2315
 msgid "Documented by"
 msgstr "Dokumenterat av"
 
-#: gtk/gtkaboutdialog.c:2324
+#: gtk/gtkaboutdialog.c:2325
 msgid "Translated by"
 msgstr "Översatt av"
 
-#: gtk/gtkaboutdialog.c:2329
+#: gtk/gtkaboutdialog.c:2330
 msgid "Artwork by"
 msgstr "Grafik av"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: gtk/gtkaboutdialog.c:2489
+#: gtk/gtkaboutdialog.c:2490
 #, c-format
 msgid ""
 "This program comes with absolutely no warranty.\n"
@@ -2203,52 +2207,52 @@ msgstr "_Höger:"
 msgid "Paper Margins"
 msgstr "Pappersmarginaler"
 
-#: gtk/gtkentry.c:9555 gtk/gtklabel.c:6680 gtk/gtktextview.c:9456
+#: gtk/gtkentry.c:9564 gtk/gtklabel.c:6680 gtk/gtktextview.c:9491
 msgid "Cu_t"
 msgstr "Klipp _ut"
 
-#: gtk/gtkentry.c:9559 gtk/gtklabel.c:6681 gtk/gtktextview.c:9460
+#: gtk/gtkentry.c:9568 gtk/gtklabel.c:6681 gtk/gtktextview.c:9495
 msgid "_Copy"
 msgstr "_Kopiera"
 
-#: gtk/gtkentry.c:9563 gtk/gtklabel.c:6682 gtk/gtktextview.c:9462
+#: gtk/gtkentry.c:9572 gtk/gtklabel.c:6682 gtk/gtktextview.c:9497
 msgid "_Paste"
 msgstr "Klistra _in"
 
-#: gtk/gtkentry.c:9566 gtk/gtkfilechooserwidget.c:1477
-#: gtk/gtkfilechooserwidget.c:2277 gtk/gtklabel.c:6684 gtk/gtktextview.c:9465
+#: gtk/gtkentry.c:9575 gtk/gtkfilechooserwidget.c:1477
+#: gtk/gtkfilechooserwidget.c:2277 gtk/gtklabel.c:6684 gtk/gtktextview.c:9500
 msgid "_Delete"
 msgstr "_Ta bort"
 
-#: gtk/gtkentry.c:9577 gtk/gtklabel.c:6693 gtk/gtktextview.c:9479
+#: gtk/gtkentry.c:9586 gtk/gtklabel.c:6693 gtk/gtktextview.c:9514
 msgid "Select _All"
 msgstr "Markera _allt"
 
-#: gtk/gtkentry.c:9587
+#: gtk/gtkentry.c:9596 gtk/gtktextview.c:9524
 msgid "Insert _Emoji"
 msgstr "Infoga _emoji"
 
-#: gtk/gtkentry.c:9763 gtk/gtktextview.c:9704
+#: gtk/gtkentry.c:9772 gtk/gtktextview.c:9749
 msgid "Select all"
 msgstr "Markera allt"
 
-#: gtk/gtkentry.c:9766 gtk/gtktextview.c:9707
+#: gtk/gtkentry.c:9775 gtk/gtktextview.c:9752
 msgid "Cut"
 msgstr "Klipp ut"
 
-#: gtk/gtkentry.c:9769 gtk/gtktextview.c:9710
+#: gtk/gtkentry.c:9778 gtk/gtktextview.c:9755
 msgid "Copy"
 msgstr "Kopiera"
 
-#: gtk/gtkentry.c:9772 gtk/gtktextview.c:9713
+#: gtk/gtkentry.c:9781 gtk/gtktextview.c:9758
 msgid "Paste"
 msgstr "Klistra in"
 
-#: gtk/gtkentry.c:10839
+#: gtk/gtkentry.c:10851
 msgid "Caps Lock is on"
 msgstr "Caps Lock är aktiverad"
 
-#: gtk/gtkentry.c:11111
+#: gtk/gtkentry.c:11126
 msgid "Insert Emoji"
 msgstr "Infoga emoji"
 
@@ -2256,7 +2260,7 @@ msgstr "Infoga emoji"
 msgid "Select a File"
 msgstr "Välj en fil"
 
-#: gtk/gtkfilechooserbutton.c:108 gtk/gtkplacessidebar.c:1087
+#: gtk/gtkfilechooserbutton.c:108 gtk/gtkplacessidebar.c:1108
 msgid "Desktop"
 msgstr "Skrivbord"
 
@@ -2264,7 +2268,7 @@ msgstr "Skrivbord"
 msgid "(None)"
 msgstr "(Ingen)"
 
-#: gtk/gtkfilechooserbutton.c:2155
+#: gtk/gtkfilechooserbutton.c:2158
 msgid "Other…"
 msgstr "Annan…"
 
@@ -2274,8 +2278,8 @@ msgstr "_Namn"
 
 #. Open item is always present
 #: gtk/gtkfilechoosernative.c:541 gtk/gtkfilechoosernative.c:626
-#: gtk/gtkplacessidebar.c:3585 gtk/gtkplacessidebar.c:3642
-#: gtk/gtkplacesview.c:1630
+#: gtk/gtkplacessidebar.c:3593 gtk/gtkplacessidebar.c:3661
+#: gtk/gtkplacesview.c:1629
 msgid "_Open"
 msgstr "_Öppna"
 
@@ -2444,7 +2448,7 @@ msgstr "Kopiera _plats"
 msgid "_Add to Bookmarks"
 msgstr "_Lägg till i bokmärkena"
 
-#: gtk/gtkfilechooserwidget.c:2276 gtk/gtkplacessidebar.c:2701
+#: gtk/gtkfilechooserwidget.c:2276 gtk/gtkplacessidebar.c:2709
 #: gtk/ui/gtkfilechooserwidget.ui:526
 msgid "_Rename"
 msgstr "_Byt namn"
@@ -2538,7 +2542,7 @@ msgstr "%-e %b %Y"
 msgid "Unknown"
 msgstr "Okänd"
 
-#: gtk/gtkfilechooserwidget.c:5097 gtk/gtkplacessidebar.c:1072
+#: gtk/gtkfilechooserwidget.c:5097 gtk/gtkplacessidebar.c:1093
 msgid "Home"
 msgstr "Hem"
 
@@ -2584,15 +2588,15 @@ msgstr "Åtkommen"
 msgid "File System"
 msgstr "Filsystem"
 
-#: gtk/gtkfontbutton.c:365 gtk/gtkfontbutton.c:493
+#: gtk/gtkfontbutton.c:368 gtk/gtkfontbutton.c:497
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: gtk/gtkfontbutton.c:478 gtk/gtkfontbutton.c:610
+#: gtk/gtkfontbutton.c:481 gtk/gtkfontbutton.c:614
 msgid "Pick a Font"
 msgstr "Välj ett typsnitt"
 
-#: gtk/gtkfontbutton.c:1341
+#: gtk/gtkfontbutton.c:1354
 msgctxt "font"
 msgid "None"
 msgstr "Inget"
@@ -2601,11 +2605,11 @@ msgstr "Inget"
 msgid "OpenGL context creation failed"
 msgstr "Skapande av OpenGL-kontext misslyckades"
 
-#: gtk/gtkheaderbar.c:387
+#: gtk/gtkheaderbar.c:391
 msgid "Application menu"
 msgstr "Programmeny"
 
-#: gtk/gtkheaderbar.c:454 gtk/gtkwindow.c:9258
+#: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9265
 msgid "Close"
 msgstr "Stäng"
 
@@ -2614,7 +2618,7 @@ msgstr "Stäng"
 msgid "Icon '%s' not present in theme %s"
 msgstr "Ikonen ”%s” finns inte i temat %s"
 
-#: gtk/gtkicontheme.c:4078 gtk/gtkicontheme.c:4445
+#: gtk/gtkicontheme.c:4080 gtk/gtkicontheme.c:4447
 msgid "Failed to load icon"
 msgstr "Misslyckades med att läsa in ikon"
 
@@ -2639,19 +2643,19 @@ msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "System (%s)"
 
-#: gtk/gtkinfobar.c:1167 gtk/gtkmessagedialog.c:385
+#: gtk/gtkinfobar.c:1168 gtk/gtkmessagedialog.c:385
 msgid "Information"
 msgstr "Information"
 
-#: gtk/gtkinfobar.c:1171 gtk/gtkmessagedialog.c:389
+#: gtk/gtkinfobar.c:1172 gtk/gtkmessagedialog.c:389
 msgid "Question"
 msgstr "Fråga"
 
-#: gtk/gtkinfobar.c:1175 gtk/gtkmessagedialog.c:393
+#: gtk/gtkinfobar.c:1176 gtk/gtkmessagedialog.c:393
 msgid "Warning"
 msgstr "Varning"
 
-#: gtk/gtkinfobar.c:1179 gtk/gtkmessagedialog.c:397
+#: gtk/gtkinfobar.c:1180 gtk/gtkmessagedialog.c:397
 msgid "Error"
 msgstr "Fel"
 
@@ -2719,11 +2723,11 @@ msgstr "%s: inget sådant program %s"
 msgid "%s: error launching application: %s\n"
 msgstr "%s: fel vid uppstart av programmet: %s\n"
 
-#: gtk/gtklinkbutton.c:370
+#: gtk/gtklinkbutton.c:374
 msgid "Copy URL"
 msgstr "Kopiera url"
 
-#: gtk/gtklinkbutton.c:511
+#: gtk/gtklinkbutton.c:522
 msgid "Invalid URI"
 msgstr "Ogiltig URI"
 
@@ -2760,40 +2764,40 @@ msgstr ""
 "Kontakta din systemadministratör"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:463
+#: gtk/gtkmain.c:464
 msgid "Load additional GTK+ modules"
 msgstr "Läs in ytterligare GTK+-moduler"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:464
+#: gtk/gtkmain.c:465
 msgid "MODULES"
 msgstr "MODULER"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:466
+#: gtk/gtkmain.c:467
 msgid "Make all warnings fatal"
 msgstr "Gör alla varningar ödesdigra"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:469
+#: gtk/gtkmain.c:470
 msgid "GTK+ debugging flags to set"
 msgstr "GTK+-felsökningsflaggor att ställa in"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:472
+#: gtk/gtkmain.c:473
 msgid "GTK+ debugging flags to unset"
 msgstr "GTK+-felsökningsflaggor att inte ställa in"
 
-#: gtk/gtkmain.c:807 gtk/gtkmain.c:1001
+#: gtk/gtkmain.c:808 gtk/gtkmain.c:1002
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Kan inte öppna display: %s"
 
-#: gtk/gtkmain.c:919
+#: gtk/gtkmain.c:920
 msgid "GTK+ Options"
 msgstr "GTK+-flaggor"
 
-#: gtk/gtkmain.c:919
+#: gtk/gtkmain.c:920
 msgid "Show GTK+ Options"
 msgstr "Visa GTK+-flaggor"
 
@@ -2802,7 +2806,7 @@ msgstr "Visa GTK+-flaggor"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:1269
+#: gtk/gtkmain.c:1270
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -2944,213 +2948,213 @@ msgstr "Sidinställning"
 msgid "File System Root"
 msgstr "Filsystemsrot"
 
-#: gtk/gtkplacessidebar.c:1049
-msgid "Recent"
-msgstr "Senaste"
-
-#: gtk/gtkplacessidebar.c:1051
-msgid "Recent files"
-msgstr "Senast använda filer"
-
-#: gtk/gtkplacessidebar.c:1061
-msgid "Starred"
-msgstr "Stjärnmärkt"
-
-#: gtk/gtkplacessidebar.c:1063
-msgid "Favorite files"
-msgstr "Favoritfiler"
-
-#: gtk/gtkplacessidebar.c:1074
-msgid "Open your personal folder"
-msgstr "Öppna din hemmapp"
-
-#: gtk/gtkplacessidebar.c:1089
-msgid "Open the contents of your desktop in a folder"
-msgstr "Öppna ditt skrivbordsinnehåll i en mapp"
-
-#: gtk/gtkplacessidebar.c:1103
-msgid "Enter Location"
-msgstr "Ange plats"
-
-#: gtk/gtkplacessidebar.c:1105
-msgid "Manually enter a location"
-msgstr "Ange manuellt en plats"
-
-#: gtk/gtkplacessidebar.c:1115
-msgid "Trash"
-msgstr "Papperskorg"
-
-#: gtk/gtkplacessidebar.c:1117
-msgid "Open the trash"
-msgstr "Öppna Papperskorgen"
-
 #. translators: %s is the name of a cloud provider for files
-#: gtk/gtkplacessidebar.c:1160
+#: gtk/gtkplacessidebar.c:981
 #, c-format
 msgid "Open %s"
 msgstr "Öppna %s"
 
-#: gtk/gtkplacessidebar.c:1239 gtk/gtkplacessidebar.c:1267
-#: gtk/gtkplacessidebar.c:1475
+#: gtk/gtkplacessidebar.c:1070
+msgid "Recent"
+msgstr "Senaste"
+
+#: gtk/gtkplacessidebar.c:1072
+msgid "Recent files"
+msgstr "Senast använda filer"
+
+#: gtk/gtkplacessidebar.c:1082
+msgid "Starred"
+msgstr "Stjärnmärkt"
+
+#: gtk/gtkplacessidebar.c:1084
+msgid "Favorite files"
+msgstr "Favoritfiler"
+
+#: gtk/gtkplacessidebar.c:1095
+msgid "Open your personal folder"
+msgstr "Öppna din hemmapp"
+
+#: gtk/gtkplacessidebar.c:1110
+msgid "Open the contents of your desktop in a folder"
+msgstr "Öppna ditt skrivbordsinnehåll i en mapp"
+
+#: gtk/gtkplacessidebar.c:1124
+msgid "Enter Location"
+msgstr "Ange plats"
+
+#: gtk/gtkplacessidebar.c:1126
+msgid "Manually enter a location"
+msgstr "Ange manuellt en plats"
+
+#: gtk/gtkplacessidebar.c:1136
+msgid "Trash"
+msgstr "Papperskorg"
+
+#: gtk/gtkplacessidebar.c:1138
+msgid "Open the trash"
+msgstr "Öppna Papperskorgen"
+
+#: gtk/gtkplacessidebar.c:1247 gtk/gtkplacessidebar.c:1275
+#: gtk/gtkplacessidebar.c:1483
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "Montera och öppna ”%s”"
 
-#: gtk/gtkplacessidebar.c:1355
+#: gtk/gtkplacessidebar.c:1363
 msgid "Open the contents of the file system"
 msgstr "Öppna filsystemsinnehållet"
 
-#: gtk/gtkplacessidebar.c:1439
+#: gtk/gtkplacessidebar.c:1447
 msgid "New bookmark"
 msgstr "Nytt bokmärke"
 
-#: gtk/gtkplacessidebar.c:1441
+#: gtk/gtkplacessidebar.c:1449
 msgid "Add a new bookmark"
 msgstr "Lägg till ett nytt bokmärke"
 
-#: gtk/gtkplacessidebar.c:1454
+#: gtk/gtkplacessidebar.c:1462
 msgid "Connect to Server"
 msgstr "Anslut till server"
 
-#: gtk/gtkplacessidebar.c:1456
+#: gtk/gtkplacessidebar.c:1464
 msgid "Connect to a network server address"
 msgstr "Anslut till en nätverksserveradress"
 
-#: gtk/gtkplacessidebar.c:1518
+#: gtk/gtkplacessidebar.c:1526
 msgid "Other Locations"
 msgstr "Andra platser"
 
-#: gtk/gtkplacessidebar.c:1519
+#: gtk/gtkplacessidebar.c:1527
 msgid "Show other locations"
 msgstr "Visa andra platser"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: gtk/gtkplacessidebar.c:2315 gtk/gtkplacessidebar.c:3662
+#: gtk/gtkplacessidebar.c:2323 gtk/gtkplacessidebar.c:3681
 msgid "_Start"
 msgstr "_Starta"
 
-#: gtk/gtkplacessidebar.c:2316 gtk/gtkplacessidebar.c:3663
+#: gtk/gtkplacessidebar.c:2324 gtk/gtkplacessidebar.c:3682
 msgid "_Stop"
 msgstr "_Stoppa"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: gtk/gtkplacessidebar.c:2323
+#: gtk/gtkplacessidebar.c:2331
 msgid "_Power On"
 msgstr "_Slå på"
 
-#: gtk/gtkplacessidebar.c:2324
+#: gtk/gtkplacessidebar.c:2332
 msgid "_Safely Remove Drive"
 msgstr "_Säker borttagning av enhet"
 
-#: gtk/gtkplacessidebar.c:2328
+#: gtk/gtkplacessidebar.c:2336
 msgid "_Connect Drive"
 msgstr "A_nslut disk"
 
-#: gtk/gtkplacessidebar.c:2329
+#: gtk/gtkplacessidebar.c:2337
 msgid "_Disconnect Drive"
 msgstr "_Koppla från disk"
 
-#: gtk/gtkplacessidebar.c:2333
+#: gtk/gtkplacessidebar.c:2341
 msgid "_Start Multi-disk Device"
 msgstr "_Starta multidiskenhet"
 
-#: gtk/gtkplacessidebar.c:2334
+#: gtk/gtkplacessidebar.c:2342
 msgid "_Stop Multi-disk Device"
 msgstr "_Stoppa multidiskenhet"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: gtk/gtkplacessidebar.c:2339
+#: gtk/gtkplacessidebar.c:2347
 msgid "_Unlock Device"
 msgstr "Lås _upp enhet"
 
-#: gtk/gtkplacessidebar.c:2340
+#: gtk/gtkplacessidebar.c:2348
 msgid "_Lock Device"
 msgstr "_Lås enhet"
 
-#: gtk/gtkplacessidebar.c:2378 gtk/gtkplacessidebar.c:3354
+#: gtk/gtkplacessidebar.c:2386 gtk/gtkplacessidebar.c:3362
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "Kunde inte starta ”%s”"
 
-#: gtk/gtkplacessidebar.c:2408
+#: gtk/gtkplacessidebar.c:2416
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Kunde inte komma åt ”%s”"
 
-#: gtk/gtkplacessidebar.c:2626
+#: gtk/gtkplacessidebar.c:2634
 msgid "This name is already taken"
 msgstr "Detta namn används redan"
 
-#: gtk/gtkplacessidebar.c:2695 gtk/inspector/actions.ui:43
+#: gtk/gtkplacessidebar.c:2703 gtk/inspector/actions.ui:43
 #: gtk/inspector/css-node-tree.ui:39 gtk/inspector/object-tree.ui:110
 #: gtk/ui/gtkfilechooserwidget.ui:189 gtk/ui/gtkfilechooserwidget.ui:500
 msgid "Name"
 msgstr "Namn"
 
-#: gtk/gtkplacessidebar.c:2895
+#: gtk/gtkplacessidebar.c:2903
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "Kunde inte avmontera ”%s”"
 
-#: gtk/gtkplacessidebar.c:3071
+#: gtk/gtkplacessidebar.c:3079
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "Kunde inte stoppa ”%s”"
 
-#: gtk/gtkplacessidebar.c:3100
+#: gtk/gtkplacessidebar.c:3108
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "Kunde inte mata ut ”%s”"
 
-#: gtk/gtkplacessidebar.c:3129 gtk/gtkplacessidebar.c:3158
+#: gtk/gtkplacessidebar.c:3137 gtk/gtkplacessidebar.c:3166
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Kunde inte mata ut %s"
 
-#: gtk/gtkplacessidebar.c:3306
+#: gtk/gtkplacessidebar.c:3314
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "Kunde inte läsa av ”%s” efter mediabyten"
 
-#: gtk/gtkplacessidebar.c:3588 gtk/gtkplacessidebar.c:3645
-#: gtk/gtkplacesview.c:1640
+#: gtk/gtkplacessidebar.c:3598 gtk/gtkplacessidebar.c:3664
+#: gtk/gtkplacesview.c:1639
 msgid "Open in New _Tab"
 msgstr "Öppna i ny _flik"
 
-#: gtk/gtkplacessidebar.c:3591 gtk/gtkplacessidebar.c:3648
-#: gtk/gtkplacesview.c:1651
+#: gtk/gtkplacessidebar.c:3604 gtk/gtkplacessidebar.c:3667
+#: gtk/gtkplacesview.c:1650
 msgid "Open in New _Window"
 msgstr "Öppna i nytt _fönster"
 
-#: gtk/gtkplacessidebar.c:3652
+#: gtk/gtkplacessidebar.c:3671
 msgid "_Add Bookmark"
 msgstr "_Lägg till bokmärke"
 
-#: gtk/gtkplacessidebar.c:3653
+#: gtk/gtkplacessidebar.c:3672
 msgid "_Remove"
 msgstr "_Ta bort"
 
-#: gtk/gtkplacessidebar.c:3654
+#: gtk/gtkplacessidebar.c:3673
 msgid "Rename…"
 msgstr "Byt namn…"
 
-#: gtk/gtkplacessidebar.c:3658 gtk/gtkplacesview.c:1685
+#: gtk/gtkplacessidebar.c:3677 gtk/gtkplacesview.c:1684
 msgid "_Mount"
 msgstr "_Montera"
 
-#: gtk/gtkplacessidebar.c:3659 gtk/gtkplacesview.c:1675
+#: gtk/gtkplacessidebar.c:3678 gtk/gtkplacesview.c:1674
 msgid "_Unmount"
 msgstr "_Avmontera"
 
-#: gtk/gtkplacessidebar.c:3660
+#: gtk/gtkplacessidebar.c:3679
 msgid "_Eject"
 msgstr "_Mata ut"
 
-#: gtk/gtkplacessidebar.c:3661
+#: gtk/gtkplacessidebar.c:3680
 msgid "_Detect Media"
 msgstr "_Sök efter media"
 
-#: gtk/gtkplacessidebar.c:4107 gtk/gtkplacesview.c:1118
+#: gtk/gtkplacessidebar.c:4126 gtk/gtkplacesview.c:1118
 msgid "Computer"
 msgstr "Dator"
 
@@ -3163,42 +3167,42 @@ msgid "No network locations found"
 msgstr "Inga nätverksplatser hittades"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1229 gtk/gtkplacesview.c:1304
+#: gtk/gtkplacesview.c:1228 gtk/gtkplacesview.c:1303
 msgid "Unable to access location"
 msgstr "Kunde inte komma åt plats"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1247 gtk/ui/gtkplacesview.ui:449
+#: gtk/gtkplacesview.c:1246 gtk/ui/gtkplacesview.ui:449
 msgid "Con_nect"
 msgstr "A_nslut"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1367
+#: gtk/gtkplacesview.c:1366
 msgid "Unable to unmount volume"
 msgstr "Kunde inte avmontera volym"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1467
+#: gtk/gtkplacesview.c:1466
 msgid "Cance_l"
 msgstr "A_vbryt"
 
-#: gtk/gtkplacesview.c:1675
+#: gtk/gtkplacesview.c:1674
 msgid "_Disconnect"
 msgstr "_Koppla från"
 
-#: gtk/gtkplacesview.c:1685
+#: gtk/gtkplacesview.c:1684
 msgid "_Connect"
 msgstr "Ans_lut"
 
-#: gtk/gtkplacesview.c:1826
+#: gtk/gtkplacesview.c:1825
 msgid "Unable to get remote server location"
 msgstr "Kan inte erhålla plats för fjärrserver"
 
-#: gtk/gtkplacesview.c:1965 gtk/gtkplacesview.c:1974
+#: gtk/gtkplacesview.c:2013 gtk/gtkplacesview.c:2022
 msgid "Networks"
 msgstr "Nätverk"
 
-#: gtk/gtkplacesview.c:1965 gtk/gtkplacesview.c:1974
+#: gtk/gtkplacesview.c:2013 gtk/gtkplacesview.c:2022
 msgid "On This Computer"
 msgstr "På denna dator"
 
@@ -3836,24 +3840,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:9206
+#: gtk/gtkwindow.c:9213
 msgid "Move"
 msgstr "Flytta"
 
-#: gtk/gtkwindow.c:9214
+#: gtk/gtkwindow.c:9221
 msgid "Resize"
 msgstr "Ändra storlek"
 
-#: gtk/gtkwindow.c:9245
+#: gtk/gtkwindow.c:9252
 msgid "Always on Top"
 msgstr "Alltid överst"
 
-#: gtk/gtkwindow.c:12679
+#: gtk/gtkwindow.c:12686
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Vill du använda GTK+ Inspector?"
 
-#: gtk/gtkwindow.c:12681
+#: gtk/gtkwindow.c:12688
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3864,7 +3868,7 @@ msgstr ""
 "det inre i vilket GTK+-program som helst. Användning av det kan medföra att "
 "programmet avslutar eller kraschar."
 
-#: gtk/gtkwindow.c:12686
+#: gtk/gtkwindow.c:12693
 msgid "Don't show this message again"
 msgstr "Visa inte detta meddelande igen"
 
@@ -5637,15 +5641,15 @@ msgstr "Välj typsnitt"
 msgid "Search font name"
 msgstr "Sök efter typsnittsnamn"
 
-#: gtk/ui/gtkfontchooserwidget.ui:97
+#: gtk/ui/gtkfontchooserwidget.ui:98
 msgid "Font Family"
 msgstr "Typsnittsfamilj"
 
-#: gtk/ui/gtkfontchooserwidget.ui:119
+#: gtk/ui/gtkfontchooserwidget.ui:120
 msgid "Preview text"
 msgstr "Förhandsvisningstext"
 
-#: gtk/ui/gtkfontchooserwidget.ui:186
+#: gtk/ui/gtkfontchooserwidget.ui:187
 msgid "No Fonts Found"
 msgstr "Inga typsnitt hittades"
 
