@@ -75,6 +75,9 @@
  * associated information.
  */
 
+/* We are using deprecated API, here, and we know that */
+#define GDK_DISABLE_DEPRECATION_WARNINGS
+
 #include "config.h"
 
 #include "gtkselection.h"
