@@ -1322,7 +1322,10 @@ gtk_main (void)
       gdk_threads_leave ();
       g_main_loop_run (loop);
       gdk_threads_enter ();
+
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gdk_flush ();
+      G_GNUC_END_IGNORE_DEPRECATIONS;
     }
 
   main_loops = g_slist_remove (main_loops, loop);
