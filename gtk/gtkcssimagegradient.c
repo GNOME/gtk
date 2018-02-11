@@ -41,7 +41,7 @@ gtk_css_image_gradient_compute (GtkCssImage             *image,
   GtkCssImageGradient *copy;
 
   if (gradient->pattern)
-    return g_object_ref (gradient);
+    return GTK_CSS_IMAGE (g_object_ref (gradient));
 
   copy = g_object_new (GTK_TYPE_CSS_IMAGE_GRADIENT, NULL);
   copy->gradient = gtk_gradient_ref (gradient->gradient);

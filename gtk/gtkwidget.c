@@ -14409,7 +14409,7 @@ gtk_widget_buildable_custom_tag_start (GtkBuildable     *buildable,
       AccelGroupParserData *data;
 
       data = g_slice_new0 (AccelGroupParserData);
-      data->object = g_object_ref (buildable);
+      data->object = G_OBJECT (g_object_ref (buildable));
       data->builder = builder;
 
       *parser = accel_group_parser;

@@ -107,7 +107,7 @@ gtk_css_image_scaled_compute (GtkCssImage             *image,
   scale = MAX(MIN (scale, scaled->n_images), 1);
 
   if (scaled->scale == scale)
-    return g_object_ref (scaled);
+    return GTK_CSS_IMAGE (g_object_ref (scaled));
   else
     {
       copy = g_object_new (_gtk_css_image_scaled_get_type (), NULL);

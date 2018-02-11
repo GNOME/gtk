@@ -462,7 +462,7 @@ plane_set_property (GObject      *object,
       adjustment = g_value_get_object (value);
       if (adjustment)
 	{
-	  plane->priv->h_adj = g_object_ref_sink (adjustment);
+	  plane->priv->h_adj = GTK_ADJUSTMENT (g_object_ref_sink (adjustment));
 	  g_signal_connect_swapped (adjustment, "value-changed", G_CALLBACK (h_changed), plane);
 	}
       break;
@@ -470,7 +470,7 @@ plane_set_property (GObject      *object,
       adjustment = g_value_get_object (value);
       if (adjustment)
 	{
-	  plane->priv->s_adj = g_object_ref_sink (adjustment);
+	  plane->priv->s_adj = GTK_ADJUSTMENT (g_object_ref_sink (adjustment));
 	  g_signal_connect_swapped (adjustment, "value-changed", G_CALLBACK (sv_changed), plane);
 	}
       break;
@@ -478,7 +478,7 @@ plane_set_property (GObject      *object,
       adjustment = g_value_get_object (value);
       if (adjustment)
 	{
-	  plane->priv->v_adj = g_object_ref_sink (adjustment);
+	  plane->priv->v_adj = GTK_ADJUSTMENT (g_object_ref_sink (adjustment));
 	  g_signal_connect_swapped (adjustment, "value-changed", G_CALLBACK (sv_changed), plane);
 	}
       break;

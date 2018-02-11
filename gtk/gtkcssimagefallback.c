@@ -174,7 +174,7 @@ gtk_css_image_fallback_compute (GtkCssImage             *image,
       return GTK_CSS_IMAGE (copy);
     }
   else
-    return g_object_ref (fallback);
+    return GTK_CSS_IMAGE (g_object_ref (fallback));
 }
 
 static gboolean

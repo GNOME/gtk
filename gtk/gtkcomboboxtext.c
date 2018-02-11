@@ -292,7 +292,7 @@ gtk_combo_box_text_buildable_custom_tag_start (GtkBuildable  *buildable,
 
       data = g_slice_new0 (ItemParserData);
       data->builder = g_object_ref (builder);
-      data->object = g_object_ref (buildable);
+      data->object = G_OBJECT (g_object_ref (buildable));
       data->domain = gtk_builder_get_translation_domain (builder);
       data->string = g_string_new ("");
 
