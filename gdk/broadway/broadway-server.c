@@ -1267,7 +1267,7 @@ handle_incoming_connection (GSocketService    *service,
     }
   else
     {
-      request->connection = g_object_ref (connection);
+      request->connection = G_IO_STREAM (g_object_ref (connection));
     }
 
   in = g_io_stream_get_input_stream (request->connection);
