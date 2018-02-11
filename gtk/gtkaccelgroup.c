@@ -1364,10 +1364,13 @@ gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
 
           if (keyval && accelerator_codes != NULL)
             {
+              GdkKeymap *keymap;
               GdkKeymapKey *keys;
               gint n_keys, i, j;
 
-              if (!gdk_keymap_get_entries_for_keyval (gdk_keymap_get_default (), keyval, &keys, &n_keys))
+              keymap = gdk_keymap_get_for_display (gdk_display_get_default ());
+
+              if (!gdk_keymap_get_entries_for_keyval (keymap, keyval, &keys, &n_keys))
                 {
                   /* Not in keymap */
                   error = TRUE;
