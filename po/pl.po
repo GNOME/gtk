@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-15 13:22+0000\n"
-"PO-Revision-Date: 2018-01-15 22:15+0100\n"
+"POT-Creation-Date: 2018-02-11 14:23+0000\n"
+"PO-Revision-Date: 2018-02-11 16:25+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -1515,53 +1515,57 @@ msgstr "Pomniejsza powszechna licencja publiczna GNU, tylko w wersji 3"
 msgid "GNU Affero General Public License, version 3 or later"
 msgstr "Powszechna licencja publiczna GNU Affero, wersja 3 lub późniejsza"
 
-#: gtk/gtkaboutdialog.c:696
+#: gtk/gtkaboutdialog.c:128
+msgid "GNU Affero General Public License, version 3 only"
+msgstr "Powszechna licencja publiczna GNU Affero, tylko w wersji 3"
+
+#: gtk/gtkaboutdialog.c:697
 msgid "C_redits"
 msgstr "_Zasługi"
 
-#: gtk/gtkaboutdialog.c:704
+#: gtk/gtkaboutdialog.c:705
 msgid "_License"
 msgstr "_Licencja"
 
-#: gtk/gtkaboutdialog.c:713 gtk/gtkcustompaperunixdialog.c:329
+#: gtk/gtkaboutdialog.c:714 gtk/gtkcustompaperunixdialog.c:329
 #: gtk/gtkmessagedialog.c:948 gtk/ui/gtkassistant.ui:144
 msgid "_Close"
 msgstr "Za_mknij"
 
-#: gtk/gtkaboutdialog.c:997
+#: gtk/gtkaboutdialog.c:998
 msgid "Could not show link"
 msgstr "Nie można wyświetlić odnośnika"
 
-#: gtk/gtkaboutdialog.c:1034
+#: gtk/gtkaboutdialog.c:1035
 msgid "Website"
 msgstr "Witryna"
 
 #. used for the application menu on MacOS.  %s is replaced with the application name.
-#: gtk/gtkaboutdialog.c:1084 gtk/ui/gtkapplication-quartz.ui:7
+#: gtk/gtkaboutdialog.c:1085 gtk/ui/gtkapplication-quartz.ui:7
 #, c-format
 msgid "About %s"
 msgstr "O programie %s"
 
-#: gtk/gtkaboutdialog.c:2311
+#: gtk/gtkaboutdialog.c:2312
 msgid "Created by"
 msgstr "Program"
 
-#: gtk/gtkaboutdialog.c:2314
+#: gtk/gtkaboutdialog.c:2315
 msgid "Documented by"
 msgstr "Dokumentacja"
 
-#: gtk/gtkaboutdialog.c:2324
+#: gtk/gtkaboutdialog.c:2325
 msgid "Translated by"
 msgstr "Tłumaczenie"
 
-#: gtk/gtkaboutdialog.c:2329
+#: gtk/gtkaboutdialog.c:2330
 msgid "Artwork by"
 msgstr "Grafika"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: gtk/gtkaboutdialog.c:2489
+#: gtk/gtkaboutdialog.c:2490
 #, c-format
 msgid ""
 "This program comes with absolutely no warranty.\n"
@@ -5649,15 +5653,15 @@ msgstr "Wybór czcionki"
 msgid "Search font name"
 msgstr "Wyszukiwanie nazwy czcionki"
 
-#: gtk/ui/gtkfontchooserwidget.ui:97
+#: gtk/ui/gtkfontchooserwidget.ui:98
 msgid "Font Family"
 msgstr "Rodzina czcionek"
 
-#: gtk/ui/gtkfontchooserwidget.ui:119
+#: gtk/ui/gtkfontchooserwidget.ui:120
 msgid "Preview text"
 msgstr "Tekst podglądu"
 
-#: gtk/ui/gtkfontchooserwidget.ui:186
+#: gtk/ui/gtkfontchooserwidget.ui:187
 msgid "No Fonts Found"
 msgstr "Brak czcionek"
 
