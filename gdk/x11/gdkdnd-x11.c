@@ -2701,7 +2701,7 @@ drag_context_grab (GdkDragContext *context)
 
   g_set_object (&x11_context->grab_seat, seat);
 
-  gdk_error_trap_push ();
+  gdk_x11_display_error_trap_push (gdk_window_get_display (x11_context->ipc_window));
 
   for (i = 0; i < G_N_ELEMENTS (grab_keys); ++i)
     {
@@ -2752,6 +2752,8 @@ drag_context_grab (GdkDragContext *context)
                     GrabModeAsync);
         }
     }
+
+  gdk_x11_display_error_trap_pop_ignored (gdk_window_get_display (x11_context->ipc_window));
 
   return TRUE;
 }
