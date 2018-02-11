@@ -487,7 +487,8 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
    * The name of the currently selected font.
    *
    * Since: 2.4
-   * @Deprecated: Use the #GtkFontChooser::font property instead
+   *
+   * Deprecated: 3.22: Use the #GtkFontChooser::font property instead
    */
   g_object_class_install_property (gobject_class,
                                    PROP_FONT_NAME,
