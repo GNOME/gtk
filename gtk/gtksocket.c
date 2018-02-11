@@ -489,10 +489,12 @@ static void
 gtk_socket_size_request (GtkSocket *socket)
 {
   GtkSocketPrivate *private = socket->priv;
+  GdkDisplay *display;
   XSizeHints hints;
   long supplied;
-	  
-  gdk_error_trap_push ();
+
+  display = gtk_widget_get_display (GTK_WIDGET (socket));
+  gdk_x11_display_error_trap_push (display);
 
   private->request_width = 1;
   private->request_height = 1;
@@ -514,7 +516,7 @@ gtk_socket_size_request (GtkSocket *socket)
     }
   private->have_size = TRUE;
   
-  gdk_error_trap_pop_ignored ();
+  gdk_x11_display_error_trap_pop_ignored (display);
 }
 
 static void
@@ -570,6 +572,7 @@ gtk_socket_send_configure_event (GtkSocket *socket)
 {
   GtkAllocation allocation;
   XConfigureEvent xconfigure;
+  GdkDisplay *display;
   gint x, y;
 
   g_return_if_fail (socket->priv->plug_window != NULL);
@@ -584,9 +587,10 @@ gtk_socket_send_configure_event (GtkSocket *socket)
    * coordinates. We still aren't really ICCCM compliant, since
    * we don't send events when the real toplevel is moved.
    */
-  gdk_error_trap_push ();
+  display = gdk_window_get_display (socket->priv->plug_window);
+  gdk_x11_display_error_trap_push (display);
   gdk_window_get_origin (socket->priv->plug_window, &x, &y);
-  gdk_error_trap_pop_ignored ();
+  gdk_x11_display_error_trap_pop_ignored (display);
 
   gtk_widget_get_allocation (GTK_WIDGET(socket), &allocation);
   xconfigure.x = x;
@@ -598,11 +602,11 @@ gtk_socket_send_configure_event (GtkSocket *socket)
   xconfigure.above = None;
   xconfigure.override_redirect = False;
 
-  gdk_error_trap_push ();
+  gdk_x11_display_error_trap_push (display);
   XSendEvent (GDK_WINDOW_XDISPLAY (socket->priv->plug_window),
 	      GDK_WINDOW_XID (socket->priv->plug_window),
 	      False, NoEventMask, (XEvent *)&xconfigure);
-  gdk_error_trap_pop_ignored ();
+  gdk_x11_display_error_trap_pop_ignored (display);
 }
 
 static void
@@ -632,7 +636,9 @@ gtk_socket_size_allocate (GtkWidget     *widget,
 	}
       else if (private->plug_window)
 	{
-	  gdk_error_trap_push ();
+          GdkDisplay *display = gdk_window_get_display (private->plug_window);
+
+	  gdk_x11_display_error_trap_push (display);
 
 	  if (allocation->width != private->current_width ||
 	      allocation->height != private->current_height)
@@ -665,7 +671,7 @@ gtk_socket_size_allocate (GtkWidget     *widget,
 				   allocation->width, allocation->height));
  	    }
 
-	  gdk_error_trap_pop_ignored ();
+	  gdk_x11_display_error_trap_pop_ignored (display);
 	}
     }
 }
@@ -692,13 +698,13 @@ gtk_socket_send_key_event (GtkSocket *socket,
   xkey.keycode = gdk_event->key.hardware_keycode;
   xkey.same_screen = True;/* FIXME ? */
 
-  gdk_error_trap_push ();
+  gdk_x11_display_error_trap_push (gdk_window_get_display (socket->priv->plug_window));
   XSendEvent (GDK_WINDOW_XDISPLAY (socket->priv->plug_window),
 	      GDK_WINDOW_XID (socket->priv->plug_window),
 	      False,
 	      (mask_key_presses ? KeyPressMask : NoEventMask),
 	      (XEvent *)&xkey);
-  gdk_error_trap_pop_ignored ();
+  gdk_x11_display_error_trap_pop_ignored (gdk_window_get_display (socket->priv->plug_window));
 }
 
 static gboolean
@@ -1053,7 +1059,7 @@ gtk_socket_add_window (GtkSocket       *socket,
         {
           g_warning (G_STRLOC ": Can't add non-GtkPlug to GtkSocket");
           private->plug_window = NULL;
-          gdk_error_trap_pop_ignored ();
+          gdk_x11_display_error_trap_pop_ignored (display);
 
           return;
         }
@@ -1064,7 +1070,7 @@ gtk_socket_add_window (GtkSocket       *socket,
     {
       GdkDragProtocol protocol;
 
-      gdk_error_trap_push ();
+      gdk_x11_display_error_trap_push (display);
 
       if (!private->plug_window)
         {
@@ -1072,16 +1078,16 @@ gtk_socket_add_window (GtkSocket       *socket,
             private->plug_window = gdk_x11_window_foreign_new_for_display (display, xid);
           if (!private->plug_window) /* was deleted before we could get it */
             {
-              gdk_error_trap_pop_ignored ();
+              gdk_x11_display_error_trap_pop_ignored (display);
               return;
             }
         }
 
-      XSelectInput (GDK_DISPLAY_XDISPLAY (gtk_widget_get_display (GTK_WIDGET (socket))),
+      XSelectInput (GDK_DISPLAY_XDISPLAY (display),
                     GDK_WINDOW_XID (private->plug_window),
                     StructureNotifyMask | PropertyChangeMask);
 
-      if (gdk_error_trap_pop ())
+      if (gdk_x11_display_error_trap_pop (display))
 	{
 	  g_object_unref (private->plug_window);
 	  private->plug_window = NULL;
@@ -1090,7 +1096,7 @@ gtk_socket_add_window (GtkSocket       *socket,
       
       /* OK, we now will reliably get destroy notification on socket->plug_window */
 
-      gdk_error_trap_push ();
+      gdk_x11_display_error_trap_push (display);
 
       if (need_reparent)
 	{
@@ -1119,26 +1125,25 @@ gtk_socket_add_window (GtkSocket       *socket,
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       protocol = gdk_window_get_drag_protocol (private->plug_window, NULL);
       if (protocol)
-	gtk_drag_dest_set_proxy (GTK_WIDGET (socket), private->plug_window,
-				 protocol, TRUE);
+	gtk_drag_dest_set_proxy (widget, private->plug_window, protocol, TRUE);
 G_GNUC_END_IGNORE_DEPRECATIONS
 
-      gdk_error_trap_pop_ignored ();
+      gdk_x11_display_error_trap_pop_ignored (display);
 
       gdk_window_add_filter (private->plug_window,
 			     gtk_socket_filter_func,
 			     socket);
 
 #ifdef HAVE_XFIXES
-      gdk_error_trap_push ();
-      XFixesChangeSaveSet (GDK_DISPLAY_XDISPLAY (gtk_widget_get_display (GTK_WIDGET (socket))),
+      gdk_x11_display_error_trap_push (display);
+      XFixesChangeSaveSet (GDK_DISPLAY_XDISPLAY (display),
                            GDK_WINDOW_XID (private->plug_window),
                            SetModeInsert, SaveSetRoot, SaveSetUnmap);
-      gdk_error_trap_pop_ignored ();
+      gdk_x11_display_error_trap_pop_ignored (display);
 #endif
       _gtk_xembed_send_message (private->plug_window,
                                 XEMBED_EMBEDDED_NOTIFY, 0,
-                                GDK_WINDOW_XID (gtk_widget_get_window (GTK_WIDGET (socket))),
+                                GDK_WINDOW_XID (gtk_widget_get_window (widget)),
                                 private->xembed_version);
 
       socket_update_active (socket);
@@ -1278,14 +1283,14 @@ xembed_get_info (GdkWindow     *window,
   unsigned long *data_long;
   int status;
   
-  gdk_error_trap_push ();
+  gdk_x11_display_error_trap_push (display);
   status = XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display),
 			       GDK_WINDOW_XID (window),
 			       xembed_info_atom,
 			       0, 2, False,
 			       xembed_info_atom, &type, &format,
 			       &nitems, &bytes_after, &data);
-  gdk_error_trap_pop_ignored ();
+  gdk_x11_display_error_trap_pop_ignored (display);
 
   if (status != Success)
     return FALSE;		/* Window vanished? */
@@ -1527,7 +1532,7 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent,
 	  else if ((xevent->xproperty.atom == gdk_x11_get_xatom_by_name_for_display (display, "XdndAware")) ||
 	      (xevent->xproperty.atom == gdk_x11_get_xatom_by_name_for_display (display, "_MOTIF_DRAG_RECEIVER_INFO")))
 	    {
-	      gdk_error_trap_push ();
+	      gdk_x11_display_error_trap_push (display);
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
               protocol = gdk_window_get_drag_protocol (private->plug_window, NULL);
               if (protocol)
@@ -1536,7 +1541,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 					 protocol, TRUE);
 G_GNUC_END_IGNORE_DEPRECATIONS
 
-	      gdk_error_trap_pop_ignored ();
+	      gdk_x11_display_error_trap_pop_ignored (display);
 	      return_val = GDK_FILTER_REMOVE;
 	    }
 	  else if (xevent->xproperty.atom == gdk_x11_get_xatom_by_name_for_display (display, "_XEMBED_INFO"))
@@ -1554,9 +1559,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 			gtk_socket_handle_map_request (socket);
 		      else
 			{
-			  gdk_error_trap_push ();
+			  gdk_x11_display_error_trap_push (display);
 			  gdk_window_show (private->plug_window);
-			  gdk_error_trap_pop_ignored ();
+			  gdk_x11_display_error_trap_pop_ignored (display);
 			  
 			  gtk_socket_unmap_notify (socket);
 			}

@@ -414,6 +414,7 @@ grab_dnd_keys (GtkWidget *widget,
                guint32    time)
 {
   guint i;
+  GdkDisplay *display;
   GdkWindow *window, *root;
   gint keycode;
 #ifdef XINPUT_2
@@ -445,9 +446,10 @@ grab_dnd_keys (GtkWidget *widget,
     using_xi2 = FALSE;
 #endif
 
+  display = gtk_widget_get_display (widget);
   root = gdk_screen_get_root_window (gtk_widget_get_screen (widget));
 
-  gdk_error_trap_push ();
+  gdk_x11_display_error_trap_push (display);
 
   for (i = 0; i < G_N_ELEMENTS (grab_keys); ++i)
     {
@@ -490,8 +492,8 @@ grab_dnd_keys (GtkWidget *widget,
                   GrabModeAsync);
     }
 
-  gdk_flush ();
-  gdk_error_trap_pop_ignored ();
+  gdk_display_flush (display);
+  gdk_x11_display_error_trap_pop_ignored (display);
 
   gdk_window_add_filter (NULL, root_key_filter, (gpointer) GDK_WINDOW_XID (window));
 }
@@ -503,6 +505,7 @@ ungrab_dnd_keys (GtkWidget *widget,
 {
   guint i;
   GdkWindow *window, *root;
+  GdkDisplay *display;
   gint keycode;
 #ifdef XINPUT_2
   XIGrabModifiers mods;
@@ -527,11 +530,12 @@ ungrab_dnd_keys (GtkWidget *widget,
     using_xi2 = FALSE;
 #endif
 
+  display = gtk_widget_get_display (widget);
   root = gdk_screen_get_root_window (gtk_widget_get_screen (widget));
 
   gdk_window_remove_filter (NULL, root_key_filter, (gpointer) GDK_WINDOW_XID (window));
 
-  gdk_error_trap_push ();
+  gdk_x11_display_error_trap_push (display);
 
   for (i = 0; i < G_N_ELEMENTS (grab_keys); ++i)
     {
@@ -559,8 +563,8 @@ ungrab_dnd_keys (GtkWidget *widget,
                     GDK_WINDOW_XID (root));
     }
 
-  gdk_flush ();
-  gdk_error_trap_pop_ignored ();
+  gdk_display_flush (display);
+  gdk_x11_display_error_trap_pop_ignored (display);
 }
 
 #else /* !GDK_WINDOWING_X11 */

@@ -1048,12 +1048,13 @@ gtk_plug_realize (GtkWidget *widget)
 
   if (gtk_widget_is_toplevel (widget))
     {
+      GdkDisplay *display = gtk_widget_get_display (widget);
       GdkWindow *root_window;
       attributes.window_type = GDK_WINDOW_TOPLEVEL;
 
       root_window = gdk_screen_get_root_window (screen);
 
-      gdk_error_trap_push ();
+      gdk_x11_display_error_trap_push (display);
       if (priv->socket_window)
         gdk_window = gdk_window_new (priv->socket_window,
                                      &attributes, attributes_mask);
@@ -1070,11 +1071,11 @@ gtk_plug_realize (GtkWidget *widget)
       gtk_widget_set_window (widget, gdk_window);
 
       gdk_display_sync (gtk_widget_get_display (widget));
-      if (gdk_error_trap_pop ()) /* Uh-oh */
+      if (gdk_x11_display_error_trap_pop (display)) /* Uh-oh */
 	{
-	  gdk_error_trap_push ();
+	  gdk_x11_display_error_trap_push (display);
 	  gdk_window_destroy (gdk_window);
-	  gdk_error_trap_pop_ignored ();
+	  gdk_x11_display_error_trap_pop_ignored (display);
 	  gdk_window = gdk_window_new (root_window,
                                        &attributes, attributes_mask);
           gtk_widget_set_window (widget, gdk_window);

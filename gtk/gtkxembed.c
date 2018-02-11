@@ -161,11 +161,11 @@ _gtk_xembed_send_message (GdkWindow        *recipient,
   xclient.data.l[3] = data1;
   xclient.data.l[4] = data2;
 
-  gdk_error_trap_push ();
+  gdk_x11_display_error_trap_push (display);
   XSendEvent (GDK_WINDOW_XDISPLAY(recipient),
 	      GDK_WINDOW_XID (recipient),
 	      False, NoEventMask, (XEvent *)&xclient);
-  gdk_error_trap_pop_ignored ();
+  gdk_x11_display_error_trap_pop_ignored (display);
 }
 
 /**

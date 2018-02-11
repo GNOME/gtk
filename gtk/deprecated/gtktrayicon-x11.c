@@ -418,7 +418,7 @@ gtk_tray_icon_get_orientation_property (GtkTrayIcon *icon)
 
   g_assert (icon->priv->manager_window != None);
   
-  gdk_error_trap_push ();
+  gdk_x11_display_error_trap_push (display);
   type = None;
   result = XGetWindowProperty (xdisplay,
 			       icon->priv->manager_window,
@@ -427,7 +427,7 @@ gtk_tray_icon_get_orientation_property (GtkTrayIcon *icon)
 			       XA_CARDINAL,
 			       &type, &format, &nitems,
 			       &bytes_after, &(prop.prop_ch));
-  error = gdk_error_trap_pop ();
+  error = gdk_x11_display_error_trap_pop (display);
 
   if (error || result != Success)
     return;
@@ -471,7 +471,7 @@ gtk_tray_icon_get_visual_property (GtkTrayIcon *icon)
 
   g_assert (icon->priv->manager_window != None);
 
-  gdk_error_trap_push ();
+  gdk_x11_display_error_trap_push (display);
   type = None;
   result = XGetWindowProperty (xdisplay,
 			       icon->priv->manager_window,
@@ -480,7 +480,7 @@ gtk_tray_icon_get_visual_property (GtkTrayIcon *icon)
 			       XA_VISUALID,
 			       &type, &format, &nitems,
 			       &bytes_after, &(prop.prop_ch));
-  error = gdk_error_trap_pop ();
+  error = gdk_x11_display_error_trap_pop (display);
 
   if (!error && result == Success &&
       type == XA_VISUALID && nitems == 1 && format == 32)
@@ -535,7 +535,7 @@ gtk_tray_icon_get_colors_property (GtkTrayIcon *icon)
 
   g_assert (icon->priv->manager_window != None);
 
-  gdk_error_trap_push ();
+  gdk_x11_display_error_trap_push (display);
   type = None;
   result = XGetWindowProperty (xdisplay,
 			       icon->priv->manager_window,
@@ -544,7 +544,7 @@ gtk_tray_icon_get_colors_property (GtkTrayIcon *icon)
 			       XA_CARDINAL,
 			       &type, &format, &nitems,
 			       &bytes_after, &(prop.prop_ch));
-  error = gdk_error_trap_pop ();
+  error = gdk_x11_display_error_trap_pop (display);
 
   if (error || result != Success)
     return;
@@ -626,7 +626,7 @@ gtk_tray_icon_get_padding_property (GtkTrayIcon *icon)
 
   g_assert (icon->priv->manager_window != None);
 
-  gdk_error_trap_push ();
+  gdk_x11_display_error_trap_push (display);
   type = None;
   result = XGetWindowProperty (xdisplay,
 			       icon->priv->manager_window,
@@ -635,7 +635,7 @@ gtk_tray_icon_get_padding_property (GtkTrayIcon *icon)
 			       XA_CARDINAL,
 			       &type, &format, &nitems,
 			       &bytes_after, &(prop.prop_ch));
-  error = gdk_error_trap_pop ();
+  error = gdk_x11_display_error_trap_pop (display);
 
   if (!error && result == Success &&
       type == XA_CARDINAL && nitems == 1 && format == 32)
@@ -675,7 +675,7 @@ gtk_tray_icon_get_icon_size_property (GtkTrayIcon *icon)
 
   g_assert (icon->priv->manager_window != None);
 
-  gdk_error_trap_push ();
+  gdk_x11_display_error_trap_push (display);
   type = None;
   result = XGetWindowProperty (xdisplay,
 			       icon->priv->manager_window,
@@ -684,7 +684,7 @@ gtk_tray_icon_get_icon_size_property (GtkTrayIcon *icon)
 			       XA_CARDINAL,
 			       &type, &format, &nitems,
 			       &bytes_after, &(prop.prop_ch));
-  error = gdk_error_trap_pop ();
+  error = gdk_x11_display_error_trap_pop (display);
 
   if (!error && result == Success &&
       type == XA_CARDINAL && nitems == 1 && format == 32)
@@ -777,7 +777,8 @@ gtk_tray_icon_send_manager_message (GtkTrayIcon *icon,
 {
   GtkWidget *widget;
   XClientMessageEvent ev;
-  Display *display;
+  GdkDisplay *display;
+  Display *xdisplay;
 
   widget = GTK_WIDGET (icon);
 
@@ -792,12 +793,15 @@ gtk_tray_icon_send_manager_message (GtkTrayIcon *icon,
   ev.data.l[3] = data2;
   ev.data.l[4] = data3;
 
-  display = GDK_DISPLAY_XDISPLAY (gtk_widget_get_display (widget));
+  display = gtk_widget_get_display (widget);
+  xdisplay = GDK_DISPLAY_XDISPLAY (display);
 
-  gdk_error_trap_push ();
-  XSendEvent (display,
-	      icon->priv->manager_window, False, NoEventMask, (XEvent *)&ev);
-  gdk_error_trap_pop_ignored ();
+  gdk_x11_display_error_trap_push (display);
+  XSendEvent (xdisplay,
+	      icon->priv->manager_window,
+              False, NoEventMask,
+              (XEvent *)&ev);
+  gdk_x11_display_error_trap_pop_ignored (display);
 }
 
 static void
@@ -994,6 +998,7 @@ _gtk_tray_icon_send_message (GtkTrayIcon *icon,
 			     gint         len)
 {
   guint stamp;
+  GdkDisplay *display;
   Display *xdisplay;
  
   g_return_val_if_fail (GTK_IS_TRAY_ICON (icon), 0);
@@ -1014,8 +1019,9 @@ _gtk_tray_icon_send_message (GtkTrayIcon *icon,
 				      timeout, len, stamp);
 
   /* Now to send the actual message */
-  xdisplay = GDK_DISPLAY_XDISPLAY (gtk_widget_get_display (GTK_WIDGET (icon)));
-  gdk_error_trap_push ();
+  display = gtk_widget_get_display (GTK_WIDGET (icon));
+  xdisplay = GDK_DISPLAY_XDISPLAY (display);
+  gdk_x11_display_error_trap_push (display);
   while (len > 0)
     {
       XClientMessageEvent ev;
@@ -1042,7 +1048,7 @@ _gtk_tray_icon_send_message (GtkTrayIcon *icon,
 		  icon->priv->manager_window, False,
 		  StructureNotifyMask, (XEvent *)&ev);
     }
-  gdk_error_trap_pop_ignored ();
+  gdk_x11_display_error_trap_pop_ignored (display);
 
   return stamp;
 }
