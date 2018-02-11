@@ -1216,7 +1216,7 @@ slide_idle_handler (gpointer data)
 
   if (priv->need_sync)
     {
-      gdk_flush ();
+      gdk_display_flush (gtk_widget_get_display (data));
       priv->need_sync = FALSE;
     }
   
