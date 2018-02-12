@@ -921,6 +921,23 @@ if build_gir
     '--quiet',
   ]
 
+  # We may build some of the dependencies as sub-projects; this means
+  # that we need to depend on the built introspection data, instead of
+  # the installed one
+  gdk_gir_inc = [ 'cairo-1.0', 'Gio-2.0', ]
+
+  if pixbuf_dep.type_name() == 'internal'
+    gdk_gir_inc += subproject('gdk-pixbuf').get_variable('gdkpixbuf_gir').get(0)
+  else
+    gdk_gir_inc += 'GdkPixbuf-2.0'
+  endif
+
+  if pango_dep.type_name() == 'internal'
+    gdk_gir_inc += subproject('pango').get_variable('pango_gir').get(0)
+  else
+    gdk_gir_inc += 'Pango-1.0'
+  endif
+
   gdk_gir = gnome.generate_gir(libgtk,
                                sources: gdk_public_headers + gdk_public_sources + [ gdkenum_h ],
                                namespace: 'Gdk',
@@ -928,7 +945,7 @@ if build_gir
                                identifier_prefix: 'Gdk',
                                symbol_prefix: 'gdk',
                                export_packages: 'gtk+-4.0',
-                               includes: [ 'Gio-2.0', 'GdkPixbuf-2.0', 'Pango-1.0', 'cairo-1.0', ],
+                               includes: gdk_gir_inc,
                                header: 'gdk/gdk.h',
                                install: true,
                                extra_args: gir_args + [
@@ -945,7 +962,7 @@ if build_gir
                                      identifier_prefix: 'Gdk',
                                      symbol_prefix: 'gdk',
                                      export_packages: 'gtk+-x11-4.0',
-                                     includes: [ gdk_gir[0], 'Gio-2.0', 'GdkPixbuf-2.0', 'Pango-1.0', 'xlib-2.0', ],
+                                     includes: [ gdk_gir[0], 'xlib-2.0', ],
                                      install: true,
                                      dependencies: gdk_gir_dep,
                                      header: 'gdk/gdkx.h',
@@ -955,6 +972,13 @@ if build_gir
     gtk_dep_sources += gdk_x11_gir
   endif
 
+  gsk_gir_inc = [ gdk_gir[0], ]
+  if graphene_dep.type_name() == 'internal'
+    gsk_gir_inc += subproject('graphene').get_variable('graphene_gir').get(0)
+  else
+    gsk_gir_inc += 'Graphene-1.0'
+  endif
+
   gsk_gir = gnome.generate_gir(libgtk,
                                sources: gsk_public_headers + gsk_public_sources + [ gskenum_h ],
                                namespace: 'Gsk',
@@ -962,14 +986,15 @@ if build_gir
                                identifier_prefix: 'Gsk',
                                symbol_prefix: 'gsk',
                                export_packages: 'gtk+-4.0',
-                               includes: [ 'Graphene-1.0', gdk_gir[0] ],
+                               includes: gsk_gir_inc,
                                header: 'gsk/gsk.h',
                                install: true,
                                dependencies: [gdk_gir_dep, graphene_dep],
                                extra_args: gir_args + [
                                  '-DGSK_COMPILATION',
                                ])
-  gsk_gir_dep = declare_dependency(dependencies: [gdk_gir_dep, graphene_dep], sources: gsk_gir)
+  gsk_gir_dep = declare_dependency(dependencies: [gdk_gir_dep, graphene_dep],
+                                   sources: gsk_gir)
   gtk_dep_sources += gsk_gir
 
   gtk_introspection_sources = [
