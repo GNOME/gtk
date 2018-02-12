@@ -1511,7 +1511,7 @@ gtk_drag_check_threshold (GtkWidget *widget,
 }
 
 /**
- * gtk_drag_cancel: (method)
+ * gtk_drag_cancel:
  * @context: a #GdkDragContext, as e.g. returned by gtk_drag_begin_with_coordinates()
  *
  * Cancels an ongoing drag operation on the source side.
