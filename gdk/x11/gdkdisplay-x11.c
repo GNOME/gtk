@@ -3072,6 +3072,16 @@ gdk_x11_display_get_default_seat (GdkDisplay *display)
 
   seats = gdk_display_list_seats (display);
 
+  /* Shortcut only one seat being available.
+   * This path always triggers for core events, so we can freely use XInput below. */
+  if (g_list_length (seats) == 1)
+    {
+      GdkSeat *seat = seats->data;
+
+      g_list_free (seats);
+      return seat;
+    }
+
   gdk_x11_display_error_trap_push (display);
   result = XIGetClientPointer (GDK_DISPLAY_XDISPLAY (display),
                                None, &device_id);
