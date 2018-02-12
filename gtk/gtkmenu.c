@@ -2742,8 +2742,6 @@ static void
 gtk_menu_snapshot (GtkWidget   *widget,
                    GtkSnapshot *snapshot)
 {
-  /* XXX The arrows *might* be missing here */
-
   gtk_snapshot_push_clip (snapshot,
                           &GRAPHENE_RECT_INIT(
                             0, 0,
