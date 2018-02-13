@@ -10,13 +10,14 @@
 # Priit Laes <plaes plaes org>, 2004, 2005, 2013.
 # Ivar Smolin <okul linux ee>, 2005–2011.
 # Mattias Põldaru <mahfiaz@gmail.com>, 2009–2010, 2012.
+# Mart Raudsepp <leio@gentoo.org>, 2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ MASTER\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-02-09 10:24+0000\n"
-"PO-Revision-Date: 2018-02-13 22:12+0200\n"
+"PO-Revision-Date: 2018-02-13 23:53+0200\n"
 "Last-Translator: Mart Raudsepp <leio@gentoo.org>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "Language: et\n"
@@ -2669,10 +2670,8 @@ msgid "OpenGL context creation failed"
 msgstr "Tõrge printeri andmete hankimisel"
 
 #: gtk/gtkheaderbar.c:391
-#, fuzzy
-#| msgid "Application"
 msgid "Application menu"
-msgstr "Rakendus"
+msgstr "Rakenduse menüü"
 
 #: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9265
 msgid "Close"
@@ -2736,7 +2735,7 @@ msgstr "Kopeeri _lingi aadress"
 
 #: gtk/gtk-launch.c:40
 msgid "Show program version"
-msgstr ""
+msgstr "Programmi versiooni näitamine"
 
 #: gtk/gtk-launch.c:74
 msgid "APPLICATION [URI...] — launch an APPLICATION"
@@ -3095,10 +3094,8 @@ msgid "New bookmark"
 msgstr ""
 
 #: gtk/gtkplacessidebar.c:1449
-#, fuzzy
-#| msgid "_Add to Bookmarks"
 msgid "Add a new bookmark"
-msgstr "_Lisa järjehoidjatesse"
+msgstr "Lisa uus järjehoidja"
 
 #: gtk/gtkplacessidebar.c:1462
 #, fuzzy
@@ -3111,16 +3108,12 @@ msgid "Connect to a network server address"
 msgstr ""
 
 #: gtk/gtkplacessidebar.c:1526
-#, fuzzy
-#| msgid "Other Applications"
 msgid "Other Locations"
-msgstr "Muud rakendused"
+msgstr "Muud asukohad"
 
 #: gtk/gtkplacessidebar.c:1527
-#, fuzzy
-#| msgid "Show other applications"
 msgid "Show other locations"
-msgstr "Näita ka teisi rakendusi"
+msgstr "Näita ka teisi asukohti"
 
 #. Adjust start/stop items to reflect the type of the drive
 #: gtk/gtkplacessidebar.c:2323 gtk/gtkplacessidebar.c:3681
@@ -3226,12 +3219,12 @@ msgstr ""
 #: gtk/gtkplacessidebar.c:3598 gtk/gtkplacessidebar.c:3664
 #: gtk/gtkplacesview.c:1639
 msgid "Open in New _Tab"
-msgstr ""
+msgstr "Ava uuel _kaardil"
 
 #: gtk/gtkplacessidebar.c:3604 gtk/gtkplacessidebar.c:3667
 #: gtk/gtkplacesview.c:1650
 msgid "Open in New _Window"
-msgstr ""
+msgstr "Ava _uues aknas"
 
 #: gtk/gtkplacessidebar.c:3671
 msgid "_Add Bookmark"
@@ -3597,7 +3590,7 @@ msgstr "Alt üles"
 #, c-format
 msgctxt "progress bar label"
 msgid "%.0f %%"
-msgstr ""
+msgstr "%.0f %%"
 
 #: gtk/gtkrecentchooserdefault.c:1075 gtk/gtkrecentchooserdefault.c:1112
 #, c-format
@@ -3647,8 +3640,7 @@ msgid "No items found"
 msgstr "Kirjeid ei leitud"
 
 #: gtk/gtkrecentchoosermenu.c:534 gtk/gtkrecentchoosermenu.c:590
-#, fuzzy, c-format
-#| msgid "No recently used resource found with URI `%s'"
+#, c-format
 msgid "No recently used resource found with URI '%s'"
 msgstr "URI-ga '%s' ei leitud viimati kasutatud ressurssi"
 
@@ -4581,26 +4573,21 @@ msgid "Text Direction"
 msgstr ""
 
 #: gtk/inspector/visual.ui:322
-#, fuzzy
-#| msgid "Left to right"
 msgid "Left-to-Right"
-msgstr "Vasakult paremale"
+msgstr "Vasakult-paremale"
 
 #: gtk/inspector/visual.ui:323
-#, fuzzy
-#| msgid "Right to left"
 msgid "Right-to-Left"
-msgstr "Paremalt vasakule"
+msgstr "Paremalt-vasakule"
 
 #: gtk/inspector/visual.ui:347
 msgid "Window scaling"
 msgstr ""
 
 #: gtk/inspector/visual.ui:382
-#, fuzzy
 #| msgid "Application"
 msgid "Animations"
-msgstr "Rakendus"
+msgstr "Animatsioonid"
 
 #: gtk/inspector/visual.ui:415
 msgid "Slowdown"
@@ -5131,20 +5118,18 @@ msgid "RA2"
 msgstr "RA2"
 
 #: gtk/paper_names_offsets.c:69
-#, fuzzy
 #| msgctxt "paper size"
 #| msgid "A3"
 msgctxt "paper size"
 msgid "RA3"
-msgstr "A3"
+msgstr "RA3"
 
 #: gtk/paper_names_offsets.c:70
-#, fuzzy
 #| msgctxt "paper size"
 #| msgid "A4"
 msgctxt "paper size"
 msgid "RA4"
-msgstr "A4"
+msgstr "RA4"
 
 #: gtk/paper_names_offsets.c:71
 msgctxt "paper size"
@@ -5247,12 +5232,9 @@ msgid "Choukei 4 Envelope"
 msgstr "Choukei 4 ümbrik"
 
 #: gtk/paper_names_offsets.c:91
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "Choukei 4 Envelope"
 msgctxt "paper size"
 msgid "Choukei 40 Envelope"
-msgstr "Choukei 4 ümbrik"
+msgstr "Choukei 40 ümbrik"
 
 #: gtk/paper_names_offsets.c:92
 msgctxt "paper size"
@@ -5270,49 +5252,34 @@ msgid "kaku2 Envelope"
 msgstr "kaku2 ümbrik"
 
 #: gtk/paper_names_offsets.c:95
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "kaku2 Envelope"
 msgctxt "paper size"
 msgid "kaku3 Envelope"
-msgstr "kaku2 ümbrik"
+msgstr "kaku3 ümbrik"
 
 #: gtk/paper_names_offsets.c:96
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "kaku2 Envelope"
 msgctxt "paper size"
 msgid "kaku4 Envelope"
-msgstr "kaku2 ümbrik"
+msgstr "kaku4 ümbrik"
 
 #: gtk/paper_names_offsets.c:97
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "kaku2 Envelope"
 msgctxt "paper size"
 msgid "kaku5 Envelope"
-msgstr "kaku2 ümbrik"
+msgstr "kaku5 ümbrik"
 
 #: gtk/paper_names_offsets.c:98
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "kaku2 Envelope"
 msgctxt "paper size"
 msgid "kaku7 Envelope"
-msgstr "kaku2 ümbrik"
+msgstr "kaku7 ümbrik"
 
 #: gtk/paper_names_offsets.c:99
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "kaku2 Envelope"
 msgctxt "paper size"
 msgid "kaku8 Envelope"
-msgstr "kaku2 ümbrik"
+msgstr "kaku8 ümbrik"
 
 #: gtk/paper_names_offsets.c:100
 msgctxt "paper size"
 msgid "oufuku (reply postcard)"
-msgstr "Oufuku (vastusepostkaart)"
+msgstr "oufuku (vastusepostkaart)"
 
 #: gtk/paper_names_offsets.c:101
 msgctxt "paper size"
@@ -5320,12 +5287,9 @@ msgid "you4 Envelope"
 msgstr "you4 ümbrik"
 
 #: gtk/paper_names_offsets.c:102
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "you4 Envelope"
 msgctxt "paper size"
 msgid "you6 Envelope"
-msgstr "you4 ümbrik"
+msgstr "you6 ümbrik"
 
 #: gtk/paper_names_offsets.c:103
 msgctxt "paper size"
@@ -5368,44 +5332,29 @@ msgid "5×7"
 msgstr "5×7"
 
 #: gtk/paper_names_offsets.c:111
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "6x9 Envelope"
 msgctxt "paper size"
 msgid "6×9 Envelope"
-msgstr "6x9 ümbrik"
+msgstr "6×9 ümbrik"
 
 #: gtk/paper_names_offsets.c:112
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "7x9 Envelope"
 msgctxt "paper size"
 msgid "7×9 Envelope"
-msgstr "7x9 ümbrik"
+msgstr "7×9 ümbrik"
 
 #: gtk/paper_names_offsets.c:113
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "#10 Envelope"
 msgctxt "paper size"
 msgid "8×10 Envelope"
-msgstr "#10 ümbrik"
+msgstr "8×10 ümbrik"
 
 #: gtk/paper_names_offsets.c:114
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "9x11 Envelope"
 msgctxt "paper size"
 msgid "9×11 Envelope"
-msgstr "9x11 ümbrik"
+msgstr "9×11 ümbrik"
 
 #: gtk/paper_names_offsets.c:115
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "#12 Envelope"
 msgctxt "paper size"
 msgid "9×12 Envelope"
-msgstr "#12 ümbrik"
+msgstr "9×12 ümbrik"
 
 #: gtk/paper_names_offsets.c:116
 msgctxt "paper size"
@@ -5483,28 +5432,19 @@ msgid "f"
 msgstr "f"
 
 #: gtk/paper_names_offsets.c:131
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "FanFold European"
 msgctxt "paper size"
 msgid "Fan-Fold European"
-msgstr "FanFold euroopa"
+msgstr "Fan-Fold euroopa"
 
 #: gtk/paper_names_offsets.c:132
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "FanFold US"
 msgctxt "paper size"
 msgid "Fan-Fold US"
-msgstr "FanFold USA"
+msgstr "Fan-Fold USA"
 
 #: gtk/paper_names_offsets.c:133
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "FanFold German Legal"
 msgctxt "paper size"
 msgid "Fan-Fold German Legal"
-msgstr "FanFold saksa"
+msgstr "Fan-Fold saksa Legal"
 
 #: gtk/paper_names_offsets.c:134
 msgctxt "paper size"
@@ -5517,36 +5457,24 @@ msgid "Government Letter"
 msgstr "Government Letter"
 
 #: gtk/paper_names_offsets.c:136
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "Index 3x5"
 msgctxt "paper size"
 msgid "Index 3×5"
-msgstr "Indeks 3x5"
+msgstr "Indeks 3×5"
 
 #: gtk/paper_names_offsets.c:137
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "Index 4x6 (postcard)"
 msgctxt "paper size"
 msgid "Index 4×6 (postcard)"
-msgstr "Indeks 4x6 (postkaart)"
+msgstr "Indeks 4×6 (postkaart)"
 
 #: gtk/paper_names_offsets.c:138
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "Index 4x6 ext"
 msgctxt "paper size"
 msgid "Index 4×6 ext"
-msgstr "Indeks 4x6 laiendatud"
+msgstr "Indeks 4×6 laiendatud"
 
 #: gtk/paper_names_offsets.c:139
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "Index 5x8"
 msgctxt "paper size"
 msgid "Index 5×8"
-msgstr "Indeks 5x8"
+msgstr "Indeks 5×8"
 
 #: gtk/paper_names_offsets.c:140
 msgctxt "paper size"
@@ -5679,19 +5607,14 @@ msgid "juuro-ku-kai"
 msgstr "juuro-ku-kai"
 
 #: gtk/paper_names_offsets.c:166
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "Small Photo"
 msgctxt "paper size"
 msgid "Large Photo"
-msgstr "Väike foto"
+msgstr "Suur foto"
 
 #: gtk/paper_names_offsets.c:167
-#, fuzzy
-#| msgid "Medium"
 msgctxt "paper size"
 msgid "Medium Photo"
-msgstr "Keskmine"
+msgstr "Keskmine foto"
 
 #: gtk/paper_names_offsets.c:168
 msgctxt "paper size"
@@ -5709,12 +5632,9 @@ msgid "Small Photo"
 msgstr "Väike foto"
 
 #: gtk/paper_names_offsets.c:171
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "Wide Format"
 msgctxt "paper size"
 msgid "Wide Photo"
-msgstr "Laiformaat"
+msgstr "Laifoto"
 
 #: gtk/paper_names_offsets.c:172
 msgctxt "paper size"
@@ -5879,9 +5799,6 @@ msgid "A"
 msgstr "A"
 
 #: gtk/ui/gtkcoloreditor.ui:171
-#, fuzzy
-#| msgctxt "Color channel"
-#| msgid "Alpha"
 msgid "Alpha"
 msgstr "Alfa"
 
@@ -5891,32 +5808,20 @@ msgid "H"
 msgstr "H"
 
 #: gtk/ui/gtkcoloreditor.ui:218
-#, fuzzy
-#| msgctxt "Color channel"
-#| msgid "Hue"
 msgid "Hue"
 msgstr "Toon"
 
 #: gtk/ui/gtkcoloreditor.ui:250
-#, fuzzy
-#| msgctxt "Color channel"
-#| msgid "S"
 msgctxt "Color Channel"
 msgid "S"
 msgstr "S"
 
 #: gtk/ui/gtkcoloreditor.ui:260
-#, fuzzy
-#| msgctxt "Color channel"
-#| msgid "V"
 msgctxt "Color Channel"
 msgid "V"
 msgstr "V"
 
 #: gtk/ui/gtkcoloreditor.ui:276
-#, fuzzy
-#| msgctxt "Color channel"
-#| msgid "Saturation"
 msgid "Saturation"
 msgstr "Küllastus"
 
@@ -6013,11 +5918,11 @@ msgstr "Millele _vormindatakse:"
 
 #: gtk/ui/gtkpagesetupunixdialog.ui:80 gtk/ui/gtkprintunixdialog.ui:747
 msgid "_Paper size:"
-msgstr "_Paberi suurus:"
+msgstr "Pabe_ri suurus:"
 
 #: gtk/ui/gtkpagesetupunixdialog.ui:122
 msgid "_Orientation:"
-msgstr "_Suund:"
+msgstr "S_uund:"
 
 #: gtk/ui/gtkpagesetupunixdialog.ui:152 gtk/ui/gtkprintunixdialog.ui:794
 msgid "Portrait"
@@ -6147,7 +6052,7 @@ msgstr "_Kõik leheküljed"
 
 #: gtk/ui/gtkprintunixdialog.ui:216
 msgid "C_urrent Page"
-msgstr "Kä_esolev lehekülg"
+msgstr "Käe_solev lehekülg"
 
 #: gtk/ui/gtkprintunixdialog.ui:233
 msgid "Se_lection"
@@ -6163,8 +6068,8 @@ msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1–3, 7, 11"
 msgstr ""
-"Määra üks või rohkem leheküljevahemikku.\n"
-" Näiteks: 1–3, 7, 11"
+"Määra üks või rohkem leheküljevahemikku,\n"
+" nt 1–3, 7, 11"
 
 #: gtk/ui/gtkprintunixdialog.ui:276
 msgid "Pages"
@@ -6180,7 +6085,7 @@ msgstr "Koop_iaid:"
 
 #: gtk/ui/gtkprintunixdialog.ui:361
 msgid "C_ollate"
-msgstr "_Eksemplarhaaval"
+msgstr "Ekse_mplarhaaval"
 
 #: gtk/ui/gtkprintunixdialog.ui:375
 msgid "_Reverse"
@@ -6192,7 +6097,7 @@ msgstr "Paigutus"
 
 #: gtk/ui/gtkprintunixdialog.ui:475
 msgid "T_wo-sided:"
-msgstr "Kahe_poolne:"
+msgstr "Kahep_oolne:"
 
 #: gtk/ui/gtkprintunixdialog.ui:500
 msgid "Pages per _side:"
@@ -6261,7 +6166,7 @@ msgstr "Dokumendi printimine"
 #. this is one of the choices for the print at option in the print dialog
 #: gtk/ui/gtkprintunixdialog.ui:987
 msgid "_Now"
-msgstr "_Nüüd"
+msgstr "Nüü_d"
 
 #. this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.
 #: gtk/ui/gtkprintunixdialog.ui:1003
@@ -6299,12 +6204,12 @@ msgstr "Kaane lisamine"
 #. this is the label used for the option in the print dialog that controls the front cover page.
 #: gtk/ui/gtkprintunixdialog.ui:1115
 msgid "Be_fore:"
-msgstr "_Enne:"
+msgstr "E_nne:"
 
 #. this is the label used for the option in the print dialog that controls the back cover page.
 #: gtk/ui/gtkprintunixdialog.ui:1139
 msgid "_After:"
-msgstr "_Pärast:"
+msgstr "Pä_rast:"
 
 #: gtk/ui/gtkprintunixdialog.ui:1181
 msgid "Job"
@@ -6627,10 +6532,9 @@ msgid "Authentication is required to print a document on %s"
 msgstr "Dokumendi printimiseks %s-sse on vaja eelnevalt autentida"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1152
-#, fuzzy, c-format
-#| msgid "Authentication is required to get attributes of job '%s'"
+#, c-format
 msgid "Authentication is required to get attributes of job “%s”"
-msgstr "Töö '%s' rekvisiitide hankimiseks on vaja eelnevalt autentida"
+msgstr "Töö „%s“ rekvisiitide hankimiseks on vaja eelnevalt autentida"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1154
 msgid "Authentication is required to get attributes of a job"
@@ -6639,7 +6543,7 @@ msgstr "Töö rekvisiitide hankimiseks on vaja eelnevalt autentida"
 #: modules/printbackends/cups/gtkprintbackendcups.c:1158
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
-msgstr "Printeri '%s' rekvisiitide hankimiseks on vaja eelnevalt autentida"
+msgstr "Printeri „%s“ rekvisiitide hankimiseks on vaja eelnevalt autentida"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1160
 msgid "Authentication is required to get attributes of a printer"
@@ -6670,10 +6574,9 @@ msgid "Domain:"
 msgstr "Domeen:"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1439
-#, fuzzy, c-format
-#| msgid "Authentication is required to print document '%s'"
+#, c-format
 msgid "Authentication is required to print document “%s”"
-msgstr "Dokumendi '%s' printimiseks on vaja eelnevalt autentida"
+msgstr "Dokumendi „%s“ printimiseks on vaja eelnevalt autentida"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1444
 #, c-format
@@ -6686,85 +6589,71 @@ msgid "Authentication is required to print this document"
 msgstr "Selle dokumendi printimiseks on vaja eelnevalt autentida"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2525
-#, fuzzy, c-format
-#| msgid "Printer '%s' is low on toner."
+#, c-format
 msgid "Printer “%s” is low on toner."
-msgstr "Printeris '%s' on tooner otsakorral."
+msgstr "Printeris „%s“ on tooner otsakorral."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2529
-#, fuzzy, c-format
-#| msgid "Printer '%s' has no toner left."
+#, c-format
 msgid "Printer “%s” has no toner left."
-msgstr "Printeris '%s' on tooner otsas."
+msgstr "Printeris „%s“ on tooner otsas."
 
 #. Translators: "Developer" like on photo development context
 #: modules/printbackends/cups/gtkprintbackendcups.c:2534
-#, fuzzy, c-format
-#| msgid "Printer '%s' is low on developer."
+#, c-format
 msgid "Printer “%s” is low on developer."
-msgstr "Printeris '%s' on ilmuti otsakorral."
+msgstr "Printeris „%s“ on ilmuti otsakorral."
 
 #. Translators: "Developer" like on photo development context
 #: modules/printbackends/cups/gtkprintbackendcups.c:2539
-#, fuzzy, c-format
-#| msgid "Printer '%s' is out of developer."
+#, c-format
 msgid "Printer “%s” is out of developer."
-msgstr "Printeris '%s' on ilmuti otsas."
+msgstr "Printeris „%s“ on ilmuti otsas."
 
 #. Translators: "marker" is one color bin of the printer
 #: modules/printbackends/cups/gtkprintbackendcups.c:2544
-#, fuzzy, c-format
-#| msgid "Printer '%s' is low on at least one marker supply."
+#, c-format
 msgid "Printer “%s” is low on at least one marker supply."
-msgstr "Printeris '%s' on vähemalt ühe värvi varu otsakorral."
+msgstr "Printeris „%s“ on vähemalt ühe värvi varu otsakorral."
 
 #. Translators: "marker" is one color bin of the printer
 #: modules/printbackends/cups/gtkprintbackendcups.c:2549
-#, fuzzy, c-format
-#| msgid "Printer '%s' is out of at least one marker supply."
+#, c-format
 msgid "Printer “%s” is out of at least one marker supply."
-msgstr "Printeris '%s' on vähemalt ühe värvi varu otsas."
+msgstr "Printeris „%s“ on vähemalt ühe värvi varu otsas."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2553
-#, fuzzy, c-format
-#| msgid "The cover is open on printer '%s'."
+#, c-format
 msgid "The cover is open on printer “%s”."
-msgstr "Printeril '%s' on kaas lahti."
+msgstr "Printeril „%s“ on kaas lahti."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2557
-#, fuzzy, c-format
-#| msgid "The door is open on printer '%s'."
+#, c-format
 msgid "The door is open on printer “%s”."
-msgstr "Printeril '%s' on luuk lahti."
+msgstr "Printeril „%s“ on luuk lahti."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2561
-#, fuzzy, c-format
-#| msgid "Printer '%s' is low on paper."
+#, c-format
 msgid "Printer “%s” is low on paper."
-msgstr "Printeris '%s' on paber otsakorral."
+msgstr "Printeris „%s“ on paber otsakorral."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2565
-#, fuzzy, c-format
-#| msgid "Printer '%s' is out of paper."
+#, c-format
 msgid "Printer “%s” is out of paper."
-msgstr "Printeril '%s' on paber otsas."
+msgstr "Printeril „%s“ on paber otsas."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2569
-#, fuzzy, c-format
-#| msgid "Printer '%s' is currently offline."
+#, c-format
 msgid "Printer “%s” is currently offline."
-msgstr "Printer '%s' on hetkel ühendamata."
+msgstr "Printer „%s“ on hetkel ühendamata."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2573
-#, fuzzy, c-format
-#| msgid "There is a problem on printer '%s'."
+#, c-format
 msgid "There is a problem on printer “%s”."
-msgstr "Printeriga '%s on probleem."
+msgstr "Printeriga „%s“ on probleem."
 
 #. Translators: this is a printer status.
 #: modules/printbackends/cups/gtkprintbackendcups.c:2593
-#, fuzzy
-#| msgid "Paused ; Rejecting Jobs"
 msgid "Paused; Rejecting Jobs"
 msgstr "Pausitud, printimistööde tagasilükkamine"
 
@@ -6776,71 +6665,53 @@ msgstr "Printimistööde tagasilükkamine"
 #. Translators: this string connects multiple printer states together.
 #: modules/printbackends/cups/gtkprintbackendcups.c:2640
 msgid "; "
-msgstr ""
+msgstr "; "
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4380
 #: modules/printbackends/cups/gtkprintbackendcups.c:4447
-#, fuzzy
-#| msgid "Two Sided"
 msgctxt "printing option"
 msgid "Two Sided"
 msgstr "Kahepoolne"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4381
-#, fuzzy
-#| msgid "Paper Type"
 msgctxt "printing option"
 msgid "Paper Type"
 msgstr "Paberi liik"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4382
-#, fuzzy
-#| msgid "Paper Source"
 msgctxt "printing option"
 msgid "Paper Source"
 msgstr "Paberi allikas"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4383
 #: modules/printbackends/cups/gtkprintbackendcups.c:4448
-#, fuzzy
-#| msgid "Output Tray"
 msgctxt "printing option"
 msgid "Output Tray"
 msgstr "Väljastussalv"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4384
-#, fuzzy
-#| msgid "Resolution"
 msgctxt "printing option"
 msgid "Resolution"
 msgstr "Lahutus"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4385
-#, fuzzy
-#| msgid "GhostScript pre-filtering"
 msgctxt "printing option"
 msgid "GhostScript pre-filtering"
 msgstr "GhostScripti eelfilter"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4394
-#, fuzzy
-#| msgid "One Sided"
 msgctxt "printing option value"
 msgid "One Sided"
 msgstr "Ühepoolne"
 
 #. Translators: this is an option of "Two Sided"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4396
-#, fuzzy
-#| msgid "Long Edge (Standard)"
 msgctxt "printing option value"
 msgid "Long Edge (Standard)"
 msgstr "Pikk külg (tavaline)"
 
 #. Translators: this is an option of "Two Sided"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4398
-#, fuzzy
-#| msgid "Short Edge (Flip)"
 msgctxt "printing option value"
 msgid "Short Edge (Flip)"
 msgstr "Lühike külg (pööratud)"
@@ -6849,8 +6720,6 @@ msgstr "Lühike külg (pööratud)"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4400
 #: modules/printbackends/cups/gtkprintbackendcups.c:4402
 #: modules/printbackends/cups/gtkprintbackendcups.c:4410
-#, fuzzy
-#| msgid "Auto Select"
 msgctxt "printing option value"
 msgid "Auto Select"
 msgstr "Automaatne valik"
@@ -6861,40 +6730,30 @@ msgstr "Automaatne valik"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4406
 #: modules/printbackends/cups/gtkprintbackendcups.c:4408
 #: modules/printbackends/cups/gtkprintbackendcups.c:4412
-#, fuzzy
-#| msgid "Printer Default"
 msgctxt "printing option value"
 msgid "Printer Default"
 msgstr "Printeri vaikimisi"
 
 #. Translators: this is an option of "GhostScript"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4414
-#, fuzzy
-#| msgid "Embed GhostScript fonts only"
 msgctxt "printing option value"
 msgid "Embed GhostScript fonts only"
-msgstr "Kaasa pannakse ainult GhostScript fondid"
+msgstr "Kaasa pannakse ainult GhostScript kirjatüübid"
 
 #. Translators: this is an option of "GhostScript"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4416
-#, fuzzy
-#| msgid "Convert to PS level 1"
 msgctxt "printing option value"
 msgid "Convert to PS level 1"
 msgstr "Teisenda vormingusse PS level 1"
 
 #. Translators: this is an option of "GhostScript"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4418
-#, fuzzy
-#| msgid "Convert to PS level 2"
 msgctxt "printing option value"
 msgid "Convert to PS level 2"
 msgstr "Teisenda vormingusse PS level 2"
 
 #. Translators: this is an option of "GhostScript"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4420
-#, fuzzy
-#| msgid "No pre-filtering"
 msgctxt "printing option value"
 msgid "No pre-filtering"
 msgstr "Eelfilter väljas"
@@ -6902,31 +6761,23 @@ msgstr "Eelfilter väljas"
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
 #: modules/printbackends/cups/gtkprintbackendcups.c:4429
-#, fuzzy
-#| msgid "Miscellaneous"
 msgctxt "printing option group"
 msgid "Miscellaneous"
 msgstr "Mitmesugust"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4456
-#, fuzzy
-#| msgid "One Sided"
 msgctxt "sides"
 msgid "One Sided"
 msgstr "Ühepoolne"
 
 #. Translators: this is an option of "Two Sided"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4458
-#, fuzzy
-#| msgid "Long Edge (Standard)"
 msgctxt "sides"
 msgid "Long Edge (Standard)"
 msgstr "Pikk külg (tavaline)"
 
 #. Translators: this is an option of "Two Sided"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4460
-#, fuzzy
-#| msgid "Short Edge (Flip)"
 msgctxt "sides"
 msgid "Short Edge (Flip)"
 msgstr "Lühike külg (pööratud)"
@@ -7074,50 +6925,36 @@ msgid "Billing Info"
 msgstr "Maksmise andmed"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5494
-#, fuzzy
-#| msgid "None"
 msgctxt "cover page"
 msgid "None"
 msgstr "Puudub"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5495
-#, fuzzy
-#| msgid "Classified"
 msgctxt "cover page"
 msgid "Classified"
 msgstr "Liigitatud"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5496
-#, fuzzy
-#| msgid "Confidential"
 msgctxt "cover page"
 msgid "Confidential"
 msgstr "Konfidentsiaalne"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5497
-#, fuzzy
-#| msgid "Secret"
 msgctxt "cover page"
 msgid "Secret"
 msgstr "Salajane"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5498
-#, fuzzy
-#| msgid "Standard"
 msgctxt "cover page"
 msgid "Standard"
 msgstr "Tavaline"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5499
-#, fuzzy
-#| msgid "Top Secret"
 msgctxt "cover page"
 msgid "Top Secret"
 msgstr "Ülisalajane"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5500
-#, fuzzy
-#| msgid "Unclassified"
 msgctxt "cover page"
 msgid "Unclassified"
 msgstr "Liigitamata"
@@ -7250,7 +7087,7 @@ msgstr "Fail"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:745
 msgid "_Output format"
-msgstr "_Väljundvorming"
+msgstr "Väl_jundvorming"
 
 #: modules/printbackends/lpr/gtkprintbackendlpr.c:393
 msgid "Print to LPR"
