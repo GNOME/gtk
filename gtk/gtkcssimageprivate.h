@@ -75,6 +75,11 @@ struct _GtkCssImageClass
                                                     GtkSnapshot                *snapshot,
                                                     double                      width,
                                                     double                      height);
+  /* does this image change based on timestamp? (optional) */
+  gboolean     (* is_dynamic)                      (GtkCssImage                *image);
+  /* get image for given timestamp or @image when not dynamic (optional) */
+  GtkCssImage *(* get_dynamic_image)               (GtkCssImage                *image,
+                                                    gint64                      monotonic_time);
   /* parse CSS, return TRUE on success */
   gboolean     (* parse)                           (GtkCssImage                *image,
                                                     GtkCssParser               *parser);
@@ -112,6 +117,9 @@ void           gtk_css_image_snapshot              (GtkCssImage                *
                                                     GtkSnapshot                *snapshot,
                                                     double                      width,
                                                     double                      height);
+gboolean       gtk_css_image_is_dynamic            (GtkCssImage                *image);
+GtkCssImage *  gtk_css_image_get_dynamic_image     (GtkCssImage                *image,
+                                                    gint64                      monotonic_time);
 void           _gtk_css_image_print                (GtkCssImage                *image,
                                                     GString                    *string);
 
