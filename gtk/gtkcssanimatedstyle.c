@@ -23,6 +23,7 @@
 
 #include "gtkcssanimationprivate.h"
 #include "gtkcssarrayvalueprivate.h"
+#include "gtkcssdynamicprivate.h"
 #include "gtkcssenumvalueprivate.h"
 #include "gtkcssinheritvalueprivate.h"
 #include "gtkcssinitialvalueprivate.h"
@@ -149,6 +150,27 @@ gtk_css_animated_style_get_intrinsic_value (GtkCssAnimatedStyle *style,
                                             guint                id)
 {
   return gtk_css_style_get_value (style->style, id);
+}
+
+static GSList *
+gtk_css_animated_style_create_dynamic (GSList      *animations,
+                                       GtkCssStyle *style,
+                                       gint64       timestamp)
+{
+  guint i;
+
+  /* XXX: Check animations if they have dynamic values */
+
+  for (i = 0; i < GTK_CSS_PROPERTY_N_PROPERTIES; i++)
+    {
+      if (gtk_css_value_is_dynamic (gtk_css_style_get_value (style, i)))
+        {
+          animations = g_slist_append (animations, gtk_css_dynamic_new (timestamp));
+          break;
+        }
+    }
+
+  return animations;
 }
 
 /* TRANSITIONS */
@@ -432,6 +454,7 @@ gtk_css_animated_style_new (GtkCssStyle      *base_style,
   if (previous_style != NULL)
     animations = gtk_css_animated_style_create_css_transitions (animations, base_style, timestamp, previous_style);
   animations = gtk_css_animated_style_create_css_animations (animations, base_style, parent_style, timestamp, provider, previous_style);
+  animations = gtk_css_animated_style_create_dynamic (animations, base_style, timestamp);
 
   if (animations == NULL)
     return g_object_ref (base_style);
