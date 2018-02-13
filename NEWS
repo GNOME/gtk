@@ -1,3 +1,76 @@
+Overview of Changes in GTK+ 3.22.27
+===================================
+
+* Require libcloudproviders 0.2.0
+
+* The Emoji chooser can now be used with GtkTextView as well
+
+* The Emoji chooser avoids fallback sequences that break the grid
+
+* GTK+ is now using ~/.config/gtk-3.0/settings.ini when using
+  Wayland without dconf
+
+* Make fuse-mounted network filesystems show up in Other Locations
+
+* The font chooser dialog supports search now
+
+* Bugs fixed:
+ 737175 most horizontal sliders are inverted when scrolled with mouse wheel
+ 741633 GtkListBoxRow should implement GtkActionable
+ 771986 Inconsistent 'row-activated' signal emission before drag'n'drop, 'acti...
+ 774248 Desktop-wide text scaling factor is ignored by gtk_widget_override_fon...
+ 779009 Missing property-change::accessible-description events when the toolti...
+ 786123 GtkPlacesSidebar: Add support for libcloudproviders
+ 786509 GDK W32: OLE2 DnD is completely broken
+ 786528 Please make the output deterministic
+ 787089 win32: GtkWindow of type GTK_WINDOW_POPUP/GDK_WINDOW_TEMP leaks memory...
+ 787128 Re-add FUSE network mounts in local-only mode
+ 789054 Firefox crashes @gdk_window_begin_move_drag() on WM without _NET_WM_MO...
+ 789160 Add Windows compatible emoji shortcuts
+ 789268 Keyboard grab by popup window causes a session-modal shortcut-inhibiti...
+ 790029 GtkTextView: Support gtk 3.22.19's emoji chooser
+ 790031 GtkClipboardClearFunc is not being called
+ 790033 Add support for third stylus button on Wacom's new Pro Pen 3D
+ 790201 Settings in ~/.config/gtk-3.0/settings.ini ignored with GDK_BACKEND=wa...
+ 790270 avoid copy of CSS data from resources
+ 790862 Addition of insert_emoji breaks ABI on gtk-3-22
+ 790963 Thread safety issue in gtk_application_impl_dbus_startup
+ 791039 Emit enter+motion after GDK_CROSSING_TOUCH_END leave
+ 791062 Fix mapping window with complete xdg-foreign state
+ 791234 autocleanups: allow g_autoptr() usage with GtkTreePath
+ 791281 Backport size allocation optimization from master to 3.22
+ 791363 Shadow vertical offset is wrong when scaling is > 2
+ 791549 gtklistbox: Crash on page-up on GtkListBox
+ 791650 Do not warn about missing colord systemd service unit
+ 791710 css documentation, non-breaking spaces/hyphens, and other details
+ 791943 gnome-shell built with meson hangs when opening more than one window
+ 792279 Use portable sed syntax in gdk/wayland/Makefile.am
+ 792459 gtk_tree_model_sort_set_sort_column_id() ignores change to sort order
+ 792624 Critical due to gtk_widget_reset_controllers() passing NULL to gtk_e...
+
+* Translation updates:
+ Africaans
+ Catalan
+ Chinese (Taiwan)
+ Esperanto
+ Finnish
+ Friulian
+ Galician
+ Hebrew
+ Hungarian
+ Icelandic
+ Indonesian
+ Italian
+ Lithuanian
+ Norwegian bokmål
+ Polish
+ Russian
+ Serbian
+ Slovenian
+ Spanish
+ Turkish
+
+
 Overview of Changes in GTK+ 3.22.26
 ===================================
 
