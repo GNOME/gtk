@@ -103,6 +103,8 @@ static const GtkCssValueClass GTK_CSS_VALUE_CORNER = {
   gtk_css_value_corner_compute,
   gtk_css_value_corner_equal,
   gtk_css_value_corner_transition,
+  NULL,
+  NULL,
   gtk_css_value_corner_print
 };
 
