@@ -96,6 +96,19 @@ gtk_css_image_real_transition (GtkCssImage *start,
     return _gtk_css_image_cross_fade_new (start, end, progress);
 }
 
+static gboolean
+gtk_css_image_real_is_dynamic (GtkCssImage *image)
+{
+  return FALSE;
+}
+
+static GtkCssImage *
+gtk_css_image_real_get_dynamic_image (GtkCssImage *image,
+                                      gint64       monotonic_time)
+{
+  return g_object_ref (image);
+}
+
 static void
 _gtk_css_image_class_init (GtkCssImageClass *klass)
 {
@@ -105,6 +118,8 @@ _gtk_css_image_class_init (GtkCssImageClass *klass)
   klass->compute = gtk_css_image_real_compute;
   klass->equal = gtk_css_image_real_equal;
   klass->transition = gtk_css_image_real_transition;
+  klass->is_dynamic = gtk_css_image_real_is_dynamic;
+  klass->get_dynamic_image = gtk_css_image_real_get_dynamic_image;
 }
 
 static void
@@ -262,6 +277,31 @@ gtk_css_image_snapshot (GtkCssImage *image,
   klass = GTK_CSS_IMAGE_GET_CLASS (image);
 
   klass->snapshot (image, snapshot, width, height);
+}
+
+gboolean
+gtk_css_image_is_dynamic (GtkCssImage *image)
+{
+  GtkCssImageClass *klass;
+
+  g_return_val_if_fail (GTK_IS_CSS_IMAGE (image), FALSE);
+
+  klass = GTK_CSS_IMAGE_GET_CLASS (image);
+
+  return klass->is_dynamic (image);
+}
+
+GtkCssImage *
+gtk_css_image_get_dynamic_image (GtkCssImage *image,
+                                 gint64       monotonic_time)
+{
+  GtkCssImageClass *klass;
+
+  g_return_val_if_fail (GTK_IS_CSS_IMAGE (image), NULL);
+
+  klass = GTK_CSS_IMAGE_GET_CLASS (image);
+
+  return klass->get_dynamic_image (image, monotonic_time);
 }
 
 void
