@@ -157,6 +157,18 @@
       </para>
     </section>
 
+    <section>
+      <title>Stop using GtkButton's image-related API</title>
+      <para>
+        The functions and properties related to automatically add a GtkImage
+        to a GtkButton, and using a GtkSetting to control its visibility, are
+        not supported in GTK+ 4. Instead, you can just pack a GtkImage inside
+        a GtkButton, and control its visibility like you would for any other
+        widget. If you only want to add a named icon to a GtkButton, you can
+        use gtk_button_set_icon_name().
+      </para>
+    </section>
+
   </section>
 
   <section>
