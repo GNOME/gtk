@@ -115,6 +115,8 @@ static const GtkCssValueClass GTK_CSS_VALUE_ICON_THEME = {
   gtk_css_value_icon_theme_compute,
   gtk_css_value_icon_theme_equal,
   gtk_css_value_icon_theme_transition,
+  NULL,
+  NULL,
   gtk_css_value_icon_theme_print
 };
 

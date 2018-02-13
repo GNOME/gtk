@@ -96,6 +96,8 @@ static const GtkCssValueClass GTK_CSS_VALUE_IMAGE = {
   gtk_css_value_image_compute,
   gtk_css_value_image_equal,
   gtk_css_value_image_transition,
+  NULL,
+  NULL,
   gtk_css_value_image_print
 };
 
