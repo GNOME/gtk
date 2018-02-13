@@ -1,0 +1,9 @@
+image: lazka/gitlab-gtk:v1
+
+stages:
+  - build
+
+build:
+  stage: build
+  script:
+   - bash -x ./.gitlab-ci/test-docker.sh
