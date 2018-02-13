@@ -81,6 +81,37 @@ gtk_css_value_image_transition (GtkCssValue *start,
   return _gtk_css_image_value_new (transition);
 }
 
+static gboolean
+gtk_css_value_image_is_dynamic (GtkCssValue *value)
+{
+  GtkCssImage *image = _gtk_css_image_value_get_image (value);
+
+  if (image == NULL)
+    return FALSE;
+
+  return gtk_css_image_is_dynamic (image);
+}
+
+static GtkCssValue *
+gtk_css_value_image_get_dynamic_value (GtkCssValue *value,
+                                       gint64       monotonic_time)
+{
+  GtkCssImage *image, *dynamic;
+  
+  image = _gtk_css_image_value_get_image (value);
+  if (image == NULL)
+    return gtk_css_value_ref (value);
+
+  dynamic = gtk_css_image_get_dynamic_image (image, monotonic_time);
+  if (dynamic == image)
+    {
+      g_object_unref (dynamic);
+      return gtk_css_value_ref (value);
+    }
+
+  return _gtk_css_image_value_new (dynamic);
+}
+
 static void
 gtk_css_value_image_print (const GtkCssValue *value,
                            GString           *string)
@@ -96,8 +127,8 @@ static const GtkCssValueClass GTK_CSS_VALUE_IMAGE = {
   gtk_css_value_image_compute,
   gtk_css_value_image_equal,
   gtk_css_value_image_transition,
-  NULL,
-  NULL,
+  gtk_css_value_image_is_dynamic,
+  gtk_css_value_image_get_dynamic_value,
   gtk_css_value_image_print
 };
 
