@@ -249,6 +249,8 @@ static const GtkCssNumberValueClass GTK_CSS_VALUE_CALC = {
     gtk_css_value_calc_compute,
     gtk_css_value_calc_equal,
     gtk_css_number_value_transition,
+    NULL,
+    NULL,
     gtk_css_value_calc_print
   },
   gtk_css_value_calc_get,
