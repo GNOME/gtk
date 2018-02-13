@@ -323,6 +323,8 @@ static const GtkCssValueClass GTK_CSS_VALUE_ARRAY = {
   gtk_css_value_array_compute,
   gtk_css_value_array_equal,
   gtk_css_value_array_transition,
+  NULL,
+  NULL,
   gtk_css_value_array_print
 };
 

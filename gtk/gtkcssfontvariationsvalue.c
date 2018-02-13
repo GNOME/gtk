@@ -180,6 +180,8 @@ static const GtkCssValueClass GTK_CSS_VALUE_FONT_VARIATIONS = {
   gtk_css_value_font_variations_compute,
   gtk_css_value_font_variations_equal,
   gtk_css_value_font_variations_transition,
+  NULL,
+  NULL,
   gtk_css_value_font_variations_print
 };
 

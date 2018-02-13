@@ -253,6 +253,8 @@ static const GtkCssNumberValueClass GTK_CSS_VALUE_WIN32_SIZE = {
     gtk_css_value_win32_size_compute,
     gtk_css_value_win32_size_equal,
     gtk_css_number_value_transition,
+    NULL,
+    NULL,
     gtk_css_value_win32_size_print
   },
   gtk_css_value_win32_size_get,
