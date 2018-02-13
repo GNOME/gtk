@@ -265,12 +265,10 @@ gdk_event_source_translate_event (GdkX11Display  *x11_display,
         result = gdk_window_cache_filter (xevent, event, cache);
     }
 
-  if (result == GDK_FILTER_CONTINUE &&
-      xevent->xany.window == XRootWindow (dpy, 0))
+  if (result == GDK_FILTER_CONTINUE)
     result = _gdk_wm_protocols_filter (xevent, event, NULL);
 
-  if (result == GDK_FILTER_CONTINUE &&
-      xevent->xany.window == XRootWindow (dpy, 0))
+  if (result == GDK_FILTER_CONTINUE)
     result = _gdk_x11_dnd_filter (xevent, event, NULL);
 
   if (result == GDK_FILTER_CONTINUE && filter_window)
