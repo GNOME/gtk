@@ -102,6 +102,8 @@ static const GtkCssValueClass GTK_CSS_VALUE_RGBA = {
   gtk_css_value_rgba_compute,
   gtk_css_value_rgba_equal,
   gtk_css_value_rgba_transition,
+  NULL,
+  NULL,
   gtk_css_value_rgba_print
 };
 
