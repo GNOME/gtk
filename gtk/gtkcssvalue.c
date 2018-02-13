@@ -44,7 +44,7 @@ _gtk_css_value_alloc (const GtkCssValueClass *klass,
 }
 
 GtkCssValue *
-_gtk_css_value_ref (GtkCssValue *value)
+gtk_css_value_ref (GtkCssValue *value)
 {
   gtk_internal_return_val_if_fail (value != NULL, NULL);
 
@@ -54,7 +54,7 @@ _gtk_css_value_ref (GtkCssValue *value)
 }
 
 void
-_gtk_css_value_unref (GtkCssValue *value)
+gtk_css_value_unref (GtkCssValue *value)
 {
   if (value == NULL)
     return;
@@ -175,3 +175,51 @@ _gtk_css_value_print (const GtkCssValue *value,
   value->class->print (value, string);
 }
 
+/**
+ * gtk_css_value_is_dynamic:
+ * @value: a #GtkCssValue
+ *
+ * A "dynamic" value has a different value at different times. This means that
+ * the value needs to be animated when time is progressing.
+ *
+ * Examples of dynamic values are animated images, such as videos or dynamic shaders.
+ *
+ * Use gtk_css_value_get_dynamic_value() to get the value for a given timestamp.
+ *
+ * Returns %TRUE if the value is dynamic
+ */
+gboolean
+gtk_css_value_is_dynamic (GtkCssValue *value)
+{
+  gtk_internal_return_val_if_fail (value != NULL, FALSE);
+
+  if (!value->class->is_dynamic)
+    return FALSE;
+
+  return value->class->is_dynamic (value);
+}
+
+/**
+ * gtk_css_value_get_dynamic_value:
+ * @value: a #GtkCssValue
+ * @monotonic_time: the timestamp for which to get the dynamic value
+ *
+ * Gets the dynamic value for a given timestamp. If @monotonic_time is 0,
+ * the default value is returned.
+ *
+ * See gtk_css_value_is_dynamic() for details about dynamic values.
+ *
+ * Returns: (transfer full): The dynamic value for @value at the given
+ *     timestamp
+ **/
+GtkCssValue *
+gtk_css_value_get_dynamic_value (GtkCssValue *value,
+                                 gint64       monotonic_time)
+{
+  gtk_internal_return_val_if_fail (value != NULL, NULL);
+
+  if (!value->class->get_dynamic_value)
+    return gtk_css_value_ref (value);
+
+  return value->class->get_dynamic_value (value, monotonic_time);
+}
