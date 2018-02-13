@@ -204,6 +204,8 @@ static const GtkCssValueClass GTK_CSS_VALUE_SHADOWS = {
   gtk_css_value_shadows_compute,
   gtk_css_value_shadows_equal,
   gtk_css_value_shadows_transition,
+  NULL,
+  NULL,
   gtk_css_value_shadows_print
 };
 
