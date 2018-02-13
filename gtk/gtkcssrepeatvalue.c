@@ -117,6 +117,8 @@ static const GtkCssValueClass GTK_CSS_VALUE_BACKGROUND_REPEAT = {
   gtk_css_value_repeat_compute,
   gtk_css_value_repeat_equal,
   gtk_css_value_repeat_transition,
+  NULL,
+  NULL,
   gtk_css_value_background_repeat_print
 };
 
@@ -125,6 +127,8 @@ static const GtkCssValueClass GTK_CSS_VALUE_BORDER_REPEAT = {
   gtk_css_value_repeat_compute,
   gtk_css_value_repeat_equal,
   gtk_css_value_repeat_transition,
+  NULL,
+  NULL,
   gtk_css_value_border_repeat_print
 };
 /* BACKGROUND REPEAT */
