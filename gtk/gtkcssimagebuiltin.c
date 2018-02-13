@@ -498,7 +498,30 @@ gtk_css_image_builtin_equal (GtkCssImage *image1,
   GtkCssImageBuiltin *builtin2 = GTK_CSS_IMAGE_BUILTIN (image2);
 
   return gdk_rgba_equal (&builtin1->fg_color, &builtin2->fg_color)
-      && gdk_rgba_equal (&builtin1->bg_color, &builtin2->bg_color);
+      && gdk_rgba_equal (&builtin1->bg_color, &builtin2->bg_color)
+      && builtin1->rotation == builtin2->rotation;
+}
+
+static gboolean
+gtk_css_image_builtin_is_dynamic (GtkCssImage *image)
+{
+  return TRUE;
+}
+
+static GtkCssImage *
+gtk_css_image_builtin_get_dynamic_image (GtkCssImage *image,
+                                         gint64       monotonic_time)
+{
+  GtkCssImageBuiltin *builtin = GTK_CSS_IMAGE_BUILTIN (image);
+  GtkCssImageBuiltin *result;
+
+  result = g_object_new (GTK_TYPE_CSS_IMAGE_BUILTIN, NULL);
+
+  result->fg_color = builtin->fg_color;
+  result->bg_color = builtin->bg_color;
+  result->rotation = 2 * G_PI * (monotonic_time % G_USEC_PER_SEC) / G_USEC_PER_SEC;
+
+  return GTK_CSS_IMAGE (result);
 }
 
 static void
@@ -521,6 +544,8 @@ gtk_css_image_builtin_class_init (GtkCssImageBuiltinClass *klass)
   image_class->print = gtk_css_image_builtin_print;
   image_class->compute = gtk_css_image_builtin_compute;
   image_class->equal = gtk_css_image_builtin_equal;
+  image_class->is_dynamic = gtk_css_image_builtin_is_dynamic;
+  image_class->get_dynamic_image = gtk_css_image_builtin_get_dynamic_image;
 
   object_class->dispose = gtk_css_image_builtin_dispose;
 }
@@ -557,6 +582,14 @@ gtk_css_image_builtin_draw (GtkCssImage            *image,
       _gtk_css_image_draw (image, cr, width, height);
       return;
     }
+
+  {
+    GtkCssImageBuiltin *builtin = GTK_CSS_IMAGE_BUILTIN (image);
+
+    cairo_translate (cr, width / 2.0, height / 2.0);
+    cairo_rotate (cr, builtin->rotation);
+    cairo_translate (cr, - width / 2.0, - height / 2.0);
+  }
 
   switch (image_type)
   {
