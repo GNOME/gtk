@@ -372,7 +372,6 @@ gdk_registry_handle_global (void               *data,
 {
   GdkWaylandDisplay *display_wayland = data;
   struct wl_output *output;
-  gboolean handled = TRUE;
 
   GDK_NOTE (MISC,
             g_message ("add global %u, interface %s, version %u", id, interface, version));
@@ -495,12 +494,9 @@ gdk_registry_handle_global (void               *data,
                                                            &server_decoration_listener,
                                                            display_wayland);
     }
-  else
-    handled = FALSE;
 
-  if (handled)
-    g_hash_table_insert (display_wayland->known_globals,
-                         GUINT_TO_POINTER (id), g_strdup (interface));
+  g_hash_table_insert (display_wayland->known_globals,
+                       GUINT_TO_POINTER (id), g_strdup (interface));
 
   process_on_globals_closures (display_wayland);
 }
@@ -1385,4 +1381,38 @@ gdk_wayland_display_get_selection (GdkDisplay *display)
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
 
   return display_wayland->selection;
+}
+
+/**
+ * gdk_wayland_display_query_registry:
+ * @display: a wayland #GdkDisplay
+ * @interface: global interface to query in the registry
+ *
+ * Returns %TRUE if the the interface was found in the display
+ * wl_registry.global handler.
+ *
+ * Returns: %TRUE if the global is offered by the compositor
+ *
+ * Since: 3.22.27
+ **/
+gboolean
+gdk_wayland_display_query_registry (GdkDisplay  *display,
+				    const gchar *global)
+{
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+  GHashTableIter iter;
+  gchar *value;
+
+  g_return_val_if_fail (GDK_IS_WAYLAND_DISPLAY (display), FALSE);
+  g_return_val_if_fail (global != NULL, FALSE);
+
+  g_hash_table_iter_init (&iter, display_wayland->known_globals);
+
+  while (g_hash_table_iter_next (&iter, NULL, (gpointer*) &value))
+    {
+      if (strcmp (value, global) == 0)
+        return TRUE;
+    }
+
+  return FALSE;
 }
