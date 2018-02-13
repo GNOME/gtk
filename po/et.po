@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: gtk+ MASTER\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-02-09 10:24+0000\n"
-"PO-Revision-Date: 2018-02-12 02:36+0200\n"
+"PO-Revision-Date: 2018-02-13 22:12+0200\n"
 "Last-Translator: Mart Raudsepp <leio@gentoo.org>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "Language: et\n"
@@ -295,129 +295,81 @@ msgid "Delete"
 msgstr "Delete"
 
 #: gdk/keyname-table.h:6881
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86MonBrightnessUp"
 msgctxt "keyboard label"
 msgid "MonBrightnessUp"
 msgstr "Kuvari heledust vähemaks"
 
 #: gdk/keyname-table.h:6882
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86MonBrightnessDown"
 msgctxt "keyboard label"
 msgid "MonBrightnessDown"
 msgstr "Kuvari heledust juurde"
 
 #: gdk/keyname-table.h:6883
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86MonBrightnessUp"
 msgctxt "keyboard label"
 msgid "KbdBrightnessUp"
-msgstr "Kuvari heledust vähemaks"
+msgstr "Klaviatuuri valgustust vähemaks"
 
 #: gdk/keyname-table.h:6884
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86MonBrightnessDown"
 msgctxt "keyboard label"
 msgid "KbdBrightnessDown"
-msgstr "Kuvari heledust juurde"
+msgstr "Klaviatuuri valgustust juurde"
 
 #: gdk/keyname-table.h:6885
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86AudioMute"
 msgctxt "keyboard label"
 msgid "AudioMute"
-msgstr "Heli tummaks"
+msgstr "Heli - tummaks"
 
 #: gdk/keyname-table.h:6886
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86AudioMute"
 msgctxt "keyboard label"
 msgid "AudioMicMute"
-msgstr "Heli tummaks"
+msgstr "Mikrofon - tummaks"
 
 #: gdk/keyname-table.h:6887
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86AudioLowerVolume"
 msgctxt "keyboard label"
 msgid "AudioLowerVolume"
 msgstr "Heli vaiksemaks"
 
 #: gdk/keyname-table.h:6888
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86AudioRaiseVolume"
 msgctxt "keyboard label"
 msgid "AudioRaiseVolume"
 msgstr "Heli valjemaks"
 
 #: gdk/keyname-table.h:6889
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86AudioPlay"
 msgctxt "keyboard label"
 msgid "AudioPlay"
 msgstr "Heli - esitamine"
 
 #: gdk/keyname-table.h:6890
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86AudioStop"
 msgctxt "keyboard label"
 msgid "AudioStop"
 msgstr "Heli - stopp"
 
 #: gdk/keyname-table.h:6891
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86AudioNext"
 msgctxt "keyboard label"
 msgid "AudioNext"
 msgstr "Heli - järgmine"
 
 #: gdk/keyname-table.h:6892
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86AudioPrev"
 msgctxt "keyboard label"
 msgid "AudioPrev"
 msgstr "Heli - eelmine"
 
 #: gdk/keyname-table.h:6893
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86AudioRecord"
 msgctxt "keyboard label"
 msgid "AudioRecord"
 msgstr "Heli - lindistamine"
 
 #: gdk/keyname-table.h:6894
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86AudioPause"
 msgctxt "keyboard label"
 msgid "AudioPause"
 msgstr "Heli - paus"
 
 #: gdk/keyname-table.h:6895
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86AudioRewind"
 msgctxt "keyboard label"
 msgid "AudioRewind"
 msgstr "Heli - tagasi kerimine"
 
 #: gdk/keyname-table.h:6896
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86AudioMedia"
 msgctxt "keyboard label"
 msgid "AudioMedia"
 msgstr "Heli - meedianupp"
@@ -425,31 +377,29 @@ msgstr "Heli - meedianupp"
 #: gdk/keyname-table.h:6897
 msgctxt "keyboard label"
 msgid "Eject"
-msgstr ""
+msgstr "Sahtli lahtilükkamine"
 
 #: gdk/keyname-table.h:6898
 msgctxt "keyboard label"
 msgid "Explorer"
-msgstr ""
+msgstr "Sirvija"
 
 #: gdk/keyname-table.h:6899
 msgctxt "keyboard label"
 msgid "Calculator"
-msgstr ""
+msgstr "Kalkulaator"
 
 #: gdk/keyname-table.h:6900
 msgctxt "keyboard label"
 msgid "Mail"
-msgstr ""
+msgstr "E-post"
 
 #: gdk/keyname-table.h:6901
 msgctxt "keyboard label"
 msgid "WWW"
-msgstr ""
+msgstr "Veeb"
 
 #: gdk/keyname-table.h:6902
-#, fuzzy
-#| msgid "Search"
 msgctxt "keyboard label"
 msgid "Search"
 msgstr "Otsing"
@@ -457,111 +407,72 @@ msgstr "Otsing"
 #: gdk/keyname-table.h:6903
 msgctxt "keyboard label"
 msgid "Tools"
-msgstr ""
+msgstr "Tööriistad"
 
 #: gdk/keyname-table.h:6904
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86ScreenSaver"
 msgctxt "keyboard label"
 msgid "ScreenSaver"
 msgstr "Ekraanisäästja"
 
 #: gdk/keyname-table.h:6905
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86Battery"
 msgctxt "keyboard label"
 msgid "Battery"
 msgstr "Aku"
 
 #: gdk/keyname-table.h:6906
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86Launch1"
 msgctxt "keyboard label"
 msgid "Launch1"
 msgstr "Käivitaja 1"
 
 #: gdk/keyname-table.h:6907
-#, fuzzy
-#| msgctxt "Stock label, navigation"
-#| msgid "_Forward"
 msgctxt "keyboard label"
 msgid "Forward"
-msgstr "_Edasi"
+msgstr "Edasi"
 
 #: gdk/keyname-table.h:6908
-#, fuzzy
-#| msgctxt "Stock label, navigation"
-#| msgid "_Back"
 msgctxt "keyboard label"
 msgid "Back"
-msgstr "_Tagasi"
+msgstr "Tagasi"
 
 #: gdk/keyname-table.h:6909
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86Sleep"
 msgctxt "keyboard label"
 msgid "Sleep"
 msgstr "Uinak"
 
 #: gdk/keyname-table.h:6910
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86Hibernate"
 msgctxt "keyboard label"
 msgid "Hibernate"
 msgstr "Talveuni"
 
 #: gdk/keyname-table.h:6911
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86WLAN"
 msgctxt "keyboard label"
 msgid "WLAN"
 msgstr "Juhtmeta võrk"
 
 #: gdk/keyname-table.h:6912
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86WebCam"
 msgctxt "keyboard label"
 msgid "WebCam"
 msgstr "Veebikaamera"
 
 #: gdk/keyname-table.h:6913
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86Display"
 msgctxt "keyboard label"
 msgid "Display"
 msgstr "Kuva"
 
 #: gdk/keyname-table.h:6914
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86TouchpadToggle"
 msgctxt "keyboard label"
 msgid "TouchpadToggle"
 msgstr "Puuteplaadi lüliti"
 
 #: gdk/keyname-table.h:6915
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86WakeUp"
 msgctxt "keyboard label"
 msgid "WakeUp"
 msgstr "Üles äratamine"
 
 #: gdk/keyname-table.h:6916
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86Suspend"
 msgctxt "keyboard label"
 msgid "Suspend"
-msgstr "Arvuti peatamine"
+msgstr "Arvuti uinak"
 
 #: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:2226
 #: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:814
@@ -676,7 +587,7 @@ msgstr ""
 #: gtk/a11y/gtkcellaccessible.c:257
 msgctxt "Action name"
 msgid "Edit"
-msgstr "_Redigeeri"
+msgstr "Redigeeri"
 
 #: gtk/a11y/gtkcellaccessible.c:259 gtk/a11y/gtkcolorswatchaccessible.c:149
 #: gtk/a11y/gtkentryaccessible.c:1557 gtk/a11y/gtkexpanderaccessible.c:281
@@ -702,12 +613,12 @@ msgstr ""
 #: gtk/a11y/gtkcolorswatchaccessible.c:148
 msgctxt "Action name"
 msgid "Select"
-msgstr "_Vali"
+msgstr "Vali"
 
 #: gtk/a11y/gtkcolorswatchaccessible.c:150
 msgctxt "Action name"
 msgid "Customize"
-msgstr "_Kohanda"
+msgstr "Kohanda"
 
 #: gtk/a11y/gtkcolorswatchaccessible.c:161
 #, fuzzy
@@ -768,7 +679,7 @@ msgstr "L_isa"
 #: gtk/a11y/gtkimageaccessible.c:55 gtk/deprecated/gtkstock.c:344
 msgctxt "Stock label"
 msgid "_Bold"
-msgstr "_Paks"
+msgstr "_Rasvane"
 
 #: gtk/a11y/gtkimageaccessible.c:56 gtk/deprecated/gtkstock.c:346
 msgctxt "Stock label"
@@ -787,15 +698,15 @@ msgstr "Sul_ge"
 
 #: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9229
 msgid "Minimize"
-msgstr ""
+msgstr "Akna minimeerimine"
 
 #: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9238
 msgid "Maximize"
-msgstr ""
+msgstr "Akna maksimeerimine"
 
 #: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9195
 msgid "Restore"
-msgstr ""
+msgstr "Akna suuruse taastamine"
 
 #: gtk/a11y/gtkimageaccessible.c:62 gtk/deprecated/gtkstock.c:351
 msgctxt "Stock label"
@@ -1161,7 +1072,7 @@ msgstr "_Vähenda"
 
 #: gtk/a11y/gtkmenubuttonaccessible.c:102 gtk/inspector/window.ui:459
 msgid "Menu"
-msgstr ""
+msgstr "Menüü"
 
 #: gtk/a11y/gtkmenuitemaccessible.c:445
 msgctxt "Action description"
@@ -1450,7 +1361,7 @@ msgstr "Ü_hendu"
 #: gtk/deprecated/gtkstock.c:350
 msgctxt "Stock label"
 msgid "_Convert"
-msgstr "_Konverdi"
+msgstr "Teise_nda"
 
 #: gtk/deprecated/gtkstock.c:354
 msgctxt "Stock label"
@@ -1514,7 +1425,7 @@ msgstr "Ümberpööratud püstine"
 #: gtk/deprecated/gtkstock.c:427
 msgctxt "Stock label"
 msgid "Page Set_up"
-msgstr "Lehekül_je sätted"
+msgstr "Lehekülje _sätted"
 
 #: gtk/deprecated/gtkstock.c:429
 msgctxt "Stock label"
@@ -1587,10 +1498,8 @@ msgid "License"
 msgstr "Litsents"
 
 #: gtk/gtkaboutdialog.c:115
-#, fuzzy
-#| msgid "Custom size"
 msgid "Custom License"
-msgstr "Kohandatud suurus"
+msgstr "Kohandatud litsents"
 
 #: gtk/gtkaboutdialog.c:116
 msgid "GNU General Public License, version 2 or later"
@@ -1669,7 +1578,7 @@ msgstr "Lähem teave %s kohta"
 
 #: gtk/gtkaboutdialog.c:2311
 msgid "Created by"
-msgstr "Autor:"
+msgstr "Autor"
 
 #: gtk/gtkaboutdialog.c:2314
 msgid "Documented by"
@@ -1767,7 +1676,7 @@ msgstr "Tühik"
 #: gtk/gtkaccellabel.c:892 gtk/gtkshortcutlabel.c:181
 msgctxt "keyboard label"
 msgid "Backslash"
-msgstr "Backslash"
+msgstr "Kurakaldkriips"
 
 #: gtk/gtkappchooserbutton.c:295
 msgid "Other application…"
@@ -1775,10 +1684,8 @@ msgstr "Muu rakendus…"
 
 #: gtk/gtkappchooserdialog.c:204 gtk/gtkappchooserdialog.c:211
 #: gtk/gtkappchooserdialog.c:228 gtk/ui/gtkappchooserdialog.ui:5
-#, fuzzy
-#| msgid "Default Application"
 msgid "Select Application"
-msgstr "Vaikimisi rakendus"
+msgstr "Rakenduse valimine"
 
 #. Translators: %s is a filename
 #: gtk/gtkappchooserdialog.c:206
@@ -1795,10 +1702,9 @@ msgstr "Vormingu %s jaoks ei leitud deserialiseerimise funktsiooni"
 
 #. Translators: %s is a file type description
 #: gtk/gtkappchooserdialog.c:213
-#, fuzzy, c-format
-#| msgid "Opening %s"
+#, c-format
 msgid "Opening “%s” files."
-msgstr "Avamine: %s"
+msgstr "„%s“ failide avamine."
 
 #: gtk/gtkappchooserdialog.c:215
 #, fuzzy, c-format
@@ -1862,10 +1768,9 @@ msgid "Element <%s> not allowed at toplevel"
 msgstr "Element <%s> pole kõige ülemisena lubatud"
 
 #: gtk/gtkbuilder-menus.c:317
-#, fuzzy, c-format
-#| msgid "text may not appear inside <%s>"
+#, c-format
 msgid "Text may not appear inside <%s>"
-msgstr "tekst ei või esineda <%s> sees"
+msgstr "Tekst ei või esineda <%s> sees"
 
 #: gtk/gtk-builder-tool.c:124
 #, c-format
@@ -2023,7 +1928,7 @@ msgstr "Uus kiirklahv…"
 #, c-format
 msgctxt "progress bar label"
 msgid "%d %%"
-msgstr ""
+msgstr "%d %%"
 
 #: gtk/gtkcolorbutton.c:185 gtk/gtkcolorbutton.c:398
 msgid "Pick a Color"
@@ -2032,7 +1937,7 @@ msgstr "Värvuse valimine"
 #: gtk/gtkcolorchooserwidget.c:304
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
-msgstr "Punane %d%%, roheline %d%%, sinine %d%%, läbipaistmatus %d%%"
+msgstr "Punane %d%%, roheline %d%%, sinine %d%%, alfa %d%%"
 
 #: gtk/gtkcolorchooserwidget.c:310
 #, c-format
@@ -2230,14 +2135,10 @@ msgid "Custom"
 msgstr "Kohandatud"
 
 #: gtk/gtkcolorchooserwidget.c:550
-#, fuzzy
-#| msgid "Custom color %d: %s"
 msgid "Custom color"
-msgstr "Kohandatud värvus %d: %s"
+msgstr "Kohandatud värvus"
 
 #: gtk/gtkcolorchooserwidget.c:551
-#, fuzzy
-#| msgid "Create custom color"
 msgid "Create a custom color"
 msgstr "Kohandatud värvuse loomine"
 
@@ -2248,12 +2149,12 @@ msgstr "Kohandatud värvus %d: %s"
 
 #: gtk/gtkcolorplane.c:409
 msgid "Color Plane"
-msgstr "Värvipaan"
+msgstr "Värvitasand"
 
 #: gtk/gtkcolorscale.c:211
 msgctxt "Color channel"
 msgid "Hue"
-msgstr "Toon"
+msgstr "Värvitoon"
 
 #: gtk/gtkcolorscale.c:213
 msgctxt "Color channel"
@@ -2350,15 +2251,12 @@ msgid "Select _All"
 msgstr "Vali k_õik"
 
 #: gtk/gtkentry.c:9596 gtk/gtktextview.c:9524
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "Insert"
 msgid "Insert _Emoji"
-msgstr "Insert"
+msgstr "Lisa _emoji"
 
 #: gtk/gtkentry.c:9772 gtk/gtktextview.c:9749
 msgid "Select all"
-msgstr "Vali k_õik"
+msgstr "Vali kõik"
 
 #: gtk/gtkentry.c:9775 gtk/gtktextview.c:9752
 msgid "Cut"
@@ -2377,11 +2275,8 @@ msgid "Caps Lock is on"
 msgstr "Caps Lock on sisse lülitatud"
 
 #: gtk/gtkentry.c:11126
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "Insert"
 msgid "Insert Emoji"
-msgstr "Insert"
+msgstr "Lisa emoji"
 
 #: gtk/gtkfilechooserbutton.c:107
 msgid "Select a File"
@@ -2588,18 +2483,14 @@ msgid "Could not select file"
 msgstr "Faili pole võimalik valida"
 
 #: gtk/gtkfilechooserwidget.c:2272
-#, fuzzy
-#| msgid "_Visit this file"
 msgid "_Visit File"
-msgstr "_Külasta seda faili"
+msgstr "_Külasta faili"
 
 #: gtk/gtkfilechooserwidget.c:2273
 msgid "_Open With File Manager"
-msgstr ""
+msgstr "Ava _failihalduris"
 
 #: gtk/gtkfilechooserwidget.c:2274
-#, fuzzy
-#| msgid "Copy _Location"
 msgid "_Copy Location"
 msgstr "Kopeeri _asukoht"
 
@@ -2609,14 +2500,12 @@ msgstr "_Lisa järjehoidjatesse"
 
 #: gtk/gtkfilechooserwidget.c:2276 gtk/gtkplacessidebar.c:2709
 #: gtk/ui/gtkfilechooserwidget.ui:526
-#, fuzzy
-#| msgid "Rename…"
 msgid "_Rename"
-msgstr "Muuda nime…"
+msgstr "Muuda _nime"
 
 #: gtk/gtkfilechooserwidget.c:2278
 msgid "_Move to Trash"
-msgstr ""
+msgstr "_Viska prügikasti"
 
 #: gtk/gtkfilechooserwidget.c:2282
 msgid "Show _Hidden Files"
@@ -2624,15 +2513,15 @@ msgstr "Näita _peidetud faile"
 
 #: gtk/gtkfilechooserwidget.c:2283
 msgid "Show _Size Column"
-msgstr "Näita _suuruse tulpa"
+msgstr "Näita s_uuruse tulpa"
 
 #: gtk/gtkfilechooserwidget.c:2284
 msgid "Show _Time"
-msgstr ""
+msgstr "Näita k_ellaaega"
 
 #: gtk/gtkfilechooserwidget.c:2285
 msgid "Sort _Folders before Files"
-msgstr ""
+msgstr "Kataloogid _sorditakse enne faile"
 
 #. this is the header for the location column in the print dialog
 #: gtk/gtkfilechooserwidget.c:2609 gtk/inspector/css-node-tree.ui:141
@@ -2665,7 +2554,7 @@ msgstr "Muud rakendused"
 
 #: gtk/gtkfilechooserwidget.c:3355
 msgid "Enter location or URL"
-msgstr ""
+msgstr "Sisesta asukoht või URL"
 
 #: gtk/gtkfilechooserwidget.c:4393 gtk/gtkfilechooserwidget.c:7297
 #: gtk/ui/gtkfilechooserwidget.ui:235
@@ -2690,10 +2579,8 @@ msgid "%l:%M %p"
 msgstr ""
 
 #: gtk/gtkfilechooserwidget.c:4811
-#, fuzzy
-#| msgid "Yesterday at %H:%M"
 msgid "Yesterday"
-msgstr "Eile kell %H:%M"
+msgstr "Eile"
 
 #: gtk/gtkfilechooserwidget.c:4819
 msgid "%-e %b"
@@ -2708,7 +2595,7 @@ msgstr ""
 #: gtk/gtkfilechooserwidget.c:5058 gtk/inspector/prop-editor.c:1689
 #: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
-msgstr "Tundmatu"
+msgstr "Teadmata"
 
 #: gtk/gtkfilechooserwidget.c:5097 gtk/gtkplacessidebar.c:1093
 #, fuzzy
@@ -2722,20 +2609,16 @@ msgid "Cannot change to folder because it is not local"
 msgstr "Kataloogi pole võimalik muuta kuna see pole kohalik kataloog"
 
 #: gtk/gtkfilechooserwidget.c:6376 gtk/gtkprintunixdialog.c:664
-#, fuzzy, c-format
-#| msgid "A file named \"%s\" already exists.  Do you want to replace it?"
+#, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
-msgstr "Fail nimega \"%s\" on juba olemas.  Kas sa soovid seda asendada?"
+msgstr "Fail nimega „%s“ on juba olemas.  Kas sa soovid seda asendada?"
 
 #: gtk/gtkfilechooserwidget.c:6379 gtk/gtkprintunixdialog.c:668
-#, fuzzy, c-format
-#| msgid ""
-#| "The file already exists in \"%s\".  Replacing it will overwrite its "
-#| "contents."
+#, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr ""
-"Fail on juba \"%s\" all olemas.  Asendamine kirjutab selle faili sisu üle."
+"Fail on juba „%s“ all olemas.  Asendamine kirjutab selle faili sisu üle."
 
 #: gtk/gtkfilechooserwidget.c:6384 gtk/gtkprintunixdialog.c:676
 msgid "_Replace"
@@ -2753,7 +2636,7 @@ msgstr "Otsingupäringut pole võimalik saata"
 
 #: gtk/gtkfilechooserwidget.c:7507
 msgid "Accessed"
-msgstr ""
+msgstr "Pöördutud"
 
 #. The pointers we return for a GtkFileSystemVolume are opaque tokens; they are
 #. * really pointers to GDrive, GVolume or GMount objects.  We need an extra
@@ -2796,18 +2679,15 @@ msgid "Close"
 msgstr "Sulge"
 
 #: gtk/gtkicontheme.c:2341 gtk/gtkicontheme.c:2406
-#, fuzzy, c-format
-#| msgid "Icon '%s' not present in theme"
+#, c-format
 msgid "Icon '%s' not present in theme %s"
-msgstr "Ikoon '%s' ei sisaldu teemas"
+msgstr "Ikoon '%s' ei sisaldu teemas %s"
 
 #: gtk/gtkicontheme.c:4080 gtk/gtkicontheme.c:4447
 msgid "Failed to load icon"
 msgstr "Tõrge ikooni laadimisel"
 
 #: gtk/gtkimmodule.c:544
-#, fuzzy
-#| msgid "Simple"
 msgctxt "input method menu"
 msgid "Simple"
 msgstr "Lihtne"
@@ -2859,10 +2739,8 @@ msgid "Show program version"
 msgstr ""
 
 #: gtk/gtk-launch.c:74
-#, fuzzy
-#| msgid "APPLICATION [URI…] — launch an APPLICATION with URI."
 msgid "APPLICATION [URI...] — launch an APPLICATION"
-msgstr "RAKENDUS [URI…] — RAKENDUSE käivitamine URI-ga."
+msgstr "RAKENDUS [URI...] — RAKENDUSE käivitamine"
 
 #. Translators: this message will appear after the usage string
 #. and before the list of options.
@@ -2881,7 +2759,7 @@ msgstr ""
 #: gtk/gtk-launch.c:90
 #, c-format
 msgid "Error parsing commandline options: %s\n"
-msgstr "Viga käsureavalikute parsimisel: %s\n"
+msgstr "Viga käsureavõtmete parsimisel: %s\n"
 
 #: gtk/gtk-launch.c:92 gtk/gtk-launch.c:113
 #, c-format
@@ -2899,7 +2777,7 @@ msgstr "%s: puudub rakenduse nimi"
 #, c-format
 msgid "Creating AppInfo from id not supported on non unix operating systems"
 msgstr ""
-"AppInfo loomine loomine id järgi pole unix operatsioonisüsteemides toetatud"
+"AppInfo loomine id järgi on toetatud ainult unix operatsioonisüsteemides"
 
 #. Translators: the first %s is the program name, the second one
 #. is the application name.
@@ -3016,7 +2894,7 @@ msgstr "Ü_hendu"
 
 #: gtk/gtkmountoperation.c:622
 msgid "Connect As"
-msgstr "Ü_hendu kasutajana"
+msgstr "Ühendu kasutajana"
 
 #: gtk/gtkmountoperation.c:631
 msgid "_Anonymous"
@@ -3024,7 +2902,7 @@ msgstr "_Anonüümne"
 
 #: gtk/gtkmountoperation.c:640
 msgid "Registered U_ser"
-msgstr "Registreeritud _kasutaja"
+msgstr "_Registreeritud kasutaja"
 
 #: gtk/gtkmountoperation.c:651
 msgid "_Username"
@@ -3048,7 +2926,7 @@ msgstr "_Jäta parool kuni väljalogimiseni meelde"
 
 #: gtk/gtkmountoperation.c:704
 msgid "Remember _forever"
-msgstr "_Jäta igavesti meelde"
+msgstr "Jäta _igavesti meelde"
 
 #: gtk/gtkmountoperation.c:1093
 #, c-format
@@ -3111,7 +2989,7 @@ msgstr "Iga printer"
 
 #: gtk/gtkpagesetupunixdialog.c:210
 msgid "For portable documents"
-msgstr "Portaablitele dokumentidele"
+msgstr "Porditavatele dokumentidele"
 
 #: gtk/gtkpagesetupunixdialog.c:829
 #, c-format
@@ -3303,10 +3181,9 @@ msgid "Unable to start “%s”"
 msgstr ""
 
 #: gtk/gtkplacessidebar.c:2416
-#, fuzzy, c-format
-#| msgid "Unable to end process"
+#, c-format
 msgid "Unable to access “%s”"
-msgstr "Protsessi pole võimalik lõpetada"
+msgstr "Ligipääs „%s“-le pole võimalik"
 
 #: gtk/gtkplacessidebar.c:2634
 #, fuzzy
@@ -3357,15 +3234,10 @@ msgid "Open in New _Window"
 msgstr ""
 
 #: gtk/gtkplacessidebar.c:3671
-#, fuzzy
-#| msgid "_Add to Bookmarks"
 msgid "_Add Bookmark"
 msgstr "_Lisa järjehoidjatesse"
 
 #: gtk/gtkplacessidebar.c:3672
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "_Remove"
 msgid "_Remove"
 msgstr "_Eemalda"
 
@@ -3375,23 +3247,23 @@ msgstr "Muuda nime…"
 
 #: gtk/gtkplacessidebar.c:3677 gtk/gtkplacesview.c:1684
 msgid "_Mount"
-msgstr ""
+msgstr "_Haagi"
 
 #: gtk/gtkplacessidebar.c:3678 gtk/gtkplacesview.c:1674
 msgid "_Unmount"
-msgstr ""
+msgstr "Haagi _lahti"
 
 #: gtk/gtkplacessidebar.c:3679
 msgid "_Eject"
-msgstr ""
+msgstr "_Väljasta"
 
 #: gtk/gtkplacessidebar.c:3680
 msgid "_Detect Media"
-msgstr ""
+msgstr "_Tuvasta meedia"
 
 #: gtk/gtkplacessidebar.c:4126 gtk/gtkplacesview.c:1118
 msgid "Computer"
-msgstr ""
+msgstr "Arvuti"
 
 #: gtk/gtkplacesview.c:894
 msgid "Searching for network locations"
@@ -3480,17 +3352,15 @@ msgstr "Katkesta ühen_dus"
 #: gtk/gtkplacesviewrow.c:481 gtk/ui/gtkplacesviewrow.ui:72
 #: gtk/ui/gtksidebarrow.ui:60
 msgid "Unmount"
-msgstr ""
+msgstr "Haagi lahti"
 
 #: gtk/gtkprintbackend.c:762
 msgid "Authentication"
 msgstr "Autentimine"
 
 #: gtk/gtkprintbackend.c:833
-#, fuzzy
-#| msgid "Remember password until you _logout"
 msgid "_Remember password"
-msgstr "_Jäta parool kuni väljalogimiseni meelde"
+msgstr "_Jäta parool meelde"
 
 #: gtk/gtkprinteroptionwidget.c:542
 msgid "Select a filename"
@@ -3578,7 +3448,7 @@ msgstr "Viga printimise eelvaate loomisel"
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
-"Kõige tõonäolisemalt on põhjus selles, et ajutisi faile pole võimalik luua."
+"Kõige tõenäolisemalt on põhjus selles, et ajutist faili polnud võimalik luua."
 
 #. window
 #: gtk/gtkprintoperation-portal.c:230 gtk/gtkprintoperation-portal.c:541
@@ -3631,7 +3501,7 @@ msgstr "Vigane PrintDlgEx argument"
 
 #: gtk/gtkprintoperation-win32.c:1790
 msgid "Invalid pointer to PrintDlgEx"
-msgstr "Vigane PrintDlgEx pointer"
+msgstr "Vigane PrintDlgEx viit"
 
 #: gtk/gtkprintoperation-win32.c:1795
 msgid "Invalid handle to PrintDlgEx"
@@ -3642,15 +3512,10 @@ msgid "Unspecified error"
 msgstr "Kirjeldamata viga"
 
 #: gtk/gtkprintunixdialog.c:745
-#, fuzzy
-#| msgid "_Preview:"
 msgid "Pre_view"
-msgstr "_Näidis:"
+msgstr "_Eelvaade"
 
 #: gtk/gtkprintunixdialog.c:747
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "_Print"
 msgid "_Print"
 msgstr "_Prindi"
 
@@ -3749,7 +3614,7 @@ msgstr "Kirjet pole võimalik eemaldada"
 
 #: gtk/gtkrecentchooserdefault.c:1605
 msgid "Could not clear list"
-msgstr "Loendit pole võimalik tühjendada"
+msgstr "Nimekirja pole võimalik tühjendada"
 
 #: gtk/gtkrecentchooserdefault.c:1689
 msgid "Copy _Location"
@@ -3757,11 +3622,11 @@ msgstr "Kopeeri _asukoht"
 
 #: gtk/gtkrecentchooserdefault.c:1700
 msgid "_Remove From List"
-msgstr "_Eemalda loetelust"
+msgstr "_Eemalda nimekirjast"
 
 #: gtk/gtkrecentchooserdefault.c:1707
 msgid "_Clear List"
-msgstr "_Tühjenda loend"
+msgstr "_Tühjenda nimekiri"
 
 #: gtk/gtkrecentchooserdefault.c:1719
 msgid "Show _Private Resources"
@@ -4085,7 +3950,7 @@ msgstr "ZWJ Null-laiusega ü_hendaja"
 
 #: gtk/gtktextutil.c:66
 msgid "ZWNJ Zero width _non-joiner"
-msgstr "ZWJ Null-laiusega _mitteühendaja"
+msgstr "ZWNJ Null-laiusega _mitteühendaja"
 
 #: gtk/gtkvolumebutton.c:189
 msgid "Adjusts the volume"
@@ -5889,7 +5754,7 @@ msgstr "prc4-ümbrik"
 #: gtk/paper_names_offsets.c:179
 msgctxt "paper size"
 msgid "prc5 Envelope"
-msgstr "c5-ümbrik"
+msgstr "prc5-ümbrik"
 
 #: gtk/paper_names_offsets.c:180
 msgctxt "paper size"
@@ -5989,18 +5854,12 @@ msgid "Quit %s"
 msgstr "Lähem teave %s kohta"
 
 #: gtk/ui/gtkassistant.ui:68
-#, fuzzy
-#| msgctxt "Stock label, media"
-#| msgid "_Next"
 msgid "_Next"
 msgstr "_Järgmine"
 
 #: gtk/ui/gtkassistant.ui:88
-#, fuzzy
-#| msgctxt "Stock label, navigation"
-#| msgid "_Back"
 msgid "_Back"
-msgstr "_Tagasi"
+msgstr "_Eelmine"
 
 #: gtk/ui/gtkassistant.ui:107
 msgid "_Finish"
@@ -6145,10 +6004,8 @@ msgid "Preview text"
 msgstr "_Näidis:"
 
 #: gtk/ui/gtkfontchooserwidget.ui:187
-#, fuzzy
-#| msgid "No items found"
 msgid "No Fonts Found"
-msgstr "Kirjeid ei leitud"
+msgstr "Kirjatüüpe ei leitud"
 
 #: gtk/ui/gtkpagesetupunixdialog.ui:47
 msgid "_Format for:"
@@ -6302,20 +6159,16 @@ msgstr "Le_heküljed:"
 
 #: gtk/ui/gtkprintunixdialog.ui:252 gtk/ui/gtkprintunixdialog.ui:270
 #: gtk/ui/gtkprintunixdialog.ui:277
-#, fuzzy
-#| msgid ""
-#| "Specify one or more page ranges,\n"
-#| " e.g. 1-3,7,11"
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1–3, 7, 11"
 msgstr ""
 "Määra üks või rohkem leheküljevahemikku.\n"
-" Näiteks: 1-3,7,11"
+" Näiteks: 1–3, 7, 11"
 
 #: gtk/ui/gtkprintunixdialog.ui:276
 msgid "Pages"
-msgstr "Le_heküljed"
+msgstr "Leheküljed"
 
 #: gtk/ui/gtkprintunixdialog.ui:311
 msgid "Copies"
@@ -6419,16 +6272,12 @@ msgstr "A_jal:"
 #: gtk/ui/gtkprintunixdialog.ui:1007 gtk/ui/gtkprintunixdialog.ui:1009
 #: gtk/ui/gtkprintunixdialog.ui:1028 gtk/ui/gtkprintunixdialog.ui:1030
 #: gtk/ui/gtkprintunixdialog.ui:1037
-#, fuzzy
-#| msgid ""
-#| "Specify the time of print,\n"
-#| " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
 msgstr ""
 "Määra printimise kellaaeg,\n"
-" nt 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
+" nt 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
 
 #: gtk/ui/gtkprintunixdialog.ui:1036
 msgid "Time of print"
