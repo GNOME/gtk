@@ -428,9 +428,7 @@ gtk_css_scanner_pop_section (GtkCssScanner *scanner,
 static void
 gtk_css_provider_init (GtkCssProvider *css_provider)
 {
-  GtkCssProviderPrivate *priv;
-
-  priv = css_provider->priv = gtk_css_provider_get_instance_private (css_provider);
+  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
 
   priv->rulesets = g_array_new (FALSE, FALSE, sizeof (GtkCssRuleset));
 
@@ -448,7 +446,7 @@ verify_tree_match_results (GtkCssProvider *provider,
 			   GPtrArray *tree_rules)
 {
 #ifdef VERIFY_TREE
-  GtkCssProviderPrivate *priv = provider->priv;
+  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
   GtkCssRuleset *ruleset;
   gboolean should_match;
   int i, j;
@@ -486,11 +484,12 @@ verify_tree_get_change_results (GtkCssProvider *provider,
 {
 #ifdef VERIFY_TREE
   {
+    GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (provider);
     GtkCssChange verify_change = 0;
     GPtrArray *tree_rules;
     int i;
 
-    tree_rules = _gtk_css_selector_tree_match_all (provider->priv->tree, matcher);
+    tree_rules = _gtk_css_selector_tree_match_all (priv->tree, matcher);
     if (tree_rules)
       {
         verify_tree_match_results (provider, matcher, tree_rules);
@@ -539,8 +538,9 @@ gtk_css_style_provider_get_color (GtkStyleProvider *provider,
                                   const char       *name)
 {
   GtkCssProvider *css_provider = GTK_CSS_PROVIDER (provider);
+  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
 
-  return g_hash_table_lookup (css_provider->priv->symbolic_colors, name);
+  return g_hash_table_lookup (priv->symbolic_colors, name);
 }
 
 static GtkCssKeyframes *
@@ -548,8 +548,9 @@ gtk_css_style_provider_get_keyframes (GtkStyleProvider *provider,
                                       const char       *name)
 {
   GtkCssProvider *css_provider = GTK_CSS_PROVIDER (provider);
+  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
 
-  return g_hash_table_lookup (css_provider->priv->keyframes, name);
+  return g_hash_table_lookup (priv->keyframes, name);
 }
 
 static void
@@ -558,15 +559,12 @@ gtk_css_style_provider_lookup (GtkStyleProvider    *provider,
                                GtkCssLookup        *lookup,
                                GtkCssChange        *change)
 {
-  GtkCssProvider *css_provider;
-  GtkCssProviderPrivate *priv;
+  GtkCssProvider *css_provider = GTK_CSS_PROVIDER (provider);
+  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
   GtkCssRuleset *ruleset;
   guint j;
   int i;
   GPtrArray *tree_rules;
-
-  css_provider = GTK_CSS_PROVIDER (provider);
-  priv = css_provider->priv;
 
   tree_rules = _gtk_css_selector_tree_match_all (priv->tree, matcher);
   if (tree_rules)
@@ -628,12 +626,9 @@ gtk_css_style_provider_iface_init (GtkStyleProviderInterface *iface)
 static void
 gtk_css_provider_finalize (GObject *object)
 {
-  GtkCssProvider *css_provider;
-  GtkCssProviderPrivate *priv;
+  GtkCssProvider *css_provider = GTK_CSS_PROVIDER (object);
+  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
   guint i;
-
-  css_provider = GTK_CSS_PROVIDER (object);
-  priv = css_provider->priv;
 
   for (i = 0; i < priv->rulesets->len; i++)
     gtk_css_ruleset_clear (&g_array_index (priv->rulesets, GtkCssRuleset, i));
@@ -735,10 +730,8 @@ css_provider_commit (GtkCssProvider *css_provider,
                      GSList         *selectors,
                      GtkCssRuleset  *ruleset)
 {
-  GtkCssProviderPrivate *priv;
+  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
   GSList *l;
-
-  priv = css_provider->priv;
 
   for (l = selectors; l; l = l->next)
     {
@@ -755,10 +748,8 @@ css_provider_commit (GtkCssProvider *css_provider,
 static void
 gtk_css_provider_reset (GtkCssProvider *css_provider)
 {
-  GtkCssProviderPrivate *priv;
+  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
   guint i;
-
-  priv = css_provider->priv;
 
   if (priv->resource)
     {
@@ -852,6 +843,7 @@ parse_import (GtkCssScanner *scanner)
 static gboolean
 parse_color_definition (GtkCssScanner *scanner)
 {
+  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (scanner->provider);
   GtkCssValue *color;
   char *name;
 
@@ -900,7 +892,7 @@ parse_color_definition (GtkCssScanner *scanner)
       return TRUE;
     }
 
-  g_hash_table_insert (scanner->provider->priv->symbolic_colors, name, color);
+  g_hash_table_insert (priv->symbolic_colors, name, color);
 
   gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_COLOR_DEFINITION);
   return TRUE;
@@ -1017,6 +1009,7 @@ skip_semicolon:
 static gboolean
 parse_keyframes (GtkCssScanner *scanner)
 {
+  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (scanner->provider);
   GtkCssKeyframes *keyframes;
   char *name;
 
@@ -1060,7 +1053,7 @@ parse_keyframes (GtkCssScanner *scanner)
       goto exit;
     }
 
-  g_hash_table_insert (scanner->provider->priv->keyframes, name, keyframes);
+  g_hash_table_insert (priv->keyframes, name, keyframes);
 
   if (!_gtk_css_parser_try (scanner->parser, "}", TRUE))
     {
@@ -1344,7 +1337,7 @@ gtk_css_provider_compare_rule (gconstpointer a_,
 static void
 gtk_css_provider_postprocess (GtkCssProvider *css_provider)
 {
-  GtkCssProviderPrivate *priv = css_provider->priv;
+  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
   GtkCssSelectorTreeBuilder *builder;
   guint i;
 
@@ -1613,7 +1606,9 @@ _gtk_get_theme_dir (void)
 const gchar *
 _gtk_css_provider_get_theme_dir (GtkCssProvider *provider)
 {
-  return provider->priv->path;
+  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (provider);
+
+  return priv->path;
 }
 
 #if (GTK_MINOR_VERSION % 2)
@@ -1757,6 +1752,7 @@ _gtk_css_provider_load_named (GtkCssProvider *provider,
   path = _gtk_css_find_theme (name, variant);
   if (path)
     {
+      GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (provider);
       char *dir, *resource_file;
       GResource *resource;
 
@@ -1771,8 +1767,8 @@ _gtk_css_provider_load_named (GtkCssProvider *provider,
       gtk_css_provider_load_from_path (provider, path);
 
       /* Only set this after load, as load_from_path will clear it */
-      provider->priv->resource = resource;
-      provider->priv->path = dir;
+      priv->resource = resource;
+      priv->path = dir;
 
       g_free (path);
     }
@@ -1950,13 +1946,11 @@ gtk_css_provider_print_keyframes (GHashTable *keyframes,
 char *
 gtk_css_provider_to_string (GtkCssProvider *provider)
 {
-  GtkCssProviderPrivate *priv;
+  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (provider);
   GString *str;
   guint i;
 
   g_return_val_if_fail (GTK_IS_CSS_PROVIDER (provider), NULL);
-
-  priv = provider->priv;
 
   str = g_string_new ("");
 

@@ -68,7 +68,6 @@ typedef struct _GtkCssProviderPrivate GtkCssProviderPrivate;
 struct _GtkCssProvider
 {
   GObject parent_instance;
-  GtkCssProviderPrivate *priv;
 };
 
 struct _GtkCssProviderClass
