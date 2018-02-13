@@ -1,0 +1,13 @@
+image: lazka/gitlab-gtk:v1
+
+stages:
+  - build
+
+cache:
+  paths:
+    - ${HOME}/.ccache
+
+build:
+  stage: build
+  script:
+   - bash -x ./.gitlab-ci/test-docker.sh
