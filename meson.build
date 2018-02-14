@@ -87,27 +87,34 @@ gtk_soversion = '0.@0@.@1@'.format(gtk_binary_age - gtk_interface_age, gtk_inter
 
 gtk_api_version = '4.0'
 
-x11_enabled            = get_option('enable-x11-backend')
-wayland_enabled        = get_option('enable-wayland-backend')
-broadway_enabled       = get_option('enable-broadway-backend')
-quartz_enabled         = get_option('enable-quartz-backend')
-win32_enabled          = get_option('enable-win32-backend')
-cloudproviders_enabled = get_option('enable-cloudproviders')
+x11_enabled            = get_option('x11-backend')
+wayland_enabled        = get_option('wayland-backend')
+broadway_enabled       = get_option('broadway-backend')
+quartz_enabled         = get_option('quartz-backend')
+win32_enabled          = get_option('win32-backend')
 
 os_unix   = false
 os_linux  = false
 os_win32  = false
 os_darwin = false
 
-if host_machine.system().contains('darwin')
+# Some windowing system backends depend on the platform we're
+# building for, so we need to ensure they are disabled; in other
+# cases, they are the only windowing system available, so we need
+# to ensure they are enabled
+if host_machine.system() == 'darwin'
   os_darwin = true
+  win32_enabled = false
 elif host_machine.system() == 'windows'
   os_win32 = true
   win32_enabled = true
   x11_enabled = false
   wayland_enabled = false
-elif host_machine.system().contains('linux')
+  quartz_enabled = false
+elif host_machine.system() == 'linux'
   os_linux = true
+  win32_enabled = false
+  quartz_enabled = false
 endif
 
 os_unix = not os_win32
@@ -578,7 +585,7 @@ else
   endif
 endif
 
-
+cloudproviders_enabled = get_option('enable-cloudproviders')
 if cloudproviders_enabled
   cloudproviders_dep = dependency('cloudproviders', required: true)
   if cloudproviders_dep.found()
