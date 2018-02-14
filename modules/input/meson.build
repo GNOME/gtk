@@ -6,8 +6,8 @@
 # there is a bit of an ordering problem which we solve by collecting all the
 # information here but moving the actual build definitions to gtk/meson.build.
 build_dynamic_modules = false
-disable_modules = get_option('disable-modules')
-if not disable_modules
+dynamic_modules = get_option('dynamic-modules')
+if dynamic_modules
   gmodule_supported = dependency('gmodule-no-export-2.0').get_pkgconfig_variable('gmodule_supported')
   if gmodule_supported == 'true'
     build_dynamic_modules = true

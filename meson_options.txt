@@ -24,8 +24,8 @@ option('enable-cloudproviders', type: 'boolean', value: false,
   description : 'Enable the cloudproviders support')
 option('enable-xinerama', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
   description : 'Enable support for the Xinerama extension')
-option('disable-modules', type: 'boolean', value : 'false',
-  description : 'Disable dynamic module loading')
+option('dynamic-modules', type: 'boolean', value : true,
+  description : 'Allow dynamic module loading')
 option('with-included-immodules', type: 'string', value : '',
   description : 'Build the specified input methods into gtk (comma-separated list or "all" or "none")')
 option('documentation', type: 'boolean', value: 'false',
