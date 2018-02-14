@@ -32,9 +32,6 @@
 
 #include <math.h>
 
-/* for the use of round() */
-#include "fallback-c89.c"
-
 typedef struct _ScrollValuator ScrollValuator;
 
 struct _ScrollValuator

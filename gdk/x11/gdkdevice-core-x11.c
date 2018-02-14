@@ -29,9 +29,6 @@
 
 #include <math.h>
 
-/* for the use of round() */
-#include "fallback-c89.c"
-
 struct _GdkX11DeviceCore
 {
   GdkDevice parent_instance;
