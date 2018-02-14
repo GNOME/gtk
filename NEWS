@@ -1,4 +1,12 @@
-Overview of Changes in GTK+ 3.22.27
+2Overview of Changes in GTK+ 3.22.28
+===================================
+
+* Fix the build
+
+* Improve frame clock accuracy (#787665)
+
+
+2Overview of Changes in GTK+ 3.22.27
 ===================================
 
 * Require libcloudproviders 0.2.0
