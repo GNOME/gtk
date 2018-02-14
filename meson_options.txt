@@ -26,8 +26,8 @@ option('enable-xinerama', type: 'combo', choices : ['yes', 'no', 'auto'], value 
   description : 'Enable support for the Xinerama extension')
 option('dynamic-modules', type: 'boolean', value : true,
   description : 'Allow dynamic module loading')
-option('with-included-immodules', type: 'string', value : '',
-  description : 'Build the specified input methods into gtk (comma-separated list or "all" or "none")')
+option('included-immodules', type: 'string', value : 'none',
+  description : 'Build the specified input methods (comma-separated list, "all", or "none")')
 option('documentation', type: 'boolean', value: 'false',
   description : 'Build API reference and tools documentation')
 option('man-pages', type: 'boolean', value: 'false',

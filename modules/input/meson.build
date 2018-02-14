@@ -32,20 +32,14 @@ all_immodules = [
 all_immodules += backend_immodules
 
 # Allow building some or all immodules included
-included_immodules = get_option('with-included-immodules')
-if included_immodules == 'none'
-  included_immodules = ''
-elif included_immodules == 'all' or included_immodules == 'yes'
-  included_immodules = ','.join(all_immodules)
+included_immodules = get_option('included-immodules').split(',')
+if included_immodules.contains('none')
+  included_immodules = []
+elif included_immodules.contains('all')
+  included_immodules = all_immodules
 endif
 
-if included_immodules == ''
-  have_included_immodules = false
-  included_immodules = []
-else
-  have_included_immodules = true
-  included_immodules = included_immodules.split(',')
-endif
+have_included_immodules = included_immodules.length() > 0
 
 foreach im: included_immodules
   if not all_immodules.contains(im)
@@ -107,5 +101,3 @@ foreach m: method_defs
     endif
   endif
 endforeach
-
-# TODO: post-install gtk4-query-immodules run to create immodules.c
