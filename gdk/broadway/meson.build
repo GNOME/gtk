@@ -28,11 +28,18 @@ gdk_broadway_public_headers = [
 
 gdk_broadway_deps = [shmlib]
 
+gen_c_array = find_program('gen-c-array.py')
+
 clienthtml_h = custom_target('clienthtml.h',
   input : 'client.html',
   output : 'clienthtml.h',
-  command : [find_program('toarray.pl'), 'client_html', '@INPUT@'],
-  capture : true)
+  command : [
+    gen_c_array,
+    '--array-name=client_html',
+    '--output=@OUTPUT@',
+    '@INPUT@',
+  ],
+)
 
 libgdk_broadway = static_library('gdk-broadway',
   clienthtml_h,
@@ -52,13 +59,18 @@ broadwayd_syslib = os_win32 ? find_library('ws2_32') : shmlib
 broadwayjs_h = custom_target('broadwayjs.h',
   input : ['broadway.js'],
   output : 'broadwayjs.h',
-  command : [find_program('toarray.pl'), 'broadway_js', '@INPUT0@'],
-  capture : true)
+  command : [
+    gen_c_array,
+    '--array-name=broadway_js',
+    '--output=@OUTPUT@',
+    '@INPUT0@',
+  ],
+)
 
 executable('gtk4-broadwayd',
   clienthtml_h, broadwayjs_h,
   'broadwayd.c', 'broadway-server.c', 'broadway-output.c',
-  include_directories: [confinc, gdkinc],
+  include_directories: [confinc, gdkinc, include_directories('.')],
   c_args: ['-DGDK_COMPILATION', '-DG_LOG_DOMAIN="Gdk"', ],
   dependencies : [broadwayd_syslib, gdk_deps],
   install : true)
