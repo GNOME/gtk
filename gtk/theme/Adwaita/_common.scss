@@ -2697,21 +2697,20 @@ switch {
 
 
 //selection-mode
-@each $s,$as in ('','-selectionmode'),
-                  (':hover', '-hover-selectionmode'),
-                  (':active', '-active-selectionmode'),
-                  (':backdrop', '-backdrop-selectionmode'),
-                  (':checked', '-checked-selectionmode'),
-                  (':checked:hover', '-checked-hover-selectionmode'),
-                  (':checked:active', '-checked-active-selectionmode'),
-                  (':backdrop:checked', '-checked-backdrop-selectionmode') {
+@each $s in  ('',
+              ':hover',
+              ':active',
+              ':backdrop',
+              ':checked',
+              ':checked:hover',
+              ':checked:active',
+              ':backdrop:checked') {
   .view.content-view.check#{$s}:not(list),
   .content-view .tile check#{$s}:not(list) {
-    -gtk-icon-shadow: none;
-    -gtk-icon-source: -gtk-scaled(url("assets/checkbox#{$as}.png"), url("assets/checkbox#{$as}@2.png"));
-    background-color: transparent;
-    min-width: 40px;
-    min-height: 40px;
+    margin: 12px;
+    min-width: 32px; min-height: 32px;
+    background-color: $osd_bg_color;
+    border-radius: 5px;
     background-image: none;
     transition: none;
     box-shadow: none;
