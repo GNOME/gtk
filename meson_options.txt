@@ -11,11 +11,11 @@ option('quartz-backend', type: 'boolean', value: true,
   description : 'Enable the macOS gdk backend (only when building on macOS)')
 
 # Optional dependencies
-option('enable-vulkan', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
+option('vulkan', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
   description : 'Enable support for the Vulkan graphics API')
-option('enable-xinerama', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
+option('xinerama', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
   description : 'Enable support for the Xinerama extension')
-option('enable-cloudproviders', type: 'boolean', value: false,
+option('cloudproviders', type: 'boolean', value: false,
   description : 'Enable the cloudproviders support')
 
 # Print backends

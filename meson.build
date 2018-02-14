@@ -507,7 +507,7 @@ if x11_enabled
     endif
   endif
 
-  enable_xinerama = get_option('enable-xinerama')
+  enable_xinerama = get_option('xinerama')
   if enable_xinerama != 'no'
     want_xinerama = enable_xinerama == 'yes'
     xinerama_dep = dependency('xinerama', required: want_xinerama)
@@ -560,7 +560,7 @@ have_vulkan = false
 vulkan_pkg_found = false
 vulkan_dep = []
 
-enable_vulkan = get_option('enable-vulkan')
+enable_vulkan = get_option('vulkan')
 if enable_vulkan == 'no'
   message('Vulkan support explicitly disabled')
 else
@@ -585,7 +585,7 @@ else
   endif
 endif
 
-cloudproviders_enabled = get_option('enable-cloudproviders')
+cloudproviders_enabled = get_option('cloudproviders')
 if cloudproviders_enabled
   cloudproviders_dep = dependency('cloudproviders', required: true)
   if cloudproviders_dep.found()
