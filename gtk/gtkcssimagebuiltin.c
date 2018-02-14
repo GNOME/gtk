@@ -444,10 +444,10 @@ gtk_css_image_builtin_draw_spinner (GtkCssImage *image,
 }
 
 static void
-gtk_css_image_builtin_real_draw (GtkCssImage        *image,
-                                 cairo_t            *cr,
-                                 double              width,
-                                 double              height)
+gtk_css_image_builtin_real_snapshot (GtkCssImage *image,
+                                     GtkSnapshot *snapshot,
+                                     double       width,
+                                     double       height)
 {
   /* It's a builtin image, other code will draw things */
 }
@@ -516,7 +516,7 @@ gtk_css_image_builtin_class_init (GtkCssImageBuiltinClass *klass)
   GtkCssImageClass *image_class = GTK_CSS_IMAGE_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  image_class->draw = gtk_css_image_builtin_real_draw;
+  image_class->snapshot = gtk_css_image_builtin_real_snapshot;
   image_class->parse = gtk_css_image_builtin_parse;
   image_class->print = gtk_css_image_builtin_print;
   image_class->compute = gtk_css_image_builtin_compute;

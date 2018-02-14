@@ -26,14 +26,19 @@
 G_DEFINE_TYPE (GtkCssImageWin32, _gtk_css_image_win32, GTK_TYPE_CSS_IMAGE)
 
 static void
-gtk_css_image_win32_draw (GtkCssImage        *image,
-                          cairo_t            *cr,
-                          double              width,
-                          double              height)
+gtk_css_image_win32_snapshot (GtkCssImage *image,
+                              GtkSnapshot *snapshot,
+                              double       width,
+                              double       height)
 {
   GtkCssImageWin32 *wimage = GTK_CSS_IMAGE_WIN32 (image);
   cairo_surface_t *surface;
   int dx, dy;
+  cairo_t *cr;
+
+  cr = gtk_snapshot_append_cairo (snapshot,
+                                  &GRAPHENE_RECT_INIT (0, 0, width, height),
+                                  "Fallback<%s>", G_OBJECT_TYPE_NAME (image));
 
   surface = gtk_win32_theme_create_surface (wimage->theme, wimage->part, wimage->state, wimage->margins,
 				            width, height, &dx, &dy);
@@ -63,6 +68,8 @@ gtk_css_image_win32_draw (GtkCssImage        *image,
   cairo_fill (cr);
 
   cairo_surface_destroy (surface);
+
+  cairo_destroy (cr);
 }
 
 static gboolean
@@ -242,7 +249,7 @@ _gtk_css_image_win32_class_init (GtkCssImageWin32Class *klass)
 
   object_class->finalize = gtk_css_image_win32_finalize;
 
-  image_class->draw = gtk_css_image_win32_draw;
+  image_class->snapshot = gtk_css_image_win32_snapshot;
   image_class->parse = gtk_css_image_win32_parse;
   image_class->print = gtk_css_image_win32_print;
 }
