@@ -704,6 +704,7 @@ summary = [
   '',
   '  Enabled backends: @0@'.format(pkg_targets.strip()),
   '    Vulkan support: @0@'.format(have_vulkan),
+  '    Print backends: @0@'.format(' '.join(print_backends)),
   '             Tests: @0@'.format(get_option('build-tests')),
   '     Documentation: @0@'.format(get_option('documentation')),
   '             Demos: @0@'.format(get_option('demos')),
