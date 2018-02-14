@@ -481,6 +481,7 @@ gtk_private_h_sources =		\
 	gtkfilesystemmodel.h	\
 	gtkfontchooserprivate.h	\
 	gtkfontchooserutils.h	\
+	gtkfontchooserwidgetprivate.h \
 	gtkgestureprivate.h	\
 	gtkgesturedragprivate.h	\
 	gtkgesturelongpressprivate.h	\
