@@ -1,4 +1,4 @@
-option('enable-colord', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
+option('colord', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
   description : 'Build colord support code')
 option('enable-x11-backend', type: 'boolean', value: 'true',
   description : 'Enable the X11 gdk backend')
