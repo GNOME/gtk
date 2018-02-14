@@ -74,10 +74,10 @@ gtk_css_image_radial_get_start_end (GtkCssImageRadial *radial,
 }
 
 static void
-gtk_css_image_radial_draw (GtkCssImage *image,
-                           cairo_t     *cr,
-                           double       width,
-                           double       height)
+gtk_css_image_radial_snapshot (GtkCssImage *image,
+                               GtkSnapshot *snapshot,
+                               double       width,
+                               double       height)
 {
   GtkCssImageRadial *radial = GTK_CSS_IMAGE_RADIAL (image);
   cairo_pattern_t *pattern;
@@ -88,6 +88,11 @@ gtk_css_image_radial_draw (GtkCssImage *image,
   double r1, r2, r3, r4, r;
   double offset;
   int i, last;
+  cairo_t *cr;
+
+  cr = gtk_snapshot_append_cairo (snapshot,
+                                  &GRAPHENE_RECT_INIT (0, 0, width, height),
+                                  "Fallback<%s>", G_OBJECT_TYPE_NAME (image));
 
   x = _gtk_css_position_value_get_x (radial->position, width);
   y = _gtk_css_position_value_get_y (radial->position, height);
@@ -225,6 +230,8 @@ gtk_css_image_radial_draw (GtkCssImage *image,
   cairo_fill (cr);
 
   cairo_pattern_destroy (pattern);
+
+  cairo_destroy (cr);
 }
 
 static gboolean
@@ -667,7 +674,7 @@ _gtk_css_image_radial_class_init (GtkCssImageRadialClass *klass)
   GtkCssImageClass *image_class = GTK_CSS_IMAGE_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  image_class->draw = gtk_css_image_radial_draw;
+  image_class->snapshot = gtk_css_image_radial_snapshot;
   image_class->parse = gtk_css_image_radial_parse;
   image_class->print = gtk_css_image_radial_print;
   image_class->compute = gtk_css_image_radial_compute;

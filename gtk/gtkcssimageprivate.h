@@ -71,10 +71,6 @@ struct _GtkCssImageClass
                                                     double                      progress);
 
   /* draw to 0,0 with the given width and height */
-  void         (* draw)                            (GtkCssImage                *image,
-                                                    cairo_t                    *cr,
-                                                    double                      width,
-                                                    double                      height);
   void         (* snapshot)                        (GtkCssImage                *image,
                                                     GtkSnapshot                *snapshot,
                                                     double                      width,
