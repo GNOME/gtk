@@ -27,6 +27,7 @@ all_immodules = [
   'ti-er',
   'ti-et',
   'viqr',
+  'wayland',
 ]
 
 all_immodules += backend_immodules
@@ -59,6 +60,53 @@ mp_cargs = [
 
 install_data('im-multipress.conf', install_dir : mp_confdir)
 
+# Format:
+#  - protocol name
+#  - protocol stability ('stable' or 'unstable')
+#  - protocol version (if stability is 'unstable')
+proto_sources = [
+  ['gtk-text-input', 'stable', ],
+]
+
+im_wayland_gen_headers = []
+im_wayland_sources = files('imwayland.c')
+wayland_scanner = find_program('wayland-scanner')
+genprotocols = find_program('../../gdk/wayland/genprotocolfiles.py')
+
+foreach p: proto_sources
+  proto_name = p.get(0)
+  proto_stability = p.get(1)
+
+  if proto_stability == 'stable'
+    output_base = proto_name
+    input = '@0@.xml'.format(proto_name)
+  else
+    proto_version = p.get(2)
+    output_base = '@0@-@1@-@2@'.format(proto_name, proto_stability, proto_version)
+    input = join_paths(proto_dir, '@0@/@1@/@2@.xml'.format(proto_stability, proto_name, output_base))
+  endif
+
+  im_wayland_sources += custom_target('@0@ client header'.format(output_base),
+                                      input: input,
+                                      output: '@0@-client-protocol.h'.format(output_base),
+                                      command: [
+                                        genprotocols,
+                                        wayland_scanner,
+                                        '@INPUT@', '@OUTPUT@',
+                                        'client-header',
+                                      ])
+
+  im_wayland_sources += custom_target('@0@ source'.format(output_base),
+                                      input: input,
+                                      output: '@0@-protocol.c'.format(output_base),
+                                      command: [
+                                        genprotocols,
+                                        wayland_scanner,
+                                        '@INPUT@', '@OUTPUT@',
+                                        'code',
+                                      ])
+endforeach
+
 method_defs = [
   ['am-et', files('imam-et.c')],
   ['cedilla', files('imcedilla.c')],
@@ -75,6 +123,7 @@ method_defs = [
   ['quartz', ('imquartz.c'), [], ('-xobjective-c')],
   ['xim', files('gtkimcontextxim.c', 'imxim.c')],
   ['ime', files('gtkimcontextime.c', 'imime.c'), ['imm32']],
+  ['wayland', im_wayland_sources],
 ]
 
 inc_im_method_defs = []

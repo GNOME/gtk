@@ -59,6 +59,10 @@ void                    gdk_wayland_display_set_startup_notification_id (GdkDisp
 
 gboolean                gdk_wayland_display_prefers_ssd         (GdkDisplay *display);
 
+GDK_AVAILABLE_IN_4_0
+gboolean                gdk_wayland_display_query_registry      (GdkDisplay  *display,
+								 const gchar *global);
+
 G_END_DECLS
 
 #endif /* __GDK_WAYLAND_DISPLAY_H__ */
