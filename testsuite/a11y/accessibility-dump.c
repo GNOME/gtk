@@ -858,6 +858,7 @@ parse_command_line (int *argc, char ***argv)
 {
   GError *error = NULL;
   GOptionContext *context;
+  gchar *schema_dir;
 
   context = g_option_context_new ("- run GTK accessibility tests");
   g_option_context_add_main_entries (context, test_args, NULL);
@@ -870,6 +871,10 @@ parse_command_line (int *argc, char ***argv)
     }
 
   gtk_test_init (argc, argv);
+
+  schema_dir = g_test_build_filename (G_TEST_BUILT, "", NULL);
+  g_setenv ("GSETTINGS_SCHEMA_DIR", schema_dir, TRUE);
+  g_free (schema_dir);
 
   /* gtk_test_init does not call setlocale(), so do it ourselves,
    * since running in the C locale breaks some our fancy
