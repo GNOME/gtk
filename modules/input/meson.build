@@ -37,6 +37,14 @@ endforeach
 immodules_subdir = 'gtk-4.0/@0@/immodules'.format(gtk_binary_version)
 immodules_install_dir = join_paths(gtk_libdir, immodules_subdir)
 
+# Format:
+#  - protocol name
+#  - protocol stability ('stable' or 'unstable')
+#  - protocol version (if stability is 'unstable')
+proto_sources = [
+  ['gtk-text-input', 'stable', ],
+]
+
 im_wayland_gen_headers = []
 im_wayland_sources = files('imwayland.c')
 wayland_scanner = find_program('wayland-scanner')
