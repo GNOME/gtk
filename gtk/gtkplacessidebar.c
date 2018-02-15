@@ -1075,12 +1075,13 @@ update_places (GtkPlacesSidebar *sidebar)
 
   if (sidebar->show_starred_location)
     {
-      mount_uri = "favorites:///";
+      mount_uri = "starred:///";
       start_icon = g_themed_icon_new_with_default_fallbacks ("starred-symbolic");
       add_place (sidebar, PLACES_STARRED_LOCATION,
                  SECTION_COMPUTER,
                  _("Starred"), start_icon, NULL, mount_uri,
                  NULL, NULL, NULL, NULL, 0,
+                /* TODO: Rename to 'Starred files' */
                  _("Favorite files"));
       g_object_unref (start_icon);
     }
