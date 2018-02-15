@@ -1048,9 +1048,9 @@ update_places (GtkPlacesSidebar *sidebar)
       start_icon = g_themed_icon_new_with_default_fallbacks ("starred-symbolic");
       add_place (sidebar, PLACES_STARRED_LOCATION,
                  SECTION_COMPUTER,
-                 _("Starred"), start_icon, NULL, "favorites:///",
+                 _("Starred"), start_icon, NULL, "starred:///",
                  NULL, NULL, NULL, NULL, 0,
-                 _("Favorite files"));
+                 _("Starred files"));
       g_object_unref (start_icon);
     }
 
