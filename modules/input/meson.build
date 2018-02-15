@@ -6,8 +6,8 @@
 # there is a bit of an ordering problem which we solve by collecting all the
 # information here but moving the actual build definitions to gtk/meson.build.
 build_dynamic_modules = false
-disable_modules = get_option('disable-modules')
-if not disable_modules
+dynamic_modules = get_option('dynamic-modules')
+if dynamic_modules
   gmodule_supported = dependency('gmodule-no-export-2.0').get_pkgconfig_variable('gmodule_supported')
   if gmodule_supported == 'true'
     build_dynamic_modules = true
@@ -32,20 +32,14 @@ all_immodules = [
 all_immodules += backend_immodules
 
 # Allow building some or all immodules included
-included_immodules = get_option('with-included-immodules')
-if included_immodules == 'none'
-  included_immodules = ''
-elif included_immodules == 'all' or included_immodules == 'yes'
-  included_immodules = ','.join(all_immodules)
+included_immodules = get_option('included-immodules').split(',')
+if included_immodules.contains('none')
+  included_immodules = []
+elif included_immodules.contains('all')
+  included_immodules = all_immodules
 endif
 
-if included_immodules == ''
-  have_included_immodules = false
-  included_immodules = []
-else
-  have_included_immodules = true
-  included_immodules = included_immodules.split(',')
-endif
+have_included_immodules = included_immodules.length() > 0
 
 foreach im: included_immodules
   if not all_immodules.contains(im)
@@ -107,5 +101,3 @@ foreach m: method_defs
     endif
   endif
 endforeach
-
-# TODO: post-install gtk4-query-immodules run to create immodules.c

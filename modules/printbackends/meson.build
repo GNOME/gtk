@@ -1,7 +1,23 @@
+all_print_backends = [
+  'cups',
+  'papi',
+  'cloudprint',
+  'test',
+]
+
+enabled_print_backends = get_option('print-backends').split(',')
+
+if enabled_print_backends.contains('none')
+  enabled_print_backends = []
+elif enabled_print_backends.contains('all')
+  enabled_print_backends = all_print_backends
+endif
+
+# The 'file' print backend cannot be disabled
 print_backends = ['file']
 
 # Checks to see if we should compile with CUPS backend for GTK+
-enable_cups = get_option('enable-cups-print-backend')
+enable_cups = enabled_print_backends.contains('cups')
 if enable_cups != 'no'
   want_cups = enable_cups == 'yes'
   #cups_config = find_program('cups-config', required : want_cups)
@@ -37,7 +53,7 @@ if enable_cups != 'no'
 endif
 
 # Checks to see if we should compile with PAPI backend for GTK+
-enable_papi = get_option('enable-papi-print-backend')
+enable_papi = enabled_print_backends.contains('papi')
 if enable_papi != 'no'
   want_papi = enable_papi == 'yes'
   libpapi = cc.find_library('libpapi', required : false)
@@ -49,7 +65,7 @@ if enable_papi != 'no'
 endif
 
 # Checks to see if we should compile with cloudprint backend for GTK+
-enable_cloudprint = get_option('enable-cloudprint-print-backend')
+enable_cloudprint = enabled_print_backends.contains('cloudprint')
 if enable_cloudprint != 'no'
   want_cloudprint = enable_cloudprint == 'yes'
   rest_dep = dependency('rest-0.7', required : want_cloudprint)
@@ -72,10 +88,11 @@ if os_unix
   endif
 endif
 
-if get_option('enable-test-print-backend') == 'yes'
+if enabled_print_backends.contains('test')
   print_backends += ['test']
 endif
 
+# Automatic fall-back to the lpr backend
 if not print_backends.contains('papi') and not print_backends.contains('cups')
   print_backends += ['lpr']
 endif

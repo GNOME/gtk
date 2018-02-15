@@ -1,4 +1,4 @@
-enable_colord = get_option('enable-colord')
+enable_colord = get_option('colord')
 if enable_colord != 'no'
   want_colord = enable_colord == 'yes'
   colord_dep = dependency('colord', version: '>= 0.1.9', required: want_colord)

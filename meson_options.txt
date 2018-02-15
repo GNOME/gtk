@@ -1,39 +1,44 @@
-option('enable-colord', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
-  description : 'Build colord support code')
-option('enable-x11-backend', type: 'boolean', value: 'true',
-  description : 'Enable the X11 gdk backend')
-option('enable-wayland-backend', type: 'boolean', value: 'true',
-  description : 'Enable the wayland gdk backend')
-option('enable-broadway-backend', type: 'boolean', value: 'false',
+# GDK backends
+option('x11-backend', type: 'boolean', value: true,
+  description : 'Enable the X11 gdk backend (only when building on Linux or macOS)')
+option('wayland-backend', type: 'boolean', value: true,
+  description : 'Enable the wayland gdk backend (only when building on Linux)')
+option('broadway-backend', type: 'boolean', value: false,
   description : 'Enable the broadway (HTML5) gdk backend')
-option('enable-win32-backend', type: 'boolean', value: 'false',
-  description : 'Enable the Windows gdk backend')
-option('enable-quartz-backend', type: 'boolean', value: 'false',
-  description : 'Enable the macOS gdk backend')
-option('enable-vulkan', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
+option('win32-backend', type: 'boolean', value: true,
+  description : 'Enable the Windows gdk backend (only when building on Windows)')
+option('quartz-backend', type: 'boolean', value: true,
+  description : 'Enable the macOS gdk backend (only when building on macOS)')
+
+# Optional dependencies
+option('vulkan', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
   description : 'Enable support for the Vulkan graphics API')
-option('enable-test-print-backend', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'no',
-  description : 'Enable the test print backend')
-option('enable-cups-print-backend', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
-  description : 'Enable the CUPS print backend')
-option('enable-papi-print-backend', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
-  description : 'Enable the papi print backend')
-option('enable-cloudprint-print-backend', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
-  description : 'Enable the cloudprint print backend')
-option('enable-cloudproviders', type: 'boolean', value: false,
-  description : 'Enable the cloudproviders support')
-option('enable-xinerama', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
+option('xinerama', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
   description : 'Enable support for the Xinerama extension')
-option('disable-modules', type: 'boolean', value : 'false',
-  description : 'Disable dynamic module loading')
-option('with-included-immodules', type: 'string', value : '',
-  description : 'Build the specified input methods into gtk (comma-separated list or "all" or "none")')
+option('cloudproviders', type: 'boolean', value: false,
+  description : 'Enable the cloudproviders support')
+
+# Print backends
+option('print-backends', type : 'string', value : 'cups,papi',
+  description : 'Build the specified print backends (comma-separated list, "all", or "none")')
+option('colord', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
+  description : 'Build colord support for the CUPS printing backend')
+
+# Modules
+option('dynamic-modules', type: 'boolean', value : true,
+  description : 'Allow dynamic module loading')
+option('included-immodules', type: 'string', value : 'none',
+  description : 'Build the specified input methods (comma-separated list, "all", or "none")')
+
+# Documentation and introspection
 option('documentation', type: 'boolean', value: 'false',
   description : 'Build API reference and tools documentation')
 option('man-pages', type: 'boolean', value: 'false',
   description : 'Build man pages for installed tools')
 option('introspection', type: 'boolean', value: 'true',
   description : 'Build introspection data (requires gobject-introspection)')
+
+# Demos and binaries
 option('demos', type: 'boolean', value: 'true',
   description : 'Build demos and example programs')
 option('build-tests', type: 'boolean', value: 'true',
