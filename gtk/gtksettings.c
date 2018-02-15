@@ -1903,6 +1903,31 @@ gtk_settings_create_for_display (GdkDisplay *display)
                                NULL);
   else
 #endif
+#ifdef GDK_WINDOWING_WAYLAND
+    if (GDK_IS_WAYLAND_DISPLAY (display))
+      {
+        const gchar *immodule = NULL;
+
+        if (gdk_wayland_display_query_registry (display,
+                                                "gtk_text_input_manager"))
+          {
+            settings = g_object_new (GTK_TYPE_SETTINGS,
+                                     "gtk-im-module", "wayland",
+                                     NULL);
+          }
+        else
+          {
+            /* Fallback to other IM methods if the compositor does not
+             * implement the interface(s).
+             */
+            settings = g_object_new (GTK_TYPE_SETTINGS, NULL);
+          }
+
+          immodule = "wayland";
+
+      }
+  else
+#endif
     settings = g_object_new (GTK_TYPE_SETTINGS, NULL);
 
   settings->priv->screen = gdk_display_get_default_screen (display);
