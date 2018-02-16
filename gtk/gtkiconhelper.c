@@ -38,7 +38,7 @@
 void
 gtk_icon_helper_invalidate (GtkIconHelper *self)
 {
-  g_clear_object (&self->texture);
+  g_clear_object (&self->paintable);
   self->texture_scale = 1;
   self->texture_is_symbolic = FALSE;
 
@@ -57,7 +57,7 @@ gtk_icon_helper_invalidate_for_change (GtkIconHelper     *self,
         !self->texture_is_symbolic)))
     {
       /* Avoid the queue_resize in gtk_icon_helper_invalidate */
-      g_clear_object (&self->texture);
+      g_clear_object (&self->paintable);
       self->texture_scale = 1;
       self->texture_is_symbolic = FALSE;
 
@@ -86,7 +86,7 @@ gtk_icon_helper_take_definition (GtkIconHelper      *self,
 void
 _gtk_icon_helper_clear (GtkIconHelper *self)
 {
-  g_clear_object (&self->texture);
+  g_clear_object (&self->paintable);
   self->texture_scale = 1;
   self->texture_is_symbolic = FALSE;
 
@@ -210,10 +210,10 @@ get_surface_size (cairo_surface_t *surface,
   cairo_destroy (cr);
 }
 
-static GdkTexture *
-ensure_texture_from_surface (GtkIconHelper   *self,
-                             cairo_surface_t *orig_surface,
-                             int             *scale_out)
+static GdkPaintable *
+ensure_paintable_from_surface (GtkIconHelper   *self,
+                               cairo_surface_t *orig_surface,
+                               int             *scale_out)
 {
   cairo_surface_t *map;
   int width, height, scale;
@@ -255,26 +255,26 @@ ensure_texture_from_surface (GtkIconHelper   *self,
 
   cairo_surface_unmap_image (orig_surface, map);
 
-  return texture;
+  return GDK_PAINTABLE (texture);
 }
 
-static GdkTexture *
-ensure_texture_from_texture (GtkIconHelper *self,
-                             GdkTexture    *texture,
-                             int           *scale)
+static GdkPaintable *
+ensure_paintable_from_texture (GtkIconHelper *self,
+                               GdkTexture    *texture,
+                               int           *scale)
 {
   *scale = 1;
 
-  return g_object_ref (texture);
+  return g_object_ref (GDK_PAINTABLE (texture));
 }
 
-static GdkTexture *
-ensure_texture_for_gicon (GtkIconHelper    *self,
-                          GtkCssStyle      *style,
-                          GtkTextDirection  dir,
-                          gint              scale,
-                          GIcon            *gicon,
-                          gboolean         *symbolic)
+static GdkPaintable *
+ensure_paintable_for_gicon (GtkIconHelper    *self,
+                            GtkCssStyle      *style,
+                            GtkTextDirection  dir,
+                            gint              scale,
+                            GIcon            *gicon,
+                            gboolean         *symbolic)
 {
   GtkIconTheme *icon_theme;
   gint width, height;
@@ -301,15 +301,15 @@ ensure_texture_for_gicon (GtkIconHelper    *self,
   *symbolic = gtk_icon_info_is_symbolic (info);
   texture = gtk_icon_info_load_texture (info);
 
-  return texture;
+  return GDK_PAINTABLE (texture);
 }
 
-static GdkTexture *
-gtk_icon_helper_load_texture (GtkIconHelper   *self,
-                              int             *out_scale,
-                              gboolean        *out_symbolic)
+static GdkPaintable *
+gtk_icon_helper_load_paintable (GtkIconHelper   *self,
+                                int             *out_scale,
+                                gboolean        *out_symbolic)
 {
-  GdkTexture *texture;
+  GdkPaintable *paintable;
   GIcon *gicon;
   int scale;
   gboolean symbolic;
@@ -317,12 +317,12 @@ gtk_icon_helper_load_texture (GtkIconHelper   *self,
   switch (gtk_image_definition_get_storage_type (self->def))
     {
     case GTK_IMAGE_SURFACE:
-      texture = ensure_texture_from_surface (self, gtk_image_definition_get_surface (self->def), &scale);
+      paintable = ensure_paintable_from_surface (self, gtk_image_definition_get_surface (self->def), &scale);
       symbolic = FALSE;
       break;
 
     case GTK_IMAGE_TEXTURE:
-      texture = ensure_texture_from_texture (self, gtk_image_definition_get_texture (self->def), &scale);
+      paintable = ensure_paintable_from_texture (self, gtk_image_definition_get_texture (self->def), &scale);
       symbolic = FALSE;
       break;
 
@@ -332,28 +332,28 @@ gtk_icon_helper_load_texture (GtkIconHelper   *self,
         gicon = g_themed_icon_new_with_default_fallbacks (gtk_image_definition_get_icon_name (self->def));
       else
         gicon = g_themed_icon_new (gtk_image_definition_get_icon_name (self->def));
-      texture = ensure_texture_for_gicon (self,
-                                          gtk_css_node_get_style (self->node),
-                                          gtk_widget_get_direction (self->owner),
-                                          scale,
-                                          gicon,
-                                          &symbolic);
+      paintable = ensure_paintable_for_gicon (self,
+                                              gtk_css_node_get_style (self->node),
+                                              gtk_widget_get_direction (self->owner),
+                                              scale,
+                                              gicon,
+                                              &symbolic);
       g_object_unref (gicon);
       break;
 
     case GTK_IMAGE_GICON:
       scale = gtk_widget_get_scale_factor (self->owner);
-      texture = ensure_texture_for_gicon (self, 
-                                          gtk_css_node_get_style (self->node),
-                                          gtk_widget_get_direction (self->owner),
-                                          scale,
-                                          gtk_image_definition_get_gicon (self->def),
-                                          &symbolic);
+      paintable = ensure_paintable_for_gicon (self, 
+                                              gtk_css_node_get_style (self->node),
+                                              gtk_widget_get_direction (self->owner),
+                                              scale,
+                                              gtk_image_definition_get_gicon (self->def),
+                                              &symbolic);
       break;
 
     case GTK_IMAGE_EMPTY:
     default:
-      texture = NULL;
+      paintable = NULL;
       scale = 1;
       symbolic = FALSE;
       break;
@@ -362,20 +362,20 @@ gtk_icon_helper_load_texture (GtkIconHelper   *self,
   *out_scale = scale;
   *out_symbolic = symbolic;
 
-  return texture;
+  return paintable;
 }
 
 static void
-gtk_icon_helper_ensure_texture (GtkIconHelper *self)
+gtk_icon_helper_ensure_paintable (GtkIconHelper *self)
 {
   gboolean symbolic;
 
-  if (self->texture)
+  if (self->paintable)
     return;
 
-  self->texture = gtk_icon_helper_load_texture (self,
-                                                &self->texture_scale,
-                                                &symbolic);
+  self->paintable = gtk_icon_helper_load_paintable (self,
+                                                    &self->texture_scale,
+                                                    &symbolic);
   self->texture_is_symbolic = symbolic;
 }
 
@@ -421,12 +421,21 @@ _gtk_icon_helper_get_size (GtkIconHelper *self,
   /* Otherwise we load the surface to guarantee we get a size */
   if (width == 0)
     {
-      gtk_icon_helper_ensure_texture (self);
+      gtk_icon_helper_ensure_paintable (self);
 
-      if (self->texture != NULL)
+      if (self->paintable != NULL)
         {
-          width = (gdk_texture_get_width (self->texture) + self->texture_scale - 1) / self->texture_scale;
-          height = (gdk_texture_get_height (self->texture) + self->texture_scale - 1) / self->texture_scale;
+          width = gdk_paintable_get_intrinsic_width (self->paintable);
+          height = gdk_paintable_get_intrinsic_height (self->paintable);
+          if (width == 0 || height == 0)
+            {
+              ensure_icon_size (self, &width, &height);
+            }
+          else
+            {
+              width = (width + self->texture_scale - 1) / self->texture_scale;
+              height = (height + self->texture_scale - 1) / self->texture_scale;
+            }
         }
       else
         {
@@ -557,18 +566,21 @@ gtk_icon_helper_snapshot (GtkIconHelper *self,
                           GtkSnapshot   *snapshot)
 {
   GtkCssStyle *style;
+  gint width, height;
 
   style = gtk_css_node_get_style (self->node);
 
-  gtk_icon_helper_ensure_texture (self);
-  if (self->texture == NULL)
+  gtk_icon_helper_ensure_paintable (self);
+  if (self->paintable == NULL)
     return;
 
-  gtk_css_style_snapshot_icon_texture (style,
-                                       snapshot,
-                                       self->texture,
-                                       self->texture_scale,
-                                       self->texture_is_symbolic);
+  _gtk_icon_helper_get_size (self, &width, &height);
+
+  gtk_css_style_snapshot_icon_paintable (style,
+                                         snapshot,
+                                         self->paintable,
+                                         width, height,
+                                         self->texture_is_symbolic);
 }
 
 gboolean
