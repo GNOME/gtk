@@ -715,6 +715,20 @@ gdk_event_get_type
 </SECTION>
 
 <SECTION>
+<TITLE>Paintable</TITLE>
+<FILE>paintable</FILE>
+GdkPaintable
+gdk_paintable_snapshot
+gdk_paintable_get_current_image
+gdk_paintable_get_flags
+gdk_paintable_get_intrinsic_width
+gdk_paintable_get_intrinsic_height
+gdk_paintable_get_intrinsic_aspect_ratio
+gdk_paintable_invalidate_contents
+gdk_paintable_invalidate_size
+<SECTION>
+
+<SECTION>
 <TITLE>Textures</TITLE>
 <FILE>textures</FILE>
 GdkTexture
