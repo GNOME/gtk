@@ -297,6 +297,9 @@ notify_storage_type (GtkCellRendererPixbuf *cellpixbuf,
     case GTK_IMAGE_TEXTURE:
       g_object_notify (G_OBJECT (cellpixbuf), "texture");
       break;
+    case GTK_IMAGE_PAINTABLE:
+      g_object_notify (G_OBJECT (cellpixbuf), "paintable");
+      break;
     case GTK_IMAGE_ICON_NAME:
       g_object_notify (G_OBJECT (cellpixbuf), "icon-name");
       break;
