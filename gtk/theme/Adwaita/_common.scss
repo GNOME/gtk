@@ -1394,7 +1394,6 @@ toolbar {
   border-radius: 0  0 5px 5px;
 }
 
-searchbar,
 .location-bar {
   @extend %toolbar;
 
@@ -1408,6 +1407,11 @@ searchbar {
   padding: 0px;
   >revealer>box {
     padding: 6px;
+    @extend %toolbar;
+
+    @extend %darkbar;
+
+    border-width: 0 0 1px;
   }
 }
 
