@@ -2167,8 +2167,8 @@ add_offscreen_ops (GskGLRenderer   *self,
                    gboolean        *is_offscreen,
                    gboolean         force_offscreen)
 {
-  const float width = max_x - min_x;
-  const float height = max_y - min_y;
+  const float width = (max_x - min_x) * self->scale_factor;
+  const float height = (max_y - min_y) * self->scale_factor;
   int render_target;
   int prev_render_target;
   RenderOp op;
