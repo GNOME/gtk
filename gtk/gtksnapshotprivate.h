@@ -80,7 +80,7 @@ struct _GtkSnapshotState {
   } data;
 };
 
-struct _GtkSnapshot {
+struct _GdkSnapshot {
   int ref_count;
   gboolean               record_names;
   GskRenderer           *renderer;
