@@ -1,8 +1,6 @@
 all_print_backends = [
   'cups',
-  'papi',
   'cloudprint',
-  'test',
 ]
 
 enabled_print_backends = get_option('print-backends').split(',')
@@ -52,18 +50,6 @@ if enable_cups != 'no'
   endif
 endif
 
-# Checks to see if we should compile with PAPI backend for GTK+
-enable_papi = enabled_print_backends.contains('papi')
-if enable_papi != 'no'
-  want_papi = enable_papi == 'yes'
-  libpapi = cc.find_library('libpapi', required : false)
-  if libpapi.found() and cc.has_function('papiServiceCreate', args : '-lpapi')
-    print_backends += ['papi']
-  elif want_papi
-    error('Cannot find libpapi.')
-  endif
-endif
-
 # Checks to see if we should compile with cloudprint backend for GTK+
 enable_cloudprint = enabled_print_backends.contains('cloudprint')
 if enable_cloudprint != 'no'
@@ -88,12 +74,8 @@ if os_unix
   endif
 endif
 
-if enabled_print_backends.contains('test')
-  print_backends += ['test']
-endif
-
 # Automatic fall-back to the lpr backend
-if not print_backends.contains('papi') and not print_backends.contains('cups')
+if not print_backends.contains('cups')
   print_backends += ['lpr']
 endif
 
