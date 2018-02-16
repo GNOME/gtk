@@ -20,12 +20,14 @@
 #ifndef __GDK_PAINTABLE_H__
 #define __GDK_PAINTABLE_H__
 
-#include <cairo.h>
-#include <glib-object.h>
-
 #if !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
+
+#include <cairo.h>
+#include <glib-object.h>
+
+#include <gdk/gdkversionmacros.h>
 
 G_BEGIN_DECLS
 
@@ -33,6 +35,7 @@ G_BEGIN_DECLS
 
 typedef struct _GdkSnapshot         GdkSnapshot; /* Forward declaration */
 
+GDK_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (GdkPaintable, gdk_paintable, GDK, PAINTABLE, GObject)
 
 /**
@@ -105,21 +108,28 @@ struct _GdkPaintableInterface
   double                (* get_intrinsic_aspect_ratio)  (GdkPaintable           *paintable);
 };
 
-
+GDK_AVAILABLE_IN_ALL
 void            gdk_paintable_snapshot                  (GdkPaintable           *paintable,
                                                          GdkSnapshot            *snapshot,
                                                          double                  width,
                                                          double                  height);
+GDK_AVAILABLE_IN_ALL
 GdkPaintable *  gdk_paintable_get_current_image         (GdkPaintable           *paintable);
 
+GDK_AVAILABLE_IN_ALL
 GdkPaintableFlags
                 gdk_paintable_get_flags                 (GdkPaintable           *paintable);
+GDK_AVAILABLE_IN_ALL
 int             gdk_paintable_get_intrinsic_width       (GdkPaintable           *paintable);
+GDK_AVAILABLE_IN_ALL
 int             gdk_paintable_get_intrinsic_height      (GdkPaintable           *paintable);
+GDK_AVAILABLE_IN_ALL
 double          gdk_paintable_get_intrinsic_aspect_ratio(GdkPaintable           *paintable);
 
 /* for implementations only */
+GDK_AVAILABLE_IN_ALL
 void            gdk_paintable_invalidate_contents       (GdkPaintable           *paintable);
+GDK_AVAILABLE_IN_ALL
 void            gdk_paintable_invalidate_size           (GdkPaintable           *paintable);
 
 
