@@ -265,28 +265,26 @@ gtk_css_style_render_icon_get_extents (GtkCssStyle  *style,
 }
 
 void
-gtk_css_style_snapshot_icon_texture (GtkCssStyle *style,
-                                     GtkSnapshot *snapshot,
-                                     GdkTexture  *texture,
-                                     double       texture_scale,
-                                     gboolean     recolor)
+gtk_css_style_snapshot_icon_paintable (GtkCssStyle  *style,
+                                       GtkSnapshot  *snapshot,
+                                       GdkPaintable *paintable,
+                                       double        width,
+                                       double        height,
+                                       gboolean      recolor)
 {
   const GtkCssValue *shadows_value, *transform_value, *filter_value;
   graphene_matrix_t transform_matrix;
-  graphene_rect_t bounds;
-  double width, height;
   gboolean has_shadow;
 
   g_return_if_fail (GTK_IS_CSS_STYLE (style));
   g_return_if_fail (snapshot != NULL);
-  g_return_if_fail (GDK_IS_TEXTURE (texture));
-  g_return_if_fail (texture_scale > 0);
+  g_return_if_fail (GDK_IS_PAINTABLE (paintable));
+  g_return_if_fail (width > 0);
+  g_return_if_fail (height > 0);
 
   shadows_value = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_SHADOW);
   transform_value = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_TRANSFORM);
   filter_value = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_FILTER);
-  width = gdk_texture_get_width (texture) / texture_scale;
-  height = gdk_texture_get_height (texture) / texture_scale;
 
   if (!gtk_css_transform_value_get_matrix (transform_value, &transform_matrix))
     return;
@@ -316,8 +314,7 @@ gtk_css_style_snapshot_icon_texture (GtkCssStyle *style,
 
   if (graphene_matrix_is_identity (&transform_matrix))
     {
-      graphene_rect_init (&bounds, 0, 0, width, height);
-      gtk_snapshot_append_texture (snapshot, texture, &bounds, "Icon");
+      gdk_paintable_snapshot (paintable, snapshot, width, height);
     }
   else
     {
@@ -328,12 +325,10 @@ gtk_css_style_snapshot_icon_texture (GtkCssStyle *style,
       graphene_matrix_multiply (&transform_matrix, &m1, &m3);
       graphene_matrix_init_translate (&m2, &GRAPHENE_POINT3D_INIT (- width / 2.0, - height / 2.0, 0));
       graphene_matrix_multiply (&m2, &m3, &m1);
-      graphene_matrix_scale (&m1, 1.0 / texture_scale, 1.0 / texture_scale, 1);
 
       gtk_snapshot_push_transform (snapshot, &m1, "Icon Transform");
 
-      graphene_rect_init (&bounds, 0, 0, gdk_texture_get_width (texture), gdk_texture_get_height (texture));
-      gtk_snapshot_append_texture (snapshot, texture, &bounds, "Icon");
+      gdk_paintable_snapshot (paintable, snapshot, width, height);
 
       gtk_snapshot_pop (snapshot);
     }
