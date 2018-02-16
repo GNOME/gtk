@@ -44,7 +44,7 @@ struct _GtkIconHelper
 
   GtkWidget *owner;
   GtkCssNode *node;
-  GdkTexture *texture;
+  GdkPaintable *paintable;
   int texture_scale;
 };
 
