@@ -38,6 +38,10 @@
 
 #include "gdkinternals.h"
 #include "gdkmemorytextureprivate.h"
+#include "gdkpaintable.h"
+
+#define GTK_COMPILATION
+#include "gtk/gtksnapshot.h"
 
 /**
  * SECTION:gdktexture
@@ -71,7 +75,57 @@ enum {
 
 static GParamSpec *properties[N_PROPS];
 
-G_DEFINE_ABSTRACT_TYPE (GdkTexture, gdk_texture, G_TYPE_OBJECT)
+static void
+gdk_texture_paintable_snapshot (GdkPaintable *paintable,
+                                GdkSnapshot  *snapshot,
+                                double        width,
+                                double        height)
+{
+  GdkTexture *self = GDK_TEXTURE (paintable);
+
+  gtk_snapshot_append_texture (snapshot,
+                               self,
+                               &GRAPHENE_RECT_INIT (0, 0, width, height),
+                               "%s as paintable %dx%d",
+                               G_OBJECT_TYPE_NAME (paintable),
+                               self->width, self->height);
+}
+
+static GdkPaintableFlags
+gdk_texture_paintable_get_flags (GdkPaintable *paintable)
+{
+  return GDK_PAINTABLE_STATIC_SIZE
+       | GDK_PAINTABLE_STATIC_CONTENTS;
+}
+
+static int
+gdk_texture_paintable_get_intrinsic_width (GdkPaintable *paintable)
+{
+  GdkTexture *self = GDK_TEXTURE (paintable);
+
+  return self->width;
+}
+
+static int
+gdk_texture_paintable_get_intrinsic_height (GdkPaintable *paintable)
+{
+  GdkTexture *self = GDK_TEXTURE (paintable);
+
+  return self->height;
+}
+
+static void
+gdk_texture_paintable_init (GdkPaintableInterface *iface)
+{
+  iface->snapshot = gdk_texture_paintable_snapshot;
+  iface->get_flags = gdk_texture_paintable_get_flags;
+  iface->get_intrinsic_width = gdk_texture_paintable_get_intrinsic_width;
+  iface->get_intrinsic_height = gdk_texture_paintable_get_intrinsic_height;
+}
+
+G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GdkTexture, gdk_texture, G_TYPE_OBJECT,
+                                  G_IMPLEMENT_INTERFACE (GDK_TYPE_PAINTABLE,
+                                                         gdk_texture_paintable_init))
 
 #define GDK_TEXTURE_WARN_NOT_IMPLEMENTED_METHOD(obj,method) \
   g_critical ("Texture of type '%s' does not implement GdkTexture::" # method, G_OBJECT_TYPE_NAME (obj))
