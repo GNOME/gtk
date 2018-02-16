@@ -194,18 +194,6 @@ struct _GtkTextViewPrivate
   gint width;
   gint height;
 
-  /* This is used to monitor the overall size request 
-   * and decide whether we need to queue resizes when
-   * the buffer content changes. 
-   *
-   * FIXME: This could be done in a simpler way by 
-   * consulting the above width/height of the buffer + some
-   * padding values, however all of this request code needs
-   * to be changed to use GtkWidget     Iface and deserves
-   * more attention.
-   */
-  GtkRequisition cached_size_request;
-
   /* The virtual cursor position is normally the same as the
    * actual (strong) cursor position, except in two circumstances:
    *
@@ -373,8 +361,6 @@ static void gtk_text_view_get_property         (GObject         *object,
 						GValue          *value,
 						GParamSpec      *pspec);
 static void gtk_text_view_destroy              (GtkWidget        *widget);
-static void gtk_text_view_size_request         (GtkWidget        *widget,
-                                                GtkRequisition   *requisition);
 static void gtk_text_view_measure (GtkWidget      *widget,
                                    GtkOrientation  orientation,
                                    int             for_size,
@@ -3899,71 +3885,6 @@ gtk_text_view_get_property (GObject         *object,
 }
 
 static void
-gtk_text_view_size_request (GtkWidget      *widget,
-                            GtkRequisition *requisition)
-{
-  GtkTextView *text_view;
-  GtkTextViewPrivate *priv;
-  GSList *tmp_list;
-
-  text_view = GTK_TEXT_VIEW (widget);
-  priv = text_view->priv;
-
-  if (priv->layout)
-    {
-      requisition->width = priv->layout->width;
-      requisition->height = priv->layout->height;
-    }
-  else
-    {
-      requisition->width = 0;
-      requisition->height = 0;
-    }
-  
-  requisition->width += priv->border_window_size.left + priv->border_window_size.right;
-  requisition->height += priv->border_window_size.top + priv->border_window_size.bottom;
-
-  requisition->height += priv->top_margin + priv->bottom_margin;
-  requisition->width += priv->left_margin + priv->right_margin;
-
-  tmp_list = priv->children;
-  while (tmp_list != NULL)
-    {
-      GtkTextViewChild *child = tmp_list->data;
-
-      if (child->anchor)
-        {
-          GtkRequisition child_req;
-          GtkRequisition old_req;
-
-          gtk_widget_get_preferred_size (child->widget, &old_req, NULL);
-
-          gtk_widget_get_preferred_size (child->widget, &child_req, NULL);
-
-          /* Invalidate layout lines if required */
-          if (priv->layout &&
-              (old_req.width != child_req.width ||
-               old_req.height != child_req.height))
-            gtk_text_child_anchor_queue_resize (child->anchor,
-                                                priv->layout);
-        }
-      else
-        {
-          GtkRequisition child_req;
-
-          gtk_widget_get_preferred_size (child->widget,
-                                         &child_req, NULL);
-        }
-
-      tmp_list = tmp_list->next;
-    }
-
-  /* Cache the requested size of the text view so we can 
-   * compare it in the changed_handler() */
-  priv->cached_size_request = *requisition;
-}
-
-static void
 gtk_text_view_measure (GtkWidget      *widget,
                        GtkOrientation  orientation,
                        int             for_size,
@@ -3972,14 +3893,44 @@ gtk_text_view_measure (GtkWidget      *widget,
                        int            *minimum_baseline,
                        int            *natural_baseline)
 {
-  GtkRequisition requisition;
-
-  gtk_text_view_size_request (widget, &requisition);
+  GtkTextViewPrivate *priv = GTK_TEXT_VIEW (widget)->priv;
+  int min = 0, nat = 0;
+  GSList *tmp_list;
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    *minimum = *natural = requisition.width;
-  else
-    *minimum = *natural = requisition.height;
+    {
+      min += priv->border_window_size.left + priv->border_window_size.right;
+      min += priv->left_margin + priv->right_margin;
+    }
+  else /* orientation == VERTICAL */
+    {
+      min += priv->border_window_size.top + priv->border_window_size.bottom;
+      min += priv->top_margin + priv->bottom_margin;
+    }
+
+  nat = min;
+
+  tmp_list = priv->children;
+  while (tmp_list != NULL)
+    {
+      GtkTextViewChild *child = tmp_list->data;
+      int child_min = 0, child_nat = 0;
+
+      gtk_widget_measure (child->widget, orientation, for_size, &child_min, &child_nat, NULL, NULL);
+
+      /* Invalidate layout lines if required */
+      if (child->anchor && priv->layout)
+        gtk_text_child_anchor_queue_resize (child->anchor,
+                                            priv->layout);
+
+      min = MAX (min, child_min);
+      nat = MAX (nat, child_nat);
+
+      tmp_list = tmp_list->next;
+    }
+
+  *minimum = min;
+  *natural = nat;
 }
 
 static void
@@ -4497,23 +4448,6 @@ changed_handler (GtkTextLayout     *layout,
           tmp_list = tmp_list->next;
         }
     }
-
-  {
-    GtkRequisition old_req = priv->cached_size_request;
-    GtkRequisition new_req;
-
-    /* Use this instead of gtk_widget_size_request wrapper
-     * to avoid the optimization which just returns widget->requisition
-     * if a resize hasn't been queued.
-     */
-    gtk_text_view_size_request (widget, &new_req);
-
-    if (old_req.width != new_req.width ||
-        old_req.height != new_req.height)
-      {
-	gtk_widget_queue_resize_no_redraw (widget);
-      }
-  }
 }
 
 static void
