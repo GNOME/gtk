@@ -167,6 +167,7 @@ gdk_deps = [
   cairogobj_dep,
   glib_dep,
   gobject_dep,
+  graphene_dep,
   epoxy_dep,
   fontconfig_dep,
   platform_gio_dep,
