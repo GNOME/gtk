@@ -119,6 +119,7 @@ enum
 {
   PROP_0,
   PROP_SURFACE,
+  PROP_PAINTABLE,
   PROP_TEXTURE,
   PROP_FILE,
   PROP_ICON_SIZE,
@@ -160,6 +161,13 @@ gtk_image_class_init (GtkImageClass *class)
                           P_("A cairo_surface_t to display"),
                           CAIRO_GOBJECT_TYPE_SURFACE,
                           GTK_PARAM_READWRITE);
+
+  image_props[PROP_PAINTABLE] =
+      g_param_spec_object ("paintable",
+                           P_("Paintable"),
+                           P_("A GdkPaintable to display"),
+                           GDK_TYPE_TEXTURE,
+                           GTK_PARAM_READWRITE);
 
   image_props[PROP_TEXTURE] =
       g_param_spec_object ("texture",
@@ -306,6 +314,9 @@ gtk_image_set_property (GObject      *object,
     case PROP_SURFACE:
       gtk_image_set_from_surface (image, g_value_get_boxed (value));
       break;
+    case PROP_PAINTABLE:
+      gtk_image_set_from_paintable (image, g_value_get_object (value));
+      break;
     case PROP_TEXTURE:
       gtk_image_set_from_texture (image, g_value_get_object (value));
       break;
@@ -352,6 +363,9 @@ gtk_image_get_property (GObject     *object,
     {
     case PROP_SURFACE:
       g_value_set_boxed (value, _gtk_icon_helper_peek_surface (&priv->icon_helper));
+      break;
+    case PROP_PAINTABLE:
+      g_value_set_object (value, _gtk_icon_helper_peek_paintable (&priv->icon_helper));
       break;
     case PROP_TEXTURE:
       g_value_set_object (value, _gtk_icon_helper_peek_texture (&priv->icon_helper));
@@ -475,6 +489,32 @@ gtk_image_new_from_pixbuf (GdkPixbuf *pixbuf)
   image = g_object_new (GTK_TYPE_IMAGE, NULL);
 
   gtk_image_set_from_pixbuf (image, pixbuf);
+
+  return GTK_WIDGET (image);  
+}
+
+/**
+ * gtk_image_new_from_paintable:
+ * @paintable: (allow-none): a #GdkPaintable, or %NULL
+ *
+ * Creates a new #GtkImage displaying @paintable.
+ * The #GtkImage does not assume a reference to the
+ * paintable; you still need to unref it if you own references.
+ * #GtkImage will add its own reference rather than adopting yours.
+ *
+ * The #GtkImage will track changes to the @paintable and update
+ * its size and contents in response to it.
+ *
+ * Returns: a new #GtkImage
+ **/
+GtkWidget*
+gtk_image_new_from_paintable (GdkPaintable *paintable)
+{
+  GtkImage *image;
+
+  image = g_object_new (GTK_TYPE_IMAGE, NULL);
+
+  gtk_image_set_from_paintable (image, paintable);
 
   return GTK_WIDGET (image);  
 }
@@ -945,6 +985,64 @@ gtk_image_set_from_surface (GtkImage       *image,
   g_object_thaw_notify (G_OBJECT (image));
 }
 
+static void
+gtk_image_paintable_invalidate_contents (GdkPaintable *paintable,
+                                         GtkImage     *image)
+{
+  gtk_widget_queue_draw (GTK_WIDGET (image));
+}
+
+static void
+gtk_image_paintable_invalidate_size (GdkPaintable *paintable,
+                                     GtkImage     *image)
+{
+  GtkImagePrivate *priv = gtk_image_get_instance_private (image);
+
+  gtk_icon_helper_invalidate (&priv->icon_helper);
+}
+
+/**
+ * gtk_image_set_from_paintable:
+ * @image: a #GtkImage
+ * @paintable: (nullable): a #GdkPaintable or %NULL
+ *
+ * See gtk_image_new_from_paintable() for details.
+ **/
+void
+gtk_image_set_from_paintable (GtkImage     *image,
+			      GdkPaintable *paintable)
+{
+  GtkImagePrivate *priv = gtk_image_get_instance_private (image);
+
+  g_return_if_fail (GTK_IS_IMAGE (image));
+  g_return_if_fail (paintable == NULL || GDK_IS_PAINTABLE (paintable));
+
+  g_object_freeze_notify (G_OBJECT (image));
+
+  if (paintable)
+    g_object_ref (paintable);
+
+  gtk_image_clear (image);
+
+  if (paintable)
+    {
+      _gtk_icon_helper_set_paintable (&priv->icon_helper, paintable);
+      g_signal_connect (paintable,
+                        "invalidate-contents",
+                        G_CALLBACK (gtk_image_paintable_invalidate_contents),
+                        image);
+      g_signal_connect (paintable,
+                        "invalidate-size",
+                        G_CALLBACK (gtk_image_paintable_invalidate_size),
+                        image);
+      g_object_unref (paintable);
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_PAINTABLE]);
+  
+  g_object_thaw_notify (G_OBJECT (image));
+}
+
 /**
  * gtk_image_set_from_texture:
  * @image: a #GtkImage
@@ -1020,6 +1118,29 @@ gtk_image_get_surface (GtkImage *image)
   g_return_val_if_fail (GTK_IS_IMAGE (image), NULL);
 
   return _gtk_icon_helper_peek_surface (&priv->icon_helper);
+}
+
+/**
+ * gtk_image_get_paintable:
+ * @image: a #GtkImage
+ *
+ * Gets the image #GdkPaintable being displayed by the #GtkImage.
+ * The storage type of the image must be %GTK_IMAGE_EMPTY or
+ * %GTK_IMAGE_PAINTABLE (see gtk_image_get_storage_type()).
+ * The caller of this function does not own a reference to the
+ * returned paintable.
+ * 
+ * Returns: (nullable) (transfer none): the displayed paintable, or %NULL if
+ *   the image is empty
+ **/
+GdkPaintable *
+gtk_image_get_paintable (GtkImage *image)
+{
+  GtkImagePrivate *priv = gtk_image_get_instance_private (image);
+
+  g_return_val_if_fail (GTK_IS_IMAGE (image), NULL);
+
+  return _gtk_icon_helper_peek_paintable (&priv->icon_helper);
 }
 
 /**
@@ -1205,6 +1326,9 @@ gtk_image_notify_for_storage_type (GtkImage     *image,
     case GTK_IMAGE_TEXTURE:
       g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_TEXTURE]);
       break;
+    case GTK_IMAGE_PAINTABLE:
+      g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_PAINTABLE]);
+      break;
     case GTK_IMAGE_EMPTY:
     default:
       break;
@@ -1275,6 +1399,17 @@ gtk_image_clear (GtkImage *image)
       g_free (priv->resource_path);
       priv->resource_path = NULL;
       g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_RESOURCE]);
+    }
+
+  if (storage_type == GTK_IMAGE_PAINTABLE)
+    {
+      GdkPaintable *paintable = _gtk_icon_helper_peek_paintable (&priv->icon_helper);
+      g_signal_handlers_disconnect_by_func (paintable,
+                                            gtk_image_paintable_invalidate_contents,
+                                            image);
+      g_signal_handlers_disconnect_by_func (paintable,
+                                            gtk_image_paintable_invalidate_size,
+                                            image);
     }
 
   _gtk_icon_helper_clear (&priv->icon_helper);

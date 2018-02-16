@@ -30,6 +30,7 @@ GtkImageDefinition *    gtk_image_definition_new_icon_name      (const char     
 GtkImageDefinition *    gtk_image_definition_new_gicon          (GIcon                          *gicon);
 GtkImageDefinition *    gtk_image_definition_new_surface        (cairo_surface_t                *surface);
 GtkImageDefinition *    gtk_image_definition_new_texture        (GdkTexture                     *texture);
+GtkImageDefinition *    gtk_image_definition_new_paintable      (GdkPaintable                   *paintable);
 
 GtkImageDefinition *    gtk_image_definition_ref                (GtkImageDefinition             *def);
 void                    gtk_image_definition_unref              (GtkImageDefinition             *def);
@@ -40,6 +41,7 @@ const gchar *           gtk_image_definition_get_icon_name      (const GtkImageD
 GIcon *                 gtk_image_definition_get_gicon          (const GtkImageDefinition       *def);
 cairo_surface_t *       gtk_image_definition_get_surface        (const GtkImageDefinition       *def);
 GdkTexture *            gtk_image_definition_get_texture        (const GtkImageDefinition       *def);
+GdkPaintable *          gtk_image_definition_get_paintable      (const GtkImageDefinition       *def);
 
 
 G_END_DECLS
