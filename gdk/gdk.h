@@ -56,6 +56,7 @@
 #include <gdk/gdkkeysyms.h>
 #include <gdk/gdkmemorytexture.h>
 #include <gdk/gdkmonitor.h>
+#include <gdk/gdkpaintable.h>
 #include <gdk/gdkpango.h>
 #include <gdk/gdkpixbuf.h>
 #include <gdk/gdkproperty.h>
