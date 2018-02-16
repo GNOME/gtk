@@ -321,5 +321,3 @@ modules/printbackends/cups/gtkprintbackendcups.c
 modules/printbackends/cups/gtkprintercups.c
 modules/printbackends/file/gtkprintbackendfile.c
 modules/printbackends/lpr/gtkprintbackendlpr.c
-modules/printbackends/papi/gtkprintbackendpapi.c
-modules/printbackends/test/gtkprintbackendtest.c
