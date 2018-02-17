@@ -21,7 +21,6 @@
 
 #include "gtkcssimagerecolorprivate.h"
 #include "gtkcssimageprivate.h"
-#include "gtkcssimagesurfaceprivate.h"
 #include "gtkcsspalettevalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkiconthemeprivate.h"
