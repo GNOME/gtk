@@ -446,6 +446,9 @@ do_images (GtkWidget *do_widget)
       gtk_media_stream_set_loop (GTK_MEDIA_STREAM (video), TRUE);
       image = gtk_image_new_from_paintable (GDK_PAINTABLE (video));
       gtk_container_add (GTK_CONTAINER (frame), image);
+      gtk_style_context_add_paint_for_display (gdk_display_get_default (),
+                                               "video",
+                                               GDK_PAINTABLE (video));
 
       controls = gtk_media_controls_new (video);
       gtk_container_add (GTK_CONTAINER (vbox), controls);
