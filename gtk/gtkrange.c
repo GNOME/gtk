@@ -2376,8 +2376,6 @@ gtk_range_adjustment_value_changed (GtkAdjustment *adjustment,
 {
   GtkRange *range = GTK_RANGE (data);
 
-  gtk_range_calc_slider (range);
-
   /* Note that we don't round off to priv->round_digits here.
    * that's because it's really broken to change a value
    * in response to a change signal on that value; round_digits
