@@ -2381,12 +2381,6 @@ gtk_range_adjustment_value_changed (GtkAdjustment *adjustment,
   GtkRange *range = GTK_RANGE (data);
 
   gtk_range_calc_slider (range);
-  
-  /* now check whether the layout changed  */
-  if (GTK_IS_SCALE (range) && gtk_scale_get_draw_value (GTK_SCALE (range)))
-    {
-      gtk_widget_queue_draw (GTK_WIDGET (range));
-    }
 
   /* Note that we don't round off to priv->round_digits here.
    * that's because it's really broken to change a value
