@@ -444,6 +444,9 @@ do_images (GtkWidget *do_widget)
       video = gtk_video_new_for_resource ("/images/gtk-logo.webm");
       gtk_media_stream_set_loop (gtk_video_get_media_stream (GTK_VIDEO (video)), TRUE);
       gtk_container_add (GTK_CONTAINER (frame), video);
+      gtk_style_context_add_paint_for_display (gdk_display_get_default (),
+                                               "video",
+                                               GDK_PAINTABLE (gtk_video_get_media_stream (GTK_VIDEO (video))));
 
       /* Sensitivity control */
       button = gtk_toggle_button_new_with_mnemonic ("_Insensitive");
