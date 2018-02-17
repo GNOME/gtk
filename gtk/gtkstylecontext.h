@@ -945,6 +945,13 @@ void gtk_style_context_add_provider_for_display    (GdkDisplay       *display,
 GDK_AVAILABLE_IN_ALL
 void gtk_style_context_remove_provider_for_display (GdkDisplay       *display,
                                                     GtkStyleProvider *provider);
+GDK_AVAILABLE_IN_ALL
+gboolean gtk_style_context_add_paint_for_display   (GdkDisplay       *display,
+                                                    const char       *name,
+                                                    GdkPaintable     *paintable);
+GDK_AVAILABLE_IN_ALL
+gboolean gtk_style_context_remove_paint_for_display(GdkDisplay       *display,
+                                                    const char       *name);
 
 GDK_AVAILABLE_IN_ALL
 void gtk_style_context_add_provider    (GtkStyleContext  *context,
