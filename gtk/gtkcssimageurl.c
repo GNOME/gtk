@@ -24,7 +24,7 @@
 #include "gtkcssimageurlprivate.h"
 
 #include "gtkcssimageinvalidprivate.h"
-#include "gtkcssimagesurfaceprivate.h"
+#include "gtkcssimagepaintableprivate.h"
 #include "gtkstyleproviderprivate.h"
 
 G_DEFINE_TYPE (GtkCssImageUrl, _gtk_css_image_url, GTK_TYPE_CSS_IMAGE)
@@ -75,7 +75,7 @@ gtk_css_image_url_load_image (GtkCssImageUrl  *url,
     }
   else
     {
-      url->loaded_image = gtk_css_image_surface_new (texture);
+      url->loaded_image = gtk_css_image_paintable_new (GDK_PAINTABLE (texture), GDK_PAINTABLE (texture));
       g_object_unref (texture);
     }
 
