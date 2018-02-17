@@ -298,6 +298,56 @@ gtk_css_value_array_transition (GtkCssValue *start,
     }
 }
 
+static gboolean
+gtk_css_value_array_is_dynamic (GtkCssValue *value)
+{
+  guint i;
+
+  for (i = 0; i < value->n_values; i++)
+    {
+      if (gtk_css_value_is_dynamic (value->values[i]))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static GtkCssValue *
+gtk_css_value_array_get_dynamic_value (GtkCssValue *value,
+                                       gint64       monotonic_time)
+{
+  GtkCssValue *result;
+  GtkCssValue *i_value;
+  guint i, j;
+
+  if (!gtk_css_value_is_dynamic (value))
+    return gtk_css_value_ref (value);
+
+  result = NULL;
+  for (i = 0; i < value->n_values; i++)
+    {
+      i_value = gtk_css_value_get_dynamic_value (value->values[i], monotonic_time);
+
+      if (result == NULL &&
+	  i_value != value->values[i])
+	{
+	  result = _gtk_css_array_value_new_from_array (value->values, value->n_values);
+	  for (j = 0; j < i; j++)
+	    _gtk_css_value_ref (result->values[j]);
+	}
+
+      if (result != NULL)
+	result->values[i] = i_value;
+      else
+	_gtk_css_value_unref (i_value);
+    }
+
+  if (result == NULL)
+    return _gtk_css_value_ref (value);
+
+  return result;
+}
+
 static void
 gtk_css_value_array_print (const GtkCssValue *value,
                            GString           *string)
@@ -323,8 +373,8 @@ static const GtkCssValueClass GTK_CSS_VALUE_ARRAY = {
   gtk_css_value_array_compute,
   gtk_css_value_array_equal,
   gtk_css_value_array_transition,
-  NULL,
-  NULL,
+  gtk_css_value_array_is_dynamic,
+  gtk_css_value_array_get_dynamic_value,
   gtk_css_value_array_print
 };
 
