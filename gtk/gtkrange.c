@@ -1954,8 +1954,6 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
 
       update_initial_slider_position (range, x, y, &slider_alloc);
       range_grab_add (range, priv->slider_widget);
-
-      gtk_widget_queue_draw (widget);
     }
   else if (priv->mouse_location == priv->trough_widget &&
            (source == GDK_SOURCE_TOUCHSCREEN ||
@@ -1984,8 +1982,6 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
       update_initial_slider_position (range, x, y, &slider);
 
       range_grab_add (range, priv->slider_widget);
-
-      gtk_widget_queue_draw (widget);
 
       update_slider_position (range, x, y);
     }
