@@ -2386,7 +2386,7 @@ cups_printer_handle_attribute (GtkPrintBackendCups *cups_backend,
   else
     {
       GTK_NOTE (PRINTING,
-		g_print ("CUPS Backend: Attribute %s ignored", ippGetName (attr)));
+		g_print ("CUPS Backend: Attribute %s ignored\n", ippGetName (attr)));
     }
 }
 
