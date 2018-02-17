@@ -75,6 +75,8 @@ struct _GtkCssImageClass
                                                     GtkSnapshot                *snapshot,
                                                     double                      width,
                                                     double                      height);
+  /* is this image to be considered invalid (see https://drafts.csswg.org/css-images-4/#invalid-image for details) */
+  gboolean     (* is_invalid)                      (GtkCssImage                *image);
   /* does this image change based on timestamp? (optional) */
   gboolean     (* is_dynamic)                      (GtkCssImage                *image);
   /* get image for given timestamp or @image when not dynamic (optional) */
@@ -117,6 +119,7 @@ void           gtk_css_image_snapshot              (GtkCssImage                *
                                                     GtkSnapshot                *snapshot,
                                                     double                      width,
                                                     double                      height);
+gboolean       gtk_css_image_is_invalid            (GtkCssImage                *image);
 gboolean       gtk_css_image_is_dynamic            (GtkCssImage                *image);
 GtkCssImage *  gtk_css_image_get_dynamic_image     (GtkCssImage                *image,
                                                     gint64                      monotonic_time);
