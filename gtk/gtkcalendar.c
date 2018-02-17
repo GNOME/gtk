@@ -634,6 +634,9 @@ gtk_calendar_class_init (GtkCalendarClass *class)
   gtk_widget_class_set_css_name (widget_class, I_("calendar"));
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
+
 static void
 gtk_calendar_init (GtkCalendar *calendar)
 {
@@ -644,6 +647,7 @@ gtk_calendar_init (GtkCalendar *calendar)
 #ifdef G_OS_WIN32
   wchar_t wbuffer[100];
 #else
+  static const char *month_format = NULL;
   char buffer[255];
   time_t tmp_time;
 #endif
@@ -703,8 +707,21 @@ gtk_calendar_init (GtkCalendar *calendar)
       {
 #ifndef G_OS_WIN32
         tmp_time=i*2764800;
-        /* Note: "%OB" works only in glibc >= 2.27 and in BSD and OS X.  */
-        strftime (buffer, sizeof (buffer), "%OB", gmtime (&tmp_time));
+        if (G_UNLIKELY (month_format == NULL))
+          {
+            buffer[0] = '\0';
+            month_format = "%OB";
+            strftime (buffer, sizeof (buffer), month_format, gmtime (&tmp_time));
+            /* "%OB" is not supported in Linux with glibc < 2.27  */
+            if (!strcmp (buffer, "%OB") || !strcmp (buffer, "OB") || !strcmp (buffer, ""))
+              {
+                month_format = "%B";
+                strftime (buffer, sizeof (buffer), month_format, gmtime (&tmp_time));
+              }
+          }
+        else
+          strftime (buffer, sizeof (buffer), month_format, gmtime (&tmp_time));
+
         default_monthname[i] = g_locale_to_utf8 (buffer, -1, NULL, NULL, NULL);
 #else
         if (!GetLocaleInfoW (GetThreadLocale (), LOCALE_SMONTHNAME1 + i,
@@ -823,7 +840,8 @@ gtk_calendar_init (GtkCalendar *calendar)
   calendar_compute_days (calendar);
 }
 
-
+#pragma GCC diagnostic pop
+
 /****************************************
  *          Utility Functions           *
  ****************************************/
