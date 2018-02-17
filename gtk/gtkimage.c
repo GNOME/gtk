@@ -292,6 +292,8 @@ gtk_image_finalize (GObject *object)
   GtkImage *image = GTK_IMAGE (object);
   GtkImagePrivate *priv = gtk_image_get_instance_private (image);
 
+  gtk_image_clear (image);
+
   gtk_icon_helper_destroy (&priv->icon_helper);
 
   g_free (priv->filename);
