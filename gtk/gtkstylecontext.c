@@ -638,6 +638,34 @@ gtk_style_context_remove_provider_for_display (GdkDisplay       *display,
   _gtk_style_cascade_remove_provider (cascade, provider);
 }
 
+gboolean
+gtk_style_context_add_paint_for_display (GdkDisplay   *display,
+                                         const char   *name,
+                                         GdkPaintable *paintable)
+{
+  GtkStyleCascade *cascade;
+
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+  g_return_val_if_fail (name != NULL, FALSE);
+  g_return_val_if_fail (GDK_IS_PAINTABLE (paintable), FALSE);
+
+  cascade = _gtk_settings_get_style_cascade (gtk_settings_get_for_display (display), 1);
+  return gtk_style_cascade_add_paint (cascade, name, paintable);
+}
+
+gboolean
+gtk_style_context_remove_paint_for_display (GdkDisplay *display,
+                                            const char *name)
+{
+  GtkStyleCascade *cascade;
+
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+  g_return_val_if_fail (name != NULL, FALSE);
+
+  cascade = _gtk_settings_get_style_cascade (gtk_settings_get_for_display (display), 1);
+  return gtk_style_cascade_remove_paint (cascade, name);
+}
+
 /**
  * gtk_style_context_get_section:
  * @context: a #GtkStyleContext

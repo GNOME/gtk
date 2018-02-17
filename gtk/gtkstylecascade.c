@@ -155,6 +155,42 @@ gtk_style_cascade_get_color (GtkStyleProvider *provider,
   return NULL;
 }
 
+static GdkPaintable *
+gtk_style_cascade_get_paint (GtkStyleProvider *provider,
+                             const char       *name)
+{
+  GtkStyleCascade *cascade = GTK_STYLE_CASCADE (provider);
+  GtkStyleCascadeIter iter;
+  GdkPaintable *paintable;
+  GtkStyleProvider *item;
+
+  for (item = gtk_style_cascade_iter_init (cascade, &iter);
+       item;
+       item = gtk_style_cascade_iter_next (cascade, &iter))
+    {
+      if (GTK_IS_STYLE_PROVIDER (item))
+        {
+          paintable = gtk_style_provider_get_paint (GTK_STYLE_PROVIDER (item), name);
+          if (paintable)
+            {
+              gtk_style_cascade_iter_clear (&iter);
+              return paintable;
+            }
+        }
+      else
+        {
+          /* If somebody hits this code path, shout at them */
+        }
+    }
+
+  gtk_style_cascade_iter_clear (&iter);
+
+  if (cascade->paints == NULL)
+    return NULL;
+
+  return g_hash_table_lookup (cascade->paints, name);
+}
+
 static int
 gtk_style_cascade_get_scale (GtkStyleProvider *provider)
 {
@@ -227,6 +263,7 @@ static void
 gtk_style_cascade_provider_iface_init (GtkStyleProviderInterface *iface)
 {
   iface->get_color = gtk_style_cascade_get_color;
+  iface->get_paint = gtk_style_cascade_get_paint;
   iface->get_settings = gtk_style_cascade_get_settings;
   iface->get_scale = gtk_style_cascade_get_scale;
   iface->get_keyframes = gtk_style_cascade_get_keyframes;
@@ -244,6 +281,7 @@ gtk_style_cascade_dispose (GObject *object)
 
   _gtk_style_cascade_set_parent (cascade, NULL);
   g_array_unref (cascade->providers);
+  g_clear_pointer (&cascade->paints, g_hash_table_unref);
 
   G_OBJECT_CLASS (_gtk_style_cascade_parent_class)->dispose (object);
 }
@@ -385,4 +423,40 @@ _gtk_style_cascade_get_scale (GtkStyleCascade *cascade)
   gtk_internal_return_val_if_fail (GTK_IS_STYLE_CASCADE (cascade), 1);
 
   return cascade->scale;
+}
+
+gboolean
+gtk_style_cascade_add_paint (GtkStyleCascade *cascade,
+                             const char      *name,
+                             GdkPaintable    *paintable)
+{
+  if (cascade->paints == NULL)
+    {
+      cascade->paints = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
+    }
+  else
+    {
+      if (g_hash_table_contains (cascade->paints, name))
+        return FALSE;
+    }
+
+  g_hash_table_insert (cascade->paints, g_strdup (name), g_object_ref (paintable));
+  gtk_style_provider_changed (GTK_STYLE_PROVIDER (cascade));
+
+  return TRUE;
+}
+
+gboolean
+gtk_style_cascade_remove_paint (GtkStyleCascade *cascade,
+                                const char      *name)
+{
+  gboolean result;
+
+  if (cascade->paints == NULL)
+    return FALSE;
+
+  result = g_hash_table_remove (cascade->paints, name);
+  if (result)
+    gtk_style_provider_changed (GTK_STYLE_PROVIDER (cascade));
+  return result;
 }
