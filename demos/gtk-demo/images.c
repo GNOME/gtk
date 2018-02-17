@@ -17,6 +17,8 @@
 #include <stdio.h>
 #include <errno.h>
 
+#include "gtkdemovideo.h"
+
 static GtkWidget *window = NULL;
 static GdkPixbufLoader *pixbuf_loader = NULL;
 static guint load_timeout = 0;
@@ -317,12 +319,15 @@ toggle_sensitivity_callback (GtkWidget *togglebutton,
 GtkWidget *
 do_images (GtkWidget *do_widget)
 {
+  GtkDemoVideo *video;
   GtkWidget *frame;
   GtkWidget *vbox;
+  GtkWidget *hbox;
+  GtkWidget *base_vbox;
   GtkWidget *image;
   GtkWidget *label;
   GtkWidget *button;
-  GIcon     *gicon;
+  GIcon *gicon;
 
   if (!window)
     {
@@ -336,9 +341,15 @@ do_images (GtkWidget *do_widget)
       g_signal_connect (window, "destroy",
                         G_CALLBACK (cleanup_callback), NULL);
 
+      base_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
+      g_object_set (base_vbox, "margin", 16, NULL);
+      gtk_container_add (GTK_CONTAINER (window), base_vbox);
+
+      hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 16);
+      gtk_container_add (GTK_CONTAINER (base_vbox), hbox);
+
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
-      g_object_set (vbox, "margin", 16, NULL);
-      gtk_container_add (GTK_CONTAINER (window), vbox);
+      gtk_container_add (GTK_CONTAINER (hbox), vbox);
 
       label = gtk_label_new (NULL);
       gtk_label_set_markup (GTK_LABEL (label),
@@ -395,6 +406,8 @@ do_images (GtkWidget *do_widget)
 
 
       /* Progressive */
+      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
+      gtk_container_add (GTK_CONTAINER (hbox), vbox);
 
       label = gtk_label_new (NULL);
       gtk_label_set_markup (GTK_LABEL (label),
@@ -415,13 +428,33 @@ do_images (GtkWidget *do_widget)
 
       start_progressive_loading (image);
 
+      /* Video */
+      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
+      gtk_container_add (GTK_CONTAINER (hbox), vbox);
+
+      label = gtk_label_new (NULL);
+      gtk_label_set_markup (GTK_LABEL (label),
+                            "<u>Displaying video</u>");
+      gtk_box_pack_start (GTK_BOX (vbox), label);
+
+      frame = gtk_frame_new (NULL);
+      gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
+      gtk_widget_set_halign (frame, GTK_ALIGN_CENTER);
+      gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
+      gtk_box_pack_start (GTK_BOX (vbox), frame);
+
+      video = gtk_demo_video_new_for_filename ("/home/lvs/incredibles2.mp4");
+      image = gtk_image_new_from_paintable (GDK_PAINTABLE (video));
+      gtk_container_add (GTK_CONTAINER (frame), image);
+      g_object_unref (video);
+
       /* Sensitivity control */
       button = gtk_toggle_button_new_with_mnemonic ("_Insensitive");
-      gtk_box_pack_start (GTK_BOX (vbox), button);
+      gtk_box_pack_start (GTK_BOX (base_vbox), button);
 
       g_signal_connect (button, "toggled",
                         G_CALLBACK (toggle_sensitivity_callback),
-                        vbox);
+                        base_vbox);
     }
 
   if (!gtk_widget_get_visible (window))

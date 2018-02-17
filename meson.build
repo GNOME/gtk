@@ -93,6 +93,7 @@ broadway_enabled       = get_option('enable-broadway-backend')
 quartz_enabled         = get_option('enable-quartz-backend')
 win32_enabled          = get_option('enable-win32-backend')
 cloudproviders_enabled = get_option('enable-cloudproviders')
+ffmpeg_enabled         = get_option('enable-ffmpeg')
 
 os_unix   = false
 os_linux  = false
@@ -586,6 +587,16 @@ if cloudproviders_enabled
   else
     error('Cloudproviders support not found, but was explicitly requested.')
   endif
+endif
+
+if ffmpeg_enabled
+  libavfilter_dep = dependency('libavfilter', version: '>= 6.47.100', required: true)
+  libavformat_dep = dependency('libavformat', version: '>= 57.41.100', required: true)
+  libavcodec_dep = dependency('libavcodec', version: '>= 57.48.101', required: true)
+  libavutil_dep = dependency('libavutil', version: '>= 55.28.100', required: true)
+  libswscale_dep = dependency('libswscale', version: '>= 4.6.100', required: true)
+  ffmpeg_deps = [libavfilter_dep, libavformat_dep, libavcodec_dep, libavutil_dep, libswscale_dep]
+  cdata.set('HAVE_FFMPEG', 1)
 endif
 
 subdir('modules/input')

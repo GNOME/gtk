@@ -8,6 +8,7 @@
 #include <gtk/gtk.h>
 
 #include "gtkfishbowl.h"
+#include "gtkdemovideo.h"
 #include "gtkgears.h"
 
 const char *const css =
@@ -82,6 +83,15 @@ create_label (void)
 }
 
 static GtkWidget *
+create_video (void)
+{
+  GtkDemoVideo *video = gtk_demo_video_new_for_filename ("/home/lvs/incredibles2.mp4");
+  GtkWidget *w = gtk_image_new_from_paintable (GDK_PAINTABLE (video));
+
+  return w;
+}
+
+static GtkWidget *
 create_gears (void)
 {
   GtkWidget *w = gtk_gears_new ();
@@ -102,6 +112,7 @@ static const struct {
   { "Label"     , create_label          },
   { "Spinner"   , create_spinner        },
   { "Spinbutton", create_spinbutton     },
+  { "Videos",     create_video          },
   { "Gears",      create_gears          },
 };
 

@@ -77,6 +77,10 @@ if harfbuzz_dep.found() and pangoft_dep.found()
   gtkdemo_deps += [ harfbuzz_dep, ]
 endif
 
+if ffmpeg_enabled
+  gtkdemo_deps += ffmpeg_deps
+endif
+
 if os_unix
   demos += files('pagesetup.c')
 endif
@@ -94,7 +98,7 @@ gtkdemo_resources = gnome.compile_resources('gtkdemo_resources',
 
 executable('gtk4-demo',
            'main.c', 'gtkfishbowl.c', 'fontplane.c', 'script-names.c', 'language-names.c',
-                   'gtkgears.c',
+                   'gtkgears.c', 'gtkdemovideo.c',
                    demos, demos_h, gtkdemo_resources,
            c_args: gtkdemo_args,
            dependencies: gtkdemo_deps,
