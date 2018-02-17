@@ -360,7 +360,7 @@ void
 gdk_paintable_invalidate_contents (GdkPaintable *paintable)
 {
   g_return_if_fail (GDK_IS_PAINTABLE (paintable));
-  g_return_if_fail (gdk_paintable_get_flags (paintable) & GDK_PAINTABLE_STATIC_CONTENTS);
+  g_return_if_fail (!(gdk_paintable_get_flags (paintable) & GDK_PAINTABLE_STATIC_CONTENTS));
 
   g_signal_emit (paintable, signals[INVALIDATE_CONTENTS], 0);
 }
@@ -382,7 +382,7 @@ void
 gdk_paintable_invalidate_size (GdkPaintable *paintable)
 {
   g_return_if_fail (GDK_IS_PAINTABLE (paintable));
-  g_return_if_fail (gdk_paintable_get_flags (paintable) & GDK_PAINTABLE_STATIC_SIZE);
+  g_return_if_fail (!(gdk_paintable_get_flags (paintable) & GDK_PAINTABLE_STATIC_SIZE));
 
   g_signal_emit (paintable, signals[INVALIDATE_SIZE], 0);
 }
