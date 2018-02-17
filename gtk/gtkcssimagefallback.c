@@ -154,10 +154,7 @@ gtk_css_image_fallback_compute (GtkCssImage      *image,
                                                     style,
                                                     parent_style);
 
-          /* Assume that failing to load an image leaves a 0x0 surface image */
-          if (GTK_IS_CSS_IMAGE_SURFACE (copy->images[i]) &&
-              _gtk_css_image_get_width (copy->images[i]) == 0 &&
-              _gtk_css_image_get_height (copy->images[i]) == 0)
+          if (gtk_css_image_is_invalid (copy->images[i]))
             continue;
 
           if (copy->used < 0)

@@ -22,6 +22,8 @@
 #include <string.h>
 
 #include "gtkcssimageurlprivate.h"
+
+#include "gtkcssimageinvalidprivate.h"
 #include "gtkcssimagesurfaceprivate.h"
 #include "gtkstyleproviderprivate.h"
 
@@ -68,11 +70,15 @@ gtk_css_image_url_load_image (GtkCssImageUrl  *url,
                        "Error loading image '%s': %s", uri, local_error->message);
           g_free (uri);
        }
+      
+      url->loaded_image = gtk_css_image_invalid_new ();
+    }
+  else
+    {
+      url->loaded_image = gtk_css_image_surface_new (texture);
+      g_object_unref (texture);
     }
 
-  url->loaded_image = gtk_css_image_surface_new (texture);
-
-  g_clear_object (&texture);
   g_clear_error (&local_error);
 
   return url->loaded_image;
@@ -146,6 +152,14 @@ gtk_css_image_url_equal (GtkCssImage *image1,
 }
 
 static gboolean
+gtk_css_image_url_is_invalid (GtkCssImage *image)
+{
+  GtkCssImageUrl *url = GTK_CSS_IMAGE_URL (image);
+
+  return gtk_css_image_is_invalid (gtk_css_image_url_load_image (url, NULL));
+}
+
+static gboolean
 gtk_css_image_url_parse (GtkCssImage  *image,
                          GtkCssParser *parser)
 {
@@ -192,6 +206,7 @@ _gtk_css_image_url_class_init (GtkCssImageUrlClass *klass)
   image_class->parse = gtk_css_image_url_parse;
   image_class->print = gtk_css_image_url_print;
   image_class->equal = gtk_css_image_url_equal;
+  image_class->is_invalid = gtk_css_image_url_is_invalid;
 
   object_class->dispose = gtk_css_image_url_dispose;
 }
