@@ -121,6 +121,7 @@
   <gresource prefix="/images">
     <file>alphatest.png</file>
     <file>floppybuddy.gif</file>
+    <file>gtk-logo.webm</file>
   </gresource>
   <gresource prefix="/pixbufs">
     <file>apple-red.png</file>
