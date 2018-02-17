@@ -20,7 +20,6 @@
 #include "config.h"
 
 #include "gtkcssimagefallbackprivate.h"
-#include "gtkcssimagesurfaceprivate.h"
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 
