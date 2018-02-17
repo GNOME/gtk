@@ -445,6 +445,9 @@ do_images (GtkWidget *do_widget)
       video = gtk_media_stream_new_for_filename ("/home/lvs/incredibles2.mp4");
       image = gtk_image_new_from_paintable (GDK_PAINTABLE (video));
       gtk_container_add (GTK_CONTAINER (frame), image);
+      gtk_style_context_add_paint_for_display (gdk_display_get_default (),
+                                               "video",
+                                               GDK_PAINTABLE (video));
 
       controls = gtk_media_controls_new (video);
       gtk_container_add (GTK_CONTAINER (vbox), controls);
