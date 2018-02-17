@@ -153,6 +153,22 @@ gtk_style_provider_get_scale (GtkStyleProvider *provider)
   return iface->get_scale (provider);
 }
 
+GdkPaintable *
+gtk_style_provider_get_paint (GtkStyleProvider *provider,
+                              const char       *name)
+{
+  GtkStyleProviderInterface *iface;
+
+  gtk_internal_return_val_if_fail (GTK_IS_STYLE_PROVIDER (provider), NULL);
+
+  iface = GTK_STYLE_PROVIDER_GET_INTERFACE (provider);
+
+  if (!iface->get_paint)
+    return NULL;
+
+  return iface->get_paint (provider, name);
+}
+
 void
 gtk_style_provider_emit_error (GtkStyleProvider *provider,
                                GtkCssSection    *section,
