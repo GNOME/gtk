@@ -38,6 +38,7 @@ struct _GtkStyleCascade
   GObject object;
 
   GtkStyleCascade *parent;
+  GHashTable *paints;
   GArray *providers;
   int scale;
 };
@@ -62,6 +63,11 @@ void                  _gtk_style_cascade_add_provider           (GtkStyleCascade
                                                                  guint                priority);
 void                  _gtk_style_cascade_remove_provider        (GtkStyleCascade     *cascade,
                                                                  GtkStyleProvider    *provider);
+gboolean              gtk_style_cascade_add_paint               (GtkStyleCascade     *cascade,
+                                                                 const char          *name,
+                                                                 GdkPaintable        *paintable);
+gboolean              gtk_style_cascade_remove_paint            (GtkStyleCascade     *cascade,
+                                                                 const char          *name);
 
 
 G_END_DECLS
