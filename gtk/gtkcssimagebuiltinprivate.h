@@ -41,7 +41,6 @@ struct _GtkCssImageBuiltin
 
   GdkRGBA       fg_color;
   GdkRGBA       bg_color;
-  double        rotation;
 };
 
 struct _GtkCssImageBuiltinClass
