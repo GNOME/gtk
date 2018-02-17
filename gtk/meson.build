@@ -46,6 +46,7 @@ gtk_private_sources = files([
   'gtkcssimagecrossfade.c',
   'gtkcssimagefallback.c',
   'gtkcssimageicontheme.c',
+  'gtkcssimageinvalid.c',
   'gtkcssimagelinear.c',
   'gtkcssimageradial.c',
   'gtkcssimagerecolor.c',
