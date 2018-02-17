@@ -8,6 +8,7 @@ struct _GskVulkanCommandPool
   GdkVulkanContext *vulkan;
 
   VkCommandPool vk_command_pool;
+  GPtrArray *buffers;
 };
 
 GskVulkanCommandPool *
@@ -28,12 +29,28 @@ gsk_vulkan_command_pool_new (GdkVulkanContext *context)
                                      NULL,
                                      &self->vk_command_pool);
 
+  self->buffers = g_ptr_array_new ();
+
   return self;
+}
+
+static void
+gsk_vulkan_command_pool_free_buffers (GskVulkanCommandPool *self)
+{
+  vkFreeCommandBuffers (gdk_vulkan_context_get_device (self->vulkan),
+                        self->vk_command_pool,
+                        self->buffers->len,
+                        (VkCommandBuffer *) self->buffers->pdata);
+
+  g_ptr_array_set_size (self->buffers, 0);
 }
 
 void
 gsk_vulkan_command_pool_free (GskVulkanCommandPool *self)
 {
+  gsk_vulkan_command_pool_free_buffers (self);
+  g_ptr_array_unref (self->buffers);
+
   vkDestroyCommandPool (gdk_vulkan_context_get_device (self->vulkan),
                         self->vk_command_pool,
                         NULL);
@@ -44,6 +61,8 @@ gsk_vulkan_command_pool_free (GskVulkanCommandPool *self)
 void
 gsk_vulkan_command_pool_reset (GskVulkanCommandPool *self)
 {
+  gsk_vulkan_command_pool_free_buffers (self);
+
   GSK_VK_CHECK (vkResetCommandPool, gdk_vulkan_context_get_device (self->vulkan),
                                     self->vk_command_pool,
                                     0);
@@ -62,6 +81,7 @@ gsk_vulkan_command_pool_get_buffer (GskVulkanCommandPool *self)
                                               .commandBufferCount = 1,
                                           },
                                           &command_buffer);
+  g_ptr_array_add (self->buffers, command_buffer);
 
   GSK_VK_CHECK (vkBeginCommandBuffer, command_buffer,
                                       &(VkCommandBufferBeginInfo) {
