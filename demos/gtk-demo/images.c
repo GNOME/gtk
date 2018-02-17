@@ -446,6 +446,9 @@ do_images (GtkWidget *do_widget)
       video = gtk_demo_video_new_for_filename ("/home/lvs/incredibles2.mp4");
       image = gtk_image_new_from_paintable (GDK_PAINTABLE (video));
       gtk_container_add (GTK_CONTAINER (frame), image);
+      gtk_style_context_add_paint_for_display (gdk_display_get_default (),
+                                               "video",
+                                               GDK_PAINTABLE (video));
       g_object_unref (video);
 
       /* Sensitivity control */
