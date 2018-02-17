@@ -122,7 +122,7 @@ gtk_css_image_paintable_is_dynamic (GtkCssImage *image)
 {
   GtkCssImagePaintable *paintable = GTK_CSS_IMAGE_PAINTABLE (image);
 
-  return (gdk_paintable_get_flags (paintable->paintable) & GDK_PAINTABLE_IMMUTABLE) == GDK_PAINTABLE_IMMUTABLE;
+  return (gdk_paintable_get_flags (paintable->paintable) & GDK_PAINTABLE_IMMUTABLE) != GDK_PAINTABLE_IMMUTABLE;
 }
 
 static GtkCssImage *
