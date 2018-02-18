@@ -198,10 +198,10 @@ GDK_AVAILABLE_IN_ALL
 void                   gtk_about_dialog_set_translator_credits (GtkAboutDialog  *about,
                                                                 const gchar     *translator_credits);
 GDK_AVAILABLE_IN_ALL
-GdkTexture            *gtk_about_dialog_get_logo               (GtkAboutDialog  *about);
+GdkPaintable          *gtk_about_dialog_get_logo               (GtkAboutDialog  *about);
 GDK_AVAILABLE_IN_ALL
 void                   gtk_about_dialog_set_logo               (GtkAboutDialog  *about,
-                                                                GdkTexture      *logo);
+                                                                GdkPaintable    *logo);
 GDK_AVAILABLE_IN_ALL
 const gchar *          gtk_about_dialog_get_logo_icon_name     (GtkAboutDialog  *about);
 GDK_AVAILABLE_IN_ALL
