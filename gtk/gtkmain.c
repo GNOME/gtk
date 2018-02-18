@@ -762,7 +762,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   display_manager = gdk_display_manager_get ();
   if (gdk_display_manager_get_default_display (display_manager) != NULL)
-    _gtk_accessibility_init ();
+    default_display_notify_cb (display_manager);
 
   g_signal_connect (display_manager, "notify::default-display",
                     G_CALLBACK (default_display_notify_cb),
