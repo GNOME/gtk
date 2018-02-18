@@ -83,7 +83,7 @@ static void                 gtk_print_backend_lpr_print_stream    (GtkPrintBacke
 								   gpointer                 user_data,
 								   GDestroyNotify           dnotify);
 
-G_DEFINE_DYNAMIC_TYPE(GtkPrintBackendLpr, gtk_print_backend_lpr, GTK_TYPE_PRINT_BACKEND
+G_DEFINE_DYNAMIC_TYPE(GtkPrintBackendLpr, gtk_print_backend_lpr, GTK_TYPE_PRINT_BACKEND)
 
 void
 g_io_module_load (GIOModule *module)

@@ -47,8 +47,6 @@ typedef struct _GtkPrintBackendFileClass GtkPrintBackendFileClass;
 
 #define _STREAM_MAX_CHUNK_SIZE 8192
 
-static GType print_backend_file_type = 0;
-
 struct _GtkPrintBackendFileClass
 {
   GtkPrintBackendClass parent_class;
