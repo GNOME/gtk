@@ -122,36 +122,13 @@ additional environment variables.
   </para>
 </formalpara>
 
-<formalpara>
-  <title><envar>GTK3_MODULES</envar></title>
-
-  <para>
-    A list of modules to load. Note that GTK+ also allows to specify modules to load via a commandline option (<option>--gtk-module</option>) and with the <literal>gtk-modules</literal> setting.
-  </para>
-</formalpara>
-
-<formalpara>
-  <title><envar>GTK_MODULES</envar></title>
-
-  <para>
-    A list of modules to load in addition to the ones in the <envar>GTK3_MODULES</envar> variable.
-  </para>
-  <warning>
-    Note that this environment variable is read by GTK+ 2.x too,
-    which may not have the same set of modules available for loading.
-    Use <envar>GTK3_MODULES</envar> for modules that are only compatible
-    with GTK+ 3.
-  </warning>
-</formalpara>
-
 <formalpara id="gtk-path">
   <title><envar>GTK_PATH</envar></title>
 
   <para>
     Specifies a list of directories to search when GTK+ is looking for
-    dynamically loaded objects such as the modules specified by
-    <envar>GTK_MODULES</envar>, theme engines, input method
-    modules, file system backends and print backends. If the path to
+    dynamically loaded objects such as input method
+    modules and print backends. If the path to
     the dynamically loaded object is given as an absolute path name,
     then GTK+ loads it directly.
     Otherwise, GTK+ goes in turn through the directories in <envar>GTK_PATH</envar>,
