@@ -486,7 +486,6 @@ gtk_public_headers = files([
   'gtkmenutoolbutton.h',
   'gtkmessagedialog.h',
   'gtkmodelbutton.h',
-  'gtkmodules.h',
   'gtkmountoperation.h',
   'gtknativedialog.h',
   'gtknotebook.h',

@@ -22,8 +22,6 @@
 
 #include "gtksettings.h"
 
-#include "gtkmodules.h"
-#include "gtkmodulesprivate.h"
 #include "gtksettingsprivate.h"
 #include "gtkintl.h"
 #include "gtkwidget.h"
@@ -154,7 +152,6 @@ enum {
   PROP_KEY_THEME_NAME,
   PROP_DND_DRAG_THRESHOLD,
   PROP_FONT_NAME,
-  PROP_MODULES,
   PROP_XFT_ANTIALIAS,
   PROP_XFT_HINTING,
   PROP_XFT_HINTSTYLE,
@@ -212,7 +209,6 @@ static guint    settings_install_property_parser (GtkSettingsClass      *class,
                                                   GParamSpec            *pspec,
                                                   GtkRcPropertyParser    parser);
 static void    settings_update_double_click      (GtkSettings           *settings);
-static void    settings_update_modules           (GtkSettings           *settings);
 
 static void    settings_update_cursor_theme      (GtkSettings           *settings);
 static void    settings_update_font_options      (GtkSettings           *settings);
@@ -454,15 +450,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                   GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_FONT_NAME);
-
-  result = settings_install_property_parser (class,
-                                             g_param_spec_string ("gtk-modules",
-                                                                  P_("GTK Modules"),
-                                                                  P_("List of currently active GTK modules"),
-                                                                  NULL,
-                                                                  GTK_PARAM_READWRITE),
-                                             NULL);
-  g_assert (result == PROP_MODULES);
 
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-xft-antialias",
@@ -1203,7 +1190,6 @@ gtk_settings_create_for_display (GdkDisplay *display)
 
   settings_init_style (settings);
   settings_update_xsettings (settings);
-  settings_update_modules (settings);
   settings_update_double_click (settings);
   settings_update_cursor_theme (settings);
   settings_update_font_options (settings);
@@ -1332,9 +1318,6 @@ gtk_settings_notify (GObject    *object,
 
   switch (property_id)
     {
-    case PROP_MODULES:
-      settings_update_modules (settings);
-      break;
     case PROP_DOUBLE_CLICK_TIME:
     case PROP_DOUBLE_CLICK_DISTANCE:
       settings_update_double_click (settings);
@@ -2053,20 +2036,6 @@ settings_update_double_click (GtkSettings *settings)
 
   gdk_display_set_double_click_time (priv->display, double_click_time);
   gdk_display_set_double_click_distance (priv->display, double_click_distance);
-}
-
-static void
-settings_update_modules (GtkSettings *settings)
-{
-  gchar *modules;
-
-  g_object_get (settings,
-                "gtk-modules", &modules,
-                NULL);
-
-  _gtk_modules_settings_changed (settings, modules);
-
-  g_free (modules);
 }
 
 static void
