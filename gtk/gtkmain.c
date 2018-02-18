@@ -120,7 +120,6 @@
 #include "gtkdndprivate.h"
 #include "gtkmain.h"
 #include "gtkmenu.h"
-#include "gtkmodules.h"
 #include "gtkmodulesprivate.h"
 #include "gtkprivate.h"
 #include "gtkrecentmanager.h"
@@ -383,8 +382,6 @@ gtk_disable_setlocale (void)
 #undef gtk_init_check
 #endif
 
-static GString *gtk_modules_string = NULL;
-
 #ifdef G_OS_WIN32
 
 static char *iso639_to_check = NULL;
@@ -576,21 +573,6 @@ do_pre_parse_initialization (void)
     }
 #endif  /* G_ENABLE_DEBUG */
 
-  env_string = g_getenv ("GTK3_MODULES");
-  if (env_string)
-    gtk_modules_string = g_string_new (env_string);
-
-  env_string = g_getenv ("GTK_MODULES");
-  if (env_string)
-    {
-      if (gtk_modules_string)
-        g_string_append_c (gtk_modules_string, G_SEARCHPATH_SEPARATOR);
-      else
-        gtk_modules_string = g_string_new (NULL);
-
-      g_string_append (gtk_modules_string, env_string);
-    }
-
   env_string = g_getenv ("GTK_SLOWDOWN");
   if (env_string)
     {
@@ -646,16 +628,6 @@ do_post_parse_initialization (void)
   _gtk_accel_map_init ();
 
   gtk_initialized = TRUE;
-
-  if (gtk_modules_string)
-    {
-      _gtk_modules_init (NULL, NULL, gtk_modules_string->str);
-      g_string_free (gtk_modules_string, TRUE);
-    }
-  else
-    {
-      _gtk_modules_init (NULL, NULL, NULL);
-    }
 
   display_manager = gdk_display_manager_get ();
   if (gdk_display_manager_get_default_display (display_manager) != NULL)
