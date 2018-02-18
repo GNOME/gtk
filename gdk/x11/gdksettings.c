@@ -35,7 +35,6 @@ static const struct {
   {"Gtk/ColorPalette",        "gtk-color-palette"},
   {"Gtk/FontName",            "gtk-font-name"},
   {"Gtk/KeyThemeName",        "gtk-key-theme-name"},
-  {"Gtk/Modules",             "gtk-modules"},
   {"Gtk/ButtonImages",        "gtk-button-images"},
   {"Gtk/MenuImages",          "gtk-menu-images"},
   {"Gtk/CursorThemeName",     "gtk-cursor-theme-name"},

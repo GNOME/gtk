@@ -387,28 +387,6 @@ load_module (GSList      *module_list,
   return module_list;
 }
 
-
-static void
-gtk_module_info_unref (GtkModuleInfo *info)
-{
-  GSList *l;
-
-  info->ref_count--;
-
-  if (info->ref_count == 0)
-    {
-      GTK_NOTE (MODULES,
-		g_message ("Unloading module: %s", g_module_name (info->module)));
-
-      gtk_modules = g_slist_remove (gtk_modules, info);
-      g_module_close (info->module);
-      for (l = info->names; l; l = l->next)
-	g_free (l->data);
-      g_slist_free (info->names);
-      g_free (info);
-    }
-}
-
 static GSList *
 load_modules (const char *module_str)
 {
@@ -469,9 +447,7 @@ static void
 display_opened_cb (GdkDisplayManager *display_manager,
 		   GdkDisplay        *display)
 {
-  GValue value = G_VALUE_INIT;
   GSList *slist;
-  GtkSettings *settings;
 
   for (slist = gtk_modules; slist; slist = slist->next)
     {
@@ -482,15 +458,6 @@ display_opened_cb (GdkDisplayManager *display_manager,
 	  if (info->display_init_func)
 	    (* info->display_init_func) (display);
 	}
-    }
-
-  g_value_init (&value, G_TYPE_STRING);
-
-  if (gdk_display_get_setting (display, "gtk-modules", &value))
-    {
-      settings = gtk_settings_get_for_display (display);
-      _gtk_modules_settings_changed (settings, g_value_get_string (&value));
-      g_value_unset (&value);
     }
 
   /* Since closing display doesn't actually release the resources yet,
@@ -536,37 +503,6 @@ _gtk_modules_init (gint        *argc,
        */
       g_slist_free (load_modules (gtk_modules_args));
     }
-}
-
-static void
-settings_destroy_notify (gpointer data)
-{
-  GSList *iter, *modules = data;
-
-  for (iter = modules; iter; iter = iter->next) 
-    {
-      GtkModuleInfo *info = iter->data;
-      gtk_module_info_unref (info);
-    }
-  g_slist_free (modules);
-}
-
-void
-_gtk_modules_settings_changed (GtkSettings *settings, 
-			       const gchar *modules)
-{
-  GSList *new_modules = NULL;
-
-  GTK_NOTE (MODULES, g_message ("gtk-modules setting changed to: %s", modules));
-
-  /* load/ref before unreffing existing */
-  if (modules && modules[0])
-    new_modules = load_modules (modules);
-
-  g_object_set_data_full (G_OBJECT (settings),
-			  I_("gtk-modules"),
-			  new_modules,
-			  settings_destroy_notify);
 }
 
 /* Return TRUE if module_to_check causes version conflicts.
