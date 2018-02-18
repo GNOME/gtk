@@ -33,8 +33,6 @@ gchar  * _gtk_find_module              (const gchar  *name,
                                         const gchar  *type);
 gchar ** _gtk_get_module_path          (const gchar  *type);
 
-gboolean _gtk_module_has_mixed_deps    (GModule       *module);
-
 G_END_DECLS
 
 #endif /* __GTK_MODULES_PRIVATE_H__ */
