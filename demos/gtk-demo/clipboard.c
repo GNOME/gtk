@@ -127,7 +127,10 @@ drag_begin (GtkWidget      *widget,
 
   texture = get_image_texture (GTK_IMAGE (widget));
   if (texture)
-    gtk_drag_set_icon_texture (context, texture, -2, -2);
+    {
+      gtk_drag_set_icon_paintable (context, GDK_PAINTABLE (texture), -2, -2);
+      g_object_unref (texture);
+    }
 }
 
 void
