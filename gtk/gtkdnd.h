@@ -79,8 +79,8 @@ GDK_AVAILABLE_IN_ALL
 void gtk_drag_set_icon_surface(GdkDragContext *context,
 			       cairo_surface_t *surface);
 GDK_AVAILABLE_IN_ALL
-void gtk_drag_set_icon_texture(GdkDragContext *context,
-			       GdkTexture     *texture,
+void gtk_drag_set_icon_paintable (GdkDragContext *context,
+			       GdkPaintable   *paintable,
                                int             hot_x,
                                int             hot_y);
 GDK_AVAILABLE_IN_ALL
