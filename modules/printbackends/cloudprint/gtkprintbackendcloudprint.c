@@ -103,48 +103,37 @@ static void                 cloudprint_printer_request_details           (GtkPri
 TGOAAccount *        t_goa_account_copy                 (TGOAAccount *account);
 void                 t_goa_account_free                 (gpointer data);
 
+GG_DEFINE_DYNAMIC_TYPE(GtkPrintBackendCloudprint, gtk_print_backend_cloudprint, GTK_TYPE_PRINT_BACKEND)
 
-
-static void
-gtk_print_backend_cloudprint_register_type (GTypeModule *module)
+void
+g_io_module_load (GIOModule *module)
 {
-  const GTypeInfo print_backend_cloudprint_info =
-  {
-    sizeof (GtkPrintBackendCloudprintClass),
-    NULL,		/* base_init */
-    NULL,		/* base_finalize */
-    (GClassInitFunc) gtk_print_backend_cloudprint_class_init,
-    NULL,		/* class_finalize */
-    NULL,		/* class_data */
-    sizeof (GtkPrintBackendCloudprint),
-    0,		/* n_preallocs */
-    (GInstanceInitFunc) gtk_print_backend_cloudprint_init,
+  g_type_module_use (G_TYPE_MODULE (module));
+
+  gtk_print_backend_cloudprint_register_type (G_TYPE_MODULE (module));
+  gtk_cloudprint_account_register_type (G_TYPE_MODULE (module));
+  gtk_printer_cloudprint_register_type (G_TYPE_MODULE (module));
+
+  g_io_extension_point_implement (GTK_PRINT_BACKEND_EXTENSION_POINT_NAME,
+                                  GTK_TYPE_PRINT_BACKEND_CLOUDPRINT,
+                                  "cloudprint",
+                                  10);
+}
+
+void
+g_io_module_unload (GIOModule *module)
+{
+}
+
+char **
+g_io_module_query (void)
+{
+  char *eps[] = {
+    GTK_PRINT_BACKEND_EXTENSION_POINT_NAME,
+    NULL
   };
 
-  print_backend_cloudprint_type = g_type_module_register_type (module,
-							 GTK_TYPE_PRINT_BACKEND,
-							 "GtkPrintBackendCloudprint",
-							 &print_backend_cloudprint_info, 0);
-}
-
-G_MODULE_EXPORT void
-pb_module_init (GTypeModule *module)
-{
-  gtk_print_backend_cloudprint_register_type (module);
-  gtk_cloudprint_account_register_type (module);
-  gtk_printer_cloudprint_register_type (module);
-}
-
-G_MODULE_EXPORT void
-pb_module_exit (void)
-{
-
-}
-
-G_MODULE_EXPORT GtkPrintBackend *
-pb_module_create (void)
-{
-  return gtk_print_backend_cloudprint_new ();
+  return g_strdupv (eps);
 }
 
 /*
@@ -188,6 +177,11 @@ gtk_print_backend_cloudprint_class_init (GtkPrintBackendCloudprintClass *klass)
   backend_class->printer_get_settings_from_options = cloudprint_printer_get_settings_from_options;
   backend_class->printer_prepare_for_print = cloudprint_printer_prepare_for_print;
   backend_class->printer_request_details = cloudprint_printer_request_details;
+}
+
+static void
+gtk_print_backend_cloudprint_class_finalize (GtkPrintBackendCloudprintClass *class)
+{
 }
 
 static void

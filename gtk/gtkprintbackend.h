@@ -140,6 +140,8 @@ struct _GtkPrintBackendClass
   void (*_gtk_reserved4) (void);
 };
 
+#define GTK_PRINT_BACKEND_EXTENSION_POINT_NAME "gtk-print-backend"
+
 GDK_AVAILABLE_IN_ALL
 GType   gtk_print_backend_get_type       (void) G_GNUC_CONST;
 
@@ -221,6 +223,8 @@ gboolean    gtk_printer_set_description       (GtkPrinter      *printer,
 GDK_AVAILABLE_IN_ALL
 gboolean    gtk_printer_set_state_message     (GtkPrinter      *printer,
 					       const gchar     *message);
+
+void        gtk_print_backends_init (void);
 
 
 G_END_DECLS

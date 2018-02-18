@@ -129,6 +129,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
 #include "gtkwindowgroup.h"
+#include "gtkprintbackend.h"
 
 #include "a11y/gtkaccessibility.h"
 
@@ -654,6 +655,8 @@ do_post_parse_initialization (void)
   _gtk_ensure_resources ();
 
   _gtk_accel_map_init ();
+
+  gtk_print_backends_init ();
 
   gtk_initialized = TRUE;
 

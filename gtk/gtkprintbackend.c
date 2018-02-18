@@ -22,6 +22,7 @@
 #include <gmodule.h>
 
 #include "gtkintl.h"
+#include "gtkdebug.h"
 #include "gtkmodulesprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
@@ -78,223 +79,32 @@ gtk_print_backend_error_quark (void)
   return quark;
 }
 
-/*****************************************
- *     GtkPrintBackendModule modules     *
- *****************************************/
-
-typedef struct _GtkPrintBackendModule GtkPrintBackendModule;
-typedef struct _GtkPrintBackendModuleClass GtkPrintBackendModuleClass;
-
-struct _GtkPrintBackendModule
+void
+gtk_print_backends_init (void)
 {
-  GTypeModule parent_instance;
-  
-  GModule *library;
+  GIOExtensionPoint *ep;
+  GIOModuleScope *scope;
+  char **paths;
+  int i;
 
-  void             (*init)     (GTypeModule    *module);
-  void             (*exit)     (void);
-  GtkPrintBackend* (*create)   (void);
+  GTK_NOTE (MODULES,
+            g_print ("Registering extension point %s\n", GTK_PRINT_BACKEND_EXTENSION_POINT_NAME));
 
-  gchar *path;
-};
+  ep = g_io_extension_point_register (GTK_PRINT_BACKEND_EXTENSION_POINT_NAME);
+  g_io_extension_point_set_required_type (ep, GTK_TYPE_PRINT_BACKEND);
 
-struct _GtkPrintBackendModuleClass
-{
-  GTypeModuleClass parent_class;
-};
+  scope = g_io_module_scope_new (G_IO_MODULE_SCOPE_BLOCK_DUPLICATES);
 
-GType _gtk_print_backend_module_get_type (void);
-
-G_DEFINE_TYPE (GtkPrintBackendModule, _gtk_print_backend_module, G_TYPE_TYPE_MODULE)
-#define GTK_TYPE_PRINT_BACKEND_MODULE      (_gtk_print_backend_module_get_type ())
-#define GTK_PRINT_BACKEND_MODULE(module)   (G_TYPE_CHECK_INSTANCE_CAST ((module), GTK_TYPE_PRINT_BACKEND_MODULE, GtkPrintBackendModule))
-
-static GSList *loaded_backends;
-
-static gboolean
-gtk_print_backend_module_load (GTypeModule *module)
-{
-  GtkPrintBackendModule *pb_module = GTK_PRINT_BACKEND_MODULE (module); 
-  gpointer initp, exitp, createp;
- 
-  pb_module->library = g_module_open (pb_module->path, G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL);
-  if (!pb_module->library)
+  paths = _gtk_get_module_path ("printbackends");
+  for (i = 0; paths[i]; i++)
     {
-      g_warning ("%s", g_module_error ());
-      return FALSE;
+      GTK_NOTE (MODULES,
+                g_print ("Scanning io modules in %s\n", paths[i]));
+      g_io_modules_scan_all_in_directory_with_scope (paths[i], scope);
     }
-  
-  /* extract symbols from the lib */
-  if (!g_module_symbol (pb_module->library, "pb_module_init",
-			&initp) ||
-      !g_module_symbol (pb_module->library, "pb_module_exit", 
-			&exitp) ||
-      !g_module_symbol (pb_module->library, "pb_module_create", 
-			&createp))
-    {
-      g_warning ("%s", g_module_error ());
-      g_module_close (pb_module->library);
-      
-      return FALSE;
-    }
+  g_strfreev (paths);
 
-  pb_module->init = initp;
-  pb_module->exit = exitp;
-  pb_module->create = createp;
-
-  /* call the printbackend's init function to let it */
-  /* setup anything it needs to set up. */
-  pb_module->init (module);
-
-  return TRUE;
-}
-
-static void
-gtk_print_backend_module_unload (GTypeModule *module)
-{
-  GtkPrintBackendModule *pb_module = GTK_PRINT_BACKEND_MODULE (module);
-  
-  pb_module->exit();
-
-  g_module_close (pb_module->library);
-  pb_module->library = NULL;
-
-  pb_module->init = NULL;
-  pb_module->exit = NULL;
-  pb_module->create = NULL;
-}
-
-/* This only will ever be called if an error occurs during
- * initialization
- */
-static void
-gtk_print_backend_module_finalize (GObject *object)
-{
-  GtkPrintBackendModule *module = GTK_PRINT_BACKEND_MODULE (object);
-
-  g_free (module->path);
-
-  G_OBJECT_CLASS (_gtk_print_backend_module_parent_class)->finalize (object);
-}
-
-static void
-_gtk_print_backend_module_class_init (GtkPrintBackendModuleClass *class)
-{
-  GTypeModuleClass *module_class = G_TYPE_MODULE_CLASS (class);
-  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
-
-  module_class->load = gtk_print_backend_module_load;
-  module_class->unload = gtk_print_backend_module_unload;
-
-  gobject_class->finalize = gtk_print_backend_module_finalize;
-}
-
-static void 
-gtk_print_backend_set_property (GObject      *object,
-                                guint         prop_id,
-                                const GValue *value,
-                                GParamSpec   *pspec)
-{
-  GtkPrintBackend *backend = GTK_PRINT_BACKEND (object);
-  GtkPrintBackendPrivate *priv = backend->priv;
-
-  switch (prop_id)
-    {
-    case PROP_STATUS:
-      priv->status = g_value_get_int (value);
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
-    }
-}
-
-static void 
-gtk_print_backend_get_property (GObject    *object,
-                                guint       prop_id,
-                                GValue     *value,
-                                GParamSpec *pspec)
-{
-  GtkPrintBackend *backend = GTK_PRINT_BACKEND (object);
-  GtkPrintBackendPrivate *priv = backend->priv;
-
-  switch (prop_id)
-    {
-    case PROP_STATUS:
-      g_value_set_int (value, priv->status);
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
-    }
-}
-
-static void
-_gtk_print_backend_module_init (GtkPrintBackendModule *pb_module)
-{
-}
-
-static GtkPrintBackend *
-_gtk_print_backend_module_create (GtkPrintBackendModule *pb_module)
-{
-  GtkPrintBackend *pb;
-  
-  if (g_type_module_use (G_TYPE_MODULE (pb_module)))
-    {
-      pb = pb_module->create ();
-      g_type_module_unuse (G_TYPE_MODULE (pb_module));
-      return pb;
-    }
-  return NULL;
-}
-
-static GtkPrintBackend *
-_gtk_print_backend_create (const gchar *backend_name)
-{
-  GSList *l;
-  gchar *module_path;
-  gchar *full_name;
-  GtkPrintBackendModule *pb_module;
-  GtkPrintBackend *pb;
-
-  for (l = loaded_backends; l != NULL; l = l->next)
-    {
-      pb_module = l->data;
-      
-      if (strcmp (G_TYPE_MODULE (pb_module)->name, backend_name) == 0)
-	return _gtk_print_backend_module_create (pb_module);
-    }
-
-  pb = NULL;
-  if (g_module_supported ())
-    {
-      full_name = g_strconcat ("printbackend-", backend_name, NULL);
-      module_path = _gtk_find_module (full_name, "printbackends");
-      g_free (full_name);
-
-      if (module_path)
-	{
-	  pb_module = g_object_new (GTK_TYPE_PRINT_BACKEND_MODULE, NULL);
-
-	  g_type_module_set_name (G_TYPE_MODULE (pb_module), backend_name);
-	  pb_module->path = g_strdup (module_path);
-
-	  loaded_backends = g_slist_prepend (loaded_backends,
-		   		             pb_module);
-
-	  pb = _gtk_print_backend_module_create (pb_module);
-
-	  /* Increase use-count so that we don't unload print backends.
-	   * There is a problem with module unloading in the cups module,
-	   * see cups_dispatch_watch_finalize for details. 
-	   */
-	  g_type_module_use (G_TYPE_MODULE (pb_module));
-	}
-      
-      g_free (module_path);
-    }
-
-  return pb;
+  g_io_module_scope_free (scope);
 }
 
 /**
@@ -311,8 +121,11 @@ gtk_print_backend_load_modules (void)
   gchar **backends;
   gint i;
   GtkSettings *settings;
+  GIOExtensionPoint *ep;
 
   result = NULL;
+
+  ep = g_io_extension_point_lookup (GTK_PRINT_BACKEND_EXTENSION_POINT_NAME);
 
   settings = gtk_settings_get_default ();
   if (settings)
@@ -324,9 +137,19 @@ gtk_print_backend_load_modules (void)
 
   for (i = 0; backends[i]; i++)
     {
-      backend = _gtk_print_backend_create (g_strstrip (backends[i]));
-      if (backend)
-        result = g_list_append (result, backend);
+      GIOExtension *ext;
+      GType type;
+
+      ext = g_io_extension_point_get_extension_by_name (ep, backends[i]);
+      if (!ext)
+        continue;
+
+      GTK_NOTE (PRINTING,
+                g_print ("Found %s print backend\n", backends[i]));
+
+      type = g_io_extension_get_type (ext);
+      backend = g_object_new (type, NULL);
+      result = g_list_append (result, backend);
     }
 
   g_strfreev (backends);
@@ -359,7 +182,47 @@ static void                 request_password                       (GtkPrintBack
                                                                     gpointer             auth_info_visible,
                                                                     const gchar         *prompt,
                                                                     gboolean             can_store_auth_info);
-  
+
+static void
+gtk_print_backend_set_property (GObject      *object,
+                                guint         prop_id,
+                                const GValue *value,
+                                GParamSpec   *pspec)
+{
+  GtkPrintBackend *backend = GTK_PRINT_BACKEND (object);
+  GtkPrintBackendPrivate *priv = backend->priv;
+
+  switch (prop_id)
+    {
+    case PROP_STATUS:
+      priv->status = g_value_get_int (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_print_backend_get_property (GObject    *object,
+                                guint       prop_id,
+                                GValue     *value,
+                                GParamSpec *pspec)
+{
+  GtkPrintBackend *backend = GTK_PRINT_BACKEND (object);
+  GtkPrintBackendPrivate *priv = backend->priv;
+
+  switch (prop_id)
+    {
+    case PROP_STATUS:
+      g_value_set_int (value, priv->status);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
 static void
 gtk_print_backend_class_init (GtkPrintBackendClass *class)
 {

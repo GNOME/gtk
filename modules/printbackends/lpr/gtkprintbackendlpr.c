@@ -83,53 +83,36 @@ static void                 gtk_print_backend_lpr_print_stream    (GtkPrintBacke
 								   gpointer                 user_data,
 								   GDestroyNotify           dnotify);
 
-static void
-gtk_print_backend_lpr_register_type (GTypeModule *module)
+G_DEFINE_DYNAMIC_TYPE(GtkPrintBackendLpr, gtk_print_backend_lpr, GTK_TYPE_PRINT_BACKEND
+
+void
+g_io_module_load (GIOModule *module)
 {
-  const GTypeInfo print_backend_lpr_info =
-  {
-    sizeof (GtkPrintBackendLprClass),
-    NULL,		/* base_init */
-    NULL,		/* base_finalize */
-    (GClassInitFunc) gtk_print_backend_lpr_class_init,
-    NULL,		/* class_finalize */
-    NULL,		/* class_data */
-    sizeof (GtkPrintBackendLpr),
-    0,		/* n_preallocs */
-    (GInstanceInitFunc) gtk_print_backend_lpr_init,
+  g_type_module_use (G_TYPE_MODULE (module));
+
+  gtk_print_backend_lpr_register_type (G_TYPE_MODULE (module));
+  gtk_printer_lpr_register_type (G_TYPE_MODULE (module));
+
+  g_io_extension_point_implement (GTK_PRINT_BACKEND_EXTENSION_POINT_NAME,
+                                  GTK_TYPE_PRINT_BACKEND_CUPS,
+                                  "lpr",
+                                  10);
+}
+
+void
+g_io_module_unload (GIOModule *module)
+{
+}
+
+char **
+g_io_module_query (void)
+{
+  char *eps[] = {
+    GTK_PRINT_BACKEND_EXTENSION_POINT_NAME,
+    NULL
   };
 
-  print_backend_lpr_type = g_type_module_register_type (module,
-                                                        GTK_TYPE_PRINT_BACKEND,
-                                                        "GtkPrintBackendLpr",
-                                                        &print_backend_lpr_info, 0);
-}
-
-G_MODULE_EXPORT void 
-pb_module_init (GTypeModule *module)
-{
-  gtk_print_backend_lpr_register_type (module);
-}
-
-G_MODULE_EXPORT void 
-pb_module_exit (void)
-{
-
-}
-  
-G_MODULE_EXPORT GtkPrintBackend * 
-pb_module_create (void)
-{
-  return gtk_print_backend_lpr_new ();
-}
-
-/*
- * GtkPrintBackendLpr
- */
-GType
-gtk_print_backend_lpr_get_type (void)
-{
-  return print_backend_lpr_type;
+  return g_strdupv (eps);
 }
 
 /**
@@ -159,6 +142,11 @@ gtk_print_backend_lpr_class_init (GtkPrintBackendLprClass *class)
   backend_class->printer_get_options = lpr_printer_get_options;
   backend_class->printer_get_settings_from_options = lpr_printer_get_settings_from_options;
   backend_class->printer_prepare_for_print = lpr_printer_prepare_for_print;
+}
+
+static void
+gtk_print_backend_lpr_class_finalize (GtkPrintBackendLprClass *class)
+{
 }
 
 static cairo_status_t

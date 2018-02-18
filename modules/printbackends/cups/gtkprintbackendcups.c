@@ -236,49 +236,38 @@ static void                 secrets_service_vanished_cb             (GDBusConnec
                                                                      const gchar *name,
                                                                      gpointer user_data);
 
-static void
-gtk_print_backend_cups_register_type (GTypeModule *module)
+G_DEFINE_DYNAMIC_TYPE(GtkPrintBackendCups, gtk_print_backend_cups, GTK_TYPE_PRINT_BACKEND)
+
+void
+g_io_module_load (GIOModule *module)
 {
-  const GTypeInfo print_backend_cups_info =
-  {
-    sizeof (GtkPrintBackendCupsClass),
-    NULL,		/* base_init */
-    NULL,		/* base_finalize */
-    (GClassInitFunc) gtk_print_backend_cups_class_init,
-    NULL,		/* class_finalize */
-    NULL,		/* class_data */
-    sizeof (GtkPrintBackendCups),
-    0,	          	/* n_preallocs */
-    (GInstanceInitFunc) gtk_print_backend_cups_init
+  g_type_module_use (G_TYPE_MODULE (module));
+
+  gtk_print_backend_cups_register_type (G_TYPE_MODULE (module));
+  gtk_printer_cups_register_type (G_TYPE_MODULE (module));
+
+  g_io_extension_point_implement (GTK_PRINT_BACKEND_EXTENSION_POINT_NAME,
+                                  GTK_TYPE_PRINT_BACKEND_CUPS,
+                                  "cups",
+                                  10);
+}
+
+void
+g_io_module_unload (GIOModule *module)
+{
+}
+
+char **
+g_io_module_query (void)
+{
+  char *eps[] = {
+    GTK_PRINT_BACKEND_EXTENSION_POINT_NAME,
+    NULL
   };
 
-  print_backend_cups_type = g_type_module_register_type (module,
-                                                         GTK_TYPE_PRINT_BACKEND,
-                                                         "GtkPrintBackendCups",
-                                                         &print_backend_cups_info, 0);
+  return g_strdupv (eps);
 }
 
-G_MODULE_EXPORT void
-pb_module_init (GTypeModule *module)
-{
-  GTK_NOTE (PRINTING,
-            g_print ("CUPS Backend: Initializing the CUPS print backend module\n"));
-
-  gtk_print_backend_cups_register_type (module);
-  gtk_printer_cups_register_type (module);
-}
-
-G_MODULE_EXPORT void
-pb_module_exit (void)
-{
-
-}
-
-G_MODULE_EXPORT GtkPrintBackend *
-pb_module_create (void)
-{
-  return gtk_print_backend_cups_new ();
-}
 /* CUPS 1.6 Getter/Setter Functions CUPS 1.6 makes private most of the
  * IPP structures and enforces access via new getter functions, which
  * are unfortunately not available in earlier versions. We define
@@ -287,7 +276,7 @@ pb_module_create (void)
  */
 #ifndef HAVE_CUPS_API_1_6
 #define ippGetOperation(ipp_request) ipp_request->request.op.operation_id
-#define ippGetInteger(attr, index) attr->values[index].integer
+#define ippGet:Integer(attr, index) attr->values[index].integer
 #define ippGetBoolean(attr, index) attr->values[index].boolean
 #define ippGetString(attr, index, foo) attr->values[index].string.text
 #define ippGetValueTag(attr) attr->value_tag
@@ -323,14 +312,10 @@ ippNextAttribute (ipp_t *ipp)
   return (ipp->current = ipp->current->next);
 }
 #endif
+
 /*
  * GtkPrintBackendCups
  */
-GType
-gtk_print_backend_cups_get_type (void)
-{
-  return print_backend_cups_type;
-}
 
 /**
  * gtk_print_backend_cups_new:
@@ -374,6 +359,11 @@ gtk_print_backend_cups_class_init (GtkPrintBackendCupsClass *class)
   backend_class->printer_get_hard_margins = cups_printer_get_hard_margins;
   backend_class->printer_get_capabilities = cups_printer_get_capabilities;
   backend_class->set_password = gtk_print_backend_cups_set_password;
+}
+
+static void
+gtk_print_backend_cups_class_finalize (GtkPrintBackendCupsClass *class)
+{
 }
 
 static gboolean

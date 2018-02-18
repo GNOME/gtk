@@ -104,53 +104,35 @@ static cairo_surface_t *    file_printer_create_cairo_surface      (GtkPrinter  
 static GList *              file_printer_list_papers               (GtkPrinter              *printer);
 static GtkPageSetup *       file_printer_get_default_page_size     (GtkPrinter              *printer);
 
-static void
-gtk_print_backend_file_register_type (GTypeModule *module)
+G_DEFINE_DYNAMIC_TYPE(GtkPrintBackendFile, gtk_print_backend_file, GTK_TYPE_PRINT_BACKEND)
+
+void
+g_io_module_load (GIOModule *module)
 {
-  const GTypeInfo print_backend_file_info =
-  {
-    sizeof (GtkPrintBackendFileClass),
-    NULL,		/* base_init */
-    NULL,		/* base_finalize */
-    (GClassInitFunc) gtk_print_backend_file_class_init,
-    NULL,		/* class_finalize */
-    NULL,		/* class_data */
-    sizeof (GtkPrintBackendFile),
-    0,		/* n_preallocs */
-    (GInstanceInitFunc) gtk_print_backend_file_init,
+  g_type_module_use (G_TYPE_MODULE (module));
+
+  gtk_print_backend_file_register_type (G_TYPE_MODULE (module));
+
+  g_io_extension_point_implement (GTK_PRINT_BACKEND_EXTENSION_POINT_NAME,
+                                  GTK_TYPE_PRINT_BACKEND_FILE,
+                                  "file",
+                                  10);
+}
+
+void
+g_io_module_unload (GIOModule *module)
+{
+}
+
+char **
+g_io_module_query (void)
+{
+  char *eps[] = {
+    GTK_PRINT_BACKEND_EXTENSION_POINT_NAME,
+    NULL
   };
 
-  print_backend_file_type = g_type_module_register_type (module,
-                                                         GTK_TYPE_PRINT_BACKEND,
-                                                         "GtkPrintBackendFile",
-                                                         &print_backend_file_info, 0);
-}
-
-G_MODULE_EXPORT void 
-pb_module_init (GTypeModule *module)
-{
-  gtk_print_backend_file_register_type (module);
-}
-
-G_MODULE_EXPORT void 
-pb_module_exit (void)
-{
-
-}
-  
-G_MODULE_EXPORT GtkPrintBackend * 
-pb_module_create (void)
-{
-  return gtk_print_backend_file_new ();
-}
-
-/*
- * GtkPrintBackendFile
- */
-GType
-gtk_print_backend_file_get_type (void)
-{
-  return print_backend_file_type;
+  return g_strdupv (eps);
 }
 
 /**
@@ -182,6 +164,11 @@ gtk_print_backend_file_class_init (GtkPrintBackendFileClass *class)
   backend_class->printer_prepare_for_print = file_printer_prepare_for_print;
   backend_class->printer_list_papers = file_printer_list_papers;
   backend_class->printer_get_default_page_size = file_printer_get_default_page_size;
+}
+
+static void
+gtk_print_backend_file_class_finalize (GtkPrintBackendFileClass *class)
+{
 }
 
 /* return N_FORMATS if no explicit format in the settings */
