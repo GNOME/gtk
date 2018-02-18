@@ -557,7 +557,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
     g_param_spec_object ("logo",
                          P_("Logo"),
                          P_("A logo for the about box. If this is not set, it defaults to gtk_window_get_default_icon_list()"),
-                         GDK_TYPE_TEXTURE,
+                         GDK_TYPE_PAINTABLE,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -942,7 +942,7 @@ gtk_about_dialog_get_property (GObject    *object,
       break;
     case PROP_LOGO:
       if (gtk_image_get_storage_type (GTK_IMAGE (priv->logo_image)) == GTK_IMAGE_TEXTURE)
-        g_value_set_object (value, gtk_image_get_texture (GTK_IMAGE (priv->logo_image)));
+        g_value_set_object (value, gtk_image_get_paintable (GTK_IMAGE (priv->logo_image)));
       else
         g_value_set_object (value, NULL);
       break;
@@ -1729,13 +1729,13 @@ gtk_about_dialog_set_translator_credits (GtkAboutDialog *about,
  * gtk_about_dialog_get_logo:
  * @about: a #GtkAboutDialog
  *
- * Returns the texture displayed as logo in the about dialog.
+ * Returns the paintable displayed as logo in the about dialog.
  *
- * Returns: (transfer none): the texture displayed as logo. The
- *   texture is owned by the about dialog. If you want to keep a
+ * Returns: (transfer none): the paintable displayed as logo. The
+ *   paintable is owned by the about dialog. If you want to keep a
  *   reference to it, you have to call g_object_ref() on it.
  */
-GdkTexture *
+GdkPaintable *
 gtk_about_dialog_get_logo (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv;
@@ -1744,8 +1744,8 @@ gtk_about_dialog_get_logo (GtkAboutDialog *about)
 
   priv = about->priv;
 
-  if (gtk_image_get_storage_type (GTK_IMAGE (priv->logo_image)) == GTK_IMAGE_TEXTURE)
-    return gtk_image_get_texture (GTK_IMAGE (priv->logo_image));
+  if (gtk_image_get_storage_type (GTK_IMAGE (priv->logo_image)) == GTK_IMAGE_PAINTABLE)
+    return gtk_image_get_paintable (GTK_IMAGE (priv->logo_image));
   else
     return NULL;
 }
@@ -1753,7 +1753,7 @@ gtk_about_dialog_get_logo (GtkAboutDialog *about)
 /**
  * gtk_about_dialog_set_logo:
  * @about: a #GtkAboutDialog
- * @logo: (allow-none): a #GdkTexture, or %NULL
+ * @logo: (allow-none): a #GdkPaintable, or %NULL
  *
  * Sets the surface to be displayed as logo in the about dialog.
  * If it is %NULL, the default window icon set with
@@ -1761,7 +1761,7 @@ gtk_about_dialog_get_logo (GtkAboutDialog *about)
  */
 void
 gtk_about_dialog_set_logo (GtkAboutDialog *about,
-                           GdkTexture     *logo)
+                           GdkPaintable   *logo)
 {
   GtkAboutDialogPrivate *priv;
 
@@ -1776,15 +1776,15 @@ gtk_about_dialog_set_logo (GtkAboutDialog *about,
     g_object_notify_by_pspec (G_OBJECT (about), props[PROP_LOGO_ICON_NAME]);
 
   if (logo != NULL)
-    gtk_image_set_from_texture (GTK_IMAGE (priv->logo_image), logo);
+    gtk_image_set_from_paintable (GTK_IMAGE (priv->logo_image), logo);
   else
     {
       GList *surfaces = gtk_window_get_default_icon_list ();
 
       if (surfaces != NULL)
         {
-          gtk_image_set_from_texture (GTK_IMAGE (priv->logo_image),
-				      GDK_TEXTURE (surfaces->data));
+          gtk_image_set_from_paintable (GTK_IMAGE (priv->logo_image),
+				        GDK_PAINTABLE (surfaces->data));
 
           g_list_free (surfaces);
         }
