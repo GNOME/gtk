@@ -5399,6 +5399,7 @@ find_builtin_icon (const gchar *icon_name,
       
       if (difference == 0)
         {
+          min_difference = 0;
           min_icon = default_icon;
           break;
         }
