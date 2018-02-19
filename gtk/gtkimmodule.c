@@ -421,38 +421,8 @@ gtk_im_module_initialize (void)
     module = NULL;							\
   }
 
-#ifdef INCLUDE_IM_am_et
-  do_builtin (am_et);
-#endif
-#ifdef INCLUDE_IM_cedilla
-  do_builtin (cedilla);
-#endif
-#ifdef INCLUDE_IM_cyrillic_translit
-  do_builtin (cyrillic_translit);
-#endif
 #ifdef INCLUDE_IM_ime
   do_builtin (ime);
-#endif
-#ifdef INCLUDE_IM_inuktitut
-  do_builtin (inuktitut);
-#endif
-#ifdef INCLUDE_IM_ipa
-  do_builtin (ipa);
-#endif
-#ifdef INCLUDE_IM_multipress
-  do_builtin (multipress);
-#endif
-#ifdef INCLUDE_IM_thai
-  do_builtin (thai);
-#endif
-#ifdef INCLUDE_IM_ti_er
-  do_builtin (ti_er);
-#endif
-#ifdef INCLUDE_IM_ti_et
-  do_builtin (ti_et);
-#endif
-#ifdef INCLUDE_IM_viqr
-  do_builtin (viqr);
 #endif
 #ifdef INCLUDE_IM_xim
   do_builtin (xim);
