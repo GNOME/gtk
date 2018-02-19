@@ -27,10 +27,6 @@
 
 G_BEGIN_DECLS
 
-#include "gtksettings.h"
-
-gchar  * _gtk_find_module              (const gchar  *name,
-                                        const gchar  *type);
 gchar ** _gtk_get_module_path          (const gchar  *type);
 
 G_END_DECLS
