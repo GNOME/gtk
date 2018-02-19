@@ -44,8 +44,6 @@ typedef struct _GtkPrintBackendLprClass GtkPrintBackendLprClass;
 
 #define _LPR_MAX_CHUNK_SIZE 8192
 
-static GType print_backend_lpr_type = 0;
-
 struct _GtkPrintBackendLprClass
 {
   GtkPrintBackendClass parent_class;
@@ -83,7 +81,7 @@ static void                 gtk_print_backend_lpr_print_stream    (GtkPrintBacke
 								   gpointer                 user_data,
 								   GDestroyNotify           dnotify);
 
-G_DEFINE_DYNAMIC_TYPE(GtkPrintBackendLpr, gtk_print_backend_lpr, GTK_TYPE_PRINT_BACKEND)
+G_DEFINE_DYNAMIC_TYPE (GtkPrintBackendLpr, gtk_print_backend_lpr, GTK_TYPE_PRINT_BACKEND)
 
 void
 g_io_module_load (GIOModule *module)
@@ -91,10 +89,9 @@ g_io_module_load (GIOModule *module)
   g_type_module_use (G_TYPE_MODULE (module));
 
   gtk_print_backend_lpr_register_type (G_TYPE_MODULE (module));
-  gtk_printer_lpr_register_type (G_TYPE_MODULE (module));
 
   g_io_extension_point_implement (GTK_PRINT_BACKEND_EXTENSION_POINT_NAME,
-                                  GTK_TYPE_PRINT_BACKEND_CUPS,
+                                  GTK_TYPE_PRINT_BACKEND_LPR,
                                   "lpr",
                                   10);
 }
