@@ -27,9 +27,9 @@
 
 #include "gdk/broadway/gdkbroadway.h"
 
-#define GTK_IM_CONTEXT_TYPE_BROADWAY (type_broadway)
-#define GTK_IM_CONTEXT_BROADWAY(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_IM_CONTEXT_TYPE_BROADWAY, GtkIMContextBroadway))
-#define GTK_IM_CONTEXT_BROADWAY_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_IM_CONTEXT_TYPE_BROADWAY, GtkIMContextBroadwayClass))
+#define GTK_TYPE_IM_CONTEXT_BROADWAY (gtk_im_context_broadway_get_type ())
+#define GTK_IM_CONTEXT_BROADWAY(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_IM_CONTEXT_BROADWAY, GtkIMContextBroadway))
+#define GTK_IM_CONTEXT_BROADWAY_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_IM_CONTEXT_BROADWAY, GtkIMContextBroadwayClass))
 
 typedef struct _GtkIMContextBroadway
 {
@@ -42,28 +42,38 @@ typedef struct _GtkIMContextBroadwayClass
   GtkIMContextSimpleClass parent_class;
 } GtkIMContextBroadwayClass;
 
-GType type_broadway = 0;
-static GObjectClass *parent_class;
+G_DEFINE_DYNAMIC_TYPE (GtkIMContextBroadway, gtk_im_context_broadway, GTK_TYPE_IM_CONTEXT_SIMPLE)
 
-static const GtkIMContextInfo imbroadway_info =
+void
+g_io_module_load (GIOModule *module)
 {
-  "broadway",      /* ID */
-  NC_("input method menu", "Broadway"),      /* Human readable name */
-  GETTEXT_PACKAGE, /* Translation domain */
-  GTK_LOCALEDIR,   /* Dir for bindtextdomain (not strictly needed for "gtk+") */
-  "",              /* Languages for which this module is the default */
-};
+  g_type_module_use (G_TYPE_MODULE (module));
 
-static const GtkIMContextInfo *info_list[] =
+  g_print ("load io module for broadway\n");
+  gtk_im_context_broadway_register_type (G_TYPE_MODULE (module));
+
+  g_io_extension_point_implement (GTK_IM_MODULE_EXTENSION_POINT_NAME,
+                                  GTK_TYPE_IM_CONTEXT_BROADWAY,
+                                  "broadway",
+                                  10);
+}
+
+void
+g_io_module_unload (GIOModule *module)
 {
-  &imbroadway_info,
-};
+}
 
-#ifndef INCLUDE_IM_broadway
-#define MODULE_ENTRY(type,function) G_MODULE_EXPORT type im_module_ ## function
-#else
-#define MODULE_ENTRY(type, function) type _gtk_immodule_broadway_ ## function
-#endif
+char **
+g_io_module_query (void)
+{
+  char *eps[] = {
+    GTK_IM_MODULE_EXTENSION_POINT_NAME,
+    NULL
+  };
+
+  return g_strdupv (eps);
+}
+
 
 static void
 broadway_set_client_widget (GtkIMContext *context, GtkWidget *widget)
@@ -100,9 +110,9 @@ broadway_focus_out (GtkIMContext *context)
 }
 
 static void
-gtk_im_context_broadway_class_init (GtkIMContextClass *klass)
+gtk_im_context_broadway_class_init (GtkIMContextBroadwayClass *class)
 {
-  parent_class = g_type_class_peek_parent (klass);
+  GtkIMContextClass *klass = GTK_IM_CONTEXT_CLASS (class);
 
   klass->focus_in = broadway_focus_in;
   klass->focus_out = broadway_focus_out;
@@ -110,52 +120,11 @@ gtk_im_context_broadway_class_init (GtkIMContextClass *klass)
 }
 
 static void
-gtk_im_context_broadway_init (GtkIMContext *im_context)
+gtk_im_context_broadway_class_finalize (GtkIMContextBroadwayClass *class)
 {
 }
 
 static void
-gtk_im_context_broadway_register_type (GTypeModule *module)
+gtk_im_context_broadway_init (GtkIMContextBroadway *im_context)
 {
-  const GTypeInfo object_info =
-  {
-    sizeof (GtkIMContextBroadwayClass),
-    (GBaseInitFunc) NULL,
-    (GBaseFinalizeFunc) NULL,
-    (GClassInitFunc) gtk_im_context_broadway_class_init,
-    NULL,           /* class_finalize */
-    NULL,           /* class_data */
-    sizeof (GtkIMContextBroadway),
-    0,
-    (GInstanceInitFunc) gtk_im_context_broadway_init,
-  };
-
-  type_broadway =
-    g_type_module_register_type (module,
-                                 GTK_TYPE_IM_CONTEXT_SIMPLE,
-                                 "GtkIMContextBroadway",
-                                 &object_info, 0);
-}
-
-MODULE_ENTRY (void, init) (GTypeModule * module)
-{
-  gtk_im_context_broadway_register_type (module);
-}
-
-MODULE_ENTRY (void, exit) (void)
-{
-}
-
-MODULE_ENTRY (void, list) (const GtkIMContextInfo *** contexts, int *n_contexts)
-{
-  *contexts = info_list;
-  *n_contexts = G_N_ELEMENTS (info_list);
-}
-
-MODULE_ENTRY (GtkIMContext *, create) (const gchar * context_id)
-{
-  if (!strcmp (context_id, "broadway"))
-    return g_object_new (type_broadway, NULL);
-  else
-    return NULL;
 }

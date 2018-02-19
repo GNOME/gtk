@@ -125,29 +125,38 @@ static void cb_client_widget_hierarchy_changed  (GtkWidget       *widget,
                                                  GtkWidget       *widget2,
                                                  GtkIMContextIME *context_ime);
 
-GType gtk_type_im_context_ime = 0;
-static GObjectClass *parent_class;
+#define GTK_TYPE_IM_CONTEXT_IME (gtk_im_context_ime_get_type ())
+#define GTK_IM_CONTEXT_IME(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_IM_CONTEXT_IME, GtkIMContextIME))
 
+G_DEFINE_DYNAMIC_TYPE (GtkIMContextIME, gtk_im_context_ime, GTK_TYPE_IM_CONTEXT)
 
 void
-gtk_im_context_ime_register_type (GTypeModule *type_module)
+g_io_module_load (GIOModule *module)
 {
-  const GTypeInfo im_context_ime_info = {
-    sizeof (GtkIMContextIMEClass),
-    (GBaseInitFunc) NULL,
-    (GBaseFinalizeFunc) NULL,
-    (GClassInitFunc) gtk_im_context_ime_class_init,
-    NULL,                       /* class_finalize */
-    NULL,                       /* class_data */
-    sizeof (GtkIMContextIME),
-    0,
-    (GInstanceInitFunc) gtk_im_context_ime_init,
+  g_type_module_use (G_TYPE_MODULE (module));
+
+  gtk_im_context_ime_register_type (G_TYPE_MODULE (module));
+
+  g_io_extension_point_implement (GTK_IM_MODULE_EXTENSION_POINT_NAME,
+                                  GTK_TYPE_IM_CONTEXT_IME,
+                                  "ime",
+                                  10);
+}
+
+void
+g_io_module_unload (GIOModule *module)
+{
+}
+
+char **
+g_io_module_query (void)
+{
+  char *eps[] = {
+    GTK_IM_MODULE_EXTENSION_POINT_NAME,
+    NULL
   };
 
-  gtk_type_im_context_ime =
-    g_type_module_register_type (type_module,
-                                 GTK_TYPE_IM_CONTEXT,
-                                 "GtkIMContextIME", &im_context_ime_info, 0);
+  return g_strdupv (eps);
 }
 
 static void
@@ -155,8 +164,6 @@ gtk_im_context_ime_class_init (GtkIMContextIMEClass *class)
 {
   GtkIMContextClass *im_context_class = GTK_IM_CONTEXT_CLASS (class);
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
-
-  parent_class = g_type_class_peek_parent (class);
 
   gobject_class->finalize     = gtk_im_context_ime_finalize;
   gobject_class->dispose      = gtk_im_context_ime_dispose;
@@ -173,6 +180,10 @@ gtk_im_context_ime_class_init (GtkIMContextIMEClass *class)
   im_context_class->set_use_preedit     = gtk_im_context_ime_set_use_preedit;
 }
 
+static void
+gtk_im_context_ime_class_finalize (GtkIMContextIMEClass *class)
+{
+}
 
 static void
 gtk_im_context_ime_init (GtkIMContextIME *context_ime)

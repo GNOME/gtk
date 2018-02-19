@@ -20,15 +20,12 @@
 
 #include <gtk/gtk.h>
 
-/* The following entry points are exported by each input method module
- */
+G_BEGIN_DECLS
 
-/*
-void          im_module_list   (const GtkIMContextInfo ***contexts,
-				guint                    *n_contexts);
-void          im_module_init   (GtkModule                *module);
-void          im_module_exit   (void);
-GtkIMContext *im_module_create (const gchar              *context_id);
-*/
+void          gtk_im_modules_init (void);
+
+#define GTK_IM_MODULE_EXTENSION_POINT_NAME "gtk-im-module"
+
+G_END_DECLS
 
 #endif /* __GTK_IM_MODULE_H__ */
