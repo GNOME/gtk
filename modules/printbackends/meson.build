@@ -16,7 +16,7 @@ print_backends = ['file']
 
 # Checks to see if we should compile with CUPS backend for GTK+
 enable_cups = enabled_print_backends.contains('cups')
-if enable_cups != 'no'
+if enable_cups
   want_cups = enable_cups == 'yes'
   #cups_config = find_program('cups-config', required : want_cups)
   #if cups_config.found()
@@ -52,7 +52,7 @@ endif
 
 # Checks to see if we should compile with cloudprint backend for GTK+
 enable_cloudprint = enabled_print_backends.contains('cloudprint')
-if enable_cloudprint != 'no'
+if enable_cloudprint
   want_cloudprint = enable_cloudprint == 'yes'
   rest_dep = dependency('rest-0.7', required : want_cloudprint)
   json_glib_dep = dependency('json-glib-1.0', required : want_cloudprint)
@@ -81,8 +81,6 @@ endif
 
 printbackends_subdir = 'gtk-4.0/@0@/printbackends'.format(gtk_binary_version)
 printbackends_install_dir = join_paths(get_option('libdir'), printbackends_subdir)
-
-message('Print backends: ' + ' '.join(print_backends))
 
 cdata.set_quoted('GTK_PRINT_BACKENDS', ','.join(print_backends))
 
