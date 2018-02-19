@@ -20,6 +20,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "gtkimmodule.h"
 #include "gtkimcontextxim.h"
 
 #include "gtk/gtkintl.h"
@@ -145,37 +146,42 @@ static void           xim_info_display_closed (GdkDisplay *display,
 			                       gboolean    is_error,
 			                       GtkXIMInfo *info);
 
-static GObjectClass *parent_class;
+G_DEFINE_DYNAMIC_TYPE (GtkIMContextXIM, gtk_im_context_xim, GTK_TYPE_IM_CONTEXT)
 
-GType gtk_type_im_context_xim = 0;
+void
+g_io_module_load (GIOModule *module)
+{
+  g_type_module_use (G_TYPE_MODULE (module));
+
+  g_print ("load io module for x11\n");
+  gtk_im_context_xim_register_type (G_TYPE_MODULE (module));
+
+  g_io_extension_point_implement (GTK_IM_MODULE_EXTENSION_POINT_NAME,
+                                  GTK_TYPE_IM_CONTEXT_XIM,
+                                  "xim",
+                                  10);
+}
+
+void
+g_io_module_unload (GIOModule *module)
+{
+}
+
+char **
+g_io_module_query (void)
+{
+  char *eps[] = {
+    GTK_IM_MODULE_EXTENSION_POINT_NAME,
+    NULL
+  };
+
+  return g_strdupv (eps);
+}
 
 static GSList *open_ims = NULL;
 
 /* List of status windows for different toplevels */
 static GSList *status_windows = NULL;
-
-void
-gtk_im_context_xim_register_type (GTypeModule *type_module)
-{
-  const GTypeInfo im_context_xim_info =
-  {
-    sizeof (GtkIMContextXIMClass),
-    (GBaseInitFunc) NULL,
-    (GBaseFinalizeFunc) NULL,
-    (GClassInitFunc) gtk_im_context_xim_class_init,
-    NULL,           /* class_finalize */    
-    NULL,           /* class_data */
-    sizeof (GtkIMContextXIM),
-    0,
-    (GInstanceInitFunc) gtk_im_context_xim_init,
-  };
-
-  gtk_type_im_context_xim = 
-    g_type_module_register_type (type_module,
-				 GTK_TYPE_IM_CONTEXT,
-				 "GtkIMContextXIM",
-				 &im_context_xim_info, 0);
-}
 
 #define PREEDIT_MASK (XIMPreeditCallbacks | XIMPreeditPosition | \
 		      XIMPreeditArea | XIMPreeditNothing | XIMPreeditNone)
@@ -475,8 +481,6 @@ gtk_im_context_xim_class_init (GtkIMContextXIMClass *class)
   GtkIMContextClass *im_context_class = GTK_IM_CONTEXT_CLASS (class);
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
 
-  parent_class = g_type_class_peek_parent (class);
-
   im_context_class->set_client_widget = gtk_im_context_xim_set_client_widget;
   im_context_class->filter_keypress = gtk_im_context_xim_filter_keypress;
   im_context_class->reset = gtk_im_context_xim_reset;
@@ -486,6 +490,11 @@ gtk_im_context_xim_class_init (GtkIMContextXIMClass *class)
   im_context_class->set_cursor_location = gtk_im_context_xim_set_cursor_location;
   im_context_class->set_use_preedit = gtk_im_context_xim_set_use_preedit;
   gobject_class->finalize = gtk_im_context_xim_finalize;
+}
+
+static void
+gtk_im_context_xim_class_finalize (GtkIMContextXIMClass *class)
+{
 }
 
 static void
@@ -534,7 +543,7 @@ gtk_im_context_xim_finalize (GObject *obj)
   g_free (context_xim->locale);
   g_free (context_xim->mb_charset);
 
-  G_OBJECT_CLASS (parent_class)->finalize (obj);
+  G_OBJECT_CLASS (gtk_im_context_xim_parent_class)->finalize (obj);
 }
 
 static void

@@ -464,7 +464,6 @@ gtk_public_headers = files([
   'gtkiconview.h',
   'gtkimage.h',
   'gtkimcontext.h',
-  'gtkimcontextinfo.h',
   'gtkimcontextsimple.h',
   'gtkimmodule.h',
   'gtkimmulticontext.h',
@@ -893,7 +892,7 @@ foreach m: dyn_im_method_defs       # populated in modules/input/meson.build
   im_args = m[2]
   im_libs = m[3]
 
-  shared_module('im-@0@'.format(im_name), im_srcs, gen_headers,
+  shared_module('libim-@0@'.format(im_name), im_srcs, gen_headers,
                 c_args: im_args,
                 include_directories: [confinc, gdkinc, gtkinc],
                 dependencies: gtk_deps + im_libs,
@@ -1045,7 +1044,6 @@ gtk_tools = [
   ['gtk4-builder-tool', ['gtk-builder-tool.c']],
   ['gtk4-update-icon-cache', ['updateiconcache.c', 'gtkiconcachevalidator.c']],
   ['gtk4-encode-symbolic-svg', ['encodesymbolic.c', 'gdkpixbufutils.c']],
-  ['gtk4-query-immodules', ['queryimmodules.c', 'gtkutils.c']],
 ]
 
 if os_unix

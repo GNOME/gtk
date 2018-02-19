@@ -87,8 +87,8 @@ endforeach
 method_defs = [
   ['broadway', files('imbroadway.c')],
   ['quartz', ('imquartz.c'), [], ('-xobjective-c')],
-  ['xim', files('gtkimcontextxim.c', 'imxim.c')],
-  ['ime', files('gtkimcontextime.c', 'imime.c'), ['imm32']],
+  ['xim', files('gtkimcontextxim.c')],
+  ['ime', files('gtkimcontextime.c'), ['imm32']],
   ['wayland', im_wayland_sources],
 ]
 
