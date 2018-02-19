@@ -855,7 +855,9 @@ gtk_settings_schemas = [
   'org.gtk.Settings.Debug.gschema.xml',
 ]
 install_data(gtk_settings_schemas, install_dir: gtk_schemasdir)
-gnome.compile_schemas()
+gnome.compile_schemas(depend_files: files(gtk_settings_schemas),
+                      build_by_default: true)
+gtk_schema_build_dir = meson.current_build_dir()
 
 # Check for more things
 if cc.has_header('langinfo.h')

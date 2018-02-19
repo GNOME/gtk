@@ -82,7 +82,6 @@ main (int argc, char **argv)
 {
   const GType *all_types;
   guint n_types = 0, i;
-  gchar *schema_dir;
   GTestDBus *bus;
   gint result;
 
@@ -93,10 +92,6 @@ main (int argc, char **argv)
   /* initialize test program */
   gtk_test_init (&argc, &argv);
   gtk_test_register_all_types ();
-
-  /* g_test_build_filename must be called after gtk_test_init */
-  schema_dir = g_test_build_filename (G_TEST_BUILT, "", NULL);
-  g_setenv ("GSETTINGS_SCHEMA_DIR", schema_dir, TRUE);
 
   /* Create one test bus for all tests, as we have a lot of very small
    * and quick tests.
@@ -136,7 +131,6 @@ main (int argc, char **argv)
 
   g_test_dbus_down (bus);
   g_object_unref (bus);
-  g_free (schema_dir);
 
   return result;
 }

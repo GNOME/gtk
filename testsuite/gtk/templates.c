@@ -328,18 +328,12 @@ test_print_unix_dialog_basic (void)
 int
 main (int argc, char **argv)
 {
-  gchar *schema_dir;
-
   /* These must be set before before gtk_test_init */
   g_setenv ("GIO_USE_VFS", "local", TRUE);
   g_setenv ("GSETTINGS_BACKEND", "memory", TRUE);
 
   /* initialize test program */
   gtk_test_init (&argc, &argv);
-
-  /* g_test_build_filename must be called after gtk_test_init */
-  schema_dir = g_test_build_filename (G_TEST_BUILT, "", NULL);
-  g_setenv ("GSETTINGS_SCHEMA_DIR", schema_dir, TRUE);
 
   /* This environment variable cooperates with gtk_widget_destroy()
    * to assert that all automated compoenents are properly finalized
@@ -373,8 +367,6 @@ main (int argc, char **argv)
   g_test_add_func ("/Template/UnixPrint/GtkPageSetupUnixDialog/Basic", test_page_setup_unix_dialog_basic);
   g_test_add_func ("/Template/UnixPrint/GtkPrintUnixDialog/Basic", test_print_unix_dialog_basic);
 #endif
-
-  g_free (schema_dir);
 
   return g_test_run();
 }

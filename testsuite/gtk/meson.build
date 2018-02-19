@@ -80,7 +80,8 @@ foreach t : tests
               'G_ENABLE_DIAGNOSTIC=0',
               'GSK_RENDERER=cairo',
               'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-              'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
+              'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
+              'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir),
             ],
        suite: 'gtk')
 endforeach
@@ -100,7 +101,8 @@ if add_languages('cpp')
               'GTK_CSD=1',
               'G_ENABLE_DIAGNOSTIC=0',
               'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-              'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
+              'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
+              'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir),
             ],
        suite: 'gtk')
   if get_option('install-tests')
@@ -113,11 +115,6 @@ if add_languages('cpp')
                    install_dir: testdatadir)
   endif
 endif
-
-# FIXME: schemas from gtk+ dir?
-# $(top_srcdir)/gtk/org.gtk.Settings.ColorChooser.gschema.xml
-# $(top_srcdir)/gtk/org.gtk.Settings.FileChooser.gschema.xml
-# gnome.compile_schemas()
 
 if get_option('install-tests')
   foreach t : tests

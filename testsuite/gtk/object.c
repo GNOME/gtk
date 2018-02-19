@@ -323,17 +323,12 @@ main (int   argc,
 {
   const GType *otypes;
   guint i;
-  gchar *schema_dir;
 
   g_setenv ("GSETTINGS_BACKEND", "memory", TRUE);
 
   /* initialize test program */
   gtk_test_init (&argc, &argv);
   gtk_test_register_all_types ();
-
-  /* g_test_build_filename must be called after gtk_test_init */
-  schema_dir = g_test_build_filename (G_TEST_BUILT, "", NULL);
-  g_setenv ("GSETTINGS_SCHEMA_DIR", schema_dir, TRUE);
 
   /* install a property test for each widget type */
   otypes = gtk_test_list_all_types (NULL);
@@ -347,6 +342,5 @@ main (int   argc,
         g_free (testpath);
       }
 
-  g_free (schema_dir);
   return g_test_run ();
 }
