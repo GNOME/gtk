@@ -51,8 +51,6 @@ typedef struct _GtkPrintBackendCloudprintClass GtkPrintBackendCloudprintClass;
 #define ONLINE_ACCOUNTS_PATH "/org/gnome/OnlineAccounts"
 #define OBJECT_MANAGER_IFACE "org.freedesktop.DBus.ObjectManager"
 
-static GType print_backend_cloudprint_type = 0;
-
 struct _GtkPrintBackendCloudprintClass
 {
   GtkPrintBackendClass parent_class;
@@ -103,7 +101,7 @@ static void                 cloudprint_printer_request_details           (GtkPri
 TGOAAccount *        t_goa_account_copy                 (TGOAAccount *account);
 void                 t_goa_account_free                 (gpointer data);
 
-GG_DEFINE_DYNAMIC_TYPE(GtkPrintBackendCloudprint, gtk_print_backend_cloudprint, GTK_TYPE_PRINT_BACKEND)
+G_DEFINE_DYNAMIC_TYPE (GtkPrintBackendCloudprint, gtk_print_backend_cloudprint, GTK_TYPE_PRINT_BACKEND)
 
 void
 g_io_module_load (GIOModule *module)
@@ -134,15 +132,6 @@ g_io_module_query (void)
   };
 
   return g_strdupv (eps);
-}
-
-/*
- * GtkPrintBackendCloudprint
- */
-GType
-gtk_print_backend_cloudprint_get_type (void)
-{
-  return print_backend_cloudprint_type;
 }
 
 /**
