@@ -75,7 +75,6 @@ typedef struct _GtkRangeStepTimer GtkRangeStepTimer;
 
 struct _GtkRangePrivate
 {
-  GtkWidget *mouse_location;
   /* last mouse coords we got, or G_MININT if mouse is outside the range */
   gint  mouse_x;
   gint  mouse_y;
@@ -216,7 +215,6 @@ static void          gtk_range_compute_slider_position  (GtkRange      *range,
                                                          GdkRectangle  *slider_rect);
 static gboolean      gtk_range_scroll                   (GtkRange      *range,
                                                          GtkScrollType  scroll);
-static void          gtk_range_update_mouse_location    (GtkRange      *range);
 static void          gtk_range_calc_slider              (GtkRange      *range);
 static void          gtk_range_calc_marks               (GtkRange      *range);
 static void          gtk_range_adjustment_value_changed (GtkAdjustment *adjustment,
@@ -1738,8 +1736,6 @@ range_grab_remove (GtkRange *range)
 
   priv->grab_location = NULL;
 
-  gtk_range_update_mouse_location (range);
-
   update_trough_state (range);
   update_slider_state (range);
   update_zoom_state (range, FALSE);
@@ -1881,10 +1877,11 @@ gtk_range_long_press_gesture_pressed (GtkGestureLongPress *gesture,
                                       GtkRange            *range)
 {
   GtkRangePrivate *priv = range->priv;
+  GtkWidget *mouse_location;
 
-  gtk_range_update_mouse_location (range);
+  mouse_location = gtk_widget_pick (GTK_WIDGET (range), x, y);
 
-  if (priv->mouse_location == priv->slider_widget && !priv->zoom)
+  if (mouse_location == priv->slider_widget && !priv->zoom)
     {
       GtkAllocation slider_alloc;
 
@@ -1912,6 +1909,7 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   guint button;
   GdkModifierType state_mask;
   GtkAllocation slider_alloc;
+  GtkWidget *mouse_location;
 
   if (!gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
@@ -1928,15 +1926,21 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   priv->mouse_x = x;
   priv->mouse_y = y;
 
-  gtk_range_update_mouse_location (range);
   gtk_widget_get_outer_allocation (priv->slider_widget, &slider_alloc);
 
   g_object_get (gtk_widget_get_settings (widget),
                 "gtk-primary-button-warps-slider", &primary_warps,
                 NULL);
 
+  mouse_location = gtk_widget_pick (widget, x, y);
 
-  if (priv->mouse_location == priv->slider_widget &&
+  /* For the purposes of this function, we ignore fill and highlight and
+   * handle them like the trough */
+  if (mouse_location == priv->fill_widget ||
+      mouse_location == priv->highlight_widget)
+    mouse_location = priv->trough_widget;
+
+  if (mouse_location == priv->slider_widget &&
       gdk_event_triggers_context_menu (event))
     {
       gboolean handled;
@@ -1946,7 +1950,7 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
       return;
     }
 
-  if (priv->mouse_location == priv->slider_widget)
+  if (mouse_location == priv->slider_widget)
     {
       /* Shift-click in the slider = fine adjustment */
       if (shift_pressed)
@@ -1955,7 +1959,7 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
       update_initial_slider_position (range, x, y, &slider_alloc);
       range_grab_add (range, priv->slider_widget);
     }
-  else if (priv->mouse_location == priv->trough_widget &&
+  else if (mouse_location == priv->trough_widget &&
            (source == GDK_SOURCE_TOUCHSCREEN ||
             (primary_warps && !shift_pressed && button == GDK_BUTTON_PRIMARY) ||
             (!primary_warps && shift_pressed && button == GDK_BUTTON_PRIMARY) ||
@@ -1985,7 +1989,7 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
 
       update_slider_position (range, x, y);
     }
-  else if (priv->mouse_location == priv->trough_widget &&
+  else if (mouse_location == priv->trough_widget &&
            ((primary_warps && shift_pressed && button == GDK_BUTTON_PRIMARY) ||
             (!primary_warps && !shift_pressed && button == GDK_BUTTON_PRIMARY) ||
             (primary_warps && button == GDK_BUTTON_MIDDLE)))
@@ -2004,7 +2008,7 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
       scroll = range_get_scroll_for_grab (range);
       gtk_range_add_step_timer (range, scroll);
     }
-  else if (priv->mouse_location == priv->trough_widget &&
+  else if (mouse_location == priv->trough_widget &&
            button == GDK_BUTTON_SECONDARY)
     {
       /* autoscroll */
@@ -2348,8 +2352,6 @@ gtk_range_event (GtkWidget *widget,
       priv->mouse_y = y;
     }
 
-  gtk_range_update_mouse_location (range);
-
   return GDK_EVENT_PROPAGATE;
 }
 
@@ -2595,30 +2597,6 @@ gtk_range_move_slider (GtkRange     *range,
     gtk_widget_error_bell (GTK_WIDGET (range));
 }
 
-/* Update mouse location, return TRUE if it changes */
-static void
-gtk_range_update_mouse_location (GtkRange *range)
-{
-  GtkRangePrivate *priv = range->priv;
-  gint x, y;
-  GtkWidget *widget = GTK_WIDGET (range);
-
-  x = priv->mouse_x;
-  y = priv->mouse_y;
-
-  if (priv->grab_location != NULL)
-    priv->mouse_location = priv->grab_location;
-  else
-    priv->mouse_location = gtk_widget_pick (widget, x, y);
-
-  /* That's what you get for not attaching gestures to the correct widget */
-  while (priv->mouse_location &&
-         priv->mouse_location != priv->slider_widget &&
-         priv->mouse_location != priv->trough_widget &&
-         priv->mouse_location != widget)
-    priv->mouse_location = gtk_widget_get_parent (priv->mouse_location);
-}
-
 static void
 gtk_range_compute_slider_position (GtkRange     *range,
                                    gdouble       adjustment_value,
@@ -2763,7 +2741,6 @@ gtk_range_calc_slider (GtkRange *range)
   gtk_widget_set_visible (priv->slider_widget, visible);
 
   gtk_widget_queue_allocate (priv->trough_widget);
-  gtk_range_update_mouse_location (range);
 }
 
 static void
