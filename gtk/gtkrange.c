@@ -75,9 +75,6 @@ typedef struct _GtkRangeStepTimer GtkRangeStepTimer;
 
 struct _GtkRangePrivate
 {
-  /* last mouse coords we got, or G_MININT if mouse is outside the range */
-  gint  mouse_x;
-  gint  mouse_y;
   GtkWidget *grab_location;   /* "grabbed" mouse location, NULL for no grab */
 
   GtkRangeStepTimer *timer;
@@ -195,11 +192,9 @@ static void gtk_range_long_press_gesture_pressed  (GtkGestureLongPress  *gesture
                                                    GtkRange             *range);
 
 
-static gboolean gtk_range_event       (GtkWidget       *widget,
-                                       GdkEvent        *event);
 static void update_slider_position   (GtkRange	       *range,
-				      gint              mouse_x,
-				      gint              mouse_y);
+                                      int               mouse_x,
+                                      int               mouse_y);
 static void stop_scrolling           (GtkRange         *range);
 static void add_autoscroll           (GtkRange         *range);
 static void remove_autoscroll        (GtkRange         *range);
@@ -286,7 +281,6 @@ gtk_range_class_init (GtkRangeClass *class)
   widget_class->snapshot = gtk_range_snapshot;
   widget_class->size_allocate = gtk_range_size_allocate;
   widget_class->unmap = gtk_range_unmap;
-  widget_class->event = gtk_range_event;
   widget_class->key_press_event = gtk_range_key_press;
   widget_class->direction_changed = gtk_range_direction_changed;
 
@@ -551,8 +545,6 @@ gtk_range_init (GtkRange *range)
   priv->inverted = FALSE;
   priv->flippable = FALSE;
   priv->round_digits = -1;
-  priv->mouse_x = G_MININT;
-  priv->mouse_y = G_MININT;
   priv->has_origin = FALSE;
   priv->show_fill_level = FALSE;
   priv->restrict_to_fill_level = TRUE;
@@ -1923,9 +1915,6 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   source_device = gdk_event_get_source_device ((GdkEvent *) event);
   source = gdk_device_get_source (source_device);
 
-  priv->mouse_x = x;
-  priv->mouse_y = y;
-
   gtk_widget_get_outer_allocation (priv->slider_widget, &slider_alloc);
 
   g_object_get (gtk_widget_get_settings (widget),
@@ -2041,9 +2030,7 @@ gtk_range_multipress_gesture_released (GtkGestureMultiPress *gesture,
 {
   GtkRangePrivate *priv = range->priv;
 
-  priv->mouse_x = x;
-  priv->mouse_y = y;
-  range->priv->in_drag = FALSE;
+  priv->in_drag = FALSE;
   stop_scrolling (range);
 }
 
@@ -2262,7 +2249,9 @@ gtk_range_scroll_controller_scroll (GtkEventControllerScroll *scroll,
 }
 
 static void
-update_autoscroll_mode (GtkRange *range)
+update_autoscroll_mode (GtkRange *range,
+                        int       mouse_x,
+                        int       mouse_y)
 {
   GtkScrollType mode = GTK_SCROLL_NONE;
 
@@ -2277,12 +2266,12 @@ update_autoscroll_mode (GtkRange *range)
       if (range->priv->orientation == GTK_ORIENTATION_VERTICAL)
         {
           size = height;
-          pos = range->priv->mouse_y;
+          pos = mouse_y;
         }
       else
         {
           size = width;
-          pos = range->priv->mouse_x;
+          pos = mouse_x;
         }
 
       if (pos < SCROLL_EDGE_SIZE)
@@ -2310,14 +2299,16 @@ gtk_range_drag_gesture_update (GtkGestureDrag *gesture,
 
   if (priv->grab_location == priv->slider_widget)
     {
+      int mouse_x, mouse_y;
+
       gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
-      priv->mouse_x = start_x + offset_x;
-      priv->mouse_y = start_y + offset_y;
+      mouse_x = start_x + offset_x;
+      mouse_y = start_y + offset_y;
       priv->in_drag = TRUE;
-      update_autoscroll_mode (range);
+      update_autoscroll_mode (range, mouse_x, mouse_y);
 
       if (priv->autoscroll_mode == GTK_SCROLL_NONE)
-        update_slider_position (range, priv->mouse_x, priv->mouse_y);
+        update_slider_position (range, mouse_x, mouse_y);
     }
 }
 
@@ -2331,28 +2322,6 @@ gtk_range_drag_gesture_begin (GtkGestureDrag *gesture,
 
   if (priv->grab_location == priv->slider_widget)
     gtk_gesture_set_state (priv->drag_gesture, GTK_EVENT_SEQUENCE_CLAIMED);
-}
-
-static gboolean
-gtk_range_event (GtkWidget *widget,
-                 GdkEvent  *event)
-{
-  GtkRange *range = GTK_RANGE (widget);
-  GtkRangePrivate *priv = range->priv;
-  gdouble x, y;
-
-  if (gdk_event_get_event_type (event) == GDK_LEAVE_NOTIFY)
-    {
-      priv->mouse_x = G_MININT;
-      priv->mouse_y = G_MININT;
-    }
-  else if (gdk_event_get_coords (event, &x, &y))
-    {
-      priv->mouse_x = x;
-      priv->mouse_y = y;
-    }
-
-  return GDK_EVENT_PROPAGATE;
 }
 
 static void
