@@ -1,6 +1,7 @@
 FROM fedora:27
 
 RUN dnf -y install \
+    adwaita-icon-theme \
     atk-devel \
     at-spi2-atk-devel \
     avahi-gobject-devel \
@@ -13,15 +14,18 @@ RUN dnf -y install \
     gcc \
     gcc-c++ \
     gdk-pixbuf2-devel \
+    gdk-pixbuf2-modules \
     gettext \
     git \
     glib2-devel \
     gobject-introspection-devel \
     graphene-devel \
+    iso-codes \
     itstool \
     json-glib-devel \
     libepoxy-devel \
     libmount-devel \
+    librsvg2 \
     libXcomposite-devel \
     libXcursor-devel \
     libXcursor-devel \
@@ -32,11 +36,13 @@ RUN dnf -y install \
     libxkbcommon-devel \
     libXrandr-devel \
     libXrender-devel \
+    mesa-dri-drivers \
     mesa-libEGL-devel \
     mesa-libwayland-egl-devel \
     meson \
     pango-devel \
     redhat-rpm-config \
+    sassc \
     vulkan-devel \
     wayland-devel \
     wayland-protocols-devel \
