@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-11 08:31+0000\n"
-"PO-Revision-Date: 2018-02-11 10:43+0100\n"
+"POT-Creation-Date: 2018-02-20 13:38+0000\n"
+"PO-Revision-Date: 2018-02-21 10:27+0100\n"
 "Last-Translator: Fabio Tomat <f.t.public@gmail.com>\n"
 "Language-Team: Friulian <fur@li.org>\n"
 "Language: fur\n"
@@ -263,22 +263,22 @@ msgstr "Icone riserve"
 msgid "The stock icon displayed in widgets representing this action."
 msgstr ""
 
-#: gtk/deprecated/gtkaction.c:342 gtk/deprecated/gtkstatusicon.c:272
+#: gtk/deprecated/gtkaction.c:342 gtk/deprecated/gtkstatusicon.c:279
 msgid "GIcon"
 msgstr "GIcon"
 
-#: gtk/deprecated/gtkaction.c:343 gtk/deprecated/gtkstatusicon.c:273
+#: gtk/deprecated/gtkaction.c:343 gtk/deprecated/gtkstatusicon.c:280
 #: gtk/gtkcellrendererpixbuf.c:282 gtk/gtkimage.c:359
 msgid "The GIcon being displayed"
 msgstr ""
 
-#: gtk/deprecated/gtkaction.c:365 gtk/deprecated/gtkstatusicon.c:256
+#: gtk/deprecated/gtkaction.c:365 gtk/deprecated/gtkstatusicon.c:263
 #: gtk/gtkcellrendererpixbuf.c:245 gtk/gtkimage.c:342 gtk/gtkprinter.c:170
 #: gtk/gtkwindow.c:887
 msgid "Icon Name"
 msgstr "Non icone"
 
-#: gtk/deprecated/gtkaction.c:366 gtk/deprecated/gtkstatusicon.c:257
+#: gtk/deprecated/gtkaction.c:366 gtk/deprecated/gtkstatusicon.c:264
 #: gtk/gtkcellrendererpixbuf.c:246 gtk/gtkimage.c:343
 msgid "The name of the icon from the icon theme"
 msgstr "Il non de icone dal teme de icone"
@@ -348,7 +348,7 @@ msgid "Whether the action is enabled."
 msgstr "Indiche se la azion e je abilitade."
 
 #: gtk/deprecated/gtkaction.c:481 gtk/deprecated/gtkactiongroup.c:228
-#: gtk/deprecated/gtkstatusicon.c:307 gtk/gtkcssnode.c:649
+#: gtk/deprecated/gtkstatusicon.c:314 gtk/gtkcssnode.c:649
 #: gtk/gtknativedialog.c:242 gtk/gtktreeviewcolumn.c:246 gtk/gtkwidget.c:1145
 msgid "Visible"
 msgstr "Visibil"
@@ -437,9 +437,8 @@ msgid ""
 msgstr ""
 
 #: gtk/deprecated/gtkalignment.c:188
-#, fuzzy
 msgid "Horizontal scale"
-msgstr "Inlineament orizontâl"
+msgstr "Scjale orizontâl"
 
 #: gtk/deprecated/gtkalignment.c:189
 msgid ""
@@ -448,9 +447,8 @@ msgid ""
 msgstr ""
 
 #: gtk/deprecated/gtkalignment.c:206
-#, fuzzy
 msgid "Vertical scale"
-msgstr "Inlineament verticâl"
+msgstr "Scjale verticâl"
 
 #: gtk/deprecated/gtkalignment.c:207
 msgid ""
@@ -521,11 +519,11 @@ msgstr "Cuantitât di spazi doprât de frece"
 
 #: gtk/deprecated/gtkcolorsel.c:325
 msgid "Has Opacity Control"
-msgstr ""
+msgstr "Al à il control opacitât"
 
 #: gtk/deprecated/gtkcolorsel.c:326
 msgid "Whether the color selector should allow setting opacity"
-msgstr ""
+msgstr "Indiche se il seletôr dal colôr al à di stabilî la opacitât"
 
 #: gtk/deprecated/gtkcolorsel.c:332
 msgid "Has palette"
@@ -591,7 +589,7 @@ msgstr "Boton jutori"
 msgid "The help button of the dialog."
 msgstr "Il boton Jutori dal dialic."
 
-#: gtk/deprecated/gtkfontsel.c:240 gtk/gtkfontbutton.c:495
+#: gtk/deprecated/gtkfontsel.c:240 gtk/gtkfontbutton.c:496
 msgid "Font name"
 msgstr "Non caratar"
 
@@ -691,7 +689,7 @@ msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
 msgstr ""
-"L'inlineament orizontâl, di 0 (çampe) a 1 (diestre). Riservât pes "
+"L'inlineament orizontâl, di 0 (çampe) a 1 (diestre). Contrari pes "
 "disposizions RTL."
 
 #: gtk/deprecated/gtkmisc.c:133 gtk/gtklabel.c:869
@@ -799,104 +797,104 @@ msgstr "Mostre numars"
 msgid "Whether the items should be displayed with a number"
 msgstr ""
 
-#: gtk/deprecated/gtkstatusicon.c:227 gtk/gtkimage.c:255
+#: gtk/deprecated/gtkstatusicon.c:234 gtk/gtkimage.c:255
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
-#: gtk/deprecated/gtkstatusicon.c:228 gtk/gtkimage.c:256
+#: gtk/deprecated/gtkstatusicon.c:235 gtk/gtkimage.c:256
 msgid "A GdkPixbuf to display"
 msgstr "Un GdkPixbuf di mostrâ"
 
-#: gtk/deprecated/gtkstatusicon.c:235 gtk/gtkimage.c:269
+#: gtk/deprecated/gtkstatusicon.c:242 gtk/gtkimage.c:269
 #: gtk/gtkrecentmanager.c:289
 msgid "Filename"
 msgstr "Non file"
 
-#: gtk/deprecated/gtkstatusicon.c:236 gtk/gtkimage.c:270
+#: gtk/deprecated/gtkstatusicon.c:243 gtk/gtkimage.c:270
 msgid "Filename to load and display"
 msgstr "Non dal file di cjariâ e mostrâ"
 
-#: gtk/deprecated/gtkstatusicon.c:248 gtk/gtkcellrendererpixbuf.c:195
+#: gtk/deprecated/gtkstatusicon.c:255 gtk/gtkcellrendererpixbuf.c:195
 #: gtk/gtkimage.c:281
 msgid "Stock ID"
 msgstr ""
 
-#: gtk/deprecated/gtkstatusicon.c:249 gtk/gtkimage.c:282
+#: gtk/deprecated/gtkstatusicon.c:256 gtk/gtkimage.c:282
 msgid "Stock ID for a stock image to display"
 msgstr ""
 
-#: gtk/deprecated/gtkstatusicon.c:280 gtk/gtkimage.c:379
+#: gtk/deprecated/gtkstatusicon.c:287 gtk/gtkimage.c:379
 msgid "Storage type"
 msgstr "Gjenar di archiviazion"
 
-#: gtk/deprecated/gtkstatusicon.c:281 gtk/gtkimage.c:380
+#: gtk/deprecated/gtkstatusicon.c:288 gtk/gtkimage.c:380
 msgid "The representation being used for image data"
 msgstr ""
 
-#: gtk/deprecated/gtkstatusicon.c:289 gtk/gtkcellrendererpixbuf.c:210
+#: gtk/deprecated/gtkstatusicon.c:296 gtk/gtkcellrendererpixbuf.c:210
 #: gtk/gtkcellrendererspinner.c:159 gtk/gtkrecentmanager.c:304
 msgid "Size"
 msgstr "Dimension"
 
-#: gtk/deprecated/gtkstatusicon.c:290
+#: gtk/deprecated/gtkstatusicon.c:297
 msgid "The size of the icon"
 msgstr "La dimension de icone"
 
-#: gtk/deprecated/gtkstatusicon.c:299 gtk/gtkinvisible.c:98
+#: gtk/deprecated/gtkstatusicon.c:306 gtk/gtkinvisible.c:98
 #: gtk/gtkmountoperation.c:179 gtk/gtkstylecontext.c:228 gtk/gtkwindow.c:894
 msgid "Screen"
 msgstr "Schermi"
 
-#: gtk/deprecated/gtkstatusicon.c:300
+#: gtk/deprecated/gtkstatusicon.c:307
 msgid "The screen where this status icon will be displayed"
 msgstr "Il schermi dulà che cheste icone di stât e vignarà mostrade"
 
-#: gtk/deprecated/gtkstatusicon.c:308
+#: gtk/deprecated/gtkstatusicon.c:315
 msgid "Whether the status icon is visible"
 msgstr "Indiche se la icone di stât e je visibile"
 
-#: gtk/deprecated/gtkstatusicon.c:323 gtk/gtkplug.c:196
+#: gtk/deprecated/gtkstatusicon.c:330 gtk/gtkplug.c:196
 msgid "Embedded"
 msgstr "Incorporât"
 
-#: gtk/deprecated/gtkstatusicon.c:324
+#: gtk/deprecated/gtkstatusicon.c:331
 msgid "Whether the status icon is embedded"
 msgstr "Indiche se la icone di stât e je incorporade"
 
-#: gtk/deprecated/gtkstatusicon.c:339 gtk/deprecated/gtktrayicon-x11.c:127
+#: gtk/deprecated/gtkstatusicon.c:346 gtk/deprecated/gtktrayicon-x11.c:127
 #: gtk/gtkgesturepan.c:237 gtk/gtkorientable.c:61
 msgid "Orientation"
 msgstr "Orientament"
 
-#: gtk/deprecated/gtkstatusicon.c:340 gtk/deprecated/gtktrayicon-x11.c:128
+#: gtk/deprecated/gtkstatusicon.c:347 gtk/deprecated/gtktrayicon-x11.c:128
 msgid "The orientation of the tray"
 msgstr "L'orientament de guantiere"
 
-#: gtk/deprecated/gtkstatusicon.c:367 gtk/gtkwidget.c:1282
+#: gtk/deprecated/gtkstatusicon.c:374 gtk/gtkwidget.c:1282
 msgid "Has tooltip"
 msgstr "Al à sugjeriments"
 
-#: gtk/deprecated/gtkstatusicon.c:368
+#: gtk/deprecated/gtkstatusicon.c:375
 msgid "Whether this tray icon has a tooltip"
 msgstr "Indiche se cheste icone di guantiere e à un consei"
 
-#: gtk/deprecated/gtkstatusicon.c:394 gtk/gtkwidget.c:1306
+#: gtk/deprecated/gtkstatusicon.c:401 gtk/gtkwidget.c:1306
 msgid "Tooltip Text"
 msgstr "Test dal sugjeriment"
 
-#: gtk/deprecated/gtkstatusicon.c:395 gtk/gtkwidget.c:1307 gtk/gtkwidget.c:1331
+#: gtk/deprecated/gtkstatusicon.c:402 gtk/gtkwidget.c:1307 gtk/gtkwidget.c:1331
 msgid "The contents of the tooltip for this widget"
-msgstr ""
+msgstr "I contignûts dal sugjeriment par chest widget"
 
-#: gtk/deprecated/gtkstatusicon.c:418 gtk/gtkwidget.c:1330
+#: gtk/deprecated/gtkstatusicon.c:425 gtk/gtkwidget.c:1330
 msgid "Tooltip markup"
 msgstr "Segn di sugjeriment"
 
-#: gtk/deprecated/gtkstatusicon.c:419
+#: gtk/deprecated/gtkstatusicon.c:426
 msgid "The contents of the tooltip for this tray icon"
 msgstr "I contignûts dal sugjeriment par cheste icone di guantiere"
 
-#: gtk/deprecated/gtkstatusicon.c:436 gtk/gtkcolorbutton.c:183
+#: gtk/deprecated/gtkstatusicon.c:443 gtk/gtkcolorbutton.c:183
 #: gtk/gtkfilechooserbutton.c:438 gtk/gtkfontbutton.c:479
 #: gtk/gtkheaderbar.c:2027 gtk/gtkprintjob.c:132 gtk/gtkshortcutsgroup.c:308
 #: gtk/gtkshortcutssection.c:376 gtk/gtkshortcutsshortcut.c:575
@@ -904,7 +902,7 @@ msgstr "I contignûts dal sugjeriment par cheste icone di guantiere"
 msgid "Title"
 msgstr "Titul"
 
-#: gtk/deprecated/gtkstatusicon.c:437
+#: gtk/deprecated/gtkstatusicon.c:444
 msgid "The title of this tray icon"
 msgstr "Il titul di cheste icone di guantiere"
 
@@ -914,7 +912,7 @@ msgstr "Contest stîl"
 
 #: gtk/deprecated/gtkstyle.c:472
 msgid "GtkStyleContext to get style from"
-msgstr ""
+msgstr "GtkStyleContext di dulà otignî il stîl"
 
 #: gtk/deprecated/gtktable.c:185
 msgid "Rows"
@@ -996,7 +994,7 @@ msgstr "Opzions orizontâls"
 
 #: gtk/deprecated/gtktable.c:258
 msgid "Options specifying the horizontal behaviour of the child"
-msgstr ""
+msgstr "Opzions che a specifichin il compuartament orizontâl dal fi"
 
 #: gtk/deprecated/gtktable.c:264
 msgid "Vertical options"
@@ -1004,7 +1002,7 @@ msgstr "Opzions verticâls"
 
 #: gtk/deprecated/gtktable.c:265
 msgid "Options specifying the vertical behaviour of the child"
-msgstr ""
+msgstr "Opzions che a specifichin il compuartament verticâl dal fi"
 
 #: gtk/deprecated/gtktable.c:271
 #, fuzzy
@@ -1016,6 +1014,7 @@ msgid ""
 "Extra space to put between the child and its left and right neighbors, in "
 "pixels"
 msgstr ""
+"Spazi adizionâl di meti tra il fi e i siei vicins a drete e a çampe, in pixel"
 
 #: gtk/deprecated/gtktable.c:278
 #, fuzzy
@@ -1027,6 +1026,7 @@ msgid ""
 "Extra space to put between the child and its upper and lower neighbors, in "
 "pixels"
 msgstr ""
+"Spazi adizionâl di meti tra il fi e i siei vicins parsore e parsot, in pixel"
 
 #: gtk/deprecated/gtkthemingengine.c:248
 msgid "Theming engine name"
@@ -1059,7 +1059,7 @@ msgstr "Colôr dal prin plan"
 
 #: gtk/deprecated/gtktrayicon-x11.c:137
 msgid "Foreground color for symbolic icons"
-msgstr ""
+msgstr "Colôr dal prin plan pes iconis simbolichis"
 
 #: gtk/deprecated/gtktrayicon-x11.c:144
 msgid "Error color"
@@ -1067,7 +1067,7 @@ msgstr "Colôr erôr"
 
 #: gtk/deprecated/gtktrayicon-x11.c:145
 msgid "Error color for symbolic icons"
-msgstr ""
+msgstr "Colôr di erôr pes iconis simbolichis"
 
 #: gtk/deprecated/gtktrayicon-x11.c:152
 msgid "Warning color"
@@ -1075,7 +1075,7 @@ msgstr "Colôr avertiment"
 
 #: gtk/deprecated/gtktrayicon-x11.c:153
 msgid "Warning color for symbolic icons"
-msgstr ""
+msgstr "Colôr di avertiment pes iconis simbolichis"
 
 #: gtk/deprecated/gtktrayicon-x11.c:160
 msgid "Success color"
@@ -1083,7 +1083,7 @@ msgstr "Colôr sucès"
 
 #: gtk/deprecated/gtktrayicon-x11.c:161
 msgid "Success color for symbolic icons"
-msgstr ""
+msgstr "Colôr di sucès pes iconis simbolichis"
 
 #: gtk/deprecated/gtktrayicon-x11.c:168 gtk/gtkbox.c:345
 msgid "Padding"
@@ -1117,129 +1117,135 @@ msgstr ""
 msgid "An XML string describing the merged UI"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:342
+#: gtk/gtkaboutdialog.c:343
 msgid "Program name"
 msgstr "Non program"
 
-#: gtk/gtkaboutdialog.c:343
+#: gtk/gtkaboutdialog.c:344
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr ""
+"Il non dal program. Se chest nol è stabilît, si fâs riferiment al predefinît "
+"g_get_application_name()"
 
-#: gtk/gtkaboutdialog.c:356
+#: gtk/gtkaboutdialog.c:357
 msgid "Program version"
 msgstr "Version program"
 
-#: gtk/gtkaboutdialog.c:357
+#: gtk/gtkaboutdialog.c:358
 msgid "The version of the program"
 msgstr "La version dal program"
 
-#: gtk/gtkaboutdialog.c:370
+#: gtk/gtkaboutdialog.c:371
 msgid "Copyright string"
 msgstr "Stringhe di copyright"
 
-#: gtk/gtkaboutdialog.c:371
+#: gtk/gtkaboutdialog.c:372
 msgid "Copyright information for the program"
 msgstr "Informazions di copyright pal program"
 
-#: gtk/gtkaboutdialog.c:386
+#: gtk/gtkaboutdialog.c:387
 msgid "Comments string"
 msgstr "Stringhe coments"
 
-#: gtk/gtkaboutdialog.c:387
+#: gtk/gtkaboutdialog.c:388
 msgid "Comments about the program"
 msgstr "Coments sul program"
 
-#: gtk/gtkaboutdialog.c:407
+#: gtk/gtkaboutdialog.c:408
 msgid "License"
 msgstr "Licence"
 
-#: gtk/gtkaboutdialog.c:408
+#: gtk/gtkaboutdialog.c:409
 msgid "The license of the program"
 msgstr "La licence dal program"
 
-#: gtk/gtkaboutdialog.c:435
+#: gtk/gtkaboutdialog.c:436
 msgid "License Type"
 msgstr "Gjenar di licence"
 
-#: gtk/gtkaboutdialog.c:436
+#: gtk/gtkaboutdialog.c:437
 msgid "The license type of the program"
 msgstr "Il gjenar di licence dal program"
 
-#: gtk/gtkaboutdialog.c:451
+#: gtk/gtkaboutdialog.c:452
 msgid "Website URL"
 msgstr "URL dal sît web"
 
-#: gtk/gtkaboutdialog.c:452
+#: gtk/gtkaboutdialog.c:453
 msgid "The URL for the link to the website of the program"
 msgstr "Il URL pal colegament al sît web dal program"
 
-#: gtk/gtkaboutdialog.c:465
+#: gtk/gtkaboutdialog.c:466
 msgid "Website label"
 msgstr "Etichete sît web"
 
-#: gtk/gtkaboutdialog.c:466
+#: gtk/gtkaboutdialog.c:467
 msgid "The label for the link to the website of the program"
 msgstr "La etichete pal colegament al sît web dal program"
 
-#: gtk/gtkaboutdialog.c:481
+#: gtk/gtkaboutdialog.c:482
 msgid "Authors"
 msgstr "Autôrs"
 
-#: gtk/gtkaboutdialog.c:482
+#: gtk/gtkaboutdialog.c:483
 msgid "List of authors of the program"
 msgstr "Liste dai autôrs dal program"
 
-#: gtk/gtkaboutdialog.c:497
+#: gtk/gtkaboutdialog.c:498
 msgid "Documenters"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:498
+#: gtk/gtkaboutdialog.c:499
 msgid "List of people documenting the program"
-msgstr ""
+msgstr "Liste di personis che a documentin il program"
 
-#: gtk/gtkaboutdialog.c:513
+#: gtk/gtkaboutdialog.c:514
 msgid "Artists"
 msgstr "Artiscj"
 
-#: gtk/gtkaboutdialog.c:514
+#: gtk/gtkaboutdialog.c:515
 msgid "List of people who have contributed artwork to the program"
 msgstr "Liste des personis che a àn contribuît ae grafiche dal program"
 
-#: gtk/gtkaboutdialog.c:529
+#: gtk/gtkaboutdialog.c:530
 msgid "Translator credits"
 msgstr "Fabio Tomat <f.t.public@gmail.com>"
 
-#: gtk/gtkaboutdialog.c:530
+#: gtk/gtkaboutdialog.c:531
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr ""
+"Ricognossiments ai tradutôrs. Cheste stringhe e à di jessi segnade come "
+"tradusibile"
 
-#: gtk/gtkaboutdialog.c:544
+#: gtk/gtkaboutdialog.c:545
 msgid "Logo"
 msgstr "Logo"
 
-#: gtk/gtkaboutdialog.c:545
+#: gtk/gtkaboutdialog.c:546
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
 msgstr ""
+"Un logo pal ricuadri informazions. Se chest nol è stabilît, si fâs "
+"riferiment al predefinît gtk_window_get_default_icon_list()"
 
-#: gtk/gtkaboutdialog.c:559
+#: gtk/gtkaboutdialog.c:560
 msgid "Logo Icon Name"
 msgstr "Non icone simbul"
 
-#: gtk/gtkaboutdialog.c:560
+#: gtk/gtkaboutdialog.c:561
 msgid "A named icon to use as the logo for the about box."
 msgstr ""
 "Une icone cun non di doprâ come simbul/logo par un ricuadri di informazions."
 
-#: gtk/gtkaboutdialog.c:573
+#: gtk/gtkaboutdialog.c:574
 msgid "Wrap license"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:574
+#: gtk/gtkaboutdialog.c:575
 msgid "Whether to wrap the license text."
 msgstr ""
 
@@ -1282,7 +1288,7 @@ msgstr ""
 
 #: gtk/gtkactionable.c:77
 msgid "The parameter for action invocations"
-msgstr ""
+msgstr "Il parametri pes invocazions de azion"
 
 #: gtk/gtkactionbar.c:338 gtk/gtkbox.c:353 gtk/gtkheaderbar.c:2013
 msgid "Pack type"
@@ -1303,7 +1309,7 @@ msgstr "Posizion"
 #: gtk/gtkactionbar.c:346 gtk/gtkbox.c:361 gtk/gtkheaderbar.c:2021
 #: gtk/gtknotebook.c:839 gtk/gtkpopovermenu.c:385 gtk/gtkstack.c:538
 msgid "The index of the child in the parent"
-msgstr ""
+msgstr "L'indiç dal fi tal gjenitôr"
 
 #: gtk/gtkadjustment.c:142 gtk/gtkcellrendererprogress.c:138
 #: gtk/gtkscalebutton.c:196 gtk/gtkspinbutton.c:436
@@ -1312,7 +1318,7 @@ msgstr "Valôr"
 
 #: gtk/gtkadjustment.c:143
 msgid "The value of the adjustment"
-msgstr ""
+msgstr "Il valôr di justament"
 
 #: gtk/gtkadjustment.c:157
 msgid "Minimum Value"
@@ -1320,7 +1326,7 @@ msgstr "Valôr minim"
 
 #: gtk/gtkadjustment.c:158
 msgid "The minimum value of the adjustment"
-msgstr ""
+msgstr "Il valôr minim di justament"
 
 #: gtk/gtkadjustment.c:175
 msgid "Maximum Value"
@@ -1328,7 +1334,7 @@ msgstr "Valôr massim"
 
 #: gtk/gtkadjustment.c:176
 msgid "The maximum value of the adjustment"
-msgstr ""
+msgstr "Il valôr massim di justament"
 
 #: gtk/gtkadjustment.c:190
 msgid "Step Increment"
@@ -1352,7 +1358,7 @@ msgstr "Dimension pagjine"
 
 #: gtk/gtkadjustment.c:224
 msgid "The page size of the adjustment"
-msgstr ""
+msgstr "La dimension de pagjine dal justament"
 
 #: gtk/gtkappchooserbutton.c:618
 msgid "Include an 'Other…' item"
@@ -1406,7 +1412,7 @@ msgstr "Mostre la app predefinide"
 
 #: gtk/gtkappchooserwidget.c:964
 msgid "Whether the widget should show the default application"
-msgstr ""
+msgstr "Indiche se il widget al à di mostrâ la aplicazion predefinide"
 
 #: gtk/gtkappchooserwidget.c:978
 msgid "Show recommended apps"
@@ -1414,7 +1420,7 @@ msgstr "Mostre lis app conseadis"
 
 #: gtk/gtkappchooserwidget.c:979
 msgid "Whether the widget should show recommended applications"
-msgstr ""
+msgstr "Indiche se il widget al à di mostrâ lis aplicazions conseadis"
 
 #: gtk/gtkappchooserwidget.c:993
 msgid "Show fallback apps"
@@ -1422,7 +1428,7 @@ msgstr "Mostre lis app di repeç"
 
 #: gtk/gtkappchooserwidget.c:994
 msgid "Whether the widget should show fallback applications"
-msgstr ""
+msgstr "Indiche se il widget al à di mostrâ lis aplicazions di repeç"
 
 #: gtk/gtkappchooserwidget.c:1006
 msgid "Show other apps"
@@ -1430,7 +1436,7 @@ msgstr "Mostre altris app"
 
 #: gtk/gtkappchooserwidget.c:1007
 msgid "Whether the widget should show other applications"
-msgstr ""
+msgstr "Indiche se il widget al à di mostrâ altris aplicazions"
 
 #: gtk/gtkappchooserwidget.c:1020
 msgid "Show all apps"
@@ -1438,7 +1444,7 @@ msgstr "Mostre dutis lis app"
 
 #: gtk/gtkappchooserwidget.c:1021
 msgid "Whether the widget should show all applications"
-msgstr ""
+msgstr "Indiche se il widget al à di mostrâ dutis lis aplicazions"
 
 #: gtk/gtkappchooserwidget.c:1035
 msgid "Widget's default text"
@@ -1478,7 +1484,7 @@ msgstr "Barcon atîf"
 
 #: gtk/gtkapplication.c:672
 msgid "The window which most recently had focus"
-msgstr ""
+msgstr "Il barcon che plui di resint al jere a fûc"
 
 #: gtk/gtkapplicationwindow.c:874
 msgid "Show a menubar"
@@ -1536,7 +1542,7 @@ msgstr ""
 
 #: gtk/gtkassistant.c:541
 msgid "Number of pixels around the header."
-msgstr ""
+msgstr "Numar di pixel ator de intestazion."
 
 #: gtk/gtkassistant.c:556
 msgid "Content Padding"
@@ -1648,11 +1654,11 @@ msgstr ""
 
 #: gtk/gtkbbox.c:292
 msgid "Non-Homogeneous"
-msgstr ""
+msgstr "No-Omogjenei"
 
 #: gtk/gtkbbox.c:293
 msgid "If TRUE, the child will not be subject to homogeneous sizing"
-msgstr ""
+msgstr "Se VÊR, il fi nol sarà sogjet ae dimension omogjenie"
 
 #: gtk/gtkbox.c:282 gtk/gtkcellareabox.c:310 gtk/gtkexpander.c:341
 #: gtk/gtkheaderbar.c:2048 gtk/gtkiconview.c:524 gtk/gtktreeviewcolumn.c:276
@@ -1665,7 +1671,7 @@ msgstr "La cuantitât di spazi tra i fîs"
 
 #: gtk/gtkbox.c:290 gtk/gtkflowbox.c:3842
 msgid "Whether the children should all be the same size"
-msgstr ""
+msgstr "Indiche se i fîs a àn di jessi ducj de stesse dimension"
 
 #: gtk/gtkbox.c:296
 msgid "Baseline position"
@@ -1685,6 +1691,7 @@ msgstr "Pant"
 #: gtk/gtkbox.c:323
 msgid "Whether the child should receive extra space when the parent grows"
 msgstr ""
+"Indiche se il fi al à di ricevi spazi in plui cuant che il gjenitôr al cres"
 
 #: gtk/gtkbox.c:338 gtk/gtktoolitemgroup.c:1704
 msgid "Fill"
@@ -1698,7 +1705,7 @@ msgstr ""
 
 #: gtk/gtkbox.c:346
 msgid "Extra space to put between the child and its neighbors, in pixels"
-msgstr ""
+msgstr "Spazi adizionâl di meti tra il fi e i siei vicins, in pixel"
 
 #: gtk/gtkbuilder.c:292
 msgid "Translation Domain"
@@ -1778,6 +1785,8 @@ msgid ""
 "Extra space to add for GTK_CAN_DEFAULT buttons that is always drawn outside "
 "the border"
 msgstr ""
+"Spazi in plui di zontâ pai botons GTK_CAN_DEFAULT, che al è simpri disegnât "
+"fûr dal ôr"
 
 #: gtk/gtkbutton.c:556
 msgid "Child X Displacement"
@@ -1787,6 +1796,8 @@ msgstr ""
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr ""
+"Trop lontan che al è di movi il fi inte direzion x, cuant che il boton al "
+"ven molât"
 
 #: gtk/gtkbutton.c:573
 msgid "Child Y Displacement"
@@ -1796,6 +1807,8 @@ msgstr ""
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr ""
+"Trop lontan che al è di movi il fi inte direzion y, cuant che il boton al "
+"ven molât"
 
 #: gtk/gtkbutton.c:593
 msgid "Displace focus"
@@ -1813,7 +1826,7 @@ msgstr "Ôr interni"
 
 #: gtk/gtkbutton.c:611
 msgid "Border between button edges and child."
-msgstr ""
+msgstr "Confin tra i ôrs dal boton e il fi."
 
 #: gtk/gtkbutton.c:626
 msgid "Image spacing"
@@ -1853,11 +1866,11 @@ msgstr ""
 
 #: gtk/gtkcalendar.c:442
 msgid "Show Heading"
-msgstr ""
+msgstr "Mostre intestazion"
 
 #: gtk/gtkcalendar.c:443
 msgid "If TRUE, a heading is displayed"
-msgstr ""
+msgstr "Se VÊR, une intestazion e ven mostrade"
 
 #: gtk/gtkcalendar.c:457
 msgid "Show Day Names"
@@ -1869,19 +1882,19 @@ msgstr "Se VÊR, a vegnin mostrâts i nons des zornadis"
 
 #: gtk/gtkcalendar.c:471
 msgid "No Month Change"
-msgstr ""
+msgstr "No modifiche mês"
 
 #: gtk/gtkcalendar.c:472
 msgid "If TRUE, the selected month cannot be changed"
-msgstr ""
+msgstr "Se VÊR, il mês selezionât nol pues jessi cambiât"
 
 #: gtk/gtkcalendar.c:486
 msgid "Show Week Numbers"
-msgstr ""
+msgstr "Mostre numars des setemanis"
 
 #: gtk/gtkcalendar.c:487
 msgid "If TRUE, week numbers are displayed"
-msgstr ""
+msgstr "Se VÊR, i numars des setemanis a vegnin mostrâts"
 
 #: gtk/gtkcalendar.c:502
 msgid "Details Width"
@@ -1937,7 +1950,7 @@ msgstr ""
 
 #: gtk/gtkcellareabox.c:331
 msgid "Whether the cell expands"
-msgstr ""
+msgstr "Indiche se la cele si pant"
 
 #: gtk/gtkcellareabox.c:346
 msgid "Align"
@@ -1945,7 +1958,7 @@ msgstr ""
 
 #: gtk/gtkcellareabox.c:347
 msgid "Whether cell should align with adjacent rows"
-msgstr ""
+msgstr "Indiche se la cele e à di inlineâsi cun lis riis dongje"
 
 #: gtk/gtkcellareabox.c:363
 msgid "Fixed Size"
@@ -1954,6 +1967,7 @@ msgstr "Dimension fisse"
 #: gtk/gtkcellareabox.c:364
 msgid "Whether cells should be the same size in all rows"
 msgstr ""
+"Indiche se lis celis a àn di jessi de stesse dimension in dutis lis riis"
 
 #: gtk/gtkcellareabox.c:380
 msgid "Pack Type"
@@ -2184,7 +2198,7 @@ msgstr "Model"
 
 #: gtk/gtkcellrenderercombo.c:129
 msgid "The model containing the possible values for the combo box"
-msgstr ""
+msgstr "Il model che al conten i valôrs pussibii pe casele cumbinade"
 
 #: gtk/gtkcellrenderercombo.c:151
 msgid "Text Column"
@@ -2204,7 +2218,7 @@ msgstr ""
 
 #: gtk/gtkcellrendererpixbuf.c:152
 msgid "Pixbuf Object"
-msgstr ""
+msgstr "Ogjet pixbuf"
 
 #: gtk/gtkcellrendererpixbuf.c:153
 msgid "The pixbuf to render"
@@ -2265,7 +2279,7 @@ msgstr "Icone"
 
 #: gtk/gtkcellrendererprogress.c:139
 msgid "Value of the progress bar"
-msgstr ""
+msgstr "Valôr de sbare di avanzament"
 
 #: gtk/gtkcellrendererprogress.c:156 gtk/gtkcellrenderertext.c:255
 #: gtk/gtkentrybuffer.c:350 gtk/gtkentry.c:950 gtk/gtkmessagedialog.c:214
@@ -2275,7 +2289,7 @@ msgstr "Test"
 
 #: gtk/gtkcellrendererprogress.c:157
 msgid "Text on the progress bar"
-msgstr ""
+msgstr "Test de sbare di avanzament"
 
 #: gtk/gtkcellrendererprogress.c:180 gtk/gtkcellrendererspinner.c:144
 msgid "Pulse"
@@ -2286,20 +2300,24 @@ msgid ""
 "Set this to positive values to indicate that some progress is made, but you "
 "don't know how much."
 msgstr ""
+"Met chest a valôrs positîfs par indicâ che al è stât fât cualchi progrès, ma "
+"no si sa trop."
 
 #: gtk/gtkcellrendererprogress.c:197
 msgid "Text x alignment"
-msgstr ""
+msgstr "Inlineament x test"
 
 #: gtk/gtkcellrendererprogress.c:198
 msgid ""
 "The horizontal text alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
 msgstr ""
+"L'inlineament dal test orizontâl, di 0 (çampe) a 1 (diestre). Contrari pes "
+"disposizions RTL."
 
 #: gtk/gtkcellrendererprogress.c:214
 msgid "Text y alignment"
-msgstr ""
+msgstr "Inlineament y test"
 
 #: gtk/gtkcellrendererprogress.c:215
 msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
@@ -3548,7 +3566,7 @@ msgstr ""
 msgid "A list of style attributes to apply to the text of the label"
 msgstr ""
 
-#: gtk/gtkentry.c:1505 gtk/gtkplacessidebar.c:4836 gtk/gtktextview.c:1045
+#: gtk/gtkentry.c:1505 gtk/gtkplacessidebar.c:4837 gtk/gtktextview.c:1045
 msgid "Populate all"
 msgstr ""
 
@@ -3785,7 +3803,7 @@ msgstr "Filtri"
 msgid "The current filter for selecting which files are displayed"
 msgstr ""
 
-#: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4802
+#: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4803
 #: gtk/gtkplacesview.c:2258
 msgid "Local Only"
 msgstr "Dome locâl"
@@ -3963,39 +3981,39 @@ msgstr ""
 msgid "The title of the font chooser dialog"
 msgstr ""
 
-#: gtk/gtkfontbutton.c:496
+#: gtk/gtkfontbutton.c:497
 msgid "The name of the selected font"
 msgstr "Il non dal caratar selezionât"
 
-#: gtk/gtkfontbutton.c:511
+#: gtk/gtkfontbutton.c:512
 msgid "Use font in label"
 msgstr ""
 
-#: gtk/gtkfontbutton.c:512
+#: gtk/gtkfontbutton.c:513
 msgid "Whether the label is drawn in the selected font"
 msgstr ""
 
-#: gtk/gtkfontbutton.c:527
+#: gtk/gtkfontbutton.c:528
 msgid "Use size in label"
 msgstr ""
 
-#: gtk/gtkfontbutton.c:528
+#: gtk/gtkfontbutton.c:529
 msgid "Whether the label is drawn with the selected font size"
 msgstr ""
 
-#: gtk/gtkfontbutton.c:544
+#: gtk/gtkfontbutton.c:545
 msgid "Show style"
 msgstr "Mostre stîl"
 
-#: gtk/gtkfontbutton.c:545
+#: gtk/gtkfontbutton.c:546
 msgid "Whether the selected font style is shown in the label"
 msgstr ""
 
-#: gtk/gtkfontbutton.c:560
+#: gtk/gtkfontbutton.c:561
 msgid "Show size"
 msgstr "Mostre dimension"
 
-#: gtk/gtkfontbutton.c:561
+#: gtk/gtkfontbutton.c:562
 msgid "Whether selected font size is shown in the label"
 msgstr ""
 
@@ -5423,90 +5441,89 @@ msgstr ""
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr ""
 
-#: gtk/gtkplacessidebar.c:4765
+#: gtk/gtkplacessidebar.c:4766
 msgid "Location to Select"
 msgstr ""
 
-#: gtk/gtkplacessidebar.c:4766
+#: gtk/gtkplacessidebar.c:4767
 msgid "The location to highlight in the sidebar"
 msgstr ""
 
-#: gtk/gtkplacessidebar.c:4771 gtk/gtkplacesview.c:2279
+#: gtk/gtkplacessidebar.c:4772 gtk/gtkplacesview.c:2279
 msgid "Open Flags"
 msgstr ""
 
-#: gtk/gtkplacessidebar.c:4772 gtk/gtkplacesview.c:2280
+#: gtk/gtkplacessidebar.c:4773 gtk/gtkplacesview.c:2280
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
 msgstr ""
 
-#: gtk/gtkplacessidebar.c:4778
+#: gtk/gtkplacessidebar.c:4779
 msgid "Show recent files"
 msgstr ""
 
-#: gtk/gtkplacessidebar.c:4779
+#: gtk/gtkplacessidebar.c:4780
 msgid "Whether the sidebar includes a builtin shortcut for recent files"
 msgstr ""
 
-#: gtk/gtkplacessidebar.c:4784
+#: gtk/gtkplacessidebar.c:4785
 msgid "Show 'Desktop'"
 msgstr "Mostre 'Scritori'"
 
-#: gtk/gtkplacessidebar.c:4785
+#: gtk/gtkplacessidebar.c:4786
 msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
 msgstr ""
 
-#: gtk/gtkplacessidebar.c:4790
+#: gtk/gtkplacessidebar.c:4791
 msgid "Show 'Connect to Server'"
 msgstr ""
 
-#: gtk/gtkplacessidebar.c:4791
+#: gtk/gtkplacessidebar.c:4792
 msgid ""
 "Whether the sidebar includes a builtin shortcut to a 'Connect to server' "
 "dialog"
 msgstr ""
 
-#: gtk/gtkplacessidebar.c:4796
+#: gtk/gtkplacessidebar.c:4797
 msgid "Show 'Enter Location'"
 msgstr ""
 
-#: gtk/gtkplacessidebar.c:4797
+#: gtk/gtkplacessidebar.c:4798
 msgid ""
 "Whether the sidebar includes a builtin shortcut to manually enter a location"
 msgstr ""
 
-#: gtk/gtkplacessidebar.c:4803 gtk/gtkplacesview.c:2259
+#: gtk/gtkplacessidebar.c:4804 gtk/gtkplacesview.c:2259
 msgid "Whether the sidebar only includes local files"
 msgstr ""
 
-#: gtk/gtkplacessidebar.c:4808
+#: gtk/gtkplacessidebar.c:4809
 msgid "Show 'Trash'"
 msgstr ""
 
-#: gtk/gtkplacessidebar.c:4809
+#: gtk/gtkplacessidebar.c:4810
 msgid "Whether the sidebar includes a builtin shortcut to the Trash location"
 msgstr ""
 
-#: gtk/gtkplacessidebar.c:4814
+#: gtk/gtkplacessidebar.c:4815
 msgid "Show 'Other locations'"
 msgstr ""
 
-#: gtk/gtkplacessidebar.c:4815
+#: gtk/gtkplacessidebar.c:4816
 msgid "Whether the sidebar includes an item to show external locations"
 msgstr ""
 
-#: gtk/gtkplacessidebar.c:4820
+#: gtk/gtkplacessidebar.c:4821
 msgid "Show “Starred Location”"
 msgstr ""
 
-#: gtk/gtkplacessidebar.c:4821
-#, fuzzy
-#| msgid "Whether the hidden files and folders should be displayed"
+#: gtk/gtkplacessidebar.c:4822
 msgid "Whether the sidebar includes an item to show starred files"
-msgstr "Indiche se si à di mostrâ i file e lis cartelis platadis"
+msgstr ""
+"Indiche se la sbare laterâl e inclût un element par mostrâ i file preferîts"
 
-#: gtk/gtkplacessidebar.c:4837
+#: gtk/gtkplacessidebar.c:4838
 msgid "Whether to emit ::populate-popup for popups that are not menus"
 msgstr ""
 
@@ -8686,9 +8703,8 @@ msgid "Whether the widget responds to input"
 msgstr ""
 
 #: gtk/gtkwidget.c:1159
-#, fuzzy
 msgid "Application paintable"
-msgstr "GtkApplication"
+msgstr "Aplicazion che si pues piturâ"
 
 #: gtk/gtkwidget.c:1160
 msgid "Whether the application will paint directly on the widget"
