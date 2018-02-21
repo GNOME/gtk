@@ -3905,7 +3905,7 @@ gtk_text_view_measure (GtkWidget      *widget,
   else /* orientation == VERTICAL */
     {
       min += priv->border_window_size.top + priv->border_window_size.bottom;
-      min += priv->top_margin + priv->bottom_margin;
+      min += priv->height;
     }
 
   nat = min;
@@ -4447,6 +4447,7 @@ changed_handler (GtkTextLayout     *layout,
 
           tmp_list = tmp_list->next;
         }
+      gtk_widget_queue_resize_no_redraw(widget);
     }
 }
 
