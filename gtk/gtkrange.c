@@ -2570,6 +2570,9 @@ gtk_range_compute_slider_position (GtkRange     *range,
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
   int trough_width, trough_height;
   int slider_width, slider_height, min_slider_size;
+  const double upper = gtk_adjustment_get_upper (priv->adjustment);
+  const double lower = gtk_adjustment_get_lower (priv->adjustment);
+  const double page_size = gtk_adjustment_get_page_size (priv->adjustment);
 
   gtk_widget_measure (priv->slider_widget,
                       GTK_ORIENTATION_HORIZONTAL, -1,
@@ -2610,9 +2613,8 @@ gtk_range_compute_slider_position (GtkRange     *range,
        * total_adjustment_range) times the trough height in pixels
        */
 
-      if (gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment) != 0)
-        height = ((bottom - top) * (gtk_adjustment_get_page_size (priv->adjustment) /
-                                     (gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment))));
+      if (upper - lower != 0)
+        height = (bottom - top) * (page_size / (upper - lower));
       else
         height = min_slider_size;
 
@@ -2624,9 +2626,8 @@ gtk_range_compute_slider_position (GtkRange     *range,
       
       y = top;
 
-      if (gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment) - gtk_adjustment_get_page_size (priv->adjustment) != 0)
-        y += (bottom - top - height) * ((adjustment_value - gtk_adjustment_get_lower (priv->adjustment)) /
-                                        (gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment) - gtk_adjustment_get_page_size (priv->adjustment)));
+      if (upper - lower - page_size != 0)
+        y += (bottom - top - height) * ((adjustment_value - lower)  / (upper - lower - page_size));
 
       y = CLAMP (y, top, bottom);
       
@@ -2663,9 +2664,8 @@ gtk_range_compute_slider_position (GtkRange     *range,
        * total_adjustment_range) times the trough width in pixels
        */
 
-      if (gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment) != 0)
-        width = ((right - left) * (gtk_adjustment_get_page_size (priv->adjustment) /
-                                 (gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment))));
+      if (upper - lower != 0)
+        width = (right - left) * (page_size / (upper - lower));
       else
         width = min_slider_size;
 
@@ -2677,9 +2677,8 @@ gtk_range_compute_slider_position (GtkRange     *range,
 
       x = left;
 
-      if (gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment) - gtk_adjustment_get_page_size (priv->adjustment) != 0)
-        x += (right - left - width) * ((adjustment_value - gtk_adjustment_get_lower (priv->adjustment)) /
-                                       (gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment) - gtk_adjustment_get_page_size (priv->adjustment)));
+      if (upper - lower - page_size != 0)
+        x += (right - left - width) * ((adjustment_value - lower) / (upper - lower - page_size));
       
       x = CLAMP (x, left, right);
       
