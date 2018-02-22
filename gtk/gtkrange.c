@@ -1754,31 +1754,32 @@ coord_to_value (GtkRange *range,
   gdouble frac;
   gdouble value;
   gint    trough_length;
-  gint    trough_start;
   gint    slider_length;
-  GtkAllocation slider_alloc, trough_alloc;
+  GtkAllocation slider_alloc;
+  int coord_x, coord_y;
 
   gtk_widget_get_outer_allocation (priv->slider_widget, &slider_alloc);
-  gtk_widget_get_outer_allocation (priv->trough_widget, &trough_alloc);
 
-  if (priv->orientation == GTK_ORIENTATION_VERTICAL)
+  gtk_widget_translate_coordinates (GTK_WIDGET (range), priv->trough_widget,
+                                    coord, coord, &coord_x, &coord_y);
+
+  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      trough_length = trough_alloc.height;
-      trough_start  = trough_alloc.y;
-      slider_length = slider_alloc.height;
+      trough_length = gtk_widget_get_width (priv->trough_widget);
+      slider_length = slider_alloc.width;
+      coord = coord_x;
     }
   else
     {
-      trough_length = trough_alloc.width;
-      trough_start  = trough_alloc.x;
-      slider_length = slider_alloc.width;
+      trough_length = gtk_widget_get_height (priv->trough_widget);
+      slider_length = slider_alloc.height;
+      coord = coord_y;
     }
 
   if (trough_length == slider_length)
     frac = 1.0;
   else
-    frac = (MAX (0, coord - trough_start) /
-            (gdouble) (trough_length - slider_length));
+    frac = MAX (0, coord) / (gdouble) (trough_length - slider_length);
 
   if (should_invert (range))
     frac = 1.0 - frac;
