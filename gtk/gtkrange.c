@@ -1371,6 +1371,9 @@ gtk_range_allocate_trough (GtkGizmo            *gizmo,
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
   GtkAllocation slider_alloc;
+  const double lower = gtk_adjustment_get_lower (priv->adjustment);
+  const double upper = gtk_adjustment_get_upper (priv->adjustment);
+  const double page_size = gtk_adjustment_get_page_size (priv->adjustment);
   double value;
 
   /* Slider */
@@ -1382,30 +1385,22 @@ gtk_range_allocate_trough (GtkGizmo            *gizmo,
 
   gtk_widget_size_allocate (priv->slider_widget, &slider_alloc, -1, out_clip);
 
-  if (gtk_adjustment_get_lower (priv->adjustment) == gtk_adjustment_get_upper (priv->adjustment))
+  if (lower == upper)
     value = 0;
   else
-    value = (gtk_adjustment_get_value (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment)) /
-            (gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment));
+    value = (gtk_adjustment_get_value (priv->adjustment) - lower) / (upper - lower);
 
   if (priv->show_fill_level &&
-      gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_page_size (priv->adjustment) -
-      gtk_adjustment_get_lower (priv->adjustment) != 0)
+      upper - page_size - lower != 0)
     {
-      gdouble level, fill;
+      double level, fill;
       GtkAllocation fill_alloc, fill_clip;
 
       fill_alloc = *allocation;
 
-      level = CLAMP (priv->fill_level,
-                     gtk_adjustment_get_lower (priv->adjustment),
-                     gtk_adjustment_get_upper (priv->adjustment) -
-                     gtk_adjustment_get_page_size (priv->adjustment));
+      level = CLAMP (priv->fill_level, lower, upper - page_size);
 
-      fill = (level - gtk_adjustment_get_lower (priv->adjustment)) /
-        (gtk_adjustment_get_upper (priv->adjustment) -
-         gtk_adjustment_get_lower (priv->adjustment) -
-         gtk_adjustment_get_page_size (priv->adjustment));
+      fill = (level - lower) / (lower - upper - page_size);
 
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
         {
