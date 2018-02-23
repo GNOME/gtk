@@ -1830,22 +1830,24 @@ gtk_range_key_press (GtkWidget   *widget,
 }
 
 static void
-update_initial_slider_position (GtkRange      *range,
-                                gdouble        x,
-                                gdouble        y,
-                                GtkAllocation *slider_alloc)
+update_initial_slider_position (GtkRange *range,
+                                double    x,
+                                double    y)
 {
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
+  GtkAllocation slider_alloc;
 
-  if (priv->orientation == GTK_ORIENTATION_VERTICAL)
+  gtk_widget_get_outer_allocation (priv->slider_widget, &slider_alloc);
+
+  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      priv->slide_initial_slider_position = MAX (0, slider_alloc->y);
-      priv->slide_initial_coordinate_delta = y - priv->slide_initial_slider_position;
+      priv->slide_initial_slider_position = MAX (0, slider_alloc.x);
+      priv->slide_initial_coordinate_delta = x - priv->slide_initial_slider_position;
     }
   else
     {
-      priv->slide_initial_slider_position = MAX (0, slider_alloc->x);
-      priv->slide_initial_coordinate_delta = x - priv->slide_initial_slider_position;
+      priv->slide_initial_slider_position = MAX (0, slider_alloc.y);
+      priv->slide_initial_coordinate_delta = y - priv->slide_initial_slider_position;
     }
 }
 
@@ -1862,10 +1864,7 @@ gtk_range_long_press_gesture_pressed (GtkGestureLongPress *gesture,
 
   if (mouse_location == priv->slider_widget && !priv->zoom)
     {
-      GtkAllocation slider_alloc;
-
-      gtk_widget_get_outer_allocation (priv->slider_widget, &slider_alloc);
-      update_initial_slider_position (range, x, y, &slider_alloc);
+      update_initial_slider_position (range, x, y);
       update_zoom_state (range, TRUE);
     }
 }
@@ -1932,7 +1931,7 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
       if (shift_pressed)
         update_zoom_state (range, TRUE);
 
-      update_initial_slider_position (range, x, y, &slider_alloc);
+      update_initial_slider_position (range, x, y);
       range_grab_add (range, priv->slider_widget);
     }
   else if (mouse_location == priv->trough_widget &&
