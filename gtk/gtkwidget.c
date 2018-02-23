@@ -4542,7 +4542,8 @@ gtk_widget_size_allocate (GtkWidget           *widget,
 
   if (real_allocation.width < 0 || real_allocation.height < 0)
     {
-      g_warning ("gtk_widget_size_allocate(): attempt to allocate widget with width %d and height %d",
+      g_warning ("gtk_widget_size_allocate(): attempt to allocate %s %s %p with width %d and height %d",
+                 G_OBJECT_TYPE_NAME (widget), gtk_css_node_get_name (priv->cssnode), widget,
                  real_allocation.width,
                  real_allocation.height);
 
