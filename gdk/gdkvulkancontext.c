@@ -93,7 +93,35 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GdkVulkanContext, gdk_vulkan_context, GDK_TYPE
 const char *
 gdk_vulkan_strerror (VkResult result)
 {
-  switch ((int)result)
+  /* If your compiler brought you here with a warning about missing
+   * enumeration values, you're running a newer Vulkan version than
+   * the GTK developers )or you are a GTK developer) and have
+   * encountered a newly added Vulkan error message.
+   * You want to add it to this enum now.
+   *
+   * Becuse the Vulkan people don't make adding this too easy, here's
+   * the process to manage it:
+   * 1. go to
+   *    https://github.com/KhronosGroup/Vulkan-LoaderAndValidationLayers/blame/master/include/vulkan/vulkan.h
+   * 2. Find the line where this enum value was added.
+   * 3. Click the commit that added this line.
+   * 4. The commit you're looking at now should also change
+   *    VK_HEADER_VERSION, find that number.
+   * 5. Use that number in the #ifdef when adding the enum value to
+   *    this enum.
+   * 6. For the error message, look at the specification (the one
+   *    that includes all extensions) at
+   *    https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkResult
+   * 7. If this value has not been added to the specification yet,
+   *    search for the error message in the text of specification.
+   *    Often it will have a description that can be used as an error
+   *    message.
+   * 8. If that didn't lead to one (or you are lazy), just use the
+   *    literal string of the enum value as the error message. A
+   *    GTK developer will add the correct one once it's added to the
+   *    specification.
+   */
+  switch (result)
   {
     case VK_SUCCESS:
       return "Command successfully completed.";
