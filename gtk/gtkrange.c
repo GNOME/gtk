@@ -2597,13 +2597,6 @@ gtk_range_compute_slider_position (GtkRange     *range,
       top = 0;
       bottom = top + trough_height;
 
-      /* Scale slider half extends over the trough edge */
-      if (GTK_IS_SCALE (range))
-        {
-          top -= min_slider_size / 2;
-          bottom += min_slider_size / 2;
-        }
-
       /* slider height is the fraction (page_size /
        * total_adjustment_range) times the trough height in pixels
        */
@@ -2647,13 +2640,6 @@ gtk_range_compute_slider_position (GtkRange     *range,
       /* Compute slider position/length */
       left = 0;
       right = left + trough_width;
-
-      /* Scale slider half extends over the trough edge */
-      if (GTK_IS_SCALE (range))
-        {
-          left -= min_slider_size / 2;
-          right += min_slider_size / 2;
-        }
 
       /* slider width is the fraction (page_size /
        * total_adjustment_range) times the trough width in pixels
