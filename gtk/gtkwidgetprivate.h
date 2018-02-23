@@ -215,8 +215,6 @@ void              _gtk_widget_set_is_toplevel              (GtkWidget *widget,
 void              _gtk_widget_grab_notify                  (GtkWidget *widget,
                                                             gboolean   was_grabbed);
 
-void              _gtk_widget_propagate_hierarchy_changed  (GtkWidget  *widget,
-                                                            GtkWidget  *previous_toplevel);
 void              _gtk_widget_propagate_display_changed    (GtkWidget  *widget,
                                                             GdkDisplay *previous_display);
 

@@ -702,6 +702,8 @@ static void gtk_widget_update_input_shape (GtkWidget *widget);
 
 static gboolean gtk_widget_class_get_visible_by_default (GtkWidgetClass *widget_class);
 static void gtk_widget_set_clip (GtkWidget *widget, const GtkAllocation *clip);
+static void _gtk_widget_propagate_hierarchy_changed (GtkWidget *widget,
+                                                     GtkWidget *previous_toplevel);
 
 
 /* --- variables --- */
@@ -7430,9 +7432,9 @@ gtk_widget_propagate_hierarchy_changed_recurse (GtkWidget *widget,
  * children, unsetting or setting the %ANCHORED flag, and
  * emitting #GtkWidget::hierarchy-changed.
  **/
-void
+static void
 _gtk_widget_propagate_hierarchy_changed (GtkWidget *widget,
-					 GtkWidget *previous_toplevel)
+                                         GtkWidget *previous_toplevel)
 {
   GtkWidgetPrivate *priv = widget->priv;
   HierarchyChangedInfo info;
