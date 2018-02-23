@@ -6674,16 +6674,12 @@ void
 gtk_widget_set_name (GtkWidget	 *widget,
 		     const gchar *name)
 {
-  GtkWidgetPrivate *priv;
-  gchar *new_name;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  priv = widget->priv;
-
-  new_name = g_strdup (name);
   g_free (priv->name);
-  priv->name = new_name;
+  priv->name = g_strdup (name);
 
   if (priv->context)
     gtk_style_context_set_id (priv->context, priv->name);
