@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-20 13:38+0000\n"
-"PO-Revision-Date: 2018-02-21 10:27+0100\n"
+"POT-Creation-Date: 2018-02-22 19:58+0000\n"
+"PO-Revision-Date: 2018-02-23 09:53+0100\n"
 "Last-Translator: Fabio Tomat <f.t.public@gmail.com>\n"
 "Language-Team: Friulian <fur@li.org>\n"
 "Language: fur\n"
@@ -425,6 +425,8 @@ msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
 msgstr ""
+"Posizion orizontâl dal fi intal spazi disponibil. 0.0 al è inlineât a çamp, "
+"1.0 al è inlineât a diestre"
 
 #: gtk/deprecated/gtkalignment.c:170
 msgid "Vertical alignment"
@@ -435,6 +437,8 @@ msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
 msgstr ""
+"Posizion verticâl dal fi intal spazi disponibil. 0.0 al è inlineât in alt, "
+"1.0 al è inlineât in bas"
 
 #: gtk/deprecated/gtkalignment.c:188
 msgid "Horizontal scale"
@@ -445,6 +449,9 @@ msgid ""
 "If available horizontal space is bigger than needed for the child, how much "
 "of it to use for the child. 0.0 means none, 1.0 means all"
 msgstr ""
+"Se il spazi orizontâl disponibil al è plui grant di ce che al covente al fi, "
+"trop di chel spazi al è di doprâ pal fi. 0.0 al significhe nie, 1.0 al "
+"significhe dut"
 
 #: gtk/deprecated/gtkalignment.c:206
 msgid "Vertical scale"
@@ -455,6 +462,9 @@ msgid ""
 "If available vertical space is bigger than needed for the child, how much of "
 "it to use for the child. 0.0 means none, 1.0 means all"
 msgstr ""
+"Se il spazi verticâl disponibil al è plui grant di ce che al covente al fi, "
+"trop di chel spazi al è di doprâ pal fi. 0.0 al significhe nie, 1.0 al "
+"significhe dut"
 
 #: gtk/deprecated/gtkalignment.c:226
 #, fuzzy
@@ -658,7 +668,7 @@ msgstr ""
 
 #: gtk/deprecated/gtkimagemenuitem.c:226 gtk/gtkbutton.c:360
 msgid "Image widget"
-msgstr ""
+msgstr "Widget imagjin"
 
 #: gtk/deprecated/gtkimagemenuitem.c:227
 msgid "Child widget to appear next to the menu text"
@@ -707,7 +717,7 @@ msgstr ""
 #: gtk/deprecated/gtkmisc.c:153
 msgid ""
 "The amount of space to add on the left and right of the widget, in pixels"
-msgstr ""
+msgstr "La cuantitât di spazi di zontâ a çampe e a drete dal widget, in pixel"
 
 #: gtk/deprecated/gtkmisc.c:171
 msgid "Y pad"
@@ -716,7 +726,7 @@ msgstr ""
 #: gtk/deprecated/gtkmisc.c:172
 msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
-msgstr ""
+msgstr "La cuantitât di spazi di zontâ sore e sot dal widget, in pixel"
 
 #: gtk/deprecated/gtknumerableicon.c:642
 msgid "Icon's count"
