@@ -4752,7 +4752,7 @@ gtk_widget_get_origin_relative_to_parent (GtkWidget *widget,
  * operation, both widget must share a common toplevel.
  *
  * Returns: %FALSE if @src_widget and @dest_widget have no common
- *   ancestor. In this case, nothing is stored in
+ *   ancestor. In this case, 0 is stored in
  *   *@dest_x and *@dest_y. Otherwise %TRUE.
  **/
 gboolean
