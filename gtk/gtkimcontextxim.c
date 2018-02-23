@@ -52,7 +52,7 @@ struct _GtkIMContextXIM
   XIMFeedback *feedbacks;
 
   gint preedit_cursor;
-  
+
   XIMCallback preedit_start_callback;
   XIMCallback preedit_done_callback;
   XIMCallback preedit_draw_callback;
@@ -96,7 +96,7 @@ struct _GtkXIMInfo
 struct _StatusWindow
 {
   GtkWidget *window;
-  
+
   /* Toplevel window to which the status window corresponds */
   GtkWidget *toplevel;
 
@@ -104,8 +104,6 @@ struct _StatusWindow
   GtkIMContextXIM *context;
 };
 
-static void     gtk_im_context_xim_class_init         (GtkIMContextXIMClass  *class);
-static void     gtk_im_context_xim_init               (GtkIMContextXIM       *im_context_xim);
 static void     gtk_im_context_xim_finalize           (GObject               *obj);
 static void     gtk_im_context_xim_set_client_widget  (GtkIMContext          *context,
                                                        GtkWidget             *widget);
@@ -146,37 +144,11 @@ static void           xim_info_display_closed (GdkDisplay *display,
 			                       gboolean    is_error,
 			                       GtkXIMInfo *info);
 
-G_DEFINE_DYNAMIC_TYPE (GtkIMContextXIM, gtk_im_context_xim, GTK_TYPE_IM_CONTEXT)
-
-void
-g_io_module_load (GIOModule *module)
-{
-  g_type_module_use (G_TYPE_MODULE (module));
-
-  g_print ("load io module for x11\n");
-  gtk_im_context_xim_register_type (G_TYPE_MODULE (module));
-
-  g_io_extension_point_implement (GTK_IM_MODULE_EXTENSION_POINT_NAME,
-                                  GTK_TYPE_IM_CONTEXT_XIM,
-                                  "xim",
-                                  10);
-}
-
-void
-g_io_module_unload (GIOModule *module)
-{
-}
-
-char **
-g_io_module_query (void)
-{
-  char *eps[] = {
-    GTK_IM_MODULE_EXTENSION_POINT_NAME,
-    NULL
-  };
-
-  return g_strdupv (eps);
-}
+G_DEFINE_TYPE_WITH_CODE (GtkIMContextXIM, gtk_im_context_xim, GTK_TYPE_IM_CONTEXT,
+                         g_io_extension_point_implement (GTK_IM_MODULE_EXTENSION_POINT_NAME,
+                                                         g_define_type_id,
+                                                         "xim",
+                                                         10))
 
 static GSList *open_ims = NULL;
 
@@ -190,11 +162,11 @@ static GSList *status_windows = NULL;
 #define ALLOWED_MASK (XIMPreeditCallbacks | XIMPreeditNothing | XIMPreeditNone | \
 		      XIMStatusCallbacks | XIMStatusNothing | XIMStatusNone)
 
-static XIMStyle 
-choose_better_style (XIMStyle style1, XIMStyle style2) 
+static XIMStyle
+choose_better_style (XIMStyle style1, XIMStyle style2)
 {
-  XIMStyle s1, s2, u; 
-  
+  XIMStyle s1, s2, u;
+
   if (style1 == 0) return style2;
   if (style2 == 0) return style1;
   if ((style1 & (PREEDIT_MASK | STATUS_MASK))
@@ -292,7 +264,7 @@ setup_im (GtkXIMInfo *info)
   if (ic_values)
     {
       int i;
-      
+
       for (i = 0; i < ic_values->count_values; i++)
 	if (strcmp (ic_values->supported_values[i],
 		    XNStringConversionCallback) == 0)
@@ -307,7 +279,7 @@ setup_im (GtkXIMInfo *info)
       for (i = 0; i < xim_styles->count_styles; i++)
 	g_print ("%#x\n", xim_styles->supported_styles[i]);
 #endif
-      
+
       XFree (ic_values);
     }
 
@@ -421,7 +393,7 @@ xim_destroy_callback (XIM      xim,
   reinitialize_all_ics (info);
   xim_info_try_im (info);
   return;
-} 
+}
 
 static GtkXIMInfo *
 get_im (GdkWindow *client_window,
@@ -493,11 +465,6 @@ gtk_im_context_xim_class_init (GtkIMContextXIMClass *class)
 }
 
 static void
-gtk_im_context_xim_class_finalize (GtkIMContextXIMClass *class)
-{
-}
-
-static void
 gtk_im_context_xim_init (GtkIMContextXIM *im_context_xim)
 {
   im_context_xim->use_preedit = TRUE;
@@ -514,7 +481,7 @@ gtk_im_context_xim_finalize (GObject *obj)
 
   context_xim->finalizing = TRUE;
 
-  if (context_xim->im_info && !context_xim->im_info->ics->next) 
+  if (context_xim->im_info && !context_xim->im_info->ics->next)
     {
       if (context_xim->im_info->reconnecting)
 	{
@@ -562,7 +529,7 @@ reinitialize_ic (GtkIMContextXIM *context_xim)
 	    g_signal_emit_by_name (context_xim, "preedit-changed");
 	}
     }
-  /* 
+  /*
      reset filter_key_release flag, otherwise keystrokes will be doubled
      until reconnecting to XIM.
   */
@@ -579,7 +546,7 @@ set_ic_client_window (GtkIMContextXIM *context_xim,
       context_xim->im_info->ics = g_slist_remove (context_xim->im_info->ics, context_xim);
       context_xim->im_info = NULL;
     }
-  
+
   context_xim->client_window = client_window;
   context_xim->client_window_xid = None;
 
@@ -599,7 +566,7 @@ set_ic_client_window (GtkIMContextXIM *context_xim,
             }
         }
     }
-  
+
   update_client_widget (context_xim);
 }
 
@@ -624,7 +591,7 @@ gtk_im_context_xim_new (void)
   result = g_object_new (GTK_TYPE_IM_CONTEXT_XIM, NULL);
 
   result->locale = g_strdup (setlocale (LC_CTYPE, NULL));
-  
+
   g_get_charset (&charset);
   result->mb_charset = g_strdup (charset);
 
@@ -651,7 +618,7 @@ mb_to_utf8 (GtkIMContextXIM *context_xim,
 	  g_error_free (error);
 	}
     }
-  
+
   return result;
 }
 
@@ -696,12 +663,12 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
   xevent.state = state;
   xevent.keycode = gdk_event_get_scancode ((GdkEvent *) event);
   xevent.same_screen = True;
-  
+
   if (XFilterEvent ((XEvent *)&xevent, context_xim->client_window_xid))
     return TRUE;
-  
+
   if (state &
-      (gtk_accelerator_get_default_mod_mask () & ~(GDK_SHIFT_MASK | GDK_CONTROL_MASK))) 
+      (gtk_accelerator_get_default_mod_mask () & ~(GDK_SHIFT_MASK | GDK_CONTROL_MASK)))
     return FALSE;
 
  again:
@@ -716,7 +683,7 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
   if (status == XBufferOverflow)
     {
       buffer_size = num_bytes;
-      if (buffer != static_buffer) 
+      if (buffer != static_buffer)
 	g_free (buffer);
       buffer = g_malloc (num_bytes + 1);
       goto again;
@@ -743,12 +710,12 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
 	      g_signal_emit_by_name (context, "commit", result_utf8);
 	      result = TRUE;
 	    }
-	  
+
 	  g_free (result_utf8);
 	}
     }
 
-  if (buffer != static_buffer) 
+  if (buffer != static_buffer)
     g_free (buffer);
 
   return result;
@@ -765,7 +732,7 @@ gtk_im_context_xim_focus_in (GtkIMContext *context)
 
       context_xim->has_focus = TRUE;
       update_status_window (context_xim);
-      
+
       if (ic)
 	XSetICFocus (ic);
     }
@@ -781,10 +748,10 @@ gtk_im_context_xim_focus_out (GtkIMContext *context)
   if (context_xim->has_focus)
     {
       XIC ic = gtk_im_context_xim_get_ic (context_xim);
-      
+
       context_xim->has_focus = FALSE;
       update_status_window (context_xim);
-  
+
       if (ic)
 	XUnsetICFocus (ic);
     }
@@ -850,7 +817,7 @@ gtk_im_context_xim_reset (GtkIMContext *context)
 
   if (!ic)
     return;
-  
+
 
   if (context_xim->preedit_length == 0)
     return;
@@ -908,7 +875,7 @@ add_feedback_attr (PangoAttrList *attrs,
 		   gint           end_pos)
 {
   PangoAttribute *attr;
-  
+
   gint start_index = g_utf8_offset_to_pointer (str, start_pos) - str;
   gint end_index = g_utf8_offset_to_pointer (str, end_pos) - str;
 
@@ -940,7 +907,7 @@ add_feedback_attr (PangoAttrList *attrs,
     g_warning ("Unrendered feedback style: %#lx", feedback & ~FEEDBACK_MASK);
 }
 
-static void     
+static void
 gtk_im_context_xim_get_preedit_string (GtkIMContext   *context,
 				       gchar         **str,
 				       PangoAttrList **attrs,
@@ -954,7 +921,7 @@ gtk_im_context_xim_get_preedit_string (GtkIMContext   *context,
       int i;
       XIMFeedback last_feedback = 0;
       gint start = -1;
-      
+
       *attrs = pango_attr_list_new ();
 
       for (i = 0; i < context_xim->preedit_length; i++)
@@ -964,7 +931,7 @@ gtk_im_context_xim_get_preedit_string (GtkIMContext   *context,
 	    {
 	      if (start >= 0)
 		add_feedback_attr (*attrs, utf8, last_feedback, start, i);
-	      
+
 	      last_feedback = new_feedback;
 	      start = i;
 	    }
@@ -990,12 +957,12 @@ preedit_start_callback (XIC      xic,
 {
   GtkIMContext *context = GTK_IM_CONTEXT (client_data);
   GtkIMContextXIM *context_xim = GTK_IM_CONTEXT_XIM (context);
-  
+
   if (!context_xim->finalizing)
     g_signal_emit_by_name (context, "preedit-start");
 
   return -1;			/* No length limit */
-}		     
+}
 
 static void
 preedit_done_callback (XIC      xic,
@@ -1014,7 +981,7 @@ preedit_done_callback (XIC      xic,
 
   if (!context_xim->finalizing)
     g_signal_emit_by_name (context, "preedit-end");
-}		     
+}
 
 static gint
 xim_text_to_utf8 (GtkIMContextXIM *context, XIMText *xim_text, gchar **text)
@@ -1040,11 +1007,11 @@ xim_text_to_utf8 (GtkIMContextXIM *context, XIMText *xim_text, gchar **text)
 			    "UTF-8",
 			    context->mb_charset,
 			    NULL, NULL, &error);
-      
+
       if (result)
 	{
 	  text_length = g_utf8_strlen (result, -1);
-	  
+
 	  if (text_length != xim_text->length)
 	    {
 	      g_warning ("Size mismatch when converting text from input method: supplied length = %d\n, result length = %d", xim_text->length, text_length);
@@ -1070,7 +1037,7 @@ xim_text_to_utf8 (GtkIMContextXIM *context, XIMText *xim_text, gchar **text)
 }
 
 static void
-preedit_draw_callback (XIC                           xic, 
+preedit_draw_callback (XIC                           xic,
 		       XPointer                      client_data,
 		       XIMPreeditDrawCallbackStruct *call_data)
 {
@@ -1083,12 +1050,12 @@ preedit_draw_callback (XIC                           xic,
   gint diff;
   gint new_length;
   gchar *tmp;
-  
+
   gint chg_first = CLAMP (call_data->chg_first, 0, context->preedit_length);
   gint chg_length = CLAMP (call_data->chg_length, 0, context->preedit_length - chg_first);
 
   context->preedit_cursor = call_data->caret;
-  
+
   if (chg_first != call_data->chg_first || chg_length != call_data->chg_length)
     g_warning ("Invalid change to preedit string, first=%d length=%d (orig length == %d)",
 	       call_data->chg_first, call_data->chg_length, context->preedit_length);
@@ -1099,7 +1066,7 @@ preedit_draw_callback (XIC                           xic,
       new_text = g_utf8_to_ucs4_fast (tmp, -1, NULL);
       g_free (tmp);
     }
-  
+
   diff = new_text_length - chg_length;
   new_length = context->preedit_length + diff;
 
@@ -1140,7 +1107,7 @@ preedit_draw_callback (XIC                           xic,
   if (!context->finalizing)
     g_signal_emit_by_name (context, "preedit-changed");
 }
-    
+
 
 static void
 preedit_caret_callback (XIC                            xic,
@@ -1148,7 +1115,7 @@ preedit_caret_callback (XIC                            xic,
 			XIMPreeditCaretCallbackStruct *call_data)
 {
   GtkIMContextXIM *context = GTK_IM_CONTEXT_XIM (client_data);
-  
+
   if (call_data->direction == XIMAbsolutePosition)
     {
       context->preedit_cursor = call_data->position;
@@ -1160,7 +1127,7 @@ preedit_caret_callback (XIC                            xic,
       g_warning ("Caret movement command: %d %d %d not supported",
 		 call_data->position, call_data->direction, call_data->style);
     }
-}	     
+}
 
 static void
 status_start_callback (XIC      xic,
@@ -1168,7 +1135,7 @@ status_start_callback (XIC      xic,
 		       XPointer call_data)
 {
   return;
-} 
+}
 
 static void
 status_done_callback (XIC      xic,
@@ -1341,7 +1308,7 @@ set_status_callback (GtkIMContextXIM *context_xim)
   context_xim->status_done_callback.callback = (XIMProc)status_done_callback;
   context_xim->status_draw_callback.client_data = (XPointer)context_xim;
   context_xim->status_draw_callback.callback = (XIMProc)status_draw_callback;
-	  
+
   return XVaCreateNestedList (0,
 			      XNStatusStartCallback, &context_xim->status_start_callback,
 			      XNStatusDoneCallback, &context_xim->status_done_callback,
@@ -1355,10 +1322,10 @@ set_string_conversion_callback (GtkIMContextXIM *context_xim, XIC xic)
 {
   if (!context_xim->im_info->supports_string_conversion)
     return;
-  
+
   context_xim->string_conversion_callback.client_data = (XPointer)context_xim;
   context_xim->string_conversion_callback.callback = (XIMProc)string_conversion_callback;
-  
+
   XSetICValues (xic,
 		XNStringConversionCallback,
 		(XPointer)&context_xim->string_conversion_callback,
@@ -1437,11 +1404,11 @@ gtk_im_context_xim_get_ic (GtkIMContextXIM *context_xim)
 	  context_xim->filter_key_release = (mask & KeyReleaseMask) != 0;
 	  set_string_conversion_callback (context_xim, xic);
 	}
-      
+
       context_xim->ic = xic;
 
       update_status_window (context_xim);
-      
+
       if (xic && context_xim->has_focus)
 	XSetICFocus (xic);
     }
@@ -1493,7 +1460,7 @@ disclaim_status_window (GtkIMContextXIM *context_xim)
       g_assert (context_xim->status_window->context == context_xim);
 
       status_window_set_text (context_xim->status_window, "");
-      
+
       context_xim->status_window->context = NULL;
       context_xim->status_window = NULL;
     }
@@ -1540,7 +1507,7 @@ update_in_toplevel (GtkIMContextXIM *context_xim)
   if (context_xim->client_widget)
     {
       GtkWidget *toplevel = gtk_widget_get_toplevel (context_xim->client_widget);
-      
+
       context_xim->in_toplevel = (toplevel && gtk_widget_is_toplevel (toplevel));
     }
   else
@@ -1549,7 +1516,7 @@ update_in_toplevel (GtkIMContextXIM *context_xim)
   /* Some paranoia, in case we don't get a focus out */
   if (!context_xim->in_toplevel)
     context_xim->has_focus = FALSE;
-  
+
   update_status_window (context_xim);
 }
 
@@ -1679,7 +1646,7 @@ status_window_free (StatusWindow *status_window)
 
   if (status_window->context)
     status_window->context->status_window = NULL;
- 
+
   g_signal_handlers_disconnect_by_func (status_window->toplevel,
 					G_CALLBACK (on_status_toplevel_destroy),
 					status_window);
@@ -1692,9 +1659,9 @@ status_window_free (StatusWindow *status_window)
 
   if (status_window->window)
     gtk_widget_destroy (status_window->window);
-  
+
   g_object_set_data (G_OBJECT (status_window->toplevel), "gtk-im-xim-status-window", NULL);
- 
+
   g_free (status_window);
 }
 
@@ -1708,7 +1675,7 @@ status_window_get (GtkWidget *toplevel)
   status_window = g_object_get_data (G_OBJECT (toplevel), "gtk-im-xim-status-window");
   if (status_window)
     return status_window;
-  
+
   status_window = g_new0 (StatusWindow, 1);
   status_window->toplevel = toplevel;
 
@@ -1723,7 +1690,7 @@ status_window_get (GtkWidget *toplevel)
   g_signal_connect (toplevel, "notify::display",
 		    G_CALLBACK (on_status_toplevel_notify_display),
 		    status_window);
-  
+
   g_object_set_data (G_OBJECT (toplevel), "gtk-im-xim-status-window", status_window);
 
   return status_window;
@@ -1737,7 +1704,7 @@ status_window_make_window (StatusWindow *status_window)
 {
   GtkWidget *window;
   GtkWidget *status_label;
-  
+
   status_window->window = gtk_window_new (GTK_WINDOW_POPUP);
   window = status_window->window;
 
@@ -1746,9 +1713,9 @@ status_window_make_window (StatusWindow *status_window)
   status_label = gtk_label_new ("");
   g_object_set (status_label, "margin", 1, NULL);
   gtk_widget_show (status_label);
-  
+
   gtk_container_add (GTK_CONTAINER (window), status_label);
-  
+
   gtk_window_set_display (GTK_WINDOW (status_window->window),
 			  gtk_widget_get_display (status_window->toplevel));
 
@@ -1765,13 +1732,13 @@ status_window_set_text (StatusWindow *status_window,
   if (text[0])
     {
       GtkWidget *label;
-      
+
       if (!status_window->window)
 	status_window_make_window (status_window);
-      
+
       label = gtk_bin_get_child (GTK_BIN (status_window->window));
       gtk_label_set_text (GTK_LABEL (label), text);
-  
+
       gtk_widget_show (status_window->window);
     }
   else
@@ -1783,7 +1750,7 @@ status_window_set_text (StatusWindow *status_window,
 
 /**
  * gtk_im_context_xim_shutdown:
- * 
+ *
  * Destroys all the status windows that are kept by the XIM contexts.  This
  * function should only be called by the XIM module exit routine.
  **/

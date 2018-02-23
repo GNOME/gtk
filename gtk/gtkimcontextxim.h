@@ -39,9 +39,9 @@ struct _GtkIMContextXIMClass
   GtkIMContextClass parent_class;
 };
 
-GtkIMContext *gtk_im_context_xim_new (void);
-
-void gtk_im_context_xim_shutdown (void);
+GType         gtk_im_context_xim_get_type (void) G_GNUC_CONST;
+GtkIMContext *gtk_im_context_xim_new      (void);
+void          gtk_im_context_xim_shutdown (void);
 
 G_END_DECLS
 

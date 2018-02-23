@@ -24,12 +24,6 @@ option('print-backends', type : 'string', value : 'cups,papi',
 option('colord', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
   description : 'Build colord support for the CUPS printing backend')
 
-# Modules
-option('dynamic-modules', type: 'boolean', value : true,
-  description : 'Allow dynamic module loading')
-option('included-immodules', type: 'string', value : 'none',
-  description : 'Build the specified input methods (comma-separated list, "all", or "none")')
-
 # Documentation and introspection
 option('documentation', type: 'boolean', value: 'false',
   description : 'Build API reference and tools documentation')

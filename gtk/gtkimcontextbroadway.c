@@ -42,38 +42,11 @@ typedef struct _GtkIMContextBroadwayClass
   GtkIMContextSimpleClass parent_class;
 } GtkIMContextBroadwayClass;
 
-G_DEFINE_DYNAMIC_TYPE (GtkIMContextBroadway, gtk_im_context_broadway, GTK_TYPE_IM_CONTEXT_SIMPLE)
-
-void
-g_io_module_load (GIOModule *module)
-{
-  g_type_module_use (G_TYPE_MODULE (module));
-
-  g_print ("load io module for broadway\n");
-  gtk_im_context_broadway_register_type (G_TYPE_MODULE (module));
-
-  g_io_extension_point_implement (GTK_IM_MODULE_EXTENSION_POINT_NAME,
-                                  GTK_TYPE_IM_CONTEXT_BROADWAY,
-                                  "broadway",
-                                  10);
-}
-
-void
-g_io_module_unload (GIOModule *module)
-{
-}
-
-char **
-g_io_module_query (void)
-{
-  char *eps[] = {
-    GTK_IM_MODULE_EXTENSION_POINT_NAME,
-    NULL
-  };
-
-  return g_strdupv (eps);
-}
-
+G_DEFINE_TYPE_WITH_CODE (GtkIMContextBroadway, gtk_im_context_broadway, GTK_TYPE_IM_CONTEXT_SIMPLE,
+                         g_io_extension_point_implement (GTK_IM_MODULE_EXTENSION_POINT_NAME,
+                                                         g_define_type_id,
+                                                         "broadway",
+                                                         10))
 
 static void
 broadway_set_client_widget (GtkIMContext *context, GtkWidget *widget)
@@ -117,11 +90,6 @@ gtk_im_context_broadway_class_init (GtkIMContextBroadwayClass *class)
   klass->focus_in = broadway_focus_in;
   klass->focus_out = broadway_focus_out;
   klass->set_client_widget = broadway_set_client_widget;
-}
-
-static void
-gtk_im_context_broadway_class_finalize (GtkIMContextBroadwayClass *class)
-{
 }
 
 static void

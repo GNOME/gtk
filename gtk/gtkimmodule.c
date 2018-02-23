@@ -42,18 +42,22 @@
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
+#include "gtkimcontextxim.h"
 #endif
 
 #ifdef GDK_WINDOWING_WAYLAND
 #include "wayland/gdkwayland.h"
+#include "gtkimcontextwayland.h"
 #endif
 
 #ifdef GDK_WINDOWING_BROADWAY
 #include "broadway/gdkbroadway.h"
+#include "gtkimcontextbroadway.h"
 #endif
 
 #ifdef GDK_WINDOWING_WIN32
 #include "win32/gdkwin32.h"
+#include "gtkimcontextime.h"
 #endif
 
 #ifdef G_OS_WIN32
@@ -236,7 +240,18 @@ gtk_im_modules_init (void)
   g_io_extension_point_set_required_type (ep, GTK_TYPE_IM_CONTEXT);
 
   g_type_ensure (gtk_im_context_simple_get_type ());
-  // other builtin im context types go here
+#ifdef GDK_WINDOWING_X11
+  g_type_ensure (gtk_im_context_xim_get_type ());
+#endif
+#ifdef GDK_WINDOWING_WAYLAND
+  g_type_ensure (gtk_im_context_wayland_get_type ());
+#endif
+#ifdef GDK_WINDOWING_BROADWAY
+  g_type_ensure (gtk_im_context_broadway_get_type ());
+#endif
+#ifdef GDK_WINDOWING_WIN32
+  g_type_ensure (gtk_im_context_ime_get_type ());
+#endif
 
   scope = g_io_module_scope_new (G_IO_MODULE_SCOPE_BLOCK_DUPLICATES);
 
