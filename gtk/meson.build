@@ -578,6 +578,48 @@ install_headers(gtk_public_headers, subdir: 'gtk-4.0/gtk/')
 
 gtk_sources = gtk_public_sources + gtk_private_sources
 
+proto_sources = [
+  ['gtk-text-input', 'stable', ],
+]
+
+im_wayland_sources = files('gtkimcontextwayland.c')
+wayland_scanner = find_program('wayland-scanner')
+genprotocols = find_program('../gdk/wayland/genprotocolfiles.py')
+
+foreach p: proto_sources
+  proto_name = p.get(0)
+  proto_stability = p.get(1)
+
+  if proto_stability == 'stable'
+    output_base = proto_name
+    input = '@0@.xml'.format(proto_name)
+  else
+    proto_version = p.get(2)
+    output_base = '@0@-@1@-@2@'.format(proto_name, proto_stability, proto_version)
+    input = join_paths(proto_dir, '@0@/@1@/@2@.xml'.format(proto_stability, proto_name, output_base))
+  endif
+
+  im_wayland_sources += custom_target('@0@ client header'.format(output_base),
+                                      input: input,
+                                      output: '@0@-client-protocol.h'.format(output_base),
+                                      command: [
+                                        genprotocols,
+                                        wayland_scanner,
+                                        '@INPUT@', '@OUTPUT@',
+                                        'client-header',
+                                      ])
+
+  im_wayland_sources += custom_target('@0@ source'.format(output_base),
+                                      input: input,
+                                      output: '@0@-protocol.c'.format(output_base),
+                                      command: [
+                                        genprotocols,
+                                        wayland_scanner,
+                                        '@INPUT@', '@OUTPUT@',
+                                        'code',
+                                      ])
+endforeach
+
 if os_unix
   gtk_unix_print_headers = [
     'gtkpagesetupunixdialog.h',
@@ -616,6 +658,7 @@ if os_win32
   ])
 
   gtk_sources += gtk_win32_print_sources
+  gtk_sources += ['gtkimcontextime.c']
 
   if cc.has_header_symbol('windows.h', 'IPrintDialogCallback')
     cdata.set('HAVE_IPRINTDIALOGCALLBACK', 1)
@@ -624,10 +667,12 @@ endif
 
 if x11_enabled
   gtk_sources += ['gtkapplication-x11.c', 'gtkmountoperation-x11.c']
+  gtk_sources += ['gtkimcontextxim.c']
 endif
 
 if wayland_enabled
   gtk_sources += ['gtkapplication-wayland.c']
+  gtk_sources += im_wayland_sources
 endif
 
 if x11_enabled or wayland_enabled
@@ -647,6 +692,8 @@ if quartz_enabled
     'gtkfilechoosernativequartz.c',
     'gtkquartz.c',
   ])
+  gtk_sources += ['gtkimcontextquartz.c']
+
   gtk_cargs += ['-xobjective-c']  # FIXME? maybe add_languages() instead?
 endif
 
@@ -824,6 +871,10 @@ if wayland_enabled
   gtk_sources += gtk_wayland_sources
 endif
 
+if broadway_enabled
+  gtk_sources += ['gtkimcontextbroadway.c']
+endif
+
 if win32_enabled
   gtk_cargs += ['-DGTK_PRINT_BACKENDS="file,lpr"']
   gtk_deps += [ giowin32_dep ]
@@ -868,39 +919,6 @@ if cc.has_header('langinfo.h')
   endforeach
 endif
 
-# Input methods
-
-gen_headers = [ gtk_gen_headers, gsk_gen_headers, gdk_gen_headers, ]
-
-included_input_modules = []
-foreach m: inc_im_method_defs       # populated in modules/input/meson.build
-  im_name = m[0]
-  im_srcs = m[1]
-  im_args = m[2]
-  im_libs = m[3]
-
-  included_input_modules += static_library('im-@0@'.format(im_name),
-                                           im_srcs, gen_headers,
-                                           c_args: im_args,
-                                           include_directories: [confinc, gdkinc, gtkinc],
-                                           dependencies: gtk_deps + im_libs)
-endforeach
-
-foreach m: dyn_im_method_defs       # populated in modules/input/meson.build
-  im_name = m[0]
-  im_srcs = m[1]
-  im_args = m[2]
-  im_libs = m[3]
-
-  shared_module('libim-@0@'.format(im_name), im_srcs, gen_headers,
-                c_args: im_args,
-                include_directories: [confinc, gdkinc, gtkinc],
-                dependencies: gtk_deps + im_libs,
-                name_prefix: '', # we want im-foo.so not libim-foo.so
-                install_dir: immodules_install_dir,
-                install: true)
-endforeach
-
 # Library
 libgtk = shared_library('gtk-4',
                         soversion: gtk_soversion,
@@ -909,7 +927,6 @@ libgtk = shared_library('gtk-4',
                         include_directories: [confinc, gdkinc, gskinc, gtkinc],
                         dependencies: gtk_deps + [libgdk_dep, libgsk_dep],
                         link_with: [libgdk, libgsk, ],
-                        link_whole: included_input_modules,
                         link_args: common_ldflags,
                         install: true)
 

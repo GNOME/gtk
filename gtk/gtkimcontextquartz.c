@@ -21,7 +21,7 @@
 #include "config.h"
 #include <string.h>
 
-#include <gtk/gtk.h>
+#include "gtk/gtkimcontextquartz.h"
 #include "gtk/gtkintl.h"
 #include "gtk/gtkimmodule.h"
 
@@ -50,41 +50,11 @@ typedef struct _GtkIMContextQuartzClass
   GtkIMContextClass parent_class;
 } GtkIMContextQuartzClass;
 
-G_DEFINE_DYNAMIC_TYPE (GtkIMContextQuartz, gtk_im_context_quartz, GTK_TYPE_IM_CONTEXT)
-
-void
-g_io_module_load (GIOModule *module)
-{
-  g_type_module_use (G_TYPE_MODULE (module));
-
-  g_print ("load io module for quartz\n");
-  gtk_im_context_quartz_register_type (G_TYPE_MODULE (module));
-
-  g_io_extension_point_implement (GTK_IM_MODULE_EXTENSION_POINT_NAME,
-                                  GTK_TYPE_IM_CONTEXT_BROADWAY,
-                                  "quartz",
-                                  10);
-}
-
-void
-g_io_module_unload (GIOModule *module)
-{
-}
-
-char **
-g_io_module_query (void)
-{
-  char *eps[] = {
-    GTK_IM_MODULE_EXTENSION_POINT_NAME,
-    NULL
-  };
-
-  return g_strdupv (eps);
-}
-
-
-
-
+G_DEFINE_TYPE_WITH_CODE (GtkIMContextQuartz, gtk_im_context_quartz, GTK_TYPE_IM_CONTEXT,
+                         g_io_extension_point_implement (GTK_IM_MODULE_EXTENSION_POINT_NAME,
+                                                         g_define_type_id,
+                                                         "quartz",
+                                                         10))
 
 static void
 quartz_get_preedit_string (GtkIMContext *context,
@@ -394,11 +364,6 @@ gtk_im_context_quartz_class_init (GtkIMContextQuartzClass *class)
   klass->set_use_preedit = quartz_set_use_preedit;
 
   object_class->finalize = imquartz_finalize;
-}
-
-static void
-gtk_im_context_quartz_class_finalize (GtkIMContextQuartzClass *class)
-{
 }
 
 static void

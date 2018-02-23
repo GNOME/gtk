@@ -128,36 +128,11 @@ static void cb_client_widget_hierarchy_changed  (GtkWidget       *widget,
 #define GTK_TYPE_IM_CONTEXT_IME (gtk_im_context_ime_get_type ())
 #define GTK_IM_CONTEXT_IME(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_IM_CONTEXT_IME, GtkIMContextIME))
 
-G_DEFINE_DYNAMIC_TYPE (GtkIMContextIME, gtk_im_context_ime, GTK_TYPE_IM_CONTEXT)
-
-void
-g_io_module_load (GIOModule *module)
-{
-  g_type_module_use (G_TYPE_MODULE (module));
-
-  gtk_im_context_ime_register_type (G_TYPE_MODULE (module));
-
-  g_io_extension_point_implement (GTK_IM_MODULE_EXTENSION_POINT_NAME,
-                                  GTK_TYPE_IM_CONTEXT_IME,
-                                  "ime",
-                                  10);
-}
-
-void
-g_io_module_unload (GIOModule *module)
-{
-}
-
-char **
-g_io_module_query (void)
-{
-  char *eps[] = {
-    GTK_IM_MODULE_EXTENSION_POINT_NAME,
-    NULL
-  };
-
-  return g_strdupv (eps);
-}
+G_DEFINE_TYPE_WITH_CODE (GtkIMContextIME, gtk_im_context_ime, GTK_TYPE_IM_CONTEXT,
+                         g_io_extension_point_implement (GTK_IM_MODULE_EXTENSION_POINT_NAME,
+                                                         g_define_type_id,
+                                                         "ime",
+                                                         10))
 
 static void
 gtk_im_context_ime_class_init (GtkIMContextIMEClass *class)
@@ -178,11 +153,6 @@ gtk_im_context_ime_class_init (GtkIMContextIMEClass *class)
   im_context_class->focus_out           = gtk_im_context_ime_focus_out;
   im_context_class->set_cursor_location = gtk_im_context_ime_set_cursor_location;
   im_context_class->set_use_preedit     = gtk_im_context_ime_set_use_preedit;
-}
-
-static void
-gtk_im_context_ime_class_finalize (GtkIMContextIMEClass *class)
-{
 }
 
 static void
@@ -512,7 +482,7 @@ get_utf8_preedit_string (GtkIMContextIME *context_ime, gint *pos_ret)
 	      g_warning ("%s", error->message);
 	      g_error_free (error);
 	    }
-	  
+
 	  if (pos_ret)
 	    {
 	      pos = ImmGetCompositionStringW (himc, GCS_CURSORPOS, NULL, 0);
@@ -933,7 +903,7 @@ gtk_im_context_ime_set_preedit_font (GtkIMContext *context)
 
   /* Try to make sure we use a font that actually can show the
    * language in question.
-   */ 
+   */
 
   switch (PRIMARYLANGID (LOWORD (ime)))
     {
@@ -970,7 +940,7 @@ gtk_im_context_ime_set_preedit_font (GtkIMContext *context)
                          &font_desc,
                          NULL);
   gtk_style_context_restore (style);
-  
+
   if (lang[0])
     {
       /* We know what language it is. Look for a character, any

@@ -42,18 +42,27 @@
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
+#include "gtkimcontextxim.h"
 #endif
 
 #ifdef GDK_WINDOWING_WAYLAND
 #include "wayland/gdkwayland.h"
+#include "gtkimcontextwayland.h"
 #endif
 
 #ifdef GDK_WINDOWING_BROADWAY
 #include "broadway/gdkbroadway.h"
+#include "gtkimcontextbroadway.h"
 #endif
 
 #ifdef GDK_WINDOWING_WIN32
 #include "win32/gdkwin32.h"
+#include "gtkimcontextime.h"
+#endif
+
+#ifdef GDK_WINDOWING_QUARTZ
+#include "quartz/gdkquartz.h"
+#include "gtkimcontextquartz.h"
 #endif
 
 #ifdef G_OS_WIN32
@@ -101,6 +110,7 @@ is_platform (const char *context_id)
   return g_strcmp0 (context_id, "wayland") == 0 ||
          g_strcmp0 (context_id, "broadway") == 0 ||
          g_strcmp0 (context_id, "xim") == 0 ||
+         g_strcmp0 (context_id, "quartz") == 0 ||
          g_strcmp0 (context_id, "ime") == 0;
 }
 
@@ -125,6 +135,11 @@ match_backend (const char *context_id)
 #ifdef GDK_WINDOWING_WIN32
   if (g_strcmp0 (context_id, "ime") == 0)
     return GDK_IS_WIN32_DISPLAY (gdk_display_get_default ());
+#endif
+
+#ifdef GDK_WINDOWING_QUARTZ
+  if (g_strcmp0 (context_id, "quartz") == 0)
+    return GDK_IS_QUARTZ_DISPLAY (gdk_display_get_default ());
 #endif
 
   return TRUE;
@@ -236,7 +251,21 @@ gtk_im_modules_init (void)
   g_io_extension_point_set_required_type (ep, GTK_TYPE_IM_CONTEXT);
 
   g_type_ensure (gtk_im_context_simple_get_type ());
-  // other builtin im context types go here
+#ifdef GDK_WINDOWING_X11
+  g_type_ensure (gtk_im_context_xim_get_type ());
+#endif
+#ifdef GDK_WINDOWING_WAYLAND
+  g_type_ensure (gtk_im_context_wayland_get_type ());
+#endif
+#ifdef GDK_WINDOWING_BROADWAY
+  g_type_ensure (gtk_im_context_broadway_get_type ());
+#endif
+#ifdef GDK_WINDOWING_WIN32
+  g_type_ensure (gtk_im_context_ime_get_type ());
+#endif
+#ifdef GDK_WINDOWING_QUARTZ
+  g_type_ensure (gtk_im_context_quartz_get_type ());
+#endif
 
   scope = g_io_module_scope_new (G_IO_MODULE_SCOPE_BLOCK_DUPLICATES);
 
@@ -251,16 +280,17 @@ gtk_im_modules_init (void)
 
   g_io_module_scope_free (scope);
 
-  {
-    GList *list, *l;
+  if (GTK_DEBUG_CHECK (MODULES))
+    {
+      GList *list, *l;
 
-    list = g_io_extension_point_get_extensions (ep);
-    for (l = list; l; l = l->next)
-      {
-        GIOExtension *ext = l->data;
-        g_print ("extension: %s: type %s\n",
-                 g_io_extension_get_name (ext),
-                 g_type_name (g_io_extension_get_type (ext)));
-      }
-  }
+      list = g_io_extension_point_get_extensions (ep);
+      for (l = list; l; l = l->next)
+        {
+          GIOExtension *ext = l->data;
+          g_print ("extension: %s: type %s\n",
+                   g_io_extension_get_name (ext),
+                   g_type_name (g_io_extension_get_type (ext)));
+        }
+    }
 }
