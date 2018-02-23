@@ -1738,22 +1738,18 @@ drag_begin_callback (GtkWidget      *widget,
   GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (user_data);
   GtkAllocation allocation;
   GtkWidget *drag_widget;
-  GtkWidget *window;
 
   gtk_widget_get_allocation (sidebar->drag_row, &allocation);
   gtk_widget_hide (sidebar->drag_row);
 
   drag_widget = GTK_WIDGET (gtk_sidebar_row_clone (GTK_SIDEBAR_ROW (sidebar->drag_row)));
-  window = gtk_window_new (GTK_WINDOW_POPUP);
   sidebar->drag_row_height = allocation.height;
-  gtk_widget_set_size_request (window, allocation.width, allocation.height);
+  gtk_widget_set_size_request (drag_widget, allocation.width, allocation.height);
 
-  gtk_container_add (GTK_CONTAINER (window), drag_widget);
-  gtk_widget_show (window);
-  gtk_widget_set_opacity (window, 0.8);
+  gtk_widget_set_opacity (drag_widget, 0.8);
 
   gtk_drag_set_icon_widget (context,
-                            window,
+                            drag_widget,
                             sidebar->drag_row_x,
                             sidebar->drag_row_y);
 }
