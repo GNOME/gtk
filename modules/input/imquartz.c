@@ -32,6 +32,7 @@
 #define GTK_IM_CONTEXT_QUARTZ(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_IM_CONTEXT_TYPE_QUARTZ, GtkIMContextQuartz))
 #define GTK_IM_CONTEXT_QUARTZ_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_IM_CONTEXT_TYPE_QUARTZ, GtkIMContextQuartzClass))
 
+
 typedef struct _GtkIMContextQuartz
 {
   GtkIMContext parent;
@@ -49,28 +50,41 @@ typedef struct _GtkIMContextQuartzClass
   GtkIMContextClass parent_class;
 } GtkIMContextQuartzClass;
 
-GType type_quartz = 0;
-static GObjectClass *parent_class;
+G_DEFINE_DYNAMIC_TYPE (GtkIMContextQuartz, gtk_im_context_quartz, GTK_TYPE_IM_CONTEXT)
 
-static const GtkIMContextInfo imquartz_info =
+void
+g_io_module_load (GIOModule *module)
 {
-  "quartz",
-  NC_("input method menu", "Mac OS X Quartz"),
-  GETTEXT_PACKAGE,
-  GTK_LOCALEDIR,
-  "ja:ko:zh:*",
-};
+  g_type_module_use (G_TYPE_MODULE (module));
 
-static const GtkIMContextInfo *info_list[] =
+  g_print ("load io module for quartz\n");
+  gtk_im_context_quartz_register_type (G_TYPE_MODULE (module));
+
+  g_io_extension_point_implement (GTK_IM_MODULE_EXTENSION_POINT_NAME,
+                                  GTK_TYPE_IM_CONTEXT_BROADWAY,
+                                  "quartz",
+                                  10);
+}
+
+void
+g_io_module_unload (GIOModule *module)
 {
-  &imquartz_info,
-};
+}
 
-#ifndef INCLUDE_IM_quartz
-#define MODULE_ENTRY(type,function) G_MODULE_EXPORT type im_module_ ## function
-#else
-#define MODULE_ENTRY(type, function) type _gtk_immodule_quartz_ ## function
-#endif
+char **
+g_io_module_query (void)
+{
+  char *eps[] = {
+    GTK_IM_MODULE_EXTENSION_POINT_NAME,
+    NULL
+  };
+
+  return g_strdupv (eps);
+}
+
+
+
+
 
 static void
 quartz_get_preedit_string (GtkIMContext *context,
@@ -359,16 +373,16 @@ imquartz_finalize (GObject *obj)
   g_signal_handlers_disconnect_by_func (qc->slave, (gpointer)commit_cb, qc);
   g_object_unref (qc->slave);
 
-  parent_class->finalize (obj);
+  gtk_im_context_quartz_parent_class->finalize (obj);
 }
 
 static void
-gtk_im_context_quartz_class_init (GtkIMContextClass *klass)
+gtk_im_context_quartz_class_init (GtkIMContextQuartzClass *class)
 {
   GTK_NOTE (MISC, g_print ("gtk_im_context_quartz_class_init\n"));
 
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  parent_class = g_type_class_peek_parent (klass);
+  GtkIMContextClass *klass = GTK_IM_CONTEXT_CLASS (class);
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
 
   klass->get_preedit_string = quartz_get_preedit_string;
   klass->filter_keypress = quartz_filter_keypress;
@@ -383,11 +397,15 @@ gtk_im_context_quartz_class_init (GtkIMContextClass *klass)
 }
 
 static void
-gtk_im_context_quartz_init (GtkIMContext *im_context)
+gtk_im_context_quartz_class_finalize (GtkIMContextQuartzClass *class)
+{
+}
+
+static void
+gtk_im_context_quartz_init (GtkIMContextQuartz *qc)
 {
   GTK_NOTE (MISC, g_print ("gtk_im_context_quartz_init\n"));
 
-  GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (im_context);
   qc->preedit_str = g_strdup ("");
   qc->cursor_index = 0;
   qc->selected_len = 0;
@@ -396,55 +414,4 @@ gtk_im_context_quartz_init (GtkIMContext *im_context)
 
   qc->slave = g_object_new (GTK_TYPE_IM_CONTEXT_SIMPLE, NULL);
   g_signal_connect (G_OBJECT (qc->slave), "commit", G_CALLBACK (commit_cb), qc);
-}
-
-static void
-gtk_im_context_quartz_register_type (GTypeModule *module)
-{
-  const GTypeInfo object_info =
-  {
-    sizeof (GtkIMContextQuartzClass),
-    (GBaseInitFunc) NULL,
-    (GBaseFinalizeFunc) NULL,
-    (GClassInitFunc) gtk_im_context_quartz_class_init,
-    NULL,           /* class_finalize */
-    NULL,           /* class_data */
-    sizeof (GtkIMContextQuartz),
-    0,
-    (GInstanceInitFunc) gtk_im_context_quartz_init,
-  };
-
-  type_quartz =
-    g_type_module_register_type (module,
-                                 GTK_TYPE_IM_CONTEXT,
-                                 "GtkIMContextQuartz",
-                                 &object_info, 0);
-}
-
-MODULE_ENTRY (void, init) (GTypeModule * module)
-{
-  gtk_im_context_quartz_register_type (module);
-}
-
-MODULE_ENTRY (void, exit) (void)
-{
-}
-
-MODULE_ENTRY (void, list) (const GtkIMContextInfo *** contexts, int *n_contexts)
-{
-  *contexts = info_list;
-  *n_contexts = G_N_ELEMENTS (info_list);
-}
-
-MODULE_ENTRY (GtkIMContext *, create) (const gchar * context_id)
-{
-  g_return_val_if_fail (context_id, NULL);
-
-  if (!strcmp (context_id, "quartz"))
-    {
-      GTK_NOTE (MISC, g_print ("immodule_quartz create\n"));
-      return g_object_new (type_quartz, NULL);
-    }
-  else
-    return NULL;
 }
