@@ -131,8 +131,10 @@ gdk_vulkan_strerror (VkResult result)
       return "Too many objects of the type have already been created.";
     case VK_ERROR_FORMAT_NOT_SUPPORTED:
       return "A requested format is not supported on this device.";
+#if VK_HEADER_VERSION >= 24
     case VK_ERROR_FRAGMENTED_POOL:
       return "A requested pool allocation has failed due to fragmentation of the pool’s memory.";
+#endif
     case VK_ERROR_SURFACE_LOST_KHR:
       return "A surface is no longer available.";
     case VK_ERROR_NATIVE_WINDOW_IN_USE_KHR:
@@ -145,8 +147,18 @@ gdk_vulkan_strerror (VkResult result)
       return "The application caused the validation layer to fail.";
     case VK_ERROR_INVALID_SHADER_NV:
       return "One or more shaders failed to compile or link.";
+#if VK_HEADER_VERSION >= 39
     case VK_ERROR_OUT_OF_POOL_MEMORY_KHR:
+      return "A pool memory allocation has failed.";
+#endif
+#if VK_HEADER_VERSION >= 54
     case VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR:
+      return "An external handle is not a valid handle of the specified type.";
+#endif
+#if VK_HEADER_VERSION >= 64
+    case VK_ERROR_NOT_PERMITTED_EXT:
+      return "The caller does not have sufficient privileges.";
+#endif
     case VK_RESULT_RANGE_SIZE:
     case VK_RESULT_MAX_ENUM:
     default:
