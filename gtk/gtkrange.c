@@ -1405,7 +1405,7 @@ gtk_range_allocate_trough (GtkGizmo            *gizmo,
 
       level = CLAMP (priv->fill_level, lower, upper - page_size);
 
-      fill = (level - lower) / (lower - upper - page_size);
+      fill = (level - lower) / (upper - lower - page_size);
 
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
         {
