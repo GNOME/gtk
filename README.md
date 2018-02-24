@@ -59,10 +59,10 @@ If you are building the X11 backend, you will also need:
     - xrender
     - xi
     - xext
-    - xfixes (optional)
-    - xcursor (optional)
-    - xdamage (optional)
-    - xcomposite (optional)
+    - xfixes
+    - xcursor
+    - xdamage
+    - xcomposite
   - [atk-bridge-2.0](https://download.gnome.org/sources/at-spi2-atk)
 
 If you are building the Wayland backend, you will also need:
