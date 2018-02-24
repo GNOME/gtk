@@ -304,75 +304,59 @@ How to compile GTK+ itself
           </group>
           <sbr/>
           <group>
-            <arg choice="plain">-Denable-cups-print-backend=yes</arg>
-            <arg choice="plain">-Denable-cups-print-backend=no</arg>
-            <arg choice="plain">-Denable-cups-print-backend=auto</arg>
+            <arg choice="plain">-Dprint-backends=all</arg>
+            <arg choice="plain">-Dprint-backends=none</arg>
+            <arg choice="plain">-Dprint-backends=cups,lpr,...</arg>
           </group>
           <sbr/>
           <group>
-            <arg choice="plain">-Denable-papi-print-backend=yes</arg>
-            <arg choice="plain">-Denable-papi-print-backend=no</arg>
-            <arg choice="plain">-Denable-papi-print-backend=auto</arg>
+            <arg choice="plain">-Dcolord=yes</arg>
+            <arg choice="plain">-Dcolord=no</arg>
+            <arg choice="plain">-Dcolord=auto</arg>
           </group>
           <sbr/>
           <group>
-            <arg choice="plain">-Denable-cloudprint-print-backend=yes</arg>
-            <arg choice="plain">-Denable-cloudprint-print-backend=no</arg>
-            <arg choice="plain">-Denable-cloudprint-print-backend=auto</arg>
+            <arg choice="plain">-Dvulkan=yes</arg>
+            <arg choice="plain">-Dvulkan=no</arg>
+            <arg choice="plain">-Dvulkan=auto</arg>
           </group>
           <sbr/>
           <group>
-            <arg choice="plain">-Denable-test-print-backend=yes</arg>
-            <arg choice="plain">-Denable-test-print-backend=no</arg>
-            <arg choice="plain">-Denable-test-print-backend=auto</arg>
+            <arg choice="plain">-Dx11-backend=true</arg>
+            <arg choice="plain">-Dx11-backend=false</arg>
           </group>
           <sbr/>
           <group>
-            <arg choice="plain">-Denable-colord=yes</arg>
-            <arg choice="plain">-Denable-colord=no</arg>
-            <arg choice="plain">-Denable-colord=auto</arg>
+            <arg choice="plain">-Dcloudproviders=true</arg>
+            <arg choice="plain">-Dcloudproviders=false</arg>
           </group>
           <sbr/>
           <group>
-            <arg choice="plain">-Denable-vulkan=yes</arg>
-            <arg choice="plain">-Denable-vulkan=no</arg>
-            <arg choice="plain">-Denable-vulkan=auto</arg>
+            <arg choice="plain">-Dxinerama=yes</arg>
+            <arg choice="plain">-Dxinerama=no</arg>
+            <arg choice="plain">-Dxinerama=auto</arg>
           </group>
           <sbr/>
           <group>
-            <arg choice="plain">-Denable-x11-backend=true</arg>
-            <arg choice="plain">-Denable-x11-backend=false</arg>
+            <arg choice="plain">-Dwin32-backend=true</arg>
+            <arg choice="plain">-Dwin32-backend=false</arg>
           </group>
           <sbr/>
           <group>
-            <arg choice="plain">-Denable-xinerama=true</arg>
-            <arg choice="plain">-Denable-xinerama=false</arg>
+            <arg choice="plain">-Dquartz-backend=true</arg>
+            <arg choice="plain">-Dquartz-backend=false</arg>
           </group>
           <sbr/>
           <group>
-            <arg choice="plain">-Denable-win32-backend=true</arg>
-            <arg choice="plain">-Denable-win32-backend=false</arg>
+            <arg choice="plain">-Dbroadway-backend=true</arg>
+            <arg choice="plain">-Dbroadway-backend=false</arg>
           </group>
           <sbr/>
           <group>
-            <arg choice="plain">-Denable-quartz-backend=true</arg>
-            <arg choice="plain">-Denable-quartz-backend=false</arg>
+            <arg choice="plain">-Dwayland-backend=true</arg>
+            <arg choice="plain">-Dwayland-backend=false</arg>
           </group>
           <sbr/>
-          <group>
-            <arg choice="plain">-Denable-broadway-backend=true</arg>
-            <arg choice="plain">-Denable-broadway-backend=false</arg>
-          </group>
-          <sbr/>
-          <group>
-            <arg choice="plain">-Denable-wayland-backend=true</arg>
-            <arg choice="plain">-Denable-wayland-backend=false</arg>
-          </group>
-          <sbr/>
-          <group>
-            <arg choice="plain">-Denable-mir-backend=true</arg>
-            <arg choice="plain">-Denable-mir-backend=false</arg>
-          </group>
           <group>
             <arg choice="plain">-Dintrospection=true</arg>
             <arg choice="plain">-Dintrospection=false</arg>
@@ -381,7 +365,7 @@ How to compile GTK+ itself
       </para>
 
       <formalpara>
-        <title><systemitem>enable-xinerama</systemitem></title>
+        <title><systemitem>xinerama</systemitem></title>
 
         <para>
           By default GTK+ will try to link against the Xinerama libraries
@@ -391,8 +375,8 @@ How to compile GTK+ itself
       </formalpara>
 
       <formalpara>
-        <title><systemitem>enable-documentation</systemitem> and
-          <systemitem>enable-man-pages</systemitem></title>
+        <title><systemitem>documentation</systemitem> and
+          <systemitem>man-pages</systemitem></title>
 
         <para>
           The <application>gtk-doc</application> package is
@@ -403,38 +387,33 @@ How to compile GTK+ itself
           <application>gtk-doc</application> installed and
           are modifying GTK+, you may want to enable
           <application>gtk-doc</application> support by passing
-          in <systemitem>enable-documentation</systemitem>.
+          in <systemitem>documentation</systemitem>.
         </para>
         <para>
           Additionally, some tools provided by GTK+ have their own
           manual pages generated using a similar set of dependencies;
           if you have <application>xsltproc</application> then you
-          can generate manual pages by passing <systemitem>enable-man-pages</systemitem>
+          can generate manual pages by passing <systemitem>man-pages</systemitem>
           when configuring the build.
         </para>
       </formalpara>
 
       <formalpara>
-        <title><systemitem>enable-cups-print-backend</systemitem>,
-          <systemitem>enable-papi-print-backend</systemitem>,
-          <systemitem>enable-cloudprint-print-backend</systemitem>, and
-          <systemitem>enable-test-print-backend</systemitem></title>
+        <title><systemitem>print-backends</systemitem></title>
 
         <para>
           By default, GTK+ will try to build various print backends if
-          their dependencies are found. These options can be used to
-          explicitly control whether each print backend should be built
-          or not.
+          their dependencies are found. This option can be used to
+          explicitly control which print backends should be built.
         </para>
       </formalpara>
 
       <formalpara>
-        <title><systemitem>enable-x11-backend</systemitem>,
-          <systemitem>enable-win32-backend</systemitem>,
-          <systemitem>enable-quartz-backend</systemitem>,
-          <systemitem>enable-broadway-backend</systemitem>,
-          <systemitem>enable-wayland-backend</systemitem>, and
-          <systemitem>enable-mir-backend</systemitem></title>
+        <title><systemitem>x11-backend</systemitem>,
+          <systemitem>win32-backend</systemitem>,
+          <systemitem>quartz-backend</systemitem>,
+          <systemitem>broadway-backend</systemitem> and
+          <systemitem>wayland-backend</systemitem></title>
 
         <para>
           Enable specific backends for GDK.  If none of these options
@@ -459,8 +438,9 @@ How to compile GTK+ itself
       </formalpara>
 
       <formalpara>
-        <title><systemitem>build-tests</systemitem>
-          <systemitem>demos</systemitem></title>
+        <title><systemitem>build-tests</systemitem>,
+               <systemitem>install-tests</systemitem>,
+               <systemitem>demos</systemitem></title>
 
         <para>
           By default, GTK+ will build quite a few tests and demos.
