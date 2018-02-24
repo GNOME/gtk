@@ -19,7 +19,7 @@ option('cloudproviders', type: 'boolean', value: false,
   description : 'Enable the cloudproviders support')
 
 # Print backends
-option('print-backends', type : 'string', value : 'cups,papi',
+option('print-backends', type : 'string', value : 'cups,file',
   description : 'Build the specified print backends (comma-separated list, "all", or "none")')
 option('colord', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
   description : 'Build colord support for the CUPS printing backend')
