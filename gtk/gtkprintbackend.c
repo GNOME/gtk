@@ -105,6 +105,20 @@ gtk_print_backends_init (void)
   g_strfreev (paths);
 
   g_io_module_scope_free (scope);
+
+  if (GTK_DEBUG_CHECK (MODULES))
+    {
+      GList *list, *l;
+
+      list = g_io_extension_point_get_extensions (ep);
+      for (l = list; l; l = l->next)
+        {
+          GIOExtension *ext = l->data;
+          g_print ("extension: %s: type %s\n",
+                   g_io_extension_get_name (ext),
+                   g_type_name (g_io_extension_get_type (ext)));
+        }
+    }
 }
 
 /**
