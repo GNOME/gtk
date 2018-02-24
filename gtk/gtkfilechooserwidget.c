@@ -2503,6 +2503,7 @@ location_entry_setup (GtkFileChooserWidget *impl)
                                            priv->current_filter);
   gtk_entry_set_width_chars (GTK_ENTRY (priv->location_entry), 45);
   gtk_entry_set_activates_default (GTK_ENTRY (priv->location_entry), TRUE);
+  gtk_widget_set_hexpand (priv->location_entry, TRUE);
 }
 
 static void
