@@ -2482,7 +2482,7 @@ gtk_text_view_queue_scroll (GtkTextView   *text_view,
 static gboolean
 gtk_text_view_flush_scroll (GtkTextView *text_view)
 {
-  GtkAllocation allocation;
+  int height;
   GtkTextIter iter;
   GtkTextPendingScroll *scroll;
   gboolean retval;
@@ -2513,10 +2513,10 @@ gtk_text_view_flush_scroll (GtkTextView *text_view)
    * the screen.
    */
   DV(g_print (">Validating scroll destination ("G_STRLOC")\n"));
-  gtk_widget_get_allocation (widget, &allocation);
+  height = gtk_widget_get_height (widget);
   gtk_text_layout_validate_yrange (text_view->priv->layout, &iter,
-                                   -(allocation.height * 2),
-                                   allocation.height * 2);
+                                   - (height * 2),
+                                   height * 2);
 
   DV(g_print (">Done validating scroll destination ("G_STRLOC")\n"));
 
