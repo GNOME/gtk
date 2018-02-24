@@ -147,18 +147,20 @@ GdkContentFormats *
 gdk_content_formats_new (const char **mime_types,
                          guint        n_mime_types)
 {
-  GPtrArray *array;
   guint i;
+  const char **mime_types_copy;
 
   if (n_mime_types == 0)
       return gdk_content_formats_new_take (NULL, 0, NULL, 0);
 
-  array = g_ptr_array_new ();
-  for (i = 0; i < n_mime_types; i++)
-    g_ptr_array_add (array, (gpointer) g_intern_string (mime_types[i]));
-  g_ptr_array_add (array, NULL);
+  mime_types_copy = g_new (const char *, n_mime_types + 1);
 
-  return gdk_content_formats_new_take (NULL, 0, (const char **) g_ptr_array_free (array, FALSE), n_mime_types);
+  for (i = 0; i < n_mime_types; i++)
+    mime_types_copy[i] = g_intern_string (mime_types[i]);
+
+  mime_types_copy[n_mime_types] = NULL;
+
+  return gdk_content_formats_new_take (NULL, 0, mime_types_copy, n_mime_types);
 }
 
 /**
