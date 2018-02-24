@@ -600,9 +600,6 @@ static gboolean gtk_widget_real_query_tooltip    (GtkWidget         *widget,
 						  gboolean           keyboard_tip,
 						  GtkTooltip        *tooltip);
 static void     gtk_widget_real_style_updated    (GtkWidget         *widget);
-static gboolean _gtk_widget_run_controllers      (GtkWidget           *widget,
-                                                  const GdkEvent      *event,
-                                                  GtkPropagationPhase  phase);
 
 static void	gtk_widget_dispatch_child_properties_changed	(GtkWidget        *object,
 								 guint             n_pspecs,
@@ -692,9 +689,6 @@ static void                  template_data_free                 (GtkWidgetTempla
 static void gtk_widget_set_usize_internal (GtkWidget          *widget,
 					   gint                width,
 					   gint                height);
-
-static void gtk_widget_on_frame_clock_update (GdkFrameClock *frame_clock,
-                                              GtkWidget     *widget);
 
 static gboolean event_window_is_still_viewable (const GdkEvent *event);
 
