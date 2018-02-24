@@ -294,17 +294,6 @@ How to compile GTK+ itself
           <command>meson</command>
           <sbr/>
           <group>
-            <arg choice="plain">-Ddisable-modules=true</arg>
-            <arg choice="plain">-Ddisable-modules=false</arg>
-          </group>
-          <sbr/>
-          <group>
-            <arg choice="plain">-Dwith-included-immodules=MODULE1,MODULE2,...</arg>
-            <arg choice="plain">-Dwith-included-immodules=all</arg>
-            <arg choice="plain">-Dwith-included-immodules=none</arg>
-          </group>
-          <sbr/>
-          <group>
             <arg choice="plain">-Ddocumentation=true</arg>
             <arg choice="plain">-Ddocumentation=false</arg>
           </group>
@@ -390,32 +379,6 @@ How to compile GTK+ itself
           </group>
         </cmdsynopsis>
       </para>
-
-      <formalpara>
-        <title><systemitem>disable-modules</systemitem></title>
-
-        <para>
-          Normally GTK+ will try to build the input method modules
-          as little shared libraries that are loaded on demand.
-          The <systemitem>disable-modules</systemitem> option
-          indicates that they should all be built statically
-          into the GTK+ library instead. This is useful for
-          people who need to produce statically-linked binaries.
-          If <systemitem>disable-modules</systemitem> is not specified,
-          then the <command>configure</command> script will try to
-          auto-detect whether shared modules work on your system.
-        </para>
-      </formalpara>
-
-      <formalpara>
-        <title><systemitem>with-included-immodules</systemitem></title>
-
-        <para>
-         This option allows you to specify which input method modules you
-         want to include directly into the GTK+ shared library, as opposed
-         to building them as loadable modules.
-        </para>
-      </formalpara>
 
       <formalpara>
         <title><systemitem>enable-xinerama</systemitem></title>
