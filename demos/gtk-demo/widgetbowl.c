@@ -82,6 +82,18 @@ create_label (void)
 }
 
 static GtkWidget *
+create_video (void)
+{
+  GtkMediaStream *stream = gtk_media_file_new_for_resource ("/images/gtk-logo.webm");
+  GtkWidget *w = gtk_image_new_from_paintable (GDK_PAINTABLE (stream));
+  gtk_media_stream_set_loop (stream, TRUE);
+  gtk_media_stream_play (stream);
+  g_object_unref (stream);
+
+  return w;
+}
+
+static GtkWidget *
 create_gears (void)
 {
   GtkWidget *w = gtk_gears_new ();
@@ -102,6 +114,7 @@ static const struct {
   { "Label"     , create_label          },
   { "Spinner"   , create_spinner        },
   { "Spinbutton", create_spinbutton     },
+  { "Video",      create_video          },
   { "Gears",      create_gears          },
 };
 
