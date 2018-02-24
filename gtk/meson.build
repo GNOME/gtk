@@ -250,6 +250,7 @@ gtk_public_sources = files([
   'gtkliststore.c',
   'gtklockbutton.c',
   'gtkmain.c',
+  'gtkmediastream.c',
   'gtkmenu.c',
   'gtkmenubar.c',
   'gtkmenubutton.c',
@@ -480,6 +481,7 @@ gtk_public_headers = files([
   'gtkliststore.h',
   'gtklockbutton.h',
   'gtkmain.h',
+  'gtkmediastream.h',
   'gtkmenu.h',
   'gtkmenubar.h',
   'gtkmenubutton.h',
@@ -813,6 +815,11 @@ gtk_deps = [
 
 if harfbuzz_dep.found() and pangoft_dep.found()
   gtk_deps += [ harfbuzz_dep, ]
+endif
+
+if ffmpeg_enabled
+  gtk_sources += [ 'gtkmediastreamffmpeg.c' ]
+  gtk_deps += [ ffmpeg_deps, ]
 endif
 
 if x11_enabled
