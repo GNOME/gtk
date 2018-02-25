@@ -31,8 +31,6 @@
 #endif
 
 #include <gtk/gtkbin.h>
-#include <gtk/gtkimage.h>
-
 
 G_BEGIN_DECLS
 
@@ -50,9 +48,7 @@ typedef struct _GtkButtonClass        GtkButtonClass;
 struct _GtkButton
 {
   /*< private >*/
-  GtkBin bin;
-
-  GtkButtonPrivate *priv;
+  GtkBin parent_instance;
 };
 
 /**

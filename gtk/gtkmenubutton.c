@@ -112,9 +112,10 @@
 
 #include "gtkmenubutton.h"
 #include "gtkmenubuttonprivate.h"
-#include "gtkbuttonprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwindow.h"
+#include "gtkimage.h"
+#include "gtkactionable.h"
 #include "gtkmain.h"
 #include "gtkaccessible.h"
 #include "gtkpopover.h"
@@ -667,7 +668,7 @@ update_sensitivity (GtkMenuButton *menu_button)
 {
   GtkMenuButtonPrivate *priv = menu_button->priv;
 
-  if (GTK_BUTTON (menu_button)->priv->action_helper)
+  if (gtk_actionable_get_action_name (GTK_ACTIONABLE (menu_button)) != NULL)
     return;
 
   gtk_widget_set_sensitive (GTK_WIDGET (menu_button),

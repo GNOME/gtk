@@ -80,6 +80,21 @@
  */
 #define ACTIVATE_TIMEOUT 250
 
+struct _GtkButtonPrivate
+{
+  GtkActionHelper       *action_helper;
+
+  GdkDevice             *grab_keyboard;
+
+  GtkGesture            *gesture;
+
+  guint                  activate_timeout;
+
+  guint          button_down           : 1;
+  guint          in_button             : 1;
+  guint          use_underline         : 1;
+  guint          child_type            : 2;
+};
 
 enum {
   CLICKED,
@@ -158,8 +173,9 @@ static void
 gtk_button_add (GtkContainer *container, GtkWidget *child)
 {
   GtkButton *button = GTK_BUTTON (container);
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
 
-  if (button->priv->child_type != WIDGET_CHILD)
+  if (priv->child_type != WIDGET_CHILD)
     gtk_container_remove (container, gtk_bin_get_child (GTK_BIN (button)));
 
   gtk_button_set_child_type (button, WIDGET_CHILD);
@@ -180,7 +196,10 @@ gtk_button_remove (GtkContainer *container, GtkWidget *child)
 static void
 gtk_button_unmap (GtkWidget *widget)
 {
-  GTK_BUTTON (widget)->priv->in_button = FALSE;
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (GTK_BUTTON (widget));
+
+  priv->in_button = FALSE;
+
   GTK_WIDGET_CLASS (gtk_button_parent_class)->unmap (widget);
 }
 
@@ -295,7 +314,7 @@ multipress_pressed_cb (GtkGestureMultiPress *gesture,
                        GtkWidget            *widget)
 {
   GtkButton *button = GTK_BUTTON (widget);
-  GtkButtonPrivate *priv = button->priv;
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
 
   if (gtk_widget_get_focus_on_click (widget) && !gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
@@ -345,12 +364,12 @@ multipress_released_cb (GtkGestureMultiPress *gesture,
                         GtkWidget            *widget)
 {
   GtkButton *button = GTK_BUTTON (widget);
-  GtkButtonPrivate *priv = button->priv;
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
   GdkEventSequence *sequence;
 
   gtk_button_do_release (button,
                          gtk_widget_is_sensitive (GTK_WIDGET (button)) &&
-                         (button->priv->in_button ||
+                         (priv->in_button ||
                           touch_release_in_button (button)));
 
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
@@ -367,7 +386,7 @@ multipress_gesture_update_cb (GtkGesture       *gesture,
                               GdkEventSequence *sequence,
                               GtkButton        *button)
 {
-  GtkButtonPrivate *priv = button->priv;
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
   gboolean in_button;
   gdouble x, y;
 
@@ -412,10 +431,7 @@ gtk_button_set_child_type (GtkButton *button, guint child_type)
 static void
 gtk_button_init (GtkButton *button)
 {
-  GtkButtonPrivate *priv;
-
-  button->priv = gtk_button_get_instance_private (button);
-  priv = button->priv;
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
 
   gtk_widget_set_can_focus (GTK_WIDGET (button), TRUE);
   gtk_widget_set_receives_default (GTK_WIDGET (button), TRUE);
@@ -442,7 +458,7 @@ static void
 gtk_button_finalize (GObject *object)
 {
   GtkButton *button = GTK_BUTTON (object);
-  GtkButtonPrivate *priv = button->priv;
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
 
   g_clear_object (&priv->gesture);
 
@@ -453,7 +469,7 @@ static void
 gtk_button_dispose (GObject *object)
 {
   GtkButton *button = GTK_BUTTON (object);
-  GtkButtonPrivate *priv = button->priv;
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
 
   g_clear_object (&priv->action_helper);
 
@@ -465,15 +481,16 @@ gtk_button_set_action_name (GtkActionable *actionable,
                             const gchar   *action_name)
 {
   GtkButton *button = GTK_BUTTON (actionable);
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
 
-  if (!button->priv->action_helper)
-    button->priv->action_helper = gtk_action_helper_new (actionable);
+  if (!priv->action_helper)
+    priv->action_helper = gtk_action_helper_new (actionable);
 
   g_signal_handlers_disconnect_by_func (button, gtk_real_button_clicked, NULL);
   if (action_name)
     g_signal_connect_after (button, "clicked", G_CALLBACK (gtk_real_button_clicked), NULL);
 
-  gtk_action_helper_set_action_name (button->priv->action_helper, action_name);
+  gtk_action_helper_set_action_name (priv->action_helper, action_name);
 }
 
 static void
@@ -481,11 +498,12 @@ gtk_button_set_action_target_value (GtkActionable *actionable,
                                     GVariant      *action_target)
 {
   GtkButton *button = GTK_BUTTON (actionable);
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
 
-  if (!button->priv->action_helper)
-    button->priv->action_helper = gtk_action_helper_new (actionable);
+  if (!priv->action_helper)
+    priv->action_helper = gtk_action_helper_new (actionable);
 
-  gtk_action_helper_set_action_target_value (button->priv->action_helper, action_target);
+  gtk_action_helper_set_action_target_value (priv->action_helper, action_target);
 }
 
 static void
@@ -529,7 +547,7 @@ gtk_button_get_property (GObject         *object,
                          GParamSpec      *pspec)
 {
   GtkButton *button = GTK_BUTTON (object);
-  GtkButtonPrivate *priv = button->priv;
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
 
   switch (prop_id)
     {
@@ -561,16 +579,18 @@ static const gchar *
 gtk_button_get_action_name (GtkActionable *actionable)
 {
   GtkButton *button = GTK_BUTTON (actionable);
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
 
-  return gtk_action_helper_get_action_name (button->priv->action_helper);
+  return gtk_action_helper_get_action_name (priv->action_helper);
 }
 
 static GVariant *
 gtk_button_get_action_target_value (GtkActionable *actionable)
 {
   GtkButton *button = GTK_BUTTON (actionable);
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
 
-  return gtk_action_helper_get_action_target_value (button->priv->action_helper);
+  return gtk_action_helper_get_action_target_value (priv->action_helper);
 }
 
 static void
@@ -726,7 +746,7 @@ static void
 gtk_button_unrealize (GtkWidget *widget)
 {
   GtkButton *button = GTK_BUTTON (widget);
-  GtkButtonPrivate *priv = button->priv;
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
 
   if (priv->activate_timeout)
     gtk_button_finish_activate (button, FALSE);
@@ -738,7 +758,7 @@ static void
 gtk_button_do_release (GtkButton *button,
                        gboolean   emit_clicked)
 {
-  GtkButtonPrivate *priv = button->priv;
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
 
   if (priv->button_down)
     {
@@ -759,7 +779,7 @@ gtk_button_key_release (GtkWidget   *widget,
 			GdkEventKey *event)
 {
   GtkButton *button = GTK_BUTTON (widget);
-  GtkButtonPrivate *priv = button->priv;
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
 
   if (priv->activate_timeout)
     {
@@ -775,7 +795,7 @@ gtk_button_key_release (GtkWidget   *widget,
 static void
 gtk_real_button_clicked (GtkButton *button)
 {
-  GtkButtonPrivate *priv = button->priv;
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
 
   if (priv->action_helper)
     gtk_action_helper_activate (priv->action_helper);
@@ -793,7 +813,7 @@ static void
 gtk_real_button_activate (GtkButton *button)
 {
   GtkWidget *widget = GTK_WIDGET (button);
-  GtkButtonPrivate *priv = button->priv;
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
   GdkDevice *device;
 
   device = gtk_get_current_event_device ();
@@ -824,7 +844,7 @@ gtk_button_finish_activate (GtkButton *button,
 			    gboolean   do_it)
 {
   GtkWidget *widget = GTK_WIDGET (button);
-  GtkButtonPrivate *priv = button->priv;
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
 
   g_source_remove (priv->activate_timeout);
   priv->activate_timeout = 0;
@@ -954,11 +974,9 @@ void
 gtk_button_set_use_underline (GtkButton *button,
 			      gboolean   use_underline)
 {
-  GtkButtonPrivate *priv;
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
 
   g_return_if_fail (GTK_IS_BUTTON (button));
-
-  priv = button->priv;
 
   use_underline = use_underline != FALSE;
 
@@ -991,15 +1009,17 @@ gtk_button_set_use_underline (GtkButton *button,
 gboolean
 gtk_button_get_use_underline (GtkButton *button)
 {
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
+
   g_return_val_if_fail (GTK_IS_BUTTON (button), FALSE);
 
-  return button->priv->use_underline;
+  return priv->use_underline;
 }
 
 static void
 gtk_button_update_state (GtkButton *button)
 {
-  GtkButtonPrivate *priv = button->priv;
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
   GtkStateFlags new_state;
   gboolean depressed;
 
@@ -1020,11 +1040,8 @@ static void
 gtk_button_display_changed (GtkWidget  *widget,
                             GdkDisplay *previous_display)
 {
-  GtkButton *button;
-  GtkButtonPrivate *priv;
-
-  button = GTK_BUTTON (widget);
-  priv = button->priv;
+  GtkButton *button = GTK_BUTTON (widget);
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
 
   /* If the button is being pressed while the display changes the
     release might never occur, so we reset the state. */
@@ -1050,7 +1067,7 @@ gtk_button_grab_notify (GtkWidget *widget,
 			gboolean   was_grabbed)
 {
   GtkButton *button = GTK_BUTTON (widget);
-  GtkButtonPrivate *priv = button->priv;
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
 
   if (priv->activate_timeout &&
       priv->grab_keyboard &&

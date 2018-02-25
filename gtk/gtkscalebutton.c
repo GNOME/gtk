@@ -40,6 +40,7 @@
 #include "gtkbindings.h"
 #include "gtkbox.h"
 #include "gtkbuttonprivate.h"
+#include "gtkimage.h"
 #include "gtkeventcontrollerscroll.h"
 #include "gtkframe.h"
 #include "gtkgesture.h"

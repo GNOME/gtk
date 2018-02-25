@@ -28,6 +28,7 @@
 #include "gtkintl.h"
 #include "gtkwidgetprivate.h"
 #include "gtktypebuiltins.h"
+#include "gtkimage.h"
 
 /**
  * SECTION:gtkstackswitcher
