@@ -78,7 +78,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkIMContextWayland, gtk_im_context_wayland, GTK_TYPE_I
 
 static GtkIMContextWaylandGlobal *global = NULL;
 
-#define GTK_IM_CONTEXT_WAYLAND(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), gtk_im_context_wayland__get_type (), GtkIMContextWayland))
+#define GTK_IM_CONTEXT_WAYLAND(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), gtk_im_context_wayland_get_type (), GtkIMContextWayland))
 
 static void
 reset_preedit (GtkIMContextWayland *context)
