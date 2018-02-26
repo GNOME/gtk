@@ -279,6 +279,9 @@ gtk_check_button_direction_changed (GtkWidget        *widget,
 {
   GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (GTK_CHECK_BUTTON (widget));
 
+  if (!priv->indicator_widget)
+    return;
+
   if (previous_direction == GTK_TEXT_DIR_LTR)
     {
       /* Now RTL -> Move the indicator to the right */
