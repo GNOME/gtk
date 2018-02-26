@@ -175,7 +175,6 @@
    (pos) == GTK_ENTRY_ICON_SECONDARY)
 
 static GQuark          quark_password_hint  = 0;
-static GQuark          quark_cursor_hadjustment = 0;
 static GQuark          quark_capslock_feedback = 0;
 static GQuark          quark_gtk_signal = 0;
 static GQuark          quark_entry_completion = 0;
@@ -608,7 +607,6 @@ static void         gtk_entry_grab_notify              (GtkWidget      *widget,
 static void         gtk_entry_check_cursor_blink       (GtkEntry       *entry);
 static void         gtk_entry_pend_cursor_blink        (GtkEntry       *entry);
 static void         gtk_entry_reset_blink_time         (GtkEntry       *entry);
-static void         gtk_entry_move_adjustments         (GtkEntry             *entry);
 static void         gtk_entry_update_cached_style_values(GtkEntry      *entry);
 static gboolean     get_middle_click_paste             (GtkEntry *entry);
 static void         gtk_entry_get_scroll_limits        (GtkEntry       *entry,
@@ -834,7 +832,6 @@ gtk_entry_class_init (GtkEntryClass *class)
   class->activate = gtk_entry_real_activate;
   
   quark_password_hint = g_quark_from_static_string ("gtk-entry-password-hint");
-  quark_cursor_hadjustment = g_quark_from_static_string ("gtk-hadjustment");
   quark_capslock_feedback = g_quark_from_static_string ("gtk-entry-capslock-feedback");
   quark_gtk_signal = g_quark_from_static_string ("gtk-signal");
   quark_entry_completion = g_quark_from_static_string ("gtk-entry-completion-key");
@@ -5450,7 +5447,6 @@ gtk_entry_set_positions (GtkEntry *entry,
 
   if (changed)
     {
-      gtk_entry_move_adjustments (entry);
       gtk_entry_recompute (entry);
     }
 }
@@ -6233,39 +6229,6 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
       if (handle_mode != GTK_TEXT_HANDLE_MODE_NONE)
         gtk_entry_update_handles (entry, handle_mode);
     }
-}
-
-static void
-gtk_entry_move_adjustments (GtkEntry *entry)
-{
-  GtkWidget *widget = GTK_WIDGET (entry);
-  GtkAdjustment *adjustment;
-  PangoContext *context;
-  PangoFontMetrics *metrics;
-  gint x, layout_x;
-  gint char_width;
-
-  adjustment = g_object_get_qdata (G_OBJECT (entry), quark_cursor_hadjustment);
-  if (!adjustment)
-    return;
-
-  /* Cursor/char position, layout offset and border width*/
-  gtk_entry_get_cursor_locations (entry, &x, NULL);
-  get_layout_position (entry, &layout_x, NULL);
-  x += layout_x;
-
-  /* Approximate width of a char, so user can see what is ahead/behind */
-  context = gtk_widget_get_pango_context (widget);
-
-  metrics = pango_context_get_metrics (context,
-                                       pango_context_get_font_description (context),
-				       pango_context_get_language (context));
-  char_width = pango_font_metrics_get_approximate_char_width (metrics) / PANGO_SCALE;
-
-  /* Scroll it */
-  gtk_adjustment_clamp_page (adjustment, 
-  			     x - (char_width + 1),   /* one char + one pixel before */
-			     x + (char_width + 2));  /* one char + cursor + one pixel after */
 }
 
 static gint
@@ -9225,55 +9188,6 @@ gtk_entry_get_completion (GtkEntry *entry)
   completion = GTK_ENTRY_COMPLETION (g_object_get_qdata (G_OBJECT (entry), quark_entry_completion));
 
   return completion;
-}
-
-/**
- * gtk_entry_set_cursor_hadjustment:
- * @entry: a #GtkEntry
- * @adjustment: (nullable): an adjustment which should be adjusted when the cursor
- *              is moved, or %NULL
- *
- * Hooks up an adjustment to the cursor position in an entry, so that when 
- * the cursor is moved, the adjustment is scrolled to show that position. 
- * See gtk_scrolled_window_get_hadjustment() for a typical way of obtaining 
- * the adjustment.
- *
- * The adjustment has to be in pixel units and in the same coordinate system 
- * as the entry. 
- */
-void
-gtk_entry_set_cursor_hadjustment (GtkEntry      *entry,
-                                  GtkAdjustment *adjustment)
-{
-  g_return_if_fail (GTK_IS_ENTRY (entry));
-  if (adjustment)
-    g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
-
-  if (adjustment)
-    g_object_ref (adjustment);
-
-  g_object_set_qdata_full (G_OBJECT (entry), 
-                           quark_cursor_hadjustment,
-                           adjustment, 
-                           g_object_unref);
-}
-
-/**
- * gtk_entry_get_cursor_hadjustment:
- * @entry: a #GtkEntry
- *
- * Retrieves the horizontal cursor adjustment for the entry. 
- * See gtk_entry_set_cursor_hadjustment().
- *
- * Returns: (transfer none) (nullable): the horizontal cursor adjustment, or %NULL
- *   if none has been set.
- */
-GtkAdjustment*
-gtk_entry_get_cursor_hadjustment (GtkEntry *entry)
-{
-  g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
-
-  return g_object_get_qdata (G_OBJECT (entry), quark_cursor_hadjustment);
 }
 
 static void
