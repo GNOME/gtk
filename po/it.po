@@ -1,18 +1,18 @@
 # This is the Italian locale definition for Gtk+.
-# Copyright (C) 1998, 1999, 2000 - 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Free Software Foundation, Inc.
+# Copyright (C) 1998, 1999, 2000 - 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 Free Software Foundation, Inc.
 # Tristan Tarrant <ttarrant@etnoteam.it>, 1999.
 # Christopher Gabriel <cgabriel@gnu.org>, 2000, 2001, 2002.
 # Alessio Dessì <alessiodessi@tiscali.it>, 2003, 2004, 2005, 2006, 2007.
 # Luca Ferretti <lferrett@gnome.org>, 2007, 2008, 2009, 2010, 2011, 2012, 2013.
-# Milo Casagrande <milo@milo.name>, 2013, 2014, 2015, 2016, 2017
+# Milo Casagrande <milo@milo.name>, 2013, 2014, 2015, 2016, 2017, 2018.
 # Gianvito Cavasoli <gianvito@gmx.it>, 2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-16 15:32+0000\n"
-"PO-Revision-Date: 2017-11-17 11:50+0100\n"
+"POT-Creation-Date: 2018-02-15 09:34+0000\n"
+"PO-Revision-Date: 2018-02-26 09:01+0100\n"
 "Last-Translator: Milo Casagrande <milo@milo.name>\n"
 "Language-Team: Italiano <gnome-it-list@gnome.org>\n"
 "Language: it\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.1\n"
+"X-Generator: Poedit 2.0.6\n"
 "X-Poedit-Basepath: /Users/milo/Development/l10n\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
@@ -78,7 +78,7 @@ msgstr "Flag per il debug di GDK da attivare"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:244 gdk/gdk.c:247 gtk/gtkmain.c:470 gtk/gtkmain.c:473
+#: gdk/gdk.c:244 gdk/gdk.c:247 gtk/gtkmain.c:471 gtk/gtkmain.c:474
 msgid "FLAGS"
 msgstr "FLAG"
 
@@ -531,32 +531,32 @@ msgid "Core GL is not available on EGL implementation"
 msgstr "GL core non è disponibile su implementazioni EGL"
 
 #. Description of --sync in --help output
-#: gdk/win32/gdkmain-win32.c:53
+#: gdk/win32/gdkmain-win32.c:56
 msgid "Don't batch GDI requests"
 msgstr "Rende sincrone le richieste GDI"
 
 #. Description of --no-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:55
+#: gdk/win32/gdkmain-win32.c:58
 msgid "Don't use the Wintab API for tablet support"
 msgstr "Non usare l'API Wintab per supportare le tavolette grafiche"
 
 #. Description of --ignore-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:57
+#: gdk/win32/gdkmain-win32.c:60
 msgid "Same as --no-wintab"
 msgstr "Uguale a --no-wintab"
 
 #. Description of --use-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:59
+#: gdk/win32/gdkmain-win32.c:62
 msgid "Do use the Wintab API [default]"
 msgstr "Usa l'API Wintab [predefinito]"
 
 #. Description of --max-colors=COLORS in --help output
-#: gdk/win32/gdkmain-win32.c:61
+#: gdk/win32/gdkmain-win32.c:64
 msgid "Size of the palette in 8 bit mode"
 msgstr "Dimensione della tavolozza in modalità 8 bit"
 
 #. Placeholder in --max-colors=COLORS in --help output
-#: gdk/win32/gdkmain-win32.c:62
+#: gdk/win32/gdkmain-win32.c:65
 msgid "COLORS"
 msgstr "COLORI"
 
@@ -717,15 +717,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Chiudi"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:411 gtk/gtkwindow.c:9222
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9229
 msgid "Minimize"
 msgstr "Minimizza"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:435 gtk/gtkwindow.c:9231
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9238
 msgid "Maximize"
 msgstr "Massimizza"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:435 gtk/gtkwindow.c:9188
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9195
 msgid "Restore"
 msgstr "Ripristina"
 
@@ -1282,7 +1282,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:673 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:12691 gtk/inspector/css-editor.c:201
+#: gtk/gtkwindow.c:12698 gtk/inspector/css-editor.c:201
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1337,7 +1337,7 @@ msgid "_Apply"
 msgstr "A_pplica"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12692
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12699
 msgid "_OK"
 msgstr "_OK"
 
@@ -1558,53 +1558,57 @@ msgstr "Licenza GNU Lesser General Public versione 3"
 msgid "GNU Affero General Public License, version 3 or later"
 msgstr "Licenza GNU Affero General Public versione 3 o successive"
 
-#: gtk/gtkaboutdialog.c:696
+#: gtk/gtkaboutdialog.c:128
+msgid "GNU Affero General Public License, version 3 only"
+msgstr "Licenza GNU Affero General Public versione 3"
+
+#: gtk/gtkaboutdialog.c:697
 msgid "C_redits"
 msgstr "_Riconoscimenti"
 
-#: gtk/gtkaboutdialog.c:704
+#: gtk/gtkaboutdialog.c:705
 msgid "_License"
 msgstr "_Licenza"
 
-#: gtk/gtkaboutdialog.c:713 gtk/gtkcustompaperunixdialog.c:329
+#: gtk/gtkaboutdialog.c:714 gtk/gtkcustompaperunixdialog.c:329
 #: gtk/gtkmessagedialog.c:948 gtk/ui/gtkassistant.ui:144
 msgid "_Close"
 msgstr "_Chiudi"
 
-#: gtk/gtkaboutdialog.c:997
+#: gtk/gtkaboutdialog.c:998
 msgid "Could not show link"
 msgstr "Impossibile mostrare il collegamento"
 
-#: gtk/gtkaboutdialog.c:1034
+#: gtk/gtkaboutdialog.c:1035
 msgid "Website"
 msgstr "Sito web"
 
 #. used for the application menu on MacOS.  %s is replaced with the application name.
-#: gtk/gtkaboutdialog.c:1084 gtk/ui/gtkapplication-quartz.ui:7
+#: gtk/gtkaboutdialog.c:1085 gtk/ui/gtkapplication-quartz.ui:7
 #, c-format
 msgid "About %s"
 msgstr "Informazioni su %s"
 
-#: gtk/gtkaboutdialog.c:2311
+#: gtk/gtkaboutdialog.c:2312
 msgid "Created by"
 msgstr "Creato da"
 
-#: gtk/gtkaboutdialog.c:2314
+#: gtk/gtkaboutdialog.c:2315
 msgid "Documented by"
 msgstr "Documentato da"
 
-#: gtk/gtkaboutdialog.c:2324
+#: gtk/gtkaboutdialog.c:2325
 msgid "Translated by"
 msgstr "Tradotto da"
 
-#: gtk/gtkaboutdialog.c:2329
+#: gtk/gtkaboutdialog.c:2330
 msgid "Artwork by"
 msgstr "Grafica di"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: gtk/gtkaboutdialog.c:2489
+#: gtk/gtkaboutdialog.c:2490
 #, c-format
 msgid ""
 "This program comes with absolutely no warranty.\n"
@@ -1853,7 +1857,7 @@ msgstr ""
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: gtk/gtkcalendar.c:800
+#: gtk/gtkcalendar.c:815
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1861,7 +1865,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:838
+#: gtk/gtkcalendar.c:853
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -1870,7 +1874,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1866
+#: gtk/gtkcalendar.c:1881
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "2000"
@@ -1885,7 +1889,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1897 gtk/gtkcalendar.c:2593
+#: gtk/gtkcalendar.c:1912 gtk/gtkcalendar.c:2608
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1901,7 +1905,7 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1929 gtk/gtkcalendar.c:2459
+#: gtk/gtkcalendar.c:1944 gtk/gtkcalendar.c:2474
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1917,7 +1921,7 @@ msgstr "%d"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:2226
+#: gtk/gtkcalendar.c:2241
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -2251,52 +2255,52 @@ msgstr "_Destro:"
 msgid "Paper Margins"
 msgstr "Margini carta"
 
-#: gtk/gtkentry.c:9555 gtk/gtklabel.c:6680 gtk/gtktextview.c:9456
+#: gtk/gtkentry.c:9564 gtk/gtklabel.c:6680 gtk/gtktextview.c:9491
 msgid "Cu_t"
 msgstr "_Taglia"
 
-#: gtk/gtkentry.c:9559 gtk/gtklabel.c:6681 gtk/gtktextview.c:9460
+#: gtk/gtkentry.c:9568 gtk/gtklabel.c:6681 gtk/gtktextview.c:9495
 msgid "_Copy"
 msgstr "_Copia"
 
-#: gtk/gtkentry.c:9563 gtk/gtklabel.c:6682 gtk/gtktextview.c:9462
+#: gtk/gtkentry.c:9572 gtk/gtklabel.c:6682 gtk/gtktextview.c:9497
 msgid "_Paste"
 msgstr "_Incolla"
 
-#: gtk/gtkentry.c:9566 gtk/gtkfilechooserwidget.c:1477
-#: gtk/gtkfilechooserwidget.c:2277 gtk/gtklabel.c:6684 gtk/gtktextview.c:9465
+#: gtk/gtkentry.c:9575 gtk/gtkfilechooserwidget.c:1477
+#: gtk/gtkfilechooserwidget.c:2277 gtk/gtklabel.c:6684 gtk/gtktextview.c:9500
 msgid "_Delete"
 msgstr "Eli_mina"
 
-#: gtk/gtkentry.c:9577 gtk/gtklabel.c:6693 gtk/gtktextview.c:9479
+#: gtk/gtkentry.c:9586 gtk/gtklabel.c:6693 gtk/gtktextview.c:9514
 msgid "Select _All"
 msgstr "_Seleziona tutto"
 
-#: gtk/gtkentry.c:9587
+#: gtk/gtkentry.c:9596 gtk/gtktextview.c:9524
 msgid "Insert _Emoji"
 msgstr "Inserisci _emoji"
 
-#: gtk/gtkentry.c:9763 gtk/gtktextview.c:9704
+#: gtk/gtkentry.c:9772 gtk/gtktextview.c:9749
 msgid "Select all"
 msgstr "Seleziona tutto"
 
-#: gtk/gtkentry.c:9766 gtk/gtktextview.c:9707
+#: gtk/gtkentry.c:9775 gtk/gtktextview.c:9752
 msgid "Cut"
 msgstr "Taglia"
 
-#: gtk/gtkentry.c:9769 gtk/gtktextview.c:9710
+#: gtk/gtkentry.c:9778 gtk/gtktextview.c:9755
 msgid "Copy"
 msgstr "Copia"
 
-#: gtk/gtkentry.c:9772 gtk/gtktextview.c:9713
+#: gtk/gtkentry.c:9781 gtk/gtktextview.c:9758
 msgid "Paste"
 msgstr "Incolla"
 
-#: gtk/gtkentry.c:10839
+#: gtk/gtkentry.c:10851
 msgid "Caps Lock is on"
 msgstr "BlocMaiusc è attivo"
 
-#: gtk/gtkentry.c:11111
+#: gtk/gtkentry.c:11126
 msgid "Insert Emoji"
 msgstr "Inserisci emoji"
 
@@ -2304,7 +2308,7 @@ msgstr "Inserisci emoji"
 msgid "Select a File"
 msgstr "Selezionare un file"
 
-#: gtk/gtkfilechooserbutton.c:108 gtk/gtkplacessidebar.c:1108
+#: gtk/gtkfilechooserbutton.c:108 gtk/gtkplacessidebar.c:1109
 msgid "Desktop"
 msgstr "Scrivania"
 
@@ -2312,7 +2316,7 @@ msgstr "Scrivania"
 msgid "(None)"
 msgstr "(Nessuno)"
 
-#: gtk/gtkfilechooserbutton.c:2155
+#: gtk/gtkfilechooserbutton.c:2158
 msgid "Other…"
 msgstr "Altro…"
 
@@ -2326,8 +2330,8 @@ msgstr "No_me"
 
 #. Open item is always present
 #: gtk/gtkfilechoosernative.c:541 gtk/gtkfilechoosernative.c:626
-#: gtk/gtkplacessidebar.c:3593 gtk/gtkplacessidebar.c:3661
-#: gtk/gtkplacesview.c:1630
+#: gtk/gtkplacessidebar.c:3594 gtk/gtkplacessidebar.c:3662
+#: gtk/gtkplacesview.c:1629
 msgid "_Open"
 msgstr "_Apri"
 
@@ -2500,7 +2504,7 @@ msgstr "Copia _posizione"
 msgid "_Add to Bookmarks"
 msgstr "A_ggiungi ai segnalibri"
 
-#: gtk/gtkfilechooserwidget.c:2276 gtk/gtkplacessidebar.c:2709
+#: gtk/gtkfilechooserwidget.c:2276 gtk/gtkplacessidebar.c:2710
 #: gtk/ui/gtkfilechooserwidget.ui:526
 msgid "_Rename"
 msgstr "_Rinomina"
@@ -2599,7 +2603,7 @@ msgstr "%e %b %Y"
 msgid "Unknown"
 msgstr "Sconosciuto"
 
-#: gtk/gtkfilechooserwidget.c:5097 gtk/gtkplacessidebar.c:1093
+#: gtk/gtkfilechooserwidget.c:5097 gtk/gtkplacessidebar.c:1094
 msgid "Home"
 msgstr "Home"
 
@@ -2645,15 +2649,15 @@ msgstr "Accesso eseguito"
 msgid "File System"
 msgstr "File system"
 
-#: gtk/gtkfontbutton.c:365 gtk/gtkfontbutton.c:493
+#: gtk/gtkfontbutton.c:368 gtk/gtkfontbutton.c:498
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: gtk/gtkfontbutton.c:478 gtk/gtkfontbutton.c:610
+#: gtk/gtkfontbutton.c:481 gtk/gtkfontbutton.c:615
 msgid "Pick a Font"
 msgstr "Selezione tipo di carattere"
 
-#: gtk/gtkfontbutton.c:1341
+#: gtk/gtkfontbutton.c:1355
 msgctxt "font"
 msgid "None"
 msgstr "Nessuno"
@@ -2662,11 +2666,11 @@ msgstr "Nessuno"
 msgid "OpenGL context creation failed"
 msgstr "Creazione contesto OpenGL non riuscita"
 
-#: gtk/gtkheaderbar.c:387
+#: gtk/gtkheaderbar.c:391
 msgid "Application menu"
 msgstr "Menù applicazione"
 
-#: gtk/gtkheaderbar.c:454 gtk/gtkwindow.c:9258
+#: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9265
 msgid "Close"
 msgstr "Chiudi"
 
@@ -2679,12 +2683,12 @@ msgstr "Icona «%s» non presente nel tema %s"
 msgid "Failed to load icon"
 msgstr "Caricamento dell'icona non riuscito"
 
-#: gtk/gtkimmodule.c:544
+#: gtk/gtkimmodule.c:547
 msgctxt "input method menu"
 msgid "Simple"
 msgstr "Semplice"
 
-#: gtk/gtkimmodule.c:560
+#: gtk/gtkimmodule.c:563
 msgctxt "input method menu"
 msgid "None"
 msgstr "Nessuno"
@@ -2700,19 +2704,19 @@ msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "Sistema (%s)"
 
-#: gtk/gtkinfobar.c:1167 gtk/gtkmessagedialog.c:385
+#: gtk/gtkinfobar.c:1168 gtk/gtkmessagedialog.c:385
 msgid "Information"
 msgstr "Informazione"
 
-#: gtk/gtkinfobar.c:1171 gtk/gtkmessagedialog.c:389
+#: gtk/gtkinfobar.c:1172 gtk/gtkmessagedialog.c:389
 msgid "Question"
 msgstr "Domanda"
 
-#: gtk/gtkinfobar.c:1175 gtk/gtkmessagedialog.c:393
+#: gtk/gtkinfobar.c:1176 gtk/gtkmessagedialog.c:393
 msgid "Warning"
 msgstr "Avvertimento"
 
-#: gtk/gtkinfobar.c:1179 gtk/gtkmessagedialog.c:397
+#: gtk/gtkinfobar.c:1180 gtk/gtkmessagedialog.c:397
 msgid "Error"
 msgstr "Errore"
 
@@ -2782,11 +2786,11 @@ msgstr "%s: applicazione %s inesistente"
 msgid "%s: error launching application: %s\n"
 msgstr "%s: errore nel lanciare l'applicazione: %s\n"
 
-#: gtk/gtklinkbutton.c:370
+#: gtk/gtklinkbutton.c:374
 msgid "Copy URL"
 msgstr "Copia URL"
 
-#: gtk/gtklinkbutton.c:511
+#: gtk/gtklinkbutton.c:522
 msgid "Invalid URI"
 msgstr "URI non valido"
 
@@ -2823,40 +2827,40 @@ msgstr ""
 "Contattare l'amministratore di sistema"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:463
+#: gtk/gtkmain.c:464
 msgid "Load additional GTK+ modules"
 msgstr "Carica i moduli GTK+ addizionali"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:464
+#: gtk/gtkmain.c:465
 msgid "MODULES"
 msgstr "MODULI"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:466
+#: gtk/gtkmain.c:467
 msgid "Make all warnings fatal"
 msgstr "Rende tutti i warning critici"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:469
+#: gtk/gtkmain.c:470
 msgid "GTK+ debugging flags to set"
 msgstr "Flag per il debug di GTK+ da attivare"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:472
+#: gtk/gtkmain.c:473
 msgid "GTK+ debugging flags to unset"
 msgstr "Flag per il debug di GTK+ da disattivare"
 
-#: gtk/gtkmain.c:807 gtk/gtkmain.c:1001
+#: gtk/gtkmain.c:808 gtk/gtkmain.c:1002
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Impossibile aprire il display: %s"
 
-#: gtk/gtkmain.c:919
+#: gtk/gtkmain.c:920
 msgid "GTK+ Options"
 msgstr "Opzioni GTK+"
 
-#: gtk/gtkmain.c:919
+#: gtk/gtkmain.c:920
 msgid "Show GTK+ Options"
 msgstr "Mostra le opzioni GTK+"
 
@@ -2865,7 +2869,7 @@ msgstr "Mostra le opzioni GTK+"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:1269
+#: gtk/gtkmain.c:1270
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -2938,27 +2942,27 @@ msgstr ""
 "Impossibile uccidere il processo con PID %d. L'operazione non è implementata."
 
 #. translators: this string is a name for the 'less' command
-#: gtk/gtkmountoperation-x11.c:955
+#: gtk/gtkmountoperation-x11.c:954
 msgid "Terminal Pager"
 msgstr "Pager di terminale"
 
-#: gtk/gtkmountoperation-x11.c:956
+#: gtk/gtkmountoperation-x11.c:955
 msgid "Top Command"
 msgstr "Comando Top"
 
-#: gtk/gtkmountoperation-x11.c:957
+#: gtk/gtkmountoperation-x11.c:956
 msgid "Bourne Again Shell"
 msgstr "Bourne Again Shell"
 
-#: gtk/gtkmountoperation-x11.c:958
+#: gtk/gtkmountoperation-x11.c:957
 msgid "Bourne Shell"
 msgstr "Bourne Shell"
 
-#: gtk/gtkmountoperation-x11.c:959
+#: gtk/gtkmountoperation-x11.c:958
 msgid "Z Shell"
 msgstr "Z Shell"
 
-#: gtk/gtkmountoperation-x11.c:1056
+#: gtk/gtkmountoperation-x11.c:1055
 #, c-format
 msgid "Cannot end process with PID %d: %s"
 msgstr "Impossibile terminare il processo con PID %d: %s"
@@ -3028,195 +3032,196 @@ msgstr "File recenti"
 msgid "Starred"
 msgstr "Preferiti"
 
-#: gtk/gtkplacessidebar.c:1084
+#. TODO: Rename to 'Starred files'
+#: gtk/gtkplacessidebar.c:1085
 msgid "Favorite files"
 msgstr "File preferiti"
 
-#: gtk/gtkplacessidebar.c:1095
+#: gtk/gtkplacessidebar.c:1096
 msgid "Open your personal folder"
 msgstr "Apre la propria cartella personale"
 
-#: gtk/gtkplacessidebar.c:1110
+#: gtk/gtkplacessidebar.c:1111
 msgid "Open the contents of your desktop in a folder"
 msgstr "Apre il contenuto della scrivania in una cartella"
 
-#: gtk/gtkplacessidebar.c:1124
+#: gtk/gtkplacessidebar.c:1125
 msgid "Enter Location"
 msgstr "Inserisci posizione"
 
-#: gtk/gtkplacessidebar.c:1126
+#: gtk/gtkplacessidebar.c:1127
 msgid "Manually enter a location"
 msgstr "Inserisci manualmente una posizione"
 
-#: gtk/gtkplacessidebar.c:1136
+#: gtk/gtkplacessidebar.c:1137
 msgid "Trash"
 msgstr "Cestino"
 
-#: gtk/gtkplacessidebar.c:1138
+#: gtk/gtkplacessidebar.c:1139
 msgid "Open the trash"
 msgstr "Apre il cestino"
 
-#: gtk/gtkplacessidebar.c:1247 gtk/gtkplacessidebar.c:1275
-#: gtk/gtkplacessidebar.c:1483
+#: gtk/gtkplacessidebar.c:1248 gtk/gtkplacessidebar.c:1276
+#: gtk/gtkplacessidebar.c:1484
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "Monta e apre «%s»"
 
-#: gtk/gtkplacessidebar.c:1363
+#: gtk/gtkplacessidebar.c:1364
 msgid "Open the contents of the file system"
 msgstr "Apre il contenuto del file system"
 
-#: gtk/gtkplacessidebar.c:1447
+#: gtk/gtkplacessidebar.c:1448
 msgid "New bookmark"
 msgstr "Nuovo segnalibro"
 
-#: gtk/gtkplacessidebar.c:1449
+#: gtk/gtkplacessidebar.c:1450
 msgid "Add a new bookmark"
 msgstr "Aggiunge un nuovo segnalibro"
 
-#: gtk/gtkplacessidebar.c:1462
+#: gtk/gtkplacessidebar.c:1463
 msgid "Connect to Server"
 msgstr "Connetti al server"
 
-#: gtk/gtkplacessidebar.c:1464
+#: gtk/gtkplacessidebar.c:1465
 msgid "Connect to a network server address"
 msgstr "Connette all'indirizzo di un server di rete"
 
-#: gtk/gtkplacessidebar.c:1526
+#: gtk/gtkplacessidebar.c:1527
 msgid "Other Locations"
 msgstr "Altre posizioni"
 
-#: gtk/gtkplacessidebar.c:1527
+#: gtk/gtkplacessidebar.c:1528
 msgid "Show other locations"
 msgstr "Mostra altre posizioni"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: gtk/gtkplacessidebar.c:2323 gtk/gtkplacessidebar.c:3681
+#: gtk/gtkplacessidebar.c:2324 gtk/gtkplacessidebar.c:3682
 msgid "_Start"
 msgstr "_Avvia"
 
-#: gtk/gtkplacessidebar.c:2324 gtk/gtkplacessidebar.c:3682
+#: gtk/gtkplacessidebar.c:2325 gtk/gtkplacessidebar.c:3683
 msgid "_Stop"
 msgstr "_Ferma"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: gtk/gtkplacessidebar.c:2331
+#: gtk/gtkplacessidebar.c:2332
 msgid "_Power On"
 msgstr "_Accendi"
 
-#: gtk/gtkplacessidebar.c:2332
+#: gtk/gtkplacessidebar.c:2333
 msgid "_Safely Remove Drive"
 msgstr "Rimuovi unità in _sicurezza"
 
-#: gtk/gtkplacessidebar.c:2336
+#: gtk/gtkplacessidebar.c:2337
 msgid "_Connect Drive"
 msgstr "_Connetti unità"
 
-#: gtk/gtkplacessidebar.c:2337
+#: gtk/gtkplacessidebar.c:2338
 msgid "_Disconnect Drive"
 msgstr "_Disconnetti unità"
 
-#: gtk/gtkplacessidebar.c:2341
+#: gtk/gtkplacessidebar.c:2342
 msgid "_Start Multi-disk Device"
 msgstr "_Avvia dispositivo multi-disco"
 
-#: gtk/gtkplacessidebar.c:2342
+#: gtk/gtkplacessidebar.c:2343
 msgid "_Stop Multi-disk Device"
 msgstr "_Ferma dispositivo multi-disco"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: gtk/gtkplacessidebar.c:2347
+#: gtk/gtkplacessidebar.c:2348
 msgid "_Unlock Device"
 msgstr "_Sblocca dispositivo"
 
-#: gtk/gtkplacessidebar.c:2348
+#: gtk/gtkplacessidebar.c:2349
 msgid "_Lock Device"
 msgstr "_Blocca dispositivo"
 
-#: gtk/gtkplacessidebar.c:2386 gtk/gtkplacessidebar.c:3362
+#: gtk/gtkplacessidebar.c:2387 gtk/gtkplacessidebar.c:3363
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "Impossibile avviare «%s»"
 
-#: gtk/gtkplacessidebar.c:2416
+#: gtk/gtkplacessidebar.c:2417
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Impossibile accedere a «%s»"
 
-#: gtk/gtkplacessidebar.c:2634
+#: gtk/gtkplacessidebar.c:2635
 msgid "This name is already taken"
 msgstr "Questo nome è già utilizzato"
 
-#: gtk/gtkplacessidebar.c:2703 gtk/inspector/actions.ui:43
+#: gtk/gtkplacessidebar.c:2704 gtk/inspector/actions.ui:43
 #: gtk/inspector/css-node-tree.ui:39 gtk/inspector/object-tree.ui:110
 #: gtk/ui/gtkfilechooserwidget.ui:189 gtk/ui/gtkfilechooserwidget.ui:500
 msgid "Name"
 msgstr "Nome"
 
-#: gtk/gtkplacessidebar.c:2903
+#: gtk/gtkplacessidebar.c:2904
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "Impossibile smontare «%s»"
 
-#: gtk/gtkplacessidebar.c:3079
+#: gtk/gtkplacessidebar.c:3080
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "Impossibile fermare «%s»"
 
-#: gtk/gtkplacessidebar.c:3108
+#: gtk/gtkplacessidebar.c:3109
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "Impossibile espellere «%s»"
 
-#: gtk/gtkplacessidebar.c:3137 gtk/gtkplacessidebar.c:3166
+#: gtk/gtkplacessidebar.c:3138 gtk/gtkplacessidebar.c:3167
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Impossibile espellere %s"
 
-#: gtk/gtkplacessidebar.c:3314
+#: gtk/gtkplacessidebar.c:3315
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "Impossibile interrogare «%s» per cambiamenti ai supporti"
 
-#: gtk/gtkplacessidebar.c:3598 gtk/gtkplacessidebar.c:3664
-#: gtk/gtkplacesview.c:1640
+#: gtk/gtkplacessidebar.c:3599 gtk/gtkplacessidebar.c:3665
+#: gtk/gtkplacesview.c:1639
 msgid "Open in New _Tab"
 msgstr "Apri in nuova sc_heda"
 
-#: gtk/gtkplacessidebar.c:3604 gtk/gtkplacessidebar.c:3667
-#: gtk/gtkplacesview.c:1651
+#: gtk/gtkplacessidebar.c:3605 gtk/gtkplacessidebar.c:3668
+#: gtk/gtkplacesview.c:1650
 msgid "Open in New _Window"
 msgstr "Apri in nuova _finestra"
 
-#: gtk/gtkplacessidebar.c:3671
+#: gtk/gtkplacessidebar.c:3672
 msgid "_Add Bookmark"
 msgstr "A_ggiungi segnalibro"
 
-#: gtk/gtkplacessidebar.c:3672
+#: gtk/gtkplacessidebar.c:3673
 msgid "_Remove"
 msgstr "_Rimuovi"
 
-#: gtk/gtkplacessidebar.c:3673
+#: gtk/gtkplacessidebar.c:3674
 msgid "Rename…"
 msgstr "Rinomina…"
 
-#: gtk/gtkplacessidebar.c:3677 gtk/gtkplacesview.c:1685
+#: gtk/gtkplacessidebar.c:3678 gtk/gtkplacesview.c:1684
 msgid "_Mount"
 msgstr "_Monta"
 
-#: gtk/gtkplacessidebar.c:3678 gtk/gtkplacesview.c:1675
+#: gtk/gtkplacessidebar.c:3679 gtk/gtkplacesview.c:1674
 msgid "_Unmount"
 msgstr "_Smonta"
 
-#: gtk/gtkplacessidebar.c:3679
+#: gtk/gtkplacessidebar.c:3680
 msgid "_Eject"
 msgstr "_Espelli"
 
-#: gtk/gtkplacessidebar.c:3680
+#: gtk/gtkplacessidebar.c:3681
 msgid "_Detect Media"
 msgstr "_Rileva supporto"
 
-#: gtk/gtkplacessidebar.c:4126 gtk/gtkplacesview.c:1118
+#: gtk/gtkplacessidebar.c:4127 gtk/gtkplacesview.c:1118
 msgid "Computer"
 msgstr "Computer"
 
@@ -3229,42 +3234,42 @@ msgid "No network locations found"
 msgstr "Non è stata trovata alcuna posizione di rete"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1229 gtk/gtkplacesview.c:1304
+#: gtk/gtkplacesview.c:1228 gtk/gtkplacesview.c:1303
 msgid "Unable to access location"
 msgstr "Impossibile accedere alla posizione"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1247 gtk/ui/gtkplacesview.ui:449
+#: gtk/gtkplacesview.c:1246 gtk/ui/gtkplacesview.ui:449
 msgid "Con_nect"
 msgstr "C_onnetti"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1367
+#: gtk/gtkplacesview.c:1366
 msgid "Unable to unmount volume"
 msgstr "Impossibile smontare il volume"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1467
+#: gtk/gtkplacesview.c:1466
 msgid "Cance_l"
 msgstr "A_nnulla"
 
-#: gtk/gtkplacesview.c:1675
+#: gtk/gtkplacesview.c:1674
 msgid "_Disconnect"
 msgstr "_Disconnetti"
 
-#: gtk/gtkplacesview.c:1685
+#: gtk/gtkplacesview.c:1684
 msgid "_Connect"
 msgstr "C_onnetti"
 
-#: gtk/gtkplacesview.c:1826
+#: gtk/gtkplacesview.c:1825
 msgid "Unable to get remote server location"
 msgstr "Impossibile recuperare la posizione del server"
 
-#: gtk/gtkplacesview.c:1965 gtk/gtkplacesview.c:1974
+#: gtk/gtkplacesview.c:2013 gtk/gtkplacesview.c:2022
 msgid "Networks"
 msgstr "Reti"
 
-#: gtk/gtkplacesview.c:1965 gtk/gtkplacesview.c:1974
+#: gtk/gtkplacesview.c:2013 gtk/gtkplacesview.c:2022
 msgid "On This Computer"
 msgstr "Su questo computer"
 
@@ -3920,24 +3925,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:9206
+#: gtk/gtkwindow.c:9213
 msgid "Move"
 msgstr "Sposta"
 
-#: gtk/gtkwindow.c:9214
+#: gtk/gtkwindow.c:9221
 msgid "Resize"
 msgstr "Ridimensiona"
 
-#: gtk/gtkwindow.c:9245
+#: gtk/gtkwindow.c:9252
 msgid "Always on Top"
 msgstr "Sempre in primo piano"
 
-#: gtk/gtkwindow.c:12679
+#: gtk/gtkwindow.c:12686
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Usare GTK+ Inspector?"
 
-#: gtk/gtkwindow.c:12681
+#: gtk/gtkwindow.c:12688
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3948,7 +3953,7 @@ msgstr ""
 "modificare qualsiasi applicazione GTK+. L'utilizzo di questo strumento "
 "potrebbe causare la chiusura inaspettata dell'applicazione."
 
-#: gtk/gtkwindow.c:12686
+#: gtk/gtkwindow.c:12693
 msgid "Don't show this message again"
 msgstr "Non mostrare più questo messaggio"
 
@@ -5722,15 +5727,15 @@ msgstr "Selezione carattere"
 msgid "Search font name"
 msgstr "Cerca nome tipo carattere"
 
-#: gtk/ui/gtkfontchooserwidget.ui:97
+#: gtk/ui/gtkfontchooserwidget.ui:98
 msgid "Font Family"
 msgstr "Famiglia carattere"
 
-#: gtk/ui/gtkfontchooserwidget.ui:119
+#: gtk/ui/gtkfontchooserwidget.ui:120
 msgid "Preview text"
 msgstr "Testo di anteprima"
 
-#: gtk/ui/gtkfontchooserwidget.ui:186
+#: gtk/ui/gtkfontchooserwidget.ui:187
 msgid "No Fonts Found"
 msgstr "Nessun carattere trovato"
 
@@ -6279,6 +6284,12 @@ msgstr "Tigrino-Etiopico (EZ+)"
 msgctxt "input method menu"
 msgid "Vietnamese (VIQR)"
 msgstr "Vietnamita (VIQR)"
+
+#. ID
+#: modules/input/imwayland.c:81
+msgctxt "input method menu"
+msgid "Wayland"
+msgstr "Wayland"
 
 #. ID
 #: modules/input/imxim.c:26
