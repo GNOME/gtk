@@ -1075,6 +1075,13 @@ GDK_AVAILABLE_IN_ALL
 void                    gtk_widget_snapshot_child       (GtkWidget   *widget,
                                                          GtkWidget   *child,
                                                          GtkSnapshot *snapshot);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_widget_set_parent_tag       (GtkWidget      *widget,
+                                                         gpointer        parent_tag,
+                                                         GDestroyNotify  destroy_notify);
+GDK_AVAILABLE_IN_ALL
+gpointer                gtk_widget_get_parent_tag       (GtkWidget *widget);
+
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWidget, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkRequisition, gtk_requisition_free)

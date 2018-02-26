@@ -3196,14 +3196,12 @@ gtk_widget_new (GType        type,
 void
 gtk_widget_unparent (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GObjectNotifyQueue *nqueue;
   GtkWidget *toplevel;
   GtkWidget *old_parent;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  priv = widget->priv;
 
   if (priv->parent == NULL)
     return;
@@ -3272,6 +3270,13 @@ gtk_widget_unparent (GtkWidget *widget)
   priv->parent = NULL;
   priv->prev_sibling = NULL;
   priv->next_sibling = NULL;
+
+  if (priv->parent_tag != NULL && priv->parent_tag_destroy_notify != NULL)
+    {
+      priv->parent_tag_destroy_notify (priv->parent_tag);
+      priv->parent_tag = NULL;
+      priv->parent_tag_destroy_notify = NULL;
+    }
 
   /* parent may no longer expand if the removed
    * child was expand=TRUE and could therefore
@@ -14356,4 +14361,60 @@ gtk_widget_get_height (GtkWidget *widget)
          margin.top  - margin.bottom -
          border.top  - border.bottom -
          padding.top - padding.bottom;
+}
+
+/**
+ * gtk_widget_set_parent_tag:
+ * @widget: a #GtkWidget
+ * @parent_tag: the parent data
+ * @destroy_notify: (nullable): Function to be called when @parent_tag is to be destroyed
+ *   or %NULL if the data should not get automatically freed
+ *
+ * Sets a parent tag on @widget. This is a single pointer that the parent widget of @widget
+ * can use to save additional data. A parent tag may only be used by the immediate parent widget
+ * and is thus invalid if no parent exists anymore.
+ *
+ * To ensure the relationship between the parent widget and the parent tag,
+ * gtk_widget_set_parent_tag() will check that the widget's parent is non-%NULL, i.e.
+ * this function can only be used after a gtk_widget_set_parent() call.
+ *
+ * As soon as @widget gets removed from the parent, @destroy_notify will be called on its parent tag.
+ * Afterwards, all gtk_widget_get_parent_tag() calls will return %NULL until a new parent tag gets set.
+ *
+ * If there is already a parent tag set when this function is called, its destroy notify will be called.
+ */
+void
+gtk_widget_set_parent_tag (GtkWidget      *widget,
+                           gpointer        parent_tag,
+                           GDestroyNotify  destroy_notify)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (gtk_widget_get_parent (widget) != NULL);
+
+  if (priv->parent_tag  && priv->parent_tag_destroy_notify)
+    priv->parent_tag_destroy_notify (priv->parent_tag);
+
+  priv->parent_tag = parent_tag;
+  priv->parent_tag_destroy_notify = destroy_notify;
+}
+
+/**
+ * gtk_widget_get_parent_tag:
+ * @widget: a #GtkWidget
+ *
+ * Returns the parent tag as set by gtk_widget_set_parent_tag().
+ *
+ * Returns: (nullable): The widget's parent tag,
+ *   or %NULL if no parent tag has been set
+ */
+gpointer
+gtk_widget_get_parent_tag (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  return priv->parent_tag;
 }

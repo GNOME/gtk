@@ -165,6 +165,9 @@ struct _GtkWidgetPrivate
 
   /* Pointer cursor */
   GdkCursor *cursor;
+
+  gpointer parent_tag;
+  GDestroyNotify parent_tag_destroy_notify;
 };
 
 GtkCssNode *  gtk_widget_get_css_node       (GtkWidget *widget);
