@@ -724,6 +724,7 @@ gdk_paintable_get_flags
 gdk_paintable_get_intrinsic_width
 gdk_paintable_get_intrinsic_height
 gdk_paintable_get_intrinsic_aspect_ratio
+gdk_paintable_compute_concrete_size
 gdk_paintable_invalidate_contents
 gdk_paintable_invalidate_size
 <SECTION>
