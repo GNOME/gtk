@@ -386,3 +386,151 @@ gdk_paintable_invalidate_size (GdkPaintable *paintable)
 
   g_signal_emit (paintable, signals[INVALIDATE_SIZE], 0);
 }
+
+/**
+ * gdk_paintable_compute_concrete_size:
+ * @paintable: a #GdkPaintable
+ * @specified_width: the width @paintable could be drawn into or
+ *     0.0 if unknown
+ * @specified_height: the height @paintable could be drawn into or
+ *     0.0 if unknown
+ * @default_width: the width @paintable would be drawn into if
+ *     no other constraints were given
+ * @default_height: the height @paintable would be drawn into if
+ *     no other constraints were given
+ * @concrete_width: (out): will be set to the concrete width
+ *     computed.
+ * @concrete_height: (out): will be set to the concrete height
+ *     computed.
+ *
+ * Applies the sizing algorithm outlined in 
+ * https://drafts.csswg.org/css-images-3/#default-sizing
+ * to the given @paintable. See that link for more details.
+ *
+ * It is not necessary to call this function when both @specified_width
+ * and @specified_height are known, but it is useful to call this
+ * function in GtkWidget:measure implementations to compute the
+ * other dimension when only one dimension is given.
+ */
+void
+gdk_paintable_compute_concrete_size (GdkPaintable *paintable,
+                                     double        specified_width,
+                                     double        specified_height,
+                                     double        default_width,
+                                     double        default_height,
+                                     double       *concrete_width,
+                                     double       *concrete_height)
+{
+  double image_width, image_height, image_aspect;
+
+  g_return_if_fail (GDK_IS_PAINTABLE (paintable));
+  g_return_if_fail (specified_width >= 0);
+  g_return_if_fail (specified_height >= 0);
+  g_return_if_fail (default_width > 0);
+  g_return_if_fail (default_height > 0);
+  g_return_if_fail (concrete_width != NULL);
+  g_return_if_fail (concrete_height != NULL);
+
+  /* If the specified size is a definite width and height,
+   * the concrete object size is given that width and height.
+   */
+  if (specified_width && specified_height)
+    {
+      *concrete_width = specified_width;
+      *concrete_height = specified_height;
+      return;
+    }
+
+  image_width  = gdk_paintable_get_intrinsic_width (paintable);
+  image_height = gdk_paintable_get_intrinsic_height (paintable);
+  image_aspect = gdk_paintable_get_intrinsic_aspect_ratio (paintable);
+
+  /* If the specified size has neither a definite width nor height,
+   * and has no additional contraints, the dimensions of the concrete
+   * object size are calculated as follows:
+   */
+  if (specified_width == 0.0 && specified_height == 0.0)
+    {
+      /* If the object has only an intrinsic aspect ratio,
+       * the concrete object size must have that aspect ratio,
+       * and additionally be as large as possible without either
+       * its height or width exceeding the height or width of the
+       * default object size.
+       */
+      if (image_aspect > 0 && image_width == 0 && image_height == 0)
+        {
+          if (image_aspect * default_height > default_width)
+            {
+              *concrete_width = default_width;
+              *concrete_height = default_width / image_aspect;
+            }
+          else
+            {
+              *concrete_width = default_height * image_aspect;
+              *concrete_height = default_height;
+            }
+        }
+      else
+        {
+          /* Otherwise, the width and height of the concrete object
+           * size is the same as the object's intrinsic width and
+           * intrinsic height, if they exist.
+           * If the concrete object size is still missing a width or
+           * height, and the object has an intrinsic aspect ratio,
+           * the missing dimension is calculated from the present
+           * dimension and the intrinsic aspect ratio.
+           * Otherwise, the missing dimension is taken from the default
+           * object size. 
+           */
+          if (image_width)
+            *concrete_width = image_width;
+          else if (image_aspect)
+            *concrete_width = image_height * image_aspect;
+          else
+            *concrete_width = default_width;
+
+          if (image_height)
+            *concrete_height = image_height;
+          else if (image_aspect)
+            *concrete_height = image_width / image_aspect;
+          else
+            *concrete_height = default_height;
+        }
+
+      return;
+    }
+
+  /* If the specified size has only a width or height, but not both,
+   * then the concrete object size is given that specified width or height.
+   * The other dimension is calculated as follows:
+   * If the object has an intrinsic aspect ratio, the missing dimension of
+   * the concrete object size is calculated using the intrinsic aspect-ratio
+   * and the present dimension.
+   * Otherwise, if the missing dimension is present in the object's intrinsic
+   * dimensions, the missing dimension is taken from the object's intrinsic
+   * dimensions.
+   * Otherwise, the missing dimension of the concrete object size is taken
+   * from the default object size. 
+   */
+  if (specified_width)
+    {
+      *concrete_width = specified_width;
+      if (image_aspect)
+        *concrete_height = specified_width / image_aspect;
+      else if (image_height)
+        *concrete_height = image_height;
+      else
+        *concrete_height = default_height;
+    }
+  else
+    {
+      *concrete_height = specified_height;
+      if (image_aspect)
+        *concrete_width = specified_height * image_aspect;
+      else if (image_width)
+        *concrete_width = image_width;
+      else
+        *concrete_width = default_width;
+    }
+}
+
