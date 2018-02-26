@@ -37,7 +37,8 @@ struct _GtkMediaStreamFFMpeg
 {
   GtkMediaStream parent_instance;
 
-  char *filename;
+  GFile *file;
+  GInputStream *input_stream;
 
   AVFormatContext *format_ctx;
   AVCodecContext *codec_ctx;
@@ -367,7 +368,8 @@ gtk_media_stream_ffmpeg_seek (GtkMediaStream *stream,
 static void 
 gtk_media_stream_ffmpeg_clear (GtkMediaStreamFFMpeg *video)
 {
-  g_clear_pointer (&video->filename, g_free);
+  g_clear_object (&video->file);
+  g_clear_object (&video->input_stream);
 
   g_clear_pointer (&video->sws_ctx, sws_freeContext);
   g_clear_pointer (&video->codec_ctx, avcodec_close);
@@ -410,14 +412,111 @@ gtk_media_stream_ffmpeg_init (GtkMediaStreamFFMpeg *video)
   video->stream_id = -1;
 }
 
+static int
+gtk_media_stream_ffmpeg_read_packet_cb (void    *data,
+                                        uint8_t *buf,
+                                        int      buf_size)
+{
+  GtkMediaStreamFFMpeg *video = data;
+  gssize n_read;
+
+  n_read = g_input_stream_read (video->input_stream,
+                                buf,
+                                buf_size,
+                                NULL,
+                                NULL);
+
+  if (n_read == 0)
+    return AVERROR_EOF;
+
+  return n_read;
+}
+
+static int64_t
+gtk_media_stream_ffmpeg_seek_cb (void    *data,
+                                 int64_t  offset,
+                                 int      whence)
+{
+  GtkMediaStreamFFMpeg *video = data;
+  GSeekType seek_type;
+  gboolean result;
+
+  switch (whence)
+    {
+    case SEEK_SET:
+      seek_type = G_SEEK_SET;
+      break;
+
+    case SEEK_CUR:
+      seek_type = G_SEEK_CUR;
+      break;
+
+    case SEEK_END:
+      seek_type = G_SEEK_END;
+      break;
+
+    case AVSEEK_SIZE:
+      /* FIXME: Handle size querying */
+      return -1;
+
+    default:
+      g_assert_not_reached ();
+      return -1;
+    }
+
+  result = g_seekable_seek (G_SEEKABLE (video->input_stream),
+                            offset,
+                            seek_type,
+                            NULL,
+                            NULL);
+  if (!result)
+    return -1;
+
+  return g_seekable_tell (G_SEEKABLE (video->input_stream));
+}
+
+static AVIOContext *
+gtk_media_stream_ffmpeg_create_io_context (GtkMediaStreamFFMpeg *video)
+{
+  AVIOContext *result;
+  int buffer_size = 4096; /* it's what everybody else uses... */
+  unsigned char *buffer;
+
+  buffer = av_malloc (buffer_size);
+  if (buffer == NULL)
+    return NULL;
+
+  result = avio_alloc_context (buffer,
+                               buffer_size,
+                               AVIO_FLAG_READ,
+                               video,
+                               gtk_media_stream_ffmpeg_read_packet_cb,
+                               NULL,
+                               G_IS_SEEKABLE (video->input_stream)
+                               ? gtk_media_stream_ffmpeg_seek_cb
+                               : NULL);
+
+  result->buf_ptr = result->buf_end;
+  result->write_flag = 0;
+
+  return result;
+}
+
 static void
-gtk_media_stream_ffmpeg_open_ffmpeg (GtkMediaStreamFFMpeg *video)
+gtk_media_stream_ffmpeg_open (GtkMediaStreamFFMpeg *video)
 {
   AVStream *stream;
   AVCodec *codec;
   int errnum;
 
-  errnum = avformat_open_input (&video->format_ctx, video->filename, NULL, NULL);
+  video->format_ctx = avformat_alloc_context ();
+  video->format_ctx->pb = gtk_media_stream_ffmpeg_create_io_context (video);
+  if (video->format_ctx->pb == NULL)
+    {
+      gtk_media_stream_ffmpeg_set_error (video, "Not enough memory");
+      return;
+    }
+  errnum = avformat_open_input (&video->format_ctx, NULL, NULL, NULL);
   if (errnum != 0)
     {
       gtk_media_stream_ffmpeg_set_ffmpeg_error (video, errnum);
@@ -486,35 +585,35 @@ gtk_media_stream_ffmpeg_open_ffmpeg (GtkMediaStreamFFMpeg *video)
 }
 
 static void
-gtk_media_stream_ffmpeg_open (GtkMediaStreamFFMpeg *video)
+gtk_media_stream_ffmpeg_set_file (GtkMediaStreamFFMpeg *video,
+                                  GFile                *file)
 {
-  if (video->filename == NULL)
-    return;
+  GError *error = NULL;
 
-  gtk_media_stream_ffmpeg_open_ffmpeg (video);
-}
-
-static void
-gtk_media_stream_ffmpeg_set_filename (GtkMediaStreamFFMpeg *video,
-                                      const char           *filename)
-{
   gtk_media_stream_ffmpeg_clear (video);
 
-  video->filename = g_strdup (filename);
+  video->file = g_object_ref (file);
+  video->input_stream = G_INPUT_STREAM (g_file_read (file, NULL, &error));
+  if (video->input_stream == NULL)
+    {
+      gtk_media_stream_ffmpeg_set_error (video, error->message);
+      g_error_free (error);
+      return;
+    }
 
   gtk_media_stream_ffmpeg_open (video);
 }
 
 GtkMediaStream *
-gtk_media_stream_ffmpeg_new_for_filename (const char *filename)
+gtk_media_stream_ffmpeg_new_for_file (GFile *file)
 {
   GtkMediaStreamFFMpeg *video;
 
-  g_return_val_if_fail (filename != NULL, NULL);
+  g_return_val_if_fail (G_IS_FILE (file), NULL);
 
   video = g_object_new (GTK_TYPE_MEDIA_STREAM_FFMPEG, NULL);
 
-  gtk_media_stream_ffmpeg_set_filename (video, filename);
+  gtk_media_stream_ffmpeg_set_file (video, file);
 
   return GTK_MEDIA_STREAM (video);
 }

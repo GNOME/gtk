@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GtkMediaStreamFFMpeg, gtk_media_stream_ffmpeg, GTK, MEDIA_STREAM_FFMPEG, GtkMediaStream)
 
-GtkMediaStream *gtk_media_stream_ffmpeg_new_for_filename        (const char     *filename);
+GtkMediaStream *gtk_media_stream_ffmpeg_new_for_file            (GFile          *file);
 
 G_END_DECLS
 
