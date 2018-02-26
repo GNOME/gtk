@@ -3525,8 +3525,6 @@ gtk_entry_event (GtkWidget *widget,
   gdouble x, y;
   gint i = 0;
 
-  gdk_event_get_coords (event, &x, &y);
-
   if (gdk_event_get_event_type (event) == GDK_FOCUS_CHANGE)
     {
       gboolean focus_in;
@@ -3548,6 +3546,9 @@ gtk_entry_event (GtkWidget *widget,
       priv->mouse_cursor_obscured = FALSE;
       return GDK_EVENT_PROPAGATE;
     }
+
+  if (!gdk_event_get_coords (event, &x, &y))
+    return GDK_EVENT_PROPAGATE;
 
   for (i = 0; i < MAX_ICONS; i++)
     {
