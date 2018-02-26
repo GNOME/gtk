@@ -50,6 +50,8 @@ struct _GtkMediaStreamClass
 
 GDK_AVAILABLE_IN_ALL
 GtkMediaStream *        gtk_media_stream_new_for_filename       (const char     *filename);
+GDK_AVAILABLE_IN_ALL
+GtkMediaStream *        gtk_media_stream_new_for_file           (GFile          *file);
 
 GDK_AVAILABLE_IN_ALL
 gboolean                gtk_media_stream_has_audio              (GtkMediaStream *self);
