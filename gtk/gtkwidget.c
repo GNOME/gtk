@@ -12727,11 +12727,9 @@ _gtk_widget_peek_style_context (GtkWidget *widget)
 GtkStyleContext *
 gtk_widget_get_style_context (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
-  priv = widget->priv;
 
   if (G_UNLIKELY (priv->context == NULL))
     {
@@ -12757,7 +12755,7 @@ gtk_widget_get_style_context (GtkWidget *widget)
                                       _gtk_widget_get_style_context (priv->parent));
     }
 
-  return widget->priv->context;
+  return priv->context;
 }
 
 /**
