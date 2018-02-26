@@ -50,6 +50,7 @@ tests = [
   ['displayclose'],
   ['revealer-size'],
   ['widgetorder'],
+  ['widget-invariants'],
 ]
 
 test_cargs = []
