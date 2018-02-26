@@ -3182,7 +3182,7 @@ gtk_entry_size_allocate (GtkWidget           *widget,
     {
       EntryIconInfo *icon_info = priv->icons[i];
       GtkAllocation icon_alloc;
-      gint width, height;
+      int width;
 
       if (!icon_info)
         continue;
@@ -3191,11 +3191,6 @@ gtk_entry_size_allocate (GtkWidget           *widget,
                           GTK_ORIENTATION_HORIZONTAL,
                           -1,
                           NULL, &width,
-                          NULL, NULL);
-      gtk_widget_measure (icon_info->widget,
-                          GTK_ORIENTATION_VERTICAL,
-                          -1,
-                          NULL, &height,
                           NULL, NULL);
 
       if ((gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL && i == GTK_ENTRY_ICON_PRIMARY) ||
@@ -3208,9 +3203,9 @@ gtk_entry_size_allocate (GtkWidget           *widget,
           icon_alloc.x = allocation->x + priv->text_x;
           priv->text_x += width;
         }
-      icon_alloc.y = allocation->y + (allocation->height - height) / 2;
+      icon_alloc.y = 0;
       icon_alloc.width = width;
-      icon_alloc.height = height;
+      icon_alloc.height = allocation->height;
       priv->text_width -= width;
 
       gtk_widget_size_allocate (icon_info->widget, &icon_alloc, baseline, &child_clip);
