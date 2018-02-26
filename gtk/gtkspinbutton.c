@@ -59,7 +59,6 @@
 #include <string.h>
 #include <locale.h>
 
-#define MIN_SPIN_BUTTON_WIDTH 30
 #define MAX_TIMER_CALLS       5
 #define EPSILON               1e-10
 #define MAX_DIGITS            20
