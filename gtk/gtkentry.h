@@ -250,14 +250,6 @@ GDK_AVAILABLE_IN_ALL
 gint       gtk_entry_text_index_to_layout_index (GtkEntry      *entry,
                                                  gint           text_index);
 
-/* For scrolling cursor appropriately
- */
-GDK_AVAILABLE_IN_ALL
-void           gtk_entry_set_cursor_hadjustment (GtkEntry      *entry,
-                                                 GtkAdjustment *adjustment);
-GDK_AVAILABLE_IN_ALL
-GtkAdjustment* gtk_entry_get_cursor_hadjustment (GtkEntry      *entry);
-
 /* Progress API
  */
 GDK_AVAILABLE_IN_ALL
