@@ -634,8 +634,23 @@ gtk_media_stream_seek_failed (GtkMediaStream *self)
 GtkMediaStream *
 gtk_media_stream_new_for_filename (const char *filename)
 {
+  GtkMediaStream *result;
+  GFile *file;
+
   g_return_val_if_fail (filename != NULL, NULL);
 
-  return gtk_media_stream_ffmpeg_new_for_filename (filename);
+  file = g_file_new_for_path (filename);
+  result = gtk_media_stream_ffmpeg_new_for_file (file);
+  g_object_unref (file);
+
+  return result;
+}
+
+GtkMediaStream *
+gtk_media_stream_new_for_file (GFile *file)
+{
+  g_return_val_if_fail (G_IS_FILE (file), NULL);
+
+  return gtk_media_stream_ffmpeg_new_for_file (file);
 }
 
