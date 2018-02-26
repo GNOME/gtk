@@ -720,28 +720,6 @@ scroll_controller_scroll (GtkEventControllerScroll *Scroll,
   gtk_spin_button_real_spin (spin, -dy * gtk_adjustment_get_step_increment (priv->adjustment));
 }
 
-static void
-update_node_ordering (GtkSpinButton *spin_button)
-{
-  GtkSpinButtonPrivate *priv = spin_button->priv;
-
-  g_assert (priv->orientation != gtk_orientable_get_orientation (GTK_ORIENTABLE (priv->box)));
-
-  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-    {
-      /* Current orientation of the box is vertical! */
-      gtk_box_reorder_child (GTK_BOX (priv->box), priv->entry, 0);
-      gtk_box_reorder_child (GTK_BOX (priv->box), priv->down_button, 1);
-    }
-  else
-    {
-      /* Current orientation of the box is horizontal! */
-      gtk_box_reorder_child (GTK_BOX (priv->box), priv->up_button, 0);
-    }
-
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->box), priv->orientation);
-}
-
 static gboolean
 gtk_spin_button_stop_spinning (GtkSpinButton *spin)
 {
@@ -1032,10 +1010,21 @@ gtk_spin_button_set_orientation (GtkSpinButton  *spin,
            gtk_entry_get_alignment (entry) == 0.5)
     gtk_entry_set_alignment (entry, 0.0);
 
-  update_node_ordering (spin);
+  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      /* Current orientation of the box is vertical! */
+      gtk_box_reorder_child (GTK_BOX (priv->box), priv->entry, 0);
+      gtk_box_reorder_child (GTK_BOX (priv->box), priv->down_button, 1);
+    }
+  else
+    {
+      /* Current orientation of the box is horizontal! */
+      gtk_box_reorder_child (GTK_BOX (priv->box), priv->up_button, 0);
+    }
+
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->box), priv->orientation);
 
   g_object_notify (G_OBJECT (spin), "orientation");
-  gtk_widget_queue_resize (GTK_WIDGET (spin));
 }
 
 static gchar *
