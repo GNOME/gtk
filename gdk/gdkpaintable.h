@@ -126,6 +126,14 @@ int             gdk_paintable_get_intrinsic_height      (GdkPaintable           
 GDK_AVAILABLE_IN_ALL
 double          gdk_paintable_get_intrinsic_aspect_ratio(GdkPaintable           *paintable);
 
+GDK_AVAILABLE_IN_ALL
+void            gdk_paintable_compute_concrete_size     (GdkPaintable           *paintable,
+                                                         double                  specified_width,
+                                                         double                  specified_height,
+                                                         double                  default_width,
+                                                         double                  default_height,
+                                                         double                 *concrete_width,
+                                                         double                 *concrete_height);
 /* for implementations only */
 GDK_AVAILABLE_IN_ALL
 void            gdk_paintable_invalidate_contents       (GdkPaintable           *paintable);
