@@ -41,6 +41,9 @@
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #mesondefine HAVE_DLFCN_H
 
+/* Have the ffmpeg library */
+#mesondefine HAVE_FFMPEG
+
 /* Define to 1 if you have the <ftw.h> header file. */
 #mesondefine HAVE_FTW_H
 

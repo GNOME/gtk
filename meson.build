@@ -589,6 +589,18 @@ if cloudproviders_enabled
   endif
 endif
 
+ffmpeg_enabled = get_option('ffmpeg')
+if ffmpeg_enabled
+  libavfilter_dep = dependency('libavfilter', version: '>= 6.47.100', required: true)
+  libavformat_dep = dependency('libavformat', version: '>= 57.41.100', required: true)
+  libavcodec_dep = dependency('libavcodec', version: '>= 57.48.101', required: true)
+  libavutil_dep = dependency('libavutil', version: '>= 55.28.100', required: true)
+  libswscale_dep = dependency('libswscale', version: '>= 4.6.100', required: true)
+  ffmpeg_deps = [libavfilter_dep, libavformat_dep, libavcodec_dep, libavutil_dep, libswscale_dep]
+  cdata.set('HAVE_FFMPEG', 1)
+endif
+
+
 subdir('modules/input')
 subdir('gdk')
 subdir('gsk')
