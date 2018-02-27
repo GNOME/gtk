@@ -17,6 +17,8 @@ option('xinerama', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto
   description : 'Enable support for the Xinerama extension')
 option('cloudproviders', type: 'boolean', value: false,
   description : 'Enable the cloudproviders support')
+option('ffmpeg', type: 'boolean', value: false,
+  description : 'Enable ffmpeg video demos')
 
 # Print backends
 option('print-backends', type : 'string', value : 'cups,papi',
