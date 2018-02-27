@@ -204,6 +204,10 @@ foreach backend : ['broadway', 'quartz', 'wayland', 'win32', 'x11']
   endif
 endforeach
 
+if gdk_backends.length() == 0
+  error('No backends enabled')
+endif
+
 # FIXME: might have to add '-xobjective-c' to c_args for quartz backend?
 libgdk = static_library('gdk',
   sources: [gdk_sources, gdk_backends_gen_headers, gdkconfig],
