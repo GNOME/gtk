@@ -599,6 +599,18 @@ if get_option('nomedia')
   media_backends += ['none']
 endif
 
+ffmpeg_enabled = get_option('ffmpeg')
+if ffmpeg_enabled
+  libavfilter_dep = dependency('libavfilter', version: '>= 6.47.100', required: true)
+  libavformat_dep = dependency('libavformat', version: '>= 57.41.100', required: true)
+  libavcodec_dep = dependency('libavcodec', version: '>= 57.48.101', required: true)
+  libavutil_dep = dependency('libavutil', version: '>= 55.28.100', required: true)
+  libswscale_dep = dependency('libswscale', version: '>= 4.6.100', required: true)
+  ffmpeg_deps = [libavfilter_dep, libavformat_dep, libavcodec_dep, libavutil_dep, libswscale_dep]
+  cdata.set('HAVE_FFMPEG', 1)
+  media_backends += ['ffmpeg']
+endif
+
 if media_backends.length() == 0
   error('No media backends enabled. If you are sure about that, enable the "nomedia" option.')
 endif
