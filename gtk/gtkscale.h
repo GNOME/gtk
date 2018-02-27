@@ -49,10 +49,7 @@ typedef struct _GtkScaleClass         GtkScaleClass;
 
 struct _GtkScale
 {
-  GtkRange range;
-
-  /*< private >*/
-  GtkScalePrivate *priv;
+  GtkRange parent_instance;
 };
 
 struct _GtkScaleClass

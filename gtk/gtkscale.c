@@ -286,21 +286,23 @@ static void
 gtk_scale_notify (GObject    *object,
                   GParamSpec *pspec)
 {
+  GtkScale *scale = GTK_SCALE (object);
+  GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
+
   if (strcmp (pspec->name, "inverted") == 0)
     {
-      GtkScale *scale = GTK_SCALE (object);
       GtkScaleMark *mark;
       GSList *m;
       gint i, n;
       gdouble *values;
 
-      scale->priv->marks = g_slist_sort_with_data (scale->priv->marks,
-                                                   compare_marks,
-                                                   GINT_TO_POINTER (gtk_range_get_inverted (GTK_RANGE (scale))));
+      priv->marks = g_slist_sort_with_data (priv->marks,
+                                            compare_marks,
+                                            GINT_TO_POINTER (gtk_range_get_inverted (GTK_RANGE (scale))));
 
-      n = g_slist_length (scale->priv->marks);
+      n = g_slist_length (priv->marks);
       values = g_new (gdouble, n);
-      for (m = scale->priv->marks, i = 0; m; m = m->next, i++)
+      for (m = priv->marks, i = 0; m; m = m->next, i++)
         {
           mark = m->data;
           values[i] = mark->value;
@@ -312,8 +314,7 @@ gtk_scale_notify (GObject    *object,
     }
   else if (strcmp (pspec->name, "adjustment"))
     {
-      GtkScale *scale = GTK_SCALE (object);
-      if (scale->priv->value_widget)
+      if (priv->value_widget)
         update_label_request (scale);
     }
 
@@ -325,7 +326,7 @@ static void
 gtk_scale_allocate_value (GtkScale      *scale,
                           GtkAllocation *out_clip)
 {
-  GtkScalePrivate *priv = scale->priv;
+  GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
   GtkWidget *widget = GTK_WIDGET (scale);
   GtkRange *range = GTK_RANGE (widget);
   GtkWidget *slider_widget;
@@ -486,7 +487,7 @@ gtk_scale_allocate_marks (GtkGizmo            *gizmo,
 {
   GtkWidget *widget = GTK_WIDGET (gizmo);
   GtkScale *scale = GTK_SCALE (gtk_widget_get_parent (widget));
-  GtkScalePrivate *priv = scale->priv;
+  GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
   GtkOrientation orientation;
   int *marks;
   int i;
@@ -544,7 +545,7 @@ gtk_scale_size_allocate (GtkWidget           *widget,
                          GtkAllocation       *out_clip)
 {
   GtkScale *scale = GTK_SCALE (widget);
-  GtkScalePrivate *priv = scale->priv;
+  GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
   GtkAllocation marks_clip, range_rect, marks_rect;
   GtkOrientation orientation;
 
@@ -868,11 +869,8 @@ gtk_scale_class_init (GtkScaleClass *class)
 static void
 gtk_scale_init (GtkScale *scale)
 {
-  GtkScalePrivate *priv;
+  GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
   GtkRange *range = GTK_RANGE (scale);
-
-  scale->priv = gtk_scale_get_instance_private (scale);
-  priv = scale->priv;
 
   priv->value_pos = GTK_POS_TOP;
   priv->digits = 1;
@@ -926,7 +924,7 @@ gtk_scale_get_property (GObject      *object,
 			GParamSpec   *pspec)
 {
   GtkScale *scale = GTK_SCALE (object);
-  GtkScalePrivate *priv = scale->priv;
+  GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
 
   switch (prop_id)
     {
@@ -1043,12 +1041,11 @@ void
 gtk_scale_set_digits (GtkScale *scale,
 		      gint      digits)
 {
-  GtkScalePrivate *priv;
+  GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
   GtkRange *range;
 
   g_return_if_fail (GTK_IS_SCALE (scale));
 
-  priv = scale->priv;
   range = GTK_RANGE (scale);
   
   digits = CLAMP (digits, -1, MAX_DIGITS);
@@ -1076,15 +1073,17 @@ gtk_scale_set_digits (GtkScale *scale,
 gint
 gtk_scale_get_digits (GtkScale *scale)
 {
+  GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
+
   g_return_val_if_fail (GTK_IS_SCALE (scale), -1);
 
-  return scale->priv->digits;
+  return priv->digits;
 }
 
 static void
 update_value_position (GtkScale *scale)
 {
-  GtkScalePrivate *priv = scale->priv;
+  GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
   GtkStyleContext *context;
 
   if (!priv->value_widget)
@@ -1116,12 +1115,11 @@ void
 gtk_scale_set_draw_value (GtkScale *scale,
 			  gboolean  draw_value)
 {
-  GtkScalePrivate *priv;
+  GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
   GtkWidget *widget;
 
   g_return_if_fail (GTK_IS_SCALE (scale));
 
-  priv = scale->priv;
   widget = GTK_WIDGET (scale);
 
   draw_value = draw_value != FALSE;
@@ -1175,9 +1173,11 @@ gtk_scale_set_draw_value (GtkScale *scale,
 gboolean
 gtk_scale_get_draw_value (GtkScale *scale)
 {
+  GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
+
   g_return_val_if_fail (GTK_IS_SCALE (scale), FALSE);
 
-  return scale->priv->draw_value;
+  return priv->draw_value;
 }
 
 /**
@@ -1234,12 +1234,10 @@ void
 gtk_scale_set_value_pos (GtkScale        *scale,
 			 GtkPositionType  pos)
 {
-  GtkScalePrivate *priv;
+  GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
   GtkWidget *widget;
 
   g_return_if_fail (GTK_IS_SCALE (scale));
-
-  priv = scale->priv;
 
   if (priv->value_pos != pos)
     {
@@ -1266,20 +1264,19 @@ gtk_scale_set_value_pos (GtkScale        *scale,
 GtkPositionType
 gtk_scale_get_value_pos (GtkScale *scale)
 {
+  GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
+
   g_return_val_if_fail (GTK_IS_SCALE (scale), 0);
 
-  return scale->priv->value_pos;
+  return priv->value_pos;
 }
 
 static void
 gtk_scale_get_range_border (GtkRange  *range,
                             GtkBorder *border)
 {
-  GtkScalePrivate *priv;
-  GtkScale *scale;
-
-  scale = GTK_SCALE (range);
-  priv = scale->priv;
+  GtkScale *scale = GTK_SCALE (range);
+  GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
 
   border->left = 0;
   border->right = 0;
@@ -1377,7 +1374,7 @@ gtk_scale_get_range_size_request (GtkRange       *range,
                                   gint           *minimum,
                                   gint           *natural)
 {
-  GtkScalePrivate *priv = GTK_SCALE (range)->priv;
+  GtkScalePrivate *priv = gtk_scale_get_instance_private (GTK_SCALE (range));
 
   /* Ensure the range requests enough size for our value */
   if (priv->value_widget)
@@ -1432,7 +1429,7 @@ gtk_scale_measure_marks (GtkGizmo       *gizmo,
 {
   GtkWidget *widget = GTK_WIDGET (gizmo);
   GtkScale *scale = GTK_SCALE (gtk_widget_get_parent (widget));;
-  GtkScalePrivate *priv = scale->priv;
+  GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
   GtkOrientation scale_orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (scale));
   GSList *m;
 
@@ -1475,7 +1472,7 @@ gtk_scale_measure (GtkWidget      *widget,
                    int            *natural_baseline)
 {
   GtkScale *scale = GTK_SCALE (widget);
-  GtkScalePrivate *priv = scale->priv;
+  GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
 
   GTK_WIDGET_CLASS (gtk_scale_parent_class)->measure (widget,
                                                       orientation,
@@ -1510,7 +1507,7 @@ gtk_scale_snapshot (GtkWidget   *widget,
                     GtkSnapshot *snapshot)
 {
   GtkScale *scale = GTK_SCALE (widget);
-  GtkScalePrivate *priv = scale->priv;
+  GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
 
   if (priv->top_marks_widget)
     gtk_widget_snapshot_child (widget, priv->top_marks_widget, snapshot);
@@ -1529,7 +1526,7 @@ gtk_scale_real_get_layout_offsets (GtkScale *scale,
                                    gint     *x,
                                    gint     *y)
 {
-  GtkScalePrivate *priv = scale->priv;
+  GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
   GtkAllocation value_alloc;
 
   if (!priv->value_widget)
@@ -1571,6 +1568,7 @@ gtk_scale_format_value (GtkScale *scale,
                         gdouble   value)
 {
   gchar *fmt = NULL;
+  GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
 
   g_signal_emit (scale, signals[FORMAT_VALUE], 0, value, &fmt);
 
@@ -1578,8 +1576,8 @@ gtk_scale_format_value (GtkScale *scale,
     return fmt;
   else
     {
-      fmt = g_strdup_printf ("%0.*f", scale->priv->digits, value);
-      return weed_out_neg_zero (fmt, scale->priv->digits);
+      fmt = g_strdup_printf ("%0.*f", priv->digits, value);
+      return weed_out_neg_zero (fmt, priv->digits);
     }
 }
 
@@ -1587,7 +1585,7 @@ static void
 gtk_scale_finalize (GObject *object)
 {
   GtkScale *scale = GTK_SCALE (object);
-  GtkScalePrivate *priv = scale->priv;
+  GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
 
   gtk_scale_clear_marks (scale);
 
@@ -1611,10 +1609,12 @@ gtk_scale_finalize (GObject *object)
 PangoLayout *
 gtk_scale_get_layout (GtkScale *scale)
 {
+  GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
+
   g_return_val_if_fail (GTK_IS_SCALE (scale), NULL);
 
-  if (scale->priv->value_widget)
-    return gtk_label_get_layout (GTK_LABEL (scale->priv->value_widget));
+  if (priv->value_widget)
+    return gtk_label_get_layout (GTK_LABEL (priv->value_widget));
 
   return NULL;
 }
@@ -1676,12 +1676,10 @@ gtk_scale_mark_free (gpointer data)
 void
 gtk_scale_clear_marks (GtkScale *scale)
 {
-  GtkScalePrivate *priv;
+  GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
   GtkStyleContext *context;
 
   g_return_if_fail (GTK_IS_SCALE (scale));
-
-  priv = scale->priv;
 
   g_slist_free_full (priv->marks, gtk_scale_mark_free);
   priv->marks = NULL;
@@ -1736,7 +1734,7 @@ gtk_scale_add_mark (GtkScale        *scale,
                     const gchar     *markup)
 {
   GtkWidget *widget;
-  GtkScalePrivate *priv;
+  GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
   GtkScaleMark *mark;
   GSList *m;
   gdouble *values;
@@ -1746,7 +1744,6 @@ gtk_scale_add_mark (GtkScale        *scale,
 
   g_return_if_fail (GTK_IS_SCALE (scale));
 
-  priv = scale->priv;
   widget = GTK_WIDGET (scale);
 
   mark = g_new0 (GtkScaleMark, 1);
