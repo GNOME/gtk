@@ -47,6 +47,7 @@ demos = files([
   'overlay2.c',
   'paintable.c',
   'paintable_animated.c',
+  'paintable_mediastream.c',
   'panes.c',
   'pickers.c',
   'pixbufs.c',
