@@ -123,25 +123,16 @@ gtk_icon_helper_init (GtkIconHelper *self,
   g_signal_connect_swapped (owner, "notify::scale-factor", G_CALLBACK (gtk_icon_helper_invalidate), self);
 }
 
-static void
-ensure_icon_size (GtkIconHelper *self,
-		  gint *width_out,
-		  gint *height_out)
+static int
+get_default_size (GtkIconHelper *self)
 {
-  gint width, height;
+  GtkCssStyle *style;
 
   if (self->pixel_size != -1)
-    {
-      width = height = self->pixel_size;
-    }
-  else
-    {
-      GtkCssStyle *style = gtk_css_node_get_style (self->node);
-      width = height = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_SIZE), 100);
-    }
+    return self->pixel_size;
 
-  *width_out = width;
-  *height_out = height;
+  style = gtk_css_node_get_style (self->node);
+  return _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_SIZE), 100);
 }
 
 static GtkIconLookupFlags
@@ -296,7 +287,7 @@ ensure_paintable_for_gicon (GtkIconHelper    *self,
     (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_THEME));
   flags = get_icon_lookup_flags (self, style, dir);
 
-  ensure_icon_size (self, &width, &height);
+  width = height = get_default_size (self);
 
   info = gtk_icon_theme_lookup_by_gicon_for_scale (icon_theme,
                                                    gicon,
@@ -425,7 +416,7 @@ get_size_for_paintable (GtkIconHelper *self,
     }
   
   if (width == 0 || height == 0)
-    ensure_icon_size (self, &width, &height);
+    width = height = get_default_size (self);
 
   *width_out = width;
   *height_out = height;
@@ -454,7 +445,7 @@ _gtk_icon_helper_get_size (GtkIconHelper *self,
     case GTK_IMAGE_ICON_NAME:
     case GTK_IMAGE_GICON:
       if (self->pixel_size != -1 || self->force_scale_pixbuf)
-        ensure_icon_size (self, &width, &height);
+        width = height = get_default_size (self);
       break;
 
     case GTK_IMAGE_TEXTURE:
@@ -489,7 +480,7 @@ _gtk_icon_helper_get_size (GtkIconHelper *self,
         }
       else
         {
-          ensure_icon_size (self, &width, &height);
+          width = height = get_default_size (self);
         }
     }
 
