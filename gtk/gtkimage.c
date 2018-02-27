@@ -1293,21 +1293,27 @@ gtk_image_snapshot (GtkWidget   *widget,
 
   width = gtk_widget_get_width (widget);
   height = gtk_widget_get_height (widget);
-  y = 0;
 
-  _gtk_icon_helper_get_size (&priv->icon_helper, &w, &h);
-  x = (width - w) / 2;
-
-  baseline = gtk_widget_get_allocated_baseline (widget);
-
-  if (baseline == -1)
-    y += floor(height - h) / 2;
+  if (_gtk_icon_helper_get_storage_type (&priv->icon_helper) == GTK_IMAGE_PAINTABLE)
+    {
+      gtk_icon_helper_snapshot (&priv->icon_helper, snapshot, width, height);
+    }
   else
-    y += CLAMP (baseline - h * gtk_image_get_baseline_align (image), 0, height - h);
+    {
+      _gtk_icon_helper_get_size (&priv->icon_helper, &w, &h);
+      x = (width - w) / 2;
 
-  gtk_snapshot_offset (snapshot, x, y);
-  gtk_icon_helper_snapshot (&priv->icon_helper, snapshot);
-  gtk_snapshot_offset (snapshot, -x, -y);
+      baseline = gtk_widget_get_allocated_baseline (widget);
+
+      if (baseline == -1)
+        y = floor(height - h) / 2;
+      else
+        y = CLAMP (baseline - h * gtk_image_get_baseline_align (image), 0, height - h);
+
+      gtk_snapshot_offset (snapshot, x, y);
+      gtk_icon_helper_snapshot (&priv->icon_helper, snapshot, w, h);
+      gtk_snapshot_offset (snapshot, -x, -y);
+    }
 }
 
 static void
@@ -1429,23 +1435,20 @@ gtk_image_measure (GtkWidget      *widget,
                    int           *natural_baseline)
 {
   GtkImagePrivate *priv = gtk_image_get_instance_private (GTK_IMAGE (widget));
-  gint width, height;
   float baseline_align;
 
-  _gtk_icon_helper_get_size (&priv->icon_helper, &width, &height);
+  gtk_icon_helper_measure (&priv->icon_helper,
+                           orientation,
+                           for_size,
+                           minimum, natural);
 
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    {
-      *minimum = *natural = width;
-    }
-  else
+  if (orientation == GTK_ORIENTATION_VERTICAL)
     {
       baseline_align = gtk_image_get_baseline_align (GTK_IMAGE (widget));
-      *minimum = *natural = height;
       if (minimum_baseline)
-        *minimum_baseline = height * baseline_align;
+        *minimum_baseline = *minimum * baseline_align;
       if (natural_baseline)
-        *natural_baseline = height * baseline_align;
+        *natural_baseline = *natural * baseline_align;
     }
 }
 
