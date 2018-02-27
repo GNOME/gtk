@@ -10,5 +10,6 @@ void            gtk_nuclear_snapshot           (GtkSnapshot     *snapshot,
 
 GdkPaintable *  gtk_nuclear_icon_new            (double          rotation);
 GdkPaintable *  gtk_nuclear_animation_new       (void);
+GtkMediaStream *gtk_nuclear_media_stream_new    (void);
 
 #endif /* __PAINTABLE_H__ */
