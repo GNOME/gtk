@@ -582,7 +582,7 @@ gtk_cell_renderer_pixbuf_snapshot (GtkCellRenderer      *cell,
     }
 
   gtk_snapshot_offset (snapshot, pix_rect.x, pix_rect.y);
-  gtk_icon_helper_snapshot (&icon_helper, snapshot);
+  gtk_icon_helper_snapshot (&icon_helper, snapshot, pix_rect.width, pix_rect.height);
   gtk_snapshot_offset (snapshot, - pix_rect.x, - pix_rect.y);
 
   gtk_icon_helper_destroy (&icon_helper);
