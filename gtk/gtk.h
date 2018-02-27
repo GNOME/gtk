@@ -137,6 +137,7 @@
 #include <gtk/gtkliststore.h>
 #include <gtk/gtklockbutton.h>
 #include <gtk/gtkmain.h>
+#include <gtk/gtkmediastream.h>
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkmenubar.h>
 #include <gtk/gtkmenubutton.h>
