@@ -4336,6 +4336,7 @@ gsk_blur_node_new (GskRenderNode *child,
                    double         radius)
 {
   GskBlurNode *self;
+  float clip_radius = gsk_cairo_blur_compute_pixels (radius);
 
   g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
 
@@ -4345,6 +4346,8 @@ gsk_blur_node_new (GskRenderNode *child,
   self->radius = radius;
 
   graphene_rect_init_from_rect (&self->render_node.bounds, &child->bounds);
+  graphene_rect_inset (&self->render_node.bounds,
+                       - clip_radius, - clip_radius);
 
   return &self->render_node;
 }
