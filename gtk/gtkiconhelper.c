@@ -385,6 +385,67 @@ gtk_icon_helper_ensure_paintable (GtkIconHelper *self)
   self->texture_is_symbolic = symbolic;
 }
 
+void
+gtk_icon_helper_measure (GtkIconHelper *self,
+                         GtkOrientation orientation,
+                         int            for_size,
+                         int           *minimum,
+                         int           *natural)
+{
+  switch (gtk_image_definition_get_storage_type (self->def))
+    {
+    case GTK_IMAGE_PAINTABLE:
+      {
+        double min_width, min_height, nat_width, nat_height;
+        int default_size = get_default_size (self);
+
+        gdk_paintable_compute_concrete_size (gtk_image_definition_get_paintable (self->def),
+                                             0, 0,
+                                             default_size, default_size,
+                                             &min_width, &min_height);
+
+        if (orientation == GTK_ORIENTATION_HORIZONTAL)
+          {
+            gdk_paintable_compute_concrete_size (gtk_image_definition_get_paintable (self->def),
+                                                 0,
+                                                 for_size < 0 ? 0 : for_size,
+                                                 default_size, default_size,
+                                                 &nat_width, &nat_height);
+            *minimum = ceil (min_width);
+            *natural = ceil (nat_width);
+          }
+        else
+          {
+            gdk_paintable_compute_concrete_size (gtk_image_definition_get_paintable (self->def),
+                                                 for_size < 0 ? 0 : for_size,
+                                                 0,
+                                                 default_size, default_size,
+                                                 &nat_width, &nat_height);
+            *minimum = ceil (min_height);
+            *natural = ceil (nat_height);
+          }
+      }
+      break;
+
+    case GTK_IMAGE_TEXTURE:
+    case GTK_IMAGE_SURFACE:
+    case GTK_IMAGE_ICON_NAME:
+    case GTK_IMAGE_GICON:
+    case GTK_IMAGE_EMPTY:
+    default:
+      {
+        int width, height;
+
+        _gtk_icon_helper_get_size (self, &width, &height);
+        if (orientation == GTK_ORIENTATION_HORIZONTAL)
+          *minimum = *natural = width;
+        else
+          *minimum = *natural = height;
+      }
+      break;
+    }
+}
+
 static void
 get_size_for_paintable (GtkIconHelper *self,
                         GdkPaintable  *paintable,
@@ -617,18 +678,17 @@ _gtk_icon_helper_get_icon_name (GtkIconHelper *self)
 
 void
 gtk_icon_helper_snapshot (GtkIconHelper *self,
-                          GtkSnapshot   *snapshot)
+                          GtkSnapshot   *snapshot,
+                          double         width,
+                          double         height)
 {
   GtkCssStyle *style;
-  gint width, height;
 
   style = gtk_css_node_get_style (self->node);
 
   gtk_icon_helper_ensure_paintable (self);
   if (self->paintable == NULL)
     return;
-
-  _gtk_icon_helper_get_size (self, &width, &height);
 
   gtk_css_style_snapshot_icon_paintable (style,
                                          snapshot,
