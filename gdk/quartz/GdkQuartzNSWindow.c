@@ -16,6 +16,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
 #import "GdkQuartzNSWindow.h"
 #include "gdkquartzwindow.h"
 #include "gdkdnd-quartz.h"
