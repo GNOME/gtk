@@ -52,6 +52,8 @@ struct _GtkEmojiChooser
   GtkWidget *stack;
   GtkWidget *scrolled_window;
 
+  int emoji_max_width;
+
   EmojiSection recent;
   EmojiSection people;
   EmojiSection body;
@@ -363,7 +365,6 @@ add_emoji (GtkWidget    *box,
   int i;
   PangoLayout *layout;
   PangoRectangle rect;
-  int width;
 
   codes = g_variant_get_child_value (item, 0);
   for (i = 0; i < g_variant_n_children (codes); i++)
@@ -379,7 +380,7 @@ add_emoji (GtkWidget    *box,
   g_variant_unref (codes);
   p[0] = 0;
 
-  label = gtk_label_new ("🙂");
+  label = gtk_label_new (text);
   attrs = pango_attr_list_new ();
   pango_attr_list_insert (attrs, pango_attr_scale_new (PANGO_SCALE_X_LARGE));
   gtk_label_set_attributes (GTK_LABEL (label), attrs);
@@ -387,14 +388,9 @@ add_emoji (GtkWidget    *box,
 
   layout = gtk_label_get_layout (GTK_LABEL (label));
   pango_layout_get_extents (layout, &rect, NULL);
-  width = rect.width;
-
-  gtk_label_set_text (GTK_LABEL (label), text);
-  layout = gtk_label_get_layout (GTK_LABEL (label));
-  pango_layout_get_extents (layout, &rect, NULL);
 
   /* Check for fallback rendering that generates too wide items */
-  if (rect.width >= 2 * width)
+  if (rect.width >= 2 * chooser->emoji_max_width)
     {
       gtk_widget_destroy (label);
       return;
@@ -640,6 +636,26 @@ gtk_emoji_chooser_init (GtkEmojiChooser *chooser)
   chooser->settings = g_settings_new ("org.gtk.Settings.EmojiChooser");
 
   gtk_widget_init_template (GTK_WIDGET (chooser));
+
+  /* Get a reasonable maximum width for an emoji. We do this to
+   * skip overly wide fallback rendering for certain emojis the
+   * font does not contain and therefore end up being rendered
+   * as multiply glyphs. */
+  {
+    PangoLayout *layout = gtk_widget_create_pango_layout (GTK_WIDGET (chooser), "🙂");
+    PangoAttrList *attrs;
+    PangoRectangle rect;
+
+    attrs = pango_attr_list_new ();
+    pango_attr_list_insert (attrs, pango_attr_scale_new (PANGO_SCALE_X_LARGE));
+    pango_layout_set_attributes (layout, attrs);
+    pango_attr_list_unref (attrs);
+
+    pango_layout_get_extents (layout, &rect, NULL);
+    chooser->emoji_max_width = rect.width;
+
+    g_object_unref (layout);
+  }
 
   chooser->recent_long_press = gtk_gesture_long_press_new (chooser->recent.box);
   g_signal_connect (chooser->recent_long_press, "pressed", G_CALLBACK (long_pressed_cb), chooser);
