@@ -176,11 +176,17 @@ gtk_media_file_init (GtkMediaFile *self)
 {
 }
 
+#include "gtkmediafileffmpegprivate.h"
+
 static GType
 gtk_media_file_get_impl_type (void)
 {
+#ifdef HAVE_FFMPEG
+  return GTK_TYPE_MEDIA_FILE_FFMPEG;
+#else
   g_assert_not_reached ();
   return G_TYPE_INVALID;
+#endif
 }
 
 /**
