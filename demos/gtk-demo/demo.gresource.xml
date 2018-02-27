@@ -183,6 +183,7 @@
     <file>overlay2.c</file>
     <file>pagesetup.c</file>
     <file>paintable.c</file>
+    <file>paintable_animated.c</file>
     <file>panes.c</file>
     <file>pickers.c</file>
     <file>pixbufs.c</file>
