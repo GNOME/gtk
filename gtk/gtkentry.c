@@ -213,6 +213,7 @@ struct _GtkEntryPrivate
 
   GtkGesture    *drag_gesture;
   GtkGesture    *multipress_gesture;
+  GtkEventController *motion_controller;
 
   GtkWidget     *progress_widget;
   GtkCssNode    *selection_node;
@@ -2430,6 +2431,28 @@ gtk_entry_get_property (GObject         *object,
     }
 }
 
+static void
+set_text_cursor (GtkWidget *widget)
+{
+  gtk_widget_set_cursor_from_name (widget, "text");
+}
+
+static void
+entry_motion_cb (GtkEventControllerMotion *event_controller,
+                 double                    x,
+                 double                    y,
+                 gpointer                  user_data)
+{
+  GtkEntry *entry = user_data;
+  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+
+  if (priv->mouse_cursor_obscured)
+    {
+      set_text_cursor (GTK_WIDGET (entry));
+      priv->mouse_cursor_obscured = FALSE;
+    }
+}
+
 static gunichar
 find_invisible_char (GtkWidget *widget)
 {
@@ -2534,6 +2557,10 @@ gtk_entry_init (GtkEntry *entry)
                     G_CALLBACK (gtk_entry_multipress_gesture_pressed), entry);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture), 0);
   gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (priv->multipress_gesture), TRUE);
+
+  priv->motion_controller = gtk_event_controller_motion_new (GTK_WIDGET (entry));
+  g_signal_connect (priv->motion_controller, "motion",
+                    G_CALLBACK (entry_motion_cb), entry);
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (entry));
   for (i = 0; i < 2; i++)
@@ -2742,6 +2769,7 @@ gtk_entry_finalize (GObject *object)
 
   g_clear_object (&priv->drag_gesture);
   g_clear_object (&priv->multipress_gesture);
+  g_clear_object (&priv->motion_controller);
 
   if (priv->tabs)
     pango_tab_array_free (priv->tabs);
@@ -2836,12 +2864,6 @@ _gtk_entry_get_display_text (GtkEntry *entry,
 
       return g_string_free (str, FALSE);
     }
-}
-
-static void
-set_text_cursor (GtkWidget *widget)
-{
-  gtk_widget_set_cursor_from_name (widget, "text");
 }
 
 static void
@@ -3536,14 +3558,6 @@ gtk_entry_event (GtkWidget *widget,
       else
         gtk_entry_focus_out (widget);
 
-      return GDK_EVENT_PROPAGATE;
-    }
-
-  if (gdk_event_get_event_type (event) == GDK_MOTION_NOTIFY &&
-      priv->mouse_cursor_obscured)
-    {
-      set_text_cursor (widget);
-      priv->mouse_cursor_obscured = FALSE;
       return GDK_EVENT_PROPAGATE;
     }
 
