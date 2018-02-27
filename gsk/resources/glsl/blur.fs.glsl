@@ -14,7 +14,7 @@ vec4 blur_pixel (in vec2 uv) {
   // XXX The magic value here is GAUSSIAN_SCALE_FACTOR from gskcairoblur.c
   float radius = u_blur_radius  * 2.30348;
 
-  int half_radius = int(radius / 2.0);
+  int half_radius = max(int(radius / 2.0), 1);
 
   for (int y = -half_radius; y < half_radius; y ++) {
     float fy = Gaussian (radius / 2.0, float(y));
