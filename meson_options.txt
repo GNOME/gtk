@@ -13,6 +13,8 @@ option('quartz-backend', type: 'boolean', value: true,
 # Media backends
 option('nomedia', type: 'boolean', value: true,
   description : 'Set to confirm that no media backend should be enabled')
+option('ffmpeg', type: 'boolean', value: false,
+  description : 'Enable ffmpeg media backend')
 
 # Optional dependencies
 option('vulkan', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
