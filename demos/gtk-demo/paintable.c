@@ -13,6 +13,8 @@
 
 #include <gtk/gtk.h>
 
+#include "paintable.h"
+
 static GtkWidget *window = NULL;
 
 /* First, add the boilerplate for the object itself.
@@ -21,14 +23,16 @@ static GtkWidget *window = NULL;
 #define GTK_TYPE_NUCLEAR_ICON (gtk_nuclear_icon_get_type ())
 G_DECLARE_FINAL_TYPE (GtkNuclearIcon, gtk_nuclear_icon, GTK, NUCLEAR_ICON, GObject)
 
-GdkPaintable *gtk_nuclear_icon_new (void);
-
-/* Declare the struct. We have no custom data, so it's very
- * bare.
- */
+/* Declare the struct. */
 struct _GtkNuclearIcon
 {
   GObject parent_instance;
+
+  /* We store this rotation value here.
+   * We are not doing with it here, but it will come in
+   * very useful in the followup demos.
+   */
+  double rotation;
 };
 
 struct _GtkNuclearIconClass
@@ -36,20 +40,19 @@ struct _GtkNuclearIconClass
   GObjectClass parent_class;
 };
 
-/* Here, we implement the functionality required by the GdkPaintable interface */
-static void
-gtk_nuclear_icon_snapshot (GdkPaintable *paintable,
-                           GdkSnapshot  *snapshot,
-                           double        width,
-                           double        height)
+/* This is the function that draws the actual icon.
+ * We make it a custom function and define it in the paintable.h header
+ * so that it can be called from all the other demos, too.
+ */
+void
+gtk_nuclear_snapshot (GtkSnapshot *snapshot,
+                      double       width,
+                      double       height,
+                      double       rotation)
 {
 #define RADIUS 0.3
   cairo_t *cr;
   double size;
-
-  /* The snapshot function is the only function we need to implement.
-   * It does the actual drawing of the paintable.
-   */
 
   gtk_snapshot_append_color (snapshot,
                              &(GdkRGBA) { 0.9, 0.75, 0.15, 1.0 },
@@ -64,6 +67,7 @@ gtk_nuclear_icon_snapshot (GdkPaintable *paintable,
                                   "Radioactive Icon");
   cairo_translate (cr, width / 2.0, height / 2.0);
   cairo_scale (cr, size, size);
+  cairo_rotate (cr, rotation);
 
   cairo_arc (cr, 0, 0, 0.1, - G_PI, G_PI);
   cairo_fill (cr);
@@ -74,6 +78,24 @@ gtk_nuclear_icon_snapshot (GdkPaintable *paintable,
   cairo_stroke (cr);
 
   cairo_destroy (cr);
+}
+
+/* Here, we implement the functionality required by the GdkPaintable interface */
+static void
+gtk_nuclear_icon_snapshot (GdkPaintable *paintable,
+                           GdkSnapshot  *snapshot,
+                           double        width,
+                           double        height)
+{
+  GtkNuclearIcon *nuclear = GTK_NUCLEAR_ICON (paintable);
+
+  /* The snapshot function is the only function we need to implement.
+   * It does the actual drawing of the paintable.
+   */
+
+  gtk_nuclear_snapshot (snapshot,
+                        width, height,
+                        nuclear->rotation);
 }
 
 static GdkPaintableFlags
@@ -113,11 +135,19 @@ gtk_nuclear_icon_init (GtkNuclearIcon *nuclear)
 {
 }
 
-/* And finally, we add the simple constructor we declared in the header. */
+/* And finally, we add a simple constructor.
+ * It is declared in the header so that the other examples
+ * can use it.
+ */
 GdkPaintable *
-gtk_nuclear_icon_new (void)
+gtk_nuclear_icon_new (double rotation)
 {
-  return g_object_new (GTK_TYPE_NUCLEAR_ICON, NULL);
+  GtkNuclearIcon *nuclear;
+
+  nuclear = g_object_new (GTK_TYPE_NUCLEAR_ICON, NULL);
+  nuclear->rotation = rotation;
+
+  return GDK_PAINTABLE (nuclear);
 }
 
 GtkWidget *
@@ -134,7 +164,7 @@ do_paintable (GtkWidget *do_widget)
       gtk_window_set_title (GTK_WINDOW (window), "Nuclear Icon");
       gtk_window_set_default_size (GTK_WINDOW (window), 300, 200);
 
-      nuclear = gtk_nuclear_icon_new ();
+      nuclear = gtk_nuclear_icon_new (0.0);
       image = gtk_image_new_from_paintable (nuclear);
       gtk_container_add (GTK_CONTAINER (window), image);
       g_object_unref (nuclear);
