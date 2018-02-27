@@ -411,7 +411,6 @@ static void   gtk_entry_dispose              (GObject          *object);
 static void   gtk_entry_destroy              (GtkWidget        *widget);
 static void   gtk_entry_realize              (GtkWidget        *widget);
 static void   gtk_entry_unrealize            (GtkWidget        *widget);
-static void   gtk_entry_map                  (GtkWidget        *widget);
 static void   gtk_entry_unmap                (GtkWidget        *widget);
 static void   gtk_entry_size_allocate        (GtkWidget           *widget,
                                               const GtkAllocation *allocation,
@@ -793,7 +792,6 @@ gtk_entry_class_init (GtkEntryClass *class)
   gobject_class->get_property = gtk_entry_get_property;
 
   widget_class->destroy = gtk_entry_destroy;
-  widget_class->map = gtk_entry_map;
   widget_class->unmap = gtk_entry_unmap;
   widget_class->realize = gtk_entry_realize;
   widget_class->unrealize = gtk_entry_unrealize;
@@ -2572,6 +2570,8 @@ gtk_entry_init (GtkEntry *entry)
       gtk_css_node_set_state (priv->undershoot_node[i], gtk_css_node_get_state (widget_node) & ~GTK_STATE_FLAG_DROP_ACTIVE);
       g_object_unref (priv->undershoot_node[i]);
     }
+
+  set_text_cursor (GTK_WIDGET (entry));
 }
 
 static void
@@ -2867,35 +2867,6 @@ _gtk_entry_get_display_text (GtkEntry *entry,
 }
 
 static void
-update_cursors (GtkWidget *widget)
-{
-  GtkEntry *entry = GTK_ENTRY (widget);
-  GtkEntryPrivate *priv = entry->priv;
-  EntryIconInfo *icon_info = NULL;
-  gint i;
-
-  for (i = 0; i < MAX_ICONS; i++)
-    {
-      if ((icon_info = priv->icons[i]) != NULL)
-        {
-          /* Set the cursor explicitly to the default one */
-          if (gtk_widget_is_sensitive (widget) &&
-              (gtk_widget_get_sensitive (icon_info->widget) ||
-               (icon_info->nonactivatable && icon_info->target_list == NULL)))
-            {
-              gtk_widget_set_cursor_from_name (icon_info->widget, "default");
-            }
-          else
-            {
-              gtk_widget_set_cursor (icon_info->widget, NULL);
-            }
-        }
-    }
-
-  set_text_cursor (widget);
-}
-
-static void
 update_icon_style (GtkWidget            *widget,
                    GtkEntryIconPosition  icon_pos)
 {
@@ -2986,20 +2957,13 @@ construct_icon_info (GtkWidget            *widget,
   priv->icons[icon_pos] = icon_info;
 
   icon_info->widget = gtk_image_new ();
+  gtk_widget_set_cursor_from_name (icon_info->widget, "default");
   gtk_widget_set_parent (icon_info->widget, widget);
 
   update_icon_style (widget, icon_pos);
   update_node_ordering (entry);
 
   return icon_info;
-}
-
-static void
-gtk_entry_map (GtkWidget *widget)
-{
-  GTK_WIDGET_CLASS (gtk_entry_parent_class)->map (widget);
-
-  update_cursors (widget);
 }
 
 static void
@@ -4338,10 +4302,7 @@ gtk_entry_state_flags_changed (GtkWidget     *widget,
   GtkEntryPrivate *priv = entry->priv;
 
   if (gtk_widget_get_realized (widget))
-    {
-      priv->mouse_cursor_obscured = FALSE;
-      update_cursors (widget);
-    }
+    priv->mouse_cursor_obscured = FALSE;
 
   if (!gtk_widget_is_sensitive (widget))
     {
@@ -7670,9 +7631,6 @@ gtk_entry_set_icon_activatable (GtkEntry             *entry,
     {
       icon_info->nonactivatable = !activatable;
 
-      if (gtk_widget_get_realized (GTK_WIDGET (entry)))
-        update_cursors (GTK_WIDGET (entry));
-
       g_object_notify_by_pspec (G_OBJECT (entry),
                                 entry_props[icon_pos == GTK_ENTRY_ICON_PRIMARY
                                             ? PROP_ACTIVATABLE_PRIMARY
@@ -7829,9 +7787,6 @@ gtk_entry_set_icon_sensitive (GtkEntry             *entry,
       gtk_widget_set_sensitive (icon_info->widget, sensitive);
 
       icon_info->pressed = FALSE;
-
-      if (gtk_widget_get_realized (GTK_WIDGET (entry)))
-        update_cursors (GTK_WIDGET (entry));
 
       g_object_notify_by_pspec (G_OBJECT (entry),
                                 entry_props[icon_pos == GTK_ENTRY_ICON_PRIMARY
