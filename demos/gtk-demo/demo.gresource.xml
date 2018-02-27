@@ -183,6 +183,7 @@
     <file>pagesetup.c</file>
     <file>paintable.c</file>
     <file>paintable_animated.c</file>
+    <file>paintable_mediastream.c</file>
     <file>panes.c</file>
     <file>pickers.c</file>
     <file>pixbufs.c</file>
