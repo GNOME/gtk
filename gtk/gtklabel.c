@@ -3335,50 +3335,46 @@ static void
 gtk_label_ensure_layout (GtkLabel *label)
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-  GtkWidget *widget;
+  PangoAlignment align;
   gboolean rtl;
 
-  widget = GTK_WIDGET (label);
+  if (priv->layout)
+    return;
 
-  rtl = _gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
+  align = PANGO_ALIGN_LEFT; /* Quiet gcc */
+  rtl = _gtk_widget_get_direction (GTK_WIDGET (label)) == GTK_TEXT_DIR_RTL;
+  priv->layout = gtk_widget_create_pango_layout (GTK_WIDGET (label), priv->text);
 
-  if (!priv->layout)
+  gtk_label_update_layout_attributes (label);
+
+  switch (priv->jtype)
     {
-      PangoAlignment align = PANGO_ALIGN_LEFT; /* Quiet gcc */
-
-      priv->layout = gtk_widget_create_pango_layout (widget, priv->text);
-
-      gtk_label_update_layout_attributes (label);
-
-      switch (priv->jtype)
-	{
-	case GTK_JUSTIFY_LEFT:
-	  align = rtl ? PANGO_ALIGN_RIGHT : PANGO_ALIGN_LEFT;
-	  break;
-	case GTK_JUSTIFY_RIGHT:
-	  align = rtl ? PANGO_ALIGN_LEFT : PANGO_ALIGN_RIGHT;
-	  break;
-	case GTK_JUSTIFY_CENTER:
-	  align = PANGO_ALIGN_CENTER;
-	  break;
-	case GTK_JUSTIFY_FILL:
-	  align = rtl ? PANGO_ALIGN_RIGHT : PANGO_ALIGN_LEFT;
-	  pango_layout_set_justify (priv->layout, TRUE);
-	  break;
-	default:
-	  g_assert_not_reached();
-	}
-
-      pango_layout_set_alignment (priv->layout, align);
-      pango_layout_set_ellipsize (priv->layout, priv->ellipsize);
-      pango_layout_set_wrap (priv->layout, priv->wrap_mode);
-      pango_layout_set_single_paragraph_mode (priv->layout, priv->single_line_mode);
-      if (priv->lines > 0)
-        pango_layout_set_height (priv->layout, - priv->lines);
-
-      if (priv->ellipsize || priv->wrap)
-        pango_layout_set_width (priv->layout, gtk_widget_get_width (GTK_WIDGET (label)) * PANGO_SCALE);
+    case GTK_JUSTIFY_LEFT:
+      align = rtl ? PANGO_ALIGN_RIGHT : PANGO_ALIGN_LEFT;
+      break;
+    case GTK_JUSTIFY_RIGHT:
+      align = rtl ? PANGO_ALIGN_LEFT : PANGO_ALIGN_RIGHT;
+      break;
+    case GTK_JUSTIFY_CENTER:
+      align = PANGO_ALIGN_CENTER;
+      break;
+    case GTK_JUSTIFY_FILL:
+      align = rtl ? PANGO_ALIGN_RIGHT : PANGO_ALIGN_LEFT;
+      pango_layout_set_justify (priv->layout, TRUE);
+      break;
+    default:
+      g_assert_not_reached();
     }
+
+  pango_layout_set_alignment (priv->layout, align);
+  pango_layout_set_ellipsize (priv->layout, priv->ellipsize);
+  pango_layout_set_wrap (priv->layout, priv->wrap_mode);
+  pango_layout_set_single_paragraph_mode (priv->layout, priv->single_line_mode);
+  if (priv->lines > 0)
+    pango_layout_set_height (priv->layout, - priv->lines);
+
+  if (priv->ellipsize || priv->wrap)
+    pango_layout_set_width (priv->layout, gtk_widget_get_width (GTK_WIDGET (label)) * PANGO_SCALE);
 }
 
 static GtkSizeRequestMode
