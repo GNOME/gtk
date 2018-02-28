@@ -98,6 +98,41 @@ gtk_css_image_cross_fade_equal (GtkCssImage *image1,
          _gtk_css_image_equal (cross_fade1->end, cross_fade2->end);
 }
 
+static gboolean
+gtk_css_image_cross_fade_is_dynamic (GtkCssImage *image)
+{
+  GtkCssImageCrossFade *cross_fade = GTK_CSS_IMAGE_CROSS_FADE (image);
+
+  return (cross_fade->start && gtk_css_image_is_dynamic (cross_fade->start))
+      || (cross_fade->end && gtk_css_image_is_dynamic (cross_fade->end));
+}
+
+static GtkCssImage *
+gtk_css_image_cross_fade_get_dynamic_image (GtkCssImage *image,
+                                            gint64       monotonic_time)
+{
+  GtkCssImageCrossFade *cross_fade = GTK_CSS_IMAGE_CROSS_FADE (image);
+  GtkCssImage *start, *end, *result;
+
+  if (cross_fade->start)
+    start = gtk_css_image_get_dynamic_image (cross_fade->start, monotonic_time);
+  else
+    start = NULL;
+  if (cross_fade->end)
+    end = gtk_css_image_get_dynamic_image (cross_fade->end, monotonic_time);
+  else
+    end = NULL;
+
+  result = _gtk_css_image_cross_fade_new (start, end, cross_fade->progress);
+
+  if (start)
+    g_object_unref (start);
+  if (end)
+    g_object_unref (end);
+
+  return result;
+}
+
 static void
 gtk_css_image_cross_fade_snapshot (GtkCssImage *image,
                                    GtkSnapshot *snapshot,
@@ -202,13 +237,21 @@ gtk_css_image_cross_fade_compute (GtkCssImage      *image,
   GtkCssImageCrossFade *cross_fade = GTK_CSS_IMAGE_CROSS_FADE (image);
   GtkCssImage *start, *end, *computed;
 
-  start = _gtk_css_image_compute (cross_fade->start, property_id, provider, style, parent_style);
-  end = _gtk_css_image_compute (cross_fade->end, property_id, provider, style, parent_style);
+  if (cross_fade->start)
+    start = _gtk_css_image_compute (cross_fade->start, property_id, provider, style, parent_style);
+  else
+    start = NULL;
+  if (cross_fade->end)
+    end = _gtk_css_image_compute (cross_fade->end, property_id, provider, style, parent_style);
+  else
+    end = NULL;
 
   computed = _gtk_css_image_cross_fade_new (start, end, cross_fade->progress);
 
-  g_object_unref (start);
-  g_object_unref (end);
+  if (start)
+    g_object_unref (start);
+  if (end)
+    g_object_unref (end);
 
   return computed;
 }
@@ -232,11 +275,13 @@ _gtk_css_image_cross_fade_class_init (GtkCssImageCrossFadeClass *klass)
 
   image_class->get_width = gtk_css_image_cross_fade_get_width;
   image_class->get_height = gtk_css_image_cross_fade_get_height;
+  image_class->compute = gtk_css_image_cross_fade_compute;
   image_class->equal = gtk_css_image_cross_fade_equal;
   image_class->snapshot = gtk_css_image_cross_fade_snapshot;
+  image_class->is_dynamic = gtk_css_image_cross_fade_is_dynamic;
+  image_class->get_dynamic_image = gtk_css_image_cross_fade_get_dynamic_image;
   image_class->parse = gtk_css_image_cross_fade_parse;
   image_class->print = gtk_css_image_cross_fade_print;
-  image_class->compute = gtk_css_image_cross_fade_compute;
 
   object_class->dispose = gtk_css_image_cross_fade_dispose;
 }
