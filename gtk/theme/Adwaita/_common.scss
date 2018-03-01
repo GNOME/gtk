@@ -3999,6 +3999,19 @@ paned {
 
 
 /**************
+ * GtkVideo *
+ **************/
+
+video {
+  & image.osd {
+    min-width: 64px;
+    min-height: 64px;
+    border-radius: 32px;
+  }
+  background: black;
+}
+
+/**************
  * GtkInfoBar *
  **************/
 infobar {
