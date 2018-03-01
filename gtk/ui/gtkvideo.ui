@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="gtk40">
+  <!-- interface-requires gtk+ 3.6 -->
+  <template class="GtkVideo" parent="GtkWidget">
+    <child>
+      <object class="GtkOverlay" id="box">
+        <child>
+          <object class="GtkImage" id="video_image">
+          </object>
+        </child>
+        <child type="overlay">
+          <object class="GtkImage" id="overlay_icon">
+            <style>
+              <class name="osd"/>
+              <class name="circular"/>
+            </style>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="icon-name">media-playback-start-symbolic</property>
+            <property name="icon-size">large</property>
+          </object>
+          <packing>
+            <property name="measure">1</property>
+          </packing>
+        </child>
+        <child type="overlay">
+          <object class="GtkRevealer" id="controls_revealer">
+            <property name="reveal-child">0</property>
+            <property name="valign">end</property>
+            <child>
+              <object class="GtkMediaControls" id="controls">
+                <style>
+                  <class name="osd"/>
+                  <class name="bottom"/>
+                </style>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="measure">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
