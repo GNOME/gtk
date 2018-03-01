@@ -28,6 +28,8 @@
 
 G_BEGIN_DECLS
 
+#define GTK_MEDIA_FILE_EXTENSION_POINT_NAME "gtk-media-file"
+
 #define GTK_TYPE_MEDIA_FILE             (gtk_media_file_get_type ())
 
 GDK_AVAILABLE_IN_ALL
