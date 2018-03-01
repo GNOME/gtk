@@ -10,6 +10,10 @@ option('win32-backend', type: 'boolean', value: true,
 option('quartz-backend', type: 'boolean', value: true,
   description : 'Enable the macOS gdk backend (only when building on macOS)')
 
+# Media backends
+option('media', type: 'string', value: 'none',
+  description : 'Build the specified media engines (comma-separated list, "all", or "none")')
+
 # Optional dependencies
 option('vulkan', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
   description : 'Enable support for the Vulkan graphics API')

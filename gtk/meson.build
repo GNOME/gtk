@@ -265,6 +265,7 @@ gtk_public_sources = files([
   'gtkmodules.c',
   'gtkmountoperation.c',
   'gtknativedialog.c',
+  'gtknomediafile.c',
   'gtknotebook.c',
   'gtkorientable.c',
   'gtkoverlay.c',
