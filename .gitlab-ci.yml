@@ -20,4 +20,9 @@ cache:
 build:
   stage: build
   script:
-   - bash -x ./.gitlab-ci/test-docker.sh
+    - bash -x ./.gitlab-ci/test-docker.sh
+  artifacts:
+    when: on_failure
+    name: "gtk-${CI_COMMIT_REF_NAME}"
+    paths:
+      - "${CI_PROJECT_DIR}/_build_full/meson-logs"
