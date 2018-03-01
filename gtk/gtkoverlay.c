@@ -266,8 +266,6 @@ gtk_overlay_size_allocate (GtkWidget           *widget,
   GSList *children;
   GtkWidget *main_widget;
 
-  GTK_WIDGET_CLASS (gtk_overlay_parent_class)->size_allocate (widget, allocation, baseline, out_clip);
-
   main_widget = gtk_bin_get_child (GTK_BIN (overlay));
   if (main_widget && gtk_widget_get_visible (main_widget))
     gtk_widget_size_allocate (main_widget, allocation, -1, out_clip);
