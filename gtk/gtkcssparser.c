@@ -831,15 +831,34 @@ _gtk_css_parser_try_hash_color (GtkCssParser *parser,
       g_ascii_isxdigit (parser->data[2]) &&
       g_ascii_isxdigit (parser->data[3]))
     {
-      if (g_ascii_isxdigit (parser->data[4]) &&
-          g_ascii_isxdigit (parser->data[5]) &&
-          g_ascii_isxdigit (parser->data[6]))
-        {
-          rgba->red   = ((get_xdigit (parser->data[1]) << 4) + get_xdigit (parser->data[2])) / 255.0;
-          rgba->green = ((get_xdigit (parser->data[3]) << 4) + get_xdigit (parser->data[4])) / 255.0;
-          rgba->blue  = ((get_xdigit (parser->data[5]) << 4) + get_xdigit (parser->data[6])) / 255.0;
-          rgba->alpha = 1.0;
-          parser->data += 7;
+      if (g_ascii_isxdigit (parser->data[4]))
+        { 
+          if (g_ascii_isxdigit (parser->data[5]) &&
+              g_ascii_isxdigit (parser->data[6]))
+            {
+              rgba->red   = ((get_xdigit (parser->data[1]) << 4) + get_xdigit (parser->data[2])) / 255.0;
+              rgba->green = ((get_xdigit (parser->data[3]) << 4) + get_xdigit (parser->data[4])) / 255.0;
+              rgba->blue  = ((get_xdigit (parser->data[5]) << 4) + get_xdigit (parser->data[6])) / 255.0;
+              if (g_ascii_isxdigit (parser->data[7]) &&
+                  g_ascii_isxdigit (parser->data[8]))
+                {
+                  rgba->alpha = ((get_xdigit (parser->data[7]) << 4) + get_xdigit (parser->data[8])) / 255.0;
+                  parser->data += 9;
+                }
+              else
+                {
+                  rgba->alpha = 1.0;
+                  parser->data += 7;
+                }
+            }
+          else
+            {
+              rgba->red   = get_xdigit (parser->data[1]) / 15.0;
+              rgba->green = get_xdigit (parser->data[2]) / 15.0;
+              rgba->blue  = get_xdigit (parser->data[3]) / 15.0;
+              rgba->alpha = get_xdigit (parser->data[4]) / 15.0;
+              parser->data += 5;
+            }
         }
       else
         {

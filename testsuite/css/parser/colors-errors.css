@@ -7,25 +7,21 @@ b {
 }
 
 c {
-  color: #1234;
-}
-
-d {
   color: #12345;
 }
 
-e {
+d {
   color: #1234567;
 }
 
-f {
+e {
   color: notacolorname;
 }
 
-g {
+f {
   color: rgb(1,2,3,4);
 }
 
-h {
+g {
   color: rgba(1,2,3,4,5);
 }
