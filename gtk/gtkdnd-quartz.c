@@ -63,8 +63,6 @@ static GtkDragSourceInfo *gtk_drag_get_source_info (GdkDragContext *context,
 static void gtk_drag_drop_finished (GtkDragSourceInfo *info,
                                    GtkDragResult      result);
 
-extern GdkDragContext *gdk_quartz_drag_source_context (); /* gdk/quartz/gdkdnd-quartz.c */
-
 struct _GtkDragSourceInfo 
 {
   GtkWidget         *source_widget;
@@ -228,7 +226,7 @@ gtk_drag_finish (GdkDragContext *context,
 		 guint32         time)
 {
   GtkDragSourceInfo *info;
-  GdkDragContext* source_context = gdk_quartz_drag_source_context ();
+  GdkDragContext* source_context = gdk_quartz_drag_source_context_libgtk_only ();
 
   if (source_context)
     {
@@ -310,7 +308,7 @@ GtkWidget *
 gtk_drag_get_source_widget (GdkDragContext *context)
 {
   GtkDragSourceInfo *info;
-  GdkDragContext* real_source_context = gdk_quartz_drag_source_context();
+  GdkDragContext* real_source_context = gdk_quartz_drag_source_context_libgtk_only ();
 
   if (!real_source_context)
     return NULL;
