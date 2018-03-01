@@ -229,6 +229,7 @@
 #include <gtk/gtktypebuiltins.h>
 #include <gtk/gtktypes.h>
 #include <gtk/gtkversion.h>
+#include <gtk/gtkvideo.h>
 #include <gtk/gtkviewport.h>
 #include <gtk/gtkvolumebutton.h>
 #include <gtk/gtkwidget.h>
