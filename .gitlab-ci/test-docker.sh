@@ -2,10 +2,17 @@
 
 set -e
 
-pwd
-meson -Denable-x11-backend=true -Denable-wayland-backend=true \
-    -Denable-broadway-backend=true -Denable-vulkan=yes _build_full
-cd _build_full
+srcdir=$(pwd)
+
+meson \
+        -Dx11-backend=true \
+        -Dwayland-backend=true \
+        -Dbroadway-backend=true \
+        -Dvulkan=yes \
+        _build $srcdir
+
+cd _build
+
 ninja
 
 xvfb-run -a -s "-screen 0 1024x768x24" \
