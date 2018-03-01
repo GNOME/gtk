@@ -16,6 +16,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
 #include "gdkdnd.h"
 #include "gdkquartzdnd.h"
 #include "gdkprivate-quartz.h"
@@ -27,7 +28,7 @@ G_DEFINE_TYPE (GdkQuartzDragContext, gdk_quartz_drag_context, GDK_TYPE_DRAG_CONT
 GdkDragContext *_gdk_quartz_drag_source_context = NULL;
 
 GdkDragContext *
-gdk_quartz_drag_source_context ()
+gdk_quartz_drag_source_context_libgtk_only ()
 {
   return _gdk_quartz_drag_source_context;
 }
