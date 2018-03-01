@@ -589,6 +589,21 @@ if cloudproviders_enabled
   endif
 endif
 
+
+media_backends = []
+
+# We require manually disabling support for media backends.
+# People should only do that when they know exactly what they're doing
+# (either not using media or providing their own implementation.)
+if get_option('nomedia')
+  media_backends += ['none']
+endif
+
+if media_backends.length() == 0
+  error('No media backends enabled. If you are sure about that, enable the "nomedia" option.')
+endif
+
+
 subdir('gdk')
 subdir('gsk')
 subdir('gtk')
@@ -705,6 +720,7 @@ summary = [
   '  Enabled backends: @0@'.format(pkg_targets.strip()),
   '    Vulkan support: @0@'.format(have_vulkan),
   '    Print backends: @0@'.format(' '.join(print_backends)),
+  '    Media backends: @0@'.format(' '.join(media_backends)),
   '             Tests: @0@'.format(get_option('build-tests')),
   '     Documentation: @0@'.format(get_option('documentation')),
   '             Demos: @0@'.format(get_option('demos')),
