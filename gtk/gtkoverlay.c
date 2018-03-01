@@ -181,7 +181,7 @@ gtk_overlay_child_update_style_classes (GtkOverlay *overlay,
                                         GtkWidget *child,
                                         GtkAllocation *child_allocation)
 {
-  GtkAllocation overlay_allocation, main_allocation;
+  GtkAllocation main_allocation;
   GtkAlign valign, halign;
   gboolean is_left, is_right, is_top, is_bottom;
   gboolean has_left, has_right, has_top, has_bottom;
@@ -196,10 +196,6 @@ gtk_overlay_child_update_style_classes (GtkOverlay *overlay,
   is_left = is_right = is_top = is_bottom = FALSE;
 
   gtk_overlay_get_main_widget_allocation (overlay, &main_allocation);
-  gtk_widget_get_allocation (GTK_WIDGET (overlay), &overlay_allocation);
-
-  main_allocation.x += overlay_allocation.x;
-  main_allocation.y += overlay_allocation.y;
 
   halign = effective_align (gtk_widget_get_halign (child),
                             gtk_widget_get_direction (child));
