@@ -589,7 +589,6 @@ if cloudproviders_enabled
   endif
 endif
 
-subdir('modules/input')
 subdir('gdk')
 subdir('gsk')
 subdir('gtk')

@@ -20,7 +20,7 @@
 #include <string.h>
 #include <wayland-client-protocol.h>
 
-#include <gtk/gtk.h>
+#include "gtk/gtkimcontextwayland.h"
 #include "gtk/gtkintl.h"
 #include "gtk/gtkimmodule.h"
 
@@ -70,31 +70,15 @@ struct _GtkIMContextWayland
   guint use_preedit : 1;
 };
 
-GType type_wayland = 0;
-static GObjectClass *parent_class;
+G_DEFINE_TYPE_WITH_CODE (GtkIMContextWayland, gtk_im_context_wayland, GTK_TYPE_IM_CONTEXT,
+                         g_io_extension_point_implement (GTK_IM_MODULE_EXTENSION_POINT_NAME,
+                                                         g_define_type_id,
+                                                         "wayland",
+                                                         10));
+
 static GtkIMContextWaylandGlobal *global = NULL;
 
-static const GtkIMContextInfo imwayland_info =
-{
-  "wayland",      /* ID */
-  NC_("input method menu", "Wayland"),      /* Human readable name */
-  GETTEXT_PACKAGE, /* Translation domain */
-  GTK_LOCALEDIR,   /* Dir for bindtextdomain (not strictly needed for "gtk+") */
-  "",              /* Languages for which this module is the default */
-};
-
-static const GtkIMContextInfo *info_list[] =
-{
-  &imwayland_info,
-};
-
-#define GTK_IM_CONTEXT_WAYLAND(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), type_wayland, GtkIMContextWayland))
-
-#ifndef INCLUDE_IM_wayland
-#define MODULE_ENTRY(type,function) G_MODULE_EXPORT type im_module_ ## function
-#else
-#define MODULE_ENTRY(type, function) type _gtk_immodule_wayland_ ## function
-#endif
+#define GTK_IM_CONTEXT_WAYLAND(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), gtk_im_context_wayland_get_type (), GtkIMContextWayland))
 
 static void
 reset_preedit (GtkIMContextWayland *context)
@@ -237,7 +221,8 @@ static const struct wl_registry_listener registry_listener = {
 static void
 gtk_im_context_wayland_global_init (GdkDisplay *display)
 {
-  g_return_if_fail (global == NULL);
+  if (global != NULL)
+    return;
 
   global = g_new0 (GtkIMContextWaylandGlobal, 1);
   global->display = gdk_wayland_display_get_wl_display (display);
@@ -339,6 +324,8 @@ translate_purpose (GtkInputPurpose purpose)
       return GTK_TEXT_INPUT_CONTENT_PURPOSE_PASSWORD;
     case GTK_INPUT_PURPOSE_PIN:
       return GTK_TEXT_INPUT_CONTENT_PURPOSE_PIN;
+    default:
+      g_assert_not_reached ();
     }
 
   return GTK_TEXT_INPUT_CONTENT_PURPOSE_NORMAL;
@@ -395,7 +382,7 @@ gtk_im_context_wayland_finalize (GObject *object)
   g_clear_object (&context->widget);
   g_clear_object (&context->gesture);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_im_context_wayland_parent_class)->finalize (object);
 }
 
 static void
@@ -470,9 +457,9 @@ gtk_im_context_wayland_get_preedit_string (GtkIMContext   *context,
                                            gint           *cursor_pos)
 {
   GtkIMContextWayland *context_wayland = GTK_IM_CONTEXT_WAYLAND (context);
-  gchar *preedit_str;
+  const char *preedit_str;
 
-  GTK_IM_CONTEXT_CLASS (parent_class)->get_preedit_string (context, str, attrs, cursor_pos);
+  GTK_IM_CONTEXT_CLASS (gtk_im_context_wayland_parent_class)->get_preedit_string (context, str, attrs, cursor_pos);
 
   /* If the parent implementation returns a len>0 string, go with it */
   if (str && *str && **str)
@@ -499,7 +486,7 @@ gtk_im_context_wayland_filter_keypress (GtkIMContext *context,
                                         GdkEventKey  *key)
 {
   /* This is done by the compositor */
-  return GTK_IM_CONTEXT_CLASS (parent_class)->filter_keypress (context, key);
+  return GTK_IM_CONTEXT_CLASS (gtk_im_context_wayland_parent_class)->filter_keypress (context, key);
 }
 
 static void
@@ -535,7 +522,7 @@ gtk_im_context_wayland_reset (GtkIMContext *context)
 {
   reset_preedit (GTK_IM_CONTEXT_WAYLAND (context));
 
-  GTK_IM_CONTEXT_CLASS (parent_class)->reset (context);
+  GTK_IM_CONTEXT_CLASS (gtk_im_context_wayland_parent_class)->reset (context);
 }
 
 static void
@@ -613,8 +600,6 @@ gtk_im_context_wayland_class_init (GtkIMContextWaylandClass *klass)
   im_context_class->set_use_preedit = gtk_im_context_wayland_set_use_preedit;
   im_context_class->set_surrounding = gtk_im_context_wayland_set_surrounding;
   im_context_class->get_surrounding = gtk_im_context_wayland_get_surrounding;
-
-  parent_class = g_type_class_peek_parent (klass);
 }
 
 static void
@@ -627,52 +612,11 @@ on_content_type_changed (GtkIMContextWayland *context)
 static void
 gtk_im_context_wayland_init (GtkIMContextWayland *context)
 {
+  gtk_im_context_wayland_global_init (gdk_display_get_default ());
+
   context->use_preedit = TRUE;
   g_signal_connect_swapped (context, "notify::input-purpose",
                             G_CALLBACK (on_content_type_changed), context);
   g_signal_connect_swapped (context, "notify::input-hints",
                             G_CALLBACK (on_content_type_changed), context);
-}
-
-static void
-gtk_im_context_wayland_register_type (GTypeModule *module)
-{
-  const GTypeInfo object_info = {
-    sizeof (GtkIMContextWaylandClass),
-    NULL, NULL,
-    (GClassInitFunc) gtk_im_context_wayland_class_init,
-    NULL, NULL,
-    sizeof (GtkIMContextWayland),
-    0,
-    (GInstanceInitFunc) gtk_im_context_wayland_init,
-  };
-
-  type_wayland = g_type_module_register_type (module,
-                                              GTK_TYPE_IM_CONTEXT_SIMPLE,
-                                              "GtkIMContextWayland",
-                                              &object_info, 0);
-}
-
-MODULE_ENTRY (void, init) (GTypeModule * module)
-{
-  gtk_im_context_wayland_register_type (module);
-  gtk_im_context_wayland_global_init (gdk_display_get_default ());
-}
-
-MODULE_ENTRY (void, exit) (void)
-{
-}
-
-MODULE_ENTRY (void, list) (const GtkIMContextInfo *** contexts, int *n_contexts)
-{
-  *contexts = info_list;
-  *n_contexts = G_N_ELEMENTS (info_list);
-}
-
-MODULE_ENTRY (GtkIMContext *, create) (const gchar * context_id)
-{
-  if (strcmp (context_id, "wayland") == 0)
-    return g_object_new (type_wayland, NULL);
-  else
-    return NULL;
 }

@@ -130,6 +130,7 @@
 #include "gtkwindowprivate.h"
 #include "gtkwindowgroup.h"
 #include "gtkprintbackend.h"
+#include "gtkimmodule.h"
 
 #include "a11y/gtkaccessibility.h"
 
@@ -628,6 +629,8 @@ gettext_initialization (void)
 static void
 default_display_notify_cb (GdkDisplayManager *dm)
 {
+  gtk_print_backends_init ();
+  gtk_im_modules_init ();
   _gtk_accessibility_init ();
   debug_flags[0].display = gdk_display_get_default ();
 }
@@ -655,8 +658,6 @@ do_post_parse_initialization (void)
   _gtk_ensure_resources ();
 
   _gtk_accel_map_init ();
-
-  gtk_print_backends_init ();
 
   gtk_initialized = TRUE;
 

@@ -1,5 +1,5 @@
 /* GTK - The GIMP Toolkit
- * Copyright (C) 2000 Red Hat Software
+ * Copyright (C) 2018 Red Hat Software
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,30 +15,15 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_IM_CONTEXT_INFO_H__
-#define __GTK_IM_CONTEXT_INFO_H__
+#ifndef __GTK_IM_CONTEXT_QUARTZ_H__
+#define __GTK_IM_CONTEXT_QUARTZ_H__
 
-
-#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
-#endif
-
-#include <glib.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-typedef struct _GtkIMContextInfo GtkIMContextInfo;
-
-struct _GtkIMContextInfo
-{
-  const gchar *context_id;
-  const gchar *context_name;
-  const gchar *domain;
-  const gchar *domain_dirname;
-  const gchar *default_locales;
-};
-
+GType         gtk_im_context_quartz_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS
 
-#endif /* __GTK_IM_CONTEXT_INFO_H__ */
+#endif /* __GTK_IM_CONTEXT_QUARTZ_H__ */

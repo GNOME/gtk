@@ -23,9 +23,7 @@
 
 G_BEGIN_DECLS
 
-extern GType gtk_type_im_context_xim;
-
-#define GTK_TYPE_IM_CONTEXT_XIM            (gtk_type_im_context_xim)
+#define GTK_TYPE_IM_CONTEXT_XIM            (gtk_im_context_xim_get_type ())
 #define GTK_IM_CONTEXT_XIM(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_IM_CONTEXT_XIM, GtkIMContextXIM))
 #define GTK_IM_CONTEXT_XIM_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_IM_CONTEXT_XIM, GtkIMContextXIMClass))
 #define GTK_IS_IM_CONTEXT_XIM(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_IM_CONTEXT_XIM))
@@ -41,10 +39,9 @@ struct _GtkIMContextXIMClass
   GtkIMContextClass parent_class;
 };
 
-void gtk_im_context_xim_register_type (GTypeModule *type_module);
-GtkIMContext *gtk_im_context_xim_new (void);
-
-void gtk_im_context_xim_shutdown (void);
+GType         gtk_im_context_xim_get_type (void) G_GNUC_CONST;
+GtkIMContext *gtk_im_context_xim_new      (void);
+void          gtk_im_context_xim_shutdown (void);
 
 G_END_DECLS
 

@@ -15,17 +15,15 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_IM_MODULE_PRIVATE_H__
-#define __GTK_IM_MODULE_PRIVATE_H__
+#ifndef __GTK_IM_CONTEXT_BROADWAY_H__
+#define __GTK_IM_CONTEXT_BROADWAY_H__
 
-#include <gdk/gdk.h>
-#include "gtkimcontext.h"
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-GtkIMContext * _gtk_im_module_create                 (const gchar              *context_id);
-const gchar  * _gtk_im_module_get_default_context_id (void);
+GType gtk_im_context_broadway_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS
 
-#endif /* __GTK_IM_MODULE_PRIVATE_H__ */
+#endif /* __GTK_IM_CONTEXT_BROADWAY_H__ */

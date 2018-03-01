@@ -351,7 +351,6 @@
     <xi:include href="gtk4-demo-application.xml" />
     <xi:include href="gtk4-widget-factory.xml" />
     <xi:include href="gtk4-icon-browser.xml" />
-    <xi:include href="gtk4-query-immodules.xml" />
     <xi:include href="gtk4-update-icon-cache.xml" />
     <xi:include href="gtk4-encode-symbolic-svg.xml" />
     <xi:include href="gtk4-builder-tool.xml" />
