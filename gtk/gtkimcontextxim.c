@@ -409,7 +409,7 @@ get_im (GdkWindow *client_window,
     {
       GtkXIMInfo *tmp_info = tmp_list->data;
       if (tmp_info->display == display &&
-	  strcmp (tmp_info->locale, locale) == 0)
+	  g_strcmp0 (tmp_info->locale, locale) == 0)
 	{
 	  if (tmp_info->im)
 	    {
