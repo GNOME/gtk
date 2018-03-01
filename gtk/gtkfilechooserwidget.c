@@ -77,7 +77,6 @@
 #include "gtkseparator.h"
 #include "gtkmodelbutton.h"
 #include "gtkgesturelongpress.h"
-#include "gtkdebug.h"
 
 #include <cairo-gobject.h>
 
@@ -2379,25 +2378,6 @@ list_popup_menu_cb (GtkWidget            *widget,
   return TRUE;
 }
 
-static void
-get_selection_modifiers (GtkWidget       *widget,
-                         GdkEventButton  *event,
-                         gboolean        *modify,
-                         gboolean        *extend)
-{
-  GdkModifierType mask;
-
-  *modify = FALSE;
-  *extend = FALSE;
-
-  mask = gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_MODIFY_SELECTION);
-  if ((event->state & mask) == mask)
-    *modify = TRUE;
-  mask = gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_EXTEND_SELECTION);
-  if ((event->state & mask) == mask)
-    *extend = TRUE;
-}
-
 /* Callback used when a button is pressed on the file list.  We trap button 3 to
  * bring up a popup menu.
  */
@@ -2408,39 +2388,9 @@ list_button_press_event_cb (GtkWidget            *widget,
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
   static gboolean in_press = FALSE;
-  GtkTreePath *path;
-  GtkTreeViewColumn *column;
-  GdkDevice *device;
-  gboolean modify, extend, is_touchscreen;
 
   if (in_press)
     return FALSE;
-
-  device = gdk_event_get_source_device ((GdkEvent *) event);
-  is_touchscreen = gtk_simulate_touchscreen () ||
-                   gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN;
-
-  get_selection_modifiers (widget, event, &modify, &extend);
-  if (!is_touchscreen &&
-      !modify && !extend &&
-      event->type == GDK_BUTTON_PRESS &&
-      event->button == GDK_BUTTON_PRIMARY &&
-      gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (priv->browse_files_tree_view),
-                                     event->x, event->y,
-                                     &path, &column, NULL, NULL))
-    {
-      GtkTreeSelection *selection;
-
-      selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->browse_files_tree_view));
-      if (gtk_tree_selection_path_is_selected (selection, path))
-        {
-          list_row_activated (GTK_TREE_VIEW (priv->browse_files_tree_view), path, column, impl);
-          gtk_tree_path_free (path);
-          return TRUE;
-        }
-
-      gtk_tree_path_free (path);
-    }
 
   if (!gdk_event_triggers_context_menu ((GdkEvent *) event))
     return FALSE;
