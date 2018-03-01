@@ -110,25 +110,10 @@ static void
 spin_xalign_cb (GtkSpinButton *spin, GtkFrame *frame)
 {
   gdouble xalign;
-  gfloat yalign;
 
   xalign = double_normalize (gtk_spin_button_get_value (spin));
-  gtk_frame_get_label_align (frame, NULL, &yalign);
-  gtk_frame_set_label_align (frame, xalign, yalign);
+  gtk_frame_set_label_align (frame, xalign);
 }
-
-#if 0
-static void
-spin_yalign_cb (GtkSpinButton *spin, GtkFrame *frame)
-{
-  gdouble yalign;
-  gfloat xalign;
-
-  yalign = double_normalize (gtk_spin_button_get_value (spin));
-  gtk_frame_get_label_align (frame, &xalign, NULL);
-  gtk_frame_set_label_align (frame, xalign, yalign);
-}
-#endif
 
 static void
 draw_border_cb (GtkToggleButton *toggle_button, GtkFrame *frame)
@@ -145,7 +130,7 @@ int main (int argc, char **argv)
   GtkBox *vbox;
   GtkFrame *frame;
   GtkGrid *grid;
-  gfloat xalign, yalign;
+  gfloat xalign;
   gboolean draw_border;
 
   gtk_init ();
@@ -171,7 +156,7 @@ int main (int argc, char **argv)
   gtk_grid_set_column_spacing (grid, 6);
   gtk_box_pack_start (vbox, GTK_WIDGET (grid));
 
-  gtk_frame_get_label_align (frame, &xalign, &yalign);
+  xalign = gtk_frame_get_label_align (frame);
 
   /* Spin to control :label-xalign */
   widget = gtk_label_new ("label xalign:");
@@ -181,18 +166,6 @@ int main (int argc, char **argv)
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), xalign);
   g_signal_connect (widget, "value-changed", G_CALLBACK (spin_xalign_cb), frame);
   gtk_grid_attach (grid, widget, 1, 0, 1, 1);
-
-/* Frame:label-yalign does nothing since the border node was removed */
-#if 0
-  /* Spin to control :label-yalign */
-  widget = gtk_label_new ("label yalign:");
-  gtk_grid_attach (grid, widget, 0, 1, 1, 1);
-
-  widget = gtk_spin_button_new_with_range (0.0, 1.0, 0.1);
-  gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), yalign);
-  g_signal_connect (widget, "value-changed", G_CALLBACK (spin_yalign_cb), frame);
-  gtk_grid_attach (grid, widget, 1, 1, 1, 1);
-#endif
 
   /* Spin to control vertical padding */
   widget = gtk_label_new ("vertical padding:");
