@@ -159,7 +159,6 @@ struct _GtkContainerPrivate
 
   guint has_focus_chain    : 1;
   guint restyle_pending    : 1;
-  guint request_mode       : 2;
 };
 
 enum {
