@@ -19,9 +19,12 @@
 
 #include "config.h"
 
-#include "gtkmediafile.h"
+#include "gtkmediafileprivate.h"
 
+#include "gtkdebug.h"
 #include "gtkintl.h"
+#include "gtkmodulesprivate.h"
+#include "gtknomediafileprivate.h"
 
 /**
  * SECTION:gtkmediafile
@@ -179,8 +182,64 @@ gtk_media_file_init (GtkMediaFile *self)
 static GType
 gtk_media_file_get_impl_type (void)
 {
-  g_assert_not_reached ();
-  return G_TYPE_INVALID;
+  static GType impl_type = G_TYPE_NONE;
+  const char *extension_name;
+  GIOExtension *e;
+  GIOExtensionPoint *ep;
+
+  if (G_LIKELY (impl_type != G_TYPE_NONE))
+    return impl_type;
+
+  GTK_NOTE (MODULES, g_print ("Looking up MediaFile extension\n"));
+  
+  ep = g_io_extension_point_lookup (GTK_MEDIA_FILE_EXTENSION_POINT_NAME);
+  e = NULL;
+
+  extension_name = g_getenv ("GTK_MEDIA");
+  if (extension_name)
+    {
+      if (g_str_equal (extension_name, "help"))
+        {
+          GList *l;
+
+          g_print ("Supported arguments for GTK_MEDIA environment variable:\n");
+
+          for (l = g_io_extension_point_get_extensions (ep); l; l = l->next)
+            {
+              e = l->data;
+
+              g_print ("%10s - %d\n", g_io_extension_get_name (e), g_io_extension_get_priority (e));
+            }
+
+          e = NULL;
+        }
+      else
+        {
+          e = g_io_extension_point_get_extension_by_name (ep, extension_name);
+          if (e == NULL)
+            {
+              g_warning ("Media extension \"%s\" from GTK_MEDIA environment variable not found.", extension_name);
+            }
+        }
+    }
+
+  if (e == NULL)
+    {
+      GList *l = g_io_extension_point_get_extensions (ep);
+
+      if (l == NULL)
+        {
+          g_error ("GTK was run without any GtkMediaFile extension being present. This must not happen.");
+        }
+
+      e = l->data;
+    }
+
+  impl_type = g_io_extension_get_type (e);
+
+  GTK_NOTE (MODULES, g_print ("Using %s from \"%s\" extension\n", g_type_name (impl_type), g_io_extension_get_name (e)));
+
+  return impl_type;
 }
 
 /**
@@ -523,4 +582,48 @@ gtk_media_file_get_input_stream (GtkMediaFile *self)
   g_return_val_if_fail (GTK_IS_MEDIA_FILE (self), NULL);
 
   return priv->input_stream;
+}
+
+void
+gtk_media_file_extension_init (void)
+{
+  GIOExtensionPoint *ep;
+  GIOModuleScope *scope;
+  char **paths;
+  int i;
+
+  GTK_NOTE (MODULES,
+            g_print ("Registering extension point %s\n", GTK_MEDIA_FILE_EXTENSION_POINT_NAME));
+
+  ep = g_io_extension_point_register (GTK_MEDIA_FILE_EXTENSION_POINT_NAME);
+  g_io_extension_point_set_required_type (ep, GTK_TYPE_MEDIA_FILE);
+
+  g_type_ensure (GTK_TYPE_NO_MEDIA_FILE);
+
+  scope = g_io_module_scope_new (G_IO_MODULE_SCOPE_BLOCK_DUPLICATES);
+
+  paths = _gtk_get_module_path ("media");
+  for (i = 0; paths[i]; i++)
+    {
+      GTK_NOTE (MODULES,
+                g_print ("Scanning io modules in %s\n", paths[i]));
+      g_io_modules_scan_all_in_directory_with_scope (paths[i], scope);
+    }
+  g_strfreev (paths);
+
+  g_io_module_scope_free (scope);
+
+  if (GTK_DEBUG_CHECK (MODULES))
+    {
+      GList *list, *l;
+
+      list = g_io_extension_point_get_extensions (ep);
+      for (l = list; l; l = l->next)
+        {
+          GIOExtension *ext = l->data;
+          g_print ("extension: %s: type %s\n",
+                   g_io_extension_get_name (ext),
+                   g_type_name (g_io_extension_get_type (ext)));
+        }
+    }
 }
