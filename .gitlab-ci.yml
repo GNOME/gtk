@@ -25,4 +25,4 @@ build:
     when: on_failure
     name: "gtk-${CI_COMMIT_REF_NAME}"
     paths:
-      - "${CI_PROJECT_DIR}/_build_full/meson-logs"
+      - "${CI_PROJECT_DIR}/_build/meson-logs"
