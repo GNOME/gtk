@@ -38,6 +38,7 @@
                         <property name="orientation">vertical</property>
                         <property name="margin">6</property>
                         <property name="spacing">6</property>
+                        <!-- Remember to keep headings here in sync with button tooltips below -->
                         <child>
                           <object class="GtkFlowBox" id="recent.box">
                             <property name="visible">1</property>
@@ -188,10 +189,12 @@
                 <child>
                   <object class="GtkBox">
                     <property name="visible">1</property>
+                    <!-- Remember to keep tooltips here in sync with section headings above -->
                     <child>
                       <object class="GtkButton" id="recent.button">
                         <property name="visible">1</property>
                         <property name="relief">none</property>
+                        <property name="tooltip-text" translatable="yes">Recent</property>
                         <style>
                           <class name="emoji-section"/>
                         </style>
@@ -201,6 +204,7 @@
                       <object class="GtkButton" id="people.button">
                         <property name="visible">1</property>
                         <property name="relief">none</property>
+                        <property name="tooltip-text" translatable="yes">Smileys &amp; People</property>
                         <style>
                           <class name="emoji-section"/>
                         </style>
@@ -210,6 +214,7 @@
                       <object class="GtkButton" id="body.button">
                         <property name="visible">1</property>
                         <property name="relief">none</property>
+                        <property name="tooltip-text" translatable="yes">Body &amp; Clothing</property>
                         <style>
                           <class name="emoji-section"/>
                         </style>
@@ -219,6 +224,7 @@
                       <object class="GtkButton" id="nature.button">
                         <property name="visible">1</property>
                         <property name="relief">none</property>
+                        <property name="tooltip-text" translatable="yes">Animals &amp; Nature</property>
                         <style>
                           <class name="emoji-section"/>
                         </style>
@@ -228,6 +234,7 @@
                       <object class="GtkButton" id="food.button">
                         <property name="visible">1</property>
                         <property name="relief">none</property>
+                        <property name="tooltip-text" translatable="yes">Food &amp; Drink</property>
                         <style>
                           <class name="emoji-section"/>
                         </style>
@@ -237,6 +244,7 @@
                       <object class="GtkButton" id="travel.button">
                         <property name="visible">1</property>
                         <property name="relief">none</property>
+                        <property name="tooltip-text" translatable="yes">Travel &amp; Places</property>
                         <style>
                           <class name="emoji-section"/>
                         </style>
@@ -246,6 +254,7 @@
                       <object class="GtkButton" id="activities.button">
                         <property name="visible">1</property>
                         <property name="relief">none</property>
+                        <property name="tooltip-text" translatable="yes">Activities</property>
                         <style>
                           <class name="emoji-section"/>
                         </style>
@@ -255,6 +264,7 @@
                       <object class="GtkButton" id="objects.button">
                         <property name="visible">1</property>
                         <property name="relief">none</property>
+                         <property name="tooltip-text" translatable="yes" context="emoji category">Objects</property>
                         <style>
                           <class name="emoji-section"/>
                         </style>
@@ -264,6 +274,7 @@
                       <object class="GtkButton" id="symbols.button">
                         <property name="visible">1</property>
                         <property name="relief">none</property>
+                        <property name="tooltip-text" translatable="yes">Symbols</property>
                         <style>
                           <class name="emoji-section"/>
                         </style>
@@ -273,6 +284,7 @@
                       <object class="GtkButton" id="flags.button">
                         <property name="visible">1</property>
                         <property name="relief">none</property>
+                        <property name="tooltip-text" translatable="yes">Flags</property>
                         <style>
                           <class name="emoji-section"/>
                         </style>
