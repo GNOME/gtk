@@ -73,8 +73,6 @@ struct _GtkEntry
 {
   /*< private >*/
   GtkWidget  parent_instance;
-
-  GtkEntryPrivate *priv;
 };
 
 /**
