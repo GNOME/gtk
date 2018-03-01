@@ -309,12 +309,6 @@ gtk/paper_names.c
 gtk/paper_names_offsets.c
 gtk/script-names.c
 gtk/updateiconcache.c
-modules/input/gtkimcontextxim.c
-modules/input/imbroadway.c
-modules/input/imime.c
-modules/input/imquartz.c
-modules/input/imwayland.c
-modules/input/imxim.c
 modules/printbackends/cloudprint/gtkprintbackendcloudprint.c
 modules/printbackends/cloudprint/gtkprintercloudprint.c
 modules/printbackends/cups/gtkprintbackendcups.c
