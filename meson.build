@@ -611,6 +611,13 @@ if ffmpeg_enabled
   media_backends += ['ffmpeg']
 endif
 
+gstreamer_enabled = get_option('gstreamer')
+if gstreamer_enabled
+  gstplayer_dep = dependency('gstreamer-player-1.0', version: '>= 1.12.3', required: true)
+  cdata.set('HAVE_GSTREAMER', 1)
+  media_backends += ['gstreamer']
+endif
+
 if media_backends.length() == 0
   error('No media backends enabled. If you are sure about that, enable the "nomedia" option.')
 endif
