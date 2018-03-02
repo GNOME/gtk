@@ -56,6 +56,9 @@
 /* Define if gio-unix is available */
 #mesondefine HAVE_GIO_UNIX
 
+/* Define if GStreamer support is available */
+#mesondefine HAVE_GSTREAMER
+
 /* Define to 1 if you have the `httpGetAuthString' function. */
 #mesondefine HAVE_HTTPGETAUTHSTRING
 
