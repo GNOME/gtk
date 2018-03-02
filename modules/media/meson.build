@@ -1,5 +1,6 @@
 all_media_backends = [
-  'ffmpeg'
+  'ffmpeg',
+  'gstreamer'
 ]
 
 enabled_media_backends = get_option('media').split(',')
@@ -41,3 +42,18 @@ if media_backends.contains('ffmpeg')
                 install : true)
 endif
 
+if media_backends.contains('gstreamer')
+  gstplayer_dep = dependency('gstreamer-player-1.0', version: '>= 1.12.3', required: true)
+  cdata.set('HAVE_GSTREAMER', 1)
+
+  shared_module('media-gstreamer',
+                'gtkgstmediafile.c',
+                'gtkgstpaintable.c',
+                'gtkgstsink.c',
+                c_args: [
+                  '-DGTK_COMPILATION'
+                ],
+                dependencies: [ libgtk_dep, gstplayer_dep ],
+                install_dir: media_install_dir,
+                install : true)
+endif
