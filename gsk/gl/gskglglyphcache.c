@@ -315,14 +315,14 @@ gsk_gl_glyph_cache_lookup (GskGLGlyphCache *cache,
                            PangoGlyph       glyph,
                            float            scale)
 {
-  GlyphCacheKey lookup_key;
   GskGLCachedGlyph *value;
 
-  lookup_key.font = font;
-  lookup_key.glyph = glyph;
-  lookup_key.scale = (guint)(scale * 1024);
-
-  value = g_hash_table_lookup (cache->hash_table, &lookup_key);
+  value = g_hash_table_lookup (cache->hash_table,
+                               &(GlyphCacheKey) {
+                                 .font = font,
+                                 .glyph = glyph,
+                                 .scale = (guint)(scale * 1024)
+                               });
 
   if (value)
     {
