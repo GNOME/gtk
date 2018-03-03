@@ -69,6 +69,7 @@
 #include <gtk/a11y/gtkscrolledwindowaccessible.h>
 #include <gtk/a11y/gtkspinbuttonaccessible.h>
 #include <gtk/a11y/gtkspinneraccessible.h>
+#include <gtk/a11y/gtkstackaccessible.h>
 #include <gtk/a11y/gtkstatusbaraccessible.h>
 #include <gtk/a11y/gtkswitchaccessible.h>
 #include <gtk/a11y/gtktextcellaccessible.h>
