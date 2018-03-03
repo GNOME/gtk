@@ -4,20 +4,21 @@
 # Guillaume SAVATON <llumeao@gmail.com>, 2007.
 # Kristjan SCHMIDT <kristjan.schmidt@googlemail.com>, 2010, 2011, 2012, 2016, 2018.
 # Tirifto <tirifto@posteo.cz>, 2018.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-21 09:30+0000\n"
-"PO-Revision-Date: 2018-02-25 19:10+0200\n"
-"Last-Translator: Kristjan SCHMIDT <kristjan.schmidt@googlemail.com>\n"
+"POT-Creation-Date: 2018-03-03 05:55+0000\n"
+"PO-Revision-Date: 2018-03-03 18:48+0100\n"
+"Last-Translator: Tirifto <tirifto@posteo.cz>\n"
 "Language-Team: Esperanto <gnome-eo-list@gnome.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Virtaal 0.7.1\n"
+"X-Generator: Gtranslator 2.91.7\n"
 
 #: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139 gdk/gdkdevicemanager.c:185
 #: gdk/gdkglcontext.c:317 gdk/gdkseat.c:202 gdk/gdkseat.c:203
@@ -109,22 +110,19 @@ msgid "Seat"
 msgstr ""
 
 #: gdk/gdkdevice.c:306 gdk/gdkdevice.c:307
-#, fuzzy
 #| msgid "Number of columns"
 msgid "Number of concurrent touches"
-msgstr "Nombro da kolumnoj"
+msgstr "Nombro da samtempaj tuŝoj"
 
 #: gdk/gdkdevice.c:321 gdk/gdkdevice.c:322
 msgid "Axes"
 msgstr ""
 
 #: gdk/gdkdevice.c:328
-#| msgid "Tooltip"
 msgid "Tool"
 msgstr "Ilo"
 
 #: gdk/gdkdevice.c:329
-#| msgid "The cell which is currently being edited"
 msgid "The tool that is currently used with this device"
 msgstr "La ilo nun uzata kun tiu ĉi aparato"
 
@@ -142,7 +140,7 @@ msgstr "La implicita ekrano por GDK"
 
 #: gdk/gdkglcontext.c:318
 msgid "The GDK display used to create the GL context"
-msgstr ""
+msgstr "La GDK-ekrano uzata por krei la GL-situacion"
 
 #: gdk/gdkglcontext.c:333 gtk/gtkwidget.c:1344
 msgid "Window"
@@ -190,19 +188,19 @@ msgstr ""
 
 #: gdk/x11/gdkdevicemanager-xi2.c:122
 msgid "Major"
-msgstr ""
+msgstr "Ĉefa"
 
 #: gdk/x11/gdkdevicemanager-xi2.c:123
 msgid "Major version number"
-msgstr ""
+msgstr "Ĉefa versia numero"
 
 #: gdk/x11/gdkdevicemanager-xi2.c:129
 msgid "Minor"
-msgstr ""
+msgstr "Malĉefa"
 
 #: gdk/x11/gdkdevicemanager-xi2.c:130
 msgid "Minor version number"
-msgstr ""
+msgstr "Malĉefa versia numero"
 
 #: gdk/x11/gdkdevice-xi2.c:143
 msgid "Device ID"
@@ -391,11 +389,11 @@ msgstr "Ĉu la agogrupo estas videble."
 
 #: gtk/deprecated/gtkactiongroup.c:242
 msgid "Accelerator Group"
-msgstr ""
+msgstr "Pliapidigila grupo"
 
 #: gtk/deprecated/gtkactiongroup.c:243
 msgid "The accelerator group the actions of this group should use."
-msgstr ""
+msgstr "Plirapidigila grupo uzota de agoj de ĉi tiu grupo"
 
 #: gtk/deprecated/gtkactivatable.c:290
 msgid "Related Action"
@@ -459,8 +457,8 @@ msgid ""
 "If available vertical space is bigger than needed for the child, how much of "
 "it to use for the child. 0.0 means none, 1.0 means all"
 msgstr ""
-"Se la disponebla vertikala spaco estas pli granda ol bezonata por la ido, "
-"uzi kiom multe de ĝi por la ido? 0.0 signifas nenion, 1.0 signifas ĉion"
+"Se disponeblas pli da vertikala spaco ol kiom la ido bezonas, uzi kiom multe "
+"da ĝi por la ido? 0.0 signifas nenion, 1.0 signifas ĉion."
 
 #: gtk/deprecated/gtkalignment.c:226
 msgid "Top Padding"
@@ -468,7 +466,7 @@ msgstr "Supra ŝtopado"
 
 #: gtk/deprecated/gtkalignment.c:227
 msgid "The padding to insert at the top of the widget."
-msgstr "La ŝtopado uzota supre de la fenestraĵo."
+msgstr "Kiom da ŝtopaĵo meti en supron de la fenestraĵo."
 
 #: gtk/deprecated/gtkalignment.c:245
 msgid "Bottom Padding"
@@ -476,7 +474,7 @@ msgstr "Malsupra ŝtopado"
 
 #: gtk/deprecated/gtkalignment.c:246
 msgid "The padding to insert at the bottom of the widget."
-msgstr "La ŝtopado uzota malsupre de la fenestraĵo."
+msgstr "Kiom da ŝtopaĵo meti en malsupron de la fenestraĵo."
 
 #: gtk/deprecated/gtkalignment.c:264
 msgid "Left Padding"
@@ -484,7 +482,7 @@ msgstr "Maldekstra ŝtopado"
 
 #: gtk/deprecated/gtkalignment.c:265
 msgid "The padding to insert at the left of the widget."
-msgstr "La ŝtopado uzota maldekstre de la fenestraĵo."
+msgstr "Kiom da ŝtopaĵo meti en maldekstron de la fenestraĵo."
 
 #: gtk/deprecated/gtkalignment.c:283
 msgid "Right Padding"
@@ -492,7 +490,7 @@ msgstr "Dekstra ŝtopado"
 
 #: gtk/deprecated/gtkalignment.c:284
 msgid "The padding to insert at the right of the widget."
-msgstr "La ŝtopado uzota dekstre de la fenestraĵo."
+msgstr "Kiom da ŝtopaĵo meti en dekstron de la fenestraĵo."
 
 #: gtk/deprecated/gtkarrow.c:121
 msgid "Arrow direction"
@@ -521,11 +519,11 @@ msgstr "De la sago uzata spaco"
 
 #: gtk/deprecated/gtkcolorsel.c:325
 msgid "Has Opacity Control"
-msgstr ""
+msgstr "Havas regon de travidebleco"
 
 #: gtk/deprecated/gtkcolorsel.c:326
 msgid "Whether the color selector should allow setting opacity"
-msgstr ""
+msgstr "Ĉu la kolorelektilo permesu agordon de travidebleco"
 
 #: gtk/deprecated/gtkcolorsel.c:332
 msgid "Has palette"
@@ -533,7 +531,7 @@ msgstr "Havas paletron"
 
 #: gtk/deprecated/gtkcolorsel.c:333
 msgid "Whether a palette should be used"
-msgstr "Ĉu uzi la paletron?"
+msgstr "Ĉu uzi la paletron"
 
 #: gtk/deprecated/gtkcolorsel.c:347 gtk/gtkcolorbutton.c:201
 msgid "Current Color"
@@ -597,7 +595,7 @@ msgstr "Tiparnomo"
 
 #: gtk/deprecated/gtkfontsel.c:241
 msgid "The string that represents this font"
-msgstr ""
+msgstr "La ĉeno reprezentanta tiun ĉi tiparon"
 
 #: gtk/deprecated/gtkfontsel.c:247 gtk/gtkfontchooser.c:90
 msgid "Preview text"
@@ -605,7 +603,7 @@ msgstr "Antaŭrigardi tekston"
 
 #: gtk/deprecated/gtkfontsel.c:248 gtk/gtkfontchooser.c:91
 msgid "The text to display in order to demonstrate the selected font"
-msgstr ""
+msgstr "La teksto vidigota por montri aspekton de la elektita tiparo"
 
 #: gtk/deprecated/gtkhandlebox.c:223 gtk/gtkcombobox.c:1245 gtk/gtkentry.c:998
 #: gtk/gtkmenubar.c:253 gtk/gtkstatusbar.c:177 gtk/gtktoolbar.c:680
@@ -615,15 +613,15 @@ msgstr "Ombrotipo"
 
 #: gtk/deprecated/gtkhandlebox.c:224
 msgid "Appearance of the shadow that surrounds the container"
-msgstr ""
+msgstr "Aspekto de la ombro kiu ĉirkaŭas la ujon"
 
 #: gtk/deprecated/gtkhandlebox.c:232
 msgid "Handle position"
-msgstr ""
+msgstr "Loko de tenilo"
 
 #: gtk/deprecated/gtkhandlebox.c:233
 msgid "Position of the handle relative to the child widget"
-msgstr ""
+msgstr "Loko de la tenilo rilate al la ida fenestraĵo"
 
 #: gtk/deprecated/gtkhandlebox.c:241
 msgid "Snap edge"
@@ -647,13 +645,14 @@ msgstr ""
 
 #: gtk/deprecated/gtkhandlebox.c:258
 msgid "Child Detached"
-msgstr ""
+msgstr "Ido malligita"
 
 #: gtk/deprecated/gtkhandlebox.c:259
 msgid ""
 "A boolean value indicating whether the handlebox's child is attached or "
 "detached."
 msgstr ""
+"Bulea valoro diranta ĉu la ido de la tenilujo estas kunligita aŭ malligita."
 
 #: gtk/deprecated/gtkimagemenuitem.c:226 gtk/gtkbutton.c:360
 msgid "Image widget"
@@ -661,7 +660,7 @@ msgstr "Bildfenestraĵo"
 
 #: gtk/deprecated/gtkimagemenuitem.c:227
 msgid "Child widget to appear next to the menu text"
-msgstr ""
+msgstr "Ida fenestraĵo aperonta flanke de la menua teksto"
 
 #: gtk/deprecated/gtkimagemenuitem.c:243 gtk/gtkbutton.c:300
 msgid "Use stock"
@@ -673,7 +672,7 @@ msgstr ""
 
 #: gtk/deprecated/gtkimagemenuitem.c:281 gtk/gtkmenu.c:647
 msgid "Accel Group"
-msgstr ""
+msgstr "Plirapidigila grupo"
 
 #: gtk/deprecated/gtkimagemenuitem.c:282
 msgid "The Accel Group to use for stock accelerator keys"
@@ -717,43 +716,43 @@ msgstr ""
 
 #: gtk/deprecated/gtknumerableicon.c:642
 msgid "Icon's count"
-msgstr ""
+msgstr "Bildsimbola nombro"
 
 #: gtk/deprecated/gtknumerableicon.c:643
 msgid "The count of the emblem currently displayed"
-msgstr ""
+msgstr "Nombro de la nun vidigata emblemo"
 
 #: gtk/deprecated/gtknumerableicon.c:649
 msgid "Icon's label"
-msgstr ""
+msgstr "Bildsimbola etikedo"
 
 #: gtk/deprecated/gtknumerableicon.c:650
 msgid "The label to be displayed over the icon"
-msgstr ""
+msgstr "Etikedo vigidota super la bildsimbolo"
 
 #: gtk/deprecated/gtknumerableicon.c:656
 msgid "Icon's style context"
-msgstr ""
+msgstr "Bildsimbola stila situacio"
 
 #: gtk/deprecated/gtknumerableicon.c:657
 msgid "The style context to theme the icon appearance"
-msgstr ""
+msgstr "Stila situacio por ŝanĝi la bildsimbolan aspekton"
 
 #: gtk/deprecated/gtknumerableicon.c:663
 msgid "Background icon"
-msgstr ""
+msgstr "Fona bildsimbolo"
 
 #: gtk/deprecated/gtknumerableicon.c:664
 msgid "The icon for the number emblem background"
-msgstr ""
+msgstr "Bildsimbolo por fono de la nombra emblemo"
 
 #: gtk/deprecated/gtknumerableicon.c:670
 msgid "Background icon name"
-msgstr ""
+msgstr "Nomo de fona bildsimbolo"
 
 #: gtk/deprecated/gtknumerableicon.c:671
 msgid "The icon name for the number emblem background"
-msgstr ""
+msgstr "Nomo de bildsimbolo por fono de la nombra emblemo"
 
 #: gtk/deprecated/gtkradioaction.c:120
 msgid "The value"
@@ -764,6 +763,8 @@ msgid ""
 "The value returned by gtk_radio_action_get_current_value() when this action "
 "is the current action of its group."
 msgstr ""
+"La valoro liverita de gtk_radio_action_get_current_value() kiam tiu ago "
+"estas la nuna ago de ĝia grupo."
 
 #: gtk/deprecated/gtkradioaction.c:139 gtk/gtkradiobutton.c:184
 #: gtk/gtkradiomenuitem.c:424 gtk/gtkradiotoolbutton.c:83
@@ -786,19 +787,19 @@ msgstr ""
 
 #: gtk/deprecated/gtkrecentaction.c:674 gtk/gtkrecentchoosermenu.c:239
 msgid "Show Numbers"
-msgstr ""
+msgstr "Montri numerojn"
 
 #: gtk/deprecated/gtkrecentaction.c:675 gtk/gtkrecentchoosermenu.c:240
 msgid "Whether the items should be displayed with a number"
-msgstr ""
+msgstr "Ĉu la eroj montriĝu kun numeroj"
 
 #: gtk/deprecated/gtkstatusicon.c:234 gtk/gtkimage.c:255
 msgid "Pixbuf"
-msgstr ""
+msgstr "Pixbuf"
 
 #: gtk/deprecated/gtkstatusicon.c:235 gtk/gtkimage.c:256
 msgid "A GdkPixbuf to display"
-msgstr ""
+msgstr "Vidigota GdkPixbuf"
 
 #: gtk/deprecated/gtkstatusicon.c:242 gtk/gtkimage.c:269
 #: gtk/gtkrecentmanager.c:289
@@ -807,7 +808,7 @@ msgstr "Dosiernomo"
 
 #: gtk/deprecated/gtkstatusicon.c:243 gtk/gtkimage.c:270
 msgid "Filename to load and display"
-msgstr ""
+msgstr "Enlegota kaj vidigota dosiernomo"
 
 #: gtk/deprecated/gtkstatusicon.c:255 gtk/gtkcellrendererpixbuf.c:195
 #: gtk/gtkimage.c:281
@@ -833,7 +834,7 @@ msgstr "Grando"
 
 #: gtk/deprecated/gtkstatusicon.c:297
 msgid "The size of the icon"
-msgstr ""
+msgstr "Grando de la bildsimbolo"
 
 #: gtk/deprecated/gtkstatusicon.c:306 gtk/gtkinvisible.c:98
 #: gtk/gtkmountoperation.c:179 gtk/gtkstylecontext.c:228 gtk/gtkwindow.c:894
@@ -842,19 +843,19 @@ msgstr "Ekrano"
 
 #: gtk/deprecated/gtkstatusicon.c:307
 msgid "The screen where this status icon will be displayed"
-msgstr ""
+msgstr "Ekrano vidigonta ĉi tiun statan bildsimbolon"
 
 #: gtk/deprecated/gtkstatusicon.c:315
 msgid "Whether the status icon is visible"
-msgstr ""
+msgstr "Ĉu la stata bildsimbolo estas videbla"
 
 #: gtk/deprecated/gtkstatusicon.c:330 gtk/gtkplug.c:196
 msgid "Embedded"
-msgstr "Enkorpigite"
+msgstr "Enkorpigita"
 
 #: gtk/deprecated/gtkstatusicon.c:331
 msgid "Whether the status icon is embedded"
-msgstr ""
+msgstr "Ĉu la stata ikono estas enkorpigita"
 
 #: gtk/deprecated/gtkstatusicon.c:346 gtk/deprecated/gtktrayicon-x11.c:127
 #: gtk/gtkgesturepan.c:237 gtk/gtkorientable.c:61
@@ -863,7 +864,7 @@ msgstr "Orientiĝo"
 
 #: gtk/deprecated/gtkstatusicon.c:347 gtk/deprecated/gtktrayicon-x11.c:128
 msgid "The orientation of the tray"
-msgstr ""
+msgstr "Orientiĝo de la taskopleto"
 
 #: gtk/deprecated/gtkstatusicon.c:374 gtk/gtkwidget.c:1282
 msgid "Has tooltip"
@@ -871,7 +872,7 @@ msgstr "Havas ŝpruchelpilon"
 
 #: gtk/deprecated/gtkstatusicon.c:375
 msgid "Whether this tray icon has a tooltip"
-msgstr ""
+msgstr "Ĉu tiu ĉi taskopleta bildsimbolo havas ŝpruchelpilon"
 
 #: gtk/deprecated/gtkstatusicon.c:401 gtk/gtkwidget.c:1306
 msgid "Tooltip Text"
@@ -879,15 +880,15 @@ msgstr "Ŝpruchelpila teksto"
 
 #: gtk/deprecated/gtkstatusicon.c:402 gtk/gtkwidget.c:1307 gtk/gtkwidget.c:1331
 msgid "The contents of the tooltip for this widget"
-msgstr ""
+msgstr "Enhavoj de la ŝpruchelpilo por tiu ĉi fenestraĵo"
 
 #: gtk/deprecated/gtkstatusicon.c:425 gtk/gtkwidget.c:1330
 msgid "Tooltip markup"
-msgstr ""
+msgstr "Ŝpruchelpila markado"
 
 #: gtk/deprecated/gtkstatusicon.c:426
 msgid "The contents of the tooltip for this tray icon"
-msgstr ""
+msgstr "Enhavoj de la ŝpruchelpilo por tiu ĉi taskopleta bildsimbolo"
 
 #: gtk/deprecated/gtkstatusicon.c:443 gtk/gtkcolorbutton.c:183
 #: gtk/gtkfilechooserbutton.c:438 gtk/gtkfontbutton.c:479
@@ -899,15 +900,15 @@ msgstr "Titolo"
 
 #: gtk/deprecated/gtkstatusicon.c:444
 msgid "The title of this tray icon"
-msgstr ""
+msgstr "Titolo de ĉi tiu taskopleta bildsimbolo"
 
 #: gtk/deprecated/gtkstyle.c:471
 msgid "Style context"
-msgstr ""
+msgstr "Stila situacio"
 
 #: gtk/deprecated/gtkstyle.c:472
 msgid "GtkStyleContext to get style from"
-msgstr ""
+msgstr "GtkStyleContext dononta stilon"
 
 #: gtk/deprecated/gtktable.c:185
 msgid "Rows"
@@ -1471,7 +1472,6 @@ msgid "Active window"
 msgstr "Aktiva fenestro"
 
 #: gtk/gtkapplication.c:672
-#| msgid "The cell which currently has focus"
 msgid "The window which most recently had focus"
 msgstr "Laste enfokusigita fenestro"
 
@@ -1753,7 +1753,7 @@ msgstr "Vertikala ĝisrandigo de la ido"
 
 #: gtk/gtkbutton.c:361
 msgid "Child widget to appear next to the button text"
-msgstr ""
+msgstr "Ida fenestraĵo aperonta flanke de la butona teksto"
 
 #: gtk/gtkbutton.c:374
 msgid "Image position"
@@ -2124,27 +2124,27 @@ msgstr "La fiksita alto"
 
 #: gtk/gtkcellrenderer.c:369
 msgid "Is Expander"
-msgstr ""
+msgstr "Estas etendebla"
 
 #: gtk/gtkcellrenderer.c:370
 msgid "Row has children"
-msgstr ""
+msgstr "Vico havas idojn"
 
 #: gtk/gtkcellrenderer.c:378
 msgid "Is Expanded"
-msgstr ""
+msgstr "Estas etendita"
 
 #: gtk/gtkcellrenderer.c:379
 msgid "Row is an expander row, and is expanded"
-msgstr ""
+msgstr "Vico estas etendebla kaj etendita"
 
 #: gtk/gtkcellrenderer.c:386
 msgid "Cell background color name"
-msgstr ""
+msgstr "Nomo de fonkoloro de la ĉelo"
 
 #: gtk/gtkcellrenderer.c:387
 msgid "Cell background color as a string"
-msgstr ""
+msgstr "Fonkoloro de la ĉelo kiel ĉeno"
 
 #: gtk/gtkcellrenderer.c:402
 msgid "Cell background color"
@@ -2152,15 +2152,15 @@ msgstr "Fonkoloro de la ĉelo"
 
 #: gtk/gtkcellrenderer.c:403
 msgid "Cell background color as a GdkColor"
-msgstr ""
+msgstr "Fonkoloro de la ĉeno kiel GdkColor"
 
 #: gtk/gtkcellrenderer.c:417
 msgid "Cell background RGBA color"
-msgstr ""
+msgstr "Fonkoloro de la ĉeno kiel RVBA-koloro"
 
 #: gtk/gtkcellrenderer.c:418
 msgid "Cell background color as a GdkRGBA"
-msgstr ""
+msgstr "Fonkoloro de la ĉelo kiel GdkRGBA"
 
 #: gtk/gtkcellrenderer.c:425
 msgid "Editing"
@@ -2168,7 +2168,7 @@ msgstr "Redaktado"
 
 #: gtk/gtkcellrenderer.c:426
 msgid "Whether the cell renderer is currently in editing mode"
-msgstr ""
+msgstr "Ĉu la ĉela bildigilo estas en redakta reĝimo nun"
 
 #: gtk/gtkcellrenderer.c:434
 msgid "Cell background set"
@@ -2188,7 +2188,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderercombo.c:151
 msgid "Text Column"
-msgstr ""
+msgstr "Teksta kolumno"
 
 #: gtk/gtkcellrenderercombo.c:152
 msgid "A column in the data source model to get the strings from"
@@ -2261,11 +2261,11 @@ msgstr ""
 #: gtk/gtkcellrendererpixbuf.c:281 gtk/gtkimage.c:358 gtk/gtkmodelbutton.c:1116
 #: gtk/gtkshortcutsshortcut.c:550 gtk/gtkwindow.c:838
 msgid "Icon"
-msgstr "Piktogramo"
+msgstr "Bildsimbolo"
 
 #: gtk/gtkcellrendererprogress.c:139
 msgid "Value of the progress bar"
-msgstr ""
+msgstr "Valoro de la plenumskalo"
 
 #: gtk/gtkcellrendererprogress.c:156 gtk/gtkcellrenderertext.c:255
 #: gtk/gtkentrybuffer.c:350 gtk/gtkentry.c:950 gtk/gtkmessagedialog.c:214
@@ -2275,7 +2275,7 @@ msgstr "Teksto"
 
 #: gtk/gtkcellrendererprogress.c:157
 msgid "Text on the progress bar"
-msgstr ""
+msgstr "Teksto sur la plenumskalo"
 
 #: gtk/gtkcellrendererprogress.c:180 gtk/gtkcellrendererspinner.c:144
 msgid "Pulse"
@@ -2564,21 +2564,23 @@ msgstr "Maksimuma larĝo de la ĉelo, en signoj"
 
 #: gtk/gtkcellrenderertext.c:542 gtk/gtktexttag.c:568
 msgid "Wrap mode"
-msgstr ""
+msgstr "Linifalda reĝimo"
 
 #: gtk/gtkcellrenderertext.c:543
 msgid ""
 "How to break the string into multiple lines, if the cell renderer does not "
 "have enough room to display the entire string"
 msgstr ""
+"Kiel disigi la ĉenon en plurajn liniojn, se la ĉela bildigilo ne havas "
+"sufiĉan spacon por vidigi ĝin tutan."
 
 #: gtk/gtkcellrenderertext.c:561 gtk/gtkcombobox.c:922
 msgid "Wrap width"
-msgstr ""
+msgstr "Linifalda larĝo"
 
 #: gtk/gtkcellrenderertext.c:562
 msgid "The width at which the text is wrapped"
-msgstr ""
+msgstr "Larĝo kie la teksto faldiĝas"
 
 #: gtk/gtkcellrenderertext.c:580 gtk/gtktreeviewcolumn.c:344
 msgid "Alignment"
@@ -2602,7 +2604,7 @@ msgstr "Agordi fonon"
 
 #: gtk/gtkcellrenderertext.c:607 gtk/gtkcellview.c:354 gtk/gtktexttag.c:722
 msgid "Whether this tag affects the background color"
-msgstr ""
+msgstr "Ĉu tiu marko efikas al la fonkoloro"
 
 #: gtk/gtkcellrenderertext.c:610 gtk/gtktexttag.c:729
 msgid "Foreground set"
@@ -2610,7 +2612,7 @@ msgstr "Agordi malfonon"
 
 #: gtk/gtkcellrenderertext.c:611 gtk/gtktexttag.c:730
 msgid "Whether this tag affects the foreground color"
-msgstr ""
+msgstr "Ĉu tiu marko efikas al la malfonkoloro"
 
 #: gtk/gtkcellrenderertext.c:614 gtk/gtktexttag.c:733
 msgid "Editability set"
@@ -2618,7 +2620,7 @@ msgstr "Agordi redakteblecon"
 
 #: gtk/gtkcellrenderertext.c:615 gtk/gtktexttag.c:734
 msgid "Whether this tag affects text editability"
-msgstr ""
+msgstr "Ĉu tiu marko efikas al redaktebleco de la teksto"
 
 #: gtk/gtkcellrenderertext.c:618 gtk/gtktexttag.c:737
 msgid "Font family set"
@@ -2674,7 +2676,7 @@ msgstr "Agordi tiparskalon"
 
 #: gtk/gtkcellrenderertext.c:643 gtk/gtktexttag.c:762
 msgid "Whether this tag scales the font size by a factor"
-msgstr ""
+msgstr "Ĉu tiu et"
 
 #: gtk/gtkcellrenderertext.c:646 gtk/gtktexttag.c:781
 msgid "Rise set"
@@ -2742,11 +2744,11 @@ msgstr ""
 
 #: gtk/gtkcellrenderertoggle.c:154 gtk/gtklistbox.c:3896
 msgid "Activatable"
-msgstr "Aktivigeble"
+msgstr "Aktivigebla"
 
 #: gtk/gtkcellrenderertoggle.c:155
 msgid "The toggle button can be activated"
-msgstr ""
+msgstr "Tiu ĉi baskulo aktivigeblas"
 
 #: gtk/gtkcellrenderertoggle.c:162
 msgid "Radio state"
@@ -2877,7 +2879,7 @@ msgstr "Montri redaktilon"
 
 #: gtk/gtkcolorbutton.c:275
 msgid "Whether to show the color editor right away"
-msgstr ""
+msgstr "Ĉu montri la redaktilon de koloroj tuj"
 
 #: gtk/gtkcolorchooser.c:67
 msgid "Color"
@@ -2965,11 +2967,11 @@ msgstr ""
 
 #: gtk/gtkcombobox.c:1025 gtk/gtkentry.c:880
 msgid "Has Frame"
-msgstr ""
+msgstr "Havas kadron"
 
 #: gtk/gtkcombobox.c:1026
 msgid "Whether the combo box draws a frame around the child"
-msgstr ""
+msgstr "Ĉu la redaktebla falmenuo desegnas kadron ĉirkaŭ la ido"
 
 #: gtk/gtkcombobox.c:1043 gtk/gtkmenu.c:695
 msgid "Tearoff Title"
@@ -3878,11 +3880,11 @@ msgstr ""
 msgid "The label on the cancel button"
 msgstr "La etikedo sur la nulig-butono"
 
-#: gtk/gtkfilechooserwidget.c:8446 gtk/gtkfilechooserwidget.c:8447
+#: gtk/gtkfilechooserwidget.c:8396 gtk/gtkfilechooserwidget.c:8397
 msgid "Search mode"
 msgstr "Serĉreĝimo"
 
-#: gtk/gtkfilechooserwidget.c:8453 gtk/gtkfilechooserwidget.c:8454
+#: gtk/gtkfilechooserwidget.c:8403 gtk/gtkfilechooserwidget.c:8404
 #: gtk/gtkheaderbar.c:2034 gtk/gtkshortcutsshortcut.c:591
 msgid "Subtitle"
 msgstr "Subteksto"
@@ -4802,7 +4804,6 @@ msgid "Direction"
 msgstr "Direkto"
 
 #: gtk/gtkmenubutton.c:535
-#| msgid "The direction the arrow should point"
 msgid "The direction the arrow should point."
 msgstr "La direkto al kiu la sago montru."
 
