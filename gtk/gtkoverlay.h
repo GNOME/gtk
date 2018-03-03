@@ -42,9 +42,7 @@ typedef struct _GtkOverlayPrivate  GtkOverlayPrivate;
 
 struct _GtkOverlay
 {
-  GtkBin parent;
-
-  GtkOverlayPrivate *priv;
+  GtkBin parent_instance;
 };
 
 /**

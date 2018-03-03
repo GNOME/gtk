@@ -258,7 +258,7 @@ gtk_overlay_size_allocate (GtkWidget           *widget,
                            GtkAllocation       *out_clip)
 {
   GtkOverlay *overlay = GTK_OVERLAY (widget);
-  GtkOverlayPrivate *priv = overlay->priv;
+  GtkOverlayPrivate *priv = gtk_overlay_get_instance_private (overlay);
   GSList *children;
   GtkWidget *main_widget;
 
@@ -352,7 +352,7 @@ static void
 gtk_overlay_remove (GtkContainer *container,
                     GtkWidget    *widget)
 {
-  GtkOverlayPrivate *priv = GTK_OVERLAY (container)->priv;
+  GtkOverlayPrivate *priv = gtk_overlay_get_instance_private (GTK_OVERLAY (container));
   GtkOverlayChild *child;
   GSList *children, *next;
   gboolean removed;
@@ -401,7 +401,7 @@ gtk_overlay_reorder_overlay (GtkOverlay *overlay,
                              GtkWidget  *child,
                              gint        position)
 {
-  GtkOverlayPrivate *priv;
+  GtkOverlayPrivate *priv = gtk_overlay_get_instance_private (overlay);
   GSList *old_link;
   GSList *new_link;
   GSList *l;
@@ -411,8 +411,6 @@ gtk_overlay_reorder_overlay (GtkOverlay *overlay,
 
   g_return_if_fail (GTK_IS_OVERLAY (overlay));
   g_return_if_fail (GTK_IS_WIDGET (child));
-
-  priv = GTK_OVERLAY (overlay)->priv;
 
   old_link = priv->children;
   old_index = 0;
@@ -466,7 +464,7 @@ gtk_overlay_forall (GtkContainer *overlay,
                     GtkCallback   callback,
                     gpointer      callback_data)
 {
-  GtkOverlayPrivate *priv = GTK_OVERLAY (overlay)->priv;
+  GtkOverlayPrivate *priv = gtk_overlay_get_instance_private (GTK_OVERLAY (overlay));
   GtkOverlayChild *child;
   GSList *children;
   GtkWidget *main_widget;
@@ -489,7 +487,7 @@ static GtkOverlayChild *
 gtk_overlay_get_overlay_child (GtkOverlay *overlay,
 			       GtkWidget *child)
 {
-  GtkOverlayPrivate *priv = GTK_OVERLAY (overlay)->priv;
+  GtkOverlayPrivate *priv = gtk_overlay_get_instance_private (overlay);
   GtkOverlayChild *child_info;
   GSList *children;
 
@@ -574,7 +572,7 @@ gtk_overlay_get_child_property (GtkContainer *container,
 				GParamSpec   *pspec)
 {
   GtkOverlay *overlay = GTK_OVERLAY (container);
-  GtkOverlayPrivate *priv = GTK_OVERLAY (overlay)->priv;
+  GtkOverlayPrivate *priv = gtk_overlay_get_instance_private (overlay);
   GtkOverlayChild *child_info;
   GtkWidget *main_widget;
 
@@ -791,14 +789,14 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
                   GTK_TYPE_WIDGET,
                   GDK_TYPE_RECTANGLE | G_SIGNAL_TYPE_STATIC_SCOPE);
 
+  child_data_quark = g_quark_from_static_string ("gtk-overlay-child-data");
+
   gtk_widget_class_set_css_name (widget_class, I_("overlay"));
 }
 
 static void
 gtk_overlay_init (GtkOverlay *overlay)
 {
-  overlay->priv = gtk_overlay_get_instance_private (overlay);
-
   gtk_widget_set_has_window (GTK_WIDGET (overlay), FALSE);
 }
 
@@ -856,13 +854,12 @@ void
 gtk_overlay_add_overlay (GtkOverlay *overlay,
                          GtkWidget  *widget)
 {
-  GtkOverlayPrivate *priv;
+  GtkOverlayPrivate *priv = gtk_overlay_get_instance_private (overlay);
   GtkOverlayChild *child;
 
   g_return_if_fail (GTK_IS_OVERLAY (overlay));
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  priv = overlay->priv;
   child = g_slice_new0 (GtkOverlayChild);
   child->widget = widget;
 
