@@ -3983,7 +3983,7 @@ static const GskRenderNodeClass GSK_TEXT_NODE_CLASS = {
  * Note that @color may not be used if the font contains
  * color glyphs.
  *
- * Returns: a new text node, or %NULL
+ * Returns: (nullable): a new text node, or %NULL
  */
 GskRenderNode *
 gsk_text_node_new (PangoFont        *font,
