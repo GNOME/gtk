@@ -33,8 +33,8 @@
         </child>
         <child>
           <object class="GtkToggleButton" id="changes_prevent">
-            <property name="active" bind-source="changes_allow" bind-property="active" bind-flags="bidirectional|invert-boolean"/>
-            <property name="visible" bind-source="changes_prevent" bind-property="active" bind-flags="invert-boolean"/>
+            <property name="active" bind-source="changes_allow" bind-property="active" bind-flags="bidirectional|invert-boolean">True</property>
+            <property name="visible" bind-source="changes_prevent" bind-property="active" bind-flags="invert-boolean">False</property>
             <property name="icon-name">changes-prevent</property>
             <property name="relief">none</property>
           </object>
