@@ -4002,6 +4002,42 @@ gsk_text_node_new (PangoFont        *font,
   if (ink_rect.width == 0 || ink_rect.height == 0)
     return NULL;
 
+  self = (GskTextNode *)gsk_text_node_new_with_bounds (font, glyphs, color, x, y,
+                                                       &GRAPHENE_RECT_INIT (x,
+                                                                            y + ink_rect.y,
+                                                                            ink_rect.x + ink_rect.width,
+                                                                            ink_rect.height));
+
+  return &self->render_node;
+}
+
+/**
+ * gsk_text_node_new_with_bounds:
+ * @font: the #PangoFont containing the glyphs
+ * @glyphs: the #PangoGlyphString to render
+ * @color: the foreground color to render with
+ * @x: the x coordinate at which to put the baseline
+ * @y: the y coordinate at wihch to put the baseline
+ * @bounds: the node bounds
+ *
+ * Creates a render node that renders the given glyphs,
+ * Note that @color may not be used if the font contains
+ * color glyphs.
+ *
+ * This function will not do any text measuring, contrary to gsk_text_node_new().
+ *
+ * Returns: (nullable): a new text node, or %NULL
+ */
+GskRenderNode *
+gsk_text_node_new_with_bounds (PangoFont             *font,
+                               PangoGlyphString      *glyphs,
+                               const GdkRGBA         *color,
+                               double                 x,
+                               double                 y,
+                               const graphene_rect_t *bounds)
+{
+  GskTextNode *self;
+
   self = (GskTextNode *) gsk_render_node_new (&GSK_TEXT_NODE_CLASS, sizeof (PangoGlyphInfo) * glyphs->num_glyphs);
 
   self->font = g_object_ref (font);
@@ -4011,11 +4047,7 @@ gsk_text_node_new (PangoFont        *font,
   self->num_glyphs = glyphs->num_glyphs;
   memcpy (self->glyphs, glyphs->glyphs, sizeof (PangoGlyphInfo) * glyphs->num_glyphs);
 
-  graphene_rect_init (&self->render_node.bounds,
-                      x,
-                      y + ink_rect.y,
-                      ink_rect.x + ink_rect.width,
-                      ink_rect.height);
+  graphene_rect_init_from_rect (&self->render_node.bounds, bounds);
 
   return &self->render_node;
 }

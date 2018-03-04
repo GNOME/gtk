@@ -288,6 +288,13 @@ GskRenderNode *         gsk_text_node_new                       (PangoFont      
                                                                  double                    x,
                                                                  double                    y);
 GDK_AVAILABLE_IN_ALL
+GskRenderNode *         gsk_text_node_new_with_bounds           (PangoFont                *font,
+                                                                 PangoGlyphString         *glyphs,
+                                                                 const GdkRGBA            *color,
+                                                                 double                    x,
+                                                                 double                    y,
+                                                                 const graphene_rect_t    *bounds);
+GDK_AVAILABLE_IN_ALL
 const PangoFont *       gsk_text_node_peek_font                 (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
 guint                   gsk_text_node_get_num_glyphs            (GskRenderNode            *node);
