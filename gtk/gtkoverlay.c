@@ -379,7 +379,7 @@ gtk_overlay_remove (GtkContainer *container,
 
       gtk_widget_unparent (widget);
 
-      for (w = gtk_widget_get_first_child (widget);
+      for (w = gtk_widget_get_first_child (GTK_WIDGET (container));
            w != NULL;
            w = gtk_widget_get_next_sibling (w))
         {
