@@ -459,11 +459,14 @@ gtk_overlay_forall (GtkContainer *overlay,
 {
   GtkWidget *child;
 
-  for (child = _gtk_widget_get_first_child (GTK_WIDGET (overlay));
-       child != NULL;
-       child = _gtk_widget_get_next_sibling (child))
+  child = gtk_widget_get_first_child (GTK_WIDGET (overlay));
+  while (child != NULL)
     {
+      GtkWidget *next = gtk_widget_get_next_sibling (child);
+
       (* callback) (child, callback_data);
+
+      child = next;
     }
 }
 
