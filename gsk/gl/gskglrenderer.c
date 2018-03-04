@@ -579,17 +579,24 @@ render_color_node (GskGLRenderer       *self,
 }
 
 static inline void
-render_texture_node (GskGLRenderer       *self,
-                     GskRenderNode       *node,
-                     RenderOpBuilder     *builder)
+render_texture_node (GskGLRenderer   *self,
+                     GskRenderNode   *node,
+                     RenderOpBuilder *builder)
 {
-  const float min_x = builder->dx + node->bounds.origin.x;
-  const float min_y = builder->dy + node->bounds.origin.y;
-  const float max_x = min_x + node->bounds.size.width;
-  const float max_y = min_y + node->bounds.size.height;
+  float min_x = builder->dx + node->bounds.origin.x;
+  float min_y = builder->dy + node->bounds.origin.y;
+  float max_x = min_x + node->bounds.size.width;
+  float max_y = min_y + node->bounds.size.height;
   GdkTexture *texture = gsk_texture_node_get_texture (node);
   int gl_min_filter = GL_NEAREST, gl_mag_filter = GL_NEAREST;
   int texture_id;
+  const GskRoundedRect *clip = &builder->current_clip;
+  graphene_rect_t node_bounds = node->bounds;
+  float tx1, ty1, tx2, ty2; /* texture coords */
+
+  /* Offset the node position and apply the modelview here already */
+  graphene_rect_offset (&node_bounds, builder->dx, builder->dy);
+  graphene_matrix_transform_bounds (&builder->current_modelview, &node_bounds, &node_bounds);
 
   get_gl_scaling_filters (node, &gl_min_filter, &gl_mag_filter);
 
@@ -600,28 +607,63 @@ render_texture_node (GskGLRenderer       *self,
   ops_set_program (builder, &self->blit_program);
   ops_set_texture (builder, texture_id);
 
+  if (!graphene_rect_contains_rect (&clip->bounds, &node_bounds))
+    {
+      const float scale_x = node->bounds.size.width / gdk_texture_get_width (texture);
+      const float scale_y = node->bounds.size.height / gdk_texture_get_height (texture);
+      graphene_matrix_t inverse_transform;
+      graphene_rect_t intersection;
+      graphene_rect_intersection (&clip->bounds, &node_bounds, &intersection);
+
+      /* The texture is completely outside of the current clip bounds */
+      if (graphene_rect_equal (&intersection, graphene_rect_zero ()))
+        return;
+
+      tx1 = (intersection.origin.x - node_bounds.origin.x) / gdk_texture_get_width (texture) / scale_x;
+      ty1 = (intersection.origin.y - node_bounds.origin.y) / gdk_texture_get_height (texture) / scale_y;
+      tx2 = tx1 + (intersection.size.width / gdk_texture_get_width (texture)) / scale_x;
+      ty2 = ty1 + (intersection.size.height / gdk_texture_get_height (texture)) / scale_y;
+
+      /* Invert intersection again, since we will apply the modelview once more in the shader */
+      graphene_matrix_inverse (&builder->current_modelview, &inverse_transform);
+      graphene_matrix_transform_bounds (&inverse_transform, &intersection, &intersection);
+
+      min_x = intersection.origin.x;
+      min_y = intersection.origin.y;
+      max_x = min_x + intersection.size.width;
+      max_y = min_y + intersection.size.height;
+    }
+  else
+    {
+      /* The whole thing */
+      tx1 = 0;
+      ty1 = 0;
+      tx2 = 1;
+      ty2 = 1;
+    }
+
   if (GDK_IS_GL_TEXTURE (texture))
     {
       ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-        { { min_x, min_y }, { 0, 1 }, },
-        { { min_x, max_y }, { 0, 0 }, },
-        { { max_x, min_y }, { 1, 1 }, },
+        { { min_x, min_y }, { tx1, ty2 }, },
+        { { min_x, max_y }, { tx1, ty1 }, },
+        { { max_x, min_y }, { tx2, ty2 }, },
 
-        { { max_x, max_y }, { 1, 0 }, },
-        { { min_x, max_y }, { 0, 0 }, },
-        { { max_x, min_y }, { 1, 1 }, },
+        { { max_x, max_y }, { tx2, ty1 }, },
+        { { min_x, max_y }, { tx1, ty1 }, },
+        { { max_x, min_y }, { tx2, ty2 }, },
       });
     }
   else
     {
       ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-        { { min_x, min_y }, { 0, 0 }, },
-        { { min_x, max_y }, { 0, 1 }, },
-        { { max_x, min_y }, { 1, 0 }, },
+        { { min_x, min_y }, { tx1, ty1 }, },
+        { { min_x, max_y }, { tx1, ty2 }, },
+        { { max_x, min_y }, { tx2, ty1 }, },
 
-        { { max_x, max_y }, { 1, 1 }, },
-        { { min_x, max_y }, { 0, 1 }, },
-        { { max_x, min_y }, { 1, 0 }, },
+        { { max_x, max_y }, { tx2, ty2 }, },
+        { { min_x, max_y }, { tx1, ty2 }, },
+        { { max_x, min_y }, { tx2, ty1 }, },
       });
     }
 }
