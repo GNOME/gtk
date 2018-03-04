@@ -575,9 +575,12 @@ gtk_im_context_xim_set_client_widget (GtkIMContext *context,
                                       GtkWidget    *widget)
 {
   GtkIMContextXIM *context_xim = GTK_IM_CONTEXT_XIM (context);
-  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
+  GdkWindow *window = NULL;
 
-  set_ic_client_window (context_xim, gtk_widget_get_window (toplevel));
+  if (widget != NULL)
+    window = gtk_widget_get_window (gtk_widget_get_toplevel (widget));
+
+  set_ic_client_window (context_xim, window);
 }
 
 GtkIMContext *
