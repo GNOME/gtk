@@ -467,11 +467,18 @@ gtk_im_context_xim_class_init (GtkIMContextXIMClass *class)
 static void
 gtk_im_context_xim_init (GtkIMContextXIM *im_context_xim)
 {
+  const char *charset;
+
   im_context_xim->use_preedit = TRUE;
   im_context_xim->filter_key_release = FALSE;
   im_context_xim->finalizing = FALSE;
   im_context_xim->has_focus = FALSE;
   im_context_xim->in_toplevel = FALSE;
+
+  im_context_xim->locale = g_strdup (setlocale (LC_CTYPE, NULL));
+
+  g_get_charset (&charset);
+  im_context_xim->mb_charset = g_strdup (charset);
 }
 
 static void
@@ -581,24 +588,6 @@ gtk_im_context_xim_set_client_widget (GtkIMContext *context,
     window = gtk_widget_get_window (gtk_widget_get_toplevel (widget));
 
   set_ic_client_window (context_xim, window);
-}
-
-GtkIMContext *
-gtk_im_context_xim_new (void)
-{
-  GtkIMContextXIM *result;
-  const gchar *charset;
-
-  if (!GDK_IS_X11_DISPLAY(gdk_display_get_default()))
-    return NULL;
-  result = g_object_new (GTK_TYPE_IM_CONTEXT_XIM, NULL);
-
-  result->locale = g_strdup (setlocale (LC_CTYPE, NULL));
-
-  g_get_charset (&charset);
-  result->mb_charset = g_strdup (charset);
-
-  return GTK_IM_CONTEXT (result);
 }
 
 static char *
