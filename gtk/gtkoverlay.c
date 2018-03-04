@@ -833,7 +833,7 @@ gtk_overlay_add_overlay (GtkOverlay *overlay,
   g_return_if_fail (GTK_IS_OVERLAY (overlay));
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  child = g_slice_new0 (GtkOverlayChild);
+  child = g_new0 (GtkOverlayChild, 1);
 
   gtk_widget_insert_before (widget, GTK_WIDGET (overlay), NULL);
   gtk_overlay_set_overlay_child (widget, child);
