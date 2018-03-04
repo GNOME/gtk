@@ -1594,9 +1594,11 @@ Gtk_3_0_gir_SCANNERFLAGS = 			\
 	--add-include-path=$(top_builddir)/gdk	\
 	--include-uninstalled=$(top_builddir)/gdk/Gdk-3.0.gir
 Gtk_3_0_gir_INCLUDES = Atk-1.0
+Gtk_3_0_gir_C_INCLUDES = gtk/gtk.h gtk/gtk-a11y.h
 if USE_X11
 Gtk_3_0_gir_SCANNERFLAGS += --add-include-path=$(top_builddir)/gdk/x11
 Gtk_3_0_gir_INCLUDES += xlib-2.0
+Gtk_3_0_gir_C_INCLUDES += gtk/gtkx.h
 endif
 Gtk_3_0_gir_CFLAGS = \
 		$(AM_CPPFLAGS) \
