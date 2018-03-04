@@ -1,0 +1,18 @@
+image: lazka/gitlab-gtk-3-22:v1
+
+stages:
+  - build
+
+before_script:
+  - mkdir -p _ccache
+  - export CCACHE_BASEDIR=${PWD}
+  - export CCACHE_DIR=${PWD}/_ccache
+
+cache:
+  paths:
+    - _ccache/
+
+build:
+  stage: build
+  script:
+   - bash -x ./.gitlab-ci/test-docker.sh
