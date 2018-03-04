@@ -582,8 +582,9 @@ gtk_media_file_get_input_stream (GtkMediaFile *self)
   return priv->input_stream;
 }
 
-#include "gtkffmediafileprivate.h"
 #include "gtknomediafileprivate.h"
+#include "gtkffmediafileprivate.h"
+#include "gtkgstmediafileprivate.h"
 
 void
 gtk_media_file_extension_init (void)
@@ -598,6 +599,9 @@ gtk_media_file_extension_init (void)
 
 #ifdef HAVE_FFMPEG
   g_type_ensure (GTK_TYPE_FF_MEDIA_FILE);
+#endif
+#ifdef HAVE_GSTREAMER
+  g_type_ensure (GTK_TYPE_GST_MEDIA_FILE);
 #endif
   g_type_ensure (GTK_TYPE_NO_MEDIA_FILE);
 }
