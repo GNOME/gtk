@@ -1200,7 +1200,7 @@ struct _GdkEventDND {
  * @type: the type of the event (%GDK_TOUCHPAD_SWIPE)
  * @window: the window which received the event
  * @send_event: %TRUE if the event was sent explicitly
- * @phase: (type GdkTouchpadGesturePhase): the current phase of the gesture
+ * @phase: the current phase of the gesture
  * @n_fingers: The number of fingers triggering the swipe
  * @time: the time of the event in milliseconds
  * @x: The X coordinate of the pointer
@@ -1237,7 +1237,7 @@ struct _GdkEventTouchpadSwipe {
  * @type: the type of the event (%GDK_TOUCHPAD_PINCH)
  * @window: the window which received the event
  * @send_event: %TRUE if the event was sent explicitly
- * @phase: (type GdkTouchpadGesturePhase): the current phase of the gesture
+ * @phase: the current phase of the gesture
  * @n_fingers: The number of fingers triggering the pinch
  * @time: the time of the event in milliseconds
  * @x: The X coordinate of the pointer
