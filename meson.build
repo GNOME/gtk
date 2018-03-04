@@ -349,6 +349,11 @@ if pangoft_dep.found()
   endif
 endif
 
+if win32_enabled
+  # for GTK_IM_CONTEXT_IME
+  pangowin32_dep  = dependency('pangowin32')
+endif
+
 pangocairo_dep = dependency('pangocairo', version: cairo_req,
                             fallback : ['pango', 'libpangocairo_dep'])
 pixbuf_dep     = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req,
