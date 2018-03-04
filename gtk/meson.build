@@ -1045,6 +1045,7 @@ if build_gir
                                dependencies: gsk_gir_dep,
                                extra_args: gir_args + [
                                  '-DGTK_COMPILATION',
+                                 '--c-include=gtk/gtk-a11y.h',
                                ])
   gtk_dep_sources += gtk_gir
 endif
