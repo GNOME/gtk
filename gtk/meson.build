@@ -875,6 +875,13 @@ if ffmpeg_enabled
   gtk_deps += [ ffmpeg_deps, ]
 endif
 
+if gstreamer_enabled
+  gtk_sources += [ 'gtkgstmediafile.c',
+                   'gtkgstpaintable.c',
+                   'gtkgstsink.c' ]
+  gtk_deps += [ gstplayer_dep, ]
+endif
+
 if x11_enabled
   x11_data_prefix = dependency('x11').get_pkgconfig_variable('prefix')
 
