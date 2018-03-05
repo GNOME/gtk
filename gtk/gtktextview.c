@@ -227,6 +227,7 @@ struct _GtkTextViewPrivate
   GtkGesture *multipress_gesture;
   GtkGesture *drag_gesture;
   GtkEventController *motion_controller;
+  GtkEventController *key_controller;
 
   GtkCssNode *selection_node;
 
@@ -395,10 +396,19 @@ static void gtk_text_view_drag_gesture_end           (GtkGestureDrag *gesture,
                                                       gdouble         offset_y,
                                                       GtkTextView    *text_view);
 
-static gint gtk_text_view_key_press_event      (GtkWidget        *widget,
-                                                GdkEventKey      *event);
-static gint gtk_text_view_key_release_event    (GtkWidget        *widget,
-                                                GdkEventKey      *event);
+static gboolean gtk_text_view_key_controller_key_pressed  (GtkEventControllerKey *controller,
+                                                           guint                  keyval,
+                                                           guint                  keycode,
+                                                           GdkModifierType        state,
+                                                           GtkTextView           *text_view);
+static void     gtk_text_view_key_controller_key_released (GtkEventControllerKey *controller,
+                                                           guint                  keyval,
+                                                           guint                  keycode,
+                                                           GdkModifierType        state,
+                                                           GtkTextView           *text_view);
+static void     gtk_text_view_key_controller_im_update    (GtkEventControllerKey *controller,
+                                                           GtkTextView           *text_view);
+
 static void gtk_text_view_focus_in             (GtkWidget        *widget);
 static void gtk_text_view_focus_out            (GtkWidget        *widget);
 static gint gtk_text_view_event                (GtkWidget        *widget,
@@ -705,8 +715,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->state_flags_changed = gtk_text_view_state_flags_changed;
   widget_class->measure = gtk_text_view_measure;
   widget_class->size_allocate = gtk_text_view_size_allocate;
-  widget_class->key_press_event = gtk_text_view_key_press_event;
-  widget_class->key_release_event = gtk_text_view_key_release_event;
   widget_class->event = gtk_text_view_event;
   widget_class->snapshot = gtk_text_view_snapshot;
   widget_class->focus = gtk_text_view_focus;
@@ -1695,6 +1703,16 @@ gtk_text_view_init (GtkTextView *text_view)
 
   priv->motion_controller = gtk_event_controller_motion_new (widget);
   g_signal_connect (priv->motion_controller, "motion", G_CALLBACK (gtk_text_view_motion), widget);
+
+  priv->key_controller = gtk_event_controller_key_new (widget);
+  g_signal_connect (priv->key_controller, "key-pressed",
+                    G_CALLBACK (gtk_text_view_key_controller_key_pressed),
+                    widget);
+  g_signal_connect (priv->key_controller, "im-update",
+                    G_CALLBACK (gtk_text_view_key_controller_im_update),
+                    widget);
+  gtk_event_controller_key_set_im_context (GTK_EVENT_CONTROLLER_KEY (priv->key_controller),
+                                           priv->im_context);
 
   priv->selection_node = gtk_css_node_new ();
   gtk_css_node_set_name (priv->selection_node, I_("selection"));
@@ -2872,7 +2890,10 @@ gtk_text_view_set_editable (GtkTextView *text_view,
       priv->editable = setting;
 
       if (setting && gtk_widget_has_focus (GTK_WIDGET (text_view)))
-	gtk_im_context_focus_in (priv->im_context);
+        gtk_im_context_focus_in (priv->im_context);
+
+      gtk_event_controller_key_set_im_context (GTK_EVENT_CONTROLLER_KEY (priv->key_controller),
+                                               setting ? priv->im_context : NULL);
 
       if (priv->layout && priv->layout->default_style)
         {
@@ -3591,6 +3612,7 @@ gtk_text_view_finalize (GObject *object)
   g_object_unref (priv->multipress_gesture);
   g_object_unref (priv->drag_gesture);
   g_object_unref (priv->motion_controller);
+  g_object_unref (priv->key_controller);
 
   if (priv->tabs)
     pango_tab_array_free (priv->tabs);
@@ -4965,52 +4987,32 @@ gtk_text_view_update_handles (GtkTextView       *text_view,
                                        GTK_TEXT_HANDLE_POSITION_SELECTION_START);
 }
 
-static gint
-gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
+static gboolean
+gtk_text_view_key_controller_key_pressed (GtkEventControllerKey *controller,
+                                          guint                  keyval,
+                                          guint                  keycode,
+                                          GdkModifierType        state,
+                                          GtkTextView           *text_view)
 {
-  GtkTextView *text_view;
   GtkTextViewPrivate *priv;
-  GtkTextMark *insert;
-  GtkTextIter iter;
-  gboolean can_insert;
   gboolean retval = FALSE;
-  guint keyval, state;
 
-  text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
 
   if (priv->layout == NULL || get_buffer (text_view) == NULL)
     return FALSE;
-
-  if (!gdk_event_get_keyval ((GdkEvent *) event, &keyval) ||
-      !gdk_event_get_state ((GdkEvent *) event, &state))
-    return GDK_EVENT_PROPAGATE;
 
   priv->handling_key_event = TRUE;
 
   /* Make sure input method knows where it is */
   flush_update_im_spot_location (text_view);
 
-  insert = gtk_text_buffer_get_insert (get_buffer (text_view));
-  gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &iter, insert);
-  can_insert = gtk_text_iter_can_insert (&iter, priv->editable);
-  if (gtk_im_context_filter_keypress (priv->im_context, event))
-    {
-      priv->need_im_reset = TRUE;
-      if (!can_insert)
-        gtk_text_view_reset_im_context (text_view);
-      retval = TRUE;
-    }
-  /* Binding set */
-  else if (GTK_WIDGET_CLASS (gtk_text_view_parent_class)->key_press_event (widget, event))
-    {
-      retval = TRUE;
-    }
   /* use overall editability not can_insert, more predictable for users */
-  else if (priv->editable &&
-           (keyval == GDK_KEY_Return ||
-            keyval == GDK_KEY_ISO_Enter ||
-            keyval == GDK_KEY_KP_Enter))
+
+  if (priv->editable &&
+      (keyval == GDK_KEY_Return ||
+       keyval == GDK_KEY_ISO_Enter ||
+       keyval == GDK_KEY_KP_Enter))
     {
       /* this won't actually insert the newline if the cursor isn't
        * editable
@@ -5046,7 +5048,7 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
   gtk_text_view_reset_blink_time (text_view);
   gtk_text_view_pend_cursor_blink (text_view);
 
-  if (!gdk_event_is_sent ((GdkEvent *) event) && priv->text_handle)
+  if (priv->text_handle)
     _gtk_text_handle_set_mode (priv->text_handle,
                                GTK_TEXT_HANDLE_MODE_NONE);
 
@@ -5057,37 +5059,22 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
   return retval;
 }
 
-static gint
-gtk_text_view_key_release_event (GtkWidget *widget, GdkEventKey *event)
+static void
+gtk_text_view_key_controller_im_update (GtkEventControllerKey *controller,
+                                        GtkTextView           *text_view)
 {
-  GtkTextView *text_view;
-  GtkTextViewPrivate *priv;
+  GtkTextViewPrivate *priv = text_view->priv;
   GtkTextMark *insert;
   GtkTextIter iter;
-  gboolean retval = FALSE;
-
-  text_view = GTK_TEXT_VIEW (widget);
-  priv = text_view->priv;
-
-  if (priv->layout == NULL || get_buffer (text_view) == NULL)
-    return FALSE;
-
-  priv->handling_key_event = TRUE;
+  gboolean can_insert;
 
   insert = gtk_text_buffer_get_insert (get_buffer (text_view));
   gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &iter, insert);
-  if (gtk_text_iter_can_insert (&iter, priv->editable) &&
-      gtk_im_context_filter_keypress (priv->im_context, event))
-    {
-      priv->need_im_reset = TRUE;
-      retval = TRUE;
-    }
-  else
-    retval = GTK_WIDGET_CLASS (gtk_text_view_parent_class)->key_release_event (widget, event);
+  can_insert = gtk_text_iter_can_insert (&iter, priv->editable);
 
-  priv->handling_key_event = FALSE;
-
-  return retval;
+  priv->need_im_reset = TRUE;
+  if (!can_insert)
+    gtk_text_view_reset_im_context (text_view);
 }
 
 static gboolean
@@ -6722,9 +6709,6 @@ gtk_text_view_buffer_changed_handler (GtkTextBuffer *buffer,
   GtkTextView *text_view = data;
   GtkTextViewPrivate *priv = text_view->priv;
 
-  if (priv->handling_key_event)
-    gtk_text_view_obscure_mouse_cursor (text_view);
-
   if (priv->text_handle)
     gtk_text_view_update_handles (text_view,
                                   _gtk_text_handle_get_mode (priv->text_handle));
@@ -8320,6 +8304,7 @@ gtk_text_view_commit_text (GtkTextView   *text_view,
 
   priv = text_view->priv;
 
+  gtk_text_view_obscure_mouse_cursor (text_view);
   gtk_text_buffer_begin_user_action (get_buffer (text_view));
 
   had_selection = gtk_text_buffer_get_selection_bounds (get_buffer (text_view),
@@ -8376,6 +8361,7 @@ gtk_text_view_preedit_changed_handler (GtkIMContext *context,
 
   priv = text_view->priv;
 
+  gtk_text_view_obscure_mouse_cursor (text_view);
   gtk_text_buffer_get_iter_at_mark (priv->buffer, &iter,
 				    gtk_text_buffer_get_insert (priv->buffer));
 
