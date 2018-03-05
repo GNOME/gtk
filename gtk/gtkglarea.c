@@ -386,7 +386,7 @@ delete_one_texture (gpointer data)
   Texture *texture = data;
 
   if (texture->holder)
-    gdk_texture_release_gl (texture->holder);
+    gdk_gl_texture_release (texture->holder);
 
   if (texture->id != 0)
     {
@@ -735,11 +735,11 @@ gtk_gl_area_snapshot (GtkWidget   *widget,
       priv->texture = NULL;
       priv->textures = g_list_prepend (priv->textures, texture);
 
-      texture->holder = gdk_texture_new_for_gl (priv->context,
-                                                texture->id,
-                                                texture->width,
-                                                texture->height,
-                                                release_texture, texture);
+      texture->holder = gdk_gl_texture_new (priv->context,
+                                            texture->id,
+                                            texture->width,
+                                            texture->height,
+                                            release_texture, texture);
 
       gtk_snapshot_append_texture (snapshot,
                                    texture->holder,
