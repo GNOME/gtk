@@ -62,6 +62,7 @@
 #include "gtkbox.h"
 #include "gtkmodelbutton.h"
 #include "gtkprivate.h"
+#include "gtkeventcontrollerkey.h"
 
 /*< private >
  * SECTION:gtkplacessidebar
@@ -173,6 +174,8 @@ struct _GtkPlacesSidebar {
   GtkPlacesOpenFlags open_flags;
 
   GActionGroup *action_group;
+
+  GtkEventController *list_box_key_controller;
 
   guint mounting               : 1;
   guint  drag_data_received    : 1;
@@ -3382,67 +3385,62 @@ stop_shortcut_cb (GSimpleAction *action,
 }
 
 static gboolean
-on_key_press_event (GtkWidget        *widget,
-                    GdkEventKey      *event,
-                    GtkPlacesSidebar *sidebar)
+on_key_pressed (GtkEventControllerKey *controller,
+                guint                  keyval,
+                guint                  keycode,
+                GdkModifierType        state,
+                GtkPlacesSidebar      *sidebar)
 {
   guint modifiers;
   GtkListBoxRow *row;
-  guint keyval, state;
 
-  if (event &&
-      gdk_event_get_keyval ((GdkEvent *) event, &keyval) &&
-      gdk_event_get_state ((GdkEvent *) event, &state))
+  row = gtk_list_box_get_selected_row (GTK_LIST_BOX (sidebar->list_box));
+  if (row)
     {
-      row = gtk_list_box_get_selected_row (GTK_LIST_BOX (sidebar->list_box));
-      if (row)
+      modifiers = gtk_accelerator_get_default_mod_mask ();
+
+      if (keyval == GDK_KEY_Return ||
+          keyval == GDK_KEY_KP_Enter ||
+          keyval == GDK_KEY_ISO_Enter ||
+          keyval == GDK_KEY_space)
         {
-          modifiers = gtk_accelerator_get_default_mod_mask ();
+          GtkPlacesOpenFlags open_flags = GTK_PLACES_OPEN_NORMAL;
 
-          if (keyval == GDK_KEY_Return ||
-              keyval == GDK_KEY_KP_Enter ||
-              keyval == GDK_KEY_ISO_Enter ||
-              keyval == GDK_KEY_space)
-            {
-              GtkPlacesOpenFlags open_flags = GTK_PLACES_OPEN_NORMAL;
+          if ((state & modifiers) == GDK_SHIFT_MASK)
+            open_flags = GTK_PLACES_OPEN_NEW_TAB;
+          else if ((state & modifiers) == GDK_CONTROL_MASK)
+            open_flags = GTK_PLACES_OPEN_NEW_WINDOW;
 
-              if ((state & modifiers) == GDK_SHIFT_MASK)
-                open_flags = GTK_PLACES_OPEN_NEW_TAB;
-              else if ((state & modifiers) == GDK_CONTROL_MASK)
-                open_flags = GTK_PLACES_OPEN_NEW_WINDOW;
+          open_row (GTK_SIDEBAR_ROW (row), open_flags);
 
-              open_row (GTK_SIDEBAR_ROW (row), open_flags);
+          return TRUE;
+        }
 
-              return TRUE;
-            }
+      if (keyval == GDK_KEY_Down &&
+          (state & modifiers) == GDK_MOD1_MASK)
+        return eject_or_unmount_selection (sidebar);
 
-          if (keyval == GDK_KEY_Down &&
-              (state & modifiers) == GDK_MOD1_MASK)
-            return eject_or_unmount_selection (sidebar);
+      if ((keyval == GDK_KEY_Delete ||
+           keyval == GDK_KEY_KP_Delete) &&
+          (state & modifiers) == 0)
+        {
+          remove_bookmark (GTK_SIDEBAR_ROW (row));
+          return TRUE;
+        }
 
-          if ((keyval == GDK_KEY_Delete ||
-               keyval == GDK_KEY_KP_Delete) &&
-              (state & modifiers) == 0)
-            {
-              remove_bookmark (GTK_SIDEBAR_ROW (row));
-              return TRUE;
-            }
+      if ((keyval == GDK_KEY_F2) &&
+          (state & modifiers) == 0)
+        {
+          rename_bookmark (GTK_SIDEBAR_ROW (row));
+          return TRUE;
+        }
 
-          if ((keyval == GDK_KEY_F2) &&
-              (state & modifiers) == 0)
-            {
-              rename_bookmark (GTK_SIDEBAR_ROW (row));
-              return TRUE;
-            }
-
-          if ((keyval == GDK_KEY_Menu) ||
-              ((keyval == GDK_KEY_F10) &&
-               (state & modifiers) == GDK_SHIFT_MASK))
-
-            {
-              popup_menu_cb (GTK_SIDEBAR_ROW (row));
-              return TRUE;
-            }
+      if ((keyval == GDK_KEY_Menu) ||
+          ((keyval == GDK_KEY_F10) &&
+           (state & modifiers) == GDK_SHIFT_MASK))
+        {
+          popup_menu_cb (GTK_SIDEBAR_ROW (row));
+          return TRUE;
         }
     }
 
@@ -4047,8 +4045,11 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 
   g_signal_connect (sidebar->list_box, "row-activated",
                     G_CALLBACK (on_row_activated), sidebar);
-  g_signal_connect (sidebar->list_box, "key-press-event",
-                    G_CALLBACK (on_key_press_event), sidebar);
+
+  sidebar->list_box_key_controller =
+    gtk_event_controller_key_new (sidebar->list_box);
+  g_signal_connect (sidebar->list_box_key_controller, "key-pressed",
+                    G_CALLBACK (on_key_pressed), sidebar);
 
   sidebar->long_press_gesture = gtk_gesture_long_press_new (GTK_WIDGET (sidebar));
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (sidebar->long_press_gesture), TRUE);
@@ -4323,6 +4324,7 @@ gtk_places_sidebar_dispose (GObject *object)
   g_clear_pointer (&sidebar->rename_uri, g_free);
 
   g_clear_object (&sidebar->long_press_gesture);
+  g_clear_object (&sidebar->list_box_key_controller);
 
   if (sidebar->source_targets)
     {
