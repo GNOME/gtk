@@ -72,6 +72,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindow.h"
+#include "gtkeventcontrollerkey.h"
 
 #include "a11y/gtkentryaccessible.h"
 
@@ -213,6 +214,7 @@ struct _GtkEntryPrivate
   GtkGesture    *drag_gesture;
   GtkGesture    *multipress_gesture;
   GtkEventController *motion_controller;
+  GtkEventController *key_controller;
 
   GtkWidget     *progress_widget;
   GtkCssNode    *selection_node;
@@ -274,7 +276,6 @@ struct _GtkEntryPrivate
   guint         cursor_handle_dragged   : 1;
   guint         selection_handle_dragged : 1;
   guint         populate_all            : 1;
-  guint         handling_key_event      : 1;
 };
 
 struct _EntryIconInfo
@@ -419,10 +420,6 @@ static void   gtk_entry_snapshot             (GtkWidget        *widget,
                                               GtkSnapshot      *snapshot);
 static gboolean gtk_entry_event              (GtkWidget        *widget,
                                               GdkEvent         *event);
-static gint   gtk_entry_key_press            (GtkWidget        *widget,
-					      GdkEventKey      *event);
-static gint   gtk_entry_key_release          (GtkWidget        *widget,
-					      GdkEventKey      *event);
 static void   gtk_entry_focus_in             (GtkWidget        *widget);
 static void   gtk_entry_focus_out            (GtkWidget        *widget);
 static void   gtk_entry_grab_focus           (GtkWidget        *widget);
@@ -557,6 +554,11 @@ static void   gtk_entry_drag_gesture_end           (GtkGestureDrag *gesture,
                                                     gdouble         offset_x,
                                                     gdouble         offset_y,
                                                     GtkEntry       *entry);
+static gboolean gtk_entry_key_controller_key_pressed  (GtkEventControllerKey *controller,
+                                                       guint                  keyval,
+                                                       guint                  keycode,
+                                                       GdkModifierType        state,
+                                                       GtkWidget             *widget);
 
 /* Internal routines
  */
@@ -797,8 +799,6 @@ gtk_entry_class_init (GtkEntryClass *class)
   widget_class->size_allocate = gtk_entry_size_allocate;
   widget_class->snapshot = gtk_entry_snapshot;
   widget_class->event = gtk_entry_event;
-  widget_class->key_press_event = gtk_entry_key_press;
-  widget_class->key_release_event = gtk_entry_key_release;
   widget_class->grab_focus = gtk_entry_grab_focus;
   widget_class->style_updated = gtk_entry_style_updated;
   widget_class->query_tooltip = gtk_entry_query_tooltip;
@@ -1973,7 +1973,10 @@ gtk_entry_set_property (GObject         *object,
 	    priv->editable = new_value;
 
 	    if (new_value && gtk_widget_has_focus (widget))
-	      gtk_im_context_focus_in (priv->im_context);
+              gtk_im_context_focus_in (priv->im_context);
+
+            gtk_event_controller_key_set_im_context (GTK_EVENT_CONTROLLER_KEY (priv->key_controller),
+                                                     new_value ? priv->im_context : NULL);
 
             g_object_notify_by_pspec (object, pspec);
 	    gtk_widget_queue_draw (widget);
@@ -2492,6 +2495,16 @@ find_invisible_char (GtkWidget *widget)
 }
 
 static void
+gtk_entry_schedule_im_reset (GtkEntry *entry)
+{
+  GtkEntryPrivate *priv;
+
+  priv = gtk_entry_get_instance_private (entry);
+
+  priv->need_im_reset = TRUE;
+}
+
+static void
 gtk_entry_init (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
@@ -2553,6 +2566,14 @@ gtk_entry_init (GtkEntry *entry)
   priv->motion_controller = gtk_event_controller_motion_new (GTK_WIDGET (entry));
   g_signal_connect (priv->motion_controller, "motion",
                     G_CALLBACK (entry_motion_cb), entry);
+
+  priv->key_controller = gtk_event_controller_key_new (GTK_WIDGET (entry));
+  g_signal_connect (priv->key_controller, "key-pressed",
+                    G_CALLBACK (gtk_entry_key_controller_key_pressed), entry);
+  g_signal_connect_swapped (priv->key_controller, "im-update",
+                            G_CALLBACK (gtk_entry_schedule_im_reset), entry);
+  gtk_event_controller_key_set_im_context (GTK_EVENT_CONTROLLER_KEY (priv->key_controller),
+                                           priv->im_context);
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (entry));
   for (i = 0; i < 2; i++)
@@ -4045,40 +4066,25 @@ gtk_entry_obscure_mouse_cursor (GtkEntry *entry)
   priv->mouse_cursor_obscured = TRUE;
 }
 
-static gint
-gtk_entry_key_press (GtkWidget   *widget,
-		     GdkEventKey *ev)
+static gboolean
+gtk_entry_key_controller_key_pressed (GtkEventControllerKey *controller,
+                                      guint                  keyval,
+                                      guint                  keycode,
+                                      GdkModifierType        state,
+                                      GtkWidget             *widget)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
-  GdkEvent *event = (GdkEvent *) ev;
-  gboolean retval = FALSE;
-  guint keyval;
-  const char *string;
-
-  if (!gdk_event_get_keyval ((GdkEvent *) event, &keyval))
-    return GDK_EVENT_PROPAGATE;
-
-  priv->handling_key_event = TRUE;
+  gunichar unichar;
 
   gtk_entry_reset_blink_time (entry);
   gtk_entry_pend_cursor_blink (entry);
 
   gtk_entry_selection_bubble_popup_unset (entry);
 
-  if (!gdk_event_is_sent (event) && priv->text_handle)
+  if (priv->text_handle)
     _gtk_text_handle_set_mode (priv->text_handle,
                                GTK_TEXT_HANDLE_MODE_NONE);
-
-  if (priv->editable)
-    {
-      if (gtk_im_context_filter_keypress (priv->im_context, ev))
-	{
-	  priv->need_im_reset = TRUE;
-	  retval = TRUE;
-          goto out;
-	}
-    }
 
   if (keyval == GDK_KEY_Return ||
       keyval == GDK_KEY_KP_Enter ||
@@ -4086,49 +4092,14 @@ gtk_entry_key_press (GtkWidget   *widget,
       keyval == GDK_KEY_Escape)
     gtk_entry_reset_im_context (entry);
 
-  if (GTK_WIDGET_CLASS (gtk_entry_parent_class)->key_press_event (widget, ev))
-    {
-      /* Activate key bindings */
-      retval = TRUE;
-      goto out;
-    }
+  unichar = gdk_keyval_to_unicode (keyval);
 
-  gdk_event_get_string (event, &string);
-
-  if (!priv->editable && string[0] != '\0')
+  if (!priv->editable && unichar != 0)
     gtk_widget_error_bell (widget);
 
-out:
-  priv->handling_key_event = FALSE;
+  gtk_entry_obscure_mouse_cursor (entry);
 
-  return retval;
-}
-
-static gint
-gtk_entry_key_release (GtkWidget   *widget,
-		       GdkEventKey *event)
-{
-  GtkEntry *entry = GTK_ENTRY (widget);
-  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
-  gboolean retval = FALSE;
-
-  priv->handling_key_event = TRUE;
-
-  if (priv->editable)
-    {
-      if (gtk_im_context_filter_keypress (priv->im_context, event))
-	{
-	  priv->need_im_reset = TRUE;
-	  retval = TRUE;
-          goto out;
-	}
-    }
-
-  retval = GTK_WIDGET_CLASS (gtk_entry_parent_class)->key_release_event (widget, event);
-
-out:
-  priv->handling_key_event = FALSE;
-  return retval;
+  return FALSE;
 }
 
 static void
@@ -4144,7 +4115,7 @@ gtk_entry_focus_in (GtkWidget *widget)
 
   if (priv->editable)
     {
-      priv->need_im_reset = TRUE;
+      gtk_entry_schedule_im_reset (entry);
       gtk_im_context_focus_in (priv->im_context);
       keymap_state_changed (keymap, entry);
       g_signal_connect (keymap, "state-changed", 
@@ -4186,7 +4157,7 @@ gtk_entry_focus_out (GtkWidget *widget)
 
   if (priv->editable)
     {
-      priv->need_im_reset = TRUE;
+      gtk_entry_schedule_im_reset (entry);
       gtk_im_context_focus_out (priv->im_context);
       remove_capslock_feedback (entry);
     }
@@ -4282,6 +4253,12 @@ gtk_entry_state_flags_changed (GtkWidget     *widget,
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+
+  if (gtk_widget_get_realized (widget))
+    {
+      set_text_cursor (widget);
+      priv->mouse_cursor_obscured = FALSE;
+    }
 
   if (!gtk_widget_is_sensitive (widget))
     {
@@ -4671,11 +4648,6 @@ buffer_notify_text (GtkEntryBuffer *buffer,
                     GParamSpec     *spec,
                     GtkEntry       *entry)
 {
-  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
-
-  if (priv->handling_key_event)
-    gtk_entry_obscure_mouse_cursor (entry);
-
   emit_changed (entry);
   g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_TEXT]);
 }
@@ -5250,7 +5222,10 @@ gtk_entry_commit_cb (GtkIMContext *context,
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
 
   if (priv->editable)
-    gtk_entry_enter_text (entry, str);
+    {
+      gtk_entry_enter_text (entry, str);
+      gtk_entry_obscure_mouse_cursor (entry);
+    }
 }
 
 static void 
@@ -5263,6 +5238,8 @@ gtk_entry_preedit_changed_cb (GtkIMContext *context,
     {
       gchar *preedit_string;
       gint cursor_pos;
+
+      gtk_entry_obscure_mouse_cursor (entry);
 
       gtk_im_context_get_preedit_string (priv->im_context,
                                          &preedit_string, NULL,
