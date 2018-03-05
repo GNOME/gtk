@@ -70,7 +70,7 @@ struct _GtkIMContextWayland
   guint use_preedit : 1;
 };
 
-G_DEFINE_TYPE_WITH_CODE (GtkIMContextWayland, gtk_im_context_wayland, GTK_TYPE_IM_CONTEXT,
+G_DEFINE_TYPE_WITH_CODE (GtkIMContextWayland, gtk_im_context_wayland, GTK_TYPE_IM_CONTEXT_SIMPLE,
                          g_io_extension_point_implement (GTK_IM_MODULE_EXTENSION_POINT_NAME,
                                                          g_define_type_id,
                                                          "wayland",
