@@ -5,6 +5,7 @@
 #include "gskdebugprivate.h"
 #include "gskprofilerprivate.h"
 #include "gdk/gdktextureprivate.h"
+#include "gdk/gdkgltextureprivate.h"
 
 #include <gdk/gdk.h>
 #include <epoxy/gl.h>

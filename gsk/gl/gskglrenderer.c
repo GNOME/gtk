@@ -11,11 +11,12 @@
 #include "gskrendernodeprivate.h"
 #include "gskshaderbuilderprivate.h"
 #include "gskglglyphcacheprivate.h"
-#include "gdk/gdktextureprivate.h"
 #include "gskglrenderopsprivate.h"
 #include "gskcairoblurprivate.h"
 
 #include "gskprivate.h"
+
+#include "gdk/gdkgltextureprivate.h"
 
 #include <epoxy/gl.h>
 #include <cairo-ft.h>
@@ -2573,10 +2574,10 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
   /* Render the actual scene */
   gsk_gl_renderer_do_render (renderer, root, viewport, texture_id, 1);
 
-  texture = gdk_texture_new_for_gl (self->gl_context,
-                                    texture_id,
-                                    width, height,
-                                    NULL, NULL);
+  texture = gdk_gl_texture_new (self->gl_context,
+                                texture_id,
+                                width, height,
+                                NULL, NULL);
 
   gsk_gl_renderer_clear_tree (self);
   return texture;
