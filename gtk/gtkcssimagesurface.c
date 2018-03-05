@@ -60,7 +60,13 @@ gtk_css_image_surface_draw (GtkCssImage *image,
       ABS (width - surface->width) > 0.001 ||
       ABS (height - surface->height) > 0.001)
     {
+      double xscale, yscale;
       cairo_t *cache;
+
+      /* We need the device scale (HiDPI mode) to calculate the proper size in
+       * pixels for the image surface and set the cache device scale
+       */
+      cairo_surface_get_device_scale (cairo_get_target (cr), &xscale, &yscale);
 
       /* Save original size to preserve precision */
       surface->width = width;
@@ -72,8 +78,9 @@ gtk_css_image_surface_draw (GtkCssImage *image,
       /* Image big enough to contain scaled image with subpixel precision */
       surface->cache = cairo_surface_create_similar_image (surface->surface,
                                                            CAIRO_FORMAT_ARGB32,
-                                                           ceil (width),
-                                                           ceil (height));
+                                                           ceil (width*xscale),
+                                                           ceil (height*yscale));
+      cairo_surface_set_device_scale (surface->cache, xscale, yscale);
       cache = cairo_create (surface->cache);
       cairo_rectangle (cache, 0, 0, width, height);
       cairo_scale (cache, width / image_width, height / image_height);
