@@ -163,7 +163,6 @@ struct _GtkExpanderPrivate
   guint             use_markup      : 1;
   guint             label_fill      : 1;
   guint             resize_toplevel : 1;
-  guint             pressed_in_title : 1;
 };
 
 static void gtk_expander_set_property (GObject          *object,
@@ -217,11 +216,6 @@ static void gtk_expander_measure (GtkWidget      *widget,
                                   int            *natural_baseline);
 
 /* Gestures */
-static void     gesture_multipress_pressed_cb  (GtkGestureMultiPress *gesture,
-                                                gint                  n_press,
-                                                gdouble               x,
-                                                gdouble               y,
-                                                GtkExpander          *expander);
 static void     gesture_multipress_released_cb (GtkGestureMultiPress *gesture,
                                                 gint                  n_press,
                                                 gdouble               x,
@@ -385,13 +379,11 @@ gtk_expander_init (GtkExpander *expander)
   gtk_drag_dest_set (GTK_WIDGET (expander), 0, NULL, 0);
   gtk_drag_dest_set_track_motion (GTK_WIDGET (expander), TRUE);
 
-  priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (expander));
+  priv->multipress_gesture = gtk_gesture_multi_press_new (priv->title_widget);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture),
                                  GDK_BUTTON_PRIMARY);
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->multipress_gesture),
                                      FALSE);
-  g_signal_connect (priv->multipress_gesture, "pressed",
-                    G_CALLBACK (gesture_multipress_pressed_cb), expander);
   g_signal_connect (priv->multipress_gesture, "released",
                     G_CALLBACK (gesture_multipress_released_cb), expander);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
@@ -531,34 +523,13 @@ gtk_expander_size_allocate (GtkWidget           *widget,
 }
 
 static void
-gesture_multipress_pressed_cb (GtkGestureMultiPress *gesture,
-                               gint                  n_press,
-                               gdouble               x,
-                               gdouble               y,
-                               GtkExpander          *expander)
-{
-  GtkExpanderPrivate *priv = expander->priv;
-  GtkAllocation title_allocation;
-
-  gtk_widget_get_own_allocation (priv->title_widget, &title_allocation);
-  gtk_widget_translate_coordinates (priv->title_widget, GTK_WIDGET (expander),
-                                    title_allocation.x, title_allocation.y,
-                                    &title_allocation.x, &title_allocation.y);
-  /* Coordinates are in the widget coordinate system, so transform
-   * the title_allocation to it.
-   */
-  priv->pressed_in_title = gdk_rectangle_contains_point (&title_allocation, x, y);
-}
-
-static void
 gesture_multipress_released_cb (GtkGestureMultiPress *gesture,
                                 gint                  n_press,
                                 gdouble               x,
                                 gdouble               y,
                                 GtkExpander          *expander)
 {
-  if (expander->priv->pressed_in_title)
-    gtk_widget_activate (GTK_WIDGET (expander));
+  gtk_widget_activate (GTK_WIDGET (expander));
 }
 
 static gboolean
