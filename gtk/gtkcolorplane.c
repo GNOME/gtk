@@ -27,6 +27,7 @@
 #include "gtkintl.h"
 #include "gtksnapshot.h"
 #include "gtkprivate.h"
+#include "gtkeventcontrollerkey.h"
 
 struct _GtkColorPlanePrivate
 {
@@ -38,6 +39,7 @@ struct _GtkColorPlanePrivate
 
   GtkGesture *drag_gesture;
   GtkGesture *long_press_gesture;
+  GtkEventController *key_controller;
 };
 
 enum {
@@ -316,16 +318,14 @@ error:
 }
 
 static gboolean
-plane_key_press (GtkWidget   *widget,
-                 GdkEventKey *event)
+key_controller_key_pressed (GtkEventControllerKey *controller,
+                            guint                  keyval,
+                            guint                  keycode,
+                            GdkModifierType        state,
+                            GtkWidget             *widget)
 {
   GtkColorPlane *plane = GTK_COLOR_PLANE (widget);
   gdouble step;
-  guint keyval, state;
-
-  if (!gdk_event_get_keyval ((GdkEvent *) event, &keyval) ||
-      !gdk_event_get_state ((GdkEvent *) event, &state))
-    return GDK_EVENT_PROPAGATE;
 
   if ((state & GDK_MOD1_MASK) != 0)
     step = 0.1;
@@ -345,7 +345,7 @@ plane_key_press (GtkWidget   *widget,
            keyval == GDK_KEY_KP_Right)
     sv_move (plane, 0, step);
   else
-    return GTK_WIDGET_CLASS (gtk_color_plane_parent_class)->key_press_event (widget, event);
+    return FALSE;
 
   return TRUE;
 }
@@ -432,6 +432,10 @@ gtk_color_plane_init (GtkColorPlane *plane)
                     G_CALLBACK (hold_action), plane);
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (plane->priv->long_press_gesture),
                                      TRUE);
+
+  plane->priv->key_controller = gtk_event_controller_key_new (GTK_WIDGET (plane));
+  g_signal_connect (plane->priv->key_controller, "key-pressed",
+                    G_CALLBACK (key_controller_key_pressed), plane);
 }
 
 static void
@@ -448,6 +452,7 @@ plane_finalize (GObject *object)
 
   g_clear_object (&plane->priv->drag_gesture);
   g_clear_object (&plane->priv->long_press_gesture);
+  g_clear_object (&plane->priv->key_controller);
 
   G_OBJECT_CLASS (gtk_color_plane_parent_class)->finalize (object);
 }
@@ -509,7 +514,6 @@ gtk_color_plane_class_init (GtkColorPlaneClass *class)
   widget_class->size_allocate = plane_size_allocate;
   widget_class->realize = plane_realize;
   widget_class->unrealize = plane_unrealize;
-  widget_class->key_press_event = plane_key_press;
 
   g_object_class_install_property (object_class,
                                    PROP_H_ADJUSTMENT,
