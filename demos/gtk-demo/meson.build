@@ -71,6 +71,7 @@ demos = files([
   'theming_style_classes.c',
   'transparent.c',
   'tree_store.c',
+  'video_player.c',
 ])
 
 gtkdemo_deps = [ libgtk_dep, ]
