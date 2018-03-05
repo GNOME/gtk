@@ -39,6 +39,7 @@
 #include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
+#include "gtkeventcontrollerkey.h"
 
 #include "a11y/gtkcolorswatchaccessibleprivate.h"
 
@@ -66,6 +67,7 @@ struct _GtkColorSwatchPrivate
 
   GtkGesture *long_press_gesture;
   GtkGesture *multipress_gesture;
+  GtkEventController *key_controller;
   GtkWidget *overlay_widget;
 
   GtkWidget *popover;
@@ -249,14 +251,13 @@ swatch_drag_data_received (GtkWidget        *widget,
 }
 
 static gboolean
-swatch_key_press (GtkWidget   *widget,
-                  GdkEventKey *event)
+key_controller_key_pressed (GtkEventControllerKey *controller,
+                            guint                  keyval,
+                            guint                  keycode,
+                            GdkModifierType        state,
+                            GtkWidget             *widget)
 {
   GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
-  guint keyval;
-
-  if (gdk_event_get_keyval ((GdkEvent *) event, &keyval))
-    return GDK_EVENT_PROPAGATE;
 
   if (keyval == GDK_KEY_space ||
       keyval == GDK_KEY_Return ||
@@ -272,9 +273,6 @@ swatch_key_press (GtkWidget   *widget,
         g_signal_emit (swatch, signals[ACTIVATE], 0);
       return TRUE;
     }
-
-  if (GTK_WIDGET_CLASS (gtk_color_swatch_parent_class)->key_press_event (widget, event))
-    return TRUE;
 
   return FALSE;
 }
@@ -515,6 +513,7 @@ swatch_dispose (GObject *object)
 
   g_clear_object (&swatch->priv->long_press_gesture);
   g_clear_object (&swatch->priv->multipress_gesture);
+  g_clear_object (&swatch->priv->key_controller);
 
   G_OBJECT_CLASS (gtk_color_swatch_parent_class)->dispose (object);
 }
@@ -535,7 +534,6 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
   widget_class->drag_begin = swatch_drag_begin;
   widget_class->drag_data_get = swatch_drag_data_get;
   widget_class->drag_data_received = swatch_drag_data_received;
-  widget_class->key_press_event = swatch_key_press;
   widget_class->popup_menu = swatch_popup_menu;
   widget_class->size_allocate = swatch_size_allocate;
   widget_class->state_flags_changed = swatch_state_flags_changed;
@@ -589,6 +587,10 @@ gtk_color_swatch_init (GtkColorSwatch *swatch)
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (swatch->priv->multipress_gesture), 0);
   g_signal_connect (swatch->priv->multipress_gesture, "pressed",
                     G_CALLBACK (tap_action), swatch);
+
+  swatch->priv->key_controller = gtk_event_controller_key_new (GTK_WIDGET (swatch));
+  g_signal_connect (swatch->priv->key_controller, "key-pressed",
+                    G_CALLBACK (key_controller_key_pressed), swatch);
 
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (swatch)), "activatable");
 
