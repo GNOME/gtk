@@ -95,6 +95,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkviewport.h"
 #include "gtkwidgetprivate.h"
+#include "gtkeventcontrollerkey.h"
 
 #include "a11y/gtkflowboxaccessibleprivate.h"
 #include "a11y/gtkflowboxchildaccessible.h"
@@ -667,6 +668,7 @@ struct _GtkFlowBoxPrivate {
 
   GtkGesture        *multipress_gesture;
   GtkGesture        *drag_gesture;
+  GtkEventController *key_controller;
 
   GtkFlowBoxChild   *rubberband_first;
   GtkFlowBoxChild   *rubberband_last;
@@ -2824,24 +2826,22 @@ gtk_flow_box_drag_gesture_end (GtkGestureDrag *gesture,
 }
 
 static gboolean
-gtk_flow_box_key_press_event (GtkWidget   *widget,
-                              GdkEventKey *event)
+gtk_flow_box_key_controller_key_pressed (GtkEventControllerKey *controller,
+                                         guint                  keyval,
+                                         guint                  keycode,
+                                         GdkModifierType        state,
+                                         GtkWidget             *widget)
 {
   GtkFlowBox *box = GTK_FLOW_BOX (widget);
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
-  guint keyval;
 
-  if (priv->rubberband_select)
+  if (priv->rubberband_select && keyval == GDK_KEY_Escape)
     {
-      if (gdk_event_get_keyval ((GdkEvent *) event, &keyval) &&
-          keyval == GDK_KEY_Escape)
-        {
-          gtk_flow_box_stop_rubberband (box);
-          return TRUE;
-        }
+      gtk_flow_box_stop_rubberband (box);
+      return TRUE;
     }
 
-  return GTK_WIDGET_CLASS (gtk_flow_box_parent_class)->key_press_event (widget, event);
+  return FALSE;
 }
 
 /* Realize and map {{{3 */
@@ -3386,6 +3386,7 @@ gtk_flow_box_finalize (GObject *obj)
 
   g_object_unref (priv->drag_gesture);
   g_object_unref (priv->multipress_gesture);
+  g_object_unref (priv->key_controller);
 
   if (priv->bound_model)
     {
@@ -3415,7 +3416,6 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
   widget_class->unmap = gtk_flow_box_unmap;
   widget_class->focus = gtk_flow_box_focus;
   widget_class->snapshot = gtk_flow_box_snapshot;
-  widget_class->key_press_event = gtk_flow_box_key_press_event;
   widget_class->get_request_mode = gtk_flow_box_get_request_mode;
   widget_class->measure = gtk_flow_box_measure;
 
@@ -3776,6 +3776,10 @@ gtk_flow_box_init (GtkFlowBox *box)
                     G_CALLBACK (gtk_flow_box_drag_gesture_update), box);
   g_signal_connect (priv->drag_gesture, "drag-end",
                     G_CALLBACK (gtk_flow_box_drag_gesture_end), box);
+
+  priv->key_controller = gtk_event_controller_key_new (GTK_WIDGET (box));
+  g_signal_connect (priv->key_controller, "key-pressed",
+                    G_CALLBACK (gtk_flow_box_key_controller_key_pressed), box);
 }
 
 static void
