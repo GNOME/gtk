@@ -225,6 +225,7 @@ gdk_x11_selection_input_stream_read_async (GInputStream        *input_stream,
                                       priv->selection, priv->target,
                                       size, count));
       g_task_return_int (task, size);
+      g_object_unref (task);
     }
   else
     {
