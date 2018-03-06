@@ -604,5 +604,18 @@ gtk_media_file_extension_init (void)
   g_type_ensure (GTK_TYPE_GST_MEDIA_FILE);
 #endif
   g_type_ensure (GTK_TYPE_NO_MEDIA_FILE);
-}
 
+  if (GTK_DEBUG_CHECK (MODULES))
+    {
+      GList *list, *l;
+
+      list = g_io_extension_point_get_extensions (ep);
+      for (l = list; l; l = l->next)
+        {
+          GIOExtension *ext = l->data;
+          g_print ("extension: %s: type %s\n",
+                   g_io_extension_get_name (ext),
+                   g_type_name (g_io_extension_get_type (ext)));
+        }
+    }
+}
