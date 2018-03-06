@@ -4030,24 +4030,18 @@ gtk_entry_drag_gesture_end (GtkGestureDrag *gesture,
 }
 
 static void
-set_invisible_cursor (GtkWidget *widget)
-{
-  GdkCursor *cursor;
-
-  cursor = gdk_cursor_new_from_name ("none", NULL);
-  gtk_widget_set_cursor (widget, cursor);
-  g_object_unref (cursor);
-}
-
-static void
 gtk_entry_obscure_mouse_cursor (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+  GdkCursor *cursor;
 
   if (priv->mouse_cursor_obscured)
     return;
 
-  set_invisible_cursor (GTK_WIDGET (entry));
+  cursor = gdk_cursor_new_from_name ("none", NULL);
+  gtk_widget_set_cursor (GTK_WIDGET (entry), cursor);
+  g_object_unref (cursor);
+
   priv->mouse_cursor_obscured = TRUE;
 }
 
@@ -4288,9 +4282,6 @@ gtk_entry_state_flags_changed (GtkWidget     *widget,
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
-
-  if (gtk_widget_get_realized (widget))
-    priv->mouse_cursor_obscured = FALSE;
 
   if (!gtk_widget_is_sensitive (widget))
     {
