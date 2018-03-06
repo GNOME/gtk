@@ -629,10 +629,10 @@ gettext_initialization (void)
 static void
 default_display_notify_cb (GdkDisplayManager *dm)
 {
+  debug_flags[0].display = gdk_display_get_default ();
   gtk_print_backends_init ();
   gtk_im_modules_init ();
   _gtk_accessibility_init ();
-  debug_flags[0].display = gdk_display_get_default ();
 }
 
 static void
