@@ -27,6 +27,7 @@ gdk_public_sources = files([
   'gdkgltexture.c',
   'gdkkeys.c',
   'gdkkeyuni.c',
+  'gdkmemorytexture.c',
   'gdkmonitor.c',
   'gdkpango.c',
   'gdkpixbuf-drawable.c',
