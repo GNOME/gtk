@@ -94,6 +94,12 @@ gdk_x11_pending_selection_notify_new (Window window,
 }
 
 static void
+gdk_x11_pending_selection_notify_free (GdkX11PendingSelectionNotify *notify)
+{
+  g_slice_free (GdkX11PendingSelectionNotify, notify);
+}
+
+static void
 gdk_x11_pending_selection_notify_require (GdkX11PendingSelectionNotify *notify,
                                           guint                         n_sends)
 {
@@ -145,6 +151,8 @@ gdk_x11_pending_selection_notify_send (GdkX11PendingSelectionNotify *notify,
                                       gdk_x11_get_xatom_name_for_display (display, notify->xevent.target),
                                       error));
     }
+
+  gdk_x11_pending_selection_notify_free (notify);
 }
 
 static gboolean
