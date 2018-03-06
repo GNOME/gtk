@@ -27,7 +27,7 @@
  * A #GtkExpander allows the user to hide or show its child by clicking
  * on an expander triangle similar to the triangles used in a #GtkTreeView.
  *
- * Normally you use an expander as you would use any other descendant
+ * Normally you use an expander as you would use a descendant
  * of #GtkBin; you create the child widget and use gtk_container_add()
  * to add it to the expander. When the expander is toggled, it will take
  * care of showing and hiding the child automatically.
@@ -785,6 +785,18 @@ gtk_expander_add (GtkContainer *container,
 {
   GtkExpander *expander = GTK_EXPANDER (container);
   GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
+
+  if (priv->child != NULL)
+    {
+      g_warning ("Attempting to add a widget with type %s to a %s, "
+                 "but a %s can only contain one widget at a time; "
+                 "it already contains a widget of type %s",
+                 g_type_name (G_OBJECT_TYPE (widget)),
+                 g_type_name (G_OBJECT_TYPE (container)),
+                 g_type_name (G_OBJECT_TYPE (container)),
+                 g_type_name (G_OBJECT_TYPE (priv->child)));
+      return;
+    }
 
   if (priv->expanded)
     {
