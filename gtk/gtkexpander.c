@@ -1030,30 +1030,23 @@ gtk_expander_resize_toplevel (GtkExpander *expander)
     {
       GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (expander));
 
-      if (toplevel && gtk_widget_get_realized (toplevel))
+      if (toplevel && GTK_IS_WINDOW (toplevel) &&
+          gtk_widget_get_realized (toplevel))
         {
-          GtkAllocation toplevel_allocation;
-          GtkAllocation child_allocation;
+          int toplevel_width, toplevel_height;
+          int child_height;
 
-          gtk_widget_get_allocation (toplevel, &toplevel_allocation);
-          gtk_widget_get_allocation (child, &child_allocation);
+          gtk_widget_get_preferred_height (child, &child_height, NULL);
+          gtk_window_get_size (GTK_WINDOW (toplevel), &toplevel_width, &toplevel_height);
 
           if (priv->expanded)
-            {
-              GtkRequisition child_requisition;
-
-              gtk_widget_get_preferred_height_for_width (child, child_allocation.width, &child_requisition.height, NULL);
-
-              toplevel_allocation.height += child_requisition.height;
-            }
+            toplevel_height += child_height;
           else
-            {
-              toplevel_allocation.height -= child_allocation.height;
-            }
+            toplevel_height -= child_height;
 
           gtk_window_resize (GTK_WINDOW (toplevel),
-                             toplevel_allocation.width,
-                             toplevel_allocation.height);
+                             toplevel_width,
+                             toplevel_height);
         }
     }
 }
