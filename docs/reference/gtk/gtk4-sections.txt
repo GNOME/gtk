@@ -1044,8 +1044,6 @@ gtk_expander_set_use_markup
 gtk_expander_get_use_markup
 gtk_expander_set_label_widget
 gtk_expander_get_label_widget
-gtk_expander_set_label_fill
-gtk_expander_get_label_fill
 gtk_expander_set_resize_toplevel
 gtk_expander_get_resize_toplevel
 <SUBSECTION Standard>

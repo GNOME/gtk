@@ -141,7 +141,6 @@ enum
   PROP_USE_UNDERLINE,
   PROP_USE_MARKUP,
   PROP_LABEL_WIDGET,
-  PROP_LABEL_FILL,
   PROP_RESIZE_TOPLEVEL
 };
 
@@ -161,7 +160,6 @@ struct _GtkExpanderPrivate
   guint             expanded        : 1;
   guint             use_underline   : 1;
   guint             use_markup      : 1;
-  guint             label_fill      : 1;
   guint             resize_toplevel : 1;
 };
 
@@ -308,14 +306,6 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                                         GTK_TYPE_WIDGET,
                                                         GTK_PARAM_READWRITE));
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_LABEL_FILL,
-                                   g_param_spec_boolean ("label-fill",
-                                                         P_("Label fill"),
-                                                         P_("Whether the label widget should fill all available horizontal space"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY));
-
   /**
    * GtkExpander:resize-toplevel:
    *
@@ -359,7 +349,6 @@ gtk_expander_init (GtkExpander *expander)
   priv->expanded = FALSE;
   priv->use_underline = FALSE;
   priv->use_markup = FALSE;
-  priv->label_fill = FALSE;
   priv->expand_timer = 0;
   priv->resize_toplevel = 0;
 
@@ -435,9 +424,6 @@ gtk_expander_set_property (GObject      *object,
     case PROP_LABEL_WIDGET:
       gtk_expander_set_label_widget (expander, g_value_get_object (value));
       break;
-    case PROP_LABEL_FILL:
-      gtk_expander_set_label_fill (expander, g_value_get_boolean (value));
-      break;
     case PROP_RESIZE_TOPLEVEL:
       gtk_expander_set_resize_toplevel (expander, g_value_get_boolean (value));
       break;
@@ -474,9 +460,6 @@ gtk_expander_get_property (GObject    *object,
       g_value_set_object (value,
                           priv->label_widget ?
                           G_OBJECT (priv->label_widget) : NULL);
-      break;
-    case PROP_LABEL_FILL:
-      g_value_set_boolean (value, priv->label_fill);
       break;
     case PROP_RESIZE_TOPLEVEL:
       g_value_set_boolean (value, gtk_expander_get_resize_toplevel (expander));
@@ -1198,56 +1181,6 @@ gtk_expander_get_label_widget (GtkExpander *expander)
   g_return_val_if_fail (GTK_IS_EXPANDER (expander), NULL);
 
   return expander->priv->label_widget;
-}
-
-/**
- * gtk_expander_set_label_fill:
- * @expander: a #GtkExpander
- * @label_fill: %TRUE if the label should should fill
- *     all available horizontal space
- *
- * Sets whether the label widget should fill all available
- * horizontal space allocated to @expander.
- */
-void
-gtk_expander_set_label_fill (GtkExpander *expander,
-                             gboolean     label_fill)
-{
-  GtkExpanderPrivate *priv;
-
-  g_return_if_fail (GTK_IS_EXPANDER (expander));
-
-  priv = expander->priv;
-
-  label_fill = label_fill != FALSE;
-
-  if (priv->label_fill != label_fill)
-    {
-      priv->label_fill = label_fill;
-
-      if (priv->label_widget != NULL)
-        gtk_widget_queue_resize (GTK_WIDGET (expander));
-
-      g_object_notify (G_OBJECT (expander), "label-fill");
-    }
-}
-
-/**
- * gtk_expander_get_label_fill:
- * @expander: a #GtkExpander
- *
- * Returns whether the label widget will fill all available
- * horizontal space allocated to @expander.
- *
- * Returns: %TRUE if the label widget will fill all
- *     available horizontal space
- */
-gboolean
-gtk_expander_get_label_fill (GtkExpander *expander)
-{
-  g_return_val_if_fail (GTK_IS_EXPANDER (expander), FALSE);
-
-  return expander->priv->label_fill;
 }
 
 /**
