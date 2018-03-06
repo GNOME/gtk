@@ -25,6 +25,7 @@
 #include "gtkliststore.h"
 #include "gtktreemodelfilter.h"
 #include "gtktreeviewcolumn.h"
+#include "gtkeventcontrollerkey.h"
 
 G_BEGIN_DECLS
 
@@ -46,6 +47,8 @@ struct _GtkEntryCompletionPrivate
   gint text_column;
 
   gchar *case_normalized_key;
+
+  GtkEventController *entry_key_controller;
 
   /* only used by GtkEntry when attached: */
   GtkWidget *popup_window;
