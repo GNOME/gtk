@@ -2060,16 +2060,17 @@ keyval_is_cursor_move (guint keyval)
 }
 
 static gboolean
-gtk_entry_completion_key_press (GtkWidget   *widget,
-                                GdkEventKey *event,
-                                gpointer     user_data)
+gtk_entry_completion_key_pressed (GtkEventControllerKey *controller,
+                                  guint                  keyval,
+                                  guint                  keycode,
+                                  GdkModifierType        state,
+                                  gpointer               user_data)
 {
   gint matches, actions = 0;
   GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (user_data);
-  guint keyval;
+  GtkWidget *widget = completion->priv->entry;
 
-  if (!completion->priv->popup_completion ||
-      !gdk_event_get_keyval ((GdkEvent *) event, &keyval))
+  if (!completion->priv->popup_completion)
     return FALSE;
 
   if (keyval == GDK_KEY_Return ||
@@ -2470,11 +2471,14 @@ maybe_accept_completion (GtkEntry *entry,
 static void
 connect_completion_signals (GtkEntryCompletion *completion)
 {
+  completion->priv->entry_key_controller =
+    gtk_event_controller_key_new (completion->priv->entry);
+  g_signal_connect (completion->priv->entry_key_controller, "key-pressed",
+                    G_CALLBACK (gtk_entry_completion_key_pressed), completion);
+
   completion->priv->changed_id =
     g_signal_connect (completion->priv->entry, "changed",
                       G_CALLBACK (gtk_entry_completion_changed), completion);
-  g_signal_connect (completion->priv->entry, "key-press-event",
-                    G_CALLBACK (gtk_entry_completion_key_press), completion);
 
     completion->priv->insert_text_id =
       g_signal_connect (completion->priv->entry, "insert-text",
@@ -2520,6 +2524,8 @@ unset_accessible_relation (GtkWidget *window,
 static void
 disconnect_completion_signals (GtkEntryCompletion *completion)
 {
+  g_clear_object (&completion->priv->entry_key_controller);
+
   if (completion->priv->changed_id > 0 &&
       g_signal_handler_is_connected (completion->priv->entry,
                                      completion->priv->changed_id))
@@ -2528,8 +2534,6 @@ disconnect_completion_signals (GtkEntryCompletion *completion)
                                    completion->priv->changed_id);
       completion->priv->changed_id = 0;
     }
-  g_signal_handlers_disconnect_by_func (completion->priv->entry,
-                                        G_CALLBACK (gtk_entry_completion_key_press), completion);
   if (completion->priv->insert_text_id > 0 &&
       g_signal_handler_is_connected (completion->priv->entry,
                                      completion->priv->insert_text_id))
