@@ -36,8 +36,8 @@
 
 #include "gdktextureprivate.h"
 
-#include "gdkcairo.h"
 #include "gdkinternals.h"
+#include "gdkmemorytextureprivate.h"
 
 /**
  * SECTION:gdktexture
@@ -211,82 +211,6 @@ gdk_texture_init (GdkTexture *self)
 {
 }
 
-/* GdkCairoTexture */
-
-#define GDK_TYPE_CAIRO_TEXTURE (gdk_cairo_texture_get_type ())
-
-G_DECLARE_FINAL_TYPE (GdkCairoTexture, gdk_cairo_texture, GDK, CAIRO_TEXTURE, GdkTexture)
-
-struct _GdkCairoTexture {
-  GdkTexture parent_instance;
-  cairo_surface_t *surface;
-};
-
-struct _GdkCairoTextureClass {
-  GdkTextureClass parent_class;
-};
-
-G_DEFINE_TYPE (GdkCairoTexture, gdk_cairo_texture, GDK_TYPE_TEXTURE)
-
-static void
-gdk_cairo_texture_finalize (GObject *object)
-{
-  GdkCairoTexture *self = GDK_CAIRO_TEXTURE (object);
-
-  cairo_surface_destroy (self->surface);
-
-  G_OBJECT_CLASS (gdk_cairo_texture_parent_class)->finalize (object);
-}
-
-static cairo_surface_t *
-gdk_cairo_texture_download_surface (GdkTexture *texture)
-{
-  GdkCairoTexture *self = GDK_CAIRO_TEXTURE (texture);
-
-  return cairo_surface_reference (self->surface);
-}
-
-static void
-gdk_cairo_texture_download (GdkTexture *texture,
-                            guchar     *data,
-                            gsize       stride)
-{
-  GdkCairoTexture *self = GDK_CAIRO_TEXTURE (texture);
-  cairo_surface_t *surface;
-  cairo_t *cr;
-
-  surface = cairo_image_surface_create_for_data (data,
-                                                 CAIRO_FORMAT_ARGB32,
-                                                 texture->width, texture->height,
-                                                 stride);
-  cr = cairo_create (surface);
-
-  cairo_set_source_surface (cr, self->surface, 0, 0);
-  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-  cairo_paint (cr);
-
-  cairo_destroy (cr);
-  cairo_surface_finish (surface);
-  cairo_surface_destroy (surface);
-}
-
-static void
-gdk_cairo_texture_class_init (GdkCairoTextureClass *klass)
-{
-  GdkTextureClass *texture_class = GDK_TEXTURE_CLASS (klass);
-  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-
-  texture_class->download = gdk_cairo_texture_download;
-  texture_class->download_surface = gdk_cairo_texture_download_surface;
-
-  gobject_class->finalize = gdk_cairo_texture_finalize;
-}
-
-static void
-gdk_cairo_texture_init (GdkCairoTexture *self)
-{
-}
-
 /**
  * gdk_texture_new_for_data:
  * @data: (array): the pixel data
@@ -341,90 +265,28 @@ gdk_texture_new_for_data (const guchar *data,
 GdkTexture *
 gdk_texture_new_for_surface (cairo_surface_t *surface)
 {
-  GdkCairoTexture *texture;
+  GdkTexture *texture;
+  GBytes *bytes;
 
   g_return_val_if_fail (cairo_surface_get_type (surface) == CAIRO_SURFACE_TYPE_IMAGE, NULL);
   g_return_val_if_fail (cairo_image_surface_get_width (surface) > 0, NULL);
   g_return_val_if_fail (cairo_image_surface_get_height (surface) > 0, NULL);
 
-  texture = g_object_new (GDK_TYPE_CAIRO_TEXTURE,
-                          "width", cairo_image_surface_get_width (surface),
-                          "height", cairo_image_surface_get_height (surface),
-                          NULL);
+  bytes = g_bytes_new_with_free_func (cairo_image_surface_get_data (surface),
+                                      cairo_image_surface_get_height (surface)
+                                      * cairo_image_surface_get_stride (surface),
+                                      (GDestroyNotify) cairo_surface_destroy,
+                                      cairo_surface_reference (surface));
+  
+  texture = gdk_memory_texture_new (cairo_image_surface_get_width (surface),
+                                    cairo_image_surface_get_height (surface),
+                                    GDK_MEMORY_CAIRO_FORMAT_ARGB32,
+                                    bytes,
+                                    cairo_image_surface_get_stride (surface));
 
-  texture->surface = cairo_surface_reference (surface);
+  g_bytes_unref (bytes);
 
-  return (GdkTexture *) texture;
-}
-
-/* GdkPixbufTexture */
-
-#define GDK_TYPE_PIXBUF_TEXTURE (gdk_pixbuf_texture_get_type ())
-
-G_DECLARE_FINAL_TYPE (GdkPixbufTexture, gdk_pixbuf_texture, GDK, PIXBUF_TEXTURE, GdkTexture)
-
-struct _GdkPixbufTexture {
-  GdkTexture parent_instance;
-
-  GdkPixbuf *pixbuf;
-};
-
-struct _GdkPixbufTextureClass {
-  GdkTextureClass parent_class;
-};
-
-G_DEFINE_TYPE (GdkPixbufTexture, gdk_pixbuf_texture, GDK_TYPE_TEXTURE)
-
-static void
-gdk_pixbuf_texture_finalize (GObject *object)
-{
-  GdkPixbufTexture *self = GDK_PIXBUF_TEXTURE (object);
-
-  g_object_unref (self->pixbuf);
-
-  G_OBJECT_CLASS (gdk_pixbuf_texture_parent_class)->finalize (object);
-}
-
-static void
-gdk_pixbuf_texture_download (GdkTexture *texture,
-                             guchar     *data,
-                             gsize       stride)
-{
-  GdkPixbufTexture *self = GDK_PIXBUF_TEXTURE (texture);
-  cairo_surface_t *surface;
-
-  surface = cairo_image_surface_create_for_data (data,
-                                                 CAIRO_FORMAT_ARGB32,
-                                                 texture->width, texture->height,
-                                                 stride);
-  gdk_cairo_surface_paint_pixbuf (surface, self->pixbuf);
-  cairo_surface_finish (surface);
-  cairo_surface_destroy (surface);
-}
-
-static cairo_surface_t *
-gdk_pixbuf_texture_download_surface (GdkTexture *texture)
-{
-  GdkPixbufTexture *self = GDK_PIXBUF_TEXTURE (texture);
-
-  return gdk_cairo_surface_create_from_pixbuf (self->pixbuf, 1, NULL);
-}
-
-static void
-gdk_pixbuf_texture_class_init (GdkPixbufTextureClass *klass)
-{
-  GdkTextureClass *texture_class = GDK_TEXTURE_CLASS (klass);
-  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-
-  texture_class->download = gdk_pixbuf_texture_download;
-  texture_class->download_surface = gdk_pixbuf_texture_download_surface;
-
-  gobject_class->finalize = gdk_pixbuf_texture_finalize;
-}
-
-static void
-gdk_pixbuf_texture_init (GdkPixbufTexture *self)
-{
+  return texture;
 }
 
 /**
@@ -438,18 +300,28 @@ gdk_pixbuf_texture_init (GdkPixbufTexture *self)
 GdkTexture *
 gdk_texture_new_for_pixbuf (GdkPixbuf *pixbuf)
 {
-  GdkPixbufTexture *self;
+  GdkTexture *texture;
+  GBytes *bytes;
 
   g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
 
-  self = g_object_new (GDK_TYPE_PIXBUF_TEXTURE,
-                       "width", gdk_pixbuf_get_width (pixbuf),
-                       "height", gdk_pixbuf_get_height (pixbuf),
-                       NULL);
+  bytes = g_bytes_new_with_free_func (gdk_pixbuf_get_pixels (pixbuf),
+                                      gdk_pixbuf_get_height (pixbuf)
+                                      * gdk_pixbuf_get_rowstride (pixbuf),
+                                      g_object_unref,
+                                      g_object_ref (pixbuf));
+  
+  texture = gdk_memory_texture_new (gdk_pixbuf_get_width (pixbuf),
+                                    gdk_pixbuf_get_height (pixbuf),
+                                    gdk_pixbuf_get_has_alpha (pixbuf)
+                                    ? GDK_MEMORY_GDK_PIXBUF_ALPHA
+                                    : GDK_MEMORY_GDK_PIXBUF_OPAQUE,
+                                    bytes,
+                                    gdk_pixbuf_get_rowstride (pixbuf));
 
-  self->pixbuf = g_object_ref (pixbuf);
+  g_bytes_unref (bytes);
 
-  return GDK_TEXTURE (self);
+  return texture;
 }
 
 /**
