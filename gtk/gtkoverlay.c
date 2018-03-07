@@ -64,7 +64,8 @@ typedef struct _GtkOverlayChild GtkOverlayChild;
 
 struct _GtkOverlayChild
 {
-  guint pass_through: 1;
+  guint pass_through : 1;
+  guint measure : 1;
   double blur;
 };
 
@@ -77,6 +78,7 @@ enum
 {
   CHILD_PROP_0,
   CHILD_PROP_PASS_THROUGH,
+  CHILD_PROP_MEASURE,
   CHILD_PROP_BLUR,
   CHILD_PROP_INDEX
 };
@@ -101,6 +103,43 @@ static GtkOverlayChild *
 gtk_overlay_get_overlay_child (GtkWidget *widget)
 {
   return (GtkOverlayChild *) g_object_get_qdata (G_OBJECT (widget), child_data_quark);
+}
+
+static void
+gtk_overlay_measure (GtkWidget      *widget,
+                     GtkOrientation  orientation,
+                     int             for_size,
+                     int            *minimum,
+                     int            *natural,
+                     int            *minimum_baseline,
+                     int            *natural_baseline)
+{
+  GtkWidget *child;
+
+  for (child = gtk_widget_get_first_child (widget);
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      GtkOverlayChild *child_data = gtk_overlay_get_overlay_child (child);
+
+      if (child_data == NULL || child_data->measure)
+        {
+          int child_min, child_nat, child_min_baseline, child_nat_baseline;
+
+          gtk_widget_measure (child,
+                              orientation,
+                              for_size,
+                              &child_min, &child_nat,
+                              &child_min_baseline, &child_nat_baseline);
+
+          *minimum = MAX (*minimum, child_min);
+          *natural = MAX (*natural, child_nat);
+          if (child_min_baseline > -1)
+            *minimum_baseline = MAX (*minimum_baseline, child_min_baseline);
+          if (child_nat_baseline > -1)
+            *natural_baseline = MAX (*natural_baseline, child_nat_baseline);
+        }
+    }
 }
 
 static void
@@ -509,6 +548,17 @@ gtk_overlay_set_child_property (GtkContainer *container,
 	    }
 	}
       break;
+    case CHILD_PROP_MEASURE:
+      if (child_info)
+	{
+	  if (g_value_get_boolean (value) != child_info->measure)
+	    {
+	      child_info->measure = g_value_get_boolean (value);
+	      gtk_container_child_notify (container, child, "measure");
+              gtk_widget_queue_resize (GTK_WIDGET (overlay));
+	    }
+	}
+      break;
     case CHILD_PROP_BLUR:
       if (child_info)
 	{
@@ -566,6 +616,12 @@ gtk_overlay_get_child_property (GtkContainer *container,
 	g_value_set_boolean (value, child_info->pass_through);
       else
 	g_value_set_boolean (value, FALSE);
+      break;
+    case CHILD_PROP_MEASURE:
+      if (child_info)
+	g_value_set_boolean (value, child_info->measure);
+      else
+	g_value_set_boolean (value, TRUE);
       break;
     case CHILD_PROP_BLUR:
       if (child_info)
@@ -690,6 +746,7 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
+  widget_class->measure = gtk_overlay_measure;
   widget_class->size_allocate = gtk_overlay_size_allocate;
   widget_class->snapshot = gtk_overlay_snapshot;
 
@@ -708,6 +765,18 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
    */
   gtk_container_class_install_child_property (container_class, CHILD_PROP_PASS_THROUGH,
       g_param_spec_boolean ("pass-through", P_("Pass Through"), P_("Pass through input, does not affect main child"),
+                            FALSE,
+                            GTK_PARAM_READWRITE));
+
+  /**
+   * GtkOverlay:measure:
+   *
+   * Include this child in determining the child request.
+   *
+   * The main child will always be measured.
+   */
+  gtk_container_class_install_child_property (container_class, CHILD_PROP_MEASURE,
+      g_param_spec_boolean ("measure", P_("Measure"), P_("Include in size measurement"),
                             FALSE,
                             GTK_PARAM_READWRITE));
 
@@ -890,4 +959,55 @@ gtk_overlay_get_overlay_pass_through (GtkOverlay *overlay,
 			   NULL);
 
   return pass_through;
+}
+
+/**
+ * gtk_overlay_set_measure_overlay:
+ * @overlay: a #GtkOverlay
+ * @widget: an overlay child of #GtkOverlay
+ * @measure: whether the child should be measured
+ *
+ * Sets whether @widget is included in the measured size of @overlay.
+ *
+ * The overlay will request the size of the largest child that has
+ * this property set to %TRUE. Children who are not included may
+ * be drawn outside of @overlay's allocation if they are too large.
+ */
+void
+gtk_overlay_set_measure_overlay (GtkOverlay *overlay,
+				 GtkWidget  *widget,
+				 gboolean    measure)
+{
+  g_return_if_fail (GTK_IS_OVERLAY (overlay));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  gtk_container_child_set (GTK_CONTAINER (overlay), widget,
+			   "measure", measure,
+			   NULL);
+}
+
+/**
+ * gtk_overlay_get_measure_overlay:
+ * @overlay: a #GtkOverlay
+ * @widget: an overlay child of #GtkOverlay
+ *
+ * Gets whether @widget's size is included in the measurement of
+ * @overlay.
+ *
+ * Returns: whether the widget is measured
+ */
+gboolean
+gtk_overlay_get_measure_overlay (GtkOverlay *overlay,
+				 GtkWidget  *widget)
+{
+  gboolean measure;
+
+  g_return_val_if_fail (GTK_IS_OVERLAY (overlay), FALSE);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  gtk_container_child_get (GTK_CONTAINER (overlay), widget,
+			   "measure", &measure,
+			   NULL);
+
+  return measure;
 }
