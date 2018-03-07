@@ -63,8 +63,8 @@ const char *css =
 struct _GtkFocusWidget
 {
   GtkWidget parent_instance;
-  int mouse_x;
-  int mouse_y;
+  double mouse_x;
+  double mouse_y;
 
   union {
     struct {
@@ -188,7 +188,7 @@ gtk_focus_widget_snapshot (GtkWidget *widget, GtkSnapshot *snapshot)
                                  "Crosshair 2");
 
       layout = gtk_widget_create_pango_layout (widget, NULL);
-      text = g_strdup_printf ("%d×%d", self->mouse_x, self->mouse_y);
+      text = g_strdup_printf ("%.2f×%.2f", self->mouse_x, self->mouse_y);
       pango_layout_set_text (layout, text, -1);
 
       gtk_snapshot_render_layout (snapshot,
@@ -207,7 +207,7 @@ gtk_focus_widget_event (GtkWidget *widget,
                         GdkEvent  *event)
 {
   GtkFocusWidget *self = GTK_FOCUS_WIDGET (widget);
-  gdouble x, y;
+  double x, y;
 
   if (gdk_event_get_event_type (event) == GDK_MOTION_NOTIFY)
     {

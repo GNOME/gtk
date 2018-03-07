@@ -4811,6 +4811,70 @@ gtk_widget_translate_coordinates (GtkWidget  *src_widget,
   return TRUE;
 }
 
+/* This is the same as translate_coordinates, but it works on doubles.
+ * We use this for event coordinates.
+ *
+ * We should probably decide for only one of the 2 versions at some point */
+static gboolean
+gtk_widget_translate_coordinatesf (GtkWidget  *src_widget,
+                                   GtkWidget  *dest_widget,
+                                   double      src_x,
+                                   double      src_y,
+                                   double     *dest_x,
+                                   double     *dest_y)
+{
+  GtkWidget *ancestor;
+  GtkWidget *parent;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (src_widget), FALSE);
+  g_return_val_if_fail (GTK_IS_WIDGET (dest_widget), FALSE);
+
+  ancestor = gtk_widget_common_ancestor (src_widget, dest_widget);
+  if (!ancestor)
+    {
+      if (dest_x)
+        *dest_x = 0;
+      if (dest_y)
+        *dest_y = 0;
+      return FALSE;
+    }
+
+
+  parent = src_widget;
+  while (parent != ancestor)
+    {
+      int origin_x, origin_y;
+
+      gtk_widget_get_origin_relative_to_parent (parent, &origin_x, &origin_y);
+
+      src_x += origin_x;
+      src_y += origin_y;
+
+      parent = _gtk_widget_get_parent (parent);
+    }
+
+  parent = dest_widget;
+  while (parent != ancestor)
+    {
+      int origin_x, origin_y;
+
+      gtk_widget_get_origin_relative_to_parent (parent, &origin_x, &origin_y);
+
+      src_x -= origin_x;
+      src_y -= origin_y;
+
+      parent = _gtk_widget_get_parent (parent);
+    }
+
+  if (dest_x)
+    *dest_x = src_x;
+
+  if (dest_y)
+    *dest_y = src_y;
+
+  return TRUE;
+}
+
 static void
 gtk_widget_real_size_allocate (GtkWidget           *widget,
                                const GtkAllocation *allocation,
@@ -5750,17 +5814,17 @@ translate_event_coordinates (GdkEvent  *event,
 {
   GtkWidget *event_widget;
   double x, y;
-  int dx, dy;
+  double dx, dy;
 
   if (!gdk_event_get_coords (event, &x, &y))
     return;
 
   event_widget = gtk_get_event_widget (event);
 
-  gtk_widget_translate_coordinates (event_widget,
-                                    widget,
-                                    x, y,
-                                    &dx, &dy);
+  gtk_widget_translate_coordinatesf (event_widget,
+                                     widget,
+                                     x, y,
+                                     &dx, &dy);
 
   gdk_event_set_coords (event, dx, dy);
 }
