@@ -15,4 +15,12 @@ if [ -z "$DESTDIR" ]; then
 
   echo Updating icon cache...
   gtk-update-icon-cache -q -t -f ${gtk_datadir}/icons/hicolor
+
+  echo Updating module cache for print backends...
+  mkdir -p ${gtk_libdir}/gtk-4.0/4.0.0/printbackends
+  gio-querymodules ${gtk_libdir}/gtk-4.0/4.0.0/printbackends
+
+  echo Updating module cache for input methods...
+  mkdir -p ${gtk_libdir}/gtk-4.0/4.0.0/immodules
+  gio-querymodules ${gtk_libdir}/gtk-4.0/4.0.0/immodules
 fi
