@@ -70,19 +70,21 @@ gtk_event_controller_set_property (GObject      *object,
                                    const GValue *value,
                                    GParamSpec   *pspec)
 {
-  GtkEventControllerPrivate *priv;
-
-  priv = gtk_event_controller_get_instance_private (GTK_EVENT_CONTROLLER (object));
+  GtkEventController *self = GTK_EVENT_CONTROLLER (object);
+  GtkEventControllerPrivate *priv = gtk_event_controller_get_instance_private (self);
 
   switch (prop_id)
     {
     case PROP_WIDGET:
       priv->widget = g_value_get_object (value);
       if (priv->widget)
-        g_object_add_weak_pointer (G_OBJECT (priv->widget), (gpointer *) &priv->widget);
+        {
+          g_object_add_weak_pointer (G_OBJECT (priv->widget), (gpointer *) &priv->widget);
+          _gtk_widget_add_controller (priv->widget, self);
+        }
       break;
     case PROP_PROPAGATION_PHASE:
-      gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (object),
+      gtk_event_controller_set_propagation_phase (self,
                                                   g_value_get_enum (value));
       break;
     default:
@@ -96,9 +98,8 @@ gtk_event_controller_get_property (GObject    *object,
                                    GValue     *value,
                                    GParamSpec *pspec)
 {
-  GtkEventControllerPrivate *priv;
-
-  priv = gtk_event_controller_get_instance_private (GTK_EVENT_CONTROLLER (object));
+  GtkEventController *self = GTK_EVENT_CONTROLLER (object);
+  GtkEventControllerPrivate *priv = gtk_event_controller_get_instance_private (self);
 
   switch (prop_id)
     {
@@ -111,19 +112,6 @@ gtk_event_controller_get_property (GObject    *object,
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
-}
-
-static void
-gtk_event_controller_constructed (GObject *object)
-{
-  GtkEventController *controller = GTK_EVENT_CONTROLLER (object);
-  GtkEventControllerPrivate *priv;
-
-  G_OBJECT_CLASS (gtk_event_controller_parent_class)->constructed (object);
-
-  priv = gtk_event_controller_get_instance_private (controller);
-  if (priv->widget)
-    _gtk_widget_add_controller (priv->widget, controller);
 }
 
 static void
@@ -153,7 +141,6 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
 
   object_class->set_property = gtk_event_controller_set_property;
   object_class->get_property = gtk_event_controller_get_property;
-  object_class->constructed = gtk_event_controller_constructed;
   object_class->dispose = gtk_event_controller_dispose;
 
   /**
