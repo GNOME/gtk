@@ -97,7 +97,6 @@ typedef enum
 
 
 typedef struct _GtkSpinButton              GtkSpinButton;
-typedef struct _GtkSpinButtonPrivate       GtkSpinButtonPrivate;
 typedef struct _GtkSpinButtonClass         GtkSpinButtonClass;
 
 /**
@@ -109,9 +108,6 @@ typedef struct _GtkSpinButtonClass         GtkSpinButtonClass;
 struct _GtkSpinButton
 {
   GtkWidget parent_instance;
-
-  /*< private >*/
-  GtkSpinButtonPrivate *priv;
 };
 
 struct _GtkSpinButtonClass
