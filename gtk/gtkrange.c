@@ -42,6 +42,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindow.h"
+#include "gtkeventcontrollerkey.h"
 
 #include "a11y/gtkrangeaccessible.h"
 
@@ -119,6 +120,7 @@ struct _GtkRangePrivate
   GtkGesture *multipress_gesture;
   GtkGesture *drag_gesture;
   GtkEventController *scroll_controller;
+  GtkEventController *key_controller;
 
   GtkScrollType autoscroll_mode;
   guint autoscroll_id;
@@ -221,8 +223,11 @@ static void          gtk_range_remove_step_timer        (GtkRange      *range);
 static gboolean      gtk_range_real_change_value        (GtkRange      *range,
                                                          GtkScrollType  scroll,
                                                          gdouble        value);
-static gboolean      gtk_range_key_press                (GtkWidget     *range,
-							 GdkEventKey   *event);
+static gboolean      gtk_range_key_controller_key_pressed (GtkEventControllerKey *controller,
+                                                           guint                  keyval,
+                                                           guint                  keycode,
+                                                           GdkModifierType        state,
+                                                           GtkWidget             *widget);
 static void          gtk_range_direction_changed        (GtkWidget     *widget,
                                                          GtkTextDirection  previous_direction);
 static void          gtk_range_measure_trough           (GtkGizmo       *gizmo,
@@ -279,7 +284,6 @@ gtk_range_class_init (GtkRangeClass *class)
   widget_class->snapshot = gtk_range_snapshot;
   widget_class->size_allocate = gtk_range_size_allocate;
   widget_class->unmap = gtk_range_unmap;
-  widget_class->key_press_event = gtk_range_key_press;
   widget_class->direction_changed = gtk_range_direction_changed;
 
   class->move_slider = gtk_range_move_slider;
@@ -590,6 +594,11 @@ gtk_range_init (GtkRange *range)
                                      GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES);
   g_signal_connect (priv->scroll_controller, "scroll",
                     G_CALLBACK (gtk_range_scroll_controller_scroll), range);
+
+  priv->key_controller =
+    gtk_event_controller_key_new (GTK_WIDGET (range));
+  g_signal_connect (priv->key_controller, "key-pressed",
+                    G_CALLBACK (gtk_range_key_controller_key_pressed), range);
 }
 
 /**
@@ -1261,6 +1270,7 @@ gtk_range_finalize (GObject *object)
   g_clear_object (&priv->multipress_gesture);
   g_clear_object (&priv->long_press_gesture);
   g_clear_object (&priv->scroll_controller);
+  g_clear_object (&priv->key_controller);
 
   gtk_widget_unparent (priv->slider_widget);
 
@@ -1788,22 +1798,16 @@ coord_to_value (GtkRange *range,
 }
 
 static gboolean
-gtk_range_key_press (GtkWidget   *widget,
-		     GdkEventKey *event)
+gtk_range_key_controller_key_pressed (GtkEventControllerKey *controller,
+                                      guint                  keyval,
+                                      guint                  keycode,
+                                      GdkModifierType        state,
+                                      GtkWidget             *widget)
 {
-  GdkDevice *device;
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
-  guint keyval;
-
-  device = gdk_event_get_device ((GdkEvent *) event);
-  device = gdk_device_get_associated_device (device);
-
-  if (!gdk_event_get_keyval ((GdkEvent *) event, &keyval))
-    return GDK_EVENT_PROPAGATE;
 
   if (gtk_gesture_is_active (priv->drag_gesture) &&
-      device == gtk_gesture_get_device (priv->drag_gesture) &&
       keyval == GDK_KEY_Escape &&
       priv->grab_location != NULL)
     {
@@ -1828,7 +1832,7 @@ gtk_range_key_press (GtkWidget   *widget,
       return GDK_EVENT_STOP;
     }
 
-  return GTK_WIDGET_CLASS (gtk_range_parent_class)->key_press_event (widget, event);
+  return TRUE;
 }
 
 static void
