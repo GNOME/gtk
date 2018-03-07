@@ -51,7 +51,6 @@ static GParamSpec *properties[LAST_PROP] = { NULL, };
 struct _GtkEventControllerPrivate
 {
   GtkWidget *widget;
-  guint evmask;
   GtkPropagationPhase phase;
 };
 
