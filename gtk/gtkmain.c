@@ -1683,6 +1683,16 @@ gtk_main_do_event (GdkEvent *event)
 
   if (is_pointing_event (event))
     event_widget = handle_pointing_event (event);
+  else if (GTK_IS_WINDOW (event_widget) &&
+           (event->any.type == GDK_KEY_PRESS ||
+            event->any.type == GDK_KEY_RELEASE))
+    {
+      GtkWidget *focus_widget;
+
+      focus_widget = gtk_window_get_focus (GTK_WINDOW (event_widget));
+      if (focus_widget)
+        event_widget = focus_widget;
+    }
 
   if (!event_widget)
     goto cleanup;
@@ -2452,59 +2462,14 @@ propagate_event_down (GtkWidget *widget,
   return handled_event;
 }
 
-static gboolean
-propagate_event (GtkWidget *widget,
-                 GdkEvent  *event,
-                 gboolean   captured,
-                 GtkWidget *topmost)
-{
-  gboolean handled_event = FALSE;
-  gboolean (* propagate_func) (GtkWidget *widget, const GdkEvent *event);
-
-  propagate_func = captured ? _gtk_widget_captured_event : gtk_widget_event;
-
-  if (event->any.type == GDK_KEY_PRESS || event->any.type == GDK_KEY_RELEASE)
-    {
-      /* Only send key events within Window widgets to the Window
-       * The Window widget will in turn pass the
-       * key event on to the currently focused widget
-       * for that window.
-       */
-      GtkWidget *window;
-
-      window = gtk_widget_get_toplevel (widget);
-      if (GTK_IS_WINDOW (window))
-        {
-          g_object_ref (widget);
-          /* If there is a grab within the window, give the grab widget
-           * a first crack at the key event
-           */
-          if (widget != window && gtk_widget_has_grab (widget))
-            handled_event = propagate_func (widget, event);
-
-          if (!handled_event &&
-              gtk_widget_is_sensitive (window))
-            handled_event = propagate_func (window, event);
-
-          g_object_unref (widget);
-          return handled_event;
-        }
-    }
-
-  /* Other events get propagated up/down the widget tree */
-  return captured ?
-    propagate_event_down (widget, event, topmost) :
-    propagate_event_up (widget, event, topmost);
-}
-
 void
 gtk_propagate_event_internal (GtkWidget *widget,
                               GdkEvent  *event,
                               GtkWidget *topmost)
 {
   /* Propagate the event down and up */
-  if (!propagate_event (widget, event, TRUE, topmost))
-    propagate_event (widget, event, FALSE, topmost);
+  if (!propagate_event_down (widget, event, topmost))
+    propagate_event_up (widget, event, topmost);
 }
 
 /**
