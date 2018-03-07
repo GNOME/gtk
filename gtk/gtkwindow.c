@@ -433,8 +433,6 @@ static gboolean gtk_window_event          (GtkWidget         *widget,
                                            GdkEvent          *event);
 static gint gtk_window_key_press_event    (GtkWidget         *widget,
 					   GdkEventKey       *event);
-static gint gtk_window_key_release_event  (GtkWidget         *widget,
-					   GdkEventKey       *event);
 static void gtk_window_focus_in           (GtkWidget         *widget);
 static void gtk_window_focus_out          (GtkWidget         *widget);
 static void surface_state_changed         (GtkWidget          *widget);
@@ -807,7 +805,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->size_allocate = gtk_window_size_allocate;
   widget_class->event = gtk_window_event;
   widget_class->key_press_event = gtk_window_key_press_event;
-  widget_class->key_release_event = gtk_window_key_release_event;
   widget_class->focus = gtk_window_focus;
   widget_class->move_focus = gtk_window_move_focus;
   widget_class->measure = gtk_window_measure;
@@ -7427,31 +7424,9 @@ gtk_window_key_press_event (GtkWidget   *widget,
   if (!handled)
     handled = gtk_window_activate_key (window, event);
 
-  /* handle focus widget key events */
-  if (!handled)
-    handled = gtk_window_propagate_key_event (window, event);
-
   /* Chain up, invokes binding set */
   if (!handled)
     handled = GTK_WIDGET_CLASS (gtk_window_parent_class)->key_press_event (widget, event);
-
-  return handled;
-}
-
-static gint
-gtk_window_key_release_event (GtkWidget   *widget,
-			      GdkEventKey *event)
-{
-  GtkWindow *window = GTK_WINDOW (widget);
-  gboolean handled = FALSE;
-
-  /* handle focus widget key events */
-  if (!handled)
-    handled = gtk_window_propagate_key_event (window, event);
-
-  /* Chain up, invokes binding set */
-  if (!handled)
-    handled = GTK_WIDGET_CLASS (gtk_window_parent_class)->key_release_event (widget, event);
 
   return handled;
 }
