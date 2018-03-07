@@ -44,10 +44,7 @@ typedef struct _GtkMenuButtonPrivate GtkMenuButtonPrivate;
 
 struct _GtkMenuButton
 {
-  GtkToggleButton parent;
-
-  /*< private >*/
-  GtkMenuButtonPrivate *priv;
+  GtkToggleButton parent_instance;
 };
 
 struct _GtkMenuButtonClass

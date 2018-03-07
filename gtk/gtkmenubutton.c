@@ -197,7 +197,7 @@ gtk_menu_button_get_property (GObject    *object,
                               GValue     *value,
                               GParamSpec *pspec)
 {
-  GtkMenuButtonPrivate *priv = GTK_MENU_BUTTON (object)->priv;
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (GTK_MENU_BUTTON (object));
 
   switch (property_id)
     {
@@ -229,7 +229,7 @@ gtk_menu_button_state_flags_changed (GtkWidget    *widget,
                                      GtkStateFlags previous_state_flags)
 {
   GtkMenuButton *button = GTK_MENU_BUTTON (widget);
-  GtkMenuButtonPrivate *priv = button->priv;
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (button);
 
   if (!gtk_widget_is_sensitive (widget))
     {
@@ -244,7 +244,7 @@ static void
 popup_menu (GtkMenuButton *menu_button,
             GdkEvent      *event)
 {
-  GtkMenuButtonPrivate *priv = menu_button->priv;
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
   GdkGravity widget_anchor = GDK_GRAVITY_SOUTH_WEST;
   GdkGravity menu_anchor = GDK_GRAVITY_NORTH_WEST;
 
@@ -405,7 +405,7 @@ static void
 gtk_menu_button_toggled (GtkToggleButton *button)
 {
   GtkMenuButton *menu_button = GTK_MENU_BUTTON (button);
-  GtkMenuButtonPrivate *priv = menu_button->priv;
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
   gboolean active = gtk_toggle_button_get_active (button);
 
   if (priv->menu)
@@ -444,9 +444,10 @@ gtk_menu_button_add (GtkContainer *container,
                      GtkWidget    *child)
 {
   GtkMenuButton *button = GTK_MENU_BUTTON (container);
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (button);
 
-  if (button->priv->arrow_widget)
-    gtk_container_remove (container, button->priv->arrow_widget);
+  if (priv->arrow_widget)
+    gtk_container_remove (container, priv->arrow_widget);
 
   GTK_CONTAINER_CLASS (gtk_menu_button_parent_class)->add (container, child);
 }
@@ -456,9 +457,10 @@ gtk_menu_button_remove (GtkContainer *container,
                         GtkWidget    *child)
 {
   GtkMenuButton *button = GTK_MENU_BUTTON (container);
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (button);
 
-  if (child == button->priv->arrow_widget)
-    button->priv->arrow_widget = NULL;
+  if (child == priv->arrow_widget)
+    priv->arrow_widget = NULL;
 
   GTK_CONTAINER_CLASS (gtk_menu_button_parent_class)->remove (container, child);
 }
@@ -598,21 +600,20 @@ static void
 add_arrow (GtkMenuButton *menu_button)
 {
   GtkWidget *arrow;
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
 
   arrow = gtk_image_new ();
-  set_arrow_type (GTK_IMAGE (arrow), menu_button->priv->arrow_type);
+  set_arrow_type (GTK_IMAGE (arrow), priv->arrow_type);
   gtk_container_add (GTK_CONTAINER (menu_button), arrow);
-  menu_button->priv->arrow_widget = arrow;
+  priv->arrow_widget = arrow;
 }
 
 static void
 gtk_menu_button_init (GtkMenuButton *menu_button)
 {
-  GtkMenuButtonPrivate *priv;
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
   GtkStyleContext *context;
 
-  priv = gtk_menu_button_get_instance_private (menu_button);
-  menu_button->priv = priv;
   priv->arrow_type = GTK_ARROW_DOWN;
   priv->use_popover = TRUE;
 
@@ -656,7 +657,7 @@ static void
 menu_detacher (GtkWidget *widget,
                GtkMenu   *menu)
 {
-  GtkMenuButtonPrivate *priv = GTK_MENU_BUTTON (widget)->priv;
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (GTK_MENU_BUTTON (widget));
 
   g_return_if_fail (priv->menu == (GtkWidget *) menu);
 
@@ -666,7 +667,7 @@ menu_detacher (GtkWidget *widget,
 static void
 update_sensitivity (GtkMenuButton *menu_button)
 {
-  GtkMenuButtonPrivate *priv = menu_button->priv;
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
 
   if (gtk_actionable_get_action_name (GTK_ACTIONABLE (menu_button)) != NULL)
     return;
@@ -685,12 +686,11 @@ _gtk_menu_button_set_popup_with_func (GtkMenuButton                 *menu_button
                                       GtkMenuButtonShowMenuCallback  func,
                                       gpointer                       user_data)
 {
-  GtkMenuButtonPrivate *priv;
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
 
   g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
   g_return_if_fail (GTK_IS_MENU (menu) || menu == NULL);
 
-  priv = menu_button->priv;
   priv->func = func;
   priv->user_data = user_data;
 
@@ -740,7 +740,7 @@ void
 gtk_menu_button_set_popup (GtkMenuButton *menu_button,
                            GtkWidget     *menu)
 {
-  GtkMenuButtonPrivate *priv = menu_button->priv;
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
 
   g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
   g_return_if_fail (GTK_IS_MENU (menu) || menu == NULL);
@@ -772,9 +772,11 @@ gtk_menu_button_set_popup (GtkMenuButton *menu_button,
 GtkMenu *
 gtk_menu_button_get_popup (GtkMenuButton *menu_button)
 {
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
+
   g_return_val_if_fail (GTK_IS_MENU_BUTTON (menu_button), NULL);
 
-  return GTK_MENU (menu_button->priv->menu);
+  return GTK_MENU (priv->menu);
 }
 
 /**
@@ -797,12 +799,10 @@ void
 gtk_menu_button_set_menu_model (GtkMenuButton *menu_button,
                                 GMenuModel    *menu_model)
 {
-  GtkMenuButtonPrivate *priv;
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
 
   g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
   g_return_if_fail (G_IS_MENU_MODEL (menu_model) || menu_model == NULL);
-
-  priv = menu_button->priv;
 
   g_object_freeze_notify (G_OBJECT (menu_button));
 
@@ -850,18 +850,18 @@ gtk_menu_button_set_menu_model (GtkMenuButton *menu_button,
 GMenuModel *
 gtk_menu_button_get_menu_model (GtkMenuButton *menu_button)
 {
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
+
   g_return_val_if_fail (GTK_IS_MENU_BUTTON (menu_button), NULL);
 
-  return menu_button->priv->model;
+  return priv->model;
 }
 
 static void
 set_align_widget_pointer (GtkMenuButton *menu_button,
                           GtkWidget     *align_widget)
 {
-  GtkMenuButtonPrivate *priv;
-
-  priv = menu_button->priv;
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
 
   if (priv->align_widget)
     g_object_remove_weak_pointer (G_OBJECT (priv->align_widget), (gpointer *) &priv->align_widget);
@@ -890,12 +890,11 @@ void
 gtk_menu_button_set_align_widget (GtkMenuButton *menu_button,
                                   GtkWidget     *align_widget)
 {
-  GtkMenuButtonPrivate *priv;
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
 
   g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
   g_return_if_fail (align_widget == NULL || gtk_widget_is_ancestor (GTK_WIDGET (menu_button), align_widget));
 
-  priv = menu_button->priv;
   if (priv->align_widget == align_widget)
     return;
 
@@ -915,15 +914,17 @@ gtk_menu_button_set_align_widget (GtkMenuButton *menu_button,
 GtkWidget *
 gtk_menu_button_get_align_widget (GtkMenuButton *menu_button)
 {
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
+
   g_return_val_if_fail (GTK_IS_MENU_BUTTON (menu_button), NULL);
 
-  return menu_button->priv->align_widget;
+  return priv->align_widget;
 }
 
 static void
 update_popover_direction (GtkMenuButton *menu_button)
 {
-  GtkMenuButtonPrivate *priv = menu_button->priv;
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
 
   if (!priv->popover)
     return;
@@ -967,7 +968,7 @@ void
 gtk_menu_button_set_direction (GtkMenuButton *menu_button,
                                GtkArrowType   direction)
 {
-  GtkMenuButtonPrivate *priv = menu_button->priv;
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
   GtkWidget *child;
 
   g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
@@ -998,15 +999,17 @@ gtk_menu_button_set_direction (GtkMenuButton *menu_button,
 GtkArrowType
 gtk_menu_button_get_direction (GtkMenuButton *menu_button)
 {
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
+
   g_return_val_if_fail (GTK_IS_MENU_BUTTON (menu_button), GTK_ARROW_DOWN);
 
-  return menu_button->priv->arrow_type;
+  return priv->arrow_type;
 }
 
 static void
 gtk_menu_button_dispose (GObject *object)
 {
-  GtkMenuButtonPrivate *priv = GTK_MENU_BUTTON (object)->priv;
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (GTK_MENU_BUTTON (object));
 
   if (priv->menu)
     {
@@ -1043,11 +1046,9 @@ void
 gtk_menu_button_set_use_popover (GtkMenuButton *menu_button,
                                  gboolean       use_popover)
 {
-  GtkMenuButtonPrivate *priv;
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
 
   g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
-
-  priv = menu_button->priv;
 
   use_popover = use_popover != FALSE;
 
@@ -1078,9 +1079,11 @@ gtk_menu_button_set_use_popover (GtkMenuButton *menu_button,
 gboolean
 gtk_menu_button_get_use_popover (GtkMenuButton *menu_button)
 {
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
+
   g_return_val_if_fail (GTK_IS_MENU_BUTTON (menu_button), FALSE);
 
-  return menu_button->priv->use_popover;
+  return priv->use_popover;
 }
 
 /**
@@ -1096,7 +1099,7 @@ void
 gtk_menu_button_set_popover (GtkMenuButton *menu_button,
                              GtkWidget     *popover)
 {
-  GtkMenuButtonPrivate *priv = menu_button->priv;
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
 
   g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
   g_return_if_fail (GTK_IS_POPOVER (popover) || popover == NULL);
@@ -1151,7 +1154,9 @@ gtk_menu_button_set_popover (GtkMenuButton *menu_button,
 GtkPopover *
 gtk_menu_button_get_popover (GtkMenuButton *menu_button)
 {
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
+
   g_return_val_if_fail (GTK_IS_MENU_BUTTON (menu_button), NULL);
 
-  return GTK_POPOVER (menu_button->priv->popover);
+  return GTK_POPOVER (priv->popover);
 }
