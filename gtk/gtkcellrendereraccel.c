@@ -95,7 +95,7 @@ struct _GtkCellRendererAccelPrivate
   guint accel_key;
   guint keycode;
 
-  GdkDevice *grab_pointer;
+  GdkSeat *grab_seat;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkCellRendererAccel, gtk_cell_renderer_accel, GTK_TYPE_CELL_RENDERER_TEXT)
@@ -439,7 +439,7 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
   GtkWidget *label;
   GtkWidget *editable;
   gboolean is_editable;
-  GdkDevice *device, *pointer;
+  GdkSeat *seat = NULL;
   GdkSurface *surface;
 
   celltext = GTK_CELL_RENDERER_TEXT (cell);
@@ -454,24 +454,25 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
   surface = gtk_widget_get_surface (gtk_widget_get_toplevel (widget));
 
   if (event)
-    device = gdk_event_get_device (event);
+    seat = gdk_event_get_seat (event);
   else
-    device = gtk_get_current_event_device ();
+    {
+      GdkDevice *device;
 
-  if (!device || !surface)
+      device = gtk_get_current_event_device ();
+      if (device)
+        seat = gdk_device_get_seat (device);
+    }
+
+  if (!seat || !surface)
     return NULL;
 
-  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
-    pointer = gdk_device_get_associated_device (device);
-  else
-    pointer = device;
-
-  if (gdk_seat_grab (gdk_device_get_seat (pointer), surface,
+  if (gdk_seat_grab (seat, surface,
                      GDK_SEAT_CAPABILITY_ALL, FALSE,
                      NULL, event, NULL, NULL) != GDK_GRAB_SUCCESS)
     return NULL;
 
-  priv->grab_pointer = pointer;
+  priv->grab_seat = seat;
 
   editable = gtk_cell_editable_widget_new (cell, priv->accel_mode, path);
 
@@ -498,10 +499,10 @@ gtk_cell_renderer_accel_ungrab (GtkCellRendererAccel *accel)
 {
   GtkCellRendererAccelPrivate *priv = accel->priv;
 
-  if (priv->grab_pointer)
+  if (priv->grab_seat)
     {
-      gdk_seat_ungrab (gdk_device_get_seat (priv->grab_pointer));
-      priv->grab_pointer = NULL;
+      gdk_seat_ungrab (priv->grab_seat);
+      priv->grab_seat = NULL;
     }
 }
 
