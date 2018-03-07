@@ -48,6 +48,7 @@
  */
 
 
+typedef struct _GtkSeparatorPrivate GtkSeparatorPrivate;
 struct _GtkSeparatorPrivate
 {
   GtkOrientation orientation;
@@ -72,14 +73,14 @@ gtk_separator_set_property (GObject      *object,
                             GParamSpec   *pspec)
 {
   GtkSeparator *separator = GTK_SEPARATOR (object);
-  GtkSeparatorPrivate *private = separator->priv;
+  GtkSeparatorPrivate *priv = gtk_separator_get_instance_private (separator);
 
   switch (prop_id)
     {
     case PROP_ORIENTATION:
-      if (private->orientation != g_value_get_enum (value))
+      if (priv->orientation != g_value_get_enum (value))
         {
-          private->orientation = g_value_get_enum (value);
+          priv->orientation = g_value_get_enum (value);
           _gtk_orientable_set_style_classes (GTK_ORIENTABLE (object));
           gtk_widget_queue_resize (GTK_WIDGET (object));
           g_object_notify_by_pspec (object, pspec);
@@ -98,12 +99,12 @@ gtk_separator_get_property (GObject    *object,
                             GParamSpec *pspec)
 {
   GtkSeparator *separator = GTK_SEPARATOR (object);
-  GtkSeparatorPrivate *private = separator->priv;
+  GtkSeparatorPrivate *priv = gtk_separator_get_instance_private (separator);
 
   switch (prop_id)
     {
     case PROP_ORIENTATION:
-      g_value_set_enum (value, private->orientation);
+      g_value_set_enum (value, priv->orientation);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -114,8 +115,9 @@ gtk_separator_get_property (GObject    *object,
 static void
 gtk_separator_init (GtkSeparator *separator)
 {
-  separator->priv = gtk_separator_get_instance_private (separator);
-  separator->priv->orientation = GTK_ORIENTATION_HORIZONTAL;
+  GtkSeparatorPrivate *priv = gtk_separator_get_instance_private (separator);
+
+  priv->orientation = GTK_ORIENTATION_HORIZONTAL;
 
   gtk_widget_set_has_window (GTK_WIDGET (separator), FALSE);
 
