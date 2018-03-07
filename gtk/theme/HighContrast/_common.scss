@@ -1172,12 +1172,13 @@ toolbar { //FIXME: why is all this being ignored?
   }
 }
 
-searchbar {
+searchbar > revealer > * {
   @extend toolbar;
   border-width: 0 0 1px;
   border-color: $borders_color;
   border-style: none none solid none;
-  padding: 3px;
+  margin: -6px;
+  padding: 9px;
 }
 
 %inset-bar {
