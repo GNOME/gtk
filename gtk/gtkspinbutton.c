@@ -202,7 +202,6 @@ struct _GtkSpinButtonPrivate
 
   GtkOrientation orientation;
 
-  GtkGesture *swipe_gesture;
   GtkEventController *scroll_controller;
 
   guint          digits        : 10;
@@ -831,6 +830,7 @@ static void
 gtk_spin_button_init (GtkSpinButton *spin_button)
 {
   GtkSpinButtonPrivate *priv;
+  GtkGesture *gesture;
 
   gtk_widget_set_has_window (GTK_WIDGET (spin_button), FALSE);
 
@@ -893,14 +893,15 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
 
   gtk_spin_button_set_adjustment (spin_button, NULL);
 
-  priv->swipe_gesture = gtk_gesture_swipe_new (GTK_WIDGET (spin_button));
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->swipe_gesture), TRUE);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->swipe_gesture),
+  gesture = gtk_gesture_swipe_new ();
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), TRUE);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                               GTK_PHASE_CAPTURE);
-  g_signal_connect (priv->swipe_gesture, "begin",
+  g_signal_connect (gesture, "begin",
                     G_CALLBACK (swipe_gesture_begin), spin_button);
-  g_signal_connect (priv->swipe_gesture, "update",
+  g_signal_connect (gesture, "update",
                     G_CALLBACK (swipe_gesture_update), spin_button);
+  gtk_widget_add_controller (GTK_WIDGET (spin_button), GTK_EVENT_CONTROLLER (gesture));
 
   priv->scroll_controller =
     gtk_event_controller_scroll_new (GTK_WIDGET (spin_button),
@@ -919,7 +920,6 @@ gtk_spin_button_finalize (GObject *object)
   gtk_spin_button_unset_adjustment (spin_button);
 
   g_object_unref (priv->scroll_controller);
-  g_object_unref (priv->swipe_gesture);
   g_object_unref (priv->up_click_gesture);
   g_object_unref (priv->down_click_gesture);
 

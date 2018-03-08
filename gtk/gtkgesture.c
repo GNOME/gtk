@@ -1472,6 +1472,9 @@ _gtk_gesture_get_group_link (GtkGesture *gesture)
  * Adds @gesture to the same group than @group_gesture. Gestures
  * are by default isolated in their own groups.
  *
+ * Both gestures must have been added to the same widget before they
+ * can be grouped. 
+ *
  * When gestures are grouped, the state of #GdkEventSequences
  * is kept in sync for all of those, so calling gtk_gesture_set_sequence_state(),
  * on one will transfer the same value to the others.

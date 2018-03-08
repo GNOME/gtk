@@ -40,15 +40,15 @@ typedef struct _GtkGestureSwipe GtkGestureSwipe;
 typedef struct _GtkGestureSwipeClass GtkGestureSwipeClass;
 
 GDK_AVAILABLE_IN_ALL
-GType        gtk_gesture_swipe_get_type  (void) G_GNUC_CONST;
+GType           gtk_gesture_swipe_get_type      (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkGesture * gtk_gesture_swipe_new       (GtkWidget *widget);
+GtkGesture *    gtk_gesture_swipe_new           (void);
 
 GDK_AVAILABLE_IN_ALL
-gboolean     gtk_gesture_swipe_get_velocity (GtkGestureSwipe *gesture,
-                                             gdouble         *velocity_x,
-                                             gdouble         *velocity_y);
+gboolean        gtk_gesture_swipe_get_velocity  (GtkGestureSwipe *gesture,
+                                                 gdouble         *velocity_x,
+                                                 gdouble         *velocity_y);
 
 G_END_DECLS
 
