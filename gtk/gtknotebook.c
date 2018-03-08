@@ -1126,9 +1126,13 @@ gtk_notebook_init (GtkNotebook *notebook)
                                GTK_STYLE_CLASS_FRAME);
 }
 
+static GtkBuildableIface *parent_buildable_iface;
+
 static void
 gtk_notebook_buildable_init (GtkBuildableIface *iface)
 {
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+
   iface->add_child = gtk_notebook_buildable_add_child;
 }
 
@@ -1140,31 +1144,38 @@ gtk_notebook_buildable_add_child (GtkBuildable  *buildable,
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (buildable);
 
-  if (type && strcmp (type, "tab") == 0)
+  if (GTK_IS_WIDGET (child))
     {
-      GtkWidget * page;
+      if (type && strcmp (type, "tab") == 0)
+        {
+          GtkWidget * page;
 
-      page = gtk_notebook_get_nth_page (notebook, -1);
-      /* To set the tab label widget, we must have already a child
-       * inside the tab container. */
-      g_assert (page != NULL);
-      /* warn when Glade tries to overwrite label */
-      if (gtk_notebook_get_tab_label (notebook, page))
-        g_warning ("Overriding tab label for notebook");
-      gtk_notebook_set_tab_label (notebook, page, GTK_WIDGET (child));
+          page = gtk_notebook_get_nth_page (notebook, -1);
+          /* To set the tab label widget, we must have already a child
+           * inside the tab container. */
+          g_assert (page != NULL);
+          /* warn when Glade tries to overwrite label */
+          if (gtk_notebook_get_tab_label (notebook, page))
+            g_warning ("Overriding tab label for notebook");
+          gtk_notebook_set_tab_label (notebook, page, GTK_WIDGET (child));
+        }
+      else if (type && strcmp (type, "action-start") == 0)
+        {
+          gtk_notebook_set_action_widget (notebook, GTK_WIDGET (child), GTK_PACK_START);
+        }
+      else if (type && strcmp (type, "action-end") == 0)
+        {
+          gtk_notebook_set_action_widget (notebook, GTK_WIDGET (child), GTK_PACK_END);
+        }
+      else if (!type)
+        gtk_notebook_append_page (notebook, GTK_WIDGET (child), NULL);
+      else
+        GTK_BUILDER_WARN_INVALID_CHILD_TYPE (notebook, type);
     }
-  else if (type && strcmp (type, "action-start") == 0)
-    {
-      gtk_notebook_set_action_widget (notebook, GTK_WIDGET (child), GTK_PACK_START);
-    }
-  else if (type && strcmp (type, "action-end") == 0)
-    {
-      gtk_notebook_set_action_widget (notebook, GTK_WIDGET (child), GTK_PACK_END);
-    }
-  else if (!type)
-    gtk_notebook_append_page (notebook, GTK_WIDGET (child), NULL);
   else
-    GTK_BUILDER_WARN_INVALID_CHILD_TYPE (notebook, type);
+    {
+      parent_buildable_iface->add_child (buildable, builder, child, type);
+    }
 }
 
 static gboolean

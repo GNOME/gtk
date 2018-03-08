@@ -3051,13 +3051,10 @@ gtk_combo_box_buildable_add_child (GtkBuildable *buildable,
                                    GObject      *child,
                                    const gchar  *type)
 {
-  if (GTK_IS_WIDGET (child))
-    {
-      parent_buildable_iface->add_child (buildable, builder, child, type);
-      return;
-    }
-
-  _gtk_cell_layout_buildable_add_child (buildable, builder, child, type);
+  if (GTK_IS_CELL_RENDERER (child))
+    _gtk_cell_layout_buildable_add_child (buildable, builder, child, type);
+  else
+    parent_buildable_iface->add_child (buildable, builder, child, type);
 }
 
 static gboolean

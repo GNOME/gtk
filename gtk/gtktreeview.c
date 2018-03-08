@@ -1978,7 +1978,10 @@ gtk_tree_view_buildable_add_child (GtkBuildable *tree_view,
 				   GObject     *child,
 				   const gchar *type)
 {
-  gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), GTK_TREE_VIEW_COLUMN (child));
+  if (GTK_IS_TREE_VIEW_COLUMN (child))
+    gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), GTK_TREE_VIEW_COLUMN (child));
+  else
+    parent_buildable_iface->add_child (tree_view, builder, child, type);
 }
 
 static GObject *

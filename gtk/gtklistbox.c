@@ -180,6 +180,8 @@ enum {
 #define BOX_PRIV(box) ((GtkListBoxPrivate*)gtk_list_box_get_instance_private ((GtkListBox*)(box)))
 #define ROW_PRIV(row) ((GtkListBoxRowPrivate*)gtk_list_box_row_get_instance_private ((GtkListBoxRow*)(row)))
 
+static GtkBuildableIface *parent_buildable_iface;
+
 static void     gtk_list_box_buildable_interface_init   (GtkBuildableIface *iface);
 
 static void     gtk_list_box_row_actionable_iface_init  (GtkActionableInterface *iface);
@@ -3473,15 +3475,15 @@ gtk_list_box_buildable_add_child (GtkBuildable *buildable,
 {
   if (type && strcmp (type, "placeholder") == 0)
     gtk_list_box_set_placeholder (GTK_LIST_BOX (buildable), GTK_WIDGET (child));
-  else if (!type)
-    gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
   else
-    GTK_BUILDER_WARN_INVALID_CHILD_TYPE (buildable, type);
+    parent_buildable_iface->add_child (buildable, builder, child, type);
 }
 
 static void
 gtk_list_box_buildable_interface_init (GtkBuildableIface *iface)
 {
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+
   iface->add_child = gtk_list_box_buildable_add_child;
 }
 
