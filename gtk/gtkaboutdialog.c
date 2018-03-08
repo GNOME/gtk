@@ -184,11 +184,6 @@ struct _GtkAboutDialogPrivate
 
   GSList *visited_links;
 
-  GtkGesture *license_press;
-  GtkGesture *system_press;
-  GtkEventController *license_motion;
-  GtkEventController *system_motion;
-
   GtkLicense license_type;
 
   guint hovering_over_link : 1;
@@ -610,6 +605,8 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 
   gtk_widget_class_bind_template_callback (widget_class, emit_activate_link);
   gtk_widget_class_bind_template_callback (widget_class, text_view_key_press_event);
+  gtk_widget_class_bind_template_callback (widget_class, text_view_released);
+  gtk_widget_class_bind_template_callback (widget_class, text_view_motion);
   gtk_widget_class_bind_template_callback (widget_class, stack_visible_child_notify);
 }
 
@@ -773,15 +770,6 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   switch_page (about, "main");
   update_stack_switcher_visibility (about);
 
-  priv->license_press = gtk_gesture_multi_press_new (priv->license_view);
-  g_signal_connect (priv->license_press, "released", G_CALLBACK (text_view_released), about);
-  priv->system_press = gtk_gesture_multi_press_new (priv->system_view);
-  g_signal_connect (priv->system_press, "released", G_CALLBACK (text_view_released), about);
-  priv->license_motion = gtk_event_controller_motion_new (priv->license_view);
-  g_signal_connect (priv->license_motion, "motion", G_CALLBACK (text_view_motion), about);
-  priv->system_motion = gtk_event_controller_motion_new (priv->system_view);
-  g_signal_connect (priv->system_motion, "motion", G_CALLBACK (text_view_motion), about);
-
   /* force defaults */
   gtk_about_dialog_set_program_name (about, NULL);
   gtk_about_dialog_set_logo (about, NULL);
@@ -817,11 +805,6 @@ gtk_about_dialog_finalize (GObject *object)
 
   g_slist_free_full (priv->credit_sections, destroy_credit_section);
   g_slist_free_full (priv->visited_links, g_free);
-
-  g_object_unref (priv->license_press);
-  g_object_unref (priv->system_press);
-  g_object_unref (priv->license_motion);
-  g_object_unref (priv->system_motion);
 
   G_OBJECT_CLASS (gtk_about_dialog_parent_class)->finalize (object);
 }
