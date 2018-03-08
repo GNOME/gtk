@@ -34,7 +34,7 @@
 
 #include "gdk/gdkkeysyms.h"
 #include "gdk/win32/gdkwin32.h"
-#include "gdk/gdkkeysyms.h"
+#include "gtk/gtkimmodule.h"
 
 #include <pango/pango.h>
 
@@ -81,8 +81,6 @@ struct _GtkIMContextIMEPrivate
 
 
 /* GObject class methods */
-static void gtk_im_context_ime_class_init (GtkIMContextIMEClass *class);
-static void gtk_im_context_ime_init       (GtkIMContextIME      *context_ime);
 static void gtk_im_context_ime_dispose    (GObject              *obj);
 static void gtk_im_context_ime_finalize   (GObject              *obj);
 
@@ -125,9 +123,6 @@ static void get_window_position                 (GdkSurface       *win,
 static void cb_client_widget_hierarchy_changed  (GtkWidget       *widget,
                                                  GtkWidget       *widget2,
                                                  GtkIMContextIME *context_ime);
-
-#define GTK_TYPE_IM_CONTEXT_IME (gtk_im_context_ime_get_type ())
-#define GTK_IM_CONTEXT_IME(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_IM_CONTEXT_IME, GtkIMContextIME))
 
 G_DEFINE_TYPE_WITH_CODE (GtkIMContextIME, gtk_im_context_ime, GTK_TYPE_IM_CONTEXT,
 			 gtk_im_module_ensure_extension_point ();
@@ -193,8 +188,7 @@ gtk_im_context_ime_dispose (GObject *obj)
 
   FREE_PREEDIT_BUFFER (context_ime);
 
-  if (G_OBJECT_CLASS (parent_class)->dispose)
-    G_OBJECT_CLASS (parent_class)->dispose (obj);
+  G_OBJECT_CLASS (gtk_im_context_ime_parent_class)->dispose (obj);
 }
 
 
@@ -207,8 +201,7 @@ gtk_im_context_ime_finalize (GObject *obj)
   g_free (context_ime->priv);
   context_ime->priv = NULL;
 
-  if (G_OBJECT_CLASS (parent_class)->finalize)
-    G_OBJECT_CLASS (parent_class)->finalize (obj);
+  G_OBJECT_CLASS (gtk_im_context_ime_parent_class)->finalize (obj);
 }
 
 
