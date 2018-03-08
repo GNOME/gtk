@@ -12894,12 +12894,14 @@ _gtk_widget_add_controller (GtkWidget          *widget,
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
-  g_return_if_fail (widget == gtk_event_controller_get_widget (controller));
+  g_return_if_fail (gtk_event_controller_get_widget (controller) == NULL);
 
   data = _gtk_widget_has_controller (widget, controller);
 
   if (data)
     return;
+
+  GTK_EVENT_CONTROLLER_GET_CLASS (controller)->set_widget (controller, widget);
 
   data = g_new0 (EventControllerData, 1);
   data->controller = controller;
@@ -12933,6 +12935,8 @@ _gtk_widget_remove_controller (GtkWidget          *widget,
 
   if (!data)
     return;
+
+  GTK_EVENT_CONTROLLER_GET_CLASS (controller)->unset_widget (controller);
 
   g_object_remove_weak_pointer (G_OBJECT (data->controller), (gpointer *) &data->controller);
 
