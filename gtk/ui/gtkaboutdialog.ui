@@ -158,6 +158,16 @@
                             <property name="right-margin">8</property>
                             <property name="cursor-visible">0</property>
                             <signal name="key-press-event" handler="text_view_key_press_event" swapped="no"/>
+                            <child>
+                              <object class="GtkGestureMultiPress">
+                                <signal name="released" handler="text_view_released" swapped="no"/>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkEventControllerMotion">
+                                <signal name="motion" handler="text_view_motion" swapped="no"/>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -185,6 +195,16 @@
                             <property name="right-margin">8</property>
                             <property name="cursor-visible">0</property>
                             <signal name="key-press-event" handler="text_view_key_press_event" swapped="no"/>
+                            <child>
+                              <object class="GtkGestureMultiPress">
+                                <signal name="released" handler="text_view_released" swapped="no"/>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkEventControllerMotion">
+                                <signal name="motion" handler="text_view_motion" swapped="no"/>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
