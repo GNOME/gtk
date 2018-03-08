@@ -839,27 +839,38 @@ gtk_overlay_init (GtkOverlay *overlay)
   gtk_widget_set_has_surface (GTK_WIDGET (overlay), FALSE);
 }
 
+static GtkBuildableIface *parent_buildable_iface;
+
 static void
 gtk_overlay_buildable_add_child (GtkBuildable *buildable,
                                  GtkBuilder   *builder,
                                  GObject      *child,
                                  const gchar  *type)
 {
-  if (type && strcmp (type, "overlay") == 0)
-    gtk_overlay_add_overlay (GTK_OVERLAY (buildable), GTK_WIDGET (child));
-  else if (!type)
+  if (GTK_IS_WIDGET (child))
     {
-      /* Make sure the main-child node is the first one */
-      gtk_widget_insert_after (GTK_WIDGET (child), GTK_WIDGET (buildable), NULL);
-      _gtk_bin_set_child (GTK_BIN (buildable), GTK_WIDGET (child));
+      if (type && strcmp (type, "overlay") == 0)
+        gtk_overlay_add_overlay (GTK_OVERLAY (buildable), GTK_WIDGET (child));
+      else if (!type)
+        {
+          /* Make sure the main-child node is the first one */
+          gtk_widget_insert_after (GTK_WIDGET (child), GTK_WIDGET (buildable), NULL);
+          _gtk_bin_set_child (GTK_BIN (buildable), GTK_WIDGET (child));
+        }
+      else
+        GTK_BUILDER_WARN_INVALID_CHILD_TYPE (buildable, type);
     }
   else
-    GTK_BUILDER_WARN_INVALID_CHILD_TYPE (buildable, type);
+    {
+      parent_buildable_iface->add_child (buildable, builder, child, type);
+    }
 }
 
 static void
 gtk_overlay_buildable_init (GtkBuildableIface *iface)
 {
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+
   iface->add_child = gtk_overlay_buildable_add_child;
 }
 

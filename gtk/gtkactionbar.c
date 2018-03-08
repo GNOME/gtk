@@ -428,6 +428,8 @@ gtk_action_bar_init (GtkActionBar *action_bar)
   gtk_container_add (GTK_CONTAINER (priv->revealer), priv->center_box);
 }
 
+static GtkBuildableIface *parent_buildable_iface;
+
 static void
 gtk_action_bar_buildable_add_child (GtkBuildable *buildable,
                                     GtkBuilder   *builder,
@@ -438,13 +440,9 @@ gtk_action_bar_buildable_add_child (GtkBuildable *buildable,
 
   if (type && strcmp (type, "center") == 0)
     gtk_action_bar_set_center_widget (action_bar, GTK_WIDGET (child));
-  else if (!type)
-    gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
   else
-    GTK_BUILDER_WARN_INVALID_CHILD_TYPE (action_bar, type);
+    parent_buildable_iface->add_child (buildable, builder, child, type);
 }
-
-static GtkBuildableIface *parent_buildable_iface;
 
 static void
 gtk_action_bar_buildable_interface_init (GtkBuildableIface *iface)

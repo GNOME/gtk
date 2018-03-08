@@ -890,10 +890,22 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 }
 
 static void
+gtk_icon_view_buildable_add_child (GtkBuildable *buildable,
+                                   GtkBuilder   *builder,
+                                   GObject      *child,
+                                   const gchar  *type)
+{
+  if (GTK_IS_CELL_RENDERER (child))
+    _gtk_cell_layout_buildable_add_child (buildable, builder, child, type);
+  else
+    parent_buildable_iface->add_child (buildable, builder, child, type);
+}
+
+static void
 gtk_icon_view_buildable_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
-  iface->add_child = _gtk_cell_layout_buildable_add_child;
+  iface->add_child = gtk_icon_view_buildable_add_child;
   iface->custom_tag_start = gtk_icon_view_buildable_custom_tag_start;
   iface->custom_tag_end = gtk_icon_view_buildable_custom_tag_end;
 }
