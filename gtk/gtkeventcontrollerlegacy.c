@@ -20,7 +20,7 @@
 #include "config.h"
 #include "gtkeventcontrollerlegacyprivate.h"
 
-G_DEFINE_TYPE (GtkEventControllerLegacy, _gtk_event_controller_legacy,
+G_DEFINE_TYPE (GtkEventControllerLegacy, gtk_event_controller_legacy,
                GTK_TYPE_EVENT_CONTROLLER)
 
 static gboolean
@@ -33,7 +33,7 @@ gtk_event_controller_legacy_handle_event (GtkEventController *controller,
 }
 
 static void
-_gtk_event_controller_legacy_class_init (GtkEventControllerLegacyClass *klass)
+gtk_event_controller_legacy_class_init (GtkEventControllerLegacyClass *klass)
 {
   GtkEventControllerClass *controller_class = GTK_EVENT_CONTROLLER_CLASS (klass);
 
@@ -41,16 +41,13 @@ _gtk_event_controller_legacy_class_init (GtkEventControllerLegacyClass *klass)
 }
 
 static void
-_gtk_event_controller_legacy_init (GtkEventControllerLegacy *controller)
+gtk_event_controller_legacy_init (GtkEventControllerLegacy *controller)
 {
 }
 
 GtkEventController *
-_gtk_event_controller_legacy_new (GtkWidget *widget)
+gtk_event_controller_legacy_new (void)
 {
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
   return g_object_new (GTK_TYPE_EVENT_CONTROLLER_LEGACY,
-                       "widget", widget,
                        NULL);
 }
