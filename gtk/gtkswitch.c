@@ -475,7 +475,6 @@ gtk_switch_dispose (GObject *object)
 
   g_clear_object (&priv->action_helper);
 
-  g_clear_object (&priv->pan_gesture);
   g_clear_object (&priv->multipress_gesture);
 
   G_OBJECT_CLASS (gtk_switch_parent_class)->dispose (object);
@@ -631,8 +630,7 @@ gtk_switch_init (GtkSwitch *self)
                                               GTK_PHASE_BUBBLE);
   priv->multipress_gesture = gesture;
 
-  gesture = gtk_gesture_pan_new (GTK_WIDGET (self),
-                                 GTK_ORIENTATION_HORIZONTAL);
+  gesture = gtk_gesture_pan_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);
   gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (gesture), TRUE);
   g_signal_connect (gesture, "pan",
@@ -641,6 +639,7 @@ gtk_switch_init (GtkSwitch *self)
                     G_CALLBACK (gtk_switch_pan_gesture_drag_end), self);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                               GTK_PHASE_CAPTURE);
+  gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
   priv->pan_gesture = gesture;
 
   /* Translators: if the "on" state label requires more than three

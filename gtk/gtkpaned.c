@@ -996,7 +996,6 @@ gtk_paned_finalize (GObject *object)
   gtk_paned_set_saved_focus (paned, NULL);
   gtk_paned_set_first_paned (paned, NULL);
 
-  g_clear_object (&priv->pan_gesture);
   g_clear_object (&priv->drag_gesture);
   g_clear_object (&priv->motion_controller);
 
@@ -1511,12 +1510,12 @@ gtk_paned_init (GtkPaned *paned)
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (paned));
 
   /* Touch gesture */
-  gesture = gtk_gesture_pan_new (GTK_WIDGET (paned),
-                                 GTK_ORIENTATION_HORIZONTAL);
+  gesture = gtk_gesture_pan_new (GTK_ORIENTATION_HORIZONTAL);
   connect_drag_gesture_signals (paned, gesture);
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), TRUE);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                               GTK_PHASE_CAPTURE);
+  gtk_widget_add_controller (GTK_WIDGET (paned), GTK_EVENT_CONTROLLER (gesture));
   priv->pan_gesture = gesture;
 
   /* Pointer gesture */
