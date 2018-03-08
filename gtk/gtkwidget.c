@@ -9947,7 +9947,23 @@ gtk_widget_buildable_add_child (GtkBuildable  *buildable,
                                 GObject       *child,
                                 const gchar   *type)
 {
-  gtk_widget_set_parent (GTK_WIDGET (child), GTK_WIDGET (buildable));
+  if (type != NULL)
+    {
+      GTK_BUILDER_WARN_INVALID_CHILD_TYPE (buildable, type);
+    }
+  if (GTK_IS_WIDGET (child))
+    {
+      gtk_widget_set_parent (GTK_WIDGET (child), GTK_WIDGET (buildable));
+    }
+  else if (GTK_IS_EVENT_CONTROLLER (child))
+    {
+      gtk_widget_add_controller (GTK_WIDGET (buildable), g_object_ref (GTK_EVENT_CONTROLLER (child)));
+    }
+  else
+    {
+      g_warning ("Cannot add an object of type %s to a widget of type %s",
+                 g_type_name (G_OBJECT_TYPE (child)), g_type_name (G_OBJECT_TYPE (buildable)));
+    }
 }
 
 static void

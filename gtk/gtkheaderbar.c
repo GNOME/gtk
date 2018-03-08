@@ -1988,6 +1988,8 @@ gtk_header_bar_init (GtkHeaderBar *bar)
   construct_label_box (bar);
 }
 
+static GtkBuildableIface *parent_buildable_iface;
+
 static void
 gtk_header_bar_buildable_add_child (GtkBuildable *buildable,
                                     GtkBuilder   *builder,
@@ -1996,15 +1998,15 @@ gtk_header_bar_buildable_add_child (GtkBuildable *buildable,
 {
   if (type && strcmp (type, "title") == 0)
     gtk_header_bar_set_custom_title (GTK_HEADER_BAR (buildable), GTK_WIDGET (child));
-  else if (!type)
-    gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
   else
-    GTK_BUILDER_WARN_INVALID_CHILD_TYPE (GTK_HEADER_BAR (buildable), type);
+    parent_buildable_iface->add_child (buildable, builder, child, type);
 }
 
 static void
 gtk_header_bar_buildable_init (GtkBuildableIface *iface)
 {
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+
   iface->add_child = gtk_header_bar_buildable_add_child;
 }
 

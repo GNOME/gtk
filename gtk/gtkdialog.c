@@ -1560,7 +1560,7 @@ gtk_dialog_buildable_add_child (GtkBuildable  *buildable,
   GtkDialogPrivate *priv = dialog->priv;
 
   if (type == NULL)
-    gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
+    parent_buildable_iface->add_child (buildable, builder, child, type);
   else if (g_str_equal (type, "titlebar"))
     {
       priv->headerbar = GTK_WIDGET (child);
