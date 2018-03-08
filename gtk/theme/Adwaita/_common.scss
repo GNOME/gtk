@@ -1697,7 +1697,12 @@ headerbar { // headerbar border rounding
 
 .titlebar:not(headerbar) {
   window > & {
-    // add a bottom border and reset everything else
+    // applications with split headerbars has a container in the titlebar
+    // slot so the .titlebar style there needs to be reset. Since we can't
+    // go backward with selectors I assumed that any csd application
+    // sports a headerbar hence relying on that styling and resetting
+    // the .titlebar styleclass
+    
     padding: 0;
     background-color: transparent;
     background-image: none;
@@ -1713,7 +1718,7 @@ headerbar { // headerbar border rounding
 
     & .titlebar,
     & headerbar {
-      // if there are nested titlebars, only the outer one should have a bottom border
+      // only the outer container should have a bottom border
       border-bottom-style: none;
     }
   }
