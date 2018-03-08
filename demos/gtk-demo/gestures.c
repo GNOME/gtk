@@ -196,12 +196,12 @@ do_gestures (GtkWidget *do_widget)
       gtk_widget_add_controller (drawing_area, GTK_EVENT_CONTROLLER (gesture));
 
       /* Zoom */
-      zoom = gesture = gtk_gesture_zoom_new (drawing_area);
+      zoom = gesture = gtk_gesture_zoom_new ();
       g_signal_connect (gesture, "scale-changed",
                         G_CALLBACK (zoom_scale_changed), drawing_area);
       gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                                   GTK_PHASE_BUBBLE);
-      g_object_weak_ref (G_OBJECT (drawing_area), (GWeakNotify) g_object_unref, gesture);
+      gtk_widget_add_controller (drawing_area, GTK_EVENT_CONTROLLER (gesture));
     }
 
   if (!gtk_widget_get_visible (window))
