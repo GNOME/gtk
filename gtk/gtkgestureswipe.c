@@ -252,19 +252,15 @@ gtk_gesture_swipe_init (GtkGestureSwipe *gesture)
 
 /**
  * gtk_gesture_swipe_new:
- * @widget: a #GtkWidget
  *
  * Returns a newly created #GtkGesture that recognizes swipes.
  *
  * Returns: a newly created #GtkGestureSwipe
  **/
 GtkGesture *
-gtk_gesture_swipe_new (GtkWidget *widget)
+gtk_gesture_swipe_new (void)
 {
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
   return g_object_new (GTK_TYPE_GESTURE_SWIPE,
-                       "widget", widget,
                        NULL);
 }
 
