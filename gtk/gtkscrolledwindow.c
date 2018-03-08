@@ -1933,12 +1933,14 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   gtk_gesture_group (priv->pan_gesture, priv->drag_gesture);
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->pan_gesture), TRUE);
 
-  priv->swipe_gesture = gtk_gesture_swipe_new (widget);
-  gtk_gesture_group (priv->swipe_gesture, priv->drag_gesture);
+  priv->swipe_gesture = gtk_gesture_swipe_new ();
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->swipe_gesture), TRUE);
   g_signal_connect_swapped (priv->swipe_gesture, "swipe",
                             G_CALLBACK (scrolled_window_swipe_cb),
                             scrolled_window);
+  gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (priv->swipe_gesture));
+  gtk_gesture_group (priv->swipe_gesture, priv->drag_gesture);
+
   priv->long_press_gesture = gtk_gesture_long_press_new (widget);
   gtk_gesture_group (priv->long_press_gesture, priv->drag_gesture);
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->long_press_gesture), TRUE);
@@ -2611,7 +2613,6 @@ gtk_scrolled_window_finalize (GObject *object)
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
 
   g_clear_object (&priv->drag_gesture);
-  g_clear_object (&priv->swipe_gesture);
   g_clear_object (&priv->long_press_gesture);
   g_clear_object (&priv->pan_gesture);
   g_clear_object (&priv->scroll_controller);
