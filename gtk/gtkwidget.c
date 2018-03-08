@@ -2954,7 +2954,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   /* need to set correct type here, and only class has the correct type here */
   gtk_css_node_set_widget_type (priv->cssnode, G_TYPE_FROM_CLASS (g_class));
 
-  gtk_widget_init_legacy_controller (widget);
+  gtk_widget_add_controller (widget, gtk_event_controller_legacy_new ());
 }
 
 
@@ -13811,16 +13811,6 @@ gboolean
 gtk_widget_get_pass_through (GtkWidget *widget)
 {
   return widget->priv->pass_through;
-}
-
-void
-gtk_widget_init_legacy_controller (GtkWidget *widget)
-{
-  GtkEventController *controller;
-
-  controller = _gtk_event_controller_legacy_new (widget);
-  g_object_set_data_full (G_OBJECT (widget), I_("gtk-widget-legacy-event-controller"),
-                          controller, g_object_unref);
 }
 
 /**
