@@ -43,7 +43,7 @@ GDK_AVAILABLE_IN_ALL
 GType        gtk_gesture_rotate_get_type        (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkGesture * gtk_gesture_rotate_new             (GtkWidget        *widget);
+GtkGesture * gtk_gesture_rotate_new             (void);
 
 GDK_AVAILABLE_IN_ALL
 gdouble      gtk_gesture_rotate_get_angle_delta (GtkGestureRotate *gesture);

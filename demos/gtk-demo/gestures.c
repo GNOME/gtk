@@ -188,12 +188,12 @@ do_gestures (GtkWidget *do_widget)
       g_object_weak_ref (G_OBJECT (drawing_area), (GWeakNotify) g_object_unref, gesture);
 
       /* Rotate */
-      rotate = gesture = gtk_gesture_rotate_new (drawing_area);
+      rotate = gesture = gtk_gesture_rotate_new ();
       g_signal_connect (gesture, "angle-changed",
                         G_CALLBACK (rotation_angle_changed), drawing_area);
       gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                                   GTK_PHASE_BUBBLE);
-      g_object_weak_ref (G_OBJECT (drawing_area), (GWeakNotify) g_object_unref, gesture);
+      gtk_widget_add_controller (drawing_area, GTK_EVENT_CONTROLLER (gesture));
 
       /* Zoom */
       zoom = gesture = gtk_gesture_zoom_new (drawing_area);
