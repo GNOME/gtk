@@ -24,7 +24,6 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-typedef struct _GtkEventController GtkEventController;
 typedef struct _GtkEventControllerClass GtkEventControllerClass;
 
 #include <gdk/gdk.h>
