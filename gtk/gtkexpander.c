@@ -390,23 +390,25 @@ gtk_expander_init (GtkExpander *expander)
                                               GTK_PHASE_BUBBLE);
 }
 
+static GtkBuildableIface *parent_buildable_iface;
+
 static void
 gtk_expander_buildable_add_child (GtkBuildable  *buildable,
                                   GtkBuilder    *builder,
                                   GObject       *child,
                                   const gchar   *type)
 {
-  if (!type)
-    gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
-  else if (strcmp (type, "label") == 0)
+  if (g_strcmp0 (type, "label") == 0)
     gtk_expander_set_label_widget (GTK_EXPANDER (buildable), GTK_WIDGET (child));
   else
-    GTK_BUILDER_WARN_INVALID_CHILD_TYPE (GTK_EXPANDER (buildable), type);
+    parent_buildable_iface->add_child (buildable, builder, child, type);
 }
 
 static void
 gtk_expander_buildable_init (GtkBuildableIface *iface)
 {
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+
   iface->add_child = gtk_expander_buildable_add_child;
 }
 

@@ -2236,10 +2236,8 @@ gtk_window_buildable_add_child (GtkBuildable *buildable,
 {
   if (type && strcmp (type, "titlebar") == 0)
     gtk_window_set_titlebar (GTK_WINDOW (buildable), GTK_WIDGET (child));
-  else if (!type)
-    gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
   else
-    GTK_BUILDER_WARN_INVALID_CHILD_TYPE (buildable, type);
+    parent_buildable_iface->add_child (buildable, builder, child, type);
 }
 
 static void
