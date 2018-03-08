@@ -4269,6 +4269,8 @@ gtk_widget_get_toplevel
 gtk_widget_get_ancestor
 gtk_widget_is_ancestor
 gtk_widget_translate_coordinates
+gtk_widget_add_controller
+gtk_widget_remove_controller
 gtk_widget_set_direction
 GtkTextDirection
 gtk_widget_get_direction
