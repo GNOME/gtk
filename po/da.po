@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-05 19:59+0000\n"
-"PO-Revision-Date: 2018-03-07 22:24+0100\n"
+"PO-Revision-Date: 2018-03-08 12:23+0100\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -3003,7 +3003,7 @@ msgstr "Seneste filer"
 
 #: gtk/gtkplacessidebar.c:1082
 msgid "Starred"
-msgstr "Stjerne"
+msgstr "Stjernemarkerede"
 
 #. TODO: Rename to 'Starred files'
 #: gtk/gtkplacessidebar.c:1085
