@@ -248,7 +248,6 @@ gtk_gesture_rotate_class_init (GtkGestureRotateClass *klass)
 
 /**
  * gtk_gesture_rotate_new:
- * @widget: a #GtkWidget
  *
  * Returns a newly created #GtkGesture that recognizes 2-touch
  * rotation gestures.
@@ -256,12 +255,9 @@ gtk_gesture_rotate_class_init (GtkGestureRotateClass *klass)
  * Returns: a newly created #GtkGestureRotate
  **/
 GtkGesture *
-gtk_gesture_rotate_new (GtkWidget *widget)
+gtk_gesture_rotate_new (void)
 {
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
   return g_object_new (GTK_TYPE_GESTURE_ROTATE,
-                       "widget", widget,
                        NULL);
 }
 

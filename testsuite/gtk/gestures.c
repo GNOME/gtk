@@ -356,7 +356,7 @@ add_mt_gesture (GtkWidget *w, const gchar *name, GtkPropagationPhase phase, GStr
   data->str = str;
   data->state = state;
 
-  g = gtk_gesture_rotate_new (w);
+  g = gtk_gesture_rotate_new ();
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (g), phase);
 
   g_object_set_data (G_OBJECT (g), "name", (gpointer)name);
@@ -365,6 +365,8 @@ add_mt_gesture (GtkWidget *w, const gchar *name, GtkPropagationPhase phase, GStr
   g_signal_connect (g, "update", G_CALLBACK (update_cb), data);
   g_signal_connect (g, "end", G_CALLBACK (end_cb), data);
   g_signal_connect (g, "sequence-state-changed", G_CALLBACK (state_changed_cb), data);
+
+  gtk_widget_add_controller (w, GTK_EVENT_CONTROLLER (g));
 
   return g;
 }
