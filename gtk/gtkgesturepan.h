@@ -42,8 +42,7 @@ GDK_AVAILABLE_IN_ALL
 GType             gtk_gesture_pan_get_type        (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkGesture *      gtk_gesture_pan_new             (GtkWidget      *widget,
-                                                   GtkOrientation  orientation);
+GtkGesture *      gtk_gesture_pan_new             (GtkOrientation  orientation);
 
 GDK_AVAILABLE_IN_ALL
 GtkOrientation    gtk_gesture_pan_get_orientation (GtkGesturePan  *gesture);

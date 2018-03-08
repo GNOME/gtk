@@ -1947,9 +1947,10 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
                             G_CALLBACK (scrolled_window_drag_end_cb),
                             scrolled_window);
 
-  priv->pan_gesture = gtk_gesture_pan_new (widget, GTK_ORIENTATION_VERTICAL);
-  gtk_gesture_group (priv->pan_gesture, priv->drag_gesture);
+  priv->pan_gesture = gtk_gesture_pan_new (GTK_ORIENTATION_VERTICAL);
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->pan_gesture), TRUE);
+  gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (priv->pan_gesture));
+  gtk_gesture_group (priv->pan_gesture, priv->drag_gesture);
 
   priv->swipe_gesture = gtk_gesture_swipe_new ();
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->swipe_gesture), TRUE);
@@ -2632,7 +2633,6 @@ gtk_scrolled_window_finalize (GObject *object)
 
   g_clear_object (&priv->drag_gesture);
   g_clear_object (&priv->long_press_gesture);
-  g_clear_object (&priv->pan_gesture);
   g_clear_object (&priv->scroll_controller);
 
 
