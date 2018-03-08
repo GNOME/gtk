@@ -259,9 +259,8 @@ GtkActionMuxer *  _gtk_widget_get_action_muxer             (GtkWidget    *widget
                                                             gboolean      create);
 
 void              _gtk_widget_add_controller               (GtkWidget           *widget,
-                                                            GtkEventController  *controller);
-void              _gtk_widget_remove_controller            (GtkWidget           *widget,
-                                                            GtkEventController  *controller);
+                                                            GtkEventController  *controller,
+                                                            gboolean             take_ref);
 GList *           _gtk_widget_list_controllers             (GtkWidget           *widget,
                                                             GtkPropagationPhase  phase);
 gboolean          _gtk_widget_consumes_motion              (GtkWidget           *widget,
