@@ -461,6 +461,7 @@ typedef struct {
   GtkEventController *controller;
   guint grab_notify_id;
   guint sequence_state_changed_id;
+  gboolean have_ref;
 } EventControllerData;
 
 struct _GtkWidgetClassPrivate
@@ -9038,7 +9039,9 @@ gtk_widget_finalize (GObject *object)
     {
       EventControllerData *data = l->data;
       if (data->controller)
-        _gtk_widget_remove_controller (widget, data->controller);
+        {
+          gtk_widget_remove_controller (widget, data->controller);
+        }
     }
   g_list_free_full (priv->event_controllers, g_free);
   priv->event_controllers = NULL;
@@ -13433,47 +13436,20 @@ event_controller_sequence_state_changed (GtkGesture            *gesture,
   cancel_event_sequence_on_hierarchy (widget, event_widget, sequence);
 }
 
-static EventControllerData *
-_gtk_widget_has_controller (GtkWidget          *widget,
-                            GtkEventController *controller)
-{
-  EventControllerData *data;
-  GtkWidgetPrivate *priv;
-  GList *l;
-
-  priv = widget->priv;
-
-  for (l = priv->event_controllers; l; l = l->next)
-    {
-      data = l->data;
-
-      if (data->controller == controller)
-        return data;
-    }
-
-  return NULL;
-}
-
 void
 _gtk_widget_add_controller (GtkWidget          *widget,
-                            GtkEventController *controller)
+                            GtkEventController *controller,
+                            gboolean            have_ref)
 {
   EventControllerData *data;
   GtkWidgetPrivate *priv;
 
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
-  g_return_if_fail (gtk_event_controller_get_widget (controller) == NULL);
-
   priv = widget->priv;
-  data = _gtk_widget_has_controller (widget, controller);
-
-  if (data)
-    return;
 
   GTK_EVENT_CONTROLLER_GET_CLASS (controller)->set_widget (controller, widget);
 
   data = g_new0 (EventControllerData, 1);
+  data->have_ref = have_ref;
   data->controller = controller;
   data->grab_notify_id =
     g_signal_connect (widget, "grab-notify",
@@ -13492,19 +13468,61 @@ _gtk_widget_add_controller (GtkWidget          *widget,
   priv->event_controllers = g_list_prepend (priv->event_controllers, data);
 }
 
+/**
+ * gtk_widget_add_controller:
+ * @widget: a #GtkWidget
+ * @controller: (transfer full): a #GtkEventController that hasn't been
+ *     added to a widget yet
+ *
+ * Adds @controller to @widget so that it will receive events. You will
+ * usually want to call this function right after creating any kind of
+ * #GtkEventController.
+ **/
 void
-_gtk_widget_remove_controller (GtkWidget          *widget,
-                               GtkEventController *controller)
+gtk_widget_add_controller (GtkWidget          *widget,
+                           GtkEventController *controller)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
+  g_return_if_fail (gtk_event_controller_get_widget (controller) == NULL);
+
+  _gtk_widget_add_controller (widget, controller, TRUE);
+}
+
+/**
+ * gtk_widget_remove_controller:
+ * @widget: a #GtkWidget
+ * @controller: (transfer none): a #GtkEventController
+ *
+ * Removes @controller from @widget, so that it doesn't process
+ * events anymore. It should not be used again.
+ *
+ * Widgets will remove all event controllers automatically when they
+ * are destroyed, there is normally no need to call this function.
+ **/
+void
+gtk_widget_remove_controller (GtkWidget          *widget,
+                              GtkEventController *controller)
 {
   EventControllerData *data;
+  GtkWidgetPrivate *priv;
+  GList *l;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
+  g_return_if_fail (gtk_event_controller_get_widget (controller) == widget);
 
-  data = _gtk_widget_has_controller (widget, controller);
+  priv = widget->priv;
 
-  if (!data)
-    return;
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      data = l->data;
+
+      if (data->controller == controller)
+        break;
+    }
+
+  g_assert (data);
 
   GTK_EVENT_CONTROLLER_GET_CLASS (controller)->unset_widget (controller);
 
@@ -13517,6 +13535,8 @@ _gtk_widget_remove_controller (GtkWidget          *widget,
     g_signal_handler_disconnect (data->controller, data->sequence_state_changed_id);
 
   data->controller = NULL;
+  if (data->have_ref)
+    g_object_unref (controller);
 }
 
 GList *

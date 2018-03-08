@@ -87,7 +87,6 @@ gtk_event_controller_set_property (GObject      *object,
                                    GParamSpec   *pspec)
 {
   GtkEventController *self = GTK_EVENT_CONTROLLER (object);
-  GtkEventControllerPrivate *priv = gtk_event_controller_get_instance_private (self);
   GtkWidget *widget;
 
   switch (prop_id)
@@ -96,8 +95,7 @@ gtk_event_controller_set_property (GObject      *object,
       widget = g_value_get_object (value);
       if (widget)
         {
-          _gtk_widget_add_controller (widget, self);
-          g_object_add_weak_pointer (G_OBJECT (widget), (gpointer *) &priv->widget);
+          _gtk_widget_add_controller (widget, self, FALSE);
         }
       break;
     case PROP_PROPAGATION_PHASE:
@@ -140,8 +138,7 @@ gtk_event_controller_dispose (GObject *object)
   priv = gtk_event_controller_get_instance_private (controller);
   if (priv->widget)
     {
-      g_object_remove_weak_pointer (G_OBJECT (priv->widget), (gpointer *) &priv->widget);
-      _gtk_widget_remove_controller (priv->widget, controller);
+      gtk_widget_remove_controller (priv->widget, controller);
     }
 
   G_OBJECT_CLASS (gtk_event_controller_parent_class)->dispose (object);
