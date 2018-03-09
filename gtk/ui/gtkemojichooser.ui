@@ -37,6 +37,17 @@
                             <property name="homogeneous">1</property>
                             <property name="selection-mode">none</property>
                             <signal name="child-activated" handler="emoji_activated"/>
+                            <child>
+                              <object class="GtkGestureLongPress">
+                                <signal name="pressed" handler="long_pressed_cb"/>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkGestureMultiPress">
+                                <property name="button">3</property>
+                                <signal name="pressed" handler="pressed_cb"/>
+                              </object>
+                            </child>
                           </object>
                         </child>
                         <child>
@@ -50,6 +61,17 @@
                             <property name="homogeneous">1</property>
                             <property name="selection-mode">none</property>
                             <signal name="child-activated" handler="emoji_activated"/>
+                            <child>
+                              <object class="GtkGestureLongPress">
+                                <signal name="pressed" handler="long_pressed_cb"/>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkGestureMultiPress">
+                                <property name="button">3</property>
+                                <signal name="pressed" handler="pressed_cb"/>
+                              </object>
+                            </child>
                           </object>
                         </child>
                         <child>
@@ -63,6 +85,17 @@
                             <property name="homogeneous">1</property>
                             <property name="selection-mode">none</property>
                             <signal name="child-activated" handler="emoji_activated"/>
+                            <child>
+                              <object class="GtkGestureLongPress">
+                                <signal name="pressed" handler="long_pressed_cb"/>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkGestureMultiPress">
+                                <property name="button">3</property>
+                                <signal name="pressed" handler="pressed_cb"/>
+                              </object>
+                            </child>
                           </object>
                         </child>
                         <child>
