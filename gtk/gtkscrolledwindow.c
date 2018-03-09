@@ -1960,8 +1960,7 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (priv->swipe_gesture));
   gtk_gesture_group (priv->swipe_gesture, priv->drag_gesture);
 
-  priv->long_press_gesture = gtk_gesture_long_press_new (widget);
-  gtk_gesture_group (priv->long_press_gesture, priv->drag_gesture);
+  priv->long_press_gesture = gtk_gesture_long_press_new ();
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->long_press_gesture), TRUE);
   g_signal_connect_swapped (priv->long_press_gesture, "pressed",
                             G_CALLBACK (scrolled_window_long_press_cb),
@@ -1969,6 +1968,8 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   g_signal_connect_swapped (priv->long_press_gesture, "cancelled",
                             G_CALLBACK (scrolled_window_long_press_cancelled_cb),
                             scrolled_window);
+  gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (priv->long_press_gesture));
+  gtk_gesture_group (priv->long_press_gesture, priv->drag_gesture);
 
   gtk_scrolled_window_set_kinetic_scrolling (scrolled_window, TRUE);
   gtk_scrolled_window_set_capture_button_press (scrolled_window, TRUE);
@@ -2632,7 +2633,6 @@ gtk_scrolled_window_finalize (GObject *object)
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
 
   g_clear_object (&priv->drag_gesture);
-  g_clear_object (&priv->long_press_gesture);
   g_clear_object (&priv->scroll_controller);
 
 
