@@ -178,14 +178,14 @@ do_gestures (GtkWidget *do_widget)
       g_object_weak_ref (G_OBJECT (drawing_area), (GWeakNotify) g_object_unref, gesture);
 
       /* Long press */
-      gesture = gtk_gesture_long_press_new (drawing_area);
+      gesture = gtk_gesture_long_press_new ();
       g_signal_connect (gesture, "pressed",
                         G_CALLBACK (long_press_gesture_pressed), drawing_area);
       g_signal_connect (gesture, "end",
                         G_CALLBACK (long_press_gesture_end), drawing_area);
       gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                                   GTK_PHASE_BUBBLE);
-      g_object_weak_ref (G_OBJECT (drawing_area), (GWeakNotify) g_object_unref, gesture);
+      gtk_widget_add_controller (drawing_area, GTK_EVENT_CONTROLLER (gesture));
 
       /* Rotate */
       rotate = gesture = gtk_gesture_rotate_new ();
