@@ -1655,7 +1655,6 @@ activate (GApplication *app)
   gint i;
   GPermission *permission;
   GAction *action;
-  GtkGesture *gesture;
 
   g_type_ensure (my_text_view_get_type ());
 
@@ -1680,6 +1679,7 @@ activate (GApplication *app)
   gtk_builder_add_callback_symbol (builder, "reset_icon_size", (GCallback)reset_icon_size);
   gtk_builder_add_callback_symbol (builder, "scale_format_value", (GCallback)scale_format_value);
   gtk_builder_add_callback_symbol (builder, "scale_format_value_blank", (GCallback)scale_format_value_blank);
+  gtk_builder_add_callback_symbol (builder, "osd_frame_pressed", (GCallback)osd_frame_pressed);
 
   gtk_builder_connect_signals (builder, NULL);
 
@@ -1896,10 +1896,6 @@ activate (GApplication *app)
   widget2 = (GtkWidget *)gtk_builder_get_object (builder, "progressbar2");
   g_signal_connect (adj, "value-changed", G_CALLBACK (adjustment3_value_changed), widget);
   g_signal_connect (adj, "value-changed", G_CALLBACK (adjustment3_value_changed), widget2);
-
-  widget = (GtkWidget *)gtk_builder_get_object (builder, "osd_frame");
-  gesture = gtk_gesture_multi_press_new (widget);
-  g_signal_connect (gesture, "pressed", G_CALLBACK (osd_frame_pressed), widget);
 
   gtk_widget_show (GTK_WIDGET (window));
 
