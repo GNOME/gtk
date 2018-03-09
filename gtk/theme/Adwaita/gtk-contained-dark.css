@@ -553,7 +553,7 @@ combobox arrow { -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); min-heig
 combobox:drop(active) { box-shadow: none; }
 
 /************ Toolbars * */
-toolbar, .inline-toolbar, searchbar > revealer > *, .location-bar { -GtkWidget-window-dragging: true; padding: 4px; background-color: #33393b; }
+toolbar, .inline-toolbar, searchbar > revealer > box, .location-bar { -GtkWidget-window-dragging: true; padding: 4px; background-color: #33393b; }
 
 toolbar { padding: 4px 3px 3px 4px; }
 
@@ -571,13 +571,13 @@ toolbar:not(.inline-toolbar):not(.osd) switch, toolbar:not(.inline-toolbar):not(
 
 .inline-toolbar { padding: 3px; border-width: 0 1px 1px; border-radius: 0  0 5px 5px; }
 
-searchbar > revealer > *, .location-bar { border-width: 0 0 1px; padding: 3px; }
+searchbar > revealer > box, .location-bar { border-width: 0 0 1px; padding: 3px; }
 
-searchbar > revealer > * { margin: -6px; padding: 6px; }
+searchbar > revealer > box { margin: -6px; padding: 6px; }
 
-.inline-toolbar, searchbar > revealer > *, .location-bar { border-style: solid; border-color: #1b1f20; background-color: #2c3133; }
+.inline-toolbar, searchbar > revealer > box, .location-bar { border-style: solid; border-color: #1b1f20; background-color: #2c3133; }
 
-.inline-toolbar:backdrop, searchbar > revealer > :backdrop, .location-bar:backdrop { border-color: #202425; background-color: #2c3233; box-shadow: none; transition: 200ms ease-out; }
+.inline-toolbar:backdrop, searchbar > revealer > box:backdrop, .location-bar:backdrop { border-color: #202425; background-color: #2c3233; box-shadow: none; transition: 200ms ease-out; }
 
 /*************** Header bars * */
 .titlebar:not(headerbar), headerbar { padding: 0 6px; min-height: 46px; border-width: 0 0 1px; border-style: solid; border-color: #0b0c0c; border-radius: 0; background: #2c3133 linear-gradient(to top, #25292b, #2a2e30 2px, #2c3133 3px); box-shadow: inset 0 1px rgba(238, 238, 236, 0.07); }
