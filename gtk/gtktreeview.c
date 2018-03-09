@@ -459,7 +459,6 @@ struct _GtkTreeViewPrivate
 
   /* Gestures */
   GtkGesture *multipress_gesture;
-  GtkGesture *column_multipress_gesture;
   GtkGesture *drag_gesture; /* Rubberbanding, row DnD */
   GtkGesture *column_drag_gesture; /* Column reordering, resizing */
   GtkEventController *motion_controller;
@@ -1648,6 +1647,7 @@ gtk_tree_view_init (GtkTreeView *tree_view)
 {
   GtkTreeViewPrivate *priv;
   GtkCssNode *widget_node;
+  GtkGesture *gesture;
 
   priv = tree_view->priv = gtk_tree_view_get_instance_private (tree_view);
 
@@ -1715,18 +1715,20 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   gtk_css_node_set_state (priv->header_node, gtk_css_node_get_state (widget_node));
   g_object_unref (priv->header_node);
 
-  priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (tree_view));
+  priv->multipress_gesture = gtk_gesture_multi_press_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture), 0);
   g_signal_connect (priv->multipress_gesture, "pressed",
                     G_CALLBACK (gtk_tree_view_multipress_gesture_pressed), tree_view);
   g_signal_connect (priv->multipress_gesture, "released",
                     G_CALLBACK (gtk_tree_view_multipress_gesture_released), tree_view);
+  gtk_widget_add_controller (GTK_WIDGET (tree_view), GTK_EVENT_CONTROLLER (priv->multipress_gesture));
 
-  priv->column_multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (tree_view));
-  g_signal_connect (priv->column_multipress_gesture, "pressed",
+  gesture = gtk_gesture_multi_press_new ();
+  g_signal_connect (gesture, "pressed",
                     G_CALLBACK (gtk_tree_view_column_multipress_gesture_pressed), tree_view);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->column_multipress_gesture),
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                               GTK_PHASE_CAPTURE);
+  gtk_widget_add_controller (GTK_WIDGET (tree_view), GTK_EVENT_CONTROLLER (gesture));
 
   priv->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (tree_view));
   g_signal_connect (priv->drag_gesture, "drag-begin",
@@ -2136,9 +2138,7 @@ gtk_tree_view_destroy (GtkWidget *widget)
       tree_view->priv->vadjustment = NULL;
     }
 
-  g_clear_object (&tree_view->priv->multipress_gesture);
   g_clear_object (&tree_view->priv->drag_gesture);
-  g_clear_object (&tree_view->priv->column_multipress_gesture);
   g_clear_object (&tree_view->priv->column_drag_gesture);
   g_clear_object (&tree_view->priv->motion_controller);
 
@@ -10523,11 +10523,10 @@ gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
   g_signal_connect (tree_view->priv->search_window, "key-press-event",
 		    G_CALLBACK (gtk_tree_view_search_key_press_event),
 		    tree_view);
-  gesture = gtk_gesture_multi_press_new (tree_view->priv->search_window);
-  g_object_set_data_full (G_OBJECT (tree_view->priv->search_window), "gesture",
-                          gesture, g_object_unref);
+  gesture = gtk_gesture_multi_press_new ();
   g_signal_connect (gesture, "pressed",
                     G_CALLBACK (gtk_tree_view_search_pressed_cb), tree_view);
+  gtk_widget_add_controller (tree_view->priv->search_window, GTK_EVENT_CONTROLLER (gesture));
 
   controller = gtk_event_controller_scroll_new (tree_view->priv->search_window,
                                                 GTK_EVENT_CONTROLLER_SCROLL_VERTICAL);

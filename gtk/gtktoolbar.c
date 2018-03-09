@@ -130,8 +130,6 @@ struct _GtkToolbarPrivate
 
   GTimer          *timer;
 
-  GtkGesture      *click_gesture;
-
   gulong           settings_connection;
 
   gint             idle_id;
@@ -559,6 +557,7 @@ gtk_toolbar_init (GtkToolbar *toolbar)
 {
   GtkToolbarPrivate *priv;
   GtkWidget *widget;
+  GtkGesture *gesture;
 
   widget = GTK_WIDGET (toolbar);
   toolbar->priv = gtk_toolbar_get_instance_private (toolbar);
@@ -596,11 +595,12 @@ gtk_toolbar_init (GtkToolbar *toolbar)
   
   priv->timer = g_timer_new ();
 
-  priv->click_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (toolbar));
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->click_gesture), FALSE);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->click_gesture), 0);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->click_gesture), GTK_PHASE_BUBBLE);
-  g_signal_connect (priv->click_gesture, "pressed", G_CALLBACK (gtk_toolbar_pressed_cb), toolbar);
+  gesture = gtk_gesture_multi_press_new ();
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture), GTK_PHASE_BUBBLE);
+  g_signal_connect (gesture, "pressed", G_CALLBACK (gtk_toolbar_pressed_cb), toolbar);
+  gtk_widget_add_controller (GTK_WIDGET (toolbar), GTK_EVENT_CONTROLLER (gesture));
 }
 
 static void
@@ -2668,8 +2668,6 @@ gtk_toolbar_finalize (GObject *object)
 
   if (priv->idle_id)
     g_source_remove (priv->idle_id);
-
-  g_clear_object (&priv->click_gesture);
 
   G_OBJECT_CLASS (gtk_toolbar_parent_class)->finalize (object);
 }

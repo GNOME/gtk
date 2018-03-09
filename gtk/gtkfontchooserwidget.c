@@ -2024,11 +2024,10 @@ add_check_group (GtkFontChooserWidget *fontchooser,
       g_signal_connect_swapped (feat, "notify::inconsistent", G_CALLBACK (update_font_features), fontchooser);
       g_signal_connect (feat, "clicked", G_CALLBACK (feat_clicked), NULL);
 
-      gesture = gtk_gesture_multi_press_new (feat);
-      g_object_set_data_full (G_OBJECT (feat), "press", gesture, g_object_unref);
-
+      gesture = gtk_gesture_multi_press_new ();
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
       g_signal_connect (gesture, "pressed", G_CALLBACK (feat_pressed), feat);
+      gtk_widget_add_controller (feat, GTK_EVENT_CONTROLLER (gesture));
 
       example = gtk_label_new ("");
       gtk_label_set_selectable (GTK_LABEL (example), TRUE);

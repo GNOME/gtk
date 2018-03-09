@@ -475,8 +475,6 @@ gtk_switch_dispose (GObject *object)
 
   g_clear_object (&priv->action_helper);
 
-  g_clear_object (&priv->multipress_gesture);
-
   G_OBJECT_CLASS (gtk_switch_parent_class)->dispose (object);
 }
 
@@ -619,7 +617,7 @@ gtk_switch_init (GtkSwitch *self)
   gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (self), TRUE);
 
-  gesture = gtk_gesture_multi_press_new (GTK_WIDGET (self));
+  gesture = gtk_gesture_multi_press_new ();
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);
   gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (gesture), TRUE);
   g_signal_connect (gesture, "pressed",
@@ -628,6 +626,7 @@ gtk_switch_init (GtkSwitch *self)
                     G_CALLBACK (gtk_switch_multipress_gesture_released), self);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                               GTK_PHASE_BUBBLE);
+  gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
   priv->multipress_gesture = gesture;
 
   gesture = gtk_gesture_pan_new (GTK_ORIENTATION_HORIZONTAL);

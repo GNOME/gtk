@@ -124,7 +124,6 @@ enum {
 };
 
 
-static void gtk_button_finalize       (GObject            *object);
 static void gtk_button_dispose        (GObject            *object);
 static void gtk_button_set_property   (GObject            *object,
                                        guint               prop_id,
@@ -215,7 +214,6 @@ gtk_button_class_init (GtkButtonClass *klass)
   container_class = GTK_CONTAINER_CLASS (klass);
 
   gobject_class->dispose      = gtk_button_dispose;
-  gobject_class->finalize     = gtk_button_finalize;
   gobject_class->set_property = gtk_button_set_property;
   gobject_class->get_property = gtk_button_get_property;
 
@@ -442,7 +440,7 @@ gtk_button_init (GtkButton *button)
   priv->use_underline = FALSE;
   priv->child_type = WIDGET_CHILD;
 
-  priv->gesture = gtk_gesture_multi_press_new (GTK_WIDGET (button));
+  priv->gesture = gtk_gesture_multi_press_new ();
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->gesture), FALSE);
   gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (priv->gesture), TRUE);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->gesture), GDK_BUTTON_PRIMARY);
@@ -451,18 +449,7 @@ gtk_button_init (GtkButton *button)
   g_signal_connect (priv->gesture, "update", G_CALLBACK (multipress_gesture_update_cb), button);
   g_signal_connect (priv->gesture, "cancel", G_CALLBACK (multipress_gesture_cancel_cb), button);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->gesture), GTK_PHASE_CAPTURE);
-
-}
-
-static void
-gtk_button_finalize (GObject *object)
-{
-  GtkButton *button = GTK_BUTTON (object);
-  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
-
-  g_clear_object (&priv->gesture);
-
-  G_OBJECT_CLASS (gtk_button_parent_class)->finalize (object);
+  gtk_widget_add_controller (GTK_WIDGET (button), GTK_EVENT_CONTROLLER (priv->gesture));
 }
 
 static void

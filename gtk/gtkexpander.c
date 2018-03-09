@@ -155,8 +155,6 @@ struct _GtkExpanderPrivate
   GtkWidget        *arrow_widget;
   GtkWidget        *child;
 
-  GtkGesture       *multipress_gesture;
-
   guint             expand_timer;
 
   guint             expanded        : 1;
@@ -338,6 +336,7 @@ static void
 gtk_expander_init (GtkExpander *expander)
 {
   GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
+  GtkGesture *gesture;
 
   gtk_widget_set_can_focus (GTK_WIDGET (expander), TRUE);
   gtk_widget_set_has_surface (GTK_WIDGET (expander), FALSE);
@@ -367,15 +366,16 @@ gtk_expander_init (GtkExpander *expander)
   gtk_drag_dest_set (GTK_WIDGET (expander), 0, NULL, 0);
   gtk_drag_dest_set_track_motion (GTK_WIDGET (expander), TRUE);
 
-  priv->multipress_gesture = gtk_gesture_multi_press_new (priv->title_widget);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture),
+  gesture = gtk_gesture_multi_press_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture),
                                  GDK_BUTTON_PRIMARY);
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->multipress_gesture),
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture),
                                      FALSE);
-  g_signal_connect (priv->multipress_gesture, "released",
+  g_signal_connect (gesture, "released",
                     G_CALLBACK (gesture_multipress_released_cb), expander);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                               GTK_PHASE_BUBBLE);
+  gtk_widget_add_controller (GTK_WIDGET (priv->title_widget), GTK_EVENT_CONTROLLER (gesture));
 }
 
 static GtkBuildableIface *parent_buildable_iface;
@@ -490,8 +490,6 @@ gtk_expander_destroy (GtkWidget *widget)
       priv->label_widget = NULL;
       priv->arrow_widget = NULL;
     }
-
-  g_clear_object (&priv->multipress_gesture);
 
   GTK_WIDGET_CLASS (gtk_expander_parent_class)->destroy (widget);
 }

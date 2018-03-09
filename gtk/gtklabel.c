@@ -3178,7 +3178,6 @@ gtk_label_finalize (GObject *object)
   if (priv->select_info)
     {
       g_object_unref (priv->select_info->drag_gesture);
-      g_object_unref (priv->select_info->multipress_gesture);
       g_object_unref (priv->select_info->motion_controller);
       g_object_unref (priv->select_info->provider);
     }
@@ -5024,13 +5023,14 @@ gtk_label_ensure_select_info (GtkLabel *label)
                         G_CALLBACK (gtk_label_drag_gesture_update), label);
       gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (priv->select_info->drag_gesture), TRUE);
 
-      priv->select_info->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (label));
+      priv->select_info->multipress_gesture = gtk_gesture_multi_press_new ();
       g_signal_connect (priv->select_info->multipress_gesture, "pressed",
                         G_CALLBACK (gtk_label_multipress_gesture_pressed), label);
       g_signal_connect (priv->select_info->multipress_gesture, "released",
                         G_CALLBACK (gtk_label_multipress_gesture_released), label);
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->select_info->multipress_gesture), 0);
       gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (priv->select_info->multipress_gesture), TRUE);
+      gtk_widget_add_controller (GTK_WIDGET (label), GTK_EVENT_CONTROLLER (priv->select_info->multipress_gesture));
 
       priv->select_info->motion_controller = gtk_event_controller_motion_new (GTK_WIDGET (label));
       g_signal_connect (priv->select_info->motion_controller, "motion",
@@ -5054,7 +5054,7 @@ gtk_label_clear_select_info (GtkLabel *label)
   if (!priv->select_info->selectable && !priv->select_info->links)
     {
       g_object_unref (priv->select_info->drag_gesture);
-      g_object_unref (priv->select_info->multipress_gesture);
+      gtk_widget_remove_controller (GTK_WIDGET (label), GTK_EVENT_CONTROLLER (priv->select_info->multipress_gesture));
       g_object_unref (priv->select_info->motion_controller);
       GTK_LABEL_CONTENT (priv->select_info->provider)->label = NULL;
       g_object_unref (priv->select_info->provider);
