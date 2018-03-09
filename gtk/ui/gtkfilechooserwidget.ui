@@ -143,6 +143,18 @@
                                             <property name="AtkObject::accessible-name" translatable="yes">Files</property>
                                           </object>
                                         </child>
+                                        <child>
+                                          <object class="GtkGestureLongPress">
+                                            <property name="touch-only">True</property>
+                                            <signal name="pressed" handler="long_press_cb" swapped="no"/>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkGestureMultiPress">
+                                            <property name="button">3</property>
+                                            <signal name="pressed" handler="multi_press_cb" swapped="no"/>
+                                          </object>
+                                        </child>
                                         <signal name="drag-data-received" handler="file_list_drag_data_received_cb" swapped="no"/>
                                         <signal name="drag-drop" handler="file_list_drag_drop_cb" swapped="no"/>
                                         <signal name="drag-begin" handler="file_list_drag_begin_cb" swapped="no"/>
