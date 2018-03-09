@@ -64,13 +64,6 @@ struct _GtkEmojiChooser
   EmojiSection symbols;
   EmojiSection flags;
 
-  GtkGesture *recent_long_press;
-  GtkGesture *recent_multi_press;
-  GtkGesture *people_long_press;
-  GtkGesture *people_multi_press;
-  GtkGesture *body_long_press;
-  GtkGesture *body_multi_press;
-
   GVariant *data;
 
   GSettings *settings;
@@ -96,13 +89,6 @@ gtk_emoji_chooser_finalize (GObject *object)
 
   g_variant_unref (chooser->data);
   g_object_unref (chooser->settings);
-
-  g_clear_object (&chooser->recent_long_press);
-  g_clear_object (&chooser->recent_multi_press);
-  g_clear_object (&chooser->people_long_press);
-  g_clear_object (&chooser->people_multi_press);
-  g_clear_object (&chooser->body_long_press);
-  g_clear_object (&chooser->body_multi_press);
 
   G_OBJECT_CLASS (gtk_emoji_chooser_parent_class)->finalize (object);
 }
@@ -633,24 +619,6 @@ gtk_emoji_chooser_init (GtkEmojiChooser *chooser)
     g_object_unref (layout);
   }
 
-  chooser->recent_long_press = gtk_gesture_long_press_new (chooser->recent.box);
-  g_signal_connect (chooser->recent_long_press, "pressed", G_CALLBACK (long_pressed_cb), chooser);
-  chooser->recent_multi_press = gtk_gesture_multi_press_new (chooser->recent.box);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (chooser->recent_multi_press), GDK_BUTTON_SECONDARY);
-  g_signal_connect (chooser->recent_multi_press, "pressed", G_CALLBACK (pressed_cb), chooser);
-
-  chooser->people_long_press = gtk_gesture_long_press_new (chooser->people.box);
-  g_signal_connect (chooser->people_long_press, "pressed", G_CALLBACK (long_pressed_cb), chooser);
-  chooser->people_multi_press = gtk_gesture_multi_press_new (chooser->people.box);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (chooser->people_multi_press), GDK_BUTTON_SECONDARY);
-  g_signal_connect (chooser->people_multi_press, "pressed", G_CALLBACK (pressed_cb), chooser);
-
-  chooser->body_long_press = gtk_gesture_long_press_new (chooser->body.box);
-  g_signal_connect (chooser->body_long_press, "pressed", G_CALLBACK (long_pressed_cb), chooser);
-  chooser->body_multi_press = gtk_gesture_multi_press_new (chooser->body.box);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (chooser->body_multi_press), GDK_BUTTON_SECONDARY);
-  g_signal_connect (chooser->body_multi_press, "pressed", G_CALLBACK (pressed_cb), chooser);
-
   adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (chooser->scrolled_window));
   g_signal_connect (adj, "value-changed", G_CALLBACK (adj_value_changed), chooser);
 
@@ -750,6 +718,8 @@ gtk_emoji_chooser_class_init (GtkEmojiChooserClass *klass)
 
   gtk_widget_class_bind_template_callback (widget_class, emoji_activated);
   gtk_widget_class_bind_template_callback (widget_class, search_changed);
+  gtk_widget_class_bind_template_callback (widget_class, pressed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, long_pressed_cb);
 }
 
 GtkWidget *
