@@ -250,9 +250,6 @@ struct _GtkFileChooserWidgetPrivate {
   GtkWidget *rename_file_popover;
   GFile *rename_file_source_file;
 
-  GtkGesture *long_press_gesture;
-  GtkGesture *multipress_gesture;
-
   GtkFileSystemModel *browse_files_model;
   char *browse_files_last_selected_name;
 
@@ -3543,9 +3540,6 @@ gtk_file_chooser_widget_dispose (GObject *object)
       gtk_widget_unparent (priv->box);
       priv->box = NULL;
     }
-
-  g_clear_object (&priv->long_press_gesture);
-  g_clear_object (&priv->multipress_gesture);
 
   G_OBJECT_CLASS (gtk_file_chooser_widget_parent_class)->dispose (object);
 }
@@ -8402,6 +8396,8 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_callback (widget_class, rename_file_name_changed);
   gtk_widget_class_bind_template_callback (widget_class, rename_file_rename_clicked);
   gtk_widget_class_bind_template_callback (widget_class, rename_file_end);
+  gtk_widget_class_bind_template_callback (widget_class, multi_press_cb);
+  gtk_widget_class_bind_template_callback (widget_class, long_press_cb);
 
   gtk_widget_class_set_css_name (widget_class, I_("filechooser"));
 }
@@ -8537,16 +8533,6 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
   set_file_system_backend (impl);
 
   priv->bookmarks_manager = _gtk_bookmarks_manager_new (NULL, NULL);
-
-  priv->long_press_gesture = gtk_gesture_long_press_new (priv->browse_files_tree_view);
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->long_press_gesture), TRUE);
-  g_signal_connect (priv->long_press_gesture, "pressed",
-                    G_CALLBACK (long_press_cb), impl);
-
-  priv->multipress_gesture = gtk_gesture_multi_press_new (priv->browse_files_tree_view);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture), GDK_BUTTON_SECONDARY);
-  g_signal_connect (priv->multipress_gesture, "pressed",
-                    G_CALLBACK (multi_press_cb), impl);
 
   /* Setup various attributes and callbacks in the UI
    * which cannot be done with GtkBuilder.
