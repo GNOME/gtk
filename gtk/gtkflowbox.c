@@ -665,7 +665,6 @@ struct _GtkFlowBoxPrivate {
   gpointer           sort_data;
   GDestroyNotify     sort_destroy;
 
-  GtkGesture        *multipress_gesture;
   GtkGesture        *drag_gesture;
 
   GtkFlowBoxChild   *rubberband_first;
@@ -3385,7 +3384,6 @@ gtk_flow_box_finalize (GObject *obj)
   g_clear_object (&priv->vadjustment);
 
   g_object_unref (priv->drag_gesture);
-  g_object_unref (priv->multipress_gesture);
 
   if (priv->bound_model)
     {
@@ -3733,6 +3731,7 @@ static void
 gtk_flow_box_init (GtkFlowBox *box)
 {
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
+  GtkGesture *gesture;
 
   gtk_widget_set_has_window (GTK_WIDGET (box), FALSE);
 
@@ -3747,21 +3746,22 @@ gtk_flow_box_init (GtkFlowBox *box)
 
   priv->children = g_sequence_new (NULL);
 
-  priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (box));
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->multipress_gesture),
+  gesture = gtk_gesture_multi_press_new ();
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture),
                                      FALSE);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture),
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture),
                                  GDK_BUTTON_PRIMARY);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                               GTK_PHASE_BUBBLE);
-  g_signal_connect (priv->multipress_gesture, "pressed",
+  g_signal_connect (gesture, "pressed",
                     G_CALLBACK (gtk_flow_box_multipress_gesture_pressed), box);
-  g_signal_connect (priv->multipress_gesture, "released",
+  g_signal_connect (gesture, "released",
                     G_CALLBACK (gtk_flow_box_multipress_gesture_released), box);
-  g_signal_connect (priv->multipress_gesture, "stopped",
+  g_signal_connect (gesture, "stopped",
                     G_CALLBACK (gtk_flow_box_multipress_gesture_stopped), box);
-  g_signal_connect (priv->multipress_gesture, "unpaired-release",
+  g_signal_connect (gesture, "unpaired-release",
                     G_CALLBACK (gtk_flow_box_multipress_unpaired_release), box);
+  gtk_widget_add_controller (GTK_WIDGET (box), GTK_EVENT_CONTROLLER (gesture));
 
   priv->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (box));
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->drag_gesture),

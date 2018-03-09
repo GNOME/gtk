@@ -207,7 +207,6 @@ struct _GtkNotebookPrivate
   guint          switch_tab_timer;
   GList         *switch_tab;
 
-  GtkGesture    *press_gesture;
   GtkEventController *motion_controller;
 
   guint32        timer;
@@ -1044,6 +1043,7 @@ gtk_notebook_init (GtkNotebook *notebook)
 {
   GtkNotebookPrivate *priv;
   GdkContentFormats *targets;
+  GtkGesture *gesture;
 
   gtk_widget_set_can_focus (GTK_WIDGET (notebook), TRUE);
   gtk_widget_set_has_window (GTK_WIDGET (notebook), FALSE);
@@ -1113,11 +1113,12 @@ gtk_notebook_init (GtkNotebook *notebook)
   gtk_widget_set_vexpand (priv->stack_widget, TRUE);
   gtk_container_add (GTK_CONTAINER (priv->box), priv->stack_widget);
 
-  priv->press_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (notebook));
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->press_gesture), 0);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->press_gesture), GTK_PHASE_CAPTURE);
-  g_signal_connect (priv->press_gesture, "pressed", G_CALLBACK (gtk_notebook_gesture_pressed), notebook);
-  g_signal_connect (priv->press_gesture, "released", G_CALLBACK (gtk_notebook_gesture_released), notebook);
+  gesture = gtk_gesture_multi_press_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture), GTK_PHASE_CAPTURE);
+  g_signal_connect (gesture, "pressed", G_CALLBACK (gtk_notebook_gesture_pressed), notebook);
+  g_signal_connect (gesture, "released", G_CALLBACK (gtk_notebook_gesture_released), notebook);
+  gtk_widget_add_controller (GTK_WIDGET (notebook), GTK_EVENT_CONTROLLER (gesture));
 
   priv->motion_controller = gtk_event_controller_motion_new (GTK_WIDGET (notebook));
   g_signal_connect (priv->motion_controller, "motion", G_CALLBACK (gtk_notebook_motion), notebook);
@@ -1610,7 +1611,6 @@ gtk_notebook_finalize (GObject *object)
   GtkNotebook *notebook = GTK_NOTEBOOK (object);
   GtkNotebookPrivate *priv = notebook->priv;
 
-  g_clear_object (&priv->press_gesture);
   g_clear_object (&priv->motion_controller);
   gtk_widget_unparent (priv->box);
 

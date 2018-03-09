@@ -224,7 +224,6 @@ struct _GtkTextViewPrivate
 
   GtkTextPendingScroll *pending_scroll;
 
-  GtkGesture *multipress_gesture;
   GtkGesture *drag_gesture;
   GtkEventController *motion_controller;
 
@@ -1625,6 +1624,7 @@ gtk_text_view_init (GtkTextView *text_view)
   GdkContentFormats *target_list;
   GtkTextViewPrivate *priv;
   GtkStyleContext *context;
+  GtkGesture *gesture;
 
   text_view->priv = gtk_text_view_get_instance_private (text_view);
   priv = text_view->priv;
@@ -1679,11 +1679,12 @@ gtk_text_view_init (GtkTextView *text_view)
 
   priv->text_window = text_window_new (GTK_TEXT_WINDOW_TEXT, widget);
 
-  priv->multipress_gesture = gtk_gesture_multi_press_new (widget);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture), 0);
-  g_signal_connect (priv->multipress_gesture, "pressed",
+  gesture = gtk_gesture_multi_press_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
+  g_signal_connect (gesture, "pressed",
                     G_CALLBACK (gtk_text_view_multipress_gesture_pressed),
                     widget);
+  gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (gesture));
 
   priv->drag_gesture = gtk_gesture_drag_new (widget);
   g_signal_connect (priv->drag_gesture, "drag-update",
@@ -3588,7 +3589,6 @@ gtk_text_view_finalize (GObject *object)
   
   cancel_pending_scroll (text_view);
 
-  g_object_unref (priv->multipress_gesture);
   g_object_unref (priv->drag_gesture);
   g_object_unref (priv->motion_controller);
 
@@ -5175,7 +5175,7 @@ gtk_text_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
          with the middle button */
       priv->scroll_after_paste = FALSE;
 
-      get_iter_from_gesture (text_view, priv->multipress_gesture,
+      get_iter_from_gesture (text_view, GTK_GESTURE (gesture),
                              &iter, NULL, NULL);
       gtk_text_buffer_paste_clipboard (get_buffer (text_view),
                                        gtk_widget_get_primary_clipboard (GTK_WIDGET (text_view)),
@@ -5207,7 +5207,7 @@ gtk_text_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
             if (is_touchscreen)
               handle_mode = GTK_TEXT_HANDLE_MODE_CURSOR;
 
-            get_iter_from_gesture (text_view, priv->multipress_gesture,
+            get_iter_from_gesture (text_view, GTK_GESTURE (gesture),
                                    &iter, NULL, NULL);
 
             if (gtk_text_buffer_get_selection_bounds (get_buffer (text_view),
@@ -5262,7 +5262,7 @@ gtk_text_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
             }
           gtk_text_view_end_selection_drag (text_view);
 
-          get_iter_from_gesture (text_view, priv->multipress_gesture,
+          get_iter_from_gesture (text_view, GTK_GESTURE (gesture),
                                  &iter, NULL, NULL);
           gtk_text_view_start_selection_drag (text_view, &iter,
                                               n_press == 2 ? SELECT_WORDS : SELECT_LINES,

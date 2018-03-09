@@ -331,7 +331,7 @@ add_gesture (GtkWidget *w, const gchar *name, GtkPropagationPhase phase, GString
   data->str = str;
   data->state = state;
 
-  g = gtk_gesture_multi_press_new (w);
+  g = gtk_gesture_multi_press_new ();
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (g), FALSE);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (g), 1);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (g), phase);
@@ -342,6 +342,8 @@ add_gesture (GtkWidget *w, const gchar *name, GtkPropagationPhase phase, GString
   g_signal_connect (g, "cancel", G_CALLBACK (cancel_cb), data);
   g_signal_connect (g, "update", G_CALLBACK (update_cb), data);
   g_signal_connect (g, "sequence-state-changed", G_CALLBACK (state_changed_cb), data);
+
+  gtk_widget_add_controller (w, GTK_EVENT_CONTROLLER (g));
 
   return g;
 }
