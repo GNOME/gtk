@@ -28,6 +28,7 @@
 #endif
 
 #include "gtkimcontextime.h"
+#include "gtkimmoduleprivate.h"
 
 #include "imm-extra.h"
 
@@ -129,6 +130,7 @@ static void cb_client_widget_hierarchy_changed  (GtkWidget       *widget,
 #define GTK_IM_CONTEXT_IME(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_IM_CONTEXT_IME, GtkIMContextIME))
 
 G_DEFINE_TYPE_WITH_CODE (GtkIMContextIME, gtk_im_context_ime, GTK_TYPE_IM_CONTEXT,
+			 gtk_im_module_ensure_extension_point ();
                          g_io_extension_point_implement (GTK_IM_MODULE_EXTENSION_POINT_NAME,
                                                          g_define_type_id,
                                                          "ime",

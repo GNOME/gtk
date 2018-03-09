@@ -40,7 +40,7 @@
 #include "gtkdebug.h"
 #include "gtkintl.h"
 #include "gtkcomposetable.h"
-#include "gtkimmodule.h"
+#include "gtkimmoduleprivate.h"
 
 #include "gtkimcontextsimpleprivate.h"
 #include "gtkimcontextsimpleseqs.h"
@@ -167,6 +167,7 @@ static void     gtk_im_context_simple_set_client_widget  (GtkIMContext          
 
 G_DEFINE_TYPE_WITH_CODE (GtkIMContextSimple, gtk_im_context_simple, GTK_TYPE_IM_CONTEXT,
                          G_ADD_PRIVATE (GtkIMContextSimple)
+                         gtk_im_module_ensure_extension_point ();
                          g_io_extension_point_implement (GTK_IM_MODULE_EXTENSION_POINT_NAME,
                                                          g_define_type_id,
                                                          "gtk-im-context-simple",

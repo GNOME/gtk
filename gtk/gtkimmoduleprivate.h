@@ -20,10 +20,12 @@
 
 #include <gdk/gdk.h>
 #include "gtkimcontext.h"
+#include "gtkimmodule.h"
 
 G_BEGIN_DECLS
 
-GtkIMContext * _gtk_im_module_create                 (const gchar              *context_id);
+void           gtk_im_module_ensure_extension_point  (void);
+GtkIMContext * _gtk_im_module_create                 (const char *context_id);
 const gchar  * _gtk_im_module_get_default_context_id (void);
 
 G_END_DECLS

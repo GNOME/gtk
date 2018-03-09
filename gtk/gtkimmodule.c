@@ -237,18 +237,31 @@ _gtk_im_module_get_default_context_id (void)
 }
 
 void
-gtk_im_modules_init (void)
+gtk_im_module_ensure_extension_point (void)
 {
   GIOExtensionPoint *ep;
-  GIOModuleScope *scope;
-  char **paths;
-  int i;
+  static gboolean registered = FALSE;
+
+  if (registered)
+    return;
 
   GTK_NOTE (MODULES,
             g_print ("Registering extension point %s\n", GTK_IM_MODULE_EXTENSION_POINT_NAME));
 
   ep = g_io_extension_point_register (GTK_IM_MODULE_EXTENSION_POINT_NAME);
   g_io_extension_point_set_required_type (ep, GTK_TYPE_IM_CONTEXT);
+
+  registered = TRUE;
+}
+
+void
+gtk_im_modules_init (void)
+{
+  GIOModuleScope *scope;
+  char **paths;
+  int i;
+
+  gtk_im_module_ensure_extension_point ();
 
   g_type_ensure (gtk_im_context_simple_get_type ());
 #ifdef GDK_WINDOWING_X11
@@ -282,8 +295,10 @@ gtk_im_modules_init (void)
 
   if (GTK_DEBUG_CHECK (MODULES))
     {
+      GIOExtensionPoint *ep;
       GList *list, *l;
 
+      ep = g_io_extension_point_lookup (GTK_IM_MODULE_EXTENSION_POINT_NAME);
       list = g_io_extension_point_get_extensions (ep);
       for (l = list; l; l = l->next)
         {

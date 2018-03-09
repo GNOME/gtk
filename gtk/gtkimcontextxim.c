@@ -21,7 +21,7 @@
 #include <stdlib.h>
 
 #include "gtkimcontextxim.h"
-#include "gtkimmodule.h"
+#include "gtkimmoduleprivate.h"
 
 #include "gtk/gtkintl.h"
 
@@ -145,6 +145,7 @@ static void           xim_info_display_closed (GdkDisplay *display,
 			                       GtkXIMInfo *info);
 
 G_DEFINE_TYPE_WITH_CODE (GtkIMContextXIM, gtk_im_context_xim, GTK_TYPE_IM_CONTEXT,
+			 gtk_im_module_ensure_extension_point ();
                          g_io_extension_point_implement (GTK_IM_MODULE_EXTENSION_POINT_NAME,
                                                          g_define_type_id,
                                                          "xim",

@@ -23,7 +23,7 @@
 
 #include "gtk/gtkimcontextquartz.h"
 #include "gtk/gtkintl.h"
-#include "gtk/gtkimmodule.h"
+#include "gtk/gtkimmoduleprivate.h"
 
 #include "gdk/quartz/gdkquartz.h"
 #include "gdk/quartz/GdkQuartzView.h"
@@ -51,6 +51,7 @@ typedef struct _GtkIMContextQuartzClass
 } GtkIMContextQuartzClass;
 
 G_DEFINE_TYPE_WITH_CODE (GtkIMContextQuartz, gtk_im_context_quartz, GTK_TYPE_IM_CONTEXT,
+			 gtk_im_module_ensure_extension_point ();
                          g_io_extension_point_implement (GTK_IM_MODULE_EXTENSION_POINT_NAME,
                                                          g_define_type_id,
                                                          "quartz",

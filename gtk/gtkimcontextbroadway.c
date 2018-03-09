@@ -23,7 +23,7 @@
 
 #include "gtk/gtkimcontextbroadway.h"
 #include "gtk/gtkintl.h"
-#include "gtk/gtkimmodule.h"
+#include "gtk/gtkimmoduleprivate.h"
 
 #include "gdk/broadway/gdkbroadway.h"
 
@@ -43,6 +43,7 @@ typedef struct _GtkIMContextBroadwayClass
 } GtkIMContextBroadwayClass;
 
 G_DEFINE_TYPE_WITH_CODE (GtkIMContextBroadway, gtk_im_context_broadway, GTK_TYPE_IM_CONTEXT_SIMPLE,
+                         gtk_im_module_ensure_extension_point ();
                          g_io_extension_point_implement (GTK_IM_MODULE_EXTENSION_POINT_NAME,
                                                          g_define_type_id,
                                                          "broadway",
