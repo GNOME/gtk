@@ -36,8 +36,6 @@ struct _GtkColorScalePrivate
 {
   GdkRGBA color;
   GtkColorScaleType type;
-
-  GtkGesture *long_press_gesture;
 };
 
 enum
@@ -166,27 +164,19 @@ static void
 gtk_color_scale_init (GtkColorScale *scale)
 {
   GtkStyleContext *context;
+  GtkGesture *gesture;
 
   scale->priv = gtk_color_scale_get_instance_private (scale);
 
-  scale->priv->long_press_gesture = gtk_gesture_long_press_new (GTK_WIDGET (scale));
-  g_signal_connect (scale->priv->long_press_gesture, "pressed",
+  gesture = gtk_gesture_long_press_new ();
+  g_signal_connect (gesture, "pressed",
                     G_CALLBACK (hold_action), scale);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (scale->priv->long_press_gesture),
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                               GTK_PHASE_TARGET);
+  gtk_widget_add_controller (GTK_WIDGET (scale), GTK_EVENT_CONTROLLER (gesture));
 
   context = gtk_widget_get_style_context (GTK_WIDGET (scale));
   gtk_style_context_add_class (context, "color");
-}
-
-static void
-scale_finalize (GObject *object)
-{
-  GtkColorScale *scale = GTK_COLOR_SCALE (object);
-
-  g_clear_object (&scale->priv->long_press_gesture);
-
-  G_OBJECT_CLASS (gtk_color_scale_parent_class)->finalize (object);
 }
 
 static void
@@ -262,7 +252,6 @@ gtk_color_scale_class_init (GtkColorScaleClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
-  object_class->finalize = scale_finalize;
   object_class->get_property = scale_get_property;
   object_class->set_property = scale_set_property;
 
