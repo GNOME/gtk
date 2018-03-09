@@ -573,13 +573,14 @@ gtk_range_init (GtkRange *range)
   g_signal_connect (priv->drag_gesture, "drag-update",
                     G_CALLBACK (gtk_range_drag_gesture_update), range);
 
-  priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (range));
+  priv->multipress_gesture = gtk_gesture_multi_press_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture), 0);
-  gtk_gesture_group (priv->drag_gesture, priv->multipress_gesture);
   g_signal_connect (priv->multipress_gesture, "pressed",
                     G_CALLBACK (gtk_range_multipress_gesture_pressed), range);
   g_signal_connect (priv->multipress_gesture, "released",
                     G_CALLBACK (gtk_range_multipress_gesture_released), range);
+  gtk_widget_add_controller (GTK_WIDGET (range), GTK_EVENT_CONTROLLER (priv->multipress_gesture));
+  gtk_gesture_group (priv->drag_gesture, priv->multipress_gesture);
 
   priv->long_press_gesture = gtk_gesture_long_press_new (GTK_WIDGET (range));
   g_object_set (priv->long_press_gesture, "delay-factor", 2.0, NULL);
@@ -1260,7 +1261,6 @@ gtk_range_finalize (GObject *object)
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
 
   g_clear_object (&priv->drag_gesture);
-  g_clear_object (&priv->multipress_gesture);
   g_clear_object (&priv->long_press_gesture);
   g_clear_object (&priv->scroll_controller);
 

@@ -432,7 +432,6 @@ gtk_gesture_multi_press_init (GtkGestureMultiPress *gesture)
 
 /**
  * gtk_gesture_multi_press_new:
- * @widget: a #GtkWidget
  *
  * Returns a newly created #GtkGesture that recognizes single and multiple
  * presses.
@@ -440,12 +439,9 @@ gtk_gesture_multi_press_init (GtkGestureMultiPress *gesture)
  * Returns: a newly created #GtkGestureMultiPress
  **/
 GtkGesture *
-gtk_gesture_multi_press_new (GtkWidget *widget)
+gtk_gesture_multi_press_new (void)
 {
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
   return g_object_new (GTK_TYPE_GESTURE_MULTI_PRESS,
-                       "widget", widget,
                        NULL);
 }
 

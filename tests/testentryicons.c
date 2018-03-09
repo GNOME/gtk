@@ -321,8 +321,9 @@ main (int argc, char **argv)
   gtk_widget_set_tooltip_text (image, "Click me");
 
   GtkGesture *gesture;
-  gesture = gtk_gesture_multi_press_new (image);
+  gesture = gtk_gesture_multi_press_new ();
   g_signal_connect (gesture, "pressed", G_CALLBACK (icon_pressed_cb), NULL);
+  gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (gesture));
   gtk_container_add (GTK_CONTAINER (box), image);
   image = gtk_image_new_from_icon_name ("document-save-symbolic");
   g_object_set (image, "margin", 6, NULL);

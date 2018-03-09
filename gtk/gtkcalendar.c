@@ -248,7 +248,6 @@ struct _GtkCalendarPrivate
   gint detail_width_chars;
   gint detail_overflow[6];
 
-  GtkGesture *press_gesture;
   GtkGesture *drag_gesture;
   GtkEventController *scroll_controller;
 };
@@ -641,6 +640,7 @@ static void
 gtk_calendar_init (GtkCalendar *calendar)
 {
   GtkWidget *widget = GTK_WIDGET (calendar);
+  GtkGesture *gesture;
   time_t secs;
   struct tm *tm;
   gint i;
@@ -670,9 +670,10 @@ gtk_calendar_init (GtkCalendar *calendar)
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (calendar)),
                                GTK_STYLE_CLASS_VIEW);
 
-  priv->press_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (calendar));
-  g_signal_connect (priv->press_gesture, "pressed", G_CALLBACK (gtk_calendar_button_press), calendar);
-  g_signal_connect (priv->press_gesture, "released", G_CALLBACK (gtk_calendar_button_release), calendar);
+  gesture = gtk_gesture_multi_press_new ();
+  g_signal_connect (gesture, "pressed", G_CALLBACK (gtk_calendar_button_press), calendar);
+  g_signal_connect (gesture, "released", G_CALLBACK (gtk_calendar_button_release), calendar);
+  gtk_widget_add_controller (GTK_WIDGET (calendar), GTK_EVENT_CONTROLLER (gesture));
 
   priv->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (calendar));
   g_signal_connect (priv->drag_gesture, "drag-begin", G_CALLBACK (gtk_calendar_drag_begin), calendar);
@@ -1318,7 +1319,6 @@ gtk_calendar_finalize (GObject *object)
 {
   GtkCalendarPrivate *priv = GTK_CALENDAR (object)->priv;
 
-  g_object_unref (priv->press_gesture);
   g_object_unref (priv->drag_gesture);
   g_object_unref (priv->scroll_controller);
 

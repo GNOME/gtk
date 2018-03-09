@@ -356,10 +356,11 @@ do_dnd (GtkWidget *do_widget)
       gtk_widget_set_hexpand (fixed, TRUE);
       gtk_widget_set_vexpand (fixed, TRUE);
 
-      multipress = gtk_gesture_multi_press_new (fixed);
+      multipress = gtk_gesture_multi_press_new ();
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (multipress), 0);
       g_signal_connect (multipress, "pressed", G_CALLBACK (pressed_cb), NULL);
       g_signal_connect (multipress, "released", G_CALLBACK (released_cb), NULL);
+      gtk_widget_add_controller (fixed, GTK_EVENT_CONTROLLER (multipress));
 
       provider = gtk_css_provider_new ();
       gtk_css_provider_load_from_resource (provider, "/dnd/dnd.css");
