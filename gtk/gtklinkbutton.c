@@ -79,7 +79,6 @@ struct _GtkLinkButtonPrivate
   gboolean visited;
 
   GtkWidget *popup_menu;
-  GtkGesture *click_gesture;
 };
 
 enum
@@ -212,6 +211,7 @@ gtk_link_button_init (GtkLinkButton *link_button)
   GtkLinkButtonPrivate *priv = gtk_link_button_get_instance_private (link_button);
   GtkStyleContext *context;
   GdkContentFormats *targets;
+  GtkGesture *gesture;
 
   gtk_button_set_relief (GTK_BUTTON (link_button), GTK_RELIEF_NONE);
   gtk_widget_set_state_flags (GTK_WIDGET (link_button), GTK_STATE_FLAG_LINK, FALSE);
@@ -232,12 +232,13 @@ gtk_link_button_init (GtkLinkButton *link_button)
   gdk_content_formats_unref (targets);
   gtk_drag_source_set_icon_name (GTK_WIDGET (link_button), "text-x-generic");
 
-  priv->click_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (link_button));
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->click_gesture), FALSE);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->click_gesture), 0);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->click_gesture), GTK_PHASE_BUBBLE);
-  g_signal_connect (priv->click_gesture, "pressed", G_CALLBACK (gtk_link_button_pressed_cb),
+  gesture = gtk_gesture_multi_press_new ();
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture), GTK_PHASE_BUBBLE);
+  g_signal_connect (gesture, "pressed", G_CALLBACK (gtk_link_button_pressed_cb),
                     link_button);
+  gtk_widget_add_controller (GTK_WIDGET (link_button), GTK_EVENT_CONTROLLER (gesture));
 
   context = gtk_widget_get_style_context (GTK_WIDGET (link_button));
   gtk_style_context_add_class (context, "link");
@@ -252,8 +253,7 @@ gtk_link_button_finalize (GObject *object)
   GtkLinkButtonPrivate *priv = gtk_link_button_get_instance_private (link_button);
 
   g_free (priv->uri);
-  g_object_unref (priv->click_gesture);
-
+  
   G_OBJECT_CLASS (gtk_link_button_parent_class)->finalize (object);
 }
 

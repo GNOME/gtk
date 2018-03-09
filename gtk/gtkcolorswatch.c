@@ -65,7 +65,6 @@ struct _GtkColorSwatchPrivate
   guint    has_menu         : 1;
 
   GtkGesture *long_press_gesture;
-  GtkGesture *multipress_gesture;
   GtkWidget *overlay_widget;
 
   GtkWidget *popover;
@@ -516,7 +515,6 @@ swatch_dispose (GObject *object)
     }
 
   g_clear_object (&swatch->priv->long_press_gesture);
-  g_clear_object (&swatch->priv->multipress_gesture);
 
   G_OBJECT_CLASS (gtk_color_swatch_parent_class)->dispose (object);
 }
@@ -573,6 +571,8 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
 static void
 gtk_color_swatch_init (GtkColorSwatch *swatch)
 {
+  GtkGesture *gesture;
+
   swatch->priv = gtk_color_swatch_get_instance_private (swatch);
   swatch->priv->use_alpha = TRUE;
   swatch->priv->selectable = TRUE;
@@ -587,10 +587,11 @@ gtk_color_swatch_init (GtkColorSwatch *swatch)
   g_signal_connect (swatch->priv->long_press_gesture, "pressed",
                     G_CALLBACK (hold_action), swatch);
 
-  swatch->priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (swatch));
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (swatch->priv->multipress_gesture), 0);
-  g_signal_connect (swatch->priv->multipress_gesture, "pressed",
+  gesture = gtk_gesture_multi_press_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
+  g_signal_connect (gesture, "pressed",
                     G_CALLBACK (tap_action), swatch);
+  gtk_widget_add_controller (GTK_WIDGET (swatch), GTK_EVENT_CONTROLLER (gesture));
 
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (swatch)), "activatable");
 

@@ -97,7 +97,6 @@ struct _GtkAppChooserWidgetPrivate {
   GAppInfoMonitor *monitor;
 
   GtkWidget *popup_menu;
-  GtkGesture *multipress_gesture;
 };
 
 enum {
@@ -919,7 +918,6 @@ gtk_app_chooser_widget_finalize (GObject *object)
   g_free (self->priv->default_text);
   g_signal_handlers_disconnect_by_func (self->priv->monitor, app_info_changed, self);
   g_object_unref (self->priv->monitor);
-  g_object_unref (self->priv->multipress_gesture);
 
   G_OBJECT_CLASS (gtk_app_chooser_widget_parent_class)->finalize (object);
 }
@@ -1173,6 +1171,7 @@ gtk_app_chooser_widget_init (GtkAppChooserWidget *self)
 {
   GtkTreeSelection *selection;
   GtkTreeModel *sort;
+  GtkGesture *gesture;
 
   self->priv = gtk_app_chooser_widget_get_instance_private (self);
 
@@ -1210,10 +1209,11 @@ gtk_app_chooser_widget_init (GtkAppChooserWidget *self)
   g_signal_connect (self->priv->monitor, "changed",
 		    G_CALLBACK (app_info_changed), self);
 
-  self->priv->multipress_gesture = gtk_gesture_multi_press_new (self->priv->program_list);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (self->priv->multipress_gesture), GDK_BUTTON_SECONDARY);
-  g_signal_connect (self->priv->multipress_gesture, "pressed",
+  gesture = gtk_gesture_multi_press_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
+  g_signal_connect (gesture, "pressed",
                     G_CALLBACK (gtk_app_chooser_row_pressed_cb), self);
+  gtk_widget_add_controller (self->priv->program_list, GTK_EVENT_CONTROLLER (gesture));
 }
 
 static GAppInfo *

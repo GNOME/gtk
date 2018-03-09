@@ -187,9 +187,7 @@ struct _GtkSpinButtonPrivate
   GtkWidget     *entry;
 
   GtkWidget     *up_button;
-  GtkGesture    *up_click_gesture;
   GtkWidget     *down_button;
-  GtkGesture    *down_click_gesture;
 
   GtkWidget     *click_child;
 
@@ -775,8 +773,7 @@ button_pressed_cb (GtkGestureMultiPress *gesture,
 {
   GtkSpinButton *spin_button = user_data;
   GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin_button);
-  GtkWidget *pressed_button = GTK_GESTURE (gesture) == priv->up_click_gesture ?
-                              priv->up_button : priv->down_button;
+  GtkWidget *pressed_button = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
 
   gtk_widget_grab_focus (GTK_WIDGET (spin_button));
 
@@ -811,14 +808,15 @@ button_released_cb (GtkGestureMultiPress *gesture,
 
   if (button == GDK_BUTTON_SECONDARY)
     {
+      GtkWidget *button = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
       double diff;
-      if (GTK_GESTURE (gesture) == priv->down_click_gesture)
+      if (button == priv->down_button)
         {
           diff = gtk_adjustment_get_value (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment);
           if (diff > EPSILON)
             gtk_spin_button_real_spin (spin_button, -diff);
         }
-      else if (GTK_GESTURE (gesture) == priv->up_click_gesture)
+      else if (button == priv->up_button)
         {
           diff = gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_value (priv->adjustment);
           if (diff > EPSILON)
@@ -868,26 +866,28 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->down_button), "down");
   gtk_container_add (GTK_CONTAINER (priv->box), priv->down_button);
 
-  priv->down_click_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (priv->down_button));
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->down_click_gesture), 0);
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->down_click_gesture), FALSE);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->down_click_gesture),
+  gesture = gtk_gesture_multi_press_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                               GTK_PHASE_CAPTURE);
-  g_signal_connect (priv->down_click_gesture, "pressed", G_CALLBACK (button_pressed_cb), spin_button);
-  g_signal_connect (priv->down_click_gesture, "released", G_CALLBACK (button_released_cb), spin_button);
+  g_signal_connect (gesture, "pressed", G_CALLBACK (button_pressed_cb), spin_button);
+  g_signal_connect (gesture, "released", G_CALLBACK (button_released_cb), spin_button);
+  gtk_widget_add_controller (GTK_WIDGET (priv->down_button), GTK_EVENT_CONTROLLER (gesture));
 
   priv->up_button = gtk_button_new_from_icon_name ("list-add-symbolic");
   gtk_widget_set_can_focus (priv->up_button, FALSE);
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->up_button), "up");
   gtk_container_add (GTK_CONTAINER (priv->box), priv->up_button);
 
-  priv->up_click_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (priv->up_button));
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->up_click_gesture), 0);
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->up_click_gesture), FALSE);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->up_click_gesture),
+  gesture = gtk_gesture_multi_press_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                               GTK_PHASE_CAPTURE);
-  g_signal_connect (priv->up_click_gesture, "pressed", G_CALLBACK (button_pressed_cb), spin_button);
-  g_signal_connect (priv->up_click_gesture, "released", G_CALLBACK (button_released_cb), spin_button);
+  g_signal_connect (gesture, "pressed", G_CALLBACK (button_pressed_cb), spin_button);
+  g_signal_connect (gesture, "released", G_CALLBACK (button_released_cb), spin_button);
+  gtk_widget_add_controller (GTK_WIDGET (priv->up_button), GTK_EVENT_CONTROLLER (gesture));
 
   gtk_spin_button_set_adjustment (spin_button, NULL);
 
@@ -918,8 +918,6 @@ gtk_spin_button_finalize (GObject *object)
   gtk_spin_button_unset_adjustment (spin_button);
 
   g_object_unref (priv->scroll_controller);
-  g_object_unref (priv->up_click_gesture);
-  g_object_unref (priv->down_click_gesture);
 
   gtk_widget_unparent (priv->box);
 

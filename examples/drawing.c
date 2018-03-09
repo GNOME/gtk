@@ -166,9 +166,9 @@ activate (GtkApplication *app,
   g_signal_connect (drag, "drag-update", G_CALLBACK (drag_update), drawing_area);
   g_signal_connect (drag, "drag-end", G_CALLBACK (drag_end), drawing_area);
 
-  press = gtk_gesture_multi_press_new (drawing_area);
+  press = gtk_gesture_multi_press_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (press), GDK_BUTTON_SECONDARY);
-  g_object_set_data_full (G_OBJECT (drawing_area), "press", press, g_object_unref);
+  gtk_widget_add_controller (drawing_area, GTK_EVENT_CONTROLLER (press));
 
   g_signal_connect (press, "pressed", G_CALLBACK (pressed), drawing_area);
 
