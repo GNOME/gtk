@@ -3796,10 +3796,10 @@ create_cursors (GtkWidget *widget)
       gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (darea), 80);
       gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (darea), cursor_draw, NULL, NULL);
       gtk_container_add (GTK_CONTAINER (frame), darea);
-      gesture = gtk_gesture_multi_press_new (darea);
+      gesture = gtk_gesture_multi_press_new ();
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
       g_signal_connect (gesture, "pressed", G_CALLBACK (cursor_pressed_cb), entry);
-      g_object_set_data_full (G_OBJECT (darea), "gesture", gesture, g_object_unref);
+      gtk_widget_add_controller (darea, GTK_EVENT_CONTROLLER (gesture));
       gtk_widget_show (darea);
 
       g_signal_connect (entry, "changed",

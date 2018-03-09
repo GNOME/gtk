@@ -132,8 +132,6 @@ struct _GtkMountOperationPrivate {
   /* for the show-processes dialog */
   GtkWidget *process_tree_view;
   GtkListStore *process_list_store;
-
-  GtkGesture *multipress_gesture;
 };
 
 enum {
@@ -230,9 +228,6 @@ gtk_mount_operation_finalize (GObject *object)
 
   if (priv->handler)
     g_object_unref (priv->handler);
-
-  if (priv->multipress_gesture)
-    g_object_unref (priv->multipress_gesture);
 
   G_OBJECT_CLASS (gtk_mount_operation_parent_class)->finalize (object);
 }
@@ -1384,6 +1379,7 @@ create_show_processes_dialog (GtkMountOperation *op,
   GtkListStore *list_store;
   gchar *s;
   gboolean use_header;
+  GtkGesture *gesture;
 
   priv = op->priv;
 
@@ -1474,10 +1470,11 @@ create_show_processes_dialog (GtkMountOperation *op,
                     G_CALLBACK (on_popup_menu_for_process_tree_view),
                     op);
 
-  priv->multipress_gesture = gtk_gesture_multi_press_new (tree_view);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture), GDK_BUTTON_SECONDARY);
-  g_signal_connect (priv->multipress_gesture, "pressed",
+  gesture = gtk_gesture_multi_press_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
+  g_signal_connect (gesture, "pressed",
                     G_CALLBACK (multi_press_cb), op);
+  gtk_widget_add_controller (tree_view, GTK_EVENT_CONTROLLER (gesture));
 
   list_store = gtk_list_store_new (3,
                                    GDK_TYPE_TEXTURE,

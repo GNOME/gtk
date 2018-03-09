@@ -213,7 +213,6 @@ struct _GtkEntryPrivate
   GtkWidget     *magnifier;
 
   GtkGesture    *drag_gesture;
-  GtkGesture    *multipress_gesture;
   GtkEventController *motion_controller;
   GtkEventController *key_controller;
 
@@ -2517,6 +2516,7 @@ gtk_entry_init (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
   GtkCssNode *widget_node;
+  GtkGesture *gesture;
   gint i;
 
   gtk_widget_set_can_focus (GTK_WIDGET (entry), TRUE);
@@ -2565,11 +2565,12 @@ gtk_entry_init (GtkEntry *entry)
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->drag_gesture), 0);
   gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (priv->drag_gesture), TRUE);
 
-  priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (entry));
-  g_signal_connect (priv->multipress_gesture, "pressed",
+  gesture = gtk_gesture_multi_press_new ();
+  g_signal_connect (gesture, "pressed",
                     G_CALLBACK (gtk_entry_multipress_gesture_pressed), entry);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture), 0);
-  gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (priv->multipress_gesture), TRUE);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
+  gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (gesture), TRUE);
+  gtk_widget_add_controller (GTK_WIDGET (entry), GTK_EVENT_CONTROLLER (gesture));
 
   priv->motion_controller = gtk_event_controller_motion_new (GTK_WIDGET (entry));
   g_signal_connect (priv->motion_controller, "motion",
@@ -2796,7 +2797,6 @@ gtk_entry_finalize (GObject *object)
   g_free (priv->im_module);
 
   g_clear_object (&priv->drag_gesture);
-  g_clear_object (&priv->multipress_gesture);
   g_clear_object (&priv->motion_controller);
 
   if (priv->tabs)

@@ -1963,12 +1963,13 @@ gtk_window_constructed (GObject *object)
 
   if (priv->type == GTK_WINDOW_TOPLEVEL)
     {
-      priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (object));
+      priv->multipress_gesture = gtk_gesture_multi_press_new ();
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture), 0);
       gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
                                                   GTK_PHASE_NONE);
       g_signal_connect (priv->multipress_gesture, "pressed",
                         G_CALLBACK (multipress_gesture_pressed_cb), object);
+      gtk_widget_add_controller (GTK_WIDGET (object), GTK_EVENT_CONTROLLER (priv->multipress_gesture));
 
       priv->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (object));
       gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->drag_gesture),
@@ -5951,9 +5952,6 @@ gtk_window_finalize (GObject *object)
       g_source_remove (priv->mnemonics_display_timeout_id);
       priv->mnemonics_display_timeout_id = 0;
     }
-
-  if (priv->multipress_gesture)
-    g_object_unref (priv->multipress_gesture);
 
   if (priv->drag_gesture)
     g_object_unref (priv->drag_gesture);

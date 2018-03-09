@@ -60,7 +60,6 @@ struct _GtkIconViewPrivate
 
   GList *items;
 
-  GtkGesture *press_gesture;
   GtkEventController *motion_controller;
   GtkEventController *key_controller;
 
