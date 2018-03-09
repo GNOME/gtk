@@ -391,7 +391,7 @@ gdk_cursor_new_from_texture (GdkTexture *texture,
  * For textured cursors, this can happen when the texture is too large or
  * when the #GdkDisplay it is used on does not support textured cursors.
  *
- * Returns: (transfer none): the fallback of the cursor or %NULL to use
+ * Returns: (transfer none) (nullable): the fallback of the cursor or %NULL to use
  *     the default cursor as fallback.
  */
 GdkCursor *
@@ -409,7 +409,7 @@ gdk_cursor_get_fallback (GdkCursor *cursor)
  * Returns the name of the cursor. If the cursor is not a named cursor, %NULL
  * will be returned and the GdkCursor::texture property will be set.
  *
- * Returns: (transfer none): the name of the cursor or %NULL if it is not
+ * Returns: (transfer none) (nullable): the name of the cursor or %NULL if it is not
  *     a named cursor
  */
 const char *
@@ -427,7 +427,7 @@ gdk_cursor_get_name (GdkCursor *cursor)
  * Returns the texture for the cursor. If the cursor is a named cursor, %NULL
  * will be returned and the GdkCursor::name property will be set.
  *
- * Returns: (transfer none): the texture for cursor or %NULL if it is a
+ * Returns: (transfer none) (nullable): the texture for cursor or %NULL if it is a
  *     named cursor
  */
 GdkTexture *
