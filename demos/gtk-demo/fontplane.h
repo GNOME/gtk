@@ -41,7 +41,6 @@ struct _GtkFontPlane
   GtkAdjustment *width_adj;
 
   GtkGesture *drag_gesture;
-  GtkGesture *long_press_gesture;
 };
 
 struct _GtkFontPlaneClass
