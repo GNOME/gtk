@@ -75,8 +75,6 @@ struct _GtkPathBarPrivate
   GIcon *home_icon;
   GIcon *desktop_icon;
 
-  GtkEventController *scroll_controller;
-
   GList *button_list;
   GList *first_scrolled_button;
   GList *fake_root;
@@ -217,6 +215,7 @@ static void
 gtk_path_bar_init (GtkPathBar *path_bar)
 {
   GtkStyleContext *context;
+  GtkEventController *controller;
 
   path_bar->priv = gtk_path_bar_get_instance_private (path_bar);
 
@@ -245,13 +244,12 @@ gtk_path_bar_init (GtkPathBar *path_bar)
   path_bar->priv->get_info_cancellable = NULL;
   path_bar->priv->cancellables = NULL;
 
-  path_bar->priv->scroll_controller =
-    gtk_event_controller_scroll_new (GTK_WIDGET (path_bar),
-                                     GTK_EVENT_CONTROLLER_SCROLL_VERTICAL |
-                                     GTK_EVENT_CONTROLLER_SCROLL_DISCRETE);
-  g_signal_connect (path_bar->priv->scroll_controller, "scroll",
+  controller = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_VERTICAL |
+                                                GTK_EVENT_CONTROLLER_SCROLL_DISCRETE);
+  g_signal_connect (controller, "scroll",
                     G_CALLBACK (gtk_path_bar_scroll_controller_scroll),
                     path_bar);
+  gtk_widget_add_controller (GTK_WIDGET (path_bar), controller);
 }
 
 static void
@@ -325,8 +323,6 @@ gtk_path_bar_finalize (GObject *object)
   g_clear_object (&path_bar->priv->desktop_icon);
 
   g_clear_object (&path_bar->priv->file_system);
-
-  g_clear_object (&path_bar->priv->scroll_controller);
 
   G_OBJECT_CLASS (gtk_path_bar_parent_class)->finalize (object);
 }

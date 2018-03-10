@@ -247,11 +247,8 @@ struct _GtkCalendarPrivate
   gint detail_height_rows;
   gint detail_width_chars;
   gint detail_overflow[6];
-
-  GtkEventController *scroll_controller;
 };
 
-static void gtk_calendar_finalize     (GObject      *calendar);
 static void gtk_calendar_destroy      (GtkWidget    *widget);
 static void gtk_calendar_set_property (GObject      *object,
                                        guint         prop_id,
@@ -365,7 +362,6 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 
   gobject_class->set_property = gtk_calendar_set_property;
   gobject_class->get_property = gtk_calendar_get_property;
-  gobject_class->finalize = gtk_calendar_finalize;
 
   widget_class->destroy = gtk_calendar_destroy;
   widget_class->snapshot = gtk_calendar_snapshot;
@@ -638,6 +634,7 @@ static void
 gtk_calendar_init (GtkCalendar *calendar)
 {
   GtkWidget *widget = GTK_WIDGET (calendar);
+  GtkEventController *controller;
   GtkGesture *gesture;
   time_t secs;
   struct tm *tm;
@@ -678,13 +675,13 @@ gtk_calendar_init (GtkCalendar *calendar)
   g_signal_connect (gesture, "drag-update", G_CALLBACK (gtk_calendar_drag_update), calendar);
   gtk_widget_add_controller (GTK_WIDGET (calendar), GTK_EVENT_CONTROLLER (gesture));
 
-  priv->scroll_controller =
-    gtk_event_controller_scroll_new (GTK_WIDGET (calendar),
-                                     GTK_EVENT_CONTROLLER_SCROLL_VERTICAL |
+  controller =
+    gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_VERTICAL |
                                      GTK_EVENT_CONTROLLER_SCROLL_DISCRETE);
-  g_signal_connect (priv->scroll_controller, "scroll",
+  g_signal_connect (controller, "scroll",
                     G_CALLBACK (gtk_calendar_scroll_controller_scroll),
                     calendar);
+  gtk_widget_add_controller (GTK_WIDGET (calendar), controller);
 
   if (!default_abbreviated_dayname[0])
     for (i=0; i<7; i++)
@@ -1312,16 +1309,6 @@ calendar_set_month_prev (GtkCalendar *calendar)
 /****************************************
  *           Basic object methods       *
  ****************************************/
-
-static void
-gtk_calendar_finalize (GObject *object)
-{
-  GtkCalendarPrivate *priv = GTK_CALENDAR (object)->priv;
-
-  g_object_unref (priv->scroll_controller);
-
-  G_OBJECT_CLASS (gtk_calendar_parent_class)->finalize (object);
-}
 
 static void
 gtk_calendar_destroy (GtkWidget *widget)
