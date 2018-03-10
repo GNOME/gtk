@@ -3379,8 +3379,6 @@ gtk_flow_box_finalize (GObject *obj)
   g_clear_object (&priv->hadjustment);
   g_clear_object (&priv->vadjustment);
 
-  g_object_unref (priv->drag_gesture);
-
   if (priv->bound_model)
     {
       if (priv->create_widget_func_data_destroy)
@@ -3759,7 +3757,7 @@ gtk_flow_box_init (GtkFlowBox *box)
                     G_CALLBACK (gtk_flow_box_multipress_unpaired_release), box);
   gtk_widget_add_controller (GTK_WIDGET (box), GTK_EVENT_CONTROLLER (gesture));
 
-  priv->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (box));
+  priv->drag_gesture = gtk_gesture_drag_new ();
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->drag_gesture),
                                      FALSE);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->drag_gesture),
@@ -3772,6 +3770,7 @@ gtk_flow_box_init (GtkFlowBox *box)
                     G_CALLBACK (gtk_flow_box_drag_gesture_update), box);
   g_signal_connect (priv->drag_gesture, "drag-end",
                     G_CALLBACK (gtk_flow_box_drag_gesture_end), box);
+  gtk_widget_add_controller (GTK_WIDGET (box), GTK_EVENT_CONTROLLER (priv->drag_gesture));
 }
 
 static void

@@ -2535,13 +2535,14 @@ gtk_entry_init (GtkEntry *entry)
 
   gtk_entry_update_cached_style_values (entry);
 
-  priv->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (entry));
+  priv->drag_gesture = gtk_gesture_drag_new ();
   g_signal_connect (priv->drag_gesture, "drag-update",
                     G_CALLBACK (gtk_entry_drag_gesture_update), entry);
   g_signal_connect (priv->drag_gesture, "drag-end",
                     G_CALLBACK (gtk_entry_drag_gesture_end), entry);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->drag_gesture), 0);
   gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (priv->drag_gesture), TRUE);
+  gtk_widget_add_controller (GTK_WIDGET (entry), GTK_EVENT_CONTROLLER (priv->drag_gesture));
 
   gesture = gtk_gesture_multi_press_new ();
   g_signal_connect (gesture, "pressed",
@@ -2762,7 +2763,6 @@ gtk_entry_finalize (GObject *object)
   g_free (priv->placeholder_text);
   g_free (priv->im_module);
 
-  g_clear_object (&priv->drag_gesture);
   g_clear_object (&priv->motion_controller);
 
   if (priv->tabs)

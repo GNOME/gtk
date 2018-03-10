@@ -213,14 +213,15 @@ gtk_font_plane_init (GtkFontPlane *plane)
   gtk_widget_set_has_surface (GTK_WIDGET (plane), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (plane), TRUE);
 
-  plane->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (plane));
-  g_signal_connect (plane->drag_gesture, "drag-begin",
+  gesture = gtk_gesture_drag_new ();
+  g_signal_connect (gesture, "drag-begin",
 		    G_CALLBACK (plane_drag_gesture_begin), plane);
-  g_signal_connect (plane->drag_gesture, "drag-update",
+  g_signal_connect (gesture, "drag-update",
 		    G_CALLBACK (plane_drag_gesture_update), plane);
-  g_signal_connect (plane->drag_gesture, "drag-end",
+  g_signal_connect (gesture, "drag-end",
 		    G_CALLBACK (plane_drag_gesture_end), plane);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (plane->drag_gesture), 0);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
+  gtk_widget_add_controller (GTK_WIDGET (plane), GTK_EVENT_CONTROLLER (gesture));
 
   gesture = gtk_gesture_long_press_new ();
   g_signal_connect (gesture, "pressed",
@@ -237,8 +238,6 @@ plane_finalize (GObject *object)
 
   g_clear_object (&plane->weight_adj);
   g_clear_object (&plane->width_adj);
-
-  g_clear_object (&plane->drag_gesture);
 
   G_OBJECT_CLASS (gtk_font_plane_parent_class)->finalize (object);
 }

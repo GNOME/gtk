@@ -42,7 +42,7 @@ GDK_AVAILABLE_IN_ALL
 GType        gtk_gesture_drag_get_type          (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkGesture * gtk_gesture_drag_new               (GtkWidget      *widget);
+GtkGesture * gtk_gesture_drag_new               (void);
 
 GDK_AVAILABLE_IN_ALL
 gboolean     gtk_gesture_drag_get_start_point   (GtkGestureDrag *gesture,

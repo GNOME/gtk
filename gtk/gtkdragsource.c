@@ -108,7 +108,8 @@ gtk_drag_source_site_destroy (gpointer data)
     gdk_content_formats_unref (site->target_list);
 
   gtk_image_definition_unref (site->image_def);
-  g_clear_object (&site->drag_gesture);
+  /* This gets called only during widget finalization.
+   * And widget finalization takes care of gestures. */
   g_slice_free (GtkDragSourceSite, site);
 }
 
@@ -144,7 +145,7 @@ gtk_drag_source_set (GtkWidget         *widget,
     {
       site = g_slice_new0 (GtkDragSourceSite);
       site->image_def = gtk_image_definition_new_empty ();
-      site->drag_gesture = gtk_gesture_drag_new (widget);
+      site->drag_gesture = gtk_gesture_drag_new ();
       gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (site->drag_gesture),
                                                   GTK_PHASE_BUBBLE);
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (site->drag_gesture), 0);
@@ -154,6 +155,7 @@ gtk_drag_source_set (GtkWidget         *widget,
       g_signal_connect (site->drag_gesture, "update",
                         G_CALLBACK (gtk_drag_source_gesture_update),
                         site);
+      gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (site->drag_gesture));
 
       g_object_set_data_full (G_OBJECT (widget),
                               I_("gtk-site-data"), 
