@@ -259,8 +259,6 @@ struct _GtkScrolledWindowPrivate
   GtkGesture *drag_gesture;
   GtkGesture *pan_gesture;
 
-  GtkEventController *motion_controller;
-
   gdouble drag_start_x;
   gdouble drag_start_y;
 
@@ -1987,9 +1985,10 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
                     G_CALLBACK (scroll_controller_decelerate), scrolled_window);
   gtk_widget_add_controller (widget, controller);
 
-  priv->motion_controller = gtk_event_controller_motion_new (widget);
-  g_signal_connect (priv->motion_controller, "leave",
+  controller = gtk_event_controller_motion_new ();
+  g_signal_connect (controller, "leave",
                     G_CALLBACK (motion_controller_leave), scrolled_window);
+  gtk_widget_add_controller (widget, controller);
 }
 
 /**

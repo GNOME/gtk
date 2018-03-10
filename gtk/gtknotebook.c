@@ -207,8 +207,6 @@ struct _GtkNotebookPrivate
   guint          switch_tab_timer;
   GList         *switch_tab;
 
-  GtkEventController *motion_controller;
-
   guint32        timer;
 
   guint          child_has_focus    : 1;
@@ -1041,6 +1039,7 @@ gtk_notebook_init (GtkNotebook *notebook)
 {
   GtkNotebookPrivate *priv;
   GdkContentFormats *targets;
+  GtkEventController *controller;
   GtkGesture *gesture;
 
   gtk_widget_set_can_focus (GTK_WIDGET (notebook), TRUE);
@@ -1118,8 +1117,9 @@ gtk_notebook_init (GtkNotebook *notebook)
   g_signal_connect (gesture, "released", G_CALLBACK (gtk_notebook_gesture_released), notebook);
   gtk_widget_add_controller (GTK_WIDGET (notebook), GTK_EVENT_CONTROLLER (gesture));
 
-  priv->motion_controller = gtk_event_controller_motion_new (GTK_WIDGET (notebook));
-  g_signal_connect (priv->motion_controller, "motion", G_CALLBACK (gtk_notebook_motion), notebook);
+  controller = gtk_event_controller_motion_new ();
+  g_signal_connect (controller, "motion", G_CALLBACK (gtk_notebook_motion), notebook);
+  gtk_widget_add_controller (GTK_WIDGET (notebook), controller);
 
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (notebook)),
                                GTK_STYLE_CLASS_FRAME);
@@ -1609,7 +1609,6 @@ gtk_notebook_finalize (GObject *object)
   GtkNotebook *notebook = GTK_NOTEBOOK (object);
   GtkNotebookPrivate *priv = notebook->priv;
 
-  g_clear_object (&priv->motion_controller);
   gtk_widget_unparent (priv->box);
 
   G_OBJECT_CLASS (gtk_notebook_parent_class)->finalize (object);

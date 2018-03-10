@@ -43,7 +43,7 @@ GDK_AVAILABLE_IN_ALL
 GType               gtk_event_controller_motion_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkEventController *gtk_event_controller_motion_new      (GtkWidget *widget);
+GtkEventController *gtk_event_controller_motion_new      (void);
 
 G_END_DECLS
 

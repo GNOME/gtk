@@ -1155,11 +1155,11 @@ gtk_menu_init (GtkMenu *menu)
                     G_CALLBACK (gtk_menu_scroll_controller_scroll), menu);
   gtk_widget_add_controller (GTK_WIDGET (menu), controller);
 
-  priv->motion_controller =
-    gtk_event_controller_motion_new (GTK_WIDGET (menu));
-  g_signal_connect (priv->motion_controller, "enter", G_CALLBACK (gtk_menu_enter), menu);
-  g_signal_connect (priv->motion_controller, "motion", G_CALLBACK (gtk_menu_motion), menu);
-  g_signal_connect (priv->motion_controller, "leave", G_CALLBACK (gtk_menu_leave), menu);
+  controller = gtk_event_controller_motion_new ();
+  g_signal_connect (controller, "enter", G_CALLBACK (gtk_menu_enter), menu);
+  g_signal_connect (controller, "motion", G_CALLBACK (gtk_menu_motion), menu);
+  g_signal_connect (controller, "leave", G_CALLBACK (gtk_menu_leave), menu);
+  gtk_widget_add_controller (GTK_WIDGET (menu), controller);
 }
 
 static void
@@ -1231,7 +1231,6 @@ gtk_menu_finalize (GObject *object)
 
   gtk_widget_unparent (priv->top_arrow_widget);
   gtk_widget_unparent (priv->bottom_arrow_widget);
-  g_clear_object (&priv->motion_controller);
 
   G_OBJECT_CLASS (gtk_menu_parent_class)->finalize (object);
 }
