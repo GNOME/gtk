@@ -375,9 +375,9 @@ test_chase (void)
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), child);
   g_object_set (child, "margin", 4, NULL);
 
-  controller = gtk_event_controller_motion_new (child);
-  g_object_set_data_full (G_OBJECT (child), "motion", controller, g_object_unref);
+  controller = gtk_event_controller_motion_new ();
   g_signal_connect (controller, "enter", G_CALLBACK (on_enter), overlay);
+  gtk_widget_add_controller (child, controller);
 
   return win;
 }
