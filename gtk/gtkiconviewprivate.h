@@ -60,8 +60,6 @@ struct _GtkIconViewPrivate
 
   GList *items;
 
-  GtkEventController *motion_controller;
-
   GtkAdjustment *hadjustment;
   GtkAdjustment *vadjustment;
 
