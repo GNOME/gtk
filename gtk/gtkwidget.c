@@ -459,7 +459,6 @@ typedef struct {
   GtkEventController *controller;
   guint grab_notify_id;
   guint sequence_state_changed_id;
-  gboolean have_ref;
 } EventControllerData;
 
 struct _GtkWidgetClassPrivate
@@ -12999,38 +12998,6 @@ event_controller_sequence_state_changed (GtkGesture            *gesture,
   cancel_event_sequence_on_hierarchy (widget, event_widget, sequence);
 }
 
-void
-_gtk_widget_add_controller (GtkWidget          *widget,
-                            GtkEventController *controller,
-                            gboolean            have_ref)
-{
-  EventControllerData *data;
-  GtkWidgetPrivate *priv;
-
-  priv = widget->priv;
-
-  GTK_EVENT_CONTROLLER_GET_CLASS (controller)->set_widget (controller, widget);
-
-  data = g_new0 (EventControllerData, 1);
-  data->have_ref = have_ref;
-  data->controller = controller;
-  data->grab_notify_id =
-    g_signal_connect (widget, "grab-notify",
-                      G_CALLBACK (event_controller_grab_notify), data);
-
-  g_object_add_weak_pointer (G_OBJECT (data->controller), (gpointer *) &data->controller);
-
-  if (GTK_IS_GESTURE (controller))
-    {
-      data->sequence_state_changed_id =
-        g_signal_connect (controller, "sequence-state-changed",
-                          G_CALLBACK (event_controller_sequence_state_changed),
-                          widget);
-    }
-
-  priv->event_controllers = g_list_prepend (priv->event_controllers, data);
-}
-
 /**
  * gtk_widget_add_controller:
  * @widget: a #GtkWidget
@@ -13049,7 +13016,30 @@ gtk_widget_add_controller (GtkWidget          *widget,
   g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
   g_return_if_fail (gtk_event_controller_get_widget (controller) == NULL);
 
-  _gtk_widget_add_controller (widget, controller, TRUE);
+  EventControllerData *data;
+  GtkWidgetPrivate *priv;
+
+  priv = widget->priv;
+
+  GTK_EVENT_CONTROLLER_GET_CLASS (controller)->set_widget (controller, widget);
+
+  data = g_new0 (EventControllerData, 1);
+  data->controller = controller;
+  data->grab_notify_id =
+    g_signal_connect (widget, "grab-notify",
+                      G_CALLBACK (event_controller_grab_notify), data);
+
+  g_object_add_weak_pointer (G_OBJECT (data->controller), (gpointer *) &data->controller);
+
+  if (GTK_IS_GESTURE (controller))
+    {
+      data->sequence_state_changed_id =
+        g_signal_connect (controller, "sequence-state-changed",
+                          G_CALLBACK (event_controller_sequence_state_changed),
+                          widget);
+    }
+
+  priv->event_controllers = g_list_prepend (priv->event_controllers, data);
 }
 
 /**
@@ -13098,8 +13088,7 @@ gtk_widget_remove_controller (GtkWidget          *widget,
     g_signal_handler_disconnect (data->controller, data->sequence_state_changed_id);
 
   data->controller = NULL;
-  if (data->have_ref)
-    g_object_unref (controller);
+  g_object_unref (controller);
 }
 
 GList *
