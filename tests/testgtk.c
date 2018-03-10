@@ -7142,9 +7142,9 @@ create_scroll_test (GtkWidget *widget)
 
       g_signal_connect (drawing_area, "configure_event",
 			G_CALLBACK (scroll_test_configure), adjustment);
-      controller = gtk_event_controller_scroll_new (drawing_area, GTK_EVENT_CONTROLLER_SCROLL_VERTICAL);
-      g_object_set_data_full (G_OBJECT (drawing_area), "scroll", controller, g_object_unref);
+      controller = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_VERTICAL);
       g_signal_connect (controller, "scroll", G_CALLBACK (scroll_test_scroll), adjustment);
+      gtk_widget_add_controller (drawing_area, controller);
 
       g_signal_connect (adjustment, "value_changed",
 			G_CALLBACK (scroll_test_adjustment_changed),

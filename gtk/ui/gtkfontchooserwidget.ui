@@ -111,6 +111,12 @@
                       <object class="GtkEntry" id="preview">
                         <property name="can-focus">1</property>
                         <property name="placeholder-text" translatable="yes">Preview text</property>
+                        <child>
+                          <object class="GtkEventControllerScroll">
+                            <property name="flags" translatable="yes">horizontal</property>
+                            <signal name="scroll" handler="resize_by_scroll_cb"/>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -136,6 +142,12 @@
                         <property name="adjustment">slider_adjustment</property>
                         <property name="draw-value">0</property>
                         <property name="round-digits">0</property>
+                        <child>
+                          <object class="GtkEventControllerScroll">
+                            <property name="flags" translatable="yes">horizontal</property>
+                            <signal name="scroll" handler="resize_by_scroll_cb"/>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
