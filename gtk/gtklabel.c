@@ -4471,12 +4471,6 @@ gtk_label_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   const GdkEvent *event;
   guint button;
 
-  if (info == NULL)
-    {
-      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
-      return;
-    }
-
   button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
