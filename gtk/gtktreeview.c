@@ -1737,15 +1737,16 @@ gtk_tree_view_init (GtkTreeView *tree_view)
                                               GTK_PHASE_CAPTURE);
   gtk_widget_add_controller (GTK_WIDGET (tree_view), GTK_EVENT_CONTROLLER (gesture));
 
-  priv->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (tree_view));
+  priv->drag_gesture = gtk_gesture_drag_new ();
   g_signal_connect (priv->drag_gesture, "drag-begin",
                     G_CALLBACK (gtk_tree_view_drag_gesture_begin), tree_view);
   g_signal_connect (priv->drag_gesture, "drag-update",
                     G_CALLBACK (gtk_tree_view_drag_gesture_update), tree_view);
   g_signal_connect (priv->drag_gesture, "drag-end",
                     G_CALLBACK (gtk_tree_view_drag_gesture_end), tree_view);
+  gtk_widget_add_controller (GTK_WIDGET (tree_view), GTK_EVENT_CONTROLLER (priv->drag_gesture));
 
-  priv->column_drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (tree_view));
+  priv->column_drag_gesture = gtk_gesture_drag_new ();
   g_signal_connect (priv->column_drag_gesture, "drag-begin",
                     G_CALLBACK (gtk_tree_view_column_drag_gesture_begin), tree_view);
   g_signal_connect (priv->column_drag_gesture, "drag-update",
@@ -1754,6 +1755,7 @@ gtk_tree_view_init (GtkTreeView *tree_view)
                     G_CALLBACK (gtk_tree_view_column_drag_gesture_end), tree_view);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->column_drag_gesture),
                                               GTK_PHASE_CAPTURE);
+  gtk_widget_add_controller (GTK_WIDGET (tree_view), GTK_EVENT_CONTROLLER (priv->column_drag_gesture));
 
   priv->motion_controller = gtk_event_controller_motion_new (GTK_WIDGET (tree_view));
   g_signal_connect (priv->motion_controller, "enter",
@@ -2145,8 +2147,6 @@ gtk_tree_view_destroy (GtkWidget *widget)
       tree_view->priv->vadjustment = NULL;
     }
 
-  g_clear_object (&tree_view->priv->drag_gesture);
-  g_clear_object (&tree_view->priv->column_drag_gesture);
   g_clear_object (&tree_view->priv->motion_controller);
 
   GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->destroy (widget);

@@ -1686,13 +1686,14 @@ gtk_text_view_init (GtkTextView *text_view)
                     widget);
   gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (gesture));
 
-  priv->drag_gesture = gtk_gesture_drag_new (widget);
+  priv->drag_gesture = gtk_gesture_drag_new ();
   g_signal_connect (priv->drag_gesture, "drag-update",
                     G_CALLBACK (gtk_text_view_drag_gesture_update),
                     widget);
   g_signal_connect (priv->drag_gesture, "drag-end",
                     G_CALLBACK (gtk_text_view_drag_gesture_end),
                     widget);
+  gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (priv->drag_gesture));
 
   priv->motion_controller = gtk_event_controller_motion_new (widget);
   g_signal_connect (priv->motion_controller, "motion", G_CALLBACK (gtk_text_view_motion), widget);
@@ -3589,7 +3590,6 @@ gtk_text_view_finalize (GObject *object)
   
   cancel_pending_scroll (text_view);
 
-  g_object_unref (priv->drag_gesture);
   g_object_unref (priv->motion_controller);
 
   if (priv->tabs)

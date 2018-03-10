@@ -255,13 +255,14 @@ main (int argc, char *argv[])
   gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (drawing_area), draw, NULL, NULL);
   g_signal_connect (drawing_area, "size-allocate", G_CALLBACK (size_allocate), NULL);
 
-  gesture = gtk_gesture_drag_new (drawing_area);
+  gesture = gtk_gesture_drag_new ();
   g_object_set_data_full (G_OBJECT (drawing_area), "gesture",
                           gesture, g_object_unref);
   g_signal_connect (gesture, "drag-begin",
                     G_CALLBACK (drag_begin), drawing_area);
   g_signal_connect (gesture, "drag-update",
                     G_CALLBACK (drag_update), drawing_area);
+  gtk_widget_add_controller (drawing_area, GTK_EVENT_CONTROLLER (gesture));
 
   g_signal_connect (drawing_area, "key_press_event",
 		    G_CALLBACK (key_press_event), NULL);

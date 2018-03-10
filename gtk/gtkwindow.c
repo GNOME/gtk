@@ -1978,13 +1978,14 @@ gtk_window_constructed (GObject *object)
                         G_CALLBACK (multipress_gesture_pressed_cb), object);
       gtk_widget_add_controller (GTK_WIDGET (object), GTK_EVENT_CONTROLLER (priv->multipress_gesture));
 
-      priv->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (object));
+      priv->drag_gesture = gtk_gesture_drag_new ();
       gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->drag_gesture),
                                                   GTK_PHASE_CAPTURE);
       g_signal_connect (priv->drag_gesture, "drag-begin",
                         G_CALLBACK (drag_gesture_begin_cb), object);
       g_signal_connect (priv->drag_gesture, "drag-update",
                         G_CALLBACK (drag_gesture_update_cb), object);
+      gtk_widget_add_controller (GTK_WIDGET (object), GTK_EVENT_CONTROLLER (priv->drag_gesture));
     }
 }
 
@@ -5963,9 +5964,6 @@ gtk_window_finalize (GObject *object)
       g_source_remove (priv->mnemonics_display_timeout_id);
       priv->mnemonics_display_timeout_id = 0;
     }
-
-  if (priv->drag_gesture)
-    g_object_unref (priv->drag_gesture);
 
   g_clear_object (&priv->renderer);
 
