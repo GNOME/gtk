@@ -78,8 +78,7 @@ GDK_AVAILABLE_IN_ALL
 GType gtk_pad_controller_get_type           (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkPadController *gtk_pad_controller_new    (GtkWindow        *window,
-                                             GActionGroup     *group,
+GtkPadController *gtk_pad_controller_new    (GActionGroup     *group,
                                              GdkDevice        *pad);
 
 GDK_AVAILABLE_IN_ALL
