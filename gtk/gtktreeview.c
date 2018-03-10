@@ -461,7 +461,6 @@ struct _GtkTreeViewPrivate
   GtkGesture *multipress_gesture;
   GtkGesture *drag_gesture; /* Rubberbanding, row DnD */
   GtkGesture *column_drag_gesture; /* Column reordering, resizing */
-  GtkEventController *motion_controller;
 
   /* Tooltip support */
   gint tooltip_column;
@@ -1648,6 +1647,7 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   GtkTreeViewPrivate *priv;
   GtkCssNode *widget_node;
   GtkGesture *gesture;
+  GtkEventController *controller;
 
   priv = tree_view->priv = gtk_tree_view_get_instance_private (tree_view);
 
@@ -1750,13 +1750,14 @@ gtk_tree_view_init (GtkTreeView *tree_view)
                                               GTK_PHASE_CAPTURE);
   gtk_widget_add_controller (GTK_WIDGET (tree_view), GTK_EVENT_CONTROLLER (priv->column_drag_gesture));
 
-  priv->motion_controller = gtk_event_controller_motion_new (GTK_WIDGET (tree_view));
-  g_signal_connect (priv->motion_controller, "enter",
+  controller = gtk_event_controller_motion_new ();
+  g_signal_connect (controller, "enter",
                     G_CALLBACK (gtk_tree_view_motion_controller_enter), tree_view);
-  g_signal_connect (priv->motion_controller, "leave",
+  g_signal_connect (controller, "leave",
                     G_CALLBACK (gtk_tree_view_motion_controller_leave), tree_view);
-  g_signal_connect (priv->motion_controller, "motion",
+  g_signal_connect (controller, "motion",
                     G_CALLBACK (gtk_tree_view_motion_controller_motion), tree_view);
+  gtk_widget_add_controller (GTK_WIDGET (tree_view), controller);
 }
 
 
@@ -2139,8 +2140,6 @@ gtk_tree_view_destroy (GtkWidget *widget)
       g_object_unref (tree_view->priv->vadjustment);
       tree_view->priv->vadjustment = NULL;
     }
-
-  g_clear_object (&tree_view->priv->motion_controller);
 
   GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->destroy (widget);
 }

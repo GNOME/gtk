@@ -145,7 +145,6 @@ struct _GtkPanedPrivate
 
   GtkGesture    *pan_gesture;  /* Used for touch */
   GtkGesture    *drag_gesture; /* Used for mice */
-  GtkEventController *motion_controller;
 
   gint          child1_size;
   gint          drag_pos;
@@ -993,8 +992,6 @@ gtk_paned_finalize (GObject *object)
   gtk_paned_set_saved_focus (paned, NULL);
   gtk_paned_set_first_paned (paned, NULL);
 
-  g_clear_object (&priv->motion_controller);
-
   gtk_widget_unparent (priv->handle_widget);
 
   G_OBJECT_CLASS (gtk_paned_parent_class)->finalize (object);
@@ -1453,6 +1450,7 @@ static void
 gtk_paned_init (GtkPaned *paned)
 {
   GtkPanedPrivate *priv = gtk_paned_get_instance_private (paned);
+  GtkEventController *controller;
   GtkGesture *gesture;
 
   gtk_widget_set_has_surface (GTK_WIDGET (paned), FALSE);
@@ -1496,8 +1494,9 @@ gtk_paned_init (GtkPaned *paned)
   gtk_widget_add_controller (GTK_WIDGET (paned), GTK_EVENT_CONTROLLER (gesture));
   priv->drag_gesture = gesture;
 
-  priv->motion_controller = gtk_event_controller_motion_new (GTK_WIDGET (paned));
-  g_signal_connect (priv->motion_controller, "motion", G_CALLBACK (gtk_paned_motion), paned);
+  controller = gtk_event_controller_motion_new ();
+  g_signal_connect (controller, "motion", G_CALLBACK (gtk_paned_motion), paned);
+  gtk_widget_add_controller (GTK_WIDGET (paned), controller);
 
   priv->handle_widget = gtk_gizmo_new ("separator",
                                        NULL,

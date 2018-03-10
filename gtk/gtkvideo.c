@@ -43,8 +43,6 @@ struct _GtkVideo
   GFile *file;
   GtkMediaStream *media_stream;
 
-  GtkEventController *motion_controller;
-
   GtkWidget *box;
   GtkWidget *video_image;
   GtkWidget *overlay_icon;
@@ -70,6 +68,32 @@ enum
 G_DEFINE_TYPE (GtkVideo, gtk_video, GTK_TYPE_WIDGET)
 
 static GParamSpec *properties[N_PROPS] = { NULL, };
+
+static gboolean
+gtk_video_hide_controls (gpointer data)
+{
+  GtkVideo *self = data;
+
+  gtk_revealer_set_reveal_child (GTK_REVEALER (self->controls_revealer), FALSE);
+
+  self->controls_hide_source = 0;
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+gtk_video_motion (GtkEventControllerMotion *motion,
+                  double                    x,
+                  double                    y,
+                  GtkVideo                 *self)
+{
+  gtk_revealer_set_reveal_child (GTK_REVEALER (self->controls_revealer), TRUE);
+  if (self->controls_hide_source)
+    g_source_remove (self->controls_hide_source);
+  self->controls_hide_source = g_timeout_add (5 * 1000,
+                                              gtk_video_hide_controls,
+                                              self);
+}
 
 static void
 gtk_video_measure (GtkWidget      *widget,
@@ -159,7 +183,6 @@ gtk_video_dispose (GObject *object)
 
   gtk_video_set_media_stream (self, NULL);
 
-  g_clear_object (&self->motion_controller);
   g_clear_pointer (&self->box, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_video_parent_class)->dispose (object);
@@ -302,34 +325,9 @@ gtk_video_class_init (GtkVideoClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkVideo, overlay_icon);
   gtk_widget_class_bind_template_child (widget_class, GtkVideo, controls);
   gtk_widget_class_bind_template_child (widget_class, GtkVideo, controls_revealer);
+  gtk_widget_class_bind_template_callback (widget_class, gtk_video_motion);
 
   gtk_widget_class_set_css_name (widget_class, I_("video"));
-}
-
-static gboolean
-gtk_video_hide_controls (gpointer data)
-{
-  GtkVideo *self = data;
-
-  gtk_revealer_set_reveal_child (GTK_REVEALER (self->controls_revealer), FALSE);
-
-  self->controls_hide_source = 0;
-
-  return G_SOURCE_REMOVE;
-}
-
-static void
-gtk_video_motion (GtkEventControllerMotion *motion,
-                  double                    x,
-                  double                    y,
-                  GtkVideo                 *self)
-{
-  gtk_revealer_set_reveal_child (GTK_REVEALER (self->controls_revealer), TRUE);
-  if (self->controls_hide_source)
-    g_source_remove (self->controls_hide_source);
-  self->controls_hide_source = g_timeout_add (5 * 1000,
-                                              gtk_video_hide_controls,
-                                              self);
 }
 
 static void
@@ -337,9 +335,6 @@ gtk_video_init (GtkVideo *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
   gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
-
-  self->motion_controller = gtk_event_controller_motion_new (GTK_WIDGET (self));
-  g_signal_connect (self->motion_controller, "motion", G_CALLBACK (gtk_video_motion), self);
 }
 
 /**

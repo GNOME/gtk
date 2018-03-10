@@ -213,7 +213,6 @@ struct _GtkEntryPrivate
   GtkWidget     *magnifier;
 
   GtkGesture    *drag_gesture;
-  GtkEventController *motion_controller;
   GtkEventController *key_controller;
 
   GtkWidget     *progress_widget;
@@ -2517,6 +2516,7 @@ gtk_entry_init (GtkEntry *entry)
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
   GtkCssNode *widget_node;
   GtkGesture *gesture;
+  GtkEventController *controller;
   gint i;
 
   gtk_widget_set_can_focus (GTK_WIDGET (entry), TRUE);
@@ -2573,9 +2573,10 @@ gtk_entry_init (GtkEntry *entry)
   gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (gesture), TRUE);
   gtk_widget_add_controller (GTK_WIDGET (entry), GTK_EVENT_CONTROLLER (gesture));
 
-  priv->motion_controller = gtk_event_controller_motion_new (GTK_WIDGET (entry));
-  g_signal_connect (priv->motion_controller, "motion",
+  controller = gtk_event_controller_motion_new ();
+  g_signal_connect (controller, "motion",
                     G_CALLBACK (entry_motion_cb), entry);
+  gtk_widget_add_controller (GTK_WIDGET (entry), controller);
 
   priv->key_controller = gtk_event_controller_key_new (GTK_WIDGET (entry));
   g_signal_connect (priv->key_controller, "key-pressed",
@@ -2796,8 +2797,6 @@ gtk_entry_finalize (GObject *object)
     g_object_unref (priv->text_handle);
   g_free (priv->placeholder_text);
   g_free (priv->im_module);
-
-  g_clear_object (&priv->motion_controller);
 
   if (priv->tabs)
     pango_tab_array_free (priv->tabs);

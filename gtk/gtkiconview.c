@@ -918,6 +918,7 @@ gtk_icon_view_cell_layout_init (GtkCellLayoutIface *iface)
 static void
 gtk_icon_view_init (GtkIconView *icon_view)
 {
+  GtkEventController *controller;
   GtkGesture *gesture;
 
   icon_view->priv = gtk_icon_view_get_instance_private (icon_view);
@@ -966,11 +967,12 @@ gtk_icon_view_init (GtkIconView *icon_view)
                     icon_view);
   gtk_widget_add_controller (GTK_WIDGET (icon_view), GTK_EVENT_CONTROLLER (gesture));
 
-  icon_view->priv->motion_controller = gtk_event_controller_motion_new (GTK_WIDGET (icon_view));
-  g_signal_connect (icon_view->priv->motion_controller, "leave", G_CALLBACK (gtk_icon_view_leave),
+  controller = gtk_event_controller_motion_new ();
+  g_signal_connect (controller, "leave", G_CALLBACK (gtk_icon_view_leave),
                     icon_view);
-  g_signal_connect (icon_view->priv->motion_controller, "motion", G_CALLBACK (gtk_icon_view_motion),
+  g_signal_connect (controller, "motion", G_CALLBACK (gtk_icon_view_motion),
                     icon_view);
+  gtk_widget_add_controller (GTK_WIDGET (icon_view), controller);
 
   icon_view->priv->key_controller = gtk_event_controller_key_new (GTK_WIDGET (icon_view));
   g_signal_connect (icon_view->priv->key_controller, "key-pressed", G_CALLBACK (gtk_icon_view_key_pressed),
@@ -1023,7 +1025,6 @@ gtk_icon_view_dispose (GObject *object)
       priv->cell_area = NULL;
     }
 
-  g_clear_object (&priv->motion_controller);
   g_clear_object (&priv->key_controller);
 
   G_OBJECT_CLASS (gtk_icon_view_parent_class)->dispose (object);

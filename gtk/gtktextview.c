@@ -225,7 +225,6 @@ struct _GtkTextViewPrivate
   GtkTextPendingScroll *pending_scroll;
 
   GtkGesture *drag_gesture;
-  GtkEventController *motion_controller;
   GtkEventController *key_controller;
 
   GtkCssNode *selection_node;
@@ -1616,6 +1615,7 @@ gtk_text_view_init (GtkTextView *text_view)
   GdkContentFormats *target_list;
   GtkTextViewPrivate *priv;
   GtkStyleContext *context;
+  GtkEventController *controller;
   GtkGesture *gesture;
 
   text_view->priv = gtk_text_view_get_instance_private (text_view);
@@ -1687,8 +1687,9 @@ gtk_text_view_init (GtkTextView *text_view)
                     widget);
   gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (priv->drag_gesture));
 
-  priv->motion_controller = gtk_event_controller_motion_new (widget);
-  g_signal_connect (priv->motion_controller, "motion", G_CALLBACK (gtk_text_view_motion), widget);
+  controller = gtk_event_controller_motion_new ();
+  g_signal_connect (controller, "motion", G_CALLBACK (gtk_text_view_motion), widget);
+  gtk_widget_add_controller (widget, controller);
 
   priv->key_controller = gtk_event_controller_key_new (widget);
   g_signal_connect (priv->key_controller, "key-pressed",
@@ -3601,7 +3602,6 @@ gtk_text_view_finalize (GObject *object)
   
   cancel_pending_scroll (text_view);
 
-  g_object_unref (priv->motion_controller);
   g_object_unref (priv->key_controller);
 
   if (priv->tabs)
