@@ -10682,13 +10682,11 @@ gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
                     G_CALLBACK (gtk_tree_view_search_pressed_cb), tree_view);
   gtk_widget_add_controller (tree_view->priv->search_window, GTK_EVENT_CONTROLLER (gesture));
 
-  controller = gtk_event_controller_scroll_new (tree_view->priv->search_window,
-                                                GTK_EVENT_CONTROLLER_SCROLL_VERTICAL);
-  g_object_set_data_full (G_OBJECT (tree_view->priv->search_window), "scroll",
-                          controller, g_object_unref);
+  controller = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_VERTICAL);
   g_signal_connect (controller, "scroll",
 		    G_CALLBACK (gtk_tree_view_search_scroll_event),
 		    tree_view);
+  gtk_widget_add_controller (tree_view->priv->search_window, controller);
 
   frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_ETCHED_IN);

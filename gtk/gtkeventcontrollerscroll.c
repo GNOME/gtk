@@ -450,22 +450,16 @@ gtk_event_controller_scroll_init (GtkEventControllerScroll *scroll)
 
 /**
  * gtk_event_controller_scroll_new:
- * @widget: a #GtkWidget
  * @flags: behavior flags
  *
- * Creates a new event controller that will handle scroll events
- * for the given @widget.
+ * Creates a new event controller that will handle scroll events.
  *
  * Returns: a new #GtkEventControllerScroll
  **/
 GtkEventController *
-gtk_event_controller_scroll_new (GtkWidget                     *widget,
-                                 GtkEventControllerScrollFlags  flags)
+gtk_event_controller_scroll_new (GtkEventControllerScrollFlags flags)
 {
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
   return g_object_new (GTK_TYPE_EVENT_CONTROLLER_SCROLL,
-                       "widget", widget,
                        "flags", flags,
                        NULL);
 }

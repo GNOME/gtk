@@ -64,8 +64,7 @@ GDK_AVAILABLE_IN_ALL
 GType               gtk_event_controller_scroll_get_type  (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkEventController *gtk_event_controller_scroll_new (GtkWidget                     *widget,
-                                                     GtkEventControllerScrollFlags  flags);
+GtkEventController *gtk_event_controller_scroll_new       (GtkEventControllerScrollFlags  flags);
 GDK_AVAILABLE_IN_ALL
 void                gtk_event_controller_scroll_set_flags (GtkEventControllerScroll      *scroll,
                                                            GtkEventControllerScrollFlags  flags);
