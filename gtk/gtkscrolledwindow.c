@@ -259,9 +259,6 @@ struct _GtkScrolledWindowPrivate
   GtkGesture *drag_gesture;
   GtkGesture *pan_gesture;
 
-  /* Scroll event controller */
-  GtkEventController *scroll_controller;
-
   GtkEventController *motion_controller;
 
   gdouble drag_start_x;
@@ -327,7 +324,6 @@ static void     gtk_scrolled_window_get_property       (GObject           *objec
                                                         guint              prop_id,
                                                         GValue            *value,
                                                         GParamSpec        *pspec);
-static void     gtk_scrolled_window_finalize           (GObject           *object);
 
 static void     gtk_scrolled_window_destroy            (GtkWidget         *widget);
 static void     gtk_scrolled_window_snapshot           (GtkWidget         *widget,
@@ -521,7 +517,6 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 
   gobject_class->set_property = gtk_scrolled_window_set_property;
   gobject_class->get_property = gtk_scrolled_window_get_property;
-  gobject_class->finalize = gtk_scrolled_window_finalize;
 
   widget_class->destroy = gtk_scrolled_window_destroy;
   widget_class->snapshot = gtk_scrolled_window_snapshot;
@@ -1885,6 +1880,7 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
 {
   GtkWidget *widget = GTK_WIDGET (scrolled_window);
   GtkScrolledWindowPrivate *priv;
+  GtkEventController *controller;
   GtkCssNode *widget_node;
   GQuark classes[4] = {
     g_quark_from_static_string (GTK_STYLE_CLASS_LEFT),
@@ -1981,18 +1977,17 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
 
   gtk_scrolled_window_update_use_indicators (scrolled_window);
 
-  priv->scroll_controller =
-    gtk_event_controller_scroll_new (widget,
-                                     GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES |
-                                     GTK_EVENT_CONTROLLER_SCROLL_KINETIC);
-  g_signal_connect (priv->scroll_controller, "scroll-begin",
+  controller = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES |
+                                                GTK_EVENT_CONTROLLER_SCROLL_KINETIC);
+  g_signal_connect (controller, "scroll-begin",
                     G_CALLBACK (scroll_controller_scroll_begin), scrolled_window);
-  g_signal_connect (priv->scroll_controller, "scroll",
+  g_signal_connect (controller, "scroll",
                     G_CALLBACK (scroll_controller_scroll), scrolled_window);
-  g_signal_connect (priv->scroll_controller, "scroll-end",
+  g_signal_connect (controller, "scroll-end",
                     G_CALLBACK (scroll_controller_scroll_end), scrolled_window);
-  g_signal_connect (priv->scroll_controller, "decelerate",
+  g_signal_connect (controller, "decelerate",
                     G_CALLBACK (scroll_controller_decelerate), scrolled_window);
+  gtk_widget_add_controller (widget, controller);
 
   priv->motion_controller = gtk_event_controller_motion_new (widget);
   g_signal_connect (priv->motion_controller, "leave",
@@ -2609,18 +2604,6 @@ gtk_scrolled_window_destroy (GtkWidget *widget)
     }
 
   GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->destroy (widget);
-}
-
-static void
-gtk_scrolled_window_finalize (GObject *object)
-{
-  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (object);
-  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
-
-  g_clear_object (&priv->scroll_controller);
-
-
-  G_OBJECT_CLASS (gtk_scrolled_window_parent_class)->finalize (object);
 }
 
 static void

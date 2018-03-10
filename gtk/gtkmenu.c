@@ -1086,6 +1086,7 @@ gtk_menu_init (GtkMenu *menu)
 {
   GtkMenuPrivate *priv;
   GtkGesture *gesture;
+  GtkEventController *controller;
 
   priv = gtk_menu_get_instance_private (menu);
 
@@ -1138,11 +1139,10 @@ gtk_menu_init (GtkMenu *menu)
   g_signal_connect (gesture, "released", G_CALLBACK (gtk_menu_released_cb), menu);
   gtk_widget_add_controller (GTK_WIDGET (menu), GTK_EVENT_CONTROLLER (gesture));
 
-  priv->scroll_controller =
-    gtk_event_controller_scroll_new (GTK_WIDGET (menu),
-                                     GTK_EVENT_CONTROLLER_SCROLL_VERTICAL);
-  g_signal_connect (priv->scroll_controller, "scroll",
+  controller = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_VERTICAL);
+  g_signal_connect (controller, "scroll",
                     G_CALLBACK (gtk_menu_scroll_controller_scroll), menu);
+  gtk_widget_add_controller (GTK_WIDGET (menu), controller);
 
   priv->motion_controller =
     gtk_event_controller_motion_new (GTK_WIDGET (menu));
@@ -1225,7 +1225,6 @@ gtk_menu_finalize (GObject *object)
 
   gtk_widget_unparent (priv->top_arrow_widget);
   gtk_widget_unparent (priv->bottom_arrow_widget);
-  g_clear_object (&priv->scroll_controller);
   g_clear_object (&priv->motion_controller);
   g_clear_object (&priv->key_controller);
 

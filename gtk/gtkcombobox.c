@@ -157,8 +157,6 @@ struct _GtkComboBoxPrivate
   GtkTreeViewRowSeparatorFunc row_separator_func;
   gpointer                    row_separator_data;
   GDestroyNotify              row_separator_destroy;
-
-  GtkEventController *scroll_controller;
 };
 
 /* There are 2 modes to this widget, which can be characterized as follows:
@@ -895,6 +893,7 @@ gtk_combo_box_init (GtkComboBox *combo_box)
   GtkComboBoxPrivate *priv;
   GtkStyleContext *context;
   GtkTreeMenu *menu;
+  GtkEventController *controller;
 
   combo_box->priv = gtk_combo_box_get_instance_private (combo_box);
   priv = combo_box->priv;
@@ -938,13 +937,12 @@ gtk_combo_box_init (GtkComboBox *combo_box)
                              GTK_WIDGET (combo_box),
                              NULL);
 
-  priv->scroll_controller =
-    gtk_event_controller_scroll_new (GTK_WIDGET (combo_box),
-                                     GTK_EVENT_CONTROLLER_SCROLL_VERTICAL |
-                                     GTK_EVENT_CONTROLLER_SCROLL_DISCRETE);
-  g_signal_connect (priv->scroll_controller, "scroll",
+  controller = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_VERTICAL |
+                                                GTK_EVENT_CONTROLLER_SCROLL_DISCRETE);
+  g_signal_connect (controller, "scroll",
                     G_CALLBACK (gtk_combo_box_scroll_controller_scroll),
                     combo_box);
+  gtk_widget_add_controller (GTK_WIDGET (combo_box), controller);
 }
 
 static void
@@ -2719,8 +2717,6 @@ gtk_combo_box_dispose (GObject* object)
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (object);
   GtkComboBoxPrivate *priv = combo_box->priv;
-
-  g_clear_object (&priv->scroll_controller);
 
   if (priv->popup_widget)
     {

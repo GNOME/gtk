@@ -124,8 +124,6 @@ struct _GtkScaleButtonPrivate
   gchar **icon_list;
 
   GtkAdjustment *adjustment; /* needed because it must be settable in init() */
-
-  GtkEventController *scroll_controller;
 };
 
 static void     gtk_scale_button_constructed    (GObject             *object);
@@ -367,6 +365,7 @@ gtk_scale_button_init (GtkScaleButton *button)
 {
   GtkScaleButtonPrivate *priv;
   GtkStyleContext *context;
+  GtkEventController *controller;
 
   button->priv = priv = gtk_scale_button_get_instance_private (button);
 
@@ -385,12 +384,11 @@ gtk_scale_button_init (GtkScaleButton *button)
   context = gtk_widget_get_style_context (GTK_WIDGET (button));
   gtk_style_context_add_class (context, "scale");
 
-  priv->scroll_controller =
-    gtk_event_controller_scroll_new (GTK_WIDGET (button),
-                                     GTK_EVENT_CONTROLLER_SCROLL_VERTICAL);
-  g_signal_connect (priv->scroll_controller, "scroll",
+  controller = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_VERTICAL);
+  g_signal_connect (controller, "scroll",
                     G_CALLBACK (gtk_scale_button_scroll_controller_scroll),
                     button);
+  gtk_widget_add_controller (GTK_WIDGET (button), controller);
 
   g_signal_connect (gtk_button_get_gesture (GTK_BUTTON (priv->plus_button)),
                     "pressed", G_CALLBACK (button_pressed_cb), button);
@@ -484,8 +482,6 @@ gtk_scale_button_finalize (GObject *object)
       g_object_unref (priv->adjustment);
       priv->adjustment = NULL;
     }
-
-  g_object_unref (priv->scroll_controller);
 
   if (priv->autoscroll_timeout)
     g_source_remove (priv->autoscroll_timeout);
