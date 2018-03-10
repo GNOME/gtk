@@ -459,7 +459,6 @@ typedef struct {
   GtkEventController *controller;
   guint grab_notify_id;
   guint sequence_state_changed_id;
-  gboolean have_ref;
 } EventControllerData;
 
 struct _GtkWidgetClassPrivate
@@ -12885,20 +12884,32 @@ event_controller_sequence_state_changed (GtkGesture            *gesture,
   cancel_event_sequence_on_hierarchy (widget, event_widget, sequence);
 }
 
+/**
+ * gtk_widget_add_controller:
+ * @widget: a #GtkWidget
+ * @controller: (transfer full): a #GtkEventController that hasn't been
+ *     added to a widget yet
+ *
+ * Adds @controller to @widget so that it will receive events. You will
+ * usually want to call this function right after creating any kind of
+ * #GtkEventController.
+ **/
 void
-_gtk_widget_add_controller (GtkWidget          *widget,
-                            GtkEventController *controller,
-                            gboolean            have_ref)
+gtk_widget_add_controller (GtkWidget          *widget,
+                           GtkEventController *controller)
 {
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GtkWidgetPrivate *priv;
   EventControllerData *data;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
+  g_return_if_fail (gtk_event_controller_get_widget (controller) == NULL);
 
   priv = widget->priv;
 
   GTK_EVENT_CONTROLLER_GET_CLASS (controller)->set_widget (controller, widget);
 
   data = g_new0 (EventControllerData, 1);
-  data->have_ref = have_ref;
   data->controller = controller;
   data->grab_notify_id =
     g_signal_connect (widget, "grab-notify",
@@ -12915,27 +12926,6 @@ _gtk_widget_add_controller (GtkWidget          *widget,
     }
 
   priv->event_controllers = g_list_prepend (priv->event_controllers, data);
-}
-
-/**
- * gtk_widget_add_controller:
- * @widget: a #GtkWidget
- * @controller: (transfer full): a #GtkEventController that hasn't been
- *     added to a widget yet
- *
- * Adds @controller to @widget so that it will receive events. You will
- * usually want to call this function right after creating any kind of
- * #GtkEventController.
- **/
-void
-gtk_widget_add_controller (GtkWidget          *widget,
-                           GtkEventController *controller)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
-  g_return_if_fail (gtk_event_controller_get_widget (controller) == NULL);
-
-  _gtk_widget_add_controller (widget, controller, TRUE);
 }
 
 /**
@@ -12984,8 +12974,7 @@ gtk_widget_remove_controller (GtkWidget          *widget,
     g_signal_handler_disconnect (data->controller, data->sequence_state_changed_id);
 
   data->controller = NULL;
-  if (data->have_ref)
-    g_object_unref (controller);
+  g_object_unref (controller);
 }
 
 GList *

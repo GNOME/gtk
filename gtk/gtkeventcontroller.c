@@ -87,17 +87,9 @@ gtk_event_controller_set_property (GObject      *object,
                                    GParamSpec   *pspec)
 {
   GtkEventController *self = GTK_EVENT_CONTROLLER (object);
-  GtkWidget *widget;
 
   switch (prop_id)
     {
-    case PROP_WIDGET:
-      widget = g_value_get_object (value);
-      if (widget)
-        {
-          _gtk_widget_add_controller (widget, self, FALSE);
-        }
-      break;
     case PROP_PROPAGATION_PHASE:
       gtk_event_controller_set_propagation_phase (self,
                                                   g_value_get_enum (value));
@@ -130,21 +122,6 @@ gtk_event_controller_get_property (GObject    *object,
 }
 
 static void
-gtk_event_controller_dispose (GObject *object)
-{
-  GtkEventController *controller = GTK_EVENT_CONTROLLER (object);
-  GtkEventControllerPrivate *priv;
-
-  priv = gtk_event_controller_get_instance_private (controller);
-  if (priv->widget)
-    {
-      gtk_widget_remove_controller (priv->widget, controller);
-    }
-
-  G_OBJECT_CLASS (gtk_event_controller_parent_class)->dispose (object);
-}
-
-static void
 gtk_event_controller_class_init (GtkEventControllerClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -156,7 +133,6 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
 
   object_class->set_property = gtk_event_controller_set_property;
   object_class->get_property = gtk_event_controller_get_property;
-  object_class->dispose = gtk_event_controller_dispose;
 
   /**
    * GtkEventController:widget:
@@ -168,7 +144,7 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
                            P_("Widget"),
                            P_("Widget the gesture relates to"),
                            GTK_TYPE_WIDGET,
-                           GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY);
+                           GTK_PARAM_READABLE);
   /**
    * GtkEventController:propagation-phase:
    *
