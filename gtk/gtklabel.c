@@ -3178,7 +3178,6 @@ gtk_label_finalize (GObject *object)
 
   if (priv->select_info)
     {
-      g_object_unref (priv->select_info->motion_controller);
       g_object_unref (priv->select_info->provider);
     }
 
@@ -5064,11 +5063,12 @@ gtk_label_ensure_select_info (GtkLabel *label)
       gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (priv->select_info->multipress_gesture), TRUE);
       gtk_widget_add_controller (GTK_WIDGET (label), GTK_EVENT_CONTROLLER (priv->select_info->multipress_gesture));
 
-      priv->select_info->motion_controller = gtk_event_controller_motion_new (GTK_WIDGET (label));
+      priv->select_info->motion_controller = gtk_event_controller_motion_new ();
       g_signal_connect (priv->select_info->motion_controller, "motion",
                         G_CALLBACK (gtk_label_motion), label);
       g_signal_connect (priv->select_info->motion_controller, "leave",
                         G_CALLBACK (gtk_label_leave), label);
+      gtk_widget_add_controller (GTK_WIDGET (label), priv->select_info->motion_controller);
 
       priv->select_info->provider = g_object_new (GTK_TYPE_LABEL_CONTENT, NULL);
       GTK_LABEL_CONTENT (priv->select_info->provider)->label = label;
@@ -5087,7 +5087,7 @@ gtk_label_clear_select_info (GtkLabel *label)
     {
       gtk_widget_remove_controller (GTK_WIDGET (label), GTK_EVENT_CONTROLLER (priv->select_info->drag_gesture));
       gtk_widget_remove_controller (GTK_WIDGET (label), GTK_EVENT_CONTROLLER (priv->select_info->multipress_gesture));
-      g_object_unref (priv->select_info->motion_controller);
+      gtk_widget_remove_controller (GTK_WIDGET (label), priv->select_info->motion_controller);
       GTK_LABEL_CONTENT (priv->select_info->provider)->label = NULL;
       g_object_unref (priv->select_info->provider);
 

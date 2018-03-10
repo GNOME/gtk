@@ -149,19 +149,14 @@ gtk_event_controller_motion_init (GtkEventControllerMotion *motion)
 
 /**
  * gtk_event_controller_motion_new:
- * @widget: a #GtkWidget
  *
- * Creates a new event controller that will handle motion events
- * for the given @widget.
+ * Creates a new event controller that will handle motion events.
  *
  * Returns: a new #GtkEventControllerMotion
  **/
 GtkEventController *
-gtk_event_controller_motion_new (GtkWidget *widget)
+gtk_event_controller_motion_new (void)
 {
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
   return g_object_new (GTK_TYPE_EVENT_CONTROLLER_MOTION,
-                       "widget", widget,
                        NULL);
 }
