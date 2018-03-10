@@ -158,10 +158,9 @@ activate (GtkApplication *app,
   g_signal_connect_after (drawing_area, "size-allocate",
                           G_CALLBACK (size_allocate_cb), NULL);
 
-  drag = gtk_gesture_drag_new (drawing_area);
+  drag = gtk_gesture_drag_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (drag), GDK_BUTTON_PRIMARY);
-  g_object_set_data_full (G_OBJECT (drawing_area), "drag", drag, g_object_unref);
-
+  gtk_widget_add_controller (drawing_area, GTK_EVENT_CONTROLLER (drag));
   g_signal_connect (drag, "drag-begin", G_CALLBACK (drag_begin), drawing_area);
   g_signal_connect (drag, "drag-update", G_CALLBACK (drag_update), drawing_area);
   g_signal_connect (drag, "drag-end", G_CALLBACK (drag_end), drawing_area);
