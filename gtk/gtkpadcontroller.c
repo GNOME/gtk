@@ -59,7 +59,7 @@
  *   g_signal_connect (action, "activate", on_invert_selection_activated, NULL);
  *   g_action_map_add_action (G_ACTION_MAP (action_group), action);
  *   …
- *   pad_controller = gtk_pad_controller_new (window, action_group, NULL);
+ *   pad_controller = gtk_pad_controller_new (action_group, NULL);
  * ]|
  *
  * The actions belonging to rings/strips will be activated with a parameter
@@ -387,35 +387,34 @@ gtk_pad_controller_init (GtkPadController *controller)
 
 /**
  * gtk_pad_controller_new:
- * @window: a #GtkWindow
  * @group: #GActionGroup to trigger actions from
  * @pad: (nullable): A %GDK_SOURCE_TABLET_PAD device, or %NULL to handle all pads
  *
  * Creates a new #GtkPadController that will associate events from @pad to
  * actions. A %NULL pad may be provided so the controller manages all pad devices
  * generically, it is discouraged to mix #GtkPadController objects with %NULL
- * and non-%NULL @pad argument on the same @window, as execution order is not
- * guaranteed.
+ * and non-%NULL @pad argument on the same toplevel window, as execution order
+ * is not guaranteed.
  *
  * The #GtkPadController is created with no mapped actions. In order to map pad
  * events to actions, use gtk_pad_controller_set_action_entries() or
  * gtk_pad_controller_set_action().
  *
+ * Be aware that pad events will only be delivered to #GtkWindows, so adding a pad
+ * controller to any other type of widget will not have an effect.
+ *
  * Returns: A newly created #GtkPadController
  **/
 GtkPadController *
-gtk_pad_controller_new (GtkWindow    *window,
-                        GActionGroup *group,
+gtk_pad_controller_new (GActionGroup *group,
                         GdkDevice    *pad)
 {
-  g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
   g_return_val_if_fail (G_IS_ACTION_GROUP (group), NULL);
   g_return_val_if_fail (!pad || GDK_IS_DEVICE (pad), NULL);
   g_return_val_if_fail (!pad || gdk_device_get_source (pad) == GDK_SOURCE_TABLET_PAD, NULL);
 
   return g_object_new (GTK_TYPE_PAD_CONTROLLER,
                        "propagation-phase", GTK_PHASE_CAPTURE,
-                       "widget", window,
                        "action-group", group,
                        "pad", pad,
                        NULL);
