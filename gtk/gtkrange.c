@@ -567,12 +567,13 @@ gtk_range_init (GtkRange *range)
    * in the oppposite order in which they are added to their
    * widget.
    */
-  priv->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (range));
+  priv->drag_gesture = gtk_gesture_drag_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->drag_gesture), 0);
   g_signal_connect (priv->drag_gesture, "drag-begin",
                     G_CALLBACK (gtk_range_drag_gesture_begin), range);
   g_signal_connect (priv->drag_gesture, "drag-update",
                     G_CALLBACK (gtk_range_drag_gesture_update), range);
+  gtk_widget_add_controller (GTK_WIDGET (range), GTK_EVENT_CONTROLLER (priv->drag_gesture));
 
   priv->multipress_gesture = gtk_gesture_multi_press_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture), 0);
@@ -1293,7 +1294,6 @@ gtk_range_finalize (GObject *object)
   GtkRange *range = GTK_RANGE (object);
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
 
-  g_clear_object (&priv->drag_gesture);
   g_clear_object (&priv->scroll_controller);
   g_clear_object (&priv->key_controller);
 

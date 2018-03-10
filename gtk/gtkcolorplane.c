@@ -37,7 +37,6 @@ struct _GtkColorPlanePrivate
 
   GdkTexture *texture;
 
-  GtkGesture *drag_gesture;
   GtkEventController *key_controller;
 };
 
@@ -408,14 +407,15 @@ gtk_color_plane_init (GtkColorPlane *plane)
       atk_object_set_role (atk_obj, ATK_ROLE_COLOR_CHOOSER);
     }
 
-  plane->priv->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (plane));
-  g_signal_connect (plane->priv->drag_gesture, "drag-begin",
+  gesture = gtk_gesture_drag_new ();
+  g_signal_connect (gesture, "drag-begin",
 		    G_CALLBACK (plane_drag_gesture_begin), plane);
-  g_signal_connect (plane->priv->drag_gesture, "drag-update",
+  g_signal_connect (gesture, "drag-update",
 		    G_CALLBACK (plane_drag_gesture_update), plane);
-  g_signal_connect (plane->priv->drag_gesture, "drag-end",
+  g_signal_connect (gesture, "drag-end",
 		    G_CALLBACK (plane_drag_gesture_end), plane);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (plane->priv->drag_gesture), 0);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
+  gtk_widget_add_controller (GTK_WIDGET (plane), GTK_EVENT_CONTROLLER (gesture));
 
   gesture = gtk_gesture_long_press_new ();
   g_signal_connect (gesture, "pressed",
@@ -440,7 +440,6 @@ plane_finalize (GObject *object)
   g_clear_object (&plane->priv->s_adj);
   g_clear_object (&plane->priv->v_adj);
 
-  g_clear_object (&plane->priv->drag_gesture);
   g_clear_object (&plane->priv->key_controller);
 
   G_OBJECT_CLASS (gtk_color_plane_parent_class)->finalize (object);
