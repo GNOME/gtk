@@ -3178,7 +3178,6 @@ gtk_label_finalize (GObject *object)
 
   if (priv->select_info)
     {
-      g_object_unref (priv->select_info->drag_gesture);
       g_object_unref (priv->select_info->motion_controller);
       g_object_unref (priv->select_info->provider);
     }
@@ -5048,12 +5047,13 @@ gtk_label_ensure_select_info (GtkLabel *label)
       if (gtk_widget_get_realized (GTK_WIDGET (label)))
 	gtk_label_set_selectable_hint (label);
 
-      priv->select_info->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (label));
+      priv->select_info->drag_gesture = gtk_gesture_drag_new ();
       g_signal_connect (priv->select_info->drag_gesture, "drag-begin",
                         G_CALLBACK (gtk_label_drag_gesture_begin), label);
       g_signal_connect (priv->select_info->drag_gesture, "drag-update",
                         G_CALLBACK (gtk_label_drag_gesture_update), label);
       gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (priv->select_info->drag_gesture), TRUE);
+      gtk_widget_add_controller (GTK_WIDGET (label), GTK_EVENT_CONTROLLER (priv->select_info->drag_gesture));
 
       priv->select_info->multipress_gesture = gtk_gesture_multi_press_new ();
       g_signal_connect (priv->select_info->multipress_gesture, "pressed",
@@ -5085,7 +5085,7 @@ gtk_label_clear_select_info (GtkLabel *label)
 
   if (!priv->select_info->selectable && !priv->select_info->links)
     {
-      g_object_unref (priv->select_info->drag_gesture);
+      gtk_widget_remove_controller (GTK_WIDGET (label), GTK_EVENT_CONTROLLER (priv->select_info->drag_gesture));
       gtk_widget_remove_controller (GTK_WIDGET (label), GTK_EVENT_CONTROLLER (priv->select_info->multipress_gesture));
       g_object_unref (priv->select_info->motion_controller);
       GTK_LABEL_CONTENT (priv->select_info->provider)->label = NULL;

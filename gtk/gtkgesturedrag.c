@@ -195,19 +195,15 @@ gtk_gesture_drag_init (GtkGestureDrag *gesture)
 
 /**
  * gtk_gesture_drag_new:
- * @widget: a #GtkWidget
  *
  * Returns a newly created #GtkGesture that recognizes drags.
  *
  * Returns: a newly created #GtkGestureDrag
  **/
 GtkGesture *
-gtk_gesture_drag_new (GtkWidget *widget)
+gtk_gesture_drag_new (void)
 {
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
   return g_object_new (GTK_TYPE_GESTURE_DRAG,
-                       "widget", widget,
                        NULL);
 }
 
