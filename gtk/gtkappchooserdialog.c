@@ -330,17 +330,6 @@ widget_populate_popup_cb (GtkAppChooserWidget *widget,
     }
 }
 
-static gboolean
-event_cb (GtkWidget    *widget,
-          GdkEvent     *event,
-          GtkSearchBar *bar)
-{
-  if (gdk_event_get_event_type (event) == GDK_KEY_PRESS)
-    return gtk_search_bar_handle_event (bar, event);
-
-  return GDK_EVENT_PROPAGATE;
-}
-
 static void
 construct_appchooser_widget (GtkAppChooserDialog *self)
 {
@@ -375,8 +364,9 @@ construct_appchooser_widget (GtkAppChooserDialog *self)
 
   _gtk_app_chooser_widget_set_search_entry (GTK_APP_CHOOSER_WIDGET (self->priv->app_chooser_widget),
                                             GTK_ENTRY (self->priv->search_entry));
-  g_signal_connect (self, "event",
-                    G_CALLBACK (event_cb), self->priv->search_bar);
+
+  gtk_search_bar_set_key_capture_widget (GTK_SEARCH_BAR (self->priv->search_bar),
+                                         GTK_WIDGET (self));
 }
 
 static void
