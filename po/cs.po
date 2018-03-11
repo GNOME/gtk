@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-02 01:20+0000\n"
-"PO-Revision-Date: 2018-03-11 08:02+0100\n"
+"PO-Revision-Date: 2018-03-11 09:35+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -6247,8 +6247,8 @@ msgstr "Grantha"
 
 #: gtk/script-names.c:122
 msgctxt "Script"
-msgid "Kjohki"
-msgstr ""
+msgid "Khojki"
+msgstr "Chodžské"
 
 #: gtk/script-names.c:123
 msgctxt "Script"
@@ -6378,24 +6378,23 @@ msgstr "Adlam"
 #: gtk/script-names.c:147
 msgctxt "Script"
 msgid "Bhaiksuki"
-msgstr ""
+msgstr "Bhaiksuki"
 
 #: gtk/script-names.c:148
-#, fuzzy
 #| msgid "Searching"
 msgctxt "Script"
 msgid "Marchen"
-msgstr "Hledá se"
+msgstr "sMar-chen"
 
 #: gtk/script-names.c:149
 msgctxt "Script"
 msgid "Newa"
-msgstr ""
+msgstr "Névárské"
 
 #: gtk/script-names.c:150
 msgctxt "Script"
 msgid "Osage"
-msgstr ""
+msgstr "Osedžské"
 
 #: gtk/script-names.c:151
 msgctxt "Script"
@@ -6405,7 +6404,7 @@ msgstr "Tangutské"
 #: gtk/script-names.c:152
 msgctxt "Script"
 msgid "Masaram Gondi"
-msgstr ""
+msgstr "Masaramovo Gondi"
 
 #: gtk/script-names.c:153
 msgctxt "Script"
