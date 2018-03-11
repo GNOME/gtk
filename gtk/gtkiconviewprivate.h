@@ -62,6 +62,7 @@ struct _GtkIconViewPrivate
 
   GtkGesture *press_gesture;
   GtkEventController *motion_controller;
+  GtkEventController *key_controller;
 
   GtkAdjustment *hadjustment;
   GtkAdjustment *vadjustment;
