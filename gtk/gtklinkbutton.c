@@ -208,7 +208,6 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
 static void
 gtk_link_button_init (GtkLinkButton *link_button)
 {
-  GtkLinkButtonPrivate *priv = gtk_link_button_get_instance_private (link_button);
   GtkStyleContext *context;
   GdkContentFormats *targets;
   GtkGesture *gesture;
