@@ -71,6 +71,14 @@ GDK_AVAILABLE_IN_ALL
 gboolean        gtk_search_entry_handle_event   (GtkSearchEntry *entry,
                                                  GdkEvent       *event);
 
+GDK_AVAILABLE_IN_ALL
+void            gtk_search_entry_set_key_capture_widget (GtkSearchEntry *entry,
+                                                         GtkWidget      *widget);
+GDK_AVAILABLE_IN_ALL
+GtkWidget*      gtk_search_entry_get_key_capture_widget (GtkSearchEntry *entry);
+
+
+
 G_END_DECLS
 
 #endif /* __GTK_SEARCH_ENTRY_H__ */
