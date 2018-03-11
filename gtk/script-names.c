@@ -119,7 +119,7 @@ static struct {
   { G_UNICODE_SCRIPT_DUPLOYAN, HB_SCRIPT_DUPLOYAN,  NC_("Script", "Duployan") },
   { G_UNICODE_SCRIPT_ELBASAN, HB_SCRIPT_ELBASAN,  NC_("Script", "Elbasan") },
   { G_UNICODE_SCRIPT_GRANTHA, HB_SCRIPT_GRANTHA,  NC_("Script", "Grantha") },
-  { G_UNICODE_SCRIPT_KHOJKI, HB_SCRIPT_KHOJKI,  NC_("Script", "Kjohki") },
+  { G_UNICODE_SCRIPT_KHOJKI, HB_SCRIPT_KHOJKI,  NC_("Script", "Khojki") },
   { G_UNICODE_SCRIPT_KHUDAWADI, HB_SCRIPT_KHUDAWADI,  NC_("Script", "Khudawadi, Sindhi") },
   { G_UNICODE_SCRIPT_LINEAR_A, HB_SCRIPT_LINEAR_A,  NC_("Script", "Linear A") },
   { G_UNICODE_SCRIPT_MAHAJANI, HB_SCRIPT_MAHAJANI,  NC_("Script", "Mahajani") },
