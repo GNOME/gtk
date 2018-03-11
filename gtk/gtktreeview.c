@@ -13821,7 +13821,7 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
   GList *list;
   GdkRectangle background_area;
   GtkWidget *widget;
-  GtkSnapshot snapshot;
+  GtkSnapshot *snapshot;
   GskRenderNode *rendernode;
   gint depth;
   /* start drawing inside the black outline */
@@ -13871,9 +13871,9 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
                                                bin_window_width + 2,
                                                background_area.height + 2);
 
-  gtk_snapshot_init (&snapshot, NULL, FALSE, NULL, "TreeView DragIcon");
+  snapshot = gtk_snapshot_new (NULL, FALSE, NULL, "TreeView DragIcon");
 
-  gtk_snapshot_render_background (&snapshot, context,
+  gtk_snapshot_render_background (snapshot, context,
                                   0, 0,
                                   bin_window_width + 2,
                                   background_area.height + 2);
@@ -13924,7 +13924,7 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
               gtk_style_context_add_class (context, GTK_STYLE_CLASS_SEPARATOR);
 
               gtk_style_context_get_color (context, &color);
-              gtk_snapshot_append_color (&snapshot,
+              gtk_snapshot_append_color (snapshot,
                                          &color, 
                                          &GRAPHENE_RECT_INIT(
                                              cell_area.x,
@@ -13939,7 +13939,7 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
 	  else
             {
               gtk_tree_view_column_cell_snapshot (column,
-                                                  &snapshot,
+                                                  snapshot,
                                                   &background_area,
                                                   &cell_area,
                                                   0, FALSE);
@@ -13948,7 +13948,7 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
       cell_offset += gtk_tree_view_column_get_width (column);
     }
 
-  rendernode = gtk_snapshot_finish (&snapshot);
+  rendernode = gtk_snapshot_free_to_node (snapshot);
 
   cr = cairo_create (surface);
 

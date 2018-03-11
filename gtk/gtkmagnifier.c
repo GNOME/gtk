@@ -103,7 +103,7 @@ gtk_magnifier_snapshot (GtkWidget   *widget,
 {
   GtkMagnifier *magnifier = GTK_MAGNIFIER (widget);
   GtkMagnifierPrivate *priv = _gtk_magnifier_get_instance_private (magnifier);
-  GtkSnapshot inspected_snapshot;
+  GtkSnapshot *inspected_snapshot;
   GskRenderNode *inspected_node;
   graphene_matrix_t transform;
 
@@ -115,14 +115,13 @@ gtk_magnifier_snapshot (GtkWidget   *widget,
 
   g_signal_handler_block (priv->inspected, priv->draw_handler);
 
-  gtk_snapshot_init (&inspected_snapshot,
-                     gtk_snapshot_get_renderer (snapshot),
-                     snapshot->record_names,
-                     NULL,
-                     "MagnifierSnapshot");
+  inspected_snapshot = gtk_snapshot_new (gtk_snapshot_get_renderer (snapshot),
+                                         snapshot->record_names,
+                                         NULL,
+                                         "MagnifierSnapshot");
 
-  gtk_widget_snapshot (priv->inspected, &inspected_snapshot);
-  inspected_node = gtk_snapshot_finish (&inspected_snapshot);
+  gtk_widget_snapshot (priv->inspected, inspected_snapshot);
+  inspected_node = gtk_snapshot_free_to_node (inspected_snapshot);
 
   if (inspected_node != NULL)
     {
