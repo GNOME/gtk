@@ -46,12 +46,21 @@
  * operates on. Use the gtk_snapshot_push() and gtk_snapshot_pop() functions to
  * change the current node.
  *
- * The only way to obtain a #GtkSnapshot object is as an argument to
- * the #GtkWidget::snapshot vfunc.
+ * The typical way to obtain a #GtkSnapshot object is as an argument to
+ * the #GtkWidget::snapshot vfunc. If you need to create your own GtkSnapshot,
+ * use gtk_snapshot_new().
  */
 
 G_DEFINE_BOXED_TYPE (GtkSnapshot, gtk_snapshot, gtk_snapshot_ref, gtk_snapshot_unref)
 
+/**
+ * gtk_snapshot_ref:
+ * @snapshot: a #GtkSnapshot
+ *
+ * Increase the reference count of @snapshot by 1.
+ *
+ * Returns: the @snapshot
+ */
 GtkSnapshot *
 gtk_snapshot_ref (GtkSnapshot *snapshot)
 {
@@ -62,6 +71,13 @@ gtk_snapshot_ref (GtkSnapshot *snapshot)
   return snapshot;
 }
 
+/**
+ * gtk_snapshot_unref:
+ * @snapshot: a #GtkSnapshot
+ *
+ * Decrease the reference count of @snapshot by 1 and
+ * free the object if the count drops to 0.
+ */
 void
 gtk_snapshot_unref (GtkSnapshot *snapshot)
 {
@@ -156,6 +172,18 @@ gtk_snapshot_state_clear (GtkSnapshotState *state)
   g_clear_pointer (&state->name, g_free);
 }
 
+/**
+ * gtk_snapshot_new:
+ * @renderer: the #GskRenderer to create nodes for
+ * @record_names: whether to keep node names (for debugging purposes)
+ * @clip: the clip region to use, or %NULL
+ * @name: a printf-style format string to create the node name
+ * @...: arguments for @name
+ *
+ * Creates a new #GtkSnapshot.
+ *
+ * Returns: a newly-allocated #GtkSnapshot
+ */
 GtkSnapshot *
 gtk_snapshot_new (GskRenderer          *renderer,
 							    gboolean              record_names,
@@ -195,6 +223,15 @@ gtk_snapshot_new (GskRenderer          *renderer,
   return snapshot;
 }
 
+/**
+ * gtk_snapshot_free_to_node:
+ * @snapshot: a #GtkSnapshot
+ *
+ * Returns the node that was constructed by @snapshot
+ * and frees @snapshot.
+ *
+ * Returns: a newly-created #GskRenderNode
+ */
 GskRenderNode *
 gtk_snapshot_free_to_node (GtkSnapshot *snapshot)
 {
@@ -1114,6 +1151,18 @@ gtk_snapshot_pop_internal (GtkSnapshot *snapshot)
   return node;
 }
 
+/**
+ * gtk_snapshot_to_node:
+ * @snapshot: a #GtkSnapshot
+ *
+ * Returns the render node that was constructed
+ * by @snapshot. After calling this function, it
+ * is no longer possible to add more nodes to
+ * @snapshot. The only function that should be
+ * called after this is gtk_snapshot_unref().
+ *
+ * Returns: the constructed #GskRenderNode
+ */
 GskRenderNode *
 gtk_snapshot_to_node (GtkSnapshot *snapshot)
 {

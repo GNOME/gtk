@@ -146,6 +146,7 @@ gtk_shortcuts_section_get_type
 gtk_shortcuts_group_get_type
 gtk_shortcuts_shortcut_get_type
 gtk_size_group_get_type
+gtk_snapshot_get_type
 gtk_spin_button_get_type
 gtk_spinner_get_type
 gtk_stack_get_type
