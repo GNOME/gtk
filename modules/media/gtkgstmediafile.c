@@ -20,7 +20,6 @@
 #include "config.h"
 
 #include "gtkgstmediafileprivate.h"
-
 #include "gtkgstpaintableprivate.h"
 
 #include <gst/player/gstplayer.h>
@@ -94,13 +93,37 @@ gtk_gst_media_file_paintable_init (GdkPaintableInterface *iface)
   iface->get_intrinsic_aspect_ratio = gtk_gst_media_file_paintable_get_intrinsic_aspect_ratio;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GtkGstMediaFile, gtk_gst_media_file, GTK_TYPE_MEDIA_FILE,
-                         G_IMPLEMENT_INTERFACE (GDK_TYPE_PAINTABLE,
-                                                gtk_gst_media_file_paintable_init)
-                         g_io_extension_point_implement (GTK_MEDIA_FILE_EXTENSION_POINT_NAME,
-                                                         g_define_type_id,
-                                                         "gstreamer",
-                                                         10);)
+G_DEFINE_DYNAMIC_TYPE_EXTENDED (GtkGstMediaFile, gtk_gst_media_file, GTK_TYPE_MEDIA_FILE, 0,
+                                G_IMPLEMENT_INTERFACE_DYNAMIC (GDK_TYPE_PAINTABLE,
+                                                               gtk_gst_media_file_paintable_init))
+void
+g_io_module_load (GIOModule *module)
+{
+  g_type_module_use (G_TYPE_MODULE (module));
+
+  gtk_gst_media_file_register_type (G_TYPE_MODULE (module));
+
+  g_io_extension_point_implement (GTK_MEDIA_FILE_EXTENSION_POINT_NAME,
+                                  g_define_type_id,
+                                  "gstreamer",
+                                  10);
+}
+
+void
+g_io_module_unload (GIOModule *module)
+{
+}
+
+char **
+g_io_module_query (void)
+{
+  char *eps[] = {
+    GTK_MEDIA_FILE_EXTENSION_POINT_NAME,
+    NULL
+  };
+
+  return g_strdupv (eps);
+}
 
 static void
 gtk_gst_media_file_position_updated_cb (GstPlayer       *player,
@@ -200,7 +223,7 @@ gtk_gst_media_file_open (GtkMediaFile *media_file)
   gst_player_pause (self->player);
 }
 
-static void 
+static void
 gtk_gst_media_file_close (GtkMediaFile *file)
 {
   GtkGstMediaFile *self = GTK_GST_MEDIA_FILE (file);
@@ -228,7 +251,7 @@ gtk_gst_media_file_pause (GtkMediaStream *stream)
 
 static void
 gtk_gst_media_file_seek (GtkMediaStream *stream,
-                         gint64          timestamp)                           
+                         gint64          timestamp)
 {
   GtkGstMediaFile *self = GTK_GST_MEDIA_FILE (stream);
 
@@ -265,6 +288,11 @@ gtk_gst_media_file_class_init (GtkGstMediaFileClass *klass)
   stream_class->seek = gtk_gst_media_file_seek;
 
   gobject_class->dispose = gtk_gst_media_file_dispose;
+}
+
+static void
+gtk_gst_media_file_class_finalize (GtkGstMediaFileClass *klass)
+{
 }
 
 static void

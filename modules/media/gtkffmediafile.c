@@ -97,9 +97,9 @@ gtk_video_frame_ffmpeg_move (GtkVideoFrameFFMpeg *dest,
 
 static void
 gtk_ff_media_file_paintable_snapshot (GdkPaintable *paintable,
-                                            GdkSnapshot  *snapshot,
-                                            double        width,
-                                            double        height)
+                                      GdkSnapshot  *snapshot,
+                                      double        width,
+                                      double        height)
 {
   GtkFfMediaFile *video = GTK_FF_MEDIA_FILE (paintable);
 
@@ -159,14 +159,39 @@ gtk_ff_media_file_paintable_init (GdkPaintableInterface *iface)
   iface->get_intrinsic_aspect_ratio = gtk_ff_media_file_paintable_get_intrinsic_aspect_ratio;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GtkFfMediaFile, gtk_ff_media_file, GTK_TYPE_MEDIA_FILE,
-                         G_IMPLEMENT_INTERFACE (GDK_TYPE_PAINTABLE,
-                                                gtk_ff_media_file_paintable_init)
-                         av_register_all ();
-                         g_io_extension_point_implement (GTK_MEDIA_FILE_EXTENSION_POINT_NAME,
-                                                         g_define_type_id,
-                                                         "ffmpeg",
-                                                         0);)
+G_DEFINE_DYNAMIC_TYPE_EXTENDED (GtkFfMediaFile, gtk_ff_media_file, GTK_TYPE_MEDIA_FILE, 0,
+                                G_IMPLEMENT_INTERFACE_DYNAMIC (GDK_TYPE_PAINTABLE,
+                                                               gtk_ff_media_file_paintable_init))
+
+void
+g_io_module_load (GIOModule *module)
+{
+  g_type_module_use (G_TYPE_MODULE (module));
+
+  gtk_ff_media_file_register_type (G_TYPE_MODULE (module));
+
+  av_register_all ();
+  g_io_extension_point_implement (GTK_MEDIA_FILE_EXTENSION_POINT_NAME,
+                                  g_define_type_id,
+                                  "ffmpeg",
+                                  0);
+}
+
+void
+g_io_module_unload (GIOModule *module)
+{
+}
+
+char **
+g_io_module_query (void)
+{
+  char *eps[] = {
+    GTK_MEDIA_FILE_EXTENSION_POINT_NAME,
+    NULL
+  };
+
+  return g_strdupv (eps);
+}
 
 static void
 gtk_ff_media_file_set_ffmpeg_error (GtkFfMediaFile *video,
@@ -255,7 +280,7 @@ gtk_ff_media_file_decode_frame (GtkFfMediaFile      *video,
               errnum = avcodec_receive_frame (video->codec_ctx, frame);
               if (errnum < 0)
                 G_BREAKPOINT();
-              if (errnum >= 0) 
+              if (errnum >= 0)
                 {
                   av_packet_unref (&packet);
                   break;
@@ -273,7 +298,7 @@ gtk_ff_media_file_decode_frame (GtkFfMediaFile      *video,
       av_frame_free (&frame);
       return FALSE;
     }
-  
+
   data = g_try_malloc0 (video->codec_ctx->width * video->codec_ctx->height * 4);
   if (data == NULL)
     {
@@ -332,7 +357,7 @@ gtk_ff_media_file_decode_frame (GtkFfMediaFile      *video,
                                texture,
                                av_rescale_q (av_frame_get_best_effort_timestamp (frame),
                                              video->format_ctx->streams[video->stream_id]->time_base,
-                                             (AVRational) { 1, G_USEC_PER_SEC })); 
+                                             (AVRational) { 1, G_USEC_PER_SEC }));
 
   av_frame_free (&frame);
 
@@ -461,14 +486,14 @@ gtk_ff_media_file_open (GtkMediaFile *file)
       gtk_ff_media_file_set_ffmpeg_error (video, errnum);
       return;
     }
-  
+
   errnum = avformat_find_stream_info (video->format_ctx, NULL);
   if (errnum < 0)
     {
       gtk_ff_media_file_set_ffmpeg_error (video, errnum);
       return;
     }
-  
+
   video->stream_id = av_find_best_stream (video->format_ctx, AVMEDIA_TYPE_VIDEO, -1, -1, NULL, 0);
   if (video->stream_id < 0)
     {
@@ -478,7 +503,7 @@ gtk_ff_media_file_open (GtkMediaFile *file)
                               _("Not a video file"));
       return;
     }
-  
+
   stream = video->format_ctx->streams[video->stream_id];
   /* alpha transparency requires the libvpx codecs, not the ffmpeg builtin ones */
   if (stream->codecpar->codec_id == AV_CODEC_ID_VP8)
@@ -526,7 +551,7 @@ gtk_ff_media_file_open (GtkMediaFile *file)
     gdk_paintable_invalidate_contents (GDK_PAINTABLE (video));
 }
 
-static void 
+static void
 gtk_ff_media_file_close (GtkMediaFile *file)
 {
   GtkFfMediaFile *video = GTK_FF_MEDIA_FILE (file);
@@ -551,7 +576,7 @@ gtk_ff_media_file_queue_frame (GtkFfMediaFile *video)
 {
   gint64 time, frame_time;
   guint delay;
-  
+
   time = g_get_monotonic_time ();
   frame_time = video->start_time + video->next_frame.timestamp;
   delay = time > frame_time ? 0 : (frame_time - time) / 1000;
@@ -580,7 +605,7 @@ static gboolean
 gtk_ff_media_file_next_frame_cb (gpointer data)
 {
   GtkFfMediaFile *video = data;
-  
+
   video->next_frame_cb = 0;
 
   if (gtk_video_frame_ffmpeg_is_empty (&video->next_frame))
@@ -654,7 +679,7 @@ gtk_ff_media_file_pause (GtkMediaStream *stream)
 
 static void
 gtk_ff_media_file_seek (GtkMediaStream *stream,
-                        gint64          timestamp)                           
+                        gint64          timestamp)
 {
   GtkFfMediaFile *video = GTK_FF_MEDIA_FILE (stream);
   int errnum;
@@ -670,7 +695,7 @@ gtk_ff_media_file_seek (GtkMediaStream *stream,
       gtk_media_stream_seek_failed (stream);
       return;
     }
-  
+
   gtk_media_stream_seek_success (stream);
 
   gtk_video_frame_ffmpeg_clear (&video->next_frame);
@@ -715,8 +740,14 @@ gtk_ff_media_file_class_init (GtkFfMediaFileClass *klass)
 }
 
 static void
+gtk_ff_media_file_class_finalize (GtkFfMediaFileClass *klass)
+{
+}
+
+static void
 gtk_ff_media_file_init (GtkFfMediaFile *video)
 {
   video->stream_id = -1;
 }
+
 
