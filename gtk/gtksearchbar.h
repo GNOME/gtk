@@ -96,6 +96,11 @@ GDK_AVAILABLE_IN_ALL
 gboolean    gtk_search_bar_handle_event    (GtkSearchBar *bar,
                                             GdkEvent     *event);
 
+GDK_AVAILABLE_IN_ALL
+void        gtk_search_bar_set_key_capture_widget (GtkSearchBar *bar,
+                                                   GtkWidget    *widget);
+GtkWidget * gtk_search_bar_get_key_capture_widget (GtkSearchBar *bar);
+
 G_END_DECLS
 
 #endif /* __GTK_SEARCH_BAR_H__ */
