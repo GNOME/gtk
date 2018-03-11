@@ -23,6 +23,7 @@
 
 #include "gtkdebug.h"
 #include "gtkintl.h"
+#include "gtkmodulesprivate.h"
 
 /**
  * SECTION:gtkmediafile
@@ -590,6 +591,9 @@ void
 gtk_media_file_extension_init (void)
 {
   GIOExtensionPoint *ep;
+  GIOModuleScope *scope;
+  char **paths;
+  int i;
 
   GTK_NOTE (MODULES,
             g_print ("Registering extension point %s\n", GTK_MEDIA_FILE_EXTENSION_POINT_NAME));
@@ -604,6 +608,19 @@ gtk_media_file_extension_init (void)
   g_type_ensure (GTK_TYPE_GST_MEDIA_FILE);
 #endif
   g_type_ensure (GTK_TYPE_NO_MEDIA_FILE);
+
+  scope = g_io_module_scope_new (G_IO_MODULE_SCOPE_BLOCK_DUPLICATES);
+
+  paths = _gtk_get_module_path ("media");
+  for (i = 0; paths[i]; i++)
+    {
+      GTK_NOTE (MODULES,
+                g_print ("Scanning io modules in %s\n", paths[i]));
+      g_io_modules_scan_all_in_directory_with_scope (paths[i], scope);
+    }
+  g_strfreev (paths);
+
+  g_io_module_scope_free (scope);
 
   if (GTK_DEBUG_CHECK (MODULES))
     {
