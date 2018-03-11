@@ -41,7 +41,7 @@
 #include "gtkprivate.h"
 #include "gtkscrollable.h"
 #include "gtksizerequest.h"
-#include "gtksnapshotprivate.h"
+#include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktreednd.h"
 #include "gtktypebuiltins.h"

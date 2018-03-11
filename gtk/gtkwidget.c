@@ -60,7 +60,7 @@
 #include "gtkselection.h"
 #include "gtksettingsprivate.h"
 #include "gtksizegroup-private.h"
-#include "gtksnapshotprivate.h"
+#include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktooltipprivate.h"
 #include "gtktypebuiltins.h"

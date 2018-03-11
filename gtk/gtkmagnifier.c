@@ -19,7 +19,7 @@
 #include "gtk/gtk.h"
 #include "gtkmagnifierprivate.h"
 #include "gtkwidgetprivate.h"
-#include "gtksnapshotprivate.h"
+#include "gtksnapshot.h"
 #include "gtkintl.h"
 
 enum {
@@ -116,7 +116,7 @@ gtk_magnifier_snapshot (GtkWidget   *widget,
   g_signal_handler_block (priv->inspected, priv->draw_handler);
 
   inspected_snapshot = gtk_snapshot_new (gtk_snapshot_get_renderer (snapshot),
-                                         snapshot->record_names,
+                                         gtk_snapshot_get_record_names (snapshot),
                                          NULL,
                                          "MagnifierSnapshot");
 

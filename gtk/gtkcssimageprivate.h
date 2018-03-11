@@ -25,7 +25,7 @@
 
 #include "gtk/gtkcssparserprivate.h"
 #include "gtk/gtkcsstypesprivate.h"
-#include "gtk/gtksnapshotprivate.h"
+#include "gtk/gtksnapshot.h"
 
 G_BEGIN_DECLS
 

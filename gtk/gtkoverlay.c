@@ -25,7 +25,7 @@
 #include "gtkscrolledwindow.h"
 #include "gtkwidgetprivate.h"
 #include "gtkmarshalers.h"
-#include "gtksnapshotprivate.h"
+#include "gtksnapshot.h"
 
 #include "gtkprivate.h"
 #include "gtkintl.h"
@@ -676,7 +676,7 @@ gtk_overlay_snapshot (GtkWidget   *widget,
               GtkSnapshot *child_snapshot;
 
               child_snapshot = gtk_snapshot_new (gtk_snapshot_get_renderer (snapshot),
-                                                 snapshot->record_names,
+                                                 gtk_snapshot_get_record_names (snapshot),
                                                  NULL,
                                                  "OverlayCaptureMainChild");
               gtk_snapshot_offset (child_snapshot, main_alloc.x, main_alloc.y);

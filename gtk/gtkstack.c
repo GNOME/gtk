@@ -28,7 +28,7 @@
 #include "gtkcontainerprivate.h"
 #include "gtkprogresstrackerprivate.h"
 #include "gtksettingsprivate.h"
-#include "gtksnapshotprivate.h"
+#include "gtksnapshot.h"
 #include "gtkwidgetprivate.h"
 #include "a11y/gtkstackaccessible.h"
 #include "a11y/gtkstackaccessibleprivate.h"
@@ -1957,7 +1957,7 @@ gtk_stack_snapshot (GtkWidget   *widget,
               gtk_widget_get_allocation (priv->last_visible_child->widget,
                                          &priv->last_visible_surface_allocation);
               last_visible_snapshot = gtk_snapshot_new (gtk_snapshot_get_renderer (snapshot),
-                                                        snapshot->record_names,
+                                                        gtk_snapshot_get_record_names (snapshot),
                                                         NULL,
                                                         "StackCaptureLastVisibleChild");
               gtk_widget_snapshot (priv->last_visible_child->widget, last_visible_snapshot);

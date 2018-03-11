@@ -22,7 +22,7 @@
 #include "gtkcssimageprivate.h"
 
 #include "gtkcssstyleprivate.h"
-#include "gtksnapshotprivate.h"
+#include "gtksnapshot.h"
 
 /* for the types only */
 #include "gtk/gtkcssimagecrossfadeprivate.h"

@@ -49,7 +49,7 @@
 #include "gtkrendericonprivate.h"
 #include "gtkscrollable.h"
 #include "gtksettingsprivate.h"
-#include "gtksnapshotprivate.h"
+#include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktooltip.h"
 #include "gtktreednd.h"
