@@ -88,8 +88,6 @@ struct _GtkSnapshot {
   GPtrArray             *nodes;
 };
 
-GskRenderer *   gtk_snapshot_get_renderer       (const GtkSnapshot       *snapshot);
-
 G_END_DECLS
 
 #endif /* __GTK_SNAPSHOT_PRIVATE_H__ */

@@ -1223,9 +1223,24 @@ gtk_snapshot_pop (GtkSnapshot *snapshot)
  * Returns: (transfer none): the #GskRenderer
  */
 GskRenderer *
-gtk_snapshot_get_renderer (const GtkSnapshot *snapshot)
+gtk_snapshot_get_renderer (GtkSnapshot *snapshot)
 {
   return snapshot->renderer;
+}
+
+/**
+ * gtk_snapshot_get_record_names:
+ * @snapshot: a #GtkSnapshot
+ *
+ * Obtains whether the snapshot is recording names
+ * for debugging.
+ *
+ * Returns: whether the snapshot records names
+ */
+gboolean
+gtk_snapshot_get_record_names (GtkSnapshot *snapshot)
+{
+  return snapshot->record_names;
 }
 
 /**

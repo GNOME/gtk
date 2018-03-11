@@ -4171,6 +4171,8 @@ gtk_snapshot_ref
 gtk_snapshot_unref
 gtk_snapshot_to_node
 gtk_snapshot_free_to_node
+gtk_snapshot_get_renderer
+gtk_snapshot_get_record_names
 gtk_snapshot_push
 gtk_snapshot_push_transform
 gtk_snapshot_push_opacity

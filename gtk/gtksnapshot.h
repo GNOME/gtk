@@ -57,6 +57,11 @@ GDK_AVAILABLE_IN_ALL
 GskRenderNode * gtk_snapshot_to_node                    (GtkSnapshot            *snapshot);
 
 GDK_AVAILABLE_IN_ALL
+GskRenderer *   gtk_snapshot_get_renderer               (GtkSnapshot            *snapshot);
+GDK_AVAILABLE_IN_ALL
+gboolean        gtk_snapshot_get_record_names           (GtkSnapshot            *snapshot);
+
+GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_push                       (GtkSnapshot            *snapshot,
                                                          gboolean                keep_coordinates,
                                                          const char             *name,
