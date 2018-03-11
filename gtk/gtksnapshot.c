@@ -50,6 +50,37 @@
  * the #GtkWidget::snapshot vfunc.
  */
 
+G_DEFINE_BOXED_TYPE (GtkSnapshot, gtk_snapshot, gtk_snapshot_ref, gtk_snapshot_unref)
+
+GtkSnapshot *
+gtk_snapshot_ref (GtkSnapshot *snapshot)
+{
+  g_assert (snapshot->ref_count > 0);
+
+  snapshot->ref_count += 1;
+
+  return snapshot;
+}
+
+void
+gtk_snapshot_unref (GtkSnapshot *snapshot)
+{
+  g_assert (snapshot->ref_count > 0);
+
+  snapshot->ref_count -= 1;
+
+  if (snapshot->ref_count > 0)
+    return;
+
+  if (snapshot->state_stack)
+    gsk_render_node_unref (gtk_snapshot_to_node (snapshot));
+
+  g_assert (snapshot->state_stack == NULL);
+  g_assert (snapshot->nodes == NULL);
+
+  g_free (snapshot);
+}
+
 static GskRenderNode *
 gtk_snapshot_collect_default (GtkSnapshot      *snapshot,
                               GtkSnapshotState *state,
@@ -125,6 +156,26 @@ gtk_snapshot_state_clear (GtkSnapshotState *state)
   g_clear_pointer (&state->name, g_free);
 }
 
+static void
+gtk_snapshot_init_internal (GtkSnapshot          *snapshot,
+                            GskRenderer          *renderer,
+                            gboolean              record_names,
+                            const cairo_region_t *clip,
+                            char                 *name)
+{
+  snapshot->record_names = record_names;
+  snapshot->renderer = renderer;
+  snapshot->state_stack = g_array_new (FALSE, TRUE, sizeof (GtkSnapshotState));
+  g_array_set_clear_func (snapshot->state_stack, (GDestroyNotify)gtk_snapshot_state_clear);
+  snapshot->nodes = g_ptr_array_new_with_free_func ((GDestroyNotify)gsk_render_node_unref);
+
+  gtk_snapshot_push_state (snapshot,
+                           name,
+                           (cairo_region_t *) clip,
+                           0, 0,
+                           gtk_snapshot_collect_default);
+}
+
 void
 gtk_snapshot_init (GtkSnapshot          *snapshot,
                    GskRenderer          *renderer,
@@ -134,12 +185,6 @@ gtk_snapshot_init (GtkSnapshot          *snapshot,
                    ...)
 {
   char *str;
-
-  snapshot->record_names = record_names;
-  snapshot->renderer = renderer;
-  snapshot->state_stack = g_array_new (FALSE, TRUE, sizeof (GtkSnapshotState));
-  g_array_set_clear_func (snapshot->state_stack, (GDestroyNotify)gtk_snapshot_state_clear);
-  snapshot->nodes = g_ptr_array_new_with_free_func ((GDestroyNotify)gsk_render_node_unref);
 
   if (name && record_names)
     {
@@ -152,11 +197,49 @@ gtk_snapshot_init (GtkSnapshot          *snapshot,
   else
     str = NULL;
 
-  gtk_snapshot_push_state (snapshot,
-                           str,
-                           (cairo_region_t *) clip,
-                           0, 0,
-                           gtk_snapshot_collect_default);
+  snapshot->ref_count = 0;
+
+  gtk_snapshot_init_internal (snapshot, renderer, record_names, clip, str);
+}
+
+GtkSnapshot *
+gtk_snapshot_new (GskRenderer          *renderer,
+							    gboolean              record_names,
+							    const cairo_region_t *clip,
+							    const char           *name,
+							    ...)
+{
+  GtkSnapshot *snapshot;
+  char *str;
+
+  if (name && record_names)
+    {
+      va_list args;
+
+      va_start (args, name);
+      str = g_strdup_vprintf (name, args);
+      va_end (args);
+    }
+  else
+    str = NULL;
+
+  snapshot = g_new (GtkSnapshot, 1);
+  snapshot->ref_count = 1;
+
+  gtk_snapshot_init_internal (snapshot, renderer, record_names, clip, str);
+
+  return snapshot;
+}
+
+GskRenderNode *
+gtk_snapshot_free_to_node (GtkSnapshot *snapshot)
+{
+  GskRenderNode *result;
+
+  result = gtk_snapshot_to_node (snapshot);
+  gtk_snapshot_unref (snapshot);
+
+  return result;
 }
 
 /**
@@ -1068,7 +1151,7 @@ gtk_snapshot_pop_internal (GtkSnapshot *snapshot)
 }
 
 GskRenderNode *
-gtk_snapshot_finish (GtkSnapshot *snapshot)
+gtk_snapshot_to_node (GtkSnapshot *snapshot)
 {
   GskRenderNode *result;
 
@@ -1089,8 +1172,18 @@ gtk_snapshot_finish (GtkSnapshot *snapshot)
   result = gtk_snapshot_pop_internal (snapshot);
 
   g_array_free (snapshot->state_stack, TRUE);
+  snapshot->state_stack = NULL;
+
   g_ptr_array_free (snapshot->nodes, TRUE);
+  snapshot->nodes = NULL;
+
   return result;
+}
+
+GskRenderNode *
+gtk_snapshot_finish (GtkSnapshot *snapshot)
+{
+  return gtk_snapshot_to_node (snapshot);
 }
 
 /**

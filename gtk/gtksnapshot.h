@@ -36,6 +36,26 @@
 
 G_BEGIN_DECLS
 
+
+GDK_AVAILABLE_IN_ALL
+GType           gtk_snapshot_get_type                   (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
+GtkSnapshot *   gtk_snapshot_ref                        (GtkSnapshot            *snapshot);
+GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_unref                      (GtkSnapshot            *snapshot);
+
+GDK_AVAILABLE_IN_ALL
+GtkSnapshot *   gtk_snapshot_new                        (GskRenderer            *renderer,
+							                                           gboolean                record_names,
+							                                           const cairo_region_t   *clip,
+							                                           const char             *name,
+							                                           ...) G_GNUC_PRINTF (4, 5);
+GDK_AVAILABLE_IN_ALL
+GskRenderNode * gtk_snapshot_free_to_node               (GtkSnapshot            *snapshot);
+
+GDK_AVAILABLE_IN_ALL
+GskRenderNode * gtk_snapshot_to_node                    (GtkSnapshot            *snapshot);
+
 GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_push                       (GtkSnapshot            *snapshot,
                                                          gboolean                keep_coordinates,
