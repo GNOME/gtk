@@ -47,6 +47,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindow.h"
+#include "gtkeventcontrollerkey.h"
 
 #include "a11y/gtkiconviewaccessibleprivate.h"
 
@@ -174,11 +175,11 @@ static void             gtk_icon_view_button_release            (GtkGestureMulti
                                                                  double                x,
                                                                  double                y,
                                                                  gpointer              user_data);
-static gboolean         gtk_icon_view_key_press                 (GtkWidget          *widget,
-								 GdkEventKey        *event);
-static gboolean         gtk_icon_view_key_release               (GtkWidget          *widget,
-								 GdkEventKey        *event);
-
+static gboolean         gtk_icon_view_key_pressed               (GtkEventControllerKey *controller,
+                                                                 guint                  keyval,
+                                                                 guint                  keycode,
+                                                                 GdkModifierType        state,
+                                                                 GtkWidget             *widget);
 
 /* GtkContainer vfuncs */
 static void             gtk_icon_view_remove                    (GtkContainer       *container,
@@ -361,8 +362,6 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   widget_class->measure = gtk_icon_view_measure;
   widget_class->size_allocate = gtk_icon_view_size_allocate;
   widget_class->snapshot = gtk_icon_view_snapshot;
-  widget_class->key_press_event = gtk_icon_view_key_press;
-  widget_class->key_release_event = gtk_icon_view_key_release;
   widget_class->drag_begin = gtk_icon_view_drag_begin;
   widget_class->drag_end = gtk_icon_view_drag_end;
   widget_class->drag_data_get = gtk_icon_view_drag_data_get;
@@ -958,6 +957,10 @@ gtk_icon_view_init (GtkIconView *icon_view)
                     icon_view);
   g_signal_connect (icon_view->priv->motion_controller, "motion", G_CALLBACK (gtk_icon_view_motion),
                     icon_view);
+
+  icon_view->priv->key_controller = gtk_event_controller_key_new (GTK_WIDGET (icon_view));
+  g_signal_connect (icon_view->priv->key_controller, "key-pressed", G_CALLBACK (gtk_icon_view_key_pressed),
+                    icon_view);
 }
 
 /* GObject methods */
@@ -1008,6 +1011,7 @@ gtk_icon_view_dispose (GObject *object)
 
   g_clear_object (&priv->press_gesture);
   g_clear_object (&priv->motion_controller);
+  g_clear_object (&priv->key_controller);
 
   G_OBJECT_CLASS (gtk_icon_view_parent_class)->dispose (object);
 }
@@ -2297,34 +2301,23 @@ gtk_icon_view_button_release (GtkGestureMultiPress *gesture,
 }
 
 static gboolean
-gtk_icon_view_key_press (GtkWidget      *widget,
-			 GdkEventKey    *event)
+gtk_icon_view_key_pressed (GtkEventControllerKey *controller,
+                           guint                  keyval,
+                           guint                  keycode,
+                           GdkModifierType        state,
+                           GtkWidget             *widget)
 {
   GtkIconView *icon_view = GTK_ICON_VIEW (widget);
-  guint keyval;
 
   if (icon_view->priv->doing_rubberband)
     {
-      if (gdk_event_get_keyval ((GdkEvent *) event, &keyval) &&
-          keyval == GDK_KEY_Escape)
+      if (keyval == GDK_KEY_Escape)
 	gtk_icon_view_stop_rubberbanding (icon_view);
 
       return TRUE;
     }
 
-  return GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->key_press_event (widget, event);
-}
-
-static gboolean
-gtk_icon_view_key_release (GtkWidget      *widget,
-			   GdkEventKey    *event)
-{
-  GtkIconView *icon_view = GTK_ICON_VIEW (widget);
-
-  if (icon_view->priv->doing_rubberband)
-    return TRUE;
-
-  return GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->key_release_event (widget, event);
+  return FALSE;
 }
 
 static void
