@@ -52,6 +52,10 @@ void                gtk_event_controller_key_set_im_context (GtkEventControllerK
 GDK_AVAILABLE_IN_ALL
 GtkIMContext *      gtk_event_controller_key_get_im_context (GtkEventControllerKey *controller);
 
+GDK_AVAILABLE_IN_ALL
+gboolean            gtk_event_controller_key_forward        (GtkEventControllerKey *controller,
+                                                             GtkWidget             *widget);
+
 G_END_DECLS
 
 #endif /* __GTK_EVENT_CONTROLLER_KEY_H__ */
