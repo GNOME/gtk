@@ -28,7 +28,7 @@
 #include "gtkcssstyleprivate.h"
 #include "gtkcsstransformvalueprivate.h"
 #include "gtkiconthemeprivate.h"
-#include "gtksnapshotprivate.h"
+#include "gtksnapshot.h"
 
 #include <math.h>
 

@@ -41,7 +41,7 @@
 #include "gtkprivate.h"
 #include "gtkscrollable.h"
 #include "gtksizerequest.h"
-#include "gtksnapshotprivate.h"
+#include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktreednd.h"
 #include "gtktypebuiltins.h"
@@ -6689,7 +6689,7 @@ gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
 				GtkTreePath *path)
 {
   GtkWidget *widget;
-  GtkSnapshot snapshot;
+  GtkSnapshot *snapshot;
   GskRenderNode *node;
   cairo_t *cr;
   cairo_surface_t *surface;
@@ -6724,15 +6724,15 @@ gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
                                                        rect.width,
                                                        rect.height);
 
-          gtk_snapshot_init (&snapshot, NULL, FALSE, NULL, "IconView DragIcon");
-	  gtk_icon_view_snapshot_item (icon_view, &snapshot, item, 
-                                       icon_view->priv->item_padding,
-                                       icon_view->priv->item_padding,
-                                       FALSE);
-          node = gtk_snapshot_finish (&snapshot);
+    snapshot = gtk_snapshot_new (NULL, FALSE, NULL, "IconView DragIcon");
+	  gtk_icon_view_snapshot_item (icon_view, snapshot, item,
+                                 icon_view->priv->item_padding,
+                                 icon_view->priv->item_padding,
+                                 FALSE);
+    node = gtk_snapshot_free_to_node (snapshot);
 
 	  cr = cairo_create (surface);
-          gsk_render_node_draw (node, cr);
+    gsk_render_node_draw (node, cr);
 	  cairo_destroy (cr);
 
 	  return surface;

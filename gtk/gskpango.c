@@ -21,7 +21,7 @@
 
 #include "gsk/gsk.h"
 #include "gskpango.h"
-#include "gtksnapshotprivate.h"
+#include "gtksnapshot.h"
 
 #include <math.h>
 
@@ -155,7 +155,7 @@ gsk_pango_renderer_show_text_glyphs (PangoRenderer        *renderer,
   if (node == NULL)
     return;
 
-  if (crenderer->snapshot->record_names)
+  if (gtk_snapshot_get_record_names (crenderer->snapshot))
     {
       char name[64];
       g_snprintf (name, sizeof (name), "Glyphs<%d>", glyphs->num_glyphs);

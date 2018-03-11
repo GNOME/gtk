@@ -81,21 +81,12 @@ struct _GtkSnapshotState {
 };
 
 struct _GtkSnapshot {
+  int ref_count;
   gboolean               record_names;
   GskRenderer           *renderer;
   GArray                *state_stack;
   GPtrArray             *nodes;
 };
-
-void            gtk_snapshot_init               (GtkSnapshot             *state,
-                                                 GskRenderer             *renderer,
-                                                 gboolean                 record_names,
-                                                 const cairo_region_t    *clip,
-                                                 const char              *name,
-                                                 ...) G_GNUC_PRINTF (5, 6);
-GskRenderNode * gtk_snapshot_finish             (GtkSnapshot             *state);
-
-GskRenderer *   gtk_snapshot_get_renderer       (const GtkSnapshot       *snapshot);
 
 G_END_DECLS
 

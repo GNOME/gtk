@@ -438,7 +438,7 @@ snapshot_frame_fill (GtkSnapshot          *snapshot,
   gsk_rounded_rect_offset (&offset_outline, off_x, off_y);
   
   node = gsk_border_node_new (&offset_outline, border_width, colors);
-  if (snapshot->record_names)
+  if (gtk_snapshot_get_record_names (snapshot))
     gsk_render_node_set_name (node, "Border");
   gtk_snapshot_append_node (snapshot, node);
   gsk_render_node_unref (node);

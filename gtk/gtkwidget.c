@@ -60,7 +60,7 @@
 #include "gtkselection.h"
 #include "gtksettingsprivate.h"
 #include "gtksizegroup-private.h"
-#include "gtksnapshotprivate.h"
+#include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktooltipprivate.h"
 #include "gtktypebuiltins.h"
@@ -5459,7 +5459,7 @@ gtk_widget_draw_internal (GtkWidget *widget,
       if (mode == RENDER_SNAPSHOT)
         {
           GskRenderer *renderer = gtk_widget_get_renderer (widget);
-          GtkSnapshot snapshot;
+          GtkSnapshot *snapshot;
           cairo_region_t *clip;
           GskRenderNode *node;
 
@@ -5468,9 +5468,9 @@ gtk_widget_draw_internal (GtkWidget *widget,
                                                 widget->priv->clip.y - widget->priv->allocation.y,
                                                 widget->priv->clip.width,
                                                 widget->priv->clip.height});
-          gtk_snapshot_init (&snapshot, renderer, FALSE, clip, "Fallback<%s>", G_OBJECT_TYPE_NAME (widget));
-          gtk_widget_snapshot (widget, &snapshot);
-          node = gtk_snapshot_finish (&snapshot);
+          snapshot = gtk_snapshot_new (renderer, FALSE, clip, "Fallback<%s>", G_OBJECT_TYPE_NAME (widget));
+          gtk_widget_snapshot (widget, snapshot);
+          node = gtk_snapshot_free_to_node (snapshot);
           if (node != NULL)
             {
               gsk_render_node_draw (node, cr);
@@ -13981,7 +13981,7 @@ gtk_widget_render (GtkWidget            *widget,
                    const cairo_region_t *region)
 {
   GdkDrawingContext *context;
-  GtkSnapshot snapshot;
+  GtkSnapshot *snapshot;
   GskRenderer *renderer;
   GskRenderNode *root;
   cairo_region_t *clip;
@@ -13997,14 +13997,13 @@ gtk_widget_render (GtkWidget            *widget,
   context = gsk_renderer_begin_draw_frame (renderer, region);
   clip = gdk_drawing_context_get_clip (context);
 
-  gtk_snapshot_init (&snapshot,
-                     renderer,
-                     should_record_names (widget, renderer),
-                     clip,
-                     "Render<%s>", G_OBJECT_TYPE_NAME (widget));
+  snapshot = gtk_snapshot_new (renderer,
+                               should_record_names (widget, renderer),
+                               clip,
+                               "Render<%s>", G_OBJECT_TYPE_NAME (widget));
   cairo_region_destroy (clip);
-  gtk_widget_snapshot (widget, &snapshot);
-  root = gtk_snapshot_finish (&snapshot);
+  gtk_widget_snapshot (widget, snapshot);
+  root = gtk_snapshot_free_to_node (snapshot);
   if (root != NULL)
     {
       gtk_inspector_record_render (widget,

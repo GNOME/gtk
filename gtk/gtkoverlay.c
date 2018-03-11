@@ -25,7 +25,7 @@
 #include "gtkscrolledwindow.h"
 #include "gtkwidgetprivate.h"
 #include "gtkmarshalers.h"
-#include "gtksnapshotprivate.h"
+#include "gtksnapshot.h"
 
 #include "gtkprivate.h"
 #include "gtkintl.h"
@@ -673,17 +673,16 @@ gtk_overlay_snapshot (GtkWidget   *widget,
 
           if (main_widget_node == NULL)
             {
-              GtkSnapshot child_snapshot;
+              GtkSnapshot *child_snapshot;
 
-              gtk_snapshot_init (&child_snapshot,
-                                 gtk_snapshot_get_renderer (snapshot),
-                                 snapshot->record_names,
-                                 NULL,
-                                 "OverlayCaptureMainChild");
-              gtk_snapshot_offset (&child_snapshot, main_alloc.x, main_alloc.y);
-              gtk_widget_snapshot (main_widget, &child_snapshot);
-              gtk_snapshot_offset (&child_snapshot, -main_alloc.x, -main_alloc.y);
-              main_widget_node = gtk_snapshot_finish (&child_snapshot);
+              child_snapshot = gtk_snapshot_new (gtk_snapshot_get_renderer (snapshot),
+                                                 gtk_snapshot_get_record_names (snapshot),
+                                                 NULL,
+                                                 "OverlayCaptureMainChild");
+              gtk_snapshot_offset (child_snapshot, main_alloc.x, main_alloc.y);
+              gtk_widget_snapshot (main_widget, child_snapshot);
+              gtk_snapshot_offset (child_snapshot, -main_alloc.x, -main_alloc.y);
+              main_widget_node = gtk_snapshot_free_to_node (child_snapshot);
               graphene_matrix_init_translate (&translate, &GRAPHENE_POINT3D_INIT (main_alloc.x,main_alloc.y, 0));
             }
 

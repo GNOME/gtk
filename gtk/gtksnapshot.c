@@ -46,9 +46,56 @@
  * operates on. Use the gtk_snapshot_push() and gtk_snapshot_pop() functions to
  * change the current node.
  *
- * The only way to obtain a #GtkSnapshot object is as an argument to
- * the #GtkWidget::snapshot vfunc.
+ * The typical way to obtain a #GtkSnapshot object is as an argument to
+ * the #GtkWidget::snapshot vfunc. If you need to create your own GtkSnapshot,
+ * use gtk_snapshot_new().
  */
+
+G_DEFINE_BOXED_TYPE (GtkSnapshot, gtk_snapshot, gtk_snapshot_ref, gtk_snapshot_unref)
+
+/**
+ * gtk_snapshot_ref:
+ * @snapshot: a #GtkSnapshot
+ *
+ * Increase the reference count of @snapshot by 1.
+ *
+ * Returns: the @snapshot
+ */
+GtkSnapshot *
+gtk_snapshot_ref (GtkSnapshot *snapshot)
+{
+  g_assert (snapshot->ref_count > 0);
+
+  snapshot->ref_count += 1;
+
+  return snapshot;
+}
+
+/**
+ * gtk_snapshot_unref:
+ * @snapshot: a #GtkSnapshot
+ *
+ * Decrease the reference count of @snapshot by 1 and
+ * free the object if the count drops to 0.
+ */
+void
+gtk_snapshot_unref (GtkSnapshot *snapshot)
+{
+  g_assert (snapshot->ref_count > 0);
+
+  snapshot->ref_count -= 1;
+
+  if (snapshot->ref_count > 0)
+    return;
+
+  if (snapshot->state_stack)
+    gsk_render_node_unref (gtk_snapshot_to_node (snapshot));
+
+  g_assert (snapshot->state_stack == NULL);
+  g_assert (snapshot->nodes == NULL);
+
+  g_free (snapshot);
+}
 
 static GskRenderNode *
 gtk_snapshot_collect_default (GtkSnapshot      *snapshot,
@@ -125,21 +172,27 @@ gtk_snapshot_state_clear (GtkSnapshotState *state)
   g_clear_pointer (&state->name, g_free);
 }
 
-void
-gtk_snapshot_init (GtkSnapshot          *snapshot,
-                   GskRenderer          *renderer,
-                   gboolean              record_names,
-                   const cairo_region_t *clip,
-                   const char           *name,
-                   ...)
+/**
+ * gtk_snapshot_new:
+ * @renderer: the #GskRenderer to create nodes for
+ * @record_names: whether to keep node names (for debugging purposes)
+ * @clip: the clip region to use, or %NULL
+ * @name: a printf-style format string to create the node name
+ * @...: arguments for @name
+ *
+ * Creates a new #GtkSnapshot.
+ *
+ * Returns: a newly-allocated #GtkSnapshot
+ */
+GtkSnapshot *
+gtk_snapshot_new (GskRenderer          *renderer,
+							    gboolean              record_names,
+							    const cairo_region_t *clip,
+							    const char           *name,
+							    ...)
 {
+  GtkSnapshot *snapshot;
   char *str;
-
-  snapshot->record_names = record_names;
-  snapshot->renderer = renderer;
-  snapshot->state_stack = g_array_new (FALSE, TRUE, sizeof (GtkSnapshotState));
-  g_array_set_clear_func (snapshot->state_stack, (GDestroyNotify)gtk_snapshot_state_clear);
-  snapshot->nodes = g_ptr_array_new_with_free_func ((GDestroyNotify)gsk_render_node_unref);
 
   if (name && record_names)
     {
@@ -152,11 +205,42 @@ gtk_snapshot_init (GtkSnapshot          *snapshot,
   else
     str = NULL;
 
+  snapshot = g_new (GtkSnapshot, 1);
+  snapshot->ref_count = 1;
+
+  snapshot->record_names = record_names;
+  snapshot->renderer = renderer;
+  snapshot->state_stack = g_array_new (FALSE, TRUE, sizeof (GtkSnapshotState));
+  g_array_set_clear_func (snapshot->state_stack, (GDestroyNotify)gtk_snapshot_state_clear);
+  snapshot->nodes = g_ptr_array_new_with_free_func ((GDestroyNotify)gsk_render_node_unref);
+
   gtk_snapshot_push_state (snapshot,
                            str,
                            (cairo_region_t *) clip,
                            0, 0,
                            gtk_snapshot_collect_default);
+
+  return snapshot;
+}
+
+/**
+ * gtk_snapshot_free_to_node:
+ * @snapshot: a #GtkSnapshot
+ *
+ * Returns the node that was constructed by @snapshot
+ * and frees @snapshot.
+ *
+ * Returns: a newly-created #GskRenderNode
+ */
+GskRenderNode *
+gtk_snapshot_free_to_node (GtkSnapshot *snapshot)
+{
+  GskRenderNode *result;
+
+  result = gtk_snapshot_to_node (snapshot);
+  gtk_snapshot_unref (snapshot);
+
+  return result;
 }
 
 /**
@@ -1067,8 +1151,20 @@ gtk_snapshot_pop_internal (GtkSnapshot *snapshot)
   return node;
 }
 
+/**
+ * gtk_snapshot_to_node:
+ * @snapshot: a #GtkSnapshot
+ *
+ * Returns the render node that was constructed
+ * by @snapshot. After calling this function, it
+ * is no longer possible to add more nodes to
+ * @snapshot. The only function that should be
+ * called after this is gtk_snapshot_unref().
+ *
+ * Returns: the constructed #GskRenderNode
+ */
 GskRenderNode *
-gtk_snapshot_finish (GtkSnapshot *snapshot)
+gtk_snapshot_to_node (GtkSnapshot *snapshot)
 {
   GskRenderNode *result;
 
@@ -1089,7 +1185,11 @@ gtk_snapshot_finish (GtkSnapshot *snapshot)
   result = gtk_snapshot_pop_internal (snapshot);
 
   g_array_free (snapshot->state_stack, TRUE);
+  snapshot->state_stack = NULL;
+
   g_ptr_array_free (snapshot->nodes, TRUE);
+  snapshot->nodes = NULL;
+
   return result;
 }
 
@@ -1123,9 +1223,24 @@ gtk_snapshot_pop (GtkSnapshot *snapshot)
  * Returns: (transfer none): the #GskRenderer
  */
 GskRenderer *
-gtk_snapshot_get_renderer (const GtkSnapshot *snapshot)
+gtk_snapshot_get_renderer (GtkSnapshot *snapshot)
 {
   return snapshot->renderer;
+}
+
+/**
+ * gtk_snapshot_get_record_names:
+ * @snapshot: a #GtkSnapshot
+ *
+ * Obtains whether the snapshot is recording names
+ * for debugging.
+ *
+ * Returns: whether the snapshot records names
+ */
+gboolean
+gtk_snapshot_get_record_names (GtkSnapshot *snapshot)
+{
+  return snapshot->record_names;
 }
 
 /**
