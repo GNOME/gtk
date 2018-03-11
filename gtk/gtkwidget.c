@@ -5229,6 +5229,13 @@ _gtk_widget_run_controllers (GtkWidget           *widget,
 
           if (controller_phase == phase)
             handled |= gtk_event_controller_handle_event (data->controller, event);
+
+          /* Non-gesture controllers are basically unique entities not meant
+           * to collaborate with anything else. Break early if any such event
+           * controller handled the event.
+           */
+          if (handled && !GTK_IS_GESTURE (data->controller))
+            break;
         }
 
       l = next;
