@@ -81,6 +81,7 @@ struct _GtkSnapshotState {
 };
 
 struct _GtkSnapshot {
+  int ref_count;
   gboolean               record_names;
   GskRenderer           *renderer;
   GArray                *state_stack;
