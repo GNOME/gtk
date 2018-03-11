@@ -278,15 +278,10 @@ key_pressed (GtkEventController     *controller,
 
               return GDK_EVENT_STOP;
             }
-          else
-            return GDK_EVENT_PROPAGATE;
         }
-
-      return gtk_search_bar_handle_event (GTK_SEARCH_BAR (sl->priv->search_bar),
-                                          gtk_get_current_event ());
     }
-  else
-    return GDK_EVENT_PROPAGATE;
+
+  return GDK_EVENT_PROPAGATE;
 }
 
 static gboolean
@@ -329,6 +324,7 @@ static void
 hierarchy_changed (GtkWidget *widget,
                    GtkWidget *previous_toplevel)
 {
+  GtkInspectorStatistics *sl = GTK_INSPECTOR_STATISTICS (widget);
   GtkEventController *controller;
   GtkWidget *toplevel;
 
@@ -339,6 +335,9 @@ hierarchy_changed (GtkWidget *widget,
   controller = gtk_event_controller_key_new (toplevel);
   g_object_set_data_full (G_OBJECT (toplevel), "controller", controller, g_object_unref);
   g_signal_connect (controller, "key-pressed", G_CALLBACK (key_pressed), widget);
+
+  gtk_search_bar_set_key_capture_widget (GTK_SEARCH_BAR (sl->priv->search_bar),
+                                         toplevel);
 }
 
 static void
