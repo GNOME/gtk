@@ -34,6 +34,7 @@
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkstylecontext.h"
+#include "gtkeventcontrollerkey.h"
 
 /**
  * SECTION:gtksearchentry
@@ -63,7 +64,8 @@
  *
  * Often, GtkSearchEntry will be fed events by means of being
  * placed inside a #GtkSearchBar. If that is not the case,
- * you can use gtk_search_entry_handle_event() to pass events.
+ * you can use gtk_search_entry_set_key_capture_widget() to let it
+ * capture key input from another widget.
  */
 
 enum {
@@ -77,6 +79,9 @@ enum {
 static guint signals[LAST_SIGNAL] = { 0 };
 
 typedef struct {
+  GtkWidget *capture_widget;
+  GtkEventController *capture_widget_controller;
+
   guint delayed_changed_id;
   gboolean content_changed;
   gboolean search_stopped;
@@ -130,6 +135,8 @@ gtk_search_entry_finalize (GObject *object)
 
   if (priv->delayed_changed_id > 0)
     g_source_remove (priv->delayed_changed_id);
+
+  gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (object), NULL);
 
   G_OBJECT_CLASS (gtk_search_entry_parent_class)->finalize (object);
 }
@@ -378,16 +385,9 @@ gtk_search_entry_new (void)
 }
 
 gboolean
-gtk_search_entry_is_keynav_event (GdkEvent *event)
+gtk_search_entry_is_keynav (guint           keyval,
+                            GdkModifierType state)
 {
-  GdkModifierType state = 0;
-  guint keyval;
-
-  if (!gdk_event_get_keyval (event, &keyval))
-    return FALSE;
-
-  gdk_event_get_state (event, &state);
-
   if (keyval == GDK_KEY_Tab       || keyval == GDK_KEY_KP_Tab ||
       keyval == GDK_KEY_Up        || keyval == GDK_KEY_KP_Up ||
       keyval == GDK_KEY_Down      || keyval == GDK_KEY_KP_Down ||
@@ -433,14 +433,15 @@ gtk_search_entry_handle_event (GtkSearchEntry *entry,
 {
   GtkSearchEntryPrivate *priv = GET_PRIV (entry);
   gboolean handled;
-  guint keyval;
+  guint keyval, state;
 
   if (!gtk_widget_get_realized (GTK_WIDGET (entry)))
     gtk_widget_realize (GTK_WIDGET (entry));
 
   gdk_event_get_keyval (event, &keyval);
+  gdk_event_get_state (event, &state);
 
-  if (gtk_search_entry_is_keynav_event (event) ||
+  if (gtk_search_entry_is_keynav (keyval, state) ||
       keyval == GDK_KEY_space ||
       keyval == GDK_KEY_Menu)
     return GDK_EVENT_PROPAGATE;
@@ -452,3 +453,96 @@ gtk_search_entry_handle_event (GtkSearchEntry *entry,
 
   return handled && priv->content_changed && !priv->search_stopped ? GDK_EVENT_STOP : GDK_EVENT_PROPAGATE;
 }
+
+static gboolean
+capture_widget_key_handled (GtkEventControllerKey *controller,
+                            guint                  keyval,
+                            guint                  keycode,
+                            GdkModifierType        state,
+                            GtkWidget             *entry)
+{
+  GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (GTK_SEARCH_ENTRY (entry));
+  gboolean handled;
+
+  if (gtk_search_entry_is_keynav (keyval, state) ||
+      keyval == GDK_KEY_space ||
+      keyval == GDK_KEY_Menu)
+    return FALSE;
+
+  priv->content_changed = FALSE;
+  priv->search_stopped = FALSE;
+
+  handled = gtk_event_controller_key_forward (controller, entry);
+
+  return handled && priv->content_changed && !priv->search_stopped ? GDK_EVENT_STOP : GDK_EVENT_PROPAGATE;
+}
+
+/**
+ * gtk_search_entry_set_key_capture_widget:
+ * @bar: a #GtkSearchEntry
+ * @widget: (nullable) (transfer none): a #GtkWidget
+ *
+ * Sets @widget as the widget that @entry will capture key events from.
+ *
+ * Key events are consumed by the search entry to start or
+ * continue a search.
+ *
+ * If the entry is part of a #GtkSearchBar, it is preferable
+ * to call gtk_search_bar_set_key_capture_widget() instead, which
+ * will reveal the entry in addition to triggering the search entry.
+ *
+ * Since: 3.94
+ **/
+void
+gtk_search_entry_set_key_capture_widget (GtkSearchEntry *entry,
+                                         GtkWidget      *widget)
+{
+  GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
+
+  g_return_if_fail (GTK_IS_SEARCH_ENTRY (entry));
+  g_return_if_fail (!widget || GTK_IS_WIDGET (widget));
+
+  if (priv->capture_widget)
+    {
+      g_object_unref (priv->capture_widget_controller);
+      g_object_remove_weak_pointer (G_OBJECT (priv->capture_widget),
+                                    (gpointer *) &priv->capture_widget);
+    }
+
+  priv->capture_widget = widget;
+
+  if (widget)
+    {
+      g_object_add_weak_pointer (G_OBJECT (priv->capture_widget),
+                                 (gpointer *) &priv->capture_widget);
+
+      priv->capture_widget_controller = gtk_event_controller_key_new (widget);
+      gtk_event_controller_set_propagation_phase (priv->capture_widget_controller,
+                                                  GTK_PHASE_CAPTURE);
+      g_signal_connect (priv->capture_widget_controller, "key-pressed",
+                        G_CALLBACK (capture_widget_key_handled), entry);
+      g_signal_connect (priv->capture_widget_controller, "key-released",
+                        G_CALLBACK (capture_widget_key_handled), entry);
+    }
+}
+
+/**
+ * gtk_search_entry_get_key_capture_widget:
+ * @entry: a #GtkSearchEntry
+ *
+ * Gets the widget that @entry is capturing key events from.
+ *
+ * Returns: The key capture widget.
+ *
+ * Since: 3.94
+ **/
+GtkWidget *
+gtk_search_entry_get_key_capture_widget (GtkSearchEntry *entry)
+{
+  GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
+
+  g_return_val_if_fail (GTK_IS_SEARCH_ENTRY (entry), NULL);
+
+  return priv->capture_widget;
+}
+
