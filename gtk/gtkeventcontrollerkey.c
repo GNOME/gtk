@@ -21,7 +21,7 @@
 
 #include "gtkintl.h"
 #include "gtkprivate.h"
-#include "gtkwidget.h"
+#include "gtkwidgetprivate.h"
 #include "gtkeventcontrollerprivate.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkbindings.h"
@@ -214,4 +214,23 @@ gtk_event_controller_key_get_im_context (GtkEventControllerKey *controller)
   g_return_val_if_fail (GTK_IS_EVENT_CONTROLLER_KEY (controller), NULL);
 
   return controller->im_context;
+}
+
+gboolean
+gtk_event_controller_key_forward (GtkEventControllerKey *controller,
+                                  GtkWidget             *widget)
+{
+  g_return_val_if_fail (GTK_IS_EVENT_CONTROLLER_KEY (controller), FALSE);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+  g_return_val_if_fail (controller->current_event != NULL, FALSE);
+
+  if (!gtk_widget_get_realized (widget))
+    gtk_widget_realize (widget);
+
+  if (_gtk_widget_captured_event (widget, (GdkEvent *) controller->current_event))
+    return TRUE;
+  if (gtk_widget_event (widget, (GdkEvent *) controller->current_event))
+    return TRUE;
+
+  return FALSE;
 }
