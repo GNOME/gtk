@@ -5138,14 +5138,14 @@ static gboolean
 gtk_widget_real_key_press_event (GtkWidget         *widget,
 				 GdkEventKey       *event)
 {
-  return gtk_bindings_activate_event (G_OBJECT (widget), event);
+  return FALSE;
 }
 
 static gboolean
 gtk_widget_real_key_release_event (GtkWidget         *widget,
 				   GdkEventKey       *event)
 {
-  return gtk_bindings_activate_event (G_OBJECT (widget), event);
+  return FALSE;
 }
 
 #define WIDGET_REALIZED_FOR_EVENT(widget, event) \
@@ -5423,6 +5423,11 @@ gtk_widget_event_internal (GtkWidget      *widget,
   if (return_val == FALSE)
     return_val |= _gtk_widget_run_controllers (widget, event_copy, GTK_PHASE_BUBBLE);
   g_object_unref (event_copy);
+
+  if (return_val == FALSE &&
+      (event->any.type == GDK_KEY_PRESS ||
+       event->any.type == GDK_KEY_RELEASE))
+    return_val |= gtk_bindings_activate_event (G_OBJECT (widget), (GdkEventKey *) event);
 
   return return_val;
 }
