@@ -777,7 +777,7 @@ gtk_init_check (void)
 
   ret = gdk_display_open_default () != NULL;
 
-  if (gtk_get_debug_flags () & GTK_DEBUG_INTERACTIVE)
+  if (ret && (gtk_get_debug_flags () & GTK_DEBUG_INTERACTIVE))
     gtk_window_set_interactive_debugging (TRUE);
 
   return ret;
