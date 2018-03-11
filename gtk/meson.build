@@ -1096,3 +1096,6 @@ if quartz_enabled
                  configuration: configuration_data(),
                  install_dir: join_paths(get_option('datadir'), 'themes/Mac/gtk-4.0'))
 endif
+
+# modules link against libgtk, so must come at the end
+subdir('printbackends')
