@@ -115,6 +115,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkwindowgroup.h"
 #include "gtkwindowprivate.h"
+#include "gtkeventcontrollerkey.h"
 
 #include "a11y/gtkmenuaccessible.h"
 
@@ -226,8 +227,6 @@ static void     gtk_menu_size_allocate     (GtkWidget           *widget,
 static void     gtk_menu_show              (GtkWidget        *widget);
 static void     gtk_menu_snapshot          (GtkWidget        *widget,
                                             GtkSnapshot      *snapshot);
-static gboolean gtk_menu_key_press         (GtkWidget        *widget,
-                                            GdkEventKey      *event);
 static void     gtk_menu_motion            (GtkEventController *controller,
                                             double              x,
                                             double              y,
@@ -507,7 +506,6 @@ gtk_menu_class_init (GtkMenuClass *class)
   widget_class->size_allocate = gtk_menu_size_allocate;
   widget_class->show = gtk_menu_show;
   widget_class->snapshot = gtk_menu_snapshot;
-  widget_class->key_press_event = gtk_menu_key_press;
   widget_class->focus = gtk_menu_focus;
   widget_class->can_activate_accel = gtk_menu_real_can_activate_accel;
   widget_class->grab_notify = gtk_menu_grab_notify;
@@ -1146,6 +1144,11 @@ gtk_menu_init (GtkMenu *menu)
   g_signal_connect (priv->motion_controller, "enter", G_CALLBACK (gtk_menu_enter), menu);
   g_signal_connect (priv->motion_controller, "motion", G_CALLBACK (gtk_menu_motion), menu);
   g_signal_connect (priv->motion_controller, "leave", G_CALLBACK (gtk_menu_leave), menu);
+
+  priv->key_controller =
+    gtk_event_controller_key_new (GTK_WIDGET (menu));
+  g_signal_connect_swapped (priv->key_controller, "key-pressed",
+                            G_CALLBACK (gtk_menu_stop_navigating_submenu), menu);
 }
 
 static void
@@ -1219,6 +1222,8 @@ gtk_menu_finalize (GObject *object)
   gtk_widget_unparent (priv->bottom_arrow_widget);
   g_clear_object (&priv->click_gesture);
   g_clear_object (&priv->scroll_controller);
+  g_clear_object (&priv->motion_controller);
+  g_clear_object (&priv->key_controller);
 
   G_OBJECT_CLASS (gtk_menu_parent_class)->finalize (object);
 }
@@ -3037,22 +3042,6 @@ gtk_menu_released_cb (GtkGestureMultiPress *gesture,
 
       gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
     }
-}
-
-static gboolean
-gtk_menu_key_press (GtkWidget   *widget,
-                    GdkEventKey *event)
-{
-  GtkMenu *menu;
-
-  g_return_val_if_fail (GTK_IS_MENU (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  menu = GTK_MENU (widget);
-
-  gtk_menu_stop_navigating_submenu (menu);
-
-  return GTK_WIDGET_CLASS (gtk_menu_parent_class)->key_press_event (widget, event);
 }
 
 static gboolean
