@@ -1952,17 +1952,16 @@ gtk_stack_snapshot (GtkWidget   *widget,
           if (priv->last_visible_node == NULL &&
               priv->last_visible_child != NULL)
             {
-              GtkSnapshot last_visible_snapshot;
+              GtkSnapshot *last_visible_snapshot;
 
               gtk_widget_get_allocation (priv->last_visible_child->widget,
                                          &priv->last_visible_surface_allocation);
-              gtk_snapshot_init (&last_visible_snapshot,
-                                 gtk_snapshot_get_renderer (snapshot),
-                                 snapshot->record_names,
-                                 NULL,
-                                 "StackCaptureLastVisibleChild");
-              gtk_widget_snapshot (priv->last_visible_child->widget, &last_visible_snapshot);
-              priv->last_visible_node = gtk_snapshot_finish (&last_visible_snapshot);
+              last_visible_snapshot = gtk_snapshot_new (gtk_snapshot_get_renderer (snapshot),
+                                                        snapshot->record_names,
+                                                        NULL,
+                                                        "StackCaptureLastVisibleChild");
+              gtk_widget_snapshot (priv->last_visible_child->widget, last_visible_snapshot);
+              priv->last_visible_node = gtk_snapshot_free_to_node (last_visible_snapshot);
             }
 
           gtk_snapshot_push_clip (snapshot,
