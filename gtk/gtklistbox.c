@@ -3872,6 +3872,16 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
 
   klass->activate = gtk_list_box_row_activate;
 
+  /**
+   * GtkListBoxRow::activate:
+   *
+   * This is a keybinding signal, which will cause this row to be activated.
+   *
+   * If you want to be notified when the user activates a row (by key or not),
+   * use the #GtkListBox::row-activated signal on the row’s parent #GtkListBox.
+   *
+   * Since: 3.10
+   */
   row_signals[ROW__ACTIVATE] =
     g_signal_new (I_("activate"),
                   G_OBJECT_CLASS_TYPE (object_class),
