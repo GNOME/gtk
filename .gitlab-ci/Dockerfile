@@ -20,6 +20,10 @@ RUN dnf -y install \
     glib2-devel \
     gobject-introspection-devel \
     graphene-devel \
+    gstreamer1-devel \
+    gstreamer1-plugins-good \
+    gstreamer1-plugins-bad-free-devel \
+    gstreamer1-plugins-base-devel \
     iso-codes \
     itstool \
     json-glib-devel \
