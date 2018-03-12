@@ -38,6 +38,30 @@ struct _GdkMemoryTextureClass
 
 G_DEFINE_TYPE (GdkMemoryTexture, gdk_memory_texture, GDK_TYPE_TEXTURE)
 
+static gsize
+gdk_memory_format_bytes_per_pixel (GdkMemoryFormat format)
+{
+  switch (format)
+    {
+    case GDK_MEMORY_B8G8R8A8_PREMULTIPLIED:
+    case GDK_MEMORY_A8R8G8B8_PREMULTIPLIED:
+    case GDK_MEMORY_B8G8R8A8:
+    case GDK_MEMORY_A8R8G8B8:
+    case GDK_MEMORY_R8G8B8A8:
+    case GDK_MEMORY_A8B8G8R8:
+      return 4;
+
+    case GDK_MEMORY_R8G8B8:
+    case GDK_MEMORY_B8G8R8:
+      return 3;
+
+    case GDK_MEMORY_N_FORMATS:
+    default:
+      g_assert_not_reached ();
+      return 4;
+    }
+}
+
 static void
 gdk_memory_texture_dispose (GObject *object)
 {
@@ -49,17 +73,21 @@ gdk_memory_texture_dispose (GObject *object)
 }
 
 static void
-gdk_memory_texture_download (GdkTexture *texture,
-                             guchar     *data,
-                             gsize       stride)
+gdk_memory_texture_download (GdkTexture         *texture,
+                             const GdkRectangle *area,
+                             guchar             *data,
+                             gsize               stride)
 {
   GdkMemoryTexture *self = GDK_MEMORY_TEXTURE (texture);
 
   gdk_memory_convert (data, stride,
                       GDK_MEMORY_CAIRO_FORMAT_ARGB32,
-                      g_bytes_get_data (self->bytes, NULL), self->stride,
+                      (guchar *) g_bytes_get_data (self->bytes, NULL)
+                        + area->x * gdk_memory_format_bytes_per_pixel (self->format)
+                        + area->y * self->stride,
+                      self->stride,
                       self->format,
-                      texture->width, texture->height);
+                      area->width, area->height);
 }
 
 static void

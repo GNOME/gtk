@@ -68,9 +68,10 @@ gdk_gl_texture_dispose (GObject *object)
 }
 
 static void
-gdk_gl_texture_download (GdkTexture *texture,
-                         guchar     *data,
-                         gsize       stride)
+gdk_gl_texture_download (GdkTexture         *texture,
+                         const GdkRectangle *area,
+                         guchar             *data,
+                         gsize               stride)
 {
   GdkGLTexture *self = GDK_GL_TEXTURE (texture);
   cairo_surface_t *surface;
@@ -78,7 +79,7 @@ gdk_gl_texture_download (GdkTexture *texture,
 
   surface = cairo_image_surface_create_for_data (data,
                                                  CAIRO_FORMAT_ARGB32,
-                                                 texture->width, texture->height,
+                                                 area->width, area->height,
                                                  stride);
 
   cr = cairo_create (surface);
@@ -93,8 +94,9 @@ gdk_gl_texture_download (GdkTexture *texture,
       GdkWindow *window;
 
       window = gdk_gl_context_get_window (self->context);
-      gdk_cairo_draw_from_gl (cr, window, self->id, GL_TEXTURE, 1, 0, 0,
-                              texture->width, texture->height);
+      gdk_cairo_draw_from_gl (cr, window, self->id, GL_TEXTURE, 1, 
+                              area->x, area->y,
+                              area->width, area->height);
     }
 
   cairo_destroy (cr);
