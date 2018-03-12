@@ -8773,9 +8773,9 @@ gtk_widget_get_direction (GtkWidget *widget)
 }
 
 static void
-gtk_widget_set_default_direction_recurse (GtkWidget *widget, gpointer data)
+gtk_widget_set_default_direction_recurse (GtkWidget        *widget,
+                                          GtkTextDirection  old_dir)
 {
-  GtkTextDirection old_dir = GPOINTER_TO_UINT (data);
   GtkWidget *child;
 
   g_object_ref (widget);
@@ -8787,7 +8787,7 @@ gtk_widget_set_default_direction_recurse (GtkWidget *widget, gpointer data)
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
     {
-      gtk_widget_set_default_direction_recurse (child, data);
+      gtk_widget_set_default_direction_recurse (child, old_dir);
     }
 
   g_object_unref (widget);
@@ -8818,8 +8818,7 @@ gtk_widget_set_default_direction (GtkTextDirection dir)
 
       while (tmp_list)
 	{
-	  gtk_widget_set_default_direction_recurse (tmp_list->data,
-						    GUINT_TO_POINTER (old_dir));
+	  gtk_widget_set_default_direction_recurse (tmp_list->data, old_dir);
 	  g_object_unref (tmp_list->data);
 	  tmp_list = tmp_list->next;
 	}
