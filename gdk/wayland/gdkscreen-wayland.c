@@ -50,6 +50,10 @@ typedef struct {
         const gchar *hintstyle;
 } GsdXftSettings;
 
+typedef struct {
+  guint  fontconfig_timestamp;
+  gchar *modules;
+} GsdExtSettings;
 
 struct _GdkWaylandScreen
 {
@@ -66,6 +70,11 @@ struct _GdkWaylandScreen
 
   GHashTable *settings;
   GsdXftSettings xft_settings;
+  GsdExtSettings dbus_settings;
+
+  GDBusProxy *dbus_proxy;
+  GCancellable *dbus_cancellable;
+  gulong dbus_setting_change_id;
 
   guint32    shell_capabilities;
 };
@@ -77,6 +86,8 @@ struct _GdkWaylandScreenClass
 
 #define OUTPUT_VERSION_WITH_DONE 2
 
+#define GTK_SETTINGS_DBUS_PATH "/org/gtk/Settings"
+#define GTK_SETTINGS_DBUS_NAME "org.gtk.Settings"
 
 GType _gdk_wayland_screen_get_type (void);
 
@@ -86,6 +97,15 @@ static void
 gdk_wayland_screen_dispose (GObject *object)
 {
   GdkWaylandScreen *screen_wayland = GDK_WAYLAND_SCREEN (object);
+
+  if (screen_wayland->dbus_proxy && screen_wayland->dbus_setting_change_id > 0)
+    {
+      g_signal_handler_disconnect (screen_wayland->dbus_proxy,
+                                   screen_wayland->dbus_setting_change_id);
+      screen_wayland->dbus_setting_change_id = 0;
+    }
+
+  g_cancellable_cancel (screen_wayland->dbus_cancellable);
 
   if (screen_wayland->root_window)
     _gdk_window_destroy (screen_wayland->root_window, FALSE);
@@ -98,12 +118,17 @@ gdk_wayland_screen_finalize (GObject *object)
 {
   GdkWaylandScreen *screen_wayland = GDK_WAYLAND_SCREEN (object);
 
+  g_clear_object (&screen_wayland->dbus_proxy);
+  g_clear_object (&screen_wayland->dbus_cancellable);
+
   if (screen_wayland->root_window)
     g_object_unref (screen_wayland->root_window);
 
   g_object_unref (screen_wayland->visual);
 
   g_hash_table_destroy (screen_wayland->settings);
+
+  g_free (screen_wayland->dbus_settings.modules);
 
   G_OBJECT_CLASS (_gdk_wayland_screen_parent_class)->finalize (object);
 }
@@ -653,6 +678,7 @@ gdk_wayland_screen_get_setting (GdkScreen   *screen,
                                 const gchar *name,
                                 GValue      *value)
 {
+  GdkWaylandScreen *wayland_screen = GDK_WAYLAND_SCREEN (screen);
   TranslationEntry *entry;
 
   g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
@@ -685,6 +711,18 @@ gdk_wayland_screen_get_setting (GdkScreen   *screen,
   if (strcmp (name, "gtk-dialogs-use-header") == 0)
     {
       g_value_set_boolean (value, TRUE);
+      return TRUE;
+    }
+
+  if (strcmp (name, "gtk-fontconfig-timestamp") == 0)
+    {
+      g_value_set_uint (value, wayland_screen->dbus_settings.fontconfig_timestamp);
+      return TRUE;
+    }
+
+  if (strcmp (name, "gtk-modules") == 0)
+    {
+      g_value_set_string (value, wayland_screen->dbus_settings.modules);
       return TRUE;
     }
 
@@ -825,6 +863,107 @@ gdk_wayland_visual_new (GdkScreen *screen)
   return visual;
 }
 
+static void
+dbus_properties_change_cb (GDBusProxy         *proxy,
+                           GVariant           *changed_properties,
+                           const gchar* const *invalidated_properties,
+                           gpointer            user_data)
+{
+  GdkWaylandScreen *screen_wayland = user_data;
+  GVariant *value;
+  gint64 timestamp;
+
+  if (g_variant_n_children (changed_properties) <= 0)
+    return;
+
+  value = g_variant_lookup_value (changed_properties,
+                                  "FontconfigTimestamp",
+                                  G_VARIANT_TYPE_INT64);
+
+  if (value != NULL)
+    {
+      timestamp = g_variant_get_int64 (value);
+      timestamp = timestamp / G_TIME_SPAN_SECOND;
+
+      if (timestamp > 0 && timestamp <= G_MAXUINT)
+        screen_wayland->dbus_settings.fontconfig_timestamp = (guint)timestamp;
+      else if (timestamp > G_MAXUINT)
+        g_warning ("Could not handle fontconfig update: timestamp out of bound");
+
+      notify_setting (GDK_SCREEN (screen_wayland), "gtk-fontconfig-timestamp");
+
+      g_variant_unref (value);
+    }
+
+  value = g_variant_lookup_value (changed_properties,
+                                  "Modules",
+                                  G_VARIANT_TYPE_STRING);
+
+  if (value != NULL)
+    {
+      g_free (screen_wayland->dbus_settings.modules);
+
+      screen_wayland->dbus_settings.modules = g_variant_dup_string (value, NULL);
+
+      notify_setting (GDK_SCREEN (screen_wayland), "gtk-modules");
+
+      g_variant_unref (value);
+    }
+}
+
+static void
+fontconfig_dbus_proxy_open_cb (GObject      *object,
+                               GAsyncResult *result,
+                               gpointer      user_data)
+{
+  GdkWaylandScreen *screen_wayland = user_data;
+  GDBusProxy *proxy;
+  GVariant *value;
+  gint64 timestamp;
+
+  proxy = g_dbus_proxy_new_for_bus_finish (result, NULL);
+
+  if (proxy == NULL)
+    return;
+
+  screen_wayland->dbus_proxy = proxy;
+  screen_wayland->dbus_setting_change_id =
+    g_signal_connect (screen_wayland->dbus_proxy,
+                      "g-properties-changed",
+                      G_CALLBACK (dbus_properties_change_cb),
+                      screen_wayland);
+
+  value = g_dbus_proxy_get_cached_property (screen_wayland->dbus_proxy,
+                                            "FontconfigTimestamp");
+
+  if (value && g_variant_is_of_type (value, G_VARIANT_TYPE_INT64))
+    {
+      timestamp = g_variant_get_int64 (value);
+      timestamp = timestamp / G_TIME_SPAN_SECOND;
+
+      if (timestamp > 0 && timestamp <= G_MAXUINT)
+        screen_wayland->dbus_settings.fontconfig_timestamp = (guint)timestamp;
+      else if (timestamp > G_MAXUINT)
+        g_warning ("Could not handle fontconfig init: timestamp out of bound");
+    }
+
+  if (value != NULL)
+    g_variant_unref (value);
+
+  value = g_dbus_proxy_get_cached_property (screen_wayland->dbus_proxy,
+                                            "Modules");
+
+  if (value && g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
+    {
+      g_free (screen_wayland->dbus_settings.modules);
+
+      screen_wayland->dbus_settings.modules = g_variant_dup_string (value, NULL);
+    }
+
+  if (value != NULL)
+    g_variant_unref (value);
+}
+
 GdkScreen *
 _gdk_wayland_screen_new (GdkDisplay *display)
 {
@@ -844,6 +983,17 @@ _gdk_wayland_screen_new (GdkDisplay *display)
     _gdk_wayland_screen_create_root_window (screen,
                                             screen_wayland->width,
                                             screen_wayland->height);
+
+  screen_wayland->dbus_cancellable = g_cancellable_new ();
+  g_dbus_proxy_new_for_bus (G_BUS_TYPE_SESSION,
+                            G_DBUS_PROXY_FLAGS_NONE,
+                            NULL,
+                            GTK_SETTINGS_DBUS_NAME,
+                            GTK_SETTINGS_DBUS_PATH,
+                            GTK_SETTINGS_DBUS_NAME,
+                            screen_wayland->dbus_cancellable,
+                            fontconfig_dbus_proxy_open_cb,
+                            screen_wayland);
 
   init_settings (screen);
 
