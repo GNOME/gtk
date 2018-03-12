@@ -5814,7 +5814,7 @@ translate_event_coordinates (GdkEvent  *event,
 {
   GtkWidget *event_widget;
   double x, y;
-  double dx, dy;
+  double dx = 0.0, dy = 0.0;
 
   if (!gdk_event_get_coords (event, &x, &y))
     return;
