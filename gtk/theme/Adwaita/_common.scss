@@ -38,6 +38,7 @@ $button_transition: all 200ms $ease-out-quad;
   -gtk-outline-radius: 2px;
 
   -gtk-secondary-caret-color: $selected_bg_color
+  font-feature-settings: 'tnum';
 }
 
 
@@ -266,6 +267,7 @@ entry {
     border: 1px solid;
     border-radius: 3px;
     transition: all 200ms $ease-out-quad;
+    font-feature-settings: normal;
 
     @include entry(normal);
 
