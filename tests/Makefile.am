@@ -90,6 +90,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testiconview-keynav		\
 	testicontheme			\
 	testimage			\
+	testinfobar                     \
 	testinput			\
 	testkineticscrolling		\
 	testlist			\
