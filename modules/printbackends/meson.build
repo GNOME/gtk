@@ -94,17 +94,19 @@ else
   colord_dep = []
 endif
 
+printbackends_args = [
+  '-DGTK_COMPILATION',
+  '-DGTK_DISABLE_DEPRECATION_WARNINGS',
+  '-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED',
+]
+
 if print_backends.contains('cups')
   shared_module('printbackend-cups',
                 'gtkprintbackendcups.c',
                 'gtkprintercups.c',
                 'gtkcupsutils.c',
                 'gtkcupssecretsutils.c',
-                c_args: [
-                  '-DGTK_COMPILATION',
-                  '-DGTK_DISABLE_DEPRECATION_WARNINGS',
-                  '-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED',
-                ],
+                c_args: printbackends_args,
                 dependencies: [libgtk_dep, libcups, colord_dep],
                 install_dir: printbackends_install_dir,
                 install : true)
@@ -115,10 +117,7 @@ if print_backends.contains('cloudprint')
                 'gtkprintbackendcloudprint.c',
                 'gtkprintercloudprint.c',
                 'gtkcloudprintaccount.c',
-                c_args: [
-                  '-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED',
-                 '-DGTK_DISABLE_DEPRECATION_WARNINGS',
-                ],
+                c_args: printbackends_args,
                 dependencies: [ libgtk_dep, rest_dep, json_glib_dep ],
                 install_dir: printbackends_install_dir,
                 install : true)
@@ -127,11 +126,7 @@ endif
 if print_backends.contains('file')
   shared_module('printbackend-file',
                 'gtkprintbackendfile.c',
-                c_args: [
-                  '-DGTK_COMPILATION',
-                  '-DGTK_DISABLE_DEPRECATION_WARNINGS',
-                  '-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED',
-                ],
+                c_args: printbackends_args,
                 dependencies: libgtk_dep,
                 install_dir: printbackends_install_dir,
                 install : true)
@@ -140,11 +135,7 @@ endif
 if print_backends.contains('lpr')
   shared_module('printbackend-lpr',
                 'gtkprintbackendlpr.c',
-                c_args: [
-                  '-DGTK_COMPILATION',
-                  '-DGTK_DISABLE_DEPRECATION_WARNINGS',
-                  '-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED',
-                ],
+                c_args: printbackends_args,
                 dependencies: libgtk_dep,
                 install_dir: printbackends_install_dir,
                 install : true)
