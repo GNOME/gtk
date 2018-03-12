@@ -46,9 +46,9 @@
  * @Title: GtkFrame
  *
  * The frame widget is a bin that surrounds its child with a decorative
- * frame and an optional label. If present, the label is drawn in a gap
- * in the top side of the frame. The position of the label can be
- * controlled with gtk_frame_set_label_align().
+ * frame and an optional label. If present, the label is drawn inside
+ * the top edge of the frame. The horizontal position of the label can
+ * be controlled with gtk_frame_set_label_align().
  *
  * # GtkFrame as GtkBuildable
  *
@@ -94,8 +94,6 @@ struct _GtkFramePrivate
 
   gint16 shadow_type;
   gfloat label_xalign;
-  gfloat label_yalign;
-  /* Properties */
 
   GtkAllocation child_allocation;
   GtkAllocation label_allocation;
@@ -105,7 +103,6 @@ enum {
   PROP_0,
   PROP_LABEL,
   PROP_LABEL_XALIGN,
-  PROP_LABEL_YALIGN,
   PROP_SHADOW_TYPE,
   PROP_LABEL_WIDGET,
   LAST_PROP
@@ -184,14 +181,6 @@ gtk_frame_class_init (GtkFrameClass *class)
                           0.0,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  frame_props[PROP_LABEL_YALIGN] =
-      g_param_spec_float ("label-yalign",
-                          P_("Label yalign"),
-                          P_("The vertical alignment of the label"),
-                          0.0, 1.0,
-                          0.5,
-                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
   frame_props[PROP_SHADOW_TYPE] =
       g_param_spec_enum ("shadow-type",
                          P_("Frame shadow"),
@@ -252,7 +241,6 @@ gtk_frame_init (GtkFrame *frame)
   priv->label_widget = NULL;
   priv->shadow_type = GTK_SHADOW_ETCHED_IN;
   priv->label_xalign = 0.0;
-  priv->label_yalign = 0.5;
 }
 
 static void 
@@ -262,7 +250,6 @@ gtk_frame_set_property (GObject         *object,
 			GParamSpec      *pspec)
 {
   GtkFrame *frame = GTK_FRAME (object);
-  GtkFramePrivate *priv = frame->priv;
 
   switch (prop_id)
     {
@@ -270,13 +257,8 @@ gtk_frame_set_property (GObject         *object,
       gtk_frame_set_label (frame, g_value_get_string (value));
       break;
     case PROP_LABEL_XALIGN:
-      gtk_frame_set_label_align (frame, g_value_get_float (value), 
-				 priv->label_yalign);
+      gtk_frame_set_label_align (frame, g_value_get_float (value));
      break;
-    case PROP_LABEL_YALIGN:
-      gtk_frame_set_label_align (frame, priv->label_xalign,
-				 g_value_get_float (value));
-      break;
     case PROP_SHADOW_TYPE:
       gtk_frame_set_shadow_type (frame, g_value_get_enum (value));
       break;
@@ -305,9 +287,6 @@ gtk_frame_get_property (GObject         *object,
       break;
     case PROP_LABEL_XALIGN:
       g_value_set_float (value, priv->label_xalign);
-      break;
-    case PROP_LABEL_YALIGN:
-      g_value_set_float (value, priv->label_yalign);
       break;
     case PROP_SHADOW_TYPE:
       g_value_set_enum (value, priv->shadow_type);
@@ -497,18 +476,13 @@ gtk_frame_get_label_widget (GtkFrame *frame)
  * @xalign: The position of the label along the top edge
  *   of the widget. A value of 0.0 represents left alignment;
  *   1.0 represents right alignment.
- * @yalign: The y alignment of the label. A value of 0.0 aligns under 
- *   the frame; 1.0 aligns above the frame. If the values are exactly
- *   0.0 or 1.0 the gap in the frame won’t be painted because the label
- *   will be completely above or below the frame.
  * 
- * Sets the alignment of the frame widget’s label. The
- * default values for a newly created frame are 0.0 and 0.5.
+ * Sets the X alignment of the frame widget’s label. The
+ * default value for a newly created frame is 0.0.
  **/
 void
 gtk_frame_set_label_align (GtkFrame *frame,
-			   gfloat    xalign,
-			   gfloat    yalign)
+                           gfloat    xalign)
 {
   GtkFramePrivate *priv;
 
@@ -517,19 +491,12 @@ gtk_frame_set_label_align (GtkFrame *frame,
   priv = frame->priv;
 
   xalign = CLAMP (xalign, 0.0, 1.0);
-  yalign = CLAMP (yalign, 0.0, 1.0);
 
   g_object_freeze_notify (G_OBJECT (frame));
   if (xalign != priv->label_xalign)
     {
       priv->label_xalign = xalign;
       g_object_notify_by_pspec (G_OBJECT (frame), frame_props[PROP_LABEL_XALIGN]);
-    }
-
-  if (yalign != priv->label_yalign)
-    {
-      priv->label_yalign = yalign;
-      g_object_notify_by_pspec (G_OBJECT (frame), frame_props[PROP_LABEL_YALIGN]);
     }
 
   g_object_thaw_notify (G_OBJECT (frame));
@@ -539,29 +506,16 @@ gtk_frame_set_label_align (GtkFrame *frame,
 /**
  * gtk_frame_get_label_align:
  * @frame: a #GtkFrame
- * @xalign: (out) (allow-none): location to store X alignment of
- *     frame’s label, or %NULL
- * @yalign: (out) (allow-none): location to store X alignment of
- *     frame’s label, or %NULL
  * 
- * Retrieves the X and Y alignment of the frame’s label. See
+ * Retrieves the X alignment of the frame’s label. See
  * gtk_frame_set_label_align().
  **/
-void
-gtk_frame_get_label_align (GtkFrame *frame,
-		           gfloat   *xalign,
-			   gfloat   *yalign)
+gfloat
+gtk_frame_get_label_align (GtkFrame *frame)
 {
-  GtkFramePrivate *priv;
+  g_return_val_if_fail (GTK_IS_FRAME (frame), 0.0);
 
-  g_return_if_fail (GTK_IS_FRAME (frame));
-
-  priv = frame->priv;
-
-  if (xalign)
-    *xalign = priv->label_xalign;
-  if (yalign)
-    *yalign = priv->label_yalign;
+  return frame->priv->label_xalign;
 }
 
 /**
