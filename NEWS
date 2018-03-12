@@ -1,3 +1,50 @@
+Overview of Changes in GTK+ 3.22.29
+====================================
+
+* Wayland 
+ - add an input method based on the text protocol
+
+* File chooser
+ - Stop activating without double-click
+
+* Bugs fixed:
+ 710888 GtkInfoBar not shown after calling gtk_widget_show
+ 743975 Better deprecation information for GtkStatusIcon
+ 775546 gdkscreen-x11: Don't try to calculate a refresh rate for RandR 1.3...
+ 794008 GtkListBoxRow signal poorly documented 
+
+* Translation updates:
+ Brazilian Portuguese
+ British English
+ Catalan
+ Croatian
+ Czech
+ Danish
+ Dutch
+ Esperanto
+ Estonian
+ French
+ Friulian
+ Galician
+ German
+ Hungarian
+ Icelandic
+ Indonesian
+ Italian
+ Kazakh
+ Korean
+ Latvian
+ Lithuanian
+ Polish
+ Russian
+ Scottish Gaelic
+ Serbian
+ Serbian Latin
+ Slovak
+ Swedish
+ Turkish
+
+
 2Overview of Changes in GTK+ 3.22.28
 ===================================
 
