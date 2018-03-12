@@ -1255,7 +1255,7 @@ gtk_info_bar_get_show_close_button (GtkInfoBar *info_bar)
  * Note that this property does not automatically show @info_bar and thus won’t
  * have any effect if it is invisible.
  *
- * Since: 3.22
+ * Since: 3.22.29
  */
 void
 gtk_info_bar_set_revealed (GtkInfoBar *info_bar,
@@ -1279,7 +1279,7 @@ gtk_info_bar_set_revealed (GtkInfoBar *info_bar,
  *
  * Returns: the current value of the GtkInfoBar:revealed property.
  *
- * Since: 3.22
+ * Since: 3.22.29
  */
 gboolean
 gtk_info_bar_get_revealed (GtkInfoBar *info_bar)
