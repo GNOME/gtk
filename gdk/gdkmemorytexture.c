@@ -241,8 +241,8 @@ static ConversionFunc converters[GDK_MEMORY_N_FORMATS][2] =
   { convert_swizzle_premultiply_3210_0123, convert_swizzle_premultiply_0123_0123 },
   { convert_swizzle_premultiply_3210_3012, convert_swizzle_premultiply_0123_3012 },
   { convert_swizzle_premultiply_3210_0321, convert_swizzle_premultiply_0123_0321 },
-  { convert_swizzle_opaque_3210, convert_swizzle_opaque_3012 },
-  { convert_swizzle_opaque_0123, convert_swizzle_opaque_0321 }
+  { convert_swizzle_opaque_3210, convert_swizzle_opaque_0123 },
+  { convert_swizzle_opaque_3012, convert_swizzle_opaque_0321 }
 };
 
 void
