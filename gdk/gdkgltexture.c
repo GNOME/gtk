@@ -178,7 +178,7 @@ gdk_gl_texture_release (GdkTexture *texture)
 }
 
 /**
- * gdk_gl_texture_new:
+ * gdk_gl_texture_new: (constructor)
  * @context: a #GdkGLContext
  * @id: the ID of a texture that was created with @context
  * @width: the nominal width of the texture
@@ -193,8 +193,8 @@ gdk_gl_texture_release (GdkTexture *texture)
  * which will happen when the GdkTexture object is finalized, or due to
  * an explicit call of gdk_texture_release_gl().
  *
- * Return value: A newly-created #GdkTexture
- **/
+ * Return value: (transfer full): A newly-created #GdkTexture
+ */
 GdkTexture *
 gdk_gl_texture_new (GdkGLContext   *context,
                     guint           id,
