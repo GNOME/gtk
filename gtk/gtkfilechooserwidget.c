@@ -3271,7 +3271,7 @@ gtk_file_chooser_widget_get_subtitle (GtkFileChooserWidget *impl)
     {
       gchar *location;
 
-      subtitle = _("Searching");
+      subtitle = g_strdup (_("Searching"));
 
       location = gtk_places_sidebar_get_location_title (GTK_PLACES_SIDEBAR (priv->places_sidebar));
       if (location)
