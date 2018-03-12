@@ -20,36 +20,11 @@
 #ifndef __GDK_MEMORY_TEXTURE_PRIVATE_H__
 #define __GDK_MEMORY_TEXTURE_PRIVATE_H__
 
+#include "gdkmemorytexture.h"
+
 #include "gdktextureprivate.h"
 
 G_BEGIN_DECLS
-
-/*
- * GdkMemoryFormat:
- *
- * #GdkMemroyFormat describes a format that bytes can have in memory.
- *
- * It describes formats by listing the contents of the memory passed to it.
- * So GDK_MEMORY_A8R8G8B8 will be 8 bits of alpha, followed by 8 bites of each 
- * blue, green and red. It is not endian-dependant, so CAIRO_FORMAT_ARGB32 is
- * represented by 2 different GdkMemoryFormats.
- * 
- * Its naming is modelled after VkFormat (see
- * https://www.khronos.org/registry/vulkan/specs/1.0/html/vkspec.html#VkFormat
- * for details).
- */
-typedef enum {
-  GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
-  GDK_MEMORY_A8R8G8B8_PREMULTIPLIED,
-  GDK_MEMORY_B8G8R8A8,
-  GDK_MEMORY_A8R8G8B8,
-  GDK_MEMORY_R8G8B8A8,
-  GDK_MEMORY_A8B8G8R8,
-  GDK_MEMORY_R8G8B8,
-  GDK_MEMORY_B8G8R8,
-
-  GDK_MEMORY_N_FORMATS
-} GdkMemoryFormat;
 
 #define GDK_MEMORY_GDK_PIXBUF_OPAQUE GDK_MEMORY_R8G8B8
 #define GDK_MEMORY_GDK_PIXBUF_ALPHA GDK_MEMORY_R8G8B8A8
@@ -65,12 +40,6 @@ typedef enum {
 #define GDK_TYPE_MEMORY_TEXTURE (gdk_memory_texture_get_type ())
 
 G_DECLARE_FINAL_TYPE (GdkMemoryTexture, gdk_memory_texture, GDK, MEMORY_TEXTURE, GdkTexture)
-
-GdkTexture *            gdk_memory_texture_new              (int                width,
-                                                             int                height,
-                                                             GdkMemoryFormat    format,
-                                                             GBytes            *bytes,
-                                                             gsize              stride);
 
 GdkMemoryFormat         gdk_memory_texture_get_format       (GdkMemoryTexture  *self);
 const guchar *          gdk_memory_texture_get_data         (GdkMemoryTexture  *self);

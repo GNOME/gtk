@@ -6,6 +6,7 @@ tests = [
   'display',
   'encoding',
   'keysyms',
+  'memorytexture',
   'rectangle',
   'rgba',
   'seat',
