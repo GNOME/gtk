@@ -1,64 +1,95 @@
 #include <gtk/gtk.h>
 
-static void
-on_button_visible_toggled (GtkToggleButton *button,
-                           void            *user_data)
-{
-  GtkInfoBar *info_bar = GTK_INFO_BAR (user_data);
-
-  gtk_widget_set_visible (GTK_WIDGET (info_bar),
-                          gtk_toggle_button_get_active (button));
-}
+typedef enum {
+  RESPONSE_UNREVEAL,
+} Response;
 
 static void
-on_button_revealed_toggled (GtkToggleButton *button,
-                            void            *user_data)
+on_info_bar_response (GtkInfoBar *info_bar,
+                      int         response_id,
+                      void       *user_data)
 {
-  GtkInfoBar *info_bar = GTK_INFO_BAR (user_data);
+  switch (response_id)
+  {
+  case GTK_RESPONSE_CLOSE:
+    gtk_widget_hide (GTK_WIDGET (info_bar));
+    break;
 
-  gtk_info_bar_set_revealed (info_bar,
-                             gtk_toggle_button_get_active (button));
+  case RESPONSE_UNREVEAL:
+    gtk_info_bar_set_revealed (info_bar, FALSE);
+    break;
+
+  default:
+    g_assert_not_reached ();
+  }
 }
 
 static void
 on_activate (GApplication *application,
              void         *user_data)
 {
-  GtkWidget *window;
   GtkWidget *box;
-
   GtkWidget *info_bar;
-  GtkWidget *content_area;
-  GtkWidget *label;
-
-  GtkWidget *button_visible;
-  GtkWidget *button_revealed;
-
-  info_bar = gtk_info_bar_new ();
-  content_area = gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar));
-  label = gtk_label_new ("Hello!\n\nI am a GtkInfoBar");
-  gtk_container_add (GTK_CONTAINER (content_area), label);
-
-  button_visible = gtk_toggle_button_new_with_label ("Toggle ::visible");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button_visible), TRUE);
-  g_signal_connect (button_visible, "toggled",
-                    G_CALLBACK (on_button_visible_toggled), info_bar);
-
-  button_revealed = gtk_toggle_button_new_with_label ("Toggle ::revealed");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button_revealed), TRUE);
-  g_signal_connect (button_revealed, "toggled",
-                    G_CALLBACK (on_button_revealed_toggled), info_bar);
+  GtkWidget *widget;
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
-  gtk_container_add (GTK_CONTAINER (box), button_visible);
-  gtk_container_add (GTK_CONTAINER (box), button_revealed);
+
+  info_bar = gtk_info_bar_new ();
+  gtk_container_add (GTK_CONTAINER (gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar))),
+                     gtk_label_new ("Hello!\nI am a GtkInfoBar"));
+
+  widget = gtk_toggle_button_new_with_label ("Toggle :visible");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+  g_object_bind_property (widget, "active",
+                          info_bar, "visible",
+                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
+  gtk_container_add (GTK_CONTAINER (box), widget);
+
+  widget = gtk_toggle_button_new_with_label ("Toggle :revealed");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+  g_object_bind_property (widget, "active",
+                          info_bar, "revealed",
+                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
+  gtk_container_add (GTK_CONTAINER (box), widget);
+
+  widget = gtk_toggle_button_new_with_label ("Toggle :show-close-button");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+  g_object_bind_property (widget, "active",
+                          info_bar, "show-close-button",
+                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
+  gtk_container_add (GTK_CONTAINER (box), widget);
+
+  widget = gtk_combo_box_text_new ();
+  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (widget),
+                             NULL, "GTK_MESSAGE_INFO");
+  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (widget),
+                             NULL, "GTK_MESSAGE_WARNING");
+  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (widget),
+                             NULL, "GTK_MESSAGE_QUESTION");
+  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (widget),
+                             NULL, "GTK_MESSAGE_ERROR");
+  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (widget),
+                             NULL, "GTK_MESSAGE_OTHER");
+  gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
+  g_object_bind_property (widget, "active",
+                          info_bar, "message-type",
+                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
+  gtk_container_add (GTK_CONTAINER (box), widget);
+
   gtk_container_add (GTK_CONTAINER (box), info_bar);
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_container_add (GTK_CONTAINER (window), box);
-  gtk_widget_show_all (window);
+  widget = gtk_button_new_with_label ("Un-reveal");
+  gtk_info_bar_add_action_widget (GTK_INFO_BAR (info_bar), widget,
+                                  RESPONSE_UNREVEAL);
+
+  g_signal_connect (info_bar, "response",
+                    G_CALLBACK (on_info_bar_response), widget);
+
+  widget = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_container_add (GTK_CONTAINER (widget), box);
+  gtk_widget_show_all (widget);
   gtk_application_add_window (GTK_APPLICATION (application),
-                              GTK_WINDOW (window));
+                              GTK_WINDOW (widget));
 }
 
 int
