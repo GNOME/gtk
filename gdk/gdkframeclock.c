@@ -541,10 +541,10 @@ _gdk_frame_clock_debug_print_timings (GdkFrameClock   *clock,
  * gdk_frame_clock_get_refresh_info:
  * @frame_clock: a #GdkFrameClock
  * @base_time: base time for determining a presentaton time
- * @refresh_interval_return: a location to store the determined refresh
- *  interval, or %NULL. A default refresh interval of 1/60th of
- *  a second will be stored if no history is present.
- * @presentation_time_return: a location to store the next
+ * @refresh_interval_return: (out) (optional): a location to store the
+ * determined refresh interval, or %NULL. A default refresh interval of
+ * 1/60th of a second will be stored if no history is present.
+ * @presentation_time_return: (out): a location to store the next
  *  candidate presentation time after the given base time.
  *  0 will be will be stored if no history is present.
  *
