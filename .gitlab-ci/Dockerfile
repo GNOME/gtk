@@ -59,6 +59,7 @@ RUN dnf -y install \
     vulkan-devel \
     wayland-devel \
     wayland-protocols-devel \
+    which \
     xorg-x11-server-Xvfb
 
 ARG HOST_USER_ID=5555
