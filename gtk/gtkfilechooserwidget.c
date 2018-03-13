@@ -3192,13 +3192,11 @@ static gchar *
 gtk_file_chooser_widget_get_subtitle (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
-  gchar *subtitle;
+  gchar *subtitle = NULL;
 
   if (priv->operation_mode == OPERATION_MODE_SEARCH)
     {
       gchar *location;
-
-      subtitle = g_strdup (_("Searching"));
 
       location = gtk_places_sidebar_get_location_title (GTK_PLACES_SIDEBAR (priv->places_sidebar));
       if (location)
@@ -3221,6 +3219,9 @@ gtk_file_chooser_widget_get_subtitle (GtkFileChooserWidget *impl)
               g_object_unref (info);
             }
         }
+
+      if (subtitle == NULL)
+        subtitle = g_strdup (_("Searching"));
     }
   else if (priv->operation_mode == OPERATION_MODE_ENTER_LOCATION ||
            (priv->operation_mode == OPERATION_MODE_BROWSE &&
@@ -3230,10 +3231,6 @@ gtk_file_chooser_widget_get_subtitle (GtkFileChooserWidget *impl)
         subtitle = g_strdup (_("Enter location"));
       else
         subtitle = g_strdup (_("Enter location or URL"));
-    }
-  else
-    {
-      subtitle = NULL;
     }
 
   return subtitle;
