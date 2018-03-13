@@ -1,4 +1,4 @@
-image: lazka/gitlab-gtk:v1
+image: ebassi/gitlab-gtk:latest
 
 stages:
   - build
