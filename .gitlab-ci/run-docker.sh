@@ -14,6 +14,6 @@ TAG="lazka/gitlab-gtk-3-22:v1"
 # created in the mounted volume have the same owner
 sudo docker build \
     --build-arg HOST_USER_ID="$UID" --tag "${TAG}" --file "Dockerfile" .
-sudo docker run \
+sudo docker run --security-opt label=disable \
     --rm --volume "$(pwd)/..:/home/user/app" --workdir "/home/user/app" \
     --tty --interactive "${TAG}" bash
