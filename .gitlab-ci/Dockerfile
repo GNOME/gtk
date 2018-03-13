@@ -10,6 +10,8 @@ RUN dnf -y install \
     ccache \
     colord-devel \
     cups-devel \
+    desktop-file-utils \
+    elfutils-libelf-devel \
     fribidi-devel \
     gcc \
     gcc-c++ \
@@ -18,6 +20,8 @@ RUN dnf -y install \
     gettext \
     git \
     glib2-devel \
+    glibc-devel \
+    glibc-headers \
     gobject-introspection-devel \
     graphene-devel \
     gstreamer1-devel \
@@ -27,9 +31,12 @@ RUN dnf -y install \
     iso-codes \
     itstool \
     json-glib-devel \
+    libattr-devel \
     libepoxy-devel \
+    libffi-devel \
     libmount-devel \
     librsvg2 \
+    libselinux-devel \
     libXcomposite-devel \
     libXcursor-devel \
     libXcursor-devel \
@@ -40,13 +47,16 @@ RUN dnf -y install \
     libxkbcommon-devel \
     libXrandr-devel \
     libXrender-devel \
+    libxslt \
     mesa-dri-drivers \
     mesa-libEGL-devel \
     mesa-libwayland-egl-devel \
     meson \
     pango-devel \
+    pcre-devel \
     redhat-rpm-config \
     sassc \
+    systemtap-sdt-devel \
     vulkan-devel \
     wayland-devel \
     wayland-protocols-devel \
