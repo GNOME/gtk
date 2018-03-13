@@ -2566,6 +2566,23 @@ gdk_win32_drag_context_drop_finish (GdkDragContext *context,
 					   context->dest_window);
       if (src_context)
 	{
+          if (gdk_drag_context_get_selected_action (src_context) == GDK_ACTION_MOVE)
+            {
+              tmp_event = gdk_event_new (GDK_SELECTION_REQUEST);
+              g_set_object (&tmp_event->selection.window, src_context->source_window);
+              tmp_event->selection.send_event = FALSE;
+              tmp_event->selection.selection = _gdk_win32_selection_atom (GDK_WIN32_ATOM_INDEX_LOCAL_DND_SELECTION);
+              tmp_event->selection.target = _gdk_win32_selection_atom (GDK_WIN32_ATOM_INDEX_DELETE);
+              sel_win32->property_change_target_atom = _gdk_win32_selection_atom (GDK_WIN32_ATOM_INDEX_DELETE);
+              tmp_event->selection.property = _gdk_win32_selection_atom (GDK_WIN32_ATOM_INDEX_LOCAL_DND_SELECTION);
+              g_set_object (&tmp_event->selection.requestor, src_context->source_window);
+              tmp_event->selection.time = GDK_CURRENT_TIME; /* ??? */
+
+              GDK_NOTE (EVENTS, _gdk_win32_print_event (tmp_event));
+              gdk_event_put (tmp_event);
+              gdk_event_free (tmp_event);
+            }
+
 	  tmp_event = gdk_event_new (GDK_DROP_FINISHED);
 	  g_set_object (&tmp_event->dnd.window, src_context->source_window);
 	  tmp_event->dnd.send_event = FALSE;
