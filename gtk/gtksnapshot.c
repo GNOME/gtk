@@ -176,7 +176,7 @@ gtk_snapshot_state_clear (GtkSnapshotState *state)
  * gtk_snapshot_new:
  * @renderer: the #GskRenderer to create nodes for
  * @record_names: whether to keep node names (for debugging purposes)
- * @clip: the clip region to use, or %NULL
+ * @clip: (nullable): the clip region to use, or %NULL
  * @name: a printf-style format string to create the node name
  * @...: arguments for @name
  *
