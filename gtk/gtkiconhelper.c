@@ -294,7 +294,7 @@ ensure_paintable_from_texture (GtkIconHelper *self,
                                GdkTexture    *texture,
                                int           *scale)
 {
-  *scale = 1;
+  *scale = gtk_image_definition_get_storage_type (self->def);
 
   return g_object_ref (GDK_PAINTABLE (texture));
 }
@@ -626,7 +626,7 @@ void
 _gtk_icon_helper_set_texture (GtkIconHelper *self,
 			      GdkTexture *texture)
 {
-  gtk_icon_helper_take_definition (self, gtk_image_definition_new_texture (texture));
+  gtk_icon_helper_take_definition (self, gtk_image_definition_new_texture (texture, 1));
 }
 
 void

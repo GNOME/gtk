@@ -381,7 +381,7 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
       take_image_definition (cellpixbuf, gtk_image_definition_new_surface (g_value_get_boxed (value)));
       break;
     case PROP_TEXTURE:
-      take_image_definition (cellpixbuf, gtk_image_definition_new_texture (g_value_get_object (value)));
+      take_image_definition (cellpixbuf, gtk_image_definition_new_texture (g_value_get_object (value), 1));
       break;
     case PROP_ICON_SIZE:
       gtk_cell_renderer_pixbuf_set_icon_size (cellpixbuf, g_value_get_enum (value));
