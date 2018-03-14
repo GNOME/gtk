@@ -762,6 +762,10 @@ gtk_snapshot_collect_rounded_clip (GtkSnapshot      *snapshot,
       clip_node = gsk_rounded_clip_node_new (node, &state->data.rounded_clip.bounds);
     }
 
+  if (clip_node->bounds.size.width == 0 ||
+      clip_node->bounds.size.height == 0)
+    return NULL;
+
   if (name)
     gsk_render_node_set_name (clip_node, name);
 
