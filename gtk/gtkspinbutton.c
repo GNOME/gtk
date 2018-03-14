@@ -2431,9 +2431,10 @@ gtk_spin_button_set_wrap (GtkSpinButton  *spin_button,
 
   if (priv->wrap != wrap)
     {
-       priv->wrap = wrap;
+      priv->wrap = wrap;
+      g_object_notify (G_OBJECT (spin_button), "wrap");
 
-       g_object_notify (G_OBJECT (spin_button), "wrap");
+      update_node_state (spin_button);
     }
 }
 
