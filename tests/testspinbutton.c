@@ -39,7 +39,7 @@ prepare_window_for_orientation (GtkOrientation orientation)
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   g_signal_connect (window, "close-request", G_CALLBACK (on_delete), NULL);
 
-  mainbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
+  mainbox = gtk_box_new (GTK_ORIENTATION_VERTICAL ^ orientation, 2);
   gtk_container_add (GTK_CONTAINER (window), mainbox);
 
   for (max = 9; max <= 999999999; max = max * 10 + 9)
