@@ -729,7 +729,8 @@ gtk_image_set_from_file   (GtkImage    *image,
   GtkImagePrivate *priv = gtk_image_get_instance_private (image);
   GdkPixbufAnimation *anim;
   gint scale_factor;
-  cairo_surface_t *surface;
+  GdkTexture *texture;
+  GtkImageDefinition *def;
 
   g_return_if_fail (GTK_IS_IMAGE (image));
 
@@ -753,11 +754,13 @@ gtk_image_set_from_file   (GtkImage    *image,
       return;
     }
 
-  surface = gdk_cairo_surface_create_from_pixbuf (gdk_pixbuf_animation_get_static_image (anim),
-                                                  scale_factor, _gtk_widget_get_window (GTK_WIDGET (image)));
-  gtk_image_set_from_surface (image, surface);
-  cairo_surface_destroy (surface);
+  texture = gdk_texture_new_for_pixbuf (gdk_pixbuf_animation_get_static_image (anim));
+  def = gtk_image_definition_new_texture (texture, scale_factor);
 
+  gtk_image_set_from_definition (image, def);
+
+  gtk_image_definition_unref (def);
+  g_object_unref (texture);
   g_object_unref (anim);
 
   priv->filename = g_strdup (filename);
@@ -809,7 +812,8 @@ gtk_image_set_from_resource (GtkImage    *image,
   GtkImagePrivate *priv = gtk_image_get_instance_private (image);
   GdkPixbufAnimation *animation;
   gint scale_factor = 1;
-  cairo_surface_t *surface;
+  GdkTexture *texture;
+  GtkImageDefinition *def;
 
   g_return_if_fail (GTK_IS_IMAGE (image));
 
@@ -840,10 +844,13 @@ gtk_image_set_from_resource (GtkImage    *image,
       return;
     }
 
-  surface = gdk_cairo_surface_create_from_pixbuf (gdk_pixbuf_animation_get_static_image (animation),
-                                                  scale_factor, _gtk_widget_get_window (GTK_WIDGET (image)));
-  gtk_image_set_from_surface (image, surface);
-  cairo_surface_destroy (surface);
+  texture = gdk_texture_new_for_pixbuf (gdk_pixbuf_animation_get_static_image (animation));
+  def = gtk_image_definition_new_texture (texture, scale_factor);
+
+  gtk_image_set_from_definition (image, def);
+
+  gtk_image_definition_unref (def);
+  g_object_unref (texture);
 
   priv->resource_path = g_strdup (resource_path);
 
