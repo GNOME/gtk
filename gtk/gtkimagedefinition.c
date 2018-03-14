@@ -57,6 +57,7 @@ struct _GtkImageDefinitionTexture {
   gint ref_count;
 
   GdkTexture *texture;
+  int scale;
 };
 
 struct _GtkImageDefinitionPaintable {
@@ -150,7 +151,8 @@ gtk_image_definition_new_surface (cairo_surface_t *surface)
 }
 
 GtkImageDefinition *
-gtk_image_definition_new_texture (GdkTexture *texture)
+gtk_image_definition_new_texture (GdkTexture *texture,
+                                  gint        scale)
 {
   GtkImageDefinition *def;
 
@@ -159,6 +161,7 @@ gtk_image_definition_new_texture (GdkTexture *texture)
 
   def = gtk_image_definition_alloc (GTK_IMAGE_TEXTURE);
   def->texture.texture = g_object_ref (texture);
+  def->texture.scale = scale;
 
   return def;
 }
@@ -234,11 +237,12 @@ gtk_image_definition_get_scale (const GtkImageDefinition *def)
       g_assert_not_reached ();
     case GTK_IMAGE_EMPTY:
     case GTK_IMAGE_SURFACE:
-    case GTK_IMAGE_TEXTURE:
     case GTK_IMAGE_PAINTABLE:
     case GTK_IMAGE_ICON_NAME:
     case GTK_IMAGE_GICON:
       return 1;
+    case GTK_IMAGE_TEXTURE:
+      return def->texture.scale;
     }
 }
 
