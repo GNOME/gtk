@@ -626,7 +626,7 @@ void
 _gtk_icon_helper_set_texture (GtkIconHelper *self,
 			      GdkTexture *texture)
 {
-  gtk_icon_helper_take_definition (self, gtk_image_definition_new_texture (texture, 1));
+  gtk_icon_helper_take_definition (self, gtk_image_definition_new_texture (texture));
 }
 
 void

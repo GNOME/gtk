@@ -29,8 +29,7 @@ GtkImageDefinition *    gtk_image_definition_new_empty          (void);
 GtkImageDefinition *    gtk_image_definition_new_icon_name      (const char                     *icon_name);
 GtkImageDefinition *    gtk_image_definition_new_gicon          (GIcon                          *gicon);
 GtkImageDefinition *    gtk_image_definition_new_surface        (cairo_surface_t                *surface);
-GtkImageDefinition *    gtk_image_definition_new_texture        (GdkTexture                     *texture,
-                                                                 int                             scale);
+GtkImageDefinition *    gtk_image_definition_new_texture        (GdkTexture                     *texture);
 GtkImageDefinition *    gtk_image_definition_new_paintable      (GdkPaintable                   *paintable);
 
 GtkImageDefinition *    gtk_image_definition_ref                (GtkImageDefinition             *def);
