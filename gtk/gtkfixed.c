@@ -105,8 +105,6 @@ static void gtk_fixed_size_allocate (GtkWidget           *widget,
                                      const GtkAllocation *allocation,
                                      int                  baseline,
                                      GtkAllocation       *out_clip);
-static void gtk_fixed_snapshot      (GtkWidget        *widget,
-                                     GtkSnapshot      *snapshot);
 static void gtk_fixed_add           (GtkContainer     *container,
                                      GtkWidget        *widget);
 static void gtk_fixed_remove        (GtkContainer     *container,
@@ -140,7 +138,6 @@ gtk_fixed_class_init (GtkFixedClass *class)
 
   widget_class->measure = gtk_fixed_measure;
   widget_class->size_allocate = gtk_fixed_size_allocate;
-  widget_class->snapshot = gtk_fixed_snapshot;
 
   container_class->add = gtk_fixed_add;
   container_class->remove = gtk_fixed_remove;
@@ -482,25 +479,3 @@ gtk_fixed_forall (GtkContainer *container,
       (* callback) (child->widget, callback_data);
     }
 }
-
-static void 
-gtk_fixed_snapshot (GtkWidget   *widget,
-                    GtkSnapshot *snapshot)
-{
-  GtkFixed *fixed = GTK_FIXED (widget);
-  GtkFixedPrivate *priv = fixed->priv;
-  GtkFixedChild *child;
-  GList *list;
-
-  for (list = priv->children;
-       list;
-       list = list->next)
-    {
-      child = list->data;
-
-      gtk_widget_snapshot_child (widget,
-                                 child->widget,
-                                 snapshot);
-    }
-}
-
