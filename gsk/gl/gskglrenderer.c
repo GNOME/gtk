@@ -172,7 +172,8 @@ static void add_offscreen_ops                 (GskGLRenderer   *self,
                                                GskRenderNode   *child_node,
                                                int             *texture_id,
                                                gboolean        *is_offscreen,
-                                               gboolean         force_offscreen);
+                                               gboolean         force_offscreen,
+                                               gboolean         reset_clip);
 static void gsk_gl_renderer_add_render_ops     (GskGLRenderer   *self,
                                                 GskRenderNode   *node,
                                                 RenderOpBuilder *builder);
@@ -779,20 +780,43 @@ render_clip_node (GskGLRenderer   *self,
 }
 
 static inline void
-render_rounded_clip_node (GskGLRenderer   *self,
-                          GskRenderNode   *node,
-                          RenderOpBuilder *builder)
+render_rounded_clip_node (GskGLRenderer       *self,
+                          GskRenderNode       *node,
+                          RenderOpBuilder     *builder)
 {
+  const float min_x = node->bounds.origin.x;
+  const float min_y = node->bounds.origin.y;
+  const float max_x = min_x + node->bounds.size.width;
+  const float max_y = min_y + node->bounds.size.height;
+  const GskRoundedRect *child_clip = gsk_rounded_clip_node_peek_clip (node);
   GskRoundedRect prev_clip;
   GskRenderNode *child = gsk_rounded_clip_node_get_child (node);
-  const GskRoundedRect *rounded_clip = gsk_rounded_clip_node_peek_clip (node);
-  GskRoundedRect child_clip;
+  int texture_id;
+  gboolean is_offscreen;
 
-  rounded_rect_intersect (self, builder, rounded_clip, &child_clip);
+  /* NOTE: We are *not* transforming the clip by the current modelview here.
+   *       We instead draw the untransformed clip to a texture and then transform
+   *       that texture.
+   */
 
-  prev_clip = ops_set_clip (builder, &child_clip);
-  gsk_gl_renderer_add_render_ops (self, child, builder);
+  prev_clip = ops_set_clip (builder, child_clip);
+  add_offscreen_ops (self, builder, min_x, max_x, min_y, max_y,
+                     child,
+                     &texture_id, &is_offscreen, TRUE, FALSE);
+
   ops_set_clip (builder, &prev_clip);
+  ops_set_program (builder, &self->blit_program);
+  ops_set_texture (builder, texture_id);
+
+  ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
+    { { min_x, min_y }, { 0, 1 }, },
+    { { min_x, max_y }, { 0, 0 }, },
+    { { max_x, min_y }, { 1, 1 }, },
+
+    { { max_x, max_y }, { 1, 0 }, },
+    { { min_x, max_y }, { 0, 0 }, },
+    { { max_x, min_y }, { 1, 1 }, },
+  });
 }
 
 static inline void
@@ -810,7 +834,7 @@ render_color_matrix_node (GskGLRenderer       *self,
 
   add_offscreen_ops (self, builder, min_x, max_x, min_y, max_y,
                      gsk_color_matrix_node_get_child (node),
-                     &texture_id, &is_offscreen, FALSE);
+                     &texture_id, &is_offscreen, FALSE, TRUE);
 
   ops_set_program (builder, &self->color_matrix_program);
   ops_set_color_matrix (builder,
@@ -854,7 +878,7 @@ render_blur_node (GskGLRenderer       *self,
   RenderOp op;
   add_offscreen_ops (self, builder, min_x, max_x, min_y, max_y,
                      gsk_blur_node_get_child (node),
-                     &texture_id, &is_offscreen, FALSE);
+                     &texture_id, &is_offscreen, FALSE, TRUE);
 
   ops_set_program (builder, &self->blur_program);
   op.op = OP_CHANGE_BLUR;
@@ -1359,7 +1383,7 @@ render_shadow_node (GskGLRenderer       *self,
       /* Draw the child offscreen, without the offset. */
       add_offscreen_ops (self, builder,
                          min_x, max_x, min_y, max_y,
-                         shadow_child, &texture_id, &is_offscreen, FALSE);
+                         shadow_child, &texture_id, &is_offscreen, FALSE, TRUE);
 
       ops_offset (builder, dx, dy);
       ops_set_program (builder, &self->shadow_program);
@@ -1431,10 +1455,10 @@ render_cross_fade_node (GskGLRenderer       *self,
    * start and the end node might be a lot smaller than that. */
 
   add_offscreen_ops (self, builder, min_x, max_x, min_y, max_y, start_node,
-                     &start_texture_id, &is_offscreen1, TRUE);
+                     &start_texture_id, &is_offscreen1, TRUE, TRUE);
 
   add_offscreen_ops (self, builder, min_x, max_x, min_y, max_y, end_node,
-                     &end_texture_id, &is_offscreen2, TRUE);
+                     &end_texture_id, &is_offscreen2, TRUE, TRUE);
 
   ops_set_program (builder, &self->cross_fade_program);
   op.op = OP_CHANGE_CROSS_FADE;
@@ -2193,7 +2217,8 @@ add_offscreen_ops (GskGLRenderer   *self,
                    GskRenderNode   *child_node,
                    int             *texture_id,
                    gboolean        *is_offscreen,
-                   gboolean         force_offscreen)
+                   gboolean         force_offscreen,
+                   gboolean         reset_clip)
 {
   const float width = (max_x - min_x) * self->scale_factor;
   const float height = (max_y - min_y) * self->scale_factor;
@@ -2244,12 +2269,15 @@ add_offscreen_ops (GskGLRenderer   *self,
   prev_modelview = ops_set_modelview (builder, &identity);
   prev_viewport = ops_set_viewport (builder, &GRAPHENE_RECT_INIT (min_x, min_y,
                                                                   width, height));
-  prev_clip = ops_set_clip (builder,
-                            &GSK_ROUNDED_RECT_INIT (min_x, min_y, width, height));
+  if (reset_clip)
+    prev_clip = ops_set_clip (builder,
+                              &GSK_ROUNDED_RECT_INIT (min_x, min_y, width, height));
 
   gsk_gl_renderer_add_render_ops (self, child_node, builder);
 
-  ops_set_clip (builder, &prev_clip);
+  if (reset_clip)
+    ops_set_clip (builder, &prev_clip);
+
   ops_set_viewport (builder, &prev_viewport);
   ops_set_modelview (builder, &prev_modelview);
   ops_set_projection (builder, &prev_projection);
@@ -2551,7 +2579,7 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
   glGenFramebuffers (1, &fbo_id);
   glBindFramebuffer (GL_FRAMEBUFFER, fbo_id);
   glFramebufferTexture2D (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_id, 0);
-  g_assert_cmpint (glCheckFramebufferStatus (GL_FRAMEBUFFER), ==, GL_FRAMEBUFFER_COMPLETE);
+  g_assert_cmphex (glCheckFramebufferStatus (GL_FRAMEBUFFER), ==, GL_FRAMEBUFFER_COMPLETE);
 
   gsk_gl_renderer_clear (self);
   gsk_gl_driver_end_frame (self->gl_driver);
