@@ -68,8 +68,6 @@ typedef enum {
   GDK_DEBUG_CAIRO_IMAGE     = 1 << 19
 } GdkDebugFlags;
 
-extern GdkWindow        *_gdk_parent_root;
-
 extern guint _gdk_debug_flags;
 
 GdkDebugFlags    gdk_display_get_debug_flags    (GdkDisplay       *display);
