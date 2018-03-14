@@ -28,31 +28,12 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GtkIconHelper GtkIconHelper;
+#define GTK_TYPE_ICON_HELPER (gtk_icon_helper_get_type())
 
-struct _GtkIconHelper
-{
-  GObject parent_instance;
+G_DECLARE_FINAL_TYPE(GtkIconHelper, gtk_icon_helper, GTK, ICON_HELPER, GObject)
 
-  GtkImageDefinition *def;
-
-  gint pixel_size;
-
-  guint use_fallback : 1;
-  guint force_scale_pixbuf : 1;
-  guint texture_is_symbolic : 1;
-
-  GtkWidget *owner;
-  GtkCssNode *node;
-  GdkPaintable *paintable;
-  int texture_scale;
-};
-
-void gtk_icon_helper_init (GtkIconHelper *self,
-                           GtkCssNode    *css_node,
-                           GtkWidget     *owner);
-
-void gtk_icon_helper_destroy (GtkIconHelper *self);
+GtkIconHelper *gtk_icon_helper_new (GtkCssNode    *css_node,
+                                    GtkWidget     *owner);
 
 void _gtk_icon_helper_clear (GtkIconHelper *self);
 
