@@ -496,7 +496,7 @@ gsk_gl_driver_create_render_target (GskGLDriver *driver,
   t->fbo.fbo_id = fbo_id;
   t->fbo.depth_stencil_id = depth_stencil_buffer_id;
 
-  g_assert_cmpint (glCheckFramebufferStatus (GL_FRAMEBUFFER), ==, GL_FRAMEBUFFER_COMPLETE);
+  g_assert_cmphex (glCheckFramebufferStatus (GL_FRAMEBUFFER), ==, GL_FRAMEBUFFER_COMPLETE);
   glBindFramebuffer (GL_FRAMEBUFFER, driver->default_fbo.fbo_id);
 
   return fbo_id;
