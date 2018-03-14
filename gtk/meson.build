@@ -123,6 +123,7 @@ gtk_private_sources = files([
   'gtkprivate.c',
   'gtkprogresstracker.c',
   'gtkquery.c',
+  'gtkscaler.c',
   'gtksearchengine.c',
   'gtksearchenginemodel.c',
   'gtksearchenginesimple.c',
