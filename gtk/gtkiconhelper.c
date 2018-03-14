@@ -35,6 +35,26 @@
 #include "gtksnapshot.h"
 #include "gtkwidgetprivate.h"
 
+struct _GtkIconHelper
+{
+  GObject parent_instance;
+
+  GtkImageDefinition *def;
+
+  gint pixel_size;
+
+  guint use_fallback : 1;
+  guint force_scale_pixbuf : 1;
+  guint texture_is_symbolic : 1;
+
+  GtkWidget *owner;
+  GtkCssNode *node;
+  GdkPaintable *paintable;
+  int texture_scale;
+};
+
+G_DEFINE_TYPE (GtkIconHelper, gtk_icon_helper, G_TYPE_OBJECT)
+
 void
 gtk_icon_helper_invalidate (GtkIconHelper *self)
 {
@@ -98,21 +118,39 @@ _gtk_icon_helper_clear (GtkIconHelper *self)
     }
 }
 
-void
-gtk_icon_helper_destroy (GtkIconHelper *self)
+static void
+gtk_icon_helper_finalize (GObject *object)
 {
+  GtkIconHelper *self = GTK_ICON_HELPER (object);
+
   _gtk_icon_helper_clear (self);
   g_signal_handlers_disconnect_by_func (self->owner, G_CALLBACK (gtk_icon_helper_invalidate), self);
   gtk_image_definition_unref (self->def);
+
+  G_OBJECT_CLASS (gtk_icon_helper_parent_class)->finalize (object);
 }
 
 void
-gtk_icon_helper_init (GtkIconHelper *self,
-                      GtkCssNode    *css_node,
-                      GtkWidget     *owner)
+gtk_icon_helper_class_init (GtkIconHelperClass *klass)
 {
-  memset (self, 0, sizeof (GtkIconHelper));
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  gobject_class->finalize = gtk_icon_helper_finalize;
+}
+
+void
+gtk_icon_helper_init (GtkIconHelper *self)
+{
   self->def = gtk_image_definition_new_empty ();
+}
+
+GtkIconHelper *
+gtk_icon_helper_new (GtkCssNode *css_node,
+                     GtkWidget  *owner)
+{
+  GtkIconHelper *self;
+  
+  self = g_object_new (GTK_TYPE_ICON_HELPER, NULL);
 
   self->pixel_size = -1;
   self->texture_is_symbolic = FALSE;
@@ -121,6 +159,8 @@ gtk_icon_helper_init (GtkIconHelper *self,
   self->owner = owner;
   g_signal_connect_swapped (owner, "direction-changed", G_CALLBACK (gtk_icon_helper_invalidate), self);
   g_signal_connect_swapped (owner, "notify::scale-factor", G_CALLBACK (gtk_icon_helper_invalidate), self);
+
+  return self;
 }
 
 static int

@@ -417,18 +417,20 @@ gtk_cell_renderer_pixbuf_new (void)
   return g_object_new (GTK_TYPE_CELL_RENDERER_PIXBUF, NULL);
 }
 
-static void
-create_icon_helper (GtkIconHelper         *icon_helper,
+static GtkIconHelper *
+create_icon_helper (
                     GtkCellRendererPixbuf *cellpixbuf,
                     GtkWidget             *widget)
 {
   GtkCellRendererPixbufPrivate *priv = cellpixbuf->priv;
+  GtkIconHelper *icon_helper;
 
-  gtk_icon_helper_init (icon_helper,
-                        gtk_style_context_get_node (gtk_widget_get_style_context (widget)),
-                        widget);
+  icon_helper = gtk_icon_helper_new (gtk_style_context_get_node (gtk_widget_get_style_context (widget)),
+                                     widget);
   _gtk_icon_helper_set_force_scale_pixbuf (icon_helper, TRUE);
   _gtk_icon_helper_set_definition (icon_helper, priv->image_def);
+
+  return icon_helper;
 }
 
 static void
@@ -448,19 +450,19 @@ gtk_cell_renderer_pixbuf_get_size (GtkCellRenderer    *cell,
   gint calc_height;
   gint xpad, ypad;
   GtkStyleContext *context;
-  GtkIconHelper icon_helper;
+  GtkIconHelper *icon_helper;
 
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_save (context);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_IMAGE);
   gtk_icon_size_set_style_classes (gtk_style_context_get_node (context), priv->icon_size);
-  create_icon_helper (&icon_helper, cellpixbuf, widget);
+  icon_helper = create_icon_helper (cellpixbuf, widget);
 
-  if (!_gtk_icon_helper_get_is_empty (&icon_helper))
-    _gtk_icon_helper_get_size (&icon_helper, 
+  if (!_gtk_icon_helper_get_is_empty (icon_helper))
+    _gtk_icon_helper_get_size (icon_helper, 
                                &pixbuf_width, &pixbuf_height);
 
-  gtk_icon_helper_destroy (&icon_helper);
+  g_object_unref (icon_helper);
   gtk_style_context_restore (context);
 
   if (priv->pixbuf_expander_open)
@@ -526,7 +528,7 @@ gtk_cell_renderer_pixbuf_snapshot (GtkCellRenderer      *cell,
   GdkRectangle draw_rect;
   gboolean is_expander;
   gint xpad, ypad;
-  GtkIconHelper icon_helper;
+  GtkIconHelper *icon_helper;
   cairo_surface_t *surface;
 
   gtk_cell_renderer_pixbuf_get_size (cell, widget, (GdkRectangle *) cell_area,
@@ -559,32 +561,32 @@ gtk_cell_renderer_pixbuf_snapshot (GtkCellRenderer      *cell,
 
       if (is_expanded && priv->pixbuf_expander_open != NULL)
         {
-          gtk_icon_helper_init (&icon_helper, gtk_style_context_get_node (context), widget);
+          icon_helper = gtk_icon_helper_new (gtk_style_context_get_node (context), widget);
           surface = gdk_cairo_surface_create_from_pixbuf (priv->pixbuf_expander_open, 1, NULL);
-          _gtk_icon_helper_set_surface (&icon_helper, surface);
+          _gtk_icon_helper_set_surface (icon_helper, surface);
           cairo_surface_destroy (surface);
         }
       else if (!is_expanded && priv->pixbuf_expander_closed != NULL)
         {
-          gtk_icon_helper_init (&icon_helper, gtk_style_context_get_node (context), widget);
+          icon_helper = gtk_icon_helper_new (gtk_style_context_get_node (context), widget);
           surface = gdk_cairo_surface_create_from_pixbuf (priv->pixbuf_expander_closed, 1, NULL);
-          _gtk_icon_helper_set_surface (&icon_helper, surface);
+          _gtk_icon_helper_set_surface (icon_helper, surface);
           cairo_surface_destroy (surface);
         }
       else
         {
-          create_icon_helper (&icon_helper, cellpixbuf, widget);
+          icon_helper = create_icon_helper (cellpixbuf, widget);
         }
     }
   else
     {
-      create_icon_helper (&icon_helper, cellpixbuf, widget);
+      icon_helper = create_icon_helper (cellpixbuf, widget);
     }
 
   gtk_snapshot_offset (snapshot, pix_rect.x, pix_rect.y);
-  gtk_icon_helper_snapshot (&icon_helper, snapshot, pix_rect.width, pix_rect.height);
+  gtk_icon_helper_snapshot (icon_helper, snapshot, pix_rect.width, pix_rect.height);
   gtk_snapshot_offset (snapshot, - pix_rect.x, - pix_rect.y);
 
-  gtk_icon_helper_destroy (&icon_helper);
+  g_object_unref (icon_helper);
   gtk_style_context_restore (context);
 }
