@@ -1717,7 +1717,8 @@ headerbar { // headerbar border rounding
 treeview.view {
   border-left-color: mix($fg_color, $base_color, 50%); // this is actually the tree lines color,
   border-top-color: $bg_color;                         // while this is the grid lines color, better then nothing
-
+  font-feature-settings: 'tnum';
+  
   rubberband { @extend rubberband; } // to avoid borders being overridden by the previously set props
 
   &:selected {
@@ -3664,6 +3665,7 @@ expander {
 calendar {
   color: $text_color;
   border: 1px solid $borders_color;
+  font-feature-settings: 'tnum';
 
   &:selected {
     @extend %selected_items;
