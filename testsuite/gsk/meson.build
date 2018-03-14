@@ -45,6 +45,8 @@ gl_tests = [
   ['outset shadow transformed', 'outset_shadow_translated.node', 'outset_shadow_translated.gl.png'],
   ['Transform in Shadow', 'shadow_transform1.node', 'shadow_transform1.gl.png'],
   ['Clipped crossfade', 'clipped_cross_fade.node', 'clipped_cross_fade.gl.png'],
+  ['Clipped rounded clip', 'clipped_rounded_clip.node', 'clipped_rounded_clip.gl.png'],
+  ['Transformed clipped rounded clip', 'transformed_clipped_rounded_clip.node', 'transformed_clipped_rounded_clip.gl.png'],
 ]
 
 foreach gl_test : gl_tests
