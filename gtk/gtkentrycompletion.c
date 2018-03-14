@@ -1648,8 +1648,6 @@ gtk_entry_completion_popup (GtkEntryCompletion *completion)
   /* default on no match */
   completion->priv->current_selected = -1;
 
-  _gtk_entry_completion_resize_popup (completion);
-
   toplevel = gtk_widget_get_toplevel (completion->priv->entry);
   if (GTK_IS_WINDOW (toplevel))
     {
@@ -1661,6 +1659,8 @@ gtk_entry_completion_popup (GtkEntryCompletion *completion)
 
   gtk_window_set_screen (GTK_WINDOW (completion->priv->popup_window),
                          gtk_widget_get_screen (completion->priv->entry));
+
+  _gtk_entry_completion_resize_popup (completion);
 
   if (completion->priv->device)
     {
