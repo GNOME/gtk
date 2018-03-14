@@ -643,30 +643,15 @@ render_texture_node (GskGLRenderer   *self,
       ty2 = 1;
     }
 
-  if (GDK_IS_GL_TEXTURE (texture))
-    {
-      ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-        { { min_x, min_y }, { tx1, ty2 }, },
-        { { min_x, max_y }, { tx1, ty1 }, },
-        { { max_x, min_y }, { tx2, ty2 }, },
+  ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
+    { { min_x, min_y }, { tx1, ty1 }, },
+    { { min_x, max_y }, { tx1, ty2 }, },
+    { { max_x, min_y }, { tx2, ty1 }, },
 
-        { { max_x, max_y }, { tx2, ty1 }, },
-        { { min_x, max_y }, { tx1, ty1 }, },
-        { { max_x, min_y }, { tx2, ty2 }, },
-      });
-    }
-  else
-    {
-      ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-        { { min_x, min_y }, { tx1, ty1 }, },
-        { { min_x, max_y }, { tx1, ty2 }, },
-        { { max_x, min_y }, { tx2, ty1 }, },
-
-        { { max_x, max_y }, { tx2, ty2 }, },
-        { { min_x, max_y }, { tx1, ty2 }, },
-        { { max_x, min_y }, { tx2, ty1 }, },
-      });
-    }
+    { { max_x, max_y }, { tx2, ty2 }, },
+    { { min_x, max_y }, { tx1, ty2 }, },
+    { { max_x, min_y }, { tx2, ty1 }, },
+  });
 }
 
 static inline void

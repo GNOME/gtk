@@ -372,14 +372,34 @@ gsk_gl_driver_get_texture_for_texture (GskGLDriver *driver,
   cairo_surface_t *surface;
 
   if (GDK_IS_GL_TEXTURE (texture))
-    return gdk_gl_texture_get_id (GDK_GL_TEXTURE (texture));
-
-  t = gdk_texture_get_render_data (texture, driver);
-
-  if (t)
     {
-      if (t->min_filter == min_filter && t->mag_filter == mag_filter)
-        return t->texture_id;
+      GdkGLContext *texture_context = gdk_gl_texture_get_context ((GdkGLTexture *)texture);
+
+      if (texture_context != driver->gl_context)
+        {
+          /* In this case, we have to temporarily make the texture's context the current one,
+           * download its data into our context and then create a texture from it. */
+          gdk_gl_context_make_current (texture_context);
+          surface = gdk_texture_download_surface (texture);
+          gdk_gl_context_make_current (driver->gl_context);
+        }
+      else
+        {
+          /* A GL texture from the same GL context is a simple task... */
+          return gdk_gl_texture_get_id (GDK_GL_TEXTURE (texture));
+        }
+    }
+  else
+    {
+      t = gdk_texture_get_render_data (texture, driver);
+
+      if (t)
+        {
+          if (t->min_filter == min_filter && t->mag_filter == mag_filter)
+            return t->texture_id;
+        }
+
+      surface = gdk_texture_download_surface (texture);
     }
 
   t = create_texture (driver, gdk_texture_get_width (texture), gdk_texture_get_height (texture));
@@ -387,7 +407,6 @@ gsk_gl_driver_get_texture_for_texture (GskGLDriver *driver,
   if (gdk_texture_set_render_data (texture, driver, t, gsk_gl_driver_release_texture))
     t->user = texture;
 
-  surface = gdk_texture_download_surface (texture);
   gsk_gl_driver_bind_source_texture (driver, t->texture_id);
   gsk_gl_driver_init_texture_with_surface (driver,
                                            t->texture_id,
