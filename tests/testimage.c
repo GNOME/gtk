@@ -24,10 +24,10 @@ drag_begin (GtkWidget      *widget,
 	    gpointer        data)
 {
   GtkWidget *image = GTK_WIDGET (data);
+  GdkTexture *texture;
 
-  cairo_surface_t *surface = gtk_image_get_surface (GTK_IMAGE (image));
-  cairo_surface_set_device_offset (surface, -2, -2);
-  gtk_drag_set_icon_surface (context, surface);
+  texture = gtk_image_get_texture (GTK_IMAGE (image));
+  gtk_drag_set_icon_paintable (context, GDK_PAINTABLE (texture), -2, -2);
 }
 
 void  
@@ -38,10 +38,11 @@ drag_data_get  (GtkWidget        *widget,
 		gpointer          data)
 {
   GtkWidget *image = GTK_WIDGET (data);
+  GdkTexture *texture;
 
-  cairo_surface_t *surface = gtk_image_get_surface (GTK_IMAGE (image));
-
-  gtk_selection_data_set_surface (selection_data, surface);
+  texture = gtk_image_get_texture (GTK_IMAGE (image));
+  gtk_selection_data_set_texture (selection_data, texture);
+  g_object_unref (texture);
 }
 
 static void
@@ -53,14 +54,15 @@ drag_data_received (GtkWidget        *widget,
 		    gpointer          data)
 {
   GtkWidget *image = GTK_WIDGET (data);
-  cairo_surface_t *surface;
+  GdkTexture *texture;
 
   if (gtk_selection_data_get_length (selection_data) < 0)
     return;
 
-  surface = gtk_selection_data_get_surface (selection_data);
+  texture = gtk_selection_data_get_texture (selection_data);
+  gtk_image_set_from_texture (GTK_IMAGE (image), texture);
 
-  gtk_image_set_from_surface (GTK_IMAGE (image), surface);
+  g_object_unref (texture);
 }
 
 static gboolean
@@ -77,9 +79,10 @@ main (int argc, char **argv)
   GtkWidget *window, *grid;
   GtkWidget *label, *image;
   GtkIconTheme *theme;
-  cairo_surface_t *surface;
+  GdkTexture *texture;
   gchar *icon_name = "help-browser";
   gchar *anim_filename = NULL;
+  GtkIconInfo *icon_info;
   GIcon *icon;
   GFile *file;
 
@@ -107,8 +110,11 @@ main (int argc, char **argv)
   gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
 
   theme = gtk_icon_theme_get_default ();
-  surface = gtk_icon_theme_load_surface (theme, icon_name, 48, gtk_widget_get_scale_factor (window), gtk_widget_get_window (window), 0, NULL);
-  image = gtk_image_new_from_surface (surface);
+  icon_info = gtk_icon_theme_lookup_icon_for_scale (theme, icon_name, 48, gtk_widget_get_scale_factor (window), GTK_ICON_LOOKUP_GENERIC_FALLBACK);
+  texture = gtk_icon_info_load_texture (icon_info);
+  g_object_unref (icon_info);
+  image = gtk_image_new_from_texture (texture);
+  g_object_unref (texture);
   gtk_grid_attach (GTK_GRID (grid), image, 2, 1, 1, 1);
 
   gtk_drag_source_set (image, GDK_BUTTON1_MASK, 
