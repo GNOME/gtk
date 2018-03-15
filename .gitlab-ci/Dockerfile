@@ -7,6 +7,7 @@ RUN dnf -y install \
     avahi-gobject-devel \
     cairo-devel \
     cairo-gobject-devel \
+    ccache \
     colord-devel \
     cups-devel \
     desktop-file-utils \

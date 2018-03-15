@@ -10,7 +10,6 @@ before_script:
 
 cache:
   paths:
-    - _ccache/
     - subprojects/gdk-pixbuf/
     - subprojects/glib/
     - subprojects/graphene/
