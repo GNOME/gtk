@@ -86,6 +86,8 @@ struct _GtkImagePrivate
 
   gchar                *filename;       /* Only used with GTK_IMAGE_SURFACE */
   gchar                *resource_path;  /* Only used with GTK_IMAGE_SURFACE */
+
+  guint keep_aspect_ratio : 1;
 };
 
 
@@ -129,6 +131,7 @@ enum
   PROP_GICON,
   PROP_RESOURCE,
   PROP_USE_FALLBACK,
+  PROP_KEEP_ASPECT_RATIO,
   NUM_PROPERTIES
 };
 
@@ -261,6 +264,19 @@ gtk_image_class_init (GtkImageClass *class)
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkImage:keep-aspect-ratio:
+   *
+   * Whether the GtkImage will render its contents trying to preserve the aspect
+   * ratio of the contents.
+   */
+  image_props[PROP_KEEP_ASPECT_RATIO] =
+      g_param_spec_boolean ("keep-aspect-ratio",
+                            P_("Keep aspect ratio"),
+                            P_("Render contents respecting the aspect ratio"),
+                            TRUE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, image_props);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_IMAGE_ACCESSIBLE);
@@ -277,6 +293,7 @@ gtk_image_init (GtkImage *image)
   gtk_widget_set_has_window (GTK_WIDGET (image), FALSE);
 
   priv->icon_helper = gtk_icon_helper_new (widget_node, GTK_WIDGET (image));
+  priv->keep_aspect_ratio = TRUE;
 }
 
 static void
@@ -336,6 +353,10 @@ gtk_image_set_property (GObject      *object,
         g_object_notify_by_pspec (object, pspec);
       break;
 
+    case PROP_KEEP_ASPECT_RATIO:
+      gtk_image_set_keep_aspect_ratio (image, g_value_get_boolean (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -379,6 +400,9 @@ gtk_image_get_property (GObject     *object,
       break;
     case PROP_USE_FALLBACK:
       g_value_set_boolean (value, _gtk_icon_helper_get_use_fallback (priv->icon_helper));
+      break;
+    case PROP_KEEP_ASPECT_RATIO:
+      g_value_set_boolean (value, priv->keep_aspect_ratio);
       break;
     case PROP_STORAGE_TYPE:
       g_value_set_enum (value, _gtk_icon_helper_get_storage_type (priv->icon_helper));
@@ -1203,27 +1227,40 @@ gtk_image_snapshot (GtkWidget   *widget,
 {
   GtkImage *image = GTK_IMAGE (widget);
   GtkImagePrivate *priv = gtk_image_get_instance_private (image);
-  int x, y, width, height;
-  gint w, h, baseline;
+  double ratio;
+  int x, y, width, height, baseline;
+  double w, h;
 
   width = gtk_widget_get_width (widget);
   height = gtk_widget_get_height (widget);
+  ratio = gdk_paintable_get_intrinsic_aspect_ratio (GDK_PAINTABLE (priv->icon_helper));
 
-  if (_gtk_icon_helper_get_storage_type (priv->icon_helper) == GTK_IMAGE_PAINTABLE)
+  if (!priv->keep_aspect_ratio || ratio == 0)
     {
       gdk_paintable_snapshot (GDK_PAINTABLE (priv->icon_helper), snapshot, width, height);
     }
   else
     {
-      _gtk_icon_helper_get_size (priv->icon_helper, &w, &h);
-      x = (width - w) / 2;
+      double image_ratio = (double) width / height;
+
+    if (ratio > image_ratio)
+      {
+        w = width;
+        h = width / ratio;
+      }
+    else
+      {
+        w = height * ratio;
+        h = height;
+      }
+
+      x = (width - ceil (w)) / 2;
 
       baseline = gtk_widget_get_allocated_baseline (widget);
-
       if (baseline == -1)
-        y = floor(height - h) / 2;
+        y = floor(height - ceil (h)) / 2;
       else
-        y = CLAMP (baseline - h * gtk_image_get_baseline_align (image), 0, height - h);
+        y = CLAMP (baseline - h * gtk_image_get_baseline_align (image), 0, height - ceil (h));
 
       gtk_snapshot_offset (snapshot, x, y);
       gdk_paintable_snapshot (GDK_PAINTABLE (priv->icon_helper), snapshot, w, h);
@@ -1461,6 +1498,51 @@ gtk_image_get_icon_size (GtkImage *image)
   g_return_val_if_fail (GTK_IS_IMAGE (image), GTK_ICON_SIZE_INHERIT);
 
   return priv->icon_size;
+}
+
+/**
+ * gtk_image_set_keep_aspect_ratio:
+ * @image: a #GtkImage
+ * @keep_aspect_ratio: whether to keep aspect ratio
+ *
+ * If set to %TRUE, the @image will render its contents according to
+ * their aspect ratio. That means that empty space may show up at the
+ * top/bottom or left/right of @image.
+ *
+ * If set to %FALSE or if the contents provide no aspect ratio, the
+ * contents will be stretched over the image's whole area.
+ */
+void
+gtk_image_set_keep_aspect_ratio (GtkImage *image,
+                                 gboolean  keep_aspect_ratio)
+{
+  GtkImagePrivate *priv = gtk_image_get_instance_private (image);
+
+  g_return_if_fail (GTK_IS_IMAGE (image));
+
+  if (priv->keep_aspect_ratio == keep_aspect_ratio)
+    return;
+
+  priv->keep_aspect_ratio = keep_aspect_ratio;
+  g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_KEEP_ASPECT_RATIO]);
+}
+
+/**
+ * gtk_image_get_keep_aspect_ratio:
+ * @image: a #GtkImage
+ *
+ * Gets the value set via gtk_image_set_keep_aspect_ratio().
+ *
+ * Returns: %TRUE if the image tries to keep the contents' aspect ratio
+ **/
+gboolean
+gtk_image_get_keep_aspect_ratio (GtkImage *image)
+{
+  GtkImagePrivate *priv = gtk_image_get_instance_private (image);
+
+  g_return_val_if_fail (GTK_IS_IMAGE (image), TRUE);
+
+  return priv->keep_aspect_ratio;
 }
 
 void
