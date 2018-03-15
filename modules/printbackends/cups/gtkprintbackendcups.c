@@ -4071,6 +4071,45 @@ cups_get_user_default_printer (char **printer_name)
     }
 }
 
+/*
+ * Parses the name of the destination from a line in an lpoptions file.
+ * If a destination name can be retrieved, this function returns 'TRUE',
+ * 'name' points to the destination name and 'lineptr' to the start of
+ * the remainder of the line.
+ * If no destination name can be parsed, 'FALSE' is returned.
+ */
+static gboolean
+parse_printer_from_lpoptions_line (gchar *line,
+    gchar **lineptr, gchar **name)
+{
+    if (strncasecmp (line, "dest", 4) == 0 && isspace (line[4]))
+      *lineptr = line + 4;
+    else if (strncasecmp (line, "default", 7) == 0 && isspace (line[7]))
+      *lineptr = line + 7;
+    else
+      return FALSE;
+
+    /* Skip leading whitespace */
+    while (isspace (**lineptr))
+      (*lineptr)++;
+
+    if (!**lineptr)
+      return FALSE;
+
+    *name = *lineptr;
+    while (!isspace (**lineptr) && **lineptr)
+      {
+        (*lineptr)++;
+      }
+
+    if (!**lineptr)
+      return FALSE;
+
+    *(*lineptr)++ = '\0';
+
+    return TRUE;
+}
+
 static int
 cups_parse_user_options (const char     *filename,
                          const char     *printer_name,
@@ -4085,32 +4124,10 @@ cups_parse_user_options (const char     *filename,
 
   while (fgets (line, sizeof (line), fp) != NULL)
     {
-      if (strncasecmp (line, "dest", 4) == 0 && isspace (line[4]))
-        lineptr = line + 4;
-      else if (strncasecmp (line, "default", 7) == 0 && isspace (line[7]))
-        lineptr = line + 7;
-      else
-        continue;
+      gboolean has_options = parse_printer_from_lpoptions_line (
+          line, &lineptr, &name);
 
-      /* Skip leading whitespace */
-      while (isspace (*lineptr))
-        lineptr++;
-
-      if (!*lineptr)
-        continue;
-
-      name = lineptr;
-      while (!isspace (*lineptr) && *lineptr)
-        {
-          lineptr++;
-        }
-
-      if (!*lineptr)
-        continue;
-
-      *lineptr++ = '\0';
-
-      if (strcasecmp (name, printer_name) != 0)
+      if (!has_options || strcasecmp (name, printer_name) != 0)
           continue;
 
       /* We found our printer, parse the options */
