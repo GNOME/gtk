@@ -119,7 +119,6 @@ static void gtk_image_get_property         (GObject      *object,
 enum
 {
   PROP_0,
-  PROP_SURFACE,
   PROP_PAINTABLE,
   PROP_TEXTURE,
   PROP_FILE,
@@ -155,13 +154,6 @@ gtk_image_class_init (GtkImageClass *class)
   widget_class->size_allocate = gtk_image_size_allocate;
   widget_class->unrealize = gtk_image_unrealize;
   widget_class->style_updated = gtk_image_style_updated;
-
-  image_props[PROP_SURFACE] =
-      g_param_spec_boxed ("surface",
-                          P_("Surface"),
-                          P_("A cairo_surface_t to display"),
-                          CAIRO_GOBJECT_TYPE_SURFACE,
-                          GTK_PARAM_READWRITE);
 
   image_props[PROP_PAINTABLE] =
       g_param_spec_object ("paintable",
@@ -314,9 +306,6 @@ gtk_image_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_SURFACE:
-      gtk_image_set_from_surface (image, g_value_get_boxed (value));
-      break;
     case PROP_PAINTABLE:
       gtk_image_set_from_paintable (image, g_value_get_object (value));
       break;
@@ -364,9 +353,6 @@ gtk_image_get_property (GObject     *object,
 
   switch (prop_id)
     {
-    case PROP_SURFACE:
-      g_value_set_boxed (value, _gtk_icon_helper_peek_surface (priv->icon_helper));
-      break;
     case PROP_PAINTABLE:
       g_value_set_object (value, _gtk_icon_helper_peek_paintable (priv->icon_helper));
       break;
@@ -547,29 +533,6 @@ gtk_image_new_from_texture (GdkTexture *texture)
   gtk_image_set_from_texture (image, texture);
 
   return GTK_WIDGET (image);  
-}
-
-/**
- * gtk_image_new_from_surface:
- * @surface: (allow-none): a #cairo_surface_t, or %NULL
- *
- * Creates a new #GtkImage displaying @surface.
- * The #GtkImage does not assume a reference to the
- * surface; you still need to unref it if you own references.
- * #GtkImage will add its own reference rather than adopting yours.
- * 
- * Returns: a new #GtkImage
- **/
-GtkWidget*
-gtk_image_new_from_surface (cairo_surface_t *surface)
-{
-  GtkImage *image;
-
-  image = g_object_new (GTK_TYPE_IMAGE, NULL);
-
-  gtk_image_set_from_surface (image, surface);
-
-  return GTK_WIDGET (image);
 }
 
 /**
@@ -962,39 +925,6 @@ gtk_image_set_from_gicon  (GtkImage       *image,
   g_object_thaw_notify (G_OBJECT (image));
 }
 
-/**
- * gtk_image_set_from_surface:
- * @image: a #GtkImage
- * @surface: (nullable): a cairo_surface_t or %NULL
- *
- * See gtk_image_new_from_surface() for details.
- **/
-void
-gtk_image_set_from_surface (GtkImage       *image,
-			    cairo_surface_t *surface)
-{
-  GtkImagePrivate *priv = gtk_image_get_instance_private (image);
-
-  g_return_if_fail (GTK_IS_IMAGE (image));
-
-  g_object_freeze_notify (G_OBJECT (image));
-
-  if (surface)
-    cairo_surface_reference (surface);
-
-  gtk_image_clear (image);
-
-  if (surface)
-    {
-      _gtk_icon_helper_set_surface (priv->icon_helper, surface);
-      cairo_surface_destroy (surface);
-    }
-
-  g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_SURFACE]);
-  
-  g_object_thaw_notify (G_OBJECT (image));
-}
-
 static void
 gtk_image_paintable_invalidate_contents (GdkPaintable *paintable,
                                          GtkImage     *image)
@@ -1105,29 +1035,6 @@ gtk_image_get_storage_type (GtkImage *image)
   g_return_val_if_fail (GTK_IS_IMAGE (image), GTK_IMAGE_EMPTY);
 
   return _gtk_icon_helper_get_storage_type (priv->icon_helper);
-}
-
-/**
- * gtk_image_get_surface:
- * @image: a #GtkImage
- *
- * Gets the image #cairo_surface_t being displayed by the #GtkImage.
- * The storage type of the image must be %GTK_IMAGE_EMPTY or
- * %GTK_IMAGE_SURFACE (see gtk_image_get_storage_type()).
- * The caller of this function does not own a reference to the
- * returned surface.
- * 
- * Returns: (nullable) (transfer none): the displayed surface, or %NULL if
- *   the image is empty
- **/
-cairo_surface_t *
-gtk_image_get_surface (GtkImage *image)
-{
-  GtkImagePrivate *priv = gtk_image_get_instance_private (image);
-
-  g_return_val_if_fail (GTK_IS_IMAGE (image), NULL);
-
-  return _gtk_icon_helper_peek_surface (priv->icon_helper);
 }
 
 /**
@@ -1335,9 +1242,6 @@ gtk_image_notify_for_storage_type (GtkImage     *image,
       break;
     case GTK_IMAGE_GICON:
       g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_GICON]);
-      break;
-    case GTK_IMAGE_SURFACE:
-      g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_SURFACE]);
       break;
     case GTK_IMAGE_TEXTURE:
       g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_TEXTURE]);
