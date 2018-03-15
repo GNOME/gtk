@@ -2269,11 +2269,12 @@ add_offscreen_ops (GskGLRenderer   *self,
   render_target = gsk_gl_driver_create_render_target (self->gl_driver, *texture_id, TRUE, TRUE);
 
   graphene_matrix_init_ortho (&item_proj,
-                              min_x, max_x,
-                              min_y, max_y,
+                              min_x * self->scale_factor, max_x * self->scale_factor,
+                              min_y * self->scale_factor, max_y * self->scale_factor,
                               ORTHO_NEAR_PLANE, ORTHO_FAR_PLANE);
   graphene_matrix_scale (&item_proj, 1, -1, 1);
   graphene_matrix_init_identity (&identity);
+  graphene_matrix_scale (&identity, self->scale_factor, self->scale_factor, 1);
 
   prev_render_target = ops_set_render_target (builder, render_target);
   /* Clear since we use this rendertarget for the first time */
@@ -2286,7 +2287,9 @@ add_offscreen_ops (GskGLRenderer   *self,
                                                                   width, height));
   if (reset_clip)
     prev_clip = ops_set_clip (builder,
-                              &GSK_ROUNDED_RECT_INIT (min_x * self->scale_factor, min_y * self->scale_factor, width, height));
+                              &GSK_ROUNDED_RECT_INIT (min_x * self->scale_factor,
+                                                      min_y * self->scale_factor,
+                                                      width, height));
 
   gsk_gl_renderer_add_render_ops (self, child_node, builder);
 
