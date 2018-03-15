@@ -94,10 +94,10 @@ gtk_css_image_scaled_dispose (GObject *object)
 
 static GtkCssImage *
 gtk_css_image_scaled_compute (GtkCssImage      *image,
-			      guint             property_id,
-			      GtkStyleProvider *provider,
-			      GtkCssStyle      *style,
-			      GtkCssStyle      *parent_style)
+                              guint             property_id,
+                              GtkStyleProvider *provider,
+                              GtkCssStyle      *style,
+                              GtkCssStyle      *parent_style)
 {
   GtkCssImageScaled *scaled = GTK_CSS_IMAGE_SCALED (image);
   int scale;
@@ -114,7 +114,7 @@ gtk_css_image_scaled_compute (GtkCssImage      *image,
 
 static gboolean
 gtk_css_image_scaled_parse (GtkCssImage  *image,
-			    GtkCssParser *parser)
+                            GtkCssParser *parser)
 {
   GtkCssImageScaled *scaled = GTK_CSS_IMAGE_SCALED (image);
   GPtrArray *images;
@@ -139,12 +139,11 @@ gtk_css_image_scaled_parse (GtkCssImage  *image,
     {
       child = _gtk_css_image_new_parse (parser);
       if (child == NULL)
-	{
-	  g_ptr_array_free (images, TRUE);
-	  return FALSE;
-	}
+        {
+          g_ptr_array_free (images, TRUE);
+          return FALSE;
+        }
       g_ptr_array_add (images, child);
-      
     }
   while ( _gtk_css_parser_try (parser, ",", TRUE));
 
