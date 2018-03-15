@@ -4011,6 +4011,20 @@ static const char *lpoptions_locations[] = {
   ".cups/lpoptions"
 };
 
+/*
+ * Sets 'abs_path' to the absolute path of 'path'.
+ * If 'path' isn't absolute yet, it is interpreted as relative to
+ * the current user's home directory.
+ */
+static void
+get_absolute_file_path (const gchar *path, gchar **abs_path)
+{
+  if (g_path_is_absolute (path))
+    *abs_path = g_strdup(path);
+  else
+    *abs_path = g_build_filename (g_get_home_dir (), path, NULL);
+}
+
 static void
 cups_parse_user_default_printer (const char  *filename,
                                  char       **printer_name)
@@ -4054,20 +4068,10 @@ cups_get_user_default_printer (char **printer_name)
 
   for (i = 0; i < G_N_ELEMENTS (lpoptions_locations); i++)
     {
-      if (g_path_is_absolute (lpoptions_locations[i]))
-        {
-          cups_parse_user_default_printer (lpoptions_locations[i],
-                                           printer_name);
-        }
-      else
-        {
-          char *filename;
-
-          filename = g_build_filename (g_get_home_dir (),
-                                       lpoptions_locations[i], NULL);
-          cups_parse_user_default_printer (filename, printer_name);
-          g_free (filename);
-        }
+      gchar *filename = NULL;
+      get_absolute_file_path (lpoptions_locations[i], &filename);
+      cups_parse_user_default_printer (filename, printer_name);
+      g_free (filename);
     }
 }
 
@@ -4148,23 +4152,11 @@ cups_get_user_options (const char     *printer_name,
 
   for (i = 0; i < G_N_ELEMENTS (lpoptions_locations); i++)
     {
-      if (g_path_is_absolute (lpoptions_locations[i]))
-        {
-           num_options = cups_parse_user_options (lpoptions_locations[i],
-                                                  printer_name,
-                                                  num_options,
-                                                  options);
-        }
-      else
-        {
-          char *filename;
-
-          filename = g_build_filename (g_get_home_dir (),
-                                       lpoptions_locations[i], NULL);
-          num_options = cups_parse_user_options (filename, printer_name,
+      gchar *filename = NULL;
+      get_absolute_file_path (lpoptions_locations[i], &filename);
+      num_options = cups_parse_user_options (filename, printer_name,
                                                  num_options, options);
-          g_free (filename);
-        }
+      g_free (filename);
     }
 
   return num_options;
