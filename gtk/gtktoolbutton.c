@@ -717,34 +717,6 @@ clone_image_menu_size (GtkImage *image)
 
       return gtk_image_new_from_gicon (icon);
     }
-  else if (storage_type == GTK_IMAGE_SURFACE)
-    {
-      int width, height;
-      cairo_surface_t *src_surface, *dest_surface;
-      GtkWidget *cloned_image;
-      gint scale = gtk_widget_get_scale_factor (GTK_WIDGET (image));
-      cairo_t *cr;
-
-      gtk_image_get_image_size (image, &width, &height);
-
-      src_surface = gtk_image_get_surface (image);
-      dest_surface =
-            gdk_window_create_similar_image_surface (gtk_widget_get_window (GTK_WIDGET (image)),
-                                                     CAIRO_FORMAT_ARGB32,
-                                                     width * scale, height * scale, scale);
-      cr = cairo_create (dest_surface);
-      cairo_set_source_surface (cr, src_surface, 0, 0);
-      cairo_scale (cr,
-                   width / cairo_image_surface_get_width (src_surface),
-                   height / cairo_image_surface_get_height (src_surface));
-      cairo_paint (cr);
-      cairo_destroy (cr);
-
-      cloned_image = gtk_image_new_from_surface (dest_surface);
-      cairo_surface_destroy (dest_surface);
-
-      return cloned_image;
-    }
 
   return NULL;
 }

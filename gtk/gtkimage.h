@@ -55,8 +55,6 @@ typedef struct _GtkImageClass         GtkImageClass;
  *  This image type was added in GTK+ 2.6
  * @GTK_IMAGE_GICON: the widget contains a #GIcon.
  *  This image type was added in GTK+ 2.14
- * @GTK_IMAGE_SURFACE: the widget contains a #cairo_surface_t.
- *  This image type was added in GTK+ 3.10
  * @GTK_IMAGE_TEXTURE: the widget contains a #GdkTexture.
  *  This image type was added in GTK+ 3.94
  * @GTK_IMAGE_PAINTABLE: the widget contains a #GdkPaintable.
@@ -65,8 +63,8 @@ typedef struct _GtkImageClass         GtkImageClass;
  * Describes the image data representation used by a #GtkImage. If you
  * want to get the image from the widget, you can only get the
  * currently-stored representation. e.g.  if the
- * gtk_image_get_storage_type() returns #GTK_IMAGE_SURFACE, then you can
- * call gtk_image_get_surface().  For empty images, you can request any
+ * gtk_image_get_storage_type() returns #GTK_IMAGE_PAINTABLE, then you can
+ * call gtk_image_get_paintable().  For empty images, you can request any
  * storage type (call any of the "get" functions), but they will all
  * return %NULL values.
  */
@@ -75,7 +73,6 @@ typedef enum
   GTK_IMAGE_EMPTY,
   GTK_IMAGE_ICON_NAME,
   GTK_IMAGE_GICON,
-  GTK_IMAGE_SURFACE,
   GTK_IMAGE_TEXTURE,
   GTK_IMAGE_PAINTABLE
 } GtkImageType;
@@ -121,8 +118,6 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_image_new_from_icon_name (const gchar     *icon_name);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_image_new_from_gicon     (GIcon           *icon);
-GDK_AVAILABLE_IN_ALL
-GtkWidget* gtk_image_new_from_surface   (cairo_surface_t *surface);
 
 GDK_AVAILABLE_IN_ALL
 void gtk_image_clear              (GtkImage        *image);
@@ -148,9 +143,6 @@ GDK_AVAILABLE_IN_ALL
 void gtk_image_set_from_gicon     (GtkImage        *image,
 				   GIcon           *icon);
 GDK_AVAILABLE_IN_ALL
-void gtk_image_set_from_surface   (GtkImage        *image,
-				   cairo_surface_t *surface);
-GDK_AVAILABLE_IN_ALL
 void gtk_image_set_pixel_size     (GtkImage        *image,
 				   gint             pixel_size);
 GDK_AVAILABLE_IN_ALL
@@ -160,8 +152,6 @@ void gtk_image_set_icon_size      (GtkImage        *image,
 GDK_AVAILABLE_IN_ALL
 GtkImageType gtk_image_get_storage_type (GtkImage   *image);
 
-GDK_AVAILABLE_IN_ALL
-cairo_surface_t *gtk_image_get_surface (GtkImage *image);
 GDK_AVAILABLE_IN_ALL
 GdkTexture *gtk_image_get_texture  (GtkImage       *image);
 GDK_AVAILABLE_IN_ALL

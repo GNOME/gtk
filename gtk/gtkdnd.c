@@ -38,6 +38,7 @@
 #include "gtkwindowprivate.h"
 
 #include "gdk/gdkcontentformatsprivate.h"
+#include "gdk/gdktextureprivate.h"
 
 #include <math.h>
 #include <stdlib.h>
@@ -1195,6 +1196,7 @@ gtk_drag_set_icon_surface (GdkDragContext  *context,
 {
   GtkWidget *widget;
   double hot_x, hot_y;
+  GdkTexture *texture;
 
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
   g_return_if_fail (surface != NULL);
@@ -1202,7 +1204,9 @@ gtk_drag_set_icon_surface (GdkDragContext  *context,
   cairo_surface_get_device_offset (surface, &hot_x, &hot_y);
   cairo_surface_set_device_offset (surface, 0, 0);
 
-  widget = gtk_image_new_from_surface (surface);
+  texture = gdk_texture_new_for_surface (surface);
+  widget = gtk_image_new_from_texture (texture);
+  g_object_unref (texture);
 
   gtk_drag_set_icon_widget_internal (context, widget, (int)hot_x, (int)hot_y, TRUE);
 }

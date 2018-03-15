@@ -213,82 +213,6 @@ get_icon_lookup_flags (GtkIconHelper    *self,
   return flags;
 }
 
-static void
-get_surface_size (cairo_surface_t *surface,
-		  int *width,
-		  int *height)
-{
-  GdkRectangle clip;
-  cairo_t *cr;
-
-  cr = cairo_create (surface);
-  if (gdk_cairo_get_clip_rectangle (cr, &clip))
-    {
-      if (clip.x != 0 || clip.y != 0)
-        {
-          g_warning ("origin of surface is %d %d, not supported", clip.x, clip.y);
-        }
-      *width = clip.width;
-      *height = clip.height;
-    }
-  else
-    {
-      g_warning ("infinite surface size not supported");
-      *width = 0;
-      *height = 0;
-    }
-
-  cairo_destroy (cr);
-}
-
-static GdkPaintable *
-ensure_paintable_from_surface (GtkIconHelper   *self,
-                               cairo_surface_t *orig_surface,
-                               int             *scale_out)
-{
-  cairo_surface_t *map;
-  int width, height, scale;
-  GdkTexture *texture;
-
-  scale = gtk_widget_get_scale_factor (self->owner);
-  *scale_out = scale;
-  _gtk_icon_helper_get_size (self, &width, &height);
-
-  map = cairo_surface_map_to_image (orig_surface,
-                                    &(GdkRectangle) { 0, 0, width * scale, height * scale});
-
-  if (cairo_image_surface_get_format (map) == CAIRO_FORMAT_ARGB32)
-    {
-      texture = gdk_texture_new_for_data (cairo_image_surface_get_data (map),
-                                          width * scale,
-                                          height * scale,
-                                          cairo_image_surface_get_stride (map));
-    }
-  else
-    {
-      cairo_surface_t *argb_surface;
-      cairo_t *cr;
-
-      argb_surface = cairo_surface_create_similar_image (orig_surface,
-                                                         CAIRO_FORMAT_ARGB32,
-                                                         width * scale, height * scale);
-
-      cr = cairo_create (argb_surface);
-      cairo_set_source_surface (cr, map, 0, 0);
-      cairo_paint (cr);
-      cairo_destroy (cr);
-      texture = gdk_texture_new_for_data (cairo_image_surface_get_data (argb_surface),
-                                          width * scale,
-                                          height * scale,
-                                          cairo_image_surface_get_stride (argb_surface));
-      cairo_surface_destroy (argb_surface);
-    }
-
-  cairo_surface_unmap_image (orig_surface, map);
-
-  return GDK_PAINTABLE (texture);
-}
-
 static GdkPaintable *
 ensure_paintable_from_texture (GtkIconHelper *self,
                                GdkTexture    *texture,
@@ -357,11 +281,6 @@ gtk_icon_helper_load_paintable (GtkIconHelper   *self,
 
   switch (gtk_image_definition_get_storage_type (self->def))
     {
-    case GTK_IMAGE_SURFACE:
-      paintable = ensure_paintable_from_surface (self, gtk_image_definition_get_surface (self->def), &scale);
-      symbolic = FALSE;
-      break;
-
     case GTK_IMAGE_TEXTURE:
       paintable = ensure_paintable_from_texture (self, gtk_image_definition_get_texture (self->def), &scale);
       symbolic = FALSE;
@@ -468,7 +387,6 @@ gtk_icon_helper_measure (GtkIconHelper *self,
       break;
 
     case GTK_IMAGE_TEXTURE:
-    case GTK_IMAGE_SURFACE:
     case GTK_IMAGE_ICON_NAME:
     case GTK_IMAGE_GICON:
     case GTK_IMAGE_EMPTY:
@@ -537,12 +455,6 @@ _gtk_icon_helper_get_size (GtkIconHelper *self,
      data for something that may not yet be visible */
   switch (gtk_image_definition_get_storage_type (self->def))
     {
-    case GTK_IMAGE_SURFACE:
-      get_surface_size (gtk_image_definition_get_surface (self->def),
-                        &width,
-                        &height);
-      break;
-
     case GTK_IMAGE_ICON_NAME:
     case GTK_IMAGE_GICON:
       if (self->pixel_size != -1 || self->force_scale_pixbuf)
@@ -570,7 +482,7 @@ _gtk_icon_helper_get_size (GtkIconHelper *self,
       break;
     }
 
-  /* Otherwise we load the surface to guarantee we get a size */
+  /* Otherwise we load the paintable to guarantee we get a size */
   if (width == 0)
     {
       gtk_icon_helper_ensure_paintable (self);
@@ -613,13 +525,6 @@ _gtk_icon_helper_set_icon_name (GtkIconHelper *self,
                                 const gchar   *icon_name)
 {
   gtk_icon_helper_take_definition (self, gtk_image_definition_new_icon_name (icon_name));
-}
-
-void
-_gtk_icon_helper_set_surface (GtkIconHelper *self,
-			      cairo_surface_t *surface)
-{
-  gtk_icon_helper_take_definition (self, gtk_image_definition_new_surface (surface));
 }
 
 void
@@ -690,12 +595,6 @@ GIcon *
 _gtk_icon_helper_peek_gicon (GtkIconHelper *self)
 {
   return gtk_image_definition_get_gicon (self->def);
-}
-
-cairo_surface_t *
-_gtk_icon_helper_peek_surface (GtkIconHelper *self)
-{
-  return gtk_image_definition_get_surface (self->def);
 }
 
 GdkTexture *

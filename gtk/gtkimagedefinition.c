@@ -22,7 +22,6 @@
 typedef struct _GtkImageDefinitionEmpty GtkImageDefinitionEmpty;
 typedef struct _GtkImageDefinitionIconName GtkImageDefinitionIconName;
 typedef struct _GtkImageDefinitionGIcon GtkImageDefinitionGIcon;
-typedef struct _GtkImageDefinitionSurface GtkImageDefinitionSurface;
 typedef struct _GtkImageDefinitionTexture GtkImageDefinitionTexture;
 typedef struct _GtkImageDefinitionPaintable GtkImageDefinitionPaintable;
 
@@ -45,13 +44,6 @@ struct _GtkImageDefinitionGIcon {
   GIcon *gicon;
 };
 
-struct _GtkImageDefinitionSurface {
-  GtkImageType type;
-  gint ref_count;
-
-  cairo_surface_t *surface;
-};
-
 struct _GtkImageDefinitionTexture {
   GtkImageType type;
   gint ref_count;
@@ -72,7 +64,6 @@ union _GtkImageDefinition
   GtkImageDefinitionEmpty empty;
   GtkImageDefinitionIconName icon_name;
   GtkImageDefinitionGIcon gicon;
-  GtkImageDefinitionSurface surface;
   GtkImageDefinitionTexture texture;
   GtkImageDefinitionPaintable paintable;
 };
@@ -92,7 +83,6 @@ gtk_image_definition_alloc (GtkImageType type)
     sizeof (GtkImageDefinitionEmpty),
     sizeof (GtkImageDefinitionIconName),
     sizeof (GtkImageDefinitionGIcon),
-    sizeof (GtkImageDefinitionSurface),
     sizeof (GtkImageDefinitionTexture),
     sizeof (GtkImageDefinitionPaintable)
   };
@@ -131,20 +121,6 @@ gtk_image_definition_new_gicon (GIcon *gicon)
 
   def = gtk_image_definition_alloc (GTK_IMAGE_GICON);
   def->gicon.gicon = g_object_ref (gicon);
-
-  return def;
-}
-
-GtkImageDefinition *
-gtk_image_definition_new_surface (cairo_surface_t *surface)
-{
-  GtkImageDefinition *def;
-
-  if (surface == NULL)
-    return NULL;
-
-  def = gtk_image_definition_alloc (GTK_IMAGE_SURFACE);
-  def->surface.surface = cairo_surface_reference (surface);
 
   return def;
 }
@@ -199,9 +175,6 @@ gtk_image_definition_unref (GtkImageDefinition *def)
     case GTK_IMAGE_EMPTY:
       g_assert_not_reached ();
       break;
-    case GTK_IMAGE_SURFACE:
-      cairo_surface_destroy (def->surface.surface);
-      break;
     case GTK_IMAGE_TEXTURE:
       g_object_unref (def->texture.texture);
       break;
@@ -233,7 +206,6 @@ gtk_image_definition_get_scale (const GtkImageDefinition *def)
     default:
       g_assert_not_reached ();
     case GTK_IMAGE_EMPTY:
-    case GTK_IMAGE_SURFACE:
     case GTK_IMAGE_PAINTABLE:
     case GTK_IMAGE_TEXTURE:
     case GTK_IMAGE_ICON_NAME:
@@ -258,15 +230,6 @@ gtk_image_definition_get_gicon (const GtkImageDefinition *def)
     return NULL;
 
   return def->gicon.gicon;
-}
-
-cairo_surface_t *
-gtk_image_definition_get_surface (const GtkImageDefinition *def)
-{
-  if (def->type != GTK_IMAGE_SURFACE)
-    return NULL;
-
-  return def->surface.surface;
 }
 
 GdkTexture *
