@@ -9774,7 +9774,7 @@ gtk_text_view_move_child (GtkTextView *text_view,
 /**
  * gtk_text_view_forward_display_line:
  * @text_view: a #GtkTextView
- * @iter: a #GtkTextIter
+ * @iter: (inout): a #GtkTextIter
  * 
  * Moves the given @iter forward by one display (wrapped) line.
  * A display line is different from a paragraph. Paragraphs are
@@ -9802,7 +9802,7 @@ gtk_text_view_forward_display_line (GtkTextView *text_view,
 /**
  * gtk_text_view_backward_display_line:
  * @text_view: a #GtkTextView
- * @iter: a #GtkTextIter
+ * @iter: (inout): a #GtkTextIter
  * 
  * Moves the given @iter backward by one display (wrapped) line.
  * A display line is different from a paragraph. Paragraphs are
@@ -9830,7 +9830,7 @@ gtk_text_view_backward_display_line (GtkTextView *text_view,
 /**
  * gtk_text_view_forward_display_line_end:
  * @text_view: a #GtkTextView
- * @iter: a #GtkTextIter
+ * @iter: (inout): a #GtkTextIter
  * 
  * Moves the given @iter forward to the next display line end.
  * A display line is different from a paragraph. Paragraphs are
@@ -9858,7 +9858,7 @@ gtk_text_view_forward_display_line_end (GtkTextView *text_view,
 /**
  * gtk_text_view_backward_display_line_start:
  * @text_view: a #GtkTextView
- * @iter: a #GtkTextIter
+ * @iter: (inout): a #GtkTextIter
  * 
  * Moves the given @iter backward to the next display line start.
  * A display line is different from a paragraph. Paragraphs are
@@ -9909,11 +9909,11 @@ gtk_text_view_starts_display_line (GtkTextView       *text_view,
 /**
  * gtk_text_view_move_visually:
  * @text_view: a #GtkTextView
- * @iter: a #GtkTextIter
+ * @iter: (inout): a #GtkTextIter
  * @count: number of characters to move (negative moves left, 
  *    positive moves right)
  *
- * Move the iterator a given number of characters visually, treating
+ * Moves the given @iter a given number of characters visually, treating
  * it as the strong cursor position. If @count is positive, then the
  * new strong cursor position will be @count positions to the right of
  * the old cursor position. If @count is negative then the new strong

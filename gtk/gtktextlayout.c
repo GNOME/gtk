@@ -3209,9 +3209,9 @@ gtk_text_layout_clamp_iter_to_vrange (GtkTextLayout *layout,
 /**
  * gtk_text_layout_move_iter_to_previous_line:
  * @layout: a #GtkLayout
- * @iter:   a #GtkTextIter
+ * @iter: (inout): a #GtkTextIter
  *
- * Move the iterator to the beginning of the previous line. The lines
+ * Moves the given @iter to the beginning of the previous line. The lines
  * of a wrapped paragraph are treated as distinct for this operation.
  **/
 gboolean
@@ -3328,9 +3328,9 @@ gtk_text_layout_move_iter_to_previous_line (GtkTextLayout *layout,
 /**
  * gtk_text_layout_move_iter_to_next_line:
  * @layout: a #GtkLayout
- * @iter:   a #GtkTextIter
+ * @iter: (inout): a #GtkTextIter
  *
- * Move the iterator to the beginning of the next line. The
+ * Moves the given @iter to the beginning of the next line. The
  * lines of a wrapped paragraph are treated as distinct for
  * this operation.
  **/
@@ -3405,10 +3405,11 @@ gtk_text_layout_move_iter_to_next_line (GtkTextLayout *layout,
 /**
  * gtk_text_layout_move_iter_to_line_end:
  * @layout: a #GtkTextLayout
+ * @iter: (inout): a #GtkTextIter
  * @direction: if negative, move to beginning of line, otherwise
                move to end of line.
  *
- * Move to the beginning or end of a display line.
+ * Moves the given @iter to the beginning or end of a display line.
  **/
 gboolean
 gtk_text_layout_move_iter_to_line_end (GtkTextLayout *layout,
@@ -3525,10 +3526,10 @@ gtk_text_layout_get_iter_at_line (GtkTextLayout  *layout,
 /**
  * gtk_text_layout_move_iter_to_x:
  * @layout: a #GtkTextLayout
- * @iter:   a #GtkTextIter
+ * @iter: (inout): a #GtkTextIter
  * @x:      X coordinate
  *
- * Keeping the iterator on the same line of the layout, move it to the
+ * Keeping the given @iter on the same line of the layout, moves it to the
  * specified X coordinate. The lines of a wrapped paragraph are
  * treated as distinct for this operation.
  **/
@@ -3584,10 +3585,10 @@ gtk_text_layout_move_iter_to_x (GtkTextLayout *layout,
 /**
  * gtk_text_layout_move_iter_visually:
  * @layout:  a #GtkTextLayout
- * @iter:    a #GtkTextIter
+ * @iter: (inout): a #GtkTextIter
  * @count:   number of characters to move (negative moves left, positive moves right)
  *
- * Move the iterator a given number of characters visually, treating
+ * Moves the given @iter a given number of characters visually, treating
  * it as the strong cursor position. If @count is positive, then the
  * new strong cursor position will be @count positions to the right of
  * the old cursor position. If @count is negative then the new strong
