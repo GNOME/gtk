@@ -243,28 +243,6 @@ struct _GskGLRendererClass
 G_DEFINE_TYPE (GskGLRenderer, gsk_gl_renderer, GSK_TYPE_RENDERER)
 
 static inline void
-rounded_rect_intersect (GskGLRenderer        *self,
-                        RenderOpBuilder      *builder,
-                        const GskRoundedRect *rect,
-                        GskRoundedRect       *dest)
-{
-  graphene_rect_t transformed_rect;
-  graphene_rect_t intersection;
-  int i;
-
-  graphene_matrix_transform_bounds (&builder->current_modelview, &rect->bounds, &transformed_rect);
-  graphene_rect_intersection (&transformed_rect, &builder->current_clip.bounds,
-                              &intersection);
-
-  dest->bounds = intersection;
-  for (i = 0; i < 4; i ++)
-    {
-      dest->corner[i].width = rect->corner[i].width * self->scale_factor;
-      dest->corner[i].height = rect->corner[i].height * self->scale_factor;
-    }
-}
-
-static inline void
 rounded_rect_to_floats (GskGLRenderer        *self,
                         RenderOpBuilder      *builder,
                         const GskRoundedRect *rect,
@@ -429,10 +407,9 @@ render_border_node (GskGLRenderer   *self,
   const GdkRGBA *colors = gsk_border_node_peek_colors (node);
   const GskRoundedRect *rounded_outline = gsk_border_node_peek_outline (node);
   const float *og_widths = gsk_border_node_peek_widths (node);
+  GskRoundedRect outline;
   float widths[4];
-  const gboolean needs_clip = TRUE;/*!gsk_rounded_rect_is_rectilinear (rounded_outline);*/
   int i;
-  GskRoundedRect prev_clip;
   struct {
     float w;
     float h;
@@ -490,22 +467,6 @@ render_border_node (GskGLRenderer   *self,
   for (i = 0; i < 4; i ++)
     widths[i] *= self->scale_factor;
 
-  if (needs_clip)
-    {
-      GskRoundedRect child_clip;
-
-      ops_set_program (builder, &self->border_program);
-
-      rounded_rect_intersect (self, builder, rounded_outline, &child_clip);
-      prev_clip = ops_set_clip (builder, &child_clip);
-
-      ops_set_border (builder, widths);
-    }
-  else
-    {
-      ops_set_program (builder, &self->color_program);
-    }
-
   {
     const GskQuadVertex side_data[4][6] = {
       /* Top */
@@ -555,6 +516,19 @@ render_border_node (GskGLRenderer   *self,
     /* We sort them by color */
     sort_border_sides (colors, indices);
 
+    /* Prepare outline */
+    outline = *rounded_outline;
+    graphene_matrix_transform_bounds (&builder->current_modelview,
+                                      &outline.bounds, &outline.bounds);
+    for (i = 0; i < 4; i ++)
+      {
+        outline.corner[i].width *= self->scale_factor;
+        outline.corner[i].height *= self->scale_factor;
+      }
+
+    ops_set_program (builder, &self->border_program);
+    ops_set_border (builder, widths, &outline);
+
     for (i = 0; i < 4; i ++)
       {
         if (widths[indices[i]] > 0)
@@ -564,9 +538,6 @@ render_border_node (GskGLRenderer   *self,
           }
       }
   }
-
-  if (needs_clip)
-    ops_set_clip (builder, &prev_clip);
 }
 
 static inline void
@@ -1696,9 +1667,29 @@ static inline void
 apply_border_op (const Program  *program,
                  const RenderOp *op)
 {
+  const GskRoundedRect *o = &op->border.outline;
+  float outline[4];
+  float widths[4];
+  float heights[4];
+  int i;
   OP_PRINT (" -> Border (%f, %f, %f, %f)",
             op->border.widths[0], op->border.widths[1], op->border.widths[2], op->border.widths[3]);
+
+  outline[0] = o->bounds.origin.x;
+  outline[1] = o->bounds.origin.y;
+  outline[2] = o->bounds.size.width;
+  outline[3] = o->bounds.size.height;
+
+  for (i = 0; i < 4; i ++)
+    {
+      widths[i] = o->corner[i].width;
+      heights[i] = o->corner[i].height;
+    }
+
   glUniform4fv (program->border.widths_location, 1, op->border.widths);
+  glUniform4fv (program->border.outline_location, 1, outline);
+  glUniform4fv (program->border.corner_widths_location, 1, widths);
+  glUniform4fv (program->border.corner_heights_location, 1, heights);
 }
 
 static inline void
@@ -1889,6 +1880,9 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   /* border */
   INIT_PROGRAM_UNIFORM_LOCATION (border, color);
   INIT_PROGRAM_UNIFORM_LOCATION (border, widths);
+  INIT_PROGRAM_UNIFORM_LOCATION (border, outline);
+  INIT_PROGRAM_UNIFORM_LOCATION (border, corner_widths);
+  INIT_PROGRAM_UNIFORM_LOCATION (border, corner_heights);
 
   /* cross fade */
   INIT_PROGRAM_UNIFORM_LOCATION (cross_fade, progress);

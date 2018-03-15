@@ -106,6 +106,9 @@ typedef struct
     struct {
       int color_location;
       int widths_location;
+      int outline_location;
+      int corner_widths_location;
+      int corner_heights_location;
     } border;
     struct {
       int source2_location;
@@ -183,6 +186,7 @@ typedef struct
     struct {
       float widths[4];
       float color[4];
+      GskRoundedRect outline;
     } border;
     struct {
       float progress;
@@ -211,6 +215,7 @@ typedef struct
       struct {
         float widths[4];
         float color[4];
+        GskRoundedRect outline;
       } border;
     };
   } program_state[GL_N_PROGRAMS];
@@ -265,7 +270,8 @@ void              ops_set_color_matrix   (RenderOpBuilder         *builder,
                                           const graphene_vec4_t   *offset);
 
 void              ops_set_border         (RenderOpBuilder         *builder,
-                                          const float             *widths);
+                                          const float             *widths,
+                                          const GskRoundedRect    *outline);
 
 void              ops_set_border_color   (RenderOpBuilder         *builder,
                                           const GdkRGBA           *color);
