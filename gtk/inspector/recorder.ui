@@ -153,7 +153,7 @@
                                   </object>
                                   <attributes>
                                     <attribute name="visible">2</attribute>
-                                    <attribute name="surface">3</attribute>
+                                    <attribute name="texture">3</attribute>
                                   </attributes>
                                 </child>
                               </object>
