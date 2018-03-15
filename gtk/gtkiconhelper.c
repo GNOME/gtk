@@ -249,11 +249,41 @@ gtk_icon_helper_paintable_snapshot (GdkPaintable *paintable,
   if (self->paintable == NULL)
     return;
 
-  gtk_css_style_snapshot_icon_paintable (style,
-                                         snapshot,
-                                         self->paintable,
-                                         width, height,
-                                         self->texture_is_symbolic);
+  switch (gtk_image_definition_get_storage_type (self->def))
+    {
+    case GTK_IMAGE_ICON_NAME:
+    case GTK_IMAGE_GICON:
+      {
+        double x, y, w, h;
+
+        /* Never scale up icons. */
+        w = gdk_paintable_get_intrinsic_width (self->paintable);
+        h = gdk_paintable_get_intrinsic_height (self->paintable);
+        w = MIN (w, width);
+        h = MIN (h, height);
+        x = (width - w) / 2;
+        y = (height - h) / 2;
+        gtk_snapshot_offset (snapshot, x, y);
+        gtk_css_style_snapshot_icon_paintable (style,
+                                               snapshot,
+                                               self->paintable,
+                                               w, h,
+                                               self->texture_is_symbolic);
+        gtk_snapshot_offset (snapshot, -x, -y);
+      }
+      break;
+
+    case GTK_IMAGE_TEXTURE:
+    case GTK_IMAGE_PAINTABLE:
+    case GTK_IMAGE_EMPTY:
+    default:
+      gtk_css_style_snapshot_icon_paintable (style,
+                                             snapshot,
+                                             self->paintable,
+                                             width, height,
+                                             self->texture_is_symbolic);
+      break;
+    }
 }
 
 static GdkPaintable *
