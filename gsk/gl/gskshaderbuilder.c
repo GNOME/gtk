@@ -7,13 +7,6 @@
 #include <gdk/gdk.h>
 #include <epoxy/gl.h>
 
-typedef struct {
-  int program_id;
-
-  GHashTable *uniform_locations;
-  GHashTable *attribute_locations;
-} ShaderProgram;
-
 struct _GskShaderBuilder
 {
   GObject parent_instance;
@@ -27,35 +20,9 @@ struct _GskShaderBuilder
   GPtrArray *defines;
   GPtrArray *uniforms;
   GPtrArray *attributes;
-
-  GHashTable *programs;
 };
 
 G_DEFINE_TYPE (GskShaderBuilder, gsk_shader_builder, G_TYPE_OBJECT)
-
-static void
-shader_program_free (gpointer data)
-{
-  ShaderProgram *p = data;
-
-  g_clear_pointer (&p->uniform_locations, g_hash_table_unref);
-  g_clear_pointer (&p->attribute_locations, g_hash_table_unref);
-
-  g_slice_free (ShaderProgram, data);
-}
-
-static ShaderProgram *
-shader_program_new (int program_id)
-{
-  ShaderProgram *p = g_slice_new (ShaderProgram);
-
-  p->program_id = program_id;
-
-  p->uniform_locations = g_hash_table_new (g_direct_hash, g_direct_equal);
-  p->attribute_locations = g_hash_table_new (g_direct_hash, g_direct_equal);
-
-  return p;
-}
 
 static void
 gsk_shader_builder_finalize (GObject *gobject)
@@ -67,10 +34,6 @@ gsk_shader_builder_finalize (GObject *gobject)
   g_free (self->fragment_preamble);
 
   g_clear_pointer (&self->defines, g_ptr_array_unref);
-  g_clear_pointer (&self->uniforms, g_ptr_array_unref);
-  g_clear_pointer (&self->attributes, g_ptr_array_unref);
-
-  g_clear_pointer (&self->programs, g_hash_table_unref);
 
   G_OBJECT_CLASS (gsk_shader_builder_parent_class)->finalize (gobject);
 }
@@ -85,12 +48,6 @@ static void
 gsk_shader_builder_init (GskShaderBuilder *self)
 {
   self->defines = g_ptr_array_new_with_free_func (g_free);
-  self->uniforms = g_ptr_array_new_with_free_func (g_free);
-  self->attributes = g_ptr_array_new_with_free_func (g_free);
-
-  self->programs = g_hash_table_new_full (g_direct_hash, g_direct_equal,
-                                          NULL,
-                                          shader_program_free);
 }
 
 GskShaderBuilder *
@@ -149,30 +106,6 @@ gsk_shader_builder_add_define (GskShaderBuilder *builder,
 
   g_ptr_array_add (builder->defines, g_strdup (define_name));
   g_ptr_array_add (builder->defines, g_strdup (define_value));
-}
-
-GQuark
-gsk_shader_builder_add_uniform (GskShaderBuilder *builder,
-                                const char       *uniform_name)
-{
-  g_return_val_if_fail (GSK_IS_SHADER_BUILDER (builder), 0);
-  g_return_val_if_fail (uniform_name != NULL, 0);
-
-  g_ptr_array_add (builder->uniforms, g_strdup (uniform_name));
-
-  return g_quark_from_string (uniform_name);
-}
-
-GQuark
-gsk_shader_builder_add_attribute (GskShaderBuilder *builder,
-                                  const char       *attribute_name)
-{
-  g_return_val_if_fail (GSK_IS_SHADER_BUILDER (builder), 0);
-  g_return_val_if_fail (attribute_name != NULL, 0);
-
-  g_ptr_array_add (builder->attributes, g_strdup (attribute_name));
-
-  return g_quark_from_string (attribute_name);
 }
 
 static gboolean
@@ -297,47 +230,12 @@ gsk_shader_builder_compile_shader (GskShaderBuilder *builder,
   return shader_id;
 }
 
-static void
-gsk_shader_builder_cache_uniforms (GskShaderBuilder *builder,
-                                   ShaderProgram    *program)
-{
-  int i;
-
-  for (i = 0; i < builder->uniforms->len; i++)
-    {
-      const char *uniform = g_ptr_array_index (builder->uniforms, i);
-      int loc = glGetUniformLocation (program->program_id, uniform);
-
-      g_hash_table_insert (program->uniform_locations,
-                           GINT_TO_POINTER (g_quark_from_string (uniform)),
-                           GINT_TO_POINTER (loc));
-    }
-}
-
-static void
-gsk_shader_builder_cache_attributes (GskShaderBuilder *builder,
-                                     ShaderProgram    *program)
-{
-  int i;
-
-  for (i = 0; i < builder->attributes->len; i++)
-    {
-      const char *attribute = g_ptr_array_index (builder->attributes, i);
-      int loc = glGetAttribLocation (program->program_id, attribute);
-
-      g_hash_table_insert (program->attribute_locations,
-                           GINT_TO_POINTER (g_quark_from_string (attribute)),
-                           GINT_TO_POINTER (loc));
-    }
-}
-
 int
 gsk_shader_builder_create_program (GskShaderBuilder *builder,
                                    const char       *vertex_shader,
                                    const char       *fragment_shader,
                                    GError          **error)
 {
-  ShaderProgram *program;
   int vertex_id, fragment_id;
   int program_id;
   int status;
@@ -389,36 +287,6 @@ gsk_shader_builder_create_program (GskShaderBuilder *builder,
       goto out;
     }
 
-  program = shader_program_new (program_id);
-  gsk_shader_builder_cache_uniforms (builder, program);
-  gsk_shader_builder_cache_attributes (builder, program);
-
-  g_hash_table_insert (builder->programs, GINT_TO_POINTER (program_id), program);
-
-#ifdef G_ENABLE_DEBUG
-  if (GSK_DEBUG_CHECK (SHADERS))
-    {
-      GHashTableIter iter;
-      gpointer name_p, location_p;
-
-      g_hash_table_iter_init (&iter, program->uniform_locations);
-      while (g_hash_table_iter_next (&iter, &name_p, &location_p))
-        {
-          g_print ("Uniform '%s' - location: %d\n",
-                   g_quark_to_string (GPOINTER_TO_INT (name_p)),
-                   GPOINTER_TO_INT (location_p));
-        }
-
-      g_hash_table_iter_init (&iter, program->attribute_locations);
-      while (g_hash_table_iter_next (&iter, &name_p, &location_p))
-        {
-          g_print ("Attribute '%s' - location: %d\n",
-                   g_quark_to_string (GPOINTER_TO_INT (name_p)),
-                   GPOINTER_TO_INT (location_p));
-        }
-    }
-#endif
-
 out:
   if (vertex_id > 0)
     {
@@ -433,50 +301,4 @@ out:
     }
 
   return program_id;
-}
-
-int
-gsk_shader_builder_get_uniform_location (GskShaderBuilder *builder,
-                                         int               program_id,
-                                         GQuark            uniform_quark)
-{
-  ShaderProgram *p = NULL;
-  gpointer loc_p = NULL;
-
-  g_return_val_if_fail (GSK_IS_SHADER_BUILDER (builder), -1);
-  g_return_val_if_fail (program_id >= 0, -1);
-
-  if (builder->uniforms->len == 0)
-    return -1;
-
-  if (!g_hash_table_lookup_extended (builder->programs, GINT_TO_POINTER (program_id), NULL, (gpointer *) &p))
-    return -1;
-
-  if (g_hash_table_lookup_extended (p->uniform_locations, GINT_TO_POINTER (uniform_quark), NULL, &loc_p))
-    return GPOINTER_TO_INT (loc_p);
-
-  return -1;
-}
-
-int
-gsk_shader_builder_get_attribute_location (GskShaderBuilder *builder,
-                                           int               program_id,
-                                           GQuark            attribute_quark)
-{
-  ShaderProgram *p = NULL;
-  gpointer loc_p = NULL;
-
-  g_return_val_if_fail (GSK_IS_SHADER_BUILDER (builder), -1);
-  g_return_val_if_fail (program_id >= 0, -1);
-
-  if (builder->attributes->len == 0)
-    return -1;
-
-  if (!g_hash_table_lookup_extended (builder->programs, GINT_TO_POINTER (program_id), NULL, (gpointer *) &p))
-    return -1;
-
-  if (g_hash_table_lookup_extended (p->attribute_locations, GINT_TO_POINTER (attribute_quark), NULL, &loc_p))
-    return GPOINTER_TO_INT (loc_p);
-
-  return -1;
 }

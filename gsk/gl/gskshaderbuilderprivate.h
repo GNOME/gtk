@@ -21,10 +21,6 @@ void                    gsk_shader_builder_set_vertex_preamble          (GskShad
 void                    gsk_shader_builder_set_fragment_preamble        (GskShaderBuilder *builder,
                                                                          const char       *shader_preamble);
 
-GQuark                  gsk_shader_builder_add_uniform                  (GskShaderBuilder *builder,
-                                                                         const char       *uniform_name);
-GQuark                  gsk_shader_builder_add_attribute                (GskShaderBuilder *builder,
-                                                                         const char       *attribute_name);
 void                    gsk_shader_builder_add_define                   (GskShaderBuilder *builder,
                                                                          const char       *define_name,
                                                                          const char       *define_value);
@@ -33,13 +29,6 @@ int                     gsk_shader_builder_create_program               (GskShad
                                                                          const char       *vertex_shader,
                                                                          const char       *fragment_shader,
                                                                          GError          **error);
-
-int                     gsk_shader_builder_get_uniform_location         (GskShaderBuilder *builder,
-                                                                         int               program_id,
-                                                                         GQuark            uniform_quark);
-int                     gsk_shader_builder_get_attribute_location       (GskShaderBuilder *builder,
-                                                                         int               program_id,
-                                                                         GQuark            attribute_quark);
 
 G_END_DECLS
 
