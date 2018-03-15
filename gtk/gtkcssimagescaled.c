@@ -30,7 +30,7 @@ gtk_css_image_scaled_get_width (GtkCssImage *image)
 {
   GtkCssImageScaled *scaled = GTK_CSS_IMAGE_SCALED (image);
 
-  return _gtk_css_image_get_width (scaled->images[0]);
+  return _gtk_css_image_get_width (scaled->images[0])/scaled->scales[0];
 }
 
 static int
@@ -38,7 +38,7 @@ gtk_css_image_scaled_get_height (GtkCssImage *image)
 {
   GtkCssImageScaled *scaled = GTK_CSS_IMAGE_SCALED (image);
 
-  return _gtk_css_image_get_height (scaled->images[0]);
+  return _gtk_css_image_get_height (scaled->images[0])/scaled->scales[0];
 }
 
 static double
@@ -58,6 +58,7 @@ gtk_css_image_scaled_snapshot (GtkCssImage *image,
   GtkCssImageScaled *scaled = GTK_CSS_IMAGE_SCALED (image);
 
   gtk_css_image_snapshot (scaled->images[0], snapshot, width, height);
+  // FIXME apply scale
 }
 
 static void
@@ -71,8 +72,9 @@ gtk_css_image_scaled_print (GtkCssImage *image,
   for (i = 0; i < scaled->n_images; i++)
     {
       _gtk_css_image_print (scaled->images[i], string);
+      g_string_append_printf (string, ",%d", scaled->scales[i]);
       if (i != scaled->n_images - 1)
-	g_string_append (string, ",");
+        g_string_append (string, ",");
     }
   g_string_append (string, ")");
 }
@@ -87,6 +89,8 @@ gtk_css_image_scaled_dispose (GObject *object)
     g_object_unref (scaled->images[i]);
   g_free (scaled->images);
   scaled->images = NULL;
+  g_free (scaled->scales);
+  scaled->scales = NULL;
 
   G_OBJECT_CLASS (_gtk_css_image_scaled_parent_class)->dispose (object);
 }
@@ -94,30 +98,56 @@ gtk_css_image_scaled_dispose (GObject *object)
 
 static GtkCssImage *
 gtk_css_image_scaled_compute (GtkCssImage      *image,
-			      guint             property_id,
-			      GtkStyleProvider *provider,
-			      GtkCssStyle      *style,
-			      GtkCssStyle      *parent_style)
+                              guint             property_id,
+                              GtkStyleProvider *provider,
+                              GtkCssStyle      *style,
+                              GtkCssStyle      *parent_style)
 {
   GtkCssImageScaled *scaled = GTK_CSS_IMAGE_SCALED (image);
   int scale;
+  GtkCssImageScaled *res;
+  int i;
+  int max_scale;
+
+  max_scale = 1;
+  for (i = 0; i < scaled->n_images; i++)
+    max_scale = MAX (max_scale, scaled->scales[i]);
 
   scale = gtk_style_provider_get_scale (provider);
-  scale = MAX(MIN (scale, scaled->n_images), 1);
+  scale = MAX(MIN (scale, max_scale), 1);
 
-  return _gtk_css_image_compute (scaled->images[scale - 1],
-                                                property_id,
-                                                provider,
-                                                style,
-                                                parent_style);
+  for (i = 0; i < scaled->n_images; i++)
+    {
+      if (scaled->scales[i] == scale)
+        break;
+    }
+  if (i == scaled->n_images)
+    i = 0;
+
+  res = g_object_new (GTK_TYPE_CSS_IMAGE_SCALED, NULL);
+  res->n_images = 1;
+  res->images = g_new (GtkCssImage *, 1);
+  res->scales = g_new (int, 1);
+
+  res->images[0] = _gtk_css_image_compute (scaled->images[i],
+                                           property_id,
+                                           provider,
+                                           style,
+                                           parent_style);
+  res->scales[0] = scaled->scales[i];
+
+  return res;
 }
+
 
 static gboolean
 gtk_css_image_scaled_parse (GtkCssImage  *image,
-			    GtkCssParser *parser)
+                            GtkCssParser *parser)
 {
   GtkCssImageScaled *scaled = GTK_CSS_IMAGE_SCALED (image);
   GPtrArray *images;
+  GArray *scales;
+  int last_scale;
   GtkCssImage *child;
 
   if (!_gtk_css_parser_try (parser, "-gtk-scaled", TRUE))
@@ -134,23 +164,43 @@ gtk_css_image_scaled_parse (GtkCssImage  *image,
     }
 
   images = g_ptr_array_new_with_free_func (g_object_unref);
+  scales = g_array_new (FALSE, FALSE, sizeof (int));
 
+  last_scale = 0;
   do
     {
       child = _gtk_css_image_new_parse (parser);
       if (child == NULL)
-	{
-	  g_ptr_array_free (images, TRUE);
-	  return FALSE;
-	}
+        {
+          g_ptr_array_free (images, TRUE);
+          g_array_free (scales, TRUE);
+          return FALSE;
+        }
       g_ptr_array_add (images, child);
-      
+      if (!_gtk_css_parser_try (parser, ",", TRUE))
+        {
+          last_scale += 1;
+          g_array_append_val (scales, last_scale);
+          break;
+        }
+      else if (_gtk_css_parser_try_int (parser, &last_scale))
+        {
+          g_array_append_val (scales, last_scale);
+          if (!_gtk_css_parser_try (parser, ",", TRUE))
+            break;
+        }
+      else
+        {
+          last_scale += 1;
+          g_array_append_val (scales, last_scale);
+        }
     }
-  while ( _gtk_css_parser_try (parser, ",", TRUE));
+  while (TRUE);
 
   if (!_gtk_css_parser_try (parser, ")", TRUE))
     {
       g_ptr_array_free (images, TRUE);
+      g_array_free (scales, TRUE);
       _gtk_css_parser_error (parser,
                              "Expected ')' at end of '-gtk-scaled'");
       return FALSE;
@@ -158,6 +208,7 @@ gtk_css_image_scaled_parse (GtkCssImage  *image,
 
   scaled->n_images = images->len;
   scaled->images = (GtkCssImage **) g_ptr_array_free (images, FALSE);
+  scaled->scales = (int *) g_array_free (scales, FALSE);
 
   return TRUE;
 }
