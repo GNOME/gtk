@@ -156,6 +156,7 @@
     <file>expander.c</file>
     <file>filtermodel.c</file>
     <file>fishbowl.c</file>
+    <file>widgetbowl.c</file>
     <file>flowbox.c</file>
     <file>foreigndrawing.c</file>
     <file>font_features.c</file>
