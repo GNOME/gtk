@@ -315,30 +315,6 @@ gtk_drag_source_add_uri_targets (GtkWidget *widget)
 }
 
 /**
- * gtk_drag_source_set_icon_surface: (method)
- * @widget: a #GtkWidget
- * @surface: the cairo surface for the drag icon
- * 
- * Sets the icon that will be used for drags from a particular widget
- * from a cairo surface. GTK+ retains a reference for @surface and will
- * release it when it is no longer needed.
- */
-void
-gtk_drag_source_set_icon_surface (GtkWidget       *widget,
-                                  cairo_surface_t *surface)
-{
-  GtkDragSourceSite *site;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  site = g_object_get_data (G_OBJECT (widget), "gtk-site-data");
-  g_return_if_fail (site != NULL);
-
-  g_clear_pointer (&site->image_def, gtk_image_definition_unref);
-  site->image_def = gtk_image_definition_new_surface (surface);
-}
-
-/**
  * gtk_drag_source_set_icon_name: (method)
  * @widget: a #GtkWidget
  * @icon_name: name of icon to use
@@ -384,5 +360,29 @@ gtk_drag_source_set_icon_gicon (GtkWidget *widget,
 
   gtk_image_definition_unref (site->image_def);
   site->image_def = gtk_image_definition_new_gicon (icon);
+}
+
+/**
+ * gtk_drag_source_set_icon_paintable: (method)
+ * @widget: a #GtkWidget
+ * @paintable: A #GdkPaintable
+ *
+ * Sets the icon that will be used for drags from a particular source
+ * to @paintable.
+ */
+void
+gtk_drag_source_set_icon_paintable (GtkWidget    *widget,
+                                    GdkPaintable *paintable)
+{
+  GtkDragSourceSite *site;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GDK_IS_PAINTABLE (paintable));
+
+  site = g_object_get_data (G_OBJECT (widget), "gtk-site-data");
+  g_return_if_fail (site != NULL);
+
+  gtk_image_definition_unref (site->image_def);
+  site->image_def = gtk_image_definition_new_paintable (paintable);
 }
 
