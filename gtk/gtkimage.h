@@ -151,6 +151,9 @@ void gtk_image_set_icon_size      (GtkImage        *image,
 GDK_AVAILABLE_IN_ALL
 void gtk_image_set_keep_aspect_ratio (GtkImage     *image,
                                       gboolean      keep_aspect_ratio);
+GDK_AVAILABLE_IN_ALL
+void gtk_image_set_can_shrink     (GtkImage        *image,
+                                   gboolean         can_shrink);
 
 GDK_AVAILABLE_IN_ALL
 GtkImageType gtk_image_get_storage_type (GtkImage   *image);
@@ -170,6 +173,8 @@ GDK_AVAILABLE_IN_ALL
 GtkIconSize gtk_image_get_icon_size (GtkImage             *image);
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_image_get_keep_aspect_ratio (GtkImage      *image);
+GDK_AVAILABLE_IN_ALL
+gboolean   gtk_image_get_can_shrink (GtkImage             *image);
 
 G_END_DECLS
 
