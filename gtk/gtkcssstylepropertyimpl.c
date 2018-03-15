@@ -21,7 +21,6 @@
 
 #include <gobject/gvaluecollector.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
-#include <cairo-gobject.h>
 #include <math.h>
 
 #include "gtkcssparserprivate.h"
@@ -742,33 +741,6 @@ css_image_value_parse_with_builtin (GtkCssStyleProperty *property,
   return css_image_value_parse (property, parser);
 }
 
-static void
-css_image_value_query (GtkCssStyleProperty *property,
-                       const GtkCssValue   *css_value,
-                       GValue              *value)
-{
-  GtkCssImage *image = _gtk_css_image_value_get_image (css_value);
-  cairo_pattern_t *pattern;
-  cairo_surface_t *surface;
-  cairo_matrix_t matrix;
-
-  g_value_init (value, CAIRO_GOBJECT_TYPE_PATTERN);
-
-  if (image != NULL)
-    {
-      double width, height;
-
-      /* the 100, 100 is rather random */
-      _gtk_css_image_get_concrete_size (image, 0, 0, 100, 100, &width, &height);
-      surface = _gtk_css_image_get_surface (image, NULL, width, height);
-      pattern = cairo_pattern_create_for_surface (surface);
-      cairo_matrix_init_scale (&matrix, width, height);
-      cairo_pattern_set_matrix (pattern, &matrix);
-      cairo_surface_destroy (surface);
-      g_value_take_boxed (value, pattern);
-    }
-}
-
 static GtkCssValue *
 background_image_value_parse_one (GtkCssParser *parser)
 {
@@ -780,14 +752,6 @@ background_image_value_parse (GtkCssStyleProperty *property,
                               GtkCssParser        *parser)
 {
   return _gtk_css_array_value_parse (parser, background_image_value_parse_one);
-}
-
-static void
-background_image_value_query (GtkCssStyleProperty *property,
-                              const GtkCssValue   *css_value,
-                              GValue              *value)
-{
-  css_image_value_query (property, _gtk_css_array_value_get_nth (css_value, 0), value);
 }
 
 static GtkCssValue *
@@ -1540,11 +1504,11 @@ _gtk_css_style_property_init_properties (void)
                                                                                                           GTK_CSS_REPEAT_STYLE_REPEAT)));
   gtk_css_style_property_register        ("background-image",
                                           GTK_CSS_PROPERTY_BACKGROUND_IMAGE,
-                                          CAIRO_GOBJECT_TYPE_PATTERN,
+                                          G_TYPE_NONE,
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_BACKGROUND,
                                           background_image_value_parse,
-                                          background_image_value_query,
+                                          NULL,
                                           _gtk_css_array_value_new (_gtk_css_image_value_new (NULL)));
 
   gtk_css_style_property_register        ("background-blend-mode",
@@ -1558,11 +1522,11 @@ _gtk_css_style_property_init_properties (void)
 
   gtk_css_style_property_register        ("border-image-source",
                                           GTK_CSS_PROPERTY_BORDER_IMAGE_SOURCE,
-                                          CAIRO_GOBJECT_TYPE_PATTERN,
+                                          G_TYPE_NONE,
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_BORDER,
                                           css_image_value_parse,
-                                          css_image_value_query,
+                                          NULL,
                                           _gtk_css_image_value_new (NULL));
   gtk_css_style_property_register        ("border-image-repeat",
                                           GTK_CSS_PROPERTY_BORDER_IMAGE_REPEAT,
