@@ -1210,7 +1210,7 @@ gtk_image_snapshot (GtkWidget   *widget,
 
   if (_gtk_icon_helper_get_storage_type (priv->icon_helper) == GTK_IMAGE_PAINTABLE)
     {
-      gtk_icon_helper_snapshot (priv->icon_helper, snapshot, width, height);
+      gdk_paintable_snapshot (GDK_PAINTABLE (priv->icon_helper), snapshot, width, height);
     }
   else
     {
@@ -1225,7 +1225,7 @@ gtk_image_snapshot (GtkWidget   *widget,
         y = CLAMP (baseline - h * gtk_image_get_baseline_align (image), 0, height - h);
 
       gtk_snapshot_offset (snapshot, x, y);
-      gtk_icon_helper_snapshot (priv->icon_helper, snapshot, w, h);
+      gdk_paintable_snapshot (GDK_PAINTABLE (priv->icon_helper), snapshot, w, h);
       gtk_snapshot_offset (snapshot, -x, -y);
     }
 }
