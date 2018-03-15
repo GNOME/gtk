@@ -326,6 +326,8 @@ ops_set_border (RenderOpBuilder      *builder,
   memcpy (&builder->program_state[builder->current_program->index].border.widths,
           widths, sizeof (float) * 4);
 
+  builder->program_state[builder->current_program->index].border.outline = *outline;
+
   op.op = OP_CHANGE_BORDER;
   op.border.widths[0] = widths[0];
   op.border.widths[1] = widths[1];
