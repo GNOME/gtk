@@ -76,11 +76,6 @@ void _gtk_icon_helper_get_size (GtkIconHelper *self,
                                 gint *width_out,
                                 gint *height_out);
 
-void gtk_icon_helper_snapshot (GtkIconHelper *self,
-                               GtkSnapshot *snapshot,
-                               double       width,
-                               double       height);
-
 gboolean _gtk_icon_helper_get_force_scale_pixbuf (GtkIconHelper *self);
 void     _gtk_icon_helper_set_force_scale_pixbuf (GtkIconHelper *self,
                                                   gboolean       force_scale);
