@@ -44,10 +44,14 @@ gl_tests = [
   ['outset shadow blurred offset', 'outset_shadow_blurred_offset'],
   ['outset shadow transformed',    'outset_shadow_translated'],
   ['Transform in Shadow',          'shadow_transform1'],
+  ['Crossfade simple',             'cross_fade'],
+  ['Crossfade transformed',        'cross_fade_transformed'],
   ['Clipped crossfade',            'clipped_cross_fade'],
   ['Clipped rounded clip',         'clipped_rounded_clip'],
   ['clipped rounded clip2',        'transformed_clipped_rounded_clip'],
   ['gradient simple',              'gradient_simple'],
+  ['gradient transformed',         'gradient_transformed'],
+  ['gradient clipped',             'gradient_clipped'],
 ]
 
 foreach gl_test : gl_tests
