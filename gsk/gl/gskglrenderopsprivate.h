@@ -10,7 +10,7 @@
 #include "gskglrendererprivate.h"
 
 #define GL_N_VERTICES 6
-#define GL_N_PROGRAMS 13
+#define GL_N_PROGRAMS 12
 
 enum {
   OP_NONE,
@@ -63,9 +63,6 @@ typedef struct
     struct {
       int color_location;
     } coloring;
-    struct {
-      int color_location;
-    } shadow;
     struct {
       int color_matrix_location;
       int color_offset_location;

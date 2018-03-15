@@ -209,7 +209,6 @@ struct _GskGLRenderer
       Program inset_shadow_program;
       Program outset_shadow_program;
       Program unblurred_outset_shadow_program;
-      Program shadow_program;
       Program border_program;
       Program cross_fade_program;
     };
@@ -1371,7 +1370,7 @@ render_shadow_node (GskGLRenderer       *self,
                          shadow_child, &texture_id, &is_offscreen, FALSE, TRUE);
 
       ops_offset (builder, dx, dy);
-      ops_set_program (builder, &self->shadow_program);
+      ops_set_program (builder, &self->coloring_program);
       ops_set_color (builder, &shadow->color);
       ops_set_texture (builder, texture_id);
       if (is_offscreen)
@@ -1755,7 +1754,6 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
     { "inset shadow",    "blit.vs.glsl",  "inset_shadow.fs.glsl" },
     { "outset shadow",   "blit.vs.glsl",  "outset_shadow.fs.glsl" },
     { "unblurred outset shadow",   "blit.vs.glsl",  "unblurred_outset_shadow.fs.glsl" },
-    { "shadow",          "blit.vs.glsl",  "shadow.fs.glsl" },
     { "border",          "blit.vs.glsl",  "border.fs.glsl" },
     { "cross fade",      "blit.vs.glsl",  "cross_fade.fs.glsl" },
   };
@@ -1873,9 +1871,6 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   INIT_PROGRAM_UNIFORM_LOCATION (unblurred_outset_shadow, outline);
   INIT_PROGRAM_UNIFORM_LOCATION (unblurred_outset_shadow, corner_widths);
   INIT_PROGRAM_UNIFORM_LOCATION (unblurred_outset_shadow, corner_heights);
-
-  /* shadow */
-  INIT_PROGRAM_UNIFORM_LOCATION (shadow, color);
 
   /* border */
   INIT_PROGRAM_UNIFORM_LOCATION (border, color);
