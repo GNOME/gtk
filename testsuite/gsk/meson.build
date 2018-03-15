@@ -47,6 +47,7 @@ gl_tests = [
   ['Clipped crossfade',            'clipped_cross_fade'],
   ['Clipped rounded clip',         'clipped_rounded_clip'],
   ['clipped rounded clip2',        'transformed_clipped_rounded_clip'],
+  ['gradient simple',              'gradient_simple'],
 ]
 
 foreach gl_test : gl_tests
