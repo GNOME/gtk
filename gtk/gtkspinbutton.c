@@ -1492,8 +1492,6 @@ gtk_spin_button_real_spin (GtkSpinButton *spin_button,
 
   if (wrapped)
     g_signal_emit (spin_button, spinbutton_signals[WRAPPED], 0);
-
-  gtk_widget_queue_draw (GTK_WIDGET (spin_button));
 }
 
 static gint
