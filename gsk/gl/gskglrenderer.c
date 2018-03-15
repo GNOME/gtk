@@ -788,18 +788,32 @@ render_rounded_clip_node (GskGLRenderer       *self,
   const float min_y = node->bounds.origin.y;
   const float max_x = min_x + node->bounds.size.width;
   const float max_y = min_y + node->bounds.size.height;
-  const GskRoundedRect *child_clip = gsk_rounded_clip_node_peek_clip (node);
+  graphene_matrix_t scale_matrix;
+  GskRoundedRect child_clip = *gsk_rounded_clip_node_peek_clip (node);
   GskRoundedRect prev_clip;
   GskRenderNode *child = gsk_rounded_clip_node_get_child (node);
   int texture_id;
   gboolean is_offscreen;
+  int i;
 
   /* NOTE: We are *not* transforming the clip by the current modelview here.
    *       We instead draw the untransformed clip to a texture and then transform
    *       that texture.
+   *
+   *       We do, however, apply the scale factor to the child clip of course.
    */
 
-  prev_clip = ops_set_clip (builder, child_clip);
+  graphene_matrix_init_scale (&scale_matrix, self->scale_factor, self->scale_factor, 1.0f);
+  graphene_matrix_transform_bounds (&scale_matrix, &child_clip.bounds, &child_clip.bounds);
+
+  /* Increase corner radius size by scale factor */
+  for (i = 0; i < 4; i ++)
+    {
+      child_clip.corner[i].width *= self->scale_factor;
+      child_clip.corner[i].height *= self->scale_factor;
+    }
+
+  prev_clip = ops_set_clip (builder, &child_clip);
   add_offscreen_ops (self, builder, min_x, max_x, min_y, max_y,
                      child,
                      &texture_id, &is_offscreen, TRUE, FALSE);
@@ -2267,11 +2281,12 @@ add_offscreen_ops (GskGLRenderer   *self,
   ops_add (builder, &op);
   prev_projection = ops_set_projection (builder, &item_proj);
   prev_modelview = ops_set_modelview (builder, &identity);
-  prev_viewport = ops_set_viewport (builder, &GRAPHENE_RECT_INIT (min_x, min_y,
+  prev_viewport = ops_set_viewport (builder, &GRAPHENE_RECT_INIT (min_x * self->scale_factor,
+                                                                  min_y * self->scale_factor,
                                                                   width, height));
   if (reset_clip)
     prev_clip = ops_set_clip (builder,
-                              &GSK_ROUNDED_RECT_INIT (min_x, min_y, width, height));
+                              &GSK_ROUNDED_RECT_INIT (min_x * self->scale_factor, min_y * self->scale_factor, width, height));
 
   gsk_gl_renderer_add_render_ops (self, child_node, builder);
 
