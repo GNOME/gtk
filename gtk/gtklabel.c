@@ -3243,7 +3243,7 @@ gtk_label_get_measuring_layout (GtkLabel *   label,
    * because we don't need it to be properly setup at that point.
    * This way we can make use of caching upon the label's creation.
    */
-  if (gtk_widget_get_allocated_width (GTK_WIDGET (label)) <= 1)
+  if (gtk_widget_get_width (GTK_WIDGET (label)) <= 1)
     {
       g_object_ref (priv->layout);
       pango_layout_set_width (priv->layout, width);

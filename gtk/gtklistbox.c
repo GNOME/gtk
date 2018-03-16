@@ -2810,7 +2810,7 @@ gtk_list_box_move_cursor (GtkListBox      *box,
       if (priv->cursor_row != NULL)
         {
           start_y = ROW_PRIV (priv->cursor_row)->y;
-          height = gtk_widget_get_allocated_height (GTK_WIDGET (box));
+          height = gtk_widget_get_height (GTK_WIDGET (box));
           end_y = CLAMP (start_y + page_size * count, 0, height - 1);
           row = gtk_list_box_get_row_at_y (box, end_y);
 

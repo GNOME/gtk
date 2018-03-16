@@ -269,7 +269,7 @@ get_child_position (GtkOverlay     *overlay,
       if (gtk_widget_get_direction (GTK_WIDGET (overlay)) == GTK_TEXT_DIR_RTL)
         allocation->x = 0;
       else
-        allocation->x = gtk_widget_get_allocated_width (GTK_WIDGET (overlay)) - req.width;
+        allocation->x = gtk_widget_get_width (GTK_WIDGET (overlay)) - req.width;
     }
   else if (widget == editor->priv->h_popup)
     {
@@ -300,8 +300,8 @@ get_child_position (GtkOverlay     *overlay,
   else
     return FALSE;
 
-  allocation->x = CLAMP (allocation->x, 0, gtk_widget_get_allocated_width (GTK_WIDGET (overlay)) - req.width);
-  allocation->y = CLAMP (allocation->y, 0, gtk_widget_get_allocated_height (GTK_WIDGET (overlay)) - req.height);
+  allocation->x = CLAMP (allocation->x, 0, gtk_widget_get_width (GTK_WIDGET (overlay)) - req.width);
+  allocation->y = CLAMP (allocation->y, 0, gtk_widget_get_height (GTK_WIDGET (overlay)) - req.height);
 
   return TRUE;
 }
