@@ -377,8 +377,9 @@ get_device_ids (GdkDisplay    *display,
 }
 
 static gboolean
-is_touchpad_device (GdkDisplay   *display,
-                    XIDeviceInfo *info)
+has_bool_prop (GdkDisplay   *display,
+               XIDeviceInfo *info,
+               const char   *prop_name)
 {
   gulong nitems, bytes_after;
   guint32 *data;
@@ -389,7 +390,7 @@ is_touchpad_device (GdkDisplay   *display,
 
   rc = XIGetProperty (GDK_DISPLAY_XDISPLAY (display),
                       info->deviceid,
-                      gdk_x11_get_xatom_by_name_for_display (display, "libinput Tapping Enabled"),
+                      gdk_x11_get_xatom_by_name_for_display (display, prop_name),
                       0, 1, False, XA_INTEGER, &type, &format, &nitems, &bytes_after,
                       (guchar **) &data);
   gdk_x11_display_error_trap_pop_ignored (display);
@@ -400,6 +401,22 @@ is_touchpad_device (GdkDisplay   *display,
   XFree (data);
 
   return TRUE;
+}
+
+static gboolean
+is_touchpad_device (GdkDisplay   *display,
+                    XIDeviceInfo *info)
+{
+  /*
+   * Touchpads are heuristically recognized via XI properties that the various
+   * Xorg drivers expose:
+   *   libinput:  libinput Tapping Enabled
+   *   synaptics: Synaptics Off
+   *   cmt:       Raw Touch Passthrough
+   */
+  return has_bool_prop (display, info, "libinput Tapping Enabled") ||
+         has_bool_prop (display, info, "Synaptics Off") ||
+         has_bool_prop (display, info, "Raw Touch Passthrough");
 }
 
 static GdkDevice *
