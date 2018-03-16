@@ -140,7 +140,7 @@ gtk_css_image_scaled_compute (GtkCssImage      *image,
                                            parent_style);
   res->scales[0] = scaled->scales[best];
 
-  return res;
+  return GTK_CSS_IMAGE (res);
 }
 
 
