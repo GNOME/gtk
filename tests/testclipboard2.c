@@ -48,7 +48,7 @@ texture_loaded_cb (GObject      *clipboard,
       return;
     }
 
-  gtk_image_set_from_texture (data, texture);
+  gtk_image_set_from_paintable (data, GDK_PAINTABLE (texture));
   g_object_unref (texture);
 }
 

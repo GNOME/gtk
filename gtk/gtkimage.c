@@ -62,7 +62,7 @@
  * If you want to handle errors in loading the file yourself,
  * for example by displaying an error message, then load the image with
  * gdk_texture_new_from_file(), then create the #GtkImage with
- * gtk_image_new_from_texture().
+ * gtk_image_new_from_paintable().
  *
  * Sometimes an application will want to avoid depending on external data
  * files, such as image files. See the documentation of #GResource for details.
@@ -123,7 +123,6 @@ enum
 {
   PROP_0,
   PROP_PAINTABLE,
-  PROP_TEXTURE,
   PROP_FILE,
   PROP_ICON_SIZE,
   PROP_PIXEL_SIZE,
@@ -165,13 +164,6 @@ gtk_image_class_init (GtkImageClass *class)
                            P_("Paintable"),
                            P_("A GdkPaintable to display"),
                            GDK_TYPE_PAINTABLE,
-                           GTK_PARAM_READWRITE);
-
-  image_props[PROP_TEXTURE] =
-      g_param_spec_object ("texture",
-                           P_("Texture"),
-                           P_("A GdkTexture to display"),
-                           GDK_TYPE_TEXTURE,
                            GTK_PARAM_READWRITE);
 
   image_props[PROP_FILE] =
@@ -340,9 +332,6 @@ gtk_image_set_property (GObject      *object,
     case PROP_PAINTABLE:
       gtk_image_set_from_paintable (image, g_value_get_object (value));
       break;
-    case PROP_TEXTURE:
-      gtk_image_set_from_texture (image, g_value_get_object (value));
-      break;
     case PROP_FILE:
       gtk_image_set_from_file (image, g_value_get_string (value));
       break;
@@ -394,9 +383,6 @@ gtk_image_get_property (GObject     *object,
     {
     case PROP_PAINTABLE:
       g_value_set_object (value, _gtk_icon_helper_peek_paintable (priv->icon_helper));
-      break;
-    case PROP_TEXTURE:
-      g_value_set_object (value, _gtk_icon_helper_peek_texture (priv->icon_helper));
       break;
     case PROP_FILE:
       g_value_set_string (value, priv->filename);
@@ -549,33 +535,6 @@ gtk_image_new_from_paintable (GdkPaintable *paintable)
   image = g_object_new (GTK_TYPE_IMAGE, NULL);
 
   gtk_image_set_from_paintable (image, paintable);
-
-  return GTK_WIDGET (image);  
-}
-
-/**
- * gtk_image_new_from_texture:
- * @texture: (allow-none): a #GdkTexture, or %NULL
- *
- * Creates a new #GtkImage displaying @texture.
- * The #GtkImage does not assume a reference to the
- * texture; you still need to unref it if you own references.
- * #GtkImage will add its own reference rather than adopting yours.
- *
- * Note that this function just creates an #GtkImage from the texture. The
- * #GtkImage created will not react to state changes. Should you want that, 
- * you should use gtk_image_new_from_icon_name().
- * 
- * Returns: a new #GtkImage
- **/
-GtkWidget*
-gtk_image_new_from_texture (GdkTexture *texture)
-{
-  GtkImage *image;
-
-  image = g_object_new (GTK_TYPE_IMAGE, NULL);
-
-  gtk_image_set_from_texture (image, texture);
 
   return GTK_WIDGET (image);  
 }
@@ -878,9 +837,8 @@ gtk_image_set_from_resource (GtkImage    *image,
  *
  * See gtk_image_new_from_pixbuf() for details.
  *
- * Note: This is a helper for gtk_image_set_from_texture(), and you can't
- * get back the exact pixbuf once this is called, only a texture.
- *
+ * Note: This is a helper for gtk_image_set_from_paintable(), and you can't
+ * get back the exact pixbuf once this is called, only a paintable.
  **/
 void
 gtk_image_set_from_pixbuf (GtkImage  *image,
@@ -896,7 +854,7 @@ gtk_image_set_from_pixbuf (GtkImage  *image,
   else
     texture = NULL;
 
-  gtk_image_set_from_texture (image, texture);
+  gtk_image_set_from_paintable (image, GDK_PAINTABLE (texture));
 
   if (texture)
     g_object_unref (texture);
@@ -1029,40 +987,6 @@ gtk_image_set_from_paintable (GtkImage     *image,
 }
 
 /**
- * gtk_image_set_from_texture:
- * @image: a #GtkImage
- * @texture: (nullable): a #GdkTexture or %NULL
- *
- * See gtk_image_new_from_texture() for details.
- **/
-void
-gtk_image_set_from_texture (GtkImage   *image,
-			    GdkTexture *texture)
-{
-  GtkImagePrivate *priv = gtk_image_get_instance_private (image);
-
-  g_return_if_fail (GTK_IS_IMAGE (image));
-  g_return_if_fail (texture == NULL || GDK_IS_TEXTURE (texture));
-
-  g_object_freeze_notify (G_OBJECT (image));
-
-  if (texture)
-    g_object_ref (texture);
-
-  gtk_image_clear (image);
-
-  if (texture)
-    {
-      _gtk_icon_helper_set_texture (priv->icon_helper, texture);
-      g_object_unref (texture);
-    }
-
-  g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_TEXTURE]);
-  
-  g_object_thaw_notify (G_OBJECT (image));
-}
-
-/**
  * gtk_image_get_storage_type:
  * @image: a #GtkImage
  * 
@@ -1103,29 +1027,6 @@ gtk_image_get_paintable (GtkImage *image)
   g_return_val_if_fail (GTK_IS_IMAGE (image), NULL);
 
   return _gtk_icon_helper_peek_paintable (priv->icon_helper);
-}
-
-/**
- * gtk_image_get_texture:
- * @image: a #GtkImage
- *
- * Gets the image #GdkTexture being displayed by the #GtkImage.
- * The storage type of the image must be %GTK_IMAGE_EMPTY or
- * %GTK_IMAGE_TEXTURE (see gtk_image_get_storage_type()).
- * The caller of this function does not own a reference to the
- * returned texture.
- * 
- * Returns: (nullable) (transfer none): the displayed texture, or %NULL if
- *   the image is empty
- **/
-GdkTexture *
-gtk_image_get_texture (GtkImage *image)
-{
-  GtkImagePrivate *priv = gtk_image_get_instance_private (image);
-
-  g_return_val_if_fail (GTK_IS_IMAGE (image), NULL);
-
-  return _gtk_icon_helper_peek_texture (priv->icon_helper);
 }
 
 /**
@@ -1301,12 +1202,10 @@ gtk_image_notify_for_storage_type (GtkImage     *image,
     case GTK_IMAGE_GICON:
       g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_GICON]);
       break;
-    case GTK_IMAGE_TEXTURE:
-      g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_TEXTURE]);
-      break;
     case GTK_IMAGE_PAINTABLE:
       g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_PAINTABLE]);
       break;
+    case GTK_IMAGE_TEXTURE:
     case GTK_IMAGE_EMPTY:
     default:
       break;

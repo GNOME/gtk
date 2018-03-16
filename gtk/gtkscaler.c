@@ -78,6 +78,14 @@ gtk_scaler_paintable_get_current_image (GdkPaintable *paintable)
   return current_self;
 }
 
+static GdkPaintableFlags
+gtk_scaler_paintable_get_flags (GdkPaintable *paintable)
+{
+  GtkScaler *self = GTK_SCALER (paintable);
+
+  return gdk_paintable_get_flags (self->paintable);
+}
+
 static int
 gtk_scaler_paintable_get_intrinsic_width (GdkPaintable *paintable)
 {
@@ -106,6 +114,7 @@ gtk_scaler_paintable_init (GdkPaintableInterface *iface)
 {
   iface->snapshot = gtk_scaler_paintable_snapshot;
   iface->get_current_image = gtk_scaler_paintable_get_current_image;
+  iface->get_flags = gtk_scaler_paintable_get_flags;
   iface->get_intrinsic_width = gtk_scaler_paintable_get_intrinsic_width;
   iface->get_intrinsic_height = gtk_scaler_paintable_get_intrinsic_height;
   iface->get_intrinsic_aspect_ratio = gtk_scaler_paintable_get_intrinsic_aspect_ratio;
@@ -120,7 +129,12 @@ gtk_scaler_dispose (GObject *object)
 {
   GtkScaler *self = GTK_SCALER (object);
 
-  g_clear_object (&self->paintable);
+  if (self->paintable)
+    {
+      g_signal_handlers_disconnect_by_func (self->paintable, gdk_paintable_invalidate_contents, self);
+      g_signal_handlers_disconnect_by_func (self->paintable, gdk_paintable_invalidate_size, self);
+      g_clear_object (&self->paintable);
+    }
 
   G_OBJECT_CLASS (gtk_scaler_parent_class)->dispose (object);
 }
@@ -151,6 +165,8 @@ gtk_scaler_new (GdkPaintable *paintable,
   self = g_object_new (GTK_TYPE_SCALER, NULL);
 
   self->paintable = g_object_ref (paintable);
+  g_signal_connect_swapped (paintable, "invalidate-contents", G_CALLBACK (gdk_paintable_invalidate_contents), self);
+  g_signal_connect_swapped (paintable, "invalidate-size", G_CALLBACK (gdk_paintable_invalidate_size), self);
   self->scale_factor = scale_factor;
 
   return GDK_PAINTABLE (self);

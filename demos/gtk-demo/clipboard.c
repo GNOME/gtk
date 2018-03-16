@@ -93,8 +93,8 @@ paste_button_clicked (GtkWidget *button,
   gdk_clipboard_read_text_async (clipboard, NULL, paste_received, entry);
 }
 
-static GdkTexture *
-get_image_texture (GtkImage *image)
+static GdkPaintable *
+get_image_paintable (GtkImage *image)
 {
   const gchar *icon_name;
   GtkIconTheme *icon_theme;
@@ -102,15 +102,15 @@ get_image_texture (GtkImage *image)
 
   switch (gtk_image_get_storage_type (image))
     {
-    case GTK_IMAGE_TEXTURE:
-      return g_object_ref (gtk_image_get_texture (image));
+    case GTK_IMAGE_PAINTABLE:
+      return g_object_ref (gtk_image_get_paintable (image));
     case GTK_IMAGE_ICON_NAME:
       icon_name = gtk_image_get_icon_name (image);
       icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (image)));
       icon_info = gtk_icon_theme_lookup_icon (icon_theme, icon_name, 48, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
       if (icon_info == NULL)
         return NULL;
-      return gtk_icon_info_load_texture (icon_info);
+      return GDK_PAINTABLE (gtk_icon_info_load_texture (icon_info));
     default:
       g_warning ("Image storage type %d not handled",
                  gtk_image_get_storage_type (image));
@@ -123,13 +123,13 @@ drag_begin (GtkWidget      *widget,
             GdkDragContext *context,
             gpointer        data)
 {
-  GdkTexture *texture;
+  GdkPaintable *paintable;
 
-  texture = get_image_texture (GTK_IMAGE (widget));
-  if (texture)
+  paintable = get_image_paintable (GTK_IMAGE (widget));
+  if (paintable)
     {
-      gtk_drag_set_icon_paintable (context, GDK_PAINTABLE (texture), -2, -2);
-      g_object_unref (texture);
+      gtk_drag_set_icon_paintable (context, paintable, -2, -2);
+      g_object_unref (paintable);
     }
 }
 
@@ -141,11 +141,11 @@ drag_data_get (GtkWidget        *widget,
                guint             time,
                gpointer          data)
 {
-  GdkTexture *texture;
+  GdkPaintable *paintable;
 
-  texture = get_image_texture (GTK_IMAGE (widget));
-  if (texture)
-    gtk_selection_data_set_texture (selection_data, texture);
+  paintable = get_image_paintable (GTK_IMAGE (widget));
+  if (GDK_IS_TEXTURE (paintable))
+    gtk_selection_data_set_texture (selection_data, GDK_TEXTURE (paintable));
 }
 
 static void
@@ -160,7 +160,7 @@ drag_data_received (GtkWidget        *widget,
       GdkTexture *texture;
 
       texture = gtk_selection_data_get_texture (selection_data);
-      gtk_image_set_from_texture (GTK_IMAGE (data), texture);
+      gtk_image_set_from_paintable (GTK_IMAGE (data), GDK_PAINTABLE (texture));
       g_object_unref (texture);
     }
 }
@@ -170,16 +170,16 @@ copy_image (GtkMenuItem *item,
             gpointer     data)
 {
   GdkClipboard *clipboard;
-  GdkTexture *texture;
+  GdkPaintable *paintable;
 
   clipboard = gtk_widget_get_clipboard (GTK_WIDGET (data));
-  texture = get_image_texture (GTK_IMAGE (data));
+  paintable = get_image_paintable (GTK_IMAGE (data));
 
-  if (texture)
-    {
-      gdk_clipboard_set_texture (clipboard, texture);
-      g_object_unref (texture);
-    }
+  if (GDK_IS_TEXTURE (paintable))
+    gdk_clipboard_set_texture (clipboard, GDK_TEXTURE (paintable));
+
+  if (paintable)
+    g_object_unref (paintable);
 }
 
 static void
@@ -193,7 +193,7 @@ paste_image_received (GObject      *source,
   if (texture == NULL)
     return;
     
-  gtk_image_set_from_texture (GTK_IMAGE (data), texture);
+  gtk_image_set_from_paintable (GTK_IMAGE (data), GDK_PAINTABLE (texture));
   g_object_unref (texture);
 }
 

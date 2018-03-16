@@ -197,7 +197,7 @@ main (int argc, char **argv)
       GdkWindow *gdk_window = gdk_window_new_toplevel (gdk_display_get_default(), 10 , 10);
       GskRenderer *renderer = gsk_renderer_new_for_window (gdk_window);
       GdkTexture *texture = gsk_renderer_render_texture (renderer, GTK_NODE_VIEW (nodeview)->node, NULL);
-      GtkWidget *image = gtk_image_new_from_texture (texture);
+      GtkWidget *image = gtk_image_new_from_paintable (GDK_PAINTABLE (texture));
 
       gtk_container_add (GTK_CONTAINER (box), nodeview);
       gtk_container_add (GTK_CONTAINER (box), image);

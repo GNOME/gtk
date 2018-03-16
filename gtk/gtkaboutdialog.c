@@ -1878,7 +1878,7 @@ gtk_about_dialog_set_logo_icon_name (GtkAboutDialog *about,
     }
   else if ((icons = gtk_window_get_default_icon_list ()))
     {
-      gtk_image_set_from_texture (GTK_IMAGE (priv->logo_image), icons->data);
+      gtk_image_set_from_paintable (GTK_IMAGE (priv->logo_image), icons->data);
       g_list_free (icons);
     }
   else
