@@ -22,7 +22,6 @@
 typedef struct _GtkImageDefinitionEmpty GtkImageDefinitionEmpty;
 typedef struct _GtkImageDefinitionIconName GtkImageDefinitionIconName;
 typedef struct _GtkImageDefinitionGIcon GtkImageDefinitionGIcon;
-typedef struct _GtkImageDefinitionTexture GtkImageDefinitionTexture;
 typedef struct _GtkImageDefinitionPaintable GtkImageDefinitionPaintable;
 
 struct _GtkImageDefinitionEmpty {
@@ -44,13 +43,6 @@ struct _GtkImageDefinitionGIcon {
   GIcon *gicon;
 };
 
-struct _GtkImageDefinitionTexture {
-  GtkImageType type;
-  gint ref_count;
-
-  GdkTexture *texture;
-};
-
 struct _GtkImageDefinitionPaintable {
   GtkImageType type;
   gint ref_count;
@@ -64,7 +56,6 @@ union _GtkImageDefinition
   GtkImageDefinitionEmpty empty;
   GtkImageDefinitionIconName icon_name;
   GtkImageDefinitionGIcon gicon;
-  GtkImageDefinitionTexture texture;
   GtkImageDefinitionPaintable paintable;
 };
 
@@ -83,7 +74,6 @@ gtk_image_definition_alloc (GtkImageType type)
     sizeof (GtkImageDefinitionEmpty),
     sizeof (GtkImageDefinitionIconName),
     sizeof (GtkImageDefinitionGIcon),
-    sizeof (GtkImageDefinitionTexture),
     sizeof (GtkImageDefinitionPaintable)
   };
   GtkImageDefinition *def;
@@ -126,20 +116,6 @@ gtk_image_definition_new_gicon (GIcon *gicon)
 }
 
 GtkImageDefinition *
-gtk_image_definition_new_texture (GdkTexture *texture)
-{
-  GtkImageDefinition *def;
-
-  if (texture == NULL)
-    return NULL;
-
-  def = gtk_image_definition_alloc (GTK_IMAGE_TEXTURE);
-  def->texture.texture = g_object_ref (texture);
-
-  return def;
-}
-
-GtkImageDefinition *
 gtk_image_definition_new_paintable (GdkPaintable *paintable)
 {
   GtkImageDefinition *def;
@@ -175,9 +151,6 @@ gtk_image_definition_unref (GtkImageDefinition *def)
     case GTK_IMAGE_EMPTY:
       g_assert_not_reached ();
       break;
-    case GTK_IMAGE_TEXTURE:
-      g_object_unref (def->texture.texture);
-      break;
     case GTK_IMAGE_PAINTABLE:
       g_object_unref (def->paintable.paintable);
       break;
@@ -207,7 +180,6 @@ gtk_image_definition_get_scale (const GtkImageDefinition *def)
       g_assert_not_reached ();
     case GTK_IMAGE_EMPTY:
     case GTK_IMAGE_PAINTABLE:
-    case GTK_IMAGE_TEXTURE:
     case GTK_IMAGE_ICON_NAME:
     case GTK_IMAGE_GICON:
       return 1;
@@ -230,15 +202,6 @@ gtk_image_definition_get_gicon (const GtkImageDefinition *def)
     return NULL;
 
   return def->gicon.gicon;
-}
-
-GdkTexture *
-gtk_image_definition_get_texture (const GtkImageDefinition *def)
-{
-  if (def->type != GTK_IMAGE_TEXTURE)
-    return NULL;
-
-  return def->texture.texture;
 }
 
 GdkPaintable *
