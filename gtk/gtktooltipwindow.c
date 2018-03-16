@@ -121,12 +121,12 @@ gtk_tooltip_window_set_label_text (GtkTooltipWindow *window,
 
 void
 gtk_tooltip_window_set_image_icon (GtkTooltipWindow *window,
-                                   GdkTexture       *texture)
+                                   GdkPaintable     *paintable)
 {
 
-  if (texture != NULL)
+  if (paintable != NULL)
     {
-      gtk_image_set_from_texture (GTK_IMAGE (window->image), texture);
+      gtk_image_set_from_paintable (GTK_IMAGE (window->image), paintable);
       gtk_widget_show (window->image);
     }
   else

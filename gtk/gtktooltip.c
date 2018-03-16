@@ -264,19 +264,19 @@ gtk_tooltip_set_text (GtkTooltip  *tooltip,
 /**
  * gtk_tooltip_set_icon:
  * @tooltip: a #GtkTooltip
- * @texture: (allow-none): a #GdkTexture, or %NULL
+ * @paintable: (allow-none): a #GdkPaintable, or %NULL
  *
  * Sets the icon of the tooltip (which is in front of the text) to be
- * @texture.  If @texure is %NULL, the image will be hidden.
+ * @paintable.  If @paintable is %NULL, the image will be hidden.
  */
 void
-gtk_tooltip_set_icon (GtkTooltip *tooltip,
-		      GdkTexture *texture)
+gtk_tooltip_set_icon (GtkTooltip   *tooltip,
+		      GdkPaintable *paintable)
 {
   g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
-  g_return_if_fail (texture == NULL || GDK_IS_TEXTURE (texture));
+  g_return_if_fail (paintable == NULL || GDK_IS_PAINTABLE (paintable));
 
-  gtk_tooltip_window_set_image_icon (GTK_TOOLTIP_WINDOW (tooltip->window), texture);
+  gtk_tooltip_window_set_image_icon (GTK_TOOLTIP_WINDOW (tooltip->window), paintable);
 }
 
 /**
