@@ -802,19 +802,7 @@ gtk_selection_data_set_pixbuf (GtkSelectionData *selection_data,
   return FALSE;
 }
 
-/**
- * gtk_selection_data_set_surface:
- * @selection_data: a #GtkSelectionData
- * @surface: a cairo image surface
- * 
- * Sets the contents of the selection from a cairo image surface.
- * The surface is converted to the form determined by
- * @selection_data->target.
- * 
- * Returns: %TRUE if the selection was successfully set,
- *   otherwise %FALSE.
- **/
-gboolean
+static gboolean
 gtk_selection_data_set_surface (GtkSelectionData *selection_data,
 			        cairo_surface_t  *surface)
 {
@@ -829,31 +817,6 @@ gtk_selection_data_set_surface (GtkSelectionData *selection_data,
   g_object_unref (pixbuf);
 
   return retval;
-}
-
-/**
- * gtk_selection_data_get_surface:
- * @selection_data: a #GtkSelectionData
- * 
- * Gets the contents of the selection data as a cairo surface.
- * 
- * Returns: (nullable) (transfer full): if the selection data
- *   contained a recognized image type and it could be converted to a
- *   cairo surface, a newly allocated surface is returned, otherwise
- *   %NULL.  If the result is non-%NULL it must be freed with
- *   g_object_unref().
- **/
-cairo_surface_t *
-gtk_selection_data_get_surface (GtkSelectionData *selection_data)
-{
-  GdkPixbuf *pixbuf;
-  cairo_surface_t *surface;
-
-  pixbuf = gtk_selection_data_get_pixbuf (selection_data);
-  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, NULL);
-  g_object_unref (pixbuf);
-
-  return surface;
 }
 
 /**
