@@ -677,7 +677,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/default_cursor.png</property>
+                                <property name="paintable">resource:///cursors/default_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -734,7 +734,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/none_cursor.png</property>
+                                <property name="paintable">resource:///cursors/none_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -791,7 +791,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/gtk_logo_cursor.png</property>
+                                <property name="paintable">resource:///cursors/gtk_logo_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -861,7 +861,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/context_menu_cursor.png</property>
+                                <property name="paintable">resource:///cursors/context_menu_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -918,7 +918,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/help_cursor.png</property>
+                                <property name="paintable">resource:///cursors/help_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -975,7 +975,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/pointer_cursor.png</property>
+                                <property name="paintable">resource:///cursors/pointer_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -1032,7 +1032,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/progress_cursor.png</property>
+                                <property name="paintable">resource:///cursors/progress_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -1089,7 +1089,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/wait_cursor.png</property>
+                                <property name="paintable">resource:///cursors/wait_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -1159,7 +1159,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/cell_cursor.png</property>
+                                <property name="paintable">resource:///cursors/cell_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -1216,7 +1216,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/crosshair_cursor.png</property>
+                                <property name="paintable">resource:///cursors/crosshair_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -1273,7 +1273,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/text_cursor.png</property>
+                                <property name="paintable">resource:///cursors/text_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -1330,7 +1330,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/vertical_text_cursor.png</property>
+                                <property name="paintable">resource:///cursors/vertical_text_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -1400,7 +1400,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/alias_cursor.png</property>
+                                <property name="paintable">resource:///cursors/alias_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -1457,7 +1457,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/copy_cursor.png</property>
+                                <property name="paintable">resource:///cursors/copy_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -1514,7 +1514,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/move_cursor.png</property>
+                                <property name="paintable">resource:///cursors/move_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -1571,7 +1571,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/no_drop_cursor.png</property>
+                                <property name="paintable">resource:///cursors/no_drop_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -1628,7 +1628,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/not_allowed_cursor.png</property>
+                                <property name="paintable">resource:///cursors/not_allowed_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -1685,7 +1685,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/grab_cursor.png</property>
+                                <property name="paintable">resource:///cursors/grab_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -1742,7 +1742,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/grabbing_cursor.png</property>
+                                <property name="paintable">resource:///cursors/grabbing_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -1812,7 +1812,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/all_scroll_cursor.png</property>
+                                <property name="paintable">resource:///cursors/all_scroll_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -1869,7 +1869,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/col_resize_cursor.png</property>
+                                <property name="paintable">resource:///cursors/col_resize_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -1926,7 +1926,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/row_resize_cursor.png</property>
+                                <property name="paintable">resource:///cursors/row_resize_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -1983,7 +1983,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/n_resize_cursor.png</property>
+                                <property name="paintable">resource:///cursors/n_resize_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -2040,7 +2040,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/e_resize_cursor.png</property>
+                                <property name="paintable">resource:///cursors/e_resize_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -2097,7 +2097,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/s_resize_cursor.png</property>
+                                <property name="paintable">resource:///cursors/s_resize_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -2154,7 +2154,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/w_resize_cursor.png</property>
+                                <property name="paintable">resource:///cursors/w_resize_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -2211,7 +2211,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/ne_resize_cursor.png</property>
+                                <property name="paintable">resource:///cursors/ne_resize_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -2268,7 +2268,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/nw_resize_cursor.png</property>
+                                <property name="paintable">resource:///cursors/nw_resize_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -2325,7 +2325,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/sw_resize_cursor.png</property>
+                                <property name="paintable">resource:///cursors/sw_resize_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -2382,7 +2382,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/se_resize_cursor.png</property>
+                                <property name="paintable">resource:///cursors/se_resize_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -2439,7 +2439,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/ew_resize_cursor.png</property>
+                                <property name="paintable">resource:///cursors/ew_resize_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -2496,7 +2496,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/ns_resize_cursor.png</property>
+                                <property name="paintable">resource:///cursors/ns_resize_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -2553,7 +2553,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/nesw_resize_cursor.png</property>
+                                <property name="paintable">resource:///cursors/nesw_resize_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -2610,7 +2610,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/nwse_resize_cursor.png</property>
+                                <property name="paintable">resource:///cursors/nwse_resize_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -2680,7 +2680,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/zoom_in_cursor.png</property>
+                                <property name="paintable">resource:///cursors/zoom_in_cursor.png</property>
                               </object>
                             </child>
                             <child>
@@ -2737,7 +2737,7 @@
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="texture">resource:///cursors/zoom_out_cursor.png</property>
+                                <property name="paintable">resource:///cursors/zoom_out_cursor.png</property>
                               </object>
                             </child>
                             <child>

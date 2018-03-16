@@ -1205,7 +1205,7 @@ gtk_drag_set_icon_surface (GdkDragContext  *context,
   cairo_surface_set_device_offset (surface, 0, 0);
 
   texture = gdk_texture_new_for_surface (surface);
-  widget = gtk_image_new_from_texture (texture);
+  widget = gtk_image_new_from_paintable (GDK_PAINTABLE (texture));
   g_object_unref (texture);
 
   gtk_drag_set_icon_widget_internal (context, widget, (int)hot_x, (int)hot_y, TRUE);

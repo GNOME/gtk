@@ -111,8 +111,6 @@ GtkWidget* gtk_image_new_from_resource  (const gchar     *resource_path);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_image_new_from_pixbuf    (GdkPixbuf       *pixbuf);
 GDK_AVAILABLE_IN_ALL
-GtkWidget* gtk_image_new_from_texture   (GdkTexture      *texture);
-GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_image_new_from_paintable (GdkPaintable    *paintable);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_image_new_from_icon_name (const gchar     *icon_name);
@@ -130,9 +128,6 @@ void gtk_image_set_from_resource  (GtkImage        *image,
 GDK_AVAILABLE_IN_ALL
 void gtk_image_set_from_pixbuf    (GtkImage        *image,
                                    GdkPixbuf       *pixbuf);
-GDK_AVAILABLE_IN_ALL
-void gtk_image_set_from_texture   (GtkImage        *image,
-                                   GdkTexture      *texture);
 GDK_AVAILABLE_IN_ALL
 void gtk_image_set_from_paintable (GtkImage        *image,
                                    GdkPaintable    *paintable);
@@ -158,8 +153,6 @@ void gtk_image_set_can_shrink     (GtkImage        *image,
 GDK_AVAILABLE_IN_ALL
 GtkImageType gtk_image_get_storage_type (GtkImage   *image);
 
-GDK_AVAILABLE_IN_ALL
-GdkTexture *gtk_image_get_texture  (GtkImage       *image);
 GDK_AVAILABLE_IN_ALL
 GdkPaintable *gtk_image_get_paintable (GtkImage       *image);
 

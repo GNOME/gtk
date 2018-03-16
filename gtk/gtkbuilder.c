@@ -529,6 +529,7 @@ gtk_builder_get_parameters (GtkBuilder         *builder,
       if (G_IS_PARAM_SPEC_OBJECT (prop->pspec) &&
           (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != GDK_TYPE_PIXBUF) &&
           (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != GDK_TYPE_TEXTURE) &&
+          (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != GDK_TYPE_PAINTABLE) &&
           (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != G_TYPE_FILE))
         {
           GObject *object = g_hash_table_lookup (builder->priv->objects,
@@ -2050,6 +2051,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
     case G_TYPE_OBJECT:
     case G_TYPE_INTERFACE:
       if (G_VALUE_HOLDS (value, GDK_TYPE_PIXBUF) ||
+          G_VALUE_HOLDS (value, GDK_TYPE_PAINTABLE) || 
           G_VALUE_HOLDS (value, GDK_TYPE_TEXTURE))
         {
           gchar *filename;
@@ -2102,7 +2104,8 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
 
           if (pixbuf)
             {
-              if (G_VALUE_HOLDS (value, GDK_TYPE_TEXTURE))
+              if (G_VALUE_HOLDS (value, GDK_TYPE_TEXTURE) ||
+                  G_VALUE_HOLDS (value, GDK_TYPE_PAINTABLE))
                 {
                   GdkTexture *texture = gdk_texture_new_for_pixbuf (pixbuf);
                   g_value_set_object (value, texture);

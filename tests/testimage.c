@@ -24,10 +24,10 @@ drag_begin (GtkWidget      *widget,
 	    gpointer        data)
 {
   GtkWidget *image = GTK_WIDGET (data);
-  GdkTexture *texture;
+  GdkPaintable *paintable;
 
-  texture = gtk_image_get_texture (GTK_IMAGE (image));
-  gtk_drag_set_icon_paintable (context, GDK_PAINTABLE (texture), -2, -2);
+  paintable = gtk_image_get_paintable (GTK_IMAGE (image));
+  gtk_drag_set_icon_paintable (context, paintable, -2, -2);
 }
 
 void  
@@ -38,11 +38,11 @@ drag_data_get  (GtkWidget        *widget,
 		gpointer          data)
 {
   GtkWidget *image = GTK_WIDGET (data);
-  GdkTexture *texture;
+  GdkPaintable *paintable;
 
-  texture = gtk_image_get_texture (GTK_IMAGE (image));
-  gtk_selection_data_set_texture (selection_data, texture);
-  g_object_unref (texture);
+  paintable = gtk_image_get_paintable (GTK_IMAGE (image));
+  if (GDK_IS_TEXTURE (paintable))
+    gtk_selection_data_set_texture (selection_data, GDK_TEXTURE (paintable));
 }
 
 static void
@@ -60,7 +60,7 @@ drag_data_received (GtkWidget        *widget,
     return;
 
   texture = gtk_selection_data_get_texture (selection_data);
-  gtk_image_set_from_texture (GTK_IMAGE (image), texture);
+  gtk_image_set_from_paintable (GTK_IMAGE (image), GDK_PAINTABLE (texture));
 
   g_object_unref (texture);
 }
@@ -113,7 +113,7 @@ main (int argc, char **argv)
   icon_info = gtk_icon_theme_lookup_icon_for_scale (theme, icon_name, 48, gtk_widget_get_scale_factor (window), GTK_ICON_LOOKUP_GENERIC_FALLBACK);
   texture = gtk_icon_info_load_texture (icon_info);
   g_object_unref (icon_info);
-  image = gtk_image_new_from_texture (texture);
+  image = gtk_image_new_from_paintable (GDK_PAINTABLE (texture));
   g_object_unref (texture);
   gtk_grid_attach (GTK_GRID (grid), image, 2, 1, 1, 1);
 

@@ -228,7 +228,8 @@ _gtk_header_bar_update_window_icon (GtkHeaderBar *bar,
 
   if (texture)
     {
-      gtk_image_set_from_texture (GTK_IMAGE (priv->titlebar_icon), texture);
+      gtk_image_set_from_paintable (GTK_IMAGE (priv->titlebar_icon),
+                                    GDK_PAINTABLE (texture));
       g_object_unref (texture);
       gtk_widget_show (priv->titlebar_icon);
 
