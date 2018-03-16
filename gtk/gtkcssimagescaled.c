@@ -107,34 +107,38 @@ gtk_css_image_scaled_compute (GtkCssImage      *image,
   int scale;
   GtkCssImageScaled *res;
   int i;
-  int max_scale;
-
-  max_scale = 1;
-  for (i = 0; i < scaled->n_images; i++)
-    max_scale = MAX (max_scale, scaled->scales[i]);
+  int best;
 
   scale = gtk_style_provider_get_scale (provider);
-  scale = MAX(MIN (scale, max_scale), 1);
+  scale = MAX(scale, 1);
 
+  best = 0;
   for (i = 0; i < scaled->n_images; i++)
     {
       if (scaled->scales[i] == scale)
-        break;
+        {
+          best = i;
+          break;
+        }
+      else if ((scaled->scales[best] < scaled->scales[i] && scaled->scales[i] < scale) ||
+               (scale < scaled->scales[i] && scaled->scales[i] < scaled->scales[best]) ||
+               (scaled->scales[best] < scale && scaled->scales[i] > scale))
+        {
+          best = i;
+        }
     }
-  if (i == scaled->n_images)
-    i = 0;
 
   res = g_object_new (GTK_TYPE_CSS_IMAGE_SCALED, NULL);
   res->n_images = 1;
   res->images = g_new (GtkCssImage *, 1);
   res->scales = g_new (int, 1);
 
-  res->images[0] = _gtk_css_image_compute (scaled->images[i],
+  res->images[0] = _gtk_css_image_compute (scaled->images[best],
                                            property_id,
                                            provider,
                                            style,
                                            parent_style);
-  res->scales[0] = scaled->scales[i];
+  res->scales[0] = scaled->scales[best];
 
   return res;
 }
