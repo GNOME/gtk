@@ -272,9 +272,9 @@ void           gtk_entry_set_placeholder_text    (GtkEntry             *entry,
 /* Setting and managing icons
  */
 GDK_AVAILABLE_IN_ALL
-void           gtk_entry_set_icon_from_texture           (GtkEntry             *entry,
+void           gtk_entry_set_icon_from_paintable         (GtkEntry             *entry,
 							  GtkEntryIconPosition  icon_pos,
-							  GdkTexture           *texture);
+							  GdkPaintable         *paintable);
 GDK_AVAILABLE_IN_ALL
 void           gtk_entry_set_icon_from_icon_name         (GtkEntry             *entry,
 							  GtkEntryIconPosition  icon_pos,
@@ -287,7 +287,7 @@ GDK_AVAILABLE_IN_ALL
 GtkImageType   gtk_entry_get_icon_storage_type           (GtkEntry             *entry,
 							  GtkEntryIconPosition  icon_pos);
 GDK_AVAILABLE_IN_ALL
-GdkTexture *   gtk_entry_get_icon_texture                (GtkEntry             *entry,
+GdkPaintable * gtk_entry_get_icon_paintable              (GtkEntry             *entry,
 							  GtkEntryIconPosition  icon_pos);
 GDK_AVAILABLE_IN_ALL
 const gchar* gtk_entry_get_icon_name                     (GtkEntry             *entry,
