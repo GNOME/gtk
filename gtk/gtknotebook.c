@@ -4332,7 +4332,7 @@ gtk_notebook_update_labels (GtkNotebook *notebook)
         {
           if (GTK_IS_LABEL (page->tab_label))
             gtk_label_set_text (GTK_LABEL (page->menu_label),
-                                gtk_label_get_label (GTK_LABEL (page->tab_label)));
+                                gtk_label_get_text (GTK_LABEL (page->tab_label)));
           else
             gtk_label_set_text (GTK_LABEL (page->menu_label), string);
         }
@@ -5560,7 +5560,7 @@ gtk_notebook_menu_item_create (GtkNotebook *notebook,
   if (page->default_menu)
     {
       if (GTK_IS_LABEL (page->tab_label))
-        page->menu_label = gtk_label_new (gtk_label_get_label (GTK_LABEL (page->tab_label)));
+        page->menu_label = gtk_label_new (gtk_label_get_text (GTK_LABEL (page->tab_label)));
       else
         page->menu_label = gtk_label_new ("");
       gtk_widget_set_halign (page->menu_label, GTK_ALIGN_START);
