@@ -1,8 +1,8 @@
 /* Benchmark/Widgetbowl
  *
- * This demo models the fishbowl demos seen on the web in a GTK way.
- * It's also a neat little tool to see how fast your computer (or
- * your GTK version) is.
+ * This is a version of the Fishbowl demo that instead shows different
+ * kinds of widgets, which is useful for comparing the rendering performance
+ * of theme specifics.
  */
 
 #include <gtk/gtk.h>
