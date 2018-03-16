@@ -6555,7 +6555,6 @@ gtk_entry_clear_icon (GtkEntry             *entry,
                                             : PROP_GICON_SECONDARY]);
       break;
 
-    case GTK_IMAGE_TEXTURE:
     case GTK_IMAGE_EMPTY:
     default:
       g_assert_not_reached ();

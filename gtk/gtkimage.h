@@ -55,8 +55,6 @@ typedef struct _GtkImageClass         GtkImageClass;
  *  This image type was added in GTK+ 2.6
  * @GTK_IMAGE_GICON: the widget contains a #GIcon.
  *  This image type was added in GTK+ 2.14
- * @GTK_IMAGE_TEXTURE: the widget contains a #GdkTexture.
- *  This image type was added in GTK+ 3.94
  * @GTK_IMAGE_PAINTABLE: the widget contains a #GdkPaintable.
  *  This image type was added in GTK+ 3.96
  *
@@ -73,7 +71,6 @@ typedef enum
   GTK_IMAGE_EMPTY,
   GTK_IMAGE_ICON_NAME,
   GTK_IMAGE_GICON,
-  GTK_IMAGE_TEXTURE,
   GTK_IMAGE_PAINTABLE
 } GtkImageType;
 

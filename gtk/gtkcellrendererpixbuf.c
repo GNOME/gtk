@@ -240,7 +240,7 @@ gtk_cell_renderer_pixbuf_get_property (GObject        *object,
       g_value_set_object (value, priv->pixbuf_expander_closed);
       break;
     case PROP_TEXTURE:
-      g_value_set_object (value, gtk_image_definition_get_texture (priv->image_def));
+      g_value_set_object (value, gtk_image_definition_get_paintable (priv->image_def));
       break;
     case PROP_ICON_SIZE:
       g_value_set_enum (value, priv->icon_size);
@@ -263,11 +263,8 @@ notify_storage_type (GtkCellRendererPixbuf *cellpixbuf,
 {
   switch (storage_type)
     {
-    case GTK_IMAGE_TEXTURE:
-      g_object_notify (G_OBJECT (cellpixbuf), "texture");
-      break;
     case GTK_IMAGE_PAINTABLE:
-      g_object_notify (G_OBJECT (cellpixbuf), "paintable");
+      g_object_notify (G_OBJECT (cellpixbuf), "texture");
       break;
     case GTK_IMAGE_ICON_NAME:
       g_object_notify (G_OBJECT (cellpixbuf), "icon-name");
@@ -335,7 +332,7 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
         texture = gdk_texture_new_for_pixbuf (pixbuf);
       else
         texture = NULL;
-      take_image_definition (cellpixbuf, gtk_image_definition_new_texture (texture));
+      take_image_definition (cellpixbuf, gtk_image_definition_new_paintable (GDK_PAINTABLE (texture)));
       break;
     case PROP_PIXBUF_EXPANDER_OPEN:
       if (priv->pixbuf_expander_open)
@@ -348,7 +345,7 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
       priv->pixbuf_expander_closed = (GdkPixbuf*) g_value_dup_object (value);
       break;
     case PROP_TEXTURE:
-      take_image_definition (cellpixbuf, gtk_image_definition_new_texture (g_value_get_object (value)));
+      take_image_definition (cellpixbuf, gtk_image_definition_new_paintable (g_value_get_object (value)));
       break;
     case PROP_ICON_SIZE:
       gtk_cell_renderer_pixbuf_set_icon_size (cellpixbuf, g_value_get_enum (value));
@@ -530,14 +527,14 @@ gtk_cell_renderer_pixbuf_snapshot (GtkCellRenderer      *cell,
         {
           icon_helper = gtk_icon_helper_new (gtk_style_context_get_node (context), widget);
           texture = gdk_texture_new_for_pixbuf (priv->pixbuf_expander_open);
-          _gtk_icon_helper_set_texture (icon_helper, texture);
+          _gtk_icon_helper_set_paintable (icon_helper, GDK_PAINTABLE (texture));
           g_object_unref (texture);
         }
       else if (!is_expanded && priv->pixbuf_expander_closed != NULL)
         {
           icon_helper = gtk_icon_helper_new (gtk_style_context_get_node (context), widget);
           texture = gdk_texture_new_for_pixbuf (priv->pixbuf_expander_closed);
-          _gtk_icon_helper_set_texture (icon_helper, texture);
+          _gtk_icon_helper_set_paintable (icon_helper, GDK_PAINTABLE (texture));
           g_object_unref (texture);
         }
       else
