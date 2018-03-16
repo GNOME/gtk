@@ -2539,6 +2539,7 @@ static void
 gdk_wayland_window_hide (GdkWindow *window)
 {
   gdk_wayland_window_hide_surface (window);
+  drop_cairo_surfaces (window);
   _gdk_window_clear_update_area (window);
 }
 
