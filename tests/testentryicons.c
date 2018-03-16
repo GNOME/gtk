@@ -87,7 +87,7 @@ set_texture (GtkWidget *button,
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
     {
       texture = gdk_texture_new_from_resource ("/org/gtk/libgtk/inspector/logo.png");
-      gtk_entry_set_icon_from_texture (entry, GTK_ENTRY_ICON_SECONDARY, texture);
+      gtk_entry_set_icon_from_paintable (entry, GTK_ENTRY_ICON_SECONDARY, GDK_PAINTABLE (texture));
       g_object_unref (texture);
     }
 }
