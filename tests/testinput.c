@@ -121,14 +121,44 @@ draw_brush (GtkWidget *widget, GdkInputSource source,
 
 static guint32 motion_time;
 
-static void
-print_axes (GdkDevice *device, gdouble *axes)
+static const gchar *
+device_source_name (GdkDevice *device)
 {
-  int i;
+  GdkInputSource source = gdk_device_get_source (device);
+  switch (source)
+    {
+    case GDK_SOURCE_MOUSE:       return "mouse";
+    case GDK_SOURCE_PEN:         return "pen";
+    case GDK_SOURCE_ERASER:      return "eraser";
+    case GDK_SOURCE_CURSOR:      return "cursor";
+    case GDK_SOURCE_KEYBOARD:    return "keyboard";
+    case GDK_SOURCE_TOUCHSCREEN: return "touchscreen";
+    case GDK_SOURCE_TOUCHPAD:    return "touchpad";
+    case GDK_SOURCE_TRACKPOINT:  return "trackpoint";
+    case GDK_SOURCE_TABLET_PAD:  return "tablet pad";
+    default:                     return "unknown";
+    }
+}
+
+static void
+print_axes (GdkEvent *event)
+{
+  gdouble *axes;
+  guint n_axes;
+
+  gdk_event_get_axes (event, &axes, &n_axes);
   
   if (axes)
     {
-      g_print ("%s ", gdk_device_get_name (device));
+      GdkDevice *device = gdk_event_get_device (event);
+      GdkDevice *source = gdk_event_get_source_device (event);
+      int i;
+
+      g_print ("%s (%s) via %s (%s): ",
+               gdk_device_get_name (device),
+               device_source_name (device),
+               gdk_device_get_name (source),
+               device_source_name (source));
 
       for (i = 0; i < gdk_device_get_n_axes (device); i++)
 	g_print ("%g ", axes[i]);
@@ -147,17 +177,14 @@ drag_begin (GtkGesture *gesture,
     {
       gdouble pressure = 0.5;
       GdkDevice *device;
-      gdouble *axes;
-      guint n_axes;
       gdouble x, y;
       GdkEvent *event;
 
       event = gtk_get_current_event ();
       device = gdk_event_get_device (event);
-      gdk_event_get_axes (event, &axes, &n_axes);
       gdk_event_get_coords (event, &x, &y);
 
-      print_axes (device, axes);
+      print_axes (event);
       gdk_event_get_axis (event, GDK_AXIS_PRESSURE, &pressure);
       draw_brush (widget, gdk_device_get_source (device), x, y, pressure);
 
@@ -188,9 +215,7 @@ drag_update (GtkGesture *gesture,
 {
   GdkModifierType state;
   GdkDevice *device;
-  gdouble *axes;
   GdkEvent *event;
-  guint n_axes;
   double start_x, start_y;
 
   event = gtk_get_current_event ();
@@ -210,8 +235,7 @@ drag_update (GtkGesture *gesture,
       motion_time = gdk_event_get_time (event);
     }
 
-  gdk_event_get_axes (event, &axes, &n_axes);
-  print_axes (device, axes);
+  print_axes (event);
 }
 
 void
