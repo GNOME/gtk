@@ -14287,12 +14287,12 @@ gtk_widget_set_cursor (GtkWidget *widget,
 /**
  * gtk_widget_set_cursor_from_name:
  * @widget: a #GtkWidget
- * @name: (allow-none): The name of the cursor or %NULL to use the default
+ * @name: (nullable): The name of the cursor or %NULL to use the default
  *     cursor
  *
  * Sets a named cursor to be shown when pointer devices point towards @widget.
  *
- * This is a utility function that calls creates a cursor via
+ * This is a utility function that creates a cursor via
  * gdk_cursor_new_from_name() and then sets it on @widget with
  * gtk_widget_set_cursor(). See those 2 functions for details.
  *
@@ -14326,7 +14326,7 @@ gtk_widget_set_cursor_from_name (GtkWidget  *widget,
  * Queries the cursor set via gtk_widget_set_cursor(). See that function for
  * details.
  *
- * Returns: (nullable) (transfer none): the cursor curently in use or %NULL
+ * Returns: (nullable) (transfer none): the cursor currently in use or %NULL
  *     to use the default.
  **/
 GdkCursor *
