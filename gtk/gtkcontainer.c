@@ -231,7 +231,7 @@ static GQuark                hadjustment_key_id;
 static GQuark                quark_focus_chain;
 static guint                 container_signals[LAST_SIGNAL] = { 0 };
 static gint                  GtkContainer_private_offset;
-static GtkWidgetClass       *parent_class = NULL;
+static GtkWidgetClass       *gtk_container_parent_class = NULL;
 extern GParamSpecPool       *_gtk_widget_child_property_pool;
 extern GObjectNotifyContext *_gtk_widget_child_property_notify_context;
 static GtkBuildableIface    *parent_buildable_iface;
@@ -319,7 +319,7 @@ gtk_container_class_init (GtkContainerClass *class)
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
-  parent_class = g_type_class_peek_parent (class);
+  gtk_container_parent_class = g_type_class_peek_parent (class);
 
   vadjustment_key_id = g_quark_from_static_string ("gtk-vadjustment");
   hadjustment_key_id = g_quark_from_static_string ("gtk-hadjustment");
@@ -1467,7 +1467,7 @@ gtk_container_destroy (GtkWidget *widget)
 
   gtk_container_foreach (container, (GtkCallback) gtk_widget_destroy, NULL);
 
-  GTK_WIDGET_CLASS (parent_class)->destroy (widget);
+  GTK_WIDGET_CLASS (gtk_container_parent_class)->destroy (widget);
 }
 
 /**
