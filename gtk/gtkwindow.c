@@ -10152,10 +10152,11 @@ gtk_window_activate_menubar (GtkWindow   *window,
       ((event->state & gtk_accelerator_get_default_mod_mask ()) ==
        (mods & gtk_accelerator_get_default_mod_mask ())))
     {
-      GList *tmp_menubars;
-      GList *menubars;
+      GList *tmp_menubars, *l;
+      GPtrArray *menubars;
       GtkMenuShell *menu_shell;
       GtkWidget *focus;
+      GtkWidget *first;
 
       focus = gtk_window_get_focus (window);
 
@@ -10168,19 +10169,21 @@ gtk_window_activate_menubar (GtkWindow   *window,
       if (tmp_menubars == NULL)
         return FALSE;
 
-      menubars = _gtk_container_focus_sort (GTK_CONTAINER (window), tmp_menubars,
-                                            GTK_DIR_TAB_FORWARD, NULL);
+      menubars = g_ptr_array_sized_new (g_list_length (tmp_menubars));;
+      for (l = tmp_menubars; l; l = l->next)
+        g_ptr_array_add (menubars, l->data);
+
       g_list_free (tmp_menubars);
 
-      if (menubars == NULL)
-        return FALSE;
+      gtk_widget_focus_sort (GTK_WIDGET (window), GTK_DIR_TAB_FORWARD, menubars);
 
-      menu_shell = GTK_MENU_SHELL (menubars->data);
+      first = g_ptr_array_index (menubars, 0);
+      menu_shell = GTK_MENU_SHELL (first);
 
       _gtk_menu_shell_set_keyboard_mode (menu_shell, TRUE);
       gtk_menu_shell_select_first (menu_shell, FALSE);
 
-      g_list_free (menubars);
+      g_ptr_array_free (menubars, TRUE);
 
       return TRUE;
     }
