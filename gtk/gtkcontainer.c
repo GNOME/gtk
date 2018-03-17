@@ -1849,51 +1849,36 @@ gtk_container_get_children (GtkContainer *container)
   return g_list_reverse (children);
 }
 
-typedef struct {
-  gboolean hexpand;
-  gboolean vexpand;
-} ComputeExpandData;
-
 static void
-gtk_container_compute_expand_callback (GtkWidget *widget,
-                                       gpointer   client_data)
+gtk_container_compute_expand (GtkWidget *widget,
+                              gboolean  *hexpand_p,
+                              gboolean  *vexpand_p)
 {
-  ComputeExpandData *data = client_data;
+  GtkWidget *w;
+  gboolean hexpand = FALSE;
+  gboolean vexpand = FALSE;
 
-  /* note that we don't get_expand on the child if we already know we
-   * have to expand, so we only recurse into children until we find
-   * one that expands and then we basically don't do any more
-   * work. This means that we can leave some children in a
-   * need_compute_expand state, which is fine, as long as GtkWidget
-   * doesn't rely on an invariant that "if a child has
-   * need_compute_expand, its parents also do"
-   *
-   * gtk_widget_compute_expand() always returns FALSE if the
-   * child is !visible so that's taken care of.
-   */
-  data->hexpand = data->hexpand ||
-    gtk_widget_compute_expand (widget, GTK_ORIENTATION_HORIZONTAL);
+  for (w = gtk_widget_get_first_child (widget);
+       w != NULL;
+       w = gtk_widget_get_next_sibling (w))
+    {
+      /* note that we don't get_expand on the child if we already know we
+       * have to expand, so we only recurse into children until we find
+       * one that expands and then we basically don't do any more
+       * work. This means that we can leave some children in a
+       * need_compute_expand state, which is fine, as long as GtkWidget
+       * doesn't rely on an invariant that "if a child has
+       * need_compute_expand, its parents also do"
+       *
+       * gtk_widget_compute_expand() always returns FALSE if the
+       * child is !visible so that's taken care of.
+       */
+      hexpand = hexpand || gtk_widget_compute_expand (w, GTK_ORIENTATION_HORIZONTAL);
+      vexpand = vexpand || gtk_widget_compute_expand (w, GTK_ORIENTATION_VERTICAL);
+    }
 
-  data->vexpand = data->vexpand ||
-    gtk_widget_compute_expand (widget, GTK_ORIENTATION_VERTICAL);
-}
-
-static void
-gtk_container_compute_expand (GtkWidget         *widget,
-                              gboolean          *hexpand_p,
-                              gboolean          *vexpand_p)
-{
-  ComputeExpandData data;
-
-  data.hexpand = FALSE;
-  data.vexpand = FALSE;
-
-  gtk_container_forall (GTK_CONTAINER (widget),
-                        gtk_container_compute_expand_callback,
-                        &data);
-
-  *hexpand_p = data.hexpand;
-  *vexpand_p = data.vexpand;
+  *hexpand_p = hexpand;
+  *vexpand_p = vexpand;
 }
 
 static void
