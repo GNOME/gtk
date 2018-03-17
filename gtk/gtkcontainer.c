@@ -1709,45 +1709,38 @@ gtk_container_real_check_resize (GtkContainer *container)
     }
 }
 
-typedef struct {
-  gint hfw;
-  gint wfh;
-} RequestModeCount;
-
-static void
-count_request_modes (GtkWidget        *widget,
-		     RequestModeCount *count)
-{
-  GtkSizeRequestMode mode = gtk_widget_get_request_mode (widget);
-
-  switch (mode)
-    {
-    case GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH:
-      count->hfw++;
-      break;
-    case GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT:
-      count->wfh++;
-      break;
-    case GTK_SIZE_REQUEST_CONSTANT_SIZE:
-    default:
-      break;
-    }
-}
-
 static GtkSizeRequestMode 
 gtk_container_get_request_mode (GtkWidget *widget)
 {
-  GtkContainer *container = GTK_CONTAINER (widget);
-  RequestModeCount count = { 0, 0 };
+  GtkWidget *w;
+  int wfh = 0, hfw = 0;
 
-  gtk_container_forall (container, (GtkCallback)count_request_modes, &count);
+  for (w = gtk_widget_get_first_child (widget);
+       w != NULL;
+       w = gtk_widget_get_next_sibling (w))
+    {
+      GtkSizeRequestMode mode = gtk_widget_get_request_mode (w);
 
-  if (!count.hfw && !count.wfh)
+      switch (mode)
+        {
+        case GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH:
+          hfw ++;
+          break;
+        case GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT:
+          wfh ++;
+          break;
+        case GTK_SIZE_REQUEST_CONSTANT_SIZE:
+        default:
+          break;
+        }
+    }
+
+  if (hfw == 0 && wfh == 0)
     return GTK_SIZE_REQUEST_CONSTANT_SIZE;
   else
-    return count.wfh > count.hfw ? 
+    return wfh > hfw ?
         GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT :
-	GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
+        GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
 }
 
 /**
