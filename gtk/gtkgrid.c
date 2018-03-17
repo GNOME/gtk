@@ -85,7 +85,6 @@ static const GtkGridRowProperties gtk_grid_row_properties_default = {
 
 struct _GtkGridChild
 {
-  GtkWidget *widget;
   GtkGridChildAttach attach[2];
 };
 
@@ -105,7 +104,6 @@ struct _GtkGridLineData
 
 struct _GtkGridPrivate
 {
-  GList *children;
   GList *row_properties;
 
   GtkOrientation orientation;
@@ -117,6 +115,8 @@ typedef struct _GtkGridPrivate GtkGridPrivate;
 
 #define ROWS(priv)    (&(priv)->linedata[GTK_ORIENTATION_HORIZONTAL])
 #define COLUMNS(priv) (&(priv)->linedata[GTK_ORIENTATION_VERTICAL])
+
+static GQuark child_data_quark = 0;
 
 /* A GtkGridLine struct represents a single row or column
  * during size requests
@@ -282,22 +282,9 @@ gtk_grid_set_property (GObject      *object,
 }
 
 static GtkGridChild *
-find_grid_child (GtkGrid   *grid,
-                 GtkWidget *widget)
+get_grid_child (GtkWidget *widget)
 {
-  GtkGridPrivate *priv = gtk_grid_get_instance_private (grid);
-  GtkGridChild *child;
-  GList *list;
-
-  for (list = priv->children; list; list = list->next)
-    {
-      child = list->data;
-
-      if (child->widget == widget)
-        return child;
-    }
-
-  return NULL;
+  return (GtkGridChild *) g_object_get_qdata (G_OBJECT (widget), child_data_quark);
 }
 
 static void
@@ -307,10 +294,9 @@ gtk_grid_get_child_property (GtkContainer *container,
                              GValue       *value,
                              GParamSpec   *pspec)
 {
-  GtkGrid *grid = GTK_GRID (container);
   GtkGridChild *grid_child;
 
-  grid_child = find_grid_child (grid, child);
+  grid_child = get_grid_child (child);
 
   if (grid_child == NULL)
     {
@@ -352,7 +338,7 @@ gtk_grid_set_child_property (GtkContainer *container,
   GtkGrid *grid = GTK_GRID (container);
   GtkGridChild *grid_child;
 
-  grid_child = find_grid_child (grid, child);
+  grid_child = get_grid_child (child);
 
   if (grid_child == NULL)
     {
@@ -407,17 +393,15 @@ grid_attach (GtkGrid   *grid,
              gint       width,
              gint       height)
 {
-  GtkGridPrivate *priv = gtk_grid_get_instance_private (grid);
   GtkGridChild *child;
 
-  child = g_slice_new (GtkGridChild);
-  child->widget = widget;
+  child = g_new (GtkGridChild, 1);
   CHILD_LEFT (child) = left;
   CHILD_TOP (child) = top;
   CHILD_WIDTH (child) = width;
   CHILD_HEIGHT (child) = height;
 
-  priv->children = g_list_prepend (priv->children, child);
+  g_object_set_qdata_full (G_OBJECT (widget), child_data_quark, child, g_free);
 
   gtk_widget_set_parent (widget, GTK_WIDGET (grid));
 }
@@ -436,11 +420,9 @@ find_attach_position (GtkGrid         *grid,
                       gint             op_span,
                       gboolean         max)
 {
-  GtkGridPrivate *priv = gtk_grid_get_instance_private (grid);
-  GtkGridChild *grid_child;
   GtkGridChildAttach *attach;
   GtkGridChildAttach *opposite;
-  GList *list;
+  GtkWidget *child;
   gint pos;
   gboolean hit;
 
@@ -451,9 +433,11 @@ find_attach_position (GtkGrid         *grid,
 
   hit = FALSE;
 
-  for (list = priv->children; list; list = list->next)
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (grid));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
     {
-      grid_child = list->data;
+      GtkGridChild *grid_child = get_grid_child (child);
 
       attach = &grid_child->attach[orientation];
       opposite = &grid_child->attach[1 - orientation];
@@ -493,30 +477,13 @@ gtk_grid_remove (GtkContainer *container,
                  GtkWidget    *child)
 {
   GtkGrid *grid = GTK_GRID (container);
-  GtkGridPrivate *priv = gtk_grid_get_instance_private (grid);
-  GtkGridChild *grid_child;
-  GList *list;
+  gboolean was_visible;
 
-  for (list = priv->children; list; list = list->next)
-    {
-      grid_child = list->data;
+  was_visible = _gtk_widget_get_visible (child);
+  gtk_widget_unparent (child);
 
-      if (grid_child->widget == child)
-        {
-          gboolean was_visible = _gtk_widget_get_visible (child);
-
-          gtk_widget_unparent (child);
-
-          priv->children = g_list_remove (priv->children, grid_child);
-
-          g_slice_free (GtkGridChild, grid_child);
-
-          if (was_visible && _gtk_widget_get_visible (GTK_WIDGET (grid)))
-            gtk_widget_queue_resize (GTK_WIDGET (grid));
-
-          break;
-        }
-    }
+  if (was_visible && _gtk_widget_get_visible (GTK_WIDGET (grid)))
+    gtk_widget_queue_resize (GTK_WIDGET (grid));
 }
 
 static void
@@ -524,18 +491,16 @@ gtk_grid_forall (GtkContainer *container,
                  GtkCallback   callback,
                  gpointer      callback_data)
 {
-  GtkGrid *grid = GTK_GRID (container);
-  GtkGridPrivate *priv = gtk_grid_get_instance_private (grid);
-  GtkGridChild *child;
-  GList *list;
+  GtkWidget *child;
 
-  list = priv->children;
-  while (list)
+  child = gtk_widget_get_first_child (GTK_WIDGET (container));
+  while (child)
     {
-      child = list->data;
-      list  = list->next;
+      GtkWidget *next = gtk_widget_get_next_sibling (child);
 
-      (* callback) (child->widget, callback_data);
+      (* callback) (child, callback_data);
+
+      child = next;
     }
 }
 
@@ -567,20 +532,19 @@ get_spacing (GtkGrid        *grid,
 static void
 gtk_grid_request_count_lines (GtkGridRequest *request)
 {
-  GtkGridPrivate *priv = gtk_grid_get_instance_private (request->grid);
-  GtkGridChild *child;
-  GtkGridChildAttach *attach;
-  GList *list;
+  GtkWidget *child;
   gint min[2];
   gint max[2];
 
   min[0] = min[1] = G_MAXINT;
   max[0] = max[1] = G_MININT;
 
-  for (list = priv->children; list; list = list->next)
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (request->grid));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
     {
-      child = list->data;
-      attach = child->attach;
+      GtkGridChild *grid_child = get_grid_child (child);
+      GtkGridChildAttach *attach = grid_child->attach;
 
       min[0] = MIN (min[0], attach[0].pos);
       max[0] = MAX (max[0], attach[0].pos + attach[0].span);
@@ -601,11 +565,9 @@ static void
 gtk_grid_request_init (GtkGridRequest *request,
                        GtkOrientation  orientation)
 {
-  GtkGridPrivate *priv = gtk_grid_get_instance_private (request->grid);
-  GtkGridChild *child;
+  GtkWidget *child;
   GtkGridChildAttach *attach;
   GtkGridLines *lines;
-  GList *list;
   gint i;
 
   lines = &request->lines[orientation];
@@ -622,12 +584,15 @@ gtk_grid_request_init (GtkGridRequest *request,
       lines->lines[i].empty = TRUE;
     }
 
-  for (list = priv->children; list; list = list->next)
-    {
-      child = list->data;
 
-      attach = &child->attach[orientation];
-      if (attach->span == 1 && gtk_widget_compute_expand (child->widget, orientation))
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (request->grid));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      GtkGridChild *grid_child = get_grid_child (child);
+
+      attach = &grid_child->attach[orientation];
+      if (attach->span == 1 && gtk_widget_compute_expand (child, orientation))
         lines->lines[attach->pos - lines->min].expand = TRUE;
     }
 }
@@ -660,7 +625,8 @@ compute_allocation_for_child (GtkGridRequest *request,
 
 static void
 compute_request_for_child (GtkGridRequest *request,
-                           GtkGridChild   *child,
+                           GtkWidget      *child,
+                           GtkGridChild   *grid_child,
                            GtkOrientation  orientation,
                            gboolean        contextual,
                            gint           *minimum,
@@ -677,9 +643,9 @@ compute_request_for_child (GtkGridRequest *request,
     {
       gint size;
 
-      size = compute_allocation_for_child (request, child, 1 - orientation);
+      size = compute_allocation_for_child (request, grid_child, 1 - orientation);
 
-      gtk_widget_measure (child->widget,
+      gtk_widget_measure (child,
                           orientation,
                           size,
                           minimum, natural,
@@ -687,7 +653,7 @@ compute_request_for_child (GtkGridRequest *request,
     }
   else
     {
-      gtk_widget_measure (child->widget,
+      gtk_widget_measure (child,
                           orientation,
                           -1,
                           minimum, natural,
@@ -704,12 +670,10 @@ gtk_grid_request_non_spanning (GtkGridRequest *request,
                                GtkOrientation  orientation,
                                gboolean        contextual)
 {
-  GtkGridPrivate *priv = gtk_grid_get_instance_private (request->grid);
-  GtkGridChild *child;
+  GtkWidget *child;
   GtkGridChildAttach *attach;
   GtkGridLines *lines;
   GtkGridLine *line;
-  GList *list;
   gint i;
   GtkBaselinePosition baseline_pos;
   gint minimum, minimum_baseline;
@@ -717,18 +681,20 @@ gtk_grid_request_non_spanning (GtkGridRequest *request,
 
   lines = &request->lines[orientation];
 
-  for (list = priv->children; list; list = list->next)
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (request->grid));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
     {
-      child = list->data;
+      GtkGridChild *grid_child = get_grid_child (child);
 
-      if (!_gtk_widget_get_visible (child->widget))
+      if (!_gtk_widget_get_visible (child))
         continue;
 
-      attach = &child->attach[orientation];
+      attach = &grid_child->attach[orientation];
       if (attach->span != 1)
         continue;
 
-      compute_request_for_child (request, child, orientation, contextual, &minimum, &natural, &minimum_baseline, &natural_baseline);
+      compute_request_for_child (request, child, grid_child, orientation, contextual, &minimum, &natural, &minimum_baseline, &natural_baseline);
 
       line = &lines->lines[attach->pos - lines->min];
 
@@ -831,8 +797,7 @@ gtk_grid_request_spanning (GtkGridRequest *request,
                            gboolean        contextual)
 {
   GtkGridPrivate *priv = gtk_grid_get_instance_private (request->grid);
-  GList *list;
-  GtkGridChild *child;
+  GtkWidget *child;
   GtkGridChildAttach *attach;
   GtkGridLineData *linedata;
   GtkGridLines *lines;
@@ -853,19 +818,21 @@ gtk_grid_request_spanning (GtkGridRequest *request,
   lines = &request->lines[orientation];
   spacing = get_spacing (request->grid, orientation);
 
-  for (list = priv->children; list; list = list->next)
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (request->grid));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
     {
-      child = list->data;
+      GtkGridChild *grid_child = get_grid_child (child);
 
-      if (!_gtk_widget_get_visible (child->widget))
+      if (!_gtk_widget_get_visible (child))
         continue;
 
-      attach = &child->attach[orientation];
+      attach = &grid_child->attach[orientation];
       if (attach->span == 1)
         continue;
 
       /* We ignore baselines for spanning children */
-      compute_request_for_child (request, child, orientation, contextual, &minimum, &natural, NULL, NULL);
+      compute_request_for_child (request, child, grid_child, orientation, contextual, &minimum, &natural, NULL, NULL);
 
       span_minimum = (attach->span - 1) * spacing;
       span_natural = (attach->span - 1) * spacing;
@@ -970,10 +937,8 @@ gtk_grid_request_compute_expand (GtkGridRequest *request,
                                  gint           *nonempty_lines,
                                  gint           *expand_lines)
 {
-  GtkGridPrivate *priv = gtk_grid_get_instance_private (request->grid);
-  GtkGridChild *child;
+  GtkWidget *child;
   GtkGridChildAttach *attach;
-  GList *list;
   gint i;
   GtkGridLines *lines;
   GtkGridLine *line;
@@ -993,14 +958,16 @@ gtk_grid_request_compute_expand (GtkGridRequest *request,
       lines->lines[i].empty = TRUE;
     }
 
-  for (list = priv->children; list; list = list->next)
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (request->grid));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
     {
-      child = list->data;
+      GtkGridChild *grid_child = get_grid_child (child);
 
-      if (!_gtk_widget_get_visible (child->widget))
+      if (!_gtk_widget_get_visible (child))
         continue;
 
-      attach = &child->attach[orientation];
+      attach = &grid_child->attach[orientation];
       if (attach->span != 1)
         continue;
 
@@ -1009,18 +976,20 @@ gtk_grid_request_compute_expand (GtkGridRequest *request,
 
       line = &lines->lines[attach->pos - lines->min];
       line->empty = FALSE;
-      if (gtk_widget_compute_expand (child->widget, orientation))
+      if (gtk_widget_compute_expand (child, orientation))
         line->expand = TRUE;
     }
 
-  for (list = priv->children; list; list = list->next)
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (request->grid));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
     {
-      child = list->data;
+      GtkGridChild *grid_child = get_grid_child (child);
 
-      if (!_gtk_widget_get_visible (child->widget))
+      if (!_gtk_widget_get_visible (child))
         continue;
 
-      attach = &child->attach[orientation];
+      attach = &grid_child->attach[orientation];
       if (attach->span == 1)
         continue;
 
@@ -1038,7 +1007,7 @@ gtk_grid_request_compute_expand (GtkGridRequest *request,
           line->empty = FALSE;
         }
 
-      if (!has_expand && gtk_widget_compute_expand (child->widget, orientation))
+      if (!has_expand && gtk_widget_compute_expand (child, orientation))
         {
           for (i = 0; i < attach->span; i++)
             {
@@ -1430,7 +1399,6 @@ gtk_grid_get_size (GtkGrid        *grid,
 		   gint           *minimum_baseline,
 		   gint           *natural_baseline)
 {
-  GtkGridPrivate *priv = gtk_grid_get_instance_private (grid);
   GtkGridRequest request;
   GtkGridLines *lines;
 
@@ -1443,7 +1411,7 @@ gtk_grid_get_size (GtkGrid        *grid,
   if (natural_baseline)
     *natural_baseline = -1;
 
-  if (priv->children == NULL)
+  if (gtk_widget_get_first_child (GTK_WIDGET (grid)) == NULL)
     return;
 
   request.grid = grid;
@@ -1466,7 +1434,6 @@ gtk_grid_get_size_for_size (GtkGrid        *grid,
 			    gint           *minimum_baseline,
                             gint           *natural_baseline)
 {
-  GtkGridPrivate *priv = gtk_grid_get_instance_private (grid);
   GtkGridRequest request;
   GtkGridLines *lines;
   gint min_size, nat_size;
@@ -1480,7 +1447,7 @@ gtk_grid_get_size_for_size (GtkGrid        *grid,
   if (natural_baseline)
     *natural_baseline = -1;
 
-  if (priv->children == NULL)
+  if (gtk_widget_get_first_child (GTK_WIDGET (grid)) == NULL)
     return;
 
   request.grid = grid;
@@ -1523,7 +1490,8 @@ gtk_grid_measure (GtkWidget     *widget,
 static void
 allocate_child (GtkGridRequest *request,
                 GtkOrientation  orientation,
-                GtkGridChild   *child,
+                GtkWidget      *child,
+                GtkGridChild   *grid_child,
                 gint           *position,
                 gint           *size,
 		gint           *baseline)
@@ -1534,10 +1502,10 @@ allocate_child (GtkGridRequest *request,
   gint i;
 
   lines = &request->lines[orientation];
-  attach = &child->attach[orientation];
+  attach = &grid_child->attach[orientation];
 
   *position = lines->lines[attach->pos - lines->min].position;
-  if (attach->span == 1 && gtk_widget_get_valign (child->widget) == GTK_ALIGN_BASELINE)
+  if (attach->span == 1 && gtk_widget_get_valign (child) == GTK_ALIGN_BASELINE)
     *baseline = lines->lines[attach->pos - lines->min].allocated_baseline;
   else
     *baseline = -1;
@@ -1555,22 +1523,23 @@ gtk_grid_request_allocate_children (GtkGridRequest      *request,
                                     const GtkAllocation *allocation,
                                     GtkAllocation       *out_clip)
 {
-  GtkGridPrivate *priv = gtk_grid_get_instance_private (request->grid);
-  GList *list;
-  GtkGridChild *child;
+  GtkWidget *child;
   GtkAllocation child_allocation;
   GtkAllocation child_clip;
   gint x, y, width, height, baseline, ignore;
 
-  for (list = priv->children; list; list = list->next)
-    {
-      child = list->data;
 
-      if (!_gtk_widget_get_visible (child->widget))
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (request->grid));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      GtkGridChild *grid_child = get_grid_child (child);
+
+      if (!_gtk_widget_get_visible (child))
         continue;
 
-      allocate_child (request, GTK_ORIENTATION_HORIZONTAL, child, &x, &width, &ignore);
-      allocate_child (request, GTK_ORIENTATION_VERTICAL, child, &y, &height, &baseline);
+      allocate_child (request, GTK_ORIENTATION_HORIZONTAL, child, grid_child, &x, &width, &ignore);
+      allocate_child (request, GTK_ORIENTATION_VERTICAL, child, grid_child, &y, &height, &baseline);
 
       child_allocation.x = x;
       child_allocation.y = y;
@@ -1581,7 +1550,7 @@ gtk_grid_request_allocate_children (GtkGridRequest      *request,
         child_allocation.x = allocation->x + allocation->width
                              - (child_allocation.x - allocation->x) - child_allocation.width;
 
-      gtk_widget_size_allocate (child->widget, &child_allocation, baseline, &child_clip);
+      gtk_widget_size_allocate (child, &child_allocation, baseline, &child_clip);
       gdk_rectangle_union (out_clip, &child_clip, out_clip);
     }
 }
@@ -1595,12 +1564,11 @@ gtk_grid_size_allocate (GtkWidget          *widget,
                         GtkAllocation       *out_clip)
 {
   GtkGrid *grid = GTK_GRID (widget);
-  GtkGridPrivate *priv = gtk_grid_get_instance_private (grid);
   GtkGridRequest request;
   GtkGridLines *lines;
   GtkOrientation orientation;
 
-  if (priv->children == NULL)
+  if (gtk_widget_get_first_child (widget) == NULL)
     return;
 
   request.grid = grid;
@@ -1720,7 +1688,9 @@ gtk_grid_class_init (GtkGridClass *class)
                       1, G_MAXINT, 1,
                       GTK_PARAM_READWRITE);
 
+
   gtk_container_class_install_child_properties (container_class, N_CHILD_PROPERTIES, child_properties);
+  child_data_quark = g_quark_from_static_string ("gtk-grid-child-data");
   gtk_widget_class_set_css_name (widget_class, I_("grid"));
 }
 
@@ -1731,7 +1701,6 @@ gtk_grid_init (GtkGrid *grid)
 
   gtk_widget_set_has_window (GTK_WIDGET (grid), FALSE);
 
-  priv->children = NULL;
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
   priv->baseline_row = 0;
 
@@ -1829,7 +1798,7 @@ gtk_grid_attach_next_to (GtkGrid         *grid,
 
   if (sibling)
     {
-      grid_sibling = find_grid_child (grid, sibling);
+      grid_sibling = get_grid_child (sibling);
 
       switch (side)
         {
@@ -1899,21 +1868,21 @@ gtk_grid_get_child_at (GtkGrid *grid,
                        gint     left,
                        gint     top)
 {
-  GtkGridPrivate *priv = gtk_grid_get_instance_private (grid);
-  GtkGridChild *child;
-  GList *list;
+  GtkWidget *child;
 
   g_return_val_if_fail (GTK_IS_GRID (grid), NULL);
 
-  for (list = priv->children; list; list = list->next)
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (grid));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
     {
-      child = list->data;
+      GtkGridChild *grid_child = get_grid_child (child);
 
-      if (CHILD_LEFT (child) <= left &&
-          CHILD_LEFT (child) + CHILD_WIDTH (child) > left &&
-          CHILD_TOP (child) <= top &&
-          CHILD_TOP (child) + CHILD_HEIGHT (child) > top)
-        return child->widget;
+      if (CHILD_LEFT (grid_child) <= left &&
+          CHILD_LEFT (grid_child) + CHILD_WIDTH (grid_child) > left &&
+          CHILD_TOP (grid_child) <= top &&
+          CHILD_TOP (grid_child) + CHILD_HEIGHT (grid_child) > top)
+        return child;
     }
 
   return NULL;
@@ -1935,31 +1904,33 @@ gtk_grid_insert_row (GtkGrid *grid,
                      gint     position)
 {
   GtkGridPrivate *priv = gtk_grid_get_instance_private (grid);
-  GtkGridChild *child;
+  GtkWidget *child;
+  int top, height;
   GList *list;
-  gint top, height;
 
   g_return_if_fail (GTK_IS_GRID (grid));
 
-  for (list = priv->children; list; list = list->next)
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (grid));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
     {
-      child = list->data;
+      GtkGridChild *grid_child = get_grid_child (child);
 
-      top = CHILD_TOP (child);
-      height = CHILD_HEIGHT (child);
+      top = CHILD_TOP (grid_child);
+      height = CHILD_HEIGHT (grid_child);
 
       if (top >= position)
         {
-          CHILD_TOP (child) = top + 1;
+          CHILD_TOP (grid_child) = top + 1;
           gtk_container_child_notify_by_pspec (GTK_CONTAINER (grid),
-                                               child->widget,
+                                               child,
                                                child_properties[CHILD_PROP_TOP_ATTACH]);
         }
       else if (top + height > position)
         {
-          CHILD_HEIGHT (child) = height + 1;
+          CHILD_HEIGHT (grid_child) = height + 1;
           gtk_container_child_notify_by_pspec (GTK_CONTAINER (grid),
-                                               child->widget,
+                                               child,
                                                child_properties[CHILD_PROP_HEIGHT]);
         }
     }
@@ -1989,21 +1960,19 @@ void
 gtk_grid_remove_row (GtkGrid *grid,
                      gint     position)
 {
-  GtkGridPrivate *priv = gtk_grid_get_instance_private (grid);
-  GtkGridChild *child;
-  GList *list;
-  gint top, height;
+  int top, height;
+  GtkWidget *child;
 
   g_return_if_fail (GTK_IS_GRID (grid));
 
-  list = priv->children;
-  while (list)
+  child = gtk_widget_get_first_child (GTK_WIDGET (grid));
+  while (child)
     {
-      child = list->data;
-      list = list->next;
+      GtkGridChild *grid_child = get_grid_child (child);
+      GtkWidget *next = gtk_widget_get_next_sibling (child);
 
-      top = CHILD_TOP (child);
-      height = CHILD_HEIGHT (child);
+      top = CHILD_TOP (grid_child);
+      height = CHILD_HEIGHT (grid_child);
 
       if (top <= position && top + height > position)
         height--;
@@ -2011,12 +1980,13 @@ gtk_grid_remove_row (GtkGrid *grid,
         top--;
 
       if (height <= 0)
-        gtk_container_remove (GTK_CONTAINER (grid), child->widget);
+        gtk_container_remove (GTK_CONTAINER (grid), child);
       else
-        gtk_container_child_set (GTK_CONTAINER (grid), child->widget,
+        gtk_container_child_set (GTK_CONTAINER (grid), child,
                                  "height", height,
                                  "top-attach", top,
                                  NULL);
+      child = next;
     }
 }
 
@@ -2035,32 +2005,32 @@ void
 gtk_grid_insert_column (GtkGrid *grid,
                         gint     position)
 {
-  GtkGridPrivate *priv = gtk_grid_get_instance_private (grid);
-  GtkGridChild *child;
-  GList *list;
-  gint left, width;
+  GtkWidget *child;
+  int left, width;
 
   g_return_if_fail (GTK_IS_GRID (grid));
 
-  for (list = priv->children; list; list = list->next)
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (grid));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
     {
-      child = list->data;
+      GtkGridChild *grid_child = get_grid_child (child);
 
-      left = CHILD_LEFT (child);
-      width = CHILD_WIDTH (child);
+      left = CHILD_LEFT (grid_child);
+      width = CHILD_WIDTH (grid_child);
 
       if (left >= position)
         {
-          CHILD_LEFT (child) = left + 1;
+          CHILD_LEFT (grid_child) = left + 1;
           gtk_container_child_notify_by_pspec (GTK_CONTAINER (grid),
-                                               child->widget,
+                                               child,
                                                child_properties[CHILD_PROP_LEFT_ATTACH]);
         }
       else if (left + width > position)
         {
-          CHILD_WIDTH (child) = width + 1;
+          CHILD_WIDTH (grid_child) = width + 1;
           gtk_container_child_notify_by_pspec (GTK_CONTAINER (grid),
-                                               child->widget,
+                                               child,
                                                child_properties[CHILD_PROP_WIDTH]);
         }
     }
@@ -2082,21 +2052,19 @@ void
 gtk_grid_remove_column (GtkGrid *grid,
                         gint     position)
 {
-  GtkGridPrivate *priv = gtk_grid_get_instance_private (grid);
-  GtkGridChild *child;
-  GList *list;
-  gint left, width;
+  GtkWidget *child;
+  int left, width;
 
   g_return_if_fail (GTK_IS_GRID (grid));
 
-  list = priv->children;
-  while (list)
+  child = gtk_widget_get_first_child (GTK_WIDGET (grid));
+  while (child)
     {
-      child = list->data;
-      list = list->next;
+      GtkGridChild *grid_child = get_grid_child (child);
+      GtkWidget *next = gtk_widget_get_next_sibling (child);
 
-      left = CHILD_LEFT (child);
-      width = CHILD_WIDTH (child);
+      left = CHILD_LEFT (grid_child);
+      width = CHILD_WIDTH (grid_child);
 
       if (left <= position && left + width > position)
         width--;
@@ -2104,12 +2072,14 @@ gtk_grid_remove_column (GtkGrid *grid,
         left--;
 
       if (width <= 0)
-        gtk_container_remove (GTK_CONTAINER (grid), child->widget);
+        gtk_container_remove (GTK_CONTAINER (grid), child);
       else
-        gtk_container_child_set (GTK_CONTAINER (grid), child->widget,
+        gtk_container_child_set (GTK_CONTAINER (grid), child,
                                  "width", width,
                                  "left-attach", left,
                                  NULL);
+
+      child = next;
     }
 }
 
@@ -2138,7 +2108,7 @@ gtk_grid_insert_next_to (GtkGrid         *grid,
   g_return_if_fail (GTK_IS_WIDGET (sibling));
   g_return_if_fail (_gtk_widget_get_parent (sibling) == (GtkWidget*)grid);
 
-  child = find_grid_child (grid, sibling);
+  child = get_grid_child (sibling);
 
   switch (side)
     {
