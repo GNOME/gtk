@@ -334,7 +334,6 @@ gtk_switch_size_allocate (GtkWidget           *widget,
   slider_alloc.height = allocation->height;
 
   gtk_widget_size_allocate (priv->slider, &slider_alloc, -1, &child_clip);
-  gtk_widget_get_clip (priv->slider, &child_clip);
   gdk_rectangle_union (out_clip, &child_clip, out_clip);
 
 
