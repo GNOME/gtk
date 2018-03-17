@@ -192,9 +192,6 @@ static gboolean gtk_container_focus                (GtkWidget         *widget,
 static void     gtk_container_real_set_focus_child (GtkContainer      *container,
                                                     GtkWidget         *widget);
 
-static gboolean gtk_container_focus_move           (GtkContainer      *container,
-                                                    GList             *children,
-                                                    GtkDirectionType   direction);
 static void     gtk_container_children_callback    (GtkWidget         *widget,
                                                     gpointer           client_data);
 static GtkSizeRequestMode gtk_container_get_request_mode (GtkWidget   *widget);
@@ -1951,20 +1948,6 @@ get_focus_chain (GtkContainer *container)
   return g_object_get_qdata (G_OBJECT (container), quark_focus_chain);
 }
 
-/* same as gtk_container_get_children, except it includes internals
- */
-static GList *
-gtk_container_get_all_children (GtkContainer *container)
-{
-  GList *children = NULL;
-
-  gtk_container_forall (container,
-                         gtk_container_children_callback,
-                         &children);
-
-  return children;
-}
-
 static GtkWidgetPath *
 gtk_container_real_get_path_for_child (GtkContainer *container,
                                        GtkWidget    *child)
@@ -1979,14 +1962,28 @@ gtk_container_real_get_path_for_child (GtkContainer *container,
   return path;
 }
 
+/* Utility function, equivalent to g_list_reverse */
+static void
+reverse_ptr_array (GPtrArray *arr)
+{
+  int i;
+
+  for (i = 0; i < arr->len / 2; i ++)
+    {
+      void *a = g_ptr_array_index (arr, i);
+      void *b = g_ptr_array_index (arr, arr->len - 1 - i);
+
+      arr->pdata[i] = b;
+      arr->pdata[arr->len - 1 - i] = a;
+    }
+}
+
 static gboolean
 gtk_container_focus (GtkWidget        *widget,
                      GtkDirectionType  direction)
 {
   GtkContainerPrivate *priv;
-  GList *children;
-  GList *sorted_children;
-  gint return_val;
+  gint return_val = FALSE;
   GtkContainer *container;
 
   g_return_val_if_fail (GTK_IS_CONTAINER (widget), FALSE);
@@ -1994,42 +1991,39 @@ gtk_container_focus (GtkWidget        *widget,
   container = GTK_CONTAINER (widget);
   priv = gtk_container_get_instance_private (container);
 
-  return_val = FALSE;
-
-  if (gtk_widget_get_can_focus (widget))
+  if (!priv->has_focus_chain)
     {
-      if (!gtk_widget_has_focus (widget))
-        {
-          gtk_widget_grab_focus (widget);
-          return_val = TRUE;
-        }
+      return_val = GTK_WIDGET_CLASS (gtk_container_parent_class)->focus (widget, direction);
     }
   else
     {
-      /* Get a list of the containers children, allowing focus
-       * chain to override.
-       */
-      if (priv->has_focus_chain)
-        children = g_list_copy (get_focus_chain (container));
-      else
-        children = gtk_container_get_all_children (container);
+      GList *focus_chain;
+      GList *l;
+      GPtrArray *child_array;
 
-      if (priv->has_focus_chain &&
-          (direction == GTK_DIR_TAB_FORWARD ||
-           direction == GTK_DIR_TAB_BACKWARD))
+      /* Here we compute the next focus child based on the focus chain set on @container.
+       * If we move via TAB, we consider the focus chain widgets in the order given to us (or in reverse).
+       * If UP/DOWN/LEFT/RIGHT are used, we sort the focus chain like normal, using their allocation. */
+      focus_chain = get_focus_chain (container);
+      child_array = g_ptr_array_sized_new (g_list_length (focus_chain));
+
+      for (l = focus_chain; l; l = l->next)
+        g_ptr_array_add (child_array, l->data);
+
+      if (direction == GTK_DIR_TAB_BACKWARD)
         {
-          sorted_children = g_list_copy (children);
-
-          if (direction == GTK_DIR_TAB_BACKWARD)
-            sorted_children = g_list_reverse (sorted_children);
+          /* Reverse order for gtk_widget_focus_move to consider */
+          reverse_ptr_array (child_array);
         }
-      else
-        sorted_children = _gtk_container_focus_sort (container, children, direction, NULL);
+      else if (direction != GTK_DIR_TAB_FORWARD)
+        {
+          /* Nothing to be done. We don't sort the children, and we don't reverse them either. */
+          gtk_widget_focus_sort (widget, direction, child_array);
+        }
 
-      return_val = gtk_container_focus_move (container, sorted_children, direction);
+      return_val = gtk_widget_focus_move (widget, direction, child_array);
 
-      g_list_free (sorted_children);
-      g_list_free (children);
+      g_ptr_array_free (child_array, TRUE);
     }
 
   return return_val;
@@ -2471,46 +2465,6 @@ _gtk_container_focus_sort (GtkContainer     *container,
       return NULL;
     }
 }
-
-static gboolean
-gtk_container_focus_move (GtkContainer     *container,
-                          GList            *children,
-                          GtkDirectionType  direction)
-{
-  GtkWidget *focus_child;
-  GtkWidget *child;
-
-  focus_child = gtk_widget_get_focus_child (GTK_WIDGET (container));
-
-  while (children)
-    {
-      child = children->data;
-      children = children->next;
-
-      if (!child)
-        continue;
-
-      if (focus_child)
-        {
-          if (focus_child == child)
-            {
-              focus_child = NULL;
-
-                if (gtk_widget_child_focus (child, direction))
-                  return TRUE;
-            }
-        }
-      else if (_gtk_widget_is_drawable (child) &&
-               gtk_widget_is_ancestor (child, GTK_WIDGET (container)))
-        {
-          if (gtk_widget_child_focus (child, direction))
-            return TRUE;
-        }
-    }
-
-  return FALSE;
-}
-
 
 static void
 gtk_container_children_callback (GtkWidget *widget,

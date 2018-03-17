@@ -424,15 +424,18 @@ gtk_widget_focus_sort (GtkWidget        *widget,
 {
   GtkWidget *child;
 
-  g_assert (focus_order->len == 0);
+  g_assert (focus_order != NULL);
 
-  /* Initialize the list with all realized child widgets */
-  for (child = _gtk_widget_get_first_child (widget);
-       child != NULL;
-       child = _gtk_widget_get_next_sibling (child))
+  if (focus_order->len == 0)
     {
-      if (_gtk_widget_get_realized (child))
-        g_ptr_array_add (focus_order, child);
+      /* Initialize the list with all realized child widgets */
+      for (child = _gtk_widget_get_first_child (widget);
+           child != NULL;
+           child = _gtk_widget_get_next_sibling (child))
+        {
+          if (_gtk_widget_get_realized (child))
+            g_ptr_array_add (focus_order, child);
+        }
     }
 
   /* Now sort that list depending on @direction */
