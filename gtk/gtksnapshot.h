@@ -46,10 +46,10 @@ void            gtk_snapshot_unref                      (GtkSnapshot            
 
 GDK_AVAILABLE_IN_ALL
 GtkSnapshot *   gtk_snapshot_new                        (GskRenderer            *renderer,
-							                                           gboolean                record_names,
-							                                           const cairo_region_t   *clip,
-							                                           const char             *name,
-							                                           ...) G_GNUC_PRINTF (4, 5);
+                                                         gboolean                record_names,
+                                                         const cairo_region_t   *clip,
+                                                         const char             *name,
+                                                         ...) G_GNUC_PRINTF (4, 5);
 GDK_AVAILABLE_IN_ALL
 GskRenderNode * gtk_snapshot_free_to_node               (GtkSnapshot            *snapshot);
 

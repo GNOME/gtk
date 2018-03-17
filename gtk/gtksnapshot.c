@@ -186,10 +186,10 @@ gtk_snapshot_state_clear (GtkSnapshotState *state)
  */
 GtkSnapshot *
 gtk_snapshot_new (GskRenderer          *renderer,
-							    gboolean              record_names,
-							    const cairo_region_t *clip,
-							    const char           *name,
-							    ...)
+                  gboolean              record_names,
+                  const cairo_region_t *clip,
+                  const char           *name,
+                  ...)
 {
   GtkSnapshot *snapshot;
   char *str;
