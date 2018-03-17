@@ -29,11 +29,6 @@ G_BEGIN_DECLS
 void     gtk_container_queue_resize_handler    (GtkContainer *container);
 void     _gtk_container_queue_restyle          (GtkContainer *container);
 void     _gtk_container_dequeue_resize_handler (GtkContainer *container);
-GList *  _gtk_container_focus_sort             (GtkContainer     *container,
-                                                GList            *children,
-                                                GtkDirectionType  direction,
-                                                GtkWidget        *old_focus);
-
 void      _gtk_container_stop_idle_sizer        (GtkContainer *container);
 void      _gtk_container_maybe_start_idle_sizer (GtkContainer *container);
 void      gtk_container_set_focus_child         (GtkContainer     *container,
