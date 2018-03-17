@@ -26,8 +26,7 @@
 
 #include "gtkradiobutton.h"
 
-#include "gtkcontainerprivate.h"
-#include "gtkbuttonprivate.h"
+#include "gtkwidgetprivate.h"
 #include "gtktogglebuttonprivate.h"
 #include "gtkcheckbuttonprivate.h"
 #include "gtklabel.h"
@@ -632,68 +631,55 @@ gtk_radio_button_focus (GtkWidget         *widget,
 
   if (gtk_widget_is_focus (widget))
     {
-      GList *children, *focus_list, *tmp_list;
-      GtkWidget *toplevel;
+      GPtrArray *child_array;
       GtkWidget *new_focus = NULL;
       GSList *l;
+      guint index;
+      gboolean found;
+      guint i;
 
       if (direction == GTK_DIR_TAB_FORWARD ||
           direction == GTK_DIR_TAB_BACKWARD)
         return FALSE;
 
-      toplevel = gtk_widget_get_toplevel (widget);
-      children = NULL;
+      child_array = g_ptr_array_sized_new (g_slist_length (priv->group));
       for (l = priv->group; l; l = l->next)
-        children = g_list_prepend (children, l->data);
+        g_ptr_array_add (child_array, l->data);
 
-      focus_list = _gtk_container_focus_sort (GTK_CONTAINER (toplevel), children, direction, widget);
-      tmp_list = g_list_find (focus_list, widget);
+      gtk_widget_focus_sort (widget, direction, child_array);
+      found = g_ptr_array_find (child_array, widget, &index);
 
-      if (tmp_list)
-	{
-	  tmp_list = tmp_list->next;
+      if (found)
+        {
+          /* Start at the *next* widget in the list */
+          if (index < child_array->len - 1)
+            index ++;
+        }
+      else
+        {
+          /* Search from the start of the list */
+          index = 0;
+        }
 
-	  while (tmp_list)
-	    {
-	      GtkWidget *child = tmp_list->data;
+      for (i = index; i < child_array->len; i ++)
+        {
+          GtkWidget *child = g_ptr_array_index (child_array, i);
 
-	      if (gtk_widget_get_mapped (child) && gtk_widget_is_sensitive (child))
-		{
-		  new_focus = child;
-		  break;
-		}
+          if (gtk_widget_get_mapped (child) && gtk_widget_is_sensitive (child))
+            {
+              new_focus = child;
+              break;
+            }
+        }
 
-	      tmp_list = tmp_list->next;
-	    }
-	}
-
-      if (!new_focus)
-	{
-	  tmp_list = focus_list;
-
-	  while (tmp_list)
-	    {
-	      GtkWidget *child = tmp_list->data;
-
-	      if (gtk_widget_get_mapped (child) && gtk_widget_is_sensitive (child))
-		{
-		  new_focus = child;
-		  break;
-		}
-
-	      tmp_list = tmp_list->next;
-	    }
-	}
-
-      g_list_free (focus_list);
-      g_list_free (children);
 
       if (new_focus)
-	{
-	  gtk_widget_grab_focus (new_focus);
-
+        {
+          gtk_widget_grab_focus (new_focus);
           gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (new_focus), TRUE);
-	}
+        }
+
+      g_ptr_array_free (child_array, TRUE);
 
       return TRUE;
     }
