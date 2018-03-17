@@ -76,9 +76,6 @@ struct _GtkLayoutPrivate
   /* Properties */
   GList *children;
 
-  gint scroll_x;
-  gint scroll_y;
-
   guint freeze_count;
 };
 
@@ -141,8 +138,6 @@ static void gtk_layout_get_child_property (GtkContainer   *container,
                                            guint           property_id,
                                            GValue         *value,
                                            GParamSpec     *pspec);
-static void gtk_layout_allocate_child     (GtkLayout      *layout,
-                                           GtkLayoutChild *child);
 static void gtk_layout_adjustment_changed (GtkAdjustment  *adjustment,
                                            GtkLayout      *layout);
 
@@ -712,9 +707,6 @@ gtk_layout_init (GtkLayout *layout)
   priv->hadjustment = NULL;
   priv->vadjustment = NULL;
 
-  priv->scroll_x = 0;
-  priv->scroll_y = 0;
-
   priv->freeze_count = 0;
 }
 
@@ -740,15 +732,34 @@ gtk_layout_size_allocate (GtkWidget           *widget,
   GtkLayout *layout = GTK_LAYOUT (widget);
   GtkLayoutPrivate *priv = layout->priv;
   GList *tmp_list;
+  int scroll_x = 0;
+  int scroll_y = 0;
 
   tmp_list = priv->children;
+
+  if (priv->hadjustment)
+    scroll_x = - gtk_adjustment_get_value (priv->hadjustment);
+
+  if (priv->vadjustment)
+    scroll_y = - gtk_adjustment_get_value (priv->vadjustment);
 
   while (tmp_list)
     {
       GtkLayoutChild *child = tmp_list->data;
+      GtkAllocation allocation;
+      GtkRequisition requisition;
+      GtkAllocation child_clip;
+
       tmp_list = tmp_list->next;
 
-      gtk_layout_allocate_child (layout, child);
+      allocation.x = child->x + scroll_x;
+      allocation.y = child->y + scroll_y;
+
+      gtk_widget_get_preferred_size (child->widget, &requisition, NULL);
+      allocation.width = requisition.width;
+      allocation.height = requisition.height;
+
+      gtk_widget_size_allocate (child->widget, &allocation, -1, &child_clip);
     }
 
   gtk_layout_set_hadjustment_values (layout);
@@ -810,27 +821,6 @@ gtk_layout_forall (GtkContainer *container,
 
       (* callback) (child->widget, callback_data);
     }
-}
-
-/* Operations on children
- */
-
-static void
-gtk_layout_allocate_child (GtkLayout      *layout,
-			   GtkLayoutChild *child)
-{
-  GtkAllocation allocation;
-  GtkRequisition requisition;
-  GtkAllocation child_clip;
-
-  allocation.x = child->x;
-  allocation.y = child->y;
-
-  gtk_widget_get_preferred_size (child->widget, &requisition, NULL);
-  allocation.width = requisition.width;
-  allocation.height = requisition.height;
-
-  gtk_widget_size_allocate (child->widget, &allocation, -1, &child_clip);
 }
 
 /* Callbacks */
