@@ -956,10 +956,24 @@ gtk_spin_button_realize (GtkWidget *widget)
   gtk_widget_queue_resize (GTK_WIDGET (spin_button));
 }
 
+/* This is called when :value, :wrap, or the bounds of the adjustment change,
+ * as the combination of those determines if our up|down_button are sensitive */
+static void
+update_buttons_sensitivity (GtkSpinButton *spin_button)
+{
+  GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin_button);
+  int lower = gtk_adjustment_get_lower (priv->adjustment);
+  int upper = gtk_adjustment_get_upper (priv->adjustment);
+  int value = gtk_adjustment_get_value (priv->adjustment);
+
+  gtk_widget_set_sensitive (priv->up_button,
+                            priv->wrap || upper - value > EPSILON);
+  gtk_widget_set_sensitive (priv->down_button,
+                            priv->wrap || value - lower > EPSILON);
+}
+
 /* Callback used when the spin button's adjustment changes.
- * We need to redraw the arrows when the adjustment’s range
- * changes, and reevaluate our size request.
- */
+ * We need to reevaluate our size request & up|down_button sensitivity. */
 static void
 adjustment_changed_cb (GtkAdjustment *adjustment, gpointer data)
 {
@@ -967,6 +981,8 @@ adjustment_changed_cb (GtkAdjustment *adjustment, gpointer data)
   GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin_button);
 
   priv->timer_step = gtk_adjustment_get_step_increment (priv->adjustment);
+
+  update_buttons_sensitivity (spin_button);
   gtk_widget_queue_resize (GTK_WIDGET (spin_button));
 }
 
@@ -1184,6 +1200,7 @@ gtk_spin_button_value_changed (GtkAdjustment *adjustment,
 
   g_signal_emit (spin_button, spinbutton_signals[VALUE_CHANGED], 0);
 
+  update_buttons_sensitivity (spin_button);
   gtk_widget_queue_draw (GTK_WIDGET (spin_button));
 
   g_object_notify (G_OBJECT (spin_button), "value");
@@ -2038,8 +2055,9 @@ gtk_spin_button_set_wrap (GtkSpinButton  *spin_button,
   if (priv->wrap != wrap)
     {
        priv->wrap = wrap;
-
        g_object_notify (G_OBJECT (spin_button), "wrap");
+
+       update_buttons_sensitivity (spin_button);
     }
 }
 
