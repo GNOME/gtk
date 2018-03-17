@@ -1927,7 +1927,7 @@ gtk_container_real_set_focus_child (GtkContainer *container,
           while (gtk_widget_get_focus_child (child))
             child = gtk_widget_get_focus_child (child);
 
-          if (!gtk_widget_translate_coordinates (child, focus_child,
+          if (!gtk_widget_translate_coordinates (child, GTK_WIDGET (container),
                                                  0, 0, &x, &y))
             return;
 
