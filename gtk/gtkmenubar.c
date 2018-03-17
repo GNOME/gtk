@@ -570,26 +570,30 @@ _gtk_menu_bar_cycle_focus (GtkMenuBar       *menubar,
   if (gtk_widget_is_toplevel (toplevel))
     {
       GList *tmp_menubars = _gtk_menu_bar_get_viewable_menu_bars (GTK_WINDOW (toplevel));
-      GList *menubars;
-      GList *current;
+      GList *l;
+      GPtrArray *menubars;
+      gboolean found;
+      guint index;
 
-      menubars = _gtk_container_focus_sort (GTK_CONTAINER (toplevel), tmp_menubars,
-					    dir, GTK_WIDGET (menubar));
-      g_list_free (tmp_menubars);
+      menubars = g_ptr_array_sized_new (g_list_length (tmp_menubars));
 
-      if (menubars)
-	{
-	  current = g_list_find (menubars, menubar);
+      for (l = tmp_menubars; l; l = l->next)
+        g_ptr_array_add (menubars, l->data);
 
-	  if (current && current->next)
-	    {
-	      GtkMenuShell *new_menushell = GTK_MENU_SHELL (current->next->data);
-	      if (new_menushell->priv->children)
-		to_activate = new_menushell->priv->children->data;
-	    }
-	}
-	  
-      g_list_free (menubars);
+      gtk_widget_focus_sort (toplevel, dir, menubars);
+
+      found = g_ptr_array_find (menubars, menubar, &index);
+
+      if (found && index < menubars->len)
+        {
+          GtkWidget *next = g_ptr_array_index (menubars, index + 1);
+          GtkMenuShell *new_menushell = GTK_MENU_SHELL (next);
+
+          if (new_menushell->priv->children)
+            to_activate = new_menushell->priv->children->data;
+        }
+
+      g_ptr_array_free (menubars, TRUE);
     }
 
   gtk_menu_shell_cancel (GTK_MENU_SHELL (menubar));
