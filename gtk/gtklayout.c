@@ -113,7 +113,6 @@ static void gtk_layout_set_property       (GObject        *object,
                                            const GValue   *value,
                                            GParamSpec     *pspec);
 static void gtk_layout_finalize           (GObject        *object);
-static void gtk_layout_map                (GtkWidget      *widget);
 static void gtk_layout_measure (GtkWidget *widget,
                                 GtkOrientation  orientation,
                                 int             for_size,
@@ -555,7 +554,6 @@ gtk_layout_class_init (GtkLayoutClass *class)
 						     G_MAXINT,
 						     100,
 						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  widget_class->map = gtk_layout_map;
   widget_class->measure = gtk_layout_measure;
   widget_class->size_allocate = gtk_layout_size_allocate;
 
@@ -718,29 +716,6 @@ gtk_layout_init (GtkLayout *layout)
   priv->scroll_y = 0;
 
   priv->freeze_count = 0;
-}
-
-static void
-gtk_layout_map (GtkWidget *widget)
-{
-  GtkLayout *layout = GTK_LAYOUT (widget);
-  GtkLayoutPrivate *priv = layout->priv;
-  GList *tmp_list;
-
-  GTK_WIDGET_CLASS (gtk_layout_parent_class)->map (widget);
-
-  tmp_list = priv->children;
-  while (tmp_list)
-    {
-      GtkLayoutChild *child = tmp_list->data;
-      tmp_list = tmp_list->next;
-
-      if (gtk_widget_get_visible (child->widget))
-	{
-	  if (!gtk_widget_get_mapped (child->widget))
-	    gtk_widget_map (child->widget);
-	}
-    }
 }
 
 static void
