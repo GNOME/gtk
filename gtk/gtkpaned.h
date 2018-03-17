@@ -43,14 +43,10 @@ G_BEGIN_DECLS
 
 typedef struct _GtkPaned        GtkPaned;
 typedef struct _GtkPanedClass   GtkPanedClass;
-typedef struct _GtkPanedPrivate GtkPanedPrivate;
 
 struct _GtkPaned
 {
-  GtkContainer container;
-
-  /*< private >*/
-  GtkPanedPrivate *priv;
+  GtkContainer parent_instance;
 };
 
 struct _GtkPanedClass
