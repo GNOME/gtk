@@ -386,7 +386,7 @@ delete_one_texture (gpointer data)
   Texture *texture = data;
 
   if (texture->holder)
-    gdk_gl_texture_release (texture->holder);
+    gdk_gl_texture_release (GDK_GL_TEXTURE (texture->holder));
 
   if (texture->id != 0)
     {
