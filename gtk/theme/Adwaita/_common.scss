@@ -1382,11 +1382,10 @@ toolbar {
   &.vertical separator { margin: 6px 1px 7px 0; }
 
   &:not(.inline-toolbar):not(.osd) {
-    switch,
-    scale,
-    entry,
-    spinbutton,
-    button {
+    // workaround: add margins to the children of tool items to simulate
+    // spacing, ignore the overflow button (.toggle) and the overflow menu
+    // (.popup)
+    > *:not(.toggle):not(.popup) > * {
       margin-right: 1px;
       margin-bottom: 1px;
     }

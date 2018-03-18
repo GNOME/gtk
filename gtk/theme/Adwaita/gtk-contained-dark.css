@@ -567,7 +567,7 @@ toolbar.horizontal separator { margin: 0 7px 1px 6px; }
 
 toolbar.vertical separator { margin: 6px 1px 7px 0; }
 
-toolbar:not(.inline-toolbar):not(.osd) switch, toolbar:not(.inline-toolbar):not(.osd) scale, toolbar:not(.inline-toolbar):not(.osd) entry, toolbar:not(.inline-toolbar):not(.osd) spinbutton, toolbar:not(.inline-toolbar):not(.osd) button { margin-right: 1px; margin-bottom: 1px; }
+toolbar:not(.inline-toolbar):not(.osd) > *:not(.toggle):not(.popup) > * { margin-right: 1px; margin-bottom: 1px; }
 
 .inline-toolbar { padding: 3px; border-width: 0 1px 1px; border-radius: 0  0 5px 5px; }
 
