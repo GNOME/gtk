@@ -96,6 +96,31 @@ gtk_video_size_allocate (GtkWidget           *widget,
 }
 
 static void
+gtk_video_realize (GtkWidget *widget)
+{
+  GtkVideo *self = GTK_VIDEO (widget);
+
+  GTK_WIDGET_CLASS (gtk_video_parent_class)->realize (widget);
+
+  if (self->media_stream)
+    gtk_media_stream_realize (self->media_stream, gtk_widget_get_window (GTK_WIDGET (self)));
+
+  if (self->file)
+    gtk_media_file_set_file (GTK_MEDIA_FILE (self->media_stream), self->file);
+}
+
+static void
+gtk_video_unrealize (GtkWidget *widget)
+{
+  GtkVideo *self = GTK_VIDEO (widget);
+
+  if (self->media_stream)
+    gtk_media_stream_unrealize (self->media_stream, gtk_widget_get_window (GTK_WIDGET (self)));
+
+  GTK_WIDGET_CLASS (gtk_video_parent_class)->unrealize (widget);
+}
+
+static void
 gtk_video_unmap (GtkWidget *widget)
 {
   GtkVideo *self = GTK_VIDEO (widget);
@@ -181,6 +206,8 @@ gtk_video_class_init (GtkVideoClass *klass)
 
   widget_class->measure = gtk_video_measure;
   widget_class->size_allocate = gtk_video_size_allocate;
+  widget_class->realize = gtk_video_realize;
+  widget_class->unrealize = gtk_video_unrealize;
   widget_class->unmap = gtk_video_unmap;
 
   gobject_class->dispose = gtk_video_dispose;
@@ -490,6 +517,8 @@ gtk_video_set_media_stream (GtkVideo       *self,
       g_signal_handlers_disconnect_by_func (self->media_stream,
                                             gtk_video_notify_cb,
                                             self);
+      if (gtk_widget_get_realized (GTK_WIDGET (self)))
+        gtk_media_stream_unrealize (self->media_stream, gtk_widget_get_window (GTK_WIDGET (self)));
       g_object_unref (self->media_stream);
       self->media_stream = NULL;
     }
@@ -497,6 +526,8 @@ gtk_video_set_media_stream (GtkVideo       *self,
   if (stream)
     {
       self->media_stream = g_object_ref (stream);
+      if (gtk_widget_get_realized (GTK_WIDGET (self)))
+        gtk_media_stream_realize (stream, gtk_widget_get_window (GTK_WIDGET (self)));
       g_signal_connect (self->media_stream,
                         "notify",
                         G_CALLBACK (gtk_video_notify_cb),
@@ -522,8 +553,6 @@ void
 gtk_video_set_file (GtkVideo *self,
                     GFile    *file)
 {
-  GtkMediaStream *stream;
-
   g_return_if_fail (GTK_IS_VIDEO (self));
   g_return_if_fail (file == NULL || G_IS_FILE (file));
 
@@ -533,14 +562,21 @@ gtk_video_set_file (GtkVideo *self,
   g_object_freeze_notify (G_OBJECT (self));
 
   if (file)
-    stream = gtk_media_file_new_for_file (file);
+    {
+      GtkMediaStream *stream;
+
+      stream = gtk_media_file_new ();
+
+      gtk_video_set_media_stream (self, stream);
+      if (gtk_widget_get_realized (GTK_WIDGET (self)))
+        gtk_media_file_set_file (GTK_MEDIA_FILE (stream), file);
+
+      g_object_unref (stream);
+    }
   else
-    stream = NULL;
-
-  gtk_video_set_media_stream (self, stream);
-
-  if (stream)
-    g_object_unref (stream);
+    {
+      gtk_video_set_media_stream (self, NULL);
+    }
 
   g_object_thaw_notify (G_OBJECT (self));
 }

@@ -128,6 +128,18 @@ gtk_media_stream_default_update_audio (GtkMediaStream *self,
 }
 
 static void
+gtk_media_stream_default_realize (GtkMediaStream *self,
+                                  GdkWindow      *window)
+{
+}
+
+static void
+gtk_media_stream_default_unrealize (GtkMediaStream *self,
+                                    GdkWindow      *window)
+{
+}
+
+static void
 gtk_media_stream_set_property (GObject      *object,
                                guint         prop_id,
                                const GValue *value,
@@ -260,6 +272,8 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
   class->pause = gtk_media_stream_default_pause;
   class->seek = gtk_media_stream_default_seek;
   class->update_audio = gtk_media_stream_default_update_audio;
+  class->realize = gtk_media_stream_default_realize;
+  class->unrealize = gtk_media_stream_default_unrealize;
 
   gobject_class->set_property = gtk_media_stream_set_property;
   gobject_class->get_property = gtk_media_stream_get_property;
@@ -837,6 +851,60 @@ gtk_media_stream_set_volume (GtkMediaStream *self,
   GTK_MEDIA_STREAM_GET_CLASS (self)->update_audio (self, priv->muted, priv->volume);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_VOLUME]);
+}
+
+/**
+ * gtk_media_stream_realize:
+ * @self: a #GtkMediaStream
+ * @window: a #GdkWindow
+ *
+ * Called by users to attach the media stream to a #GdkWindow they manage.
+ * The stream can then access the resources of @window for its rendering
+ * purposes. In particular, media streams might want to create
+ * #GdkGLContexts or sync to the #GdkFrameClock.
+ *
+ * Whoever calls this function is responsible for calling
+ * gtk_media_stream_unrealize() before either the stream or @window get
+ * destroyed.
+ *
+ * Multiple calls to this function may happen from different users of the
+ * video, even with the same @window. Each of these calls must be followed
+ * by its own call to gtk_media_stream_unrealize().
+ *
+ * It is not required to call this function to make a media stream work.
+ **/
+void
+gtk_media_stream_realize (GtkMediaStream *self,
+                          GdkWindow      *window)
+{
+  g_return_if_fail (GTK_IS_MEDIA_STREAM (self));
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  g_object_ref (self);
+  g_object_ref (window);
+
+  GTK_MEDIA_STREAM_GET_CLASS (self)->realize (self, window);
+}
+
+/**
+ * gtk_media_stream_unrealize:
+ * @self: a #GtkMediaStream previously realized
+ * @window: the #GdkWindow the stream was realized with
+ *
+ * Undoes a previous call to gtk_media_stream_realize() and causes
+ * the stream to release all resources it had allocated from @window.
+ **/
+void
+gtk_media_stream_unrealize (GtkMediaStream *self,
+                            GdkWindow      *window)
+{
+  g_return_if_fail (GTK_IS_MEDIA_STREAM (self));
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  GTK_MEDIA_STREAM_GET_CLASS (self)->unrealize (self, window);
+
+  g_object_unref (window);
+  g_object_unref (self);
 }
 
 /**

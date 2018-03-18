@@ -44,6 +44,11 @@ struct _GtkMediaStreamClass
   void                  (* update_audio)                        (GtkMediaStream *self,
                                                                  gboolean        muted,
                                                                  double          volume);
+  void                  (* realize)                             (GtkMediaStream *self,
+                                                                 GdkWindow      *window);
+  void                  (* unrealize)                           (GtkMediaStream *self,
+                                                                 GdkWindow      *window);
+
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
@@ -103,6 +108,12 @@ double                  gtk_media_stream_get_volume             (GtkMediaStream 
 GDK_AVAILABLE_IN_ALL
 void                    gtk_media_stream_set_volume             (GtkMediaStream *self,
                                                                  double          volume);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_media_stream_realize                (GtkMediaStream *self,
+                                                                 GdkWindow      *window);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_media_stream_unrealize              (GtkMediaStream *self,
+                                                                 GdkWindow      *window);
 
 /* for implementations only */
 GDK_AVAILABLE_IN_ALL
