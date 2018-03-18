@@ -25,7 +25,6 @@
 #include "gskrendererprivate.h"
 #include "gskroundedrectprivate.h"
 
-#include "gdk/gdkmemorytextureprivate.h"
 #include "gdk/gdktextureprivate.h"
 
 static gboolean
@@ -755,7 +754,7 @@ gsk_texture_node_deserialize (GVariant  *variant,
     }
 
   texture = gdk_memory_texture_new (width, height,
-                                    GDK_MEMORY_CAIRO_FORMAT_ARGB32,
+                                    GDK_MEMORY_DEFAULT,
                                     bytes,
                                     width * 4);
 
