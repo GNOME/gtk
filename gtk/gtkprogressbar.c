@@ -91,7 +91,7 @@
  * in overlays like the one Epiphany has for page loading progress.
  */
 
-struct _GtkProgressBarPrivate
+typedef struct
 {
   gchar         *text;
 
@@ -118,7 +118,7 @@ struct _GtkProgressBarPrivate
   guint          ellipsize     : 3;
   guint          show_text     : 1;
   guint          inverted      : 1;
-};
+} GtkProgressBarPrivate;
 
 enum {
   PROP_0,
@@ -266,7 +266,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
 static void
 update_fraction_classes (GtkProgressBar *pbar)
 {
-  GtkProgressBarPrivate *priv = pbar->priv;
+  GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (pbar);
   GtkStyleContext *context;
   gboolean empty = FALSE;
   gboolean full = FALSE;
@@ -298,7 +298,7 @@ update_fraction_classes (GtkProgressBar *pbar)
 static void
 update_node_classes (GtkProgressBar *pbar)
 {
-  GtkProgressBarPrivate *priv = pbar->priv;
+  GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (pbar);
   GtkStyleContext *context;
   gboolean left = FALSE;
   gboolean right = FALSE;
@@ -378,7 +378,7 @@ allocate_trough (GtkGizmo            *gizmo,
 
 {
   GtkProgressBar *pbar = GTK_PROGRESS_BAR (gtk_widget_get_parent (GTK_WIDGET (gizmo)));
-  GtkProgressBarPrivate *priv = pbar->priv;
+  GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (pbar);
   GtkAllocation alloc;
   gint width, height;
   gboolean inverted;
@@ -452,8 +452,9 @@ snapshot_trough (GtkGizmo    *gizmo,
 
 {
   GtkProgressBar *pbar = GTK_PROGRESS_BAR (gtk_widget_get_parent (GTK_WIDGET (gizmo)));
+  GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (pbar);
 
-  gtk_widget_snapshot_child (GTK_WIDGET (gizmo), pbar->priv->progress_widget, snapshot);
+  gtk_widget_snapshot_child (GTK_WIDGET (gizmo), priv->progress_widget, snapshot);
 
   return FALSE;
 }
@@ -461,10 +462,7 @@ snapshot_trough (GtkGizmo    *gizmo,
 static void
 gtk_progress_bar_init (GtkProgressBar *pbar)
 {
-  GtkProgressBarPrivate *priv;
-
-  pbar->priv = gtk_progress_bar_get_instance_private (pbar);
-  priv = pbar->priv;
+  GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (pbar);
 
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
   priv->inverted = FALSE;
@@ -540,7 +538,7 @@ gtk_progress_bar_get_property (GObject      *object,
                                GParamSpec   *pspec)
 {
   GtkProgressBar *pbar = GTK_PROGRESS_BAR (object);
-  GtkProgressBarPrivate* priv = pbar->priv;
+  GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (pbar);
 
   switch (prop_id)
     {
@@ -592,7 +590,7 @@ static void
 gtk_progress_bar_finalize (GObject *object)
 {
   GtkProgressBar *pbar = GTK_PROGRESS_BAR (object);
-  GtkProgressBarPrivate *priv = pbar->priv;
+  GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (pbar);
 
   if (priv->activity_mode)
     gtk_progress_bar_act_mode_leave (pbar);
@@ -611,7 +609,7 @@ gtk_progress_bar_finalize (GObject *object)
 static gchar *
 get_current_text (GtkProgressBar *pbar)
 {
-  GtkProgressBarPrivate *priv = pbar->priv;
+  GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (pbar);
 
   if (priv->text)
     return g_strdup (priv->text);
@@ -626,13 +624,11 @@ gtk_progress_bar_size_allocate (GtkWidget           *widget,
                                 GtkAllocation       *out_clip)
 {
   GtkAllocation child_clip = *allocation;
-  GtkProgressBarPrivate *priv;
+  GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (GTK_PROGRESS_BAR (widget));
   gint bar_width, bar_height;
   gint text_width, text_height, text_min, text_nat;
   GtkAllocation alloc;
   GtkAllocation text_clip;
-
-  priv = GTK_PROGRESS_BAR (widget)->priv;
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -697,13 +693,10 @@ gtk_progress_bar_measure (GtkWidget      *widget,
                           int            *minimum_baseline,
                           int            *natural_baseline)
 {
-  GtkProgressBar *pbar;
-  GtkProgressBarPrivate *priv;
+  GtkProgressBar *pbar = GTK_PROGRESS_BAR (widget);
+  GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (pbar);
   gint text_minimum, text_natural;
   gint trough_minimum, trough_natural;
-
-  pbar = GTK_PROGRESS_BAR (widget);
-  priv = pbar->priv;
 
   if (priv->show_text)
     gtk_widget_measure (priv->label, orientation, -1,
@@ -750,7 +743,7 @@ tick_cb (GtkWidget     *widget,
          gpointer       user_data)
 {
   GtkProgressBar *pbar = GTK_PROGRESS_BAR (widget);
-  GtkProgressBarPrivate *priv = pbar->priv;
+  GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (pbar);
   gint64 frame_time;
   gdouble iteration, pulse_iterations, current_iterations, fraction;
 
@@ -806,7 +799,7 @@ tick_cb (GtkWidget     *widget,
 static void
 gtk_progress_bar_act_mode_enter (GtkProgressBar *pbar)
 {
-  GtkProgressBarPrivate *priv = pbar->priv;
+  GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (pbar);
   GtkWidget *widget = GTK_WIDGET (pbar);
   gboolean inverted;
 
@@ -844,7 +837,7 @@ gtk_progress_bar_act_mode_enter (GtkProgressBar *pbar)
 static void
 gtk_progress_bar_act_mode_leave (GtkProgressBar *pbar)
 {
-  GtkProgressBarPrivate *priv = pbar->priv;
+  GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (pbar);
 
   if (priv->tick_id)
     gtk_widget_remove_tick_callback (GTK_WIDGET (pbar), priv->tick_id);
@@ -859,7 +852,7 @@ static void
 gtk_progress_bar_set_activity_mode (GtkProgressBar *pbar,
                                     gboolean        activity_mode)
 {
-  GtkProgressBarPrivate *priv = pbar->priv;
+  GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (pbar);
 
   activity_mode = !!activity_mode;
 
@@ -889,11 +882,9 @@ void
 gtk_progress_bar_set_fraction (GtkProgressBar *pbar,
                                gdouble         fraction)
 {
-  GtkProgressBarPrivate* priv;
+  GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (pbar);
 
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
-
-  priv = pbar->priv;
 
   priv->fraction = CLAMP (fraction, 0.0, 1.0);
 
@@ -915,7 +906,7 @@ gtk_progress_bar_set_fraction (GtkProgressBar *pbar,
 static void
 gtk_progress_bar_update_pulse (GtkProgressBar *pbar)
 {
-  GtkProgressBarPrivate *priv = pbar->priv;
+  GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (pbar);
   gint64 pulse_time = g_get_monotonic_time ();
 
   if (priv->pulse2 == pulse_time)
@@ -964,11 +955,9 @@ void
 gtk_progress_bar_set_text (GtkProgressBar *pbar,
                            const gchar    *text)
 {
-  GtkProgressBarPrivate *priv;
+  GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (pbar);
 
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
-
-  priv = pbar->priv;
 
   /* Don't notify again if nothing's changed. */
   if (g_strcmp0 (priv->text, text) == 0)
@@ -1003,11 +992,9 @@ void
 gtk_progress_bar_set_show_text (GtkProgressBar *pbar,
                                 gboolean        show_text)
 {
-  GtkProgressBarPrivate *priv;
+  GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (pbar);
 
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
-
-  priv = pbar->priv;
 
   show_text = !!show_text;
 
@@ -1055,9 +1042,11 @@ gtk_progress_bar_set_show_text (GtkProgressBar *pbar,
 gboolean
 gtk_progress_bar_get_show_text (GtkProgressBar *pbar)
 {
+  GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (pbar);
+
   g_return_val_if_fail (GTK_IS_PROGRESS_BAR (pbar), FALSE);
 
-  return pbar->priv->show_text;
+  return priv->show_text;
 }
 
 /**
@@ -1072,11 +1061,9 @@ void
 gtk_progress_bar_set_pulse_step (GtkProgressBar *pbar,
                                  gdouble         fraction)
 {
-  GtkProgressBarPrivate *priv;
+  GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (pbar);
 
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
-
-  priv = pbar->priv;
 
   priv->pulse_fraction = fraction;
 
@@ -1098,7 +1085,7 @@ static void
 gtk_progress_bar_set_orientation (GtkProgressBar *pbar,
                                   GtkOrientation  orientation)
 {
-  GtkProgressBarPrivate *priv = pbar->priv;
+  GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (pbar);
 
   if (priv->orientation == orientation)
     return;
@@ -1124,11 +1111,9 @@ void
 gtk_progress_bar_set_inverted (GtkProgressBar *pbar,
                                gboolean        inverted)
 {
-  GtkProgressBarPrivate *priv;
+  GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (pbar);
 
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
-
-  priv = pbar->priv;
 
   if (priv->inverted == inverted)
     return;
@@ -1156,9 +1141,11 @@ gtk_progress_bar_set_inverted (GtkProgressBar *pbar,
 const gchar*
 gtk_progress_bar_get_text (GtkProgressBar *pbar)
 {
+  GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (pbar);
+
   g_return_val_if_fail (GTK_IS_PROGRESS_BAR (pbar), NULL);
 
-  return pbar->priv->text;
+  return priv->text;
 }
 
 /**
@@ -1172,9 +1159,11 @@ gtk_progress_bar_get_text (GtkProgressBar *pbar)
 gdouble
 gtk_progress_bar_get_fraction (GtkProgressBar *pbar)
 {
+  GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (pbar);
+
   g_return_val_if_fail (GTK_IS_PROGRESS_BAR (pbar), 0);
 
-  return pbar->priv->fraction;
+  return priv->fraction;
 }
 
 /**
@@ -1188,9 +1177,11 @@ gtk_progress_bar_get_fraction (GtkProgressBar *pbar)
 gdouble
 gtk_progress_bar_get_pulse_step (GtkProgressBar *pbar)
 {
+  GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (pbar);
+
   g_return_val_if_fail (GTK_IS_PROGRESS_BAR (pbar), 0);
 
-  return pbar->priv->pulse_fraction;
+  return priv->pulse_fraction;
 }
 
 /**
@@ -1204,9 +1195,11 @@ gtk_progress_bar_get_pulse_step (GtkProgressBar *pbar)
 gboolean
 gtk_progress_bar_get_inverted (GtkProgressBar *pbar)
 {
+  GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (pbar);
+
   g_return_val_if_fail (GTK_IS_PROGRESS_BAR (pbar), FALSE);
 
-  return pbar->priv->inverted;
+  return priv->inverted;
 }
 
 /**
@@ -1221,13 +1214,11 @@ void
 gtk_progress_bar_set_ellipsize (GtkProgressBar     *pbar,
                                 PangoEllipsizeMode  mode)
 {
-  GtkProgressBarPrivate *priv;
+  GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (pbar);
 
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
   g_return_if_fail (mode >= PANGO_ELLIPSIZE_NONE &&
                     mode <= PANGO_ELLIPSIZE_END);
-
-  priv = pbar->priv;
 
   if ((PangoEllipsizeMode)priv->ellipsize != mode)
     {
@@ -1253,7 +1244,9 @@ gtk_progress_bar_set_ellipsize (GtkProgressBar     *pbar,
 PangoEllipsizeMode
 gtk_progress_bar_get_ellipsize (GtkProgressBar *pbar)
 {
+  GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (pbar);
+
   g_return_val_if_fail (GTK_IS_PROGRESS_BAR (pbar), PANGO_ELLIPSIZE_NONE);
 
-  return pbar->priv->ellipsize;
+  return priv->ellipsize;
 }
