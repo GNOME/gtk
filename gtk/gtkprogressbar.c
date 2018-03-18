@@ -147,8 +147,6 @@ static void gtk_progress_bar_size_allocate        (GtkWidget           *widget,
                                                    int                  baseline,
                                                    GtkAllocation       *out_clip);
 
-static void     gtk_progress_bar_snapshot         (GtkWidget      *widget,
-                                                   GtkSnapshot    *snapshot);
 static void     gtk_progress_bar_act_mode_enter   (GtkProgressBar *progress);
 static void     gtk_progress_bar_act_mode_leave   (GtkProgressBar *progress);
 static void     gtk_progress_bar_finalize         (GObject        *object);
@@ -182,9 +180,8 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
   gobject_class->get_property = gtk_progress_bar_get_property;
   gobject_class->finalize = gtk_progress_bar_finalize;
 
-  widget_class->snapshot = gtk_progress_bar_snapshot;
-  widget_class->size_allocate = gtk_progress_bar_size_allocate;
   widget_class->measure = gtk_progress_bar_measure;
+  widget_class->size_allocate = gtk_progress_bar_size_allocate;
   widget_class->direction_changed = gtk_progress_bar_direction_changed;
 
   g_object_class_override_property (gobject_class, PROP_ORIENTATION, "orientation");
@@ -856,18 +853,6 @@ gtk_progress_bar_act_mode_leave (GtkProgressBar *pbar)
   gtk_style_context_remove_class (gtk_widget_get_style_context (priv->progress_widget),
                                   GTK_STYLE_CLASS_PULSE);
   update_node_classes (pbar);
-}
-
-static void
-gtk_progress_bar_snapshot (GtkWidget   *widget,
-                           GtkSnapshot *snapshot)
-{
-  GtkProgressBar *pbar = GTK_PROGRESS_BAR (widget);
-  GtkProgressBarPrivate *priv = pbar->priv;
-
-  gtk_widget_snapshot_child (widget, priv->trough_widget, snapshot);
-  if (priv->show_text)
-    gtk_widget_snapshot_child (widget, priv->label, snapshot);
 }
 
 static void
