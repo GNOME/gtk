@@ -39,9 +39,17 @@
 #include "gdkinternals.h"
 #include "gdkmemorytextureprivate.h"
 #include "gdkpaintable.h"
+#include "gdksnapshot.h"
 
-#define GTK_COMPILATION
-#include "gtk/gtksnapshot.h"
+#include <graphene.h>
+
+/* HACK: So we don't need to include any (not-yet-created) GSK or GTK headers */
+void
+gtk_snapshot_append_texture (GdkSnapshot            *snapshot,
+                             GdkTexture             *texture,
+                             const graphene_rect_t  *bounds,
+                             const char             *name,
+                             ...) G_GNUC_PRINTF (4, 5);
 
 /**
  * SECTION:gdktexture
