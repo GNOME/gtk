@@ -543,6 +543,23 @@ gtk_video_set_media_stream (GtkVideo       *self,
 }
 
 /**
+ * gtk_video_get_file:
+ * @self: a #GtkVideo
+ *
+ * Gets the file played by @self or %NULL if not playing back
+ * a file.
+ *
+ * Returns: (nullable) (transfer none): The file played by @self
+ **/
+GFile *
+gtk_video_get_file (GtkVideo *self)
+{
+  g_return_val_if_fail (GTK_IS_VIDEO (self), NULL);
+
+  return self->file;
+}
+
+/**
  * gtk_video_set_file:
  * @self: a #GtkVideo
  * @file: (allow-none): the file to play
