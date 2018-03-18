@@ -17,8 +17,7 @@ print_backends = ['file']
 # Checks to see if we should compile with CUPS backend for GTK+
 enable_cups = enabled_print_backends.contains('cups')
 if enable_cups
-  want_cups = enable_cups == 'yes'
-  #cups_config = find_program('cups-config', required : want_cups)
+  #cups_config = find_program('cups-config', required : true)
   #if cups_config.found()
   # FIXME: eek, see configure.ac (we're just not going to support non-standar prefix for now)
   #endif
@@ -36,16 +35,16 @@ if enable_cups
         cdata.set('HAVE_HTTP_AUTHSTRING', 1,
           description :'Define if cups http_t authstring field is accessible')
       endif
-      libcups = cc.find_library('cups', required : want_cups)
+      libcups = cc.find_library('cups', required : true)
       if libcups.found() and cc.has_function('httpGetAuthString', dependencies : libcups)
         cdata.set('HAVE_HTTPGETAUTHSTRING', 1)
       endif
 
       print_backends += ['cups']
-    elif want_cups
+    else
       error('Need CUPS version >= 1.2')
     endif
-  elif want_cups
+  else
     error('Cannot find CUPS headers in default prefix.')
   endif
 endif
@@ -53,9 +52,8 @@ endif
 # Checks to see if we should compile with cloudprint backend for GTK+
 enable_cloudprint = enabled_print_backends.contains('cloudprint')
 if enable_cloudprint
-  want_cloudprint = enable_cloudprint == 'yes'
-  rest_dep = dependency('rest-0.7', required : want_cloudprint)
-  json_glib_dep = dependency('json-glib-1.0', required : want_cloudprint)
+  rest_dep = dependency('rest-0.7', required : true)
+  json_glib_dep = dependency('json-glib-1.0', required : true)
   if rest_dep.found() and json_glib_dep.found()
     print_backends += ['cloudprint']
   endif
