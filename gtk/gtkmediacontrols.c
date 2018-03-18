@@ -320,7 +320,7 @@ gtk_media_controls_new (GtkMediaStream *stream)
  *
  * Gets the media stream managed by @controls or %NULL if none.
  *
- * Returns: (nullable): The media stream managed by @controls
+ * Returns: (nullable) (transfer none): The media stream managed by @controls
  **/
 GtkMediaStream *
 gtk_media_controls_get_media_stream (GtkMediaControls *controls)

@@ -366,7 +366,7 @@ gtk_video_new_for_filename (const char *filename)
 
 /**
  * gtk_video_new_for_resource:
- * @filename: (allow-none): resource path to play back
+ * @resource_path: (allow-none): resource path to play back
  *
  * Creates a #GtkVideo to play back the resource at the
  * given @resource_path.
@@ -412,7 +412,7 @@ gtk_video_new_for_resource (const char *resource_path)
  *
  * Gets the media stream managed by @self or %NULL if none.
  *
- * Returns: (nullable): The media stream managed by @self
+ * Returns: (nullable) (transfer none): The media stream managed by @self
  **/
 GtkMediaStream *
 gtk_video_get_media_stream (GtkVideo *self)
@@ -582,7 +582,7 @@ gtk_video_set_file (GtkVideo *self,
 }
 
 /**
- * gtk_video_set_resource:
+ * gtk_video_set_filename:
  * @self: a #GtkVideo
  * @filename: (allow-none): the filename to play
  *

@@ -511,7 +511,7 @@ gtk_media_file_set_file (GtkMediaFile *self,
  * When @self is not playing or not playing from a file,
  * %NULL is returned.
  *
- * Returns: (nullable): The currently playing file or %NULL if not
+ * Returns: (nullable) (transfer none): The currently playing file or %NULL if not
  *     playing from a file.
  **/
 GFile *
@@ -571,7 +571,7 @@ gtk_media_file_set_input_stream (GtkMediaFile *self,
  * When @self is not playing or not playing from a stream,
  * %NULL is returned.
  *
- * Returns: (nullable): The currently playing stream or %NULL if not
+ * Returns: (nullable) (transfer none): The currently playing stream or %NULL if not
  *     playing from a stream.
  **/
 GInputStream *

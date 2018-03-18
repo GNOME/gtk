@@ -1108,7 +1108,7 @@ gtk_media_stream_error (GtkMediaStream *self,
 }
 
 /**
- * gtk_media_stream_error:
+ * gtk_media_stream_error_valist:
  * @self: a #GtkMediaStream
  * @domain: error domain
  * @code: error code
