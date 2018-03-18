@@ -59,13 +59,10 @@ G_BEGIN_DECLS
 
 typedef struct _GtkLevelBarClass   GtkLevelBarClass;
 typedef struct _GtkLevelBar        GtkLevelBar;
-typedef struct _GtkLevelBarPrivate GtkLevelBarPrivate;
 
 struct _GtkLevelBar {
   /*< private >*/
-  GtkWidget parent;
-
-  GtkLevelBarPrivate *priv;
+  GtkWidget parent_instance;
 };
 
 struct _GtkLevelBarClass {
