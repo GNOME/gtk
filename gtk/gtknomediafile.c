@@ -45,7 +45,7 @@ gtk_no_media_file_open (GtkMediaFile *file)
   gtk_media_stream_error (GTK_MEDIA_STREAM (file),
                           G_IO_ERROR,
                           G_IO_ERROR_NOT_SUPPORTED,
-                          _("GTK has been compiled without media support."));
+                          _("GTK could not find a media module. Check your installation."));
 }
 
 static void
