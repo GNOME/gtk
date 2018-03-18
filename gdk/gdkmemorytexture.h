@@ -68,6 +68,24 @@ typedef enum {
   GDK_MEMORY_N_FORMATS
 } GdkMemoryFormat;
 
+/**
+ * GDK_MEMORY_DEFAULT:
+ *
+ * This is the default memory format used by GTK and is the format
+ * provided by gdk_texture_download(). It is equal to
+ * %CAIRO_FORMAT_ARGB32.
+ *
+ * Be aware that unlike the #GdkMemoryFormat values, this format is
+ * different for different endianness.
+ */
+#if G_BYTE_ORDER == G_LITTLE_ENDIAN
+#define GDK_MEMORY_DEFAULT GDK_MEMORY_B8G8R8A8_PREMULTIPLIED
+#elif G_BYTE_ORDER == G_BIG_ENDIAN
+#define GDK_MEMORY_DEFAULT GDK_MEMORY_A8R8G8B8_PREMULTIPLIED
+#else
+#error "Unknown byte order for GDK_MEMORY_DEFAULT"
+#endif
+
 GDK_AVAILABLE_IN_ALL
 GdkTexture *            gdk_memory_texture_new              (int                width,
                                                              int                height,
