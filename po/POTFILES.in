@@ -181,6 +181,9 @@ gtk/gtkliststore.c
 gtk/gtklockbutton.c
 gtk/gtkmagnifier.c
 gtk/gtkmain.c
+gtk/gtkmediacontrols.c
+gtk/gtkmediafile.c
+gtk/gtkmediastream.c
 gtk/gtkmenubar.c
 gtk/gtkmenubutton.c
 gtk/gtkmenu.c
@@ -195,6 +198,7 @@ gtk/gtkmountoperation.c
 gtk/gtkmountoperation-stub.c
 gtk/gtkmountoperation-x11.c
 gtk/gtknativedialog.c
+gtk/gtknomediafile.c
 gtk/gtknotebook.c
 gtk/gtkorientable.c
 gtk/gtkoverlay.c
@@ -288,6 +292,7 @@ gtk/gtktreesortable.c
 gtk/gtktreestore.c
 gtk/gtktreeview.c
 gtk/gtktreeviewcolumn.c
+gtk/gtkvideo.c
 gtk/gtkviewport.c
 gtk/gtkvolumebutton.c
 gtk/gtkwidget.c
@@ -355,6 +360,8 @@ gtk/ui/gtksidebarrow.ui
 gtk/ui/gtkstatusbar.ui
 gtk/ui/gtkvolumebutton.ui
 gtk/updateiconcache.c
+modules/media/gtkffmediafile.c
+modules/media/gtkgstsink.c
 modules/printbackends/gtkprintbackendcloudprint.c
 modules/printbackends/gtkprintbackendcups.c
 modules/printbackends/gtkprintbackendfile.c
