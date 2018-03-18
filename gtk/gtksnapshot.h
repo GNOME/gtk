@@ -36,13 +36,20 @@
 
 G_BEGIN_DECLS
 
+typedef GdkSnapshot                    GtkSnapshot;
+typedef struct _GtkSnapshotClass       GtkSnapshotClass;
+
+#define GTK_TYPE_SNAPSHOT               (gtk_snapshot_get_type ())
+
+#define GTK_SNAPSHOT(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_SNAPSHOT, GtkSnapshot))
+#define GTK_IS_SNAPSHOT(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_SNAPSHOT))
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkSnapshot, g_object_unref)
+
+
 
 GDK_AVAILABLE_IN_ALL
 GType           gtk_snapshot_get_type                   (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
-GtkSnapshot *   gtk_snapshot_ref                        (GtkSnapshot            *snapshot);
-GDK_AVAILABLE_IN_ALL
-void            gtk_snapshot_unref                      (GtkSnapshot            *snapshot);
 
 GDK_AVAILABLE_IN_ALL
 GtkSnapshot *   gtk_snapshot_new                        (GskRenderer            *renderer,

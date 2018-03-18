@@ -24,16 +24,12 @@
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
 
-#include <cairo.h>
-#include <glib-object.h>
-
+#include <gdk/gdktypes.h>
 #include <gdk/gdkversionmacros.h>
 
 G_BEGIN_DECLS
 
-#define GDK_TYPE_PAINTABLE            (gdk_paintable_get_type ())
-
-typedef struct _GdkSnapshot         GdkSnapshot; /* Forward declaration */
+#define GDK_TYPE_PAINTABLE               (gdk_paintable_get_type ())
 
 GDK_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (GdkPaintable, gdk_paintable, GDK, PAINTABLE, GObject)

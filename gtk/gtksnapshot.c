@@ -51,42 +51,12 @@
  * use gtk_snapshot_new().
  */
 
-G_DEFINE_BOXED_TYPE (GtkSnapshot, gtk_snapshot, gtk_snapshot_ref, gtk_snapshot_unref)
+G_DEFINE_TYPE (GtkSnapshot, gtk_snapshot, GDK_TYPE_SNAPSHOT)
 
-/**
- * gtk_snapshot_ref:
- * @snapshot: a #GtkSnapshot
- *
- * Increase the reference count of @snapshot by 1.
- *
- * Returns: the @snapshot
- */
-GtkSnapshot *
-gtk_snapshot_ref (GtkSnapshot *snapshot)
+static void
+gtk_snapshot_dispose (GObject *object)
 {
-  g_assert (snapshot->ref_count > 0);
-
-  snapshot->ref_count += 1;
-
-  return snapshot;
-}
-
-/**
- * gtk_snapshot_unref:
- * @snapshot: a #GtkSnapshot
- *
- * Decrease the reference count of @snapshot by 1 and
- * free the object if the count drops to 0.
- */
-void
-gtk_snapshot_unref (GtkSnapshot *snapshot)
-{
-  g_assert (snapshot->ref_count > 0);
-
-  snapshot->ref_count -= 1;
-
-  if (snapshot->ref_count > 0)
-    return;
+  GtkSnapshot *snapshot = GTK_SNAPSHOT (object);
 
   if (snapshot->state_stack)
     gsk_render_node_unref (gtk_snapshot_to_node (snapshot));
@@ -94,7 +64,20 @@ gtk_snapshot_unref (GtkSnapshot *snapshot)
   g_assert (snapshot->state_stack == NULL);
   g_assert (snapshot->nodes == NULL);
 
-  g_free (snapshot);
+  G_OBJECT_CLASS (gtk_snapshot_parent_class)->dispose (object);
+}
+
+static void
+gtk_snapshot_class_init (GtkSnapshotClass *klass)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  gobject_class->dispose = gtk_snapshot_dispose;
+}
+
+static void
+gtk_snapshot_init (GtkSnapshot *self)
+{
 }
 
 static GskRenderNode *
@@ -205,8 +188,7 @@ gtk_snapshot_new (GskRenderer          *renderer,
   else
     str = NULL;
 
-  snapshot = g_new (GtkSnapshot, 1);
-  snapshot->ref_count = 1;
+  snapshot = g_object_new (GTK_TYPE_SNAPSHOT, NULL);
 
   snapshot->record_names = record_names;
   snapshot->renderer = renderer;
@@ -224,8 +206,8 @@ gtk_snapshot_new (GskRenderer          *renderer,
 }
 
 /**
- * gtk_snapshot_free_to_node:
- * @snapshot: a #GtkSnapshot
+ * gtk_snapshot_free_to_node: (skip)
+ * @snapshot: (transfer full): a #GtkSnapshot
  *
  * Returns the node that was constructed by @snapshot
  * and frees @snapshot.
@@ -238,7 +220,7 @@ gtk_snapshot_free_to_node (GtkSnapshot *snapshot)
   GskRenderNode *result;
 
   result = gtk_snapshot_to_node (snapshot);
-  gtk_snapshot_unref (snapshot);
+  g_object_unref (snapshot);
 
   return result;
 }

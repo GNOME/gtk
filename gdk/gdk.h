@@ -63,6 +63,7 @@
 #include <gdk/gdkrectangle.h>
 #include <gdk/gdkrgba.h>
 #include <gdk/gdkseat.h>
+#include <gdk/gdksnapshot.h>
 #include <gdk/gdktexture.h>
 #include <gdk/gdktypes.h>
 #include <gdk/gdkvulkancontext.h>

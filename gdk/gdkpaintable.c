@@ -21,6 +21,8 @@
 
 #include "gdkpaintable.h"
 
+#include "gdksnapshotprivate.h"
+
 /**
  * SECTION:paintable
  * @Title: GdkPaintable

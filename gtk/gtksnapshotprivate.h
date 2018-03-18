@@ -80,12 +80,22 @@ struct _GtkSnapshotState {
   } data;
 };
 
+/* This is a nasty little hack. We typedef GtkSnapshot to the fake object GdkSnapshot
+ * so that we don't need to typecast between them.
+ * After all, the GdkSnapshot only exist so poor language bindings don't trip. Hardcore
+ * C code can just blatantly ignore such layering violations with a typedef.
+ */
 struct _GdkSnapshot {
-  int ref_count;
+  GObject                parent_instance; /* it's really GdkSnapshot, but don't tell anyone! */
+
   gboolean               record_names;
   GskRenderer           *renderer;
   GArray                *state_stack;
   GPtrArray             *nodes;
+};
+
+struct _GtkSnapshotClass {
+  GObjectClass           parent_class; /* it's really GdkSnapshotClass, but don't tell anyone! */
 };
 
 G_END_DECLS
