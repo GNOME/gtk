@@ -86,6 +86,20 @@ typedef enum {
 #error "Unknown byte order for GDK_MEMORY_DEFAULT"
 #endif
 
+#define GDK_TYPE_MEMORY_TEXTURE (gdk_memory_texture_get_type ())
+
+#define GDK_MEMORY_TEXTURE(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_MEMORY_TEXTURE, GdkMemoryTexture))
+#define GDK_IS_MEMORY_TEXTURE(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GDK_TYPE_MEMORY_TEXTURE))
+
+typedef struct _GdkMemoryTexture        GdkMemoryTexture;
+typedef struct _GdkMemoryTextureClass   GdkMemoryTextureClass;
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkMemoryTexture, g_object_unref)
+
+
+GDK_AVAILABLE_IN_ALL
+GType                   gdk_memory_texture_get_type         (void) G_GNUC_CONST;
+
 GDK_AVAILABLE_IN_ALL
 GdkTexture *            gdk_memory_texture_new              (int                width,
                                                              int                height,

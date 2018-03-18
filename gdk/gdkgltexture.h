@@ -23,11 +23,23 @@
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
 
-#include <gdk/gdktypes.h>
 #include <gdk/gdkglcontext.h>
+#include <gdk/gdktexture.h>
 
 G_BEGIN_DECLS
 
+#define GDK_TYPE_GL_TEXTURE (gdk_gl_texture_get_type ())
+
+#define GDK_GL_TEXTURE(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_GL_TEXTURE, GdkGLTexture))
+#define GDK_IS_GL_TEXTURE(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GDK_TYPE_GL_TEXTURE))
+
+typedef struct _GdkGLTexture            GdkGLTexture;
+typedef struct _GdkGLTextureClass       GdkGLTextureClass;
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkGLTexture, g_object_unref)
+
+GDK_AVAILABLE_IN_ALL
+GType                   gdk_gl_texture_get_type                (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
 GdkTexture *            gdk_gl_texture_new                     (GdkGLContext    *context,
@@ -38,7 +50,7 @@ GdkTexture *            gdk_gl_texture_new                     (GdkGLContext    
                                                                 gpointer         data);
 
 GDK_AVAILABLE_IN_ALL
-void                    gdk_gl_texture_release                 (GdkTexture      *texture);
+void                    gdk_gl_texture_release                 (GdkGLTexture    *texture);
 
 
 G_END_DECLS

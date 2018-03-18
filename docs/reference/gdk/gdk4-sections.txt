@@ -751,6 +751,16 @@ gdk_texture_get_type
 GDK_TYPE_TEXTURE
 GDK_IS_TEXTURE
 GDK_TEXTURE
+GdkGLTextureClass
+gdk_gl_texture_get_type
+GDK_TYPE_GL_TEXTURE
+GDK_IS_GL_TEXTURE
+GDK_GL_TEXTURE
+GdkMemoryTextureClass
+gdk_memory_texture_get_type
+GDK_TYPE_MEMORY_TEXTURE
+GDK_IS_MEMORY_TEXTURE
+GDK_MEMORY_TEXTURE
 </SECTION>
 
 <SECTION>

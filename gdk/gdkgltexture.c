@@ -133,28 +133,26 @@ gdk_gl_texture_get_id (GdkGLTexture *self)
 
 /**
  * gdk_gl_texture_release:
- * @texture: a #GdkTexture wrapping a GL texture
+ * @self: a #GdkTexture wrapping a GL texture
  *
- * Releases the GL resources held by a #GdkTexture that
- * was created with gdk_texture_new_for_gl().
+ * Releases the GL resources held by a #GdkGLTexture that
+ * was created with gdk_gl_texture_new().
  *
  * The texture contents are still available via the
  * gdk_texture_download() function, after this function
  * has been called.
  */
 void
-gdk_gl_texture_release (GdkTexture *texture)
+gdk_gl_texture_release (GdkGLTexture *self)
 {
-  GdkGLTexture *self;
   GdkWindow *window;
+  GdkTexture *texture;
   cairo_t *cr;
 
-  g_return_if_fail (GDK_IS_GL_TEXTURE (texture));
-
-  self = GDK_GL_TEXTURE (texture);
-
+  g_return_if_fail (GDK_IS_GL_TEXTURE (self));
   g_return_if_fail (self->saved == NULL);
 
+  texture = GDK_TEXTURE (self);
   self->saved = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
                                             texture->width, texture->height);
 
@@ -178,7 +176,7 @@ gdk_gl_texture_release (GdkTexture *texture)
 }
 
 /**
- * gdk_gl_texture_new: (constructor)
+ * gdk_gl_texture_new:
  * @context: a #GdkGLContext
  * @id: the ID of a texture that was created with @context
  * @width: the nominal width of the texture

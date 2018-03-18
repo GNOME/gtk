@@ -31,10 +31,6 @@ G_BEGIN_DECLS
 
 #define GDK_MEMORY_CAIRO_FORMAT_ARGB32 GDK_MEMORY_DEFAULT
 
-#define GDK_TYPE_MEMORY_TEXTURE (gdk_memory_texture_get_type ())
-
-G_DECLARE_FINAL_TYPE (GdkMemoryTexture, gdk_memory_texture, GDK, MEMORY_TEXTURE, GdkTexture)
-
 GdkMemoryFormat         gdk_memory_texture_get_format       (GdkMemoryTexture  *self);
 const guchar *          gdk_memory_texture_get_data         (GdkMemoryTexture  *self);
 gsize                   gdk_memory_texture_get_stride       (GdkMemoryTexture  *self);
