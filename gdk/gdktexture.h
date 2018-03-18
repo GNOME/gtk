@@ -43,11 +43,6 @@ GDK_AVAILABLE_IN_ALL
 GType                   gdk_texture_get_type                   (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GdkTexture *            gdk_texture_new_for_data               (const guchar    *data,
-                                                                int              width,
-                                                                int              height,
-                                                                int              stride);
-GDK_AVAILABLE_IN_ALL
 GdkTexture *            gdk_texture_new_for_pixbuf             (GdkPixbuf       *pixbuf);
 GDK_AVAILABLE_IN_ALL
 GdkTexture *            gdk_texture_new_from_resource          (const char      *resource_path);

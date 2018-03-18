@@ -24,6 +24,8 @@
 #include "gskdebugprivate.h"
 #include "gskrendererprivate.h"
 #include "gskroundedrectprivate.h"
+
+#include "gdk/gdkmemorytextureprivate.h"
 #include "gdk/gdktextureprivate.h"
 
 static gboolean
@@ -729,6 +731,7 @@ gsk_texture_node_deserialize (GVariant  *variant,
   guint32 width, height;
   GVariant *pixel_variant;
   gsize n_pixels;
+  GBytes *bytes;
 
   if (!check_variant_type (variant, GSK_TEXTURE_NODE_VARIANT_TYPE, error))
     return NULL;
@@ -738,9 +741,23 @@ gsk_texture_node_deserialize (GVariant  *variant,
                  &width, &height, &pixel_variant);
 
   /* XXX: Make this work without copying the data */
-  texture = gdk_texture_new_for_data (g_variant_get_fixed_array (pixel_variant, &n_pixels, sizeof (guint32)),
-                                      width, height, width * 4);
-  g_variant_unref (pixel_variant);
+  bytes = g_bytes_new_with_free_func (g_variant_get_fixed_array (pixel_variant, &n_pixels, sizeof (guint32)),
+                                      width * height * sizeof (guint32),
+                                      (GDestroyNotify) g_variant_unref,
+                                      pixel_variant);
+  if (n_pixels != width * height)
+    {
+      g_set_error (error, GSK_SERIALIZATION_ERROR, GSK_SERIALIZATION_INVALID_DATA,
+                   "Expected %u pixels but got %"G_GSIZE_FORMAT" for %ux%u image",
+                   width * height, n_pixels, width, height);
+      g_bytes_unref (bytes);
+      return NULL;
+    }
+
+  texture = gdk_memory_texture_new (width, height,
+                                    GDK_MEMORY_CAIRO_FORMAT_ARGB32,
+                                    bytes,
+                                    width * 4);
 
   node = gsk_texture_node_new (texture, &GRAPHENE_RECT_INIT(bounds[0], bounds[1], bounds[2], bounds[3]));
 
