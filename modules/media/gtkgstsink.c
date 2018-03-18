@@ -25,9 +25,20 @@
 #include "gtkgstpaintableprivate.h"
 #include "gtkintl.h"
 
+#if GST_GL_HAVE_WINDOW_X11 && GST_GL_HAVE_PLATFORM_GLX && defined (GDK_WINDOWING_X11)
+#include <gdk/x11/gdkx.h>
+#include <gst/gl/x11/gstgldisplay_x11.h>
+#endif
+
+#if GST_GL_HAVE_WINDOW_WAYLAND && GST_GL_HAVE_PLATFORM_EGL && defined (GDK_WINDOWING_WAYLAND)
+#include <gdk/wayland/gdkwayland.h>
+#include <gst/gl/wayland/gstgldisplay_wayland.h>
+#endif
+
 enum {
   PROP_0,
   PROP_PAINTABLE,
+  PROP_GL_CONTEXT,
 
   N_PROPS,
 };
@@ -37,11 +48,14 @@ GST_DEBUG_CATEGORY (gtk_debug_gst_sink);
 
 #define FORMATS "{ BGRA, ARGB, RGBA, ABGR, RGB, BGR }"
 
+#define NOGL_CAPS GST_VIDEO_CAPS_MAKE (FORMATS)
+#define GL_CAPS GST_VIDEO_CAPS_MAKE_WITH_FEATURES (GST_CAPS_FEATURE_MEMORY_GL_MEMORY, "RGBA")
+
 static GstStaticPadTemplate gtk_gst_sink_template =
 GST_STATIC_PAD_TEMPLATE ("sink",
     GST_PAD_SINK,
     GST_PAD_ALWAYS,
-    GST_STATIC_CAPS (GST_VIDEO_CAPS_MAKE (FORMATS))
+    GST_STATIC_CAPS (GL_CAPS "; " NOGL_CAPS)
     );
 
 G_DEFINE_TYPE_WITH_CODE (GtkGstSink, gtk_gst_sink,
@@ -53,40 +67,157 @@ static GParamSpec *properties[N_PROPS] = { NULL, };
 
 
 static void
-gtk_gst_sink_get_times (GstBaseSink * bsink, GstBuffer * buf,
-    GstClockTime * start, GstClockTime * end)
+gtk_gst_sink_get_times (GstBaseSink  *bsink,
+                        GstBuffer    *buf,
+                        GstClockTime *start,
+                        GstClockTime *end)
 {
   GtkGstSink *gtk_sink;
 
   gtk_sink = GTK_GST_SINK (bsink);
 
-  if (GST_BUFFER_TIMESTAMP_IS_VALID (buf)) {
-    *start = GST_BUFFER_TIMESTAMP (buf);
-    if (GST_BUFFER_DURATION_IS_VALID (buf))
-      *end = *start + GST_BUFFER_DURATION (buf);
-    else {
-      if (GST_VIDEO_INFO_FPS_N (&gtk_sink->v_info) > 0) {
-        *end = *start +
-            gst_util_uint64_scale_int (GST_SECOND,
-            GST_VIDEO_INFO_FPS_D (&gtk_sink->v_info),
-            GST_VIDEO_INFO_FPS_N (&gtk_sink->v_info));
-      }
+  if (GST_BUFFER_TIMESTAMP_IS_VALID (buf))
+    {
+      *start = GST_BUFFER_TIMESTAMP (buf);
+      if (GST_BUFFER_DURATION_IS_VALID (buf))
+        {
+          *end = *start + GST_BUFFER_DURATION (buf);
+        }
+      else
+        {
+          if (GST_VIDEO_INFO_FPS_N (&gtk_sink->v_info) > 0)
+            *end = *start + gst_util_uint64_scale_int (GST_SECOND,
+                                                       GST_VIDEO_INFO_FPS_D (&gtk_sink->v_info),
+                                                       GST_VIDEO_INFO_FPS_N (&gtk_sink->v_info));
+        }
     }
-  }
+}
+
+static GstCaps *
+gtk_gst_sink_get_caps (GstBaseSink *bsink,
+                       GstCaps     *filter)
+{
+  GtkGstSink *self = GTK_GST_SINK (bsink);
+  GstCaps *tmp;
+  GstCaps *result;
+
+  if (self->gst_context)
+    {
+      tmp = gst_pad_get_pad_template_caps (GST_BASE_SINK_PAD (bsink));
+    }
+  else
+    {
+      tmp = gst_caps_from_string (NOGL_CAPS);
+    }
+  GST_DEBUG_OBJECT (self, "advertising own caps %" GST_PTR_FORMAT, tmp);
+
+  if (filter)
+    {
+      GST_DEBUG_OBJECT (self, "intersecting with filter caps %" GST_PTR_FORMAT, filter);
+
+      result = gst_caps_intersect_full (filter, tmp, GST_CAPS_INTERSECT_FIRST);
+      gst_caps_unref (tmp);
+    }
+  else
+    {
+      result = tmp;
+    }
+
+  GST_DEBUG_OBJECT (self, "returning caps: %" GST_PTR_FORMAT, result);
+
+  return result;
 }
 
 static gboolean
-gtk_gst_sink_set_caps (GstBaseSink * bsink, GstCaps * caps)
+gtk_gst_sink_set_caps (GstBaseSink *bsink,
+                       GstCaps     *caps)
 {
   GtkGstSink *self = GTK_GST_SINK (bsink);
 
-  GST_DEBUG ("set caps with %" GST_PTR_FORMAT, caps);
+  GST_DEBUG_OBJECT (self, "set caps with %" GST_PTR_FORMAT, caps);
 
   if (!gst_video_info_from_caps (&self->v_info, caps))
     return FALSE;
 
   return TRUE;
 }
+
+static gboolean
+gtk_gst_sink_query (GstBaseSink *bsink,
+                    GstQuery    *query)
+{
+  GtkGstSink *self = GTK_GST_SINK (bsink);
+
+  if (GST_QUERY_TYPE (query) == GST_QUERY_CONTEXT &&
+      self->gst_display != NULL &&
+      gst_gl_handle_context_query (GST_ELEMENT (self), query, self->gst_display, self->gst_context, self->gst_app_context))
+    return TRUE;
+      
+  return GST_BASE_SINK_CLASS (gtk_gst_sink_parent_class)->query (bsink, query);
+}
+
+static gboolean
+gtk_gst_sink_propose_allocation (GstBaseSink *bsink,
+                                 GstQuery    *query)
+{
+  GtkGstSink *self = GTK_GST_SINK (bsink);
+  GstBufferPool *pool = NULL;
+  GstStructure *config;
+  GstCaps *caps;
+  guint size;
+  gboolean need_pool;
+
+  if (!self->gst_context)
+    return FALSE;
+
+  gst_query_parse_allocation (query, &caps, &need_pool);
+
+  if (caps == NULL)
+    {
+      GST_DEBUG_OBJECT (bsink, "no caps specified");
+      return FALSE;
+    }
+
+  if (!gst_caps_features_contains (gst_caps_get_features (caps, 0), GST_CAPS_FEATURE_MEMORY_GL_MEMORY))
+    return FALSE;
+
+  if (need_pool)
+    {
+      GstVideoInfo info;
+
+      if (!gst_video_info_from_caps (&info, caps))
+        {
+          GST_DEBUG_OBJECT (self, "invalid caps specified");
+          return FALSE;
+        }
+
+      GST_DEBUG_OBJECT (self, "create new pool");
+      pool = gst_gl_buffer_pool_new (self->gst_context);
+
+      /* the normal size of a frame */
+      size = info.size;
+
+      config = gst_buffer_pool_get_config (pool);
+      gst_buffer_pool_config_set_params (config, caps, size, 0, 0);
+
+      if (!gst_buffer_pool_set_config (pool, config))
+        {
+          GST_DEBUG_OBJECT (bsink, "failed setting config");
+          gst_object_unref (pool);
+          return FALSE;
+        }
+
+      /* we need at least 2 buffer because we hold on to the last one */
+      gst_query_add_allocation_pool (query, pool, size, 2, 0);
+      gst_object_unref (pool);
+    }
+
+  /* we also support various metadata */
+  gst_query_add_allocation_meta (query, GST_VIDEO_META_API_TYPE, 0);
+
+  return TRUE;
+}
+
 
 static GdkMemoryFormat
 gtk_gst_memory_format_from_video (GstVideoFormat format)
@@ -117,21 +248,38 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink *self,
 {
   GstVideoFrame frame;
   GdkTexture *texture;
-  GBytes *bytes;
 
-  if (!gst_video_frame_map (&frame, &self->v_info, buffer, GST_MAP_READ))
-    return NULL;
-
-  bytes = g_bytes_new_with_free_func (frame.data[0],
-                                      frame.info.width * frame.info.stride[0],
-                                      (GDestroyNotify) gst_buffer_unref,
-                                      gst_buffer_ref (buffer));
-  texture = gdk_memory_texture_new (frame.info.width,
+  if (buffer->pool && GST_IS_GL_BUFFER_POOL (buffer->pool) &&
+      gst_video_frame_map (&frame, &self->v_info, buffer, GST_MAP_READ | GST_MAP_GL))
+    {
+      texture = gdk_gl_texture_new (self->gdk_context,
+                                    *(guint *) frame.data[0],
+                                    frame.info.width,
                                     frame.info.height,
-                                    gtk_gst_memory_format_from_video (GST_VIDEO_FRAME_FORMAT (&frame)),
-                                    bytes,
-                                    frame.info.stride[0]);
-  gst_video_frame_unmap (&frame);
+                                    (GDestroyNotify) gst_buffer_unref,
+                                    gst_buffer_ref (buffer));
+      gst_video_frame_unmap (&frame);
+    }
+  else if (gst_video_frame_map (&frame, &self->v_info, buffer, GST_MAP_READ))
+    {
+      GBytes *bytes;
+
+      bytes = g_bytes_new_with_free_func (frame.data[0],
+                                          frame.info.width * frame.info.stride[0],
+                                          (GDestroyNotify) gst_buffer_unref,
+                                          gst_buffer_ref (buffer));
+      texture = gdk_memory_texture_new (frame.info.width,
+                                        frame.info.height,
+                                        gtk_gst_memory_format_from_video (GST_VIDEO_FRAME_FORMAT (&frame)),
+                                        bytes,
+                                        frame.info.stride[0]);
+      gst_video_frame_unmap (&frame);
+    }
+  else
+    {
+      GST_ERROR_OBJECT (self, "Could not convert buffer to texture.");
+      texture = NULL;
+    }
 
   return texture;
 }
@@ -161,6 +309,98 @@ gtk_gst_sink_show_frame (GstVideoSink * vsink, GstBuffer * buf)
 }
 
 static void
+gtk_gst_sink_initialize_gl (GtkGstSink *self)
+{
+  GdkDisplay *display;
+  GError *error = NULL;
+
+  display = gdk_gl_context_get_display (self->gdk_context);
+
+  gdk_gl_context_make_current (self->gdk_context);
+
+#if GST_GL_HAVE_WINDOW_X11 && GST_GL_HAVE_PLATFORM_GLX && defined (GDK_WINDOWING_X11)
+  if (GDK_IS_X11_DISPLAY (display))
+    {
+      GstGLPlatform platform = GST_GL_PLATFORM_GLX;
+      GstGLAPI gl_api;
+      guintptr gl_handle;
+
+      GST_DEBUG_OBJECT (self, "got GLX on X11!");
+
+      gl_api = gst_gl_context_get_current_gl_api (platform, NULL, NULL);
+      gl_handle = gst_gl_context_get_current_gl_context (platform);
+      if (gl_handle)
+        {
+          self->gst_display = GST_GL_DISPLAY (gst_gl_display_x11_new_with_display (gdk_x11_display_get_xdisplay (display)));
+          self->gst_app_context = gst_gl_context_new_wrapped (self->gst_display, gl_handle, platform, gl_api);
+        }
+      else
+        {
+          GST_ERROR_OBJECT (self, "Failed to get handle from GdkGLContext, not using GLX");
+          return;
+        }
+    }
+  else
+#endif
+#if GST_GL_HAVE_WINDOW_WAYLAND && GST_GL_HAVE_PLATFORM_EGL && defined (GDK_WINDOWING_WAYLAND)
+  if (GDK_IS_WAYLAND_DISPLAY (display))
+    {
+      GstGLPlatform platform = GST_GL_PLATFORM_GLX;
+      GstGLAPI gl_api;
+      guintptr gl_handle;
+
+      GST_DEBUG_OBJECT (self, "got EGL on Wayland!");
+
+      platform = GST_GL_PLATFORM_EGL;
+      gl_api = gst_gl_context_get_current_gl_api (platform, NULL, NULL);
+      gl_handle = gst_gl_context_get_current_gl_context (platform);
+
+      if (gl_handle)
+        {
+          struct wl_display *wayland_display;
+
+          wayland_display = gdk_wayland_display_get_wl_display (display);
+          self->gst_display = GST_GL_DISPLAY (gst_gl_display_wayland_new_with_display (wayland_display));
+          self->gst_app_context = gst_gl_context_new_wrapped (self->gst_display, gl_handle, platform, gl_api);
+        }
+      else
+        {
+          GST_ERROR_OBJECT (self, "Failed to get handle from GdkGLContext, not using Wayland EGL");
+          return;
+        }
+    }
+  else
+#endif
+    {
+      GST_INFO_OBJECT (self, "Unsupported GDK display %s for GL", G_OBJECT_TYPE_NAME (display));
+      return;
+    }
+
+  g_assert (self->gst_app_context != NULL);
+
+  gst_gl_context_activate (self->gst_app_context, TRUE);
+  if (!gst_gl_context_fill_info (self->gst_app_context, &error))
+    {
+      GST_ERROR_OBJECT (self, "failed to retrieve GDK context info: %s", error->message);
+      g_clear_error (&error);
+      g_clear_object (&self->gst_app_context);
+      g_clear_object (&self->gst_display);
+      return;
+    } else {
+      gst_gl_context_activate (self->gst_app_context, FALSE);
+    }
+
+  if (!gst_gl_display_create_context (self->gst_display, self->gst_app_context, &self->gst_context, &error))
+    {
+      GST_ERROR_OBJECT (self, "Couldn't create GL context: %s", error->message);
+      g_error_free (error);
+      g_clear_object (&self->gst_app_context);
+      g_clear_object (&self->gst_display);
+      return;
+    }
+}
+
+static void
 gtk_gst_sink_set_property (GObject      *object,
                            guint         prop_id,
                            const GValue *value,
@@ -175,6 +415,12 @@ gtk_gst_sink_set_property (GObject      *object,
       self->paintable = g_value_dup_object (value);
       if (self->paintable == NULL)
         self->paintable = GTK_GST_PAINTABLE (gtk_gst_paintable_new ());
+      break;
+
+    case PROP_GL_CONTEXT:
+      self->gdk_context = g_value_dup_object (value);
+      if (self->gdk_context != NULL)
+        gtk_gst_sink_initialize_gl (self);
       break;
 
     default:
@@ -208,6 +454,9 @@ gtk_gst_sink_dispose (GObject *object)
 {
   GtkGstSink *self = GTK_GST_SINK (object);
 
+  g_clear_object (&self->gst_app_context);
+  g_clear_object (&self->gst_display);
+  g_clear_object (&self->gdk_context);
   g_clear_object (&self->paintable);
 
   G_OBJECT_CLASS (gtk_gst_sink_parent_class)->dispose (object);
@@ -227,6 +476,9 @@ gtk_gst_sink_class_init (GtkGstSinkClass * klass)
 
   gstbasesink_class->set_caps = gtk_gst_sink_set_caps;
   gstbasesink_class->get_times = gtk_gst_sink_get_times;
+  gstbasesink_class->query = gtk_gst_sink_query;
+  gstbasesink_class->propose_allocation = gtk_gst_sink_propose_allocation;
+  gstbasesink_class->get_caps = gtk_gst_sink_get_caps;
 
   gstvideosink_class->show_frame = gtk_gst_sink_show_frame;
 
@@ -241,6 +493,18 @@ gtk_gst_sink_class_init (GtkGstSinkClass * klass)
                          P_("Paintable providing the picture"),
                          GTK_TYPE_GST_PAINTABLE,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkGstSink:gl-context:
+   *
+   * The #GdkGLContext to use for GL rendering.
+   */
+  properties[PROP_GL_CONTEXT] =
+    g_param_spec_object ("gl-context",
+                         P_("gl-context"),
+                         P_("GL context to use for rendering"),
+                         GDK_TYPE_GL_CONTEXT,
+                         G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 

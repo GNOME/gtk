@@ -614,6 +614,8 @@ endif
 gstreamer_enabled = get_option('gstreamer')
 if gstreamer_enabled
   gstplayer_dep = dependency('gstreamer-player-1.0', version: '>= 1.12.3', required: true)
+  gstgl_dep = dependency('gstreamer-gl-1.0', version: '>= 1.12.3', required: true)
+  gstreamer_deps = [gstplayer_dep, gstgl_dep]
   cdata.set('HAVE_GSTREAMER', 1)
   media_backends += ['gstreamer']
 endif

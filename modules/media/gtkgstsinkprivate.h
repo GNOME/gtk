@@ -24,6 +24,8 @@
 #include "gtkgstpaintableprivate.h"
 
 #include <gst/gst.h>
+#define GST_USE_UNSTABLE_API
+#include <gst/gl/gl.h>
 #include <gst/video/gstvideosink.h>
 #include <gst/video/video.h>
 
@@ -47,6 +49,11 @@ struct _GtkGstSink
 
   GstVideoInfo         v_info;
   GtkGstPaintable *    paintable;
+
+  GdkGLContext *       gdk_context;
+  GstGLDisplay *       gst_display;
+  GstGLContext *       gst_app_context;
+  GstGLContext *       gst_context;
 };
 
 struct _GtkGstSinkClass

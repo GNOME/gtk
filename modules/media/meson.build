@@ -20,7 +20,7 @@ if gstreamer_enabled
                 c_args: [
                   '-DGTK_COMPILATION'
                 ],
-                dependencies: [ libgtk_dep, gstplayer_dep ],
+                dependencies: [ libgtk_dep, gstreamer_deps ],
                 install_dir: media_install_dir,
                 install : true)
 endif

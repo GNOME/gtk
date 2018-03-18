@@ -29,6 +29,8 @@ struct _GtkGstPaintable
 {
   GObject parent_instance;
 
+  GdkGLContext *context;
+
   GdkPaintable *image;
 };
 
@@ -109,10 +111,14 @@ gtk_gst_paintable_video_renderer_create_video_sink (GstPlayerVideoRenderer *rend
                                                     GstPlayer              *player)
 {
   GtkGstPaintable *self = GTK_GST_PAINTABLE (renderer);
+  GstElement *element;
 
-  return g_object_new (GTK_TYPE_GST_SINK,
-                       "paintable", self,
-                       NULL);
+  element =  g_object_new (GTK_TYPE_GST_SINK,
+                           "paintable", self,
+                           "gl-context", self->context,
+                           NULL);
+
+  return element;
 }
 
 static void
@@ -154,6 +160,47 @@ GdkPaintable *
 gtk_gst_paintable_new (void)
 {
   return g_object_new (GTK_TYPE_GST_PAINTABLE, NULL);
+}
+
+void
+gtk_gst_paintable_realize (GtkGstPaintable *self,
+                           GdkWindow       *window)
+{
+  GError *error = NULL;
+
+  if (self->context)
+    return;
+
+  self->context = gdk_window_create_gl_context (window, &error);
+  if (self->context == NULL)
+    {
+      GST_INFO ("failed to create GDK GL context: %s", error->message);
+      g_error_free (error);
+      return;
+    }
+
+  if (!gdk_gl_context_realize (self->context, &error))
+    {
+      GST_INFO ("failed to realize GDK GL context: %s", error->message);
+      g_clear_object (&self->context);
+      g_error_free (error);
+      return;
+    }
+}
+
+void
+gtk_gst_paintable_unrealize (GtkGstPaintable *self,
+                             GdkWindow       *window)
+{
+  /* XXX: We could be smarter here and:
+   * - track how often we were realized with that window
+   * - track alternate windows
+   */
+  if (self->context == NULL)
+    return;
+
+  if (gdk_gl_context_get_window (self->context) == window)
+    g_clear_object (&self->context);
 }
 
 static void
