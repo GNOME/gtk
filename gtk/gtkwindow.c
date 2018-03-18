@@ -73,6 +73,7 @@
 #include "inspector/init.h"
 #include "inspector/window.h"
 
+#include "gdk/gdktextureprivate.h"
 #include "gdk/gdk-private.h"
 
 #include <cairo-gobject.h>
@@ -4600,10 +4601,7 @@ icon_from_list (GList *list,
   cairo_destroy (cr);
   cairo_surface_destroy (source);
 
-  texture = gdk_texture_new_for_data (cairo_image_surface_get_data (target),
-                                      cairo_image_surface_get_width (target),
-                                      cairo_image_surface_get_height (target),
-                                      cairo_image_surface_get_stride (target));
+  texture = gdk_texture_new_for_surface (target);
   cairo_surface_destroy (target);
 
   return texture;

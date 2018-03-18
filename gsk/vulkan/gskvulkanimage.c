@@ -6,6 +6,8 @@
 #include "gskvulkanmemoryprivate.h"
 #include "gskvulkanpipelineprivate.h"
 
+#include "gdk/gdkmemorytextureprivate.h"
+
 #include <string.h>
 
 struct _GskVulkanUploader
@@ -633,6 +635,7 @@ gsk_vulkan_image_download (GskVulkanImage    *self,
 {
   GskVulkanBuffer *buffer;
   GdkTexture *texture;
+  GBytes *bytes;
   guchar *mem;
 
   gsk_vulkan_uploader_add_image_barrier (uploader,
@@ -671,7 +674,11 @@ gsk_vulkan_image_download (GskVulkanImage    *self,
   GSK_VK_CHECK (vkQueueWaitIdle, gdk_vulkan_context_get_queue (self->vulkan));
 
   mem = gsk_vulkan_buffer_map (buffer);
-  texture = gdk_texture_new_for_data (mem, self->width, self->height, self->width * 4);
+  bytes = g_bytes_new (mem, self->width * self->height * 4);
+  texture = gdk_memory_texture_new (self->width, self->height,
+                                    GDK_MEMORY_CAIRO_FORMAT_ARGB32,
+                                    bytes,
+                                    self->width * 4);
   gsk_vulkan_buffer_unmap (buffer);
   gsk_vulkan_buffer_free (buffer);
 

@@ -267,48 +267,6 @@ gdk_texture_init (GdkTexture *self)
 }
 
 /**
- * gdk_texture_new_for_data:
- * @data: (array): the pixel data
- * @width: the number of pixels in each row
- * @height: the number of rows
- * @stride: the distance from the beginning of one row to the next, in bytes
- *
- * Creates a new texture object holding the given data.
- * The data is assumed to be in CAIRO_FORMAT_ARGB32 format.
- *
- * Returns: a new #GdkTexture
- */
-GdkTexture *
-gdk_texture_new_for_data (const guchar *data,
-                          int           width,
-                          int           height,
-                          int           stride)
-{
-  GdkTexture *texture;
-  cairo_surface_t *original, *copy;
-  cairo_t *cr;
-
-  g_return_val_if_fail (width > 0, NULL);
-  g_return_val_if_fail (height > 0, NULL);
-
-  original = cairo_image_surface_create_for_data ((guchar *) data, CAIRO_FORMAT_ARGB32, width, height, stride);
-  copy = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
-
-  cr = cairo_create (copy);
-  cairo_set_source_surface (cr, original, 0, 0);
-  cairo_paint (cr);
-  cairo_destroy (cr);
-
-  texture = gdk_texture_new_for_surface (copy);
-
-  cairo_surface_destroy (copy);
-  cairo_surface_finish (original);
-  cairo_surface_destroy (original);
-
-  return texture;
-}
-
-/**
  * gdk_texture_new_for_surface:
  * @surface: a cairo image surface
  *
