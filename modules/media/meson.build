@@ -49,6 +49,7 @@ endif
 
 if media_backends.contains('gstreamer')
   gstplayer_dep = dependency('gstreamer-player-1.0', version: '>= 1.12.3', required: true)
+  gstgl_dep = dependency('gstreamer-gl-1.0', version: '>= 1.12.3', required: true)
   cdata.set('HAVE_GSTREAMER', 1)
 
   shared_module('media-gstreamer',
@@ -56,7 +57,7 @@ if media_backends.contains('gstreamer')
                 'gtkgstpaintable.c',
                 'gtkgstsink.c',
                 c_args: extra_c_args,
-                dependencies: [ libgtk_dep, gstplayer_dep ],
+                dependencies: [ libgtk_dep, gstplayer_dep, gstgl_dep ],
                 install_dir: media_install_dir,
                 install : true)
 endif
