@@ -3274,6 +3274,9 @@ bad things might happen.</property>
           <object class="GtkLabel">
             <property name="margin">20</property>
             <property name="label" translatable="yes">To free the princess, you have to slay the dragon.</property>
+            <accessibility>
+              <role type="static"/>
+            </accessibility>
           </object>
         </child>
       </object>
@@ -3551,6 +3554,9 @@ bad things might happen.</property>
     <child>
       <object class="GtkLabel" id="notebook_info_label">
         <property name="label">No updates at this time</property>
+        <accessibility>
+          <role type="static"/>
+        </accessibility>
       </object>
     </child>
   </object>

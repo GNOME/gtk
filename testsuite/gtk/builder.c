@@ -1520,6 +1520,20 @@ test_widget (void)
     "    </child>"
     "  </object>"
     "</interface>";
+  const gchar *buffer4 =
+    "<interface>"
+    "  <object class=\"GtkWindow\" id=\"window1\">"
+    "    <child>"
+    "      <object class=\"GtkLabel\" id=\"label1\">"
+    "         <property name=\"label\">Thelabel</property>"
+    "         <property name=\"can_focus\">False</property>"
+    "         <accessibility>"
+    "            <role type=\"static\"/>"
+    "         </accessibility>"
+    "      </object>"
+    "    </child>"
+    "  </object>"
+   "</interface>";
   GtkBuilder *builder;
   GObject *window1, *button1, *label1;
   AtkObject *accessible;
@@ -1564,6 +1578,14 @@ test_widget (void)
   g_free (name);
   
   gtk_widget_destroy (GTK_WIDGET (window1));
+  g_object_unref (builder);
+
+  builder = builder_new_from_string (buffer4, -1, NULL);
+  label1 = gtk_builder_get_object (builder, "label1");
+
+  accessible = gtk_widget_get_accessible (GTK_WIDGET (label1));
+  g_assert (atk_object_get_role (accessible) == ATK_ROLE_STATIC);
+
   g_object_unref (builder);
 }
 
