@@ -125,6 +125,14 @@ object_tree_widget_get_parent (GObject *object)
   return G_OBJECT (gtk_widget_get_parent (GTK_WIDGET (object)));
 }
 
+static GObject *
+object_tree_menu_get_parent (GObject *object)
+{
+  GtkWidget *w = gtk_menu_get_attach_widget (GTK_MENU (object));
+
+  return w ? G_OBJECT (w) : NULL;
+}
+
 static gboolean
 object_tree_widget_get_sensitive (GObject *object)
 {
@@ -438,6 +446,12 @@ static const ObjectTreeClassFuncs object_tree_class_funcs[] = {
     gtk_menu_item_get_type,
     object_tree_widget_get_parent,
     object_tree_menu_item_forall,
+    object_tree_widget_get_sensitive
+  },
+  {
+    gtk_menu_get_type,
+    object_tree_menu_get_parent,
+    object_tree_widget_forall,
     object_tree_widget_get_sensitive
   },
   {
