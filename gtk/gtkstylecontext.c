@@ -170,7 +170,11 @@ gtk_style_context_real_changed (GtkStyleContext *context)
   GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
 
   if (GTK_IS_CSS_WIDGET_NODE (priv->cssnode))
-    _gtk_widget_style_context_invalidated (gtk_css_widget_node_get_widget (GTK_CSS_WIDGET_NODE (priv->cssnode)));
+    {
+      GtkWidget *widget = gtk_css_widget_node_get_widget (GTK_CSS_WIDGET_NODE (priv->cssnode));
+      if (widget != NULL)
+        _gtk_widget_style_context_invalidated (widget);
+    }
 }
 
 static void
