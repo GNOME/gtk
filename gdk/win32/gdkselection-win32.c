@@ -2356,7 +2356,8 @@ _gdk_win32_selection_property_change (GdkWin32Selection *win32_sel,
           open_clipboard_timeout (NULL);
         }
     }
-  else if (property == _gdk_win32_selection_atom (GDK_WIN32_ATOM_INDEX_OLE2_DND) &&
+  else if ((property == _gdk_win32_selection_atom (GDK_WIN32_ATOM_INDEX_OLE2_DND) ||
+            property == _gdk_win32_selection_atom (GDK_WIN32_ATOM_INDEX_LOCAL_DND_SELECTION)) &&
            mode == GDK_PROP_MODE_REPLACE &&
            win32_sel->property_change_target_atom == _gdk_win32_selection_atom (GDK_WIN32_ATOM_INDEX_DELETE))
     {

@@ -186,7 +186,8 @@ _gdk_win32_window_change_property (GdkWindow         *window,
 #endif
 
   if (property == _gdk_win32_selection_atom (GDK_WIN32_ATOM_INDEX_GDK_SELECTION) ||
-      property == _gdk_win32_selection_atom (GDK_WIN32_ATOM_INDEX_OLE2_DND))
+      property == _gdk_win32_selection_atom (GDK_WIN32_ATOM_INDEX_OLE2_DND) ||
+      property == _gdk_win32_selection_atom (GDK_WIN32_ATOM_INDEX_LOCAL_DND_SELECTION))
     {
       _gdk_win32_selection_property_change (win32_sel,
                                             window,
