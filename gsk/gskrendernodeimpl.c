@@ -702,7 +702,7 @@ gsk_texture_node_serialize (GskRenderNode *node)
   gsize stride;
 
   stride = 4 * self->texture->width;
-  data = g_malloc (sizeof (guchar) * stride * self->texture->width);
+  data = g_malloc (sizeof (guchar) * stride * self->texture->height);
   gdk_texture_download (self->texture, data, stride);
 
   result = g_variant_new ("(dddduu@au)",
