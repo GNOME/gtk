@@ -1172,12 +1172,15 @@ toolbar { //FIXME: why is all this being ignored?
   }
 }
 
-searchbar {
+searchbar > revealer > box {
   @extend toolbar;
   border-width: 0 0 1px;
   border-color: $borders_color;
   border-style: none none solid none;
-  padding: 3px;
+
+  // workaround: undo the GtkContainer::border-width and use CSS padding instead
+  margin: -6px;
+  padding: 9px;
 }
 
 %inset-bar {

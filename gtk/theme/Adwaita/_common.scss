@@ -1404,7 +1404,7 @@ toolbar {
   border-radius: 0  0 5px 5px;
 }
 
-searchbar,
+searchbar > revealer > box,
 .location-bar {
   @extend %toolbar;
 
@@ -1412,6 +1412,12 @@ searchbar,
 
   border-width: 0 0 1px;
   padding: 3px;
+}
+
+searchbar > revealer > box {
+  // workaround: undo the GtkContainer::border-width and use CSS padding instead
+  margin: -6px;
+  padding: 6px;
 }
 
 %darkbar {

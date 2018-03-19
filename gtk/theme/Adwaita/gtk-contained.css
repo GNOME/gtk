@@ -561,7 +561,7 @@ combobox arrow { -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); min-heig
 combobox:drop(active) { box-shadow: none; }
 
 /************ Toolbars * */
-toolbar, .inline-toolbar, searchbar, .location-bar { -GtkWidget-window-dragging: true; padding: 4px; background-color: #e8e8e7; }
+toolbar, .inline-toolbar, searchbar > revealer > box, .location-bar { -GtkWidget-window-dragging: true; padding: 4px; background-color: #e8e8e7; }
 
 toolbar { padding: 4px 3px 3px 4px; }
 
@@ -579,11 +579,13 @@ toolbar:not(.inline-toolbar):not(.osd) switch, toolbar:not(.inline-toolbar):not(
 
 .inline-toolbar { padding: 3px; border-width: 0 1px 1px; border-radius: 0  0 5px 5px; }
 
-searchbar, .location-bar { border-width: 0 0 1px; padding: 3px; }
+searchbar > revealer > box, .location-bar { border-width: 0 0 1px; padding: 3px; }
 
-.inline-toolbar, searchbar, .location-bar { border-style: solid; border-color: #b6b6b3; background-color: #d9d9d7; }
+searchbar > revealer > box { margin: -6px; padding: 6px; }
 
-.inline-toolbar:backdrop, searchbar:backdrop, .location-bar:backdrop { border-color: #c0c0bd; background-color: #dadad8; box-shadow: none; transition: 200ms ease-out; }
+.inline-toolbar, searchbar > revealer > box, .location-bar { border-style: solid; border-color: #b6b6b3; background-color: #d9d9d7; }
+
+.inline-toolbar:backdrop, searchbar > revealer > box:backdrop, .location-bar:backdrop { border-color: #c0c0bd; background-color: #dadad8; box-shadow: none; transition: 200ms ease-out; }
 
 /*************** Header bars * */
 .titlebar:not(headerbar), headerbar { padding: 0 6px; min-height: 46px; border-width: 0 0 1px; border-style: solid; border-color: #91918c; border-radius: 0; background: #f4f4f4 linear-gradient(to top, #d4d4d2, #efefef 2px, #f4f4f4 3px); box-shadow: inset 0 1px rgba(255, 255, 255, 0.8); }
