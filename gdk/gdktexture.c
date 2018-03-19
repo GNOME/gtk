@@ -151,9 +151,16 @@ static cairo_surface_t *
 gdk_texture_real_download_surface (GdkTexture *texture)
 {
   cairo_surface_t *surface;
+  cairo_status_t surface_status;
 
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
                                         texture->width, texture->height);
+
+  surface_status = cairo_surface_status (surface);
+  if (surface_status != CAIRO_STATUS_SUCCESS)
+    g_warning ("%s: surface error: %s", __FUNCTION__,
+               cairo_status_to_string (surface_status));
+
   gdk_texture_download (texture,
                         cairo_image_surface_get_data (surface),
                         cairo_image_surface_get_stride (surface));
