@@ -697,12 +697,13 @@ static GVariant *
 gsk_texture_node_serialize (GskRenderNode *node)
 {
   GskTextureNode *self = (GskTextureNode *) node;
-  cairo_surface_t *surface;
+  guchar *data;
   GVariant *result;
+  gsize stride;
 
-  surface = gdk_texture_download_surface (self->texture);
-
-  g_assert (cairo_image_surface_get_width (surface) * 4 == cairo_image_surface_get_stride (surface));
+  stride = 4 * self->texture->width;
+  data = g_malloc (sizeof (guchar) * stride * self->texture->width);
+  gdk_texture_download (self->texture, data, stride);
 
   result = g_variant_new ("(dddduu@au)",
                           (double) node->bounds.origin.x, (double) node->bounds.origin.y,
@@ -710,12 +711,12 @@ gsk_texture_node_serialize (GskRenderNode *node)
                           (guint32) gdk_texture_get_width (self->texture),
                           (guint32) gdk_texture_get_height (self->texture),
                           g_variant_new_fixed_array (G_VARIANT_TYPE ("u"),
-                                                     cairo_image_surface_get_data (surface),
+                                                     data,
                                                      gdk_texture_get_width (self->texture)
                                                      * gdk_texture_get_height (self->texture),
                                                      sizeof (guint32)));
 
-  cairo_surface_destroy (surface);
+  g_free (data);
 
   return result;
 }
