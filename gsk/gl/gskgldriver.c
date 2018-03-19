@@ -654,3 +654,14 @@ gsk_gl_driver_init_texture_with_surface (GskGLDriver     *self,
   if (t->min_filter != GL_NEAREST)
     glGenerateMipmap (GL_TEXTURE_2D);
 }
+
+gboolean
+gsk_gl_driver_texture_needs_tiling (GskGLDriver *self,
+                                    GdkTexture  *texture)
+{
+  int max = gsk_gl_driver_get_max_texture_size (self);
+
+  g_assert (self->max_texture_size > -1);
+
+  return texture->width > max || texture->height > max;
+}

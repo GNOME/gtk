@@ -555,33 +555,41 @@ render_texture_node (GskGLRenderer       *self,
                      GskRenderNode       *node,
                      RenderOpBuilder     *builder)
 {
-  const float min_x = builder->dx + node->bounds.origin.x;
-  const float min_y = builder->dy + node->bounds.origin.y;
-  const float max_x = min_x + node->bounds.size.width;
-  const float max_y = min_y + node->bounds.size.height;
   GdkTexture *texture = gsk_texture_node_get_texture (node);
-  int gl_min_filter = GL_NEAREST, gl_mag_filter = GL_NEAREST;
-  int texture_id;
 
-  get_gl_scaling_filters (node, &gl_min_filter, &gl_mag_filter);
+  if (gsk_gl_driver_texture_needs_tiling (self->gl_driver, texture))
+    {
 
-  texture_id = gsk_gl_driver_get_texture_for_texture (self->gl_driver,
-                                                      texture,
-                                                      gl_min_filter,
-                                                      gl_mag_filter);
-  ops_set_program (builder, &self->blit_program);
-  ops_set_texture (builder, texture_id);
+    }
+  else
+    {
+      const float min_x = builder->dx + node->bounds.origin.x;
+      const float min_y = builder->dy + node->bounds.origin.y;
+      const float max_x = min_x + node->bounds.size.width;
+      const float max_y = min_y + node->bounds.size.height;
+      int gl_min_filter = GL_NEAREST, gl_mag_filter = GL_NEAREST;
+      int texture_id;
+
+      get_gl_scaling_filters (node, &gl_min_filter, &gl_mag_filter);
+
+      texture_id = gsk_gl_driver_get_texture_for_texture (self->gl_driver,
+                                                          texture,
+                                                          gl_min_filter,
+                                                          gl_mag_filter);
+      ops_set_program (builder, &self->blit_program);
+      ops_set_texture (builder, texture_id);
 
 
-  ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-    { { min_x, min_y }, { 0, 0 }, },
-    { { min_x, max_y }, { 0, 1 }, },
-    { { max_x, min_y }, { 1, 0 }, },
+      ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
+        { { min_x, min_y }, { 0, 0 }, },
+        { { min_x, max_y }, { 0, 1 }, },
+        { { max_x, min_y }, { 1, 0 }, },
 
-    { { max_x, max_y }, { 1, 1 }, },
-    { { min_x, max_y }, { 0, 1 }, },
-    { { max_x, min_y }, { 1, 0 }, },
-  });
+        { { max_x, max_y }, { 1, 1 }, },
+        { { min_x, max_y }, { 0, 1 }, },
+        { { max_x, min_y }, { 1, 0 }, },
+      });
+    }
 }
 
 static inline void

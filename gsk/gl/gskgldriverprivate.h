@@ -33,6 +33,8 @@ int             gsk_gl_driver_create_permanent_texture  (GskGLDriver     *driver
 int             gsk_gl_driver_create_texture            (GskGLDriver     *driver,
                                                          float            width,
                                                          float            height);
+gboolean        gsk_gl_driver_texture_needs_tiling      (GskGLDriver     *driver,
+                                                         GdkTexture      *texture);
 int             gsk_gl_driver_create_render_target      (GskGLDriver     *driver,
                                                          int              texture_id,
                                                          gboolean         add_depth_buffer,
