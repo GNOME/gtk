@@ -45,6 +45,9 @@
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
+            <accessibility>
+              <relation type="label-for" target="treeview1"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -81,6 +84,9 @@
                 </child>
               </object>
             </child>
+            <accessibility>
+              <relation type="labelled-by" target="label1"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -129,6 +135,9 @@
                 </child>
               </object>
             </child>
+            <accessibility>
+              <relation type="labelled-by" target="label2"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -142,6 +151,9 @@
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
+            <accessibility>
+              <relation type="label-for" target="treeview2"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -155,6 +167,9 @@
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
+            <accessibility>
+              <relation type="label-for" target="treeview3"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -185,6 +200,9 @@
                 </child>
               </object>
             </child>
+            <accessibility>
+              <relation type="labelled-by" target="label3"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left-attach">0</property>

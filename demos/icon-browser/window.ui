@@ -133,6 +133,9 @@
               <object class="GtkImage" id="image1">
                 <property name="halign">center</property>
                 <property name="valign">end</property>
+                <accessibility>
+                  <relation type="labelled-by" target="label1"/>
+                </accessibility>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -143,6 +146,9 @@
               <object class="GtkImage" id="image2">
                 <property name="halign">center</property>
                 <property name="valign">end</property>
+                <accessibility>
+                  <relation type="labelled-by" target="label2"/>
+                </accessibility>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -153,6 +159,9 @@
               <object class="GtkImage" id="image3">
                 <property name="halign">center</property>
                 <property name="valign">end</property>
+                <accessibility>
+                  <relation type="labelled-by" target="label3"/>
+                </accessibility>
               </object>
               <packing>
                 <property name="left-attach">2</property>
@@ -163,6 +172,9 @@
               <object class="GtkImage" id="image4">
                 <property name="halign">center</property>
                 <property name="valign">end</property>
+                <accessibility>
+                  <relation type="labelled-by" target="label4"/>
+                </accessibility>
               </object>
               <packing>
                 <property name="left-attach">3</property>
@@ -173,6 +185,9 @@
               <object class="GtkImage" id="image5">
                 <property name="halign">center</property>
                 <property name="valign">end</property>
+                <accessibility>
+                  <relation type="labelled-by" target="label5"/>
+                </accessibility>
               </object>
               <packing>
                 <property name="left-attach">4</property>
@@ -183,6 +198,9 @@
               <object class="GtkImage" id="image6">
                 <property name="halign">center</property>
                 <property name="valign">end</property>
+                <accessibility>
+                  <relation type="labelled-by" target="label6"/>
+                </accessibility>
               </object>
               <packing>
                 <property name="left-attach">5</property>
@@ -197,6 +215,9 @@
                 <style>
                   <class name="dim-label"/>
                 </style>
+                <accessibility>
+                  <relation type="label-for" target="image1"/>
+                </accessibility>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -211,6 +232,9 @@
                 <style>
                   <class name="dim-label"/>
                 </style>
+                <accessibility>
+                  <relation type="label-for" target="image2"/>
+                </accessibility>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -225,6 +249,9 @@
                 <style>
                   <class name="dim-label"/>
                 </style>
+                <accessibility>
+                  <relation type="label-for" target="image3"/>
+                </accessibility>
               </object>
               <packing>
                 <property name="left-attach">2</property>
@@ -239,6 +266,9 @@
                 <style>
                   <class name="dim-label"/>
                 </style>
+                <accessibility>
+                  <relation type="label-for" target="image4"/>
+                </accessibility>
               </object>
               <packing>
                 <property name="left-attach">3</property>
@@ -253,6 +283,9 @@
                 <style>
                   <class name="dim-label"/>
                 </style>
+                <accessibility>
+                  <relation type="label-for" target="image5"/>
+                </accessibility>
               </object>
               <packing>
                 <property name="left-attach">4</property>
@@ -267,6 +300,9 @@
                 <style>
                   <class name="dim-label"/>
                 </style>
+                <accessibility>
+                  <relation type="label-for" target="image6"/>
+                </accessibility>
               </object>
               <packing>
                 <property name="left-attach">5</property>

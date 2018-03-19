@@ -3464,9 +3464,12 @@ bad things might happen.</property>
         <property name="row-spacing">10</property>
         <property name="column-spacing">10</property>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="title_label">
             <property name="label">Title:</property>
             <property name="xalign">1</property>
+            <accessibility>
+              <relation type="label-for" target="open_popover_entry"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -3474,10 +3477,13 @@ bad things might happen.</property>
           </packing>
         </child>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="description_label">
             <property name="valign">start</property>
             <property name="label">Description:</property>
             <property name="xalign">1</property>
+            <accessibility>
+              <relation type="label-for" target="open_popover_textview"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -3493,7 +3499,11 @@ bad things might happen.</property>
             <property name="min-content-width">100</property>
             <property name="max-content-width">100</property>
             <child>
-              <object class="GtkTextView" id="open_popover_textview"/>
+              <object class="GtkTextView" id="open_popover_textview">
+                <accessibility>
+                  <relation type="labelled-by" target="description_label"/>
+                </accessibility>
+              </object>
             </child>
           </object>
           <packing>
@@ -3504,6 +3514,9 @@ bad things might happen.</property>
         <child>
           <object class="GtkEntry" id="open_popover_entry">
             <property name="activates-default">1</property>
+            <accessibility>
+              <relation type="labelled-by" target="title_label"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left-attach">1</property>
