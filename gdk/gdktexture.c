@@ -466,7 +466,7 @@ gdk_texture_download_area (GdkTexture         *texture,
   return GDK_TEXTURE_GET_CLASS (texture)->download (texture, area, data, stride);
 }
 
-/*
+/**
  * gdk_texture_download:
  * @texture: a #GdkTexture
  * @data: (array): pointer to enough memory to be filled with the
@@ -491,7 +491,7 @@ gdk_texture_download_area (GdkTexture         *texture,
  *                       cairo_image_surface_get_stride (surface));
  * cairo_surface_mark_dirty (surface);
  * ]|
- **/
+ */
 void
 gdk_texture_download (GdkTexture *texture,
                       guchar     *data,
