@@ -31,9 +31,9 @@ def main(argv):
     cairo_min_ver = '1.14.0'
     gdk_pixbuf_min_ver = '2.30.0'
     gdk_win32_sys_libs = '-lgdi32 -limm32 -lshell32 -lole32 -lwinmm -ldwmapi'
+    cairo_libs = '-lcairo-gobject -lcairo '
     glib_min_ver = '2.45.8'
 
-    cairo_backends = 'cairo-win32'
     gdk_backends = 'win32'
     gio_package = 'gio-2.0 >= ' + glib_min_ver
     broadway_extra_libs = ''
@@ -43,20 +43,17 @@ def main(argv):
         # On Visual Studio, we link to zlib1.lib
         broadway_extra_libs = ' -lzlib1'
         gdk_backends += ' broadway'
-        cairo_backends += ' cairo'
 
     pkg_replace_items = {'@GTK_API_VERSION@': '3.0',
                          '@GDK_BACKENDS@': gdk_backends}
 
-    pkg_required_packages = 'gdk-pixbuf-2.0 >= ' + gdk_pixbuf_min_ver + ' ' + \
-                            'cairo >= ' + cairo_min_ver + ' ' + \
-                            'cairo-gobject >= ' + cairo_min_ver
+    pkg_required_packages = 'gdk-pixbuf-2.0 >= ' + gdk_pixbuf_min_ver
 
     gdk_pc_replace_items = {'@GDK_PACKAGES@': gio_package + ' ' + \
                                               'pangowin32 pangocairo' + ' ' + \
                                               pkg_required_packages,
-                            '@GDK_PRIVATE_PACKAGES@': gio_package + ' ' + cairo_backends,
-                            '@GDK_EXTRA_LIBS@': gdk_win32_sys_libs + broadway_extra_libs,
+                            '@GDK_PRIVATE_PACKAGES@': gio_package,
+                            '@GDK_EXTRA_LIBS@': cairo_libs + gdk_win32_sys_libs + broadway_extra_libs,
                             '@GDK_EXTRA_CFLAGS@': '',
                             'gdk-3': 'gdk-3.0'}
 
