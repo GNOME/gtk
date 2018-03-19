@@ -1178,7 +1178,7 @@ searchbar > revealer > box {
   border-color: $borders_color;
   border-style: none none solid none;
 
-  // workaround: undo the GtkContainer::border-width and use CSS padding instead
+  // workaround: undo the GtkContainer:border-width and use CSS padding instead
   margin: -6px;
   padding: 9px;
 }
