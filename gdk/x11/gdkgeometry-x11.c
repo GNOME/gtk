@@ -30,7 +30,7 @@ typedef struct _GdkSurfaceParentPos GdkSurfaceParentPos;
 
 struct _GdkSurfaceQueueItem
 {
-  GdkSurface *window;
+  GdkSurface *surface;
   gulong serial;
   cairo_region_t *antiexpose_area;
 };
@@ -78,10 +78,10 @@ queue_delete_link (GQueue *queue,
 static void
 queue_item_free (GdkSurfaceQueueItem *item)
 {
-  if (item->window)
+  if (item->surface)
     {
-      g_object_remove_weak_pointer (G_OBJECT (item->window),
-				    (gpointer *)&(item->window));
+      g_object_remove_weak_pointer (G_OBJECT (item->surface),
+				    (gpointer *)&(item->surface));
     }
   
   cairo_region_destroy (item->antiexpose_area);
@@ -102,10 +102,10 @@ _gdk_x11_display_free_translate_queue (GdkDisplay *display)
 }
 
 static void
-gdk_surface_queue (GdkSurface          *window,
+gdk_surface_queue (GdkSurface          *surface,
 		  GdkSurfaceQueueItem *new_item)
 {
-  GdkX11Display *display_x11 = GDK_X11_DISPLAY (GDK_SURFACE_DISPLAY (window));
+  GdkX11Display *display_x11 = GDK_X11_DISPLAY (GDK_SURFACE_DISPLAY (surface));
   
   if (!display_x11->translate_queue)
     display_x11->translate_queue = g_queue_new ();
@@ -116,7 +116,7 @@ gdk_surface_queue (GdkSurface          *window,
    */
   if (display_x11->translate_queue->length >= 64)
     {
-      gulong serial = find_current_serial (GDK_SURFACE_XDISPLAY (window));
+      gulong serial = find_current_serial (GDK_SURFACE_XDISPLAY (surface));
       GList *tmp_list = display_x11->translate_queue->head;
       
       while (tmp_list)
@@ -157,32 +157,32 @@ gdk_surface_queue (GdkSurface          *window,
 	}
     }
 
-  new_item->window = window;
-  new_item->serial = NextRequest (GDK_SURFACE_XDISPLAY (window));
+  new_item->surface = surface;
+  new_item->serial = NextRequest (GDK_SURFACE_XDISPLAY (surface));
   
-  g_object_add_weak_pointer (G_OBJECT (window),
-			     (gpointer *)&(new_item->window));
+  g_object_add_weak_pointer (G_OBJECT (surface),
+			     (gpointer *)&(new_item->surface));
 
   g_queue_push_tail (display_x11->translate_queue, new_item);
 }
 
 void
-_gdk_x11_surface_queue_antiexpose (GdkSurface *window,
+_gdk_x11_surface_queue_antiexpose (GdkSurface *surface,
 				  cairo_region_t *area)
 {
   GdkSurfaceQueueItem *item = g_new (GdkSurfaceQueueItem, 1);
   item->antiexpose_area = cairo_region_reference (area);
 
-  gdk_surface_queue (window, item);
+  gdk_surface_queue (surface, item);
 }
 
 void
-_gdk_x11_surface_process_expose (GdkSurface    *window,
+_gdk_x11_surface_process_expose (GdkSurface    *surface,
                                 gulong        serial,
                                 GdkRectangle *area)
 {
   cairo_region_t *invalidate_region = cairo_region_create_rectangle (area);
-  GdkX11Display *display_x11 = GDK_X11_DISPLAY (GDK_SURFACE_DISPLAY (window));
+  GdkX11Display *display_x11 = GDK_X11_DISPLAY (GDK_SURFACE_DISPLAY (surface));
 
   if (display_x11->translate_queue)
     {
@@ -196,7 +196,7 @@ _gdk_x11_surface_process_expose (GdkSurface    *window,
           /* an overflow-safe (serial < item->serial) */
           if (serial - item->serial > (gulong) G_MAXLONG)
             {
-              if (item->window == window)
+              if (item->surface == surface)
 		cairo_region_subtract (invalidate_region, item->antiexpose_area);
             }
           else
@@ -209,7 +209,7 @@ _gdk_x11_surface_process_expose (GdkSurface    *window,
     }
 
   if (!cairo_region_is_empty (invalidate_region))
-    _gdk_surface_invalidate_for_expose (window, invalidate_region);
+    _gdk_surface_invalidate_for_expose (surface, invalidate_region);
 
   cairo_region_destroy (invalidate_region);
 }

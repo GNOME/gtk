@@ -67,8 +67,8 @@
  * // where we are drawing are [-RADIUS, RADIUS], [-RADIUS, RADIUS]
  * // We first center, then change the scale
  *
- * width = gdk_surface_get_width (window);
- * height = gdk_surface_get_height (window);
+ * width = gdk_surface_get_width (surface);
+ * height = gdk_surface_get_height (surface);
  * radius = MIN (width, height) / 2.;
  *
  * cairo_translate (cr,

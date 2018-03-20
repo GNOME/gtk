@@ -131,19 +131,19 @@ _gdk_x11_convert_grab_status (gint status)
 
 /*
  * _gdk_x11_surface_grab_check_unmap:
- * @window: a #GdkSurface
+ * @surface: a #GdkSurface
  * @serial: serial from Unmap event (or from NextRequest(display)
  *   if the unmap is being done by this client.)
  *
  * Checks to see if an unmap request or event causes the current
- * grab window to become not viewable, and if so, clear the
+ * grab surface to become not viewable, and if so, clear the
  * the pointer we keep to it.
  **/
 void
-_gdk_x11_surface_grab_check_unmap (GdkSurface *window,
+_gdk_x11_surface_grab_check_unmap (GdkSurface *surface,
                                   gulong     serial)
 {
-  GdkDisplay *display = gdk_surface_get_display (window);
+  GdkDisplay *display = gdk_surface_get_display (surface);
   GdkSeat *seat;
   GList *devices, *d;
 
@@ -153,24 +153,24 @@ _gdk_x11_surface_grab_check_unmap (GdkSurface *window,
   devices = g_list_prepend (devices, gdk_seat_get_keyboard (seat));
   devices = g_list_prepend (devices, gdk_seat_get_pointer (seat));
 
-  /* End all grabs on the newly hidden window */
+  /* End all grabs on the newly hidden surface */
   for (d = devices; d; d = d->next)
-    _gdk_display_end_device_grab (display, d->data, serial, window, TRUE);
+    _gdk_display_end_device_grab (display, d->data, serial, surface, TRUE);
 
   g_list_free (devices);
 }
 
 /*
  * _gdk_x11_surface_grab_check_destroy:
- * @window: a #GdkSurface
+ * @surface: a #GdkSurface
  * 
- * Checks to see if window is the current grab window, and if
- * so, clear the current grab window.
+ * Checks to see if surface is the current grab surface, and if
+ * so, clear the current grab surface.
  **/
 void
-_gdk_x11_surface_grab_check_destroy (GdkSurface *window)
+_gdk_x11_surface_grab_check_destroy (GdkSurface *surface)
 {
-  GdkDisplay *display = gdk_surface_get_display (window);
+  GdkDisplay *display = gdk_surface_get_display (surface);
   GdkSeat *seat;
   GdkDeviceGrabInfo *grab;
   GList *devices, *d;
@@ -183,10 +183,10 @@ _gdk_x11_surface_grab_check_destroy (GdkSurface *window)
 
   for (d = devices; d; d = d->next)
     {
-      /* Make sure there is no lasting grab in this native window */
+      /* Make sure there is no lasting grab in this native surface */
       grab = _gdk_display_get_last_device_grab (display, d->data);
 
-      if (grab && grab->native_surface == window)
+      if (grab && grab->native_surface == surface)
         {
           /* We don't know the actual serial to end, but it
              doesn't really matter as this only happens

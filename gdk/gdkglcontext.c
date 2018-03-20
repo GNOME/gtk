@@ -28,7 +28,7 @@
  *
  * #GdkGLContexts are created for a #GdkSurface using
  * gdk_surface_create_gl_context(), and the context will match the
- * the characteristics of the window.
+ * the characteristics of the surface.
  *
  * A #GdkGLContext is not tied to any particular normal framebuffer.
  * For instance, it cannot draw to the #GdkSurface back buffer. The GDK
@@ -265,12 +265,12 @@ gdk_gl_context_real_realize (GdkGLContext  *self,
 static cairo_region_t *
 gdk_gl_context_real_get_damage (GdkGLContext *context)
 {
-  GdkSurface *window = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
+  GdkSurface *surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
 
   return cairo_region_create_rectangle (&(GdkRectangle) {
                                             0, 0,
-                                            gdk_surface_get_width (window),
-                                            gdk_surface_get_height (window)
+                                            gdk_surface_get_width (surface),
+                                            gdk_surface_get_height (surface)
                                         });
 }
 
@@ -279,7 +279,7 @@ gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
                                  cairo_region_t *region)
 {
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
-  GdkSurface *window;
+  GdkSurface *surface;
   GdkGLContext *shared;
   cairo_region_t *damage;
   int ww, wh;
@@ -295,9 +295,9 @@ gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
   cairo_region_union (region, damage);
   cairo_region_destroy (damage);
 
-  window = gdk_draw_context_get_surface (draw_context);
-  ww = gdk_surface_get_width (window) * gdk_surface_get_scale_factor (window);
-  wh = gdk_surface_get_height (window) * gdk_surface_get_scale_factor (window);
+  surface = gdk_draw_context_get_surface (draw_context);
+  ww = gdk_surface_get_width (surface) * gdk_surface_get_scale_factor (surface);
+  wh = gdk_surface_get_height (surface) * gdk_surface_get_scale_factor (surface);
 
   gdk_gl_context_make_current (context);
 

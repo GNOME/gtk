@@ -74,9 +74,9 @@ typedef enum
  * @GDK_MODE_SCREEN: the device is enabled. The device’s coordinate space
  *                   maps to the entire screen.
  * @GDK_MODE_SURFACE: the device is enabled. The device’s coordinate space
- *                   is mapped to a single window. The manner in which this window
+ *                   is mapped to a single surface. The manner in which this surface
  *                   is chosen is undefined, but it will typically be the same
- *                   way in which the focus window for key events is determined.
+ *                   way in which the focus surface for key events is determined.
  *
  * An enumeration that describes the mode of an input device.
  */
@@ -163,7 +163,7 @@ void           gdk_device_set_axis_use  (GdkDevice         *device,
 
 GDK_AVAILABLE_IN_ALL
 void     gdk_device_get_state    (GdkDevice         *device,
-                                  GdkSurface         *window,
+                                  GdkSurface         *surface,
                                   gdouble           *axes,
                                   GdkModifierType   *mask);
 GDK_AVAILABLE_IN_ALL
@@ -188,7 +188,7 @@ GdkSurface *
                                   gdouble           *win_y);
 GDK_AVAILABLE_IN_ALL
 gboolean gdk_device_get_history  (GdkDevice         *device,
-                                  GdkSurface         *window,
+                                  GdkSurface         *surface,
                                   guint32            start,
                                   guint32            stop,
                                   GdkTimeCoord    ***events,
@@ -225,7 +225,7 @@ GdkDeviceType gdk_device_get_device_type (GdkDevice *device);
 
 GDK_DEPRECATED_FOR(gdk_seat_grab)
 GdkGrabStatus gdk_device_grab        (GdkDevice        *device,
-                                      GdkSurface        *window,
+                                      GdkSurface        *surface,
                                       GdkGrabOwnership  grab_ownership,
                                       gboolean          owner_events,
                                       GdkEventMask      event_mask,

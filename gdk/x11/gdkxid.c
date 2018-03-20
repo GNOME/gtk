@@ -71,7 +71,7 @@ _gdk_x11_display_remove_window (GdkDisplay *display,
                                 XID         xid)
 {
   GdkX11Display *display_x11;
-  GdkSurface *window;
+  GdkSurface *surface;
 
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
@@ -80,9 +80,9 @@ _gdk_x11_display_remove_window (GdkDisplay *display,
   if (!display_x11->xid_ht)
     return;
 
-  window = g_hash_table_lookup (display_x11->xid_ht, &xid);
-  if (window && gdk_surface_get_parent (window) == NULL)
-    display_x11->toplevels = g_list_remove (display_x11->toplevels, window);
+  surface = g_hash_table_lookup (display_x11->xid_ht, &xid);
+  if (surface && gdk_surface_get_parent (surface) == NULL)
+    display_x11->toplevels = g_list_remove (display_x11->toplevels, surface);
 
   g_hash_table_remove (display_x11->xid_ht, &xid);
 }

@@ -190,7 +190,7 @@ gdk_drag_context_get_source_surface (GdkDragContext *context)
  * gdk_drag_context_get_dest_surface:
  * @context: a #GdkDragContext
  *
- * Returns the destination window for the DND operation.
+ * Returns the destination surface for the DND operation.
  *
  * Returns: (transfer none): a #GdkSurface
  **/
@@ -785,14 +785,14 @@ gdk_drop_read_finish (GdkDragContext *context,
  * gdk_drag_context_get_drag_surface:
  * @context: a #GdkDragContext
  *
- * Returns the window on which the drag icon should be rendered
- * during the drag operation. Note that the window may not be
+ * Returns the surface on which the drag icon should be rendered
+ * during the drag operation. Note that the surface may not be
  * available until the drag operation has begun. GDK will move
- * the window in accordance with the ongoing drag operation.
- * The window is owned by @context and will be destroyed when
+ * the surface in accordance with the ongoing drag operation.
+ * The surface is owned by @context and will be destroyed when
  * the drag operation is over.
  *
- * Returns: (nullable) (transfer none): the drag window, or %NULL
+ * Returns: (nullable) (transfer none): the drag surface, or %NULL
  */
 GdkSurface *
 gdk_drag_context_get_drag_surface (GdkDragContext *context)
@@ -808,12 +808,12 @@ gdk_drag_context_get_drag_surface (GdkDragContext *context)
 /**
  * gdk_drag_context_set_hotspot:
  * @context: a #GdkDragContext
- * @hot_x: x coordinate of the drag window hotspot
- * @hot_y: y coordinate of the drag window hotspot
+ * @hot_x: x coordinate of the drag surface hotspot
+ * @hot_y: y coordinate of the drag surface hotspot
  *
- * Sets the position of the drag window that will be kept
+ * Sets the position of the drag surface that will be kept
  * under the cursor hotspot. Initially, the hotspot is at the
- * top left corner of the drag window.
+ * top left corner of the drag surface.
  */
 void
 gdk_drag_context_set_hotspot (GdkDragContext *context,

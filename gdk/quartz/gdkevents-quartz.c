@@ -150,8 +150,8 @@ fixup_event (GdkEvent *event)
     g_object_ref (event->any.window);
   if (((event->any.type == GDK_ENTER_NOTIFY) ||
        (event->any.type == GDK_LEAVE_NOTIFY)) &&
-      (event->crossing.subwindow != NULL))
-    g_object_ref (event->crossing.subwindow);
+      (event->crossing.child_window != NULL))
+    g_object_ref (event->crossing.child_window);
   event->any.send_event = FALSE;
 }
 
@@ -866,7 +866,7 @@ fill_crossing_event (GdkSurface       *toplevel,
 
   event->any.type = event_type;
   event->crossing.window = toplevel;
-  event->crossing.subwindow = NULL;
+  event->crossing.child_window = NULL;
   event->crossing.time = get_time_from_ns_event (nsevent);
   event->crossing.x = x;
   event->crossing.y = y;
@@ -1684,8 +1684,8 @@ gdk_event_translate (GdkEvent *event,
 	g_object_ref (event->any.window);
       if (((event->any.type == GDK_ENTER_NOTIFY) ||
 	   (event->any.type == GDK_LEAVE_NOTIFY)) &&
-	  (event->crossing.subwindow != NULL))
-	g_object_ref (event->crossing.subwindow);
+	  (event->crossing.child_window != NULL))
+	g_object_ref (event->crossing.child_window);
     }
   else
     {

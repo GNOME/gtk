@@ -602,7 +602,7 @@ gtk_menu_shell_event (GtkWidget *widget,
 
   if (gdk_event_get_event_type (event) == GDK_GRAB_BROKEN)
     {
-      gdk_event_get_grab_window (event, &window);
+      gdk_event_get_grab_surface (event, &window);
 
       if (priv->have_xgrab && window == NULL)
         {

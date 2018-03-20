@@ -740,10 +740,10 @@ gtk_gesture_handle_event (GtkEventController *controller,
     }
   else if (event_type == GDK_GRAB_BROKEN)
     {
-      GdkSurface *window = NULL;
+      GdkSurface *surface = NULL;
 
-      gdk_event_get_grab_window (event, &window);
-      if (!window || !gesture_within_window (gesture, window))
+      gdk_event_get_grab_surface (event, &surface);
+      if (!surface || !gesture_within_window (gesture, surface))
         _gtk_gesture_cancel_all (gesture);
 
       return FALSE;

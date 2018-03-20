@@ -29,11 +29,11 @@
 static cairo_user_data_key_t direct_key;
 
 void
-gdk_cairo_surface_mark_as_direct (cairo_surface_t *surface,
-                                  GdkSurface *window)
+gdk_cairo_surface_mark_as_direct (cairo_surface_t *cairo_surface,
+                                  GdkSurface *surface)
 {
-  cairo_surface_set_user_data (surface, &direct_key,
-                               g_object_ref (window),  g_object_unref);
+  cairo_surface_set_user_data (cairo_surface, &direct_key,
+                               g_object_ref (surface),  g_object_unref);
 }
 
 static const char *
@@ -219,10 +219,10 @@ gdk_gl_texture_quads (GdkGLContext *paint_context,
 {
   GdkGLContextPaintData *paint_data  = gdk_gl_context_get_paint_data (paint_context);
   GdkGLContextProgram *program;
-  GdkSurface *window = gdk_gl_context_get_surface (paint_context);
-  int surface_scale = gdk_surface_get_scale_factor (window);
-  float w = gdk_surface_get_width (window) * surface_scale;
-  float h = gdk_surface_get_height (window) * surface_scale;
+  GdkSurface *surface = gdk_gl_context_get_surface (paint_context);
+  int surface_scale = gdk_surface_get_scale_factor (surface);
+  float w = gdk_surface_get_width (surface) * surface_scale;
+  float h = gdk_surface_get_height (surface) * surface_scale;
   int i;
   float *vertex_buffer_data;
 
@@ -299,7 +299,7 @@ gdk_gl_texture_quads (GdkGLContext *paint_context,
 /**
  * gdk_cairo_draw_from_gl:
  * @cr: a cairo context
- * @window: The window we're rendering for (not necessarily into)
+ * @surface: The surface we're rendering for (not necessarily into)
  * @source: The GL ID of the source buffer
  * @source_type: The type of the @source
  * @buffer_scale: The scale-factor that the @source buffer is allocated for
@@ -314,9 +314,9 @@ gdk_gl_texture_quads (GdkGLContext *paint_context,
  * The top left corner of the rectangle specified by @x, @y, @width and @height
  * will be drawn at the current (0,0) position of the cairo_t.
  *
- * This will work for *all* cairo_t, as long as @window is realized, but the
+ * This will work for *all* cairo_t, as long as @surface is realized, but the
  * fallback implementation that reads back the pixels from the buffer may be
- * used in the general case. In the case of direct drawing to a window with
+ * used in the general case. In the case of direct drawing to a surface with
  * no special effects applied to @cr it will however use a more efficient
  * approach.
  *
@@ -327,7 +327,7 @@ gdk_gl_texture_quads (GdkGLContext *paint_context,
  */
 void
 gdk_cairo_draw_from_gl (cairo_t              *cr,
-                        GdkSurface            *window,
+                        GdkSurface            *surface,
                         int                   source,
                         int                   source_type,
                         int                   buffer_scale,
@@ -345,7 +345,7 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
   GdkGLContextPaintData *paint_data;
   int major, minor, version;
 
-  paint_context = gdk_surface_get_paint_gl_context (window, NULL);
+  paint_context = gdk_surface_get_paint_gl_context (surface, NULL);
   if (paint_context == NULL)
     {
       g_warning ("gdk_cairo_draw_gl_render_buffer failed - no paint context");
@@ -449,7 +449,7 @@ out:
 
 /* This is always called with the paint context current */
 void
-gdk_gl_texture_from_surface (cairo_surface_t *surface,
+gdk_gl_texture_from_surface (cairo_surface_t *cairo_surface,
 			     cairo_region_t  *region)
 {
   GdkGLContext *paint_context;
@@ -458,8 +458,8 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
   double device_x_offset, device_y_offset;
   cairo_rectangle_int_t rect, e;
   int n_rects, i;
-  GdkSurface *window;
-  int unscaled_window_height;
+  GdkSurface *surface;
+  int unscaled_surface_height;
   unsigned int texture_id;
   int surface_scale;
   double sx, sy;
@@ -476,19 +476,19 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
   if (paint_context &&
       GDK_DISPLAY_DEBUG_CHECK (display, GL_SOFTWARE) == 0 &&
       GDK_GL_CONTEXT_GET_CLASS (paint_context)->texture_from_surface &&
-      GDK_GL_CONTEXT_GET_CLASS (paint_context)->texture_from_surface (paint_context, surface, region))
+      GDK_GL_CONTEXT_GET_CLASS (paint_context)->texture_from_surface (paint_context, cairo_surface, region))
     return;
 
   /* Software fallback */
   use_texture_rectangle = gdk_gl_context_use_texture_rectangle (paint_context);
 
-  window = gdk_gl_context_get_surface (paint_context);
-  surface_scale = gdk_surface_get_scale_factor (window);
-  gdk_surface_get_unscaled_size (window, NULL, &unscaled_window_height);
+  surface = gdk_gl_context_get_surface (paint_context);
+  surface_scale = gdk_surface_get_scale_factor (surface);
+  gdk_surface_get_unscaled_size (surface, NULL, &unscaled_surface_height);
 
   sx = sy = 1;
-  cairo_surface_get_device_scale (surface, &sx, &sy);
-  cairo_surface_get_device_offset (surface, &device_x_offset, &device_y_offset);
+  cairo_surface_get_device_scale (cairo_surface, &sx, &sy);
+  cairo_surface_get_device_offset (cairo_surface, &device_x_offset, &device_y_offset);
 
   glGenTextures (1, &texture_id);
   if (use_texture_rectangle)
@@ -506,7 +506,7 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
 
   n_rects = cairo_region_num_rectangles (region);
 
-#define FLIP_Y(_y) (unscaled_window_height - (_y))
+#define FLIP_Y(_y) (unscaled_surface_height - (_y))
 
   for (i = 0; i < n_rects; i++)
     {
@@ -522,7 +522,7 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
       e.y += (int)device_y_offset;
       e.width *= sx;
       e.height *= sy;
-      image = cairo_surface_map_to_image (surface, &e);
+      image = cairo_surface_map_to_image (cairo_surface, &e);
 
       gdk_gl_context_upload_texture (paint_context, 
                                      cairo_image_surface_get_data (image),
@@ -531,7 +531,7 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
                                      cairo_image_surface_get_stride (image),
                                      target);
 
-      cairo_surface_unmap_image (surface, image);
+      cairo_surface_unmap_image (cairo_surface, image);
 
       if (use_texture_rectangle)
         {

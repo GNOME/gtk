@@ -996,7 +996,7 @@ gdk_wayland_display_init (GdkWaylandDisplay *display)
 }
 
 GList *
-gdk_wayland_display_get_toplevel_windows (GdkDisplay *display)
+gdk_wayland_display_get_toplevel_surfaces (GdkDisplay *display)
 {
   return GDK_WAYLAND_DISPLAY (display)->toplevels;
 }
@@ -1847,7 +1847,7 @@ transform_to_string (int transform)
 static void
 update_scale (GdkDisplay *display)
 {
-  g_list_foreach (gdk_wayland_display_get_toplevel_windows (display),
+  g_list_foreach (gdk_wayland_display_get_toplevel_surfaces (display),
                   (GFunc)gdk_wayland_surface_update_scale,
                   NULL);
 }

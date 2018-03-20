@@ -54,28 +54,28 @@ GDK_AVAILABLE_IN_ALL
 GType    gdk_x11_surface_get_type          (void);
 
 GDK_AVAILABLE_IN_ALL
-Window   gdk_x11_surface_get_xid           (GdkSurface   *window);
+Window   gdk_x11_surface_get_xid           (GdkSurface   *surface);
 GDK_AVAILABLE_IN_ALL
-void     gdk_x11_surface_set_user_time     (GdkSurface   *window,
+void     gdk_x11_surface_set_user_time     (GdkSurface   *surface,
                                            guint32      timestamp);
 GDK_AVAILABLE_IN_ALL
-void     gdk_x11_surface_set_utf8_property    (GdkSurface *window,
+void     gdk_x11_surface_set_utf8_property    (GdkSurface *surface,
 					      const gchar *name,
 					      const gchar *value);
 GDK_AVAILABLE_IN_ALL
-void     gdk_x11_surface_set_theme_variant (GdkSurface   *window,
+void     gdk_x11_surface_set_theme_variant (GdkSurface   *surface,
                                            const char  *variant);
 GDK_AVAILABLE_IN_ALL
-void     gdk_x11_surface_move_to_current_desktop (GdkSurface   *window);
+void     gdk_x11_surface_move_to_current_desktop (GdkSurface   *surface);
 
 GDK_AVAILABLE_IN_ALL
-guint32  gdk_x11_surface_get_desktop             (GdkSurface   *window);
+guint32  gdk_x11_surface_get_desktop             (GdkSurface   *surface);
 GDK_AVAILABLE_IN_ALL
-void     gdk_x11_surface_move_to_desktop         (GdkSurface   *window,
+void     gdk_x11_surface_move_to_desktop         (GdkSurface   *surface,
                                                  guint32      desktop);
 
 GDK_AVAILABLE_IN_ALL
-void     gdk_x11_surface_set_frame_sync_enabled (GdkSurface *window,
+void     gdk_x11_surface_set_frame_sync_enabled (GdkSurface *surface,
                                                 gboolean   frame_sync_enabled);
 
 /**
@@ -99,7 +99,7 @@ void     gdk_x11_surface_set_frame_sync_enabled (GdkSurface *window,
 #define GDK_SURFACE_XID(win)           (gdk_x11_surface_get_xid (win))
 
 GDK_AVAILABLE_IN_ALL
-guint32       gdk_x11_get_server_time  (GdkSurface       *window);
+guint32       gdk_x11_get_server_time  (GdkSurface       *surface);
 
 GDK_AVAILABLE_IN_ALL
 GdkSurface  *gdk_x11_surface_foreign_new_for_display (GdkDisplay *display,

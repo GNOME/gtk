@@ -2708,7 +2708,7 @@ _gtk_widget_emulate_press (GtkWidget      *widget,
   else if (event->any.type == GDK_MOTION_NOTIFY)
     {
       press = gdk_event_new (GDK_BUTTON_PRESS);
-      press->any.window = g_object_ref (event->any.window);
+      press->any.surface = g_object_ref (event->any.surface);
       press->button.time = event->motion.time;
       press->button.x = event->motion.x;
       press->button.y = event->motion.y;
@@ -5787,7 +5787,7 @@ event_surface_is_still_viewable (const GdkEvent *event)
     case GDK_ENTER_NOTIFY:
     case GDK_PROXIMITY_IN:
     case GDK_SCROLL:
-      return event->any.window && gdk_surface_is_viewable (event->any.window);
+      return event->any.surface && gdk_surface_is_viewable (event->any.surface);
 
 #if 0
     /* The following events are the second half of paired events;
@@ -9391,7 +9391,7 @@ _gtk_widget_list_devices (GtkWidget *widget)
 static void
 synth_crossing (GtkWidget       *widget,
                 GdkEventType     type,
-                GdkSurface       *window,
+                GdkSurface       *surface,
                 GdkDevice       *device,
                 GdkCrossingMode  mode,
                 GdkNotifyType    detail)
@@ -9400,14 +9400,14 @@ synth_crossing (GtkWidget       *widget,
 
   event = gdk_event_new (type);
 
-  event->any.window = g_object_ref (window);
+  event->any.surface = g_object_ref (surface);
   event->any.send_event = TRUE;
-  event->crossing.subwindow = g_object_ref (window);
+  event->crossing.child_surface = g_object_ref (surface);
   event->crossing.time = GDK_CURRENT_TIME;
   gdk_device_get_position_double (device,
                                   &event->crossing.x_root,
                                   &event->crossing.y_root);
-  gdk_surface_get_device_position_double (window,
+  gdk_surface_get_device_position_double (surface,
                                          device,
                                          &event->crossing.x,
                                          &event->crossing.y,

@@ -243,7 +243,7 @@ gtk_entry_icon_accessible_do_action (AtkAction *action,
   gtk_entry_get_icon_area (gtk_entry, icon->pos, &icon_area);
 
   event = gdk_event_new (GDK_BUTTON_PRESS);
-  event->any.window = g_object_ref (gtk_widget_get_window (widget));
+  event->any.surface = g_object_ref (gtk_widget_get_window (widget));
   event->button.button = 1;
   event->any.send_event = TRUE;
   event->button.time = GDK_CURRENT_TIME;

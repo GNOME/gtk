@@ -47,8 +47,8 @@ typedef struct _GdkWaylandDragContextClass GdkWaylandDragContextClass;
 struct _GdkWaylandDragContext
 {
   GdkDragContext context;
-  GdkSurface *dnd_window;
-  struct wl_surface *dnd_surface;
+  GdkSurface *dnd_surface;
+  struct wl_surface *dnd_wl_surface;
   struct wl_data_source *data_source;
   GdkDragAction selected_action;
   uint32_t serial;
@@ -74,7 +74,7 @@ gdk_wayland_drag_context_finalize (GObject *object)
 {
   GdkWaylandDragContext *wayland_context = GDK_WAYLAND_DRAG_CONTEXT (object);
   GdkDragContext *context = GDK_DRAG_CONTEXT (object);
-  GdkSurface *dnd_window;
+  GdkSurface *dnd_surface;
 
   contexts = g_list_remove (contexts, context);
 
@@ -86,12 +86,12 @@ gdk_wayland_drag_context_finalize (GObject *object)
   if (wayland_context->data_source)
     wl_data_source_destroy (wayland_context->data_source);
 
-  dnd_window = wayland_context->dnd_window;
+  dnd_surface = wayland_context->dnd_surface;
 
   G_OBJECT_CLASS (gdk_wayland_drag_context_parent_class)->finalize (object);
 
-  if (dnd_window)
-    gdk_surface_destroy (dnd_window);
+  if (dnd_surface)
+    gdk_surface_destroy (dnd_surface);
 }
 
 void
@@ -99,7 +99,7 @@ _gdk_wayland_drag_context_emit_event (GdkDragContext *context,
                                       GdkEventType    type,
                                       guint32         time_)
 {
-  GdkSurface *window;
+  GdkSurface *surface;
   GdkEvent *event;
 
   switch ((guint) type)
@@ -114,19 +114,19 @@ _gdk_wayland_drag_context_emit_event (GdkDragContext *context,
     }
 
   if (context->is_source)
-    window = gdk_drag_context_get_source_surface (context);
+    surface = gdk_drag_context_get_source_surface (context);
   else
-    window = gdk_drag_context_get_dest_surface (context);
+    surface = gdk_drag_context_get_dest_surface (context);
 
   event = gdk_event_new (type);
-  event->any.window = g_object_ref (window);
+  event->any.surface = g_object_ref (surface);
   event->dnd.context = g_object_ref (context);
   event->dnd.time = time_;
   event->dnd.x_root = GDK_WAYLAND_DRAG_CONTEXT (context)->x;
   event->dnd.y_root = GDK_WAYLAND_DRAG_CONTEXT (context)->y;
   gdk_event_set_device (event, gdk_drag_context_get_device (context));
 
-  gdk_display_put_event (gdk_surface_get_display (window), event);
+  gdk_display_put_event (gdk_surface_get_display (surface), event);
   g_object_unref (event);
 }
 
@@ -363,7 +363,7 @@ gdk_wayland_drag_context_init (GdkWaylandDragContext *context_wayland)
 static GdkSurface *
 gdk_wayland_drag_context_get_drag_surface (GdkDragContext *context)
 {
-  return GDK_WAYLAND_DRAG_CONTEXT (context)->dnd_window;
+  return GDK_WAYLAND_DRAG_CONTEXT (context)->dnd_surface;
 }
 
 static void
@@ -382,9 +382,9 @@ gdk_wayland_drag_context_set_hotspot (GdkDragContext *context,
   if (prev_hot_x == hot_x && prev_hot_y == hot_y)
     return;
 
-  _gdk_wayland_surface_offset_next_wl_buffer (context_wayland->dnd_window,
+  _gdk_wayland_surface_offset_next_wl_buffer (context_wayland->dnd_surface,
                                              -hot_x, -hot_y);
-  gdk_surface_invalidate_rect (context_wayland->dnd_window, &damage_rect, FALSE);
+  gdk_surface_invalidate_rect (context_wayland->dnd_surface, &damage_rect, FALSE);
 }
 
 static void
@@ -428,8 +428,8 @@ gdk_wayland_drag_context_drop_done (GdkDragContext *context,
 
   if (success)
     {
-      if (context_wayland->dnd_window)
-        gdk_surface_hide (context_wayland->dnd_window);
+      if (context_wayland->dnd_surface)
+        gdk_surface_hide (context_wayland->dnd_surface);
     }
 }
 
@@ -461,24 +461,24 @@ gdk_wayland_drag_context_class_init (GdkWaylandDragContextClass *klass)
 }
 
 void
-_gdk_wayland_surface_register_dnd (GdkSurface *window)
+_gdk_wayland_surface_register_dnd (GdkSurface *surface)
 {
 }
 
 static GdkSurface *
-create_dnd_window (GdkDisplay *display)
+create_dnd_surface (GdkDisplay *display)
 {
-  GdkSurface *window;
+  GdkSurface *surface;
 
-  window = gdk_surface_new_popup (display, &(GdkRectangle) { 0, 0, 100, 100 });
+  surface = gdk_surface_new_popup (display, &(GdkRectangle) { 0, 0, 100, 100 });
 
-  gdk_surface_set_type_hint (window, GDK_SURFACE_TYPE_HINT_DND);
+  gdk_surface_set_type_hint (surface, GDK_SURFACE_TYPE_HINT_DND);
   
-  return window;
+  return surface;
 }
 
 GdkDragContext *
-_gdk_wayland_surface_drag_begin (GdkSurface          *window,
+_gdk_wayland_surface_drag_begin (GdkSurface          *surface,
 				GdkDevice          *device,
 	                        GdkContentProvider *content,
                                 GdkDragAction       actions,
@@ -498,15 +498,15 @@ _gdk_wayland_surface_drag_begin (GdkSurface          *window,
                                   "content", content,
                                   NULL);
   context = GDK_DRAG_CONTEXT (context_wayland);
-  context->source_surface = g_object_ref (window);
+  context->source_surface = g_object_ref (surface);
   context->is_source = TRUE;
 
   gdk_drag_context_set_device (context, device);
 
-  context_wayland->dnd_window = create_dnd_window (gdk_surface_get_display (window));
-  context_wayland->dnd_surface = gdk_wayland_surface_get_wl_surface (context_wayland->dnd_window);
+  context_wayland->dnd_surface = create_dnd_surface (gdk_surface_get_display (surface));
+  context_wayland->dnd_wl_surface = gdk_wayland_surface_get_wl_surface (context_wayland->dnd_surface);
   context_wayland->data_source =
-  gdk_wayland_selection_get_data_source (window);
+  gdk_wayland_selection_get_data_source (surface);
 
   mimetypes = gdk_content_formats_get_mime_types (context->formats, &n_mimetypes);
   for (i = 0; i < n_mimetypes; i++)
@@ -523,8 +523,8 @@ _gdk_wayland_surface_drag_begin (GdkSurface          *window,
 
   wl_data_device_start_drag (gdk_wayland_device_get_data_device (device),
                              context_wayland->data_source,
-                             gdk_wayland_surface_get_wl_surface (window),
-			     context_wayland->dnd_surface,
+                             gdk_wayland_surface_get_wl_surface (surface),
+			     context_wayland->dnd_wl_surface,
                              _gdk_wayland_display_get_serial (display_wayland));
 
   gdk_seat_ungrab (gdk_device_get_seat (device));
@@ -580,12 +580,12 @@ _gdk_wayland_drag_context_set_coords (GdkDragContext *context,
 
 void
 _gdk_wayland_drag_context_set_source_surface (GdkDragContext *context,
-                                             GdkSurface      *window)
+                                             GdkSurface      *surface)
 {
   if (context->source_surface)
     g_object_unref (context->source_surface);
 
-  context->source_surface = window ? g_object_ref (window) : NULL;
+  context->source_surface = surface ? g_object_ref (surface) : NULL;
 }
 
 void
@@ -618,13 +618,13 @@ gdk_wayland_drag_context_lookup_by_data_source (struct wl_data_source *source)
 }
 
 GdkDragContext *
-gdk_wayland_drag_context_lookup_by_source_surface (GdkSurface *window)
+gdk_wayland_drag_context_lookup_by_source_surface (GdkSurface *surface)
 {
   GList *l;
 
   for (l = contexts; l; l = l->next)
     {
-      if (window == gdk_drag_context_get_source_surface (l->data))
+      if (surface == gdk_drag_context_get_source_surface (l->data))
         return l->data;
     }
 

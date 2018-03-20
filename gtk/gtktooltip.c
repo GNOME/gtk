@@ -1174,17 +1174,17 @@ void
 _gtk_tooltip_handle_event (GdkEvent *event)
 {
   GdkEventType event_type;
-  GdkSurface *window;
+  GdkSurface *surface;
   gdouble dx, dy;
 
   if (!tooltips_enabled (event))
     return;
 
   event_type = gdk_event_get_event_type (event);
-  window = gdk_event_get_window (event);
+  surface = gdk_event_get_surface (event);
   gdk_event_get_coords (event, &dx, &dy);
 
-  gtk_tooltip_handle_event_internal (event_type, window, dx, dy);
+  gtk_tooltip_handle_event_internal (event_type, surface, dx, dy);
 }
 
 static void

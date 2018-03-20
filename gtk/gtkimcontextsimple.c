@@ -1074,7 +1074,7 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
       priv->compose_buffer[0] = 0;
       if (n_compose > 1)		/* Invalid sequence */
 	{
-	  beep_window (gdk_event_get_window ((GdkEvent *) event));
+	  beep_window (gdk_event_get_surface ((GdkEvent *) event));
 	  return TRUE;
 	}
   
@@ -1102,7 +1102,7 @@ is_hex_keyval (guint keyval)
 static guint
 canonical_hex_keyval (GdkEventKey *event)
 {
-  GdkSurface *window = gdk_event_get_window ((GdkEvent *) event);
+  GdkSurface *window = gdk_event_get_surface ((GdkEvent *) event);
   GdkKeymap *keymap = gdk_display_get_keymap (gdk_surface_get_display (window));
   guint keyval, event_keyval;
   guint *keyvals = NULL;
@@ -1162,7 +1162,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 {
   GtkIMContextSimple *context_simple = GTK_IM_CONTEXT_SIMPLE (context);
   GtkIMContextSimplePrivate *priv = context_simple->priv;
-  GdkSurface *window = gdk_event_get_window ((GdkEvent *) event);
+  GdkSurface *window = gdk_event_get_surface ((GdkEvent *) event);
   GdkDisplay *display = gdk_surface_get_display (window);
   GdkKeymap *keymap = gdk_display_get_keymap (display);
   GSList *tmp_list;

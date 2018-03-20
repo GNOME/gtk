@@ -657,7 +657,7 @@ gdk_event_get_scroll_deltas
 gdk_event_is_scroll_stop_event
 gdk_event_get_state
 gdk_event_get_time
-gdk_event_get_window
+gdk_event_get_surface
 gdk_event_get_event_type
 GdkEventSequence
 gdk_event_get_event_sequence

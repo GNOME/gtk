@@ -64,18 +64,18 @@ typedef enum {
 /**
  * GdkSeatGrabPrepareFunc:
  * @seat: the #GdkSeat being grabbed
- * @window: the #GdkSurface being grabbed
+ * @surface: the #GdkSurface being grabbed
  * @user_data: user data passed in gdk_seat_grab()
  *
- * Type of the callback used to set up @window so it can be
- * grabbed. A typical action would be ensuring the window is
+ * Type of the callback used to set up @surface so it can be
+ * grabbed. A typical action would be ensuring the surface is
  * visible, although there's room for other initialization
  * actions.
  *
  * Since: 3.20
  */
 typedef void (* GdkSeatGrabPrepareFunc) (GdkSeat   *seat,
-                                         GdkSurface *window,
+                                         GdkSurface *surface,
                                          gpointer   user_data);
 
 struct _GdkSeat
@@ -88,7 +88,7 @@ GType          gdk_seat_get_type         (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
 GdkGrabStatus  gdk_seat_grab             (GdkSeat                *seat,
-                                          GdkSurface              *window,
+                                          GdkSurface              *surface,
                                           GdkSeatCapabilities     capabilities,
                                           gboolean                owner_events,
                                           GdkCursor              *cursor,

@@ -846,7 +846,7 @@ _gdk_win32_print_event (const GdkEvent *event)
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
       g_print ("%p (%.4g,%.4g) (%.4g,%.4g) %s %s%s",
-	       event->crossing.subwindow == NULL ? NULL : GDK_SURFACE_HWND (event->crossing.subwindow),
+	       event->crossing.child_window == NULL ? NULL : GDK_SURFACE_HWND (event->crossing.subwindow),
 	       event->crossing.x, event->crossing.y,
 	       event->crossing.x_root, event->crossing.y_root,
 	       (event->crossing.mode == GDK_CROSSING_NORMAL ? "NORMAL" :
@@ -949,8 +949,8 @@ fixup_event (GdkEvent *event)
     g_object_ref (event->any.window);
   if (((event->any.type == GDK_ENTER_NOTIFY) ||
        (event->any.type == GDK_LEAVE_NOTIFY)) &&
-      (event->crossing.subwindow != NULL))
-    g_object_ref (event->crossing.subwindow);
+      (event->crossing.child_window != NULL))
+    g_object_ref (event->crossing.child_window);
   if (((event->any.type == GDK_SELECTION_CLEAR) ||
        (event->any.type == GDK_SELECTION_NOTIFY) ||
        (event->any.type == GDK_SELECTION_REQUEST)) &&
@@ -1242,7 +1242,7 @@ send_crossing_event (GdkDisplay                 *display,
 
   event = gdk_event_new (type);
   event->crossing.window = window;
-  event->crossing.subwindow = subwindow;
+  event->crossing.child_window = subwindow;
   event->crossing.time = _gdk_win32_get_next_tick (time_);
   event->crossing.x = pt.x / impl->surface_scale;
   event->crossing.y = pt.y / impl->surface_scale;

@@ -35,7 +35,7 @@ point_press (PointState *point,
   if (point == &mouse_state)
     {
       ev = gdk_event_new (GDK_BUTTON_PRESS);
-      ev->any.window = g_object_ref (gtk_widget_get_window (widget));
+      ev->any.surface = g_object_ref (gtk_widget_get_window (widget));
       ev->button.time = GDK_CURRENT_TIME;
       ev->button.x = point->x;
       ev->button.y = point->y;
@@ -47,7 +47,7 @@ point_press (PointState *point,
   else
     {
       ev = gdk_event_new (GDK_TOUCH_BEGIN);
-      ev->any.window = g_object_ref (gtk_widget_get_window (widget));
+      ev->any.surface = g_object_ref (gtk_widget_get_window (widget));
       ev->touch.time = GDK_CURRENT_TIME;
       ev->touch.x = point->x;
       ev->touch.y = point->y;
@@ -87,7 +87,7 @@ point_update (PointState *point,
   if (point == &mouse_state)
     {
       ev = gdk_event_new (GDK_MOTION_NOTIFY);
-      ev->any.window = g_object_ref (gtk_widget_get_window (widget));
+      ev->any.surface = g_object_ref (gtk_widget_get_window (widget));
       ev->button.time = GDK_CURRENT_TIME;
       ev->motion.x = x;
       ev->motion.y = y;
@@ -99,7 +99,7 @@ point_update (PointState *point,
         return;
 
       ev = gdk_event_new (GDK_TOUCH_UPDATE);
-      ev->any.window = g_object_ref (gtk_widget_get_window (widget));
+      ev->any.surface = g_object_ref (gtk_widget_get_window (widget));
       ev->touch.time = GDK_CURRENT_TIME;
       ev->touch.x = x;
       ev->touch.y = y;
@@ -142,7 +142,7 @@ point_release (PointState *point,
         return;
 
       ev = gdk_event_new (GDK_BUTTON_RELEASE);
-      ev->any.window = g_object_ref (gtk_widget_get_window (point->widget));
+      ev->any.surface = g_object_ref (gtk_widget_get_window (point->widget));
       ev->button.time = GDK_CURRENT_TIME;
       ev->button.x = point->x;
       ev->button.y = point->y;
@@ -153,7 +153,7 @@ point_release (PointState *point,
   else
     {
       ev = gdk_event_new (GDK_TOUCH_END);
-      ev->any.window = g_object_ref (gtk_widget_get_window (point->widget));
+      ev->any.surface = g_object_ref (gtk_widget_get_window (point->widget));
       ev->touch.time = GDK_CURRENT_TIME;
       ev->touch.x = point->x;
       ev->touch.y = point->y;

@@ -372,12 +372,12 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
 {
   GList *tmp_list;
   GList *pending_motions = NULL;
-  GdkSurface *pending_motion_window = NULL;
+  GdkSurface *pending_motion_surface = NULL;
   GdkDevice *pending_motion_device = NULL;
   GdkEvent *last_motion = NULL;
 
   /* If the last N events in the event queue are motion notify
-   * events for the same window, drop all but the last */
+   * events for the same surface, drop all but the last */
 
   tmp_list = display->queued_tail;
 
@@ -391,8 +391,8 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
       if (event->any.type != GDK_MOTION_NOTIFY)
         break;
 
-      if (pending_motion_window != NULL &&
-          pending_motion_window != event->any.window)
+      if (pending_motion_surface != NULL &&
+          pending_motion_surface != event->any.surface)
         break;
 
       if (pending_motion_device != NULL &&
@@ -402,7 +402,7 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
       if (!last_motion)
         last_motion = event;
 
-      pending_motion_window = event->any.window;
+      pending_motion_surface = event->any.surface;
       pending_motion_device = event->any.device;
       pending_motions = tmp_list;
 
@@ -429,8 +429,8 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
       pending_motions == display->queued_events &&
       pending_motions == display->queued_tail)
     {
-      GdkFrameClock *clock = gdk_surface_get_frame_clock (pending_motion_window);
-      if (clock) /* might be NULL if window was destroyed */
+      GdkFrameClock *clock = gdk_surface_get_frame_clock (pending_motion_surface);
+      if (clock) /* might be NULL if surface was destroyed */
 	gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS);
     }
 }
@@ -619,8 +619,8 @@ gdk_event_copy (const GdkEvent *event)
           EVENT_PAYLOAD (event),
           EVENT_PAYLOAD_SIZE);
 
-  if (new_event->any.window)
-    g_object_ref (new_event->any.window);
+  if (new_event->any.surface)
+    g_object_ref (new_event->any.surface);
   if (new_event->any.device)
     g_object_ref (new_event->any.device);
   if (new_event->any.source_device)
@@ -637,8 +637,8 @@ gdk_event_copy (const GdkEvent *event)
 
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
-      if (event->crossing.subwindow != NULL)
-        g_object_ref (event->crossing.subwindow);
+      if (event->crossing.child_surface != NULL)
+        g_object_ref (event->crossing.child_surface);
       break;
 
     case GDK_DRAG_ENTER:
@@ -723,7 +723,7 @@ gdk_event_finalize (GObject *object)
 
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
-      g_clear_object (&event->crossing.subwindow);
+      g_clear_object (&event->crossing.child_surface);
       break;
 
     case GDK_DRAG_ENTER:
@@ -766,8 +766,8 @@ gdk_event_finalize (GObject *object)
   if (display)
     _gdk_display_event_data_free (display, event);
 
-  if (event->any.window)
-    g_object_unref (event->any.window);
+  if (event->any.surface)
+    g_object_unref (event->any.surface);
 
   g_clear_object (&event->any.device);
   g_clear_object (&event->any.source_device);
@@ -776,7 +776,7 @@ gdk_event_finalize (GObject *object)
 }
 
 /**
- * gdk_event_get_window:
+ * gdk_event_get_surface:
  * @event: a #GdkEvent
  *
  * Extracts the #GdkSurface associated with an event.
@@ -784,11 +784,11 @@ gdk_event_finalize (GObject *object)
  * Returns: (transfer none): The #GdkSurface associated with the event
  */
 GdkSurface *
-gdk_event_get_window (const GdkEvent *event)
+gdk_event_get_surface (const GdkEvent *event)
 {
   g_return_val_if_fail (event != NULL, NULL);
 
-  return event->any.window;
+  return event->any.surface;
 }
 
 /**
@@ -947,12 +947,12 @@ gdk_event_get_state (const GdkEvent  *event,
 /**
  * gdk_event_get_coords:
  * @event: a #GdkEvent
- * @x_win: (out) (optional): location to put event window x coordinate
- * @y_win: (out) (optional): location to put event window y coordinate
+ * @x_win: (out) (optional): location to put event surface x coordinate
+ * @y_win: (out) (optional): location to put event surface y coordinate
  *
- * Extract the event window relative x/y coordinates from an event.
+ * Extract the event surface relative x/y coordinates from an event.
  *
- * Returns: %TRUE if the event delivered event window coordinates
+ * Returns: %TRUE if the event delivered event surface coordinates
  **/
 gboolean
 gdk_event_get_coords (const GdkEvent *event,
@@ -1673,13 +1673,13 @@ gdk_event_triggers_context_menu (const GdkEvent *event)
       GdkDisplay *display;
       GdkModifierType modifier;
 
-      g_return_val_if_fail (GDK_IS_SURFACE (bevent->any.window), FALSE);
+      g_return_val_if_fail (GDK_IS_SURFACE (bevent->any.surface), FALSE);
 
       if (bevent->button == GDK_BUTTON_SECONDARY &&
           ! (bevent->state & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK)))
         return TRUE;
 
-      display = gdk_surface_get_display (bevent->any.window);
+      display = gdk_surface_get_display (bevent->any.surface);
 
       modifier = gdk_keymap_get_modifier_mask (gdk_display_get_keymap (display),
                                                GDK_MODIFIER_INTENT_CONTEXT_MENU);
@@ -1847,8 +1847,8 @@ gdk_event_get_display (const GdkEvent *event)
   if (event->any.display)
     return event->any.display;
 
-  if (event->any.window)
-    return gdk_surface_get_display (event->any.window);
+  if (event->any.surface)
+    return gdk_surface_get_display (event->any.surface);
 
   return NULL;
 }
@@ -2326,24 +2326,24 @@ gdk_event_get_touch_emulating_pointer (const GdkEvent *event,
 }
 
 /**
- * gdk_event_get_grab_window:
+ * gdk_event_get_grab_surface:
  * @event: a #GdkEvent
- * @window: (out) (transfer none): Return location for the grab window
+ * @surface: (out) (transfer none): Return location for the grab surface
  *
- * Extracts the grab window from a grab broken event.
+ * Extracts the grab surface from a grab broken event.
  *
  * Returns: %TRUE on success, otherwise %FALSE
  **/
 gboolean
-gdk_event_get_grab_window (const GdkEvent  *event,
-                           GdkSurface      **window)
+gdk_event_get_grab_surface (const GdkEvent  *event,
+                           GdkSurface      **surface)
 {
   if (!event)
     return FALSE;
 
   if (event->any.type == GDK_GRAB_BROKEN)
     {
-      *window = event->grab_broken.grab_window;
+      *surface = event->grab_broken.grab_surface;
       return TRUE;
     }
 

@@ -5712,8 +5712,8 @@ gtk_tree_view_key_press (GtkWidget   *widget,
           gulong popup_menu_id;
 
           new_event = gdk_event_copy ((GdkEvent *) event);
-          g_object_unref (((GdkEventKey *) new_event)->any.window);
-          ((GdkEventKey *) new_event)->any.window =
+          g_object_unref (((GdkEventKey *) new_event)->any.surface);
+          ((GdkEventKey *) new_event)->any.surface =
             g_object_ref (gtk_widget_get_window (search_window));
           gtk_widget_realize (search_window);
 
@@ -10605,20 +10605,20 @@ send_focus_change (GtkWidget *widget,
     {
       GdkDevice *dev = d->data;
       GdkEvent *fevent;
-      GdkSurface *window;
+      GdkSurface *surface;
 
       /* Skip non-master keyboards that haven't
-       * selected for events from this window
+       * selected for events from this surface
        */
-      window = gtk_widget_get_window (widget);
+      surface = gtk_widget_get_window (widget);
       if (gdk_device_get_device_type (dev) != GDK_DEVICE_TYPE_MASTER &&
-          !gdk_surface_get_device_events (window, dev))
+          !gdk_surface_get_device_events (surface, dev))
         continue;
 
       fevent = gdk_event_new (GDK_FOCUS_CHANGE);
 
       fevent->any.type = GDK_FOCUS_CHANGE;
-      fevent->any.window = g_object_ref (window);
+      fevent->any.surface = g_object_ref (surface);
       fevent->focus_change.in = in;
       gdk_event_set_device (fevent, device);
 

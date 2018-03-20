@@ -583,12 +583,12 @@ gtk_im_context_xim_set_client_widget (GtkIMContext *context,
                                       GtkWidget    *widget)
 {
   GtkIMContextXIM *context_xim = GTK_IM_CONTEXT_XIM (context);
-  GdkSurface *window = NULL;
+  GdkSurface *surface = NULL;
 
   if (widget != NULL)
-    window = gtk_widget_get_window (gtk_widget_get_toplevel (widget));
+    surface = gtk_widget_get_window (gtk_widget_get_toplevel (widget));
 
-  set_ic_client_window (context_xim, window);
+  set_ic_client_window (context_xim, surface);
 }
 
 static char *
@@ -641,7 +641,7 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
   if (event_type == GDK_KEY_RELEASE && !context_xim->filter_key_release)
     return FALSE;
 
-  window = gdk_surface_get_toplevel (gdk_event_get_window ((GdkEvent *) event));
+  window = gdk_surface_get_toplevel (gdk_event_get_surface ((GdkEvent *) event));
 
   xevent.type = (event_type == GDK_KEY_PRESS) ? KeyPress : KeyRelease;
   xevent.serial = 0;		/* hope it doesn't matter */

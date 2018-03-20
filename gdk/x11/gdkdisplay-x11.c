@@ -205,12 +205,12 @@ gdk_x11_display_event_translator_init (GdkEventTranslatorIface *iface)
                         GDK_SURFACE_STATE_BOTTOM_TILED)
 
 static void
-do_edge_constraint_state_check (GdkSurface      *window,
+do_edge_constraint_state_check (GdkSurface      *surface,
                                 GdkSurfaceState  old_state,
                                 GdkSurfaceState *set,
                                 GdkSurfaceState *unset)
 {
-  GdkToplevelX11 *toplevel = _gdk_x11_surface_get_toplevel (window);
+  GdkToplevelX11 *toplevel = _gdk_x11_surface_get_toplevel (surface);
   GdkSurfaceState local_set, local_unset;
   guint edge_constraints;
 
@@ -223,7 +223,7 @@ do_edge_constraint_state_check (GdkSurface      *window,
    * GDK_SURFACE_STATE_TILED to be set if any edge is tiled, and cleared
    * if no edge is tiled.
    */
-  if (!gdk_surface_supports_edge_constraints (window))
+  if (!gdk_surface_supports_edge_constraints (surface))
     {
       /* FIXME: we rely on implementation details of mutter here:
        * mutter only tiles horizontally, and sets maxvert when it does
@@ -351,16 +351,16 @@ do_edge_constraint_state_check (GdkSurface      *window,
 }
 
 static void
-do_net_wm_state_changes (GdkSurface *window)
+do_net_wm_state_changes (GdkSurface *surface)
 {
-  GdkToplevelX11 *toplevel = _gdk_x11_surface_get_toplevel (window);
+  GdkToplevelX11 *toplevel = _gdk_x11_surface_get_toplevel (surface);
   GdkSurfaceState old_state, set, unset;
 
-  if (GDK_SURFACE_DESTROYED (window) ||
-      gdk_surface_get_surface_type (window) != GDK_SURFACE_TOPLEVEL)
+  if (GDK_SURFACE_DESTROYED (surface) ||
+      gdk_surface_get_surface_type (surface) != GDK_SURFACE_TOPLEVEL)
     return;
 
-  old_state = gdk_surface_get_state (window);
+  old_state = gdk_surface_get_state (surface);
 
   set = unset = 0;
 
@@ -426,16 +426,16 @@ do_net_wm_state_changes (GdkSurface *window)
     }
 
   /* Update edge constraints and tiling */
-  do_edge_constraint_state_check (window, old_state, &set, &unset);
+  do_edge_constraint_state_check (surface, old_state, &set, &unset);
 
-  gdk_synthesize_surface_state (window, unset, set);
+  gdk_synthesize_surface_state (surface, unset, set);
 }
 
 static void
-gdk_check_wm_desktop_changed (GdkSurface *window)
+gdk_check_wm_desktop_changed (GdkSurface *surface)
 {
-  GdkToplevelX11 *toplevel = _gdk_x11_surface_get_toplevel (window);
-  GdkDisplay *display = GDK_SURFACE_DISPLAY (window);
+  GdkToplevelX11 *toplevel = _gdk_x11_surface_get_toplevel (surface);
+  GdkDisplay *display = GDK_SURFACE_DISPLAY (surface);
 
   Atom type;
   gint format;
@@ -447,7 +447,7 @@ gdk_check_wm_desktop_changed (GdkSurface *window)
   type = None;
   gdk_x11_display_error_trap_push (display);
   XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display),
-                      GDK_SURFACE_XID (window),
+                      GDK_SURFACE_XID (surface),
                       gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_DESKTOP"),
                       0, G_MAXLONG, False, XA_CARDINAL, &type,
                       &format, &nitems,
@@ -463,15 +463,15 @@ gdk_check_wm_desktop_changed (GdkSurface *window)
   else
     toplevel->on_all_desktops = FALSE;
 
-  do_net_wm_state_changes (window);
+  do_net_wm_state_changes (surface);
 }
 
 static void
-gdk_check_wm_state_changed (GdkSurface *window)
+gdk_check_wm_state_changed (GdkSurface *surface)
 {
-  GdkToplevelX11 *toplevel = _gdk_x11_surface_get_toplevel (window);
-  GdkDisplay *display = GDK_SURFACE_DISPLAY (window);
-  GdkX11Screen *screen = GDK_SURFACE_SCREEN (window);
+  GdkToplevelX11 *toplevel = _gdk_x11_surface_get_toplevel (surface);
+  GdkDisplay *display = GDK_SURFACE_DISPLAY (surface);
+  GdkX11Screen *screen = GDK_SURFACE_SCREEN (surface);
 
   Atom type;
   gint format;
@@ -492,7 +492,7 @@ gdk_check_wm_state_changed (GdkSurface *window)
 
   type = None;
   gdk_x11_display_error_trap_push (display);
-  XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), GDK_SURFACE_XID (window),
+  XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), GDK_SURFACE_XID (surface),
 		      gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE"),
 		      0, G_MAXLONG, False, XA_ATOM, &type, &format, &nitems,
 		      &bytes_after, &data);
@@ -539,16 +539,16 @@ gdk_check_wm_state_changed (GdkSurface *window)
    * as well.
    */
   if (toplevel->have_sticky && !had_sticky)
-    gdk_check_wm_desktop_changed (window);
+    gdk_check_wm_desktop_changed (surface);
   else
-    do_net_wm_state_changes (window);
+    do_net_wm_state_changes (surface);
 }
 
 static void
-gdk_check_edge_constraints_changed (GdkSurface *window)
+gdk_check_edge_constraints_changed (GdkSurface *surface)
 {
-  GdkToplevelX11 *toplevel = _gdk_x11_surface_get_toplevel (window);
-  GdkDisplay *display = GDK_SURFACE_DISPLAY (window);
+  GdkToplevelX11 *toplevel = _gdk_x11_surface_get_toplevel (surface);
+  GdkDisplay *display = GDK_SURFACE_DISPLAY (surface);
 
   Atom type;
   gint format;
@@ -560,7 +560,7 @@ gdk_check_edge_constraints_changed (GdkSurface *window)
   type = None;
   gdk_x11_display_error_trap_push (display);
   XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display),
-                      GDK_SURFACE_XID (window),
+                      GDK_SURFACE_XID (surface),
                       gdk_x11_get_xatom_by_name_for_display (display, "_GTK_EDGE_CONSTRAINTS"),
                       0, G_MAXLONG, False, XA_CARDINAL, &type,
                       &format, &nitems,
@@ -584,7 +584,7 @@ gdk_check_edge_constraints_changed (GdkSurface *window)
       toplevel->edge_constraints = 0;
     }
 
-  do_net_wm_state_changes (window);
+  do_net_wm_state_changes (surface);
 }
 
 static Atom
@@ -635,7 +635,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
                                  const XEvent       *xevent)
 {
   Window xwindow;
-  GdkSurface *window;
+  GdkSurface *surface;
   gboolean is_substructure;
   GdkSurfaceImplX11 *surface_impl = NULL;
   GdkX11Screen *x11_screen = NULL;
@@ -644,7 +644,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
   gboolean return_val;
 
   /* Find the GdkSurface that this event relates to. If that's
-   * not the same as the window that the event was sent to,
+   * not the same as the surface that the event was sent to,
    * we are getting an event from SubstructureNotifyMask.
    * We ignore such events for internal operation, but we
    * need to report them to the application because of
@@ -656,26 +656,26 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
   xwindow = get_event_xwindow (xevent);
   is_substructure = xwindow != xevent->xany.window;
 
-  window = gdk_x11_surface_lookup_for_display (display, xwindow);
-  if (window)
+  surface = gdk_x11_surface_lookup_for_display (display, xwindow);
+  if (surface)
     {
       /* We may receive events such as NoExpose/GraphicsExpose
        * and ShmCompletion for pixmaps
        */
-      if (!GDK_IS_SURFACE (window))
+      if (!GDK_IS_SURFACE (surface))
         return FALSE;
 
-      x11_screen = GDK_SURFACE_SCREEN (window);
-      toplevel = _gdk_x11_surface_get_toplevel (window);
-      surface_impl = GDK_SURFACE_IMPL_X11 (window->impl);
+      x11_screen = GDK_SURFACE_SCREEN (surface);
+      toplevel = _gdk_x11_surface_get_toplevel (surface);
+      surface_impl = GDK_SURFACE_IMPL_X11 (surface->impl);
 
-      g_object_ref (window);
+      g_object_ref (surface);
     }
 
-  event->any.window = window;
+  event->any.surface = surface;
   event->any.send_event = xevent->xany.send_event ? TRUE : FALSE;
 
-  if (window && GDK_SURFACE_DESTROYED (window))
+  if (surface && GDK_SURFACE_DESTROYED (surface))
     {
       if (xevent->type != DestroyNotify)
 	{
@@ -729,7 +729,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 			   xevent->xexpose.width, xevent->xexpose.height,
 			   event->any.send_event ? " (send)" : ""));
 
-      if (window == NULL)
+      if (surface == NULL)
         {
           return_val = FALSE;
           break;
@@ -748,7 +748,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
         y2 = (xevent->xexpose.y + xevent->xexpose.height + surface_impl->surface_scale -1) / surface_impl->surface_scale;
         expose_rect.height = y2 - expose_rect.y;
 
-        _gdk_x11_surface_process_expose (window, xevent->xexpose.serial, &expose_rect);
+        _gdk_x11_surface_process_expose (surface, xevent->xexpose.serial, &expose_rect);
         return_val = FALSE;
       }
 
@@ -763,7 +763,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 		  g_message ("graphics expose:\tdrawable: %ld",
 			     xevent->xgraphicsexpose.drawable));
 
-        if (window == NULL)
+        if (surface == NULL)
           {
             return_val = FALSE;
             break;
@@ -778,7 +778,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
         y2 = (xevent->xgraphicsexpose.y + xevent->xgraphicsexpose.height + surface_impl->surface_scale -1) / surface_impl->surface_scale;
         expose_rect.height = y2 - expose_rect.y;
 
-        _gdk_x11_surface_process_expose (window, xevent->xgraphicsexpose.serial, &expose_rect);
+        _gdk_x11_surface_process_expose (surface, xevent->xgraphicsexpose.serial, &expose_rect);
         return_val = FALSE;
       }
       break;
@@ -830,12 +830,12 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       if (!is_substructure)
 	{
 	  event->any.type = GDK_DESTROY;
-	  event->any.window = window;
+	  event->any.surface = surface;
 
-	  return_val = window && !GDK_SURFACE_DESTROYED (window);
+	  return_val = surface && !GDK_SURFACE_DESTROYED (surface);
 
-	  if (window && GDK_SURFACE_XID (window) != x11_screen->xroot_window)
-	    gdk_surface_destroy_notify (window);
+	  if (surface && GDK_SURFACE_XID (surface) != x11_screen->xroot_window)
+	    gdk_surface_destroy_notify (surface);
 	}
       else
 	return_val = FALSE;
@@ -848,9 +848,9 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 			   xevent->xmap.window));
 
       event->any.type = GDK_UNMAP;
-      event->any.window = window;
+      event->any.surface = surface;
 
-      if (window && !is_substructure)
+      if (surface && !is_substructure)
 	{
           /* If the WM supports the _NET_WM_STATE_HIDDEN hint, we do not want to
            * interpret UnmapNotify events as implying iconic state.
@@ -865,8 +865,8 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
                * means we hid the window ourselves, so we will have already flipped
                * the iconified bit off.
                */
-              if (GDK_SURFACE_IS_MAPPED (window))
-                gdk_synthesize_surface_state (window,
+              if (GDK_SURFACE_IS_MAPPED (surface))
+                gdk_synthesize_surface_state (surface,
                                              0,
                                              GDK_SURFACE_STATE_ICONIFIED);
             }
@@ -875,13 +875,13 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
               surface_impl->toplevel->frame_pending)
             {
               surface_impl->toplevel->frame_pending = FALSE;
-              _gdk_frame_clock_thaw (gdk_surface_get_frame_clock (event->any.window));
+              _gdk_frame_clock_thaw (gdk_surface_get_frame_clock (event->any.surface));
             }
 
 	  if (toplevel)
-            gdk_surface_freeze_toplevel_updates (window);
+            gdk_surface_freeze_toplevel_updates (surface);
 
-          _gdk_x11_surface_grab_check_unmap (window, xevent->xany.serial);
+          _gdk_x11_surface_grab_check_unmap (surface, xevent->xany.serial);
         }
 
       break;
@@ -892,18 +892,18 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 			   xevent->xmap.window));
 
       event->any.type = GDK_MAP;
-      event->any.window = window;
+      event->any.surface = surface;
 
-      if (window && !is_substructure)
+      if (surface && !is_substructure)
 	{
 	  /* Unset iconified if it was set */
-	  if (window->state & GDK_SURFACE_STATE_ICONIFIED)
-	    gdk_synthesize_surface_state (window,
+	  if (surface->state & GDK_SURFACE_STATE_ICONIFIED)
+	    gdk_synthesize_surface_state (surface,
 					 GDK_SURFACE_STATE_ICONIFIED,
 					 0);
 
 	  if (toplevel)
-	    gdk_surface_thaw_toplevel_updates (window);
+	    gdk_surface_thaw_toplevel_updates (surface);
 	}
 
       break;
@@ -932,9 +932,9 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 			   xevent->xconfigure.border_width,
 			   xevent->xconfigure.above,
 			   xevent->xconfigure.override_redirect,
-			   !window
+			   !surface
 			   ? " (discarding)"
-			   : window->surface_type == GDK_SURFACE_CHILD
+			   : surface->surface_type == GDK_SURFACE_CHILD
 			   ? " (discarding child)"
 			   : xevent->xconfigure.event != xevent->xconfigure.window
 			   ? " (discarding substructure)"
@@ -953,28 +953,28 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	}
 #endif
 
-    if (!window ||
+    if (!surface ||
 	  xevent->xconfigure.event != xevent->xconfigure.window ||
-          GDK_SURFACE_TYPE (window) == GDK_SURFACE_CHILD)
+          GDK_SURFACE_TYPE (surface) == GDK_SURFACE_CHILD)
 	return_val = FALSE;
       else
 	{
 	  event->any.type = GDK_CONFIGURE;
-	  event->any.window = window;
+	  event->any.surface = surface;
 	  event->configure.width = (xevent->xconfigure.width + surface_impl->surface_scale - 1) / surface_impl->surface_scale;
 	  event->configure.height = (xevent->xconfigure.height + surface_impl->surface_scale - 1) / surface_impl->surface_scale;
 
 	  if (!xevent->xconfigure.send_event &&
 	      !xevent->xconfigure.override_redirect &&
-	      !GDK_SURFACE_DESTROYED (window))
+	      !GDK_SURFACE_DESTROYED (surface))
 	    {
 	      gint tx = 0;
 	      gint ty = 0;
 	      Window child_window = 0;
 
 	      gdk_x11_display_error_trap_push (display);
-	      if (XTranslateCoordinates (GDK_SURFACE_XDISPLAY (window),
-					 GDK_SURFACE_XID (window),
+	      if (XTranslateCoordinates (GDK_SURFACE_XDISPLAY (surface),
+					 GDK_SURFACE_XID (surface),
 					 x11_screen->xroot_window,
 					 0, 0,
 					 &tx, &ty,
@@ -992,27 +992,27 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	    }
 	  if (!is_substructure)
 	    {
-	      window->x = event->configure.x;
-	      window->y = event->configure.y;
+	      surface->x = event->configure.x;
+	      surface->y = event->configure.y;
 
               if (surface_impl->unscaled_width != xevent->xconfigure.width ||
                   surface_impl->unscaled_height != xevent->xconfigure.height)
                 {
                   surface_impl->unscaled_width = xevent->xconfigure.width;
                   surface_impl->unscaled_height = xevent->xconfigure.height;
-                  window->width = event->configure.width;
-                  window->height = event->configure.height;
+                  surface->width = event->configure.width;
+                  surface->height = event->configure.height;
 
-                  _gdk_surface_update_size (window);
+                  _gdk_surface_update_size (surface);
                   _gdk_x11_surface_update_size (surface_impl);
                 }
 
-	      if (window->resize_count >= 1)
+	      if (surface->resize_count >= 1)
 		{
-		  window->resize_count -= 1;
+		  surface->resize_count -= 1;
 
-		  if (window->resize_count == 0)
-		    _gdk_x11_moveresize_configure_done (display, window);
+		  if (surface->resize_count == 0)
+		    _gdk_x11_moveresize_configure_done (display, surface);
 		}
 	    }
         }
@@ -1027,7 +1027,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 			   gdk_x11_get_xatom_name_for_display (display, xevent->xproperty.atom),
 			   "\""));
 
-      if (window == NULL)
+      if (surface == NULL)
         {
 	  return_val = FALSE;
           break;
@@ -1040,13 +1040,13 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	  xevent->xproperty.serial >= toplevel->map_serial)
 	{
 	  if (xevent->xproperty.atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE"))
-	    gdk_check_wm_state_changed (window);
+	    gdk_check_wm_state_changed (surface);
 
 	  if (xevent->xproperty.atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_DESKTOP"))
-	    gdk_check_wm_desktop_changed (window);
+	    gdk_check_wm_desktop_changed (surface);
 
 	  if (xevent->xproperty.atom == gdk_x11_get_xatom_by_name_for_display (display, "_GTK_EDGE_CONSTRAINTS"))
-	    gdk_check_edge_constraints_changed (window);
+	    gdk_check_edge_constraints_changed (surface);
 	}
 
       return_val = FALSE;
@@ -1120,18 +1120,18 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
  done:
   if (return_val)
     {
-      if (event->any.window)
-	g_object_ref (event->any.window);
+      if (event->any.surface)
+	g_object_ref (event->any.surface);
     }
   else
     {
       /* Mark this event as having no resources to be freed */
-      event->any.window = NULL;
+      event->any.surface = NULL;
       event->any.type = GDK_NOTHING;
     }
 
-  if (window)
-    g_object_unref (window);
+  if (surface)
+    g_object_unref (surface);
 
   return return_val;
 }
@@ -1201,7 +1201,7 @@ _gdk_wm_protocols_filter (const XEvent *xevent,
 			  GdkEvent     *event,
 			  gpointer      data)
 {
-  GdkSurface *win = event->any.window;
+  GdkSurface *win = event->any.surface;
   GdkDisplay *display;
   Atom atom;
 

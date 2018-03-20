@@ -240,8 +240,8 @@ gdk_cairo_surface_paint_pixbuf (cairo_surface_t *surface,
 /**
  * gdk_cairo_surface_create_from_pixbuf:
  * @pixbuf: a #GdkPixbuf
- * @scale: the scale of the new surface, or 0 to use same as @window
- * @for_surface: (allow-none): The window this will be drawn to, or %NULL
+ * @scale: the scale of the new surface, or 0 to use same as @surface
+ * @for_surface: (allow-none): The surface this will be drawn to, or %NULL
  *
  * Creates an image surface with the same contents as
  * the pixbuf.

@@ -117,7 +117,7 @@ GdkMonitor * gdk_display_get_monitor_at_point  (GdkDisplay *display,
                                                 int         y);
 GDK_AVAILABLE_IN_ALL
 GdkMonitor * gdk_display_get_monitor_at_surface (GdkDisplay *display,
-                                                GdkSurface  *window);
+                                                GdkSurface  *surface);
 
 GDK_AVAILABLE_IN_ALL
 GdkKeymap *  gdk_display_get_keymap  (GdkDisplay *display);

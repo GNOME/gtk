@@ -132,7 +132,7 @@ GInputStream *          gdk_drop_read_finish            (GdkDragContext        *
 /* Source side */
 
 GDK_AVAILABLE_IN_ALL
-GdkDragContext *        gdk_drag_begin                  (GdkSurface              *window,
+GdkDragContext *        gdk_drag_begin                  (GdkSurface              *surface,
                                                          GdkDevice              *device,
                                                          GdkContentProvider     *content,
                                                          GdkDragAction           actions,

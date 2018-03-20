@@ -1497,7 +1497,7 @@ associate_menu_grab_transfer_window (GtkMenu *menu)
   if (toplevel_window == NULL || transfer_window == NULL)
     return;
 
-  g_object_set_data (G_OBJECT (toplevel_window), I_("gdk-attached-grab-window"), transfer_window);
+  g_object_set_data (G_OBJECT (toplevel_window), I_("gdk-attached-grab-surface"), transfer_window);
 }
 
 static void
@@ -2068,7 +2068,7 @@ gtk_menu_popup_at_pointer (GtkMenu        *menu,
 
   if (trigger_event)
     {
-      rect_window = gdk_event_get_window (trigger_event);
+      rect_window = gdk_event_get_surface (trigger_event);
 
       if (rect_window)
         {
@@ -2547,7 +2547,7 @@ menu_grab_transfer_window_destroy (GtkMenu *menu)
       g_object_set_data (G_OBJECT (menu), I_("gtk-menu-transfer-window"), NULL);
 
       widget_window = gtk_widget_get_window (GTK_WIDGET (menu));
-      g_object_set_data (G_OBJECT (widget_window), I_("gdk-attached-grab-window"), window);
+      g_object_set_data (G_OBJECT (widget_window), I_("gdk-attached-grab-surface"), window);
     }
 }
 

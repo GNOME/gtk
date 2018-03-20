@@ -49,13 +49,13 @@ GDK_AVAILABLE_IN_ALL
 GdkSurface *              gdk_wayland_surface_new_subsurface       (GdkDisplay            *display,
                                                                   const GdkRectangle    *position);
 GDK_AVAILABLE_IN_ALL
-struct wl_surface       *gdk_wayland_surface_get_wl_surface       (GdkSurface *window);
+struct wl_surface       *gdk_wayland_surface_get_wl_surface       (GdkSurface *surface);
 
 GDK_AVAILABLE_IN_ALL
-void                     gdk_wayland_surface_set_use_custom_surface (GdkSurface *window);
+void                     gdk_wayland_surface_set_use_custom_surface (GdkSurface *surface);
 
 GDK_AVAILABLE_IN_ALL
-void                     gdk_wayland_surface_set_dbus_properties_libgtk_only (GdkSurface  *window,
+void                     gdk_wayland_surface_set_dbus_properties_libgtk_only (GdkSurface  *surface,
 									     const char *application_id,
 									     const char *app_menu_path,
 									     const char *menubar_path,
@@ -63,24 +63,24 @@ void                     gdk_wayland_surface_set_dbus_properties_libgtk_only (Gd
 									     const char *application_object_path,
 									     const char *unique_bus_name);
 
-typedef void (*GdkWaylandSurfaceExported) (GdkSurface  *window,
+typedef void (*GdkWaylandSurfaceExported) (GdkSurface  *surface,
                                           const char *handle,
                                           gpointer    user_data);
 
 GDK_AVAILABLE_IN_ALL
-gboolean                 gdk_wayland_surface_export_handle (GdkSurface               *window,
+gboolean                 gdk_wayland_surface_export_handle (GdkSurface               *surface,
                                                            GdkWaylandSurfaceExported callback,
                                                            gpointer                 user_data,
                                                            GDestroyNotify           destroy_func);
 
 GDK_AVAILABLE_IN_ALL
-void                     gdk_wayland_surface_unexport_handle (GdkSurface *window);
+void                     gdk_wayland_surface_unexport_handle (GdkSurface *surface);
 
 GDK_AVAILABLE_IN_ALL
-gboolean                 gdk_wayland_surface_set_transient_for_exported (GdkSurface *window,
+gboolean                 gdk_wayland_surface_set_transient_for_exported (GdkSurface *surface,
                                                                         char      *parent_handle_str);
 
-void gdk_wayland_surface_announce_csd                        (GdkSurface *window);
+void gdk_wayland_surface_announce_csd                        (GdkSurface *surface);
 
 G_END_DECLS
 

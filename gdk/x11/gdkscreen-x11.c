@@ -805,9 +805,9 @@ _gdk_x11_screen_set_surface_scale (GdkX11Screen *x11_screen,
 
   for (l = toplevels; l != NULL; l = l->next)
     {
-      GdkSurface *window = l->data;
+      GdkSurface *surface = l->data;
 
-      _gdk_x11_surface_set_surface_scale (window, scale);
+      _gdk_x11_surface_set_surface_scale (surface, scale);
     }
 
   for (i = 0; i < x11_display->monitors->len; i++)
