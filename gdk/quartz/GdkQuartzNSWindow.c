@@ -39,7 +39,7 @@
 
   event = gdk_event_new (GDK_DELETE);
 
-  event->any.window = g_object_ref (window);
+  event->any.surface = g_object_ref (window);
   event->any.send_event = FALSE;
 
   _gdk_event_queue_append (gdk_display_get_default (), event);

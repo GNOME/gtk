@@ -1139,7 +1139,7 @@ gtk_drag_begin_internal (GtkWidget         *widget,
 	       * toplevel GdkSurface, which should be the GdkSurface backing
 	       * nswindow. Then, we convert to the NSWindow coordinate system.
 	       */
-	      window = event->any.window;
+	      window = event->any.surface;
 	      GdkSurface *toplevel = gdk_surface_get_toplevel (window);
 
 	      while (window != toplevel)

@@ -1669,10 +1669,10 @@ gdk_dropfiles_filter (GdkXEvent *xev,
     {
       GDK_NOTE (DND, g_print ("WM_DROPFILES: %p\n", msg->hwnd));
 
-      context = gdk_drag_context_new (gdk_surface_get_display (event->any.window),
+      context = gdk_drag_context_new (gdk_surface_get_display (event->any.surface),
                                       FALSE,
                                       NULL,
-                                      event->any.window,
+                                      event->any.surface,
                                       GDK_ACTION_COPY,
                                       NULL,
                                       GDK_DRAG_PROTO_WIN32_DROPFILES);

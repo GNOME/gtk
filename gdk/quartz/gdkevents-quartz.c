@@ -146,8 +146,8 @@ _gdk_quartz_events_break_all_grabs (guint32 time)
 static void
 fixup_event (GdkEvent *event)
 {
-  if (event->any.window)
-    g_object_ref (event->any.window);
+  if (event->any.surface)
+    g_object_ref (event->any.surface);
   if (((event->any.type == GDK_ENTER_NOTIFY) ||
        (event->any.type == GDK_LEAVE_NOTIFY)) &&
       (event->crossing.child_window != NULL))
@@ -515,7 +515,7 @@ generate_motion_event (GdkSurface *window)
   GdkQuartzDeviceManagerCore *device_manager;
 
   event = gdk_event_new (GDK_MOTION_NOTIFY);
-  event->any.window = NULL;
+  event->any.surface = NULL;
   event->any.send_event = TRUE;
 
   screen_point = [NSEvent mouseLocation];
@@ -598,7 +598,7 @@ _gdk_quartz_events_send_map_event (GdkSurface *window)
       GdkEvent event;
 
       event.any.type = GDK_MAP;
-      event.any.window = window;
+      event.any.surface = window;
   
       gdk_event_put (&event);
     }
@@ -1680,8 +1680,8 @@ gdk_event_translate (GdkEvent *event,
  done:
   if (return_val)
     {
-      if (event->any.window)
-	g_object_ref (event->any.window);
+      if (event->any.surface)
+	g_object_ref (event->any.surface);
       if (((event->any.type == GDK_ENTER_NOTIFY) ||
 	   (event->any.type == GDK_LEAVE_NOTIFY)) &&
 	  (event->crossing.child_window != NULL))
@@ -1690,7 +1690,7 @@ gdk_event_translate (GdkEvent *event,
   else
     {
       /* Mark this event as having no resources to be freed */
-      event->any.window = NULL;
+      event->any.surface = NULL;
       event->any.type = GDK_NOTHING;
     }
 
@@ -1710,7 +1710,7 @@ _gdk_quartz_display_queue_events (GdkDisplay *display)
 
       event = gdk_event_new (GDK_NOTHING);
 
-      event->any.window = NULL;
+      event->any.surface = NULL;
       event->any.send_event = FALSE;
 
       ((GdkEventPrivate *)event)->flags |= GDK_EVENT_PENDING;

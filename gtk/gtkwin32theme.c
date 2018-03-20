@@ -157,7 +157,7 @@ invalidate_win32_themes (GdkXEvent *xevent,
   gpointer theme;
   MSG *msg;
 
-  if (!GDK_IS_WIN32_SURFACE (event->any.window))
+  if (!GDK_IS_WIN32_SURFACE (event->any.surface))
     return GDK_FILTER_CONTINUE;
 
   msg = (MSG *) xevent;
@@ -170,7 +170,7 @@ invalidate_win32_themes (GdkXEvent *xevent,
       theme_was_open |= gtk_win32_theme_close (theme);
     }
   if (theme_was_open)
-    gtk_style_context_reset_widgets (gdk_surface_get_display (event->any.window));
+    gtk_style_context_reset_widgets (gdk_surface_get_display (event->any.surface));
 
   return GDK_FILTER_CONTINUE;
 }

@@ -43,7 +43,7 @@ GDK_SELECTION_CLEAR     GtkWidget::selection_clear_event
 GDK_FOCUS_CHANGE        GtkWidget::focus_in_event
                         GtkWidget::focus_out_event
 
-Events that are assured to have a valid GdkEvent.any.window field are
+Events that are assured to have a valid GdkEvent.any.surface field are
 
 GDK_EXPOSE		GtkWidget::expose_event
 

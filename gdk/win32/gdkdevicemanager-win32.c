@@ -898,7 +898,7 @@ gdk_input_other_event (GdkDisplay *display,
    */
   static guint button_map[8] = {0, 1, 4, 5, 2, 3, 6, 7};
 
-  if (event->any.window != wintab_window)
+  if (event->any.surface != wintab_window)
     {
       g_warning ("gdk_input_other_event: not wintab_window?");
       return FALSE;
@@ -1084,7 +1084,7 @@ gdk_input_other_event (GdkDisplay *display,
                                               GDK_SURFACE_HWND (window), x, y));
         }
 
-      event->any.window = window;
+      event->any.surface = window;
       key_state = get_modifier_key_state ();
       if (event->any.type == GDK_BUTTON_PRESS ||
           event->any.type == GDK_BUTTON_RELEASE)

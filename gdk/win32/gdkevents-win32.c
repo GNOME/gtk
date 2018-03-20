@@ -804,7 +804,7 @@ _gdk_win32_print_event (const GdkEvent *event)
     }
 
   g_print (" %p @ %ums ",
-           event->any.window ? GDK_SURFACE_HWND (event->any.window) : NULL,
+           event->any.surface ? GDK_SURFACE_HWND (event->any.surface) : NULL,
            gdk_event_get_time (event));
 
   switch (event->any.type)
@@ -945,8 +945,8 @@ decode_key_lparam (LPARAM lParam)
 static void
 fixup_event (GdkEvent *event)
 {
-  if (event->any.window)
-    g_object_ref (event->any.window);
+  if (event->any.surface)
+    g_object_ref (event->any.surface);
   if (((event->any.type == GDK_ENTER_NOTIFY) ||
        (event->any.type == GDK_LEAVE_NOTIFY)) &&
       (event->crossing.child_window != NULL))
@@ -1058,7 +1058,7 @@ apply_event_filters (GdkSurface  *window,
   GList *tmp_list;
 
   event = gdk_event_new (GDK_NOTHING);
-  event->any.window = g_object_ref (window);
+  event->any.surface = g_object_ref (window);
   ((GdkEventPrivate *)event)->flags |= GDK_EVENT_PENDING;
 
   display = gdk_display_get_default ();
@@ -3368,7 +3368,7 @@ gdk_event_translate (MSG  *msg,
 	  !GDK_SURFACE_DESTROYED (window))
 	{
 	  event = gdk_event_new (GDK_MAP);
-	  event->any.window = window;
+	  event->any.surface = window;
 	  _gdk_win32_append_event (event);
 	}
 
@@ -3432,7 +3432,7 @@ gdk_event_translate (MSG  *msg,
 	{
 	  /* Send UNMAP events  */
 	  event = gdk_event_new (GDK_UNMAP);
-	  event->any.window = window;
+	  event->any.surface = window;
 	  _gdk_win32_append_event (event);
 
 	  /* Make transient parent the forground window when window unmaps */
@@ -3705,7 +3705,7 @@ gdk_event_translate (MSG  *msg,
 	break;
 
       event = gdk_event_new (GDK_DELETE);
-      event->any.window = window;
+      event->any.surface = window;
 
       _gdk_win32_append_event (event);
 
@@ -3740,7 +3740,7 @@ gdk_event_translate (MSG  *msg,
 	break;
 
       event = gdk_event_new (GDK_DESTROY);
-      event->any.window = window;
+      event->any.surface = window;
 
       _gdk_win32_append_event (event);
 
@@ -3935,7 +3935,7 @@ gdk_event_translate (MSG  *msg,
     wintab:
 
       event = gdk_event_new (GDK_NOTHING);
-      event->any.window = window;
+      event->any.surface = window;
       g_object_ref (window);
 
       if (gdk_input_other_event (display, event, msg, window))
