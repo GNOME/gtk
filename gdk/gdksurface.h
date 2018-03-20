@@ -517,11 +517,6 @@ GDK_AVAILABLE_IN_ALL
 void          gdk_surface_scroll                (GdkSurface     *surface,
                                                 gint           dx,
                                                 gint           dy);
-GDK_AVAILABLE_IN_ALL
-void	      gdk_surface_move_region           (GdkSurface       *surface,
-						const cairo_region_t *region,
-						gint             dx,
-						gint             dy);
 
 /* 
  * This allows for making shaped (partially transparent) surfaces

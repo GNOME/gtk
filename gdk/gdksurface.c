@@ -3984,44 +3984,6 @@ gdk_surface_scroll (GdkSurface *surface,
   gdk_surface_invalidate_rect_full (surface, NULL, TRUE);
 }
 
-/**
- * gdk_surface_move_region:
- * @surface: a #GdkSurface
- * @region: The #cairo_region_t to move
- * @dx: Amount to move in the X direction
- * @dy: Amount to move in the Y direction
- *
- * Move the part of @surface indicated by @region by @dy pixels in the Y
- * direction and @dx pixels in the X direction. The portions of @region
- * that not covered by the new position of @region are invalidated.
- *
- * Child surfaces are not moved.
- */
-void
-gdk_surface_move_region (GdkSurface            *surface,
-                        const cairo_region_t *region,
-                        gint                  dx,
-                        gint                  dy)
-{
-  cairo_region_t *expose_area;
-
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-  g_return_if_fail (region != NULL);
-
-  if (dx == 0 && dy == 0)
-    return;
-
-  if (surface->destroyed)
-    return;
-
-  expose_area = cairo_region_copy (region);
-  cairo_region_translate (expose_area, dx, dy);
-  cairo_region_union (expose_area, region);
-
-  gdk_surface_invalidate_region_full (surface, expose_area, FALSE);
-  cairo_region_destroy (expose_area);
-}
-
 static void
 gdk_surface_set_cursor_internal (GdkSurface *surface,
                                 GdkDevice *device,
