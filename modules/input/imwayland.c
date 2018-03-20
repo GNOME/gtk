@@ -420,6 +420,9 @@ released_cb (GtkGestureMultiPress *gesture,
 {
   GtkInputHints hints;
 
+  if (!global->current)
+    return;
+
   g_object_get (context, "input-hints", &hints, NULL);
 
   if (n_press == 1 &&
