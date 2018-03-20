@@ -485,6 +485,7 @@ gtk_entry_completion_init (GtkEntryCompletion *completion)
   priv->popup_set_width = TRUE;
   priv->popup_single_match = TRUE;
   priv->inline_selection = FALSE;
+  priv->accept_on_activate = TRUE;
 
   priv->filter_model = NULL;
 }
@@ -2481,8 +2482,9 @@ connect_completion_signals (GtkEntryCompletion *completion)
                         G_CALLBACK (completion_insert_text_callback), completion);
     g_signal_connect (completion->priv->entry, "notify",
                       G_CALLBACK (clear_completion_callback), completion);
-    g_signal_connect (completion->priv->entry, "activate",
-                      G_CALLBACK (accept_completion_callback), completion);
+    if (completion->priv->accept_on_activate)
+      g_signal_connect (completion->priv->entry, "activate",
+                        G_CALLBACK (accept_completion_callback), completion);
     g_signal_connect (completion->priv->entry, "event",
                       G_CALLBACK (maybe_accept_completion), completion);
 }
@@ -2589,4 +2591,28 @@ _gtk_entry_completion_connect (GtkEntryCompletion *completion,
                               completion->priv->entry);
 
   connect_completion_signals (completion);
+}
+
+void
+_gtk_entry_completion_set_accept_on_activate (GtkEntryCompletion *completion,
+                                              gboolean            accept_on_activate)
+{
+  if (completion->priv->entry &&
+      completion->priv->accept_on_activate != accept_on_activate)
+    {
+      if (accept_on_activate)
+        {
+          g_signal_connect (completion->priv->entry, "activate",
+                            G_CALLBACK (accept_completion_callback),
+                            completion);
+        }
+      else
+        {
+          g_signal_handlers_disconnect_by_func (completion->priv->entry,
+                                                G_CALLBACK (accept_completion_callback),
+                                                completion);
+        }
+    }
+
+  completion->priv->accept_on_activate = accept_on_activate;
 }

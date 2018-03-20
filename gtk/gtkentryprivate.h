@@ -67,6 +67,7 @@ struct _GtkEntryCompletionPrivate
   guint popup_single_match : 1;
   guint inline_selection   : 1;
   guint has_grab           : 1;
+  guint accept_on_activate : 1;
 
   gchar *completion_prefix;
 
@@ -80,6 +81,8 @@ void     _gtk_entry_completion_popdown      (GtkEntryCompletion *completion);
 void     _gtk_entry_completion_connect      (GtkEntryCompletion *completion,
                                              GtkEntry           *entry);
 void     _gtk_entry_completion_disconnect   (GtkEntryCompletion *completion);
+void     _gtk_entry_completion_set_accept_on_activate (GtkEntryCompletion *completion,
+                                                       gboolean            accept_on_activate);
 
 gchar*   _gtk_entry_get_display_text       (GtkEntry *entry,
                                             gint      start_pos,
