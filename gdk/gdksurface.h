@@ -42,8 +42,6 @@ typedef struct _GdkGeometry          GdkGeometry;
 
 /**
  * GdkSurfaceType:
- * @GDK_SURFACE_ROOT: root window; this surface has no parent, covers the entire
- *  screen, and is created by the window system
  * @GDK_SURFACE_TOPLEVEL: toplevel window (used to implement #GtkWindow)
  * @GDK_SURFACE_CHILD: child surface (used to implement e.g. #GtkEntry)
  * @GDK_SURFACE_TEMP: override redirect temporary surface (used to implement
@@ -57,7 +55,6 @@ typedef struct _GdkGeometry          GdkGeometry;
  */
 typedef enum
 {
-  GDK_SURFACE_ROOT,
   GDK_SURFACE_TOPLEVEL,
   GDK_SURFACE_CHILD,
   GDK_SURFACE_TEMP,

@@ -634,7 +634,6 @@ get_current_toplevel (GdkDisplay      *display,
 
   if (pointer_surface != NULL &&
       (GDK_SURFACE_DESTROYED (pointer_surface) ||
-       GDK_SURFACE_TYPE (pointer_surface) == GDK_SURFACE_ROOT ||
        GDK_SURFACE_TYPE (pointer_surface) == GDK_SURFACE_FOREIGN))
     pointer_surface = NULL;
 

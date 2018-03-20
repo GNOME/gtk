@@ -479,9 +479,7 @@ gdk_surface_has_impl (GdkSurface *surface)
 static gboolean
 gdk_surface_is_toplevel (GdkSurface *surface)
 {
-  return
-    surface->parent == NULL ||
-    surface->parent->surface_type == GDK_SURFACE_ROOT;
+  return surface->parent == NULL;
 }
 
 gboolean
@@ -603,9 +601,7 @@ should_apply_clip_as_shape (GdkSurface *surface)
     /* Not for non-shaped toplevels */
     (surface->shape != NULL || surface->applied_shape) &&
     /* or for foreign surfaces */
-    surface->surface_type != GDK_SURFACE_FOREIGN &&
-    /* or for the root surface */
-    surface->surface_type != GDK_SURFACE_ROOT;
+    surface->surface_type != GDK_SURFACE_FOREIGN;
 }
 
 static void
@@ -744,9 +740,8 @@ recompute_visible_regions_internal (GdkSurface *private,
       private->clip_region = new_clip;
     }
 
-  /* Update all children, recursively (except for root, where children are not exact). */
-  if ((abs_pos_changed || clip_region_changed || recalculate_children) &&
-      private->surface_type != GDK_SURFACE_ROOT)
+  /* Update all children, recursively */
+  if ((abs_pos_changed || clip_region_changed || recalculate_children))
     {
       for (l = private->children; l; l = l->next)
 	{
@@ -834,8 +829,7 @@ get_native_device_event_mask (GdkSurface *private,
   else
     event_mask = private->event_mask;
 
-  if (private->surface_type == GDK_SURFACE_ROOT ||
-      private->surface_type == GDK_SURFACE_FOREIGN)
+  if (private->surface_type == GDK_SURFACE_FOREIGN)
     return event_mask;
   else
     {
@@ -912,9 +906,8 @@ gdk_surface_new (GdkDisplay    *display,
     {
     case GDK_SURFACE_TOPLEVEL:
     case GDK_SURFACE_TEMP:
-      if (parent != NULL && GDK_SURFACE_TYPE (parent) != GDK_SURFACE_ROOT)
-	g_warning (G_STRLOC "Toplevel surfaces must be created as children of\n"
-		   "a surface of type GDK_SURFACE_ROOT");
+      if (parent != NULL)
+	g_warning (G_STRLOC "Toplevel surfaces must be created without a parent");
       break;
     case GDK_SURFACE_SUBSURFACE:
 #ifdef GDK_WINDOWING_WAYLAND
@@ -926,11 +919,10 @@ gdk_surface_new (GdkDisplay    *display,
 #endif
       break;
     case GDK_SURFACE_CHILD:
-      if (GDK_SURFACE_TYPE (parent) == GDK_SURFACE_ROOT ||
-          GDK_SURFACE_TYPE (parent) == GDK_SURFACE_FOREIGN)
+      if (GDK_SURFACE_TYPE (parent) == GDK_SURFACE_FOREIGN)
         {
           g_warning (G_STRLOC "Child surfaces must not be created as children of\n"
-                     "a surface of type GDK_SURFACE_ROOT or GDK_SURFACE_FOREIGN");
+                     "a surface of type GDK_SURFACE_FOREIGN");
           return NULL;
         }
       break;
@@ -1181,13 +1173,6 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
       g_assert_not_reached ();
       break;
 
-    case GDK_SURFACE_ROOT:
-      if (!gdk_display_is_closed (display))
-	{
-	  g_error ("attempted to destroy root window");
-	  break;
-	}
-      /* else fall thru */
     case GDK_SURFACE_TOPLEVEL:
     case GDK_SURFACE_CHILD:
     case GDK_SURFACE_TEMP:
@@ -2533,8 +2518,7 @@ gdk_surface_invalidate_full (GdkSurface           *surface,
 
   if (surface->input_only ||
       !surface->viewable ||
-      cairo_region_is_empty (region) ||
-      surface->surface_type == GDK_SURFACE_ROOT)
+      cairo_region_is_empty (region))
     return;
 
   r.x = 0;
@@ -3051,8 +3035,7 @@ _gdk_surface_update_viewable (GdkSurface *surface)
 {
   gboolean viewable;
 
-  if (surface->surface_type == GDK_SURFACE_FOREIGN ||
-      surface->surface_type == GDK_SURFACE_ROOT)
+  if (surface->surface_type == GDK_SURFACE_FOREIGN)
     viewable = TRUE;
   else if (gdk_surface_is_toplevel (surface) ||
 	   surface->parent->viewable)
@@ -3888,8 +3871,7 @@ gdk_surface_set_cursor_internal (GdkSurface *surface,
 
   g_assert (gdk_surface_get_display (surface) == gdk_device_get_display (device));
 
-  if (surface->surface_type == GDK_SURFACE_ROOT ||
-      surface->surface_type == GDK_SURFACE_FOREIGN)
+  if (surface->surface_type == GDK_SURFACE_FOREIGN)
     GDK_DEVICE_GET_CLASS (device)->set_surface_cursor (device, surface, cursor);
   else
     {
@@ -4704,8 +4686,7 @@ get_event_toplevel (GdkSurface *surface)
 {
   GdkSurface *parent;
 
-  while ((parent = surface->parent) != NULL &&
-	 (parent->surface_type != GDK_SURFACE_ROOT))
+  while ((parent = surface->parent) != NULL)
     surface = parent;
 
   return surface;
@@ -4763,8 +4744,7 @@ update_cursor (GdkDisplay *display,
      the cursor is inherited from the parent */
   while (cursor_surface->cursor == NULL &&
          !g_hash_table_contains (cursor_surface->device_cursor, device) &&
-	 (parent = cursor_surface->parent) != NULL &&
-	 parent->surface_type != GDK_SURFACE_ROOT)
+	 (parent = cursor_surface->parent) != NULL)
     cursor_surface = parent;
 
   cursor = g_hash_table_lookup (cursor_surface->device_cursor, device);
@@ -5283,9 +5263,6 @@ _gdk_windowing_got_event (GdkDisplay *display,
       gdk_surface_print_tree (event_surface, 0, event->key.keyval == 0xbd);
     }
 #endif
-
-  if (event_surface->surface_type == GDK_SURFACE_ROOT)
-    goto out;
 
   if (event->any.type == GDK_ENTER_NOTIFY)
     _gdk_display_set_surface_under_pointer (display, device, event_surface);
@@ -6792,7 +6769,6 @@ gdk_surface_set_state (GdkSurface      *surface,
       g_object_notify (G_OBJECT (surface), "state");
       break;
     case GDK_SURFACE_FOREIGN:
-    case GDK_SURFACE_ROOT:
     case GDK_SURFACE_CHILD:
     default:
       break;

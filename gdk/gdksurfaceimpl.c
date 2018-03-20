@@ -184,8 +184,7 @@ traverse_to_toplevel (GdkSurface *surface,
   gdouble xf = x;
   gdouble yf = y;
 
-  while ((parent = surface->parent) != NULL &&
-         (gdk_surface_get_surface_type (parent) != GDK_SURFACE_ROOT))
+  while ((parent = surface->parent) != NULL)
     {
       gdk_surface_coords_to_parent (surface, xf, yf, &xf, &yf);
       surface = parent;
