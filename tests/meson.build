@@ -128,7 +128,8 @@ gtk_tests = [
   ['showrendernode'],
   ['testborderdrawing'],
   ['testoutsetshadowdrawing'],
-  ['testblur']
+  ['testblur'],
+  ['testtexture'],
 ]
 
 if os_linux
