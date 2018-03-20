@@ -81,12 +81,28 @@ gtk_snapshot_init (GtkSnapshot *self)
 {
 }
 
+static cairo_region_t *
+create_offset_region (const cairo_region_t *region,
+                      int                   dx,
+                      int                   dy)
+{
+  cairo_region_t *result;
+
+  if (region == NULL)
+    return NULL;
+
+  result = cairo_region_copy (region);
+  cairo_region_translate (result, -dx, -dy);
+
+  return result;
+}
+
 static GskRenderNode *
-gtk_snapshot_collect_default (GtkSnapshot      *snapshot,
-                              GtkSnapshotState *state,
-                              GskRenderNode **nodes,
-                              guint           n_nodes,
-                              const char     *name)
+gtk_snapshot_collect_default (GtkSnapshot       *snapshot,
+                              GtkSnapshotState  *state,
+                              GskRenderNode    **nodes,
+                              guint              n_nodes,
+                              const char        *name)
 {
   GskRenderNode *node;
 
@@ -156,6 +172,29 @@ gtk_snapshot_state_clear (GtkSnapshotState *state)
   g_clear_pointer (&state->name, g_free);
 }
 
+static GtkSnapshot *
+gtk_snapshot_new_internal (gboolean        record_names,
+                           cairo_region_t *clip,
+                           char           *name)
+{
+  GtkSnapshot *snapshot;
+
+  snapshot = g_object_new (GTK_TYPE_SNAPSHOT, NULL);
+
+  snapshot->record_names = record_names;
+  snapshot->state_stack = g_array_new (FALSE, TRUE, sizeof (GtkSnapshotState));
+  g_array_set_clear_func (snapshot->state_stack, (GDestroyNotify)gtk_snapshot_state_clear);
+  snapshot->nodes = g_ptr_array_new_with_free_func ((GDestroyNotify)gsk_render_node_unref);
+
+  gtk_snapshot_push_state (snapshot,
+                           name,
+                           clip,
+                           0, 0,
+                           gtk_snapshot_collect_default);
+
+  return snapshot;
+}
+
 /**
  * gtk_snapshot_new:
  * @record_names: whether to keep node names (for debugging purposes)
@@ -173,7 +212,6 @@ gtk_snapshot_new (gboolean              record_names,
                   const char           *name,
                   ...)
 {
-  GtkSnapshot *snapshot;
   char *str;
 
   if (name && record_names)
@@ -187,18 +225,43 @@ gtk_snapshot_new (gboolean              record_names,
   else
     str = NULL;
 
-  snapshot = g_object_new (GTK_TYPE_SNAPSHOT, NULL);
+  return gtk_snapshot_new_internal (record_names,
+                                    (cairo_region_t *) clip,
+                                    str);
+}
 
-  snapshot->record_names = record_names;
-  snapshot->state_stack = g_array_new (FALSE, TRUE, sizeof (GtkSnapshotState));
-  g_array_set_clear_func (snapshot->state_stack, (GDestroyNotify)gtk_snapshot_state_clear);
-  snapshot->nodes = g_ptr_array_new_with_free_func ((GDestroyNotify)gsk_render_node_unref);
+GtkSnapshot *
+gtk_snapshot_new_child (GtkSnapshot *parent,
+                        const char  *name,
+                        ...)
+{
+  GtkSnapshotState *parent_state;
+  GtkSnapshot *snapshot;
+  cairo_region_t *clip;
+  char *str;
 
-  gtk_snapshot_push_state (snapshot,
-                           str,
-                           (cairo_region_t *) clip,
-                           0, 0,
-                           gtk_snapshot_collect_default);
+  if (name && parent->record_names)
+    {
+      va_list args;
+
+      va_start (args, name);
+      str = g_strdup_vprintf (name, args);
+      va_end (args);
+    }
+  else
+    str = NULL;
+
+  parent_state = gtk_snapshot_get_current_state (parent);
+  clip = create_offset_region (parent_state->clip_region,
+                               parent_state->translate_x,
+                               parent_state->translate_y);
+
+  snapshot = gtk_snapshot_new_internal (parent->record_names,
+                                        clip,
+                                        str);
+
+  if (clip)
+    cairo_region_destroy (clip);
 
   return snapshot;
 }
@@ -401,35 +464,10 @@ gtk_snapshot_push_offset (GtkSnapshot *snapshot)
   else
     str = NULL;
 
-  if (state->clip_region)
-    {
-      offset_clip = cairo_region_copy (state->clip_region);
-      if (state->translate_x != floor (state->translate_x))
-        {
-          cairo_region_translate (offset_clip, -1, 0);
-          cairo_region_union (offset_clip, state->clip_region);
-          if (state->translate_y != floor (state->translate_y))
-            {
-              cairo_region_t *tmp = cairo_region_copy (offset_clip);
-              cairo_region_translate (offset_clip, 0, -1);
-              cairo_region_union (offset_clip, tmp);
-              cairo_region_destroy (tmp);
-            }
-        }
-      else if (state->translate_y != floor (state->translate_y))
-        {
-          cairo_region_translate (offset_clip, 0, -1);
-          cairo_region_union (offset_clip, state->clip_region);
-        }
-      cairo_region_translate (offset_clip, 
-                              - floor (state->translate_x),
-                              - floor (state->translate_y));
+  offset_clip = create_offset_region (state->clip_region,
+                                      state->translate_x,
+                                      state->translate_y);
 
-    }
-  else
-    {
-      offset_clip = NULL;
-    }
   state = gtk_snapshot_push_state (snapshot,
                                    str,
                                    offset_clip,

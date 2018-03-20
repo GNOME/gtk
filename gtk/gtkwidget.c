@@ -60,7 +60,7 @@
 #include "gtkselection.h"
 #include "gtksettingsprivate.h"
 #include "gtksizegroup-private.h"
-#include "gtksnapshot.h"
+#include "gtksnapshotprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktooltipprivate.h"
 #include "gtktypebuiltins.h"
@@ -3011,6 +3011,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   priv->sensitive = TRUE;
   priv->alloc_needed = TRUE;
   priv->alloc_needed_on_child = TRUE;
+  priv->draw_needed = TRUE;
   priv->focus_on_click = TRUE;
 #ifdef G_ENABLE_DEBUG
   priv->highlight_resize = FALSE;
@@ -3570,8 +3571,7 @@ gtk_widget_unmap (GtkWidget *widget)
       g_object_ref (widget);
       gtk_widget_push_verify_invariants (widget);
 
-      if (!_gtk_widget_get_has_surface (widget))
-	gtk_widget_queue_draw (widget);
+      gtk_widget_queue_draw (widget);
       _gtk_tooltip_hide (widget);
 
       g_signal_emit (widget, widget_signals[UNMAP], 0);
@@ -4020,6 +4020,21 @@ gtk_widget_queue_draw_area (GtkWidget *widget,
   cairo_region_destroy (region);
 }
 
+static void
+gtk_widget_real_queue_draw (GtkWidget *widget)
+{
+  for (; widget; widget = _gtk_widget_get_parent (widget))
+    {
+      GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+      if (priv->draw_needed)
+        break;
+
+      priv->draw_needed = TRUE;
+      g_clear_pointer (&priv->render_node, gsk_render_node_unref);
+    }
+}
+
 /**
  * gtk_widget_queue_draw:
  * @widget: a #GtkWidget
@@ -4034,6 +4049,8 @@ gtk_widget_queue_draw (GtkWidget *widget)
   GdkRectangle *rect;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  gtk_widget_real_queue_draw (widget);
 
   parent = _gtk_widget_get_parent (widget);
   rect = &widget->priv->clip;
@@ -4287,6 +4304,8 @@ gtk_widget_queue_draw_region (GtkWidget            *widget,
   /* Just return if the widget isn't mapped */
   if (!_gtk_widget_get_mapped (widget))
     return;
+
+  gtk_widget_real_queue_draw (widget);
 
   if (!_gtk_widget_get_parent (widget))
     {
@@ -4627,6 +4646,7 @@ check_clip:
            * are relative to */
           gtk_widget_queue_draw_region (parent ? parent : widget, invalidate);
           cairo_region_destroy (invalidate);
+          gtk_widget_real_queue_draw (widget);
         }
     }
 
@@ -13811,48 +13831,26 @@ gtk_widget_maybe_add_debug_render_nodes (GtkWidget             *widget,
 #endif
 }
 
-void
-gtk_widget_snapshot (GtkWidget   *widget,
-                     GtkSnapshot *snapshot)
+static GskRenderNode *
+gtk_widget_create_render_node (GtkWidget   *widget,
+                               GtkSnapshot *parent_snapshot)
 {
   GtkWidgetClass *klass = GTK_WIDGET_GET_CLASS (widget);
-  GtkWidgetPrivate *priv;
+  GtkWidgetPrivate *priv = widget->priv;
   GtkCssValue *filter_value;
   RenderMode mode;
   double opacity;
-  cairo_rectangle_int_t offset_clip;
   GtkCssStyle *style;
   GtkAllocation allocation;
   GtkBorder margin, border, padding;
+  GtkSnapshot *snapshot;
 
-  if (!_gtk_widget_is_drawable (widget))
-    return;
-
-  if (_gtk_widget_get_alloc_needed (widget))
-    {
-      g_warning ("Trying to snapshot %s %p without a current allocation", G_OBJECT_TYPE_NAME (widget), widget);
-      return;
-    }
-
-  priv = widget->priv;
-  offset_clip = priv->clip;
-  offset_clip.x -= priv->allocation.x;
-  offset_clip.y -= priv->allocation.y;
-
-  if (gtk_snapshot_clips_rect (snapshot, &offset_clip))
-    return;
-
-  opacity = widget->priv->alpha / 255.0;
-  if (opacity <= 0.0)
-    return;
+  snapshot = gtk_snapshot_new_child (parent_snapshot, "%s<%p>", gtk_widget_get_name (widget), widget);
 
   /* Compatibility mode: if the widget does not have a render node, we draw
    * using gtk_widget_draw() on a temporary node
    */
   mode = get_render_mode (klass);
-
-  if (GTK_DEBUG_CHECK (SNAPSHOT))
-    gtk_snapshot_push (snapshot, TRUE, "%s<%p>", gtk_widget_get_name (widget), widget);
 
   filter_value = _gtk_style_context_peek_property (_gtk_widget_get_style_context (widget), GTK_CSS_PROPERTY_FILTER);
   gtk_css_filter_value_push_snapshot (filter_value, snapshot);
@@ -13861,6 +13859,7 @@ gtk_widget_snapshot (GtkWidget   *widget,
   get_box_margin (style, &margin);
   get_box_border (style, &border);
   get_box_padding (style, &padding);
+  opacity = widget->priv->alpha / 255.0;
 
   _gtk_widget_get_allocation (widget, &allocation);
 
@@ -13868,6 +13867,11 @@ gtk_widget_snapshot (GtkWidget   *widget,
     {
       cairo_t *cr;
       graphene_rect_t bounds;
+      cairo_rectangle_int_t offset_clip;
+
+      offset_clip = priv->clip;
+      offset_clip.x -= priv->allocation.x;
+      offset_clip.y -= priv->allocation.y;
 
       graphene_rect_init (&bounds,
                           offset_clip.x,
@@ -13914,6 +13918,11 @@ gtk_widget_snapshot (GtkWidget   *widget,
           gboolean result;
           cairo_t *cr;
           graphene_rect_t bounds;
+          cairo_rectangle_int_t offset_clip;
+
+          offset_clip = priv->clip;
+          offset_clip.x -= priv->allocation.x;
+          offset_clip.y -= priv->allocation.y;
 
           graphene_rect_init (&bounds,
                               offset_clip.x,
@@ -13939,16 +13948,53 @@ gtk_widget_snapshot (GtkWidget   *widget,
         gtk_snapshot_pop (snapshot);
     }
 
-
   gtk_css_filter_value_pop_snapshot (filter_value, snapshot);
 
 #ifdef G_ENABLE_DEBUG
   gtk_widget_maybe_add_debug_render_nodes (widget, snapshot);
 #endif
 
+  return gtk_snapshot_free_to_node (snapshot);
+}
 
-  if (GTK_DEBUG_CHECK (SNAPSHOT))
-    gtk_snapshot_pop (snapshot);
+void
+gtk_widget_snapshot (GtkWidget   *widget,
+                     GtkSnapshot *snapshot)
+{
+  GtkWidgetPrivate *priv = widget->priv;
+  cairo_rectangle_int_t offset_clip;
+  double opacity;
+
+  if (!_gtk_widget_is_drawable (widget))
+    return;
+
+  if (_gtk_widget_get_alloc_needed (widget))
+    {
+      g_warning ("Trying to snapshot %s %p without a current allocation", G_OBJECT_TYPE_NAME (widget), widget);
+      return;
+    }
+
+  priv = widget->priv;
+  offset_clip = priv->clip;
+  offset_clip.x -= priv->allocation.x;
+  offset_clip.y -= priv->allocation.y;
+
+  if (gtk_snapshot_clips_rect (snapshot, &offset_clip))
+    return;
+
+  opacity = widget->priv->alpha / 255.0;
+  if (opacity <= 0.0)
+    return;
+
+  if (priv->draw_needed)
+    {
+      g_assert (priv->render_node == NULL);
+      priv->render_node = gtk_widget_create_render_node (widget, snapshot);
+      priv->draw_needed = FALSE;
+    }
+
+  if (priv->render_node)
+    gtk_snapshot_append_node (snapshot, priv->render_node);
 }
 
 static gboolean
@@ -13968,7 +14014,6 @@ gtk_widget_render (GtkWidget            *widget,
   GtkSnapshot *snapshot;
   GskRenderer *renderer;
   GskRenderNode *root;
-  cairo_region_t *clip;
 
   /* We only render double buffered on native windows */
   if (!gdk_surface_has_native (surface))
@@ -13979,12 +14024,10 @@ gtk_widget_render (GtkWidget            *widget,
     return;
 
   context = gsk_renderer_begin_draw_frame (renderer, region);
-  clip = gdk_drawing_context_get_clip (context);
 
   snapshot = gtk_snapshot_new (should_record_names (widget, renderer),
-                               clip,
+                               NULL,
                                "Render<%s>", G_OBJECT_TYPE_NAME (widget));
-  cairo_region_destroy (clip);
   gtk_widget_snapshot (widget, snapshot);
   root = gtk_snapshot_free_to_node (snapshot);
   if (root != NULL)

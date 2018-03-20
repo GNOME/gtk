@@ -76,6 +76,9 @@ struct _GtkWidgetPrivate
   guint alloc_needed          : 1; /* this widget needs a size_allocate() call */
   guint alloc_needed_on_child : 1; /* 0 or more children - or this widget - need a size_allocate() call */
 
+  /* Queue-draw related flags */
+  guint draw_needed           : 1;
+
   /* Expand-related flags */
   guint need_compute_expand   : 1; /* Need to recompute computed_[hv]_expand */
   guint computed_hexpand      : 1; /* computed results (composite of child flags) */
@@ -142,7 +145,10 @@ struct _GtkWidgetPrivate
   /* The widget's requested sizes */
   SizeRequestCache requests;
 
-  /* The widget's surface or its surface window if it does
+  /* The render node we draw or %NULL if not yet created. */
+  GskRenderNode *render_node;
+
+  /* The widget's surface or its parent surface if it does
    * not have a surface. (Which will be indicated by the
    * no_surface field being set).
    */
