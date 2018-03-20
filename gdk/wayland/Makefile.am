@@ -23,6 +23,8 @@ noinst_LTLIBRARIES =				\
 BUILT_SOURCES = 				\
 	pointer-gestures-unstable-v1-client-protocol.h		\
 	pointer-gestures-unstable-v1-protocol.c			\
+	xdg-shell-client-protocol.h				\
+	xdg-shell-protocol.c					\
 	xdg-shell-unstable-v6-client-protocol.h			\
 	xdg-shell-unstable-v6-protocol.c			\
 	xdg-foreign-unstable-v1-client-protocol.h		\
@@ -80,7 +82,7 @@ libgdkwaylandinclude_HEADERS = 			\
 .SECONDEXPANSION:
 
 define protostability
-$(shell echo $1 | sed 's/.*-\(\(un\)\{0,1\}stable\)-.*/\1/')
+$(if $(findstring unstable,$1),unstable,stable)
 endef
 
 define protoname
