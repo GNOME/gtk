@@ -376,7 +376,7 @@ gtk_color_button_init (GtkColorButton *button)
   GtkStyleContext *context;
   GdkContentFormats *targets;
 
-  gtk_widget_set_has_window (GTK_WIDGET (button), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (button), FALSE);
 
   /* Create the widgets */
   priv = button->priv = gtk_color_button_get_instance_private (button);

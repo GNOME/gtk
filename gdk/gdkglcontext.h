@@ -45,7 +45,7 @@ GType gdk_gl_context_get_type (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GdkDisplay *            gdk_gl_context_get_display              (GdkGLContext  *context);
 GDK_AVAILABLE_IN_ALL
-GdkWindow *             gdk_gl_context_get_window               (GdkGLContext  *context);
+GdkSurface *             gdk_gl_context_get_surface               (GdkGLContext  *context);
 GDK_AVAILABLE_IN_ALL
 GdkGLContext *          gdk_gl_context_get_shared_context       (GdkGLContext  *context);
 GDK_AVAILABLE_IN_ALL

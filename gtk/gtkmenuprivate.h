@@ -53,7 +53,7 @@ struct _GtkMenuPrivate
   gint                position_x;
   gint                position_y;
 
-  GdkWindow         *rect_window;
+  GdkSurface         *rect_window;
   GdkRectangle       rect;
   GtkWidget         *widget;
   GdkGravity         rect_anchor;
@@ -61,7 +61,7 @@ struct _GtkMenuPrivate
   GdkAnchorHints     anchor_hints;
   gint               rect_anchor_dx;
   gint               rect_anchor_dy;
-  GdkWindowTypeHint  menu_type_hint;
+  GdkSurfaceTypeHint  menu_type_hint;
 
   guint toggle_size;
   guint accel_size;

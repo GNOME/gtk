@@ -20,7 +20,7 @@
 #include "gdkeventsource.h"
 
 #include "gdkinternals.h"
-#include "gdkwindow-x11.h"
+#include "gdksurface-x11.h"
 #include "gdkprivate-x11.h"
 #include "gdkdisplay-x11.h"
 #include "xsettings-client.h"
@@ -55,13 +55,13 @@ static GSourceFuncs event_funcs = {
   gdk_event_source_finalize
 };
 
-static GdkWindow *
-gdk_event_source_get_filter_window (GdkEventSource      *event_source,
-                                    const XEvent        *xevent,
-                                    GdkEventTranslator **event_translator)
+static GdkSurface *
+gdk_event_source_get_filter_surface (GdkEventSource      *event_source,
+                                     const XEvent        *xevent,
+                                     GdkEventTranslator **event_translator)
 {
   GList *list = event_source->translators;
-  GdkWindow *window;
+  GdkSurface *surface;
 
   *event_translator = NULL;
 
@@ -70,23 +70,23 @@ gdk_event_source_get_filter_window (GdkEventSource      *event_source,
       GdkEventTranslator *translator = list->data;
 
       list = list->next;
-      window = _gdk_x11_event_translator_get_window (translator,
+      surface = _gdk_x11_event_translator_get_surface (translator,
                                                      event_source->display,
                                                      xevent);
-      if (window)
+      if (surface)
         {
           *event_translator = translator;
-          return window;
+          return surface;
         }
     }
 
-  window = gdk_x11_window_lookup_for_display (event_source->display,
+  surface = gdk_x11_surface_lookup_for_display (event_source->display,
                                               xevent->xany.window);
 
-  if (window && !GDK_IS_WINDOW (window))
-    window = NULL;
+  if (surface && !GDK_IS_SURFACE (surface))
+    surface = NULL;
 
-  return window;
+  return surface;
 }
 
 static void
@@ -96,8 +96,8 @@ handle_focus_change (GdkEventCrossing *event)
   GdkX11Screen *x11_screen;
   gboolean focus_in, had_focus;
 
-  toplevel = _gdk_x11_window_get_toplevel (event->any.window);
-  x11_screen = GDK_X11_SCREEN (GDK_WINDOW_SCREEN (event->any.window));
+  toplevel = _gdk_x11_surface_get_toplevel (event->any.surface);
+  x11_screen = GDK_X11_SCREEN (GDK_SURFACE_SCREEN (event->any.surface));
   focus_in = (event->any.type == GDK_ENTER_NOTIFY);
 
   if (x11_screen->wmspec_check_window)
@@ -119,12 +119,12 @@ handle_focus_change (GdkEventCrossing *event)
       GdkEvent *focus_event;
 
       focus_event = gdk_event_new (GDK_FOCUS_CHANGE);
-      focus_event->any.window = g_object_ref (event->any.window);
+      focus_event->any.surface = g_object_ref (event->any.surface);
       focus_event->any.send_event = FALSE;
       focus_event->focus_change.in = focus_in;
       gdk_event_set_device (focus_event, gdk_event_get_device ((GdkEvent *) event));
 
-      gdk_display_put_event (gdk_window_get_display (event->any.window), focus_event);
+      gdk_display_put_event (gdk_surface_get_display (event->any.surface), focus_event);
       g_object_unref (focus_event);
     }
 }
@@ -142,7 +142,7 @@ create_synth_crossing_event (GdkEventType     evtype,
 
   event = gdk_event_new (evtype);
   event->any.send_event = TRUE;
-  event->any.window = g_object_ref (real_event->any.window);
+  event->any.surface = g_object_ref (real_event->any.surface);
   event->crossing.detail = GDK_NOTIFY_ANCESTOR;
   event->crossing.mode = mode;
   event->crossing.time = gdk_event_get_time (real_event);
@@ -232,7 +232,7 @@ gdk_event_source_translate_event (GdkX11Display  *x11_display,
   GdkFilterReturn result = GDK_FILTER_CONTINUE;
   GdkDisplay *display = GDK_DISPLAY (x11_display);
   GdkEventTranslator *event_translator;
-  GdkWindow *filter_window;
+  GdkSurface *filter_surface;
   Display *dpy;
   GdkX11Screen *x11_screen;
   gpointer cache;
@@ -241,10 +241,10 @@ gdk_event_source_translate_event (GdkX11Display  *x11_display,
 
   dpy = GDK_DISPLAY_XDISPLAY (display);
 
-  filter_window = gdk_event_source_get_filter_window (event_source, xevent,
+  filter_surface = gdk_event_source_get_filter_surface (event_source, xevent,
                                                       &event_translator);
-  if (filter_window)
-    event->any.window = g_object_ref (filter_window);
+  if (filter_surface)
+    event->any.surface = g_object_ref (filter_surface);
 
   /* apply XSettings filters */
   if (xevent->xany.window == XRootWindow (dpy, 0))
@@ -254,15 +254,15 @@ gdk_event_source_translate_event (GdkX11Display  *x11_display,
       xevent->xany.window == x11_screen->xsettings_manager_window)
     result = gdk_xsettings_manager_window_filter (xevent, event, x11_screen);
 
-  cache = gdk_window_cache_get (display);
+  cache = gdk_surface_cache_get (display);
   if (cache)
     {
       if (result == GDK_FILTER_CONTINUE)
-        result = gdk_window_cache_shape_filter (xevent, event, cache);
+        result = gdk_surface_cache_shape_filter (xevent, event, cache);
 
       if (result == GDK_FILTER_CONTINUE &&
           xevent->xany.window == XRootWindow (dpy, 0))
-        result = gdk_window_cache_filter (xevent, event, cache);
+        result = gdk_surface_cache_filter (xevent, event, cache);
     }
 
   if (result == GDK_FILTER_CONTINUE)
@@ -271,10 +271,10 @@ gdk_event_source_translate_event (GdkX11Display  *x11_display,
   if (result == GDK_FILTER_CONTINUE)
     result = _gdk_x11_dnd_filter (xevent, event, NULL);
 
-  if (result == GDK_FILTER_CONTINUE && filter_window)
+  if (result == GDK_FILTER_CONTINUE && filter_surface)
     {
-      gpointer context = g_object_get_data (G_OBJECT (filter_window), "xdnd-source-context");
-      result = xdnd_source_window_filter (xevent, event, context);
+      gpointer context = g_object_get_data (G_OBJECT (filter_surface), "xdnd-source-context");
+      result = xdnd_source_surface_filter (xevent, event, context);
     }
 
   if (result != GDK_FILTER_CONTINUE)
@@ -316,7 +316,7 @@ gdk_event_source_translate_event (GdkX11Display  *x11_display,
   if (event &&
       (event->any.type == GDK_ENTER_NOTIFY ||
        event->any.type == GDK_LEAVE_NOTIFY) &&
-      event->any.window != NULL)
+      event->any.surface != NULL)
     {
       /* Handle focusing (in the case where no window manager is running */
       handle_focus_change (&event->crossing);
@@ -523,7 +523,7 @@ gdk_x11_event_source_select_events (GdkEventSource *source,
 
       if (mask != 0)
         {
-          _gdk_x11_event_translator_select_window_events (translator, window, mask);
+          _gdk_x11_event_translator_select_surface_events (translator, window, mask);
           event_mask &= ~mask;
         }
 

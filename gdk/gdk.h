@@ -67,7 +67,7 @@
 #include <gdk/gdktexture.h>
 #include <gdk/gdktypes.h>
 #include <gdk/gdkvulkancontext.h>
-#include <gdk/gdkwindow.h>
+#include <gdk/gdksurface.h>
 
 #include <gdk/gdk-autocleanup.h>
 

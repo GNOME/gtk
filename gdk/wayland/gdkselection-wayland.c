@@ -162,7 +162,7 @@ data_offer_source_actions (void                 *data,
   GDK_DISPLAY_NOTE (display, EVENTS,
             g_message ("data offer source actions, offer %p, actions %d", wl_data_offer, source_actions));
 
-  if (gdk_drag_context_get_dest_window (drop_context))
+  if (gdk_drag_context_get_dest_surface (drop_context))
     _gdk_wayland_drag_context_emit_event (drop_context, GDK_DRAG_MOTION,
                                           GDK_CURRENT_TIME);
 }
@@ -184,7 +184,7 @@ data_offer_action (void                 *data,
 
   drop_context->action = _wl_to_gdk_actions (action);
 
-  if (gdk_drag_context_get_dest_window (drop_context))
+  if (gdk_drag_context_get_dest_surface (drop_context))
     _gdk_wayland_drag_context_emit_event (drop_context, GDK_DRAG_MOTION,
                                           GDK_CURRENT_TIME);
 }
@@ -427,9 +427,9 @@ static const struct wl_data_source_listener data_source_listener = {
 };
 
 struct wl_data_source *
-gdk_wayland_selection_get_data_source (GdkWindow *owner)
+gdk_wayland_selection_get_data_source (GdkSurface *owner)
 {
-  GdkDisplay *display = gdk_window_get_display (owner);
+  GdkDisplay *display = gdk_surface_get_display (owner);
   GdkWaylandSelection *wayland_selection = gdk_wayland_display_get_selection (display);
   gpointer source = NULL;
   GdkWaylandDisplay *display_wayland;
@@ -437,7 +437,7 @@ gdk_wayland_selection_get_data_source (GdkWindow *owner)
   if (wayland_selection->dnd_source)
     return wayland_selection->dnd_source;
 
-  display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (owner));
+  display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (owner));
 
   source = wl_data_device_manager_create_data_source (display_wayland->data_device_manager);
   wl_data_source_add_listener (source,

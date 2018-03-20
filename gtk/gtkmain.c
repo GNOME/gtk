@@ -1160,62 +1160,62 @@ gtk_main_iteration_do (gboolean blocking)
 }
 
 static void
-rewrite_events_translate (GdkWindow *old_window,
-                          GdkWindow *new_window,
+rewrite_events_translate (GdkSurface *old_surface,
+                          GdkSurface *new_surface,
                           gdouble   *x,
                           gdouble   *y)
 {
   gint old_origin_x, old_origin_y;
   gint new_origin_x, new_origin_y;
 
-  gdk_window_get_origin (old_window, &old_origin_x, &old_origin_y);
-  gdk_window_get_origin (new_window, &new_origin_x, &new_origin_y);
+  gdk_surface_get_origin (old_surface, &old_origin_x, &old_origin_y);
+  gdk_surface_get_origin (new_surface, &new_origin_x, &new_origin_y);
 
   *x += old_origin_x - new_origin_x;
   *y += old_origin_y - new_origin_y;
 }
 
 static GdkEvent *
-rewrite_event_for_window (GdkEvent  *event,
-                          GdkWindow *new_window)
+rewrite_event_for_surface (GdkEvent  *event,
+                          GdkSurface *new_surface)
 {
   event = gdk_event_copy (event);
 
   switch ((guint) event->any.type)
     {
     case GDK_SCROLL:
-      rewrite_events_translate (event->any.window,
-                                new_window,
+      rewrite_events_translate (event->any.surface,
+                                new_surface,
                                 &event->scroll.x, &event->scroll.y);
       break;
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
-      rewrite_events_translate (event->any.window,
-                                new_window,
+      rewrite_events_translate (event->any.surface,
+                                new_surface,
                                 &event->button.x, &event->button.y);
       break;
     case GDK_MOTION_NOTIFY:
-      rewrite_events_translate (event->any.window,
-                                new_window,
+      rewrite_events_translate (event->any.surface,
+                                new_surface,
                                 &event->motion.x, &event->motion.y);
       break;
     case GDK_TOUCH_BEGIN:
     case GDK_TOUCH_UPDATE:
     case GDK_TOUCH_END:
     case GDK_TOUCH_CANCEL:
-      rewrite_events_translate (event->any.window,
-                                new_window,
+      rewrite_events_translate (event->any.surface,
+                                new_surface,
                                 &event->touch.x, &event->touch.y);
       break;
     case GDK_TOUCHPAD_SWIPE:
-      rewrite_events_translate (event->any.window,
-                                new_window,
+      rewrite_events_translate (event->any.surface,
+                                new_surface,
                                 &event->touchpad_swipe.x,
                                 &event->touchpad_swipe.y);
       break;
     case GDK_TOUCHPAD_PINCH:
-      rewrite_events_translate (event->any.window,
-                                new_window,
+      rewrite_events_translate (event->any.surface,
+                                new_surface,
                                 &event->touchpad_pinch.x,
                                 &event->touchpad_pinch.y);
       break;
@@ -1229,15 +1229,15 @@ rewrite_event_for_window (GdkEvent  *event,
       return event;
     }
 
-  g_object_unref (event->any.window);
-  event->any.window = g_object_ref (new_window);
+  g_object_unref (event->any.surface);
+  event->any.surface = g_object_ref (new_surface);
 
   return event;
 }
 
 /* If there is a pointer or keyboard grab in effect with owner_events = TRUE,
  * then what X11 does is deliver the event normally if it was going to this
- * client, otherwise, delivers it in terms of the grab window. This function
+ * client, otherwise, delivers it in terms of the grab surface. This function
  * rewrites events to the effect that events going to the same window group
  * are delivered normally, otherwise, the event is delivered in terms of the
  * grab window.
@@ -1245,7 +1245,7 @@ rewrite_event_for_window (GdkEvent  *event,
 static GdkEvent *
 rewrite_event_for_grabs (GdkEvent *event)
 {
-  GdkWindow *grab_window;
+  GdkSurface *grab_surface;
   GtkWidget *event_widget, *grab_widget;
   gpointer grab_widget_ptr;
   gboolean owner_events;
@@ -1268,10 +1268,10 @@ rewrite_event_for_grabs (GdkEvent *event)
     case GDK_TOUCH_CANCEL:
     case GDK_TOUCHPAD_SWIPE:
     case GDK_TOUCHPAD_PINCH:
-      display = gdk_window_get_display (event->any.window);
+      display = gdk_surface_get_display (event->any.surface);
       device = gdk_event_get_device (event);
 
-      if (!gdk_device_grab_info (display, device, &grab_window, &owner_events) ||
+      if (!gdk_device_grab_info (display, device, &grab_surface, &owner_events) ||
           !owner_events)
         return NULL;
       break;
@@ -1280,12 +1280,12 @@ rewrite_event_for_grabs (GdkEvent *event)
     }
 
   event_widget = gtk_get_event_widget (event);
-  gdk_window_get_user_data (grab_window, &grab_widget_ptr);
+  gdk_surface_get_user_data (grab_surface, &grab_widget_ptr);
   grab_widget = grab_widget_ptr;
 
   if (grab_widget &&
       gtk_main_get_window_group (grab_widget) != gtk_main_get_window_group (event_widget))
-    return rewrite_event_for_window (event, grab_window);
+    return rewrite_event_for_surface (event, grab_surface);
   else
     return NULL;
 }
@@ -1374,9 +1374,9 @@ synth_crossing (GtkWidget       *widget,
   gdk_event_set_device (event, gdk_event_get_device (source));
   gdk_event_set_source_device (event, gdk_event_get_source_device (source));
 
-  event->any.window = g_object_ref (gtk_widget_get_window (toplevel));
+  event->any.surface = g_object_ref (gtk_widget_get_surface (toplevel));
   if (other_widget)
-    event->crossing.subwindow = g_object_ref (gtk_widget_get_window (other_widget));
+    event->crossing.child_surface = g_object_ref (gtk_widget_get_surface (other_widget));
 
   if (enter)
     gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_PRELIGHT, FALSE);
@@ -1659,10 +1659,10 @@ gtk_main_do_event (GdkEvent *event)
   GList *tmp_list;
 
   /* Find the widget which got the event. We store the widget
-   * in the user_data field of GdkWindow's. Ignore the event
+   * in the user_data field of GdkSurface's. Ignore the event
    * if we don't have a widget for it, except for GDK_PROPERTY_NOTIFY
    * events which are handled specially. Though this happens rarely,
-   * bogus events can occur for e.g. destroyed GdkWindows.
+   * bogus events can occur for e.g. destroyed GdkSurfaces.
    */
   event_widget = gtk_get_event_widget (event);
   if (!event_widget)
@@ -1776,8 +1776,8 @@ gtk_main_do_event (GdkEvent *event)
       break;
 
     case GDK_EXPOSE:
-      if (event->any.window)
-        gtk_widget_render (event_widget, event->any.window, event->expose.region);
+      if (event->any.surface)
+        gtk_widget_render (event_widget, event->any.surface, event->expose.region);
       break;
 
     case GDK_FOCUS_CHANGE:
@@ -1917,7 +1917,7 @@ synth_crossing_for_grab_notify (GtkWidget       *from,
   while (devices)
     {
       GdkDevice *device = devices->data;
-      GdkWindow *from_window, *to_window;
+      GdkSurface *from_window, *to_window;
 
       /* Do not propagate events more than once to
        * the same windows if non-multidevice aware.
@@ -1929,7 +1929,7 @@ synth_crossing_for_grab_notify (GtkWidget       *from,
           from_window = _gtk_widget_get_device_window (from, device);
 
           if (from_window &&
-              !gdk_window_get_support_multidevice (from_window) &&
+              !gdk_surface_get_support_multidevice (from_window) &&
               g_list_find (info->notified_windows, from_window))
             from_window = NULL;
         }
@@ -1941,7 +1941,7 @@ synth_crossing_for_grab_notify (GtkWidget       *from,
           to_window = _gtk_widget_get_device_window (to, device);
 
           if (to_window &&
-              !gdk_window_get_support_multidevice (to_window) &&
+              !gdk_surface_get_support_multidevice (to_window) &&
               g_list_find (info->notified_windows, to_window))
             to_window = NULL;
         }
@@ -2317,10 +2317,10 @@ gtk_get_event_widget (const GdkEvent *event)
   gpointer widget_ptr;
 
   widget = NULL;
-  if (event && event->any.window &&
-      (event->any.type == GDK_DESTROY || !gdk_window_is_destroyed (event->any.window)))
+  if (event && event->any.surface &&
+      (event->any.type == GDK_DESTROY || !gdk_surface_is_destroyed (event->any.surface)))
     {
-      gdk_window_get_user_data (event->any.window, &widget_ptr);
+      gdk_surface_get_user_data (event->any.surface, &widget_ptr);
       widget = widget_ptr;
     }
 

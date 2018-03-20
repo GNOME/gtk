@@ -566,7 +566,7 @@ gtk_toolbar_init (GtkToolbar *toolbar)
   priv = toolbar->priv;
 
   gtk_widget_set_can_focus (widget, FALSE);
-  gtk_widget_set_has_window (widget, FALSE);
+  gtk_widget_set_has_surface (widget, FALSE);
 
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
   priv->style = DEFAULT_TOOLBAR_STYLE;
@@ -2238,7 +2238,7 @@ show_menu (GtkToolbar     *toolbar,
                     "anchor-hints", (GDK_ANCHOR_FLIP_Y |
                                      GDK_ANCHOR_SLIDE |
                                      GDK_ANCHOR_RESIZE),
-                    "menu-type-hint", GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU,
+                    "menu-type-hint", GDK_SURFACE_TYPE_HINT_DROPDOWN_MENU,
                     "rect-anchor-dx", -minimum_size.width,
                     NULL);
 

@@ -22,11 +22,11 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#ifndef __GDK_WINDOW_X11_H__
-#define __GDK_WINDOW_X11_H__
+#ifndef __GDK_SURFACE_X11_H__
+#define __GDK_SURFACE_X11_H__
 
 #include "gdk/x11/gdkprivate-x11.h"
-#include "gdk/gdkwindowimpl.h"
+#include "gdk/gdksurfaceimpl.h"
 
 #include <X11/Xlib.h>
 
@@ -42,25 +42,25 @@
 G_BEGIN_DECLS
 
 typedef struct _GdkToplevelX11 GdkToplevelX11;
-typedef struct _GdkWindowImplX11 GdkWindowImplX11;
-typedef struct _GdkWindowImplX11Class GdkWindowImplX11Class;
+typedef struct _GdkSurfaceImplX11 GdkSurfaceImplX11;
+typedef struct _GdkSurfaceImplX11Class GdkSurfaceImplX11Class;
 typedef struct _GdkXPositionInfo GdkXPositionInfo;
 
 /* Window implementation for X11
  */
 
-#define GDK_TYPE_WINDOW_IMPL_X11              (gdk_window_impl_x11_get_type ())
-#define GDK_WINDOW_IMPL_X11(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WINDOW_IMPL_X11, GdkWindowImplX11))
-#define GDK_WINDOW_IMPL_X11_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WINDOW_IMPL_X11, GdkWindowImplX11Class))
-#define GDK_IS_WINDOW_IMPL_X11(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WINDOW_IMPL_X11))
-#define GDK_IS_WINDOW_IMPL_X11_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WINDOW_IMPL_X11))
-#define GDK_WINDOW_IMPL_X11_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WINDOW_IMPL_X11, GdkWindowImplX11Class))
+#define GDK_TYPE_SURFACE_IMPL_X11              (gdk_surface_impl_x11_get_type ())
+#define GDK_SURFACE_IMPL_X11(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_SURFACE_IMPL_X11, GdkSurfaceImplX11))
+#define GDK_SURFACE_IMPL_X11_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_SURFACE_IMPL_X11, GdkSurfaceImplX11Class))
+#define GDK_IS_SURFACE_IMPL_X11(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_SURFACE_IMPL_X11))
+#define GDK_IS_SURFACE_IMPL_X11_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_SURFACE_IMPL_X11))
+#define GDK_SURFACE_IMPL_X11_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_SURFACE_IMPL_X11, GdkSurfaceImplX11Class))
 
-struct _GdkWindowImplX11
+struct _GdkSurfaceImplX11
 {
-  GdkWindowImpl parent_instance;
+  GdkSurfaceImpl parent_instance;
 
-  GdkWindow *wrapper;
+  GdkSurface *wrapper;
 
   Window xid;
 
@@ -74,11 +74,11 @@ struct _GdkWindowImplX11
   guint frame_sync_enabled : 1;
   guint tracking_damage: 1;
 
-  gint window_scale;
+  gint surface_scale;
 
-  /* Width and height not divided by window_scale - this matters in the
+  /* Width and height not divided by surface_scale - this matters in the
    * corner-case where the window manager assigns us a size that isn't
-   * a multiple of window_scale - for example for a maximized window
+   * a multiple of surface_scale - for example for a maximized window
    * with an odd-sized title-bar.
    */
   gint unscaled_width;
@@ -91,9 +91,9 @@ struct _GdkWindowImplX11
 #endif
 };
  
-struct _GdkWindowImplX11Class 
+struct _GdkSurfaceImplX11Class 
 {
-  GdkWindowImplClass parent_class;
+  GdkSurfaceImplClass parent_class;
 };
 
 struct _GdkToplevelX11
@@ -151,7 +151,7 @@ struct _GdkToplevelX11
   
   cairo_surface_t *icon_pixmap;
   cairo_surface_t *icon_mask;
-  GdkWindow *group_leader;
+  GdkSurface *group_leader;
 
   /* Time of most recent user interaction. */
   gulong user_time;
@@ -162,7 +162,7 @@ struct _GdkToplevelX11
    */
   Window focus_window;
 
-  GdkWindowHints last_geometry_hints_mask;
+  GdkSurfaceHints last_geometry_hints_mask;
   GdkGeometry last_geometry_hints;
   
   /* Constrained edge information */
@@ -184,16 +184,16 @@ struct _GdkToplevelX11
 #endif
 };
 
-GType gdk_window_impl_x11_get_type (void);
+GType gdk_surface_impl_x11_get_type (void);
 
-GdkToplevelX11 *_gdk_x11_window_get_toplevel        (GdkWindow *window);
+GdkToplevelX11 *_gdk_x11_surface_get_toplevel        (GdkSurface *window);
 
-GdkCursor      *_gdk_x11_window_get_cursor          (GdkWindow *window);
+GdkCursor      *_gdk_x11_surface_get_cursor          (GdkSurface *window);
 
-void            _gdk_x11_window_update_size         (GdkWindowImplX11 *impl);
-void            _gdk_x11_window_set_window_scale    (GdkWindow *window,
+void            _gdk_x11_surface_update_size         (GdkSurfaceImplX11 *impl);
+void            _gdk_x11_surface_set_surface_scale    (GdkSurface *window,
 						     int        scale);
 
 G_END_DECLS
 
-#endif /* __GDK_WINDOW_X11_H__ */
+#endif /* __GDK_SURFACE_X11_H__ */

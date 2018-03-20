@@ -98,33 +98,33 @@ check_for_draw (GdkEvent *event, gpointer data)
 }
 
 static void
-snapshot_window_native (GdkWindow *window,
+snapshot_window_native (GdkSurface *window,
                         cairo_t   *cr)
 {
 #ifdef GDK_WINDOWING_X11
-  if (GDK_IS_X11_WINDOW (window))
+  if (GDK_IS_X11_SURFACE (window))
     {
       cairo_surface_t *surface;
       XWindowAttributes attrs;
 
-      if (gdk_window_get_window_type (window) == GDK_WINDOW_TOPLEVEL ||
-          gdk_window_get_window_type (window) == GDK_WINDOW_TEMP ||
-          gdk_window_get_window_type (window) == GDK_WINDOW_FOREIGN)
+      if (gdk_surface_get_surface_type (window) == GDK_SURFACE_TOPLEVEL ||
+          gdk_surface_get_surface_type (window) == GDK_SURFACE_TEMP ||
+          gdk_surface_get_surface_type (window) == GDK_SURFACE_FOREIGN)
         {
           /* give the WM/server some time to sync. They need it.
            * Also, do use popups instead of toplevels in your tests
            * whenever you can.
            */
-          gdk_display_sync (gdk_window_get_display (window));
+          gdk_display_sync (gdk_surface_get_display (window));
           g_timeout_add (500, quit_when_idle, loop);
           g_main_loop_run (loop);
         }
 
-      XGetWindowAttributes (gdk_x11_display_get_xdisplay (gdk_window_get_display (window)),
-                            gdk_x11_window_get_xid (window),
+      XGetWindowAttributes (gdk_x11_display_get_xdisplay (gdk_surface_get_display (window)),
+                            gdk_x11_surface_get_xid (window),
                             &attrs);
-      surface = cairo_xlib_surface_create (gdk_x11_display_get_xdisplay (gdk_window_get_display (window)),
-                                           gdk_x11_window_get_xid (window),
+      surface = cairo_xlib_surface_create (gdk_x11_display_get_xdisplay (gdk_surface_get_display (window)),
+                                           gdk_x11_surface_get_xid (window),
                                            attrs.visual,
                                            attrs.width,
                                            attrs.height);
@@ -159,7 +159,7 @@ snapshot_widget (GtkWidget *widget, SnapshotMode mode)
   gdk_event_handler_set (check_for_draw, NULL, NULL);
   g_main_loop_run (loop);
 
-  surface = gdk_window_create_similar_surface (gtk_widget_get_window (widget),
+  surface = gdk_surface_create_similar_surface (gtk_widget_get_surface (widget),
                                                CAIRO_CONTENT_COLOR,
                                                gtk_widget_get_allocated_width (widget),
                                                gtk_widget_get_allocated_height (widget));
@@ -169,7 +169,7 @@ snapshot_widget (GtkWidget *widget, SnapshotMode mode)
   switch (mode)
     {
     case SNAPSHOT_WINDOW:
-      snapshot_window_native (gtk_widget_get_window (widget), cr);
+      snapshot_window_native (gtk_widget_get_surface (widget), cr);
       break;
     case SNAPSHOT_DRAW:
       gtk_widget_draw (widget, cr);

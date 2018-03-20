@@ -665,7 +665,7 @@ gtk_calendar_init (GtkCalendar *calendar)
   priv = calendar->priv = gtk_calendar_get_instance_private (calendar);
 
   gtk_widget_set_can_focus (widget, TRUE);
-  gtk_widget_set_has_window (widget, FALSE);
+  gtk_widget_set_has_surface (widget, FALSE);
 
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (calendar)),
                                GTK_STYLE_CLASS_VIEW);

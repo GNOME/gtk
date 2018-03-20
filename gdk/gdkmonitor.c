@@ -34,7 +34,7 @@
  * associated with a #GdkDisplay. GdkDisplay has APIs to enumerate
  * monitors with gdk_display_get_n_monitors() and gdk_display_get_monitor(), and
  * to find particular monitors with gdk_display_get_primary_monitor() or
- * gdk_display_get_monitor_at_window().
+ * gdk_display_get_monitor_at_surface().
  */
 
 /**
@@ -410,8 +410,8 @@ gdk_monitor_get_model (GdkMonitor *monitor)
  * on very high density outputs this can be a higher value (often 2).
  *
  * This can be used if you want to create pixel based data for a
- * particular monitor, but most of the time you’re drawing to a window
- * where it is better to use gdk_window_get_scale_factor() instead.
+ * particular monitor, but most of the time you’re drawing to a surface
+ * where it is better to use gdk_surface_get_scale_factor() instead.
  *
  * Returns: the scale factor
  */

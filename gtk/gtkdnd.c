@@ -326,7 +326,7 @@ gtk_drag_get_source_widget (GdkDragContext *context)
     {
       GtkWidget *widget = tmp_list->data;
 
-      if (gtk_widget_get_window (widget) == gdk_drag_context_get_source_window (context))
+      if (gtk_widget_get_surface (widget) == gdk_drag_context_get_source_surface (context))
         return widget;
 
       tmp_list = tmp_list->next;
@@ -428,7 +428,7 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
     case GDK_DRAG_MOTION:
     case GDK_DROP_START:
       {
-        GdkWindow *window;
+        GdkSurface *window;
         gint tx, ty;
         double x_root, y_root;
         gboolean found;
@@ -445,9 +445,9 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
               }
           }
 
-        window = gtk_widget_get_window (toplevel);
+        window = gtk_widget_get_surface (toplevel);
 
-        gdk_window_get_position (window, &tx, &ty);
+        gdk_surface_get_position (window, &tx, &ty);
         gdk_event_get_root_coords (event, &x_root, &y_root);
 
         found = gtk_drag_find_widget (toplevel,
@@ -501,7 +501,7 @@ gtk_drag_find_widget (GtkWidget           *widget,
   /* Get the widget at the pointer coordinates and travel up
    * the widget hierarchy from there.
    */
-  widget = _gtk_widget_find_at_coords (gtk_widget_get_window (widget),
+  widget = _gtk_widget_find_at_coords (gtk_widget_get_surface (widget),
                                        x, y, &x, &y);
   if (!widget)
     return FALSE;
@@ -946,7 +946,7 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   toplevel = gtk_widget_get_toplevel (widget);
   gtk_widget_translate_coordinates (widget, toplevel,
                                     x, y, &x, &y);
-  gdk_window_get_device_position (gtk_widget_get_window (toplevel),
+  gdk_surface_get_device_position (gtk_widget_get_surface (toplevel),
                                   device,
                                   &dx, &dy,
                                   NULL);
@@ -958,7 +958,7 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   content->formats = gdk_content_formats_ref (target_list);
   content->time = time;
 
-  context = gdk_drag_begin (gtk_widget_get_window (toplevel), device, GDK_CONTENT_PROVIDER (content), actions, dx, dy);
+  context = gdk_drag_begin (gtk_widget_get_surface (toplevel), device, GDK_CONTENT_PROVIDER (content), actions, dx, dy);
   if (context == NULL)
     {
       g_object_unref (content);
@@ -1109,13 +1109,13 @@ gtk_drag_set_icon_widget_internal (GdkDragContext *context,
       display = gdk_drag_context_get_display (context);
 
       info->icon_window = gtk_window_new (GTK_WINDOW_POPUP);
-      gtk_window_set_type_hint (GTK_WINDOW (info->icon_window), GDK_WINDOW_TYPE_HINT_DND);
+      gtk_window_set_type_hint (GTK_WINDOW (info->icon_window), GDK_SURFACE_TYPE_HINT_DND);
       gtk_window_set_display (GTK_WINDOW (info->icon_window), display);
       gtk_widget_set_size_request (info->icon_window, 24, 24);
       gtk_style_context_remove_class (gtk_widget_get_style_context (info->icon_window), "background");
 
       gtk_window_set_hardcoded_window (GTK_WINDOW (info->icon_window),
-                                       gdk_drag_context_get_drag_window (context));
+                                       gdk_drag_context_get_drag_surface (context));
       gtk_widget_show (info->icon_window);
     }
 

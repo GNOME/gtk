@@ -459,7 +459,7 @@ void gtk_tree_view_convert_tree_to_widget_coords       (GtkTreeView *tree_view,
 							gint        *wx,
 							gint        *wy);
 GDK_AVAILABLE_IN_ALL
-void gtk_tree_view_convert_widget_to_bin_window_coords (GtkTreeView *tree_view,
+void gtk_tree_view_convert_widget_to_bin_surface_coords (GtkTreeView *tree_view,
 							gint         wx,
 							gint         wy,
 							gint        *bx,
@@ -471,7 +471,7 @@ void gtk_tree_view_convert_bin_window_to_widget_coords (GtkTreeView *tree_view,
 							gint        *wx,
 							gint        *wy);
 GDK_AVAILABLE_IN_ALL
-void gtk_tree_view_convert_tree_to_bin_window_coords   (GtkTreeView *tree_view,
+void gtk_tree_view_convert_tree_to_bin_surface_coords   (GtkTreeView *tree_view,
 							gint         tx,
 							gint         ty,
 							gint        *bx,

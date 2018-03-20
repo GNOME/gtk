@@ -104,7 +104,7 @@ gdk_seat_default_get_capabilities (GdkSeat *seat)
 
 static GdkGrabStatus
 gdk_seat_default_grab (GdkSeat                *seat,
-                       GdkWindow              *window,
+                       GdkSurface              *surface,
                        GdkSeatCapabilities     capabilities,
                        gboolean                owner_events,
                        GdkCursor              *cursor,
@@ -119,12 +119,12 @@ gdk_seat_default_grab (GdkSeat                *seat,
   priv = gdk_seat_default_get_instance_private (GDK_SEAT_DEFAULT (seat));
 
   if (prepare_func)
-    (prepare_func) (seat, window, prepare_func_data);
+    (prepare_func) (seat, surface, prepare_func_data);
 
-  if (!gdk_window_is_visible (window))
+  if (!gdk_surface_is_visible (surface))
     {
-      g_critical ("Window %p has not been made visible in GdkSeatGrabPrepareFunc",
-                  window);
+      g_critical ("Surface %p has not been made visible in GdkSeatGrabPrepareFunc",
+                  surface);
       return GDK_GRAB_NOT_VIEWABLE;
     }
 
@@ -145,7 +145,7 @@ gdk_seat_default_grab (GdkSeat                *seat,
       if (capabilities & GDK_SEAT_CAPABILITY_TOUCH)
         pointer_evmask |= TOUCH_EVENTS;
 
-      status = gdk_device_grab (priv->master_pointer, window,
+      status = gdk_device_grab (priv->master_pointer, surface,
                                 GDK_OWNERSHIP_NONE, owner_events,
                                 pointer_evmask, cursor,
                                 evtime);
@@ -154,7 +154,7 @@ gdk_seat_default_grab (GdkSeat                *seat,
   if (status == GDK_GRAB_SUCCESS &&
       capabilities & GDK_SEAT_CAPABILITY_KEYBOARD)
     {
-      status = gdk_device_grab (priv->master_keyboard, window,
+      status = gdk_device_grab (priv->master_keyboard, surface,
                                 GDK_OWNERSHIP_NONE, owner_events,
                                 KEYBOARD_EVENTS, cursor,
                                 evtime);
@@ -163,7 +163,7 @@ gdk_seat_default_grab (GdkSeat                *seat,
         {
           if (capabilities & ~GDK_SEAT_CAPABILITY_KEYBOARD)
             gdk_device_ungrab (priv->master_pointer, evtime);
-          gdk_window_hide (window);
+          gdk_surface_hide (surface);
         }
     }
 

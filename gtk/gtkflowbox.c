@@ -3734,7 +3734,7 @@ gtk_flow_box_init (GtkFlowBox *box)
 {
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
 
-  gtk_widget_set_has_window (GTK_WIDGET (box), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (box), FALSE);
 
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
   priv->selection_mode = GTK_SELECTION_SINGLE;

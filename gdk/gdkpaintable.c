@@ -165,7 +165,7 @@ gdk_paintable_default_init (GdkPaintableInterface *iface)
    * has changed.
    *
    * Examples for such an event would be a paintable displaying the contents of a toplevel
-   * window being resized.
+   * surface being resized.
    *
    * Since: 4.0
    */

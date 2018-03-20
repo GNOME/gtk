@@ -137,7 +137,7 @@
       <para>
 	This is the step in a <glossterm
 	linkend="widget">widget's</glossterm> life cycle where it
-	actually shows the GdkWindows it created when it was
+	actually shows the GdkSurfaces it created when it was
 	<glossterm linkend="realization">realized</glossterm>.  When a
 	widget is mapped, it must turn on its
 	%GTK_MAPPED <link linkend="GtkWidgetFlags">flag</link>.
@@ -146,7 +146,7 @@
       <para>
 	Note that due to the asynchronous nature of the X window
 	system, a widget's window may not appear on the screen
-	immediatly after one calls gdk_window_show():
+	immediatly after one calls gdk_surface_show():
 	you must wait for the corresponding map <glossterm
 	linkend="event">event</glossterm> to be received.  You can do
 	this with the <link
@@ -193,10 +193,10 @@
     <glossterm>no-window widget</glossterm>
     <glossdef>
       <para>
-	A widget that does not have a GdkWindow of its own on which to
+	A widget that does not have a GdkSurface of its own on which to
 	draw its contents, but rather shares its <glossterm
 	linkend="parent">parent's</glossterm>.  This can be tested with
-	the gtk_widget_get_has_window() function.
+	the gtk_widget_get_has_surface() function.
       </para>
     </glossdef>
   </glossentry>
@@ -218,20 +218,20 @@
       <para>
 	This is the step in a <glossterm
 	linkend="widget">widget's</glossterm> life cycle where it
-	creates its own GdkWindow, or otherwise associates itself with
+	creates its own GdkSurface, or otherwise associates itself with
 	its <glossterm linkend="parent">parent's</glossterm>
-	GdkWindow.  If the widget has its own window, then it must
+	GdkSurface.  If the widget has its own window, then it must
 	also attach a <glossterm linkend="style">style</glossterm> to
 	it.  A widget becomes unrealized by destroying its associated
-	GdkWindow.  When a widget is realized, it must turn on its
+	GdkSurface.  When a widget is realized, it must turn on its
 	%GTK_REALIZED <link linkend="GtkWidgetFlags">flag</link>.
       </para>
 
       <para>
-	Widgets that don't own the GdkWindow on which they draw are
+	Widgets that don't own the GdkSurface on which they draw are
 	called <glossterm linkend="no-window">no-window widgets</glossterm>.  
-        This can be tested with the gtk_widget_get_has_window() function.  Normally,
-        these widgets draw on their parent's GdkWindow.
+        This can be tested with the gtk_widget_get_has_surface() function.  Normally,
+        these widgets draw on their parent's GdkSurface.
       </para>
 
       <para>

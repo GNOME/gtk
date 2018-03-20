@@ -41,17 +41,17 @@ gtk_application_impl_wayland_handle_window_realize (GtkApplicationImpl *impl,
   GtkApplicationImplClass *impl_class =
     GTK_APPLICATION_IMPL_CLASS (gtk_application_impl_wayland_parent_class);
   GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) impl;
-  GdkWindow *gdk_window;
+  GdkSurface *gdk_surface;
   gchar *window_path;
 
-  gdk_window = gtk_widget_get_window (GTK_WIDGET (window));
+  gdk_surface = gtk_widget_get_surface (GTK_WIDGET (window));
 
-  if (!GDK_IS_WAYLAND_WINDOW (gdk_window))
+  if (!GDK_IS_WAYLAND_SURFACE (gdk_surface))
     return;
 
   window_path = gtk_application_impl_dbus_get_window_path (dbus, window);
 
-  gdk_wayland_window_set_dbus_properties_libgtk_only (gdk_window,
+  gdk_wayland_surface_set_dbus_properties_libgtk_only (gdk_surface,
                                                       dbus->application_id, dbus->app_menu_path, dbus->menubar_path,
                                                       window_path, dbus->object_path, dbus->unique_name);
 

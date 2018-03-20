@@ -18,7 +18,7 @@
 #include "config.h"
 
 #include "gdkeventtranslator.h"
-#include "gdkwindow-x11.h"
+#include "gdksurface-x11.h"
 
 typedef GdkEventTranslatorIface GdkEventTranslatorInterface;
 G_DEFINE_INTERFACE (GdkEventTranslator, _gdk_x11_event_translator, G_TYPE_OBJECT);
@@ -72,7 +72,7 @@ _gdk_x11_event_translator_get_handled_events (GdkEventTranslator *translator)
 }
 
 void
-_gdk_x11_event_translator_select_window_events (GdkEventTranslator *translator,
+_gdk_x11_event_translator_select_surface_events (GdkEventTranslator *translator,
                                                 Window              window,
                                                 GdkEventMask        event_mask)
 {
@@ -82,14 +82,14 @@ _gdk_x11_event_translator_select_window_events (GdkEventTranslator *translator,
 
   iface = GDK_EVENT_TRANSLATOR_GET_IFACE (translator);
 
-  if (iface->select_window_events)
-    iface->select_window_events (translator, window, event_mask);
+  if (iface->select_surface_events)
+    iface->select_surface_events (translator, window, event_mask);
 }
 
-GdkWindow *
-_gdk_x11_event_translator_get_window (GdkEventTranslator *translator,
-                                      GdkDisplay         *display,
-                                      const XEvent       *xevent)
+GdkSurface *
+_gdk_x11_event_translator_get_surface (GdkEventTranslator *translator,
+                                       GdkDisplay         *display,
+                                       const XEvent       *xevent)
 {
   GdkEventTranslatorIface *iface;
 
@@ -97,8 +97,8 @@ _gdk_x11_event_translator_get_window (GdkEventTranslator *translator,
 
   iface = GDK_EVENT_TRANSLATOR_GET_IFACE (translator);
 
-  if (iface->get_window)
-    return iface->get_window (translator, xevent);
+  if (iface->get_surface)
+    return iface->get_surface (translator, xevent);
 
   return NULL;
 }

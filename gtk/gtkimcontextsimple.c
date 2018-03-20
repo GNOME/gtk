@@ -1022,9 +1022,9 @@ check_emoji (GtkIMContextSimple *context_simple,
 }
 
 static void
-beep_window (GdkWindow *window)
+beep_window (GdkSurface *window)
 {
-  GdkDisplay *display = gdk_window_get_display (window);
+  GdkDisplay *display = gdk_surface_get_display (window);
   gboolean   beep;
 
   g_object_get (gtk_settings_get_for_display (display),
@@ -1032,7 +1032,7 @@ beep_window (GdkWindow *window)
                 NULL);
 
   if (beep)
-    gdk_window_beep (window);
+    gdk_surface_beep (window);
 }
 
 static gboolean
@@ -1074,7 +1074,7 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
       priv->compose_buffer[0] = 0;
       if (n_compose > 1)		/* Invalid sequence */
 	{
-	  beep_window (gdk_event_get_window ((GdkEvent *) event));
+	  beep_window (gdk_event_get_surface ((GdkEvent *) event));
 	  return TRUE;
 	}
   
@@ -1102,8 +1102,8 @@ is_hex_keyval (guint keyval)
 static guint
 canonical_hex_keyval (GdkEventKey *event)
 {
-  GdkWindow *window = gdk_event_get_window ((GdkEvent *) event);
-  GdkKeymap *keymap = gdk_display_get_keymap (gdk_window_get_display (window));
+  GdkSurface *window = gdk_event_get_surface ((GdkEvent *) event);
+  GdkKeymap *keymap = gdk_display_get_keymap (gdk_surface_get_display (window));
   guint keyval, event_keyval;
   guint *keyvals = NULL;
   gint n_vals = 0;
@@ -1162,8 +1162,8 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 {
   GtkIMContextSimple *context_simple = GTK_IM_CONTEXT_SIMPLE (context);
   GtkIMContextSimplePrivate *priv = context_simple->priv;
-  GdkWindow *window = gdk_event_get_window ((GdkEvent *) event);
-  GdkDisplay *display = gdk_window_get_display (window);
+  GdkSurface *window = gdk_event_get_surface ((GdkEvent *) event);
+  GdkDisplay *display = gdk_surface_get_display (window);
   GdkKeymap *keymap = gdk_display_get_keymap (display);
   GSList *tmp_list;
   int n_compose = 0;

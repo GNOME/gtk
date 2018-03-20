@@ -16,7 +16,7 @@ gdk_quartz_sources = files([
   'gdkscreen-quartz.c',
   'gdkselection-quartz.c',
   'gdkutils-quartz.c',
-  'gdkwindow-quartz.c',
+  'gdksurface-quartz.c',
 ])
 
 gdk_quartz_public_headers = files([
@@ -29,7 +29,7 @@ gdk_quartz_public_headers = files([
   'gdkquartzkeys.h',
   'gdkquartzscreen.h',
   'gdkquartzutils.h',
-  'gdkquartzwindow.h',
+  'gdkquartzsurface.h',
 ])
 
 install_headers(gdk_quartz_public_headers, subdir: 'gtk-4.0/gdk/quartz/')

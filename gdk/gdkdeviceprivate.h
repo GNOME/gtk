@@ -71,49 +71,49 @@ struct _GdkDeviceClass
   GObjectClass parent_class;
 
   gboolean (* get_history)   (GdkDevice      *device,
-                              GdkWindow      *window,
+                              GdkSurface      *surface,
                               guint32         start,
                               guint32         stop,
                               GdkTimeCoord ***events,
                               gint           *n_events);
 
   void (* get_state)         (GdkDevice       *device,
-                              GdkWindow       *window,
+                              GdkSurface       *surface,
                               gdouble         *axes,
                               GdkModifierType *mask);
 
-  void (* set_window_cursor) (GdkDevice *device,
-                              GdkWindow *window,
+  void (* set_surface_cursor) (GdkDevice *device,
+                              GdkSurface *surface,
                               GdkCursor *cursor);
 
   void (* warp)              (GdkDevice  *device,
                               gdouble     x,
                               gdouble     y);
   void (* query_state)       (GdkDevice       *device,
-                              GdkWindow       *window,
-                              GdkWindow      **child_window,
+                              GdkSurface       *surface,
+                              GdkSurface      **child_surface,
                               gdouble          *root_x,
                               gdouble          *root_y,
                               gdouble          *win_x,
                               gdouble          *win_y,
                               GdkModifierType  *mask);
   GdkGrabStatus (* grab)     (GdkDevice        *device,
-                              GdkWindow        *window,
+                              GdkSurface        *surface,
                               gboolean          owner_events,
                               GdkEventMask      event_mask,
-                              GdkWindow        *confine_to,
+                              GdkSurface        *confine_to,
                               GdkCursor        *cursor,
                               guint32           time_);
   void          (*ungrab)    (GdkDevice        *device,
                               guint32           time_);
 
-  GdkWindow * (* window_at_position) (GdkDevice       *device,
+  GdkSurface * (* surface_at_position) (GdkDevice       *device,
                                       double          *win_x,
                                       double          *win_y,
                                       GdkModifierType *mask,
                                       gboolean         get_toplevel);
-  void (* select_window_events)      (GdkDevice       *device,
-                                      GdkWindow       *window,
+  void (* select_surface_events)      (GdkDevice       *device,
+                                      GdkSurface       *surface,
                                       GdkEventMask     event_mask);
 };
 
@@ -138,16 +138,16 @@ void _gdk_device_get_axis_info (GdkDevice  *device,
 void _gdk_device_set_keys    (GdkDevice   *device,
                               guint        num_keys);
 
-gboolean   _gdk_device_translate_window_coord (GdkDevice *device,
-                                               GdkWindow *window,
+gboolean   _gdk_device_translate_surface_coord (GdkDevice *device,
+                                               GdkSurface *surface,
                                                guint      index,
                                                gdouble    value,
                                                gdouble   *axis_value);
 
 gboolean   _gdk_device_translate_screen_coord (GdkDevice *device,
-                                               GdkWindow *window,
-                                               gdouble    window_root_x,
-                                               gdouble    window_root_y,
+                                               GdkSurface *surface,
+                                               gdouble    surface_root_x,
+                                               gdouble    surface_root_y,
                                                gdouble    screen_width,
                                                gdouble    screen_height,
                                                guint      index,
@@ -167,14 +167,14 @@ void _gdk_device_add_slave (GdkDevice *device,
 void _gdk_device_remove_slave (GdkDevice *device,
                                GdkDevice *slave);
 void _gdk_device_query_state                  (GdkDevice        *device,
-                                               GdkWindow        *window,
-                                               GdkWindow       **child_window,
+                                               GdkSurface        *surface,
+                                               GdkSurface       **child_surface,
                                                gdouble          *root_x,
                                                gdouble          *root_y,
                                                gdouble          *win_x,
                                                gdouble          *win_y,
                                                GdkModifierType  *mask);
-GdkWindow * _gdk_device_window_at_position    (GdkDevice        *device,
+GdkSurface * _gdk_device_surface_at_position    (GdkDevice        *device,
                                                gdouble          *win_x,
                                                gdouble          *win_y,
                                                GdkModifierType  *mask,

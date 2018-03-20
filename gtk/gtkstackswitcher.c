@@ -87,7 +87,7 @@ gtk_stack_switcher_init (GtkStackSwitcher *switcher)
   GtkStyleContext *context;
   GtkStackSwitcherPrivate *priv;
 
-  gtk_widget_set_has_window (GTK_WIDGET (switcher), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (switcher), FALSE);
 
   priv = gtk_stack_switcher_get_instance_private (switcher);
 

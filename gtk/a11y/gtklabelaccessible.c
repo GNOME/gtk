@@ -995,7 +995,7 @@ gtk_label_accessible_get_character_extents (AtkText      *text,
   PangoRectangle char_rect;
   const gchar *label_text;
   gint index, x_layout, y_layout;
-  GdkWindow *window;
+  GdkSurface *window;
   gint x_window, y_window;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
@@ -1010,8 +1010,8 @@ gtk_label_accessible_get_character_extents (AtkText      *text,
   pango_layout_index_to_pos (gtk_label_get_layout (label), index, &char_rect);
   pango_extents_to_pixels (&char_rect, NULL);
 
-  window = gtk_widget_get_window (widget);
-  gdk_window_get_origin (window, &x_window, &y_window);
+  window = gtk_widget_get_surface (widget);
+  gdk_surface_get_origin (window, &x_window, &y_window);
 
   *x = x_window + x_layout + char_rect.x;
   *y = y_window + y_layout + char_rect.y;
@@ -1020,8 +1020,8 @@ gtk_label_accessible_get_character_extents (AtkText      *text,
 
   if (coords == ATK_XY_WINDOW)
     {
-      window = gdk_window_get_toplevel (window);
-      gdk_window_get_origin (window, &x_window, &y_window);
+      window = gdk_surface_get_toplevel (window);
+      gdk_surface_get_origin (window, &x_window, &y_window);
 
       *x -= x_window;
       *y -= y_window;
@@ -1040,7 +1040,7 @@ gtk_label_accessible_get_offset_at_point (AtkText      *atk_text,
   gint index, x_layout, y_layout;
   gint x_window, y_window;
   gint x_local, y_local;
-  GdkWindow *window;
+  GdkSurface *window;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (atk_text));
   if (widget == NULL)
@@ -1050,16 +1050,16 @@ gtk_label_accessible_get_offset_at_point (AtkText      *atk_text,
 
   gtk_label_get_layout_offsets (label, &x_layout, &y_layout);
 
-  window = gtk_widget_get_window (widget);
-  gdk_window_get_origin (window, &x_window, &y_window);
+  window = gtk_widget_get_surface (widget);
+  gdk_surface_get_origin (window, &x_window, &y_window);
 
   x_local = x - x_layout - x_window;
   y_local = y - y_layout - y_window;
 
   if (coords == ATK_XY_WINDOW)
     {
-      window = gdk_window_get_toplevel (window);
-      gdk_window_get_origin (window, &x_window, &y_window);
+      window = gdk_surface_get_toplevel (window);
+      gdk_surface_get_origin (window, &x_window, &y_window);
 
       x_local += x_window;
       y_local += y_window;

@@ -84,7 +84,7 @@ static void
 gsk_vulkan_renderer_update_images_cb (GdkVulkanContext  *context,
                                       GskVulkanRenderer *self)
 {
-  GdkWindow *window;
+  GdkSurface *window;
   gint scale_factor;
   gsize width, height;
   guint i;
@@ -94,10 +94,10 @@ gsk_vulkan_renderer_update_images_cb (GdkVulkanContext  *context,
   self->n_targets = gdk_vulkan_context_get_n_images (context);
   self->targets = g_new (GskVulkanImage *, self->n_targets);
 
-  window = gsk_renderer_get_window (GSK_RENDERER (self));
-  scale_factor = gdk_window_get_scale_factor (window);
-  width = gdk_window_get_width (window) * scale_factor;
-  height = gdk_window_get_height (window) * scale_factor;
+  window = gsk_renderer_get_surface (GSK_RENDERER (self));
+  scale_factor = gdk_surface_get_scale_factor (window);
+  width = gdk_surface_get_width (window) * scale_factor;
+  height = gdk_surface_get_height (window) * scale_factor;
 
   for (i = 0; i < self->n_targets; i++)
     {
@@ -110,12 +110,12 @@ gsk_vulkan_renderer_update_images_cb (GdkVulkanContext  *context,
 
 static gboolean
 gsk_vulkan_renderer_realize (GskRenderer  *renderer,
-                             GdkWindow    *window,
+                             GdkSurface    *window,
                              GError      **error)
 {
   GskVulkanRenderer *self = GSK_VULKAN_RENDERER (renderer);
 
-  self->vulkan = gdk_window_create_vulkan_context (window, error);
+  self->vulkan = gdk_surface_create_vulkan_context (window, error);
   if (self->vulkan == NULL)
     return FALSE;
 
@@ -256,7 +256,7 @@ gsk_vulkan_renderer_begin_draw_frame (GskRenderer          *renderer,
   GskVulkanRenderer *self = GSK_VULKAN_RENDERER (renderer);
   GdkDrawingContext *result;
 
-  result = gdk_window_begin_draw_frame (gsk_renderer_get_window (renderer),
+  result = gdk_surface_begin_draw_frame (gsk_renderer_get_surface (renderer),
                                         GDK_DRAW_CONTEXT (self->vulkan),
                                         region);
 

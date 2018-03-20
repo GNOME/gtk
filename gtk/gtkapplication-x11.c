@@ -39,22 +39,22 @@ gtk_application_impl_x11_handle_window_realize (GtkApplicationImpl *impl,
                                                 GtkWindow          *window)
 {
   GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) impl;
-  GdkWindow *gdk_window;
+  GdkSurface *gdk_surface;
   gchar *window_path;
 
-  gdk_window = gtk_widget_get_window (GTK_WIDGET (window));
+  gdk_surface = gtk_widget_get_surface (GTK_WIDGET (window));
 
-  if (!GDK_IS_X11_WINDOW (gdk_window))
+  if (!GDK_IS_X11_SURFACE (gdk_surface))
     return;
 
   window_path = gtk_application_impl_dbus_get_window_path (dbus, window);
 
-  gdk_x11_window_set_utf8_property (gdk_window, "_GTK_APPLICATION_ID", dbus->application_id);
-  gdk_x11_window_set_utf8_property (gdk_window, "_GTK_UNIQUE_BUS_NAME", dbus->unique_name);
-  gdk_x11_window_set_utf8_property (gdk_window, "_GTK_APPLICATION_OBJECT_PATH", dbus->object_path);
-  gdk_x11_window_set_utf8_property (gdk_window, "_GTK_WINDOW_OBJECT_PATH", window_path);
-  gdk_x11_window_set_utf8_property (gdk_window, "_GTK_APP_MENU_OBJECT_PATH", dbus->app_menu_path);
-  gdk_x11_window_set_utf8_property (gdk_window, "_GTK_MENUBAR_OBJECT_PATH", dbus->menubar_path);
+  gdk_x11_surface_set_utf8_property (gdk_surface, "_GTK_APPLICATION_ID", dbus->application_id);
+  gdk_x11_surface_set_utf8_property (gdk_surface, "_GTK_UNIQUE_BUS_NAME", dbus->unique_name);
+  gdk_x11_surface_set_utf8_property (gdk_surface, "_GTK_APPLICATION_OBJECT_PATH", dbus->object_path);
+  gdk_x11_surface_set_utf8_property (gdk_surface, "_GTK_WINDOW_OBJECT_PATH", window_path);
+  gdk_x11_surface_set_utf8_property (gdk_surface, "_GTK_APP_MENU_OBJECT_PATH", dbus->app_menu_path);
+  gdk_x11_surface_set_utf8_property (gdk_surface, "_GTK_MENUBAR_OBJECT_PATH", dbus->menubar_path);
 
   g_free (window_path);
 }
@@ -63,12 +63,12 @@ static GVariant *
 gtk_application_impl_x11_get_window_system_id (GtkApplicationImplDBus *dbus,
                                                GtkWindow              *window)
 {
-  GdkWindow *gdk_window;
+  GdkSurface *gdk_surface;
 
-  gdk_window = gtk_widget_get_window (GTK_WIDGET (window));
+  gdk_surface = gtk_widget_get_surface (GTK_WIDGET (window));
 
-  if (GDK_IS_X11_WINDOW (gdk_window))
-    return g_variant_new_uint32 (GDK_WINDOW_XID (gdk_window));
+  if (GDK_IS_X11_SURFACE (gdk_surface))
+    return g_variant_new_uint32 (GDK_SURFACE_XID (gdk_surface));
 
   return GTK_APPLICATION_IMPL_DBUS_CLASS (gtk_application_impl_x11_parent_class)->get_window_system_id (dbus, window);
 }

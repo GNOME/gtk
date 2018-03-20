@@ -579,7 +579,7 @@ gtk_color_swatch_init (GtkColorSwatch *swatch)
   swatch->priv->has_menu = TRUE;
 
   gtk_widget_set_can_focus (GTK_WIDGET (swatch), TRUE);
-  gtk_widget_set_has_window (GTK_WIDGET (swatch), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (swatch), FALSE);
 
   swatch->priv->long_press_gesture = gtk_gesture_long_press_new (GTK_WIDGET (swatch));
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (swatch->priv->long_press_gesture),

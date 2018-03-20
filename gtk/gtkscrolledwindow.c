@@ -1913,7 +1913,7 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   scrolled_window->priv = priv =
     gtk_scrolled_window_get_instance_private (scrolled_window);
 
-  gtk_widget_set_has_window (widget, FALSE);
+  gtk_widget_set_has_surface (widget, FALSE);
   gtk_widget_set_can_focus (widget, TRUE);
 
   /* Instantiated by gtk_scrolled_window_set_[hv]adjustment

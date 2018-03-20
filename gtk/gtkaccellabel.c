@@ -321,7 +321,7 @@ gtk_accel_label_init (GtkAccelLabel *accel_label)
 {
   GtkAccelLabelPrivate *priv;
 
-  gtk_widget_set_has_window (GTK_WIDGET (accel_label), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (accel_label), FALSE);
 
   accel_label->priv = gtk_accel_label_get_instance_private (accel_label);
   priv = accel_label->priv;

@@ -88,7 +88,7 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
   GdkDisplay *display;
   GdkBroadwayDisplay *display_broadway;
   GdkSeat *seat;
-  GdkWindow *window;
+  GdkSurface *window;
   GdkEvent *event = NULL;
   GList *node;
   GSList *list, *d;
@@ -117,7 +117,7 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
     if (window)
       {
         event = gdk_event_new (GDK_ENTER_NOTIFY);
-        event->any.window = g_object_ref (window);
+        event->any.surface = g_object_ref (window);
         event->crossing.time = message->base.time;
         event->crossing.x = message->pointer.win_x;
         event->crossing.y = message->pointer.win_y;
@@ -137,7 +137,7 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
     if (window)
       {
         event = gdk_event_new (GDK_LEAVE_NOTIFY);
-        event->any.window = g_object_ref (window);
+        event->any.surface = g_object_ref (window);
         event->crossing.time = message->base.time;
         event->crossing.x = message->pointer.win_x;
         event->crossing.y = message->pointer.win_y;
@@ -160,7 +160,7 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
     if (window)
       {
         event = gdk_event_new (GDK_MOTION_NOTIFY);
-        event->any.window = g_object_ref (window);
+        event->any.surface = g_object_ref (window);
         event->motion.time = message->base.time;
         event->motion.x = message->pointer.win_x;
         event->motion.y = message->pointer.win_y;
@@ -184,7 +184,7 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
     if (window)
       {
         event = gdk_event_new (message->base.type == 'b' ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE);
-        event->any.window = g_object_ref (window);
+        event->any.surface = g_object_ref (window);
         event->button.time = message->base.time;
         event->button.x = message->pointer.win_x;
         event->button.y = message->pointer.win_y;
@@ -204,7 +204,7 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
     if (window)
       {
         event = gdk_event_new (GDK_SCROLL);
-        event->any.window = g_object_ref (window);
+        event->any.surface = g_object_ref (window);
         event->scroll.time = message->base.time;
         event->scroll.x = message->pointer.win_x;
         event->scroll.y = message->pointer.win_y;
@@ -243,7 +243,7 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
           break;
 
         event = gdk_event_new (event_type);
-        event->any.window = g_object_ref (window);
+        event->any.surface = g_object_ref (window);
         event->touch.sequence = GUINT_TO_POINTER(message->touch.sequence_id);
         event->touch.emulating_pointer = message->touch.is_emulated;
         event->touch.time = message->base.time;
@@ -279,7 +279,7 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
     if (window)
       {
         event = gdk_event_new (message->base.type == 'k' ? GDK_KEY_PRESS : GDK_KEY_RELEASE);
-        event->any.window = g_object_ref (window);
+        event->any.surface = g_object_ref (window);
         event->key.time = message->base.time;
         event->key.keyval = message->key.key;
         event->key.state = message->key.state;
@@ -306,7 +306,7 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
         window->y = message->configure_notify.y;
 
         event = gdk_event_new (GDK_CONFIGURE);
-        event->any.window = g_object_ref (window);
+        event->any.surface = g_object_ref (window);
         event->configure.x = message->configure_notify.x;
         event->configure.y = message->configure_notify.y;
         event->configure.width = message->configure_notify.width;
@@ -340,7 +340,7 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
     if (window)
       {
         event = gdk_event_new (GDK_FOCUS_CHANGE);
-        event->any.window = g_object_ref (window);
+        event->any.surface = g_object_ref (window);
         event->focus_change.in = FALSE;
         gdk_event_set_device (event, gdk_seat_get_pointer (seat));
         node = _gdk_event_queue_append (display, event);
@@ -350,7 +350,7 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
     if (window)
       {
         event = gdk_event_new (GDK_FOCUS_CHANGE);
-        event->any.window = g_object_ref (window);
+        event->any.surface = g_object_ref (window);
         event->focus_change.in = TRUE;
         gdk_event_set_device (event, gdk_seat_get_pointer (seat));
         node = _gdk_event_queue_append (display, event);

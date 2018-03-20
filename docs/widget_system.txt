@@ -62,23 +62,23 @@ GtkWidget, public flags:
 GTK_TOPLEVEL:
 	Widgets without a real parent, as there are GtkWindows and
 	GtkMenus have this flag set throughout their lifetime.
-	Toplevel widgets always contain their own GdkWindow.
+	Toplevel widgets always contain their own GdkSurface.
 	
 GTK_NO_WINDOW:
 	This flag is indicative for a widget that does not provide
-	its own GdkWindow. Visible action (e.g. drawing) is performed
-	on the parent's GdkWindow.
+	its own GdkSurface. Visible action (e.g. drawing) is performed
+	on the parent's GdkSurface.
 
 GTK_REALIZED:
 	Set by gtk_widget_realize, unset by gtk_widget_unrealize.
 	Relies on ((widget->parent && widget->parent->window)
 	           || GTK_WIDGET_TOPLEVEL (widget));
-	Means: widget has an associated GdkWindow (XWindow).
+	Means: widget has an associated GdkSurface (XWindow).
 
 GTK_MAPPED:
 	Set by gtk_widget_map, unset by gtk_widget_unmap.
 	May only be set if GTK_WIDGET_REALIZED (widget).
-	Means: gdk_window_show() has been called on the widgets window(s).
+	Means: gdk_surface_show() has been called on the widgets window(s).
 
 GTK_VISIBLE:
 	Set by gtk_widget_show.
@@ -329,7 +329,7 @@ Adding to a container
 
 When a widget is added to a container, the container:
 
-  1) calls gtk_widget_set_parent_window (widget, window) if 
+  1) calls gtk_widget_set_parent_surface (widget, window) if 
      the widget is being added to something other than container->window
   2) calls gtk_widget_set_parent (widget, container)
 
@@ -364,7 +364,7 @@ When a widget receives the "realize" signal it should:
 
   1) set the realized flag
   2) set widget->window
-      widget->window = gtk_widget_get_parent_window (widget);
+      widget->window = gtk_widget_get_parent_surface (widget);
       g_object_ref (widget->window);
   3) attach the widget's style
 
@@ -374,7 +374,7 @@ When a widget receives the "realize" signal it should:
 
   1) set the REALIZED flag
   2) create windows with the parent obtained from
-      gtk_widget_get_parent_window (widget);
+      gtk_widget_get_parent_surface (widget);
   3) attach the widget's style
   4) set the background color for the new window based on the style
 
@@ -382,7 +382,7 @@ The Map signal
 --------------
 
   1) Set the MAPPED flag
-  2) If the widget has any windows, gdk_window_show those windows
+  2) If the widget has any windows, gdk_surface_show those windows
   3) call gtk_widget_map for all child widgets that are 
      VISIBLE, CHILD_VISIBLE and !MAPPED. (A widget will only
      be !CHILD_VISIBLE if the container set it that way, so
@@ -395,7 +395,7 @@ The Unmap signal
 
 When a widget receives the unmap signal, it must:
 
- 1) If the widget has a window, gdk_window_hide that window, 
+ 1) If the widget has a window, gdk_surface_hide that window, 
  2) If the widget does not have a window, unmap all child widgets
  3) Do any other functions related to taking the widget offscreen
      (for instance, removing popup windows...)
@@ -409,8 +409,8 @@ When a widget receives the unrealize signal, it must
 
  1) For any windows other than widget->window do:
 
-    gdk_window_set_user_data (window, NULL);
-    gdk_window_destroy (window);
+    gdk_surface_set_user_data (window, NULL);
+    gdk_surface_destroy (window);
 
  2) Call the parent's unrealize handler
 

@@ -23,7 +23,7 @@
 
 GdkDisplay *_gdk_display = NULL;
 GdkQuartzScreen *_gdk_screen = NULL;
-GdkWindow *_gdk_root = NULL;
+GdkSurface *_gdk_root = NULL;
 GdkDeviceManager *_gdk_device_manager = NULL;
 
 GdkOSXVersion

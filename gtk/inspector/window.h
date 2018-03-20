@@ -109,7 +109,7 @@ void       gtk_inspector_window_rescan     (GtkWidget          *iw);
 gboolean   gtk_inspector_is_recording      (GtkWidget          *widget);
 void       gtk_inspector_record_render     (GtkWidget          *widget,
                                             GskRenderer        *renderer,
-                                            GdkWindow          *window,
+                                            GdkSurface          *window,
                                             const cairo_region_t *region,
                                             GdkDrawingContext  *context,
                                             GskRenderNode      *node);

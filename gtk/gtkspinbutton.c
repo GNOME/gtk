@@ -833,7 +833,7 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
 {
   GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin_button);
 
-  gtk_widget_set_has_window (GTK_WIDGET (spin_button), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (spin_button), FALSE);
 
   priv->adjustment = NULL;
   priv->timer = 0;

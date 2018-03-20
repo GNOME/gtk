@@ -2499,7 +2499,7 @@ gtk_entry_init (GtkEntry *entry)
   gint i;
 
   gtk_widget_set_can_focus (GTK_WIDGET (entry), TRUE);
-  gtk_widget_set_has_window (GTK_WIDGET (entry), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (entry), FALSE);
 
   priv->editable = TRUE;
   priv->visible = TRUE;

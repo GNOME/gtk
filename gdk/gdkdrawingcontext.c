@@ -18,16 +18,16 @@
 /**
  * SECTION:gdkdrawingcontext
  * @Title: GdkDrawingContext
- * @Short_description: Drawing context for GDK windows
+ * @Short_description: Drawing context for GDK surfaces
  *
  * #GdkDrawingContext is an object that represents the current drawing
- * state of a #GdkWindow.
+ * state of a #GdkSurface.
  *
- * It's possible to use a #GdkDrawingContext to draw on a #GdkWindow
+ * It's possible to use a #GdkDrawingContext to draw on a #GdkSurface
  * via rendering API like Cairo or OpenGL.
  *
- * A #GdkDrawingContext can only be created by calling gdk_window_begin_draw_frame()
- * and will be valid until a call to gdk_window_end_draw_frame().
+ * A #GdkDrawingContext can only be created by calling gdk_surface_begin_draw_frame()
+ * and will be valid until a call to gdk_surface_end_draw_frame().
  *
  * #GdkDrawingContext is available since GDK 3.22
  */
@@ -49,14 +49,14 @@
 #include "gdkinternals.h"
 #include "gdkintl.h"
 #include "gdkframeclockidle.h"
-#include "gdkwindowimpl.h"
+#include "gdksurfaceimpl.h"
 #include "gdkglcontextprivate.h"
 #include "gdk-private.h"
 
 typedef struct _GdkDrawingContextPrivate GdkDrawingContextPrivate;
 
 struct _GdkDrawingContextPrivate {
-  GdkWindow *window;
+  GdkSurface *surface;
   GdkDrawContext *paint_context;
 
   cairo_region_t *clip;
@@ -68,7 +68,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (GdkDrawingContext, gdk_drawing_context, G_TYPE_OBJEC
 enum {
   PROP_0,
 
-  PROP_WINDOW,
+  PROP_SURFACE,
   PROP_CLIP,
   PROP_PAINT_CONTEXT,
 
@@ -89,7 +89,7 @@ gdk_drawing_context_dispose (GObject *gobject)
   if (priv->cr != NULL)
     gdk_cairo_set_drawing_context (priv->cr, NULL);
 
-  g_clear_object (&priv->window);
+  g_clear_object (&priv->surface);
   g_clear_object (&priv->paint_context);
   g_clear_pointer (&priv->clip, cairo_region_destroy);
   g_clear_pointer (&priv->cr, cairo_destroy);
@@ -108,13 +108,13 @@ gdk_drawing_context_set_property (GObject      *gobject,
 
   switch (prop_id)
     {
-    case PROP_WINDOW:
-      priv->window = g_value_dup_object (value);
-      if (priv->window == NULL)
+    case PROP_SURFACE:
+      priv->surface = g_value_dup_object (value);
+      if (priv->surface == NULL)
         {
-          g_critical ("The drawing context of type %s does not have a window "
+          g_critical ("The drawing context of type %s does not have a surface "
                       "associated to it. Drawing contexts can only be created "
-                      "using gdk_window_begin_draw_frame().",
+                      "using gdk_surface_begin_draw_frame().",
                       G_OBJECT_TYPE_NAME (gobject));
           return;
         }
@@ -144,8 +144,8 @@ gdk_drawing_context_get_property (GObject    *gobject,
 
   switch (prop_id)
     {
-    case PROP_WINDOW:
-      g_value_set_object (value, priv->window);
+    case PROP_SURFACE:
+      g_value_set_object (value, priv->surface);
       break;
 
     case PROP_CLIP:
@@ -171,13 +171,13 @@ gdk_drawing_context_class_init (GdkDrawingContextClass *klass)
   gobject_class->dispose = gdk_drawing_context_dispose;
 
   /**
-   * GdkDrawingContext:window:
+   * GdkDrawingContext:surface:
    *
-   * The #GdkWindow that created the drawing context.
+   * The #GdkSurface that created the drawing context.
    */
-  obj_property[PROP_WINDOW] =
-    g_param_spec_object ("window", "Window", "The window that created the context",
-                         GDK_TYPE_WINDOW,
+  obj_property[PROP_SURFACE] =
+    g_param_spec_object ("surface", "Surface", "The surface that created the context",
+                         GDK_TYPE_SURFACE,
                          G_PARAM_CONSTRUCT_ONLY |
                          G_PARAM_READWRITE |
                          G_PARAM_STATIC_STRINGS);
@@ -242,7 +242,7 @@ gdk_cairo_get_drawing_context (cairo_t *cr)
  * gdk_drawing_context_get_cairo_context:
  * @context: a #GdkDrawingContext created with a %NULL paint context
  *
- * Retrieves a Cairo context to be used to draw on the #GdkWindow
+ * Retrieves a Cairo context to be used to draw on the #GdkSurface
  * that created the #GdkDrawingContext. The @context must have been
  * created without a #GdkDrawContext for this function to work. If
  * gdk_drawing_context_get_paint_context() does not return %NULL,
@@ -250,10 +250,10 @@ gdk_cairo_get_drawing_context (cairo_t *cr)
  *
  * The returned context is guaranteed to be valid as long as the
  * #GdkDrawingContext is valid, that is between a call to
- * gdk_window_begin_draw_frame() and gdk_window_end_draw_frame().
+ * gdk_surface_begin_draw_frame() and gdk_surface_end_draw_frame().
  *
  * Returns: (transfer none) (nullable): a Cairo context to be used to draw
- *   the contents of the #GdkWindow. The context is owned by the
+ *   the contents of the #GdkSurface. The context is owned by the
  *   #GdkDrawingContext and should not be destroyed. %NULL is
  *   returned when a paint context is in used.
  */
@@ -263,7 +263,7 @@ gdk_drawing_context_get_cairo_context (GdkDrawingContext *context)
   GdkDrawingContextPrivate *priv = gdk_drawing_context_get_instance_private (context);
 
   g_return_val_if_fail (GDK_IS_DRAWING_CONTEXT (context), NULL);
-  g_return_val_if_fail (GDK_IS_WINDOW (priv->window), NULL);
+  g_return_val_if_fail (GDK_IS_SURFACE (priv->surface), NULL);
 
   if (priv->paint_context != NULL)
     return NULL;
@@ -273,12 +273,12 @@ gdk_drawing_context_get_cairo_context (GdkDrawingContext *context)
       cairo_region_t *region;
       cairo_surface_t *surface;
 
-      surface = _gdk_window_ref_cairo_surface (priv->window);
+      surface = _gdk_surface_ref_cairo_surface (priv->surface);
       priv->cr = cairo_create (surface);
 
       gdk_cairo_set_drawing_context (priv->cr, context);
 
-      region = gdk_window_get_current_paint_region (priv->window);
+      region = gdk_surface_get_current_paint_region (priv->surface);
       cairo_region_union (region, priv->clip);
       gdk_cairo_region (priv->cr, region);
       cairo_clip (priv->cr);
@@ -291,21 +291,21 @@ gdk_drawing_context_get_cairo_context (GdkDrawingContext *context)
 }
 
 /**
- * gdk_drawing_context_get_window:
+ * gdk_drawing_context_get_surface:
  * @context: a #GdkDrawingContext
  *
- * Retrieves the window that created the drawing @context.
+ * Retrieves the surface that created the drawing @context.
  *
- * Returns: (transfer none): a #GdkWindow
+ * Returns: (transfer none): a #GdkSurface
  */
-GdkWindow *
-gdk_drawing_context_get_window (GdkDrawingContext *context)
+GdkSurface *
+gdk_drawing_context_get_surface (GdkDrawingContext *context)
 {
   GdkDrawingContextPrivate *priv = gdk_drawing_context_get_instance_private (context);
 
   g_return_val_if_fail (GDK_IS_DRAWING_CONTEXT (context), NULL);
 
-  return priv->window;
+  return priv->surface;
 }
 
 /**
@@ -362,10 +362,10 @@ gdk_drawing_context_is_valid (GdkDrawingContext *context)
 
   g_return_val_if_fail (GDK_IS_DRAWING_CONTEXT (context), FALSE);
 
-  if (priv->window == NULL)
+  if (priv->surface == NULL)
     return FALSE;
 
-  if (gdk_window_get_drawing_context (priv->window) != context)
+  if (gdk_surface_get_drawing_context (priv->surface) != context)
     return FALSE;
 
   return TRUE;

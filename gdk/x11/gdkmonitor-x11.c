@@ -34,7 +34,7 @@ static gboolean
 gdk_monitor_has_fullscreen_window (GdkMonitor *monitor)
 {
   GList *toplevels, *l;
-  GdkWindow *window;
+  GdkSurface *surface;
   gboolean has_fullscreen;
 
   toplevels = gdk_x11_display_get_toplevel_windows (monitor->display);
@@ -42,13 +42,13 @@ gdk_monitor_has_fullscreen_window (GdkMonitor *monitor)
   has_fullscreen = FALSE;
   for (l = toplevels; l; l = l->next)
     {
-      window = l->data;
+      surface = l->data;
 
-      if ((gdk_window_get_state (window) & GDK_WINDOW_STATE_FULLSCREEN) == 0)
+      if ((gdk_surface_get_state (surface) & GDK_SURFACE_STATE_FULLSCREEN) == 0)
         continue;
 
-      if (gdk_window_get_fullscreen_mode (window) == GDK_FULLSCREEN_ON_ALL_MONITORS ||
-          gdk_display_get_monitor_at_window (monitor->display, window) == monitor)
+      if (gdk_surface_get_fullscreen_mode (surface) == GDK_FULLSCREEN_ON_ALL_MONITORS ||
+          gdk_display_get_monitor_at_surface (monitor->display, surface) == monitor)
         {
           has_fullscreen = TRUE;
           break;

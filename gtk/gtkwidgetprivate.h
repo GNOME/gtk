@@ -53,8 +53,8 @@ struct _GtkWidgetPrivate
   guint in_destruction        : 1;
   guint toplevel              : 1;
   guint anchored              : 1;
-  guint no_window             : 1;
-  guint no_window_set         : 1;
+  guint no_surface            : 1;
+  guint no_surface_set        : 1;
   guint realized              : 1;
   guint mapped                : 1;
   guint visible               : 1;
@@ -143,12 +143,12 @@ struct _GtkWidgetPrivate
   /* The widget's requested sizes */
   SizeRequestCache requests;
 
-  /* The widget's window or its parent window if it does
-   * not have a window. (Which will be indicated by the
-   * no_window field being set).
+  /* The widget's surface or its surface window if it does
+   * not have a surface. (Which will be indicated by the
+   * no_surface field being set).
    */
-  GdkWindow *window;
-  GList *registered_windows;
+  GdkSurface *surface;
+  GList *registered_surfaces;
 
   GList *event_controllers;
 
@@ -220,8 +220,8 @@ void              _gtk_widget_propagate_display_changed    (GtkWidget  *widget,
 
 void              _gtk_widget_set_device_window            (GtkWidget *widget,
                                                             GdkDevice *device,
-                                                            GdkWindow *pointer_window);
-GdkWindow *       _gtk_widget_get_device_window            (GtkWidget *widget,
+                                                            GdkSurface *pointer_window);
+GdkSurface *       _gtk_widget_get_device_window            (GtkWidget *widget,
                                                             GdkDevice *device);
 GList *           _gtk_widget_list_devices                 (GtkWidget *widget);
 
@@ -278,7 +278,7 @@ gboolean          gtk_widget_query_tooltip                 (GtkWidget  *widget,
                                                             GtkTooltip *tooltip);
 
 void              gtk_widget_render                        (GtkWidget            *widget,
-                                                            GdkWindow            *window,
+                                                            GdkSurface            *surface,
                                                             const cairo_region_t *region);
 
 
@@ -315,7 +315,7 @@ void              gtk_widget_get_outer_allocation          (GtkWidget        *wi
 void              gtk_widget_get_own_allocation            (GtkWidget        *widget,
                                                             GtkAllocation    *allocation);
 
-void              gtk_widget_get_window_allocation         (GtkWidget *widget,
+void              gtk_widget_get_surface_allocation         (GtkWidget *widget,
                                                             GtkAllocation *allocation);
 
 
@@ -371,9 +371,9 @@ _gtk_widget_is_drawable (GtkWidget *widget)
 }
 
 static inline gboolean
-_gtk_widget_get_has_window (GtkWidget *widget)
+_gtk_widget_get_has_surface (GtkWidget *widget)
 {
-  return !widget->priv->no_window;
+  return !widget->priv->no_surface;
 }
 
 static inline gboolean
@@ -429,10 +429,10 @@ _gtk_widget_peek_request_cache (GtkWidget *widget)
   return &widget->priv->requests;
 }
 
-static inline GdkWindow *
-_gtk_widget_get_window (GtkWidget *widget)
+static inline GdkSurface *
+_gtk_widget_get_surface (GtkWidget *widget)
 {
-  return widget->priv->window;
+  return widget->priv->surface;
 }
 
 static inline void

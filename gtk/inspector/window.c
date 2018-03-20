@@ -372,7 +372,7 @@ gtk_inspector_window_get_for_display (GdkDisplay *display)
 void
 gtk_inspector_record_render (GtkWidget            *widget,
                              GskRenderer          *renderer,
-                             GdkWindow            *window,
+                             GdkSurface            *window,
                              const cairo_region_t *region,
                              GdkDrawingContext    *context,
                              GskRenderNode        *node)

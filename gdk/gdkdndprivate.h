@@ -57,7 +57,7 @@ struct _GdkDragContextClass {
                                                                  GAsyncResult           *result,
                                                                  GError                **error);
   gboolean    (*drop_status)   (GdkDragContext  *context);
-  GdkWindow*  (*get_drag_window) (GdkDragContext *context);
+  GdkSurface*  (*get_drag_surface) (GdkDragContext *context);
   void        (*set_hotspot)   (GdkDragContext  *context,
                                 gint             hot_x,
                                 gint             hot_y);
@@ -87,9 +87,9 @@ struct _GdkDragContext {
   GdkDisplay *display;
 
   gboolean is_source;
-  GdkWindow *source_window;
-  GdkWindow *dest_window;
-  GdkWindow *drag_window;
+  GdkSurface *source_surface;
+  GdkSurface *dest_surface;
+  GdkSurface *drag_surface;
 
   GdkContentProvider *content;
   GdkContentFormats *formats;

@@ -402,9 +402,9 @@ test_type (gconstpointer data)
 
   if (g_type_is_a (type, GTK_TYPE_SETTINGS))
     instance = G_OBJECT (g_object_ref (gtk_settings_get_default ()));
-  else if (g_type_is_a (type, GDK_TYPE_WINDOW))
+  else if (g_type_is_a (type, GDK_TYPE_SURFACE))
     {
-      instance = G_OBJECT (g_object_ref (gdk_window_new_popup (display,
+      instance = G_OBJECT (g_object_ref (gdk_surface_new_popup (display,
                                                                &(GdkRectangle) { 0, 0, 100, 100 })));
     }
   else if (g_str_equal (g_type_name (type), "GdkX11Cursor"))
@@ -644,8 +644,8 @@ test_type (gconstpointer data)
     }
   g_free (pspecs);
 
-  if (g_type_is_a (type, GDK_TYPE_WINDOW))
-    gdk_window_destroy (GDK_WINDOW (instance));
+  if (g_type_is_a (type, GDK_TYPE_SURFACE))
+    gdk_surface_destroy (GDK_SURFACE (instance));
   else
     g_object_unref (instance);
 

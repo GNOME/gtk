@@ -114,11 +114,11 @@ main(int argc, char **argv)
   else
     {
       GskRenderer *renderer;
-      GdkWindow *window;
+      GdkSurface *window;
       GdkTexture *texture = NULL;
 
-      window = gdk_window_new_toplevel (gdk_display_get_default(), 10 , 10);
-      renderer = gsk_renderer_new_for_window (window);
+      window = gdk_surface_new_toplevel (gdk_display_get_default(), 10 , 10);
+      renderer = gsk_renderer_new_for_surface (window);
 
       for (run = 0; run < runs; run++)
         {

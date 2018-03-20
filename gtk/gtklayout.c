@@ -694,7 +694,7 @@ gtk_layout_init (GtkLayout *layout)
 {
   GtkLayoutPrivate *priv;
 
-  gtk_widget_set_has_window (GTK_WIDGET (layout), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (layout), FALSE);
 
   layout->priv = gtk_layout_get_instance_private (layout);
   priv = layout->priv;

@@ -210,7 +210,7 @@ gsk_render_node_get_name (GskRenderNode *node)
  *
  * Typically, you'll use this function to implement fallback rendering
  * of #GskRenderNodes on an intermediate Cairo context, instead of using
- * the drawing context associated to a #GdkWindow's rendering buffer.
+ * the drawing context associated to a #GdkSurface's rendering buffer.
  *
  * For advanced nodes that cannot be supported using Cairo, in particular
  * for nodes doing 3D operations, this function may fail.

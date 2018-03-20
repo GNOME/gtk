@@ -24,36 +24,36 @@
 
 #include "config.h"
 
-#include "gdkwindowimpl.h"
+#include "gdksurfaceimpl.h"
 
 #include "gdkinternals.h"
 
 
-G_DEFINE_TYPE (GdkWindowImpl, gdk_window_impl, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GdkSurfaceImpl, gdk_surface_impl, G_TYPE_OBJECT);
 
 static gboolean
-gdk_window_impl_beep (GdkWindow *window)
+gdk_surface_impl_beep (GdkSurface *surface)
 {
-  /* FALSE means windows can't beep, so the display will be
+  /* FALSE means surfaces can't beep, so the display will be
    * made to beep instead. */
   return FALSE;
 }
 
 static GdkDisplay *
-get_display_for_window (GdkWindow *primary,
-                        GdkWindow *secondary)
+get_display_for_surface (GdkSurface *primary,
+                        GdkSurface *secondary)
 {
-  GdkDisplay *display = gdk_window_get_display (primary);
+  GdkDisplay *display = gdk_surface_get_display (primary);
 
   if (display)
     return display;
 
-  display = gdk_window_get_display (secondary);
+  display = gdk_surface_get_display (secondary);
 
   if (display)
     return display;
 
-  g_warning ("no display for window, using default");
+  g_warning ("no display for surface, using default");
   return gdk_display_get_default ();
 }
 
@@ -147,9 +147,9 @@ maybe_flip_position (gint      bounds_pos,
                      gint      bounds_size,
                      gint      rect_pos,
                      gint      rect_size,
-                     gint      window_size,
+                     gint      surface_size,
                      gint      rect_sign,
-                     gint      window_sign,
+                     gint      surface_sign,
                      gint      offset,
                      gboolean  flip,
                      gboolean *flipped)
@@ -158,54 +158,54 @@ maybe_flip_position (gint      bounds_pos,
   gint secondary;
 
   *flipped = FALSE;
-  primary = rect_pos + (1 + rect_sign) * rect_size / 2 + offset - (1 + window_sign) * window_size / 2;
+  primary = rect_pos + (1 + rect_sign) * rect_size / 2 + offset - (1 + surface_sign) * surface_size / 2;
 
-  if (!flip || (primary >= bounds_pos && primary + window_size <= bounds_pos + bounds_size))
+  if (!flip || (primary >= bounds_pos && primary + surface_size <= bounds_pos + bounds_size))
     return primary;
 
   *flipped = TRUE;
-  secondary = rect_pos + (1 - rect_sign) * rect_size / 2 - offset - (1 - window_sign) * window_size / 2;
+  secondary = rect_pos + (1 - rect_sign) * rect_size / 2 - offset - (1 - surface_sign) * surface_size / 2;
 
-  if (secondary >= bounds_pos && secondary + window_size <= bounds_pos + bounds_size)
+  if (secondary >= bounds_pos && secondary + surface_size <= bounds_pos + bounds_size)
     return secondary;
 
   *flipped = FALSE;
   return primary;
 }
 
-static GdkWindow *
-traverse_to_toplevel (GdkWindow *window,
+static GdkSurface *
+traverse_to_toplevel (GdkSurface *surface,
                       gint       x,
                       gint       y,
                       gint      *toplevel_x,
                       gint      *toplevel_y)
 {
-  GdkWindow *parent;
+  GdkSurface *parent;
   gdouble xf = x;
   gdouble yf = y;
 
-  while ((parent = window->parent) != NULL &&
-         (gdk_window_get_window_type (parent) != GDK_WINDOW_ROOT))
+  while ((parent = surface->parent) != NULL &&
+         (gdk_surface_get_surface_type (parent) != GDK_SURFACE_ROOT))
     {
-      gdk_window_coords_to_parent (window, xf, yf, &xf, &yf);
-      window = parent;
+      gdk_surface_coords_to_parent (surface, xf, yf, &xf, &yf);
+      surface = parent;
     }
 
   *toplevel_x = (gint) xf;
   *toplevel_y = (gint) yf;
-  return window;
+  return surface;
 }
 
 static void
-gdk_window_impl_move_to_rect (GdkWindow          *window,
+gdk_surface_impl_move_to_rect (GdkSurface          *surface,
                               const GdkRectangle *rect,
                               GdkGravity          rect_anchor,
-                              GdkGravity          window_anchor,
+                              GdkGravity          surface_anchor,
                               GdkAnchorHints      anchor_hints,
                               gint                rect_anchor_dx,
                               gint                rect_anchor_dy)
 {
-  GdkWindow *transient_for_toplevel;
+  GdkSurface *transient_for_toplevel;
   GdkDisplay *display;
   GdkMonitor *monitor;
   GdkRectangle bounds;
@@ -218,33 +218,33 @@ gdk_window_impl_move_to_rect (GdkWindow          *window,
   /*
    * First translate the anchor rect to toplevel coordinates. This is needed
    * because not all backends will be able to get root coordinates for
-   * non-toplevel windows.
+   * non-toplevel surfaces.
    */
-  transient_for_toplevel = traverse_to_toplevel (window->transient_for,
+  transient_for_toplevel = traverse_to_toplevel (surface->transient_for,
                                                  root_rect.x,
                                                  root_rect.y,
                                                  &root_rect.x,
                                                  &root_rect.y);
 
-  gdk_window_get_root_coords (transient_for_toplevel,
+  gdk_surface_get_root_coords (transient_for_toplevel,
                               root_rect.x,
                               root_rect.y,
                               &root_rect.x,
                               &root_rect.y);
 
-  display = get_display_for_window (window, window->transient_for);
+  display = get_display_for_surface (surface, surface->transient_for);
   monitor = get_monitor_for_rect (display, &root_rect);
   gdk_monitor_get_workarea (monitor, &bounds);
 
-  flipped_rect.width = window->width - window->shadow_left - window->shadow_right;
-  flipped_rect.height = window->height - window->shadow_top - window->shadow_bottom;
+  flipped_rect.width = surface->width - surface->shadow_left - surface->shadow_right;
+  flipped_rect.height = surface->height - surface->shadow_top - surface->shadow_bottom;
   flipped_rect.x = maybe_flip_position (bounds.x,
                                         bounds.width,
                                         root_rect.x,
                                         root_rect.width,
                                         flipped_rect.width,
                                         get_anchor_x_sign (rect_anchor),
-                                        get_anchor_x_sign (window_anchor),
+                                        get_anchor_x_sign (surface_anchor),
                                         rect_anchor_dx,
                                         anchor_hints & GDK_ANCHOR_FLIP_X,
                                         &flipped_x);
@@ -254,7 +254,7 @@ gdk_window_impl_move_to_rect (GdkWindow          *window,
                                         root_rect.height,
                                         flipped_rect.height,
                                         get_anchor_y_sign (rect_anchor),
-                                        get_anchor_y_sign (window_anchor),
+                                        get_anchor_y_sign (surface_anchor),
                                         rect_anchor_dy,
                                         anchor_hints & GDK_ANCHOR_FLIP_Y,
                                         &flipped_y);
@@ -303,22 +303,22 @@ gdk_window_impl_move_to_rect (GdkWindow          *window,
         final_rect.height = bounds.y + bounds.height - final_rect.y;
     }
 
-  flipped_rect.x -= window->shadow_left;
-  flipped_rect.y -= window->shadow_top;
-  flipped_rect.width += window->shadow_left + window->shadow_right;
-  flipped_rect.height += window->shadow_top + window->shadow_bottom;
+  flipped_rect.x -= surface->shadow_left;
+  flipped_rect.y -= surface->shadow_top;
+  flipped_rect.width += surface->shadow_left + surface->shadow_right;
+  flipped_rect.height += surface->shadow_top + surface->shadow_bottom;
 
-  final_rect.x -= window->shadow_left;
-  final_rect.y -= window->shadow_top;
-  final_rect.width += window->shadow_left + window->shadow_right;
-  final_rect.height += window->shadow_top + window->shadow_bottom;
+  final_rect.x -= surface->shadow_left;
+  final_rect.y -= surface->shadow_top;
+  final_rect.width += surface->shadow_left + surface->shadow_right;
+  final_rect.height += surface->shadow_top + surface->shadow_bottom;
 
-  if (final_rect.width != window->width || final_rect.height != window->height)
-    gdk_window_move_resize (window, final_rect.x, final_rect.y, final_rect.width, final_rect.height);
+  if (final_rect.width != surface->width || final_rect.height != surface->height)
+    gdk_surface_move_resize (surface, final_rect.x, final_rect.y, final_rect.width, final_rect.height);
   else
-    gdk_window_move (window, final_rect.x, final_rect.y);
+    gdk_surface_move (surface, final_rect.x, final_rect.y);
 
-  g_signal_emit_by_name (window,
+  g_signal_emit_by_name (surface,
                          "moved-to-rect",
                          &flipped_rect,
                          &final_rect,
@@ -327,21 +327,21 @@ gdk_window_impl_move_to_rect (GdkWindow          *window,
 }
 
 static void
-gdk_window_impl_process_updates_recurse (GdkWindow      *window,
+gdk_surface_impl_process_updates_recurse (GdkSurface      *surface,
                                          cairo_region_t *region)
 {
-  _gdk_window_process_updates_recurse (window, region);
+  _gdk_surface_process_updates_recurse (surface, region);
 }
 
 static void
-gdk_window_impl_class_init (GdkWindowImplClass *impl_class)
+gdk_surface_impl_class_init (GdkSurfaceImplClass *impl_class)
 {
-  impl_class->beep = gdk_window_impl_beep;
-  impl_class->move_to_rect = gdk_window_impl_move_to_rect;
-  impl_class->process_updates_recurse = gdk_window_impl_process_updates_recurse;
+  impl_class->beep = gdk_surface_impl_beep;
+  impl_class->move_to_rect = gdk_surface_impl_move_to_rect;
+  impl_class->process_updates_recurse = gdk_surface_impl_process_updates_recurse;
 }
 
 static void
-gdk_window_impl_init (GdkWindowImpl *impl)
+gdk_surface_impl_init (GdkSurfaceImpl *impl)
 {
 }

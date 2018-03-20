@@ -98,9 +98,9 @@ GDK_AVAILABLE_IN_ALL
 GdkDragAction    gdk_drag_context_get_selected_action  (GdkDragContext *context);
 
 GDK_AVAILABLE_IN_ALL
-GdkWindow       *gdk_drag_context_get_source_window    (GdkDragContext *context);
+GdkSurface       *gdk_drag_context_get_source_surface    (GdkDragContext *context);
 GDK_AVAILABLE_IN_ALL
-GdkWindow       *gdk_drag_context_get_dest_window      (GdkDragContext *context);
+GdkSurface       *gdk_drag_context_get_dest_surface      (GdkDragContext *context);
 
 /* Destination side */
 GDK_AVAILABLE_IN_ALL
@@ -132,7 +132,7 @@ GInputStream *          gdk_drop_read_finish            (GdkDragContext        *
 /* Source side */
 
 GDK_AVAILABLE_IN_ALL
-GdkDragContext *        gdk_drag_begin                  (GdkWindow              *window,
+GdkDragContext *        gdk_drag_begin                  (GdkSurface              *surface,
                                                          GdkDevice              *device,
                                                          GdkContentProvider     *content,
                                                          GdkDragAction           actions,
@@ -147,7 +147,7 @@ void            gdk_drag_drop_done   (GdkDragContext *context,
                                       gboolean        success);
 
 GDK_AVAILABLE_IN_ALL
-GdkWindow      *gdk_drag_context_get_drag_window (GdkDragContext *context);
+GdkSurface      *gdk_drag_context_get_drag_surface (GdkDragContext *context);
 
 GDK_AVAILABLE_IN_ALL
 void            gdk_drag_context_set_hotspot (GdkDragContext *context,

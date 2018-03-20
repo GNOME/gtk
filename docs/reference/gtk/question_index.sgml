@@ -391,14 +391,14 @@ This comes up when using bitfields; in C you can write the following
 code:
 <informalexample>
 <programlisting>
-  gdk_window_set_events (gdk_window,
+  gdk_surface_set_events (gdk_surface,
                          GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
 </programlisting>
 </informalexample>
 while in C++ you must write:
 <informalexample>
 <programlisting>
-  gdk_window_set_events (gdk_window,
+  gdk_surface_set_events (gdk_surface,
                          (GdkEventMask) GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
 </programlisting>
 </informalexample>

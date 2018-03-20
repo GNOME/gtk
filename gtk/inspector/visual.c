@@ -584,7 +584,7 @@ scale_changed (GtkAdjustment *adjustment, GtkInspectorVisual *vis)
 
   scale = gtk_adjustment_get_value (adjustment);
   display = gdk_display_get_default ();
-  gdk_x11_display_set_window_scale (display, scale);
+  gdk_x11_display_set_surface_scale (display, scale);
 }
 #endif
 

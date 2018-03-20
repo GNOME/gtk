@@ -408,7 +408,7 @@ gtk_menu_shell_init (GtkMenuShell *menu_shell)
   menu_shell->priv = gtk_menu_shell_get_instance_private (menu_shell);
   menu_shell->priv->take_focus = TRUE;
 
-  gtk_widget_set_has_window (GTK_WIDGET (menu_shell), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (menu_shell), FALSE);
 }
 
 static void
@@ -598,11 +598,11 @@ gtk_menu_shell_event (GtkWidget *widget,
 {
   GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget);
   GtkMenuShellPrivate *priv = menu_shell->priv;
-  GdkWindow *window;
+  GdkSurface *window;
 
   if (gdk_event_get_event_type (event) == GDK_GRAB_BROKEN)
     {
-      gdk_event_get_grab_window (event, &window);
+      gdk_event_get_grab_surface (event, &window);
 
       if (priv->have_xgrab && window == NULL)
         {

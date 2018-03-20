@@ -299,7 +299,7 @@ static void gtk_menu_remove         (GtkContainer      *menu,
                                      GtkWidget         *widget);
 
 static void       menu_grab_transfer_window_destroy (GtkMenu *menu);
-static GdkWindow *menu_grab_transfer_window_get     (GtkMenu *menu);
+static GdkSurface *menu_grab_transfer_window_get     (GtkMenu *menu);
 
 static gboolean gtk_menu_real_can_activate_accel (GtkWidget *widget,
                                                   guint      signal_id);
@@ -773,7 +773,7 @@ gtk_menu_class_init (GtkMenuClass *class)
   /**
    * GtkMenu:menu-type-hint:
    *
-   * The #GdkWindowTypeHint to use for the menu's #GdkWindow.
+   * The #GdkSurfaceTypeHint to use for the menu's #GdkSurface.
    *
    * See gtk_menu_popup_at_rect (), gtk_menu_popup_at_widget (),
    * gtk_menu_popup_at_pointer (), #GtkMenu:anchor-hints,
@@ -784,8 +784,8 @@ gtk_menu_class_init (GtkMenuClass *class)
                                    g_param_spec_enum ("menu-type-hint",
                                                       P_("Menu type hint"),
                                                       P_("Menu window type hint"),
-                                                      GDK_TYPE_WINDOW_TYPE_HINT,
-                                                      GDK_WINDOW_TYPE_HINT_POPUP_MENU,
+                                                      GDK_TYPE_SURFACE_TYPE_HINT,
+                                                      GDK_SURFACE_TYPE_HINT_POPUP_MENU,
                                                       G_PARAM_READWRITE |
                                                       G_PARAM_CONSTRUCT |
                                                       G_PARAM_STATIC_NAME |
@@ -1124,7 +1124,7 @@ gtk_menu_init (GtkMenu *menu)
   priv->anchor_hints = GDK_ANCHOR_FLIP | GDK_ANCHOR_SLIDE | GDK_ANCHOR_RESIZE;
   priv->rect_anchor_dx = 0;
   priv->rect_anchor_dy = 0;
-  priv->menu_type_hint = GDK_WINDOW_TYPE_HINT_POPUP_MENU;
+  priv->menu_type_hint = GDK_SURFACE_TYPE_HINT_POPUP_MENU;
 
   _gtk_widget_set_captured_event_handler (GTK_WIDGET (menu), gtk_menu_captured_event);
 
@@ -1162,7 +1162,7 @@ gtk_menu_init (GtkMenu *menu)
 }
 
 static void
-moved_to_rect_cb (GdkWindow          *window,
+moved_to_rect_cb (GdkSurface          *window,
                   const GdkRectangle *flipped_rect,
                   const GdkRectangle *final_rect,
                   gboolean            flipped_x,
@@ -1470,7 +1470,7 @@ gtk_menu_real_insert (GtkMenuShell *menu_shell,
 }
 
 static gboolean
-popup_grab_on_window (GdkWindow *window,
+popup_grab_on_window (GdkSurface *window,
                       GdkDevice *pointer)
 {
   GdkGrabStatus status;
@@ -1488,16 +1488,16 @@ static void
 associate_menu_grab_transfer_window (GtkMenu *menu)
 {
   GtkMenuPrivate *priv = menu->priv;
-  GdkWindow *toplevel_window;
-  GdkWindow *transfer_window;
+  GdkSurface *toplevel_window;
+  GdkSurface *transfer_window;
 
-  toplevel_window = gtk_widget_get_window (priv->toplevel);
+  toplevel_window = gtk_widget_get_surface (priv->toplevel);
   transfer_window = g_object_get_data (G_OBJECT (menu), "gtk-menu-transfer-window");
 
   if (toplevel_window == NULL || transfer_window == NULL)
     return;
 
-  g_object_set_data (G_OBJECT (toplevel_window), I_("gdk-attached-grab-window"), transfer_window);
+  g_object_set_data (G_OBJECT (toplevel_window), I_("gdk-attached-grab-surface"), transfer_window);
 }
 
 static void
@@ -1595,7 +1595,7 @@ gtk_menu_popup_internal (GtkMenu             *menu,
 
   if (xgrab_shell && xgrab_shell != widget)
     {
-      if (popup_grab_on_window (gtk_widget_get_window (xgrab_shell), pointer))
+      if (popup_grab_on_window (gtk_widget_get_surface (xgrab_shell), pointer))
         {
           _gtk_menu_shell_set_grab_device (GTK_MENU_SHELL (xgrab_shell), pointer);
           GTK_MENU_SHELL (xgrab_shell)->priv->have_xgrab = TRUE;
@@ -1603,7 +1603,7 @@ gtk_menu_popup_internal (GtkMenu             *menu,
     }
   else
     {
-      GdkWindow *transfer_window;
+      GdkSurface *transfer_window;
 
       xgrab_shell = widget;
       transfer_window = menu_grab_transfer_window_get (menu);
@@ -1693,7 +1693,7 @@ gtk_menu_popup_internal (GtkMenu             *menu,
   gtk_widget_show (priv->toplevel);
 
   if (xgrab_shell == widget)
-    popup_grab_on_window (gtk_widget_get_window (widget), pointer); /* Should always succeed */
+    popup_grab_on_window (gtk_widget_get_surface (widget), pointer); /* Should always succeed */
 
   gtk_grab_add (GTK_WIDGET (menu));
 
@@ -1861,7 +1861,7 @@ get_device_for_event (const GdkEvent *event)
 /**
  * gtk_menu_popup_at_rect:
  * @menu: the #GtkMenu to pop up
- * @rect_window: (not nullable): the #GdkWindow @rect is relative to
+ * @rect_window: (not nullable): the #GdkSurface @rect is relative to
  * @rect: (not nullable): the #GdkRectangle to align @menu with
  * @rect_anchor: the point on @rect to align with @menu's anchor point
  * @menu_anchor: the point on @menu to align with @rect's anchor point
@@ -1889,7 +1889,7 @@ get_device_for_event (const GdkEvent *event)
  */
 void
 gtk_menu_popup_at_rect (GtkMenu            *menu,
-                        GdkWindow          *rect_window,
+                        GdkSurface          *rect_window,
                         const GdkRectangle *rect,
                         GdkGravity          rect_anchor,
                         GdkGravity          menu_anchor,
@@ -1902,7 +1902,7 @@ gtk_menu_popup_at_rect (GtkMenu            *menu,
   guint32 activate_time = GDK_CURRENT_TIME;
 
   g_return_if_fail (GTK_IS_MENU (menu));
-  g_return_if_fail (GDK_IS_WINDOW (rect_window));
+  g_return_if_fail (GDK_IS_SURFACE (rect_window));
   g_return_if_fail (rect);
 
   priv = menu->priv;
@@ -2054,7 +2054,7 @@ gtk_menu_popup_at_pointer (GtkMenu        *menu,
                            const GdkEvent *trigger_event)
 {
   GdkEvent *current_event = NULL;
-  GdkWindow *rect_window = NULL;
+  GdkSurface *rect_window = NULL;
   GdkDevice *device = NULL;
   GdkRectangle rect = { 0, 0, 1, 1 };
 
@@ -2068,7 +2068,7 @@ gtk_menu_popup_at_pointer (GtkMenu        *menu,
 
   if (trigger_event)
     {
-      rect_window = gdk_event_get_window (trigger_event);
+      rect_window = gdk_event_get_surface (trigger_event);
 
       if (rect_window)
         {
@@ -2078,7 +2078,7 @@ gtk_menu_popup_at_pointer (GtkMenu        *menu,
             device = gdk_device_get_associated_device (device);
 
           if (device)
-            gdk_window_get_device_position (rect_window, device, &rect.x, &rect.y, NULL);
+            gdk_surface_get_device_position (rect_window, device, &rect.x, &rect.y, NULL);
         }
     }
   else
@@ -2517,16 +2517,16 @@ gtk_menu_focus (GtkWidget       *widget,
 /* See notes in gtk_menu_popup() for information
  * about the “grab transfer window”
  */
-static GdkWindow *
+static GdkSurface *
 menu_grab_transfer_window_get (GtkMenu *menu)
 {
-  GdkWindow *window = g_object_get_data (G_OBJECT (menu), "gtk-menu-transfer-window");
+  GdkSurface *window = g_object_get_data (G_OBJECT (menu), "gtk-menu-transfer-window");
   if (!window)
     {
-      window = gdk_window_new_temp (gtk_widget_get_display (GTK_WIDGET (menu)));
-      gtk_widget_register_window (GTK_WIDGET (menu), window);
+      window = gdk_surface_new_temp (gtk_widget_get_display (GTK_WIDGET (menu)));
+      gtk_widget_register_surface (GTK_WIDGET (menu), window);
 
-      gdk_window_show (window);
+      gdk_surface_show (window);
 
       g_object_set_data (G_OBJECT (menu), I_("gtk-menu-transfer-window"), window);
     }
@@ -2537,17 +2537,17 @@ menu_grab_transfer_window_get (GtkMenu *menu)
 static void
 menu_grab_transfer_window_destroy (GtkMenu *menu)
 {
-  GdkWindow *window = g_object_get_data (G_OBJECT (menu), "gtk-menu-transfer-window");
+  GdkSurface *window = g_object_get_data (G_OBJECT (menu), "gtk-menu-transfer-window");
   if (window)
     {
-      GdkWindow *widget_window;
+      GdkSurface *widget_window;
 
-      gtk_widget_unregister_window (GTK_WIDGET (menu), window);
-      gdk_window_destroy (window);
+      gtk_widget_unregister_surface (GTK_WIDGET (menu), window);
+      gdk_surface_destroy (window);
       g_object_set_data (G_OBJECT (menu), I_("gtk-menu-transfer-window"), NULL);
 
-      widget_window = gtk_widget_get_window (GTK_WIDGET (menu));
-      g_object_set_data (G_OBJECT (widget_window), I_("gdk-attached-grab-window"), window);
+      widget_window = gtk_widget_get_surface (GTK_WIDGET (menu));
+      g_object_set_data (G_OBJECT (widget_window), I_("gdk-attached-grab-surface"), window);
     }
 }
 
@@ -2956,7 +2956,7 @@ pointer_in_menu_window (GtkWidget *widget,
       GtkMenuShell *menu_shell;
       gint          window_x, window_y;
 
-      gdk_window_get_position (gtk_widget_get_window (priv->toplevel),
+      gdk_surface_get_position (gtk_widget_get_surface (priv->toplevel),
                                &window_x, &window_y);
 
       gtk_widget_get_allocation (widget, &allocation);
@@ -3194,7 +3194,7 @@ gtk_menu_scroll_by (GtkMenu *menu,
   if ((priv->scroll_offset >= 0) && (offset < 0))
     offset = 0;
 
-  view_height = gdk_window_get_height (gtk_widget_get_window (widget));
+  view_height = gdk_surface_get_height (gtk_widget_get_surface (widget));
 
   if (priv->scroll_offset == 0 &&
       view_height >= priv->requested_height)
@@ -3242,7 +3242,7 @@ get_arrows_sensitive_area (GtkMenu      *menu,
 {
   GtkMenuPrivate *priv = menu->priv;
   GtkWidget *widget = GTK_WIDGET (menu);
-  GdkWindow *window;
+  GdkSurface *window;
   gint width, height;
   gint win_x, win_y;
   gint top_arrow_height, bottom_arrow_height;
@@ -3258,11 +3258,11 @@ get_arrows_sensitive_area (GtkMenu      *menu,
                       &bottom_arrow_height, NULL,
                       NULL, NULL);
 
-  window = gtk_widget_get_window (widget);
-  width = gdk_window_get_width (window);
-  height = gdk_window_get_height (window);
+  window = gtk_widget_get_surface (widget);
+  width = gdk_surface_get_width (window);
+  height = gdk_surface_get_height (window);
 
-  gdk_window_get_position (window, &win_x, &win_y);
+  gdk_surface_get_position (window, &win_x, &win_y);
 
   if (upper)
     {
@@ -3297,7 +3297,7 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
 
   menu_shell = GTK_MENU_SHELL (menu);
 
-  gdk_window_get_position (gtk_widget_get_window (priv->toplevel),
+  gdk_surface_get_position (gtk_widget_get_surface (priv->toplevel),
                            &top_x, &top_y);
   x -= top_x;
   y -= top_y;
@@ -3509,7 +3509,7 @@ pointer_on_menu_widget (GtkMenu *menu,
   gint window_x, window_y;
 
   gtk_widget_get_allocation (GTK_WIDGET (menu), &allocation);
-  gdk_window_get_position (gtk_widget_get_window (priv->toplevel),
+  gdk_surface_get_position (gtk_widget_get_surface (priv->toplevel),
                            &window_x, &window_y);
 
   if (x_root >= window_x && x_root < window_x + allocation.width &&
@@ -3598,7 +3598,7 @@ gtk_menu_captured_event (GtkWidget *widget,
               y_diff = y_root - priv->drag_start_y;
               offset = priv->initial_drag_offset - y_diff;
 
-              view_height = gdk_window_get_height (gtk_widget_get_window (widget));
+              view_height = gdk_surface_get_height (gtk_widget_get_surface (widget));
               get_arrows_border (menu, &arrow_border);
 
               if (priv->upper_arrow_visible)
@@ -3772,7 +3772,7 @@ gtk_menu_position_legacy (GtkMenu  *menu,
    * to set a different hint
    */
   if (!gtk_widget_get_visible (priv->toplevel))
-    gtk_window_set_type_hint (GTK_WINDOW (priv->toplevel), GDK_WINDOW_TYPE_HINT_POPUP_MENU);
+    gtk_window_set_type_hint (GTK_WINDOW (priv->toplevel), GDK_SURFACE_TYPE_HINT_POPUP_MENU);
 
   if (priv->position_func)
     {
@@ -3977,14 +3977,14 @@ gtk_menu_position (GtkMenu  *menu,
                    gboolean  set_scroll_offset)
 {
   GtkMenuPrivate *priv = menu->priv;
-  GdkWindow *rect_window = NULL;
+  GdkSurface *rect_window = NULL;
   GdkRectangle rect;
   GtkTextDirection text_direction = GTK_TEXT_DIR_NONE;
   GdkGravity rect_anchor;
   GdkGravity menu_anchor;
   GdkAnchorHints anchor_hints;
   gint rect_anchor_dx, rect_anchor_dy;
-  GdkWindow *toplevel;
+  GdkSurface *toplevel;
   gboolean emulated_move_to_rect = FALSE;
 
   rect_anchor = priv->rect_anchor;
@@ -4000,8 +4000,8 @@ gtk_menu_position (GtkMenu  *menu,
     }
   else if (priv->widget)
     {
-      rect_window = gtk_widget_get_window (priv->widget);
-      gtk_widget_get_window_allocation (priv->widget, &rect);
+      rect_window = gtk_widget_get_surface (priv->widget);
+      gtk_widget_get_surface_allocation (priv->widget, &rect);
       text_direction = gtk_widget_get_direction (priv->widget);
     }
   else if (!priv->position_func)
@@ -4022,8 +4022,8 @@ gtk_menu_position (GtkMenu  *menu,
         {
           rect = (GdkRectangle) { 0, 0, 1, 1 };
 
-          rect_window = gtk_widget_get_window (attach_widget);
-          gdk_window_get_device_position (rect_window, grab_device,
+          rect_window = gtk_widget_get_surface (attach_widget);
+          gdk_surface_get_device_position (rect_window, grab_device,
                                           &rect.x, &rect.y, NULL);
           text_direction = gtk_widget_get_direction (attach_widget);
           rect_anchor = GDK_GRAVITY_SOUTH_EAST;
@@ -4058,9 +4058,9 @@ gtk_menu_position (GtkMenu  *menu,
       menu_anchor = get_horizontally_flipped_anchor (menu_anchor);
     }
 
-  toplevel = gtk_widget_get_window (priv->toplevel);
+  toplevel = gtk_widget_get_surface (priv->toplevel);
 
-  gdk_window_set_transient_for (toplevel, rect_window);
+  gdk_surface_set_transient_for (toplevel, rect_window);
 
   g_signal_handlers_disconnect_by_func (toplevel, moved_to_rect_cb, menu);
 
@@ -4069,7 +4069,7 @@ gtk_menu_position (GtkMenu  *menu,
                       menu);
 
 
-  gdk_window_move_to_rect (toplevel,
+  gdk_surface_move_to_rect (toplevel,
                            &rect,
                            rect_anchor,
                            menu_anchor,
@@ -4187,7 +4187,7 @@ gtk_menu_scroll_item_visible (GtkMenuShell *menu_shell,
                             &child_offset, &child_height, &last_child))
     {
       y = priv->scroll_offset;
-      height = gdk_window_get_height (gtk_widget_get_window (widget));
+      height = gdk_surface_get_height (gtk_widget_get_surface (widget));
 
       if (child_offset < y)
         {

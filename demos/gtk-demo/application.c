@@ -470,14 +470,14 @@ demo_application_window_size_allocate (GtkWidget           *widget,
 }
 
 static void
-window_state_changed (GtkWidget *widget)
+surface_state_changed (GtkWidget *widget)
 {
   DemoApplicationWindow *window = (DemoApplicationWindow *)widget;
-  GdkWindowState new_state;
+  GdkSurfaceState new_state;
 
-  new_state = gdk_window_get_state (gtk_widget_get_window (widget));
-  window->maximized = (new_state & GDK_WINDOW_STATE_MAXIMIZED) != 0;
-  window->fullscreen = (new_state & GDK_WINDOW_STATE_FULLSCREEN) != 0;
+  new_state = gdk_surface_get_state (gtk_widget_get_surface (widget));
+  window->maximized = (new_state & GDK_SURFACE_STATE_MAXIMIZED) != 0;
+  window->fullscreen = (new_state & GDK_SURFACE_STATE_FULLSCREEN) != 0;
 }
 
 static void
@@ -485,15 +485,15 @@ demo_application_window_realize (GtkWidget *widget)
 {
   GTK_WIDGET_CLASS (demo_application_window_parent_class)->realize (widget);
 
-  g_signal_connect_swapped (gtk_widget_get_window (widget), "notify::state",
-                            G_CALLBACK (window_state_changed), widget);
+  g_signal_connect_swapped (gtk_widget_get_surface (widget), "notify::state",
+                            G_CALLBACK (surface_state_changed), widget);
 }
 
 static void
 demo_application_window_unrealize (GtkWidget *widget)
 {
-  g_signal_handlers_disconnect_by_func (gtk_widget_get_window (widget),
-                                        window_state_changed, widget);
+  g_signal_handlers_disconnect_by_func (gtk_widget_get_surface (widget),
+                                        surface_state_changed, widget);
 
   GTK_WIDGET_CLASS (demo_application_window_parent_class)->unrealize (widget);
 }

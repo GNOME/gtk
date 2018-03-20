@@ -691,7 +691,7 @@ enum_monitor (HMONITOR hmonitor,
           w32mon->work_rect = rect;
 
           if (data->display->has_fixed_scale)
-            scale = data->display->window_scale;
+            scale = data->display->surface_scale;
           else
             {
               /* First acquire the scale using the current screen */

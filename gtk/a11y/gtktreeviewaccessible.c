@@ -546,7 +546,7 @@ gtk_tree_view_accessible_ref_accessible_at_point (AtkComponent *component,
   tree_view = GTK_TREE_VIEW (widget);
 
   atk_component_get_extents (component, &x_pos, &y_pos, NULL, NULL, coord_type);
-  gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, x, y, &bx, &by);
+  gtk_tree_view_convert_widget_to_bin_surface_coords (tree_view, x, y, &bx, &by);
   if (!gtk_tree_view_get_path_at_pos (tree_view,
                                       bx - x_pos, by - y_pos,
                                       &path, &column, NULL, NULL))
@@ -1090,17 +1090,17 @@ gtk_tree_view_accessible_get_cell_extents (GtkCellAccessibleParent *parent,
 
   tree_view = GTK_TREE_VIEW (widget);
   gtk_tree_view_accessible_get_cell_area (parent, cell, &cell_rect);
-  gtk_tree_view_convert_widget_to_bin_window_coords (tree_view,
+  gtk_tree_view_convert_widget_to_bin_surface_coords (tree_view,
                                                      0, 0, 
                                                      &w_x, &w_y);
 
   if (coord_type != ATK_XY_WINDOW)
     {
-      GdkWindow *window;
+      GdkSurface *window;
       gint x_toplevel, y_toplevel;
 
-      window = gdk_window_get_toplevel (gtk_widget_get_window (widget));
-      gdk_window_get_origin (window, &x_toplevel, &y_toplevel);
+      window = gdk_surface_get_toplevel (gtk_widget_get_surface (widget));
+      gdk_surface_get_origin (window, &x_toplevel, &y_toplevel);
 
       w_x += x_toplevel;
       w_y += y_toplevel;
@@ -1175,7 +1175,7 @@ gtk_tree_view_accessible_grab_cell_focus (GtkCellAccessibleParent *parent,
         {
 #ifdef GDK_WINDOWING_X11
           gtk_window_present_with_time (GTK_WINDOW (toplevel),
-                                        gdk_x11_get_server_time (gtk_widget_get_window (widget)));
+                                        gdk_x11_get_server_time (gtk_widget_get_surface (widget)));
 #else
           gtk_window_present (GTK_WINDOW (toplevel));
 #endif
@@ -1443,7 +1443,7 @@ is_cell_showing (GtkTreeView  *tree_view,
   tree_cell_rect->height = cell_rect->height;
 
   gtk_tree_view_get_visible_rect (tree_view, visible_rect);
-  gtk_tree_view_convert_tree_to_bin_window_coords (tree_view, visible_rect->x,
+  gtk_tree_view_convert_tree_to_bin_surface_coords (tree_view, visible_rect->x,
                                                    visible_rect->y, &bx, &by);
 
   if (((tree_cell_rect->x + tree_cell_rect->width) < bx) ||

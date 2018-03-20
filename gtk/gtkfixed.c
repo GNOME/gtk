@@ -176,7 +176,7 @@ gtk_fixed_init (GtkFixed *fixed)
 
   fixed->priv->children = NULL;
 
-  gtk_widget_set_has_window (GTK_WIDGET (fixed), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (fixed), FALSE);
 }
 
 /**

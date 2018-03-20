@@ -57,7 +57,7 @@
  * GDK_PARENT_RELATIVE:
  *
  * A special value, indicating that the background
- * for a window should be inherited from the parent window.
+ * for a surface should be inherited from the parent surface.
  */
 #define GDK_PARENT_RELATIVE  1L
 
@@ -128,7 +128,7 @@ typedef struct _GdkDragContext        GdkDragContext;
 typedef struct _GdkClipboard          GdkClipboard;
 typedef struct _GdkDisplayManager     GdkDisplayManager;
 typedef struct _GdkDisplay            GdkDisplay;
-typedef struct _GdkWindow             GdkWindow;
+typedef struct _GdkSurface             GdkSurface;
 typedef struct _GdkKeymap             GdkKeymap;
 typedef struct _GdkAppLaunchContext   GdkAppLaunchContext;
 typedef struct _GdkSeat               GdkSeat;
@@ -317,7 +317,7 @@ typedef enum
  * @GDK_GRAB_ALREADY_GRABBED: the resource is actively grabbed by another client.
  * @GDK_GRAB_INVALID_TIME: the resource was grabbed more recently than the
  *  specified time.
- * @GDK_GRAB_NOT_VIEWABLE: the grab window or the @confine_to window are not
+ * @GDK_GRAB_NOT_VIEWABLE: the grab surface or the @confine_to surface are not
  *  viewable.
  * @GDK_GRAB_FROZEN: the resource is frozen by an active grab of another client.
  * @GDK_GRAB_FAILED: the grab failed for some other reason. Since 3.16
@@ -338,7 +338,7 @@ typedef enum
 /**
  * GdkGrabOwnership:
  * @GDK_OWNERSHIP_NONE: All other devices’ events are allowed.
- * @GDK_OWNERSHIP_WINDOW: Other devices’ events are blocked for the grab window.
+ * @GDK_OWNERSHIP_SURFACE: Other devices’ events are blocked for the grab surface.
  * @GDK_OWNERSHIP_APPLICATION: Other devices’ events are blocked for the whole application.
  *
  * Defines how device grabs interact with other devices.
@@ -346,7 +346,7 @@ typedef enum
 typedef enum
 {
   GDK_OWNERSHIP_NONE,
-  GDK_OWNERSHIP_WINDOW,
+  GDK_OWNERSHIP_SURFACE,
   GDK_OWNERSHIP_APPLICATION
 } GdkGrabOwnership;
 
@@ -362,15 +362,15 @@ typedef enum
  * @GDK_BUTTON_RELEASE_MASK: receive button release events
  * @GDK_KEY_PRESS_MASK: receive key press events
  * @GDK_KEY_RELEASE_MASK: receive key release events
- * @GDK_ENTER_NOTIFY_MASK: receive window enter events
- * @GDK_LEAVE_NOTIFY_MASK: receive window leave events
+ * @GDK_ENTER_NOTIFY_MASK: receive surface enter events
+ * @GDK_LEAVE_NOTIFY_MASK: receive surface leave events
  * @GDK_FOCUS_CHANGE_MASK: receive focus change events
- * @GDK_STRUCTURE_MASK: receive events about window configuration change
+ * @GDK_STRUCTURE_MASK: receive events about surface configuration change
  * @GDK_PROPERTY_CHANGE_MASK: receive property change events
  * @GDK_PROXIMITY_IN_MASK: receive proximity in events
  * @GDK_PROXIMITY_OUT_MASK: receive proximity out events
- * @GDK_SUBSTRUCTURE_MASK: receive events about window configuration changes of
- *   child windows
+ * @GDK_SUBSTRUCTURE_MASK: receive events about surface configuration changes of
+ *   child surfaces
  * @GDK_SCROLL_MASK: receive scroll events
  * @GDK_TOUCH_MASK: receive touch events. Since 3.4
  * @GDK_SMOOTH_SCROLL_MASK: receive smooth scrolling events. Since 3.4
@@ -378,7 +378,7 @@ typedef enum
  * @GDK_TABLET_PAD_MASK: receive tablet pad events. Since 3.22
  * @GDK_ALL_EVENTS_MASK: the combination of all the above event masks.
  *
- * A set of bit-flags to indicate which events a window is to receive.
+ * A set of bit-flags to indicate which events a surface is to receive.
  * Most of these masks map onto one or more of the #GdkEventType event types
  * above.
  *
@@ -387,10 +387,10 @@ typedef enum
  *
  * Since GTK 3.8, motion events are already compressed by default, independent
  * of this mechanism. This compression can be disabled with
- * gdk_window_set_event_compression(). See the documentation of that function
+ * gdk_surface_set_event_compression(). See the documentation of that function
  * for details.
  *
- * If %GDK_TOUCH_MASK is enabled, the window will receive touch events
+ * If %GDK_TOUCH_MASK is enabled, the surface will receive touch events
  * from touch-enabled devices. Those will come as sequences of #GdkEventTouch
  * with type %GDK_TOUCH_UPDATE, enclosed by two events with
  * type %GDK_TOUCH_BEGIN and %GDK_TOUCH_END (or %GDK_TOUCH_CANCEL).
@@ -449,7 +449,7 @@ typedef enum {
  * GdkVulkanError:
  * @GDK_VULKAN_ERROR_UNSUPPORTED: Vulkan is not supported on this backend or has not been
  *     compiled in.
- * @GDK_VULKAN_ERROR_NOT_AVAILABLE: Vulkan support is not available on this Window
+ * @GDK_VULKAN_ERROR_NOT_AVAILABLE: Vulkan support is not available on this Surface
  *
  * Error enumeration for #GdkVulkanContext.
  *
@@ -461,27 +461,27 @@ typedef enum {
 } GdkVulkanError;
 
 /**
- * GdkWindowTypeHint:
- * @GDK_WINDOW_TYPE_HINT_NORMAL: Normal toplevel window.
- * @GDK_WINDOW_TYPE_HINT_DIALOG: Dialog window.
- * @GDK_WINDOW_TYPE_HINT_MENU: Window used to implement a menu; GTK+ uses
+ * GdkSurfaceTypeHint:
+ * @GDK_SURFACE_TYPE_HINT_NORMAL: Normal toplevel window.
+ * @GDK_SURFACE_TYPE_HINT_DIALOG: Dialog window.
+ * @GDK_SURFACE_TYPE_HINT_MENU: Window used to implement a menu; GTK+ uses
  *  this hint only for torn-off menus, see #GtkTearoffMenuItem.
- * @GDK_WINDOW_TYPE_HINT_TOOLBAR: Window used to implement toolbars.
- * @GDK_WINDOW_TYPE_HINT_SPLASHSCREEN: Window used to display a splash
+ * @GDK_SURFACE_TYPE_HINT_TOOLBAR: Window used to implement toolbars.
+ * @GDK_SURFACE_TYPE_HINT_SPLASHSCREEN: Window used to display a splash
  *  screen during application startup.
- * @GDK_WINDOW_TYPE_HINT_UTILITY: Utility windows which are not detached
+ * @GDK_SURFACE_TYPE_HINT_UTILITY: Utility windows which are not detached
  *  toolbars or dialogs.
- * @GDK_WINDOW_TYPE_HINT_DOCK: Used for creating dock or panel windows.
- * @GDK_WINDOW_TYPE_HINT_DESKTOP: Used for creating the desktop background
+ * @GDK_SURFACE_TYPE_HINT_DOCK: Used for creating dock or panel windows.
+ * @GDK_SURFACE_TYPE_HINT_DESKTOP: Used for creating the desktop background
  *  window.
- * @GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU: A menu that belongs to a menubar.
- * @GDK_WINDOW_TYPE_HINT_POPUP_MENU: A menu that does not belong to a menubar,
+ * @GDK_SURFACE_TYPE_HINT_DROPDOWN_MENU: A menu that belongs to a menubar.
+ * @GDK_SURFACE_TYPE_HINT_POPUP_MENU: A menu that does not belong to a menubar,
  *  e.g. a context menu.
- * @GDK_WINDOW_TYPE_HINT_TOOLTIP: A tooltip.
- * @GDK_WINDOW_TYPE_HINT_NOTIFICATION: A notification - typically a “bubble”
+ * @GDK_SURFACE_TYPE_HINT_TOOLTIP: A tooltip.
+ * @GDK_SURFACE_TYPE_HINT_NOTIFICATION: A notification - typically a “bubble”
  *  that belongs to a status icon.
- * @GDK_WINDOW_TYPE_HINT_COMBO: A popup from a combo box.
- * @GDK_WINDOW_TYPE_HINT_DND: A window that is used to implement a DND cursor.
+ * @GDK_SURFACE_TYPE_HINT_COMBO: A popup from a combo box.
+ * @GDK_SURFACE_TYPE_HINT_DND: A window that is used to implement a DND cursor.
  *
  * These are hints for the window manager that indicate what type of function
  * the window has. The window manager can use this when determining decoration
@@ -492,21 +492,21 @@ typedef enum {
  */
 typedef enum
 {
-  GDK_WINDOW_TYPE_HINT_NORMAL,
-  GDK_WINDOW_TYPE_HINT_DIALOG,
-  GDK_WINDOW_TYPE_HINT_MENU,		/* Torn off menu */
-  GDK_WINDOW_TYPE_HINT_TOOLBAR,
-  GDK_WINDOW_TYPE_HINT_SPLASHSCREEN,
-  GDK_WINDOW_TYPE_HINT_UTILITY,
-  GDK_WINDOW_TYPE_HINT_DOCK,
-  GDK_WINDOW_TYPE_HINT_DESKTOP,
-  GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU,	/* A drop down menu (from a menubar) */
-  GDK_WINDOW_TYPE_HINT_POPUP_MENU,	/* A popup menu (from right-click) */
-  GDK_WINDOW_TYPE_HINT_TOOLTIP,
-  GDK_WINDOW_TYPE_HINT_NOTIFICATION,
-  GDK_WINDOW_TYPE_HINT_COMBO,
-  GDK_WINDOW_TYPE_HINT_DND
-} GdkWindowTypeHint;
+  GDK_SURFACE_TYPE_HINT_NORMAL,
+  GDK_SURFACE_TYPE_HINT_DIALOG,
+  GDK_SURFACE_TYPE_HINT_MENU,		/* Torn off menu */
+  GDK_SURFACE_TYPE_HINT_TOOLBAR,
+  GDK_SURFACE_TYPE_HINT_SPLASHSCREEN,
+  GDK_SURFACE_TYPE_HINT_UTILITY,
+  GDK_SURFACE_TYPE_HINT_DOCK,
+  GDK_SURFACE_TYPE_HINT_DESKTOP,
+  GDK_SURFACE_TYPE_HINT_DROPDOWN_MENU,	/* A drop down menu (from a menubar) */
+  GDK_SURFACE_TYPE_HINT_POPUP_MENU,	/* A popup menu (from right-click) */
+  GDK_SURFACE_TYPE_HINT_TOOLTIP,
+  GDK_SURFACE_TYPE_HINT_NOTIFICATION,
+  GDK_SURFACE_TYPE_HINT_COMBO,
+  GDK_SURFACE_TYPE_HINT_DND
+} GdkSurfaceTypeHint;
 
 /**
  * GdkAxisUse:

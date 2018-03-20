@@ -226,7 +226,7 @@ gtk_statusbar_init (GtkStatusbar *statusbar)
 {
   GtkStatusbarPrivate *priv;
 
-  gtk_widget_set_has_window (GTK_WIDGET (statusbar), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (statusbar), FALSE);
 
   statusbar->priv = gtk_statusbar_get_instance_private (statusbar);
   priv = statusbar->priv;

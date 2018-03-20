@@ -37,7 +37,7 @@ GDK_AVAILABLE_IN_ALL
 GType gdk_drawing_context_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GdkWindow *     gdk_drawing_context_get_window          (GdkDrawingContext *context);
+GdkSurface *     gdk_drawing_context_get_surface          (GdkDrawingContext *context);
 GDK_AVAILABLE_IN_ALL
 GdkDrawContext* gdk_drawing_context_get_paint_context   (GdkDrawingContext *context);
 GDK_AVAILABLE_IN_ALL

@@ -129,13 +129,13 @@ gtk_media_stream_default_update_audio (GtkMediaStream *self,
 
 static void
 gtk_media_stream_default_realize (GtkMediaStream *self,
-                                  GdkWindow      *window)
+                                  GdkSurface      *window)
 {
 }
 
 static void
 gtk_media_stream_default_unrealize (GtkMediaStream *self,
-                                    GdkWindow      *window)
+                                    GdkSurface      *window)
 {
 }
 
@@ -856,9 +856,9 @@ gtk_media_stream_set_volume (GtkMediaStream *self,
 /**
  * gtk_media_stream_realize:
  * @self: a #GtkMediaStream
- * @window: a #GdkWindow
+ * @window: a #GdkSurface
  *
- * Called by users to attach the media stream to a #GdkWindow they manage.
+ * Called by users to attach the media stream to a #GdkSurface they manage.
  * The stream can then access the resources of @window for its rendering
  * purposes. In particular, media streams might want to create
  * #GdkGLContexts or sync to the #GdkFrameClock.
@@ -875,10 +875,10 @@ gtk_media_stream_set_volume (GtkMediaStream *self,
  **/
 void
 gtk_media_stream_realize (GtkMediaStream *self,
-                          GdkWindow      *window)
+                          GdkSurface      *window)
 {
   g_return_if_fail (GTK_IS_MEDIA_STREAM (self));
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
   g_object_ref (self);
   g_object_ref (window);
@@ -889,17 +889,17 @@ gtk_media_stream_realize (GtkMediaStream *self,
 /**
  * gtk_media_stream_unrealize:
  * @self: a #GtkMediaStream previously realized
- * @window: the #GdkWindow the stream was realized with
+ * @window: the #GdkSurface the stream was realized with
  *
  * Undoes a previous call to gtk_media_stream_realize() and causes
  * the stream to release all resources it had allocated from @window.
  **/
 void
 gtk_media_stream_unrealize (GtkMediaStream *self,
-                            GdkWindow      *window)
+                            GdkSurface      *window)
 {
   g_return_if_fail (GTK_IS_MEDIA_STREAM (self));
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
   GTK_MEDIA_STREAM_GET_CLASS (self)->unrealize (self, window);
 

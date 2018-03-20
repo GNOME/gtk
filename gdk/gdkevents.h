@@ -56,7 +56,7 @@ G_BEGIN_DECLS
 /**
  * GDK_PRIORITY_REDRAW:
  *
- * This is the priority that the idle handler processing window updates
+ * This is the priority that the idle handler processing surface updates
  * is given in the
  * [GLib Main Loop][glib-The-Main-Event-Loop].
  */
@@ -151,33 +151,33 @@ typedef void (*GdkEventFunc) (GdkEvent *event,
 /**
  * GdkEventType:
  * @GDK_NOTHING: a special code to indicate a null event.
- * @GDK_DELETE: the window manager has requested that the toplevel window be
+ * @GDK_DELETE: the window manager has requested that the toplevel surface be
  *   hidden or destroyed, usually when the user clicks on a special icon in the
  *   title bar.
- * @GDK_DESTROY: the window has been destroyed.
- * @GDK_EXPOSE: all or part of the window has become visible and needs to be
+ * @GDK_DESTROY: the surface has been destroyed.
+ * @GDK_EXPOSE: all or part of the surface has become visible and needs to be
  *   redrawn.
  * @GDK_MOTION_NOTIFY: the pointer (usually a mouse) has moved.
  * @GDK_BUTTON_PRESS: a mouse button has been pressed.
  * @GDK_BUTTON_RELEASE: a mouse button has been released.
  * @GDK_KEY_PRESS: a key has been pressed.
  * @GDK_KEY_RELEASE: a key has been released.
- * @GDK_ENTER_NOTIFY: the pointer has entered the window.
- * @GDK_LEAVE_NOTIFY: the pointer has left the window.
- * @GDK_FOCUS_CHANGE: the keyboard focus has entered or left the window.
- * @GDK_CONFIGURE: the size, position or stacking order of the window has changed.
- *   Note that GTK+ discards these events for %GDK_WINDOW_CHILD windows.
- * @GDK_MAP: the window has been mapped.
- * @GDK_UNMAP: the window has been unmapped.
+ * @GDK_ENTER_NOTIFY: the pointer has entered the surface.
+ * @GDK_LEAVE_NOTIFY: the pointer has left the surface.
+ * @GDK_FOCUS_CHANGE: the keyboard focus has entered or left the surface.
+ * @GDK_CONFIGURE: the size, position or stacking order of the surface has changed.
+ *   Note that GTK+ discards these events for %GDK_SURFACE_CHILD surfaces.
+ * @GDK_MAP: the surface has been mapped.
+ * @GDK_UNMAP: the surface has been unmapped.
  * @GDK_PROXIMITY_IN: an input device has moved into contact with a sensing
  *   surface (e.g. a touchscreen or graphics tablet).
  * @GDK_PROXIMITY_OUT: an input device has moved out of contact with a sensing
  *   surface.
- * @GDK_DRAG_ENTER: the mouse has entered the window while a drag is in progress.
- * @GDK_DRAG_LEAVE: the mouse has left the window while a drag is in progress.
- * @GDK_DRAG_MOTION: the mouse has moved in the window while a drag is in
+ * @GDK_DRAG_ENTER: the mouse has entered the surface while a drag is in progress.
+ * @GDK_DRAG_LEAVE: the mouse has left the surface while a drag is in progress.
+ * @GDK_DRAG_MOTION: the mouse has moved in the surface while a drag is in
  *   progress.
- * @GDK_DROP_START: a drop operation onto the window has started.
+ * @GDK_DROP_START: a drop operation onto the surface has started.
  * @GDK_SCROLL: the scroll wheel was turned
  * @GDK_GRAB_BROKEN: a pointer or keyboard grab was broken. This event type
  *   was added in 2.8.
@@ -286,10 +286,10 @@ typedef enum
 
 /**
  * GdkScrollDirection:
- * @GDK_SCROLL_UP: the window is scrolled up.
- * @GDK_SCROLL_DOWN: the window is scrolled down.
- * @GDK_SCROLL_LEFT: the window is scrolled to the left.
- * @GDK_SCROLL_RIGHT: the window is scrolled to the right.
+ * @GDK_SCROLL_UP: the surface is scrolled up.
+ * @GDK_SCROLL_DOWN: the surface is scrolled down.
+ * @GDK_SCROLL_LEFT: the surface is scrolled to the left.
+ * @GDK_SCROLL_RIGHT: the surface is scrolled to the right.
  * @GDK_SCROLL_SMOOTH: the scrolling is determined by the delta values
  *   in scroll events. See gdk_event_get_scroll_deltas(). Since: 3.4
  *
@@ -306,17 +306,17 @@ typedef enum
 
 /**
  * GdkNotifyType:
- * @GDK_NOTIFY_ANCESTOR: the window is entered from an ancestor or
+ * @GDK_NOTIFY_ANCESTOR: the surface is entered from an ancestor or
  *   left towards an ancestor.
  * @GDK_NOTIFY_VIRTUAL: the pointer moves between an ancestor and an
- *   inferior of the window.
- * @GDK_NOTIFY_INFERIOR: the window is entered from an inferior or
+ *   inferior of the surface.
+ * @GDK_NOTIFY_INFERIOR: the surface is entered from an inferior or
  *   left towards an inferior.
- * @GDK_NOTIFY_NONLINEAR: the window is entered from or left towards
- *   a window which is neither an ancestor nor an inferior.
- * @GDK_NOTIFY_NONLINEAR_VIRTUAL: the pointer moves between two windows
- *   which are not ancestors of each other and the window is part of
- *   the ancestor chain between one of these windows and their least
+ * @GDK_NOTIFY_NONLINEAR: the surface is entered from or left towards
+ *   a surface which is neither an ancestor nor an inferior.
+ * @GDK_NOTIFY_NONLINEAR_VIRTUAL: the pointer moves between two surfaces
+ *   which are not ancestors of each other and the surface is part of
+ *   the ancestor chain between one of these surfaces and their least
  *   common ancestor.
  * @GDK_NOTIFY_UNKNOWN: an unknown type of enter/leave event occurred.
  *
@@ -345,12 +345,12 @@ typedef enum
  * @GDK_CROSSING_STATE_CHANGED: crossing because a GTK+ widget changed
  *   state (e.g. sensitivity).
  * @GDK_CROSSING_TOUCH_BEGIN: crossing because a touch sequence has begun,
- *   this event is synthetic as the pointer might have not left the window.
+ *   this event is synthetic as the pointer might have not left the surface.
  * @GDK_CROSSING_TOUCH_END: crossing because a touch sequence has ended,
- *   this event is synthetic as the pointer might have not left the window.
+ *   this event is synthetic as the pointer might have not left the surface.
  * @GDK_CROSSING_DEVICE_SWITCH: crossing because of a device switch (i.e.
  *   a mouse taking control of the pointer after a touch device), this event
- *   is synthetic as the pointer didn’t leave the window.
+ *   is synthetic as the pointer didn’t leave the surface.
  *
  * Specifies the crossing mode for enter and leave events.
  */
@@ -381,7 +381,7 @@ GDK_AVAILABLE_IN_ALL
 void	  gdk_event_free     		(GdkEvent 	*event);
 
 GDK_AVAILABLE_IN_ALL
-GdkWindow *gdk_event_get_window         (const GdkEvent *event);
+GdkSurface *gdk_event_get_surface       (const GdkEvent *event);
 
 GDK_AVAILABLE_IN_ALL
 guint32   gdk_event_get_time            (const GdkEvent  *event);
@@ -545,8 +545,8 @@ GDK_AVAILABLE_IN_ALL
 gboolean       gdk_event_get_touch_emulating_pointer (const GdkEvent *event,
                                                       gboolean       *emulating);
 GDK_AVAILABLE_IN_ALL
-gboolean       gdk_event_get_grab_window (const GdkEvent  *event,
-                                          GdkWindow      **window);
+gboolean       gdk_event_get_grab_surface (const GdkEvent  *event,
+                                           GdkSurface      **surface);
 GDK_AVAILABLE_IN_ALL
 gboolean       gdk_event_get_focus_in (const GdkEvent *event,
                                        gboolean       *focus_in);

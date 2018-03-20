@@ -134,7 +134,7 @@ create_surface (GtkColorPlane *plane)
   width = gtk_widget_get_width (widget);
   height = gtk_widget_get_height (widget);
 
-  surface = gdk_window_create_similar_surface (gtk_widget_get_window (widget),
+  surface = gdk_surface_create_similar_surface (gtk_widget_get_surface (widget),
                                                CAIRO_CONTENT_COLOR,
                                                width, height);
 
@@ -408,7 +408,7 @@ gtk_color_plane_init (GtkColorPlane *plane)
 
   plane->priv = gtk_color_plane_get_instance_private (plane);
 
-  gtk_widget_set_has_window (GTK_WIDGET (plane), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (plane), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (plane), TRUE);
 
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (plane));

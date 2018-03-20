@@ -348,10 +348,10 @@ static NSWindow *
 get_toplevel_nswindow (GtkWidget *widget)
 {
   GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
-  GdkWindow *window = gtk_widget_get_window (toplevel);
+  GdkSurface *window = gtk_widget_get_surface (toplevel);
   
   if (gtk_widget_is_toplevel (toplevel) && window)
-    return [gdk_quartz_window_get_nsview (window) window];
+    return [gdk_quartz_surface_get_nsview (window) window];
   else
     return NULL;
 }
@@ -633,11 +633,11 @@ gtk_drag_find_widget (GtkWidget       *widget,
   if (gtk_widget_get_parent (widget))
     {
       gint tx, ty;
-      GdkWindow *window = gtk_widget_get_window (widget);
-      GdkWindow *parent_window;
+      GdkSurface *window = gtk_widget_get_surface (widget);
+      GdkSurface *parent_window;
       GtkAllocation allocation;
 
-      parent_window = gtk_widget_get_window (gtk_widget_get_parent (widget));
+      parent_window = gtk_widget_get_surface (gtk_widget_get_parent (widget));
 
       /* Compute the offset from allocation-relative to
        * window-relative coordinates.
@@ -646,12 +646,12 @@ gtk_drag_find_widget (GtkWidget       *widget,
       allocation_to_window_x = allocation.x;
       allocation_to_window_y = allocation.y;
 
-      if (gtk_widget_get_has_window (widget))
+      if (gtk_widget_get_has_surface (widget))
 	{
 	  /* The allocation is relative to the parent window for
 	   * window widgets, not to widget->window.
 	   */
-          gdk_window_get_position (window, &tx, &ty);
+          gdk_surface_get_position (window, &tx, &ty);
 	  
           allocation_to_window_x -= tx;
           allocation_to_window_y -= ty;
@@ -664,18 +664,18 @@ gtk_drag_find_widget (GtkWidget       *widget,
 	{
 	  GdkRectangle window_rect = { 0, 0, 0, 0 };
 	  
-          window_rect.width = gdk_window_get_width (window);
-          window_rect.height = gdk_window_get_height (window);
+          window_rect.width = gdk_surface_get_width (window);
+          window_rect.height = gdk_surface_get_height (window);
 
 	  gdk_rectangle_intersect (&new_allocation, &window_rect, &new_allocation);
 
-	  gdk_window_get_position (window, &tx, &ty);
+	  gdk_surface_get_position (window, &tx, &ty);
 	  new_allocation.x += tx;
 	  x_offset += tx;
 	  new_allocation.y += ty;
 	  y_offset += ty;
 	  
-	  window = gdk_window_get_parent (window);
+	  window = gdk_surface_get_parent (window);
 	}
 
       if (!window)		/* Window and widget heirarchies didn't match. */
@@ -930,7 +930,7 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
 	      }
 	  }
 
-	gdk_window_get_position (gtk_widget_get_window (toplevel), &tx, &ty);
+	gdk_surface_get_position (gtk_widget_get_surface (toplevel), &tx, &ty);
 	
 	data.x = event->dnd.x_root - tx;
 	data.y = event->dnd.y_root - ty;
@@ -1091,10 +1091,10 @@ gtk_drag_begin_idle (gpointer arg)
 }
 /* Fake protocol to let us call GdkNSView gdkWindow without including
  * gdk/GdkNSView.h (which we can’t because it pulls in the internal-only
- * gdkwindow.h).
+ * gdksurface.h).
  */
 @protocol GdkNSView
-- (GdkWindow *)gdkWindow;
+- (GdkSurface *)gdkWindow;
 @end
 
 GdkDragContext *
@@ -1109,7 +1109,7 @@ gtk_drag_begin_internal (GtkWidget         *widget,
 {
   GtkDragSourceInfo *info;
   GdkDevice *pointer;
-  GdkWindow *window;
+  GdkSurface *window;
   GdkDragContext *context;
   NSWindow *nswindow = get_toplevel_nswindow (widget);
   NSPoint point = {0, 0};
@@ -1119,14 +1119,14 @@ gtk_drag_begin_internal (GtkWidget         *widget,
 
   if ((x != -1 && y != -1) || event)
     {
-      GdkWindow *window;
+      GdkSurface *window;
       gdouble dx, dy;
       if (x != -1 && y != -1)
 	{
 	  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
-	  window = gtk_widget_get_window (toplevel);
+	  window = gtk_widget_get_surface (toplevel);
 	  gtk_widget_translate_coordinates (widget, toplevel, x, y, &x, &y);
-	  gdk_window_get_root_coords (gtk_widget_get_window (toplevel), x, y,
+	  gdk_surface_get_root_coords (gtk_widget_get_surface (toplevel), x, y,
 							     &x, &y);
 	  dx = (gdouble)x;
 	  dy = (gdouble)y;
@@ -1136,26 +1136,26 @@ gtk_drag_begin_internal (GtkWidget         *widget,
 	  if (gdk_event_get_coords (event, &dx, &dy))
 	    {
 	      /* We need to translate (x, y) to coordinates relative to the
-	       * toplevel GdkWindow, which should be the GdkWindow backing
+	       * toplevel GdkSurface, which should be the GdkSurface backing
 	       * nswindow. Then, we convert to the NSWindow coordinate system.
 	       */
-	      window = event->any.window;
-	      GdkWindow *toplevel = gdk_window_get_toplevel (window);
+	      window = event->any.surface;
+	      GdkSurface *toplevel = gdk_surface_get_toplevel (window);
 
 	      while (window != toplevel)
 		{
 		  double old_x = dx;
 		  double old_y = dy;
 
-		  gdk_window_coords_to_parent (window, old_x, old_y,
+		  gdk_surface_coords_to_parent (window, old_x, old_y,
 					       &dx, &dy);
-		  window = gdk_window_get_parent (window);
+		  window = gdk_surface_get_parent (window);
 		}
 	    }
 	  time = (double)gdk_event_get_time (event);
 	}
       point.x = dx;
-      point.y = gdk_window_get_height (window) - dy;
+      point.y = gdk_surface_get_height (window) - dy;
     }
 
   nstime = [[NSDate dateWithTimeIntervalSince1970: time / 1000] timeIntervalSinceReferenceDate];
@@ -1445,7 +1445,7 @@ gtk_drag_set_icon_name (GdkDragContext *context,
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
   g_return_if_fail (icon_name != NULL);
 
-  display = gdk_window_get_display (gdk_drag_context_get_source_window (context));
+  display = gdk_surface_get_display (gdk_drag_context_get_source_surface (context));
   g_return_if_fail (display != NULL);
 
   gtk_icon_size_lookup (GTK_ICON_SIZE_DND, &width, &height);
@@ -1574,7 +1574,7 @@ _gtk_drag_source_handle_event (GtkWidget *widget,
   switch (event->type)
     {
     case GDK_DROP_FINISHED:
-      result = (gdk_drag_context_get_dest_window (context) != NULL) ? GTK_DRAG_RESULT_SUCCESS : GTK_DRAG_RESULT_NO_TARGET;
+      result = (gdk_drag_context_get_dest_surface (context) != NULL) ? GTK_DRAG_RESULT_SUCCESS : GTK_DRAG_RESULT_NO_TARGET;
       gtk_drag_drop_finished (info, result);
       break;
     default:

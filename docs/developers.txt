@@ -26,13 +26,13 @@ Refer to the file widget_system.txt which covers widget flags and the
 resulting invariants in a detailed way.
 
 
-GdkWindow pointers may be NULL in GdkEvents
+GdkSurface pointers may be NULL in GdkEvents
 -------------------------------------------
 
 The notification nature of the signal mechanism might cause events to
-be emitted that have their GdkWindow pointer set to NULL.
+be emitted that have their GdkSurface pointer set to NULL.
 This is due to the fact that certain events need to be emitted after the
-real GdkWindow of a widget is not any longer pertinent.
+real GdkSurface of a widget is not any longer pertinent.
 It's up to the signal handling function (application) to check for the
 window field of the event structure to be != NULL, if it is going to
 perform any operations through Gdk calls on it.
@@ -43,7 +43,7 @@ GDK_SELECTION_CLEAR     GtkWidget::selection_clear_event
 GDK_FOCUS_CHANGE        GtkWidget::focus_in_event
                         GtkWidget::focus_out_event
 
-Events that are assured to have a valid GdkEvent.any.window field are
+Events that are assured to have a valid GdkEvent.any.surface field are
 
 GDK_EXPOSE		GtkWidget::expose_event
 
@@ -51,10 +51,10 @@ GDK_EXPOSE		GtkWidget::expose_event
 Writing Gdk functions
 ---------------------
 
-When writing Gdk functions that operate on GdkWindow structures in any
-meaningful sense, that is casting to a GdkWindowPrivate structure for
-access to fields other then GdkWindow.user_data, the programmer is
-recommended to check for the GdkWindowPrivate.destroyed field to be ==
-FALSE, especially if the GdkWindowPrivate.xwindow field is used.
+When writing Gdk functions that operate on GdkSurface structures in any
+meaningful sense, that is casting to a GdkSurfacePrivate structure for
+access to fields other then GdkSurface.user_data, the programmer is
+recommended to check for the GdkSurfacePrivate.destroyed field to be ==
+FALSE, especially if the GdkSurfacePrivate.xwindow field is used.
 Silent abortion of the Gdk function is the correct behaviour if this
 condition isn't met.

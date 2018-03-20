@@ -31,41 +31,41 @@
 
 #include <gdk/gdkcursor.h>
 #include <gdk/gdkinternals.h>
-#include "gdkwindow-broadway.h"
+#include "gdksurface-broadway.h"
 #include "gdkdisplay-broadway.h"
 
 #include "gdkbroadwaycursor.h"
-#include "gdkbroadwaywindow.h"
+#include "gdkbroadwaysurface.h"
 
 void _gdk_broadway_resync_windows (void);
 
 guint32 gdk_broadway_display_ensure_texture (GdkDisplay *display,
 					     GdkTexture *texture);
 
-void gdk_broadway_window_set_nodes (GdkWindow *window,
+void gdk_broadway_surface_set_nodes (GdkSurface *window,
 				    GArray *nodes,
                                     GPtrArray *node_textures);
 
-void     _gdk_broadway_window_register_dnd (GdkWindow      *window);
-GdkDragContext * _gdk_broadway_window_drag_begin (GdkWindow          *window,
+void     _gdk_broadway_surface_register_dnd (GdkSurface      *window);
+GdkDragContext * _gdk_broadway_surface_drag_begin (GdkSurface          *window,
 						  GdkDevice          *device,
 						  GdkContentProvider *content,
                                                   GdkDragAction       actions,
                                                   gint                dx,
                                                   gint                dy);
-void     _gdk_broadway_window_translate         (GdkWindow *window,
+void     _gdk_broadway_surface_translate         (GdkSurface *window,
 						 cairo_region_t *area,
 						 gint       dx,
 						 gint       dy);
 gboolean _gdk_broadway_moveresize_handle_event   (GdkDisplay *display,
 						  BroadwayInputMsg *msg);
 gboolean _gdk_broadway_moveresize_configure_done (GdkDisplay *display,
-						  GdkWindow  *window);
-void _gdk_broadway_roundtrip_notify (GdkWindow  *window,
+						  GdkSurface  *window);
+void _gdk_broadway_roundtrip_notify (GdkSurface  *window,
                                      guint32 tag,
                                      gboolean local_reply);
-void     _gdk_broadway_window_grab_check_destroy (GdkWindow *window);
-void     _gdk_broadway_window_grab_check_unmap (GdkWindow *window,
+void     _gdk_broadway_surface_grab_check_destroy (GdkSurface *window);
+void     _gdk_broadway_surface_grab_check_unmap (GdkSurface *window,
 						gulong     serial);
 
 void _gdk_keymap_keys_changed     (GdkDisplay      *display);
@@ -99,11 +99,11 @@ void _gdk_broadway_display_get_default_cursor_size (GdkDisplay *display,
 void _gdk_broadway_display_get_maximal_cursor_size (GdkDisplay *display,
 						    guint       *width,
 						    guint       *height);
-void       _gdk_broadway_display_create_window_impl     (GdkDisplay    *display,
-							 GdkWindow     *window,
-							 GdkWindow     *real_parent,
+void       _gdk_broadway_display_create_surface_impl     (GdkDisplay    *display,
+							 GdkSurface     *window,
+							 GdkSurface     *real_parent,
 							 GdkEventMask   event_mask,
-							 GdkWindowAttr *attributes);
+							 GdkSurfaceAttr *attributes);
 gint _gdk_broadway_display_text_property_to_utf8_list (GdkDisplay    *display,
 						       GdkAtom        encoding,
 						       gint           format,
@@ -120,11 +120,11 @@ BroadwayInputMsg * _gdk_broadway_display_block_for_input (GdkDisplay *display,
 							  gboolean remove);
 
 /* Window methods - testing */
-void _gdk_broadway_window_resize_surface        (GdkWindow *window);
+void _gdk_broadway_surface_resize_surface        (GdkSurface *window);
 
 void _gdk_broadway_cursor_update_theme (GdkCursor *cursor);
 void _gdk_broadway_cursor_display_finalize (GdkDisplay *display);
 
-#define GDK_WINDOW_IS_BROADWAY(win)   (GDK_IS_WINDOW_IMPL_BROADWAY (((GdkWindow *)win)->impl))
+#define GDK_SURFACE_IS_BROADWAY(win)   (GDK_IS_SURFACE_IMPL_BROADWAY (((GdkSurface *)win)->impl))
 
 #endif /* __GDK_PRIVATE_BROADWAY_H__ */

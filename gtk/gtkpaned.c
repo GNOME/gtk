@@ -1499,7 +1499,7 @@ gtk_paned_init (GtkPaned *paned)
   GtkPanedPrivate *priv = gtk_paned_get_instance_private (paned);
   GtkGesture *gesture;
 
-  gtk_widget_set_has_window (GTK_WIDGET (paned), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (paned), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (paned), TRUE);
 
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;

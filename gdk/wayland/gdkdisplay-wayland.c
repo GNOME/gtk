@@ -636,7 +636,7 @@ _gdk_wayland_display_open (const gchar *display_name)
 static void
 destroy_toplevel (gpointer data)
 {
-  _gdk_window_destroy (GDK_WINDOW (data), FALSE);
+  _gdk_surface_destroy (GDK_SURFACE (data), FALSE);
 }
 
 static void
@@ -714,7 +714,7 @@ gdk_wayland_display_get_name (GdkDisplay *display)
 
 void
 gdk_wayland_display_system_bell (GdkDisplay *display,
-                                 GdkWindow  *window)
+                                 GdkSurface  *window)
 {
   GdkWaylandDisplay *display_wayland;
   struct gtk_surface1 *gtk_surface;
@@ -728,7 +728,7 @@ gdk_wayland_display_system_bell (GdkDisplay *display,
     return;
 
   if (window)
-    gtk_surface = gdk_wayland_window_get_gtk_surface (window);
+    gtk_surface = gdk_wayland_surface_get_gtk_surface (window);
   else
     gtk_surface = NULL;
 
@@ -798,7 +798,7 @@ gdk_wayland_display_has_pending (GdkDisplay *display)
   return FALSE;
 }
 
-static GdkWindow *
+static GdkSurface *
 gdk_wayland_display_get_default_group (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
@@ -916,16 +916,16 @@ gdk_wayland_display_get_monitor (GdkDisplay *display,
 }
 
 static GdkMonitor *
-gdk_wayland_display_get_monitor_at_window (GdkDisplay *display,
-                                           GdkWindow  *window)
+gdk_wayland_display_get_monitor_at_surface (GdkDisplay *display,
+                                           GdkSurface  *window)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   struct wl_output *output;
   int i;
 
-  g_return_val_if_fail (GDK_IS_WAYLAND_WINDOW (window), NULL);
+  g_return_val_if_fail (GDK_IS_WAYLAND_SURFACE (window), NULL);
 
-  output = gdk_wayland_window_get_wl_output (window);
+  output = gdk_wayland_surface_get_wl_output (window);
   if (output == NULL)
     return NULL;
 
@@ -953,7 +953,7 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
   object_class->dispose = gdk_wayland_display_dispose;
   object_class->finalize = gdk_wayland_display_finalize;
 
-  display_class->window_type = gdk_wayland_window_get_type ();
+  display_class->surface_type = gdk_wayland_surface_get_type ();
 
 #ifdef GDK_RENDERING_VULKAN
   display_class->vk_context_type = GDK_TYPE_WAYLAND_VULKAN_CONTEXT;
@@ -973,7 +973,7 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
   display_class->get_app_launch_context = _gdk_wayland_display_get_app_launch_context;
   display_class->get_next_serial = gdk_wayland_display_get_next_serial;
   display_class->notify_startup_complete = gdk_wayland_display_notify_startup_complete;
-  display_class->create_window_impl = _gdk_wayland_display_create_window_impl;
+  display_class->create_surface_impl = _gdk_wayland_display_create_surface_impl;
   display_class->get_keymap = _gdk_wayland_display_get_keymap;
   display_class->text_property_to_utf8_list = _gdk_wayland_display_text_property_to_utf8_list;
   display_class->utf8_to_string_target = _gdk_wayland_display_utf8_to_string_target;
@@ -982,7 +982,7 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
 
   display_class->get_n_monitors = gdk_wayland_display_get_n_monitors;
   display_class->get_monitor = gdk_wayland_display_get_monitor;
-  display_class->get_monitor_at_window = gdk_wayland_display_get_monitor_at_window;
+  display_class->get_monitor_at_surface = gdk_wayland_display_get_monitor_at_surface;
   display_class->get_setting = gdk_wayland_display_get_setting;
   display_class->set_cursor_theme = gdk_wayland_display_set_cursor_theme;
 }
@@ -996,7 +996,7 @@ gdk_wayland_display_init (GdkWaylandDisplay *display)
 }
 
 GList *
-gdk_wayland_display_get_toplevel_windows (GdkDisplay *display)
+gdk_wayland_display_get_toplevel_surfaces (GdkDisplay *display)
 {
   return GDK_WAYLAND_DISPLAY (display)->toplevels;
 }
@@ -1847,8 +1847,8 @@ transform_to_string (int transform)
 static void
 update_scale (GdkDisplay *display)
 {
-  g_list_foreach (gdk_wayland_display_get_toplevel_windows (display),
-                  (GFunc)gdk_wayland_window_update_scale,
+  g_list_foreach (gdk_wayland_display_get_toplevel_surfaces (display),
+                  (GFunc)gdk_wayland_surface_update_scale,
                   NULL);
 }
 

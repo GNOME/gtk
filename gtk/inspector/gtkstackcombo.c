@@ -48,7 +48,7 @@ G_DEFINE_TYPE (GtkStackCombo, gtk_stack_combo, GTK_TYPE_WIDGET)
 static void
 gtk_stack_combo_init (GtkStackCombo *self)
 {
-  gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
 
   self->stack = NULL;
   self->combo = GTK_COMBO_BOX (gtk_combo_box_text_new ());

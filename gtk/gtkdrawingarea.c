@@ -304,7 +304,7 @@ gtk_drawing_area_class_init (GtkDrawingAreaClass *class)
 static void
 gtk_drawing_area_init (GtkDrawingArea *darea)
 {
-  gtk_widget_set_has_window (GTK_WIDGET (darea), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (darea), FALSE);
 }
 
 /**

@@ -80,7 +80,7 @@ G_END_DECLS
 #include <gdk/quartz/gdkquartzmonitor.h>
 #include <gdk/quartz/gdkquartzscreen.h>
 #include <gdk/quartz/gdkquartzutils.h>
-#include <gdk/quartz/gdkquartzwindow.h>
+#include <gdk/quartz/gdkquartzsurface.h>
 
 #undef __GDKQUARTZ_H_INSIDE__
 

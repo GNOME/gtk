@@ -1176,7 +1176,7 @@ gtk_app_chooser_widget_init (GtkAppChooserWidget *self)
 
   self->priv = gtk_app_chooser_widget_get_instance_private (self);
 
-  gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
 
   gtk_widget_init_template (GTK_WIDGET (self));
 

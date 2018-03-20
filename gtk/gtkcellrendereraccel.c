@@ -440,7 +440,7 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
   GtkWidget *editable;
   gboolean is_editable;
   GdkDevice *device, *pointer;
-  GdkWindow *window;
+  GdkSurface *window;
 
   celltext = GTK_CELL_RENDERER_TEXT (cell);
   accel = GTK_CELL_RENDERER_ACCEL (cell);
@@ -451,7 +451,7 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
   if (!is_editable)
     return NULL;
 
-  window = gtk_widget_get_window (gtk_widget_get_toplevel (widget));
+  window = gtk_widget_get_surface (gtk_widget_get_toplevel (widget));
 
   if (event)
     device = gdk_event_get_device (event);

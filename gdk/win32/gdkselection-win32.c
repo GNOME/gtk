@@ -76,7 +76,7 @@ S:_gtk_selection_request()
 event handler, which calls
 S:gtk_selection_invoke_handler()
 to get the data, and then calls
-S:gdk_property_change() (_gdk_x11_window_change_property())
+S:gdk_property_change() (_gdk_x11_surface_change_property())
 to submit the data, by setting the property given by the message sender
 (GDK_SELECTION) on the requestor window (our client clipboard window).
 
@@ -194,7 +194,7 @@ S:_gtk_selection_request()
 event handler, which calls
 S:gtk_selection_invoke_handler()
 to get the data, and then calls
-S:gdk_property_change() (_gdk_win32_window_change_property())
+S:gdk_property_change() (_gdk_win32_surface_change_property())
 to submit the data, by first transmuting it to the format actually requested
 by the sender of WM_RENDERFORMAT, and then by returning thedata back up the stack,
 to the WM_RENDERFORMAT handler, which then calls
@@ -253,7 +253,7 @@ DND:
 GDK-Win32:
 S:idataobject_getdata()
 sends a GDK_SELECTION_REQUEST event, which results in a call to
-S:_gdk_win32_window_change_property()
+S:_gdk_win32_surface_change_property()
 which passes clipboard data back via the selection singleton.
 GDK-Win32 uses delayed rendering for all formats, even text.
 
@@ -304,7 +304,7 @@ enum _GdkWin32ClipboardQueueAction
 struct _GdkWin32ClipboardQueueInfo
 {
   GdkDisplay                   *display;
-  GdkWindow                    *requestor;
+  GdkSurface                    *requestor;
   GdkAtom                       selection;
   GdkAtom                       target;
   guint32                       time;
@@ -747,7 +747,7 @@ _gdk_utf8_to_string_target_internal (const gchar *str,
 }
 
 static void
-selection_property_store (GdkWindow *owner,
+selection_property_store (GdkSurface *owner,
 			  GdkAtom    type,
 			  gint       format,
 			  guchar    *data,
@@ -756,13 +756,13 @@ selection_property_store (GdkWindow *owner,
   GdkSelProp *prop;
   GdkWin32Selection *win32_sel = _gdk_win32_selection_get ();
 
-  prop = g_hash_table_lookup (win32_sel->sel_prop_table, GDK_WINDOW_HWND (owner));
+  prop = g_hash_table_lookup (win32_sel->sel_prop_table, GDK_SURFACE_HWND (owner));
 
   if (prop != NULL)
     {
       g_free (prop->data);
       g_free (prop);
-      g_hash_table_remove (win32_sel->sel_prop_table, GDK_WINDOW_HWND (owner));
+      g_hash_table_remove (win32_sel->sel_prop_table, GDK_SURFACE_HWND (owner));
     }
 
   prop = g_new (GdkSelProp, 1);
@@ -772,7 +772,7 @@ selection_property_store (GdkWindow *owner,
   prop->bitness = format;
   prop->target = type;
 
-  g_hash_table_insert (win32_sel->sel_prop_table, GDK_WINDOW_HWND (owner), prop);
+  g_hash_table_insert (win32_sel->sel_prop_table, GDK_SURFACE_HWND (owner), prop);
 }
 
 void
@@ -802,7 +802,7 @@ _gdk_dropfiles_store (gchar *data)
 }
 
 static void
-generate_selection_notify (GdkWindow *requestor,
+generate_selection_notify (GdkSurface *requestor,
 			   GdkAtom    selection,
 			   GdkAtom    target,
 			   GdkAtom    property,
@@ -860,7 +860,7 @@ _gdk_win32_clear_clipboard_queue ()
 static void
 send_targets_request (guint time)
 {
-  GdkWindow *owner;
+  GdkSurface *owner;
   GdkEvent tmp_event;
   GdkWin32Selection *win32_sel = _gdk_win32_selection_get ();
 
@@ -875,9 +875,9 @@ send_targets_request (guint time)
 
   if (win32_sel->clipboard_opened_for == INVALID_HANDLE_VALUE)
     {
-      if (OpenClipboard (GDK_WINDOW_HWND (owner)))
+      if (OpenClipboard (GDK_SURFACE_HWND (owner)))
         {
-          win32_sel->clipboard_opened_for = GDK_WINDOW_HWND (owner);
+          win32_sel->clipboard_opened_for = GDK_SURFACE_HWND (owner);
           GDK_NOTE (DND, g_print ("Opened clipboard for 0x%p @ %s:%d\n", win32_sel->clipboard_opened_for, __FILE__, __LINE__));
         }
     }
@@ -1687,7 +1687,7 @@ transmute_selection_target (GdkAtom       from_target,
 }
 
 static GdkAtom
-convert_clipboard_selection_to_targets_target (GdkWindow *requestor)
+convert_clipboard_selection_to_targets_target (GdkSurface *requestor)
 {
   gint fmt;
   int i;
@@ -1732,7 +1732,7 @@ convert_clipboard_selection_to_targets_target (GdkWindow *requestor)
 }
 
 static GdkAtom
-convert_clipboard_selection_to_target (GdkWindow *requestor,
+convert_clipboard_selection_to_target (GdkSurface *requestor,
                                        GdkAtom    target)
 {
   UINT format;
@@ -1814,7 +1814,7 @@ convert_clipboard_selection_to_target (GdkWindow *requestor,
 
 static GdkAtom
 convert_selection_with_opened_clipboard (GdkDisplay *display,
-                                          GdkWindow  *requestor,
+                                          GdkSurface  *requestor,
                                           GdkAtom     target,
                                           guint32     time)
 {
@@ -1860,7 +1860,7 @@ open_clipboard_timeout (gpointer data)
       info = (GdkWin32ClipboardQueueInfo *) tmp_list->data;
       next = g_list_next (tmp_list);
 
-      if (GDK_WINDOW_DESTROYED (info->requestor) ||
+      if (GDK_SURFACE_DESTROYED (info->requestor) ||
           info->idle_time >= CLIPBOARD_IDLE_ABORT_TIME)
         {
           clipboard_queue = g_list_remove_link (clipboard_queue, tmp_list);
@@ -1913,12 +1913,12 @@ open_clipboard_timeout (gpointer data)
 
       if (win32_sel->clipboard_opened_for == INVALID_HANDLE_VALUE)
         {
-          if (!OpenClipboard (GDK_WINDOW_HWND (info->requestor)))
+          if (!OpenClipboard (GDK_SURFACE_HWND (info->requestor)))
             {
               info->idle_time += 1;
               continue;
             }
-          win32_sel->clipboard_opened_for = GDK_WINDOW_HWND (info->requestor);
+          win32_sel->clipboard_opened_for = GDK_SURFACE_HWND (info->requestor);
           GDK_NOTE (DND, g_print ("Opened clipboard for 0x%p @ %s:%d\n", win32_sel->clipboard_opened_for, __FILE__, __LINE__));
         }
 
@@ -1967,7 +1967,7 @@ open_clipboard_timeout (gpointer data)
 static void
 queue_open_clipboard (GdkWin32ClipboardQueueAction  action,
                       GdkDisplay                   *display,
-                      GdkWindow                    *requestor,
+                      GdkSurface                    *requestor,
                       GdkAtom                       target,
                       guint32                       time)
 {
@@ -2011,7 +2011,7 @@ queue_open_clipboard (GdkWin32ClipboardQueueAction  action,
 
 gboolean
 _gdk_win32_display_set_selection_owner (GdkDisplay *display,
-					GdkWindow  *owner,
+					GdkSurface  *owner,
 					GdkAtom     selection,
 					guint32     time,
 					gboolean    send_event)
@@ -2025,14 +2025,14 @@ _gdk_win32_display_set_selection_owner (GdkDisplay *display,
       const char *sel_name = (const char *)selection;
 
       g_print ("gdk_selection_owner_set_for_display: %p %s\n",
-	       (owner ? GDK_WINDOW_HWND (owner) : NULL),
+	       (owner ? GDK_SURFACE_HWND (owner) : NULL),
 	       sel_name);
     });
 
   if (selection != GDK_SELECTION_CLIPBOARD)
     {
       if (owner != NULL)
-        g_hash_table_insert (win32_sel->sel_owner_table, selection, GDK_WINDOW_HWND (owner));
+        g_hash_table_insert (win32_sel->sel_owner_table, selection, GDK_SURFACE_HWND (owner));
       else
         g_hash_table_remove (win32_sel->sel_owner_table, selection);
 
@@ -2042,10 +2042,10 @@ _gdk_win32_display_set_selection_owner (GdkDisplay *display,
   /* Rest of this function handles the CLIPBOARD selection */
   if (owner != NULL)
     {
-      if (GDK_WINDOW_DESTROYED (owner))
+      if (GDK_SURFACE_DESTROYED (owner))
 	return FALSE;
 
-      hwnd = GDK_WINDOW_HWND (owner);
+      hwnd = GDK_SURFACE_HWND (owner);
     }
   else
     hwnd = NULL;
@@ -2102,11 +2102,11 @@ _gdk_win32_display_set_selection_owner (GdkDisplay *display,
   return TRUE;
 }
 
-GdkWindow*
+GdkSurface*
 _gdk_win32_display_get_selection_owner (GdkDisplay *display,
                                         GdkAtom     selection)
 {
-  GdkWindow *window;
+  GdkSurface *window;
   HWND selection_owner;
   GdkWin32Selection *win32_sel = _gdk_win32_selection_get ();
 
@@ -2118,7 +2118,7 @@ _gdk_win32_display_get_selection_owner (GdkDisplay *display,
     selection_owner = g_hash_table_lookup (win32_sel->sel_owner_table, selection);
 
   if (selection_owner)
-    window = gdk_win32_window_lookup_for_display (display,
+    window = gdk_win32_surface_lookup_for_display (display,
                                                   selection_owner);
   else
     window = NULL;
@@ -2128,7 +2128,7 @@ _gdk_win32_display_get_selection_owner (GdkDisplay *display,
 
       g_print ("gdk_selection_owner_get: %s = %p\n",
 	       sel_name,
-	       (window ? GDK_WINDOW_HWND (window) : NULL));
+	       (window ? GDK_SURFACE_HWND (window) : NULL));
     });
 
   return window;
@@ -2136,7 +2136,7 @@ _gdk_win32_display_get_selection_owner (GdkDisplay *display,
 
 static GdkAtom
 convert_dnd_selection_to_target (GdkAtom    target,
-                                 GdkWindow *requestor)
+                                 GdkSurface *requestor)
 {
   GdkWin32Selection *win32_sel = _gdk_win32_selection_get ();
   UINT format;
@@ -2243,7 +2243,7 @@ convert_dnd_selection_to_target (GdkAtom    target,
 
 void
 _gdk_win32_display_convert_selection (GdkDisplay *display,
-				      GdkWindow *requestor,
+				      GdkSurface *requestor,
 				      GdkAtom    selection,
 				      GdkAtom    target,
 				      guint32    time)
@@ -2254,7 +2254,7 @@ _gdk_win32_display_convert_selection (GdkDisplay *display,
   g_return_if_fail (selection != NULL);
   g_return_if_fail (requestor != NULL);
 
-  if (GDK_WINDOW_DESTROYED (requestor))
+  if (GDK_SURFACE_DESTROYED (requestor))
     return;
 
   GDK_NOTE (DND, {
@@ -2262,18 +2262,18 @@ _gdk_win32_display_convert_selection (GdkDisplay *display,
       const char *tgt_name = (const char *)target;
 
       g_print ("gdk_selection_convert: %p %s %s\n",
-	       GDK_WINDOW_HWND (requestor),
+	       GDK_SURFACE_HWND (requestor),
 	       sel_name, tgt_name);
     });
 
   if (selection == GDK_SELECTION_CLIPBOARD)
     {
       if (win32_sel->clipboard_opened_for != INVALID_HANDLE_VALUE ||
-          OpenClipboard (GDK_WINDOW_HWND (requestor)))
+          OpenClipboard (GDK_SURFACE_HWND (requestor)))
         {
           if (win32_sel->clipboard_opened_for == INVALID_HANDLE_VALUE)
             {
-              win32_sel->clipboard_opened_for = GDK_WINDOW_HWND (requestor);
+              win32_sel->clipboard_opened_for = GDK_SURFACE_HWND (requestor);
               GDK_NOTE (DND, g_print ("Opened clipboard for 0x%p @ %s:%d\n", win32_sel->clipboard_opened_for, __FILE__, __LINE__));
             }
 
@@ -2317,7 +2317,7 @@ _gdk_win32_display_convert_selection (GdkDisplay *display,
 
 void
 _gdk_win32_selection_property_change (GdkWin32Selection *win32_sel,
-                                      GdkWindow         *window,
+                                      GdkSurface         *window,
                                       GdkAtom            property,
                                       GdkAtom            type,
                                       gint               format,
@@ -2331,9 +2331,9 @@ _gdk_win32_selection_property_change (GdkWin32Selection *win32_sel,
       win32_sel->property_change_target_atom = 0;
 
       if (win32_sel->clipboard_opened_for == INVALID_HANDLE_VALUE &&
-          OpenClipboard (GDK_WINDOW_HWND (window)))
+          OpenClipboard (GDK_SURFACE_HWND (window)))
         {
-          win32_sel->clipboard_opened_for = GDK_WINDOW_HWND (window);
+          win32_sel->clipboard_opened_for = GDK_SURFACE_HWND (window);
           GDK_NOTE (DND, g_print ("Opened clipboard for 0x%p @ %s:%d\n", win32_sel->clipboard_opened_for, __FILE__, __LINE__));
         }
 
@@ -2435,7 +2435,7 @@ _gdk_win32_selection_property_change (GdkWin32Selection *win32_sel,
 
 gint
 _gdk_win32_display_get_selection_property (GdkDisplay *display,
-					   GdkWindow  *requestor,
+					   GdkSurface  *requestor,
 					   guchar    **data,
 					   GdkAtom    *ret_type,
 					   gint       *ret_format)
@@ -2444,15 +2444,15 @@ _gdk_win32_display_get_selection_property (GdkDisplay *display,
   GdkSelProp *prop;
 
   g_return_val_if_fail (requestor != NULL, 0);
-  g_return_val_if_fail (GDK_IS_WINDOW (requestor), 0);
+  g_return_val_if_fail (GDK_IS_SURFACE (requestor), 0);
 
-  if (GDK_WINDOW_DESTROYED (requestor))
+  if (GDK_SURFACE_DESTROYED (requestor))
     return 0;
 
   GDK_NOTE (DND, g_print ("gdk_selection_property_get: %p",
-			   GDK_WINDOW_HWND (requestor)));
+			   GDK_SURFACE_HWND (requestor)));
 
-  prop = g_hash_table_lookup (win32_sel->sel_prop_table, GDK_WINDOW_HWND (requestor));
+  prop = g_hash_table_lookup (win32_sel->sel_prop_table, GDK_SURFACE_HWND (requestor));
 
   if (prop == NULL)
     {
@@ -2484,25 +2484,25 @@ _gdk_win32_display_get_selection_property (GdkDisplay *display,
 }
 
 void
-_gdk_selection_property_delete (GdkWindow *window)
+_gdk_selection_property_delete (GdkSurface *window)
 {
   GDK_NOTE (DND, g_print ("_gdk_selection_property_delete: %p (no-op)\n",
-			   GDK_WINDOW_HWND (window)));
+			   GDK_SURFACE_HWND (window)));
 
 #if 0
-  prop = g_hash_table_lookup (sel_prop_table, GDK_WINDOW_HWND (window));
+  prop = g_hash_table_lookup (sel_prop_table, GDK_SURFACE_HWND (window));
   if (prop != NULL)
     {
       g_free (prop->data);
       g_free (prop);
-      g_hash_table_remove (sel_prop_table, GDK_WINDOW_HWND (window));
+      g_hash_table_remove (sel_prop_table, GDK_SURFACE_HWND (window));
     }
 #endif
 }
 
 void
 _gdk_win32_display_send_selection_notify (GdkDisplay   *display,
-					  GdkWindow    *requestor,
+					  GdkSurface    *requestor,
 					  GdkAtom     	selection,
 					  GdkAtom     	target,
 					  GdkAtom     	property,
@@ -2794,7 +2794,7 @@ _gdk_win32_add_target_to_selformats (GdkAtom  target,
  * delayed rendering (that is, all formats, as we use delayed rendering
  * for everything). This function only registers the formats, but does
  * not announce them as supported. That is handled as a special case
- * in gdk_window_property_change().
+ * in gdk_surface_property_change().
  *
  * Implementation detail:
  * This function will be called repeatedly, every time the PRIMARY selection changes.
@@ -2806,7 +2806,7 @@ _gdk_win32_add_target_to_selformats (GdkAtom  target,
  */
 void
 gdk_win32_display_add_selection_targets (GdkDisplay *display,
-                                         GdkWindow  *owner,
+                                         GdkSurface  *owner,
                                          GdkAtom     selection,
                                          GdkAtom    *targets,
                                          guint       ntargets)
@@ -2818,7 +2818,7 @@ gdk_win32_display_add_selection_targets (GdkDisplay *display,
       const char *sel_name = (const char *)selection;
 
       g_print ("gdk_win32_selection_add_targets: %p: %s: ",
-	       owner ? GDK_WINDOW_HWND (owner) : NULL,
+	       owner ? GDK_SURFACE_HWND (owner) : NULL,
 	       sel_name);
 
       for (i = 0; i < ntargets; i++)

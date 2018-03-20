@@ -568,7 +568,7 @@ gtk_entry_completion_constructed (GObject *object)
   gtk_window_set_use_subsurface (GTK_WINDOW (priv->popup_window), TRUE);
   gtk_window_set_resizable (GTK_WINDOW (priv->popup_window), FALSE);
   gtk_window_set_type_hint (GTK_WINDOW(priv->popup_window),
-                            GDK_WINDOW_TYPE_HINT_COMBO);
+                            GDK_SURFACE_TYPE_HINT_COMBO);
 
   g_signal_connect (priv->popup_window, "event",
                     G_CALLBACK (gtk_entry_completion_popup_event),
@@ -1372,7 +1372,7 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   GdkDisplay *display;
   GdkMonitor *monitor;
   GdkRectangle area;
-  GdkWindow *window;
+  GdkSurface *window;
   GtkRequisition popup_req;
   GtkRequisition entry_req;
   GtkRequisition tree_req;
@@ -1382,7 +1382,7 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   GtkTreeViewColumn *action_column;
   gint action_height;
 
-  window = gtk_widget_get_window (completion->priv->entry);
+  window = gtk_widget_get_surface (completion->priv->entry);
 
   if (!window)
     return;
@@ -1390,11 +1390,11 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   if (!completion->priv->filter_model)
     return;
 
-  gtk_widget_get_window_allocation (completion->priv->entry, &allocation);
+  gtk_widget_get_surface_allocation (completion->priv->entry, &allocation);
   gtk_widget_get_preferred_size (completion->priv->entry,
                                  &entry_req, NULL);
 
-  gdk_window_get_origin (window, &x, &y);
+  gdk_surface_get_origin (window, &x, &y);
   x += allocation.x;
   y += allocation.y + (allocation.height - entry_req.height) / 2;
 
@@ -1415,7 +1415,7 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   gtk_widget_realize (completion->priv->tree_view);
 
   display = gtk_widget_get_display (GTK_WIDGET (completion->priv->entry));
-  monitor = gdk_display_get_monitor_at_window (display, window);
+  monitor = gdk_display_get_monitor_at_surface (display, window);
   gdk_monitor_get_workarea (monitor, &area);
 
   if (height == 0)
@@ -1478,7 +1478,7 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
 
 static void
 prepare_popup_func (GdkSeat   *seat,
-                    GdkWindow *window,
+                    GdkSurface *window,
                     gpointer   user_data)
 {
   GtkEntryCompletion *completion = user_data;
@@ -1533,7 +1533,7 @@ gtk_entry_completion_popup (GtkEntryCompletion *completion)
     {
       gtk_grab_add (completion->priv->popup_window);
       gdk_seat_grab (gdk_device_get_seat (completion->priv->device),
-                     gtk_widget_get_window (completion->priv->popup_window),
+                     gtk_widget_get_surface (completion->priv->popup_window),
                      GDK_SEAT_CAPABILITY_POINTER | GDK_SEAT_CAPABILITY_TOUCH,
                      TRUE, NULL, NULL,
                      prepare_popup_func, completion);

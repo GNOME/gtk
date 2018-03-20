@@ -22,31 +22,31 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#ifndef __GDK_WINDOW_BROADWAY_H__
-#define __GDK_WINDOW_BROADWAY_H__
+#ifndef __GDK_SURFACE_BROADWAY_H__
+#define __GDK_SURFACE_BROADWAY_H__
 
-#include <gdk/gdkwindowimpl.h>
+#include <gdk/gdksurfaceimpl.h>
 
 G_BEGIN_DECLS
 
-typedef struct _GdkWindowImplBroadway GdkWindowImplBroadway;
-typedef struct _GdkWindowImplBroadwayClass GdkWindowImplBroadwayClass;
+typedef struct _GdkSurfaceImplBroadway GdkSurfaceImplBroadway;
+typedef struct _GdkSurfaceImplBroadwayClass GdkSurfaceImplBroadwayClass;
 
 /* Window implementation for Broadway
  */
 
-#define GDK_TYPE_WINDOW_IMPL_BROADWAY              (gdk_window_impl_broadway_get_type ())
-#define GDK_WINDOW_IMPL_BROADWAY(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WINDOW_IMPL_BROADWAY, GdkWindowImplBroadway))
-#define GDK_WINDOW_IMPL_BROADWAY_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WINDOW_IMPL_BROADWAY, GdkWindowImplBroadwayClass))
-#define GDK_IS_WINDOW_IMPL_BROADWAY(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WINDOW_IMPL_BROADWAY))
-#define GDK_IS_WINDOW_IMPL_BROADWAY_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WINDOW_IMPL_BROADWAY))
-#define GDK_WINDOW_IMPL_BROADWAY_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WINDOW_IMPL_BROADWAY, GdkWindowImplBroadwayClass))
+#define GDK_TYPE_SURFACE_IMPL_BROADWAY              (gdk_surface_impl_broadway_get_type ())
+#define GDK_SURFACE_IMPL_BROADWAY(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_SURFACE_IMPL_BROADWAY, GdkSurfaceImplBroadway))
+#define GDK_SURFACE_IMPL_BROADWAY_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_SURFACE_IMPL_BROADWAY, GdkSurfaceImplBroadwayClass))
+#define GDK_IS_SURFACE_IMPL_BROADWAY(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_SURFACE_IMPL_BROADWAY))
+#define GDK_IS_SURFACE_IMPL_BROADWAY_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_SURFACE_IMPL_BROADWAY))
+#define GDK_SURFACE_IMPL_BROADWAY_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_SURFACE_IMPL_BROADWAY, GdkSurfaceImplBroadwayClass))
 
-struct _GdkWindowImplBroadway
+struct _GdkSurfaceImplBroadway
 {
-  GdkWindowImpl parent_instance;
+  GdkSurfaceImpl parent_instance;
 
-  GdkWindow *wrapper;
+  GdkSurface *wrapper;
 
   GdkCursor *cursor;
 
@@ -61,24 +61,24 @@ struct _GdkWindowImplBroadway
   int pre_maximize_width;
   int pre_maximize_height;
 
-  gint8 toplevel_window_type;
+  gint8 toplevel_surface_type;
   gboolean dirty;
   gboolean last_synced;
 
   GdkGeometry geometry_hints;
-  GdkWindowHints geometry_hints_mask;
+  GdkSurfaceHints geometry_hints_mask;
 
   GArray *node_data;
   GPtrArray *node_data_textures;
 };
 
-struct _GdkWindowImplBroadwayClass
+struct _GdkSurfaceImplBroadwayClass
 {
-  GdkWindowImplClass parent_class;
+  GdkSurfaceImplClass parent_class;
 };
 
-GType gdk_window_impl_broadway_get_type (void);
+GType gdk_surface_impl_broadway_get_type (void);
 
 G_END_DECLS
 
-#endif /* __GDK_WINDOW_BROADWAY_H__ */
+#endif /* __GDK_SURFACE_BROADWAY_H__ */

@@ -12,7 +12,7 @@ gdk_wayland_sources = files([
   'gdkprimary-wayland.c',
   'gdkselection-wayland.c',
   'gdkvulkancontext-wayland.c',
-  'gdkwindow-wayland.c',
+  'gdksurface-wayland.c',
   'wm-button-layout-translation.c',
 ])
 
@@ -21,7 +21,7 @@ gdk_wayland_public_headers = files([
   'gdkwaylanddisplay.h',
   'gdkwaylandglcontext.h',
   'gdkwaylandmonitor.h',
-  'gdkwaylandwindow.h'
+  'gdkwaylandsurface.h'
 ])
 
 install_headers(gdk_wayland_public_headers, subdir: 'gtk-4.0/gdk/wayland/')

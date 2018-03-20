@@ -85,7 +85,7 @@ struct _GdkWin32Display
   guint have_at_least_win81 : 1;
   GdkWin32ProcessDpiAwareness dpi_aware_type;
   guint has_fixed_scale : 1;
-  guint window_scale;
+  guint surface_scale;
 
   GdkWin32ShcoreFuncs shcore_funcs;
   GdkWin32User32DPIFuncs user32_dpi_funcs;

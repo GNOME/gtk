@@ -40,7 +40,7 @@ GType gdk_draw_context_get_type (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GdkDisplay *            gdk_draw_context_get_display              (GdkDrawContext  *context);
 GDK_AVAILABLE_IN_ALL
-GdkWindow *             gdk_draw_context_get_window               (GdkDrawContext  *context);
+GdkSurface *             gdk_draw_context_get_surface               (GdkDrawContext  *context);
 
 G_END_DECLS
 

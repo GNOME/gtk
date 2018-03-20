@@ -38,7 +38,7 @@ static VkResult
 gdk_win32_vulkan_context_create_surface (GdkVulkanContext *context,
                                          VkSurfaceKHR     *surface)
 {
-  GdkWindow *window = gdk_draw_context_get_window (GDK_DRAW_CONTEXT (context));
+  GdkSurface *window = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
   GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
   VkWin32SurfaceCreateInfoKHR info;
 
@@ -46,7 +46,7 @@ gdk_win32_vulkan_context_create_surface (GdkVulkanContext *context,
   info.pNext = NULL;
   info.flags = 0;
   info.hinstance = _gdk_dll_hinstance;
-  info.hwnd = GDK_WINDOW_HWND (window);
+  info.hwnd = GDK_SURFACE_HWND (window);
 
   /* This is necessary so that Vulkan sees the Window.
    * Usually, vkCreateWin32SurfaceKHR() will not cause a problem to happen as

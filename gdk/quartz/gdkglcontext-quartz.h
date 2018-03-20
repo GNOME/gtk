@@ -24,12 +24,12 @@
 #define __GDK_QUARTZ_GL_CONTEXT__
 
 #include "gdkglcontextprivate.h"
-#include "gdkwindow.h"
+#include "gdksurface.h"
 #include "gdkinternals.h"
 
 G_BEGIN_DECLS
 
-GdkGLContext *  gdk_quartz_window_create_gl_context                (GdkWindow         *window,
+GdkGLContext *  gdk_quartz_surface_create_gl_context                (GdkSurface         *window,
                                                                     gboolean           attach,
                                                                     GdkGLContext      *share,
                                                                     GError           **error);

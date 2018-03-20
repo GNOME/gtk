@@ -1886,7 +1886,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
 
 static gboolean
 gsk_gl_renderer_realize (GskRenderer  *renderer,
-                         GdkWindow    *window,
+                         GdkSurface    *window,
                          GError      **error)
 {
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
@@ -1896,7 +1896,7 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
    */
   if (self->gl_context == NULL)
     {
-      self->gl_context = gdk_window_create_gl_context (window, error);
+      self->gl_context = gdk_surface_create_gl_context (window, error);
       if (self->gl_context == NULL)
         return FALSE;
     }
@@ -1957,13 +1957,13 @@ gsk_gl_renderer_begin_draw_frame (GskRenderer          *renderer,
   cairo_region_t *damage;
   GdkDrawingContext *result;
   GdkRectangle whole_window;
-  GdkWindow *window;
+  GdkSurface *window;
 
-  window = gsk_renderer_get_window (renderer);
+  window = gsk_renderer_get_surface (renderer);
   whole_window = (GdkRectangle) {
                      0, 0,
-                     gdk_window_get_width (window) * self->scale_factor,
-                     gdk_window_get_height (window) * self->scale_factor
+                     gdk_surface_get_width (window) * self->scale_factor,
+                     gdk_surface_get_height (window) * self->scale_factor
                  };
   damage = gdk_gl_context_get_damage (self->gl_context);
   cairo_region_union (damage, update_area);
@@ -1985,7 +1985,7 @@ gsk_gl_renderer_begin_draw_frame (GskRenderer          *renderer,
         self->render_mode = RENDER_SCISSOR;
     }
 
-  result = gdk_window_begin_draw_frame (window,
+  result = gdk_surface_begin_draw_frame (window,
                                         GDK_DRAW_CONTEXT (self->gl_context),
                                         damage);
 
@@ -2048,7 +2048,7 @@ gsk_gl_renderer_setup_render_mode (GskGLRenderer *self)
     case RENDER_SCISSOR:
       {
         GdkDrawingContext *context = gsk_renderer_get_drawing_context (GSK_RENDERER (self));
-        GdkWindow *window = gsk_renderer_get_window (GSK_RENDERER (self));
+        GdkSurface *window = gsk_renderer_get_surface (GSK_RENDERER (self));
         cairo_region_t *clip = gdk_drawing_context_get_clip (context);
         cairo_rectangle_int_t extents;
         int window_height;
@@ -2062,7 +2062,7 @@ gsk_gl_renderer_setup_render_mode (GskGLRenderer *self)
 
         g_assert (cairo_region_num_rectangles (clip) == 1);
 
-        window_height = gdk_window_get_height (window) * self->scale_factor;
+        window_height = gdk_surface_get_height (window) * self->scale_factor;
 
         /*cairo_region_get_extents (clip, &extents);*/
         cairo_region_get_rectangle (clip, 0, &extents);
@@ -2567,7 +2567,7 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
   width = ceilf (viewport->size.width);
   height = ceilf (viewport->size.height);
 
-  self->scale_factor = gdk_window_get_scale_factor (gsk_renderer_get_window (renderer));
+  self->scale_factor = gdk_surface_get_scale_factor (gsk_renderer_get_surface (renderer));
   gdk_gl_context_make_current (self->gl_context);
 
   /* Prepare our framebuffer */
@@ -2605,19 +2605,19 @@ gsk_gl_renderer_render (GskRenderer   *renderer,
                         GskRenderNode *root)
 {
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
-  GdkWindow *window = gsk_renderer_get_window (renderer);
+  GdkSurface *window = gsk_renderer_get_surface (renderer);
   graphene_rect_t viewport;
 
   if (self->gl_context == NULL)
     return;
 
-  self->scale_factor = gdk_window_get_scale_factor (window);
+  self->scale_factor = gdk_surface_get_scale_factor (window);
   gdk_gl_context_make_current (self->gl_context);
 
   viewport.origin.x = 0;
   viewport.origin.y = 0;
-  viewport.size.width = gdk_window_get_width (window) * self->scale_factor;
-  viewport.size.height = gdk_window_get_height (window) * self->scale_factor;
+  viewport.size.width = gdk_surface_get_width (window) * self->scale_factor;
+  viewport.size.height = gdk_surface_get_height (window) * self->scale_factor;
 
   gsk_gl_renderer_do_render (renderer, root, &viewport, 0, self->scale_factor);
 

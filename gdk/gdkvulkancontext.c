@@ -36,9 +36,9 @@
  * #GdkVulkanContext is an object representing the platform-specific
  * Vulkan draw context.
  *
- * #GdkVulkanContexts are created for a #GdkWindow using
- * gdk_window_create_vulkan_context(), and the context will match the
- * the characteristics of the window.
+ * #GdkVulkanContexts are created for a #GdkSurface using
+ * gdk_surface_create_vulkan_context(), and the context will match the
+ * the characteristics of the surface.
  *
  * Support for #GdkVulkanContext is platform-specific, context creation
  * can fail, returning %NULL context.
@@ -250,7 +250,7 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
                                     GError           **error)
 {
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
-  GdkWindow *window = gdk_draw_context_get_window (GDK_DRAW_CONTEXT (context));
+  GdkSurface *surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
   VkSurfaceCapabilitiesKHR capabilities;
   VkCompositeAlphaFlagBitsKHR composite_alpha;
   VkSwapchainKHR new_swapchain;
@@ -258,8 +258,8 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
   VkDevice device;
   guint i;
 
-  if (gdk_window_get_width (window) * gdk_window_get_scale_factor (window) == priv->swapchain_width &&
-      gdk_window_get_height (window) * gdk_window_get_scale_factor (window) == priv->swapchain_height)
+  if (gdk_surface_get_width (surface) * gdk_surface_get_scale_factor (surface) == priv->swapchain_width &&
+      gdk_surface_get_height (surface) * gdk_surface_get_scale_factor (surface) == priv->swapchain_height)
     return TRUE;
 
   device = gdk_vulkan_context_get_device (context);
@@ -291,12 +291,12 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
   /*
    * Per https://www.khronos.org/registry/vulkan/specs/1.0-wsi_extensions/xhtml/vkspec.html#VkSurfaceCapabilitiesKHR
    * the current extent may assume a special value, meaning that the extend should assume whatever
-   * value the window has.
+   * value the surface has.
    */
   if (capabilities.currentExtent.width == -1 || capabilities.currentExtent.height == -1)
     {
-      capabilities.currentExtent.width = gdk_window_get_width (window) * gdk_window_get_scale_factor (window);
-      capabilities.currentExtent.height = gdk_window_get_height (window) * gdk_window_get_scale_factor (window);
+      capabilities.currentExtent.width = gdk_surface_get_width (surface) * gdk_surface_get_scale_factor (surface);
+      capabilities.currentExtent.height = gdk_surface_get_height (surface) * gdk_surface_get_scale_factor (surface);
     }
 
   res = GDK_VK_CHECK (vkCreateSwapchainKHR, device,
@@ -361,15 +361,15 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
         {
           priv->regions[i] = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
                                                                 0, 0,
-                                                                gdk_window_get_width (window),
-                                                                gdk_window_get_height (window),
+                                                                gdk_surface_get_width (surface),
+                                                                gdk_surface_get_height (surface),
                                                             });
         }
     }
   else
     {
       g_set_error (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_NOT_AVAILABLE,
-                   "Could not create swapchain for this window: %s", gdk_vulkan_strerror (res));
+                   "Could not create swapchain for this surface: %s", gdk_vulkan_strerror (res));
       priv->swapchain = VK_NULL_HANDLE;
       priv->swapchain_width = 0;
       priv->swapchain_height = 0;
@@ -457,7 +457,7 @@ gdk_vulkan_context_class_init (GdkVulkanContextClass *klass)
    *
    * This signal is emitted when the images managed by this context have
    * changed. Usually this means that the swapchain had to be recreated,
-   * for example in response to a change of the window size.
+   * for example in response to a change of the surface size.
    */
   signals[IMAGES_UPDATED] =
     g_signal_new (g_intern_static_string ("images-updated"),
@@ -493,7 +493,7 @@ gdk_vulkan_context_real_init (GInitable     *initable,
   if (res != VK_SUCCESS)
     {
       g_set_error (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_NOT_AVAILABLE,
-                   "Could not create surface for this window: %s", gdk_vulkan_strerror (res));
+                   "Could not create surface for this surface: %s", gdk_vulkan_strerror (res));
       return FALSE;
     }
 
@@ -504,7 +504,7 @@ gdk_vulkan_context_real_init (GInitable     *initable,
   if (res != VK_SUCCESS)
     {
       g_set_error (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_NOT_AVAILABLE,
-                   "Could not check if queue family supports this window: %s", gdk_vulkan_strerror (res));
+                   "Could not check if queue family supports this surface: %s", gdk_vulkan_strerror (res));
     }
   else if (!supported)
     {
@@ -705,8 +705,8 @@ gdk_vulkan_context_get_image (GdkVulkanContext *context,
  *
  * Gets the index of the image that is currently being drawn.
  *
- * This function can only be used between gdk_window_begin_draw_frame() and
- * gdk_window_end_draw_frame() calls for the toplevel window that the
+ * This function can only be used between gdk_surface_begin_draw_frame() and
+ * gdk_surface_end_draw_frame() calls for the toplevel surface that the
  * @context is associated with.
  *
  * Returns: the index of the images that is being drawn
@@ -729,8 +729,8 @@ gdk_vulkan_context_get_draw_index (GdkVulkanContext *context)
  * Gets the Vulkan semaphore that protects access to the image that is
  * currently being drawn.
  *
- * This function can only be used between gdk_window_begin_draw_frame() and
- * gdk_window_end_draw_frame() calls for the toplevel window that the
+ * This function can only be used between gdk_surface_begin_draw_frame() and
+ * gdk_surface_end_draw_frame() calls for the toplevel surface that the
  * @context is associated with.
  *
  * Returns: (transfer none): the VkSemaphore

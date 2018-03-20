@@ -1392,7 +1392,7 @@ gtk_combo_box_menu_popup (GtkComboBox    *combo_box)
                                         gtk_menu_update_scroll_offset,
                                         NULL);
 
-  g_object_set (priv->popup_widget, "menu-type-hint", GDK_WINDOW_TYPE_HINT_COMBO, NULL);
+  g_object_set (priv->popup_widget, "menu-type-hint", GDK_SURFACE_TYPE_HINT_COMBO, NULL);
 
   if (priv->wrap_width > 0 || priv->cell_view == NULL)
     {

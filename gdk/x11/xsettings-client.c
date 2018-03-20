@@ -28,7 +28,7 @@
 #include <gdk/x11/gdkx11display.h>
 #include <gdk/x11/gdkx11property.h>
 #include <gdk/x11/gdkx11screen.h>
-#include <gdk/x11/gdkx11window.h>
+#include <gdk/x11/gdkx11surface.h>
 #include <gdk/x11/gdkprivate-x11.h>
 #include <gdk/x11/gdkdisplay-x11.h>
 #include <gdk/x11/gdkscreen-x11.h>
@@ -445,7 +445,7 @@ read_settings (GdkX11Screen *x11_screen,
 
   /* Since we support scaling we look at the specific Gdk/UnscaledDPI
      setting if it exists and use that instead of Xft/DPI if it is set */
-  if (x11_screen->xsettings && !x11_screen->fixed_window_scale)
+  if (x11_screen->xsettings && !x11_screen->fixed_surface_scale)
     {
       setting = g_hash_table_lookup (x11_screen->xsettings, "gdk-unscaled-dpi");
       if (setting)
@@ -465,9 +465,9 @@ read_settings (GdkX11Screen *x11_screen,
 
   g_value_init (&value, G_TYPE_INT);
 
-  if (!x11_screen->fixed_window_scale &&
+  if (!x11_screen->fixed_surface_scale &&
       gdk_display_get_setting (display, "gdk-window-scaling-factor", &value))
-    _gdk_x11_screen_set_window_scale (x11_screen, g_value_get_int (&value));
+    _gdk_x11_screen_set_surface_scale (x11_screen, g_value_get_int (&value));
 }
 
 static Atom

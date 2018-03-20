@@ -29,7 +29,7 @@
 #include "gdktextlistconverter-x11.h"
 #include "gdkx11display.h"
 #include "gdkx11property.h"
-#include "gdkx11window.h"
+#include "gdkx11surface.h"
 
 typedef struct _GdkX11PendingSelectionNotify GdkX11PendingSelectionNotify;
 typedef struct _GdkX11SelectionOutputStreamPrivate  GdkX11SelectionOutputStreamPrivate;

@@ -612,7 +612,7 @@ gtk_list_box_init (GtkListBox *box)
   GtkListBoxPrivate *priv = BOX_PRIV (box);
   GtkWidget *widget = GTK_WIDGET (box);
 
-  gtk_widget_set_has_window (widget, FALSE);
+  gtk_widget_set_has_surface (widget, FALSE);
   priv->selection_mode = GTK_SELECTION_SINGLE;
   priv->activate_single_click = TRUE;
 

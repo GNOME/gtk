@@ -22,8 +22,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#ifndef __GDK_X11_WINDOW_H__
-#define __GDK_X11_WINDOW_H__
+#ifndef __GDK_X11_SURFACE_H__
+#define __GDK_X11_SURFACE_H__
 
 #if !defined (__GDKX_H_INSIDE__) && !defined (GDK_COMPILATION)
 #error "Only <gdk/gdkx.h> can be included directly."
@@ -36,78 +36,78 @@
 
 G_BEGIN_DECLS
 
-#define GDK_TYPE_X11_WINDOW              (gdk_x11_window_get_type ())
-#define GDK_X11_WINDOW(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_X11_WINDOW, GdkX11Window))
-#define GDK_X11_WINDOW_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_X11_WINDOW, GdkX11WindowClass))
-#define GDK_IS_X11_WINDOW(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_X11_WINDOW))
-#define GDK_IS_X11_WINDOW_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_X11_WINDOW))
-#define GDK_X11_WINDOW_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_X11_WINDOW, GdkX11WindowClass))
+#define GDK_TYPE_X11_SURFACE              (gdk_x11_surface_get_type ())
+#define GDK_X11_SURFACE(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_X11_SURFACE, GdkX11Surface))
+#define GDK_X11_SURFACE_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_X11_SURFACE, GdkX11SurfaceClass))
+#define GDK_IS_X11_SURFACE(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_X11_SURFACE))
+#define GDK_IS_X11_SURFACE_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_X11_SURFACE))
+#define GDK_X11_SURFACE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_X11_SURFACE, GdkX11SurfaceClass))
 
 #ifdef GDK_COMPILATION
-typedef struct _GdkX11Window GdkX11Window;
+typedef struct _GdkX11Surface GdkX11Surface;
 #else
-typedef GdkWindow GdkX11Window;
+typedef GdkSurface GdkX11Surface;
 #endif
-typedef struct _GdkX11WindowClass GdkX11WindowClass;
+typedef struct _GdkX11SurfaceClass GdkX11SurfaceClass;
 
 GDK_AVAILABLE_IN_ALL
-GType    gdk_x11_window_get_type          (void);
+GType    gdk_x11_surface_get_type          (void);
 
 GDK_AVAILABLE_IN_ALL
-Window   gdk_x11_window_get_xid           (GdkWindow   *window);
+Window   gdk_x11_surface_get_xid           (GdkSurface   *surface);
 GDK_AVAILABLE_IN_ALL
-void     gdk_x11_window_set_user_time     (GdkWindow   *window,
+void     gdk_x11_surface_set_user_time     (GdkSurface   *surface,
                                            guint32      timestamp);
 GDK_AVAILABLE_IN_ALL
-void     gdk_x11_window_set_utf8_property    (GdkWindow *window,
+void     gdk_x11_surface_set_utf8_property    (GdkSurface *surface,
 					      const gchar *name,
 					      const gchar *value);
 GDK_AVAILABLE_IN_ALL
-void     gdk_x11_window_set_theme_variant (GdkWindow   *window,
+void     gdk_x11_surface_set_theme_variant (GdkSurface   *surface,
                                            const char  *variant);
 GDK_AVAILABLE_IN_ALL
-void     gdk_x11_window_move_to_current_desktop (GdkWindow   *window);
+void     gdk_x11_surface_move_to_current_desktop (GdkSurface   *surface);
 
 GDK_AVAILABLE_IN_ALL
-guint32  gdk_x11_window_get_desktop             (GdkWindow   *window);
+guint32  gdk_x11_surface_get_desktop             (GdkSurface   *surface);
 GDK_AVAILABLE_IN_ALL
-void     gdk_x11_window_move_to_desktop         (GdkWindow   *window,
+void     gdk_x11_surface_move_to_desktop         (GdkSurface   *surface,
                                                  guint32      desktop);
 
 GDK_AVAILABLE_IN_ALL
-void     gdk_x11_window_set_frame_sync_enabled (GdkWindow *window,
+void     gdk_x11_surface_set_frame_sync_enabled (GdkSurface *surface,
                                                 gboolean   frame_sync_enabled);
 
 /**
- * GDK_WINDOW_XDISPLAY:
- * @win: a #GdkWindow.
+ * GDK_SURFACE_XDISPLAY:
+ * @win: a #GdkSurface.
  *
- * Returns the display of a #GdkWindow.
+ * Returns the display of a #GdkSurface.
  *
  * Returns: an Xlib Display*.
  */
-#define GDK_WINDOW_XDISPLAY(win)      (GDK_DISPLAY_XDISPLAY (gdk_window_get_display (win)))
+#define GDK_SURFACE_XDISPLAY(win)      (GDK_DISPLAY_XDISPLAY (gdk_surface_get_display (win)))
 
 /**
- * GDK_WINDOW_XID:
- * @win: a #GdkWindow.
+ * GDK_SURFACE_XID:
+ * @win: a #GdkSurface.
  *
- * Returns the X window belonging to a #GdkWindow.
+ * Returns the X window belonging to a #GdkSurface.
  *
  * Returns: the Xlib Window of @win.
  */
-#define GDK_WINDOW_XID(win)           (gdk_x11_window_get_xid (win))
+#define GDK_SURFACE_XID(win)           (gdk_x11_surface_get_xid (win))
 
 GDK_AVAILABLE_IN_ALL
-guint32       gdk_x11_get_server_time  (GdkWindow       *window);
+guint32       gdk_x11_get_server_time  (GdkSurface       *surface);
 
 GDK_AVAILABLE_IN_ALL
-GdkWindow  *gdk_x11_window_foreign_new_for_display (GdkDisplay *display,
+GdkSurface  *gdk_x11_surface_foreign_new_for_display (GdkDisplay *display,
                                                     Window      window);
 GDK_AVAILABLE_IN_ALL
-GdkWindow  *gdk_x11_window_lookup_for_display      (GdkDisplay *display,
+GdkSurface  *gdk_x11_surface_lookup_for_display      (GdkDisplay *display,
                                                     Window      window);
 
 G_END_DECLS
 
-#endif /* __GDK_X11_WINDOW_H__ */
+#endif /* __GDK_X11_SURFACE_H__ */

@@ -562,7 +562,7 @@ gtk_widget_accessible_get_extents (AtkComponent   *component,
                                    gint           *height,
                                    AtkCoordType    coord_type)
 {
-  GdkWindow *window;
+  GdkSurface *window;
   gint x_window, y_window;
   gint x_toplevel, y_toplevel;
   GtkWidget *widget;
@@ -586,22 +586,22 @@ gtk_widget_accessible_get_extents (AtkComponent   *component,
     {
       *x = allocation.x;
       *y = allocation.y;
-      window = gtk_widget_get_parent_window (widget);
+      window = gtk_widget_get_parent_surface (widget);
     }
   else
     {
       *x = 0;
       *y = 0;
-      window = gtk_widget_get_window (widget);
+      window = gtk_widget_get_surface (widget);
     }
-  gdk_window_get_origin (window, &x_window, &y_window);
+  gdk_surface_get_origin (window, &x_window, &y_window);
   *x += x_window;
   *y += y_window;
 
   if (coord_type == ATK_XY_WINDOW)
     {
-      window = gdk_window_get_toplevel (gtk_widget_get_window (widget));
-      gdk_window_get_origin (window, &x_toplevel, &y_toplevel);
+      window = gdk_surface_get_toplevel (gtk_widget_get_surface (widget));
+      gdk_surface_get_origin (window, &x_toplevel, &y_toplevel);
 
       *x -= x_toplevel;
       *y -= y_toplevel;
@@ -635,7 +635,7 @@ gtk_widget_accessible_grab_focus (AtkComponent *component)
     {
 #ifdef GDK_WINDOWING_X11
       gtk_window_present_with_time (GTK_WINDOW (toplevel),
-      gdk_x11_get_server_time (gtk_widget_get_window (widget)));
+      gdk_x11_get_server_time (gtk_widget_get_surface (widget)));
 #else
       gtk_window_present (GTK_WINDOW (toplevel));
 #endif
@@ -663,9 +663,9 @@ gtk_widget_accessible_set_extents (AtkComponent *component,
   if (coord_type == ATK_XY_WINDOW)
     {
       gint x_current, y_current;
-      GdkWindow *window = gtk_widget_get_window (widget);
+      GdkSurface *window = gtk_widget_get_surface (widget);
 
-      gdk_window_get_origin (window, &x_current, &y_current);
+      gdk_surface_get_origin (window, &x_current, &y_current);
       x_current += x;
       y_current += y;
       if (x_current < 0 || y_current < 0)
@@ -703,9 +703,9 @@ gtk_widget_accessible_set_position (AtkComponent *component,
       if (coord_type == ATK_XY_WINDOW)
         {
           gint x_current, y_current;
-          GdkWindow *window = gtk_widget_get_window (widget);
+          GdkSurface *window = gtk_widget_get_surface (widget);
 
-          gdk_window_get_origin (window, &x_current, &y_current);
+          gdk_surface_get_origin (window, &x_current, &y_current);
           x_current += x;
           y_current += y;
           if (x_current < 0 || y_current < 0)

@@ -36,7 +36,7 @@
  *
  * You will always interact with one of those s.ubclasses.
  *
- * A GdkDrawContext is always associated with a single toplevel window.
+ * A GdkDrawContext is always associated with a single toplevel surface.
  */
 
 /**
@@ -49,7 +49,7 @@
 typedef struct _GdkDrawContextPrivate GdkDrawContextPrivate;
 
 struct _GdkDrawContextPrivate {
-  GdkWindow *window;
+  GdkSurface *surface;
 
   guint is_drawing : 1;
 };
@@ -58,7 +58,7 @@ enum {
   PROP_0,
 
   PROP_DISPLAY,
-  PROP_WINDOW,
+  PROP_SURFACE,
 
   LAST_PROP
 };
@@ -73,7 +73,7 @@ gdk_draw_context_dispose (GObject *gobject)
   GdkDrawContext *context = GDK_DRAW_CONTEXT (gobject);
   GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (context);
 
-  g_clear_object (&priv->window);
+  g_clear_object (&priv->surface);
 
   G_OBJECT_CLASS (gdk_draw_context_parent_class)->dispose (gobject);
 }
@@ -89,9 +89,9 @@ gdk_draw_context_set_property (GObject      *gobject,
 
   switch (prop_id)
     {
-    case PROP_WINDOW:
-      priv->window = g_value_dup_object (value);
-      g_assert (priv->window != NULL);
+    case PROP_SURFACE:
+      priv->surface = g_value_dup_object (value);
+      g_assert (priv->surface != NULL);
       break;
 
     default:
@@ -114,8 +114,8 @@ gdk_draw_context_get_property (GObject    *gobject,
       g_value_set_object (value, gdk_draw_context_get_display (context));
       break;
 
-    case PROP_WINDOW:
-      g_value_set_object (value, priv->window);
+    case PROP_SURFACE:
+      g_value_set_object (value, priv->surface);
       break;
 
     default:
@@ -146,15 +146,15 @@ gdk_draw_context_class_init (GdkDrawContextClass *klass)
                          G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkDrawContext:window:
+   * GdkDrawContext:surface:
    *
-   * The #GdkWindow the gl context is bound to.
+   * The #GdkSurface the gl context is bound to.
    */
-  pspecs[PROP_WINDOW] =
-    g_param_spec_object ("window",
-                         P_("Window"),
-                         P_("The GDK window bound to the context"),
-                         GDK_TYPE_WINDOW,
+  pspecs[PROP_SURFACE] =
+    g_param_spec_object ("surface",
+                         P_("Surface"),
+                         P_("The GDK surface bound to the context"),
+                         GDK_TYPE_SURFACE,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
                          G_PARAM_STATIC_STRINGS);
@@ -171,8 +171,8 @@ gdk_draw_context_init (GdkDrawContext *self)
  * gdk_draw_context_is_drawing:
  * @context: a #GdkDrawContext
  *
- * Returns %TRUE if @context is in the process of drawing to its window. In such
- * cases, it will have access to the window's backbuffer to render the new frame
+ * Returns %TRUE if @context is in the process of drawing to its surface. In such
+ * cases, it will have access to the surface's backbuffer to render the new frame
  * onto it.
  *
  * Returns: %TRUE if the context is between begin_frame() and end_frame() calls.
@@ -194,7 +194,7 @@ gdk_draw_context_is_drawing (GdkDrawContext *context)
  *
  * The @context is free to update @region to the size that actually needs to
  * be repainted. Contexts that do not support partial blits for example may
- * want to invalidate the whole window instead.
+ * want to invalidate the whole surface instead.
  *
  * The function does not clear the background. Clearing the backgroud is the
  * job of the renderer. The contents of the backbuffer are undefined after this
@@ -257,24 +257,24 @@ gdk_draw_context_get_display (GdkDrawContext *context)
 
   g_return_val_if_fail (GDK_IS_DRAW_CONTEXT (context), NULL);
 
-  return priv->window ? gdk_window_get_display (priv->window) : NULL;
+  return priv->surface ? gdk_surface_get_display (priv->surface) : NULL;
 }
 
 /**
- * gdk_draw_context_get_window:
+ * gdk_draw_context_get_surface:
  * @context: a #GdkDrawContext
  *
- * Retrieves the #GdkWindow used by the @context.
+ * Retrieves the #GdkSurface used by the @context.
  *
- * Returns: (nullable) (transfer none): a #GdkWindow or %NULL
+ * Returns: (nullable) (transfer none): a #GdkSurface or %NULL
  */
-GdkWindow *
-gdk_draw_context_get_window (GdkDrawContext *context)
+GdkSurface *
+gdk_draw_context_get_surface (GdkDrawContext *context)
 {
   GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (context);
 
   g_return_val_if_fail (GDK_IS_DRAW_CONTEXT (context), NULL);
 
-  return priv->window;
+  return priv->surface;
 }
 

@@ -109,7 +109,7 @@
  * On the platforms that support it, #GtkGesture will handle transparently
  * touchpad gesture events. The only precautions users of #GtkGesture should do
  * to enable this support are:
- * - Enabling %GDK_TOUCHPAD_GESTURE_MASK on their #GdkWindows
+ * - Enabling %GDK_TOUCHPAD_GESTURE_MASK on their #GdkSurfaces
  * - If the gesture has %GTK_PHASE_NONE, ensuring events of type
  *   %GDK_TOUCHPAD_SWIPE and %GDK_TOUCHPAD_PINCH are handled by the #GtkGesture
  */
@@ -600,20 +600,20 @@ _gtk_gesture_cancel_all (GtkGesture *gesture)
 
 static gboolean
 gesture_within_window (GtkGesture *gesture,
-                       GdkWindow  *parent)
+                       GdkSurface  *parent)
 {
-  GdkWindow *window;
+  GdkSurface *window;
   GtkWidget *widget;
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
-  window = gtk_widget_get_window (widget);
+  window = gtk_widget_get_surface (widget);
 
   while (window)
     {
       if (window == parent)
         return TRUE;
 
-      window = gdk_window_get_parent (window);
+      window = gdk_surface_get_parent (window);
     }
 
   return FALSE;
@@ -740,10 +740,10 @@ gtk_gesture_handle_event (GtkEventController *controller,
     }
   else if (event_type == GDK_GRAB_BROKEN)
     {
-      GdkWindow *window = NULL;
+      GdkSurface *surface = NULL;
 
-      gdk_event_get_grab_window (event, &window);
-      if (!window || !gesture_within_window (gesture, window))
+      gdk_event_get_grab_surface (event, &surface);
+      if (!surface || !gesture_within_window (gesture, surface))
         _gtk_gesture_cancel_all (gesture);
 
       return FALSE;

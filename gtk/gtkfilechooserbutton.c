@@ -466,7 +466,7 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
   GtkWidget *icon;
   GdkContentFormats *target_list;
 
-  gtk_widget_set_has_window (GTK_WIDGET (button), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (button), FALSE);
 
   priv = button->priv = gtk_file_chooser_button_get_instance_private (button);
 

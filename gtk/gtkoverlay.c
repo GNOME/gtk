@@ -842,7 +842,7 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
 static void
 gtk_overlay_init (GtkOverlay *overlay)
 {
-  gtk_widget_set_has_window (GTK_WIDGET (overlay), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (overlay), FALSE);
 }
 
 static void

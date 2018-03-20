@@ -720,7 +720,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
 static void
 gtk_shortcuts_shortcut_init (GtkShortcutsShortcut *self)
 {
-  gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
 
   self->box = g_object_new (GTK_TYPE_BOX,
                             "orientation", GTK_ORIENTATION_HORIZONTAL,

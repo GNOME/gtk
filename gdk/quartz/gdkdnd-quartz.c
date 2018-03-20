@@ -34,7 +34,7 @@ gdk_quartz_drag_source_context_libgtk_only ()
 }
 
 GdkDragContext *
-_gdk_quartz_window_drag_begin (GdkWindow *window,
+_gdk_quartz_surface_drag_begin (GdkSurface *window,
                                GdkDevice *device,
                                GList     *targets,
                                gint       dx,
@@ -48,7 +48,7 @@ _gdk_quartz_window_drag_begin (GdkWindow *window,
                                                   NULL);
   _gdk_quartz_drag_source_context->is_source = TRUE;
 
-  _gdk_quartz_drag_source_context->source_window = window;
+  _gdk_quartz_drag_source_context->source_surface = window;
   g_object_ref (window);
 
   _gdk_quartz_drag_source_context->targets = targets;
@@ -97,7 +97,7 @@ gdk_quartz_drag_context_drop_finish (GdkDragContext *context,
 }
 
 void
-_gdk_quartz_window_register_dnd (GdkWindow *window)
+_gdk_quartz_surface_register_dnd (GdkSurface *window)
 {
   /* FIXME: Implement */
 }

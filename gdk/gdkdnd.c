@@ -26,7 +26,7 @@
 
 #include "gdkdndprivate.h"
 #include "gdkdisplay.h"
-#include "gdkwindow.h"
+#include "gdksurface.h"
 #include "gdkintl.h"
 #include "gdkcontentformats.h"
 #include "gdkcontentprovider.h"
@@ -171,35 +171,35 @@ gdk_drag_context_get_selected_action (GdkDragContext *context)
 }
 
 /**
- * gdk_drag_context_get_source_window:
+ * gdk_drag_context_get_source_surface:
  * @context: a #GdkDragContext
  *
- * Returns the #GdkWindow where the DND operation started.
+ * Returns the #GdkSurface where the DND operation started.
  *
- * Returns: (transfer none): a #GdkWindow
+ * Returns: (transfer none): a #GdkSurface
  **/
-GdkWindow *
-gdk_drag_context_get_source_window (GdkDragContext *context)
+GdkSurface *
+gdk_drag_context_get_source_surface (GdkDragContext *context)
 {
   g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
 
-  return context->source_window;
+  return context->source_surface;
 }
 
 /**
- * gdk_drag_context_get_dest_window:
+ * gdk_drag_context_get_dest_surface:
  * @context: a #GdkDragContext
  *
- * Returns the destination window for the DND operation.
+ * Returns the destination surface for the DND operation.
  *
- * Returns: (transfer none): a #GdkWindow
+ * Returns: (transfer none): a #GdkSurface
  **/
-GdkWindow *
-gdk_drag_context_get_dest_window (GdkDragContext *context)
+GdkSurface *
+gdk_drag_context_get_dest_surface (GdkDragContext *context)
 {
   g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
 
-  return context->dest_window;
+  return context->dest_surface;
 }
 
 /**
@@ -315,11 +315,11 @@ gdk_drag_context_finalize (GObject *object)
   g_clear_object (&context->content);
   g_clear_pointer (&context->formats, gdk_content_formats_unref);
 
-  if (context->source_window)
-    g_object_unref (context->source_window);
+  if (context->source_surface)
+    g_object_unref (context->source_surface);
 
-  if (context->dest_window)
-    g_object_unref (context->dest_window);
+  if (context->dest_surface)
+    g_object_unref (context->dest_surface);
 
   G_OBJECT_CLASS (gdk_drag_context_parent_class)->finalize (object);
 }
@@ -782,25 +782,25 @@ gdk_drop_read_finish (GdkDragContext *context,
 }
 
 /**
- * gdk_drag_context_get_drag_window:
+ * gdk_drag_context_get_drag_surface:
  * @context: a #GdkDragContext
  *
- * Returns the window on which the drag icon should be rendered
- * during the drag operation. Note that the window may not be
+ * Returns the surface on which the drag icon should be rendered
+ * during the drag operation. Note that the surface may not be
  * available until the drag operation has begun. GDK will move
- * the window in accordance with the ongoing drag operation.
- * The window is owned by @context and will be destroyed when
+ * the surface in accordance with the ongoing drag operation.
+ * The surface is owned by @context and will be destroyed when
  * the drag operation is over.
  *
- * Returns: (nullable) (transfer none): the drag window, or %NULL
+ * Returns: (nullable) (transfer none): the drag surface, or %NULL
  */
-GdkWindow *
-gdk_drag_context_get_drag_window (GdkDragContext *context)
+GdkSurface *
+gdk_drag_context_get_drag_surface (GdkDragContext *context)
 {
   g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
 
-  if (GDK_DRAG_CONTEXT_GET_CLASS (context)->get_drag_window)
-    return GDK_DRAG_CONTEXT_GET_CLASS (context)->get_drag_window (context);
+  if (GDK_DRAG_CONTEXT_GET_CLASS (context)->get_drag_surface)
+    return GDK_DRAG_CONTEXT_GET_CLASS (context)->get_drag_surface (context);
 
   return NULL;
 }
@@ -808,12 +808,12 @@ gdk_drag_context_get_drag_window (GdkDragContext *context)
 /**
  * gdk_drag_context_set_hotspot:
  * @context: a #GdkDragContext
- * @hot_x: x coordinate of the drag window hotspot
- * @hot_y: y coordinate of the drag window hotspot
+ * @hot_x: x coordinate of the drag surface hotspot
+ * @hot_y: y coordinate of the drag surface hotspot
  *
- * Sets the position of the drag window that will be kept
+ * Sets the position of the drag surface that will be kept
  * under the cursor hotspot. Initially, the hotspot is at the
- * top left corner of the drag window.
+ * top left corner of the drag surface.
  */
 void
 gdk_drag_context_set_hotspot (GdkDragContext *context,
