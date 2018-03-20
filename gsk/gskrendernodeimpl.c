@@ -2320,6 +2320,164 @@ gsk_transform_node_peek_transform (GskRenderNode *node)
   return &self->transform;
 }
 
+/*** GSK_OFFSET_NODE ***/
+
+typedef struct _GskOffsetNode GskOffsetNode;
+
+struct _GskOffsetNode
+{
+  GskRenderNode render_node;
+
+  GskRenderNode *child;
+  double x_offset;
+  double y_offset;
+};
+
+static void
+gsk_offset_node_finalize (GskRenderNode *node)
+{
+  GskOffsetNode *self = (GskOffsetNode *) node;
+
+  gsk_render_node_unref (self->child);
+}
+
+static void
+gsk_offset_node_draw (GskRenderNode *node,
+                      cairo_t       *cr)
+{
+  GskOffsetNode *self = (GskOffsetNode *) node;
+
+  cairo_translate (cr, self->x_offset, self->y_offset);
+  gsk_render_node_draw (self->child, cr);
+}
+
+#define GSK_OFFSET_NODE_VARIANT_TYPE "(dduv)"
+
+static GVariant *
+gsk_offset_node_serialize (GskRenderNode *node)
+{
+  GskOffsetNode *self = (GskOffsetNode *) node;
+
+  return g_variant_new (GSK_OFFSET_NODE_VARIANT_TYPE,
+                        self->x_offset,
+                        self->y_offset,
+                        (guint32) gsk_render_node_get_node_type (self->child),
+                        gsk_render_node_serialize_node (self->child));
+}
+
+static GskRenderNode *
+gsk_offset_node_deserialize (GVariant  *variant,
+                             GError   **error)
+{
+  double x_offset, y_offset;
+  guint32 child_type;
+  GVariant *child_variant;
+  GskRenderNode *result, *child;
+
+  if (!check_variant_type (variant, GSK_OFFSET_NODE_VARIANT_TYPE, error))
+    return NULL;
+
+  g_variant_get (variant, GSK_OFFSET_NODE_VARIANT_TYPE,
+                 &x_offset, &y_offset,
+                 &child_type, &child_variant);
+
+  child = gsk_render_node_deserialize_node (child_type, child_variant, error);
+  g_variant_unref (child_variant);
+
+  if (child == NULL)
+    return NULL;
+
+  result = gsk_offset_node_new (child, x_offset, y_offset);
+
+  gsk_render_node_unref (child);
+
+  return result;
+}
+
+static const GskRenderNodeClass GSK_OFFSET_NODE_CLASS = {
+  GSK_OFFSET_NODE,
+  sizeof (GskOffsetNode),
+  "GskOffsetNode",
+  gsk_offset_node_finalize,
+  gsk_offset_node_draw,
+  gsk_offset_node_serialize,
+  gsk_offset_node_deserialize
+};
+
+/**
+ * gsk_offset_node_new:
+ * @child: The node to offset
+ * @x_offset: The x offset to apply
+ * @y_offset: The y offset to apply
+ *
+ * Creates a #GskRenderNode that will offset the given @child
+ * with the given @x_offset and @y_offset.
+ *
+ * This is a common special case of the matrix transform
+ * achieved by gsk_transform_node_new().
+ *
+ * Returns: A new #GskRenderNode
+ */
+GskRenderNode *
+gsk_offset_node_new (GskRenderNode *child,
+                     double         x_offset,
+                     double         y_offset)
+{
+  GskOffsetNode *self;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
+
+  self = (GskOffsetNode *) gsk_render_node_new (&GSK_OFFSET_NODE_CLASS, 0);
+
+  self->child = gsk_render_node_ref (child);
+  self->x_offset = x_offset;
+  self->y_offset = y_offset;
+
+  graphene_rect_offset_r (&child->bounds,
+                          x_offset, y_offset,
+                          &self->render_node.bounds);
+
+  return &self->render_node;
+}
+
+/**
+ * gsk_offset_node_get_child:
+ * @node: a offset @GskRenderNode
+ *
+ * Gets the child node that is getting offset by the given @node.
+ *
+ * Returns: (transfer none): The child that is getting offset
+ **/
+GskRenderNode *
+gsk_offset_node_get_child (GskRenderNode *node)
+{
+  GskOffsetNode *self = (GskOffsetNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_OFFSET_NODE), NULL);
+
+  return self->child;
+}
+
+double
+gsk_offset_node_get_x_offset (GskRenderNode *node)
+{
+  GskOffsetNode *self = (GskOffsetNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_OFFSET_NODE), 0.0);
+
+  return self->x_offset;
+}
+
+double
+gsk_offset_node_get_y_offset (GskRenderNode *node)
+{
+  GskOffsetNode *self = (GskOffsetNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_OFFSET_NODE), 0.0);
+
+  return self->y_offset;
+}
+
 /*** GSK_OPACITY_NODE ***/
 
 typedef struct _GskOpacityNode GskOpacityNode;

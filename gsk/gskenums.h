@@ -35,6 +35,7 @@
  * @GSK_INSET_SHADOW_NODE: A node drawing an inset shadow
  * @GSK_OUTSET_SHADOW_NODE: A node drawing an outset shadow
  * @GSK_TRANSFORM_NODE: A node that renders its child after applying a matrix transform
+ * @GSK_OFFSET_NODE: A node that renders its child after applying a 2D translation
  * @GSK_OPACITY_NODE: A node that changes the opacity of its child
  * @GSK_COLOR_MATRIX_NODE: A node that applies a color matrix to every pixel
  * @GSK_REPEAT_NODE: A node that repeats the child's contents
@@ -62,6 +63,7 @@ typedef enum {
   GSK_INSET_SHADOW_NODE,
   GSK_OUTSET_SHADOW_NODE,
   GSK_TRANSFORM_NODE,
+  GSK_OFFSET_NODE,
   GSK_OPACITY_NODE,
   GSK_COLOR_MATRIX_NODE,
   GSK_REPEAT_NODE,

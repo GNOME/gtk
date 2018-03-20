@@ -545,6 +545,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
       }
       return;
 
+    case GSK_OFFSET_NODE:
     case GSK_TRANSFORM_NODE:
       {
         graphene_matrix_t transform, mv;
@@ -555,10 +556,23 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
           FALLBACK ("Transform nodes can't deal with clip type %u\n", clip->type);
 #endif
 
-        graphene_matrix_init_from_matrix (&transform, gsk_transform_node_peek_transform (node));
+        if (gsk_render_node_get_node_type (node) == GSK_TRANSFORM_NODE)
+          {
+            child = gsk_transform_node_get_child (node);
+            graphene_matrix_init_from_matrix (&transform, gsk_transform_node_peek_transform (node));
+          }
+        else
+          {
+            child = gsk_offset_node_get_child (node);
+            graphene_matrix_init_translate (&transform,
+                                            &GRAPHENE_POINT3D_INIT(
+                                                gsk_offset_node_get_x_offset (node),
+                                                gsk_offset_node_get_y_offset (node),
+                                                0.0
+                                            ));
+          }
         graphene_matrix_init_from_matrix (&mv, &self->mv);
         graphene_matrix_multiply (&transform, &mv, &self->mv);
-        child = gsk_transform_node_get_child (node);
         if (!gsk_vulkan_push_constants_transform (&op.constants.constants, constants, &transform, &child->bounds))
           FALLBACK ("Transform nodes can't deal with clip type %u", constants->clip.type);
         op.type = GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS;

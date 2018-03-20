@@ -645,6 +645,7 @@ gsk_broadway_renderer_add_node (GskRenderer *self,
     case GSK_COLOR_MATRIX_NODE:
     case GSK_TEXT_NODE:
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
+    case GSK_OFFSET_NODE:
     case GSK_TRANSFORM_NODE:
     case GSK_REPEAT_NODE:
     case GSK_BLEND_NODE:

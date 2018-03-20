@@ -171,6 +171,8 @@ node_type_name (GskRenderNodeType type)
       return "Outset Shadow";
     case GSK_TRANSFORM_NODE:
       return "Transform";
+    case GSK_OFFSET_NODE:
+      return "Offset";
     case GSK_OPACITY_NODE:
       return "Opacity";
     case GSK_COLOR_MATRIX_NODE:
@@ -651,6 +653,11 @@ populate_render_node_properties (GtkListStore  *store,
             g_free (label);
           }
       }
+      break;
+
+    case GSK_OFFSET_NODE:
+      add_float_row (store, "x offset", gsk_offset_node_get_x_offset (node));
+      add_float_row (store, "y offset", gsk_offset_node_get_y_offset (node));
       break;
 
     case GSK_NOT_A_RENDER_NODE:

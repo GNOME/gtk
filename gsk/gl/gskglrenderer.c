@@ -623,6 +623,29 @@ render_texture_node (GskGLRenderer       *self,
 }
 
 static inline void
+render_offset_node (GskGLRenderer   *self,
+                    GskRenderNode   *node,
+                    RenderOpBuilder *builder)
+{
+  GskRenderNode *child = gsk_offset_node_get_child (node);
+  graphene_matrix_t prev_mv;
+  graphene_matrix_t transform, transformed_mv;
+
+  graphene_matrix_init_translate (&transform,
+                                  &GRAPHENE_POINT3D_INIT(
+                                      gsk_offset_node_get_x_offset (node),
+                                      gsk_offset_node_get_y_offset (node),
+                                      1.0
+                                  ));
+  graphene_matrix_multiply (&transform, &builder->current_modelview, &transformed_mv);
+  prev_mv = ops_set_modelview (builder, &transformed_mv);
+
+  gsk_gl_renderer_add_render_ops (self, child, builder);
+
+  ops_set_modelview (builder, &prev_mv);
+}
+
+static inline void
 render_transform_node (GskGLRenderer   *self,
                        GskRenderNode   *node,
                        RenderOpBuilder *builder)
@@ -2108,6 +2131,10 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
 
     case GSK_TEXTURE_NODE:
       render_texture_node (self, node, builder);
+    break;
+
+    case GSK_OFFSET_NODE:
+      render_offset_node (self, node, builder);
     break;
 
     case GSK_TRANSFORM_NODE:
