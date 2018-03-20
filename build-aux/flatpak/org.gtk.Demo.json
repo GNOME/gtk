@@ -1,0 +1,59 @@
+{
+    "app-id": "org.gtk.Demo",
+    "runtime": "org.gnome.Platform",
+    "runtime-version": "master",
+    "sdk": "org.gnome.Sdk",
+    "command": "gtk4-demo",
+    "tags": ["devel", "development", "nightly"],
+    "rename-desktop-file": "gtk4-demo.desktop",
+    "rename-icon": "gtk4-demo",
+    "desktop-file-name-prefix": "(Development) ",
+    "finish-args": [
+        "--device=dri",
+        "--share=ipc",
+        "--socket=x11",
+        "--socket=wayland",
+        "--talk-name=org.gtk.vfs", "--talk-name=org.gtk.vfs.*",
+        "--talk-name=ca.desrt.conf", "--env=DCONF_USER_CONFIG_DIR=.config/dconf"
+    ],
+    "cleanup": [
+        "/include",
+        "/lib/pkgconfig", "/share/pkgconfig",
+        "/share/aclocal",
+        "/man", "/share/man", "/share/gtk-doc",
+        "*.la", ".a",
+        "/lib/girepository-1.0",
+        "/share/gir-1.0",
+        "/share/doc"
+    ],
+    "modules": [
+        {
+            "name": "graphene",
+            "buildsystem": "meson",
+            "builddir": true,
+            "config-opts": [
+                "--libdir=/app/lib"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/ebassi/graphene.git"
+                }
+            ]
+        },
+        {
+            "name": "gtk",
+            "buildsystem": "meson",
+            "builddir": true,
+            "config-opts": [
+                "--libdir=/app/lib"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://gitlab.gnome.org/GNOME/gtk.git"
+                }
+            ]
+        }
+    ]
+}
