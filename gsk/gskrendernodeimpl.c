@@ -43,6 +43,13 @@ check_variant_type (GVariant *variant,
   return TRUE;
 }
 
+static gboolean
+gsk_render_node_can_diff_impossible (GskRenderNode *node1,
+                                     GskRenderNode *node2)
+{
+  return FALSE;
+}
+
 /*** GSK_COLOR_NODE ***/
 
 typedef struct _GskColorNode GskColorNode;
@@ -110,6 +117,8 @@ static const GskRenderNodeClass GSK_COLOR_NODE_CLASS = {
   "GskColorNode",
   gsk_color_node_finalize,
   gsk_color_node_draw,
+  gsk_render_node_can_diff_impossible,
+  gsk_render_node_diff_impossible,
   gsk_color_node_serialize,
   gsk_color_node_deserialize,
 };
@@ -286,6 +295,8 @@ static const GskRenderNodeClass GSK_LINEAR_GRADIENT_NODE_CLASS = {
   "GskLinearGradientNode",
   gsk_linear_gradient_node_finalize,
   gsk_linear_gradient_node_draw,
+  gsk_render_node_can_diff_impossible,
+  gsk_render_node_diff_impossible,
   gsk_linear_gradient_node_serialize,
   gsk_linear_gradient_node_deserialize,
 };
@@ -296,6 +307,8 @@ static const GskRenderNodeClass GSK_REPEATING_LINEAR_GRADIENT_NODE_CLASS = {
   "GskRepeatingLinearGradientNode",
   gsk_linear_gradient_node_finalize,
   gsk_linear_gradient_node_draw,
+  gsk_render_node_can_diff_impossible,
+  gsk_render_node_diff_impossible,
   gsk_linear_gradient_node_serialize,
   gsk_repeating_linear_gradient_node_deserialize,
 };
@@ -585,6 +598,8 @@ static const GskRenderNodeClass GSK_BORDER_NODE_CLASS = {
   "GskBorderNode",
   gsk_border_node_finalize,
   gsk_border_node_draw,
+  gsk_render_node_can_diff_impossible,
+  gsk_render_node_diff_impossible,
   gsk_border_node_serialize,
   gsk_border_node_deserialize
 };
@@ -772,6 +787,8 @@ static const GskRenderNodeClass GSK_TEXTURE_NODE_CLASS = {
   "GskTextureNode",
   gsk_texture_node_finalize,
   gsk_texture_node_draw,
+  gsk_render_node_can_diff_impossible,
+  gsk_render_node_diff_impossible,
   gsk_texture_node_serialize,
   gsk_texture_node_deserialize
 };
@@ -1278,6 +1295,8 @@ static const GskRenderNodeClass GSK_INSET_SHADOW_NODE_CLASS = {
   "GskInsetShadowNode",
   gsk_inset_shadow_node_finalize,
   gsk_inset_shadow_node_draw,
+  gsk_render_node_can_diff_impossible,
+  gsk_render_node_diff_impossible,
   gsk_inset_shadow_node_serialize,
   gsk_inset_shadow_node_deserialize
 };
@@ -1579,6 +1598,8 @@ static const GskRenderNodeClass GSK_OUTSET_SHADOW_NODE_CLASS = {
   "GskOutsetShadowNode",
   gsk_outset_shadow_node_finalize,
   gsk_outset_shadow_node_draw,
+  gsk_render_node_can_diff_impossible,
+  gsk_render_node_diff_impossible,
   gsk_outset_shadow_node_serialize,
   gsk_outset_shadow_node_deserialize
 };
@@ -1846,6 +1867,8 @@ static const GskRenderNodeClass GSK_CAIRO_NODE_CLASS = {
   "GskCairoNode",
   gsk_cairo_node_finalize,
   gsk_cairo_node_draw,
+  gsk_render_node_can_diff_impossible,
+  gsk_render_node_diff_impossible,
   gsk_cairo_node_serialize,
   gsk_cairo_node_deserialize
 };
@@ -2075,6 +2098,8 @@ static const GskRenderNodeClass GSK_CONTAINER_NODE_CLASS = {
   "GskContainerNode",
   gsk_container_node_finalize,
   gsk_container_node_draw,
+  gsk_render_node_can_diff_impossible,
+  gsk_render_node_diff_impossible,
   gsk_container_node_serialize,
   gsk_container_node_deserialize
 };
@@ -2258,6 +2283,8 @@ static const GskRenderNodeClass GSK_TRANSFORM_NODE_CLASS = {
   "GskTransformNode",
   gsk_transform_node_finalize,
   gsk_transform_node_draw,
+  gsk_render_node_can_diff_impossible,
+  gsk_render_node_diff_impossible,
   gsk_transform_node_serialize,
   gsk_transform_node_deserialize
 };
@@ -2400,6 +2427,8 @@ static const GskRenderNodeClass GSK_OFFSET_NODE_CLASS = {
   "GskOffsetNode",
   gsk_offset_node_finalize,
   gsk_offset_node_draw,
+  gsk_render_node_can_diff_impossible,
+  gsk_render_node_diff_impossible,
   gsk_offset_node_serialize,
   gsk_offset_node_deserialize
 };
@@ -2569,6 +2598,8 @@ static const GskRenderNodeClass GSK_OPACITY_NODE_CLASS = {
   "GskOpacityNode",
   gsk_opacity_node_finalize,
   gsk_opacity_node_draw,
+  gsk_render_node_can_diff_impossible,
+  gsk_render_node_diff_impossible,
   gsk_opacity_node_serialize,
   gsk_opacity_node_deserialize
 };
@@ -2804,6 +2835,8 @@ static const GskRenderNodeClass GSK_COLOR_MATRIX_NODE_CLASS = {
   "GskColorMatrixNode",
   gsk_color_matrix_node_finalize,
   gsk_color_matrix_node_draw,
+  gsk_render_node_can_diff_impossible,
+  gsk_render_node_diff_impossible,
   gsk_color_matrix_node_serialize,
   gsk_color_matrix_node_deserialize
 };
@@ -2992,6 +3025,8 @@ static const GskRenderNodeClass GSK_REPEAT_NODE_CLASS = {
   "GskRepeatNode",
   gsk_repeat_node_finalize,
   gsk_repeat_node_draw,
+  gsk_render_node_can_diff_impossible,
+  gsk_render_node_diff_impossible,
   gsk_repeat_node_serialize,
   gsk_repeat_node_deserialize
 };
@@ -3137,6 +3172,8 @@ static const GskRenderNodeClass GSK_CLIP_NODE_CLASS = {
   "GskClipNode",
   gsk_clip_node_finalize,
   gsk_clip_node_draw,
+  gsk_render_node_can_diff_impossible,
+  gsk_render_node_diff_impossible,
   gsk_clip_node_serialize,
   gsk_clip_node_deserialize
 };
@@ -3298,6 +3335,8 @@ static const GskRenderNodeClass GSK_ROUNDED_CLIP_NODE_CLASS = {
   "GskRoundedClipNode",
   gsk_rounded_clip_node_finalize,
   gsk_rounded_clip_node_draw,
+  gsk_render_node_can_diff_impossible,
+  gsk_render_node_diff_impossible,
   gsk_rounded_clip_node_serialize,
   gsk_rounded_clip_node_deserialize
 };
@@ -3521,6 +3560,8 @@ static const GskRenderNodeClass GSK_SHADOW_NODE_CLASS = {
   "GskShadowNode",
   gsk_shadow_node_finalize,
   gsk_shadow_node_draw,
+  gsk_render_node_can_diff_impossible,
+  gsk_render_node_diff_impossible,
   gsk_shadow_node_serialize,
   gsk_shadow_node_deserialize
 };
@@ -3735,6 +3776,8 @@ static const GskRenderNodeClass GSK_BLEND_NODE_CLASS = {
   "GskBlendNode",
   gsk_blend_node_finalize,
   gsk_blend_node_draw,
+  gsk_render_node_can_diff_impossible,
+  gsk_render_node_diff_impossible,
   gsk_blend_node_serialize,
   gsk_blend_node_deserialize
 };
@@ -3905,6 +3948,8 @@ static const GskRenderNodeClass GSK_CROSS_FADE_NODE_CLASS = {
   "GskCrossFadeNode",
   gsk_cross_fade_node_finalize,
   gsk_cross_fade_node_draw,
+  gsk_render_node_can_diff_impossible,
+  gsk_render_node_diff_impossible,
   gsk_cross_fade_node_serialize,
   gsk_cross_fade_node_deserialize
 };
@@ -4126,6 +4171,8 @@ static const GskRenderNodeClass GSK_TEXT_NODE_CLASS = {
   "GskTextNode",
   gsk_text_node_finalize,
   gsk_text_node_draw,
+  gsk_render_node_can_diff_impossible,
+  gsk_render_node_diff_impossible,
   gsk_text_node_serialize,
   gsk_text_node_deserialize
 };
@@ -4511,6 +4558,8 @@ static const GskRenderNodeClass GSK_BLUR_NODE_CLASS = {
   "GskBlurNode",
   gsk_blur_node_finalize,
   gsk_blur_node_draw,
+  gsk_render_node_can_diff_impossible,
+  gsk_render_node_diff_impossible,
   gsk_blur_node_serialize,
   gsk_blur_node_deserialize
 };

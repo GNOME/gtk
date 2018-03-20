@@ -266,6 +266,87 @@ gsk_render_node_draw (GskRenderNode *node,
     }
 }
 
+/*
+ * gsk_render_node_can_diff:
+ * @node1: a #GskRenderNode
+ * @node2: the #GskRenderNode to compare with
+ *
+ * Checks if 2 render nodes can be expected to be compared via
+ * gsk_render_node_diff(). The node diffing algorithm uses this function
+ * to match up similar nodes to compare when trying to minimze the
+ * resulting region.
+ *
+ * Nodes of different type always return %FALSE here.
+ *
+ * Returns: %TRUE if @node1 and @node2 can be expected to be compared
+ **/
+gboolean
+gsk_render_node_can_diff (GskRenderNode *node1,
+                          GskRenderNode *node2)
+{
+  if (node1 == node2)
+    return TRUE;
+
+  if (gsk_render_node_get_node_type (node1) != gsk_render_node_get_node_type (node2))
+    return FALSE;
+
+  return node1->node_class->can_diff (node1, node2);
+}
+
+static void
+rectangle_init_from_graphene (cairo_rectangle_int_t *cairo,
+                              const graphene_rect_t *graphene)
+{
+  cairo->x = floorf (graphene->origin.x);
+  cairo->y = floorf (graphene->origin.y);
+  cairo->width = ceilf (graphene->origin.x + graphene->size.width) - cairo->x;
+  cairo->height = ceilf (graphene->origin.y + graphene->size.height) - cairo->y;
+}
+
+void
+gsk_render_node_diff_impossible (GskRenderNode  *node1,
+                                 GskRenderNode  *node2,
+                                 cairo_region_t *region)
+{
+  cairo_rectangle_int_t rect;
+
+  rectangle_init_from_graphene (&rect, &node1->bounds);
+  cairo_region_union_rectangle (region, &rect);
+  rectangle_init_from_graphene (&rect, &node2->bounds);
+  cairo_region_union_rectangle (region, &rect);
+}
+
+/**
+ * gsk_render_node_diff:
+ * @node1: a #GskRenderNode
+ * @node2: the #GskRenderNode to compare with
+ * @region: a #cairo_region_t to add the differences to
+ *
+ * Compares @node1 and @node2 trying to compute the minimal region of changes.
+ * In the worst case, this is the union of the bounds of @node1 and @node2.
+ *
+ * This function is used to compute the area that needs to be redrawn when
+ * the previous contents were drawn by @node1 and the new contents should
+ * correspond to @node2. As such, it is important that this comparison is
+ * faster than the time it takes to actually do the redraw.
+ *
+ * Note that the passed in @region may already contain previous results from
+ * previous node comparisons, so this function call will only add to it.
+ **/
+void
+gsk_render_node_diff (GskRenderNode  *node1,
+                      GskRenderNode  *node2,
+                      cairo_region_t *region)
+{
+  if (node1 == node2)
+    return;
+
+  if (gsk_render_node_get_node_type (node1) != gsk_render_node_get_node_type (node2))
+    return gsk_render_node_diff_impossible (node1, node2, region);
+
+  return node1->node_class->diff (node1, node2, region);
+}
+
 #define GSK_RENDER_NODE_SERIALIZATION_VERSION 0
 #define GSK_RENDER_NODE_SERIALIZATION_ID "GskRenderNode"
 
