@@ -579,7 +579,7 @@ gboolean              gtk_widget_is_visible             (GtkWidget    *widget);
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_set_has_surface         (GtkWidget    *widget,
-                                                         gboolean      has_window);
+                                                         gboolean      has_surface);
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_widget_get_has_surface         (GtkWidget    *widget);
 
@@ -603,7 +603,7 @@ GtkWidget           * gtk_widget_get_parent             (GtkWidget    *widget);
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_set_parent_surface      (GtkWidget    *widget,
-							 GdkSurface    *parent_window);
+							 GdkSurface    *parent_surface);
 GDK_AVAILABLE_IN_ALL
 GdkSurface           * gtk_widget_get_parent_surface      (GtkWidget    *widget);
 
@@ -615,15 +615,15 @@ gboolean              gtk_widget_get_child_visible      (GtkWidget    *widget);
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_set_surface             (GtkWidget    *widget,
-                                                         GdkSurface    *window);
+                                                         GdkSurface    *surface);
 GDK_AVAILABLE_IN_ALL
 GdkSurface           * gtk_widget_get_surface             (GtkWidget    *widget);
 GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_register_surface        (GtkWidget    *widget,
-                                                         GdkSurface    *window);
+                                                         GdkSurface    *surface);
 GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_unregister_surface      (GtkWidget    *widget,
-                                                         GdkSurface    *window);
+                                                         GdkSurface    *surface);
 
 GDK_AVAILABLE_IN_ALL
 int                   gtk_widget_get_allocated_width    (GtkWidget     *widget);

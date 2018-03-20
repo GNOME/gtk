@@ -53,8 +53,8 @@ struct _GtkWidgetPrivate
   guint in_destruction        : 1;
   guint toplevel              : 1;
   guint anchored              : 1;
-  guint no_window             : 1;
-  guint no_window_set         : 1;
+  guint no_surface            : 1;
+  guint no_surface_set        : 1;
   guint realized              : 1;
   guint mapped                : 1;
   guint visible               : 1;
@@ -143,12 +143,12 @@ struct _GtkWidgetPrivate
   /* The widget's requested sizes */
   SizeRequestCache requests;
 
-  /* The widget's window or its parent window if it does
-   * not have a window. (Which will be indicated by the
-   * no_window field being set).
+  /* The widget's surface or its surface window if it does
+   * not have a surface. (Which will be indicated by the
+   * no_surface field being set).
    */
-  GdkSurface *window;
-  GList *registered_windows;
+  GdkSurface *surface;
+  GList *registered_surfaces;
 
   GList *event_controllers;
 
@@ -278,7 +278,7 @@ gboolean          gtk_widget_query_tooltip                 (GtkWidget  *widget,
                                                             GtkTooltip *tooltip);
 
 void              gtk_widget_render                        (GtkWidget            *widget,
-                                                            GdkSurface            *window,
+                                                            GdkSurface            *surface,
                                                             const cairo_region_t *region);
 
 
@@ -373,7 +373,7 @@ _gtk_widget_is_drawable (GtkWidget *widget)
 static inline gboolean
 _gtk_widget_get_has_surface (GtkWidget *widget)
 {
-  return !widget->priv->no_window;
+  return !widget->priv->no_surface;
 }
 
 static inline gboolean
@@ -432,7 +432,7 @@ _gtk_widget_peek_request_cache (GtkWidget *widget)
 static inline GdkSurface *
 _gtk_widget_get_surface (GtkWidget *widget)
 {
-  return widget->priv->window;
+  return widget->priv->surface;
 }
 
 static inline void
