@@ -131,3 +131,6 @@ install_data('gtk4-demo.desktop', install_dir: gtk_applicationsdir)
 # GSettings
 install_data('org.gtk.Demo.gschema.xml', install_dir: gtk_schemasdir)
 gnome.compile_schemas()
+
+# appdata
+install_data('org.gtk.Demo.appdata.xml', install_dir: gtk_appdatadir)

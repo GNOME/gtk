@@ -125,6 +125,7 @@ gtk_localedir = join_paths(gtk_prefix, get_option('localedir'))
 gtk_sysconfdir = join_paths(gtk_prefix, get_option('sysconfdir'))
 gtk_applicationsdir = join_paths(gtk_datadir, 'applications')
 gtk_schemasdir = join_paths(gtk_datadir, 'glib-2.0/schemas')
+gtk_appdatadir = join_paths(gtk_datadir, 'metainfo')
 
 cc = meson.get_compiler('c')
 
