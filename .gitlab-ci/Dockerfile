@@ -70,4 +70,4 @@ RUN useradd -u $HOST_USER_ID -ms /bin/bash user
 USER user
 WORKDIR /home/user
 
-ENV LANG C.utf8
+ENV LANG C.UTF-8
