@@ -83,22 +83,22 @@ _gdk_surface_move_resize_child (GdkSurface *window,
 			   _gdk_win32_surface_description (window),
 			   window->x, window->y, width, height, x, y));
 
-  if (width * impl->window_scale > 65535 || height * impl->window_scale > 65535)
+  if (width * impl->surface_scale > 65535 || height * impl->surface_scale > 65535)
     {
       g_warning ("Native children wider or taller than 65535 pixels are not supported.");
 
-      if (width * impl->window_scale > 65535)
-        width = 65535 / impl->window_scale;
-      if (height * impl->window_scale > 65535)
-        height = 65535 /impl->window_scale;
+      if (width * impl->surface_scale > 65535)
+        width = 65535 / impl->surface_scale;
+      if (height * impl->surface_scale > 65535)
+        height = 65535 /impl->surface_scale;
     }
 
   window->x = x;
   window->y = y;
   window->width = width;
   window->height = height;
-  impl->unscaled_width = width * impl->window_scale;
-  impl->unscaled_height = height * impl->window_scale;
+  impl->unscaled_width = width * impl->surface_scale;
+  impl->unscaled_height = height * impl->surface_scale;
 
   _gdk_win32_surface_tmp_unset_parent_bg (window);
   _gdk_win32_surface_tmp_unset_bg (window, TRUE);
@@ -106,14 +106,14 @@ _gdk_surface_move_resize_child (GdkSurface *window,
   GDK_NOTE (MISC, g_print ("... SetWindowPos(%p,NULL,%d,%d,%d,%d,"
 			   "NOACTIVATE|NOZORDER)\n",
 			   GDK_SURFACE_HWND (window),
-			   (window->x + window->parent->abs_x) * impl->window_scale,
-			   (window->y + window->parent->abs_y) * impl->window_scale,
+			   (window->x + window->parent->abs_x) * impl->surface_scale,
+			   (window->y + window->parent->abs_y) * impl->surface_scale,
 			   impl->unscaled_width,
 			   impl->unscaled_height));
 
   API_CALL (SetWindowPos, (GDK_SURFACE_HWND (window), NULL,
-			   (window->x + window->parent->abs_x) * impl->window_scale,
-			   (window->y + window->parent->abs_y) * impl->window_scale,
+			   (window->x + window->parent->abs_x) * impl->surface_scale,
+			   (window->y + window->parent->abs_y) * impl->surface_scale,
 			   impl->unscaled_width,
 			   impl->unscaled_height,
 			   SWP_NOACTIVATE | SWP_NOZORDER));
@@ -132,7 +132,7 @@ _gdk_win32_surface_tmp_unset_bg (GdkSurface *window,
 
   if (_gdk_surface_has_impl (window) &&
       GDK_SURFACE_IS_WIN32 (window) &&
-      window->window_type != GDK_SURFACE_FOREIGN)
+      window->surface_type != GDK_SURFACE_FOREIGN)
     tmp_unset_bg (window);
 
   if (recurse)
@@ -150,7 +150,7 @@ _gdk_win32_surface_tmp_unset_parent_bg (GdkSurface *window)
   if (window->parent == NULL)
     return;
 
-  window = _gdk_surface_get_impl_window (window->parent);
+  window = _gdk_surface_get_impl_surface (window->parent);
   _gdk_win32_surface_tmp_unset_bg (window, FALSE);
 }
 
@@ -165,7 +165,7 @@ _gdk_win32_surface_tmp_reset_bg (GdkSurface *window,
 
   if (_gdk_surface_has_impl (window) &&
       GDK_SURFACE_IS_WIN32 (window) &&
-      window->window_type != GDK_SURFACE_FOREIGN)
+      window->surface_type != GDK_SURFACE_FOREIGN)
     {
       tmp_reset_bg (window);
     }

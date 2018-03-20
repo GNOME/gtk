@@ -99,7 +99,7 @@ gsk_cairo_renderer_render (GskRenderer   *renderer,
                            GskRenderNode *root)
 {
   GdkDrawingContext *context = gsk_renderer_get_drawing_context (renderer);
-  GdkSurface *window = gsk_renderer_get_window (renderer);
+  GdkSurface *window = gsk_renderer_get_surface (renderer);
 
   cairo_t *cr;
 

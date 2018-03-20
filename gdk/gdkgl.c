@@ -219,10 +219,10 @@ gdk_gl_texture_quads (GdkGLContext *paint_context,
 {
   GdkGLContextPaintData *paint_data  = gdk_gl_context_get_paint_data (paint_context);
   GdkGLContextProgram *program;
-  GdkSurface *window = gdk_gl_context_get_window (paint_context);
-  int window_scale = gdk_surface_get_scale_factor (window);
-  float w = gdk_surface_get_width (window) * window_scale;
-  float h = gdk_surface_get_height (window) * window_scale;
+  GdkSurface *window = gdk_gl_context_get_surface (paint_context);
+  int surface_scale = gdk_surface_get_scale_factor (window);
+  float w = gdk_surface_get_width (window) * surface_scale;
+  float h = gdk_surface_get_height (window) * surface_scale;
   int i;
   float *vertex_buffer_data;
 
@@ -461,7 +461,7 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
   GdkSurface *window;
   int unscaled_window_height;
   unsigned int texture_id;
-  int window_scale;
+  int surface_scale;
   double sx, sy;
   float umax, vmax;
   gboolean use_texture_rectangle;
@@ -482,8 +482,8 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
   /* Software fallback */
   use_texture_rectangle = gdk_gl_context_use_texture_rectangle (paint_context);
 
-  window = gdk_gl_context_get_window (paint_context);
-  window_scale = gdk_surface_get_scale_factor (window);
+  window = gdk_gl_context_get_surface (paint_context);
+  surface_scale = gdk_surface_get_scale_factor (window);
   gdk_surface_get_unscaled_size (window, NULL, &unscaled_window_height);
 
   sx = sy = 1;
@@ -512,8 +512,8 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
     {
       cairo_region_get_rectangle (region, i, &rect);
 
-      glScissor (rect.x * window_scale, FLIP_Y ((rect.y + rect.height) * window_scale),
-                 rect.width * window_scale, rect.height * window_scale);
+      glScissor (rect.x * surface_scale, FLIP_Y ((rect.y + rect.height) * surface_scale),
+                 rect.width * surface_scale, rect.height * surface_scale);
 
       e = rect;
       e.x *= sx;
@@ -546,8 +546,8 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
 
       {
         GdkTexturedQuad quad = {
-          rect.x * window_scale, FLIP_Y(rect.y * window_scale),
-          (rect.x + rect.width) * window_scale, FLIP_Y((rect.y + rect.height) * window_scale),
+          rect.x * surface_scale, FLIP_Y(rect.y * surface_scale),
+          (rect.x + rect.width) * surface_scale, FLIP_Y((rect.y + rect.height) * surface_scale),
           0, 0,
           umax, vmax,
         };

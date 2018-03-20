@@ -48,7 +48,7 @@ gdk_monitor_has_fullscreen_window (GdkMonitor *monitor)
         continue;
 
       if (gdk_surface_get_fullscreen_mode (window) == GDK_FULLSCREEN_ON_ALL_MONITORS ||
-          gdk_display_get_monitor_at_window (monitor->display, window) == monitor)
+          gdk_display_get_monitor_at_surface (monitor->display, window) == monitor)
         {
           has_fullscreen = TRUE;
           break;

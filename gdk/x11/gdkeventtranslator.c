@@ -72,7 +72,7 @@ _gdk_x11_event_translator_get_handled_events (GdkEventTranslator *translator)
 }
 
 void
-_gdk_x11_event_translator_select_window_events (GdkEventTranslator *translator,
+_gdk_x11_event_translator_select_surface_events (GdkEventTranslator *translator,
                                                 Window              window,
                                                 GdkEventMask        event_mask)
 {
@@ -82,8 +82,8 @@ _gdk_x11_event_translator_select_window_events (GdkEventTranslator *translator,
 
   iface = GDK_EVENT_TRANSLATOR_GET_IFACE (translator);
 
-  if (iface->select_window_events)
-    iface->select_window_events (translator, window, event_mask);
+  if (iface->select_surface_events)
+    iface->select_surface_events (translator, window, event_mask);
 }
 
 GdkSurface *

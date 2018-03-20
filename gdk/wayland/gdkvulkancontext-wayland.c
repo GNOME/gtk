@@ -37,7 +37,7 @@ static VkResult
 gdk_wayland_vulkan_context_create_surface (GdkVulkanContext *context,
                                            VkSurfaceKHR     *surface)
 {
-  GdkSurface *window = gdk_draw_context_get_window (GDK_DRAW_CONTEXT (context));
+  GdkSurface *window = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
   GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
 
   /* This is necessary so that Vulkan sees the Window.
@@ -64,7 +64,7 @@ gdk_vulkan_context_wayland_end_frame (GdkDrawContext *context,
                                       cairo_region_t *painted,
                                       cairo_region_t *damage)
 {
-  GdkSurface *window = gdk_draw_context_get_window (GDK_DRAW_CONTEXT (context));
+  GdkSurface *window = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
 
   GDK_DRAW_CONTEXT_CLASS (gdk_wayland_vulkan_context_parent_class)->end_frame (context, painted, damage);
 

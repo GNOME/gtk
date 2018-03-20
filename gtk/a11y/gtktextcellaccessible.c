@@ -493,10 +493,10 @@ get_origins (GtkWidget *widget,
 
   if (GTK_IS_TREE_VIEW (widget))
     {
-      gtk_tree_view_convert_widget_to_bin_window_coords (GTK_TREE_VIEW (widget),
+      gtk_tree_view_convert_widget_to_bin_surface_coords (GTK_TREE_VIEW (widget),
                                                          *x_window, *y_window,
                                                          x_window, y_window);
-      gtk_tree_view_convert_widget_to_bin_window_coords (GTK_TREE_VIEW (widget),
+      gtk_tree_view_convert_widget_to_bin_surface_coords (GTK_TREE_VIEW (widget),
                                                          *x_toplevel, *y_toplevel,
                                                          x_toplevel, y_toplevel);
     }

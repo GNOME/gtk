@@ -690,7 +690,7 @@ static void gtk_widget_set_usize_internal (GtkWidget          *widget,
 					   gint                width,
 					   gint                height);
 
-static gboolean event_window_is_still_viewable (const GdkEvent *event);
+static gboolean event_surface_is_still_viewable (const GdkEvent *event);
 
 static void gtk_widget_update_input_shape (GtkWidget *widget);
 
@@ -5441,7 +5441,7 @@ gtk_widget_draw_internal (GtkWidget *widget,
   if (gdk_cairo_get_clip_rectangle (cr, NULL))
     {
       GtkWidgetClass *widget_class = GTK_WIDGET_GET_CLASS (widget);
-      GdkSurface *event_window = NULL;
+      GdkSurface *event_surface = NULL;
       gboolean result;
       RenderMode mode;
 
@@ -5542,7 +5542,7 @@ gtk_widget_draw_internal (GtkWidget *widget,
 #endif
 
       if (cairo_status (cr) &&
-          event_window != NULL)
+          event_surface != NULL)
         {
           /* We check the event so we only warn about internal GTK+ calls.
            * Errors might come from PDF streams having write failures and
@@ -5745,7 +5745,7 @@ _gtk_widget_captured_event (GtkWidget      *widget,
       return TRUE;
     }
 
-  if (!event_window_is_still_viewable (event))
+  if (!event_surface_is_still_viewable (event))
     return TRUE;
 
   event_copy = gdk_event_copy (event);
@@ -5771,7 +5771,7 @@ out:
 }
 
 static gboolean
-event_window_is_still_viewable (const GdkEvent *event)
+event_surface_is_still_viewable (const GdkEvent *event)
 {
   /* Check that we think the event's window is viewable before
    * delivering the event, to prevent surprises. We do this here
@@ -5841,7 +5841,7 @@ gtk_widget_event_internal (GtkWidget      *widget,
    * they are responsible for returning TRUE to terminate
    * handling.
    */
-  if (!event_window_is_still_viewable (event))
+  if (!event_surface_is_still_viewable (event))
     return TRUE;
 
   /* Non input events get handled right away */
@@ -9341,7 +9341,7 @@ _gtk_widget_get_device_window (GtkWidget *widget,
   if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     return NULL;
 
-  window = gdk_device_get_last_event_window (device);
+  window = gdk_device_get_last_event_surface (device);
   if (window && is_my_window (widget, window))
     return window;
   else
@@ -9373,14 +9373,14 @@ _gtk_widget_list_devices (GtkWidget *widget)
 
   seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
   device = gdk_seat_get_pointer (seat);
-  if (is_my_window (widget, gdk_device_get_last_event_window (device)))
+  if (is_my_window (widget, gdk_device_get_last_event_surface (device)))
     result = g_list_prepend (result, device);
 
   devices = gdk_seat_get_slaves (seat, GDK_SEAT_CAPABILITY_ALL_POINTING);
   for (l = devices; l; l = l->next)
     {
       device = l->data;
-      if (is_my_window (widget, gdk_device_get_last_event_window (device)))
+      if (is_my_window (widget, gdk_device_get_last_event_surface (device)))
         result = g_list_prepend (result, device);
     }
   g_list_free (devices);
@@ -9663,7 +9663,7 @@ gtk_widget_propagate_state (GtkWidget          *widget,
       if (!priv->shadowed &&
           (new_flags & GTK_STATE_FLAG_INSENSITIVE) != (old_flags & GTK_STATE_FLAG_INSENSITIVE))
         {
-          GList *event_windows = NULL;
+          GList *event_surfaces = NULL;
           GList *devices, *d;
 
           devices = _gtk_widget_list_devices (widget);
@@ -9680,7 +9680,7 @@ gtk_widget_propagate_state (GtkWidget          *widget,
                * same window if non-multidevice aware.
                */
               if (!gdk_surface_get_support_multidevice (window) &&
-                  g_list_find (event_windows, window))
+                  g_list_find (event_surfaces, window))
                 continue;
 
               if (!gtk_widget_is_sensitive (widget))
@@ -9690,10 +9690,10 @@ gtk_widget_propagate_state (GtkWidget          *widget,
                 _gtk_widget_synthesize_crossing (NULL, widget, d->data,
                                                  GDK_CROSSING_STATE_CHANGED);
 
-              event_windows = g_list_prepend (event_windows, window);
+              event_surfaces = g_list_prepend (event_surfaces, window);
             }
 
-          g_list_free (event_windows);
+          g_list_free (event_surfaces);
           g_list_free (devices);
         }
 
@@ -9726,7 +9726,7 @@ gtk_widget_propagate_state (GtkWidget          *widget,
  * @widget: a #GtkWidget
  * @region: (allow-none): shape to be added, or %NULL to remove an existing shape
  *
- * Sets a shape for this widget’s GDK window. This allows for
+ * Sets a shape for this widget’s GDK surface. This allows for
  * transparent windows etc., see gdk_surface_shape_combine_region()
  * for more information.
  **/
@@ -9737,7 +9737,7 @@ gtk_widget_shape_combine_region (GtkWidget *widget,
   GtkWidgetPrivate *priv;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  /*  set_shape doesn't work on widgets without GDK window */
+  /*  set_shape doesn't work on widgets without GDK surface */
   g_return_if_fail (_gtk_widget_get_has_window (widget));
 
   priv = widget->priv;
@@ -9759,7 +9759,7 @@ gtk_widget_shape_combine_region (GtkWidget *widget,
                                cairo_region_copy (region),
 			       (GDestroyNotify) cairo_region_destroy);
 
-      /* set shape if widget has a GDK window already.
+      /* set shape if widget has a GDK surface already.
        * otherwise the shape is scheduled to be set by gtk_widget_realize().
        */
       if (priv->window)
@@ -9772,7 +9772,7 @@ gtk_widget_update_input_shape (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = widget->priv;
 
-  /* set shape if widget has a GDK window already.
+  /* set shape if widget has a GDK surface already.
    * otherwise the shape is scheduled to be set by gtk_widget_realize().
    */
   if (priv->window)
@@ -9825,7 +9825,7 @@ gtk_widget_set_csd_input_shape (GtkWidget            *widget,
  * @widget: a #GtkWidget
  * @region: (allow-none): shape to be added, or %NULL to remove an existing shape
  *
- * Sets an input shape for this widget’s GDK window. This allows for
+ * Sets an input shape for this widget’s GDK surface. This allows for
  * windows which react to mouse click in a nonrectangular region, see
  * gdk_surface_input_shape_combine_region() for more information.
  **/
@@ -9834,7 +9834,7 @@ gtk_widget_input_shape_combine_region (GtkWidget      *widget,
                                        cairo_region_t *region)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  /*  set_shape doesn't work on widgets without GDK window */
+  /*  set_shape doesn't work on widgets without GDK surface */
   g_return_if_fail (_gtk_widget_get_has_window (widget));
 
   if (region == NULL)

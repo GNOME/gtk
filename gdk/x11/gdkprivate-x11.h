@@ -196,7 +196,7 @@ void       _gdk_x11_display_get_default_cursor_size (GdkDisplay *display,
 void       _gdk_x11_display_get_maximal_cursor_size (GdkDisplay *display,
                                                      guint      *width,
                                                      guint      *height);
-void       _gdk_x11_display_create_window_impl     (GdkDisplay    *display,
+void       _gdk_x11_display_create_surface_impl     (GdkDisplay    *display,
                                                     GdkSurface     *window,
                                                     GdkSurface     *real_parent,
                                                     GdkEventMask   event_mask,
@@ -217,7 +217,7 @@ _gdk_x11_dnd_filter (const XEvent *xevent,
                      gpointer      data);
 
 GdkFilterReturn
-xdnd_source_window_filter (const XEvent *xevent,
+xdnd_source_surface_filter (const XEvent *xevent,
                            GdkEvent     *event,
                            gpointer      data);
 

@@ -215,7 +215,7 @@ gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
   object_class->finalize = gdk_quartz_display_finalize;
   object_class->dispose = gdk_quartz_display_dispose;
 
-  display_class->window_type = GDK_TYPE_QUARTZ_SURFACE;
+  display_class->surface_type = GDK_TYPE_QUARTZ_SURFACE;
 
   display_class->get_name = gdk_quartz_display_get_name;
   display_class->beep = gdk_quartz_display_beep;
@@ -235,7 +235,7 @@ gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
   display_class->notify_startup_complete = gdk_quartz_display_notify_startup_complete;
   display_class->event_data_copy = _gdk_quartz_display_event_data_copy;
   display_class->event_data_free = _gdk_quartz_display_event_data_free;
-  display_class->create_window_impl = _gdk_quartz_display_create_window_impl;
+  display_class->create_surface_impl = _gdk_quartz_display_create_surface_impl;
   display_class->get_keymap = _gdk_quartz_display_get_keymap;
   display_class->text_property_to_utf8_list = _gdk_quartz_display_text_property_to_utf8_list;
   display_class->utf8_to_string_target = _gdk_quartz_display_utf8_to_string_target;

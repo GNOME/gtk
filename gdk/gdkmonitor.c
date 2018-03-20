@@ -34,7 +34,7 @@
  * associated with a #GdkDisplay. GdkDisplay has APIs to enumerate
  * monitors with gdk_display_get_n_monitors() and gdk_display_get_monitor(), and
  * to find particular monitors with gdk_display_get_primary_monitor() or
- * gdk_display_get_monitor_at_window().
+ * gdk_display_get_monitor_at_surface().
  */
 
 /**

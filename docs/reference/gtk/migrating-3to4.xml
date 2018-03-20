@@ -150,7 +150,7 @@
     </section>
 
     <section>
-      <title>Stop using gdk_pixbuf_get_from_window() and gdk_cairo_set_source_window()</title>
+      <title>Stop using gdk_pixbuf_get_from_window() and gdk_cairo_set_source_surface()</title>
       <para>
         These functions are not supported in GTK+ 4. Instead, either use backend-specific
         APIs, or render your widgets using gtk_widget_render().

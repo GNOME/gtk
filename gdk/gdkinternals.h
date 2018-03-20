@@ -131,7 +131,7 @@ struct _GdkSurfaceAttr
   gint width;
   gint height;
   GdkSurfaceSurfaceClass wclass;
-  GdkSurfaceType window_type;
+  GdkSurfaceType surface_type;
   GdkSurfaceTypeHint type_hint;
 };
 
@@ -152,11 +152,11 @@ struct _GdkSurface
   gint y;
 
   GdkEventMask event_mask;
-  guint8 window_type;
+  guint8 surface_type;
 
   guint8 resize_count;
 
-  gint8 toplevel_window_type;
+  gint8 toplevel_surface_type;
 
   GList *children;
   GList children_list_node;
@@ -212,7 +212,7 @@ struct _GdkSurface
   /* The GdkSurface that has the impl, ref:ed if another window.
    * This ref is required to keep the wrapper of the impl window alive
    * for as long as any GdkSurface references the impl. */
-  GdkSurface *impl_window;
+  GdkSurface *impl_surface;
 
   guint update_and_descendants_freeze_count;
 
@@ -244,7 +244,7 @@ struct _GdkSurface
   cairo_region_t *opaque_region;
 };
 
-#define GDK_SURFACE_TYPE(d) ((((GdkSurface *)(d)))->window_type)
+#define GDK_SURFACE_TYPE(d) ((((GdkSurface *)(d)))->surface_type)
 #define GDK_SURFACE_DESTROYED(d) (((GdkSurface *)(d))->destroyed)
 
 extern gint       _gdk_screen_number;
@@ -384,16 +384,16 @@ void _gdk_synthesize_crossing_events (GdkDisplay                 *display,
 				      GdkEvent                   *event_in_queue,
 				      gulong                      serial,
 				      gboolean                    non_linear);
-void _gdk_display_set_window_under_pointer (GdkDisplay *display,
+void _gdk_display_set_surface_under_pointer (GdkDisplay *display,
                                             GdkDevice  *device,
                                             GdkSurface  *window);
 
 gboolean    _gdk_surface_has_impl (GdkSurface *window);
-GdkSurface * _gdk_surface_get_impl_window (GdkSurface *window);
+GdkSurface * _gdk_surface_get_impl_surface (GdkSurface *window);
 
 void gdk_surface_destroy_notify       (GdkSurface *window);
 
-void gdk_synthesize_window_state (GdkSurface     *window,
+void gdk_synthesize_surface_state (GdkSurface     *window,
                                   GdkSurfaceState unset_flags,
                                   GdkSurfaceState set_flags);
 

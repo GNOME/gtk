@@ -39,7 +39,7 @@
 #define GRIP_HEIGHT 15
 #define GDK_LION_RESIZE 5
 
-#define WINDOW_IS_TOPLEVEL(window)      (GDK_SURFACE_TYPE (window) != GDK_SURFACE_CHILD)
+#define SURFACE_IS_TOPLEVEL(window)      (GDK_SURFACE_TYPE (window) != GDK_SURFACE_CHILD)
 
 /* This is the window corresponding to the key window */
 static GdkSurface   *current_keyboard_window;
@@ -615,7 +615,7 @@ find_toplevel_under_pointer (GdkDisplay *display,
 
   info = _gdk_display_get_pointer_info (display, GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_device_manager)->core_pointer);
   toplevel = info->toplevel_under_pointer;
-  if (toplevel && WINDOW_IS_TOPLEVEL (toplevel))
+  if (toplevel && SURFACE_IS_TOPLEVEL (toplevel))
     get_window_point_from_screen_point (toplevel, screen_point, x, y);
 
   if (toplevel)
@@ -701,7 +701,7 @@ find_toplevel_for_mouse_event (NSEvent    *nsevent,
    */
   grab = _gdk_display_get_last_device_grab (display,
                                             GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_device_manager)->core_pointer);
-  if (WINDOW_IS_TOPLEVEL (toplevel) && grab)
+  if (SURFACE_IS_TOPLEVEL (toplevel) && grab)
     {
       /* Implicit grabs do not go through XGrabPointer and thus the
        * event mask should not be checked.
@@ -768,7 +768,7 @@ find_toplevel_for_mouse_event (NSEvent    *nsevent,
                                                             screen_point,
                                                             &x_tmp, &y_tmp);
       if (toplevel_under_pointer
-          && WINDOW_IS_TOPLEVEL (toplevel_under_pointer))
+          && SURFACE_IS_TOPLEVEL (toplevel_under_pointer))
         {
           GdkSurfaceImplQuartz *toplevel_impl;
 
@@ -1385,7 +1385,7 @@ test_resize (NSEvent *event, GdkSurface *toplevel, gint x, gint y)
    * dragging before GDK recognizes the grab.
    *
    * We perform this check for a button press of all buttons, because we
-   * do receive, for instance, a right mouse down event for a GDK window
+   * do receive, for instance, a right mouse down event for a GDK surface
    * for x-coordinate range [-3, 0], but we do not want to forward this
    * into GDK. Forwarding such events into GDK will confuse the pointer
    * window finding code, because there are no GdkSurfaces present in
@@ -1493,7 +1493,7 @@ gdk_event_translate (GdkEvent *event,
   if ([(GdkQuartzNSWindow *)nswindow isInManualResizeOrMove])
     return FALSE;
 
-  /* Find the right GDK window to send the event to, taking grabs and
+  /* Find the right GDK surface to send the event to, taking grabs and
    * event masks into consideration.
    */
   window = find_window_for_ns_event (nsevent, &x, &y, &x_root, &y_root);
@@ -1650,7 +1650,7 @@ gdk_event_translate (GdkEvent *event,
       break;
 #endif
     case NSMouseExited:
-      if (WINDOW_IS_TOPLEVEL (window))
+      if (SURFACE_IS_TOPLEVEL (window))
           [[NSCursor arrowCursor] set];
       /* fall through */
     case NSMouseEntered:

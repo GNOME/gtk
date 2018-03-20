@@ -82,7 +82,7 @@ find_widget_at_pointer (GdkDevice *device)
   GtkWidget *widget = NULL;
   GdkSurface *pointer_window;
 
-  pointer_window = gdk_device_get_window_at_position (device, NULL, NULL);
+  pointer_window = gdk_device_get_surface_at_position (device, NULL, NULL);
 
   if (pointer_window)
     {

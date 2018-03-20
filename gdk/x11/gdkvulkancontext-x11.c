@@ -36,7 +36,7 @@ static VkResult
 gdk_x11_vulkan_context_create_surface (GdkVulkanContext *context,
                                        VkSurfaceKHR     *surface)
 {
-  GdkSurface *window = gdk_draw_context_get_window (GDK_DRAW_CONTEXT (context));
+  GdkSurface *window = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
   GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
 
   /* This is necessary so that Vulkan sees the Window.

@@ -964,15 +964,15 @@ gdk_win32_display_init (GdkWin32Display *display)
   if (display->dpi_aware_type != PROCESS_DPI_UNAWARE &&
       scale_str != NULL)
     {
-      display->window_scale = atol (scale_str);
+      display->surface_scale = atol (scale_str);
 
-      if (display->window_scale == 0)
-        display->window_scale = 1;
+      if (display->surface_scale == 0)
+        display->surface_scale = 1;
 
       display->has_fixed_scale = TRUE;
     }
   else
-    display->window_scale = 1;
+    display->surface_scale = 1;
 
   _gdk_win32_display_init_cursors (display);
   gdk_win32_display_check_composited (display);
@@ -1107,7 +1107,7 @@ _gdk_win32_display_get_monitor_scale_factor (GdkWin32Display *win32_display,
         *dpi = dpix;
 
       if (win32_display->has_fixed_scale)
-        return win32_display->window_scale;
+        return win32_display->surface_scale;
       else
         return dpix / USER_DEFAULT_SCREEN_DPI > 1 ? dpix / USER_DEFAULT_SCREEN_DPI : 1;
     }
@@ -1143,7 +1143,7 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
   object_class->dispose = gdk_win32_display_dispose;
   object_class->finalize = gdk_win32_display_finalize;
 
-  display_class->window_type = GDK_TYPE_WIN32_SURFACE;
+  display_class->surface_type = GDK_TYPE_WIN32_SURFACE;
 
   display_class->get_name = gdk_win32_display_get_name;
   display_class->beep = gdk_win32_display_beep;
@@ -1164,7 +1164,7 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
 
   display_class->get_next_serial = gdk_win32_display_get_next_serial;
   display_class->notify_startup_complete = gdk_win32_display_notify_startup_complete;
-  display_class->create_window_impl = _gdk_win32_display_create_window_impl;
+  display_class->create_surface_impl = _gdk_win32_display_create_surface_impl;
 
   display_class->get_keymap = _gdk_win32_display_get_keymap;
   display_class->text_property_to_utf8_list = _gdk_win32_display_text_property_to_utf8_list;

@@ -48,7 +48,7 @@ request (GtkWidget      *widget,
 	 gpointer        user_data)
 {
   GdkDisplay *display = gtk_widget_get_display (widget);
-  GdkMonitor *monitor = gdk_display_get_monitor_at_window (display, 
+  GdkMonitor *monitor = gdk_display_get_monitor_at_surface (display, 
                                               gtk_widget_get_window (widget));
 
   if (monitor == NULL)

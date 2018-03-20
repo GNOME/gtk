@@ -697,7 +697,7 @@ load_node_file (GFile *file, gboolean generate)
     }
 
   window = gdk_surface_new_toplevel (gdk_display_get_default(), 10 , 10);
-  renderer = gsk_renderer_new_for_window (window);
+  renderer = gsk_renderer_new_for_surface (window);
   texture = gsk_renderer_render_texture (renderer, node, NULL);
 
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,

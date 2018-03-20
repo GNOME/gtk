@@ -230,7 +230,7 @@ struct _GdkSurfaceImplWin32
   GdkSurface *wrapper;
   HANDLE handle;
 
-  gint8 toplevel_window_type;
+  gint8 toplevel_surface_type;
 
   HICON   hicon_big;
   HICON   hicon_small;
@@ -347,7 +347,7 @@ struct _GdkSurfaceImplWin32
   LONG_PTR temp_styles;
 
   /* scale of window on HiDPI */
-  gint window_scale;
+  gint surface_scale;
   gint unscaled_width;
   gint unscaled_height;
 };

@@ -905,7 +905,7 @@ gdk_input_other_event (GdkDisplay *display,
     }
 
   device_manager = GDK_DEVICE_MANAGER_WIN32 (_gdk_device_manager);
-  window = gdk_device_get_window_at_position (device_manager->core_pointer, &x, &y);
+  window = gdk_device_get_surface_at_position (device_manager->core_pointer, &x, &y);
 
   if (window)
     g_object_ref (window);
@@ -1070,16 +1070,16 @@ gdk_input_other_event (GdkDisplay *display,
             return FALSE;
 
           impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
-          pt.x = x * impl->window_scale;
-          pt.y = y * impl->window_scale;
+          pt.x = x * impl->surface_scale;
+          pt.y = y * impl->surface_scale;
           ClientToScreen (GDK_SURFACE_HWND (window), &pt);
           g_object_unref (window);
           window = window->parent;
           impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
           g_object_ref (window);
           ScreenToClient (GDK_SURFACE_HWND (window), &pt);
-          x = pt.x / impl->window_scale;
-          y = pt.y / impl->window_scale;
+          x = pt.x / impl->surface_scale;
+          y = pt.y / impl->surface_scale;
           GDK_NOTE (EVENTS_OR_INPUT, g_print ("... propagating to %p %+d%+d\n",
                                               GDK_SURFACE_HWND (window), x, y));
         }

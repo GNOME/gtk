@@ -274,7 +274,7 @@ gdk_event_source_translate_event (GdkX11Display  *x11_display,
   if (result == GDK_FILTER_CONTINUE && filter_window)
     {
       gpointer context = g_object_get_data (G_OBJECT (filter_window), "xdnd-source-context");
-      result = xdnd_source_window_filter (xevent, event, context);
+      result = xdnd_source_surface_filter (xevent, event, context);
     }
 
   if (result != GDK_FILTER_CONTINUE)
@@ -523,7 +523,7 @@ gdk_x11_event_source_select_events (GdkEventSource *source,
 
       if (mask != 0)
         {
-          _gdk_x11_event_translator_select_window_events (translator, window, mask);
+          _gdk_x11_event_translator_select_surface_events (translator, window, mask);
           event_mask &= ~mask;
         }
 

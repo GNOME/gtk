@@ -412,7 +412,7 @@ void       _gdk_win32_keymap_set_active_layout   (GdkWin32Keymap *keymap,
 
 GdkKeymap *_gdk_win32_display_get_keymap (GdkDisplay *display);
 
-void       _gdk_win32_display_create_window_impl   (GdkDisplay    *display,
+void       _gdk_win32_display_create_surface_impl   (GdkDisplay    *display,
                                                     GdkSurface     *window,
                                                     GdkSurface     *real_parent,
                                                     GdkEventMask   event_mask,

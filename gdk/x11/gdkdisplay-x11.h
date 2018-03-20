@@ -112,7 +112,7 @@ struct _GdkX11Display
   GSList *streams;
 
   /* input GdkSurface list */
-  GList *input_windows;
+  GList *input_surfaces;
 
   /* GdkCursor => XCursor */
   GHashTable *cursors;

@@ -102,10 +102,10 @@ void            _gdk_wayland_surface_offset_next_wl_buffer (GdkSurface *window,
                                                            int        y);
 GdkDragContext * _gdk_wayland_drop_context_new (GdkDisplay            *display,
                                                 struct wl_data_device *data_device);
-void _gdk_wayland_drag_context_set_source_window (GdkDragContext *context,
+void _gdk_wayland_drag_context_set_source_surface (GdkDragContext *context,
                                                   GdkSurface      *window);
-void _gdk_wayland_drag_context_set_dest_window (GdkDragContext *context,
-                                                GdkSurface      *dest_window,
+void _gdk_wayland_drag_context_set_dest_surface (GdkDragContext *context,
+                                                GdkSurface      *dest_surface,
                                                 uint32_t        serial);
 void _gdk_wayland_drag_context_emit_event (GdkDragContext *context,
                                            GdkEventType    type,
@@ -118,12 +118,12 @@ void gdk_wayland_drag_context_set_action (GdkDragContext *context,
                                           GdkDragAction   action);
 
 GdkDragContext * gdk_wayland_drag_context_lookup_by_data_source   (struct wl_data_source *source);
-GdkDragContext * gdk_wayland_drag_context_lookup_by_source_window (GdkSurface *window);
+GdkDragContext * gdk_wayland_drag_context_lookup_by_source_surface (GdkSurface *window);
 struct wl_data_source * gdk_wayland_drag_context_get_data_source  (GdkDragContext *context);
 
 void gdk_wayland_drop_context_update_targets (GdkDragContext *context);
 
-void _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
+void _gdk_wayland_display_create_surface_impl (GdkDisplay    *display,
 					      GdkSurface     *window,
 					      GdkSurface     *real_parent,
 					      GdkEventMask   event_mask,

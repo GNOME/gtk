@@ -1962,7 +1962,7 @@ gsk_gl_renderer_begin_draw_frame (GskRenderer          *renderer,
   GdkRectangle whole_window;
   GdkSurface *window;
 
-  window = gsk_renderer_get_window (renderer);
+  window = gsk_renderer_get_surface (renderer);
   whole_window = (GdkRectangle) {
                      0, 0,
                      gdk_surface_get_width (window) * self->scale_factor,
@@ -2051,7 +2051,7 @@ gsk_gl_renderer_setup_render_mode (GskGLRenderer *self)
     case RENDER_SCISSOR:
       {
         GdkDrawingContext *context = gsk_renderer_get_drawing_context (GSK_RENDERER (self));
-        GdkSurface *window = gsk_renderer_get_window (GSK_RENDERER (self));
+        GdkSurface *window = gsk_renderer_get_surface (GSK_RENDERER (self));
         cairo_region_t *clip = gdk_drawing_context_get_clip (context);
         cairo_rectangle_int_t extents;
         int window_height;
@@ -2570,7 +2570,7 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
   width = ceilf (viewport->size.width);
   height = ceilf (viewport->size.height);
 
-  self->scale_factor = gdk_surface_get_scale_factor (gsk_renderer_get_window (renderer));
+  self->scale_factor = gdk_surface_get_scale_factor (gsk_renderer_get_surface (renderer));
   gdk_gl_context_make_current (self->gl_context);
 
   /* Prepare our framebuffer */
@@ -2608,7 +2608,7 @@ gsk_gl_renderer_render (GskRenderer   *renderer,
                         GskRenderNode *root)
 {
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
-  GdkSurface *window = gsk_renderer_get_window (renderer);
+  GdkSurface *window = gsk_renderer_get_surface (renderer);
   graphene_rect_t viewport;
 
   if (self->gl_context == NULL)

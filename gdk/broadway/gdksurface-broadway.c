@@ -46,7 +46,7 @@
 /* Forward declarations */
 static void        gdk_surface_impl_broadway_finalize   (GObject            *object);
 
-#define WINDOW_IS_TOPLEVEL(window) \
+#define SURFACE_IS_TOPLEVEL(window) \
   (GDK_SURFACE_TYPE (window) != GDK_SURFACE_CHILD)
 
 struct _GdkBroadwaySurface {
@@ -123,7 +123,7 @@ queue_flush (GdkSurface *window)
 static void
 gdk_surface_impl_broadway_init (GdkSurfaceImplBroadway *impl)
 {
-  impl->toplevel_window_type = -1;
+  impl->toplevel_surface_type = -1;
 }
 
 static void
@@ -195,7 +195,7 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
 static void
 connect_frame_clock (GdkSurface *window)
 {
-  if (WINDOW_IS_TOPLEVEL (window))
+  if (SURFACE_IS_TOPLEVEL (window))
     {
       GdkFrameClock *frame_clock = gdk_surface_get_frame_clock (window);
 
@@ -205,7 +205,7 @@ connect_frame_clock (GdkSurface *window)
 }
 
 void
-_gdk_broadway_display_create_window_impl (GdkDisplay    *display,
+_gdk_broadway_display_create_surface_impl (GdkDisplay    *display,
                                           GdkSurface     *window,
                                           GdkSurface     *real_parent,
                                           GdkEventMask   event_mask,
@@ -223,12 +223,12 @@ _gdk_broadway_display_create_window_impl (GdkDisplay    *display,
                                                window->y,
                                                window->width,
                                                window->height,
-                                               window->window_type == GDK_SURFACE_TEMP);
+                                               window->surface_type == GDK_SURFACE_TEMP);
   g_hash_table_insert (broadway_display->id_ht, GINT_TO_POINTER(impl->id), window);
   impl->wrapper = window;
 
-  g_assert (window->window_type == GDK_SURFACE_TOPLEVEL ||
-            window->window_type == GDK_SURFACE_TEMP);
+  g_assert (window->surface_type == GDK_SURFACE_TOPLEVEL ||
+            window->surface_type == GDK_SURFACE_TEMP);
   g_assert (window->parent == NULL);
 
   broadway_display->toplevels = g_list_prepend (broadway_display->toplevels, impl);
@@ -687,7 +687,7 @@ gdk_broadway_surface_set_icon_name (GdkSurface   *window,
                                    const gchar *name)
 {
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !SURFACE_IS_TOPLEVEL (window))
     return;
 
   g_object_set_qdata (G_OBJECT (window), g_quark_from_static_string ("gdk-icon-name-set"),
@@ -698,7 +698,7 @@ static void
 gdk_broadway_surface_iconify (GdkSurface *window)
 {
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !SURFACE_IS_TOPLEVEL (window))
     return;
 }
 
@@ -706,7 +706,7 @@ static void
 gdk_broadway_surface_deiconify (GdkSurface *window)
 {
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !SURFACE_IS_TOPLEVEL (window))
     return;
 }
 
@@ -714,7 +714,7 @@ static void
 gdk_broadway_surface_stick (GdkSurface *window)
 {
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !SURFACE_IS_TOPLEVEL (window))
     return;
 
 }
@@ -723,7 +723,7 @@ static void
 gdk_broadway_surface_unstick (GdkSurface *window)
 {
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !SURFACE_IS_TOPLEVEL (window))
     return;
 
 }
@@ -737,7 +737,7 @@ gdk_broadway_surface_maximize (GdkSurface *window)
   GdkRectangle geom;
 
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !SURFACE_IS_TOPLEVEL (window))
     return;
 
   impl = GDK_SURFACE_IMPL_BROADWAY (window->impl);
@@ -747,7 +747,7 @@ gdk_broadway_surface_maximize (GdkSurface *window)
 
   impl->maximized = TRUE;
 
-  gdk_synthesize_window_state (window, 0, GDK_SURFACE_STATE_MAXIMIZED);
+  gdk_synthesize_surface_state (window, 0, GDK_SURFACE_STATE_MAXIMIZED);
 
   impl->pre_maximize_x = window->x;
   impl->pre_maximize_y = window->y;
@@ -769,7 +769,7 @@ gdk_broadway_surface_unmaximize (GdkSurface *window)
   GdkSurfaceImplBroadway *impl;
 
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !SURFACE_IS_TOPLEVEL (window))
     return;
 
   impl = GDK_SURFACE_IMPL_BROADWAY (window->impl);
@@ -779,7 +779,7 @@ gdk_broadway_surface_unmaximize (GdkSurface *window)
 
   impl->maximized = FALSE;
 
-  gdk_synthesize_window_state (window, GDK_SURFACE_STATE_MAXIMIZED, 0);
+  gdk_synthesize_surface_state (window, GDK_SURFACE_STATE_MAXIMIZED, 0);
 
   gdk_surface_move_resize (window,
                           impl->pre_maximize_x,
@@ -792,7 +792,7 @@ static void
 gdk_broadway_surface_fullscreen (GdkSurface *window)
 {
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !SURFACE_IS_TOPLEVEL (window))
     return;
 
 }
@@ -801,7 +801,7 @@ static void
 gdk_broadway_surface_unfullscreen (GdkSurface *window)
 {
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !SURFACE_IS_TOPLEVEL (window))
     return;
 
 }
@@ -813,7 +813,7 @@ gdk_broadway_surface_set_keep_above (GdkSurface *window,
   g_return_if_fail (GDK_IS_SURFACE (window));
 
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !SURFACE_IS_TOPLEVEL (window))
     return;
 
 }
@@ -824,7 +824,7 @@ gdk_broadway_surface_set_keep_below (GdkSurface *window, gboolean setting)
   g_return_if_fail (GDK_IS_SURFACE (window));
 
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !SURFACE_IS_TOPLEVEL (window))
     return;
 
 }
@@ -833,7 +833,7 @@ static GdkSurface *
 gdk_broadway_surface_get_group (GdkSurface *window)
 {
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !SURFACE_IS_TOPLEVEL (window))
     return NULL;
 
   return window;
@@ -850,7 +850,7 @@ gdk_broadway_surface_set_decorations (GdkSurface      *window,
                                      GdkWMDecoration decorations)
 {
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !SURFACE_IS_TOPLEVEL (window))
     return;
 
 }
@@ -862,7 +862,7 @@ gdk_broadway_surface_get_decorations (GdkSurface       *window,
   gboolean result = FALSE;
 
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !SURFACE_IS_TOPLEVEL (window))
     return FALSE;
 
   return result;
@@ -875,7 +875,7 @@ gdk_broadway_surface_set_functions (GdkSurface    *window,
   g_return_if_fail (GDK_IS_SURFACE (window));
 
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !SURFACE_IS_TOPLEVEL (window))
     return;
 }
 
@@ -1264,7 +1264,7 @@ gdk_broadway_surface_begin_resize_drag (GdkSurface     *window,
   impl = GDK_SURFACE_IMPL_BROADWAY (window->impl);
 
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !SURFACE_IS_TOPLEVEL (window))
     return;
 
   if (impl->maximized)
@@ -1304,7 +1304,7 @@ gdk_broadway_surface_begin_move_drag (GdkSurface *window,
   impl = GDK_SURFACE_IMPL_BROADWAY (window->impl);
 
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !SURFACE_IS_TOPLEVEL (window))
     return;
 
   if (impl->maximized)
@@ -1342,7 +1342,7 @@ gdk_broadway_surface_set_opacity (GdkSurface *window,
   g_return_if_fail (GDK_IS_SURFACE (window));
 
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !SURFACE_IS_TOPLEVEL (window))
     return;
 
   if (opacity < 0)

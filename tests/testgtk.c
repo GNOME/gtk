@@ -5627,7 +5627,7 @@ create_wmhints (GtkWidget *widget)
  */
 
 static void
-window_state_callback (GdkSurface  *window,
+surface_state_callback (GdkSurface  *window,
                        GParamSpec *pspec,
                        GtkWidget  *label)
 {
@@ -5678,7 +5678,7 @@ tracking_label (GtkWidget *window)
 
   g_object_set_data (G_OBJECT (label), "title", (gpointer)gtk_window_get_title (GTK_WINDOW (window)));
   g_signal_connect (gtk_widget_get_window (window), "notify::state",
-                    G_CALLBACK (window_state_callback),
+                    G_CALLBACK (surface_state_callback),
                     label);
 
   button = gtk_button_new_with_label ("Deiconify");
@@ -5856,7 +5856,7 @@ get_state_controls (GtkWidget *window)
 }
 
 void
-create_window_states (GtkWidget *widget)
+create_surface_states (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
   GtkWidget *label;
@@ -6715,7 +6715,7 @@ find_widget_at_pointer (GdkDevice *device)
   gint x, y;
   FindWidgetData data;
  
- pointer_window = gdk_device_get_window_at_position (device, NULL, NULL);
+ pointer_window = gdk_device_get_surface_at_position (device, NULL, NULL);
  
  if (pointer_window)
    {
@@ -7780,7 +7780,7 @@ struct {
   { "tooltips", create_tooltips },
   { "WM hints", create_wmhints },
   { "window sizing", create_window_sizing },
-  { "window states", create_window_states }
+  { "window states", create_surface_states }
 };
 int nbuttons = sizeof (buttons) / sizeof (buttons[0]);
 

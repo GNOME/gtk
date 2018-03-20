@@ -41,7 +41,7 @@ typedef struct _GdkDisplayClass GdkDisplayClass;
 typedef struct
 {
   GdkSurface *window;
-  GdkSurface *native_window;
+  GdkSurface *native_surface;
   gulong serial_start;
   gulong serial_end; /* exclusive, i.e. not active on serial_end */
   guint event_mask;
@@ -63,7 +63,7 @@ typedef struct
  */
 typedef struct
 {
-  GdkSurface *window_under_pointer;   /* window that last got a normal enter event */
+  GdkSurface *surface_under_pointer;   /* window that last got a normal enter event */
   gdouble toplevel_x, toplevel_y;
   guint32 state;
   guint32 button;
@@ -114,7 +114,7 @@ struct _GdkDisplayClass
 {
   GObjectClass parent_class;
 
-  GType window_type;          /* type for native windows for this display, set in class_init */
+  GType surface_type;          /* type for native windows for this display, set in class_init */
   GType vk_context_type;      /* type for GdkVulkanContext, must be set if vk_extension_name != NULL */
   const char *vk_extension_name; /* Name of required windowing vulkan extension or %NULL (default) if Vulkan isn't supported */
 
@@ -140,7 +140,7 @@ struct _GdkDisplayClass
                                                  GdkEvent       *new_event);
   void                       (*event_data_free) (GdkDisplay     *display,
                                                  GdkEvent       *event);
-  void                       (*create_window_impl) (GdkDisplay    *display,
+  void                       (*create_surface_impl) (GdkDisplay    *display,
                                                     GdkSurface     *window,
                                                     GdkSurface     *real_parent,
                                                     GdkEventMask   event_mask,
@@ -166,7 +166,7 @@ struct _GdkDisplayClass
   GdkMonitor *           (*get_monitor)                (GdkDisplay     *display,
                                                         int             index);
   GdkMonitor *           (*get_primary_monitor)        (GdkDisplay     *display);
-  GdkMonitor *           (*get_monitor_at_window)      (GdkDisplay     *display,
+  GdkMonitor *           (*get_monitor_at_surface)      (GdkDisplay     *display,
                                                         GdkSurface      *window);
   gboolean               (*get_setting)                (GdkDisplay     *display,
                                                         const char     *name,
@@ -199,7 +199,7 @@ GdkDeviceGrabInfo * _gdk_display_get_last_device_grab (GdkDisplay *display,
 GdkDeviceGrabInfo * _gdk_display_add_device_grab      (GdkDisplay       *display,
                                                        GdkDevice        *device,
                                                        GdkSurface        *window,
-                                                       GdkSurface        *native_window,
+                                                       GdkSurface        *native_surface,
                                                        GdkGrabOwnership  grab_ownership,
                                                        gboolean          owner_events,
                                                        GdkEventMask      event_mask,
@@ -230,7 +230,7 @@ void                _gdk_display_event_data_copy      (GdkDisplay       *display
                                                        GdkEvent         *new_event);
 void                _gdk_display_event_data_free      (GdkDisplay       *display,
                                                        GdkEvent         *event);
-void                _gdk_display_create_window_impl   (GdkDisplay       *display,
+void                _gdk_display_create_surface_impl   (GdkDisplay       *display,
                                                        GdkSurface        *window,
                                                        GdkSurface        *real_parent,
                                                        GdkEventMask      event_mask,

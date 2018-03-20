@@ -153,7 +153,7 @@ gdk_draw_context_class_init (GdkDrawContextClass *klass)
   pspecs[PROP_WINDOW] =
     g_param_spec_object ("window",
                          P_("Window"),
-                         P_("The GDK window bound to the context"),
+                         P_("The GDK surface bound to the context"),
                          GDK_TYPE_SURFACE,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
@@ -261,7 +261,7 @@ gdk_draw_context_get_display (GdkDrawContext *context)
 }
 
 /**
- * gdk_draw_context_get_window:
+ * gdk_draw_context_get_surface:
  * @context: a #GdkDrawContext
  *
  * Retrieves the #GdkSurface used by the @context.
@@ -269,7 +269,7 @@ gdk_draw_context_get_display (GdkDrawContext *context)
  * Returns: (nullable) (transfer none): a #GdkSurface or %NULL
  */
 GdkSurface *
-gdk_draw_context_get_window (GdkDrawContext *context)
+gdk_draw_context_get_surface (GdkDrawContext *context)
 {
   GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (context);
 

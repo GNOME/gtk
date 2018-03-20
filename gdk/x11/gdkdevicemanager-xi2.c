@@ -82,7 +82,7 @@ static gboolean gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *
                                                             GdkEvent           *event,
                                                             const XEvent       *xevent);
 static GdkEventMask gdk_x11_device_manager_xi2_get_handled_events   (GdkEventTranslator *translator);
-static void         gdk_x11_device_manager_xi2_select_window_events (GdkEventTranslator *translator,
+static void         gdk_x11_device_manager_xi2_select_surface_events (GdkEventTranslator *translator,
                                                                      Window              window,
                                                                      GdkEventMask        event_mask);
 static GdkSurface *  gdk_x11_device_manager_xi2_get_window           (GdkEventTranslator *translator,
@@ -835,7 +835,7 @@ gdk_x11_device_manager_xi2_event_translator_init (GdkEventTranslatorIface *iface
 {
   iface->translate_event = gdk_x11_device_manager_xi2_translate_event;
   iface->get_handled_events = gdk_x11_device_manager_xi2_get_handled_events;
-  iface->select_window_events = gdk_x11_device_manager_xi2_select_window_events;
+  iface->select_surface_events = gdk_x11_device_manager_xi2_select_surface_events;
   iface->get_window = gdk_x11_device_manager_xi2_get_window;
 }
 
@@ -1110,8 +1110,8 @@ translate_axes (GdkDevice       *device,
         {
         case GDK_AXIS_X:
         case GDK_AXIS_Y:
-          if (gdk_device_get_mode (device) == GDK_MODE_WINDOW)
-            _gdk_device_translate_window_coord (device, window, i, val, &axes[i]);
+          if (gdk_device_get_mode (device) == GDK_MODE_SURFACE)
+            _gdk_device_translate_surface_coord (device, window, i, val, &axes[i]);
           else
             {
               if (use == GDK_AXIS_X)
@@ -1150,7 +1150,7 @@ is_parent_of (GdkSurface *parent,
 }
 
 static gboolean
-get_event_window (GdkEventTranslator *translator,
+get_event_surface (GdkEventTranslator *translator,
                   XIEvent            *ev,
                   GdkSurface         **window_p)
 {
@@ -1367,7 +1367,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
   if (!ev)
     return FALSE;
 
-  if (!get_event_window (translator, ev, &window))
+  if (!get_event_surface (translator, ev, &window))
     return FALSE;
 
   if (window && GDK_SURFACE_DESTROYED (window))
@@ -1377,7 +1377,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
   if (window)
     {
       impl = GDK_SURFACE_IMPL_X11 (window->impl);
-      scale = impl->window_scale;
+      scale = impl->surface_scale;
     }
 
   if (ev->evtype == XI_Motion ||
@@ -1552,7 +1552,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                                  event->any.window,
                                                  &xev->valuators);
 
-            if (gdk_device_get_mode (device) == GDK_MODE_WINDOW)
+            if (gdk_device_get_mode (device) == GDK_MODE_SURFACE)
               {
                 /* Update event coordinates from axes */
                 gdk_device_get_axis (device, event->button.axes, GDK_AXIS_X, &event->button.x);
@@ -1650,7 +1650,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                              event->any.window,
                                              &xev->valuators);
 
-        if (gdk_device_get_mode (device) == GDK_MODE_WINDOW)
+        if (gdk_device_get_mode (device) == GDK_MODE_SURFACE)
           {
             /* Update event coordinates from axes */
             gdk_device_get_axis (device, event->motion.axes, GDK_AXIS_X, &event->motion.x);
@@ -1698,7 +1698,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                             event->any.window,
                                             &xev->valuators);
 
-        if (gdk_device_get_mode (device) == GDK_MODE_WINDOW)
+        if (gdk_device_get_mode (device) == GDK_MODE_SURFACE)
           {
             /* Update event coordinates from axes */
             gdk_device_get_axis (device, event->touch.axes, GDK_AXIS_X, &event->touch.x);
@@ -1771,7 +1771,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                             event->any.window,
                                             &xev->valuators);
 
-        if (gdk_device_get_mode (device) == GDK_MODE_WINDOW)
+        if (gdk_device_get_mode (device) == GDK_MODE_SURFACE)
           {
             /* Update event coordinates from axes */
             gdk_device_get_axis (device, event->touch.axes, GDK_AXIS_X, &event->touch.x);
@@ -1817,7 +1817,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
         if (ev->evtype == XI_Enter &&
             xev->detail != XINotifyInferior && xev->mode != XINotifyPassiveUngrab &&
-	    gdk_surface_get_window_type (window) == GDK_SURFACE_TOPLEVEL)
+	    gdk_surface_get_surface_type (window) == GDK_SURFACE_TOPLEVEL)
           {
             if (gdk_device_get_device_type (source_device) != GDK_DEVICE_TYPE_MASTER)
               _gdk_device_xi2_reset_scroll_valuators (GDK_X11_DEVICE_XI2 (source_device));
@@ -1911,7 +1911,7 @@ gdk_x11_device_manager_xi2_get_handled_events (GdkEventTranslator *translator)
 }
 
 static void
-gdk_x11_device_manager_xi2_select_window_events (GdkEventTranslator *translator,
+gdk_x11_device_manager_xi2_select_surface_events (GdkEventTranslator *translator,
                                                  Window              window,
                                                  GdkEventMask        evmask)
 {
@@ -1944,7 +1944,7 @@ gdk_x11_device_manager_xi2_get_window (GdkEventTranslator *translator,
   if (!ev)
     return NULL;
 
-  get_event_window (translator, ev, &window);
+  get_event_surface (translator, ev, &window);
   return window;
 }
 

@@ -89,7 +89,7 @@ gdk_device_virtual_get_state (GdkDevice       *device,
 }
 
 static void
-gdk_device_virtual_set_window_cursor (GdkDevice *device,
+gdk_device_virtual_set_surface_cursor (GdkDevice *device,
                                       GdkSurface *window,
                                       GdkCursor *cursor)
 {
@@ -198,7 +198,7 @@ gdk_device_virtual_ungrab (GdkDevice *device,
 }
 
 static void
-gdk_device_virtual_select_window_events (GdkDevice    *device,
+gdk_device_virtual_select_surface_events (GdkDevice    *device,
 					 GdkSurface    *window,
 					 GdkEventMask  event_mask)
 {
@@ -211,13 +211,13 @@ gdk_device_virtual_class_init (GdkDeviceVirtualClass *klass)
 
   device_class->get_history = gdk_device_virtual_get_history;
   device_class->get_state = gdk_device_virtual_get_state;
-  device_class->set_window_cursor = gdk_device_virtual_set_window_cursor;
+  device_class->set_surface_cursor = gdk_device_virtual_set_surface_cursor;
   device_class->warp = gdk_device_virtual_warp;
   device_class->query_state = gdk_device_virtual_query_state;
   device_class->grab = gdk_device_virtual_grab;
   device_class->ungrab = gdk_device_virtual_ungrab;
-  device_class->window_at_position = _gdk_device_win32_surface_at_position;
-  device_class->select_window_events = gdk_device_virtual_select_window_events;
+  device_class->surface_at_position = _gdk_device_win32_surface_at_position;
+  device_class->select_surface_events = gdk_device_virtual_select_surface_events;
 }
 
 static void

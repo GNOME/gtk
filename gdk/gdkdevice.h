@@ -73,7 +73,7 @@ typedef enum
  * @GDK_MODE_DISABLED: the device is disabled and will not report any events.
  * @GDK_MODE_SCREEN: the device is enabled. The device’s coordinate space
  *                   maps to the entire screen.
- * @GDK_MODE_WINDOW: the device is enabled. The device’s coordinate space
+ * @GDK_MODE_SURFACE: the device is enabled. The device’s coordinate space
  *                   is mapped to a single window. The manner in which this window
  *                   is chosen is undefined, but it will typically be the same
  *                   way in which the focus window for key events is determined.
@@ -84,7 +84,7 @@ typedef enum
 {
   GDK_MODE_DISABLED,
   GDK_MODE_SCREEN,
-  GDK_MODE_WINDOW
+  GDK_MODE_SURFACE
 } GdkInputMode;
 
 /**
@@ -172,7 +172,7 @@ void     gdk_device_get_position (GdkDevice         *device,
                                   gint              *y);
 GDK_AVAILABLE_IN_ALL
 GdkSurface *
-         gdk_device_get_window_at_position
+         gdk_device_get_surface_at_position
                                  (GdkDevice         *device,
                                   gint              *win_x,
                                   gint              *win_y);
@@ -182,7 +182,7 @@ void     gdk_device_get_position_double (GdkDevice         *device,
                                          gdouble           *y);
 GDK_AVAILABLE_IN_ALL
 GdkSurface *
-         gdk_device_get_window_at_position_double
+         gdk_device_get_surface_at_position_double
                                  (GdkDevice         *device,
                                   gdouble           *win_x,
                                   gdouble           *win_y);
@@ -242,7 +242,7 @@ void          gdk_device_warp        (GdkDevice        *device,
                                       gint              y);
 
 GDK_AVAILABLE_IN_ALL
-GdkSurface *gdk_device_get_last_event_window (GdkDevice *device);
+GdkSurface *gdk_device_get_last_event_surface (GdkDevice *device);
 
 GDK_AVAILABLE_IN_ALL
 const gchar *gdk_device_get_vendor_id       (GdkDevice *device);

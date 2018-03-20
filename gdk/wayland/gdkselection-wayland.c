@@ -162,7 +162,7 @@ data_offer_source_actions (void                 *data,
   GDK_DISPLAY_NOTE (display, EVENTS,
             g_message ("data offer source actions, offer %p, actions %d", wl_data_offer, source_actions));
 
-  if (gdk_drag_context_get_dest_window (drop_context))
+  if (gdk_drag_context_get_dest_surface (drop_context))
     _gdk_wayland_drag_context_emit_event (drop_context, GDK_DRAG_MOTION,
                                           GDK_CURRENT_TIME);
 }
@@ -184,7 +184,7 @@ data_offer_action (void                 *data,
 
   drop_context->action = _wl_to_gdk_actions (action);
 
-  if (gdk_drag_context_get_dest_window (drop_context))
+  if (gdk_drag_context_get_dest_surface (drop_context))
     _gdk_wayland_drag_context_emit_event (drop_context, GDK_DRAG_MOTION,
                                           GDK_CURRENT_TIME);
 }

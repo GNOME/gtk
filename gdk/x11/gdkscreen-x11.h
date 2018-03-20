@@ -41,8 +41,8 @@ struct _GdkX11Screen
   Window xroot_window;
   gint screen_num;
 
-  gint window_scale;
-  gboolean fixed_window_scale;
+  gint surface_scale;
+  gboolean fixed_surface_scale;
 
   /* Xft resources for the display, used for default values for
    * the Xft/ XSETTINGS
@@ -108,7 +108,7 @@ void _gdk_x11_screen_get_edge_monitors      (GdkX11Screen *screen,
                                              gint         *bottom,
                                              gint         *left,
                                              gint         *right);
-void _gdk_x11_screen_set_window_scale       (GdkX11Screen *x11_screen,
+void _gdk_x11_screen_set_surface_scale       (GdkX11Screen *x11_screen,
                                              int           scale);
 void gdk_x11_screen_get_work_area           (GdkX11Screen *screen,
                                              GdkRectangle *area);

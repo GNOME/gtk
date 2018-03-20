@@ -461,7 +461,7 @@ GdkSurface *   gdk_surface_new_child             (GdkSurface     *parent,
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_destroy               (GdkSurface     *window);
 GDK_AVAILABLE_IN_ALL
-GdkSurfaceType gdk_surface_get_window_type       (GdkSurface     *window);
+GdkSurfaceType gdk_surface_get_surface_type       (GdkSurface     *window);
 GDK_AVAILABLE_IN_ALL
 gboolean      gdk_surface_is_destroyed          (GdkSurface     *window);
 

@@ -241,7 +241,7 @@ gdk_cairo_surface_paint_pixbuf (cairo_surface_t *surface,
  * gdk_cairo_surface_create_from_pixbuf:
  * @pixbuf: a #GdkPixbuf
  * @scale: the scale of the new surface, or 0 to use same as @window
- * @for_window: (allow-none): The window this will be drawn to, or %NULL
+ * @for_surface: (allow-none): The window this will be drawn to, or %NULL
  *
  * Creates an image surface with the same contents as
  * the pixbuf.
@@ -251,14 +251,14 @@ gdk_cairo_surface_paint_pixbuf (cairo_surface_t *surface,
 cairo_surface_t *
 gdk_cairo_surface_create_from_pixbuf (const GdkPixbuf *pixbuf,
                                       int              scale,
-                                      GdkSurface       *for_window)
+                                      GdkSurface       *for_surface)
 {
   cairo_format_t format;
   cairo_surface_t *surface;
 
   g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
   g_return_val_if_fail (scale >= 0, NULL);
-  g_return_val_if_fail (for_window == NULL || GDK_IS_SURFACE (for_window), NULL);
+  g_return_val_if_fail (for_surface == NULL || GDK_IS_SURFACE (for_surface), NULL);
 
   if (gdk_pixbuf_get_n_channels (pixbuf) == 3)
     format = CAIRO_FORMAT_RGB24;
@@ -266,7 +266,7 @@ gdk_cairo_surface_create_from_pixbuf (const GdkPixbuf *pixbuf,
     format = CAIRO_FORMAT_ARGB32;
 
   surface =
-     gdk_surface_create_similar_image_surface (for_window,
+     gdk_surface_create_similar_image_surface (for_surface,
 					      format,
                                               gdk_pixbuf_get_width (pixbuf),
                                               gdk_pixbuf_get_height (pixbuf),

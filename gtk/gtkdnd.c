@@ -326,7 +326,7 @@ gtk_drag_get_source_widget (GdkDragContext *context)
     {
       GtkWidget *widget = tmp_list->data;
 
-      if (gtk_widget_get_window (widget) == gdk_drag_context_get_source_window (context))
+      if (gtk_widget_get_window (widget) == gdk_drag_context_get_source_surface (context))
         return widget;
 
       tmp_list = tmp_list->next;
@@ -1115,7 +1115,7 @@ gtk_drag_set_icon_widget_internal (GdkDragContext *context,
       gtk_style_context_remove_class (gtk_widget_get_style_context (info->icon_window), "background");
 
       gtk_window_set_hardcoded_window (GTK_WINDOW (info->icon_window),
-                                       gdk_drag_context_get_drag_window (context));
+                                       gdk_drag_context_get_drag_surface (context));
       gtk_widget_show (info->icon_window);
     }
 

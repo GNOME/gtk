@@ -171,7 +171,7 @@ gdk_drag_context_get_selected_action (GdkDragContext *context)
 }
 
 /**
- * gdk_drag_context_get_source_window:
+ * gdk_drag_context_get_source_surface:
  * @context: a #GdkDragContext
  *
  * Returns the #GdkSurface where the DND operation started.
@@ -179,15 +179,15 @@ gdk_drag_context_get_selected_action (GdkDragContext *context)
  * Returns: (transfer none): a #GdkSurface
  **/
 GdkSurface *
-gdk_drag_context_get_source_window (GdkDragContext *context)
+gdk_drag_context_get_source_surface (GdkDragContext *context)
 {
   g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
 
-  return context->source_window;
+  return context->source_surface;
 }
 
 /**
- * gdk_drag_context_get_dest_window:
+ * gdk_drag_context_get_dest_surface:
  * @context: a #GdkDragContext
  *
  * Returns the destination window for the DND operation.
@@ -195,11 +195,11 @@ gdk_drag_context_get_source_window (GdkDragContext *context)
  * Returns: (transfer none): a #GdkSurface
  **/
 GdkSurface *
-gdk_drag_context_get_dest_window (GdkDragContext *context)
+gdk_drag_context_get_dest_surface (GdkDragContext *context)
 {
   g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
 
-  return context->dest_window;
+  return context->dest_surface;
 }
 
 /**
@@ -315,11 +315,11 @@ gdk_drag_context_finalize (GObject *object)
   g_clear_object (&context->content);
   g_clear_pointer (&context->formats, gdk_content_formats_unref);
 
-  if (context->source_window)
-    g_object_unref (context->source_window);
+  if (context->source_surface)
+    g_object_unref (context->source_surface);
 
-  if (context->dest_window)
-    g_object_unref (context->dest_window);
+  if (context->dest_surface)
+    g_object_unref (context->dest_surface);
 
   G_OBJECT_CLASS (gdk_drag_context_parent_class)->finalize (object);
 }
@@ -782,7 +782,7 @@ gdk_drop_read_finish (GdkDragContext *context,
 }
 
 /**
- * gdk_drag_context_get_drag_window:
+ * gdk_drag_context_get_drag_surface:
  * @context: a #GdkDragContext
  *
  * Returns the window on which the drag icon should be rendered
@@ -795,12 +795,12 @@ gdk_drop_read_finish (GdkDragContext *context,
  * Returns: (nullable) (transfer none): the drag window, or %NULL
  */
 GdkSurface *
-gdk_drag_context_get_drag_window (GdkDragContext *context)
+gdk_drag_context_get_drag_surface (GdkDragContext *context)
 {
   g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
 
-  if (GDK_DRAG_CONTEXT_GET_CLASS (context)->get_drag_window)
-    return GDK_DRAG_CONTEXT_GET_CLASS (context)->get_drag_window (context);
+  if (GDK_DRAG_CONTEXT_GET_CLASS (context)->get_drag_surface)
+    return GDK_DRAG_CONTEXT_GET_CLASS (context)->get_drag_surface (context);
 
   return NULL;
 }

@@ -58,7 +58,7 @@
 {
   GdkSurface *window = [[self contentView] gdkWindow];
 
-  gdk_synthesize_window_state (window, 0, 
+  gdk_synthesize_surface_state (window, 0, 
 			       GDK_SURFACE_STATE_ICONIFIED);
 }
 
@@ -68,14 +68,14 @@
 
   _gdk_quartz_surface_attach_to_parent (window);
 
-  gdk_synthesize_window_state (window, GDK_SURFACE_STATE_ICONIFIED, 0);
+  gdk_synthesize_surface_state (window, GDK_SURFACE_STATE_ICONIFIED, 0);
 }
 
 -(void)windowDidBecomeKey:(NSNotification *)aNotification
 {
   GdkSurface *window = [[self contentView] gdkWindow];
 
-  gdk_synthesize_window_state (window, 0, GDK_SURFACE_STATE_FOCUSED);
+  gdk_synthesize_surface_state (window, 0, GDK_SURFACE_STATE_FOCUSED);
   _gdk_quartz_events_update_focus_window (window, TRUE);
 }
 
@@ -84,7 +84,7 @@
   GdkSurface *window = [[self contentView] gdkWindow];
 
   _gdk_quartz_events_update_focus_window (window, FALSE);
-  gdk_synthesize_window_state (window, GDK_SURFACE_STATE_FOCUSED, 0);
+  gdk_synthesize_surface_state (window, GDK_SURFACE_STATE_FOCUSED, 0);
 }
 
 -(void)windowDidBecomeMain:(NSNotification *)aNotification
@@ -195,7 +195,7 @@
   /* In case the window is changed when maximized remove the maximized state */
   if (maximized && !inMaximizeTransition && !NSEqualRects (lastMaximizedFrame, [self frame]))
     {
-      gdk_synthesize_window_state (window,
+      gdk_synthesize_surface_state (window,
                                    GDK_SURFACE_STATE_MAXIMIZED,
                                    0);
     }
@@ -226,7 +226,7 @@
   /* see same in windowDidMove */
   if (maximized && !inMaximizeTransition && !NSEqualRects (lastMaximizedFrame, [self frame]))
     {
-      gdk_synthesize_window_state (window,
+      gdk_synthesize_surface_state (window,
                                    GDK_SURFACE_STATE_MAXIMIZED,
                                    0);
     }
@@ -311,7 +311,7 @@
   /* Popup windows should not be able to get focused in the window
    * manager sense, it's only handled through grabs.
    */
-  if (window->window_type == GDK_SURFACE_TEMP)
+  if (window->surface_type == GDK_SURFACE_TEMP)
     return NO;
 
   switch (impl->type_hint)
@@ -726,7 +726,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
       GList* windows, *list;
       gint gx, gy;
 
-      event->dnd.context->dest_window = NULL;
+      event->dnd.context->dest_surface = NULL;
 
       windows = get_toplevels ();
       _gdk_quartz_surface_nspoint_to_gdk_xy (aPoint, &gx, &gy);
@@ -742,7 +742,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
           wh = gdk_surface_get_height (win);
 
           if (gx > wx && gy > wy && gx <= wx + ww && gy <= wy + wh)
-            event->dnd.context->dest_window = win;
+            event->dnd.context->dest_surface = win;
         }
     }
 
@@ -818,14 +818,14 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
   if (maximized)
     {
       lastMaximizedFrame = newFrame;
-      gdk_synthesize_window_state (window,
+      gdk_synthesize_surface_state (window,
                                    GDK_SURFACE_STATE_MAXIMIZED,
                                    0);
     }
   else
     {
       lastUnmaximizedFrame = [nsWindow frame];
-      gdk_synthesize_window_state (window,
+      gdk_synthesize_surface_state (window,
                                    0,
                                    GDK_SURFACE_STATE_MAXIMIZED);
     }

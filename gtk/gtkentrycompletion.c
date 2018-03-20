@@ -1415,7 +1415,7 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   gtk_widget_realize (completion->priv->tree_view);
 
   display = gtk_widget_get_display (GTK_WIDGET (completion->priv->entry));
-  monitor = gdk_display_get_monitor_at_window (display, window);
+  monitor = gdk_display_get_monitor_at_surface (display, window);
   gdk_monitor_get_workarea (monitor, &area);
 
   if (height == 0)

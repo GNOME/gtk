@@ -76,7 +76,7 @@ struct _GdkSurfaceImplClass
   void         (* move_to_rect)         (GdkSurface       *window,
                                          const GdkRectangle *rect,
                                          GdkGravity       rect_anchor,
-                                         GdkGravity       window_anchor,
+                                         GdkGravity       surface_anchor,
                                          GdkAnchorHints   anchor_hints,
                                          gint             rect_anchor_dx,
                                          gint             rect_anchor_dy);

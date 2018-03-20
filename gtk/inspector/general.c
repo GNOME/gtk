@@ -129,7 +129,7 @@ init_version (GtkInspectorGeneral *gen)
     backend = "Unknown";
 
   window = gdk_surface_new_toplevel (display, 10, 10);
-  gsk_renderer = gsk_renderer_new_for_window (window);
+  gsk_renderer = gsk_renderer_new_for_surface (window);
   if (strcmp (G_OBJECT_TYPE_NAME (gsk_renderer), "GskVulkanRenderer") == 0)
     renderer = "Vulkan";
   else if (strcmp (G_OBJECT_TYPE_NAME (gsk_renderer), "GskGLRenderer") == 0)

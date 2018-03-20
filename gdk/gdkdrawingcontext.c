@@ -18,7 +18,7 @@
 /**
  * SECTION:gdkdrawingcontext
  * @Title: GdkDrawingContext
- * @Short_description: Drawing context for GDK windows
+ * @Short_description: Drawing context for GDK surfaces
  *
  * #GdkDrawingContext is an object that represents the current drawing
  * state of a #GdkSurface.
@@ -291,7 +291,7 @@ gdk_drawing_context_get_cairo_context (GdkDrawingContext *context)
 }
 
 /**
- * gdk_drawing_context_get_window:
+ * gdk_drawing_context_get_surface:
  * @context: a #GdkDrawingContext
  *
  * Retrieves the window that created the drawing @context.
@@ -299,7 +299,7 @@ gdk_drawing_context_get_cairo_context (GdkDrawingContext *context)
  * Returns: (transfer none): a #GdkSurface
  */
 GdkSurface *
-gdk_drawing_context_get_window (GdkDrawingContext *context)
+gdk_drawing_context_get_surface (GdkDrawingContext *context)
 {
   GdkDrawingContextPrivate *priv = gdk_drawing_context_get_instance_private (context);
 

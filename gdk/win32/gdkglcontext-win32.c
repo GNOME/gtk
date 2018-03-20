@@ -49,7 +49,7 @@ _gdk_win32_gl_context_dispose (GObject *gobject)
   GdkGLContext *context = GDK_GL_CONTEXT (gobject);
   GdkWin32GLContext *context_win32 = GDK_WIN32_GL_CONTEXT (gobject);
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (gdk_gl_context_get_display (context));
-  GdkSurface *window = gdk_gl_context_get_window (context);
+  GdkSurface *window = gdk_gl_context_get_surface (context);
 
   if (context_win32->hglrc != NULL)
     {
@@ -107,7 +107,7 @@ gdk_win32_gl_context_end_frame (GdkDrawContext *draw_context,
 {
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
   GdkWin32GLContext *context_win32 = GDK_WIN32_GL_CONTEXT (context);
-  GdkSurface *window = gdk_gl_context_get_window (context);
+  GdkSurface *window = gdk_gl_context_get_surface (context);
   GdkWin32Display *display = (GDK_WIN32_DISPLAY (gdk_gl_context_get_display (context)));
   gboolean can_wait = display->hasWglOMLSyncControl;
   cairo_rectangle_int_t whole_window;
@@ -177,7 +177,7 @@ gdk_win32_gl_context_begin_frame (GdkDrawContext *draw_context,
 
   /* If nothing else is known, repaint everything so that the back
      buffer is fully up-to-date for the swapbuffer */
-  window = gdk_gl_context_get_window (context);
+  window = gdk_gl_context_get_surface (context);
   cairo_region_union_rectangle (update_area, &(GdkRectangle) {
                                                  0, 0,
                                                  gdk_surface_get_width (window),
@@ -647,7 +647,7 @@ gdk_win32_gl_context_realize (GdkGLContext *context,
   gint glver_major = 0;
   gint glver_minor = 0;
 
-  GdkSurface *window = gdk_gl_context_get_window (context);
+  GdkSurface *window = gdk_gl_context_get_surface (context);
   GdkSurfaceImplWin32 *impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
   GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (gdk_surface_get_display (window));
 
@@ -816,7 +816,7 @@ _gdk_win32_display_make_gl_context_current (GdkDisplay *display,
 
   if (context_win32->is_attached && display_win32->hasWglEXTSwapControl)
     {
-      window = gdk_gl_context_get_window (context);
+      window = gdk_gl_context_get_surface (context);
 
       /* If there is compositing there is no particular need to delay
        * the swap when drawing on the offscreen, rendering to the screen

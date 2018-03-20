@@ -40,7 +40,7 @@ gdk_surface_impl_beep (GdkSurface *window)
 }
 
 static GdkDisplay *
-get_display_for_window (GdkSurface *primary,
+get_display_for_surface (GdkSurface *primary,
                         GdkSurface *secondary)
 {
   GdkDisplay *display = gdk_surface_get_display (primary);
@@ -185,7 +185,7 @@ traverse_to_toplevel (GdkSurface *window,
   gdouble yf = y;
 
   while ((parent = window->parent) != NULL &&
-         (gdk_surface_get_window_type (parent) != GDK_SURFACE_ROOT))
+         (gdk_surface_get_surface_type (parent) != GDK_SURFACE_ROOT))
     {
       gdk_surface_coords_to_parent (window, xf, yf, &xf, &yf);
       window = parent;
@@ -200,7 +200,7 @@ static void
 gdk_surface_impl_move_to_rect (GdkSurface          *window,
                               const GdkRectangle *rect,
                               GdkGravity          rect_anchor,
-                              GdkGravity          window_anchor,
+                              GdkGravity          surface_anchor,
                               GdkAnchorHints      anchor_hints,
                               gint                rect_anchor_dx,
                               gint                rect_anchor_dy)
@@ -232,7 +232,7 @@ gdk_surface_impl_move_to_rect (GdkSurface          *window,
                               &root_rect.x,
                               &root_rect.y);
 
-  display = get_display_for_window (window, window->transient_for);
+  display = get_display_for_surface (window, window->transient_for);
   monitor = get_monitor_for_rect (display, &root_rect);
   gdk_monitor_get_workarea (monitor, &bounds);
 
@@ -244,7 +244,7 @@ gdk_surface_impl_move_to_rect (GdkSurface          *window,
                                         root_rect.width,
                                         flipped_rect.width,
                                         get_anchor_x_sign (rect_anchor),
-                                        get_anchor_x_sign (window_anchor),
+                                        get_anchor_x_sign (surface_anchor),
                                         rect_anchor_dx,
                                         anchor_hints & GDK_ANCHOR_FLIP_X,
                                         &flipped_x);
@@ -254,7 +254,7 @@ gdk_surface_impl_move_to_rect (GdkSurface          *window,
                                         root_rect.height,
                                         flipped_rect.height,
                                         get_anchor_y_sign (rect_anchor),
-                                        get_anchor_y_sign (window_anchor),
+                                        get_anchor_y_sign (surface_anchor),
                                         rect_anchor_dy,
                                         anchor_hints & GDK_ANCHOR_FLIP_Y,
                                         &flipped_y);

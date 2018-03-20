@@ -316,7 +316,7 @@ gsk_renderer_init (GskRenderer *self)
 }
 
 /**
- * gsk_renderer_get_window:
+ * gsk_renderer_get_surface:
  * @renderer: a #GskRenderer
  *
  * Retrieves the #GdkSurface set using gsk_renderer_realize(). If the renderer
@@ -325,7 +325,7 @@ gsk_renderer_init (GskRenderer *self)
  * Returns: (transfer none) (nullable): a #GdkSurface
  */
 GdkSurface *
-gsk_renderer_get_window (GskRenderer *renderer)
+gsk_renderer_get_surface (GskRenderer *renderer)
 {
   GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
 
@@ -684,7 +684,7 @@ static struct {
 };
 
 /**
- * gsk_renderer_new_for_window:
+ * gsk_renderer_new_for_surface:
  * @window: a #GdkSurface
  *
  * Creates an appropriate #GskRenderer instance for the given @window.
@@ -694,7 +694,7 @@ static struct {
  * Returns: (transfer full) (nullable): a #GskRenderer
  */
 GskRenderer *
-gsk_renderer_new_for_window (GdkSurface *window)
+gsk_renderer_new_for_surface (GdkSurface *window)
 {
   GType renderer_type;
   GskRenderer *renderer;

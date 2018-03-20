@@ -110,12 +110,12 @@ static void     move_to_current_desktop           (GdkSurface *window);
 
 static void        gdk_surface_impl_x11_finalize   (GObject            *object);
 
-#define WINDOW_IS_TOPLEVEL_OR_FOREIGN(window)           \
+#define SURFACE_IS_TOPLEVEL_OR_FOREIGN(window)           \
   (GDK_SURFACE_TYPE (window) == GDK_SURFACE_TOPLEVEL ||   \
    GDK_SURFACE_TYPE (window) == GDK_SURFACE_TEMP ||       \
    GDK_SURFACE_TYPE (window) == GDK_SURFACE_FOREIGN)
 
-#define WINDOW_IS_TOPLEVEL(window)                      \
+#define SURFACE_IS_TOPLEVEL(window)                      \
   (GDK_SURFACE_TYPE (window) == GDK_SURFACE_TOPLEVEL ||   \
    GDK_SURFACE_TYPE (window) == GDK_SURFACE_TEMP)
 
@@ -153,7 +153,7 @@ G_DEFINE_TYPE (GdkSurfaceImplX11, gdk_surface_impl_x11, GDK_TYPE_SURFACE_IMPL)
 static void
 gdk_surface_impl_x11_init (GdkSurfaceImplX11 *impl)
 {  
-  impl->window_scale = 1;
+  impl->surface_scale = 1;
   impl->frame_sync_enabled = TRUE;
 }
 
@@ -164,7 +164,7 @@ _gdk_x11_surface_get_toplevel (GdkSurface *window)
   
   g_return_val_if_fail (GDK_IS_SURFACE (window), NULL);
 
-  if (!WINDOW_IS_TOPLEVEL (window))
+  if (!SURFACE_IS_TOPLEVEL (window))
     return NULL;
 
   impl = GDK_SURFACE_IMPL_X11 (window->impl);
@@ -235,7 +235,7 @@ window_pre_damage (GdkSurface *window)
   GdkSurface *toplevel_window = gdk_surface_get_toplevel (window);
   GdkSurfaceImplX11 *impl;
 
-  if (!toplevel_window || !WINDOW_IS_TOPLEVEL (toplevel_window))
+  if (!toplevel_window || !SURFACE_IS_TOPLEVEL (toplevel_window))
     return;
 
   impl = GDK_SURFACE_IMPL_X11 (toplevel_window->impl);
@@ -310,7 +310,7 @@ gdk_x11_surface_predict_presentation_time (GdkSurface *window)
   gint64 presentation_time;
   gint64 refresh_interval;
 
-  if (!WINDOW_IS_TOPLEVEL (window))
+  if (!SURFACE_IS_TOPLEVEL (window))
     return;
 
   clock = gdk_surface_get_frame_clock (window);
@@ -357,7 +357,7 @@ gdk_x11_surface_begin_frame (GdkSurface *window,
 
   impl = GDK_SURFACE_IMPL_X11 (window->impl);
 
-  if (!WINDOW_IS_TOPLEVEL (window) ||
+  if (!SURFACE_IS_TOPLEVEL (window) ||
       impl->toplevel->extended_update_counter == None)
     return;
 
@@ -398,7 +398,7 @@ gdk_x11_surface_end_frame (GdkSurface *window)
 
   impl = GDK_SURFACE_IMPL_X11 (window->impl);
 
-  if (!WINDOW_IS_TOPLEVEL (window) ||
+  if (!SURFACE_IS_TOPLEVEL (window) ||
       impl->toplevel->extended_update_counter == None ||
       !impl->toplevel->in_frame)
     return;
@@ -488,11 +488,11 @@ gdk_x11_ref_cairo_surface (GdkSurface *window)
   if (!impl->cairo_surface)
     {
       impl->cairo_surface = gdk_x11_create_cairo_surface (impl,
-                                                          gdk_surface_get_width (window) * impl->window_scale,
-                                                          gdk_surface_get_height (window) * impl->window_scale);
-      cairo_surface_set_device_scale (impl->cairo_surface, impl->window_scale, impl->window_scale);
+                                                          gdk_surface_get_width (window) * impl->surface_scale,
+                                                          gdk_surface_get_height (window) * impl->surface_scale);
+      cairo_surface_set_device_scale (impl->cairo_surface, impl->surface_scale, impl->surface_scale);
 
-      if (WINDOW_IS_TOPLEVEL (window) && impl->toplevel->in_frame)
+      if (SURFACE_IS_TOPLEVEL (window) && impl->toplevel->in_frame)
         hook_surface_changed (window);
     }
 
@@ -513,7 +513,7 @@ gdk_surface_impl_x11_finalize (GObject *object)
 
   wrapper = impl->wrapper;
 
-  if (WINDOW_IS_TOPLEVEL (wrapper) && impl->toplevel->in_frame)
+  if (SURFACE_IS_TOPLEVEL (wrapper) && impl->toplevel->in_frame)
     unhook_surface_changed (wrapper);
 
   _gdk_x11_surface_grab_check_destroy (wrapper);
@@ -775,8 +775,8 @@ setup_toplevel_window (GdkSurface    *window,
    * correct value???
    */
   size_hints.flags = PSize;
-  size_hints.width = window->width * impl->window_scale;
-  size_hints.height = window->height * impl->window_scale;
+  size_hints.width = window->width * impl->surface_scale;
+  size_hints.height = window->height * impl->surface_scale;
   
   XSetWMNormalHints (xdisplay, xid, &size_hints);
   
@@ -837,7 +837,7 @@ connect_frame_clock (GdkSurface *window)
   GdkSurfaceImplX11 *impl;
 
   impl = GDK_SURFACE_IMPL_X11 (window->impl);
-  if (WINDOW_IS_TOPLEVEL (window) && !impl->frame_clock_connected)
+  if (SURFACE_IS_TOPLEVEL (window) && !impl->frame_clock_connected)
     {
       GdkFrameClock *frame_clock = gdk_surface_get_frame_clock (window);
 
@@ -851,7 +851,7 @@ connect_frame_clock (GdkSurface *window)
 }
 
 void
-_gdk_x11_display_create_window_impl (GdkDisplay    *display,
+_gdk_x11_display_create_surface_impl (GdkDisplay    *display,
                                      GdkSurface     *window,
                                      GdkSurface     *real_parent,
                                      GdkEventMask   event_mask,
@@ -885,7 +885,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
   impl = g_object_new (GDK_TYPE_SURFACE_IMPL_X11, NULL);
   window->impl = GDK_SURFACE_IMPL (impl);
   impl->wrapper = GDK_SURFACE (window);
-  impl->window_scale = x11_screen->window_scale;
+  impl->surface_scale = x11_screen->surface_scale;
 
   xdisplay = x11_screen->xdisplay;
 
@@ -896,7 +896,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
   impl->override_redirect = FALSE;
 
   /* Sanity checks */
-  switch (window->window_type)
+  switch (window->surface_type)
     {
     case GDK_SURFACE_TOPLEVEL:
     case GDK_SURFACE_TEMP:
@@ -928,7 +928,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
       xattributes.colormap = gdk_x11_display_get_window_colormap (display_x11);
       xattributes_mask |= CWColormap;
 
-      if (window->window_type == GDK_SURFACE_TEMP)
+      if (window->surface_type == GDK_SURFACE_TEMP)
         {
           xattributes.save_under = True;
           xattributes.override_redirect = True;
@@ -944,7 +944,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
     {
       class = InputOnly;
 
-      if (window->window_type == GDK_SURFACE_TEMP)
+      if (window->surface_type == GDK_SURFACE_TEMP)
         {
           xattributes.override_redirect = True;
           xattributes_mask |= CWOverrideRedirect;
@@ -955,19 +955,19 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
       depth = 0;
     }
 
-  if (window->width * impl->window_scale > 32767 ||
-      window->height * impl->window_scale > 32767)
+  if (window->width * impl->surface_scale > 32767 ||
+      window->height * impl->surface_scale > 32767)
     {
       g_warning ("Native Windows wider or taller than 32767 pixels are not supported");
 
-      if (window->width * impl->window_scale > 32767)
-        window->width = 32767 / impl->window_scale;
-      if (window->height  * impl->window_scale > 32767)
-        window->height = 32767 /  impl->window_scale;
+      if (window->width * impl->surface_scale > 32767)
+        window->width = 32767 / impl->surface_scale;
+      if (window->height  * impl->surface_scale > 32767)
+        window->height = 32767 /  impl->surface_scale;
     }
 
-  impl->unscaled_width = window->width * impl->window_scale;
-  impl->unscaled_height = window->height * impl->window_scale;
+  impl->unscaled_width = window->width * impl->surface_scale;
+  impl->unscaled_height = window->height * impl->surface_scale;
 
   if (window->parent)
     {
@@ -981,9 +981,9 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
     }
 
   impl->xid = XCreateWindow (xdisplay, xparent,
-                             (window->x + abs_x) * impl->window_scale,
-                             (window->y + abs_y) * impl->window_scale,
-                             window->width * impl->window_scale, window->height * impl->window_scale,
+                             (window->x + abs_x) * impl->surface_scale,
+                             (window->y + abs_y) * impl->surface_scale,
+                             window->width * impl->surface_scale, window->height * impl->surface_scale,
                              0, depth, class, xvisual,
                              xattributes_mask, &xattributes);
 
@@ -1094,24 +1094,24 @@ gdk_x11_surface_foreign_new_for_display (GdkDisplay *display,
 
   win = _gdk_display_create_window (display);
   win->impl = g_object_new (GDK_TYPE_SURFACE_IMPL_X11, NULL);
-  win->impl_window = win;
+  win->impl_surface = win;
 
   impl = GDK_SURFACE_IMPL_X11 (win->impl);
   impl->wrapper = win;
-  impl->window_scale = GDK_X11_SCREEN (screen)->window_scale;
+  impl->surface_scale = GDK_X11_SCREEN (screen)->surface_scale;
 
   /* Always treat foreigns as toplevels */
   win->parent = NULL;
 
   impl->xid = window;
 
-  win->x = attrs.x / impl->window_scale;
-  win->y = attrs.y / impl->window_scale;
+  win->x = attrs.x / impl->surface_scale;
+  win->y = attrs.y / impl->surface_scale;
   impl->unscaled_width = attrs.width;
   impl->unscaled_height = attrs.height;
-  win->width = attrs.width / impl->window_scale;
-  win->height = attrs.height  / impl->window_scale;
-  win->window_type = GDK_SURFACE_FOREIGN;
+  win->width = attrs.width / impl->surface_scale;
+  win->height = attrs.height  / impl->surface_scale;
+  win->surface_type = GDK_SURFACE_FOREIGN;
   win->destroyed = FALSE;
 
   win->event_mask = x_event_mask_to_gdk_event_mask (attrs.your_event_mask);
@@ -1197,9 +1197,9 @@ gdk_x11_surface_destroy (GdkSurface *window,
 static void
 gdk_x11_surface_destroy_notify (GdkSurface *window)
 {
-  GdkSurfaceImplX11 *window_impl;
+  GdkSurfaceImplX11 *surface_impl;
 
-  window_impl = GDK_SURFACE_IMPL_X11 ((window)->impl);
+  surface_impl = GDK_SURFACE_IMPL_X11 ((window)->impl);
 
   if (!GDK_SURFACE_DESTROYED (window))
     {
@@ -1210,8 +1210,8 @@ gdk_x11_surface_destroy_notify (GdkSurface *window)
     }
 
   _gdk_x11_display_remove_window (GDK_SURFACE_DISPLAY (window), GDK_SURFACE_XID (window));
-  if (window_impl->toplevel && window_impl->toplevel->focus_window)
-    _gdk_x11_display_remove_window (GDK_SURFACE_DISPLAY (window), window_impl->toplevel->focus_window);
+  if (surface_impl->toplevel && surface_impl->toplevel->focus_window)
+    _gdk_x11_display_remove_window (GDK_SURFACE_DISPLAY (window), surface_impl->toplevel->focus_window);
 
   _gdk_x11_surface_grab_check_destroy (window);
 
@@ -1411,7 +1411,7 @@ gdk_surface_x11_show (GdkSurface *window, gboolean already_mapped)
   if (!already_mapped)
     set_initial_hints (window);
       
-  if (WINDOW_IS_TOPLEVEL (window))
+  if (SURFACE_IS_TOPLEVEL (window))
     {
       display = gdk_surface_get_display (window);
       display_x11 = GDK_X11_DISPLAY (display);
@@ -1444,7 +1444,7 @@ gdk_surface_x11_hide (GdkSurface *window)
                                     NextRequest (GDK_SURFACE_XDISPLAY (window)));
 
   /* You can't simply unmap toplevel windows. */
-  switch (window->window_type)
+  switch (window->surface_type)
     {
     case GDK_SURFACE_TOPLEVEL:
     case GDK_SURFACE_TEMP: /* ? */
@@ -1469,7 +1469,7 @@ gdk_surface_x11_withdraw (GdkSurface *window)
   if (!window->destroyed)
     {
       if (GDK_SURFACE_IS_MAPPED (window))
-        gdk_synthesize_window_state (window,
+        gdk_synthesize_surface_state (window,
                                      0,
                                      GDK_SURFACE_STATE_WITHDRAWN);
 
@@ -1489,7 +1489,7 @@ window_x11_move (GdkSurface *window,
 
   XMoveWindow (GDK_SURFACE_XDISPLAY (window),
                GDK_SURFACE_XID (window),
-               x * impl->window_scale, y * impl->window_scale);
+               x * impl->surface_scale, y * impl->surface_scale);
 
   if (impl->override_redirect)
     {
@@ -1515,19 +1515,19 @@ window_x11_resize (GdkSurface *window,
 
   XResizeWindow (GDK_SURFACE_XDISPLAY (window),
                  GDK_SURFACE_XID (window),
-                 width * impl->window_scale, height * impl->window_scale);
+                 width * impl->surface_scale, height * impl->surface_scale);
 
   if (impl->override_redirect)
     {
-      impl->unscaled_width = width * impl->window_scale;
-      impl->unscaled_height = height * impl->window_scale;
+      impl->unscaled_width = width * impl->surface_scale;
+      impl->unscaled_height = height * impl->surface_scale;
       window->width = width;
       window->height = height;
       _gdk_x11_surface_update_size (GDK_SURFACE_IMPL_X11 (window->impl));
     }
   else
     {
-      if (width * impl->window_scale != impl->unscaled_width || height * impl->window_scale != impl->unscaled_height)
+      if (width * impl->surface_scale != impl->unscaled_width || height * impl->surface_scale != impl->unscaled_height)
         window->resize_count += 1;
     }
 }
@@ -1551,16 +1551,16 @@ window_x11_move_resize (GdkSurface *window,
 
   XMoveResizeWindow (GDK_SURFACE_XDISPLAY (window),
                      GDK_SURFACE_XID (window),
-                     x * impl->window_scale, y * impl->window_scale,
-                     width * impl->window_scale, height * impl->window_scale);
+                     x * impl->surface_scale, y * impl->surface_scale,
+                     width * impl->surface_scale, height * impl->surface_scale);
 
   if (impl->override_redirect)
     {
       window->x = x;
       window->y = y;
 
-      impl->unscaled_width = width * impl->window_scale;
-      impl->unscaled_height = height * impl->window_scale;
+      impl->unscaled_width = width * impl->surface_scale;
+      impl->unscaled_height = height * impl->surface_scale;
       window->width = width;
       window->height = height;
 
@@ -1568,7 +1568,7 @@ window_x11_move_resize (GdkSurface *window,
     }
   else
     {
-      if (width * impl->window_scale != impl->unscaled_width || height * impl->window_scale != impl->unscaled_height)
+      if (width * impl->surface_scale != impl->unscaled_width || height * impl->surface_scale != impl->unscaled_height)
         window->resize_count += 1;
     }
 }
@@ -1593,7 +1593,7 @@ gdk_surface_x11_move_resize (GdkSurface *window,
 }
 
 void
-_gdk_x11_surface_set_window_scale (GdkSurface *window,
+_gdk_x11_surface_set_surface_scale (GdkSurface *window,
 				  int scale)
 {
   GdkSurfaceImplX11 *impl;
@@ -1602,13 +1602,13 @@ _gdk_x11_surface_set_window_scale (GdkSurface *window,
 
   impl = GDK_SURFACE_IMPL_X11 (window->impl);
 
-  impl->window_scale = scale;
+  impl->surface_scale = scale;
   if (impl->cairo_surface)
-    cairo_surface_set_device_scale (impl->cairo_surface, impl->window_scale, impl->window_scale);
+    cairo_surface_set_device_scale (impl->cairo_surface, impl->surface_scale, impl->surface_scale);
   _gdk_surface_update_size (window);
 
   toplevel = _gdk_x11_surface_get_toplevel (window);
-  if (toplevel && window->window_type != GDK_SURFACE_FOREIGN)
+  if (toplevel && window->surface_type != GDK_SURFACE_FOREIGN)
     {
       /* These are affected by window scale: */
       geom_mask = toplevel->last_geometry_hints_mask &
@@ -1619,23 +1619,23 @@ _gdk_x11_surface_set_window_scale (GdkSurface *window,
                                        geom_mask);
     }
 
-  if (window->window_type == GDK_SURFACE_FOREIGN)
+  if (window->surface_type == GDK_SURFACE_FOREIGN)
     XMoveWindow (GDK_SURFACE_XDISPLAY (window),
                  GDK_SURFACE_XID (window),
-                 window->x * impl->window_scale,
-                 window->y * impl->window_scale);
+                 window->x * impl->surface_scale,
+                 window->y * impl->surface_scale);
   else
     {
       if (impl->override_redirect)
         {
-          impl->unscaled_width = window->width * impl->window_scale;
-          impl->unscaled_height = window->height * impl->window_scale;
+          impl->unscaled_width = window->width * impl->surface_scale;
+          impl->unscaled_height = window->height * impl->surface_scale;
         }
 
       XResizeWindow (GDK_SURFACE_XDISPLAY (window),
                      GDK_SURFACE_XID (window),
-                     window->width * impl->window_scale,
-                     window->height * impl->window_scale);
+                     window->width * impl->surface_scale,
+                     window->height * impl->surface_scale);
     }
 
   gdk_surface_invalidate_rect (window, NULL, TRUE);
@@ -1803,7 +1803,7 @@ gdk_x11_surface_focus (GdkSurface *window,
   g_return_if_fail (GDK_IS_SURFACE (window));
 
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !SURFACE_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   display = GDK_SURFACE_DISPLAY (window);
@@ -1853,7 +1853,7 @@ gdk_x11_surface_set_type_hint (GdkSurface        *window,
   Atom atom;
   
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !SURFACE_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   display = gdk_surface_get_display (window);
@@ -1927,7 +1927,7 @@ gdk_x11_surface_get_type_hint (GdkSurface *window)
   g_return_val_if_fail (GDK_IS_SURFACE (window), GDK_SURFACE_TYPE_HINT_NORMAL);
 
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !SURFACE_IS_TOPLEVEL_OR_FOREIGN (window))
     return GDK_SURFACE_TYPE_HINT_NORMAL;
 
   type = GDK_SURFACE_TYPE_HINT_NORMAL;
@@ -2014,7 +2014,7 @@ gdk_x11_surface_set_modal_hint (GdkSurface *window,
 			       gboolean   modal)
 {
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !SURFACE_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   window->modal_hint = modal;
@@ -2034,7 +2034,7 @@ gdk_x11_surface_set_skip_taskbar_hint (GdkSurface *window,
   g_return_if_fail (GDK_SURFACE_TYPE (window) != GDK_SURFACE_CHILD);
   
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !SURFACE_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   toplevel = _gdk_x11_surface_get_toplevel (window);
@@ -2055,7 +2055,7 @@ gdk_x11_surface_set_skip_pager_hint (GdkSurface *window,
   g_return_if_fail (GDK_SURFACE_TYPE (window) != GDK_SURFACE_CHILD);
   
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !SURFACE_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   toplevel = _gdk_x11_surface_get_toplevel (window);
@@ -2076,7 +2076,7 @@ gdk_x11_surface_set_urgency_hint (GdkSurface *window,
   g_return_if_fail (GDK_SURFACE_TYPE (window) != GDK_SURFACE_CHILD);
   
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !SURFACE_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   toplevel = _gdk_x11_surface_get_toplevel (window);
@@ -2095,7 +2095,7 @@ gdk_x11_surface_set_geometry_hints (GdkSurface         *window,
   GdkToplevelX11 *toplevel;
 
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !SURFACE_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   toplevel = _gdk_x11_surface_get_toplevel (window);
@@ -2132,35 +2132,35 @@ gdk_x11_surface_set_geometry_hints (GdkSurface         *window,
   if (geom_mask & GDK_HINT_MIN_SIZE)
     {
       size_hints.flags |= PMinSize;
-      size_hints.min_width = geometry->min_width * impl->window_scale;
-      size_hints.min_height = geometry->min_height * impl->window_scale;
+      size_hints.min_width = geometry->min_width * impl->surface_scale;
+      size_hints.min_height = geometry->min_height * impl->surface_scale;
     }
   
   if (geom_mask & GDK_HINT_MAX_SIZE)
     {
       size_hints.flags |= PMaxSize;
-      size_hints.max_width = MAX (geometry->max_width, 1) * impl->window_scale;
-      size_hints.max_height = MAX (geometry->max_height, 1) * impl->window_scale;
+      size_hints.max_width = MAX (geometry->max_width, 1) * impl->surface_scale;
+      size_hints.max_height = MAX (geometry->max_height, 1) * impl->surface_scale;
     }
   
   if (geom_mask & GDK_HINT_BASE_SIZE)
     {
       size_hints.flags |= PBaseSize;
-      size_hints.base_width = geometry->base_width * impl->window_scale;
-      size_hints.base_height = geometry->base_height * impl->window_scale;
+      size_hints.base_width = geometry->base_width * impl->surface_scale;
+      size_hints.base_height = geometry->base_height * impl->surface_scale;
     }
   
   if (geom_mask & GDK_HINT_RESIZE_INC)
     {
       size_hints.flags |= PResizeInc;
-      size_hints.width_inc = geometry->width_inc * impl->window_scale;
-      size_hints.height_inc = geometry->height_inc * impl->window_scale;
+      size_hints.width_inc = geometry->width_inc * impl->surface_scale;
+      size_hints.height_inc = geometry->height_inc * impl->surface_scale;
     }
-  else if (impl->window_scale > 1)
+  else if (impl->surface_scale > 1)
     {
       size_hints.flags |= PResizeInc;
-      size_hints.width_inc = impl->window_scale;
-      size_hints.height_inc = impl->window_scale;
+      size_hints.width_inc = impl->surface_scale;
+      size_hints.height_inc = impl->surface_scale;
     }
 
   if (geom_mask & GDK_HINT_ASPECT)
@@ -2218,7 +2218,7 @@ gdk_surface_get_geometry_hints (GdkSurface      *window,
   *geom_mask = 0;
   
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !SURFACE_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   impl = GDK_SURFACE_IMPL_X11 (window->impl);
@@ -2236,22 +2236,22 @@ gdk_surface_get_geometry_hints (GdkSurface      *window,
   if (size_hints->flags & PMinSize)
     {
       *geom_mask |= GDK_HINT_MIN_SIZE;
-      geometry->min_width = size_hints->min_width / impl->window_scale;
-      geometry->min_height = size_hints->min_height / impl->window_scale;
+      geometry->min_width = size_hints->min_width / impl->surface_scale;
+      geometry->min_height = size_hints->min_height / impl->surface_scale;
     }
 
   if (size_hints->flags & PMaxSize)
     {
       *geom_mask |= GDK_HINT_MAX_SIZE;
-      geometry->max_width = MAX (size_hints->max_width, 1) / impl->window_scale;
-      geometry->max_height = MAX (size_hints->max_height, 1) / impl->window_scale;
+      geometry->max_width = MAX (size_hints->max_width, 1) / impl->surface_scale;
+      geometry->max_height = MAX (size_hints->max_height, 1) / impl->surface_scale;
     }
 
   if (size_hints->flags & PResizeInc)
     {
       *geom_mask |= GDK_HINT_RESIZE_INC;
-      geometry->width_inc = size_hints->width_inc / impl->window_scale;
-      geometry->height_inc = size_hints->height_inc / impl->window_scale;
+      geometry->width_inc = size_hints->width_inc / impl->surface_scale;
+      geometry->height_inc = size_hints->height_inc / impl->surface_scale;
     }
 
   if (size_hints->flags & PAspect)
@@ -2367,7 +2367,7 @@ gdk_x11_surface_set_title (GdkSurface   *window,
   g_return_if_fail (title != NULL);
 
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !SURFACE_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
   
   display = gdk_surface_get_display (window);
@@ -2398,7 +2398,7 @@ gdk_x11_surface_set_role (GdkSurface   *window,
   display = gdk_surface_get_display (window);
 
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !SURFACE_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   if (role)
@@ -2421,7 +2421,7 @@ gdk_x11_surface_set_startup_id (GdkSurface   *window,
   display = gdk_surface_get_display (window);
 
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !SURFACE_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   if (startup_id)
@@ -2439,7 +2439,7 @@ gdk_x11_surface_set_transient_for (GdkSurface *window,
 				  GdkSurface *parent)
 {
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !SURFACE_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   /* XSetTransientForHint() doesn't allow unsetting, so do it manually */
@@ -2490,13 +2490,13 @@ gdk_surface_x11_get_geometry (GdkSurface *window,
 		    &root, &tx, &ty, &twidth, &theight, &tborder_width, &tdepth);
       
       if (x)
-	*x = tx / impl->window_scale;
+	*x = tx / impl->surface_scale;
       if (y)
-	*y = ty / impl->window_scale;
+	*y = ty / impl->surface_scale;
       if (width)
-	*width = twidth / impl->window_scale;
+	*width = twidth / impl->surface_scale;
       if (height)
-	*height = theight / impl->window_scale;
+	*height = theight / impl->surface_scale;
     }
 }
 
@@ -2515,13 +2515,13 @@ gdk_surface_x11_get_root_coords (GdkSurface *window,
   XTranslateCoordinates (GDK_SURFACE_XDISPLAY (window),
                          GDK_SURFACE_XID (window),
                          GDK_SURFACE_XROOTWIN (window),
-                         x * impl->window_scale, y * impl->window_scale, &tx, &ty,
+                         x * impl->surface_scale, y * impl->surface_scale, &tx, &ty,
                          &child);
 
   if (root_x)
-    *root_x = tx / impl->window_scale;
+    *root_x = tx / impl->surface_scale;
   if (root_y)
-    *root_y = ty / impl->window_scale;
+    *root_y = ty / impl->surface_scale;
 }
 
 static void
@@ -2561,10 +2561,10 @@ gdk_x11_surface_get_frame_extents (GdkSurface    *window,
   impl = GDK_SURFACE_IMPL_X11 (window->impl);
 
   /* Refine our fallback answer a bit using local information */
-  rect->x = window->x * impl->window_scale;
-  rect->y = window->y * impl->window_scale;
-  rect->width = window->width * impl->window_scale;
-  rect->height = window->height * impl->window_scale;
+  rect->x = window->x * impl->surface_scale;
+  rect->y = window->y * impl->surface_scale;
+  rect->width = window->width * impl->surface_scale;
+  rect->height = window->height * impl->surface_scale;
 
   if (GDK_SURFACE_DESTROYED (window) || impl->override_redirect)
     return;
@@ -2688,10 +2688,10 @@ gdk_x11_surface_get_frame_extents (GdkSurface    *window,
      as well as round the size up when we divide by scale so that the returned
      size is guaranteed to cover the real pixels, but it may overshoot a bit
      in case the window is not positioned/sized according to the scale */
-  rect->width = (rect->width + rect->x % impl->window_scale + impl->window_scale - 1) / impl->window_scale;
-  rect->height = (rect->height + rect->y % impl->window_scale + impl->window_scale - 1) / impl->window_scale;
-  rect->x = rect->x / impl->window_scale;
-  rect->y = rect->y / impl->window_scale;
+  rect->width = (rect->width + rect->x % impl->surface_scale + impl->surface_scale - 1) / impl->surface_scale;
+  rect->height = (rect->height + rect->y % impl->surface_scale + impl->surface_scale - 1) / impl->surface_scale;
+  rect->x = rect->x / impl->surface_scale;
+  rect->y = rect->y / impl->surface_scale;
   gdk_x11_display_error_trap_pop_ignored (display);
 }
 
@@ -2794,14 +2794,14 @@ do_shape_combine_region (GdkSurface       *window,
       XRectangle *xrects = NULL;
 
       _gdk_x11_region_get_xrectangles (shape_region,
-                                       0, 0, impl->window_scale,
+                                       0, 0, impl->surface_scale,
                                        &xrects, &n_rects);
       
       XShapeCombineRectangles (GDK_SURFACE_XDISPLAY (window),
                                GDK_SURFACE_XID (window),
                                shape,
-                               offset_x * impl->window_scale,
-                               offset_y * impl->window_scale,
+                               offset_x * impl->surface_scale,
+                               offset_y * impl->surface_scale,
                                xrects, n_rects,
                                ShapeSet,
                                YXBanded);
@@ -2841,7 +2841,7 @@ gdk_x11_surface_set_accept_focus (GdkSurface *window,
       window->accept_focus = accept_focus;
 
       if (!GDK_SURFACE_DESTROYED (window) &&
-	  WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+	  SURFACE_IS_TOPLEVEL_OR_FOREIGN (window))
 	update_wm_hints (window, FALSE);
     }
 }
@@ -2858,7 +2858,7 @@ gdk_x11_surface_set_focus_on_map (GdkSurface *window,
       
       if ((!GDK_SURFACE_DESTROYED (window)) &&
 	  (!window->focus_on_map) &&
-	  WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+	  SURFACE_IS_TOPLEVEL_OR_FOREIGN (window))
 	gdk_x11_surface_set_user_time (window, 0);
     }
 }
@@ -2892,7 +2892,7 @@ gdk_x11_surface_set_user_time (GdkSurface *window,
   Window xid;
 
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !SURFACE_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   display = gdk_surface_get_display (window);
@@ -2943,7 +2943,7 @@ gdk_x11_surface_set_utf8_property  (GdkSurface *window,
 {
   GdkDisplay *display;
 
-  if (!WINDOW_IS_TOPLEVEL (window))
+  if (!SURFACE_IS_TOPLEVEL (window))
     return;
 
   display = gdk_surface_get_display (window);
@@ -2974,10 +2974,10 @@ gdk_x11_surface_set_shadow_width (GdkSurface *window,
   GdkSurfaceImplX11 *impl = GDK_SURFACE_IMPL_X11 (window->impl);
   Atom frame_extents;
   gulong data[4] = {
-    left * impl->window_scale,
-    right * impl->window_scale,
-    top * impl->window_scale,
-    bottom * impl->window_scale
+    left * impl->surface_scale,
+    right * impl->surface_scale,
+    top * impl->surface_scale,
+    bottom * impl->surface_scale
   };
 
   frame_extents = gdk_x11_get_xatom_by_name_for_display (gdk_surface_get_display (window),
@@ -3135,7 +3135,7 @@ gdk_x11_surface_set_icon_list (GdkSurface *window,
   gint i, n;
 
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !SURFACE_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   display = gdk_surface_get_display (window);
@@ -3217,7 +3217,7 @@ gdk_x11_surface_set_icon_name (GdkSurface   *window,
   GdkDisplay *display;
 
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !SURFACE_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   display = gdk_surface_get_display (window);
@@ -3252,7 +3252,7 @@ static void
 gdk_x11_surface_iconify (GdkSurface *window)
 {
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !SURFACE_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   if (GDK_SURFACE_IS_MAPPED (window))
@@ -3264,7 +3264,7 @@ gdk_x11_surface_iconify (GdkSurface *window)
   else
     {
       /* Flip our client side flag, the real work happens on map. */
-      gdk_synthesize_window_state (window,
+      gdk_synthesize_surface_state (window,
                                    0,
                                    GDK_SURFACE_STATE_ICONIFIED);
       gdk_wmspec_change_state (TRUE, window,
@@ -3277,7 +3277,7 @@ static void
 gdk_x11_surface_deiconify (GdkSurface *window)
 {
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !SURFACE_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   if (GDK_SURFACE_IS_MAPPED (window))
@@ -3290,7 +3290,7 @@ gdk_x11_surface_deiconify (GdkSurface *window)
   else
     {
       /* Flip our client side flag, the real work happens on map. */
-      gdk_synthesize_window_state (window,
+      gdk_synthesize_surface_state (window,
                                    GDK_SURFACE_STATE_ICONIFIED,
                                    0);
       gdk_wmspec_change_state (FALSE, window,
@@ -3303,7 +3303,7 @@ static void
 gdk_x11_surface_stick (GdkSurface *window)
 {
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !SURFACE_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   if (GDK_SURFACE_IS_MAPPED (window))
@@ -3341,7 +3341,7 @@ gdk_x11_surface_stick (GdkSurface *window)
   else
     {
       /* Flip our client side flag, the real work happens on map. */
-      gdk_synthesize_window_state (window,
+      gdk_synthesize_surface_state (window,
                                    0,
                                    GDK_SURFACE_STATE_STICKY);
     }
@@ -3351,7 +3351,7 @@ static void
 gdk_x11_surface_unstick (GdkSurface *window)
 {
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !SURFACE_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   if (GDK_SURFACE_IS_MAPPED (window))
@@ -3366,7 +3366,7 @@ gdk_x11_surface_unstick (GdkSurface *window)
   else
     {
       /* Flip our client side flag, the real work happens on map. */
-      gdk_synthesize_window_state (window,
+      gdk_synthesize_surface_state (window,
                                    GDK_SURFACE_STATE_STICKY,
                                    0);
 
@@ -3377,7 +3377,7 @@ static void
 gdk_x11_surface_maximize (GdkSurface *window)
 {
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !SURFACE_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   if (GDK_SURFACE_IS_MAPPED (window))
@@ -3385,7 +3385,7 @@ gdk_x11_surface_maximize (GdkSurface *window)
 			     g_intern_static_string ("_NET_WM_STATE_MAXIMIZED_VERT"),
 			     g_intern_static_string ("_NET_WM_STATE_MAXIMIZED_HORZ"));
   else
-    gdk_synthesize_window_state (window,
+    gdk_synthesize_surface_state (window,
 				 0,
 				 GDK_SURFACE_STATE_MAXIMIZED);
 }
@@ -3394,7 +3394,7 @@ static void
 gdk_x11_surface_unmaximize (GdkSurface *window)
 {
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !SURFACE_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   if (GDK_SURFACE_IS_MAPPED (window))
@@ -3402,7 +3402,7 @@ gdk_x11_surface_unmaximize (GdkSurface *window)
 			     g_intern_static_string ("_NET_WM_STATE_MAXIMIZED_VERT"),
 			     g_intern_static_string ("_NET_WM_STATE_MAXIMIZED_HORZ"));
   else
-    gdk_synthesize_window_state (window,
+    gdk_synthesize_surface_state (window,
 				 GDK_SURFACE_STATE_MAXIMIZED,
 				 0);
 }
@@ -3411,7 +3411,7 @@ static void
 gdk_x11_surface_apply_fullscreen_mode (GdkSurface *window)
 {
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !SURFACE_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   /* _NET_WM_FULLSCREEN_MONITORS gives an indication to the window manager as
@@ -3503,7 +3503,7 @@ static void
 gdk_x11_surface_fullscreen (GdkSurface *window)
 {
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !SURFACE_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   if (GDK_SURFACE_IS_MAPPED (window))
@@ -3518,7 +3518,7 @@ gdk_x11_surface_fullscreen (GdkSurface *window)
 	gdk_x11_surface_apply_fullscreen_mode (window);
     }
   else
-    gdk_synthesize_window_state (window,
+    gdk_synthesize_surface_state (window,
                                  0,
                                  GDK_SURFACE_STATE_FULLSCREEN);
 }
@@ -3530,7 +3530,7 @@ gdk_x11_surface_fullscreen_on_monitor (GdkSurface  *window,
   GdkRectangle geom;
 
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !SURFACE_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   gdk_monitor_get_geometry (monitor, &geom);
@@ -3544,7 +3544,7 @@ static void
 gdk_x11_surface_unfullscreen (GdkSurface *window)
 {
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !SURFACE_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   if (GDK_SURFACE_IS_MAPPED (window))
@@ -3553,7 +3553,7 @@ gdk_x11_surface_unfullscreen (GdkSurface *window)
                              NULL);
 
   else
-    gdk_synthesize_window_state (window,
+    gdk_synthesize_surface_state (window,
 				 GDK_SURFACE_STATE_FULLSCREEN,
 				 0);
 }
@@ -3565,7 +3565,7 @@ gdk_x11_surface_set_keep_above (GdkSurface *window,
   g_return_if_fail (GDK_IS_SURFACE (window));
 
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !SURFACE_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   if (GDK_SURFACE_IS_MAPPED (window))
@@ -3579,7 +3579,7 @@ gdk_x11_surface_set_keep_above (GdkSurface *window,
 			       NULL);
     }
   else
-    gdk_synthesize_window_state (window,
+    gdk_synthesize_surface_state (window,
     				 setting ? GDK_SURFACE_STATE_BELOW : GDK_SURFACE_STATE_ABOVE,
 				 setting ? GDK_SURFACE_STATE_ABOVE : 0);
 }
@@ -3590,7 +3590,7 @@ gdk_x11_surface_set_keep_below (GdkSurface *window, gboolean setting)
   g_return_if_fail (GDK_IS_SURFACE (window));
 
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !SURFACE_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   if (GDK_SURFACE_IS_MAPPED (window))
@@ -3604,7 +3604,7 @@ gdk_x11_surface_set_keep_below (GdkSurface *window, gboolean setting)
 			       NULL);
     }
   else
-    gdk_synthesize_window_state (window,
+    gdk_synthesize_surface_state (window,
 				 setting ? GDK_SURFACE_STATE_ABOVE : GDK_SURFACE_STATE_BELOW,
 				 setting ? GDK_SURFACE_STATE_BELOW : 0);
 }
@@ -3615,7 +3615,7 @@ gdk_x11_surface_get_group (GdkSurface *window)
   GdkToplevelX11 *toplevel;
   
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !SURFACE_IS_TOPLEVEL (window))
     return NULL;
   
   toplevel = _gdk_x11_surface_get_toplevel (window);
@@ -3635,7 +3635,7 @@ gdk_x11_surface_set_group (GdkSurface *window,
 
   if (GDK_SURFACE_DESTROYED (window) ||
       (leader != NULL && GDK_SURFACE_DESTROYED (leader)) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !SURFACE_IS_TOPLEVEL (window))
     return;
 
   toplevel = _gdk_x11_surface_get_toplevel (window);
@@ -3741,7 +3741,7 @@ gdk_x11_surface_set_decorations (GdkSurface      *window,
   MotifWmHints hints;
 
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !SURFACE_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
   
   /* initialize to zero to avoid writing uninitialized data to socket */
@@ -3760,7 +3760,7 @@ gdk_x11_surface_get_decorations(GdkSurface       *window,
   gboolean result = FALSE;
 
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !SURFACE_IS_TOPLEVEL_OR_FOREIGN (window))
     return FALSE;
   
   hints = gdk_surface_get_mwm_hints (window);
@@ -3789,7 +3789,7 @@ gdk_x11_surface_set_functions (GdkSurface    *window,
   g_return_if_fail (GDK_IS_SURFACE (window));
 
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !SURFACE_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
   
   /* initialize to zero to avoid writing uninitialized data to socket */
@@ -3886,8 +3886,8 @@ wmspec_send_message (GdkDisplay *display,
   xclient.message_type =
     gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_MOVERESIZE");
   xclient.format = 32;
-  xclient.data.l[0] = root_x * impl->window_scale;
-  xclient.data.l[1] = root_y * impl->window_scale;
+  xclient.data.l[0] = root_x * impl->surface_scale;
+  xclient.data.l[1] = root_y * impl->surface_scale;
   xclient.data.l[2] = action;
   xclient.data.l[3] = button;
   xclient.data.l[4] = 1;  /* source indication */
@@ -4284,8 +4284,8 @@ _gdk_x11_moveresize_handle_event (const XEvent *event)
         break;
 
       update_pos (mv_resize,
-                  event->xmotion.x_root / impl->window_scale,
-                  event->xmotion.y_root / impl->window_scale);
+                  event->xmotion.x_root / impl->surface_scale,
+                  event->xmotion.y_root / impl->surface_scale);
 
       /* This should never be triggered in normal cases, but in the
        * case where the drag started without an implicit grab being
@@ -4296,22 +4296,22 @@ _gdk_x11_moveresize_handle_event (const XEvent *event)
       if ((event->xmotion.state & button_mask) == 0)
         {
           check_maximize (mv_resize,
-                          event->xmotion.x_root / impl->window_scale,
-                          event->xmotion.y_root / impl->window_scale);
+                          event->xmotion.x_root / impl->surface_scale,
+                          event->xmotion.y_root / impl->surface_scale);
           finish_drag (mv_resize);
         }
       break;
 
     case ButtonRelease:
       update_pos (mv_resize,
-                  event->xbutton.x_root / impl->window_scale,
-                  event->xbutton.y_root / impl->window_scale);
+                  event->xbutton.x_root / impl->surface_scale,
+                  event->xbutton.y_root / impl->surface_scale);
 
       if (event->xbutton.button == mv_resize->moveresize_button)
         {
           check_maximize (mv_resize,
-                          event->xmotion.x_root / impl->window_scale,
-                          event->xmotion.y_root / impl->window_scale);
+                          event->xmotion.x_root / impl->surface_scale,
+                          event->xmotion.y_root / impl->surface_scale);
           finish_drag (mv_resize);
         }
       break;
@@ -4326,24 +4326,24 @@ _gdk_x11_moveresize_handle_event (const XEvent *event)
         switch (ev->evtype)
           {
           case XI_Motion:
-            update_pos (mv_resize, xev->root_x / impl->window_scale, xev->root_y / impl->window_scale);
+            update_pos (mv_resize, xev->root_x / impl->surface_scale, xev->root_y / impl->surface_scale);
             state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
             if ((state & button_mask) == 0)
               {
                 check_maximize (mv_resize,
-                                xev->root_x / impl->window_scale,
-                                xev->root_y / impl->window_scale);
+                                xev->root_x / impl->surface_scale,
+                                xev->root_y / impl->surface_scale);
                 finish_drag (mv_resize);
               }
             break;
 
           case XI_ButtonRelease:
-            update_pos (mv_resize, xev->root_x / impl->window_scale, xev->root_y / impl->window_scale);
+            update_pos (mv_resize, xev->root_x / impl->surface_scale, xev->root_y / impl->surface_scale);
             if (xev->detail == mv_resize->moveresize_button)
               {
                 check_maximize (mv_resize,
-                                xev->root_x / impl->window_scale,
-                                xev->root_y / impl->window_scale);
+                                xev->root_x / impl->surface_scale,
+                                xev->root_y / impl->surface_scale);
                 finish_drag (mv_resize);
               }
             break;
@@ -4571,7 +4571,7 @@ gdk_x11_surface_begin_resize_drag (GdkSurface     *window,
                                   guint32        timestamp)
 {
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !SURFACE_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   /* Avoid EWMH for touch devices */
@@ -4591,7 +4591,7 @@ gdk_x11_surface_begin_move_drag (GdkSurface *window,
 {
   gint direction;
 
-  if (GDK_SURFACE_DESTROYED (window) || !WINDOW_IS_TOPLEVEL (window))
+  if (GDK_SURFACE_DESTROYED (window) || !SURFACE_IS_TOPLEVEL (window))
     return;
 
   if (button == 0)
@@ -4637,7 +4637,7 @@ gdk_x11_surface_set_opacity (GdkSurface *window,
   g_return_if_fail (GDK_IS_SURFACE (window));
 
   if (GDK_SURFACE_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !SURFACE_IS_TOPLEVEL (window))
     return;
 
   display = gdk_surface_get_display (window);
@@ -4747,7 +4747,7 @@ gdk_x11_surface_get_scale_factor (GdkSurface *window)
   if (GDK_SURFACE_DESTROYED (window))
     return 1;
 
-  return impl->window_scale;
+  return impl->surface_scale;
 }
 
 /**
@@ -4800,10 +4800,10 @@ gdk_x11_surface_set_opaque_region (GdkSurface      *window,
         {
           cairo_rectangle_int_t rect;
           cairo_region_get_rectangle (region, i, &rect);
-          data[i*4+0] = rect.x * impl->window_scale;
-          data[i*4+1] = rect.y * impl->window_scale;
-          data[i*4+2] = rect.width * impl->window_scale;
-          data[i*4+3] = rect.height * impl->window_scale;
+          data[i*4+0] = rect.x * impl->surface_scale;
+          data[i*4+1] = rect.y * impl->surface_scale;
+          data[i*4+2] = rect.width * impl->surface_scale;
+          data[i*4+3] = rect.height * impl->surface_scale;
         }
     }
   else
@@ -4860,8 +4860,8 @@ gdk_x11_surface_show_window_menu (GdkSurface *window,
   xclient.window = GDK_SURFACE_XID (window);
   xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "_GTK_SHOW_WINDOW_MENU");
   xclient.data.l[0] = device_id;
-  xclient.data.l[1] = x_root * impl->window_scale;
-  xclient.data.l[2] = y_root * impl->window_scale;
+  xclient.data.l[1] = x_root * impl->surface_scale;
+  xclient.data.l[2] = y_root * impl->surface_scale;
   xclient.format = 32;
 
   XSendEvent (GDK_DISPLAY_XDISPLAY (display), GDK_SURFACE_XROOTWIN (window), False,

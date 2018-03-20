@@ -96,7 +96,7 @@ gdk_display_get_n_monitors
 gdk_display_get_monitor
 gdk_display_get_primary_monitor
 gdk_display_get_monitor_at_point
-gdk_display_get_monitor_at_window
+gdk_display_get_monitor_at_surface
 gdk_display_get_clipboard
 gdk_display_get_primary_clipboard
 gdk_display_get_setting
@@ -184,7 +184,7 @@ gdk_surface_new_popup
 gdk_surface_new_temp
 gdk_surface_new_child
 gdk_surface_destroy
-gdk_surface_get_window_type
+gdk_surface_get_surface_type
 gdk_surface_get_display
 gdk_surface_show
 gdk_surface_show_unraised
@@ -536,15 +536,15 @@ gdk_device_ungrab
 gdk_device_get_state
 gdk_device_get_position
 gdk_device_get_position_double
-gdk_device_get_window_at_position
-gdk_device_get_window_at_position_double
+gdk_device_get_surface_at_position
+gdk_device_get_surface_at_position_double
 gdk_device_get_history
 gdk_device_free_history
 GdkTimeCoord
 gdk_device_get_axis
 gdk_device_list_axes
 gdk_device_get_axis_value
-gdk_device_get_last_event_window
+gdk_device_get_last_event_surface
 
 <SUBSECTION>
 gdk_device_tool_get_serial
@@ -804,9 +804,9 @@ gdk_drag_context_get_suggested_action
 gdk_drag_context_get_selected_action
 gdk_drag_context_get_formats
 gdk_drag_context_get_device
-gdk_drag_context_get_source_window
-gdk_drag_context_get_dest_window
-gdk_drag_context_get_drag_window
+gdk_drag_context_get_source_surface
+gdk_drag_context_get_dest_surface
+gdk_drag_context_get_drag_surface
 gdk_drag_context_set_hotspot
 
 <SUBSECTION Standard>
@@ -853,7 +853,7 @@ gdk_x11_display_error_trap_push
 gdk_x11_display_error_trap_pop
 gdk_x11_display_error_trap_pop_ignored
 gdk_x11_display_set_cursor_theme
-gdk_x11_display_set_window_scale
+gdk_x11_display_set_surface_scale
 gdk_x11_display_get_glx_version
 gdk_x11_register_standard_event_type
 gdk_x11_screen_get_screen_number
@@ -1116,7 +1116,7 @@ gdk_frame_timings_get_type
 <FILE>gdkdrawcontext</FILE>
 GdkDrawContext
 gdk_draw_context_get_display
-gdk_draw_context_get_window
+gdk_draw_context_get_surface
 
 <SUBSECTION Standard>
 GDK_DRAW_CONTEXT
@@ -1132,7 +1132,7 @@ gdk_draw_context_get_type
 <FILE>gdkglcontext</FILE>
 GdkGLContext
 gdk_gl_context_get_display
-gdk_gl_context_get_window
+gdk_gl_context_get_surface
 gdk_gl_context_get_shared_context
 gdk_gl_context_get_version
 
@@ -1197,7 +1197,7 @@ GDK_IS_MONITOR
 <SECTION>
 <FILE>gdkdrawingcontext</FILE>
 GdkDrawingContext
-gdk_drawing_context_get_window
+gdk_drawing_context_get_surface
 gdk_drawing_context_get_clip
 gdk_drawing_context_get_cairo_context
 gdk_drawing_context_is_valid

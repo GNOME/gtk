@@ -80,7 +80,7 @@ main (int argc, char **argv)
   png_file = argv[2];
 
   window = gdk_surface_new_toplevel (gdk_display_get_default(), 10 , 10);
-  renderer = gsk_renderer_new_for_window (window);
+  renderer = gsk_renderer_new_for_surface (window);
 
   g_test_message ("Node file: '%s'\n", node_file);
   g_test_message ("PNG file: '%s'\n", png_file);

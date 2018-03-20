@@ -250,7 +250,7 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
                                     GError           **error)
 {
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
-  GdkSurface *window = gdk_draw_context_get_window (GDK_DRAW_CONTEXT (context));
+  GdkSurface *window = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
   VkSurfaceCapabilitiesKHR capabilities;
   VkCompositeAlphaFlagBitsKHR composite_alpha;
   VkSwapchainKHR new_swapchain;

@@ -265,7 +265,7 @@ gdk_gl_context_real_realize (GdkGLContext  *self,
 static cairo_region_t *
 gdk_gl_context_real_get_damage (GdkGLContext *context)
 {
-  GdkSurface *window = gdk_draw_context_get_window (GDK_DRAW_CONTEXT (context));
+  GdkSurface *window = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
 
   return cairo_region_create_rectangle (&(GdkRectangle) {
                                             0, 0,
@@ -295,7 +295,7 @@ gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
   cairo_region_union (region, damage);
   cairo_region_destroy (damage);
 
-  window = gdk_draw_context_get_window (draw_context);
+  window = gdk_draw_context_get_surface (draw_context);
   ww = gdk_surface_get_width (window) * gdk_surface_get_scale_factor (window);
   wh = gdk_surface_get_height (window) * gdk_surface_get_scale_factor (window);
 
@@ -886,7 +886,7 @@ gdk_gl_context_get_display (GdkGLContext *context)
 }
 
 /**
- * gdk_gl_context_get_window:
+ * gdk_gl_context_get_surface:
  * @context: a #GdkGLContext
  *
  * Retrieves the #GdkSurface used by the @context.
@@ -894,11 +894,11 @@ gdk_gl_context_get_display (GdkGLContext *context)
  * Returns: (nullable) (transfer none): a #GdkSurface or %NULL
  */
 GdkSurface *
-gdk_gl_context_get_window (GdkGLContext *context)
+gdk_gl_context_get_surface (GdkGLContext *context)
 {
   g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), NULL);
 
-  return gdk_draw_context_get_window (GDK_DRAW_CONTEXT (context));
+  return gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
 }
 
 /**

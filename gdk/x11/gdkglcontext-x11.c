@@ -125,7 +125,7 @@ gdk_x11_gl_context_end_frame (GdkDrawContext *draw_context,
 {
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
   GdkX11GLContext *context_x11 = GDK_X11_GL_CONTEXT (context);
-  GdkSurface *window = gdk_gl_context_get_window (context);
+  GdkSurface *window = gdk_gl_context_get_surface (context);
   GdkDisplay *display = gdk_gl_context_get_display (context);
   Display *dpy = gdk_x11_display_get_xdisplay (display);
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
@@ -194,7 +194,7 @@ gdk_x11_gl_context_get_damage (GdkGLContext *context)
   GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
   Display *dpy = gdk_x11_display_get_xdisplay (display);
-  GdkSurface *window = gdk_draw_context_get_window (GDK_DRAW_CONTEXT (context));
+  GdkSurface *window = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
   unsigned int buffer_age = 0;
 
   if (display_x11->has_glx_buffer_age)
@@ -372,7 +372,7 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *paint_context,
   int n_rects, i;
   GdkSurface *window;
   int unscaled_window_height;
-  int window_scale;
+  int surface_scale;
   unsigned int texture_id;
   gboolean use_texture_rectangle;
   guint target;
@@ -400,8 +400,8 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *paint_context,
 
   GDK_DISPLAY_NOTE (GDK_DISPLAY (display_x11), OPENGL, g_message ("Using GLX_EXT_texture_from_pixmap to draw surface"));
 
-  window = gdk_gl_context_get_window (paint_context)->impl_window;
-  window_scale = gdk_surface_get_scale_factor (window);
+  window = gdk_gl_context_get_surface (paint_context)->impl_surface;
+  surface_scale = gdk_surface_get_scale_factor (window);
   gdk_surface_get_unscaled_size (window, NULL, &unscaled_window_height);
 
   sx = sy = 1;
@@ -430,8 +430,8 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *paint_context,
 #define FLIP_Y(_y) (unscaled_window_height - (_y))
 
   cairo_region_get_extents (region, &rect);
-  glScissor (rect.x * window_scale, FLIP_Y((rect.y + rect.height) * window_scale),
-             rect.width * window_scale, rect.height * window_scale);
+  glScissor (rect.x * surface_scale, FLIP_Y((rect.y + rect.height) * surface_scale),
+             rect.width * surface_scale, rect.height * surface_scale);
 
   for (i = 0; i < n_rects; i++)
     {
@@ -457,8 +457,8 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *paint_context,
 
       {
         GdkTexturedQuad quad = {
-          rect.x * window_scale, FLIP_Y(rect.y * window_scale),
-          (rect.x + rect.width) * window_scale, FLIP_Y((rect.y + rect.height) * window_scale),
+          rect.x * surface_scale, FLIP_Y(rect.y * surface_scale),
+          (rect.x + rect.width) * surface_scale, FLIP_Y((rect.y + rect.height) * surface_scale),
           uscale * src_x, vscale * src_y,
           uscale * (src_x + src_width), vscale * (src_y + src_height),
         };
@@ -570,7 +570,7 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
   gboolean debug_bit, compat_bit, legacy_bit, es_bit;
   int major, minor, flags;
 
-  window = gdk_gl_context_get_window (context);
+  window = gdk_gl_context_get_surface (context);
   display = gdk_surface_get_display (window);
   dpy = gdk_x11_display_get_xdisplay (display);
   context_x11 = GDK_X11_GL_CONTEXT (context);
@@ -669,7 +669,7 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
 
   xvisinfo = find_xvisinfo_for_fbconfig (display, context_x11->glx_config);
 
-  info = get_glx_drawable_info (window->impl_window);
+  info = get_glx_drawable_info (window->impl_surface);
   if (info == NULL)
     {
       XSetWindowAttributes attrs;
@@ -698,7 +698,7 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
       if (GDK_X11_DISPLAY (display)->glx_version >= 13)
         {
           info->glx_drawable = glXCreateWindow (dpy, context_x11->glx_config,
-                                                gdk_x11_surface_get_xid (window->impl_window),
+                                                gdk_x11_surface_get_xid (window->impl_surface),
                                                 NULL);
           info->dummy_glx = glXCreateWindow (dpy, context_x11->glx_config, info->dummy_xwin, NULL);
         }
@@ -717,12 +717,12 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
           return FALSE;
         }
 
-      set_glx_drawable_info (window->impl_window, info);
+      set_glx_drawable_info (window->impl_surface, info);
     }
 
   XFree (xvisinfo);
 
-  context_x11->attached_drawable = info->glx_drawable ? info->glx_drawable : gdk_x11_surface_get_xid (window->impl_window);
+  context_x11->attached_drawable = info->glx_drawable ? info->glx_drawable : gdk_x11_surface_get_xid (window->impl_surface);
   context_x11->unattached_drawable = info->dummy_glx ? info->dummy_glx : info->dummy_xwin;
 
   context_x11->is_direct = glXIsDirect (dpy, context_x11->glx_context);

@@ -585,7 +585,7 @@ find_window_for_mouse_event (GdkSurface* reported_window,
   POINT pt;
   GdkDisplay *display;
   GdkDeviceManagerWin32 *device_manager;
-  GdkSurface *event_window;
+  GdkSurface *event_surface;
   HWND hwnd;
   RECT rect;
   GdkDeviceGrabInfo *grab;
@@ -600,10 +600,10 @@ find_window_for_mouse_event (GdkSurface* reported_window,
   pt = msg->pt;
 
   if (!grab->owner_events)
-    event_window = grab->native_window;
+    event_surface = grab->native_surface;
   else
     {
-      event_window = NULL;
+      event_surface = NULL;
       hwnd = WindowFromPoint (pt);
       if (hwnd != NULL)
 	{
@@ -612,19 +612,19 @@ find_window_for_mouse_event (GdkSurface* reported_window,
 	  ScreenToClient (hwnd, &client_pt);
 	  GetClientRect (hwnd, &rect);
 	  if (PtInRect (&rect, client_pt))
-	    event_window = gdk_win32_handle_table_lookup (hwnd);
+	    event_surface = gdk_win32_handle_table_lookup (hwnd);
 	}
-      if (event_window == NULL)
-	event_window = grab->native_window;
+      if (event_surface == NULL)
+	event_surface = grab->native_surface;
     }
 
   /* need to also adjust the coordinates to the new window */
-  ScreenToClient (GDK_SURFACE_HWND (event_window), &pt);
+  ScreenToClient (GDK_SURFACE_HWND (event_surface), &pt);
 
   /* ATTENTION: need to update client coords */
   msg->lParam = MAKELPARAM (pt.x, pt.y);
 
-  return event_window;
+  return event_surface;
 }
 
 static void
@@ -891,8 +891,8 @@ _gdk_win32_print_event (const GdkEvent *event)
 		 event->dnd.context,
 		 _gdk_win32_drag_protocol_to_string (event->dnd.context->protocol),
 		 event->dnd.context->is_source ? "SOURCE" : "DEST",
-		 event->dnd.context->source_window == NULL ? NULL : GDK_SURFACE_HWND (event->dnd.context->source_window),
-		 event->dnd.context->dest_window == NULL ? NULL : GDK_SURFACE_HWND (event->dnd.context->dest_window));
+		 event->dnd.context->source_surface == NULL ? NULL : GDK_SURFACE_HWND (event->dnd.context->source_surface),
+		 event->dnd.context->dest_surface == NULL ? NULL : GDK_SURFACE_HWND (event->dnd.context->dest_surface));
       break;
     case GDK_SCROLL:
       g_print ("(%.4g,%.4g) (%.4g,%.4g) %s ",
@@ -907,8 +907,8 @@ _gdk_win32_print_event (const GdkEvent *event)
       break;
     case GDK_SURFACE_STATE:
       g_print ("%s: %s",
-	       _gdk_win32_surface_state_to_string (event->window_state.changed_mask),
-	       _gdk_win32_surface_state_to_string (event->window_state.new_window_state));
+	       _gdk_win32_surface_state_to_string (event->surface_state.changed_mask),
+	       _gdk_win32_surface_state_to_string (event->surface_state.new_surface_state));
     case GDK_GRAB_BROKEN:
       g_print ("%s %s %p",
 	       (event->grab_broken.keyboard ? "KEYBOARD" : "POINTER"),
@@ -1233,7 +1233,7 @@ send_crossing_event (GdkDisplay                 *display,
       mode != GDK_CROSSING_UNGRAB)
     {
       /* !owner_event => only report events wrt grab window, ignore rest */
-      if ((GdkSurface *)window != grab->native_window)
+      if ((GdkSurface *)window != grab->native_surface)
 	return;
     }
 
@@ -1244,10 +1244,10 @@ send_crossing_event (GdkDisplay                 *display,
   event->crossing.window = window;
   event->crossing.subwindow = subwindow;
   event->crossing.time = _gdk_win32_get_next_tick (time_);
-  event->crossing.x = pt.x / impl->window_scale;
-  event->crossing.y = pt.y / impl->window_scale;
-  event->crossing.x_root = (screen_pt->x + _gdk_offset_x) / impl->window_scale;
-  event->crossing.y_root = (screen_pt->y + _gdk_offset_y) / impl->window_scale;
+  event->crossing.x = pt.x / impl->surface_scale;
+  event->crossing.y = pt.y / impl->surface_scale;
+  event->crossing.x_root = (screen_pt->x + _gdk_offset_x) / impl->surface_scale;
+  event->crossing.y_root = (screen_pt->y + _gdk_offset_y) / impl->surface_scale;
   event->crossing.mode = mode;
   event->crossing.detail = notify_type;
   event->crossing.mode = mode;
@@ -1265,7 +1265,7 @@ static GdkSurface *
 get_native_parent (GdkSurface *window)
 {
   if (window->parent != NULL)
-    return window->parent->impl_window;
+    return window->parent->impl_surface;
   return NULL;
 }
 
@@ -1534,12 +1534,12 @@ gboolean
 _gdk_win32_get_window_rect (GdkSurface *window,
                             RECT      *rect)
 {
-  GdkSurfaceImplWin32 *window_impl;
+  GdkSurfaceImplWin32 *surface_impl;
   RECT client_rect;
   POINT point;
   HWND hwnd;
 
-  window_impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
+  surface_impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
 
   hwnd = GDK_SURFACE_HWND (window);
 
@@ -1551,8 +1551,8 @@ _gdk_win32_get_window_rect (GdkSurface *window,
   if (gdk_surface_get_parent (window) == NULL)
     {
       ClientToScreen (hwnd, &point);
-      point.x += _gdk_offset_x * window_impl->window_scale;
-      point.y += _gdk_offset_y * window_impl->window_scale;
+      point.x += _gdk_offset_x * surface_impl->surface_scale;
+      point.y += _gdk_offset_y * surface_impl->surface_scale;
     }
 
   rect->left = point.x;
@@ -1560,7 +1560,7 @@ _gdk_win32_get_window_rect (GdkSurface *window,
   rect->right = point.x + client_rect.right - client_rect.left;
   rect->bottom = point.y + client_rect.bottom - client_rect.top;
 
-  return !window_impl->inhibit_configure;
+  return !surface_impl->inhibit_configure;
 }
 
 void
@@ -1571,10 +1571,10 @@ _gdk_win32_do_emit_configure_event (GdkSurface *window,
 
   impl->unscaled_width = rect.right - rect.left;
   impl->unscaled_height = rect.bottom - rect.top;
-  window->width = (impl->unscaled_width + impl->window_scale - 1) / impl->window_scale;
-  window->height = (impl->unscaled_height + impl->window_scale - 1) / impl->window_scale;
-  window->x = rect.left / impl->window_scale;
-  window->y = rect.top / impl->window_scale;
+  window->width = (impl->unscaled_width + impl->surface_scale - 1) / impl->surface_scale;
+  window->height = (impl->unscaled_height + impl->surface_scale - 1) / impl->surface_scale;
+  window->x = rect.left / impl->surface_scale;
+  window->y = rect.top / impl->surface_scale;
 
   _gdk_surface_update_size (window);
 
@@ -1694,7 +1694,7 @@ handle_wm_paint (MSG        *msg,
       return;
     }
 
-  update_region = _gdk_win32_hrgn_to_region (hrgn, impl->window_scale);
+  update_region = _gdk_win32_hrgn_to_region (hrgn, impl->surface_scale);
   if (!cairo_region_is_empty (update_region))
     _gdk_surface_invalidate_for_expose (window, update_region);
   cairo_region_destroy (update_region);
@@ -1793,8 +1793,8 @@ handle_nchittest (HWND hwnd,
 
   /* If it's inside the rect, return FALSE and let DefWindowProc() handle it */
   if (cairo_region_contains_point (window->input_shape,
-                                   rect.left / impl->window_scale,
-                                   rect.top / impl->window_scale))
+                                   rect.left / impl->surface_scale,
+                                   rect.top / impl->surface_scale))
     return FALSE;
 
   /* Otherwise override DefWindowProc() and tell WM that the point is not
@@ -1815,7 +1815,7 @@ handle_dpi_changed (GdkSurface *window,
   GdkDevice *device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
   RECT *rect = (RECT *)msg->lParam;
   GdkEvent *event;
-  guint old_scale = impl->window_scale;
+  guint old_scale = impl->surface_scale;
 
   /* MSDN for WM_DPICHANGED: dpi_x == dpi_y here, so LOWORD (msg->wParam) == HIWORD (msg->wParam) */
   guint dpi = LOWORD (msg->wParam);
@@ -1824,10 +1824,10 @@ handle_dpi_changed (GdkSurface *window,
   if (win32_display->has_fixed_scale)
     return;
 
-  impl->window_scale = dpi / USER_DEFAULT_SCREEN_DPI;
+  impl->surface_scale = dpi / USER_DEFAULT_SCREEN_DPI;
 
   /* Don't bother if scales did not change in the end */
-  if (old_scale == impl->window_scale)
+  if (old_scale == impl->surface_scale)
     return;
 
   if (!IsIconic (msg->hwnd) &&
@@ -1835,21 +1835,21 @@ handle_dpi_changed (GdkSurface *window,
     {
       GdkMonitor *monitor;
 
-      monitor = gdk_display_get_monitor_at_window (display, window);
-      gdk_monitor_set_scale_factor (monitor, impl->window_scale);
+      monitor = gdk_display_get_monitor_at_surface (display, window);
+      gdk_monitor_set_scale_factor (monitor, impl->surface_scale);
 
       if (impl->layered)
         {
           /* We only need to set the cairo surface device scale here ourselves for layered windows */
           if (impl->cache_surface != NULL)
             cairo_surface_set_device_scale (impl->cache_surface,
-                                            impl->window_scale,
-                                            impl->window_scale);
+                                            impl->surface_scale,
+                                            impl->surface_scale);
 
           if (impl->cairo_surface != NULL)
             cairo_surface_set_device_scale (impl->cairo_surface,
-                                            impl->window_scale,
-                                            impl->window_scale);
+                                            impl->surface_scale,
+                                            impl->surface_scale);
         }
     }
 
@@ -1878,10 +1878,10 @@ generate_button_event (GdkEventType      type,
 
   event->button.window = window;
   event->button.time = _gdk_win32_get_next_tick (msg->time);
-  event->button.x = current_x = (gint16) GET_X_LPARAM (msg->lParam) / impl->window_scale;
-  event->button.y = current_y = (gint16) GET_Y_LPARAM (msg->lParam) / impl->window_scale;
-  event->button.x_root = (msg->pt.x + _gdk_offset_x) / impl->window_scale;
-  event->button.y_root = (msg->pt.y + _gdk_offset_y) / impl->window_scale;
+  event->button.x = current_x = (gint16) GET_X_LPARAM (msg->lParam) / impl->surface_scale;
+  event->button.y = current_y = (gint16) GET_Y_LPARAM (msg->lParam) / impl->surface_scale;
+  event->button.x_root = (msg->pt.x + _gdk_offset_x) / impl->surface_scale;
+  event->button.y_root = (msg->pt.y + _gdk_offset_y) / impl->surface_scale;
   event->button.axes = NULL;
   event->button.state = build_pointer_event_state (msg);
   event->button.button = button;
@@ -2180,8 +2180,8 @@ _gdk_win32_surface_fill_min_max_info (GdkSurface  *window,
   if (impl->hint_flags & GDK_HINT_MIN_SIZE)
     {
       rect.left = rect.top = 0;
-      rect.right = impl->hints.min_width * impl->window_scale;
-      rect.bottom = impl->hints.min_height * impl->window_scale;
+      rect.right = impl->hints.min_width * impl->surface_scale;
+      rect.bottom = impl->hints.min_height * impl->surface_scale;
 
       _gdk_win32_adjust_client_rect (window, &rect);
 
@@ -2194,8 +2194,8 @@ _gdk_win32_surface_fill_min_max_info (GdkSurface  *window,
       int maxw, maxh;
 
       rect.left = rect.top = 0;
-      rect.right = impl->hints.max_width * impl->window_scale;
-      rect.bottom = impl->hints.max_height * impl->window_scale;
+      rect.right = impl->hints.max_width * impl->surface_scale;
+      rect.bottom = impl->hints.max_height * impl->surface_scale;
 
       _gdk_win32_adjust_client_rect (window, &rect);
 
@@ -2264,8 +2264,8 @@ _gdk_win32_surface_fill_min_max_info (GdkSurface  *window,
           mmi->ptMaxSize.y = nearest_info.rcWork.bottom - nearest_info.rcWork.top;
         }
 
-      mmi->ptMaxTrackSize.x = GetSystemMetrics (SM_CXVIRTUALSCREEN) + impl->margins_x * impl->window_scale;
-      mmi->ptMaxTrackSize.y = GetSystemMetrics (SM_CYVIRTUALSCREEN) + impl->margins_y * impl->window_scale;
+      mmi->ptMaxTrackSize.x = GetSystemMetrics (SM_CXVIRTUALSCREEN) + impl->margins_x * impl->surface_scale;
+      mmi->ptMaxTrackSize.y = GetSystemMetrics (SM_CYVIRTUALSCREEN) + impl->margins_y * impl->surface_scale;
     }
 
   return TRUE;
@@ -2817,7 +2817,7 @@ gdk_event_translate (MSG  *msg,
 	  /* We keep the implicit grab until no buttons at all are held down */
 	  if ((state & GDK_ANY_BUTTON_MASK & ~(GDK_BUTTON1_MASK << (button - 1))) == 0)
 	    {
-	      GdkSurface *native_window = pointer_grab->native_window;
+	      GdkSurface *native_surface = pointer_grab->native_surface;
 
 	      ReleaseCapture ();
 
@@ -2834,7 +2834,7 @@ gdk_event_translate (MSG  *msg,
 		}
 
 	      synthesize_crossing_events (display,
-					  native_window, new_window,
+					  native_surface, new_window,
 					  GDK_CROSSING_UNGRAB,
 					  &msg->pt,
 					  0, /* TODO: Set right mask */
@@ -2885,7 +2885,7 @@ gdk_event_translate (MSG  *msg,
 
 	  if (!pointer_grab->owner_events &&
 	      new_window != NULL &&
-	      new_window != pointer_grab->native_window)
+	      new_window != pointer_grab->native_surface)
 	    new_window = NULL;
 	}
 
@@ -2923,12 +2923,12 @@ gdk_event_translate (MSG  *msg,
        * sends WM_MOUSEMOVE messages after a new window is shows under
        * the mouse, even if the mouse hasn't moved. This disturbs gtk.
        */
-      if ((msg->pt.x + _gdk_offset_x) / impl->window_scale == current_root_x &&
-	  (msg->pt.y + _gdk_offset_y) / impl->window_scale == current_root_y)
+      if ((msg->pt.x + _gdk_offset_x) / impl->surface_scale == current_root_x &&
+	  (msg->pt.y + _gdk_offset_y) / impl->surface_scale == current_root_y)
 	break;
 
-      current_root_x = (msg->pt.x + _gdk_offset_x) / impl->window_scale;
-      current_root_y = (msg->pt.y + _gdk_offset_y) / impl->window_scale;
+      current_root_x = (msg->pt.x + _gdk_offset_x) / impl->surface_scale;
+      current_root_y = (msg->pt.y + _gdk_offset_y) / impl->surface_scale;
 
 
       if (impl->drag_move_resize_context.op != GDK_WIN32_DRAGOP_NONE)
@@ -2940,8 +2940,8 @@ gdk_event_translate (MSG  *msg,
 	  event = gdk_event_new (GDK_MOTION_NOTIFY);
 	  event->motion.window = window;
 	  event->motion.time = _gdk_win32_get_next_tick (msg->time);
-	  event->motion.x = current_x = (gint16) GET_X_LPARAM (msg->lParam) / impl->window_scale;
-	  event->motion.y = current_y = (gint16) GET_Y_LPARAM (msg->lParam) / impl->window_scale;
+	  event->motion.x = current_x = (gint16) GET_X_LPARAM (msg->lParam) / impl->surface_scale;
+	  event->motion.y = current_y = (gint16) GET_Y_LPARAM (msg->lParam) / impl->surface_scale;
 	  event->motion.x_root = current_root_x;
 	  event->motion.y_root = current_root_y;
 	  event->motion.axes = NULL;
@@ -3065,10 +3065,10 @@ gdk_event_translate (MSG  *msg,
 	  event->scroll.direction = (((short) HIWORD (msg->wParam)) > 0) ?
 	    GDK_SCROLL_RIGHT : GDK_SCROLL_LEFT;
       event->scroll.time = _gdk_win32_get_next_tick (msg->time);
-      event->scroll.x = (gint16) point.x / impl->window_scale;
-      event->scroll.y = (gint16) point.y / impl->window_scale;
-      event->scroll.x_root = ((gint16) GET_X_LPARAM (msg->lParam) + _gdk_offset_x) / impl->window_scale;
-      event->scroll.y_root = ((gint16) GET_Y_LPARAM (msg->lParam) + _gdk_offset_y) / impl->window_scale;
+      event->scroll.x = (gint16) point.x / impl->surface_scale;
+      event->scroll.y = (gint16) point.y / impl->surface_scale;
+      event->scroll.x_root = ((gint16) GET_X_LPARAM (msg->lParam) + _gdk_offset_x) / impl->surface_scale;
+      event->scroll.y_root = ((gint16) GET_Y_LPARAM (msg->lParam) + _gdk_offset_y) / impl->surface_scale;
       event->scroll.state = build_pointer_event_state (msg);
       gdk_event_set_device (event, device_manager_win32->core_pointer);
       gdk_event_set_source_device (event, device_manager_win32->system_pointer);
@@ -3119,7 +3119,7 @@ gdk_event_translate (MSG  *msg,
 
      case WM_MOUSEACTIVATE:
        {
-	 if (gdk_surface_get_window_type (window) == GDK_SURFACE_TEMP
+	 if (gdk_surface_get_surface_type (window) == GDK_SURFACE_TEMP
 	     || !window->accept_focus)
 	   {
 	     *ret_valp = MA_NOACTIVATE;
@@ -3397,7 +3397,7 @@ gdk_event_translate (MSG  *msg,
 	  else
 	    unset_bits |= GDK_SURFACE_STATE_MAXIMIZED;
 
-	  gdk_synthesize_window_state (window, unset_bits, set_bits);
+	  gdk_synthesize_surface_state (window, unset_bits, set_bits);
 
 	  new_state = window->state;
 
@@ -3484,8 +3484,8 @@ gdk_event_translate (MSG  *msg,
 	    {
 	      /* Resize in increments relative to the base size */
 	      rect.left = rect.top = 0;
-	      rect.right = impl->hints.base_width * impl->window_scale;
-	      rect.bottom = impl->hints.base_height * impl->window_scale;
+	      rect.right = impl->hints.base_width * impl->surface_scale;
+	      rect.bottom = impl->hints.base_height * impl->surface_scale;
 	      _gdk_win32_adjust_client_rect (window, &rect);
 	      point.x = rect.left;
 	      point.y = rect.top;
@@ -3507,53 +3507,53 @@ gdk_event_translate (MSG  *msg,
 	    case WMSZ_BOTTOM:
 	      if (drag->bottom == rect.bottom)
 		break;
-        adjust_drag (&drag->bottom, rect.bottom, impl->hints.height_inc * impl->window_scale);
+        adjust_drag (&drag->bottom, rect.bottom, impl->hints.height_inc * impl->surface_scale);
 	      break;
 
 	    case WMSZ_BOTTOMLEFT:
 	      if (drag->bottom == rect.bottom && drag->left == rect.left)
 		break;
-	      adjust_drag (&drag->bottom, rect.bottom, impl->hints.height_inc * impl->window_scale);
-	      adjust_drag (&drag->left, rect.left, impl->hints.width_inc * impl->window_scale);
+	      adjust_drag (&drag->bottom, rect.bottom, impl->hints.height_inc * impl->surface_scale);
+	      adjust_drag (&drag->left, rect.left, impl->hints.width_inc * impl->surface_scale);
 	      break;
 
 	    case WMSZ_LEFT:
 	      if (drag->left == rect.left)
 		break;
-	      adjust_drag (&drag->left, rect.left, impl->hints.width_inc * impl->window_scale);
+	      adjust_drag (&drag->left, rect.left, impl->hints.width_inc * impl->surface_scale);
 	      break;
 
 	    case WMSZ_TOPLEFT:
 	      if (drag->top == rect.top && drag->left == rect.left)
 		break;
-	      adjust_drag (&drag->top, rect.top, impl->hints.height_inc * impl->window_scale);
-	      adjust_drag (&drag->left, rect.left, impl->hints.width_inc * impl->window_scale);
+	      adjust_drag (&drag->top, rect.top, impl->hints.height_inc * impl->surface_scale);
+	      adjust_drag (&drag->left, rect.left, impl->hints.width_inc * impl->surface_scale);
 	      break;
 
 	    case WMSZ_TOP:
 	      if (drag->top == rect.top)
 		break;
-	      adjust_drag (&drag->top, rect.top, impl->hints.height_inc * impl->window_scale);
+	      adjust_drag (&drag->top, rect.top, impl->hints.height_inc * impl->surface_scale);
 	      break;
 
 	    case WMSZ_TOPRIGHT:
 	      if (drag->top == rect.top && drag->right == rect.right)
 		break;
-	      adjust_drag (&drag->top, rect.top, impl->hints.height_inc * impl->window_scale);
-	      adjust_drag (&drag->right, rect.right, impl->hints.width_inc * impl->window_scale);
+	      adjust_drag (&drag->top, rect.top, impl->hints.height_inc * impl->surface_scale);
+	      adjust_drag (&drag->right, rect.right, impl->hints.width_inc * impl->surface_scale);
 	      break;
 
 	    case WMSZ_RIGHT:
 	      if (drag->right == rect.right)
 		break;
-	      adjust_drag (&drag->right, rect.right, impl->hints.width_inc * impl->window_scale);
+	      adjust_drag (&drag->right, rect.right, impl->hints.width_inc * impl->surface_scale);
 	      break;
 
 	    case WMSZ_BOTTOMRIGHT:
 	      if (drag->bottom == rect.bottom && drag->right == rect.right)
 		break;
-	      adjust_drag (&drag->bottom, rect.bottom, impl->hints.height_inc * impl->window_scale);
-	      adjust_drag (&drag->right, rect.right, impl->hints.width_inc * impl->window_scale);
+	      adjust_drag (&drag->bottom, rect.bottom, impl->hints.height_inc * impl->surface_scale);
+	      adjust_drag (&drag->right, rect.right, impl->hints.width_inc * impl->surface_scale);
 	      break;
 	    }
 
@@ -3885,9 +3885,9 @@ gdk_event_translate (MSG  *msg,
 	}
 
       if (LOWORD (msg->wParam) == WA_INACTIVE)
-	gdk_synthesize_window_state (window, GDK_SURFACE_STATE_FOCUSED, 0);
+	gdk_synthesize_surface_state (window, GDK_SURFACE_STATE_FOCUSED, 0);
       else
-	gdk_synthesize_window_state (window, 0, GDK_SURFACE_STATE_FOCUSED);
+	gdk_synthesize_surface_state (window, 0, GDK_SURFACE_STATE_FOCUSED);
 
       /* Bring any tablet contexts to the top of the overlap order when
        * one of our windows is activated.

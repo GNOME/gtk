@@ -916,7 +916,7 @@ gdk_wayland_display_get_monitor (GdkDisplay *display,
 }
 
 static GdkMonitor *
-gdk_wayland_display_get_monitor_at_window (GdkDisplay *display,
+gdk_wayland_display_get_monitor_at_surface (GdkDisplay *display,
                                            GdkSurface  *window)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
@@ -953,7 +953,7 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
   object_class->dispose = gdk_wayland_display_dispose;
   object_class->finalize = gdk_wayland_display_finalize;
 
-  display_class->window_type = gdk_wayland_surface_get_type ();
+  display_class->surface_type = gdk_wayland_surface_get_type ();
 
 #ifdef GDK_RENDERING_VULKAN
   display_class->vk_context_type = GDK_TYPE_WAYLAND_VULKAN_CONTEXT;
@@ -973,7 +973,7 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
   display_class->get_app_launch_context = _gdk_wayland_display_get_app_launch_context;
   display_class->get_next_serial = gdk_wayland_display_get_next_serial;
   display_class->notify_startup_complete = gdk_wayland_display_notify_startup_complete;
-  display_class->create_window_impl = _gdk_wayland_display_create_window_impl;
+  display_class->create_surface_impl = _gdk_wayland_display_create_surface_impl;
   display_class->get_keymap = _gdk_wayland_display_get_keymap;
   display_class->text_property_to_utf8_list = _gdk_wayland_display_text_property_to_utf8_list;
   display_class->utf8_to_string_target = _gdk_wayland_display_utf8_to_string_target;
@@ -982,7 +982,7 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
 
   display_class->get_n_monitors = gdk_wayland_display_get_n_monitors;
   display_class->get_monitor = gdk_wayland_display_get_monitor;
-  display_class->get_monitor_at_window = gdk_wayland_display_get_monitor_at_window;
+  display_class->get_monitor_at_surface = gdk_wayland_display_get_monitor_at_surface;
   display_class->get_setting = gdk_wayland_display_get_setting;
   display_class->set_cursor_theme = gdk_wayland_display_set_cursor_theme;
 }

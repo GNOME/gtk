@@ -48,7 +48,7 @@ _gdk_quartz_surface_drag_begin (GdkSurface *window,
                                                   NULL);
   _gdk_quartz_drag_source_context->is_source = TRUE;
 
-  _gdk_quartz_drag_source_context->source_window = window;
+  _gdk_quartz_drag_source_context->source_surface = window;
   g_object_ref (window);
 
   _gdk_quartz_drag_source_context->targets = targets;

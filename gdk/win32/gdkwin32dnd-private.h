@@ -30,7 +30,7 @@ struct _GdkWin32DragContext
 {
   GdkDragContext context;
   GdkSurface *ipc_window;
-  GdkSurface *drag_window;
+  GdkSurface *drag_surface;
   GdkCursor *cursor;
   GdkSeat *grab_seat;
   GdkDragAction actions;

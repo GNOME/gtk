@@ -111,7 +111,7 @@ GDK_AVAILABLE_IN_ALL
 void        gdk_x11_display_ungrab            (GdkDisplay *display);
 
 GDK_AVAILABLE_IN_ALL
-void        gdk_x11_display_set_window_scale (GdkDisplay *display,
+void        gdk_x11_display_set_surface_scale (GdkDisplay *display,
                                               gint scale);
 
 GDK_AVAILABLE_IN_ALL

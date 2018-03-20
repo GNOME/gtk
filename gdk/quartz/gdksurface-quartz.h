@@ -89,12 +89,12 @@ void         gdk_quartz_surface_release_context (GdkSurfaceImplQuartz *window,
 typedef struct _GdkRootWindowImplQuartz GdkRootWindowImplQuartz;
 typedef struct _GdkRootWindowImplQuartzClass GdkRootWindowImplQuartzClass;
 
-#define GDK_TYPE_ROOT_WINDOW_IMPL_QUARTZ              (_gdk_root_window_impl_quartz_get_type ())
-#define GDK_ROOT_WINDOW_IMPL_QUARTZ(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_ROOT_WINDOW_IMPL_QUARTZ, GdkRootWindowImplQuartz))
-#define GDK_ROOT_WINDOW_IMPL_QUARTZ_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_ROOT_WINDOW_IMPL_QUARTZ, GdkRootWindowImplQuartzClass))
-#define GDK_IS_ROOT_WINDOW_IMPL_QUARTZ(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_ROOT_WINDOW_IMPL_QUARTZ))
-#define GDK_IS_ROOT_WINDOW_IMPL_QUARTZ_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_ROOT_WINDOW_IMPL_QUARTZ))
-#define GDK_ROOT_WINDOW_IMPL_QUARTZ_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_ROOT_WINDOW_IMPL_QUARTZ, GdkRootWindowImplQuartzClass))
+#define GDK_TYPE_ROOT_SURFACE_IMPL_QUARTZ              (_gdk_root_surface_impl_quartz_get_type ())
+#define GDK_ROOT_SURFACE_IMPL_QUARTZ(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_ROOT_SURFACE_IMPL_QUARTZ, GdkRootWindowImplQuartz))
+#define GDK_ROOT_SURFACE_IMPL_QUARTZ_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_ROOT_SURFACE_IMPL_QUARTZ, GdkRootWindowImplQuartzClass))
+#define GDK_IS_ROOT_SURFACE_IMPL_QUARTZ(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_ROOT_SURFACE_IMPL_QUARTZ))
+#define GDK_IS_ROOT_SURFACE_IMPL_QUARTZ_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_ROOT_SURFACE_IMPL_QUARTZ))
+#define GDK_ROOT_SURFACE_IMPL_QUARTZ_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_ROOT_SURFACE_IMPL_QUARTZ, GdkRootWindowImplQuartzClass))
 
 struct _GdkRootWindowImplQuartz
 {
@@ -106,7 +106,7 @@ struct _GdkRootWindowImplQuartzClass
   GdkSurfaceImplQuartzClass parent_class;
 };
 
-GType _gdk_root_window_impl_quartz_get_type (void);
+GType _gdk_root_surface_impl_quartz_get_type (void);
 
 GList *get_toplevels (void);
 

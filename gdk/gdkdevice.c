@@ -594,7 +594,7 @@ gdk_device_get_position (GdkDevice *device,
 
 
 /**
- * gdk_device_get_window_at_position_double:
+ * gdk_device_get_surface_at_position_double:
  * @device: pointer #GdkDevice to query info to.
  * @win_x: (out) (allow-none): return location for the X coordinate of the device location,
  *         relative to the window origin, or %NULL.
@@ -613,7 +613,7 @@ gdk_device_get_position (GdkDevice *device,
  *   device position, or %NULL.
  **/
 GdkSurface *
-gdk_device_get_window_at_position_double (GdkDevice  *device,
+gdk_device_get_surface_at_position_double (GdkDevice  *device,
                                           gdouble    *win_x,
                                           gdouble    *win_y)
 {
@@ -625,7 +625,7 @@ gdk_device_get_window_at_position_double (GdkDevice  *device,
   g_return_val_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_SLAVE ||
                         gdk_display_device_is_grabbed (gdk_device_get_display (device), device), NULL);
 
-  window = _gdk_device_window_at_position (device, &tmp_x, &tmp_y, NULL, FALSE);
+  window = _gdk_device_surface_at_position (device, &tmp_x, &tmp_y, NULL, FALSE);
 
   /* This might need corrections, as the native window returned
      may contain client side children */
@@ -643,7 +643,7 @@ gdk_device_get_window_at_position_double (GdkDevice  *device,
 }
 
 /**
- * gdk_device_get_window_at_position:
+ * gdk_device_get_surface_at_position:
  * @device: pointer #GdkDevice to query info to.
  * @win_x: (out) (allow-none): return location for the X coordinate of the device location,
  *         relative to the window origin, or %NULL.
@@ -661,7 +661,7 @@ gdk_device_get_window_at_position_double (GdkDevice  *device,
  * device position, or %NULL.
  **/
 GdkSurface *
-gdk_device_get_window_at_position (GdkDevice  *device,
+gdk_device_get_surface_at_position (GdkDevice  *device,
                                    gint       *win_x,
                                    gint       *win_y)
 {
@@ -669,7 +669,7 @@ gdk_device_get_window_at_position (GdkDevice  *device,
   GdkSurface *window;
 
   window =
-    gdk_device_get_window_at_position_double (device, &tmp_x, &tmp_y);
+    gdk_device_get_surface_at_position_double (device, &tmp_x, &tmp_y);
 
   if (win_x)
     *win_x = round (tmp_x);
@@ -1566,7 +1566,7 @@ find_axis_info (GArray     *array,
 }
 
 gboolean
-_gdk_device_translate_window_coord (GdkDevice *device,
+_gdk_device_translate_surface_coord (GdkDevice *device,
                                     GdkSurface *window,
                                     guint      index_,
                                     gdouble    value,
@@ -1765,13 +1765,13 @@ _gdk_device_query_state (GdkDevice        *device,
 }
 
 GdkSurface *
-_gdk_device_window_at_position (GdkDevice        *device,
+_gdk_device_surface_at_position (GdkDevice        *device,
                                 gdouble          *win_x,
                                 gdouble          *win_y,
                                 GdkModifierType  *mask,
                                 gboolean          get_toplevel)
 {
-  return GDK_DEVICE_GET_CLASS (device)->window_at_position (device,
+  return GDK_DEVICE_GET_CLASS (device)->surface_at_position (device,
                                                             win_x,
                                                             win_y,
                                                             mask,
@@ -1779,7 +1779,7 @@ _gdk_device_window_at_position (GdkDevice        *device,
 }
 
 /**
- * gdk_device_get_last_event_window:
+ * gdk_device_get_last_event_surface:
  * @device: a #GdkDevice, with a source other than %GDK_SOURCE_KEYBOARD
  *
  * Gets information about which window the given pointer device is in, based on events
@@ -1791,7 +1791,7 @@ _gdk_device_window_at_position (GdkDevice        *device,
  * Returns: (transfer none) (allow-none): the last window the device
  */
 GdkSurface *
-gdk_device_get_last_event_window (GdkDevice *device)
+gdk_device_get_last_event_surface (GdkDevice *device)
 {
   GdkDisplay *display;
   GdkPointerSurfaceInfo *info;
@@ -1802,7 +1802,7 @@ gdk_device_get_last_event_window (GdkDevice *device)
   display = gdk_device_get_display (device);
   info = _gdk_display_get_pointer_info (display, device);
 
-  return info->window_under_pointer;
+  return info->surface_under_pointer;
 }
 
 /**

@@ -74,11 +74,11 @@ struct _GdkSurfaceImplX11
   guint frame_sync_enabled : 1;
   guint tracking_damage: 1;
 
-  gint window_scale;
+  gint surface_scale;
 
-  /* Width and height not divided by window_scale - this matters in the
+  /* Width and height not divided by surface_scale - this matters in the
    * corner-case where the window manager assigns us a size that isn't
-   * a multiple of window_scale - for example for a maximized window
+   * a multiple of surface_scale - for example for a maximized window
    * with an odd-sized title-bar.
    */
   gint unscaled_width;
@@ -191,7 +191,7 @@ GdkToplevelX11 *_gdk_x11_surface_get_toplevel        (GdkSurface *window);
 GdkCursor      *_gdk_x11_surface_get_cursor          (GdkSurface *window);
 
 void            _gdk_x11_surface_update_size         (GdkSurfaceImplX11 *impl);
-void            _gdk_x11_surface_set_window_scale    (GdkSurface *window,
+void            _gdk_x11_surface_set_surface_scale    (GdkSurface *window,
 						     int        scale);
 
 G_END_DECLS

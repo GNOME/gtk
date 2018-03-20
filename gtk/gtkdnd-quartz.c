@@ -1445,7 +1445,7 @@ gtk_drag_set_icon_name (GdkDragContext *context,
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
   g_return_if_fail (icon_name != NULL);
 
-  display = gdk_surface_get_display (gdk_drag_context_get_source_window (context));
+  display = gdk_surface_get_display (gdk_drag_context_get_source_surface (context));
   g_return_if_fail (display != NULL);
 
   gtk_icon_size_lookup (GTK_ICON_SIZE_DND, &width, &height);
@@ -1574,7 +1574,7 @@ _gtk_drag_source_handle_event (GtkWidget *widget,
   switch (event->type)
     {
     case GDK_DROP_FINISHED:
-      result = (gdk_drag_context_get_dest_window (context) != NULL) ? GTK_DRAG_RESULT_SUCCESS : GTK_DRAG_RESULT_NO_TARGET;
+      result = (gdk_drag_context_get_dest_surface (context) != NULL) ? GTK_DRAG_RESULT_SUCCESS : GTK_DRAG_RESULT_NO_TARGET;
       gtk_drag_drop_finished (info, result);
       break;
     default:

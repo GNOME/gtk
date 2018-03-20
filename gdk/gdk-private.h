@@ -23,7 +23,7 @@ gboolean        gdk_surface_supports_edge_constraints    (GdkSurface *window);
 void            gdk_surface_move_to_rect         (GdkSurface          *window,
                                                  const GdkRectangle *rect,
                                                  GdkGravity          rect_anchor,
-                                                 GdkGravity          window_anchor,
+                                                 GdkGravity          surface_anchor,
                                                  GdkAnchorHints      anchor_hints,
                                                  gint                rect_anchor_dx,
                                                  gint                rect_anchor_dy);

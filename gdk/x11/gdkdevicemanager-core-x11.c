@@ -334,7 +334,7 @@ is_parent_of (GdkSurface *parent,
 }
 
 static GdkSurface *
-get_event_window (GdkEventTranslator *translator,
+get_event_surface (GdkEventTranslator *translator,
                   const XEvent       *xevent)
 {
   GdkDisplay *display;
@@ -380,7 +380,7 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
 
   device_manager = GDK_X11_DEVICE_MANAGER_CORE (translator);
 
-  window = get_event_window (translator, xevent);
+  window = get_event_surface (translator, xevent);
 
   scale = 1;
   if (window)
@@ -390,7 +390,7 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
 
       g_object_ref (window);
       impl = GDK_SURFACE_IMPL_X11 (window->impl);
-      scale = impl->window_scale;
+      scale = impl->surface_scale;
     }
 
   event->any.window = window;

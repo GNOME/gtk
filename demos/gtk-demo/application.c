@@ -470,7 +470,7 @@ demo_application_window_size_allocate (GtkWidget           *widget,
 }
 
 static void
-window_state_changed (GtkWidget *widget)
+surface_state_changed (GtkWidget *widget)
 {
   DemoApplicationWindow *window = (DemoApplicationWindow *)widget;
   GdkSurfaceState new_state;
@@ -486,14 +486,14 @@ demo_application_window_realize (GtkWidget *widget)
   GTK_WIDGET_CLASS (demo_application_window_parent_class)->realize (widget);
 
   g_signal_connect_swapped (gtk_widget_get_window (widget), "notify::state",
-                            G_CALLBACK (window_state_changed), widget);
+                            G_CALLBACK (surface_state_changed), widget);
 }
 
 static void
 demo_application_window_unrealize (GtkWidget *widget)
 {
   g_signal_handlers_disconnect_by_func (gtk_widget_get_window (widget),
-                                        window_state_changed, widget);
+                                        surface_state_changed, widget);
 
   GTK_WIDGET_CLASS (demo_application_window_parent_class)->unrealize (widget);
 }

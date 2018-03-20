@@ -71,7 +71,7 @@ find_toplevel_at_pointer (GdkDisplay *display)
   GdkSurface *pointer_window;
   GtkWidget *widget = NULL;
 
-  pointer_window = gdk_device_get_window_at_position (gtk_get_current_event_device (),
+  pointer_window = gdk_device_get_surface_at_position (gtk_get_current_event_device (),
                                                       NULL, NULL);
 
   /* The user data field of a GdkSurface is used to store a pointer

@@ -67,7 +67,7 @@ gsk_vulkan_render_setup (GskVulkanRender       *self,
                          GskVulkanImage        *target,
                          const graphene_rect_t *rect)
 {
-  GdkSurface *window = gsk_renderer_get_window (self->renderer);
+  GdkSurface *window = gsk_renderer_get_surface (self->renderer);
 
   self->target = g_object_ref (target);
 
@@ -83,7 +83,7 @@ gsk_vulkan_render_setup (GskVulkanRender       *self,
     }
   else
     {
-      self->scale_factor = gdk_surface_get_scale_factor (gsk_renderer_get_window (self->renderer));
+      self->scale_factor = gdk_surface_get_scale_factor (gsk_renderer_get_surface (self->renderer));
       self->viewport = GRAPHENE_RECT_INIT (0, 0,
                                            gdk_surface_get_width (window) * self->scale_factor,
                                            gdk_surface_get_height (window) * self->scale_factor);
