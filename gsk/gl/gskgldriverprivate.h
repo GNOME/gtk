@@ -16,6 +16,12 @@ typedef struct {
   float uv[2];
 } GskQuadVertex;
 
+typedef struct {
+  cairo_rectangle_int_t rect;
+  guint texture_id;
+} TextureSlice;
+
+
 GskGLDriver *   gsk_gl_driver_new                       (GdkGLContext    *context);
 
 int             gsk_gl_driver_get_max_texture_size      (GskGLDriver     *driver);
@@ -33,8 +39,6 @@ int             gsk_gl_driver_create_permanent_texture  (GskGLDriver     *driver
 int             gsk_gl_driver_create_texture            (GskGLDriver     *driver,
                                                          float            width,
                                                          float            height);
-gboolean        gsk_gl_driver_texture_needs_tiling      (GskGLDriver     *driver,
-                                                         GdkTexture      *texture);
 int             gsk_gl_driver_create_render_target      (GskGLDriver     *driver,
                                                          int              texture_id,
                                                          gboolean         add_depth_buffer,
@@ -57,6 +61,10 @@ void            gsk_gl_driver_destroy_texture           (GskGLDriver     *driver
                                                          int              texture_id);
 
 int             gsk_gl_driver_collect_textures          (GskGLDriver     *driver);
+void            gsk_gl_driver_slice_texture             (GskGLDriver     *self,
+                                                         GdkTexture      *texture,
+                                                         TextureSlice   **out_slices,
+                                                         guint           *out_n_slices);
 
 G_END_DECLS
 

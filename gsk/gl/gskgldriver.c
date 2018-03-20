@@ -25,6 +25,10 @@ typedef struct {
   GdkTexture *user;
   guint in_use : 1;
   guint permanent : 1;
+
+  /* TODO: Make this optional and not for every texture... */
+  TextureSlice *slices;
+  guint n_slices;
 } Texture;
 
 struct _GskGLDriver
@@ -72,6 +76,7 @@ static void
 texture_free (gpointer data)
 {
   Texture *t = data;
+  guint i;
 
   if (t->user)
     gdk_texture_clear_render_data (t->user);
@@ -79,10 +84,32 @@ texture_free (gpointer data)
   if (t->fbo.fbo_id != 0)
     fbo_clear (&t->fbo);
 
-  glDeleteTextures (1, &t->texture_id);
+  if (t->texture_id != 0)
+    {
+      glDeleteTextures (1, &t->texture_id);
+    }
+  else
+    {
+      g_assert_cmpint (t->n_slices, >, 0);
+
+      for (i = 0; i < t->n_slices; i ++)
+        glDeleteTextures (1, &t->slices[i].texture_id);
+    }
+
   g_slice_free (Texture, t);
 }
 
+static void
+gsk_gl_driver_set_texture_parameters (GskGLDriver *self,
+                                      int          min_filter,
+                                      int          mag_filter)
+{
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min_filter);
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_filter);
+
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+}
 
 static void
 gsk_gl_driver_finalize (GObject *gobject)
@@ -313,8 +340,8 @@ create_texture (GskGLDriver *self,
   g_assert (width > 0);
   g_assert (height > 0);
 
-  if (width >= self->max_texture_size ||
-      height >= self->max_texture_size)
+  if (width > self->max_texture_size ||
+      height > self->max_texture_size)
     {
       g_critical ("Texture %d x %d is bigger than supported texture limit of %d; clipping...",
                   width, height,
@@ -362,6 +389,108 @@ gsk_gl_driver_release_texture (gpointer data)
   t->user = NULL;
 }
 
+void
+gsk_gl_driver_slice_texture (GskGLDriver   *self,
+                             GdkTexture    *texture,
+                             TextureSlice **out_slices,
+                             guint         *out_n_slices)
+{
+  const int max_texture_size = gsk_gl_driver_get_max_texture_size (self) / 4; // XXX Too much?
+  const int tex_width = texture->width;
+  const int tex_height = texture->height;
+  const int cols = (texture->width / max_texture_size) + 1;
+  const int rows = (texture->height / max_texture_size) + 1;
+  int col, row;
+  int x = 0, y = 0; /* Position in the texture */
+  TextureSlice *slices;
+  Texture *tex;
+
+  g_assert (tex_width > max_texture_size || tex_height > max_texture_size);
+
+
+  tex = gdk_texture_get_render_data (texture, self);
+
+  if (tex != NULL)
+    {
+      g_assert (tex->n_slices > 0);
+      *out_slices = tex->slices;
+      *out_n_slices = tex->n_slices;
+      return;
+    }
+
+  slices = g_new0 (TextureSlice, cols * rows);
+
+  /* TODO: (Perf):
+   *   We still create a surface here, which should obviously be unnecessary
+   *   and we should eventually remove it and upload the data directly.
+   */
+  for (col = 0; col < cols; col ++)
+    {
+      const int slice_width = MIN (max_texture_size, texture->width - x);
+      const int stride = slice_width * 4;
+
+      for (row = 0; row < rows; row ++)
+        {
+          const int slice_height = MIN (max_texture_size, texture->height - y);
+          const int slice_index = (col * rows) + row;
+          guchar *data;
+          guint texture_id;
+          cairo_surface_t *surface;
+
+          data = g_malloc (sizeof (guchar) * stride * slice_height);
+
+          gdk_texture_download_area (texture,
+                                     &(GdkRectangle){x, y, slice_width, slice_height},
+                                     data, stride);
+          surface = cairo_image_surface_create_for_data (data,
+                                                         CAIRO_FORMAT_ARGB32,
+                                                         slice_width, slice_height,
+                                                         stride);
+
+          glGenTextures (1, &texture_id);
+
+#ifdef G_ENABLE_DEBUG
+          gsk_profiler_counter_inc (self->profiler, self->counters.created_textures);
+#endif
+          glBindTexture (GL_TEXTURE_2D, texture_id);
+          gsk_gl_driver_set_texture_parameters (self, GL_NEAREST, GL_NEAREST);
+          gdk_cairo_surface_upload_to_gl (surface, GL_TEXTURE_2D, slice_width, slice_height, NULL);
+
+#ifdef G_ENABLE_DEBUG
+          gsk_profiler_counter_inc (self->profiler, self->counters.surface_uploads);
+#endif
+
+          slices[slice_index].rect = (GdkRectangle){x, y, slice_width, slice_height};
+          slices[slice_index].texture_id = texture_id;
+
+          g_free (data);
+          cairo_surface_destroy (surface);
+
+          y += slice_height;
+        }
+
+      y = 0;
+      x += slice_width;
+    }
+
+  /* Allocate one Texture for the entire thing. */
+  tex = texture_new ();
+  tex->width = texture->width;
+  tex->height = texture->height;
+  tex->min_filter = GL_NEAREST;
+  tex->mag_filter = GL_NEAREST;
+  tex->in_use = TRUE;
+  tex->slices = slices;
+  tex->n_slices = cols * rows;
+
+  /* Use texture_free as destroy notify here since we are not inserting this Texture
+   * into self->textures! */
+  gdk_texture_set_render_data (texture, self, tex, texture_free);
+
+  *out_slices = slices;
+  *out_n_slices = cols * rows;
+}
+
 int
 gsk_gl_driver_get_texture_for_texture (GskGLDriver *self,
                                        GdkTexture  *texture,
@@ -386,7 +515,7 @@ gsk_gl_driver_get_texture_for_texture (GskGLDriver *self,
       else
         {
           /* A GL texture from the same GL context is a simple task... */
-          return gdk_gl_texture_get_id (GDK_GL_TEXTURE (texture));
+          return gdk_gl_texture_get_id ((GdkGLTexture *)texture);
         }
     }
   else
@@ -573,17 +702,6 @@ gsk_gl_driver_destroy_texture (GskGLDriver *self,
   g_hash_table_remove (self->textures, GINT_TO_POINTER (texture_id));
 }
 
-static void
-gsk_gl_driver_set_texture_parameters (GskGLDriver *self,
-                                      int          min_filter,
-                                      int          mag_filter)
-{
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min_filter);
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_filter);
-
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-}
 
 void
 gsk_gl_driver_init_texture_empty (GskGLDriver *self,
@@ -653,15 +771,4 @@ gsk_gl_driver_init_texture_with_surface (GskGLDriver     *self,
 
   if (t->min_filter != GL_NEAREST)
     glGenerateMipmap (GL_TEXTURE_2D);
-}
-
-gboolean
-gsk_gl_driver_texture_needs_tiling (GskGLDriver *self,
-                                    GdkTexture  *texture)
-{
-  int max = gsk_gl_driver_get_max_texture_size (self);
-
-  g_assert (self->max_texture_size > -1);
-
-  return texture->width > max || texture->height > max;
 }

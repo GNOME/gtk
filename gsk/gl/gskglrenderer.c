@@ -556,17 +556,47 @@ render_texture_node (GskGLRenderer       *self,
                      RenderOpBuilder     *builder)
 {
   GdkTexture *texture = gsk_texture_node_get_texture (node);
+  const int max_texture_size = gsk_gl_driver_get_max_texture_size (self->gl_driver);
+  const float min_x = builder->dx + node->bounds.origin.x;
+  const float min_y = builder->dy + node->bounds.origin.y;
+  const float max_x = min_x + node->bounds.size.width;
+  const float max_y = min_y + node->bounds.size.height;
 
-  if (gsk_gl_driver_texture_needs_tiling (self->gl_driver, texture))
+  if (texture->width > max_texture_size || texture->height > max_texture_size)
     {
+      const float scale_x = (max_x - min_x) / texture->width;
+      const float scale_y = (max_y - min_y) / texture->height;
+      TextureSlice *slices;
+      guint n_slices;
+      guint i;
 
+      gsk_gl_driver_slice_texture (self->gl_driver, texture, &slices, &n_slices);
+
+      ops_set_program (builder, &self->blit_program);
+      for (i = 0; i < n_slices; i ++)
+        {
+          const TextureSlice *slice = &slices[i];
+          float x1, x2, y1, y2;
+
+          x1 = min_x + (scale_x * slice->rect.x);
+          x2 = x1 + (slice->rect.width * scale_x);
+          y1 = min_y + (scale_y * slice->rect.y);
+          y2 = y1 + (slice->rect.height * scale_y);
+
+          ops_set_texture (builder, slice->texture_id);
+          ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
+            { { x1, y1 }, { 0, 0 }, },
+            { { x1, y2 }, { 0, 1 }, },
+            { { x2, y1 }, { 1, 0 }, },
+
+            { { x2, y2 }, { 1, 1 }, },
+            { { x1, y2 }, { 0, 1 }, },
+            { { x2, y1 }, { 1, 0 }, },
+          });
+        }
     }
   else
     {
-      const float min_x = builder->dx + node->bounds.origin.x;
-      const float min_y = builder->dy + node->bounds.origin.y;
-      const float max_x = min_x + node->bounds.size.width;
-      const float max_y = min_y + node->bounds.size.height;
       int gl_min_filter = GL_NEAREST, gl_mag_filter = GL_NEAREST;
       int texture_id;
 
