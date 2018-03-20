@@ -490,12 +490,6 @@ _gdk_surface_has_impl (GdkSurface *surface)
   return gdk_surface_has_impl (surface);
 }
 
-static gboolean
-gdk_surface_has_no_impl (GdkSurface *surface)
-{
-  return surface->impl_surface != surface;
-}
-
 static void
 remove_sibling_overlapped_area (GdkSurface *surface,
 				cairo_region_t *region)
@@ -2526,10 +2520,8 @@ impl_surface_add_update_area (GdkSurface *impl_surface,
 }
 
 static void
-gdk_surface_invalidate_maybe_recurse_full (GdkSurface            *surface,
-					  const cairo_region_t *region,
-                                          GdkSurfaceChildFunc    child_func,
-					  gpointer              user_data)
+gdk_surface_invalidate_full (GdkSurface           *surface,
+		             const cairo_region_t *region)
 {
   cairo_region_t *visible_region;
   cairo_rectangle_int_t r;
@@ -2573,52 +2565,12 @@ gdk_surface_invalidate_maybe_recurse_full (GdkSurface            *surface,
   cairo_region_destroy (visible_region);
 }
 
-/**
- * gdk_surface_invalidate_maybe_recurse:
- * @surface: a #GdkSurface
- * @region: a #cairo_region_t
- * @child_func: (scope call) (allow-none): function to use to decide if to
- *     recurse to a child, %NULL means never recurse.
- * @user_data: data passed to @child_func
- *
- * Adds @region to the update area for @surface. The update area is the
- * region that needs to be redrawn, or “dirty region.”
- *
- * GDK will process all updates whenever the frame clock schedules a redraw,
- * so there’s no need to do forces redraws manually, you just need to
- * invalidate regions that you know should be redrawn.
- *
- * The @child_func parameter controls whether the region of
- * each child surface that intersects @region will also be invalidated.
- * Only children for which @child_func returns #TRUE will have the area
- * invalidated.
- **/
-void
-gdk_surface_invalidate_maybe_recurse (GdkSurface            *surface,
-				     const cairo_region_t *region,
-                                     GdkSurfaceChildFunc    child_func,
-				     gpointer              user_data)
-{
-  gdk_surface_invalidate_maybe_recurse_full (surface, region,
-					    child_func, user_data);
-}
-
-static gboolean
-true_predicate (GdkSurface *surface,
-		gpointer   user_data)
-{
-  return TRUE;
-}
-
 static void
 gdk_surface_invalidate_region_full (GdkSurface       *surface,
 				    const cairo_region_t *region,
 				    gboolean         invalidate_children)
 {
-  gdk_surface_invalidate_maybe_recurse_full (surface, region,
-					    invalidate_children ?
-					    true_predicate : (gboolean (*) (GdkSurface *, gpointer))NULL,
-				       NULL);
+  gdk_surface_invalidate_full (surface, region);
 }
 
 /**
@@ -2637,18 +2589,14 @@ gdk_surface_invalidate_region_full (GdkSurface       *surface,
  * The @invalidate_children parameter controls whether the region of
  * each child surface that intersects @region will also be invalidated.
  * If %FALSE, then the update area for child surfaces will remain
- * unaffected. See gdk_surface_invalidate_maybe_recurse if you need
- * fine grained control over which children are invalidated.
+ * unaffected.
  **/
 void
 gdk_surface_invalidate_region (GdkSurface       *surface,
 			      const cairo_region_t *region,
 			      gboolean         invalidate_children)
 {
-  gdk_surface_invalidate_maybe_recurse (surface, region,
-				       invalidate_children ?
-					 true_predicate : (gboolean (*) (GdkSurface *, gpointer))NULL,
-				       NULL);
+  gdk_surface_invalidate_full (surface, region);
 }
 
 /**
@@ -2670,9 +2618,7 @@ void
 _gdk_surface_invalidate_for_expose (GdkSurface       *surface,
 				   cairo_region_t       *region)
 {
-  gdk_surface_invalidate_maybe_recurse_full (surface, region,
-					    (gboolean (*) (GdkSurface *, gpointer))gdk_surface_has_no_impl,
-					    NULL);
+  gdk_surface_invalidate_full (surface, region);
 }
 
 

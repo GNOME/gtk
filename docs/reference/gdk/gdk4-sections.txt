@@ -243,8 +243,6 @@ gdk_surface_get_visible_region
 <SUBSECTION>
 gdk_surface_invalidate_rect
 gdk_surface_invalidate_region
-GdkSurfaceChildFunc
-gdk_surface_invalidate_maybe_recurse
 gdk_surface_get_update_area
 gdk_surface_freeze_updates
 gdk_surface_thaw_updates

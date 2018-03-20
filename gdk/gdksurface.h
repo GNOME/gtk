@@ -851,25 +851,6 @@ void       gdk_surface_invalidate_region         (GdkSurface          *surface,
 					         const cairo_region_t    *region,
 					         gboolean            invalidate_children);
 
-/**
- * GdkSurfaceChildFunc:
- * @surface: a #GdkSurface
- * @user_data: user data
- *
- * A function of this type is passed to gdk_surface_invalidate_maybe_recurse().
- * It gets called for each child of the surface to determine whether to
- * recursively invalidate it or now.
- *
- * Returns: %TRUE to invalidate @surface recursively
- */
-typedef gboolean (*GdkSurfaceChildFunc)          (GdkSurface *surface,
-                                                 gpointer   user_data);
-
-GDK_AVAILABLE_IN_ALL
-void       gdk_surface_invalidate_maybe_recurse  (GdkSurface            *surface,
-						 const cairo_region_t *region,
-						 GdkSurfaceChildFunc    child_func,
-						 gpointer              user_data);
 GDK_AVAILABLE_IN_ALL
 cairo_region_t *gdk_surface_get_update_area      (GdkSurface            *surface);
 
