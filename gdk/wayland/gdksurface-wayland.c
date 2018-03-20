@@ -3855,7 +3855,7 @@ gdk_wayland_surface_get_gtk_surface (GdkSurface *surface)
  *     struct wl_surface *surface;
  *     struct input_panel_surface *ip_surface;
  *
- *     surface = gtk_widget_get_window (widget);
+ *     surface = gtk_widget_get_surface (widget);
  *     gdk_wayland_surface_set_custom_surface (surface);
  *
  *     surface = gdk_wayland_surface_get_wl_surface (surface);

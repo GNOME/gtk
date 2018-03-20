@@ -614,9 +614,9 @@ get_bounding_box (GtkWidget    *widget,
   gint x3, y3;
   gint x4, y4;
 
-  window = gtk_widget_get_parent_window (widget);
+  window = gtk_widget_get_parent_surface (widget);
   if (window == NULL)
-    window = gtk_widget_get_window (widget);
+    window = gtk_widget_get_surface (widget);
 
   gtk_widget_get_allocation (widget, &allocation);
 
@@ -1052,7 +1052,7 @@ _gtk_tooltip_focus_in (GtkWidget *widget)
 
   tooltip->keyboard_widget = g_object_ref (widget);
 
-  gdk_surface_get_device_position (gtk_widget_get_window (widget),
+  gdk_surface_get_device_position (gtk_widget_get_surface (widget),
                                   device, &x, &y, NULL);
 
   return_value = gtk_tooltip_run_requery (&widget, tooltip, &x, &y);

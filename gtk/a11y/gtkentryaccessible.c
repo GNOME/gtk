@@ -243,7 +243,7 @@ gtk_entry_icon_accessible_do_action (AtkAction *action,
   gtk_entry_get_icon_area (gtk_entry, icon->pos, &icon_area);
 
   event = gdk_event_new (GDK_BUTTON_PRESS);
-  event->any.surface = g_object_ref (gtk_widget_get_window (widget));
+  event->any.surface = g_object_ref (gtk_widget_get_surface (widget));
   event->button.button = 1;
   event->any.send_event = TRUE;
   event->button.time = GDK_CURRENT_TIME;
@@ -976,7 +976,7 @@ gtk_entry_accessible_get_character_extents (AtkText      *text,
 
   _gtk_widget_get_allocation (widget, &allocation);
 
-  window = gtk_widget_get_window (widget);
+  window = gtk_widget_get_surface (widget);
   gdk_surface_get_origin (window, &x_window, &y_window);
 
   *x = x_window + allocation.x + x_layout + char_rect.x;
@@ -1017,7 +1017,7 @@ gtk_entry_accessible_get_offset_at_point (AtkText      *atk_text,
 
   gtk_entry_get_layout_offsets (entry, &x_layout, &y_layout);
 
-  window = gtk_widget_get_window (widget);
+  window = gtk_widget_get_surface (widget);
   gdk_surface_get_origin (window, &x_window, &y_window);
 
   x_local = x - x_layout - x_window;

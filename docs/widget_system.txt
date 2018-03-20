@@ -329,7 +329,7 @@ Adding to a container
 
 When a widget is added to a container, the container:
 
-  1) calls gtk_widget_set_parent_window (widget, window) if 
+  1) calls gtk_widget_set_parent_surface (widget, window) if 
      the widget is being added to something other than container->window
   2) calls gtk_widget_set_parent (widget, container)
 
@@ -364,7 +364,7 @@ When a widget receives the "realize" signal it should:
 
   1) set the realized flag
   2) set widget->window
-      widget->window = gtk_widget_get_parent_window (widget);
+      widget->window = gtk_widget_get_parent_surface (widget);
       g_object_ref (widget->window);
   3) attach the widget's style
 
@@ -374,7 +374,7 @@ When a widget receives the "realize" signal it should:
 
   1) set the REALIZED flag
   2) create windows with the parent obtained from
-      gtk_widget_get_parent_window (widget);
+      gtk_widget_get_parent_surface (widget);
   3) attach the widget's style
   4) set the background color for the new window based on the style
 

@@ -1010,7 +1010,7 @@ gtk_label_accessible_get_character_extents (AtkText      *text,
   pango_layout_index_to_pos (gtk_label_get_layout (label), index, &char_rect);
   pango_extents_to_pixels (&char_rect, NULL);
 
-  window = gtk_widget_get_window (widget);
+  window = gtk_widget_get_surface (widget);
   gdk_surface_get_origin (window, &x_window, &y_window);
 
   *x = x_window + x_layout + char_rect.x;
@@ -1050,7 +1050,7 @@ gtk_label_accessible_get_offset_at_point (AtkText      *atk_text,
 
   gtk_label_get_layout_offsets (label, &x_layout, &y_layout);
 
-  window = gtk_widget_get_window (widget);
+  window = gtk_widget_get_surface (widget);
   gdk_surface_get_origin (window, &x_window, &y_window);
 
   x_local = x - x_layout - x_window;

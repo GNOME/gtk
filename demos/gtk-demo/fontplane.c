@@ -208,7 +208,7 @@ plane_drag_gesture_end (GtkGestureDrag *gesture,
 static void
 gtk_font_plane_init (GtkFontPlane *plane)
 {
-  gtk_widget_set_has_window (GTK_WIDGET (plane), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (plane), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (plane), TRUE);
 
   plane->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (plane));

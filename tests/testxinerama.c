@@ -49,7 +49,7 @@ request (GtkWidget      *widget,
 {
   GdkDisplay *display = gtk_widget_get_display (widget);
   GdkMonitor *monitor = gdk_display_get_monitor_at_surface (display, 
-                                              gtk_widget_get_window (widget));
+                                              gtk_widget_get_surface (widget));
 
   if (monitor == NULL)
     gtk_label_set_markup (GTK_LABEL (user_data), 

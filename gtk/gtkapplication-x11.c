@@ -42,7 +42,7 @@ gtk_application_impl_x11_handle_window_realize (GtkApplicationImpl *impl,
   GdkSurface *gdk_surface;
   gchar *window_path;
 
-  gdk_surface = gtk_widget_get_window (GTK_WIDGET (window));
+  gdk_surface = gtk_widget_get_surface (GTK_WIDGET (window));
 
   if (!GDK_IS_X11_SURFACE (gdk_surface))
     return;
@@ -65,7 +65,7 @@ gtk_application_impl_x11_get_window_system_id (GtkApplicationImplDBus *dbus,
 {
   GdkSurface *gdk_surface;
 
-  gdk_surface = gtk_widget_get_window (GTK_WIDGET (window));
+  gdk_surface = gtk_widget_get_surface (GTK_WIDGET (window));
 
   if (GDK_IS_X11_SURFACE (gdk_surface))
     return g_variant_new_uint32 (GDK_SURFACE_XID (gdk_surface));

@@ -299,13 +299,13 @@ focus_sort_left_right (GtkWidget        *widget,
         }
       else
         {
-          if (!_gtk_widget_get_has_window (widget))
+          if (!_gtk_widget_get_has_surface (widget))
             compare_info.y = allocation.y + allocation.height / 2;
           else
             compare_info.y = allocation.height / 2;
         }
 
-      if (!_gtk_widget_get_has_window (widget))
+      if (!_gtk_widget_get_has_surface (widget))
         compare_info.x = (direction == GTK_DIR_RIGHT) ? allocation.x : allocation.x + allocation.width;
       else
         compare_info.x = (direction == GTK_DIR_RIGHT) ? 0 : allocation.width;
@@ -398,13 +398,13 @@ focus_sort_up_down (GtkWidget        *widget,
         }
       else
         {
-          if (!_gtk_widget_get_has_window (widget))
+          if (!_gtk_widget_get_has_surface (widget))
             compare_info.x = allocation.x + allocation.width / 2;
           else
             compare_info.x = allocation.width / 2;
         }
 
-      if (!_gtk_widget_get_has_window (widget))
+      if (!_gtk_widget_get_has_surface (widget))
         compare_info.y = (direction == GTK_DIR_DOWN) ? allocation.y : allocation.y + allocation.height;
       else
         compare_info.y = (direction == GTK_DIR_DOWN) ? 0 : + allocation.height;

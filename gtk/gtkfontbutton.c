@@ -578,7 +578,7 @@ gtk_font_button_init (GtkFontButton *font_button)
   font_button->priv = gtk_font_button_get_instance_private (font_button);
   priv = font_button->priv;
 
-  gtk_widget_set_has_window (GTK_WIDGET (font_button), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (font_button), FALSE);
 
   priv->button = gtk_button_new ();
   g_signal_connect (priv->button, "clicked", G_CALLBACK (gtk_font_button_clicked), font_button);

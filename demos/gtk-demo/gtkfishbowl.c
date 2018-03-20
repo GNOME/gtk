@@ -56,7 +56,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkFishbowl, gtk_fishbowl, GTK_TYPE_CONTAINER)
 static void
 gtk_fishbowl_init (GtkFishbowl *fishbowl)
 {
-  gtk_widget_set_has_window (GTK_WIDGET (fishbowl), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (fishbowl), FALSE);
 }
 
 /**

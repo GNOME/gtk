@@ -1374,9 +1374,9 @@ synth_crossing (GtkWidget       *widget,
   gdk_event_set_device (event, gdk_event_get_device (source));
   gdk_event_set_source_device (event, gdk_event_get_source_device (source));
 
-  event->any.surface = g_object_ref (gtk_widget_get_window (toplevel));
+  event->any.surface = g_object_ref (gtk_widget_get_surface (toplevel));
   if (other_widget)
-    event->crossing.child_surface = g_object_ref (gtk_widget_get_window (other_widget));
+    event->crossing.child_surface = g_object_ref (gtk_widget_get_surface (other_widget));
 
   if (enter)
     gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_PRELIGHT, FALSE);

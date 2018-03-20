@@ -159,7 +159,7 @@ snapshot_widget (GtkWidget *widget, SnapshotMode mode)
   gdk_event_handler_set (check_for_draw, NULL, NULL);
   g_main_loop_run (loop);
 
-  surface = gdk_surface_create_similar_surface (gtk_widget_get_window (widget),
+  surface = gdk_surface_create_similar_surface (gtk_widget_get_surface (widget),
                                                CAIRO_CONTENT_COLOR,
                                                gtk_widget_get_allocated_width (widget),
                                                gtk_widget_get_allocated_height (widget));
@@ -169,7 +169,7 @@ snapshot_widget (GtkWidget *widget, SnapshotMode mode)
   switch (mode)
     {
     case SNAPSHOT_WINDOW:
-      snapshot_window_native (gtk_widget_get_window (widget), cr);
+      snapshot_window_native (gtk_widget_get_surface (widget), cr);
       break;
     case SNAPSHOT_DRAW:
       gtk_widget_draw (widget, cr);

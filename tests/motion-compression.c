@@ -9,7 +9,7 @@ event_cb (GtkWidget *window,
           GdkEvent  *event)
 {
   if (gdk_event_get_event_type (event) == GDK_MOTION_NOTIFY &&
-      gdk_event_get_surface (event) == gtk_widget_get_window (window))
+      gdk_event_get_surface (event) == gtk_widget_get_surface (window))
     {
       gdouble x, y;
       float processing_ms = gtk_adjustment_get_value (adjustment);

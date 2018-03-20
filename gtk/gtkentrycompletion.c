@@ -1382,7 +1382,7 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   GtkTreeViewColumn *action_column;
   gint action_height;
 
-  window = gtk_widget_get_window (completion->priv->entry);
+  window = gtk_widget_get_surface (completion->priv->entry);
 
   if (!window)
     return;
@@ -1390,7 +1390,7 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   if (!completion->priv->filter_model)
     return;
 
-  gtk_widget_get_window_allocation (completion->priv->entry, &allocation);
+  gtk_widget_get_surface_allocation (completion->priv->entry, &allocation);
   gtk_widget_get_preferred_size (completion->priv->entry,
                                  &entry_req, NULL);
 
@@ -1533,7 +1533,7 @@ gtk_entry_completion_popup (GtkEntryCompletion *completion)
     {
       gtk_grab_add (completion->priv->popup_window);
       gdk_seat_grab (gdk_device_get_seat (completion->priv->device),
-                     gtk_widget_get_window (completion->priv->popup_window),
+                     gtk_widget_get_surface (completion->priv->popup_window),
                      GDK_SEAT_CAPABILITY_POINTER | GDK_SEAT_CAPABILITY_TOUCH,
                      TRUE, NULL, NULL,
                      prepare_popup_func, completion);

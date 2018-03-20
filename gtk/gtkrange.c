@@ -535,7 +535,7 @@ gtk_range_init (GtkRange *range)
 {
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
 
-  gtk_widget_set_has_window (GTK_WIDGET (range), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (range), FALSE);
 
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
   priv->adjustment = NULL;

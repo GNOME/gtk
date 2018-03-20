@@ -606,7 +606,7 @@ gesture_within_window (GtkGesture *gesture,
   GtkWidget *widget;
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
-  window = gtk_widget_get_window (widget);
+  window = gtk_widget_get_surface (widget);
 
   while (window)
     {

@@ -623,7 +623,7 @@ gtk_switch_init (GtkSwitch *self)
   GtkSwitchPrivate *priv = gtk_switch_get_instance_private (self);
   GtkGesture *gesture;
 
-  gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (self), TRUE);
 
   gesture = gtk_gesture_multi_press_new (GTK_WIDGET (self));

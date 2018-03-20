@@ -408,7 +408,7 @@ gtk_menu_shell_init (GtkMenuShell *menu_shell)
   menu_shell->priv = gtk_menu_shell_get_instance_private (menu_shell);
   menu_shell->priv->take_focus = TRUE;
 
-  gtk_widget_set_has_window (GTK_WIDGET (menu_shell), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (menu_shell), FALSE);
 }
 
 static void

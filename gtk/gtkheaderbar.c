@@ -1778,7 +1778,7 @@ gtk_header_bar_realize (GtkWidget *widget)
                             G_CALLBACK (_gtk_header_bar_update_window_buttons), widget);
   g_signal_connect_swapped (settings, "notify::gtk-decoration-layout",
                             G_CALLBACK (_gtk_header_bar_update_window_buttons), widget);
-  g_signal_connect_swapped (_gtk_widget_get_window (widget), "notify::state",
+  g_signal_connect_swapped (_gtk_widget_get_surface (widget), "notify::state",
                             G_CALLBACK (surface_state_changed), widget);
   _gtk_header_bar_update_window_buttons (GTK_HEADER_BAR (widget));
 }
@@ -1791,7 +1791,7 @@ gtk_header_bar_unrealize (GtkWidget *widget)
   settings = gtk_widget_get_settings (widget);
 
   g_signal_handlers_disconnect_by_func (settings, _gtk_header_bar_update_window_buttons, widget);
-  g_signal_handlers_disconnect_by_func (_gtk_widget_get_window (widget), surface_state_changed, widget);
+  g_signal_handlers_disconnect_by_func (_gtk_widget_get_surface (widget), surface_state_changed, widget);
 
   GTK_WIDGET_CLASS (gtk_header_bar_parent_class)->unrealize (widget);
 }
@@ -1803,7 +1803,7 @@ surface_state_changed (GtkWidget *widget)
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
   GdkSurfaceState changed, new_state;
 
-  new_state = gdk_surface_get_state (_gtk_widget_get_window (widget));
+  new_state = gdk_surface_get_state (_gtk_widget_get_surface (widget));
   changed = new_state ^ priv->state;
   priv->state = new_state;
 
@@ -1977,7 +1977,7 @@ gtk_header_bar_init (GtkHeaderBar *bar)
 
   priv = gtk_header_bar_get_instance_private (bar);
 
-  gtk_widget_set_has_window (GTK_WIDGET (bar), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (bar), FALSE);
 
   priv->title = NULL;
   priv->subtitle = NULL;

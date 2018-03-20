@@ -238,7 +238,7 @@ gtk_focus_widget_finalize (GObject *object)
 static void
 gtk_focus_widget_init (GtkFocusWidget *self)
 {
-  gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
 
   self->child1 = gtk_button_new_with_label ("1");
   gtk_widget_set_parent (self->child1, GTK_WIDGET (self));

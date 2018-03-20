@@ -44,7 +44,7 @@ gtk_application_impl_wayland_handle_window_realize (GtkApplicationImpl *impl,
   GdkSurface *gdk_surface;
   gchar *window_path;
 
-  gdk_surface = gtk_widget_get_window (GTK_WIDGET (window));
+  gdk_surface = gtk_widget_get_surface (GTK_WIDGET (window));
 
   if (!GDK_IS_WAYLAND_SURFACE (gdk_surface))
     return;

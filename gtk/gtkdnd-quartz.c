@@ -348,7 +348,7 @@ static NSWindow *
 get_toplevel_nswindow (GtkWidget *widget)
 {
   GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
-  GdkSurface *window = gtk_widget_get_window (toplevel);
+  GdkSurface *window = gtk_widget_get_surface (toplevel);
   
   if (gtk_widget_is_toplevel (toplevel) && window)
     return [gdk_quartz_surface_get_nsview (window) window];
@@ -633,11 +633,11 @@ gtk_drag_find_widget (GtkWidget       *widget,
   if (gtk_widget_get_parent (widget))
     {
       gint tx, ty;
-      GdkSurface *window = gtk_widget_get_window (widget);
+      GdkSurface *window = gtk_widget_get_surface (widget);
       GdkSurface *parent_window;
       GtkAllocation allocation;
 
-      parent_window = gtk_widget_get_window (gtk_widget_get_parent (widget));
+      parent_window = gtk_widget_get_surface (gtk_widget_get_parent (widget));
 
       /* Compute the offset from allocation-relative to
        * window-relative coordinates.
@@ -646,7 +646,7 @@ gtk_drag_find_widget (GtkWidget       *widget,
       allocation_to_window_x = allocation.x;
       allocation_to_window_y = allocation.y;
 
-      if (gtk_widget_get_has_window (widget))
+      if (gtk_widget_get_has_surface (widget))
 	{
 	  /* The allocation is relative to the parent window for
 	   * window widgets, not to widget->window.
@@ -930,7 +930,7 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
 	      }
 	  }
 
-	gdk_surface_get_position (gtk_widget_get_window (toplevel), &tx, &ty);
+	gdk_surface_get_position (gtk_widget_get_surface (toplevel), &tx, &ty);
 	
 	data.x = event->dnd.x_root - tx;
 	data.y = event->dnd.y_root - ty;
@@ -1124,9 +1124,9 @@ gtk_drag_begin_internal (GtkWidget         *widget,
       if (x != -1 && y != -1)
 	{
 	  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
-	  window = gtk_widget_get_window (toplevel);
+	  window = gtk_widget_get_surface (toplevel);
 	  gtk_widget_translate_coordinates (widget, toplevel, x, y, &x, &y);
-	  gdk_surface_get_root_coords (gtk_widget_get_window (toplevel), x, y,
+	  gdk_surface_get_root_coords (gtk_widget_get_surface (toplevel), x, y,
 							     &x, &y);
 	  dx = (gdouble)x;
 	  dy = (gdouble)y;

@@ -578,10 +578,10 @@ GDK_AVAILABLE_IN_ALL
 gboolean              gtk_widget_is_visible             (GtkWidget    *widget);
 
 GDK_AVAILABLE_IN_ALL
-void                  gtk_widget_set_has_window         (GtkWidget    *widget,
+void                  gtk_widget_set_has_surface         (GtkWidget    *widget,
                                                          gboolean      has_window);
 GDK_AVAILABLE_IN_ALL
-gboolean              gtk_widget_get_has_window         (GtkWidget    *widget);
+gboolean              gtk_widget_get_has_surface         (GtkWidget    *widget);
 
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_widget_is_toplevel            (GtkWidget    *widget);
@@ -602,10 +602,10 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget           * gtk_widget_get_parent             (GtkWidget    *widget);
 
 GDK_AVAILABLE_IN_ALL
-void                  gtk_widget_set_parent_window      (GtkWidget    *widget,
+void                  gtk_widget_set_parent_surface      (GtkWidget    *widget,
 							 GdkSurface    *parent_window);
 GDK_AVAILABLE_IN_ALL
-GdkSurface           * gtk_widget_get_parent_window      (GtkWidget    *widget);
+GdkSurface           * gtk_widget_get_parent_surface      (GtkWidget    *widget);
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_set_child_visible      (GtkWidget    *widget,
@@ -614,15 +614,15 @@ GDK_AVAILABLE_IN_ALL
 gboolean              gtk_widget_get_child_visible      (GtkWidget    *widget);
 
 GDK_AVAILABLE_IN_ALL
-void                  gtk_widget_set_window             (GtkWidget    *widget,
+void                  gtk_widget_set_surface             (GtkWidget    *widget,
                                                          GdkSurface    *window);
 GDK_AVAILABLE_IN_ALL
-GdkSurface           * gtk_widget_get_window             (GtkWidget    *widget);
+GdkSurface           * gtk_widget_get_surface             (GtkWidget    *widget);
 GDK_AVAILABLE_IN_ALL
-void                  gtk_widget_register_window        (GtkWidget    *widget,
+void                  gtk_widget_register_surface        (GtkWidget    *widget,
                                                          GdkSurface    *window);
 GDK_AVAILABLE_IN_ALL
-void                  gtk_widget_unregister_window      (GtkWidget    *widget,
+void                  gtk_widget_unregister_surface      (GtkWidget    *widget,
                                                          GdkSurface    *window);
 
 GDK_AVAILABLE_IN_ALL

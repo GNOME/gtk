@@ -1381,7 +1381,7 @@ configure_event (GtkWidget *window)
   lx = g_object_get_data (G_OBJECT (window), "x");
   ly = g_object_get_data (G_OBJECT (window), "y");
 
-  gdk_surface_get_root_origin (gtk_widget_get_window (window),
+  gdk_surface_get_root_origin (gtk_widget_get_surface (window),
                               &upositionx, &upositiony);
   sprintf (buffer, "%d", upositionx);
   gtk_label_set_text (lx, buffer);
@@ -1537,7 +1537,7 @@ create_pixbuf (GtkWidget *widget)
       button = gtk_button_new ();
       gtk_box_pack_start (GTK_BOX (box2), button);
 
-      gdk_surface = gtk_widget_get_window (window);
+      gdk_surface = gtk_widget_get_surface (window);
 
       pixbufwid = new_pixbuf ("test.xpm", gdk_surface);
 
@@ -5566,7 +5566,7 @@ create_wmhints (GtkWidget *widget)
 
       gtk_widget_realize (window);
 
-      gdk_surface = gtk_widget_get_window (window);
+      gdk_surface = gtk_widget_get_surface (window);
 
       pixbuf = gdk_pixbuf_new_from_xpm_data ((const char **) openfile);
       surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, NULL);
@@ -5677,7 +5677,7 @@ tracking_label (GtkWidget *window)
   gtk_box_pack_start (GTK_BOX (hbox), label);
 
   g_object_set_data (G_OBJECT (label), "title", (gpointer)gtk_window_get_title (GTK_WINDOW (window)));
-  g_signal_connect (gtk_widget_get_window (window), "notify::state",
+  g_signal_connect (gtk_widget_get_surface (window), "notify::state",
                     G_CALLBACK (surface_state_callback),
                     label);
 
@@ -6629,7 +6629,7 @@ find_widget (GtkWidget *widget, FindWidgetData *data)
    * but within the allocation are not counted. This is consistent
    * with the way we highlight drag targets.
    */
-  if (gtk_widget_get_has_window (widget))
+  if (gtk_widget_get_has_surface (widget))
     {
       new_allocation.x = 0;
       new_allocation.y = 0;
@@ -6637,8 +6637,8 @@ find_widget (GtkWidget *widget, FindWidgetData *data)
 
   if (gtk_widget_get_parent (widget) && !data->first)
     {
-      GdkSurface *window = gtk_widget_get_window (widget);
-      while (window != gtk_widget_get_window (gtk_widget_get_parent (widget)))
+      GdkSurface *window = gtk_widget_get_surface (widget);
+      while (window != gtk_widget_get_surface (gtk_widget_get_parent (widget)))
 	{
 	  gint tx, ty, twidth, theight;
 	  
@@ -6727,7 +6727,7 @@ find_widget_at_pointer (GdkDevice *device)
 
  if (widget)
    {
-     gdk_surface_get_device_position (gtk_widget_get_window (widget),
+     gdk_surface_get_device_position (gtk_widget_get_surface (widget),
                                      device,
 			             &x, &y, NULL);
      
@@ -6846,7 +6846,7 @@ snapshot_widget (GtkButton *button,
     data->cursor = gdk_cursor_new_from_name ("crosshair", NULL);
 
   gdk_seat_grab (gdk_device_get_seat (device),
-                 gtk_widget_get_window (widget),
+                 gtk_widget_get_surface (widget),
                  GDK_SEAT_CAPABILITY_ALL_POINTING,
                  TRUE, data->cursor, NULL, NULL, NULL);
 
@@ -6983,7 +6983,7 @@ scroll_test_adjustment_changed (GtkAdjustment *adjustment, GtkWidget *widget)
   if (!gtk_widget_is_drawable (widget))
     return;
 
-  window = gtk_widget_get_window (widget);
+  window = gtk_widget_get_surface (widget);
   gdk_surface_scroll (window, 0, dy);
 }
 

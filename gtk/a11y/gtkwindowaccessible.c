@@ -240,7 +240,7 @@ gtk_window_accessible_ref_state_set (AtkObject *accessible)
   if (gtk_window_is_active (window))
     atk_state_set_add_state (state_set, ATK_STATE_ACTIVE);
 
-  gdk_surface = gtk_widget_get_window (widget);
+  gdk_surface = gtk_widget_get_surface (widget);
   if (gdk_surface)
     {
       state = gdk_surface_get_state (gdk_surface);
@@ -385,7 +385,7 @@ gtk_window_accessible_get_extents (AtkComponent  *component,
       return;
     }
 
-  window = gtk_widget_get_window (widget);
+  window = gtk_widget_get_surface (widget);
   if (window == NULL)
     return;
 
@@ -432,7 +432,7 @@ gtk_window_accessible_get_size (AtkComponent *component,
       return;
     }
 
-  window = gtk_widget_get_window (widget);
+  window = gtk_widget_get_surface (widget);
   if (window == NULL)
     return;
 

@@ -315,7 +315,7 @@ void              gtk_widget_get_outer_allocation          (GtkWidget        *wi
 void              gtk_widget_get_own_allocation            (GtkWidget        *widget,
                                                             GtkAllocation    *allocation);
 
-void              gtk_widget_get_window_allocation         (GtkWidget *widget,
+void              gtk_widget_get_surface_allocation         (GtkWidget *widget,
                                                             GtkAllocation *allocation);
 
 
@@ -371,7 +371,7 @@ _gtk_widget_is_drawable (GtkWidget *widget)
 }
 
 static inline gboolean
-_gtk_widget_get_has_window (GtkWidget *widget)
+_gtk_widget_get_has_surface (GtkWidget *widget)
 {
   return !widget->priv->no_window;
 }
@@ -430,7 +430,7 @@ _gtk_widget_peek_request_cache (GtkWidget *widget)
 }
 
 static inline GdkSurface *
-_gtk_widget_get_window (GtkWidget *widget)
+_gtk_widget_get_surface (GtkWidget *widget)
 {
   return widget->priv->window;
 }

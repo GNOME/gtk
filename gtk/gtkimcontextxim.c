@@ -586,7 +586,7 @@ gtk_im_context_xim_set_client_widget (GtkIMContext *context,
   GdkSurface *surface = NULL;
 
   if (widget != NULL)
-    surface = gtk_widget_get_window (gtk_widget_get_toplevel (widget));
+    surface = gtk_widget_get_surface (gtk_widget_get_toplevel (widget));
 
   set_ic_client_window (context_xim, surface);
 }
@@ -1613,9 +1613,9 @@ on_status_toplevel_configure (GtkWidget     *toplevel,
 
       if (status_window->window)
         {
-          height = DisplayHeight(GDK_SURFACE_XDISPLAY (gtk_widget_get_window (toplevel)), 0);
+          height = DisplayHeight(GDK_SURFACE_XDISPLAY (gtk_widget_get_surface (toplevel)), 0);
 
-          gdk_surface_get_frame_extents (gtk_widget_get_window (toplevel), &rect);
+          gdk_surface_get_frame_extents (gtk_widget_get_surface (toplevel), &rect);
           gtk_widget_get_preferred_size ( (status_window->window), &requisition, NULL);
 
           if (rect.y + rect.height + requisition.height < height)

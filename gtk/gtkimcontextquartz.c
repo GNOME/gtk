@@ -260,7 +260,7 @@ quartz_set_client_window (GtkIMContext *context, GtkWidget *widget)
 
   GTK_NOTE (MISC, g_print ("quartz_set_client_window: %p\n", widget));
 
-  qc->client_window = gtk_widget_get_parent_window (widget);
+  qc->client_window = gtk_widget_get_parent_surface (widget);
 }
 
 static void

@@ -299,7 +299,7 @@ pressed_cb (GtkGesture *gesture,
       rect.height = 0;
 
       gtk_menu_popup_at_rect (GTK_MENU (menu),
-                              gtk_widget_get_window (widget),
+                              gtk_widget_get_surface (widget),
                               &rect,
                               GDK_GRAVITY_NORTH_WEST,
                               GDK_GRAVITY_NORTH_WEST,

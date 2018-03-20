@@ -1099,7 +1099,7 @@ gtk_tree_view_accessible_get_cell_extents (GtkCellAccessibleParent *parent,
       GdkSurface *window;
       gint x_toplevel, y_toplevel;
 
-      window = gdk_surface_get_toplevel (gtk_widget_get_window (widget));
+      window = gdk_surface_get_toplevel (gtk_widget_get_surface (widget));
       gdk_surface_get_origin (window, &x_toplevel, &y_toplevel);
 
       w_x += x_toplevel;
@@ -1175,7 +1175,7 @@ gtk_tree_view_accessible_grab_cell_focus (GtkCellAccessibleParent *parent,
         {
 #ifdef GDK_WINDOWING_X11
           gtk_window_present_with_time (GTK_WINDOW (toplevel),
-                                        gdk_x11_get_server_time (gtk_widget_get_window (widget)));
+                                        gdk_x11_get_server_time (gtk_widget_get_surface (widget)));
 #else
           gtk_window_present (GTK_WINDOW (toplevel));
 #endif

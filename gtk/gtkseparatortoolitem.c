@@ -114,7 +114,7 @@ gtk_separator_tool_item_init (GtkSeparatorToolItem *separator_item)
   priv = separator_item->priv = gtk_separator_tool_item_get_instance_private (separator_item);
   priv->draw = TRUE;
 
-  gtk_widget_set_has_window (widget, FALSE);
+  gtk_widget_set_has_surface (widget, FALSE);
 }
 
 static void

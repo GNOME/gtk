@@ -1288,7 +1288,7 @@ gtk_box_init (GtkBox *box)
 {
   GtkBoxPrivate *priv = gtk_box_get_instance_private (box);
 
-  gtk_widget_set_has_window (GTK_WIDGET (box), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (box), FALSE);
 
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
   priv->children = NULL;

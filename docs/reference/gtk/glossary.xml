@@ -196,7 +196,7 @@
 	A widget that does not have a GdkSurface of its own on which to
 	draw its contents, but rather shares its <glossterm
 	linkend="parent">parent's</glossterm>.  This can be tested with
-	the gtk_widget_get_has_window() function.
+	the gtk_widget_get_has_surface() function.
       </para>
     </glossdef>
   </glossentry>
@@ -230,7 +230,7 @@
       <para>
 	Widgets that don't own the GdkSurface on which they draw are
 	called <glossterm linkend="no-window">no-window widgets</glossterm>.  
-        This can be tested with the gtk_widget_get_has_window() function.  Normally,
+        This can be tested with the gtk_widget_get_has_surface() function.  Normally,
         these widgets draw on their parent's GdkSurface.
       </para>
 

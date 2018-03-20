@@ -8506,7 +8506,7 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
   impl->priv = gtk_file_chooser_widget_get_instance_private (impl);
   priv = impl->priv;
 
-  gtk_widget_set_has_window (GTK_WIDGET (impl), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (impl), FALSE);
 
   priv->local_only = FALSE;
   priv->preview_widget_active = TRUE;

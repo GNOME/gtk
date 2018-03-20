@@ -248,7 +248,7 @@ gtk_scrollbar_init (GtkScrollbar *self)
 {
   GtkScrollbarPrivate *priv = gtk_scrollbar_get_instance_private (self);
 
-  gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
 
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
 

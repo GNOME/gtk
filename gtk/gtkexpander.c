@@ -341,7 +341,7 @@ gtk_expander_init (GtkExpander *expander)
   expander->priv = priv = gtk_expander_get_instance_private (expander);
 
   gtk_widget_set_can_focus (GTK_WIDGET (expander), TRUE);
-  gtk_widget_set_has_window (GTK_WIDGET (expander), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (expander), FALSE);
 
   priv->label_widget = NULL;
   priv->child = NULL;

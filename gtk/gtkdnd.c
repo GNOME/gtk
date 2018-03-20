@@ -326,7 +326,7 @@ gtk_drag_get_source_widget (GdkDragContext *context)
     {
       GtkWidget *widget = tmp_list->data;
 
-      if (gtk_widget_get_window (widget) == gdk_drag_context_get_source_surface (context))
+      if (gtk_widget_get_surface (widget) == gdk_drag_context_get_source_surface (context))
         return widget;
 
       tmp_list = tmp_list->next;
@@ -445,7 +445,7 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
               }
           }
 
-        window = gtk_widget_get_window (toplevel);
+        window = gtk_widget_get_surface (toplevel);
 
         gdk_surface_get_position (window, &tx, &ty);
         gdk_event_get_root_coords (event, &x_root, &y_root);
@@ -501,7 +501,7 @@ gtk_drag_find_widget (GtkWidget           *widget,
   /* Get the widget at the pointer coordinates and travel up
    * the widget hierarchy from there.
    */
-  widget = _gtk_widget_find_at_coords (gtk_widget_get_window (widget),
+  widget = _gtk_widget_find_at_coords (gtk_widget_get_surface (widget),
                                        x, y, &x, &y);
   if (!widget)
     return FALSE;
@@ -946,7 +946,7 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   toplevel = gtk_widget_get_toplevel (widget);
   gtk_widget_translate_coordinates (widget, toplevel,
                                     x, y, &x, &y);
-  gdk_surface_get_device_position (gtk_widget_get_window (toplevel),
+  gdk_surface_get_device_position (gtk_widget_get_surface (toplevel),
                                   device,
                                   &dx, &dy,
                                   NULL);
@@ -958,7 +958,7 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   content->formats = gdk_content_formats_ref (target_list);
   content->time = time;
 
-  context = gdk_drag_begin (gtk_widget_get_window (toplevel), device, GDK_CONTENT_PROVIDER (content), actions, dx, dy);
+  context = gdk_drag_begin (gtk_widget_get_surface (toplevel), device, GDK_CONTENT_PROVIDER (content), actions, dx, dy);
   if (context == NULL)
     {
       g_object_unref (content);

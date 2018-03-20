@@ -266,7 +266,7 @@ gtk_im_context_ime_set_client_widget (GtkIMContext *context,
   g_return_if_fail (GTK_IS_IM_CONTEXT_IME (context));
   context_ime = GTK_IM_CONTEXT_IME (context);
   toplevel = gtk_widget_get_toplevel (widget);
-  client_window = gtk_widget_get_window (toplevel);
+  client_window = gtk_widget_get_surface (toplevel);
 
   if (client_window)
     {

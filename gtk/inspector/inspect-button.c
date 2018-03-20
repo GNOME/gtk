@@ -115,7 +115,7 @@ find_widget_at_pointer (GdkDevice *device)
     {
       double x, y;
 
-      gdk_surface_get_device_position_double (gtk_widget_get_window (widget),
+      gdk_surface_get_device_position_double (gtk_widget_get_surface (widget),
                                              device, &x, &y, NULL);
 
       widget = inspector_pick (widget, x, y);
@@ -175,7 +175,7 @@ on_inspect_widget (GtkWidget          *button,
 {
   GtkWidget *widget;
 
-  gdk_surface_raise (gtk_widget_get_window (GTK_WIDGET (iw)));
+  gdk_surface_raise (gtk_widget_get_surface (GTK_WIDGET (iw)));
 
   clear_flash (iw);
 
@@ -234,7 +234,7 @@ deemphasize_window (GtkWidget *window)
       cairo_region_destroy (region);
     }
   else
-    gdk_surface_lower (gtk_widget_get_window (window));
+    gdk_surface_lower (gtk_widget_get_surface (window));
 }
 
 static void
@@ -249,7 +249,7 @@ reemphasize_window (GtkWidget *window)
       gtk_widget_input_shape_combine_region (window, NULL);
     }
   else
-    gdk_surface_raise (gtk_widget_get_window (window));
+    gdk_surface_raise (gtk_widget_get_surface (window));
 }
 
 static gboolean
@@ -320,7 +320,7 @@ gtk_inspector_on_inspect (GtkWidget          *button,
   display = gdk_display_get_default ();
   cursor = gdk_cursor_new_from_name ("crosshair", NULL);
   status = gdk_seat_grab (gdk_display_get_default_seat (display),
-                          gtk_widget_get_window (iw->invisible),
+                          gtk_widget_get_surface (iw->invisible),
                           GDK_SEAT_CAPABILITY_ALL_POINTING, TRUE,
                           cursor, NULL, prepare_inspect_func, NULL);
   g_object_unref (cursor);

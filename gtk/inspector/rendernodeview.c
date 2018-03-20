@@ -337,7 +337,7 @@ gtk_render_node_view_class_init (GtkRenderNodeViewClass *klass)
 static void
 gtk_render_node_view_init (GtkRenderNodeView *view)
 {
-  gtk_widget_set_has_window (GTK_WIDGET (view), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (view), FALSE);
 }
 
 GtkWidget *

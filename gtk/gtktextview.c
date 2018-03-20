@@ -1629,7 +1629,7 @@ gtk_text_view_init (GtkTextView *text_view)
   text_view->priv = gtk_text_view_get_instance_private (text_view);
   priv = text_view->priv;
 
-  gtk_widget_set_has_window (widget, FALSE);
+  gtk_widget_set_has_surface (widget, FALSE);
   gtk_widget_set_can_focus (widget, TRUE);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (text_view));
@@ -8746,7 +8746,7 @@ gtk_text_view_do_popup (GtkTextView    *text_view,
                                                      &iter_location.y);
 
               gtk_menu_popup_at_rect (GTK_MENU (priv->popup_menu),
-                                      gtk_widget_get_window (GTK_WIDGET (text_view)),
+                                      gtk_widget_get_surface (GTK_WIDGET (text_view)),
                                       &iter_location,
                                       GDK_GRAVITY_SOUTH_EAST,
                                       GDK_GRAVITY_NORTH_WEST,

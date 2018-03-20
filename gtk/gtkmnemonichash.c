@@ -124,7 +124,7 @@ _gtk_mnemonic_hash_activate (GtkMnemonicHash *mnemonic_hash,
   for (list = targets; list; list = list->next)
     {
       widget = GTK_WIDGET (list->data);
-      window = gtk_widget_get_window (widget);
+      window = gtk_widget_get_surface (widget);
 
       if (gtk_widget_is_sensitive (widget) &&
 	  gtk_widget_get_mapped (widget) &&
