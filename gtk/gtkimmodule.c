@@ -697,7 +697,13 @@ match_backend (GtkIMContextInfo *context)
 {
 #ifdef GDK_WINDOWING_WAYLAND
   if (g_strcmp0 (context->context_id, "wayland") == 0)
-    return GDK_IS_WAYLAND_DISPLAY (gdk_display_get_default ());
+    {
+      GdkDisplay *display = gdk_display_get_default ();
+
+      return GDK_IS_WAYLAND_DISPLAY (display) &&
+             gdk_wayland_display_query_registry (display,
+                                                 "gtk_text_input_manager");
+    }
 #endif
 
 #ifdef GDK_WINDOWING_BROADWAY
