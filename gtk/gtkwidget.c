@@ -435,8 +435,6 @@
 
 #define GTK_STATE_FLAGS_DO_PROPAGATE (GTK_STATE_FLAG_INSENSITIVE|GTK_STATE_FLAG_BACKDROP)
 
-#define WIDGET_CLASS(w)	 GTK_WIDGET_GET_CLASS (w)
-
 typedef struct {
   gchar               *name;           /* Name of the template automatic child */
   gboolean             internal_child; /* Whether the automatic widget should be exported as an <internal-child> */
@@ -5972,10 +5970,10 @@ gtk_widget_activate (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  if (WIDGET_CLASS (widget)->activate_signal)
+  if (GTK_WIDGET_GET_CLASS (widget)->activate_signal)
     {
       /* FIXME: we should eventually check the signals signature here */
-      g_signal_emit (widget, WIDGET_CLASS (widget)->activate_signal, 0);
+      g_signal_emit (widget, GTK_WIDGET_GET_CLASS (widget)->activate_signal, 0);
 
       return TRUE;
     }
