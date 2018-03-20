@@ -146,9 +146,9 @@ struct _GtkWidget
  *   means that either it or any of its parents up to the toplevel
  *   widget have been set as hidden.
  * @realize: Signal emitted when widget is associated with a
- *   #GdkWindow, which means that gtk_widget_realize() has been called or
+ *   #GdkSurface, which means that gtk_widget_realize() has been called or
  *   the widget has been mapped (that is, it is going to be drawn).
- * @unrealize: Signal emitted when the GdkWindow associated with
+ * @unrealize: Signal emitted when the GdkSurface associated with
  *   widget is destroyed, which means that gtk_widget_unrealize() has
  *   been called or the widget has been unmapped (that is, it is going
  *   to be hidden).
@@ -603,9 +603,9 @@ GtkWidget           * gtk_widget_get_parent             (GtkWidget    *widget);
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_set_parent_window      (GtkWidget    *widget,
-							 GdkWindow    *parent_window);
+							 GdkSurface    *parent_window);
 GDK_AVAILABLE_IN_ALL
-GdkWindow           * gtk_widget_get_parent_window      (GtkWidget    *widget);
+GdkSurface           * gtk_widget_get_parent_window      (GtkWidget    *widget);
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_set_child_visible      (GtkWidget    *widget,
@@ -615,15 +615,15 @@ gboolean              gtk_widget_get_child_visible      (GtkWidget    *widget);
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_set_window             (GtkWidget    *widget,
-                                                         GdkWindow    *window);
+                                                         GdkSurface    *window);
 GDK_AVAILABLE_IN_ALL
-GdkWindow           * gtk_widget_get_window             (GtkWidget    *widget);
+GdkSurface           * gtk_widget_get_window             (GtkWidget    *widget);
 GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_register_window        (GtkWidget    *widget,
-                                                         GdkWindow    *window);
+                                                         GdkSurface    *window);
 GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_unregister_window      (GtkWidget    *widget,
-                                                         GdkWindow    *window);
+                                                         GdkSurface    *window);
 
 GDK_AVAILABLE_IN_ALL
 int                   gtk_widget_get_allocated_width    (GtkWidget     *widget);
@@ -817,7 +817,7 @@ void             gtk_widget_set_default_direction (GtkTextDirection  dir);
 GDK_AVAILABLE_IN_ALL
 GtkTextDirection gtk_widget_get_default_direction (void);
 
-/* Counterpart to gdk_window_shape_combine_region.
+/* Counterpart to gdk_surface_shape_combine_region.
  */
 GDK_AVAILABLE_IN_ALL
 void	     gtk_widget_shape_combine_region (GtkWidget *widget,

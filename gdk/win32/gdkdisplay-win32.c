@@ -492,7 +492,7 @@ gdk_win32_display_get_name (GdkDisplay *display)
   return display_name_cache;
 }
 
-static GdkWindow *
+static GdkSurface *
 gdk_win32_display_get_default_group (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
@@ -1143,7 +1143,7 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
   object_class->dispose = gdk_win32_display_dispose;
   object_class->finalize = gdk_win32_display_finalize;
 
-  display_class->window_type = GDK_TYPE_WIN32_WINDOW;
+  display_class->window_type = GDK_TYPE_WIN32_SURFACE;
 
   display_class->get_name = gdk_win32_display_get_name;
   display_class->beep = gdk_win32_display_beep;
@@ -1184,5 +1184,5 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
   display_class->get_last_seen_time = gdk_win32_display_get_last_seen_time;
   display_class->set_cursor_theme = gdk_win32_display_set_cursor_theme;
 
-  _gdk_win32_windowing_init ();
+  _gdk_win32_surfaceing_init ();
 }

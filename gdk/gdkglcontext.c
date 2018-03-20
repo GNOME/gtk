@@ -26,12 +26,12 @@
  * #GdkGLContext is an object representing the platform-specific
  * OpenGL draw context.
  *
- * #GdkGLContexts are created for a #GdkWindow using
- * gdk_window_create_gl_context(), and the context will match the
+ * #GdkGLContexts are created for a #GdkSurface using
+ * gdk_surface_create_gl_context(), and the context will match the
  * the characteristics of the window.
  *
  * A #GdkGLContext is not tied to any particular normal framebuffer.
- * For instance, it cannot draw to the #GdkWindow back buffer. The GDK
+ * For instance, it cannot draw to the #GdkSurface back buffer. The GDK
  * repaint system is in full control of the painting to that. Instead,
  * you can create render buffers or textures and use gdk_cairo_draw_from_gl()
  * in the draw function of your widget to draw them. Then GDK will handle
@@ -46,14 +46,14 @@
  * ## Creating a new OpenGL context ##
  *
  * In order to create a new #GdkGLContext instance you need a
- * #GdkWindow, which you typically get during the realize call
+ * #GdkSurface, which you typically get during the realize call
  * of a widget.
  *
  * A #GdkGLContext is not realized until either gdk_gl_context_make_current(),
  * or until it is realized using gdk_gl_context_realize(). It is possible to
  * specify details of the GL context like the OpenGL version to be used, or
  * whether the GL context should have extra state validation enabled after
- * calling gdk_window_create_gl_context() by calling gdk_gl_context_realize().
+ * calling gdk_surface_create_gl_context() by calling gdk_gl_context_realize().
  * If the realization fails you have the option to change the settings of the
  * #GdkGLContext and try again.
  *
@@ -265,12 +265,12 @@ gdk_gl_context_real_realize (GdkGLContext  *self,
 static cairo_region_t *
 gdk_gl_context_real_get_damage (GdkGLContext *context)
 {
-  GdkWindow *window = gdk_draw_context_get_window (GDK_DRAW_CONTEXT (context));
+  GdkSurface *window = gdk_draw_context_get_window (GDK_DRAW_CONTEXT (context));
 
   return cairo_region_create_rectangle (&(GdkRectangle) {
                                             0, 0,
-                                            gdk_window_get_width (window),
-                                            gdk_window_get_height (window)
+                                            gdk_surface_get_width (window),
+                                            gdk_surface_get_height (window)
                                         });
 }
 
@@ -279,7 +279,7 @@ gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
                                  cairo_region_t *region)
 {
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
-  GdkWindow *window;
+  GdkSurface *window;
   GdkGLContext *shared;
   cairo_region_t *damage;
   int ww, wh;
@@ -296,8 +296,8 @@ gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
   cairo_region_destroy (damage);
 
   window = gdk_draw_context_get_window (draw_context);
-  ww = gdk_window_get_width (window) * gdk_window_get_scale_factor (window);
-  wh = gdk_window_get_height (window) * gdk_window_get_scale_factor (window);
+  ww = gdk_surface_get_width (window) * gdk_surface_get_scale_factor (window);
+  wh = gdk_surface_get_height (window) * gdk_surface_get_scale_factor (window);
 
   gdk_gl_context_make_current (context);
 
@@ -889,11 +889,11 @@ gdk_gl_context_get_display (GdkGLContext *context)
  * gdk_gl_context_get_window:
  * @context: a #GdkGLContext
  *
- * Retrieves the #GdkWindow used by the @context.
+ * Retrieves the #GdkSurface used by the @context.
  *
- * Returns: (nullable) (transfer none): a #GdkWindow or %NULL
+ * Returns: (nullable) (transfer none): a #GdkSurface or %NULL
  */
-GdkWindow *
+GdkSurface *
 gdk_gl_context_get_window (GdkGLContext *context)
 {
   g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), NULL);

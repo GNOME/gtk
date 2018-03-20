@@ -484,12 +484,12 @@ get_origins (GtkWidget *widget,
              gint      *x_toplevel,
              gint      *y_toplevel)
 {
-  GdkWindow *window;
+  GdkSurface *window;
 
   window = gtk_widget_get_window (widget);
-  gdk_window_get_origin (window, x_window, y_window);
-  window = gdk_window_get_toplevel (gtk_widget_get_window (widget));
-  gdk_window_get_origin (window, x_toplevel, y_toplevel);
+  gdk_surface_get_origin (window, x_window, y_window);
+  window = gdk_surface_get_toplevel (gtk_widget_get_window (widget));
+  gdk_surface_get_origin (window, x_toplevel, y_toplevel);
 
   if (GTK_IS_TREE_VIEW (widget))
     {

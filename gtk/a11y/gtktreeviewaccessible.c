@@ -1096,11 +1096,11 @@ gtk_tree_view_accessible_get_cell_extents (GtkCellAccessibleParent *parent,
 
   if (coord_type != ATK_XY_WINDOW)
     {
-      GdkWindow *window;
+      GdkSurface *window;
       gint x_toplevel, y_toplevel;
 
-      window = gdk_window_get_toplevel (gtk_widget_get_window (widget));
-      gdk_window_get_origin (window, &x_toplevel, &y_toplevel);
+      window = gdk_surface_get_toplevel (gtk_widget_get_window (widget));
+      gdk_surface_get_origin (window, &x_toplevel, &y_toplevel);
 
       w_x += x_toplevel;
       w_y += y_toplevel;

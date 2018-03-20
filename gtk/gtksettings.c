@@ -560,7 +560,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * When %TRUE, keyboard navigation and other input-related errors
    * will cause a beep. Since the error bell is implemented using
-   * gdk_window_beep(), the windowing system may offer ways to
+   * gdk_surface_beep(), the windowing system may offer ways to
    * configure the error bell in many ways, such as flashing the
    * window or similar visual effects.
    */

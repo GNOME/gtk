@@ -32,7 +32,7 @@ G_DEFINE_TYPE (GskCairoRenderer, gsk_cairo_renderer, GSK_TYPE_RENDERER)
 
 static gboolean
 gsk_cairo_renderer_realize (GskRenderer  *renderer,
-                            GdkWindow    *window,
+                            GdkSurface    *window,
                             GError      **error)
 {
   return TRUE;
@@ -99,7 +99,7 @@ gsk_cairo_renderer_render (GskRenderer   *renderer,
                            GskRenderNode *root)
 {
   GdkDrawingContext *context = gsk_renderer_get_drawing_context (renderer);
-  GdkWindow *window = gsk_renderer_get_window (renderer);
+  GdkSurface *window = gsk_renderer_get_window (renderer);
 
   cairo_t *cr;
 
@@ -114,7 +114,7 @@ gsk_cairo_renderer_render (GskRenderer   *renderer,
       cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
       cairo_rectangle (cr,
                        0, 0,
-                       gdk_window_get_width (window), gdk_window_get_height (window));
+                       gdk_surface_get_width (window), gdk_surface_get_height (window));
       cairo_set_source_rgba (cr, 0, 0, 0.85, 0.5);
       cairo_stroke (cr);
       cairo_restore (cr);

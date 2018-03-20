@@ -48,7 +48,7 @@
  *
  * Cursors by themselves are not very interesting, they must be
  * bound to a window for users to see them. This is done with
- * gdk_window_set_cursor() or gdk_window_set_device_cursor().
+ * gdk_surface_set_cursor() or gdk_surface_set_device_cursor().
  * Applications will typically use higher-level GTK+ functions such
  * as gtk_widget_set_cursor() instead.
  *
@@ -69,7 +69,7 @@
  * gdk_display_get_maximal_cursor_size() for the limitations that might apply.
  *
  * To ease work with unsupported cursors, a fallback cursor can be provided.
- * If a #GdkWindow cannot use a cursor because of the reasons mentioned above,
+ * If a #GdkSurface cannot use a cursor because of the reasons mentioned above,
  * it will try the fallback cursor. Of course, fallback cursors can themselves
  * have fallback cursors again, so it is possible to provide a chain of
  * progressively easier to support cursors. If none of the provided cursors

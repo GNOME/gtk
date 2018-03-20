@@ -261,19 +261,19 @@ static const char notify_details[][23] = {
 #endif
 
 static void
-set_user_time (GdkWindow *window,
+set_user_time (GdkSurface *window,
                GdkEvent  *event)
 {
   g_return_if_fail (event != NULL);
 
-  window = gdk_window_get_toplevel (event->any.window);
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  window = gdk_surface_get_toplevel (event->any.window);
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
   /* If an event doesn't have a valid timestamp, we shouldn't use it
    * to update the latest user interaction time.
    */
   if (gdk_event_get_time (event) != GDK_CURRENT_TIME)
-    gdk_x11_window_set_user_time (gdk_window_get_toplevel (window),
+    gdk_x11_surface_set_user_time (gdk_surface_get_toplevel (window),
                                   gdk_event_get_time (event));
 }
 
@@ -316,10 +316,10 @@ translate_notify_type (int detail)
 }
 
 static gboolean
-is_parent_of (GdkWindow *parent,
-              GdkWindow *child)
+is_parent_of (GdkSurface *parent,
+              GdkSurface *child)
 {
-  GdkWindow *w;
+  GdkSurface *w;
 
   w = child;
   while (w != NULL)
@@ -327,21 +327,21 @@ is_parent_of (GdkWindow *parent,
       if (w == parent)
         return TRUE;
 
-      w = gdk_window_get_parent (w);
+      w = gdk_surface_get_parent (w);
     }
 
   return FALSE;
 }
 
-static GdkWindow *
+static GdkSurface *
 get_event_window (GdkEventTranslator *translator,
                   const XEvent       *xevent)
 {
   GdkDisplay *display;
-  GdkWindow *window;
+  GdkSurface *window;
 
   display = GDK_X11_DEVICE_MANAGER_CORE (translator)->display;
-  window = gdk_x11_window_lookup_for_display (display, xevent->xany.window);
+  window = gdk_x11_surface_lookup_for_display (display, xevent->xany.window);
 
   /* Apply keyboard grabs to non-native windows */
   if (xevent->type == KeyPress || xevent->type == KeyRelease)
@@ -371,9 +371,9 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
                                              GdkEvent           *event,
                                              const XEvent       *xevent)
 {
-  GdkWindowImplX11 *impl;
+  GdkSurfaceImplX11 *impl;
   GdkX11DeviceManagerCore *device_manager;
-  GdkWindow *window;
+  GdkSurface *window;
   gboolean return_val;
   int scale;
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
@@ -385,18 +385,18 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
   scale = 1;
   if (window)
     {
-      if (GDK_WINDOW_DESTROYED (window) || !GDK_IS_WINDOW (window))
+      if (GDK_SURFACE_DESTROYED (window) || !GDK_IS_SURFACE (window))
         return FALSE;
 
       g_object_ref (window);
-      impl = GDK_WINDOW_IMPL_X11 (window->impl);
+      impl = GDK_SURFACE_IMPL_X11 (window->impl);
       scale = impl->window_scale;
     }
 
   event->any.window = window;
   event->any.send_event = xevent->xany.send_event ? TRUE : FALSE;
 
-  if (window && GDK_WINDOW_DESTROYED (window))
+  if (window && GDK_SURFACE_DESTROYED (window))
     {
       if (xevent->type != DestroyNotify)
         {
@@ -622,10 +622,10 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
       gdk_event_set_device (event, device_manager->core_pointer);
 
       /* If the subwindow field of the XEvent is non-NULL, then
-       *  lookup the corresponding GdkWindow.
+       *  lookup the corresponding GdkSurface.
        */
       if (xevent->xcrossing.subwindow != None)
-        event->crossing.subwindow = gdk_x11_window_lookup_for_display (display, xevent->xcrossing.subwindow);
+        event->crossing.subwindow = gdk_x11_surface_lookup_for_display (display, xevent->xcrossing.subwindow);
       else
         event->crossing.subwindow = NULL;
 
@@ -662,10 +662,10 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
       gdk_event_set_device (event, device_manager->core_pointer);
 
       /* If the subwindow field of the XEvent is non-NULL, then
-       *  lookup the corresponding GdkWindow.
+       *  lookup the corresponding GdkSurface.
        */
       if (xevent->xcrossing.subwindow != None)
-        event->crossing.subwindow = gdk_x11_window_lookup_for_display (display, xevent->xcrossing.subwindow);
+        event->crossing.subwindow = gdk_x11_surface_lookup_for_display (display, xevent->xcrossing.subwindow);
       else
         event->crossing.subwindow = NULL;
 
@@ -792,7 +792,7 @@ _gdk_x11_event_translate_keyboard_string (GdkEventKey *event)
  * window (not a ancestor or child) got or lost the focus
  */
 void
-_gdk_device_manager_core_handle_focus (GdkWindow *window,
+_gdk_device_manager_core_handle_focus (GdkSurface *window,
                                        Window     original,
                                        GdkDevice *device,
                                        GdkDevice *source_device,
@@ -804,17 +804,17 @@ _gdk_device_manager_core_handle_focus (GdkWindow *window,
   GdkX11Screen *x11_screen;
   gboolean had_focus;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
   g_return_if_fail (GDK_IS_DEVICE (device));
   g_return_if_fail (source_device == NULL || GDK_IS_DEVICE (source_device));
 
-  GDK_DISPLAY_NOTE (gdk_window_get_display (window), EVENTS,
+  GDK_DISPLAY_NOTE (gdk_surface_get_display (window), EVENTS,
             g_message ("focus out:\t\twindow: %ld, detail: %s, mode: %s",
-                       GDK_WINDOW_XID (window),
+                       GDK_SURFACE_XID (window),
                        notify_details[detail],
                        notify_modes[mode]));
 
-  toplevel = _gdk_x11_window_get_toplevel (window);
+  toplevel = _gdk_x11_surface_get_toplevel (window);
 
   if (!toplevel)
     return;
@@ -823,7 +823,7 @@ _gdk_device_manager_core_handle_focus (GdkWindow *window,
     return;
 
   had_focus = HAS_FOCUS (toplevel);
-  x11_screen = GDK_X11_SCREEN (GDK_WINDOW_SCREEN (window));
+  x11_screen = GDK_X11_SCREEN (GDK_SURFACE_SCREEN (window));
 
   switch (detail)
     {
@@ -896,7 +896,7 @@ _gdk_device_manager_core_handle_focus (GdkWindow *window,
       if (source_device)
         gdk_event_set_source_device (event, source_device);
 
-      gdk_display_put_event (gdk_window_get_display (window), event);
+      gdk_display_put_event (gdk_surface_get_display (window), event);
       g_object_unref (event);
     }
 }

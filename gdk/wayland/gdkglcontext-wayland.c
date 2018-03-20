@@ -163,7 +163,7 @@ gdk_wayland_gl_context_get_damage (GdkGLContext *context)
   GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   EGLSurface egl_surface;
-  GdkWindow *window = gdk_draw_context_get_window (GDK_DRAW_CONTEXT (context));
+  GdkSurface *window = gdk_draw_context_get_window (GDK_DRAW_CONTEXT (context));
   int buffer_age = 0;
 
   if (display_wayland->have_egl_buffer_age)
@@ -176,7 +176,7 @@ gdk_wayland_gl_context_get_damage (GdkGLContext *context)
         shared = context;
       shared_wayland = GDK_WAYLAND_GL_CONTEXT (shared);
 
-      egl_surface = gdk_wayland_window_get_egl_surface (window->impl_window,
+      egl_surface = gdk_wayland_surface_get_egl_surface (window->impl_window,
                                                         shared_wayland->egl_config);
       gdk_gl_context_make_current (shared);
       eglQuerySurface (display_wayland->egl_display, egl_surface,
@@ -208,8 +208,8 @@ gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
                                   cairo_region_t *damage)
 {
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
-  GdkWindow *window = gdk_gl_context_get_window (context);
-  GdkDisplay *display = gdk_window_get_display (window);
+  GdkSurface *window = gdk_gl_context_get_window (context);
+  GdkDisplay *display = gdk_surface_get_display (window);
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   GdkWaylandGLContext *context_wayland = GDK_WAYLAND_GL_CONTEXT (context);
   EGLSurface egl_surface;
@@ -220,7 +220,7 @@ gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
 
   gdk_gl_context_make_current (context);
 
-  egl_surface = gdk_wayland_window_get_egl_surface (window->impl_window,
+  egl_surface = gdk_wayland_surface_get_egl_surface (window->impl_window,
                                                     context_wayland->egl_config);
 
   if (display_wayland->have_egl_swap_buffers_with_damage && damage != NULL)
@@ -228,7 +228,7 @@ gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
       int i, j, n_rects = cairo_region_num_rectangles (damage);
       EGLint *rects = g_new (EGLint, n_rects * 4);
       cairo_rectangle_int_t rect;
-      int window_height = gdk_window_get_height (window);
+      int window_height = gdk_surface_get_height (window);
 
       for (i = 0, j = 0; i < n_rects; i++)
         {
@@ -244,7 +244,7 @@ gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
   else
     eglSwapBuffers (display_wayland->egl_display, egl_surface);
 
-  gdk_wayland_window_sync (window);
+  gdk_wayland_surface_sync (window);
 }
 
 static void
@@ -360,11 +360,11 @@ gdk_wayland_display_init_gl (GdkDisplay *display)
 #define MAX_EGL_ATTRS   30
 
 static gboolean
-find_eglconfig_for_window (GdkWindow  *window,
+find_eglconfig_for_window (GdkSurface  *window,
                            EGLConfig  *egl_config_out,
                            GError    **error)
 {
-  GdkDisplay *display = gdk_window_get_display (window);
+  GdkDisplay *display = gdk_surface_get_display (window);
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   EGLint attrs[MAX_EGL_ATTRS];
   EGLint count;
@@ -418,12 +418,12 @@ find_eglconfig_for_window (GdkWindow  *window,
 }
 
 GdkGLContext *
-gdk_wayland_window_create_gl_context (GdkWindow     *window,
+gdk_wayland_surface_create_gl_context (GdkSurface     *window,
 				      gboolean       attached,
                                       GdkGLContext  *share,
                                       GError       **error)
 {
-  GdkDisplay *display = gdk_window_get_display (window);
+  GdkDisplay *display = gdk_surface_get_display (window);
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   GdkWaylandGLContext *context;
   EGLConfig config;
@@ -466,8 +466,8 @@ gdk_wayland_gl_context_dispose (GObject *gobject)
   if (context_wayland->egl_context != NULL)
     {
       GdkGLContext *context = GDK_GL_CONTEXT (gobject);
-      GdkWindow *window = gdk_gl_context_get_window (context);
-      GdkDisplay *display = gdk_window_get_display (window);
+      GdkSurface *window = gdk_gl_context_get_window (context);
+      GdkDisplay *display = gdk_surface_get_display (window);
       GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
 
       if (eglGetCurrentContext () == context_wayland->egl_context)
@@ -490,7 +490,7 @@ gdk_wayland_display_make_gl_context_current (GdkDisplay   *display,
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   GdkWaylandGLContext *context_wayland;
-  GdkWindow *window;
+  GdkSurface *window;
   EGLSurface egl_surface;
 
   if (context == NULL)
@@ -504,13 +504,13 @@ gdk_wayland_display_make_gl_context_current (GdkDisplay   *display,
   window = gdk_gl_context_get_window (context);
 
   if (context_wayland->is_attached || gdk_draw_context_is_drawing (GDK_DRAW_CONTEXT (context)))
-    egl_surface = gdk_wayland_window_get_egl_surface (window->impl_window, context_wayland->egl_config);
+    egl_surface = gdk_wayland_surface_get_egl_surface (window->impl_window, context_wayland->egl_config);
   else
     {
       if (display_wayland->have_egl_surfaceless_context)
 	egl_surface = EGL_NO_SURFACE;
       else
-	egl_surface = gdk_wayland_window_get_dummy_egl_surface (window->impl_window,
+	egl_surface = gdk_wayland_surface_get_dummy_egl_surface (window->impl_window,
 								context_wayland->egl_config);
     }
 

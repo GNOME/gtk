@@ -233,7 +233,7 @@ _gtk_text_util_create_drag_icon (GtkWidget *widget,
   pixmap_width  = layout_width  / PANGO_SCALE;
   pixmap_height = layout_height / PANGO_SCALE;
 
-  surface = gdk_window_create_similar_surface (gtk_widget_get_window (widget),
+  surface = gdk_surface_create_similar_surface (gtk_widget_get_window (widget),
                                                CAIRO_CONTENT_COLOR_ALPHA,
                                                pixmap_width, pixmap_height);
   cr = cairo_create (surface);
@@ -342,7 +342,7 @@ _gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
   layout_width = MIN (layout_width, DRAG_ICON_MAX_WIDTH);
   layout_height = MIN (layout_height, DRAG_ICON_MAX_HEIGHT);
 
-  surface = gdk_window_create_similar_surface (gtk_widget_get_window (widget),
+  surface = gdk_surface_create_similar_surface (gtk_widget_get_window (widget),
                                                CAIRO_CONTENT_COLOR_ALPHA,
                                                layout_width, layout_height);
 

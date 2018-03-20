@@ -6719,7 +6719,7 @@ gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
 	    item->cell_area.height + icon_view->priv->item_padding * 2 
 	  };
 
-	  surface = gdk_window_create_similar_surface (gtk_widget_get_window (GTK_WIDGET (icon_view)),
+	  surface = gdk_surface_create_similar_surface (gtk_widget_get_window (GTK_WIDGET (icon_view)),
                                                        CAIRO_CONTENT_COLOR_ALPHA,
                                                        rect.width,
                                                        rect.height);

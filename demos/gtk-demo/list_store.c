@@ -37,7 +37,7 @@ enum
 static Bug data[] =
 {
   { FALSE, 60482, "Normal",     "scrollable notebooks and hidden tabs" },
-  { FALSE, 60620, "Critical",   "gdk_window_clear_area (gdkwindow-win32.c) is not thread-safe" },
+  { FALSE, 60620, "Critical",   "gdk_surface_clear_area (gdkwindow-win32.c) is not thread-safe" },
   { FALSE, 50214, "Major",      "Xft support does not clean up correctly" },
   { TRUE,  52877, "Major",      "GtkFileSelection needs a refresh method. " },
   { FALSE, 56070, "Normal",     "Can't click button after setting in sensitive" },

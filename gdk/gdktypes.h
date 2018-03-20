@@ -128,7 +128,7 @@ typedef struct _GdkDragContext        GdkDragContext;
 typedef struct _GdkClipboard          GdkClipboard;
 typedef struct _GdkDisplayManager     GdkDisplayManager;
 typedef struct _GdkDisplay            GdkDisplay;
-typedef struct _GdkWindow             GdkWindow;
+typedef struct _GdkSurface             GdkSurface;
 typedef struct _GdkKeymap             GdkKeymap;
 typedef struct _GdkAppLaunchContext   GdkAppLaunchContext;
 typedef struct _GdkSeat               GdkSeat;
@@ -387,7 +387,7 @@ typedef enum
  *
  * Since GTK 3.8, motion events are already compressed by default, independent
  * of this mechanism. This compression can be disabled with
- * gdk_window_set_event_compression(). See the documentation of that function
+ * gdk_surface_set_event_compression(). See the documentation of that function
  * for details.
  *
  * If %GDK_TOUCH_MASK is enabled, the window will receive touch events
@@ -461,27 +461,27 @@ typedef enum {
 } GdkVulkanError;
 
 /**
- * GdkWindowTypeHint:
- * @GDK_WINDOW_TYPE_HINT_NORMAL: Normal toplevel window.
- * @GDK_WINDOW_TYPE_HINT_DIALOG: Dialog window.
- * @GDK_WINDOW_TYPE_HINT_MENU: Window used to implement a menu; GTK+ uses
+ * GdkSurfaceTypeHint:
+ * @GDK_SURFACE_TYPE_HINT_NORMAL: Normal toplevel window.
+ * @GDK_SURFACE_TYPE_HINT_DIALOG: Dialog window.
+ * @GDK_SURFACE_TYPE_HINT_MENU: Window used to implement a menu; GTK+ uses
  *  this hint only for torn-off menus, see #GtkTearoffMenuItem.
- * @GDK_WINDOW_TYPE_HINT_TOOLBAR: Window used to implement toolbars.
- * @GDK_WINDOW_TYPE_HINT_SPLASHSCREEN: Window used to display a splash
+ * @GDK_SURFACE_TYPE_HINT_TOOLBAR: Window used to implement toolbars.
+ * @GDK_SURFACE_TYPE_HINT_SPLASHSCREEN: Window used to display a splash
  *  screen during application startup.
- * @GDK_WINDOW_TYPE_HINT_UTILITY: Utility windows which are not detached
+ * @GDK_SURFACE_TYPE_HINT_UTILITY: Utility windows which are not detached
  *  toolbars or dialogs.
- * @GDK_WINDOW_TYPE_HINT_DOCK: Used for creating dock or panel windows.
- * @GDK_WINDOW_TYPE_HINT_DESKTOP: Used for creating the desktop background
+ * @GDK_SURFACE_TYPE_HINT_DOCK: Used for creating dock or panel windows.
+ * @GDK_SURFACE_TYPE_HINT_DESKTOP: Used for creating the desktop background
  *  window.
- * @GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU: A menu that belongs to a menubar.
- * @GDK_WINDOW_TYPE_HINT_POPUP_MENU: A menu that does not belong to a menubar,
+ * @GDK_SURFACE_TYPE_HINT_DROPDOWN_MENU: A menu that belongs to a menubar.
+ * @GDK_SURFACE_TYPE_HINT_POPUP_MENU: A menu that does not belong to a menubar,
  *  e.g. a context menu.
- * @GDK_WINDOW_TYPE_HINT_TOOLTIP: A tooltip.
- * @GDK_WINDOW_TYPE_HINT_NOTIFICATION: A notification - typically a “bubble”
+ * @GDK_SURFACE_TYPE_HINT_TOOLTIP: A tooltip.
+ * @GDK_SURFACE_TYPE_HINT_NOTIFICATION: A notification - typically a “bubble”
  *  that belongs to a status icon.
- * @GDK_WINDOW_TYPE_HINT_COMBO: A popup from a combo box.
- * @GDK_WINDOW_TYPE_HINT_DND: A window that is used to implement a DND cursor.
+ * @GDK_SURFACE_TYPE_HINT_COMBO: A popup from a combo box.
+ * @GDK_SURFACE_TYPE_HINT_DND: A window that is used to implement a DND cursor.
  *
  * These are hints for the window manager that indicate what type of function
  * the window has. The window manager can use this when determining decoration
@@ -492,21 +492,21 @@ typedef enum {
  */
 typedef enum
 {
-  GDK_WINDOW_TYPE_HINT_NORMAL,
-  GDK_WINDOW_TYPE_HINT_DIALOG,
-  GDK_WINDOW_TYPE_HINT_MENU,		/* Torn off menu */
-  GDK_WINDOW_TYPE_HINT_TOOLBAR,
-  GDK_WINDOW_TYPE_HINT_SPLASHSCREEN,
-  GDK_WINDOW_TYPE_HINT_UTILITY,
-  GDK_WINDOW_TYPE_HINT_DOCK,
-  GDK_WINDOW_TYPE_HINT_DESKTOP,
-  GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU,	/* A drop down menu (from a menubar) */
-  GDK_WINDOW_TYPE_HINT_POPUP_MENU,	/* A popup menu (from right-click) */
-  GDK_WINDOW_TYPE_HINT_TOOLTIP,
-  GDK_WINDOW_TYPE_HINT_NOTIFICATION,
-  GDK_WINDOW_TYPE_HINT_COMBO,
-  GDK_WINDOW_TYPE_HINT_DND
-} GdkWindowTypeHint;
+  GDK_SURFACE_TYPE_HINT_NORMAL,
+  GDK_SURFACE_TYPE_HINT_DIALOG,
+  GDK_SURFACE_TYPE_HINT_MENU,		/* Torn off menu */
+  GDK_SURFACE_TYPE_HINT_TOOLBAR,
+  GDK_SURFACE_TYPE_HINT_SPLASHSCREEN,
+  GDK_SURFACE_TYPE_HINT_UTILITY,
+  GDK_SURFACE_TYPE_HINT_DOCK,
+  GDK_SURFACE_TYPE_HINT_DESKTOP,
+  GDK_SURFACE_TYPE_HINT_DROPDOWN_MENU,	/* A drop down menu (from a menubar) */
+  GDK_SURFACE_TYPE_HINT_POPUP_MENU,	/* A popup menu (from right-click) */
+  GDK_SURFACE_TYPE_HINT_TOOLTIP,
+  GDK_SURFACE_TYPE_HINT_NOTIFICATION,
+  GDK_SURFACE_TYPE_HINT_COMBO,
+  GDK_SURFACE_TYPE_HINT_DND
+} GdkSurfaceTypeHint;
 
 /**
  * GdkAxisUse:

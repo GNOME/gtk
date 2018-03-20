@@ -49,44 +49,44 @@ enum {
 static guint signals[LAST_SIGNAL];
 
 #define WINDOW_IS_TOPLEVEL(window) \
-  (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD)
+  (GDK_SURFACE_TYPE (window) != GDK_SURFACE_CHILD)
 
 #define MAX_WL_BUFFER_SIZE (4083) /* 4096 minus header, string argument length and NUL byte */
 
-typedef struct _GdkWaylandWindow GdkWaylandWindow;
-typedef struct _GdkWaylandWindowClass GdkWaylandWindowClass;
+typedef struct _GdkWaylandSurface GdkWaylandSurface;
+typedef struct _GdkWaylandSurfaceClass GdkWaylandSurfaceClass;
 
-struct _GdkWaylandWindow
+struct _GdkWaylandSurface
 {
-  GdkWindow parent;
+  GdkSurface parent;
 };
 
-struct _GdkWaylandWindowClass
+struct _GdkWaylandSurfaceClass
 {
-  GdkWindowClass parent_class;
+  GdkSurfaceClass parent_class;
 };
 
-G_DEFINE_TYPE (GdkWaylandWindow, gdk_wayland_window, GDK_TYPE_WINDOW)
+G_DEFINE_TYPE (GdkWaylandSurface, gdk_wayland_surface, GDK_TYPE_SURFACE)
 
 static void
-gdk_wayland_window_class_init (GdkWaylandWindowClass *wayland_window_class)
+gdk_wayland_surface_class_init (GdkWaylandSurfaceClass *wayland_surface_class)
 {
 }
 
 static void
-gdk_wayland_window_init (GdkWaylandWindow *wayland_window)
+gdk_wayland_surface_init (GdkWaylandSurface *wayland_surface)
 {
 }
 
-#define GDK_TYPE_WINDOW_IMPL_WAYLAND              (_gdk_window_impl_wayland_get_type ())
-#define GDK_WINDOW_IMPL_WAYLAND(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WINDOW_IMPL_WAYLAND, GdkWindowImplWayland))
-#define GDK_WINDOW_IMPL_WAYLAND_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WINDOW_IMPL_WAYLAND, GdkWindowImplWaylandClass))
-#define GDK_IS_WINDOW_IMPL_WAYLAND(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WINDOW_IMPL_WAYLAND))
-#define GDK_IS_WINDOW_IMPL_WAYLAND_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WINDOW_IMPL_WAYLAND))
-#define GDK_WINDOW_IMPL_WAYLAND_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WINDOW_IMPL_WAYLAND, GdkWindowImplWaylandClass))
+#define GDK_TYPE_SURFACE_IMPL_WAYLAND              (_gdk_surface_impl_wayland_get_type ())
+#define GDK_SURFACE_IMPL_WAYLAND(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_SURFACE_IMPL_WAYLAND, GdkSurfaceImplWayland))
+#define GDK_SURFACE_IMPL_WAYLAND_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_SURFACE_IMPL_WAYLAND, GdkSurfaceImplWaylandClass))
+#define GDK_IS_SURFACE_IMPL_WAYLAND(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_SURFACE_IMPL_WAYLAND))
+#define GDK_IS_SURFACE_IMPL_WAYLAND_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_SURFACE_IMPL_WAYLAND))
+#define GDK_SURFACE_IMPL_WAYLAND_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_SURFACE_IMPL_WAYLAND, GdkSurfaceImplWaylandClass))
 
-typedef struct _GdkWindowImplWayland GdkWindowImplWayland;
-typedef struct _GdkWindowImplWaylandClass GdkWindowImplWaylandClass;
+typedef struct _GdkSurfaceImplWayland GdkSurfaceImplWayland;
+typedef struct _GdkSurfaceImplWaylandClass GdkSurfaceImplWaylandClass;
 
 typedef enum _PositionMethod
 {
@@ -95,11 +95,11 @@ typedef enum _PositionMethod
   POSITION_METHOD_MOVE_TO_RECT
 } PositionMethod;
 
-struct _GdkWindowImplWayland
+struct _GdkSurfaceImplWayland
 {
-  GdkWindowImpl parent_instance;
+  GdkSurfaceImpl parent_instance;
 
-  GdkWindow *wrapper;
+  GdkSurface *wrapper;
 
   struct {
     /* The wl_outputs that this window currently touches */
@@ -126,9 +126,9 @@ struct _GdkWindowImplWayland
   unsigned int pending_buffer_attached : 1;
   unsigned int pending_commit : 1;
   unsigned int awaiting_frame : 1;
-  GdkWindowTypeHint hint;
-  GdkWindow *transient_for;
-  GdkWindow *popup_parent;
+  GdkSurfaceTypeHint hint;
+  GdkSurface *transient_for;
+  GdkSurface *popup_parent;
   PositionMethod position_method;
 
   cairo_surface_t *staging_cairo_surface;
@@ -152,7 +152,7 @@ struct _GdkWindowImplWayland
   } application;
 
   GdkGeometry geometry_hints;
-  GdkWindowHints geometry_mask;
+  GdkSurfaceHints geometry_mask;
 
   GdkSeat *grab_input_seat;
 
@@ -192,11 +192,11 @@ struct _GdkWindowImplWayland
   struct {
     int width;
     int height;
-    GdkWindowState state;
+    GdkSurfaceState state;
   } pending;
 
   struct {
-    GdkWaylandWindowExported callback;
+    GdkWaylandSurfaceExported callback;
     gpointer user_data;
     GDestroyNotify destroy_func;
   } exported;
@@ -205,28 +205,28 @@ struct _GdkWindowImplWayland
   GHashTable *shortcuts_inhibitors;
 };
 
-struct _GdkWindowImplWaylandClass
+struct _GdkSurfaceImplWaylandClass
 {
-  GdkWindowImplClass parent_class;
+  GdkSurfaceImplClass parent_class;
 };
 
-static void gdk_wayland_window_maybe_configure (GdkWindow *window,
+static void gdk_wayland_surface_maybe_configure (GdkSurface *window,
                                                 int        width,
                                                 int        height,
                                                 int        scale);
 
-static void maybe_set_gtk_surface_dbus_properties (GdkWindow *window);
-static void maybe_set_gtk_surface_modal (GdkWindow *window);
+static void maybe_set_gtk_surface_dbus_properties (GdkSurface *window);
+static void maybe_set_gtk_surface_modal (GdkSurface *window);
 
-static void gdk_window_request_transient_parent_commit (GdkWindow *window);
+static void gdk_surface_request_transient_parent_commit (GdkSurface *window);
 
-static void gdk_wayland_window_sync_margin (GdkWindow *window);
-static void gdk_wayland_window_sync_input_region (GdkWindow *window);
-static void gdk_wayland_window_sync_opaque_region (GdkWindow *window);
+static void gdk_wayland_surface_sync_margin (GdkSurface *window);
+static void gdk_wayland_surface_sync_input_region (GdkSurface *window);
+static void gdk_wayland_surface_sync_opaque_region (GdkSurface *window);
 
-static void unset_transient_for_exported (GdkWindow *window);
+static void unset_transient_for_exported (GdkSurface *window);
 
-static void calculate_moved_to_rect_result (GdkWindow    *window,
+static void calculate_moved_to_rect_result (GdkSurface    *window,
                                             int           x,
                                             int           y,
                                             int           width,
@@ -236,14 +236,14 @@ static void calculate_moved_to_rect_result (GdkWindow    *window,
                                             gboolean     *flipped_x,
                                             gboolean     *flipped_y);
 
-static gboolean gdk_wayland_window_is_exported (GdkWindow *window);
+static gboolean gdk_wayland_surface_is_exported (GdkSurface *window);
 
-GType _gdk_window_impl_wayland_get_type (void);
+GType _gdk_surface_impl_wayland_get_type (void);
 
-G_DEFINE_TYPE (GdkWindowImplWayland, _gdk_window_impl_wayland, GDK_TYPE_WINDOW_IMPL)
+G_DEFINE_TYPE (GdkSurfaceImplWayland, _gdk_surface_impl_wayland, GDK_TYPE_SURFACE_IMPL)
 
 static void
-_gdk_window_impl_wayland_init (GdkWindowImplWayland *impl)
+_gdk_surface_impl_wayland_init (GdkSurfaceImplWayland *impl)
 {
   impl->scale = 1;
   impl->initial_fullscreen_output = NULL;
@@ -252,10 +252,10 @@ _gdk_window_impl_wayland_init (GdkWindowImplWayland *impl)
 }
 
 static void
-_gdk_wayland_screen_add_orphan_dialog (GdkWindow *window)
+_gdk_wayland_screen_add_orphan_dialog (GdkSurface *window)
 {
   GdkWaylandDisplay *display_wayland =
-    GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+    GDK_WAYLAND_DISPLAY (gdk_surface_get_display (window));
 
   if (!g_list_find (display_wayland->orphan_dialogs, window))
     display_wayland->orphan_dialogs =
@@ -263,9 +263,9 @@ _gdk_wayland_screen_add_orphan_dialog (GdkWindow *window)
 }
 
 static void
-drop_cairo_surfaces (GdkWindow *window)
+drop_cairo_surfaces (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
   g_clear_pointer (&impl->staging_cairo_surface, cairo_surface_destroy);
   g_clear_pointer (&impl->backfill_cairo_surface, cairo_surface_destroy);
@@ -277,11 +277,11 @@ drop_cairo_surfaces (GdkWindow *window)
 }
 
 static void
-_gdk_wayland_window_save_size (GdkWindow *window)
+_gdk_wayland_surface_save_size (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
-  if (window->state & (GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_MAXIMIZED))
+  if (window->state & (GDK_SURFACE_STATE_FULLSCREEN | GDK_SURFACE_STATE_MAXIMIZED))
     return;
 
   impl->saved_width = window->width - impl->margin_left - impl->margin_right;
@@ -289,11 +289,11 @@ _gdk_wayland_window_save_size (GdkWindow *window)
 }
 
 static void
-_gdk_wayland_window_clear_saved_size (GdkWindow *window)
+_gdk_wayland_surface_clear_saved_size (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
-  if (window->state & (GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_MAXIMIZED))
+  if (window->state & (GDK_SURFACE_STATE_FULLSCREEN | GDK_SURFACE_STATE_MAXIMIZED))
     return;
 
   impl->saved_width = -1;
@@ -301,19 +301,19 @@ _gdk_wayland_window_clear_saved_size (GdkWindow *window)
 }
 
 /*
- * gdk_wayland_window_update_size:
+ * gdk_wayland_surface_update_size:
  * @drawable: a #GdkDrawableImplWayland.
  *
  * Updates the state of the drawable (in particular the drawable's
  * cairo surface) when its size has changed.
  */
 static void
-gdk_wayland_window_update_size (GdkWindow *window,
+gdk_wayland_surface_update_size (GdkSurface *window,
                                 int32_t    width,
                                 int32_t    height,
                                 int        scale)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
   GdkRectangle area;
   cairo_region_t *region;
 
@@ -339,7 +339,7 @@ gdk_wayland_window_update_size (GdkWindow *window,
   area.height = window->height;
 
   region = cairo_region_create_rectangle (&area);
-  _gdk_window_invalidate_for_expose (window, region);
+  _gdk_surface_invalidate_for_expose (window, region);
   cairo_region_destroy (region);
 }
 
@@ -402,9 +402,9 @@ fill_presentation_time_from_frame_time (GdkFrameTimings *timings,
 }
 
 static void
-read_back_cairo_surface (GdkWindow *window)
+read_back_cairo_surface (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
   cairo_t *cr;
   cairo_region_t *paint_region = NULL;
 
@@ -437,18 +437,18 @@ frame_callback (void               *data,
                 struct wl_callback *callback,
                 uint32_t            time)
 {
-  GdkWindow *window = data;
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurface *window = data;
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
   GdkWaylandDisplay *display_wayland =
-    GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
-  GdkFrameClock *clock = gdk_window_get_frame_clock (window);
+    GDK_WAYLAND_DISPLAY (gdk_surface_get_display (window));
+  GdkFrameClock *clock = gdk_surface_get_frame_clock (window);
   GdkFrameTimings *timings;
 
   GDK_DISPLAY_NOTE (GDK_DISPLAY (display_wayland), EVENTS, g_message ("frame %p", window));
 
   wl_callback_destroy (callback);
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return;
 
   if (!impl->awaiting_frame)
@@ -491,7 +491,7 @@ static const struct wl_callback_listener frame_listener = {
 
 static void
 on_frame_clock_before_paint (GdkFrameClock *clock,
-                             GdkWindow     *window)
+                             GdkSurface     *window)
 {
   GdkFrameTimings *timings = gdk_frame_clock_get_current_timings (clock);
   gint64 presentation_time;
@@ -524,9 +524,9 @@ on_frame_clock_before_paint (GdkFrameClock *clock,
 
 static void
 on_frame_clock_after_paint (GdkFrameClock *clock,
-                            GdkWindow     *window)
+                            GdkSurface     *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
   struct wl_callback *callback;
 
   if (!impl->pending_commit)
@@ -567,10 +567,10 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
 }
 
 void
-gdk_wayland_window_update_scale (GdkWindow *window)
+gdk_wayland_surface_update_scale (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (window));
   guint32 scale;
   GSList *l;
   GList *children, *c;
@@ -589,33 +589,33 @@ gdk_wayland_window_update_scale (GdkWindow *window)
     }
 
   /* Notify app that scale changed */
-  gdk_wayland_window_maybe_configure (window, window->width, window->height, scale);
+  gdk_wayland_surface_maybe_configure (window, window->width, window->height, scale);
 
-  children = gdk_window_get_children (window);
+  children = gdk_surface_get_children (window);
   for (c = children; c; c = c->next)
     {
-      GdkWindow *child = c->data;
-      gdk_wayland_window_update_scale (child);
+      GdkSurface *child = c->data;
+      gdk_wayland_surface_update_scale (child);
     }
   g_list_free (children);
 }
 
-static void gdk_wayland_window_create_surface (GdkWindow *window);
+static void gdk_wayland_surface_create_surface (GdkSurface *window);
 
 void
 _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
-                                         GdkWindow     *window,
-                                         GdkWindow     *real_parent,
+                                         GdkSurface     *window,
+                                         GdkSurface     *real_parent,
                                          GdkEventMask   event_mask,
-                                         GdkWindowAttr *attributes)
+                                         GdkSurfaceAttr *attributes)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
-  GdkWindowImplWayland *impl;
+  GdkSurfaceImplWayland *impl;
   GdkFrameClock *frame_clock;
 
-  impl = g_object_new (GDK_TYPE_WINDOW_IMPL_WAYLAND, NULL);
-  window->impl = GDK_WINDOW_IMPL (impl);
-  impl->wrapper = GDK_WINDOW (window);
+  impl = g_object_new (GDK_TYPE_SURFACE_IMPL_WAYLAND, NULL);
+  window->impl = GDK_SURFACE_IMPL (impl);
+  impl->wrapper = GDK_SURFACE (window);
   impl->shortcuts_inhibitors = g_hash_table_new (NULL, NULL);
 
   if (window->width > 65535)
@@ -638,14 +638,14 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
 
   impl->title = NULL;
 
-  switch (GDK_WINDOW_TYPE (window))
+  switch (GDK_SURFACE_TYPE (window))
     {
-    case GDK_WINDOW_TOPLEVEL:
-    case GDK_WINDOW_TEMP:
-      gdk_window_set_title (window, get_default_title ());
+    case GDK_SURFACE_TOPLEVEL:
+    case GDK_SURFACE_TEMP:
+      gdk_surface_set_title (window, get_default_title ());
       break;
 
-    case GDK_WINDOW_CHILD:
+    case GDK_SURFACE_CHILD:
     default:
       break;
     }
@@ -653,20 +653,20 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
   if (real_parent == NULL)
     display_wayland->toplevels = g_list_prepend (display_wayland->toplevels, window);
 
-  gdk_wayland_window_create_surface (window);
+  gdk_wayland_surface_create_surface (window);
 
-  frame_clock = gdk_window_get_frame_clock (window);
+  frame_clock = gdk_surface_get_frame_clock (window);
   g_signal_connect (frame_clock, "before-paint", G_CALLBACK (on_frame_clock_before_paint), window);
   g_signal_connect (frame_clock, "after-paint", G_CALLBACK (on_frame_clock_after_paint), window);
 }
 
 static void
-gdk_wayland_window_attach_image (GdkWindow *window)
+gdk_wayland_surface_attach_image (GdkSurface *window)
 {
   GdkWaylandDisplay *display;
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return;
 
   g_assert (_gdk_wayland_is_shm_surface (impl->staging_cairo_surface));
@@ -680,7 +680,7 @@ gdk_wayland_window_attach_image (GdkWindow *window)
   impl->pending_buffer_offset_y = 0;
 
   /* Only set the buffer scale if supported by the compositor */
-  display = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+  display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (window));
   if (display->compositor_version >= WL_SURFACE_HAS_BUFFER_SCALE)
     wl_surface_set_buffer_scale (impl->display_server.wl_surface, impl->scale);
 
@@ -688,16 +688,16 @@ gdk_wayland_window_attach_image (GdkWindow *window)
   impl->pending_commit = TRUE;
 }
 
-static const cairo_user_data_key_t gdk_wayland_window_cairo_key;
+static const cairo_user_data_key_t gdk_wayland_surface_cairo_key;
 
 static void
 buffer_release_callback (void             *_data,
                          struct wl_buffer *wl_buffer)
 {
   cairo_surface_t *cairo_surface = _data;
-  GdkWindowImplWayland *impl = cairo_surface_get_user_data (cairo_surface, &gdk_wayland_window_cairo_key);
+  GdkSurfaceImplWayland *impl = cairo_surface_get_user_data (cairo_surface, &gdk_wayland_surface_cairo_key);
 
-  g_return_if_fail (GDK_IS_WINDOW_IMPL_WAYLAND (impl));
+  g_return_if_fail (GDK_IS_SURFACE_IMPL_WAYLAND (impl));
 
   /* The released buffer isn't the latest committed one, we have no further
    * use for it, so clean it up.
@@ -752,9 +752,9 @@ static const struct wl_buffer_listener buffer_listener = {
 };
 
 static void
-gdk_wayland_window_ensure_cairo_surface (GdkWindow *window)
+gdk_wayland_surface_ensure_cairo_surface (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
   /* If we are drawing using OpenGL then we only need a logical 1x1 surface. */
   if (impl->display_server.egl_window)
@@ -774,7 +774,7 @@ gdk_wayland_window_ensure_cairo_surface (GdkWindow *window)
     }
   else if (!impl->staging_cairo_surface)
     {
-      GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (impl->wrapper));
+      GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (impl->wrapper));
       struct wl_buffer *buffer;
 
       impl->staging_cairo_surface = _gdk_wayland_display_create_shm_surface (display_wayland,
@@ -782,7 +782,7 @@ gdk_wayland_window_ensure_cairo_surface (GdkWindow *window)
                                                                              impl->wrapper->height,
                                                                              impl->scale);
       cairo_surface_set_user_data (impl->staging_cairo_surface,
-                                   &gdk_wayland_window_cairo_key,
+                                   &gdk_wayland_surface_cairo_key,
                                    g_object_ref (impl),
                                    (cairo_destroy_func_t)
                                    g_object_unref);
@@ -799,14 +799,14 @@ gdk_wayland_window_ensure_cairo_surface (GdkWindow *window)
  * impl->staging_cairo_surface gets nullified.
  */
 static cairo_surface_t *
-gdk_wayland_window_ref_cairo_surface (GdkWindow *window)
+gdk_wayland_surface_ref_cairo_surface (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
-  if (GDK_WINDOW_DESTROYED (impl->wrapper))
+  if (GDK_SURFACE_DESTROYED (impl->wrapper))
     return NULL;
 
-  gdk_wayland_window_ensure_cairo_surface (window);
+  gdk_wayland_surface_ensure_cairo_surface (window);
 
   cairo_surface_reference (impl->staging_cairo_surface);
 
@@ -814,7 +814,7 @@ gdk_wayland_window_ref_cairo_surface (GdkWindow *window)
 }
 
 static cairo_surface_t *
-gdk_wayland_window_create_similar_image_surface (GdkWindow *     window,
+gdk_wayland_surface_create_similar_image_surface (GdkSurface *     window,
                                                  cairo_format_t  format,
                                                  int             width,
                                                  int             height)
@@ -823,17 +823,17 @@ gdk_wayland_window_create_similar_image_surface (GdkWindow *     window,
 }
 
 static gboolean
-gdk_window_impl_wayland_begin_paint (GdkWindow *window)
+gdk_surface_impl_wayland_begin_paint (GdkSurface *window)
 {
-  gdk_wayland_window_ensure_cairo_surface (window);
+  gdk_wayland_surface_ensure_cairo_surface (window);
 
   return FALSE;
 }
 
 static void
-gdk_window_impl_wayland_end_paint (GdkWindow *window)
+gdk_surface_impl_wayland_end_paint (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
   cairo_rectangle_int_t rect;
   int i, n;
 
@@ -841,7 +841,7 @@ gdk_window_impl_wayland_end_paint (GdkWindow *window)
       _gdk_wayland_is_shm_surface (impl->staging_cairo_surface) &&
       !cairo_region_is_empty (window->current_paint.region))
     {
-      gdk_wayland_window_attach_image (window);
+      gdk_wayland_surface_attach_image (window);
 
       /* If there's a committed buffer pending, then track which
        * updates are staged until the next frame, so we can back
@@ -871,38 +871,38 @@ gdk_window_impl_wayland_end_paint (GdkWindow *window)
       impl->pending_commit = TRUE;
     }
 
-  gdk_wayland_window_sync (window);
+  gdk_wayland_surface_sync (window);
 }
 
 void
-gdk_wayland_window_sync (GdkWindow *window)
+gdk_wayland_surface_sync (GdkSurface *window)
 {
-  gdk_wayland_window_sync_margin (window);
-  gdk_wayland_window_sync_opaque_region (window);
-  gdk_wayland_window_sync_input_region (window);
+  gdk_wayland_surface_sync_margin (window);
+  gdk_wayland_surface_sync_opaque_region (window);
+  gdk_wayland_surface_sync_input_region (window);
 }
 
 static gboolean
-gdk_window_impl_wayland_beep (GdkWindow *window)
+gdk_surface_impl_wayland_beep (GdkSurface *window)
 {
-  gdk_wayland_display_system_bell (gdk_window_get_display (window),
+  gdk_wayland_display_system_bell (gdk_surface_get_display (window),
                                    window);
 
   return TRUE;
 }
 
 static void
-gdk_window_impl_wayland_finalize (GObject *object)
+gdk_surface_impl_wayland_finalize (GObject *object)
 {
-  GdkWindow *window = GDK_WINDOW (object);
-  GdkWindowImplWayland *impl;
+  GdkSurface *window = GDK_SURFACE (object);
+  GdkSurfaceImplWayland *impl;
 
-  g_return_if_fail (GDK_IS_WINDOW_IMPL_WAYLAND (object));
+  g_return_if_fail (GDK_IS_SURFACE_IMPL_WAYLAND (object));
 
-  impl = GDK_WINDOW_IMPL_WAYLAND (object);
+  impl = GDK_SURFACE_IMPL_WAYLAND (object);
 
-  if (gdk_wayland_window_is_exported (window))
-    gdk_wayland_window_unexport_handle (window);
+  if (gdk_wayland_surface_is_exported (window))
+    gdk_wayland_surface_unexport_handle (window);
 
   g_free (impl->title);
 
@@ -919,11 +919,11 @@ gdk_window_impl_wayland_finalize (GObject *object)
 
   g_hash_table_destroy (impl->shortcuts_inhibitors);
 
-  G_OBJECT_CLASS (_gdk_window_impl_wayland_parent_class)->finalize (object);
+  G_OBJECT_CLASS (_gdk_surface_impl_wayland_parent_class)->finalize (object);
 }
 
 static void
-gdk_wayland_window_configure (GdkWindow *window,
+gdk_wayland_surface_configure (GdkSurface *window,
                               int        width,
                               int        height,
                               int        scale)
@@ -937,20 +937,20 @@ gdk_wayland_window_configure (GdkWindow *window,
   event->configure.width = width;
   event->configure.height = height;
 
-  gdk_wayland_window_update_size (window, width, height, scale);
-  _gdk_window_update_size (window);
+  gdk_wayland_surface_update_size (window, width, height, scale);
+  _gdk_surface_update_size (window);
 
-  display = gdk_window_get_display (window);
+  display = gdk_surface_get_display (window);
   _gdk_wayland_display_deliver_event (display, event);
 }
 
 static void
-gdk_wayland_window_maybe_configure (GdkWindow *window,
+gdk_wayland_surface_maybe_configure (GdkSurface *window,
                                     int        width,
                                     int        height,
                                     int        scale)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
   gboolean is_xdg_popup;
   gboolean is_visible;
 
@@ -966,35 +966,35 @@ gdk_wayland_window_maybe_configure (GdkWindow *window,
    */
 
   is_xdg_popup = (impl->display_server.xdg_popup != NULL);
-  is_visible = gdk_window_is_visible (window);
+  is_visible = gdk_surface_is_visible (window);
 
   if (is_xdg_popup && is_visible && !impl->initial_configure_received)
-    gdk_window_hide (window);
+    gdk_surface_hide (window);
 
-  gdk_wayland_window_configure (window, width, height, scale);
+  gdk_wayland_surface_configure (window, width, height, scale);
 
   if (is_xdg_popup && is_visible && !impl->initial_configure_received)
-    gdk_window_show (window);
+    gdk_surface_show (window);
 }
 
 static void
-gdk_wayland_window_sync_parent (GdkWindow *window,
-                                GdkWindow *parent)
+gdk_wayland_surface_sync_parent (GdkSurface *window,
+                                GdkSurface *parent)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  GdkWindowImplWayland *impl_parent = NULL;
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl_parent = NULL;
   struct zxdg_toplevel_v6 *parent_toplevel;
 
   g_assert (parent == NULL ||
-            gdk_window_get_display (window) == gdk_window_get_display (parent));
+            gdk_surface_get_display (window) == gdk_surface_get_display (parent));
 
   if (!impl->display_server.xdg_toplevel)
     return;
 
   if (impl->transient_for)
-    impl_parent = GDK_WINDOW_IMPL_WAYLAND (impl->transient_for->impl);
+    impl_parent = GDK_SURFACE_IMPL_WAYLAND (impl->transient_for->impl);
   else if (parent)
-    impl_parent = GDK_WINDOW_IMPL_WAYLAND (parent->impl);
+    impl_parent = GDK_SURFACE_IMPL_WAYLAND (parent->impl);
 
   if (impl_parent)
     {
@@ -1012,9 +1012,9 @@ gdk_wayland_window_sync_parent (GdkWindow *window,
 }
 
 static void
-gdk_wayland_window_sync_parent_of_imported (GdkWindow *window)
+gdk_wayland_surface_sync_parent_of_imported (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
   if (!impl->display_server.wl_surface)
     return;
@@ -1030,10 +1030,10 @@ gdk_wayland_window_sync_parent_of_imported (GdkWindow *window)
 }
 
 static void
-gdk_wayland_window_update_dialogs (GdkWindow *window)
+gdk_wayland_surface_update_dialogs (GdkSurface *window)
 {
   GdkWaylandDisplay *display_wayland =
-    GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+    GDK_WAYLAND_DISPLAY (gdk_surface_get_display (window));
   GList *l;
 
   if (!display_wayland->orphan_dialogs)
@@ -1041,29 +1041,29 @@ gdk_wayland_window_update_dialogs (GdkWindow *window)
 
   for (l = display_wayland->orphan_dialogs; l; l = l->next)
     {
-      GdkWindow *w = l->data;
-      GdkWindowImplWayland *impl;
+      GdkSurface *w = l->data;
+      GdkSurfaceImplWayland *impl;
 
-      if (!GDK_IS_WINDOW_IMPL_WAYLAND(w->impl))
+      if (!GDK_IS_SURFACE_IMPL_WAYLAND(w->impl))
         continue;
 
-      impl = GDK_WINDOW_IMPL_WAYLAND (w->impl);
+      impl = GDK_SURFACE_IMPL_WAYLAND (w->impl);
       if (w == window)
 	continue;
-      if (impl->hint != GDK_WINDOW_TYPE_HINT_DIALOG)
+      if (impl->hint != GDK_SURFACE_TYPE_HINT_DIALOG)
         continue;
       if (impl->transient_for)
         continue;
 
       /* Update the parent relationship only for dialogs without transients */
-      gdk_wayland_window_sync_parent (w, window);
+      gdk_wayland_surface_sync_parent (w, window);
     }
 }
 
 static void
-gdk_wayland_window_sync_title (GdkWindow *window)
+gdk_wayland_surface_sync_title (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
   if (!impl->display_server.xdg_toplevel)
     return;
@@ -1075,10 +1075,10 @@ gdk_wayland_window_sync_title (GdkWindow *window)
 }
 
 static void
-gdk_wayland_window_get_window_geometry (GdkWindow    *window,
+gdk_wayland_surface_get_window_geometry (GdkSurface    *window,
                                         GdkRectangle *geometry)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
   *geometry = (GdkRectangle) {
     .x = impl->margin_left,
@@ -1089,16 +1089,16 @@ gdk_wayland_window_get_window_geometry (GdkWindow    *window,
 }
 
 static void
-gdk_wayland_window_sync_margin (GdkWindow *window)
+gdk_wayland_surface_sync_margin (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
   GdkRectangle geometry;
 
   if (!impl->display_server.xdg_surface)
     return;
 
-  gdk_wayland_window_get_window_geometry (window, &geometry);
-  gdk_window_set_geometry_hints (window,
+  gdk_wayland_surface_get_window_geometry (window, &geometry);
+  gdk_surface_set_geometry_hints (window,
                                  &impl->geometry_hints,
                                  impl->geometry_mask);
   zxdg_surface_v6_set_window_geometry (impl->display_server.xdg_surface,
@@ -1131,9 +1131,9 @@ wl_region_from_cairo_region (GdkWaylandDisplay *display,
 }
 
 static void
-gdk_wayland_window_sync_opaque_region (GdkWindow *window)
+gdk_wayland_surface_sync_opaque_region (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
   struct wl_region *wl_region = NULL;
 
   if (!impl->display_server.wl_surface)
@@ -1143,7 +1143,7 @@ gdk_wayland_window_sync_opaque_region (GdkWindow *window)
     return;
 
   if (impl->opaque_region != NULL)
-    wl_region = wl_region_from_cairo_region (GDK_WAYLAND_DISPLAY (gdk_window_get_display (window)),
+    wl_region = wl_region_from_cairo_region (GDK_WAYLAND_DISPLAY (gdk_surface_get_display (window)),
                                              impl->opaque_region);
 
   wl_surface_set_opaque_region (impl->display_server.wl_surface, wl_region);
@@ -1155,9 +1155,9 @@ gdk_wayland_window_sync_opaque_region (GdkWindow *window)
 }
 
 static void
-gdk_wayland_window_sync_input_region (GdkWindow *window)
+gdk_wayland_surface_sync_input_region (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
   struct wl_region *wl_region = NULL;
 
   if (!impl->display_server.wl_surface)
@@ -1167,7 +1167,7 @@ gdk_wayland_window_sync_input_region (GdkWindow *window)
     return;
 
   if (impl->input_region != NULL)
-    wl_region = wl_region_from_cairo_region (GDK_WAYLAND_DISPLAY (gdk_window_get_display (window)),
+    wl_region = wl_region_from_cairo_region (GDK_WAYLAND_DISPLAY (gdk_surface_get_display (window)),
                                              impl->input_region);
 
   wl_surface_set_input_region (impl->display_server.wl_surface, wl_region);
@@ -1179,9 +1179,9 @@ gdk_wayland_window_sync_input_region (GdkWindow *window)
 }
 
 static void
-gdk_wayland_set_input_region_if_empty (GdkWindow *window)
+gdk_wayland_set_input_region_if_empty (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
   GdkWaylandDisplay *display;
   struct wl_region *empty;
 
@@ -1194,7 +1194,7 @@ gdk_wayland_set_input_region_if_empty (GdkWindow *window)
   if (!cairo_region_is_empty (impl->input_region))
     return;
 
-  display = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+  display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (window));
   empty = wl_compositor_create_region (display->compositor);
 
   wl_surface_set_input_region (impl->display_server.wl_surface, empty);
@@ -1208,15 +1208,15 @@ surface_enter (void              *data,
                struct wl_surface *wl_surface,
                struct wl_output  *output)
 {
-  GdkWindow *window = GDK_WINDOW (data);
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurface *window = GDK_SURFACE (data);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
-  GDK_DISPLAY_NOTE (gdk_window_get_display (window), EVENTS,
+  GDK_DISPLAY_NOTE (gdk_surface_get_display (window), EVENTS,
             g_message ("surface enter, window %p output %p", window, output));
 
   impl->display_server.outputs = g_slist_prepend (impl->display_server.outputs, output);
 
-  gdk_wayland_window_update_scale (window);
+  gdk_wayland_surface_update_scale (window);
 }
 
 static void
@@ -1224,16 +1224,16 @@ surface_leave (void              *data,
                struct wl_surface *wl_surface,
                struct wl_output  *output)
 {
-  GdkWindow *window = GDK_WINDOW (data);
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurface *window = GDK_SURFACE (data);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
-  GDK_DISPLAY_NOTE (gdk_window_get_display (window), EVENTS,
+  GDK_DISPLAY_NOTE (gdk_surface_get_display (window), EVENTS,
             g_message ("surface leave, window %p output %p", window, output));
 
   impl->display_server.outputs = g_slist_remove (impl->display_server.outputs, output);
 
   if (impl->display_server.outputs)
-    gdk_wayland_window_update_scale (window);
+    gdk_wayland_surface_update_scale (window);
 }
 
 static const struct wl_surface_listener surface_listener = {
@@ -1242,10 +1242,10 @@ static const struct wl_surface_listener surface_listener = {
 };
 
 static void
-on_parent_surface_committed (GdkWindowImplWayland *parent_impl,
-                             GdkWindow            *window)
+on_parent_surface_committed (GdkSurfaceImplWayland *parent_impl,
+                             GdkSurface            *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
   g_signal_handler_disconnect (parent_impl,
                                impl->parent_surface_committed_handler);
@@ -1258,12 +1258,12 @@ on_parent_surface_committed (GdkWindowImplWayland *parent_impl,
 }
 
 static void
-gdk_wayland_window_create_subsurface (GdkWindow *window)
+gdk_wayland_surface_create_subsurface (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl, *parent_impl = NULL;
+  GdkSurfaceImplWayland *impl, *parent_impl = NULL;
   GdkWaylandDisplay *display_wayland;
 
-  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
   if (!impl->display_server.wl_surface)
     return; /* Bail out, surface and subsurface will be created later when shown */
@@ -1272,11 +1272,11 @@ gdk_wayland_window_create_subsurface (GdkWindow *window)
     return;
 
   if (impl->transient_for)
-    parent_impl = GDK_WINDOW_IMPL_WAYLAND (impl->transient_for->impl);
+    parent_impl = GDK_SURFACE_IMPL_WAYLAND (impl->transient_for->impl);
 
   if (parent_impl && parent_impl->display_server.wl_surface)
     {
-      display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+      display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (window));
       impl->display_server.wl_subsurface =
         wl_subcompositor_get_subsurface (display_wayland->subcompositor,
                                          impl->display_server.wl_surface, parent_impl->display_server.wl_surface);
@@ -1292,15 +1292,15 @@ gdk_wayland_window_create_subsurface (GdkWindow *window)
         g_signal_connect_object (parent_impl, "committed",
                                  G_CALLBACK (on_parent_surface_committed),
                                  window, 0);
-      gdk_window_request_transient_parent_commit (window);
+      gdk_surface_request_transient_parent_commit (window);
     }
 }
 
 static void
-gdk_wayland_window_create_surface (GdkWindow *window)
+gdk_wayland_surface_create_surface (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (window));
 
   impl->display_server.wl_surface = wl_compositor_create_surface (display_wayland->compositor);
   wl_surface_add_listener (impl->display_server.wl_surface, &surface_listener, window);
@@ -1311,9 +1311,9 @@ xdg_surface_configure (void                   *data,
                        struct zxdg_surface_v6 *xdg_surface,
                        uint32_t                serial)
 {
-  GdkWindow *window = GDK_WINDOW (data);
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  GdkWindowState new_state;
+  GdkSurface *window = GDK_SURFACE (data);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
+  GdkSurfaceState new_state;
   int width = impl->pending.width;
   int height = impl->pending.height;
   gboolean fixed_size;
@@ -1321,7 +1321,7 @@ xdg_surface_configure (void                   *data,
 
   if (!impl->initial_configure_received)
     {
-      gdk_window_thaw_updates (window);
+      gdk_surface_thaw_updates (window);
       impl->initial_configure_received = TRUE;
     }
 
@@ -1335,7 +1335,7 @@ xdg_surface_configure (void                   *data,
   impl->pending.state = 0;
 
   fixed_size =
-    new_state & (GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_TILED);
+    new_state & (GDK_SURFACE_STATE_MAXIMIZED | GDK_SURFACE_STATE_FULLSCREEN | GDK_SURFACE_STATE_TILED);
 
   saved_size = (width == 0 && height == 0);
   /* According to xdg_shell, an xdg_surface.configure with size 0x0
@@ -1354,7 +1354,7 @@ xdg_surface_configure (void                   *data,
 
   if (width > 0 && height > 0)
     {
-      GdkWindowHints geometry_mask = impl->geometry_mask;
+      GdkSurfaceHints geometry_mask = impl->geometry_mask;
 
       /* Ignore size increments for maximized/fullscreen windows */
       if (fixed_size)
@@ -1362,7 +1362,7 @@ xdg_surface_configure (void                   *data,
       if (!saved_size)
         {
           /* Do not reapply contrains if we are restoring original size */
-          gdk_window_constrain_size (&impl->geometry_hints,
+          gdk_surface_constrain_size (&impl->geometry_hints,
                                      geometry_mask,
                                      width + impl->margin_left + impl->margin_right,
                                      height + impl->margin_top + impl->margin_bottom,
@@ -1370,25 +1370,25 @@ xdg_surface_configure (void                   *data,
                                      &height);
 
           /* Save size for next time we get 0x0 */
-          _gdk_wayland_window_save_size (window);
+          _gdk_wayland_surface_save_size (window);
         }
 
-      gdk_wayland_window_configure (window, width, height, impl->scale);
+      gdk_wayland_surface_configure (window, width, height, impl->scale);
     }
 
-  GDK_DISPLAY_NOTE (gdk_window_get_display (window), EVENTS,
+  GDK_DISPLAY_NOTE (gdk_surface_get_display (window), EVENTS,
             g_message ("configure, window %p %dx%d,%s%s%s%s",
                        window, width, height,
-                       (new_state & GDK_WINDOW_STATE_FULLSCREEN) ? " fullscreen" : "",
-                       (new_state & GDK_WINDOW_STATE_MAXIMIZED) ? " maximized" : "",
-                       (new_state & GDK_WINDOW_STATE_FOCUSED) ? " focused" : "",
-                       (new_state & GDK_WINDOW_STATE_TILED) ? " tiled" : ""));
+                       (new_state & GDK_SURFACE_STATE_FULLSCREEN) ? " fullscreen" : "",
+                       (new_state & GDK_SURFACE_STATE_MAXIMIZED) ? " maximized" : "",
+                       (new_state & GDK_SURFACE_STATE_FOCUSED) ? " focused" : "",
+                       (new_state & GDK_SURFACE_STATE_TILED) ? " tiled" : ""));
 
-  gdk_window_set_state (window, new_state);
+  gdk_surface_set_state (window, new_state);
   zxdg_surface_v6_ack_configure (xdg_surface, serial);
-  if (impl->hint != GDK_WINDOW_TYPE_HINT_DIALOG &&
-      new_state & GDK_WINDOW_STATE_FOCUSED)
-    gdk_wayland_window_update_dialogs (window);
+  if (impl->hint != GDK_SURFACE_TYPE_HINT_DIALOG &&
+      new_state & GDK_SURFACE_STATE_FOCUSED)
+    gdk_wayland_surface_update_dialogs (window);
 }
 
 static const struct zxdg_surface_v6_listener xdg_surface_listener = {
@@ -1402,8 +1402,8 @@ xdg_toplevel_configure (void                    *data,
                         int32_t                  height,
                         struct wl_array         *states)
 {
-  GdkWindow *window = GDK_WINDOW (data);
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurface *window = GDK_SURFACE (data);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
   uint32_t *p;
 
   wl_array_for_each (p, states)
@@ -1412,13 +1412,13 @@ xdg_toplevel_configure (void                    *data,
       switch (state)
         {
         case ZXDG_TOPLEVEL_V6_STATE_FULLSCREEN:
-          impl->pending.state |= GDK_WINDOW_STATE_FULLSCREEN;
+          impl->pending.state |= GDK_SURFACE_STATE_FULLSCREEN;
           break;
         case ZXDG_TOPLEVEL_V6_STATE_MAXIMIZED:
-          impl->pending.state |= GDK_WINDOW_STATE_MAXIMIZED;
+          impl->pending.state |= GDK_SURFACE_STATE_MAXIMIZED;
           break;
         case ZXDG_TOPLEVEL_V6_STATE_ACTIVATED:
-          impl->pending.state |= GDK_WINDOW_STATE_FOCUSED;
+          impl->pending.state |= GDK_SURFACE_STATE_FOCUSED;
           break;
         case ZXDG_TOPLEVEL_V6_STATE_RESIZING:
           break;
@@ -1436,11 +1436,11 @@ static void
 xdg_toplevel_close (void                    *data,
                     struct zxdg_toplevel_v6 *xdg_toplevel)
 {
-  GdkWindow *window = GDK_WINDOW (data);
+  GdkSurface *window = GDK_SURFACE (data);
   GdkDisplay *display;
   GdkEvent *event;
 
-  display = gdk_window_get_display (window);
+  display = gdk_surface_get_display (window);
 
   GDK_DISPLAY_NOTE (display, EVENTS, g_message ("close %p", window));
 
@@ -1457,10 +1457,10 @@ static const struct zxdg_toplevel_v6_listener xdg_toplevel_listener = {
 };
 
 static void
-gdk_wayland_window_create_xdg_toplevel (GdkWindow *window)
+gdk_wayland_surface_create_xdg_toplevel (GdkSurface *window)
 {
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (window));
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
   const gchar *app_id;
 
   impl->display_server.xdg_surface =
@@ -1469,7 +1469,7 @@ gdk_wayland_window_create_xdg_toplevel (GdkWindow *window)
   zxdg_surface_v6_add_listener (impl->display_server.xdg_surface,
                                 &xdg_surface_listener,
                                 window);
-  gdk_window_freeze_updates (window);
+  gdk_surface_freeze_updates (window);
 
   impl->display_server.xdg_toplevel =
     zxdg_surface_v6_get_toplevel (impl->display_server.xdg_surface);
@@ -1477,13 +1477,13 @@ gdk_wayland_window_create_xdg_toplevel (GdkWindow *window)
                                  &xdg_toplevel_listener,
                                  window);
 
-  gdk_wayland_window_sync_parent (window, NULL);
-  gdk_wayland_window_sync_parent_of_imported (window);
-  gdk_wayland_window_sync_title (window);
+  gdk_wayland_surface_sync_parent (window, NULL);
+  gdk_wayland_surface_sync_parent_of_imported (window);
+  gdk_wayland_surface_sync_title (window);
 
-  if (window->state & GDK_WINDOW_STATE_MAXIMIZED)
+  if (window->state & GDK_SURFACE_STATE_MAXIMIZED)
     zxdg_toplevel_v6_set_maximized (impl->display_server.xdg_toplevel);
-  if (window->state & GDK_WINDOW_STATE_FULLSCREEN)
+  if (window->state & GDK_SURFACE_STATE_FULLSCREEN)
     zxdg_toplevel_v6_set_fullscreen (impl->display_server.xdg_toplevel,
                                      impl->initial_fullscreen_output);
 
@@ -1499,7 +1499,7 @@ gdk_wayland_window_create_xdg_toplevel (GdkWindow *window)
   maybe_set_gtk_surface_dbus_properties (window);
   maybe_set_gtk_surface_modal (window);
 
-  if (impl->hint == GDK_WINDOW_TYPE_HINT_DIALOG)
+  if (impl->hint == GDK_SURFACE_TYPE_HINT_DIALOG)
     _gdk_wayland_screen_add_orphan_dialog (window);
 
   wl_surface_commit (impl->display_server.wl_surface);
@@ -1513,8 +1513,8 @@ xdg_popup_configure (void                 *data,
                      int32_t               width,
                      int32_t               height)
 {
-  GdkWindow *window = GDK_WINDOW (data);
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurface *window = GDK_SURFACE (data);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
   GdkRectangle flipped_rect;
   GdkRectangle final_rect;
   gboolean flipped_x;
@@ -1543,11 +1543,11 @@ static void
 xdg_popup_done (void                 *data,
                 struct zxdg_popup_v6 *xdg_popup)
 {
-  GdkWindow *window = GDK_WINDOW (data);
+  GdkSurface *window = GDK_SURFACE (data);
 
-  GDK_DISPLAY_NOTE (gdk_window_get_display (window), EVENTS, g_message ("done %p", window));
+  GDK_DISPLAY_NOTE (gdk_surface_get_display (window), EVENTS, g_message ("done %p", window));
 
-  gdk_window_hide (window);
+  gdk_surface_hide (window);
 }
 
 static const struct zxdg_popup_v6_listener xdg_popup_listener = {
@@ -1628,10 +1628,10 @@ window_anchor_to_gravity (GdkGravity rect_anchor)
 }
 
 void
-gdk_wayland_window_announce_csd (GdkWindow *window)
+gdk_wayland_surface_announce_csd (GdkSurface *window)
 {
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (window));
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
   if (!display_wayland->server_decoration_manager)
     return;
   impl->display_server.server_decoration =
@@ -1642,21 +1642,21 @@ gdk_wayland_window_announce_csd (GdkWindow *window)
                                                 ORG_KDE_KWIN_SERVER_DECORATION_MANAGER_MODE_CLIENT);
 }
 
-static GdkWindow *
-get_real_parent_and_translate (GdkWindow *window,
+static GdkSurface *
+get_real_parent_and_translate (GdkSurface *window,
                                gint      *x,
                                gint      *y)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  GdkWindow *parent = impl->transient_for;
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
+  GdkSurface *parent = impl->transient_for;
 
   while (parent)
     {
-      GdkWindowImplWayland *parent_impl =
-        GDK_WINDOW_IMPL_WAYLAND (parent->impl);
-      GdkWindow *effective_parent = gdk_window_get_parent (parent);
+      GdkSurfaceImplWayland *parent_impl =
+        GDK_SURFACE_IMPL_WAYLAND (parent->impl);
+      GdkSurface *effective_parent = gdk_surface_get_parent (parent);
 
-      if ((gdk_window_has_native (parent) &&
+      if ((gdk_surface_has_native (parent) &&
            !parent_impl->display_server.wl_subsurface) ||
           !effective_parent)
         break;
@@ -1664,7 +1664,7 @@ get_real_parent_and_translate (GdkWindow *window,
       *x += parent->x;
       *y += parent->y;
 
-      if (gdk_window_has_native (parent) &&
+      if (gdk_surface_has_native (parent) &&
           parent_impl->display_server.wl_subsurface)
         parent = parent->transient_for;
       else
@@ -1675,11 +1675,11 @@ get_real_parent_and_translate (GdkWindow *window,
 }
 
 static void
-translate_to_real_parent_window_geometry (GdkWindow  *window,
+translate_to_real_parent_window_geometry (GdkSurface  *window,
                                           gint       *x,
                                           gint       *y)
 {
-  GdkWindow *parent;
+  GdkSurface *parent;
 
   parent = get_real_parent_and_translate (window, x, y);
 
@@ -1687,12 +1687,12 @@ translate_to_real_parent_window_geometry (GdkWindow  *window,
   *y -= parent->shadow_top;
 }
 
-static GdkWindow *
-translate_from_real_parent_window_geometry (GdkWindow *window,
+static GdkSurface *
+translate_from_real_parent_window_geometry (GdkSurface *window,
                                             gint      *x,
                                             gint      *y)
 {
-  GdkWindow *parent;
+  GdkSurface *parent;
   gint dx = 0;
   gint dy = 0;
 
@@ -1705,17 +1705,17 @@ translate_from_real_parent_window_geometry (GdkWindow *window,
 }
 
 static void
-calculate_popup_rect (GdkWindow    *window,
+calculate_popup_rect (GdkSurface    *window,
                       GdkGravity    rect_anchor,
                       GdkGravity    window_anchor,
                       GdkRectangle *out_rect)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
   GdkRectangle geometry;
   GdkRectangle anchor_rect;
   int x = 0, y = 0;
 
-  gdk_wayland_window_get_window_geometry (window, &geometry);
+  gdk_wayland_surface_get_window_geometry (window, &geometry);
 
   anchor_rect = (GdkRectangle) {
     .x = (impl->pending_move_to_rect.rect.x +
@@ -1873,7 +1873,7 @@ flip_anchor_vertically (GdkGravity anchor)
 }
 
 static void
-calculate_moved_to_rect_result (GdkWindow    *window,
+calculate_moved_to_rect_result (GdkSurface    *window,
                                 int           x,
                                 int           y,
                                 int           width,
@@ -1883,8 +1883,8 @@ calculate_moved_to_rect_result (GdkWindow    *window,
                                 gboolean     *flipped_x,
                                 gboolean     *flipped_y)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  GdkWindow *parent;
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
+  GdkSurface *parent;
   gint window_x, window_y;
   gint window_width, window_height;
   GdkRectangle best_rect;
@@ -1902,7 +1902,7 @@ calculate_moved_to_rect_result (GdkWindow    *window,
   window_width = width + window->shadow_left + window->shadow_right;
   window_height = height + window->shadow_top + window->shadow_bottom;
 
-  gdk_window_move_resize (window,
+  gdk_surface_move_resize (window,
                           window_x, window_y,
                           window_width, window_height);
 
@@ -1957,11 +1957,11 @@ calculate_moved_to_rect_result (GdkWindow    *window,
 }
 
 static struct zxdg_positioner_v6 *
-create_dynamic_positioner (GdkWindow *window)
+create_dynamic_positioner (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
   GdkWaylandDisplay *display =
-    GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+    GDK_WAYLAND_DISPLAY (gdk_surface_get_display (window));
   struct zxdg_positioner_v6 *positioner;
   GdkRectangle geometry;
   enum zxdg_positioner_v6_anchor anchor;
@@ -1972,7 +1972,7 @@ create_dynamic_positioner (GdkWindow *window)
 
   positioner = zxdg_shell_v6_create_positioner (display->xdg_shell);
 
-  gdk_wayland_window_get_window_geometry (window, &geometry);
+  gdk_wayland_surface_get_window_geometry (window, &geometry);
   zxdg_positioner_v6_set_size (positioner, geometry.width, geometry.height);
 
   real_anchor_rect_x = impl->pending_move_to_rect.rect.x;
@@ -2019,11 +2019,11 @@ create_dynamic_positioner (GdkWindow *window)
 }
 
 static struct zxdg_positioner_v6 *
-create_simple_positioner (GdkWindow *window,
-                          GdkWindow *parent)
+create_simple_positioner (GdkSurface *window,
+                          GdkSurface *parent)
 {
   GdkWaylandDisplay *display =
-    GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+    GDK_WAYLAND_DISPLAY (gdk_surface_get_display (window));
   struct zxdg_positioner_v6 *positioner;
   GdkRectangle geometry;
   GdkRectangle parent_geometry;
@@ -2031,13 +2031,13 @@ create_simple_positioner (GdkWindow *window,
 
   positioner = zxdg_shell_v6_create_positioner (display->xdg_shell);
 
-  gdk_wayland_window_get_window_geometry (window, &geometry);
+  gdk_wayland_surface_get_window_geometry (window, &geometry);
   zxdg_positioner_v6_set_size (positioner, geometry.width, geometry.height);
 
   parent_x = parent->x;
   parent_y = parent->y;
 
-  gdk_wayland_window_get_window_geometry (parent, &parent_geometry);
+  gdk_wayland_surface_get_window_geometry (parent, &parent_geometry);
   parent_x += parent_geometry.x;
   parent_y += parent_geometry.y;
 
@@ -2056,13 +2056,13 @@ create_simple_positioner (GdkWindow *window,
 }
 
 static void
-gdk_wayland_window_create_xdg_popup (GdkWindow      *window,
-                                     GdkWindow      *parent,
+gdk_wayland_surface_create_xdg_popup (GdkSurface      *window,
+                                     GdkSurface      *parent,
                                      struct wl_seat *seat)
 {
-  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  GdkWindowImplWayland *parent_impl = GDK_WINDOW_IMPL_WAYLAND (parent->impl);
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (window));
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *parent_impl = GDK_SURFACE_IMPL_WAYLAND (parent->impl);
   struct zxdg_positioner_v6 *positioner;
   GdkSeat *gdk_seat;
   guint32 serial;
@@ -2098,7 +2098,7 @@ gdk_wayland_window_create_xdg_popup (GdkWindow      *window,
   zxdg_surface_v6_add_listener (impl->display_server.xdg_surface,
                                 &xdg_surface_listener,
                                 window);
-  gdk_window_freeze_updates (window);
+  gdk_surface_freeze_updates (window);
 
   if (impl->position_method == POSITION_METHOD_MOVE_TO_RECT)
     positioner = create_dynamic_positioner (window);
@@ -2129,11 +2129,11 @@ gdk_wayland_window_create_xdg_popup (GdkWindow      *window,
 }
 
 static struct wl_seat *
-find_grab_input_seat (GdkWindow *window, GdkWindow *transient_for)
+find_grab_input_seat (GdkSurface *window, GdkSurface *transient_for)
 {
-  GdkWindow *attached_grab_window;
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  GdkWindowImplWayland *tmp_impl;
+  GdkSurface *attached_grab_window;
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *tmp_impl;
 
   /* Use the device that was used for the grab as the device for
    * the popup window setup - so this relies on GTK+ taking the
@@ -2151,14 +2151,14 @@ find_grab_input_seat (GdkWindow *window, GdkWindow *transient_for)
   attached_grab_window = g_object_get_data (G_OBJECT (window), "gdk-attached-grab-window");
   if (attached_grab_window)
     {
-      tmp_impl = GDK_WINDOW_IMPL_WAYLAND (attached_grab_window->impl);
+      tmp_impl = GDK_SURFACE_IMPL_WAYLAND (attached_grab_window->impl);
       if (tmp_impl->grab_input_seat)
         return gdk_wayland_seat_get_wl_seat (tmp_impl->grab_input_seat);
     }
 
   while (transient_for)
     {
-      tmp_impl = GDK_WINDOW_IMPL_WAYLAND (transient_for->impl);
+      tmp_impl = GDK_SURFACE_IMPL_WAYLAND (transient_for->impl);
 
       if (tmp_impl->grab_input_seat)
         return gdk_wayland_seat_get_wl_seat (tmp_impl->grab_input_seat);
@@ -2170,27 +2170,27 @@ find_grab_input_seat (GdkWindow *window, GdkWindow *transient_for)
 }
 
 static gboolean
-should_be_mapped (GdkWindow *window)
+should_be_mapped (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
   /* Don't map crazy temp that GTK+ uses for internal X11 shenanigans. */
-  if (window->window_type == GDK_WINDOW_TEMP && window->x < 0 && window->y < 0)
+  if (window->window_type == GDK_SURFACE_TEMP && window->x < 0 && window->y < 0)
     return FALSE;
 
-  if (impl->hint == GDK_WINDOW_TYPE_HINT_DND)
+  if (impl->hint == GDK_SURFACE_TYPE_HINT_DND)
     return FALSE;
 
   return TRUE;
 }
 
 static gboolean
-should_map_as_popup (GdkWindow *window)
+should_map_as_popup (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
   /* Ideally, popup would be temp windows with a parent and grab */
-  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP)
+  if (GDK_SURFACE_TYPE (window) == GDK_SURFACE_TEMP)
     {
       /* If a temp window has a parent and a grab, we can use a popup */
       if (impl->transient_for)
@@ -2207,9 +2207,9 @@ should_map_as_popup (GdkWindow *window)
   /* Yet we need to keep the window type hint tests for compatibility */
   switch ((guint) impl->hint)
     {
-    case GDK_WINDOW_TYPE_HINT_POPUP_MENU:
-    case GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU:
-    case GDK_WINDOW_TYPE_HINT_COMBO:
+    case GDK_SURFACE_TYPE_HINT_POPUP_MENU:
+    case GDK_SURFACE_TYPE_HINT_DROPDOWN_MENU:
+    case GDK_SURFACE_TYPE_HINT_COMBO:
       return TRUE;
 
     default:
@@ -2220,14 +2220,14 @@ should_map_as_popup (GdkWindow *window)
 }
 
 static gboolean
-should_map_as_subsurface (GdkWindow *window)
+should_map_as_subsurface (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
-  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_SUBSURFACE)
+  if (GDK_SURFACE_TYPE (window) == GDK_SURFACE_SUBSURFACE)
     return TRUE;
 
-  if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_TEMP)
+  if (GDK_SURFACE_TYPE (window) != GDK_SURFACE_TEMP)
     return FALSE;
 
   /* if we want a popup, we do not want a subsurface */
@@ -2236,9 +2236,9 @@ should_map_as_subsurface (GdkWindow *window)
 
   if (impl->transient_for)
     {
-      GdkWindowImplWayland *impl_parent;
+      GdkSurfaceImplWayland *impl_parent;
 
-      impl_parent = GDK_WINDOW_IMPL_WAYLAND (impl->transient_for->impl);
+      impl_parent = GDK_SURFACE_IMPL_WAYLAND (impl->transient_for->impl);
       /* subsurface require that the parent is mapped */
       if (impl_parent->mapped)
         return TRUE;
@@ -2255,12 +2255,12 @@ should_map_as_subsurface (GdkWindow *window)
  * or xdg_popup. If the window is not, traverse up the transiency parents until
  * we find one.
  */
-static GdkWindow *
-get_popup_parent (GdkWindow *window)
+static GdkSurface *
+get_popup_parent (GdkSurface *window)
 {
   while (window)
     {
-      GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+      GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
       if (impl->display_server.xdg_popup || impl->display_server.xdg_toplevel)
         return window;
@@ -2272,10 +2272,10 @@ get_popup_parent (GdkWindow *window)
 }
 
 static void
-gdk_wayland_window_map (GdkWindow *window)
+gdk_wayland_surface_map (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  GdkWindow *transient_for = NULL;
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
+  GdkSurface *transient_for = NULL;
 
   if (!should_be_mapped (window))
     return;
@@ -2286,7 +2286,7 @@ gdk_wayland_window_map (GdkWindow *window)
   if (should_map_as_subsurface (window))
     {
       if (impl->transient_for)
-        gdk_wayland_window_create_subsurface (window);
+        gdk_wayland_surface_create_subsurface (window);
       else
         g_warning ("Couldn't map window %p as susburface yet because it doesn't have a parent",
                    window);
@@ -2301,7 +2301,7 @@ gdk_wayland_window_map (GdkWindow *window)
        * surface they should be positioned with by finding the surface beneath
        * the device that created the grab for the popup window.
        */
-      if (!impl->transient_for && impl->hint == GDK_WINDOW_TYPE_HINT_POPUP_MENU)
+      if (!impl->transient_for && impl->hint == GDK_SURFACE_TYPE_HINT_POPUP_MENU)
         {
           GdkDevice *grab_device = NULL;
 
@@ -2313,13 +2313,13 @@ gdk_wayland_window_map (GdkWindow *window)
            */
           if (!impl->grab_input_seat)
             {
-              GdkWindow *attached_grab_window =
+              GdkSurface *attached_grab_window =
                 g_object_get_data (G_OBJECT (window),
                                    "gdk-attached-grab-window");
               if (attached_grab_window)
                 {
-                  GdkWindowImplWayland *attached_impl =
-                    GDK_WINDOW_IMPL_WAYLAND (attached_grab_window->impl);
+                  GdkSurfaceImplWayland *attached_impl =
+                    GDK_SURFACE_IMPL_WAYLAND (attached_grab_window->impl);
                   grab_device = gdk_seat_get_pointer (attached_impl->grab_input_seat);
                   transient_for =
                     gdk_device_get_window_at_position (grab_device,
@@ -2334,18 +2334,18 @@ gdk_wayland_window_map (GdkWindow *window)
             }
 
           if (transient_for)
-            transient_for = get_popup_parent (gdk_window_get_toplevel (transient_for));
+            transient_for = get_popup_parent (gdk_surface_get_toplevel (transient_for));
 
           /* If the position was not explicitly set, start the popup at the
            * position of the device that holds the grab.
            */
           if (impl->position_method == POSITION_METHOD_NONE && grab_device)
-            gdk_window_get_device_position (transient_for, grab_device,
+            gdk_surface_get_device_position (transient_for, grab_device,
                                             &window->x, &window->y, NULL);
         }
       else
         {
-          transient_for = gdk_window_get_toplevel (impl->transient_for);
+          transient_for = gdk_surface_get_toplevel (impl->transient_for);
           transient_for = get_popup_parent (transient_for);
         }
 
@@ -2363,51 +2363,51 @@ gdk_wayland_window_map (GdkWindow *window)
 
       if (!create_fallback)
         {
-          gdk_wayland_window_create_xdg_popup (window,
+          gdk_wayland_surface_create_xdg_popup (window,
                                                transient_for,
                                                grab_input_seat);
         }
       else
         {
-          gdk_wayland_window_create_xdg_toplevel (window);
+          gdk_wayland_surface_create_xdg_toplevel (window);
         }
     }
   else
     {
-      gdk_wayland_window_create_xdg_toplevel (window);
+      gdk_wayland_surface_create_xdg_toplevel (window);
     }
 
   impl->mapped = TRUE;
 }
 
 static void
-gdk_wayland_window_show (GdkWindow *window,
+gdk_wayland_surface_show (GdkSurface *window,
                          gboolean   already_mapped)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
   if (!impl->display_server.wl_surface)
-    gdk_wayland_window_create_surface (window);
+    gdk_wayland_surface_create_surface (window);
 
-  gdk_wayland_window_map (window);
+  gdk_wayland_surface_map (window);
 
   _gdk_make_event (window, GDK_MAP, NULL, FALSE);
 
   if (impl->staging_cairo_surface &&
       _gdk_wayland_is_shm_surface (impl->staging_cairo_surface))
-    gdk_wayland_window_attach_image (window);
+    gdk_wayland_surface_attach_image (window);
 }
 
 static void
-unmap_subsurface (GdkWindow *window)
+unmap_subsurface (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  GdkWindowImplWayland *parent_impl;
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *parent_impl;
 
   g_return_if_fail (impl->display_server.wl_subsurface);
   g_return_if_fail (impl->transient_for);
 
-  parent_impl = GDK_WINDOW_IMPL_WAYLAND (impl->transient_for->impl);
+  parent_impl = GDK_SURFACE_IMPL_WAYLAND (impl->transient_for->impl);
   wl_subsurface_destroy (impl->display_server.wl_subsurface);
   if (impl->parent_surface_committed_handler)
     {
@@ -2419,21 +2419,21 @@ unmap_subsurface (GdkWindow *window)
 }
 
 static void
-unmap_popups_for_window (GdkWindow *window)
+unmap_popups_for_window (GdkSurface *window)
 {
   GdkWaylandDisplay *display_wayland;
   GList *l;
 
-  display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+  display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (window));
   for (l = display_wayland->current_popups; l; l = l->next)
     {
-       GdkWindow *popup = l->data;
-       GdkWindowImplWayland *popup_impl = GDK_WINDOW_IMPL_WAYLAND (popup->impl);
+       GdkSurface *popup = l->data;
+       GdkSurfaceImplWayland *popup_impl = GDK_SURFACE_IMPL_WAYLAND (popup->impl);
 
        if (popup_impl->popup_parent == window)
          {
            g_warning ("Tried to unmap the parent of a popup");
-           gdk_window_hide (popup);
+           gdk_surface_hide (popup);
 
            return;
          }
@@ -2441,10 +2441,10 @@ unmap_popups_for_window (GdkWindow *window)
 }
 
 static void
-gdk_wayland_window_hide_surface (GdkWindow *window)
+gdk_wayland_surface_hide_surface (GdkSurface *window)
 {
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (window));
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
   unmap_popups_for_window (window);
 
@@ -2491,7 +2491,7 @@ gdk_wayland_window_hide_surface (GdkWindow *window)
           zxdg_surface_v6_destroy (impl->display_server.xdg_surface);
           impl->display_server.xdg_surface = NULL;
           if (!impl->initial_configure_received)
-            gdk_window_thaw_updates (window);
+            gdk_surface_thaw_updates (window);
           else
             impl->initial_configure_received = FALSE;
         }
@@ -2504,7 +2504,7 @@ gdk_wayland_window_hide_surface (GdkWindow *window)
           GdkFrameClock *frame_clock;
 
           impl->awaiting_frame = FALSE;
-          frame_clock = gdk_window_get_frame_clock (window);
+          frame_clock = gdk_surface_get_frame_clock (window);
           if (frame_clock)
             _gdk_frame_clock_thaw (frame_clock);
         }
@@ -2522,89 +2522,89 @@ gdk_wayland_window_hide_surface (GdkWindow *window)
       g_slist_free (impl->display_server.outputs);
       impl->display_server.outputs = NULL;
 
-      if (impl->hint == GDK_WINDOW_TYPE_HINT_DIALOG && !impl->transient_for)
+      if (impl->hint == GDK_SURFACE_TYPE_HINT_DIALOG && !impl->transient_for)
         display_wayland->orphan_dialogs =
           g_list_remove (display_wayland->orphan_dialogs, window);
     }
 
   unset_transient_for_exported (window);
 
-  _gdk_wayland_window_clear_saved_size (window);
+  _gdk_wayland_surface_clear_saved_size (window);
   impl->pending_commit = FALSE;
   impl->mapped = FALSE;
 }
 
 static void
-gdk_wayland_window_hide (GdkWindow *window)
+gdk_wayland_surface_hide (GdkSurface *window)
 {
-  gdk_wayland_window_hide_surface (window);
-  _gdk_window_clear_update_area (window);
+  gdk_wayland_surface_hide_surface (window);
+  _gdk_surface_clear_update_area (window);
 }
 
 static void
-gdk_window_wayland_withdraw (GdkWindow *window)
+gdk_surface_wayland_withdraw (GdkSurface *window)
 {
   if (!window->destroyed)
     {
-      if (GDK_WINDOW_IS_MAPPED (window))
-        gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_WITHDRAWN);
+      if (GDK_SURFACE_IS_MAPPED (window))
+        gdk_synthesize_window_state (window, 0, GDK_SURFACE_STATE_WITHDRAWN);
 
-      g_assert (!GDK_WINDOW_IS_MAPPED (window));
+      g_assert (!GDK_SURFACE_IS_MAPPED (window));
 
-      gdk_wayland_window_hide_surface (window);
+      gdk_wayland_surface_hide_surface (window);
     }
 }
 
 static void
-gdk_window_wayland_set_events (GdkWindow    *window,
+gdk_surface_wayland_set_events (GdkSurface    *window,
                                GdkEventMask  event_mask)
 {
-  GDK_WINDOW (window)->event_mask = event_mask;
+  GDK_SURFACE (window)->event_mask = event_mask;
 }
 
 static GdkEventMask
-gdk_window_wayland_get_events (GdkWindow *window)
+gdk_surface_wayland_get_events (GdkSurface *window)
 {
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return 0;
   else
-    return GDK_WINDOW (window)->event_mask;
+    return GDK_SURFACE (window)->event_mask;
 }
 
 static void
-gdk_window_wayland_raise (GdkWindow *window)
+gdk_surface_wayland_raise (GdkSurface *window)
 {
 }
 
 static void
-gdk_window_wayland_lower (GdkWindow *window)
+gdk_surface_wayland_lower (GdkSurface *window)
 {
 }
 
 static void
-gdk_window_wayland_restack_toplevel (GdkWindow *window,
-                                     GdkWindow *sibling,
+gdk_surface_wayland_restack_toplevel (GdkSurface *window,
+                                     GdkSurface *sibling,
                                      gboolean   above)
 {
 }
 
 static void
-gdk_window_request_transient_parent_commit (GdkWindow *window)
+gdk_surface_request_transient_parent_commit (GdkSurface *window)
 {
-  GdkWindowImplWayland *window_impl, *impl;
+  GdkSurfaceImplWayland *window_impl, *impl;
   GdkFrameClock *frame_clock;
 
-  window_impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  window_impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
   if (!window_impl->transient_for)
     return;
 
-  impl = GDK_WINDOW_IMPL_WAYLAND (window_impl->transient_for->impl);
+  impl = GDK_SURFACE_IMPL_WAYLAND (window_impl->transient_for->impl);
 
   if (!impl->display_server.wl_surface || impl->pending_commit)
     return;
 
-  frame_clock = gdk_window_get_frame_clock (window_impl->transient_for);
+  frame_clock = gdk_surface_get_frame_clock (window_impl->transient_for);
 
   if (!frame_clock)
     return;
@@ -2615,19 +2615,19 @@ gdk_window_request_transient_parent_commit (GdkWindow *window)
 }
 
 static void
-gdk_window_wayland_move_resize (GdkWindow *window,
+gdk_surface_wayland_move_resize (GdkSurface *window,
                                 gboolean   with_move,
                                 gint       x,
                                 gint       y,
                                 gint       width,
                                 gint       height)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
   if (with_move)
     {
       /* Each toplevel has in its own "root" coordinate system */
-      if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_TOPLEVEL)
+      if (GDK_SURFACE_TYPE (window) != GDK_SURFACE_TOPLEVEL)
         {
           window->x = x;
           window->y = y;
@@ -2638,7 +2638,7 @@ gdk_window_wayland_move_resize (GdkWindow *window,
               wl_subsurface_set_position (impl->display_server.wl_subsurface,
                                           window->x + window->abs_x,
                                           window->y + window->abs_y);
-              gdk_window_request_transient_parent_commit (window);
+              gdk_surface_request_transient_parent_commit (window);
             }
         }
     }
@@ -2647,12 +2647,12 @@ gdk_window_wayland_move_resize (GdkWindow *window,
    * just move the window - don't update its size
    */
   if (width > 0 && height > 0)
-    gdk_wayland_window_maybe_configure (window, width, height, impl->scale);
+    gdk_wayland_surface_maybe_configure (window, width, height, impl->scale);
 }
 
 /* Avoid zero width/height as this is a protocol error */
 static void
-sanitize_anchor_rect (GdkWindow    *window,
+sanitize_anchor_rect (GdkSurface    *window,
                       GdkRectangle *rect)
 {
   gint original_width = rect->width;
@@ -2665,7 +2665,7 @@ sanitize_anchor_rect (GdkWindow    *window,
 }
 
 static void
-gdk_window_wayland_move_to_rect (GdkWindow          *window,
+gdk_surface_wayland_move_to_rect (GdkSurface          *window,
                                  const GdkRectangle *rect,
                                  GdkGravity          rect_anchor,
                                  GdkGravity          window_anchor,
@@ -2673,7 +2673,7 @@ gdk_window_wayland_move_to_rect (GdkWindow          *window,
                                  gint                rect_anchor_dx,
                                  gint                rect_anchor_dy)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
   impl->pending_move_to_rect.rect = *rect;
   sanitize_anchor_rect (window, &impl->pending_move_to_rect.rect);
@@ -2688,13 +2688,13 @@ gdk_window_wayland_move_to_rect (GdkWindow          *window,
 }
 
 static void
-gdk_window_wayland_get_geometry (GdkWindow *window,
+gdk_surface_wayland_get_geometry (GdkSurface *window,
                                  gint      *x,
                                  gint      *y,
                                  gint      *width,
                                  gint      *height)
 {
-  if (!GDK_WINDOW_DESTROYED (window))
+  if (!GDK_SURFACE_DESTROYED (window))
     {
       if (x)
         *x = window->x;
@@ -2708,7 +2708,7 @@ gdk_window_wayland_get_geometry (GdkWindow *window,
 }
 
 static void
-gdk_window_wayland_get_root_coords (GdkWindow *window,
+gdk_surface_wayland_get_root_coords (GdkSurface *window,
                                     gint       x,
                                     gint       y,
                                     gint      *root_x,
@@ -2744,7 +2744,7 @@ gdk_window_wayland_get_root_coords (GdkWindow *window,
 }
 
 static gboolean
-gdk_window_wayland_get_device_state (GdkWindow       *window,
+gdk_surface_wayland_get_device_state (GdkSurface       *window,
                                      GdkDevice       *device,
                                      gdouble         *x,
                                      gdouble         *y,
@@ -2752,13 +2752,13 @@ gdk_window_wayland_get_device_state (GdkWindow       *window,
 {
   gboolean return_val;
 
-  g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), FALSE);
+  g_return_val_if_fail (window == NULL || GDK_IS_SURFACE (window), FALSE);
 
   return_val = TRUE;
 
-  if (!GDK_WINDOW_DESTROYED (window))
+  if (!GDK_SURFACE_DESTROYED (window))
     {
-      GdkWindow *child;
+      GdkSurface *child;
 
       GDK_DEVICE_GET_CLASS (device)->query_state (device, window,
                                                   &child,
@@ -2771,7 +2771,7 @@ gdk_window_wayland_get_device_state (GdkWindow       *window,
 }
 
 static void
-gdk_window_wayland_shape_combine_region (GdkWindow            *window,
+gdk_surface_wayland_shape_combine_region (GdkSurface            *window,
                                          const cairo_region_t *shape_region,
                                          gint                  offset_x,
                                          gint                  offset_y)
@@ -2779,14 +2779,14 @@ gdk_window_wayland_shape_combine_region (GdkWindow            *window,
 }
 
 static void
-gdk_window_wayland_input_shape_combine_region (GdkWindow            *window,
+gdk_surface_wayland_input_shape_combine_region (GdkSurface            *window,
                                                const cairo_region_t *shape_region,
                                                gint                  offset_x,
                                                gint                  offset_y)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return;
 
   g_clear_pointer (&impl->input_region, cairo_region_destroy);
@@ -2801,32 +2801,32 @@ gdk_window_wayland_input_shape_combine_region (GdkWindow            *window,
 }
 
 static void
-gdk_wayland_window_destroy (GdkWindow *window,
+gdk_wayland_surface_destroy (GdkSurface *window,
                             gboolean   recursing,
                             gboolean   foreign_destroy)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
   /* Wayland windows can't be externally destroyed; we may possibly
    * eventually want to use this path at display close-down
    */
   g_return_if_fail (!foreign_destroy);
 
-  gdk_wayland_window_hide_surface (window);
+  gdk_wayland_surface_hide_surface (window);
   drop_cairo_surfaces (window);
 
   if (window->parent == NULL)
     {
-      GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+      GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (window));
       display->toplevels = g_list_remove (display->toplevels, window);
     }
 }
 
 static void
-gdk_wayland_window_focus (GdkWindow *window,
+gdk_wayland_surface_focus (GdkSurface *window,
                           guint32    timestamp)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
   if (!impl->display_server.gtk_surface)
     return;
@@ -2842,28 +2842,28 @@ gdk_wayland_window_focus (GdkWindow *window,
 }
 
 static void
-gdk_wayland_window_set_type_hint (GdkWindow         *window,
-                                  GdkWindowTypeHint  hint)
+gdk_wayland_surface_set_type_hint (GdkSurface         *window,
+                                  GdkSurfaceTypeHint  hint)
 {
-  GdkWindowImplWayland *impl;
+  GdkSurfaceImplWayland *impl;
 
-  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return;
 
   impl->hint = hint;
 }
 
-static GdkWindowTypeHint
-gdk_wayland_window_get_type_hint (GdkWindow *window)
+static GdkSurfaceTypeHint
+gdk_wayland_surface_get_type_hint (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl;
+  GdkSurfaceImplWayland *impl;
 
-  if (GDK_WINDOW_DESTROYED (window))
-    return GDK_WINDOW_TYPE_HINT_NORMAL;
+  if (GDK_SURFACE_DESTROYED (window))
+    return GDK_SURFACE_TYPE_HINT_NORMAL;
 
-  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
   return impl->hint;
 }
@@ -2873,9 +2873,9 @@ gtk_surface_configure (void                *data,
                        struct gtk_surface1 *gtk_surface,
                        struct wl_array     *states)
 {
-  GdkWindow *window = GDK_WINDOW (data);
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  GdkWindowState new_state = 0;
+  GdkSurface *window = GDK_SURFACE (data);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
+  GdkSurfaceState new_state = 0;
   uint32_t *p;
 
   wl_array_for_each (p, states)
@@ -2885,21 +2885,21 @@ gtk_surface_configure (void                *data,
       switch (state)
         {
         case GTK_SURFACE1_STATE_TILED:
-          new_state |= GDK_WINDOW_STATE_TILED;
+          new_state |= GDK_SURFACE_STATE_TILED;
           break;
 
         /* Since v2 */
         case GTK_SURFACE1_STATE_TILED_TOP:
-          new_state |= (GDK_WINDOW_STATE_TILED | GDK_WINDOW_STATE_TOP_TILED);
+          new_state |= (GDK_SURFACE_STATE_TILED | GDK_SURFACE_STATE_TOP_TILED);
           break;
         case GTK_SURFACE1_STATE_TILED_RIGHT:
-          new_state |= (GDK_WINDOW_STATE_TILED | GDK_WINDOW_STATE_RIGHT_TILED);
+          new_state |= (GDK_SURFACE_STATE_TILED | GDK_SURFACE_STATE_RIGHT_TILED);
           break;
         case GTK_SURFACE1_STATE_TILED_BOTTOM:
-          new_state |= (GDK_WINDOW_STATE_TILED | GDK_WINDOW_STATE_BOTTOM_TILED);
+          new_state |= (GDK_SURFACE_STATE_TILED | GDK_SURFACE_STATE_BOTTOM_TILED);
           break;
         case GTK_SURFACE1_STATE_TILED_LEFT:
-          new_state |= (GDK_WINDOW_STATE_TILED | GDK_WINDOW_STATE_LEFT_TILED);
+          new_state |= (GDK_SURFACE_STATE_TILED | GDK_SURFACE_STATE_LEFT_TILED);
           break;
         default:
           /* Unknown state */
@@ -2915,9 +2915,9 @@ gtk_surface_configure_edges (void                *data,
                              struct gtk_surface1 *gtk_surface,
                              struct wl_array     *edge_constraints)
 {
-  GdkWindow *window = GDK_WINDOW (data);
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  GdkWindowState new_state = 0;
+  GdkSurface *window = GDK_SURFACE (data);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
+  GdkSurfaceState new_state = 0;
   uint32_t *p;
 
   wl_array_for_each (p, edge_constraints)
@@ -2927,16 +2927,16 @@ gtk_surface_configure_edges (void                *data,
       switch (constraint)
         {
         case GTK_SURFACE1_EDGE_CONSTRAINT_RESIZABLE_TOP:
-          new_state |= GDK_WINDOW_STATE_TOP_RESIZABLE;
+          new_state |= GDK_SURFACE_STATE_TOP_RESIZABLE;
           break;
         case GTK_SURFACE1_EDGE_CONSTRAINT_RESIZABLE_RIGHT:
-          new_state |= GDK_WINDOW_STATE_RIGHT_RESIZABLE;
+          new_state |= GDK_SURFACE_STATE_RIGHT_RESIZABLE;
           break;
         case GTK_SURFACE1_EDGE_CONSTRAINT_RESIZABLE_BOTTOM:
-          new_state |= GDK_WINDOW_STATE_BOTTOM_RESIZABLE;
+          new_state |= GDK_SURFACE_STATE_BOTTOM_RESIZABLE;
           break;
         case GTK_SURFACE1_EDGE_CONSTRAINT_RESIZABLE_LEFT:
-          new_state |= GDK_WINDOW_STATE_LEFT_RESIZABLE;
+          new_state |= GDK_SURFACE_STATE_LEFT_RESIZABLE;
           break;
         default:
           /* Unknown state */
@@ -2953,11 +2953,11 @@ static const struct gtk_surface1_listener gtk_surface_listener = {
 };
 
 static void
-gdk_wayland_window_init_gtk_surface (GdkWindow *window)
+gdk_wayland_surface_init_gtk_surface (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
   GdkWaylandDisplay *display =
-    GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+    GDK_WAYLAND_DISPLAY (gdk_surface_get_display (window));
 
   if (impl->display_server.gtk_surface != NULL)
     return;
@@ -2969,7 +2969,7 @@ gdk_wayland_window_init_gtk_surface (GdkWindow *window)
   impl->display_server.gtk_surface =
     gtk_shell1_get_gtk_surface (display->gtk_shell,
                                 impl->display_server.wl_surface);
-  gdk_window_set_geometry_hints (window,
+  gdk_surface_set_geometry_hints (window,
                                  &impl->geometry_hints,
                                  impl->geometry_mask);
   gtk_surface1_add_listener (impl->display_server.gtk_surface,
@@ -2978,11 +2978,11 @@ gdk_wayland_window_init_gtk_surface (GdkWindow *window)
 }
 
 static void
-maybe_set_gtk_surface_modal (GdkWindow *window)
+maybe_set_gtk_surface_modal (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
-  gdk_wayland_window_init_gtk_surface (window);
+  gdk_wayland_surface_init_gtk_surface (window);
   if (impl->display_server.gtk_surface == NULL)
     return;
 
@@ -2994,7 +2994,7 @@ maybe_set_gtk_surface_modal (GdkWindow *window)
 }
 
 static void
-gdk_wayland_window_set_modal_hint (GdkWindow *window,
+gdk_wayland_surface_set_modal_hint (GdkSurface *window,
                                    gboolean   modal)
 {
   window->modal_hint = modal;
@@ -3002,36 +3002,36 @@ gdk_wayland_window_set_modal_hint (GdkWindow *window,
 }
 
 static void
-gdk_wayland_window_set_skip_taskbar_hint (GdkWindow *window,
+gdk_wayland_surface_set_skip_taskbar_hint (GdkSurface *window,
                                           gboolean   skips_taskbar)
 {
 }
 
 static void
-gdk_wayland_window_set_skip_pager_hint (GdkWindow *window,
+gdk_wayland_surface_set_skip_pager_hint (GdkSurface *window,
                                         gboolean   skips_pager)
 {
 }
 
 static void
-gdk_wayland_window_set_urgency_hint (GdkWindow *window,
+gdk_wayland_surface_set_urgency_hint (GdkSurface *window,
                                      gboolean   urgent)
 {
 }
 
 static void
-gdk_wayland_window_set_geometry_hints (GdkWindow         *window,
+gdk_wayland_surface_set_geometry_hints (GdkSurface         *window,
                                        const GdkGeometry *geometry,
-                                       GdkWindowHints     geom_mask)
+                                       GdkSurfaceHints     geom_mask)
 {
-  GdkWindowImplWayland *impl;
+  GdkSurfaceImplWayland *impl;
   int width, height;
 
-  if (GDK_WINDOW_DESTROYED (window) ||
+  if (GDK_SURFACE_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL (window))
     return;
 
-  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
   impl->geometry_hints = *geometry;
   impl->geometry_mask = geom_mask;
@@ -3067,19 +3067,19 @@ gdk_wayland_window_set_geometry_hints (GdkWindow         *window,
 }
 
 static void
-gdk_wayland_window_set_title (GdkWindow   *window,
+gdk_wayland_surface_set_title (GdkSurface   *window,
                               const gchar *title)
 {
-  GdkWindowImplWayland *impl;
+  GdkSurfaceImplWayland *impl;
   const char *end;
   gsize title_length;
 
   g_return_if_fail (title != NULL);
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return;
 
-  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
   if (g_strcmp0 (impl->title, title) == 0)
     return;
@@ -3096,36 +3096,36 @@ gdk_wayland_window_set_title (GdkWindow   *window,
   else
     {
       impl->title = g_utf8_make_valid (title, title_length);
-      g_warning ("Invalid utf8 passed to gdk_window_set_title: '%s'", title);
+      g_warning ("Invalid utf8 passed to gdk_surface_set_title: '%s'", title);
     }
 
-  gdk_wayland_window_sync_title (window);
+  gdk_wayland_surface_sync_title (window);
 }
 
 static void
-gdk_wayland_window_set_role (GdkWindow   *window,
+gdk_wayland_surface_set_role (GdkSurface   *window,
                              const gchar *role)
 {
 }
 
 static void
-gdk_wayland_window_set_startup_id (GdkWindow   *window,
+gdk_wayland_surface_set_startup_id (GdkSurface   *window,
                                    const gchar *startup_id)
 {
 }
 
 static gboolean
-check_transient_for_loop (GdkWindow *window,
-                          GdkWindow *parent)
+check_transient_for_loop (GdkSurface *window,
+                          GdkSurface *parent)
 {
   while (parent)
     {
-      GdkWindowImplWayland *impl;
+      GdkSurfaceImplWayland *impl;
 
-      if (!GDK_IS_WINDOW_IMPL_WAYLAND(parent->impl))
+      if (!GDK_IS_SURFACE_IMPL_WAYLAND(parent->impl))
         return FALSE;
 
-      impl = GDK_WINDOW_IMPL_WAYLAND (parent->impl);
+      impl = GDK_SURFACE_IMPL_WAYLAND (parent->impl);
       if (impl->transient_for == window)
         return TRUE;
       parent = impl->transient_for;
@@ -3134,16 +3134,16 @@ check_transient_for_loop (GdkWindow *window,
 }
 
 static void
-gdk_wayland_window_set_transient_for (GdkWindow *window,
-                                      GdkWindow *parent)
+gdk_wayland_surface_set_transient_for (GdkSurface *window,
+                                      GdkSurface *parent)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
   GdkWaylandDisplay *display_wayland =
-    GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
-  GdkWindow *previous_parent;
+    GDK_WAYLAND_DISPLAY (gdk_surface_get_display (window));
+  GdkSurface *previous_parent;
 
   g_assert (parent == NULL ||
-            gdk_window_get_display (window) == gdk_window_get_display (parent));
+            gdk_surface_get_display (window) == gdk_surface_get_display (parent));
 
   if (check_transient_for_loop (window, parent))
     {
@@ -3159,7 +3159,7 @@ gdk_wayland_window_set_transient_for (GdkWindow *window,
   previous_parent = impl->transient_for;
   impl->transient_for = parent;
 
-  if (impl->hint == GDK_WINDOW_TYPE_HINT_DIALOG)
+  if (impl->hint == GDK_SURFACE_TYPE_HINT_DIALOG)
     {
       if (!parent)
         _gdk_wayland_screen_add_orphan_dialog (window);
@@ -3167,14 +3167,14 @@ gdk_wayland_window_set_transient_for (GdkWindow *window,
         display_wayland->orphan_dialogs =
           g_list_remove (display_wayland->orphan_dialogs, window);
     }
-  gdk_wayland_window_sync_parent (window, NULL);
+  gdk_wayland_surface_sync_parent (window, NULL);
   if (should_map_as_subsurface (window) &&
-      parent && gdk_window_is_visible (window))
-    gdk_wayland_window_create_subsurface (window);
+      parent && gdk_surface_is_visible (window))
+    gdk_wayland_surface_create_subsurface (window);
 }
 
 static void
-gdk_wayland_window_get_frame_extents (GdkWindow    *window,
+gdk_wayland_surface_get_frame_extents (GdkSurface    *window,
                                       GdkRectangle *rect)
 {
   *rect = (GdkRectangle) {
@@ -3186,37 +3186,37 @@ gdk_wayland_window_get_frame_extents (GdkWindow    *window,
 }
 
 static void
-gdk_wayland_window_set_accept_focus (GdkWindow *window,
+gdk_wayland_surface_set_accept_focus (GdkSurface *window,
                                      gboolean   accept_focus)
 {
 }
 
 static void
-gdk_wayland_window_set_focus_on_map (GdkWindow *window,
+gdk_wayland_surface_set_focus_on_map (GdkSurface *window,
                                      gboolean focus_on_map)
 {
 }
 
 static void
-gdk_wayland_window_set_icon_list (GdkWindow *window,
+gdk_wayland_surface_set_icon_list (GdkSurface *window,
                                   GList     *surfaces)
 {
 }
 
 static void
-gdk_wayland_window_set_icon_name (GdkWindow   *window,
+gdk_wayland_surface_set_icon_name (GdkSurface   *window,
                                   const gchar *name)
 {
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return;
 }
 
 static void
-gdk_wayland_window_iconify (GdkWindow *window)
+gdk_wayland_surface_iconify (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
-  if (GDK_WINDOW_DESTROYED (window) ||
+  if (GDK_SURFACE_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL (window))
     return;
 
@@ -3227,103 +3227,103 @@ gdk_wayland_window_iconify (GdkWindow *window)
 }
 
 static void
-gdk_wayland_window_deiconify (GdkWindow *window)
+gdk_wayland_surface_deiconify (GdkSurface *window)
 {
-  if (GDK_WINDOW_DESTROYED (window) ||
+  if (GDK_SURFACE_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL (window))
     return;
 
-  if (GDK_WINDOW_IS_MAPPED (window))
-    gdk_window_show (window);
+  if (GDK_SURFACE_IS_MAPPED (window))
+    gdk_surface_show (window);
   else
     /* Flip our client side flag, the real work happens on map. */
-    gdk_synthesize_window_state (window, GDK_WINDOW_STATE_ICONIFIED, 0);
+    gdk_synthesize_window_state (window, GDK_SURFACE_STATE_ICONIFIED, 0);
 }
 
 static void
-gdk_wayland_window_stick (GdkWindow *window)
+gdk_wayland_surface_stick (GdkSurface *window)
 {
 }
 
 static void
-gdk_wayland_window_unstick (GdkWindow *window)
+gdk_wayland_surface_unstick (GdkSurface *window)
 {
 }
 
 static void
-gdk_wayland_window_maximize (GdkWindow *window)
+gdk_wayland_surface_maximize (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return;
 
-  _gdk_wayland_window_save_size (window);
+  _gdk_wayland_surface_save_size (window);
   if (impl->display_server.xdg_toplevel)
     zxdg_toplevel_v6_set_maximized (impl->display_server.xdg_toplevel);
   else
-    gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_MAXIMIZED);
+    gdk_synthesize_window_state (window, 0, GDK_SURFACE_STATE_MAXIMIZED);
 }
 
 static void
-gdk_wayland_window_unmaximize (GdkWindow *window)
+gdk_wayland_surface_unmaximize (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return;
 
   if (impl->display_server.xdg_toplevel)
     zxdg_toplevel_v6_unset_maximized (impl->display_server.xdg_toplevel);
   else
-    gdk_synthesize_window_state (window, GDK_WINDOW_STATE_MAXIMIZED, 0);
+    gdk_synthesize_window_state (window, GDK_SURFACE_STATE_MAXIMIZED, 0);
 }
 
 static void
-gdk_wayland_window_fullscreen_on_monitor (GdkWindow  *window,
+gdk_wayland_surface_fullscreen_on_monitor (GdkSurface  *window,
                                           GdkMonitor *monitor)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
   struct wl_output *output = ((GdkWaylandMonitor *)monitor)->output;
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return;
 
-  _gdk_wayland_window_save_size (window);
+  _gdk_wayland_surface_save_size (window);
   if (impl->display_server.xdg_toplevel)
     {
       zxdg_toplevel_v6_set_fullscreen (impl->display_server.xdg_toplevel, output);
     }
   else
     {
-      gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FULLSCREEN);
+      gdk_synthesize_window_state (window, 0, GDK_SURFACE_STATE_FULLSCREEN);
       impl->initial_fullscreen_output = output;
     }
 }
 
 static void
-gdk_wayland_window_fullscreen (GdkWindow *window)
+gdk_wayland_surface_fullscreen (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return;
 
   impl->initial_fullscreen_output = NULL;
 
-  _gdk_wayland_window_save_size (window);
+  _gdk_wayland_surface_save_size (window);
   if (impl->display_server.xdg_toplevel)
     zxdg_toplevel_v6_set_fullscreen (impl->display_server.xdg_toplevel, NULL);
   else
-    gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FULLSCREEN);
+    gdk_synthesize_window_state (window, 0, GDK_SURFACE_STATE_FULLSCREEN);
 }
 
 static void
-gdk_wayland_window_unfullscreen (GdkWindow *window)
+gdk_wayland_surface_unfullscreen (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return;
 
   impl->initial_fullscreen_output = NULL;
@@ -3331,107 +3331,107 @@ gdk_wayland_window_unfullscreen (GdkWindow *window)
   if (impl->display_server.xdg_toplevel)
     zxdg_toplevel_v6_unset_fullscreen (impl->display_server.xdg_toplevel);
   else
-    gdk_synthesize_window_state (window, GDK_WINDOW_STATE_FULLSCREEN, 0);
+    gdk_synthesize_window_state (window, GDK_SURFACE_STATE_FULLSCREEN, 0);
 }
 
 static void
-gdk_wayland_window_set_keep_above (GdkWindow *window, gboolean setting)
+gdk_wayland_surface_set_keep_above (GdkSurface *window, gboolean setting)
 {
 }
 
 static void
-gdk_wayland_window_set_keep_below (GdkWindow *window, gboolean setting)
+gdk_wayland_surface_set_keep_below (GdkSurface *window, gboolean setting)
 {
 }
 
-static GdkWindow *
-gdk_wayland_window_get_group (GdkWindow *window)
+static GdkSurface *
+gdk_wayland_surface_get_group (GdkSurface *window)
 {
   return NULL;
 }
 
 static void
-gdk_wayland_window_set_group (GdkWindow *window,
-                              GdkWindow *leader)
+gdk_wayland_surface_set_group (GdkSurface *window,
+                              GdkSurface *leader)
 {
 }
 
 static void
-gdk_wayland_window_set_decorations (GdkWindow       *window,
+gdk_wayland_surface_set_decorations (GdkSurface       *window,
                                     GdkWMDecoration  decorations)
 {
 }
 
 static gboolean
-gdk_wayland_window_get_decorations (GdkWindow       *window,
+gdk_wayland_surface_get_decorations (GdkSurface       *window,
                                     GdkWMDecoration *decorations)
 {
   return FALSE;
 }
 
 static void
-gdk_wayland_window_set_functions (GdkWindow     *window,
+gdk_wayland_surface_set_functions (GdkSurface     *window,
                                   GdkWMFunction  functions)
 {
 }
 
 static void
-gdk_wayland_window_begin_resize_drag (GdkWindow     *window,
-                                      GdkWindowEdge  edge,
+gdk_wayland_surface_begin_resize_drag (GdkSurface     *window,
+                                      GdkSurfaceEdge  edge,
                                       GdkDevice     *device,
                                       gint           button,
                                       gint           root_x,
                                       gint           root_y,
                                       guint32        timestamp)
 {
-  GdkWindowImplWayland *impl;
+  GdkSurfaceImplWayland *impl;
   GdkEventSequence *sequence;
   uint32_t resize_edges, serial;
 
-  if (GDK_WINDOW_DESTROYED (window) ||
+  if (GDK_SURFACE_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL (window))
     return;
 
   switch (edge)
     {
-    case GDK_WINDOW_EDGE_NORTH_WEST:
+    case GDK_SURFACE_EDGE_NORTH_WEST:
       resize_edges = ZXDG_TOPLEVEL_V6_RESIZE_EDGE_TOP_LEFT;
       break;
 
-    case GDK_WINDOW_EDGE_NORTH:
+    case GDK_SURFACE_EDGE_NORTH:
       resize_edges = ZXDG_TOPLEVEL_V6_RESIZE_EDGE_TOP;
       break;
 
-    case GDK_WINDOW_EDGE_NORTH_EAST:
+    case GDK_SURFACE_EDGE_NORTH_EAST:
       resize_edges = ZXDG_TOPLEVEL_V6_RESIZE_EDGE_TOP_RIGHT;
       break;
 
-    case GDK_WINDOW_EDGE_WEST:
+    case GDK_SURFACE_EDGE_WEST:
       resize_edges = ZXDG_TOPLEVEL_V6_RESIZE_EDGE_LEFT;
       break;
 
-    case GDK_WINDOW_EDGE_EAST:
+    case GDK_SURFACE_EDGE_EAST:
       resize_edges = ZXDG_TOPLEVEL_V6_RESIZE_EDGE_RIGHT;
       break;
 
-    case GDK_WINDOW_EDGE_SOUTH_WEST:
+    case GDK_SURFACE_EDGE_SOUTH_WEST:
       resize_edges = ZXDG_TOPLEVEL_V6_RESIZE_EDGE_BOTTOM_LEFT;
       break;
 
-    case GDK_WINDOW_EDGE_SOUTH:
+    case GDK_SURFACE_EDGE_SOUTH:
       resize_edges = ZXDG_TOPLEVEL_V6_RESIZE_EDGE_BOTTOM;
       break;
 
-    case GDK_WINDOW_EDGE_SOUTH_EAST:
+    case GDK_SURFACE_EDGE_SOUTH_EAST:
       resize_edges = ZXDG_TOPLEVEL_V6_RESIZE_EDGE_BOTTOM_RIGHT;
       break;
 
     default:
-      g_warning ("gdk_window_begin_resize_drag: bad resize edge %d!", edge);
+      g_warning ("gdk_surface_begin_resize_drag: bad resize edge %d!", edge);
       return;
     }
 
-  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
   if (!impl->display_server.xdg_toplevel)
     return;
@@ -3453,22 +3453,22 @@ gdk_wayland_window_begin_resize_drag (GdkWindow     *window,
 }
 
 static void
-gdk_wayland_window_begin_move_drag (GdkWindow *window,
+gdk_wayland_surface_begin_move_drag (GdkSurface *window,
                                     GdkDevice *device,
                                     gint       button,
                                     gint       root_x,
                                     gint       root_y,
                                     guint32    timestamp)
 {
-  GdkWindowImplWayland *impl;
+  GdkSurfaceImplWayland *impl;
   GdkEventSequence *sequence;
   uint32_t serial;
 
-  if (GDK_WINDOW_DESTROYED (window) ||
+  if (GDK_SURFACE_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL (window))
     return;
 
-  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
   if (!impl->display_server.xdg_toplevel)
     return;
@@ -3488,41 +3488,41 @@ gdk_wayland_window_begin_move_drag (GdkWindow *window,
 }
 
 static void
-gdk_wayland_window_set_opacity (GdkWindow *window,
+gdk_wayland_surface_set_opacity (GdkSurface *window,
                                 gdouble    opacity)
 {
 }
 
 static void
-gdk_wayland_window_destroy_notify (GdkWindow *window)
+gdk_wayland_surface_destroy_notify (GdkSurface *window)
 {
-  if (!GDK_WINDOW_DESTROYED (window))
+  if (!GDK_SURFACE_DESTROYED (window))
     {
-      g_warning ("GdkWindow %p unexpectedly destroyed", window);
-      _gdk_window_destroy (window, TRUE);
+      g_warning ("GdkSurface %p unexpectedly destroyed", window);
+      _gdk_surface_destroy (window, TRUE);
     }
 
   g_object_unref (window);
 }
 
 static gint
-gdk_wayland_window_get_scale_factor (GdkWindow *window)
+gdk_wayland_surface_get_scale_factor (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return 1;
 
   return impl->scale;
 }
 
 static void
-gdk_wayland_window_set_opaque_region (GdkWindow      *window,
+gdk_wayland_surface_set_opaque_region (GdkSurface      *window,
                                       cairo_region_t *region)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return;
 
   g_clear_pointer (&impl->opaque_region, cairo_region_destroy);
@@ -3531,16 +3531,16 @@ gdk_wayland_window_set_opaque_region (GdkWindow      *window,
 }
 
 static void
-gdk_wayland_window_set_shadow_width (GdkWindow *window,
+gdk_wayland_surface_set_shadow_width (GdkSurface *window,
                                      int        left,
                                      int        right,
                                      int        top,
                                      int        bottom)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
   gint new_width, new_height;
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return;
 
   /* Reconfigure window to keep the same window geometry */
@@ -3548,7 +3548,7 @@ gdk_wayland_window_set_shadow_width (GdkWindow *window,
     (impl->margin_left + impl->margin_right) + (left + right);
   new_height = window->height -
     (impl->margin_top + impl->margin_bottom) + (top + bottom);
-  gdk_wayland_window_maybe_configure (window, new_width, new_height, impl->scale);
+  gdk_wayland_surface_maybe_configure (window, new_width, new_height, impl->scale);
 
   impl->margin_left = left;
   impl->margin_right = right;
@@ -3557,10 +3557,10 @@ gdk_wayland_window_set_shadow_width (GdkWindow *window,
 }
 
 static gboolean
-gdk_wayland_window_show_window_menu (GdkWindow *window,
+gdk_wayland_surface_show_window_menu (GdkSurface *window,
                                      GdkEvent  *event)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
   struct wl_seat *seat;
   GdkWaylandDevice *device;
   double x, y;
@@ -3591,9 +3591,9 @@ gdk_wayland_window_show_window_menu (GdkWindow *window,
 }
 
 static gboolean
-gdk_wayland_window_supports_edge_constraints (GdkWindow *window)
+gdk_wayland_surface_supports_edge_constraints (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
   struct gtk_surface1 *gtk_surface = impl->display_server.gtk_surface;
 
   if (!gtk_surface)
@@ -3603,80 +3603,80 @@ gdk_wayland_window_supports_edge_constraints (GdkWindow *window)
 }
 
 static void
-_gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
+_gdk_surface_impl_wayland_class_init (GdkSurfaceImplWaylandClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GdkWindowImplClass *impl_class = GDK_WINDOW_IMPL_CLASS (klass);
+  GdkSurfaceImplClass *impl_class = GDK_SURFACE_IMPL_CLASS (klass);
 
-  object_class->finalize = gdk_window_impl_wayland_finalize;
+  object_class->finalize = gdk_surface_impl_wayland_finalize;
 
-  impl_class->ref_cairo_surface = gdk_wayland_window_ref_cairo_surface;
-  impl_class->create_similar_image_surface = gdk_wayland_window_create_similar_image_surface;
-  impl_class->show = gdk_wayland_window_show;
-  impl_class->hide = gdk_wayland_window_hide;
-  impl_class->withdraw = gdk_window_wayland_withdraw;
-  impl_class->set_events = gdk_window_wayland_set_events;
-  impl_class->get_events = gdk_window_wayland_get_events;
-  impl_class->raise = gdk_window_wayland_raise;
-  impl_class->lower = gdk_window_wayland_lower;
-  impl_class->restack_toplevel = gdk_window_wayland_restack_toplevel;
-  impl_class->move_resize = gdk_window_wayland_move_resize;
-  impl_class->move_to_rect = gdk_window_wayland_move_to_rect;
-  impl_class->get_geometry = gdk_window_wayland_get_geometry;
-  impl_class->get_root_coords = gdk_window_wayland_get_root_coords;
-  impl_class->get_device_state = gdk_window_wayland_get_device_state;
-  impl_class->shape_combine_region = gdk_window_wayland_shape_combine_region;
-  impl_class->input_shape_combine_region = gdk_window_wayland_input_shape_combine_region;
-  impl_class->destroy = gdk_wayland_window_destroy;
-  impl_class->begin_paint = gdk_window_impl_wayland_begin_paint;
-  impl_class->end_paint = gdk_window_impl_wayland_end_paint;
-  impl_class->beep = gdk_window_impl_wayland_beep;
+  impl_class->ref_cairo_surface = gdk_wayland_surface_ref_cairo_surface;
+  impl_class->create_similar_image_surface = gdk_wayland_surface_create_similar_image_surface;
+  impl_class->show = gdk_wayland_surface_show;
+  impl_class->hide = gdk_wayland_surface_hide;
+  impl_class->withdraw = gdk_surface_wayland_withdraw;
+  impl_class->set_events = gdk_surface_wayland_set_events;
+  impl_class->get_events = gdk_surface_wayland_get_events;
+  impl_class->raise = gdk_surface_wayland_raise;
+  impl_class->lower = gdk_surface_wayland_lower;
+  impl_class->restack_toplevel = gdk_surface_wayland_restack_toplevel;
+  impl_class->move_resize = gdk_surface_wayland_move_resize;
+  impl_class->move_to_rect = gdk_surface_wayland_move_to_rect;
+  impl_class->get_geometry = gdk_surface_wayland_get_geometry;
+  impl_class->get_root_coords = gdk_surface_wayland_get_root_coords;
+  impl_class->get_device_state = gdk_surface_wayland_get_device_state;
+  impl_class->shape_combine_region = gdk_surface_wayland_shape_combine_region;
+  impl_class->input_shape_combine_region = gdk_surface_wayland_input_shape_combine_region;
+  impl_class->destroy = gdk_wayland_surface_destroy;
+  impl_class->begin_paint = gdk_surface_impl_wayland_begin_paint;
+  impl_class->end_paint = gdk_surface_impl_wayland_end_paint;
+  impl_class->beep = gdk_surface_impl_wayland_beep;
 
-  impl_class->focus = gdk_wayland_window_focus;
-  impl_class->set_type_hint = gdk_wayland_window_set_type_hint;
-  impl_class->get_type_hint = gdk_wayland_window_get_type_hint;
-  impl_class->set_modal_hint = gdk_wayland_window_set_modal_hint;
-  impl_class->set_skip_taskbar_hint = gdk_wayland_window_set_skip_taskbar_hint;
-  impl_class->set_skip_pager_hint = gdk_wayland_window_set_skip_pager_hint;
-  impl_class->set_urgency_hint = gdk_wayland_window_set_urgency_hint;
-  impl_class->set_geometry_hints = gdk_wayland_window_set_geometry_hints;
-  impl_class->set_title = gdk_wayland_window_set_title;
-  impl_class->set_role = gdk_wayland_window_set_role;
-  impl_class->set_startup_id = gdk_wayland_window_set_startup_id;
-  impl_class->set_transient_for = gdk_wayland_window_set_transient_for;
-  impl_class->get_frame_extents = gdk_wayland_window_get_frame_extents;
-  impl_class->set_accept_focus = gdk_wayland_window_set_accept_focus;
-  impl_class->set_focus_on_map = gdk_wayland_window_set_focus_on_map;
-  impl_class->set_icon_list = gdk_wayland_window_set_icon_list;
-  impl_class->set_icon_name = gdk_wayland_window_set_icon_name;
-  impl_class->iconify = gdk_wayland_window_iconify;
-  impl_class->deiconify = gdk_wayland_window_deiconify;
-  impl_class->stick = gdk_wayland_window_stick;
-  impl_class->unstick = gdk_wayland_window_unstick;
-  impl_class->maximize = gdk_wayland_window_maximize;
-  impl_class->unmaximize = gdk_wayland_window_unmaximize;
-  impl_class->fullscreen = gdk_wayland_window_fullscreen;
-  impl_class->fullscreen_on_monitor = gdk_wayland_window_fullscreen_on_monitor;
-  impl_class->unfullscreen = gdk_wayland_window_unfullscreen;
-  impl_class->set_keep_above = gdk_wayland_window_set_keep_above;
-  impl_class->set_keep_below = gdk_wayland_window_set_keep_below;
-  impl_class->get_group = gdk_wayland_window_get_group;
-  impl_class->set_group = gdk_wayland_window_set_group;
-  impl_class->set_decorations = gdk_wayland_window_set_decorations;
-  impl_class->get_decorations = gdk_wayland_window_get_decorations;
-  impl_class->set_functions = gdk_wayland_window_set_functions;
-  impl_class->begin_resize_drag = gdk_wayland_window_begin_resize_drag;
-  impl_class->begin_move_drag = gdk_wayland_window_begin_move_drag;
-  impl_class->set_opacity = gdk_wayland_window_set_opacity;
-  impl_class->destroy_notify = gdk_wayland_window_destroy_notify;
-  impl_class->register_dnd = _gdk_wayland_window_register_dnd;
-  impl_class->drag_begin = _gdk_wayland_window_drag_begin;
-  impl_class->get_scale_factor = gdk_wayland_window_get_scale_factor;
-  impl_class->set_opaque_region = gdk_wayland_window_set_opaque_region;
-  impl_class->set_shadow_width = gdk_wayland_window_set_shadow_width;
-  impl_class->show_window_menu = gdk_wayland_window_show_window_menu;
-  impl_class->create_gl_context = gdk_wayland_window_create_gl_context;
-  impl_class->supports_edge_constraints = gdk_wayland_window_supports_edge_constraints;
+  impl_class->focus = gdk_wayland_surface_focus;
+  impl_class->set_type_hint = gdk_wayland_surface_set_type_hint;
+  impl_class->get_type_hint = gdk_wayland_surface_get_type_hint;
+  impl_class->set_modal_hint = gdk_wayland_surface_set_modal_hint;
+  impl_class->set_skip_taskbar_hint = gdk_wayland_surface_set_skip_taskbar_hint;
+  impl_class->set_skip_pager_hint = gdk_wayland_surface_set_skip_pager_hint;
+  impl_class->set_urgency_hint = gdk_wayland_surface_set_urgency_hint;
+  impl_class->set_geometry_hints = gdk_wayland_surface_set_geometry_hints;
+  impl_class->set_title = gdk_wayland_surface_set_title;
+  impl_class->set_role = gdk_wayland_surface_set_role;
+  impl_class->set_startup_id = gdk_wayland_surface_set_startup_id;
+  impl_class->set_transient_for = gdk_wayland_surface_set_transient_for;
+  impl_class->get_frame_extents = gdk_wayland_surface_get_frame_extents;
+  impl_class->set_accept_focus = gdk_wayland_surface_set_accept_focus;
+  impl_class->set_focus_on_map = gdk_wayland_surface_set_focus_on_map;
+  impl_class->set_icon_list = gdk_wayland_surface_set_icon_list;
+  impl_class->set_icon_name = gdk_wayland_surface_set_icon_name;
+  impl_class->iconify = gdk_wayland_surface_iconify;
+  impl_class->deiconify = gdk_wayland_surface_deiconify;
+  impl_class->stick = gdk_wayland_surface_stick;
+  impl_class->unstick = gdk_wayland_surface_unstick;
+  impl_class->maximize = gdk_wayland_surface_maximize;
+  impl_class->unmaximize = gdk_wayland_surface_unmaximize;
+  impl_class->fullscreen = gdk_wayland_surface_fullscreen;
+  impl_class->fullscreen_on_monitor = gdk_wayland_surface_fullscreen_on_monitor;
+  impl_class->unfullscreen = gdk_wayland_surface_unfullscreen;
+  impl_class->set_keep_above = gdk_wayland_surface_set_keep_above;
+  impl_class->set_keep_below = gdk_wayland_surface_set_keep_below;
+  impl_class->get_group = gdk_wayland_surface_get_group;
+  impl_class->set_group = gdk_wayland_surface_set_group;
+  impl_class->set_decorations = gdk_wayland_surface_set_decorations;
+  impl_class->get_decorations = gdk_wayland_surface_get_decorations;
+  impl_class->set_functions = gdk_wayland_surface_set_functions;
+  impl_class->begin_resize_drag = gdk_wayland_surface_begin_resize_drag;
+  impl_class->begin_move_drag = gdk_wayland_surface_begin_move_drag;
+  impl_class->set_opacity = gdk_wayland_surface_set_opacity;
+  impl_class->destroy_notify = gdk_wayland_surface_destroy_notify;
+  impl_class->register_dnd = _gdk_wayland_surface_register_dnd;
+  impl_class->drag_begin = _gdk_wayland_surface_drag_begin;
+  impl_class->get_scale_factor = gdk_wayland_surface_get_scale_factor;
+  impl_class->set_opaque_region = gdk_wayland_surface_set_opaque_region;
+  impl_class->set_shadow_width = gdk_wayland_surface_set_shadow_width;
+  impl_class->show_window_menu = gdk_wayland_surface_show_window_menu;
+  impl_class->create_gl_context = gdk_wayland_surface_create_gl_context;
+  impl_class->supports_edge_constraints = gdk_wayland_surface_supports_edge_constraints;
 
   signals[COMMITTED] = g_signal_new (g_intern_static_string ("committed"),
                                      G_TYPE_FROM_CLASS (object_class),
@@ -3687,31 +3687,31 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
 }
 
 void
-_gdk_wayland_window_set_grab_seat (GdkWindow *window,
+_gdk_wayland_surface_set_grab_seat (GdkSurface *window,
                                    GdkSeat   *seat)
 {
-  GdkWindowImplWayland *impl;
+  GdkSurfaceImplWayland *impl;
 
   g_return_if_fail (window != NULL);
 
-  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
   impl->grab_input_seat = seat;
 }
 
 /**
- * gdk_wayland_window_new_subsurface: (constructor)
+ * gdk_wayland_surface_new_subsurface: (constructor)
  * @display: the display to create the window on
  * @position: position relative to the transient window
  *
  * Creates a new subsurface window.
  *
- * Returns: (transfer full): the new #GdkWindow
+ * Returns: (transfer full): the new #GdkSurface
  **/
-GdkWindow *
-gdk_wayland_window_new_subsurface (GdkDisplay         *display,
+GdkSurface *
+gdk_wayland_surface_new_subsurface (GdkDisplay         *display,
                                    const GdkRectangle *position)
 {
-  GdkWindowAttr attr;
+  GdkSurfaceAttr attr;
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (position != NULL, NULL);
@@ -3721,35 +3721,35 @@ gdk_wayland_window_new_subsurface (GdkDisplay         *display,
   attr.y = position->y;
   attr.width = position->width;
   attr.height = position->height;
-  attr.window_type = GDK_WINDOW_SUBSURFACE;
+  attr.window_type = GDK_SURFACE_SUBSURFACE;
 
-  return gdk_window_new (display, NULL, &attr);
+  return gdk_surface_new (display, NULL, &attr);
 }
 
 /**
- * gdk_wayland_window_get_wl_surface:
- * @window: (type GdkWaylandWindow): a #GdkWindow
+ * gdk_wayland_surface_get_wl_surface:
+ * @window: (type GdkWaylandSurface): a #GdkSurface
  *
- * Returns the Wayland surface of a #GdkWindow.
+ * Returns the Wayland surface of a #GdkSurface.
  *
  * Returns: (transfer none): a Wayland wl_surface
  */
 struct wl_surface *
-gdk_wayland_window_get_wl_surface (GdkWindow *window)
+gdk_wayland_surface_get_wl_surface (GdkSurface *window)
 {
-  g_return_val_if_fail (GDK_IS_WAYLAND_WINDOW (window), NULL);
+  g_return_val_if_fail (GDK_IS_WAYLAND_SURFACE (window), NULL);
 
-  return GDK_WINDOW_IMPL_WAYLAND (window->impl)->display_server.wl_surface;
+  return GDK_SURFACE_IMPL_WAYLAND (window->impl)->display_server.wl_surface;
 }
 
 struct wl_output *
-gdk_wayland_window_get_wl_output (GdkWindow *window)
+gdk_wayland_surface_get_wl_output (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl;
+  GdkSurfaceImplWayland *impl;
 
-  g_return_val_if_fail (GDK_IS_WAYLAND_WINDOW (window), NULL);
+  g_return_val_if_fail (GDK_IS_WAYLAND_SURFACE (window), NULL);
 
-  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
   /* We pick the head of the list as this is the last entered output */
   if (impl->display_server.outputs)
     return (struct wl_output *) impl->display_server.outputs->data;
@@ -3758,9 +3758,9 @@ gdk_wayland_window_get_wl_output (GdkWindow *window)
 }
 
 static struct wl_egl_window *
-gdk_wayland_window_get_wl_egl_window (GdkWindow *window)
+gdk_wayland_surface_get_wl_egl_window (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
   if (impl->display_server.egl_window == NULL)
     {
@@ -3775,20 +3775,20 @@ gdk_wayland_window_get_wl_egl_window (GdkWindow *window)
 }
 
 EGLSurface
-gdk_wayland_window_get_egl_surface (GdkWindow *window,
+gdk_wayland_surface_get_egl_surface (GdkSurface *window,
                                     EGLConfig  config)
 {
-  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
-  GdkWindowImplWayland *impl;
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (window));
+  GdkSurfaceImplWayland *impl;
   struct wl_egl_window *egl_window;
 
-  g_return_val_if_fail (GDK_IS_WAYLAND_WINDOW (window), NULL);
+  g_return_val_if_fail (GDK_IS_WAYLAND_SURFACE (window), NULL);
 
-  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
   if (impl->egl_surface == NULL)
     {
-      egl_window = gdk_wayland_window_get_wl_egl_window (window);
+      egl_window = gdk_wayland_surface_get_wl_egl_window (window);
 
       impl->egl_surface =
         eglCreateWindowSurface (display->egl_display, config, egl_window, NULL);
@@ -3798,15 +3798,15 @@ gdk_wayland_window_get_egl_surface (GdkWindow *window,
 }
 
 EGLSurface
-gdk_wayland_window_get_dummy_egl_surface (GdkWindow *window,
+gdk_wayland_surface_get_dummy_egl_surface (GdkSurface *window,
                                           EGLConfig  config)
 {
-  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
-  GdkWindowImplWayland *impl;
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (window));
+  GdkSurfaceImplWayland *impl;
 
-  g_return_val_if_fail (GDK_IS_WAYLAND_WINDOW (window), NULL);
+  g_return_val_if_fail (GDK_IS_WAYLAND_SURFACE (window), NULL);
 
-  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
   if (impl->dummy_egl_surface == NULL)
     {
@@ -3821,18 +3821,18 @@ gdk_wayland_window_get_dummy_egl_surface (GdkWindow *window,
 }
 
 struct gtk_surface1 *
-gdk_wayland_window_get_gtk_surface (GdkWindow *window)
+gdk_wayland_surface_get_gtk_surface (GdkSurface *window)
 {
-  g_return_val_if_fail (GDK_IS_WAYLAND_WINDOW (window), NULL);
+  g_return_val_if_fail (GDK_IS_WAYLAND_SURFACE (window), NULL);
 
-  return GDK_WINDOW_IMPL_WAYLAND (window->impl)->display_server.gtk_surface;
+  return GDK_SURFACE_IMPL_WAYLAND (window->impl)->display_server.gtk_surface;
 }
 
 /**
- * gdk_wayland_window_set_use_custom_surface:
- * @window: (type GdkWaylandWindow): a #GdkWindow
+ * gdk_wayland_surface_set_use_custom_surface:
+ * @window: (type GdkWaylandSurface): a #GdkSurface
  *
- * Marks a #GdkWindow as a custom Wayland surface. The application is
+ * Marks a #GdkSurface as a custom Wayland surface. The application is
  * expected to register the surface as some type of surface using
  * some Wayland interface.
  *
@@ -3844,21 +3844,21 @@ gdk_wayland_window_get_gtk_surface (GdkWindow *window)
  * compositor will expose a private interface to the special client
  * that lets the client identify the wl_surface as a panel or such.
  *
- * This function should be called before a #GdkWindow is shown. This is
+ * This function should be called before a #GdkSurface is shown. This is
  * best done by connecting to the #GtkWidget::realize signal:
  *
  * |[<!-- language="C" -->
  *   static void
  *   widget_realize_cb (GtkWidget *widget)
  *   {
- *     GdkWindow *window;
+ *     GdkSurface *window;
  *     struct wl_surface *surface;
  *     struct input_panel_surface *ip_surface;
  *
  *     window = gtk_widget_get_window (widget);
- *     gdk_wayland_window_set_custom_surface (window);
+ *     gdk_wayland_surface_set_custom_surface (window);
  *
- *     surface = gdk_wayland_window_get_wl_surface (window);
+ *     surface = gdk_wayland_surface_get_wl_surface (window);
  *     ip_surface = input_panel_get_input_panel_surface (input_panel, surface);
  *     input_panel_surface_set_panel (ip_surface);
  *   }
@@ -3871,24 +3871,24 @@ gdk_wayland_window_get_gtk_surface (GdkWindow *window)
  * ]|
  */
 void
-gdk_wayland_window_set_use_custom_surface (GdkWindow *window)
+gdk_wayland_surface_set_use_custom_surface (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl;
+  GdkSurfaceImplWayland *impl;
 
-  g_return_if_fail (GDK_IS_WAYLAND_WINDOW (window));
+  g_return_if_fail (GDK_IS_WAYLAND_SURFACE (window));
 
-  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
   if (!impl->display_server.wl_surface)
-    gdk_wayland_window_create_surface (window);
+    gdk_wayland_surface_create_surface (window);
 
   impl->use_custom_surface = TRUE;
 }
 
 static void
-maybe_set_gtk_surface_dbus_properties (GdkWindow *window)
+maybe_set_gtk_surface_dbus_properties (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
   if (impl->application.was_set)
     return;
@@ -3901,7 +3901,7 @@ maybe_set_gtk_surface_dbus_properties (GdkWindow *window)
       impl->application.unique_bus_name == NULL)
     return;
 
-  gdk_wayland_window_init_gtk_surface (window);
+  gdk_wayland_surface_init_gtk_surface (window);
   if (impl->display_server.gtk_surface == NULL)
     return;
 
@@ -3916,7 +3916,7 @@ maybe_set_gtk_surface_dbus_properties (GdkWindow *window)
 }
 
 void
-gdk_wayland_window_set_dbus_properties_libgtk_only (GdkWindow  *window,
+gdk_wayland_surface_set_dbus_properties_libgtk_only (GdkSurface  *window,
                                                     const char *application_id,
                                                     const char *app_menu_path,
                                                     const char *menubar_path,
@@ -3924,11 +3924,11 @@ gdk_wayland_window_set_dbus_properties_libgtk_only (GdkWindow  *window,
                                                     const char *application_object_path,
                                                     const char *unique_bus_name)
 {
-  GdkWindowImplWayland *impl;
+  GdkSurfaceImplWayland *impl;
 
-  g_return_if_fail (GDK_IS_WAYLAND_WINDOW (window));
+  g_return_if_fail (GDK_IS_WAYLAND_SURFACE (window));
 
-  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
   impl->application.application_id = g_strdup (application_id);
   impl->application.app_menu_path = g_strdup (app_menu_path);
@@ -3942,15 +3942,15 @@ gdk_wayland_window_set_dbus_properties_libgtk_only (GdkWindow  *window,
 }
 
 void
-_gdk_wayland_window_offset_next_wl_buffer (GdkWindow *window,
+_gdk_wayland_surface_offset_next_wl_buffer (GdkSurface *window,
                                            int        x,
                                            int        y)
 {
-  GdkWindowImplWayland *impl;
+  GdkSurfaceImplWayland *impl;
 
-  g_return_if_fail (GDK_IS_WAYLAND_WINDOW (window));
+  g_return_if_fail (GDK_IS_WAYLAND_SURFACE (window));
 
-  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
   impl->pending_buffer_offset_x = x;
   impl->pending_buffer_offset_y = y;
@@ -3961,8 +3961,8 @@ xdg_exported_handle (void                    *data,
                      struct zxdg_exported_v1 *zxdg_exported_v1,
                      const char              *handle)
 {
-  GdkWindow *window = data;
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurface *window = data;
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
   impl->exported.callback (window, handle, impl->exported.user_data);
   g_clear_pointer (&impl->exported.user_data,
@@ -3974,10 +3974,10 @@ static const struct zxdg_exported_v1_listener xdg_exported_listener = {
 };
 
 /**
- * GdkWaylandWindowExported:
- * @window: the #GdkWindow that is exported
+ * GdkWaylandSurfaceExported:
+ * @window: the #GdkSurface that is exported
  * @handle: the handle
- * @user_data: user data that was passed to gdk_wayland_window_export_handle()
+ * @user_data: user data that was passed to gdk_wayland_surface_export_handle()
  *
  * Callback that gets called when the handle for a window has been
  * obtained from the Wayland compositor. The handle can be passed
@@ -3986,16 +3986,16 @@ static const struct zxdg_exported_v1_listener xdg_exported_listener = {
  */
 
 static gboolean
-gdk_wayland_window_is_exported (GdkWindow *window)
+gdk_wayland_surface_is_exported (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
   return !!impl->display_server.xdg_exported;
 }
 
 /**
- * gdk_wayland_window_export_handle:
- * @window: the #GdkWindow to obtain a handle for
+ * gdk_wayland_surface_export_handle:
+ * @window: the #GdkSurface to obtain a handle for
  * @callback: callback to call with the handle
  * @user_data: user data for @callback
  * @destroy_func: destroy notify for @user_data
@@ -4007,12 +4007,12 @@ gdk_wayland_window_is_exported (GdkWindow *window)
  * It is an error to call this function on a window that is already
  * exported.
  *
- * When the handle is no longer needed, gdk_wayland_window_unexport_handle()
+ * When the handle is no longer needed, gdk_wayland_surface_unexport_handle()
  * should be called to clean up resources.
  *
  * The main purpose for obtaining a handle is to mark a surface
  * from another window as transient for this one, see
- * gdk_wayland_window_set_transient_for_exported().
+ * gdk_wayland_surface_set_transient_for_exported().
  *
  * Note that this API depends on an unstable Wayland protocol,
  * and thus may require changes in the future.
@@ -4021,20 +4021,20 @@ gdk_wayland_window_is_exported (GdkWindow *window)
  *     an error occurred.
  */
 gboolean
-gdk_wayland_window_export_handle (GdkWindow                *window,
-                                  GdkWaylandWindowExported  callback,
+gdk_wayland_surface_export_handle (GdkSurface                *window,
+                                  GdkWaylandSurfaceExported  callback,
                                   gpointer                  user_data,
                                   GDestroyNotify            destroy_func)
 {
-  GdkWindowImplWayland *impl;
+  GdkSurfaceImplWayland *impl;
   GdkWaylandDisplay *display_wayland;
-  GdkDisplay *display = gdk_window_get_display (window);
+  GdkDisplay *display = gdk_surface_get_display (window);
   struct zxdg_exported_v1 *xdg_exported;
 
-  g_return_val_if_fail (GDK_IS_WAYLAND_WINDOW (window), FALSE);
+  g_return_val_if_fail (GDK_IS_WAYLAND_SURFACE (window), FALSE);
   g_return_val_if_fail (GDK_IS_WAYLAND_DISPLAY (display), FALSE);
 
-  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
   display_wayland = GDK_WAYLAND_DISPLAY (display);
 
   g_return_val_if_fail (!impl->display_server.xdg_exported, FALSE);
@@ -4058,11 +4058,11 @@ gdk_wayland_window_export_handle (GdkWindow                *window,
 }
 
 /**
- * gdk_wayland_window_unexport_handle:
- * @window: the #GdkWindow to unexport
+ * gdk_wayland_surface_unexport_handle:
+ * @window: the #GdkSurface to unexport
  *
  * Destroys the handle that was obtained with
- * gdk_wayland_window_export_handle().
+ * gdk_wayland_surface_export_handle().
  *
  * It is an error to call this function on a window that
  * does not have a handle.
@@ -4071,13 +4071,13 @@ gdk_wayland_window_export_handle (GdkWindow                *window,
  * and thus may require changes in the future.
  */
 void
-gdk_wayland_window_unexport_handle (GdkWindow *window)
+gdk_wayland_surface_unexport_handle (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl;
+  GdkSurfaceImplWayland *impl;
 
-  g_return_if_fail (GDK_IS_WAYLAND_WINDOW (window));
+  g_return_if_fail (GDK_IS_WAYLAND_SURFACE (window));
 
-  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
   g_return_if_fail (impl->display_server.xdg_exported);
 
@@ -4088,9 +4088,9 @@ gdk_wayland_window_unexport_handle (GdkWindow *window)
 }
 
 static void
-unset_transient_for_exported (GdkWindow *window)
+unset_transient_for_exported (GdkSurface *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
 
   g_clear_pointer (&impl->imported_transient_for, zxdg_imported_v1_destroy);
 }
@@ -4099,7 +4099,7 @@ static void
 xdg_imported_destroyed (void                    *data,
                         struct zxdg_imported_v1 *zxdg_imported_v1)
 {
-  GdkWindow *window = data;
+  GdkSurface *window = data;
 
   unset_transient_for_exported (window);
 }
@@ -4109,13 +4109,13 @@ static const struct zxdg_imported_v1_listener xdg_imported_listener = {
 };
 
 /**
- * gdk_wayland_window_set_transient_for_exported:
- * @window: the #GdkWindow to make as transient
+ * gdk_wayland_surface_set_transient_for_exported:
+ * @window: the #GdkSurface to make as transient
  * @parent_handle_str: an exported handle for a surface
  *
  * Marks @window as transient for the surface to which the given
  * @parent_handle_str refers. Typically, the handle will originate
- * from a gdk_wayland_window_export_handle() call in another process.
+ * from a gdk_wayland_surface_export_handle() call in another process.
  *
  * Note that this API depends on an unstable Wayland protocol,
  * and thus may require changes in the future.
@@ -4124,19 +4124,19 @@ static const struct zxdg_imported_v1_listener xdg_imported_listener = {
  *     %FALSE if an error occurred.
  */
 gboolean
-gdk_wayland_window_set_transient_for_exported (GdkWindow *window,
+gdk_wayland_surface_set_transient_for_exported (GdkSurface *window,
                                                char      *parent_handle_str)
 {
-  GdkWindowImplWayland *impl;
+  GdkSurfaceImplWayland *impl;
   GdkWaylandDisplay *display_wayland;
-  GdkDisplay *display = gdk_window_get_display (window);
+  GdkDisplay *display = gdk_surface_get_display (window);
 
-  g_return_val_if_fail (GDK_IS_WAYLAND_WINDOW (window), FALSE);
+  g_return_val_if_fail (GDK_IS_WAYLAND_SURFACE (window), FALSE);
   g_return_val_if_fail (GDK_IS_WAYLAND_DISPLAY (display), FALSE);
   g_return_val_if_fail (!should_map_as_subsurface (window) &&
                         !should_map_as_popup (window), FALSE);
 
-  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
   display_wayland = GDK_WAYLAND_DISPLAY (display);
 
   if (!display_wayland->xdg_importer)
@@ -4145,7 +4145,7 @@ gdk_wayland_window_set_transient_for_exported (GdkWindow *window,
       return FALSE;
     }
 
-  gdk_window_set_transient_for (window, NULL);
+  gdk_surface_set_transient_for (window, NULL);
 
   impl->imported_transient_for =
     zxdg_importer_v1_import (display_wayland->xdg_importer, parent_handle_str);
@@ -4153,24 +4153,24 @@ gdk_wayland_window_set_transient_for_exported (GdkWindow *window,
                                  &xdg_imported_listener,
                                  window);
 
-  gdk_wayland_window_sync_parent_of_imported (window);
+  gdk_wayland_surface_sync_parent_of_imported (window);
 
   return TRUE;
 }
 
 static struct zwp_keyboard_shortcuts_inhibitor_v1 *
-gdk_wayland_window_get_inhibitor (GdkWindowImplWayland *impl,
+gdk_wayland_surface_get_inhibitor (GdkSurfaceImplWayland *impl,
                                   struct wl_seat *seat)
 {
   return g_hash_table_lookup (impl->shortcuts_inhibitors, seat);
 }
 
 void
-gdk_wayland_window_inhibit_shortcuts (GdkWindow *window,
+gdk_wayland_surface_inhibit_shortcuts (GdkSurface *window,
                                       GdkSeat   *gdk_seat)
 {
-  GdkWindowImplWayland *impl= GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+  GdkSurfaceImplWayland *impl= GDK_SURFACE_IMPL_WAYLAND (window->impl);
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (window));
   struct wl_surface *surface = impl->display_server.wl_surface;
   struct wl_seat *seat = gdk_wayland_seat_get_wl_seat (gdk_seat);
   struct zwp_keyboard_shortcuts_inhibitor_v1 *inhibitor;
@@ -4178,7 +4178,7 @@ gdk_wayland_window_inhibit_shortcuts (GdkWindow *window,
   if (display->keyboard_shortcuts_inhibit == NULL)
     return;
 
-  if (gdk_wayland_window_get_inhibitor (impl, seat))
+  if (gdk_wayland_surface_get_inhibitor (impl, seat))
     return; /* Already inhibitted */
 
   inhibitor =
@@ -4189,14 +4189,14 @@ gdk_wayland_window_inhibit_shortcuts (GdkWindow *window,
 }
 
 void
-gdk_wayland_window_restore_shortcuts (GdkWindow *window,
+gdk_wayland_surface_restore_shortcuts (GdkSurface *window,
                                       GdkSeat   *gdk_seat)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (window->impl);
   struct wl_seat *seat = gdk_wayland_seat_get_wl_seat (gdk_seat);
   struct zwp_keyboard_shortcuts_inhibitor_v1 *inhibitor;
 
-  inhibitor = gdk_wayland_window_get_inhibitor (impl, seat);
+  inhibitor = gdk_wayland_surface_get_inhibitor (impl, seat);
   if (inhibitor == NULL)
     return; /* Not inhibitted */
 

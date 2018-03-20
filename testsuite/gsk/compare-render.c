@@ -67,7 +67,7 @@ main (int argc, char **argv)
   cairo_surface_t *diff_surface = NULL;
   GdkTexture *texture;
   GskRenderer *renderer;
-  GdkWindow *window;
+  GdkSurface *window;
   GskRenderNode *node;
   const char *node_file;
   const char *png_file;
@@ -79,7 +79,7 @@ main (int argc, char **argv)
   node_file = argv[1];
   png_file = argv[2];
 
-  window = gdk_window_new_toplevel (gdk_display_get_default(), 10 , 10);
+  window = gdk_surface_new_toplevel (gdk_display_get_default(), 10 , 10);
   renderer = gsk_renderer_new_for_window (window);
 
   g_test_message ("Node file: '%s'\n", node_file);

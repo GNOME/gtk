@@ -22,8 +22,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GDK_WINDOW_WIN32_H__
-#define __GDK_WINDOW_WIN32_H__
+#ifndef __GDK_SURFACE_WIN32_H__
+#define __GDK_SURFACE_WIN32_H__
 
 #include "gdk/win32/gdkprivate-win32.h"
 #include "gdk/gdkwindowimpl.h"
@@ -36,15 +36,15 @@ G_BEGIN_DECLS
 /* Window implementation for Win32
  */
 
-typedef struct _GdkWindowImplWin32 GdkWindowImplWin32;
-typedef struct _GdkWindowImplWin32Class GdkWindowImplWin32Class;
+typedef struct _GdkSurfaceImplWin32 GdkSurfaceImplWin32;
+typedef struct _GdkSurfaceImplWin32Class GdkSurfaceImplWin32Class;
 
-#define GDK_TYPE_WINDOW_IMPL_WIN32              (_gdk_window_impl_win32_get_type ())
-#define GDK_WINDOW_IMPL_WIN32(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WINDOW_IMPL_WIN32, GdkWindowImplWin32))
-#define GDK_WINDOW_IMPL_WIN32_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WINDOW_IMPL_WIN32, GdkWindowImplWin32Class))
-#define GDK_IS_WINDOW_IMPL_WIN32(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WINDOW_IMPL_WIN32))
-#define GDK_IS_WINDOW_IMPL_WIN32_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WINDOW_IMPL_WIN32))
-#define GDK_WINDOW_IMPL_WIN32_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WINDOW_IMPL_WIN32, GdkWindowImplWin32Class))
+#define GDK_TYPE_SURFACE_IMPL_WIN32              (_gdk_surface_impl_win32_get_type ())
+#define GDK_SURFACE_IMPL_WIN32(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_SURFACE_IMPL_WIN32, GdkSurfaceImplWin32))
+#define GDK_SURFACE_IMPL_WIN32_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_SURFACE_IMPL_WIN32, GdkSurfaceImplWin32Class))
+#define GDK_IS_SURFACE_IMPL_WIN32(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_SURFACE_IMPL_WIN32))
+#define GDK_IS_SURFACE_IMPL_WIN32_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_SURFACE_IMPL_WIN32))
+#define GDK_SURFACE_IMPL_WIN32_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_SURFACE_IMPL_WIN32, GdkSurfaceImplWin32Class))
 
 enum _GdkWin32AeroSnapCombo
 {
@@ -107,13 +107,13 @@ typedef enum _GdkWin32MonitorDpiType
 struct _GdkW32DragMoveResizeContext
 {
   /* The window that is being moved/resized */
-  GdkWindow         *window;
+  GdkSurface         *window;
 
   /* The kind of drag-operation going on. */
   GdkW32WindowDragOp op;
 
   /* The edge that was grabbed for resizing. Not used for moving. */
-  GdkWindowEdge      edge;
+  GdkSurfaceEdge      edge;
 
   /* The device used to initiate the op.
    * We grab it at the beginning and ungrab it at the end.
@@ -223,11 +223,11 @@ struct _GdkW32DragMoveResizeContext
 
 typedef struct _GdkW32DragMoveResizeContext GdkW32DragMoveResizeContext;
 
-struct _GdkWindowImplWin32
+struct _GdkSurfaceImplWin32
 {
-  GdkWindowImpl parent_instance;
+  GdkSurfaceImpl parent_instance;
 
-  GdkWindow *wrapper;
+  GdkSurface *wrapper;
   HANDLE handle;
 
   gint8 toplevel_window_type;
@@ -249,9 +249,9 @@ struct _GdkWindowImplWin32
 
   GdkEventMask native_event_mask;
 
-  GdkWindowTypeHint type_hint;
+  GdkSurfaceTypeHint type_hint;
 
-  GdkWindow *transient_owner;
+  GdkSurface *transient_owner;
   GSList    *transient_children;
   gint       num_transients;
   gboolean   changing_state;
@@ -286,7 +286,7 @@ struct _GdkWindowImplWin32
   guint have_temp_styles : 1;
 
   /* If TRUE, the window is in the process of being maximized.
-   * This is set by WM_SYSCOMMAND and by gdk_win32_window_maximize (),
+   * This is set by WM_SYSCOMMAND and by gdk_win32_surface_maximize (),
    * and is unset when WM_WINDOWPOSCHANGING is handled.
    */
   guint maximizing : 1;
@@ -334,7 +334,7 @@ struct _GdkWindowImplWin32
   /* Also remember the same position, but in absolute form. */
   GdkRectangle *snap_stash_int;
 
-  /* Decorations set by gdk_window_set_decorations() or NULL if unset */
+  /* Decorations set by gdk_surface_set_decorations() or NULL if unset */
   GdkWMDecoration* decorations;
 
   /* No. of windows to force layered windows off */
@@ -352,25 +352,25 @@ struct _GdkWindowImplWin32
   gint unscaled_height;
 };
 
-struct _GdkWindowImplWin32Class
+struct _GdkSurfaceImplWin32Class
 {
-  GdkWindowImplClass parent_class;
+  GdkSurfaceImplClass parent_class;
 };
 
-GType _gdk_window_impl_win32_get_type (void);
+GType _gdk_surface_impl_win32_get_type (void);
 
-void  _gdk_win32_window_tmp_unset_bg  (GdkWindow *window,
+void  _gdk_win32_surface_tmp_unset_bg  (GdkSurface *window,
 				       gboolean   recurse);
-void  _gdk_win32_window_tmp_reset_bg  (GdkWindow *window,
+void  _gdk_win32_surface_tmp_reset_bg  (GdkSurface *window,
 				       gboolean   recurse);
 
-void  _gdk_win32_window_tmp_unset_parent_bg (GdkWindow *window);
-void  _gdk_win32_window_tmp_reset_parent_bg (GdkWindow *window);
+void  _gdk_win32_surface_tmp_unset_parent_bg (GdkSurface *window);
+void  _gdk_win32_surface_tmp_reset_parent_bg (GdkSurface *window);
 
-void  _gdk_win32_window_update_style_bits   (GdkWindow *window);
+void  _gdk_win32_surface_update_style_bits   (GdkSurface *window);
 
-gint  _gdk_win32_window_get_scale_factor    (GdkWindow *window);
+gint  _gdk_win32_surface_get_scale_factor    (GdkSurface *window);
 
 G_END_DECLS
 
-#endif /* __GDK_WINDOW_WIN32_H__ */
+#endif /* __GDK_SURFACE_WIN32_H__ */

@@ -68,19 +68,19 @@ enum
 static GtkWidget *
 find_toplevel_at_pointer (GdkDisplay *display)
 {
-  GdkWindow *pointer_window;
+  GdkSurface *pointer_window;
   GtkWidget *widget = NULL;
 
   pointer_window = gdk_device_get_window_at_position (gtk_get_current_event_device (),
                                                       NULL, NULL);
 
-  /* The user data field of a GdkWindow is used to store a pointer
+  /* The user data field of a GdkSurface is used to store a pointer
    * to the widget that created it.
    */
   if (pointer_window)
     {
       gpointer widget_ptr;
-      gdk_window_get_user_data (pointer_window, &widget_ptr);
+      gdk_surface_get_user_data (pointer_window, &widget_ptr);
       widget = widget_ptr;
     }
 

@@ -196,9 +196,9 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_window_get_attached_to          (GtkWindow           *window);
 GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_type_hint            (GtkWindow           *window, 
-						GdkWindowTypeHint    hint);
+						GdkSurfaceTypeHint    hint);
 GDK_AVAILABLE_IN_ALL
-GdkWindowTypeHint gtk_window_get_type_hint     (GtkWindow           *window);
+GdkSurfaceTypeHint gtk_window_get_type_hint     (GtkWindow           *window);
 GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_skip_taskbar_hint    (GtkWindow           *window,
                                                 gboolean             setting);
@@ -381,7 +381,7 @@ void     gtk_window_set_keep_below    (GtkWindow *window, gboolean setting);
 
 GDK_AVAILABLE_IN_ALL
 void gtk_window_begin_resize_drag (GtkWindow     *window,
-                                   GdkWindowEdge  edge,
+                                   GdkSurfaceEdge  edge,
                                    gint           button,
                                    gint           root_x,
                                    gint           root_y,

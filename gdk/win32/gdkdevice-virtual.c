@@ -65,7 +65,7 @@ _gdk_device_virtual_set_active (GdkDevice *device,
 
 static gboolean
 gdk_device_virtual_get_history (GdkDevice      *device,
-				GdkWindow      *window,
+				GdkSurface      *window,
 				guint32         start,
 				guint32         stop,
 				GdkTimeCoord ***events,
@@ -77,7 +77,7 @@ gdk_device_virtual_get_history (GdkDevice      *device,
 
 static void
 gdk_device_virtual_get_state (GdkDevice       *device,
-			      GdkWindow       *window,
+			      GdkSurface       *window,
 			      gdouble         *axes,
 			      GdkModifierType *mask)
 {
@@ -90,12 +90,12 @@ gdk_device_virtual_get_state (GdkDevice       *device,
 
 static void
 gdk_device_virtual_set_window_cursor (GdkDevice *device,
-                                      GdkWindow *window,
+                                      GdkSurface *window,
                                       GdkCursor *cursor)
 {
   if (cursor != NULL)
     {
-      GdkDisplay *display = gdk_window_get_display (window);
+      GdkDisplay *display = gdk_surface_get_display (window);
       HCURSOR hcursor = NULL;
 
       if (display != NULL)
@@ -116,8 +116,8 @@ gdk_device_virtual_warp (GdkDevice *device,
 
 static void
 gdk_device_virtual_query_state (GdkDevice        *device,
-				GdkWindow        *window,
-				GdkWindow       **child_window,
+				GdkSurface        *window,
+				GdkSurface       **child_window,
 				gdouble          *root_x,
 				gdouble          *root_y,
 				gdouble          *win_x,
@@ -135,14 +135,14 @@ gdk_device_virtual_query_state (GdkDevice        *device,
 
 static GdkGrabStatus
 gdk_device_virtual_grab (GdkDevice    *device,
-			 GdkWindow    *window,
+			 GdkSurface    *window,
 			 gboolean      owner_events,
 			 GdkEventMask  event_mask,
-			 GdkWindow    *confine_to,
+			 GdkSurface    *confine_to,
 			 GdkCursor    *cursor,
 			 guint32       time_)
 {
-  GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+  GdkSurfaceImplWin32 *impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
 
   if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
     {
@@ -160,7 +160,7 @@ gdk_device_virtual_grab (GdkDevice    *device,
       else
         SetCursor (LoadCursor (NULL, IDC_ARROW));
 
-      SetCapture (GDK_WINDOW_HWND (window));
+      SetCapture (GDK_SURFACE_HWND (window));
     }
 
   return GDK_GRAB_SUCCESS;
@@ -199,7 +199,7 @@ gdk_device_virtual_ungrab (GdkDevice *device,
 
 static void
 gdk_device_virtual_select_window_events (GdkDevice    *device,
-					 GdkWindow    *window,
+					 GdkSurface    *window,
 					 GdkEventMask  event_mask)
 {
 }
@@ -216,7 +216,7 @@ gdk_device_virtual_class_init (GdkDeviceVirtualClass *klass)
   device_class->query_state = gdk_device_virtual_query_state;
   device_class->grab = gdk_device_virtual_grab;
   device_class->ungrab = gdk_device_virtual_ungrab;
-  device_class->window_at_position = _gdk_device_win32_window_at_position;
+  device_class->window_at_position = _gdk_device_win32_surface_at_position;
   device_class->select_window_events = gdk_device_virtual_select_window_events;
 }
 

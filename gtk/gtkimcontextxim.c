@@ -37,7 +37,7 @@ struct _GtkIMContextXIM
   gchar *locale;
   gchar *mb_charset;
 
-  GdkWindow *client_window;
+  GdkSurface *client_window;
   Window client_window_xid;
   GtkWidget *client_widget;
 
@@ -123,7 +123,7 @@ static void     gtk_im_context_xim_get_preedit_string (GtkIMContext          *co
 
 static void reinitialize_ic      (GtkIMContextXIM *context_xim);
 static void set_ic_client_window (GtkIMContextXIM *context_xim,
-				  GdkWindow       *client_window);
+				  GdkSurface       *client_window);
 
 static void setup_styles (GtkXIMInfo *info);
 
@@ -397,12 +397,12 @@ xim_destroy_callback (XIM      xim,
 }
 
 static GtkXIMInfo *
-get_im (GdkWindow *client_window,
+get_im (GdkSurface *client_window,
 	const char *locale)
 {
   GSList *tmp_list;
   GtkXIMInfo *info;
-  GdkDisplay *display = gdk_window_get_display (client_window);
+  GdkDisplay *display = gdk_surface_get_display (client_window);
 
   info = NULL;
   tmp_list = open_ims;
@@ -546,7 +546,7 @@ reinitialize_ic (GtkIMContextXIM *context_xim)
 
 static void
 set_ic_client_window (GtkIMContextXIM *context_xim,
-		      GdkWindow       *client_window)
+		      GdkSurface       *client_window)
 {
   reinitialize_ic (context_xim);
   if (context_xim->client_window)
@@ -560,16 +560,16 @@ set_ic_client_window (GtkIMContextXIM *context_xim,
 
   if (context_xim->client_window)
     {
-      GdkWindow *native;
+      GdkSurface *native;
 
       context_xim->im_info = get_im (context_xim->client_window, context_xim->locale);
       context_xim->im_info->ics = g_slist_prepend (context_xim->im_info->ics, context_xim);
 
-      for (native = client_window; native; native = gdk_window_get_parent (native))
+      for (native = client_window; native; native = gdk_surface_get_parent (native))
         {
-          if (gdk_window_has_native (native))
+          if (gdk_surface_has_native (native))
             {
-              context_xim->client_window_xid = gdk_x11_window_get_xid (native);
+              context_xim->client_window_xid = gdk_x11_surface_get_xid (native);
               break;
             }
         }
@@ -583,7 +583,7 @@ gtk_im_context_xim_set_client_widget (GtkIMContext *context,
                                       GtkWidget    *widget)
 {
   GtkIMContextXIM *context_xim = GTK_IM_CONTEXT_XIM (context);
-  GdkWindow *window = NULL;
+  GdkSurface *window = NULL;
 
   if (widget != NULL)
     window = gtk_widget_get_window (gtk_widget_get_toplevel (widget));
@@ -628,7 +628,7 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
   KeySym keysym;
   Status status;
   gboolean result = FALSE;
-  GdkWindow *window;
+  GdkSurface *window;
   XKeyPressedEvent xevent;
   GdkEventType event_type;
   guint state;
@@ -641,14 +641,14 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
   if (event_type == GDK_KEY_RELEASE && !context_xim->filter_key_release)
     return FALSE;
 
-  window = gdk_window_get_toplevel (gdk_event_get_window ((GdkEvent *) event));
+  window = gdk_surface_get_toplevel (gdk_event_get_window ((GdkEvent *) event));
 
   xevent.type = (event_type == GDK_KEY_PRESS) ? KeyPress : KeyRelease;
   xevent.serial = 0;		/* hope it doesn't matter */
   xevent.send_event = gdk_event_is_sent ((GdkEvent *)event);
-  xevent.display = GDK_WINDOW_XDISPLAY (window);
-  xevent.window = GDK_WINDOW_XID (window);
-  xevent.root = DefaultRootWindow(GDK_WINDOW_XDISPLAY (window));
+  xevent.display = GDK_SURFACE_XDISPLAY (window);
+  xevent.window = GDK_SURFACE_XID (window);
+  xevent.root = DefaultRootWindow(GDK_SURFACE_XDISPLAY (window));
   xevent.subwindow = xevent.window;
   xevent.time = gdk_event_get_time ((GdkEvent *) event);
   xevent.x = xevent.x_root = 0;
@@ -1426,11 +1426,11 @@ gtk_im_context_xim_get_ic (GtkIMContextXIM *context_xim)
  * For B) we basically have to depend on our callers
  * calling ::focus-in and ::focus-out at the right time.
  *
- * The toplevel is computed by walking up the GdkWindow
+ * The toplevel is computed by walking up the GdkSurface
  * hierarchy from context->client_window until we find a
  * window that is owned by some widget, and then calling
  * gtk_widget_get_toplevel() on that widget. This should
- * handle both cases where we might have GdkWindows without widgets,
+ * handle both cases where we might have GdkSurfaces without widgets,
  * and cases where GtkWidgets have strange window hierarchies
  * (like a torn off GtkHandleBox.)
  *
@@ -1531,16 +1531,16 @@ on_client_widget_hierarchy_changed (GtkWidget       *widget,
  * widget owning the nearest parent that has a widget.
  */
 static GtkWidget *
-widget_for_window (GdkWindow *window)
+widget_for_window (GdkSurface *window)
 {
   while (window)
     {
       gpointer user_data;
-      gdk_window_get_user_data (window, &user_data);
+      gdk_surface_get_user_data (window, &user_data);
       if (user_data)
 	return user_data;
 
-      window = gdk_window_get_parent (window);
+      window = gdk_surface_get_parent (window);
     }
 
   return NULL;
@@ -1613,9 +1613,9 @@ on_status_toplevel_configure (GtkWidget     *toplevel,
 
       if (status_window->window)
         {
-          height = DisplayHeight(GDK_WINDOW_XDISPLAY (gtk_widget_get_window (toplevel)), 0);
+          height = DisplayHeight(GDK_SURFACE_XDISPLAY (gtk_widget_get_window (toplevel)), 0);
 
-          gdk_window_get_frame_extents (gtk_widget_get_window (toplevel), &rect);
+          gdk_surface_get_frame_extents (gtk_widget_get_window (toplevel), &rect);
           gtk_widget_get_preferred_size ( (status_window->window), &requisition, NULL);
 
           if (rect.y + rect.height + requisition.height < height)

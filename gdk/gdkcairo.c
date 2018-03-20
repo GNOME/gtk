@@ -33,9 +33,9 @@
  * can be used with GDK. GTK+ does all of its drawing using cairo.
  *
  * GDK does not wrap the cairo API, instead it allows to create cairo
- * contexts which can be used to draw on #GdkWindows. Additional
+ * contexts which can be used to draw on #GdkSurfaces. Additional
  * functions allow use #GdkRectangles with cairo and to use #GdkRGBAs,
- * #GdkPixbufs and #GdkWindows as sources for drawing operations.
+ * #GdkPixbufs and #GdkSurfaces as sources for drawing operations.
  */
 
 
@@ -251,14 +251,14 @@ gdk_cairo_surface_paint_pixbuf (cairo_surface_t *surface,
 cairo_surface_t *
 gdk_cairo_surface_create_from_pixbuf (const GdkPixbuf *pixbuf,
                                       int              scale,
-                                      GdkWindow       *for_window)
+                                      GdkSurface       *for_window)
 {
   cairo_format_t format;
   cairo_surface_t *surface;
 
   g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
   g_return_val_if_fail (scale >= 0, NULL);
-  g_return_val_if_fail (for_window == NULL || GDK_IS_WINDOW (for_window), NULL);
+  g_return_val_if_fail (for_window == NULL || GDK_IS_SURFACE (for_window), NULL);
 
   if (gdk_pixbuf_get_n_channels (pixbuf) == 3)
     format = CAIRO_FORMAT_RGB24;
@@ -266,7 +266,7 @@ gdk_cairo_surface_create_from_pixbuf (const GdkPixbuf *pixbuf,
     format = CAIRO_FORMAT_ARGB32;
 
   surface =
-     gdk_window_create_similar_image_surface (for_window,
+     gdk_surface_create_similar_image_surface (for_window,
 					      format,
                                               gdk_pixbuf_get_width (pixbuf),
                                               gdk_pixbuf_get_height (pixbuf),

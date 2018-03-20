@@ -1416,8 +1416,8 @@ gtk_menu_item_real_popup_submenu (GtkWidget      *widget,
                                              GDK_ANCHOR_SLIDE |
                                              GDK_ANCHOR_RESIZE),
                             "menu-type-hint", (priv->from_menubar ?
-                                               GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU :
-                                               GDK_WINDOW_TYPE_HINT_POPUP_MENU),
+                                               GDK_SURFACE_TYPE_HINT_DROPDOWN_MENU :
+                                               GDK_SURFACE_TYPE_HINT_POPUP_MENU),
                             NULL);
 
               gtk_menu_popup_at_widget (GTK_MENU (priv->submenu),

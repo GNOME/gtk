@@ -22,8 +22,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GDK_WIN32_WINDOW_H__
-#define __GDK_WIN32_WINDOW_H__
+#ifndef __GDK_WIN32_SURFACE_H__
+#define __GDK_WIN32_SURFACE_H__
 
 #if !defined (__GDKWIN32_H_INSIDE__) && !defined (GDK_COMPILATION)
 #error "Only <gdk/gdkwin32.h> can be included directly."
@@ -33,23 +33,23 @@
 
 G_BEGIN_DECLS
 
-#define GDK_TYPE_WIN32_WINDOW              (gdk_win32_window_get_type ())
-#define GDK_WIN32_WINDOW(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WIN32_WINDOW, GdkWin32Window))
-#define GDK_WIN32_WINDOW_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WIN32_WINDOW, GdkWin32WindowClass))
-#define GDK_IS_WIN32_WINDOW(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WIN32_WINDOW))
-#define GDK_IS_WIN32_WINDOW_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WIN32_WINDOW))
-#define GDK_WIN32_WINDOW_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WIN32_WINDOW, GdkWin32WindowClass))
+#define GDK_TYPE_WIN32_SURFACE              (gdk_win32_surface_get_type ())
+#define GDK_WIN32_SURFACE(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WIN32_SURFACE, GdkWin32Surface))
+#define GDK_WIN32_SURFACE_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WIN32_SURFACE, GdkWin32SurfaceClass))
+#define GDK_IS_WIN32_SURFACE(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WIN32_SURFACE))
+#define GDK_IS_WIN32_SURFACE_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WIN32_SURFACE))
+#define GDK_WIN32_SURFACE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WIN32_SURFACE, GdkWin32SurfaceClass))
 
 #ifdef GDK_COMPILATION
-typedef struct _GdkWin32Window GdkWin32Window;
+typedef struct _GdkWin32Surface GdkWin32Surface;
 #else
-typedef GdkWindow GdkWin32Window;
+typedef GdkSurface GdkWin32Surface;
 #endif
-typedef struct _GdkWin32WindowClass GdkWin32WindowClass;
+typedef struct _GdkWin32SurfaceClass GdkWin32SurfaceClass;
 
 GDK_AVAILABLE_IN_ALL
-GType    gdk_win32_window_get_type          (void);
+GType    gdk_win32_surface_get_type          (void);
 
 G_END_DECLS
 
-#endif /* __GDK_X11_WINDOW_H__ */
+#endif /* __GDK_X11_SURFACE_H__ */

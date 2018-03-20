@@ -38,46 +38,46 @@ struct _GdkQuartzDeviceCoreClass
 };
 
 static gboolean gdk_quartz_device_core_get_history (GdkDevice      *device,
-                                                    GdkWindow      *window,
+                                                    GdkSurface      *window,
                                                     guint32         start,
                                                     guint32         stop,
                                                     GdkTimeCoord ***events,
                                                     gint           *n_events);
 static void gdk_quartz_device_core_get_state (GdkDevice       *device,
-                                              GdkWindow       *window,
+                                              GdkSurface       *window,
                                               gdouble         *axes,
                                               GdkModifierType *mask);
 static void gdk_quartz_device_core_set_window_cursor (GdkDevice *device,
-                                                      GdkWindow *window,
+                                                      GdkSurface *window,
                                                       GdkCursor *cursor);
 static void gdk_quartz_device_core_warp (GdkDevice *device,
                                          gdouble    x,
                                          gdouble    y);
 static void gdk_quartz_device_core_query_state (GdkDevice        *device,
-                                                GdkWindow        *window,
-                                                GdkWindow       **root_window,
-                                                GdkWindow       **child_window,
+                                                GdkSurface        *window,
+                                                GdkSurface       **root_window,
+                                                GdkSurface       **child_window,
                                                 gdouble          *root_x,
                                                 gdouble          *root_y,
                                                 gdouble          *win_x,
                                                 gdouble          *win_y,
                                                 GdkModifierType  *mask);
 static GdkGrabStatus gdk_quartz_device_core_grab   (GdkDevice     *device,
-                                                    GdkWindow     *window,
+                                                    GdkSurface     *window,
                                                     gboolean       owner_events,
                                                     GdkEventMask   event_mask,
-                                                    GdkWindow     *confine_to,
+                                                    GdkSurface     *confine_to,
                                                     GdkCursor     *cursor,
                                                     guint32        time_);
 static void          gdk_quartz_device_core_ungrab (GdkDevice     *device,
                                                     guint32        time_);
-static GdkWindow * gdk_quartz_device_core_window_at_position (GdkDevice       *device,
+static GdkSurface * gdk_quartz_device_core_window_at_position (GdkDevice       *device,
                                                               gdouble         *win_x,
                                                               gdouble         *win_y,
                                                               GdkModifierType *mask,
                                                               gboolean         get_toplevel);
 static void      gdk_quartz_device_core_select_window_events (GdkDevice       *device,
-                                                              GdkWindow       *window,
+                                                              GdkSurface       *window,
                                                               GdkEventMask     event_mask);
 
 
@@ -112,7 +112,7 @@ gdk_quartz_device_core_init (GdkQuartzDeviceCore *quartz_device_core)
 
 static gboolean
 gdk_quartz_device_core_get_history (GdkDevice      *device,
-                                    GdkWindow      *window,
+                                    GdkSurface      *window,
                                     guint32         start,
                                     guint32         stop,
                                     GdkTimeCoord ***events,
@@ -123,13 +123,13 @@ gdk_quartz_device_core_get_history (GdkDevice      *device,
 
 static void
 gdk_quartz_device_core_get_state (GdkDevice       *device,
-                                  GdkWindow       *window,
+                                  GdkSurface       *window,
                                   gdouble         *axes,
                                   GdkModifierType *mask)
 {
   gdouble x_pos, y_pos;
 
-  gdk_window_get_device_position_double (window, device, &x_pos, &y_pos, mask);
+  gdk_surface_get_device_position_double (window, device, &x_pos, &y_pos, mask);
 
   if (axes)
     {
@@ -139,12 +139,12 @@ gdk_quartz_device_core_get_state (GdkDevice       *device,
 }
 
 static void
-translate_coords_to_child_coords (GdkWindow *parent,
-                                  GdkWindow *child,
+translate_coords_to_child_coords (GdkSurface *parent,
+                                  GdkSurface *child,
                                   gint      *x,
                                   gint      *y)
 {
-  GdkWindow *current = child;
+  GdkSurface *current = child;
 
   if (child == parent)
     return;
@@ -153,23 +153,23 @@ translate_coords_to_child_coords (GdkWindow *parent,
     {
       gint tmp_x, tmp_y;
 
-      gdk_window_get_origin (current, &tmp_x, &tmp_y);
+      gdk_surface_get_origin (current, &tmp_x, &tmp_y);
 
       *x -= tmp_x;
       *y -= tmp_y;
 
-      current = gdk_window_get_parent (current);
+      current = gdk_surface_get_parent (current);
     }
 }
 
 static void
 gdk_quartz_device_core_set_window_cursor (GdkDevice *device,
-                                          GdkWindow *window,
+                                          GdkSurface *window,
                                           GdkCursor *cursor)
 {
   NSCursor *nscursor;
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return;
 
   nscursor = _gdk_quartz_cursor_get_ns_cursor (cursor);
@@ -185,21 +185,21 @@ gdk_quartz_device_core_warp (GdkDevice *device,
   CGDisplayMoveCursorToPoint (CGMainDisplayID (), CGPointMake (x, y));
 }
 
-static GdkWindow *
-gdk_quartz_device_core_query_state_helper (GdkWindow       *window,
+static GdkSurface *
+gdk_quartz_device_core_query_state_helper (GdkSurface       *window,
                                            GdkDevice       *device,
                                            gdouble         *x,
                                            gdouble         *y,
                                            GdkModifierType *mask)
 {
-  GdkWindow *toplevel;
+  GdkSurface *toplevel;
   NSPoint point;
   gint x_tmp, y_tmp;
-  GdkWindow *found_window;
+  GdkSurface *found_window;
 
-  g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (window == NULL || GDK_IS_SURFACE (window), NULL);
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     {
       *x = 0;
       *y = 0;
@@ -207,7 +207,7 @@ gdk_quartz_device_core_query_state_helper (GdkWindow       *window,
       return NULL;
     }
 
-  toplevel = gdk_window_get_toplevel (window);
+  toplevel = gdk_surface_get_toplevel (window);
 
   if (mask)
     *mask = _gdk_quartz_events_get_current_keyboard_modifiers () |
@@ -217,14 +217,14 @@ gdk_quartz_device_core_query_state_helper (GdkWindow       *window,
   if (window == _gdk_root)
     {
       point = [NSEvent mouseLocation];
-      _gdk_quartz_window_nspoint_to_gdk_xy (point, &x_tmp, &y_tmp);
+      _gdk_quartz_surface_nspoint_to_gdk_xy (point, &x_tmp, &y_tmp);
     }
   else
     {
-      GdkWindowImplQuartz *impl;
+      GdkSurfaceImplQuartz *impl;
       NSWindow *nswindow;
 
-      impl = GDK_WINDOW_IMPL_QUARTZ (toplevel->impl);
+      impl = GDK_SURFACE_IMPL_QUARTZ (toplevel->impl);
       nswindow = impl->toplevel;
 
       point = [nswindow mouseLocationOutsideOfEventStream];
@@ -235,7 +235,7 @@ gdk_quartz_device_core_query_state_helper (GdkWindow       *window,
       window = toplevel;
     }
 
-  found_window = _gdk_quartz_window_find_child (window, x_tmp, y_tmp,
+  found_window = _gdk_quartz_surface_find_child (window, x_tmp, y_tmp,
                                                 FALSE);
 
   if (found_window == _gdk_root)
@@ -255,15 +255,15 @@ gdk_quartz_device_core_query_state_helper (GdkWindow       *window,
 
 static void
 gdk_quartz_device_core_query_state (GdkDevice        *device,
-                                    GdkWindow        *window,
-                                    GdkWindow       **child_window,
+                                    GdkSurface        *window,
+                                    GdkSurface       **child_window,
                                     gdouble          *root_x,
                                     gdouble          *root_y,
                                     gdouble          *win_x,
                                     gdouble          *win_y,
                                     GdkModifierType  *mask)
 {
-  GdkWindow *found_window;
+  GdkSurface *found_window;
   NSPoint point;
   gint x_tmp, y_tmp;
 
@@ -281,7 +281,7 @@ gdk_quartz_device_core_query_state (GdkDevice        *device,
     *child_window = found_window;
 
   point = [NSEvent mouseLocation];
-  _gdk_quartz_window_nspoint_to_gdk_xy (point, &x_tmp, &y_tmp);
+  _gdk_quartz_surface_nspoint_to_gdk_xy (point, &x_tmp, &y_tmp);
 
   if (root_x)
     *root_x = x_tmp;
@@ -292,10 +292,10 @@ gdk_quartz_device_core_query_state (GdkDevice        *device,
 
 static GdkGrabStatus
 gdk_quartz_device_core_grab (GdkDevice    *device,
-                             GdkWindow    *window,
+                             GdkSurface    *window,
                              gboolean      owner_events,
                              GdkEventMask  event_mask,
-                             GdkWindow    *confine_to,
+                             GdkSurface    *confine_to,
                              GdkCursor    *cursor,
                              guint32       time_)
 {
@@ -316,22 +316,22 @@ gdk_quartz_device_core_ungrab (GdkDevice *device,
   _gdk_display_device_grab_update (_gdk_display, device, NULL, 0);
 }
 
-static GdkWindow *
+static GdkSurface *
 gdk_quartz_device_core_window_at_position (GdkDevice       *device,
                                            gdouble         *win_x,
                                            gdouble         *win_y,
                                            GdkModifierType *mask,
                                            gboolean         get_toplevel)
 {
-  GdkWindow *found_window;
+  GdkSurface *found_window;
   NSPoint point;
   gint x_tmp, y_tmp;
 
   /* Get mouse coordinates, find window under the mouse pointer */
   point = [NSEvent mouseLocation];
-  _gdk_quartz_window_nspoint_to_gdk_xy (point, &x_tmp, &y_tmp);
+  _gdk_quartz_surface_nspoint_to_gdk_xy (point, &x_tmp, &y_tmp);
 
-  found_window = _gdk_quartz_window_find_child (_gdk_root, x_tmp, y_tmp, get_toplevel);
+  found_window = _gdk_quartz_surface_find_child (_gdk_root, x_tmp, y_tmp, get_toplevel);
 
   if (found_window)
     translate_coords_to_child_coords (_gdk_root, found_window, &x_tmp, &y_tmp);
@@ -351,7 +351,7 @@ gdk_quartz_device_core_window_at_position (GdkDevice       *device,
 
 static void
 gdk_quartz_device_core_select_window_events (GdkDevice    *device,
-                                             GdkWindow    *window,
+                                             GdkSurface    *window,
                                              GdkEventMask  event_mask)
 {
   /* The mask is set in the common code. */

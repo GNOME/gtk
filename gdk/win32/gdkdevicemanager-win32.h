@@ -60,7 +60,7 @@ void     _gdk_input_set_tablet_active (void);
 gboolean gdk_input_other_event        (GdkDisplay *display,
                                        GdkEvent   *event,
                                        MSG        *msg,
-                                       GdkWindow  *window);
+                                       GdkSurface  *window);
 
 G_END_DECLS
 

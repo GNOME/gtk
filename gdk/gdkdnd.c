@@ -174,11 +174,11 @@ gdk_drag_context_get_selected_action (GdkDragContext *context)
  * gdk_drag_context_get_source_window:
  * @context: a #GdkDragContext
  *
- * Returns the #GdkWindow where the DND operation started.
+ * Returns the #GdkSurface where the DND operation started.
  *
- * Returns: (transfer none): a #GdkWindow
+ * Returns: (transfer none): a #GdkSurface
  **/
-GdkWindow *
+GdkSurface *
 gdk_drag_context_get_source_window (GdkDragContext *context)
 {
   g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
@@ -192,9 +192,9 @@ gdk_drag_context_get_source_window (GdkDragContext *context)
  *
  * Returns the destination window for the DND operation.
  *
- * Returns: (transfer none): a #GdkWindow
+ * Returns: (transfer none): a #GdkSurface
  **/
-GdkWindow *
+GdkSurface *
 gdk_drag_context_get_dest_window (GdkDragContext *context)
 {
   g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
@@ -794,7 +794,7 @@ gdk_drop_read_finish (GdkDragContext *context,
  *
  * Returns: (nullable) (transfer none): the drag window, or %NULL
  */
-GdkWindow *
+GdkSurface *
 gdk_drag_context_get_drag_window (GdkDragContext *context)
 {
   g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);

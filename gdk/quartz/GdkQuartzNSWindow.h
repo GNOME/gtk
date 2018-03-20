@@ -33,7 +33,7 @@
   NSPoint initialMoveLocation;
   NSPoint initialResizeLocation;
   NSRect  initialResizeFrame;
-  GdkWindowEdge resizeEdge;
+  GdkSurfaceEdge resizeEdge;
 
   NSRect  lastUnmaximizedFrame;
   NSRect  lastMaximizedFrame;
@@ -45,7 +45,7 @@
 -(void)beginManualMove;
 -(BOOL)trackManualMove;
 -(BOOL)isInManualResizeOrMove;
--(void)beginManualResize:(GdkWindowEdge)edge;
+-(void)beginManualResize:(GdkSurfaceEdge)edge;
 -(BOOL)trackManualResize;
 -(void)showAndMakeKey:(BOOL)makeKey;
 -(void)hide;

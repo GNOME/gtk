@@ -473,11 +473,11 @@ static void
 window_state_changed (GtkWidget *widget)
 {
   DemoApplicationWindow *window = (DemoApplicationWindow *)widget;
-  GdkWindowState new_state;
+  GdkSurfaceState new_state;
 
-  new_state = gdk_window_get_state (gtk_widget_get_window (widget));
-  window->maximized = (new_state & GDK_WINDOW_STATE_MAXIMIZED) != 0;
-  window->fullscreen = (new_state & GDK_WINDOW_STATE_FULLSCREEN) != 0;
+  new_state = gdk_surface_get_state (gtk_widget_get_window (widget));
+  window->maximized = (new_state & GDK_SURFACE_STATE_MAXIMIZED) != 0;
+  window->fullscreen = (new_state & GDK_SURFACE_STATE_FULLSCREEN) != 0;
 }
 
 static void

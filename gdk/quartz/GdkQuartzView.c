@@ -76,10 +76,10 @@
   gint ns_x, ns_y;
   GdkRectangle *rect;
 
-  rect = g_object_get_data (G_OBJECT (gdk_window), GIC_CURSOR_RECT);
+  rect = g_object_get_data (G_OBJECT (gdk_surface), GIC_CURSOR_RECT);
   if (rect)
     {
-      _gdk_quartz_window_gdk_xy_to_xy (rect->x, rect->y + rect->height,
+      _gdk_quartz_surface_gdk_xy_to_xy (rect->x, rect->y + rect->height,
 				       &ns_x, &ns_y);
 
       return NSMakeRect (ns_x, ns_y, rect->width, rect->height);
@@ -126,7 +126,7 @@
   gchar *prev_str;
   markedRange = selectedRange = NSMakeRange (NSNotFound, 0);
 
-  g_object_set_data_full (G_OBJECT (gdk_window), TIC_MARKED_TEXT, NULL, g_free);
+  g_object_set_data_full (G_OBJECT (gdk_surface), TIC_MARKED_TEXT, NULL, g_free);
 }
 
 -(void)setMarkedText: (id)aString selectedRange: (NSRange)newSelection replacementRange: (NSRange)replacementRange
@@ -153,21 +153,21 @@
       str = [aString UTF8String];
     }
 
-  g_object_set_data_full (G_OBJECT (gdk_window), TIC_MARKED_TEXT, g_strdup (str), g_free);
-  g_object_set_data (G_OBJECT (gdk_window), TIC_SELECTED_POS,
+  g_object_set_data_full (G_OBJECT (gdk_surface), TIC_MARKED_TEXT, g_strdup (str), g_free);
+  g_object_set_data (G_OBJECT (gdk_surface), TIC_SELECTED_POS,
 		     GUINT_TO_POINTER (selectedRange.location));
-  g_object_set_data (G_OBJECT (gdk_window), TIC_SELECTED_LEN,
+  g_object_set_data (G_OBJECT (gdk_surface), TIC_SELECTED_LEN,
 		     GUINT_TO_POINTER (selectedRange.length));
 
   GDK_NOTE (EVENTS, g_message ("setMarkedText: set %s (%p, nsview %p): %s",
-			       TIC_MARKED_TEXT, gdk_window, self,
+			       TIC_MARKED_TEXT, gdk_surface, self,
 			       str ? str : "(empty)"));
 
   /* handle text input changes by mouse events */
-  if (!GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (gdk_window),
+  if (!GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (gdk_surface),
                                             TIC_IN_KEY_DOWN)))
     {
-      _gdk_quartz_synthesize_null_key_event(gdk_window);
+      _gdk_quartz_synthesize_null_key_event(gdk_surface);
     }
 }
 
@@ -209,326 +209,326 @@
       str = [string UTF8String];
    }
 
-  g_object_set_data_full (G_OBJECT (gdk_window), TIC_INSERT_TEXT, g_strdup (str), g_free);
+  g_object_set_data_full (G_OBJECT (gdk_surface), TIC_INSERT_TEXT, g_strdup (str), g_free);
   GDK_NOTE (EVENTS, g_message ("insertText: set %s (%p, nsview %p): %s",
-			     TIC_INSERT_TEXT, gdk_window, self,
+			     TIC_INSERT_TEXT, gdk_surface, self,
 			     str ? str : "(empty)"));
 
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_FILTERED));
 
   /* handle text input changes by mouse events */
-  if (!GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (gdk_window),
+  if (!GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (gdk_surface),
                                             TIC_IN_KEY_DOWN)))
     {
-      _gdk_quartz_synthesize_null_key_event(gdk_window);
+      _gdk_quartz_synthesize_null_key_event(gdk_surface);
     }
 }
 
 -(void)deleteBackward: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("deleteBackward"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)deleteForward: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("deleteForward"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)deleteToBeginningOfLine: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("deleteToBeginningOfLine"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)deleteToEndOfLine: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("deleteToEndOfLine"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)deleteWordBackward: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("deleteWordBackward"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)deleteWordForward: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("deleteWordForward"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)insertBacktab: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("insertBacktab"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)insertNewline: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("insertNewline"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY, GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY, GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)insertTab: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("insertTab"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)moveBackward: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("moveBackward"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)moveBackwardAndModifySelection: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("moveBackwardAndModifySelection"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)moveDown: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("moveDown"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)moveDownAndModifySelection: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("moveDownAndModifySelection"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)moveForward: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("moveForward"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)moveForwardAndModifySelection: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("moveForwardAndModifySelection"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)moveLeft: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("moveLeft"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)moveLeftAndModifySelection: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("moveLeftAndModifySelection"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)moveRight: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("moveRight"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)moveRightAndModifySelection: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("moveRightAndModifySelection"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)moveToBeginningOfDocument: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("moveToBeginningOfDocument"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)moveToBeginningOfDocumentAndModifySelection: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("moveToBeginningOfDocumentAndModifySelection"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)moveToBeginningOfLine: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("moveToBeginningOfLine"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)moveToBeginningOfLineAndModifySelection: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("moveToBeginningOfLineAndModifySelection"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)moveToEndOfDocument: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("moveToEndOfDocument"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)moveToEndOfDocumentAndModifySelection: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("moveToEndOfDocumentAndModifySelection"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)moveToEndOfLine: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("moveToEndOfLine"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)moveToEndOfLineAndModifySelection: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("moveToEndOfLineAndModifySelection"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)moveUp: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("moveUp"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)moveUpAndModifySelection: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("moveUpAndModifySelection"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)moveWordBackward: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("moveWordBackward"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)moveWordBackwardAndModifySelection: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("moveWordBackwardAndModifySelection"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)moveWordForward: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("moveWordForward"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)moveWordForwardAndModifySelection: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("moveWordForwardAndModifySelection"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)moveWordLeft: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("moveWordLeft"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)moveWordLeftAndModifySelection: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("moveWordLeftAndModifySelection"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)moveWordRight: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("moveWordRight"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)moveWordRightAndModifySelection: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("moveWordRightAndModifySelection"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)pageDown: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("pageDown"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)pageDownAndModifySelection: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("pageDownAndModifySelection"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)pageUp: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("pageUp"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)pageUpAndModifySelection: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("pageUpAndModifySelection"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)selectAll: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("selectAll"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)selectLine: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("selectLine"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)selectWord: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("selectWord"));
-  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+  g_object_set_data (G_OBJECT (gdk_surface), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
@@ -550,14 +550,14 @@
   [super dealloc];
 }
 
--(void)setGdkWindow: (GdkWindow *)window
+-(void)setGdkSurface: (GdkSurface *)window
 {
-  gdk_window = window;
+  gdk_surface = window;
 }
 
--(GdkWindow *)gdkWindow
+-(GdkSurface *)gdkWindow
 {
-  return gdk_window;
+  return gdk_surface;
 }
 
 -(NSTrackingRectTag)trackingRect
@@ -572,7 +572,7 @@
 
 -(BOOL)isOpaque
 {
-  if (GDK_WINDOW_DESTROYED (gdk_window))
+  if (GDK_SURFACE_DESTROYED (gdk_surface))
     return YES;
 
   return NO;
@@ -581,13 +581,13 @@
 -(void)drawRect: (NSRect)rect
 {
   GdkRectangle gdk_rect;
-  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (gdk_window->impl);
+  GdkSurfaceImplQuartz *impl = GDK_SURFACE_IMPL_QUARTZ (gdk_window->impl);
   const NSRect *drawn_rects;
   NSInteger count;
   int i;
   cairo_region_t *region;
 
-  if (GDK_WINDOW_DESTROYED (gdk_window))
+  if (GDK_SURFACE_DESTROYED (gdk_surface))
     return;
 
   if (! (gdk_window->event_mask & GDK_EXPOSURE_MASK))
@@ -596,7 +596,7 @@
   if (NSEqualRects (rect, NSZeroRect))
     return;
 
-  if (!GDK_WINDOW_IS_MAPPED (gdk_window))
+  if (!GDK_SURFACE_IS_MAPPED (gdk_surface))
     {
       /* If the window is not yet mapped, clip_region_with_children
        * will be empty causing the usual code below to draw nothing.
@@ -636,7 +636,7 @@
     }
 
   impl->in_paint_rect_count++;
-  _gdk_window_process_updates_recurse (gdk_window, region);
+  _gdk_surface_process_updates_recurse (gdk_surface, region);
   impl->in_paint_rect_count--;
 
   cairo_region_destroy (region);
@@ -658,7 +658,7 @@
  */
 -(void)updateTrackingRect
 {
-  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (gdk_window->impl);
+  GdkSurfaceImplQuartz *impl = GDK_SURFACE_IMPL_QUARTZ (gdk_window->impl);
   NSRect rect;
 
   if (!impl || !impl->toplevel)

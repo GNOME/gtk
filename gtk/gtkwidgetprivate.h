@@ -147,7 +147,7 @@ struct _GtkWidgetPrivate
    * not have a window. (Which will be indicated by the
    * no_window field being set).
    */
-  GdkWindow *window;
+  GdkSurface *window;
   GList *registered_windows;
 
   GList *event_controllers;
@@ -220,8 +220,8 @@ void              _gtk_widget_propagate_display_changed    (GtkWidget  *widget,
 
 void              _gtk_widget_set_device_window            (GtkWidget *widget,
                                                             GdkDevice *device,
-                                                            GdkWindow *pointer_window);
-GdkWindow *       _gtk_widget_get_device_window            (GtkWidget *widget,
+                                                            GdkSurface *pointer_window);
+GdkSurface *       _gtk_widget_get_device_window            (GtkWidget *widget,
                                                             GdkDevice *device);
 GList *           _gtk_widget_list_devices                 (GtkWidget *widget);
 
@@ -278,7 +278,7 @@ gboolean          gtk_widget_query_tooltip                 (GtkWidget  *widget,
                                                             GtkTooltip *tooltip);
 
 void              gtk_widget_render                        (GtkWidget            *widget,
-                                                            GdkWindow            *window,
+                                                            GdkSurface            *window,
                                                             const cairo_region_t *region);
 
 
@@ -429,7 +429,7 @@ _gtk_widget_peek_request_cache (GtkWidget *widget)
   return &widget->priv->requests;
 }
 
-static inline GdkWindow *
+static inline GdkSurface *
 _gtk_widget_get_window (GtkWidget *widget)
 {
   return widget->priv->window;

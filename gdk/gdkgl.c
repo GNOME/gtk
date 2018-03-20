@@ -30,7 +30,7 @@ static cairo_user_data_key_t direct_key;
 
 void
 gdk_cairo_surface_mark_as_direct (cairo_surface_t *surface,
-                                  GdkWindow *window)
+                                  GdkSurface *window)
 {
   cairo_surface_set_user_data (surface, &direct_key,
                                g_object_ref (window),  g_object_unref);
@@ -219,10 +219,10 @@ gdk_gl_texture_quads (GdkGLContext *paint_context,
 {
   GdkGLContextPaintData *paint_data  = gdk_gl_context_get_paint_data (paint_context);
   GdkGLContextProgram *program;
-  GdkWindow *window = gdk_gl_context_get_window (paint_context);
-  int window_scale = gdk_window_get_scale_factor (window);
-  float w = gdk_window_get_width (window) * window_scale;
-  float h = gdk_window_get_height (window) * window_scale;
+  GdkSurface *window = gdk_gl_context_get_window (paint_context);
+  int window_scale = gdk_surface_get_scale_factor (window);
+  float w = gdk_surface_get_width (window) * window_scale;
+  float h = gdk_surface_get_height (window) * window_scale;
   int i;
   float *vertex_buffer_data;
 
@@ -327,7 +327,7 @@ gdk_gl_texture_quads (GdkGLContext *paint_context,
  */
 void
 gdk_cairo_draw_from_gl (cairo_t              *cr,
-                        GdkWindow            *window,
+                        GdkSurface            *window,
                         int                   source,
                         int                   source_type,
                         int                   buffer_scale,
@@ -345,7 +345,7 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
   GdkGLContextPaintData *paint_data;
   int major, minor, version;
 
-  paint_context = gdk_window_get_paint_gl_context (window, NULL);
+  paint_context = gdk_surface_get_paint_gl_context (window, NULL);
   if (paint_context == NULL)
     {
       g_warning ("gdk_cairo_draw_gl_render_buffer failed - no paint context");
@@ -458,7 +458,7 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
   double device_x_offset, device_y_offset;
   cairo_rectangle_int_t rect, e;
   int n_rects, i;
-  GdkWindow *window;
+  GdkSurface *window;
   int unscaled_window_height;
   unsigned int texture_id;
   int window_scale;
@@ -483,8 +483,8 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
   use_texture_rectangle = gdk_gl_context_use_texture_rectangle (paint_context);
 
   window = gdk_gl_context_get_window (paint_context);
-  window_scale = gdk_window_get_scale_factor (window);
-  gdk_window_get_unscaled_size (window, NULL, &unscaled_window_height);
+  window_scale = gdk_surface_get_scale_factor (window);
+  gdk_surface_get_unscaled_size (window, NULL, &unscaled_window_height);
 
   sx = sy = 1;
   cairo_surface_get_device_scale (surface, &sx, &sy);

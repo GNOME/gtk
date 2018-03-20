@@ -104,9 +104,9 @@
  * is to change which lines are onscreen. This happens when the value
  * of a scroll adjustment changes. So the code path begins in
  * gtk_text_view_value_changed() and goes like this:
- *   - gdk_window_scroll() to reflect the new adjustment value
+ *   - gdk_surface_scroll() to reflect the new adjustment value
  *   - validate the lines that were moved onscreen
- *   - gdk_window_process_updates() to handle the exposes immediately
+ *   - gdk_surface_process_updates() to handle the exposes immediately
  *
  * The second way is that you get the “invalidated” signal from the layout,
  * indicating that lines have become invalid. This code path begins in
@@ -8978,7 +8978,7 @@ gtk_text_view_selection_bubble_popup_set (GtkTextView *text_view)
   g_source_set_name_by_id (priv->selection_bubble_timeout_id, "[gtk+] gtk_text_view_selection_bubble_popup_cb");
 }
 
-/* Child GdkWindows */
+/* Child GdkSurfaces */
 
 static void
 node_style_changed_cb (GtkCssNode        *node,

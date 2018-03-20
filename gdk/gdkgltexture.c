@@ -91,7 +91,7 @@ gdk_gl_texture_download (GdkTexture         *texture,
     }
   else
     {
-      GdkWindow *window;
+      GdkSurface *window;
 
       window = gdk_gl_context_get_window (self->context);
       gdk_cairo_draw_from_gl (cr, window, self->id, GL_TEXTURE, 1, 
@@ -145,7 +145,7 @@ gdk_gl_texture_get_id (GdkGLTexture *self)
 void
 gdk_gl_texture_release (GdkGLTexture *self)
 {
-  GdkWindow *window;
+  GdkSurface *window;
   GdkTexture *texture;
   cairo_t *cr;
 

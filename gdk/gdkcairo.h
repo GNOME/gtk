@@ -58,10 +58,10 @@ cairo_region_t *
 GDK_AVAILABLE_IN_ALL
 cairo_surface_t * gdk_cairo_surface_create_from_pixbuf      (const GdkPixbuf *pixbuf,
                                                              int scale,
-                                                             GdkWindow *for_window);
+                                                             GdkSurface *for_window);
 GDK_AVAILABLE_IN_ALL
 void       gdk_cairo_draw_from_gl (cairo_t              *cr,
-                                   GdkWindow            *window,
+                                   GdkSurface            *window,
                                    int                   source,
                                    int                   source_type,
                                    int                   buffer_scale,

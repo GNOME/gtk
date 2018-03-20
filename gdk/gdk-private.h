@@ -10,17 +10,17 @@ GdkDisplay *    gdk_display_open_default        (void);
 
 gboolean        gdk_device_grab_info            (GdkDisplay  *display,
                                                  GdkDevice   *device,
-                                                 GdkWindow  **grab_window,
+                                                 GdkSurface  **grab_window,
                                                  gboolean    *owner_events);
 
 void            gdk_pre_parse                   (void);
 
-void            gdk_window_freeze_toplevel_updates      (GdkWindow *window);
-void            gdk_window_thaw_toplevel_updates        (GdkWindow *window);
+void            gdk_surface_freeze_toplevel_updates      (GdkSurface *window);
+void            gdk_surface_thaw_toplevel_updates        (GdkSurface *window);
 
-gboolean        gdk_window_supports_edge_constraints    (GdkWindow *window);
+gboolean        gdk_surface_supports_edge_constraints    (GdkSurface *window);
 
-void            gdk_window_move_to_rect         (GdkWindow          *window,
+void            gdk_surface_move_to_rect         (GdkSurface          *window,
                                                  const GdkRectangle *rect,
                                                  GdkGravity          rect_anchor,
                                                  GdkGravity          window_anchor,

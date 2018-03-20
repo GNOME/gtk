@@ -79,13 +79,13 @@
       <title>Review your window creation flags</title>
       <para>
         GTK+ 4 removes the GDK_WA_CURSOR flag. Instead, just use
-        gdk_window_set_cursor() to set a cursor on the window after
+        gdk_surface_set_cursor() to set a cursor on the window after
         creating it.
       </para>
       <para>
         GTK+ 4 also removes the GDK_WA_VISUAL flag, and always uses
         an RGBA visual for windows. To prepare your code for this,
-        use gdk_window_set_visual (gdk_screen_get_rgba_visual ()) after
+        use gdk_surface_set_visual (gdk_screen_get_rgba_visual ()) after
         creating your window.
       </para>
       <para>
@@ -194,7 +194,7 @@
       <title>Stop using the root window</title>
       <para>
         The root window is an X11-centric concept that is no longer exposed in the
-        backend-neutral GDK API. gdk_window_get_parent() will return %NULL for toplevel
+        backend-neutral GDK API. gdk_surface_get_parent() will return %NULL for toplevel
         windows. If you need to interact with the X11 root window, you can use
         gdk_x11_display_get_xrootwindow() to get its XID.
       </para>
@@ -217,12 +217,12 @@
     </section>
 
     <section>
-      <title>Adapt to GdkWindow API changes</title>
+      <title>Adapt to GdkSurface API changes</title>
       <para>
-        The gdk_window_new() function has been replaced by a number of more
-        specialized constructors: gdk_window_new_toplevel(), gdk_window_new_popup(),
-        gdk_window_new_temp(), gdk_window_new_child(), gdk_window_new_input(),
-        gdk_wayland_window_new_subsurface(). Use the appropriate ones to create
+        The gdk_surface_new() function has been replaced by a number of more
+        specialized constructors: gdk_surface_new_toplevel(), gdk_surface_new_popup(),
+        gdk_surface_new_temp(), gdk_surface_new_child(), gdk_surface_new_input(),
+        gdk_wayland_surface_new_subsurface(). Use the appropriate ones to create
         your windows.
       </para>
       <para>
@@ -230,7 +230,7 @@
         complicating the code and could not be supported across backends.
       </para>
       <para>
-        gdk_window_reparent() is no longer available.
+        gdk_surface_reparent() is no longer available.
       </para>
     </section>
 
@@ -244,7 +244,7 @@
     </section>
 
     <section>
-      <title>Stop using gdk_window_set_event_compression</title>
+      <title>Stop using gdk_surface_set_event_compression</title>
       <para>
         Event compression is now always enabled. If you need to see the uncoalesced
         motion history, use gdk_event_get_motion_history().
@@ -367,7 +367,7 @@
     </section>
 
     <section>
-      <title>Stop using APIs to query GdkWindows</title>
+      <title>Stop using APIs to query GdkSurfaces</title>
       <para>
         A number of APIs for querying special-purpose windows have been removed,
         since these windows are no longer publically available:

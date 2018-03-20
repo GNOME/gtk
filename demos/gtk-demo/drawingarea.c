@@ -137,7 +137,7 @@ checkerboard_draw (GtkDrawingArea *da,
   /* At the start of a draw handler, a clip region has been set on
    * the Cairo context, and the contents have been cleared to the
    * widget's background color. The docs for
-   * gdk_window_begin_paint_region() give more details on how this
+   * gdk_surface_begin_paint_region() give more details on how this
    * works.
    */
 

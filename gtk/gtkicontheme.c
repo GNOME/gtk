@@ -1947,7 +1947,7 @@ choose_icon (GtkIconTheme       *icon_theme,
  *
  * When rendering on displays with high pixel densities you should not
  * use a @size multiplied by the scaling factor returned by functions
- * like gdk_window_get_scale_factor(). Instead, you should use
+ * like gdk_surface_get_scale_factor(). Instead, you should use
  * gtk_icon_theme_lookup_icon_for_scale(), as the assets loaded
  * for a given scaling factor may be different.
  * 
@@ -4832,7 +4832,7 @@ gtk_icon_info_load_symbolic_for_context_finish (GtkIconInfo   *icon_info,
  *
  * When rendering on displays with high pixel densities you should not
  * use a @size multiplied by the scaling factor returned by functions
- * like gdk_window_get_scale_factor(). Instead, you should use
+ * like gdk_surface_get_scale_factor(). Instead, you should use
  * gtk_icon_theme_lookup_by_gicon_for_scale(), as the assets loaded
  * for a given scaling factor may be different.
  *

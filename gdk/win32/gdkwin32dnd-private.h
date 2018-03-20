@@ -29,8 +29,8 @@ G_BEGIN_DECLS
 struct _GdkWin32DragContext
 {
   GdkDragContext context;
-  GdkWindow *ipc_window;
-  GdkWindow *drag_window;
+  GdkSurface *ipc_window;
+  GdkSurface *drag_window;
   GdkCursor *cursor;
   GdkSeat *grab_seat;
   GdkDragAction actions;

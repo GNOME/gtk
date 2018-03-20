@@ -48,10 +48,10 @@ test_dialog_override_property (void)
   GtkWidget *dialog;
 
   dialog = g_object_new (GTK_TYPE_DIALOG,
-			 "type-hint", GDK_WINDOW_TYPE_HINT_UTILITY,
+			 "type-hint", GDK_SURFACE_TYPE_HINT_UTILITY,
 			 NULL);
   g_assert (GTK_IS_DIALOG (dialog));
-  g_assert (gtk_window_get_type_hint (GTK_WINDOW (dialog)) == GDK_WINDOW_TYPE_HINT_UTILITY);
+  g_assert (gtk_window_get_type_hint (GTK_WINDOW (dialog)) == GDK_SURFACE_TYPE_HINT_UTILITY);
 
   gtk_widget_destroy (dialog);
 }

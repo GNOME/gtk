@@ -181,10 +181,10 @@ _gdk_broadway_display_size_changed (GdkDisplay                      *display,
   toplevels =  broadway_display->toplevels;
   for (l = toplevels; l != NULL; l = l->next)
     {
-      GdkWindowImplBroadway *toplevel_impl = l->data;
+      GdkSurfaceImplBroadway *toplevel_impl = l->data;
 
       if (toplevel_impl->maximized)
-        gdk_window_move_resize (toplevel_impl->wrapper, 0, 0, msg->width, msg->height);
+        gdk_surface_move_resize (toplevel_impl->wrapper, 0, 0, msg->width, msg->height);
     }
 }
 
@@ -313,7 +313,7 @@ gdk_broadway_display_has_pending (GdkDisplay *display)
   return FALSE;
 }
 
-static GdkWindow *
+static GdkSurface *
 gdk_broadway_display_get_default_group (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
@@ -520,7 +520,7 @@ gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
   object_class->dispose = gdk_broadway_display_dispose;
   object_class->finalize = gdk_broadway_display_finalize;
 
-  display_class->window_type = GDK_TYPE_BROADWAY_WINDOW;
+  display_class->window_type = GDK_TYPE_BROADWAY_SURFACE;
 
   display_class->get_name = gdk_broadway_display_get_name;
   display_class->beep = gdk_broadway_display_beep;

@@ -25,7 +25,7 @@
  * tree of #GskRenderNode instances.
  *
  * Typically you will use a #GskRenderer instance with a #GdkDrawingContext
- * associated to a #GdkWindow, and call gsk_renderer_render() with the
+ * associated to a #GdkSurface, and call gsk_renderer_render() with the
  * drawing context and the scene to be rendered.
  *
  * It is necessary to realize a #GskRenderer instance using gsk_renderer_realize()
@@ -69,7 +69,7 @@ typedef struct
   GskScalingFilter min_filter;
   GskScalingFilter mag_filter;
 
-  GdkWindow *window;
+  GdkSurface *window;
   GdkDrawingContext *drawing_context;
   GskRenderNode *root_node;
   GdkDisplay *display;
@@ -98,7 +98,7 @@ static GParamSpec *gsk_renderer_properties[N_PROPS];
 
 static gboolean
 gsk_renderer_real_realize (GskRenderer  *self,
-                           GdkWindow    *window,
+                           GdkSurface    *window,
                            GError      **error)
 {
   GSK_RENDERER_WARN_NOT_IMPLEMENTED_METHOD (self, realize);
@@ -126,7 +126,7 @@ gsk_renderer_real_begin_draw_frame (GskRenderer          *self,
 {
   GskRendererPrivate *priv = gsk_renderer_get_instance_private (self);
 
-  return gdk_window_begin_draw_frame (priv->window,
+  return gdk_surface_begin_draw_frame (priv->window,
                                       NULL,
                                       region);
 }
@@ -137,7 +137,7 @@ gsk_renderer_real_end_draw_frame (GskRenderer       *self,
 {
   GskRendererPrivate *priv = gsk_renderer_get_instance_private (self);
 
-  gdk_window_end_draw_frame (priv->window,
+  gdk_surface_end_draw_frame (priv->window,
                              context);
 }
 
@@ -155,7 +155,7 @@ gsk_renderer_real_create_cairo_surface (GskRenderer    *self,
                                         int             height)
 {
   GskRendererPrivate *priv = gsk_renderer_get_instance_private (self);
-  int scale_factor = priv->window ? gdk_window_get_scale_factor (priv->window) : 1;
+  int scale_factor = priv->window ? gdk_surface_get_scale_factor (priv->window) : 1;
   int real_width = width * scale_factor;
   int real_height = height * scale_factor;
 
@@ -286,7 +286,7 @@ gsk_renderer_class_init (GskRendererClass *klass)
     g_param_spec_object ("window",
                          "Window",
                          "The window associated to the renderer",
-                         GDK_TYPE_WINDOW,
+                         GDK_TYPE_SURFACE,
                          G_PARAM_READABLE |
                          G_PARAM_STATIC_STRINGS);
 
@@ -319,12 +319,12 @@ gsk_renderer_init (GskRenderer *self)
  * gsk_renderer_get_window:
  * @renderer: a #GskRenderer
  *
- * Retrieves the #GdkWindow set using gsk_renderer_realize(). If the renderer
+ * Retrieves the #GdkSurface set using gsk_renderer_realize(). If the renderer
  * has not been realized yet, %NULL will be returned.
  *
- * Returns: (transfer none) (nullable): a #GdkWindow
+ * Returns: (transfer none) (nullable): a #GdkSurface
  */
-GdkWindow *
+GdkSurface *
 gsk_renderer_get_window (GskRenderer *renderer)
 {
   GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
@@ -409,7 +409,7 @@ gsk_renderer_is_realized (GskRenderer *renderer)
 /**
  * gsk_renderer_realize:
  * @renderer: a #GskRenderer
- * @window: the #GdkWindow renderer will be used on
+ * @window: the #GdkSurface renderer will be used on
  * @error: return location for an error
  *
  * Creates the resources needed by the @renderer to render the scene
@@ -417,14 +417,14 @@ gsk_renderer_is_realized (GskRenderer *renderer)
  */
 gboolean
 gsk_renderer_realize (GskRenderer  *renderer,
-                      GdkWindow    *window,
+                      GdkSurface    *window,
                       GError      **error)
 {
   GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
 
   g_return_val_if_fail (GSK_IS_RENDERER (renderer), FALSE);
   g_return_val_if_fail (!gsk_renderer_is_realized (renderer), FALSE);
-  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   priv->window = g_object_ref (window);
@@ -625,9 +625,9 @@ get_renderer_for_name (const char *renderer_name)
 }
 
 static GType
-get_renderer_for_display (GdkWindow *window)
+get_renderer_for_display (GdkSurface *window)
 {
-  GdkDisplay *display = gdk_window_get_display (window);
+  GdkDisplay *display = gdk_surface_get_display (window);
   const char *renderer_name;
 
   renderer_name = g_object_get_data (G_OBJECT (display), "gsk-renderer");
@@ -635,7 +635,7 @@ get_renderer_for_display (GdkWindow *window)
 }
 
 static GType
-get_renderer_for_env_var (GdkWindow *window)
+get_renderer_for_env_var (GdkSurface *window)
 {
   static GType env_var_type = G_TYPE_NONE;
 
@@ -649,18 +649,18 @@ get_renderer_for_env_var (GdkWindow *window)
 }
 
 static GType
-get_renderer_for_backend (GdkWindow *window)
+get_renderer_for_backend (GdkSurface *window)
 {
 #ifdef GDK_WINDOWING_X11
-  if (GDK_IS_X11_WINDOW (window))
+  if (GDK_IS_X11_SURFACE (window))
     return GSK_TYPE_GL_RENDERER; 
 #endif
 #ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_WINDOW (window))
+  if (GDK_IS_WAYLAND_SURFACE (window))
     return GSK_TYPE_GL_RENDERER;
 #endif
 #ifdef GDK_WINDOWING_BROADWAY
-  if (GDK_IS_BROADWAY_WINDOW (window))
+  if (GDK_IS_BROADWAY_SURFACE (window))
     return GSK_TYPE_BROADWAY_RENDERER;
 #endif
 
@@ -668,14 +668,14 @@ get_renderer_for_backend (GdkWindow *window)
 }
 
 static GType
-get_renderer_fallback (GdkWindow *window)
+get_renderer_fallback (GdkSurface *window)
 {
   return GSK_TYPE_CAIRO_RENDERER;
 }
 
 static struct {
   gboolean verbose;
-  GType (* get_renderer) (GdkWindow *window);
+  GType (* get_renderer) (GdkSurface *window);
 } renderer_possibilities[] = {
   { TRUE,  get_renderer_for_display },
   { TRUE,  get_renderer_for_env_var },
@@ -685,7 +685,7 @@ static struct {
 
 /**
  * gsk_renderer_new_for_window:
- * @window: a #GdkWindow
+ * @window: a #GdkSurface
  *
  * Creates an appropriate #GskRenderer instance for the given @window.
  *
@@ -694,7 +694,7 @@ static struct {
  * Returns: (transfer full) (nullable): a #GskRenderer
  */
 GskRenderer *
-gsk_renderer_new_for_window (GdkWindow *window)
+gsk_renderer_new_for_window (GdkSurface *window)
 {
   GType renderer_type;
   GskRenderer *renderer;
@@ -702,7 +702,7 @@ gsk_renderer_new_for_window (GdkWindow *window)
   gboolean verbose = FALSE;
   guint i;
 
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), NULL);
 
   for (i = 0; i < G_N_ELEMENTS (renderer_possibilities); i++)
     {
@@ -715,7 +715,7 @@ gsk_renderer_new_for_window (GdkWindow *window)
        */
       verbose |= renderer_possibilities[i].verbose;
       renderer = g_object_new (renderer_type,
-                               "display", gdk_window_get_display (window),
+                               "display", gdk_surface_get_display (window),
                                NULL);
 
       if (gsk_renderer_realize (renderer, window, &error))
@@ -784,8 +784,8 @@ gsk_renderer_begin_draw_frame (GskRenderer          *renderer,
 
       full_window = cairo_region_create_rectangle (&(GdkRectangle) {
                                                        0, 0,
-                                                       gdk_window_get_width (priv->window),
-                                                       gdk_window_get_height (priv->window)
+                                                       gdk_surface_get_width (priv->window),
+                                                       gdk_surface_get_height (priv->window)
                                                    });
 
       priv->drawing_context = GSK_RENDERER_GET_CLASS (renderer)->begin_draw_frame (renderer, full_window);

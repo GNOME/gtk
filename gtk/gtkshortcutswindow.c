@@ -876,7 +876,7 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
   PangoAttrList *attributes;
 
   gtk_window_set_resizable (GTK_WINDOW (self), FALSE);
-  gtk_window_set_type_hint (GTK_WINDOW (self), GDK_WINDOW_TYPE_HINT_DIALOG);
+  gtk_window_set_type_hint (GTK_WINDOW (self), GDK_SURFACE_TYPE_HINT_DIALOG);
 
   g_signal_connect (self, "key-press-event",
                     G_CALLBACK (window_key_press_event_cb), NULL);

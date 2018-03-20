@@ -667,7 +667,7 @@ load_node_file (GFile *file, gboolean generate)
   GBytes *bytes;
   GskRenderNode *node;
   GskRenderer *renderer;
-  GdkWindow *window;
+  GdkSurface *window;
   GdkTexture *texture = NULL;
   cairo_surface_t *surface;
   char *png_file;
@@ -696,7 +696,7 @@ load_node_file (GFile *file, gboolean generate)
       return;
     }
 
-  window = gdk_window_new_toplevel (gdk_display_get_default(), 10 , 10);
+  window = gdk_surface_new_toplevel (gdk_display_get_default(), 10 , 10);
   renderer = gsk_renderer_new_for_window (window);
   texture = gsk_renderer_render_texture (renderer, node, NULL);
 
@@ -721,7 +721,7 @@ load_node_file (GFile *file, gboolean generate)
   g_object_unref (window);
   gsk_renderer_unrealize (renderer);
   g_object_unref (renderer);
-  gdk_window_destroy (window);
+  gdk_surface_destroy (window);
 
   gsk_render_node_unref (node);
 

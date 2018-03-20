@@ -163,7 +163,7 @@ void           gdk_device_set_axis_use  (GdkDevice         *device,
 
 GDK_AVAILABLE_IN_ALL
 void     gdk_device_get_state    (GdkDevice         *device,
-                                  GdkWindow         *window,
+                                  GdkSurface         *window,
                                   gdouble           *axes,
                                   GdkModifierType   *mask);
 GDK_AVAILABLE_IN_ALL
@@ -171,7 +171,7 @@ void     gdk_device_get_position (GdkDevice         *device,
                                   gint              *x,
                                   gint              *y);
 GDK_AVAILABLE_IN_ALL
-GdkWindow *
+GdkSurface *
          gdk_device_get_window_at_position
                                  (GdkDevice         *device,
                                   gint              *win_x,
@@ -181,14 +181,14 @@ void     gdk_device_get_position_double (GdkDevice         *device,
                                          gdouble           *x,
                                          gdouble           *y);
 GDK_AVAILABLE_IN_ALL
-GdkWindow *
+GdkSurface *
          gdk_device_get_window_at_position_double
                                  (GdkDevice         *device,
                                   gdouble           *win_x,
                                   gdouble           *win_y);
 GDK_AVAILABLE_IN_ALL
 gboolean gdk_device_get_history  (GdkDevice         *device,
-                                  GdkWindow         *window,
+                                  GdkSurface         *window,
                                   guint32            start,
                                   guint32            stop,
                                   GdkTimeCoord    ***events,
@@ -225,7 +225,7 @@ GdkDeviceType gdk_device_get_device_type (GdkDevice *device);
 
 GDK_DEPRECATED_FOR(gdk_seat_grab)
 GdkGrabStatus gdk_device_grab        (GdkDevice        *device,
-                                      GdkWindow        *window,
+                                      GdkSurface        *window,
                                       GdkGrabOwnership  grab_ownership,
                                       gboolean          owner_events,
                                       GdkEventMask      event_mask,
@@ -242,7 +242,7 @@ void          gdk_device_warp        (GdkDevice        *device,
                                       gint              y);
 
 GDK_AVAILABLE_IN_ALL
-GdkWindow *gdk_device_get_last_event_window (GdkDevice *device);
+GdkSurface *gdk_device_get_last_event_window (GdkDevice *device);
 
 GDK_AVAILABLE_IN_ALL
 const gchar *gdk_device_get_vendor_id       (GdkDevice *device);

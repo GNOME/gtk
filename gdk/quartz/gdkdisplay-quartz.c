@@ -30,7 +30,7 @@
 #include "gdkdisplay-quartz.h"
 
 
-static GdkWindow *
+static GdkSurface *
 gdk_quartz_display_get_default_group (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
@@ -62,7 +62,7 @@ _gdk_quartz_display_open (const gchar *display_name)
 
   _gdk_screen = g_object_new (gdk_quartz_screen_get_type (), NULL);
 
-  _gdk_quartz_window_init_windowing (_gdk_display);
+  _gdk_quartz_surface_init_windowing (_gdk_display);
 
   _gdk_quartz_events_init ();
 
@@ -215,7 +215,7 @@ gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
   object_class->finalize = gdk_quartz_display_finalize;
   object_class->dispose = gdk_quartz_display_dispose;
 
-  display_class->window_type = GDK_TYPE_QUARTZ_WINDOW;
+  display_class->window_type = GDK_TYPE_QUARTZ_SURFACE;
 
   display_class->get_name = gdk_quartz_display_get_name;
   display_class->beep = gdk_quartz_display_beep;

@@ -42,7 +42,7 @@ struct _GdkSeatClass
   GdkSeatCapabilities (*get_capabilities) (GdkSeat *seat);
 
   GdkGrabStatus (* grab)   (GdkSeat                *seat,
-                            GdkWindow              *window,
+                            GdkSurface              *window,
                             GdkSeatCapabilities     capabilities,
                             gboolean                owner_events,
                             GdkCursor              *cursor,

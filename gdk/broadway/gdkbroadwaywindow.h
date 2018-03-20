@@ -22,33 +22,33 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#ifndef __GDK_BROADWAY_WINDOW_H__
-#define __GDK_BROADWAY_WINDOW_H__
+#ifndef __GDK_BROADWAY_SURFACE_H__
+#define __GDK_BROADWAY_SURFACE_H__
 
 #include <gdk/gdk.h>
 
 G_BEGIN_DECLS
 
-#define GDK_TYPE_BROADWAY_WINDOW              (gdk_broadway_window_get_type ())
-#define GDK_BROADWAY_WINDOW(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_BROADWAY_WINDOW, GdkBroadwayWindow))
-#define GDK_BROADWAY_WINDOW_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_BROADWAY_WINDOW, GdkBroadwayWindowClass))
-#define GDK_IS_BROADWAY_WINDOW(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_BROADWAY_WINDOW))
-#define GDK_IS_BROADWAY_WINDOW_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_BROADWAY_WINDOW))
-#define GDK_BROADWAY_WINDOW_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_BROADWAY_WINDOW, GdkBroadwayWindowClass))
+#define GDK_TYPE_BROADWAY_SURFACE              (gdk_broadway_surface_get_type ())
+#define GDK_BROADWAY_SURFACE(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_BROADWAY_SURFACE, GdkBroadwaySurface))
+#define GDK_BROADWAY_SURFACE_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_BROADWAY_SURFACE, GdkBroadwaySurfaceClass))
+#define GDK_IS_BROADWAY_SURFACE(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_BROADWAY_SURFACE))
+#define GDK_IS_BROADWAY_SURFACE_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_BROADWAY_SURFACE))
+#define GDK_BROADWAY_SURFACE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_BROADWAY_SURFACE, GdkBroadwaySurfaceClass))
 
 #ifdef GDK_COMPILATION
-typedef struct _GdkBroadwayWindow GdkBroadwayWindow;
+typedef struct _GdkBroadwaySurface GdkBroadwaySurface;
 #else
-typedef GdkWindow GdkBroadwayWindow;
+typedef GdkSurface GdkBroadwaySurface;
 #endif
-typedef struct _GdkBroadwayWindowClass GdkBroadwayWindowClass;
+typedef struct _GdkBroadwaySurfaceClass GdkBroadwaySurfaceClass;
 
 GDK_AVAILABLE_IN_ALL
-GType    gdk_broadway_window_get_type          (void);
+GType    gdk_broadway_surface_get_type          (void);
 
 GDK_AVAILABLE_IN_ALL
-guint32  gdk_broadway_get_last_seen_time (GdkWindow       *window);
+guint32  gdk_broadway_get_last_seen_time (GdkSurface       *window);
 
 G_END_DECLS
 
-#endif /* __GDK_BROADWAY_WINDOW_H__ */
+#endif /* __GDK_BROADWAY_SURFACE_H__ */

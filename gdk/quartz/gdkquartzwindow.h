@@ -17,8 +17,8 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_QUARTZ_WINDOW_H__
-#define __GDK_QUARTZ_WINDOW_H__
+#ifndef __GDK_QUARTZ_SURFACE_H__
+#define __GDK_QUARTZ_SURFACE_H__
 
 #if !defined (__GDKQUARTZ_H_INSIDE__) && !defined (GDK_COMPILATION)
 #error "Only <gdk/gdkquartz.h> can be included directly."
@@ -28,28 +28,28 @@
 
 G_BEGIN_DECLS
 
-#define GDK_TYPE_QUARTZ_WINDOW              (gdk_quartz_window_get_type ())
-#define GDK_QUARTZ_WINDOW(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_QUARTZ_WINDOW, GdkQuartzWindow))
-#define GDK_QUARTZ_WINDOW_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_QUARTZ_WINDOW, GdkQuartzWindowClass))
-#define GDK_IS_QUARTZ_WINDOW(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_QUARTZ_WINDOW))
-#define GDK_IS_QUARTZ_WINDOW_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_QUARTZ_WINDOW))
-#define GDK_QUARTZ_WINDOW_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_QUARTZ_WINDOW, GdkQuartzWindowClass))
+#define GDK_TYPE_QUARTZ_SURFACE              (gdk_quartz_surface_get_type ())
+#define GDK_QUARTZ_SURFACE(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_QUARTZ_SURFACE, GdkQuartzSurface))
+#define GDK_QUARTZ_SURFACE_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_QUARTZ_SURFACE, GdkQuartzSurfaceClass))
+#define GDK_IS_QUARTZ_SURFACE(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_QUARTZ_SURFACE))
+#define GDK_IS_QUARTZ_SURFACE_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_QUARTZ_SURFACE))
+#define GDK_QUARTZ_SURFACE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_QUARTZ_SURFACE, GdkQuartzSurfaceClass))
 
 #ifdef GDK_COMPILATION
-typedef struct _GdkQuartzWindow GdkQuartzWindow;
+typedef struct _GdkQuartzSurface GdkQuartzSurface;
 #else
-typedef GdkWindow GdkQuartzWindow;
+typedef GdkSurface GdkQuartzSurface;
 #endif
-typedef struct _GdkQuartzWindowClass GdkQuartzWindowClass;
+typedef struct _GdkQuartzSurfaceClass GdkQuartzSurfaceClass;
 
 GDK_AVAILABLE_IN_ALL
-GType     gdk_quartz_window_get_type     (void);
+GType     gdk_quartz_surface_get_type     (void);
 
 GDK_AVAILABLE_IN_ALL
-NSWindow *gdk_quartz_window_get_nswindow (GdkWindow *window);
+NSWindow *gdk_quartz_surface_get_nswindow (GdkSurface *window);
 GDK_AVAILABLE_IN_ALL
-NSView   *gdk_quartz_window_get_nsview   (GdkWindow *window);
+NSView   *gdk_quartz_surface_get_nsview   (GdkSurface *window);
 
 G_END_DECLS
 
-#endif /* __GDK_QUARTZ_WINDOW_H__ */
+#endif /* __GDK_QUARTZ_SURFACE_H__ */

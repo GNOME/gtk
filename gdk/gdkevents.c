@@ -372,7 +372,7 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
 {
   GList *tmp_list;
   GList *pending_motions = NULL;
-  GdkWindow *pending_motion_window = NULL;
+  GdkSurface *pending_motion_window = NULL;
   GdkDevice *pending_motion_device = NULL;
   GdkEvent *last_motion = NULL;
 
@@ -429,7 +429,7 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
       pending_motions == display->queued_events &&
       pending_motions == display->queued_tail)
     {
-      GdkFrameClock *clock = gdk_window_get_frame_clock (pending_motion_window);
+      GdkFrameClock *clock = gdk_surface_get_frame_clock (pending_motion_window);
       if (clock) /* might be NULL if window was destroyed */
 	gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS);
     }
@@ -602,7 +602,7 @@ copy_time_coord (const GdkTimeCoord *coord)
  * @event: a #GdkEvent
  *
  * Copies a #GdkEvent, copying or incrementing the reference count of the
- * resources associated with it (e.g. #GdkWindow’s and strings).
+ * resources associated with it (e.g. #GdkSurface’s and strings).
  *
  * Returns: (transfer full): a copy of @event. Free with g_object_unref()
  */
@@ -779,11 +779,11 @@ gdk_event_finalize (GObject *object)
  * gdk_event_get_window:
  * @event: a #GdkEvent
  *
- * Extracts the #GdkWindow associated with an event.
+ * Extracts the #GdkSurface associated with an event.
  *
- * Returns: (transfer none): The #GdkWindow associated with the event
+ * Returns: (transfer none): The #GdkSurface associated with the event
  */
-GdkWindow *
+GdkSurface *
 gdk_event_get_window (const GdkEvent *event)
 {
   g_return_val_if_fail (event != NULL, NULL);
@@ -1626,7 +1626,7 @@ gdk_event_set_source_device (GdkEvent  *event,
  * triggered the event, falling back to the virtual (master) device
  * (as in gdk_event_get_device()) if the event wasn’t caused by
  * interaction with a hardware device. This may happen for example
- * in synthesized crossing events after a #GdkWindow updates its
+ * in synthesized crossing events after a #GdkSurface updates its
  * geometry or a grab is acquired/released.
  *
  * If the event does not contain a device field, this function will
@@ -1673,13 +1673,13 @@ gdk_event_triggers_context_menu (const GdkEvent *event)
       GdkDisplay *display;
       GdkModifierType modifier;
 
-      g_return_val_if_fail (GDK_IS_WINDOW (bevent->any.window), FALSE);
+      g_return_val_if_fail (GDK_IS_SURFACE (bevent->any.window), FALSE);
 
       if (bevent->button == GDK_BUTTON_SECONDARY &&
           ! (bevent->state & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK)))
         return TRUE;
 
-      display = gdk_window_get_display (bevent->any.window);
+      display = gdk_surface_get_display (bevent->any.window);
 
       modifier = gdk_keymap_get_modifier_mask (gdk_display_get_keymap (display),
                                                GDK_MODIFIER_INTENT_CONTEXT_MENU);
@@ -1848,7 +1848,7 @@ gdk_event_get_display (const GdkEvent *event)
     return event->any.display;
 
   if (event->any.window)
-    return gdk_window_get_display (event->any.window);
+    return gdk_surface_get_display (event->any.window);
 
   return NULL;
 }
@@ -2336,7 +2336,7 @@ gdk_event_get_touch_emulating_pointer (const GdkEvent *event,
  **/
 gboolean
 gdk_event_get_grab_window (const GdkEvent  *event,
-                           GdkWindow      **window)
+                           GdkSurface      **window)
 {
   if (!event)
     return FALSE;

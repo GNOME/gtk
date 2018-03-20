@@ -428,7 +428,7 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
     case GDK_DRAG_MOTION:
     case GDK_DROP_START:
       {
-        GdkWindow *window;
+        GdkSurface *window;
         gint tx, ty;
         double x_root, y_root;
         gboolean found;
@@ -447,7 +447,7 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
 
         window = gtk_widget_get_window (toplevel);
 
-        gdk_window_get_position (window, &tx, &ty);
+        gdk_surface_get_position (window, &tx, &ty);
         gdk_event_get_root_coords (event, &x_root, &y_root);
 
         found = gtk_drag_find_widget (toplevel,
@@ -946,7 +946,7 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   toplevel = gtk_widget_get_toplevel (widget);
   gtk_widget_translate_coordinates (widget, toplevel,
                                     x, y, &x, &y);
-  gdk_window_get_device_position (gtk_widget_get_window (toplevel),
+  gdk_surface_get_device_position (gtk_widget_get_window (toplevel),
                                   device,
                                   &dx, &dy,
                                   NULL);
@@ -1109,7 +1109,7 @@ gtk_drag_set_icon_widget_internal (GdkDragContext *context,
       display = gdk_drag_context_get_display (context);
 
       info->icon_window = gtk_window_new (GTK_WINDOW_POPUP);
-      gtk_window_set_type_hint (GTK_WINDOW (info->icon_window), GDK_WINDOW_TYPE_HINT_DND);
+      gtk_window_set_type_hint (GTK_WINDOW (info->icon_window), GDK_SURFACE_TYPE_HINT_DND);
       gtk_window_set_display (GTK_WINDOW (info->icon_window), display);
       gtk_widget_set_size_request (info->icon_window, 24, 24);
       gtk_style_context_remove_class (gtk_widget_get_style_context (info->icon_window), "background");

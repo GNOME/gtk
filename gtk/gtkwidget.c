@@ -1182,7 +1182,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
       g_param_spec_object ("window",
                            P_("Window"),
                            P_("The widget’s window if it is realized"),
-                           GDK_TYPE_WINDOW,
+                           GDK_TYPE_SURFACE,
                            GTK_PARAM_READABLE);
 
   /**
@@ -1497,7 +1497,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * @widget: the object which received the signal.
    *
    * The ::realize signal is emitted when @widget is associated with a
-   * #GdkWindow, which means that gtk_widget_realize() has been called or the
+   * #GdkSurface, which means that gtk_widget_realize() has been called or the
    * widget has been mapped (that is, it is going to be drawn).
    */
   widget_signals[REALIZE] =
@@ -1513,7 +1513,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * GtkWidget::unrealize:
    * @widget: the object which received the signal.
    *
-   * The ::unrealize signal is emitted when the #GdkWindow associated with
+   * The ::unrealize signal is emitted when the #GdkSurface associated with
    * @widget is destroyed, which means that gtk_widget_unrealize() has been
    * called or the widget has been unmapped (that is, it is going to be
    * hidden).
@@ -1830,7 +1830,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * The ::key-press-event signal is emitted when a key is pressed. The signal
    * emission will reoccur at the key-repeat rate when the key is kept pressed.
    *
-   * To receive this signal, the #GdkWindow associated to the widget needs
+   * To receive this signal, the #GdkSurface associated to the widget needs
    * to enable the #GDK_KEY_PRESS_MASK mask.
    *
    * This signal will be sent to the grab widget if there is one.
@@ -1857,7 +1857,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *
    * The ::key-release-event signal is emitted when a key is released.
    *
-   * To receive this signal, the #GdkWindow associated to the widget needs
+   * To receive this signal, the #GdkSurface associated to the widget needs
    * to enable the #GDK_KEY_RELEASE_MASK mask.
    *
    * This signal will be sent to the grab widget if there is one.
@@ -3906,13 +3906,13 @@ gtk_widget_realize (GtkWidget *widget)
       if (priv->has_shape_mask)
 	{
 	  region = g_object_get_qdata (G_OBJECT (widget), quark_shape_info);
-	  gdk_window_shape_combine_region (priv->window, region, 0, 0);
+	  gdk_surface_shape_combine_region (priv->window, region, 0, 0);
 	}
 
       gtk_widget_update_input_shape (widget);
 
       if (priv->multidevice)
-        gdk_window_set_support_multidevice (priv->window, TRUE);
+        gdk_surface_set_support_multidevice (priv->window, TRUE);
 
       gtk_widget_update_alpha (widget);
 
@@ -3965,7 +3965,7 @@ gtk_widget_unrealize (GtkWidget *widget)
 }
 
 /*
- * Returns the values you're supposed to pass to gdk_window_move_resize
+ * Returns the values you're supposed to pass to gdk_surface_move_resize
  * for a windowed widget.
  */
 void
@@ -4210,15 +4210,15 @@ gtk_widget_get_frame_clock (GtkWidget *widget)
     {
       /* We use gtk_widget_get_toplevel() here to make it explicit that
        * the frame clock is a property of the toplevel that a widget
-       * is anchored to; gdk_window_get_toplevel() will go up the
+       * is anchored to; gdk_surface_get_toplevel() will go up the
        * hierarchy anyways, but should squash any funny business with
        * reparenting windows and widgets.
        */
       GtkWidget *toplevel = _gtk_widget_get_toplevel (widget);
-      GdkWindow *window = _gtk_widget_get_window (toplevel);
+      GdkSurface *window = _gtk_widget_get_window (toplevel);
       g_assert (window != NULL);
 
-      return gdk_window_get_frame_clock (window);
+      return gdk_surface_get_frame_clock (window);
     }
   else
     {
@@ -4352,7 +4352,7 @@ gtk_widget_queue_draw_region (GtkWidget            *widget,
 
 invalidate:
   gtk_debug_updates_add (windowed_parent, region2);
-  gdk_window_invalidate_region (_gtk_widget_get_window (widget), region2, TRUE);
+  gdk_surface_invalidate_region (_gtk_widget_get_window (widget), region2, TRUE);
 
   cairo_region_destroy (region2);
 
@@ -4575,7 +4575,7 @@ gtk_widget_size_allocate (GtkWidget           *widget,
            GtkAllocation window_alloc;
 
            gtk_widget_get_window_allocation (widget, &window_alloc);
-           gdk_window_move_resize (priv->window,
+           gdk_surface_move_resize (priv->window,
                                    window_alloc.x, window_alloc.y,
                                    window_alloc.width, window_alloc.height);
          }
@@ -4889,7 +4889,7 @@ gtk_widget_real_size_allocate (GtkWidget           *widget,
        GtkAllocation window_alloc;
 
        gtk_widget_get_window_allocation (widget, &window_alloc);
-       gdk_window_move_resize (priv->window,
+       gdk_surface_move_resize (priv->window,
                                window_alloc.x, window_alloc.y,
                                window_alloc.width, window_alloc.height);
      }
@@ -5008,7 +5008,7 @@ gtk_widget_real_can_activate_accel (GtkWidget *widget,
   /* widgets must be onscreen for accels to take effect */
   return gtk_widget_is_sensitive (widget) &&
          _gtk_widget_is_drawable (widget) &&
-         gdk_window_is_viewable (priv->window);
+         gdk_surface_is_viewable (priv->window);
 }
 
 /**
@@ -5441,7 +5441,7 @@ gtk_widget_draw_internal (GtkWidget *widget,
   if (gdk_cairo_get_clip_rectangle (cr, NULL))
     {
       GtkWidgetClass *widget_class = GTK_WIDGET_GET_CLASS (widget);
-      GdkWindow *event_window = NULL;
+      GdkSurface *event_window = NULL;
       gboolean result;
       RenderMode mode;
 
@@ -5640,8 +5640,8 @@ gtk_widget_event (GtkWidget       *widget,
   if (event->any.type == GDK_EXPOSE)
     {
       g_warning ("Events of type GDK_EXPOSE cannot be synthesized. To get "
-		 "the same effect, call gdk_window_invalidate_rect/region(), "
-		 "followed by gdk_window_process_updates().");
+		 "the same effect, call gdk_surface_invalidate_rect/region(), "
+		 "followed by gdk_surface_process_updates().");
       return TRUE;
     }
 
@@ -5740,8 +5740,8 @@ _gtk_widget_captured_event (GtkWidget      *widget,
   if (event->any.type == GDK_EXPOSE)
     {
       g_warning ("Events of type GDK_EXPOSE cannot be synthesized. To get "
-		 "the same effect, call gdk_window_invalidate_rect/region(), "
-		 "followed by gdk_window_process_updates().");
+		 "the same effect, call gdk_surface_invalidate_rect/region(), "
+		 "followed by gdk_surface_process_updates().");
       return TRUE;
     }
 
@@ -5787,7 +5787,7 @@ event_window_is_still_viewable (const GdkEvent *event)
     case GDK_ENTER_NOTIFY:
     case GDK_PROXIMITY_IN:
     case GDK_SCROLL:
-      return event->any.window && gdk_window_is_viewable (event->any.window);
+      return event->any.window && gdk_surface_is_viewable (event->any.window);
 
 #if 0
     /* The following events are the second half of paired events;
@@ -6993,10 +6993,10 @@ gtk_widget_is_visible (GtkWidget *widget)
  * @widget: a #GtkWidget
  * @has_window: whether or not @widget has a window.
  *
- * Specifies whether @widget has a #GdkWindow of its own. Note that
+ * Specifies whether @widget has a #GdkSurface of its own. Note that
  * all realized widgets have a non-%NULL “window” pointer
  * (gtk_widget_get_window() never returns a %NULL window when a widget
- * is realized), but for many of them it’s actually the #GdkWindow of
+ * is realized), but for many of them it’s actually the #GdkSurface of
  * one of its parent widgets. Widgets that do not create a %window for
  * themselves in #GtkWidget::realize must announce this by
  * calling this function with @has_window = %FALSE.
@@ -7013,7 +7013,7 @@ gtk_widget_set_has_window (GtkWidget *widget,
   widget->priv->no_window = !has_window;
   widget->priv->no_window_set = TRUE;
 
-  /* GdkWindow has a min size of 1×1 */
+  /* GdkSurface has a min size of 1×1 */
   widget->priv->allocation.width = 1;
   widget->priv->allocation.height = 1;
 }
@@ -7022,7 +7022,7 @@ gtk_widget_set_has_window (GtkWidget *widget,
  * gtk_widget_get_has_window:
  * @widget: a #GtkWidget
  *
- * Determines whether @widget has a #GdkWindow of its own. See
+ * Determines whether @widget has a #GdkSurface of its own. See
  * gtk_widget_set_has_window().
  *
  * Returns: %TRUE if @widget has a window, %FALSE otherwise
@@ -7101,7 +7101,7 @@ gtk_widget_get_realized (GtkWidget *widget)
  * @realized: %TRUE to mark the widget as realized
  *
  * Marks the widget as being realized. This function must only be 
- * called after all #GdkWindows for the @widget have been created 
+ * called after all #GdkSurfaces for the @widget have been created 
  * and registered.
  *
  * This function should only ever be called in a derived widget's
@@ -8073,9 +8073,9 @@ gtk_widget_create_pango_layout (GtkWidget   *widget,
  */
 void
 gtk_widget_set_parent_window (GtkWidget *widget,
-                              GdkWindow *parent_window)
+                              GdkSurface *parent_window)
 {
-  GdkWindow *old_parent_window;
+  GdkSurface *old_parent_window;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (!GTK_IS_WINDOW (widget));
@@ -8103,11 +8103,11 @@ gtk_widget_set_parent_window (GtkWidget *widget,
  * Returns: (transfer none) (nullable): the parent window of @widget, or %NULL
  * if it does not have a parent window.
  **/
-GdkWindow *
+GdkSurface *
 gtk_widget_get_parent_window (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv;
-  GdkWindow *parent_window;
+  GdkSurface *parent_window;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
@@ -8232,7 +8232,7 @@ _gtk_widget_scale_changed (GtkWidget *widget)
  * to the actual device pixels. On traditional systems this is 1, on
  * high density outputs, it can be a higher value (typically 2).
  *
- * See gdk_window_get_scale_factor().
+ * See gdk_surface_get_scale_factor().
  *
  * Returns: the scale factor for @widget
  */
@@ -8246,7 +8246,7 @@ gtk_widget_get_scale_factor (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 1);
 
   if (_gtk_widget_get_realized (widget))
-    return gdk_window_get_scale_factor (_gtk_widget_get_window (widget));
+    return gdk_surface_get_scale_factor (_gtk_widget_get_window (widget));
 
   toplevel = _gtk_widget_get_toplevel (widget);
   if (toplevel && toplevel != widget)
@@ -8404,9 +8404,9 @@ gtk_widget_keynav_failed (GtkWidget        *widget,
  *
  * Notifies the user about an input-related error on this widget.
  * If the #GtkSettings:gtk-error-bell setting is %TRUE, it calls
- * gdk_window_beep(), otherwise it does nothing.
+ * gdk_surface_beep(), otherwise it does nothing.
  *
- * Note that the effect of gdk_window_beep() can be configured in many
+ * Note that the effect of gdk_surface_beep() can be configured in many
  * ways, depending on the windowing backend and the desktop environment
  * or window manager that is used.
  **/
@@ -8430,7 +8430,7 @@ gtk_widget_error_bell (GtkWidget *widget)
                 NULL);
 
   if (beep && priv->window)
-    gdk_window_beep (priv->window);
+    gdk_surface_beep (priv->window);
 }
 
 static void
@@ -9149,7 +9149,7 @@ gtk_widget_real_map (GtkWidget *widget)
       priv->mapped = TRUE;
 
       if (_gtk_widget_get_has_window (widget))
-        gdk_window_show (priv->window);
+        gdk_surface_show (priv->window);
 
       for (p = gtk_widget_get_first_child (widget);
            p != NULL;
@@ -9182,7 +9182,7 @@ gtk_widget_real_unmap (GtkWidget *widget)
       priv->mapped = FALSE;
 
       if (_gtk_widget_get_has_window (widget))
-        gdk_window_hide (priv->window);
+        gdk_surface_hide (priv->window);
 
       for (child = gtk_widget_get_first_child (widget);
            child != NULL;
@@ -9236,7 +9236,7 @@ gtk_widget_real_unrealize (GtkWidget *widget)
   g_assert (!widget->priv->mapped);
 
    /* We must do unrealize child widget BEFORE container widget.
-    * gdk_window_destroy() destroys specified xwindow and its sub-xwindows.
+    * gdk_surface_destroy() destroys specified xwindow and its sub-xwindows.
     * So, unrealizing container widget before its children causes the problem
     * (for example, gdk_ic_destroy () with destroyed window causes crash.)
     */
@@ -9246,7 +9246,7 @@ gtk_widget_real_unrealize (GtkWidget *widget)
   if (_gtk_widget_get_has_window (widget))
     {
       gtk_widget_unregister_window (widget, priv->window);
-      gdk_window_destroy (priv->window);
+      gdk_surface_destroy (priv->window);
       priv->window = NULL;
     }
   else
@@ -9311,14 +9311,14 @@ gtk_widget_adjust_baseline_request (GtkWidget *widget,
 
 static gboolean
 is_my_window (GtkWidget *widget,
-              GdkWindow *window)
+              GdkSurface *window)
 {
   gpointer user_data;
 
   if (!window)
     return FALSE;
 
-  gdk_window_get_user_data (window, &user_data);
+  gdk_surface_get_user_data (window, &user_data);
   return (user_data == widget);
 }
 
@@ -9329,11 +9329,11 @@ is_my_window (GtkWidget *widget,
  *
  * Returns: (nullable): the window of @widget that @device is in, or %NULL
  */
-GdkWindow *
+GdkSurface *
 _gtk_widget_get_device_window (GtkWidget *widget,
                                GdkDevice *device)
 {
-  GdkWindow *window;
+  GdkSurface *window;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
@@ -9391,7 +9391,7 @@ _gtk_widget_list_devices (GtkWidget *widget)
 static void
 synth_crossing (GtkWidget       *widget,
                 GdkEventType     type,
-                GdkWindow       *window,
+                GdkSurface       *window,
                 GdkDevice       *device,
                 GdkCrossingMode  mode,
                 GdkNotifyType    detail)
@@ -9407,7 +9407,7 @@ synth_crossing (GtkWidget       *widget,
   gdk_device_get_position_double (device,
                                   &event->crossing.x_root,
                                   &event->crossing.y_root);
-  gdk_window_get_device_position_double (window,
+  gdk_surface_get_device_position_double (window,
                                          device,
                                          &event->crossing.x,
                                          &event->crossing.y,
@@ -9464,7 +9464,7 @@ _gtk_widget_synthesize_crossing (GtkWidget       *from,
                                  GdkDevice       *device,
 				 GdkCrossingMode  mode)
 {
-  GdkWindow *from_window = NULL, *to_window = NULL;
+  GdkSurface *from_window = NULL, *to_window = NULL;
 
   g_return_if_fail (from != NULL || to != NULL);
 
@@ -9489,11 +9489,11 @@ _gtk_widget_synthesize_crossing (GtkWidget       *from,
   else if (from_window != NULL && to_window == NULL)
     {
       GList *from_ancestors = NULL, *list;
-      GdkWindow *from_ancestor = from_window;
+      GdkSurface *from_ancestor = from_window;
 
       while (from_ancestor != NULL)
 	{
-	  from_ancestor = gdk_window_get_parent (from_ancestor);
+	  from_ancestor = gdk_surface_get_parent (from_ancestor);
           if (from_ancestor == NULL)
             break;
           from_ancestors = g_list_prepend (from_ancestors, from_ancestor);
@@ -9503,7 +9503,7 @@ _gtk_widget_synthesize_crossing (GtkWidget       *from,
 		      device, mode, GDK_NOTIFY_ANCESTOR);
       for (list = g_list_last (from_ancestors); list; list = list->prev)
 	{
-	  synth_crossing (NULL, GDK_LEAVE_NOTIFY, (GdkWindow *) list->data,
+	  synth_crossing (NULL, GDK_LEAVE_NOTIFY, (GdkSurface *) list->data,
 			  device, mode, GDK_NOTIFY_VIRTUAL);
 	}
 
@@ -9514,11 +9514,11 @@ _gtk_widget_synthesize_crossing (GtkWidget       *from,
   else if (from_window == NULL && to_window != NULL)
     {
       GList *to_ancestors = NULL, *list;
-      GdkWindow *to_ancestor = to_window;
+      GdkSurface *to_ancestor = to_window;
 
       while (to_ancestor != NULL)
 	{
-	  to_ancestor = gdk_window_get_parent (to_ancestor);
+	  to_ancestor = gdk_surface_get_parent (to_ancestor);
 	  if (to_ancestor == NULL)
             break;
           to_ancestors = g_list_prepend (to_ancestors, to_ancestor);
@@ -9528,7 +9528,7 @@ _gtk_widget_synthesize_crossing (GtkWidget       *from,
 
       for (list = to_ancestors; list; list = list->next)
 	{
-	  synth_crossing (NULL, GDK_ENTER_NOTIFY, (GdkWindow *) list->data,
+	  synth_crossing (NULL, GDK_ENTER_NOTIFY, (GdkSurface *) list->data,
 			  device, mode, GDK_NOTIFY_VIRTUAL);
 	}
       synth_crossing (to, GDK_ENTER_NOTIFY, to_window,
@@ -9541,13 +9541,13 @@ _gtk_widget_synthesize_crossing (GtkWidget       *from,
   else
     {
       GList *from_ancestors = NULL, *to_ancestors = NULL, *list;
-      GdkWindow *from_ancestor = from_window, *to_ancestor = to_window;
+      GdkSurface *from_ancestor = from_window, *to_ancestor = to_window;
 
       while (from_ancestor != NULL || to_ancestor != NULL)
 	{
 	  if (from_ancestor != NULL)
 	    {
-	      from_ancestor = gdk_window_get_parent (from_ancestor);
+	      from_ancestor = gdk_surface_get_parent (from_ancestor);
 	      if (from_ancestor == to_window)
 		break;
               if (from_ancestor)
@@ -9555,7 +9555,7 @@ _gtk_widget_synthesize_crossing (GtkWidget       *from,
 	    }
 	  if (to_ancestor != NULL)
 	    {
-	      to_ancestor = gdk_window_get_parent (to_ancestor);
+	      to_ancestor = gdk_surface_get_parent (to_ancestor);
 	      if (to_ancestor == from_window)
 		break;
               if (to_ancestor)
@@ -9568,7 +9568,7 @@ _gtk_widget_synthesize_crossing (GtkWidget       *from,
 	    synth_crossing (from, GDK_LEAVE_NOTIFY, from_window,
 			    device, mode, GDK_NOTIFY_INFERIOR);
 	  for (list = to_ancestors; list; list = list->next)
-	    synth_crossing (NULL, GDK_ENTER_NOTIFY, (GdkWindow *) list->data,
+	    synth_crossing (NULL, GDK_ENTER_NOTIFY, (GdkSurface *) list->data,
 			    device, mode, GDK_NOTIFY_VIRTUAL);
 	  synth_crossing (to, GDK_ENTER_NOTIFY, to_window,
 			  device, mode, GDK_NOTIFY_ANCESTOR);
@@ -9579,7 +9579,7 @@ _gtk_widget_synthesize_crossing (GtkWidget       *from,
 			  device, mode, GDK_NOTIFY_ANCESTOR);
 	  for (list = g_list_last (from_ancestors); list; list = list->prev)
 	    {
-	      synth_crossing (NULL, GDK_LEAVE_NOTIFY, (GdkWindow *) list->data,
+	      synth_crossing (NULL, GDK_LEAVE_NOTIFY, (GdkSurface *) list->data,
 			      device, mode, GDK_NOTIFY_VIRTUAL);
 	    }
 	  if (mode != GDK_CROSSING_GTK_GRAB)
@@ -9601,12 +9601,12 @@ _gtk_widget_synthesize_crossing (GtkWidget       *from,
 
 	  for (list = g_list_last (from_ancestors); list; list = list->prev)
 	    {
-	      synth_crossing (NULL, GDK_LEAVE_NOTIFY, (GdkWindow *) list->data,
+	      synth_crossing (NULL, GDK_LEAVE_NOTIFY, (GdkSurface *) list->data,
 			      device, mode, GDK_NOTIFY_NONLINEAR_VIRTUAL);
 	    }
 	  for (list = to_ancestors; list; list = list->next)
 	    {
-	      synth_crossing (NULL, GDK_ENTER_NOTIFY, (GdkWindow *) list->data,
+	      synth_crossing (NULL, GDK_ENTER_NOTIFY, (GdkSurface *) list->data,
 			      device, mode, GDK_NOTIFY_NONLINEAR_VIRTUAL);
 	    }
 	  synth_crossing (to, GDK_ENTER_NOTIFY, to_window,
@@ -9670,7 +9670,7 @@ gtk_widget_propagate_state (GtkWidget          *widget,
 
           for (d = devices; d; d = d->next)
             {
-              GdkWindow *window;
+              GdkSurface *window;
               GdkDevice *device;
 
               device = d->data;
@@ -9679,7 +9679,7 @@ gtk_widget_propagate_state (GtkWidget          *widget,
               /* Do not propagate more than once to the
                * same window if non-multidevice aware.
                */
-              if (!gdk_window_get_support_multidevice (window) &&
+              if (!gdk_surface_get_support_multidevice (window) &&
                   g_list_find (event_windows, window))
                 continue;
 
@@ -9727,7 +9727,7 @@ gtk_widget_propagate_state (GtkWidget          *widget,
  * @region: (allow-none): shape to be added, or %NULL to remove an existing shape
  *
  * Sets a shape for this widget’s GDK window. This allows for
- * transparent windows etc., see gdk_window_shape_combine_region()
+ * transparent windows etc., see gdk_surface_shape_combine_region()
  * for more information.
  **/
 void
@@ -9747,7 +9747,7 @@ gtk_widget_shape_combine_region (GtkWidget *widget,
       priv->has_shape_mask = FALSE;
 
       if (priv->window)
-	gdk_window_shape_combine_region (priv->window, NULL, 0, 0);
+	gdk_surface_shape_combine_region (priv->window, NULL, 0, 0);
 
       g_object_set_qdata (G_OBJECT (widget), quark_shape_info, NULL);
     }
@@ -9763,7 +9763,7 @@ gtk_widget_shape_combine_region (GtkWidget *widget,
        * otherwise the shape is scheduled to be set by gtk_widget_realize().
        */
       if (priv->window)
-	gdk_window_shape_combine_region (priv->window, region, 0, 0);
+	gdk_surface_shape_combine_region (priv->window, region, 0, 0);
     }
 }
 
@@ -9800,7 +9800,7 @@ gtk_widget_update_input_shape (GtkWidget *widget)
       else
         region = NULL;
 
-      gdk_window_input_shape_combine_region (priv->window, region, 0, 0);
+      gdk_surface_input_shape_combine_region (priv->window, region, 0, 0);
 
       if (free_region)
         cairo_region_destroy (region);
@@ -9827,7 +9827,7 @@ gtk_widget_set_csd_input_shape (GtkWidget            *widget,
  *
  * Sets an input shape for this widget’s GDK window. This allows for
  * windows which react to mouse click in a nonrectangular region, see
- * gdk_window_input_shape_combine_region() for more information.
+ * gdk_surface_input_shape_combine_region() for more information.
  **/
 void
 gtk_widget_input_shape_combine_region (GtkWidget      *widget,
@@ -12098,15 +12098,15 @@ gtk_widget_get_allocated_baseline (GtkWidget *widget)
 /**
  * gtk_widget_set_window:
  * @widget: a #GtkWidget
- * @window: (transfer full): a #GdkWindow
+ * @window: (transfer full): a #GdkSurface
  *
  * Sets a widget’s window. This function should only be used in a
  * widget’s #GtkWidget::realize implementation. The %window passed is
- * usually either new window created with gdk_window_new(), or the
+ * usually either new window created with gdk_surface_new(), or the
  * window of its parent widget as returned by
  * gtk_widget_get_parent_window().
  *
- * Widgets must indicate whether they will create their own #GdkWindow
+ * Widgets must indicate whether they will create their own #GdkSurface
  * by calling gtk_widget_set_has_window(). This is usually done in the
  * widget’s init() function.
  *
@@ -12114,12 +12114,12 @@ gtk_widget_get_allocated_baseline (GtkWidget *widget)
  */
 void
 gtk_widget_set_window (GtkWidget *widget,
-                       GdkWindow *window)
+                       GdkSurface *window)
 {
   GtkWidgetPrivate *priv;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (window == NULL || GDK_IS_WINDOW (window));
+  g_return_if_fail (window == NULL || GDK_IS_SURFACE (window));
 
   priv = widget->priv;
 
@@ -12134,60 +12134,60 @@ gtk_widget_set_window (GtkWidget *widget,
 /**
  * gtk_widget_register_window:
  * @widget: a #GtkWidget
- * @window: a #GdkWindow
+ * @window: a #GdkSurface
  *
- * Registers a #GdkWindow with the widget and sets it up so that
+ * Registers a #GdkSurface with the widget and sets it up so that
  * the widget receives events for it. Call gtk_widget_unregister_window()
  * when destroying the window.
  *
- * Before 3.8 you needed to call gdk_window_set_user_data() directly to set
+ * Before 3.8 you needed to call gdk_surface_set_user_data() directly to set
  * this up. This is now deprecated and you should use gtk_widget_register_window()
  * instead. Old code will keep working as is, although some new features like
  * transparency might not work perfectly.
  */
 void
 gtk_widget_register_window (GtkWidget    *widget,
-			    GdkWindow    *window)
+			    GdkSurface    *window)
 {
   GtkWidgetPrivate *priv;
   gpointer user_data;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
-  gdk_window_get_user_data (window, &user_data);
+  gdk_surface_get_user_data (window, &user_data);
   g_assert (user_data == NULL);
 
   priv = widget->priv;
 
-  gdk_window_set_user_data (window, widget);
+  gdk_surface_set_user_data (window, widget);
   priv->registered_windows = g_list_prepend (priv->registered_windows, window);
 }
 
 /**
  * gtk_widget_unregister_window:
  * @widget: a #GtkWidget
- * @window: a #GdkWindow
+ * @window: a #GdkSurface
  *
- * Unregisters a #GdkWindow from the widget that was previously set up with
+ * Unregisters a #GdkSurface from the widget that was previously set up with
  * gtk_widget_register_window(). You need to call this when the window is
  * no longer used by the widget, such as when you destroy it.
  */
 void
 gtk_widget_unregister_window (GtkWidget    *widget,
-			      GdkWindow    *window)
+			      GdkSurface    *window)
 {
   GtkWidgetPrivate *priv;
   gpointer user_data;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
   priv = widget->priv;
 
-  gdk_window_get_user_data (window, &user_data);
+  gdk_surface_get_user_data (window, &user_data);
   g_assert (user_data == widget);
-  gdk_window_set_user_data (window, NULL);
+  gdk_surface_set_user_data (window, NULL);
   priv->registered_windows = g_list_remove (priv->registered_windows, window);
 }
 
@@ -12199,7 +12199,7 @@ gtk_widget_unregister_window (GtkWidget    *widget,
  *
  * Returns: (transfer none) (nullable): @widget’s window.
  */
-GdkWindow*
+GdkSurface*
 gtk_widget_get_window (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
@@ -12231,8 +12231,8 @@ gtk_widget_get_support_multidevice (GtkWidget *widget)
  *
  * Enables or disables multiple pointer awareness. If this setting is %TRUE,
  * @widget will start receiving multiple, per device enter/leave events. Note
- * that if custom #GdkWindows are created in #GtkWidget::realize,
- * gdk_window_set_support_multidevice() will have to be called manually on them.
+ * that if custom #GdkSurfaces are created in #GtkWidget::realize,
+ * gdk_surface_set_support_multidevice() will have to be called manually on them.
  **/
 void
 gtk_widget_set_support_multidevice (GtkWidget *widget,
@@ -12246,7 +12246,7 @@ gtk_widget_set_support_multidevice (GtkWidget *widget,
   priv->multidevice = (support_multidevice == TRUE);
 
   if (_gtk_widget_get_realized (widget))
-    gdk_window_set_support_multidevice (priv->window, support_multidevice);
+    gdk_surface_set_support_multidevice (priv->window, support_multidevice);
 }
 
 /* There are multiple alpha related sources. First of all the user can specify alpha
@@ -12281,7 +12281,7 @@ gtk_widget_update_alpha (GtkWidget *widget)
   if (_gtk_widget_get_realized (widget))
     {
       if (_gtk_widget_is_toplevel (widget))
-	gdk_window_set_opacity (priv->window, priv->alpha / 255.0);
+	gdk_surface_set_opacity (priv->window, priv->alpha / 255.0);
 
       gtk_widget_queue_draw (widget);
     }
@@ -13976,7 +13976,7 @@ should_record_names (GtkWidget   *widget,
 
 void
 gtk_widget_render (GtkWidget            *widget,
-                   GdkWindow            *window,
+                   GdkSurface            *window,
                    const cairo_region_t *region)
 {
   GdkDrawingContext *context;
@@ -13986,7 +13986,7 @@ gtk_widget_render (GtkWidget            *widget,
   cairo_region_t *clip;
 
   /* We only render double buffered on native windows */
-  if (!gdk_window_has_native (window))
+  if (!gdk_surface_has_native (window))
     return;
 
   renderer = gtk_widget_get_renderer (widget);

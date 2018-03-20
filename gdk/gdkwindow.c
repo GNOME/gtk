@@ -60,37 +60,37 @@
  * @Short_description: Onscreen display areas in the target window system
  * @Title: Windows
  *
- * A #GdkWindow is a (usually) rectangular region on the screen.
+ * A #GdkSurface is a (usually) rectangular region on the screen.
  * It’s a low-level object, used to implement high-level objects such as
  * #GtkWidget and #GtkWindow on the GTK+ level. A #GtkWindow is a toplevel
  * window, the thing a user might think of as a “window” with a titlebar
- * and so on; a #GtkWindow may contain many sub-GdkWindows.
+ * and so on; a #GtkWindow may contain many sub-GdkSurfaces.
  */
 
 /**
- * GdkWindow:
+ * GdkSurface:
  *
- * The GdkWindow struct contains only private fields and
+ * The GdkSurface struct contains only private fields and
  * should not be accessed directly.
  */
 
-/* Historically a GdkWindow always matches a platform native window,
+/* Historically a GdkSurface always matches a platform native window,
  * be it a toplevel window or a child window. In this setup the
- * GdkWindow (and other GdkDrawables) were platform independent classes,
+ * GdkSurface (and other GdkDrawables) were platform independent classes,
  * and the actual platform specific implementation was in a delegate
  * object available as “impl” in the window object.
  *
  * With the addition of client side windows this changes a bit. The
- * application-visible GdkWindow object behaves as it did before, but
+ * application-visible GdkSurface object behaves as it did before, but
  * such windows now don't a corresponding native window. Instead subwindows
  * windows are “client side”, i.e. emulated by the gdk code such
  * that clipping, drawing, moving, events etc work as expected.
  *
- * GdkWindows have a pointer to the “impl window” they are in, i.e.
- * the topmost GdkWindow which have the same “impl” value. This is stored
+ * GdkSurfaces have a pointer to the “impl window” they are in, i.e.
+ * the topmost GdkSurface which have the same “impl” value. This is stored
  * in impl_window, which is different from the window itself only for client
  * side windows.
- * All GdkWindows (native or not) track the position of the window in the parent
+ * All GdkSurfaces (native or not) track the position of the window in the parent
  * (x, y), the size of the window (width, height), the position of the window
  * with respect to the impl window (abs_x, abs_y). We also track the clip
  * region of the window wrt parent windows, in window-relative coordinates (clip_region).
@@ -111,42 +111,42 @@ enum {
 
 /* Global info */
 
-static void gdk_window_finalize   (GObject              *object);
+static void gdk_surface_finalize   (GObject              *object);
 
-static void gdk_window_set_property (GObject      *object,
+static void gdk_surface_set_property (GObject      *object,
                                      guint         prop_id,
                                      const GValue *value,
                                      GParamSpec   *pspec);
-static void gdk_window_get_property (GObject      *object,
+static void gdk_surface_get_property (GObject      *object,
                                      guint         prop_id,
                                      GValue       *value,
                                      GParamSpec   *pspec);
 
-static void gdk_window_clear_backing_region (GdkWindow *window);
+static void gdk_surface_clear_backing_region (GdkSurface *window);
 
-static void recompute_visible_regions   (GdkWindow *private,
+static void recompute_visible_regions   (GdkSurface *private,
 					 gboolean recalculate_children);
-static void gdk_window_invalidate_in_parent (GdkWindow *private);
+static void gdk_surface_invalidate_in_parent (GdkSurface *private);
 static void update_cursor               (GdkDisplay *display,
                                          GdkDevice  *device);
-static void impl_window_add_update_area (GdkWindow *impl_window,
+static void impl_window_add_update_area (GdkSurface *impl_window,
 					 cairo_region_t *region);
-static void gdk_window_invalidate_region_full (GdkWindow       *window,
+static void gdk_surface_invalidate_region_full (GdkSurface       *window,
 					       const cairo_region_t *region,
 					       gboolean         invalidate_children);
-static void gdk_window_invalidate_rect_full (GdkWindow          *window,
+static void gdk_surface_invalidate_rect_full (GdkSurface          *window,
 					     const GdkRectangle *rect,
 					     gboolean            invalidate_children);
-static cairo_surface_t *gdk_window_ref_impl_surface (GdkWindow *window);
+static cairo_surface_t *gdk_surface_ref_impl_surface (GdkSurface *window);
 
-static void gdk_window_set_frame_clock (GdkWindow      *window,
+static void gdk_surface_set_frame_clock (GdkSurface      *window,
                                         GdkFrameClock  *clock);
 
 
 static guint signals[LAST_SIGNAL] = { 0 };
 static GParamSpec *properties[LAST_PROP] = { NULL, };
 
-G_DEFINE_ABSTRACT_TYPE (GdkWindow, gdk_window, G_TYPE_OBJECT)
+G_DEFINE_ABSTRACT_TYPE (GdkSurface, gdk_surface, G_TYPE_OBJECT)
 
 #ifdef DEBUG_WINDOW_PRINTING
 char *
@@ -223,13 +223,13 @@ list_insert_link_before (GList *list,
 }
 
 static void
-gdk_window_init (GdkWindow *window)
+gdk_surface_init (GdkSurface *window)
 {
   /* 0-initialization is good for all other fields. */
 
-  window->window_type = GDK_WINDOW_CHILD;
+  window->window_type = GDK_SURFACE_CHILD;
 
-  window->state = GDK_WINDOW_STATE_WITHDRAWN;
+  window->state = GDK_SURFACE_STATE_WITHDRAWN;
   window->fullscreen_mode = GDK_FULLSCREEN_ON_CURRENT_MONITOR;
   window->width = 1;
   window->height = 1;
@@ -241,21 +241,21 @@ gdk_window_init (GdkWindow *window)
 }
 
 static void
-gdk_window_class_init (GdkWindowClass *klass)
+gdk_surface_class_init (GdkSurfaceClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = gdk_window_finalize;
-  object_class->set_property = gdk_window_set_property;
-  object_class->get_property = gdk_window_get_property;
+  object_class->finalize = gdk_surface_finalize;
+  object_class->set_property = gdk_surface_set_property;
+  object_class->get_property = gdk_surface_get_property;
 
   /* Properties */
 
   /**
-   * GdkWindow:cursor:
+   * GdkSurface:cursor:
    *
-   * The mouse pointer for a #GdkWindow. See gdk_window_set_cursor() and
-   * gdk_window_get_cursor() for details.
+   * The mouse pointer for a #GdkSurface. See gdk_surface_set_cursor() and
+   * gdk_surface_get_cursor() for details.
    */
   properties[PROP_CURSOR] =
       g_param_spec_object ("cursor",
@@ -265,9 +265,9 @@ gdk_window_class_init (GdkWindowClass *klass)
                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkWindow:display:
+   * GdkSurface:display:
    *
-   * The #GdkDisplay connection of the window. See gdk_window_get_display()
+   * The #GdkDisplay connection of the window. See gdk_surface_get_display()
    * for details.
    */
   properties[PROP_DISPLAY] =
@@ -281,14 +281,14 @@ gdk_window_class_init (GdkWindowClass *klass)
       g_param_spec_flags ("state",
                           P_("State"),
                           P_("State"),
-                          GDK_TYPE_WINDOW_STATE, GDK_WINDOW_STATE_WITHDRAWN,
+                          GDK_TYPE_SURFACE_STATE, GDK_SURFACE_STATE_WITHDRAWN,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   /**
-   * GdkWindow::moved-to-rect:
-   * @window: the #GdkWindow that moved
+   * GdkSurface::moved-to-rect:
+   * @window: the #GdkSurface that moved
    * @flipped_rect: (nullable): the position of @window after any possible
    *                flipping or %NULL if the backend can't obtain it
    * @final_rect: (nullable): the final position of @window or %NULL if the
@@ -328,7 +328,7 @@ gdk_window_class_init (GdkWindowClass *klass)
 static void
 seat_removed_cb (GdkDisplay *display,
                  GdkSeat    *seat,
-                 GdkWindow  *window)
+                 GdkSurface  *window)
 {
   GdkDevice *device = gdk_seat_get_pointer (seat);
 
@@ -340,25 +340,25 @@ seat_removed_cb (GdkDisplay *display,
 }
 
 static void
-gdk_window_finalize (GObject *object)
+gdk_surface_finalize (GObject *object)
 {
-  GdkWindow *window = GDK_WINDOW (object);
+  GdkSurface *window = GDK_SURFACE (object);
 
-  g_signal_handlers_disconnect_by_func (gdk_window_get_display (window),
+  g_signal_handlers_disconnect_by_func (gdk_surface_get_display (window),
                                         seat_removed_cb, window);
 
-  if (!GDK_WINDOW_DESTROYED (window))
+  if (!GDK_SURFACE_DESTROYED (window))
     {
-      if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
+      if (GDK_SURFACE_TYPE (window) != GDK_SURFACE_FOREIGN)
 	{
 	  g_warning ("losing last reference to undestroyed window");
-	  _gdk_window_destroy (window, FALSE);
+	  _gdk_surface_destroy (window, FALSE);
 	}
       else
 	/* We use TRUE here, to keep us from actually calling
 	 * XDestroyWindow() on the window
 	 */
-	_gdk_window_destroy (window, TRUE);
+	_gdk_surface_destroy (window, TRUE);
     }
 
   if (window->impl)
@@ -396,21 +396,21 @@ gdk_window_finalize (GObject *object)
   if (window->opaque_region)
     cairo_region_destroy (window->opaque_region);
 
-  G_OBJECT_CLASS (gdk_window_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gdk_surface_parent_class)->finalize (object);
 }
 
 static void
-gdk_window_set_property (GObject      *object,
+gdk_surface_set_property (GObject      *object,
                          guint         prop_id,
                          const GValue *value,
                          GParamSpec   *pspec)
 {
-  GdkWindow *window = GDK_WINDOW (object);
+  GdkSurface *window = GDK_SURFACE (object);
 
   switch (prop_id)
     {
     case PROP_CURSOR:
-      gdk_window_set_cursor (window, g_value_get_object (value));
+      gdk_surface_set_cursor (window, g_value_get_object (value));
       break;
 
     case PROP_DISPLAY:
@@ -425,17 +425,17 @@ gdk_window_set_property (GObject      *object,
 }
 
 static void
-gdk_window_get_property (GObject    *object,
+gdk_surface_get_property (GObject    *object,
                          guint       prop_id,
                          GValue     *value,
                          GParamSpec *pspec)
 {
-  GdkWindow *window = GDK_WINDOW (object);
+  GdkSurface *window = GDK_SURFACE (object);
 
   switch (prop_id)
     {
     case PROP_CURSOR:
-      g_value_set_object (value, gdk_window_get_cursor (window));
+      g_value_set_object (value, gdk_surface_get_cursor (window));
       break;
 
     case PROP_DISPLAY:
@@ -453,62 +453,62 @@ gdk_window_get_property (GObject    *object,
 }
 
 static gboolean
-gdk_window_is_subsurface (GdkWindow *window)
+gdk_surface_is_subsurface (GdkSurface *window)
 {
-   return window->window_type == GDK_WINDOW_SUBSURFACE;
+   return window->window_type == GDK_SURFACE_SUBSURFACE;
 }
 
-static GdkWindow *
-gdk_window_get_impl_window (GdkWindow *window)
+static GdkSurface *
+gdk_surface_get_impl_window (GdkSurface *window)
 {
   return window->impl_window;
 }
 
-GdkWindow *
-_gdk_window_get_impl_window (GdkWindow *window)
+GdkSurface *
+_gdk_surface_get_impl_window (GdkSurface *window)
 {
-  return gdk_window_get_impl_window (window);
+  return gdk_surface_get_impl_window (window);
 }
 
 static gboolean
-gdk_window_has_impl (GdkWindow *window)
+gdk_surface_has_impl (GdkSurface *window)
 {
   return window->impl_window == window;
 }
 
 static gboolean
-gdk_window_is_toplevel (GdkWindow *window)
+gdk_surface_is_toplevel (GdkSurface *window)
 {
   return
     window->parent == NULL ||
-    window->parent->window_type == GDK_WINDOW_ROOT;
+    window->parent->window_type == GDK_SURFACE_ROOT;
 }
 
 gboolean
-_gdk_window_has_impl (GdkWindow *window)
+_gdk_surface_has_impl (GdkSurface *window)
 {
-  return gdk_window_has_impl (window);
+  return gdk_surface_has_impl (window);
 }
 
 static gboolean
-gdk_window_has_no_impl (GdkWindow *window)
+gdk_surface_has_no_impl (GdkSurface *window)
 {
   return window->impl_window != window;
 }
 
 static void
-remove_sibling_overlapped_area (GdkWindow *window,
+remove_sibling_overlapped_area (GdkSurface *window,
 				cairo_region_t *region)
 {
-  GdkWindow *parent;
-  GdkWindow *sibling;
+  GdkSurface *parent;
+  GdkSurface *sibling;
   cairo_region_t *child_region;
   GdkRectangle r;
   GList *l;
 
   parent = window->parent;
 
-  if (gdk_window_is_toplevel (window))
+  if (gdk_surface_is_toplevel (window))
     return;
 
   /* Convert from from window coords to parent coords */
@@ -521,7 +521,7 @@ remove_sibling_overlapped_area (GdkWindow *window,
       if (sibling == window)
 	break;
 
-      if (!GDK_WINDOW_IS_MAPPED (sibling) || sibling->input_only)
+      if (!GDK_SURFACE_IS_MAPPED (sibling) || sibling->input_only)
 	continue;
 
       r.x = sibling->x;
@@ -550,11 +550,11 @@ remove_sibling_overlapped_area (GdkWindow *window,
 }
 
 static void
-remove_child_area (GdkWindow *window,
+remove_child_area (GdkSurface *window,
 		   gboolean for_input,
 		   cairo_region_t *region)
 {
-  GdkWindow *child;
+  GdkSurface *child;
   cairo_region_t *child_region;
   GdkRectangle r;
   GList *l;
@@ -568,7 +568,7 @@ remove_child_area (GdkWindow *window,
       if (cairo_region_is_empty (region))
 	break;
 
-      if (!GDK_WINDOW_IS_MAPPED (child) || child->input_only)
+      if (!GDK_SURFACE_IS_MAPPED (child) || child->input_only)
 	continue;
 
       r.x = child->x;
@@ -602,29 +602,29 @@ remove_child_area (GdkWindow *window,
 }
 
 static gboolean
-should_apply_clip_as_shape (GdkWindow *window)
+should_apply_clip_as_shape (GdkSurface *window)
 {
   return
-    gdk_window_has_impl (window) &&
+    gdk_surface_has_impl (window) &&
     /* Not for non-shaped toplevels */
     (window->shape != NULL || window->applied_shape) &&
     /* or for foreign windows */
-    window->window_type != GDK_WINDOW_FOREIGN &&
+    window->window_type != GDK_SURFACE_FOREIGN &&
     /* or for the root window */
-    window->window_type != GDK_WINDOW_ROOT;
+    window->window_type != GDK_SURFACE_ROOT;
 }
 
 static void
-apply_shape (GdkWindow *window,
+apply_shape (GdkSurface *window,
 	     cairo_region_t *region)
 {
-  GdkWindowImplClass *impl_class;
+  GdkSurfaceImplClass *impl_class;
 
   /* We trash whether we applied a shape so that
      we can avoid unsetting it many times, which
      could happen in e.g. apply_clip_as_shape as
      windows get resized */
-  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+  impl_class = GDK_SURFACE_IMPL_GET_CLASS (window->impl);
   if (region)
     impl_class->shape_combine_region (window,
 				      region, 0, 0);
@@ -653,7 +653,7 @@ region_rect_equal (const cairo_region_t *region,
 }
 
 static void
-apply_clip_as_shape (GdkWindow *window)
+apply_clip_as_shape (GdkSurface *window)
 {
   GdkRectangle r;
   cairo_region_t *region;
@@ -678,13 +678,13 @@ apply_clip_as_shape (GdkWindow *window)
 }
 
 static void
-recompute_visible_regions_internal (GdkWindow *private,
+recompute_visible_regions_internal (GdkSurface *private,
 				    gboolean   recalculate_clip,
 				    gboolean   recalculate_children)
 {
   GdkRectangle r;
   GList *l;
-  GdkWindow *child;
+  GdkSurface *child;
   cairo_region_t *new_clip;
   gboolean clip_region_changed;
   gboolean abs_pos_changed;
@@ -694,10 +694,10 @@ recompute_visible_regions_internal (GdkWindow *private,
   old_abs_y = private->abs_y;
 
   /* Update absolute position */
-  if ((gdk_window_has_impl (private) &&
-       private->window_type != GDK_WINDOW_SUBSURFACE) ||
-      (gdk_window_is_toplevel (private) &&
-       private->window_type == GDK_WINDOW_SUBSURFACE))
+  if ((gdk_surface_has_impl (private) &&
+       private->window_type != GDK_SURFACE_SUBSURFACE) ||
+      (gdk_surface_is_toplevel (private) &&
+       private->window_type == GDK_SURFACE_SUBSURFACE))
     {
       /* Native windows and toplevel subsurfaces start here */
       private->abs_x = 0;
@@ -729,7 +729,7 @@ recompute_visible_regions_internal (GdkWindow *private,
 	  r.height = private->height;
 	  new_clip = cairo_region_create_rectangle (&r);
 
-	  if (!gdk_window_is_toplevel (private))
+	  if (!gdk_surface_is_toplevel (private))
 	    cairo_region_intersect (new_clip, private->parent->clip_region);
 
 	  /* Convert from parent coords to window coords */
@@ -752,7 +752,7 @@ recompute_visible_regions_internal (GdkWindow *private,
 
   /* Update all children, recursively (except for root, where children are not exact). */
   if ((abs_pos_changed || clip_region_changed || recalculate_children) &&
-      private->window_type != GDK_WINDOW_ROOT)
+      private->window_type != GDK_SURFACE_ROOT)
     {
       for (l = private->children; l; l = l->next)
 	{
@@ -784,12 +784,12 @@ recompute_visible_regions_internal (GdkWindow *private,
  * recompute_visible_regions), pass in TRUE for recalculate_children on the parent
  */
 static void
-recompute_visible_regions (GdkWindow *private,
+recompute_visible_regions (GdkSurface *private,
 			   gboolean recalculate_children)
 {
-  GdkWindow *toplevel;
+  GdkSurface *toplevel;
 
-  toplevel = gdk_window_get_toplevel (private);
+  toplevel = gdk_surface_get_toplevel (private);
   toplevel->geometry_dirty = TRUE;
 
   recompute_visible_regions_internal (private,
@@ -798,7 +798,7 @@ recompute_visible_regions (GdkWindow *private,
 }
 
 static void
-gdk_window_clear_old_updated_area (GdkWindow *window)
+gdk_surface_clear_old_updated_area (GdkSurface *window)
 {
   int i;
 
@@ -813,7 +813,7 @@ gdk_window_clear_old_updated_area (GdkWindow *window)
 }
 
 static void
-gdk_window_append_old_updated_area (GdkWindow *window,
+gdk_surface_append_old_updated_area (GdkSurface *window,
                                     cairo_region_t *region)
 {
   if (window->old_updated_area[1])
@@ -823,14 +823,14 @@ gdk_window_append_old_updated_area (GdkWindow *window,
 }
 
 void
-_gdk_window_update_size (GdkWindow *window)
+_gdk_surface_update_size (GdkSurface *window)
 {
-  gdk_window_clear_old_updated_area (window);
+  gdk_surface_clear_old_updated_area (window);
   recompute_visible_regions (window, FALSE);
 }
 
 static GdkEventMask
-get_native_device_event_mask (GdkWindow *private,
+get_native_device_event_mask (GdkSurface *private,
                               GdkDevice *device)
 {
   GdkEventMask event_mask;
@@ -840,8 +840,8 @@ get_native_device_event_mask (GdkWindow *private,
   else
     event_mask = private->event_mask;
 
-  if (private->window_type == GDK_WINDOW_ROOT ||
-      private->window_type == GDK_WINDOW_FOREIGN)
+  if (private->window_type == GDK_SURFACE_ROOT ||
+      private->window_type == GDK_SURFACE_FOREIGN)
     return event_mask;
   else
     {
@@ -864,25 +864,25 @@ get_native_device_event_mask (GdkWindow *private,
 }
 
 static GdkEventMask
-get_native_event_mask (GdkWindow *private)
+get_native_event_mask (GdkSurface *private)
 {
   return get_native_device_event_mask (private, NULL);
 }
 
-GdkWindow*
-gdk_window_new (GdkDisplay    *display,
-                GdkWindow     *parent,
-		GdkWindowAttr *attributes)
+GdkSurface*
+gdk_surface_new (GdkDisplay    *display,
+                GdkSurface     *parent,
+		GdkSurfaceAttr *attributes)
 {
-  GdkWindow *window;
+  GdkSurface *window;
   gboolean native;
   GdkEventMask event_mask;
 
   g_return_val_if_fail (attributes != NULL, NULL);
 
-  if (parent != NULL && GDK_WINDOW_DESTROYED (parent))
+  if (parent != NULL && GDK_SURFACE_DESTROYED (parent))
     {
-      g_warning ("gdk_window_new(): parent is destroyed");
+      g_warning ("gdk_surface_new(): parent is destroyed");
       return NULL;
     }
 
@@ -906,9 +906,9 @@ gdk_window_new (GdkDisplay    *display,
        * before
        */
       if (parent == NULL)
-	window->window_type = GDK_WINDOW_TEMP;
+	window->window_type = GDK_SURFACE_TEMP;
       else
-	window->window_type = GDK_WINDOW_CHILD;
+	window->window_type = GDK_SURFACE_CHILD;
     }
   else
     window->window_type = attributes->window_type;
@@ -916,13 +916,13 @@ gdk_window_new (GdkDisplay    *display,
   /* Sanity checks */
   switch (window->window_type)
     {
-    case GDK_WINDOW_TOPLEVEL:
-    case GDK_WINDOW_TEMP:
-      if (parent != NULL && GDK_WINDOW_TYPE (parent) != GDK_WINDOW_ROOT)
+    case GDK_SURFACE_TOPLEVEL:
+    case GDK_SURFACE_TEMP:
+      if (parent != NULL && GDK_SURFACE_TYPE (parent) != GDK_SURFACE_ROOT)
 	g_warning (G_STRLOC "Toplevel windows must be created as children of\n"
-		   "a window of type GDK_WINDOW_ROOT");
+		   "a window of type GDK_SURFACE_ROOT");
       break;
-    case GDK_WINDOW_SUBSURFACE:
+    case GDK_SURFACE_SUBSURFACE:
 #ifdef GDK_WINDOWING_WAYLAND
       if (!GDK_IS_WAYLAND_DISPLAY (display))
         {
@@ -931,12 +931,12 @@ gdk_window_new (GdkDisplay    *display,
         }
 #endif
       break;
-    case GDK_WINDOW_CHILD:
-      if (GDK_WINDOW_TYPE (parent) == GDK_WINDOW_ROOT ||
-          GDK_WINDOW_TYPE (parent) == GDK_WINDOW_FOREIGN)
+    case GDK_SURFACE_CHILD:
+      if (GDK_SURFACE_TYPE (parent) == GDK_SURFACE_ROOT ||
+          GDK_SURFACE_TYPE (parent) == GDK_SURFACE_FOREIGN)
         {
           g_warning (G_STRLOC "Child windows must not be created as children of\n"
-                     "a window of type GDK_WINDOW_ROOT or GDK_WINDOW_FOREIGN");
+                     "a window of type GDK_SURFACE_ROOT or GDK_SURFACE_FOREIGN");
           return NULL;
         }
       break;
@@ -963,14 +963,14 @@ gdk_window_new (GdkDisplay    *display,
   else
     {
       GdkFrameClock *frame_clock = g_object_new (GDK_TYPE_FRAME_CLOCK_IDLE, NULL);
-      gdk_window_set_frame_clock (window, frame_clock);
+      gdk_surface_set_frame_clock (window, frame_clock);
       g_object_unref (frame_clock);
 
       native = TRUE; /* Always use native windows for toplevels */
     }
 
 #ifdef GDK_WINDOWING_WAYLAND
-  if (window->window_type == GDK_WINDOW_SUBSURFACE)
+  if (window->window_type == GDK_SURFACE_SUBSURFACE)
     native = TRUE; /* Always use native windows for subsurfaces as well */
 #endif
 
@@ -996,7 +996,7 @@ gdk_window_new (GdkDisplay    *display,
 }
 
 /**
- * gdk_window_new_toplevel: (constructor)
+ * gdk_surface_new_toplevel: (constructor)
  * @display: the display to create the window on
  * @width: width of new window
  * @height: height of new window
@@ -1004,14 +1004,14 @@ gdk_window_new (GdkDisplay    *display,
  * Creates a new toplevel window. The window will be managed by the window
  * manager.
  *
- * Returns: (transfer full): the new #GdkWindow
+ * Returns: (transfer full): the new #GdkSurface
  **/
-GdkWindow *
-gdk_window_new_toplevel (GdkDisplay *display,
+GdkSurface *
+gdk_surface_new_toplevel (GdkDisplay *display,
                          gint        width,
                          gint        height)
 {
-  GdkWindowAttr attr;
+  GdkSurfaceAttr attr;
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
@@ -1020,26 +1020,26 @@ gdk_window_new_toplevel (GdkDisplay *display,
   attr.y = 0;
   attr.width = width;
   attr.height = height;
-  attr.window_type = GDK_WINDOW_TOPLEVEL;
+  attr.window_type = GDK_SURFACE_TOPLEVEL;
 
-  return gdk_window_new (display, NULL, &attr);
+  return gdk_surface_new (display, NULL, &attr);
 }
 
 /**
- * gdk_window_new_popup: (constructor)
+ * gdk_surface_new_popup: (constructor)
  * @display: the display to create the window on
  * @position: position of the window on screen
  *
  * Creates a new toplevel popup window. The window will bypass window
  * management.
  *
- * Returns: (transfer full): the new #GdkWindow
+ * Returns: (transfer full): the new #GdkSurface
  **/
-GdkWindow *
-gdk_window_new_popup (GdkDisplay         *display,
+GdkSurface *
+gdk_surface_new_popup (GdkDisplay         *display,
                       const GdkRectangle *position)
 {
-  GdkWindowAttr attr;
+  GdkSurfaceAttr attr;
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (position != NULL, NULL);
@@ -1049,13 +1049,13 @@ gdk_window_new_popup (GdkDisplay         *display,
   attr.y = position->y;
   attr.width = position->width;
   attr.height = position->height;
-  attr.window_type = GDK_WINDOW_TEMP;
+  attr.window_type = GDK_SURFACE_TEMP;
 
-  return gdk_window_new (display, NULL, &attr);
+  return gdk_surface_new (display, NULL, &attr);
 }
 
 /**
- * gdk_window_new_temp: (constructor)
+ * gdk_surface_new_temp: (constructor)
  * @display: the display to create the window on
  *
  * Creates a new toplevel temporary window. The window will be
@@ -1063,12 +1063,12 @@ gdk_window_new_popup (GdkDisplay         *display,
  *
  * You most likely do not want to use this function.
  *
- * Returns: (transfer full): the new #GdkWindow
+ * Returns: (transfer full): the new #GdkSurface
  **/
-GdkWindow *
-gdk_window_new_temp (GdkDisplay *display)
+GdkSurface *
+gdk_surface_new_temp (GdkDisplay *display)
 {
-  GdkWindowAttr attr;
+  GdkSurfaceAttr attr;
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
@@ -1077,45 +1077,45 @@ gdk_window_new_temp (GdkDisplay *display)
   attr.y = -100;
   attr.width = 10;
   attr.height = 10;
-  attr.window_type = GDK_WINDOW_TEMP;
+  attr.window_type = GDK_SURFACE_TEMP;
 
-  return gdk_window_new (display, NULL, &attr);
+  return gdk_surface_new (display, NULL, &attr);
 }
 
 /**
- * gdk_window_new_child: (constructor)
+ * gdk_surface_new_child: (constructor)
  * @parent: the parent window
  * @position: placement of the window inside @parent
  *
  * Creates a new client-side child window.
  *
- * Returns: (transfer full): the new #GdkWindow
+ * Returns: (transfer full): the new #GdkSurface
  **/
-GdkWindow *
-gdk_window_new_child (GdkWindow          *parent,
+GdkSurface *
+gdk_surface_new_child (GdkSurface          *parent,
                       const GdkRectangle *position)
 {
-  GdkWindowAttr attr;
+  GdkSurfaceAttr attr;
 
-  g_return_val_if_fail (GDK_IS_WINDOW (parent), NULL);
+  g_return_val_if_fail (GDK_IS_SURFACE (parent), NULL);
 
   attr.wclass = GDK_INPUT_OUTPUT;
   attr.x = position->x;
   attr.y = position->y;
   attr.width = position->width;
   attr.height = position->height;
-  attr.window_type = GDK_WINDOW_CHILD;
+  attr.window_type = GDK_SURFACE_CHILD;
 
-  return gdk_window_new (gdk_window_get_display (parent), parent, &attr);
+  return gdk_surface_new (gdk_surface_get_display (parent), parent, &attr);
 }
 
 static void
 update_pointer_info_foreach (GdkDisplay           *display,
                              GdkDevice            *device,
-                             GdkPointerWindowInfo *pointer_info,
+                             GdkPointerSurfaceInfo *pointer_info,
                              gpointer              user_data)
 {
-  GdkWindow *window = user_data;
+  GdkSurface *window = user_data;
 
   if (pointer_info->window_under_pointer == window)
     {
@@ -1125,7 +1125,7 @@ update_pointer_info_foreach (GdkDisplay           *display,
 }
 
 static void
-window_remove_from_pointer_info (GdkWindow  *window,
+window_remove_from_pointer_info (GdkSurface  *window,
                                  GdkDisplay *display)
 {
   _gdk_display_pointer_info_foreach (display,
@@ -1134,7 +1134,7 @@ window_remove_from_pointer_info (GdkWindow  *window,
 }
 
 static void
-gdk_window_free_current_paint (GdkWindow *window)
+gdk_surface_free_current_paint (GdkSurface *window)
 {
   cairo_surface_destroy (window->current_paint.surface);
   window->current_paint.surface = NULL;
@@ -1146,8 +1146,8 @@ gdk_window_free_current_paint (GdkWindow *window)
 }
 
 /**
- * _gdk_window_destroy_hierarchy:
- * @window: a #GdkWindow
+ * _gdk_surface_destroy_hierarchy:
+ * @window: a #GdkSurface
  * @recursing: If %TRUE, then this is being called because a parent
  *            was destroyed.
  * @recursing_native: If %TRUE, then this is being called because a native parent
@@ -1160,26 +1160,26 @@ gdk_window_free_current_paint (GdkWindow *window)
  *            windowing system calls should be made. (This may never happen
  *            for some windowing systems.)
  *
- * Internal function to destroy a window. Like gdk_window_destroy(),
- * but does not drop the reference count created by gdk_window_new().
+ * Internal function to destroy a window. Like gdk_surface_destroy(),
+ * but does not drop the reference count created by gdk_surface_new().
  **/
 static void
-_gdk_window_destroy_hierarchy (GdkWindow *window,
+_gdk_surface_destroy_hierarchy (GdkSurface *window,
 			       gboolean   recursing,
 			       gboolean   recursing_native,
 			       gboolean   foreign_destroy)
 {
-  GdkWindowImplClass *impl_class;
-  GdkWindow *temp_window;
+  GdkSurfaceImplClass *impl_class;
+  GdkSurface *temp_window;
   GdkDisplay *display;
   GList *tmp;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return;
 
-  display = gdk_window_get_display (window);
+  display = gdk_surface_get_display (window);
 
   switch (window->window_type)
     {
@@ -1187,19 +1187,19 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
       g_assert_not_reached ();
       break;
 
-    case GDK_WINDOW_ROOT:
+    case GDK_SURFACE_ROOT:
       if (!gdk_display_is_closed (display))
 	{
 	  g_error ("attempted to destroy root window");
 	  break;
 	}
       /* else fall thru */
-    case GDK_WINDOW_TOPLEVEL:
-    case GDK_WINDOW_CHILD:
-    case GDK_WINDOW_TEMP:
-    case GDK_WINDOW_FOREIGN:
-    case GDK_WINDOW_SUBSURFACE:
-      if (window->window_type == GDK_WINDOW_FOREIGN && !foreign_destroy)
+    case GDK_SURFACE_TOPLEVEL:
+    case GDK_SURFACE_CHILD:
+    case GDK_SURFACE_TEMP:
+    case GDK_SURFACE_FOREIGN:
+    case GDK_SURFACE_SUBSURFACE:
+      if (window->window_type == GDK_SURFACE_FOREIGN && !foreign_destroy)
 	{
 	}
       else
@@ -1210,10 +1210,10 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
                 window->parent->children = g_list_remove_link (window->parent->children, &window->children_list_node);
 
 	      if (!recursing &&
-		  GDK_WINDOW_IS_MAPPED (window))
+		  GDK_SURFACE_IS_MAPPED (window))
 		{
 		  recompute_visible_regions (window, FALSE);
-		  gdk_window_invalidate_in_parent (window);
+		  gdk_surface_invalidate_in_parent (window);
 		}
 	    }
 
@@ -1228,12 +1228,12 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
           if (window->frame_clock)
             {
               g_object_run_dispose (G_OBJECT (window->frame_clock));
-              gdk_window_set_frame_clock (window, NULL);
+              gdk_surface_set_frame_clock (window, NULL);
             }
 
-          gdk_window_free_current_paint (window);
+          gdk_surface_free_current_paint (window);
 
-	  if (window->window_type == GDK_WINDOW_FOREIGN)
+	  if (window->window_type == GDK_SURFACE_FOREIGN)
 	    g_assert (window->children == NULL);
 	  else
 	    {
@@ -1247,26 +1247,26 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 		  tmp = tmp->next;
 
 		  if (temp_window)
-		    _gdk_window_destroy_hierarchy (temp_window,
+		    _gdk_surface_destroy_hierarchy (temp_window,
 						   TRUE,
-						   recursing_native || gdk_window_has_impl (window),
+						   recursing_native || gdk_surface_has_impl (window),
 						   foreign_destroy);
 		}
 	    }
 
-	  _gdk_window_clear_update_area (window);
+	  _gdk_surface_clear_update_area (window);
 
-	  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+	  impl_class = GDK_SURFACE_IMPL_GET_CLASS (window->impl);
 
-	  if (gdk_window_has_impl (window))
+	  if (gdk_surface_has_impl (window))
 	    impl_class->destroy (window, recursing_native, foreign_destroy);
 	  else
 	    {
 	      /* hide to make sure we repaint and break grabs */
-	      gdk_window_hide (window);
+	      gdk_surface_hide (window);
 	    }
 
-	  window->state |= GDK_WINDOW_STATE_WITHDRAWN;
+	  window->state |= GDK_SURFACE_STATE_WITHDRAWN;
 	  window->parent = NULL;
 	  window->destroyed = TRUE;
 
@@ -1285,26 +1285,26 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 }
 
 /**
- * _gdk_window_destroy:
- * @window: a #GdkWindow
+ * _gdk_surface_destroy:
+ * @window: a #GdkSurface
  * @foreign_destroy: If %TRUE, the window or a parent was destroyed by some
  *            external agency. The window has already been destroyed and no
  *            windowing system calls should be made. (This may never happen
  *            for some windowing systems.)
  *
- * Internal function to destroy a window. Like gdk_window_destroy(),
- * but does not drop the reference count created by gdk_window_new().
+ * Internal function to destroy a window. Like gdk_surface_destroy(),
+ * but does not drop the reference count created by gdk_surface_new().
  **/
 void
-_gdk_window_destroy (GdkWindow *window,
+_gdk_surface_destroy (GdkSurface *window,
 		     gboolean   foreign_destroy)
 {
-  _gdk_window_destroy_hierarchy (window, FALSE, FALSE, foreign_destroy);
+  _gdk_surface_destroy_hierarchy (window, FALSE, FALSE, foreign_destroy);
 }
 
 /**
- * gdk_window_destroy:
- * @window: a #GdkWindow
+ * gdk_surface_destroy:
+ * @window: a #GdkSurface
  *
  * Destroys the window system resources associated with @window and decrements @window's
  * reference count. The window system resources for all children of @window are also
@@ -1315,121 +1315,121 @@ _gdk_window_destroy (GdkWindow *window,
  *
  **/
 void
-gdk_window_destroy (GdkWindow *window)
+gdk_surface_destroy (GdkSurface *window)
 {
-  _gdk_window_destroy_hierarchy (window, FALSE, FALSE, FALSE);
+  _gdk_surface_destroy_hierarchy (window, FALSE, FALSE, FALSE);
   g_object_unref (window);
 }
 
 /**
- * gdk_window_set_user_data:
- * @window: a #GdkWindow
+ * gdk_surface_set_user_data:
+ * @window: a #GdkSurface
  * @user_data: (allow-none) (type GObject.Object): user data
  *
  * For most purposes this function is deprecated in favor of
  * g_object_set_data(). However, for historical reasons GTK+ stores
- * the #GtkWidget that owns a #GdkWindow as user data on the
- * #GdkWindow. So, custom widget implementations should use
- * this function for that. If GTK+ receives an event for a #GdkWindow,
+ * the #GtkWidget that owns a #GdkSurface as user data on the
+ * #GdkSurface. So, custom widget implementations should use
+ * this function for that. If GTK+ receives an event for a #GdkSurface,
  * and the user data for the window is non-%NULL, GTK+ will assume the
  * user data is a #GtkWidget, and forward the event to that widget.
  *
  **/
 void
-gdk_window_set_user_data (GdkWindow *window,
+gdk_surface_set_user_data (GdkSurface *window,
 			  gpointer   user_data)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
   window->user_data = user_data;
 }
 
 /**
- * gdk_window_get_user_data:
- * @window: a #GdkWindow
+ * gdk_surface_get_user_data:
+ * @window: a #GdkSurface
  * @data: (out): return location for user data
  *
  * Retrieves the user data for @window, which is normally the widget
- * that @window belongs to. See gdk_window_set_user_data().
+ * that @window belongs to. See gdk_surface_set_user_data().
  *
  **/
 void
-gdk_window_get_user_data (GdkWindow *window,
+gdk_surface_get_user_data (GdkSurface *window,
 			  gpointer  *data)
 {
   *data = window->user_data;
 }
 
 /**
- * gdk_window_get_window_type:
- * @window: a #GdkWindow
+ * gdk_surface_get_window_type:
+ * @window: a #GdkSurface
  *
- * Gets the type of the window. See #GdkWindowType.
+ * Gets the type of the window. See #GdkSurfaceType.
  *
  * Returns: type of window
  **/
-GdkWindowType
-gdk_window_get_window_type (GdkWindow *window)
+GdkSurfaceType
+gdk_surface_get_window_type (GdkSurface *window)
 {
-  g_return_val_if_fail (GDK_IS_WINDOW (window), (GdkWindowType) -1);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), (GdkSurfaceType) -1);
 
-  return GDK_WINDOW_TYPE (window);
+  return GDK_SURFACE_TYPE (window);
 }
 
 /**
- * gdk_window_get_display:
- * @window: a #GdkWindow
+ * gdk_surface_get_display:
+ * @window: a #GdkSurface
  * 
- * Gets the #GdkDisplay associated with a #GdkWindow.
+ * Gets the #GdkDisplay associated with a #GdkSurface.
  * 
  * Returns: (transfer none): the #GdkDisplay associated with @window
  **/
 GdkDisplay *
-gdk_window_get_display (GdkWindow *window)
+gdk_surface_get_display (GdkSurface *window)
 {
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), NULL);
 
   return window->display;
 }
 /**
- * gdk_window_is_destroyed:
- * @window: a #GdkWindow
+ * gdk_surface_is_destroyed:
+ * @window: a #GdkSurface
  *
  * Check to see if a window is destroyed..
  *
  * Returns: %TRUE if the window is destroyed
  **/
 gboolean
-gdk_window_is_destroyed (GdkWindow *window)
+gdk_surface_is_destroyed (GdkSurface *window)
 {
-  return GDK_WINDOW_DESTROYED (window);
+  return GDK_SURFACE_DESTROYED (window);
 }
 
 /**
- * gdk_window_has_native:
- * @window: a #GdkWindow
+ * gdk_surface_has_native:
+ * @window: a #GdkSurface
  *
  * Checks whether the window has a native window or not.
  *
  * Returns: %TRUE if the @window has a native window, %FALSE otherwise.
  */
 gboolean
-gdk_window_has_native (GdkWindow *window)
+gdk_surface_has_native (GdkSurface *window)
 {
-  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), FALSE);
 
   return window->parent == NULL || window->parent->impl != window->impl;
 }
 
 /**
- * gdk_window_get_position:
- * @window: a #GdkWindow
+ * gdk_surface_get_position:
+ * @window: a #GdkSurface
  * @x: (out) (allow-none): X coordinate of window
  * @y: (out) (allow-none): Y coordinate of window
  *
  * Obtains the position of the window as reported in the
  * most-recently-processed #GdkEventConfigure. Contrast with
- * gdk_window_get_geometry() which queries the X server for the
+ * gdk_surface_get_geometry() which queries the X server for the
  * current window position, regardless of which events have been
  * received or processed.
  *
@@ -1437,11 +1437,11 @@ gdk_window_has_native (GdkWindow *window)
  *
  **/
 void
-gdk_window_get_position (GdkWindow *window,
+gdk_surface_get_position (GdkSurface *window,
 			 gint      *x,
 			 gint      *y)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
   if (x)
     *x = window->x;
@@ -1450,11 +1450,11 @@ gdk_window_get_position (GdkWindow *window,
 }
 
 /**
- * gdk_window_get_parent:
- * @window: a #GdkWindow
+ * gdk_surface_get_parent:
+ * @window: a #GdkSurface
  *
  * Obtains the parent of @window, as known to GDK. Does not query the
- * X server; thus this returns the parent as passed to gdk_window_new(),
+ * X server; thus this returns the parent as passed to gdk_surface_new(),
  * not the actual parent. This should never matter unless you’re using
  * Xlib calls mixed with GDK calls on the X11 platform. It may also
  * matter for toplevel windows, because the window manager may choose
@@ -1462,38 +1462,38 @@ gdk_window_get_position (GdkWindow *window,
  *
  * Returns: (transfer none): parent of @window
  **/
-GdkWindow*
-gdk_window_get_parent (GdkWindow *window)
+GdkSurface*
+gdk_surface_get_parent (GdkSurface *window)
 {
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), NULL);
 
-  if (gdk_window_is_subsurface (window))
+  if (gdk_surface_is_subsurface (window))
     return window->transient_for;
   else
     return window->parent;
 }
 
 /**
- * gdk_window_get_toplevel:
- * @window: a #GdkWindow
+ * gdk_surface_get_toplevel:
+ * @window: a #GdkSurface
  *
  * Gets the toplevel window that’s an ancestor of @window.
  *
- * Any window type but %GDK_WINDOW_CHILD is considered a
- * toplevel window, as is a %GDK_WINDOW_CHILD window that
+ * Any window type but %GDK_SURFACE_CHILD is considered a
+ * toplevel window, as is a %GDK_SURFACE_CHILD window that
  * has a root window as parent.
  *
  * Returns: (transfer none): the toplevel window containing @window
  **/
-GdkWindow *
-gdk_window_get_toplevel (GdkWindow *window)
+GdkSurface *
+gdk_surface_get_toplevel (GdkSurface *window)
 {
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), NULL);
 
-  while (window->window_type == GDK_WINDOW_CHILD ||
-         window->window_type == GDK_WINDOW_SUBSURFACE)
+  while (window->window_type == GDK_SURFACE_CHILD ||
+         window->window_type == GDK_SURFACE_SUBSURFACE)
     {
-      if (gdk_window_is_toplevel (window))
+      if (gdk_surface_is_toplevel (window))
 	break;
       window = window->parent;
     }
@@ -1502,8 +1502,8 @@ gdk_window_get_toplevel (GdkWindow *window)
 }
 
 /**
- * gdk_window_get_children:
- * @window: a #GdkWindow
+ * gdk_surface_get_children:
+ * @window: a #GdkSurface
  *
  * Gets the list of children of @window known to GDK.
  * This function only returns children created via GDK,
@@ -1513,36 +1513,36 @@ gdk_window_get_toplevel (GdkWindow *window)
  * The returned list must be freed, but the elements in the
  * list need not be.
  *
- * Returns: (transfer container) (element-type GdkWindow):
+ * Returns: (transfer container) (element-type GdkSurface):
  *     list of child windows inside @window
  **/
 GList*
-gdk_window_get_children (GdkWindow *window)
+gdk_surface_get_children (GdkSurface *window)
 {
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), NULL);
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return NULL;
 
   return g_list_copy (window->children);
 }
 
 /**
- * gdk_window_peek_children:
- * @window: a #GdkWindow
+ * gdk_surface_peek_children:
+ * @window: a #GdkSurface
  *
- * Like gdk_window_get_children(), but does not copy the list of
+ * Like gdk_surface_get_children(), but does not copy the list of
  * children, so the list does not need to be freed.
  *
- * Returns: (transfer none) (element-type GdkWindow):
+ * Returns: (transfer none) (element-type GdkSurface):
  *     a reference to the list of child windows in @window
  **/
 GList *
-gdk_window_peek_children (GdkWindow *window)
+gdk_surface_peek_children (GdkSurface *window)
 {
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), NULL);
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return NULL;
 
   return window->children;
@@ -1550,8 +1550,8 @@ gdk_window_peek_children (GdkWindow *window)
 
 
 /**
- * gdk_window_get_children_with_user_data:
- * @window: a #GdkWindow
+ * gdk_surface_get_children_with_user_data:
+ * @window: a #GdkSurface
  * @user_data: user data to look for
  *
  * Gets the list of children of @window known to GDK with a
@@ -1563,19 +1563,19 @@ gdk_window_peek_children (GdkWindow *window)
  * The list is returned in (relative) stacking order, i.e. the
  * lowest window is first.
  *
- * Returns: (transfer container) (element-type GdkWindow):
+ * Returns: (transfer container) (element-type GdkSurface):
  *     list of child windows inside @window
  **/
 GList *
-gdk_window_get_children_with_user_data (GdkWindow *window,
+gdk_surface_get_children_with_user_data (GdkSurface *window,
                                         gpointer   user_data)
 {
-  GdkWindow *child;
+  GdkSurface *child;
   GList *res, *l;
 
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), NULL);
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return NULL;
 
   res = NULL;
@@ -1592,25 +1592,25 @@ gdk_window_get_children_with_user_data (GdkWindow *window,
 
 
 /**
- * gdk_window_is_visible:
- * @window: a #GdkWindow
+ * gdk_surface_is_visible:
+ * @window: a #GdkSurface
  *
- * Checks whether the window has been mapped (with gdk_window_show() or
- * gdk_window_show_unraised()).
+ * Checks whether the window has been mapped (with gdk_surface_show() or
+ * gdk_surface_show_unraised()).
  *
  * Returns: %TRUE if the window is mapped
  **/
 gboolean
-gdk_window_is_visible (GdkWindow *window)
+gdk_surface_is_visible (GdkSurface *window)
 {
-  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), FALSE);
 
-  return GDK_WINDOW_IS_MAPPED (window);
+  return GDK_SURFACE_IS_MAPPED (window);
 }
 
 /**
- * gdk_window_is_viewable:
- * @window: a #GdkWindow
+ * gdk_surface_is_viewable:
+ * @window: a #GdkSurface
  *
  * Check if the window and all ancestors of the window are
  * mapped. (This is not necessarily "viewable" in the X sense, since
@@ -1620,9 +1620,9 @@ gdk_window_is_visible (GdkWindow *window)
  * Returns: %TRUE if the window is viewable
  **/
 gboolean
-gdk_window_is_viewable (GdkWindow *window)
+gdk_surface_is_viewable (GdkSurface *window)
 {
-  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), FALSE);
 
   if (window->destroyed)
     return FALSE;
@@ -1631,31 +1631,31 @@ gdk_window_is_viewable (GdkWindow *window)
 }
 
 /**
- * gdk_window_get_state:
- * @window: a #GdkWindow
+ * gdk_surface_get_state:
+ * @window: a #GdkSurface
  *
  * Gets the bitwise OR of the currently active window state flags,
- * from the #GdkWindowState enumeration.
+ * from the #GdkSurfaceState enumeration.
  *
  * Returns: window state bitfield
  **/
-GdkWindowState
-gdk_window_get_state (GdkWindow *window)
+GdkSurfaceState
+gdk_surface_get_state (GdkSurface *window)
 {
-  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), FALSE);
 
   return window->state;
 }
 
 static cairo_content_t
-gdk_window_get_content (GdkWindow *window)
+gdk_surface_get_content (GdkSurface *window)
 {
   cairo_surface_t *surface;
   cairo_content_t content;
 
-  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), 0);
 
-  surface = gdk_window_ref_impl_surface (window);
+  surface = gdk_surface_ref_impl_surface (window);
   content = cairo_surface_get_content (surface);
   cairo_surface_destroy (surface);
 
@@ -1663,13 +1663,13 @@ gdk_window_get_content (GdkWindow *window)
 }
 
 static cairo_surface_t *
-gdk_window_ref_impl_surface (GdkWindow *window)
+gdk_surface_ref_impl_surface (GdkSurface *window)
 {
-  return GDK_WINDOW_IMPL_GET_CLASS (window->impl)->ref_cairo_surface (gdk_window_get_impl_window (window));
+  return GDK_SURFACE_IMPL_GET_CLASS (window->impl)->ref_cairo_surface (gdk_surface_get_impl_window (window));
 }
 
 GdkGLContext *
-gdk_window_get_paint_gl_context (GdkWindow  *window,
+gdk_surface_get_paint_gl_context (GdkSurface  *window,
                                  GError    **error)
 {
   GError *internal_error = NULL;
@@ -1684,7 +1684,7 @@ gdk_window_get_paint_gl_context (GdkWindow  *window,
 
   if (window->impl_window->gl_paint_context == NULL)
     {
-      GdkWindowImplClass *impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+      GdkSurfaceImplClass *impl_class = GDK_SURFACE_IMPL_GET_CLASS (window->impl);
 
       if (impl_class->create_gl_context == NULL)
         {
@@ -1719,12 +1719,12 @@ gdk_window_get_paint_gl_context (GdkWindow  *window,
 }
 
 /**
- * gdk_window_create_gl_context:
- * @window: a #GdkWindow
+ * gdk_surface_create_gl_context:
+ * @window: a #GdkSurface
  * @error: return location for an error
  *
  * Creates a new #GdkGLContext matching the
- * framebuffer format to the visual of the #GdkWindow. The context
+ * framebuffer format to the visual of the #GdkSurface. The context
  * is disconnected from any particular window or surface.
  *
  * If the creation of the #GdkGLContext failed, @error will be set.
@@ -1736,27 +1736,27 @@ gdk_window_get_paint_gl_context (GdkWindow  *window,
  * %NULL on error
  **/
 GdkGLContext *
-gdk_window_create_gl_context (GdkWindow    *window,
+gdk_surface_create_gl_context (GdkSurface    *window,
                               GError      **error)
 {
   GdkGLContext *paint_context;
 
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-  paint_context = gdk_window_get_paint_gl_context (window, error);
+  paint_context = gdk_surface_get_paint_gl_context (window, error);
   if (paint_context == NULL)
     return NULL;
 
-  return GDK_WINDOW_IMPL_GET_CLASS (window->impl)->create_gl_context (window->impl_window,
+  return GDK_SURFACE_IMPL_GET_CLASS (window->impl)->create_gl_context (window->impl_window,
 								      FALSE,
                                                                       paint_context,
                                                                       error);
 }
 
 /**
- * gdk_window_create_vulkan_context:
- * @window: a #GdkWindow
+ * gdk_surface_create_vulkan_context:
+ * @window: a #GdkSurface
  * @error: return location for an error
  *
  * Creates a new #GdkVulkanContext for rendering on @window.
@@ -1767,12 +1767,12 @@ gdk_window_create_gl_context (GdkWindow    *window,
  * %NULL on error
  **/
 GdkVulkanContext *
-gdk_window_create_vulkan_context (GdkWindow  *window,
+gdk_surface_create_vulkan_context (GdkSurface  *window,
                                   GError    **error)
 {
   GdkDisplay *display;
 
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
   if (GDK_DISPLAY_DEBUG_CHECK (window->display, VULKAN_DISABLE))
@@ -1782,7 +1782,7 @@ gdk_window_create_vulkan_context (GdkWindow  *window,
       return NULL;
     }
 
-  display = gdk_window_get_display (window);
+  display = gdk_surface_get_display (window);
 
   if (GDK_DISPLAY_GET_CLASS (display)->vk_extension_name == NULL)
     {
@@ -1799,11 +1799,11 @@ gdk_window_create_vulkan_context (GdkWindow  *window,
 }
 
 static void
-gdk_window_begin_paint_internal (GdkWindow            *window,
+gdk_surface_begin_paint_internal (GdkSurface            *window,
 			         const cairo_region_t *region)
 {
   GdkRectangle clip_box;
-  GdkWindowImplClass *impl_class;
+  GdkSurfaceImplClass *impl_class;
   double sx, sy;
   gboolean needs_surface;
   cairo_content_t surface_content;
@@ -1815,7 +1815,7 @@ gdk_window_begin_paint_internal (GdkWindow            *window,
       return;
     }
 
-  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+  impl_class = GDK_SURFACE_IMPL_GET_CLASS (window->impl);
 
   needs_surface = TRUE;
   if (impl_class->begin_paint)
@@ -1825,11 +1825,11 @@ gdk_window_begin_paint_internal (GdkWindow            *window,
   cairo_region_intersect (window->current_paint.region, window->clip_region);
   cairo_region_get_extents (window->current_paint.region, &clip_box);
 
-  surface_content = gdk_window_get_content (window);
+  surface_content = gdk_surface_get_content (window);
 
   if (needs_surface)
     {
-      window->current_paint.surface = gdk_window_create_similar_surface (window,
+      window->current_paint.surface = gdk_surface_create_similar_surface (window,
                                                                          surface_content,
                                                                          MAX (clip_box.width, 1),
                                                                          MAX (clip_box.height, 1));
@@ -1842,27 +1842,27 @@ gdk_window_begin_paint_internal (GdkWindow            *window,
     }
   else
     {
-      window->current_paint.surface = gdk_window_ref_impl_surface (window);
+      window->current_paint.surface = gdk_surface_ref_impl_surface (window);
       window->current_paint.surface_needs_composite = FALSE;
     }
 
   if (!cairo_region_is_empty (window->current_paint.region))
-    gdk_window_clear_backing_region (window);
+    gdk_surface_clear_backing_region (window);
 }
 
 static void
-gdk_window_end_paint_internal (GdkWindow *window)
+gdk_surface_end_paint_internal (GdkSurface *window)
 {
-  GdkWindowImplClass *impl_class;
+  GdkSurfaceImplClass *impl_class;
   cairo_t *cr;
 
   if (window->current_paint.surface == NULL)
     {
-      g_warning (G_STRLOC": no preceding call to gdk_window_begin_draw_frame(), see documentation");
+      g_warning (G_STRLOC": no preceding call to gdk_surface_begin_draw_frame(), see documentation");
       return;
     }
 
-  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+  impl_class = GDK_SURFACE_IMPL_GET_CLASS (window->impl);
 
   if (impl_class->end_paint)
     impl_class->end_paint (window);
@@ -1871,7 +1871,7 @@ gdk_window_end_paint_internal (GdkWindow *window)
     {
       cairo_surface_t *surface;
 
-      surface = gdk_window_ref_impl_surface (window);
+      surface = gdk_surface_ref_impl_surface (window);
       cr = cairo_create (surface);
 
       cairo_set_source_surface (cr, window->current_paint.surface, 0, 0);
@@ -1887,41 +1887,41 @@ gdk_window_end_paint_internal (GdkWindow *window)
       cairo_surface_destroy (surface);
     }
 
-  gdk_window_free_current_paint (window);
+  gdk_surface_free_current_paint (window);
 }
 
 /**
- * gdk_window_begin_draw_frame:
- * @window: a #GdkWindow
+ * gdk_surface_begin_draw_frame:
+ * @window: a #GdkSurface
  * @context: (allow-none): the context used to draw the frame
  * @region: a Cairo region
  *
  * Indicates that you are beginning the process of redrawing @region
  * on @window, and provides you with a #GdkDrawingContext.
  *
- * If @window is a top level #GdkWindow, backed by a native window
+ * If @window is a top level #GdkSurface, backed by a native window
  * implementation, a backing store (offscreen buffer) large enough to
  * contain @region will be created. The backing store will be initialized
  * with the background color or background surface for @window. Then, all
  * drawing operations performed on @window will be diverted to the
- * backing store. When you call gdk_window_end_frame(), the contents of
+ * backing store. When you call gdk_surface_end_frame(), the contents of
  * the backing store will be copied to @window, making it visible
  * on screen. Only the part of @window contained in @region will be
  * modified; that is, drawing operations are clipped to @region.
  *
  * The net result of all this is to remove flicker, because the user
  * sees the finished product appear all at once when you call
- * gdk_window_end_draw_frame(). If you draw to @window directly without
- * calling gdk_window_begin_draw_frame(), the user may see flicker
+ * gdk_surface_end_draw_frame(). If you draw to @window directly without
+ * calling gdk_surface_begin_draw_frame(), the user may see flicker
  * as individual drawing operations are performed in sequence.
  *
  * When using GTK+, the widget system automatically places calls to
- * gdk_window_begin_draw_frame() and gdk_window_end_draw_frame() around
+ * gdk_surface_begin_draw_frame() and gdk_surface_end_draw_frame() around
  * emissions of the `GtkWidget::draw` signal. That is, if you’re
  * drawing the contents of the widget yourself, you can assume that the
  * widget has a cleared background, is already set as the clip region,
  * and already has a backing store. Therefore in most cases, application
- * code in GTK does not need to call gdk_window_begin_draw_frame()
+ * code in GTK does not need to call gdk_surface_begin_draw_frame()
  * explicitly.
  *
  * Returns: (transfer none): a #GdkDrawingContext context that should be
@@ -1929,16 +1929,16 @@ gdk_window_end_paint_internal (GdkWindow *window)
  *   by GDK.
  */
 GdkDrawingContext *
-gdk_window_begin_draw_frame (GdkWindow            *window,
+gdk_surface_begin_draw_frame (GdkSurface            *window,
                              GdkDrawContext       *draw_context,
                              const cairo_region_t *region)
 {
   GdkDrawingContext *context;
   cairo_region_t *real_region;
 
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
-  g_return_val_if_fail (gdk_window_has_native (window), NULL);
-  g_return_val_if_fail (gdk_window_is_toplevel (window), NULL);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), NULL);
+  g_return_val_if_fail (gdk_surface_has_native (window), NULL);
+  g_return_val_if_fail (gdk_surface_is_toplevel (window), NULL);
   g_return_val_if_fail (region != NULL, NULL);
   if (draw_context != NULL)
     {
@@ -1946,14 +1946,14 @@ gdk_window_begin_draw_frame (GdkWindow            *window,
       g_return_val_if_fail (gdk_draw_context_get_window (draw_context) == window, NULL);
     }
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return NULL;
 
   if (window->drawing_context != NULL)
     {
       g_critical ("The window %p already has a drawing context. You cannot "
-                  "call gdk_window_begin_draw_frame() without calling "
-                  "gdk_window_end_draw_frame() first.", window);
+                  "call gdk_surface_begin_draw_frame() without calling "
+                  "gdk_surface_end_draw_frame() first.", window);
       return NULL;
     }
 
@@ -1962,7 +1962,7 @@ gdk_window_begin_draw_frame (GdkWindow            *window,
   if (draw_context)
     gdk_draw_context_begin_frame (draw_context, real_region);
   else
-    gdk_window_begin_paint_internal (window, real_region);
+    gdk_surface_begin_paint_internal (window, real_region);
 
   context = g_object_new (GDK_TYPE_DRAWING_CONTEXT,
                           "window", window,
@@ -1979,35 +1979,35 @@ gdk_window_begin_draw_frame (GdkWindow            *window,
 }
 
 /**
- * gdk_window_end_draw_frame:
- * @window: a #GdkWindow
- * @context: the #GdkDrawingContext created by gdk_window_begin_draw_frame()
+ * gdk_surface_end_draw_frame:
+ * @window: a #GdkSurface
+ * @context: the #GdkDrawingContext created by gdk_surface_begin_draw_frame()
  *
  * Indicates that the drawing of the contents of @window started with
- * gdk_window_begin_frame() has been completed.
+ * gdk_surface_begin_frame() has been completed.
  *
  * This function will take care of destroying the #GdkDrawingContext.
  *
  * It is an error to call this function without a matching
- * gdk_window_begin_frame() first.
+ * gdk_surface_begin_frame() first.
  */
 void
-gdk_window_end_draw_frame (GdkWindow         *window,
+gdk_surface_end_draw_frame (GdkSurface         *window,
                            GdkDrawingContext *context)
 {
   GdkDrawContext *paint_context;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
   g_return_if_fail (GDK_IS_DRAWING_CONTEXT (context));
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return;
 
   if (window->drawing_context == NULL)
     {
       g_critical ("The window %p has no drawing context. You must call "
-                  "gdk_window_begin_draw_frame() before calling "
-                  "gdk_window_end_draw_frame().", window);
+                  "gdk_surface_begin_draw_frame() before calling "
+                  "gdk_surface_end_draw_frame().", window);
       return;
     }
   g_return_if_fail (window->drawing_context == context);
@@ -2025,7 +2025,7 @@ gdk_window_end_draw_frame (GdkWindow         *window,
     }
   else
     {
-      gdk_window_end_paint_internal (window);
+      gdk_surface_end_paint_internal (window);
     }
 
   window->drawing_context = NULL;
@@ -2034,15 +2034,15 @@ gdk_window_end_draw_frame (GdkWindow         *window,
 }
 
 /*< private >
- * gdk_window_get_current_paint_region:
- * @window: a #GdkWindow
+ * gdk_surface_get_current_paint_region:
+ * @window: a #GdkSurface
  *
  * Retrieves a copy of the current paint region.
  *
  * Returns: (transfer full): a Cairo region
  */
 cairo_region_t *
-gdk_window_get_current_paint_region (GdkWindow *window)
+gdk_surface_get_current_paint_region (GdkSurface *window)
 {
   cairo_region_t *region;
 
@@ -2060,28 +2060,28 @@ gdk_window_get_current_paint_region (GdkWindow *window)
 }
 
 /*< private >
- * gdk_window_get_drawing_context:
- * @window: a #GdkWindow
+ * gdk_surface_get_drawing_context:
+ * @window: a #GdkSurface
  *
  * Retrieves the #GdkDrawingContext associated to @window by
- * gdk_window_begin_draw_frame().
+ * gdk_surface_begin_draw_frame().
  *
  * Returns: (transfer none) (nullable): a #GdkDrawingContext, if any is set
  */
 GdkDrawingContext *
-gdk_window_get_drawing_context (GdkWindow *window)
+gdk_surface_get_drawing_context (GdkSurface *window)
 {
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), NULL);
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return NULL;
 
   return window->drawing_context;
 }
 
 /**
- * gdk_window_get_clip_region:
- * @window: a #GdkWindow
+ * gdk_surface_get_clip_region:
+ * @window: a #GdkSurface
  * 
  * Computes the region of a window that potentially can be written
  * to by drawing primitives. This region may not take into account
@@ -2093,11 +2093,11 @@ gdk_window_get_drawing_context (GdkWindow *window)
  *          when you are done.
  **/
 cairo_region_t*
-gdk_window_get_clip_region (GdkWindow *window)
+gdk_surface_get_clip_region (GdkSurface *window)
 {
   cairo_region_t *result;
 
-  g_return_val_if_fail (GDK_WINDOW (window), NULL);
+  g_return_val_if_fail (GDK_SURFACE (window), NULL);
 
   result = cairo_region_copy (window->clip_region);
 
@@ -2108,8 +2108,8 @@ gdk_window_get_clip_region (GdkWindow *window)
 }
 
 /**
- * gdk_window_get_visible_region:
- * @window: a #GdkWindow
+ * gdk_surface_get_visible_region:
+ * @window: a #GdkSurface
  * 
  * Computes the region of the @window that is potentially visible.
  * This does not necessarily take into account if the window is
@@ -2120,19 +2120,19 @@ gdk_window_get_clip_region (GdkWindow *window)
  *          when you are done.
  **/
 cairo_region_t *
-gdk_window_get_visible_region (GdkWindow *window)
+gdk_surface_get_visible_region (GdkSurface *window)
 {
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), NULL);
 
   return cairo_region_copy (window->clip_region);
 }
 
 static void
-gdk_window_clear_backing_region (GdkWindow *window)
+gdk_surface_clear_backing_region (GdkSurface *window)
 {
   cairo_t *cr;
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return;
 
   cr = cairo_create (window->current_paint.surface);
@@ -2148,27 +2148,27 @@ gdk_window_clear_backing_region (GdkWindow *window)
  * or the actual impl surface of the window. This should not be used
  * from very many places: be careful! */
 static cairo_surface_t *
-ref_window_surface (GdkWindow *window)
+ref_window_surface (GdkSurface *window)
 {
   if (window->impl_window->current_paint.surface)
     return cairo_surface_reference (window->impl_window->current_paint.surface);
   else
-    return gdk_window_ref_impl_surface (window);
+    return gdk_surface_ref_impl_surface (window);
 }
 
 /* This is used in places like gdk_cairo_set_source_window and
  * other places to take "screenshots" of windows. Thus, we allow
  * it to be used outside of a begin_paint / end_paint. */
 cairo_surface_t *
-_gdk_window_ref_cairo_surface (GdkWindow *window)
+_gdk_surface_ref_cairo_surface (GdkSurface *window)
 {
   cairo_surface_t *surface;
 
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), NULL);
 
   surface = ref_window_surface (window);
 
-  if (gdk_window_has_impl (window))
+  if (gdk_surface_has_impl (window))
     {
       return surface;
     }
@@ -2190,12 +2190,12 @@ _gdk_window_ref_cairo_surface (GdkWindow *window)
 static GSList *update_windows = NULL;
 
 static inline gboolean
-gdk_window_is_ancestor (GdkWindow *window,
-			GdkWindow *ancestor)
+gdk_surface_is_ancestor (GdkSurface *window,
+			GdkSurface *ancestor)
 {
   while (window)
     {
-      GdkWindow *parent = window->parent;
+      GdkSurface *parent = window->parent;
 
       if (parent == ancestor)
 	return TRUE;
@@ -2207,7 +2207,7 @@ gdk_window_is_ancestor (GdkWindow *window,
 }
 
 static void
-gdk_window_add_update_window (GdkWindow *window)
+gdk_surface_add_update_window (GdkSurface *window)
 {
   GSList *tmp;
   GSList *prev = NULL;
@@ -2224,24 +2224,24 @@ gdk_window_add_update_window (GdkWindow *window)
 
   for (tmp = update_windows; tmp; tmp = tmp->next)
     {
-      GdkWindow *parent = window->parent;
+      GdkSurface *parent = window->parent;
 
       /*  check if tmp is an ancestor of "window"; if it is, set a
        *  flag indicating that all following windows are either
        *  children of "window" or from a differen hierarchy
        */
-      if (!has_ancestor_in_list && gdk_window_is_ancestor (window, tmp->data))
+      if (!has_ancestor_in_list && gdk_surface_is_ancestor (window, tmp->data))
 	has_ancestor_in_list = TRUE;
 
       /* insert in reverse stacking order when adding around siblings,
        * so processing updates properly paints over lower stacked windows
        */
-      if (parent == GDK_WINDOW (tmp->data)->parent)
+      if (parent == GDK_SURFACE (tmp->data)->parent)
 	{
           if (parent != NULL)
             {
               gint index = g_list_index (parent->children, window);
-              for (; tmp && parent == GDK_WINDOW (tmp->data)->parent; tmp = tmp->next)
+              for (; tmp && parent == GDK_SURFACE (tmp->data)->parent; tmp = tmp->next)
                 {
                   gint sibling_index = g_list_index (parent->children, tmp->data);
                   if (index > sibling_index)
@@ -2261,7 +2261,7 @@ gdk_window_add_update_window (GdkWindow *window)
       /*  if "window" has an ancestor in the list and tmp is one of
        *  "window's" children, insert "window" before tmp
        */
-      if (has_ancestor_in_list && gdk_window_is_ancestor (tmp->data, window))
+      if (has_ancestor_in_list && gdk_surface_is_ancestor (tmp->data, window))
 	{
 	  tmp = g_slist_prepend (tmp, g_object_ref (window));
 
@@ -2292,7 +2292,7 @@ gdk_window_add_update_window (GdkWindow *window)
 }
 
 static void
-gdk_window_remove_update_window (GdkWindow *window)
+gdk_surface_remove_update_window (GdkSurface *window)
 {
   GSList *link;
 
@@ -2305,36 +2305,36 @@ gdk_window_remove_update_window (GdkWindow *window)
 }
 
 static gboolean
-gdk_window_is_toplevel_frozen (GdkWindow *window)
+gdk_surface_is_toplevel_frozen (GdkSurface *window)
 {
-  GdkWindow *toplevel;
+  GdkSurface *toplevel;
 
-  toplevel = gdk_window_get_toplevel (window);
+  toplevel = gdk_surface_get_toplevel (window);
 
   return toplevel->update_and_descendants_freeze_count > 0;
 }
 
 static void
-gdk_window_schedule_update (GdkWindow *window)
+gdk_surface_schedule_update (GdkSurface *window)
 {
   GdkFrameClock *frame_clock;
 
   if (window &&
       (window->update_freeze_count ||
-       gdk_window_is_toplevel_frozen (window)))
+       gdk_surface_is_toplevel_frozen (window)))
     return;
 
   /* If there's no frame clock (a foreign window), then the invalid
-   * region will just stick around unless gdk_window_process_updates()
+   * region will just stick around unless gdk_surface_process_updates()
    * is called. */
-  frame_clock = gdk_window_get_frame_clock (window);
+  frame_clock = gdk_surface_get_frame_clock (window);
   if (frame_clock)
-    gdk_frame_clock_request_phase (gdk_window_get_frame_clock (window),
+    gdk_frame_clock_request_phase (gdk_surface_get_frame_clock (window),
                                    GDK_FRAME_CLOCK_PHASE_PAINT);
 }
 
 void
-_gdk_window_process_updates_recurse (GdkWindow *window,
+_gdk_surface_process_updates_recurse (GdkSurface *window,
                                      cairo_region_t *expose_region)
 {
   cairo_region_t *clipped_expose_region;
@@ -2368,7 +2368,7 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
 
 
 static void
-gdk_window_update_native_shapes (GdkWindow *window)
+gdk_surface_update_native_shapes (GdkSurface *window)
 {
   if (should_apply_clip_as_shape (window))
     apply_clip_as_shape (window);
@@ -2378,15 +2378,15 @@ gdk_window_update_native_shapes (GdkWindow *window)
  * expose events for the window and all non-native descendants.
  */
 static void
-gdk_window_process_updates_internal (GdkWindow *window)
+gdk_surface_process_updates_internal (GdkSurface *window)
 {
-  GdkWindowImplClass *impl_class;
-  GdkWindow *toplevel;
+  GdkSurfaceImplClass *impl_class;
+  GdkSurface *toplevel;
 
-  toplevel = gdk_window_get_toplevel (window);
+  toplevel = gdk_surface_get_toplevel (window);
   if (toplevel->geometry_dirty)
     {
-      gdk_window_update_native_shapes (toplevel);
+      gdk_surface_update_native_shapes (toplevel);
       toplevel->geometry_dirty = FALSE;
     }
 
@@ -2406,13 +2406,13 @@ gdk_window_process_updates_internal (GdkWindow *window)
       window->active_update_area = window->update_area;
       window->update_area = NULL;
 
-      if (gdk_window_is_viewable (window))
+      if (gdk_surface_is_viewable (window))
 	{
 	  cairo_region_t *expose_region;
 
 	  expose_region = cairo_region_copy (window->active_update_area);
 
-	  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+	  impl_class = GDK_SURFACE_IMPL_GET_CLASS (window->impl);
 
 	  /* Clip to part visible in impl window */
 	  cairo_region_intersect (expose_region, window->clip_region);
@@ -2422,7 +2422,7 @@ gdk_window_process_updates_internal (GdkWindow *window)
 
           impl_class->process_updates_recurse (window, expose_region);
 
-          gdk_window_append_old_updated_area (window, window->active_update_area);
+          gdk_surface_append_old_updated_area (window, window->active_update_area);
 
           cairo_region_destroy (expose_region);
         }
@@ -2437,47 +2437,47 @@ gdk_window_process_updates_internal (GdkWindow *window)
 }
 
 static void
-gdk_window_paint_on_clock (GdkFrameClock *clock,
+gdk_surface_paint_on_clock (GdkFrameClock *clock,
 			   void          *data)
 {
-  GdkWindow *window;
+  GdkSurface *window;
 
-  window = GDK_WINDOW (data);
+  window = GDK_SURFACE (data);
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
   g_return_if_fail (window->impl_window == window);
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return;
 
   g_object_ref (window);
 
   if (window->update_area &&
       !window->update_freeze_count &&
-      !gdk_window_is_toplevel_frozen (window) &&
+      !gdk_surface_is_toplevel_frozen (window) &&
 
       /* Don't recurse into process_updates_internal, we'll
        * do the update later when idle instead. */
       !window->in_update)
     {
-      gdk_window_process_updates_internal (window);
-      gdk_window_remove_update_window (window);
+      gdk_surface_process_updates_internal (window);
+      gdk_surface_remove_update_window (window);
     }
 
   g_object_unref (window);
 }
 
 static void
-gdk_window_invalidate_rect_full (GdkWindow          *window,
+gdk_surface_invalidate_rect_full (GdkSurface          *window,
 				  const GdkRectangle *rect,
 				  gboolean            invalidate_children)
 {
   GdkRectangle window_rect;
   cairo_region_t *region;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return;
 
   if (window->input_only || !window->viewable)
@@ -2493,61 +2493,61 @@ gdk_window_invalidate_rect_full (GdkWindow          *window,
     }
 
   region = cairo_region_create_rectangle (rect);
-  gdk_window_invalidate_region_full (window, region, invalidate_children);
+  gdk_surface_invalidate_region_full (window, region, invalidate_children);
   cairo_region_destroy (region);
 }
 
 /**
- * gdk_window_invalidate_rect:
- * @window: a #GdkWindow
+ * gdk_surface_invalidate_rect:
+ * @window: a #GdkSurface
  * @rect: (allow-none): rectangle to invalidate or %NULL to invalidate the whole
  *      window
  * @invalidate_children: whether to also invalidate child windows
  *
- * A convenience wrapper around gdk_window_invalidate_region() which
+ * A convenience wrapper around gdk_surface_invalidate_region() which
  * invalidates a rectangular region. See
- * gdk_window_invalidate_region() for details.
+ * gdk_surface_invalidate_region() for details.
  **/
 void
-gdk_window_invalidate_rect (GdkWindow          *window,
+gdk_surface_invalidate_rect (GdkSurface          *window,
 			    const GdkRectangle *rect,
 			    gboolean            invalidate_children)
 {
-  gdk_window_invalidate_rect_full (window, rect, invalidate_children);
+  gdk_surface_invalidate_rect_full (window, rect, invalidate_children);
 }
 
 static void
-impl_window_add_update_area (GdkWindow *impl_window,
+impl_window_add_update_area (GdkSurface *impl_window,
 			     cairo_region_t *region)
 {
   if (impl_window->update_area)
     cairo_region_union (impl_window->update_area, region);
   else
     {
-      gdk_window_add_update_window (impl_window);
+      gdk_surface_add_update_window (impl_window);
       impl_window->update_area = cairo_region_copy (region);
-      gdk_window_schedule_update (impl_window);
+      gdk_surface_schedule_update (impl_window);
     }
 }
 
 static void
-gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
+gdk_surface_invalidate_maybe_recurse_full (GdkSurface            *window,
 					  const cairo_region_t *region,
-                                          GdkWindowChildFunc    child_func,
+                                          GdkSurfaceChildFunc    child_func,
 					  gpointer              user_data)
 {
   cairo_region_t *visible_region;
   cairo_rectangle_int_t r;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return;
 
   if (window->input_only ||
       !window->viewable ||
       cairo_region_is_empty (region) ||
-      window->window_type == GDK_WINDOW_ROOT)
+      window->window_type == GDK_SURFACE_ROOT)
     return;
 
   r.x = 0;
@@ -2562,7 +2562,7 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
       r.height = window->height;
       cairo_region_intersect_rectangle (visible_region, &r);
 
-      if (gdk_window_has_impl (window))
+      if (gdk_surface_has_impl (window))
 	{
 	  impl_window_add_update_area (window, visible_region);
 	  break;
@@ -2579,8 +2579,8 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
 }
 
 /**
- * gdk_window_invalidate_maybe_recurse:
- * @window: a #GdkWindow
+ * gdk_surface_invalidate_maybe_recurse:
+ * @window: a #GdkSurface
  * @region: a #cairo_region_t
  * @child_func: (scope call) (allow-none): function to use to decide if to
  *     recurse to a child, %NULL means never recurse.
@@ -2599,36 +2599,36 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
  * invalidated.
  **/
 void
-gdk_window_invalidate_maybe_recurse (GdkWindow            *window,
+gdk_surface_invalidate_maybe_recurse (GdkSurface            *window,
 				     const cairo_region_t *region,
-                                     GdkWindowChildFunc    child_func,
+                                     GdkSurfaceChildFunc    child_func,
 				     gpointer              user_data)
 {
-  gdk_window_invalidate_maybe_recurse_full (window, region,
+  gdk_surface_invalidate_maybe_recurse_full (window, region,
 					    child_func, user_data);
 }
 
 static gboolean
-true_predicate (GdkWindow *window,
+true_predicate (GdkSurface *window,
 		gpointer   user_data)
 {
   return TRUE;
 }
 
 static void
-gdk_window_invalidate_region_full (GdkWindow       *window,
+gdk_surface_invalidate_region_full (GdkSurface       *window,
 				    const cairo_region_t *region,
 				    gboolean         invalidate_children)
 {
-  gdk_window_invalidate_maybe_recurse_full (window, region,
+  gdk_surface_invalidate_maybe_recurse_full (window, region,
 					    invalidate_children ?
-					    true_predicate : (gboolean (*) (GdkWindow *, gpointer))NULL,
+					    true_predicate : (gboolean (*) (GdkSurface *, gpointer))NULL,
 				       NULL);
 }
 
 /**
- * gdk_window_invalidate_region:
- * @window: a #GdkWindow
+ * gdk_surface_invalidate_region:
+ * @window: a #GdkSurface
  * @region: a #cairo_region_t
  * @invalidate_children: %TRUE to also invalidate child windows
  *
@@ -2642,23 +2642,23 @@ gdk_window_invalidate_region_full (GdkWindow       *window,
  * The @invalidate_children parameter controls whether the region of
  * each child window that intersects @region will also be invalidated.
  * If %FALSE, then the update area for child windows will remain
- * unaffected. See gdk_window_invalidate_maybe_recurse if you need
+ * unaffected. See gdk_surface_invalidate_maybe_recurse if you need
  * fine grained control over which children are invalidated.
  **/
 void
-gdk_window_invalidate_region (GdkWindow       *window,
+gdk_surface_invalidate_region (GdkSurface       *window,
 			      const cairo_region_t *region,
 			      gboolean         invalidate_children)
 {
-  gdk_window_invalidate_maybe_recurse (window, region,
+  gdk_surface_invalidate_maybe_recurse (window, region,
 				       invalidate_children ?
-					 true_predicate : (gboolean (*) (GdkWindow *, gpointer))NULL,
+					 true_predicate : (gboolean (*) (GdkSurface *, gpointer))NULL,
 				       NULL);
 }
 
 /**
- * _gdk_window_invalidate_for_expose:
- * @window: a #GdkWindow
+ * _gdk_surface_invalidate_for_expose:
+ * @window: a #GdkSurface
  * @region: a #cairo_region_t
  *
  * Adds @region to the update area for @window.
@@ -2672,37 +2672,37 @@ gdk_window_invalidate_region (GdkWindow       *window,
  * any non-native child windows.
  **/
 void
-_gdk_window_invalidate_for_expose (GdkWindow       *window,
+_gdk_surface_invalidate_for_expose (GdkSurface       *window,
 				   cairo_region_t       *region)
 {
-  gdk_window_invalidate_maybe_recurse_full (window, region,
-					    (gboolean (*) (GdkWindow *, gpointer))gdk_window_has_no_impl,
+  gdk_surface_invalidate_maybe_recurse_full (window, region,
+					    (gboolean (*) (GdkSurface *, gpointer))gdk_surface_has_no_impl,
 					    NULL);
 }
 
 
 /**
- * gdk_window_get_update_area:
- * @window: a #GdkWindow
+ * gdk_surface_get_update_area:
+ * @window: a #GdkSurface
  *
  * Transfers ownership of the update area from @window to the caller
  * of the function. That is, after calling this function, @window will
  * no longer have an invalid/dirty region; the update area is removed
  * from @window and handed to you. If a window has no update area,
- * gdk_window_get_update_area() returns %NULL. You are responsible for
+ * gdk_surface_get_update_area() returns %NULL. You are responsible for
  * calling cairo_region_destroy() on the returned region if it’s non-%NULL.
  *
  * Returns: the update area for @window
  **/
 cairo_region_t *
-gdk_window_get_update_area (GdkWindow *window)
+gdk_surface_get_update_area (GdkSurface *window)
 {
-  GdkWindow *impl_window;
+  GdkSurface *impl_window;
   cairo_region_t *tmp_region, *to_remove;
 
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), NULL);
 
-  impl_window = gdk_window_get_impl_window (window);
+  impl_window = gdk_surface_get_impl_window (window);
 
   if (impl_window->update_area)
     {
@@ -2739,7 +2739,7 @@ gdk_window_get_update_area (GdkWindow *window)
 	      cairo_region_destroy (impl_window->update_area);
 	      impl_window->update_area = NULL;
 
-	      gdk_window_remove_update_window ((GdkWindow *)impl_window);
+	      gdk_surface_remove_update_window ((GdkSurface *)impl_window);
 	    }
 
 	  return tmp_region;
@@ -2750,20 +2750,20 @@ gdk_window_get_update_area (GdkWindow *window)
 }
 
 /**
- * _gdk_window_clear_update_area:
- * @window: a #GdkWindow.
+ * _gdk_surface_clear_update_area:
+ * @window: a #GdkSurface.
  *
  * Internal function to clear the update area for a window. This
  * is called when the window is hidden or destroyed.
  **/
 void
-_gdk_window_clear_update_area (GdkWindow *window)
+_gdk_surface_clear_update_area (GdkSurface *window)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
   if (window->update_area)
     {
-      gdk_window_remove_update_window (window);
+      gdk_surface_remove_update_window (window);
 
       cairo_region_destroy (window->update_area);
       window->update_area = NULL;
@@ -2771,72 +2771,72 @@ _gdk_window_clear_update_area (GdkWindow *window)
 }
 
 /**
- * gdk_window_freeze_updates:
- * @window: a #GdkWindow
+ * gdk_surface_freeze_updates:
+ * @window: a #GdkSurface
  *
  * Temporarily freezes a window such that it won’t receive expose
  * events.  The window will begin receiving expose events again when
- * gdk_window_thaw_updates() is called. If gdk_window_freeze_updates()
- * has been called more than once, gdk_window_thaw_updates() must be called
+ * gdk_surface_thaw_updates() is called. If gdk_surface_freeze_updates()
+ * has been called more than once, gdk_surface_thaw_updates() must be called
  * an equal number of times to begin processing exposes.
  **/
 void
-gdk_window_freeze_updates (GdkWindow *window)
+gdk_surface_freeze_updates (GdkSurface *window)
 {
-  GdkWindow *impl_window;
+  GdkSurface *impl_window;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
-  impl_window = gdk_window_get_impl_window (window);
+  impl_window = gdk_surface_get_impl_window (window);
   impl_window->update_freeze_count++;
 }
 
 /**
- * gdk_window_thaw_updates:
- * @window: a #GdkWindow
+ * gdk_surface_thaw_updates:
+ * @window: a #GdkSurface
  *
- * Thaws a window frozen with gdk_window_freeze_updates().
+ * Thaws a window frozen with gdk_surface_freeze_updates().
  **/
 void
-gdk_window_thaw_updates (GdkWindow *window)
+gdk_surface_thaw_updates (GdkSurface *window)
 {
-  GdkWindow *impl_window;
+  GdkSurface *impl_window;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
-  impl_window = gdk_window_get_impl_window (window);
+  impl_window = gdk_surface_get_impl_window (window);
 
   g_return_if_fail (impl_window->update_freeze_count > 0);
 
   if (--impl_window->update_freeze_count == 0)
-    gdk_window_schedule_update (GDK_WINDOW (impl_window));
+    gdk_surface_schedule_update (GDK_SURFACE (impl_window));
 }
 
 void
-gdk_window_freeze_toplevel_updates (GdkWindow *window)
+gdk_surface_freeze_toplevel_updates (GdkSurface *window)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
-  g_return_if_fail (window->window_type != GDK_WINDOW_CHILD);
+  g_return_if_fail (GDK_IS_SURFACE (window));
+  g_return_if_fail (window->window_type != GDK_SURFACE_CHILD);
 
   window->update_and_descendants_freeze_count++;
-  _gdk_frame_clock_freeze (gdk_window_get_frame_clock (window));
+  _gdk_frame_clock_freeze (gdk_surface_get_frame_clock (window));
 }
 
 void
-gdk_window_thaw_toplevel_updates (GdkWindow *window)
+gdk_surface_thaw_toplevel_updates (GdkSurface *window)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
-  g_return_if_fail (window->window_type != GDK_WINDOW_CHILD);
+  g_return_if_fail (GDK_IS_SURFACE (window));
+  g_return_if_fail (window->window_type != GDK_SURFACE_CHILD);
   g_return_if_fail (window->update_and_descendants_freeze_count > 0);
 
   window->update_and_descendants_freeze_count--;
-  _gdk_frame_clock_thaw (gdk_window_get_frame_clock (window));
+  _gdk_frame_clock_thaw (gdk_surface_get_frame_clock (window));
 
-  gdk_window_schedule_update (window);
+  gdk_surface_schedule_update (window);
 }
 
 /**
- * gdk_window_constrain_size:
+ * gdk_surface_constrain_size:
  * @geometry: a #GdkGeometry structure
  * @flags: a mask indicating what portions of @geometry are set
  * @width: desired width of window
@@ -2848,8 +2848,8 @@ gdk_window_thaw_toplevel_updates (GdkWindow *window)
  * set of geometry hints (such as minimum and maximum size).
  */
 void
-gdk_window_constrain_size (GdkGeometry    *geometry,
-			   GdkWindowHints  flags,
+gdk_surface_constrain_size (GdkGeometry    *geometry,
+			   GdkSurfaceHints  flags,
 			   gint            width,
 			   gint            height,
 			   gint           *new_width,
@@ -2965,8 +2965,8 @@ gdk_window_constrain_size (GdkGeometry    *geometry,
 }
 
 /**
- * gdk_window_get_device_position_double:
- * @window: a #GdkWindow.
+ * gdk_surface_get_device_position_double:
+ * @window: a #GdkSurface.
  * @device: pointer #GdkDevice to query to.
  * @x: (out) (allow-none): return location for the X coordinate of @device, or %NULL.
  * @y: (out) (allow-none): return location for the Y coordinate of @device, or %NULL.
@@ -2980,8 +2980,8 @@ gdk_window_constrain_size (GdkGeometry    *geometry,
  * (as with gdk_device_get_window_at_position()), or %NULL if the
  * window is not known to GDK.
  **/
-GdkWindow *
-gdk_window_get_device_position_double (GdkWindow       *window,
+GdkSurface *
+gdk_surface_get_device_position_double (GdkSurface       *window,
                                        GdkDevice       *device,
                                        double          *x,
                                        double          *y,
@@ -2991,13 +2991,13 @@ gdk_window_get_device_position_double (GdkWindow       *window,
   GdkModifierType tmp_mask;
   gboolean normal_child;
 
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), NULL);
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
   g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, NULL);
 
   tmp_x = tmp_y = 0;
   tmp_mask = 0;
-  normal_child = GDK_WINDOW_IMPL_GET_CLASS (window->impl)->get_device_state (window,
+  normal_child = GDK_SURFACE_IMPL_GET_CLASS (window->impl)->get_device_state (window,
                                                                              device,
                                                                              &tmp_x, &tmp_y,
                                                                              &tmp_mask);
@@ -3013,13 +3013,13 @@ gdk_window_get_device_position_double (GdkWindow       *window,
     *mask = tmp_mask;
 
   if (normal_child)
-    return _gdk_window_find_child_at (window, tmp_x, tmp_y);
+    return _gdk_surface_find_child_at (window, tmp_x, tmp_y);
   return NULL;
 }
 
 /**
- * gdk_window_get_device_position:
- * @window: a #GdkWindow.
+ * gdk_surface_get_device_position:
+ * @window: a #GdkSurface.
  * @device: pointer #GdkDevice to query to.
  * @x: (out) (allow-none): return location for the X coordinate of @device, or %NULL.
  * @y: (out) (allow-none): return location for the Y coordinate of @device, or %NULL.
@@ -3029,14 +3029,14 @@ gdk_window_get_device_position_double (GdkWindow       *window,
  * The position is given in coordinates relative to the upper left
  * corner of @window.
  *
- * Use gdk_window_get_device_position_double() if you need subpixel precision.
+ * Use gdk_surface_get_device_position_double() if you need subpixel precision.
  *
  * Returns: (nullable) (transfer none): The window underneath @device
  * (as with gdk_device_get_window_at_position()), or %NULL if the
  * window is not known to GDK.
  **/
-GdkWindow *
-gdk_window_get_device_position (GdkWindow       *window,
+GdkSurface *
+gdk_surface_get_device_position (GdkSurface       *window,
                                 GdkDevice       *device,
                                 gint            *x,
                                 gint            *y,
@@ -3044,7 +3044,7 @@ gdk_window_get_device_position (GdkWindow       *window,
 {
   gdouble tmp_x, tmp_y;
 
-  window = gdk_window_get_device_position_double (window, device,
+  window = gdk_surface_get_device_position_double (window, device,
                                                   &tmp_x, &tmp_y, mask);
   if (x)
     *x = round (tmp_x);
@@ -3055,10 +3055,10 @@ gdk_window_get_device_position (GdkWindow       *window,
 }
 
 static gboolean
-gdk_window_raise_internal (GdkWindow *window)
+gdk_surface_raise_internal (GdkSurface *window)
 {
-  GdkWindow *parent = window->parent;
-  GdkWindowImplClass *impl_class;
+  GdkSurface *parent = window->parent;
+  GdkSurfaceImplClass *impl_class;
   gboolean did_raise = FALSE;
 
   if (parent && parent->children->data != window)
@@ -3068,10 +3068,10 @@ gdk_window_raise_internal (GdkWindow *window)
       did_raise = TRUE;
     }
 
-  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+  impl_class = GDK_SURFACE_IMPL_GET_CLASS (window->impl);
 
   /* Just do native raise for toplevels */
-  if (gdk_window_has_impl (window))
+  if (gdk_surface_has_impl (window))
       impl_class->raise (window);
 
   return did_raise;
@@ -3079,10 +3079,10 @@ gdk_window_raise_internal (GdkWindow *window)
 
 /* Returns TRUE If the native window was mapped or unmapped */
 static gboolean
-set_viewable (GdkWindow *w,
+set_viewable (GdkSurface *w,
 	      gboolean val)
 {
-  GdkWindow *child;
+  GdkSurface *child;
   GList *l;
 
   if (w->viewable == val)
@@ -3097,7 +3097,7 @@ set_viewable (GdkWindow *w,
     {
       child = l->data;
 
-      if (GDK_WINDOW_IS_MAPPED (child))
+      if (GDK_SURFACE_IS_MAPPED (child))
 	set_viewable (child, val);
     }
 
@@ -3106,16 +3106,16 @@ set_viewable (GdkWindow *w,
 
 /* Returns TRUE If the native window was mapped or unmapped */
 gboolean
-_gdk_window_update_viewable (GdkWindow *window)
+_gdk_surface_update_viewable (GdkSurface *window)
 {
   gboolean viewable;
 
-  if (window->window_type == GDK_WINDOW_FOREIGN ||
-      window->window_type == GDK_WINDOW_ROOT)
+  if (window->window_type == GDK_SURFACE_FOREIGN ||
+      window->window_type == GDK_SURFACE_ROOT)
     viewable = TRUE;
-  else if (gdk_window_is_toplevel (window) ||
+  else if (gdk_surface_is_toplevel (window) ||
 	   window->parent->viewable)
-    viewable = GDK_WINDOW_IS_MAPPED (window);
+    viewable = GDK_SURFACE_IS_MAPPED (window);
   else
     viewable = FALSE;
 
@@ -3123,31 +3123,31 @@ _gdk_window_update_viewable (GdkWindow *window)
 }
 
 static void
-gdk_window_show_internal (GdkWindow *window, gboolean raise)
+gdk_surface_show_internal (GdkSurface *window, gboolean raise)
 {
-  GdkWindowImplClass *impl_class;
+  GdkSurfaceImplClass *impl_class;
   gboolean was_mapped, was_viewable;
   gboolean did_show, did_raise = FALSE;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
   if (window->destroyed)
     return;
 
-  was_mapped = GDK_WINDOW_IS_MAPPED (window);
+  was_mapped = GDK_SURFACE_IS_MAPPED (window);
   was_viewable = window->viewable;
 
   if (raise)
     {
       /* Keep children in (reverse) stacking order */
-      did_raise = gdk_window_raise_internal (window);
+      did_raise = gdk_surface_raise_internal (window);
     }
 
-  if (gdk_window_has_impl (window))
+  if (gdk_surface_has_impl (window))
     {
       if (!was_mapped)
         gdk_synthesize_window_state (window,
-                                     GDK_WINDOW_STATE_WITHDRAWN,
+                                     GDK_SURFACE_STATE_WITHDRAWN,
                                      0);
     }
   else
@@ -3156,20 +3156,20 @@ gdk_window_show_internal (GdkWindow *window, gboolean raise)
       g_object_notify_by_pspec (G_OBJECT (window), properties[PROP_STATE]);
     }
 
-  did_show = _gdk_window_update_viewable (window);
+  did_show = _gdk_surface_update_viewable (window);
 
   /* If it was already viewable the backend show op won't be called, call it
      again to ensure things happen right if the mapped tracking was not right
      for e.g. a foreign window.
      Dunno if this is strictly needed but its what happened pre-csw.
-     Also show if not done by gdk_window_update_viewable. */
-  if (gdk_window_has_impl (window) && (was_viewable || !did_show))
+     Also show if not done by gdk_surface_update_viewable. */
+  if (gdk_surface_has_impl (window) && (was_viewable || !did_show))
     {
-      impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+      impl_class = GDK_SURFACE_IMPL_GET_CLASS (window->impl);
       impl_class->show (window, !did_show ? was_mapped : TRUE);
     }
 
-  if (!was_mapped && !gdk_window_has_impl (window))
+  if (!was_mapped && !gdk_surface_has_impl (window))
     {
       if (window->event_mask & GDK_STRUCTURE_MASK)
 	_gdk_make_event (window, GDK_MAP, NULL, FALSE);
@@ -3182,17 +3182,17 @@ gdk_window_show_internal (GdkWindow *window, gboolean raise)
     {
       recompute_visible_regions (window, FALSE);
 
-      if (gdk_window_is_viewable (window))
-        gdk_window_invalidate_rect_full (window, NULL, TRUE);
+      if (gdk_surface_is_viewable (window))
+        gdk_surface_invalidate_rect_full (window, NULL, TRUE);
     }
 }
 
 /**
- * gdk_window_show_unraised:
- * @window: a #GdkWindow
+ * gdk_surface_show_unraised:
+ * @window: a #GdkSurface
  *
- * Shows a #GdkWindow onscreen, but does not modify its stacking
- * order. In contrast, gdk_window_show() will raise the window
+ * Shows a #GdkSurface onscreen, but does not modify its stacking
+ * order. In contrast, gdk_surface_show() will raise the window
  * to the top of the window stack.
  *
  * On the X11 platform, in Xlib terms, this function calls
@@ -3200,48 +3200,48 @@ gdk_window_show_internal (GdkWindow *window, gboolean raise)
  * that you can’t really use XMapWindow() directly on a GDK window).
  */
 void
-gdk_window_show_unraised (GdkWindow *window)
+gdk_surface_show_unraised (GdkSurface *window)
 {
-  gdk_window_show_internal (window, FALSE);
+  gdk_surface_show_internal (window, FALSE);
 }
 
 /**
- * gdk_window_raise:
- * @window: a #GdkWindow
+ * gdk_surface_raise:
+ * @window: a #GdkSurface
  *
  * Raises @window to the top of the Z-order (stacking order), so that
  * other windows with the same parent window appear below @window.
  * This is true whether or not the windows are visible.
  *
  * If @window is a toplevel, the window manager may choose to deny the
- * request to move the window in the Z-order, gdk_window_raise() only
+ * request to move the window in the Z-order, gdk_surface_raise() only
  * requests the restack, does not guarantee it.
  */
 void
-gdk_window_raise (GdkWindow *window)
+gdk_surface_raise (GdkSurface *window)
 {
   gboolean did_raise;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
   if (window->destroyed)
     return;
 
   /* Keep children in (reverse) stacking order */
-  did_raise = gdk_window_raise_internal (window);
+  did_raise = gdk_surface_raise_internal (window);
 
   if (did_raise &&
-      !gdk_window_is_toplevel (window) &&
-      gdk_window_is_viewable (window) &&
+      !gdk_surface_is_toplevel (window) &&
+      gdk_surface_is_viewable (window) &&
       !window->input_only)
-    gdk_window_invalidate_region_full (window, window->clip_region, TRUE);
+    gdk_surface_invalidate_region_full (window, window->clip_region, TRUE);
 }
 
 static void
-gdk_window_lower_internal (GdkWindow *window)
+gdk_surface_lower_internal (GdkSurface *window)
 {
-  GdkWindow *parent = window->parent;
-  GdkWindowImplClass *impl_class;
+  GdkSurface *parent = window->parent;
+  GdkSurfaceImplClass *impl_class;
 
   if (parent)
     {
@@ -3249,19 +3249,19 @@ gdk_window_lower_internal (GdkWindow *window)
       parent->children = g_list_concat (parent->children, &window->children_list_node);
     }
 
-  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+  impl_class = GDK_SURFACE_IMPL_GET_CLASS (window->impl);
 
   /* Just do native lower for toplevels */
-  if (gdk_window_has_impl (window))
+  if (gdk_surface_has_impl (window))
     impl_class->lower (window);
 }
 
 static void
-gdk_window_invalidate_in_parent (GdkWindow *private)
+gdk_surface_invalidate_in_parent (GdkSurface *private)
 {
   GdkRectangle r, child;
 
-  if (gdk_window_is_toplevel (private))
+  if (gdk_surface_is_toplevel (private))
     return;
 
   /* get the visible rectangle of the parent */
@@ -3275,43 +3275,43 @@ gdk_window_invalidate_in_parent (GdkWindow *private)
   child.height = private->height;
   gdk_rectangle_intersect (&r, &child, &r);
 
-  gdk_window_invalidate_rect_full (private->parent, &r, TRUE);
+  gdk_surface_invalidate_rect_full (private->parent, &r, TRUE);
 }
 
 
 /**
- * gdk_window_lower:
- * @window: a #GdkWindow
+ * gdk_surface_lower:
+ * @window: a #GdkSurface
  *
  * Lowers @window to the bottom of the Z-order (stacking order), so that
  * other windows with the same parent window appear above @window.
  * This is true whether or not the other windows are visible.
  *
  * If @window is a toplevel, the window manager may choose to deny the
- * request to move the window in the Z-order, gdk_window_lower() only
+ * request to move the window in the Z-order, gdk_surface_lower() only
  * requests the restack, does not guarantee it.
  *
- * Note that gdk_window_show() raises the window again, so don’t call this
- * function before gdk_window_show(). (Try gdk_window_show_unraised().)
+ * Note that gdk_surface_show() raises the window again, so don’t call this
+ * function before gdk_surface_show(). (Try gdk_surface_show_unraised().)
  */
 void
-gdk_window_lower (GdkWindow *window)
+gdk_surface_lower (GdkSurface *window)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
   if (window->destroyed)
     return;
 
   /* Keep children in (reverse) stacking order */
-  gdk_window_lower_internal (window);
+  gdk_surface_lower_internal (window);
 
-  gdk_window_invalidate_in_parent (window);
+  gdk_surface_invalidate_in_parent (window);
 }
 
 /**
- * gdk_window_restack:
- * @window: a #GdkWindow
- * @sibling: (allow-none): a #GdkWindow that is a sibling of @window, or %NULL
+ * gdk_surface_restack:
+ * @window: a #GdkSurface
+ * @sibling: (allow-none): a #GdkSurface that is a sibling of @window, or %NULL
  * @above: a boolean
  *
  * Changes the position of  @window in the Z-order (stacking order), so that
@@ -3322,20 +3322,20 @@ gdk_window_lower (GdkWindow *window)
  * lowers the window.
  *
  * If @window is a toplevel, the window manager may choose to deny the
- * request to move the window in the Z-order, gdk_window_restack() only
+ * request to move the window in the Z-order, gdk_surface_restack() only
  * requests the restack, does not guarantee it.
  */
 void
-gdk_window_restack (GdkWindow     *window,
-		    GdkWindow     *sibling,
+gdk_surface_restack (GdkSurface     *window,
+		    GdkSurface     *sibling,
 		    gboolean       above)
 {
-  GdkWindowImplClass *impl_class;
-  GdkWindow *parent;
+  GdkSurfaceImplClass *impl_class;
+  GdkSurface *parent;
   GList *sibling_link;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
-  g_return_if_fail (sibling == NULL || GDK_IS_WINDOW (sibling));
+  g_return_if_fail (GDK_IS_SURFACE (window));
+  g_return_if_fail (sibling == NULL || GDK_IS_SURFACE (sibling));
 
   if (window->destroyed)
     return;
@@ -3343,16 +3343,16 @@ gdk_window_restack (GdkWindow     *window,
   if (sibling == NULL)
     {
       if (above)
-	gdk_window_raise (window);
+	gdk_surface_raise (window);
       else
-	gdk_window_lower (window);
+	gdk_surface_lower (window);
       return;
     }
 
-  if (gdk_window_is_toplevel (window))
+  if (gdk_surface_is_toplevel (window))
     {
-      g_return_if_fail (gdk_window_is_toplevel (sibling));
-      impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+      g_return_if_fail (gdk_surface_is_toplevel (sibling));
+      impl_class = GDK_SURFACE_IMPL_GET_CLASS (window->impl);
       impl_class->restack_toplevel (window, sibling, above);
       return;
     }
@@ -3376,33 +3376,33 @@ gdk_window_restack (GdkWindow     *window,
                                                     &window->children_list_node);
     }
 
-  gdk_window_invalidate_in_parent (window);
+  gdk_surface_invalidate_in_parent (window);
 }
 
 
 /**
- * gdk_window_show:
- * @window: a #GdkWindow
+ * gdk_surface_show:
+ * @window: a #GdkSurface
  *
- * Like gdk_window_show_unraised(), but also raises the window to the
+ * Like gdk_surface_show_unraised(), but also raises the window to the
  * top of the window stack (moves the window to the front of the
  * Z-order).
  *
  * This function maps a window so it’s visible onscreen. Its opposite
- * is gdk_window_hide().
+ * is gdk_surface_hide().
  *
  * When implementing a #GtkWidget, you should call this function on the widget's
- * #GdkWindow as part of the “map” method.
+ * #GdkSurface as part of the “map” method.
  */
 void
-gdk_window_show (GdkWindow *window)
+gdk_surface_show (GdkSurface *window)
 {
-  gdk_window_show_internal (window, TRUE);
+  gdk_surface_show_internal (window, TRUE);
 }
 
 /**
- * gdk_window_hide:
- * @window: a #GdkWindow
+ * gdk_surface_hide:
+ * @window: a #GdkSurface
  *
  * For toplevel windows, withdraws them, so they will no longer be
  * known to the window manager; for all windows, unmaps them, so
@@ -3410,29 +3410,29 @@ gdk_window_show (GdkWindow *window)
  * part of gtk_widget_hide().
  */
 void
-gdk_window_hide (GdkWindow *window)
+gdk_surface_hide (GdkSurface *window)
 {
-  GdkWindowImplClass *impl_class;
+  GdkSurfaceImplClass *impl_class;
   gboolean was_mapped, did_hide;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
   if (window->destroyed)
     return;
 
-  was_mapped = GDK_WINDOW_IS_MAPPED (window);
+  was_mapped = GDK_SURFACE_IS_MAPPED (window);
 
-  if (gdk_window_has_impl (window))
+  if (gdk_surface_has_impl (window))
     {
 
-      if (GDK_WINDOW_IS_MAPPED (window))
+      if (GDK_SURFACE_IS_MAPPED (window))
 	gdk_synthesize_window_state (window,
 				     0,
-				     GDK_WINDOW_STATE_WITHDRAWN);
+				     GDK_SURFACE_STATE_WITHDRAWN);
     }
   else if (was_mapped)
     {
-      window->state = GDK_WINDOW_STATE_WITHDRAWN;
+      window->state = GDK_SURFACE_STATE_WITHDRAWN;
       g_object_notify_by_pspec (G_OBJECT (window), properties[PROP_STATE]);
     }
 
@@ -3443,7 +3443,7 @@ gdk_window_hide (GdkWindow *window)
       GList *devices, *d;
 
       /* May need to break grabs on children */
-      display = gdk_window_get_display (window);
+      display = gdk_surface_get_display (window);
       seat = gdk_display_get_default_seat (display);
 
       devices = gdk_seat_get_slaves (seat, GDK_SEAT_CAPABILITY_ALL);
@@ -3469,19 +3469,19 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       g_list_free (devices);
     }
 
-  did_hide = _gdk_window_update_viewable (window);
+  did_hide = _gdk_surface_update_viewable (window);
 
   /* Hide foreign window as those are not handled by update_viewable. */
-  if (gdk_window_has_impl (window) && (!did_hide))
+  if (gdk_surface_has_impl (window) && (!did_hide))
     {
-      impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+      impl_class = GDK_SURFACE_IMPL_GET_CLASS (window->impl);
       impl_class->hide (window);
     }
 
-  gdk_window_clear_old_updated_area (window);
+  gdk_surface_clear_old_updated_area (window);
   recompute_visible_regions (window, FALSE);
 
-  if (was_mapped && !gdk_window_has_impl (window))
+  if (was_mapped && !gdk_surface_has_impl (window))
     {
       if (window->event_mask & GDK_STRUCTURE_MASK)
 	_gdk_make_event (window, GDK_UNMAP, NULL, FALSE);
@@ -3492,34 +3492,34 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   /* Invalidate the rect */
   if (was_mapped)
-    gdk_window_invalidate_in_parent (window);
+    gdk_surface_invalidate_in_parent (window);
 }
 
 /**
- * gdk_window_withdraw:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_withdraw:
+ * @window: a toplevel #GdkSurface
  *
  * Withdraws a window (unmaps it and asks the window manager to forget about it).
- * This function is not really useful as gdk_window_hide() automatically
+ * This function is not really useful as gdk_surface_hide() automatically
  * withdraws toplevel windows before hiding them.
  **/
 void
-gdk_window_withdraw (GdkWindow *window)
+gdk_surface_withdraw (GdkSurface *window)
 {
-  GdkWindowImplClass *impl_class;
+  GdkSurfaceImplClass *impl_class;
   gboolean was_mapped;
   GdkGLContext *current_context;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
   if (window->destroyed)
     return;
 
-  was_mapped = GDK_WINDOW_IS_MAPPED (window);
+  was_mapped = GDK_SURFACE_IS_MAPPED (window);
 
-  if (gdk_window_has_impl (window))
+  if (gdk_surface_has_impl (window))
     {
-      impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+      impl_class = GDK_SURFACE_IMPL_GET_CLASS (window->impl);
       impl_class->withdraw (window);
 
       if (was_mapped)
@@ -3536,13 +3536,13 @@ gdk_window_withdraw (GdkWindow *window)
         gdk_gl_context_clear_current ();
 
       recompute_visible_regions (window, FALSE);
-      gdk_window_clear_old_updated_area (window);
+      gdk_surface_clear_old_updated_area (window);
     }
 }
 
 /**
- * gdk_window_set_events:
- * @window: a #GdkWindow
+ * gdk_surface_set_events:
+ * @window: a #GdkSurface
  * @event_mask: event mask for @window
  *
  * The event mask for a window determines which events will be reported
@@ -3554,21 +3554,21 @@ gdk_window_withdraw (GdkWindow *window)
  * See the [input handling overview][event-masks] for details.
  **/
 void
-gdk_window_set_events (GdkWindow       *window,
+gdk_surface_set_events (GdkSurface       *window,
 		       GdkEventMask     event_mask)
 {
-  GdkWindowImplClass *impl_class;
+  GdkSurfaceImplClass *impl_class;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
   if (window->destroyed)
     return;
 
   window->event_mask = event_mask;
 
-  if (gdk_window_has_impl (window))
+  if (gdk_surface_has_impl (window))
     {
-      impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+      impl_class = GDK_SURFACE_IMPL_GET_CLASS (window->impl);
       impl_class->set_events (window,
 			      get_native_event_mask (window));
     }
@@ -3576,18 +3576,18 @@ gdk_window_set_events (GdkWindow       *window,
 }
 
 /**
- * gdk_window_get_events:
- * @window: a #GdkWindow
+ * gdk_surface_get_events:
+ * @window: a #GdkSurface
  *
  * Gets the event mask for @window for all master input devices. See
- * gdk_window_set_events().
+ * gdk_surface_set_events().
  *
  * Returns: event mask for @window
  **/
 GdkEventMask
-gdk_window_get_events (GdkWindow *window)
+gdk_surface_get_events (GdkSurface *window)
 {
-  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), 0);
 
   if (window->destroyed)
     return 0;
@@ -3596,8 +3596,8 @@ gdk_window_get_events (GdkWindow *window)
 }
 
 /**
- * gdk_window_set_device_events:
- * @window: a #GdkWindow
+ * gdk_surface_set_device_events:
+ * @window: a #GdkSurface
  * @device: #GdkDevice to enable events for.
  * @event_mask: event mask for @window
  *
@@ -3610,17 +3610,17 @@ gdk_window_get_events (GdkWindow *window)
  * See the [input handling overview][event-masks] for details.
  **/
 void
-gdk_window_set_device_events (GdkWindow    *window,
+gdk_surface_set_device_events (GdkSurface    *window,
                               GdkDevice    *device,
                               GdkEventMask  event_mask)
 {
   GdkEventMask device_mask;
-  GdkWindow *native;
+  GdkSurface *native;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
   g_return_if_fail (GDK_IS_DEVICE (device));
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return;
 
   if (G_UNLIKELY (!window->device_events))
@@ -3637,15 +3637,15 @@ gdk_window_set_device_events (GdkWindow    *window,
     g_hash_table_insert (window->device_events, device,
                          GINT_TO_POINTER (event_mask));
 
-  native = gdk_window_get_toplevel (window);
+  native = gdk_surface_get_toplevel (window);
 
   device_mask = get_native_device_event_mask (window, device);
   GDK_DEVICE_GET_CLASS (device)->select_window_events (device, native, device_mask);
 }
 
 /**
- * gdk_window_get_device_events:
- * @window: a #GdkWindow.
+ * gdk_surface_get_device_events:
+ * @window: a #GdkSurface.
  * @device: a #GdkDevice.
  *
  * Returns the event mask for @window corresponding to an specific device.
@@ -3653,15 +3653,15 @@ gdk_window_set_device_events (GdkWindow    *window,
  * Returns: device event mask for @window
  **/
 GdkEventMask
-gdk_window_get_device_events (GdkWindow *window,
+gdk_surface_get_device_events (GdkSurface *window,
                               GdkDevice *device)
 {
   GdkEventMask mask;
 
-  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), 0);
   g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return 0;
 
   if (!window->device_events)
@@ -3675,7 +3675,7 @@ gdk_window_get_device_events (GdkWindow *window,
 }
 
 static void
-gdk_window_move_resize_toplevel (GdkWindow *window,
+gdk_surface_move_resize_toplevel (GdkSurface *window,
                                  gboolean   with_move,
                                  gint       x,
                                  gint       y,
@@ -3683,7 +3683,7 @@ gdk_window_move_resize_toplevel (GdkWindow *window,
                                  gint       height)
 {
   cairo_region_t *old_region, *new_region;
-  GdkWindowImplClass *impl_class;
+  GdkSurfaceImplClass *impl_class;
   gboolean expose;
   gboolean is_resize;
 
@@ -3692,14 +3692,14 @@ gdk_window_move_resize_toplevel (GdkWindow *window,
 
   is_resize = (width != -1) || (height != -1);
 
-  if (gdk_window_is_viewable (window) &&
+  if (gdk_surface_is_viewable (window) &&
       !window->input_only)
     {
       expose = TRUE;
       old_region = cairo_region_copy (window->clip_region);
     }
 
-  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+  impl_class = GDK_SURFACE_IMPL_GET_CLASS (window->impl);
   impl_class->move_resize (window, with_move, x, y, width, height);
 
   /* Avoid recomputing for pure toplevel moves, for performance reasons */
@@ -3714,7 +3714,7 @@ gdk_window_move_resize_toplevel (GdkWindow *window,
        * X will expose it, but lets do that without the roundtrip
        */
       cairo_region_subtract (new_region, old_region);
-      gdk_window_invalidate_region_full (window, new_region, TRUE);
+      gdk_surface_invalidate_region_full (window, new_region, TRUE);
 
       cairo_region_destroy (old_region);
       cairo_region_destroy (new_region);
@@ -3723,7 +3723,7 @@ gdk_window_move_resize_toplevel (GdkWindow *window,
 
 
 static void
-gdk_window_move_resize_internal (GdkWindow *window,
+gdk_surface_move_resize_internal (GdkSurface *window,
 				 gboolean   with_move,
 				 gint       x,
 				 gint       y,
@@ -3733,14 +3733,14 @@ gdk_window_move_resize_internal (GdkWindow *window,
   cairo_region_t *old_region, *new_region;
   gboolean expose;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
   if (window->destroyed)
     return;
 
-  if (gdk_window_is_toplevel (window))
+  if (gdk_surface_is_toplevel (window))
     {
-      gdk_window_move_resize_toplevel (window, with_move, x, y, width, height);
+      gdk_surface_move_resize_toplevel (window, with_move, x, y, width, height);
       return;
     }
 
@@ -3762,7 +3762,7 @@ gdk_window_move_resize_internal (GdkWindow *window,
   expose = FALSE;
   old_region = NULL;
 
-  if (gdk_window_is_viewable (window) &&
+  if (gdk_surface_is_viewable (window) &&
       !window->input_only)
     {
       GdkRectangle r;
@@ -3804,7 +3804,7 @@ gdk_window_move_resize_internal (GdkWindow *window,
 
       cairo_region_union (new_region, old_region);
 
-      gdk_window_invalidate_region_full (window->parent, new_region, TRUE);
+      gdk_surface_invalidate_region_full (window->parent, new_region, TRUE);
 
       cairo_region_destroy (old_region);
       cairo_region_destroy (new_region);
@@ -3814,8 +3814,8 @@ gdk_window_move_resize_internal (GdkWindow *window,
 
 
 /**
- * gdk_window_move:
- * @window: a #GdkWindow
+ * gdk_surface_move:
+ * @window: a #GdkSurface
  * @x: X coordinate relative to window’s parent
  * @y: Y coordinate relative to window’s parent
  *
@@ -3825,20 +3825,20 @@ gdk_window_move_resize_internal (GdkWindow *window,
  * anyway, instead of using GDK functions. For child windows,
  * the move will reliably succeed.
  *
- * If you’re also planning to resize the window, use gdk_window_move_resize()
+ * If you’re also planning to resize the window, use gdk_surface_move_resize()
  * to both move and resize simultaneously, for a nicer visual effect.
  **/
 void
-gdk_window_move (GdkWindow *window,
+gdk_surface_move (GdkSurface *window,
 		 gint       x,
 		 gint       y)
 {
-  gdk_window_move_resize_internal (window, TRUE, x, y, -1, -1);
+  gdk_surface_move_resize_internal (window, TRUE, x, y, -1, -1);
 }
 
 /**
- * gdk_window_resize:
- * @window: a #GdkWindow
+ * gdk_surface_resize:
+ * @window: a #GdkSurface
  * @width: new width of the window
  * @height: new height of the window
  *
@@ -3848,44 +3848,44 @@ gdk_window_move (GdkWindow *window,
  *
  * Windows may not be resized below 1x1.
  *
- * If you’re also planning to move the window, use gdk_window_move_resize()
+ * If you’re also planning to move the window, use gdk_surface_move_resize()
  * to both move and resize simultaneously, for a nicer visual effect.
  **/
 void
-gdk_window_resize (GdkWindow *window,
+gdk_surface_resize (GdkSurface *window,
 		   gint       width,
 		   gint       height)
 {
-  gdk_window_move_resize_internal (window, FALSE, 0, 0, width, height);
+  gdk_surface_move_resize_internal (window, FALSE, 0, 0, width, height);
 }
 
 
 /**
- * gdk_window_move_resize:
- * @window: a #GdkWindow
+ * gdk_surface_move_resize:
+ * @window: a #GdkSurface
  * @x: new X position relative to window’s parent
  * @y: new Y position relative to window’s parent
  * @width: new width
  * @height: new height
  *
- * Equivalent to calling gdk_window_move() and gdk_window_resize(),
+ * Equivalent to calling gdk_surface_move() and gdk_surface_resize(),
  * except that both operations are performed at once, avoiding strange
  * visual effects. (i.e. the user may be able to see the window first
- * move, then resize, if you don’t use gdk_window_move_resize().)
+ * move, then resize, if you don’t use gdk_surface_move_resize().)
  **/
 void
-gdk_window_move_resize (GdkWindow *window,
+gdk_surface_move_resize (GdkSurface *window,
 			gint       x,
 			gint       y,
 			gint       width,
 			gint       height)
 {
-  gdk_window_move_resize_internal (window, TRUE, x, y, width, height);
+  gdk_surface_move_resize_internal (window, TRUE, x, y, width, height);
 }
 
 /**
- * gdk_window_move_to_rect:
- * @window: the #GdkWindow to move
+ * gdk_surface_move_to_rect:
+ * @window: the #GdkSurface to move
  * @rect: (not nullable): the destination #GdkRectangle to align @window with
  * @rect_anchor: the point on @rect to align with @window's anchor point
  * @window_anchor: the point on @window to align with @rect's anchor point
@@ -3907,13 +3907,13 @@ gdk_window_move_resize (GdkWindow *window,
  * %GDK_GRAVITY_NORTH_WEST with %GDK_GRAVITY_NORTH_EAST and vice versa if
  * @window extends beyond the left or right edges of the monitor.
  *
- * Connect to the #GdkWindow::moved-to-rect signal to find out how it was
+ * Connect to the #GdkSurface::moved-to-rect signal to find out how it was
  * actually positioned.
  *
  * Stability: Private
  */
 void
-gdk_window_move_to_rect (GdkWindow          *window,
+gdk_surface_move_to_rect (GdkSurface          *window,
                          const GdkRectangle *rect,
                          GdkGravity          rect_anchor,
                          GdkGravity          window_anchor,
@@ -3921,13 +3921,13 @@ gdk_window_move_to_rect (GdkWindow          *window,
                          gint                rect_anchor_dx,
                          gint                rect_anchor_dy)
 {
-  GdkWindowImplClass *impl_class;
+  GdkSurfaceImplClass *impl_class;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
   g_return_if_fail (window->transient_for);
   g_return_if_fail (rect);
 
-  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+  impl_class = GDK_SURFACE_IMPL_GET_CLASS (window->impl);
   impl_class->move_to_rect (window,
                             rect,
                             rect_anchor,
@@ -3938,8 +3938,8 @@ gdk_window_move_to_rect (GdkWindow          *window,
 }
 
 /**
- * gdk_window_scroll:
- * @window: a #GdkWindow
+ * gdk_surface_scroll:
+ * @window: a #GdkSurface
  * @dx: Amount to scroll in the X direction
  * @dy: Amount to scroll in the Y direction
  *
@@ -3956,13 +3956,13 @@ gdk_window_move_to_rect (GdkWindow          *window,
  * artifacts and unnecessary invalidations.
  **/
 void
-gdk_window_scroll (GdkWindow *window,
+gdk_surface_scroll (GdkSurface *window,
 		   gint       dx,
 		   gint       dy)
 {
   GList *tmp_list;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
   if (dx == 0 && dy == 0)
     return;
@@ -3975,7 +3975,7 @@ gdk_window_scroll (GdkWindow *window,
   tmp_list = window->children;
   while (tmp_list)
     {
-      GdkWindow *child = GDK_WINDOW (tmp_list->data);
+      GdkSurface *child = GDK_SURFACE (tmp_list->data);
 
       /* Just update the positions, the bits will move with the copy */
       child->x += dx;
@@ -3986,12 +3986,12 @@ gdk_window_scroll (GdkWindow *window,
 
   recompute_visible_regions (window, TRUE);
 
-  gdk_window_invalidate_rect_full (window, NULL, TRUE);
+  gdk_surface_invalidate_rect_full (window, NULL, TRUE);
 }
 
 /**
- * gdk_window_move_region:
- * @window: a #GdkWindow
+ * gdk_surface_move_region:
+ * @window: a #GdkSurface
  * @region: The #cairo_region_t to move
  * @dx: Amount to move in the X direction
  * @dy: Amount to move in the Y direction
@@ -4003,14 +4003,14 @@ gdk_window_scroll (GdkWindow *window,
  * Child windows are not moved.
  */
 void
-gdk_window_move_region (GdkWindow            *window,
+gdk_surface_move_region (GdkSurface            *window,
                         const cairo_region_t *region,
                         gint                  dx,
                         gint                  dy)
 {
   cairo_region_t *expose_area;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
   g_return_if_fail (region != NULL);
 
   if (dx == 0 && dy == 0)
@@ -4023,82 +4023,82 @@ gdk_window_move_region (GdkWindow            *window,
   cairo_region_translate (expose_area, dx, dy);
   cairo_region_union (expose_area, region);
 
-  gdk_window_invalidate_region_full (window, expose_area, FALSE);
+  gdk_surface_invalidate_region_full (window, expose_area, FALSE);
   cairo_region_destroy (expose_area);
 }
 
 static void
-gdk_window_set_cursor_internal (GdkWindow *window,
+gdk_surface_set_cursor_internal (GdkSurface *window,
                                 GdkDevice *device,
                                 GdkCursor *cursor)
 {
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return;
 
-  g_assert (gdk_window_get_display (window) == gdk_device_get_display (device));
+  g_assert (gdk_surface_get_display (window) == gdk_device_get_display (device));
 
-  if (window->window_type == GDK_WINDOW_ROOT ||
-      window->window_type == GDK_WINDOW_FOREIGN)
+  if (window->window_type == GDK_SURFACE_ROOT ||
+      window->window_type == GDK_SURFACE_FOREIGN)
     GDK_DEVICE_GET_CLASS (device)->set_window_cursor (device, window, cursor);
   else
     {
-      GdkPointerWindowInfo *pointer_info;
+      GdkPointerSurfaceInfo *pointer_info;
       GdkDisplay *display;
 
-      display = gdk_window_get_display (window);
+      display = gdk_surface_get_display (window);
       pointer_info = _gdk_display_get_pointer_info (display, device);
 
-      if (_gdk_window_event_parent_of (window, pointer_info->window_under_pointer))
+      if (_gdk_surface_event_parent_of (window, pointer_info->window_under_pointer))
         update_cursor (display, device);
     }
 }
 
 /**
- * gdk_window_get_cursor:
- * @window: a #GdkWindow
+ * gdk_surface_get_cursor:
+ * @window: a #GdkSurface
  *
  * Retrieves a #GdkCursor pointer for the cursor currently set on the
- * specified #GdkWindow, or %NULL.  If the return value is %NULL then
+ * specified #GdkSurface, or %NULL.  If the return value is %NULL then
  * there is no custom cursor set on the specified window, and it is
  * using the cursor for its parent window.
  *
  * Returns: (nullable) (transfer none): a #GdkCursor, or %NULL. The
- *   returned object is owned by the #GdkWindow and should not be
- *   unreferenced directly. Use gdk_window_set_cursor() to unset the
+ *   returned object is owned by the #GdkSurface and should not be
+ *   unreferenced directly. Use gdk_surface_set_cursor() to unset the
  *   cursor of the window
  */
 GdkCursor *
-gdk_window_get_cursor (GdkWindow *window)
+gdk_surface_get_cursor (GdkSurface *window)
 {
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), NULL);
 
   return window->cursor;
 }
 
 /**
- * gdk_window_set_cursor:
- * @window: a #GdkWindow
+ * gdk_surface_set_cursor:
+ * @window: a #GdkSurface
  * @cursor: (allow-none): a cursor
  *
- * Sets the default mouse pointer for a #GdkWindow.
+ * Sets the default mouse pointer for a #GdkSurface.
  *
  * Note that @cursor must be for the same display as @window.
  *
  * Use gdk_cursor_new_for_display() or gdk_cursor_new_from_texture() to
  * create the cursor. To make the cursor invisible, use %GDK_BLANK_CURSOR.
- * Passing %NULL for the @cursor argument to gdk_window_set_cursor() means
+ * Passing %NULL for the @cursor argument to gdk_surface_set_cursor() means
  * that @window will use the cursor of its parent window. Most windows
  * should use this default.
  */
 void
-gdk_window_set_cursor (GdkWindow *window,
+gdk_surface_set_cursor (GdkSurface *window,
 		       GdkCursor *cursor)
 {
   GdkDisplay *display;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
-  display = gdk_window_get_display (window);
+  display = gdk_surface_get_display (window);
 
   if (window->cursor)
     {
@@ -4106,7 +4106,7 @@ gdk_window_set_cursor (GdkWindow *window,
       window->cursor = NULL;
     }
 
-  if (!GDK_WINDOW_DESTROYED (window))
+  if (!GDK_SURFACE_DESTROYED (window))
     {
       GdkDevice *device;
       GList *seats, *s;
@@ -4121,13 +4121,13 @@ gdk_window_set_cursor (GdkWindow *window,
           GList *devices, *d;
 
           device = gdk_seat_get_pointer (s->data);
-          gdk_window_set_cursor_internal (window, device, window->cursor);
+          gdk_surface_set_cursor_internal (window, device, window->cursor);
 
           devices = gdk_seat_get_slaves (s->data, GDK_SEAT_CAPABILITY_TABLET_STYLUS);
           for (d = devices; d; d = d->next)
             {
               device = gdk_device_get_associated_device (d->data);
-              gdk_window_set_cursor_internal (window, device, window->cursor);
+              gdk_surface_set_cursor_internal (window, device, window->cursor);
             }
           g_list_free (devices);
         }
@@ -4138,25 +4138,25 @@ gdk_window_set_cursor (GdkWindow *window,
 }
 
 /**
- * gdk_window_get_device_cursor:
- * @window: a #GdkWindow.
+ * gdk_surface_get_device_cursor:
+ * @window: a #GdkSurface.
  * @device: a master, pointer #GdkDevice.
  *
  * Retrieves a #GdkCursor pointer for the @device currently set on the
- * specified #GdkWindow, or %NULL.  If the return value is %NULL then
+ * specified #GdkSurface, or %NULL.  If the return value is %NULL then
  * there is no custom cursor set on the specified window, and it is
  * using the cursor for its parent window.
  *
  * Returns: (nullable) (transfer none): a #GdkCursor, or %NULL. The
- *   returned object is owned by the #GdkWindow and should not be
- *   unreferenced directly. Use gdk_window_set_cursor() to unset the
+ *   returned object is owned by the #GdkSurface and should not be
+ *   unreferenced directly. Use gdk_surface_set_cursor() to unset the
  *   cursor of the window
  **/
 GdkCursor *
-gdk_window_get_device_cursor (GdkWindow *window,
+gdk_surface_get_device_cursor (GdkSurface *window,
                               GdkDevice *device)
 {
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), NULL);
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
   g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, NULL);
   g_return_val_if_fail (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_MASTER, NULL);
@@ -4165,24 +4165,24 @@ gdk_window_get_device_cursor (GdkWindow *window,
 }
 
 /**
- * gdk_window_set_device_cursor:
- * @window: a #GdkWindow
+ * gdk_surface_set_device_cursor:
+ * @window: a #GdkSurface
  * @device: a master, pointer #GdkDevice
  * @cursor: a #GdkCursor
  *
  * Sets a specific #GdkCursor for a given device when it gets inside @window.
  * Use gdk_cursor_new_for_display() or gdk_cursor_new_from_texture() to create
  * the cursor. To make the cursor invisible, use %GDK_BLANK_CURSOR. Passing
- * %NULL for the @cursor argument to gdk_window_set_cursor() means that
+ * %NULL for the @cursor argument to gdk_surface_set_cursor() means that
  * @window will use the cursor of its parent window. Most windows should
  * use this default.
  **/
 void
-gdk_window_set_device_cursor (GdkWindow *window,
+gdk_surface_set_device_cursor (GdkSurface *window,
                               GdkDevice *device,
                               GdkCursor *cursor)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
   g_return_if_fail (GDK_IS_DEVICE (device));
   g_return_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD);
   g_return_if_fail (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_MASTER);
@@ -4192,12 +4192,12 @@ gdk_window_set_device_cursor (GdkWindow *window,
   else
     g_hash_table_replace (window->device_cursor, device, g_object_ref (cursor));
 
-  gdk_window_set_cursor_internal (window, device, cursor);
+  gdk_surface_set_cursor_internal (window, device, cursor);
 }
 
 /**
- * gdk_window_get_geometry:
- * @window: a #GdkWindow
+ * gdk_surface_get_geometry:
+ * @window: a #GdkSurface
  * @x: (out) (allow-none): return location for X coordinate of window (relative to its parent)
  * @y: (out) (allow-none): return location for Y coordinate of window (relative to its parent)
  * @width: (out) (allow-none): return location for width of window
@@ -4214,39 +4214,39 @@ gdk_window_set_device_cursor (GdkWindow *window,
  * On the X11 platform, the geometry is obtained from the X server,
  * so reflects the latest position of @window; this may be out-of-sync
  * with the position of @window delivered in the most-recently-processed
- * #GdkEventConfigure. gdk_window_get_position() in contrast gets the
+ * #GdkEventConfigure. gdk_surface_get_position() in contrast gets the
  * position from the most recent configure event.
  *
  * Note: If @window is not a toplevel, it is much better
- * to call gdk_window_get_position(), gdk_window_get_width() and
- * gdk_window_get_height() instead, because it avoids the roundtrip to
+ * to call gdk_surface_get_position(), gdk_surface_get_width() and
+ * gdk_surface_get_height() instead, because it avoids the roundtrip to
  * the X server and because these functions support the full 32-bit
- * coordinate space, whereas gdk_window_get_geometry() is restricted to
+ * coordinate space, whereas gdk_surface_get_geometry() is restricted to
  * the 16-bit coordinates of X11.
  */
 void
-gdk_window_get_geometry (GdkWindow *window,
+gdk_surface_get_geometry (GdkSurface *window,
 			 gint      *x,
 			 gint      *y,
 			 gint      *width,
 			 gint      *height)
 {
-  GdkWindow *parent;
-  GdkWindowImplClass *impl_class;
+  GdkSurface *parent;
+  GdkSurfaceImplClass *impl_class;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
-  if (!GDK_WINDOW_DESTROYED (window))
+  if (!GDK_SURFACE_DESTROYED (window))
     {
-      if (gdk_window_has_impl (window))
+      if (gdk_surface_has_impl (window))
 	{
-	  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+	  impl_class = GDK_SURFACE_IMPL_GET_CLASS (window->impl);
 	  impl_class->get_geometry (window, x, y,
 				    width, height);
 	  /* This reports the position wrt to the native parent, we need to convert
 	     it to be relative to the client side parent */
 	  parent = window->parent;
-	  if (parent && !gdk_window_has_impl (parent))
+	  if (parent && !gdk_surface_has_impl (parent))
 	    {
 	      if (x)
 		*x -= parent->abs_x;
@@ -4269,8 +4269,8 @@ gdk_window_get_geometry (GdkWindow *window,
 }
 
 /**
- * gdk_window_get_width:
- * @window: a #GdkWindow
+ * gdk_surface_get_width:
+ * @window: a #GdkSurface
  *
  * Returns the width of the given @window.
  *
@@ -4281,16 +4281,16 @@ gdk_window_get_geometry (GdkWindow *window,
  * Returns: The width of @window
  */
 int
-gdk_window_get_width (GdkWindow *window)
+gdk_surface_get_width (GdkSurface *window)
 {
-  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), 0);
 
   return window->width;
 }
 
 /**
- * gdk_window_get_height:
- * @window: a #GdkWindow
+ * gdk_surface_get_height:
+ * @window: a #GdkSurface
  *
  * Returns the height of the given @window.
  *
@@ -4301,36 +4301,36 @@ gdk_window_get_width (GdkWindow *window)
  * Returns: The height of @window
  */
 int
-gdk_window_get_height (GdkWindow *window)
+gdk_surface_get_height (GdkSurface *window)
 {
-  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), 0);
 
   return window->height;
 }
 
 /**
- * gdk_window_get_origin:
- * @window: a #GdkWindow
+ * gdk_surface_get_origin:
+ * @window: a #GdkSurface
  * @x: (out) (allow-none): return location for X coordinate
  * @y: (out) (allow-none): return location for Y coordinate
  *
  * Obtains the position of a window in root window coordinates.
- * (Compare with gdk_window_get_position() and
- * gdk_window_get_geometry() which return the position of a window
+ * (Compare with gdk_surface_get_position() and
+ * gdk_surface_get_geometry() which return the position of a window
  * relative to its parent window.)
  *
  * Returns: not meaningful, ignore
  */
 gint
-gdk_window_get_origin (GdkWindow *window,
+gdk_surface_get_origin (GdkSurface *window,
 		       gint      *x,
 		       gint      *y)
 {
   gint dummy_x, dummy_y;
 
-  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), 0);
 
-  gdk_window_get_root_coords (window,
+  gdk_surface_get_root_coords (window,
                               0, 0,
                               x ? x : &dummy_x,
                               y ? y : &dummy_y);
@@ -4339,8 +4339,8 @@ gdk_window_get_origin (GdkWindow *window,
 }
 
 /**
- * gdk_window_get_root_coords:
- * @window: a #GdkWindow
+ * gdk_surface_get_root_coords:
+ * @window: a #GdkSurface
  * @x: X coordinate in window
  * @y: Y coordinate in window
  * @root_x: (out): return location for X coordinate
@@ -4348,28 +4348,28 @@ gdk_window_get_origin (GdkWindow *window,
  *
  * Obtains the position of a window position in root
  * window coordinates. This is similar to
- * gdk_window_get_origin() but allows you to pass
+ * gdk_surface_get_origin() but allows you to pass
  * in any position in the window, not just the origin.
  */
 void
-gdk_window_get_root_coords (GdkWindow *window,
+gdk_surface_get_root_coords (GdkSurface *window,
 			    gint       x,
 			    gint       y,
 			    gint      *root_x,
 			    gint      *root_y)
 {
-  GdkWindowImplClass *impl_class;
+  GdkSurfaceImplClass *impl_class;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     {
       *root_x = 0;
       *root_y = 0;
       return;
     }
   
-  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+  impl_class = GDK_SURFACE_IMPL_GET_CLASS (window->impl);
   impl_class->get_root_coords (window->impl_window,
 			       x + window->abs_x,
 			       y + window->abs_y,
@@ -4377,7 +4377,7 @@ gdk_window_get_root_coords (GdkWindow *window,
 }
 
 /**
- * gdk_window_coords_to_parent:
+ * gdk_surface_coords_to_parent:
  * @window: a child window
  * @x: X coordinate in child’s coordinate system
  * @y: Y coordinate in child’s coordinate system
@@ -4388,18 +4388,18 @@ gdk_window_get_root_coords (GdkWindow *window,
  *
  * Transforms window coordinates from a child window to its parent
  * window. Calling this function is equivalent to adding the return
- * values of gdk_window_get_position() to the child coordinates.
+ * values of gdk_surface_get_position() to the child coordinates.
  *
- * See also: gdk_window_coords_from_parent()
+ * See also: gdk_surface_coords_from_parent()
  **/
 void
-gdk_window_coords_to_parent (GdkWindow *window,
+gdk_surface_coords_to_parent (GdkSurface *window,
                              gdouble    x,
                              gdouble    y,
                              gdouble   *parent_x,
                              gdouble   *parent_y)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
   if (parent_x)
     *parent_x = x + window->x;
@@ -4409,7 +4409,7 @@ gdk_window_coords_to_parent (GdkWindow *window,
 }
 
 /**
- * gdk_window_coords_from_parent:
+ * gdk_surface_coords_from_parent:
  * @window: a child window
  * @parent_x: X coordinate in parent’s coordinate system
  * @parent_y: Y coordinate in parent’s coordinate system
@@ -4420,18 +4420,18 @@ gdk_window_coords_to_parent (GdkWindow *window,
  * window.
  *
  * Calling this function is equivalent to subtracting the return
- * values of gdk_window_get_position() from the parent coordinates.
+ * values of gdk_surface_get_position() from the parent coordinates.
  *
- * See also: gdk_window_coords_to_parent()
+ * See also: gdk_surface_coords_to_parent()
  **/
 void
-gdk_window_coords_from_parent (GdkWindow *window,
+gdk_surface_coords_from_parent (GdkSurface *window,
                                gdouble    parent_x,
                                gdouble    parent_y,
                                gdouble   *x,
                                gdouble   *y)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
   if (x)
     *x = parent_x - window->x;
@@ -4441,8 +4441,8 @@ gdk_window_coords_from_parent (GdkWindow *window,
 }
 
 /**
- * gdk_window_shape_combine_region:
- * @window: a #GdkWindow
+ * gdk_surface_shape_combine_region:
+ * @window: a #GdkSurface
  * @shape_region: (allow-none): region of window to be non-transparent
  * @offset_x: X position of @shape_region in @window coordinates
  * @offset_y: Y position of @shape_region in @window coordinates
@@ -4463,16 +4463,16 @@ gdk_window_coords_from_parent (GdkWindow *window,
  * This function works on both toplevel and child windows.
  */
 void
-gdk_window_shape_combine_region (GdkWindow       *window,
+gdk_surface_shape_combine_region (GdkSurface       *window,
 				 const cairo_region_t *shape_region,
 				 gint             offset_x,
 				 gint             offset_y)
 {
   cairo_region_t *old_region, *new_region, *diff;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return;
 
   if (!window->shape && shape_region == NULL)
@@ -4484,7 +4484,7 @@ gdk_window_shape_combine_region (GdkWindow       *window,
     cairo_region_destroy (window->shape);
 
   old_region = NULL;
-  if (GDK_WINDOW_IS_MAPPED (window))
+  if (GDK_SURFACE_IS_MAPPED (window))
     old_region = cairo_region_copy (window->clip_region);
 
   if (shape_region)
@@ -4505,11 +4505,11 @@ gdk_window_shape_combine_region (GdkWindow       *window,
       diff = cairo_region_copy (new_region);
       cairo_region_subtract (diff, old_region);
 
-      gdk_window_invalidate_region_full (window, diff, TRUE);
+      gdk_surface_invalidate_region_full (window, diff, TRUE);
 
       cairo_region_destroy (diff);
 
-      if (!gdk_window_is_toplevel (window))
+      if (!gdk_surface_is_toplevel (window))
 	{
 	  /* New area in the non-root parent window, needs invalidation */
 	  diff = cairo_region_copy (old_region);
@@ -4518,7 +4518,7 @@ gdk_window_shape_combine_region (GdkWindow       *window,
 	  /* Adjust region to parent window coords */
 	  cairo_region_translate (diff, window->x, window->y);
 
-	  gdk_window_invalidate_region_full (window->parent, diff, TRUE);
+	  gdk_surface_invalidate_region_full (window->parent, diff, TRUE);
 
 	  cairo_region_destroy (diff);
 	}
@@ -4529,7 +4529,7 @@ gdk_window_shape_combine_region (GdkWindow       *window,
 }
 
 static void
-do_child_shapes (GdkWindow *window,
+do_child_shapes (GdkSurface *window,
 		 gboolean merge)
 {
   GdkRectangle r;
@@ -4548,57 +4548,57 @@ do_child_shapes (GdkWindow *window,
 
   cairo_region_xor_rectangle (region, &r);
 
-  gdk_window_shape_combine_region (window, region, 0, 0);
+  gdk_surface_shape_combine_region (window, region, 0, 0);
 
   cairo_region_destroy (region);
 }
 
 /**
- * gdk_window_set_child_shapes:
- * @window: a #GdkWindow
+ * gdk_surface_set_child_shapes:
+ * @window: a #GdkSurface
  *
  * Sets the shape mask of @window to the union of shape masks
  * for all children of @window, ignoring the shape mask of @window
- * itself. Contrast with gdk_window_merge_child_shapes() which includes
+ * itself. Contrast with gdk_surface_merge_child_shapes() which includes
  * the shape mask of @window in the masks to be merged.
  **/
 void
-gdk_window_set_child_shapes (GdkWindow *window)
+gdk_surface_set_child_shapes (GdkSurface *window)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
   do_child_shapes (window, FALSE);
 }
 
 /**
- * gdk_window_merge_child_shapes:
- * @window: a #GdkWindow
+ * gdk_surface_merge_child_shapes:
+ * @window: a #GdkSurface
  *
  * Merges the shape masks for any child windows into the
  * shape mask for @window. i.e. the union of all masks
  * for @window and its children will become the new mask
- * for @window. See gdk_window_shape_combine_region().
+ * for @window. See gdk_surface_shape_combine_region().
  *
- * This function is distinct from gdk_window_set_child_shapes()
+ * This function is distinct from gdk_surface_set_child_shapes()
  * because it includes @window’s shape mask in the set of shapes to
  * be merged.
  */
 void
-gdk_window_merge_child_shapes (GdkWindow *window)
+gdk_surface_merge_child_shapes (GdkSurface *window)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
   do_child_shapes (window, TRUE);
 }
 
 /**
- * gdk_window_input_shape_combine_region:
- * @window: a #GdkWindow
+ * gdk_surface_input_shape_combine_region:
+ * @window: a #GdkSurface
  * @shape_region: region of window to be non-transparent
  * @offset_x: X position of @shape_region in @window coordinates
  * @offset_y: Y position of @shape_region in @window coordinates
  *
- * Like gdk_window_shape_combine_region(), but the shape applies
+ * Like gdk_surface_shape_combine_region(), but the shape applies
  * only to event handling. Mouse events which happen while
  * the pointer position corresponds to an unset bit in the
  * mask will be passed on the window below @window.
@@ -4616,16 +4616,16 @@ gdk_window_merge_child_shapes (GdkWindow *window)
  * function does nothing.
  */
 void
-gdk_window_input_shape_combine_region (GdkWindow       *window,
+gdk_surface_input_shape_combine_region (GdkSurface       *window,
 				       const cairo_region_t *shape_region,
 				       gint             offset_x,
 				       gint             offset_y)
 {
-  GdkWindowImplClass *impl_class;
+  GdkSurfaceImplClass *impl_class;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return;
 
   if (window->input_shape)
@@ -4639,15 +4639,15 @@ gdk_window_input_shape_combine_region (GdkWindow       *window,
   else
     window->input_shape = NULL;
 
-  if (gdk_window_has_impl (window))
+  if (gdk_surface_has_impl (window))
     {
-      impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+      impl_class = GDK_SURFACE_IMPL_GET_CLASS (window->impl);
       impl_class->input_shape_combine_region (window, window->input_shape, 0, 0);
     }
 }
 
 static void
-do_child_input_shapes (GdkWindow *window,
+do_child_input_shapes (GdkSurface *window,
 		       gboolean merge)
 {
   GdkRectangle r;
@@ -4668,30 +4668,30 @@ do_child_input_shapes (GdkWindow *window,
 
   cairo_region_xor_rectangle (region, &r);
 
-  gdk_window_input_shape_combine_region (window, region, 0, 0);
+  gdk_surface_input_shape_combine_region (window, region, 0, 0);
 }
 
 
 /**
- * gdk_window_set_child_input_shapes:
- * @window: a #GdkWindow
+ * gdk_surface_set_child_input_shapes:
+ * @window: a #GdkSurface
  *
  * Sets the input shape mask of @window to the union of input shape masks
  * for all children of @window, ignoring the input shape mask of @window
- * itself. Contrast with gdk_window_merge_child_input_shapes() which includes
+ * itself. Contrast with gdk_surface_merge_child_input_shapes() which includes
  * the input shape mask of @window in the masks to be merged.
  **/
 void
-gdk_window_set_child_input_shapes (GdkWindow *window)
+gdk_surface_set_child_input_shapes (GdkSurface *window)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
   do_child_input_shapes (window, FALSE);
 }
 
 /**
- * gdk_window_set_pass_through:
- * @window: a #GdkWindow
+ * gdk_surface_set_pass_through:
+ * @window: a #GdkSurface
  * @pass_through: a boolean
  *
  * Sets whether input to the window is passed through to the window
@@ -4714,56 +4714,56 @@ gdk_window_set_child_input_shapes (GdkWindow *window)
  * enter/leave events on its way to the destination window.
  **/
 void
-gdk_window_set_pass_through (GdkWindow *window,
+gdk_surface_set_pass_through (GdkSurface *window,
                              gboolean   pass_through)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
   window->pass_through = !!pass_through;
 }
 
 /**
- * gdk_window_get_pass_through:
- * @window: a #GdkWindow
+ * gdk_surface_get_pass_through:
+ * @window: a #GdkSurface
  *
  * Returns whether input to the window is passed through to the window
  * below.
  *
- * See gdk_window_set_pass_through() for details
+ * See gdk_surface_set_pass_through() for details
  **/
 gboolean
-gdk_window_get_pass_through (GdkWindow *window)
+gdk_surface_get_pass_through (GdkSurface *window)
 {
-  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), FALSE);
 
   return window->pass_through;
 }
 
 /**
- * gdk_window_merge_child_input_shapes:
- * @window: a #GdkWindow
+ * gdk_surface_merge_child_input_shapes:
+ * @window: a #GdkSurface
  *
  * Merges the input shape masks for any child windows into the
  * input shape mask for @window. i.e. the union of all input masks
  * for @window and its children will become the new input mask
- * for @window. See gdk_window_input_shape_combine_region().
+ * for @window. See gdk_surface_input_shape_combine_region().
  *
- * This function is distinct from gdk_window_set_child_input_shapes()
+ * This function is distinct from gdk_surface_set_child_input_shapes()
  * because it includes @window’s input shape mask in the set of
  * shapes to be merged.
  **/
 void
-gdk_window_merge_child_input_shapes (GdkWindow *window)
+gdk_surface_merge_child_input_shapes (GdkSurface *window)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
   do_child_input_shapes (window, TRUE);
 }
 
 
 /**
- * gdk_window_get_modal_hint:
- * @window: A toplevel #GdkWindow.
+ * gdk_surface_get_modal_hint:
+ * @window: A toplevel #GdkSurface.
  *
  * Determines whether or not the window manager is hinted that @window
  * has modal behaviour.
@@ -4771,16 +4771,16 @@ gdk_window_merge_child_input_shapes (GdkWindow *window)
  * Returns: whether or not the window has the modal hint set.
  */
 gboolean
-gdk_window_get_modal_hint (GdkWindow *window)
+gdk_surface_get_modal_hint (GdkSurface *window)
 {
-  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), FALSE);
 
   return window->modal_hint;
 }
 
 /**
- * gdk_window_get_accept_focus:
- * @window: a toplevel #GdkWindow.
+ * gdk_surface_get_accept_focus:
+ * @window: a toplevel #GdkSurface.
  *
  * Determines whether or not the desktop environment shuld be hinted that
  * the window does not want to receive input focus.
@@ -4788,16 +4788,16 @@ gdk_window_get_modal_hint (GdkWindow *window)
  * Returns: whether or not the window should receive input focus.
  */
 gboolean
-gdk_window_get_accept_focus (GdkWindow *window)
+gdk_surface_get_accept_focus (GdkSurface *window)
 {
-  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), FALSE);
 
   return window->accept_focus;
 }
 
 /**
- * gdk_window_get_focus_on_map:
- * @window: a toplevel #GdkWindow.
+ * gdk_surface_get_focus_on_map:
+ * @window: a toplevel #GdkSurface.
  *
  * Determines whether or not the desktop environment should be hinted that the
  * window does not want to receive input focus when it is mapped.
@@ -4806,41 +4806,41 @@ gdk_window_get_accept_focus (GdkWindow *window)
  * it is mapped.
  */
 gboolean
-gdk_window_get_focus_on_map (GdkWindow *window)
+gdk_surface_get_focus_on_map (GdkSurface *window)
 {
-  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), FALSE);
 
   return window->focus_on_map;
 }
 
 /**
- * gdk_window_is_input_only:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_is_input_only:
+ * @window: a toplevel #GdkSurface
  *
  * Determines whether or not the window is an input only window.
  *
  * Returns: %TRUE if @window is input only
  */
 gboolean
-gdk_window_is_input_only (GdkWindow *window)
+gdk_surface_is_input_only (GdkSurface *window)
 {
-  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), FALSE);
 
   return window->input_only;
 }
 
 /**
- * gdk_window_is_shaped:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_is_shaped:
+ * @window: a toplevel #GdkSurface
  *
  * Determines whether or not the window is shaped.
  *
  * Returns: %TRUE if @window is shaped
  */
 gboolean
-gdk_window_is_shaped (GdkWindow *window)
+gdk_surface_is_shaped (GdkSurface *window)
 {
-  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), FALSE);
 
   return window->shaped;
 }
@@ -4848,23 +4848,23 @@ gdk_window_is_shaped (GdkWindow *window)
 /* Gets the toplevel for a window as used for events,
    i.e. including offscreen parents going up to the native
    toplevel */
-static GdkWindow *
-get_event_toplevel (GdkWindow *window)
+static GdkSurface *
+get_event_toplevel (GdkSurface *window)
 {
-  GdkWindow *parent;
+  GdkSurface *parent;
 
   while ((parent = window->parent) != NULL &&
-	 (parent->window_type != GDK_WINDOW_ROOT))
+	 (parent->window_type != GDK_SURFACE_ROOT))
     window = parent;
 
   return window;
 }
 
 gboolean
-_gdk_window_event_parent_of (GdkWindow *parent,
- 	  	             GdkWindow *child)
+_gdk_surface_event_parent_of (GdkSurface *parent,
+ 	  	             GdkSurface *child)
 {
-  GdkWindow *w;
+  GdkSurface *w;
 
   w = child;
   while (w != NULL)
@@ -4882,9 +4882,9 @@ static void
 update_cursor (GdkDisplay *display,
                GdkDevice  *device)
 {
-  GdkWindow *cursor_window, *parent, *toplevel;
-  GdkWindow *pointer_window;
-  GdkPointerWindowInfo *pointer_info;
+  GdkSurface *cursor_window, *parent, *toplevel;
+  GdkSurface *pointer_window;
+  GdkPointerSurfaceInfo *pointer_info;
   GdkDeviceGrabInfo *grab;
   GdkCursor *cursor;
 
@@ -4897,7 +4897,7 @@ update_cursor (GdkDisplay *display,
   if (/* have grab */
       grab != NULL &&
       /* the pointer is not in a descendant of the grab window */
-      !_gdk_window_event_parent_of (grab->window, pointer_window))
+      !_gdk_surface_event_parent_of (grab->window, pointer_window))
     {
       /* use the cursor from the grab window */
       cursor_window = grab->window;
@@ -4913,7 +4913,7 @@ update_cursor (GdkDisplay *display,
   while (cursor_window->cursor == NULL &&
          !g_hash_table_contains (cursor_window->device_cursor, device) &&
 	 (parent = cursor_window->parent) != NULL &&
-	 parent->window_type != GDK_WINDOW_ROOT)
+	 parent->window_type != GDK_SURFACE_ROOT)
     cursor_window = parent;
 
   cursor = g_hash_table_lookup (cursor_window->device_cursor, device);
@@ -4928,7 +4928,7 @@ update_cursor (GdkDisplay *display,
 }
 
 static gboolean
-point_in_window (GdkWindow *window,
+point_in_window (GdkSurface *window,
 		 gdouble    x,
                  gdouble    y)
 {
@@ -4946,14 +4946,14 @@ point_in_window (GdkWindow *window,
 /* Same as point_in_window, except it also takes pass_through and its
    interaction with child windows into account */
 static gboolean
-point_in_input_window (GdkWindow *window,
+point_in_input_window (GdkSurface *window,
 		       gdouble    x,
 		       gdouble    y,
-		       GdkWindow **input_window,
+		       GdkSurface **input_window,
 		       gdouble   *input_window_x,
 		       gdouble   *input_window_y)
 {
-  GdkWindow *sub;
+  GdkSurface *sub;
   double child_x, child_y;
   GList *l;
 
@@ -4978,17 +4978,17 @@ point_in_input_window (GdkWindow *window,
     {
       sub = l->data;
 
-      if (!GDK_WINDOW_IS_MAPPED (sub))
+      if (!GDK_SURFACE_IS_MAPPED (sub))
 	continue;
 
-      gdk_window_coords_from_parent ((GdkWindow *)sub,
+      gdk_surface_coords_from_parent ((GdkSurface *)sub,
 				     x, y,
 				     &child_x, &child_y);
       if (point_in_input_window (sub, child_x, child_y,
 				 input_window, input_window_x, input_window_y))
 	{
 	  if (input_window)
-	    gdk_window_coords_to_parent (sub,
+	    gdk_surface_coords_to_parent (sub,
 					 *input_window_x,
 					 *input_window_y,
 					 input_window_x,
@@ -5000,12 +5000,12 @@ point_in_input_window (GdkWindow *window,
   return FALSE;
 }
 
-GdkWindow *
-_gdk_window_find_child_at (GdkWindow *window,
+GdkSurface *
+_gdk_surface_find_child_at (GdkSurface *window,
 			   double     x,
                            double     y)
 {
-  GdkWindow *sub;
+  GdkSurface *sub;
   double child_x, child_y;
   GList *l;
 
@@ -5016,29 +5016,29 @@ _gdk_window_find_child_at (GdkWindow *window,
 	{
 	  sub = l->data;
 
-	  if (!GDK_WINDOW_IS_MAPPED (sub))
+	  if (!GDK_SURFACE_IS_MAPPED (sub))
 	    continue;
 
-	  gdk_window_coords_from_parent ((GdkWindow *)sub,
+	  gdk_surface_coords_from_parent ((GdkSurface *)sub,
                                          x, y,
                                          &child_x, &child_y);
 	  if (point_in_input_window (sub, child_x, child_y,
 				     NULL, NULL, NULL))
-	    return (GdkWindow *)sub;
+	    return (GdkSurface *)sub;
 	}
     }
 
   return NULL;
 }
 
-GdkWindow *
-_gdk_window_find_descendant_at (GdkWindow *window,
+GdkSurface *
+_gdk_surface_find_descendant_at (GdkSurface *window,
 				gdouble    x,
                                 gdouble    y,
 				gdouble   *found_x,
 				gdouble   *found_y)
 {
-  GdkWindow *sub, *input_window;
+  GdkSurface *sub, *input_window;
   gdouble child_x, child_y;
   GList *l;
   gboolean found;
@@ -5053,10 +5053,10 @@ _gdk_window_find_descendant_at (GdkWindow *window,
 	    {
 	      sub = l->data;
 
-	      if (!GDK_WINDOW_IS_MAPPED (sub))
+	      if (!GDK_SURFACE_IS_MAPPED (sub))
 		continue;
 
-	      gdk_window_coords_from_parent ((GdkWindow *)sub,
+	      gdk_surface_coords_from_parent ((GdkSurface *)sub,
                                              x, y,
                                              &child_x, &child_y);
 	      if (point_in_input_window (sub, child_x, child_y,
@@ -5087,30 +5087,30 @@ _gdk_window_find_descendant_at (GdkWindow *window,
 }
 
 /**
- * gdk_window_beep:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_beep:
+ * @window: a toplevel #GdkSurface
  *
  * Emits a short beep associated to @window in the appropriate
  * display, if supported. Otherwise, emits a short beep on
  * the display just as gdk_display_beep().
  **/
 void
-gdk_window_beep (GdkWindow *window)
+gdk_surface_beep (GdkSurface *window)
 {
   GdkDisplay *display;
-  GdkWindow *toplevel;
+  GdkSurface *toplevel;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return;
 
   toplevel = get_event_toplevel (window);
-  display = gdk_window_get_display (window);
+  display = gdk_surface_get_display (window);
 
   if (toplevel)
     {
-      if (GDK_WINDOW_IMPL_GET_CLASS (toplevel->impl)->beep (toplevel))
+      if (GDK_SURFACE_IMPL_GET_CLASS (toplevel->impl)->beep (toplevel))
         return;
     }
   
@@ -5119,8 +5119,8 @@ gdk_window_beep (GdkWindow *window)
 }
 
 /**
- * gdk_window_set_support_multidevice:
- * @window: a #GdkWindow.
+ * gdk_surface_set_support_multidevice:
+ * @window: a #GdkSurface.
  * @support_multidevice: %TRUE to enable multidevice support in @window.
  *
  * This function will enable multidevice features in @window.
@@ -5129,12 +5129,12 @@ gdk_window_beep (GdkWindow *window)
  * per device enter/leave events, device grabs and grab ownerships.
  **/
 void
-gdk_window_set_support_multidevice (GdkWindow *window,
+gdk_surface_set_support_multidevice (GdkSurface *window,
                                     gboolean   support_multidevice)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return;
 
   if (window->support_multidevice == support_multidevice)
@@ -5146,8 +5146,8 @@ gdk_window_set_support_multidevice (GdkWindow *window,
 }
 
 /**
- * gdk_window_get_support_multidevice:
- * @window: a #GdkWindow.
+ * gdk_surface_get_support_multidevice:
+ * @window: a #GdkSurface.
  *
  * Returns %TRUE if the window is aware of the existence of multiple
  * devices.
@@ -5155,11 +5155,11 @@ gdk_window_set_support_multidevice (GdkWindow *window,
  * Returns: %TRUE if the window handles multidevice features.
  **/
 gboolean
-gdk_window_get_support_multidevice (GdkWindow *window)
+gdk_surface_get_support_multidevice (GdkSurface *window)
 {
-  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), FALSE);
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return FALSE;
 
   return window->support_multidevice;
@@ -5168,7 +5168,7 @@ gdk_window_get_support_multidevice (GdkWindow *window)
 /* send motion events if the right buttons are down */
 
 GdkEvent *
-_gdk_make_event (GdkWindow    *window,
+_gdk_make_event (GdkSurface    *window,
 		 GdkEventType  type,
 		 GdkEvent     *event_in_queue,
 		 gboolean      before_event)
@@ -5262,12 +5262,12 @@ _gdk_make_event (GdkWindow    *window,
   if (event_in_queue)
     {
     if (before_event)
-      _gdk_event_queue_insert_before (gdk_window_get_display (window), event_in_queue, event);
+      _gdk_event_queue_insert_before (gdk_surface_get_display (window), event_in_queue, event);
     else
-      _gdk_event_queue_insert_after (gdk_window_get_display (window), event_in_queue, event);
+      _gdk_event_queue_insert_after (gdk_surface_get_display (window), event_in_queue, event);
     }
   else
-    _gdk_event_queue_append (gdk_window_get_display (window), event);
+    _gdk_event_queue_append (gdk_surface_get_display (window), event);
 
   return event;
 }
@@ -5275,9 +5275,9 @@ _gdk_make_event (GdkWindow    *window,
 void
 _gdk_display_set_window_under_pointer (GdkDisplay *display,
                                        GdkDevice  *device,
-				       GdkWindow  *window)
+				       GdkSurface  *window)
 {
-  GdkPointerWindowInfo *device_info;
+  GdkPointerSurfaceInfo *device_info;
 
   device_info = _gdk_display_get_pointer_info (display, device);
 
@@ -5305,7 +5305,7 @@ _gdk_display_set_window_under_pointer (GdkDisplay *display,
 #endif
 
 static void
-gdk_window_print (GdkWindow *window,
+gdk_surface_print (GdkSurface *window,
 		  int indent)
 {
   char *s;
@@ -5325,14 +5325,14 @@ gdk_window_print (GdkWindow *window,
 	   window->width, window->height
 	   );
 
-  if (gdk_window_has_impl (window))
+  if (gdk_surface_has_impl (window))
     {
 #ifdef GDK_WINDOWING_X11
-      g_print (" impl(0x%lx)", gdk_x11_window_get_xid (window));
+      g_print (" impl(0x%lx)", gdk_x11_surface_get_xid (window));
 #endif
     }
 
-  if (window->window_type != GDK_WINDOW_CHILD)
+  if (window->window_type != GDK_SURFACE_CHILD)
     g_print (" %s", window_types[window->window_type]);
 
   if (window->input_only)
@@ -5341,7 +5341,7 @@ gdk_window_print (GdkWindow *window,
   if (window->shaped)
     g_print (" shaped");
 
-  if (!gdk_window_is_visible ((GdkWindow *)window))
+  if (!gdk_surface_is_visible ((GdkSurface *)window))
     g_print (" hidden");
 
   g_print (" abs[%d,%d]",
@@ -5359,7 +5359,7 @@ gdk_window_print (GdkWindow *window,
 
 
 static void
-gdk_window_print_tree (GdkWindow *window,
+gdk_surface_print_tree (GdkSurface *window,
 		       int indent,
 		       gboolean include_input_only)
 {
@@ -5368,10 +5368,10 @@ gdk_window_print_tree (GdkWindow *window,
   if (window->input_only && !include_input_only)
     return;
 
-  gdk_window_print (window, indent);
+  gdk_surface_print (window, indent);
 
   for (l = window->children; l != NULL; l = l->next)
-    gdk_window_print_tree (l->data, indent + 4, include_input_only);
+    gdk_surface_print_tree (l->data, indent + 4, include_input_only);
 }
 
 #endif /* DEBUG_WINDOW_PRINTING */
@@ -5382,10 +5382,10 @@ _gdk_windowing_got_event (GdkDisplay *display,
                           GdkEvent   *event,
                           gulong      serial)
 {
-  GdkWindow *event_window;
+  GdkSurface *event_window;
   gboolean unlink_event = FALSE;
   GdkDeviceGrabInfo *button_release_grab;
-  GdkPointerWindowInfo *pointer_info = NULL;
+  GdkPointerSurfaceInfo *pointer_info = NULL;
   GdkDevice *device, *source_device;
 
   _gdk_display_update_last_event (display, event);
@@ -5429,11 +5429,11 @@ _gdk_windowing_got_event (GdkDisplay *display,
       (event->key.keyval == 0xa7 ||
        event->key.keyval == 0xbd))
     {
-      gdk_window_print_tree (event_window, 0, event->key.keyval == 0xbd);
+      gdk_surface_print_tree (event_window, 0, event->key.keyval == 0xbd);
     }
 #endif
 
-  if (event_window->window_type == GDK_WINDOW_ROOT)
+  if (event_window->window_type == GDK_SURFACE_ROOT)
     goto out;
 
   if (event->any.type == GDK_ENTER_NOTIFY)
@@ -5480,7 +5480,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
 }
 
 /**
- * gdk_window_create_similar_surface:
+ * gdk_surface_create_similar_surface:
  * @window: window to make new surface similar to
  * @content: the content for the new surface
  * @width: width of the new surface
@@ -5505,7 +5505,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
  * or any other error occurs.
  **/
 cairo_surface_t *
-gdk_window_create_similar_surface (GdkWindow *     window,
+gdk_surface_create_similar_surface (GdkSurface *     window,
                                    cairo_content_t content,
                                    int             width,
                                    int             height)
@@ -5513,9 +5513,9 @@ gdk_window_create_similar_surface (GdkWindow *     window,
   cairo_surface_t *window_surface, *surface;
   double sx, sy;
 
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), NULL);
 
-  window_surface = gdk_window_ref_impl_surface (window);
+  window_surface = gdk_surface_ref_impl_surface (window);
   sx = sy = 1;
   cairo_surface_get_device_scale (window_surface, &sx, &sy);
 
@@ -5540,7 +5540,7 @@ gdk_window_create_similar_surface (GdkWindow *     window,
 
 
 /**
- * gdk_window_create_similar_image_surface:
+ * gdk_surface_create_similar_image_surface:
  * @window: (nullable): window to make new surface similar to, or
  *   %NULL if none
  * @format: (type int): the format for the new surface
@@ -5561,13 +5561,13 @@ gdk_window_create_similar_surface (GdkWindow *     window,
  * use:
  *
  * |[<!-- language="C" -->
- *   int scale = gdk_window_get_scale_factor (window);
- *   int width = gdk_window_get_width (window) * scale;
- *   int height = gdk_window_get_height (window) * scale;
+ *   int scale = gdk_surface_get_scale_factor (window);
+ *   int width = gdk_surface_get_width (window) * scale;
+ *   int height = gdk_surface_get_height (window) * scale;
  *
  *   // format is set elsewhere
  *   cairo_surface_t *surface =
- *     gdk_window_create_similar_image_surface (window,
+ *     gdk_surface_create_similar_image_surface (window,
  *                                              format,
  *                                              width, height,
  *                                              scale);
@@ -5586,7 +5586,7 @@ gdk_window_create_similar_surface (GdkWindow *     window,
  * or any other error occurs.
  **/
 cairo_surface_t *
-gdk_window_create_similar_image_surface (GdkWindow *     window,
+gdk_surface_create_similar_image_surface (GdkSurface *     window,
 					 cairo_format_t  format,
 					 int             width,
 					 int             height,
@@ -5594,22 +5594,22 @@ gdk_window_create_similar_image_surface (GdkWindow *     window,
 {
   cairo_surface_t *surface;
 
-  g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (window == NULL || GDK_IS_SURFACE (window), NULL);
 
   if (window == NULL)
     {
       surface = cairo_image_surface_create (format, width, height);
     }
-  else if (GDK_WINDOW_IMPL_GET_CLASS (window->impl)->create_similar_image_surface)
+  else if (GDK_SURFACE_IMPL_GET_CLASS (window->impl)->create_similar_image_surface)
     {
       surface =
-        GDK_WINDOW_IMPL_GET_CLASS (window->impl)->create_similar_image_surface (window, format, width, height);
+        GDK_SURFACE_IMPL_GET_CLASS (window->impl)->create_similar_image_surface (window, format, width, height);
     }
   else
     {
       cairo_surface_t *window_surface;
 
-      window_surface = gdk_window_ref_impl_surface (window);
+      window_surface = gdk_surface_ref_impl_surface (window);
       surface =
         cairo_surface_create_similar_image (window_surface,
                                             format,
@@ -5619,7 +5619,7 @@ gdk_window_create_similar_image_surface (GdkWindow *     window,
     }
 
   if (scale == 0)
-    scale = gdk_window_get_scale_factor (window);
+    scale = gdk_surface_get_scale_factor (window);
 
   cairo_surface_set_device_scale (surface, scale, scale);
 
@@ -5628,8 +5628,8 @@ gdk_window_create_similar_image_surface (GdkWindow *     window,
 
 
 /**
- * gdk_window_focus:
- * @window: a #GdkWindow
+ * gdk_surface_focus:
+ * @window: a #GdkSurface
  * @timestamp: timestamp of the event triggering the window focus
  *
  * Sets keyboard focus to @window. In most cases, gtk_window_present()
@@ -5637,15 +5637,15 @@ gdk_window_create_similar_image_surface (GdkWindow *     window,
  *
  **/
 void
-gdk_window_focus (GdkWindow *window,
+gdk_surface_focus (GdkSurface *window,
                   guint32    timestamp)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->focus (window, timestamp);
+  GDK_SURFACE_IMPL_GET_CLASS (window->impl)->focus (window, timestamp);
 }
 
 /**
- * gdk_window_set_type_hint:
- * @window: A toplevel #GdkWindow
+ * gdk_surface_set_type_hint:
+ * @window: A toplevel #GdkSurface
  * @hint: A hint of the function this window will have
  *
  * The application can use this call to provide a hint to the window
@@ -5656,29 +5656,29 @@ gdk_window_focus (GdkWindow *window,
  * The hint must be set before the window is mapped.
  **/
 void
-gdk_window_set_type_hint (GdkWindow        *window,
-			  GdkWindowTypeHint hint)
+gdk_surface_set_type_hint (GdkSurface        *window,
+			  GdkSurfaceTypeHint hint)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_type_hint (window, hint);
+  GDK_SURFACE_IMPL_GET_CLASS (window->impl)->set_type_hint (window, hint);
 }
 
 /**
- * gdk_window_get_type_hint:
- * @window: A toplevel #GdkWindow
+ * gdk_surface_get_type_hint:
+ * @window: A toplevel #GdkSurface
  *
  * This function returns the type hint set for a window.
  *
  * Returns: The type hint set for @window
  **/
-GdkWindowTypeHint
-gdk_window_get_type_hint (GdkWindow *window)
+GdkSurfaceTypeHint
+gdk_surface_get_type_hint (GdkSurface *window)
 {
-  return GDK_WINDOW_IMPL_GET_CLASS (window->impl)->get_type_hint (window);
+  return GDK_SURFACE_IMPL_GET_CLASS (window->impl)->get_type_hint (window);
 }
 
 /**
- * gdk_window_set_modal_hint:
- * @window: A toplevel #GdkWindow
+ * gdk_surface_set_modal_hint:
+ * @window: A toplevel #GdkSurface
  * @modal: %TRUE if the window is modal, %FALSE otherwise.
  *
  * The application can use this hint to tell the window manager
@@ -5687,73 +5687,73 @@ gdk_window_get_type_hint (GdkWindow *window)
  * way.
  *
  * You should only use this on windows for which you have
- * previously called gdk_window_set_transient_for()
+ * previously called gdk_surface_set_transient_for()
  **/
 void
-gdk_window_set_modal_hint (GdkWindow *window,
+gdk_surface_set_modal_hint (GdkSurface *window,
 			   gboolean   modal)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_modal_hint (window, modal);
+  GDK_SURFACE_IMPL_GET_CLASS (window->impl)->set_modal_hint (window, modal);
 }
 
 /**
- * gdk_window_set_skip_taskbar_hint:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_set_skip_taskbar_hint:
+ * @window: a toplevel #GdkSurface
  * @skips_taskbar: %TRUE to skip the taskbar
  *
  * Toggles whether a window should appear in a task list or window
  * list. If a window’s semantic type as specified with
- * gdk_window_set_type_hint() already fully describes the window, this
+ * gdk_surface_set_type_hint() already fully describes the window, this
  * function should not be called in addition,
  * instead you should allow the window to be treated according to
  * standard policy for its semantic type.
  **/
 void
-gdk_window_set_skip_taskbar_hint (GdkWindow *window,
+gdk_surface_set_skip_taskbar_hint (GdkSurface *window,
                                   gboolean   skips_taskbar)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_skip_taskbar_hint (window, skips_taskbar);
+  GDK_SURFACE_IMPL_GET_CLASS (window->impl)->set_skip_taskbar_hint (window, skips_taskbar);
 }
 
 /**
- * gdk_window_set_skip_pager_hint:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_set_skip_pager_hint:
+ * @window: a toplevel #GdkSurface
  * @skips_pager: %TRUE to skip the pager
  *
  * Toggles whether a window should appear in a pager (workspace
  * switcher, or other desktop utility program that displays a small
  * thumbnail representation of the windows on the desktop). If a
- * window’s semantic type as specified with gdk_window_set_type_hint()
+ * window’s semantic type as specified with gdk_surface_set_type_hint()
  * already fully describes the window, this function should
  * not be called in addition, instead you should
  * allow the window to be treated according to standard policy for
  * its semantic type.
  **/
 void
-gdk_window_set_skip_pager_hint (GdkWindow *window,
+gdk_surface_set_skip_pager_hint (GdkSurface *window,
                                 gboolean   skips_pager)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_skip_pager_hint (window, skips_pager);
+  GDK_SURFACE_IMPL_GET_CLASS (window->impl)->set_skip_pager_hint (window, skips_pager);
 }
 
 /**
- * gdk_window_set_urgency_hint:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_set_urgency_hint:
+ * @window: a toplevel #GdkSurface
  * @urgent: %TRUE if the window is urgent
  *
  * Toggles whether a window needs the user's
  * urgent attention.
  **/
 void
-gdk_window_set_urgency_hint (GdkWindow *window,
+gdk_surface_set_urgency_hint (GdkSurface *window,
 			     gboolean   urgent)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_urgency_hint (window, urgent);
+  GDK_SURFACE_IMPL_GET_CLASS (window->impl)->set_urgency_hint (window, urgent);
 }
 
 /**
- * gdk_window_set_geometry_hints:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_set_geometry_hints:
+ * @window: a toplevel #GdkSurface
  * @geometry: geometry hints
  * @geom_mask: bitmask indicating fields of @geometry to pay attention to
  *
@@ -5766,50 +5766,50 @@ gdk_window_set_urgency_hint (GdkWindow *window,
  * this is to constrain user resizing, but the windowing system
  * will typically  (but is not required to) also constrain the
  * current size of the window to the provided values and
- * constrain programatic resizing via gdk_window_resize() or
- * gdk_window_move_resize().
+ * constrain programatic resizing via gdk_surface_resize() or
+ * gdk_surface_move_resize().
  *
  * Note that on X11, this effect has no effect on windows
- * of type %GDK_WINDOW_TEMP since these windows are not resizable
+ * of type %GDK_SURFACE_TEMP since these windows are not resizable
  * by the user.
  *
  * Since you can’t count on the windowing system doing the
  * constraints for programmatic resizes, you should generally
- * call gdk_window_constrain_size() yourself to determine
+ * call gdk_surface_constrain_size() yourself to determine
  * appropriate sizes.
  *
  **/
 void
-gdk_window_set_geometry_hints (GdkWindow         *window,
+gdk_surface_set_geometry_hints (GdkSurface         *window,
 			       const GdkGeometry *geometry,
-			       GdkWindowHints     geom_mask)
+			       GdkSurfaceHints     geom_mask)
 {
   g_return_if_fail (geometry != NULL || geom_mask == 0);
 
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_geometry_hints (window, geometry, geom_mask);
+  GDK_SURFACE_IMPL_GET_CLASS (window->impl)->set_geometry_hints (window, geometry, geom_mask);
 }
 
 /**
- * gdk_window_set_title:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_set_title:
+ * @window: a toplevel #GdkSurface
  * @title: title of @window
  *
  * Sets the title of a toplevel window, to be displayed in the titlebar.
  * If you haven’t explicitly set the icon name for the window
- * (using gdk_window_set_icon_name()), the icon name will be set to
+ * (using gdk_surface_set_icon_name()), the icon name will be set to
  * @title as well. @title must be in UTF-8 encoding (as with all
  * user-readable strings in GDK/GTK+). @title may not be %NULL.
  **/
 void
-gdk_window_set_title (GdkWindow   *window,
+gdk_surface_set_title (GdkSurface   *window,
 		      const gchar *title)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_title (window, title);
+  GDK_SURFACE_IMPL_GET_CLASS (window->impl)->set_title (window, title);
 }
 
 /**
- * gdk_window_set_role:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_set_role:
+ * @window: a toplevel #GdkSurface
  * @role: a string indicating its role
  *
  * When using GTK+, typically you should use gtk_window_set_role() instead
@@ -5827,31 +5827,31 @@ gdk_window_set_title (GdkWindow   *window,
  *
  **/
 void
-gdk_window_set_role (GdkWindow   *window,
+gdk_surface_set_role (GdkSurface   *window,
 		     const gchar *role)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_role (window, role);
+  GDK_SURFACE_IMPL_GET_CLASS (window->impl)->set_role (window, role);
 }
 
 /**
- * gdk_window_set_startup_id:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_set_startup_id:
+ * @window: a toplevel #GdkSurface
  * @startup_id: a string with startup-notification identifier
  *
  * When using GTK+, typically you should use gtk_window_set_startup_id()
  * instead of this low-level function.
  **/
 void
-gdk_window_set_startup_id (GdkWindow   *window,
+gdk_surface_set_startup_id (GdkSurface   *window,
 			   const gchar *startup_id)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_startup_id (window, startup_id);
+  GDK_SURFACE_IMPL_GET_CLASS (window->impl)->set_startup_id (window, startup_id);
 }
 
 /**
- * gdk_window_set_transient_for:
- * @window: a toplevel #GdkWindow
- * @parent: another toplevel #GdkWindow
+ * gdk_surface_set_transient_for:
+ * @window: a toplevel #GdkSurface
+ * @parent: another toplevel #GdkSurface
  *
  * Indicates to the window manager that @window is a transient dialog
  * associated with the application window @parent. This allows the
@@ -5862,17 +5862,17 @@ gdk_window_set_startup_id (GdkWindow   *window,
  * #GtkDialog.
  **/
 void
-gdk_window_set_transient_for (GdkWindow *window,
-			      GdkWindow *parent)
+gdk_surface_set_transient_for (GdkSurface *window,
+			      GdkSurface *parent)
 {
   window->transient_for = parent;
 
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_transient_for (window, parent);
+  GDK_SURFACE_IMPL_GET_CLASS (window->impl)->set_transient_for (window, parent);
 }
 
 /**
- * gdk_window_get_root_origin:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_get_root_origin:
+ * @window: a toplevel #GdkSurface
  * @x: (out): return location for X position of window frame
  * @y: (out): return location for Y position of window frame
  *
@@ -5881,13 +5881,13 @@ gdk_window_set_transient_for (GdkWindow *window,
  *
  **/
 void
-gdk_window_get_root_origin (GdkWindow *window,
+gdk_surface_get_root_origin (GdkSurface *window,
 			    gint      *x,
 			    gint      *y)
 {
   GdkRectangle rect;
 
-  gdk_window_get_frame_extents (window, &rect);
+  gdk_surface_get_frame_extents (window, &rect);
 
   if (x)
     *x = rect.x;
@@ -5897,26 +5897,26 @@ gdk_window_get_root_origin (GdkWindow *window,
 }
 
 /**
- * gdk_window_get_frame_extents:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_get_frame_extents:
+ * @window: a toplevel #GdkSurface
  * @rect: (out): rectangle to fill with bounding box of the window frame
  *
  * Obtains the bounding box of the window, including window manager
  * titlebar/borders if any. The frame position is given in root window
  * coordinates. To get the position of the window itself (rather than
- * the frame) in root window coordinates, use gdk_window_get_origin().
+ * the frame) in root window coordinates, use gdk_surface_get_origin().
  *
  **/
 void
-gdk_window_get_frame_extents (GdkWindow    *window,
+gdk_surface_get_frame_extents (GdkSurface    *window,
                               GdkRectangle *rect)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->get_frame_extents (window, rect);
+  GDK_SURFACE_IMPL_GET_CLASS (window->impl)->get_frame_extents (window, rect);
 }
 
 /**
- * gdk_window_set_accept_focus:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_set_accept_focus:
+ * @window: a toplevel #GdkSurface
  * @accept_focus: %TRUE if the window should receive input focus
  *
  * Setting @accept_focus to %FALSE hints the desktop environment that the
@@ -5926,15 +5926,15 @@ gdk_window_get_frame_extents (GdkWindow    *window,
  * hint. ICCCM-compliant window manager usually respect it.
  **/
 void
-gdk_window_set_accept_focus (GdkWindow *window,
+gdk_surface_set_accept_focus (GdkSurface *window,
 			     gboolean accept_focus)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_accept_focus (window, accept_focus);
+  GDK_SURFACE_IMPL_GET_CLASS (window->impl)->set_accept_focus (window, accept_focus);
 }
 
 /**
- * gdk_window_set_focus_on_map:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_set_focus_on_map:
+ * @window: a toplevel #GdkSurface
  * @focus_on_map: %TRUE if the window should receive input focus when mapped
  *
  * Setting @focus_on_map to %FALSE hints the desktop environment that the
@@ -5947,15 +5947,15 @@ gdk_window_set_accept_focus (GdkWindow *window,
  * manager extension specification should respect it.
  **/
 void
-gdk_window_set_focus_on_map (GdkWindow *window,
+gdk_surface_set_focus_on_map (GdkSurface *window,
 			     gboolean focus_on_map)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_focus_on_map (window, focus_on_map);
+  GDK_SURFACE_IMPL_GET_CLASS (window->impl)->set_focus_on_map (window, focus_on_map);
 }
 
 /**
- * gdk_window_set_icon_list:
- * @window: The #GdkWindow toplevel window to set the icon of.
+ * gdk_surface_set_icon_list:
+ * @window: The #GdkSurface toplevel window to set the icon of.
  * @surfaces: (transfer none) (element-type GdkTexture):
  *     A list of image surfaces, of different sizes.
  *
@@ -5970,15 +5970,15 @@ gdk_window_set_focus_on_map (GdkWindow *window,
  * Note that some platforms don't support window icons.
  */
 void
-gdk_window_set_icon_list (GdkWindow *window,
+gdk_surface_set_icon_list (GdkSurface *window,
                           GList     *textures)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_icon_list (window, textures);
+  GDK_SURFACE_IMPL_GET_CLASS (window->impl)->set_icon_list (window, textures);
 }
 
 /**
- * gdk_window_set_icon_name:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_set_icon_name:
+ * @window: a toplevel #GdkSurface
  * @name: (allow-none): name of window while iconified (minimized)
  *
  * Windows may have a name used while minimized, distinct from the
@@ -5986,24 +5986,24 @@ gdk_window_set_icon_list (GdkWindow *window,
  * idea from a user interface standpoint. But you can set such a name
  * with this function, if you like.
  *
- * After calling this with a non-%NULL @name, calls to gdk_window_set_title()
+ * After calling this with a non-%NULL @name, calls to gdk_surface_set_title()
  * will not update the icon title.
  *
  * Using %NULL for @name unsets the icon title; further calls to
- * gdk_window_set_title() will again update the icon title as well.
+ * gdk_surface_set_title() will again update the icon title as well.
  *
  * Note that some platforms don't support window icons.
  **/
 void
-gdk_window_set_icon_name (GdkWindow   *window,
+gdk_surface_set_icon_name (GdkSurface   *window,
 			  const gchar *name)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_icon_name (window, name);
+  GDK_SURFACE_IMPL_GET_CLASS (window->impl)->set_icon_name (window, name);
 }
 
 /**
- * gdk_window_iconify:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_iconify:
+ * @window: a toplevel #GdkSurface
  *
  * Asks to iconify (minimize) @window. The window manager may choose
  * to ignore the request, but normally will honor it. Using
@@ -6013,31 +6013,31 @@ gdk_window_set_icon_name (GdkWindow   *window,
  *
  **/
 void
-gdk_window_iconify (GdkWindow *window)
+gdk_surface_iconify (GdkSurface *window)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->iconify (window);
+  GDK_SURFACE_IMPL_GET_CLASS (window->impl)->iconify (window);
 }
 
 /**
- * gdk_window_deiconify:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_deiconify:
+ * @window: a toplevel #GdkSurface
  *
  * Attempt to deiconify (unminimize) @window. On X11 the window manager may
  * choose to ignore the request to deiconify. When using GTK+,
- * use gtk_window_deiconify() instead of the #GdkWindow variant. Or better yet,
+ * use gtk_window_deiconify() instead of the #GdkSurface variant. Or better yet,
  * you probably want to use gtk_window_present(), which raises the window, focuses it,
  * unminimizes it, and puts it on the current desktop.
  *
  **/
 void
-gdk_window_deiconify (GdkWindow *window)
+gdk_surface_deiconify (GdkSurface *window)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->deiconify (window);
+  GDK_SURFACE_IMPL_GET_CLASS (window->impl)->deiconify (window);
 }
 
 /**
- * gdk_window_stick:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_stick:
+ * @window: a toplevel #GdkSurface
  *
  * “Pins” a window such that it’s on all workspaces and does not scroll
  * with viewports, for window managers that have scrollable viewports.
@@ -6051,28 +6051,28 @@ gdk_window_deiconify (GdkWindow *window)
  *
  **/
 void
-gdk_window_stick (GdkWindow *window)
+gdk_surface_stick (GdkSurface *window)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->stick (window);
+  GDK_SURFACE_IMPL_GET_CLASS (window->impl)->stick (window);
 }
 
 /**
- * gdk_window_unstick:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_unstick:
+ * @window: a toplevel #GdkSurface
  *
- * Reverse operation for gdk_window_stick(); see gdk_window_stick(),
+ * Reverse operation for gdk_surface_stick(); see gdk_surface_stick(),
  * and gtk_window_unstick().
  *
  **/
 void
-gdk_window_unstick (GdkWindow *window)
+gdk_surface_unstick (GdkSurface *window)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->unstick (window);
+  GDK_SURFACE_IMPL_GET_CLASS (window->impl)->unstick (window);
 }
 
 /**
- * gdk_window_maximize:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_maximize:
+ * @window: a toplevel #GdkSurface
  *
  * Maximizes the window. If the window was already maximized, then
  * this function does nothing.
@@ -6088,14 +6088,14 @@ gdk_window_unstick (GdkWindow *window)
  *
  **/
 void
-gdk_window_maximize (GdkWindow *window)
+gdk_surface_maximize (GdkSurface *window)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->maximize (window);
+  GDK_SURFACE_IMPL_GET_CLASS (window->impl)->maximize (window);
 }
 
 /**
- * gdk_window_unmaximize:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_unmaximize:
+ * @window: a toplevel #GdkSurface
  *
  * Unmaximizes the window. If the window wasn’t maximized, then this
  * function does nothing.
@@ -6111,14 +6111,14 @@ gdk_window_maximize (GdkWindow *window)
  *
  **/
 void
-gdk_window_unmaximize (GdkWindow *window)
+gdk_surface_unmaximize (GdkSurface *window)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->unmaximize (window);
+  GDK_SURFACE_IMPL_GET_CLASS (window->impl)->unmaximize (window);
 }
 
 /**
- * gdk_window_fullscreen:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_fullscreen:
+ * @window: a toplevel #GdkSurface
  *
  * Moves the window into fullscreen mode. This means the
  * window covers the entire screen and is above any panels
@@ -6135,14 +6135,14 @@ gdk_window_unmaximize (GdkWindow *window)
  * it to happen.
  **/
 void
-gdk_window_fullscreen (GdkWindow *window)
+gdk_surface_fullscreen (GdkSurface *window)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->fullscreen (window);
+  GDK_SURFACE_IMPL_GET_CLASS (window->impl)->fullscreen (window);
 }
 
 /**
- * gdk_window_fullscreen_on_monitor:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_fullscreen_on_monitor:
+ * @window: a toplevel #GdkSurface
  * @monitor: Which monitor to display fullscreen on.
  *
  * Moves the window into fullscreen mode on the given monitor. This means
@@ -6151,23 +6151,23 @@ gdk_window_fullscreen (GdkWindow *window)
  * If the window was already fullscreen, then this function does nothing.
  **/
 void
-gdk_window_fullscreen_on_monitor (GdkWindow  *window,
+gdk_surface_fullscreen_on_monitor (GdkSurface  *window,
                                   GdkMonitor *monitor)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
   g_return_if_fail (GDK_IS_MONITOR (monitor));
-  g_return_if_fail (gdk_monitor_get_display (monitor) == gdk_window_get_display (window));
+  g_return_if_fail (gdk_monitor_get_display (monitor) == gdk_surface_get_display (window));
   g_return_if_fail (gdk_monitor_is_valid (monitor));
 
-  if (GDK_WINDOW_IMPL_GET_CLASS (window->impl)->fullscreen_on_monitor != NULL)
-    GDK_WINDOW_IMPL_GET_CLASS (window->impl)->fullscreen_on_monitor (window, monitor);
+  if (GDK_SURFACE_IMPL_GET_CLASS (window->impl)->fullscreen_on_monitor != NULL)
+    GDK_SURFACE_IMPL_GET_CLASS (window->impl)->fullscreen_on_monitor (window, monitor);
   else
-    GDK_WINDOW_IMPL_GET_CLASS (window->impl)->fullscreen (window);
+    GDK_SURFACE_IMPL_GET_CLASS (window->impl)->fullscreen (window);
 }
 
 /**
- * gdk_window_set_fullscreen_mode:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_set_fullscreen_mode:
+ * @window: a toplevel #GdkSurface
  * @mode: fullscreen mode
  *
  * Specifies whether the @window should span over all monitors (in a multi-head
@@ -6189,42 +6189,42 @@ gdk_window_fullscreen_on_monitor (GdkWindow  *window,
  * is specified.
  **/
 void
-gdk_window_set_fullscreen_mode (GdkWindow        *window,
+gdk_surface_set_fullscreen_mode (GdkSurface        *window,
                                 GdkFullscreenMode mode)
 {
-  GdkWindowImplClass *impl_class;
+  GdkSurfaceImplClass *impl_class;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
   if (window->fullscreen_mode != mode)
     {
       window->fullscreen_mode = mode;
 
-      impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+      impl_class = GDK_SURFACE_IMPL_GET_CLASS (window->impl);
       if (impl_class->apply_fullscreen_mode != NULL)
         impl_class->apply_fullscreen_mode (window);
     }
 }
 
 /**
- * gdk_window_get_fullscreen_mode:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_get_fullscreen_mode:
+ * @window: a toplevel #GdkSurface
  *
  * Obtains the #GdkFullscreenMode of the @window.
  *
  * Returns: The #GdkFullscreenMode applied to the window when fullscreen.
  **/
 GdkFullscreenMode
-gdk_window_get_fullscreen_mode (GdkWindow *window)
+gdk_surface_get_fullscreen_mode (GdkSurface *window)
 {
-  g_return_val_if_fail (GDK_IS_WINDOW (window), GDK_FULLSCREEN_ON_CURRENT_MONITOR);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), GDK_FULLSCREEN_ON_CURRENT_MONITOR);
 
   return window->fullscreen_mode;
 }
 
 /**
- * gdk_window_unfullscreen:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_unfullscreen:
+ * @window: a toplevel #GdkSurface
  *
  * Moves the window out of fullscreen mode. If the window was not
  * fullscreen, does nothing.
@@ -6238,14 +6238,14 @@ gdk_window_get_fullscreen_mode (GdkWindow *window)
  * it to happen.
  **/
 void
-gdk_window_unfullscreen (GdkWindow *window)
+gdk_surface_unfullscreen (GdkSurface *window)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->unfullscreen (window);
+  GDK_SURFACE_IMPL_GET_CLASS (window->impl)->unfullscreen (window);
 }
 
 /**
- * gdk_window_set_keep_above:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_set_keep_above:
+ * @window: a toplevel #GdkSurface
  * @setting: whether to keep @window above other windows
  *
  * Set if @window must be kept above other windows. If the
@@ -6259,15 +6259,15 @@ gdk_window_unfullscreen (GdkWindow *window)
  * and GDK makes a best effort to get it to happen.
  **/
 void
-gdk_window_set_keep_above (GdkWindow *window,
+gdk_surface_set_keep_above (GdkSurface *window,
                            gboolean   setting)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_keep_above (window, setting);
+  GDK_SURFACE_IMPL_GET_CLASS (window->impl)->set_keep_above (window, setting);
 }
 
 /**
- * gdk_window_set_keep_below:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_set_keep_below:
+ * @window: a toplevel #GdkSurface
  * @setting: whether to keep @window below other windows
  *
  * Set if @window must be kept below other windows. If the
@@ -6281,28 +6281,28 @@ gdk_window_set_keep_above (GdkWindow *window,
  * and GDK makes a best effort to get it to happen.
  **/
 void
-gdk_window_set_keep_below (GdkWindow *window, gboolean setting)
+gdk_surface_set_keep_below (GdkSurface *window, gboolean setting)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_keep_below (window, setting);
+  GDK_SURFACE_IMPL_GET_CLASS (window->impl)->set_keep_below (window, setting);
 }
 
 /**
- * gdk_window_get_group:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_get_group:
+ * @window: a toplevel #GdkSurface
  *
- * Returns the group leader window for @window. See gdk_window_set_group().
+ * Returns the group leader window for @window. See gdk_surface_set_group().
  *
  * Returns: (transfer none): the group leader window for @window
  **/
-GdkWindow *
-gdk_window_get_group (GdkWindow *window)
+GdkSurface *
+gdk_surface_get_group (GdkSurface *window)
 {
-  return GDK_WINDOW_IMPL_GET_CLASS (window->impl)->get_group (window);
+  return GDK_SURFACE_IMPL_GET_CLASS (window->impl)->get_group (window);
 }
 
 /**
- * gdk_window_set_group:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_set_group:
+ * @window: a toplevel #GdkSurface
  * @leader: (allow-none): group leader window, or %NULL to restore the default group leader window
  *
  * Sets the group leader window for @window. By default,
@@ -6317,18 +6317,18 @@ gdk_window_get_group (GdkWindow *window)
  * if your application pretends to be multiple applications.
  **/
 void
-gdk_window_set_group (GdkWindow *window,
-		      GdkWindow *leader)
+gdk_surface_set_group (GdkSurface *window,
+		      GdkSurface *leader)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_group (window, leader);
+  GDK_SURFACE_IMPL_GET_CLASS (window->impl)->set_group (window, leader);
 }
 
 /**
- * gdk_window_set_decorations:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_set_decorations:
+ * @window: a toplevel #GdkSurface
  * @decorations: decoration hint mask
  *
- * “Decorations” are the features the window manager adds to a toplevel #GdkWindow.
+ * “Decorations” are the features the window manager adds to a toplevel #GdkSurface.
  * This function sets the traditional Motif window manager hints that tell the
  * window manager which decorations you would like your window to have.
  * Usually you should use gtk_window_set_decorated() on a #GtkWindow instead of
@@ -6345,32 +6345,32 @@ gdk_window_set_group (GdkWindow *window,
  *
  **/
 void
-gdk_window_set_decorations (GdkWindow      *window,
+gdk_surface_set_decorations (GdkSurface      *window,
 			    GdkWMDecoration decorations)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_decorations (window, decorations);
+  GDK_SURFACE_IMPL_GET_CLASS (window->impl)->set_decorations (window, decorations);
 }
 
 /**
- * gdk_window_get_decorations:
- * @window: The toplevel #GdkWindow to get the decorations from
+ * gdk_surface_get_decorations:
+ * @window: The toplevel #GdkSurface to get the decorations from
  * @decorations: (out): The window decorations will be written here
  *
- * Returns the decorations set on the GdkWindow with
- * gdk_window_set_decorations().
+ * Returns the decorations set on the GdkSurface with
+ * gdk_surface_set_decorations().
  *
  * Returns: %TRUE if the window has decorations set, %FALSE otherwise.
  **/
 gboolean
-gdk_window_get_decorations(GdkWindow       *window,
+gdk_surface_get_decorations(GdkSurface       *window,
 			   GdkWMDecoration *decorations)
 {
-  return GDK_WINDOW_IMPL_GET_CLASS (window->impl)->get_decorations (window, decorations);
+  return GDK_SURFACE_IMPL_GET_CLASS (window->impl)->get_decorations (window, decorations);
 }
 
 /**
- * gdk_window_set_functions:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_set_functions:
+ * @window: a toplevel #GdkSurface
  * @functions: bitmask of operations to allow on @window
  *
  * Sets hints about the window management functions to make available
@@ -6389,15 +6389,15 @@ gdk_window_get_decorations(GdkWindow       *window,
  *
  **/
 void
-gdk_window_set_functions (GdkWindow    *window,
+gdk_surface_set_functions (GdkSurface    *window,
 			  GdkWMFunction functions)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_functions (window, functions);
+  GDK_SURFACE_IMPL_GET_CLASS (window->impl)->set_functions (window, functions);
 }
 
 /**
- * gdk_window_begin_resize_drag_for_device:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_begin_resize_drag_for_device:
+ * @window: a toplevel #GdkSurface
  * @edge: the edge or corner from which the drag is started
  * @device: the device used for the operation
  * @button: the button being used to drag, or 0 for a keyboard-initiated drag
@@ -6413,20 +6413,20 @@ gdk_window_set_functions (GdkWindow    *window,
  * but has a fallback implementation for other window managers.
  */
 void
-gdk_window_begin_resize_drag_for_device (GdkWindow     *window,
-                                         GdkWindowEdge  edge,
+gdk_surface_begin_resize_drag_for_device (GdkSurface     *window,
+                                         GdkSurfaceEdge  edge,
                                          GdkDevice     *device,
                                          gint           button,
                                          gint           root_x,
                                          gint           root_y,
                                          guint32        timestamp)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->begin_resize_drag (window, edge, device, button, root_x, root_y, timestamp);
+  GDK_SURFACE_IMPL_GET_CLASS (window->impl)->begin_resize_drag (window, edge, device, button, root_x, root_y, timestamp);
 }
 
 /**
- * gdk_window_begin_resize_drag:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_begin_resize_drag:
+ * @window: a toplevel #GdkSurface
  * @edge: the edge or corner from which the drag is started
  * @button: the button being used to drag, or 0 for a keyboard-initiated drag
  * @root_x: root window X coordinate of mouse click that began the drag
@@ -6436,12 +6436,12 @@ gdk_window_begin_resize_drag_for_device (GdkWindow     *window,
  * Begins a window resize operation (for a toplevel window).
  *
  * This function assumes that the drag is controlled by the
- * client pointer device, use gdk_window_begin_resize_drag_for_device()
+ * client pointer device, use gdk_surface_begin_resize_drag_for_device()
  * to begin a drag with a different device.
  */
 void
-gdk_window_begin_resize_drag (GdkWindow     *window,
-                              GdkWindowEdge  edge,
+gdk_surface_begin_resize_drag (GdkSurface     *window,
+                              GdkSurfaceEdge  edge,
                               gint           button,
                               gint           root_x,
                               gint           root_y,
@@ -6450,15 +6450,15 @@ gdk_window_begin_resize_drag (GdkWindow     *window,
   GdkDisplay *display;
   GdkDevice *device;
 
-  display = gdk_window_get_display (window);
+  display = gdk_surface_get_display (window);
   device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
-  gdk_window_begin_resize_drag_for_device (window, edge,
+  gdk_surface_begin_resize_drag_for_device (window, edge,
                                            device, button, root_x, root_y, timestamp);
 }
 
 /**
- * gdk_window_begin_move_drag_for_device:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_begin_move_drag_for_device:
+ * @window: a toplevel #GdkSurface
  * @device: the device used for the operation
  * @button: the button being used to drag, or 0 for a keyboard-initiated drag
  * @root_x: root window X coordinate of mouse click that began the drag
@@ -6472,20 +6472,20 @@ gdk_window_begin_resize_drag (GdkWindow     *window,
  * but has a fallback implementation for other window managers.
  */
 void
-gdk_window_begin_move_drag_for_device (GdkWindow *window,
+gdk_surface_begin_move_drag_for_device (GdkSurface *window,
                                        GdkDevice *device,
                                        gint       button,
                                        gint       root_x,
                                        gint       root_y,
                                        guint32    timestamp)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->begin_move_drag (window,
+  GDK_SURFACE_IMPL_GET_CLASS (window->impl)->begin_move_drag (window,
                                                              device, button, root_x, root_y, timestamp);
 }
 
 /**
- * gdk_window_begin_move_drag:
- * @window: a toplevel #GdkWindow
+ * gdk_surface_begin_move_drag:
+ * @window: a toplevel #GdkSurface
  * @button: the button being used to drag, or 0 for a keyboard-initiated drag
  * @root_x: root window X coordinate of mouse click that began the drag
  * @root_y: root window Y coordinate of mouse click that began the drag
@@ -6494,11 +6494,11 @@ gdk_window_begin_move_drag_for_device (GdkWindow *window,
  * Begins a window move operation (for a toplevel window).
  *
  * This function assumes that the drag is controlled by the
- * client pointer device, use gdk_window_begin_move_drag_for_device()
+ * client pointer device, use gdk_surface_begin_move_drag_for_device()
  * to begin a drag with a different device.
  */
 void
-gdk_window_begin_move_drag (GdkWindow *window,
+gdk_surface_begin_move_drag (GdkSurface *window,
                             gint       button,
                             gint       root_x,
                             gint       root_y,
@@ -6507,14 +6507,14 @@ gdk_window_begin_move_drag (GdkWindow *window,
   GdkDisplay *display;
   GdkDevice *device;
 
-  display = gdk_window_get_display (window);
+  display = gdk_surface_get_display (window);
   device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
-  gdk_window_begin_move_drag_for_device (window, device, button, root_x, root_y, timestamp);
+  gdk_surface_begin_move_drag_for_device (window, device, button, root_x, root_y, timestamp);
 }
 
 /**
- * gdk_window_set_opacity:
- * @window: a top-level or non-native #GdkWindow
+ * gdk_surface_set_opacity:
+ * @window: a top-level or non-native #GdkSurface
  * @opacity: opacity
  *
  * Set @window to render as partially transparent,
@@ -6525,7 +6525,7 @@ gdk_window_begin_move_drag (GdkWindow *window,
  * that may not always be there. For instance, On X11, this works only on
  * X screens with a compositing manager running. On Wayland, there is no
  * per-window opacity value that the compositor would apply. Instead, use
- * `gdk_window_set_opaque_region (window, NULL)` to tell the compositor
+ * `gdk_surface_set_opaque_region (window, NULL)` to tell the compositor
  * that the entire window is (potentially) non-opaque, and draw your content
  * with alpha, or use gtk_widget_set_opacity() to set an overall opacity
  * for your widgets.
@@ -6533,7 +6533,7 @@ gdk_window_begin_move_drag (GdkWindow *window,
  * Support for non-toplevel windows was added in 3.8.
  */
 void
-gdk_window_set_opacity (GdkWindow *window,
+gdk_surface_set_opacity (GdkSurface *window,
 			gdouble    opacity)
 {
   if (opacity < 0)
@@ -6546,33 +6546,33 @@ gdk_window_set_opacity (GdkWindow *window,
   if (window->destroyed)
     return;
 
-  if (gdk_window_has_impl (window))
-    GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_opacity (window, opacity);
+  if (gdk_surface_has_impl (window))
+    GDK_SURFACE_IMPL_GET_CLASS (window->impl)->set_opacity (window, opacity);
   else
     {
       recompute_visible_regions (window, FALSE);
-      gdk_window_invalidate_rect_full (window, NULL, TRUE);
+      gdk_surface_invalidate_rect_full (window, NULL, TRUE);
     }
 }
 
 /* This function is called when the XWindow is really gone.
  */
 void
-gdk_window_destroy_notify (GdkWindow *window)
+gdk_surface_destroy_notify (GdkSurface *window)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->destroy_notify (window);
+  GDK_SURFACE_IMPL_GET_CLASS (window->impl)->destroy_notify (window);
 }
 
 /**
- * gdk_window_register_dnd:
- * @window: a #GdkWindow.
+ * gdk_surface_register_dnd:
+ * @window: a #GdkSurface.
  *
  * Registers a window as a potential drop destination.
  */
 void
-gdk_window_register_dnd (GdkWindow *window)
+gdk_surface_register_dnd (GdkSurface *window)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->register_dnd (window);
+  GDK_SURFACE_IMPL_GET_CLASS (window->impl)->register_dnd (window);
 }
 
 /**
@@ -6592,31 +6592,31 @@ gdk_window_register_dnd (GdkWindow *window)
  *     %NULL on error.
  */
 GdkDragContext *
-gdk_drag_begin (GdkWindow          *window,
+gdk_drag_begin (GdkSurface          *window,
                 GdkDevice          *device,
                 GdkContentProvider *content,
                 GdkDragAction       actions,
                 gint                dx,
                 gint                dy)
 {
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), NULL);
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
-  g_return_val_if_fail (gdk_window_get_display (window) == gdk_device_get_display (device), NULL);
+  g_return_val_if_fail (gdk_surface_get_display (window) == gdk_device_get_display (device), NULL);
   g_return_val_if_fail (GDK_IS_CONTENT_PROVIDER (content), NULL);
 
-  return GDK_WINDOW_IMPL_GET_CLASS (window->impl)->drag_begin (window, device, content, actions, dx, dy);
+  return GDK_SURFACE_IMPL_GET_CLASS (window->impl)->drag_begin (window, device, content, actions, dx, dy);
 }
 
 static void
-gdk_window_flush_events (GdkFrameClock *clock,
+gdk_surface_flush_events (GdkFrameClock *clock,
                          void          *data)
 {
-  GdkWindow *window;
+  GdkSurface *window;
   GdkDisplay *display;
 
-  window = GDK_WINDOW (data);
+  window = GDK_SURFACE (data);
 
-  display = gdk_window_get_display (window);
+  display = gdk_surface_get_display (window);
   _gdk_event_queue_flush (display);
   _gdk_display_pause_events (display);
 
@@ -6626,27 +6626,27 @@ gdk_window_flush_events (GdkFrameClock *clock,
 }
 
 static void
-gdk_window_resume_events (GdkFrameClock *clock,
+gdk_surface_resume_events (GdkFrameClock *clock,
                           void          *data)
 {
-  GdkWindow *window;
+  GdkSurface *window;
   GdkDisplay *display;
 
-  window = GDK_WINDOW (data);
+  window = GDK_SURFACE (data);
 
-  display = gdk_window_get_display (window);
+  display = gdk_surface_get_display (window);
   _gdk_display_unpause_events (display);
 
   window->frame_clock_events_paused = FALSE;
 }
 
 static void
-gdk_window_set_frame_clock (GdkWindow     *window,
+gdk_surface_set_frame_clock (GdkSurface     *window,
                             GdkFrameClock *clock)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
   g_return_if_fail (clock == NULL || GDK_IS_FRAME_CLOCK (clock));
-  g_return_if_fail (clock == NULL || gdk_window_is_toplevel (window));
+  g_return_if_fail (clock == NULL || gdk_surface_is_toplevel (window));
 
   if (clock == window->frame_clock)
     return;
@@ -6656,31 +6656,31 @@ gdk_window_set_frame_clock (GdkWindow     *window,
       g_object_ref (clock);
       g_signal_connect (G_OBJECT (clock),
                         "flush-events",
-                        G_CALLBACK (gdk_window_flush_events),
+                        G_CALLBACK (gdk_surface_flush_events),
                         window);
       g_signal_connect (G_OBJECT (clock),
                         "paint",
-                        G_CALLBACK (gdk_window_paint_on_clock),
+                        G_CALLBACK (gdk_surface_paint_on_clock),
                         window);
       g_signal_connect (G_OBJECT (clock),
                         "resume-events",
-                        G_CALLBACK (gdk_window_resume_events),
+                        G_CALLBACK (gdk_surface_resume_events),
                         window);
     }
 
   if (window->frame_clock)
     {
       if (window->frame_clock_events_paused)
-        gdk_window_resume_events (window->frame_clock, G_OBJECT (window));
+        gdk_surface_resume_events (window->frame_clock, G_OBJECT (window));
 
       g_signal_handlers_disconnect_by_func (G_OBJECT (window->frame_clock),
-                                            G_CALLBACK (gdk_window_flush_events),
+                                            G_CALLBACK (gdk_surface_flush_events),
                                             window);
       g_signal_handlers_disconnect_by_func (G_OBJECT (window->frame_clock),
-                                            G_CALLBACK (gdk_window_paint_on_clock),
+                                            G_CALLBACK (gdk_surface_paint_on_clock),
                                             window);
       g_signal_handlers_disconnect_by_func (G_OBJECT (window->frame_clock),
-                                            G_CALLBACK (gdk_window_resume_events),
+                                            G_CALLBACK (gdk_surface_resume_events),
                                             window);
       g_object_unref (window->frame_clock);
     }
@@ -6689,7 +6689,7 @@ gdk_window_set_frame_clock (GdkWindow     *window,
 }
 
 /**
- * gdk_window_get_frame_clock:
+ * gdk_surface_get_frame_clock:
  * @window: window to get frame clock for
  *
  * Gets the frame clock for the window. The frame clock for a window
@@ -6699,19 +6699,19 @@ gdk_window_set_frame_clock (GdkWindow     *window,
  * Returns: (transfer none): the frame clock
  */
 GdkFrameClock*
-gdk_window_get_frame_clock (GdkWindow *window)
+gdk_surface_get_frame_clock (GdkSurface *window)
 {
-  GdkWindow *toplevel;
+  GdkSurface *toplevel;
 
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), NULL);
 
-  toplevel = gdk_window_get_toplevel (window);
+  toplevel = gdk_surface_get_toplevel (window);
 
   return toplevel->frame_clock;
 }
 
 /**
- * gdk_window_get_scale_factor:
+ * gdk_surface_get_scale_factor:
  * @window: window to get scale factor for
  *
  * Returns the internal scale factor that maps from window coordiantes
@@ -6730,16 +6730,16 @@ gdk_window_get_frame_clock (GdkWindow *window)
  * Returns: the scale factor
  */
 gint
-gdk_window_get_scale_factor (GdkWindow *window)
+gdk_surface_get_scale_factor (GdkSurface *window)
 {
-  GdkWindowImplClass *impl_class;
+  GdkSurfaceImplClass *impl_class;
 
-  g_return_val_if_fail (GDK_IS_WINDOW (window), 1);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), 1);
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return 1;
 
-  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+  impl_class = GDK_SURFACE_IMPL_GET_CLASS (window->impl);
 
   if (impl_class->get_scale_factor)
     return impl_class->get_scale_factor (window);
@@ -6751,18 +6751,18 @@ gdk_window_get_scale_factor (GdkWindow *window)
    in window scale coordinates. We need this to properly handle GL
    coordinates which are y-flipped in the real coordinates. */
 void
-gdk_window_get_unscaled_size (GdkWindow *window,
+gdk_surface_get_unscaled_size (GdkSurface *window,
                               int *unscaled_width,
                               int *unscaled_height)
 {
-  GdkWindowImplClass *impl_class;
+  GdkSurfaceImplClass *impl_class;
   gint scale;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
   if (window->impl_window == window)
     {
-      impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+      impl_class = GDK_SURFACE_IMPL_GET_CLASS (window->impl);
 
       if (impl_class->get_unscaled_size)
         {
@@ -6771,7 +6771,7 @@ gdk_window_get_unscaled_size (GdkWindow *window,
         }
     }
 
-  scale = gdk_window_get_scale_factor (window);
+  scale = gdk_surface_get_scale_factor (window);
 
   if (unscaled_width)
     *unscaled_width = window->width * scale;
@@ -6782,8 +6782,8 @@ gdk_window_get_unscaled_size (GdkWindow *window,
 
 
 /**
- * gdk_window_set_opaque_region:
- * @window: a top-level or non-native #GdkWindow
+ * gdk_surface_set_opaque_region:
+ * @window: a top-level or non-native #GdkSurface
  * @region: (allow-none):  a region, or %NULL
  *
  * For optimisation purposes, compositing window managers may
@@ -6801,13 +6801,13 @@ gdk_window_get_unscaled_size (GdkWindow *window,
  * property in your #GtkWidget::style-updated handler.
  */
 void
-gdk_window_set_opaque_region (GdkWindow      *window,
+gdk_surface_set_opaque_region (GdkSurface      *window,
                               cairo_region_t *region)
 {
-  GdkWindowImplClass *impl_class;
+  GdkSurfaceImplClass *impl_class;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
-  g_return_if_fail (!GDK_WINDOW_DESTROYED (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
+  g_return_if_fail (!GDK_SURFACE_DESTROYED (window));
 
   if (cairo_region_equal (window->opaque_region, region))
     return;
@@ -6817,15 +6817,15 @@ gdk_window_set_opaque_region (GdkWindow      *window,
   if (region != NULL)
     window->opaque_region = cairo_region_reference (region);
 
-  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+  impl_class = GDK_SURFACE_IMPL_GET_CLASS (window->impl);
 
   if (impl_class->set_opaque_region)
     impl_class->set_opaque_region (window, region);
 }
 
 /**
- * gdk_window_set_shadow_width:
- * @window: a #GdkWindow
+ * gdk_surface_set_shadow_width:
+ * @window: a #GdkSurface
  * @left: The left extent
  * @right: The right extent
  * @top: The top extent
@@ -6842,16 +6842,16 @@ gdk_window_set_opaque_region (GdkWindow      *window,
  * to create toplevel windows.
  */
 void
-gdk_window_set_shadow_width (GdkWindow *window,
+gdk_surface_set_shadow_width (GdkSurface *window,
                              gint       left,
                              gint       right,
                              gint       top,
                              gint       bottom)
 {
-  GdkWindowImplClass *impl_class;
+  GdkSurfaceImplClass *impl_class;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
-  g_return_if_fail (!GDK_WINDOW_DESTROYED (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
+  g_return_if_fail (!GDK_SURFACE_DESTROYED (window));
   g_return_if_fail (left >= 0 && right >= 0 && top >= 0 && bottom >= 0);
 
   window->shadow_top = top;
@@ -6859,15 +6859,15 @@ gdk_window_set_shadow_width (GdkWindow *window,
   window->shadow_right = right;
   window->shadow_bottom = bottom;
 
-  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+  impl_class = GDK_SURFACE_IMPL_GET_CLASS (window->impl);
 
   if (impl_class->set_shadow_width)
     impl_class->set_shadow_width (window, left, right, top, bottom);
 }
 
 /**
- * gdk_window_show_window_menu:
- * @window: a #GdkWindow
+ * gdk_surface_show_window_menu:
+ * @window: a #GdkSurface
  * @event: a #GdkEvent to show the menu for
  *
  * Asks the windowing system to show the window menu. The window menu
@@ -6879,15 +6879,15 @@ gdk_window_set_shadow_width (GdkWindow *window,
  * Returns: %TRUE if the window menu was shown and %FALSE otherwise.
  */
 gboolean
-gdk_window_show_window_menu (GdkWindow *window,
+gdk_surface_show_window_menu (GdkSurface *window,
                              GdkEvent  *event)
 {
-  GdkWindowImplClass *impl_class;
+  GdkSurfaceImplClass *impl_class;
 
-  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
-  g_return_val_if_fail (!GDK_WINDOW_DESTROYED (window), FALSE);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), FALSE);
+  g_return_val_if_fail (!GDK_SURFACE_DESTROYED (window), FALSE);
 
-  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+  impl_class = GDK_SURFACE_IMPL_GET_CLASS (window->impl);
 
   if (impl_class->show_window_menu)
     return impl_class->show_window_menu (window, event);
@@ -6896,14 +6896,14 @@ gdk_window_show_window_menu (GdkWindow *window,
 }
 
 gboolean
-gdk_window_supports_edge_constraints (GdkWindow *window)
+gdk_surface_supports_edge_constraints (GdkSurface *window)
 {
-  GdkWindowImplClass *impl_class;
+  GdkSurfaceImplClass *impl_class;
 
-  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
-  g_return_val_if_fail (!GDK_WINDOW_DESTROYED (window), FALSE);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), FALSE);
+  g_return_val_if_fail (!GDK_SURFACE_DESTROYED (window), FALSE);
 
-  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+  impl_class = GDK_SURFACE_IMPL_GET_CLASS (window->impl);
 
   if (impl_class->supports_edge_constraints)
     return impl_class->supports_edge_constraints (window);
@@ -6912,46 +6912,46 @@ gdk_window_supports_edge_constraints (GdkWindow *window)
 }
 
 void
-gdk_window_set_state (GdkWindow      *window,
-                      GdkWindowState  new_state)
+gdk_surface_set_state (GdkSurface      *window,
+                      GdkSurfaceState  new_state)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
   if (new_state == window->state)
     return; /* No actual work to do, nothing changed. */
 
-  /* Actually update the field in GdkWindow, this is sort of an odd
+  /* Actually update the field in GdkSurface, this is sort of an odd
    * place to do it, but seems like the safest since it ensures we expose no
    * inconsistent state to the user.
    */
 
   window->state = new_state;
 
-  _gdk_window_update_viewable (window);
+  _gdk_surface_update_viewable (window);
 
   /* We only really send the event to toplevels, since
    * all the window states don't apply to non-toplevels.
-   * Non-toplevels do use the GDK_WINDOW_STATE_WITHDRAWN flag
+   * Non-toplevels do use the GDK_SURFACE_STATE_WITHDRAWN flag
    * internally so we needed to update window->state.
    */
   switch (window->window_type)
     {
-    case GDK_WINDOW_TOPLEVEL:
-    case GDK_WINDOW_TEMP: /* ? */
+    case GDK_SURFACE_TOPLEVEL:
+    case GDK_SURFACE_TEMP: /* ? */
       g_object_notify (G_OBJECT (window), "state");
       break;
-    case GDK_WINDOW_FOREIGN:
-    case GDK_WINDOW_ROOT:
-    case GDK_WINDOW_CHILD:
+    case GDK_SURFACE_FOREIGN:
+    case GDK_SURFACE_ROOT:
+    case GDK_SURFACE_CHILD:
     default:
       break;
     }
 }
 
 void
-gdk_synthesize_window_state (GdkWindow     *window,
-                             GdkWindowState unset_flags,
-                             GdkWindowState set_flags)
+gdk_synthesize_window_state (GdkSurface     *window,
+                             GdkSurfaceState unset_flags,
+                             GdkSurfaceState set_flags)
 {
-  gdk_window_set_state (window, (window->state | set_flags) & ~unset_flags);
+  gdk_surface_set_state (window, (window->state | set_flags) & ~unset_flags);
 }

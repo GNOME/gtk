@@ -44,10 +44,10 @@ G_BEGIN_DECLS
 
 #include "gdkprivate-win32.h"
 
-#define GDK_WINDOW_HWND(win)          (GDK_WINDOW_IMPL_WIN32(win->impl)->handle)
+#define GDK_SURFACE_HWND(win)          (GDK_SURFACE_IMPL_WIN32(win->impl)->handle)
 #else
 /* definition for exported 'internals' go here */
-#define GDK_WINDOW_HWND(d) (gdk_win32_window_get_handle (d))
+#define GDK_SURFACE_HWND(d) (gdk_win32_surface_get_handle (d))
 
 #endif /* INSIDE_GDK_WIN32 */
 
@@ -68,24 +68,24 @@ G_BEGIN_DECLS
 #define XBUTTON2 2
 #endif
 
-/* Return true if the GdkWindow is a win32 implemented window */
+/* Return true if the GdkSurface is a win32 implemented window */
 GDK_AVAILABLE_IN_ALL
-gboolean      gdk_win32_window_is_win32 (GdkWindow *window);
+gboolean      gdk_win32_surface_is_win32 (GdkSurface *window);
 GDK_AVAILABLE_IN_ALL
-HWND          gdk_win32_window_get_impl_hwnd (GdkWindow *window);
+HWND          gdk_win32_surface_get_impl_hwnd (GdkSurface *window);
 
 /* Return the Gdk* for a particular HANDLE */
 GDK_AVAILABLE_IN_ALL
 gpointer      gdk_win32_handle_table_lookup (HWND handle);
 /* Translate from window to Windows handle */
 GDK_AVAILABLE_IN_ALL
-HGDIOBJ       gdk_win32_window_get_handle (GdkWindow *window);
+HGDIOBJ       gdk_win32_surface_get_handle (GdkSurface *window);
 
 GDK_AVAILABLE_IN_ALL
-GdkWindow *   gdk_win32_window_foreign_new_for_display (GdkDisplay *display,
+GdkSurface *   gdk_win32_surface_foreign_new_for_display (GdkDisplay *display,
                                                         HWND        anid);
 GDK_AVAILABLE_IN_ALL
-GdkWindow *   gdk_win32_window_lookup_for_display (GdkDisplay *display,
+GdkSurface *   gdk_win32_surface_lookup_for_display (GdkDisplay *display,
                                                    HWND        anid);
 
 #if defined (INSIDE_GDK_WIN32) || defined (GDK_COMPILATION) || defined (GTK_COMPILATION)

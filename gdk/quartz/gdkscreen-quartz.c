@@ -53,8 +53,8 @@
  *
  * A Cocoa coordinate is always relative to the origin of the monitor
  * coordinate space.  Such coordinates are mapped to their respective
- * position in the GdkScreen root window (_gdk_quartz_window_xy_to_gdk_xy)
- * and vice versa (_gdk_quartz_window_gdk_xy_to_xy).  Both functions can
+ * position in the GdkScreen root window (_gdk_quartz_surface_xy_to_gdk_xy)
+ * and vice versa (_gdk_quartz_surface_gdk_xy_to_xy).  Both functions can
  * be found in gdkwindow-quartz.c.  Note that Cocoa coordinates can have
  * negative values (in case a monitor is located left or below of screen 0),
  * but GDK coordinates can *not*!
@@ -208,7 +208,7 @@ _gdk_quartz_screen_update_window_sizes (GdkQuartzScreen *screen)
 
   windows = get_toplevels ();
   for (list = windows; list; list = list->next)
-    _gdk_quartz_window_update_position (list->data);
+    _gdk_quartz_surface_update_position (list->data);
 }
 
 static void

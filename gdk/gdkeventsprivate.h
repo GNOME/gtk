@@ -55,7 +55,7 @@ struct _GdkEventAny
 {
   GObject parent_instance;
   GdkEventType type;
-  GdkWindow *window;
+  GdkSurface *window;
   guint16 flags;
   gint8 send_event;
   GdkDevice *device;
@@ -329,7 +329,7 @@ struct _GdkEventKey
 struct _GdkEventCrossing
 {
   GdkEventAny any;
-  GdkWindow *subwindow;
+  GdkSurface *subwindow;
   guint32 time;
   gdouble x;
   gdouble y;
@@ -427,7 +427,7 @@ struct _GdkEventGrabBroken {
   GdkEventAny any;
   gboolean keyboard;
   gboolean implicit;
-  GdkWindow *grab_window;
+  GdkSurface *grab_window;
 };
 
 /*

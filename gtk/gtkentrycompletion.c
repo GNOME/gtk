@@ -568,7 +568,7 @@ gtk_entry_completion_constructed (GObject *object)
   gtk_window_set_use_subsurface (GTK_WINDOW (priv->popup_window), TRUE);
   gtk_window_set_resizable (GTK_WINDOW (priv->popup_window), FALSE);
   gtk_window_set_type_hint (GTK_WINDOW(priv->popup_window),
-                            GDK_WINDOW_TYPE_HINT_COMBO);
+                            GDK_SURFACE_TYPE_HINT_COMBO);
 
   g_signal_connect (priv->popup_window, "event",
                     G_CALLBACK (gtk_entry_completion_popup_event),
@@ -1372,7 +1372,7 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   GdkDisplay *display;
   GdkMonitor *monitor;
   GdkRectangle area;
-  GdkWindow *window;
+  GdkSurface *window;
   GtkRequisition popup_req;
   GtkRequisition entry_req;
   GtkRequisition tree_req;
@@ -1394,7 +1394,7 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   gtk_widget_get_preferred_size (completion->priv->entry,
                                  &entry_req, NULL);
 
-  gdk_window_get_origin (window, &x, &y);
+  gdk_surface_get_origin (window, &x, &y);
   x += allocation.x;
   y += allocation.y + (allocation.height - entry_req.height) / 2;
 
@@ -1478,7 +1478,7 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
 
 static void
 prepare_popup_func (GdkSeat   *seat,
-                    GdkWindow *window,
+                    GdkSurface *window,
                     gpointer   user_data)
 {
   GtkEntryCompletion *completion = user_data;

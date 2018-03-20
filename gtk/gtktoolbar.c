@@ -2238,7 +2238,7 @@ show_menu (GtkToolbar     *toolbar,
                     "anchor-hints", (GDK_ANCHOR_FLIP_Y |
                                      GDK_ANCHOR_SLIDE |
                                      GDK_ANCHOR_RESIZE),
-                    "menu-type-hint", GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU,
+                    "menu-type-hint", GDK_SURFACE_TYPE_HINT_DROPDOWN_MENU,
                     "rect-anchor-dx", -minimum_size.width,
                     NULL);
 

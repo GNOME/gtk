@@ -411,7 +411,7 @@ gdk_monitor_get_model (GdkMonitor *monitor)
  *
  * This can be used if you want to create pixel based data for a
  * particular monitor, but most of the time you’re drawing to a window
- * where it is better to use gdk_window_get_scale_factor() instead.
+ * where it is better to use gdk_surface_get_scale_factor() instead.
  *
  * Returns: the scale factor
  */

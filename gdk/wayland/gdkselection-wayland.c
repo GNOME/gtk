@@ -427,9 +427,9 @@ static const struct wl_data_source_listener data_source_listener = {
 };
 
 struct wl_data_source *
-gdk_wayland_selection_get_data_source (GdkWindow *owner)
+gdk_wayland_selection_get_data_source (GdkSurface *owner)
 {
-  GdkDisplay *display = gdk_window_get_display (owner);
+  GdkDisplay *display = gdk_surface_get_display (owner);
   GdkWaylandSelection *wayland_selection = gdk_wayland_display_get_selection (display);
   gpointer source = NULL;
   GdkWaylandDisplay *display_wayland;
@@ -437,7 +437,7 @@ gdk_wayland_selection_get_data_source (GdkWindow *owner)
   if (wayland_selection->dnd_source)
     return wayland_selection->dnd_source;
 
-  display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (owner));
+  display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (owner));
 
   source = wl_data_device_manager_create_data_source (display_wayland->data_device_manager);
   wl_data_source_add_listener (source,

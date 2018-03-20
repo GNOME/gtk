@@ -64,7 +64,7 @@ typedef enum {
 /**
  * GdkSeatGrabPrepareFunc:
  * @seat: the #GdkSeat being grabbed
- * @window: the #GdkWindow being grabbed
+ * @window: the #GdkSurface being grabbed
  * @user_data: user data passed in gdk_seat_grab()
  *
  * Type of the callback used to set up @window so it can be
@@ -75,7 +75,7 @@ typedef enum {
  * Since: 3.20
  */
 typedef void (* GdkSeatGrabPrepareFunc) (GdkSeat   *seat,
-                                         GdkWindow *window,
+                                         GdkSurface *window,
                                          gpointer   user_data);
 
 struct _GdkSeat
@@ -88,7 +88,7 @@ GType          gdk_seat_get_type         (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
 GdkGrabStatus  gdk_seat_grab             (GdkSeat                *seat,
-                                          GdkWindow              *window,
+                                          GdkSurface              *window,
                                           GdkSeatCapabilities     capabilities,
                                           gboolean                owner_events,
                                           GdkCursor              *cursor,

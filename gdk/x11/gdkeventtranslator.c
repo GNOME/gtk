@@ -86,7 +86,7 @@ _gdk_x11_event_translator_select_window_events (GdkEventTranslator *translator,
     iface->select_window_events (translator, window, event_mask);
 }
 
-GdkWindow *
+GdkSurface *
 _gdk_x11_event_translator_get_window (GdkEventTranslator *translator,
                                       GdkDisplay         *display,
                                       const XEvent       *xevent)

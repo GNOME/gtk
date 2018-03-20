@@ -58,7 +58,7 @@ list_ignore_properties (gboolean buglist)
     { "GtkCList",               "selection-mode",       (void*) GTK_SELECTION_NONE, },
     { "GtkWidget",              "has-default",          (void*) TRUE, },                /* conflicts with toplevel-less widgets */
     { "GtkWidget",              "display",              (void*) MATCH_ANY_VALUE },
-    { "GtkWindow",              "type-hint",            (void*) GDK_WINDOW_TYPE_HINT_DND, }, /* conflicts with ::visible=TRUE */
+    { "GtkWindow",              "type-hint",            (void*) GDK_SURFACE_TYPE_HINT_DND, }, /* conflicts with ::visible=TRUE */
     { "GtkCellView",            "background",           (void*) "", },                  /* "" is not a valid background color */
     { "GtkColorButton",         "color",                (void*) NULL, },                /* not a valid boxed color */
     { "GtkInputDialog",         "has-separator",        (void*) MATCH_ANY_VALUE, },     /* property disabled */

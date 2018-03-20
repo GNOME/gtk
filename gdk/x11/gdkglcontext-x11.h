@@ -55,7 +55,7 @@ struct _GdkX11GLContextClass
 };
 
 gboolean        gdk_x11_screen_init_gl                          (GdkX11Screen      *screen);
-GdkGLContext *  gdk_x11_window_create_gl_context                (GdkWindow         *window,
+GdkGLContext *  gdk_x11_surface_create_gl_context                (GdkSurface         *window,
 								 gboolean           attached,
                                                                  GdkGLContext      *share,
                                                                  GError           **error);

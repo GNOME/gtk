@@ -1160,16 +1160,16 @@ gtk_main_iteration_do (gboolean blocking)
 }
 
 static void
-rewrite_events_translate (GdkWindow *old_window,
-                          GdkWindow *new_window,
+rewrite_events_translate (GdkSurface *old_window,
+                          GdkSurface *new_window,
                           gdouble   *x,
                           gdouble   *y)
 {
   gint old_origin_x, old_origin_y;
   gint new_origin_x, new_origin_y;
 
-  gdk_window_get_origin (old_window, &old_origin_x, &old_origin_y);
-  gdk_window_get_origin (new_window, &new_origin_x, &new_origin_y);
+  gdk_surface_get_origin (old_window, &old_origin_x, &old_origin_y);
+  gdk_surface_get_origin (new_window, &new_origin_x, &new_origin_y);
 
   *x += old_origin_x - new_origin_x;
   *y += old_origin_y - new_origin_y;
@@ -1177,7 +1177,7 @@ rewrite_events_translate (GdkWindow *old_window,
 
 static GdkEvent *
 rewrite_event_for_window (GdkEvent  *event,
-                          GdkWindow *new_window)
+                          GdkSurface *new_window)
 {
   event = gdk_event_copy (event);
 
@@ -1245,7 +1245,7 @@ rewrite_event_for_window (GdkEvent  *event,
 static GdkEvent *
 rewrite_event_for_grabs (GdkEvent *event)
 {
-  GdkWindow *grab_window;
+  GdkSurface *grab_window;
   GtkWidget *event_widget, *grab_widget;
   gpointer grab_widget_ptr;
   gboolean owner_events;
@@ -1268,7 +1268,7 @@ rewrite_event_for_grabs (GdkEvent *event)
     case GDK_TOUCH_CANCEL:
     case GDK_TOUCHPAD_SWIPE:
     case GDK_TOUCHPAD_PINCH:
-      display = gdk_window_get_display (event->any.window);
+      display = gdk_surface_get_display (event->any.window);
       device = gdk_event_get_device (event);
 
       if (!gdk_device_grab_info (display, device, &grab_window, &owner_events) ||
@@ -1280,7 +1280,7 @@ rewrite_event_for_grabs (GdkEvent *event)
     }
 
   event_widget = gtk_get_event_widget (event);
-  gdk_window_get_user_data (grab_window, &grab_widget_ptr);
+  gdk_surface_get_user_data (grab_window, &grab_widget_ptr);
   grab_widget = grab_widget_ptr;
 
   if (grab_widget &&
@@ -1659,10 +1659,10 @@ gtk_main_do_event (GdkEvent *event)
   GList *tmp_list;
 
   /* Find the widget which got the event. We store the widget
-   * in the user_data field of GdkWindow's. Ignore the event
+   * in the user_data field of GdkSurface's. Ignore the event
    * if we don't have a widget for it, except for GDK_PROPERTY_NOTIFY
    * events which are handled specially. Though this happens rarely,
-   * bogus events can occur for e.g. destroyed GdkWindows.
+   * bogus events can occur for e.g. destroyed GdkSurfaces.
    */
   event_widget = gtk_get_event_widget (event);
   if (!event_widget)
@@ -1917,7 +1917,7 @@ synth_crossing_for_grab_notify (GtkWidget       *from,
   while (devices)
     {
       GdkDevice *device = devices->data;
-      GdkWindow *from_window, *to_window;
+      GdkSurface *from_window, *to_window;
 
       /* Do not propagate events more than once to
        * the same windows if non-multidevice aware.
@@ -1929,7 +1929,7 @@ synth_crossing_for_grab_notify (GtkWidget       *from,
           from_window = _gtk_widget_get_device_window (from, device);
 
           if (from_window &&
-              !gdk_window_get_support_multidevice (from_window) &&
+              !gdk_surface_get_support_multidevice (from_window) &&
               g_list_find (info->notified_windows, from_window))
             from_window = NULL;
         }
@@ -1941,7 +1941,7 @@ synth_crossing_for_grab_notify (GtkWidget       *from,
           to_window = _gtk_widget_get_device_window (to, device);
 
           if (to_window &&
-              !gdk_window_get_support_multidevice (to_window) &&
+              !gdk_surface_get_support_multidevice (to_window) &&
               g_list_find (info->notified_windows, to_window))
             to_window = NULL;
         }
@@ -2318,9 +2318,9 @@ gtk_get_event_widget (const GdkEvent *event)
 
   widget = NULL;
   if (event && event->any.window &&
-      (event->any.type == GDK_DESTROY || !gdk_window_is_destroyed (event->any.window)))
+      (event->any.type == GDK_DESTROY || !gdk_surface_is_destroyed (event->any.window)))
     {
-      gdk_window_get_user_data (event->any.window, &widget_ptr);
+      gdk_surface_get_user_data (event->any.window, &widget_ptr);
       widget = widget_ptr;
     }
 

@@ -85,7 +85,7 @@ static GdkEventMask gdk_x11_device_manager_xi2_get_handled_events   (GdkEventTra
 static void         gdk_x11_device_manager_xi2_select_window_events (GdkEventTranslator *translator,
                                                                      Window              window,
                                                                      GdkEventMask        event_mask);
-static GdkWindow *  gdk_x11_device_manager_xi2_get_window           (GdkEventTranslator *translator,
+static GdkSurface *  gdk_x11_device_manager_xi2_get_window           (GdkEventTranslator *translator,
                                                                      const XEvent       *xevent);
 
 enum {
@@ -1061,11 +1061,11 @@ translate_notify_type (gint detail)
 static void
 set_user_time (GdkEvent *event)
 {
-  GdkWindow *window;
+  GdkSurface *window;
   guint32 time;
 
-  window = gdk_window_get_toplevel (event->any.window);
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  window = gdk_surface_get_toplevel (event->any.window);
+  g_return_if_fail (GDK_IS_SURFACE (window));
 
   time = gdk_event_get_time (event);
 
@@ -1073,14 +1073,14 @@ set_user_time (GdkEvent *event)
    * to update the latest user interaction time.
    */
   if (time != GDK_CURRENT_TIME)
-    gdk_x11_window_set_user_time (window, time);
+    gdk_x11_surface_set_user_time (window, time);
 }
 
 static gdouble *
 translate_axes (GdkDevice       *device,
                 gdouble          x,
                 gdouble          y,
-                GdkWindow       *window,
+                GdkSurface       *window,
                 XIValuatorState *valuators)
 {
   guint n_axes, i;
@@ -1132,10 +1132,10 @@ translate_axes (GdkDevice       *device,
 }
 
 static gboolean
-is_parent_of (GdkWindow *parent,
-              GdkWindow *child)
+is_parent_of (GdkSurface *parent,
+              GdkSurface *child)
 {
-  GdkWindow *w;
+  GdkSurface *w;
 
   w = child;
   while (w != NULL)
@@ -1143,7 +1143,7 @@ is_parent_of (GdkWindow *parent,
       if (w == parent)
         return TRUE;
 
-      w = gdk_window_get_parent (w);
+      w = gdk_surface_get_parent (w);
     }
 
   return FALSE;
@@ -1152,10 +1152,10 @@ is_parent_of (GdkWindow *parent,
 static gboolean
 get_event_window (GdkEventTranslator *translator,
                   XIEvent            *ev,
-                  GdkWindow         **window_p)
+                  GdkSurface         **window_p)
 {
   GdkDisplay *display;
-  GdkWindow *window = NULL;
+  GdkSurface *window = NULL;
   gboolean should_have_window = TRUE;
 
   display = GDK_X11_DEVICE_MANAGER_CORE (translator)->display;
@@ -1175,7 +1175,7 @@ get_event_window (GdkEventTranslator *translator,
       {
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
 
-        window = gdk_x11_window_lookup_for_display (display, xev->event);
+        window = gdk_x11_surface_lookup_for_display (display, xev->event);
 
         /* Apply keyboard grabs to non-native windows */
         if (ev->evtype == XI_KeyPress || ev->evtype == XI_KeyRelease)
@@ -1207,7 +1207,7 @@ get_event_window (GdkEventTranslator *translator,
       {
         XIEnterEvent *xev = (XIEnterEvent *) ev;
 
-        window = gdk_x11_window_lookup_for_display (display, xev->event);
+        window = gdk_x11_surface_lookup_for_display (display, xev->event);
       }
       break;
     default:
@@ -1349,8 +1349,8 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
   const XGenericEventCookie *cookie;
   GdkDevice *device, *source_device;
   gboolean return_val = TRUE;
-  GdkWindow *window;
-  GdkWindowImplX11 *impl;
+  GdkSurface *window;
+  GdkSurfaceImplX11 *impl;
   int scale;
   XIEvent *ev;
 
@@ -1370,13 +1370,13 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
   if (!get_event_window (translator, ev, &window))
     return FALSE;
 
-  if (window && GDK_WINDOW_DESTROYED (window))
+  if (window && GDK_SURFACE_DESTROYED (window))
     return FALSE;
 
   scale = 1;
   if (window)
     {
-      impl = GDK_WINDOW_IMPL_X11 (window->impl);
+      impl = GDK_SURFACE_IMPL_X11 (window->impl);
       scale = impl->window_scale;
     }
 
@@ -1805,7 +1805,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         event->crossing.focus = xev->focus;
 
         event->any.window = window;
-        event->crossing.subwindow = gdk_x11_window_lookup_for_display (display, xev->child);
+        event->crossing.subwindow = gdk_x11_surface_lookup_for_display (display, xev->child);
 
         device = g_hash_table_lookup (device_manager->id_table,
                                       GINT_TO_POINTER (xev->deviceid));
@@ -1817,7 +1817,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
         if (ev->evtype == XI_Enter &&
             xev->detail != XINotifyInferior && xev->mode != XINotifyPassiveUngrab &&
-	    gdk_window_get_window_type (window) == GDK_WINDOW_TOPLEVEL)
+	    gdk_surface_get_window_type (window) == GDK_SURFACE_TOPLEVEL)
           {
             if (gdk_device_get_device_type (source_device) != GDK_DEVICE_TYPE_MASTER)
               _gdk_device_xi2_reset_scroll_valuators (GDK_X11_DEVICE_XI2 (source_device));
@@ -1926,13 +1926,13 @@ gdk_x11_device_manager_xi2_select_window_events (GdkEventTranslator *translator,
   g_free (event_mask.mask);
 }
 
-static GdkWindow *
+static GdkSurface *
 gdk_x11_device_manager_xi2_get_window (GdkEventTranslator *translator,
                                        const XEvent       *xevent)
 {
   GdkX11DeviceManagerXI2 *device_manager;
   XIEvent *ev;
-  GdkWindow *window = NULL;
+  GdkSurface *window = NULL;
 
   device_manager = (GdkX11DeviceManagerXI2 *) translator;
 

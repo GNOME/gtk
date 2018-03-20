@@ -250,7 +250,7 @@ static gchar *types[] =
   "GtkTreeSelection ",
   "GdkDisplay ",
   "GdkScreen ",
-  "GdkWindow ",
+  "GdkSurface ",
   "GdkEventButton ",
   "GdkCursor ",
   "GtkTreeIter ",

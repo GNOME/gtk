@@ -36,8 +36,8 @@
  * #GdkVulkanContext is an object representing the platform-specific
  * Vulkan draw context.
  *
- * #GdkVulkanContexts are created for a #GdkWindow using
- * gdk_window_create_vulkan_context(), and the context will match the
+ * #GdkVulkanContexts are created for a #GdkSurface using
+ * gdk_surface_create_vulkan_context(), and the context will match the
  * the characteristics of the window.
  *
  * Support for #GdkVulkanContext is platform-specific, context creation
@@ -250,7 +250,7 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
                                     GError           **error)
 {
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
-  GdkWindow *window = gdk_draw_context_get_window (GDK_DRAW_CONTEXT (context));
+  GdkSurface *window = gdk_draw_context_get_window (GDK_DRAW_CONTEXT (context));
   VkSurfaceCapabilitiesKHR capabilities;
   VkCompositeAlphaFlagBitsKHR composite_alpha;
   VkSwapchainKHR new_swapchain;
@@ -258,8 +258,8 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
   VkDevice device;
   guint i;
 
-  if (gdk_window_get_width (window) * gdk_window_get_scale_factor (window) == priv->swapchain_width &&
-      gdk_window_get_height (window) * gdk_window_get_scale_factor (window) == priv->swapchain_height)
+  if (gdk_surface_get_width (window) * gdk_surface_get_scale_factor (window) == priv->swapchain_width &&
+      gdk_surface_get_height (window) * gdk_surface_get_scale_factor (window) == priv->swapchain_height)
     return TRUE;
 
   device = gdk_vulkan_context_get_device (context);
@@ -295,8 +295,8 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
    */
   if (capabilities.currentExtent.width == -1 || capabilities.currentExtent.height == -1)
     {
-      capabilities.currentExtent.width = gdk_window_get_width (window) * gdk_window_get_scale_factor (window);
-      capabilities.currentExtent.height = gdk_window_get_height (window) * gdk_window_get_scale_factor (window);
+      capabilities.currentExtent.width = gdk_surface_get_width (window) * gdk_surface_get_scale_factor (window);
+      capabilities.currentExtent.height = gdk_surface_get_height (window) * gdk_surface_get_scale_factor (window);
     }
 
   res = GDK_VK_CHECK (vkCreateSwapchainKHR, device,
@@ -361,8 +361,8 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
         {
           priv->regions[i] = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
                                                                 0, 0,
-                                                                gdk_window_get_width (window),
-                                                                gdk_window_get_height (window),
+                                                                gdk_surface_get_width (window),
+                                                                gdk_surface_get_height (window),
                                                             });
         }
     }
@@ -705,8 +705,8 @@ gdk_vulkan_context_get_image (GdkVulkanContext *context,
  *
  * Gets the index of the image that is currently being drawn.
  *
- * This function can only be used between gdk_window_begin_draw_frame() and
- * gdk_window_end_draw_frame() calls for the toplevel window that the
+ * This function can only be used between gdk_surface_begin_draw_frame() and
+ * gdk_surface_end_draw_frame() calls for the toplevel window that the
  * @context is associated with.
  *
  * Returns: the index of the images that is being drawn
@@ -729,8 +729,8 @@ gdk_vulkan_context_get_draw_index (GdkVulkanContext *context)
  * Gets the Vulkan semaphore that protects access to the image that is
  * currently being drawn.
  *
- * This function can only be used between gdk_window_begin_draw_frame() and
- * gdk_window_end_draw_frame() calls for the toplevel window that the
+ * This function can only be used between gdk_surface_begin_draw_frame() and
+ * gdk_surface_end_draw_frame() calls for the toplevel window that the
  * @context is associated with.
  *
  * Returns: (transfer none): the VkSemaphore

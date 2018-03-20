@@ -55,13 +55,13 @@ static GSourceFuncs event_funcs = {
   gdk_event_source_finalize
 };
 
-static GdkWindow *
+static GdkSurface *
 gdk_event_source_get_filter_window (GdkEventSource      *event_source,
                                     const XEvent        *xevent,
                                     GdkEventTranslator **event_translator)
 {
   GList *list = event_source->translators;
-  GdkWindow *window;
+  GdkSurface *window;
 
   *event_translator = NULL;
 
@@ -80,10 +80,10 @@ gdk_event_source_get_filter_window (GdkEventSource      *event_source,
         }
     }
 
-  window = gdk_x11_window_lookup_for_display (event_source->display,
+  window = gdk_x11_surface_lookup_for_display (event_source->display,
                                               xevent->xany.window);
 
-  if (window && !GDK_IS_WINDOW (window))
+  if (window && !GDK_IS_SURFACE (window))
     window = NULL;
 
   return window;
@@ -96,8 +96,8 @@ handle_focus_change (GdkEventCrossing *event)
   GdkX11Screen *x11_screen;
   gboolean focus_in, had_focus;
 
-  toplevel = _gdk_x11_window_get_toplevel (event->any.window);
-  x11_screen = GDK_X11_SCREEN (GDK_WINDOW_SCREEN (event->any.window));
+  toplevel = _gdk_x11_surface_get_toplevel (event->any.window);
+  x11_screen = GDK_X11_SCREEN (GDK_SURFACE_SCREEN (event->any.window));
   focus_in = (event->any.type == GDK_ENTER_NOTIFY);
 
   if (x11_screen->wmspec_check_window)
@@ -124,7 +124,7 @@ handle_focus_change (GdkEventCrossing *event)
       focus_event->focus_change.in = focus_in;
       gdk_event_set_device (focus_event, gdk_event_get_device ((GdkEvent *) event));
 
-      gdk_display_put_event (gdk_window_get_display (event->any.window), focus_event);
+      gdk_display_put_event (gdk_surface_get_display (event->any.window), focus_event);
       g_object_unref (focus_event);
     }
 }
@@ -232,7 +232,7 @@ gdk_event_source_translate_event (GdkX11Display  *x11_display,
   GdkFilterReturn result = GDK_FILTER_CONTINUE;
   GdkDisplay *display = GDK_DISPLAY (x11_display);
   GdkEventTranslator *event_translator;
-  GdkWindow *filter_window;
+  GdkSurface *filter_window;
   Display *dpy;
   GdkX11Screen *x11_screen;
   gpointer cache;
@@ -254,15 +254,15 @@ gdk_event_source_translate_event (GdkX11Display  *x11_display,
       xevent->xany.window == x11_screen->xsettings_manager_window)
     result = gdk_xsettings_manager_window_filter (xevent, event, x11_screen);
 
-  cache = gdk_window_cache_get (display);
+  cache = gdk_surface_cache_get (display);
   if (cache)
     {
       if (result == GDK_FILTER_CONTINUE)
-        result = gdk_window_cache_shape_filter (xevent, event, cache);
+        result = gdk_surface_cache_shape_filter (xevent, event, cache);
 
       if (result == GDK_FILTER_CONTINUE &&
           xevent->xany.window == XRootWindow (dpy, 0))
-        result = gdk_window_cache_filter (xevent, event, cache);
+        result = gdk_surface_cache_filter (xevent, event, cache);
     }
 
   if (result == GDK_FILTER_CONTINUE)

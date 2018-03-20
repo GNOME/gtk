@@ -171,7 +171,7 @@ gdk_display_class_init (GdkDisplayClass *class)
   object_class->get_property = gdk_display_get_property;
 
   class->get_app_launch_context = gdk_display_real_get_app_launch_context;
-  class->window_type = GDK_TYPE_WINDOW;
+  class->window_type = GDK_TYPE_SURFACE;
 
   class->opened = gdk_display_real_opened;
   class->make_default = gdk_display_real_make_default;
@@ -326,10 +326,10 @@ gdk_display_class_init (GdkDisplayClass *class)
 }
 
 static void
-free_pointer_info (GdkPointerWindowInfo *info)
+free_pointer_info (GdkPointerSurfaceInfo *info)
 {
   g_clear_object (&info->window_under_pointer);
-  g_slice_free (GdkPointerWindowInfo, info);
+  g_slice_free (GdkPointerSurfaceInfo, info);
 }
 
 static void
@@ -516,14 +516,14 @@ gdk_display_put_event (GdkDisplay     *display,
 
 static void
 generate_grab_broken_event (GdkDisplay *display,
-                            GdkWindow  *window,
+                            GdkSurface  *window,
                             GdkDevice  *device,
 			    gboolean    implicit,
-			    GdkWindow  *grab_window)
+			    GdkSurface  *grab_window)
 {
   g_return_if_fail (window != NULL);
 
-  if (!GDK_WINDOW_DESTROYED (window))
+  if (!GDK_SURFACE_DESTROYED (window))
     {
       GdkEvent *event;
 
@@ -559,8 +559,8 @@ _gdk_display_get_last_device_grab (GdkDisplay *display,
 GdkDeviceGrabInfo *
 _gdk_display_add_device_grab (GdkDisplay       *display,
                               GdkDevice        *device,
-                              GdkWindow        *window,
-                              GdkWindow        *native_window,
+                              GdkSurface        *window,
+                              GdkSurface        *native_window,
                               GdkGrabOwnership  grab_ownership,
                               gboolean          owner_events,
                               GdkEventMask      event_mask,
@@ -619,23 +619,23 @@ _gdk_display_add_device_grab (GdkDisplay       *display,
   return info;
 }
 
-static GdkWindow *
+static GdkSurface *
 get_current_toplevel (GdkDisplay      *display,
                       GdkDevice       *device,
                       int             *x_out,
                       int             *y_out,
 		      GdkModifierType *state_out)
 {
-  GdkWindow *pointer_window;
+  GdkSurface *pointer_window;
   gdouble x, y;
   GdkModifierType state;
 
   pointer_window = _gdk_device_window_at_position (device, &x, &y, &state, TRUE);
 
   if (pointer_window != NULL &&
-      (GDK_WINDOW_DESTROYED (pointer_window) ||
-       GDK_WINDOW_TYPE (pointer_window) == GDK_WINDOW_ROOT ||
-       GDK_WINDOW_TYPE (pointer_window) == GDK_WINDOW_FOREIGN))
+      (GDK_SURFACE_DESTROYED (pointer_window) ||
+       GDK_SURFACE_TYPE (pointer_window) == GDK_SURFACE_ROOT ||
+       GDK_SURFACE_TYPE (pointer_window) == GDK_SURFACE_FOREIGN))
     pointer_window = NULL;
 
   *x_out = round (x);
@@ -654,8 +654,8 @@ switch_to_pointer_grab (GdkDisplay        *display,
 			guint32            time,
 			gulong             serial)
 {
-  GdkWindow *new_toplevel;
-  GdkPointerWindowInfo *info;
+  GdkSurface *new_toplevel;
+  GdkPointerSurfaceInfo *info;
   GList *old_grabs;
   GdkModifierType state;
   int x = 0, y = 0;
@@ -768,7 +768,7 @@ _gdk_display_device_grab_update (GdkDisplay *display,
 
       if ((next_grab == NULL && current_grab->implicit_ungrab) ||
           (next_grab != NULL && current_grab->window != next_grab->window))
-        generate_grab_broken_event (display, GDK_WINDOW (current_grab->window),
+        generate_grab_broken_event (display, GDK_SURFACE (current_grab->window),
                                     device,
                                     current_grab->implicit,
                                     next_grab? next_grab->window : NULL);
@@ -837,7 +837,7 @@ gboolean
 _gdk_display_end_device_grab (GdkDisplay *display,
                               GdkDevice  *device,
                               gulong      serial,
-                              GdkWindow  *if_child,
+                              GdkSurface  *if_child,
                               gboolean    implicit)
 {
   GdkDeviceGrabInfo *grab;
@@ -851,7 +851,7 @@ _gdk_display_end_device_grab (GdkDisplay *display,
   grab = l->data;
   if (grab &&
       (if_child == NULL ||
-       _gdk_window_event_parent_of (if_child, grab->window)))
+       _gdk_surface_event_parent_of (if_child, grab->window)))
     {
       grab->serial_end = serial;
       grab->implicit_ungrab = implicit;
@@ -916,11 +916,11 @@ _gdk_display_check_grab_ownership (GdkDisplay *display,
   return TRUE;
 }
 
-GdkPointerWindowInfo *
+GdkPointerSurfaceInfo *
 _gdk_display_get_pointer_info (GdkDisplay *display,
                                GdkDevice  *device)
 {
-  GdkPointerWindowInfo *info;
+  GdkPointerSurfaceInfo *info;
 
   if (device && gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     device = gdk_device_get_associated_device (device);
@@ -932,7 +932,7 @@ _gdk_display_get_pointer_info (GdkDisplay *display,
 
   if (G_UNLIKELY (!info))
     {
-      info = g_slice_new0 (GdkPointerWindowInfo);
+      info = g_slice_new0 (GdkPointerSurfaceInfo);
       g_hash_table_insert (display->pointers_info, device, info);
     }
 
@@ -951,7 +951,7 @@ _gdk_display_pointer_info_foreach (GdkDisplay                   *display,
 
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
-      GdkPointerWindowInfo *info = value;
+      GdkPointerSurfaceInfo *info = value;
       GdkDevice *device = key;
 
       (func) (display, device, info, user_data);
@@ -975,7 +975,7 @@ _gdk_display_pointer_info_foreach (GdkDisplay                   *display,
 gboolean
 gdk_device_grab_info (GdkDisplay  *display,
                       GdkDevice   *device,
-                      GdkWindow  **grab_window,
+                      GdkSurface  **grab_window,
                       gboolean    *owner_events)
 {
   GdkDeviceGrabInfo *info;
@@ -1105,12 +1105,12 @@ gdk_display_flush (GdkDisplay *display)
  *
  * Returns the default group leader window for all toplevel windows
  * on @display. This window is implicitly created by GDK.
- * See gdk_window_set_group().
+ * See gdk_surface_set_group().
  *
  * Returns: (transfer none): The default group leader window
  * for @display
  **/
-GdkWindow *
+GdkSurface *
 gdk_display_get_default_group (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
@@ -1162,7 +1162,7 @@ gdk_display_get_primary_clipboard (GdkDisplay *display)
  * gdk_display_supports_shapes:
  * @display: a #GdkDisplay
  *
- * Returns %TRUE if gdk_window_shape_combine_mask() can
+ * Returns %TRUE if gdk_surface_shape_combine_mask() can
  * be used to create shaped windows on @display.
  *
  * Returns: %TRUE if shaped windows are supported
@@ -1179,7 +1179,7 @@ gdk_display_supports_shapes (GdkDisplay *display)
  * gdk_display_supports_input_shapes:
  * @display: a #GdkDisplay
  *
- * Returns %TRUE if gdk_window_input_shape_combine_mask() can
+ * Returns %TRUE if gdk_surface_input_shape_combine_mask() can
  * be used to modify the input shape of windows on @display.
  *
  * Returns: %TRUE if windows with modified input shape are supported
@@ -1315,10 +1315,10 @@ _gdk_display_event_data_free (GdkDisplay *display,
 
 void
 _gdk_display_create_window_impl (GdkDisplay       *display,
-                                 GdkWindow        *window,
-                                 GdkWindow        *real_parent,
+                                 GdkSurface        *window,
+                                 GdkSurface        *real_parent,
                                  GdkEventMask      event_mask,
-                                 GdkWindowAttr    *attributes)
+                                 GdkSurfaceAttr    *attributes)
 {
   GDK_DISPLAY_GET_CLASS (display)->create_window_impl (display,
                                                        window,
@@ -1327,7 +1327,7 @@ _gdk_display_create_window_impl (GdkDisplay       *display,
                                                        attributes);
 }
 
-GdkWindow *
+GdkSurface *
 _gdk_display_create_window (GdkDisplay *display)
 {
   return g_object_new (GDK_DISPLAY_GET_CLASS (display)->window_type,
@@ -1433,7 +1433,7 @@ gdk_display_set_composited (GdkDisplay *display,
  * to check if that is the case.
  *
  * For setting an overall opacity for a top-level window, see
- * gdk_window_set_opacity().
+ * gdk_surface_set_opacity().
  *
  * On modern displays, this value is always %TRUE.
  *
@@ -1675,7 +1675,7 @@ gdk_display_get_monitor_at_point (GdkDisplay *display,
 /**
  * gdk_display_get_monitor_at_window:
  * @display: a #GdkDisplay
- * @window: a #GdkWindow
+ * @window: a #GdkSurface
  *
  * Gets the monitor in which the largest area of @window
  * resides, or a monitor close to @window if it is outside
@@ -1685,7 +1685,7 @@ gdk_display_get_monitor_at_point (GdkDisplay *display,
  */
 GdkMonitor *
 gdk_display_get_monitor_at_window (GdkDisplay *display,
-                                   GdkWindow  *window)
+                                   GdkSurface  *window)
 {
   GdkRectangle win;
   int n_monitors, i;
@@ -1704,8 +1704,8 @@ gdk_display_get_monitor_at_window (GdkDisplay *display,
         return best;
     }
 
-  gdk_window_get_geometry (window, &win.x, &win.y, &win.width, &win.height);
-  gdk_window_get_origin (window, &win.x, &win.y);
+  gdk_surface_get_geometry (window, &win.x, &win.y, &win.width, &win.height);
+  gdk_surface_get_origin (window, &win.x, &win.y);
 
   n_monitors = gdk_display_get_n_monitors (display);
   for (i = 0; i < n_monitors; i++)

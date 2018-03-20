@@ -16,8 +16,8 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_WINDOW_QUARTZ_H__
-#define __GDK_WINDOW_QUARTZ_H__
+#ifndef __GDK_SURFACE_QUARTZ_H__
+#define __GDK_SURFACE_QUARTZ_H__
 
 #import <gdk/quartz/GdkQuartzView.h>
 #import <gdk/quartz/GdkQuartzNSWindow.h>
@@ -28,31 +28,31 @@ G_BEGIN_DECLS
 /* Window implementation for Quartz
  */
 
-typedef struct _GdkWindowImplQuartz GdkWindowImplQuartz;
-typedef struct _GdkWindowImplQuartzClass GdkWindowImplQuartzClass;
+typedef struct _GdkSurfaceImplQuartz GdkSurfaceImplQuartz;
+typedef struct _GdkSurfaceImplQuartzClass GdkSurfaceImplQuartzClass;
 
-#define GDK_TYPE_WINDOW_IMPL_QUARTZ              (_gdk_window_impl_quartz_get_type ())
-#define GDK_WINDOW_IMPL_QUARTZ(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WINDOW_IMPL_QUARTZ, GdkWindowImplQuartz))
-#define GDK_WINDOW_IMPL_QUARTZ_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WINDOW_IMPL_QUARTZ, GdkWindowImplQuartzClass))
-#define GDK_IS_WINDOW_IMPL_QUARTZ(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WINDOW_IMPL_QUARTZ))
-#define GDK_IS_WINDOW_IMPL_QUARTZ_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WINDOW_IMPL_QUARTZ))
-#define GDK_WINDOW_IMPL_QUARTZ_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WINDOW_IMPL_QUARTZ, GdkWindowImplQuartzClass))
+#define GDK_TYPE_SURFACE_IMPL_QUARTZ              (_gdk_surface_impl_quartz_get_type ())
+#define GDK_SURFACE_IMPL_QUARTZ(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_SURFACE_IMPL_QUARTZ, GdkSurfaceImplQuartz))
+#define GDK_SURFACE_IMPL_QUARTZ_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_SURFACE_IMPL_QUARTZ, GdkSurfaceImplQuartzClass))
+#define GDK_IS_SURFACE_IMPL_QUARTZ(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_SURFACE_IMPL_QUARTZ))
+#define GDK_IS_SURFACE_IMPL_QUARTZ_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_SURFACE_IMPL_QUARTZ))
+#define GDK_SURFACE_IMPL_QUARTZ_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_SURFACE_IMPL_QUARTZ, GdkSurfaceImplQuartzClass))
 
-struct _GdkWindowImplQuartz
+struct _GdkSurfaceImplQuartz
 {
-  GdkWindowImpl parent_instance;
+  GdkSurfaceImpl parent_instance;
 
-  GdkWindow *wrapper;
+  GdkSurface *wrapper;
 
   NSWindow *toplevel;
   NSTrackingRectTag tracking_rect;
   GdkQuartzView *view;
 
-  GdkWindowTypeHint type_hint;
+  GdkSurfaceTypeHint type_hint;
 
   gint in_paint_rect_count;
 
-  GdkWindow *transient_for;
+  GdkSurface *transient_for;
 
   /* Sorted by z-order */
   GList *sorted_children;
@@ -66,21 +66,21 @@ struct _GdkWindowImplQuartz
   gint shadow_max;
 };
  
-struct _GdkWindowImplQuartzClass 
+struct _GdkSurfaceImplQuartzClass 
 {
-  GdkWindowImplClass parent_class;
+  GdkSurfaceImplClass parent_class;
 
-  CGContextRef  (* get_context)     (GdkWindowImplQuartz *window,
+  CGContextRef  (* get_context)     (GdkSurfaceImplQuartz *window,
                                      gboolean             antialias);
-  void          (* release_context) (GdkWindowImplQuartz *window,
+  void          (* release_context) (GdkSurfaceImplQuartz *window,
                                      CGContextRef         cg_context);
 };
 
-GType _gdk_window_impl_quartz_get_type (void);
+GType _gdk_surface_impl_quartz_get_type (void);
 
-CGContextRef gdk_quartz_window_get_context     (GdkWindowImplQuartz *window,
+CGContextRef gdk_quartz_surface_get_context     (GdkSurfaceImplQuartz *window,
                                                 gboolean             antialias);
-void         gdk_quartz_window_release_context (GdkWindowImplQuartz *window,
+void         gdk_quartz_surface_release_context (GdkSurfaceImplQuartz *window,
                                                 CGContextRef         context);
 
 /* Root window implementation for Quartz
@@ -98,12 +98,12 @@ typedef struct _GdkRootWindowImplQuartzClass GdkRootWindowImplQuartzClass;
 
 struct _GdkRootWindowImplQuartz
 {
-  GdkWindowImplQuartz parent_instance;
+  GdkSurfaceImplQuartz parent_instance;
 };
  
 struct _GdkRootWindowImplQuartzClass 
 {
-  GdkWindowImplQuartzClass parent_class;
+  GdkSurfaceImplQuartzClass parent_class;
 };
 
 GType _gdk_root_window_impl_quartz_get_type (void);
@@ -112,4 +112,4 @@ GList *get_toplevels (void);
 
 G_END_DECLS
 
-#endif /* __GDK_WINDOW_QUARTZ_H__ */
+#endif /* __GDK_SURFACE_QUARTZ_H__ */

@@ -219,7 +219,7 @@ void    _gdk_win32_add_format_to_targets                          (UINT         
 gint    _gdk_win32_add_target_to_selformats                       (GdkAtom            target,
                                                                    GArray            *array);
 void    _gdk_win32_selection_property_change                      (GdkWin32Selection *win32_sel,
-                                                                   GdkWindow         *window,
+                                                                   GdkSurface         *window,
                                                                    GdkAtom            property,
                                                                    GdkAtom            type,
                                                                    gint               format,

@@ -49,7 +49,7 @@
 typedef struct _GdkDrawContextPrivate GdkDrawContextPrivate;
 
 struct _GdkDrawContextPrivate {
-  GdkWindow *window;
+  GdkSurface *window;
 
   guint is_drawing : 1;
 };
@@ -148,13 +148,13 @@ gdk_draw_context_class_init (GdkDrawContextClass *klass)
   /**
    * GdkDrawContext:window:
    *
-   * The #GdkWindow the gl context is bound to.
+   * The #GdkSurface the gl context is bound to.
    */
   pspecs[PROP_WINDOW] =
     g_param_spec_object ("window",
                          P_("Window"),
                          P_("The GDK window bound to the context"),
-                         GDK_TYPE_WINDOW,
+                         GDK_TYPE_SURFACE,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
                          G_PARAM_STATIC_STRINGS);
@@ -257,18 +257,18 @@ gdk_draw_context_get_display (GdkDrawContext *context)
 
   g_return_val_if_fail (GDK_IS_DRAW_CONTEXT (context), NULL);
 
-  return priv->window ? gdk_window_get_display (priv->window) : NULL;
+  return priv->window ? gdk_surface_get_display (priv->window) : NULL;
 }
 
 /**
  * gdk_draw_context_get_window:
  * @context: a #GdkDrawContext
  *
- * Retrieves the #GdkWindow used by the @context.
+ * Retrieves the #GdkSurface used by the @context.
  *
- * Returns: (nullable) (transfer none): a #GdkWindow or %NULL
+ * Returns: (nullable) (transfer none): a #GdkSurface or %NULL
  */
-GdkWindow *
+GdkSurface *
 gdk_draw_context_get_window (GdkDrawContext *context)
 {
   GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (context);

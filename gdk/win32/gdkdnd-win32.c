@@ -179,10 +179,10 @@ move_drag_window (GdkDragContext *context,
 {
   GdkWin32DragContext *context_win32 = GDK_WIN32_DRAG_CONTEXT (context);
 
-  gdk_window_move (context_win32->drag_window,
+  gdk_surface_move (context_win32->drag_window,
                    x_root - context_win32->hot_x,
                    y_root - context_win32->hot_y);
-  gdk_window_raise (context_win32->drag_window);
+  gdk_surface_raise (context_win32->drag_window);
 }
 
 static void
@@ -204,7 +204,7 @@ gdk_win32_drag_context_finalize (GObject *object)
 {
   GdkDragContext *context;
   GdkWin32DragContext *context_win32;
-  GdkWindow *drag_window;
+  GdkSurface *drag_window;
 
   GDK_NOTE (DND, g_print ("gdk_drag_context_finalize %p\n", object));
 
@@ -229,7 +229,7 @@ gdk_win32_drag_context_finalize (GObject *object)
   G_OBJECT_CLASS (gdk_win32_drag_context_parent_class)->finalize (object);
 
   if (drag_window)
-    gdk_window_destroy (drag_window);
+    gdk_surface_destroy (drag_window);
 }
 
 /* Drag Contexts */
@@ -237,8 +237,8 @@ gdk_win32_drag_context_finalize (GObject *object)
 static GdkDragContext *
 gdk_drag_context_new (GdkDisplay        *display,
                       gboolean           is_source,
-                      GdkWindow         *source_window,
-                      GdkWindow         *dest_window,
+                      GdkSurface         *source_window,
+                      GdkSurface         *dest_window,
                       GdkDragAction      actions,
                       GdkDevice         *device,
                       GdkDragProtocol    protocol)
@@ -272,8 +272,8 @@ gdk_drag_context_new (GdkDisplay        *display,
 
 static GdkDragContext *
 gdk_drag_context_find (gboolean   is_source,
-		       GdkWindow *source,
-		       GdkWindow *dest)
+		       GdkSurface *source,
+		       GdkSurface *dest)
 {
   GList *tmp_list = contexts;
   GdkDragContext *context;
@@ -312,7 +312,7 @@ typedef struct {
   GdkDragContext *context;
 
   gint ref_count;
-  GdkWindow *dest_window;
+  GdkSurface *dest_window;
 
 } target_drag_context;
 
@@ -588,7 +588,7 @@ idroptarget_dragenter (LPDROPTARGET This,
 
   g_clear_object (&ctx->context);
 
-  context = gdk_drag_context_new (gdk_window_get_display (ctx->dest_window),
+  context = gdk_drag_context_new (gdk_surface_get_display (ctx->dest_window),
                                   FALSE,
                                   /* OLE2 DnD does not allow us to get the source window,
                                    * but we *can* find it if it's ours. This is needed to
@@ -800,7 +800,7 @@ send_change_events (GdkDragContext *context,
   POINT pt;
   POINT pt_client;
   gboolean changed = FALSE;
-  HWND hwnd = GDK_WINDOW_HWND (context->source_window);
+  HWND hwnd = GDK_SURFACE_HWND (context->source_window);
   LPARAM lparam;
   WPARAM wparam;
   gint pt_x;
@@ -1440,7 +1440,7 @@ static IEnumFORMATETCVtbl ief_vtbl = {
 
 
 static target_drag_context *
-target_context_new (GdkWindow *window)
+target_context_new (GdkSurface *window)
 {
   target_drag_context *result;
 
@@ -1459,7 +1459,7 @@ target_context_new (GdkWindow *window)
 
 static source_drag_context *
 source_context_new (GdkDragContext    *context,
-                    GdkWindow         *window,
+                    GdkSurface         *window,
                     GdkContentFormats *formats)
 {
   GdkWin32DragContext *context_win32;
@@ -1669,7 +1669,7 @@ gdk_dropfiles_filter (GdkXEvent *xev,
     {
       GDK_NOTE (DND, g_print ("WM_DROPFILES: %p\n", msg->hwnd));
 
-      context = gdk_drag_context_new (gdk_window_get_display (event->any.window),
+      context = gdk_drag_context_new (gdk_surface_get_display (event->any.window),
                                       FALSE,
                                       NULL,
                                       event->any.window,
@@ -1866,7 +1866,7 @@ local_send_enter (GdkDragContext *context,
       current_dest_drag = NULL;
     }
 
-  new_context = gdk_drag_context_new (gdk_window_get_display (context->source_window),
+  new_context = gdk_drag_context_new (gdk_surface_get_display (context->source_window),
                                       FALSE,
                                       context->source_window,
                                       context->dest_window,
@@ -1875,8 +1875,8 @@ local_send_enter (GdkDragContext *context,
                                       GDK_DRAG_PROTO_LOCAL);
   new_context->formats = gdk_content_formats_ref (context->formats);
 
-  gdk_window_set_events (new_context->source_window,
-			 gdk_window_get_events (new_context->source_window) |
+  gdk_surface_set_events (new_context->source_window,
+			 gdk_surface_get_events (new_context->source_window) |
 			 GDK_PROPERTY_CHANGE_MASK);
 
   tmp_event = gdk_event_new (GDK_DRAG_ENTER);
@@ -1995,20 +1995,20 @@ gdk_drag_do_leave (GdkDragContext *context,
     }
 }
 
-static GdkWindow *
+static GdkSurface *
 create_drag_window (GdkDisplay *display)
 {
-  GdkWindow *window;
+  GdkSurface *window;
 
-  window = gdk_window_new_popup (display, &(GdkRectangle) { 0, 0, 100, 100 });
+  window = gdk_surface_new_popup (display, &(GdkRectangle) { 0, 0, 100, 100 });
 
-  gdk_window_set_type_hint (window, GDK_WINDOW_TYPE_HINT_DND);
+  gdk_surface_set_type_hint (window, GDK_SURFACE_TYPE_HINT_DND);
   
   return window;
 }
 
 GdkDragContext *
-_gdk_win32_window_drag_begin (GdkWindow         *window,
+_gdk_win32_surface_drag_begin (GdkSurface         *window,
                               GdkDevice         *device,
                               GdkContentFormats *formats,
                               GdkDragAction      actions,
@@ -2026,7 +2026,7 @@ _gdk_win32_window_drag_begin (GdkWindow         *window,
   if (use_ole2_dnd)
     g_assert (pending_src_context == NULL);
 
-  context = gdk_drag_context_new (gdk_window_get_display (window),
+  context = gdk_drag_context_new (gdk_surface_get_display (window),
                                   TRUE,
                                   window,
                                   NULL,
@@ -2064,7 +2064,7 @@ _gdk_win32_window_drag_begin (GdkWindow         *window,
   if (kbd_state[VK_RBUTTON] & 0x80)
     context_win32->last_key_state |= MK_RBUTTON;
 
-  context_win32->drag_window = create_drag_window (gdk_window_get_display (window));
+  context_win32->drag_window = create_drag_window (gdk_surface_get_display (window));
 
   if (!drag_context_grab (context))
     {
@@ -2200,25 +2200,25 @@ find_window_enum_proc (HWND   hwnd,
     return TRUE;
 }
 
-static GdkWindow *
+static GdkSurface *
 gdk_win32_drag_context_find_window (GdkDragContext  *context,
-				    GdkWindow       *drag_window,
+				    GdkSurface       *drag_window,
 				    gint             x_root,
 				    gint             y_root,
 				    GdkDragProtocol *protocol)
 {
   GdkWin32DragContext *context_win32 = GDK_WIN32_DRAG_CONTEXT (context);
-  GdkWindow *dest_window, *dw;
+  GdkSurface *dest_window, *dw;
   find_window_enum_arg a;
 
   a.x = x_root * context_win32->scale - _gdk_offset_x;
   a.y = y_root * context_win32->scale - _gdk_offset_y;
-  a.ignore = drag_window ? GDK_WINDOW_HWND (drag_window) : NULL;
+  a.ignore = drag_window ? GDK_SURFACE_HWND (drag_window) : NULL;
   a.result = NULL;
 
   GDK_NOTE (DND,
 	    g_print ("gdk_drag_find_window_real: %p %+d%+d\n",
-		     (drag_window ? GDK_WINDOW_HWND (drag_window) : NULL),
+		     (drag_window ? GDK_SURFACE_HWND (drag_window) : NULL),
 		     a.x, a.y));
 
   EnumWindows (find_window_enum_proc, (LPARAM) &a);
@@ -2230,11 +2230,11 @@ gdk_win32_drag_context_find_window (GdkDragContext  *context,
       dw = gdk_win32_handle_table_lookup (a.result);
       if (dw)
         {
-          dest_window = gdk_window_get_toplevel (dw);
+          dest_window = gdk_surface_get_toplevel (dw);
           g_object_ref (dest_window);
         }
       else
-        dest_window = gdk_win32_window_foreign_new_for_display (context->display, a.result);
+        dest_window = gdk_win32_surface_foreign_new_for_display (context->display, a.result);
 
       if (use_ole2_dnd)
         *protocol = GDK_DRAG_PROTO_OLE2;
@@ -2246,10 +2246,10 @@ gdk_win32_drag_context_find_window (GdkDragContext  *context,
 
   GDK_NOTE (DND,
 	    g_print ("gdk_drag_find_window: %p %+d%+d: %p: %p %s\n",
-		     (drag_window ? GDK_WINDOW_HWND (drag_window) : NULL),
+		     (drag_window ? GDK_SURFACE_HWND (drag_window) : NULL),
 		     x_root, y_root,
 		     a.result,
-		     (dest_window ? GDK_WINDOW_HWND (dest_window) : NULL),
+		     (dest_window ? GDK_SURFACE_HWND (dest_window) : NULL),
 		     _gdk_win32_drag_protocol_to_string (*protocol)));
 
   return dest_window;
@@ -2257,7 +2257,7 @@ gdk_win32_drag_context_find_window (GdkDragContext  *context,
 
 static gboolean
 gdk_win32_drag_context_drag_motion (GdkDragContext *context,
-		 GdkWindow      *dest_window,
+		 GdkSurface      *dest_window,
 		 GdkDragProtocol protocol,
 		 gint            x_root,
 		 gint            y_root,
@@ -2575,7 +2575,7 @@ gdk_destroy_filter (GdkXEvent *xev,
 #endif
 
 void
-_gdk_win32_window_register_dnd (GdkWindow *window)
+_gdk_win32_surface_register_dnd (GdkSurface *window)
 {
   target_drag_context *ctx;
   HRESULT hr;
@@ -2587,7 +2587,7 @@ _gdk_win32_window_register_dnd (GdkWindow *window)
   else
     g_object_set_data (G_OBJECT (window), "gdk-dnd-registered", GINT_TO_POINTER (TRUE));
 
-  GDK_NOTE (DND, g_print ("gdk_window_register_dnd: %p\n", GDK_WINDOW_HWND (window)));
+  GDK_NOTE (DND, g_print ("gdk_surface_register_dnd: %p\n", GDK_SURFACE_HWND (window)));
 
   if (!use_ole2_dnd)
     {
@@ -2596,13 +2596,13 @@ _gdk_win32_window_register_dnd (GdkWindow *window)
        * whether the window (widget) in question actually accepts files
        * (in gtk, data of type text/uri-list) or not.
        */
-      gdk_window_add_filter (window, gdk_dropfiles_filter, NULL);
-      DragAcceptFiles (GDK_WINDOW_HWND (window), TRUE);
+      gdk_surface_add_filter (window, gdk_dropfiles_filter, NULL);
+      DragAcceptFiles (GDK_SURFACE_HWND (window), TRUE);
     }
   else
     {
       /* Return if window is already setup for DND. */
-      if (g_hash_table_lookup (target_ctx_for_window, GDK_WINDOW_HWND (window)) != NULL)
+      if (g_hash_table_lookup (target_ctx_for_window, GDK_SURFACE_HWND (window)) != NULL)
 	return;
 
       ctx = target_context_new (window);
@@ -2612,7 +2612,7 @@ _gdk_win32_window_register_dnd (GdkWindow *window)
 	OTHER_API_FAILED ("CoLockObjectExternal");
       else
 	{
-	  hr = RegisterDragDrop (GDK_WINDOW_HWND (window), &ctx->idt);
+	  hr = RegisterDragDrop (GDK_SURFACE_HWND (window), &ctx->idt);
 	  if (hr == DRAGDROP_E_ALREADYREGISTERED)
 	    {
 	      g_print ("DRAGDROP_E_ALREADYREGISTERED\n");
@@ -2623,7 +2623,7 @@ _gdk_win32_window_register_dnd (GdkWindow *window)
 	  else
 	    {
 	      g_object_ref (window);
-	      g_hash_table_insert (target_ctx_for_window, GDK_WINDOW_HWND (window), ctx);
+	      g_hash_table_insert (target_ctx_for_window, GDK_SURFACE_HWND (window), ctx);
 	    }
 	}
     }
@@ -2721,11 +2721,11 @@ gdk_drag_anim_timeout (gpointer data)
 
   t = ease_out_cubic (f);
 
-  gdk_window_show (context->drag_window);
-  gdk_window_move (context->drag_window,
+  gdk_surface_show (context->drag_window);
+  gdk_surface_move (context->drag_window,
                    context->last_x + (context->start_x - context->last_x) * t - context->hot_x,
                    context->last_y + (context->start_y - context->last_y) * t - context->hot_y);
-  gdk_window_set_opacity (context->drag_window, 1.0 - f);
+  gdk_surface_set_opacity (context->drag_window, 1.0 - f);
 
   return G_SOURCE_CONTINUE;
 }
@@ -2760,15 +2760,15 @@ gdk_win32_drag_context_drop_done (GdkDragContext *context,
 
   if (success)
     {
-      gdk_window_hide (win32_context->drag_window);
+      gdk_surface_hide (win32_context->drag_window);
       return;
     }
 
-  win_surface = _gdk_window_ref_cairo_surface (win32_context->drag_window);
-  surface = gdk_window_create_similar_surface (win32_context->drag_window,
+  win_surface = _gdk_surface_ref_cairo_surface (win32_context->drag_window);
+  surface = gdk_surface_create_similar_surface (win32_context->drag_window,
                                                cairo_surface_get_content (win_surface),
-                                               gdk_window_get_width (win32_context->drag_window),
-                                               gdk_window_get_height (win32_context->drag_window));
+                                               gdk_surface_get_width (win32_context->drag_window),
+                                               gdk_surface_get_height (win32_context->drag_window));
   cr = cairo_create (surface);
   cairo_set_source_surface (cr, win_surface, 0, 0);
   cairo_paint (cr);
@@ -2778,7 +2778,7 @@ gdk_win32_drag_context_drop_done (GdkDragContext *context,
 /*
   pattern = cairo_pattern_create_for_surface (surface);
 
-  gdk_window_set_background_pattern (win32_context->drag_window, pattern);
+  gdk_surface_set_background_pattern (win32_context->drag_window, pattern);
 
   cairo_pattern_destroy (pattern);
 */
@@ -2786,7 +2786,7 @@ gdk_win32_drag_context_drop_done (GdkDragContext *context,
 
   anim = g_slice_new0 (GdkDragAnim);
   g_set_object (&anim->context, win32_context);
-  anim->frame_clock = gdk_window_get_frame_clock (win32_context->drag_window);
+  anim->frame_clock = gdk_surface_get_frame_clock (win32_context->drag_window);
   anim->start_time = gdk_frame_clock_get_frame_time (anim->frame_clock);
 
   id = g_timeout_add_full (G_PRIORITY_DEFAULT, 17,
@@ -2948,7 +2948,7 @@ gdk_drag_update (GdkDragContext  *context,
 {
   GdkWin32DragContext *win32_context = GDK_WIN32_DRAG_CONTEXT (context);
   GdkDragAction action, possible_actions;
-  GdkWindow *dest_window;
+  GdkSurface *dest_window;
   GdkDragProtocol protocol;
 
   gdk_drag_get_current_actions (mods, GDK_BUTTON_PRIMARY, win32_context->actions,
@@ -2985,7 +2985,7 @@ gdk_dnd_handle_key_event (GdkDragContext    *context,
 {
   GdkWin32DragContext *win32_context = GDK_WIN32_DRAG_CONTEXT (context);
   GdkModifierType state;
-  GdkWindow *root_window;
+  GdkSurface *root_window;
   GdkDevice *pointer;
   gint dx, dy;
 
@@ -3198,7 +3198,7 @@ gdk_win32_drag_context_action_changed (GdkDragContext *context,
   gdk_drag_context_set_cursor (context, cursor);
 }
 
-static GdkWindow *
+static GdkSurface *
 gdk_win32_drag_context_get_drag_window (GdkDragContext *context)
 {
   return GDK_WIN32_DRAG_CONTEXT (context)->drag_window;

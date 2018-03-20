@@ -34,15 +34,15 @@
 
 @interface GdkQuartzView : NSView <NSTextInputClient>
 {
-  GdkWindow *gdk_window;
+  GdkSurface *gdk_surface;
   NSTrackingRectTag trackingRect;
   BOOL needsInvalidateShadow;
   NSRange markedRange;
   NSRange selectedRange;
 }
 
-- (void)setGdkWindow: (GdkWindow *)window;
-- (GdkWindow *)gdkWindow;
+- (void)setGdkSurface: (GdkSurface *)window;
+- (GdkSurface *)gdkWindow;
 - (NSTrackingRectTag)trackingRect;
 - (void)setNeedsInvalidateShadow: (BOOL)invalidate;
 

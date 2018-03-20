@@ -102,7 +102,7 @@ static int	    gdk_x_error			 (Display     *display,
 static int	    gdk_x_io_error		 (Display     *display);
 
 void
-_gdk_x11_windowing_init (void)
+_gdk_x11_surfaceing_init (void)
 {
   XSetErrorHandler (gdk_x_error);
   XSetIOErrorHandler (gdk_x_io_error);
@@ -130,8 +130,8 @@ _gdk_x11_convert_grab_status (gint status)
 }
 
 /*
- * _gdk_x11_window_grab_check_unmap:
- * @window: a #GdkWindow
+ * _gdk_x11_surface_grab_check_unmap:
+ * @window: a #GdkSurface
  * @serial: serial from Unmap event (or from NextRequest(display)
  *   if the unmap is being done by this client.)
  *
@@ -140,10 +140,10 @@ _gdk_x11_convert_grab_status (gint status)
  * the pointer we keep to it.
  **/
 void
-_gdk_x11_window_grab_check_unmap (GdkWindow *window,
+_gdk_x11_surface_grab_check_unmap (GdkSurface *window,
                                   gulong     serial)
 {
-  GdkDisplay *display = gdk_window_get_display (window);
+  GdkDisplay *display = gdk_surface_get_display (window);
   GdkSeat *seat;
   GList *devices, *d;
 
@@ -161,16 +161,16 @@ _gdk_x11_window_grab_check_unmap (GdkWindow *window,
 }
 
 /*
- * _gdk_x11_window_grab_check_destroy:
- * @window: a #GdkWindow
+ * _gdk_x11_surface_grab_check_destroy:
+ * @window: a #GdkSurface
  * 
  * Checks to see if window is the current grab window, and if
  * so, clear the current grab window.
  **/
 void
-_gdk_x11_window_grab_check_destroy (GdkWindow *window)
+_gdk_x11_surface_grab_check_destroy (GdkSurface *window)
 {
-  GdkDisplay *display = gdk_window_get_display (window);
+  GdkDisplay *display = gdk_surface_get_display (window);
   GdkSeat *seat;
   GdkDeviceGrabInfo *grab;
   GList *devices, *d;

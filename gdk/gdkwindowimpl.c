@@ -29,10 +29,10 @@
 #include "gdkinternals.h"
 
 
-G_DEFINE_TYPE (GdkWindowImpl, gdk_window_impl, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GdkSurfaceImpl, gdk_surface_impl, G_TYPE_OBJECT);
 
 static gboolean
-gdk_window_impl_beep (GdkWindow *window)
+gdk_surface_impl_beep (GdkSurface *window)
 {
   /* FALSE means windows can't beep, so the display will be
    * made to beep instead. */
@@ -40,15 +40,15 @@ gdk_window_impl_beep (GdkWindow *window)
 }
 
 static GdkDisplay *
-get_display_for_window (GdkWindow *primary,
-                        GdkWindow *secondary)
+get_display_for_window (GdkSurface *primary,
+                        GdkSurface *secondary)
 {
-  GdkDisplay *display = gdk_window_get_display (primary);
+  GdkDisplay *display = gdk_surface_get_display (primary);
 
   if (display)
     return display;
 
-  display = gdk_window_get_display (secondary);
+  display = gdk_surface_get_display (secondary);
 
   if (display)
     return display;
@@ -173,21 +173,21 @@ maybe_flip_position (gint      bounds_pos,
   return primary;
 }
 
-static GdkWindow *
-traverse_to_toplevel (GdkWindow *window,
+static GdkSurface *
+traverse_to_toplevel (GdkSurface *window,
                       gint       x,
                       gint       y,
                       gint      *toplevel_x,
                       gint      *toplevel_y)
 {
-  GdkWindow *parent;
+  GdkSurface *parent;
   gdouble xf = x;
   gdouble yf = y;
 
   while ((parent = window->parent) != NULL &&
-         (gdk_window_get_window_type (parent) != GDK_WINDOW_ROOT))
+         (gdk_surface_get_window_type (parent) != GDK_SURFACE_ROOT))
     {
-      gdk_window_coords_to_parent (window, xf, yf, &xf, &yf);
+      gdk_surface_coords_to_parent (window, xf, yf, &xf, &yf);
       window = parent;
     }
 
@@ -197,7 +197,7 @@ traverse_to_toplevel (GdkWindow *window,
 }
 
 static void
-gdk_window_impl_move_to_rect (GdkWindow          *window,
+gdk_surface_impl_move_to_rect (GdkSurface          *window,
                               const GdkRectangle *rect,
                               GdkGravity          rect_anchor,
                               GdkGravity          window_anchor,
@@ -205,7 +205,7 @@ gdk_window_impl_move_to_rect (GdkWindow          *window,
                               gint                rect_anchor_dx,
                               gint                rect_anchor_dy)
 {
-  GdkWindow *transient_for_toplevel;
+  GdkSurface *transient_for_toplevel;
   GdkDisplay *display;
   GdkMonitor *monitor;
   GdkRectangle bounds;
@@ -226,7 +226,7 @@ gdk_window_impl_move_to_rect (GdkWindow          *window,
                                                  &root_rect.x,
                                                  &root_rect.y);
 
-  gdk_window_get_root_coords (transient_for_toplevel,
+  gdk_surface_get_root_coords (transient_for_toplevel,
                               root_rect.x,
                               root_rect.y,
                               &root_rect.x,
@@ -314,9 +314,9 @@ gdk_window_impl_move_to_rect (GdkWindow          *window,
   final_rect.height += window->shadow_top + window->shadow_bottom;
 
   if (final_rect.width != window->width || final_rect.height != window->height)
-    gdk_window_move_resize (window, final_rect.x, final_rect.y, final_rect.width, final_rect.height);
+    gdk_surface_move_resize (window, final_rect.x, final_rect.y, final_rect.width, final_rect.height);
   else
-    gdk_window_move (window, final_rect.x, final_rect.y);
+    gdk_surface_move (window, final_rect.x, final_rect.y);
 
   g_signal_emit_by_name (window,
                          "moved-to-rect",
@@ -327,21 +327,21 @@ gdk_window_impl_move_to_rect (GdkWindow          *window,
 }
 
 static void
-gdk_window_impl_process_updates_recurse (GdkWindow      *window,
+gdk_surface_impl_process_updates_recurse (GdkSurface      *window,
                                          cairo_region_t *region)
 {
-  _gdk_window_process_updates_recurse (window, region);
+  _gdk_surface_process_updates_recurse (window, region);
 }
 
 static void
-gdk_window_impl_class_init (GdkWindowImplClass *impl_class)
+gdk_surface_impl_class_init (GdkSurfaceImplClass *impl_class)
 {
-  impl_class->beep = gdk_window_impl_beep;
-  impl_class->move_to_rect = gdk_window_impl_move_to_rect;
-  impl_class->process_updates_recurse = gdk_window_impl_process_updates_recurse;
+  impl_class->beep = gdk_surface_impl_beep;
+  impl_class->move_to_rect = gdk_surface_impl_move_to_rect;
+  impl_class->process_updates_recurse = gdk_surface_impl_process_updates_recurse;
 }
 
 static void
-gdk_window_impl_init (GdkWindowImpl *impl)
+gdk_surface_impl_init (GdkSurfaceImpl *impl)
 {
 }

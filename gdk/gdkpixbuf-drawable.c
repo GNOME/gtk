@@ -38,7 +38,7 @@
  * and manipulate pixbufs, see the #GdkPixbuf API documentation.
  *
  * The functions described here allow to obtain pixbufs from
- * #GdkWindows and cairo surfaces.
+ * #GdkSurfaces and cairo surfaces.
  */
 
 static cairo_format_t

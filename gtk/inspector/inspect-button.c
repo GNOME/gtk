@@ -80,7 +80,7 @@ static GtkWidget *
 find_widget_at_pointer (GdkDevice *device)
 {
   GtkWidget *widget = NULL;
-  GdkWindow *pointer_window;
+  GdkSurface *pointer_window;
 
   pointer_window = gdk_device_get_window_at_position (device, NULL, NULL);
 
@@ -88,20 +88,20 @@ find_widget_at_pointer (GdkDevice *device)
     {
       gpointer widget_ptr;
 
-      gdk_window_get_user_data (pointer_window, &widget_ptr);
+      gdk_surface_get_user_data (pointer_window, &widget_ptr);
       widget = widget_ptr;
 
       if (!GTK_IS_WINDOW (widget))
         {
           while (TRUE)
             {
-              GdkWindow *parent = gdk_window_get_parent (pointer_window);
+              GdkSurface *parent = gdk_surface_get_parent (pointer_window);
 
               if (!parent)
                 break;
 
               pointer_window = parent;
-              gdk_window_get_user_data (pointer_window, &widget_ptr);
+              gdk_surface_get_user_data (pointer_window, &widget_ptr);
               widget = widget_ptr;
 
               if (GTK_IS_WINDOW (widget))
@@ -115,7 +115,7 @@ find_widget_at_pointer (GdkDevice *device)
     {
       double x, y;
 
-      gdk_window_get_device_position_double (gtk_widget_get_window (widget),
+      gdk_surface_get_device_position_double (gtk_widget_get_window (widget),
                                              device, &x, &y, NULL);
 
       widget = inspector_pick (widget, x, y);
@@ -175,7 +175,7 @@ on_inspect_widget (GtkWidget          *button,
 {
   GtkWidget *widget;
 
-  gdk_window_raise (gtk_widget_get_window (GTK_WIDGET (iw)));
+  gdk_surface_raise (gtk_widget_get_window (GTK_WIDGET (iw)));
 
   clear_flash (iw);
 
@@ -234,7 +234,7 @@ deemphasize_window (GtkWidget *window)
       cairo_region_destroy (region);
     }
   else
-    gdk_window_lower (gtk_widget_get_window (window));
+    gdk_surface_lower (gtk_widget_get_window (window));
 }
 
 static void
@@ -249,7 +249,7 @@ reemphasize_window (GtkWidget *window)
       gtk_widget_input_shape_combine_region (window, NULL);
     }
   else
-    gdk_window_raise (gtk_widget_get_window (window));
+    gdk_surface_raise (gtk_widget_get_window (window));
 }
 
 static gboolean
@@ -295,10 +295,10 @@ property_query_event (GtkWidget *widget,
 
 static void
 prepare_inspect_func (GdkSeat   *seat,
-                      GdkWindow *window,
+                      GdkSurface *window,
                       gpointer   user_data)
 {
-  gdk_window_show (window);
+  gdk_surface_show (window);
 }
 
 

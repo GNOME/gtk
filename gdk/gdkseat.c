@@ -233,7 +233,7 @@ gdk_seat_get_capabilities (GdkSeat *seat)
 /**
  * gdk_seat_grab:
  * @seat: a #GdkSeat
- * @window: the #GdkWindow which will own the grab
+ * @window: the #GdkSurface which will own the grab
  * @capabilities: capabilities that will be grabbed
  * @owner_events: if %FALSE then all device events are reported with respect to
  *                @window and are only reported if selected by @event_mask. If
@@ -267,7 +267,7 @@ gdk_seat_get_capabilities (GdkSeat *seat)
  * events corresponding to the given capabilities. For example in GTK+ this
  * is used for Drag and Drop operations, popup menus and such.
  *
- * Note that if the event mask of a #GdkWindow has selected both button press
+ * Note that if the event mask of a #GdkSurface has selected both button press
  * and button release events, or touch begin and touch end, then a press event
  * will cause an automatic grab until the button is released, equivalent to a
  * grab on the window with @owner_events set to %TRUE. This is done because most
@@ -281,7 +281,7 @@ gdk_seat_get_capabilities (GdkSeat *seat)
  **/
 GdkGrabStatus
 gdk_seat_grab (GdkSeat                *seat,
-               GdkWindow              *window,
+               GdkSurface              *window,
                GdkSeatCapabilities     capabilities,
                gboolean                owner_events,
                GdkCursor              *cursor,
@@ -292,7 +292,7 @@ gdk_seat_grab (GdkSeat                *seat,
   GdkSeatClass *seat_class;
 
   g_return_val_if_fail (GDK_IS_SEAT (seat), GDK_GRAB_FAILED);
-  g_return_val_if_fail (GDK_IS_WINDOW (window), GDK_GRAB_FAILED);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), GDK_GRAB_FAILED);
 
   capabilities &= GDK_SEAT_CAPABILITY_ALL;
   g_return_val_if_fail (capabilities != GDK_SEAT_CAPABILITY_NONE, GDK_GRAB_FAILED);

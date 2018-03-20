@@ -91,7 +91,7 @@
     <title>Event propagation</title>
 
     <para>
-      For widgets which have a #GdkWindow set, events are received from the
+      For widgets which have a #GdkSurface set, events are received from the
       windowing system and passed to gtk_main_do_event(). See its documentation
       for details of what it does: compression of enter/leave events,
       identification of the widget receiving the event, pushing the event onto a
@@ -101,11 +101,11 @@
 
     <para>
       When a GDK backend produces an input event, it is tied to a #GdkDevice and
-      a #GdkWindow, which in turn represents a windowing system surface in the
+      a #GdkSurface, which in turn represents a windowing system surface in the
       backend. If a widget has grabbed the current input device, or all input
       devices, the event is propagated to that #GtkWidget. Otherwise, it is
       propagated to the the #GtkWidget which called gtk_widget_register_window()
-      on the #GdkWindow receiving the event.
+      on the #GdkSurface receiving the event.
     </para>
 
     <para>
@@ -113,7 +113,7 @@
       specific input device (gtk_device_grab_add()), is sent events in
       preference to a global grab (gtk_grab_add()). Input grabs only have effect
       within the #GtkWindowGroup containing the #GtkWidget which registered the
-      event’s #GdkWindow. If this #GtkWidget is a child of the grab widget, the
+      event’s #GdkSurface. If this #GtkWidget is a child of the grab widget, the
       event is propagated to the child — this is the basis for propagating
       events within modal dialogs.
     </para>
@@ -186,15 +186,15 @@
       Each widget instance has a basic event mask and another per input device,
       which determine the types of input event it receives. Each event mask set
       on a widget is added to the corresponding (basic or per-device) event mask
-      for the widget’s #GdkWindow, and all child #GdkWindows.
+      for the widget’s #GdkSurface, and all child #GdkSurfaces.
     </para>
 
     <para>
-      Filtering events against event masks happens inside #GdkWindow, which
+      Filtering events against event masks happens inside #GdkSurface, which
       exposes event masks to the windowing system to reduce the number of events
       GDK receives from it. On receiving an event, it is filtered against the
-      #GdkWindow’s mask for the input device, if set. Otherwise, it is filtered
-      against the #GdkWindow’s basic event mask.
+      #GdkSurface’s mask for the input device, if set. Otherwise, it is filtered
+      against the #GdkSurface’s basic event mask.
     </para>
 
     <para>

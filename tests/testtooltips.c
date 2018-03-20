@@ -363,7 +363,7 @@ main (int argc, char *argv[])
 
   gtk_widget_set_tooltip_window (button, GTK_WINDOW (tooltip_window));
   gtk_window_set_type_hint (GTK_WINDOW (tooltip_window),
-                            GDK_WINDOW_TYPE_HINT_TOOLTIP);
+                            GDK_SURFACE_TYPE_HINT_TOOLTIP);
   gtk_window_set_transient_for (GTK_WINDOW (tooltip_window),
                                 GTK_WINDOW (window));
 

@@ -502,7 +502,7 @@ gdk_device_get_property (GObject    *object,
 /**
  * gdk_device_get_state: (skip)
  * @device: a #GdkDevice.
- * @window: a #GdkWindow.
+ * @window: a #GdkSurface.
  * @axes: (nullable) (array): an array of doubles to store the values of
  * the axes of @device in, or %NULL.
  * @mask: (optional) (out): location to store the modifiers, or %NULL.
@@ -514,13 +514,13 @@ gdk_device_get_property (GObject    *object,
  */
 void
 gdk_device_get_state (GdkDevice       *device,
-                      GdkWindow       *window,
+                      GdkSurface       *window,
                       gdouble         *axes,
                       GdkModifierType *mask)
 {
   g_return_if_fail (GDK_IS_DEVICE (device));
   g_return_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD);
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SURFACE (window));
   g_return_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_SLAVE ||
                     gdk_display_device_is_grabbed (gdk_device_get_display (device), device));
 
@@ -609,16 +609,16 @@ gdk_device_get_position (GdkDevice *device,
  * function may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
  * unless there is an ongoing grab on them, see gdk_device_grab().
  *
- * Returns: (nullable) (transfer none): the #GdkWindow under the
+ * Returns: (nullable) (transfer none): the #GdkSurface under the
  *   device position, or %NULL.
  **/
-GdkWindow *
+GdkSurface *
 gdk_device_get_window_at_position_double (GdkDevice  *device,
                                           gdouble    *win_x,
                                           gdouble    *win_y)
 {
   gdouble tmp_x, tmp_y;
-  GdkWindow *window;
+  GdkSurface *window;
 
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
   g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, NULL);
@@ -630,7 +630,7 @@ gdk_device_get_window_at_position_double (GdkDevice  *device,
   /* This might need corrections, as the native window returned
      may contain client side children */
   if (window)
-    window = _gdk_window_find_descendant_at (window,
+    window = _gdk_surface_find_descendant_at (window,
                                              tmp_x, tmp_y,
                                              &tmp_x, &tmp_y);
 
@@ -657,16 +657,16 @@ gdk_device_get_window_at_position_double (GdkDevice  *device,
  * function may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
  * unless there is an ongoing grab on them, see gdk_device_grab().
  *
- * Returns: (nullable) (transfer none): the #GdkWindow under the
+ * Returns: (nullable) (transfer none): the #GdkSurface under the
  * device position, or %NULL.
  **/
-GdkWindow *
+GdkSurface *
 gdk_device_get_window_at_position (GdkDevice  *device,
                                    gint       *win_x,
                                    gint       *win_y)
 {
   gdouble tmp_x, tmp_y;
-  GdkWindow *window;
+  GdkSurface *window;
 
   window =
     gdk_device_get_window_at_position_double (device, &tmp_x, &tmp_y);
@@ -698,7 +698,7 @@ gdk_device_get_window_at_position (GdkDevice  *device,
  * be returned. (This is not distinguishable from the case where
  * motion history is supported and no events were found.)
  *
- * Note that there is also gdk_window_set_event_compression() to get
+ * Note that there is also gdk_surface_set_event_compression() to get
  * more motion events delivered directly, independent of the windowing
  * system.
  *
@@ -707,7 +707,7 @@ gdk_device_get_window_at_position (GdkDevice  *device,
  **/
 gboolean
 gdk_device_get_history (GdkDevice      *device,
-                        GdkWindow      *window,
+                        GdkSurface      *window,
                         guint32         start,
                         guint32         stop,
                         GdkTimeCoord ***events,
@@ -715,7 +715,7 @@ gdk_device_get_history (GdkDevice      *device,
 {
   g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
   g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, FALSE);
-  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), FALSE);
 
   if (n_events)
     *n_events = 0;
@@ -723,7 +723,7 @@ gdk_device_get_history (GdkDevice      *device,
   if (events)
     *events = NULL;
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (window))
     return FALSE;
 
   if (!GDK_DEVICE_GET_CLASS (device)->get_history)
@@ -1311,7 +1311,7 @@ get_native_grab_event_mask (GdkEventMask grab_mask)
  *   or gdk_event_get_device() if the grab is in reaction to an event. Also, you can use
  *   gdk_seat_get_pointer() but only in code that isn’t triggered by a
  *   #GdkEvent and there aren’t other means to get a meaningful #GdkDevice to operate on.
- * @window: the #GdkWindow which will own the grab (the grab window)
+ * @window: the #GdkSurface which will own the grab (the grab window)
  * @grab_ownership: specifies the grab ownership.
  * @owner_events: if %FALSE then all device events are reported with respect to
  *                @window and are only reported if selected by @event_mask. If
@@ -1357,7 +1357,7 @@ get_native_grab_event_mask (GdkEventMask grab_mask)
  **/
 GdkGrabStatus
 gdk_device_grab (GdkDevice        *device,
-                 GdkWindow        *window,
+                 GdkSurface        *window,
                  GdkGrabOwnership  grab_ownership,
                  gboolean          owner_events,
                  GdkEventMask      event_mask,
@@ -1365,15 +1365,15 @@ gdk_device_grab (GdkDevice        *device,
                  guint32           time_)
 {
   GdkGrabStatus res;
-  GdkWindow *native;
+  GdkSurface *native;
 
   g_return_val_if_fail (GDK_IS_DEVICE (device), GDK_GRAB_FAILED);
-  g_return_val_if_fail (GDK_IS_WINDOW (window), GDK_GRAB_FAILED);
-  g_return_val_if_fail (gdk_window_get_display (window) == gdk_device_get_display (device), GDK_GRAB_FAILED);
+  g_return_val_if_fail (GDK_IS_SURFACE (window), GDK_GRAB_FAILED);
+  g_return_val_if_fail (gdk_surface_get_display (window) == gdk_device_get_display (device), GDK_GRAB_FAILED);
 
-  native = gdk_window_get_toplevel (window);
+  native = gdk_surface_get_toplevel (window);
 
-  if (native == NULL || GDK_WINDOW_DESTROYED (native))
+  if (native == NULL || GDK_SURFACE_DESTROYED (native))
     return GDK_GRAB_NOT_VIEWABLE;
 
   res = GDK_DEVICE_GET_CLASS (device)->grab (device,
@@ -1389,7 +1389,7 @@ gdk_device_grab (GdkDevice        *device,
       GdkDisplay *display;
       gulong serial;
 
-      display = gdk_window_get_display (window);
+      display = gdk_surface_get_display (window);
       serial = _gdk_display_get_next_serial (display);
 
       _gdk_display_add_device_grab (display,
@@ -1567,7 +1567,7 @@ find_axis_info (GArray     *array,
 
 gboolean
 _gdk_device_translate_window_coord (GdkDevice *device,
-                                    GdkWindow *window,
+                                    GdkSurface *window,
                                     guint      index_,
                                     gdouble    value,
                                     gdouble   *axis_value)
@@ -1608,8 +1608,8 @@ _gdk_device_translate_window_coord (GdkDevice *device,
   x_min = axis_info_x->min_value;
   y_min = axis_info_y->min_value;
 
-  window_width = gdk_window_get_width (window);
-  window_height = gdk_window_get_height (window);
+  window_width = gdk_surface_get_width (window);
+  window_height = gdk_surface_get_height (window);
 
   x_resolution = axis_info_x->resolution;
   y_resolution = axis_info_y->resolution;
@@ -1665,7 +1665,7 @@ _gdk_device_translate_window_coord (GdkDevice *device,
 
 gboolean
 _gdk_device_translate_screen_coord (GdkDevice *device,
-                                    GdkWindow *window,
+                                    GdkSurface *window,
                                     gdouble    window_root_x,
                                     gdouble    window_root_y,
                                     gdouble    screen_width,
@@ -1746,8 +1746,8 @@ _gdk_device_translate_axis (GdkDevice *device,
 
 void
 _gdk_device_query_state (GdkDevice        *device,
-                         GdkWindow        *window,
-                         GdkWindow       **child_window,
+                         GdkSurface        *window,
+                         GdkSurface       **child_window,
                          gdouble          *root_x,
                          gdouble          *root_y,
                          gdouble          *win_x,
@@ -1764,7 +1764,7 @@ _gdk_device_query_state (GdkDevice        *device,
                                               mask);
 }
 
-GdkWindow *
+GdkSurface *
 _gdk_device_window_at_position (GdkDevice        *device,
                                 gdouble          *win_x,
                                 gdouble          *win_y,
@@ -1790,11 +1790,11 @@ _gdk_device_window_at_position (GdkDevice        *device,
  *
  * Returns: (transfer none) (allow-none): the last window the device
  */
-GdkWindow *
+GdkSurface *
 gdk_device_get_last_event_window (GdkDevice *device)
 {
   GdkDisplay *display;
-  GdkPointerWindowInfo *info;
+  GdkPointerSurfaceInfo *info;
 
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
   g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, NULL);

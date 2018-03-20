@@ -223,7 +223,7 @@ on_composited_changed (GdkDisplay *display,
   else
     gtk_label_set_text (label, "Not composited");
 
-  /* We draw a different background on the GdkWindow */
+  /* We draw a different background on the GdkSurface */
   gtk_widget_queue_draw (gtk_widget_get_toplevel (GTK_WIDGET (label)));
 }
 
@@ -760,7 +760,7 @@ create_button_box (GtkWidget *widget)
 
 static GtkWidget*
 new_pixbuf (char      *filename,
-	    GdkWindow *window)
+	    GdkSurface *window)
 {
   GtkWidget *widget;
   GdkPixbuf *pixbuf;
@@ -1381,7 +1381,7 @@ configure_event (GtkWidget *window)
   lx = g_object_get_data (G_OBJECT (window), "x");
   ly = g_object_get_data (G_OBJECT (window), "y");
 
-  gdk_window_get_root_origin (gtk_widget_get_window (window),
+  gdk_surface_get_root_origin (gtk_widget_get_window (window),
                               &upositionx, &upositiony);
   sprintf (buffer, "%d", upositionx);
   gtk_label_set_text (lx, buffer);
@@ -1512,7 +1512,7 @@ create_pixbuf (GtkWidget *widget)
   GtkWidget *label;
   GtkWidget *separator;
   GtkWidget *pixbufwid;
-  GdkWindow *gdk_window;
+  GdkSurface *gdk_surface;
 
   if (!window)
     {
@@ -1537,9 +1537,9 @@ create_pixbuf (GtkWidget *widget)
       button = gtk_button_new ();
       gtk_box_pack_start (GTK_BOX (box2), button);
 
-      gdk_window = gtk_widget_get_window (window);
+      gdk_surface = gtk_widget_get_window (window);
 
-      pixbufwid = new_pixbuf ("test.xpm", gdk_window);
+      pixbufwid = new_pixbuf ("test.xpm", gdk_surface);
 
       label = gtk_label_new ("Pixbuf\ntest");
       box3 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
@@ -1550,7 +1550,7 @@ create_pixbuf (GtkWidget *widget)
       button = gtk_button_new ();
       gtk_box_pack_start (GTK_BOX (box2), button);
 
-      pixbufwid = new_pixbuf ("test.xpm", gdk_window);
+      pixbufwid = new_pixbuf ("test.xpm", gdk_surface);
 
       label = gtk_label_new ("Pixbuf\ntest");
       box3 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
@@ -5546,7 +5546,7 @@ create_wmhints (GtkWidget *widget)
   GtkWidget *button;
   GtkWidget *box1;
   GtkWidget *box2;
-  GdkWindow *gdk_window;
+  GdkSurface *gdk_surface;
   GdkPixbuf *pixbuf;
   cairo_surface_t *surface;
   GList *list;
@@ -5566,7 +5566,7 @@ create_wmhints (GtkWidget *widget)
 
       gtk_widget_realize (window);
 
-      gdk_window = gtk_widget_get_window (window);
+      gdk_surface = gtk_widget_get_window (window);
 
       pixbuf = gdk_pixbuf_new_from_xpm_data ((const char **) openfile);
       surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, NULL);
@@ -5579,10 +5579,10 @@ create_wmhints (GtkWidget *widget)
       cairo_surface_destroy (surface);
       g_object_unref (pixbuf);
 
-      gdk_window_set_icon_name (gdk_window, "WMHints Test Icon");
+      gdk_surface_set_icon_name (gdk_surface, "WMHints Test Icon");
 
-      gdk_window_set_decorations (gdk_window, GDK_DECOR_ALL | GDK_DECOR_MENU);
-      gdk_window_set_functions (gdk_window, GDK_FUNC_ALL | GDK_FUNC_RESIZE);
+      gdk_surface_set_decorations (gdk_surface, GDK_DECOR_ALL | GDK_DECOR_MENU);
+      gdk_surface_set_functions (gdk_surface, GDK_FUNC_ALL | GDK_FUNC_RESIZE);
 
       box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       gtk_container_add (GTK_CONTAINER (window), box1);
@@ -5627,28 +5627,28 @@ create_wmhints (GtkWidget *widget)
  */
 
 static void
-window_state_callback (GdkWindow  *window,
+window_state_callback (GdkSurface  *window,
                        GParamSpec *pspec,
                        GtkWidget  *label)
 {
   gchar *msg;
-  GdkWindowState new_state;
+  GdkSurfaceState new_state;
 
-  new_state = gdk_window_get_state (window);
+  new_state = gdk_surface_get_state (window);
   msg = g_strconcat ((const char *)g_object_get_data (G_OBJECT (label), "title"), ": ",
-                     (new_state & GDK_WINDOW_STATE_WITHDRAWN) ?
+                     (new_state & GDK_SURFACE_STATE_WITHDRAWN) ?
                      "withdrawn" : "not withdrawn", ", ",
-                     (new_state & GDK_WINDOW_STATE_ICONIFIED) ?
+                     (new_state & GDK_SURFACE_STATE_ICONIFIED) ?
                      "iconified" : "not iconified", ", ",
-                     (new_state & GDK_WINDOW_STATE_STICKY) ?
+                     (new_state & GDK_SURFACE_STATE_STICKY) ?
                      "sticky" : "not sticky", ", ",
-                     (new_state & GDK_WINDOW_STATE_MAXIMIZED) ?
+                     (new_state & GDK_SURFACE_STATE_MAXIMIZED) ?
                      "maximized" : "not maximized", ", ",
-                     (new_state & GDK_WINDOW_STATE_FULLSCREEN) ?
+                     (new_state & GDK_SURFACE_STATE_FULLSCREEN) ?
                      "fullscreen" : "not fullscreen", ", ",
-                     (new_state & GDK_WINDOW_STATE_ABOVE) ?
+                     (new_state & GDK_SURFACE_STATE_ABOVE) ?
                      "above" : "not above", ", ",
-                     (new_state & GDK_WINDOW_STATE_BELOW) ?
+                     (new_state & GDK_SURFACE_STATE_BELOW) ?
                      "below" : "not below", ", ",
                      NULL);
 
@@ -6637,13 +6637,13 @@ find_widget (GtkWidget *widget, FindWidgetData *data)
 
   if (gtk_widget_get_parent (widget) && !data->first)
     {
-      GdkWindow *window = gtk_widget_get_window (widget);
+      GdkSurface *window = gtk_widget_get_window (widget);
       while (window != gtk_widget_get_window (gtk_widget_get_parent (widget)))
 	{
 	  gint tx, ty, twidth, theight;
 	  
-          twidth = gdk_window_get_width (window);
-          theight = gdk_window_get_height (window);
+          twidth = gdk_surface_get_width (window);
+          theight = gdk_surface_get_height (window);
 
 	  if (new_allocation.x < 0)
 	    {
@@ -6660,13 +6660,13 @@ find_widget (GtkWidget *widget, FindWidgetData *data)
 	  if (new_allocation.y + new_allocation.height > theight)
 	    new_allocation.height = theight - new_allocation.y;
 
-	  gdk_window_get_position (window, &tx, &ty);
+	  gdk_surface_get_position (window, &tx, &ty);
 	  new_allocation.x += tx;
 	  x_offset += tx;
 	  new_allocation.y += ty;
 	  y_offset += ty;
 
-	  window = gdk_window_get_parent (window);
+	  window = gdk_surface_get_parent (window);
 	}
     }
 
@@ -6711,7 +6711,7 @@ static GtkWidget *
 find_widget_at_pointer (GdkDevice *device)
 {
   GtkWidget *widget = NULL;
-  GdkWindow *pointer_window;
+  GdkSurface *pointer_window;
   gint x, y;
   FindWidgetData data;
  
@@ -6721,13 +6721,13 @@ find_widget_at_pointer (GdkDevice *device)
    {
      gpointer widget_ptr;
 
-     gdk_window_get_user_data (pointer_window, &widget_ptr);
+     gdk_surface_get_user_data (pointer_window, &widget_ptr);
      widget = widget_ptr;
    }
 
  if (widget)
    {
-     gdk_window_get_device_position (gtk_widget_get_window (widget),
+     gdk_surface_get_device_position (gtk_widget_get_window (widget),
                                      device,
 			             &x, &y, NULL);
      
@@ -6974,7 +6974,7 @@ scroll_test_configure (GtkWidget *widget, GdkEventConfigure *event,
 static void
 scroll_test_adjustment_changed (GtkAdjustment *adjustment, GtkWidget *widget)
 {
-  GdkWindow *window;
+  GdkSurface *window;
   gint dy;
 
   dy = scroll_test_pos - (int)gtk_adjustment_get_value (adjustment);
@@ -6984,7 +6984,7 @@ scroll_test_adjustment_changed (GtkAdjustment *adjustment, GtkWidget *widget)
     return;
 
   window = gtk_widget_get_window (widget);
-  gdk_window_scroll (window, 0, dy);
+  gdk_surface_scroll (window, 0, dy);
 }
 
 

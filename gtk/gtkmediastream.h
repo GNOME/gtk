@@ -45,9 +45,9 @@ struct _GtkMediaStreamClass
                                                                  gboolean        muted,
                                                                  double          volume);
   void                  (* realize)                             (GtkMediaStream *self,
-                                                                 GdkWindow      *window);
+                                                                 GdkSurface      *window);
   void                  (* unrealize)                           (GtkMediaStream *self,
-                                                                 GdkWindow      *window);
+                                                                 GdkSurface      *window);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
@@ -110,10 +110,10 @@ void                    gtk_media_stream_set_volume             (GtkMediaStream 
                                                                  double          volume);
 GDK_AVAILABLE_IN_ALL
 void                    gtk_media_stream_realize                (GtkMediaStream *self,
-                                                                 GdkWindow      *window);
+                                                                 GdkSurface      *window);
 GDK_AVAILABLE_IN_ALL
 void                    gtk_media_stream_unrealize              (GtkMediaStream *self,
-                                                                 GdkWindow      *window);
+                                                                 GdkSurface      *window);
 
 /* for implementations only */
 GDK_AVAILABLE_IN_ALL

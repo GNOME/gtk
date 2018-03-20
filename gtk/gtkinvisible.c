@@ -220,11 +220,11 @@ gtk_invisible_get_display (GtkInvisible *invisible)
 static void
 gtk_invisible_realize (GtkWidget *widget)
 {
-  GdkWindow *window;
+  GdkSurface *window;
 
   gtk_widget_set_realized (widget, TRUE);
 
-  window = gdk_window_new_temp (gtk_widget_get_display (widget));
+  window = gdk_surface_new_temp (gtk_widget_get_display (widget));
   gtk_widget_set_window (widget, window);
   gtk_widget_register_window (widget, window);
 }

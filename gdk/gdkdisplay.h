@@ -80,7 +80,7 @@ GDK_AVAILABLE_IN_ALL
 GdkDisplay *gdk_display_get_default (void);
 
 GDK_AVAILABLE_IN_ALL
-GdkWindow *gdk_display_get_default_group       (GdkDisplay *display); 
+GdkSurface *gdk_display_get_default_group       (GdkDisplay *display); 
 
 GDK_AVAILABLE_IN_ALL
 GdkClipboard *          gdk_display_get_clipboard               (GdkDisplay     *display);
@@ -117,7 +117,7 @@ GdkMonitor * gdk_display_get_monitor_at_point  (GdkDisplay *display,
                                                 int         y);
 GDK_AVAILABLE_IN_ALL
 GdkMonitor * gdk_display_get_monitor_at_window (GdkDisplay *display,
-                                                GdkWindow  *window);
+                                                GdkSurface  *window);
 
 GDK_AVAILABLE_IN_ALL
 GdkKeymap *  gdk_display_get_keymap  (GdkDisplay *display);

@@ -88,7 +88,7 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
   GdkDisplay *display;
   GdkBroadwayDisplay *display_broadway;
   GdkSeat *seat;
-  GdkWindow *window;
+  GdkSurface *window;
   GdkEvent *event = NULL;
   GList *node;
   GSList *list, *d;

@@ -37,7 +37,7 @@ struct _GdkX11DeviceManagerCoreClass
   GObjectClass parent_class;
 };
 
-void            _gdk_device_manager_core_handle_focus           (GdkWindow   *window,
+void            _gdk_device_manager_core_handle_focus           (GdkSurface   *window,
                                                                  Window       original,
                                                                  GdkDevice   *device,
                                                                  GdkDevice   *source_device,

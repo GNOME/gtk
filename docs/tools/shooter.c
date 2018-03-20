@@ -211,20 +211,20 @@ static GList *toplevels;
 static guint shot_id;
 
 static gboolean
-window_is_csd (GdkWindow *window)
+window_is_csd (GdkSurface *window)
 {
   gboolean set;
   GdkWMDecoration decorations = 0;
 
   /* FIXME: is this accurate? */
-  set = gdk_window_get_decorations (window, &decorations);
+  set = gdk_surface_get_decorations (window, &decorations);
   return (set && (decorations == 0));
 }
 
 static gboolean
 shoot_one (WidgetInfo *info)
 {
-  GdkWindow *window;
+  GdkSurface *window;
   XID id;
   GdkPixbuf *screenshot = NULL;
   DecorationType decor = DECOR_FRAME;
@@ -236,7 +236,7 @@ shoot_one (WidgetInfo *info)
     }
 
   window = gtk_widget_get_window (info->window);
-  id = gdk_x11_window_get_xid (window);
+  id = gdk_x11_surface_get_xid (window);
   if (window_is_csd (window))
     decor = (info->include_decorations) ? DECOR_NONE : DECOR_WINDOW_FRAME;
   screenshot = take_window_shot (id, decor);

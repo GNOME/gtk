@@ -49,7 +49,7 @@ size_allocate (GtkWidget     *widget,
     {
       cairo_t *cr;
 
-      surface = gdk_window_create_similar_surface (gtk_widget_get_window (widget),
+      surface = gdk_surface_create_similar_surface (gtk_widget_get_window (widget),
                                                    CAIRO_CONTENT_COLOR,
                                                    gtk_widget_get_width (widget),
                                                    gtk_widget_get_height (widget));

@@ -37,7 +37,7 @@ typedef struct _GtkIMContextQuartz
 {
   GtkIMContext parent;
   GtkIMContext *slave;
-  GdkWindow *client_window;
+  GdkSurface *client_window;
   gchar *preedit_str;
   unsigned int cursor_index;
   unsigned int selected_len;
@@ -110,7 +110,7 @@ quartz_get_preedit_string (GtkIMContext *context,
 
 static gboolean
 output_result (GtkIMContext *context,
-               GdkWindow *win)
+               GdkSurface *win)
 {
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
   gboolean retval = FALSE;
@@ -168,15 +168,15 @@ quartz_filter_keypress (GtkIMContext *context,
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
   gboolean retval;
   NSView *nsview;
-  GdkWindow *win;
+  GdkSurface *win;
 
   GTK_NOTE (MISC, g_print ("quartz_filter_keypress\n"));
 
-  if (!GDK_IS_QUARTZ_WINDOW (qc->client_window))
+  if (!GDK_IS_QUARTZ_SURFACE (qc->client_window))
     return FALSE;
 
-  nsview = gdk_quartz_window_get_nsview (qc->client_window);
-  win = (GdkWindow *)[ (GdkQuartzView *)nsview gdkWindow];
+  nsview = gdk_quartz_surface_get_nsview (qc->client_window);
+  win = (GdkSurface *)[ (GdkQuartzView *)nsview gdkWindow];
   GTK_NOTE (MISC, g_print ("client_window: %p, win: %p, nsview: %p\n",
 			   qc->client_window, win, nsview));
 
@@ -224,10 +224,10 @@ discard_preedit (GtkIMContext *context)
   if (!qc->client_window)
     return;
 
-  if (!GDK_IS_QUARTZ_WINDOW (qc->client_window))
+  if (!GDK_IS_QUARTZ_SURFACE (qc->client_window))
     return;
 
-  NSView *nsview = gdk_quartz_window_get_nsview (qc->client_window);
+  NSView *nsview = gdk_quartz_surface_get_nsview (qc->client_window);
   if (!nsview)
     return;
 
@@ -290,7 +290,7 @@ quartz_set_cursor_location (GtkIMContext *context, GdkRectangle *area)
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
   gint x, y;
   NSView *nsview;
-  GdkWindow *win;
+  GdkSurface *win;
 
   GTK_NOTE (MISC, g_print ("quartz_set_cursor_location\n"));
 
@@ -305,16 +305,16 @@ quartz_set_cursor_location (GtkIMContext *context, GdkRectangle *area)
   qc->cursor_rect->width = area->width;
   qc->cursor_rect->height = area->height;
 
-  gdk_window_get_origin (qc->client_window, &x, &y);
+  gdk_surface_get_origin (qc->client_window, &x, &y);
 
   qc->cursor_rect->x = area->x + x;
   qc->cursor_rect->y = area->y + y;
 
-  if (!GDK_IS_QUARTZ_WINDOW (qc->client_window))
+  if (!GDK_IS_QUARTZ_SURFACE (qc->client_window))
     return;
 
-  nsview = gdk_quartz_window_get_nsview (qc->client_window);
-  win = (GdkWindow *)[ (GdkQuartzView*)nsview gdkWindow];
+  nsview = gdk_quartz_surface_get_nsview (qc->client_window);
+  win = (GdkSurface *)[ (GdkQuartzView*)nsview gdkWindow];
   g_object_set_data (G_OBJECT (win), GIC_CURSOR_RECT, qc->cursor_rect);
 }
 

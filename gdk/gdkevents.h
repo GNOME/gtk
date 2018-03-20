@@ -166,7 +166,7 @@ typedef void (*GdkEventFunc) (GdkEvent *event,
  * @GDK_LEAVE_NOTIFY: the pointer has left the window.
  * @GDK_FOCUS_CHANGE: the keyboard focus has entered or left the window.
  * @GDK_CONFIGURE: the size, position or stacking order of the window has changed.
- *   Note that GTK+ discards these events for %GDK_WINDOW_CHILD windows.
+ *   Note that GTK+ discards these events for %GDK_SURFACE_CHILD windows.
  * @GDK_MAP: the window has been mapped.
  * @GDK_UNMAP: the window has been unmapped.
  * @GDK_PROXIMITY_IN: an input device has moved into contact with a sensing
@@ -381,7 +381,7 @@ GDK_AVAILABLE_IN_ALL
 void	  gdk_event_free     		(GdkEvent 	*event);
 
 GDK_AVAILABLE_IN_ALL
-GdkWindow *gdk_event_get_window         (const GdkEvent *event);
+GdkSurface *gdk_event_get_window         (const GdkEvent *event);
 
 GDK_AVAILABLE_IN_ALL
 guint32   gdk_event_get_time            (const GdkEvent  *event);
@@ -546,7 +546,7 @@ gboolean       gdk_event_get_touch_emulating_pointer (const GdkEvent *event,
                                                       gboolean       *emulating);
 GDK_AVAILABLE_IN_ALL
 gboolean       gdk_event_get_grab_window (const GdkEvent  *event,
-                                          GdkWindow      **window);
+                                          GdkSurface      **window);
 GDK_AVAILABLE_IN_ALL
 gboolean       gdk_event_get_focus_in (const GdkEvent *event,
                                        gboolean       *focus_in);

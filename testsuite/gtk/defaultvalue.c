@@ -104,9 +104,9 @@ test_type (gconstpointer data)
 
   if (g_type_is_a (type, GTK_TYPE_SETTINGS))
     instance = g_object_ref (gtk_settings_get_default ());
-  else if (g_type_is_a (type, GDK_TYPE_WINDOW))
+  else if (g_type_is_a (type, GDK_TYPE_SURFACE))
     {
-      instance = g_object_ref (gdk_window_new_popup (gdk_display_get_default (),
+      instance = g_object_ref (gdk_surface_new_popup (gdk_display_get_default (),
                                                      0,
                                                      &(GdkRectangle) { 0, 0, 100, 100 }));
     }
@@ -354,8 +354,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     }
   g_free (pspecs);
 
-  if (g_type_is_a (type, GDK_TYPE_WINDOW))
-    gdk_window_destroy (GDK_WINDOW (instance));
+  if (g_type_is_a (type, GDK_TYPE_SURFACE))
+    gdk_surface_destroy (GDK_SURFACE (instance));
   else
     g_object_unref (instance);
 

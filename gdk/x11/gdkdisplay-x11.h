@@ -96,7 +96,7 @@ struct _GdkX11Display
   /* Session Management leader window see ICCCM */
   char *program_class;
   Window leader_window;
-  GdkWindow *leader_gdk_window;
+  GdkSurface *leader_gdk_surface;
   gboolean leader_window_title_set;
 
   /* List of functions to go from extension event => X window */
@@ -111,7 +111,7 @@ struct _GdkX11Display
   /* streams reading selections */
   GSList *streams;
 
-  /* input GdkWindow list */
+  /* input GdkSurface list */
   GList *input_windows;
 
   /* GdkCursor => XCursor */

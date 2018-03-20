@@ -598,7 +598,7 @@ gtk_menu_shell_event (GtkWidget *widget,
 {
   GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget);
   GtkMenuShellPrivate *priv = menu_shell->priv;
-  GdkWindow *window;
+  GdkSurface *window;
 
   if (gdk_event_get_event_type (event) == GDK_GRAB_BROKEN)
     {

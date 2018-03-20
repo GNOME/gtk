@@ -51,7 +51,7 @@ init_root_window_size (GdkWin32Screen *screen)
   GdkDisplay *display = _gdk_display;
   int monitor_count;
   GdkMonitor *monitor;
-  GdkWindowImplWin32 *root_impl;
+  GdkSurfaceImplWin32 *root_impl;
 
   monitor_count = gdk_display_get_n_monitors (display);
   monitor = gdk_display_get_monitor (display, 0);

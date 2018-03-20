@@ -37,7 +37,7 @@ gtk_drag_dest_realized (GtkWidget *widget)
   GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
 
   if (gtk_widget_is_toplevel (toplevel))
-    gdk_window_register_dnd (gtk_widget_get_window (toplevel));
+    gdk_surface_register_dnd (gtk_widget_get_window (toplevel));
 }
 
 static void
@@ -47,7 +47,7 @@ gtk_drag_dest_hierarchy_changed (GtkWidget *widget,
   GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
 
   if (gtk_widget_is_toplevel (toplevel) && gtk_widget_get_realized (toplevel))
-    gdk_window_register_dnd (gtk_widget_get_window (toplevel));
+    gdk_surface_register_dnd (gtk_widget_get_window (toplevel));
 }
 
 static void
@@ -132,7 +132,7 @@ gtk_drag_dest_set_internal (GtkWidget       *widget,
  * {
 *   GdkModifierType mask;
  *
- *   gdk_window_get_pointer (gtk_widget_get_window (widget),
+ *   gdk_surface_get_pointer (gtk_widget_get_window (widget),
  *                           NULL, NULL, &mask);
  *   if (mask & GDK_CONTROL_MASK)
  *     gdk_drag_status (context, GDK_ACTION_COPY, time);
