@@ -26,7 +26,7 @@
 #define __GDK_SURFACE_WIN32_H__
 
 #include "gdk/win32/gdkprivate-win32.h"
-#include "gdk/gdkwindowimpl.h"
+#include "gdk/gdksurfaceimpl.h"
 #include "gdk/gdkcursor.h"
 
 #include <windows.h>

@@ -49,7 +49,7 @@
 #include "gdkinternals.h"
 #include "gdkintl.h"
 #include "gdkframeclockidle.h"
-#include "gdkwindowimpl.h"
+#include "gdksurfaceimpl.h"
 #include "gdkglcontextprivate.h"
 #include "gdk-private.h"
 

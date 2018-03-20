@@ -25,10 +25,10 @@
 
 #include "config.h"
 
-#include "gdkwindow-x11.h"
+#include "gdksurface-x11.h"
 
-#include "gdkwindow.h"
-#include "gdkwindowimpl.h"
+#include "gdksurface.h"
+#include "gdksurfaceimpl.h"
 #include "gdkvisual-x11.h"
 #include "gdkinternals.h"
 #include "gdkdeviceprivate.h"

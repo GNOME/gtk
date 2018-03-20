@@ -22,7 +22,7 @@
 #include "gdkprivate-x11.h"
 #include "gdkscreen-x11.h"
 #include "gdkdisplay-x11.h"
-#include "gdkwindow-x11.h"
+#include "gdksurface-x11.h"
 
 
 typedef struct _GdkSurfaceQueueItem GdkSurfaceQueueItem;

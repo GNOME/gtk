@@ -1,4 +1,4 @@
-/* gdkwindow-quartz.c
+/* gdksurface-quartz.c
  *
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  * Copyright (C) 2005-2007 Imendio AB
@@ -23,7 +23,7 @@
 #include <gdk/gdkdeviceprivate.h>
 #include <gdk/gdkdisplayprivate.h>
 
-#include "gdkwindowimpl.h"
+#include "gdksurfaceimpl.h"
 #include "gdkprivate-quartz.h"
 #include "gdkglcontext-quartz.h"
 #include "gdkquartzscreen.h"

@@ -5974,7 +5974,7 @@ gtk_window_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_window_parent_class)->finalize (object);
 }
 
-/* copied from gdkwindow-x11.c */
+/* copied from gdksurface-x11.c */
 static const gchar *
 get_default_title (void)
 {

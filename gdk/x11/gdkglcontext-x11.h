@@ -30,7 +30,7 @@
 #include "gdkglcontextprivate.h"
 #include "gdkdisplayprivate.h"
 #include "gdkvisual-x11.h"
-#include "gdkwindow.h"
+#include "gdksurface.h"
 #include "gdkinternals.h"
 
 G_BEGIN_DECLS

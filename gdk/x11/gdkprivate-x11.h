@@ -32,7 +32,7 @@
 #include "gdkcursor.h"
 #include "gdkinternals.h"
 #include "gdkx.h"
-#include "gdkwindow-x11.h"
+#include "gdksurface-x11.h"
 #include "gdkscreen-x11.h"
 
 #include <X11/Xlib.h>

@@ -22,7 +22,7 @@
 #include <gdk/gdkdisplayprivate.h>
 
 #import "GdkQuartzView.h"
-#include "gdkquartzwindow.h"
+#include "gdkquartzsurface.h"
 #include "gdkquartzcursor.h"
 #include "gdkprivate-quartz.h"
 #include "gdkquartzdevice-core.h"

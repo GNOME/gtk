@@ -19,7 +19,7 @@
 
 #include "config.h"
 #import "GdkQuartzView.h"
-#include "gdkquartzwindow.h"
+#include "gdkquartzsurface.h"
 #include "gdkprivate-quartz.h"
 #include "gdkquartz.h"
 

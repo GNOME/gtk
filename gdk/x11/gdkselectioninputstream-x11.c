@@ -27,7 +27,7 @@
 #include "gdkintl.h"
 #include "gdkx11display.h"
 #include "gdkx11property.h"
-#include "gdkx11window.h"
+#include "gdkx11surface.h"
 
 typedef struct GdkX11SelectionInputStreamPrivate  GdkX11SelectionInputStreamPrivate;
 

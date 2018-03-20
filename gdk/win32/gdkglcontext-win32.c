@@ -23,7 +23,7 @@
 #include "config.h"
 
 #include "gdkprivate-win32.h"
-#include "gdkwindow-win32.h"
+#include "gdksurface-win32.h"
 #include "gdkglcontext-win32.h"
 #include "gdkdisplay-win32.h"
 
@@ -31,10 +31,10 @@
 #include "gdkwin32glcontext.h"
 #include "gdkwin32misc.h"
 #include "gdkwin32screen.h"
-#include "gdkwin32window.h"
+#include "gdkwin32surface.h"
 
 #include "gdkglcontext.h"
-#include "gdkwindow.h"
+#include "gdksurface.h"
 #include "gdkinternals.h"
 #include "gdkintl.h"
 

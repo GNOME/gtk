@@ -23,7 +23,7 @@
 
 #include "gdkprivate-quartz.h"
 #include "gdkquartzscreen.h"
-#include "gdkquartzwindow.h"
+#include "gdkquartzsurface.h"
 #include "gdkquartzdisplay.h"
 #include "gdkquartzdevicemanager-core.h"
 #include "gdkmonitorprivate.h"

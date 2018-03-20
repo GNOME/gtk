@@ -28,7 +28,7 @@
 #include <gdk/x11/gdkx11display.h>
 #include <gdk/x11/gdkx11property.h>
 #include <gdk/x11/gdkx11screen.h>
-#include <gdk/x11/gdkx11window.h>
+#include <gdk/x11/gdkx11surface.h>
 #include <gdk/x11/gdkprivate-x11.h>
 #include <gdk/x11/gdkdisplay-x11.h>
 #include <gdk/x11/gdkscreen-x11.h>

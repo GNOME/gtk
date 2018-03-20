@@ -27,7 +27,7 @@
 
 #include <cairo-gobject.h>
 
-#include "gdkwindow.h"
+#include "gdksurface.h"
 
 #include "gdkrectangle.h"
 #include "gdkinternals.h"
@@ -36,7 +36,7 @@
 #include "gdkdeviceprivate.h"
 #include "gdkmarshalers.h"
 #include "gdkframeclockidle.h"
-#include "gdkwindowimpl.h"
+#include "gdksurfaceimpl.h"
 #include "gdkglcontextprivate.h"
 #include "gdkdrawingcontextprivate.h"
 #include "gdk-private.h"

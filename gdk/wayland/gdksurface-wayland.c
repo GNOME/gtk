@@ -23,8 +23,8 @@
 #include "gdk.h"
 #include "gdkwayland.h"
 
-#include "gdkwindow.h"
-#include "gdkwindowimpl.h"
+#include "gdksurface.h"
+#include "gdksurfaceimpl.h"
 #include "gdkdisplay-wayland.h"
 #include "gdkglcontext-wayland.h"
 #include "gdkframeclockprivate.h"

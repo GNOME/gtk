@@ -12,12 +12,12 @@ gdk_broadway_sources = files([
   'gdkkeys-broadway.c',
   'gdkmonitor-broadway.c',
   'gdkselection-broadway.c',
-  'gdkwindow-broadway.c',
+  'gdksurface-broadway.c',
 ])
 
 gdk_broadway_public_headers = [
   'gdkbroadwaydisplay.h',
-  'gdkbroadwaywindow.h',
+  'gdkbroadwaysurface.h',
   'gdkbroadwaycursor.h',
   'gdkbroadwaymonitor.h',
 ]

@@ -934,7 +934,7 @@ _gdk_win32_display_get_maximal_cursor_size (GdkDisplay *display,
 
 /* Convert a pixbuf to an HICON (or HCURSOR).  Supports alpha under
  * Windows XP, thresholds alpha otherwise.  Also used from
- * gdkwindow-win32.c for creating application icons.
+ * gdksurface-win32.c for creating application icons.
  */
 
 static HBITMAP

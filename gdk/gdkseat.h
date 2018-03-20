@@ -25,7 +25,7 @@
 #endif
 
 #include <glib-object.h>
-#include <gdk/gdkwindow.h>
+#include <gdk/gdksurface.h>
 #include <gdk/gdkevents.h>
 #include <gdk/gdktypes.h>
 

@@ -21,7 +21,7 @@
 
 #import <gdk/quartz/GdkQuartzView.h>
 #import <gdk/quartz/GdkQuartzNSWindow.h>
-#include "gdk/gdkwindowimpl.h"
+#include "gdk/gdksurfaceimpl.h"
 
 G_BEGIN_DECLS
 

@@ -1091,7 +1091,7 @@ gtk_drag_begin_idle (gpointer arg)
 }
 /* Fake protocol to let us call GdkNSView gdkWindow without including
  * gdk/GdkNSView.h (which we can’t because it pulls in the internal-only
- * gdkwindow.h).
+ * gdksurface.h).
  */
 @protocol GdkNSView
 - (GdkSurface *)gdkWindow;

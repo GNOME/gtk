@@ -22,7 +22,7 @@
 
 #include "gdkdisplayprivate.h"
 #include "gdkkeys.h"
-#include "gdkwindow.h"
+#include "gdksurface.h"
 #include "gdkinternals.h"
 
 G_BEGIN_DECLS

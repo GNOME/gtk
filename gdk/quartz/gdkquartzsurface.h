@@ -1,4 +1,4 @@
-/* gdkquartzwindow.h
+/* gdkquartzsurface.h
  *
  * Copyright (C) 2005  Imendio AB
  * Copyright (C) 2010  Kristian Rietveld  <kris@gtk.org>

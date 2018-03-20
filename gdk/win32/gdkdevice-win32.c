@@ -17,7 +17,7 @@
 
 #include "config.h"
 
-#include <gdk/gdkwindow.h>
+#include <gdk/gdksurface.h>
 
 #include <windowsx.h>
 #include <objbase.h>

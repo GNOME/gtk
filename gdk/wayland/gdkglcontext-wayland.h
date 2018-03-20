@@ -24,7 +24,7 @@
 
 #include "gdkglcontextprivate.h"
 #include "gdkdisplayprivate.h"
-#include "gdkwindow.h"
+#include "gdksurface.h"
 #include "gdkinternals.h"
 
 #include <epoxy/egl.h>

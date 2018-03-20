@@ -26,7 +26,7 @@
 #define __GDK_SURFACE_X11_H__
 
 #include "gdk/x11/gdkprivate-x11.h"
-#include "gdk/gdkwindowimpl.h"
+#include "gdk/gdksurfaceimpl.h"
 
 #include <X11/Xlib.h>
 

@@ -26,7 +26,7 @@
 
 #include "gdkdndprivate.h"
 #include "gdkdisplay.h"
-#include "gdkwindow.h"
+#include "gdksurface.h"
 #include "gdkintl.h"
 #include "gdkcontentformats.h"
 #include "gdkcontentprovider.h"

@@ -19,7 +19,7 @@
 #define __GDK_DISPLAY_PRIVATE_H__
 
 #include "gdkdisplay.h"
-#include "gdkwindow.h"
+#include "gdksurface.h"
 #include "gdkcursor.h"
 #include "gdkmonitor.h"
 #include "gdkinternals.h"

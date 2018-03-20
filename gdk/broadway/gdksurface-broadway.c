@@ -25,12 +25,12 @@
 
 #include "config.h"
 
-#include "gdkwindow-broadway.h"
+#include "gdksurface-broadway.h"
 
 #include "gdkbroadwaydisplay.h"
 #include "gdkdisplay.h"
-#include "gdkwindow.h"
-#include "gdkwindowimpl.h"
+#include "gdksurface.h"
+#include "gdksurfaceimpl.h"
 #include "gdkdisplay-broadway.h"
 #include "gdkprivate-broadway.h"
 #include "gdkinternals.h"

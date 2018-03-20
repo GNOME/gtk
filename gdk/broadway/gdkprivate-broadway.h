@@ -31,11 +31,11 @@
 
 #include <gdk/gdkcursor.h>
 #include <gdk/gdkinternals.h>
-#include "gdkwindow-broadway.h"
+#include "gdksurface-broadway.h"
 #include "gdkdisplay-broadway.h"
 
 #include "gdkbroadwaycursor.h"
-#include "gdkbroadwaywindow.h"
+#include "gdkbroadwaysurface.h"
 
 void _gdk_broadway_resync_windows (void);
 

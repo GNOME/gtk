@@ -157,7 +157,7 @@ typedef enum
 } GdkWMFunction;
 
 /* Currently, these are the same values numerically as in the
- * X protocol. If you change that, gdkwindow-x11.c/gdk_surface_set_geometry_hints()
+ * X protocol. If you change that, gdksurface-x11.c/gdk_surface_set_geometry_hints()
  * will need fixing.
  */
 /**

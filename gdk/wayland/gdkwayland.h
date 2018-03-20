@@ -32,7 +32,7 @@
 #include <gdk/wayland/gdkwaylanddevice.h>
 #include <gdk/wayland/gdkwaylanddisplay.h>
 #include <gdk/wayland/gdkwaylandmonitor.h>
-#include <gdk/wayland/gdkwaylandwindow.h>
+#include <gdk/wayland/gdkwaylandsurface.h>
 #include <gdk/wayland/gdkwaylandglcontext.h>
 
 #undef __GDKWAYLAND_H_INSIDE__

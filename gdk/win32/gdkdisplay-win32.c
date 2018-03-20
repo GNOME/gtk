@@ -28,7 +28,7 @@
 #include "gdkglcontext-win32.h"
 #include "gdkwin32display.h"
 #include "gdkwin32screen.h"
-#include "gdkwin32window.h"
+#include "gdkwin32surface.h"
 #include "gdkmonitor-win32.h"
 #include "gdkwin32.h"
 #include "gdkvulkancontext-win32.h"

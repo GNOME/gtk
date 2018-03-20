@@ -42,8 +42,8 @@ gdk_public_sources = files([
   'gdksnapshot.c',
   'gdktexture.c',
   'gdkvulkancontext.c',
-  'gdkwindow.c',
-  'gdkwindowimpl.c',
+  'gdksurface.c',
+  'gdksurfaceimpl.c',
 ])
 
 gdk_public_headers = files([
@@ -86,7 +86,7 @@ gdk_public_headers = files([
   'gdktexture.h',
   'gdktypes.h',
   'gdkvulkancontext.h',
-  'gdkwindow.h',
+  'gdksurface.h',
 ])
 install_headers(gdk_public_headers, subdir: 'gtk-4.0/gdk/')
 

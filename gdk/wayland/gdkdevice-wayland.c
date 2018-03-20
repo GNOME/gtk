@@ -22,7 +22,7 @@
 #include <errno.h>
 
 #include <string.h>
-#include <gdk/gdkwindow.h>
+#include <gdk/gdksurface.h>
 #include <gdk/gdktypes.h>
 #include "gdkclipboard-wayland.h"
 #include "gdkclipboardprivate.h"

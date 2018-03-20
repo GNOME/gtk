@@ -26,7 +26,7 @@ gdk_x11_sources = files([
   'gdktextlistconverter-x11.c',
   'gdkvisual-x11.c',
   'gdkvulkancontext-x11.c',
-  'gdkwindow-x11.c',
+  'gdksurface-x11.c',
   'gdkxftdefaults.c',
   'gdkxid.c',
   'xsettings-client.c',
@@ -50,7 +50,7 @@ gdk_x11_public_headers = files([
   'gdkx11screen.h',
   'gdkx11selection.h',
   'gdkx11utils.h',
-  'gdkx11window.h',
+  'gdkx11surface.h',
 ])
 
 install_headers(gdk_x11_public_headers, subdir: 'gtk-4.0/gdk/x11/')

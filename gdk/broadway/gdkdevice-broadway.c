@@ -20,7 +20,7 @@
 
 #include "gdkdevice-broadway.h"
 
-#include "gdkwindow.h"
+#include "gdksurface.h"
 #include "gdkprivate-broadway.h"
 
 static gboolean gdk_broadway_device_get_history (GdkDevice      *device,

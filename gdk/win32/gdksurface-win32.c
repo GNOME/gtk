@@ -29,7 +29,7 @@
 #include <stdlib.h>
 
 #include "gdk.h"
-#include "gdkwindowimpl.h"
+#include "gdksurfaceimpl.h"
 #include "gdkprivate-win32.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdevicemanager-win32.h"
@@ -37,7 +37,7 @@
 #include "gdkwin32.h"
 #include "gdkdisplayprivate.h"
 #include "gdkmonitorprivate.h"
-#include "gdkwin32window.h"
+#include "gdkwin32surface.h"
 #include "gdkglcontext-win32.h"
 #include "gdkdisplay-win32.h"
 

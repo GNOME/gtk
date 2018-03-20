@@ -22,7 +22,7 @@
 #include "gdkdeviceprivate.h"
 
 #include "gdkinternals.h"
-#include "gdkwindow.h"
+#include "gdksurface.h"
 #include "gdkprivate-x11.h"
 #include "gdkdisplay-x11.h"
 #include "gdkasync.h"

@@ -1,4 +1,4 @@
-/* gdkwindow-quartz.c
+/* gdksurface-quartz.c
  *
  * Copyright (C) 2005-2007 Imendio AB
  *
@@ -26,7 +26,7 @@
 #include <gdk/quartz/gdkdevicemanager-core-quartz.h>
 #include <gdk/quartz/gdkdnd-quartz.h>
 #include <gdk/quartz/gdkscreen-quartz.h>
-#include <gdk/quartz/gdkwindow-quartz.h>
+#include <gdk/quartz/gdksurface-quartz.h>
 
 #include <gdk/gdk.h>
 

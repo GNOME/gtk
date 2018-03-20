@@ -28,7 +28,7 @@
 
 #include "gdkinternals.h"
 #include "gdkdisplay-x11.h"
-#include "gdkwindow-x11.h"
+#include "gdksurface-x11.h"
 
 G_DEFINE_TYPE (GdkX11VulkanContext, gdk_x11_vulkan_context, GDK_TYPE_VULKAN_CONTEXT)
 

@@ -37,7 +37,7 @@
 
 #include <glib.h>
 #include <gdk/gdkkeys.h>
-#include <gdk/gdkwindow.h>
+#include <gdk/gdksurface.h>
 #include <gdk/gdkinternals.h>
 #include <gdk/gdk.h>		/* For gdk_get_program_class() */
 

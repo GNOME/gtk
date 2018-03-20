@@ -31,7 +31,7 @@
 #include "gdkdeviceprivate.h"
 #include "gdkdisplaymanagerprivate.h"
 #include "gdkevents.h"
-#include "gdkwindowimpl.h"
+#include "gdksurfaceimpl.h"
 #include "gdkinternals.h"
 #include "gdkmonitorprivate.h"
 

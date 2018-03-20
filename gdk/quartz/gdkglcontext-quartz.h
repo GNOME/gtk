@@ -24,7 +24,7 @@
 #define __GDK_QUARTZ_GL_CONTEXT__
 
 #include "gdkglcontextprivate.h"
-#include "gdkwindow.h"
+#include "gdksurface.h"
 #include "gdkinternals.h"
 
 G_BEGIN_DECLS

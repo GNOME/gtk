@@ -624,7 +624,7 @@ find_toplevel_under_pointer (GdkDisplay *display,
        * under the pointer and we thus return NULL. This can occur when
        * toplevel under pointer has not yet been updated due to a very recent
        * window resize. Alternatively, we should no longer be relying on
-       * the toplevel_under_pointer value which is maintained in gdkwindow.c.
+       * the toplevel_under_pointer value which is maintained in gdksurface.c.
        */
       if (*x < 0 || *y < 0 || *x >= toplevel->width || *y >= toplevel->height)
         return NULL;

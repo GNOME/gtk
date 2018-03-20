@@ -25,7 +25,7 @@
 #ifndef __GDK_SURFACE_IMPL_H__
 #define __GDK_SURFACE_IMPL_H__
 
-#include <gdk/gdkwindow.h>
+#include <gdk/gdksurface.h>
 #include <gdk/gdkproperty.h>
 
 G_BEGIN_DECLS

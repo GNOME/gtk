@@ -35,7 +35,7 @@
 #endif
 
 #include <gdk/gdkcursorprivate.h>
-#include <gdk/win32/gdkwindow-win32.h>
+#include <gdk/win32/gdksurface-win32.h>
 #include <gdk/win32/gdkwin32display.h>
 #include <gdk/win32/gdkwin32screen.h>
 #include <gdk/win32/gdkwin32keys.h>

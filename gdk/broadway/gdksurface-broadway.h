@@ -25,7 +25,7 @@
 #ifndef __GDK_SURFACE_BROADWAY_H__
 #define __GDK_SURFACE_BROADWAY_H__
 
-#include <gdk/gdkwindowimpl.h>
+#include <gdk/gdksurfaceimpl.h>
 
 G_BEGIN_DECLS
 

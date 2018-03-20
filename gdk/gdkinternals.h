@@ -28,7 +28,7 @@
 #define __GDK_INTERNALS_H__
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
-#include "gdkwindowimpl.h"
+#include "gdksurfaceimpl.h"
 #include "gdkdisplay.h"
 #include "gdkeventsprivate.h"
 #include "gdkenumtypes.h"
