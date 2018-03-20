@@ -83,15 +83,6 @@ void _gdk_x11_surface_process_expose    (GdkSurface     *window,
                                         gulong         serial,
                                         GdkRectangle  *area);
 
-void     _gdk_x11_surface_queue_antiexpose  (GdkSurface *window,
-                                            cairo_region_t *area);
-void     _gdk_x11_surface_translate         (GdkSurface *window,
-                                            cairo_region_t *area,
-                                            gint       dx,
-                                            gint       dy);
-
-void     _gdk_x11_display_free_translate_queue (GdkDisplay *display);
-
 cairo_region_t* _gdk_x11_xwindow_get_shape  (Display *xdisplay,
                                              Window   window,
                                              gint     scale,

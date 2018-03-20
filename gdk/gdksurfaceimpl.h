@@ -112,13 +112,6 @@ struct _GdkSurfaceImplClass
 					       gint             offset_x,
 					       gint             offset_y);
 
-  /* Called before processing updates for a surface. This gives the windowing
-   * layer a chance to save the region for later use in avoiding duplicate
-   * exposes.
-   */
-  void     (* queue_antiexpose)     (GdkSurface       *surface,
-                                     cairo_region_t  *update_area);
-
 /* Called to do the windowing system specific part of gdk_surface_destroy(),
  *
  * surface: The window being destroyed

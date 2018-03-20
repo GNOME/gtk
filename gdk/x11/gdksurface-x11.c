@@ -4894,7 +4894,6 @@ gdk_surface_impl_x11_class_init (GdkSurfaceImplX11Class *klass)
   impl_class->get_device_state = gdk_surface_x11_get_device_state;
   impl_class->shape_combine_region = gdk_surface_x11_shape_combine_region;
   impl_class->input_shape_combine_region = gdk_surface_x11_input_shape_combine_region;
-  impl_class->queue_antiexpose = _gdk_x11_surface_queue_antiexpose;
   impl_class->destroy = gdk_x11_surface_destroy;
   impl_class->beep = gdk_x11_surface_beep;
 

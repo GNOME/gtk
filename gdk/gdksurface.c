@@ -2415,9 +2415,6 @@ gdk_surface_process_updates_internal (GdkSurface *surface)
 	  /* Clip to part visible in impl surface */
 	  cairo_region_intersect (expose_region, surface->clip_region);
 
-          if (impl_class->queue_antiexpose)
-            impl_class->queue_antiexpose (surface, expose_region);
-
           impl_class->process_updates_recurse (surface, expose_region);
 
           gdk_surface_append_old_updated_area (surface, surface->active_update_area);

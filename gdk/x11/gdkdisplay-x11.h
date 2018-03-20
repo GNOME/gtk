@@ -105,9 +105,6 @@ struct _GdkX11Display
   /* X ID hashtable */
   GHashTable *xid_ht;
 
-  /* translation queue */
-  GQueue *translate_queue;
-
   /* streams reading selections */
   GSList *streams;
 

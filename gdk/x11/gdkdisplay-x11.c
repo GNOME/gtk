@@ -1966,9 +1966,6 @@ gdk_x11_display_finalize (GObject *object)
 
   _gdk_x11_cursor_display_finalize (GDK_DISPLAY (display_x11));
 
-  /* Empty the event queue */
-  _gdk_x11_display_free_translate_queue (GDK_DISPLAY (display_x11));
-
   /* Get rid of pending streams */
   g_slist_free_full (display_x11->streams, g_object_unref);
 
