@@ -77,7 +77,6 @@ struct _GdkEventAny
 struct _GdkEventExpose
 {
   GdkEventAny any;
-  GdkRectangle area;
   cairo_region_t *region;
 };
 
