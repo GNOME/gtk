@@ -3932,58 +3932,6 @@ gdk_surface_move_to_rect (GdkSurface          *surface,
                             rect_anchor_dy);
 }
 
-/**
- * gdk_surface_scroll:
- * @surface: a #GdkSurface
- * @dx: Amount to scroll in the X direction
- * @dy: Amount to scroll in the Y direction
- *
- * Scroll the contents of @surface, both pixels and children, by the
- * given amount. @surface itself does not move. Portions of the surface
- * that the scroll operation brings in from offscreen areas are
- * invalidated. The invalidated region may be bigger than what would
- * strictly be necessary.
- *
- * For X11, a minimum area will be invalidated if the surface has no
- * subsurfaces, or if the edges of the surface’s parent do not extend
- * beyond the edges of the surface. In other cases, a multi-step process
- * is used to scroll the surface which may produce temporary visual
- * artifacts and unnecessary invalidations.
- **/
-void
-gdk_surface_scroll (GdkSurface *surface,
-		   gint       dx,
-		   gint       dy)
-{
-  GList *tmp_list;
-
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  if (dx == 0 && dy == 0)
-    return;
-
-  if (surface->destroyed)
-    return;
-
-  /* First move all child surfaces, without causing invalidation */
-
-  tmp_list = surface->children;
-  while (tmp_list)
-    {
-      GdkSurface *child = GDK_SURFACE (tmp_list->data);
-
-      /* Just update the positions, the bits will move with the copy */
-      child->x += dx;
-      child->y += dy;
-
-      tmp_list = tmp_list->next;
-    }
-
-  recompute_visible_regions (surface, TRUE);
-
-  gdk_surface_invalidate_rect_full (surface, NULL, TRUE);
-}
-
 static void
 gdk_surface_set_cursor_internal (GdkSurface *surface,
                                 GdkDevice *device,

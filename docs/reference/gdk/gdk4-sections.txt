@@ -216,7 +216,6 @@ gdk_surface_get_pass_through
 gdk_surface_move
 gdk_surface_resize
 gdk_surface_move_resize
-gdk_surface_scroll
 gdk_surface_has_native
 gdk_surface_raise
 gdk_surface_lower

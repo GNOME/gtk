@@ -513,10 +513,6 @@ gboolean      gdk_surface_get_focus_on_map      (GdkSurface     *surface);
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_set_focus_on_map      (GdkSurface     *surface,
 					        gboolean       focus_on_map);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_scroll                (GdkSurface     *surface,
-                                                gint           dx,
-                                                gint           dy);
 
 /* 
  * This allows for making shaped (partially transparent) surfaces
