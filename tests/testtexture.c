@@ -86,7 +86,7 @@ gtk_texture_view_finalize (GObject *object)
 static void
 gtk_texture_view_init (GtkTextureView *self)
 {
-  gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
 }
 
 static void
