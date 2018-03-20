@@ -1,27 +1,53 @@
-image: ebassi/gitlab-gtk:latest
-
 stages:
   - build
+  - flatpak
 
-before_script:
-  - mkdir -p _ccache
-  - export CCACHE_BASEDIR=${PWD}
-  - export CCACHE_DIR=${PWD}/_ccache
-
-cache:
-  paths:
-    - subprojects/gdk-pixbuf/
-    - subprojects/glib/
-    - subprojects/graphene/
-    - subprojects/libepoxy/
-    - subprojects/pango/
-
-build:
+gtk:
+  image: ebassi/gitlab-gtk:latest
   stage: build
+  before_script:
+    - mkdir -p _ccache
+    - export CCACHE_BASEDIR=${PWD}
+    - export CCACHE_DIR=${PWD}/_ccache
   script:
     - bash -x ./.gitlab-ci/test-docker.sh
+  cache:
+    paths:
+      - subprojects/gdk-pixbuf/
+      - subprojects/glib/
+      - subprojects/graphene/
+      - subprojects/libepoxy/
+      - subprojects/pango/
   artifacts:
     when: on_failure
     name: "gtk-${CI_COMMIT_REF_NAME}"
     paths:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
+
+flatpak:demo:
+  image: registry.gitlab.com/alatiera/gnome-nightly-oci/gnome-master:latest
+  stage: flatpak
+  script:
+    - flatpak-builder --stop-at=gtk app build-aux/flatpak/org.gtk.Demo.json
+    - flatpak-builder --run app build-aux/flatpak/org.gtk.Demo.json meson --prefix /app --libdir /app/lib --buildtype debug -Dx11-backend=true -Dwayland-backend=true -Dprint-backends=file -Dbuild-tests=false -Ddemos=true _build .
+    - flatpak-builder --run app build-aux/flatpak/org.gtk.Demo.json ninja -C _build install
+    - flatpak-builder --finish-only --repo=repo app build-aux/flatpak/org.gtk.Demo.json
+    - flatpak build-bundle repo gtk-demo-dev.flatpak --runtime-repo=https://flathub.org/repo/flathub.flatpakrepo org.gtk.Demo
+  artifacts:
+    paths:
+      - gtk-demo-dev.flatpak
+    expire_in: 1 day
+
+flatpak:widget-factory:
+  image: registry.gitlab.com/alatiera/gnome-nightly-oci/gnome-master:latest
+  stage: flatpak
+  script:
+    - flatpak-builder --stop-at=gtk app build-aux/flatpak/org.gtk.WidgetFactory.json
+    - flatpak-builder --run app build-aux/flatpak/org.gtk.WidgetFactory.json meson --prefix /app --libdir /app/lib --buildtype debug -Dx11-backend=true -Dwayland-backend=true -Dprint-backends=file -Dbuild-tests=false -Ddemos=true _build .
+    - flatpak-builder --run app build-aux/flatpak/org.gtk.WidgetFactory.json ninja -C _build install
+    - flatpak-builder --finish-only --repo=repo app build-aux/flatpak/org.gtk.WidgetFactory.json
+    - flatpak build-bundle repo gtk-widget-factory-dev.flatpak --runtime-repo=https://flathub.org/repo/flathub.flatpakrepo org.gtk.WidgetFactory
+  artifacts:
+    paths:
+      - gtk-widget-factory-dev.flatpak
+    expire_in: 1 day
