@@ -2355,7 +2355,6 @@ _gdk_surface_process_updates_recurse (GdkSurface *surface,
   event = gdk_event_new (GDK_EXPOSE);
   event->any.surface = g_object_ref (surface);
   event->any.send_event = FALSE;
-  event->expose.count = 0;
   event->expose.region = cairo_region_reference (clipped_expose_region);
   cairo_region_get_extents (clipped_expose_region, &event->expose.area);
 

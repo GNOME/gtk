@@ -70,10 +70,6 @@ struct _GdkEventAny
  * @send_event: %TRUE if the event was sent explicitly.
  * @area: bounding box of @region.
  * @region: the region that needs to be redrawn.
- * @count: the number of contiguous %GDK_EXPOSE events following this one.
- *   The only use for this is “exposure compression”, i.e. handling all
- *   contiguous %GDK_EXPOSE events in one go, though GDK performs some
- *   exposure compression so this is not normally needed.
  *
  * Generated when all or part of a surface becomes visible and needs to be
  * redrawn.
@@ -83,7 +79,6 @@ struct _GdkEventExpose
   GdkEventAny any;
   GdkRectangle area;
   cairo_region_t *region;
-  gint count; /* If non-zero, how many more events follow. */
 };
 
 /*
