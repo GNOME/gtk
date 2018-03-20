@@ -104,6 +104,7 @@
             <child>
               <object class="GtkSwitch" id="switch1">
                 <property name="can-focus">1</property>
+                <property name="tooltip_text">Switch it</property>
               </object>
             </child>
           </object>

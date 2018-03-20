@@ -27,9 +27,12 @@
         <property name="column-spacing">10</property>
         <property name="margin">20</property>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="label_plain">
             <property name="label">Plain</property>
             <property name="xalign">0</property>
+            <accessibility>
+              <relation type="label-for" target="scale_plain"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -37,12 +40,15 @@
           </packing>
         </child>
         <child>
-          <object class="GtkScale">
+          <object class="GtkScale" id="scale_plain">
             <property name="can-focus">1</property>
             <property name="width-request">200</property>
             <property name="draw-value">0</property>
             <property name="adjustment">adjustment1</property>
             <property name="hexpand">1</property>
+            <accessibility>
+              <relation type="labelled-by" target="label_plain"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -50,9 +56,12 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="label_marks">
             <property name="label">Marks</property>
             <property name="xalign">0</property>
+            <accessibility>
+              <relation type="label-for" target="scale_marks"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -60,7 +69,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkScale">
+          <object class="GtkScale" id="scale_marks">
             <property name="can-focus">1</property>
             <property name="width-request">200</property>
             <property name="draw-value">0</property>
@@ -73,6 +82,9 @@
               <mark value="3" position="bottom"></mark>
               <mark value="4" position="bottom"></mark>
             </marks>
+            <accessibility>
+              <relation type="labelled-by" target="label_marks"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -80,9 +92,12 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="label_discrete">
             <property name="label">Discrete</property>
             <property name="xalign">0</property>
+            <accessibility>
+              <relation type="label-for" target="scale_discrete"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -90,13 +105,16 @@
           </packing>
         </child>
         <child>
-          <object class="GtkScale">
+          <object class="GtkScale" id="scale_discrete">
             <property name="can-focus">1</property>
             <property name="width-request">200</property>
             <property name="round-digits">0</property>
             <property name="draw-value">0</property>
             <property name="adjustment">adjustment3</property>
             <property name="hexpand">1</property>
+            <accessibility>
+              <relation type="labelled-by" target="label_discrete"/>
+            </accessibility>
             <marks>
               <mark value="0" position="bottom"></mark>
               <mark value="1" position="bottom"></mark>
