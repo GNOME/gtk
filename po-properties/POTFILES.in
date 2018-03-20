@@ -16,7 +16,7 @@ gdk/gdkevents.c
 gdk/gdkglcontext.c
 gdk/gdkpango.c
 gdk/gdkseat.c
-gdk/gdkwindow.c
+gdk/gdksurface.c
 gdk/keyname-table.h
 gdk/quartz/gdkglcontext-quartz.c
 gdk/wayland/gdkclipboard-wayland.c
