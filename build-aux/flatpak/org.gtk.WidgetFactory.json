@@ -1,0 +1,48 @@
+{
+    "app-id": "org.gtk.WidgetFactory",
+    "runtime": "org.gnome.Platform",
+    "runtime-version": "master",
+    "sdk": "org.gnome.Sdk",
+    "command": "gtk-demo",
+    "tags": ["devel", "development", "nightly"],
+    "rename-desktop-file": "gtk4-widget-factory.desktop",
+    "rename-icon": "gtk4-widget-factory",
+    "desktop-file-prefix": "(Development) ",
+    "finish-args": [
+        "--share=ipc",
+        "--socket=x11",
+        "--socket=wayland",
+        "--talk-name=org.gtk.vfs", "--talk-name=org.gtk.vfs.*",
+        "--talk-name=ca.desrt.conf", "--env=DCONF_USER_CONFIG_DIR=.config/dconf"
+    ],
+    "modules": [
+        {
+            "name": "graphene",
+            "buildsystem": "meson",
+            "builddir": true,
+            "config-opts": [
+                "--libdir /app/lib"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/ebassi/graphene.git"
+                }
+            ]
+        },
+        {
+            "name": "gtk",
+            "buildsystem": "meson",
+            "builddir": true,
+            "config-opts": [
+                "--libdir /app/lib"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://gitlab.gnome.org/GNOME/gtk.git"
+                }
+            ]
+        }
+    ]
+}
