@@ -1790,18 +1790,13 @@ gtk_stack_snapshot_crossfade (GtkWidget   *widget,
 
   if (priv->last_visible_node)
     {
-      graphene_matrix_t translate;
-
-      graphene_matrix_init_translate (&translate,
-                                      &GRAPHENE_POINT3D_INIT (
-                                        priv->last_visible_surface_allocation.x,
-                                        priv->last_visible_surface_allocation.y,
-                                        0)
-                                      );
-
-      gtk_snapshot_push_transform (snapshot, &translate, "CrossFadeStart");
+      gtk_snapshot_offset (snapshot,
+                           priv->last_visible_surface_allocation.x,
+                           priv->last_visible_surface_allocation.y);
       gtk_snapshot_append_node (snapshot, priv->last_visible_node);
-      gtk_snapshot_pop (snapshot);
+      gtk_snapshot_offset (snapshot,
+                           -priv->last_visible_surface_allocation.x,
+                           -priv->last_visible_surface_allocation.y);
     }
   gtk_snapshot_pop (snapshot);
 
@@ -1865,13 +1860,9 @@ gtk_stack_snapshot_under (GtkWidget   *widget,
 
   if (priv->last_visible_node)
     {
-      graphene_matrix_t matrix;
-
-      graphene_matrix_init_translate (&matrix, &GRAPHENE_POINT3D_INIT (pos_x, pos_y, 0));
-
-      gtk_snapshot_push_transform (snapshot, &matrix, "StackUnder");
+      gtk_snapshot_offset (snapshot, pos_x, pos_y);
       gtk_snapshot_append_node (snapshot, priv->last_visible_node);
-      gtk_snapshot_pop (snapshot);
+      gtk_snapshot_offset (snapshot, -pos_x, -pos_y);
     }
 }
 
@@ -1884,7 +1875,6 @@ gtk_stack_snapshot_slide (GtkWidget   *widget,
 
   if (priv->last_visible_node)
     {
-      graphene_matrix_t matrix;
       int x, y;
       int width, height;
 
@@ -1927,10 +1917,9 @@ gtk_stack_snapshot_slide (GtkWidget   *widget,
       else if (gtk_widget_get_valign (priv->last_visible_child->widget) == GTK_ALIGN_CENTER)
         y -= (priv->last_visible_widget_height - height) / 2;
 
-      graphene_matrix_init_translate (&matrix, &GRAPHENE_POINT3D_INIT (x, y, 0));
-      gtk_snapshot_push_transform (snapshot, &matrix, "StackSlide");
+      gtk_snapshot_offset (snapshot, x, y);
       gtk_snapshot_append_node (snapshot, priv->last_visible_node);
-      gtk_snapshot_pop (snapshot);
+      gtk_snapshot_offset (snapshot, -x, -y);
      }
 
   gtk_widget_snapshot_child (widget,

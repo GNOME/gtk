@@ -35,6 +35,7 @@
 #include "gtkcssstyleprivate.h"
 #include "gtkhslaprivate.h"
 #include "gtkroundedboxprivate.h"
+#include "gtksnapshotprivate.h"
 
 #include "gsk/gskroundedrectprivate.h"
 
@@ -440,7 +441,7 @@ snapshot_frame_fill (GtkSnapshot          *snapshot,
   node = gsk_border_node_new (&offset_outline, border_width, colors);
   if (gtk_snapshot_get_record_names (snapshot))
     gsk_render_node_set_name (node, "Border");
-  gtk_snapshot_append_node (snapshot, node);
+  gtk_snapshot_append_node_internal (snapshot, node);
   gsk_render_node_unref (node);
 }
 

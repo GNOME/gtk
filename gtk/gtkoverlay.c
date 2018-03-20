@@ -655,7 +655,6 @@ gtk_overlay_snapshot (GtkWidget   *widget,
   GtkAllocation main_alloc;
   cairo_region_t *clip = NULL;
   int i;
-  graphene_matrix_t translate;
 
   main_widget = gtk_bin_get_child (GTK_BIN (widget));
   gtk_widget_get_allocation (widget, &main_alloc);
@@ -682,7 +681,6 @@ gtk_overlay_snapshot (GtkWidget   *widget,
               gtk_widget_snapshot (main_widget, child_snapshot);
               gtk_snapshot_offset (child_snapshot, -main_alloc.x, -main_alloc.y);
               main_widget_node = gtk_snapshot_free_to_node (child_snapshot);
-              graphene_matrix_init_translate (&translate, &GRAPHENE_POINT3D_INIT (main_alloc.x,main_alloc.y, 0));
             }
 
           gtk_widget_get_allocation (child, &alloc);

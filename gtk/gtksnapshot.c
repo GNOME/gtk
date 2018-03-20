@@ -337,6 +337,98 @@ gtk_snapshot_push_transform (GtkSnapshot             *snapshot,
 }
 
 static GskRenderNode *
+gtk_snapshot_collect_offset (GtkSnapshot       *snapshot,
+                             GtkSnapshotState  *state,
+                             GskRenderNode    **nodes,
+                             guint              n_nodes,
+                             const char        *name)
+{
+  GskRenderNode *node, *offset_node;
+  GtkSnapshotState  *previous_state;
+
+  node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes, name);
+  if (node == NULL)
+    return NULL;
+
+  previous_state = gtk_snapshot_get_previous_state (snapshot);
+  if (previous_state->translate_x == 0.0 &&
+      previous_state->translate_y == 0.0)
+    return node;
+
+  offset_node = gsk_offset_node_new (node,
+                                     previous_state->translate_x,
+                                     previous_state->translate_y);
+  if (name)
+    gsk_render_node_set_name (offset_node, name);
+
+  gsk_render_node_unref (node);
+
+  return offset_node;
+}
+
+static void
+gtk_snapshot_push_offset (GtkSnapshot *snapshot,
+                          const char  *name,
+                          ...) G_GNUC_PRINTF(2, 3);
+static void
+gtk_snapshot_push_offset (GtkSnapshot *snapshot,
+                          const char  *name,
+                          ...)
+{
+  GtkSnapshotState *state = gtk_snapshot_get_current_state (snapshot);
+  char *str;
+  cairo_region_t *offset_clip;
+
+  if (name && snapshot->record_names)
+    {
+      va_list args;
+
+      va_start (args, name);
+      str = g_strdup_vprintf (name, args);
+      va_end (args);
+    }
+  else
+    str = NULL;
+
+  if (state->clip_region)
+    {
+      offset_clip = cairo_region_copy (state->clip_region);
+      if (state->translate_x != floor (state->translate_x))
+        {
+          cairo_region_translate (offset_clip, -1, 0);
+          cairo_region_union (offset_clip, state->clip_region);
+          if (state->translate_y != floor (state->translate_y))
+            {
+              cairo_region_t *tmp = cairo_region_copy (offset_clip);
+              cairo_region_translate (offset_clip, 0, -1);
+              cairo_region_union (offset_clip, tmp);
+              cairo_region_destroy (tmp);
+            }
+        }
+      else if (state->translate_y != floor (state->translate_y))
+        {
+          cairo_region_translate (offset_clip, 0, -1);
+          cairo_region_union (offset_clip, state->clip_region);
+        }
+      cairo_region_translate (offset_clip, 
+                              - floor (state->translate_x),
+                              - floor (state->translate_y));
+
+    }
+  else
+    {
+      offset_clip = NULL;
+    }
+  state = gtk_snapshot_push_state (snapshot,
+                                   str,
+                                   offset_clip,
+                                   0, 0,
+                                   gtk_snapshot_collect_offset);
+  if (offset_clip)
+    cairo_region_destroy (offset_clip);
+}
+
+static GskRenderNode *
 gtk_snapshot_collect_opacity (GtkSnapshot      *snapshot,
                               GtkSnapshotState *state,
                               GskRenderNode **nodes,
@@ -1191,7 +1283,7 @@ gtk_snapshot_pop (GtkSnapshot *snapshot)
   node = gtk_snapshot_pop_internal (snapshot);
   if (node)
     {
-      gtk_snapshot_append_node (snapshot, node);
+      gtk_snapshot_append_node_internal (snapshot, node);
       gsk_render_node_unref (node);
     }
 }
@@ -1261,6 +1353,25 @@ gtk_snapshot_get_offset (GtkSnapshot *snapshot,
     *y = current_state->translate_y;
 }
 
+void
+gtk_snapshot_append_node_internal (GtkSnapshot   *snapshot,
+                                   GskRenderNode *node)
+{
+  GtkSnapshotState *current_state;
+
+  current_state = gtk_snapshot_get_current_state (snapshot);
+
+  if (current_state)
+    {
+      g_ptr_array_add (snapshot->nodes, gsk_render_node_ref (node));
+      current_state->n_nodes ++;
+    }
+  else
+    {
+      g_critical ("Tried appending a node to an already finished snapshot.");
+    }
+}
+
 /**
  * gtk_snapshot_append_node:
  * @snapshot: a #GtkSnapshot
@@ -1275,22 +1386,12 @@ void
 gtk_snapshot_append_node (GtkSnapshot   *snapshot,
                           GskRenderNode *node)
 {
-  GtkSnapshotState *current_state;
-
   g_return_if_fail (snapshot != NULL);
   g_return_if_fail (GSK_IS_RENDER_NODE (node));
 
-  current_state = gtk_snapshot_get_current_state (snapshot);
-
-  if (current_state)
-    {
-      g_ptr_array_add (snapshot->nodes, gsk_render_node_ref (node));
-      current_state->n_nodes ++;
-    }
-  else
-    {
-      g_critical ("Tried appending a node to an already finished snapshot.");
-    }
+  gtk_snapshot_push_offset (snapshot, "OffsetReset");
+  gtk_snapshot_append_node_internal (snapshot, node);
+  gtk_snapshot_pop (snapshot);
 }
 
 /**
@@ -1351,7 +1452,7 @@ gtk_snapshot_append_cairo (GtkSnapshot           *snapshot,
       g_free (str);
     }
 
-  gtk_snapshot_append_node (snapshot, node);
+  gtk_snapshot_append_node_internal (snapshot, node);
   gsk_render_node_unref (node);
 
   cr = gsk_cairo_node_get_draw_context (node);
@@ -1404,7 +1505,7 @@ gtk_snapshot_append_texture (GtkSnapshot            *snapshot,
       g_free (str);
     }
 
-  gtk_snapshot_append_node (snapshot, node);
+  gtk_snapshot_append_node_internal (snapshot, node);
   gsk_render_node_unref (node);
 }
 
@@ -1469,7 +1570,7 @@ gtk_snapshot_append_color (GtkSnapshot           *snapshot,
       g_free (str);
     }
 
-  gtk_snapshot_append_node (snapshot, node);
+  gtk_snapshot_append_node_internal (snapshot, node);
   gsk_render_node_unref (node);
 }
 
@@ -1709,7 +1810,7 @@ gtk_snapshot_append_linear_gradient (GtkSnapshot            *snapshot,
       g_free (str);
     }
 
-  gtk_snapshot_append_node (snapshot, node);
+  gtk_snapshot_append_node_internal (snapshot, node);
   gsk_render_node_unref (node);
 }
 
@@ -1787,6 +1888,6 @@ gtk_snapshot_append_repeating_linear_gradient (GtkSnapshot            *snapshot,
       g_free (str);
     }
 
-  gtk_snapshot_append_node (snapshot, node);
+  gtk_snapshot_append_node_internal (snapshot, node);
   gsk_render_node_unref (node);
 }

@@ -21,7 +21,7 @@
 
 #include "gsk/gsk.h"
 #include "gskpango.h"
-#include "gtksnapshot.h"
+#include "gtksnapshotprivate.h"
 
 #include <math.h>
 
@@ -162,7 +162,7 @@ gsk_pango_renderer_show_text_glyphs (PangoRenderer        *renderer,
       gsk_render_node_set_name (node, name);
     }
 
-  gtk_snapshot_append_node (crenderer->snapshot, node);
+  gtk_snapshot_append_node_internal (crenderer->snapshot, node);
   gsk_render_node_unref (node);
 }
 
