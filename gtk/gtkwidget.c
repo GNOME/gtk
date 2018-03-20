@@ -10685,6 +10685,7 @@ typedef struct
   GtkBuilder *builder;
   GSList *actions;
   GSList *relations;
+  AtkRole role;
 } AccessibilitySubParserData;
 
 static void
@@ -10763,6 +10764,45 @@ accessibility_start_element (GMarkupParseContext  *context,
       action->translatable = translatable;
 
       data->actions = g_slist_prepend (data->actions, action);
+    }
+  else if (strcmp (element_name, "role") == 0)
+    {
+      const gchar *type;
+      AtkRole role;
+
+      if (!_gtk_builder_check_parent (data->builder, context, "accessibility", error))
+        return;
+
+      if (data->role != ATK_ROLE_INVALID)
+        {
+          g_set_error (error,
+                       GTK_BUILDER_ERROR,
+                       GTK_BUILDER_ERROR_INVALID_VALUE,
+                       "Duplicate accessibility role definition");
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
+        }
+
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_STRING, "type", &type,
+                                        G_MARKUP_COLLECT_INVALID))
+        {
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
+        }
+
+      role = atk_role_for_name (type);
+      if (role == ATK_ROLE_INVALID)
+        {
+          g_set_error (error,
+                       GTK_BUILDER_ERROR,
+                       GTK_BUILDER_ERROR_INVALID_VALUE,
+                       "No such role type: '%s'", type);
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
+        }
+
+      data->role = role;
     }
   else if (strcmp (element_name, "accessibility") == 0)
     {
@@ -11107,6 +11147,12 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
       if (a11y_data->relations)
 	g_object_set_qdata (G_OBJECT (buildable), quark_builder_atk_relations,
 			    a11y_data->relations);
+
+      if (a11y_data->role != ATK_ROLE_INVALID)
+        {
+          AtkObject *accessible = gtk_widget_get_accessible (GTK_WIDGET (buildable));
+          atk_object_set_role (accessible, a11y_data->role);
+        }
 
       g_slice_free (AccessibilitySubParserData, a11y_data);
     }
