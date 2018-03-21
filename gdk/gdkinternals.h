@@ -200,13 +200,8 @@ struct _GdkSurface
   guint shaped : 1;
   guint support_multidevice : 1;
   guint synthesize_crossing_event_queued : 1;
-  guint effective_visibility : 2;
-  guint visibility : 2; /* The visibility wrt the toplevel (i.e. based on clip_region) */
-  guint native_visibility : 2; /* the native visibility of a impl surfaces */
   guint viewable : 1; /* mapped and all parents mapped */
-  guint applied_shape : 1;
   guint in_update : 1;
-  guint geometry_dirty : 1;
   guint frame_clock_events_paused : 1;
 
   /* The GdkSurface that has the impl, ref:ed if another surface.
