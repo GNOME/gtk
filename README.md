@@ -122,35 +122,18 @@ In the bug report please include:
 
 * How to reproduce the bug.
 
-  If you can reproduce it with one of the test programs that are built
-  in the tests/ subdirectory, that will be most convenient.  Otherwise,
-  please include a short test program that exhibits the behavior.
-  As a last resort, you can also provide a pointer to a larger piece
-  of software that can be downloaded.
+  If you can reproduce it with one of the demo applications that are
+  built in the demos/ subdirectory, on one of the test programs that
+  are built in the tests/ subdirectory, that will be most convenient.
+  Otherwise, please include a short test program that exhibits the
+  behavior. As a last resort, you can also provide a pointer to a
+  larger piece of software that can be downloaded.
 
 * If the bug was a crash, the exact text that was printed out
   when the crash occurred.
 
 * Further information such as stack traces may be useful, but
   is not necessary.
-
-
-Contributing
-------------
-
-Patches should also be submitted to the bug tracking system. If the patch
-fixes an existing bug, add the patch as an attachment to that bug report;
-otherwise, enter a new bug report that describes the patch, and attach the
-patch to that bug report.
-
-Patches should be in Git-formatted form. You should use `git format-patch`
-to generate them. We recommend using [git-bz](http://git.fishsoup.net/man/git-bz.html).
-
-For more information on the recommended workflow, please read
-[this wiki page](https://wiki.gnome.org/Git/WorkingWithPatches).
-
-Please, follow the `CODING_STYLE` document in order to conform to GTK+'s
-coding style when submitting a code contribution.
 
 Release notes
 -------------
