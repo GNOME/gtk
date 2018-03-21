@@ -103,10 +103,6 @@ struct _GdkSurfaceImplClass
   gboolean    (* begin_paint)           (GdkSurface       *surface);
   void        (* end_paint)             (GdkSurface       *surface);
 
-  void         (* shape_combine_region) (GdkSurface       *surface,
-                                         const cairo_region_t *shape_region,
-                                         gint             offset_x,
-                                         gint             offset_y);
   void         (* input_shape_combine_region) (GdkSurface       *surface,
                                                const cairo_region_t *shape_region,
                                                gint             offset_x,

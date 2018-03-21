@@ -2757,38 +2757,32 @@ gdk_surface_x11_set_events (GdkSurface    *surface,
     }
 }
 
-static inline void
-do_shape_combine_region (GdkSurface       *surface,
-			 const cairo_region_t *shape_region,
-			 gint             offset_x,
-			 gint             offset_y,
-			 gint             shape)
+static void 
+gdk_surface_x11_input_shape_combine_region (GdkSurface           *surface,
+			 		    const cairo_region_t *shape_region,
+			 		    gint                  offset_x,
+					    gint                  offset_y)
 {
+#ifdef ShapeInput
   GdkSurfaceImplX11 *impl = GDK_SURFACE_IMPL_X11 (surface->impl);
 
   if (GDK_SURFACE_DESTROYED (surface))
     return;
 
+  if (!gdk_display_supports_input_shapes (GDK_SURFACE_DISPLAY (surface)))
+    return;
+
   if (shape_region == NULL)
     {
-      /* Use NULL mask to unset the shape */
-      if (shape == ShapeBounding
-	  ? gdk_display_supports_shapes (GDK_SURFACE_DISPLAY (surface))
-	  : gdk_display_supports_input_shapes (GDK_SURFACE_DISPLAY (surface)))
-	{
-	  XShapeCombineMask (GDK_SURFACE_XDISPLAY (surface),
-			     GDK_SURFACE_XID (surface),
-			     shape,
-			     0, 0,
-			     None,
-			     ShapeSet);
-	}
+      XShapeCombineMask (GDK_SURFACE_XDISPLAY (surface),
+                         GDK_SURFACE_XID (surface),
+                         ShapeInput,
+                         0, 0,
+                         None,
+                         ShapeSet);
       return;
     }
-  
-  if (shape == ShapeBounding
-      ? gdk_display_supports_shapes (GDK_SURFACE_DISPLAY (surface))
-      : gdk_display_supports_input_shapes (GDK_SURFACE_DISPLAY (surface)))
+  else
     {
       gint n_rects = 0;
       XRectangle *xrects = NULL;
@@ -2799,7 +2793,7 @@ do_shape_combine_region (GdkSurface       *surface,
       
       XShapeCombineRectangles (GDK_SURFACE_XDISPLAY (surface),
                                GDK_SURFACE_XID (surface),
-                               shape,
+			       ShapeInput,
                                offset_x * impl->surface_scale,
                                offset_y * impl->surface_scale,
                                xrects, n_rects,
@@ -2808,25 +2802,6 @@ do_shape_combine_region (GdkSurface       *surface,
       
       g_free (xrects);
     }
-}
-
-static void
-gdk_surface_x11_shape_combine_region (GdkSurface       *surface,
-                                     const cairo_region_t *shape_region,
-                                     gint             offset_x,
-                                     gint             offset_y)
-{
-  do_shape_combine_region (surface, shape_region, offset_x, offset_y, ShapeBounding);
-}
-
-static void 
-gdk_surface_x11_input_shape_combine_region (GdkSurface       *surface,
-					   const cairo_region_t *shape_region,
-					   gint             offset_x,
-					   gint             offset_y)
-{
-#ifdef ShapeInput
-  do_shape_combine_region (surface, shape_region, offset_x, offset_y, ShapeInput);
 #endif
 }
 
@@ -4892,7 +4867,6 @@ gdk_surface_impl_x11_class_init (GdkSurfaceImplX11Class *klass)
   impl_class->get_geometry = gdk_surface_x11_get_geometry;
   impl_class->get_root_coords = gdk_surface_x11_get_root_coords;
   impl_class->get_device_state = gdk_surface_x11_get_device_state;
-  impl_class->shape_combine_region = gdk_surface_x11_shape_combine_region;
   impl_class->input_shape_combine_region = gdk_surface_x11_input_shape_combine_region;
   impl_class->destroy = gdk_x11_surface_destroy;
   impl_class->beep = gdk_x11_surface_beep;

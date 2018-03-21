@@ -2762,14 +2762,6 @@ gdk_surface_wayland_get_device_state (GdkSurface       *surface,
 }
 
 static void
-gdk_surface_wayland_shape_combine_region (GdkSurface            *surface,
-                                         const cairo_region_t *shape_region,
-                                         gint                  offset_x,
-                                         gint                  offset_y)
-{
-}
-
-static void
 gdk_surface_wayland_input_shape_combine_region (GdkSurface            *surface,
                                                const cairo_region_t *shape_region,
                                                gint                  offset_x,
@@ -3616,7 +3608,6 @@ _gdk_surface_impl_wayland_class_init (GdkSurfaceImplWaylandClass *klass)
   impl_class->get_geometry = gdk_surface_wayland_get_geometry;
   impl_class->get_root_coords = gdk_surface_wayland_get_root_coords;
   impl_class->get_device_state = gdk_surface_wayland_get_device_state;
-  impl_class->shape_combine_region = gdk_surface_wayland_shape_combine_region;
   impl_class->input_shape_combine_region = gdk_surface_wayland_input_shape_combine_region;
   impl_class->destroy = gdk_wayland_surface_destroy;
   impl_class->begin_paint = gdk_surface_impl_wayland_begin_paint;

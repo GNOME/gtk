@@ -2228,32 +2228,6 @@ gdk_win32_surface_set_events (GdkSurface   *window,
 }
 
 static void
-do_shape_combine_region (GdkSurface *window,
-			 HRGN	    hrgn,
-			 gint       x, gint y)
-{
-  RECT rect;
-  GdkSurfaceImplWin32 *impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
-
-  GetClientRect (GDK_SURFACE_HWND (window), &rect);
-
-  _gdk_win32_adjust_client_rect (window, &rect);
-
-  OffsetRgn (hrgn, -rect.left, -rect.top);
-  OffsetRgn (hrgn, x, y);
-
-  /* If this is a top-level window, add the title bar to the region */
-  if (GDK_SURFACE_TYPE (window) == GDK_SURFACE_TOPLEVEL)
-    {
-      HRGN tmp = CreateRectRgn (0, 0, rect.right - rect.left, -rect.top);
-      CombineRgn (hrgn, hrgn, tmp, RGN_OR);
-      DeleteObject (tmp);
-    }
-
-  SetWindowRgn (GDK_SURFACE_HWND (window), hrgn, TRUE);
-}
-
-static void
 gdk_win32_surface_set_accept_focus (GdkSurface *window,
 			     gboolean accept_focus)
 {
@@ -4148,8 +4122,6 @@ point_in_window (GdkSurface *window,
 {
   return x >= 0 && x < window->width &&
          y >= 0 && y < window->height &&
-         (window->shape == NULL ||
-          cairo_region_contains_point (window->shape, x, y)) &&
          (window->input_shape == NULL ||
           cairo_region_contains_point (window->input_shape, x, y));
 }
@@ -5343,38 +5315,6 @@ cairo_region_to_hrgn (const cairo_region_t *region,
   return (hrgn);
 }
 
-static void
-gdk_win32_surface_shape_combine_region (GdkSurface       *window,
-				       const cairo_region_t *shape_region,
-				       gint             offset_x,
-				       gint             offset_y)
-{
-  GdkSurfaceImplWin32 *impl;
-
-  if (GDK_SURFACE_DESTROYED (window))
-    return;
-
-  if (!shape_region)
-    {
-      GDK_NOTE (MISC, g_print ("gdk_win32_surface_shape_combine_region: %p: none\n",
-			       GDK_SURFACE_HWND (window)));
-      SetWindowRgn (GDK_SURFACE_HWND (window), NULL, TRUE);
-    }
-  else
-    {
-      HRGN hrgn;
-      impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
-
-      hrgn = cairo_region_to_hrgn (shape_region, 0, 0, impl->surface_scale);
-
-      GDK_NOTE (MISC, g_print ("gdk_win32_surface_shape_combine_region: %p: %p\n",
-			       GDK_SURFACE_HWND (window),
-			       hrgn));
-
-      do_shape_combine_region (window, hrgn, offset_x, offset_y);
-    }
-}
-
 GdkSurface *
 gdk_win32_surface_lookup_for_display (GdkDisplay *display,
                                      HWND        anid)
@@ -5890,7 +5830,6 @@ gdk_surface_impl_win32_class_init (GdkSurfaceImplWin32Class *klass)
   impl_class->get_device_state = gdk_surface_win32_get_device_state;
   impl_class->get_root_coords = gdk_win32_surface_get_root_coords;
 
-  impl_class->shape_combine_region = gdk_win32_surface_shape_combine_region;
   impl_class->input_shape_combine_region = gdk_win32_input_shape_combine_region;
   impl_class->destroy = gdk_win32_surface_destroy;
   impl_class->begin_paint = gdk_win32_surface_begin_paint;

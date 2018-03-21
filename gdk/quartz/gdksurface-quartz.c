@@ -1824,15 +1824,6 @@ gdk_quartz_surface_set_transient_for (GdkSurface *window,
 }
 
 static void
-gdk_surface_quartz_shape_combine_region (GdkSurface       *window,
-                                        const cairo_region_t *shape,
-                                        gint             x,
-                                        gint             y)
-{
-  /* FIXME: Implement */
-}
-
-static void
 gdk_surface_quartz_input_shape_combine_region (GdkSurface       *window,
                                               const cairo_region_t *shape_region,
                                               gint             offset_x,
@@ -2764,7 +2755,6 @@ gdk_surface_impl_quartz_class_init (GdkSurfaceImplQuartzClass *klass)
   impl_class->get_geometry = gdk_surface_quartz_get_geometry;
   impl_class->get_root_coords = gdk_surface_quartz_get_root_coords;
   impl_class->get_device_state = gdk_surface_quartz_get_device_state;
-  impl_class->shape_combine_region = gdk_surface_quartz_shape_combine_region;
   impl_class->input_shape_combine_region = gdk_surface_quartz_input_shape_combine_region;
   impl_class->destroy = gdk_quartz_surface_destroy;
   impl_class->begin_paint = gdk_surface_impl_quartz_begin_paint;
