@@ -593,80 +593,6 @@ remove_child_area (GdkSurface *surface,
     }
 }
 
-static gboolean
-should_apply_clip_as_shape (GdkSurface *surface)
-{
-  return
-    gdk_surface_has_impl (surface) &&
-    /* Not for non-shaped toplevels */
-    (surface->shape != NULL || surface->applied_shape) &&
-    /* or for foreign surfaces */
-    surface->surface_type != GDK_SURFACE_FOREIGN;
-}
-
-static void
-apply_shape (GdkSurface *surface,
-	     cairo_region_t *region)
-{
-  GdkSurfaceImplClass *impl_class;
-
-  /* We trash whether we applied a shape so that
-     we can avoid unsetting it many times, which
-     could happen in e.g. apply_clip_as_shape as
-     surfaces get resized */
-  impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-  if (region)
-    impl_class->shape_combine_region (surface,
-				      region, 0, 0);
-  else if (surface->applied_shape)
-    impl_class->shape_combine_region (surface,
-				      NULL, 0, 0);
-
-  surface->applied_shape = region != NULL;
-}
-
-static gboolean
-region_rect_equal (const cairo_region_t *region,
-                   const GdkRectangle *rect)
-{
-    GdkRectangle extents;
-
-    if (cairo_region_num_rectangles (region) != 1)
-        return FALSE;
-
-    cairo_region_get_extents (region, &extents);
-
-    return extents.x == rect->x &&
-        extents.y == rect->y &&
-        extents.width == rect->width &&
-        extents.height == rect->height;
-}
-
-static void
-apply_clip_as_shape (GdkSurface *surface)
-{
-  GdkRectangle r;
-  cairo_region_t *region;
-
-  r.x = r.y = 0;
-  r.width = surface->width;
-  r.height = surface->height;
-
-  region = cairo_region_copy (surface->clip_region);
-  remove_sibling_overlapped_area (surface, region);
-
-  /* We only apply the clip region if would differ
-     from the actual clip region implied by the size
-     of the surface. This is to avoid unneccessarily
-     adding meaningless shapes to all native subsurfaces */
-  if (!region_rect_equal (region, &r))
-    apply_shape (surface, region);
-  else
-    apply_shape (surface, NULL);
-
-  cairo_region_destroy (region);
-}
-
 static void
 recompute_visible_regions_internal (GdkSurface *private,
 				    gboolean   recalculate_clip,
@@ -724,9 +650,6 @@ recompute_visible_regions_internal (GdkSurface *private,
 
 	  /* Convert from parent coords to surface coords */
 	  cairo_region_translate (new_clip, -private->x, -private->y);
-
-	  if (should_apply_clip_as_shape (private) && private->shape)
-	    cairo_region_intersect (new_clip, private->shape);
 	}
       else
 	  new_clip = cairo_region_create ();
@@ -776,11 +699,6 @@ static void
 recompute_visible_regions (GdkSurface *private,
 			   gboolean recalculate_children)
 {
-  GdkSurface *toplevel;
-
-  toplevel = gdk_surface_get_toplevel (private);
-  toplevel->geometry_dirty = TRUE;
-
   recompute_visible_regions_internal (private,
 				      TRUE,
 				      recalculate_children);
@@ -2343,14 +2261,6 @@ _gdk_surface_process_updates_recurse (GdkSurface *surface,
   cairo_region_destroy (clipped_expose_region);
 }
 
-
-static void
-gdk_surface_update_native_shapes (GdkSurface *surface)
-{
-  if (should_apply_clip_as_shape (surface))
-    apply_clip_as_shape (surface);
-}
-
 /* Process and remove any invalid area on the native surface by creating
  * expose events for the surface and all non-native descendants.
  */
@@ -2358,14 +2268,6 @@ static void
 gdk_surface_process_updates_internal (GdkSurface *surface)
 {
   GdkSurfaceImplClass *impl_class;
-  GdkSurface *toplevel;
-
-  toplevel = gdk_surface_get_toplevel (surface);
-  if (toplevel->geometry_dirty)
-    {
-      gdk_surface_update_native_shapes (toplevel);
-      toplevel->geometry_dirty = FALSE;
-    }
 
   /* Ensure the surface lives while updating it */
   g_object_ref (surface);
