@@ -47,7 +47,7 @@ GDK_AVAILABLE_IN_ALL
 GType    gdk_broadway_surface_get_type          (void);
 
 GDK_AVAILABLE_IN_ALL
-guint32  gdk_broadway_get_last_seen_time (GdkSurface       *window);
+guint32  gdk_broadway_get_last_seen_time (GdkSurface       *surface);
 
 G_END_DECLS
 

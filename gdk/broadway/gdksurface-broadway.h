@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 typedef struct _GdkSurfaceImplBroadway GdkSurfaceImplBroadway;
 typedef struct _GdkSurfaceImplBroadwayClass GdkSurfaceImplBroadwayClass;
 
-/* Window implementation for Broadway
+/* Surface implementation for Broadway
  */
 
 #define GDK_TYPE_SURFACE_IMPL_BROADWAY              (gdk_surface_impl_broadway_get_type ())

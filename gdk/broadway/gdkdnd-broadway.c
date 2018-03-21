@@ -84,36 +84,36 @@ gdk_broadway_drag_context_finalize (GObject *object)
 /* Drag Contexts */
 
 GdkDragContext *
-_gdk_broadway_surface_drag_begin (GdkSurface          *window,
-				 GdkDevice          *device,
-			         GdkContentProvider *content,
-                                 GdkDragAction       actions,
-                                 gint                dx,
-                                 gint                dy)
+_gdk_broadway_surface_drag_begin (GdkSurface          *surface,
+                                  GdkDevice          *device,
+                                  GdkContentProvider *content,
+                                  GdkDragAction       actions,
+                                  gint                dx,
+                                  gint                dy)
 {
   GdkDragContext *new_context;
 
-  g_return_val_if_fail (window != NULL, NULL);
-  g_return_val_if_fail (GDK_SURFACE_IS_BROADWAY (window), NULL);
+  g_return_val_if_fail (surface != NULL, NULL);
+  g_return_val_if_fail (GDK_SURFACE_IS_BROADWAY (surface), NULL);
 
   new_context = g_object_new (GDK_TYPE_BROADWAY_DRAG_CONTEXT,
-                              "display", gdk_surface_get_display (window),
+                              "display", gdk_surface_get_display (surface),
                               "content", content,
-			      NULL);
+                              NULL);
 
   return new_context;
 }
 
 static void
 gdk_broadway_drag_context_drag_drop (GdkDragContext *context,
-				     guint32         time)
+                                     guint32         time)
 {
   g_return_if_fail (context != NULL);
 }
 
 static void
 gdk_broadway_drag_context_drag_abort (GdkDragContext *context,
-				      guint32         time)
+                                      guint32         time)
 {
   g_return_if_fail (context != NULL);
 }
@@ -122,30 +122,30 @@ gdk_broadway_drag_context_drag_abort (GdkDragContext *context,
 
 static void
 gdk_broadway_drag_context_drag_status (GdkDragContext   *context,
-				       GdkDragAction     action,
-				       guint32           time)
+                                       GdkDragAction     action,
+                                       guint32           time)
 {
   g_return_if_fail (context != NULL);
 }
 
 static void
 gdk_broadway_drag_context_drop_reply (GdkDragContext   *context,
-				      gboolean          ok,
-				      guint32           time)
+                                      gboolean          ok,
+                                      guint32           time)
 {
   g_return_if_fail (context != NULL);
 }
 
 static void
 gdk_broadway_drag_context_drop_finish (GdkDragContext   *context,
-				       gboolean          success,
-				       guint32           time)
+                                       gboolean          success,
+                                       guint32           time)
 {
   g_return_if_fail (context != NULL);
 }
 
 void
-_gdk_broadway_surface_register_dnd (GdkSurface      *window)
+_gdk_broadway_surface_register_dnd (GdkSurface      *surface)
 {
 }
 
