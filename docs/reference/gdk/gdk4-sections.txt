@@ -240,7 +240,6 @@ gdk_surface_end_draw_frame
 <SUBSECTION>
 gdk_surface_invalidate_rect
 gdk_surface_invalidate_region
-gdk_surface_get_update_area
 gdk_surface_freeze_updates
 gdk_surface_thaw_updates
 gdk_surface_get_frame_clock

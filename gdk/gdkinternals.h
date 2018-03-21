@@ -217,11 +217,6 @@ struct _GdkSurface
   gint shadow_right;
   gint shadow_bottom;
 
-  /* The clip region is the part of the surface, in surface coordinates
-     that is fully or partially (i.e. semi transparently) visible in
-     the surface hierarchy from the toplevel and down */
-  cairo_region_t *clip_region;
-
   GdkCursor *cursor;
   GHashTable *device_cursor;
 

@@ -486,51 +486,6 @@ _gdk_surface_has_impl (GdkSurface *surface)
 }
 
 static void
-remove_sibling_overlapped_area (GdkSurface *surface,
-				cairo_region_t *region)
-{
-  GdkSurface *parent;
-  GdkSurface *sibling;
-  cairo_region_t *child_region;
-  GdkRectangle r;
-  GList *l;
-
-  parent = surface->parent;
-
-  if (gdk_surface_is_toplevel (surface))
-    return;
-
-  /* Convert from from surface coords to parent coords */
-  cairo_region_translate (region, surface->x, surface->y);
-
-  for (l = parent->children; l; l = l->next)
-    {
-      sibling = l->data;
-
-      if (sibling == surface)
-	break;
-
-      if (!GDK_SURFACE_IS_MAPPED (sibling) || sibling->input_only)
-	continue;
-
-      r.x = sibling->x;
-      r.y = sibling->y;
-      r.width = sibling->width;
-      r.height = sibling->height;
-
-      child_region = cairo_region_create_rectangle (&r);
-
-      cairo_region_subtract (region, child_region);
-      cairo_region_destroy (child_region);
-    }
-
-  remove_sibling_overlapped_area (parent, region);
-
-  /* Convert back to surface coords */
-  cairo_region_translate (region, -surface->x, -surface->y);
-}
-
-static void
 remove_child_area (GdkSurface *surface,
 		   gboolean for_input,
 		   cairo_region_t *region)
@@ -579,11 +534,8 @@ recompute_visible_regions_internal (GdkSurface *private,
 				    gboolean   recalculate_clip,
 				    gboolean   recalculate_children)
 {
-  GdkRectangle r;
   GList *l;
   GdkSurface *child;
-  cairo_region_t *new_clip;
-  gboolean clip_region_changed;
   gboolean abs_pos_changed;
   int old_abs_x, old_abs_y;
 
@@ -610,42 +562,8 @@ recompute_visible_regions_internal (GdkSurface *private,
     private->abs_x != old_abs_x ||
     private->abs_y != old_abs_y;
 
-  /* Update clip region based on:
-   * parent clip
-   * surface size/position
-   */
-  clip_region_changed = FALSE;
-  if (recalculate_clip)
-    {
-      if (private->viewable)
-	{
-	  /* Calculate visible region (sans children) in parent surface coords */
-	  r.x = private->x;
-	  r.y = private->y;
-	  r.width = private->width;
-	  r.height = private->height;
-	  new_clip = cairo_region_create_rectangle (&r);
-
-	  if (!gdk_surface_is_toplevel (private))
-	    cairo_region_intersect (new_clip, private->parent->clip_region);
-
-	  /* Convert from parent coords to surface coords */
-	  cairo_region_translate (new_clip, -private->x, -private->y);
-	}
-      else
-	  new_clip = cairo_region_create ();
-
-      if (private->clip_region == NULL ||
-	  !cairo_region_equal (private->clip_region, new_clip))
-	clip_region_changed = TRUE;
-
-      if (private->clip_region)
-	cairo_region_destroy (private->clip_region);
-      private->clip_region = new_clip;
-    }
-
   /* Update all children, recursively */
-  if ((abs_pos_changed || clip_region_changed || recalculate_children))
+  if ((abs_pos_changed || recalculate_children))
     {
       for (l = private->children; l; l = l->next)
 	{
@@ -655,7 +573,7 @@ recompute_visible_regions_internal (GdkSurface *private,
 	   * Except if recalculate_children is set to force child updates
 	   */
 	  recompute_visible_regions_internal (child,
-					      recalculate_clip && (clip_region_changed || recalculate_children),
+					      recalculate_clip && recalculate_children,
 					      FALSE);
 	}
     }
@@ -1149,12 +1067,6 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
 	  surface->destroyed = TRUE;
 
 	  surface_remove_from_pointer_info (surface, display);
-
-	  if (surface->clip_region)
-	    {
-	      cairo_region_destroy (surface->clip_region);
-	      surface->clip_region = NULL;
-	    }
 
           g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_STATE]);
 	}
@@ -1700,7 +1612,6 @@ gdk_surface_begin_paint_internal (GdkSurface            *surface,
     needs_surface = impl_class->begin_paint (surface);
 
   surface->current_paint.region = cairo_region_copy (region);
-  cairo_region_intersect (surface->current_paint.region, surface->clip_region);
   cairo_region_get_extents (surface->current_paint.region, &clip_box);
 
   surface_content = gdk_surface_get_content (surface);
@@ -1931,7 +1842,7 @@ gdk_surface_get_current_paint_region (GdkSurface *surface)
     }
   else
     {
-      region = cairo_region_copy (surface->clip_region);
+      region = cairo_region_create_rectangle (&(cairo_rectangle_int_t) { 0, 0, surface->width, surface->height });
     }
 
   return region;
@@ -2167,31 +2078,20 @@ void
 _gdk_surface_process_updates_recurse (GdkSurface *surface,
                                      cairo_region_t *expose_region)
 {
-  cairo_region_t *clipped_expose_region;
   GdkEvent *event;
 
   if (surface->destroyed)
     return;
-
-  clipped_expose_region = cairo_region_copy (expose_region);
-
-  cairo_region_intersect (clipped_expose_region, surface->clip_region);
-
-  if (cairo_region_is_empty (clipped_expose_region))
-    goto out;
 
   /* Paint the surface before the children, clipped to the surface region */
 
   event = gdk_event_new (GDK_EXPOSE);
   event->any.surface = g_object_ref (surface);
   event->any.send_event = FALSE;
-  event->expose.region = cairo_region_reference (clipped_expose_region);
+  event->expose.region = cairo_region_reference (expose_region);
 
   _gdk_event_emit (event);
   gdk_event_free (event);
-
- out:
-  cairo_region_destroy (clipped_expose_region);
 }
 
 /* Process and remove any invalid area on the native surface by creating
@@ -2225,9 +2125,6 @@ gdk_surface_process_updates_internal (GdkSurface *surface)
 	  expose_region = cairo_region_copy (surface->active_update_area);
 
 	  impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-
-	  /* Clip to part visible in impl surface */
-	  cairo_region_intersect (expose_region, surface->clip_region);
 
           impl_class->process_updates_recurse (surface, expose_region);
 
@@ -2438,75 +2335,6 @@ _gdk_surface_invalidate_for_expose (GdkSurface       *surface,
 				   cairo_region_t       *region)
 {
   gdk_surface_invalidate_full (surface, region);
-}
-
-
-/**
- * gdk_surface_get_update_area:
- * @surface: a #GdkSurface
- *
- * Transfers ownership of the update area from @surface to the caller
- * of the function. That is, after calling this function, @surface will
- * no longer have an invalid/dirty region; the update area is removed
- * from @surface and handed to you. If a surface has no update area,
- * gdk_surface_get_update_area() returns %NULL. You are responsible for
- * calling cairo_region_destroy() on the returned region if it’s non-%NULL.
- *
- * Returns: the update area for @surface
- **/
-cairo_region_t *
-gdk_surface_get_update_area (GdkSurface *surface)
-{
-  GdkSurface *impl_surface;
-  cairo_region_t *tmp_region, *to_remove;
-
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
-
-  impl_surface = gdk_surface_get_impl_surface (surface);
-
-  if (impl_surface->update_area)
-    {
-      tmp_region = cairo_region_copy (surface->clip_region);
-      /* Convert to impl coords */
-      cairo_region_translate (tmp_region, surface->abs_x, surface->abs_y);
-      cairo_region_intersect (tmp_region, impl_surface->update_area);
-
-      if (cairo_region_is_empty (tmp_region))
-	{
-	  cairo_region_destroy (tmp_region);
-	  return NULL;
-	}
-      else
-	{
-	  /* Convert from impl coords */
-	  cairo_region_translate (tmp_region, -surface->abs_x, -surface->abs_y);
-
-	  /* Don't remove any update area that is overlapped by sibling surfaces
-	     or child surfaces as these really need to be repainted independently of this surface. */
-	  to_remove = cairo_region_copy (tmp_region);
-
-	  remove_child_area (surface, FALSE, to_remove);
-	  remove_sibling_overlapped_area (surface, to_remove);
-
-	  /* Remove from update_area */
-	  cairo_region_translate (to_remove, surface->abs_x, surface->abs_y);
-	  cairo_region_subtract (impl_surface->update_area, to_remove);
-
-	  cairo_region_destroy (to_remove);
-
-	  if (cairo_region_is_empty (impl_surface->update_area))
-	    {
-	      cairo_region_destroy (impl_surface->update_area);
-	      impl_surface->update_area = NULL;
-
-	      gdk_surface_remove_update_surface ((GdkSurface *)impl_surface);
-	    }
-
-	  return tmp_region;
-	}
-    }
-  else
-    return NULL;
 }
 
 /**
@@ -2993,7 +2821,7 @@ gdk_surface_raise (GdkSurface *surface)
       !gdk_surface_is_toplevel (surface) &&
       gdk_surface_is_viewable (surface) &&
       !surface->input_only)
-    gdk_surface_invalidate_region_full (surface, surface->clip_region, TRUE);
+    gdk_surface_invalidate_rect_full (surface, NULL, TRUE);
 }
 
 static void
@@ -3441,22 +3269,10 @@ gdk_surface_move_resize_toplevel (GdkSurface *surface,
                                  gint       width,
                                  gint       height)
 {
-  cairo_region_t *old_region, *new_region;
   GdkSurfaceImplClass *impl_class;
-  gboolean expose;
   gboolean is_resize;
 
-  expose = FALSE;
-  old_region = NULL;
-
   is_resize = (width != -1) || (height != -1);
-
-  if (gdk_surface_is_viewable (surface) &&
-      !surface->input_only)
-    {
-      expose = TRUE;
-      old_region = cairo_region_copy (surface->clip_region);
-    }
 
   impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
   impl_class->move_resize (surface, with_move, x, y, width, height);
@@ -3464,20 +3280,6 @@ gdk_surface_move_resize_toplevel (GdkSurface *surface,
   /* Avoid recomputing for pure toplevel moves, for performance reasons */
   if (is_resize)
     recompute_visible_regions (surface, FALSE);
-
-  if (expose)
-    {
-      new_region = cairo_region_copy (surface->clip_region);
-
-      /* This is the newly exposed area (due to any resize),
-       * X will expose it, but lets do that without the roundtrip
-       */
-      cairo_region_subtract (new_region, old_region);
-      gdk_surface_invalidate_region_full (surface, new_region, TRUE);
-
-      cairo_region_destroy (old_region);
-      cairo_region_destroy (new_region);
-    }
 }
 
 

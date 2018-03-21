@@ -812,9 +812,6 @@ void       gdk_surface_invalidate_region         (GdkSurface          *surface,
 					         gboolean            invalidate_children);
 
 GDK_AVAILABLE_IN_ALL
-cairo_region_t *gdk_surface_get_update_area      (GdkSurface            *surface);
-
-GDK_AVAILABLE_IN_ALL
 void       gdk_surface_freeze_updates      (GdkSurface    *surface);
 GDK_AVAILABLE_IN_ALL
 void       gdk_surface_thaw_updates        (GdkSurface    *surface);

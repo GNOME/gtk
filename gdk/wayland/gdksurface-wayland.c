@@ -411,7 +411,7 @@ read_back_cairo_surface (GdkSurface *surface)
   if (!impl->backfill_cairo_surface)
     goto out;
 
-  paint_region = cairo_region_copy (surface->clip_region);
+  paint_region = cairo_region_create_rectangle (&(cairo_rectangle_int_t) { 0, 0, surface->width, surface->height });
   cairo_region_subtract (paint_region, impl->staged_updates_region);
 
   if (cairo_region_is_empty (paint_region))
