@@ -14,17 +14,17 @@
 # Bruno Brouard <annoa.b@gmail.com>, 2009,2011-12.
 # Claude Paroz <claude@2xlibre.net>, 2007-2016.
 # Gérard Baylard <Geodebay@gmail.com>, 2011.
-# Charles Monzat <superboa@hotmail.fr>, 2018.
 #
 # spin button : bouton compteur
 # spinner : indicateur d'activité
+# Charles Monzat <superboa@hotmail.fr>, 2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+_properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-18 12:49+0000\n"
-"PO-Revision-Date: 2018-02-18 15:21+0100\n"
+"POT-Creation-Date: 2018-03-20 16:29+0000\n"
+"PO-Revision-Date: 2018-03-21 09:41+0100\n"
 "Last-Translator: Charles Monzat <superboa@hotmail.fr>\n"
 "Language-Team: français <gnomefr@traduc.org>\n"
 "Language: fr\n"
@@ -883,7 +883,7 @@ msgid "The size of the icon"
 msgstr "La taille de l’icône"
 
 #: gtk/deprecated/gtkstatusicon.c:306 gtk/gtkinvisible.c:98
-#: gtk/gtkmountoperation.c:179 gtk/gtkstylecontext.c:228 gtk/gtkwindow.c:894
+#: gtk/gtkmountoperation.c:179 gtk/gtkstylecontext.c:232 gtk/gtkwindow.c:894
 msgid "Screen"
 msgstr "Écran"
 
@@ -2867,7 +2867,7 @@ msgstr "État incohérent"
 msgid "The inconsistent state of the button"
 msgstr "L’état incohérent du bouton"
 
-#: gtk/gtkcellrenderertoggle.c:154 gtk/gtklistbox.c:3896
+#: gtk/gtkcellrenderertoggle.c:154 gtk/gtklistbox.c:3906
 msgid "Activatable"
 msgstr "Activable"
 
@@ -3041,7 +3041,7 @@ msgstr "Couleur RGBA"
 msgid "Color as RGBA"
 msgstr "Couleur sous la forme RGBA"
 
-#: gtk/gtkcolorswatch.c:722 gtk/gtklabel.c:908 gtk/gtklistbox.c:3910
+#: gtk/gtkcolorswatch.c:722 gtk/gtklabel.c:908 gtk/gtklistbox.c:3920
 msgid "Selectable"
 msgstr "Sélectionnable"
 
@@ -3314,7 +3314,7 @@ msgstr "Valeur initiale"
 msgid "The initial specified value used for this property"
 msgstr "La valeur initiale spécifiée utilisée par cette propriété"
 
-#: gtk/gtkdialog.c:588 gtk/gtkinfobar.c:435
+#: gtk/gtkdialog.c:588 gtk/gtkinfobar.c:419
 msgid "Content area border"
 msgstr "Bordure de la zone de contenu"
 
@@ -3323,7 +3323,7 @@ msgid "Width of border around the main dialog area"
 msgstr ""
 "Largeur de la bordure autour de la zone principale de la boîte de dialogue"
 
-#: gtk/gtkdialog.c:606 gtk/gtkinfobar.c:453
+#: gtk/gtkdialog.c:606 gtk/gtkinfobar.c:437
 msgid "Content area spacing"
 msgstr "Espacement dans la zone de contenu"
 
@@ -3332,15 +3332,15 @@ msgid "Spacing between elements of the main dialog area"
 msgstr ""
 "Espacement entre éléments dans la zone principale de la boîte de dialogue"
 
-#: gtk/gtkdialog.c:614 gtk/gtkinfobar.c:470
+#: gtk/gtkdialog.c:614 gtk/gtkinfobar.c:454
 msgid "Button spacing"
 msgstr "Espacement des boutons"
 
-#: gtk/gtkdialog.c:615 gtk/gtkinfobar.c:471
+#: gtk/gtkdialog.c:615 gtk/gtkinfobar.c:455
 msgid "Spacing between buttons"
 msgstr "Espacement entre les boutons"
 
-#: gtk/gtkdialog.c:631 gtk/gtkinfobar.c:487
+#: gtk/gtkdialog.c:631 gtk/gtkinfobar.c:471
 msgid "Action area border"
 msgstr "Bordure de la zone d’actions"
 
@@ -4082,11 +4082,11 @@ msgstr "Étiquette d’annulation"
 msgid "The label on the cancel button"
 msgstr "L’étiquette du bouton annuler"
 
-#: gtk/gtkfilechooserwidget.c:8446 gtk/gtkfilechooserwidget.c:8447
+#: gtk/gtkfilechooserwidget.c:8393 gtk/gtkfilechooserwidget.c:8394
 msgid "Search mode"
 msgstr "Mode de recherche"
 
-#: gtk/gtkfilechooserwidget.c:8453 gtk/gtkfilechooserwidget.c:8454
+#: gtk/gtkfilechooserwidget.c:8400 gtk/gtkfilechooserwidget.c:8401
 #: gtk/gtkheaderbar.c:2034 gtk/gtkshortcutsshortcut.c:591
 msgid "Subtitle"
 msgstr "Sous-titre"
@@ -4625,31 +4625,40 @@ msgstr "Utiliser un recours"
 msgid "Whether to use icon names fallback"
 msgstr "Indique s’il faut utiliser les noms d’icônes en recours"
 
-#: gtk/gtkinfobar.c:364 gtk/gtkmessagedialog.c:189
+#: gtk/gtkinfobar.c:339 gtk/gtkmessagedialog.c:189
 msgid "Message Type"
 msgstr "Type de message"
 
-#: gtk/gtkinfobar.c:365 gtk/gtkmessagedialog.c:190
+#: gtk/gtkinfobar.c:340 gtk/gtkmessagedialog.c:190
 msgid "The type of message"
 msgstr "Type de message"
 
-#: gtk/gtkinfobar.c:380 gtk/gtksearchbar.c:425
+#: gtk/gtkinfobar.c:354 gtk/gtksearchbar.c:425
 msgid "Show Close Button"
 msgstr "Afficher le bouton Fermer"
 
-#: gtk/gtkinfobar.c:381
+#: gtk/gtkinfobar.c:355
 msgid "Whether to include a standard close button"
 msgstr "Indique s’il faut inclure un bouton de fermeture standard"
 
-#: gtk/gtkinfobar.c:436
+#: gtk/gtkinfobar.c:361
+#| msgid "Reveal Child"
+msgid "Reveal"
+msgstr "Révéler"
+
+#: gtk/gtkinfobar.c:362
+msgid "Controls whether the action bar shows its contents or not"
+msgstr "Contrôle si la barre d’action affiche son contenu ou non"
+
+#: gtk/gtkinfobar.c:420
 msgid "Width of border around the content area"
 msgstr "Largeur de la bordure autour de la zone de contenu"
 
-#: gtk/gtkinfobar.c:454
+#: gtk/gtkinfobar.c:438
 msgid "Spacing between elements of the area"
 msgstr "Espacement entre les éléments de la zone"
 
-#: gtk/gtkinfobar.c:488
+#: gtk/gtkinfobar.c:472
 msgid "Width of border around the action area"
 msgstr "Largeur de la bordure autour de la zone d’actions"
 
@@ -4848,11 +4857,11 @@ msgstr "Visité"
 msgid "Whether this link has been visited."
 msgstr "Indique si le lien a été visité."
 
-#: gtk/gtklistbox.c:3897
+#: gtk/gtklistbox.c:3907
 msgid "Whether this row can be activated"
 msgstr "Indique si cette ligne peut être activée"
 
-#: gtk/gtklistbox.c:3911
+#: gtk/gtklistbox.c:3921
 msgid "Whether this row can be selected"
 msgstr "Indique si cette ligne peut être sélectionnée"
 
@@ -4981,7 +4990,7 @@ msgid "The parent widget which the menu should align with."
 msgstr "L’élément graphique parant sur lequel le menu doit s’aligner"
 
 #: gtk/gtkmenubutton.c:534 gtk/gtkshortcutsshortcut.c:645
-#: gtk/gtkstylecontext.c:242
+#: gtk/gtkstylecontext.c:246
 msgid "Direction"
 msgstr "Direction"
 
@@ -5350,7 +5359,7 @@ msgstr "Icônique"
 msgid "Whether to prefer the icon over text"
 msgstr "Indique si l’icône est privilégiée par rapport au texte"
 
-#: gtk/gtkmountoperation.c:163 gtk/gtkstylecontext.c:258
+#: gtk/gtkmountoperation.c:163 gtk/gtkstylecontext.c:262
 msgid "Parent"
 msgstr "Parent"
 
@@ -5784,12 +5793,10 @@ msgstr ""
 "les emplacements externes"
 
 #: gtk/gtkplacessidebar.c:4821
-#| msgid "Show 'Enter Location'"
 msgid "Show “Starred Location”"
 msgstr "Afficher « Emplacement favori »"
 
 #: gtk/gtkplacessidebar.c:4822
-#| msgid "Whether the sidebar includes an item to show external locations"
 msgid "Whether the sidebar includes an item to show starred files"
 msgstr ""
 "Indique si le panneau latéral inclut un raccourci intégré permettant de voir "
@@ -7932,23 +7939,23 @@ msgstr "Taille symbolique à utiliser pour l’icône nommée"
 msgid "Style of bevel around the statusbar text"
 msgstr "Style d’encadrement autour du texte de la barre d’état"
 
-#: gtk/gtkstylecontext.c:229
+#: gtk/gtkstylecontext.c:233
 msgid "The associated GdkScreen"
 msgstr "L’objet GdkScreen associé"
 
-#: gtk/gtkstylecontext.c:235
+#: gtk/gtkstylecontext.c:239
 msgid "FrameClock"
 msgstr "FrameClock"
 
-#: gtk/gtkstylecontext.c:236
+#: gtk/gtkstylecontext.c:240
 msgid "The associated GdkFrameClock"
 msgstr "L’objet GdkFrameClock associé"
 
-#: gtk/gtkstylecontext.c:243 gtk/gtktexttag.c:299
+#: gtk/gtkstylecontext.c:247 gtk/gtktexttag.c:299
 msgid "Text direction"
 msgstr "Direction du texte"
 
-#: gtk/gtkstylecontext.c:259
+#: gtk/gtkstylecontext.c:263
 msgid "The parent style context"
 msgstr "Le contexte du style parent"
 
