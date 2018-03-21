@@ -21,7 +21,7 @@
   Please describe the expected outcome
 -->
 
-# Version information
+## Version information
 <!--
  - which version of GTK+ you are using
  - what operating system and version
@@ -29,7 +29,7 @@
  - if you built GTK+ yourself, the list of options used to configure the build
 -->
 
-# Additional information
+## Additional information
 <!--
  - If the bug was a crash, the exact text that was printed out
    when the crash occurred.
