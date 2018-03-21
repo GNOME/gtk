@@ -223,6 +223,8 @@ gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
   egl_surface = gdk_wayland_surface_get_egl_surface (surface->impl_surface,
                                                     context_wayland->egl_config);
 
+  gdk_wayland_surface_sync (surface);
+
   if (display_wayland->have_egl_swap_buffers_with_damage && damage != NULL)
     {
       int i, j, n_rects = cairo_region_num_rectangles (damage);
@@ -243,8 +245,6 @@ gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
     }
   else
     eglSwapBuffers (display_wayland->egl_display, egl_surface);
-
-  gdk_wayland_surface_sync (surface);
 }
 
 static void
