@@ -1,20 +1,20 @@
 If you want to hack on the GTK+ project, you'll need to have the development
 tools appropriate for your operating system, including:
 
-	- Python 3.x
-	- Meson
-	- Ninja
-	- Gettext (19.7 or newer)
-	- a C99 compatible compiler
+ - Python 3.x
+ - Meson
+ - Ninja
+ - Gettext (19.7 or newer)
+ - a C99 compatible compiler
 
 Up-to-date instructions about developing GNOME applications and libraries
 can be found here:
 
-        https://developer.gnome.org
+ * https://developer.gnome.org
 
 Information about using GitLab with GNOME can be found here:
 
-        https://wiki.gnome.org/GitLab
+ * https://wiki.gnome.org/GitLab
 
 In order to get Git GTK+ installed on your system, you need to have the
 required versions of all the GTK+ dependencies; typically, this means a
