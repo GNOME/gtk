@@ -1022,9 +1022,9 @@ check_emoji (GtkIMContextSimple *context_simple,
 }
 
 static void
-beep_window (GdkSurface *window)
+beep_surface (GdkSurface *surface)
 {
-  GdkDisplay *display = gdk_surface_get_display (window);
+  GdkDisplay *display = gdk_surface_get_display (surface);
   gboolean   beep;
 
   g_object_get (gtk_settings_get_for_display (display),
@@ -1032,7 +1032,7 @@ beep_window (GdkSurface *window)
                 NULL);
 
   if (beep)
-    gdk_surface_beep (window);
+    gdk_surface_beep (surface);
 }
 
 static gboolean
@@ -1074,7 +1074,7 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
       priv->compose_buffer[0] = 0;
       if (n_compose > 1)		/* Invalid sequence */
 	{
-	  beep_window (gdk_event_get_surface ((GdkEvent *) event));
+	  beep_surface (gdk_event_get_surface ((GdkEvent *) event));
 	  return TRUE;
 	}
   
@@ -1102,8 +1102,8 @@ is_hex_keyval (guint keyval)
 static guint
 canonical_hex_keyval (GdkEventKey *event)
 {
-  GdkSurface *window = gdk_event_get_surface ((GdkEvent *) event);
-  GdkKeymap *keymap = gdk_display_get_keymap (gdk_surface_get_display (window));
+  GdkSurface *surface = gdk_event_get_surface ((GdkEvent *) event);
+  GdkKeymap *keymap = gdk_display_get_keymap (gdk_surface_get_display (surface));
   guint keyval, event_keyval;
   guint *keyvals = NULL;
   gint n_vals = 0;
@@ -1162,8 +1162,8 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 {
   GtkIMContextSimple *context_simple = GTK_IM_CONTEXT_SIMPLE (context);
   GtkIMContextSimplePrivate *priv = context_simple->priv;
-  GdkSurface *window = gdk_event_get_surface ((GdkEvent *) event);
-  GdkDisplay *display = gdk_surface_get_display (window);
+  GdkSurface *surface = gdk_event_get_surface ((GdkEvent *) event);
+  GdkDisplay *display = gdk_surface_get_display (surface);
   GdkKeymap *keymap = gdk_display_get_keymap (display);
   GSList *tmp_list;
   int n_compose = 0;
@@ -1213,7 +1213,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	  else if (priv->in_hex_sequence)
 	    {
 	      /* invalid hex sequence */
-	      beep_window (window);
+	      beep_surface (surface);
 
 	      priv->tentative_match = 0;
 	      priv->in_hex_sequence = FALSE;
@@ -1321,7 +1321,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	{
 	  /* invalid hex sequence */
 	  if (n_compose > 0)
-	    beep_window (window);
+	    beep_surface (surface);
 
 	  priv->tentative_match = 0;
 	  priv->in_hex_sequence = FALSE;
@@ -1370,7 +1370,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
       else if (!is_end)
 	{
 	  /* non-hex character in hex sequence */
-	  beep_window (window);
+	  beep_surface (surface);
 	  return TRUE;
 	}
     }
@@ -1385,7 +1385,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
         }
       else
         {
-	  beep_window (window);
+	  beep_surface (surface);
 	  return TRUE;
         }
     }
@@ -1394,7 +1394,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 
   if (n_compose == MAX(GTK_MAX_COMPOSE_LEN + 1, 9))
     {
-      beep_window (window);
+      beep_surface (surface);
       priv->tentative_match = 0;
       priv->in_hex_sequence = FALSE;
       priv->in_emoji_sequence = FALSE;
@@ -1423,7 +1423,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	      else
 		{
 		  /* invalid hex sequence */
-		  beep_window (window);
+		  beep_surface (surface);
 
 		  priv->tentative_match = 0;
 		  priv->in_hex_sequence = FALSE;
@@ -1433,7 +1433,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
             }
           else if ((priv->in_hex_sequence && !check_hex (context_simple, n_compose)) ||
                    (priv->in_emoji_sequence && !check_emoji (context_simple, n_compose)))
-	    beep_window (window);
+	    beep_surface (surface);
 
 	  g_signal_emit_by_name (context_simple, "preedit-changed");
 

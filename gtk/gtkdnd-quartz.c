@@ -348,10 +348,10 @@ static NSWindow *
 get_toplevel_nswindow (GtkWidget *widget)
 {
   GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
-  GdkSurface *window = gtk_widget_get_surface (toplevel);
+  GdkSurface *surface = gtk_widget_get_surface (toplevel);
   
-  if (gtk_widget_is_toplevel (toplevel) && window)
-    return [gdk_quartz_surface_get_nsview (window) window];
+  if (gtk_widget_is_toplevel (toplevel) && surface)
+    return [gdk_quartz_surface_get_nsview (surface) surface];
   else
     return NULL;
 }
@@ -633,52 +633,52 @@ gtk_drag_find_widget (GtkWidget       *widget,
   if (gtk_widget_get_parent (widget))
     {
       gint tx, ty;
-      GdkSurface *window = gtk_widget_get_surface (widget);
-      GdkSurface *parent_window;
+      GdkSurface *surface = gtk_widget_get_surface (widget);
+      GdkSurface *parent_surface;
       GtkAllocation allocation;
 
-      parent_window = gtk_widget_get_surface (gtk_widget_get_parent (widget));
+      parent_surface = gtk_widget_get_surface (gtk_widget_get_parent (widget));
 
       /* Compute the offset from allocation-relative to
-       * window-relative coordinates.
+       * surface-relative coordinates.
        */
       gtk_widget_get_allocation (widget, &allocation);
-      allocation_to_window_x = allocation.x;
-      allocation_to_window_y = allocation.y;
+      allocation_to_surface_x = allocation.x;
+      allocation_to_surface_y = allocation.y;
 
       if (gtk_widget_get_has_surface (widget))
 	{
-	  /* The allocation is relative to the parent window for
-	   * window widgets, not to widget->window.
+	  /* The allocation is relative to the parent surface for
+	   * surface widgets, not to widget->surface.
 	   */
-          gdk_surface_get_position (window, &tx, &ty);
+          gdk_surface_get_position (surface, &tx, &ty);
 	  
-          allocation_to_window_x -= tx;
-          allocation_to_window_y -= ty;
+          allocation_to_surface_x -= tx;
+          allocation_to_surface_y -= ty;
 	}
 
-      new_allocation.x = 0 + allocation_to_window_x;
-      new_allocation.y = 0 + allocation_to_window_y;
+      new_allocation.x = 0 + allocation_to_surface_x;
+      new_allocation.y = 0 + allocation_to_surface_y;
       
-      while (window && window != parent_window)
+      while (surface && surface != parent_surface)
 	{
-	  GdkRectangle window_rect = { 0, 0, 0, 0 };
+	  GdkRectangle surface_rect = { 0, 0, 0, 0 };
 	  
-          window_rect.width = gdk_surface_get_width (window);
-          window_rect.height = gdk_surface_get_height (window);
+          surface_rect.width = gdk_surface_get_width (surface);
+          surface_rect.height = gdk_surface_get_height (surface);
 
-	  gdk_rectangle_intersect (&new_allocation, &window_rect, &new_allocation);
+	  gdk_rectangle_intersect (&new_allocation, &surface_rect, &new_allocation);
 
-	  gdk_surface_get_position (window, &tx, &ty);
+	  gdk_surface_get_position (surface, &tx, &ty);
 	  new_allocation.x += tx;
 	  x_offset += tx;
 	  new_allocation.y += ty;
 	  y_offset += ty;
 	  
-	  window = gdk_surface_get_parent (window);
+	  surface = gdk_surface_get_parent (surface);
 	}
 
-      if (!window)		/* Window and widget heirarchies didn't match. */
+      if (!surface)		/* Surface and widget heirarchies didn't match. */
 	return;
     }
 
@@ -725,8 +725,8 @@ gtk_drag_find_widget (GtkWidget       *widget,
 	{
 	  data->found = data->callback (widget,
 					data->context,
-					data->x - x_offset - allocation_to_window_x,
-					data->y - y_offset - allocation_to_window_y,
+					data->x - x_offset - allocation_to_surface_x,
+					data->y - y_offset - allocation_to_surface_y,
 					data->time);
 	  /* If so, send a "drag-leave" to the last widget */
 	  if (data->found)
@@ -1089,12 +1089,12 @@ gtk_drag_begin_idle (gpointer arg)
 
   return G_SOURCE_REMOVE;
 }
-/* Fake protocol to let us call GdkNSView gdkWindow without including
+/* Fake protocol to let us call GdkNSView gdkSurface without including
  * gdk/GdkNSView.h (which we can’t because it pulls in the internal-only
  * gdksurface.h).
  */
 @protocol GdkNSView
-- (GdkSurface *)gdkWindow;
+- (GdkSurface *)gdkSurface;
 @end
 
 GdkDragContext *
@@ -1109,7 +1109,7 @@ gtk_drag_begin_internal (GtkWidget         *widget,
 {
   GtkDragSourceInfo *info;
   GdkDevice *pointer;
-  GdkSurface *window;
+  GdkSurface *surface;
   GdkDragContext *context;
   NSWindow *nswindow = get_toplevel_nswindow (widget);
   NSPoint point = {0, 0};
@@ -1119,12 +1119,12 @@ gtk_drag_begin_internal (GtkWidget         *widget,
 
   if ((x != -1 && y != -1) || event)
     {
-      GdkSurface *window;
+      GdkSurface *surface;
       gdouble dx, dy;
       if (x != -1 && y != -1)
 	{
 	  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
-	  window = gtk_widget_get_surface (toplevel);
+	  surface = gtk_widget_get_surface (toplevel);
 	  gtk_widget_translate_coordinates (widget, toplevel, x, y, &x, &y);
 	  gdk_surface_get_root_coords (gtk_widget_get_surface (toplevel), x, y,
 							     &x, &y);
@@ -1139,23 +1139,23 @@ gtk_drag_begin_internal (GtkWidget         *widget,
 	       * toplevel GdkSurface, which should be the GdkSurface backing
 	       * nswindow. Then, we convert to the NSWindow coordinate system.
 	       */
-	      window = event->any.surface;
-	      GdkSurface *toplevel = gdk_surface_get_toplevel (window);
+	      surface = event->any.surface;
+	      GdkSurface *toplevel = gdk_surface_get_toplevel (surface);
 
-	      while (window != toplevel)
+	      while (surface != toplevel)
 		{
 		  double old_x = dx;
 		  double old_y = dy;
 
-		  gdk_surface_coords_to_parent (window, old_x, old_y,
+		  gdk_surface_coords_to_parent (surface, old_x, old_y,
 					       &dx, &dy);
-		  window = gdk_surface_get_parent (window);
+		  surface = gdk_surface_get_parent (surface);
 		}
 	    }
 	  time = (double)gdk_event_get_time (event);
 	}
       point.x = dx;
-      point.y = gdk_surface_get_height (window) - dy;
+      point.y = gdk_surface_get_height (surface) - dy;
     }
 
   nstime = [[NSDate dateWithTimeIntervalSince1970: time / 1000] timeIntervalSinceReferenceDate];
@@ -1169,10 +1169,10 @@ gtk_drag_begin_internal (GtkWidget         *widget,
                       clickCount: 1
                       pressure: 0.0 ];
 
-  window = [(id<GdkNSView>)[nswindow contentView] gdkWindow];
+  surface = [(id<GdkNSView>)[nswindow contentView] gdkSurface];
   g_return_val_if_fail (nsevent != NULL, NULL);
 
-  context = gdk_drag_begin (window, g_list_copy (target_list->list));
+  context = gdk_drag_begin (surface, g_list_copy (target_list->list));
   g_return_val_if_fail (context != NULL, NULL);
 
   info = gtk_drag_get_source_info (context, TRUE);

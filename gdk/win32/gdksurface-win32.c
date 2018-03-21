@@ -615,7 +615,7 @@ RegisterGdkClass (GdkSurfaceType wtype, GdkSurfaceTypeHint wtype_hint)
       wcl.style |= CS_OWNDC;
       if (0 == klassTOPLEVEL)
         {
-          wcl.lpszClassName = L"gdkWindowToplevel";
+          wcl.lpszClassName = L"gdkSurfaceToplevel";
 
           ONCE_PER_CLASS ();
           klassTOPLEVEL = RegisterClassExW (&wcl);
@@ -630,7 +630,7 @@ RegisterGdkClass (GdkSurfaceType wtype, GdkSurfaceTypeHint wtype_hint)
         {
           if (klassTEMPSHADOW == 0)
             {
-              wcl.lpszClassName = L"gdkWindowTempShadow";
+              wcl.lpszClassName = L"gdkSurfaceTempShadow";
               wcl.style |= CS_SAVEBITS;
               wcl.style |= 0x00020000; /* CS_DROPSHADOW */
 
@@ -644,7 +644,7 @@ RegisterGdkClass (GdkSurfaceType wtype, GdkSurfaceTypeHint wtype_hint)
         {
           if (klassTEMP == 0)
             {
-              wcl.lpszClassName = L"gdkWindowTemp";
+              wcl.lpszClassName = L"gdkSurfaceTemp";
               wcl.style |= CS_SAVEBITS;
               ONCE_PER_CLASS ();
               klassTEMP = RegisterClassExW (&wcl);
@@ -2716,7 +2716,7 @@ get_functions_quark ()
   static GQuark quark = 0;
 
   if (!quark)
-    quark = g_quark_from_static_string ("gdk-window-functions");
+    quark = g_quark_from_static_string ("gdk-surface-functions");
 
   return quark;
 }
@@ -3363,7 +3363,7 @@ RegisterGdkDumbClass ()
   wcl.hbrBackground = NULL;
   wcl.hCursor = LoadCursor (NULL, IDC_ARROW);
   wcl.style |= CS_OWNDC;
-  wcl.lpszClassName = L"gdkWindowDumb";
+  wcl.lpszClassName = L"gdkSurfaceDumb";
 
   if (klassDUMB == 0)
     klassDUMB = RegisterClassExW (&wcl);

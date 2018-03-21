@@ -261,19 +261,19 @@ gtk_im_context_ime_set_client_widget (GtkIMContext *context,
 {
   GtkIMContextIME *context_ime;
   GtkWidget *toplevel;
-  GdkSurface *client_window;
+  GdkSurface *client_surface;
 
   g_return_if_fail (GTK_IS_IM_CONTEXT_IME (context));
   context_ime = GTK_IM_CONTEXT_IME (context);
   toplevel = gtk_widget_get_toplevel (widget);
-  client_window = gtk_widget_get_surface (toplevel);
+  client_surface = gtk_widget_get_surface (toplevel);
 
-  if (client_window)
+  if (client_surface)
     {
       HIMC himc;
       HWND hwnd;
 
-      hwnd = gdk_win32_surface_get_impl_hwnd (client_window);
+      hwnd = gdk_win32_surface_get_impl_hwnd (client_surface);
       himc = ImmGetContext (hwnd);
       if (himc)
 	{
@@ -289,7 +289,7 @@ gtk_im_context_ime_set_client_widget (GtkIMContext *context,
       gtk_im_context_ime_focus_out (context);
     }
 
-  context_ime->client_window = client_window;
+  context_ime->client_surface = client_surface;
 }
 
 static gunichar
@@ -377,7 +377,7 @@ gtk_im_context_ime_filter_keypress (GtkIMContext *context,
   if (!context_ime->focus)
     return FALSE;
 
-  if (!GDK_IS_SURFACE (context_ime->client_window))
+  if (!GDK_IS_SURFACE (context_ime->client_surface))
     return FALSE;
 
   gdk_event_get_keyval ((GdkEvent *) event, &keyval);
@@ -427,10 +427,10 @@ gtk_im_context_ime_reset (GtkIMContext *context)
   HWND hwnd;
   HIMC himc;
 
-  if (!context_ime->client_window)
+  if (!context_ime->client_surface)
     return;
 
-  hwnd = gdk_win32_surface_get_impl_hwnd (context_ime->client_window);
+  hwnd = gdk_win32_surface_get_impl_hwnd (context_ime->client_surface);
   himc = ImmGetContext (hwnd);
   if (!himc)
     return;
@@ -459,9 +459,9 @@ get_utf8_preedit_string (GtkIMContextIME *context_ime, gint *pos_ret)
   if (pos_ret)
     *pos_ret = 0;
 
-  if (!context_ime->client_window)
+  if (!context_ime->client_surface)
     return g_strdup ("");
-  hwnd = gdk_win32_surface_get_impl_hwnd (context_ime->client_window);
+  hwnd = gdk_win32_surface_get_impl_hwnd (context_ime->client_surface);
   himc = ImmGetContext (hwnd);
   if (!himc)
     return g_strdup ("");
@@ -520,9 +520,9 @@ get_pango_attr_list (GtkIMContextIME *context_ime, const gchar *utf8str)
   HWND hwnd;
   HIMC himc;
 
-  if (!context_ime->client_window)
+  if (!context_ime->client_surface)
     return attrs;
-  hwnd = gdk_win32_surface_get_impl_hwnd (context_ime->client_window);
+  hwnd = gdk_win32_surface_get_impl_hwnd (context_ime->client_surface);
   himc = ImmGetContext (hwnd);
   if (!himc)
     return attrs;
@@ -654,18 +654,18 @@ gtk_im_context_ime_focus_in (GtkIMContext *context)
   HWND hwnd;
   HIMC himc;
 
-  if (!GDK_IS_SURFACE (context_ime->client_window))
+  if (!GDK_IS_SURFACE (context_ime->client_surface))
     return;
 
   /* swtich current context */
   context_ime->focus = TRUE;
 
-  hwnd = gdk_win32_surface_get_impl_hwnd (context_ime->client_window);
+  hwnd = gdk_win32_surface_get_impl_hwnd (context_ime->client_surface);
   himc = ImmGetContext (hwnd);
   if (!himc)
     return;
 
-  toplevel = gdk_surface_get_toplevel (context_ime->client_window);
+  toplevel = gdk_surface_get_toplevel (context_ime->client_surface);
   if (GDK_IS_SURFACE (toplevel))
     {
       gdk_surface_add_filter (toplevel,
@@ -680,7 +680,7 @@ gtk_im_context_ime_focus_in (GtkIMContext *context)
     }
 
   /* trace reparenting (probably no need) */
-  gdk_surface_get_user_data (context_ime->client_window, (gpointer) & widget);
+  gdk_surface_get_user_data (context_ime->client_surface, (gpointer) & widget);
   if (GTK_IS_WIDGET (widget))
     {
       g_signal_connect (widget, "hierarchy-changed",
@@ -725,13 +725,13 @@ gtk_im_context_ime_focus_out (GtkIMContext *context)
   HWND hwnd;
   HIMC himc;
 
-  if (!GDK_IS_SURFACE (context_ime->client_window))
+  if (!GDK_IS_SURFACE (context_ime->client_surface))
     return;
 
   /* swtich current context */
   context_ime->focus = FALSE;
 
-  hwnd = gdk_win32_surface_get_impl_hwnd (context_ime->client_window);
+  hwnd = gdk_win32_surface_get_impl_hwnd (context_ime->client_surface);
   himc = ImmGetContext (hwnd);
   if (!himc)
     return;
@@ -778,7 +778,7 @@ gtk_im_context_ime_focus_out (GtkIMContext *context)
     }
 
   /* remove signal handler */
-  gdk_surface_get_user_data (context_ime->client_window, (gpointer) & widget);
+  gdk_surface_get_user_data (context_ime->client_surface, (gpointer) & widget);
   if (GTK_IS_WIDGET (widget))
     {
       g_signal_handlers_disconnect_by_func
@@ -787,7 +787,7 @@ gtk_im_context_ime_focus_out (GtkIMContext *context)
     }
 
   /* remove event fileter */
-  toplevel = gdk_surface_get_toplevel (context_ime->client_window);
+  toplevel = gdk_surface_get_toplevel (context_ime->client_surface);
   if (GDK_IS_SURFACE (toplevel))
     {
       gdk_surface_remove_filter (toplevel,
@@ -822,15 +822,15 @@ gtk_im_context_ime_set_cursor_location (GtkIMContext *context,
   if (area)
     context_ime->cursor_location = *area;
 
-  if (!context_ime->client_window)
+  if (!context_ime->client_surface)
     return;
 
-  hwnd = gdk_win32_surface_get_impl_hwnd (context_ime->client_window);
+  hwnd = gdk_win32_surface_get_impl_hwnd (context_ime->client_surface);
   himc = ImmGetContext (hwnd);
   if (!himc)
     return;
 
-  get_window_position (context_ime->client_window, &wx, &wy);
+  get_window_position (context_ime->client_surface, &wx, &wy);
   cf.dwStyle = CFS_POINT;
   cf.ptCurrentPos.x = wx + context_ime->cursor_location.x;
   cf.ptCurrentPos.y = wy + context_ime->cursor_location.y;
@@ -855,7 +855,7 @@ gtk_im_context_ime_set_use_preedit (GtkIMContext *context,
       HWND hwnd;
       HIMC himc;
 
-      hwnd = gdk_win32_surface_get_impl_hwnd (context_ime->client_window);
+      hwnd = gdk_win32_surface_get_impl_hwnd (context_ime->client_surface);
       himc = ImmGetContext (hwnd);
       if (!himc)
         return;
@@ -886,14 +886,14 @@ gtk_im_context_ime_set_preedit_font (GtkIMContext *context)
   g_return_if_fail (GTK_IS_IM_CONTEXT_IME (context));
 
   context_ime = GTK_IM_CONTEXT_IME (context);
-  if (!context_ime->client_window)
+  if (!context_ime->client_surface)
     return;
 
-  gdk_surface_get_user_data (context_ime->client_window, (gpointer) &widget);
+  gdk_surface_get_user_data (context_ime->client_surface, (gpointer) &widget);
   if (!GTK_IS_WIDGET (widget))
     return;
 
-  hwnd = gdk_win32_surface_get_impl_hwnd (context_ime->client_window);
+  hwnd = gdk_win32_surface_get_impl_hwnd (context_ime->client_surface);
   himc = ImmGetContext (hwnd);
   if (!himc)
     return;
@@ -1009,7 +1009,7 @@ gtk_im_context_ime_message_filter (GdkXEvent *xevent,
   if (!context_ime->focus)
     return retval;
 
-  hwnd = gdk_win32_surface_get_impl_hwnd (context_ime->client_window);
+  hwnd = gdk_win32_surface_get_impl_hwnd (context_ime->client_surface);
   himc = ImmGetContext (hwnd);
   if (!himc)
     return retval;
@@ -1021,7 +1021,7 @@ gtk_im_context_ime_message_filter (GdkXEvent *xevent,
         gint wx = 0, wy = 0;
         CANDIDATEFORM cf;
 
-        get_window_position (context_ime->client_window, &wx, &wy);
+        get_window_position (context_ime->client_surface, &wx, &wy);
         /* FIXME! */
         {
           HWND hwnd_top;
@@ -1030,7 +1030,7 @@ gtk_im_context_ime_message_filter (GdkXEvent *xevent,
 
           hwnd_top =
             gdk_win32_surface_get_impl_hwnd (gdk_surface_get_toplevel
-                                            (context_ime->client_window));
+                                            (context_ime->client_surface));
           GetWindowRect (hwnd_top, &rc);
           pt.x = wx;
           pt.y = wy;
@@ -1127,19 +1127,19 @@ gtk_im_context_ime_message_filter (GdkXEvent *xevent,
  * x and y must be initialized to 0.
  */
 static void
-get_window_position (GdkSurface *win, gint *x, gint *y)
+get_window_position (GdkSurface *surface, gint *x, gint *y)
 {
   GdkSurface *parent, *toplevel;
   gint wx, wy;
 
-  g_return_if_fail (GDK_IS_SURFACE (win));
+  g_return_if_fail (GDK_IS_SURFACE (surface));
   g_return_if_fail (x && y);
 
-  gdk_surface_get_position (win, &wx, &wy);
+  gdk_surface_get_position (surface, &wx, &wy);
   *x += wx;
   *y += wy;
-  parent = gdk_surface_get_parent (win);
-  toplevel = gdk_surface_get_toplevel (win);
+  parent = gdk_surface_get_parent (surface);
+  toplevel = gdk_surface_get_toplevel (surface);
 
   if (parent && parent != toplevel)
     get_window_position (parent, x, y);
@@ -1159,12 +1159,12 @@ cb_client_widget_hierarchy_changed (GtkWidget       *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GTK_IS_IM_CONTEXT_IME (context_ime));
 
-  if (!context_ime->client_window)
+  if (!context_ime->client_surface)
     return;
   if (!context_ime->focus)
     return;
 
-  new_toplevel = gdk_surface_get_toplevel (context_ime->client_window);
+  new_toplevel = gdk_surface_get_toplevel (context_ime->client_surface);
   if (context_ime->toplevel == new_toplevel)
     return;
 

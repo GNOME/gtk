@@ -555,7 +555,7 @@
   gdk_surface = window;
 }
 
--(GdkSurface *)gdkWindow
+-(GdkSurface *)gdkSurface
 {
   return gdk_surface;
 }

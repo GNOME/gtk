@@ -36,7 +36,7 @@ struct _GtkIMContextIME
 {
   GtkIMContext object;
 
-  GdkSurface *client_window;
+  GdkSurface *client_surface;
   GdkSurface *toplevel;
   guint use_preedit : 1;
   guint preediting : 1;

@@ -129,13 +129,13 @@ gtk_media_stream_default_update_audio (GtkMediaStream *self,
 
 static void
 gtk_media_stream_default_realize (GtkMediaStream *self,
-                                  GdkSurface      *window)
+                                  GdkSurface      *surface)
 {
 }
 
 static void
 gtk_media_stream_default_unrealize (GtkMediaStream *self,
-                                    GdkSurface      *window)
+                                    GdkSurface      *surface)
 {
 }
 
@@ -856,54 +856,54 @@ gtk_media_stream_set_volume (GtkMediaStream *self,
 /**
  * gtk_media_stream_realize:
  * @self: a #GtkMediaStream
- * @window: a #GdkSurface
+ * @surface: a #GdkSurface
  *
  * Called by users to attach the media stream to a #GdkSurface they manage.
- * The stream can then access the resources of @window for its rendering
+ * The stream can then access the resources of @surface for its rendering
  * purposes. In particular, media streams might want to create
  * #GdkGLContexts or sync to the #GdkFrameClock.
  *
  * Whoever calls this function is responsible for calling
- * gtk_media_stream_unrealize() before either the stream or @window get
+ * gtk_media_stream_unrealize() before either the stream or @surface get
  * destroyed.
  *
  * Multiple calls to this function may happen from different users of the
- * video, even with the same @window. Each of these calls must be followed
+ * video, even with the same @surface. Each of these calls must be followed
  * by its own call to gtk_media_stream_unrealize().
  *
  * It is not required to call this function to make a media stream work.
  **/
 void
 gtk_media_stream_realize (GtkMediaStream *self,
-                          GdkSurface      *window)
+                          GdkSurface      *surface)
 {
   g_return_if_fail (GTK_IS_MEDIA_STREAM (self));
-  g_return_if_fail (GDK_IS_SURFACE (window));
+  g_return_if_fail (GDK_IS_SURFACE (surface));
 
   g_object_ref (self);
-  g_object_ref (window);
+  g_object_ref (surface);
 
-  GTK_MEDIA_STREAM_GET_CLASS (self)->realize (self, window);
+  GTK_MEDIA_STREAM_GET_CLASS (self)->realize (self, surface);
 }
 
 /**
  * gtk_media_stream_unrealize:
  * @self: a #GtkMediaStream previously realized
- * @window: the #GdkSurface the stream was realized with
+ * @surface: the #GdkSurface the stream was realized with
  *
  * Undoes a previous call to gtk_media_stream_realize() and causes
- * the stream to release all resources it had allocated from @window.
+ * the stream to release all resources it had allocated from @surface.
  **/
 void
 gtk_media_stream_unrealize (GtkMediaStream *self,
-                            GdkSurface      *window)
+                            GdkSurface      *surface)
 {
   g_return_if_fail (GTK_IS_MEDIA_STREAM (self));
-  g_return_if_fail (GDK_IS_SURFACE (window));
+  g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  GTK_MEDIA_STREAM_GET_CLASS (self)->unrealize (self, window);
+  GTK_MEDIA_STREAM_GET_CLASS (self)->unrealize (self, surface);
 
-  g_object_unref (window);
+  g_object_unref (surface);
   g_object_unref (self);
 }
 

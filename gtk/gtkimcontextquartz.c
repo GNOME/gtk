@@ -37,7 +37,7 @@ typedef struct _GtkIMContextQuartz
 {
   GtkIMContext parent;
   GtkIMContext *slave;
-  GdkSurface *client_window;
+  GdkSurface *client_surface;
   gchar *preedit_str;
   unsigned int cursor_index;
   unsigned int selected_len;
@@ -110,25 +110,25 @@ quartz_get_preedit_string (GtkIMContext *context,
 
 static gboolean
 output_result (GtkIMContext *context,
-               GdkSurface *win)
+               GdkSurface *surface)
 {
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
   gboolean retval = FALSE;
   gchar *fixed_str, *marked_str;
 
-  fixed_str = g_strdup (g_object_get_data (G_OBJECT (win), TIC_INSERT_TEXT));
-  marked_str = g_strdup (g_object_get_data (G_OBJECT (win), TIC_MARKED_TEXT));
+  fixed_str = g_strdup (g_object_get_data (G_OBJECT (surface), TIC_INSERT_TEXT));
+  marked_str = g_strdup (g_object_get_data (G_OBJECT (surface), TIC_MARKED_TEXT));
   if (fixed_str)
     {
       GTK_NOTE (MISC, g_print ("tic-insert-text: %s\n", fixed_str));
       g_free (qc->preedit_str);
       qc->preedit_str = NULL;
-      g_object_set_data (G_OBJECT (win), TIC_INSERT_TEXT, NULL);
+      g_object_set_data (G_OBJECT (surface), TIC_INSERT_TEXT, NULL);
       g_signal_emit_by_name (context, "commit", fixed_str);
       g_signal_emit_by_name (context, "preedit_changed");
 
       unsigned int filtered =
-	   GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (win),
+	   GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (surface),
 						GIC_FILTER_KEY));
       GTK_NOTE (MISC, g_print ("filtered, %d\n", filtered));
       if (filtered)
@@ -140,14 +140,14 @@ output_result (GtkIMContext *context,
     {
       GTK_NOTE (MISC, g_print ("tic-marked-text: %s\n", marked_str));
       qc->cursor_index =
-	   GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (win),
+	   GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (surface),
 						TIC_SELECTED_POS));
       qc->selected_len =
-	   GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (win),
+	   GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (surface),
 						TIC_SELECTED_LEN));
       g_free (qc->preedit_str);
       qc->preedit_str = g_strdup (marked_str);
-      g_object_set_data (G_OBJECT (win), TIC_MARKED_TEXT, NULL);
+      g_object_set_data (G_OBJECT (surface), TIC_MARKED_TEXT, NULL);
       g_signal_emit_by_name (context, "preedit_changed");
       retval = TRUE;
     }
@@ -168,17 +168,17 @@ quartz_filter_keypress (GtkIMContext *context,
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
   gboolean retval;
   NSView *nsview;
-  GdkSurface *win;
+  GdkSurface *surface;
 
   GTK_NOTE (MISC, g_print ("quartz_filter_keypress\n"));
 
-  if (!GDK_IS_QUARTZ_SURFACE (qc->client_window))
+  if (!GDK_IS_QUARTZ_SURFACE (qc->client_surface))
     return FALSE;
 
-  nsview = gdk_quartz_surface_get_nsview (qc->client_window);
-  win = (GdkSurface *)[ (GdkQuartzView *)nsview gdkWindow];
-  GTK_NOTE (MISC, g_print ("client_window: %p, win: %p, nsview: %p\n",
-			   qc->client_window, win, nsview));
+  nsview = gdk_quartz_surface_get_nsview (qc->client_surface);
+  surface = (GdkSurface *)[ (GdkQuartzView *)nsview gdkSurface];
+  GTK_NOTE (MISC, g_print ("client_surface: %p, win: %p, nsview: %p\n",
+			   qc->client_surface, surface, nsview));
 
   NSEvent *nsevent = gdk_quartz_event_get_nsevent ((GdkEvent *)event);
 
@@ -186,7 +186,7 @@ quartz_filter_keypress (GtkIMContext *context,
     {
       if (event->hardware_keycode == 0 && event->keyval == 0xffffff)
         /* update text input changes by mouse events */
-        return output_result (context, win);
+        return output_result (context, surface);
       else
         return gtk_im_context_filter_keypress (qc->slave, event);
     }
@@ -200,7 +200,7 @@ quartz_filter_keypress (GtkIMContext *context,
   NSEventType etype = [nsevent type];
   if (etype == NSKeyDown)
     {
-       g_object_set_data (G_OBJECT (win), TIC_IN_KEY_DOWN,
+       g_object_set_data (G_OBJECT (surface), TIC_IN_KEY_DOWN,
                                           GUINT_TO_POINTER (TRUE));
        [nsview keyDown: nsevent];
     }
@@ -208,8 +208,8 @@ quartz_filter_keypress (GtkIMContext *context,
   if (event->hardware_keycode == 102 || event->hardware_keycode == 104)
     return FALSE;
 
-  retval = output_result(context, win);
-  g_object_set_data (G_OBJECT (win), TIC_IN_KEY_DOWN,
+  retval = output_result(context, surface);
+  g_object_set_data (G_OBJECT (surface), TIC_IN_KEY_DOWN,
                                      GUINT_TO_POINTER (FALSE));
   GTK_NOTE (MISC, g_print ("quartz_filter_keypress done\n"));
 
@@ -221,13 +221,13 @@ discard_preedit (GtkIMContext *context)
 {
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
 
-  if (!qc->client_window)
+  if (!qc->client_surface)
     return;
 
-  if (!GDK_IS_QUARTZ_SURFACE (qc->client_window))
+  if (!GDK_IS_QUARTZ_SURFACE (qc->client_surface))
     return;
 
-  NSView *nsview = gdk_quartz_surface_get_nsview (qc->client_window);
+  NSView *nsview = gdk_quartz_surface_get_nsview (qc->client_surface);
   if (!nsview)
     return;
 
@@ -254,13 +254,13 @@ quartz_reset (GtkIMContext *context)
 }
 
 static void
-quartz_set_client_window (GtkIMContext *context, GtkWidget *widget)
+quartz_set_client_surface (GtkIMContext *context, GtkWidget *widget)
 {
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
 
-  GTK_NOTE (MISC, g_print ("quartz_set_client_window: %p\n", widget));
+  GTK_NOTE (MISC, g_print ("quartz_set_client_surface: %p\n", widget));
 
-  qc->client_window = gtk_widget_get_parent_surface (widget);
+  qc->client_surface = gtk_widget_get_parent_surface (widget);
 }
 
 static void
@@ -290,11 +290,11 @@ quartz_set_cursor_location (GtkIMContext *context, GdkRectangle *area)
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
   gint x, y;
   NSView *nsview;
-  GdkSurface *win;
+  GdkSurface *surface;
 
   GTK_NOTE (MISC, g_print ("quartz_set_cursor_location\n"));
 
-  if (!qc->client_window)
+  if (!qc->client_surface)
     return;
 
   if (!qc->focused)
@@ -305,17 +305,17 @@ quartz_set_cursor_location (GtkIMContext *context, GdkRectangle *area)
   qc->cursor_rect->width = area->width;
   qc->cursor_rect->height = area->height;
 
-  gdk_surface_get_origin (qc->client_window, &x, &y);
+  gdk_surface_get_origin (qc->client_surface, &x, &y);
 
   qc->cursor_rect->x = area->x + x;
   qc->cursor_rect->y = area->y + y;
 
-  if (!GDK_IS_QUARTZ_SURFACE (qc->client_window))
+  if (!GDK_IS_QUARTZ_SURFACE (qc->client_surface))
     return;
 
-  nsview = gdk_quartz_surface_get_nsview (qc->client_window);
-  win = (GdkSurface *)[ (GdkQuartzView*)nsview gdkWindow];
-  g_object_set_data (G_OBJECT (win), GIC_CURSOR_RECT, qc->cursor_rect);
+  nsview = gdk_quartz_surface_get_nsview (qc->client_surface);
+  surface = (GdkSurface *)[ (GdkQuartzView*)nsview gdkSurface];
+  g_object_set_data (G_OBJECT (surface), GIC_CURSOR_RECT, qc->cursor_rect);
 }
 
 static void
@@ -358,7 +358,7 @@ gtk_im_context_quartz_class_init (GtkIMContextQuartzClass *class)
   klass->get_preedit_string = quartz_get_preedit_string;
   klass->filter_keypress = quartz_filter_keypress;
   klass->reset = quartz_reset;
-  klass->set_client_widget = quartz_set_client_window;
+  klass->set_client_widget = quartz_set_client_surface;
   klass->focus_in = quartz_focus_in;
   klass->focus_out = quartz_focus_out;
   klass->set_cursor_location = quartz_set_cursor_location;

@@ -25,7 +25,7 @@
 
 static gboolean
 _cairo_surface_extents (cairo_surface_t *surface,
-                            GdkRectangle *extents)
+			GdkRectangle *extents)
 {
   double x1, x2, y1, y2;
   cairo_t *cr;

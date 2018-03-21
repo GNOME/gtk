@@ -6977,11 +6977,11 @@ gtk_widget_is_visible (GtkWidget *widget)
 /**
  * gtk_widget_set_has_surface:
  * @widget: a #GtkWidget
- * @has_surface: whether or not @widget has a window.
+ * @has_surface: whether or not @widget has a surface.
  *
  * Specifies whether @widget has a #GdkSurface of its own. Note that
  * all realized widgets have a non-%NULL “window” pointer
- * (gtk_widget_get_surface() never returns a %NULL window when a widget
+ * (gtk_widget_get_surface() never returns a %NULL surface when a widget
  * is realized), but for many of them it’s actually the #GdkSurface of
  * one of its parent widgets. Widgets that do not create a %window for
  * themselves in #GtkWidget::realize must announce this by
@@ -7011,7 +7011,7 @@ gtk_widget_set_has_surface (GtkWidget *widget,
  * Determines whether @widget has a #GdkSurface of its own. See
  * gtk_widget_set_has_surface().
  *
- * Returns: %TRUE if @widget has a window, %FALSE otherwise
+ * Returns: %TRUE if @widget has a surface, %FALSE otherwise
  **/
 gboolean
 gtk_widget_get_has_surface (GtkWidget *widget)
@@ -9296,30 +9296,30 @@ gtk_widget_adjust_baseline_request (GtkWidget *widget,
 }
 
 static gboolean
-is_my_window (GtkWidget *widget,
-              GdkSurface *window)
+is_my_surface (GtkWidget *widget,
+	       GdkSurface *surface)
 {
   gpointer user_data;
 
-  if (!window)
+  if (!surface)
     return FALSE;
 
-  gdk_surface_get_user_data (window, &user_data);
+  gdk_surface_get_user_data (surface, &user_data);
   return (user_data == widget);
 }
 
 /*
- * _gtk_widget_get_device_window:
+ * _gtk_widget_get_device_surface:
  * @widget: a #GtkWidget
  * @device: a #GdkDevice
  *
- * Returns: (nullable): the window of @widget that @device is in, or %NULL
+ * Returns: (nullable): the surface of @widget that @device is in, or %NULL
  */
 GdkSurface *
-_gtk_widget_get_device_window (GtkWidget *widget,
-                               GdkDevice *device)
+_gtk_widget_get_device_surface (GtkWidget *widget,
+				GdkDevice *device)
 {
-  GdkSurface *window;
+  GdkSurface *surface;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
@@ -9327,9 +9327,9 @@ _gtk_widget_get_device_window (GtkWidget *widget,
   if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     return NULL;
 
-  window = gdk_device_get_last_event_surface (device);
-  if (window && is_my_window (widget, window))
-    return window;
+  surface = gdk_device_get_last_event_surface (device);
+  if (surface && is_my_surface (widget, surface))
+    return surface;
   else
     return NULL;
 }
@@ -9339,7 +9339,7 @@ _gtk_widget_get_device_window (GtkWidget *widget,
  * @widget: a #GtkWidget
  *
  * Returns the list of pointer #GdkDevices that are currently
- * on top of any window belonging to @widget. Free the list
+ * on top of any surface belonging to @widget. Free the list
  * with g_list_free(), the elements are owned by GTK+ and must
  * not be freed.
  */
@@ -9359,14 +9359,14 @@ _gtk_widget_list_devices (GtkWidget *widget)
 
   seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
   device = gdk_seat_get_pointer (seat);
-  if (is_my_window (widget, gdk_device_get_last_event_surface (device)))
+  if (is_my_surface (widget, gdk_device_get_last_event_surface (device)))
     result = g_list_prepend (result, device);
 
   devices = gdk_seat_get_slaves (seat, GDK_SEAT_CAPABILITY_ALL_POINTING);
   for (l = devices; l; l = l->next)
     {
       device = l->data;
-      if (is_my_window (widget, gdk_device_get_last_event_surface (device)))
+      if (is_my_surface (widget, gdk_device_get_last_event_surface (device)))
         result = g_list_prepend (result, device);
     }
   g_list_free (devices);
@@ -9450,32 +9450,32 @@ _gtk_widget_synthesize_crossing (GtkWidget       *from,
                                  GdkDevice       *device,
 				 GdkCrossingMode  mode)
 {
-  GdkSurface *from_window = NULL, *to_window = NULL;
+  GdkSurface *from_surface = NULL, *to_surface = NULL;
 
   g_return_if_fail (from != NULL || to != NULL);
 
   if (from != NULL)
     {
-      from_window = _gtk_widget_get_device_window (from, device);
+      from_surface = _gtk_widget_get_device_surface (from, device);
 
-      if (!from_window)
-        from_window = from->priv->surface;
+      if (!from_surface)
+        from_surface = from->priv->surface;
     }
 
   if (to != NULL)
     {
-      to_window = _gtk_widget_get_device_window (to, device);
+      to_surface = _gtk_widget_get_device_surface (to, device);
 
-      if (!to_window)
-        to_window = to->priv->surface;
+      if (!to_surface)
+        to_surface = to->priv->surface;
     }
 
-  if (from_window == NULL && to_window == NULL)
+  if (from_surface == NULL && to_surface == NULL)
     ;
-  else if (from_window != NULL && to_window == NULL)
+  else if (from_surface != NULL && to_surface == NULL)
     {
       GList *from_ancestors = NULL, *list;
-      GdkSurface *from_ancestor = from_window;
+      GdkSurface *from_ancestor = from_surface;
 
       while (from_ancestor != NULL)
 	{
@@ -9485,7 +9485,7 @@ _gtk_widget_synthesize_crossing (GtkWidget       *from,
           from_ancestors = g_list_prepend (from_ancestors, from_ancestor);
 	}
 
-      synth_crossing (from, GDK_LEAVE_NOTIFY, from_window,
+      synth_crossing (from, GDK_LEAVE_NOTIFY, from_surface,
 		      device, mode, GDK_NOTIFY_ANCESTOR);
       for (list = g_list_last (from_ancestors); list; list = list->prev)
 	{
@@ -9497,10 +9497,10 @@ _gtk_widget_synthesize_crossing (GtkWidget       *from,
 
       g_list_free (from_ancestors);
     }
-  else if (from_window == NULL && to_window != NULL)
+  else if (from_surface == NULL && to_surface != NULL)
     {
       GList *to_ancestors = NULL, *list;
-      GdkSurface *to_ancestor = to_window;
+      GdkSurface *to_ancestor = to_surface;
 
       while (to_ancestor != NULL)
 	{
@@ -9517,24 +9517,24 @@ _gtk_widget_synthesize_crossing (GtkWidget       *from,
 	  synth_crossing (NULL, GDK_ENTER_NOTIFY, (GdkSurface *) list->data,
 			  device, mode, GDK_NOTIFY_VIRTUAL);
 	}
-      synth_crossing (to, GDK_ENTER_NOTIFY, to_window,
+      synth_crossing (to, GDK_ENTER_NOTIFY, to_surface,
 		      device, mode, GDK_NOTIFY_ANCESTOR);
 
       g_list_free (to_ancestors);
     }
-  else if (from_window == to_window)
+  else if (from_surface == to_surface)
     ;
   else
     {
       GList *from_ancestors = NULL, *to_ancestors = NULL, *list;
-      GdkSurface *from_ancestor = from_window, *to_ancestor = to_window;
+      GdkSurface *from_ancestor = from_surface, *to_ancestor = to_surface;
 
       while (from_ancestor != NULL || to_ancestor != NULL)
 	{
 	  if (from_ancestor != NULL)
 	    {
 	      from_ancestor = gdk_surface_get_parent (from_ancestor);
-	      if (from_ancestor == to_window)
+	      if (from_ancestor == to_surface)
 		break;
               if (from_ancestor)
 	        from_ancestors = g_list_prepend (from_ancestors, from_ancestor);
@@ -9542,26 +9542,26 @@ _gtk_widget_synthesize_crossing (GtkWidget       *from,
 	  if (to_ancestor != NULL)
 	    {
 	      to_ancestor = gdk_surface_get_parent (to_ancestor);
-	      if (to_ancestor == from_window)
+	      if (to_ancestor == from_surface)
 		break;
               if (to_ancestor)
 	        to_ancestors = g_list_prepend (to_ancestors, to_ancestor);
 	    }
 	}
-      if (to_ancestor == from_window)
+      if (to_ancestor == from_surface)
 	{
 	  if (mode != GDK_CROSSING_GTK_UNGRAB)
-	    synth_crossing (from, GDK_LEAVE_NOTIFY, from_window,
+	    synth_crossing (from, GDK_LEAVE_NOTIFY, from_surface,
 			    device, mode, GDK_NOTIFY_INFERIOR);
 	  for (list = to_ancestors; list; list = list->next)
 	    synth_crossing (NULL, GDK_ENTER_NOTIFY, (GdkSurface *) list->data,
 			    device, mode, GDK_NOTIFY_VIRTUAL);
-	  synth_crossing (to, GDK_ENTER_NOTIFY, to_window,
+	  synth_crossing (to, GDK_ENTER_NOTIFY, to_surface,
 			  device, mode, GDK_NOTIFY_ANCESTOR);
 	}
-      else if (from_ancestor == to_window)
+      else if (from_ancestor == to_surface)
 	{
-	  synth_crossing (from, GDK_LEAVE_NOTIFY, from_window,
+	  synth_crossing (from, GDK_LEAVE_NOTIFY, from_surface,
 			  device, mode, GDK_NOTIFY_ANCESTOR);
 	  for (list = g_list_last (from_ancestors); list; list = list->prev)
 	    {
@@ -9569,7 +9569,7 @@ _gtk_widget_synthesize_crossing (GtkWidget       *from,
 			      device, mode, GDK_NOTIFY_VIRTUAL);
 	    }
 	  if (mode != GDK_CROSSING_GTK_GRAB)
-	    synth_crossing (to, GDK_ENTER_NOTIFY, to_window,
+	    synth_crossing (to, GDK_ENTER_NOTIFY, to_surface,
 			    device, mode, GDK_NOTIFY_INFERIOR);
 	}
       else
@@ -9582,7 +9582,7 @@ _gtk_widget_synthesize_crossing (GtkWidget       *from,
 	      to_ancestors = g_list_delete_link (to_ancestors, to_ancestors);
 	    }
 
-	  synth_crossing (from, GDK_LEAVE_NOTIFY, from_window,
+	  synth_crossing (from, GDK_LEAVE_NOTIFY, from_surface,
 			  device, mode, GDK_NOTIFY_NONLINEAR);
 
 	  for (list = g_list_last (from_ancestors); list; list = list->prev)
@@ -9595,7 +9595,7 @@ _gtk_widget_synthesize_crossing (GtkWidget       *from,
 	      synth_crossing (NULL, GDK_ENTER_NOTIFY, (GdkSurface *) list->data,
 			      device, mode, GDK_NOTIFY_NONLINEAR_VIRTUAL);
 	    }
-	  synth_crossing (to, GDK_ENTER_NOTIFY, to_window,
+	  synth_crossing (to, GDK_ENTER_NOTIFY, to_surface,
 			  device, mode, GDK_NOTIFY_NONLINEAR);
 	}
       g_list_free (from_ancestors);
@@ -9656,17 +9656,17 @@ gtk_widget_propagate_state (GtkWidget          *widget,
 
           for (d = devices; d; d = d->next)
             {
-              GdkSurface *window;
+              GdkSurface *surface;
               GdkDevice *device;
 
               device = d->data;
-              window = _gtk_widget_get_device_window (widget, device);
+              surface = _gtk_widget_get_device_surface (widget, device);
 
               /* Do not propagate more than once to the
-               * same window if non-multidevice aware.
+               * same surface if non-multidevice aware.
                */
-              if (!gdk_surface_get_support_multidevice (window) &&
-                  g_list_find (event_surfaces, window))
+              if (!gdk_surface_get_support_multidevice (surface) &&
+                  g_list_find (event_surfaces, surface))
                 continue;
 
               if (!gtk_widget_is_sensitive (widget))
@@ -9676,7 +9676,7 @@ gtk_widget_propagate_state (GtkWidget          *widget,
                 _gtk_widget_synthesize_crossing (NULL, widget, d->data,
                                                  GDK_CROSSING_STATE_CHANGED);
 
-              event_surfaces = g_list_prepend (event_surfaces, window);
+              event_surfaces = g_list_prepend (event_surfaces, surface);
             }
 
           g_list_free (event_surfaces);
@@ -12133,7 +12133,7 @@ gtk_widget_set_surface (GtkWidget *widget,
  */
 void
 gtk_widget_register_surface (GtkWidget    *widget,
-			    GdkSurface    *surface)
+			     GdkSurface    *surface)
 {
   GtkWidgetPrivate *priv;
   gpointer user_data;
@@ -12161,7 +12161,7 @@ gtk_widget_register_surface (GtkWidget    *widget,
  */
 void
 gtk_widget_unregister_surface (GtkWidget    *widget,
-			      GdkSurface    *surface)
+			       GdkSurface    *surface)
 {
   GtkWidgetPrivate *priv;
   gpointer user_data;
@@ -12354,9 +12354,9 @@ gtk_widget_get_opacity (GtkWidget *widget)
  *
  *   fevent->focus_change.type = GDK_FOCUS_CHANGE;
  *   fevent->focus_change.in = TRUE;
- *   fevent->focus_change.window = _gtk_widget_get_surface (widget);
- *   if (fevent->focus_change.window != NULL)
- *     g_object_ref (fevent->focus_change.window);
+ *   fevent->focus_change.surface = _gtk_widget_get_surface (widget);
+ *   if (fevent->focus_change.surface != NULL)
+ *     g_object_ref (fevent->focus_change.surface);
  *
  *   gtk_widget_send_focus_change (widget, fevent);
  *

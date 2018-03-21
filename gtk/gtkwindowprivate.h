@@ -115,8 +115,8 @@ GdkTexture *     gtk_window_get_icon_for_size (GtkWindow *window,
 
 void       gtk_window_set_use_subsurface (GtkWindow *window,
                                           gboolean   use_subsurface);
-void       gtk_window_set_hardcoded_window (GtkWindow *window,
-                                            GdkSurface *gdk_surface);
+void       gtk_window_set_hardcoded_surface (GtkWindow *window,
+					     GdkSurface *surface);
 
 GdkDisplay *gtk_window_get_display (GtkWindow *window);
 

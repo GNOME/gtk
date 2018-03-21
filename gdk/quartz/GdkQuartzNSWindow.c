@@ -34,7 +34,7 @@
 
 -(BOOL)windowShouldClose:(id)sender
 {
-  GdkSurface *window = [[self contentView] gdkWindow];
+  GdkSurface *window = [[self contentView] gdkSurface];
   GdkEvent *event;
 
   event = gdk_event_new (GDK_DELETE);
@@ -49,14 +49,14 @@
 
 -(void)windowWillMiniaturize:(NSNotification *)aNotification
 {
-  GdkSurface *window = [[self contentView] gdkWindow];
+  GdkSurface *window = [[self contentView] gdkSurface];
 
   _gdk_quartz_surface_detach_from_parent (window);
 }
 
 -(void)windowDidMiniaturize:(NSNotification *)aNotification
 {
-  GdkSurface *window = [[self contentView] gdkWindow];
+  GdkSurface *window = [[self contentView] gdkSurface];
 
   gdk_synthesize_surface_state (window, 0, 
 			       GDK_SURFACE_STATE_ICONIFIED);
@@ -64,7 +64,7 @@
 
 -(void)windowDidDeminiaturize:(NSNotification *)aNotification
 {
-  GdkSurface *window = [[self contentView] gdkWindow];
+  GdkSurface *window = [[self contentView] gdkSurface];
 
   _gdk_quartz_surface_attach_to_parent (window);
 
@@ -73,7 +73,7 @@
 
 -(void)windowDidBecomeKey:(NSNotification *)aNotification
 {
-  GdkSurface *window = [[self contentView] gdkWindow];
+  GdkSurface *window = [[self contentView] gdkSurface];
 
   gdk_synthesize_surface_state (window, 0, GDK_SURFACE_STATE_FOCUSED);
   _gdk_quartz_events_update_focus_window (window, TRUE);
@@ -81,7 +81,7 @@
 
 -(void)windowDidResignKey:(NSNotification *)aNotification
 {
-  GdkSurface *window = [[self contentView] gdkWindow];
+  GdkSurface *window = [[self contentView] gdkSurface];
 
   _gdk_quartz_events_update_focus_window (window, FALSE);
   gdk_synthesize_surface_state (window, GDK_SURFACE_STATE_FOCUSED, 0);
@@ -89,7 +89,7 @@
 
 -(void)windowDidBecomeMain:(NSNotification *)aNotification
 {
-  GdkSurface *window = [[self contentView] gdkWindow];
+  GdkSurface *window = [[self contentView] gdkSurface];
 
   if (![self isVisible])
     {
@@ -108,7 +108,7 @@
 {
   GdkSurface *window;
 
-  window = [[self contentView] gdkWindow];
+  window = [[self contentView] gdkSurface];
   _gdk_quartz_surface_did_resign_main (window);
 }
 
@@ -154,7 +154,7 @@
 
 -(void)checkSendEnterNotify
 {
-  GdkSurface *window = [[self contentView] gdkWindow];
+  GdkSurface *window = [[self contentView] gdkSurface];
   GdkSurfaceImplQuartz *impl = GDK_SURFACE_IMPL_QUARTZ (window->impl);
 
   /* When a new window has been created, and the mouse
@@ -186,7 +186,7 @@
 
 -(void)windowDidMove:(NSNotification *)aNotification
 {
-  GdkSurface *window = [[self contentView] gdkWindow];
+  GdkSurface *window = [[self contentView] gdkSurface];
   GdkEvent *event;
 
   GdkSurfaceImplQuartz *impl = GDK_SURFACE_IMPL_QUARTZ (window->impl);
@@ -218,7 +218,7 @@
 -(void)windowDidResize:(NSNotification *)aNotification
 {
   NSRect content_rect = [self contentRectForFrameRect:[self frame]];
-  GdkSurface *window = [[self contentView] gdkWindow];
+  GdkSurface *window = [[self contentView] gdkSurface];
   GdkEvent *event;
   GdkSurfaceImplQuartz *impl = GDK_SURFACE_IMPL_QUARTZ (window->impl);
   gboolean maximized = gdk_surface_get_state (window) & GDK_SURFACE_STATE_MAXIMIZED;
@@ -273,7 +273,7 @@
 
 -(BOOL)canBecomeMainWindow
 {
-  GdkSurface *window = [[self contentView] gdkWindow];
+  GdkSurface *window = [[self contentView] gdkSurface];
   GdkSurfaceImplQuartz *impl = GDK_SURFACE_IMPL_QUARTZ (window->impl);
 
   switch (impl->type_hint)
@@ -302,7 +302,7 @@
 
 -(BOOL)canBecomeKeyWindow
 {
-  GdkSurface *window = [[self contentView] gdkWindow];
+  GdkSurface *window = [[self contentView] gdkSurface];
   GdkSurfaceImplQuartz *impl = GDK_SURFACE_IMPL_QUARTZ (window->impl);
 
   if (!window->accept_focus)
@@ -340,7 +340,7 @@
 
 - (void)showAndMakeKey:(BOOL)makeKey
 {
-  GdkSurface *window = [[self contentView] gdkWindow];
+  GdkSurface *window = [[self contentView] gdkSurface];
   GdkSurfaceImplQuartz *impl = GDK_SURFACE_IMPL_QUARTZ (window->impl);
 
   inShowOrHide = YES;
@@ -357,7 +357,7 @@
 
 - (void)hide
 {
-  GdkSurface *window = [[self contentView] gdkWindow];
+  GdkSurface *window = [[self contentView] gdkSurface];
   GdkSurfaceImplQuartz *impl = GDK_SURFACE_IMPL_QUARTZ (window->impl);
 
   inShowOrHide = YES;
@@ -369,7 +369,7 @@
 
 - (BOOL)trackManualMove
 {
-  GdkSurface *window = [[self contentView] gdkWindow];
+  GdkSurface *window = [[self contentView] gdkSurface];
   GdkSurfaceImplQuartz *impl = GDK_SURFACE_IMPL_QUARTZ (window->impl);
   NSPoint currentLocation;
   NSPoint newOrigin;
@@ -587,7 +587,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
   current_context = g_object_new (GDK_TYPE_QUARTZ_DRAG_CONTEXT, NULL);
   update_context_from_dragging_info (sender);
 
-  window = [[self contentView] gdkWindow];
+  window = [[self contentView] gdkSurface];
 
   current_context->display = gdk_surface_get_display (window);
 
@@ -626,7 +626,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
   GdkEvent *event;
   
   event = gdk_event_new (GDK_DRAG_LEAVE);
-  event->dnd.window = g_object_ref ([[self contentView] gdkWindow]);
+  event->dnd.window = g_object_ref ([[self contentView] gdkSurface]);
   event->dnd.send_event = FALSE;
   event->dnd.context = g_object_ref (current_context);
   event->dnd.time = GDK_CURRENT_TIME;
@@ -653,7 +653,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
   _gdk_quartz_surface_nspoint_to_gdk_xy (screen_point, &gx, &gy);
 
   event = gdk_event_new (GDK_DRAG_MOTION);
-  event->dnd.window = g_object_ref ([[self contentView] gdkWindow]);
+  event->dnd.window = g_object_ref ([[self contentView] gdkSurface]);
   event->dnd.send_event = FALSE;
   event->dnd.context = g_object_ref (current_context);
   event->dnd.time = GDK_CURRENT_TIME;
@@ -681,7 +681,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
   _gdk_quartz_surface_nspoint_to_gdk_xy (screen_point, &gx, &gy);
 
   event = gdk_event_new (GDK_DROP_START);
-  event->dnd.window = g_object_ref ([[self contentView] gdkWindow]);
+  event->dnd.window = g_object_ref ([[self contentView] gdkSurface]);
   event->dnd.send_event = FALSE;
   event->dnd.context = g_object_ref (current_context);
   event->dnd.time = GDK_CURRENT_TIME;
@@ -715,7 +715,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
   g_assert (_gdk_quartz_drag_source_context != NULL);
 
   event = gdk_event_new (GDK_DROP_FINISHED);
-  event->dnd.window = g_object_ref ([[self contentView] gdkWindow]);
+  event->dnd.window = g_object_ref ([[self contentView] gdkSurface]);
   event->dnd.send_event = FALSE;
   event->dnd.context = g_object_ref (_gdk_quartz_drag_source_context);
 
@@ -772,7 +772,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
   is_fullscreen = (([self styleMask] & NSFullScreenWindowMask) != 0);
 
   if (was_fullscreen != is_fullscreen)
-    _gdk_quartz_surface_update_fullscreen_state ([[self contentView] gdkWindow]);
+    _gdk_quartz_surface_update_fullscreen_state ([[self contentView] gdkSurface]);
 }
 
 #endif
@@ -780,7 +780,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 - (NSRect)constrainFrameRect:(NSRect)frameRect toScreen:(NSScreen *)screen
 {
   NSRect rect;
-  GdkSurface *window = [[self contentView] gdkWindow];
+  GdkSurface *window = [[self contentView] gdkSurface];
   GdkSurfaceImplQuartz *impl = GDK_SURFACE_IMPL_QUARTZ (window->impl);
 
   /* Allow the window to move up "shadow_top" more than normally allowed
@@ -797,7 +797,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
                         defaultFrame:(NSRect)newFrame
 {
   NSRect screenFrame = [[self screen] visibleFrame];
-  GdkSurface *window = [[self contentView] gdkWindow];
+  GdkSurface *window = [[self contentView] gdkSurface];
   GdkSurfaceImplQuartz *impl = GDK_SURFACE_IMPL_QUARTZ (window->impl);
   gboolean maximized = gdk_surface_get_state (window) & GDK_SURFACE_STATE_MAXIMIZED;
 
@@ -811,7 +811,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
                  toFrame:(NSRect)newFrame
 {
 
-  GdkSurface *window = [[self contentView] gdkWindow];
+  GdkSurface *window = [[self contentView] gdkSurface];
   GdkSurfaceImplQuartz *impl = GDK_SURFACE_IMPL_QUARTZ (window->impl);
   gboolean maximized = gdk_surface_get_state (window) & GDK_SURFACE_STATE_MAXIMIZED;
 

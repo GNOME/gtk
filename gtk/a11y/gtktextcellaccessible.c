@@ -479,24 +479,24 @@ add_attr (PangoAttrList *attr_list,
 
 static void
 get_origins (GtkWidget *widget,
-             gint      *x_window,
-             gint      *y_window,
+             gint      *x_surface,
+             gint      *y_surface,
              gint      *x_toplevel,
              gint      *y_toplevel)
 {
-  GdkSurface *window;
+  GdkSurface *surface;
 
-  window = gtk_widget_get_surface (widget);
-  gdk_surface_get_origin (window, x_window, y_window);
-  window = gdk_surface_get_toplevel (gtk_widget_get_surface (widget));
-  gdk_surface_get_origin (window, x_toplevel, y_toplevel);
+  surface = gtk_widget_get_surface (widget);
+  gdk_surface_get_origin (surface, x_surface, y_surface);
+  surface = gdk_surface_get_toplevel (gtk_widget_get_surface (widget));
+  gdk_surface_get_origin (surface, x_toplevel, y_toplevel);
 
   if (GTK_IS_TREE_VIEW (widget))
     {
-      gtk_tree_view_convert_widget_to_bin_surface_coords (GTK_TREE_VIEW (widget),
-                                                         *x_window, *y_window,
-                                                         x_window, y_window);
-      gtk_tree_view_convert_widget_to_bin_surface_coords (GTK_TREE_VIEW (widget),
+      gtk_tree_view_convert_widget_to_bin_window_coords (GTK_TREE_VIEW (widget),
+                                                         *x_surface, *y_surface,
+                                                         x_surface, y_surface);
+      gtk_tree_view_convert_widget_to_bin_window_coords (GTK_TREE_VIEW (widget),
                                                          *x_toplevel, *y_toplevel,
                                                          x_toplevel, y_toplevel);
     }
@@ -523,7 +523,7 @@ gtk_text_cell_accessible_get_character_extents (AtkText      *text,
   gfloat xalign, yalign;
   gint x_offset, y_offset, index;
   gint xpad, ypad;
-  gint x_window, y_window, x_toplevel, y_toplevel;
+  gint x_surface, y_surface, x_toplevel, y_toplevel;
 
   if (!GTK_TEXT_CELL_ACCESSIBLE (text)->priv->cell_text)
     {
@@ -568,10 +568,10 @@ gtk_text_cell_accessible_get_character_extents (AtkText      *text,
 
   gtk_cell_renderer_get_padding (GTK_CELL_RENDERER (gtk_renderer), &xpad, &ypad);
 
-  get_origins (widget, &x_window, &y_window, &x_toplevel, &y_toplevel);
+  get_origins (widget, &x_surface, &y_surface, &x_toplevel, &y_toplevel);
 
-  *x = (char_rect.x / PANGO_SCALE) + x_offset + rendered_rect.x + xpad + x_window;
-  *y = (char_rect.y / PANGO_SCALE) + y_offset + rendered_rect.y + ypad + y_window;
+  *x = (char_rect.x / PANGO_SCALE) + x_offset + rendered_rect.x + xpad + x_surface;
+  *y = (char_rect.y / PANGO_SCALE) + y_offset + rendered_rect.y + ypad + y_surface;
   *height = char_rect.height / PANGO_SCALE;
   *width = char_rect.width / PANGO_SCALE;
 
@@ -609,7 +609,7 @@ gtk_text_cell_accessible_get_offset_at_point (AtkText      *text,
   gfloat xalign, yalign;
   gint x_offset, y_offset, index;
   gint xpad, ypad;
-  gint x_window, y_window, x_toplevel, y_toplevel;
+  gint x_surface, y_surface, x_toplevel, y_toplevel;
   gint x_temp, y_temp;
   gboolean ret;
 
@@ -649,10 +649,10 @@ gtk_text_cell_accessible_get_offset_at_point (AtkText      *text,
 
   gtk_cell_renderer_get_padding (GTK_CELL_RENDERER (gtk_renderer), &xpad, &ypad);
 
-  get_origins (widget, &x_window, &y_window, &x_toplevel, &y_toplevel);
+  get_origins (widget, &x_surface, &y_surface, &x_toplevel, &y_toplevel);
 
-  x_temp =  x - (x_offset + rendered_rect.x + xpad) - x_window;
-  y_temp =  y - (y_offset + rendered_rect.y + ypad) - y_window;
+  x_temp =  x - (x_offset + rendered_rect.x + xpad) - x_surface;
+  y_temp =  y - (y_offset + rendered_rect.y + ypad) - y_surface;
   if (coords == ATK_XY_WINDOW)
     {
       x_temp += x_toplevel;

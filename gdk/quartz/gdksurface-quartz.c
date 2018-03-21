@@ -1306,7 +1306,7 @@ update_toplevel_order (void)
       if (![[nswindow contentView] isKindOfClass:[GdkQuartzView class]])
         continue;
 
-      window = [(GdkQuartzView *)[nswindow contentView] gdkWindow];
+      window = [(GdkQuartzView *)[nswindow contentView] gdkSurface];
       toplevels = g_list_prepend (toplevels, window);
     }
 

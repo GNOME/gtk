@@ -444,9 +444,9 @@ gtk_text_view_accessible_get_offset_at_point (AtkText      *text,
 {
   GtkTextView *view;
   GtkTextIter iter;
-  gint x_widget, y_widget, x_window, y_window, buff_x, buff_y;
+  gint x_widget, y_widget, x_surface, y_surface, buff_x, buff_y;
   GtkWidget *widget;
-  GdkSurface *window;
+  GdkSurface *surface;
   GdkRectangle rect;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
@@ -454,8 +454,8 @@ gtk_text_view_accessible_get_offset_at_point (AtkText      *text,
     return -1;
 
   view = GTK_TEXT_VIEW (widget);
-  window = gtk_widget_get_surface (widget);
-  gdk_surface_get_origin (window, &x_widget, &y_widget);
+  surface = gtk_widget_get_surface (widget);
+  gdk_surface_get_origin (surface, &x_widget, &y_widget);
 
   if (coords == ATK_XY_SCREEN)
     {
@@ -464,11 +464,11 @@ gtk_text_view_accessible_get_offset_at_point (AtkText      *text,
     }
   else if (coords == ATK_XY_WINDOW)
     {
-      window = gdk_surface_get_toplevel (window);
-      gdk_surface_get_origin (window, &x_window, &y_window);
+      surface = gdk_surface_get_toplevel (surface);
+      gdk_surface_get_origin (surface, &x_surface, &y_surface);
 
-      x = x - x_widget + x_window;
-      y = y - y_widget + y_window;
+      x = x - x_widget + x_surface;
+      y = y - y_widget + y_surface;
     }
   else
     return -1;
@@ -506,8 +506,8 @@ gtk_text_view_accessible_get_character_extents (AtkText      *text,
   GtkTextIter iter;
   GtkWidget *widget;
   GdkRectangle rectangle;
-  GdkSurface *window;
-  gint x_widget, y_widget, x_window, y_window;
+  GdkSurface *surface;
+  gint x_widget, y_widget, x_surface, y_surface;
 
   *x = 0;
   *y = 0;
@@ -523,11 +523,11 @@ gtk_text_view_accessible_get_character_extents (AtkText      *text,
   gtk_text_buffer_get_iter_at_offset (buffer, &iter, offset);
   gtk_text_view_get_iter_location (view, &iter, &rectangle);
 
-  window = gtk_widget_get_surface (widget);
-  if (window == NULL)
+  surface = gtk_widget_get_surface (widget);
+  if (surface == NULL)
     return;
 
-  gdk_surface_get_origin (window, &x_widget, &y_widget);
+  gdk_surface_get_origin (surface, &x_widget, &y_widget);
 
   *height = rectangle.height;
   *width = rectangle.width;
@@ -536,10 +536,10 @@ gtk_text_view_accessible_get_character_extents (AtkText      *text,
     rectangle.x, rectangle.y, x, y);
   if (coords == ATK_XY_WINDOW)
     {
-      window = gdk_surface_get_toplevel (window);
-      gdk_surface_get_origin (window, &x_window, &y_window);
-      *x += x_widget - x_window;
-      *y += y_widget - y_window;
+      surface = gdk_surface_get_toplevel (surface);
+      gdk_surface_get_origin (surface, &x_surface, &y_surface);
+      *x += x_widget - x_surface;
+      *y += y_widget - y_surface;
     }
   else if (coords == ATK_XY_SCREEN)
     {

@@ -372,7 +372,7 @@ gtk_inspector_window_get_for_display (GdkDisplay *display)
 void
 gtk_inspector_record_render (GtkWidget            *widget,
                              GskRenderer          *renderer,
-                             GdkSurface            *window,
+                             GdkSurface           *surface,
                              const cairo_region_t *region,
                              GdkDrawingContext    *context,
                              GskRenderNode        *node)
@@ -390,7 +390,7 @@ gtk_inspector_record_render (GtkWidget            *widget,
   gtk_inspector_recorder_record_render (GTK_INSPECTOR_RECORDER (iw->widget_recorder),
                                         widget,
                                         renderer,
-                                        window,
+                                        surface,
                                         region,
                                         context,
                                         node);

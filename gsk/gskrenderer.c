@@ -69,7 +69,7 @@ typedef struct
   GskScalingFilter min_filter;
   GskScalingFilter mag_filter;
 
-  GdkSurface *window;
+  GdkSurface *surface;
   GdkDrawingContext *drawing_context;
   GskRenderNode *root_node;
   GdkDisplay *display;
@@ -84,7 +84,7 @@ typedef struct
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GskRenderer, gsk_renderer, G_TYPE_OBJECT)
 
 enum {
-  PROP_WINDOW = 1,
+  PROP_SURFACE = 1,
   PROP_DISPLAY,
   PROP_DRAWING_CONTEXT,
 
@@ -98,7 +98,7 @@ static GParamSpec *gsk_renderer_properties[N_PROPS];
 
 static gboolean
 gsk_renderer_real_realize (GskRenderer  *self,
-                           GdkSurface    *window,
+                           GdkSurface    *surface,
                            GError      **error)
 {
   GSK_RENDERER_WARN_NOT_IMPLEMENTED_METHOD (self, realize);
@@ -126,9 +126,9 @@ gsk_renderer_real_begin_draw_frame (GskRenderer          *self,
 {
   GskRendererPrivate *priv = gsk_renderer_get_instance_private (self);
 
-  return gdk_surface_begin_draw_frame (priv->window,
-                                      NULL,
-                                      region);
+  return gdk_surface_begin_draw_frame (priv->surface,
+                                       NULL,
+                                       region);
 }
 
 static void
@@ -137,8 +137,8 @@ gsk_renderer_real_end_draw_frame (GskRenderer       *self,
 {
   GskRendererPrivate *priv = gsk_renderer_get_instance_private (self);
 
-  gdk_surface_end_draw_frame (priv->window,
-                             context);
+  gdk_surface_end_draw_frame (priv->surface,
+                              context);
 }
 
 static void
@@ -155,7 +155,7 @@ gsk_renderer_real_create_cairo_surface (GskRenderer    *self,
                                         int             height)
 {
   GskRendererPrivate *priv = gsk_renderer_get_instance_private (self);
-  int scale_factor = priv->window ? gdk_surface_get_scale_factor (priv->window) : 1;
+  int scale_factor = priv->surface ? gdk_surface_get_scale_factor (priv->surface) : 1;
   int real_width = width * scale_factor;
   int real_height = height * scale_factor;
 
@@ -215,8 +215,8 @@ gsk_renderer_get_property (GObject    *gobject,
 
   switch (prop_id)
     {
-    case PROP_WINDOW:
-      g_value_set_object (value, priv->window);
+    case PROP_SURFACE:
+      g_value_set_object (value, priv->surface);
       break;
 
     case PROP_DRAWING_CONTEXT:
@@ -282,10 +282,10 @@ gsk_renderer_class_init (GskRendererClass *klass)
 			 G_PARAM_CONSTRUCT_ONLY |
 			 G_PARAM_STATIC_STRINGS);
 
-  gsk_renderer_properties[PROP_WINDOW] =
-    g_param_spec_object ("window",
-                         "Window",
-                         "The window associated to the renderer",
+  gsk_renderer_properties[PROP_SURFACE] =
+    g_param_spec_object ("surface",
+                         "Surface",
+                         "The surface associated to the renderer",
                          GDK_TYPE_SURFACE,
                          G_PARAM_READABLE |
                          G_PARAM_STATIC_STRINGS);
@@ -331,7 +331,7 @@ gsk_renderer_get_surface (GskRenderer *renderer)
 
   g_return_val_if_fail (GSK_IS_RENDERER (renderer), NULL);
 
-  return priv->window;
+  return priv->surface;
 }
 
 /*< private >
@@ -409,7 +409,7 @@ gsk_renderer_is_realized (GskRenderer *renderer)
 /**
  * gsk_renderer_realize:
  * @renderer: a #GskRenderer
- * @window: the #GdkSurface renderer will be used on
+ * @surface: the #GdkSurface renderer will be used on
  * @error: return location for an error
  *
  * Creates the resources needed by the @renderer to render the scene
@@ -417,21 +417,21 @@ gsk_renderer_is_realized (GskRenderer *renderer)
  */
 gboolean
 gsk_renderer_realize (GskRenderer  *renderer,
-                      GdkSurface    *window,
+                      GdkSurface    *surface,
                       GError      **error)
 {
   GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
 
   g_return_val_if_fail (GSK_IS_RENDERER (renderer), FALSE);
   g_return_val_if_fail (!gsk_renderer_is_realized (renderer), FALSE);
-  g_return_val_if_fail (GDK_IS_SURFACE (window), FALSE);
+  g_return_val_if_fail (GDK_IS_SURFACE (surface), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-  priv->window = g_object_ref (window);
+  priv->surface = g_object_ref (surface);
 
-  if (!GSK_RENDERER_GET_CLASS (renderer)->realize (renderer, window, error))
+  if (!GSK_RENDERER_GET_CLASS (renderer)->realize (renderer, surface, error))
     {
-      g_clear_object (&priv->window);
+      g_clear_object (&priv->surface);
       return FALSE;
     }
 
@@ -625,9 +625,9 @@ get_renderer_for_name (const char *renderer_name)
 }
 
 static GType
-get_renderer_for_display (GdkSurface *window)
+get_renderer_for_display (GdkSurface *surface)
 {
-  GdkDisplay *display = gdk_surface_get_display (window);
+  GdkDisplay *display = gdk_surface_get_display (surface);
   const char *renderer_name;
 
   renderer_name = g_object_get_data (G_OBJECT (display), "gsk-renderer");
@@ -635,7 +635,7 @@ get_renderer_for_display (GdkSurface *window)
 }
 
 static GType
-get_renderer_for_env_var (GdkSurface *window)
+get_renderer_for_env_var (GdkSurface *surface)
 {
   static GType env_var_type = G_TYPE_NONE;
 
@@ -649,18 +649,18 @@ get_renderer_for_env_var (GdkSurface *window)
 }
 
 static GType
-get_renderer_for_backend (GdkSurface *window)
+get_renderer_for_backend (GdkSurface *surface)
 {
 #ifdef GDK_WINDOWING_X11
-  if (GDK_IS_X11_SURFACE (window))
+  if (GDK_IS_X11_SURFACE (surface))
     return GSK_TYPE_GL_RENDERER; 
 #endif
 #ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_SURFACE (window))
+  if (GDK_IS_WAYLAND_SURFACE (surface))
     return GSK_TYPE_GL_RENDERER;
 #endif
 #ifdef GDK_WINDOWING_BROADWAY
-  if (GDK_IS_BROADWAY_SURFACE (window))
+  if (GDK_IS_BROADWAY_SURFACE (surface))
     return GSK_TYPE_BROADWAY_RENDERER;
 #endif
 
@@ -668,14 +668,14 @@ get_renderer_for_backend (GdkSurface *window)
 }
 
 static GType
-get_renderer_fallback (GdkSurface *window)
+get_renderer_fallback (GdkSurface *surface)
 {
   return GSK_TYPE_CAIRO_RENDERER;
 }
 
 static struct {
   gboolean verbose;
-  GType (* get_renderer) (GdkSurface *window);
+  GType (* get_renderer) (GdkSurface *surface);
 } renderer_possibilities[] = {
   { TRUE,  get_renderer_for_display },
   { TRUE,  get_renderer_for_env_var },
@@ -685,16 +685,16 @@ static struct {
 
 /**
  * gsk_renderer_new_for_surface:
- * @window: a #GdkSurface
+ * @surface: a #GdkSurface
  *
- * Creates an appropriate #GskRenderer instance for the given @window.
+ * Creates an appropriate #GskRenderer instance for the given @surface.
  *
  * The renderer will be realized when it is returned.
  *
  * Returns: (transfer full) (nullable): a #GskRenderer
  */
 GskRenderer *
-gsk_renderer_new_for_surface (GdkSurface *window)
+gsk_renderer_new_for_surface (GdkSurface *surface)
 {
   GType renderer_type;
   GskRenderer *renderer;
@@ -702,11 +702,11 @@ gsk_renderer_new_for_surface (GdkSurface *window)
   gboolean verbose = FALSE;
   guint i;
 
-  g_return_val_if_fail (GDK_IS_SURFACE (window), NULL);
+  g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
 
   for (i = 0; i < G_N_ELEMENTS (renderer_possibilities); i++)
     {
-      renderer_type = renderer_possibilities[i].get_renderer (window);
+      renderer_type = renderer_possibilities[i].get_renderer (surface);
       if (renderer_type == G_TYPE_INVALID)
         continue;
 
@@ -715,25 +715,25 @@ gsk_renderer_new_for_surface (GdkSurface *window)
        */
       verbose |= renderer_possibilities[i].verbose;
       renderer = g_object_new (renderer_type,
-                               "display", gdk_surface_get_display (window),
+                               "display", gdk_surface_get_display (surface),
                                NULL);
 
-      if (gsk_renderer_realize (renderer, window, &error))
+      if (gsk_renderer_realize (renderer, surface, &error))
         {
           if (verbose || GSK_RENDERER_DEBUG_CHECK (renderer, RENDERER))
             {
-              g_print ("Using renderer of type '%s' for window '%s'\n",
+              g_print ("Using renderer of type '%s' for surface '%s'\n",
                        G_OBJECT_TYPE_NAME (renderer),
-                       G_OBJECT_TYPE_NAME (window));
+                       G_OBJECT_TYPE_NAME (surface));
             }
           return renderer;
         }
 
       if (verbose || GSK_RENDERER_DEBUG_CHECK (renderer, RENDERER))
         {
-          g_print ("Failed to realize renderer of type '%s' for window '%s': %s\n",
+          g_print ("Failed to realize renderer of type '%s' for surface '%s': %s\n",
                    G_OBJECT_TYPE_NAME (renderer),
-                   G_OBJECT_TYPE_NAME (window),
+                   G_OBJECT_TYPE_NAME (surface),
                    error->message);
         }
       g_object_unref (renderer);
@@ -780,17 +780,17 @@ gsk_renderer_begin_draw_frame (GskRenderer          *renderer,
 #ifdef G_ENABLE_DEBUG
   if (GSK_RENDERER_DEBUG_CHECK (renderer, FULL_REDRAW))
     {
-      cairo_region_t *full_window;
+      cairo_region_t *full_surface;
 
-      full_window = cairo_region_create_rectangle (&(GdkRectangle) {
+      full_surface = cairo_region_create_rectangle (&(GdkRectangle) {
                                                        0, 0,
-                                                       gdk_surface_get_width (priv->window),
-                                                       gdk_surface_get_height (priv->window)
+                                                       gdk_surface_get_width (priv->surface),
+                                                       gdk_surface_get_height (priv->surface)
                                                    });
 
-      priv->drawing_context = GSK_RENDERER_GET_CLASS (renderer)->begin_draw_frame (renderer, full_window);
+      priv->drawing_context = GSK_RENDERER_GET_CLASS (renderer)->begin_draw_frame (renderer, full_surface);
 
-      cairo_region_destroy (full_window);
+      cairo_region_destroy (full_surface);
     }
   else
 #endif

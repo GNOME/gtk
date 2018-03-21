@@ -4042,7 +4042,7 @@ get_move_resize_data (GdkDisplay *display,
   static GQuark move_resize_quark = 0;
 
   if (!move_resize_quark)
-    move_resize_quark = g_quark_from_static_string ("gdk-window-moveresize");
+    move_resize_quark = g_quark_from_static_string ("gdk-surface-moveresize");
   
   mv_resize = g_object_get_qdata (G_OBJECT (display), move_resize_quark);
 

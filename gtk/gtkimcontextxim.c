@@ -37,8 +37,8 @@ struct _GtkIMContextXIM
   gchar *locale;
   gchar *mb_charset;
 
-  GdkSurface *client_window;
-  Window client_window_xid;
+  GdkSurface *client_surface;
+  Window client_surface_xid;
   GtkWidget *client_widget;
 
   /* The status window for this input context; we claim the
@@ -122,8 +122,8 @@ static void     gtk_im_context_xim_get_preedit_string (GtkIMContext          *co
 						       gint                  *cursor_pos);
 
 static void reinitialize_ic      (GtkIMContextXIM *context_xim);
-static void set_ic_client_window (GtkIMContextXIM *context_xim,
-				  GdkSurface       *client_window);
+static void set_ic_client_surface (GtkIMContextXIM *context_xim,
+				  GdkSurface       *client_surface);
 
 static void setup_styles (GtkXIMInfo *info);
 
@@ -307,7 +307,7 @@ xim_info_display_closed (GdkDisplay *display,
   info->ics = NULL;
 
   for (tmp_list = ics; tmp_list; tmp_list = tmp_list->next)
-    set_ic_client_window (tmp_list->data, NULL);
+    set_ic_client_surface (tmp_list->data, NULL);
 
   g_slist_free (ics);
 
@@ -397,12 +397,12 @@ xim_destroy_callback (XIM      xim,
 }
 
 static GtkXIMInfo *
-get_im (GdkSurface *client_window,
+get_im (GdkSurface *client_surface,
 	const char *locale)
 {
   GSList *tmp_list;
   GtkXIMInfo *info;
-  GdkDisplay *display = gdk_surface_get_display (client_window);
+  GdkDisplay *display = gdk_surface_get_display (client_surface);
 
   info = NULL;
   tmp_list = open_ims;
@@ -513,7 +513,7 @@ gtk_im_context_xim_finalize (GObject *obj)
 	}
     }
 
-  set_ic_client_window (context_xim, NULL);
+  set_ic_client_surface (context_xim, NULL);
 
   g_free (context_xim->locale);
   g_free (context_xim->mb_charset);
@@ -545,31 +545,31 @@ reinitialize_ic (GtkIMContextXIM *context_xim)
 }
 
 static void
-set_ic_client_window (GtkIMContextXIM *context_xim,
-		      GdkSurface       *client_window)
+set_ic_client_surface (GtkIMContextXIM *context_xim,
+		      GdkSurface       *client_surface)
 {
   reinitialize_ic (context_xim);
-  if (context_xim->client_window)
+  if (context_xim->client_surface)
     {
       context_xim->im_info->ics = g_slist_remove (context_xim->im_info->ics, context_xim);
       context_xim->im_info = NULL;
     }
 
-  context_xim->client_window = client_window;
-  context_xim->client_window_xid = None;
+  context_xim->client_surface = client_surface;
+  context_xim->client_surface_xid = None;
 
-  if (context_xim->client_window)
+  if (context_xim->client_surface)
     {
       GdkSurface *native;
 
-      context_xim->im_info = get_im (context_xim->client_window, context_xim->locale);
+      context_xim->im_info = get_im (context_xim->client_surface, context_xim->locale);
       context_xim->im_info->ics = g_slist_prepend (context_xim->im_info->ics, context_xim);
 
-      for (native = client_window; native; native = gdk_surface_get_parent (native))
+      for (native = client_surface; native; native = gdk_surface_get_parent (native))
         {
           if (gdk_surface_has_native (native))
             {
-              context_xim->client_window_xid = gdk_x11_surface_get_xid (native);
+              context_xim->client_surface_xid = gdk_x11_surface_get_xid (native);
               break;
             }
         }
@@ -588,7 +588,7 @@ gtk_im_context_xim_set_client_widget (GtkIMContext *context,
   if (widget != NULL)
     surface = gtk_widget_get_surface (gtk_widget_get_toplevel (widget));
 
-  set_ic_client_window (context_xim, surface);
+  set_ic_client_surface (context_xim, surface);
 }
 
 static char *
@@ -657,7 +657,7 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
   xevent.keycode = gdk_event_get_scancode ((GdkEvent *) event);
   xevent.same_screen = True;
 
-  if (XFilterEvent ((XEvent *)&xevent, context_xim->client_window_xid))
+  if (XFilterEvent ((XEvent *)&xevent, context_xim->client_surface_xid))
     return TRUE;
 
   if (state &
@@ -1373,7 +1373,7 @@ gtk_im_context_xim_get_ic (GtkIMContextXIM *context_xim)
 
       xic = XCreateIC (context_xim->im_info->im,
 		       XNInputStyle, im_style,
-		       XNClientWindow, context_xim->client_window_xid,
+		       XNClientWindow, context_xim->client_surface_xid,
 		       name1, list1,
 		       name2, list2,
 		       NULL);
@@ -1427,7 +1427,7 @@ gtk_im_context_xim_get_ic (GtkIMContextXIM *context_xim)
  * calling ::focus-in and ::focus-out at the right time.
  *
  * The toplevel is computed by walking up the GdkSurface
- * hierarchy from context->client_window until we find a
+ * hierarchy from context->client_surface until we find a
  * window that is owned by some widget, and then calling
  * gtk_widget_get_toplevel() on that widget. This should
  * handle both cases where we might have GdkSurfaces without widgets,
@@ -1546,13 +1546,13 @@ widget_for_window (GdkSurface *window)
   return NULL;
 }
 
-/* Called when context_xim->client_window changes; takes care of
+/* Called when context_xim->client_surface changes; takes care of
  * removing and/or setting up our watches for the toplevel
  */
 static void
 update_client_widget (GtkIMContextXIM *context_xim)
 {
-  GtkWidget *new_client_widget = widget_for_window (context_xim->client_window);
+  GtkWidget *new_client_widget = widget_for_window (context_xim->client_surface);
 
   if (new_client_widget != context_xim->client_widget)
     {

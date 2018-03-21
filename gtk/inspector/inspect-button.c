@@ -80,28 +80,28 @@ static GtkWidget *
 find_widget_at_pointer (GdkDevice *device)
 {
   GtkWidget *widget = NULL;
-  GdkSurface *pointer_window;
+  GdkSurface *pointer_surface;
 
-  pointer_window = gdk_device_get_surface_at_position (device, NULL, NULL);
+  pointer_surface = gdk_device_get_surface_at_position (device, NULL, NULL);
 
-  if (pointer_window)
+  if (pointer_surface)
     {
       gpointer widget_ptr;
 
-      gdk_surface_get_user_data (pointer_window, &widget_ptr);
+      gdk_surface_get_user_data (pointer_surface, &widget_ptr);
       widget = widget_ptr;
 
       if (!GTK_IS_WINDOW (widget))
         {
           while (TRUE)
             {
-              GdkSurface *parent = gdk_surface_get_parent (pointer_window);
+              GdkSurface *parent = gdk_surface_get_parent (pointer_surface);
 
               if (!parent)
                 break;
 
-              pointer_window = parent;
-              gdk_surface_get_user_data (pointer_window, &widget_ptr);
+              pointer_surface = parent;
+              gdk_surface_get_user_data (pointer_surface, &widget_ptr);
               widget = widget_ptr;
 
               if (GTK_IS_WINDOW (widget))
@@ -295,10 +295,10 @@ property_query_event (GtkWidget *widget,
 
 static void
 prepare_inspect_func (GdkSeat   *seat,
-                      GdkSurface *window,
+                      GdkSurface *surface,
                       gpointer   user_data)
 {
-  gdk_surface_show (window);
+  gdk_surface_show (surface);
 }
 
 

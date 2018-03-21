@@ -1177,7 +1177,7 @@ rewrite_events_translate (GdkSurface *old_surface,
 
 static GdkEvent *
 rewrite_event_for_surface (GdkEvent  *event,
-                          GdkSurface *new_surface)
+			   GdkSurface *new_surface)
 {
   event = gdk_event_copy (event);
 
@@ -1903,7 +1903,7 @@ typedef struct
   gboolean   was_grabbed;
   gboolean   is_grabbed;
   gboolean   from_grab;
-  GList     *notified_windows;
+  GList     *notified_surfaces;
   GdkDevice *device;
 } GrabNotifyInfo;
 
@@ -1917,46 +1917,46 @@ synth_crossing_for_grab_notify (GtkWidget       *from,
   while (devices)
     {
       GdkDevice *device = devices->data;
-      GdkSurface *from_window, *to_window;
+      GdkSurface *from_surface, *to_surface;
 
       /* Do not propagate events more than once to
-       * the same windows if non-multidevice aware.
+       * the same surfaces if non-multidevice aware.
        */
       if (!from)
-        from_window = NULL;
+        from_surface = NULL;
       else
         {
-          from_window = _gtk_widget_get_device_window (from, device);
+          from_surface = _gtk_widget_get_device_surface (from, device);
 
-          if (from_window &&
-              !gdk_surface_get_support_multidevice (from_window) &&
-              g_list_find (info->notified_windows, from_window))
-            from_window = NULL;
+          if (from_surface &&
+              !gdk_surface_get_support_multidevice (from_surface) &&
+              g_list_find (info->notified_surfaces, from_surface))
+            from_surface = NULL;
         }
 
       if (!to)
-        to_window = NULL;
+        to_surface = NULL;
       else
         {
-          to_window = _gtk_widget_get_device_window (to, device);
+          to_surface = _gtk_widget_get_device_surface (to, device);
 
-          if (to_window &&
-              !gdk_surface_get_support_multidevice (to_window) &&
-              g_list_find (info->notified_windows, to_window))
-            to_window = NULL;
+          if (to_surface &&
+              !gdk_surface_get_support_multidevice (to_surface) &&
+              g_list_find (info->notified_surfaces, to_surface))
+            to_surface = NULL;
         }
 
-      if (from_window || to_window)
+      if (from_surface || to_surface)
         {
-          _gtk_widget_synthesize_crossing ((from_window) ? from : NULL,
-                                           (to_window) ? to : NULL,
+          _gtk_widget_synthesize_crossing ((from_surface) ? from : NULL,
+                                           (to_surface) ? to : NULL,
                                            device, mode);
 
-          if (from_window)
-            info->notified_windows = g_list_prepend (info->notified_windows, from_window);
+          if (from_surface)
+            info->notified_surfaces = g_list_prepend (info->notified_surfaces, from_surface);
 
-          if (to_window)
-            info->notified_windows = g_list_prepend (info->notified_windows, to_window);
+          if (to_surface)
+            info->notified_surfaces = g_list_prepend (info->notified_surfaces, to_surface);
         }
 
       devices = devices->next;
@@ -1995,7 +1995,7 @@ gtk_grab_notify_foreach (GtkWidget *child,
     }
 
   if (info->device &&
-      _gtk_widget_get_device_window (child, info->device))
+      _gtk_widget_get_device_surface (child, info->device))
     {
       /* Device specified and is on widget */
       devices = g_list_prepend (NULL, info->device);
@@ -2069,7 +2069,7 @@ gtk_grab_notify (GtkWindowGroup *group,
       g_object_unref (toplevel);
     }
 
-  g_list_free (info.notified_windows);
+  g_list_free (info.notified_surfaces);
   g_object_unref (group);
 }
 

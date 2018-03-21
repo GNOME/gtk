@@ -995,8 +995,8 @@ gtk_label_accessible_get_character_extents (AtkText      *text,
   PangoRectangle char_rect;
   const gchar *label_text;
   gint index, x_layout, y_layout;
-  GdkSurface *window;
-  gint x_window, y_window;
+  GdkSurface *surface;
+  gint x_surface, y_surface;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
@@ -1010,21 +1010,21 @@ gtk_label_accessible_get_character_extents (AtkText      *text,
   pango_layout_index_to_pos (gtk_label_get_layout (label), index, &char_rect);
   pango_extents_to_pixels (&char_rect, NULL);
 
-  window = gtk_widget_get_surface (widget);
-  gdk_surface_get_origin (window, &x_window, &y_window);
+  surface = gtk_widget_get_surface (widget);
+  gdk_surface_get_origin (surface, &x_surface, &y_surface);
 
-  *x = x_window + x_layout + char_rect.x;
-  *y = y_window + y_layout + char_rect.y;
+  *x = x_surface + x_layout + char_rect.x;
+  *y = y_surface + y_layout + char_rect.y;
   *width = char_rect.width;
   *height = char_rect.height;
 
   if (coords == ATK_XY_WINDOW)
     {
-      window = gdk_surface_get_toplevel (window);
-      gdk_surface_get_origin (window, &x_window, &y_window);
+      surface = gdk_surface_get_toplevel (surface);
+      gdk_surface_get_origin (surface, &x_surface, &y_surface);
 
-      *x -= x_window;
-      *y -= y_window;
+      *x -= x_surface;
+      *y -= y_surface;
     }
 }
 
@@ -1038,9 +1038,9 @@ gtk_label_accessible_get_offset_at_point (AtkText      *atk_text,
   GtkLabel *label;
   const gchar *text;
   gint index, x_layout, y_layout;
-  gint x_window, y_window;
+  gint x_surface, y_surface;
   gint x_local, y_local;
-  GdkSurface *window;
+  GdkSurface *surface;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (atk_text));
   if (widget == NULL)
@@ -1050,19 +1050,19 @@ gtk_label_accessible_get_offset_at_point (AtkText      *atk_text,
 
   gtk_label_get_layout_offsets (label, &x_layout, &y_layout);
 
-  window = gtk_widget_get_surface (widget);
-  gdk_surface_get_origin (window, &x_window, &y_window);
+  surface = gtk_widget_get_surface (widget);
+  gdk_surface_get_origin (surface, &x_surface, &y_surface);
 
-  x_local = x - x_layout - x_window;
-  y_local = y - y_layout - y_window;
+  x_local = x - x_layout - x_surface;
+  y_local = y - y_layout - y_surface;
 
   if (coords == ATK_XY_WINDOW)
     {
-      window = gdk_surface_get_toplevel (window);
-      gdk_surface_get_origin (window, &x_window, &y_window);
+      surface = gdk_surface_get_toplevel (surface);
+      gdk_surface_get_origin (surface, &x_surface, &y_surface);
 
-      x_local += x_window;
-      y_local += y_window;
+      x_local += x_surface;
+      y_local += y_surface;
     }
 
   if (!pango_layout_xy_to_index (gtk_label_get_layout (label),

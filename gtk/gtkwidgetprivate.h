@@ -217,10 +217,10 @@ void              _gtk_widget_grab_notify                  (GtkWidget *widget,
 void              _gtk_widget_propagate_display_changed    (GtkWidget  *widget,
                                                             GdkDisplay *previous_display);
 
-void              _gtk_widget_set_device_window            (GtkWidget *widget,
+void              _gtk_widget_set_device_surface           (GtkWidget *widget,
                                                             GdkDevice *device,
                                                             GdkSurface *pointer_window);
-GdkSurface *       _gtk_widget_get_device_window            (GtkWidget *widget,
+GdkSurface *       _gtk_widget_get_device_surface          (GtkWidget *widget,
                                                             GdkDevice *device);
 GList *           _gtk_widget_list_devices                 (GtkWidget *widget);
 
@@ -315,7 +315,7 @@ void              gtk_widget_get_own_allocation            (GtkWidget        *wi
                                                             GtkAllocation    *allocation);
 
 void              gtk_widget_get_surface_allocation         (GtkWidget *widget,
-                                                            GtkAllocation *allocation);
+							     GtkAllocation *allocation);
 
 
 GtkWidget *       gtk_widget_common_ancestor               (GtkWidget *widget_a,

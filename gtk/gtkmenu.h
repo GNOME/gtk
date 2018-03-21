@@ -154,7 +154,7 @@ void       gtk_menu_popup_for_device      (GtkMenu             *menu,
                                            guint32              activate_time);
 GDK_AVAILABLE_IN_ALL
 void       gtk_menu_popup_at_rect         (GtkMenu             *menu,
-                                           GdkSurface           *rect_window,
+                                           GdkSurface          *rect_surface,
                                            const GdkRectangle  *rect,
                                            GdkGravity           rect_anchor,
                                            GdkGravity           menu_anchor,

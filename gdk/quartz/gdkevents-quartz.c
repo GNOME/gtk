@@ -424,7 +424,7 @@ get_toplevel_from_ns_event (NSEvent *nsevent,
 
       view = (GdkQuartzView *)[[nsevent window] contentView];
 
-      toplevel = [view gdkWindow];
+      toplevel = [view gdkSurface];
 
       point = [nsevent locationInWindow];
       view_point = [view convertPoint:point fromView:nil];
@@ -643,7 +643,7 @@ find_toplevel_for_keyboard_event (NSEvent *nsevent)
   GdkSeat *seat;
 
   view = (GdkQuartzView *)[[nsevent window] contentView];
-  window = [view gdkWindow];
+  window = [view gdkSurface];
 
   display = gdk_surface_get_display (window);
 

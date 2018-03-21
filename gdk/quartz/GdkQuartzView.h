@@ -42,7 +42,7 @@
 }
 
 - (void)setGdkSurface: (GdkSurface *)window;
-- (GdkSurface *)gdkWindow;
+- (GdkSurface *)gdkSurface;
 - (NSTrackingRectTag)trackingRect;
 - (void)setNeedsInvalidateShadow: (BOOL)invalidate;
 

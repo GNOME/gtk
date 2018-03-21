@@ -101,7 +101,7 @@
  * Several functions are available for converting between the different
  * coordinate systems.  The most common translations are between widget and bin
  * window coordinates and between bin window and tree coordinates. For the
- * former you can use gtk_tree_view_convert_widget_to_bin_surface_coords()
+ * former you can use gtk_tree_view_convert_widget_to_bin_window_coords()
  * (and vice versa), for the latter gtk_tree_view_convert_bin_window_to_tree_coords()
  * (and vice versa).
  *
@@ -390,7 +390,7 @@ struct _GtkTreeViewPrivate
 
   /* Interactive Header reordering */
   GdkSurface *drag_surface;
-  GdkSurface *drag_highlight_window;
+  GdkSurface *drag_highlight_surface;
   GtkTreeViewColumn *drag_column;
   gint drag_column_x;
 
@@ -2275,11 +2275,11 @@ gtk_tree_view_unrealize (GtkWidget *widget)
       priv->drag_surface = NULL;
     }
 
-  if (priv->drag_highlight_window)
+  if (priv->drag_highlight_surface)
     {
-      gtk_widget_unregister_surface (widget, priv->drag_highlight_window);
-      gdk_surface_destroy (priv->drag_highlight_window);
-      priv->drag_highlight_window = NULL;
+      gtk_widget_unregister_surface (widget, priv->drag_highlight_surface);
+      gdk_surface_destroy (priv->drag_highlight_surface);
+      priv->drag_highlight_surface = NULL;
     }
 
   GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->unrealize (widget);
@@ -2791,7 +2791,7 @@ gtk_tree_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   /* Because grab_focus can cause reentrancy, we delay grab_focus until after
    * we're done handling the button press.
    */
-  gtk_tree_view_convert_widget_to_bin_surface_coords (tree_view, x, y,
+  gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, x, y,
                                                      &bin_x, &bin_y);
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
@@ -3036,7 +3036,7 @@ gtk_tree_view_drag_gesture_begin (GtkGestureDrag *gesture,
       return;
     }
 
-  gtk_tree_view_convert_widget_to_bin_surface_coords (tree_view, start_x, start_y,
+  gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, start_x, start_y,
                                                      &bin_x, &bin_y);
   tree_view->priv->press_start_x = tree_view->priv->rubber_band_x = bin_x;
   tree_view->priv->press_start_y = tree_view->priv->rubber_band_y = bin_y;
@@ -3210,8 +3210,8 @@ gtk_tree_view_button_release_drag_column (GtkTreeView *tree_view)
   tree_view->priv->column_drag_info = NULL;
   tree_view->priv->cur_reorder = NULL;
 
-  if (tree_view->priv->drag_highlight_window)
-    gdk_surface_hide (tree_view->priv->drag_highlight_window);
+  if (tree_view->priv->drag_highlight_surface)
+    gdk_surface_hide (tree_view->priv->drag_highlight_surface);
 
   /* Reset our flags */
   tree_view->priv->drag_column_surface_state = DRAG_COLUMN_WINDOW_STATE_UNSET;
@@ -3641,23 +3641,23 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
           GtkAllocation drag_allocation;
 	  GtkWidget    *button;
 
-	  if (tree_view->priv->drag_highlight_window)
+	  if (tree_view->priv->drag_highlight_surface)
 	    {
-	      gtk_widget_unregister_surface (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_window);
-	      gdk_surface_destroy (tree_view->priv->drag_highlight_window);
+	      gtk_widget_unregister_surface (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_surface);
+	      gdk_surface_destroy (tree_view->priv->drag_highlight_surface);
 	    }
 
 	  button = gtk_tree_view_column_get_button (tree_view->priv->drag_column);
           gtk_widget_get_allocation (button, &drag_allocation);
 	  width = drag_allocation.width;
 	  height = drag_allocation.height;
-	  tree_view->priv->drag_highlight_window = gdk_surface_new_child (gtk_widget_get_surface (widget),
+	  tree_view->priv->drag_highlight_surface = gdk_surface_new_child (gtk_widget_get_surface (widget),
                                                                          &(GdkRectangle){
                                                                            tree_view->priv->drag_column_x,
                                                                            0,
                                                                            drag_allocation.width,
                                                                            drag_allocation.height});
-	  gtk_widget_register_surface (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_window);
+	  gtk_widget_register_surface (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_surface);
 
 	  tree_view->priv->drag_column_surface_state = DRAG_COLUMN_WINDOW_STATE_ORIGINAL;
 	}
@@ -3694,15 +3694,15 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
       /* Create the new window */
       if (tree_view->priv->drag_column_surface_state != DRAG_COLUMN_WINDOW_STATE_ARROW)
 	{
-	  if (tree_view->priv->drag_highlight_window)
+	  if (tree_view->priv->drag_highlight_surface)
 	    {
-	      gtk_widget_unregister_surface (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_window);
-	      gdk_surface_destroy (tree_view->priv->drag_highlight_window);
+	      gtk_widget_unregister_surface (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_surface);
+	      gdk_surface_destroy (tree_view->priv->drag_highlight_surface);
 	    }
 
-	  tree_view->priv->drag_highlight_window = gdk_surface_new_popup (gtk_widget_get_display (widget),
+	  tree_view->priv->drag_highlight_surface = gdk_surface_new_popup (gtk_widget_get_display (widget),
                                                                          &(GdkRectangle) { x, y, width, height });
-	  gtk_widget_register_surface (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_window);
+	  gtk_widget_register_surface (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_surface);
 
 	  mask_image = cairo_image_surface_create (CAIRO_FORMAT_A1, width, height);
 
@@ -3720,7 +3720,7 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 	}
 
       tree_view->priv->drag_column_surface_state = DRAG_COLUMN_WINDOW_STATE_ARROW;
-      gdk_surface_move (tree_view->priv->drag_highlight_window, x, y);
+      gdk_surface_move (tree_view->priv->drag_highlight_surface, x, y);
     }
   else if (arrow_type == DRAG_COLUMN_WINDOW_STATE_ARROW_LEFT ||
 	   arrow_type == DRAG_COLUMN_WINDOW_STATE_ARROW_RIGHT)
@@ -3759,15 +3759,15 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
       if (tree_view->priv->drag_column_surface_state != DRAG_COLUMN_WINDOW_STATE_ARROW_LEFT &&
 	  tree_view->priv->drag_column_surface_state != DRAG_COLUMN_WINDOW_STATE_ARROW_RIGHT)
 	{
-	  if (tree_view->priv->drag_highlight_window)
+	  if (tree_view->priv->drag_highlight_surface)
 	    {
-	      gtk_widget_unregister_surface (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_window);
-	      gdk_surface_destroy (tree_view->priv->drag_highlight_window);
+	      gtk_widget_unregister_surface (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_surface);
+	      gdk_surface_destroy (tree_view->priv->drag_highlight_surface);
 	    }
 
-	  tree_view->priv->drag_highlight_window = gdk_surface_new_popup (gtk_widget_get_display (widget),
+	  tree_view->priv->drag_highlight_surface = gdk_surface_new_popup (gtk_widget_get_display (widget),
                                                                          &(GdkRectangle) { x, y, width, height });
-	  gtk_widget_register_surface (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_window);
+	  gtk_widget_register_surface (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_surface);
 
 	  mask_image = cairo_image_surface_create (CAIRO_FORMAT_A1, width, height);
 
@@ -3791,17 +3791,17 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 	}
 
       tree_view->priv->drag_column_surface_state = arrow_type;
-      gdk_surface_move (tree_view->priv->drag_highlight_window, x, y);
+      gdk_surface_move (tree_view->priv->drag_highlight_surface, x, y);
    }
   else
     {
       g_warning (G_STRLOC"Invalid GtkTreeViewColumnReorder struct");
-      gdk_surface_hide (tree_view->priv->drag_highlight_window);
+      gdk_surface_hide (tree_view->priv->drag_highlight_surface);
       return;
     }
 
-  gdk_surface_show (tree_view->priv->drag_highlight_window);
-  gdk_surface_raise (tree_view->priv->drag_highlight_window);
+  gdk_surface_show (tree_view->priv->drag_highlight_surface);
+  gdk_surface_raise (tree_view->priv->drag_highlight_surface);
 }
 
 static gboolean
@@ -3865,13 +3865,13 @@ gtk_tree_view_vertical_autoscroll (GtkTreeView *tree_view)
 
       sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (tree_view->priv->drag_gesture));
       gtk_gesture_get_point (tree_view->priv->drag_gesture, sequence, NULL, &py);
-      gtk_tree_view_convert_widget_to_bin_surface_coords (tree_view, 0, py,
-                                                         NULL, &y);
+      gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, 0, py,
+							  NULL, &y);
     }
   else
     {
       y = tree_view->priv->event_last_y;
-      gtk_tree_view_convert_widget_to_bin_surface_coords (tree_view, 0, y, NULL, &y);
+      gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, 0, y, NULL, &y);
     }
 
   y += tree_view->priv->dy;
@@ -4117,8 +4117,8 @@ gtk_tree_view_update_rubber_band_selection (GtkTreeView *tree_view)
                                NULL, &offset_y);
   gtk_gesture_drag_get_start_point (GTK_GESTURE_DRAG (tree_view->priv->drag_gesture),
                                     NULL, &start_y);
-  gtk_tree_view_convert_widget_to_bin_surface_coords (tree_view, 0, start_y,
-                                                     NULL, &bin_y);
+  gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, 0, start_y,
+						      NULL, &bin_y);
   bin_y = MAX (0, bin_y + offset_y + tree_view->priv->dy);
 
   _gtk_rbtree_find_offset (tree_view->priv->tree, MIN (tree_view->priv->press_start_y, bin_y), &start_tree, &start_node);
@@ -4276,8 +4276,8 @@ gtk_tree_view_update_rubber_band (GtkTreeView *tree_view)
                                &offset_x, &offset_y);
   gtk_gesture_drag_get_start_point (GTK_GESTURE_DRAG (tree_view->priv->drag_gesture),
                                     &start_x, &start_y);
-  gtk_tree_view_convert_widget_to_bin_surface_coords (tree_view, start_x, start_y,
-                                                     &bin_x, &bin_y);
+  gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, start_x, start_y,
+						      &bin_x, &bin_y);
   bin_y += tree_view->priv->dy;
 
   x = MAX (bin_x + offset_x, 0);
@@ -4315,8 +4315,8 @@ gtk_tree_view_snapshot_rubber_band (GtkTreeView *tree_view,
                                &offset_x, &offset_y);
   gtk_gesture_drag_get_start_point (GTK_GESTURE_DRAG (tree_view->priv->drag_gesture),
                                     &start_x, &start_y);
-  gtk_tree_view_convert_widget_to_bin_surface_coords (tree_view, start_x, start_y,
-                                                     &bin_x, &bin_y);
+  gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, start_x, start_y,
+						      &bin_x, &bin_y);
   bin_x = MAX (0, bin_x + offset_x);
   bin_y = MAX (0, bin_y + offset_y + tree_view->priv->dy);
 
@@ -4425,8 +4425,8 @@ gtk_tree_view_motion_controller_motion (GtkEventControllerMotion *controller,
           gtk_gesture_is_active (tree_view->priv->multipress_gesture))
         node = NULL;
 
-      gtk_tree_view_convert_widget_to_bin_surface_coords (tree_view, x, y,
-                                                         &bin_x, &bin_y);
+      gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, x, y,
+							  &bin_x, &bin_y);
       new_y = MAX (0, TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, bin_y));
 
       _gtk_rbtree_find_offset (tree_view->priv->tree, new_y, &tree, &node);
@@ -5216,8 +5216,8 @@ gtk_tree_view_snapshot (GtkWidget   *widget,
   gtk_snapshot_pop (snapshot);
   
 #if 0
-  Thyis clearly does not work. priv->drag_highlight_window is potentially a toplevel...
-  if (tree_view->priv->drag_highlight_window)
+  Thyis clearly does not work. priv->drag_highlight_surface is potentially a toplevel...
+  if (tree_view->priv->drag_highlight_surface)
     {
       GdkRGBA color;
 
@@ -5230,8 +5230,8 @@ gtk_tree_view_snapshot (GtkWidget   *widget,
           gdk_cairo_set_source_rgba (cr, &color);
           cairo_rectangle (cr,
                            1, 1,
-                           gdk_surface_get_width (tree_view->priv->drag_highlight_window) - 2,
-                           gdk_surface_get_height (tree_view->priv->drag_highlight_window) - 2);
+                           gdk_surface_get_width (tree_view->priv->drag_highlight_surface) - 2,
+                           gdk_surface_get_height (tree_view->priv->drag_highlight_surface) - 2);
           cairo_stroke (cr);
         }
       else
@@ -7059,8 +7059,8 @@ drag_scan_timeout (gpointer data)
 
   seat = gdk_display_get_default_seat (gtk_widget_get_display (GTK_WIDGET (tree_view)));
   gdk_surface_get_device_position (tree_view->priv->bin_window,
-                                  gdk_seat_get_pointer (seat),
-                                  &x, &y, &state);
+				   gdk_seat_get_pointer (seat),
+				   &x, &y, &state);
 
   gtk_tree_view_get_visible_rect (tree_view, &visible_rect);
 
@@ -7421,8 +7421,8 @@ gtk_tree_view_maybe_begin_dragging_row (GtkTreeView *tree_view)
   gtk_gesture_set_state (GTK_GESTURE (tree_view->priv->multipress_gesture),
                          GTK_EVENT_SEQUENCE_DENIED);
 
-  gtk_tree_view_convert_widget_to_bin_surface_coords (tree_view, start_x, start_y,
-                                                     &bin_x, &bin_y);
+  gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, start_x, start_y,
+						      &bin_x, &bin_y);
   gtk_tree_view_get_path_at_pos (tree_view, bin_x, bin_y, &path,
                                  NULL, NULL, NULL);
 
@@ -9565,7 +9565,7 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
   button_allocation.y = 0;
 
   tree_view->priv->drag_surface = gdk_surface_new_child (gtk_widget_get_surface (GTK_WIDGET (tree_view)),
-                                                       &button_allocation);
+							 &button_allocation);
   gtk_widget_register_surface (GTK_WIDGET (tree_view), tree_view->priv->drag_surface);
 
   /* Kids, don't try this at home */
@@ -12740,7 +12740,7 @@ gtk_tree_view_set_cursor_on_cell (GtkTreeView       *tree_view,
  * Finds the path at the point (@x, @y), relative to bin_window coordinates.
  * That is, @x and @y are relative to an events coordinates. Widget-relative
  * coordinates must be converted using
- * gtk_tree_view_convert_widget_to_bin_surface_coords(). It is primarily for
+ * gtk_tree_view_convert_widget_to_bin_window_coords(). It is primarily for
  * things like popup menus. If @path is non-%NULL, then it will be filled
  * with the #GtkTreePath at that point.  This path should be freed with
  * gtk_tree_path_free().  If @column is non-%NULL, then it will be filled
@@ -12752,7 +12752,7 @@ gtk_tree_view_set_cursor_on_cell (GtkTreeView       *tree_view,
  *
  * For converting widget coordinates (eg. the ones you get from
  * GtkWidget::query-tooltip), please see
- * gtk_tree_view_convert_widget_to_bin_surface_coords().
+ * gtk_tree_view_convert_widget_to_bin_window_coords().
  *
  * Returns: %TRUE if a row exists at that coordinate.
  **/
@@ -13081,7 +13081,7 @@ gtk_tree_view_get_background_area (GtkTreeView        *tree_view,
  *
  * Fills @visible_rect with the currently-visible region of the
  * buffer, in tree coordinates. Convert to bin_window coordinates with
- * gtk_tree_view_convert_tree_to_bin_surface_coords().
+ * gtk_tree_view_convert_tree_to_bin_window_coords().
  * Tree coordinates start at 0,0 for row 0 of the tree, and cover the entire
  * scrollable area of the tree.
  **/
@@ -13128,9 +13128,9 @@ gtk_tree_view_convert_widget_to_tree_coords (GtkTreeView *tree_view,
 
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
 
-  gtk_tree_view_convert_widget_to_bin_surface_coords (tree_view,
-						     wx, wy,
-						     &x, &y);
+  gtk_tree_view_convert_widget_to_bin_window_coords (tree_view,
+						      wx, wy,
+						      &x, &y);
   gtk_tree_view_convert_bin_window_to_tree_coords (tree_view,
 						   x, y,
 						   tx, ty);
@@ -13158,16 +13158,16 @@ gtk_tree_view_convert_tree_to_widget_coords (GtkTreeView *tree_view,
 
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
 
-  gtk_tree_view_convert_tree_to_bin_surface_coords (tree_view,
-						   tx, ty,
-						   &x, &y);
+  gtk_tree_view_convert_tree_to_bin_window_coords (tree_view,
+						    tx, ty,
+						    &x, &y);
   gtk_tree_view_convert_bin_window_to_widget_coords (tree_view,
 						     x, y,
 						     wx, wy);
 }
 
 /**
- * gtk_tree_view_convert_widget_to_bin_surface_coords:
+ * gtk_tree_view_convert_widget_to_bin_window_coords:
  * @tree_view: a #GtkTreeView
  * @wx: X coordinate relative to the widget
  * @wy: Y coordinate relative to the widget
@@ -13177,7 +13177,7 @@ gtk_tree_view_convert_tree_to_widget_coords (GtkTreeView *tree_view,
  * Converts widget coordinates to coordinates for the bin_window.
  **/
 void
-gtk_tree_view_convert_widget_to_bin_surface_coords (GtkTreeView *tree_view,
+gtk_tree_view_convert_widget_to_bin_window_coords (GtkTreeView *tree_view,
                                                    gint         wx,
                                                    gint         wy,
                                                    gint        *bx,
@@ -13217,7 +13217,7 @@ gtk_tree_view_convert_bin_window_to_widget_coords (GtkTreeView *tree_view,
 }
 
 /**
- * gtk_tree_view_convert_tree_to_bin_surface_coords:
+ * gtk_tree_view_convert_tree_to_bin_window_coords:
  * @tree_view: a #GtkTreeView
  * @tx: tree X coordinate
  * @ty: tree Y coordinate
@@ -13228,7 +13228,7 @@ gtk_tree_view_convert_bin_window_to_widget_coords (GtkTreeView *tree_view,
  * to bin_window coordinates.
  **/
 void
-gtk_tree_view_convert_tree_to_bin_surface_coords (GtkTreeView *tree_view,
+gtk_tree_view_convert_tree_to_bin_window_coords (GtkTreeView *tree_view,
                                                  gint         tx,
                                                  gint         ty,
                                                  gint        *bx,
@@ -13352,11 +13352,11 @@ gtk_tree_view_get_visible_range (GtkTreeView  *tree_view,
  *
  * The @x and @y coordinate that are provided must be relative to bin_window
  * coordinates.  Widget-relative coordinates must be converted using
- * gtk_tree_view_convert_widget_to_bin_surface_coords().
+ * gtk_tree_view_convert_widget_to_bin_window_coords().
  *
  * For converting widget coordinates (eg. the ones you get from
  * GtkWidget::query-tooltip), please see
- * gtk_tree_view_convert_widget_to_bin_surface_coords().
+ * gtk_tree_view_convert_widget_to_bin_window_coords().
  *
  * The @path, @column, @cell_x and @cell_y arguments will be filled in
  * likewise as for gtk_tree_view_get_path_at_pos().  Please see
@@ -13736,8 +13736,8 @@ gtk_tree_view_get_dest_row_at_pos (GtkTreeView             *tree_view,
    * in the bottom fourth, drop after that row; if in the middle,
    * and the row has children, drop into the row.
    */
-  gtk_tree_view_convert_widget_to_bin_surface_coords (tree_view, drag_x, drag_y,
-						     &bin_x, &bin_y);
+  gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, drag_x, drag_y,
+						      &bin_x, &bin_y);
 
   if (!gtk_tree_view_get_path_at_pos (tree_view,
 				      bin_x,
@@ -13856,9 +13856,9 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
   bin_window_width = gtk_widget_get_width (GTK_WIDGET (tree_view));
 
   surface = gdk_surface_create_similar_surface (gtk_widget_get_surface (GTK_WIDGET (tree_view)),
-                                               CAIRO_CONTENT_COLOR,
-                                               bin_window_width + 2,
-                                               background_area.height + 2);
+						CAIRO_CONTENT_COLOR,
+						bin_window_width + 2,
+						background_area.height + 2);
 
   snapshot = gtk_snapshot_new (NULL, FALSE, NULL, "TreeView DragIcon");
 
@@ -14269,13 +14269,13 @@ gtk_tree_view_search_position_func (GtkTreeView *tree_view,
   GdkDisplay *display;
   GdkMonitor *monitor;
   GdkRectangle workarea;
-  GdkSurface *tree_window = gtk_widget_get_surface (GTK_WIDGET (tree_view));
+  GdkSurface *tree_surface = gtk_widget_get_surface (GTK_WIDGET (tree_view));
   GtkRequisition requisition;
 
   gtk_widget_realize (search_window);
 
   display = gtk_widget_get_display (GTK_WIDGET (tree_view));
-  monitor = gdk_display_get_monitor_at_surface (display, tree_window);
+  monitor = gdk_display_get_monitor_at_surface (display, tree_surface);
   monitor = gdk_display_get_monitor (display, 0);
   gdk_monitor_get_workarea (monitor, &workarea);
 
@@ -15445,8 +15445,8 @@ gtk_tree_view_get_tooltip_context (GtkTreeView   *tree_view,
     }
   else
     {
-      gtk_tree_view_convert_widget_to_bin_surface_coords (tree_view, *x, *y,
-							 x, y);
+      gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, *x, *y,
+							  x, y);
 
       if (!gtk_tree_view_get_path_at_pos (tree_view, *x, *y,
 					  &tmppath, NULL, NULL, NULL))

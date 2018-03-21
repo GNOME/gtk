@@ -440,7 +440,7 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
   GtkWidget *editable;
   gboolean is_editable;
   GdkDevice *device, *pointer;
-  GdkSurface *window;
+  GdkSurface *surface;
 
   celltext = GTK_CELL_RENDERER_TEXT (cell);
   accel = GTK_CELL_RENDERER_ACCEL (cell);
@@ -451,14 +451,14 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
   if (!is_editable)
     return NULL;
 
-  window = gtk_widget_get_surface (gtk_widget_get_toplevel (widget));
+  surface = gtk_widget_get_surface (gtk_widget_get_toplevel (widget));
 
   if (event)
     device = gdk_event_get_device (event);
   else
     device = gtk_get_current_event_device ();
 
-  if (!device || !window)
+  if (!device || !surface)
     return NULL;
 
   if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
@@ -466,7 +466,7 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
   else
     pointer = device;
 
-  if (gdk_seat_grab (gdk_device_get_seat (pointer), window,
+  if (gdk_seat_grab (gdk_device_get_seat (pointer), surface,
                      GDK_SEAT_CAPABILITY_ALL, FALSE,
                      NULL, event, NULL, NULL) != GDK_GRAB_SUCCESS)
     return NULL;

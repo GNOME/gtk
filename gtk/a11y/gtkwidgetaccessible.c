@@ -562,8 +562,8 @@ gtk_widget_accessible_get_extents (AtkComponent   *component,
                                    gint           *height,
                                    AtkCoordType    coord_type)
 {
-  GdkSurface *window;
-  gint x_window, y_window;
+  GdkSurface *surface;
+  gint x_surface, y_surface;
   gint x_toplevel, y_toplevel;
   GtkWidget *widget;
   GtkAllocation allocation;
@@ -586,22 +586,22 @@ gtk_widget_accessible_get_extents (AtkComponent   *component,
     {
       *x = allocation.x;
       *y = allocation.y;
-      window = gtk_widget_get_parent_surface (widget);
+      surface = gtk_widget_get_parent_surface (widget);
     }
   else
     {
       *x = 0;
       *y = 0;
-      window = gtk_widget_get_surface (widget);
+      surface = gtk_widget_get_surface (widget);
     }
-  gdk_surface_get_origin (window, &x_window, &y_window);
-  *x += x_window;
-  *y += y_window;
+  gdk_surface_get_origin (surface, &x_surface, &y_surface);
+  *x += x_surface;
+  *y += y_surface;
 
   if (coord_type == ATK_XY_WINDOW)
     {
-      window = gdk_surface_get_toplevel (gtk_widget_get_surface (widget));
-      gdk_surface_get_origin (window, &x_toplevel, &y_toplevel);
+      surface = gdk_surface_get_toplevel (gtk_widget_get_surface (widget));
+      gdk_surface_get_origin (surface, &x_toplevel, &y_toplevel);
 
       *x -= x_toplevel;
       *y -= y_toplevel;
@@ -663,9 +663,9 @@ gtk_widget_accessible_set_extents (AtkComponent *component,
   if (coord_type == ATK_XY_WINDOW)
     {
       gint x_current, y_current;
-      GdkSurface *window = gtk_widget_get_surface (widget);
+      GdkSurface *surface = gtk_widget_get_surface (widget);
 
-      gdk_surface_get_origin (window, &x_current, &y_current);
+      gdk_surface_get_origin (surface, &x_current, &y_current);
       x_current += x;
       y_current += y;
       if (x_current < 0 || y_current < 0)
@@ -703,9 +703,9 @@ gtk_widget_accessible_set_position (AtkComponent *component,
       if (coord_type == ATK_XY_WINDOW)
         {
           gint x_current, y_current;
-          GdkSurface *window = gtk_widget_get_surface (widget);
+          GdkSurface *surface = gtk_widget_get_surface (widget);
 
-          gdk_surface_get_origin (window, &x_current, &y_current);
+          gdk_surface_get_origin (surface, &x_current, &y_current);
           x_current += x;
           y_current += y;
           if (x_current < 0 || y_current < 0)

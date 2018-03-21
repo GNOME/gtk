@@ -390,7 +390,7 @@ gtk_popover_hide_internal (GtkPopover *popover)
     {
       cairo_region_t *region = cairo_region_create ();
       gdk_surface_input_shape_combine_region (gtk_widget_get_surface (widget),
-                                             region, 0, 0);
+					      region, 0, 0);
       cairo_region_destroy (region);
     }
 }
@@ -471,7 +471,7 @@ static void
 gtk_popover_realize (GtkWidget *widget)
 {
   GtkAllocation allocation;
-  GdkSurface *window;
+  GdkSurface *surface;
 
   gtk_widget_get_surface_allocation (widget, &allocation);
 
@@ -486,21 +486,21 @@ gtk_popover_realize (GtkWidget *widget)
 
       g_assert (GTK_IS_WINDOW (toplevel));
 
-      window = gdk_wayland_surface_new_subsurface (gtk_widget_get_display (toplevel),
-                                                  &allocation);
+      surface = gdk_wayland_surface_new_subsurface (gtk_widget_get_display (toplevel),
+						    &allocation);
 
-      gdk_surface_set_transient_for (window,
-                                    gtk_widget_get_surface (toplevel));
+      gdk_surface_set_transient_for (surface,
+				     gtk_widget_get_surface (toplevel));
     }
   else
 #endif
     {
-      window = gdk_surface_new_child (gtk_widget_get_parent_surface (widget),
-                                     &allocation);
+      surface = gdk_surface_new_child (gtk_widget_get_parent_surface (widget),
+				       &allocation);
     }
 
-  gtk_widget_set_surface (widget, window);
-  gtk_widget_register_surface (widget, window);
+  gtk_widget_set_surface (widget, surface);
+  gtk_widget_register_surface (widget, surface);
   gtk_widget_set_realized (widget, TRUE);
 }
 
@@ -827,7 +827,7 @@ gtk_popover_get_gap_coords (GtkPopover      *popover,
       gtk_widget_translate_coordinates (priv->widget, GTK_WIDGET (priv->window),
                                         rect.x, rect.y, &rect.x, &rect.y);
       gdk_surface_get_origin (gtk_widget_get_surface (GTK_WIDGET (popover)),
-                             &win_x, &win_y);
+			      &win_x, &win_y);
       rect.x -= win_x;
       rect.y -= win_y;
     }
@@ -1016,9 +1016,9 @@ static void
 gtk_popover_update_shape (GtkPopover *popover)
 {
   GtkWidget *widget = GTK_WIDGET (popover);
-  cairo_surface_t *surface;
+  cairo_surface_t *cairo_surface;
   cairo_region_t *region;
-  GdkSurface *win;
+  GdkSurface *surface;
   cairo_t *cr;
 
 #ifdef GDK_WINDOWING_WAYLAND
@@ -1026,19 +1026,19 @@ gtk_popover_update_shape (GtkPopover *popover)
     return;
 #endif
 
-  win = gtk_widget_get_surface (widget);
-  surface =
-    gdk_surface_create_similar_surface (win,
+  surface = gtk_widget_get_surface (widget);
+  cairo_surface =
+    gdk_surface_create_similar_surface (surface,
                                        CAIRO_CONTENT_COLOR_ALPHA,
-                                       gdk_surface_get_width (win),
-                                       gdk_surface_get_height (win));
+                                       gdk_surface_get_width (surface),
+                                       gdk_surface_get_height (surface));
 
-  cr = cairo_create (surface);
+  cr = cairo_create (cairo_surface);
   gtk_popover_fill_border_path (popover, cr);
   cairo_destroy (cr);
 
-  region = gdk_cairo_region_create_from_surface (surface);
-  cairo_surface_destroy (surface);
+  region = gdk_cairo_region_create_from_surface (cairo_surface);
+  cairo_surface_destroy (cairo_surface);
 
   gtk_widget_input_shape_combine_region (widget, region);
   cairo_region_destroy (region);
@@ -1501,7 +1501,7 @@ gtk_popover_show (GtkWidget *widget)
 
   if (gtk_widget_get_realized (widget))
     gdk_surface_input_shape_combine_region (gtk_widget_get_surface (widget),
-                                           NULL, 0, 0);
+					    NULL, 0, 0);
 }
 
 static void

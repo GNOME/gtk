@@ -599,21 +599,21 @@ _gtk_gesture_cancel_all (GtkGesture *gesture)
 }
 
 static gboolean
-gesture_within_window (GtkGesture *gesture,
-                       GdkSurface  *parent)
+gesture_within_surface (GtkGesture *gesture,
+                        GdkSurface  *parent)
 {
-  GdkSurface *window;
+  GdkSurface *surface;
   GtkWidget *widget;
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
-  window = gtk_widget_get_surface (widget);
+  surface = gtk_widget_get_surface (widget);
 
-  while (window)
+  while (surface)
     {
-      if (window == parent)
+      if (surface == parent)
         return TRUE;
 
-      window = gdk_surface_get_parent (window);
+      surface = gdk_surface_get_parent (surface);
     }
 
   return FALSE;
@@ -743,7 +743,7 @@ gtk_gesture_handle_event (GtkEventController *controller,
       GdkSurface *surface = NULL;
 
       gdk_event_get_grab_surface (event, &surface);
-      if (!surface || !gesture_within_window (gesture, surface))
+      if (!surface || !gesture_within_surface (gesture, surface))
         _gtk_gesture_cancel_all (gesture);
 
       return FALSE;

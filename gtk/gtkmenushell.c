@@ -598,13 +598,13 @@ gtk_menu_shell_event (GtkWidget *widget,
 {
   GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget);
   GtkMenuShellPrivate *priv = menu_shell->priv;
-  GdkSurface *window;
+  GdkSurface *surface;
 
   if (gdk_event_get_event_type (event) == GDK_GRAB_BROKEN)
     {
-      gdk_event_get_grab_surface (event, &window);
+      gdk_event_get_grab_surface (event, &surface);
 
-      if (priv->have_xgrab && window == NULL)
+      if (priv->have_xgrab && surface == NULL)
         {
           /* Unset the active menu item so gtk_menu_popdown() doesn't see it. */
           gtk_menu_shell_deselect (menu_shell);
