@@ -112,7 +112,7 @@ void        gdk_x11_display_ungrab            (GdkDisplay *display);
 
 GDK_AVAILABLE_IN_ALL
 void        gdk_x11_display_set_surface_scale (GdkDisplay *display,
-                                              gint scale);
+                                               gint scale);
 
 GDK_AVAILABLE_IN_ALL
 void                           gdk_x11_display_error_trap_push        (GdkDisplay *display);

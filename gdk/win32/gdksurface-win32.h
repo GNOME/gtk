@@ -360,9 +360,9 @@ struct _GdkSurfaceImplWin32Class
 GType _gdk_surface_impl_win32_get_type (void);
 
 void  _gdk_win32_surface_tmp_unset_bg  (GdkSurface *window,
-				       gboolean   recurse);
+                                        gboolean   recurse);
 void  _gdk_win32_surface_tmp_reset_bg  (GdkSurface *window,
-				       gboolean   recurse);
+                                        gboolean   recurse);
 
 void  _gdk_win32_surface_tmp_unset_parent_bg (GdkSurface *window);
 void  _gdk_win32_surface_tmp_reset_parent_bg (GdkSurface *window);

@@ -103,7 +103,7 @@ void     _gdk_x11_keymap_add_virt_mods   (GdkKeymap       *keymap,
 void _gdk_x11_surfaceing_init    (void);
 
 void _gdk_x11_surface_grab_check_unmap   (GdkSurface *window,
-                                         gulong     serial);
+                                          gulong     serial);
 void _gdk_x11_surface_grab_check_destroy (GdkSurface *window);
 
 gboolean _gdk_x11_display_is_root_window (GdkDisplay *display,
@@ -183,11 +183,11 @@ void       _gdk_x11_display_get_maximal_cursor_size (GdkDisplay *display,
                                                      guint      *width,
                                                      guint      *height);
 void       _gdk_x11_display_create_surface_impl     (GdkDisplay    *display,
-                                                    GdkSurface     *window,
-                                                    GdkSurface     *real_parent,
-                                                    GdkEventMask   event_mask,
-                                                    GdkSurfaceAttr *attributes);
-GList *    gdk_x11_display_get_toplevel_windows    (GdkDisplay *display);
+                                                     GdkSurface     *window,
+                                                     GdkSurface     *real_parent,
+                                                     GdkEventMask   event_mask,
+                                                     GdkSurfaceAttr *attributes);
+GList *    gdk_x11_display_get_toplevel_windows     (GdkDisplay *display);
 
 void _gdk_x11_precache_atoms (GdkDisplay          *display,
                               const gchar * const *atom_names,
@@ -204,8 +204,8 @@ _gdk_x11_dnd_filter (const XEvent *xevent,
 
 GdkFilterReturn
 xdnd_source_surface_filter (const XEvent *xevent,
-                           GdkEvent     *event,
-                           gpointer      data);
+                            GdkEvent     *event,
+                            gpointer      data);
 
 typedef struct _GdkSurfaceCache GdkSurfaceCache;
 
@@ -214,30 +214,30 @@ gdk_surface_cache_get (GdkDisplay *display);
 
 GdkFilterReturn
 gdk_surface_cache_filter (const XEvent *xevent,
-                         GdkEvent     *event,
-                         gpointer      data);
+                          GdkEvent     *event,
+                          gpointer      data);
 GdkFilterReturn
 gdk_surface_cache_shape_filter (const XEvent *xevent,
-                               GdkEvent     *event,
-                               gpointer      data);
+                                GdkEvent     *event,
+                                gpointer      data);
 
 void _gdk_x11_cursor_display_finalize (GdkDisplay *display);
 
 void _gdk_x11_surface_register_dnd (GdkSurface *window);
 
 GdkDragContext * _gdk_x11_surface_drag_begin (GdkSurface          *window,
-                                             GdkDevice          *device,
-                                             GdkContentProvider *content,
-                                             GdkDragAction       actions,
-                                             gint                dx,
-                                             gint                dy);
+                                              GdkDevice          *device,
+                                              GdkContentProvider *content,
+                                              GdkDragAction       actions,
+                                              gint                dx,
+                                              gint                dy);
 
 GdkGrabStatus _gdk_x11_convert_grab_status (gint status);
 
 cairo_surface_t * _gdk_x11_display_create_bitmap_surface (GdkDisplay *display,
                                                           int         width,
                                                           int         height);
- 
+
 extern const gint        _gdk_x11_event_mask_table[];
 extern const gint        _gdk_x11_event_mask_table_size;
 

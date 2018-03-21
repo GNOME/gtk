@@ -20,7 +20,7 @@ void            gdk_surface_thaw_toplevel_updates        (GdkSurface *surface);
 
 gboolean        gdk_surface_supports_edge_constraints    (GdkSurface *surface);
 
-void            gdk_surface_move_to_rect         (GdkSurface          *surface,
+void            gdk_surface_move_to_rect        (GdkSurface          *surface,
                                                  const GdkRectangle *rect,
                                                  GdkGravity          rect_anchor,
                                                  GdkGravity          surface_anchor,

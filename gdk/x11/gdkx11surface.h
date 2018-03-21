@@ -57,14 +57,14 @@ GDK_AVAILABLE_IN_ALL
 Window   gdk_x11_surface_get_xid           (GdkSurface   *surface);
 GDK_AVAILABLE_IN_ALL
 void     gdk_x11_surface_set_user_time     (GdkSurface   *surface,
-                                           guint32      timestamp);
+                                            guint32      timestamp);
 GDK_AVAILABLE_IN_ALL
-void     gdk_x11_surface_set_utf8_property    (GdkSurface *surface,
-					      const gchar *name,
-					      const gchar *value);
+void     gdk_x11_surface_set_utf8_property (GdkSurface *surface,
+                                            const gchar *name,
+                                            const gchar *value);
 GDK_AVAILABLE_IN_ALL
 void     gdk_x11_surface_set_theme_variant (GdkSurface   *surface,
-                                           const char  *variant);
+                                            const char  *variant);
 GDK_AVAILABLE_IN_ALL
 void     gdk_x11_surface_move_to_current_desktop (GdkSurface   *surface);
 
@@ -72,11 +72,11 @@ GDK_AVAILABLE_IN_ALL
 guint32  gdk_x11_surface_get_desktop             (GdkSurface   *surface);
 GDK_AVAILABLE_IN_ALL
 void     gdk_x11_surface_move_to_desktop         (GdkSurface   *surface,
-                                                 guint32      desktop);
+                                                  guint32      desktop);
 
 GDK_AVAILABLE_IN_ALL
 void     gdk_x11_surface_set_frame_sync_enabled (GdkSurface *surface,
-                                                gboolean   frame_sync_enabled);
+                                                 gboolean   frame_sync_enabled);
 
 /**
  * GDK_SURFACE_XDISPLAY:
@@ -103,10 +103,10 @@ guint32       gdk_x11_get_server_time  (GdkSurface       *surface);
 
 GDK_AVAILABLE_IN_ALL
 GdkSurface  *gdk_x11_surface_foreign_new_for_display (GdkDisplay *display,
-                                                    Window      window);
+                                                      Window      window);
 GDK_AVAILABLE_IN_ALL
 GdkSurface  *gdk_x11_surface_lookup_for_display      (GdkDisplay *display,
-                                                    Window      window);
+                                                      Window      window);
 
 G_END_DECLS
 

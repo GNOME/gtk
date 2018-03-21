@@ -82,7 +82,7 @@ struct _GdkDeviceClass
                               gdouble         *axes,
                               GdkModifierType *mask);
 
-  void (* set_surface_cursor) (GdkDevice *device,
+  void (* set_surface_cursor)(GdkDevice *device,
                               GdkSurface *surface,
                               GdkCursor *cursor);
 
@@ -108,13 +108,13 @@ struct _GdkDeviceClass
                               guint32           time_);
 
   GdkSurface * (* surface_at_position) (GdkDevice       *device,
-                                      double          *win_x,
-                                      double          *win_y,
-                                      GdkModifierType *mask,
-                                      gboolean         get_toplevel);
-  void (* select_surface_events)      (GdkDevice       *device,
-                                      GdkSurface       *surface,
-                                      GdkEventMask     event_mask);
+                                        double          *win_x,
+                                        double          *win_y,
+                                        GdkModifierType *mask,
+                                        gboolean         get_toplevel);
+  void (* select_surface_events)       (GdkDevice       *device,
+                                        GdkSurface       *surface,
+                                        GdkEventMask     event_mask);
 };
 
 void  _gdk_device_set_associated_device (GdkDevice *device,
@@ -139,10 +139,10 @@ void _gdk_device_set_keys    (GdkDevice   *device,
                               guint        num_keys);
 
 gboolean   _gdk_device_translate_surface_coord (GdkDevice *device,
-                                               GdkSurface *surface,
-                                               guint      index,
-                                               gdouble    value,
-                                               gdouble   *axis_value);
+                                                GdkSurface *surface,
+                                                guint      index,
+                                                gdouble    value,
+                                                gdouble   *axis_value);
 
 gboolean   _gdk_device_translate_screen_coord (GdkDevice *device,
                                                GdkSurface *surface,
@@ -174,7 +174,7 @@ void _gdk_device_query_state                  (GdkDevice        *device,
                                                gdouble          *win_x,
                                                gdouble          *win_y,
                                                GdkModifierType  *mask);
-GdkSurface * _gdk_device_surface_at_position    (GdkDevice        *device,
+GdkSurface * _gdk_device_surface_at_position  (GdkDevice        *device,
                                                gdouble          *win_x,
                                                gdouble          *win_y,
                                                GdkModifierType  *mask,

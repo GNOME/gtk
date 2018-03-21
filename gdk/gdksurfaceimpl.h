@@ -58,14 +58,14 @@ struct _GdkSurfaceImplClass
                                                  int             height);
 
   void         (* show)                 (GdkSurface       *surface,
-					 gboolean         already_mapped);
+                                         gboolean         already_mapped);
   void         (* hide)                 (GdkSurface       *surface);
   void         (* withdraw)             (GdkSurface       *surface);
   void         (* raise)                (GdkSurface       *surface);
   void         (* lower)                (GdkSurface       *surface);
   void         (* restack_toplevel)     (GdkSurface       *surface,
-					 GdkSurface       *sibling,
-					 gboolean        above);
+                                         GdkSurface       *sibling,
+                                         gboolean        above);
 
   void         (* move_resize)          (GdkSurface       *surface,
                                          gboolean         with_move,
@@ -91,8 +91,8 @@ struct _GdkSurfaceImplClass
                                          gint            *width,
                                          gint            *height);
   void         (* get_root_coords)      (GdkSurface       *surface,
-					 gint             x,
-					 gint             y,
+                                         gint             x,
+                                         gint             y,
                                          gint            *root_x,
                                          gint            *root_y);
   gboolean     (* get_device_state)     (GdkSurface       *surface,
@@ -108,9 +108,9 @@ struct _GdkSurfaceImplClass
                                          gint             offset_x,
                                          gint             offset_y);
   void         (* input_shape_combine_region) (GdkSurface       *surface,
-					       const cairo_region_t *shape_region,
-					       gint             offset_x,
-					       gint             offset_y);
+                                               const cairo_region_t *shape_region,
+                                               gint             offset_x,
+                                               gint             offset_y);
 
 /* Called to do the windowing system specific part of gdk_surface_destroy(),
  *
@@ -126,47 +126,47 @@ struct _GdkSurfaceImplClass
  *     for some windowing systems.)
  */
   void         (* destroy)              (GdkSurface       *surface,
-					 gboolean         recursing,
-					 gboolean         foreign_destroy);
+                                         gboolean         recursing,
+                                         gboolean         foreign_destroy);
 
 
   /* optional */
   gboolean     (* beep)                 (GdkSurface       *surface);
 
   void         (* focus)                (GdkSurface       *surface,
-					 guint32          timestamp);
+                                         guint32          timestamp);
   void         (* set_type_hint)        (GdkSurface       *surface,
-					 GdkSurfaceTypeHint hint);
+                                         GdkSurfaceTypeHint hint);
   GdkSurfaceTypeHint (* get_type_hint)   (GdkSurface       *surface);
   void         (* set_modal_hint)       (GdkSurface *surface,
-					 gboolean   modal);
+                                         gboolean   modal);
   void         (* set_skip_taskbar_hint) (GdkSurface *surface,
-					  gboolean   skips_taskbar);
+                                          gboolean   skips_taskbar);
   void         (* set_skip_pager_hint)  (GdkSurface *surface,
-					 gboolean   skips_pager);
+                                         gboolean   skips_pager);
   void         (* set_urgency_hint)     (GdkSurface *surface,
-					 gboolean   urgent);
+                                         gboolean   urgent);
   void         (* set_geometry_hints)   (GdkSurface         *surface,
-					 const GdkGeometry *geometry,
-					 GdkSurfaceHints     geom_mask);
+                                         const GdkGeometry *geometry,
+                                         GdkSurfaceHints     geom_mask);
   void         (* set_title)            (GdkSurface   *surface,
-					 const gchar *title);
+                                         const gchar *title);
   void         (* set_role)             (GdkSurface   *surface,
-					 const gchar *role);
+                                         const gchar *role);
   void         (* set_startup_id)       (GdkSurface   *surface,
-					 const gchar *startup_id);
+                                         const gchar *startup_id);
   void         (* set_transient_for)    (GdkSurface *surface,
-					 GdkSurface *parent);
+                                         GdkSurface *parent);
   void         (* get_frame_extents)    (GdkSurface    *surface,
-					 GdkRectangle *rect);
+                                         GdkRectangle *rect);
   void         (* set_accept_focus)     (GdkSurface *surface,
-					 gboolean accept_focus);
+                                         gboolean accept_focus);
   void         (* set_focus_on_map)     (GdkSurface *surface,
-					 gboolean focus_on_map);
+                                         gboolean focus_on_map);
   void         (* set_icon_list)        (GdkSurface *surface,
-					 GList     *pixbufs);
+                                         GList     *pixbufs);
   void         (* set_icon_name)        (GdkSurface   *surface,
-					 const gchar *name);
+                                         const gchar *name);
   void         (* iconify)              (GdkSurface *surface);
   void         (* deiconify)            (GdkSurface *surface);
   void         (* stick)                (GdkSurface *surface);
@@ -179,18 +179,18 @@ struct _GdkSurfaceImplClass
   void         (* apply_fullscreen_mode) (GdkSurface *surface);
   void         (* unfullscreen)         (GdkSurface *surface);
   void         (* set_keep_above)       (GdkSurface *surface,
-					 gboolean   setting);
+                                         gboolean   setting);
   void         (* set_keep_below)       (GdkSurface *surface,
-					 gboolean   setting);
+                                         gboolean   setting);
   GdkSurface *  (* get_group)            (GdkSurface *surface);
   void         (* set_group)            (GdkSurface *surface,
-					 GdkSurface *leader);
+                                         GdkSurface *leader);
   void         (* set_decorations)      (GdkSurface      *surface,
-					 GdkWMDecoration decorations);
+                                         GdkWMDecoration decorations);
   gboolean     (* get_decorations)      (GdkSurface       *surface,
-					 GdkWMDecoration *decorations);
+                                         GdkWMDecoration *decorations);
   void         (* set_functions)        (GdkSurface    *surface,
-					 GdkWMFunction functions);
+                                         GdkWMFunction functions);
   void         (* begin_resize_drag)    (GdkSurface     *surface,
                                          GdkSurfaceEdge  edge,
                                          GdkDevice     *device,
@@ -207,7 +207,7 @@ struct _GdkSurfaceImplClass
   void         (* enable_synchronized_configure) (GdkSurface *surface);
   void         (* configure_finished)   (GdkSurface *surface);
   void         (* set_opacity)          (GdkSurface *surface,
-					 gdouble    opacity);
+                                         gdouble    opacity);
   void         (* destroy_notify)       (GdkSurface *surface);
   void         (* register_dnd)         (GdkSurface *surface);
   GdkDragContext * (*drag_begin)        (GdkSurface        *surface,
@@ -235,7 +235,7 @@ struct _GdkSurfaceImplClass
   gboolean     (* show_window_menu)       (GdkSurface      *surface,
                                            GdkEvent       *event);
   GdkGLContext *(*create_gl_context)      (GdkSurface      *surface,
-					   gboolean        attached,
+                                           gboolean        attached,
                                            GdkGLContext   *share,
                                            GError        **error);
   gboolean     (* supports_edge_constraints)(GdkSurface    *surface);

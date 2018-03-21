@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
@@ -41,17 +41,17 @@ G_BEGIN_DECLS
 /* Macro for casting a pointer to a GtkWidget or GtkWidgetClass pointer.
  * Macros for testing whether widget or klass are of type GTK_TYPE_WIDGET.
  */
-#define GTK_TYPE_WIDGET			  (gtk_widget_get_type ())
-#define GTK_WIDGET(widget)		  (G_TYPE_CHECK_INSTANCE_CAST ((widget), GTK_TYPE_WIDGET, GtkWidget))
-#define GTK_WIDGET_CLASS(klass)		  (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_WIDGET, GtkWidgetClass))
-#define GTK_IS_WIDGET(widget)		  (G_TYPE_CHECK_INSTANCE_TYPE ((widget), GTK_TYPE_WIDGET))
-#define GTK_IS_WIDGET_CLASS(klass)	  (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_WIDGET))
+#define GTK_TYPE_WIDGET                   (gtk_widget_get_type ())
+#define GTK_WIDGET(widget)                (G_TYPE_CHECK_INSTANCE_CAST ((widget), GTK_TYPE_WIDGET, GtkWidget))
+#define GTK_WIDGET_CLASS(klass)           (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_WIDGET, GtkWidgetClass))
+#define GTK_IS_WIDGET(widget)             (G_TYPE_CHECK_INSTANCE_TYPE ((widget), GTK_TYPE_WIDGET))
+#define GTK_IS_WIDGET_CLASS(klass)        (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_WIDGET))
 #define GTK_WIDGET_GET_CLASS(obj)         (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_WIDGET, GtkWidgetClass))
 
 #define GTK_TYPE_REQUISITION              (gtk_requisition_get_type ())
 
 typedef struct _GtkWidgetPrivate       GtkWidgetPrivate;
-typedef struct _GtkWidgetClass	       GtkWidgetClass;
+typedef struct _GtkWidgetClass         GtkWidgetClass;
 typedef struct _GtkWidgetClassPrivate  GtkWidgetClassPrivate;
 
 /**
@@ -67,7 +67,7 @@ typedef struct _GtkWidgetClassPrivate  GtkWidgetClassPrivate;
  * [GtkWidget’s geometry management section][geometry-management] for
  * more information.
  */
-typedef 	GdkRectangle	   GtkAllocation;
+typedef         GdkRectangle       GtkAllocation;
 
 /**
  * GtkCallback:
@@ -78,7 +78,7 @@ typedef 	GdkRectangle	   GtkAllocation;
  * the children of a container, see gtk_container_foreach().
  */
 typedef void    (*GtkCallback)     (GtkWidget        *widget,
-				    gpointer          data);
+                                    gpointer          data);
 
 /**
  * GtkTickCallback:
@@ -244,32 +244,32 @@ struct _GtkWidgetClass
 
   /* seldomly overidden */
   void (*dispatch_child_properties_changed) (GtkWidget   *widget,
-					     guint        n_pspecs,
-					     GParamSpec **pspecs);
+                                             guint        n_pspecs,
+                                             GParamSpec **pspecs);
 
   /* basics */
   void (* destroy)             (GtkWidget        *widget);
-  void (* show)		       (GtkWidget        *widget);
-  void (* hide)		       (GtkWidget        *widget);
-  void (* map)		       (GtkWidget        *widget);
-  void (* unmap)	       (GtkWidget        *widget);
-  void (* realize)	       (GtkWidget        *widget);
-  void (* unrealize)	       (GtkWidget        *widget);
+  void (* show)                (GtkWidget        *widget);
+  void (* hide)                (GtkWidget        *widget);
+  void (* map)                 (GtkWidget        *widget);
+  void (* unmap)               (GtkWidget        *widget);
+  void (* realize)             (GtkWidget        *widget);
+  void (* unrealize)           (GtkWidget        *widget);
   void (* size_allocate)       (GtkWidget           *widget,
                                 const GtkAllocation *allocation,
                                 int                  baseline,
                                 GtkAllocation       *out_clip);
   void (* state_flags_changed) (GtkWidget        *widget,
-				GtkStateFlags  	  previous_state_flags);
+                                GtkStateFlags     previous_state_flags);
   void (* hierarchy_changed)   (GtkWidget        *widget,
-				GtkWidget        *previous_toplevel);
+                                GtkWidget        *previous_toplevel);
   void (* direction_changed)   (GtkWidget        *widget,
-				GtkTextDirection  previous_direction);
+                                GtkTextDirection  previous_direction);
   void (* grab_notify)         (GtkWidget        *widget,
-				gboolean          was_grabbed);
-  void (* child_notify)        (GtkWidget	 *widget,
-				GParamSpec       *child_property);
-  gboolean (* draw)	       (GtkWidget	 *widget,
+                                gboolean          was_grabbed);
+  void (* child_notify)        (GtkWidget        *widget,
+                                GParamSpec       *child_property);
+  gboolean (* draw)            (GtkWidget        *widget,
                                 cairo_t          *cr);
 
   /* size requests */
@@ -298,43 +298,43 @@ struct _GtkWidgetClass
                                          GtkDirectionType     direction);
 
   /* events */
-  gboolean (* event)			(GtkWidget	     *widget,
-					 GdkEvent	     *event);
-  gboolean (* key_press_event)		(GtkWidget	     *widget,
-					 GdkEventKey	     *event);
-  gboolean (* key_release_event)	(GtkWidget	     *widget,
-					 GdkEventKey	     *event);
+  gboolean (* event)                    (GtkWidget           *widget,
+                                         GdkEvent            *event);
+  gboolean (* key_press_event)          (GtkWidget           *widget,
+                                         GdkEventKey         *event);
+  gboolean (* key_release_event)        (GtkWidget           *widget,
+                                         GdkEventKey         *event);
 
   /* Source side drag signals */
   void     (* drag_begin)          (GtkWidget         *widget,
-				    GdkDragContext     *context);
-  void     (* drag_end)	           (GtkWidget	       *widget,
-				    GdkDragContext     *context);
+                                    GdkDragContext     *context);
+  void     (* drag_end)            (GtkWidget          *widget,
+                                    GdkDragContext     *context);
   void     (* drag_data_get)       (GtkWidget          *widget,
-				    GdkDragContext     *context,
-				    GtkSelectionData   *selection_data,
-				    guint               time_);
+                                    GdkDragContext     *context,
+                                    GtkSelectionData   *selection_data,
+                                    guint               time_);
   void     (* drag_data_delete)    (GtkWidget          *widget,
-				    GdkDragContext     *context);
+                                    GdkDragContext     *context);
 
   /* Target side drag signals */
   void     (* drag_leave)          (GtkWidget          *widget,
-				    GdkDragContext     *context,
-				    guint               time_);
-  gboolean (* drag_motion)         (GtkWidget	       *widget,
-				    GdkDragContext     *context,
-				    gint                x,
-				    gint                y,
-				    guint               time_);
-  gboolean (* drag_drop)           (GtkWidget	       *widget,
-				    GdkDragContext     *context,
-				    gint                x,
-				    gint                y,
-				    guint               time_);
+                                    GdkDragContext     *context,
+                                    guint               time_);
+  gboolean (* drag_motion)         (GtkWidget          *widget,
+                                    GdkDragContext     *context,
+                                    gint                x,
+                                    gint                y,
+                                    guint               time_);
+  gboolean (* drag_drop)           (GtkWidget          *widget,
+                                    GdkDragContext     *context,
+                                    gint                x,
+                                    gint                y,
+                                    guint               time_);
   void     (* drag_data_received)  (GtkWidget          *widget,
-				    GdkDragContext     *context,
-				    GtkSelectionData   *selection_data,
-				    guint               time_);
+                                    GdkDragContext     *context,
+                                    GtkSelectionData   *selection_data,
+                                    guint               time_);
   gboolean (* drag_failed)         (GtkWidget          *widget,
                                     GdkDragContext     *context,
                                     GtkDragResult       result);
@@ -353,10 +353,10 @@ struct _GtkWidgetClass
 
 
   gboolean     (* query_tooltip)      (GtkWidget  *widget,
-				       gint        x,
-				       gint        y,
-				       gboolean    keyboard_tooltip,
-				       GtkTooltip *tooltip);
+                                       gint        x,
+                                       gint        y,
+                                       gboolean    keyboard_tooltip,
+                                       GtkTooltip *tooltip);
 
   void         (* compute_expand)     (GtkWidget  *widget,
                                        gboolean   *hexpand_p,
@@ -384,57 +384,57 @@ struct _GtkWidgetClass
 
 
 GDK_AVAILABLE_IN_ALL
-GType	   gtk_widget_get_type		  (void) G_GNUC_CONST;
+GType      gtk_widget_get_type            (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-GtkWidget* gtk_widget_new		  (GType		type,
-					   const gchar	       *first_property_name,
-					   ...);
+GtkWidget* gtk_widget_new                 (GType                type,
+                                           const gchar         *first_property_name,
+                                           ...);
 GDK_AVAILABLE_IN_ALL
-void	   gtk_widget_destroy		  (GtkWidget	       *widget);
+void       gtk_widget_destroy             (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
-void	   gtk_widget_destroyed		  (GtkWidget	       *widget,
-					   GtkWidget	      **widget_pointer);
+void       gtk_widget_destroyed           (GtkWidget           *widget,
+                                           GtkWidget          **widget_pointer);
 GDK_AVAILABLE_IN_ALL
-void	   gtk_widget_unparent		  (GtkWidget	       *widget);
+void       gtk_widget_unparent            (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_show                (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_hide                (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
-void	   gtk_widget_map		  (GtkWidget	       *widget);
+void       gtk_widget_map                 (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
-void	   gtk_widget_unmap		  (GtkWidget	       *widget);
+void       gtk_widget_unmap               (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
-void	   gtk_widget_realize		  (GtkWidget	       *widget);
+void       gtk_widget_realize             (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
-void	   gtk_widget_unrealize		  (GtkWidget	       *widget);
+void       gtk_widget_unrealize           (GtkWidget           *widget);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_draw                (GtkWidget           *widget,
                                            cairo_t             *cr);
 /* Queuing draws */
 GDK_AVAILABLE_IN_ALL
-void	   gtk_widget_queue_draw	  (GtkWidget	       *widget);
+void       gtk_widget_queue_draw          (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
-void	   gtk_widget_queue_draw_area	  (GtkWidget	       *widget,
-					   gint                 x,
-					   gint                 y,
-					   gint                 width,
-					   gint                 height);
+void       gtk_widget_queue_draw_area     (GtkWidget           *widget,
+                                           gint                 x,
+                                           gint                 y,
+                                           gint                 width,
+                                           gint                 height);
 GDK_AVAILABLE_IN_ALL
-void	   gtk_widget_queue_draw_region   (GtkWidget	       *widget,
+void       gtk_widget_queue_draw_region   (GtkWidget           *widget,
                                            const cairo_region_t*region);
 GDK_AVAILABLE_IN_ALL
-void	   gtk_widget_queue_resize	  (GtkWidget	       *widget);
+void       gtk_widget_queue_resize        (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
-void	   gtk_widget_queue_resize_no_redraw (GtkWidget *widget);
+void       gtk_widget_queue_resize_no_redraw (GtkWidget *widget);
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_queue_allocate      (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
 GdkFrameClock* gtk_widget_get_frame_clock (GtkWidget           *widget);
 
 GDK_AVAILABLE_IN_ALL
-void	   gtk_widget_size_allocate	  (GtkWidget           *widget,
+void       gtk_widget_size_allocate       (GtkWidget           *widget,
                                            const GtkAllocation *allocation,
                                            int                  baseline,
                                            GtkAllocation       *out_clip);
@@ -455,51 +455,51 @@ void                gtk_widget_get_preferred_size             (GtkWidget      *w
                                                                GtkRequisition *natural_size);
 
 GDK_AVAILABLE_IN_ALL
-void	   gtk_widget_add_accelerator	  (GtkWidget           *widget,
-					   const gchar         *accel_signal,
-					   GtkAccelGroup       *accel_group,
-					   guint                accel_key,
-					   GdkModifierType      accel_mods,
-					   GtkAccelFlags        accel_flags);
+void       gtk_widget_add_accelerator     (GtkWidget           *widget,
+                                           const gchar         *accel_signal,
+                                           GtkAccelGroup       *accel_group,
+                                           guint                accel_key,
+                                           GdkModifierType      accel_mods,
+                                           GtkAccelFlags        accel_flags);
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_remove_accelerator  (GtkWidget           *widget,
-					   GtkAccelGroup       *accel_group,
-					   guint                accel_key,
-					   GdkModifierType      accel_mods);
+                                           GtkAccelGroup       *accel_group,
+                                           guint                accel_key,
+                                           GdkModifierType      accel_mods);
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_set_accel_path      (GtkWidget           *widget,
-					   const gchar         *accel_path,
-					   GtkAccelGroup       *accel_group);
+                                           const gchar         *accel_path,
+                                           GtkAccelGroup       *accel_group);
 GDK_AVAILABLE_IN_ALL
-GList*     gtk_widget_list_accel_closures (GtkWidget	       *widget);
+GList*     gtk_widget_list_accel_closures (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_can_activate_accel  (GtkWidget           *widget,
                                            guint                signal_id);
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_mnemonic_activate   (GtkWidget           *widget,
-					   gboolean             group_cycling);
+                                           gboolean             group_cycling);
 GDK_AVAILABLE_IN_ALL
-gboolean   gtk_widget_event		  (GtkWidget	       *widget,
+gboolean   gtk_widget_event               (GtkWidget           *widget,
                                            const GdkEvent      *event);
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_send_focus_change   (GtkWidget           *widget,
                                            GdkEvent            *event);
 
 GDK_AVAILABLE_IN_ALL
-gboolean   gtk_widget_activate		     (GtkWidget	       *widget);
+gboolean   gtk_widget_activate               (GtkWidget        *widget);
 
 GDK_AVAILABLE_IN_ALL
-gboolean   gtk_widget_intersect		  (GtkWidget	       *widget,
-					   const GdkRectangle  *area,
-					   GdkRectangle	       *intersection);
+gboolean   gtk_widget_intersect           (GtkWidget           *widget,
+                                           const GdkRectangle  *area,
+                                           GdkRectangle        *intersection);
 
 GDK_AVAILABLE_IN_ALL
-void	gtk_widget_freeze_child_notify	  (GtkWidget	       *widget);
+void    gtk_widget_freeze_child_notify    (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
-void	gtk_widget_child_notify		  (GtkWidget	       *widget,
-					   const gchar	       *child_property);
+void    gtk_widget_child_notify           (GtkWidget           *widget,
+                                           const gchar         *child_property);
 GDK_AVAILABLE_IN_ALL
-void	gtk_widget_thaw_child_notify	  (GtkWidget	       *widget);
+void    gtk_widget_thaw_child_notify      (GtkWidget           *widget);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_set_can_focus       (GtkWidget           *widget,
@@ -546,7 +546,7 @@ gboolean   gtk_widget_device_is_shadowed  (GtkWidget           *widget,
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_set_name               (GtkWidget    *widget,
-							 const gchar  *name);
+                                                         const gchar  *name);
 GDK_AVAILABLE_IN_ALL
 const gchar *         gtk_widget_get_name               (GtkWidget    *widget);
 
@@ -563,7 +563,7 @@ GtkStateFlags         gtk_widget_get_state_flags        (GtkWidget     *widget);
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_set_sensitive          (GtkWidget    *widget,
-							 gboolean      sensitive);
+                                                         gboolean      sensitive);
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_widget_get_sensitive          (GtkWidget    *widget);
 GDK_AVAILABLE_IN_ALL
@@ -578,10 +578,10 @@ GDK_AVAILABLE_IN_ALL
 gboolean              gtk_widget_is_visible             (GtkWidget    *widget);
 
 GDK_AVAILABLE_IN_ALL
-void                  gtk_widget_set_has_surface         (GtkWidget    *widget,
+void                  gtk_widget_set_has_surface        (GtkWidget    *widget,
                                                          gboolean      has_surface);
 GDK_AVAILABLE_IN_ALL
-gboolean              gtk_widget_get_has_surface         (GtkWidget    *widget);
+gboolean              gtk_widget_get_has_surface        (GtkWidget    *widget);
 
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_widget_is_toplevel            (GtkWidget    *widget);
@@ -597,32 +597,32 @@ gboolean              gtk_widget_get_mapped             (GtkWidget    *widget);
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_set_parent             (GtkWidget    *widget,
-							 GtkWidget    *parent);
+                                                         GtkWidget    *parent);
 GDK_AVAILABLE_IN_ALL
 GtkWidget           * gtk_widget_get_parent             (GtkWidget    *widget);
 
 GDK_AVAILABLE_IN_ALL
-void                  gtk_widget_set_parent_surface      (GtkWidget    *widget,
-							 GdkSurface    *parent_surface);
+void                  gtk_widget_set_parent_surface     (GtkWidget    *widget,
+                                                         GdkSurface    *parent_surface);
 GDK_AVAILABLE_IN_ALL
-GdkSurface           * gtk_widget_get_parent_surface      (GtkWidget    *widget);
+GdkSurface           * gtk_widget_get_parent_surface    (GtkWidget    *widget);
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_set_child_visible      (GtkWidget    *widget,
-							 gboolean      is_visible);
+                                                         gboolean      is_visible);
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_widget_get_child_visible      (GtkWidget    *widget);
 
 GDK_AVAILABLE_IN_ALL
-void                  gtk_widget_set_surface             (GtkWidget    *widget,
+void                  gtk_widget_set_surface            (GtkWidget    *widget,
                                                          GdkSurface    *surface);
 GDK_AVAILABLE_IN_ALL
-GdkSurface           * gtk_widget_get_surface             (GtkWidget    *widget);
+GdkSurface           * gtk_widget_get_surface           (GtkWidget    *widget);
 GDK_AVAILABLE_IN_ALL
-void                  gtk_widget_register_surface        (GtkWidget    *widget,
+void                  gtk_widget_register_surface       (GtkWidget    *widget,
                                                          GdkSurface    *surface);
 GDK_AVAILABLE_IN_ALL
-void                  gtk_widget_unregister_surface      (GtkWidget    *widget,
+void                  gtk_widget_unregister_surface     (GtkWidget    *widget,
                                                          GdkSurface    *surface);
 
 GDK_AVAILABLE_IN_ALL
@@ -666,16 +666,16 @@ void       gtk_widget_get_size_request    (GtkWidget           *widget,
                                            gint                *width,
                                            gint                *height);
 GDK_AVAILABLE_IN_ALL
-void	   gtk_widget_set_opacity	  (GtkWidget	       *widget,
-					   double		opacity);
+void       gtk_widget_set_opacity         (GtkWidget           *widget,
+                                           double               opacity);
 GDK_AVAILABLE_IN_ALL
-double	   gtk_widget_get_opacity	  (GtkWidget	       *widget);
+double     gtk_widget_get_opacity         (GtkWidget           *widget);
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget*   gtk_widget_get_toplevel	(GtkWidget	*widget);
+GtkWidget*   gtk_widget_get_toplevel    (GtkWidget      *widget);
 GDK_AVAILABLE_IN_ALL
-GtkWidget*   gtk_widget_get_ancestor	(GtkWidget	*widget,
-					 GType		 widget_type);
+GtkWidget*   gtk_widget_get_ancestor    (GtkWidget      *widget,
+                                         GType           widget_type);
 
 GDK_AVAILABLE_IN_ALL
 gint          gtk_widget_get_scale_factor (GtkWidget *widget);
@@ -768,16 +768,16 @@ void     gtk_widget_set_margin_bottom (GtkWidget *widget,
                                        gint       margin);
 
 GDK_AVAILABLE_IN_ALL
-gboolean     gtk_widget_is_ancestor	(GtkWidget	*widget,
-					 GtkWidget	*ancestor);
+gboolean     gtk_widget_is_ancestor     (GtkWidget      *widget,
+                                         GtkWidget      *ancestor);
 
 GDK_AVAILABLE_IN_ALL
 gboolean     gtk_widget_translate_coordinates (GtkWidget  *src_widget,
-					       GtkWidget  *dest_widget,
-					       gint        src_x,
-					       gint        src_y,
-					       gint       *dest_x,
-					       gint       *dest_y);
+                                               GtkWidget  *dest_widget,
+                                               gint        src_x,
+                                               gint        src_y,
+                                               gint       *dest_x,
+                                               gint       *dest_y);
 
 GDK_AVAILABLE_IN_ALL
 gboolean     gtk_widget_contains              (GtkWidget  *widget,
@@ -802,13 +802,13 @@ GDK_AVAILABLE_IN_ALL
 const cairo_font_options_t *gtk_widget_get_font_options (GtkWidget *widget);
 GDK_AVAILABLE_IN_ALL
 PangoLayout  *gtk_widget_create_pango_layout  (GtkWidget   *widget,
-					       const gchar *text);
+                                               const gchar *text);
 
 /* Functions for setting directionality for widgets */
 
 GDK_AVAILABLE_IN_ALL
 void             gtk_widget_set_direction         (GtkWidget        *widget,
-						   GtkTextDirection  dir);
+                                                   GtkTextDirection  dir);
 GDK_AVAILABLE_IN_ALL
 GtkTextDirection gtk_widget_get_direction         (GtkWidget        *widget);
 
@@ -820,7 +820,7 @@ GtkTextDirection gtk_widget_get_default_direction (void);
 /* Counterpart to gdk_surface_shape_combine_region.
  */
 GDK_AVAILABLE_IN_ALL
-void	     gtk_widget_input_shape_combine_region (GtkWidget *widget,
+void         gtk_widget_input_shape_combine_region (GtkWidget *widget,
                                                     cairo_region_t *region);
 
 GDK_AVAILABLE_IN_ALL
@@ -836,10 +836,10 @@ GDK_AVAILABLE_IN_ALL
 GList* gtk_widget_list_mnemonic_labels  (GtkWidget *widget);
 GDK_AVAILABLE_IN_ALL
 void   gtk_widget_add_mnemonic_label    (GtkWidget *widget,
-					 GtkWidget *label);
+                                         GtkWidget *label);
 GDK_AVAILABLE_IN_ALL
 void   gtk_widget_remove_mnemonic_label (GtkWidget *widget,
-					 GtkWidget *label);
+                                         GtkWidget *label);
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_set_tooltip_window    (GtkWidget   *widget,
@@ -860,7 +860,7 @@ GDK_AVAILABLE_IN_ALL
 gchar *    gtk_widget_get_tooltip_markup    (GtkWidget   *widget);
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_set_has_tooltip       (GtkWidget   *widget,
-					     gboolean     has_tooltip);
+                                             gboolean     has_tooltip);
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_get_has_tooltip       (GtkWidget   *widget);
 
@@ -1013,28 +1013,28 @@ GDK_AVAILABLE_IN_ALL
 void    gtk_widget_init_template                        (GtkWidget             *widget);
 GDK_AVAILABLE_IN_ALL
 GObject *gtk_widget_get_template_child                  (GtkWidget             *widget,
-						         GType                  widget_type,
-						         const gchar           *name);
+                                                         GType                  widget_type,
+                                                         const gchar           *name);
 GDK_AVAILABLE_IN_ALL
 void    gtk_widget_class_set_template                   (GtkWidgetClass        *widget_class,
-						         GBytes                *template_bytes);
+                                                         GBytes                *template_bytes);
 GDK_AVAILABLE_IN_ALL
 void    gtk_widget_class_set_template_from_resource     (GtkWidgetClass        *widget_class,
-						         const gchar           *resource_name);
+                                                         const gchar           *resource_name);
 GDK_AVAILABLE_IN_ALL
 void    gtk_widget_class_bind_template_callback_full    (GtkWidgetClass        *widget_class,
-						         const gchar           *callback_name,
-						         GCallback              callback_symbol);
+                                                         const gchar           *callback_name,
+                                                         GCallback              callback_symbol);
 GDK_AVAILABLE_IN_ALL
 void    gtk_widget_class_set_connect_func               (GtkWidgetClass        *widget_class,
-						         GtkBuilderConnectFunc  connect_func,
-						         gpointer               connect_data,
-						         GDestroyNotify         connect_data_destroy);
+                                                         GtkBuilderConnectFunc  connect_func,
+                                                         gpointer               connect_data,
+                                                         GDestroyNotify         connect_data_destroy);
 GDK_AVAILABLE_IN_ALL
 void    gtk_widget_class_bind_template_child_full       (GtkWidgetClass        *widget_class,
-						         const gchar           *name,
-						         gboolean               internal_child,
-						         gssize                 struct_offset);
+                                                         const gchar           *name,
+                                                         gboolean               internal_child,
+                                                         gssize                 struct_offset);
 
 GDK_AVAILABLE_IN_ALL
 GActionGroup           *gtk_widget_get_action_group     (GtkWidget             *widget,

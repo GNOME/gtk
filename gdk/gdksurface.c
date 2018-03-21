@@ -114,27 +114,27 @@ enum {
 static void gdk_surface_finalize   (GObject              *object);
 
 static void gdk_surface_set_property (GObject      *object,
-                                     guint         prop_id,
-                                     const GValue *value,
-                                     GParamSpec   *pspec);
+                                      guint         prop_id,
+                                      const GValue *value,
+                                      GParamSpec   *pspec);
 static void gdk_surface_get_property (GObject      *object,
-                                     guint         prop_id,
-                                     GValue       *value,
-                                     GParamSpec   *pspec);
+                                      guint         prop_id,
+                                      GValue       *value,
+                                      GParamSpec   *pspec);
 
 static void gdk_surface_clear_backing_region (GdkSurface *surface);
 
 static void recompute_visible_regions   (GdkSurface *private,
-					 gboolean recalculate_children);
+                                         gboolean recalculate_children);
 static void gdk_surface_invalidate_in_parent (GdkSurface *private);
 static void update_cursor               (GdkDisplay *display,
                                          GdkDevice  *device);
 static void impl_surface_add_update_area (GdkSurface *impl_surface,
-					 cairo_region_t *region);
+                                          cairo_region_t *region);
 static cairo_surface_t *gdk_surface_ref_impl_surface (GdkSurface *surface);
 
 static void gdk_surface_set_frame_clock (GdkSurface      *surface,
-                                        GdkFrameClock  *clock);
+                                         GdkFrameClock  *clock);
 
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -157,23 +157,23 @@ print_region (cairo_region_t *region)
       cairo_rectangle_int_t r;
 
       if (num == 1)
-	{
-	  cairo_region_get_rectangle (region, 0, &r);
-	  g_string_append_printf (s, "%dx%d @%d,%d", r.width, r.height, r.x, r.y);
-	}
+        {
+          cairo_region_get_rectangle (region, 0, &r);
+          g_string_append_printf (s, "%dx%d @%d,%d", r.width, r.height, r.x, r.y);
+        }
       else
-	{
-	  int i;
-	  cairo_region_get_extents (region, &r);
-	  g_string_append_printf (s, "extent: %dx%d @%d,%d, details: ", r.width, r.height, r.x, r.y);
-	  for (i = 0; i < num; i++)
-	    {
+        {
+          int i;
+          cairo_region_get_extents (region, &r);
+          g_string_append_printf (s, "extent: %dx%d @%d,%d, details: ", r.width, r.height, r.x, r.y);
+          for (i = 0; i < num; i++)
+            {
               cairo_region_get_rectangle (region, i, &r);
-	      g_string_append_printf (s, "[%dx%d @%d,%d]", r.width, r.height, r.x, r.y);
-	      if (i != num -1)
-		g_string_append (s, ", ");
-	    }
-	}
+              g_string_append_printf (s, "[%dx%d @%d,%d]", r.width, r.height, r.x, r.y);
+              if (i != num -1)
+                g_string_append (s, ", ");
+            }
+        }
     }
   g_string_append (s, "}");
   return g_string_free (s, FALSE);
@@ -344,15 +344,15 @@ gdk_surface_finalize (GObject *object)
   if (!GDK_SURFACE_DESTROYED (surface))
     {
       if (GDK_SURFACE_TYPE (surface) != GDK_SURFACE_FOREIGN)
-	{
-	  g_warning ("losing last reference to undestroyed surface");
-	  _gdk_surface_destroy (surface, FALSE);
-	}
+        {
+          g_warning ("losing last reference to undestroyed surface");
+          _gdk_surface_destroy (surface, FALSE);
+        }
       else
-	/* We use TRUE here, to keep us from actually calling
-	 * XDestroyWindow() on the window
-	 */
-	_gdk_surface_destroy (surface, TRUE);
+        /* We use TRUE here, to keep us from actually calling
+         * XDestroyWindow() on the window
+         */
+        _gdk_surface_destroy (surface, TRUE);
     }
 
   if (surface->impl)
@@ -392,9 +392,9 @@ gdk_surface_finalize (GObject *object)
 
 static void
 gdk_surface_set_property (GObject      *object,
-                         guint         prop_id,
-                         const GValue *value,
-                         GParamSpec   *pspec)
+                          guint         prop_id,
+                          const GValue *value,
+                          GParamSpec   *pspec)
 {
   GdkSurface *surface = GDK_SURFACE (object);
 
@@ -417,9 +417,9 @@ gdk_surface_set_property (GObject      *object,
 
 static void
 gdk_surface_get_property (GObject    *object,
-                         guint       prop_id,
-                         GValue     *value,
-                         GParamSpec *pspec)
+                          guint       prop_id,
+                          GValue     *value,
+                          GParamSpec *pspec)
 {
   GdkSurface *surface = GDK_SURFACE (object);
 
@@ -481,8 +481,8 @@ _gdk_surface_has_impl (GdkSurface *surface)
 
 static void
 remove_child_area (GdkSurface *surface,
-		   gboolean for_input,
-		   cairo_region_t *region)
+                   gboolean for_input,
+                   cairo_region_t *region)
 {
   GdkSurface *child;
   cairo_region_t *child_region;
@@ -494,12 +494,12 @@ remove_child_area (GdkSurface *surface,
       child = l->data;
 
       /* If region is empty already, no need to do
-	 anything potentially costly */
+         anything potentially costly */
       if (cairo_region_is_empty (region))
-	break;
+        break;
 
       if (!GDK_SURFACE_IS_MAPPED (child) || child->input_only)
-	continue;
+        continue;
 
       r.x = child->x;
       r.y = child->y;
@@ -508,15 +508,15 @@ remove_child_area (GdkSurface *surface,
 
       /* Bail early if child totally outside region */
       if (cairo_region_contains_rectangle (region, &r) == CAIRO_REGION_OVERLAP_OUT)
-	continue;
+        continue;
 
       child_region = cairo_region_create_rectangle (&r);
 
       if (for_input)
-	{
-	  if (child->input_shape)
-	    cairo_region_intersect (child_region, child->input_shape);
-	}
+        {
+          if (child->input_shape)
+            cairo_region_intersect (child_region, child->input_shape);
+        }
 
       cairo_region_subtract (region, child_region);
       cairo_region_destroy (child_region);
@@ -525,8 +525,8 @@ remove_child_area (GdkSurface *surface,
 
 static void
 recompute_visible_regions_internal (GdkSurface *private,
-				    gboolean   recalculate_clip,
-				    gboolean   recalculate_children)
+                                    gboolean   recalculate_clip,
+                                    gboolean   recalculate_children)
 {
   GList *l;
   GdkSurface *child;
@@ -560,16 +560,16 @@ recompute_visible_regions_internal (GdkSurface *private,
   if ((abs_pos_changed || recalculate_children))
     {
       for (l = private->children; l; l = l->next)
-	{
-	  child = l->data;
-	  /* Only recalculate clip if the the clip region changed, otherwise
-	   * there is no way the child clip region could change (its has not e.g. moved)
-	   * Except if recalculate_children is set to force child updates
-	   */
-	  recompute_visible_regions_internal (child,
-					      recalculate_clip && recalculate_children,
-					      FALSE);
-	}
+        {
+          child = l->data;
+          /* Only recalculate clip if the the clip region changed, otherwise
+           * there is no way the child clip region could change (its has not e.g. moved)
+           * Except if recalculate_children is set to force child updates
+           */
+          recompute_visible_regions_internal (child,
+                                              recalculate_clip && recalculate_children,
+                                              FALSE);
+        }
     }
 }
 
@@ -590,11 +590,11 @@ recompute_visible_regions_internal (GdkSurface *private,
  */
 static void
 recompute_visible_regions (GdkSurface *private,
-			   gboolean recalculate_children)
+                           gboolean recalculate_children)
 {
   recompute_visible_regions_internal (private,
-				      TRUE,
-				      recalculate_children);
+                                      TRUE,
+                                      recalculate_children);
 }
 
 static void
@@ -614,7 +614,7 @@ gdk_surface_clear_old_updated_area (GdkSurface *surface)
 
 static void
 gdk_surface_append_old_updated_area (GdkSurface *surface,
-                                    cairo_region_t *region)
+                                     cairo_region_t *region)
 {
   if (surface->old_updated_area[1])
     cairo_region_destroy (surface->old_updated_area[1]);
@@ -649,10 +649,10 @@ get_native_device_event_mask (GdkSurface *private,
       mask = private->event_mask;
 
       /* We need thse for all native surfaces so we can
-	 emulate events on children: */
+         emulate events on children: */
       mask |=
-	GDK_EXPOSURE_MASK |
-	GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK |
+        GDK_EXPOSURE_MASK |
+        GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK |
         GDK_TOUCH_MASK |
         GDK_POINTER_MOTION_MASK |
         GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
@@ -670,8 +670,8 @@ get_native_event_mask (GdkSurface *private)
 
 GdkSurface*
 gdk_surface_new (GdkDisplay    *display,
-                GdkSurface     *parent,
-		GdkSurfaceAttr *attributes)
+                 GdkSurface     *parent,
+                 GdkSurfaceAttr *attributes)
 {
   GdkSurface *surface;
   gboolean native;
@@ -705,9 +705,9 @@ gdk_surface_new (GdkDisplay    *display,
        * before
        */
       if (parent == NULL)
-	surface->surface_type = GDK_SURFACE_TEMP;
+        surface->surface_type = GDK_SURFACE_TEMP;
       else
-	surface->surface_type = GDK_SURFACE_CHILD;
+        surface->surface_type = GDK_SURFACE_CHILD;
     }
   else
     surface->surface_type = attributes->surface_type;
@@ -718,7 +718,7 @@ gdk_surface_new (GdkDisplay    *display,
     case GDK_SURFACE_TOPLEVEL:
     case GDK_SURFACE_TEMP:
       if (parent != NULL)
-	g_warning (G_STRLOC "Toplevel surfaces must be created without a parent");
+        g_warning (G_STRLOC "Toplevel surfaces must be created without a parent");
       break;
     case GDK_SURFACE_SUBSURFACE:
 #ifdef GDK_WINDOWING_WAYLAND
@@ -805,8 +805,8 @@ gdk_surface_new (GdkDisplay    *display,
  **/
 GdkSurface *
 gdk_surface_new_toplevel (GdkDisplay *display,
-                         gint        width,
-                         gint        height)
+                          gint        width,
+                          gint        height)
 {
   GdkSurfaceAttr attr;
 
@@ -834,7 +834,7 @@ gdk_surface_new_toplevel (GdkDisplay *display,
  **/
 GdkSurface *
 gdk_surface_new_popup (GdkDisplay         *display,
-                      const GdkRectangle *position)
+                       const GdkRectangle *position)
 {
   GdkSurfaceAttr attr;
 
@@ -890,7 +890,7 @@ gdk_surface_new_temp (GdkDisplay *display)
  **/
 GdkSurface *
 gdk_surface_new_child (GdkSurface          *parent,
-                      const GdkRectangle *position)
+                       const GdkRectangle *position)
 {
   GdkSurfaceAttr attr;
 
@@ -923,7 +923,7 @@ update_pointer_info_foreach (GdkDisplay           *display,
 
 static void
 surface_remove_from_pointer_info (GdkSurface  *surface,
-                                 GdkDisplay *display)
+                                  GdkDisplay *display)
 {
   _gdk_display_pointer_info_foreach (display,
                                      update_pointer_info_foreach,
@@ -962,9 +962,9 @@ gdk_surface_free_current_paint (GdkSurface *surface)
  **/
 static void
 _gdk_surface_destroy_hierarchy (GdkSurface *surface,
-			       gboolean   recursing,
-			       gboolean   recursing_native,
-			       gboolean   foreign_destroy)
+                                gboolean   recursing,
+                                gboolean   recursing_native,
+                                gboolean   foreign_destroy)
 {
   GdkSurfaceImplClass *impl_class;
   GdkSurface *temp_surface;
@@ -990,22 +990,22 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
     case GDK_SURFACE_FOREIGN:
     case GDK_SURFACE_SUBSURFACE:
       if (surface->surface_type == GDK_SURFACE_FOREIGN && !foreign_destroy)
-	{
-	}
+        {
+        }
       else
-	{
-	  if (surface->parent)
-	    {
-	      if (surface->parent->children)
+        {
+          if (surface->parent)
+            {
+              if (surface->parent->children)
                 surface->parent->children = g_list_remove_link (surface->parent->children, &surface->children_list_node);
 
-	      if (!recursing &&
-		  GDK_SURFACE_IS_MAPPED (surface))
-		{
-		  recompute_visible_regions (surface, FALSE);
-		  gdk_surface_invalidate_in_parent (surface);
-		}
-	    }
+              if (!recursing &&
+                  GDK_SURFACE_IS_MAPPED (surface))
+                {
+                  recompute_visible_regions (surface, FALSE);
+                  gdk_surface_invalidate_in_parent (surface);
+                }
+            }
 
           if (surface->gl_paint_context)
             {
@@ -1023,47 +1023,47 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
 
           gdk_surface_free_current_paint (surface);
 
-	  if (surface->surface_type == GDK_SURFACE_FOREIGN)
-	    g_assert (surface->children == NULL);
-	  else
-	    {
-	      tmp = surface->children;
-	      surface->children = NULL;
-	      /* No need to free children list, its all made up of in-struct nodes */
+          if (surface->surface_type == GDK_SURFACE_FOREIGN)
+            g_assert (surface->children == NULL);
+          else
+            {
+              tmp = surface->children;
+              surface->children = NULL;
+              /* No need to free children list, its all made up of in-struct nodes */
 
-	      while (tmp)
-		{
-		  temp_surface = tmp->data;
-		  tmp = tmp->next;
+              while (tmp)
+                {
+                  temp_surface = tmp->data;
+                  tmp = tmp->next;
 
-		  if (temp_surface)
-		    _gdk_surface_destroy_hierarchy (temp_surface,
-						   TRUE,
-						   recursing_native || gdk_surface_has_impl (surface),
-						   foreign_destroy);
-		}
-	    }
+                  if (temp_surface)
+                    _gdk_surface_destroy_hierarchy (temp_surface,
+                                                   TRUE,
+                                                   recursing_native || gdk_surface_has_impl (surface),
+                                                   foreign_destroy);
+                }
+            }
 
-	  _gdk_surface_clear_update_area (surface);
+          _gdk_surface_clear_update_area (surface);
 
-	  impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
+          impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
 
-	  if (gdk_surface_has_impl (surface))
-	    impl_class->destroy (surface, recursing_native, foreign_destroy);
-	  else
-	    {
-	      /* hide to make sure we repaint and break grabs */
-	      gdk_surface_hide (surface);
-	    }
+          if (gdk_surface_has_impl (surface))
+            impl_class->destroy (surface, recursing_native, foreign_destroy);
+          else
+            {
+              /* hide to make sure we repaint and break grabs */
+              gdk_surface_hide (surface);
+            }
 
-	  surface->state |= GDK_SURFACE_STATE_WITHDRAWN;
-	  surface->parent = NULL;
-	  surface->destroyed = TRUE;
+          surface->state |= GDK_SURFACE_STATE_WITHDRAWN;
+          surface->parent = NULL;
+          surface->destroyed = TRUE;
 
-	  surface_remove_from_pointer_info (surface, display);
+          surface_remove_from_pointer_info (surface, display);
 
           g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_STATE]);
-	}
+        }
       break;
     }
 }
@@ -1081,7 +1081,7 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
  **/
 void
 _gdk_surface_destroy (GdkSurface *surface,
-		     gboolean   foreign_destroy)
+                      gboolean   foreign_destroy)
 {
   _gdk_surface_destroy_hierarchy (surface, FALSE, FALSE, foreign_destroy);
 }
@@ -1121,7 +1121,7 @@ gdk_surface_destroy (GdkSurface *surface)
  **/
 void
 gdk_surface_set_user_data (GdkSurface *surface,
-			  gpointer   user_data)
+                           gpointer   user_data)
 {
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
@@ -1139,7 +1139,7 @@ gdk_surface_set_user_data (GdkSurface *surface,
  **/
 void
 gdk_surface_get_user_data (GdkSurface *surface,
-			  gpointer  *data)
+                           gpointer  *data)
 {
   *data = surface->user_data;
 }
@@ -1222,8 +1222,8 @@ gdk_surface_has_native (GdkSurface *surface)
  **/
 void
 gdk_surface_get_position (GdkSurface *surface,
-			 gint      *x,
-			 gint      *y)
+                          gint      *x,
+                          gint      *y)
 {
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
@@ -1278,7 +1278,7 @@ gdk_surface_get_toplevel (GdkSurface *surface)
          surface->surface_type == GDK_SURFACE_SUBSURFACE)
     {
       if (gdk_surface_is_toplevel (surface))
-	break;
+        break;
       surface = surface->parent;
     }
 
@@ -1352,7 +1352,7 @@ gdk_surface_peek_children (GdkSurface *surface)
  **/
 GList *
 gdk_surface_get_children_with_user_data (GdkSurface *surface,
-                                        gpointer   user_data)
+                                         gpointer   user_data)
 {
   GdkSurface *child;
   GList *res, *l;
@@ -1368,7 +1368,7 @@ gdk_surface_get_children_with_user_data (GdkSurface *surface,
       child = l->data;
 
       if (child->user_data == user_data)
-	res = g_list_prepend (res, child);
+        res = g_list_prepend (res, child);
     }
 
   return res;
@@ -1454,7 +1454,7 @@ gdk_surface_ref_impl_surface (GdkSurface *surface)
 
 GdkGLContext *
 gdk_surface_get_paint_gl_context (GdkSurface  *surface,
-                                 GError    **error)
+                                  GError    **error)
 {
   GError *internal_error = NULL;
 
@@ -1521,7 +1521,7 @@ gdk_surface_get_paint_gl_context (GdkSurface  *surface,
  **/
 GdkGLContext *
 gdk_surface_create_gl_context (GdkSurface    *surface,
-                              GError      **error)
+                               GError      **error)
 {
   GdkGLContext *paint_context;
 
@@ -1533,7 +1533,7 @@ gdk_surface_create_gl_context (GdkSurface    *surface,
     return NULL;
 
   return GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->create_gl_context (surface->impl_surface,
-								      FALSE,
+                                                                      FALSE,
                                                                       paint_context,
                                                                       error);
 }
@@ -1552,7 +1552,7 @@ gdk_surface_create_gl_context (GdkSurface    *surface,
  **/
 GdkVulkanContext *
 gdk_surface_create_vulkan_context (GdkSurface  *surface,
-                                  GError    **error)
+                                   GError    **error)
 {
   GdkDisplay *display;
 
@@ -1584,7 +1584,7 @@ gdk_surface_create_vulkan_context (GdkSurface  *surface,
 
 static void
 gdk_surface_begin_paint_internal (GdkSurface            *surface,
-			         const cairo_region_t *region)
+                                  const cairo_region_t *region)
 {
   GdkRectangle clip_box;
   GdkSurfaceImplClass *impl_class;
@@ -1713,8 +1713,8 @@ gdk_surface_end_paint_internal (GdkSurface *surface)
  */
 GdkDrawingContext *
 gdk_surface_begin_draw_frame (GdkSurface            *surface,
-                             GdkDrawContext       *draw_context,
-                             const cairo_region_t *region)
+                              GdkDrawContext       *draw_context,
+                              const cairo_region_t *region)
 {
   GdkDrawingContext *context;
   cairo_region_t *real_region;
@@ -1776,7 +1776,7 @@ gdk_surface_begin_draw_frame (GdkSurface            *surface,
  */
 void
 gdk_surface_end_draw_frame (GdkSurface         *surface,
-                           GdkDrawingContext *context)
+                            GdkDrawingContext *context)
 {
   GdkDrawContext *paint_context;
 
@@ -1926,14 +1926,14 @@ static GSList *update_surfaces = NULL;
 
 static inline gboolean
 gdk_surface_is_ancestor (GdkSurface *surface,
-			GdkSurface *ancestor)
+                         GdkSurface *ancestor)
 {
   while (surface)
     {
       GdkSurface *parent = surface->parent;
 
       if (parent == ancestor)
-	return TRUE;
+        return TRUE;
 
       surface = parent;
     }
@@ -1966,13 +1966,13 @@ gdk_surface_add_update_surface (GdkSurface *surface)
        *  children of "surface" or from a differen hierarchy
        */
       if (!has_ancestor_in_list && gdk_surface_is_ancestor (surface, tmp->data))
-	has_ancestor_in_list = TRUE;
+        has_ancestor_in_list = TRUE;
 
       /* insert in reverse stacking order when adding around siblings,
        * so processing updates properly paints over lower stacked surfaces
        */
       if (parent == GDK_SURFACE (tmp->data)->parent)
-	{
+        {
           if (parent != NULL)
             {
               gint index = g_list_index (parent->children, surface);
@@ -1984,37 +1984,37 @@ gdk_surface_add_update_surface (GdkSurface *surface)
                   prev = tmp;
                 }
             }
-	  /* here, tmp got advanced past all lower stacked siblings */
-	  tmp = g_slist_prepend (tmp, g_object_ref (surface));
-	  if (prev)
-	    prev->next = tmp;
-	  else
-	    update_surfaces = tmp;
-	  return;
-	}
+          /* here, tmp got advanced past all lower stacked siblings */
+          tmp = g_slist_prepend (tmp, g_object_ref (surface));
+          if (prev)
+            prev->next = tmp;
+          else
+            update_surfaces = tmp;
+          return;
+        }
 
       /*  if "surface" has an ancestor in the list and tmp is one of
        *  "surface's" children, insert "surface" before tmp
        */
       if (has_ancestor_in_list && gdk_surface_is_ancestor (tmp->data, surface))
-	{
-	  tmp = g_slist_prepend (tmp, g_object_ref (surface));
+        {
+          tmp = g_slist_prepend (tmp, g_object_ref (surface));
 
-	  if (prev)
-	    prev->next = tmp;
-	  else
-	    update_surfaces = tmp;
-	  return;
-	}
+          if (prev)
+            prev->next = tmp;
+          else
+            update_surfaces = tmp;
+          return;
+        }
 
       /*  if we're at the end of the list and had an ancestor it it,
        *  append to the list
        */
       if (! tmp->next && has_ancestor_in_list)
-	{
-	  tmp = g_slist_append (tmp, g_object_ref (surface));
-	  return;
-	}
+        {
+          tmp = g_slist_append (tmp, g_object_ref (surface));
+          return;
+        }
 
       prev = tmp;
     }
@@ -2070,7 +2070,7 @@ gdk_surface_schedule_update (GdkSurface *surface)
 
 void
 _gdk_surface_process_updates_recurse (GdkSurface *surface,
-                                     cairo_region_t *expose_region)
+                                      cairo_region_t *expose_region)
 {
   GdkEvent *event;
 
@@ -2113,12 +2113,12 @@ gdk_surface_process_updates_internal (GdkSurface *surface)
       surface->update_area = NULL;
 
       if (gdk_surface_is_viewable (surface))
-	{
-	  cairo_region_t *expose_region;
+        {
+          cairo_region_t *expose_region;
 
-	  expose_region = cairo_region_copy (surface->active_update_area);
+          expose_region = cairo_region_copy (surface->active_update_area);
 
-	  impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
+          impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
 
           impl_class->process_updates_recurse (surface, expose_region);
 
@@ -2138,7 +2138,7 @@ gdk_surface_process_updates_internal (GdkSurface *surface)
 
 static void
 gdk_surface_paint_on_clock (GdkFrameClock *clock,
-			   void          *data)
+                            void          *data)
 {
   GdkSurface *surface;
 
@@ -2180,7 +2180,7 @@ gdk_surface_paint_on_clock (GdkFrameClock *clock,
  **/
 void
 gdk_surface_invalidate_rect (GdkSurface        *surface,
-			    const GdkRectangle *rect)
+                             const GdkRectangle *rect)
 {
   GdkRectangle surface_rect;
   cairo_region_t *region;
@@ -2209,7 +2209,7 @@ gdk_surface_invalidate_rect (GdkSurface        *surface,
 
 static void
 impl_surface_add_update_area (GdkSurface *impl_surface,
-			     cairo_region_t *region)
+                              cairo_region_t *region)
 {
   if (impl_surface->update_area)
     cairo_region_union (impl_surface->update_area, region);
@@ -2241,7 +2241,7 @@ impl_surface_add_update_area (GdkSurface *impl_surface,
  **/
 void
 gdk_surface_invalidate_region (GdkSurface          *surface,
-			      const cairo_region_t *region)
+                               const cairo_region_t *region)
 {
   cairo_region_t *visible_region;
   cairo_rectangle_int_t r;
@@ -2261,24 +2261,24 @@ gdk_surface_invalidate_region (GdkSurface          *surface,
 
   visible_region = cairo_region_copy (region);
 
-  while (surface != NULL && 
-	 !cairo_region_is_empty (visible_region))
+  while (surface != NULL &&
+         !cairo_region_is_empty (visible_region))
     {
       r.width = surface->width;
       r.height = surface->height;
       cairo_region_intersect_rectangle (visible_region, &r);
 
       if (gdk_surface_has_impl (surface))
-	{
-	  impl_surface_add_update_area (surface, visible_region);
-	  break;
-	}
+        {
+          impl_surface_add_update_area (surface, visible_region);
+          break;
+        }
       else
-	{
-	  cairo_region_translate (visible_region,
-				  surface->x, surface->y);
-	  surface = surface->parent;
-	}
+        {
+          cairo_region_translate (visible_region,
+                                  surface->x, surface->y);
+          surface = surface->parent;
+        }
     }
 
   cairo_region_destroy (visible_region);
@@ -2384,11 +2384,11 @@ gdk_surface_thaw_toplevel_updates (GdkSurface *surface)
  */
 void
 gdk_surface_constrain_size (GdkGeometry    *geometry,
-			   GdkSurfaceHints  flags,
-			   gint            width,
-			   gint            height,
-			   gint           *new_width,
-			   gint           *new_height)
+                            GdkSurfaceHints  flags,
+                            gint            width,
+                            gint            height,
+                            gint           *new_width,
+                            gint           *new_height)
 {
   /* This routine is partially borrowed from fvwm.
    *
@@ -2407,7 +2407,7 @@ gdk_surface_constrain_size (GdkGeometry    *geometry,
   gint max_width = G_MAXINT;
   gint max_height = G_MAXINT;
 
-#define FLOOR(value, base)	( ((gint) ((value) / (base))) * (base) )
+#define FLOOR(value, base)      ( ((gint) ((value) / (base))) * (base) )
 
   if ((flags & GDK_HINT_BASE_SIZE) && (flags & GDK_HINT_MIN_SIZE))
     {
@@ -2467,30 +2467,30 @@ gdk_surface_constrain_size (GdkGeometry    *geometry,
       gint delta;
 
       if (geometry->min_aspect * height > width)
-	{
-	  delta = FLOOR (height - width / geometry->min_aspect, yinc);
-	  if (height - delta >= min_height)
-	    height -= delta;
-	  else
-	    {
-	      delta = FLOOR (height * geometry->min_aspect - width, xinc);
-	      if (width + delta <= max_width)
-		width += delta;
-	    }
-	}
+        {
+          delta = FLOOR (height - width / geometry->min_aspect, yinc);
+          if (height - delta >= min_height)
+            height -= delta;
+          else
+            {
+              delta = FLOOR (height * geometry->min_aspect - width, xinc);
+              if (width + delta <= max_width)
+                width += delta;
+            }
+        }
 
       if (geometry->max_aspect * height < width)
-	{
-	  delta = FLOOR (width - height * geometry->max_aspect, xinc);
-	  if (width - delta >= min_width)
-	    width -= delta;
-	  else
-	    {
-	      delta = FLOOR (width / geometry->max_aspect - height, yinc);
-	      if (height + delta <= max_height)
-		height += delta;
-	    }
-	}
+        {
+          delta = FLOOR (width - height * geometry->max_aspect, xinc);
+          if (width - delta >= min_width)
+            width -= delta;
+          else
+            {
+              delta = FLOOR (width / geometry->max_aspect - height, yinc);
+              if (height + delta <= max_height)
+                height += delta;
+            }
+        }
     }
 
 #undef FLOOR
@@ -2517,10 +2517,10 @@ gdk_surface_constrain_size (GdkGeometry    *geometry,
  **/
 GdkSurface *
 gdk_surface_get_device_position_double (GdkSurface       *surface,
-                                       GdkDevice       *device,
-                                       double          *x,
-                                       double          *y,
-                                       GdkModifierType *mask)
+                                        GdkDevice       *device,
+                                        double          *x,
+                                        double          *y,
+                                        GdkModifierType *mask)
 {
   gdouble tmp_x, tmp_y;
   GdkModifierType tmp_mask;
@@ -2572,10 +2572,10 @@ gdk_surface_get_device_position_double (GdkSurface       *surface,
  **/
 GdkSurface *
 gdk_surface_get_device_position (GdkSurface       *surface,
-                                GdkDevice       *device,
-                                gint            *x,
-                                gint            *y,
-                                GdkModifierType *mask)
+                                 GdkDevice       *device,
+                                 gint            *x,
+                                 gint            *y,
+                                 GdkModifierType *mask)
 {
   gdouble tmp_x, tmp_y;
 
@@ -2615,7 +2615,7 @@ gdk_surface_raise_internal (GdkSurface *surface)
 /* Returns TRUE If the native surface was mapped or unmapped */
 static gboolean
 set_viewable (GdkSurface *w,
-	      gboolean val)
+              gboolean val)
 {
   GdkSurface *child;
   GList *l;
@@ -2633,7 +2633,7 @@ set_viewable (GdkSurface *w,
       child = l->data;
 
       if (GDK_SURFACE_IS_MAPPED (child))
-	set_viewable (child, val);
+        set_viewable (child, val);
     }
 
   return FALSE;
@@ -2648,7 +2648,7 @@ _gdk_surface_update_viewable (GdkSurface *surface)
   if (surface->surface_type == GDK_SURFACE_FOREIGN)
     viewable = TRUE;
   else if (gdk_surface_is_toplevel (surface) ||
-	   surface->parent->viewable)
+           surface->parent->viewable)
     viewable = GDK_SURFACE_IS_MAPPED (surface);
   else
     viewable = FALSE;
@@ -2706,10 +2706,10 @@ gdk_surface_show_internal (GdkSurface *surface, gboolean raise)
   if (!was_mapped && !gdk_surface_has_impl (surface))
     {
       if (surface->event_mask & GDK_STRUCTURE_MASK)
-	_gdk_make_event (surface, GDK_MAP, NULL, FALSE);
+        _gdk_make_event (surface, GDK_MAP, NULL, FALSE);
 
       if (surface->parent && surface->parent->event_mask & GDK_SUBSTRUCTURE_MASK)
-	_gdk_make_event (surface, GDK_MAP, NULL, FALSE);
+        _gdk_make_event (surface, GDK_MAP, NULL, FALSE);
     }
 
   if (!was_mapped || did_raise)
@@ -2861,8 +2861,8 @@ gdk_surface_lower (GdkSurface *surface)
  */
 void
 gdk_surface_restack (GdkSurface     *surface,
-		    GdkSurface     *sibling,
-		    gboolean       above)
+                     GdkSurface     *sibling,
+                     gboolean       above)
 {
   GdkSurfaceImplClass *impl_class;
   GdkSurface *parent;
@@ -2877,9 +2877,9 @@ gdk_surface_restack (GdkSurface     *surface,
   if (sibling == NULL)
     {
       if (above)
-	gdk_surface_raise (surface);
+        gdk_surface_raise (surface);
       else
-	gdk_surface_lower (surface);
+        gdk_surface_lower (surface);
       return;
     }
 
@@ -2897,15 +2897,15 @@ gdk_surface_restack (GdkSurface     *surface,
       sibling_link = g_list_find (parent->children, sibling);
       g_return_if_fail (sibling_link != NULL);
       if (sibling_link == NULL)
-	return;
+        return;
 
       parent->children = g_list_remove_link (parent->children, &surface->children_list_node);
       if (above)
-	parent->children = list_insert_link_before (parent->children,
+        parent->children = list_insert_link_before (parent->children,
                                                     sibling_link,
                                                     &surface->children_list_node);
       else
-	parent->children = list_insert_link_before (parent->children,
+        parent->children = list_insert_link_before (parent->children,
                                                     sibling_link->next,
                                                     &surface->children_list_node);
     }
@@ -2960,9 +2960,9 @@ gdk_surface_hide (GdkSurface *surface)
     {
 
       if (GDK_SURFACE_IS_MAPPED (surface))
-	gdk_synthesize_surface_state (surface,
-				     0,
-				     GDK_SURFACE_STATE_WITHDRAWN);
+        gdk_synthesize_surface_state (surface,
+                                     0,
+                                     GDK_SURFACE_STATE_WITHDRAWN);
     }
   else if (was_mapped)
     {
@@ -3018,10 +3018,10 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   if (was_mapped && !gdk_surface_has_impl (surface))
     {
       if (surface->event_mask & GDK_STRUCTURE_MASK)
-	_gdk_make_event (surface, GDK_UNMAP, NULL, FALSE);
+        _gdk_make_event (surface, GDK_UNMAP, NULL, FALSE);
 
       if (surface->parent && surface->parent->event_mask & GDK_SUBSTRUCTURE_MASK)
-	_gdk_make_event (surface, GDK_UNMAP, NULL, FALSE);
+        _gdk_make_event (surface, GDK_UNMAP, NULL, FALSE);
     }
 
   /* Invalidate the rect */
@@ -3057,13 +3057,13 @@ gdk_surface_withdraw (GdkSurface *surface)
       impl_class->withdraw (surface);
 
       if (was_mapped)
-	{
-	  if (surface->event_mask & GDK_STRUCTURE_MASK)
-	    _gdk_make_event (surface, GDK_UNMAP, NULL, FALSE);
+        {
+          if (surface->event_mask & GDK_STRUCTURE_MASK)
+            _gdk_make_event (surface, GDK_UNMAP, NULL, FALSE);
 
-	  if (surface->parent && surface->parent->event_mask & GDK_SUBSTRUCTURE_MASK)
-	    _gdk_make_event (surface, GDK_UNMAP, NULL, FALSE);
-	}
+          if (surface->parent && surface->parent->event_mask & GDK_SUBSTRUCTURE_MASK)
+            _gdk_make_event (surface, GDK_UNMAP, NULL, FALSE);
+        }
 
       current_context = gdk_gl_context_get_current ();
       if (current_context != NULL && gdk_gl_context_get_surface (current_context) == surface)
@@ -3089,7 +3089,7 @@ gdk_surface_withdraw (GdkSurface *surface)
  **/
 void
 gdk_surface_set_events (GdkSurface       *surface,
-		       GdkEventMask     event_mask)
+                        GdkEventMask     event_mask)
 {
   GdkSurfaceImplClass *impl_class;
 
@@ -3104,7 +3104,7 @@ gdk_surface_set_events (GdkSurface       *surface,
     {
       impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
       impl_class->set_events (surface,
-			      get_native_event_mask (surface));
+                              get_native_event_mask (surface));
     }
 
 }
@@ -3145,8 +3145,8 @@ gdk_surface_get_events (GdkSurface *surface)
  **/
 void
 gdk_surface_set_device_events (GdkSurface    *surface,
-                              GdkDevice    *device,
-                              GdkEventMask  event_mask)
+                               GdkDevice    *device,
+                               GdkEventMask  event_mask)
 {
   GdkEventMask device_mask;
   GdkSurface *native;
@@ -3188,7 +3188,7 @@ gdk_surface_set_device_events (GdkSurface    *surface,
  **/
 GdkEventMask
 gdk_surface_get_device_events (GdkSurface *surface,
-                              GdkDevice *device)
+                               GdkDevice *device)
 {
   GdkEventMask mask;
 
@@ -3210,11 +3210,11 @@ gdk_surface_get_device_events (GdkSurface *surface,
 
 static void
 gdk_surface_move_resize_toplevel (GdkSurface *surface,
-                                 gboolean   with_move,
-                                 gint       x,
-                                 gint       y,
-                                 gint       width,
-                                 gint       height)
+                                  gboolean   with_move,
+                                  gint       x,
+                                  gint       y,
+                                  gint       width,
+                                  gint       height)
 {
   GdkSurfaceImplClass *impl_class;
   gboolean is_resize;
@@ -3232,11 +3232,11 @@ gdk_surface_move_resize_toplevel (GdkSurface *surface,
 
 static void
 gdk_surface_move_resize_internal (GdkSurface *surface,
-				 gboolean   with_move,
-				 gint       x,
-				 gint       y,
-				 gint       width,
-				 gint       height)
+                                  gboolean   with_move,
+                                  gint       x,
+                                  gint       y,
+                                  gint       width,
+                                  gint       height)
 {
   cairo_region_t *old_region, *new_region;
   gboolean expose;
@@ -3262,7 +3262,7 @@ gdk_surface_move_resize_internal (GdkSurface *surface,
       surface->height == height &&
       (!with_move ||
        (surface->x == x &&
-	surface->y == y)))
+        surface->y == y)))
     return;
 
   /* Handle child surfaces */
@@ -3338,8 +3338,8 @@ gdk_surface_move_resize_internal (GdkSurface *surface,
  **/
 void
 gdk_surface_move (GdkSurface *surface,
-		 gint       x,
-		 gint       y)
+                  gint       x,
+                  gint       y)
 {
   gdk_surface_move_resize_internal (surface, TRUE, x, y, -1, -1);
 }
@@ -3361,8 +3361,8 @@ gdk_surface_move (GdkSurface *surface,
  **/
 void
 gdk_surface_resize (GdkSurface *surface,
-		   gint       width,
-		   gint       height)
+                    gint       width,
+                    gint       height)
 {
   gdk_surface_move_resize_internal (surface, FALSE, 0, 0, width, height);
 }
@@ -3383,10 +3383,10 @@ gdk_surface_resize (GdkSurface *surface,
  **/
 void
 gdk_surface_move_resize (GdkSurface *surface,
-			gint       x,
-			gint       y,
-			gint       width,
-			gint       height)
+                         gint       x,
+                         gint       y,
+                         gint       width,
+                         gint       height)
 {
   gdk_surface_move_resize_internal (surface, TRUE, x, y, width, height);
 }
@@ -3422,12 +3422,12 @@ gdk_surface_move_resize (GdkSurface *surface,
  */
 void
 gdk_surface_move_to_rect (GdkSurface          *surface,
-                         const GdkRectangle *rect,
-                         GdkGravity          rect_anchor,
-                         GdkGravity          surface_anchor,
-                         GdkAnchorHints      anchor_hints,
-                         gint                rect_anchor_dx,
-                         gint                rect_anchor_dy)
+                          const GdkRectangle *rect,
+                          GdkGravity          rect_anchor,
+                          GdkGravity          surface_anchor,
+                          GdkAnchorHints      anchor_hints,
+                          gint                rect_anchor_dx,
+                          gint                rect_anchor_dy)
 {
   GdkSurfaceImplClass *impl_class;
 
@@ -3447,8 +3447,8 @@ gdk_surface_move_to_rect (GdkSurface          *surface,
 
 static void
 gdk_surface_set_cursor_internal (GdkSurface *surface,
-                                GdkDevice *device,
-                                GdkCursor *cursor)
+                                 GdkDevice *device,
+                                 GdkCursor *cursor)
 {
   if (GDK_SURFACE_DESTROYED (surface))
     return;
@@ -3509,7 +3509,7 @@ gdk_surface_get_cursor (GdkSurface *surface)
  */
 void
 gdk_surface_set_cursor (GdkSurface *surface,
-		       GdkCursor *cursor)
+                        GdkCursor *cursor)
 {
   GdkDisplay *display;
 
@@ -3529,7 +3529,7 @@ gdk_surface_set_cursor (GdkSurface *surface,
       GList *seats, *s;
 
       if (cursor)
-	surface->cursor = g_object_ref (cursor);
+        surface->cursor = g_object_ref (cursor);
 
       seats = gdk_display_list_seats (display);
 
@@ -3571,7 +3571,7 @@ gdk_surface_set_cursor (GdkSurface *surface,
  **/
 GdkCursor *
 gdk_surface_get_device_cursor (GdkSurface *surface,
-                              GdkDevice *device)
+                               GdkDevice *device)
 {
   g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
@@ -3596,8 +3596,8 @@ gdk_surface_get_device_cursor (GdkSurface *surface,
  **/
 void
 gdk_surface_set_device_cursor (GdkSurface *surface,
-                              GdkDevice *device,
-                              GdkCursor *cursor)
+                               GdkDevice *device,
+                               GdkCursor *cursor)
 {
   g_return_if_fail (GDK_IS_SURFACE (surface));
   g_return_if_fail (GDK_IS_DEVICE (device));
@@ -3643,10 +3643,10 @@ gdk_surface_set_device_cursor (GdkSurface *surface,
  */
 void
 gdk_surface_get_geometry (GdkSurface *surface,
-			 gint      *x,
-			 gint      *y,
-			 gint      *width,
-			 gint      *height)
+                          gint      *x,
+                          gint      *y,
+                          gint      *width,
+                          gint      *height)
 {
   GdkSurface *parent;
   GdkSurfaceImplClass *impl_class;
@@ -3656,32 +3656,32 @@ gdk_surface_get_geometry (GdkSurface *surface,
   if (!GDK_SURFACE_DESTROYED (surface))
     {
       if (gdk_surface_has_impl (surface))
-	{
-	  impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-	  impl_class->get_geometry (surface, x, y,
-				    width, height);
-	  /* This reports the position wrt to the native parent, we need to convert
-	     it to be relative to the client side parent */
-	  parent = surface->parent;
-	  if (parent && !gdk_surface_has_impl (parent))
-	    {
-	      if (x)
-		*x -= parent->abs_x;
-	      if (y)
-		*y -= parent->abs_y;
-	    }
-	}
+        {
+          impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
+          impl_class->get_geometry (surface, x, y,
+                                    width, height);
+          /* This reports the position wrt to the native parent, we need to convert
+             it to be relative to the client side parent */
+          parent = surface->parent;
+          if (parent && !gdk_surface_has_impl (parent))
+            {
+              if (x)
+                *x -= parent->abs_x;
+              if (y)
+                *y -= parent->abs_y;
+            }
+        }
       else
-	{
+        {
           if (x)
             *x = surface->x;
           if (y)
             *y = surface->y;
-	  if (width)
-	    *width = surface->width;
-	  if (height)
-	    *height = surface->height;
-	}
+          if (width)
+            *width = surface->width;
+          if (height)
+            *height = surface->height;
+        }
     }
 }
 
@@ -3740,8 +3740,8 @@ gdk_surface_get_height (GdkSurface *surface)
  */
 gint
 gdk_surface_get_origin (GdkSurface *surface,
-		       gint      *x,
-		       gint      *y)
+                        gint      *x,
+                        gint      *y)
 {
   gint dummy_x, dummy_y;
 
@@ -3770,10 +3770,10 @@ gdk_surface_get_origin (GdkSurface *surface,
  */
 void
 gdk_surface_get_root_coords (GdkSurface *surface,
-			    gint       x,
-			    gint       y,
-			    gint      *root_x,
-			    gint      *root_y)
+                             gint       x,
+                             gint       y,
+                             gint      *root_x,
+                             gint      *root_y)
 {
   GdkSurfaceImplClass *impl_class;
 
@@ -3788,9 +3788,9 @@ gdk_surface_get_root_coords (GdkSurface *surface,
   
   impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
   impl_class->get_root_coords (surface->impl_surface,
-			       x + surface->abs_x,
-			       y + surface->abs_y,
-			       root_x, root_y);
+                               x + surface->abs_x,
+                               y + surface->abs_y,
+                               root_x, root_y);
 }
 
 /**
@@ -3811,10 +3811,10 @@ gdk_surface_get_root_coords (GdkSurface *surface,
  **/
 void
 gdk_surface_coords_to_parent (GdkSurface *surface,
-                             gdouble    x,
-                             gdouble    y,
-                             gdouble   *parent_x,
-                             gdouble   *parent_y)
+                              gdouble    x,
+                              gdouble    y,
+                              gdouble   *parent_x,
+                              gdouble   *parent_y)
 {
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
@@ -3843,10 +3843,10 @@ gdk_surface_coords_to_parent (GdkSurface *surface,
  **/
 void
 gdk_surface_coords_from_parent (GdkSurface *surface,
-                               gdouble    parent_x,
-                               gdouble    parent_y,
-                               gdouble   *x,
-                               gdouble   *y)
+                                gdouble    parent_x,
+                                gdouble    parent_y,
+                                gdouble   *x,
+                                gdouble   *y)
 {
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
@@ -3883,9 +3883,9 @@ gdk_surface_coords_from_parent (GdkSurface *surface,
  */
 void
 gdk_surface_input_shape_combine_region (GdkSurface       *surface,
-				       const cairo_region_t *shape_region,
-				       gint             offset_x,
-				       gint             offset_y)
+                                        const cairo_region_t *shape_region,
+                                        gint             offset_x,
+                                        gint             offset_y)
 {
   GdkSurfaceImplClass *impl_class;
 
@@ -3914,7 +3914,7 @@ gdk_surface_input_shape_combine_region (GdkSurface       *surface,
 
 static void
 do_child_input_shapes (GdkSurface *surface,
-		       gboolean merge)
+                       gboolean merge)
 {
   GdkRectangle r;
   cairo_region_t *region;
@@ -3979,7 +3979,7 @@ gdk_surface_set_child_input_shapes (GdkSurface *surface)
  **/
 void
 gdk_surface_set_pass_through (GdkSurface *surface,
-                             gboolean   pass_through)
+                              gboolean   pass_through)
 {
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
@@ -4109,7 +4109,7 @@ get_event_toplevel (GdkSurface *surface)
 
 gboolean
 _gdk_surface_event_parent_of (GdkSurface *parent,
- 	  	             GdkSurface *child)
+                              GdkSurface *child)
 {
   GdkSurface *w;
 
@@ -4117,7 +4117,7 @@ _gdk_surface_event_parent_of (GdkSurface *parent,
   while (w != NULL)
     {
       if (w == parent)
-	return TRUE;
+        return TRUE;
 
       w = w->parent;
     }
@@ -4159,7 +4159,7 @@ update_cursor (GdkDisplay *display,
      the cursor is inherited from the parent */
   while (cursor_surface->cursor == NULL &&
          !g_hash_table_contains (cursor_surface->device_cursor, device) &&
-	 (parent = cursor_surface->parent) != NULL)
+         (parent = cursor_surface->parent) != NULL)
     cursor_surface = parent;
 
   cursor = g_hash_table_lookup (cursor_surface->device_cursor, device);
@@ -4175,26 +4175,26 @@ update_cursor (GdkDisplay *display,
 
 static gboolean
 point_in_surface (GdkSurface *surface,
-		 gdouble    x,
-                 gdouble    y)
+                  gdouble    x,
+                  gdouble    y)
 {
   return
     x >= 0 && x < surface->width &&
     y >= 0 && y < surface->height &&
     (surface->input_shape == NULL ||
      cairo_region_contains_point (surface->input_shape,
-			  x, y));
+                          x, y));
 }
 
 /* Same as point_in_surface, except it also takes pass_through and its
    interaction with child surfaces into account */
 static gboolean
 point_in_input_surface (GdkSurface *surface,
-		       gdouble    x,
-		       gdouble    y,
-		       GdkSurface **input_surface,
-		       gdouble   *input_surface_x,
-		       gdouble   *input_surface_y)
+                        gdouble    x,
+                        gdouble    y,
+                        GdkSurface **input_surface,
+                        gdouble   *input_surface_x,
+                        gdouble   *input_surface_y)
 {
   GdkSurface *sub;
   double child_x, child_y;
@@ -4206,11 +4206,11 @@ point_in_input_surface (GdkSurface *surface,
   if (!surface->pass_through)
     {
       if (input_surface)
-	{
-	  *input_surface = surface;
-	  *input_surface_x = x;
-	  *input_surface_y = y;
-	}
+        {
+          *input_surface = surface;
+          *input_surface_x = x;
+          *input_surface_y = y;
+        }
       return TRUE;
     }
 
@@ -4222,22 +4222,22 @@ point_in_input_surface (GdkSurface *surface,
       sub = l->data;
 
       if (!GDK_SURFACE_IS_MAPPED (sub))
-	continue;
+        continue;
 
       gdk_surface_coords_from_parent ((GdkSurface *)sub,
-				     x, y,
-				     &child_x, &child_y);
+                                     x, y,
+                                     &child_x, &child_y);
       if (point_in_input_surface (sub, child_x, child_y,
-				 input_surface, input_surface_x, input_surface_y))
-	{
-	  if (input_surface)
-	    gdk_surface_coords_to_parent (sub,
-					 *input_surface_x,
-					 *input_surface_y,
-					 input_surface_x,
-					 input_surface_y);
-	  return TRUE;
-	}
+                                 input_surface, input_surface_x, input_surface_y))
+        {
+          if (input_surface)
+            gdk_surface_coords_to_parent (sub,
+                                         *input_surface_x,
+                                         *input_surface_y,
+                                         input_surface_x,
+                                         input_surface_y);
+          return TRUE;
+        }
     }
 
   return FALSE;
@@ -4245,8 +4245,8 @@ point_in_input_surface (GdkSurface *surface,
 
 GdkSurface *
 _gdk_surface_find_child_at (GdkSurface *surface,
-			   double     x,
-                           double     y)
+                            double     x,
+                            double     y)
 {
   GdkSurface *sub;
   double child_x, child_y;
@@ -4256,19 +4256,19 @@ _gdk_surface_find_child_at (GdkSurface *surface,
     {
       /* Children is ordered in reverse stack order, i.e. first is topmost */
       for (l = surface->children; l != NULL; l = l->next)
-	{
-	  sub = l->data;
+        {
+          sub = l->data;
 
-	  if (!GDK_SURFACE_IS_MAPPED (sub))
-	    continue;
+          if (!GDK_SURFACE_IS_MAPPED (sub))
+            continue;
 
-	  gdk_surface_coords_from_parent ((GdkSurface *)sub,
+          gdk_surface_coords_from_parent ((GdkSurface *)sub,
                                          x, y,
                                          &child_x, &child_y);
-	  if (point_in_input_surface (sub, child_x, child_y,
-				     NULL, NULL, NULL))
-	    return (GdkSurface *)sub;
-	}
+          if (point_in_input_surface (sub, child_x, child_y,
+                                     NULL, NULL, NULL))
+            return (GdkSurface *)sub;
+        }
     }
 
   return NULL;
@@ -4276,10 +4276,10 @@ _gdk_surface_find_child_at (GdkSurface *surface,
 
 GdkSurface *
 _gdk_surface_find_descendant_at (GdkSurface *surface,
-				gdouble    x,
-                                gdouble    y,
-				gdouble   *found_x,
-				gdouble   *found_y)
+                                 gdouble    x,
+                                 gdouble    y,
+                                 gdouble   *found_x,
+                                 gdouble   *found_y)
 {
   GdkSurface *sub, *input_surface;
   gdouble child_x, child_y;
@@ -4289,30 +4289,30 @@ _gdk_surface_find_descendant_at (GdkSurface *surface,
   if (point_in_surface (surface, x, y))
     {
       do
-	{
-	  found = FALSE;
-	  /* Children is ordered in reverse stack order, i.e. first is topmost */
-	  for (l = surface->children; l != NULL; l = l->next)
-	    {
-	      sub = l->data;
+        {
+          found = FALSE;
+          /* Children is ordered in reverse stack order, i.e. first is topmost */
+          for (l = surface->children; l != NULL; l = l->next)
+            {
+              sub = l->data;
 
-	      if (!GDK_SURFACE_IS_MAPPED (sub))
-		continue;
+              if (!GDK_SURFACE_IS_MAPPED (sub))
+                continue;
 
-	      gdk_surface_coords_from_parent ((GdkSurface *)sub,
+              gdk_surface_coords_from_parent ((GdkSurface *)sub,
                                              x, y,
                                              &child_x, &child_y);
-	      if (point_in_input_surface (sub, child_x, child_y,
-					 &input_surface, &child_x, &child_y))
-		{
-		  x = child_x;
-		  y = child_y;
-		  surface = input_surface;
-		  found = TRUE;
-		  break;
-		}
-	    }
-	}
+              if (point_in_input_surface (sub, child_x, child_y,
+                                         &input_surface, &child_x, &child_y))
+                {
+                  x = child_x;
+                  y = child_y;
+                  surface = input_surface;
+                  found = TRUE;
+                  break;
+                }
+            }
+        }
       while (found);
     }
   else
@@ -4356,7 +4356,7 @@ gdk_surface_beep (GdkSurface *surface)
       if (GDK_SURFACE_IMPL_GET_CLASS (toplevel->impl)->beep (toplevel))
         return;
     }
-  
+
   /* If surfaces fail to beep, we beep the display. */
   gdk_display_beep (display);
 }
@@ -4373,7 +4373,7 @@ gdk_surface_beep (GdkSurface *surface)
  **/
 void
 gdk_surface_set_support_multidevice (GdkSurface *surface,
-                                    gboolean   support_multidevice)
+                                     gboolean   support_multidevice)
 {
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
@@ -4412,9 +4412,9 @@ gdk_surface_get_support_multidevice (GdkSurface *surface)
 
 GdkEvent *
 _gdk_make_event (GdkSurface    *surface,
-		 GdkEventType  type,
-		 GdkEvent     *event_in_queue,
-		 gboolean      before_event)
+                 GdkEventType  type,
+                 GdkEvent     *event_in_queue,
+                 gboolean      before_event)
 {
   GdkEvent *event = gdk_event_new (type);
   guint32 the_time;
@@ -4517,8 +4517,8 @@ _gdk_make_event (GdkSurface    *surface,
 
 void
 _gdk_display_set_surface_under_pointer (GdkDisplay *display,
-                                       GdkDevice  *device,
-				       GdkSurface  *surface)
+                                        GdkDevice  *device,
+                                        GdkSurface  *surface)
 {
   GdkPointerSurfaceInfo *device_info;
 
@@ -4536,10 +4536,10 @@ _gdk_display_set_surface_under_pointer (GdkDisplay *display,
 }
 
 #define GDK_ANY_BUTTON_MASK (GDK_BUTTON1_MASK | \
-			     GDK_BUTTON2_MASK | \
-			     GDK_BUTTON3_MASK | \
-			     GDK_BUTTON4_MASK | \
-			     GDK_BUTTON5_MASK)
+                             GDK_BUTTON2_MASK | \
+                             GDK_BUTTON3_MASK | \
+                             GDK_BUTTON4_MASK | \
+                             GDK_BUTTON5_MASK)
 
 #ifdef DEBUG_SURFACE_PRINTING
 
@@ -4549,7 +4549,7 @@ _gdk_display_set_surface_under_pointer (GdkDisplay *display,
 
 static void
 gdk_surface_print (GdkSurface *surface,
-		  int indent)
+                  int indent)
 {
   char *s;
   const char *surface_types[] = {
@@ -4563,10 +4563,10 @@ gdk_surface_print (GdkSurface *surface,
   };
 
   g_print ("%*s%p: [%s] %d,%d %dx%d", indent, "", surface,
-	   surface->user_data ? g_type_name_from_instance (surface->user_data) : "no widget",
-	   surface->x, surface->y,
-	   surface->width, surface->height
-	   );
+           surface->user_data ? g_type_name_from_instance (surface->user_data) : "no widget",
+           surface->x, surface->y,
+           surface->width, surface->height
+           );
 
   if (gdk_surface_has_impl (surface))
     {
@@ -4585,11 +4585,11 @@ gdk_surface_print (GdkSurface *surface,
     g_print (" hidden");
 
   g_print (" abs[%d,%d]",
-	   surface->abs_x, surface->abs_y);
+           surface->abs_x, surface->abs_y);
 
   if (surface->alpha != 255)
     g_print (" alpha[%d]",
-	   surface->alpha);
+           surface->alpha);
 
   s = print_region (surface->clip_region);
   g_print (" clipbox[%s]", s);
@@ -4600,8 +4600,8 @@ gdk_surface_print (GdkSurface *surface,
 
 static void
 gdk_surface_print_tree (GdkSurface *surface,
-		       int indent,
-		       gboolean include_input_only)
+                        int indent,
+                        gboolean include_input_only)
 {
   GList *l;
 
@@ -4743,9 +4743,9 @@ _gdk_windowing_got_event (GdkDisplay *display,
  **/
 cairo_surface_t *
 gdk_surface_create_similar_surface (GdkSurface *     surface,
-                                   cairo_content_t content,
-                                   int             width,
-                                   int             height)
+                                    cairo_content_t content,
+                                    int             width,
+                                    int             height)
 {
   cairo_surface_t *surface_surface, *similar_surface;
   double sx, sy;
@@ -4824,10 +4824,10 @@ gdk_surface_create_similar_surface (GdkSurface *     surface,
  **/
 cairo_surface_t *
 gdk_surface_create_similar_image_surface (GdkSurface *     surface,
-					 cairo_format_t  format,
-					 int             width,
-					 int             height,
-					 int             scale)
+                                          cairo_format_t  format,
+                                          int             width,
+                                          int             height,
+                                          int             scale)
 {
   cairo_surface_t *cairo_surface;
 
@@ -4875,7 +4875,7 @@ gdk_surface_create_similar_image_surface (GdkSurface *     surface,
  **/
 void
 gdk_surface_focus (GdkSurface *surface,
-                  guint32    timestamp)
+                   guint32    timestamp)
 {
   GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->focus (surface, timestamp);
 }
@@ -4894,7 +4894,7 @@ gdk_surface_focus (GdkSurface *surface,
  **/
 void
 gdk_surface_set_type_hint (GdkSurface        *surface,
-			  GdkSurfaceTypeHint hint)
+                           GdkSurfaceTypeHint hint)
 {
   GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_type_hint (surface, hint);
 }
@@ -4928,7 +4928,7 @@ gdk_surface_get_type_hint (GdkSurface *surface)
  **/
 void
 gdk_surface_set_modal_hint (GdkSurface *surface,
-			   gboolean   modal)
+                            gboolean   modal)
 {
   GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_modal_hint (surface, modal);
 }
@@ -4947,7 +4947,7 @@ gdk_surface_set_modal_hint (GdkSurface *surface,
  **/
 void
 gdk_surface_set_skip_taskbar_hint (GdkSurface *surface,
-                                  gboolean   skips_taskbar)
+                                   gboolean   skips_taskbar)
 {
   GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_skip_taskbar_hint (surface, skips_taskbar);
 }
@@ -4968,7 +4968,7 @@ gdk_surface_set_skip_taskbar_hint (GdkSurface *surface,
  **/
 void
 gdk_surface_set_skip_pager_hint (GdkSurface *surface,
-                                gboolean   skips_pager)
+                                 gboolean   skips_pager)
 {
   GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_skip_pager_hint (surface, skips_pager);
 }
@@ -4983,7 +4983,7 @@ gdk_surface_set_skip_pager_hint (GdkSurface *surface,
  **/
 void
 gdk_surface_set_urgency_hint (GdkSurface *surface,
-			     gboolean   urgent)
+                              gboolean   urgent)
 {
   GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_urgency_hint (surface, urgent);
 }
@@ -5018,8 +5018,8 @@ gdk_surface_set_urgency_hint (GdkSurface *surface,
  **/
 void
 gdk_surface_set_geometry_hints (GdkSurface         *surface,
-			       const GdkGeometry *geometry,
-			       GdkSurfaceHints     geom_mask)
+                                const GdkGeometry *geometry,
+                                GdkSurfaceHints     geom_mask)
 {
   g_return_if_fail (geometry != NULL || geom_mask == 0);
 
@@ -5039,7 +5039,7 @@ gdk_surface_set_geometry_hints (GdkSurface         *surface,
  **/
 void
 gdk_surface_set_title (GdkSurface   *surface,
-		      const gchar *title)
+                       const gchar *title)
 {
   GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_title (surface, title);
 }
@@ -5065,7 +5065,7 @@ gdk_surface_set_title (GdkSurface   *surface,
  **/
 void
 gdk_surface_set_role (GdkSurface   *surface,
-		     const gchar *role)
+                      const gchar *role)
 {
   GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_role (surface, role);
 }
@@ -5080,7 +5080,7 @@ gdk_surface_set_role (GdkSurface   *surface,
  **/
 void
 gdk_surface_set_startup_id (GdkSurface   *surface,
-			   const gchar *startup_id)
+                            const gchar *startup_id)
 {
   GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_startup_id (surface, startup_id);
 }
@@ -5100,7 +5100,7 @@ gdk_surface_set_startup_id (GdkSurface   *surface,
  **/
 void
 gdk_surface_set_transient_for (GdkSurface *surface,
-			      GdkSurface *parent)
+                              GdkSurface *parent)
 {
   surface->transient_for = parent;
 
@@ -5119,8 +5119,8 @@ gdk_surface_set_transient_for (GdkSurface *surface,
  **/
 void
 gdk_surface_get_root_origin (GdkSurface *surface,
-			    gint      *x,
-			    gint      *y)
+                             gint      *x,
+                             gint      *y)
 {
   GdkRectangle rect;
 
@@ -5146,7 +5146,7 @@ gdk_surface_get_root_origin (GdkSurface *surface,
  **/
 void
 gdk_surface_get_frame_extents (GdkSurface    *surface,
-                              GdkRectangle *rect)
+                               GdkRectangle *rect)
 {
   GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->get_frame_extents (surface, rect);
 }
@@ -5164,7 +5164,7 @@ gdk_surface_get_frame_extents (GdkSurface    *surface,
  **/
 void
 gdk_surface_set_accept_focus (GdkSurface *surface,
-			     gboolean accept_focus)
+                              gboolean accept_focus)
 {
   GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_accept_focus (surface, accept_focus);
 }
@@ -5185,7 +5185,7 @@ gdk_surface_set_accept_focus (GdkSurface *surface,
  **/
 void
 gdk_surface_set_focus_on_map (GdkSurface *surface,
-			     gboolean focus_on_map)
+                              gboolean focus_on_map)
 {
   GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_focus_on_map (surface, focus_on_map);
 }
@@ -5208,7 +5208,7 @@ gdk_surface_set_focus_on_map (GdkSurface *surface,
  */
 void
 gdk_surface_set_icon_list (GdkSurface *surface,
-                          GList     *textures)
+                           GList     *textures)
 {
   GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_icon_list (surface, textures);
 }
@@ -5233,7 +5233,7 @@ gdk_surface_set_icon_list (GdkSurface *surface,
  **/
 void
 gdk_surface_set_icon_name (GdkSurface   *surface,
-			  const gchar *name)
+                           const gchar *name)
 {
   GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_icon_name (surface, name);
 }
@@ -5389,7 +5389,7 @@ gdk_surface_fullscreen (GdkSurface *surface)
  **/
 void
 gdk_surface_fullscreen_on_monitor (GdkSurface  *surface,
-                                  GdkMonitor *monitor)
+                                   GdkMonitor *monitor)
 {
   g_return_if_fail (GDK_IS_SURFACE (surface));
   g_return_if_fail (GDK_IS_MONITOR (monitor));
@@ -5427,7 +5427,7 @@ gdk_surface_fullscreen_on_monitor (GdkSurface  *surface,
  **/
 void
 gdk_surface_set_fullscreen_mode (GdkSurface        *surface,
-                                GdkFullscreenMode mode)
+                                 GdkFullscreenMode mode)
 {
   GdkSurfaceImplClass *impl_class;
 
@@ -5497,7 +5497,7 @@ gdk_surface_unfullscreen (GdkSurface *surface)
  **/
 void
 gdk_surface_set_keep_above (GdkSurface *surface,
-                           gboolean   setting)
+                            gboolean   setting)
 {
   GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_keep_above (surface, setting);
 }
@@ -5518,7 +5518,8 @@ gdk_surface_set_keep_above (GdkSurface *surface,
  * and GDK makes a best effort to get it to happen.
  **/
 void
-gdk_surface_set_keep_below (GdkSurface *surface, gboolean setting)
+gdk_surface_set_keep_below (GdkSurface *surface,
+                            gboolean setting)
 {
   GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_keep_below (surface, setting);
 }
@@ -5555,7 +5556,7 @@ gdk_surface_get_group (GdkSurface *surface)
  **/
 void
 gdk_surface_set_group (GdkSurface *surface,
-		      GdkSurface *leader)
+                       GdkSurface *leader)
 {
   GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_group (surface, leader);
 }
@@ -5583,7 +5584,7 @@ gdk_surface_set_group (GdkSurface *surface,
  **/
 void
 gdk_surface_set_decorations (GdkSurface      *surface,
-			    GdkWMDecoration decorations)
+                             GdkWMDecoration decorations)
 {
   GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_decorations (surface, decorations);
 }
@@ -5599,8 +5600,8 @@ gdk_surface_set_decorations (GdkSurface      *surface,
  * Returns: %TRUE if the surface has decorations set, %FALSE otherwise.
  **/
 gboolean
-gdk_surface_get_decorations(GdkSurface       *surface,
-			   GdkWMDecoration *decorations)
+gdk_surface_get_decorations (GdkSurface       *surface,
+                             GdkWMDecoration *decorations)
 {
   return GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->get_decorations (surface, decorations);
 }
@@ -5627,7 +5628,7 @@ gdk_surface_get_decorations(GdkSurface       *surface,
  **/
 void
 gdk_surface_set_functions (GdkSurface    *surface,
-			  GdkWMFunction functions)
+                           GdkWMFunction functions)
 {
   GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_functions (surface, functions);
 }
@@ -5651,12 +5652,12 @@ gdk_surface_set_functions (GdkSurface    *surface,
  */
 void
 gdk_surface_begin_resize_drag_for_device (GdkSurface     *surface,
-                                         GdkSurfaceEdge  edge,
-                                         GdkDevice     *device,
-                                         gint           button,
-                                         gint           root_x,
-                                         gint           root_y,
-                                         guint32        timestamp)
+                                          GdkSurfaceEdge  edge,
+                                          GdkDevice     *device,
+                                          gint           button,
+                                          gint           root_x,
+                                          gint           root_y,
+                                          guint32        timestamp)
 {
   GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->begin_resize_drag (surface, edge, device, button, root_x, root_y, timestamp);
 }
@@ -5678,11 +5679,11 @@ gdk_surface_begin_resize_drag_for_device (GdkSurface     *surface,
  */
 void
 gdk_surface_begin_resize_drag (GdkSurface     *surface,
-                              GdkSurfaceEdge  edge,
-                              gint           button,
-                              gint           root_x,
-                              gint           root_y,
-                              guint32        timestamp)
+                               GdkSurfaceEdge  edge,
+                               gint           button,
+                               gint           root_x,
+                               gint           root_y,
+                               guint32        timestamp)
 {
   GdkDisplay *display;
   GdkDevice *device;
@@ -5710,11 +5711,11 @@ gdk_surface_begin_resize_drag (GdkSurface     *surface,
  */
 void
 gdk_surface_begin_move_drag_for_device (GdkSurface *surface,
-                                       GdkDevice *device,
-                                       gint       button,
-                                       gint       root_x,
-                                       gint       root_y,
-                                       guint32    timestamp)
+                                        GdkDevice *device,
+                                        gint       button,
+                                        gint       root_x,
+                                        gint       root_y,
+                                        guint32    timestamp)
 {
   GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->begin_move_drag (surface,
                                                              device, button, root_x, root_y, timestamp);
@@ -5736,10 +5737,10 @@ gdk_surface_begin_move_drag_for_device (GdkSurface *surface,
  */
 void
 gdk_surface_begin_move_drag (GdkSurface *surface,
-                            gint       button,
-                            gint       root_x,
-                            gint       root_y,
-                            guint32    timestamp)
+                             gint       button,
+                             gint       root_x,
+                             gint       root_y,
+                             guint32    timestamp)
 {
   GdkDisplay *display;
   GdkDevice *device;
@@ -5771,7 +5772,7 @@ gdk_surface_begin_move_drag (GdkSurface *surface,
  */
 void
 gdk_surface_set_opacity (GdkSurface *surface,
-			gdouble    opacity)
+                         gdouble    opacity)
 {
   if (opacity < 0)
     opacity = 0;
@@ -5846,7 +5847,7 @@ gdk_drag_begin (GdkSurface          *surface,
 
 static void
 gdk_surface_flush_events (GdkFrameClock *clock,
-                         void          *data)
+                          void          *data)
 {
   GdkSurface *surface;
   GdkDisplay *display;
@@ -5864,7 +5865,7 @@ gdk_surface_flush_events (GdkFrameClock *clock,
 
 static void
 gdk_surface_resume_events (GdkFrameClock *clock,
-                          void          *data)
+                           void          *data)
 {
   GdkSurface *surface;
   GdkDisplay *display;
@@ -5879,7 +5880,7 @@ gdk_surface_resume_events (GdkFrameClock *clock,
 
 static void
 gdk_surface_set_frame_clock (GdkSurface     *surface,
-                            GdkFrameClock *clock)
+                             GdkFrameClock *clock)
 {
   g_return_if_fail (GDK_IS_SURFACE (surface));
   g_return_if_fail (clock == NULL || GDK_IS_FRAME_CLOCK (clock));
@@ -5989,8 +5990,8 @@ gdk_surface_get_scale_factor (GdkSurface *surface)
    coordinates which are y-flipped in the real coordinates. */
 void
 gdk_surface_get_unscaled_size (GdkSurface *surface,
-                              int *unscaled_width,
-                              int *unscaled_height)
+                               int *unscaled_width,
+                               int *unscaled_height)
 {
   GdkSurfaceImplClass *impl_class;
   gint scale;
@@ -6039,7 +6040,7 @@ gdk_surface_get_unscaled_size (GdkSurface *surface,
  */
 void
 gdk_surface_set_opaque_region (GdkSurface      *surface,
-                              cairo_region_t *region)
+                               cairo_region_t *region)
 {
   GdkSurfaceImplClass *impl_class;
 
@@ -6080,10 +6081,10 @@ gdk_surface_set_opaque_region (GdkSurface      *surface,
  */
 void
 gdk_surface_set_shadow_width (GdkSurface *surface,
-                             gint       left,
-                             gint       right,
-                             gint       top,
-                             gint       bottom)
+                              gint       left,
+                              gint       right,
+                              gint       top,
+                              gint       bottom)
 {
   GdkSurfaceImplClass *impl_class;
 
@@ -6117,7 +6118,7 @@ gdk_surface_set_shadow_width (GdkSurface *surface,
  */
 gboolean
 gdk_surface_show_window_menu (GdkSurface *surface,
-                             GdkEvent  *event)
+                              GdkEvent  *event)
 {
   GdkSurfaceImplClass *impl_class;
 
@@ -6150,7 +6151,7 @@ gdk_surface_supports_edge_constraints (GdkSurface *surface)
 
 void
 gdk_surface_set_state (GdkSurface      *surface,
-                      GdkSurfaceState  new_state)
+                       GdkSurfaceState  new_state)
 {
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
@@ -6186,8 +6187,8 @@ gdk_surface_set_state (GdkSurface      *surface,
 
 void
 gdk_synthesize_surface_state (GdkSurface     *surface,
-                             GdkSurfaceState unset_flags,
-                             GdkSurfaceState set_flags)
+                              GdkSurfaceState unset_flags,
+                              GdkSurfaceState set_flags)
 {
   gdk_surface_set_state (surface, (surface->state | set_flags) & ~unset_flags);
 }

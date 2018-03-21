@@ -78,10 +78,10 @@ void         _gdk_quartz_synthesize_null_key_event (GdkSurface *window);
 /* Drag and Drop */
 void        _gdk_quartz_surface_register_dnd      (GdkSurface   *window);
 GdkDragContext * _gdk_quartz_surface_drag_begin   (GdkSurface   *window,
-                                                  GdkDevice   *device,
-                                                  GList       *targets,
-                                                  gint         x_root,
-                                                  gint         y_root);
+                                                   GdkDevice   *device,
+                                                   GList       *targets,
+                                                   gint         x_root,
+                                                   gint         y_root);
 
 /* Display */
 
@@ -98,35 +98,35 @@ gboolean    _gdk_quartz_get_setting                 (const gchar *name,
 
 
 /* Window */
-gboolean    _gdk_quartz_surface_is_ancestor          (GdkSurface *ancestor,
+gboolean    _gdk_quartz_surface_is_ancestor         (GdkSurface *ancestor,
                                                      GdkSurface *window);
-void       _gdk_quartz_surface_gdk_xy_to_xy          (gint       gdk_x,
+void       _gdk_quartz_surface_gdk_xy_to_xy         (gint       gdk_x,
                                                      gint       gdk_y,
                                                      gint      *ns_x,
                                                      gint      *ns_y);
-void       _gdk_quartz_surface_xy_to_gdk_xy          (gint       ns_x,
+void       _gdk_quartz_surface_xy_to_gdk_xy         (gint       ns_x,
                                                      gint       ns_y,
                                                      gint      *gdk_x,
                                                      gint      *gdk_y);
-void       _gdk_quartz_surface_nspoint_to_gdk_xy     (NSPoint    point,
+void       _gdk_quartz_surface_nspoint_to_gdk_xy    (NSPoint    point,
                                                      gint      *x,
                                                      gint      *y);
-GdkSurface *_gdk_quartz_surface_find_child            (GdkSurface *window,
-						     gint       x,
-						     gint       y,
+GdkSurface *_gdk_quartz_surface_find_child          (GdkSurface *window,
+                                                     gint       x,
+                                                     gint       y,
                                                      gboolean   get_toplevel);
-void       _gdk_quartz_surface_attach_to_parent      (GdkSurface *window);
-void       _gdk_quartz_surface_detach_from_parent    (GdkSurface *window);
-void       _gdk_quartz_surface_did_become_main       (GdkSurface *window);
-void       _gdk_quartz_surface_did_resign_main       (GdkSurface *window);
-void       _gdk_quartz_surface_debug_highlight       (GdkSurface *window,
+void       _gdk_quartz_surface_attach_to_parent     (GdkSurface *window);
+void       _gdk_quartz_surface_detach_from_parent   (GdkSurface *window);
+void       _gdk_quartz_surface_did_become_main      (GdkSurface *window);
+void       _gdk_quartz_surface_did_resign_main      (GdkSurface *window);
+void       _gdk_quartz_surface_debug_highlight      (GdkSurface *window,
                                                      gint       number);
 
 void       _gdk_quartz_surface_update_position           (GdkSurface    *window);
 void       _gdk_quartz_surface_update_fullscreen_state   (GdkSurface    *window);
 
 /* Window methods - property */
-gboolean _gdk_quartz_surface_get_property      (GdkSurface    *window,
+gboolean _gdk_quartz_surface_get_property     (GdkSurface    *window,
                                                GdkAtom       property,
                                                GdkAtom       type,
                                                gulong        offset,
@@ -136,14 +136,14 @@ gboolean _gdk_quartz_surface_get_property      (GdkSurface    *window,
                                                gint         *actual_format_type,
                                                gint         *actual_length,
                                                guchar      **data);
-void     _gdk_quartz_surface_change_property   (GdkSurface    *window,
+void     _gdk_quartz_surface_change_property  (GdkSurface    *window,
                                                GdkAtom       property,
                                                GdkAtom       type,
                                                gint          format,
                                                GdkPropMode   mode,
                                                const guchar *data,
                                                gint          nelements);
-void     _gdk_quartz_surface_delete_property   (GdkSurface    *window,
+void     _gdk_quartz_surface_delete_property  (GdkSurface    *window,
                                                GdkAtom       property);
 
 
