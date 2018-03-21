@@ -2172,7 +2172,6 @@ gdk_surface_paint_on_clock (GdkFrameClock *clock,
  * @surface: a #GdkSurface
  * @rect: (allow-none): rectangle to invalidate or %NULL to invalidate the whole
  *      surface
- * @invalidate_children: whether to also invalidate child surfaces
  *
  * A convenience wrapper around gdk_surface_invalidate_region() which
  * invalidates a rectangular region. See
@@ -2225,7 +2224,6 @@ impl_surface_add_update_area (GdkSurface *impl_surface,
  * gdk_surface_invalidate_region:
  * @surface: a #GdkSurface
  * @region: a #cairo_region_t
- * @invalidate_children: %TRUE to also invalidate child surfaces
  *
  * Adds @region to the update area for @surface. The update area is the
  * region that needs to be redrawn, or “dirty region.”
