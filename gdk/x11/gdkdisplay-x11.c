@@ -748,7 +748,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
         y2 = (xevent->xexpose.y + xevent->xexpose.height + surface_impl->surface_scale -1) / surface_impl->surface_scale;
         expose_rect.height = y2 - expose_rect.y;
 
-        _gdk_x11_surface_process_expose (surface, xevent->xexpose.serial, &expose_rect);
+        gdk_surface_invalidate_rect (surface, &expose_rect);
         return_val = FALSE;
       }
 
@@ -778,7 +778,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
         y2 = (xevent->xgraphicsexpose.y + xevent->xgraphicsexpose.height + surface_impl->surface_scale -1) / surface_impl->surface_scale;
         expose_rect.height = y2 - expose_rect.y;
 
-        _gdk_x11_surface_process_expose (surface, xevent->xgraphicsexpose.serial, &expose_rect);
+        gdk_surface_invalidate_rect (surface, &expose_rect);
         return_val = FALSE;
       }
       break;

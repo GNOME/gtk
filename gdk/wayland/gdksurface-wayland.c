@@ -314,8 +314,6 @@ gdk_wayland_surface_update_size (GdkSurface *surface,
                                 int        scale)
 {
   GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (surface->impl);
-  GdkRectangle area;
-  cairo_region_t *region;
 
   if ((surface->width == width) &&
       (surface->height == height) &&
@@ -333,14 +331,7 @@ gdk_wayland_surface_update_size (GdkSurface *surface,
   if (impl->display_server.wl_surface)
     wl_surface_set_buffer_scale (impl->display_server.wl_surface, scale);
 
-  area.x = 0;
-  area.y = 0;
-  area.width = surface->width;
-  area.height = surface->height;
-
-  region = cairo_region_create_rectangle (&area);
-  _gdk_surface_invalidate_for_expose (surface, region);
-  cairo_region_destroy (region);
+  gdk_surface_invalidate_rect (surface, NULL);
 }
 
 static const gchar *

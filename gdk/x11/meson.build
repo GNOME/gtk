@@ -13,7 +13,6 @@ gdk_x11_sources = files([
   'gdkdnd-x11.c',
   'gdkeventsource.c',
   'gdkeventtranslator.c',
-  'gdkgeometry-x11.c',
   'gdkglcontext-x11.c',
   'gdkkeys-x11.c',
   'gdkmain-x11.c',

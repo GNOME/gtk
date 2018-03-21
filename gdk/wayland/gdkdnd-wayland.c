@@ -384,7 +384,7 @@ gdk_wayland_drag_context_set_hotspot (GdkDragContext *context,
 
   _gdk_wayland_surface_offset_next_wl_buffer (context_wayland->dnd_surface,
                                              -hot_x, -hot_y);
-  gdk_surface_invalidate_rect (context_wayland->dnd_surface, &damage_rect, FALSE);
+  gdk_surface_invalidate_rect (context_wayland->dnd_surface, &damage_rect);
 }
 
 static void

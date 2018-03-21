@@ -180,7 +180,7 @@ gtk_window_manage_updates (GtkWidget     *widget,
       cairo_region_union (region, draw->region);
     }
   gtk_debug_updates_print (updates, region, "Queued update");
-  gdk_surface_invalidate_region (gtk_widget_get_surface (widget), region, TRUE);
+  gdk_surface_invalidate_region (gtk_widget_get_surface (widget), region);
   cairo_region_destroy (region);
 
   /* Then remove all outdated regions */

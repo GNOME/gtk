@@ -1638,7 +1638,7 @@ _gdk_x11_surface_set_surface_scale (GdkSurface *surface,
                      surface->height * impl->surface_scale);
     }
 
-  gdk_surface_invalidate_rect (surface, NULL, TRUE);
+  gdk_surface_invalidate_rect (surface, NULL);
 }
 
 static void

@@ -78,11 +78,6 @@ gint _gdk_x11_display_send_xevent (GdkDisplay *display,
                                    glong       event_mask,
                                    XEvent     *event_send);
 
-/* Routines from gdkgeometry-x11.c */
-void _gdk_x11_surface_process_expose    (GdkSurface     *window,
-                                        gulong         serial,
-                                        GdkRectangle  *area);
-
 cairo_region_t* _gdk_x11_xwindow_get_shape  (Display *xdisplay,
                                              Window   window,
                                              gint     scale,

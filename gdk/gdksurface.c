@@ -131,12 +131,6 @@ static void update_cursor               (GdkDisplay *display,
                                          GdkDevice  *device);
 static void impl_surface_add_update_area (GdkSurface *impl_surface,
 					 cairo_region_t *region);
-static void gdk_surface_invalidate_region_full (GdkSurface       *surface,
-					       const cairo_region_t *region,
-					       gboolean         invalidate_children);
-static void gdk_surface_invalidate_rect_full (GdkSurface          *surface,
-					     const GdkRectangle *rect,
-					     gboolean            invalidate_children);
 static cairo_surface_t *gdk_surface_ref_impl_surface (GdkSurface *surface);
 
 static void gdk_surface_set_frame_clock (GdkSurface      *surface,
@@ -2173,10 +2167,20 @@ gdk_surface_paint_on_clock (GdkFrameClock *clock,
   g_object_unref (surface);
 }
 
-static void
-gdk_surface_invalidate_rect_full (GdkSurface          *surface,
-				  const GdkRectangle *rect,
-				  gboolean            invalidate_children)
+/**
+ * gdk_surface_invalidate_rect:
+ * @surface: a #GdkSurface
+ * @rect: (allow-none): rectangle to invalidate or %NULL to invalidate the whole
+ *      surface
+ * @invalidate_children: whether to also invalidate child surfaces
+ *
+ * A convenience wrapper around gdk_surface_invalidate_region() which
+ * invalidates a rectangular region. See
+ * gdk_surface_invalidate_region() for details.
+ **/
+void
+gdk_surface_invalidate_rect (GdkSurface        *surface,
+			    const GdkRectangle *rect)
 {
   GdkRectangle surface_rect;
   cairo_region_t *region;
@@ -2199,27 +2203,8 @@ gdk_surface_invalidate_rect_full (GdkSurface          *surface,
     }
 
   region = cairo_region_create_rectangle (rect);
-  gdk_surface_invalidate_region_full (surface, region, invalidate_children);
+  gdk_surface_invalidate_region (surface, region);
   cairo_region_destroy (region);
-}
-
-/**
- * gdk_surface_invalidate_rect:
- * @surface: a #GdkSurface
- * @rect: (allow-none): rectangle to invalidate or %NULL to invalidate the whole
- *      surface
- * @invalidate_children: whether to also invalidate child surfaces
- *
- * A convenience wrapper around gdk_surface_invalidate_region() which
- * invalidates a rectangular region. See
- * gdk_surface_invalidate_region() for details.
- **/
-void
-gdk_surface_invalidate_rect (GdkSurface          *surface,
-			    const GdkRectangle *rect,
-			    gboolean            invalidate_children)
-{
-  gdk_surface_invalidate_rect_full (surface, rect, invalidate_children);
 }
 
 static void
@@ -2236,9 +2221,27 @@ impl_surface_add_update_area (GdkSurface *impl_surface,
     }
 }
 
-static void
-gdk_surface_invalidate_full (GdkSurface           *surface,
-		             const cairo_region_t *region)
+/**
+ * gdk_surface_invalidate_region:
+ * @surface: a #GdkSurface
+ * @region: a #cairo_region_t
+ * @invalidate_children: %TRUE to also invalidate child surfaces
+ *
+ * Adds @region to the update area for @surface. The update area is the
+ * region that needs to be redrawn, or “dirty region.”
+ *
+ * GDK will process all updates whenever the frame clock schedules a redraw,
+ * so there’s no need to do forces redraws manually, you just need to
+ * invalidate regions that you know should be redrawn.
+ *
+ * The @invalidate_children parameter controls whether the region of
+ * each child surface that intersects @region will also be invalidated.
+ * If %FALSE, then the update area for child surfaces will remain
+ * unaffected.
+ **/
+void
+gdk_surface_invalidate_region (GdkSurface          *surface,
+			      const cairo_region_t *region)
 {
   cairo_region_t *visible_region;
   cairo_rectangle_int_t r;
@@ -2279,62 +2282,6 @@ gdk_surface_invalidate_full (GdkSurface           *surface,
     }
 
   cairo_region_destroy (visible_region);
-}
-
-static void
-gdk_surface_invalidate_region_full (GdkSurface       *surface,
-				    const cairo_region_t *region,
-				    gboolean         invalidate_children)
-{
-  gdk_surface_invalidate_full (surface, region);
-}
-
-/**
- * gdk_surface_invalidate_region:
- * @surface: a #GdkSurface
- * @region: a #cairo_region_t
- * @invalidate_children: %TRUE to also invalidate child surfaces
- *
- * Adds @region to the update area for @surface. The update area is the
- * region that needs to be redrawn, or “dirty region.”
- *
- * GDK will process all updates whenever the frame clock schedules a redraw,
- * so there’s no need to do forces redraws manually, you just need to
- * invalidate regions that you know should be redrawn.
- *
- * The @invalidate_children parameter controls whether the region of
- * each child surface that intersects @region will also be invalidated.
- * If %FALSE, then the update area for child surfaces will remain
- * unaffected.
- **/
-void
-gdk_surface_invalidate_region (GdkSurface       *surface,
-			      const cairo_region_t *region,
-			      gboolean         invalidate_children)
-{
-  gdk_surface_invalidate_full (surface, region);
-}
-
-/**
- * _gdk_surface_invalidate_for_expose:
- * @surface: a #GdkSurface
- * @region: a #cairo_region_t
- *
- * Adds @region to the update area for @surface.
- *
- * GDK will process all updates whenever the frame clock schedules a redraw,
- * so there’s no need to do forces redraws manually, you just need to
- * invalidate regions that you know should be redrawn.
- *
- * This version of invalidation is used when you recieve expose events
- * from the native surface system. It exposes the native surface, plus
- * any non-native child surfaces.
- **/
-void
-_gdk_surface_invalidate_for_expose (GdkSurface       *surface,
-				   cairo_region_t       *region)
-{
-  gdk_surface_invalidate_full (surface, region);
 }
 
 /**
@@ -2770,7 +2717,7 @@ gdk_surface_show_internal (GdkSurface *surface, gboolean raise)
       recompute_visible_regions (surface, FALSE);
 
       if (gdk_surface_is_viewable (surface))
-        gdk_surface_invalidate_rect_full (surface, NULL, TRUE);
+        gdk_surface_invalidate_rect (surface, NULL);
     }
 }
 
@@ -2821,7 +2768,7 @@ gdk_surface_raise (GdkSurface *surface)
       !gdk_surface_is_toplevel (surface) &&
       gdk_surface_is_viewable (surface) &&
       !surface->input_only)
-    gdk_surface_invalidate_rect_full (surface, NULL, TRUE);
+    gdk_surface_invalidate_rect (surface, NULL);
 }
 
 static void
@@ -2862,7 +2809,7 @@ gdk_surface_invalidate_in_parent (GdkSurface *private)
   child.height = private->height;
   gdk_rectangle_intersect (&r, &child, &r);
 
-  gdk_surface_invalidate_rect_full (private->parent, &r, TRUE);
+  gdk_surface_invalidate_rect (private->parent, &r);
 }
 
 
@@ -3365,7 +3312,7 @@ gdk_surface_move_resize_internal (GdkSurface *surface,
 
       cairo_region_union (new_region, old_region);
 
-      gdk_surface_invalidate_region_full (surface->parent, new_region, TRUE);
+      gdk_surface_invalidate_region (surface->parent, new_region);
 
       cairo_region_destroy (old_region);
       cairo_region_destroy (new_region);
@@ -5841,7 +5788,7 @@ gdk_surface_set_opacity (GdkSurface *surface,
   else
     {
       recompute_visible_regions (surface, FALSE);
-      gdk_surface_invalidate_rect_full (surface, NULL, TRUE);
+      gdk_surface_invalidate_rect (surface, NULL);
     }
 }
 

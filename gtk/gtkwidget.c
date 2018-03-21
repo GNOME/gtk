@@ -4338,7 +4338,7 @@ gtk_widget_queue_draw_region (GtkWidget            *widget,
 
 invalidate:
   gtk_debug_updates_add (windowed_parent, region2);
-  gdk_surface_invalidate_region (_gtk_widget_get_surface (widget), region2, TRUE);
+  gdk_surface_invalidate_region (_gtk_widget_get_surface (widget), region2);
 
   cairo_region_destroy (region2);
 

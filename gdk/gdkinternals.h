@@ -342,9 +342,6 @@ void _gdk_windowing_got_event                (GdkDisplay       *display,
 
 #define GDK_SURFACE_IS_MAPPED(surface) (((surface)->state & GDK_SURFACE_STATE_WITHDRAWN) == 0)
 
-void _gdk_surface_invalidate_for_expose (GdkSurface       *surface,
-                                        cairo_region_t       *region);
-
 GdkSurface * _gdk_surface_find_child_at (GdkSurface *surface,
                                        double x, double y);
 GdkSurface * _gdk_surface_find_descendant_at (GdkSurface *toplevel,
