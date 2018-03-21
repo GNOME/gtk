@@ -107,8 +107,7 @@ Or [online](https://developer.gnome.org/gtk4/stable/gtk-building.html)
 How to report bugs
 ------------------
 
-Bugs should be reported to the GNOME [bug tracking system](https://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b).
-You will need an account for yourself.
+Bugs should be reported on the [issues page](https://gitlab.gnome.org/GNOME/gtk/issues/new).
 
 In the bug report please include:
 
