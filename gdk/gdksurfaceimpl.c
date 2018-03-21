@@ -326,18 +326,10 @@ gdk_surface_impl_move_to_rect (GdkSurface          *surface,
 }
 
 static void
-gdk_surface_impl_process_updates_recurse (GdkSurface      *surface,
-                                         cairo_region_t *region)
-{
-  _gdk_surface_process_updates_recurse (surface, region);
-}
-
-static void
 gdk_surface_impl_class_init (GdkSurfaceImplClass *impl_class)
 {
   impl_class->beep = gdk_surface_impl_beep;
   impl_class->move_to_rect = gdk_surface_impl_move_to_rect;
-  impl_class->process_updates_recurse = gdk_surface_impl_process_updates_recurse;
 }
 
 static void

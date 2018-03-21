@@ -211,9 +211,6 @@ struct _GdkSurfaceImplClass
                                          gint              dx,
                                          gint              dy);
 
-  void         (*process_updates_recurse) (GdkSurface      *surface,
-                                           cairo_region_t *region);
-
   gint         (* get_scale_factor)       (GdkSurface      *surface);
   void         (* get_unscaled_size)      (GdkSurface      *surface,
                                            int            *unscaled_width,

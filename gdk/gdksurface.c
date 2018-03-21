@@ -2067,9 +2067,9 @@ gdk_surface_schedule_update (GdkSurface *surface)
                                    GDK_FRAME_CLOCK_PHASE_PAINT);
 }
 
-void
-_gdk_surface_process_updates_recurse (GdkSurface *surface,
-                                      cairo_region_t *expose_region)
+static void
+gdk_surface_process_updates_recurse (GdkSurface *surface,
+                                     cairo_region_t *expose_region)
 {
   GdkEvent *event;
 
@@ -2093,8 +2093,6 @@ _gdk_surface_process_updates_recurse (GdkSurface *surface,
 static void
 gdk_surface_process_updates_internal (GdkSurface *surface)
 {
-  GdkSurfaceImplClass *impl_class;
-
   /* Ensure the surface lives while updating it */
   g_object_ref (surface);
 
@@ -2117,9 +2115,7 @@ gdk_surface_process_updates_internal (GdkSurface *surface)
 
           expose_region = cairo_region_copy (surface->active_update_area);
 
-          impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-
-          impl_class->process_updates_recurse (surface, expose_region);
+          gdk_surface_process_updates_recurse (surface, expose_region);
 
           gdk_surface_append_old_updated_area (surface, surface->active_update_area);
 

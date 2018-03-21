@@ -318,9 +318,6 @@ GdkDrawingContext *gdk_surface_get_drawing_context (GdkSurface *surface);
 
 cairo_region_t *gdk_surface_get_current_paint_region (GdkSurface *surface);
 
-void       _gdk_surface_process_updates_recurse (GdkSurface *surface,
-                                                 cairo_region_t *expose_region);
-
 /*****************************************
  * Interfaces provided by windowing code *
  *****************************************/
