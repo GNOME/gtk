@@ -200,8 +200,6 @@ struct _GdkSurfaceImplClass
                                          gint       root_x,
                                          gint       root_y,
                                          guint32    timestamp);
-  void         (* enable_synchronized_configure) (GdkSurface *surface);
-  void         (* configure_finished)   (GdkSurface *surface);
   void         (* set_opacity)          (GdkSurface *surface,
                                          gdouble    opacity);
   void         (* destroy_notify)       (GdkSurface *surface);
