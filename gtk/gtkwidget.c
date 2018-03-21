@@ -707,7 +707,6 @@ GtkTextDirection gtk_default_direction = GTK_TEXT_DIR_LTR;
 static GQuark		quark_accel_path = 0;
 static GQuark		quark_accel_closures = 0;
 static GQuark		quark_parent_surface = 0;
-static GQuark		quark_shape_info = 0;
 static GQuark		quark_input_shape_info = 0;
 static GQuark		quark_pango_context = 0;
 static GQuark		quark_mnemonic_labels = 0;
@@ -925,7 +924,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_accel_path = g_quark_from_static_string ("gtk-accel-path");
   quark_accel_closures = g_quark_from_static_string ("gtk-accel-closures");
   quark_parent_surface = g_quark_from_static_string ("gtk-parent-surface");
-  quark_shape_info = g_quark_from_static_string ("gtk-shape-info");
   quark_input_shape_info = g_quark_from_static_string ("gtk-input-shape-info");
   quark_pango_context = g_quark_from_static_string ("gtk-pango-context");
   quark_mnemonic_labels = g_quark_from_static_string ("gtk-mnemonic-labels");
@@ -3871,7 +3869,6 @@ void
 gtk_widget_realize (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv;
-  cairo_region_t *region;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (widget->priv->anchored ||
@@ -3900,12 +3897,6 @@ gtk_widget_realize (GtkWidget *widget)
       g_signal_emit (widget, widget_signals[REALIZE], 0);
 
       gtk_widget_real_set_has_tooltip (widget, gtk_widget_get_has_tooltip (widget), TRUE);
-
-      if (priv->has_shape_mask)
-	{
-	  region = g_object_get_qdata (G_OBJECT (widget), quark_shape_info);
-	  gdk_surface_shape_combine_region (priv->surface, region, 0, 0);
-	}
 
       gtk_widget_update_input_shape (widget);
 
@@ -3938,9 +3929,6 @@ gtk_widget_unrealize (GtkWidget *widget)
 
   g_object_ref (widget);
   gtk_widget_push_verify_invariants (widget);
-
-  if (widget->priv->has_shape_mask)
-    gtk_widget_shape_combine_region (widget, NULL);
 
   if (g_object_get_qdata (G_OBJECT (widget), quark_input_shape_info))
     gtk_widget_input_shape_combine_region (widget, NULL);
@@ -9716,52 +9704,6 @@ gtk_widget_propagate_state (GtkWidget          *widget,
         }
 
       g_object_unref (widget);
-    }
-}
-
-/**
- * gtk_widget_shape_combine_region:
- * @widget: a #GtkWidget
- * @region: (allow-none): shape to be added, or %NULL to remove an existing shape
- *
- * Sets a shape for this widget’s GDK surface. This allows for
- * transparent windows etc., see gdk_surface_shape_combine_region()
- * for more information.
- **/
-void
-gtk_widget_shape_combine_region (GtkWidget *widget,
-                                 cairo_region_t *region)
-{
-  GtkWidgetPrivate *priv;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  /*  set_shape doesn't work on widgets without GDK surface */
-  g_return_if_fail (_gtk_widget_get_has_surface (widget));
-
-  priv = widget->priv;
-
-  if (region == NULL)
-    {
-      priv->has_shape_mask = FALSE;
-
-      if (priv->surface)
-	gdk_surface_shape_combine_region (priv->surface, NULL, 0, 0);
-
-      g_object_set_qdata (G_OBJECT (widget), quark_shape_info, NULL);
-    }
-  else
-    {
-      priv->has_shape_mask = TRUE;
-
-      g_object_set_qdata_full (G_OBJECT (widget), quark_shape_info,
-                               cairo_region_copy (region),
-			       (GDestroyNotify) cairo_region_destroy);
-
-      /* set shape if widget has a GDK surface already.
-       * otherwise the shape is scheduled to be set by gtk_widget_realize().
-       */
-      if (priv->surface)
-	gdk_surface_shape_combine_region (priv->surface, region, 0, 0);
     }
 }
 

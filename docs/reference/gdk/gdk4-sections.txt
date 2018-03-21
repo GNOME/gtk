@@ -193,7 +193,6 @@ gdk_surface_is_destroyed
 gdk_surface_is_visible
 gdk_surface_is_viewable
 gdk_surface_is_input_only
-gdk_surface_is_shaped
 gdk_surface_get_state
 gdk_surface_withdraw
 gdk_surface_iconify
@@ -252,9 +251,6 @@ gdk_surface_set_accept_focus
 gdk_surface_get_accept_focus
 gdk_surface_set_focus_on_map
 gdk_surface_get_focus_on_map
-gdk_surface_shape_combine_region
-gdk_surface_set_child_shapes
-gdk_surface_merge_child_shapes
 gdk_surface_input_shape_combine_region
 gdk_surface_set_child_input_shapes
 gdk_surface_merge_child_input_shapes

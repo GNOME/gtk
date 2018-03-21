@@ -4254,7 +4254,6 @@ GtkTextDirection
 gtk_widget_get_direction
 gtk_widget_set_default_direction
 gtk_widget_get_default_direction
-gtk_widget_shape_combine_region
 gtk_widget_input_shape_combine_region
 gtk_widget_create_pango_context
 gtk_widget_get_pango_context

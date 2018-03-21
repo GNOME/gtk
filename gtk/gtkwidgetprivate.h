@@ -69,7 +69,6 @@ struct _GtkWidgetPrivate
   guint shadowed              : 1;
   guint child_visible         : 1;
   guint multidevice           : 1;
-  guint has_shape_mask        : 1;
   guint pass_through          : 1;
 
   /* Queue-resize related flags */

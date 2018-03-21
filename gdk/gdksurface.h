@@ -511,36 +511,6 @@ GDK_AVAILABLE_IN_ALL
 void          gdk_surface_set_focus_on_map      (GdkSurface     *surface,
 					        gboolean       focus_on_map);
 
-/* 
- * This allows for making shaped (partially transparent) surfaces
- * - cool feature, needed for Drag and Drag for example.
- */
-GDK_AVAILABLE_IN_ALL
-void gdk_surface_shape_combine_region (GdkSurface	      *surface,
-                                      const cairo_region_t *shape_region,
-                                      gint	       offset_x,
-                                      gint	       offset_y);
-
-/*
- * This routine allows you to quickly take the shapes of all the child surfaces
- * of a surface and use their shapes as the shape mask for this surface - useful
- * for container surfaces that dont want to look like a big box
- * 
- * - Raster
- */
-GDK_AVAILABLE_IN_ALL
-void gdk_surface_set_child_shapes (GdkSurface *surface);
-
-/*
- * This routine allows you to merge (ie ADD) child shapes to your
- * own surface’s shape keeping its current shape and ADDING the child
- * shapes to it.
- * 
- * - Raster
- */
-GDK_AVAILABLE_IN_ALL
-void gdk_surface_merge_child_shapes         (GdkSurface       *surface);
-
 GDK_AVAILABLE_IN_ALL
 void gdk_surface_input_shape_combine_region (GdkSurface       *surface,
                                             const cairo_region_t *shape_region,
@@ -570,8 +540,6 @@ GDK_AVAILABLE_IN_ALL
 gboolean gdk_surface_is_viewable    (GdkSurface *surface);
 GDK_AVAILABLE_IN_ALL
 gboolean gdk_surface_is_input_only  (GdkSurface *surface);
-GDK_AVAILABLE_IN_ALL
-gboolean gdk_surface_is_shaped      (GdkSurface *surface);
 
 GDK_AVAILABLE_IN_ALL
 GdkSurfaceState gdk_surface_get_state (GdkSurface *surface);

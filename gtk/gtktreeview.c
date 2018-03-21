@@ -3594,7 +3594,6 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
   GtkTreeViewColumnReorder *reorder = tree_view->priv->cur_reorder;
   GtkWidget *widget = GTK_WIDGET (tree_view);
   cairo_surface_t *mask_image;
-  cairo_region_t *mask_region;
   gint x;
   gint y;
   gint width;
@@ -3717,11 +3716,6 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
           cairo_fill (cr);
           cairo_destroy (cr);
 
-          mask_region = gdk_cairo_region_create_from_surface (mask_image);
-	  gdk_surface_shape_combine_region (tree_view->priv->drag_highlight_window,
-					   mask_region, 0, 0);
-
-          cairo_region_destroy (mask_region);
           cairo_surface_destroy (mask_image);
 	}
 
@@ -3793,11 +3787,6 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
           cairo_fill (cr);
           cairo_destroy (cr);
 
-          mask_region = gdk_cairo_region_create_from_surface (mask_image);
-	  gdk_surface_shape_combine_region (tree_view->priv->drag_highlight_window,
-					   mask_region, 0, 0);
-
-          cairo_region_destroy (mask_region);
           cairo_surface_destroy (mask_image);
 	}
 

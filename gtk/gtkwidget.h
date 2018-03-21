@@ -820,9 +820,6 @@ GtkTextDirection gtk_widget_get_default_direction (void);
 /* Counterpart to gdk_surface_shape_combine_region.
  */
 GDK_AVAILABLE_IN_ALL
-void	     gtk_widget_shape_combine_region (GtkWidget *widget,
-                                              cairo_region_t *region);
-GDK_AVAILABLE_IN_ALL
 void	     gtk_widget_input_shape_combine_region (GtkWidget *widget,
                                                     cairo_region_t *region);
 

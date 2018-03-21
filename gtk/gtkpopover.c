@@ -1040,10 +1040,10 @@ gtk_popover_update_shape (GtkPopover *popover)
   region = gdk_cairo_region_create_from_surface (surface);
   cairo_surface_destroy (surface);
 
-  gtk_widget_shape_combine_region (widget, region);
+  gtk_widget_input_shape_combine_region (widget, region);
   cairo_region_destroy (region);
 
-  gdk_surface_set_child_shapes (gtk_widget_get_surface (widget));
+  gdk_surface_set_child_input_shapes (gtk_widget_get_surface (widget));
 }
 
 static void

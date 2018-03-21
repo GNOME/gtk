@@ -197,7 +197,6 @@ struct _GdkSurface
 
   guint accept_focus : 1;
   guint focus_on_map : 1;
-  guint shaped : 1;
   guint support_multidevice : 1;
   guint synthesize_crossing_event_queued : 1;
   guint viewable : 1; /* mapped and all parents mapped */
@@ -226,7 +225,6 @@ struct _GdkSurface
   GdkCursor *cursor;
   GHashTable *device_cursor;
 
-  cairo_region_t *shape;
   cairo_region_t *input_shape;
 
   GList *devices_inside;

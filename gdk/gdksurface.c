@@ -373,9 +373,6 @@ gdk_surface_finalize (GObject *object)
       surface->impl_surface = NULL;
     }
 
-  if (surface->shape)
-    cairo_region_destroy (surface->shape);
-
   if (surface->input_shape)
     cairo_region_destroy (surface->input_shape);
 
@@ -523,14 +520,6 @@ remove_sibling_overlapped_area (GdkSurface *surface,
 
       child_region = cairo_region_create_rectangle (&r);
 
-      if (sibling->shape)
-	{
-	  /* Adjust shape region to parent surface coords */
-	  cairo_region_translate (sibling->shape, sibling->x, sibling->y);
-	  cairo_region_intersect (child_region, sibling->shape);
-	  cairo_region_translate (sibling->shape, -sibling->x, -sibling->y);
-	}
-
       cairo_region_subtract (region, child_region);
       cairo_region_destroy (child_region);
     }
@@ -573,14 +562,6 @@ remove_child_area (GdkSurface *surface,
 	continue;
 
       child_region = cairo_region_create_rectangle (&r);
-
-      if (child->shape)
-	{
-	  /* Adjust shape region to parent surface coords */
-	  cairo_region_translate (child->shape, child->x, child->y);
-	  cairo_region_intersect (child_region, child->shape);
-	  cairo_region_translate (child->shape, -child->x, -child->y);
-	}
 
       if (for_input)
 	{
@@ -4128,157 +4109,6 @@ gdk_surface_coords_from_parent (GdkSurface *surface,
 }
 
 /**
- * gdk_surface_shape_combine_region:
- * @surface: a #GdkSurface
- * @shape_region: (allow-none): region of surface to be non-transparent
- * @offset_x: X position of @shape_region in @surface coordinates
- * @offset_y: Y position of @shape_region in @surface coordinates
- *
- * Makes pixels in @surface outside @shape_region be transparent,
- * so that the surface may be nonrectangular.
- *
- * If @shape_region is %NULL, the shape will be unset, so the whole
- * surface will be opaque again. @offset_x and @offset_y are ignored
- * if @shape_region is %NULL.
- *
- * On the X11 platform, this uses an X server extension which is
- * widely available on most common platforms, but not available on
- * very old X servers, and occasionally the implementation will be
- * buggy. On servers without the shape extension, this function
- * will do nothing.
- *
- * This function works on both toplevel and child surfaces.
- */
-void
-gdk_surface_shape_combine_region (GdkSurface       *surface,
-				 const cairo_region_t *shape_region,
-				 gint             offset_x,
-				 gint             offset_y)
-{
-  cairo_region_t *old_region, *new_region, *diff;
-
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  if (GDK_SURFACE_DESTROYED (surface))
-    return;
-
-  if (!surface->shape && shape_region == NULL)
-    return;
-
-  surface->shaped = (shape_region != NULL);
-
-  if (surface->shape)
-    cairo_region_destroy (surface->shape);
-
-  old_region = NULL;
-  if (GDK_SURFACE_IS_MAPPED (surface))
-    old_region = cairo_region_copy (surface->clip_region);
-
-  if (shape_region)
-    {
-      surface->shape = cairo_region_copy (shape_region);
-      cairo_region_translate (surface->shape, offset_x, offset_y);
-    }
-  else
-    surface->shape = NULL;
-
-  recompute_visible_regions (surface, FALSE);
-
-  if (old_region)
-    {
-      new_region = cairo_region_copy (surface->clip_region);
-
-      /* New area in the surface, needs invalidation */
-      diff = cairo_region_copy (new_region);
-      cairo_region_subtract (diff, old_region);
-
-      gdk_surface_invalidate_region_full (surface, diff, TRUE);
-
-      cairo_region_destroy (diff);
-
-      if (!gdk_surface_is_toplevel (surface))
-	{
-	  /* New area in the non-root parent surface, needs invalidation */
-	  diff = cairo_region_copy (old_region);
-	  cairo_region_subtract (diff, new_region);
-
-	  /* Adjust region to parent surface coords */
-	  cairo_region_translate (diff, surface->x, surface->y);
-
-	  gdk_surface_invalidate_region_full (surface->parent, diff, TRUE);
-
-	  cairo_region_destroy (diff);
-	}
-
-      cairo_region_destroy (new_region);
-      cairo_region_destroy (old_region);
-    }
-}
-
-static void
-do_child_shapes (GdkSurface *surface,
-		 gboolean merge)
-{
-  GdkRectangle r;
-  cairo_region_t *region;
-
-  r.x = 0;
-  r.y = 0;
-  r.width = surface->width;
-  r.height = surface->height;
-
-  region = cairo_region_create_rectangle (&r);
-  remove_child_area (surface, FALSE, region);
-
-  if (merge && surface->shape)
-    cairo_region_subtract (region, surface->shape);
-
-  cairo_region_xor_rectangle (region, &r);
-
-  gdk_surface_shape_combine_region (surface, region, 0, 0);
-
-  cairo_region_destroy (region);
-}
-
-/**
- * gdk_surface_set_child_shapes:
- * @surface: a #GdkSurface
- *
- * Sets the shape mask of @surface to the union of shape masks
- * for all children of @surface, ignoring the shape mask of @surface
- * itself. Contrast with gdk_surface_merge_child_shapes() which includes
- * the shape mask of @surface in the masks to be merged.
- **/
-void
-gdk_surface_set_child_shapes (GdkSurface *surface)
-{
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  do_child_shapes (surface, FALSE);
-}
-
-/**
- * gdk_surface_merge_child_shapes:
- * @surface: a #GdkSurface
- *
- * Merges the shape masks for any child surfaces into the
- * shape mask for @surface. i.e. the union of all masks
- * for @surface and its children will become the new mask
- * for @surface. See gdk_surface_shape_combine_region().
- *
- * This function is distinct from gdk_surface_set_child_shapes()
- * because it includes @surface’s shape mask in the set of shapes to
- * be merged.
- */
-void
-gdk_surface_merge_child_shapes (GdkSurface *surface)
-{
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  do_child_shapes (surface, TRUE);
-}
-
-/**
  * gdk_surface_input_shape_combine_region:
  * @surface: a #GdkSurface
  * @shape_region: region of surface to be non-transparent
@@ -4348,8 +4178,6 @@ do_child_input_shapes (GdkSurface *surface,
   region = cairo_region_create_rectangle (&r);
   remove_child_area (surface, TRUE, region);
 
-  if (merge && surface->shape)
-    cairo_region_subtract (region, surface->shape);
   if (merge && surface->input_shape)
     cairo_region_subtract (region, surface->input_shape);
 
@@ -4516,22 +4344,6 @@ gdk_surface_is_input_only (GdkSurface *surface)
   return surface->input_only;
 }
 
-/**
- * gdk_surface_is_shaped:
- * @surface: a toplevel #GdkSurface
- *
- * Determines whether or not the surface is shaped.
- *
- * Returns: %TRUE if @surface is shaped
- */
-gboolean
-gdk_surface_is_shaped (GdkSurface *surface)
-{
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), FALSE);
-
-  return surface->shaped;
-}
-
 /* Gets the toplevel for a surface as used for events,
    i.e. including offscreen parents going up to the native
    toplevel */
@@ -4620,9 +4432,6 @@ point_in_surface (GdkSurface *surface,
   return
     x >= 0 && x < surface->width &&
     y >= 0 && y < surface->height &&
-    (surface->shape == NULL ||
-     cairo_region_contains_point (surface->shape,
-			  x, y)) &&
     (surface->input_shape == NULL ||
      cairo_region_contains_point (surface->input_shape,
 			  x, y));
@@ -5022,9 +4831,6 @@ gdk_surface_print (GdkSurface *surface,
 
   if (surface->input_only)
     g_print (" input-only");
-
-  if (surface->shaped)
-    g_print (" shaped");
 
   if (!gdk_surface_is_visible ((GdkSurface *)surface))
     g_print (" hidden");
