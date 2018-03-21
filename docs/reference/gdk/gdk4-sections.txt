@@ -235,10 +235,8 @@ gdk_surface_create_gl_context
 gdk_surface_create_vulkan_context
 
 <SUBSECTION>
-gdk_surface_get_clip_region
 gdk_surface_begin_draw_frame
 gdk_surface_end_draw_frame
-gdk_surface_get_visible_region
 
 <SUBSECTION>
 gdk_surface_invalidate_rect

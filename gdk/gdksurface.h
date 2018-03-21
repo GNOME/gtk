@@ -609,11 +609,6 @@ void          gdk_surface_set_geometry_hints (GdkSurface          *surface,
 					     GdkSurfaceHints      geom_mask);
 
 GDK_AVAILABLE_IN_ALL
-cairo_region_t *gdk_surface_get_clip_region  (GdkSurface          *surface);
-GDK_AVAILABLE_IN_ALL
-cairo_region_t *gdk_surface_get_visible_region(GdkSurface         *surface);
-
-GDK_AVAILABLE_IN_ALL
 GdkDrawingContext *gdk_surface_begin_draw_frame  (GdkSurface            *surface,
                                                  GdkDrawContext       *context,
                                                  const cairo_region_t *region);

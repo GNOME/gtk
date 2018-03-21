@@ -1976,54 +1976,6 @@ gdk_surface_get_drawing_context (GdkSurface *surface)
   return surface->drawing_context;
 }
 
-/**
- * gdk_surface_get_clip_region:
- * @surface: a #GdkSurface
- * 
- * Computes the region of a surface that potentially can be written
- * to by drawing primitives. This region may not take into account
- * other factors such as if the surface is obscured by other surfaces,
- * but no area outside of this region will be affected by drawing
- * primitives.
- * 
- * Returns: a #cairo_region_t. This must be freed with cairo_region_destroy()
- *          when you are done.
- **/
-cairo_region_t*
-gdk_surface_get_clip_region (GdkSurface *surface)
-{
-  cairo_region_t *result;
-
-  g_return_val_if_fail (GDK_SURFACE (surface), NULL);
-
-  result = cairo_region_copy (surface->clip_region);
-
-  if (surface->current_paint.region != NULL)
-    cairo_region_intersect (result, surface->current_paint.region);
-
-  return result;
-}
-
-/**
- * gdk_surface_get_visible_region:
- * @surface: a #GdkSurface
- * 
- * Computes the region of the @surface that is potentially visible.
- * This does not necessarily take into account if the surface is
- * obscured by other surfaces, but no area outside of this region
- * is visible.
- * 
- * Returns: a #cairo_region_t. This must be freed with cairo_region_destroy()
- *          when you are done.
- **/
-cairo_region_t *
-gdk_surface_get_visible_region (GdkSurface *surface)
-{
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
-
-  return cairo_region_copy (surface->clip_region);
-}
-
 static void
 gdk_surface_clear_backing_region (GdkSurface *surface)
 {
