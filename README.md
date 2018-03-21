@@ -1,6 +1,8 @@
 GTK+ — The GTK toolkit
 ======================
 
+[![Build Status](https://gitlab.gnome.org/GNOME/gtk/badges/master/build.svg)](https://gitlab.gnome.org/GNOME/gtk/pipelines)
+
 General information
 -------------------
 
