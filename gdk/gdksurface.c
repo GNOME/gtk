@@ -227,7 +227,6 @@ gdk_surface_init (GdkSurface *surface)
   surface->fullscreen_mode = GDK_FULLSCREEN_ON_CURRENT_MONITOR;
   surface->width = 1;
   surface->height = 1;
-  surface->toplevel_surface_type = -1;
   surface->children_list_node.data = surface;
 
   surface->device_cursor = g_hash_table_new_full (NULL, NULL,

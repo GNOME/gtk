@@ -123,7 +123,6 @@ queue_flush (GdkSurface *surface)
 static void
 gdk_surface_impl_broadway_init (GdkSurfaceImplBroadway *impl)
 {
-  impl->toplevel_surface_type = -1;
 }
 
 static void

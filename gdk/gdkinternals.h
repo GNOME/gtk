@@ -156,8 +156,6 @@ struct _GdkSurface
 
   guint8 resize_count;
 
-  gint8 toplevel_surface_type;
-
   GList *children;
   GList children_list_node;
 
@@ -191,14 +189,12 @@ struct _GdkSurface
   guint input_only : 1;
   guint pass_through : 1;
   guint modal_hint : 1;
-  guint has_alpha_background : 1;
 
   guint destroyed : 2;
 
   guint accept_focus : 1;
   guint focus_on_map : 1;
   guint support_multidevice : 1;
-  guint synthesize_crossing_event_queued : 1;
   guint viewable : 1; /* mapped and all parents mapped */
   guint in_update : 1;
   guint frame_clock_events_paused : 1;

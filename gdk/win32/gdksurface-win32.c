@@ -190,7 +190,6 @@ gdk_surface_impl_win32_init (GdkSurfaceImplWin32 *impl)
 {
   GdkDisplay *display = gdk_display_get_default ();
 
-  impl->toplevel_surface_type = -1;
   impl->hicon_big = NULL;
   impl->hicon_small = NULL;
   impl->hint_flags = 0;

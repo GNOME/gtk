@@ -61,7 +61,6 @@ struct _GdkSurfaceImplBroadway
   int pre_maximize_width;
   int pre_maximize_height;
 
-  gint8 toplevel_surface_type;
   gboolean dirty;
   gboolean last_synced;
 

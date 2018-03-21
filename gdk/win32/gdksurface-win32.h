@@ -230,8 +230,6 @@ struct _GdkSurfaceImplWin32
   GdkSurface *wrapper;
   HANDLE handle;
 
-  gint8 toplevel_surface_type;
-
   HICON   hicon_big;
   HICON   hicon_small;
 
