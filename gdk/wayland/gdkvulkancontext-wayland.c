@@ -66,9 +66,9 @@ gdk_vulkan_context_wayland_end_frame (GdkDrawContext *context,
 {
   GdkSurface *surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
 
-  GDK_DRAW_CONTEXT_CLASS (gdk_wayland_vulkan_context_parent_class)->end_frame (context, painted, damage);
-
   gdk_wayland_surface_sync (surface);
+
+  GDK_DRAW_CONTEXT_CLASS (gdk_wayland_vulkan_context_parent_class)->end_frame (context, painted, damage);
 }
 
 static void
