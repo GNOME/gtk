@@ -55,6 +55,8 @@ GtkIMContext *      gtk_event_controller_key_get_im_context (GtkEventControllerK
 GDK_AVAILABLE_IN_3_24
 gboolean            gtk_event_controller_key_forward        (GtkEventControllerKey *controller,
                                                              GtkWidget             *widget);
+GDK_AVAILABLE_IN_3_24
+guint               gtk_event_controller_key_get_group      (GtkEventControllerKey *controller);
 
 G_END_DECLS
 
