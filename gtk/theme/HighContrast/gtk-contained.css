@@ -334,13 +334,13 @@ button.destructive-action:disabled:active, button.destructive-action:disabled:ch
 
 .inline-toolbar toolbutton > button:backdrop:disabled:active, .inline-toolbar toolbutton > button:backdrop:disabled:checked { border-width: 2px; border-style: solid; color: gray; border-color: silver; background-image: none; background-color: #f6f6f6; }
 
-toolbar.inline-toolbar toolbutton > button.flat, searchbar > revealer > .inline-toolbar toolbutton > button.flat, toolbar.inline-toolbar toolbutton:backdrop > button.flat, searchbar > revealer > .inline-toolbar toolbutton:backdrop > button.flat, .linked:not(.vertical) > spinbutton:not(.vertical), .linked:not(.vertical) > entry, .inline-toolbar button, .inline-toolbar button:backdrop, .linked > button, .linked > button:hover, .linked > button:active, .linked > button:checked, .linked > button:backdrop, .linked > combobox > box > button.combo:dir(ltr), .linked > combobox > box > button.combo:dir(rtl) { border-radius: 0; border-right-style: none; }
+toolbar.inline-toolbar toolbutton > button.flat, searchbar > revealer > box.inline-toolbar toolbutton > button.flat, toolbar.inline-toolbar toolbutton:backdrop > button.flat, searchbar > revealer > box.inline-toolbar toolbutton:backdrop > button.flat, .linked:not(.vertical) > spinbutton:not(.vertical), .linked:not(.vertical) > entry, .inline-toolbar button, .inline-toolbar button:backdrop, .linked > button, .linked > button:hover, .linked > button:active, .linked > button:checked, .linked > button:backdrop, .linked > combobox > box > button.combo:dir(ltr), .linked > combobox > box > button.combo:dir(rtl) { border-radius: 0; border-right-style: none; }
 
-.linked:not(.vertical) > spinbutton:first-child:not(.vertical), .linked:not(.vertical) > entry:first-child, .inline-toolbar button:first-child, .linked > button:first-child, toolbar.inline-toolbar toolbutton:first-child > button.flat, searchbar > revealer > .inline-toolbar toolbutton:first-child > button.flat, toolbar.inline-toolbar toolbutton:backdrop:first-child > button.flat, searchbar > revealer > .inline-toolbar toolbutton:backdrop:first-child > button.flat, combobox.linked button:nth-child(2):dir(rtl), .linked:not(.vertical) > combobox:first-child > box > button.combo { border-top-left-radius: 3px; border-bottom-left-radius: 3px; }
+.linked:not(.vertical) > spinbutton:first-child:not(.vertical), .linked:not(.vertical) > entry:first-child, .inline-toolbar button:first-child, .linked > button:first-child, toolbar.inline-toolbar toolbutton:first-child > button.flat, searchbar > revealer > box.inline-toolbar toolbutton:first-child > button.flat, toolbar.inline-toolbar toolbutton:backdrop:first-child > button.flat, searchbar > revealer > box.inline-toolbar toolbutton:backdrop:first-child > button.flat, combobox.linked button:nth-child(2):dir(rtl), .linked:not(.vertical) > combobox:first-child > box > button.combo { border-top-left-radius: 3px; border-bottom-left-radius: 3px; }
 
-.linked:not(.vertical) > spinbutton:last-child:not(.vertical), .linked:not(.vertical) > entry:last-child, .inline-toolbar button:last-child, .linked > button:last-child, toolbar.inline-toolbar toolbutton:last-child > button.flat, searchbar > revealer > .inline-toolbar toolbutton:last-child > button.flat, toolbar.inline-toolbar toolbutton:backdrop:last-child > button.flat, searchbar > revealer > .inline-toolbar toolbutton:backdrop:last-child > button.flat, combobox.linked button:nth-child(2):dir(ltr), .linked:not(.vertical) > combobox:last-child > box > button.combo { border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-right-style: solid; }
+.linked:not(.vertical) > spinbutton:last-child:not(.vertical), .linked:not(.vertical) > entry:last-child, .inline-toolbar button:last-child, .linked > button:last-child, toolbar.inline-toolbar toolbutton:last-child > button.flat, searchbar > revealer > box.inline-toolbar toolbutton:last-child > button.flat, toolbar.inline-toolbar toolbutton:backdrop:last-child > button.flat, searchbar > revealer > box.inline-toolbar toolbutton:backdrop:last-child > button.flat, combobox.linked button:nth-child(2):dir(ltr), .linked:not(.vertical) > combobox:last-child > box > button.combo { border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-right-style: solid; }
 
-.linked:not(.vertical) > spinbutton:only-child:not(.vertical), .linked:not(.vertical) > entry:only-child, .inline-toolbar button:only-child, .linked > button:only-child, toolbar.inline-toolbar toolbutton:only-child > button.flat, searchbar > revealer > .inline-toolbar toolbutton:only-child > button.flat, toolbar.inline-toolbar toolbutton:backdrop:only-child > button.flat, searchbar > revealer > .inline-toolbar toolbutton:backdrop:only-child > button.flat, .linked:not(.vertical) > combobox:only-child > box > button.combo { border-radius: 3px; border-style: solid; }
+.linked:not(.vertical) > spinbutton:only-child:not(.vertical), .linked:not(.vertical) > entry:only-child, .inline-toolbar button:only-child, .linked > button:only-child, toolbar.inline-toolbar toolbutton:only-child > button.flat, searchbar > revealer > box.inline-toolbar toolbutton:only-child > button.flat, toolbar.inline-toolbar toolbutton:backdrop:only-child > button.flat, searchbar > revealer > box.inline-toolbar toolbutton:backdrop:only-child > button.flat, .linked:not(.vertical) > combobox:only-child > box > button.combo { border-radius: 3px; border-style: solid; }
 
 .linked.vertical > spinbutton:not(.vertical), .linked.vertical > entry, .linked.vertical > button, .linked.vertical > button:hover, .linked.vertical > button:active, .linked.vertical > button:checked, .linked.vertical > button:backdrop, .linked.vertical > combobox > box > button.combo { border-style: solid solid none solid; border-radius: 0; }
 
@@ -467,23 +467,23 @@ combobox arrow { -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); min-heig
 combobox:drop(active) { box-shadow: none; }
 
 /************ Toolbars * */
-toolbar, searchbar > revealer > * { padding: 6px; background-color: #fff; }
+toolbar, searchbar > revealer > box { padding: 6px; background-color: #fff; }
 
-toolbar.osd, searchbar > revealer > .osd { background-color: rgba(0, 0, 0, 0.8); border-radius: 6px; padding: 12px; }
+toolbar.osd, searchbar > revealer > box.osd { background-color: rgba(0, 0, 0, 0.8); border-radius: 6px; padding: 12px; }
 
-toolbar.osd label, searchbar > revealer > .osd label { color: #fff; }
+toolbar.osd label, searchbar > revealer > box.osd label { color: #fff; }
 
-toolbar.inline-toolbar, searchbar > revealer > .inline-toolbar { border-width: 0 1px 1px; padding: 3px; border-radius: 0  0 4px 4px; }
+toolbar.inline-toolbar, searchbar > revealer > box.inline-toolbar { border-width: 0 1px 1px; padding: 3px; border-radius: 0  0 4px 4px; }
 
-toolbar.vertical, searchbar > revealer > .vertical { border-right: 1px solid gray; }
+toolbar.vertical, searchbar > revealer > box.vertical { border-right: 1px solid gray; }
 
-toolbar.vertical:dir(rtl), searchbar > revealer > .vertical:dir(rtl) { border-right: none; border-left: 1px solid gray; }
+toolbar.vertical:dir(rtl), searchbar > revealer > box.vertical:dir(rtl) { border-right: none; border-left: 1px solid gray; }
 
-searchbar > revealer > * { border-width: 0 0 1px; border-color: gray; border-style: none none solid none; margin: -6px; padding: 9px; }
+searchbar > revealer > box { border-width: 0 0 1px; border-color: gray; border-style: none none solid none; margin: -6px; padding: 9px; }
 
-toolbar.inline-toolbar, searchbar > revealer > .inline-toolbar { border-style: solid; border-color: gray; background-color: #d9d9d9; box-shadow: inset 0 2px 3px -1px #a4a4a4; }
+toolbar.inline-toolbar, searchbar > revealer > box.inline-toolbar { border-style: solid; border-color: gray; background-color: #d9d9d9; box-shadow: inset 0 2px 3px -1px #a4a4a4; }
 
-toolbar.inline-toolbar:backdrop, searchbar > revealer > .inline-toolbar:backdrop { border-color: #8d8d8d; background-color: #d7d7d7; box-shadow: none; }
+toolbar.inline-toolbar:backdrop, searchbar > revealer > box.inline-toolbar:backdrop { border-color: #8d8d8d; background-color: #d7d7d7; box-shadow: none; }
 
 /*************** Header bars * */
 .titlebar:not(headerbar), headerbar { min-height: 46px; border-width: 0 0 1px; border-style: solid; border-color: gray; border-radius: 7px 7px 0 0; background-color: transparent; background-image: linear-gradient(to bottom, white, #fff); box-shadow: inset 0 -1px #d9d9d9, inset 0 1px #fff; padding: 6px; }
