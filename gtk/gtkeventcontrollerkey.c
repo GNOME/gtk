@@ -47,6 +47,8 @@ enum {
   KEY_RELEASED,
   MODIFIERS,
   IM_UPDATE,
+  FOCUS_IN,
+  FOCUS_OUT,
   N_SIGNALS
 };
 
@@ -76,6 +78,16 @@ gtk_event_controller_key_handle_event (GtkEventController *controller,
   GdkModifierType state;
   guint16 keycode;
   guint keyval;
+
+  if (event_type == GDK_FOCUS_CHANGE)
+    {
+      if (event->focus_change.in)
+        g_signal_emit (controller, signals[FOCUS_IN], 0);
+      else
+        g_signal_emit (controller, signals[FOCUS_OUT], 0);
+
+      return FALSE;
+    }
 
   if (event_type != GDK_KEY_PRESS && event_type != GDK_KEY_RELEASE)
     return FALSE;
@@ -162,6 +174,20 @@ gtk_event_controller_key_class_init (GtkEventControllerKeyClass *klass)
                   G_TYPE_BOOLEAN, 1, GDK_TYPE_MODIFIER_TYPE);
   signals[IM_UPDATE] =
     g_signal_new (I_("im-update"),
+                  GTK_TYPE_EVENT_CONTROLLER_KEY,
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
+  signals[FOCUS_IN] =
+    g_signal_new (I_("focus-in"),
+                  GTK_TYPE_EVENT_CONTROLLER_KEY,
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
+  signals[FOCUS_OUT] =
+    g_signal_new (I_("focus-out"),
                   GTK_TYPE_EVENT_CONTROLLER_KEY,
                   G_SIGNAL_RUN_LAST,
                   0, NULL, NULL,
