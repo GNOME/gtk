@@ -4202,6 +4202,24 @@ gtk_snapshot_render_insertion_cursor
 </SECTION>
 
 <SECTION>
+<FILE>gtkwidgetpaintable</FILE>
+<TITLE>GtkWidgetPaintable</TITLE>
+gtk_widget_paintable_new
+gtk_widget_paintable_get_widget
+gtk_widget_paintable_set_widget
+
+<SUBSECTION Standard>
+GTK_WIDGET_PAINTABLE
+GTK_IS_WIDGET_PAINTABLE
+GTK_TYPE_WIDGET_PAINTABLE
+GTK_WIDGET_PAINTABLE_CLASS
+GTK_IS_WIDGET_PAINTABLE_CLASS
+GTK_WIDGET_PAINTABLE_GET_CLASS
+<SUBSECTION Private>
+gtk_widget_paintable_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkwidget</FILE>
 <TITLE>GtkWidget</TITLE>
 GtkWidget
