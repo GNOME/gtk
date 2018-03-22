@@ -148,6 +148,8 @@ struct _GtkWidgetPrivate
   /* The render node we draw or %NULL if not yet created. */
   GskRenderNode *render_node;
 
+  GSList *paintables;
+
   /* The widget's surface or its parent surface if it does
    * not have a surface. (Which will be indicated by the
    * no_surface field being set).

@@ -232,6 +232,7 @@
 #include <gtk/gtkviewport.h>
 #include <gtk/gtkvolumebutton.h>
 #include <gtk/gtkwidget.h>
+#include <gtk/gtkwidgetpaintable.h>
 #include <gtk/gtkwidgetpath.h>
 #include <gtk/gtkwindow.h>
 #include <gtk/gtkwindowgroup.h>
