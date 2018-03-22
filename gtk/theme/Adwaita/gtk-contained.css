@@ -587,7 +587,7 @@ toolbar.horizontal separator { margin: 0 7px 1px 6px; }
 
 toolbar.vertical separator { margin: 6px 1px 7px 0; }
 
-toolbar:not(.inline-toolbar):not(.osd) > *:not(.toggle):not(.popup) > * { margin-right: 1px; margin-bottom: 1px; color: red; background: green; }
+toolbar:not(.inline-toolbar):not(.osd) > *:not(.toggle):not(.popup) > * { margin-right: 1px; margin-bottom: 1px; }
 
 .inline-toolbar { padding: 3px; border-width: 0 1px 1px; border-radius: 0  0 5px 5px; }
 
@@ -1754,6 +1754,11 @@ paned.horizontal > separator.wide { margin: 0; padding: 0; background-repeat: re
 paned.vertical > separator { margin: 0 0 -8px 0; padding: 0 0 8px 0; background-repeat: repeat-x; background-position: top; }
 
 paned.vertical > separator.wide { margin: 0; padding: 0; background-repeat: repeat-x, repeat-x; background-position: bottom, top; }
+
+/************** GtkVideo * */
+video { background: black; }
+
+video image.osd { min-width: 64px; min-height: 64px; border-radius: 32px; }
 
 /************** GtkInfoBar * */
 infobar { border-style: none; }
