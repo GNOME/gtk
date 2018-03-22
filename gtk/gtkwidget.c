@@ -65,6 +65,7 @@
 #include "gtktooltipprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkversion.h"
+#include "gtkwidgetpaintable.h"
 #include "gtkwidgetpathprivate.h"
 #include "gtkwindowgroup.h"
 #include "gtkwindowprivate.h"
@@ -4021,6 +4022,29 @@ gtk_widget_queue_draw_area (GtkWidget *widget,
 }
 
 static void
+gtk_widget_invalidate_paintable_contents (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GSList *l;
+
+  if (!_gtk_widget_is_drawable (widget))
+    return;
+
+  for (l = priv->paintables; l; l = l->next)
+    gdk_paintable_invalidate_contents (l->data);
+}
+
+static void
+gtk_widget_invalidate_paintable_size (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GSList *l;
+
+  for (l = priv->paintables; l; l = l->next)
+    gdk_paintable_invalidate_size (l->data);
+}
+
+static void
 gtk_widget_real_queue_draw (GtkWidget *widget)
 {
   for (; widget; widget = _gtk_widget_get_parent (widget))
@@ -4032,6 +4056,7 @@ gtk_widget_real_queue_draw (GtkWidget *widget)
 
       priv->draw_needed = TRUE;
       g_clear_pointer (&priv->render_node, gsk_render_node_unref);
+      gtk_widget_invalidate_paintable_contents (widget);
     }
 }
 
@@ -4121,6 +4146,8 @@ gtk_widget_queue_resize_internal (GtkWidget *widget)
         gtk_widget_queue_resize_internal (widgets->data);
       }
   }
+
+  gtk_widget_invalidate_paintable_size (widget);
 
   if (_gtk_widget_is_toplevel (widget) && GTK_IS_CONTAINER (widget))
     {
@@ -6937,6 +6964,7 @@ _gtk_widget_set_visible_flag (GtkWidget *widget,
       memset (&priv->clip, 0, sizeof (priv->clip));
       memset (&priv->allocated_size, 0, sizeof (priv->allocated_size));
       priv->allocated_size_baseline = 0;
+      gtk_widget_invalidate_paintable_size (widget);
     }
 }
 
@@ -8883,6 +8911,9 @@ gtk_widget_dispose (GObject *object)
   else if (_gtk_widget_get_visible (widget))
     gtk_widget_hide (widget);
 
+  while (priv->paintables)
+    gtk_widget_paintable_set_widget (priv->paintables->data, NULL);
+
   priv->visible = FALSE;
   if (_gtk_widget_get_realized (widget))
     gtk_widget_unrealize (widget);
@@ -9195,6 +9226,8 @@ gtk_widget_real_unmap (GtkWidget *widget)
         {
           gtk_widget_unmap (child);
         }
+
+      gtk_widget_invalidate_paintable_contents (widget);
 
       gtk_widget_unset_state_flags (widget,
                                     GTK_STATE_FLAG_PRELIGHT |
@@ -13988,8 +14021,11 @@ gtk_widget_snapshot (GtkWidget   *widget,
 
   if (priv->draw_needed)
     {
-      g_assert (priv->render_node == NULL);
-      priv->render_node = gtk_widget_create_render_node (widget, snapshot);
+      GskRenderNode *render_node;
+      render_node = gtk_widget_create_render_node (widget, snapshot);
+      /* This can happen when nested drawing happens and a widget contains itself */
+      g_clear_pointer (&priv->render_node, gsk_render_node_unref);
+      priv->render_node = render_node;
       priv->draw_needed = FALSE;
     }
 
