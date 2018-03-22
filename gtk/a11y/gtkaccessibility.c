@@ -903,6 +903,12 @@ window_focus (GtkWidget     *widget,
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
+  if (event->grab)
+    /*
+     * Ignore temporary grabs.
+     */
+    return FALSE;
+
   atk_obj = gtk_widget_get_accessible (widget);
   g_signal_emit_by_name (atk_obj, event->in ? "activate" : "deactivate");
 

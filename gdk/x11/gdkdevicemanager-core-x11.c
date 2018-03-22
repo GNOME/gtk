@@ -31,6 +31,8 @@
 
 #define HAS_FOCUS(toplevel)                           \
   ((toplevel)->has_focus || (toplevel)->has_pointer_focus)
+#define HAS_FOCUS_WINDOW(toplevel)                    \
+  ((toplevel)->has_focus_window || (toplevel)->has_pointer_focus)
 
 static void    gdk_x11_device_manager_core_finalize    (GObject *object);
 static void    gdk_x11_device_manager_core_constructed (GObject *object);
@@ -822,7 +824,7 @@ _gdk_device_manager_core_handle_focus (GdkWindow *window,
 {
   GdkToplevelX11 *toplevel;
   GdkX11Screen *x11_screen;
-  gboolean had_focus;
+  gboolean had_focus, had_focus_window;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (GDK_IS_DEVICE (device));
@@ -843,6 +845,7 @@ _gdk_device_manager_core_handle_focus (GdkWindow *window,
     return;
 
   had_focus = HAS_FOCUS (toplevel);
+  had_focus_window = HAS_FOCUS_WINDOW (toplevel);
   x11_screen = GDK_X11_SCREEN (gdk_window_get_screen (window));
 
   switch (detail)
@@ -904,7 +907,8 @@ _gdk_device_manager_core_handle_focus (GdkWindow *window,
       break;
     }
 
-  if (HAS_FOCUS (toplevel) != had_focus)
+  if (HAS_FOCUS (toplevel) != had_focus ||
+      HAS_FOCUS_WINDOW(toplevel) != had_focus_window)
     {
       GdkEvent *event;
 
@@ -912,6 +916,13 @@ _gdk_device_manager_core_handle_focus (GdkWindow *window,
       event->focus_change.window = g_object_ref (window);
       event->focus_change.send_event = FALSE;
       event->focus_change.in = focus_in;
+      event->focus_change.grab =
+        mode == NotifyGrab ||
+#ifdef XINPUT_2
+        mode == XINotifyPassiveGrab ||
+        mode == XINotifyPassiveUngrab ||
+#endif /* XINPUT_2 */
+        mode == NotifyUngrab;
       gdk_event_set_device (event, device);
       if (source_device)
         gdk_event_set_source_device (event, source_device);

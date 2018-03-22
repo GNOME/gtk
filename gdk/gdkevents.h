@@ -959,6 +959,8 @@ struct _GdkEventCrossing
  * @send_event: %TRUE if the event was sent explicitly.
  * @in: %TRUE if the window has gained the keyboard focus, %FALSE if
  *   it has lost the focus.
+ * @grab: %TRUE if this event is only due to another application temporarily
+ *   grabbing the keyboard.
  *
  * Describes a change of keyboard focus.
  */
@@ -968,6 +970,7 @@ struct _GdkEventFocus
   GdkWindow *window;
   gint8 send_event;
   gint16 in;
+  gint8 grab;
 };
 
 /**
