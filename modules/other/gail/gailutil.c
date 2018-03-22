@@ -540,6 +540,12 @@ window_focus (GtkWidget     *widget,
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
+  if (event->grab)
+    /*
+     * Ignore temporary grabs.
+     */
+    return FALSE;
+
   atk_obj = gtk_widget_get_accessible (widget);
   signal_name =  (event->in) ? "activate" : "deactivate";
   g_signal_emit (atk_obj, g_signal_lookup (signal_name, GAIL_TYPE_WINDOW), 0); 

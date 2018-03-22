@@ -377,6 +377,7 @@ struct _GdkEventFocus
   GdkWindow *window;
   gint8 send_event;
   gint16 in;
+  gint8 grab;
 };
 
 struct _GdkEventConfigure

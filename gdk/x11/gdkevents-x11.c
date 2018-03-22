@@ -623,10 +623,13 @@ gdk_check_wm_state_changed (GdkWindow *window)
 
 #define HAS_FOCUS(toplevel)                           \
   ((toplevel)->has_focus || (toplevel)->has_pointer_focus)
+#define HAS_FOCUS_WINDOW(toplevel)                    \
+  ((toplevel)->has_focus_window || (toplevel)->has_pointer_focus)
 
 static void
 generate_focus_event (GdkWindow *window,
-		      gboolean   in)
+		      gboolean   in,
+		      gboolean   grab)
 {
   GdkEvent event;
   
@@ -634,6 +637,7 @@ generate_focus_event (GdkWindow *window,
   event.focus_change.window = window;
   event.focus_change.send_event = FALSE;
   event.focus_change.in = in;
+  event.focus_change.grab = grab;
   
   gdk_event_put (&event);
 }
@@ -1345,11 +1349,13 @@ gdk_event_translate (GdkDisplay *display,
 	  if (xevent->xcrossing.focus && !toplevel->has_focus_window)
 	    {
 	      gboolean had_focus = HAS_FOCUS (toplevel);
+	      gboolean had_focus_window = HAS_FOCUS_WINDOW (toplevel);
 	      
 	      toplevel->has_pointer_focus = TRUE;
 	      
-	      if (HAS_FOCUS (toplevel) != had_focus)
-		generate_focus_event (window, TRUE);
+	      if (HAS_FOCUS (toplevel) != had_focus || HAS_FOCUS_WINDOW(toplevel) != had_focus_window)
+		generate_focus_event (window, TRUE,
+		    xevent->xcrossing.mode == NotifyGrab || xevent->xcrossing.mode == NotifyUngrab);
 	    }
 	}
 
@@ -1442,11 +1448,13 @@ gdk_event_translate (GdkDisplay *display,
 	  if (xevent->xcrossing.focus && !toplevel->has_focus_window)
 	    {
 	      gboolean had_focus = HAS_FOCUS (toplevel);
+	      gboolean had_focus_window = HAS_FOCUS_WINDOW (toplevel);
 	      
 	      toplevel->has_pointer_focus = FALSE;
 	      
-	      if (HAS_FOCUS (toplevel) != had_focus)
-		generate_focus_event (window, FALSE);
+	      if (HAS_FOCUS (toplevel) != had_focus || HAS_FOCUS_WINDOW(toplevel) != had_focus_window)
+		generate_focus_event (window, FALSE,
+		    xevent->xcrossing.mode == NotifyGrab || xevent->xcrossing.mode == NotifyUngrab);
 	    }
 	}
 
@@ -1524,6 +1532,7 @@ gdk_event_translate (GdkDisplay *display,
       if (toplevel)
 	{
 	  gboolean had_focus = HAS_FOCUS (toplevel);
+	  gboolean had_focus_window = HAS_FOCUS_WINDOW (toplevel);
 	  
 	  switch (xevent->xfocus.detail)
 	    {
@@ -1569,8 +1578,9 @@ gdk_event_translate (GdkDisplay *display,
 	      break;
 	    }
 
-	  if (HAS_FOCUS (toplevel) != had_focus)
-	    generate_focus_event (window, TRUE);
+	  if (HAS_FOCUS (toplevel) != had_focus || HAS_FOCUS_WINDOW(toplevel) != had_focus_window)
+	    generate_focus_event (window, TRUE,
+		xevent->xfocus.mode == NotifyGrab || xevent->xfocus.mode == NotifyUngrab);
 	}
       break;
     case FocusOut:
@@ -1583,6 +1593,7 @@ gdk_event_translate (GdkDisplay *display,
       if (toplevel)
 	{
 	  gboolean had_focus = HAS_FOCUS (toplevel);
+	  gboolean had_focus_window = HAS_FOCUS_WINDOW (toplevel);
 	    
 	  switch (xevent->xfocus.detail)
 	    {
@@ -1620,8 +1631,9 @@ gdk_event_translate (GdkDisplay *display,
 	      break;
 	    }
 
-	  if (HAS_FOCUS (toplevel) != had_focus)
-	    generate_focus_event (window, FALSE);
+	  if (HAS_FOCUS (toplevel) != had_focus || HAS_FOCUS_WINDOW(toplevel) != had_focus_window)
+	    generate_focus_event (window, FALSE,
+		xevent->xfocus.mode == NotifyGrab || xevent->xfocus.mode == NotifyUngrab);
 	}
       break;
 
