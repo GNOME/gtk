@@ -2057,16 +2057,27 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
           gchar *filename;
           GError *tmp_error = NULL;
           GdkPixbuf *pixbuf = NULL;
+          GObject *object;
 
-          if (g_hash_table_contains (builder->priv->objects, string))
+          object = g_hash_table_lookup (builder->priv->objects, string);
+
+          if (object)
             {
-              g_set_error (error,
-                           GTK_BUILDER_ERROR,
-                           GTK_BUILDER_ERROR_INVALID_VALUE,
-                           "Could not load image '%s': "
-                           " '%s' is already used as object id",
-                           string, string);
-              return FALSE;
+              if (g_type_is_a (G_OBJECT_TYPE (object), G_VALUE_TYPE (value)))
+                {
+                  g_value_set_object (value, object);
+                  return TRUE;
+                }
+              else
+                {
+                  g_set_error (error,
+                               GTK_BUILDER_ERROR,
+                               GTK_BUILDER_ERROR_INVALID_VALUE,
+                               "Could not load image '%s': "
+                               " '%s' is already used as object id for a %s",
+                               string, string, G_OBJECT_TYPE_NAME (object));
+                  return FALSE;
+                }
             }
 
           filename = _gtk_builder_get_resource_path (builder, string);
