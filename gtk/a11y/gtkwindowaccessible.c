@@ -20,9 +20,11 @@
 
 #include <gtk/gtk.h>
 
+#include "gtkaccessibility.h"
 #include "gtkwidgetaccessibleprivate.h"
 #include "gtkwindowaccessible.h"
 #include "gtktoplevelaccessible.h"
+#include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
 
 /* atkcomponent.h */
@@ -441,6 +443,19 @@ gtk_window_accessible_get_size (AtkComponent *component,
   *width = rect.width;
   *height = rect.height;
 }
+
+void
+_gtk_window_accessible_set_is_active (GtkWindow   *window,
+                                      gboolean     is_active)
+{
+  AtkObject *accessible = _gtk_widget_peek_accessible (GTK_WIDGET (window));
+
+  if (accessible == NULL)
+    return;
+
+  g_signal_emit_by_name (accessible, is_active ? "activate" : "deactivate");
+}
+
 
 static void
 atk_component_interface_init (AtkComponentIface *iface)
