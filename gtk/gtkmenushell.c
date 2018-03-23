@@ -75,6 +75,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkwindow.h"
 #include "gtkwindowprivate.h"
+#include "gtkeventcontrollerkey.h"
 
 #include "a11y/gtkmenushellaccessible.h"
 
@@ -116,8 +117,11 @@ static void gtk_menu_shell_get_property      (GObject           *object,
                                               GParamSpec        *pspec);
 static void gtk_menu_shell_finalize          (GObject           *object);
 static void gtk_menu_shell_dispose           (GObject           *object);
-static gint gtk_menu_shell_key_press         (GtkWidget         *widget,
-                                              GdkEventKey       *event);
+static gboolean gtk_menu_shell_key_press     (GtkEventControllerKey *key,
+                                              guint                  keyval,
+                                              guint                  keycode,
+                                              GdkModifierType        modifiers,
+                                              GtkWidget             *widget);
 static void gtk_menu_shell_display_changed   (GtkWidget         *widget,
                                               GdkDisplay        *previous_display);
 static gboolean gtk_menu_shell_event         (GtkWidget         *widget,
@@ -147,8 +151,10 @@ static void gtk_real_menu_shell_cycle_focus      (GtkMenuShell      *menu_shell,
                                                   GtkDirectionType   dir);
 
 static void     gtk_menu_shell_reset_key_hash    (GtkMenuShell *menu_shell);
-static gboolean gtk_menu_shell_activate_mnemonic (GtkMenuShell *menu_shell,
-                                                  GdkEventKey  *event);
+static gboolean gtk_menu_shell_activate_mnemonic (GtkMenuShell    *menu_shell,
+                                                  guint            keycode,
+                                                  GdkModifierType  state,
+                                                  guint            group);
 static gboolean gtk_menu_shell_real_move_selected (GtkMenuShell  *menu_shell, 
                                                    gint           distance);
 
@@ -175,7 +181,6 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
   object_class->dispose = gtk_menu_shell_dispose;
 
   widget_class->event = gtk_menu_shell_event;
-  widget_class->key_press_event = gtk_menu_shell_key_press;
   widget_class->display_changed = gtk_menu_shell_display_changed;
 
   container_class->add = gtk_menu_shell_add;
@@ -405,10 +410,16 @@ gtk_menu_shell_child_type (GtkContainer *container)
 static void
 gtk_menu_shell_init (GtkMenuShell *menu_shell)
 {
+  GtkWidget *widget = GTK_WIDGET (menu_shell);
+
   menu_shell->priv = gtk_menu_shell_get_instance_private (menu_shell);
   menu_shell->priv->take_focus = TRUE;
 
-  gtk_widget_set_has_surface (GTK_WIDGET (menu_shell), FALSE);
+  menu_shell->priv->key_controller = gtk_event_controller_key_new (widget);
+  g_signal_connect (menu_shell->priv->key_controller, "key-pressed",
+                    G_CALLBACK (gtk_menu_shell_key_press), widget);
+
+  gtk_widget_set_has_surface (widget, FALSE);
 }
 
 static void
@@ -459,6 +470,8 @@ gtk_menu_shell_finalize (GObject *object)
     _gtk_mnemonic_hash_free (priv->mnemonic_hash);
   if (priv->key_hash)
     _gtk_key_hash_free (priv->key_hash);
+
+  g_object_unref (priv->key_controller);
 
   G_OBJECT_CLASS (gtk_menu_shell_parent_class)->finalize (object);
 }
@@ -873,9 +886,12 @@ _gtk_menu_shell_update_mnemonics (GtkMenuShell *menu_shell)
     }
 }
 
-static gint
-gtk_menu_shell_key_press (GtkWidget   *widget,
-                          GdkEventKey *event)
+static gboolean
+gtk_menu_shell_key_press (GtkEventControllerKey *key,
+                          guint                  keyval,
+                          guint                  keycode,
+                          GdkModifierType        modifiers,
+                          GtkWidget             *widget)
 {
   GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget);
   GtkMenuShellPrivate *priv = menu_shell->priv;
@@ -884,12 +900,10 @@ gtk_menu_shell_key_press (GtkWidget   *widget,
 
   if (!(priv->active_menu_item || priv->in_unselectable_item) &&
       priv->parent_menu_shell)
-    return gtk_widget_event (priv->parent_menu_shell, (GdkEvent *)event);
+    return gtk_event_controller_key_forward (key, priv->parent_menu_shell);
 
-  if (gtk_bindings_activate_event (G_OBJECT (widget), event))
-    return TRUE;
-
-  return gtk_menu_shell_activate_mnemonic (menu_shell, event);
+  return gtk_menu_shell_activate_mnemonic (menu_shell, keycode, modifiers,
+                                           gtk_event_controller_key_get_group (key));
 }
 
 static void
@@ -1530,16 +1544,15 @@ gtk_menu_shell_reset_key_hash (GtkMenuShell *menu_shell)
 }
 
 static gboolean
-gtk_menu_shell_activate_mnemonic (GtkMenuShell *menu_shell,
-                                  GdkEventKey  *event)
+gtk_menu_shell_activate_mnemonic (GtkMenuShell    *menu_shell,
+                                  guint            keycode,
+                                  GdkModifierType  state,
+                                  guint            group)
 {
   GtkMnemonicHash *mnemonic_hash;
   GtkKeyHash *key_hash;
   GSList *entries;
   gboolean result = FALSE;
-  guint16 keycode;
-  GdkModifierType state;
-  guint group;
 
   mnemonic_hash = gtk_menu_shell_get_mnemonic_hash (menu_shell, FALSE);
   if (!mnemonic_hash)
@@ -1548,10 +1561,6 @@ gtk_menu_shell_activate_mnemonic (GtkMenuShell *menu_shell,
   key_hash = gtk_menu_shell_get_key_hash (menu_shell, TRUE);
   if (!key_hash)
     return FALSE;
-
-  gdk_event_get_keycode ((GdkEvent *)event, &keycode);
-  gdk_event_get_state ((GdkEvent *)event, &state);
-  gdk_event_get_key_group ((GdkEvent *)event, &group);
 
   entries = _gtk_key_hash_lookup (key_hash,
                                   keycode,
