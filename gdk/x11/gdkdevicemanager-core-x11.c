@@ -33,6 +33,8 @@
 
 #define HAS_FOCUS(toplevel)                           \
   ((toplevel)->has_focus || (toplevel)->has_pointer_focus)
+#define HAS_FOCUS_WINDOW(toplevel)                           \
+  ((toplevel)->has_focus_window || (toplevel)->has_pointer_focus)
 
 static void    gdk_x11_device_manager_core_finalize    (GObject *object);
 static void    gdk_x11_device_manager_core_constructed (GObject *object);
@@ -802,7 +804,7 @@ _gdk_device_manager_core_handle_focus (GdkSurface *surface,
 {
   GdkToplevelX11 *toplevel;
   GdkX11Screen *x11_screen;
-  gboolean had_focus;
+  gboolean had_focus, had_focus_window;
 
   g_return_if_fail (GDK_IS_SURFACE (surface));
   g_return_if_fail (GDK_IS_DEVICE (device));
@@ -823,6 +825,7 @@ _gdk_device_manager_core_handle_focus (GdkSurface *surface,
     return;
 
   had_focus = HAS_FOCUS (toplevel);
+  had_focus_window = HAS_FOCUS_WINDOW (toplevel);
   x11_screen = GDK_X11_SCREEN (GDK_SURFACE_SCREEN (surface));
 
   switch (detail)
@@ -884,7 +887,8 @@ _gdk_device_manager_core_handle_focus (GdkSurface *surface,
       break;
     }
 
-  if (HAS_FOCUS (toplevel) != had_focus)
+  if (HAS_FOCUS (toplevel) != had_focus ||
+      HAS_FOCUS_WINDOW (toplevel) != had_focus_window)
     {
       GdkEvent *event;
 

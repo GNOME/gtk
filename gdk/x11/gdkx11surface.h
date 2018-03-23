@@ -108,6 +108,9 @@ GDK_AVAILABLE_IN_ALL
 GdkSurface  *gdk_x11_surface_lookup_for_display      (GdkDisplay *display,
                                                       Window      window);
 
+GDK_AVAILABLE_IN_ALL
+gboolean     gdk_x11_surface_has_focus_window        (GdkSurface *surface);
+
 G_END_DECLS
 
 #endif /* __GDK_X11_SURFACE_H__ */

@@ -10472,8 +10472,9 @@ _gtk_window_set_is_active (GtkWindow *window,
         }
 
       g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_IS_ACTIVE]);
-      _gtk_window_accessible_set_is_active (window, is_active);
     }
+
+  _gtk_window_accessible_set_is_active (window, is_active);
 }
 
 /**

@@ -4850,6 +4850,17 @@ gdk_x11_surface_show_window_menu (GdkSurface *surface,
   return TRUE;
 }
 
+gboolean
+gdk_x11_surface_has_focus_window (GdkSurface *surface)
+{
+  GdkToplevelX11 *toplevel = _gdk_x11_surface_get_toplevel (surface);
+
+  if (!toplevel)
+    return FALSE;
+
+  return toplevel->has_focus_window;
+}
+
 static void
 gdk_surface_impl_x11_class_init (GdkSurfaceImplX11Class *klass)
 {

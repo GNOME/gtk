@@ -27,7 +27,16 @@
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
 
+#ifdef GDK_WINDOWING_X11
+#include <gdk/x11/gdkx.h>
+#endif
+
 /* atkcomponent.h */
+
+struct _GtkWindowAccessiblePrivate
+{
+  guint is_active:1;                   // Whether the window is active, including during X11 temporary grabs
+};
 
 static void                  gtk_window_accessible_get_extents      (AtkComponent         *component,
                                                            gint                 *x,
@@ -45,6 +54,7 @@ static void atk_window_interface_init (AtkWindowIface *iface);
 G_DEFINE_TYPE_WITH_CODE (GtkWindowAccessible,
                          gtk_window_accessible,
                          GTK_TYPE_CONTAINER_ACCESSIBLE,
+                         G_ADD_PRIVATE (GtkWindowAccessible)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT,
                                                 atk_component_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_WINDOW,
@@ -359,6 +369,8 @@ gtk_window_accessible_class_init (GtkWindowAccessibleClass *klass)
 static void
 gtk_window_accessible_init (GtkWindowAccessible *accessible)
 {
+  accessible->priv = gtk_window_accessible_get_instance_private (accessible);
+  accessible->priv->is_active = 0;
 }
 
 static void
@@ -449,11 +461,29 @@ _gtk_window_accessible_set_is_active (GtkWindow   *window,
                                       gboolean     is_active)
 {
   AtkObject *accessible = _gtk_widget_peek_accessible (GTK_WIDGET (window));
+  GtkWindowAccessible *window_accessible;
+  GtkWindowAccessiblePrivate *priv;
 
   if (accessible == NULL)
     return;
 
-  g_signal_emit_by_name (accessible, is_active ? "activate" : "deactivate");
+  window_accessible = GTK_WINDOW_ACCESSIBLE (accessible);
+  priv = window_accessible->priv;
+
+#ifdef GDK_WINDOWING_X11
+  if (gdk_x11_surface_has_focus_window (gtk_widget_get_surface (gtk_widget_get_toplevel (GTK_WIDGET (window)))))
+    /*
+     * Actually still active, this is a temporary X11 grab for keyboard
+     * shortcut.  We do not want to bother screen readers in that case.
+     */
+    is_active = TRUE;
+#endif
+
+  if (priv->is_active != is_active)
+    {
+      priv->is_active = is_active;
+      g_signal_emit_by_name (accessible, is_active ? "activate" : "deactivate");
+    }
 }
 
 
