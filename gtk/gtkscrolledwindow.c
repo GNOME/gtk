@@ -1734,35 +1734,37 @@ gtk_scrolled_window_measure (GtkWidget      *widget,
    */
   if (policy_may_be_visible (priv->hscrollbar_policy))
     {
-      GtkRequisition hscrollbar_requisition;
-      gtk_widget_get_preferred_size (priv->hscrollbar, &hscrollbar_requisition, NULL);
+      int scrollbar_size;
+
+      gtk_widget_measure (priv->hscrollbar, orientation, -1, &scrollbar_size, NULL, NULL, NULL);
 
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
         {
-          minimum_req = MAX (minimum_req, hscrollbar_requisition.width + sborder.left + sborder.right);
-          natural_req = MAX (natural_req, hscrollbar_requisition.width + sborder.left + sborder.right);
+          minimum_req = MAX (minimum_req, scrollbar_size + sborder.left + sborder.right);
+          natural_req = MAX (natural_req, scrollbar_size + sborder.left + sborder.right);
         }
       else if (!priv->use_indicators && priv->hscrollbar_policy == GTK_POLICY_ALWAYS)
         {
-          minimum_req += hscrollbar_requisition.height;
-          natural_req += hscrollbar_requisition.height;
+          minimum_req += scrollbar_size;
+          natural_req += scrollbar_size;
         }
     }
 
   if (policy_may_be_visible (priv->vscrollbar_policy))
     {
-      GtkRequisition vscrollbar_requisition;
-      gtk_widget_get_preferred_size (priv->vscrollbar, &vscrollbar_requisition, NULL);
+      int scrollbar_size;
+
+      gtk_widget_measure (priv->vscrollbar, orientation, -1, &scrollbar_size, NULL, NULL, NULL);
 
       if (orientation == GTK_ORIENTATION_VERTICAL)
         {
-          minimum_req = MAX (minimum_req, vscrollbar_requisition.height + sborder.top + sborder.bottom);
-          natural_req = MAX (natural_req, vscrollbar_requisition.height + sborder.top + sborder.bottom);
+          minimum_req = MAX (minimum_req, scrollbar_size + sborder.top + sborder.bottom);
+          natural_req = MAX (natural_req, scrollbar_size + sborder.top + sborder.bottom);
         }
       else if (!priv->use_indicators && priv->vscrollbar_policy == GTK_POLICY_ALWAYS)
         {
-          minimum_req += vscrollbar_requisition.width;
-          natural_req += vscrollbar_requisition.width;
+          minimum_req += scrollbar_size;
+          natural_req += scrollbar_size;
         }
     }
 
@@ -3399,36 +3401,20 @@ gtk_scrolled_window_focus (GtkWidget        *widget,
 
 static void
 gtk_scrolled_window_adjustment_changed (GtkAdjustment *adjustment,
-					gpointer       data)
+                                        gpointer       user_data)
 {
-  GtkScrolledWindow *scrolled_window = data;
+  GtkScrolledWindow *scrolled_window = user_data;
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
 
   if (adjustment == gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->hscrollbar)))
     {
       if (priv->hscrollbar_policy == GTK_POLICY_AUTOMATIC)
-	{
-	  gboolean visible;
-
-          visible = priv->hscrollbar_visible;
-          gtk_scrolled_window_update_scrollbar_visibility_flags (scrolled_window, priv->hscrollbar);
-
-          if (priv->hscrollbar_visible != visible)
-            gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
-	}
+        gtk_scrolled_window_update_scrollbar_visibility_flags (scrolled_window, priv->hscrollbar);
     }
   else if (adjustment == gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->vscrollbar)))
     {
       if (priv->vscrollbar_policy == GTK_POLICY_AUTOMATIC)
-	{
-	  gboolean visible;
-
-          visible = priv->vscrollbar_visible;
-          gtk_scrolled_window_update_scrollbar_visibility_flags (scrolled_window, priv->vscrollbar);
-
-          if (priv->vscrollbar_visible != visible)
-            gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
-	}
+        gtk_scrolled_window_update_scrollbar_visibility_flags (scrolled_window, priv->vscrollbar);
     }
 }
 
