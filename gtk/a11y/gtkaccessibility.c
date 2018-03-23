@@ -27,6 +27,7 @@
 #include <gtk/gtkaccessible.h>
 
 #ifdef GDK_WINDOWING_X11
+#include <gdk/x11/gdkx.h>
 #include <atk-bridge.h>
 #endif
 
@@ -43,6 +44,15 @@ window_focus (GtkWidget     *widget,
   g_return_val_if_fail (GTK_IS_WINDOW (widget), FALSE);
 
   focus_in = gtk_window_is_active (GTK_WINDOW (widget));
+
+#ifdef GDK_WINDOWING_X11
+  if (!focus_in)
+  {
+    if (gdk_x11_surface_has_focus_window (gtk_widget_get_surface(gtk_widget_get_toplevel(widget))))
+      /* Actually still active, this is a temporary grab.  */
+      return FALSE;
+  }
+#endif
 
   atk_obj = gtk_widget_get_accessible (widget);
   g_signal_emit_by_name (atk_obj, focus_in ? "activate" : "deactivate");
