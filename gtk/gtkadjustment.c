@@ -323,12 +323,6 @@ gtk_adjustment_set_property (GObject      *object,
 }
 
 static inline void
-emit_changed (GtkAdjustment *adjustment)
-{
-  g_signal_emit (adjustment, adjustment_signals[CHANGED], 0);
-}
-
-static inline void
 emit_value_changed (GtkAdjustment *adjustment)
 {
   g_signal_emit (adjustment, adjustment_signals[VALUE_CHANGED], 0);
@@ -361,7 +355,7 @@ gtk_adjustment_dispatch_properties_changed (GObject     *object,
 
   if (changed)
     {
-      emit_changed (GTK_ADJUSTMENT (object));
+      g_signal_emit (object, adjustment_signals[CHANGED], 0);
     }
 }
 
@@ -824,41 +818,16 @@ gtk_adjustment_configure (GtkAdjustment *adjustment,
 {
   GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
   gboolean value_changed = FALSE;
-  gboolean changed = FALSE;
 
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
   g_object_freeze_notify (G_OBJECT (adjustment));
 
-  if (priv->lower != lower)
-    {
-      gtk_adjustment_set_lower (adjustment, lower);
-      changed = TRUE;
-    }
-
-  if (priv->upper != upper)
-    {
-      gtk_adjustment_set_upper (adjustment, upper);
-      changed = TRUE;
-    }
-
-  if (priv->step_increment != step_increment)
-    {
-      gtk_adjustment_set_step_increment (adjustment, step_increment);
-      changed = TRUE;
-    }
-
-  if (priv->page_increment != page_increment)
-    {
-      gtk_adjustment_set_page_increment (adjustment, page_increment);
-      changed = TRUE;
-    }
-
-  if (priv->page_size != page_size)
-    {
-      gtk_adjustment_set_page_size (adjustment, page_size);
-      changed = TRUE;
-    }
+  gtk_adjustment_set_lower (adjustment, lower);
+  gtk_adjustment_set_upper (adjustment, upper);
+  gtk_adjustment_set_step_increment (adjustment, step_increment);
+  gtk_adjustment_set_page_increment (adjustment, page_increment);
+  gtk_adjustment_set_page_size (adjustment, page_size);
 
   /* don't use CLAMP() so we don't end up below lower if upper - page_size
    * is smaller than lower
@@ -875,10 +844,8 @@ gtk_adjustment_configure (GtkAdjustment *adjustment,
       value_changed = TRUE;
     }
 
+  /* The dispatch_properties_changed implementation will emit ::changed! */
   g_object_thaw_notify (G_OBJECT (adjustment));
-
-  if (changed)
-    emit_changed (adjustment); /* force emission before ::value-changed */
 
   if (value_changed)
     emit_value_changed (adjustment);
