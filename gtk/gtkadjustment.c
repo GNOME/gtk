@@ -100,8 +100,6 @@ static guint adjustment_signals[LAST_SIGNAL] = { 0 };
 
 static GParamSpec *adjustment_props[NUM_PROPERTIES] = { NULL, };
 
-static guint64 adjustment_changed_stamp = 0; /* protected by global gdk lock */
-
 G_DEFINE_TYPE_WITH_PRIVATE (GtkAdjustment, gtk_adjustment, G_TYPE_INITIALLY_UNOWNED)
 
 static void
@@ -363,7 +361,6 @@ gtk_adjustment_dispatch_properties_changed (GObject     *object,
 
   if (changed)
     {
-      adjustment_changed_stamp++;
       emit_changed (GTK_ADJUSTMENT (object));
     }
 }
@@ -827,19 +824,41 @@ gtk_adjustment_configure (GtkAdjustment *adjustment,
 {
   GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
   gboolean value_changed = FALSE;
-  guint64 old_stamp = adjustment_changed_stamp;
+  gboolean changed = FALSE;
 
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
   g_object_freeze_notify (G_OBJECT (adjustment));
 
-  g_object_set (adjustment,
-                "lower", lower,
-                "upper", upper,
-                "step-increment", step_increment,
-                "page-increment", page_increment,
-                "page-size", page_size,
-                NULL);
+  if (priv->lower != lower)
+    {
+      gtk_adjustment_set_lower (adjustment, lower);
+      changed = TRUE;
+    }
+
+  if (priv->upper != upper)
+    {
+      gtk_adjustment_set_upper (adjustment, upper);
+      changed = TRUE;
+    }
+
+  if (priv->step_increment != step_increment)
+    {
+      gtk_adjustment_set_step_increment (adjustment, step_increment);
+      changed = TRUE;
+    }
+
+  if (priv->page_increment != page_increment)
+    {
+      gtk_adjustment_set_page_increment (adjustment, page_increment);
+      changed = TRUE;
+    }
+
+  if (priv->page_size != page_size)
+    {
+      gtk_adjustment_set_page_size (adjustment, page_size);
+      changed = TRUE;
+    }
 
   /* don't use CLAMP() so we don't end up below lower if upper - page_size
    * is smaller than lower
@@ -858,7 +877,7 @@ gtk_adjustment_configure (GtkAdjustment *adjustment,
 
   g_object_thaw_notify (G_OBJECT (adjustment));
 
-  if (old_stamp == adjustment_changed_stamp)
+  if (changed)
     emit_changed (adjustment); /* force emission before ::value-changed */
 
   if (value_changed)
