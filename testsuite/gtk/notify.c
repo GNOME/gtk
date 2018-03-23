@@ -44,6 +44,8 @@ count_notify (GObject *obj, GParamSpec *pspec, NotifyData *data)
 static void
 check_property (GObject *instance, GParamSpec *pspec)
 {
+  g_test_message ("Checking %s:%s", G_OBJECT_TYPE_NAME (instance), pspec->name);
+
   if (G_TYPE_IS_ENUM (pspec->value_type))
     {
       GEnumClass *class;
