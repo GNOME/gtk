@@ -2571,6 +2571,10 @@ gtk_entry_init (GtkEntry *entry)
                     G_CALLBACK (gtk_entry_key_controller_key_pressed), entry);
   g_signal_connect_swapped (priv->key_controller, "im-update",
                             G_CALLBACK (gtk_entry_schedule_im_reset), entry);
+  g_signal_connect_swapped (priv->key_controller, "focus-in",
+                            G_CALLBACK (gtk_entry_focus_in), entry);
+  g_signal_connect_swapped (priv->key_controller, "focus-out",
+                            G_CALLBACK (gtk_entry_focus_out), entry);
   gtk_event_controller_key_set_im_context (GTK_EVENT_CONTROLLER_KEY (priv->key_controller),
                                            priv->im_context);
 
@@ -3514,20 +3518,6 @@ gtk_entry_event (GtkWidget *widget,
   GdkDevice *device;
   gdouble x, y;
   gint i = 0;
-
-  if (gdk_event_get_event_type (event) == GDK_FOCUS_CHANGE)
-    {
-      gboolean focus_in;
-
-      gdk_event_get_focus_in (event, &focus_in);
-
-      if (focus_in)
-        gtk_entry_focus_in (widget);
-      else
-        gtk_entry_focus_out (widget);
-
-      return GDK_EVENT_PROPAGATE;
-    }
 
   if (!gdk_event_get_coords (event, &x, &y))
     return GDK_EVENT_PROPAGATE;
