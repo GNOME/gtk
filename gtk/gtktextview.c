@@ -405,8 +405,6 @@ static void     gtk_text_view_key_controller_im_update    (GtkEventControllerKey
 
 static void gtk_text_view_focus_in             (GtkWidget        *widget);
 static void gtk_text_view_focus_out            (GtkWidget        *widget);
-static gint gtk_text_view_event                (GtkWidget        *widget,
-                                                GdkEvent         *event);
 static void gtk_text_view_motion               (GtkEventController *controller,
                                                 double              x,
                                                 double              y,
@@ -704,7 +702,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->state_flags_changed = gtk_text_view_state_flags_changed;
   widget_class->measure = gtk_text_view_measure;
   widget_class->size_allocate = gtk_text_view_size_allocate;
-  widget_class->event = gtk_text_view_event;
   widget_class->snapshot = gtk_text_view_snapshot;
   widget_class->focus = gtk_text_view_focus;
   widget_class->drag_begin = gtk_text_view_drag_begin;
@@ -1700,6 +1697,12 @@ gtk_text_view_init (GtkTextView *text_view)
   g_signal_connect (priv->key_controller, "im-update",
                     G_CALLBACK (gtk_text_view_key_controller_im_update),
                     widget);
+  g_signal_connect_swapped (priv->key_controller, "focus-in",
+                            G_CALLBACK (gtk_text_view_focus_in),
+                            widget);
+  g_signal_connect_swapped (priv->key_controller, "focus-out",
+                            G_CALLBACK (gtk_text_view_focus_out),
+                            widget);
   gtk_event_controller_key_set_im_context (GTK_EVENT_CONTROLLER_KEY (priv->key_controller),
                                            priv->im_context);
 
@@ -5304,26 +5307,6 @@ gtk_text_view_focus_out (GtkWidget *widget)
       priv->need_im_reset = TRUE;
       gtk_im_context_focus_out (priv->im_context);
     }
-}
-
-static gboolean
-gtk_text_view_event (GtkWidget *widget,
-                     GdkEvent  *event)
-{
-  if (gdk_event_get_event_type (event) == GDK_FOCUS_CHANGE)
-    {
-      gboolean focus_in;
-
-      gdk_event_get_focus_in (event, &focus_in);
-      if (focus_in)
-        gtk_text_view_focus_in (widget);
-      else
-        gtk_text_view_focus_out (widget);
-
-      return GDK_EVENT_PROPAGATE;
-    }
-
-  return GDK_EVENT_PROPAGATE;
 }
 
 static void
