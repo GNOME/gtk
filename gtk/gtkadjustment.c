@@ -297,7 +297,6 @@ gtk_adjustment_set_property (GObject      *object,
 {
   GtkAdjustment *adjustment = GTK_ADJUSTMENT (object);
   gdouble double_value = g_value_get_double (value);
-  GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
 
   switch (prop_id)
     {
@@ -305,19 +304,19 @@ gtk_adjustment_set_property (GObject      *object,
       gtk_adjustment_set_value (adjustment, double_value);
       break;
     case PROP_LOWER:
-      priv->lower = double_value;
+      gtk_adjustment_set_lower (adjustment, double_value);
       break;
     case PROP_UPPER:
-      priv->upper = double_value;
+      gtk_adjustment_set_upper (adjustment, double_value);
       break;
     case PROP_STEP_INCREMENT:
-      priv->step_increment = double_value;
+      gtk_adjustment_set_step_increment (adjustment, double_value);
       break;
     case PROP_PAGE_INCREMENT:
-      priv->page_increment = double_value;
+      gtk_adjustment_set_page_increment (adjustment, double_value);
       break;
     case PROP_PAGE_SIZE:
-      priv->page_size = double_value;
+      gtk_adjustment_set_page_size (adjustment, double_value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -615,7 +614,10 @@ gtk_adjustment_set_lower (GtkAdjustment *adjustment,
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
   if (lower != priv->lower)
-    g_object_set (adjustment, "lower", lower, NULL);
+    {
+      priv->lower = lower;
+      g_object_notify_by_pspec (G_OBJECT (adjustment), adjustment_props[PROP_LOWER]);
+    }
 }
 
 /**
@@ -659,7 +661,10 @@ gtk_adjustment_set_upper (GtkAdjustment *adjustment,
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
   if (upper != priv->upper)
-    g_object_set (adjustment, "upper", upper, NULL);
+    {
+      priv->upper = upper;
+      g_object_notify_by_pspec (G_OBJECT (adjustment), adjustment_props[PROP_UPPER]);
+    }
 }
 
 /**
@@ -700,7 +705,10 @@ gtk_adjustment_set_step_increment (GtkAdjustment *adjustment,
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
   if (step_increment != priv->step_increment)
-    g_object_set (adjustment, "step-increment", step_increment, NULL);
+    {
+      priv->step_increment = step_increment;
+      g_object_notify_by_pspec (G_OBJECT (adjustment), adjustment_props[PROP_STEP_INCREMENT]);
+    }
 }
 
 /**
@@ -741,7 +749,10 @@ gtk_adjustment_set_page_increment (GtkAdjustment *adjustment,
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
   if (page_increment != priv->page_increment)
-    g_object_set (adjustment, "page-increment", page_increment, NULL);
+    {
+      priv->page_increment = page_increment;
+      g_object_notify_by_pspec (G_OBJECT (adjustment), adjustment_props[PROP_PAGE_INCREMENT]);
+    }
 }
 
 /**
@@ -782,7 +793,10 @@ gtk_adjustment_set_page_size (GtkAdjustment *adjustment,
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
   if (page_size != priv->page_size)
-    g_object_set (adjustment, "page-size", page_size, NULL);
+    {
+      priv->page_size = page_size;
+      g_object_notify_by_pspec (G_OBJECT (adjustment), adjustment_props[PROP_PAGE_SIZE]);
+    }
 }
 
 /**
