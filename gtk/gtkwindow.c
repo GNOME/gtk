@@ -10453,6 +10453,7 @@ _gtk_window_set_is_active (GtkWindow *window,
   if (is_active != priv->is_active)
     {
       GtkWidget *widget = GTK_WIDGET (window);
+      AtkObject *accessible = gtk_widget_get_accessible (widget);
 
       priv->is_active = is_active;
 
@@ -10472,6 +10473,7 @@ _gtk_window_set_is_active (GtkWindow *window,
         }
 
       g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_IS_ACTIVE]);
+      g_signal_emit_by_name (accessible, is_active ? "activate" : "deactivate");
     }
 }
 
