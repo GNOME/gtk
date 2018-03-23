@@ -23,6 +23,7 @@
 #include <gtk/gtkmnemonichash.h>
 #include <gtk/gtkkeyhash.h>
 #include <gtk/gtkmenutracker.h>
+#include <gtk/gtkeventcontroller.h>
 
 G_BEGIN_DECLS
 
@@ -70,6 +71,7 @@ struct _GtkMenuShellPrivate
   GtkKeyHash *key_hash;
 
   GdkDevice *grab_pointer;
+  GtkEventController *key_controller;
 };
 
 void        _gtk_menu_shell_select_last      (GtkMenuShell *menu_shell,
