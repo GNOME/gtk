@@ -27,6 +27,7 @@
 #include "gtksizerequest.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
+#include "gtkeventcontrollerkey.h"
 
 
 /**
@@ -519,6 +520,7 @@ struct _GtkCellEditableWidget
   GtkCellRendererAccelMode accel_mode;
   gchar *path;
   GtkCellRenderer *cell;
+  GtkEventController *key_controller;
 };
 
 enum {
@@ -547,32 +549,32 @@ gtk_cell_editable_widget_cell_editable_init (GtkCellEditableIface *iface)
 }
 
 static gboolean
-gtk_cell_editable_widget_key_press_event (GtkWidget   *widget,
-                                          GdkEventKey *event)
+key_controller_modifiers (GtkEventControllerKey *key,
+                          GdkModifierType        state,
+                          GtkWidget             *widget)
+{
+  /* Ignore modifiers */
+  return TRUE;
+}
+
+static gboolean
+key_controller_key_pressed (GtkEventControllerKey *key,
+                            guint                  keyval,
+                            guint                  keycode,
+                            GdkModifierType        state,
+                            GtkWidget             *widget)
 {
   GtkCellEditableWidget *box = (GtkCellEditableWidget*)widget;
   GdkModifierType accel_mods = 0;
   guint accel_key;
-  guint keyval = 0;
   gboolean edited;
   gboolean cleared;
   GdkModifierType consumed_modifiers;
   GdkDisplay *display;
-  gboolean is_modifier = FALSE;
-  guint16 keycode = 0;
   guint group = 0;
-  GdkModifierType state = 0;
 
   display = gtk_widget_get_display (widget);
-
-  gdk_event_get_state ((GdkEvent *)event, &state);
-  gdk_event_get_keyval ((GdkEvent *)event, &keyval);
-  gdk_event_get_keycode ((GdkEvent *)event, &keycode);
-  gdk_event_get_key_group ((GdkEvent *)event, &group);
-  gdk_event_get_key_is_modifier ((GdkEvent *)event, &is_modifier);
-
-  if (is_modifier)
-    return TRUE;
+  group = gtk_event_controller_key_get_group (key);
 
   edited = FALSE;
   cleared = FALSE;
@@ -716,6 +718,7 @@ gtk_cell_editable_widget_finalize (GObject *object)
 {
   GtkCellEditableWidget *box = (GtkCellEditableWidget*)object;
 
+  g_object_unref (box->key_controller);
   g_free (box->path);
 
   G_OBJECT_CLASS (gtk_cell_editable_widget_parent_class)->finalize (object);
@@ -731,7 +734,6 @@ gtk_cell_editable_widget_class_init (GtkCellEditableWidgetClass *class)
   object_class->set_property = gtk_cell_editable_widget_set_property;
   object_class->get_property = gtk_cell_editable_widget_get_property;
 
-  widget_class->key_press_event = gtk_cell_editable_widget_key_press_event;
   widget_class->unrealize = gtk_cell_editable_widget_unrealize;
 
   g_object_class_override_property (object_class,
@@ -754,7 +756,17 @@ gtk_cell_editable_widget_class_init (GtkCellEditableWidgetClass *class)
 static void
 gtk_cell_editable_widget_init (GtkCellEditableWidget *box)
 {
-  gtk_widget_set_can_focus (GTK_WIDGET (box), TRUE);
+  GtkWidget *widget = GTK_WIDGET (box);
+
+  gtk_widget_set_can_focus (widget, TRUE);
+
+  box->key_controller = gtk_event_controller_key_new (widget);
+  g_signal_connect (box->key_controller, "key-pressed",
+                    G_CALLBACK (key_controller_key_pressed), box);
+  g_signal_connect (box->key_controller, "modifiers",
+                    G_CALLBACK (key_controller_modifiers), box);
+
+  gtk_widget_set_has_surface (widget, FALSE);
 }
 
 static GtkWidget *
