@@ -3844,9 +3844,9 @@ gtk_entry_show_magnifier (GtkEntry *entry,
 
   gtk_widget_get_allocation (GTK_WIDGET (entry), &allocation);
 
-  rect.x = x + text_allocation.x - allocation.x;
+  rect.x = x + text_allocation.x;
   rect.width = 1;
-  rect.y = text_allocation.y - allocation.y;
+  rect.y = text_allocation.y;
   rect.height = text_allocation.height;
 
   _gtk_magnifier_set_coords (GTK_MAGNIFIER (priv->magnifier), rect.x,
