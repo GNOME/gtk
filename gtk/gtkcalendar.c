@@ -301,8 +301,8 @@ static gboolean gtk_calendar_key_controller_key_pressed (GtkEventControllerKey *
                                                          guint                  keycode,
                                                          GdkModifierType        state,
                                                          GtkWidget             *widget);
-static gboolean gtk_calendar_event          (GtkWidget        *widget,
-                                             GdkEvent         *event);
+static void     gtk_calendar_key_controller_focus       (GtkEventControllerKey *controller,
+                                                         GtkWidget             *widget);
 static void     gtk_calendar_grab_notify    (GtkWidget        *widget,
                                              gboolean          was_grabbed);
 static void     gtk_calendar_state_flags_changed  (GtkWidget     *widget,
@@ -380,7 +380,6 @@ gtk_calendar_class_init (GtkCalendarClass *class)
   widget_class->size_allocate = gtk_calendar_size_allocate;
   widget_class->state_flags_changed = gtk_calendar_state_flags_changed;
   widget_class->grab_notify = gtk_calendar_grab_notify;
-  widget_class->event = gtk_calendar_event;
   widget_class->query_tooltip = gtk_calendar_query_tooltip;
 
   widget_class->drag_data_get = gtk_calendar_drag_data_get;
@@ -693,6 +692,12 @@ gtk_calendar_init (GtkCalendar *calendar)
     gtk_event_controller_key_new (GTK_WIDGET (calendar));
   g_signal_connect (priv->key_controller, "key-pressed",
                     G_CALLBACK (gtk_calendar_key_controller_key_pressed),
+                    calendar);
+  g_signal_connect (priv->key_controller, "focus-in",
+                    G_CALLBACK (gtk_calendar_key_controller_focus),
+                    calendar);
+  g_signal_connect (priv->key_controller, "focus-out",
+                    G_CALLBACK (gtk_calendar_key_controller_focus),
                     calendar);
 
   if (!default_abbreviated_dayname[0])
@@ -2870,6 +2875,17 @@ gtk_calendar_key_controller_key_pressed (GtkEventControllerKey *controller,
   return return_val;
 }
 
+static void
+gtk_calendar_key_controller_focus (GtkEventControllerKey *key,
+                                   GtkWidget             *widget)
+{
+  GtkCalendar *calendar = GTK_CALENDAR (widget);
+
+  calendar_queue_refresh (calendar);
+  calendar_stop_spinning (calendar);
+  calendar->priv->in_drag = 0;
+}
+
 
 /****************************************
  *           Misc widget methods        *
@@ -2895,23 +2911,6 @@ gtk_calendar_grab_notify (GtkWidget *widget,
 {
   if (!was_grabbed)
     calendar_stop_spinning (GTK_CALENDAR (widget));
-}
-
-static gboolean
-gtk_calendar_event (GtkWidget *widget,
-                    GdkEvent  *event)
-{
-  GtkCalendar *calendar = GTK_CALENDAR (widget);
-
-  if (gdk_event_get_event_type (event) == GDK_FOCUS_CHANGE)
-    {
-      calendar_queue_refresh (calendar);
-      calendar_stop_spinning (calendar);
-
-      calendar->priv->in_drag = 0;
-    }
-
-  return GDK_EVENT_PROPAGATE;
 }
 
 
