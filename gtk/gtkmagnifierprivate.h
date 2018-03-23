@@ -20,7 +20,7 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_MAGNIFIER           (_gtk_magnifier_get_type ())
+#define GTK_TYPE_MAGNIFIER           (gtk_magnifier_get_type ())
 #define GTK_MAGNIFIER(o)             (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_MAGNIFIER, GtkMagnifier))
 #define GTK_MAGNIFIER_CLASS(c)       (G_TYPE_CHECK_CLASS_CAST ((c), GTK_TYPE_MAGNIFIER, GtkMagnifierClass))
 #define GTK_IS_MAGNIFIER(o)          (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_MAGNIFIER))
@@ -40,7 +40,7 @@ struct _GtkMagnifierClass
   GtkWidgetClass parent_class;
 };
 
-GType       _gtk_magnifier_get_type          (void) G_GNUC_CONST;
+GType       gtk_magnifier_get_type           (void) G_GNUC_CONST;
 
 GtkWidget * _gtk_magnifier_new               (GtkWidget       *inspected);
 
