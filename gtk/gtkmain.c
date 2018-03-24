@@ -631,7 +631,9 @@ static void
 default_display_notify_cb (GdkDisplayManager *dm)
 {
   debug_flags[0].display = gdk_display_get_default ();
+#ifdef G_OS_UNIX
   gtk_print_backends_init ();
+#endif
   gtk_im_modules_init ();
   gtk_media_file_extension_init ();
   _gtk_accessibility_init ();
