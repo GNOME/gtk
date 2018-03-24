@@ -91,7 +91,7 @@ _gdk_win32_surfaceing_init (void)
   GDK_NOTE (EVENTS, g_print ("input_locale:%p, codepage:%d\n",
 			     _gdk_input_locale, _gdk_input_codepage));
 
-  _gdk_win32_selection_init ();
+  _gdk_win32_clipdrop_init ();
 }
 
 void

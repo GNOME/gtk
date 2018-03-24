@@ -43,6 +43,23 @@ typedef struct _GdkWin32DragContextClass GdkWin32DragContextClass;
 GDK_AVAILABLE_IN_ALL
 GType    gdk_win32_drag_context_get_type (void);
 
+#define GDK_TYPE_WIN32_DROP_CONTEXT              (gdk_win32_drop_context_get_type ())
+#define GDK_WIN32_DROP_CONTEXT(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WIN32_DROP_CONTEXT, GdkWin32DropContext))
+#define GDK_WIN32_DROP_CONTEXT_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WIN32_DROP_CONTEXT, GdkWin32DropContextClass))
+#define GDK_IS_WIN32_DROP_CONTEXT(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WIN32_DROP_CONTEXT))
+#define GDK_IS_WIN32_DROP_CONTEXT_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WIN32_DROP_CONTEXT))
+#define GDK_WIN32_DROP_CONTEXT_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WIN32_DROP_CONTEXT, GdkWin32DropContextClass))
+
+#ifdef GDK_COMPILATION
+typedef struct _GdkWin32DropContext GdkWin32DropContext;
+#else
+typedef GdkDragContext GdkWin32DropContext;
+#endif
+typedef struct _GdkWin32DropContextClass GdkWin32DropContextClass;
+
+GDK_AVAILABLE_IN_ALL
+GType    gdk_win32_drop_context_get_type (void);
+
 G_END_DECLS
 
 #endif /* __GDK_WIN32_DRAG_CONTEXT_H__ */

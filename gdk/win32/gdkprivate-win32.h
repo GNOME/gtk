@@ -40,7 +40,8 @@
 #include <gdk/win32/gdkwin32screen.h>
 #include <gdk/win32/gdkwin32keys.h>
 #include <gdk/win32/gdkdevicemanager-win32.h>
-#include <gdk/win32/gdkselection-win32.h>
+#include <gdk/win32/gdkclipdrop-win32.h>
+//#include <gdk/win32/gdkselection-win32.h>
 
 #include "gdkinternals.h"
 
@@ -282,8 +283,11 @@ extern UINT              _gdk_input_codepage;
 
 extern guint             _gdk_keymap_serial;
 
-/* The singleton selection object pointer */
-GdkWin32Selection *_win32_selection;
+/* The singleton clipdrop object pointer */
+GdkWin32Clipdrop *_win32_clipdrop;
+
+/* Used to identify the main thread */
+GThread          *_win32_main_thread;
 
 void _gdk_win32_dnd_do_dragdrop (void);
 void _gdk_win32_ole2_dnd_property_change (GdkAtom       type,
@@ -412,11 +416,11 @@ void       _gdk_win32_display_create_surface_impl   (GdkDisplay    *display,
 /* stray GdkSurfaceImplWin32 members */
 void _gdk_win32_surface_register_dnd (GdkSurface *window);
 GdkDragContext *_gdk_win32_surface_drag_begin (GdkSurface         *window,
-                                               GdkDevice         *device,
-                                               GdkContentFormats *formats,
-                                               GdkDragAction      actions,
-                                               gint               x_root,
-                                               gint               y_root);
+                                               GdkDevice          *device,
+                                               GdkContentProvider *content,
+                                               GdkDragAction       actions,
+                                               gint                x_root,
+                                               gint                y_root);
 
 /* Stray GdkWin32Screen members */
 gboolean _gdk_win32_get_setting (const gchar *name, GValue *value);
@@ -458,7 +462,8 @@ BOOL WINAPI GtkShowWindow (GdkSurface *window,
 
 /* Initialization */
 void _gdk_win32_surfaceing_init (void);
-void _gdk_dnd_init    (void);
+void _gdk_drag_init    (void);
+void _gdk_drop_init    (void);
 void _gdk_events_init (GdkDisplay *display);
 
 #endif /* __GDK_PRIVATE_WIN32_H__ */

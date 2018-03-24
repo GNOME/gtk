@@ -48,5 +48,7 @@ gint		  _gdk_max_colors = 0;
 GdkWin32ModalOpKind	  _modal_operation_in_progress = GDK_WIN32_MODAL_OP_NONE;
 HWND              _modal_move_resize_window = NULL;
 
-/* The singleton selection object pointer */
-GdkWin32Selection *_win32_selection = NULL;
+/* The singleton clipdrop object pointer */
+GdkWin32Clipdrop *_win32_clipdrop = NULL;
+
+GThread          *_win32_main_thread = NULL;

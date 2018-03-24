@@ -75,7 +75,6 @@ struct _GdkWin32Display
   int cursor_theme_size;
 
   HWND hwnd;
-  HWND clipboard_hwnd;
 
   /* WGL/OpenGL Items */
   guint have_wgl : 1;
