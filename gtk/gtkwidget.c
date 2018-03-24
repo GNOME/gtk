@@ -5444,7 +5444,6 @@ gtk_widget_draw_internal (GtkWidget *widget,
 
       if (mode == RENDER_SNAPSHOT)
         {
-          GskRenderer *renderer = gtk_widget_get_renderer (widget);
           GtkSnapshot *snapshot;
           cairo_region_t *clip;
           GskRenderNode *node;
@@ -5454,7 +5453,7 @@ gtk_widget_draw_internal (GtkWidget *widget,
                                                 widget->priv->clip.y - widget->priv->allocation.y,
                                                 widget->priv->clip.width,
                                                 widget->priv->clip.height});
-          snapshot = gtk_snapshot_new (renderer, FALSE, clip, "Fallback<%s>", G_OBJECT_TYPE_NAME (widget));
+          snapshot = gtk_snapshot_new (FALSE, clip, "Fallback<%s>", G_OBJECT_TYPE_NAME (widget));
           gtk_widget_snapshot (widget, snapshot);
           node = gtk_snapshot_free_to_node (snapshot);
           if (node != NULL)
@@ -13982,8 +13981,7 @@ gtk_widget_render (GtkWidget            *widget,
   context = gsk_renderer_begin_draw_frame (renderer, region);
   clip = gdk_drawing_context_get_clip (context);
 
-  snapshot = gtk_snapshot_new (renderer,
-                               should_record_names (widget, renderer),
+  snapshot = gtk_snapshot_new (should_record_names (widget, renderer),
                                clip,
                                "Render<%s>", G_OBJECT_TYPE_NAME (widget));
   cairo_region_destroy (clip);

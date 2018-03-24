@@ -157,7 +157,6 @@ gtk_snapshot_state_clear (GtkSnapshotState *state)
 
 /**
  * gtk_snapshot_new:
- * @renderer: the #GskRenderer to create nodes for
  * @record_names: whether to keep node names (for debugging purposes)
  * @clip: (nullable): the clip region to use, or %NULL
  * @name: a printf-style format string to create the node name
@@ -168,8 +167,7 @@ gtk_snapshot_state_clear (GtkSnapshotState *state)
  * Returns: a newly-allocated #GtkSnapshot
  */
 GtkSnapshot *
-gtk_snapshot_new (GskRenderer          *renderer,
-                  gboolean              record_names,
+gtk_snapshot_new (gboolean              record_names,
                   const cairo_region_t *clip,
                   const char           *name,
                   ...)
@@ -191,7 +189,6 @@ gtk_snapshot_new (GskRenderer          *renderer,
   snapshot = g_object_new (GTK_TYPE_SNAPSHOT, NULL);
 
   snapshot->record_names = record_names;
-  snapshot->renderer = renderer;
   snapshot->state_stack = g_array_new (FALSE, TRUE, sizeof (GtkSnapshotState));
   g_array_set_clear_func (snapshot->state_stack, (GDestroyNotify)gtk_snapshot_state_clear);
   snapshot->nodes = g_ptr_array_new_with_free_func ((GDestroyNotify)gsk_render_node_unref);
@@ -1197,21 +1194,6 @@ gtk_snapshot_pop (GtkSnapshot *snapshot)
       gtk_snapshot_append_node (snapshot, node);
       gsk_render_node_unref (node);
     }
-}
-
-/**
- * gtk_snapshot_get_renderer:
- * @snapshot: a #GtkSnapshot
- *
- * Obtains the #GskRenderer that this snapshot will be
- * rendered with.
- *
- * Returns: (transfer none): the #GskRenderer
- */
-GskRenderer *
-gtk_snapshot_get_renderer (GtkSnapshot *snapshot)
-{
-  return snapshot->renderer;
 }
 
 /**

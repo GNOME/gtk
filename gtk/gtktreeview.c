@@ -13860,7 +13860,7 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
 						bin_window_width + 2,
 						background_area.height + 2);
 
-  snapshot = gtk_snapshot_new (NULL, FALSE, NULL, "TreeView DragIcon");
+  snapshot = gtk_snapshot_new (FALSE, NULL, "TreeView DragIcon");
 
   gtk_snapshot_render_background (snapshot, context,
                                   0, 0,

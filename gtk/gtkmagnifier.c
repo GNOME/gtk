@@ -115,8 +115,7 @@ gtk_magnifier_snapshot (GtkWidget   *widget,
 
   g_signal_handler_block (priv->inspected, priv->draw_handler);
 
-  inspected_snapshot = gtk_snapshot_new (gtk_snapshot_get_renderer (snapshot),
-                                         gtk_snapshot_get_record_names (snapshot),
+  inspected_snapshot = gtk_snapshot_new (gtk_snapshot_get_record_names (snapshot),
                                          NULL,
                                          "MagnifierSnapshot");
 

@@ -253,7 +253,7 @@ _gtk_css_image_draw (GtkCssImage        *image,
   cairo_save (cr);
 
   clip = cairo_region_create_rectangle (&(cairo_rectangle_int_t) { 0, 0, width, height });
-  snapshot = gtk_snapshot_new (NULL, FALSE, clip, "Fallback<%s>", G_OBJECT_TYPE_NAME (image));
+  snapshot = gtk_snapshot_new (FALSE, clip, "Fallback<%s>", G_OBJECT_TYPE_NAME (image));
   gtk_css_image_snapshot (image, snapshot, width, height);
   node = gtk_snapshot_free_to_node (snapshot);
 
