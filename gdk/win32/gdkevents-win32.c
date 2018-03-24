@@ -795,7 +795,6 @@ _gdk_win32_print_event (const GdkEvent *event)
     CASE (GDK_DROP_START);
     CASE (GDK_DROP_FINISHED);
     CASE (GDK_SCROLL);
-    CASE (GDK_SURFACE_STATE);
     CASE (GDK_GRAB_BROKEN);
 #undef CASE
     default: g_assert_not_reached ();
@@ -903,10 +902,6 @@ _gdk_win32_print_event (const GdkEvent *event)
 		   "???")))));
       print_event_state (event->scroll.state);
       break;
-    case GDK_SURFACE_STATE:
-      g_print ("%s: %s",
-	       _gdk_win32_surface_state_to_string (event->surface_state.changed_mask),
-	       _gdk_win32_surface_state_to_string (event->surface_state.new_surface_state));
     case GDK_GRAB_BROKEN:
       g_print ("%s %s %p",
 	       (event->grab_broken.keyboard ? "KEYBOARD" : "POINTER"),
