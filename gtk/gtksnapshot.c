@@ -1372,7 +1372,7 @@ gtk_snapshot_append_cairo (GtkSnapshot           *snapshot,
   gtk_snapshot_append_node (snapshot, node);
   gsk_render_node_unref (node);
 
-  cr = gsk_cairo_node_get_draw_context (node, snapshot->renderer);
+  cr = gsk_cairo_node_get_draw_context (node);
 
   cairo_translate (cr, current_state->translate_x, current_state->translate_y);
 

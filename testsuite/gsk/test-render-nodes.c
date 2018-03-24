@@ -134,7 +134,7 @@ cairo (void)
   cairo_t *cr;
 
   node = gsk_cairo_node_new (&GRAPHENE_RECT_INIT (0, 0, 200, 600));
-  cr = gsk_cairo_node_get_draw_context (node, NULL);
+  cr = gsk_cairo_node_get_draw_context (node);
 
   cairo_set_source_rgb (cr, 1, 0, 0);
   cairo_rectangle (cr, 0, 0, 200, 200);
@@ -159,7 +159,7 @@ cairo2 (void)
   int i, j;
 
   node = gsk_cairo_node_new (&GRAPHENE_RECT_INIT (0, 0, 200, 200));
-  cr = gsk_cairo_node_get_draw_context (node, NULL);
+  cr = gsk_cairo_node_get_draw_context (node);
 
   cairo_set_source_rgb (cr, 1, 1, 1);
 
@@ -263,7 +263,7 @@ ducky (void)
   node = gsk_cairo_node_new (&GRAPHENE_RECT_INIT (0, 0,
                                                   gdk_pixbuf_get_width (pixbuf),
                                                   gdk_pixbuf_get_height (pixbuf)));
-  cr = gsk_cairo_node_get_draw_context (node, NULL);
+  cr = gsk_cairo_node_get_draw_context (node);
   gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
   cairo_paint (cr);
   cairo_destroy (cr);

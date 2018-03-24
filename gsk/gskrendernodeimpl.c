@@ -1903,7 +1903,6 @@ gsk_cairo_node_new (const graphene_rect_t *bounds)
 /**
  * gsk_cairo_node_get_draw_context:
  * @node: a cairo #GskRenderNode
- * @renderer: (nullable): Renderer to optimize for or %NULL for any
  *
  * Creates a Cairo context for drawing using the surface associated
  * to the render node.
@@ -1914,15 +1913,13 @@ gsk_cairo_node_new (const graphene_rect_t *bounds)
  *   cairo_destroy() when done drawing
  */
 cairo_t *
-gsk_cairo_node_get_draw_context (GskRenderNode *node,
-                                 GskRenderer   *renderer)
+gsk_cairo_node_get_draw_context (GskRenderNode *node)
 {
   GskCairoNode *self = (GskCairoNode *) node;
   int width, height;
   cairo_t *res;
 
   g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_CAIRO_NODE), NULL);
-  g_return_val_if_fail (renderer == NULL || GSK_IS_RENDERER (renderer), NULL);
 
   width = ceilf (node->bounds.size.width);
   height = ceilf (node->bounds.size.height);
@@ -1953,23 +1950,6 @@ gsk_cairo_node_get_draw_context (GskRenderNode *node,
                    node->bounds.origin.x, node->bounds.origin.y,
                    node->bounds.size.width, node->bounds.size.height);
   cairo_clip (res);
-
-  if (renderer && GSK_RENDERER_DEBUG_CHECK (renderer, SURFACE))
-    {
-      const char *prefix;
-      prefix = g_getenv ("GSK_DEBUG_PREFIX");
-      if (!prefix || g_str_has_prefix (node->name, prefix))
-        {
-          cairo_save (res);
-          cairo_rectangle (res,
-                           node->bounds.origin.x + 1, node->bounds.origin.y + 1,
-                           node->bounds.size.width - 2, node->bounds.size.height - 2);
-          cairo_set_line_width (res, 2);
-          cairo_set_source_rgb (res, 1, 0, 0);
-          cairo_stroke (res);
-          cairo_restore (res);
-        }
-    }
 
   return res;
 }
