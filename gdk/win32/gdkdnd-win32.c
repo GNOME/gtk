@@ -3099,8 +3099,7 @@ gdk_dnd_handle_button_event (GdkDragContext       *context,
     return FALSE;
 #endif
 
-  if ((gdk_drag_context_get_selected_action (context) != 0) &&
-      (gdk_drag_context_get_dest_surface (context) != NULL))
+  if ((gdk_drag_context_get_selected_action (context) != 0))
     {
       g_signal_emit_by_name (context, "drop-performed",
                              gdk_event_get_time ((GdkEvent *) event));

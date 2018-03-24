@@ -972,7 +972,7 @@ gdk_win32_display_init (GdkWin32Display *display)
       display->has_fixed_scale = TRUE;
     }
   else
-    display->surface_scale = 1;
+    display->surface_scale = _gdk_win32_display_get_monitor_scale_factor (display, NULL, NULL, NULL);
 
   _gdk_win32_display_init_cursors (display);
   gdk_win32_display_check_composited (display);

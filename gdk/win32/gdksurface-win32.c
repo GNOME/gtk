@@ -5393,7 +5393,7 @@ gdk_win32_surface_show_window_menu (GdkSurface *window,
   gint x, y;
   GdkSurfaceImplWin32 *impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
 
-  switch (event->type)
+  switch (event->any.type)
     {
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:

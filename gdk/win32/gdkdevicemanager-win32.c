@@ -1093,7 +1093,6 @@ gdk_input_other_event (GdkDisplay *display,
 	  if (source_device->sends_core)
 	    gdk_event_set_device (event, device_manager->core_pointer);
           gdk_event_set_source_device (event, GDK_DEVICE (source_device));
-          gdk_event_set_seat (event, gdk_device_get_seat (device_manager->core_pointer));
 
           event->button.axes = g_new (gdouble, num_axes);
 	  gdk_surface_get_origin (window, &root_x, &root_y);
@@ -1115,7 +1114,7 @@ gdk_input_other_event (GdkDisplay *display,
 
           GDK_NOTE (EVENTS_OR_INPUT,
                     g_print ("WINTAB button %s:%d %g,%g\n",
-                             (event->button.type == GDK_BUTTON_PRESS ?
+                             (event->any.type == GDK_BUTTON_PRESS ?
                               "press" : "release"),
                              event->button.button,
                              event->button.x, event->button.y));
@@ -1125,7 +1124,6 @@ gdk_input_other_event (GdkDisplay *display,
           event->motion.time = _gdk_win32_get_next_tick (msg->time);
           gdk_event_set_device (event, device_manager->core_pointer);
           gdk_event_set_source_device (event, GDK_DEVICE (source_device));
-          gdk_event_set_seat (event, gdk_device_get_seat (device_manager->core_pointer));
 
           event->motion.axes = g_new (gdouble, num_axes);
 	  gdk_surface_get_origin (window, &root_x, &root_y);
