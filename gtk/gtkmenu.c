@@ -1232,6 +1232,7 @@ gtk_menu_finalize (GObject *object)
   gtk_widget_unparent (priv->bottom_arrow_widget);
   g_clear_object (&priv->click_gesture);
   g_clear_object (&priv->scroll_controller);
+  g_clear_object (&priv->motion_controller);
 
   G_OBJECT_CLASS (gtk_menu_parent_class)->finalize (object);
 }
