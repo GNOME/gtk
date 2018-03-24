@@ -1693,7 +1693,7 @@ handle_wm_paint (MSG        *msg,
 
   update_region = _gdk_win32_hrgn_to_region (hrgn, impl->surface_scale);
   if (!cairo_region_is_empty (update_region))
-    _gdk_surface_invalidate_for_expose (window, update_region);
+    gdk_surface_invalidate_region (window, update_region);
   cairo_region_destroy (update_region);
 
   DeleteObject (hrgn);
