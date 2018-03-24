@@ -40,7 +40,6 @@ typedef enum {
   GSK_VULKAN_OP_FALLBACK,
   GSK_VULKAN_OP_FALLBACK_CLIP,
   GSK_VULKAN_OP_FALLBACK_ROUNDED_CLIP,
-  GSK_VULKAN_OP_SURFACE,
   GSK_VULKAN_OP_TEXTURE,
   GSK_VULKAN_OP_COLOR,
   GSK_VULKAN_OP_LINEAR_GRADIENT,
@@ -356,18 +355,11 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
     case GSK_CAIRO_NODE:
       if (gsk_cairo_node_peek_surface (node) == NULL)
         return;
-      if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
-        pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE;
-      else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
-        pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE_CLIP;
-      else if (constants->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
-        pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE_CLIP_ROUNDED;
-      else
-        FALLBACK ("Cairo nodes can't deal with clip type %u", constants->clip.type);
-      op.type = GSK_VULKAN_OP_SURFACE;
-      op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
-      g_array_append_val (self->render_ops, op);
-      return;
+      /* We're using recording surfaces, so drawing them to an image
+       * surface and uploading them is the right thing.
+       * But that's exactly what the fallback code does.
+       */
+      goto fallback;
 
     case GSK_TEXT_NODE:
       {
@@ -688,11 +680,10 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
       break;
 
     case GSK_CAIRO_NODE:
-      if (graphene_rect_equal (bounds, &node->bounds))
-        {
-          surface = cairo_surface_reference ((cairo_surface_t *)gsk_cairo_node_peek_surface (node));
-          goto got_surface;
-        }
+      /* We're using recording surfaces, so drawing them to an image
+       * surface and uploading them is the right thing.
+       * But that's exactly what the fallback code does.
+       */
       break;
 
     default:
@@ -796,7 +787,6 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
 
   cairo_destroy (cr);
 
-got_surface:
   result = gsk_vulkan_image_new_from_data (uploader,
                                            cairo_image_surface_get_data (surface),
                                            cairo_image_surface_get_width (surface),
@@ -904,22 +894,6 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
         case GSK_VULKAN_OP_FALLBACK_CLIP:
         case GSK_VULKAN_OP_FALLBACK_ROUNDED_CLIP:
           gsk_vulkan_render_pass_upload_fallback (self, &op->render, render, uploader);
-          break;
-
-        case GSK_VULKAN_OP_SURFACE:
-          {
-            cairo_surface_t *surface;
-
-            surface = (cairo_surface_t *)gsk_cairo_node_peek_surface (op->render.node);
-            op->render.source = gsk_vulkan_image_new_from_data (uploader,
-                                                                cairo_image_surface_get_data (surface),
-                                                                cairo_image_surface_get_width (surface),
-                                                                cairo_image_surface_get_height (surface),
-                                                                cairo_image_surface_get_stride (surface));
-            op->render.source_rect = GRAPHENE_RECT_INIT(0, 0, 1, 1);
-
-            gsk_vulkan_render_add_cleanup_image (render, op->render.source);
-          }
           break;
 
         case GSK_VULKAN_OP_TEXT:
@@ -1102,7 +1076,6 @@ gsk_vulkan_render_pass_count_vertex_data (GskVulkanRenderPass *self)
         case GSK_VULKAN_OP_FALLBACK:
         case GSK_VULKAN_OP_FALLBACK_CLIP:
         case GSK_VULKAN_OP_FALLBACK_ROUNDED_CLIP:
-        case GSK_VULKAN_OP_SURFACE:
         case GSK_VULKAN_OP_TEXTURE:
         case GSK_VULKAN_OP_REPEAT:
           op->render.vertex_count = gsk_vulkan_texture_pipeline_count_vertex_data (GSK_VULKAN_TEXTURE_PIPELINE (op->render.pipeline));
@@ -1195,7 +1168,6 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
         case GSK_VULKAN_OP_FALLBACK:
         case GSK_VULKAN_OP_FALLBACK_CLIP:
         case GSK_VULKAN_OP_FALLBACK_ROUNDED_CLIP:
-        case GSK_VULKAN_OP_SURFACE:
         case GSK_VULKAN_OP_TEXTURE:
           {
             op->render.vertex_offset = offset + n_bytes;
@@ -1464,7 +1436,6 @@ gsk_vulkan_render_pass_reserve_descriptor_sets (GskVulkanRenderPass *self,
         case GSK_VULKAN_OP_FALLBACK:
         case GSK_VULKAN_OP_FALLBACK_CLIP:
         case GSK_VULKAN_OP_FALLBACK_ROUNDED_CLIP:
-        case GSK_VULKAN_OP_SURFACE:
         case GSK_VULKAN_OP_TEXTURE:
         case GSK_VULKAN_OP_OPACITY:
         case GSK_VULKAN_OP_BLUR:
@@ -1531,7 +1502,6 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
         case GSK_VULKAN_OP_FALLBACK:
         case GSK_VULKAN_OP_FALLBACK_CLIP:
         case GSK_VULKAN_OP_FALLBACK_ROUNDED_CLIP:
-        case GSK_VULKAN_OP_SURFACE:
         case GSK_VULKAN_OP_TEXTURE:
         case GSK_VULKAN_OP_REPEAT:
           if (!op->render.source)
