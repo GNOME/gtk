@@ -891,47 +891,6 @@ gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon,
   return pixbuf;
 }
 
-gboolean
-_gdk_win32_display_supports_cursor_alpha (GdkDisplay    *display)
-{
-  return TRUE;
-}
-
-gboolean
-_gdk_win32_display_supports_cursor_color (GdkDisplay    *display)
-{
-  return TRUE;
-}
-
-void
-_gdk_win32_display_get_default_cursor_size (GdkDisplay *display,
-					    guint      *width,
-					    guint      *height)
-{
-  /* TODO: Use per-monitor DPI functions (8.1 and newer) or
-   * calculate DPI ourselves and use that, assuming that 72 dpi
-   * corresponds to 32x32 cursors. Take into account that DPI
-   * can be artificially increased by the user to make stuff bigger.
-   */
-
-  if (width)
-    *width = GetSystemMetrics (SM_CXCURSOR);
-  if (height)
-    *height = GetSystemMetrics (SM_CYCURSOR);
-}
-
-void
-_gdk_win32_display_get_maximal_cursor_size (GdkDisplay *display,
-					    guint       *width,
-					    guint       *height)
-{
-  if (width)
-    *width = GetSystemMetrics (SM_CXCURSOR);
-  if (height)
-    *height = GetSystemMetrics (SM_CYCURSOR);
-}
-
-
 /* Convert a pixbuf to an HICON (or HCURSOR).  Supports alpha under
  * Windows XP, thresholds alpha otherwise.  Also used from
  * gdksurface-win32.c for creating application icons.

@@ -360,15 +360,6 @@ void              win32_cursor_theme_destroy          (Win32CursorTheme *theme);
 Win32CursorTheme *_gdk_win32_display_get_cursor_theme (GdkWin32Display  *win32_display);
 
 /* GdkDisplay member functions */
-void     _gdk_win32_display_get_default_cursor_size (GdkDisplay  *display,
-                                                     guint       *width,
-                                                     guint       *height);
-void     _gdk_win32_display_get_maximal_cursor_size (GdkDisplay  *display,
-                                                     guint       *width,
-                                                     guint       *height);
-gboolean _gdk_win32_display_supports_cursor_alpha (GdkDisplay    *display);
-gboolean _gdk_win32_display_supports_cursor_color (GdkDisplay    *display);
-
 GList *_gdk_win32_display_list_devices (GdkDisplay *dpy);
 
 gboolean _gdk_win32_display_has_pending (GdkDisplay *display);
