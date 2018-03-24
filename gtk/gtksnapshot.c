@@ -388,25 +388,15 @@ gtk_snapshot_collect_offset (GtkSnapshot       *snapshot,
 }
 
 static void
-gtk_snapshot_push_offset (GtkSnapshot *snapshot,
-                          const char  *name,
-                          ...) G_GNUC_PRINTF(2, 3);
-static void
-gtk_snapshot_push_offset (GtkSnapshot *snapshot,
-                          const char  *name,
-                          ...)
+gtk_snapshot_push_offset (GtkSnapshot *snapshot)
 {
   GtkSnapshotState *state = gtk_snapshot_get_current_state (snapshot);
   char *str;
   cairo_region_t *offset_clip;
 
-  if (name && snapshot->record_names)
+  if (snapshot->record_names)
     {
-      va_list args;
-
-      va_start (args, name);
-      str = g_strdup_vprintf (name, args);
-      va_end (args);
+      str = g_strdup_printf ("Offset<%d,%d>", state->translate_x, state->translate_y);
     }
   else
     str = NULL;
@@ -1435,7 +1425,7 @@ gtk_snapshot_append_node (GtkSnapshot   *snapshot,
   g_return_if_fail (snapshot != NULL);
   g_return_if_fail (GSK_IS_RENDER_NODE (node));
 
-  gtk_snapshot_push_offset (snapshot, "OffsetReset");
+  gtk_snapshot_push_offset (snapshot);
   gtk_snapshot_append_node_internal (snapshot, node);
   gtk_snapshot_pop (snapshot);
 }
