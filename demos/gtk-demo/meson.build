@@ -33,6 +33,7 @@ demos = files([
   'iconview.c',
   'iconview_edit.c',
   'images.c',
+  'image_view.c',
   'infobar.c',
   'links.c',
   'listbox.c',
