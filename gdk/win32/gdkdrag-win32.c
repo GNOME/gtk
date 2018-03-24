@@ -2040,7 +2040,7 @@ gdk_win32_drag_context_find_surface (GdkDragContext  *context,
   a.result = NULL;
 
   GDK_NOTE (DND,
-            g_print ("gdk_drag_find_surface_real: %p %+d%+d\n",
+            g_print ("gdk_win32_drag_context_find_surface: %p %+d%+d\n",
                      (drag_surface ? GDK_SURFACE_HWND (drag_surface) : NULL),
                      a.x, a.y));
 
@@ -2068,7 +2068,7 @@ gdk_win32_drag_context_find_surface (GdkDragContext  *context,
     }
 
   GDK_NOTE (DND,
-            g_print ("gdk_drag_find_surface: %p %+d%+d: %p: %p %s\n",
+            g_print ("gdk_win32_drag_context_find_surface: %p %+d%+d: %p: %p %s\n",
                      (drag_surface ? GDK_SURFACE_HWND (drag_surface) : NULL),
                      x_root, y_root,
                      a.result,
@@ -2098,7 +2098,7 @@ gdk_win32_drag_context_drag_motion (GdkDragContext  *context,
 
   context->actions = possible_actions;
 
-  GDK_NOTE (DND, g_print ("gdk_drag_motion: @ %+d:%+d %s suggested=%s, possible=%s\n"
+  GDK_NOTE (DND, g_print ("gdk_win32_drag_context_drag_motion: @ %+d:%+d %s suggested=%s, possible=%s\n"
                           " context=%p:{actions=%s,suggested=%s,action=%s}\n",
                           x_root, y_root,
                           _gdk_win32_drag_protocol_to_string (protocol),
@@ -2184,7 +2184,7 @@ gdk_win32_drag_context_drag_motion (GdkDragContext  *context,
                   break;
 
                 case GDK_DRAG_PROTO_NONE:
-                  g_warning ("GDK_DRAG_PROTO_NONE is not valid in gdk_drag_motion()");
+                  g_warning ("GDK_DRAG_PROTO_NONE is not valid in gdk_win32_drag_context_drag_motion()");
                   break;
 
                 default:
@@ -2602,12 +2602,12 @@ gdk_drag_update (GdkDragContext  *context,
   gdk_drag_get_current_actions (mods, GDK_BUTTON_PRIMARY, win32_context->actions,
                                 &action, &possible_actions);
 
-  gdk_drag_find_surface (context,
-                         win32_context->drag_surface,
-                         x_root, y_root, &dest_surface, &protocol);
+  dest_surface = gdk_win32_drag_context_find_surface (context,
+                                                      win32_context->drag_surface,
+                                                      x_root, y_root, &protocol);
 
-  gdk_drag_motion (context, dest_surface, protocol, x_root, y_root,
-                   action, possible_actions, evtime);
+  gdk_win32_drag_context_drag_motion (context, dest_surface, protocol, x_root, y_root,
+                                      action, possible_actions, evtime);
 }
 
 static gboolean
@@ -2875,8 +2875,6 @@ gdk_win32_drag_context_class_init (GdkWin32DragContextClass *klass)
 
   object_class->finalize = gdk_win32_drag_context_finalize;
 
-  context_class->find_surface = gdk_win32_drag_context_find_surface;
-  context_class->drag_motion = gdk_win32_drag_context_drag_motion;
   context_class->drag_abort = gdk_win32_drag_context_drag_abort;
   context_class->drag_drop = gdk_win32_drag_context_drag_drop;
   context_class->drop_status = gdk_win32_drag_context_drop_status;
