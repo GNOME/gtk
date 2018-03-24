@@ -129,7 +129,6 @@ static GdkSurface *mouse_window = NULL;
 static GdkSurface *mouse_window_ignored_leave = NULL;
 static gint current_x, current_y;
 static gint current_root_x, current_root_y;
-static UINT client_message;
 
 static UINT got_gdk_events_message;
 static HWND modal_win32_dialog = NULL;
@@ -462,7 +461,6 @@ _gdk_events_init (GdkDisplay *display)
   };
 #endif
 
-  client_message = RegisterWindowMessage ("GDK_WIN32_CLIENT_MESSAGE");
   got_gdk_events_message = RegisterWindowMessage ("GDK_WIN32_GOT_EVENTS");
 
 #if 0
@@ -2373,42 +2371,6 @@ gdk_event_translate (MSG  *msg,
 
       if (result == GDK_FILTER_REMOVE || result == GDK_FILTER_TRANSLATE)
 	{
-	  return_val = TRUE;
-	  goto done;
-	}
-    }
-
-  if (msg->message == client_message)
-    {
-      GList *tmp_list;
-      GdkFilterReturn result = GDK_FILTER_CONTINUE;
-      GList *node;
-
-      GDK_NOTE (EVENTS, g_print (" client_message"));
-
-      event = gdk_event_new (GDK_NOTHING);
-      ((GdkEventPrivate *)event)->flags |= GDK_EVENT_PENDING;
-
-      node = _gdk_event_queue_append (display, event);
-
-      switch (result)
-	{
-	case GDK_FILTER_REMOVE:
-	  _gdk_event_queue_remove_link (display, node);
-	  g_list_free_1 (node);
-	  gdk_event_free (event);
-	  return_val = TRUE;
-	  goto done;
-
-	case GDK_FILTER_TRANSLATE:
-	  ((GdkEventPrivate *)event)->flags &= ~GDK_EVENT_PENDING;
-	  GDK_NOTE (EVENTS, _gdk_win32_print_event (event));
-	  return_val = TRUE;
-	  goto done;
-
-	case GDK_FILTER_CONTINUE:
-	  /* No more: Send unknown client messages on to Gtk for it to use */
-	  GDK_NOTE (EVENTS, _gdk_win32_print_event (event));
 	  return_val = TRUE;
 	  goto done;
 	}
