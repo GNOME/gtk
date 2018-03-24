@@ -982,11 +982,11 @@ gdk_input_other_event (GdkDisplay *display,
 
       last_grab = _gdk_display_get_last_device_grab (display, GDK_DEVICE (source_device));
 
-      if (last_grab && last_grab->window)
+      if (last_grab && last_grab->surface)
         {
           g_object_unref (window);
 
-          window = g_object_ref (last_grab->window);
+          window = g_object_ref (last_grab->surface);
         }
 
       if (window == NULL)

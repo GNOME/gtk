@@ -915,7 +915,7 @@ gdk_win32_surface_foreign_new_for_display (GdkDisplay *display,
   if ((window = gdk_win32_surface_lookup_for_display (display, anid)) != NULL)
     return g_object_ref (window);
 
-  window = _gdk_display_create_window (display);
+  window = _gdk_display_create_surface (display);
   window->impl = g_object_new (GDK_TYPE_SURFACE_IMPL_WIN32, NULL);
   window->impl_surface = window;
   impl = GDK_SURFACE_IMPL_WIN32 (window->impl);

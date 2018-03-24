@@ -230,7 +230,7 @@ generate_grab_broken_event (GdkDeviceManagerWin32 *device_manager,
   event->any.send_event = 0;
   event->grab_broken.keyboard = keyboard;
   event->grab_broken.implicit = FALSE;
-  event->grab_broken.grab_window = grab_window;
+  event->grab_broken.grab_surface = grab_window;
   gdk_event_set_device (event, device);
   gdk_event_set_source_device (event, source_device);
 
@@ -836,7 +836,7 @@ _gdk_win32_print_event (const GdkEvent *event)
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
       g_print ("%p (%.4g,%.4g) (%.4g,%.4g) %s %s%s",
-	       event->crossing.child_window == NULL ? NULL : GDK_SURFACE_HWND (event->crossing.subwindow),
+	       event->crossing.child_surface == NULL ? NULL : GDK_SURFACE_HWND (event->crossing.child_surface),
 	       event->crossing.x, event->crossing.y,
 	       event->crossing.x_root, event->crossing.y_root,
 	       (event->crossing.mode == GDK_CROSSING_NORMAL ? "NORMAL" :
@@ -888,7 +888,7 @@ _gdk_win32_print_event (const GdkEvent *event)
       g_print ("%s %s %p",
 	       (event->grab_broken.keyboard ? "KEYBOARD" : "POINTER"),
 	       (event->grab_broken.implicit ? "IMPLICIT" : "EXPLICIT"),
-	       (event->grab_broken.grab_window ? GDK_SURFACE_HWND (event->grab_broken.grab_window) : 0));
+	       (event->grab_broken.grab_surface ? GDK_SURFACE_HWND (event->grab_broken.grab_surface) : 0));
     default:
       /* Nothing */
       break;
@@ -924,8 +924,8 @@ fixup_event (GdkEvent *event)
     g_object_ref (event->any.surface);
   if (((event->any.type == GDK_ENTER_NOTIFY) ||
        (event->any.type == GDK_LEAVE_NOTIFY)) &&
-      (event->crossing.child_window != NULL))
-    g_object_ref (event->crossing.child_window);
+      (event->crossing.child_surface != NULL))
+    g_object_ref (event->crossing.child_surface);
   event->any.send_event = InSendMessage ();
 }
 
@@ -1186,7 +1186,7 @@ send_crossing_event (GdkDisplay                 *display,
 
   event = gdk_event_new (type);
   event->any.surface = window;
-  event->crossing.child_window = subwindow;
+  event->crossing.child_surface = subwindow;
   event->crossing.time = _gdk_win32_get_next_tick (time_);
   event->crossing.x = pt.x / impl->surface_scale;
   event->crossing.y = pt.y / impl->surface_scale;
@@ -2385,7 +2385,7 @@ gdk_event_translate (MSG  *msg,
 
       if (keyboard_grab &&
           !propagate (&window, msg,
-		      keyboard_grab->window,
+		      keyboard_grab->surface,
 		      keyboard_grab->owner_events,
 		      GDK_ALL_EVENTS_MASK,
 		      doesnt_want_key))
@@ -2586,7 +2586,7 @@ gdk_event_translate (MSG  *msg,
 
       if (keyboard_grab &&
           !propagate (&window, msg,
-		      keyboard_grab->window,
+		      keyboard_grab->surface,
 		      keyboard_grab->owner_events,
 		      GDK_ALL_EVENTS_MASK,
 		      doesnt_want_char))
@@ -3022,10 +3022,10 @@ gdk_event_translate (MSG  *msg,
 
     case WM_KILLFOCUS:
       if (keyboard_grab != NULL &&
-	  !GDK_SURFACE_DESTROYED (keyboard_grab->window) &&
+	  !GDK_SURFACE_DESTROYED (keyboard_grab->surface) &&
 	  (_modal_operation_in_progress & GDK_WIN32_MODAL_OP_DND) == 0)
 	{
-	  generate_grab_broken_event (_gdk_device_manager, keyboard_grab->window, TRUE, NULL);
+	  generate_grab_broken_event (_gdk_device_manager, keyboard_grab->surface, TRUE, NULL);
 	}
 
       /* fallthrough */
@@ -3069,7 +3069,7 @@ gdk_event_translate (MSG  *msg,
 				 LOWORD (msg->lParam), HIWORD (msg->lParam)));
 
       if (pointer_grab != NULL)
-        grab_window = pointer_grab->window;
+        grab_window = pointer_grab->surface;
 
       if (grab_window == NULL && LOWORD (msg->lParam) != HTCLIENT)
 	break;
@@ -3243,8 +3243,8 @@ gdk_event_translate (MSG  *msg,
       {
         GdkDevice *device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
 
-        if ((pointer_grab != NULL && pointer_grab->window == window) ||
-            (keyboard_grab != NULL && keyboard_grab->window == window))
+        if ((pointer_grab != NULL && pointer_grab->surface == window) ||
+            (keyboard_grab != NULL && keyboard_grab->surface == window))
           gdk_device_ungrab (device, msg -> time);
     }
 
@@ -3611,8 +3611,8 @@ gdk_event_translate (MSG  *msg,
       break;
 
     case WM_NCDESTROY:
-      if ((pointer_grab != NULL && pointer_grab -> window == window) ||
-          (keyboard_grab && keyboard_grab -> window == window))
+      if ((pointer_grab != NULL && pointer_grab->surface == window) ||
+          (keyboard_grab && keyboard_grab->surface == window))
       {
         GdkDevice *device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
         gdk_device_ungrab (device, msg -> time);

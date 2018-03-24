@@ -156,7 +156,7 @@ gtk_im_context_ime_class_init (GtkIMContextIMEClass *class)
 static void
 gtk_im_context_ime_init (GtkIMContextIME *context_ime)
 {
-  context_ime->client_window          = NULL;
+  context_ime->client_surface         = NULL;
   context_ime->toplevel               = NULL;
   context_ime->use_preedit            = TRUE;
   context_ime->preediting             = FALSE;
@@ -184,7 +184,7 @@ gtk_im_context_ime_dispose (GObject *obj)
   GtkIMContext *context = GTK_IM_CONTEXT (obj);
   GtkIMContextIME *context_ime = GTK_IM_CONTEXT_IME (obj);
 
-  if (context_ime->client_window)
+  if (context_ime->client_surface)
     gtk_im_context_ime_set_client_widget (context, NULL);
 
   FREE_PREEDIT_BUFFER (context_ime);
