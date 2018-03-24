@@ -52,6 +52,7 @@ tests = [
   ['displayclose'],
   ['revealer-size'],
   ['widgetorder'],
+  ['imageview-size'],
 ]
 
 test_cargs = []

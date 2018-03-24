@@ -93,7 +93,7 @@ struct _GdkPaintableInterface
                                                          double                  height);
   /* get the current contents in an immutable form (optional) */
   GdkPaintable *        (* get_current_image)           (GdkPaintable           *paintable);
-   
+
   /* get flags for potential optimizations (optional) */
   GdkPaintableFlags     (* get_flags)                   (GdkPaintable           *paintable);
   /* preferred width of paintable or 0 if it has no width (optional) */

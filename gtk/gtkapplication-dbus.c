@@ -336,20 +336,20 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
                   "gtk-shell-shows-menubar", FALSE,
                   NULL);
 
-  if (dbus->sm_proxy == NULL)
-    {
-      dbus->inhibit_proxy = gtk_application_get_proxy_if_service_present (dbus->session,
-                                                                          G_DBUS_PROXY_FLAGS_NONE,
-                                                                          "org.freedesktop.portal.Desktop",
-                                                                          "/org/freedesktop/portal/desktop",
-                                                                          "org.freedesktop.portal.Inhibit",
-                                                                          &error);
-      if (error)
-        {
-          g_debug ("Failed to get an inhibit portal proxy: %s", error->message);
-          g_clear_error (&error);
-        }
-    }
+  /*if (dbus->sm_proxy == NULL)*/
+    /*{*/
+      /*dbus->inhibit_proxy = gtk_application_get_proxy_if_service_present (dbus->session,*/
+                                                                          /*G_DBUS_PROXY_FLAGS_NONE,*/
+                                                                          /*"org.freedesktop.portal.Desktop",*/
+                                                                          /*"/org/freedesktop/portal/desktop",*/
+                                                                          /*"org.freedesktop.portal.Inhibit",*/
+                                                                          /*&error);*/
+      /*if (error)*/
+        /*{*/
+          /*g_debug ("Failed to get an inhibit portal proxy: %s", error->message);*/
+          /*g_clear_error (&error);*/
+        /*}*/
+    /*}*/
 }
 
 static void
