@@ -172,6 +172,7 @@
     <file>iconview.c</file>
     <file>iconview_edit.c</file>
     <file>images.c</file>
+    <file>image_view.c</file>
     <file>infobar.c</file>
     <file>links.c</file>
     <file>listbox.c</file>
@@ -209,6 +210,9 @@
     <file>tree_store.c</file>
     <file>textmask.c</file>
     <file>video_player.c</file>
+  </gresource>
+  <gresource prefix="/imageview">
+    <file>image_view.ui</file>
   </gresource>
   <gresource prefix="/textview">
     <file>floppybuddy.gif</file>

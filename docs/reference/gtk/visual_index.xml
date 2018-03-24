@@ -33,6 +33,9 @@
     <link linkend="GtkImage">
       <inlinegraphic fileref="image.png" format="PNG"></inlinegraphic>
     </link>
+    <link linkend="GtkImageView">
+      <inlinegraphic fileref="image.png" format="PNG"></inlinegraphic>
+    </link>
     <link linkend="GtkSeparator">
       <inlinegraphic fileref="separator.png" format="PNG"></inlinegraphic>
     </link>
