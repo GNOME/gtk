@@ -151,6 +151,14 @@ typedef enum {
   GDK_WIN32_PE_INUSE
 } GdkWin32PalEntryState;
 
+typedef enum
+{
+  GDK_DRAG_PROTO_NONE = 0,
+  GDK_DRAG_PROTO_WIN32_DROPFILES,
+  GDK_DRAG_PROTO_OLE2,
+  GDK_DRAG_PROTO_LOCAL,
+} GdkDragProtocol;
+
 GType _gdk_gc_win32_get_type (void);
 
 gulong _gdk_win32_get_next_tick (gulong suggested_tick);

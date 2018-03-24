@@ -268,9 +268,6 @@ _gdk_win32_drag_protocol_to_string (GdkDragProtocol protocol)
   switch (protocol)
     {
 #define CASE(x) case GDK_DRAG_PROTO_##x: return #x
-      CASE (MOTIF);
-      CASE (XDND);
-      CASE (ROOTWIN);
       CASE (NONE);
       CASE (WIN32_DROPFILES);
       CASE (OLE2);

@@ -265,7 +265,7 @@ gdk_drag_context_new (GdkDisplay        *display,
   g_set_object (&context->source_surface, source_surface);
   g_set_object (&context->dest_surface, dest_surface);
   context->actions = actions;
-  context->protocol = protocol;
+  context_win32->protocol = protocol;
 
   return context;
 }
@@ -1834,7 +1834,7 @@ local_send_leave (GdkDragContext *context,
 			  current_dest_drag));
 
   if ((current_dest_drag != NULL) &&
-      (current_dest_drag->protocol == GDK_DRAG_PROTO_LOCAL) &&
+      (GDK_WIN32_DRAG_CONTEXT (current_dest_drag)->protocol == GDK_DRAG_PROTO_LOCAL) &&
       (current_dest_drag->source_surface == context->source_surface))
     {
       tmp_event = gdk_event_new (GDK_DRAG_LEAVE);
@@ -1915,7 +1915,7 @@ local_send_motion (GdkDragContext *context,
 			  current_dest_drag));
 
   if ((current_dest_drag != NULL) &&
-      (current_dest_drag->protocol == GDK_DRAG_PROTO_LOCAL) &&
+      (GDK_WIN32_DRAG_CONTEXT (current_dest_drag)->protocol == GDK_DRAG_PROTO_LOCAL) &&
       (current_dest_drag->source_surface == context->source_surface))
     {
       GdkWin32DragContext *current_dest_drag_win32;
@@ -1956,7 +1956,7 @@ local_send_drop (GdkDragContext *context,
 			  current_dest_drag));
 
   if ((current_dest_drag != NULL) &&
-      (current_dest_drag->protocol == GDK_DRAG_PROTO_LOCAL) &&
+      (GDK_WIN32_DRAG_CONTEXT (current_dest_drag)->protocol == GDK_DRAG_PROTO_LOCAL) &&
       (current_dest_drag->source_surface == context->source_surface))
     {
       GdkWin32DragContext *context_win32;
@@ -1993,7 +1993,7 @@ gdk_drag_do_leave (GdkDragContext *context,
 
       if (!use_ole2_dnd)
 	{
-	  if (context->protocol == GDK_DRAG_PROTO_LOCAL)
+	  if (GDK_WIN32_DRAG_CONTEXT (context)->protocol == GDK_DRAG_PROTO_LOCAL)
 	    local_send_leave (context, time);
 	}
 
@@ -2320,7 +2320,7 @@ gdk_win32_drag_context_drag_motion (GdkDragContext *context,
 	  if (dest_surface)
 	    {
 	      g_set_object (&context->dest_surface, dest_surface);
-	      context->protocol = protocol;
+	      context_win32->protocol = protocol;
 
 	      switch (protocol)
 		{
@@ -2368,7 +2368,7 @@ gdk_win32_drag_context_drag_motion (GdkDragContext *context,
 	{
 	  if (context_win32->drag_status == GDK_DRAG_STATUS_DRAG)
 	    {
-	      switch (context->protocol)
+	      switch (context_win32->protocol)
 		{
 		case GDK_DRAG_PROTO_LOCAL:
 		  local_send_motion (context, x_root, y_root, suggested_action, time);
@@ -2417,7 +2417,7 @@ gdk_win32_drag_context_drag_drop (GdkDragContext *context,
   if (!use_ole2_dnd)
     {
       if (context->dest_surface &&
-	  context->protocol == GDK_DRAG_PROTO_LOCAL)
+	  GDK_WIN32_DRAG_CONTEXT (context)->protocol == GDK_DRAG_PROTO_LOCAL)
 	local_send_drop (context, time);
     }
   else
@@ -2507,7 +2507,7 @@ gdk_win32_drag_context_drop_reply (GdkDragContext *context,
   if (!use_ole2_dnd)
     if (context->dest_surface)
       {
-	if (context->protocol == GDK_DRAG_PROTO_WIN32_DROPFILES)
+	if (GDK_WIN32_DRAG_CONTEXT (context)->protocol == GDK_DRAG_PROTO_WIN32_DROPFILES)
 	  _gdk_dropfiles_store (NULL);
       }
 }
@@ -2646,7 +2646,7 @@ gdk_win32_drag_context_drop_status (GdkDragContext *context)
 static GdkAtom
 gdk_win32_drag_context_get_selection (GdkDragContext *context)
 {
-  switch (context->protocol)
+  switch (GDK_WIN32_DRAG_CONTEXT (context)->protocol)
     {
     case GDK_DRAG_PROTO_LOCAL:
       return _gdk_win32_selection_atom (GDK_WIN32_ATOM_INDEX_LOCAL_DND_SELECTION);

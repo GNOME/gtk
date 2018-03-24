@@ -39,6 +39,7 @@ struct _GdkWin32DragContextUtilityData
 struct _GdkWin32DragContext
 {
   GdkDragContext context;
+  GdkDragProtocol protocol;
   GdkSurface *ipc_window;
   GdkSurface *drag_surface;
   GdkCursor *cursor;
@@ -66,6 +67,7 @@ struct _GdkWin32DragContextClass
 struct _GdkWin32DropContext
 {
   GdkDragContext context;
+  GdkDragProtocol protocol;
   GdkDragAction actions;
   GdkDragAction current_action;
 

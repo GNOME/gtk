@@ -56,6 +56,7 @@
 #include "gdkdeviceprivate.h"
 #include "gdkdevice-wintab.h"
 #include "gdkwin32dnd.h"
+#include "gdkwin32dnd-private.h"
 #include "gdkdisplay-win32.h"
 //#include "gdkselection-win32.h"
 #include "gdkdndprivate.h"
@@ -867,7 +868,7 @@ _gdk_win32_print_event (const GdkEvent *event)
       if (event->dnd.context != NULL)
 	g_print ("ctx:%p: %s %s src:%p dest:%p",
 		 event->dnd.context,
-		 _gdk_win32_drag_protocol_to_string (event->dnd.context->protocol),
+		 _gdk_win32_drag_protocol_to_string (GDK_WIN32_DRAG_CONTEXT (event->dnd.context)->protocol),
 		 event->dnd.context->is_source ? "SOURCE" : "DEST",
 		 event->dnd.context->source_surface == NULL ? NULL : GDK_SURFACE_HWND (event->dnd.context->source_surface),
 		 event->dnd.context->dest_surface == NULL ? NULL : GDK_SURFACE_HWND (event->dnd.context->dest_surface));
