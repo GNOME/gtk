@@ -800,9 +800,6 @@ _gdk_win32_print_event (const GdkEvent *event)
   switch (event->any.type)
     {
     case GDK_EXPOSE:
-      g_print ("%s %d",
-	       _gdk_win32_gdkrectangle_to_string (&event->expose.area),
-	       event->expose.count);
       break;
     case GDK_MOTION_NOTIFY:
       g_print ("(%.4g,%.4g) (%.4g,%.4g)",
