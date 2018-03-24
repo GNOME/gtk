@@ -2434,9 +2434,9 @@ gdk_win32_drag_context_drop_done (GdkDragContext *context,
                           win32_context->util_data.last_x, win32_context->util_data.last_y,
                           win32_context->start_x, win32_context->start_y));
 
-  id = gdk_threads_add_timeout_full (G_PRIORITY_DEFAULT, 17,
-                                     gdk_drag_anim_timeout, anim,
-                                     (GDestroyNotify) gdk_drag_anim_destroy);
+  id = g_timeout_add_full (G_PRIORITY_DEFAULT, 17,
+                           gdk_drag_anim_timeout, anim,
+                           (GDestroyNotify) gdk_drag_anim_destroy);
   g_source_set_name_by_id (id, "[gtk+] gdk_drag_anim_timeout");
 }
 
