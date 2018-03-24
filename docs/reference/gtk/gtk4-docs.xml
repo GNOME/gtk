@@ -94,6 +94,7 @@
       <xi:include href="xml/gtklabel.xml" />
       <xi:include href="xml/gtkimage.xml" />
       <xi:include href="xml/gtkpicture.xml" />
+      <xi:include href="xml/gtkimageview.xml" />
       <xi:include href="xml/gtkspinner.xml" />
       <xi:include href="xml/gtkinfobar.xml" />
       <xi:include href="xml/gtkprogressbar.xml" />
