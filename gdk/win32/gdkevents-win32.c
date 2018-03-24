@@ -1016,43 +1016,30 @@ fill_key_event_string (GdkEvent *event)
     }
 }
 
-static GdkFilterReturn
-apply_event_filters (GdkSurface  *window,
-		     MSG        *msg,
-		     GList     **filters)
+static GdkWin32MessageFilterReturn
+apply_message_filters (GdkDisplay *display,
+                       MSG        *msg,
+                       gint       *ret_valp,
+                       GList     **filters)
 {
-  GdkFilterReturn result = GDK_FILTER_CONTINUE;
-  GdkEvent *event;
-  GdkDisplay *display;
+  GdkWin32MessageFilterReturn result = GDK_WIN32_MESSAGE_FILTER_CONTINUE;
   GList *node;
   GList *tmp_list;
-
-  event = gdk_event_new (GDK_NOTHING);
-  event->any.surface = g_object_ref (window);
-  event->any.flags |= GDK_EVENT_PENDING;
-
-  display = gdk_display_get_default ();
-
-  /* I think GdkFilterFunc semantics require the passed-in event
-   * to already be in the queue. The filter func can generate
-   * more events and append them after it if it likes.
-   */
-  node = _gdk_event_queue_append (display, event);
 
   tmp_list = *filters;
   while (tmp_list)
     {
-      GdkEventFilter *filter = (GdkEventFilter *) tmp_list->data;
+      GdkWin32MessageFilter *filter = (GdkWin32MessageFilter *) tmp_list->data;
       GList *node;
 
-      if ((filter->flags & GDK_EVENT_FILTER_REMOVED) != 0)
+      if (filter->removed)
         {
           tmp_list = tmp_list->next;
           continue;
         }
 
       filter->ref_count++;
-      result = filter->function (msg, event, filter->data);
+      result = filter->function (display, msg, ret_valp, filter->data);
 
       /* get the next node after running the function since the
          function may add or remove a next node */
@@ -1067,21 +1054,8 @@ apply_event_filters (GdkSurface  *window,
           g_free (filter);
         }
 
-      if (result !=  GDK_FILTER_CONTINUE)
+      if (result != GDK_WIN32_MESSAGE_FILTER_CONTINUE)
 	break;
-    }
-
-  if (result == GDK_FILTER_CONTINUE || result == GDK_FILTER_REMOVE)
-    {
-      _gdk_event_queue_remove_link (display, node);
-      g_list_free_1 (node);
-      gdk_event_free (event);
-    }
-  else /* GDK_FILTER_TRANSLATE */
-    {
-      event->any.flags &= ~GDK_EVENT_PENDING;
-      fixup_event (event);
-      GDK_NOTE (EVENTS, _gdk_win32_print_event (event));
     }
 
   return result;
@@ -2290,21 +2264,18 @@ gdk_event_translate (MSG  *msg,
   STGMEDIUM *property_change_data;
 
   display = gdk_display_get_default ();
-  window = gdk_win32_handle_table_lookup (msg->hwnd);
+  win32_display = GDK_WIN32_DISPLAY (display);
 
-  if (_gdk_default_filters)
+  if (win32_display->filters)
     {
-      /* Apply global filters */
+      /* Apply display filters */
+      GdkWin32MessageFilterReturn result = apply_message_filters (win32_display, msg, ret_valp, &win32_display->filters);
 
-      GdkFilterReturn result = apply_event_filters (window, msg, &_gdk_default_filters);
-
-      /* If result is GDK_FILTER_CONTINUE, we continue as if nothing
-       * happened. If it is GDK_FILTER_REMOVE or GDK_FILTER_TRANSLATE,
-       * we return TRUE, and DefWindowProcW() will not be called.
-       */
-      if (result == GDK_FILTER_REMOVE || result == GDK_FILTER_TRANSLATE)
+      if (result == GDK_WIN32_MESSAGE_FILTER_REMOVE)
 	return TRUE;
     }
+
+  window = gdk_win32_handle_table_lookup (msg->hwnd);
 
   if (window == NULL)
     {
@@ -2341,19 +2312,6 @@ gdk_event_translate (MSG  *msg,
    * #define return to a syntax error...
    */
 #define return GOTO_DONE_INSTEAD
-
-  if (!GDK_SURFACE_DESTROYED (window) && window->filters)
-    {
-      /* Apply per-window filters */
-
-      GdkFilterReturn result = apply_event_filters (window, msg, &window->filters);
-
-      if (result == GDK_FILTER_REMOVE || result == GDK_FILTER_TRANSLATE)
-	{
-	  return_val = TRUE;
-	  goto done;
-	}
-    }
 
   if (msg->message == aerosnap_message)
     _gdk_win32_surface_handle_aerosnap (gdk_surface_get_toplevel (window),

@@ -39,6 +39,127 @@
 
 static int debug_indent = 0;
 
+/**
+ * gdk_win32_display_add_filter:
+ * @display: a #GdkWin32Display
+ * @function: filter callback
+ * @data: data to pass to filter callback
+ *
+ * Adds an event filter to @window, allowing you to intercept messages
+ * before they reach GDK. This is a low-level operation and makes it
+ * easy to break GDK and/or GTK+, so you have to know what you're
+ * doing.
+ **/
+void
+gdk_win32_display_add_filter (GdkWin32Display           *display,
+                              GdkWin32MessageFilterFunc  function,
+                              gpointer                   data)
+{
+  GList *tmp_list;
+  GdkWin32MessageFilter *filter;
+
+  g_return_if_fail (GDK_IS_WIN32_DISPLAY (display));
+
+  tmp_list = display->filters;
+
+  for (tmp_list = display->filters; tmp_list; tmp_list = tmp_list->next)
+    {
+      filter = (GdkWin32MessageFilter *) tmp_list->data;
+
+      if ((filter->function == function) && (filter->data == data))
+        {
+          filter->ref_count++;
+          return;
+        }
+    }
+
+  filter = g_new (GdkWin32MessageFilter, 1);
+  filter->function = function;
+  filter->data = data;
+  filter->ref_count = 1;
+  filter->removed = FALSE;
+
+  display->filters = g_list_append (display->filters, filter);
+}
+
+/**
+ * _gdk_win32_message_filter_unref:
+ * @display: A #GdkWin32Display
+ * @filter: A message filter
+ *
+ * Release a reference to @filter.  Note this function may
+ * mutate the list storage, so you need to handle this
+ * if iterating over a list of filters.
+ */
+void
+_gdk_win32_message_filter_unref (GdkWin32Display       *display,
+			         GdkWin32MessageFilter *filter)
+{
+  GList **filters;
+  GList *tmp_list;
+
+  filters = &display->filters;
+
+  tmp_list = *filters;
+  while (tmp_list)
+    {
+      GdkWin32MessageFilter *iter_filter = tmp_list->data;
+      GList *node;
+
+      node = tmp_list;
+      tmp_list = tmp_list->next;
+
+      if (iter_filter != filter)
+	continue;
+
+      g_assert (iter_filter->ref_count > 0);
+
+      filter->ref_count--;
+      if (filter->ref_count != 0)
+	continue;
+
+      *filters = g_list_remove_link (*filters, node);
+      g_free (filter);
+      g_list_free_1 (node);
+    }
+}
+
+/**
+ * gdk_win32_display_remove_filter:
+ * @display: A #GdkWin32Display
+ * @function: previously-added filter function
+ * @data: user data for previously-added filter function
+ *
+ * Remove a filter previously added with gdk_win32_display_add_filter().
+ */
+void
+gdk_win32_display_remove_filter (GdkWin32Display           *display,
+                                 GdkWin32MessageFilterFunc  function,
+                                 gpointer                   data)
+{
+  GList *tmp_list;
+  GdkWin32MessageFilter *filter;
+
+  g_return_if_fail (GDK_IS_WIN32_DISPLAY (display));
+
+  tmp_list = display->filters;
+
+  while (tmp_list)
+    {
+      filter = (GdkWin32MessageFilter *) tmp_list->data;
+      tmp_list = tmp_list->next;
+
+      if ((filter->function == function) && (filter->data == data))
+        {
+          filter->removed = TRUE;
+
+          _gdk_win32_message_filter_unref (display, filter);
+
+          return;
+        }
+    }
+}
+
 static GdkMonitor *
 _gdk_win32_display_find_matching_monitor (GdkWin32Display *win32_display,
                                           GdkMonitor      *needle)
@@ -581,6 +702,9 @@ gdk_win32_display_finalize (GObject *object)
   _gdk_win32_dnd_exit ();
 
   g_ptr_array_free (display_win32->monitors, TRUE);
+
+  while (display_win32->filters)
+    _gdk_win32_message_filter_unref (display_win32, display_win32->filters->data);
 
   G_OBJECT_CLASS (gdk_win32_display_parent_class)->finalize (object);
 }

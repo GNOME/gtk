@@ -61,6 +61,50 @@ GDK_AVAILABLE_IN_ALL
 HCURSOR    gdk_win32_display_get_hcursor         (GdkDisplay  *display,
                                                   GdkCursor   *cursor);
 
+/**
+ * GdkWin32MessageFilterReturn:
+ * @GDK_WIN32_MESSAGE_FILTER_CONTINUE: event not handled, continue processing.
+ * @GDK_WIN32_MESSAGE_FILTER_REMOVE: event handled, terminate processing.
+ *
+ * Specifies the result of applying a #GdkWin32MessageFilterFunc to a Windows message.
+ */
+typedef enum {
+  GDK_WIN32_MESSAGE_FILTER_CONTINUE,	  /* Message not handled, continue processing */
+  GDK_WIN32_MESSAGE_FILTER_REMOVE	  /* Terminate processing, removing message */
+} GdkWin32MessageFilterReturn;
+
+/**
+ * GdkWin32MessageFilterFunc:
+ * @msg: the Windows message to filter.
+ * @return_value: a location to store the return value for the message
+ * @data: (closure): user data set when the filter was installed.
+ *
+ * Specifies the type of function used to filter Windows messages before they are
+ * processed by GDK Win32 backend.
+ *
+ * The @return_value must be set, if this function returns
+ * #GDK_WIN32_MESSAGE_FILTER_REMOVE, otherwise it is ignored.
+ *
+ * The event translation and message filtering are orthogonal - 
+ * if a filter wants a GDK event queued, it should do that itself.
+ *
+ * Returns: a #GdkWin32MessageFilterReturn value.
+ */
+typedef GdkWin32MessageFilterReturn (*GdkWin32MessageFilterFunc) (GdkWin32Display *display,
+                                                                  MSG             *message,
+                                                                  gint            *return_value,
+                                                                  gpointer         data);
+
+GDK_AVAILABLE_IN_ALL
+void       gdk_win32_display_add_filter          (GdkWin32Display                 *display,
+                                                  GdkWin32MessageFilterFunc        function,
+                                                  gpointer                         data);
+
+GDK_AVAILABLE_IN_ALL
+void       gdk_win32_display_remove_filter       (GdkWin32Display                 *display,
+                                                  GdkWin32MessageFilterFunc        function,
+                                                  gpointer                         data);
+
 G_END_DECLS
 
 #endif /* __GDK_WIN32_DISPLAY_H__ */

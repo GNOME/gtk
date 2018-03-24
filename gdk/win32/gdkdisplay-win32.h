@@ -101,6 +101,9 @@ struct _GdkWin32Display
   /* Cursor Items (GdkCursor->HCURSOR) */
   GHashTable *cursors;
   GdkCursor *grab_cursor;
+
+  /* Message filters */
+  GList *filters;
 };
 
 struct _GdkWin32DisplayClass
@@ -118,5 +121,15 @@ guint      _gdk_win32_display_get_monitor_scale_factor (GdkWin32Display *win32_d
                                                         HMONITOR         hmonitor,
                                                         HWND             hwnd,
                                                         gint             *dpi);
+
+typedef struct _GdkWin32MessageFilter GdkWin32MessageFilter;
+
+struct _GdkWin32MessageFilter
+{
+  GdkWin32MessageFilterFunc function;
+  gpointer data;
+  gboolean removed;
+  guint ref_count;
+};
 
 #endif /* __GDK_DISPLAY__WIN32_H__ */

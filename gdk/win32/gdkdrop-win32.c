@@ -697,27 +697,32 @@ close_it (gpointer data)
 
 #endif
 
-static GdkFilterReturn
-gdk_dropfiles_filter (GdkXEvent *xev,
-                      GdkEvent  *event,
-                      gpointer   data)
+static GdkWin32MessageFilterReturn
+gdk_dropfiles_filter (GdkWin32Display *display,
+                      MSG             *msg,
+                      gint            *ret_valp,
+                      gpointer         data)
 {
+  GdkSurface *window;
   GdkDragContext *context;
   GdkWin32DropContext *context_win32;
+  GdkEvent *event;
   GString *result;
-  MSG *msg = (MSG *) xev;
   HANDLE hdrop;
   POINT pt;
   gint nfiles, i;
   gchar *fileName, *linkedFile;
 
-  if (msg->message == WM_DROPFILES)
-    {
+  if (msg->message != WM_DROPFILES)
+    return GDK_WIN32_MESSAGE_FILTER_CONTINUE;
+
       GDK_NOTE (DND, g_print ("WM_DROPFILES: %p\n", msg->hwnd));
 
-      context = gdk_drop_context_new (gdk_surface_get_display (event->any.surface),
+      window = gdk_win32_handle_table_lookup (msg->hwnd);
+
+      context = gdk_drop_context_new (display,
                                       NULL,
-                                      event->any.surface,
+                                      window,
                                       GDK_ACTION_COPY,
                                       GDK_DRAG_PROTO_WIN32_DROPFILES);
       context_win32 = GDK_WIN32_DROP_CONTEXT (context);
@@ -730,14 +735,18 @@ gdk_dropfiles_filter (GdkXEvent *xev,
 
       context->suggested_action = GDK_ACTION_COPY;
       current_dest_drag = context;
-      event->any.type = GDK_DROP_START;
-      event->dnd.context = current_dest_drag;
-      gdk_event_set_device (event, gdk_drag_context_get_device (current_dest_drag));
 
       hdrop = (HANDLE) msg->wParam;
       DragQueryPoint (hdrop, &pt);
       ClientToScreen (msg->hwnd, &pt);
 
+      event = gdk_event_new (GDK_DROP_START);
+
+      event->any.send_event = FALSE;
+      g_set_object (&event->dnd.context, context);
+      g_set_object (&event->any.surface, window);
+      gdk_event_set_display (event, display);
+      gdk_event_set_device (event, gdk_drag_context_get_device (context));
       event->dnd.x_root = pt.x / context_win32->scale + _gdk_offset_x;
       event->dnd.y_root = pt.y / context_win32->scale + _gdk_offset_y;
       event->dnd.time = _gdk_win32_get_next_tick (msg->time);
@@ -813,14 +822,25 @@ gdk_dropfiles_filter (GdkXEvent *xev,
           g_string_append (result, "\015\012");
         }
 
+      /* FIXME: this call is currently a no-op, but it should
+       * stash the string somewhere, and later produce it,
+       * maybe in response to gdk_win32_drop_context_read_async()?
+       */
       _gdk_dropfiles_store (result->str);
       g_string_free (result, FALSE);
 
+      GDK_NOTE (EVENTS, _gdk_win32_print_event (event));
+      _gdk_event_emit (event);
+      gdk_event_free (event);
+
       DragFinish (hdrop);
-      return GDK_FILTER_TRANSLATE;
-    }
-  else
-    return GDK_FILTER_CONTINUE;
+
+  gdk_display_put_event (display, event);
+  gdk_event_free (event);
+
+  *ret_valp = 0;
+
+  return GDK_WIN32_MESSAGE_FILTER_REMOVE;
 }
 
 /* Destination side */

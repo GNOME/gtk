@@ -147,22 +147,18 @@ gtk_win32_theme_equal (GtkWin32Theme *theme1,
 
 #ifdef G_OS_WIN32
 
-static GdkFilterReturn
-invalidate_win32_themes (GdkXEvent *xevent,
-                         GdkEvent  *event,
-                         gpointer   unused)
+static GdkWin32MessageFilterReturn
+invalidate_win32_themes (GdkWin32Display *display,
+                         MSG             *msg,
+                         gint            *ret_valp,
+                         gpointer         data)
 {
   GHashTableIter iter;
   gboolean theme_was_open = FALSE;
   gpointer theme;
-  MSG *msg;
 
-  if (!GDK_IS_WIN32_SURFACE (event->any.surface))
-    return GDK_FILTER_CONTINUE;
-
-  msg = (MSG *) xevent;
   if (msg->message != WM_THEMECHANGED)
-    return GDK_FILTER_CONTINUE;
+    return GDK_WIN32_MESSAGE_FILTER_CONTINUE;
 
   g_hash_table_iter_init (&iter, themes_by_class);
   while (g_hash_table_iter_next (&iter, NULL, &theme))
@@ -170,9 +166,9 @@ invalidate_win32_themes (GdkXEvent *xevent,
       theme_was_open |= gtk_win32_theme_close (theme);
     }
   if (theme_was_open)
-    gtk_style_context_reset_widgets (gdk_surface_get_display (event->any.surface));
+    gtk_style_context_reset_widgets (display);
 
-  return GDK_FILTER_CONTINUE;
+  return GDK_WIN32_MESSAGE_FILTER_CONTINUE;
 }
 
 static void
@@ -233,7 +229,7 @@ gtk_win32_theme_init (void)
       use_xp_theme = FALSE;
     }
 
-  gdk_surface_add_filter (NULL, invalidate_win32_themes, NULL);
+  gdk_win32_display_add_filter (gdk_display_get_default (), invalidate_win32_themes, NULL);
 }
 
 static HTHEME

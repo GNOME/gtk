@@ -113,9 +113,10 @@ static void gtk_im_context_ime_set_use_preedit     (GtkIMContext   *context,
 /* GtkIMContextIME's private functions */
 static void gtk_im_context_ime_set_preedit_font (GtkIMContext    *context);
 
-static GdkFilterReturn
-gtk_im_context_ime_message_filter               (GdkXEvent       *xevent,
-                                                 GdkEvent        *event,
+static GdkWin32MessageFilterReturn
+gtk_im_context_ime_message_filter               (GdkWin32Display *display,
+                                                 MSG             *msg,
+                                                 gint            *ret_valp,
                                                  gpointer         data);
 static void get_window_position                 (GdkSurface       *win,
                                                  gint            *x,
@@ -661,8 +662,8 @@ gtk_im_context_ime_focus_in (GtkIMContext *context)
   toplevel = gdk_surface_get_toplevel (context_ime->client_surface);
   if (GDK_IS_SURFACE (toplevel))
     {
-      gdk_surface_add_filter (toplevel,
-                             gtk_im_context_ime_message_filter, context_ime);
+      gdk_win32_display_add_filter (gdk_surface_get_display (toplevel),
+                                    gtk_im_context_ime_message_filter, context_ime);
       context_ime->toplevel = toplevel;
     }
   else
@@ -783,9 +784,9 @@ gtk_im_context_ime_focus_out (GtkIMContext *context)
   toplevel = gdk_surface_get_toplevel (context_ime->client_surface);
   if (GDK_IS_SURFACE (toplevel))
     {
-      gdk_surface_remove_filter (toplevel,
-                                gtk_im_context_ime_message_filter,
-                                context_ime);
+      gdk_win32_display_remove_filter (gdk_surface_get_display (toplevel),
+                                       gtk_im_context_ime_message_filter,
+                                       context_ime);
       context_ime->toplevel = NULL;
     }
   else
@@ -983,17 +984,17 @@ ERROR_OUT:
 }
 
 
-static GdkFilterReturn
-gtk_im_context_ime_message_filter (GdkXEvent *xevent,
-                                   GdkEvent  *event,
-                                   gpointer   data)
+static GdkWin32MessageFilterReturn
+gtk_im_context_ime_message_filter (GdkWin32Display *display,
+                                   MSG             *msg,
+                                   gint            *ret_valp,
+                                   gpointer         data)
 {
   GtkIMContext *context;
   GtkIMContextIME *context_ime;
   HWND hwnd;
   HIMC himc;
-  MSG *msg = (MSG *) xevent;
-  GdkFilterReturn retval = GDK_FILTER_CONTINUE;
+  GdkWin32MessageFilterReturn retval = GDK_WIN32_MESSAGE_FILTER_CONTINUE;
 
   g_return_val_if_fail (GTK_IS_IM_CONTEXT_IME (data), retval);
 
@@ -1002,10 +1003,15 @@ gtk_im_context_ime_message_filter (GdkXEvent *xevent,
   if (!context_ime->focus)
     return retval;
 
+  if (gdk_win32_surface_get_impl_hwnd (context_ime->toplevel) != msg->hwnd)
+    return retval;
+
   hwnd = gdk_win32_surface_get_impl_hwnd (context_ime->client_surface);
   himc = ImmGetContext (hwnd);
   if (!himc)
     return retval;
+
+  *ret_valp = 0;
 
   switch (msg->message)
     {
@@ -1063,11 +1069,11 @@ gtk_im_context_ime_message_filter (GdkXEvent *xevent,
               }
 
             if (context_ime->commit_string)
-              retval = TRUE;
+              retval = GDK_WIN32_MESSAGE_FILTER_REMOVE;
           }
 
         if (context_ime->use_preedit)
-          retval = TRUE;
+          retval = GDK_WIN32_MESSAGE_FILTER_REMOVE;
         break;
       }
 
@@ -1076,7 +1082,7 @@ gtk_im_context_ime_message_filter (GdkXEvent *xevent,
       gtk_im_context_ime_set_cursor_location (context, NULL);
       g_signal_emit_by_name (context, "preedit-start");
       if (context_ime->use_preedit)
-        retval = TRUE;
+        retval = GDK_WIN32_MESSAGE_FILTER_REMOVE;
       break;
 
     case WM_IME_ENDCOMPOSITION:
@@ -1092,7 +1098,7 @@ gtk_im_context_ime_message_filter (GdkXEvent *xevent,
         }
 
       if (context_ime->use_preedit)
-        retval = TRUE;
+        retval = GDK_WIN32_MESSAGE_FILTER_REMOVE;
       break;
 
     case WM_IME_NOTIFY:
@@ -1160,27 +1166,6 @@ cb_client_widget_hierarchy_changed (GtkWidget       *widget,
   new_toplevel = gdk_surface_get_toplevel (context_ime->client_surface);
   if (context_ime->toplevel == new_toplevel)
     return;
-
-  /* remove filter from old toplevel */
-  if (GDK_IS_SURFACE (context_ime->toplevel))
-    {
-      gdk_surface_remove_filter (context_ime->toplevel,
-                                gtk_im_context_ime_message_filter,
-                                context_ime);
-    }
-  else
-    {
-    }
-
-  /* add filter to new toplevel */
-  if (GDK_IS_SURFACE (new_toplevel))
-    {
-      gdk_surface_add_filter (new_toplevel,
-                             gtk_im_context_ime_message_filter, context_ime);
-    }
-  else
-    {
-    }
 
   context_ime->toplevel = new_toplevel;
 }
