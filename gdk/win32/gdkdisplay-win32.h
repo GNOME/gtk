@@ -22,12 +22,21 @@
 #ifndef __GDK_DISPLAY__WIN32_H__
 #define __GDK_DISPLAY__WIN32_H__
 
+#include "gdkwin32screen.h"
+
 /* Define values used to set DPI-awareness */
 typedef enum _GdkWin32ProcessDpiAwareness {
   PROCESS_DPI_UNAWARE = 0,
   PROCESS_SYSTEM_DPI_AWARE = 1,
   PROCESS_PER_MONITOR_DPI_AWARE = 2
 } GdkWin32ProcessDpiAwareness;
+
+typedef enum _GdkWin32MonitorDpiType { 
+  MDT_EFFECTIVE_DPI  = 0,
+  MDT_ANGULAR_DPI    = 1,
+  MDT_RAW_DPI        = 2,
+  MDT_DEFAULT        = MDT_EFFECTIVE_DPI
+} GdkWin32MonitorDpiType;
 
 /* APIs from shcore.dll */
 typedef HRESULT (WINAPI *funcSetProcessDpiAwareness) (GdkWin32ProcessDpiAwareness value);

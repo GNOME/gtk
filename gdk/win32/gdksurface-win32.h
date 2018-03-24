@@ -96,14 +96,6 @@ enum _GdkW32WindowDragOp
 
 typedef enum _GdkW32WindowDragOp GdkW32WindowDragOp;
 
-typedef enum _GdkWin32MonitorDpiType
-{
-  MDT_EFFECTIVE_DPI  = 0,
-  MDT_ANGULAR_DPI    = 1,
-  MDT_RAW_DPI        = 2,
-  MDT_DEFAULT        = MDT_EFFECTIVE_DPI
-} GdkWin32MonitorDpiType;
-
 struct _GdkW32DragMoveResizeContext
 {
   /* The window that is being moved/resized */
