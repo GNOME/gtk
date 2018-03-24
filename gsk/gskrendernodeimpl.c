@@ -1721,7 +1721,7 @@ gsk_cairo_node_draw (GskRenderNode *node,
   if (self->surface == NULL)
     return;
 
-  cairo_set_source_surface (cr, self->surface, node->bounds.origin.x, node->bounds.origin.y);
+  cairo_set_source_surface (cr, self->surface, 0, 0);
   cairo_paint (cr);
 }
 
@@ -1731,6 +1731,8 @@ static GVariant *
 gsk_cairo_node_serialize (GskRenderNode *node)
 {
   GskCairoNode *self = (GskCairoNode *) node;
+  cairo_surface_t *image;
+  GVariant *result;
 
   if (self->surface == NULL)
     {
@@ -1740,30 +1742,38 @@ gsk_cairo_node_serialize (GskRenderNode *node)
                             (guint32) 0, (guint32) 0,
                             g_variant_new_array (G_VARIANT_TYPE ("u"), NULL, 0));
     }
-  else if (cairo_image_surface_get_width (self->surface) * 4 == cairo_image_surface_get_stride (self->surface))
+
+  image = cairo_surface_map_to_image (self->surface,
+                                      &(cairo_rectangle_int_t) {
+                                          (double) node->bounds.origin.x,
+                                          (double) node->bounds.origin.y,
+                                          (double) node->bounds.size.width,
+                                          (double) node->bounds.size.height
+                                      });
+
+  if (cairo_image_surface_get_width (image) * 4 == cairo_image_surface_get_stride (image))
     {
-      return g_variant_new ("(dddduu@au)",
-                            (double) node->bounds.origin.x, (double) node->bounds.origin.y,
-                            (double) node->bounds.size.width, (double) node->bounds.size.height,
-                            (guint32) cairo_image_surface_get_width (self->surface),
-                            (guint32) cairo_image_surface_get_height (self->surface),
-                            g_variant_new_fixed_array (G_VARIANT_TYPE ("u"),
-                                                       cairo_image_surface_get_data (self->surface),
-                                                       cairo_image_surface_get_width (self->surface)
-                                                       * cairo_image_surface_get_height (self->surface),
-                                                       sizeof (guint32)));
+      result = g_variant_new ("(dddduu@au)",
+                              (double) node->bounds.origin.x, (double) node->bounds.origin.y,
+                              (double) node->bounds.size.width, (double) node->bounds.size.height,
+                              (guint32) cairo_image_surface_get_width (image),
+                              (guint32) cairo_image_surface_get_height (image),
+                              g_variant_new_fixed_array (G_VARIANT_TYPE ("u"),
+                                                         cairo_image_surface_get_data (image),
+                                                         cairo_image_surface_get_width (image)
+                                                         * cairo_image_surface_get_height (image),
+                                                         sizeof (guint32)));
     }
   else
     {
       int width, height;
       int stride, i;
       guchar *mem_surface, *data;
-      GVariant *result;
 
-      width = cairo_image_surface_get_width (self->surface);
-      height = cairo_image_surface_get_height (self->surface);
-      stride = cairo_image_surface_get_stride (self->surface);
-      data = cairo_image_surface_get_data (self->surface);
+      width = cairo_image_surface_get_width (image);
+      height = cairo_image_surface_get_height (image);
+      stride = cairo_image_surface_get_stride (image);
+      data = cairo_image_surface_get_data (image);
 
       mem_surface = (guchar *) g_malloc (width * height * 4);
 
@@ -1780,9 +1790,11 @@ gsk_cairo_node_serialize (GskRenderNode *node)
                                                         width * height,
                                                         sizeof (guint32)));
       g_free (mem_surface);
-
-      return result;
     }
+
+  cairo_surface_unmap_image (self->surface, image);
+
+  return result;
 }
 
 const cairo_user_data_key_t gsk_surface_variant_key;
@@ -1923,27 +1935,19 @@ gsk_cairo_node_get_draw_context (GskRenderNode *node,
     }
   else if (self->surface == NULL)
     {
-      if (renderer)
-        {
-          self->surface = gsk_renderer_create_cairo_surface (renderer,
-                                                             CAIRO_FORMAT_ARGB32,
-                                                             ceilf (node->bounds.size.width),
-                                                             ceilf (node->bounds.size.height));
-        }
-      else
-        {
-          self->surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                                      ceilf (node->bounds.size.width),
-                                                      ceilf (node->bounds.size.height));
-        }
+      self->surface = cairo_recording_surface_create (CAIRO_CONTENT_COLOR_ALPHA,
+                                                      &(cairo_rectangle_t) {
+                                                          node->bounds.origin.x,
+                                                          node->bounds.origin.y,
+                                                          node->bounds.size.width,
+                                                          node->bounds.size.height
+                                                      });
       res = cairo_create (self->surface);
     }
   else
     {
       res = cairo_create (self->surface);
     }
-
-  cairo_translate (res, -node->bounds.origin.x, -node->bounds.origin.y);
 
   cairo_rectangle (res,
                    node->bounds.origin.x, node->bounds.origin.y,
