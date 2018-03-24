@@ -386,7 +386,7 @@ query_targets (LPDATAOBJECT  pDataObj,
   for (p = g_list_reverse (result); p; p = p->next)
     gdk_content_formats_builder_add_mime_type (builder, (const gchar *) p->data);
 
-  result_formats = gdk_content_formats_builder_free (builder);
+  result_formats = gdk_content_formats_builder_free_to_formats (builder);
   g_list_free (result);
 
   return result_formats;

@@ -119,7 +119,7 @@ gdk_win32_clipboard_request_contentformats (GdkWin32Clipboard *cb)
 
       g_array_free (formatpairs, TRUE);
 
-      return gdk_content_formats_builder_free (builder);
+      return gdk_content_formats_builder_free_to_formats (builder);
     }
   else
     {
