@@ -6,9 +6,7 @@ gtk:
   image: ebassi/gitlab-gtk:latest
   stage: build
   before_script:
-    - mkdir -p _ccache
-    - export CCACHE_BASEDIR=${PWD}
-    - export CCACHE_DIR=${PWD}/_ccache
+    - export CCACHE_DISABLE=true_
   script:
     - bash -x ./.gitlab-ci/test-docker.sh
   cache:
