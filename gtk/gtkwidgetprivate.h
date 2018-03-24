@@ -86,6 +86,7 @@ struct _GtkWidgetPrivate
   guint child_visible         : 1;
   guint multidevice           : 1;
   guint can_target            : 1;
+  guint in_size_allocate  :1;
 
   /* Queue-resize related flags */
   guint resize_needed         : 1; /* queue_resize() has been called but no get_preferred_size() yet */
