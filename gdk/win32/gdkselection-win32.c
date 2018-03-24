@@ -820,7 +820,8 @@ generate_selection_notify (GdkSurface *requestor,
   tmp_event.selection.requestor = 0;
   tmp_event.selection.time = time;
 
-  gdk_event_put (&tmp_event);
+  gdk_event_set_display (&tmp_event, gdk_window_get_display (requestor));
+  gdk_display_put_event (gdk_window_get_display (requestor), &tmp_event);
 }
 
 void
@@ -894,7 +895,8 @@ send_targets_request (guint time)
   tmp_event.selection.time = time;
   win32_sel->property_change_target_atom = _gdk_win32_selection_atom (GDK_WIN32_ATOM_INDEX_TARGETS);
 
-  gdk_event_put (&tmp_event);
+  gdk_event_set_display (&tmp_event, gdk_window_get_display (owner));
+  gdk_display_put_event (gdk_window_get_display (owner), &tmp_event);
   win32_sel->targets_request_pending = TRUE;
 }
 
