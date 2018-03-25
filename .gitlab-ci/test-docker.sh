@@ -9,7 +9,6 @@ meson \
         -Dwayland-backend=true \
         -Dbroadway-backend=true \
         -Dvulkan=yes \
-        --werror \
         _build $srcdir
 
 cd _build
