@@ -34,7 +34,7 @@ struct _GtkColorPlanePrivate
   GtkAdjustment *s_adj;
   GtkAdjustment *v_adj;
 
-  cairo_surface_t *surface;
+  GdkTexture *texture;
 
   GtkGesture *drag_gesture;
   GtkGesture *long_press_gesture;
@@ -80,12 +80,13 @@ plane_snapshot (GtkWidget   *widget,
   width = gtk_widget_get_width (widget);
   height = gtk_widget_get_height (widget);
 
+  gtk_snapshot_append_texture (snapshot,
+                               plane->priv->texture,
+                               &GRAPHENE_RECT_INIT (0, 0, width, height),
+                               "ColorPlane");
   cr = gtk_snapshot_append_cairo (snapshot,
                                   &GRAPHENE_RECT_INIT (0, 0, width, height),
                                   "ColorPlane");
-
-  cairo_set_source_surface (cr, plane->priv->surface, 0, 0);
-  cairo_paint (cr);
 
   cairo_move_to (cr, 0,     y + 0.5);
   cairo_line_to (cr, width, y + 0.5);
@@ -114,13 +115,11 @@ plane_snapshot (GtkWidget   *widget,
 }
 
 static void
-create_surface (GtkColorPlane *plane)
+create_texture (GtkColorPlane *plane)
 {
   GtkWidget *widget = GTK_WIDGET (plane);
-  cairo_t *cr;
-  cairo_surface_t *surface;
+  GBytes *bytes;
   gint width, height, stride;
-  cairo_surface_t *tmp;
   guint red, green, blue;
   guint32 *data, *p;
   gdouble h, s, v;
@@ -134,49 +133,43 @@ create_surface (GtkColorPlane *plane)
   width = gtk_widget_get_width (widget);
   height = gtk_widget_get_height (widget);
 
-  surface = gdk_surface_create_similar_surface (gtk_widget_get_surface (widget),
-                                               CAIRO_CONTENT_COLOR,
-                                               width, height);
+  g_clear_object (&plane->priv->texture);
 
-  if (plane->priv->surface)
-    cairo_surface_destroy (plane->priv->surface);
-  plane->priv->surface = surface;
-
-  if (width == 1 || height == 1)
-    return;
-
-  stride = cairo_format_stride_for_width (CAIRO_FORMAT_RGB24, width);
+  stride = width * 4;
 
   data = g_malloc (height * stride);
 
-  h = gtk_adjustment_get_value (plane->priv->h_adj);
-  sf = 1.0 / (height - 1);
-  vf = 1.0 / (width - 1);
-  for (y = 0; y < height; y++)
+  if (width > 1 && height > 1)
     {
-      s = CLAMP (1.0 - y * sf, 0.0, 1.0);
-      p = data + y * (stride / 4);
-      for (x = 0; x < width; x++)
+      h = gtk_adjustment_get_value (plane->priv->h_adj);
+      sf = 1.0 / (height - 1);
+      vf = 1.0 / (width - 1);
+      for (y = 0; y < height; y++)
         {
-          v = x * vf;
-          gtk_hsv_to_rgb (h, s, v, &r, &g, &b);
-          red = CLAMP (r * 255, 0, 255);
-          green = CLAMP (g * 255, 0, 255);
-          blue = CLAMP (b * 255, 0, 255);
-          p[x] = (red << 16) | (green << 8) | blue;
+          s = CLAMP (1.0 - y * sf, 0.0, 1.0);
+          p = data + y * (stride / 4);
+          for (x = 0; x < width; x++)
+            {
+              v = x * vf;
+              gtk_hsv_to_rgb (h, s, v, &r, &g, &b);
+              red = CLAMP (r * 255, 0, 255);
+              green = CLAMP (g * 255, 0, 255);
+              blue = CLAMP (b * 255, 0, 255);
+              p[x] = (0xff << 24) | (red << 16) | (green << 8) | blue;
+            }
         }
     }
+  else
+    {
+      memset (data, 0, height * stride);
+    }
 
-  tmp = cairo_image_surface_create_for_data ((guchar *)data, CAIRO_FORMAT_RGB24,
-                                             width, height, stride);
-  cr = cairo_create (surface);
-
-  cairo_set_source_surface (cr, tmp, 0, 0);
-  cairo_paint (cr);
-
-  cairo_destroy (cr);
-  cairo_surface_destroy (tmp);
-  g_free (data);
+  bytes = g_bytes_new_take (data, height * stride);
+  plane->priv->texture = gdk_memory_texture_new (width, height,
+                                                 GDK_MEMORY_DEFAULT,
+                                                 bytes,
+                                                 stride);
+  g_bytes_unref (bytes);
 }
 
 static void
@@ -187,7 +180,7 @@ plane_size_allocate (GtkWidget           *widget,
 {
   GtkColorPlane *plane = GTK_COLOR_PLANE (widget);
 
-  create_surface (plane);
+  create_texture (plane);
 }
 
 static void
@@ -195,7 +188,7 @@ plane_realize (GtkWidget *widget)
 {
   GTK_WIDGET_CLASS (gtk_color_plane_parent_class)->realize (widget);
 
-  create_surface (GTK_COLOR_PLANE (widget));
+  create_texture (GTK_COLOR_PLANE (widget));
 }
 
 static void
@@ -204,7 +197,7 @@ plane_unrealize (GtkWidget *widget)
   GtkColorPlane *plane = GTK_COLOR_PLANE (widget);
   GtkColorPlanePrivate *priv = gtk_color_plane_get_instance_private (plane);
 
-  g_clear_pointer (&priv->surface, cairo_surface_destroy);
+  g_clear_object (&priv->texture);
 
   GTK_WIDGET_CLASS (gtk_color_plane_parent_class)->unrealize (widget);
 }
@@ -222,7 +215,7 @@ set_cross_cursor (GtkWidget *widget,
 static void
 h_changed (GtkColorPlane *plane)
 {
-  create_surface (plane);
+  create_texture (plane);
   gtk_widget_queue_draw (GTK_WIDGET (plane));
 }
 
@@ -439,8 +432,7 @@ plane_finalize (GObject *object)
 {
   GtkColorPlane *plane = GTK_COLOR_PLANE (object);
 
-  if (plane->priv->surface)
-    cairo_surface_destroy (plane->priv->surface);
+  g_clear_object (&plane->priv->texture);
 
   g_clear_object (&plane->priv->h_adj);
   g_clear_object (&plane->priv->s_adj);
