@@ -623,38 +623,6 @@ render_texture_node (GskGLRenderer       *self,
 }
 
 static inline void
-render_cairo_node (GskGLRenderer       *self,
-                   GskRenderNode       *node,
-                   RenderOpBuilder     *builder,
-                   const GskQuadVertex *vertex_data)
-{
-  const cairo_surface_t *surface = gsk_cairo_node_peek_surface (node);
-  int gl_min_filter = GL_NEAREST, gl_mag_filter = GL_NEAREST;
-  int texture_id;
-  double scale_x, scale_y;
-
-  if (surface == NULL)
-    return;
-
-  get_gl_scaling_filters (node, &gl_min_filter, &gl_mag_filter);
-
-
-  cairo_surface_get_device_scale ((cairo_surface_t *)surface, &scale_x, &scale_y);
-  texture_id = gsk_gl_driver_create_texture (self->gl_driver,
-                                             node->bounds.size.width * scale_x,
-                                             node->bounds.size.height * scale_y);
-  gsk_gl_driver_bind_source_texture (self->gl_driver, texture_id);
-  gsk_gl_driver_init_texture_with_surface (self->gl_driver,
-                                           texture_id,
-                                           (cairo_surface_t *)surface,
-                                           gl_min_filter,
-                                           gl_mag_filter);
-  ops_set_program (builder, &self->blit_program);
-  ops_set_texture (builder, texture_id);
-  ops_draw (builder, vertex_data);
-}
-
-static inline void
 render_transform_node (GskGLRenderer   *self,
                        GskRenderNode   *node,
                        RenderOpBuilder *builder)
@@ -2137,10 +2105,6 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
       render_texture_node (self, node, builder);
     break;
 
-    case GSK_CAIRO_NODE:
-      render_cairo_node (self, node, builder, vertex_data);
-    break;
-
     case GSK_TRANSFORM_NODE:
       render_transform_node (self, node, builder);
     break;
@@ -2200,6 +2164,7 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
     case GSK_BLEND_NODE:
     case GSK_REPEAT_NODE:
+    case GSK_CAIRO_NODE:
     default:
       {
         render_fallback_node (self, node, builder, vertex_data);
