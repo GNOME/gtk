@@ -106,6 +106,7 @@ typedef struct {
   guint has_gl_framebuffer_blit : 1;
   guint has_frame_terminator : 1;
   guint has_unpack_subimage : 1;
+  guint has_debug_output : 1;
   guint extensions_checked : 1;
   guint debug_enabled : 1;
   guint forward_compatible : 1;
@@ -722,6 +723,99 @@ gdk_gl_context_get_use_es (GdkGLContext *context)
   return priv->use_es > 0;
 }
 
+#ifdef G_ENABLE_CONSISTENCY_CHECKS
+static void
+gl_debug_message_callback (GLenum        source,
+                           GLenum        type,
+                           GLuint        id,
+                           GLenum        severity,
+                           GLsizei       length,
+                           const GLchar *message,
+                           const void   *user_data)
+{
+  const char *message_source;
+  const char *message_type;
+  const char *message_severity;
+
+  if (severity == GL_DEBUG_SEVERITY_NOTIFICATION)
+    return;
+
+  switch (source)
+    {
+    case GL_DEBUG_SOURCE_API:
+      message_source = "API";
+      break;
+    case GL_DEBUG_SOURCE_WINDOW_SYSTEM:
+      message_source = "Window System";
+      break;
+    case GL_DEBUG_SOURCE_SHADER_COMPILER:
+      message_source = "Shader Compiler";
+      break;
+    case GL_DEBUG_SOURCE_THIRD_PARTY:
+      message_source = "Third Party";
+      break;
+    case GL_DEBUG_SOURCE_APPLICATION:
+      message_source = "Application";
+      break;
+    case GL_DEBUG_SOURCE_OTHER:
+    default:
+      message_source = "Other";
+    }
+
+  switch (type)
+    {
+    case GL_DEBUG_TYPE_ERROR:
+      message_type = "Error";
+      break;
+    case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+      message_type = "Deprecated Behavior";
+      break;
+    case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+      message_type = "Undefined Behavior";
+      break;
+    case GL_DEBUG_TYPE_PORTABILITY:
+      message_type = "Portability";
+      break;
+    case GL_DEBUG_TYPE_PERFORMANCE:
+      message_type = "Performance";
+      break;
+    case GL_DEBUG_TYPE_MARKER:
+      message_type = "Marker";
+      break;
+    case GL_DEBUG_TYPE_PUSH_GROUP:
+      message_type = "Push Group";
+      break;
+    case GL_DEBUG_TYPE_POP_GROUP:
+      message_type = "Pop Group";
+      break;
+    case GL_DEBUG_TYPE_OTHER:
+    default:
+      message_type = "Other";
+    }
+
+  switch (severity)
+    {
+    case GL_DEBUG_SEVERITY_HIGH:
+      message_severity = "High";
+      break;
+    case GL_DEBUG_SEVERITY_MEDIUM:
+      message_severity = "Medium";
+      break;
+    case GL_DEBUG_SEVERITY_LOW:
+      message_severity = "Low";
+      break;
+    case GL_DEBUG_SEVERITY_NOTIFICATION:
+      message_severity = "Notification";
+      break;
+    default:
+      message_severity = "Unknown";
+    }
+
+  g_warning ("OPENGL:\n    Source: %s\n    Type: %s\n    Severity: %s\n    Message: %s",
+             message_source, message_type, message_severity, message);
+}
+#endif
+
 /**
  * gdk_gl_context_realize:
  * @context: a #GdkGLContext
@@ -766,6 +860,18 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
 
   if (priv->use_es < 0)
     priv->use_es = !epoxy_is_desktop_gl ();
+
+  priv->has_debug_output = epoxy_has_gl_extension ("GL_ARB_debug_output");
+
+#ifdef G_ENABLE_CONSISTENCY_CHECKS
+  if (priv->has_debug_output)
+    {
+      gdk_gl_context_make_current (context);
+      glEnable (GL_DEBUG_OUTPUT);
+      glEnable (GL_DEBUG_OUTPUT_SYNCHRONOUS);
+      glDebugMessageCallback (gl_debug_message_callback, NULL);
+    }
+#endif
 
   if (priv->use_es)
     {
