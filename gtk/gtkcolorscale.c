@@ -110,6 +110,7 @@ gtk_color_scale_snapshot_trough (GtkColorScale  *scale,
   else if (scale->priv->type == GTK_COLOR_SCALE_ALPHA)
     {
       cairo_t *cr;
+      graphene_point_t start, end;
 
       cr = gtk_snapshot_append_cairo (snapshot,
                                       &GRAPHENE_RECT_INIT(x, y, width, height),
@@ -121,6 +122,13 @@ gtk_color_scale_snapshot_trough (GtkColorScale  *scale,
         {
           cairo_translate (cr, width, 0);
           cairo_scale (cr, -1, 1);
+          graphene_point_init (&start, x + width, y);
+          graphene_point_init (&end, x, y);
+        }
+      else
+        {
+          graphene_point_init (&start, x, y);
+          graphene_point_init (&end, x + width, y);
         }
 
       cairo_pattern_t *pattern;
@@ -137,16 +145,20 @@ gtk_color_scale_snapshot_trough (GtkColorScale  *scale,
       cairo_mask (cr, pattern);
       cairo_pattern_destroy (pattern);
 
-      color = &scale->priv->color;
-
-      pattern = cairo_pattern_create_linear (0, 0, width, 0);
-      cairo_pattern_add_color_stop_rgba (pattern, 0, color->red, color->green, color->blue, 0);
-      cairo_pattern_add_color_stop_rgba (pattern, width, color->red, color->green, color->blue, 1);
-      cairo_set_source (cr, pattern);
-      cairo_paint (cr);
-      cairo_pattern_destroy (pattern);
-
       cairo_destroy (cr);
+
+      color = &scale->priv->color;
+      
+      gtk_snapshot_append_linear_gradient (snapshot,
+                                           &GRAPHENE_RECT_INIT(x, y, width, height),
+                                           &start,
+                                           &end,
+                                           (GskColorStop[2]) {
+                                               { 0, { color->red, color->green, color->blue, 0 } },
+                                               { 1, { color->red, color->green, color->blue, 1 } },
+                                           },
+                                           2,
+                                           "ColorAlphaGradient");
     }
 }
 
