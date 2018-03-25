@@ -2073,6 +2073,11 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
     { { max_x, min_y }, { 1, 0 }, },
   };
 
+  /* This can still happen, even if the render nodes are created using
+   * GtkSnapshot, so let's juse be safe. */
+  if (node->bounds.size.width == 0.0f || node->bounds.size.height == 0.0f)
+    return;
+
 #if DEBUG_OPS
   if (gsk_render_node_get_node_type (node) != GSK_CONTAINER_NODE)
     g_message ("Adding ops for node %s with type %u", node->name,
