@@ -90,9 +90,10 @@ gtk_color_scale_snapshot_trough (GtkColorScale  *scale,
       gdouble f;
       int hue_x, hue_y;
 
-      stride = cairo_format_stride_for_width (CAIRO_FORMAT_RGB24, width);
-
-      data = g_malloc (height * stride);
+      tmp = cairo_image_surface_create (CAIRO_FORMAT_RGB24,
+                                        width, height);
+      stride = cairo_image_surface_get_stride (tmp);
+      data = (guint32* )cairo_image_surface_get_data (tmp);
 
       f = 1.0 / (height - 1);
       for (hue_y = 0; hue_y < height; hue_y++)
@@ -105,18 +106,16 @@ gtk_color_scale_snapshot_trough (GtkColorScale  *scale,
               red = CLAMP (r * 255, 0, 255);
               green = CLAMP (g * 255, 0, 255);
               blue = CLAMP (b * 255, 0, 255);
-              p[hue_x] = (red << 16) | (green << 8) | blue;
+              p[hue_x] = 0xFF000000 | (red << 16) | (green << 8) | blue;
             }
         }
 
-      tmp = cairo_image_surface_create_for_data ((guchar *)data, CAIRO_FORMAT_RGB24,
-                                                 width, height, stride);
+      cairo_surface_mark_dirty (tmp);
 
       cairo_set_source_surface (cr, tmp, 0, 0);
       cairo_paint (cr);
 
       cairo_surface_destroy (tmp);
-      g_free (data);
     }
   else if (scale->priv->type == GTK_COLOR_SCALE_ALPHA)
     {
