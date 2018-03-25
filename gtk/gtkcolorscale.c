@@ -62,63 +62,67 @@ gtk_color_scale_snapshot_trough (GtkColorScale  *scale,
                                  int             height)
 {
   GtkWidget *widget = GTK_WIDGET (scale);
-  cairo_t *cr;
 
   if (width <= 1 || height <= 1)
     return;
 
-  cr = gtk_snapshot_append_cairo (snapshot,
-                                  &GRAPHENE_RECT_INIT(x, y, width, height),
-                                  "ColorScaleTrough");
-  cairo_translate (cr, x, y);
-
-  if (gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == GTK_ORIENTATION_HORIZONTAL &&
-      gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-    {
-      cairo_translate (cr, width, 0);
-      cairo_scale (cr, -1, 1);
-    }
-
   if (scale->priv->type == GTK_COLOR_SCALE_HUE)
     {
+      GdkTexture *texture;
       gint stride;
-      cairo_surface_t *tmp;
-      guint red, green, blue;
-      guint32 *data, *p;
+      GBytes *bytes;
+      guchar *data, *p;
       gdouble h;
       gdouble r, g, b;
       gdouble f;
       int hue_x, hue_y;
 
-      tmp = cairo_image_surface_create (CAIRO_FORMAT_RGB24,
-                                        width, height);
-      stride = cairo_image_surface_get_stride (tmp);
-      data = (guint32* )cairo_image_surface_get_data (tmp);
+      stride = width * 3;
+      data = g_malloc (width * height * 3);
 
       f = 1.0 / (height - 1);
       for (hue_y = 0; hue_y < height; hue_y++)
         {
           h = CLAMP (hue_y * f, 0.0, 1.0);
-          p = data + hue_y * (stride / 4);
-          for (hue_x = 0; hue_x < width; hue_x++)
+          p = data + hue_y * stride;
+          for (hue_x = 0; hue_x < stride; hue_x += 3)
             {
               gtk_hsv_to_rgb (h, 1, 1, &r, &g, &b);
-              red = CLAMP (r * 255, 0, 255);
-              green = CLAMP (g * 255, 0, 255);
-              blue = CLAMP (b * 255, 0, 255);
-              p[hue_x] = 0xFF000000 | (red << 16) | (green << 8) | blue;
+              p[hue_x + 0] = CLAMP (r * 255, 0, 255);
+              p[hue_x + 1] = CLAMP (g * 255, 0, 255);
+              p[hue_x + 2] = CLAMP (b * 255, 0, 255);
             }
         }
 
-      cairo_surface_mark_dirty (tmp);
+      bytes = g_bytes_new_take (data, width * height * 3);
+      texture = gdk_memory_texture_new (width, height,
+                                        GDK_MEMORY_R8G8B8,
+                                        bytes,
+                                        stride);
+      g_bytes_unref (bytes);
 
-      cairo_set_source_surface (cr, tmp, 0, 0);
-      cairo_paint (cr);
-
-      cairo_surface_destroy (tmp);
+      gtk_snapshot_append_texture (snapshot,
+                                   texture,
+                                   &GRAPHENE_RECT_INIT(x, y, width, height),
+                                   "ColorScaleHue");
+      g_object_unref (texture);
     }
   else if (scale->priv->type == GTK_COLOR_SCALE_ALPHA)
     {
+      cairo_t *cr;
+
+      cr = gtk_snapshot_append_cairo (snapshot,
+                                      &GRAPHENE_RECT_INIT(x, y, width, height),
+                                      "ColorScaleAlpha");
+      cairo_translate (cr, x, y);
+
+      if (gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == GTK_ORIENTATION_HORIZONTAL &&
+          gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+        {
+          cairo_translate (cr, width, 0);
+          cairo_scale (cr, -1, 1);
+        }
+
       cairo_pattern_t *pattern;
       cairo_matrix_t matrix;
       GdkRGBA *color;
@@ -141,9 +145,9 @@ gtk_color_scale_snapshot_trough (GtkColorScale  *scale,
       cairo_set_source (cr, pattern);
       cairo_paint (cr);
       cairo_pattern_destroy (pattern);
-    }
 
-  cairo_destroy (cr);
+      cairo_destroy (cr);
+    }
 }
 
 static void
