@@ -4611,7 +4611,7 @@ drag_begin_cb (GtkWidget      *widget,
 {
   GtkLabel *label = GTK_LABEL (widget);
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-  cairo_surface_t *surface = NULL;
+  GdkPaintable *paintable = NULL;
 
   g_signal_handlers_disconnect_by_func (widget, drag_begin_cb, NULL);
 
@@ -4635,15 +4635,15 @@ drag_begin_cb (GtkWidget      *widget,
       if (start > len)
         start = len;
 
-      surface = _gtk_text_util_create_drag_icon (widget,
-                                                 priv->text + start,
-                                                 end - start);
+      paintable = gtk_text_util_create_drag_icon (widget,
+                                                  priv->text + start,
+                                                  end - start);
     }
 
-  if (surface)
+  if (paintable)
     {
-      gtk_drag_set_icon_surface (context, surface);
-      cairo_surface_destroy (surface);
+      gtk_drag_set_icon_paintable (context, paintable, 0, 0);
+      g_object_unref (paintable);
     }
   else
     {

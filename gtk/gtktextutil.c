@@ -189,27 +189,26 @@ limit_layout_lines (PangoLayout *layout)
 }
 
 /**
- * _gtk_text_util_create_drag_icon:
+ * gtk_text_util_create_drag_icon:
  * @widget: #GtkWidget to extract the pango context
  * @text: a #gchar to render the icon
  * @len: length of @text, or -1 for NUL-terminated text
  *
  * Creates a drag and drop icon from @text.
  *
- * Returns: a #cairo_surface_t to use as DND icon
+ * Returns: (transfer full): a #GdkPaintable to use as DND icon
  */
-cairo_surface_t *
-_gtk_text_util_create_drag_icon (GtkWidget *widget,
-                                 gchar     *text,
-                                 gsize      len)
+GdkPaintable *
+gtk_text_util_create_drag_icon (GtkWidget *widget,
+                                gchar     *text,
+                                gsize      len)
 {
   GtkStyleContext *style_context;
-  cairo_surface_t *surface;
+  GtkSnapshot *snapshot;
   PangoContext *context;
   PangoLayout  *layout;
-  cairo_t      *cr;
-  gint          pixmap_height, pixmap_width;
-  gint          layout_width, layout_height;
+  GdkPaintable *paintable;
+  gint          layout_width;
   GdkRGBA       color;
 
   g_return_val_if_fail (widget != NULL, NULL);
@@ -220,34 +219,24 @@ _gtk_text_util_create_drag_icon (GtkWidget *widget,
 
   pango_layout_set_text (layout, text, len);
   pango_layout_set_wrap (layout, PANGO_WRAP_WORD_CHAR);
-  pango_layout_get_size (layout, &layout_width, &layout_height);
+  pango_layout_get_size (layout, &layout_width, NULL);
 
   layout_width = MIN (layout_width, DRAG_ICON_MAX_WIDTH * PANGO_SCALE);
   pango_layout_set_width (layout, layout_width);
 
   limit_layout_lines (layout);
 
-  /* get again layout extents, they may have changed */
-  pango_layout_get_size (layout, &layout_width, &layout_height);
-
-  pixmap_width  = layout_width  / PANGO_SCALE;
-  pixmap_height = layout_height / PANGO_SCALE;
-
-  surface = gdk_surface_create_similar_surface (gtk_widget_get_surface (widget),
-                                               CAIRO_CONTENT_COLOR_ALPHA,
-                                               pixmap_width, pixmap_height);
-  cr = cairo_create (surface);
+  snapshot = gtk_snapshot_new (FALSE, NULL, "TextDragIcon");
 
   style_context = gtk_widget_get_style_context (widget);
   gtk_style_context_get_color (style_context,
                                &color);
-  gdk_cairo_set_source_rgba (cr, &color);
-  pango_cairo_show_layout (cr, layout);
+  gtk_snapshot_append_layout (snapshot, layout, &color, "TextDragIcon");
 
-  cairo_destroy (cr);
+  paintable = gtk_snapshot_free_to_paintable (snapshot);
   g_object_unref (layout);
 
-  return surface;
+  return paintable;
 }
 
 static void

@@ -8573,18 +8573,18 @@ gtk_entry_drag_begin (GtkWidget      *widget,
   if (text)
     {
       gint *ranges, n_ranges;
-      cairo_surface_t *surface;
+      GdkPaintable *paintable;
 
-      surface = _gtk_text_util_create_drag_icon (widget, text, -1);
-
+      paintable = gtk_text_util_create_drag_icon (widget, text, -1);
       gtk_entry_get_pixel_ranges (entry, &ranges, &n_ranges);
-      cairo_surface_set_device_offset (surface,
-                                       -(priv->drag_start_x - ranges[0]),
-                                       -(priv->drag_start_y));
-      g_free (ranges);
 
-      gtk_drag_set_icon_surface (context, surface);
-      cairo_surface_destroy (surface);
+      gtk_drag_set_icon_paintable (context,
+                                   paintable,
+                                   priv->drag_start_x - ranges[0],
+                                   priv->drag_start_y);
+
+      g_free (ranges);
+      g_object_unref (paintable);
       g_free (text);
     }
 }
