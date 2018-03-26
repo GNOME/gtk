@@ -485,9 +485,6 @@ main (gint argc, gchar **argv)
 
   cell = gtk_cell_renderer_pixbuf_new ();
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (icon_list), cell, FALSE);
-  g_object_set (cell, 
-		"follow-state", TRUE, 
-		NULL);
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (icon_list),
 				  cell, "pixbuf", 0, NULL);
 
@@ -513,9 +510,6 @@ main (gint argc, gchar **argv)
 
   cell = gtk_cell_renderer_pixbuf_new ();
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (tvc), cell, FALSE);
-  g_object_set (cell, 
-		"follow-state", TRUE, 
-		NULL);
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (tvc),
 				  cell, "pixbuf", 0, NULL);
 

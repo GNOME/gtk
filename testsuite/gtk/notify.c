@@ -525,8 +525,7 @@ test_type (gconstpointer data)
         continue;
 
       if (g_type_is_a (pspec->owner_type, GTK_TYPE_CELL_RENDERER_PIXBUF) &&
-	  (g_str_equal (pspec->name, "follow-state") ||
-	   g_str_equal (pspec->name, "stock-id") ||
+	  (g_str_equal (pspec->name, "stock-id") ||
            g_str_equal (pspec->name, "stock-size")))
         continue;
 
