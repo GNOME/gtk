@@ -167,19 +167,17 @@ static void
 drag_set_color_icon (GdkDragContext *context,
                      const GdkRGBA  *color)
 {
-  cairo_surface_t *surface;
-  cairo_t *cr;
+  GtkSnapshot *snapshot;
+  GdkPaintable *paintable;
 
-  surface = cairo_image_surface_create (CAIRO_FORMAT_RGB24, 48, 32);
-  cr = cairo_create (surface);
-  gdk_cairo_set_source_rgba (cr, color);
-  cairo_paint (cr);
+  snapshot = gtk_snapshot_new (FALSE, NULL, "ColorDragIcon");
+  gtk_snapshot_append_color (snapshot,
+                             color,
+                             &GRAPHENE_RECT_INIT(0, 0, 48, 32),
+                             "ColorDragColor");
+  paintable = gtk_snapshot_free_to_paintable (snapshot);
 
-  cairo_surface_set_device_offset (surface, -4, -4);
-  gtk_drag_set_icon_surface (context, surface);
-
-  cairo_destroy (cr);
-  cairo_surface_destroy (surface);
+  gtk_drag_set_icon_paintable (context, paintable, 4, 4);
 }
 
 static void
