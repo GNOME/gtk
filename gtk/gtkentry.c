@@ -7167,7 +7167,7 @@ gtk_entry_set_has_frame (GtkEntry *entry,
     gtk_style_context_remove_class (context, GTK_STYLE_CLASS_FLAT);
   else
     gtk_style_context_add_class (context, GTK_STYLE_CLASS_FLAT);
-  gtk_widget_queue_draw (GTK_WIDGET (entry));
+
   g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_HAS_FRAME]);
 }
 
