@@ -165,7 +165,7 @@ struct _GtkPlacesSidebar {
   GtkPlacesOpenFlags go_to_after_mount_open_flags;
   GCancellable *cancellable;
 
-  GtkWidget *popover;
+  GtkWidget *context_menu;
   GtkSidebarRow *context_row;
   GSList *shortcuts;
 
@@ -2260,9 +2260,9 @@ check_visibility (GMount   *mount,
 }
 
 static void
-check_popover_sensitivity (GtkSidebarRow *row,
-                           GMenuItem     *start_menu_item,
-                           GMenuItem     *stop_menu_item)
+check_context_menu_sensitivity (GtkSidebarRow *row,
+                                GMenuItem     *start_menu_item,
+                                GMenuItem     *stop_menu_item)
 {
   gboolean show_mount;
   gboolean show_unmount;
@@ -3534,20 +3534,21 @@ add_open_menu_item (GMenu              *menu,
 }
 
 static void
-on_row_popover_destroy (GtkWidget        *row_popover,
-                        GtkPlacesSidebar *sidebar)
+on_row_context_menu_destroy (GtkWidget        *context_menu,
+                             GtkPlacesSidebar *sidebar)
 {
   if (sidebar)
-    sidebar->popover = NULL;
+    sidebar->context_menu = NULL;
 }
 
 /* Constructs the popover for the sidebar row if needed */
 static void
-create_row_popover (GtkPlacesSidebar *sidebar,
-                    GtkSidebarRow    *row)
+create_row_context_menu (GtkPlacesSidebar *sidebar,
+                         GtkSidebarRow    *row)
 {
   GMenu *context_menu, *open_menu_items, *bookmarks_menu_items, *mount_menu_items;
   GMenuItem *start_menu_item, *stop_menu_item;
+  gboolean prefer_popover_menu;
 
   open_menu_items = g_menu_new ();
 
@@ -3606,14 +3607,27 @@ create_row_popover (GtkPlacesSidebar *sidebar,
       }
   #endif
 
-  sidebar->popover = gtk_popover_new_from_model (GTK_WIDGET (sidebar), G_MENU_MODEL (context_menu));
+  g_object_get (gtk_widget_get_settings (GTK_WIDGET (sidebar)),
+                "gtk-dialogs-use-header", &prefer_popover_menu,
+                NULL);
+
+  if (prefer_popover_menu)
+    {
+      sidebar->context_menu = gtk_popover_new_from_model (GTK_WIDGET (sidebar), G_MENU_MODEL (context_menu));
+      setup_popover_shadowing (sidebar->context_menu);
+    }
+  else
+    {
+      sidebar->context_menu = gtk_menu_new_from_model (G_MENU_MODEL (context_menu));
+      gtk_menu_attach_to_widget (GTK_MENU (sidebar->context_menu), GTK_WIDGET (sidebar), NULL);
+    }
+
   /* Clean sidebar pointer when its destroyed, most of the times due to its
    * relative_to associated row being destroyed */
-  g_signal_connect (sidebar->popover, "destroy", G_CALLBACK (on_row_popover_destroy), sidebar);
-  setup_popover_shadowing (sidebar->popover);
+  g_signal_connect (sidebar->context_menu, "destroy", G_CALLBACK (on_row_context_menu_destroy), sidebar);
 
   /* Update everything! */
-  check_popover_sensitivity (row, start_menu_item, stop_menu_item);
+  check_context_menu_sensitivity (row, start_menu_item, stop_menu_item);
 
   if (sidebar->populate_all)
     {
@@ -3650,15 +3664,22 @@ show_row_popover (GtkSidebarRow *row)
 
   g_object_get (row, "sidebar", &sidebar, NULL);
 
-  if (sidebar->popover)
-    gtk_widget_destroy (sidebar->popover);
+  if (sidebar->context_menu)
+    gtk_widget_destroy (sidebar->context_menu);
 
-  create_row_popover (sidebar, row);
+  create_row_context_menu (sidebar, row);
 
-  gtk_popover_set_relative_to (GTK_POPOVER (sidebar->popover), GTK_WIDGET (row));
-
-  sidebar->context_row = row;
-  gtk_popover_popup (GTK_POPOVER (sidebar->popover));
+  if (GTK_IS_MENU (sidebar->context_menu))
+    {
+      sidebar->context_row = row;
+      gtk_menu_popup_at_pointer (GTK_MENU (sidebar->context_menu), NULL);
+    }
+  else
+    {
+      gtk_popover_set_relative_to (GTK_POPOVER (sidebar->context_menu), GTK_WIDGET (row));
+      sidebar->context_row = row;
+      gtk_popover_popup (GTK_POPOVER (sidebar->context_menu));
+    }
 
   g_object_unref (sidebar);
 }
@@ -4243,10 +4264,10 @@ gtk_places_sidebar_dispose (GObject *object)
       sidebar->bookmarks_manager = NULL;
     }
 
-  if (sidebar->popover)
+  if (sidebar->context_menu)
     {
-      gtk_widget_destroy (sidebar->popover);
-      sidebar->popover = NULL;
+      gtk_widget_destroy (sidebar->context_menu);
+      sidebar->context_menu = NULL;
     }
 
   if (sidebar->rename_popover)
