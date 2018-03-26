@@ -279,12 +279,8 @@ endif
 
 common_ldflags = []
 
-if host_machine.system() == 'linux'
-  foreach ldflag: [ '-Wl,-Bsymbolic', '-Wl,-z,relro', '-Wl,-z,now', ]
-    if cc.has_argument(ldflag)
-      common_ldflags += [ ldflag ]
-    endif
-  endforeach
+if host_machine.system() == 'linux' and cc.get_id() == 'gcc'
+  common_ldflags += [ '-Wl,-Bsymbolic', '-Wl,-z,relro', '-Wl,-z,now', ]
 endif
 
 # Maintain compatibility with autotools
