@@ -225,17 +225,6 @@ struct _GtkFileChooserWidgetPrivate {
   GtkWidget *remote_warning_bar;
 
   GtkWidget *browse_files_popover;
-  GtkWidget *add_shortcut_item;
-  GtkWidget *hidden_files_item;
-  GtkWidget *size_column_item;
-  GtkWidget *copy_file_location_item;
-  GtkWidget *visit_file_item;
-  GtkWidget *open_folder_item;
-  GtkWidget *rename_file_item;
-  GtkWidget *trash_file_item;
-  GtkWidget *delete_file_item;
-  GtkWidget *sort_directories_item;
-  GtkWidget *show_time_item;
 
   GtkWidget *browse_new_folder_button;
   GtkSizeGroup *browse_path_bar_size_group;
@@ -2113,7 +2102,7 @@ check_file_list_popover_sensitivity (GtkFileChooserWidget *impl)
   gboolean all_folders;
   gboolean active;
   GActionGroup *actions;
-  GAction *action, *action2;
+  GAction *action, *action_delete, *action_trash;
 
   actions = gtk_widget_get_action_group (priv->browse_files_tree_view, "item");
 
@@ -2150,8 +2139,8 @@ check_file_list_popover_sensitivity (GtkFileChooserWidget *impl)
   else
     g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
 
-  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "delete");
-  action2 = g_action_map_lookup_action (G_ACTION_MAP (actions), "trash");
+  action_delete = g_action_map_lookup_action (G_ACTION_MAP (actions), "delete");
+  action_trash = g_action_map_lookup_action (G_ACTION_MAP (actions), "trash");
 
   if (num_selected == 1)
     {
@@ -2163,30 +2152,26 @@ check_file_list_popover_sensitivity (GtkFileChooserWidget *impl)
 
       if (g_file_info_get_attribute_boolean (info, G_FILE_ATTRIBUTE_ACCESS_CAN_TRASH))
         {
-          g_simple_action_set_enabled (G_SIMPLE_ACTION (action2), TRUE);
-          gtk_widget_set_visible (priv->delete_file_item, FALSE);
-          gtk_widget_set_visible (priv->trash_file_item, TRUE);
+          g_simple_action_set_enabled (G_SIMPLE_ACTION (action_delete), FALSE);
+          g_simple_action_set_enabled (G_SIMPLE_ACTION (action_trash), TRUE);
         }
       else if (g_file_info_get_attribute_boolean (info, G_FILE_ATTRIBUTE_ACCESS_CAN_DELETE))
         {
-          g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
-          gtk_widget_set_visible (priv->delete_file_item, TRUE);
-          gtk_widget_set_visible (priv->trash_file_item, FALSE);
+          g_simple_action_set_enabled (G_SIMPLE_ACTION (action_delete), TRUE);
+          g_simple_action_set_enabled (G_SIMPLE_ACTION (action_trash), FALSE);
         }
       else
         {
-          g_simple_action_set_enabled (G_SIMPLE_ACTION (action2), FALSE);
-          gtk_widget_set_visible (priv->delete_file_item, FALSE);
-          gtk_widget_set_visible (priv->trash_file_item, TRUE);
+          g_simple_action_set_enabled (G_SIMPLE_ACTION (action_delete), FALSE);
+          g_simple_action_set_enabled (G_SIMPLE_ACTION (action_trash), FALSE);
         }
 
       g_slist_free_full (infos, g_object_unref);
     }
   else
     {
-      gtk_widget_set_visible (priv->delete_file_item, FALSE);
-      gtk_widget_set_visible (priv->trash_file_item, TRUE);
-      g_simple_action_set_enabled (G_SIMPLE_ACTION (action2), FALSE);
+      g_simple_action_set_enabled (G_SIMPLE_ACTION (action_delete), FALSE);
+      g_simple_action_set_enabled (G_SIMPLE_ACTION (action_trash), FALSE);
     }
 }
 
@@ -2217,74 +2202,52 @@ add_actions (GtkFileChooserWidget *impl)
   g_object_unref (actions);
 }
 
-static GtkWidget *
-append_separator (GtkWidget *box)
+static void
+add_menu_item (GMenu       *menu,
+               const gchar *label,
+               const gchar *action)
 {
-  GtkWidget *separator;
+  GMenuItem *menu_item;
 
-  separator = g_object_new (GTK_TYPE_SEPARATOR,
-                            "orientation", GTK_ORIENTATION_HORIZONTAL,
-                            "visible", TRUE,
-                            "margin-start", 12,
-                            "margin-end", 12,
-                            "margin-top", 6,
-                            "margin-bottom", 6,
-                            NULL);
-  gtk_container_add (GTK_CONTAINER (box), separator);
-
-  return separator;
-}
-
-/* Constructs the popup menu for the file list if needed */
-static GtkWidget *
-add_button (GtkWidget   *box,
-            const gchar *label,
-            const gchar *action)
-{
-  GtkWidget *item;
-
- item = g_object_new (GTK_TYPE_MODEL_BUTTON,
-                       "visible", TRUE,
-                       "action-name", action,
-                       "text", label,
-                       NULL);
-  gtk_container_add (GTK_CONTAINER (box), item);
-
-  return item;
+  menu_item = g_menu_item_new (label, action);
+  g_menu_item_set_attribute (menu_item, "hidden-when", "s", "action-disabled");
+  g_menu_append_item (menu, menu_item);
 }
 
 static void
 file_list_build_popover (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
-  GtkWidget *box;
+  GMenu *context_menu, *file_menu_items, *settings_menu_items;
 
   if (priv->browse_files_popover)
     return;
 
-  priv->browse_files_popover = gtk_popover_new (priv->browse_files_tree_view);
-  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  g_object_set (box, "margin", 10, NULL);
-  gtk_widget_show (box);
-  gtk_container_add (GTK_CONTAINER (priv->browse_files_popover), box);
+  file_menu_items = g_menu_new ();
 
-  priv->visit_file_item = add_button (box, _("_Visit File"), "item.visit");
-  priv->open_folder_item = add_button (box, _("_Open With File Manager"), "item.open");
-  priv->copy_file_location_item = add_button (box, _("_Copy Location"), "item.copy-location");
-  priv->add_shortcut_item = add_button (box, _("_Add to Bookmarks"), "item.add-shortcut");
-  priv->rename_file_item = add_button (box, _("_Rename"), "item.rename");
-  priv->delete_file_item = add_button (box, _("_Delete"), "item.delete");
-  priv->trash_file_item = add_button (box, _("_Move to Trash"), "item.trash");
+  add_menu_item (file_menu_items, _("_Visit File"), "item.visit");
+  add_menu_item (file_menu_items, _("_Open With File Manager"), "item.open");
+  add_menu_item (file_menu_items, _("_Copy Location"), "item.copy-location");
+  add_menu_item (file_menu_items, _("_Add to Bookmarks"), "item.add-shortcut");
+  add_menu_item (file_menu_items, _("_Rename"), "item.rename");
+  add_menu_item (file_menu_items, _("_Delete"), "item.delete");
+  add_menu_item (file_menu_items, _("_Move to Trash"), "item.trash");
 
-  append_separator (box);
+  settings_menu_items = g_menu_new ();
 
-  priv->hidden_files_item = add_button (box, _("Show _Hidden Files"), "item.toggle-show-hidden");
-  priv->size_column_item = add_button (box, _("Show _Size Column"), "item.toggle-show-size");
-  priv->show_time_item = add_button (box, _("Show _Time"), "item.toggle-show-time");
-  priv->sort_directories_item = add_button (box, _("Sort _Folders before Files"), "item.toggle-sort-dirs-first");
+  add_menu_item (settings_menu_items, _("Show _Hidden Files"), "item.toggle-show-hidden");
+  add_menu_item (settings_menu_items, _("Show _Size Column"), "item.toggle-show-size");
+  add_menu_item (settings_menu_items, _("Show _Time"), "item.toggle-show-time");
+  add_menu_item (settings_menu_items, _("Sort _Folders before Files"), "item.toggle-sort-dirs-first");
+
+  context_menu = g_menu_new ();
+  g_menu_append_section (context_menu, NULL, G_MENU_MODEL (file_menu_items));
+  g_menu_append_section (context_menu, NULL, G_MENU_MODEL (settings_menu_items));
+
+  priv->browse_files_popover = gtk_popover_new_from_model (priv->browse_files_tree_view, G_MENU_MODEL (context_menu));
 }
 
-/* Updates the popover for the file list, creating it if necessary */
+/* Updates context menu items for the file list, creating it if necessary */
 static void
 file_list_update_popover (GtkFileChooserWidget *impl)
 {
@@ -2299,18 +2262,25 @@ file_list_update_popover (GtkFileChooserWidget *impl)
    * bookmarks_check_add_sensitivity()
    */
 
+  actions = gtk_widget_get_action_group (priv->browse_files_tree_view, "item");
+
   if (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
       priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
       priv->operation_mode != OPERATION_MODE_BROWSE)
     {
-      gtk_widget_set_visible (priv->rename_file_item, FALSE);
-      gtk_widget_set_visible (priv->delete_file_item, FALSE);
-      gtk_widget_set_visible (priv->trash_file_item, FALSE);
+      action = g_action_map_lookup_action (G_ACTION_MAP (actions), "rename");
+      g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+
+      action = g_action_map_lookup_action (G_ACTION_MAP (actions), "delete");
+      g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+
+      action = g_action_map_lookup_action (G_ACTION_MAP (actions), "trash");
+      g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
     }
 
-  gtk_widget_set_visible (priv->visit_file_item, (priv->operation_mode != OPERATION_MODE_BROWSE));
+  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "visit");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), (priv->operation_mode != OPERATION_MODE_BROWSE));
 
-  actions = gtk_widget_get_action_group (priv->browse_files_tree_view, "item");
   action = g_action_map_lookup_action (G_ACTION_MAP (actions), "toggle-show-hidden");
   g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (priv->show_hidden));
 
