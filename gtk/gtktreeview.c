@@ -7466,7 +7466,7 @@ gtk_tree_view_drag_begin (GtkWidget      *widget,
   GtkTreeView *tree_view;
   GtkTreePath *path = NULL;
   gint cell_x, cell_y;
-  cairo_surface_t *row_pix;
+  GdkPaintable *row_pix;
   TreeViewDragInfo *di;
 
   tree_view = GTK_TREE_VIEW (widget);
@@ -7496,14 +7496,10 @@ gtk_tree_view_drag_begin (GtkWidget      *widget,
 
   row_pix = gtk_tree_view_create_row_drag_icon (tree_view,
                                                 path);
-  cairo_surface_set_device_offset (row_pix,
-                                   /* the + 1 is for the black border in the icon */
-                                   tree_view->priv->press_start_x + 1,
-                                   1);
 
-  gtk_drag_set_icon_surface (context, row_pix);
+  gtk_drag_set_icon_paintable (context, row_pix, tree_view->priv->press_start_x + 1, 1);
 
-  cairo_surface_destroy (row_pix);
+  g_object_unref (row_pix);
   gtk_tree_path_free (path);
 }
 
@@ -13786,6 +13782,25 @@ gtk_tree_view_get_dest_row_at_pos (GtkTreeView             *tree_view,
 }
 
 
+static void
+gtk_treeview_snapshot_border (GtkSnapshot           *snapshot,
+                              const graphene_rect_t *rect)
+{
+  GskRoundedRect rounded;
+  GskRenderNode *border_node;
+
+  gsk_rounded_rect_init_from_rect (&rounded, rect, 0);
+
+#define BLACK { 0, 0, 0, 1 }
+  border_node = gsk_border_node_new (&rounded,
+                                     (float[4]) { 1, 1, 1, 1 },
+                                     (GdkRGBA[4]) { BLACK, BLACK, BLACK, BLACK });
+#undef BLACK
+
+  gtk_snapshot_append_node (snapshot, border_node);
+
+  gsk_render_node_unref (border_node);
+}
 
 /* KEEP IN SYNC WITH GTK_TREE_VIEW_BIN_EXPOSE */
 /**
@@ -13798,7 +13813,7 @@ gtk_tree_view_get_dest_row_at_pos (GtkTreeView             *tree_view,
  *
  * Returns: (transfer full): a newly-allocated surface of the drag icon.
  **/
-cairo_surface_t *
+GdkPaintable *
 gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
                                     GtkTreePath  *path)
 {
@@ -13811,15 +13826,13 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
   GdkRectangle background_area;
   GtkWidget *widget;
   GtkSnapshot *snapshot;
-  GskRenderNode *rendernode;
+  GdkPaintable *paintable;
   gint depth;
   /* start drawing inside the black outline */
   gint x = 1, y = 1;
-  cairo_surface_t *surface;
   gint bin_window_width;
   gboolean is_separator = FALSE;
   gboolean rtl;
-  cairo_t *cr;
 
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), NULL);
   g_return_val_if_fail (path != NULL, NULL);
@@ -13854,11 +13867,6 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
   background_area.height = gtk_tree_view_get_row_height (tree_view, node);
 
   bin_window_width = gtk_widget_get_width (GTK_WIDGET (tree_view));
-
-  surface = gdk_surface_create_similar_surface (gtk_widget_get_surface (GTK_WIDGET (tree_view)),
-						CAIRO_CONTENT_COLOR,
-						bin_window_width + 2,
-						background_area.height + 2);
 
   snapshot = gtk_snapshot_new (FALSE, NULL, "TreeView DragIcon");
 
@@ -13937,26 +13945,12 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
       cell_offset += gtk_tree_view_column_get_width (column);
     }
 
-  rendernode = gtk_snapshot_free_to_node (snapshot);
+  gtk_treeview_snapshot_border (snapshot,
+                                &GRAPHENE_RECT_INIT(0, 0, bin_window_width + 2, background_area.height + 2));
 
-  cr = cairo_create (surface);
+  paintable = gtk_snapshot_free_to_paintable (snapshot);
 
-  gsk_render_node_draw (rendernode, cr);
-
-  cairo_set_source_rgb (cr, 0, 0, 0);
-  cairo_rectangle (cr, 
-                   0.5, 0.5, 
-                   bin_window_width + 1,
-                   background_area.height + 1);
-  cairo_set_line_width (cr, 1.0);
-  cairo_stroke (cr);
-
-  cairo_destroy (cr);
-  gsk_render_node_unref (rendernode);
-
-  cairo_surface_set_device_offset (surface, 2, 2);
-
-  return surface;
+  return paintable;
 }
 
 
