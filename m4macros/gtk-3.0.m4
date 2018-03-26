@@ -25,7 +25,7 @@ AC_ARG_ENABLE(gtktest, [  --disable-gtktest       do not try to compile and run 
 
   no_gtk=""
 
-  AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
+  AC_PATH_TOOL(PKG_CONFIG, pkg-config, no)
 
   if test x$PKG_CONFIG != xno ; then
     if $PKG_CONFIG --atleast-pkgconfig-version 0.7 ; then
@@ -201,7 +201,7 @@ AC_DEFUN([GTK_CHECK_BACKEND],
   min_gtk_version=ifelse([$2],,3.0.0,$2)
   pkg_config_args="$pkg_config_args >= $min_gtk_version"
 
-  AC_PATH_PROG(PKG_CONFIG, [pkg-config], [AC_MSG_ERROR([No pkg-config found])])
+  AC_PATH_TOOL(PKG_CONFIG, [pkg-config], [AC_MSG_ERROR([No pkg-config found])])
 
   if $PKG_CONFIG $pkg_config_args ; then
     target_found=yes
