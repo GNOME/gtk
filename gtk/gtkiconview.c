@@ -6098,7 +6098,7 @@ gtk_icon_view_drag_begin (GtkWidget      *widget,
 {
   GtkIconView *icon_view;
   GtkIconViewItem *item;
-  cairo_surface_t *icon;
+  GdkPaintable *icon;
   gint x, y;
   GtkTreePath *path;
 
@@ -6123,11 +6123,9 @@ gtk_icon_view_drag_begin (GtkWidget      *widget,
   icon = gtk_icon_view_create_drag_icon (icon_view, path);
   gtk_tree_path_free (path);
 
-  cairo_surface_set_device_offset (icon, -x, -y);
+  gtk_drag_set_icon_paintable (context, icon, x, y);
 
-  gtk_drag_set_icon_surface (context, icon);
-
-  cairo_surface_destroy (icon);
+  g_object_unref (icon);
 }
 
 static void 
@@ -6684,15 +6682,13 @@ gtk_icon_view_get_dest_item_at_pos (GtkIconView              *icon_view,
  *
  * Returns: (transfer full): a newly-allocated surface of the drag icon.
  **/
-cairo_surface_t *
+GdkPaintable *
 gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
 				GtkTreePath *path)
 {
   GtkWidget *widget;
   GtkSnapshot *snapshot;
-  GskRenderNode *node;
-  cairo_t *cr;
-  cairo_surface_t *surface;
+  GdkPaintable *paintable;
   GList *l;
   gint index;
 
@@ -6711,32 +6707,16 @@ gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
       GtkIconViewItem *item = l->data;
       
       if (index == item->index)
-	{
-	  GdkRectangle rect = { 
-	    item->cell_area.x - icon_view->priv->item_padding, 
-	    item->cell_area.y - icon_view->priv->item_padding, 
-	    item->cell_area.width  + icon_view->priv->item_padding * 2, 
-	    item->cell_area.height + icon_view->priv->item_padding * 2 
-	  };
+        {
+          snapshot = gtk_snapshot_new (FALSE, NULL, "IconView DragIcon");
+          gtk_icon_view_snapshot_item (icon_view, snapshot, item,
+                                       icon_view->priv->item_padding,
+                                       icon_view->priv->item_padding,
+                                       FALSE);
+          paintable = gtk_snapshot_free_to_paintable (snapshot);
 
-	  surface = gdk_surface_create_similar_surface (gtk_widget_get_surface (GTK_WIDGET (icon_view)),
-                                                       CAIRO_CONTENT_COLOR_ALPHA,
-                                                       rect.width,
-                                                       rect.height);
-
-    snapshot = gtk_snapshot_new (FALSE, NULL, "IconView DragIcon");
-	  gtk_icon_view_snapshot_item (icon_view, snapshot, item,
-                                 icon_view->priv->item_padding,
-                                 icon_view->priv->item_padding,
-                                 FALSE);
-    node = gtk_snapshot_free_to_node (snapshot);
-
-	  cr = cairo_create (surface);
-    gsk_render_node_draw (node, cr);
-	  cairo_destroy (cr);
-
-	  return surface;
-	}
+          return paintable;
+       }
     }
   
   return NULL;

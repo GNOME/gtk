@@ -286,7 +286,7 @@ gboolean               gtk_icon_view_get_dest_item_at_pos     (GtkIconView      
 							       GtkTreePath             **path,
 							       GtkIconViewDropPosition  *pos);
 GDK_AVAILABLE_IN_ALL
-cairo_surface_t       *gtk_icon_view_create_drag_icon         (GtkIconView              *icon_view,
+GdkPaintable          *gtk_icon_view_create_drag_icon         (GtkIconView              *icon_view,
 							       GtkTreePath              *path);
 
 GDK_AVAILABLE_IN_ALL
