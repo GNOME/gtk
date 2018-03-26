@@ -1176,42 +1176,6 @@ gtk_drag_set_icon_definition (GdkDragContext     *context,
 }
 
 /**
- * gtk_drag_set_icon_surface:
- * @context: the context for a drag (This must be called
- *     with a context for the source side of a drag)
- * @surface: the surface to use as icon
- *
- * Sets @surface as the icon for a given drag. GTK+ retains
- * references for the arguments, and will release them when
- * they are no longer needed.
- *
- * To position the surface relative to the mouse, use
- * cairo_surface_set_device_offset() on @surface. The mouse
- * cursor will be positioned at the (0,0) coordinate of the
- * surface.
- */
-void
-gtk_drag_set_icon_surface (GdkDragContext  *context,
-                           cairo_surface_t *surface)
-{
-  GtkWidget *widget;
-  double hot_x, hot_y;
-  GdkTexture *texture;
-
-  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
-  g_return_if_fail (surface != NULL);
-
-  cairo_surface_get_device_offset (surface, &hot_x, &hot_y);
-  cairo_surface_set_device_offset (surface, 0, 0);
-
-  texture = gdk_texture_new_for_surface (surface);
-  widget = gtk_image_new_from_paintable (GDK_PAINTABLE (texture));
-  g_object_unref (texture);
-
-  gtk_drag_set_icon_widget_internal (context, widget, (int)hot_x, (int)hot_y, TRUE);
-}
-
-/**
  * gtk_drag_set_icon_paintable:
  * @context: the context for a drag (This must be called
  *     with a context for the source side of a drag)
