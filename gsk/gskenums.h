@@ -35,7 +35,6 @@
  * @GSK_INSET_SHADOW_NODE: A node drawing an inset shadow
  * @GSK_OUTSET_SHADOW_NODE: A node drawing an outset shadow
  * @GSK_TRANSFORM_NODE: A node that renders its child after applying a matrix transform
- * @GSK_OFFSET_NODE: A node that renders its child after applying a 2D translation
  * @GSK_OPACITY_NODE: A node that changes the opacity of its child
  * @GSK_COLOR_MATRIX_NODE: A node that applies a color matrix to every pixel
  * @GSK_REPEAT_NODE: A node that repeats the child's contents
@@ -46,6 +45,7 @@
  * @GSK_CROSS_FADE_NODE: A node that cross-fades between two children
  * @GSK_TEXT_NODE: A node containing a glyph string
  * @GSK_BLUR_NODE: A node that applies a blur
+ * @GSK_OFFSET_NODE: A node that renders its child after applying a 2D translation
  *
  * The type of a node determines what the node is rendering.
  *
@@ -63,7 +63,6 @@ typedef enum {
   GSK_INSET_SHADOW_NODE,
   GSK_OUTSET_SHADOW_NODE,
   GSK_TRANSFORM_NODE,
-  GSK_OFFSET_NODE,
   GSK_OPACITY_NODE,
   GSK_COLOR_MATRIX_NODE,
   GSK_REPEAT_NODE,
@@ -73,7 +72,8 @@ typedef enum {
   GSK_BLEND_NODE,
   GSK_CROSS_FADE_NODE,
   GSK_TEXT_NODE,
-  GSK_BLUR_NODE
+  GSK_BLUR_NODE,
+  GSK_OFFSET_NODE
 } GskRenderNodeType;
 
 /**
