@@ -45,6 +45,7 @@ struct _GskPangoRenderer
   GtkSnapshot *snapshot;
   GdkRGBA fg_color;
   graphene_rect_t bounds;
+  char *name;
 
   /* house-keeping options */
   gboolean is_cached_renderer;
@@ -157,9 +158,9 @@ gsk_pango_renderer_show_text_glyphs (PangoRenderer        *renderer,
 
   if (gtk_snapshot_get_record_names (crenderer->snapshot))
     {
-      char name[64];
-      g_snprintf (name, sizeof (name), "Glyphs<%d>", glyphs->num_glyphs);
-      gsk_render_node_set_name (node, name);
+      char *s = g_strdup_printf ("%s<%d>", crenderer->name, glyphs->num_glyphs);
+      gsk_render_node_set_name (node, s);
+      g_free (s);
     }
 
   gtk_snapshot_append_node_internal (crenderer->snapshot, node);
@@ -427,6 +428,7 @@ release_renderer (GskPangoRenderer *renderer)
   if (G_LIKELY (renderer->is_cached_renderer))
     {
       renderer->snapshot = NULL;
+      g_clear_pointer (&renderer->name, g_free);
 
       G_UNLOCK (cached_renderer);
     }
@@ -434,12 +436,24 @@ release_renderer (GskPangoRenderer *renderer)
     g_object_unref (renderer);
 }
 
-/* convenience wrappers using the default renderer */
-
+/**
+ * gtk_snapshot_append_layout:
+ * @snapshot: a #GtkSnapshot
+ * @layout: the #PangoLayout to render
+ * @color: the foreground color to render the layout in
+ * @name: (transfer none): a printf() style format string for the name for the new node
+ * @...: arguments to insert into the format string
+ *
+ * Creates render nodes for rendering @layout in the given foregound @color
+ * and appends them to the current node of @snapshot without changing the
+ * current node.
+ **/
 void
-gsk_pango_show_layout (GtkSnapshot   *snapshot,
-                       const GdkRGBA *fg_color,
-                       PangoLayout   *layout)
+gtk_snapshot_append_layout (GtkSnapshot            *snapshot,
+                            PangoLayout            *layout,
+                            const GdkRGBA          *color,
+                            const char             *name,
+                            ...)
 {
   GskPangoRenderer *crenderer;
   PangoRectangle ink_rect;
@@ -450,7 +464,17 @@ gsk_pango_show_layout (GtkSnapshot   *snapshot,
   crenderer = acquire_renderer ();
 
   crenderer->snapshot = snapshot;
-  crenderer->fg_color = *fg_color;
+  crenderer->fg_color = *color;
+  if (name && gtk_snapshot_get_record_names (crenderer->snapshot))
+    {
+      va_list args;
+
+      va_start (args, name);
+      crenderer->name = g_strdup_vprintf (name, args);
+      va_end (args);
+    }
+  else
+    crenderer->name = NULL;
 
   pango_layout_get_pixel_extents (layout, &ink_rect, NULL);
   graphene_rect_init (&crenderer->bounds, ink_rect.x, ink_rect.y, ink_rect.width, ink_rect.height);

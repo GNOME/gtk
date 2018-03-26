@@ -34,10 +34,6 @@ typedef struct _GskPangoRendererClass   GskPangoRendererClass;
 
 GType gsk_pango_renderer_get_type (void) G_GNUC_CONST;
 
-void gsk_pango_show_layout (GtkSnapshot   *snapshot,
-                            const GdkRGBA *fg_color,
-                            PangoLayout   *layout);
-
 G_END_DECLS
 
 #endif /* __GSK_PANGO_H__ */

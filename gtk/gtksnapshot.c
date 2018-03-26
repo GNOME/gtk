@@ -1728,7 +1728,7 @@ gtk_snapshot_render_layout (GtkSnapshot     *snapshot,
   shadows_value = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_TEXT_SHADOW);
   has_shadow = gtk_css_shadows_value_push_snapshot (shadows_value, snapshot);
 
-  gsk_pango_show_layout (snapshot, fg_color, layout);
+  gtk_snapshot_append_layout (snapshot, layout, fg_color, "RenderLayout");
 
   if (has_shadow)
     gtk_snapshot_pop (snapshot);

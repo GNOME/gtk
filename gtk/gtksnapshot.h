@@ -155,6 +155,14 @@ void            gtk_snapshot_append_color               (GtkSnapshot            
                                                          const graphene_rect_t  *bounds,
                                                          const char             *name,
                                                          ...) G_GNUC_PRINTF (4, 5);
+/* next function implemented in gskpango.c */
+GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_append_layout              (GtkSnapshot            *snapshot,
+                                                         PangoLayout            *layout,
+                                                         const GdkRGBA          *color,
+                                                         const char             *name,
+                                                         ...) G_GNUC_PRINTF (4, 5);
+
 
 GDK_AVAILABLE_IN_ALL
 gboolean        gtk_snapshot_clips_rect                 (GtkSnapshot            *snapshot,

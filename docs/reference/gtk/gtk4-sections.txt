@@ -4190,6 +4190,7 @@ gtk_snapshot_append_node
 gtk_snapshot_append_cairo
 gtk_snapshot_append_texture
 gtk_snapshot_append_color
+gtk_snapshot_append_layout
 gtk_snapshot_clips_rect
 gtk_snapshot_render_background
 gtk_snapshot_render_frame
