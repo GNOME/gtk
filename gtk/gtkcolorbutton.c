@@ -31,7 +31,6 @@
 #include "gtkcolorbutton.h"
 
 #include "gtkbutton.h"
-#include "gtkmain.h"
 #include "gtkcolorchooser.h"
 #include "gtkcolorchooserprivate.h"
 #include "gtkcolorchooserdialog.h"
@@ -39,9 +38,11 @@
 #include "gtkdnd.h"
 #include "gtkdragdest.h"
 #include "gtkdragsource.h"
+#include "gtkintl.h"
+#include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
+#include "gtksnapshot.h"
 
 
 /**
@@ -322,19 +323,17 @@ static void
 set_color_icon (GdkDragContext *context,
                 const GdkRGBA  *rgba)
 {
-  cairo_surface_t *surface;
-  cairo_t *cr;
+  GtkSnapshot *snapshot;
+  GdkPaintable *paintable;
 
-  surface = cairo_image_surface_create (CAIRO_FORMAT_RGB24, 48, 32);
-  cr = cairo_create (surface);
+  snapshot = gtk_snapshot_new (FALSE, NULL, "ColorDragIcon");
+  gtk_snapshot_append_color (snapshot,
+                             rgba,
+                             &GRAPHENE_RECT_INIT(0, 0, 48, 32),
+                             "ColorDragColor");
+  paintable = gtk_snapshot_free_to_paintable (snapshot);
 
-  gdk_cairo_set_source_rgba (cr, rgba);
-  cairo_paint (cr);
-
-  gtk_drag_set_icon_surface (context, surface);
-
-  cairo_destroy (cr);
-  cairo_surface_destroy (surface);
+  gtk_drag_set_icon_paintable (context, paintable, 0, 0);
 }
 
 static void
