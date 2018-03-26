@@ -261,14 +261,15 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_style_context_get (context, "font", &values->font, NULL);
 }
 
-cairo_surface_t *
-_gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
-                                      GtkTextBuffer *buffer,
-                                      GtkTextIter   *start,
-                                      GtkTextIter   *end)
+GdkPaintable *
+gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
+                                     GtkTextBuffer *buffer,
+                                     GtkTextIter   *start,
+                                     GtkTextIter   *end)
 {
   GtkAllocation      allocation;
-  cairo_surface_t   *surface;
+  GdkPaintable      *paintable;
+  GtkSnapshot       *snapshot;
   gint               layout_width, layout_height;
   GtkTextBuffer     *new_buffer;
   GtkTextLayout     *layout;
@@ -331,11 +332,10 @@ _gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
   layout_width = MIN (layout_width, DRAG_ICON_MAX_WIDTH);
   layout_height = MIN (layout_height, DRAG_ICON_MAX_HEIGHT);
 
-  surface = gdk_surface_create_similar_surface (gtk_widget_get_surface (widget),
-                                               CAIRO_CONTENT_COLOR_ALPHA,
-                                               layout_width, layout_height);
-
-  cr = cairo_create (surface);
+  snapshot = gtk_snapshot_new (FALSE, NULL, "RichTextDragIcon");
+  cr = gtk_snapshot_append_cairo (snapshot,
+                                  &GRAPHENE_RECT_INIT (0, 0, layout_width, layout_height),
+                                  "Text");
 
   gtk_text_layout_draw (layout, widget, cr);
 
@@ -343,7 +343,9 @@ _gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
   g_object_unref (layout);
   g_object_unref (new_buffer);
 
-  return surface;
+  paintable = gtk_snapshot_free_to_paintable (snapshot);
+
+  return paintable;
 }
 
 static gint
