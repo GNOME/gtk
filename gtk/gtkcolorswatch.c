@@ -64,7 +64,7 @@ struct _GtkColorSwatchPrivate
   GtkCssGadget *gadget;
   GtkCssGadget *overlay_gadget;
 
-  GtkWidget *popover;
+  GtkWidget *context_menu;
 };
 
 enum
@@ -347,25 +347,51 @@ emit_customize (GtkColorSwatch *swatch)
 static void
 do_popup (GtkColorSwatch *swatch)
 {
-  if (swatch->priv->popover == NULL)
-    {
-      GtkWidget *box;
-      GtkWidget *item;
+  gboolean prefer_popover_menu;
 
-      swatch->priv->popover = gtk_popover_new (GTK_WIDGET (swatch));
-      box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (swatch->priv->popover), box);
-      g_object_set (box, "margin", 10, NULL);
-      item = g_object_new (GTK_TYPE_MODEL_BUTTON,
-                           "text", _("C_ustomize"),
-                           NULL);
-      g_signal_connect_swapped (item, "clicked",
-                                G_CALLBACK (emit_customize), swatch);
-      gtk_container_add (GTK_CONTAINER (box), item);
-      gtk_widget_show_all (box);
+  g_object_get (gtk_widget_get_settings (GTK_WIDGET (swatch)),
+                "gtk-dialogs-use-header", &prefer_popover_menu,
+                NULL);
+
+  if (swatch->priv->context_menu == NULL)
+    {
+      GtkWidget *item;
+      
+      if (prefer_popover_menu)
+        {
+          GtkWidget *box;
+
+          swatch->priv->context_menu = gtk_popover_new (GTK_WIDGET (swatch));
+          box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+          gtk_container_add (GTK_CONTAINER (swatch->priv->context_menu), box);
+          g_object_set (box, "margin", 10, NULL);
+
+          item = g_object_new (GTK_TYPE_MODEL_BUTTON,
+                               "text", _("C_ustomize"),
+                               NULL);
+          g_signal_connect_swapped (item, "clicked",
+                                    G_CALLBACK (emit_customize), swatch);
+
+          gtk_container_add (GTK_CONTAINER (box), item);
+          gtk_widget_show_all (box);
+        }
+      else
+        {
+          swatch->priv->context_menu = gtk_menu_new ();
+          
+          item = gtk_menu_item_new_with_mnemonic (_ ("C_ustomize"));
+          g_signal_connect_swapped (item, "activate",
+                                    G_CALLBACK (emit_customize), swatch);
+          gtk_widget_set_visible (GTK_WIDGET (item), TRUE);
+
+          gtk_menu_shell_append (GTK_MENU_SHELL (swatch->priv->context_menu), item); 
+        }
     }
 
-  gtk_popover_popup (GTK_POPOVER (swatch->priv->popover));
+  if (prefer_popover_menu)
+      gtk_popover_popup (GTK_POPOVER (swatch->priv->context_menu));
+  else
+      gtk_menu_popup_at_pointer (GTK_MENU (swatch->priv->context_menu), NULL);
 }
 
 static gboolean
@@ -661,10 +687,10 @@ swatch_dispose (GObject *object)
 {
   GtkColorSwatch *swatch = GTK_COLOR_SWATCH (object);
 
-  if (swatch->priv->popover)
+  if (swatch->priv->context_menu)
     {
-      gtk_widget_destroy (swatch->priv->popover);
-      swatch->priv->popover = NULL;
+      gtk_widget_destroy (swatch->priv->context_menu);
+      swatch->priv->context_menu = NULL;
     }
 
   g_clear_object (&swatch->priv->long_press_gesture);
