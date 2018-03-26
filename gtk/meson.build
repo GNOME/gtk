@@ -291,6 +291,7 @@ gtk_public_sources = files([
   'gtkrenderbackground.c',
   'gtkrenderborder.c',
   'gtkrendericon.c',
+  'gtkrendernodepaintable.c',
   'gtkrevealer.c',
   'gtkroundedbox.c',
   'gtkscale.c',

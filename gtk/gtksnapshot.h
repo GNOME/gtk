@@ -58,9 +58,13 @@ GtkSnapshot *   gtk_snapshot_new                        (gboolean               
                                                          ...) G_GNUC_PRINTF (3, 4);
 GDK_AVAILABLE_IN_ALL
 GskRenderNode * gtk_snapshot_free_to_node               (GtkSnapshot            *snapshot);
+GDK_AVAILABLE_IN_ALL
+GdkPaintable *  gtk_snapshot_free_to_paintable          (GtkSnapshot            *snapshot);
 
 GDK_AVAILABLE_IN_ALL
 GskRenderNode * gtk_snapshot_to_node                    (GtkSnapshot            *snapshot);
+GDK_AVAILABLE_IN_ALL
+GdkPaintable *  gtk_snapshot_to_paintable               (GtkSnapshot            *snapshot);
 
 GDK_AVAILABLE_IN_ALL
 gboolean        gtk_snapshot_get_record_names           (GtkSnapshot            *snapshot);

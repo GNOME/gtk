@@ -25,6 +25,7 @@
 #include "gtkrenderbackgroundprivate.h"
 #include "gtkrenderborderprivate.h"
 #include "gtkrendericonprivate.h"
+#include "gtkrendernodepaintableprivate.h"
 #include "gtkstylecontextprivate.h"
 
 #include "gsk/gskrendernodeprivate.h"
@@ -217,6 +218,26 @@ gtk_snapshot_free_to_node (GtkSnapshot *snapshot)
   GskRenderNode *result;
 
   result = gtk_snapshot_to_node (snapshot);
+  g_object_unref (snapshot);
+
+  return result;
+}
+
+/**
+ * gtk_snapshot_free_to_paintable: (skip)
+ * @snapshot: (transfer full): a #GtkSnapshot
+ *
+ * Returns a paintable for the node that was
+ * constructed by @snapshot and frees @snapshot.
+ *
+ * Returns: a newly-created #GdkPaintable
+ */
+GdkPaintable *
+gtk_snapshot_free_to_paintable (GtkSnapshot *snapshot)
+{
+  GdkPaintable *result;
+
+  result = gtk_snapshot_to_paintable (snapshot);
   g_object_unref (snapshot);
 
   return result;
@@ -1266,6 +1287,31 @@ gtk_snapshot_to_node (GtkSnapshot *snapshot)
   snapshot->nodes = NULL;
 
   return result;
+}
+
+/**
+ * gtk_snapshot_to_paintable:
+ * @snapshot: a #GtkSnapshot
+ *
+ * Returns a paintable encapsulating the render node
+ * that was constructed by @snapshot. After calling
+ * this function, it is no longer possible to add more
+ * nodes to @snapshot. The only function that should be
+ * called after this is gtk_snapshot_unref().
+ *
+ * Returns: a new #GdkPaintable
+ */
+GdkPaintable *
+gtk_snapshot_to_paintable (GtkSnapshot *snapshot)
+{
+  GskRenderNode *node;
+  GdkPaintable *paintable;
+
+  node = gtk_snapshot_to_node (snapshot);
+  paintable = gtk_render_node_paintable_new (node);
+  gsk_render_node_unref (node);
+
+  return paintable;
 }
 
 /**
