@@ -1877,7 +1877,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
 
 static gboolean
 gsk_gl_renderer_realize (GskRenderer  *renderer,
-                         GdkSurface    *window,
+                         GdkSurface    *surface,
                          GError      **error)
 {
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
@@ -1887,7 +1887,7 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
    */
   if (self->gl_context == NULL)
     {
-      self->gl_context = gdk_surface_create_gl_context (window, error);
+      self->gl_context = gdk_surface_create_gl_context (surface, error);
       if (self->gl_context == NULL)
         return FALSE;
     }
@@ -1947,19 +1947,19 @@ gsk_gl_renderer_begin_draw_frame (GskRenderer          *renderer,
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
   cairo_region_t *damage;
   GdkDrawingContext *result;
-  GdkRectangle whole_window;
-  GdkSurface *window;
+  GdkRectangle whole_surface;
+  GdkSurface *surface;
 
-  window = gsk_renderer_get_surface (renderer);
-  whole_window = (GdkRectangle) {
+  surface = gsk_renderer_get_surface (renderer);
+  whole_surface = (GdkRectangle) {
                      0, 0,
-                     gdk_surface_get_width (window) * self->scale_factor,
-                     gdk_surface_get_height (window) * self->scale_factor
+                     gdk_surface_get_width (surface) * self->scale_factor,
+                     gdk_surface_get_height (surface) * self->scale_factor
                  };
   damage = gdk_gl_context_get_damage (self->gl_context);
   cairo_region_union (damage, update_area);
 
-  if (cairo_region_contains_rectangle (damage, &whole_window) == CAIRO_REGION_OVERLAP_IN)
+  if (cairo_region_contains_rectangle (damage, &whole_surface) == CAIRO_REGION_OVERLAP_IN)
     {
       self->render_mode = RENDER_FULL;
     }
@@ -1970,13 +1970,13 @@ gsk_gl_renderer_begin_draw_frame (GskRenderer          *renderer,
       cairo_region_get_extents (damage, &extents);
       cairo_region_union_rectangle (damage, &extents);
 
-      if (gdk_rectangle_equal (&extents, &whole_window))
+      if (gdk_rectangle_equal (&extents, &whole_surface))
         self->render_mode = RENDER_FULL;
       else
         self->render_mode = RENDER_SCISSOR;
     }
 
-  result = gdk_surface_begin_draw_frame (window,
+  result = gdk_surface_begin_draw_frame (surface,
                                         GDK_DRAW_CONTEXT (self->gl_context),
                                         damage);
 
@@ -2039,10 +2039,10 @@ gsk_gl_renderer_setup_render_mode (GskGLRenderer *self)
     case RENDER_SCISSOR:
       {
         GdkDrawingContext *context = gsk_renderer_get_drawing_context (GSK_RENDERER (self));
-        GdkSurface *window = gsk_renderer_get_surface (GSK_RENDERER (self));
+        GdkSurface *surface = gsk_renderer_get_surface (GSK_RENDERER (self));
         cairo_region_t *clip = gdk_drawing_context_get_clip (context);
         cairo_rectangle_int_t extents;
-        int window_height;
+        int surface_height;
 
         /* Fall back to RENDER_FULL */
         if (clip == NULL)
@@ -2053,14 +2053,14 @@ gsk_gl_renderer_setup_render_mode (GskGLRenderer *self)
 
         g_assert (cairo_region_num_rectangles (clip) == 1);
 
-        window_height = gdk_surface_get_height (window) * self->scale_factor;
+        surface_height = gdk_surface_get_height (surface) * self->scale_factor;
 
         /*cairo_region_get_extents (clip, &extents);*/
         cairo_region_get_rectangle (clip, 0, &extents);
 
         glEnable (GL_SCISSOR_TEST);
         glScissor (extents.x * self->scale_factor,
-                   window_height - (extents.height * self->scale_factor) - (extents.y * self->scale_factor),
+                   surface_height - (extents.height * self->scale_factor) - (extents.y * self->scale_factor),
                    extents.width * self->scale_factor,
                    extents.height * self->scale_factor);
 
@@ -2602,19 +2602,19 @@ gsk_gl_renderer_render (GskRenderer   *renderer,
                         GskRenderNode *root)
 {
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
-  GdkSurface *window = gsk_renderer_get_surface (renderer);
+  GdkSurface *surface = gsk_renderer_get_surface (renderer);
   graphene_rect_t viewport;
 
   if (self->gl_context == NULL)
     return;
 
-  self->scale_factor = gdk_surface_get_scale_factor (window);
+  self->scale_factor = gdk_surface_get_scale_factor (surface);
   gdk_gl_context_make_current (self->gl_context);
 
   viewport.origin.x = 0;
   viewport.origin.y = 0;
-  viewport.size.width = gdk_surface_get_width (window) * self->scale_factor;
-  viewport.size.height = gdk_surface_get_height (window) * self->scale_factor;
+  viewport.size.width = gdk_surface_get_width (surface) * self->scale_factor;
+  viewport.size.height = gdk_surface_get_height (surface) * self->scale_factor;
 
   gsk_gl_renderer_do_render (renderer, root, &viewport, 0, self->scale_factor);
 
