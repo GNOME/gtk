@@ -11,25 +11,29 @@ drag_begin (GtkWidget      *widget,
 {
   GtkWidget *row;
   GtkAllocation alloc;
-  cairo_surface_t *surface;
+  GtkSnapshot *snapshot;
+  GdkPaintable *paintable;
   cairo_t *cr;
   int x, y;
 
   row = gtk_widget_get_ancestor (widget, GTK_TYPE_LIST_BOX_ROW);
   gtk_widget_get_allocation (row, &alloc);
-  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, alloc.width, alloc.height);
-  cr = cairo_create (surface);
+  snapshot = gtk_snapshot_new (FALSE, NULL, "DragIcon");
+  cr = gtk_snapshot_append_cairo (snapshot,
+                                  &GRAPHENE_RECT_INIT(0, 0, alloc.width, alloc.height),
+                                  "DragText");
 
   gtk_style_context_add_class (gtk_widget_get_style_context (row), "during-dnd");
   gtk_widget_draw (row, cr);
   gtk_style_context_remove_class (gtk_widget_get_style_context (row), "during-dnd");
 
-  gtk_widget_translate_coordinates (widget, row, 0, 0, &x, &y);
-  cairo_surface_set_device_offset (surface, -x, -y);
-  gtk_drag_set_icon_surface (context, surface);
-
   cairo_destroy (cr);
-  cairo_surface_destroy (surface);
+  paintable = gtk_snapshot_free_to_paintable (snapshot);
+
+  gtk_widget_translate_coordinates (widget, row, 0, 0, &x, &y);
+  gtk_drag_set_icon_paintable (context, paintable, -x, -y);
+
+  g_object_unref (paintable);
 }
 
 
