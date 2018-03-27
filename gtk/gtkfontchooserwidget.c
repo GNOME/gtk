@@ -305,7 +305,7 @@ gtk_font_chooser_widget_set_property (GObject         *object,
       gtk_font_chooser_widget_set_show_preview_entry (fontchooser, g_value_get_boolean (value));
       break;
     case GTK_FONT_CHOOSER_PROP_LEVEL:
-      gtk_font_chooser_widget_set_level (fontchooser, g_value_get_enum (value));
+      gtk_font_chooser_widget_set_level (fontchooser, g_value_get_flags (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -339,7 +339,7 @@ gtk_font_chooser_widget_get_property (GObject         *object,
       g_value_set_boolean (value, gtk_font_chooser_widget_get_show_preview_entry (fontchooser));
       break;
     case GTK_FONT_CHOOSER_PROP_LEVEL:
-      g_value_set_enum (value, gtk_font_chooser_widget_get_level (fontchooser));
+      g_value_set_flags (value, gtk_font_chooser_widget_get_level (fontchooser));
       break;
     case GTK_FONT_CHOOSER_PROP_FONT_FEATURES:
       g_value_set_string (value, fontchooser->priv->font_features);
@@ -863,6 +863,10 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
   priv->preview_text = g_strdup (pango_language_get_sample_string (NULL));
   priv->show_preview_entry = TRUE;
   priv->font_desc = pango_font_description_new ();
+  priv->level = GTK_FONT_CHOOSER_LEVEL_FAMILY |
+                GTK_FONT_CHOOSER_LEVEL_STYLE |
+                GTK_FONT_CHOOSER_LEVEL_SIZE |
+                GTK_FONT_CHOOSER_LEVEL_VARIATION;
 
   /* Set default preview text */
   gtk_entry_set_text (GTK_ENTRY (priv->preview), priv->preview_text);
@@ -981,10 +985,10 @@ gtk_font_chooser_widget_load_fonts (GtkFontChooserWidget *fontchooser,
 
           face_name = pango_font_face_get_face_name (faces[j]);
 
-          if (priv->level == GTK_FONT_CHOOSER_LEVEL_FAMILY)
-            title = g_strdup (fam_name);
-          else
+          if ((priv->level & GTK_FONT_CHOOSER_LEVEL_STYLE) != 0)
             title = g_strconcat (fam_name, " ", face_name, NULL);
+          else
+            title = g_strdup (fam_name);
 
           desc = gtk_delayed_font_description_new (faces[j]);
 
@@ -998,7 +1002,7 @@ gtk_font_chooser_widget_load_fonts (GtkFontChooserWidget *fontchooser,
           g_free (title);
           gtk_delayed_font_description_unref (desc);
 
-          if (priv->level == GTK_FONT_CHOOSER_LEVEL_FAMILY)
+          if ((priv->level & GTK_FONT_CHOOSER_LEVEL_STYLE) == 0)
             break;
         }
 
@@ -1415,10 +1419,10 @@ gtk_font_chooser_widget_update_font_name (GtkFontChooserWidget *fontchooser,
   g_object_unref (face);
   gtk_delayed_font_description_unref (desc);
 
-  if (priv->level == GTK_FONT_CHOOSER_LEVEL_FAMILY)
-    title = g_strdup (fam_name);
-  else
+  if ((priv->level & GTK_FONT_CHOOSER_LEVEL_STYLE) != 0)
     title = g_strconcat (fam_name, " ", face_name, NULL);
+  else
+    title = g_strdup (fam_name);
 
   attrs = gtk_font_chooser_widget_get_preview_attributes (fontchooser, font_desc);
   gtk_label_set_attributes (GTK_LABEL (priv->font_name_label), attrs);
@@ -1638,6 +1642,9 @@ gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchoose
 
   g_hash_table_foreach (priv->axes, axis_remove, NULL);
   g_hash_table_remove_all (priv->axes);
+
+  if ((priv->level & GTK_FONT_CHOOSER_LEVEL_VARIATION) == 0)
+    return FALSE;
 
   pango_font = pango_context_load_font (gtk_widget_get_pango_context (GTK_WIDGET (fontchooser)),
                                         priv->font_desc);
@@ -2042,6 +2049,9 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
       gtk_widget_hide (gtk_widget_get_parent (item->feat));
     }
 
+  if ((priv->level & GTK_FONT_CHOOSER_LEVEL_FEATURES) == 0)
+    return FALSE;
+
   pango_font = pango_context_load_font (gtk_widget_get_pango_context (GTK_WIDGET (fontchooser)),
                                         priv->font_desc);
   ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font)),
@@ -2384,7 +2394,7 @@ gtk_font_chooser_widget_set_level (GtkFontChooserWidget *fontchooser,
 
   priv->level = level;
 
-  if (level == GTK_FONT_CHOOSER_LEVEL_FONT)
+  if ((level & GTK_FONT_CHOOSER_LEVEL_SIZE) != 0)
     {
       gtk_widget_show (priv->size_label);
       gtk_widget_show (priv->size_slider);

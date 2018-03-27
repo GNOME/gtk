@@ -606,6 +606,10 @@ gtk_font_button_init (GtkFontButton *font_button)
   font_button->priv->font_face = NULL;
   font_button->priv->font_size = -1;
   font_button->priv->title = g_strdup (_("Pick a Font"));
+  font_button->priv->level = GTK_FONT_CHOOSER_LEVEL_FAMILY |
+                             GTK_FONT_CHOOSER_LEVEL_STYLE |
+                             GTK_FONT_CHOOSER_LEVEL_SIZE |
+                             GTK_FONT_CHOOSER_LEVEL_VARIATION;
 
   gtk_font_button_take_font_desc (font_button, NULL);
 
@@ -659,7 +663,7 @@ gtk_font_button_set_property (GObject      *object,
       gtk_font_button_take_font_desc (font_button, g_value_dup_boxed (value));
       break;
     case GTK_FONT_CHOOSER_PROP_LEVEL:
-      gtk_font_button_set_level (font_button, g_value_get_enum (value));
+      gtk_font_button_set_level (font_button, g_value_get_flags (value));
       break;
     case GTK_FONT_CHOOSER_PROP_FONT:
       gtk_font_button_set_font_name (font_button, g_value_get_string (value));
@@ -706,7 +710,7 @@ gtk_font_button_get_property (GObject    *object,
       g_value_set_string (value, priv->language);
       break;
     case GTK_FONT_CHOOSER_PROP_LEVEL:
-      g_value_set_enum (value, priv->level);
+      g_value_set_flags (value, priv->level);
       break;
     case GTK_FONT_CHOOSER_PROP_FONT:
       g_value_set_string (value, gtk_font_button_get_font_name (font_button));
@@ -1284,15 +1288,15 @@ gtk_font_button_update_font_info (GtkFontButton *font_button)
   else
     face_name = "";
 
-  if (priv->level == GTK_FONT_CHOOSER_LEVEL_FAMILY)
-    family_style = g_strdup (fam_name);
-  else
+  if ((priv->level & GTK_FONT_CHOOSER_LEVEL_STYLE) != 0)
     family_style = g_strconcat (fam_name, " ", face_name, NULL);
+  else
+    family_style = g_strdup (fam_name);
 
   gtk_label_set_text (GTK_LABEL (font_button->priv->font_label), family_style);
   g_free (family_style);
 
-  if (priv->level == GTK_FONT_CHOOSER_LEVEL_FONT)
+  if ((priv->level & GTK_FONT_CHOOSER_LEVEL_SIZE) != 0)
     {
       /* mirror Pango, which doesn't translate this either */
       gchar *size = g_strdup_printf ("%2.4g%s",
