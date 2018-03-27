@@ -474,7 +474,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
    *    adjustment = gtk_spin_button_get_adjustment (spin);
    *    value = (int)gtk_adjustment_get_value (adjustment);
    *    text = g_strdup_printf ("%02d", value);
-   *    gtk_entry_set_text (GTK_ENTRY (spin), text);
+   *    gtk_spin_button_set_text (spin, text):
    *    g_free (text);
    *
    *    return TRUE;
