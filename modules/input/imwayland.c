@@ -223,11 +223,8 @@ registry_handle_global_remove (void               *data,
 {
   GtkIMContextWaylandGlobal *global = data;
 
-  gtk_text_input_destroy (global->text_input);
-  global->text_input = NULL;
-
-  gtk_text_input_manager_destroy (global->text_input_manager);
-  global->text_input_manager = NULL;
+  g_clear_pointer(&global->text_input, gtk_text_input_destroy);
+  g_clear_pointer(&global->text_input_manager, gtk_text_input_manager_destroy);
 }
 
 static const struct wl_registry_listener registry_listener = {
