@@ -106,7 +106,7 @@
  *     ├── entry
  *     │    ├── undershoot.left
  *     │    ╰── undershoot.right
- *     ╰── button.up
+ *     ╰── button.down
  * ]|
  *
  * GtkSpinButtons main CSS node has the name spinbutton. It creates subnodes
