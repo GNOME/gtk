@@ -14059,15 +14059,16 @@ gtk_widget_render (GtkWidget            *widget,
   if (renderer == NULL)
     return;
 
-  context = gsk_renderer_begin_draw_frame (renderer, region);
-
   snapshot = gtk_snapshot_new (should_record_names (widget, renderer),
                                NULL,
                                "Render<%s>", G_OBJECT_TYPE_NAME (widget));
   gtk_widget_snapshot (widget, snapshot);
   root = gtk_snapshot_free_to_node (snapshot);
+
   if (root != NULL)
     {
+      context = gsk_renderer_begin_draw_frame (renderer, region);
+
       gtk_inspector_record_render (widget,
                                    renderer,
                                    surface,
@@ -14077,10 +14078,9 @@ gtk_widget_render (GtkWidget            *widget,
 
       gsk_renderer_render (renderer, root, context);
       gsk_render_node_unref (root);
+
+      gsk_renderer_end_draw_frame (renderer, context);
     }
-
-
-  gsk_renderer_end_draw_frame (renderer, context);
 }
 
 /**
