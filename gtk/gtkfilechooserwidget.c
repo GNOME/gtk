@@ -2205,12 +2205,14 @@ add_actions (GtkFileChooserWidget *impl)
 static void
 add_menu_item (GMenu       *menu,
                const gchar *label,
-               const gchar *action)
+               const gchar *action,
+               gboolean     hide_when_disabled)
 {
   GMenuItem *menu_item;
 
   menu_item = g_menu_item_new (label, action);
-  g_menu_item_set_attribute (menu_item, "hidden-when", "s", "action-disabled");
+  if (hide_when_disabled)
+    g_menu_item_set_attribute (menu_item, "hidden-when", "s", "action-disabled");
   g_menu_append_item (menu, menu_item);
 }
 
@@ -2226,20 +2228,20 @@ file_list_build_context_menu (GtkFileChooserWidget *impl)
 
   file_menu_items = g_menu_new ();
 
-  add_menu_item (file_menu_items, _("_Visit File"), "item.visit");
-  add_menu_item (file_menu_items, _("_Open With File Manager"), "item.open");
-  add_menu_item (file_menu_items, _("_Copy Location"), "item.copy-location");
-  add_menu_item (file_menu_items, _("_Add to Bookmarks"), "item.add-shortcut");
-  add_menu_item (file_menu_items, _("_Rename"), "item.rename");
-  add_menu_item (file_menu_items, _("_Delete"), "item.delete");
-  add_menu_item (file_menu_items, _("_Move to Trash"), "item.trash");
+  add_menu_item (file_menu_items, _("_Visit File"), "item.visit", TRUE);
+  add_menu_item (file_menu_items, _("_Open With File Manager"), "item.open", FALSE);
+  add_menu_item (file_menu_items, _("_Copy Location"), "item.copy-location", FALSE);
+  add_menu_item (file_menu_items, _("_Add to Bookmarks"), "item.add-shortcut", FALSE);
+  add_menu_item (file_menu_items, _("_Rename"), "item.rename", TRUE);
+  add_menu_item (file_menu_items, _("_Delete"), "item.delete", TRUE);
+  add_menu_item (file_menu_items, _("_Move to Trash"), "item.trash", TRUE);
 
   settings_menu_items = g_menu_new ();
 
-  add_menu_item (settings_menu_items, _("Show _Hidden Files"), "item.toggle-show-hidden");
-  add_menu_item (settings_menu_items, _("Show _Size Column"), "item.toggle-show-size");
-  add_menu_item (settings_menu_items, _("Show _Time"), "item.toggle-show-time");
-  add_menu_item (settings_menu_items, _("Sort _Folders before Files"), "item.toggle-sort-dirs-first");
+  add_menu_item (settings_menu_items, _("Show _Hidden Files"), "item.toggle-show-hidden", FALSE);
+  add_menu_item (settings_menu_items, _("Show _Size Column"), "item.toggle-show-size", FALSE);
+  add_menu_item (settings_menu_items, _("Show _Time"), "item.toggle-show-time", FALSE);
+  add_menu_item (settings_menu_items, _("Sort _Folders before Files"), "item.toggle-sort-dirs-first", FALSE);
 
   context_menu = g_menu_new ();
   g_menu_append_section (context_menu, NULL, G_MENU_MODEL (file_menu_items));
