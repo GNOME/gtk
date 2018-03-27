@@ -115,17 +115,25 @@ ops_set_modelview (RenderOpBuilder         *builder,
 {
   RenderOp op;
   graphene_matrix_t prev_mv;
-  RenderOp *last_op;
 
   if (builder->current_program &&
       memcmp (&builder->program_state[builder->current_program->index].modelview, modelview,
               sizeof (graphene_matrix_t)) == 0)
     return *modelview;
 
-  last_op = &g_array_index (builder->render_ops, RenderOp, builder->render_ops->len - 1);
-  if (last_op->op == OP_CHANGE_MODELVIEW)
+  if (builder->render_ops->len > 0)
     {
-      last_op->modelview = *modelview;
+      RenderOp *last_op = &g_array_index (builder->render_ops, RenderOp, builder->render_ops->len - 1);
+      if (last_op->op == OP_CHANGE_MODELVIEW)
+        {
+          last_op->modelview = *modelview;
+        }
+      else
+        {
+          op.op = OP_CHANGE_MODELVIEW;
+          op.modelview = *modelview;
+          g_array_append_val (builder->render_ops, op);
+        }
     }
   else
     {
@@ -149,12 +157,20 @@ ops_set_projection (RenderOpBuilder         *builder,
 {
   RenderOp op;
   graphene_matrix_t prev_mv;
-  RenderOp *last_op;
 
-  last_op = &g_array_index (builder->render_ops, RenderOp, builder->render_ops->len - 1);
-  if (last_op->op == OP_CHANGE_PROJECTION)
+  if (builder->render_ops->len > 0)
     {
-      last_op->projection = *projection;
+      RenderOp *last_op = &g_array_index (builder->render_ops, RenderOp, builder->render_ops->len - 1);
+      if (last_op->op == OP_CHANGE_PROJECTION)
+        {
+          last_op->projection = *projection;
+        }
+      else
+        {
+          op.op = OP_CHANGE_PROJECTION;
+          op.projection = *projection;
+          g_array_append_val (builder->render_ops, op);
+        }
     }
   else
     {
