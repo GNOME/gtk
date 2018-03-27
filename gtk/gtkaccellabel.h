@@ -46,7 +46,6 @@ G_BEGIN_DECLS
 
 typedef struct _GtkAccelLabel	     GtkAccelLabel;
 typedef struct _GtkAccelLabelClass   GtkAccelLabelClass;
-typedef struct _GtkAccelLabelPrivate GtkAccelLabelPrivate;
 
 /**
  * GtkAccelLabel:
@@ -57,7 +56,6 @@ typedef struct _GtkAccelLabelPrivate GtkAccelLabelPrivate;
 struct _GtkAccelLabel
 {
   GtkWidget parent_instance;
-  GtkAccelLabelPrivate *priv;
 };
 
 struct _GtkAccelLabelClass
