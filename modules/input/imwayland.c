@@ -533,6 +533,8 @@ gtk_im_context_wayland_focus_out (GtkIMContext *context)
 {
   if (global->current != context)
     return;
+  if (!global->text_input)
+    return;
 
   gtk_text_input_disable (global->text_input);
   global->current = NULL;
