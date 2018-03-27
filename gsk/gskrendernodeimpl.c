@@ -22,10 +22,21 @@
 
 #include "gskcairoblurprivate.h"
 #include "gskdebugprivate.h"
+#include "gskdiffprivate.h"
 #include "gskrendererprivate.h"
 #include "gskroundedrectprivate.h"
 
 #include "gdk/gdktextureprivate.h"
+
+static void
+rectangle_init_from_graphene (cairo_rectangle_int_t *cairo,
+                              const graphene_rect_t *graphene)
+{
+  cairo->x = floorf (graphene->origin.x);
+  cairo->y = floorf (graphene->origin.y);
+  cairo->width = ceilf (graphene->origin.x + graphene->size.width) - cairo->x;
+  cairo->height = ceilf (graphene->origin.y + graphene->size.height) - cairo->y;
+}
 
 static gboolean
 check_variant_type (GVariant *variant,
@@ -44,10 +55,10 @@ check_variant_type (GVariant *variant,
 }
 
 static gboolean
-gsk_render_node_can_diff_impossible (GskRenderNode *node1,
-                                     GskRenderNode *node2)
+gsk_render_node_can_diff_true (GskRenderNode *node1,
+                               GskRenderNode *node2)
 {
-  return FALSE;
+  return TRUE;
 }
 
 /*** GSK_COLOR_NODE ***/
@@ -78,6 +89,21 @@ gsk_color_node_draw (GskRenderNode *node,
                    node->bounds.origin.x, node->bounds.origin.y,
                    node->bounds.size.width, node->bounds.size.height);
   cairo_fill (cr);
+}
+
+static void
+gsk_color_node_diff (GskRenderNode  *node1,
+                     GskRenderNode  *node2,
+                     cairo_region_t *region)
+{
+  GskColorNode *self1 = (GskColorNode *) node1;
+  GskColorNode *self2 = (GskColorNode *) node2;
+
+  if (graphene_rect_equal (&node1->bounds, &node2->bounds) &&
+      gdk_rgba_equal (&self1->color, &self2->color))
+    return;
+
+  gsk_render_node_diff_impossible (node1, node2, region);
 }
 
 #define GSK_COLOR_NODE_VARIANT_TYPE "(dddddddd)"
@@ -117,8 +143,8 @@ static const GskRenderNodeClass GSK_COLOR_NODE_CLASS = {
   "GskColorNode",
   gsk_color_node_finalize,
   gsk_color_node_draw,
-  gsk_render_node_can_diff_impossible,
-  gsk_render_node_diff_impossible,
+  gsk_render_node_can_diff_true,
+  gsk_color_node_diff,
   gsk_color_node_serialize,
   gsk_color_node_deserialize,
 };
@@ -211,6 +237,39 @@ gsk_linear_gradient_node_draw (GskRenderNode *node,
   cairo_fill (cr);
 }
 
+static void
+gsk_linear_gradient_node_diff (GskRenderNode  *node1,
+                               GskRenderNode  *node2,
+                               cairo_region_t *region)
+{
+  GskLinearGradientNode *self1 = (GskLinearGradientNode *) node1;
+  GskLinearGradientNode *self2 = (GskLinearGradientNode *) node2;
+
+  if (graphene_point_equal (&self1->start, &self2->start) &&
+      graphene_point_equal (&self1->end, &self2->end) &&
+      self1->n_stops == self2->n_stops)
+    {
+      gsize i;
+
+      for (i = 0; i < self1->n_stops; i++)
+        {
+          GskColorStop *stop1 = &self1->stops[i];
+          GskColorStop *stop2 = &self2->stops[i];
+
+          if (stop1->offset == stop2->offset &&
+              gdk_rgba_equal (&stop1->color, &stop2->color))
+            continue;
+
+          gsk_render_node_diff_impossible (node1, node2, region);
+          return;
+        }
+
+      return;
+    }
+  
+  gsk_render_node_diff_impossible (node1, node2, region);
+}
+
 #define GSK_LINEAR_GRADIENT_NODE_VARIANT_TYPE "(dddddddda(ddddd))"
 
 static GVariant *
@@ -295,8 +354,8 @@ static const GskRenderNodeClass GSK_LINEAR_GRADIENT_NODE_CLASS = {
   "GskLinearGradientNode",
   gsk_linear_gradient_node_finalize,
   gsk_linear_gradient_node_draw,
-  gsk_render_node_can_diff_impossible,
-  gsk_render_node_diff_impossible,
+  gsk_render_node_can_diff_true,
+  gsk_linear_gradient_node_diff,
   gsk_linear_gradient_node_serialize,
   gsk_linear_gradient_node_deserialize,
 };
@@ -307,8 +366,8 @@ static const GskRenderNodeClass GSK_REPEATING_LINEAR_GRADIENT_NODE_CLASS = {
   "GskRepeatingLinearGradientNode",
   gsk_linear_gradient_node_finalize,
   gsk_linear_gradient_node_draw,
-  gsk_render_node_can_diff_impossible,
-  gsk_render_node_diff_impossible,
+  gsk_render_node_can_diff_true,
+  gsk_linear_gradient_node_diff,
   gsk_linear_gradient_node_serialize,
   gsk_repeating_linear_gradient_node_deserialize,
 };
@@ -533,6 +592,28 @@ gsk_border_node_draw (GskRenderNode *node,
   cairo_restore (cr);
 }
 
+static void
+gsk_border_node_diff (GskRenderNode  *node1,
+                      GskRenderNode  *node2,
+                      cairo_region_t *region)
+{
+  GskBorderNode *self1 = (GskBorderNode *) node1;
+  GskBorderNode *self2 = (GskBorderNode *) node2;
+
+  if (gsk_rounded_rect_equal (&self1->outline, &self2->outline) &&
+      gdk_rgba_equal (&self1->border_color[0], &self2->border_color[0]) &&
+      gdk_rgba_equal (&self1->border_color[1], &self2->border_color[1]) &&
+      gdk_rgba_equal (&self1->border_color[2], &self2->border_color[2]) &&
+      gdk_rgba_equal (&self1->border_color[3], &self2->border_color[3]) &&
+      self1->border_width[0] == self2->border_width[0] &&
+      self1->border_width[1] == self2->border_width[1] &&
+      self1->border_width[2] == self2->border_width[2] &&
+      self1->border_width[3] == self2->border_width[3])
+    return;
+
+  gsk_render_node_diff_impossible (node1, node2, region);
+}
+
 #define GSK_BORDER_NODE_VARIANT_TYPE "(dddddddddddddddddddddddddddddddd)"
 
 static GVariant *
@@ -598,8 +679,8 @@ static const GskRenderNodeClass GSK_BORDER_NODE_CLASS = {
   "GskBorderNode",
   gsk_border_node_finalize,
   gsk_border_node_draw,
-  gsk_render_node_can_diff_impossible,
-  gsk_render_node_diff_impossible,
+  gsk_render_node_can_diff_true,
+  gsk_border_node_diff,
   gsk_border_node_serialize,
   gsk_border_node_deserialize
 };
@@ -706,6 +787,21 @@ gsk_texture_node_draw (GskRenderNode *node,
   cairo_surface_destroy (surface);
 }
 
+static void
+gsk_texture_node_diff (GskRenderNode  *node1,
+                       GskRenderNode  *node2,
+                       cairo_region_t *region)
+{
+  GskTextureNode *self1 = (GskTextureNode *) node1;
+  GskTextureNode *self2 = (GskTextureNode *) node2;
+
+  if (graphene_rect_equal (&node1->bounds, &node2->bounds) &&
+      self1->texture == self2->texture)
+    return;
+
+  gsk_render_node_diff_impossible (node1, node2, region);
+}
+
 #define GSK_TEXTURE_NODE_VARIANT_TYPE "(dddduuau)"
 
 static GVariant *
@@ -787,8 +883,8 @@ static const GskRenderNodeClass GSK_TEXTURE_NODE_CLASS = {
   "GskTextureNode",
   gsk_texture_node_finalize,
   gsk_texture_node_draw,
-  gsk_render_node_can_diff_impossible,
-  gsk_render_node_diff_impossible,
+  gsk_render_node_can_diff_true,
+  gsk_texture_node_diff,
   gsk_texture_node_serialize,
   gsk_texture_node_deserialize
 };
@@ -1240,6 +1336,25 @@ gsk_inset_shadow_node_draw (GskRenderNode *node,
   cairo_restore (cr);
 }
 
+static void
+gsk_inset_shadow_node_diff (GskRenderNode  *node1,
+                            GskRenderNode  *node2,
+                            cairo_region_t *region)
+{
+  GskInsetShadowNode *self1 = (GskInsetShadowNode *) node1;
+  GskInsetShadowNode *self2 = (GskInsetShadowNode *) node2;
+
+  if (gsk_rounded_rect_equal (&self1->outline, &self2->outline) &&
+      gdk_rgba_equal (&self1->color, &self2->color) &&
+      self1->dx == self2->dx &&
+      self1->dy == self2->dy &&
+      self1->spread == self2->spread &&
+      self1->blur_radius == self2->blur_radius)
+    return;
+
+  gsk_render_node_diff_impossible (node1, node2, region);
+}
+
 #define GSK_INSET_SHADOW_NODE_VARIANT_TYPE "(dddddddddddddddddddd)"
 
 static GVariant *
@@ -1295,8 +1410,8 @@ static const GskRenderNodeClass GSK_INSET_SHADOW_NODE_CLASS = {
   "GskInsetShadowNode",
   gsk_inset_shadow_node_finalize,
   gsk_inset_shadow_node_draw,
-  gsk_render_node_can_diff_impossible,
-  gsk_render_node_diff_impossible,
+  gsk_render_node_can_diff_true,
+  gsk_inset_shadow_node_diff,
   gsk_inset_shadow_node_serialize,
   gsk_inset_shadow_node_deserialize
 };
@@ -1543,6 +1658,25 @@ gsk_outset_shadow_node_draw (GskRenderNode *node,
   cairo_restore (cr);
 }
 
+static void
+gsk_outset_shadow_node_diff (GskRenderNode  *node1,
+                             GskRenderNode  *node2,
+                             cairo_region_t *region)
+{
+  GskOutsetShadowNode *self1 = (GskOutsetShadowNode *) node1;
+  GskOutsetShadowNode *self2 = (GskOutsetShadowNode *) node2;
+
+  if (gsk_rounded_rect_equal (&self1->outline, &self2->outline) &&
+      gdk_rgba_equal (&self1->color, &self2->color) &&
+      self1->dx == self2->dx &&
+      self1->dy == self2->dy &&
+      self1->spread == self2->spread &&
+      self1->blur_radius == self2->blur_radius)
+    return;
+
+  gsk_render_node_diff_impossible (node1, node2, region);
+}
+
 #define GSK_OUTSET_SHADOW_NODE_VARIANT_TYPE "(dddddddddddddddddddd)"
 
 static GVariant *
@@ -1598,8 +1732,8 @@ static const GskRenderNodeClass GSK_OUTSET_SHADOW_NODE_CLASS = {
   "GskOutsetShadowNode",
   gsk_outset_shadow_node_finalize,
   gsk_outset_shadow_node_draw,
-  gsk_render_node_can_diff_impossible,
-  gsk_render_node_diff_impossible,
+  gsk_render_node_can_diff_true,
+  gsk_outset_shadow_node_diff,
   gsk_outset_shadow_node_serialize,
   gsk_outset_shadow_node_deserialize
 };
@@ -1867,7 +2001,7 @@ static const GskRenderNodeClass GSK_CAIRO_NODE_CLASS = {
   "GskCairoNode",
   gsk_cairo_node_finalize,
   gsk_cairo_node_draw,
-  gsk_render_node_can_diff_impossible,
+  gsk_render_node_can_diff_true,
   gsk_render_node_diff_impossible,
   gsk_cairo_node_serialize,
   gsk_cairo_node_deserialize
@@ -2012,6 +2146,60 @@ gsk_container_node_draw (GskRenderNode *node,
     }
 }
 
+static gboolean
+gsk_container_node_can_diff (GskRenderNode *node1,
+                             GskRenderNode *node2)
+{
+  return TRUE;
+}
+
+static void
+gsk_render_node_add_to_region (GskRenderNode  *node,
+                               cairo_region_t *region)
+{
+  cairo_rectangle_int_t rect;
+
+  rectangle_init_from_graphene (&rect, &node->bounds);
+  cairo_region_union_rectangle (region, &rect);
+}
+
+static int
+gsk_container_node_compare_func (gconstpointer elem1, gconstpointer elem2, gpointer data)
+{
+  return gsk_render_node_can_diff ((GskRenderNode *) elem1, (GskRenderNode *) elem2) ? 0 : 1;
+}
+
+static void
+gsk_container_node_keep_func (gconstpointer elem1, gconstpointer elem2, gpointer data)
+{
+  gsk_render_node_diff ((GskRenderNode *) elem1, (GskRenderNode *) elem2, data);
+}
+
+static void
+gsk_container_node_change_func (gconstpointer elem, gsize idx, gpointer data)
+{
+  gsk_render_node_add_to_region ((GskRenderNode *) elem, data);
+}
+
+static void
+gsk_container_node_diff (GskRenderNode  *node1,
+                         GskRenderNode  *node2,
+                         cairo_region_t *region)
+{
+  GskContainerNode *self1 = (GskContainerNode *) node1;
+  GskContainerNode *self2 = (GskContainerNode *) node2;
+
+  gsk_diff ((gconstpointer *) self1->children,
+            self1->n_children,
+            (gconstpointer *) self2->children,
+            self2->n_children,
+            gsk_container_node_compare_func,
+            gsk_container_node_keep_func,
+            gsk_container_node_change_func,
+            gsk_container_node_change_func,
+            region);
+}
+
 static void
 gsk_container_node_get_bounds (GskContainerNode *container,
                                graphene_rect_t *bounds)
@@ -2098,8 +2286,8 @@ static const GskRenderNodeClass GSK_CONTAINER_NODE_CLASS = {
   "GskContainerNode",
   gsk_container_node_finalize,
   gsk_container_node_draw,
-  gsk_render_node_can_diff_impossible,
-  gsk_render_node_diff_impossible,
+  gsk_container_node_can_diff,
+  gsk_container_node_diff,
   gsk_container_node_serialize,
   gsk_container_node_deserialize
 };
@@ -2283,7 +2471,7 @@ static const GskRenderNodeClass GSK_TRANSFORM_NODE_CLASS = {
   "GskTransformNode",
   gsk_transform_node_finalize,
   gsk_transform_node_draw,
-  gsk_render_node_can_diff_impossible,
+  gsk_render_node_can_diff_true,
   gsk_render_node_diff_impossible,
   gsk_transform_node_serialize,
   gsk_transform_node_deserialize
@@ -2378,6 +2566,46 @@ gsk_offset_node_draw (GskRenderNode *node,
   gsk_render_node_draw (self->child, cr);
 }
 
+static gboolean
+gsk_offset_node_can_diff (GskRenderNode *node1,
+                          GskRenderNode *node2)
+{
+  GskOffsetNode *self1 = (GskOffsetNode *) node1;
+  GskOffsetNode *self2 = (GskOffsetNode *) node2;
+
+  return self1->x_offset == self2->x_offset
+      && self1->y_offset == self2->y_offset
+      && gsk_render_node_can_diff (self1->child, self2->child);
+}
+
+static void
+gsk_offset_node_diff (GskRenderNode  *node1,
+                      GskRenderNode  *node2,
+                      cairo_region_t *region)
+{
+  GskOffsetNode *self1 = (GskOffsetNode *) node1;
+  GskOffsetNode *self2 = (GskOffsetNode *) node2;
+
+  if (self1->x_offset == self2->x_offset &&
+      self1->y_offset == self2->y_offset)
+    {
+      cairo_region_t *sub;
+
+      if (self1->child == self2->child)
+        return;
+
+      sub = cairo_region_create ();
+      gsk_render_node_diff (self1->child, self2->child, sub);
+      cairo_region_translate (sub, self1->x_offset, self1->y_offset);
+      cairo_region_union (region, sub);
+      cairo_region_destroy (sub);
+    }
+  else
+    {
+      gsk_render_node_diff_impossible (node1, node2, region);
+    }
+}
+
 #define GSK_OFFSET_NODE_VARIANT_TYPE "(dduv)"
 
 static GVariant *
@@ -2427,8 +2655,8 @@ static const GskRenderNodeClass GSK_OFFSET_NODE_CLASS = {
   "GskOffsetNode",
   gsk_offset_node_finalize,
   gsk_offset_node_draw,
-  gsk_render_node_can_diff_impossible,
-  gsk_render_node_diff_impossible,
+  gsk_offset_node_can_diff,
+  gsk_offset_node_diff,
   gsk_offset_node_serialize,
   gsk_offset_node_deserialize
 };
@@ -2550,6 +2778,20 @@ gsk_opacity_node_draw (GskRenderNode *node,
   cairo_restore (cr);
 }
 
+static void
+gsk_opacity_node_diff (GskRenderNode  *node1,
+                       GskRenderNode  *node2,
+                       cairo_region_t *region)
+{
+  GskOpacityNode *self1 = (GskOpacityNode *) node1;
+  GskOpacityNode *self2 = (GskOpacityNode *) node2;
+
+  if (self1->opacity == self2->opacity)
+    gsk_render_node_diff (self1->child, self2->child, region);
+  else
+    gsk_render_node_diff_impossible (node1, node2, region);
+}
+
 #define GSK_OPACITY_NODE_VARIANT_TYPE "(duv)"
 
 static GVariant *
@@ -2598,8 +2840,8 @@ static const GskRenderNodeClass GSK_OPACITY_NODE_CLASS = {
   "GskOpacityNode",
   gsk_opacity_node_finalize,
   gsk_opacity_node_draw,
-  gsk_render_node_can_diff_impossible,
-  gsk_render_node_diff_impossible,
+  gsk_render_node_can_diff_true,
+  gsk_opacity_node_diff,
   gsk_opacity_node_serialize,
   gsk_opacity_node_deserialize
 };
@@ -2835,7 +3077,7 @@ static const GskRenderNodeClass GSK_COLOR_MATRIX_NODE_CLASS = {
   "GskColorMatrixNode",
   gsk_color_matrix_node_finalize,
   gsk_color_matrix_node_draw,
-  gsk_render_node_can_diff_impossible,
+  gsk_render_node_can_diff_true,
   gsk_render_node_diff_impossible,
   gsk_color_matrix_node_serialize,
   gsk_color_matrix_node_deserialize
@@ -3025,7 +3267,7 @@ static const GskRenderNodeClass GSK_REPEAT_NODE_CLASS = {
   "GskRepeatNode",
   gsk_repeat_node_finalize,
   gsk_repeat_node_draw,
-  gsk_render_node_can_diff_impossible,
+  gsk_render_node_can_diff_true,
   gsk_render_node_diff_impossible,
   gsk_repeat_node_serialize,
   gsk_repeat_node_deserialize
@@ -3123,6 +3365,30 @@ gsk_clip_node_draw (GskRenderNode *node,
   cairo_restore (cr);
 }
 
+static void
+gsk_clip_node_diff (GskRenderNode  *node1,
+                    GskRenderNode  *node2,
+                    cairo_region_t *region)
+{
+  GskClipNode *self1 = (GskClipNode *) node1;
+  GskClipNode *self2 = (GskClipNode *) node2;
+
+  if (graphene_rect_equal (&self1->clip, &self2->clip))
+    {
+      cairo_region_t *sub;
+      cairo_rectangle_int_t clip_rect;
+      
+      sub = cairo_region_create();
+      gsk_render_node_diff (self1->child, self2->child, sub);
+      rectangle_init_from_graphene (&clip_rect, &self1->clip);
+      cairo_region_intersect_rectangle (sub, &clip_rect);
+      cairo_region_union (region, sub);
+      cairo_region_destroy (sub);
+    }
+
+  gsk_render_node_diff_impossible (node1, node2, region);
+}
+
 #define GSK_CLIP_NODE_VARIANT_TYPE "(dddduv)"
 
 static GVariant *
@@ -3172,8 +3438,8 @@ static const GskRenderNodeClass GSK_CLIP_NODE_CLASS = {
   "GskClipNode",
   gsk_clip_node_finalize,
   gsk_clip_node_draw,
-  gsk_render_node_can_diff_impossible,
-  gsk_render_node_diff_impossible,
+  gsk_render_node_can_diff_true,
+  gsk_clip_node_diff,
   gsk_clip_node_serialize,
   gsk_clip_node_deserialize
 };
@@ -3271,6 +3537,30 @@ gsk_rounded_clip_node_draw (GskRenderNode *node,
   cairo_restore (cr);
 }
 
+static void
+gsk_rounded_clip_node_diff (GskRenderNode  *node1,
+                            GskRenderNode  *node2,
+                            cairo_region_t *region)
+{
+  GskRoundedClipNode *self1 = (GskRoundedClipNode *) node1;
+  GskRoundedClipNode *self2 = (GskRoundedClipNode *) node2;
+
+  if (gsk_rounded_rect_equal (&self1->clip, &self2->clip))
+    {
+      cairo_region_t *sub;
+      cairo_rectangle_int_t clip_rect;
+      
+      sub = cairo_region_create();
+      gsk_render_node_diff (self1->child, self2->child, sub);
+      rectangle_init_from_graphene (&clip_rect, &self1->clip.bounds);
+      cairo_region_intersect_rectangle (sub, &clip_rect);
+      cairo_region_union (region, sub);
+      cairo_region_destroy (sub);
+    }
+
+  gsk_render_node_diff_impossible (node1, node2, region);
+}
+
 #define GSK_ROUNDED_CLIP_NODE_VARIANT_TYPE "(dddddddddddduv)"
 
 static GVariant *
@@ -3335,8 +3625,8 @@ static const GskRenderNodeClass GSK_ROUNDED_CLIP_NODE_CLASS = {
   "GskRoundedClipNode",
   gsk_rounded_clip_node_finalize,
   gsk_rounded_clip_node_draw,
-  gsk_render_node_can_diff_impossible,
-  gsk_render_node_diff_impossible,
+  gsk_render_node_can_diff_true,
+  gsk_rounded_clip_node_diff,
   gsk_rounded_clip_node_serialize,
   gsk_rounded_clip_node_deserialize
 };
@@ -3458,6 +3748,62 @@ gsk_shadow_node_draw (GskRenderNode *node,
 }
 
 static void
+gsk_shadow_node_diff (GskRenderNode  *node1,
+                      GskRenderNode  *node2,
+                      cairo_region_t *region)
+{
+  GskShadowNode *self1 = (GskShadowNode *) node1;
+  GskShadowNode *self2 = (GskShadowNode *) node2;
+  int top = 0, right = 0, bottom = 0, left = 0;
+  cairo_region_t *sub;
+  cairo_rectangle_int_t rect;
+  gsize i, n;
+
+  if (self1->n_shadows != self2->n_shadows)
+    {
+      gsk_render_node_diff_impossible (node1, node2, region);
+      return;
+    }
+
+  for (i = 0; i < self1->n_shadows; i++)
+    {
+      GskShadow *shadow1 = &self1->shadows[i];
+      GskShadow *shadow2 = &self2->shadows[i];
+      float clip_radius;
+
+      if (!gdk_rgba_equal (&shadow1->color, &shadow2->color) ||
+          shadow1->dx != shadow2->dx ||
+          shadow1->dy != shadow2->dy ||
+          shadow1->radius != shadow2->radius)
+        {
+          gsk_render_node_diff_impossible (node1, node2, region);
+          return;
+        }
+
+      clip_radius = gsk_cairo_blur_compute_pixels (shadow1->radius);
+      top = MAX (top, ceil (clip_radius - shadow1->dy));
+      right = MAX (right, ceil (clip_radius + shadow1->dx));
+      bottom = MAX (bottom, ceil (clip_radius + shadow1->dy));
+      left = MAX (left, ceil (clip_radius - shadow1->dx));
+    }
+
+  sub = cairo_region_create ();
+  gsk_render_node_diff (self1->child, self2->child, sub);
+
+  n = cairo_region_num_rectangles (sub);
+  for (i = 0; i < n; i++)
+    {
+      cairo_region_get_rectangle (sub, i, &rect);
+      rect.x -= left;
+      rect.y -= top;
+      rect.width += left + right;
+      rect.height += top + bottom;
+      cairo_region_union_rectangle (region, &rect);
+    }
+  cairo_region_destroy (sub);
+}
+
+static void
 gsk_shadow_node_get_bounds (GskShadowNode *self,
                             graphene_rect_t *bounds)
 {
@@ -3560,8 +3906,8 @@ static const GskRenderNodeClass GSK_SHADOW_NODE_CLASS = {
   "GskShadowNode",
   gsk_shadow_node_finalize,
   gsk_shadow_node_draw,
-  gsk_render_node_can_diff_impossible,
-  gsk_render_node_diff_impossible,
+  gsk_render_node_can_diff_true,
+  gsk_shadow_node_diff,
   gsk_shadow_node_serialize,
   gsk_shadow_node_deserialize
 };
@@ -3715,6 +4061,23 @@ gsk_blend_node_draw (GskRenderNode *node,
   cairo_paint (cr);
 }
 
+static void
+gsk_blend_node_diff (GskRenderNode  *node1,
+                     GskRenderNode  *node2,
+                     cairo_region_t *region)
+{
+  GskBlendNode *self1 = (GskBlendNode *) node1;
+  GskBlendNode *self2 = (GskBlendNode *) node2;
+
+  if (self1->blend_mode == self2->blend_mode)
+    {
+      gsk_render_node_diff (self1->top, self2->top, region);
+      gsk_render_node_diff (self1->bottom, self2->bottom, region);
+    }
+
+  gsk_render_node_diff_impossible (node1, node2, region);
+}
+
 #define GSK_BLEND_NODE_VARIANT_TYPE "(uvuvu)"
 
 static GVariant *
@@ -3776,8 +4139,8 @@ static const GskRenderNodeClass GSK_BLEND_NODE_CLASS = {
   "GskBlendNode",
   gsk_blend_node_finalize,
   gsk_blend_node_draw,
-  gsk_render_node_can_diff_impossible,
-  gsk_render_node_diff_impossible,
+  gsk_render_node_can_diff_true,
+  gsk_blend_node_diff,
   gsk_blend_node_serialize,
   gsk_blend_node_deserialize
 };
@@ -3886,6 +4249,23 @@ gsk_cross_fade_node_draw (GskRenderNode *node,
   cairo_paint (cr);
 }
 
+static void
+gsk_cross_fade_node_diff (GskRenderNode  *node1,
+                          GskRenderNode  *node2,
+                          cairo_region_t *region)
+{
+  GskCrossFadeNode *self1 = (GskCrossFadeNode *) node1;
+  GskCrossFadeNode *self2 = (GskCrossFadeNode *) node2;
+
+  if (self1->progress == self2->progress)
+    {
+      gsk_render_node_diff (self1->start, self2->start, region);
+      gsk_render_node_diff (self1->end, self2->end, region);
+    }
+
+  gsk_render_node_diff_impossible (node1, node2, region);
+}
+
 #define GSK_CROSS_FADE_NODE_VARIANT_TYPE "(uvuvd)"
 
 static GVariant *
@@ -3948,8 +4328,8 @@ static const GskRenderNodeClass GSK_CROSS_FADE_NODE_CLASS = {
   "GskCrossFadeNode",
   gsk_cross_fade_node_finalize,
   gsk_cross_fade_node_draw,
-  gsk_render_node_can_diff_impossible,
-  gsk_render_node_diff_impossible,
+  gsk_render_node_can_diff_true,
+  gsk_cross_fade_node_diff,
   gsk_cross_fade_node_serialize,
   gsk_cross_fade_node_deserialize
 };
@@ -4068,6 +4448,44 @@ gsk_text_node_draw (GskRenderNode *node,
   cairo_restore (cr);
 }
 
+static void
+gsk_text_node_diff (GskRenderNode  *node1,
+                    GskRenderNode  *node2,
+                    cairo_region_t *region)
+{
+  GskTextNode *self1 = (GskTextNode *) node1;
+  GskTextNode *self2 = (GskTextNode *) node2;
+
+  if (self1->font == self2->font &&
+      gdk_rgba_equal (&self1->color, &self2->color) &&
+      self1->x == self2->x &&
+      self1->y == self2->y &&
+      self1->num_glyphs == self2->num_glyphs)
+    {
+      guint i;
+
+      for (i = 0; i < self1->num_glyphs; i++)
+        {
+          PangoGlyphInfo *info1 = &self1->glyphs[i];
+          PangoGlyphInfo *info2 = &self2->glyphs[i];
+
+          if (info1->glyph == info2->glyph &&
+              info1->geometry.width == info2->geometry.width &&
+              info1->geometry.x_offset == info2->geometry.x_offset &&
+              info1->geometry.y_offset == info2->geometry.y_offset &&
+              info1->attr.is_cluster_start == info2->attr.is_cluster_start)
+            continue;
+
+          gsk_render_node_diff_impossible (node1, node2, region);
+          return;
+        }
+
+      return;
+    }
+
+  gsk_render_node_diff_impossible (node1, node2, region);
+}
+
 #define GSK_TEXT_NODE_VARIANT_TYPE "(sdddddda(uiiii))"
 
 static GVariant *
@@ -4171,8 +4589,8 @@ static const GskRenderNodeClass GSK_TEXT_NODE_CLASS = {
   "GskTextNode",
   gsk_text_node_finalize,
   gsk_text_node_draw,
-  gsk_render_node_can_diff_impossible,
-  gsk_render_node_diff_impossible,
+  gsk_render_node_can_diff_true,
+  gsk_text_node_diff,
   gsk_text_node_serialize,
   gsk_text_node_deserialize
 };
@@ -4514,6 +4932,42 @@ gsk_blur_node_draw (GskRenderNode *node,
   cairo_pattern_destroy (pattern);
 }
 
+static void
+gsk_blur_node_diff (GskRenderNode  *node1,
+                    GskRenderNode  *node2,
+                    cairo_region_t *region)
+{
+  GskBlurNode *self1 = (GskBlurNode *) node1;
+  GskBlurNode *self2 = (GskBlurNode *) node2;
+
+  if (self1->radius == self2->radius)
+    {
+      cairo_rectangle_int_t rect;
+      cairo_region_t *sub;
+      int i, n, clip_radius;
+
+      clip_radius = ceil (gsk_cairo_blur_compute_pixels (self1->radius));
+      sub = cairo_region_create ();
+      gsk_render_node_diff (self1->child, self2->child, sub);
+
+      n = cairo_region_num_rectangles (sub);
+      for (i = 0; i < n; i++)
+        {
+          cairo_region_get_rectangle (sub, i, &rect);
+          rect.x -= clip_radius;
+          rect.y -= clip_radius;
+          rect.width += 2 * clip_radius;
+          rect.height += 2 * clip_radius;
+          cairo_region_union_rectangle (region, &rect);
+        }
+      cairo_region_destroy (sub);
+    }
+  else
+    {
+      gsk_render_node_diff_impossible (node1, node2, region);
+    }
+}
+
 #define GSK_BLUR_NODE_VARIANT_TYPE "(duv)"
 
 static GVariant *
@@ -4558,8 +5012,8 @@ static const GskRenderNodeClass GSK_BLUR_NODE_CLASS = {
   "GskBlurNode",
   gsk_blur_node_finalize,
   gsk_blur_node_draw,
-  gsk_render_node_can_diff_impossible,
-  gsk_render_node_diff_impossible,
+  gsk_render_node_can_diff_true,
+  gsk_blur_node_diff,
   gsk_blur_node_serialize,
   gsk_blur_node_deserialize
 };

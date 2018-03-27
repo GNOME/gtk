@@ -522,3 +522,16 @@ gsk_rounded_rect_to_float (const GskRoundedRect *self,
     }
 }
 
+gboolean
+gsk_rounded_rect_equal (gconstpointer rect1,
+                        gconstpointer rect2)
+{
+  const GskRoundedRect *self1 = rect1;
+  const GskRoundedRect *self2 = rect2;
+
+  return graphene_rect_equal (&self1->bounds, &self2->bounds)
+      && graphene_size_equal (&self1->corner[0], &self2->corner[0])
+      && graphene_size_equal (&self1->corner[1], &self2->corner[1])
+      && graphene_size_equal (&self1->corner[2], &self2->corner[2])
+      && graphene_size_equal (&self1->corner[3], &self2->corner[3]);
+}
