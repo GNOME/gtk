@@ -177,7 +177,7 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
-  
+
   gobject_class->finalize = gtk_accel_label_finalize;
   gobject_class->set_property = gtk_accel_label_set_property;
   gobject_class->get_property = gtk_accel_label_get_property;
@@ -188,9 +188,6 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
   widget_class->destroy = gtk_accel_label_destroy;
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_ACCEL_LABEL);
-
-  class->signal_quote1 = g_strdup ("<:");
-  class->signal_quote2 = g_strdup (":>");
 
 #ifndef GDK_WINDOWING_QUARTZ
   /* This is the text that should appear next to menu accelerators
