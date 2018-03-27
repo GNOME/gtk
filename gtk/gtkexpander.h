@@ -39,13 +39,10 @@ G_BEGIN_DECLS
 
 typedef struct _GtkExpander        GtkExpander;
 typedef struct _GtkExpanderClass   GtkExpanderClass;
-typedef struct _GtkExpanderPrivate GtkExpanderPrivate;
 
 struct _GtkExpander
 {
   GtkContainer parent_instance;
-
-  GtkExpanderPrivate *priv;
 };
 
 /**

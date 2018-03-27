@@ -144,6 +144,7 @@ enum
   PROP_RESIZE_TOPLEVEL
 };
 
+typedef struct _GtkExpanderPrivate GtkExpanderPrivate;
 struct _GtkExpanderPrivate
 {
   GtkWidget        *label_widget;
@@ -336,9 +337,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
 static void
 gtk_expander_init (GtkExpander *expander)
 {
-  GtkExpanderPrivate *priv;
-
-  expander->priv = priv = gtk_expander_get_instance_private (expander);
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
 
   gtk_widget_set_can_focus (GTK_WIDGET (expander), TRUE);
   gtk_widget_set_has_surface (GTK_WIDGET (expander), FALSE);
@@ -440,7 +439,7 @@ gtk_expander_get_property (GObject    *object,
                            GParamSpec *pspec)
 {
   GtkExpander *expander = GTK_EXPANDER (object);
-  GtkExpanderPrivate *priv = expander->priv;
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
 
   switch (prop_id)
     {
@@ -473,7 +472,7 @@ gtk_expander_get_property (GObject    *object,
 static void
 gtk_expander_destroy (GtkWidget *widget)
 {
-  GtkExpanderPrivate *priv = GTK_EXPANDER (widget)->priv;
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (GTK_EXPANDER (widget));
 
   if (priv->expand_timer)
     {
@@ -501,7 +500,8 @@ gtk_expander_size_allocate (GtkWidget           *widget,
                             int                  baseline,
                             GtkAllocation       *out_clip)
 {
-  GtkExpanderPrivate *priv = GTK_EXPANDER (widget)->priv;
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (GTK_EXPANDER (widget));
+
   gtk_widget_size_allocate (priv->box, allocation, baseline, out_clip);
 }
 
@@ -519,7 +519,7 @@ static gboolean
 expand_timeout (gpointer data)
 {
   GtkExpander *expander = GTK_EXPANDER (data);
-  GtkExpanderPrivate *priv = expander->priv;
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
 
   priv->expand_timer = 0;
   gtk_expander_set_expanded (expander, TRUE);
@@ -535,7 +535,7 @@ gtk_expander_drag_motion (GtkWidget        *widget,
                           guint             time)
 {
   GtkExpander *expander = GTK_EXPANDER (widget);
-  GtkExpanderPrivate *priv = expander->priv;
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
 
   if (!priv->expanded && !priv->expand_timer)
     {
@@ -552,7 +552,7 @@ gtk_expander_drag_leave (GtkWidget      *widget,
                          guint           time)
 {
   GtkExpander *expander = GTK_EXPANDER (widget);
-  GtkExpanderPrivate *priv = expander->priv;
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
 
   if (priv->expand_timer)
     {
@@ -588,19 +588,21 @@ focus_in_site (GtkExpander      *expander,
                FocusSite         site,
                GtkDirectionType  direction)
 {
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
+
   switch (site)
     {
     case FOCUS_WIDGET:
       gtk_widget_grab_focus (GTK_WIDGET (expander));
       return TRUE;
     case FOCUS_LABEL:
-      if (expander->priv->label_widget)
-        return gtk_widget_child_focus (expander->priv->label_widget, direction);
+      if (priv->label_widget)
+        return gtk_widget_child_focus (priv->label_widget, direction);
       else
         return FALSE;
     case FOCUS_CHILD:
       {
-        GtkWidget *child = expander->priv->child;
+        GtkWidget *child = priv->child;
 
         if (child && gtk_widget_get_child_visible (child))
           return gtk_widget_child_focus (child, direction);
@@ -698,7 +700,7 @@ get_next_site (GtkExpander      *expander,
 static void
 gtk_expander_resize_toplevel (GtkExpander *expander)
 {
-  GtkExpanderPrivate *priv = expander->priv;
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
   GtkWidget *child = priv->child;
 
   if (child && priv->resize_toplevel &&
@@ -733,6 +735,7 @@ gtk_expander_focus (GtkWidget        *widget,
                     GtkDirectionType  direction)
 {
   GtkExpander *expander = GTK_EXPANDER (widget);
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
 
   if (!focus_current_site (expander, direction))
     {
@@ -743,7 +746,7 @@ gtk_expander_focus (GtkWidget        *widget,
       widget_is_focus = gtk_widget_is_focus (widget);
       old_focus_child = gtk_widget_get_focus_child (GTK_WIDGET (widget));
 
-      if (old_focus_child && old_focus_child == expander->priv->label_widget)
+      if (old_focus_child && old_focus_child == priv->label_widget)
         site = FOCUS_LABEL;
       else if (old_focus_child)
         site = FOCUS_CHILD;
@@ -820,7 +823,9 @@ gtk_expander_remove (GtkContainer *container,
 static void
 gtk_expander_activate (GtkExpander *expander)
 {
-  gtk_expander_set_expanded (expander, !expander->priv->expanded);
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
+
+  gtk_expander_set_expanded (expander, !priv->expanded);
 }
 
 static void
@@ -892,12 +897,10 @@ void
 gtk_expander_set_expanded (GtkExpander *expander,
                            gboolean     expanded)
 {
-  GtkExpanderPrivate *priv;
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
   GtkWidget *child;
 
   g_return_if_fail (GTK_IS_EXPANDER (expander));
-
-  priv = expander->priv;
 
   expanded = expanded != FALSE;
 
@@ -945,9 +948,11 @@ gtk_expander_set_expanded (GtkExpander *expander,
 gboolean
 gtk_expander_get_expanded (GtkExpander *expander)
 {
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
+
   g_return_val_if_fail (GTK_IS_EXPANDER (expander), FALSE);
 
-  return expander->priv->expanded;
+  return priv->expanded;
 }
 
 /**
@@ -963,6 +968,8 @@ void
 gtk_expander_set_label (GtkExpander *expander,
                         const gchar *label)
 {
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
+
   g_return_if_fail (GTK_IS_EXPANDER (expander));
 
   if (!label)
@@ -974,8 +981,8 @@ gtk_expander_set_label (GtkExpander *expander,
       GtkWidget *child;
 
       child = gtk_label_new (label);
-      gtk_label_set_use_underline (GTK_LABEL (child), expander->priv->use_underline);
-      gtk_label_set_use_markup (GTK_LABEL (child), expander->priv->use_markup);
+      gtk_label_set_use_underline (GTK_LABEL (child), priv->use_underline);
+      gtk_label_set_use_markup (GTK_LABEL (child), priv->use_markup);
       gtk_widget_show (child);
 
       gtk_expander_set_label_widget (expander, child);
@@ -1006,11 +1013,9 @@ gtk_expander_set_label (GtkExpander *expander,
 const gchar *
 gtk_expander_get_label (GtkExpander *expander)
 {
-  GtkExpanderPrivate *priv;
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
 
   g_return_val_if_fail (GTK_IS_EXPANDER (expander), NULL);
-
-  priv = expander->priv;
 
   if (GTK_IS_LABEL (priv->label_widget))
     return gtk_label_get_label (GTK_LABEL (priv->label_widget));
@@ -1030,11 +1035,9 @@ void
 gtk_expander_set_use_underline (GtkExpander *expander,
                                 gboolean     use_underline)
 {
-  GtkExpanderPrivate *priv;
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
 
   g_return_if_fail (GTK_IS_EXPANDER (expander));
-
-  priv = expander->priv;
 
   use_underline = use_underline != FALSE;
 
@@ -1062,9 +1065,11 @@ gtk_expander_set_use_underline (GtkExpander *expander,
 gboolean
 gtk_expander_get_use_underline (GtkExpander *expander)
 {
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
+
   g_return_val_if_fail (GTK_IS_EXPANDER (expander), FALSE);
 
-  return expander->priv->use_underline;
+  return priv->use_underline;
 }
 
 /**
@@ -1080,11 +1085,9 @@ void
 gtk_expander_set_use_markup (GtkExpander *expander,
                              gboolean     use_markup)
 {
-  GtkExpanderPrivate *priv;
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
 
   g_return_if_fail (GTK_IS_EXPANDER (expander));
-
-  priv = expander->priv;
 
   use_markup = use_markup != FALSE;
 
@@ -1112,9 +1115,11 @@ gtk_expander_set_use_markup (GtkExpander *expander,
 gboolean
 gtk_expander_get_use_markup (GtkExpander *expander)
 {
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
+
   g_return_val_if_fail (GTK_IS_EXPANDER (expander), FALSE);
 
-  return expander->priv->use_markup;
+  return priv->use_markup;
 }
 
 /**
@@ -1129,14 +1134,12 @@ void
 gtk_expander_set_label_widget (GtkExpander *expander,
                                GtkWidget   *label_widget)
 {
-  GtkExpanderPrivate *priv;
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
   GtkWidget *widget;
 
   g_return_if_fail (GTK_IS_EXPANDER (expander));
   g_return_if_fail (label_widget == NULL || GTK_IS_WIDGET (label_widget));
   g_return_if_fail (label_widget == NULL || gtk_widget_get_parent (label_widget) == NULL);
-
-  priv = expander->priv;
 
   if (priv->label_widget == label_widget)
     return;
@@ -1178,9 +1181,11 @@ gtk_expander_set_label_widget (GtkExpander *expander,
 GtkWidget *
 gtk_expander_get_label_widget (GtkExpander *expander)
 {
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
+
   g_return_val_if_fail (GTK_IS_EXPANDER (expander), NULL);
 
-  return expander->priv->label_widget;
+  return priv->label_widget;
 }
 
 /**
@@ -1195,11 +1200,13 @@ void
 gtk_expander_set_resize_toplevel (GtkExpander *expander,
                                   gboolean     resize_toplevel)
 {
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
+
   g_return_if_fail (GTK_IS_EXPANDER (expander));
 
-  if (expander->priv->resize_toplevel != resize_toplevel)
+  if (priv->resize_toplevel != resize_toplevel)
     {
-      expander->priv->resize_toplevel = resize_toplevel ? TRUE : FALSE;
+      priv->resize_toplevel = resize_toplevel ? TRUE : FALSE;
       g_object_notify (G_OBJECT (expander), "resize-toplevel");
     }
 }
@@ -1216,7 +1223,9 @@ gtk_expander_set_resize_toplevel (GtkExpander *expander,
 gboolean
 gtk_expander_get_resize_toplevel (GtkExpander *expander)
 {
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
+
   g_return_val_if_fail (GTK_IS_EXPANDER (expander), FALSE);
 
-  return expander->priv->resize_toplevel;
+  return priv->resize_toplevel;
 }
