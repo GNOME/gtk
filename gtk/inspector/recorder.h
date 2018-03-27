@@ -56,7 +56,6 @@ void            gtk_inspector_recorder_record_render            (GtkInspectorRec
                                                                  GskRenderer            *renderer,
                                                                  GdkSurface             *surface,
                                                                  const cairo_region_t   *region,
-                                                                 GdkDrawingContext      *context,
                                                                  GskRenderNode          *node);
 
 G_END_DECLS
