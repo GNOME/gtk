@@ -14046,7 +14046,6 @@ gtk_widget_render (GtkWidget            *widget,
                    GdkSurface            *surface,
                    const cairo_region_t *region)
 {
-  GdkDrawingContext *context;
   GtkSnapshot *snapshot;
   GskRenderer *renderer;
   GskRenderNode *root;
@@ -14067,19 +14066,15 @@ gtk_widget_render (GtkWidget            *widget,
 
   if (root != NULL)
     {
-      context = gsk_renderer_begin_draw_frame (renderer, region);
-
       gtk_inspector_record_render (widget,
                                    renderer,
                                    surface,
                                    region,
-                                   context,
                                    root);
 
-      gsk_renderer_render (renderer, root, context);
-      gsk_render_node_unref (root);
+      gsk_renderer_render (renderer, root, region);
 
-      gsk_renderer_end_draw_frame (renderer, context);
+      gsk_render_node_unref (root);
     }
 }
 

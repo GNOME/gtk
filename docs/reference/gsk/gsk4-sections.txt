@@ -5,8 +5,6 @@ gsk_renderer_get_surface
 gsk_renderer_get_display
 gsk_renderer_realize
 gsk_renderer_unrealize
-gsk_renderer_begin_draw_frame
-gsk_renderer_end_draw_frame
 gsk_renderer_render
 gsk_renderer_render_texture
 <SUBSECTION Standard>

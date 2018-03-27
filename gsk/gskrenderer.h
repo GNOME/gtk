@@ -60,15 +60,9 @@ GdkTexture *            gsk_renderer_render_texture             (GskRenderer    
                                                                  const graphene_rect_t   *viewport);
 
 GDK_AVAILABLE_IN_ALL
-GdkDrawingContext *     gsk_renderer_begin_draw_frame           (GskRenderer             *renderer,
-                                                                 const cairo_region_t    *region);
-GDK_AVAILABLE_IN_ALL
 void                    gsk_renderer_render                     (GskRenderer             *renderer,
                                                                  GskRenderNode           *root,
-                                                                 GdkDrawingContext       *context);
-GDK_AVAILABLE_IN_ALL
-void                    gsk_renderer_end_draw_frame             (GskRenderer             *renderer,
-                                                                 GdkDrawingContext       *context);
+                                                                 const cairo_region_t    *region);
 
 G_END_DECLS
 

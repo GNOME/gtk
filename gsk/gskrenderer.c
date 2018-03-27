@@ -24,9 +24,8 @@
  * #GskRenderer is a class that renders a scene graph defined via a
  * tree of #GskRenderNode instances.
  *
- * Typically you will use a #GskRenderer instance with a #GdkDrawingContext
- * associated to a #GdkSurface, and call gsk_renderer_render() with the
- * drawing context and the scene to be rendered.
+ * Typically you will use a #GskRenderer instance to repeatedly call
+ * gsk_renderer_render() to update the contents of its associated #GdkSurface.
  *
  * It is necessary to realize a #GskRenderer instance using gsk_renderer_realize()
  * before calling gsk_renderer_render(), in order to create the appropriate
@@ -505,18 +504,24 @@ gsk_renderer_render_texture (GskRenderer           *renderer,
  * gsk_renderer_render:
  * @renderer: a #GskRenderer
  * @root: a #GskRenderNode
- * @context: The drawing context created via gsk_renderer_begin_draw_frame()
+ * @region: the #cairo_region_t that must be redrawn or %NULL for the whole
+ *     window
  *
  * Renders the scene graph, described by a tree of #GskRenderNode instances,
- * using the given #GdkDrawingContext.
+ * ensuring that the given @region gets redrawn.
+ *
+ * Renderers must ensure that changes of the contents given by the @root
+ * node as well as the area given by @region are redrawn. They are however
+ * free to not redraw any pixel outside of @region if they can guarantee that
+ * it didn't change.
  *
  * The @renderer will acquire a reference on the #GskRenderNode tree while
  * the rendering is in progress.
  */
 void
-gsk_renderer_render (GskRenderer       *renderer,
-                     GskRenderNode     *root,
-                     GdkDrawingContext *context)
+gsk_renderer_render (GskRenderer          *renderer,
+                     GskRenderNode        *root,
+                     const cairo_region_t *region)
 {
   GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
 
@@ -524,10 +529,25 @@ gsk_renderer_render (GskRenderer       *renderer,
   g_return_if_fail (priv->is_realized);
   g_return_if_fail (GSK_IS_RENDER_NODE (root));
   g_return_if_fail (priv->root_node == NULL);
-  g_return_if_fail (GDK_IS_DRAWING_CONTEXT (context));
-  g_return_if_fail (context == priv->drawing_context);
 
   priv->root_node = gsk_render_node_ref (root);
+
+  if (region == NULL || GSK_RENDERER_DEBUG_CHECK (renderer, FULL_REDRAW))
+    {
+      cairo_region_t *full_surface;
+
+      full_surface = cairo_region_create_rectangle (&(GdkRectangle) {
+                                                       0, 0,
+                                                       gdk_surface_get_width (priv->surface),
+                                                       gdk_surface_get_height (priv->surface)
+                                                   });
+
+      priv->drawing_context = GSK_RENDERER_GET_CLASS (renderer)->begin_draw_frame (renderer, full_surface);
+
+      cairo_region_destroy (full_surface);
+    }
+  else
+    priv->drawing_context = GSK_RENDERER_GET_CLASS (renderer)->begin_draw_frame (renderer, region);
 
   GSK_RENDERER_GET_CLASS (renderer)->render (renderer, root);
 
@@ -548,6 +568,9 @@ gsk_renderer_render (GskRenderer       *renderer,
     }
 #endif
 
+  GSK_RENDERER_GET_CLASS (renderer)->end_draw_frame (renderer, priv->drawing_context);
+
+  priv->drawing_context = NULL;
   g_clear_pointer (&priv->root_node, gsk_render_node_unref);
 }
 
@@ -720,75 +743,6 @@ gsk_renderer_new_for_surface (GdkSurface *surface)
 
   g_assert_not_reached ();
   return NULL;
-}
-
-/**
- * gsk_renderer_begin_draw_frame:
- * @renderer: a #GskRenderer
- * @region: the #cairo_region_t that you wish to draw
- *
- * Indicates that you are beginning the process of redrawing @region using
- * @renderer, and provides you with a #GdkDrawingContext to use for this.
- *
- * Returns: (transfer none): a #GdkDrawingContext context that should be used to
- * draw the contents of the @renderer. This context is owned by GDK.
- */
-GdkDrawingContext *
-gsk_renderer_begin_draw_frame (GskRenderer          *renderer,
-                               const cairo_region_t *region)
-{
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
-
-  g_return_val_if_fail (GSK_IS_RENDERER (renderer), NULL);
-  g_return_val_if_fail (region != NULL, NULL);
-  g_return_val_if_fail (priv->drawing_context == NULL, NULL);
-
-#ifdef G_ENABLE_DEBUG
-  if (GSK_RENDERER_DEBUG_CHECK (renderer, FULL_REDRAW))
-    {
-      cairo_region_t *full_surface;
-
-      full_surface = cairo_region_create_rectangle (&(GdkRectangle) {
-                                                       0, 0,
-                                                       gdk_surface_get_width (priv->surface),
-                                                       gdk_surface_get_height (priv->surface)
-                                                   });
-
-      priv->drawing_context = GSK_RENDERER_GET_CLASS (renderer)->begin_draw_frame (renderer, full_surface);
-
-      cairo_region_destroy (full_surface);
-    }
-  else
-#endif
-  priv->drawing_context = GSK_RENDERER_GET_CLASS (renderer)->begin_draw_frame (renderer, region);
-
-  return priv->drawing_context;
-}
-
-/**
- * gsk_renderer_end_draw_frame:
- * @renderer: a #GskRenderer
- * @context: the drawing context returned by the matching call to
- *     gsk_renderer_begin_draw_frame()
- *
- * Release the drawning context returned by gsk_renderer_begin_draw_frame().
- *
- * Calls to gsk_renderer_begin_draw_frame() and gsk_renderer_end_draw_frame()
- * must be paired.
- */
-void
-gsk_renderer_end_draw_frame (GskRenderer       *renderer,
-                             GdkDrawingContext *context)
-{
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
-
-  g_return_if_fail (GSK_IS_RENDERER (renderer));
-  g_return_if_fail (GDK_IS_DRAWING_CONTEXT (context));
-  g_return_if_fail (priv->drawing_context == context);
-
-  priv->drawing_context = NULL;
-
-  GSK_RENDERER_GET_CLASS (renderer)->end_draw_frame (renderer, context);
 }
 
 GskDebugFlags
