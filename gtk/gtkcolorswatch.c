@@ -178,6 +178,7 @@ drag_set_color_icon (GdkDragContext *context,
   paintable = gtk_snapshot_free_to_paintable (snapshot);
 
   gtk_drag_set_icon_paintable (context, paintable, 4, 4);
+  g_object_unref (paintable);
 }
 
 static void
