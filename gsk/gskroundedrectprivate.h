@@ -14,6 +14,9 @@ void                     gsk_rounded_rect_path                  (const GskRounde
 void                     gsk_rounded_rect_to_float              (const GskRoundedRect     *self,
                                                                  float                     rect[12]);
 
+gboolean                 gsk_rounded_rect_equal                 (gconstpointer             rect1,
+                                                                 gconstpointer             rect2);
+
 G_END_DECLS
 
 #endif /* __GSK_ROUNDED_RECT_PRIVATE_H__ */
