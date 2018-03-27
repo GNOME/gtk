@@ -621,13 +621,15 @@ subdir('gdk')
 subdir('gsk')
 subdir('gtk')
 subdir('modules')
-if get_option('demos')
-  subdir('demos')
-  subdir('examples')
-endif
 if get_option('build-tests')
   subdir('tests')
   subdir('testsuite')
+endif
+if get_option('demos')
+  subdir('demos')
+endif
+if get_option('build-examples')
+  subdir('examples')
 endif
 
 # config.h
