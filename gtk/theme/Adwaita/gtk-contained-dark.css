@@ -1098,13 +1098,15 @@ switch:backdrop:disabled slider label, switch:backdrop:disabled slider { color: 
 
 checkbutton.text-button, radiobutton.text-button { padding: 2px 0; outline-offset: 0; }
 
-checkbutton.text-button label:not(:only-child):first-child, radiobutton.text-button label:not(:only-child):first-child { margin-left: 4px; }
+checkbutton.text-button label:not(:only-child):first-child:dir(rtl), radiobutton.text-button label:not(:only-child):first-child:dir(rtl) { margin-left: 4px; }
 
-checkbutton.text-button label:not(:only-child):last-child, radiobutton.text-button label:not(:only-child):last-child { margin-right: 4px; }
+checkbutton.text-button label:not(:only-child):first-child:dir(ltr), radiobutton.text-button label:not(:only-child):first-child:dir(ltr) { margin-right: 4px; }
 
-check, radio { margin: 0 4px; min-height: 14px; min-width: 14px; border: 1px solid; -gtk-icon-source: none; color: #eeeeec; outline-color: rgba(238, 238, 236, 0.3); border-color: #0b0c0c; text-shadow: 0 -1px rgba(0, 0, 0, 0.827451); -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.827451); background-image: linear-gradient(to bottom, #2c3133 20%, #25292b 90%); box-shadow: inset 0 1px rgba(255, 255, 255, 0.05), inset 0 -2px #2a2e30, inset 0 -1px #1e2122, 0 1px rgba(0, 0, 0, 0.1); }
+checkbutton.text-button label:not(:only-child):last-child:dir(rtl), radiobutton.text-button label:not(:only-child):last-child:dir(rtl) { margin-right: 4px; }
 
-check:only-child, radio:only-child { margin: 0; }
+checkbutton.text-button label:not(:only-child):last-child:dir(ltr), radiobutton.text-button label:not(:only-child):last-child:dir(ltr) { margin-left: 4px; }
+
+check, radio { min-height: 14px; min-width: 14px; border: 1px solid; -gtk-icon-source: none; color: #eeeeec; outline-color: rgba(238, 238, 236, 0.3); border-color: #0b0c0c; text-shadow: 0 -1px rgba(0, 0, 0, 0.827451); -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.827451); background-image: linear-gradient(to bottom, #2c3133 20%, #25292b 90%); box-shadow: inset 0 1px rgba(255, 255, 255, 0.05), inset 0 -2px #2a2e30, inset 0 -1px #1e2122, 0 1px rgba(0, 0, 0, 0.1); }
 
 popover check.left:dir(rtl), popover radio.left:dir(rtl) { margin-left: 0; margin-right: 12px; }
 

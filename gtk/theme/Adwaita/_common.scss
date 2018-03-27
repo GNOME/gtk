@@ -2730,17 +2730,19 @@ checkbutton.text-button, radiobutton.text-button {
   outline-offset: 0;
 
   label:not(:only-child) {
-    &:first-child { margin-left: 4px; }
-    &:last-child { margin-right: 4px; }
+    &:first-child {
+      &:dir(rtl) { margin-left: 4px; }
+      &:dir(ltr) { margin-right: 4px; }
+    }
+    &:last-child {
+      &:dir(rtl) { margin-right: 4px; }
+      &:dir(ltr) { margin-left: 4px; }
+    }
   }
 }
 
 check,
 radio {
-  margin: 0 4px;
-
-  &:only-child { margin: 0; }
-
   popover & { // when in a popover add more space between the label and the check, reset the other side margin.
               // See https://bugzilla.gnome.org/show_bug.cgi?id=779570 for details.
     &.left:dir(rtl) {
