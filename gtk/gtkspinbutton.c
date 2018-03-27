@@ -952,8 +952,6 @@ gtk_spin_button_realize (GtkWidget *widget)
   if (!return_val &&
       (priv->numeric || gtk_entry_get_text (GTK_ENTRY (priv->entry)) == NULL))
     gtk_spin_button_default_output (spin_button);
-
-  gtk_widget_queue_resize (GTK_WIDGET (spin_button));
 }
 
 /* This is called when :value, :wrap, or the bounds of the adjustment change,
