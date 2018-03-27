@@ -145,6 +145,11 @@ struct _GtkFontChooserWidgetPrivate
   GAction *tweak_action;
 };
 
+enum {
+  PROP_ZERO,
+  PROP_TWEAK_ACTION
+};
+
 /* Keep in line with GtkTreeStore defined in gtkfontchooserwidget.ui */
 enum {
   FAMILY_COLUMN,
@@ -318,6 +323,9 @@ gtk_font_chooser_widget_get_property (GObject         *object,
 
   switch (prop_id)
     {
+    case PROP_TWEAK_ACTION:
+      g_value_set_object (value, G_OBJECT (fontchooser->priv->tweak_action));
+      break;
     case GTK_FONT_CHOOSER_PROP_FONT:
       g_value_take_string (value, gtk_font_chooser_widget_get_font (fontchooser));
       break;
@@ -689,6 +697,7 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GParamSpec *pspec;
 
   g_type_ensure (GTK_TYPE_DELAYED_FONT_DESCRIPTION);
   g_type_ensure (G_TYPE_THEMED_ICON);
@@ -703,6 +712,23 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   gobject_class->dispose = gtk_font_chooser_widget_dispose;
   gobject_class->set_property = gtk_font_chooser_widget_set_property;
   gobject_class->get_property = gtk_font_chooser_widget_get_property;
+
+  /**
+   * GtkFontChooserWidget:tweak-action:
+   *
+   * A toggle action that can be used to switch to the tweak page
+   * of the font chooser widget, which lets the user tweak the
+   * OpenType features and variation axes of the selected font.
+   *
+   * The action will be enabled or disabled depending on whether
+   * the selected font has any features or axes.
+   */
+  pspec = g_param_spec_object ("tweak-action",
+                               P_("The tweak action"),
+                               P_("The toggle action to switch to the tweak page"),
+                               G_TYPE_ACTION,
+                               G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_property (gobject_class, PROP_TWEAK_ACTION, pspec);
 
   _gtk_font_chooser_install_properties (gobject_class);
 
