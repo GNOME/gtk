@@ -55,10 +55,6 @@ void            gtk_render_node_view_set_clip_region    (GtkRenderNodeView      
                                                          const cairo_region_t   *clip);
 const cairo_region_t*
                 gtk_render_node_view_get_clip_region    (GtkRenderNodeView      *view);
-void            gtk_render_node_view_set_render_region  (GtkRenderNodeView      *view,
-                                                         const cairo_region_t   *region);
-const cairo_region_t*
-                gtk_render_node_view_get_render_region  (GtkRenderNodeView      *view);
 
 
 G_END_DECLS

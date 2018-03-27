@@ -105,8 +105,6 @@ recordings_list_row_selected (GtkListBox           *box,
                                             gtk_inspector_render_recording_get_node (GTK_INSPECTOR_RENDER_RECORDING (recording)));
       gtk_render_node_view_set_clip_region (GTK_RENDER_NODE_VIEW (priv->render_node_view),
                                             gtk_inspector_render_recording_get_clip_region (GTK_INSPECTOR_RENDER_RECORDING (recording)));
-      gtk_render_node_view_set_render_region (GTK_RENDER_NODE_VIEW (priv->render_node_view),
-                                              gtk_inspector_render_recording_get_render_region (GTK_INSPECTOR_RENDER_RECORDING (recording)));
       gtk_render_node_view_set_viewport (GTK_RENDER_NODE_VIEW (priv->render_node_view),
                                          gtk_inspector_render_recording_get_area (GTK_INSPECTOR_RENDER_RECORDING (recording)));
       gtk_tree_model_render_node_set_root_node (GTK_TREE_MODEL_RENDER_NODE (priv->render_node_model),
@@ -1075,18 +1073,15 @@ gtk_inspector_recorder_record_render (GtkInspectorRecorder *recorder,
                                       GskRenderer          *renderer,
                                       GdkSurface           *surface,
                                       const cairo_region_t *region,
-                                      GdkDrawingContext    *context,
                                       GskRenderNode        *node)
 {
   GtkInspectorRecording *recording;
   GdkFrameClock *frame_clock;
-  cairo_region_t *clip;
 
   if (!gtk_inspector_recorder_is_recording (recorder))
     return;
 
   frame_clock = gtk_widget_get_frame_clock (widget);
-  clip = gdk_drawing_context_get_clip (context);
 
   recording = gtk_inspector_render_recording_new (gdk_frame_clock_get_frame_time (frame_clock),
                                                   gsk_renderer_get_profiler (renderer),
@@ -1094,11 +1089,9 @@ gtk_inspector_recorder_record_render (GtkInspectorRecorder *recorder,
                                                     gdk_surface_get_width (surface),
                                                     gdk_surface_get_height (surface) },
                                                   region,
-                                                  clip,
                                                   node);
   gtk_inspector_recorder_add_recording (recorder, recording);
   g_object_unref (recording);
-  cairo_region_destroy (clip);
 }
 
 void
