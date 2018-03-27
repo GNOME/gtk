@@ -1,7 +1,6 @@
 /* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
- * GtkAccelLabel: GtkLabel with accelerator monitoring facilities.
  * Copyright (C) 1998 Tim Janik
  *
  * This library is free software; you can redistribute it and/or
@@ -32,7 +31,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtklabel.h>
+#include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
 

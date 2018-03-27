@@ -27,6 +27,7 @@
 #include <string.h>
 
 #include "gtkaccellabel.h"
+#include "gtklabel.h"
 #include "gtkcontainerprivate.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"

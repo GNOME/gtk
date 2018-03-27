@@ -28,6 +28,7 @@
 #include "config.h"
 #include <string.h>
 
+#include "gtklabel.h"
 #include "gtkaccellabel.h"
 #include "gtkaccelmap.h"
 #include "gtkintl.h"
@@ -47,8 +48,8 @@
  * @Title: GtkAccelLabel
  * @See_also: #GtkAccelGroup
  *
- * The #GtkAccelLabel widget is a subclass of #GtkLabel that also displays an
- * accelerator key on the right of the label text, e.g. “Ctrl+S”.
+ * The #GtkAccelLabel is a widget that shows an accelerator next to a description
+ * of said accelerator, e.g. “Save Document Ctrl+S”.
  * It is commonly used in menus to show the keyboard short-cuts for commands.
  *
  * The accelerator key to display is typically not set explicitly (although it

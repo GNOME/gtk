@@ -22,6 +22,7 @@
 #include "gtkmodelmenuitem.h"
 
 #include "gtkaccellabel.h"
+#include "gtklabel.h"
 #include "gtkcheckmenuitemprivate.h"
 #include "gtkimage.h"
 #include "gtkbox.h"
