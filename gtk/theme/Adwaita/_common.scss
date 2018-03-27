@@ -1720,30 +1720,101 @@ headerbar { // headerbar border rounding
 /************
  * Pathbars *
  ************/
-.path-bar button {
-  &.text-button, &.image-button, & {
-    padding-left: 4px;
-    padding-right: 4px;
+.path-bar.path-bar.path-bar.path-bar.path-bar button {
+  // the .path-bar selector is repeated multiple times to increase specificity
+  // and prevent this style from being overridden by more specific rules; the
+  // proper solution would probably be to change the button's element name to
+  // something like "pathelement", but that would break existing themes
+
+  $_regular_padding: 9px;
+  $_image_button_padding: 4px;
+
+  padding-left: $_regular_padding;
+  padding-right: $_regular_padding;
+
+  // unset the style; make the top and the bottom border transparent instead of
+  // removing them to keep the height consistent with other buttons
+  border-color: transparent;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  border-radius: 0;
+  border-left-width: 0;
+  border-right-width: 0;
+  background: none;
+  box-shadow: none;
+
+  // add an extra pixel to left padding of all buttons but the first to make the
+  // separators appear centered
+  &:not(first-child) {
+    padding-left: ($_regular_padding + 1px);
   }
 
+  // slider and image buttons look really odd with 10px padding, reduce it
+  &.slider-button, &.image-button:not(.text-button) {
+    padding-left: $_image_button_padding;
+    padding-right: $_image_button_padding;
+
+    &:not(first-child) {
+      padding-left: ($_image_button_padding + 1px);
+    }
+  }
+
+  // normal image buttons have a lot of padding around the labels, but it is too
+  // much padding for path bars
   &.text-button.image-button label {
     padding-left: 0;
     padding-right: 0;
   }
 
-  &.text-button.image-button, & {
-    label:last-child { padding-right: 8px; }
-    label:first-child { padding-left: 8px; }
+  // add small vertical separators between the buttons
+  &:not(:first-child) {
+    & {
+      background-image: image($borders_color);
+      background-size: 1px 12px;
+      background-position: 0 50%;
+      background-repeat: no-repeat;
+    }
+
+    &:disabled {
+      background-image: image($insensitive_borders_color);
+    }
   }
 
-  image {
-    padding-left: 4px;
-    padding-right: 4px;
+  // make the arrows more transparent to make it easier to discern whether the
+  // slider buttons are disabled, since there is no backround to help users tell
+  // what state they are in
+  &.slider-button:disabled {
+    color: transparentize($insensitive_fg_color, 0.35);
   }
 
-  &.slider-button {
-    padding-left: 0;
-    padding-right: 0;
+  &.slider-button:backdrop {
+    color: $backdrop_fg_color;
+  }
+
+  &.slider-button:backdrop:disabled {
+    color: $backdrop_insensitive_color;
+  }
+
+  // add transition for a fancy hover animation
+  & > * {
+    transition: box-shadow 0.25s;
+  }
+
+  &:hover > * {
+    box-shadow: inset 0 -2px 0 $borders_color;
+  }
+
+  &:checked > * {
+    box-shadow: inset 0 -2px 0 $selected_bg_color;
+  }
+
+  &:checked:disabled > * {
+    box-shadow: inset 0 -2px 0 $insensitive_borders_color;
+  }
+
+  // add right margin to images to separate them from the labels
+  & image:not(:last-child) {
+    margin-right: 4px;
   }
 }
 

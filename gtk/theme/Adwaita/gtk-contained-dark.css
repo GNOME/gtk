@@ -679,17 +679,35 @@ window.csd > .titlebar:not(headerbar) { padding: 0; background-color: transparen
 .titlebar:not(headerbar) > separator { background-color: #1b1f20; }
 
 /************ Pathbars * */
-.path-bar button.text-button, .path-bar button.image-button, .path-bar button { padding-left: 4px; padding-right: 4px; }
+.path-bar.path-bar.path-bar.path-bar.path-bar button { padding-left: 9px; padding-right: 9px; border-color: transparent; border-top-color: transparent; border-bottom-color: transparent; border-radius: 0; border-left-width: 0; border-right-width: 0; background: none; box-shadow: none; }
 
-.path-bar button.text-button.image-button label { padding-left: 0; padding-right: 0; }
+.path-bar.path-bar.path-bar.path-bar.path-bar button:not(first-child) { padding-left: 10px; }
 
-.path-bar button.text-button.image-button label:last-child, .path-bar button label:last-child { padding-right: 8px; }
+.path-bar.path-bar.path-bar.path-bar.path-bar button.slider-button, .path-bar.path-bar.path-bar.path-bar.path-bar button.image-button:not(.text-button) { padding-left: 4px; padding-right: 4px; }
 
-.path-bar button.text-button.image-button label:first-child, .path-bar button label:first-child { padding-left: 8px; }
+.path-bar.path-bar.path-bar.path-bar.path-bar button.slider-button:not(first-child), .path-bar.path-bar.path-bar.path-bar.path-bar button.image-button:not(.text-button):not(first-child) { padding-left: 5px; }
 
-.path-bar button image { padding-left: 4px; padding-right: 4px; }
+.path-bar.path-bar.path-bar.path-bar.path-bar button.text-button.image-button label { padding-left: 0; padding-right: 0; }
 
-.path-bar button.slider-button { padding-left: 0; padding-right: 0; }
+.path-bar.path-bar.path-bar.path-bar.path-bar button:not(:first-child) { background-image: image(#1b1f20); background-size: 1px 12px; background-position: 0 50%; background-repeat: no-repeat; }
+
+.path-bar.path-bar.path-bar.path-bar.path-bar button:not(:first-child):disabled { background-image: image(#1b1f20); }
+
+.path-bar.path-bar.path-bar.path-bar.path-bar button.slider-button:disabled { color: rgba(145, 148, 148, 0.65); }
+
+.path-bar.path-bar.path-bar.path-bar.path-bar button.slider-button:backdrop { color: #919494; }
+
+.path-bar.path-bar.path-bar.path-bar.path-bar button.slider-button:backdrop:disabled { color: #566164; }
+
+.path-bar.path-bar.path-bar.path-bar.path-bar button > * { transition: box-shadow 0.25s; }
+
+.path-bar.path-bar.path-bar.path-bar.path-bar button:hover > * { box-shadow: inset 0 -2px 0 #1b1f20; }
+
+.path-bar.path-bar.path-bar.path-bar.path-bar button:checked > * { box-shadow: inset 0 -2px 0 #215d9c; }
+
+.path-bar.path-bar.path-bar.path-bar.path-bar button:checked:disabled > * { box-shadow: inset 0 -2px 0 #1b1f20; }
+
+.path-bar.path-bar.path-bar.path-bar.path-bar button image:not(:last-child) { margin-right: 4px; }
 
 /************** Tree Views * */
 treeview.view { border-left-color: #898b8b; border-top-color: #33393b; }
