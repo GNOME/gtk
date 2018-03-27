@@ -1006,6 +1006,7 @@ response_cb (GtkDialog *dialog,
 
   g_object_notify (G_OBJECT (font_button), "font");
   g_object_notify (G_OBJECT (font_button), "font-desc");
+  g_object_notify (G_OBJECT (font_button), "font-features");
 
   g_object_thaw_notify (object);
 
