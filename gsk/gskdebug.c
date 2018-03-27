@@ -10,6 +10,7 @@ static const GDebugKey gsk_debug_keys[] = {
   { "vulkan", GSK_DEBUG_VULKAN },
   { "fallback", GSK_DEBUG_FALLBACK },
   { "glyphcache", GSK_DEBUG_GLYPH_CACHE },
+  { "diff", GSK_DEBUG_DIFF },
   { "geometry", GSK_DEBUG_GEOMETRY },
   { "full-redraw", GSK_DEBUG_FULL_REDRAW},
   { "sync", GSK_DEBUG_SYNC },
