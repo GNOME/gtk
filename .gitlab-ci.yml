@@ -26,26 +26,18 @@ flatpak:demo:
   image: registry.gitlab.com/alatiera/gnome-nightly-oci/gnome-master:latest
   stage: flatpak
   script:
-    - flatpak-builder --stop-at=gtk app build-aux/flatpak/org.gtk.Demo.json
-    - flatpak-builder --run app build-aux/flatpak/org.gtk.Demo.json meson --prefix /app --libdir /app/lib --buildtype debug -Dx11-backend=true -Dwayland-backend=true -Dprint-backends=file -Dbuild-tests=false -Ddemos=true _build .
-    - flatpak-builder --run app build-aux/flatpak/org.gtk.Demo.json ninja -C _build install
-    - flatpak-builder --finish-only --repo=repo app build-aux/flatpak/org.gtk.Demo.json
-    - flatpak build-bundle repo gtk-demo-dev.flatpak --runtime-repo=https://flathub.org/repo/flathub.flatpakrepo org.gtk.Demo
+    - bash -x ./.gitlab-ci/flatpak-build.sh org.gtk.Demo
   artifacts:
     paths:
-      - gtk-demo-dev.flatpak
+      - org.gtk.Demo-dev.flatpak
     expire_in: 1 day
 
 flatpak:widget-factory:
   image: registry.gitlab.com/alatiera/gnome-nightly-oci/gnome-master:latest
   stage: flatpak
   script:
-    - flatpak-builder --stop-at=gtk app build-aux/flatpak/org.gtk.WidgetFactory.json
-    - flatpak-builder --run app build-aux/flatpak/org.gtk.WidgetFactory.json meson --prefix /app --libdir /app/lib --buildtype debug -Dx11-backend=true -Dwayland-backend=true -Dprint-backends=file -Dbuild-tests=false -Ddemos=true _build .
-    - flatpak-builder --run app build-aux/flatpak/org.gtk.WidgetFactory.json ninja -C _build install
-    - flatpak-builder --finish-only --repo=repo app build-aux/flatpak/org.gtk.WidgetFactory.json
-    - flatpak build-bundle repo gtk-widget-factory-dev.flatpak --runtime-repo=https://flathub.org/repo/flathub.flatpakrepo org.gtk.WidgetFactory
+    - bash -x ./.gitlab-ci/flatpak-build.sh org.gtk.WidgetFactory
   artifacts:
     paths:
-      - gtk-widget-factory-dev.flatpak
+      - org.gtk.WidgetFactory-dev.flatpak
     expire_in: 1 day
