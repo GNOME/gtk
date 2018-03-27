@@ -3510,12 +3510,14 @@ add_actions (GtkPlacesSidebar *sidebar)
 static GMenuItem *
 add_menu_item (GMenu       *menu,
                const gchar *label,
-               const gchar *action)
+               const gchar *action,
+               gboolean     hide_when_disabled)
 {
   GMenuItem *menu_item;
 
   menu_item = g_menu_item_new (label, action);
-  g_menu_item_set_attribute (menu_item, "hidden-when", "s", "action-disabled");
+  if (hide_when_disabled)
+    g_menu_item_set_attribute (menu_item, "hidden-when", "s", "action-disabled");
   g_menu_append_item (menu, menu_item);
 
   return menu_item;
@@ -3562,50 +3564,50 @@ create_row_context_menu (GtkPlacesSidebar *sidebar,
 
   bookmarks_menu_items = g_menu_new ();
 
-  add_menu_item (bookmarks_menu_items, _("_Add Bookmark"), "row.bookmark");
-  add_menu_item (bookmarks_menu_items, _("_Remove"), "row.remove");
-  add_menu_item (bookmarks_menu_items, _("Rename…"), "row.rename");
+  add_menu_item (bookmarks_menu_items, _("_Add Bookmark"), "row.bookmark", TRUE);
+  add_menu_item (bookmarks_menu_items, _("_Remove"), "row.remove", FALSE);
+  add_menu_item (bookmarks_menu_items, _("Rename…"), "row.rename", FALSE);
 
   mount_menu_items = g_menu_new ();
 
-  add_menu_item (mount_menu_items, _("_Mount"), "row.mount");
-  add_menu_item (mount_menu_items, _("_Unmount"), "row.unmount");
-  add_menu_item (mount_menu_items, _("_Eject"), "row.eject");
-  add_menu_item (mount_menu_items, _("_Detect Media"), "row.rescan");
-  start_menu_item = add_menu_item (mount_menu_items, _("_Start"), "row.start");
-  stop_menu_item = add_menu_item (mount_menu_items, _("_Stop"), "row.stop");
+  add_menu_item (mount_menu_items, _("_Mount"), "row.mount", TRUE);
+  add_menu_item (mount_menu_items, _("_Unmount"), "row.unmount", TRUE);
+  add_menu_item (mount_menu_items, _("_Eject"), "row.eject", TRUE);
+  add_menu_item (mount_menu_items, _("_Detect Media"), "row.rescan", TRUE);
+  start_menu_item = add_menu_item (mount_menu_items, _("_Start"), "row.start", TRUE);
+  stop_menu_item = add_menu_item (mount_menu_items, _("_Stop"), "row.stop", TRUE);
 
   context_menu = g_menu_new ();
   g_menu_append_section (context_menu, NULL, G_MENU_MODEL (open_menu_items));
   g_menu_append_section (context_menu, NULL, G_MENU_MODEL (bookmarks_menu_items));
   g_menu_append_section (context_menu, NULL, G_MENU_MODEL (mount_menu_items));
 
-  #ifdef HAVE_CLOUDPROVIDERS
-    CloudProvidersAccount *cloud_provider_account;
+#ifdef HAVE_CLOUDPROVIDERS
+  CloudProvidersAccount *cloud_provider_account;
 
-    g_object_get (row, "cloud-provider-account", &cloud_provider_account, NULL);
+  g_object_get (row, "cloud-provider-account", &cloud_provider_account, NULL);
 
-    if (cloud_provider_account)
-      {
-        context_menu = g_menu_new ();
-        g_menu_append_section (context_menu, NULL, G_MENU_MODEL (open_menu_items));
+  if (cloud_provider_account)
+    {
+      context_menu = g_menu_new ();
+      g_menu_append_section (context_menu, NULL, G_MENU_MODEL (open_menu_items));
 
-        cloud_provider_menu = cloud_providers_account_get_menu_model (cloud_provider_account);
-        cloud_provider_action_group = cloud_providers_account_get_action_group (cloud_provider_account);
+      cloud_provider_menu = cloud_providers_account_get_menu_model (cloud_provider_account);
+      cloud_provider_action_group = cloud_providers_account_get_action_group (cloud_provider_account);
 
-        if (cloud_provider_menu != NULL && cloud_provider_action_group != NULL)
-          {
-            g_menu_append_section (context_menu, NULL, cloud_provider_menu);
-            gtk_widget_insert_action_group (GTK_WIDGET (sidebar),
-                                            "cloudprovider",
-                                            G_ACTION_GROUP (cloud_provider_action_group));
-          }
-      }
-    else
-      {
-        return;
-      }
-  #endif
+      if (cloud_provider_menu != NULL && cloud_provider_action_group != NULL)
+        {
+          g_menu_append_section (context_menu, NULL, cloud_provider_menu);
+          gtk_widget_insert_action_group (GTK_WIDGET (sidebar),
+                                          "cloudprovider",
+                                          G_ACTION_GROUP (cloud_provider_action_group));
+        }
+    }
+  else
+    {
+      return;
+    }
+#endif
 
   g_object_get (gtk_widget_get_settings (GTK_WIDGET (sidebar)),
                 "gtk-dialogs-use-header", &prefer_popover_menu,
