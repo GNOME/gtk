@@ -881,24 +881,10 @@ gtk_scrolled_window_invalidate_overshoot (GtkScrolledWindow *scrolled_window)
   gtk_scrolled_window_relative_allocation (GTK_WIDGET (scrolled_window),
                                            &child_allocation);
   if (overshoot_x != 0)
-    {
-      gtk_widget_queue_draw_area (GTK_WIDGET (scrolled_window),
-                                  overshoot_x < 0 ? child_allocation.x :
-                                      child_allocation.x + child_allocation.width - MAX_OVERSHOOT_DISTANCE,
-                                  child_allocation.y,
-                                  MAX_OVERSHOOT_DISTANCE,
-                                  child_allocation.height);
-    }
+    gtk_widget_queue_draw (GTK_WIDGET (scrolled_window));
 
   if (overshoot_y != 0)
-    {
-      gtk_widget_queue_draw_area (GTK_WIDGET (scrolled_window),
-                                  child_allocation.x,
-                                  overshoot_y < 0 ? child_allocation.y :
-                                      child_allocation.y + child_allocation.height - MAX_OVERSHOOT_DISTANCE,
-                                  child_allocation.width,
-                                  MAX_OVERSHOOT_DISTANCE);
-    }
+    gtk_widget_queue_draw (GTK_WIDGET (scrolled_window));
 }
 
 static void

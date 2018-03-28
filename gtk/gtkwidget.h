@@ -416,15 +416,6 @@ void       gtk_widget_draw                (GtkWidget           *widget,
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_queue_draw          (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
-void       gtk_widget_queue_draw_area     (GtkWidget           *widget,
-                                           gint                 x,
-                                           gint                 y,
-                                           gint                 width,
-                                           gint                 height);
-GDK_AVAILABLE_IN_ALL
-void       gtk_widget_queue_draw_region   (GtkWidget           *widget,
-                                           const cairo_region_t*region);
-GDK_AVAILABLE_IN_ALL
 void       gtk_widget_queue_resize        (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_queue_resize_no_redraw (GtkWidget *widget);

@@ -1347,12 +1347,7 @@ gtk_paned_size_allocate (GtkWidget           *widget,
            old_handle_pos.width != priv->handle_pos.width ||
            old_handle_pos.height != priv->handle_pos.height))
         {
-          gtk_widget_queue_draw_area (widget,
-                                      old_handle_pos.x, old_handle_pos.y,
-                                      old_handle_pos.width, old_handle_pos.height);
-          gtk_widget_queue_draw_area (widget,
-                                      priv->handle_pos.x, priv->handle_pos.y,
-                                      priv->handle_pos.width, priv->handle_pos.height);
+          gtk_widget_queue_draw (widget);
         }
 
 

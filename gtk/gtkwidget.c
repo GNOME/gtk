@@ -3220,11 +3220,7 @@ gtk_widget_unparent (GtkWidget *widget)
     gtk_widget_set_focus_child (priv->parent, NULL);
 
   if (_gtk_widget_is_drawable (priv->parent))
-    gtk_widget_queue_draw_area (priv->parent,
-				priv->clip.x,
-				priv->clip.y,
-				priv->clip.width,
-				priv->clip.height);
+    gtk_widget_queue_draw (priv->parent);
 
   if (priv->visible && _gtk_widget_get_visible (priv->parent))
     gtk_widget_queue_resize (priv->parent);
@@ -4000,57 +3996,6 @@ gtk_widget_invalidate_paintable_size (GtkWidget *widget)
     gdk_paintable_invalidate_size (l->data);
 }
 
-static void
-gtk_widget_real_queue_draw (GtkWidget *widget)
-{
-  for (; widget; widget = _gtk_widget_get_parent (widget))
-    {
-      GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-      if (priv->draw_needed)
-        break;
-
-      priv->draw_needed = TRUE;
-      g_clear_pointer (&priv->render_node, gsk_render_node_unref);
-      gtk_widget_invalidate_paintable_contents (widget);
-      if (_gtk_widget_get_has_surface (widget) &&
-          _gtk_widget_get_realized (widget))
-        gdk_surface_queue_expose (gtk_widget_get_surface (widget));
-    }
-}
-
-/**
- * gtk_widget_queue_draw_area:
- * @widget: a #GtkWidget
- * @x: x coordinate of upper-left corner of rectangle to redraw
- * @y: y coordinate of upper-left corner of rectangle to redraw
- * @width: width of region to draw
- * @height: height of region to draw
- *
- * Convenience function that calls gtk_widget_queue_draw_region() on
- * the region created from the given coordinates.
- *
- * The region here is specified in widget coordinates of @widget.
- *
- * @width or @height may be 0, in this case this function does
- * nothing. Negative values for @width and @height are not allowed.
- */
-void
-gtk_widget_queue_draw_area (GtkWidget *widget,
-			    gint       x,
-			    gint       y,
-			    gint       width,
-			    gint       height)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  /* Just return if the widget isn't mapped */
-  if (!_gtk_widget_get_mapped (widget))
-    return;
-
-  gtk_widget_real_queue_draw (widget);
-}
-
 /**
  * gtk_widget_queue_draw:
  * @widget: a #GtkWidget
@@ -4067,7 +4012,20 @@ gtk_widget_queue_draw (GtkWidget *widget)
   if (!_gtk_widget_get_mapped (widget))
     return;
 
-  gtk_widget_real_queue_draw (widget);
+  for (; widget; widget = _gtk_widget_get_parent (widget))
+    {
+      GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+      if (priv->draw_needed)
+        break;
+
+      priv->draw_needed = TRUE;
+      g_clear_pointer (&priv->render_node, gsk_render_node_unref);
+      gtk_widget_invalidate_paintable_contents (widget);
+      if (_gtk_widget_get_has_surface (widget) &&
+          _gtk_widget_get_realized (widget))
+        gdk_surface_queue_expose (gtk_widget_get_surface (widget));
+    }
 }
 
 static void
@@ -4278,32 +4236,6 @@ get_box_padding (GtkCssStyle *style,
   border->left = get_number (style, GTK_CSS_PROPERTY_PADDING_LEFT);
   border->bottom = get_number (style, GTK_CSS_PROPERTY_PADDING_BOTTOM);
   border->right = get_number (style, GTK_CSS_PROPERTY_PADDING_RIGHT);
-}
-
-/**
- * gtk_widget_queue_draw_region:
- * @widget: a #GtkWidget
- * @region: region to draw, in @widget's coordinates
- *
- * Invalidates the area of @widget defined by @region. Makes sure
- * that the compositor updates the speicifed region of the toplevel
- * window.
- *
- * Normally you would only use this function in widget
- * implementations. You might also use it to schedule a redraw of a
- * #GtkDrawingArea or some portion thereof.
- **/
-void
-gtk_widget_queue_draw_region (GtkWidget            *widget,
-                              const cairo_region_t *region)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  /* Just return if the widget isn't mapped */
-  if (!_gtk_widget_get_mapped (widget))
-    return;
-
-  gtk_widget_real_queue_draw (widget);
 }
 
 /**
@@ -4570,23 +4502,8 @@ check_clip:
   position_changed |= (old_clip.x != priv->clip.x ||
                       old_clip.y != priv->clip.y);
 
-  if (_gtk_widget_get_mapped (widget))
-    {
-      if (position_changed || size_changed || baseline_changed)
-        {
-          /* Invalidate union(old_clip,priv->clip) in the toplevel's window
-           */
-          GtkWidget *parent = _gtk_widget_get_parent (widget);
-          cairo_region_t *invalidate = cairo_region_create_rectangle (&priv->clip);
-          cairo_region_union_rectangle (invalidate, &old_clip);
-
-          /* Use the parent here since that's what priv->allocation and priv->clip
-           * are relative to */
-          gtk_widget_queue_draw_region (parent ? parent : widget, invalidate);
-          cairo_region_destroy (invalidate);
-          gtk_widget_real_queue_draw (widget);
-        }
-    }
+  if (position_changed || size_changed || baseline_changed)
+    gtk_widget_queue_draw (widget);
 
 out:
   if (priv->alloc_needed_on_child)
