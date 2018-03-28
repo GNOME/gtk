@@ -124,6 +124,9 @@ struct _GtkSnapshotState {
     struct {
       char *message;
     } debug;
+    struct {
+      GskRenderNode *source_node;
+    } mask;
   } data;
 };
 
@@ -1248,6 +1251,73 @@ gtk_snapshot_push_blend (GtkSnapshot  *snapshot,
   gtk_snapshot_push_state (snapshot,
                            top_state->transform,
                            gtk_snapshot_collect_blend_bottom,
+                           NULL);
+}
+
+static GskRenderNode *
+gtk_snapshot_collect_mask_mask (GtkSnapshot      *snapshot,
+                                GtkSnapshotState *state,
+                                GskRenderNode   **nodes,
+                                guint             n_nodes)
+{
+  GskRenderNode *source_child, *mask_child, *mask_node;
+
+  mask_child = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes);
+  source_child = state->data.mask.source_node;
+
+  if (source_child == NULL ||
+      mask_child == NULL)
+    return NULL;
+
+  mask_node = gsk_mask_node_new (source_child, mask_child);
+
+  gsk_render_node_unref (source_child);
+  gsk_render_node_unref (mask_child);
+
+  return mask_node;
+}
+
+static GskRenderNode *
+gtk_snapshot_collect_mask_source (GtkSnapshot      *snapshot,
+                                  GtkSnapshotState *state,
+                                  GskRenderNode   **nodes,
+                                  guint             n_nodes)
+{
+  GtkSnapshotState *prev_state = gtk_snapshot_get_previous_state (snapshot);
+
+  g_assert (prev_state->collect_func == gtk_snapshot_collect_mask_mask);
+
+  prev_state->data.mask.source_node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes);
+
+  return NULL;
+}
+
+static void
+gtk_snapshot_clear_mask_source (GtkSnapshotState *state)
+{
+  g_clear_pointer (&(state->data.mask.source_node), gsk_render_node_unref);
+}
+
+/**
+ * gtk_snapshot_push_mask:
+ * @snapshot: a #GtkSnapshot
+ *
+ * Calling this function requires 2 subsequent calls to gtk_snapshot_pop().
+ **/
+void
+gtk_snapshot_push_mask (GtkSnapshot *snapshot)
+{
+  GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
+  GtkSnapshotState *source_state;
+
+  source_state = gtk_snapshot_push_state (snapshot,
+                                          current_state->transform,
+                                          gtk_snapshot_collect_mask_source,
+                                          gtk_snapshot_clear_mask_source);
+
+  gtk_snapshot_push_state (snapshot,
+                           source_state->transform,
+                           gtk_snapshot_collect_mask_mask,
                            NULL);
 }
 

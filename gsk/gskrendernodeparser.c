@@ -1566,6 +1566,31 @@ parse_blend_node (GtkCssParser *parser)
 }
 
 static GskRenderNode *
+parse_mask_node (GtkCssParser *parser)
+{
+  GskRenderNode *source = NULL;
+  GskRenderNode *mask = NULL;
+  const Declaration declarations[] = {
+    { "source", parse_node, clear_node, &source },
+    { "mask", parse_node, clear_node, &mask },
+  };
+  GskRenderNode *result;
+
+  parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
+  if (source == NULL)
+    source = create_default_render_node ();
+  if (mask == NULL)
+    mask = gsk_color_node_new (&GDK_RGBA("AAFF00"), &GRAPHENE_RECT_INIT (0, 0, 50, 50));
+
+  result = gsk_mask_node_new (source, mask);
+
+  gsk_render_node_unref (source);
+  gsk_render_node_unref (mask);
+
+  return result;
+}
+
+static GskRenderNode *
 parse_repeat_node (GtkCssParser *parser)
 {
   GskRenderNode *child = NULL;
@@ -1843,6 +1868,7 @@ parse_node (GtkCssParser *parser,
     { "texture", parse_texture_node },
     { "transform", parse_transform_node },
     { "glshader", parse_glshader_node },
+    { "mask", parse_mask_node },
   };
   GskRenderNode **node_p = out_node;
   guint i;
@@ -2906,6 +2932,17 @@ render_node_print (Printer       *p,
               }
           }
         append_node_param (p, "top", gsk_blend_node_get_top_child (node));
+
+        end_node (p);
+      }
+      break;
+
+    case GSK_MASK_NODE:
+      {
+        start_node (p, "mask");
+
+        append_node_param (p, "source", gsk_mask_node_get_source (node));
+        append_node_param (p, "mask", gsk_mask_node_get_mask (node));
 
         end_node (p);
       }

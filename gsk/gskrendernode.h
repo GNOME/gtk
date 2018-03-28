@@ -164,6 +164,7 @@ GskRenderNode *         gsk_render_node_deserialize             (GBytes         
 #define GSK_TYPE_TEXT_NODE                      (gsk_text_node_get_type())
 #define GSK_TYPE_BLUR_NODE                      (gsk_blur_node_get_type())
 #define GSK_TYPE_GL_SHADER_NODE                 (gsk_gl_shader_node_get_type())
+#define GSK_TYPE_MASK_NODE                      (gsk_mask_node_get_type())
 
 typedef struct _GskDebugNode                    GskDebugNode;
 typedef struct _GskColorNode                    GskColorNode;
@@ -190,6 +191,7 @@ typedef struct _GskCrossFadeNode                GskCrossFadeNode;
 typedef struct _GskTextNode                     GskTextNode;
 typedef struct _GskBlurNode                     GskBlurNode;
 typedef struct _GskGLShaderNode                 GskGLShaderNode;
+typedef struct _GskMaskNode                     GskMaskNode;
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_debug_node_get_type                 (void) G_GNUC_CONST;
@@ -530,6 +532,16 @@ GDK_AVAILABLE_IN_ALL
 GBytes *                gsk_gl_shader_node_get_args             (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
 GskGLShader *           gsk_gl_shader_node_get_shader           (GskRenderNode            *node);
+
+GDK_AVAILABLE_IN_ALL
+GType                   gsk_mask_node_get_type                  (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
+GskRenderNode *         gsk_mask_node_new                       (GskRenderNode            *source_child,
+                                                                 GskRenderNode            *mask_child);
+GDK_AVAILABLE_IN_ALL
+GskRenderNode *         gsk_mask_node_get_source                (GskRenderNode            *node);
+GDK_AVAILABLE_IN_ALL
+GskRenderNode *         gsk_mask_node_get_mask                  (GskRenderNode            *node);
 
 G_END_DECLS
 

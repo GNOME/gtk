@@ -3808,6 +3808,7 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
     case GSK_REPEATING_RADIAL_GRADIENT_NODE:
     case GSK_CAIRO_NODE:
+    case GSK_MASK_NODE:
     default:
       {
         render_fallback_node (self, node, builder);
