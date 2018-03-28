@@ -66,6 +66,7 @@ typedef struct
   GObject parent_instance;
 
   GdkSurface *surface;
+  GskRenderNode *prev_node;
   GskRenderNode *root_node;
   GdkDisplay *display;
 
@@ -375,6 +376,8 @@ gsk_renderer_unrealize (GskRenderer *renderer)
 
   GSK_RENDERER_GET_CLASS (renderer)->unrealize (renderer);
 
+  g_clear_pointer (&priv->prev_node, gsk_render_node_unref);
+
   priv->is_realized = FALSE;
 }
 
@@ -465,31 +468,36 @@ gsk_renderer_render (GskRenderer          *renderer,
                      const cairo_region_t *region)
 {
   GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
-  cairo_region_t *real_region;
+  cairo_region_t *clip;
 
   g_return_if_fail (GSK_IS_RENDERER (renderer));
   g_return_if_fail (priv->is_realized);
   g_return_if_fail (GSK_IS_RENDER_NODE (root));
   g_return_if_fail (priv->root_node == NULL);
 
-  priv->root_node = gsk_render_node_ref (root);
-
-  if (region == NULL || GSK_RENDERER_DEBUG_CHECK (renderer, FULL_REDRAW))
+  if (region == NULL || priv->prev_node == NULL || GSK_RENDERER_DEBUG_CHECK (renderer, FULL_REDRAW))
     {
-      real_region = cairo_region_create_rectangle (&(GdkRectangle) {
-                                                       0, 0,
-                                                       gdk_surface_get_width (priv->surface),
-                                                       gdk_surface_get_height (priv->surface)
-                                                   });
-
-      GSK_RENDERER_GET_CLASS (renderer)->render (renderer, root, real_region);
-
-      cairo_region_destroy (real_region);
+      clip = cairo_region_create_rectangle (&(GdkRectangle) {
+                                                0, 0,
+                                                gdk_surface_get_width (priv->surface),
+                                                gdk_surface_get_height (priv->surface)
+                                            });
     }
   else
     {
-      GSK_RENDERER_GET_CLASS (renderer)->render (renderer, root, region);
+      clip = cairo_region_copy (region);
+      gsk_render_node_diff (priv->prev_node, root, clip);
+
+      if (cairo_region_is_empty (clip))
+        {
+          cairo_region_destroy (clip);
+          return;
+        }
     }
+
+  priv->root_node = gsk_render_node_ref (root);
+
+  GSK_RENDERER_GET_CLASS (renderer)->render (renderer, root, clip);
 
 #ifdef G_ENABLE_DEBUG
   if (GSK_RENDERER_DEBUG_CHECK (renderer, RENDERER))
@@ -508,7 +516,9 @@ gsk_renderer_render (GskRenderer          *renderer,
     }
 #endif
 
-  g_clear_pointer (&priv->root_node, gsk_render_node_unref);
+  g_clear_pointer (&priv->prev_node, gsk_render_node_unref);
+  priv->prev_node = priv->root_node;
+  priv->root_node = NULL;
 }
 
 /*< private >
