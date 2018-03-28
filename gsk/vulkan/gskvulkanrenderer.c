@@ -187,7 +187,7 @@ gsk_vulkan_renderer_render_texture (GskRenderer           *renderer,
                                                 ceil (viewport->size.width),
                                                 ceil (viewport->size.height));
 
-  gsk_vulkan_render_reset (render, image, viewport);
+  gsk_vulkan_render_reset (render, image, viewport, NULL);
 
   gsk_vulkan_render_add_node (render, root);
 
@@ -211,15 +211,21 @@ gsk_vulkan_renderer_render_texture (GskRenderer           *renderer,
 }
 
 static void
-gsk_vulkan_renderer_render (GskRenderer   *renderer,
-                            GskRenderNode *root)
+gsk_vulkan_renderer_render (GskRenderer          *renderer,
+                            GskRenderNode        *root,
+                            const cairo_region_t *region)
 {
   GskVulkanRenderer *self = GSK_VULKAN_RENDERER (renderer);
   GskVulkanRender *render;
+  GdkDrawingContext *context;
+  GdkSurface *surface;
+  cairo_region_t *clip;
 #ifdef G_ENABLE_DEBUG
   GskProfiler *profiler;
   gint64 cpu_time;
 #endif
+
+  surface = gsk_renderer_get_surface (renderer);
 
 #ifdef G_ENABLE_DEBUG
   profiler = gsk_renderer_get_profiler (renderer);
@@ -229,9 +235,14 @@ gsk_vulkan_renderer_render (GskRenderer   *renderer,
   gsk_profiler_timer_begin (profiler, self->profile_timers.cpu_time);
 #endif
 
+  context = gdk_surface_begin_draw_frame (surface,
+                                          GDK_DRAW_CONTEXT (self->vulkan),
+                                          region);
   render = self->render;
 
-  gsk_vulkan_render_reset (render, self->targets[gdk_vulkan_context_get_draw_index (self->vulkan)], NULL);
+  clip = gdk_drawing_context_get_clip (context);
+  gsk_vulkan_render_reset (render, self->targets[gdk_vulkan_context_get_draw_index (self->vulkan)], NULL, clip);
+  cairo_region_destroy (clip);
 
   gsk_vulkan_render_add_node (render, root);
 
@@ -247,20 +258,8 @@ gsk_vulkan_renderer_render (GskRenderer   *renderer,
 
   gsk_profiler_push_samples (profiler);
 #endif
-}
 
-static GdkDrawingContext *
-gsk_vulkan_renderer_begin_draw_frame (GskRenderer          *renderer,
-                                      const cairo_region_t *region)
-{
-  GskVulkanRenderer *self = GSK_VULKAN_RENDERER (renderer);
-  GdkDrawingContext *result;
-
-  result = gdk_surface_begin_draw_frame (gsk_renderer_get_surface (renderer),
-                                        GDK_DRAW_CONTEXT (self->vulkan),
-                                        region);
-
-  return result;
+  gdk_surface_end_draw_frame (surface, context);
 }
 
 static void
@@ -272,7 +271,6 @@ gsk_vulkan_renderer_class_init (GskVulkanRendererClass *klass)
   renderer_class->unrealize = gsk_vulkan_renderer_unrealize;
   renderer_class->render = gsk_vulkan_renderer_render;
   renderer_class->render_texture = gsk_vulkan_renderer_render_texture;
-  renderer_class->begin_draw_frame = gsk_vulkan_renderer_begin_draw_frame;
 }
 
 static void

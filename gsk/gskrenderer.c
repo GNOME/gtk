@@ -66,7 +66,6 @@ typedef struct
   GObject parent_instance;
 
   GdkSurface *surface;
-  GdkDrawingContext *drawing_context;
   GskRenderNode *root_node;
   GdkDisplay *display;
 
@@ -82,7 +81,6 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GskRenderer, gsk_renderer, G_TYPE_OBJECT)
 enum {
   PROP_SURFACE = 1,
   PROP_DISPLAY,
-  PROP_DRAWING_CONTEXT,
 
   N_PROPS
 };
@@ -116,30 +114,10 @@ gsk_renderer_real_render_texture (GskRenderer           *self,
   return NULL;
 }
 
-static GdkDrawingContext *
-gsk_renderer_real_begin_draw_frame (GskRenderer          *self,
-                                    const cairo_region_t *region)
-{
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (self);
-
-  return gdk_surface_begin_draw_frame (priv->surface,
-                                       NULL,
-                                       region);
-}
-
 static void
-gsk_renderer_real_end_draw_frame (GskRenderer       *self,
-                                  GdkDrawingContext *context)
-{
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (self);
-
-  gdk_surface_end_draw_frame (priv->surface,
-                              context);
-}
-
-static void
-gsk_renderer_real_render (GskRenderer *self,
-                          GskRenderNode *root)
+gsk_renderer_real_render (GskRenderer          *self,
+                          GskRenderNode        *root,
+                          const cairo_region_t *region)
 {
   GSK_RENDERER_WARN_NOT_IMPLEMENTED_METHOD (self, render);
 }
@@ -197,10 +175,6 @@ gsk_renderer_get_property (GObject    *gobject,
       g_value_set_object (value, priv->surface);
       break;
 
-    case PROP_DRAWING_CONTEXT:
-      g_value_set_object (value, priv->drawing_context);
-      break;
-
     case PROP_DISPLAY:
       g_value_set_object (value, priv->display);
       break;
@@ -235,8 +209,6 @@ gsk_renderer_class_init (GskRendererClass *klass)
 
   klass->realize = gsk_renderer_real_realize;
   klass->unrealize = gsk_renderer_real_unrealize;
-  klass->begin_draw_frame = gsk_renderer_real_begin_draw_frame;
-  klass->end_draw_frame = gsk_renderer_real_end_draw_frame;
   klass->render = gsk_renderer_real_render;
   klass->render_texture = gsk_renderer_real_render_texture;
 
@@ -264,19 +236,6 @@ gsk_renderer_class_init (GskRendererClass *klass)
                          "Surface",
                          "The surface associated to the renderer",
                          GDK_TYPE_SURFACE,
-                         G_PARAM_READABLE |
-                         G_PARAM_STATIC_STRINGS);
-
-  /**
-   * GskRenderer:drawing-context:
-   *
-   * The drawing context used when rendering.
-   */
-  gsk_renderer_properties[PROP_DRAWING_CONTEXT] =
-    g_param_spec_object ("drawing-context",
-                         "Drawing Context",
-                         "The drawing context used by the renderer",
-                         GDK_TYPE_DRAWING_CONTEXT,
                          G_PARAM_READABLE |
                          G_PARAM_STATIC_STRINGS);
 
@@ -327,24 +286,6 @@ gsk_renderer_get_root_node (GskRenderer *renderer)
   g_return_val_if_fail (GSK_IS_RENDERER (renderer), NULL);
 
   return priv->root_node;
-}
-
-/*< private >
- * gsk_renderer_get_drawing_context:
- * @renderer: a #GskRenderer
- *
- * Retrieves the #GdkDrawingContext used by @renderer.
- *
- * Returns: (transfer none) (nullable): a #GdkDrawingContext
- */
-GdkDrawingContext *
-gsk_renderer_get_drawing_context (GskRenderer *renderer)
-{
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
-
-  g_return_val_if_fail (GSK_IS_RENDERER (renderer), NULL);
-
-  return priv->drawing_context;
 }
 
 /**
@@ -524,6 +465,7 @@ gsk_renderer_render (GskRenderer          *renderer,
                      const cairo_region_t *region)
 {
   GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
+  cairo_region_t *real_region;
 
   g_return_if_fail (GSK_IS_RENDERER (renderer));
   g_return_if_fail (priv->is_realized);
@@ -534,22 +476,20 @@ gsk_renderer_render (GskRenderer          *renderer,
 
   if (region == NULL || GSK_RENDERER_DEBUG_CHECK (renderer, FULL_REDRAW))
     {
-      cairo_region_t *full_surface;
-
-      full_surface = cairo_region_create_rectangle (&(GdkRectangle) {
+      real_region = cairo_region_create_rectangle (&(GdkRectangle) {
                                                        0, 0,
                                                        gdk_surface_get_width (priv->surface),
                                                        gdk_surface_get_height (priv->surface)
                                                    });
 
-      priv->drawing_context = GSK_RENDERER_GET_CLASS (renderer)->begin_draw_frame (renderer, full_surface);
+      GSK_RENDERER_GET_CLASS (renderer)->render (renderer, root, real_region);
 
-      cairo_region_destroy (full_surface);
+      cairo_region_destroy (real_region);
     }
   else
-    priv->drawing_context = GSK_RENDERER_GET_CLASS (renderer)->begin_draw_frame (renderer, region);
-
-  GSK_RENDERER_GET_CLASS (renderer)->render (renderer, root);
+    {
+      GSK_RENDERER_GET_CLASS (renderer)->render (renderer, root, region);
+    }
 
 #ifdef G_ENABLE_DEBUG
   if (GSK_RENDERER_DEBUG_CHECK (renderer, RENDERER))
@@ -568,9 +508,6 @@ gsk_renderer_render (GskRenderer          *renderer,
     }
 #endif
 
-  GSK_RENDERER_GET_CLASS (renderer)->end_draw_frame (renderer, priv->drawing_context);
-
-  priv->drawing_context = NULL;
   g_clear_pointer (&priv->root_node, gsk_render_node_unref);
 }
 

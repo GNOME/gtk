@@ -178,12 +178,6 @@ static void gsk_gl_renderer_add_render_ops     (GskGLRenderer   *self,
                                                 GskRenderNode   *node,
                                                 RenderOpBuilder *builder);
 
-typedef enum
-{
-  RENDER_FULL,
-  RENDER_SCISSOR
-} RenderMode;
-
 struct _GskGLRenderer
 {
   GskRenderer parent_instance;
@@ -229,7 +223,7 @@ struct _GskGLRenderer
   } profile_timers;
 #endif
 
-  RenderMode render_mode;
+  cairo_region_t *render_region;
 
   gboolean has_buffers : 1;
 };
@@ -1942,51 +1936,6 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
   g_clear_object (&self->gl_context);
 }
 
-static GdkDrawingContext *
-gsk_gl_renderer_begin_draw_frame (GskRenderer          *renderer,
-                                  const cairo_region_t *update_area)
-{
-  GskGLRenderer *self = GSK_GL_RENDERER (renderer);
-  cairo_region_t *damage;
-  GdkDrawingContext *result;
-  GdkRectangle whole_surface;
-  GdkSurface *surface;
-
-  surface = gsk_renderer_get_surface (renderer);
-  whole_surface = (GdkRectangle) {
-                     0, 0,
-                     gdk_surface_get_width (surface) * self->scale_factor,
-                     gdk_surface_get_height (surface) * self->scale_factor
-                 };
-  damage = gdk_gl_context_get_damage (self->gl_context);
-  cairo_region_union (damage, update_area);
-
-  if (cairo_region_contains_rectangle (damage, &whole_surface) == CAIRO_REGION_OVERLAP_IN)
-    {
-      self->render_mode = RENDER_FULL;
-    }
-  else
-    {
-      GdkRectangle extents;
-
-      cairo_region_get_extents (damage, &extents);
-      cairo_region_union_rectangle (damage, &extents);
-
-      if (gdk_rectangle_equal (&extents, &whole_surface))
-        self->render_mode = RENDER_FULL;
-      else
-        self->render_mode = RENDER_SCISSOR;
-    }
-
-  result = gdk_surface_begin_draw_frame (surface,
-                                        GDK_DRAW_CONTEXT (self->gl_context),
-                                        damage);
-
-  cairo_region_destroy (damage);
-
-  return result;
-}
-
 static void
 gsk_gl_renderer_resize_viewport (GskGLRenderer         *self,
                                  const graphene_rect_t *viewport)
@@ -2032,48 +1981,27 @@ gsk_gl_renderer_clear (GskGLRenderer *self)
 static void
 gsk_gl_renderer_setup_render_mode (GskGLRenderer *self)
 {
-  switch (self->render_mode)
-  {
-    case RENDER_FULL:
+  if (self->render_region == NULL)
+    {
       glDisable (GL_SCISSOR_TEST);
-      break;
+    }
+  else
+    {
+      GdkSurface *surface = gsk_renderer_get_surface (GSK_RENDERER (self));
+      cairo_rectangle_int_t extents;
+      int surface_height;
 
-    case RENDER_SCISSOR:
-      {
-        GdkDrawingContext *context = gsk_renderer_get_drawing_context (GSK_RENDERER (self));
-        GdkSurface *surface = gsk_renderer_get_surface (GSK_RENDERER (self));
-        cairo_region_t *clip = gdk_drawing_context_get_clip (context);
-        cairo_rectangle_int_t extents;
-        int surface_height;
+      g_assert (cairo_region_num_rectangles (self->render_region) == 1);
 
-        /* Fall back to RENDER_FULL */
-        if (clip == NULL)
-          {
-            glDisable (GL_SCISSOR_TEST);
-            return;
-          }
+      surface_height = gdk_surface_get_height (surface) * self->scale_factor;
+      cairo_region_get_rectangle (self->render_region, 0, &extents);
 
-        g_assert (cairo_region_num_rectangles (clip) == 1);
-
-        surface_height = gdk_surface_get_height (surface) * self->scale_factor;
-
-        /*cairo_region_get_extents (clip, &extents);*/
-        cairo_region_get_rectangle (clip, 0, &extents);
-
-        glEnable (GL_SCISSOR_TEST);
-        glScissor (extents.x * self->scale_factor,
-                   surface_height - (extents.height * self->scale_factor) - (extents.y * self->scale_factor),
-                   extents.width * self->scale_factor,
-                   extents.height * self->scale_factor);
-
-        cairo_region_destroy (clip);
-        break;
-      }
-
-    default:
-      g_assert_not_reached ();
-      break;
-  }
+      glEnable (GL_SCISSOR_TEST);
+      glScissor (extents.x * self->scale_factor,
+                 surface_height - (extents.height * self->scale_factor) - (extents.y * self->scale_factor),
+                 extents.width * self->scale_factor,
+                 extents.height * self->scale_factor);
+    }
 }
 
 
@@ -2562,7 +2490,6 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
 
   g_return_val_if_fail (self->gl_context != NULL, NULL);
 
-  self->render_mode = RENDER_FULL;
   width = ceilf (viewport->size.width);
   height = ceilf (viewport->size.height);
 
@@ -2600,15 +2527,57 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
 }
 
 static void
-gsk_gl_renderer_render (GskRenderer   *renderer,
-                        GskRenderNode *root)
+gsk_gl_renderer_render (GskRenderer          *renderer,
+                        GskRenderNode        *root,
+                        const cairo_region_t *update_area)
 {
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
-  GdkSurface *surface = gsk_renderer_get_surface (renderer);
   graphene_rect_t viewport;
+  cairo_region_t *damage;
+  GdkDrawingContext *context;
+  GdkRectangle whole_surface;
+  GdkSurface *surface;
 
   if (self->gl_context == NULL)
     return;
+
+  surface = gsk_renderer_get_surface (renderer);
+  whole_surface = (GdkRectangle) {
+                      0, 0,
+                      gdk_surface_get_width (surface) * self->scale_factor,
+                      gdk_surface_get_height (surface) * self->scale_factor
+                  };
+  damage = gdk_gl_context_get_damage (self->gl_context);
+  cairo_region_union (damage, update_area);
+
+  if (cairo_region_contains_rectangle (damage, &whole_surface) == CAIRO_REGION_OVERLAP_IN)
+    {
+      self->render_region = NULL;
+    }
+  else
+    {
+      GdkRectangle extents;
+
+      cairo_region_get_extents (damage, &extents);
+      cairo_region_union_rectangle (damage, &extents);
+
+      if (gdk_rectangle_equal (&extents, &whole_surface))
+        self->render_region = NULL;
+      else
+        self->render_region = cairo_region_reference (damage);
+    }
+
+  context = gdk_surface_begin_draw_frame (surface,
+                                          GDK_DRAW_CONTEXT (self->gl_context),
+                                          damage);
+
+  cairo_region_destroy (damage);
+  if (self->render_region)
+    {
+      damage = gdk_drawing_context_get_clip (context);
+      cairo_region_union (self->render_region, damage);
+      cairo_region_destroy (damage);
+    }
 
   self->scale_factor = gdk_surface_get_scale_factor (surface);
   gdk_gl_context_make_current (self->gl_context);
@@ -2622,6 +2591,10 @@ gsk_gl_renderer_render (GskRenderer   *renderer,
 
   gdk_gl_context_make_current (self->gl_context);
   gsk_gl_renderer_clear_tree (self);
+
+  gdk_surface_end_draw_frame (surface, context);
+
+  g_clear_pointer (&self->render_region, cairo_region_destroy);
 }
 
 static void
@@ -2634,7 +2607,6 @@ gsk_gl_renderer_class_init (GskGLRendererClass *klass)
 
   renderer_class->realize = gsk_gl_renderer_realize;
   renderer_class->unrealize = gsk_gl_renderer_unrealize;
-  renderer_class->begin_draw_frame = gsk_gl_renderer_begin_draw_frame;
   renderer_class->render = gsk_gl_renderer_render;
   renderer_class->render_texture = gsk_gl_renderer_render_texture;
 }
