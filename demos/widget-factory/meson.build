@@ -9,6 +9,7 @@ executable('gtk4-widget-factory',
            dependencies: libgtk_dep,
            include_directories: confinc,
            gui_app: true,
+           link_args: extra_demo_ldflags,
            install: true)
 
 # desktop file

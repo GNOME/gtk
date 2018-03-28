@@ -104,6 +104,7 @@ executable('gtk4-demo',
            dependencies: gtkdemo_deps,
            include_directories: confinc,
            gui_app: true,
+           link_args: extra_demo_ldflags,
            install: true)
 
 executable('gtk4-demo-application',
@@ -112,6 +113,7 @@ executable('gtk4-demo-application',
            dependencies: gtkdemo_deps,
            include_directories: confinc,
            gui_app: true,
+           link_args: extra_demo_ldflags,
            install: true)
 
 # icons

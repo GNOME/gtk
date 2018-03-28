@@ -559,9 +559,15 @@ if quartz_enabled
   backend_immodules += ['quartz']
 endif
 
+extra_demo_ldflags = []
 if win32_enabled
   pc_gdk_extra_libs += ['-lgdi32', '-limm32', '-lshell32', '-lole32']
-  if cc.get_id() != 'msvc'
+  if cc.get_id() == 'msvc'
+    # Since the demo programs are now built as pure GUI programs, we
+    # need to pass in /entry:mainCRTStartup so that they will properly
+    # link on Visual Studio builds
+    extra_demo_ldflags = ['/entry:mainCRTStartup']
+  else
     pc_gdk_extra_libs += ['-Wl,-luuid']
   endif
   pc_gdk_extra_libs += ['-lwinmm', '-ldwmapi', '-lsetupapi', '-lcfgmgr32']
