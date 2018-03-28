@@ -114,9 +114,7 @@ draw_brush (GtkWidget *widget, GdkInputSource source,
   cairo_fill (cr);
   cairo_destroy (cr);
 
-  gtk_widget_queue_draw_area (widget,
-			      update_rect.x, update_rect.y,
-			      update_rect.width, update_rect.height);
+  gtk_widget_queue_draw (widget);
 }
 
 static guint32 motion_time;

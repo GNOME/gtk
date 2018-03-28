@@ -588,9 +588,6 @@ static void gtk_text_view_update_handles       (GtkTextView           *text_view
 static void gtk_text_view_selection_bubble_popup_unset (GtkTextView *text_view);
 static void gtk_text_view_selection_bubble_popup_set   (GtkTextView *text_view);
 
-static void gtk_text_view_get_rendered_rect (GtkTextView  *text_view,
-                                             GdkRectangle *rect);
-
 static gboolean gtk_text_view_extend_selection (GtkTextView            *text_view,
                                                 GtkTextExtendSelection  granularity,
                                                 const GtkTextIter      *location,
@@ -645,9 +642,7 @@ static GtkTextWindow *text_window_new             (GtkTextWindowType  type,
 static void           text_window_free            (GtkTextWindow     *win);
 static void           text_window_size_allocate   (GtkTextWindow     *win,
                                                    GdkRectangle      *rect);
-static void           text_window_invalidate_rect (GtkTextWindow     *win,
-                                                   GdkRectangle      *rect);
-static void           text_window_invalidate_cursors (GtkTextWindow  *win);
+static void           text_window_invalidate      (GtkTextWindow     *win);
 
 static gint           text_window_get_width       (GtkTextWindow     *win);
 static gint           text_window_get_height      (GtkTextWindow     *win);
@@ -4352,8 +4347,6 @@ changed_handler (GtkTextLayout     *layout,
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
   GtkWidget *widget;
-  GdkRectangle visible_rect;
-  GdkRectangle redraw_rect;
   
   text_view = GTK_TEXT_VIEW (data);
   priv = text_view->priv;
@@ -4363,46 +4356,24 @@ changed_handler (GtkTextLayout     *layout,
 
   if (gtk_widget_get_realized (widget))
     {      
-      gtk_text_view_get_rendered_rect (text_view, &visible_rect);
+      text_window_invalidate (priv->text_window);
 
-      redraw_rect.x = visible_rect.x;
-      redraw_rect.width = visible_rect.width;
-      redraw_rect.y = start_y;
+      DV(g_print(" invalidated rect: %d,%d %d x %d\n",
+                 redraw_rect.x,
+                 redraw_rect.y,
+                 redraw_rect.width,
+                 redraw_rect.height));
+      
+      if (priv->left_window)
+        text_window_invalidate (priv->left_window);
+      if (priv->right_window)
+        text_window_invalidate (priv->right_window);
+      if (priv->top_window)
+        text_window_invalidate (priv->top_window);
+      if (priv->bottom_window)
+        text_window_invalidate (priv->bottom_window);
 
-      if (old_height == new_height)
-        redraw_rect.height = old_height;
-      else if (start_y + old_height > visible_rect.y)
-        redraw_rect.height = MAX (0, visible_rect.y + visible_rect.height - start_y);
-      else
-        redraw_rect.height = 0;
-	
-      if (gdk_rectangle_intersect (&redraw_rect, &visible_rect, &redraw_rect))
-        {
-          /* text_window_invalidate_rect() takes buffer coordinates */
-          text_window_invalidate_rect (priv->text_window,
-                                       &redraw_rect);
-
-          DV(g_print(" invalidated rect: %d,%d %d x %d\n",
-                     redraw_rect.x,
-                     redraw_rect.y,
-                     redraw_rect.width,
-                     redraw_rect.height));
-          
-          if (priv->left_window)
-            text_window_invalidate_rect (priv->left_window,
-                                         &redraw_rect);
-          if (priv->right_window)
-            text_window_invalidate_rect (priv->right_window,
-                                         &redraw_rect);
-          if (priv->top_window)
-            text_window_invalidate_rect (priv->top_window,
-                                         &redraw_rect);
-          if (priv->bottom_window)
-            text_window_invalidate_rect (priv->bottom_window,
-                                         &redraw_rect);
-
-          queue_update_im_spot_location (text_view);
-        }
+      queue_update_im_spot_location (text_view);
     }
   
   if (old_height != new_height)
@@ -5789,19 +5760,7 @@ blink_cb (gpointer data)
       priv->blink_time += get_cursor_time (text_view);
     }
 
-  /* Block changed_handler while changing the layout's cursor visibility
-   * because it would expose the whole paragraph. Instead, we expose
-   * the cursor's area(s) manually below.
-   */
-  g_signal_handlers_block_by_func (priv->layout,
-                                   changed_handler,
-                                   text_view);
   gtk_text_layout_set_cursor_visible (priv->layout, !visible);
-  g_signal_handlers_unblock_by_func (priv->layout,
-                                     changed_handler,
-                                     text_view);
-
-  text_window_invalidate_cursors (priv->text_window);
 
   /* Remove ourselves */
   return FALSE;
@@ -6731,9 +6690,6 @@ gtk_text_view_toggle_overwrite (GtkTextView *text_view)
 {
   GtkTextViewPrivate *priv = text_view->priv;
 
-  if (priv->text_window)
-    text_window_invalidate_cursors (priv->text_window);
-
   priv->overwrite_mode = !priv->overwrite_mode;
 
   if (priv->layout)
@@ -6741,7 +6697,7 @@ gtk_text_view_toggle_overwrite (GtkTextView *text_view)
 					priv->overwrite_mode && priv->editable);
 
   if (priv->text_window)
-    text_window_invalidate_cursors (priv->text_window);
+    text_window_invalidate (priv->text_window);
 
   gtk_text_view_pend_cursor_blink (text_view);
 
@@ -9085,19 +9041,6 @@ text_window_free (GtkTextWindow *win)
 }
 
 static void
-gtk_text_view_get_rendered_rect (GtkTextView  *text_view,
-                                 GdkRectangle *rect)
-{
-  GtkTextViewPrivate *priv = text_view->priv;
-
-  rect->x = gtk_adjustment_get_value (priv->hadjustment);
-  rect->y = gtk_adjustment_get_value (priv->vadjustment) - priv->top_margin;
-
-  rect->height = text_window_get_height (priv->text_window);
-  rect->width = text_window_get_width (priv->text_window);
-}
-
-static void
 text_window_size_allocate (GtkTextWindow *win,
                            GdkRectangle  *rect)
 {
@@ -9105,139 +9048,9 @@ text_window_size_allocate (GtkTextWindow *win,
 }
 
 static void
-text_window_invalidate_rect (GtkTextWindow *win,
-                             GdkRectangle  *rect)
+text_window_invalidate (GtkTextWindow *win)
 {
-  GtkTextViewPrivate *priv = GTK_TEXT_VIEW (win->widget)->priv;
-  GdkRectangle window_rect;
-
-  /* TODO: Remove this and fix the actual invalidation? */
-  gtk_widget_queue_draw (GTK_WIDGET (win->widget));
-  return;
-
-  gtk_text_view_buffer_to_surface_coords (GTK_TEXT_VIEW (win->widget),
-                                         win->type,
-                                         rect->x,
-                                         rect->y,
-                                         &window_rect.x,
-                                         &window_rect.y);
-
-  window_rect.width = rect->width;
-  window_rect.height = rect->height;
-  
-  /* Adjust the rect as appropriate */
-  
-  switch (win->type)
-    {
-    case GTK_TEXT_WINDOW_TEXT:
-      window_rect.x -= priv->xoffset;
-      window_rect.y -= priv->yoffset;
-      break;
-
-    case GTK_TEXT_WINDOW_LEFT:
-    case GTK_TEXT_WINDOW_RIGHT:
-      window_rect.x = 0;
-      window_rect.y -= priv->yoffset;
-      window_rect.width = win->allocation.width;
-      break;
-
-    case GTK_TEXT_WINDOW_TOP:
-    case GTK_TEXT_WINDOW_BOTTOM:
-      window_rect.x -= priv->xoffset;
-      window_rect.y = 0;
-      window_rect.height = win->allocation.height;
-      break;
-
-    case GTK_TEXT_WINDOW_PRIVATE:
-    case GTK_TEXT_WINDOW_WIDGET:
-    default:
-      g_warning ("%s: bug!", G_STRFUNC);
-      return;
-      break;
-    }
-          
-  window_rect.x += win->allocation.x;
-  window_rect.y += win->allocation.y;
-  if (!gdk_rectangle_intersect (&window_rect, &win->allocation, &window_rect))
-    return;
-
-  gtk_widget_queue_draw_area (win->widget,
-                              window_rect.x, window_rect.y,
-                              window_rect.width, window_rect.height);
-}
-
-static void
-text_window_invalidate_cursors (GtkTextWindow *win)
-{
-  GtkTextView *text_view;
-  GtkTextViewPrivate *priv;
-  GtkTextIter  iter;
-  GdkRectangle strong;
-  GdkRectangle weak;
-  gboolean     draw_arrow;
-  gint         stem_width;
-  gint         arrow_width;
-
-  text_view = GTK_TEXT_VIEW (win->widget);
-  priv = text_view->priv;
-
-  gtk_text_buffer_get_iter_at_mark (priv->buffer, &iter,
-                                    gtk_text_buffer_get_insert (priv->buffer));
-
-  if (_gtk_text_layout_get_block_cursor (priv->layout, &strong))
-    {
-      text_window_invalidate_rect (win, &strong);
-      return;
-    }
-
-  gtk_text_layout_get_cursor_locations (priv->layout, &iter,
-                                        &strong, &weak);
-
-  /* cursor width calculation as in gtkstylecontext.c:draw_insertion_cursor(),
-   * ignoring the text direction be exposing both sides of the cursor
-   */
-
-  draw_arrow = (strong.x != weak.x || strong.y != weak.y);
-
-  stem_width = strong.height * CURSOR_ASPECT_RATIO + 1;
-  arrow_width = stem_width + 1;
-
-  strong.width = stem_width;
-
-  /* round up to the next even number */
-  if (stem_width & 1)
-    stem_width++;
-
-  strong.x     -= stem_width / 2;
-  strong.width += stem_width;
-
-  if (draw_arrow)
-    {
-      strong.x     -= arrow_width;
-      strong.width += arrow_width * 2;
-    }
-
-  text_window_invalidate_rect (win, &strong);
-
-  if (draw_arrow) /* == have weak */
-    {
-      stem_width = weak.height * CURSOR_ASPECT_RATIO + 1;
-      arrow_width = stem_width + 1;
-
-      weak.width = stem_width;
-
-      /* round up to the next even number */
-      if (stem_width & 1)
-        stem_width++;
-
-      weak.x     -= stem_width / 2;
-      weak.width += stem_width;
-
-      weak.x     -= arrow_width;
-      weak.width += arrow_width * 2;
-
-      text_window_invalidate_rect (win, &weak);
-    }
+  gtk_widget_queue_draw (win->widget);
 }
 
 static gint
