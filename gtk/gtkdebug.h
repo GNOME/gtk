@@ -37,22 +37,21 @@ G_BEGIN_DECLS
 typedef enum {
   GTK_DEBUG_TEXT            = 1 <<  0,
   GTK_DEBUG_TREE            = 1 <<  1,
-  GTK_DEBUG_UPDATES         = 1 <<  2,
-  GTK_DEBUG_KEYBINDINGS     = 1 <<  3,
-  GTK_DEBUG_MODULES         = 1 <<  4,
-  GTK_DEBUG_GEOMETRY        = 1 <<  5,
-  GTK_DEBUG_ICONTHEME       = 1 <<  6,
-  GTK_DEBUG_PRINTING        = 1 <<  7,
-  GTK_DEBUG_BUILDER         = 1 <<  8,
-  GTK_DEBUG_SIZE_REQUEST    = 1 <<  9,
-  GTK_DEBUG_NO_CSS_CACHE    = 1 << 10,
-  GTK_DEBUG_BASELINES       = 1 << 11,
-  GTK_DEBUG_INTERACTIVE     = 1 << 12,
-  GTK_DEBUG_TOUCHSCREEN     = 1 << 13,
-  GTK_DEBUG_ACTIONS         = 1 << 14,
-  GTK_DEBUG_RESIZE          = 1 << 15,
-  GTK_DEBUG_LAYOUT          = 1 << 16,
-  GTK_DEBUG_SNAPSHOT        = 1 << 17
+  GTK_DEBUG_KEYBINDINGS     = 1 <<  2,
+  GTK_DEBUG_MODULES         = 1 <<  3,
+  GTK_DEBUG_GEOMETRY        = 1 <<  4,
+  GTK_DEBUG_ICONTHEME       = 1 <<  5,
+  GTK_DEBUG_PRINTING        = 1 <<  6,
+  GTK_DEBUG_BUILDER         = 1 <<  7,
+  GTK_DEBUG_SIZE_REQUEST    = 1 <<  8,
+  GTK_DEBUG_NO_CSS_CACHE    = 1 <<  9,
+  GTK_DEBUG_BASELINES       = 1 << 10,
+  GTK_DEBUG_INTERACTIVE     = 1 << 11,
+  GTK_DEBUG_TOUCHSCREEN     = 1 << 12,
+  GTK_DEBUG_ACTIONS         = 1 << 13,
+  GTK_DEBUG_RESIZE          = 1 << 14,
+  GTK_DEBUG_LAYOUT          = 1 << 15,
+  GTK_DEBUG_SNAPSHOT        = 1 << 16
 } GtkDebugFlag;
 
 #ifdef G_ENABLE_DEBUG

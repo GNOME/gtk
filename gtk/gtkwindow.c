@@ -41,7 +41,6 @@
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
-#include "gtkdebugupdatesprivate.h"
 #include "gtkdragdest.h"
 #include "gtkgesturedrag.h"
 #include "gtkgesturemultipress.h"
@@ -9306,8 +9305,6 @@ gtk_window_snapshot (GtkWidget   *widget,
       GtkWindowPopover *data = l->data;
       gtk_widget_snapshot_child (widget, data->widget, snapshot);
     }
-
-  gtk_debug_updates_snapshot (widget, snapshot);
 }
 
 /**
