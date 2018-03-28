@@ -129,8 +129,6 @@ static void recompute_visible_regions   (GdkSurface *private,
 static void gdk_surface_invalidate_in_parent (GdkSurface *private);
 static void update_cursor               (GdkDisplay *display,
                                          GdkDevice  *device);
-static void impl_surface_add_update_area (GdkSurface *impl_surface,
-                                          cairo_region_t *region);
 static cairo_surface_t *gdk_surface_ref_impl_surface (GdkSurface *surface);
 
 static void gdk_surface_set_frame_clock (GdkSurface      *surface,
@@ -2202,7 +2200,7 @@ gdk_surface_invalidate_rect (GdkSurface        *surface,
 }
 
 static void
-impl_surface_add_update_area (GdkSurface *impl_surface,
+impl_surface_add_update_area (GdkSurface     *impl_surface,
                               cairo_region_t *region)
 {
   if (impl_surface->update_area)
@@ -2213,6 +2211,33 @@ impl_surface_add_update_area (GdkSurface *impl_surface,
       impl_surface->update_area = cairo_region_copy (region);
       gdk_surface_schedule_update (impl_surface);
     }
+}
+
+/**
+ * gdk_surface_queue_expose:
+ * @surface: a #GdkSurface
+ *
+ * Forces an expose event for @surface to be scheduled.
+ *
+ * If the invalid area of @surface is empty, an expose event will
+ * still be emitted. Its invalid region will be empty.
+ *
+ * This function is useful for implementations that track invalid
+ * regions on their own.
+ **/
+void
+gdk_surface_queue_expose (GdkSurface *surface)
+{
+  cairo_region_t *region;
+
+  g_return_if_fail (GDK_IS_SURFACE (surface));
+
+  while (!gdk_surface_has_impl (surface))
+    surface = surface->parent;
+
+  region = cairo_region_create ();
+  impl_surface_add_update_area (surface, region);
+  cairo_region_destroy (region);
 }
 
 /**
