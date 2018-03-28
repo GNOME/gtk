@@ -4283,8 +4283,6 @@ gtk_widget_get_font_options
 gtk_widget_set_font_map
 gtk_widget_get_font_map
 gtk_widget_create_pango_layout
-gtk_widget_queue_draw_area
-gtk_widget_queue_draw_region
 gtk_widget_get_cursor
 gtk_widget_set_cursor
 gtk_widget_set_cursor_from_name
