@@ -49,7 +49,7 @@ _gdk_win32_gl_context_dispose (GObject *gobject)
   GdkGLContext *context = GDK_GL_CONTEXT (gobject);
   GdkWin32GLContext *context_win32 = GDK_WIN32_GL_CONTEXT (gobject);
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (gdk_gl_context_get_display (context));
-  GdkSurface *window = gdk_gl_context_get_surface (context);
+  GdkSurface *surface = gdk_gl_context_get_surface (context);
 
   if (context_win32->hglrc != NULL)
     {
@@ -64,29 +64,29 @@ _gdk_win32_gl_context_dispose (GObject *gobject)
       ReleaseDC (display_win32->gl_hwnd, context_win32->gl_hdc);
     }
 
-  if (window != NULL && window->impl != NULL)
+  if (surface != NULL && surface->impl != NULL)
     {
-      GdkSurfaceImplWin32 *impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
+      GdkSurfaceImplWin32 *impl = GDK_SURFACE_IMPL_WIN32 (surface->impl);
 
       if (impl->suppress_layered > 0)
         impl->suppress_layered--;
 
-      /* If we don't have any window that forces layered windows off,
+      /* If we don't have any surface that forces layered windows off,
        * trigger update_style_bits() to enable layered windows again
        */
       if (impl->suppress_layered == 0)
-        _gdk_win32_surface_update_style_bits (window);
+        _gdk_win32_surface_update_style_bits (surface);
     }
 
   G_OBJECT_CLASS (gdk_win32_gl_context_parent_class)->dispose (gobject);
 }
 
 static void
-gdk_gl_blit_region (GdkSurface *window, cairo_region_t *region)
+gdk_gl_blit_region (GdkSurface *surface, cairo_region_t *region)
 {
   int n_rects, i;
-  int scale = gdk_surface_get_scale_factor (window);
-  int wh = gdk_surface_get_height (window);
+  int scale = gdk_surface_get_scale_factor (surface);
+  int wh = gdk_surface_get_height (surface);
   cairo_rectangle_int_t rect;
 
   n_rects = cairo_region_num_rectangles (region);
@@ -107,7 +107,7 @@ gdk_win32_gl_context_end_frame (GdkDrawContext *draw_context,
 {
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
   GdkWin32GLContext *context_win32 = GDK_WIN32_GL_CONTEXT (context);
-  GdkSurface *window = gdk_gl_context_get_surface (context);
+  GdkSurface *surface = gdk_gl_context_get_surface (context);
   GdkWin32Display *display = (GDK_WIN32_DISPLAY (gdk_gl_context_get_display (context)));
   gboolean can_wait = display->hasWglOMLSyncControl;
   cairo_rectangle_int_t whole_window;
@@ -138,7 +138,7 @@ gdk_win32_gl_context_end_frame (GdkDrawContext *draw_context,
         }
     }
 
-  whole_window = (GdkRectangle) { 0, 0, gdk_surface_get_width (window), gdk_surface_get_height (window) };
+  whole_window = (GdkRectangle) { 0, 0, gdk_surface_get_width (surface), gdk_surface_get_height (surface) };
   if (cairo_region_contains_rectangle (painted, &whole_window) == CAIRO_REGION_OVERLAP_IN)
     {
       SwapBuffers (context_win32->gl_hdc);
@@ -147,7 +147,7 @@ gdk_win32_gl_context_end_frame (GdkDrawContext *draw_context,
     {
       glDrawBuffer(GL_FRONT);
       glReadBuffer(GL_BACK);
-      gdk_gl_blit_region (window, painted);
+      gdk_gl_blit_region (surface, painted);
       glDrawBuffer(GL_BACK);
       glFlush();
 
@@ -166,7 +166,7 @@ gdk_win32_gl_context_begin_frame (GdkDrawContext *draw_context,
                                   cairo_region_t *update_area)
 {
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
-  GdkSurface *window;
+  GdkSurface *surface;
 
   GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_parent_class)->begin_frame (draw_context, update_area);
   if (gdk_gl_context_get_shared_context (context))
@@ -177,11 +177,11 @@ gdk_win32_gl_context_begin_frame (GdkDrawContext *draw_context,
 
   /* If nothing else is known, repaint everything so that the back
      buffer is fully up-to-date for the swapbuffer */
-  window = gdk_gl_context_get_surface (context);
+  surface = gdk_gl_context_get_surface (context);
   cairo_region_union_rectangle (update_area, &(GdkRectangle) {
                                                  0, 0,
-                                                 gdk_surface_get_width (window),
-                                                 gdk_surface_get_height (window) });
+                                                 gdk_surface_get_width (surface),
+                                                 gdk_surface_get_height (surface) });
 }
 
 typedef struct
@@ -647,9 +647,9 @@ gdk_win32_gl_context_realize (GdkGLContext *context,
   gint glver_major = 0;
   gint glver_minor = 0;
 
-  GdkSurface *window = gdk_gl_context_get_surface (context);
-  GdkSurfaceImplWin32 *impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
-  GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (gdk_surface_get_display (window));
+  GdkSurface *surface = gdk_gl_context_get_surface (context);
+  GdkSurfaceImplWin32 *impl = GDK_SURFACE_IMPL_WIN32 (surface->impl);
+  GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (gdk_surface_get_display (surface));
 
   if (!_set_pixformat_for_hdc (context_win32->gl_hdc,
                                &pixel_format,
@@ -719,11 +719,11 @@ gdk_win32_gl_context_realize (GdkGLContext *context,
    */
   impl->suppress_layered++;
 
-  /* if this is the first time a GL context is acquired for the window,
+  /* if this is the first time a GL context is acquired for the surface,
    * disable layered windows by triggering update_style_bits()
    */
   if (impl->suppress_layered == 1)
-    _gdk_win32_surface_update_style_bits (window);
+    _gdk_win32_surface_update_style_bits (surface);
 
   /* Ensure that any other context is created with a legacy bit set */
   gdk_gl_context_set_is_legacy (context, legacy_bit);
@@ -752,13 +752,13 @@ gdk_win32_gl_context_init (GdkWin32GLContext *self)
 }
 
 GdkGLContext *
-_gdk_win32_surface_create_gl_context (GdkSurface *window,
+_gdk_win32_surface_create_gl_context (GdkSurface *surface,
                                      gboolean attached,
                                      GdkGLContext *share,
                                      GError **error)
 {
-  GdkDisplay *display = gdk_surface_get_display (window);
-  GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (gdk_surface_get_display (window));
+  GdkDisplay *display = gdk_surface_get_display (surface);
+  GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
   GdkWin32GLContext *context = NULL;
 
   /* Acquire and store up the Windows-specific HWND and HDC */
@@ -773,13 +773,13 @@ _gdk_win32_surface_create_gl_context (GdkSurface *window,
       return NULL;
     }
 
-  hwnd = GDK_SURFACE_HWND (window);
+  hwnd = GDK_SURFACE_HWND (surface);
   hdc = GetDC (hwnd);
 
   display_win32->gl_hwnd = hwnd;
 
   context = g_object_new (GDK_TYPE_WIN32_GL_CONTEXT,
-                          "window", window,
+                          "surface", surface,
                           "shared-context", share,
                           NULL);
 
@@ -795,7 +795,7 @@ _gdk_win32_display_make_gl_context_current (GdkDisplay *display,
 {
   GdkWin32GLContext *context_win32;
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
-  GdkSurface *window;
+  GdkSurface *surface;
 
   gboolean do_frame_sync = FALSE;
 
@@ -816,13 +816,13 @@ _gdk_win32_display_make_gl_context_current (GdkDisplay *display,
 
   if (context_win32->is_attached && display_win32->hasWglEXTSwapControl)
     {
-      window = gdk_gl_context_get_surface (context);
+      surface = gdk_gl_context_get_surface (context);
 
       /* If there is compositing there is no particular need to delay
        * the swap when drawing on the offscreen, rendering to the screen
        * happens later anyway, and its up to the compositor to sync that
        * to the vblank. */
-      display = gdk_surface_get_display (window);
+      display = gdk_surface_get_display (surface);
       do_frame_sync = ! gdk_display_is_composited (display);
 
       if (do_frame_sync != context_win32->do_frame_sync)
