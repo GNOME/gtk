@@ -443,10 +443,11 @@ opacity (void)
   return container;
 }
 
+#define N 5
+
 static GskRenderNode *
 color_matrix1 (void)
 {
-  const int N = 5;
   GskRenderNode *container_node;
   GskRenderNode *cairo_node = cairo ();
   GskRenderNode *n;
@@ -517,6 +518,8 @@ color_matrix1 (void)
 
   return container_node;
 }
+
+#undef N
 
 static GskRenderNode *
 transformed_clip (void)
