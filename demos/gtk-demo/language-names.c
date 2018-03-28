@@ -2,12 +2,13 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
 #include <string.h>
 #include <errno.h>
-#include <dirent.h>
 #include <locale.h>
-#include <langinfo.h>
 #include <sys/stat.h>
 
 #include <glib.h>
@@ -173,9 +174,9 @@ languages_variant_init (const char *variant)
 {
   gboolean res;
   gsize    buf_len;
-  g_autofree char *buf = NULL;
-  g_autofree char *filename = NULL;
-  g_autoptr (GError) error = NULL;
+  char *buf = NULL;
+  char *filename = NULL;
+  GError *error = NULL;
 
   bindtextdomain (variant, ISO_CODES_LOCALESDIR);
   bind_textdomain_codeset (variant, "UTF-8");
@@ -185,19 +186,25 @@ languages_variant_init (const char *variant)
   res = g_file_get_contents (filename, &buf, &buf_len, &error);
   if (res)
     {
-      g_autoptr (GMarkupParseContext) ctx = NULL;
+      GMarkupParseContext *ctx = NULL;
       GMarkupParser parser = { languages_parse_start_tag, NULL, NULL, NULL, NULL };
 
       ctx = g_markup_parse_context_new (&parser, 0, NULL, NULL);
 
+      g_free (error);
       error = NULL;
       res = g_markup_parse_context_parse (ctx, buf, buf_len, &error);
+      g_free (ctx);
 
       if (!res)
         g_warning ("Failed to parse '%s': %s\n", filename, error->message);
     }
   else
     g_warning ("Failed to load '%s': %s\n", filename, error->message);
+
+  g_free (error);
+  g_free (filename);
+  g_free (buf);
 }
 
 static void
