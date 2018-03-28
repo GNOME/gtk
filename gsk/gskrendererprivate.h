@@ -38,32 +38,28 @@ struct _GskRendererClass
 {
   GObjectClass parent_class;
 
-  gboolean (* realize) (GskRenderer *renderer,
-                        GdkSurface *surface,
-                        GError **error);
-  void (* unrealize) (GskRenderer *renderer);
+  gboolean             (* realize)                              (GskRenderer            *renderer,
+                                                                 GdkSurface             *surface,
+                                                                 GError                **error);
+  void                 (* unrealize)                            (GskRenderer            *renderer);
 
-  GdkTexture * (* render_texture) (GskRenderer           *renderer,
-                                   GskRenderNode         *root,
-                                   const graphene_rect_t *viewport);
-  GdkDrawingContext * (* begin_draw_frame) (GskRenderer *renderer,
-                                            const cairo_region_t *region);
-  void (* end_draw_frame) (GskRenderer *renderer,
-                           GdkDrawingContext *context);
-  void (* render) (GskRenderer *renderer,
-                   GskRenderNode *root);
+  GdkTexture *         (* render_texture)                       (GskRenderer            *renderer,
+                                                                 GskRenderNode          *root,
+                                                                 const graphene_rect_t  *viewport);
+  void                 (* render)                               (GskRenderer            *renderer,
+                                                                 GskRenderNode          *root,
+                                                                 const cairo_region_t   *invalid);
 };
 
-gboolean gsk_renderer_is_realized (GskRenderer *renderer);
+gboolean                gsk_renderer_is_realized                (GskRenderer    *renderer);
 
 GskRenderNode *         gsk_renderer_get_root_node              (GskRenderer    *renderer);
-GdkDrawingContext *     gsk_renderer_get_drawing_context        (GskRenderer    *renderer);
 
 GskProfiler *           gsk_renderer_get_profiler               (GskRenderer    *renderer);
 
-GskDebugFlags           gsk_renderer_get_debug_flags            (GskRenderer   *renderer);
-void                    gsk_renderer_set_debug_flags            (GskRenderer   *renderer,
-                                                                 GskDebugFlags  flags);
+GskDebugFlags           gsk_renderer_get_debug_flags            (GskRenderer    *renderer);
+void                    gsk_renderer_set_debug_flags            (GskRenderer    *renderer,
+                                                                 GskDebugFlags   flags);
 
 G_END_DECLS
 
