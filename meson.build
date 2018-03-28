@@ -371,9 +371,6 @@ else
   platform_gio_dep = giounix_dep
 endif
 
-cdata.set('HAVE_HARFBUZZ', harfbuzz_dep.found())
-cdata.set('HAVE_PANGOFT', pangoft_dep.found())
-
 if iso_codes_dep.found()
   cdata.set_quoted('ISO_CODES_PREFIX', iso_codes_dep.get_pkgconfig_variable('prefix'))
 else
@@ -435,11 +432,14 @@ if cc.get_id() == 'msvc'
 
   # Fallback for HarfBuzz
   if not harfbuzz_dep.found()
-    if cc.has_header('harfbuzz/hb.h')
+    if cc.has_header('hb.h')
       harfbuzz_dep = cc.find_library('harfbuzz', required : false)
     endif
   endif
 endif
+
+cdata.set('HAVE_HARFBUZZ', harfbuzz_dep.found())
+cdata.set('HAVE_PANGOFT', pangoft_dep.found())
 
 atk_pkgs = ['atk']
 
