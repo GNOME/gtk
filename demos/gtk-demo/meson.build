@@ -76,8 +76,11 @@ demos = files([
 
 gtkdemo_deps = [ libgtk_dep, ]
 
+extra_demo_sources = files(['main.c', 'gtkfishbowl.c', 'fontplane.c', 'gtkgears.c'])
+
 if harfbuzz_dep.found() and pangoft_dep.found()
   demos += files('font_features.c')
+  extra_demo_sources += files(['script-names.c', 'language-names.c'])
   gtkdemo_deps += [ harfbuzz_dep, ]
 endif
 
@@ -97,9 +100,7 @@ gtkdemo_resources = gnome.compile_resources('gtkdemo_resources',
                                             source_dir: '.')
 
 executable('gtk4-demo',
-           'main.c', 'gtkfishbowl.c', 'fontplane.c', 'script-names.c', 'language-names.c',
-                   'gtkgears.c',
-                   demos, demos_h, gtkdemo_resources,
+                   demos, demos_h, extra_demo_sources, gtkdemo_resources,
            c_args: gtkdemo_args,
            dependencies: gtkdemo_deps,
            include_directories: confinc,
