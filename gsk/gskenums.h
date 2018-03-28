@@ -81,7 +81,8 @@ typedef enum {
   GSK_TEXT_NODE,
   GSK_BLUR_NODE,
   GSK_DEBUG_NODE,
-  GSK_GL_SHADER_NODE
+  GSK_GL_SHADER_NODE,
+  GSK_MASK_NODE,
 } GskRenderNodeType;
 
 /**

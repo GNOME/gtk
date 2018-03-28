@@ -3810,6 +3810,7 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
     case GSK_FILL_NODE:
     case GSK_STROKE_NODE:
     case GSK_CAIRO_NODE:
+    case GSK_MASK_NODE:
     default:
       {
         render_fallback_node (self, node, builder);

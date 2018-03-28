@@ -262,6 +262,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
     case GSK_CONIC_GRADIENT_NODE:
     case GSK_FILL_NODE:
     case GSK_STROKE_NODE:
+    case GSK_MASK_NODE:
     default:
       FALLBACK ("Unsupported node '%s'", g_type_name_from_instance ((GTypeInstance *) node));
 

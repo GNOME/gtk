@@ -174,6 +174,10 @@ create_list_model_for_render_node (GskRenderNode *node)
       return create_render_node_list_model ((GskRenderNode *[2]) { gsk_blend_node_get_bottom_child (node), 
                                                                    gsk_blend_node_get_top_child (node) }, 2);
 
+    case GSK_MASK_NODE:
+      return create_render_node_list_model ((GskRenderNode *[2]) { gsk_mask_node_get_source (node), 
+                                                                   gsk_mask_node_get_mask (node) }, 2);
+
     case GSK_CROSS_FADE_NODE:
       return create_render_node_list_model ((GskRenderNode *[2]) { gsk_cross_fade_node_get_start_child (node),
                                                                    gsk_cross_fade_node_get_end_child (node) }, 2);
@@ -304,6 +308,8 @@ node_type_name (GskRenderNodeType type)
       return "Blur";
     case GSK_GL_SHADER_NODE:
       return "GL Shader";
+    case GSK_MASK_NODE:
+      return "Mask";
     }
 }
 
@@ -335,6 +341,7 @@ node_name (GskRenderNode *node)
     case GSK_STROKE_NODE:
     case GSK_SHADOW_NODE:
     case GSK_BLEND_NODE:
+    case GSK_MASK_NODE:
     case GSK_CROSS_FADE_NODE:
     case GSK_TEXT_NODE:
     case GSK_BLUR_NODE:
@@ -1193,6 +1200,7 @@ populate_render_node_properties (GtkListStore  *store,
       break;
 
     case GSK_NOT_A_RENDER_NODE:
+    case GSK_MASK_NODE:
     default:
       break;
     }
