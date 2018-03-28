@@ -59,7 +59,8 @@ void                    gsk_vulkan_render_free                          (GskVulk
 gboolean                gsk_vulkan_render_is_busy                       (GskVulkanRender        *self);
 void                    gsk_vulkan_render_reset                         (GskVulkanRender        *self,
                                                                          GskVulkanImage         *target,
-                                                                         const graphene_rect_t  *rect);
+                                                                         const graphene_rect_t  *rect,
+                                                                         const cairo_region_t   *clip);
 
 GskRenderer *           gsk_vulkan_render_get_renderer                  (GskVulkanRender        *self);
 
