@@ -66,9 +66,6 @@ typedef struct
 {
   GObject parent_instance;
 
-  GskScalingFilter min_filter;
-  GskScalingFilter mag_filter;
-
   GdkSurface *surface;
   GdkDrawingContext *drawing_context;
   GskRenderNode *root_node;
