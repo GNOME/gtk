@@ -687,17 +687,13 @@ window.csd > .titlebar:not(headerbar) { padding: 0; background-color: transparen
 .titlebar:not(headerbar) > separator { background-color: #b6b6b3; }
 
 /************ Pathbars * */
-.path-bar button.text-button, .path-bar button.image-button, .path-bar button { padding-left: 4px; padding-right: 4px; }
+.path-bar button, .path-bar button.text-button { padding-left: 10px; padding-right: 10px; }
 
-.path-bar button.text-button.image-button label { padding-left: 0; padding-right: 0; }
+.path-bar button.slider-button, .path-bar button.image-button { padding-left: 4px; padding-right: 4px; }
 
-.path-bar button.text-button.image-button label:last-child, .path-bar button label:last-child { padding-right: 8px; }
+.path-bar button label, .path-bar button.image-button label { padding-left: 0; padding-right: 0; }
 
-.path-bar button.text-button.image-button label:first-child, .path-bar button label:first-child { padding-left: 8px; }
-
-.path-bar button image { padding-left: 4px; padding-right: 4px; }
-
-.path-bar button.slider-button { padding-left: 0; padding-right: 0; }
+.path-bar button > box > *:not(:first-child) { margin-left: 4px; }
 
 /************** Tree Views * */
 treeview.view { border-left-color: #979a9b; border-top-color: #e8e8e7; }

@@ -1721,29 +1721,26 @@ headerbar { // headerbar border rounding
  * Pathbars *
  ************/
 .path-bar button {
-  &.text-button, &.image-button, & {
+  &,
+  &.text-button {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  &.slider-button,
+  &.image-button {
     padding-left: 4px;
     padding-right: 4px;
   }
 
-  &.text-button.image-button label {
+  & label,
+  &.image-button label {
     padding-left: 0;
     padding-right: 0;
   }
 
-  &.text-button.image-button, & {
-    label:last-child { padding-right: 8px; }
-    label:first-child { padding-left: 8px; }
-  }
-
-  image {
-    padding-left: 4px;
-    padding-right: 4px;
-  }
-
-  &.slider-button {
-    padding-left: 0;
-    padding-right: 0;
+  & > box > *:not(:first-child) {
+    margin-left: 4px;
   }
 }
 
