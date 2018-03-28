@@ -145,24 +145,6 @@ gsk_renderer_real_render (GskRenderer *self,
   GSK_RENDERER_WARN_NOT_IMPLEMENTED_METHOD (self, render);
 }
 
-static cairo_surface_t *
-gsk_renderer_real_create_cairo_surface (GskRenderer    *self,
-                                        cairo_format_t  format,
-                                        int             width,
-                                        int             height)
-{
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (self);
-  int scale_factor = priv->surface ? gdk_surface_get_scale_factor (priv->surface) : 1;
-  int real_width = width * scale_factor;
-  int real_height = height * scale_factor;
-
-  cairo_surface_t *res = cairo_image_surface_create (format, real_width, real_height);
-
-  cairo_surface_set_device_scale (res, scale_factor, scale_factor);
-
-  return res;
-}
-
 static void
 gsk_renderer_dispose (GObject *gobject)
 {
@@ -258,7 +240,6 @@ gsk_renderer_class_init (GskRendererClass *klass)
   klass->end_draw_frame = gsk_renderer_real_end_draw_frame;
   klass->render = gsk_renderer_real_render;
   klass->render_texture = gsk_renderer_real_render_texture;
-  klass->create_cairo_surface = gsk_renderer_real_create_cairo_surface;
 
   gobject_class->constructed = gsk_renderer_constructed;
   gobject_class->set_property = gsk_renderer_set_property;
@@ -739,18 +720,6 @@ gsk_renderer_new_for_surface (GdkSurface *surface)
 
   g_assert_not_reached ();
   return NULL;
-}
-
-cairo_surface_t *
-gsk_renderer_create_cairo_surface (GskRenderer    *renderer,
-                                   cairo_format_t  format,
-                                   int             width,
-                                   int             height)
-{
-  g_return_val_if_fail (GSK_IS_RENDERER (renderer), NULL);
-  g_return_val_if_fail (width > 0 && height > 0, NULL);
-
-  return GSK_RENDERER_GET_CLASS (renderer)->create_cairo_surface (renderer, format, width, height);
 }
 
 /**
