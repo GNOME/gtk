@@ -24,9 +24,10 @@
 
 #include "config.h"
 
+#include "gdkframeclockidleprivate.h"
+
 #include "gdkinternals.h"
 #include "gdkframeclockprivate.h"
-#include "gdkframeclockidle.h"
 #include "gdk.h"
 
 #ifdef G_OS_WIN32

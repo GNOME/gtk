@@ -48,7 +48,6 @@
 #include "gdkrectangle.h"
 #include "gdkinternals.h"
 #include "gdkintl.h"
-#include "gdkframeclockidle.h"
 #include "gdksurfaceimpl.h"
 #include "gdkglcontextprivate.h"
 #include "gdk-private.h"
