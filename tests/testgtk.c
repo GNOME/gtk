@@ -7677,8 +7677,6 @@ create_main_window (void)
 
   box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (scrolled_window), box2);
-  gtk_container_set_focus_vadjustment (GTK_CONTAINER (box2),
-				       gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (scrolled_window)));
   gtk_widget_show (box2);
 
   for (i = 0; i < nbuttons; i++)
