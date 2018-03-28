@@ -24,7 +24,6 @@
 #include "gtkbox.h"
 #include "gtkcomboboxtext.h"
 #include "gtkcssproviderprivate.h"
-#include "gtkdebugupdatesprivate.h"
 #include "gtkdebug.h"
 #include "gtkprivate.h"
 #include "gtksettings.h"
@@ -66,7 +65,6 @@ struct _GtkInspectorVisualPrivate
 
   GtkWidget *debug_box;
   GtkWidget *rendering_mode_combo;
-  GtkWidget *updates_switch;
   GtkWidget *baselines_switch;
   GtkWidget *layout_switch;
   GtkWidget *touchscreen_switch;
@@ -220,25 +218,6 @@ font_scale_entry_activated (GtkEntry           *entry,
   factor = g_strtod (gtk_entry_get_text (entry), &err);
   if (err != NULL)
     update_font_scale (vis, factor, TRUE, FALSE);
-}
-
-static void
-updates_activate (GtkSwitch *sw)
-{
-  gboolean updates;
-
-  updates = gtk_switch_get_active (sw);
-  gtk_debug_updates_set_enabled_for_display (gdk_display_get_default (), updates);
-  redraw_everything ();
-}
-
-static void
-init_updates (GtkInspectorVisual *vis)
-{
-  gboolean updates = FALSE;
-
-  updates = gtk_debug_updates_get_enabled_for_display (gdk_display_get_default ());
-  gtk_switch_set_active (GTK_SWITCH (vis->priv->updates_switch), updates);
 }
 
 static void
@@ -849,7 +828,6 @@ gtk_inspector_visual_init (GtkInspectorVisual *vis)
   init_font_scale (vis);
   init_scale (vis);
   init_rendering_mode (vis);
-  init_updates (vis);
   init_animation (vis);
   init_slowdown (vis);
   init_touchscreen (vis);
@@ -882,7 +860,6 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/visual.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, rendering_mode_combo);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, updates_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, direction_combo);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, baselines_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, layout_switch);
@@ -908,7 +885,6 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, font_scale_entry);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, font_scale_adjustment);
 
-  gtk_widget_class_bind_template_callback (widget_class, updates_activate);
   gtk_widget_class_bind_template_callback (widget_class, direction_changed);
   gtk_widget_class_bind_template_callback (widget_class, rendering_mode_changed);
   gtk_widget_class_bind_template_callback (widget_class, baselines_activate);
