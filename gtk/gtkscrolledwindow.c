@@ -38,7 +38,7 @@
 #include "gtkgesturesingle.h"
 #include "gtkgestureswipe.h"
 #include "gtkintl.h"
-#include "gtkkineticscrolling.h"
+#include "gtkkineticscrollingprivate.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
