@@ -2,7 +2,7 @@
 #define __GSK_GL_IMAGE_H__
 
 #include "gskgldriverprivate.h"
-#include <cairo/cairo.h>
+#include <cairo.h>
 
 typedef struct
 {

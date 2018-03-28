@@ -6,7 +6,7 @@
 #include "gskprivate.h"
 
 #include <graphene.h>
-#include <cairo/cairo.h>
+#include <cairo.h>
 #include <epoxy/gl.h>
 
 /* Parameters for our cache eviction strategy.
