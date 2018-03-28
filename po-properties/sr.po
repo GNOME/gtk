@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-20 13:38+0000\n"
-"PO-Revision-Date: 2018-02-20 20:37+0100\n"
+"POT-Creation-Date: 2018-03-25 20:48+0000\n"
+"PO-Revision-Date: 2018-03-25 23:34+0200\n"
 "Last-Translator: Марко М. Костић <marko.m.kostic@gmail.com>\n"
 "Language-Team: српски <gnome-sr@googlegroups.org>\n"
 "Language: sr\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Project-Style: gnome\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Poedit 2.0.6\n"
 
 #: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139 gdk/gdkdevicemanager.c:185
 #: gdk/gdkglcontext.c:317 gdk/gdkseat.c:202 gdk/gdkseat.c:203
@@ -860,7 +860,7 @@ msgid "The size of the icon"
 msgstr "Величина иконице"
 
 #: gtk/deprecated/gtkstatusicon.c:306 gtk/gtkinvisible.c:98
-#: gtk/gtkmountoperation.c:179 gtk/gtkstylecontext.c:228 gtk/gtkwindow.c:894
+#: gtk/gtkmountoperation.c:179 gtk/gtkstylecontext.c:232 gtk/gtkwindow.c:894
 msgid "Screen"
 msgstr "Екран"
 
@@ -2789,7 +2789,7 @@ msgstr "Недоследно стање"
 msgid "The inconsistent state of the button"
 msgstr "Недоследно стање дугмића"
 
-#: gtk/gtkcellrenderertoggle.c:154 gtk/gtklistbox.c:3896
+#: gtk/gtkcellrenderertoggle.c:154 gtk/gtklistbox.c:3906
 msgid "Activatable"
 msgstr "Могуће активирати"
 
@@ -2962,7 +2962,7 @@ msgid "Color as RGBA"
 msgstr "Боја као РГБА"
 
 # Избирач наиђе на отирач? :) Али ми не пада ништа паметније на памет :(
-#: gtk/gtkcolorswatch.c:722 gtk/gtklabel.c:908 gtk/gtklistbox.c:3910
+#: gtk/gtkcolorswatch.c:722 gtk/gtklabel.c:908 gtk/gtklistbox.c:3920
 msgid "Selectable"
 msgstr "Избирљив"
 
@@ -3229,7 +3229,7 @@ msgstr "Почетна вредност"
 msgid "The initial specified value used for this property"
 msgstr "Почетна наведена вредност коришћена за ово својство"
 
-#: gtk/gtkdialog.c:588 gtk/gtkinfobar.c:435
+#: gtk/gtkdialog.c:588 gtk/gtkinfobar.c:419
 msgid "Content area border"
 msgstr "Ивица површине садржаја"
 
@@ -3237,7 +3237,7 @@ msgstr "Ивица површине садржаја"
 msgid "Width of border around the main dialog area"
 msgstr "Ширина ивице око главне површине прозорчета"
 
-#: gtk/gtkdialog.c:606 gtk/gtkinfobar.c:453
+#: gtk/gtkdialog.c:606 gtk/gtkinfobar.c:437
 msgid "Content area spacing"
 msgstr "Размак области садржаја"
 
@@ -3245,15 +3245,15 @@ msgstr "Размак области садржаја"
 msgid "Spacing between elements of the main dialog area"
 msgstr "Размак између елемената на области главног прозорчета"
 
-#: gtk/gtkdialog.c:614 gtk/gtkinfobar.c:470
+#: gtk/gtkdialog.c:614 gtk/gtkinfobar.c:454
 msgid "Button spacing"
 msgstr "Размак дугмића"
 
-#: gtk/gtkdialog.c:615 gtk/gtkinfobar.c:471
+#: gtk/gtkdialog.c:615 gtk/gtkinfobar.c:455
 msgid "Spacing between buttons"
 msgstr "Размаци између дугмића"
 
-#: gtk/gtkdialog.c:631 gtk/gtkinfobar.c:487
+#: gtk/gtkdialog.c:631 gtk/gtkinfobar.c:471
 msgid "Action area border"
 msgstr "Ивица површине за деловање"
 
@@ -3961,11 +3961,11 @@ msgstr "Натпис отказивања"
 msgid "The label on the cancel button"
 msgstr "Натпис на дугмету за отказивање"
 
-#: gtk/gtkfilechooserwidget.c:8446 gtk/gtkfilechooserwidget.c:8447
+#: gtk/gtkfilechooserwidget.c:8393 gtk/gtkfilechooserwidget.c:8394
 msgid "Search mode"
 msgstr "Режим претраге"
 
-#: gtk/gtkfilechooserwidget.c:8453 gtk/gtkfilechooserwidget.c:8454
+#: gtk/gtkfilechooserwidget.c:8400 gtk/gtkfilechooserwidget.c:8401
 #: gtk/gtkheaderbar.c:2034 gtk/gtkshortcutsshortcut.c:591
 msgid "Subtitle"
 msgstr "Поднаслов"
@@ -4496,31 +4496,39 @@ msgstr "Користи пребацивање"
 msgid "Whether to use icon names fallback"
 msgstr "Да ли да користи пребацивање имена иконице"
 
-#: gtk/gtkinfobar.c:364 gtk/gtkmessagedialog.c:189
+#: gtk/gtkinfobar.c:339 gtk/gtkmessagedialog.c:189
 msgid "Message Type"
 msgstr "Врста обавештења"
 
-#: gtk/gtkinfobar.c:365 gtk/gtkmessagedialog.c:190
+#: gtk/gtkinfobar.c:340 gtk/gtkmessagedialog.c:190
 msgid "The type of message"
 msgstr "Врста обавештења"
 
-#: gtk/gtkinfobar.c:380 gtk/gtksearchbar.c:425
+#: gtk/gtkinfobar.c:354 gtk/gtksearchbar.c:425
 msgid "Show Close Button"
 msgstr "Прикажи дугме за затварање"
 
-#: gtk/gtkinfobar.c:381
+#: gtk/gtkinfobar.c:355
 msgid "Whether to include a standard close button"
 msgstr "Да ли ће бити укључено уобичајено дугме за затварање"
 
-#: gtk/gtkinfobar.c:436
+#: gtk/gtkinfobar.c:361
+msgid "Reveal"
+msgstr "Откриј"
+
+#: gtk/gtkinfobar.c:362
+msgid "Controls whether the action bar shows its contents or not"
+msgstr "Управља приказом приказа садржаја траке радњи"
+
+#: gtk/gtkinfobar.c:420
 msgid "Width of border around the content area"
 msgstr "Ширина ивице око области садржаја"
 
-#: gtk/gtkinfobar.c:454
+#: gtk/gtkinfobar.c:438
 msgid "Spacing between elements of the area"
 msgstr "Размак између елемената на области"
 
-#: gtk/gtkinfobar.c:488
+#: gtk/gtkinfobar.c:472
 msgid "Width of border around the action area"
 msgstr "Ширина ивице око акционе области"
 
@@ -4713,11 +4721,11 @@ msgstr "Посећена"
 msgid "Whether this link has been visited."
 msgstr "Да ли је адреса посећена."
 
-#: gtk/gtklistbox.c:3897
+#: gtk/gtklistbox.c:3907
 msgid "Whether this row can be activated"
 msgstr "Да ли овај ред може бити покренут"
 
-#: gtk/gtklistbox.c:3911
+#: gtk/gtklistbox.c:3921
 msgid "Whether this row can be selected"
 msgstr "Да ли овај ред може бити изабран"
 
@@ -4842,7 +4850,7 @@ msgstr "Кључни елемент са којим треба да се пор�
 
 # Mozda "razlomak"
 #: gtk/gtkmenubutton.c:534 gtk/gtkshortcutsshortcut.c:645
-#: gtk/gtkstylecontext.c:242
+#: gtk/gtkstylecontext.c:246
 msgid "Direction"
 msgstr "Правац"
 
@@ -5203,7 +5211,7 @@ msgstr "Иконски"
 msgid "Whether to prefer the icon over text"
 msgstr "Да ли је пожељно имати иконицу више од текста"
 
-#: gtk/gtkmountoperation.c:163 gtk/gtkstylecontext.c:258
+#: gtk/gtkmountoperation.c:163 gtk/gtkstylecontext.c:262
 msgid "Parent"
 msgstr "Родитељ"
 
@@ -7690,23 +7698,23 @@ msgstr "Симболичка величина која ће се користи�
 msgid "Style of bevel around the statusbar text"
 msgstr "Начин приказа удубљења око текста на траци стања"
 
-#: gtk/gtkstylecontext.c:229
+#: gtk/gtkstylecontext.c:233
 msgid "The associated GdkScreen"
 msgstr "Повезани Гдк екран"
 
-#: gtk/gtkstylecontext.c:235
+#: gtk/gtkstylecontext.c:239
 msgid "FrameClock"
 msgstr "Часовник кадра"
 
-#: gtk/gtkstylecontext.c:236
+#: gtk/gtkstylecontext.c:240
 msgid "The associated GdkFrameClock"
 msgstr "Придружени часовник Гдк кадра"
 
-#: gtk/gtkstylecontext.c:243 gtk/gtktexttag.c:299
+#: gtk/gtkstylecontext.c:247 gtk/gtktexttag.c:299
 msgid "Text direction"
 msgstr "Смер текста"
 
-#: gtk/gtkstylecontext.c:259
+#: gtk/gtkstylecontext.c:263
 msgid "The parent style context"
 msgstr "Садржај родитељског стила"
 
