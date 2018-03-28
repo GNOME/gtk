@@ -41,7 +41,6 @@
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcsswidgetnodeprivate.h"
 #include "gtkdebug.h"
-#include "gtkdebugupdatesprivate.h"
 #include "gtkeventcontrollerlegacyprivate.h"
 #include "gtkgesturedrag.h"
 #include "gtkgestureprivate.h"
@@ -4383,7 +4382,6 @@ gtk_widget_queue_draw_region (GtkWidget            *widget,
   cairo_region_translate (region2, x, y);
 
 invalidate:
-  gtk_debug_updates_add (windowed_parent, region2);
   gdk_surface_invalidate_region (_gtk_widget_get_surface (widget), region2);
 
   cairo_region_destroy (region2);
