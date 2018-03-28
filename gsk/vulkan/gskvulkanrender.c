@@ -65,7 +65,8 @@ struct _GskVulkanRender
 static void
 gsk_vulkan_render_setup (GskVulkanRender       *self,
                          GskVulkanImage        *target,
-                         const graphene_rect_t *rect)
+                         const graphene_rect_t *rect,
+                         const cairo_region_t  *clip)
 {
   GdkSurface *window = gsk_renderer_get_surface (self->renderer);
 
@@ -75,11 +76,6 @@ gsk_vulkan_render_setup (GskVulkanRender       *self,
     {
       self->viewport = *rect;
       self->scale_factor = 1;
-      self->clip = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
-                                                      0, 0,
-                                                      gsk_vulkan_image_get_width (target),
-                                                      gsk_vulkan_image_get_height (target)
-                                                  });
     }
   else
     {
@@ -87,7 +83,18 @@ gsk_vulkan_render_setup (GskVulkanRender       *self,
       self->viewport = GRAPHENE_RECT_INIT (0, 0,
                                            gdk_surface_get_width (window) * self->scale_factor,
                                            gdk_surface_get_height (window) * self->scale_factor);
-      self->clip = gdk_drawing_context_get_clip (gsk_renderer_get_drawing_context (self->renderer));
+    }
+  if (clip)
+    {
+      self->clip = cairo_region_reference ((cairo_region_t *) clip);
+    }
+  else
+    {
+      self->clip = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
+                                                      0, 0,
+                                                      gsk_vulkan_image_get_width (target),
+                                                      gsk_vulkan_image_get_height (target)
+                                                  });
     }
 }
 
@@ -749,11 +756,12 @@ gsk_vulkan_render_is_busy (GskVulkanRender *self)
 void
 gsk_vulkan_render_reset (GskVulkanRender       *self,
                          GskVulkanImage        *target,
-                         const graphene_rect_t *rect)
+                         const graphene_rect_t *rect,
+                         const cairo_region_t  *clip)
 {
   gsk_vulkan_render_cleanup (self);
 
-  gsk_vulkan_render_setup (self, target, rect);
+  gsk_vulkan_render_setup (self, target, rect, clip);
 }
 
 GskRenderer *
