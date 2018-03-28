@@ -600,6 +600,9 @@ append_node (GtkTreeModelRenderNode *nodemodel,
           }
       }
       break;
+
+    case GSK_MASK_NODE:
+      break;
     }
 }
 

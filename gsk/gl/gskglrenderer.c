@@ -2197,6 +2197,7 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
     case GSK_BLEND_NODE:
     case GSK_REPEAT_NODE:
     case GSK_CAIRO_NODE:
+    case GSK_MASK_NODE:
     default:
       {
         render_fallback_node (self, node, builder, vertex_data);

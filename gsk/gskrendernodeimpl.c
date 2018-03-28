@@ -4563,6 +4563,143 @@ gsk_blur_node_get_radius (GskRenderNode *node)
   return self->radius;
 }
 
+/*** GSK_MASK_NODE ***/
+
+typedef struct _GskMaskNode GskMaskNode;
+
+struct _GskMaskNode
+{
+  GskRenderNode render_node;
+
+  GskRenderNode *mask_child;
+  GskRenderNode *source_child;
+};
+
+static void
+gsk_mask_node_finalize (GskRenderNode *node)
+{
+  GskMaskNode *self = (GskMaskNode *) node;
+
+  gsk_render_node_unref (self->source_child);
+  gsk_render_node_unref (self->mask_child);
+}
+
+static void
+gsk_mask_node_draw (GskRenderNode *node,
+                    cairo_t       *cr)
+{
+  GskMaskNode *self = (GskMaskNode *) node;
+  cairo_pattern_t *mask_pattern;
+
+  cairo_push_group (cr);
+  gsk_render_node_draw (self->source_child, cr);
+  cairo_pop_group_to_source (cr);
+
+  cairo_push_group (cr);
+  gsk_render_node_draw (self->mask_child, cr);
+  mask_pattern = cairo_pop_group (cr);
+
+  cairo_mask (cr, mask_pattern);
+}
+
+#define GSK_MASK_NODE_VARIANT_TYPE "(uvuv)"
+
+static GVariant *
+gsk_mask_node_serialize (GskRenderNode *node)
+{
+  GskMaskNode *self = (GskMaskNode *) node;
+
+  return g_variant_new (GSK_MASK_NODE_VARIANT_TYPE,
+                        (guint32) gsk_render_node_get_node_type (self->source_child),
+                        gsk_render_node_serialize_node (self->source_child),
+                        (guint32) gsk_render_node_get_node_type (self->mask_child),
+                        gsk_render_node_serialize_node (self->mask_child));
+}
+
+static GskRenderNode *
+gsk_mask_node_deserialize (GVariant  *variant,
+                           GError   **error)
+{
+  guint32 source_type;
+  GskRenderNode *source_child;
+  GVariant *source_variant;
+  guint32 mask_type;
+  GskRenderNode *mask_child;
+  GVariant *mask_variant;
+  GskRenderNode *result;
+
+  g_variant_get (variant, GSK_MASK_NODE_VARIANT_TYPE,
+                 &source_type, &source_variant,
+                 &mask_type, &mask_variant);
+
+  source_child = gsk_render_node_deserialize_node (source_type, source_variant, error);
+  g_variant_unref (source_variant);
+
+  if (source_child == NULL)
+    return NULL;
+
+  mask_child = gsk_render_node_deserialize_node (mask_type, mask_variant, error);
+  g_variant_unref (mask_variant);
+
+  if (mask_child == NULL)
+    return NULL;
+
+  result = gsk_mask_node_new (source_child, mask_child);
+
+  gsk_render_node_unref (source_child);
+  gsk_render_node_unref (mask_child);
+
+  return result;
+}
+
+static const GskRenderNodeClass GSK_MASK_NODE_CLASS = {
+  GSK_MASK_NODE,
+  sizeof (GskMaskNode),
+  "GskMaskNode",
+  gsk_mask_node_finalize,
+  gsk_mask_node_draw,
+  gsk_mask_node_serialize,
+  gsk_mask_node_deserialize
+};
+
+GskRenderNode *
+gsk_mask_node_new (GskRenderNode *source_child,
+                   GskRenderNode *mask_child)
+{
+  GskMaskNode *self;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (source_child), NULL);
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (mask_child), NULL);
+
+  self = (GskMaskNode *) gsk_render_node_new (&GSK_MASK_NODE_CLASS, 0);
+  self->source_child = gsk_render_node_ref (source_child);
+  self->mask_child = gsk_render_node_ref (mask_child);
+
+  graphene_rect_union (&source_child->bounds, &mask_child->bounds, &self->render_node.bounds);
+
+  return &self->render_node;
+}
+
+GskRenderNode *
+gsk_mask_node_get_source (GskRenderNode *node)
+{
+  GskMaskNode *self = (GskMaskNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_MASK_NODE), NULL);
+
+  return self->source_child;
+}
+
+GskRenderNode *
+gsk_mask_node_get_mask (GskRenderNode *node)
+{
+  GskMaskNode *self = (GskMaskNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_MASK_NODE), NULL);
+
+  return self->mask_child;
+}
+
 static const GskRenderNodeClass *klasses[] = {
   [GSK_CONTAINER_NODE] = &GSK_CONTAINER_NODE_CLASS,
   [GSK_CAIRO_NODE] = &GSK_CAIRO_NODE_CLASS,
@@ -4584,7 +4721,8 @@ static const GskRenderNodeClass *klasses[] = {
   [GSK_CROSS_FADE_NODE] = &GSK_CROSS_FADE_NODE_CLASS,
   [GSK_TEXT_NODE] = &GSK_TEXT_NODE_CLASS,
   [GSK_BLUR_NODE] = &GSK_BLUR_NODE_CLASS,
-  [GSK_OFFSET_NODE] = &GSK_OFFSET_NODE_CLASS
+  [GSK_OFFSET_NODE] = &GSK_OFFSET_NODE_CLASS,
+  [GSK_MASK_NODE] = &GSK_MASK_NODE_CLASS,
 };
 
 GskRenderNode *

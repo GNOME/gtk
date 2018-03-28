@@ -193,6 +193,8 @@ node_type_name (GskRenderNodeType type)
       return "Text";
     case GSK_BLUR_NODE:
       return "Blur";
+    case GSK_MASK_NODE:
+      return "Mask";
     }
 }
 
@@ -662,6 +664,7 @@ populate_render_node_properties (GtkListStore  *store,
 
     case GSK_NOT_A_RENDER_NODE:
     case GSK_TRANSFORM_NODE:
+    case GSK_MASK_NODE:
     default:
       break;
     }

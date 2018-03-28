@@ -275,6 +275,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
       g_assert_not_reached ();
       return;
     case GSK_SHADOW_NODE:
+    case GSK_MASK_NODE:
     default:
       FALLBACK ("Unsupported node '%s'", node->node_class->type_name);
 

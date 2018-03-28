@@ -325,6 +325,14 @@ GskRenderNode *         gsk_blur_node_get_child                 (GskRenderNode  
 GDK_AVAILABLE_IN_ALL
 double                  gsk_blur_node_get_radius                (GskRenderNode            *node);
 
+GDK_AVAILABLE_IN_ALL
+GskRenderNode *         gsk_mask_node_new                       (GskRenderNode            *source_child,
+                                                                 GskRenderNode            *mask_child);
+GDK_AVAILABLE_IN_ALL
+GskRenderNode *         gsk_mask_node_get_source                (GskRenderNode            *node);
+GDK_AVAILABLE_IN_ALL
+GskRenderNode *         gsk_mask_node_get_mask                  (GskRenderNode            *node);
+
 G_END_DECLS
 
 #endif /* __GSK_RENDER_NODE_H__ */
