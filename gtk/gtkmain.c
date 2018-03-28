@@ -116,7 +116,6 @@
 #include "gtkaccelmapprivate.h"
 #include "gtkbox.h"
 #include "gtkdebug.h"
-#include "gtkdebugupdatesprivate.h"
 #include "gtkdndprivate.h"
 #include "gtkmain.h"
 #include "gtkmediafileprivate.h"
@@ -157,7 +156,6 @@ DisplayDebugFlags debug_flags[N_DEBUG_DISPLAYS];
 static const GDebugKey gtk_debug_keys[] = {
   { "text", GTK_DEBUG_TEXT },
   { "tree", GTK_DEBUG_TREE },
-  { "updates", GTK_DEBUG_UPDATES },
   { "keybindings", GTK_DEBUG_KEYBINDINGS },
   { "modules", GTK_DEBUG_MODULES },
   { "geometry", GTK_DEBUG_GEOMETRY },
@@ -652,9 +650,6 @@ do_post_parse_initialization (void)
 #ifdef SIGPIPE
   signal (SIGPIPE, SIG_IGN);
 #endif
-
-  if (debug_flags[0].flags & GTK_DEBUG_UPDATES)
-    gtk_debug_updates_set_enabled (TRUE);
 
   gtk_widget_set_default_direction (gtk_get_locale_direction ());
 
