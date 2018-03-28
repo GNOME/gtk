@@ -1077,6 +1077,90 @@ gtk_snapshot_push_blend (GtkSnapshot  *snapshot,
 }
 
 static GskRenderNode *
+gtk_snapshot_collect_mask_mask (GtkSnapshot      *snapshot,
+                                GtkSnapshotState *state,
+                                GskRenderNode   **nodes,
+                                guint             n_nodes,
+                                const char       *name)
+{
+  GskRenderNode *source_child, *mask_child, *mask_node;
+
+  mask_child = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes, name);
+  source_child = state->data.mask.source_node;
+
+  if (source_child == NULL ||
+      mask_child == NULL)
+    return NULL;
+
+  mask_node = gsk_mask_node_new (source_child, mask_child);
+  gsk_render_node_set_name (mask_node, name);
+
+  gsk_render_node_unref (source_child);
+  gsk_render_node_unref (mask_child);
+
+  return mask_node;
+}
+
+static GskRenderNode *
+gtk_snapshot_collect_mask_source (GtkSnapshot      *snapshot,
+                                  GtkSnapshotState *state,
+                                  GskRenderNode   **nodes,
+                                  guint             n_nodes,
+                                  const char       *name)
+{
+  GtkSnapshotState *prev_state = gtk_snapshot_get_previous_state (snapshot);
+
+  g_assert (prev_state->collect_func == gtk_snapshot_collect_mask_mask);
+
+  prev_state->data.mask.source_node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes, name);
+
+  return NULL;
+}
+
+/**
+ * gtk_snapshot_push_mask:
+ * @snapshot: a #GtkSnapshot
+ * @name: printf format string for name of the pushed node
+ * @...: printf-style arguments for the @name string
+ *
+ * Calling this function requires 2 subsequent calls to gtk_snapshot_pop().
+ **/
+void
+gtk_snapshot_push_mask (GtkSnapshot *snapshot,
+                        const char  *name,
+                        ...)
+{
+  GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
+  GtkSnapshotState *source_state;
+  char *str;
+
+  if (name && snapshot->record_names)
+    {
+      va_list args;
+
+      va_start (args, name);
+      str = g_strdup_vprintf (name, args);
+      va_end (args);
+    }
+  else
+    str = NULL;
+
+  source_state = gtk_snapshot_push_state (snapshot,
+                                          str,
+                                          current_state->clip_region,
+                                          current_state->translate_x,
+                                          current_state->translate_y,
+                                          gtk_snapshot_collect_mask_mask);
+
+  gtk_snapshot_push_state (snapshot,
+                           g_strdup (str),
+                           source_state->clip_region,
+                           source_state->translate_x,
+                           source_state->translate_y,
+                           gtk_snapshot_collect_mask_source);
+}
+
+static GskRenderNode *
 gtk_snapshot_collect_cross_fade_end (GtkSnapshot      *snapshot,
                                      GtkSnapshotState *state,
                                      GskRenderNode   **nodes,

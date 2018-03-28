@@ -74,6 +74,9 @@ struct _GtkSnapshotState {
       GskRenderNode *bottom_node;
     } blend;
     struct {
+      GskRenderNode *source_node;
+    } mask;
+    struct {
       double progress;
       GskRenderNode *start_node;
     } cross_fade;

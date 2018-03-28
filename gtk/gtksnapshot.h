@@ -123,6 +123,10 @@ void            gtk_snapshot_push_blend                 (GtkSnapshot            
                                                          const char             *name,
                                                          ...) G_GNUC_PRINTF (3, 4);
 GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_push_mask                  (GtkSnapshot            *snapshot,
+                                                         const char             *name,
+                                                         ...) G_GNUC_PRINTF (2, 3);
+GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_push_cross_fade            (GtkSnapshot            *snapshot,
                                                          double                  progress,
                                                          const char             *name,
