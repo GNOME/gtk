@@ -3977,49 +3977,6 @@ gtk_widget_get_surface_allocation (GtkWidget     *widget,
   *allocation = alloc;
 }
 
-/**
- * gtk_widget_queue_draw_area:
- * @widget: a #GtkWidget
- * @x: x coordinate of upper-left corner of rectangle to redraw
- * @y: y coordinate of upper-left corner of rectangle to redraw
- * @width: width of region to draw
- * @height: height of region to draw
- *
- * Convenience function that calls gtk_widget_queue_draw_region() on
- * the region created from the given coordinates.
- *
- * The region here is specified in widget coordinates of @widget.
- *
- * @width or @height may be 0, in this case this function does
- * nothing. Negative values for @width and @height are not allowed.
- */
-void
-gtk_widget_queue_draw_area (GtkWidget *widget,
-			    gint       x,
-			    gint       y,
-			    gint       width,
-			    gint       height)
-{
-  GdkRectangle rect;
-  cairo_region_t *region;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (width >= 0);
-  g_return_if_fail (height >= 0);
-
-  if (width == 0 || height == 0)
-    return;
-
-  rect.x = x;
-  rect.y = y;
-  rect.width = width;
-  rect.height = height;
-
-  region = cairo_region_create_rectangle (&rect);
-  gtk_widget_queue_draw_region (widget, region);
-  cairo_region_destroy (region);
-}
-
 static void
 gtk_widget_invalidate_paintable_contents (GtkWidget *widget)
 {
@@ -4056,7 +4013,42 @@ gtk_widget_real_queue_draw (GtkWidget *widget)
       priv->draw_needed = TRUE;
       g_clear_pointer (&priv->render_node, gsk_render_node_unref);
       gtk_widget_invalidate_paintable_contents (widget);
+      if (_gtk_widget_get_has_surface (widget) &&
+          _gtk_widget_get_realized (widget))
+        gdk_surface_queue_expose (gtk_widget_get_surface (widget));
     }
+}
+
+/**
+ * gtk_widget_queue_draw_area:
+ * @widget: a #GtkWidget
+ * @x: x coordinate of upper-left corner of rectangle to redraw
+ * @y: y coordinate of upper-left corner of rectangle to redraw
+ * @width: width of region to draw
+ * @height: height of region to draw
+ *
+ * Convenience function that calls gtk_widget_queue_draw_region() on
+ * the region created from the given coordinates.
+ *
+ * The region here is specified in widget coordinates of @widget.
+ *
+ * @width or @height may be 0, in this case this function does
+ * nothing. Negative values for @width and @height are not allowed.
+ */
+void
+gtk_widget_queue_draw_area (GtkWidget *widget,
+			    gint       x,
+			    gint       y,
+			    gint       width,
+			    gint       height)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  /* Just return if the widget isn't mapped */
+  if (!_gtk_widget_get_mapped (widget))
+    return;
+
+  gtk_widget_real_queue_draw (widget);
 }
 
 /**
@@ -4069,22 +4061,13 @@ gtk_widget_real_queue_draw (GtkWidget *widget)
 void
 gtk_widget_queue_draw (GtkWidget *widget)
 {
-  GtkWidget *parent;
-  GdkRectangle *rect;
-
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
+  /* Just return if the widget isn't mapped */
+  if (!_gtk_widget_get_mapped (widget))
+    return;
+
   gtk_widget_real_queue_draw (widget);
-
-  parent = _gtk_widget_get_parent (widget);
-  rect = &widget->priv->clip;
-
-  if (!_gtk_widget_get_has_surface (widget))
-    gtk_widget_queue_draw_area (parent ? parent : widget,
-                                rect->x, rect->y, rect->width, rect->height);
-  else
-    gtk_widget_queue_draw_area (widget,
-                                0, 0, rect->width, rect->height);
 }
 
 static void
@@ -4314,84 +4297,14 @@ void
 gtk_widget_queue_draw_region (GtkWidget            *widget,
                               const cairo_region_t *region)
 {
-  GtkWidget *windowed_parent;
-  cairo_rectangle_int_t self_clip;
-  cairo_region_t *clip_region = NULL;
-  cairo_region_t *region2;
-  int x, y;
-  GtkCssStyle *parent_style;
-  GtkBorder border, padding;
-
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  if (cairo_region_is_empty (region))
-    return;
 
   /* Just return if the widget isn't mapped */
   if (!_gtk_widget_get_mapped (widget))
     return;
 
   gtk_widget_real_queue_draw (widget);
-
-  if (!_gtk_widget_get_parent (widget))
-    {
-      g_assert (_gtk_widget_get_has_surface (widget));
-      region2 = cairo_region_copy (region);
-      windowed_parent = widget;
-      goto invalidate;
-    }
-
-  /* priv->clip is in parent coordinates, transform it to @widget coordinates. */
-  self_clip = widget->priv->clip;
-  self_clip.x -= widget->priv->allocation.x;
-  self_clip.y -= widget->priv->allocation.y;
-  clip_region = cairo_region_create_rectangle (&self_clip);
-
-  region2 = cairo_region_copy (region);
-  cairo_region_intersect (region2, clip_region);
-
-  /* Look for the parent with a window and invalidate @region in there. */
-  windowed_parent = widget;
-  while (windowed_parent != NULL && !_gtk_widget_get_has_surface (windowed_parent))
-    windowed_parent = _gtk_widget_get_parent (windowed_parent);
-
-  g_assert (windowed_parent != NULL);
-
-  /* @region's coordinates are originally relative to @widget's origin */
-  if (widget != windowed_parent)
-    gtk_widget_translate_coordinates (widget,
-                                      windowed_parent,
-                                      0, 0,
-                                      &x, &y);
-  else
-    x = y = 0;
-
-  /* At this point, x and y are relative to the windowed parent's origin,
-   * but the window of the parent spans over its entire allocation, so we need
-   * to account for border and padding manually. The values returned from
-   * gtk_widget_get_surface_allocation, which should've been used to size and position
-   * @parent's window, do not include widget margins nor css margins.
-   */
-  parent_style = gtk_css_node_get_style (windowed_parent->priv->cssnode);
-  get_box_border (parent_style, &border);
-  get_box_padding (parent_style, &padding);
-
-  x += border.left + padding.left;
-  y += border.top + padding.top;
-
-  cairo_region_translate (region2, x, y);
-
-invalidate:
-  gdk_surface_invalidate_region (_gtk_widget_get_surface (widget), region2);
-
-  cairo_region_destroy (region2);
-
-  if (clip_region)
-    cairo_region_destroy (clip_region);
 }
-
-
-
 
 /**
  * gtk_widget_size_allocate:
