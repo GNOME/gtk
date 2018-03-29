@@ -584,7 +584,7 @@ _gtk_menu_bar_cycle_focus (GtkMenuBar       *menubar,
 
       found = g_ptr_array_find (menubars, menubar, &index);
 
-      if (found && index < menubars->len)
+      if (found && index < menubars->len - 1)
         {
           GtkWidget *next = g_ptr_array_index (menubars, index + 1);
           GtkMenuShell *new_menushell = GTK_MENU_SHELL (next);
