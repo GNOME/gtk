@@ -628,7 +628,7 @@ install_headers(gtk_public_headers, subdir: 'gtk-4.0/gtk/')
 gtk_sources = gtk_public_sources + gtk_private_sources
 
 proto_sources = [
-  ['gtk-text-input', 'stable', ],
+  ['text-input', 'unstable', 'v3', ],
 ]
 
 im_wayland_sources = files('gtkimcontextwayland.c')
