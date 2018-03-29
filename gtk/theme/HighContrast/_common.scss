@@ -2611,6 +2611,7 @@ levelbar {
   }
 }
 
+
 // catch all extend :)
 
 %selected_items {
@@ -2618,6 +2619,9 @@ levelbar {
   color: $selected_fg_color;
   &:backdrop { background-color: $borders_color; color: $selected_fg_color; }
 }
+
+.monospace { font-family: monospace; }
+
 
 /**********
  * frames *
