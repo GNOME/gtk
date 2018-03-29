@@ -345,6 +345,7 @@ modules/input/imti-er.c
 modules/input/imti-et.c
 modules/input/imviqr.c
 modules/input/imwayland.c
+modules/input/imwaylandgtk.c
 modules/input/imxim.c
 modules/printbackends/cloudprint/gtkprintbackendcloudprint.c
 modules/printbackends/cloudprint/gtkprintercloudprint.c

@@ -702,6 +702,14 @@ match_backend (GtkIMContextInfo *context)
 
       return GDK_IS_WAYLAND_DISPLAY (display) &&
              gdk_wayland_display_query_registry (display,
+                                                 "zwp_text_input_manager_v3");
+    }
+  if (g_strcmp0 (context->context_id, "waylandgtk") == 0)
+    {
+      GdkDisplay *display = gdk_display_get_default ();
+
+      return GDK_IS_WAYLAND_DISPLAY (display) &&
+             gdk_wayland_display_query_registry (display,
                                                  "gtk_text_input_manager");
     }
 #endif
