@@ -175,8 +175,8 @@ endif
 endif
 
 protocol_built_sources =	\
-	gtk-text-input-protocol.c	\
-	gtk-text-input-client-protocol.h
+	text-input-unstable-v3-protocol.c	\
+	text-input-unstable-v3-client-protocol.h
 
 im_wayland_la_CPPFLAGS = $(AM_CPPFLAGS)
 im_wayland_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
