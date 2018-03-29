@@ -1156,6 +1156,8 @@ levelbar block.empty:backdrop { border-color: rgba(0, 0, 0, 0.15); }
 
 .view:backdrop:selected, textview text:backdrop:selected, iconview:backdrop:selected, calendar:backdrop:selected, textview text:backdrop:selected:focus, iconview:backdrop:selected:focus, calendar:backdrop:focus:selected, textview text:backdrop:selected:hover, iconview:backdrop:selected:hover, calendar:backdrop:hover:selected, textview text selection:backdrop, flowbox flowboxchild:backdrop:selected, label selection:backdrop, spinbutton:not(.vertical) selection:backdrop, entry selection:backdrop, modelbutton.flat:backdrop:selected, popover.background checkbutton:backdrop:selected, popover.background radiobutton:backdrop:selected, .menuitem.button.flat:backdrop:selected, row.activatable:backdrop:selected, .sidebar:backdrop:selected { background-color: gray; color: #fff; }
 
+.monospace { font-family: monospace; }
+
 /********** frames * */
 frame, .frame { border: 1px solid gray; padding: 0; }
 
