@@ -20,6 +20,9 @@ struct _GskShaderBuilder
   GPtrArray *defines;
   GPtrArray *uniforms;
   GPtrArray *attributes;
+
+  /* We reuse this one for all the shaders */
+  GString *shader_code;
 };
 
 G_DEFINE_TYPE (GskShaderBuilder, gsk_shader_builder, G_TYPE_OBJECT)
@@ -32,6 +35,7 @@ gsk_shader_builder_finalize (GObject *gobject)
   g_free (self->resource_base_path);
   g_free (self->vertex_preamble);
   g_free (self->fragment_preamble);
+  g_string_free (self->shader_code, TRUE);
 
   g_clear_pointer (&self->defines, g_ptr_array_unref);
 
@@ -48,6 +52,7 @@ static void
 gsk_shader_builder_init (GskShaderBuilder *self)
 {
   self->defines = g_ptr_array_new_with_free_func (g_free);
+  self->shader_code = g_string_new (NULL);
 }
 
 GskShaderBuilder *
@@ -143,12 +148,14 @@ gsk_shader_builder_compile_shader (GskShaderBuilder *builder,
                                    GError          **error)
 {
   GString *code;
-  char *source;
+  const char *source;
   int shader_id;
   int status;
   int i;
 
-  code = g_string_new (NULL);
+  /* Clear possibly previously set shader code */
+  g_string_erase (builder->shader_code, 0, -1);
+  code = builder->shader_code;
 
   if (builder->version > 0)
     {
@@ -174,7 +181,6 @@ gsk_shader_builder_compile_shader (GskShaderBuilder *builder,
 
   if (!lookup_shader_code (code, builder->resource_base_path, shader_preamble, error))
     {
-      g_string_free (code, TRUE);
       return -1;
     }
 
@@ -182,11 +188,10 @@ gsk_shader_builder_compile_shader (GskShaderBuilder *builder,
 
   if (!lookup_shader_code (code, builder->resource_base_path, shader_source, error))
     {
-      g_string_free (code, TRUE);
       return -1;
     }
 
-  source = g_string_free (code, FALSE);
+  source = code->str;
 
   shader_id = glCreateShader (shader_type);
   glShaderSource (shader_id, 1, (const GLchar **) &source, NULL);
@@ -202,8 +207,6 @@ gsk_shader_builder_compile_shader (GskShaderBuilder *builder,
                source);
     }
 #endif
-
-  g_free (source);
 
   glGetShaderiv (shader_id, GL_COMPILE_STATUS, &status);
   if (status == GL_FALSE)
