@@ -18,8 +18,6 @@ struct _GskShaderBuilder
   int version;
 
   GPtrArray *defines;
-  GPtrArray *uniforms;
-  GPtrArray *attributes;
 
   /* We reuse this one for all the shaders */
   GString *shader_code;
