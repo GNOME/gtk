@@ -39,14 +39,10 @@ G_BEGIN_DECLS
 
 typedef struct _GtkEntryBuffer            GtkEntryBuffer;
 typedef struct _GtkEntryBufferClass       GtkEntryBufferClass;
-typedef struct _GtkEntryBufferPrivate     GtkEntryBufferPrivate;
 
 struct _GtkEntryBuffer
 {
   GObject parent_instance;
-
-  /*< private >*/
-  GtkEntryBufferPrivate *priv;
 };
 
 struct _GtkEntryBufferClass

@@ -66,6 +66,7 @@ enum {
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
+typedef struct _GtkEntryBufferPrivate GtkEntryBufferPrivate;
 struct _GtkEntryBufferPrivate
 {
   /* Only valid if this class is not derived */
@@ -101,17 +102,23 @@ static const gchar*
 gtk_entry_buffer_normal_get_text (GtkEntryBuffer *buffer,
                                   gsize          *n_bytes)
 {
+  GtkEntryBufferPrivate *priv = gtk_entry_buffer_get_instance_private (buffer);
+
   if (n_bytes)
-    *n_bytes = buffer->priv->normal_text_bytes;
-  if (!buffer->priv->normal_text)
+    *n_bytes = priv->normal_text_bytes;
+
+  if (!priv->normal_text)
       return "";
-  return buffer->priv->normal_text;
+
+  return priv->normal_text;
 }
 
 static guint
 gtk_entry_buffer_normal_get_length (GtkEntryBuffer *buffer)
 {
-  return buffer->priv->normal_text_chars;
+  GtkEntryBufferPrivate *priv = gtk_entry_buffer_get_instance_private (buffer);
+
+  return priv->normal_text_chars;
 }
 
 static guint
@@ -120,7 +127,7 @@ gtk_entry_buffer_normal_insert_text (GtkEntryBuffer *buffer,
                                      const gchar    *chars,
                                      guint           n_chars)
 {
-  GtkEntryBufferPrivate *pv = buffer->priv;
+  GtkEntryBufferPrivate *pv = gtk_entry_buffer_get_instance_private (buffer);
   gsize prev_size;
   gsize n_bytes;
   gsize at;
@@ -184,7 +191,7 @@ gtk_entry_buffer_normal_delete_text (GtkEntryBuffer *buffer,
                                      guint           position,
                                      guint           n_chars)
 {
-  GtkEntryBufferPrivate *pv = buffer->priv;
+  GtkEntryBufferPrivate *pv = gtk_entry_buffer_get_instance_private (buffer);
   gsize start, end;
 
   if (position > pv->normal_text_chars)
@@ -244,9 +251,7 @@ gtk_entry_buffer_real_deleted_text (GtkEntryBuffer *buffer,
 static void
 gtk_entry_buffer_init (GtkEntryBuffer *buffer)
 {
-  GtkEntryBufferPrivate *pv;
-
-  pv = buffer->priv = gtk_entry_buffer_get_instance_private (buffer);
+  GtkEntryBufferPrivate *pv = gtk_entry_buffer_get_instance_private (buffer);
 
   pv->normal_text = NULL;
   pv->normal_text_chars = 0;
@@ -258,7 +263,7 @@ static void
 gtk_entry_buffer_finalize (GObject *obj)
 {
   GtkEntryBuffer *buffer = GTK_ENTRY_BUFFER (obj);
-  GtkEntryBufferPrivate *pv = buffer->priv;
+  GtkEntryBufferPrivate *pv = gtk_entry_buffer_get_instance_private (buffer);
 
   if (pv->normal_text)
     {
@@ -552,17 +557,19 @@ void
 gtk_entry_buffer_set_max_length (GtkEntryBuffer *buffer,
                                  gint            max_length)
 {
+  GtkEntryBufferPrivate *priv = gtk_entry_buffer_get_instance_private (buffer);
+
   g_return_if_fail (GTK_IS_ENTRY_BUFFER (buffer));
 
   max_length = CLAMP (max_length, 0, GTK_ENTRY_BUFFER_MAX_SIZE);
 
-  if (buffer->priv->max_length == max_length)
+  if (priv->max_length == max_length)
     return;
 
   if (max_length > 0 && gtk_entry_buffer_get_length (buffer) > max_length)
     gtk_entry_buffer_delete_text (buffer, max_length, -1);
 
-  buffer->priv->max_length = max_length;
+  priv->max_length = max_length;
   g_object_notify_by_pspec (G_OBJECT (buffer), entry_buffer_props[PROP_MAX_LENGTH]);
 }
 
@@ -579,8 +586,11 @@ gtk_entry_buffer_set_max_length (GtkEntryBuffer *buffer,
 gint
 gtk_entry_buffer_get_max_length (GtkEntryBuffer *buffer)
 {
+  GtkEntryBufferPrivate *priv = gtk_entry_buffer_get_instance_private (buffer);
+
   g_return_val_if_fail (GTK_IS_ENTRY_BUFFER (buffer), 0);
-  return buffer->priv->max_length;
+
+  return priv->max_length;
 }
 
 /**
@@ -608,14 +618,13 @@ gtk_entry_buffer_insert_text (GtkEntryBuffer *buffer,
                               const gchar    *chars,
                               gint            n_chars)
 {
+  GtkEntryBufferPrivate *pv = gtk_entry_buffer_get_instance_private (buffer);
   GtkEntryBufferClass *klass;
-  GtkEntryBufferPrivate *pv;
   guint length;
 
   g_return_val_if_fail (GTK_IS_ENTRY_BUFFER (buffer), 0);
 
   length = gtk_entry_buffer_get_length (buffer);
-  pv = buffer->priv;
 
   if (n_chars < 0)
     n_chars = g_utf8_strlen (chars, -1);
