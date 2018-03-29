@@ -130,13 +130,6 @@ GdkWin32Screen *GDK_SURFACE_SCREEN(GObject *win);
 
 typedef struct _GdkWin32SingleFont      GdkWin32SingleFont;
 
-struct _GdkWin32Cursor
-{
-  GdkCursor cursor;
-
-  HCURSOR hcursor;
-};
-
 struct _GdkWin32SingleFont
 {
   HFONT hfont;

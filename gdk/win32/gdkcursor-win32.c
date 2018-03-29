@@ -22,6 +22,7 @@
 #include "gdkcursor.h"
 #include "gdkwin32.h"
 #include "gdktextureprivate.h"
+#include "gdkintl.h"
 
 #include "gdkdisplay-win32.h"
 
@@ -75,6 +76,309 @@ static DefaultCursor default_cursors[] = {
   { "nw-resize", IDC_SIZENWSE },
   { "se-resize", IDC_SIZENWSE }
 };
+
+typedef struct _GdkWin32HCursorTableEntry GdkWin32HCursorTableEntry;
+
+struct _GdkWin32HCursorTableEntry
+{
+  HCURSOR  handle;
+  guint64  refcount;
+  gboolean destroyable;
+};
+
+struct _GdkWin32HCursor
+{
+  GObject          parent_instance;
+
+  /* Do not do any modifications to the handle
+   * (i.e. do not call DestroyCursor() on it).
+   * It's a "read-only" copy, the original is stored
+   * in the display instance.
+   */
+  HANDLE           readonly_handle;
+
+  /* This is a way to access the real handle stored
+   * in the display.
+   * TODO: make it a weak reference
+   */
+  GdkWin32Display *display;
+
+  /* A copy of the "destoyable" attribute of the handle */
+  gboolean         readonly_destroyable;
+};
+
+struct _GdkWin32HCursorClass
+{
+  GObjectClass parent_class;
+};
+
+enum
+{
+  PROP_0,
+  PROP_DISPLAY,
+  PROP_HANDLE,
+  PROP_DESTROYABLE,
+  NUM_PROPERTIES
+};
+
+G_DEFINE_TYPE (GdkWin32HCursor, gdk_win32_hcursor, G_TYPE_OBJECT)
+
+static void
+gdk_win32_hcursor_init (GdkWin32HCursor *win32_hcursor)
+{
+}
+
+static void
+gdk_win32_hcursor_finalize (GObject *gobject)
+{
+  GdkWin32HCursor *win32_hcursor = GDK_WIN32_HCURSOR (gobject);
+
+  if (win32_hcursor->display)
+    _gdk_win32_display_hcursor_unref (win32_hcursor->display, win32_hcursor->readonly_handle);
+
+  g_clear_object (&win32_hcursor->display);
+
+  G_OBJECT_CLASS (gdk_win32_hcursor_parent_class)->finalize (G_OBJECT (win32_hcursor));
+}
+
+static void
+gdk_win32_hcursor_set_property (GObject      *object,
+                                guint         prop_id,
+                                const GValue *value,
+                                GParamSpec   *pspec)
+{
+  GdkWin32HCursor *win32_hcursor;
+
+  win32_hcursor = GDK_WIN32_HCURSOR (object);
+
+  switch (prop_id)
+    {
+    case PROP_DISPLAY:
+      g_set_object (&win32_hcursor->display, g_value_get_object (value));
+      break;
+
+    case PROP_DESTROYABLE:
+      win32_hcursor->readonly_destroyable = g_value_get_boolean (value);
+      break;
+
+    case PROP_HANDLE:
+      win32_hcursor->readonly_handle = g_value_get_pointer (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+
+}
+
+static void
+gdk_win32_hcursor_get_property (GObject    *object,
+                                guint       prop_id,
+                                GValue     *value,
+                                GParamSpec *pspec)
+{
+  GdkWin32HCursor *win32_hcursor;
+
+  win32_hcursor = GDK_WIN32_HCURSOR (object);
+
+  switch (prop_id)
+    {
+    case PROP_DISPLAY:
+      g_value_set_object (value, win32_hcursor->display);
+      break;
+
+    case PROP_DESTROYABLE:
+      g_value_set_boolean (value, win32_hcursor->readonly_destroyable);
+      break;
+
+    case PROP_HANDLE:
+      g_value_set_pointer (value, win32_hcursor->readonly_handle);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gdk_win32_hcursor_constructed (GObject *object)
+{
+  GdkWin32HCursor *win32_hcursor;
+
+  win32_hcursor = GDK_WIN32_HCURSOR (object);
+
+  g_assert_nonnull (win32_hcursor->display);
+  g_assert_nonnull (win32_hcursor->readonly_handle);
+
+  _gdk_win32_display_hcursor_ref (win32_hcursor->display,
+                                  win32_hcursor->readonly_handle,
+                                  win32_hcursor->readonly_destroyable);
+}
+
+static GParamSpec *hcursor_props[NUM_PROPERTIES] = { NULL, };
+
+static void
+gdk_win32_hcursor_class_init (GdkWin32HCursorClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = gdk_win32_hcursor_finalize;
+  object_class->constructed = gdk_win32_hcursor_constructed;
+  object_class->get_property = gdk_win32_hcursor_get_property;
+  object_class->set_property = gdk_win32_hcursor_set_property;
+
+  hcursor_props[PROP_DISPLAY] =
+      g_param_spec_object ("display",
+                           P_("Display"),
+                           P_("The display that will use this cursor"),
+                           GDK_TYPE_DISPLAY,
+                           G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE);
+
+  hcursor_props[PROP_HANDLE] =
+      g_param_spec_pointer ("handle",
+                            P_("Handle"),
+                            P_("The HCURSOR handle for this cursor"),
+                            G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE);
+
+  hcursor_props[PROP_DESTROYABLE] =
+      g_param_spec_boolean ("destroyable",
+                            P_("Destroyable"),
+                            P_("Whether calling DestroyCursor() is allowed on this cursor"),
+                            TRUE,
+                            G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE);
+
+  g_object_class_install_properties (object_class, NUM_PROPERTIES, hcursor_props);
+}
+
+GdkWin32HCursor *
+gdk_win32_hcursor_new (GdkWin32Display *display,
+                       HCURSOR          handle,
+                       gboolean         destroyable)
+{
+  return g_object_new (GDK_TYPE_WIN32_HCURSOR,
+                       "display", display,
+                       "handle", handle,
+                       "destroyable", destroyable,
+                       NULL);
+}
+
+void
+_gdk_win32_display_hcursor_ref (GdkWin32Display *display,
+                                HCURSOR          handle,
+                                gboolean         destroyable)
+{
+  GdkWin32HCursorTableEntry *entry;
+
+  entry = g_hash_table_lookup (display->cursor_reftable, handle);
+
+  if (entry)
+    {
+      if (entry->destroyable != destroyable)
+        g_warning ("Destroyability metadata for cursor handle 0x%p does not match", handle);
+
+      entry->refcount += 1;
+
+      return;
+    }
+
+  entry = g_new0 (GdkWin32HCursorTableEntry, 1);
+  entry->handle = handle;
+  entry->destroyable = destroyable;
+  entry->refcount = 1;
+
+  g_hash_table_insert (display->cursor_reftable, handle, entry);
+  display->cursors_for_destruction = g_list_remove_all (display->cursors_for_destruction, handle);
+}
+
+static gboolean
+delayed_cursor_destruction (gpointer user_data)
+{
+  GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (user_data);
+  HANDLE current_hcursor = GetCursor ();
+  GList *p;
+
+  win32_display->idle_cursor_destructor_id = 0;
+
+  for (p = win32_display->cursors_for_destruction; p; p = p->next)
+    {
+      HCURSOR handle = (HCURSOR) p->data;
+
+      if (handle == NULL)
+        continue;
+
+      if (current_hcursor == handle)
+        {
+          SetCursor (NULL);
+          current_hcursor = NULL;
+        }
+
+      if (!DestroyCursor (handle))
+        g_warning (G_STRLOC ": DestroyCursor (%p) failed: %lu", handle, GetLastError ());
+    }
+
+  g_list_free (win32_display->cursors_for_destruction);
+  win32_display->cursors_for_destruction = NULL;
+
+  return G_SOURCE_REMOVE;
+}
+
+void
+_gdk_win32_display_hcursor_unref (GdkWin32Display *display,
+                                  HCURSOR          handle)
+{
+  GdkWin32HCursorTableEntry *entry;
+  gboolean destroyable;
+
+  entry = g_hash_table_lookup (display->cursor_reftable, handle);
+
+  if (!entry)
+    {
+      g_warning ("Trying to forget cursor handle 0x%p that is not in the table", handle);
+
+      return;
+    }
+
+  entry->refcount -= 1;
+
+  if (entry->refcount > 0)
+    return;
+
+  destroyable = entry->destroyable;
+
+  g_hash_table_remove (display->cursor_reftable, handle);
+  g_free (entry);
+
+  if (!destroyable)
+    return;
+
+  /* GDK tends to destroy a cursor first, then set a new one.
+   * This results in repeated oscillations between SetCursor(NULL)
+   * and SetCursor(hcursor). To avoid that, delay cursor destruction a bit
+   * to let GDK set a new one first. That way cursors are switched
+   * seamlessly, without a NULL cursor between them.
+   * If GDK sets the new cursor to the same handle the old cursor had,
+   * the cursor handle is taken off the destruction list.
+   */
+  if (g_list_find (display->cursors_for_destruction, handle) == NULL)
+    {
+      display->cursors_for_destruction = g_list_prepend (display->cursors_for_destruction, handle);
+
+      if (display->idle_cursor_destructor_id == 0)
+        display->idle_cursor_destructor_id = g_idle_add (delayed_cursor_destruction, display);
+    }
+}
+
+#ifdef gdk_win32_hcursor_get_handle
+#undef gdk_win32_hcursor_get_handle
+#endif
+
+HCURSOR
+gdk_win32_hcursor_get_handle (GdkWin32HCursor *cursor)
+{
+  return cursor->readonly_handle;
+}
 
 static HCURSOR
 hcursor_from_x_cursor (gint         i,
