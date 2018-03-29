@@ -172,10 +172,9 @@ gsk_shader_builder_compile_shader (GskShaderBuilder *builder,
       g_string_append_c (code, ' ');
       g_string_append (code, value);
       g_string_append_c (code, '\n');
-
-      if (i == builder->defines->len - 2)
-        g_string_append_c (code, '\n');
     }
+
+  g_string_append_c (code, '\n');
 
   if (!lookup_shader_code (code, builder->resource_base_path, shader_preamble, error))
     {
