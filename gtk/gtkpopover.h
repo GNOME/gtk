@@ -35,15 +35,10 @@ G_BEGIN_DECLS
 
 typedef struct _GtkPopover GtkPopover;
 typedef struct _GtkPopoverClass GtkPopoverClass;
-typedef struct _GtkPopoverPrivate GtkPopoverPrivate;
 
 struct _GtkPopover
 {
   GtkBin parent_instance;
-
-  /*< private >*/
-
-  GtkPopoverPrivate *priv;
 };
 
 struct _GtkPopoverClass
