@@ -126,6 +126,15 @@ static GSourceFuncs event_funcs = {
   NULL
 };
 
+/* Whenever we do an implicit grab (call SetCapture() after
+ * a mouse button is held down), we ref the capturing surface
+ * and keep that ref here. When mouse buttons are released,
+ * we remove the implicit grab and synthesize a crossing
+ * event from the grab surface to whatever surface is now
+ * under cursor.
+ */
+static GdkSurface *implicit_grab_surface = NULL;
+
 static GdkSurface *mouse_window = NULL;
 static GdkSurface *mouse_window_ignored_leave = NULL;
 static gint current_x, current_y;
@@ -2224,7 +2233,6 @@ gdk_event_translate (MSG  *msg,
   POINT point;
   MINMAXINFO *mmi;
   HWND hwnd;
-  GdkCursor *cursor;
   BYTE key_state[256];
   HIMC himc;
   WINDOWPOS *windowpos;
@@ -2661,7 +2669,10 @@ gdk_event_translate (MSG  *msg,
       if (pointer_grab == NULL)
 	{
 	  SetCapture (GDK_SURFACE_HWND (window));
+	  g_set_object (&implicit_grab_surface, g_object_ref (window));
 	}
+      else
+	g_set_object (&implicit_grab_surface, NULL);
 
       generate_button_event (GDK_BUTTON_PRESS, button,
 			     window, msg);
@@ -2694,15 +2705,13 @@ gdk_event_translate (MSG  *msg,
 
       g_set_object (&window, find_window_for_mouse_event (window, msg));
 
-      if (pointer_grab != NULL && pointer_grab->implicit)
+      if (pointer_grab == NULL && implicit_grab_surface != NULL)
 	{
 	  gint state = build_pointer_event_state (msg);
 
 	  /* We keep the implicit grab until no buttons at all are held down */
 	  if ((state & GDK_ANY_BUTTON_MASK & ~(GDK_BUTTON1_MASK << (button - 1))) == 0)
 	    {
-	      GdkSurface *native_surface = pointer_grab->native_surface;
-
 	      ReleaseCapture ();
 
 	      new_window = NULL;
@@ -2718,16 +2727,19 @@ gdk_event_translate (MSG  *msg,
 		}
 
 	      synthesize_crossing_events (display,
-					  native_surface, new_window,
+					  implicit_grab_surface, new_window,
 					  GDK_CROSSING_UNGRAB,
 					  &msg->pt,
 					  0, /* TODO: Set right mask */
 					  msg->time,
 					  FALSE);
+	      g_set_object (&implicit_grab_surface, NULL);
 	      g_set_object (&mouse_window, new_window);
 	      mouse_window_ignored_leave = NULL;
 	    }
 	}
+      else
+	g_set_object (&implicit_grab_surface, NULL);
 
       generate_button_event (GDK_BUTTON_RELEASE, button,
 			     window, msg);
@@ -3071,23 +3083,33 @@ gdk_event_translate (MSG  *msg,
       if (grab_window == NULL && LOWORD (msg->lParam) != HTCLIENT)
 	break;
 
-      if (grab_window != NULL)
+      return_val = FALSE;
+
+      if (grab_window != NULL &&
+          !GDK_SURFACE_DESTROYED (grab_window))
         {
           win32_display = GDK_WIN32_DISPLAY (gdk_surface_get_display (grab_window));
 
           if (win32_display->grab_cursor != NULL)
-            cursor = win32_display->grab_cursor;
+            {
+              GDK_NOTE (EVENTS, g_print (" (grab SetCursor(%p)", gdk_win32_hcursor_get_handle (win32_display->grab_cursor)));
+              SetCursor (gdk_win32_hcursor_get_handle (win32_display->grab_cursor));
+              return_val = TRUE;
+              *ret_valp = TRUE;
+            }
         }
-      else
-        cursor = NULL;
 
-      if (cursor != NULL)
+      if (!return_val &&
+          !GDK_SURFACE_DESTROYED (window) &&
+          GDK_SURFACE_IMPL_WIN32 (window->impl)->cursor != NULL)
         {
-          GDK_NOTE (EVENTS, g_print (" (SetCursor(%p)", cursor));
-          SetCursor (g_hash_table_lookup (win32_display->cursors, cursor));
+          win32_display = GDK_WIN32_DISPLAY (gdk_surface_get_display (window));
+          GDK_NOTE (EVENTS, g_print (" (window SetCursor(%p)", gdk_win32_hcursor_get_handle (GDK_SURFACE_IMPL_WIN32 (window->impl)->cursor)));
+          SetCursor (gdk_win32_hcursor_get_handle (GDK_SURFACE_IMPL_WIN32 (window->impl)->cursor));
           return_val = TRUE;
           *ret_valp = TRUE;
         }
+
       break;
 
     case WM_SYSMENU:
