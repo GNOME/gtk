@@ -51,9 +51,12 @@ RUN dnf -y install \
     mesa-dri-drivers \
     mesa-libEGL-devel \
     mesa-libwayland-egl-devel \
-    meson \
+    ninja-build \
     pango-devel \
     pcre-devel \
+    python3 \
+    python3-pip \
+    python3-wheel \
     redhat-rpm-config \
     sassc \
     systemtap-sdt-devel \
@@ -61,7 +64,10 @@ RUN dnf -y install \
     wayland-devel \
     wayland-protocols-devel \
     which \
-    xorg-x11-server-Xvfb
+    xorg-x11-server-Xvfb \
+ && dnf clean all
+
+RUN pip3 install meson
 
 ARG HOST_USER_ID=5555
 ENV HOST_USER_ID ${HOST_USER_ID}
