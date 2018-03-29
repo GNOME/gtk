@@ -99,9 +99,10 @@ struct _GdkWin32Display
   GdkWin32ShcoreFuncs shcore_funcs;
   GdkWin32User32DPIFuncs user32_dpi_funcs;
   
-  /* Cursor Items (GdkCursor->HCURSOR) */
+  /* Cursor Items (GdkCursor->GdkWin32HCursor) */
   GHashTable *cursors;
-  GdkCursor *grab_cursor;
+  /* The cursor that is used by current grab (if any) */
+  GdkWin32HCursor *grab_cursor;
   /* HCURSOR -> GdkWin32HCursorTableEntry */
   GHashTable *cursor_reftable;
   /* ID of the idle callback scheduled to destroy cursors */

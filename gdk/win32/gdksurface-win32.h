@@ -26,6 +26,7 @@
 #define __GDK_SURFACE_WIN32_H__
 
 #include "gdk/win32/gdkprivate-win32.h"
+#include "gdk/win32/gdkwin32cursor.h"
 #include "gdk/gdksurfaceimpl.h"
 #include "gdk/gdkcursor.h"
 
@@ -224,6 +225,9 @@ struct _GdkSurfaceImplWin32
 
   HICON   hicon_big;
   HICON   hicon_small;
+
+  /* The cursor that GDK set for this window via GdkDevice */
+  GdkWin32HCursor *cursor;
 
   /* When VK_PACKET sends us a leading surrogate, it's stashed here.
    * Later, when another VK_PACKET sends a tailing surrogate, we make up

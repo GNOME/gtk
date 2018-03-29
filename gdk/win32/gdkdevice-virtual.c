@@ -89,21 +89,25 @@ gdk_device_virtual_get_state (GdkDevice       *device,
 }
 
 static void
-gdk_device_virtual_set_surface_cursor (GdkDevice *device,
-                                      GdkSurface *window,
-                                      GdkCursor *cursor)
+gdk_device_virtual_set_surface_cursor (GdkDevice  *device,
+                                       GdkSurface *window,
+                                       GdkCursor  *cursor)
 {
-  if (cursor != NULL)
-    {
-      GdkDisplay *display = gdk_surface_get_display (window);
-      HCURSOR hcursor = NULL;
+  GdkDisplay *display = gdk_surface_get_display (window);
+  GdkWin32HCursor *win32_hcursor = NULL;
 
-      if (display != NULL)
-        hcursor = gdk_win32_display_get_hcursor (display, cursor);
+  if (cursor == NULL)
+    cursor = gdk_cursor_new_from_name ("default", NULL);
 
-      if (hcursor != NULL)
-        SetCursor (hcursor);   
-    }
+  if (display != NULL)
+    win32_hcursor = gdk_win32_display_get_win32hcursor (GDK_WIN32_DISPLAY (display), cursor);
+
+  /* This is correct because the code up the stack already
+   * checked that cursor is currently inside this window,
+   * and wouldn't have called this function otherwise.
+   */
+  if (win32_hcursor != NULL)
+    SetCursor (gdk_win32_hcursor_get_handle (win32_hcursor));
 }
 
 static void
@@ -142,21 +146,15 @@ gdk_device_virtual_grab (GdkDevice    *device,
 			 GdkCursor    *cursor,
 			 guint32       time_)
 {
-  GdkSurfaceImplWin32 *impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
-
   if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
     {
+      GdkWin32HCursor *win32_hcursor;
       GdkWin32Display *display = GDK_WIN32_DISPLAY (gdk_device_get_display (device));
-      if (display->grab_cursor != NULL)
-        {
-          if (GetCursor () == g_hash_table_lookup (display->cursors, display->grab_cursor))
-	        SetCursor (NULL);
-        }
-
-      g_set_object (&display->grab_cursor, cursor);
+      win32_hcursor = gdk_win32_display_get_win32hcursor (display, cursor);
+      g_set_object (&display->grab_cursor, win32_hcursor);
 
       if (display->grab_cursor != NULL)
-        SetCursor (g_hash_table_lookup (display->cursors, display->grab_cursor));
+        SetCursor (gdk_win32_hcursor_get_handle (display->grab_cursor));
       else
         SetCursor (LoadCursor (NULL, IDC_ARROW));
 
@@ -183,14 +181,7 @@ gdk_device_virtual_ungrab (GdkDevice *device,
 
   if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
     {
-      if (win32_display->grab_cursor != NULL)
-        {
-          if (GetCursor () == g_hash_table_lookup (win32_display->cursors, win32_display->grab_cursor))
-            SetCursor (NULL);
-        }
-
       g_clear_object (&win32_display->grab_cursor);
-
       ReleaseCapture ();
     }
 

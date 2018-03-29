@@ -38,6 +38,7 @@
 #include "gdkdisplayprivate.h"
 #include "gdkmonitorprivate.h"
 #include "gdkwin32surface.h"
+#include "gdkwin32cursor.h"
 #include "gdkglcontext-win32.h"
 #include "gdkdisplay-win32.h"
 
@@ -200,6 +201,22 @@ gdk_surface_impl_win32_init (GdkSurfaceImplWin32 *impl)
   impl->changing_state = FALSE;
   impl->surface_scale = 1;
 }
+
+
+static void
+gdk_surface_impl_win32_dispose (GObject *object)
+{
+  GdkSurfaceImplWin32 *surface_impl;
+
+  g_return_if_fail (GDK_IS_SURFACE_IMPL_WIN32 (object));
+
+  surface_impl = GDK_SURFACE_IMPL_WIN32 (object);
+
+  g_clear_object (&surface_impl->cursor);
+
+  G_OBJECT_CLASS (parent_class)->dispose (object);
+}
+
 
 static void
 gdk_surface_impl_win32_finalize (GObject *object)
@@ -5813,6 +5830,7 @@ gdk_surface_impl_win32_class_init (GdkSurfaceImplWin32Class *klass)
 
   parent_class = g_type_class_peek_parent (klass);
 
+  object_class->dispose = gdk_surface_impl_win32_dispose;
   object_class->finalize = gdk_surface_impl_win32_finalize;
 
   impl_class->ref_cairo_surface = gdk_win32_ref_cairo_surface;
