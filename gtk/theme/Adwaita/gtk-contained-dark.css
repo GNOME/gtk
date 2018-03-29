@@ -1596,6 +1596,10 @@ expander title > arrow { min-width: 16px; min-height: 16px; -gtk-icon-source: -g
 
 expander title > arrow:dir(rtl) { -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
 
+expander title > arrow:disabled { color: #919494; }
+
+expander title > arrow:disabled:backdrop { color: #566164; }
+
 expander title > arrow:checked { -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
 
 expander title:hover > arrow { color: white; }
