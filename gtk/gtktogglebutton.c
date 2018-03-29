@@ -98,6 +98,7 @@
  * ]|
  */
 
+typedef struct _GtkToggleButtonPrivate       GtkToggleButtonPrivate;
 struct _GtkToggleButtonPrivate
 {
   guint active         : 1;
@@ -186,10 +187,10 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
 static void
 gtk_toggle_button_init (GtkToggleButton *toggle_button)
 {
+  GtkToggleButtonPrivate *priv = gtk_toggle_button_get_instance_private (toggle_button);
   GtkStyleContext *context;
 
-  toggle_button->priv = gtk_toggle_button_get_instance_private (toggle_button);
-  toggle_button->priv->active = FALSE;
+  priv->active = FALSE;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (toggle_button));
   gtk_style_context_add_class (context, "toggle");
@@ -271,7 +272,7 @@ gtk_toggle_button_get_property (GObject      *object,
 				GParamSpec   *pspec)
 {
   GtkToggleButton *tb = GTK_TOGGLE_BUTTON (object);
-  GtkToggleButtonPrivate *priv = tb->priv;
+  GtkToggleButtonPrivate *priv = gtk_toggle_button_get_instance_private (tb);
 
   switch (prop_id)
     {
@@ -298,11 +299,9 @@ void
 gtk_toggle_button_set_active (GtkToggleButton *toggle_button,
 			      gboolean         is_active)
 {
-  GtkToggleButtonPrivate *priv;
+  GtkToggleButtonPrivate *priv = gtk_toggle_button_get_instance_private (toggle_button);
 
   g_return_if_fail (GTK_IS_TOGGLE_BUTTON (toggle_button));
-
-  priv = toggle_button->priv;
 
   is_active = is_active != FALSE;
 
@@ -317,7 +316,9 @@ void
 _gtk_toggle_button_set_active (GtkToggleButton *toggle_button,
                                gboolean         is_active)
 {
-  toggle_button->priv->active = is_active;
+  GtkToggleButtonPrivate *priv = gtk_toggle_button_get_instance_private (toggle_button);
+
+  priv->active = is_active;
 
   if (is_active)
     gtk_widget_set_state_flags (GTK_WIDGET (toggle_button), GTK_STATE_FLAG_CHECKED, FALSE);
@@ -338,9 +339,11 @@ _gtk_toggle_button_set_active (GtkToggleButton *toggle_button,
 gboolean
 gtk_toggle_button_get_active (GtkToggleButton *toggle_button)
 {
+  GtkToggleButtonPrivate *priv = gtk_toggle_button_get_instance_private (toggle_button);
+
   g_return_val_if_fail (GTK_IS_TOGGLE_BUTTON (toggle_button), FALSE);
 
-  return toggle_button->priv->active;
+  return priv->active;
 }
 
 /**
@@ -381,7 +384,7 @@ static void
 gtk_toggle_button_clicked (GtkButton *button)
 {
   GtkToggleButton *toggle_button = GTK_TOGGLE_BUTTON (button);
-  GtkToggleButtonPrivate *priv = toggle_button->priv;
+  GtkToggleButtonPrivate *priv = gtk_toggle_button_get_instance_private (toggle_button);
 
   _gtk_toggle_button_set_active (toggle_button, !priv->active);
 

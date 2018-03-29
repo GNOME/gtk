@@ -43,15 +43,12 @@ G_BEGIN_DECLS
 #define GTK_TOGGLE_BUTTON_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TOGGLE_BUTTON, GtkToggleButtonClass))
 
 typedef struct _GtkToggleButton              GtkToggleButton;
-typedef struct _GtkToggleButtonPrivate       GtkToggleButtonPrivate;
 typedef struct _GtkToggleButtonClass         GtkToggleButtonClass;
 
 struct _GtkToggleButton
 {
   /*< private >*/
   GtkButton button;
-
-  GtkToggleButtonPrivate *priv;
 };
 
 struct _GtkToggleButtonClass
