@@ -1907,7 +1907,7 @@ gtk_settings_create_for_display (GdkDisplay *display)
     if (GDK_IS_WAYLAND_DISPLAY (display))
       {
         if (gdk_wayland_display_query_registry (display,
-                                                "gtk_text_input_manager"))
+                                                "zwp_text_input_manager_v3"))
           {
             settings = g_object_new (GTK_TYPE_SETTINGS,
                                      "gtk-im-module", "wayland",
