@@ -1808,7 +1808,6 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
 
       INIT_COMMON_UNIFORM_LOCATION (prog, alpha);
       INIT_COMMON_UNIFORM_LOCATION (prog, source);
-      INIT_COMMON_UNIFORM_LOCATION (prog, mask);
       INIT_COMMON_UNIFORM_LOCATION (prog, clip);
       INIT_COMMON_UNIFORM_LOCATION (prog, clip_corner_widths);
       INIT_COMMON_UNIFORM_LOCATION (prog, clip_corner_heights);

@@ -44,7 +44,6 @@ typedef struct
   int id;
   /* Common locations (gl_common)*/
   int source_location;
-  int mask_location;
   int position_location;
   int uv_location;
   int alpha_location;
