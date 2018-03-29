@@ -1,5 +1,6 @@
 /* GTK - The GIMP Toolkit
  * Copyright (C) 2017 Red Hat, Inc.
+ * Copyright (C) 2018 Purism SPC
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -25,7 +26,7 @@
 #include "gtk/gtkimmodule.h"
 
 #include "gdk/wayland/gdkwayland.h"
-#include "gtk-text-input-client-protocol.h"
+#include "text-input-unstable-v3-client-protocol.h"
 
 typedef struct _GtkIMContextWaylandGlobal GtkIMContextWaylandGlobal;
 typedef struct _GtkIMContextWayland GtkIMContextWayland;
@@ -36,9 +37,8 @@ struct _GtkIMContextWaylandGlobal
   struct wl_display *display;
   struct wl_registry *registry;
   uint32_t text_input_manager_wl_id;
-  struct gtk_text_input_manager *text_input_manager;
-  struct gtk_text_input *text_input;
-  uint32_t enter_serial;
+  struct zwp_text_input_manager_v3 *text_input_manager;
+  struct zwp_text_input_v3 *text_input;
 
   GtkIMContext *current;
 };
@@ -111,19 +111,13 @@ reset_preedit (GtkIMContextWayland *context)
 
 static void
 text_input_enter (void                     *data,
-                  struct gtk_text_input    *text_input,
-                  uint32_t                  serial,
+                  struct zwp_text_input_v3 *text_input,
                   struct wl_surface        *surface)
-{
-  GtkIMContextWaylandGlobal *global = data;
-
-  global->enter_serial = serial;
-}
+{}
 
 static void
 text_input_leave (void                     *data,
-                  struct gtk_text_input    *text_input,
-                  uint32_t                  serial,
+                  struct zwp_text_input_v3 *text_input,
                   struct wl_surface        *surface)
 {
   GtkIMContextWayland *context;
@@ -137,7 +131,7 @@ text_input_leave (void                     *data,
 
 static void
 text_input_preedit (void                     *data,
-                    struct gtk_text_input    *text_input,
+                    struct zwp_text_input_v3 *text_input,
                     const char               *text,
                     guint                     cursor)
 {
@@ -168,7 +162,7 @@ text_input_preedit (void                     *data,
 
 static void
 text_input_commit (void                     *data,
-                   struct gtk_text_input    *text_input,
+                   struct zwp_text_input_v3 *text_input,
                    const char               *text)
 {
   GtkIMContextWaylandGlobal *global = data;
@@ -179,7 +173,7 @@ text_input_commit (void                     *data,
 
 static void
 text_input_delete_surrounding_text (void                     *data,
-                                    struct gtk_text_input    *text_input,
+                                    struct zwp_text_input_v3 *text_input,
                                     uint32_t                  offset,
                                     uint32_t                  len)
 {
@@ -189,7 +183,7 @@ text_input_delete_surrounding_text (void                     *data,
     g_signal_emit_by_name (global->current, "delete-surrounding", offset, len);
 }
 
-static const struct gtk_text_input_listener text_input_listener = {
+static const struct zwp_text_input_v3_listener text_input_listener = {
   text_input_enter,
   text_input_leave,
   text_input_preedit,
@@ -207,17 +201,17 @@ registry_handle_global (void               *data,
   GtkIMContextWaylandGlobal *global = data;
   GdkSeat *seat = gdk_display_get_default_seat (gdk_display_get_default ());
 
-  if (strcmp (interface, "gtk_text_input_manager") == 0)
+  if (strcmp (interface, "zwp_text_input_manager_v3") == 0)
     {
       global->text_input_manager_wl_id = id;
       global->text_input_manager =
         wl_registry_bind (global->registry, global->text_input_manager_wl_id,
-                          &gtk_text_input_manager_interface, 1);
+                          &zwp_text_input_manager_v3_interface, 1);
       global->text_input =
-        gtk_text_input_manager_get_text_input (global->text_input_manager,
-                                               gdk_wayland_seat_get_wl_seat (seat));
-      gtk_text_input_add_listener (global->text_input,
-                                   &text_input_listener, global);
+        zwp_text_input_manager_v3_get_text_input (global->text_input_manager,
+                                          gdk_wayland_seat_get_wl_seat (seat));
+      zwp_text_input_v3_add_listener (global->text_input,
+                                      &text_input_listener, global);
     }
 }
 
@@ -231,8 +225,8 @@ registry_handle_global_remove (void               *data,
   if (id != global->text_input_manager_wl_id)
     return;
 
-  g_clear_pointer(&global->text_input, gtk_text_input_destroy);
-  g_clear_pointer(&global->text_input_manager, gtk_text_input_manager_destroy);
+  g_clear_pointer(&global->text_input, zwp_text_input_v3_destroy);
+  g_clear_pointer(&global->text_input_manager, zwp_text_input_manager_v3_destroy);
 }
 
 static const struct wl_registry_listener registry_listener = {
@@ -262,10 +256,10 @@ notify_surrounding_text (GtkIMContextWayland *context)
   if (!context->surrounding.text)
     return;
 
-  gtk_text_input_set_surrounding_text (global->text_input,
-                                       context->surrounding.text,
-                                       context->surrounding.cursor_idx,
-                                       context->surrounding.cursor_idx);
+  zwp_text_input_v3_set_surrounding_text (global->text_input,
+                                          context->surrounding.text,
+                                          context->surrounding.cursor_idx,
+                                          context->surrounding.cursor_idx);
 }
 
 static void
@@ -284,9 +278,9 @@ notify_cursor_location (GtkIMContextWayland *context)
   gdk_window_get_root_coords (context->window, rect.x, rect.y,
                               &rect.x, &rect.y);
 
-  gtk_text_input_set_cursor_rectangle (global->text_input,
-                                       rect.x, rect.y,
-                                       rect.width, rect.height);
+  zwp_text_input_v3_set_cursor_rectangle (global->text_input,
+                                          rect.x, rect.y,
+                                          rect.width, rect.height);
 }
 
 static uint32_t
@@ -296,23 +290,23 @@ translate_hints (GtkInputHints   input_hints,
   uint32_t hints = 0;
 
   if (input_hints & GTK_INPUT_HINT_SPELLCHECK)
-    hints |= GTK_TEXT_INPUT_CONTENT_HINT_SPELLCHECK;
+    hints |= ZWP_TEXT_INPUT_V3_CONTENT_HINT_SPELLCHECK;
   if (input_hints & GTK_INPUT_HINT_WORD_COMPLETION)
-    hints |= GTK_TEXT_INPUT_CONTENT_HINT_COMPLETION;
+    hints |= ZWP_TEXT_INPUT_V3_CONTENT_HINT_COMPLETION;
   if (input_hints & GTK_INPUT_HINT_LOWERCASE)
-    hints |= GTK_TEXT_INPUT_CONTENT_HINT_LOWERCASE;
+    hints |= ZWP_TEXT_INPUT_V3_CONTENT_HINT_LOWERCASE;
   if (input_hints & GTK_INPUT_HINT_UPPERCASE_CHARS)
-    hints |= GTK_TEXT_INPUT_CONTENT_HINT_UPPERCASE;
+    hints |= ZWP_TEXT_INPUT_V3_CONTENT_HINT_UPPERCASE;
   if (input_hints & GTK_INPUT_HINT_UPPERCASE_WORDS)
-    hints |= GTK_TEXT_INPUT_CONTENT_HINT_TITLECASE;
+    hints |= ZWP_TEXT_INPUT_V3_CONTENT_HINT_TITLECASE;
   if (input_hints & GTK_INPUT_HINT_UPPERCASE_SENTENCES)
-    hints |= GTK_TEXT_INPUT_CONTENT_HINT_AUTO_CAPITALIZATION;
+    hints |= ZWP_TEXT_INPUT_V3_CONTENT_HINT_AUTO_CAPITALIZATION;
 
   if (purpose == GTK_INPUT_PURPOSE_PIN ||
       purpose == GTK_INPUT_PURPOSE_PASSWORD)
     {
-      hints |= (GTK_TEXT_INPUT_CONTENT_HINT_HIDDEN_TEXT |
-                GTK_TEXT_INPUT_CONTENT_HINT_SENSITIVE_DATA);
+      hints |= (ZWP_TEXT_INPUT_V3_CONTENT_HINT_HIDDEN_TEXT |
+                ZWP_TEXT_INPUT_V3_CONTENT_HINT_SENSITIVE_DATA);
     }
 
   return hints;
@@ -324,28 +318,28 @@ translate_purpose (GtkInputPurpose purpose)
   switch (purpose)
     {
     case GTK_INPUT_PURPOSE_FREE_FORM:
-      return GTK_TEXT_INPUT_CONTENT_PURPOSE_NORMAL;
+      return ZWP_TEXT_INPUT_V3_CONTENT_PURPOSE_NORMAL;
     case GTK_INPUT_PURPOSE_ALPHA:
-      return GTK_TEXT_INPUT_CONTENT_PURPOSE_ALPHA;
+      return ZWP_TEXT_INPUT_V3_CONTENT_PURPOSE_ALPHA;
     case GTK_INPUT_PURPOSE_DIGITS:
-      return GTK_TEXT_INPUT_CONTENT_PURPOSE_DIGITS;
+      return ZWP_TEXT_INPUT_V3_CONTENT_PURPOSE_DIGITS;
     case GTK_INPUT_PURPOSE_NUMBER:
-      return GTK_TEXT_INPUT_CONTENT_PURPOSE_NUMBER;
+      return ZWP_TEXT_INPUT_V3_CONTENT_PURPOSE_NUMBER;
     case GTK_INPUT_PURPOSE_PHONE:
-      return GTK_TEXT_INPUT_CONTENT_PURPOSE_PHONE;
+      return ZWP_TEXT_INPUT_V3_CONTENT_PURPOSE_PHONE;
     case GTK_INPUT_PURPOSE_URL:
-      return GTK_TEXT_INPUT_CONTENT_PURPOSE_URL;
+      return ZWP_TEXT_INPUT_V3_CONTENT_PURPOSE_URL;
     case GTK_INPUT_PURPOSE_EMAIL:
-      return GTK_TEXT_INPUT_CONTENT_PURPOSE_EMAIL;
+      return ZWP_TEXT_INPUT_V3_CONTENT_PURPOSE_EMAIL;
     case GTK_INPUT_PURPOSE_NAME:
-      return GTK_TEXT_INPUT_CONTENT_PURPOSE_NAME;
+      return ZWP_TEXT_INPUT_V3_CONTENT_PURPOSE_NAME;
     case GTK_INPUT_PURPOSE_PASSWORD:
-      return GTK_TEXT_INPUT_CONTENT_PURPOSE_PASSWORD;
+      return ZWP_TEXT_INPUT_V3_CONTENT_PURPOSE_PASSWORD;
     case GTK_INPUT_PURPOSE_PIN:
-      return GTK_TEXT_INPUT_CONTENT_PURPOSE_PIN;
+      return ZWP_TEXT_INPUT_V3_CONTENT_PURPOSE_PIN;
     }
 
-  return GTK_TEXT_INPUT_CONTENT_PURPOSE_NORMAL;
+  return ZWP_TEXT_INPUT_V3_CONTENT_PURPOSE_NORMAL;
 }
 
 static void
@@ -362,9 +356,9 @@ notify_content_type (GtkIMContextWayland *context)
                 "input-purpose", &purpose,
                 NULL);
 
-  gtk_text_input_set_content_type (global->text_input,
-                                   translate_hints (hints, purpose),
-                                   translate_purpose (purpose));
+  zwp_text_input_v3_set_content_type (global->text_input,
+                                      translate_hints (hints, purpose),
+                                      translate_purpose (purpose));
 }
 
 static void
@@ -372,7 +366,7 @@ commit_state (GtkIMContextWayland *context)
 {
   if (global->current != GTK_IM_CONTEXT (context))
     return;
-  gtk_text_input_commit (global->text_input);
+  zwp_text_input_v3_commit (global->text_input);
 }
 
 static void
@@ -382,12 +376,11 @@ enable_text_input (GtkIMContextWayland *context,
   guint flags = 0;
 
   if (context->use_preedit)
-    flags |= GTK_TEXT_INPUT_ENABLE_FLAGS_CAN_SHOW_PREEDIT;
+    flags |= ZWP_TEXT_INPUT_V3_ENABLE_FLAGS_CAN_SHOW_PREEDIT;
   if (toggle_panel)
-    flags |= GTK_TEXT_INPUT_ENABLE_FLAGS_TOGGLE_INPUT_PANEL;
+    flags |= ZWP_TEXT_INPUT_V3_ENABLE_FLAGS_TOGGLE_INPUT_PANEL;
 
-  gtk_text_input_enable (global->text_input,
-                         global->enter_serial,
+  zwp_text_input_v3_enable (global->text_input,
                          flags);
 }
 
@@ -488,7 +481,9 @@ gtk_im_context_wayland_get_preedit_string (GtkIMContext   *context,
   GtkIMContextWayland *context_wayland = GTK_IM_CONTEXT_WAYLAND (context);
   gchar *preedit_str;
 
-  GTK_IM_CONTEXT_CLASS (parent_class)->get_preedit_string (context, str, attrs, cursor_pos);
+  GTK_IM_CONTEXT_CLASS (parent_class)->get_preedit_string (context,
+                                                           str, attrs,
+                                                           cursor_pos);
 
   /* If the parent implementation returns a len>0 string, go with it */
   if (str && *str && **str)
@@ -542,7 +537,7 @@ gtk_im_context_wayland_focus_out (GtkIMContext *context)
   if (global->current != context)
     return;
 
-  gtk_text_input_disable (global->text_input);
+  zwp_text_input_v3_disable (global->text_input);
   global->current = NULL;
 }
 
