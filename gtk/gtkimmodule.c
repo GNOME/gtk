@@ -702,7 +702,7 @@ match_backend (GtkIMContextInfo *context)
 
       return GDK_IS_WAYLAND_DISPLAY (display) &&
              gdk_wayland_display_query_registry (display,
-                                                 "gtk_text_input_manager");
+                                                 "zwp_text_input_manager_v3");
     }
 #endif
 
