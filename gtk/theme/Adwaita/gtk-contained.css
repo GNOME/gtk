@@ -1594,6 +1594,10 @@ expander title > arrow:dir(rtl) { -gtk-icon-source: -gtk-icontheme("pan-end-symb
 
 expander title > arrow:hover { color: #748489; }
 
+expander title > arrow:disabled { color: #8b8e8f; }
+
+expander title > arrow:disabled:backdrop { color: #c3c3c0; }
+
 expander title > arrow:checked { -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
 
 /************ Calendar * */
