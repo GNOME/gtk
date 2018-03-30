@@ -3548,7 +3548,7 @@ static void
 create_row_context_menu (GtkPlacesSidebar *sidebar,
                          GtkSidebarRow    *row)
 {
-  GMenu *context_menu, *open_menu_items, *bookmarks_menu_items, *mount_menu_items;
+  GMenu *context_menu_model, *open_menu_items, *bookmarks_menu_items, *mount_menu_items;
   GMenuItem *start_menu_item, *stop_menu_item;
   gboolean prefer_popover_menu;
 
@@ -3577,10 +3577,10 @@ create_row_context_menu (GtkPlacesSidebar *sidebar,
   start_menu_item = add_menu_item (mount_menu_items, _("_Start"), "row.start", TRUE);
   stop_menu_item = add_menu_item (mount_menu_items, _("_Stop"), "row.stop", TRUE);
 
-  context_menu = g_menu_new ();
-  g_menu_append_section (context_menu, NULL, G_MENU_MODEL (open_menu_items));
-  g_menu_append_section (context_menu, NULL, G_MENU_MODEL (bookmarks_menu_items));
-  g_menu_append_section (context_menu, NULL, G_MENU_MODEL (mount_menu_items));
+  context_menu_model = g_menu_new ();
+  g_menu_append_section (context_menu_model, NULL, G_MENU_MODEL (open_menu_items));
+  g_menu_append_section (context_menu_model, NULL, G_MENU_MODEL (bookmarks_menu_items));
+  g_menu_append_section (context_menu_model, NULL, G_MENU_MODEL (mount_menu_items));
 
 #ifdef HAVE_CLOUDPROVIDERS
   CloudProvidersAccount *cloud_provider_account;
@@ -3589,24 +3589,22 @@ create_row_context_menu (GtkPlacesSidebar *sidebar,
 
   if (cloud_provider_account)
     {
-      context_menu = g_menu_new ();
-      g_menu_append_section (context_menu, NULL, G_MENU_MODEL (open_menu_items));
+      context_menu_model = g_menu_new ();
+      g_menu_append_section (context_menu_model, NULL, G_MENU_MODEL (open_menu_items));
 
       cloud_provider_menu = cloud_providers_account_get_menu_model (cloud_provider_account);
       cloud_provider_action_group = cloud_providers_account_get_action_group (cloud_provider_account);
 
       if (cloud_provider_menu != NULL && cloud_provider_action_group != NULL)
         {
-          g_menu_append_section (context_menu, NULL, cloud_provider_menu);
+          g_menu_append_section (context_menu_model, NULL, cloud_provider_menu);
           gtk_widget_insert_action_group (GTK_WIDGET (sidebar),
                                           "cloudprovider",
                                           G_ACTION_GROUP (cloud_provider_action_group));
         }
     }
   else
-    {
       return;
-    }
 #endif
 
   prefer_popover_menu = g_getenv ("XDG_CURRENT_DESKTOP") &&
@@ -3614,12 +3612,12 @@ create_row_context_menu (GtkPlacesSidebar *sidebar,
 
   if (prefer_popover_menu)
     {
-      sidebar->context_menu = gtk_popover_new_from_model (GTK_WIDGET (sidebar), G_MENU_MODEL (context_menu));
+      sidebar->context_menu = gtk_popover_new_from_model (GTK_WIDGET (sidebar), G_MENU_MODEL (context_menu_model));
       setup_popover_shadowing (sidebar->context_menu);
     }
   else
     {
-      sidebar->context_menu = gtk_menu_new_from_model (G_MENU_MODEL (context_menu));
+      sidebar->context_menu = gtk_menu_new_from_model (G_MENU_MODEL (context_menu_model));
       gtk_menu_attach_to_widget (GTK_MENU (sidebar->context_menu), GTK_WIDGET (sidebar), NULL);
     }
 
@@ -3647,7 +3645,7 @@ create_row_context_menu (GtkPlacesSidebar *sidebar,
         file = NULL;
 
       g_signal_emit (sidebar, places_sidebar_signals[POPULATE_POPUP], 0,
-                     context_menu, file, volume);
+                     context_menu_model, file, volume);
 
       if (file)
         g_object_unref (file);

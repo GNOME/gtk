@@ -2220,7 +2220,7 @@ static void
 file_list_build_context_menu (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
-  GMenu *context_menu, *file_menu_items, *settings_menu_items;
+  GMenu *context_menu_model, *file_menu_items, *settings_menu_items;
   gboolean prefer_popover_menu;
 
   if (priv->browse_files_context_menu)
@@ -2243,20 +2243,20 @@ file_list_build_context_menu (GtkFileChooserWidget *impl)
   add_menu_item (settings_menu_items, _("Show _Time"), "item.toggle-show-time", FALSE);
   add_menu_item (settings_menu_items, _("Sort _Folders before Files"), "item.toggle-sort-dirs-first", FALSE);
 
-  context_menu = g_menu_new ();
-  g_menu_append_section (context_menu, NULL, G_MENU_MODEL (file_menu_items));
-  g_menu_append_section (context_menu, NULL, G_MENU_MODEL (settings_menu_items));
+  context_menu_model = g_menu_new ();
+  g_menu_append_section (context_menu_model, NULL, G_MENU_MODEL (file_menu_items));
+  g_menu_append_section (context_menu_model, NULL, G_MENU_MODEL (settings_menu_items));
 
   prefer_popover_menu = g_getenv ("XDG_CURRENT_DESKTOP") &&
                         g_strstr_len (g_getenv ("XDG_CURRENT_DESKTOP"), -1, "GNOME") != NULL;
 
   if (prefer_popover_menu)
     {
-      priv->browse_files_context_menu = gtk_popover_new_from_model (priv->browse_files_tree_view, G_MENU_MODEL (context_menu));
+      priv->browse_files_context_menu = gtk_popover_new_from_model (priv->browse_files_tree_view, G_MENU_MODEL (context_menu_model));
     }
   else
     {
-      priv->browse_files_context_menu = gtk_menu_new_from_model (G_MENU_MODEL (context_menu));
+      priv->browse_files_context_menu = gtk_menu_new_from_model (G_MENU_MODEL (context_menu_model));
       gtk_menu_attach_to_widget (GTK_MENU (priv->browse_files_context_menu), GTK_WIDGET (priv->browse_files_tree_view), NULL);
     }
 }
