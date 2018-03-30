@@ -11,6 +11,7 @@ struct _GskGLShaderCache
   GObject parent_instance;
 
   GHashTable *shader_cache;
+  GHashTable *program_cache;
 };
 
 G_DEFINE_TYPE (GskGLShaderCache, gsk_gl_shader_cache, G_TYPE_OBJECT)
@@ -21,6 +22,7 @@ gsk_gl_shader_cache_finalize (GObject *gobject)
   GskGLShaderCache *self = GSK_GL_SHADER_CACHE (gobject);
 
   g_clear_pointer (&self->shader_cache, g_hash_table_unref);
+  g_clear_pointer (&self->program_cache, g_hash_table_unref);
 
   G_OBJECT_CLASS (gsk_gl_shader_cache_parent_class)->finalize (gobject);
 }
@@ -119,7 +121,27 @@ gsk_gl_shader_cache_link_program (GskGLShaderCache  *cache,
 {
   g_return_val_if_fail (vertex_shader > 0 && fragment_shader > 0, -1);
 
-  int program_id = glCreateProgram ();
+  if (cache->program_cache == NULL)
+    cache->program_cache = g_hash_table_new_full (g_int64_hash, g_int64_equal,
+                                                  g_free,
+                                                  NULL);
+
+  gint64 *key = g_new (gint64, 1);
+
+  *key = (gint64) vertex_shader << 31 | fragment_shader;
+
+  int program_id = GPOINTER_TO_INT (g_hash_table_lookup (cache->program_cache, key));
+  if (program_id > 0)
+    {
+      GSK_NOTE (SHADERS,
+                g_debug ("*** Cache hit for program (vertex: %d, fragment: %d) ***",
+                         vertex_shader,
+                         fragment_shader));
+      g_free (key);
+      return program_id;
+    }
+
+  program_id = glCreateProgram ();
 
   GSK_NOTE (SHADERS,
             g_debug ("*** Linking %d, %d shaders ***\n",
@@ -152,6 +174,10 @@ gsk_gl_shader_cache_link_program (GskGLShaderCache  *cache,
     {
       glDetachShader (program_id, vertex_shader);
       glDetachShader (program_id, fragment_shader);
+
+      g_hash_table_insert (cache->program_cache,
+                           key,
+                           GINT_TO_POINTER (program_id));
     }
 
   return program_id;

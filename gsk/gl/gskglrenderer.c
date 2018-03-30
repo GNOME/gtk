@@ -1915,7 +1915,6 @@ static void
 gsk_gl_renderer_unrealize (GskRenderer *renderer)
 {
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
-  guint i;
 
   if (self->gl_context == NULL)
     return;
@@ -1926,9 +1925,6 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
    * as they will be dropped when we finalize the GskGLDriver
    */
   g_array_set_size (self->render_ops, 0);
-
-  for (i = 0; i < GL_N_PROGRAMS; i ++)
-    glDeleteProgram (self->programs[i].id);
 
   gsk_gl_glyph_cache_free (&self->glyph_cache);
 
