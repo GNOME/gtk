@@ -40,6 +40,40 @@ get_stats (GtkWidget *widget)
   return stats;
 }
 
+static gint64
+guess_refresh_interval (GdkFrameClock *frame_clock)
+{
+  gint64 interval;
+  gint64 i;
+
+  interval = G_MAXINT64;
+
+  for (i = gdk_frame_clock_get_history_start (frame_clock);
+       i < gdk_frame_clock_get_frame_counter (frame_clock);
+       i++)
+    {
+      GdkFrameTimings *t, *before;
+      gint64 ts, before_ts;
+
+      t = gdk_frame_clock_get_timings (frame_clock, i);
+      before = gdk_frame_clock_get_timings (frame_clock, i - 1);
+      if (t == NULL || before == NULL)
+        continue;
+
+      ts = gdk_frame_timings_get_frame_time (t);
+      before_ts = gdk_frame_timings_get_frame_time (before);
+      if (ts == 0 || before_ts == 0)
+        continue;
+
+      interval = MIN (interval, ts - before_ts);
+    }
+
+  if (interval == G_MAXINT64)
+    return 0;
+
+  return interval;
+}
+
 static void
 do_stats (GtkWidget *widget,
           gint      *suggested_change)
@@ -65,7 +99,7 @@ do_stats (GtkWidget *widget,
        end_counter > start_counter && end != NULL && !gdk_frame_timings_get_complete (end);
        end = gdk_frame_clock_get_timings (frame_clock, end_counter))
     end_counter--;
-  if (start_counter == end_counter)
+  if (end_counter - start_counter < 4)
     return;
 
   start_timestamp = gdk_frame_timings_get_presentation_time (start);
@@ -77,6 +111,12 @@ do_stats (GtkWidget *widget,
     }
 
   interval = gdk_frame_timings_get_refresh_interval (end);
+  if (interval == 0)
+    {
+      interval = guess_refresh_interval (frame_clock);
+      if (interval == 0)
+        return;
+    }
   n_frames = end_counter - start_counter;
   expected_frames = round ((double) (end_timestamp - start_timestamp) / interval);
 
