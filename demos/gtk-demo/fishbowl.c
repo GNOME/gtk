@@ -9,6 +9,7 @@
 
 #include "gtkfishbowl.h"
 
+GtkWidget *info_label;
 GtkWidget *allow_changes;
 
 #define N_STATS 5
@@ -17,14 +18,7 @@ GtkWidget *allow_changes;
 
 typedef struct _Stats Stats;
 struct _Stats {
-  gint64 last_stats;
-  gint64 last_frame;
   gint last_suggestion;
-  guint frame_counter_max;
-
-  guint stats_index;
-  guint frame_counter[N_STATS];
-  guint item_counter[N_STATS];
 };
 
 static Stats *
@@ -41,8 +35,6 @@ get_stats (GtkWidget *widget)
     {
       stats = g_new0 (Stats, 1);
       g_object_set_qdata_full (G_OBJECT (widget), stats_quark, stats, g_free);
-      stats->last_frame = gdk_frame_clock_get_frame_time (gtk_widget_get_frame_clock (widget));
-      stats->last_stats = stats->last_frame;
     }
 
   return stats;
@@ -50,93 +42,85 @@ get_stats (GtkWidget *widget)
 
 static void
 do_stats (GtkWidget *widget,
-          GtkWidget *info_label,
           gint      *suggested_change)
 {
+  GdkFrameClock *frame_clock;
   Stats *stats;
-  gint64 frame_time;
+  GdkFrameTimings *start, *end;
+  gint64 start_counter, end_counter;
+  gint64 n_frames, expected_frames;
+  gint64 start_timestamp, end_timestamp;
+  gint64 interval;
+  char *new_label;
 
   stats = get_stats (widget);
-  frame_time = gdk_frame_clock_get_frame_time (gtk_widget_get_frame_clock (widget));
+  frame_clock = gtk_widget_get_frame_clock (widget);
+  if (frame_clock == NULL)
+    return;
 
-  if (stats->last_stats + STATS_UPDATE_TIME < frame_time)
+  start_counter = gdk_frame_clock_get_history_start (frame_clock);
+  end_counter = gdk_frame_clock_get_frame_counter (frame_clock);
+  start = gdk_frame_clock_get_timings (frame_clock, start_counter);
+  for (end = gdk_frame_clock_get_timings (frame_clock, end_counter);
+       end_counter > start_counter && end != NULL && !gdk_frame_timings_get_complete (end);
+       end = gdk_frame_clock_get_timings (frame_clock, end_counter))
+    end_counter--;
+  if (start_counter == end_counter)
+    return;
+
+  start_timestamp = gdk_frame_timings_get_presentation_time (start);
+  end_timestamp = gdk_frame_timings_get_presentation_time (end);
+  if (start_timestamp == 0 || end_timestamp == 0)
     {
-      char *new_label;
-      guint i, n_frames;
+      start_timestamp = gdk_frame_timings_get_frame_time (start);
+      end_timestamp = gdk_frame_timings_get_frame_time (end);
+    }
 
-      n_frames = 0;
-      for (i = 0; i < N_STATS; i++)
-        {
-          n_frames += stats->frame_counter[i];
-        }
-      
-      new_label = g_strdup_printf ("icons - %.1f fps",
-                                   (double) G_USEC_PER_SEC * n_frames
-                                       / (N_STATS * STATS_UPDATE_TIME));
-      gtk_label_set_label (GTK_LABEL (info_label), new_label);
-      g_free (new_label);
+  interval = gdk_frame_timings_get_refresh_interval (end);
+  n_frames = end_counter - start_counter;
+  expected_frames = round ((double) (end_timestamp - start_timestamp) / interval);
 
-      if (stats->frame_counter[stats->stats_index] >= 19 * stats->frame_counter_max / 20)
-        {
-          if (stats->last_suggestion > 0)
-            stats->last_suggestion *= 2;
-          else
-            stats->last_suggestion = 1;
-        }
+  new_label = g_strdup_printf ("icons - %.1f fps",
+                               ((double) n_frames) * G_USEC_PER_SEC / (end_timestamp - start_timestamp));
+  gtk_label_set_label (GTK_LABEL (info_label), new_label);
+  g_free (new_label);
+
+  if (n_frames >= expected_frames)
+    {
+      if (stats->last_suggestion > 0)
+        stats->last_suggestion *= 2;
       else
-        {
-          if (stats->last_suggestion < 0)
-            stats->last_suggestion--;
-          else
-            stats->last_suggestion = -1;
-          stats->last_suggestion = MAX (stats->last_suggestion, 1 - (int) stats->item_counter[stats->stats_index]);
-        }
-
-      stats->stats_index = (stats->stats_index + 1) % N_STATS;
-      stats->frame_counter[stats->stats_index] = 0;
-      stats->item_counter[stats->stats_index] = stats->item_counter[(stats->stats_index + N_STATS - 1) % N_STATS];
-      stats->last_stats = frame_time;
-      
-      if (suggested_change)
-        *suggested_change = stats->last_suggestion;
+        stats->last_suggestion = 1;
+    }
+  else if (n_frames + 1 < expected_frames)
+    {
+      if (stats->last_suggestion < 0)
+        stats->last_suggestion--;
       else
-        stats->last_suggestion = 0;
+        stats->last_suggestion = -1;
     }
   else
     {
-      if (suggested_change)
-        *suggested_change = 0;
+      stats->last_suggestion = 0;
     }
 
-  stats->last_frame = frame_time;
-  stats->frame_counter[stats->stats_index]++;
-  stats->frame_counter_max = MAX (stats->frame_counter_max, stats->frame_counter[stats->stats_index]);
-}
-
-static void
-stats_update (GtkWidget *widget)
-{
-  Stats *stats;
-
-  stats = get_stats (widget);
-
-  stats->item_counter[stats->stats_index] = gtk_fishbowl_get_count (GTK_FISHBOWL (widget));
+  if (suggested_change)
+    *suggested_change = stats->last_suggestion;
+  else
+    stats->last_suggestion = 0;
 }
 
 static gboolean
-move_fish (GtkWidget     *bowl,
-           GdkFrameClock *frame_clock,
-           gpointer       info_label)
+move_fish (gpointer bowl)
 {
-  gint suggested_change = 0;
+  gint suggested_change = 0, new_count;
   
   do_stats (bowl,
-            info_label,
             !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (allow_changes)) ? &suggested_change : NULL);
 
-  gtk_fishbowl_set_count (GTK_FISHBOWL (bowl),
-                          gtk_fishbowl_get_count (GTK_FISHBOWL (bowl)) + suggested_change);
-  stats_update (bowl);
+  new_count = gtk_fishbowl_get_count (GTK_FISHBOWL (bowl)) + suggested_change;
+  new_count = MAX (1, new_count);
+  gtk_fishbowl_set_count (GTK_FISHBOWL (bowl), new_count);
 
   return G_SOURCE_CONTINUE;
 }
@@ -149,7 +133,7 @@ do_fishbowl (GtkWidget *do_widget)
   if (!window)
     {
       GtkBuilder *builder;
-      GtkWidget *bowl, *info_label;
+      GtkWidget *bowl;
 
       g_type_ensure (GTK_TYPE_FISHBOWL);
 
@@ -166,7 +150,9 @@ do_fishbowl (GtkWidget *do_widget)
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
       gtk_widget_realize (window);
-      gtk_widget_add_tick_callback (bowl, move_fish, info_label, NULL);
+      g_timeout_add_seconds (1,
+                             move_fish,
+                             bowl);
     }
 
   if (!gtk_widget_get_visible (window))
