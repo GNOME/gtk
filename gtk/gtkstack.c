@@ -1946,7 +1946,6 @@ gtk_stack_snapshot (GtkWidget   *widget,
               gtk_widget_get_allocation (priv->last_visible_child->widget,
                                          &priv->last_visible_surface_allocation);
               last_visible_snapshot = gtk_snapshot_new (gtk_snapshot_get_record_names (snapshot),
-                                                        NULL,
                                                         "StackCaptureLastVisibleChild");
               gtk_widget_snapshot (priv->last_visible_child->widget, last_visible_snapshot);
               priv->last_visible_node = gtk_snapshot_free_to_node (last_visible_snapshot);

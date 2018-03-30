@@ -18,7 +18,7 @@ drag_begin (GtkWidget      *widget,
 
   row = gtk_widget_get_ancestor (widget, GTK_TYPE_LIST_BOX_ROW);
   gtk_widget_get_allocation (row, &alloc);
-  snapshot = gtk_snapshot_new (FALSE, NULL, "DragIcon");
+  snapshot = gtk_snapshot_new (FALSE, "DragIcon");
   cr = gtk_snapshot_append_cairo (snapshot,
                                   &GRAPHENE_RECT_INIT(0, 0, alloc.width, alloc.height),
                                   "DragText");
