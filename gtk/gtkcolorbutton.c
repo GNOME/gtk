@@ -326,7 +326,7 @@ set_color_icon (GdkDragContext *context,
   GtkSnapshot *snapshot;
   GdkPaintable *paintable;
 
-  snapshot = gtk_snapshot_new (FALSE, NULL, "ColorDragIcon");
+  snapshot = gtk_snapshot_new (FALSE, "ColorDragIcon");
   gtk_snapshot_append_color (snapshot,
                              rgba,
                              &GRAPHENE_RECT_INIT(0, 0, 48, 32),
