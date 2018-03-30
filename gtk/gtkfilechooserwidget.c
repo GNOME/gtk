@@ -2247,9 +2247,8 @@ file_list_build_context_menu (GtkFileChooserWidget *impl)
   g_menu_append_section (context_menu, NULL, G_MENU_MODEL (file_menu_items));
   g_menu_append_section (context_menu, NULL, G_MENU_MODEL (settings_menu_items));
 
-  g_object_get (gtk_widget_get_settings (GTK_WIDGET (impl)),
-                "gtk-dialogs-use-header", &prefer_popover_menu,
-                NULL);
+  prefer_popover_menu = g_getenv ("XDG_CURRENT_DESKTOP") &&
+                        g_strstr_len (g_getenv ("XDG_CURRENT_DESKTOP"), -1, "GNOME") != NULL;
 
   if (prefer_popover_menu)
     {
@@ -8750,4 +8749,3 @@ gtk_file_chooser_widget_get_choice (GtkFileChooser  *chooser,
 
   return NULL;
 }
-

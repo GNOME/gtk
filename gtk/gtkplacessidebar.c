@@ -3609,9 +3609,8 @@ create_row_context_menu (GtkPlacesSidebar *sidebar,
     }
 #endif
 
-  g_object_get (gtk_widget_get_settings (GTK_WIDGET (sidebar)),
-                "gtk-dialogs-use-header", &prefer_popover_menu,
-                NULL);
+  prefer_popover_menu = g_getenv ("XDG_CURRENT_DESKTOP") &&
+                        g_strstr_len (g_getenv ("XDG_CURRENT_DESKTOP"), -1, "GNOME") != NULL;
 
   if (prefer_popover_menu)
     {

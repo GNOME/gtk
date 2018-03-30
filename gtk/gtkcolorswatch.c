@@ -349,14 +349,13 @@ do_popup (GtkColorSwatch *swatch)
 {
   gboolean prefer_popover_menu;
 
-  g_object_get (gtk_widget_get_settings (GTK_WIDGET (swatch)),
-                "gtk-dialogs-use-header", &prefer_popover_menu,
-                NULL);
+  prefer_popover_menu = g_getenv ("XDG_CURRENT_DESKTOP") &&
+                        g_strstr_len (g_getenv ("XDG_CURRENT_DESKTOP"), -1, "GNOME") != NULL;
 
   if (swatch->priv->context_menu == NULL)
     {
       GtkWidget *item;
-      
+
       if (prefer_popover_menu)
         {
           GtkWidget *box;
@@ -378,13 +377,13 @@ do_popup (GtkColorSwatch *swatch)
       else
         {
           swatch->priv->context_menu = gtk_menu_new ();
-          
+
           item = gtk_menu_item_new_with_mnemonic (_ ("C_ustomize"));
           g_signal_connect_swapped (item, "activate",
                                     G_CALLBACK (emit_customize), swatch);
           gtk_widget_set_visible (GTK_WIDGET (item), TRUE);
 
-          gtk_menu_shell_append (GTK_MENU_SHELL (swatch->priv->context_menu), item); 
+          gtk_menu_shell_append (GTK_MENU_SHELL (swatch->priv->context_menu), item);
         }
     }
 
