@@ -406,6 +406,10 @@ gdk_x11_surface_end_frame (GdkSurface *surface)
   clock = gdk_surface_get_frame_clock (surface);
   timings = gdk_frame_clock_get_current_timings (clock);
 
+  /* Make sure we request timing updates even if nothing was damaged.
+   * We want the frame clock to be accurate. */
+  gdk_x11_surface_pre_damage (surface);
+
   impl->toplevel->in_frame = FALSE;
 
   if (impl->toplevel->current_counter_value % 2 == 1)
