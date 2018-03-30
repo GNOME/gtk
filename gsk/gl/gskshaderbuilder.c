@@ -233,10 +233,7 @@ gsk_shader_builder_create_program (GskShaderBuilder *builder,
                                                    fragment_shader,
                                                    error);
   if (fragment_id < 0)
-    {
-      glDeleteShader (vertex_id);
-      return -1;
-    }
+    return -1;
 
   return gsk_gl_shader_cache_link_program (cache,
                                            vertex_id,
