@@ -25,7 +25,7 @@ gsk_public_sources = files([
   'gskrenderer.c',
   'gskrendernode.c',
   'gskrendernodeimpl.c',
-  'gskroundedrect.c'
+  'gskroundedrect.c',
 ])
 
 gsk_private_sources = files([
@@ -34,13 +34,14 @@ gsk_private_sources = files([
   'gskdebug.c',
   'gskprivate.c',
   'gskprofiler.c',
-  'gl/gskshaderbuilder.c',
-  'gl/gskglprofiler.c',
-  'gl/gskglrenderer.c',
+  'gl/gskgldriver.c',
   'gl/gskglglyphcache.c',
   'gl/gskglimage.c',
-  'gl/gskgldriver.c',
-  'gl/gskglrenderops.c'
+  'gl/gskglprofiler.c',
+  'gl/gskglrenderer.c',
+  'gl/gskglrenderops.c',
+  'gl/gskglshadercache.c',
+  'gl/gskshaderbuilder.c',
 ])
 
 gsk_public_headers = files([
@@ -49,7 +50,7 @@ gsk_public_headers = files([
   'gskrendernode.h',
   'gskroundedrect.h',
   'gsktypes.h',
-  'gsk-autocleanup.h'
+  'gsk-autocleanup.h',
 ])
 
 install_headers(gsk_public_headers, 'gsk.h', subdir: 'gtk-4.0/gsk')

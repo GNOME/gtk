@@ -26,6 +26,7 @@ void                    gsk_shader_builder_add_define                   (GskShad
                                                                          const char       *define_value);
 
 int                     gsk_shader_builder_create_program               (GskShaderBuilder *builder,
+                                                                         GdkGLContext     *gl_context,
                                                                          const char       *vertex_shader,
                                                                          const char       *fragment_shader,
                                                                          GError          **error);

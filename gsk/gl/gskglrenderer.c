@@ -1790,6 +1790,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
 
       prog->index = i;
       prog->id = gsk_shader_builder_create_program (builder,
+                                                    self->gl_context,
                                                     program_definitions[i].vs,
                                                     program_definitions[i].fs,
                                                     &shader_error);

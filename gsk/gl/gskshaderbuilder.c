@@ -3,6 +3,7 @@
 #include "gskshaderbuilderprivate.h"
 
 #include "gskdebugprivate.h"
+#include "gskglshadercacheprivate.h"
 
 #include <gdk/gdk.h>
 #include <epoxy/gl.h>
@@ -18,8 +19,6 @@ struct _GskShaderBuilder
   int version;
 
   GPtrArray *defines;
-  GPtrArray *uniforms;
-  GPtrArray *attributes;
 };
 
 G_DEFINE_TYPE (GskShaderBuilder, gsk_shader_builder, G_TYPE_OBJECT)
@@ -137,6 +136,7 @@ lookup_shader_code (GString *code,
 
 static int
 gsk_shader_builder_compile_shader (GskShaderBuilder *builder,
+                                   GskGLShaderCache *cache,
                                    int               shader_type,
                                    const char       *shader_preamble,
                                    const char       *shader_source,
@@ -145,7 +145,6 @@ gsk_shader_builder_compile_shader (GskShaderBuilder *builder,
   GString *code;
   char *source;
   int shader_id;
-  int status;
   int i;
 
   code = g_string_new (NULL);
@@ -188,70 +187,48 @@ gsk_shader_builder_compile_shader (GskShaderBuilder *builder,
 
   source = g_string_free (code, FALSE);
 
-  shader_id = glCreateShader (shader_type);
-  glShaderSource (shader_id, 1, (const GLchar **) &source, NULL);
-  glCompileShader (shader_id);
-
-#ifdef G_ENABLE_DEBUG
-  if (GSK_DEBUG_CHECK (SHADERS))
-    {
-      g_print ("*** Compiling %s shader from '%s' + '%s' ***\n"
-               "%s\n",
-               shader_type == GL_VERTEX_SHADER ? "vertex" : "fragment",
-               shader_preamble, shader_source,
-               source);
-    }
-#endif
+  shader_id = gsk_gl_shader_cache_compile_shader (cache,
+                                                  shader_type, source,
+                                                  error);
 
   g_free (source);
-
-  glGetShaderiv (shader_id, GL_COMPILE_STATUS, &status);
-  if (status == GL_FALSE)
-    {
-      int log_len;
-      char *buffer;
-
-      glGetShaderiv (shader_id, GL_INFO_LOG_LENGTH, &log_len);
-
-      buffer = g_malloc0 (log_len + 1);
-      glGetShaderInfoLog (shader_id, log_len, NULL, buffer);
-
-      g_set_error (error, GDK_GL_ERROR, GDK_GL_ERROR_COMPILATION_FAILED,
-                   "Compilation failure in %s shader:\n%s",
-                   shader_type == GL_VERTEX_SHADER ? "vertex" : "fragment",
-                   buffer);
-      g_free (buffer);
-
-      glDeleteShader (shader_id);
-
-      return -1;
-    }
 
   return shader_id;
 }
 
 int
 gsk_shader_builder_create_program (GskShaderBuilder *builder,
+                                   GdkGLContext     *gl_context,
                                    const char       *vertex_shader,
                                    const char       *fragment_shader,
                                    GError          **error)
 {
   int vertex_id, fragment_id;
-  int program_id;
-  int status;
 
   g_return_val_if_fail (GSK_IS_SHADER_BUILDER (builder), -1);
   g_return_val_if_fail (vertex_shader != NULL, -1);
   g_return_val_if_fail (fragment_shader != NULL, -1);
 
-  vertex_id = gsk_shader_builder_compile_shader (builder, GL_VERTEX_SHADER,
+  GskGLShaderCache *cache = g_object_get_data (G_OBJECT (gl_context), "-gsk-gl-shader-cache");
+  if (cache == NULL)
+    {
+      cache = gsk_gl_shader_cache_new ();
+      g_object_set_data_full (G_OBJECT (gl_context),
+                              "-gsk-gl-shader-cache",
+                              cache,
+                              (GDestroyNotify) g_object_unref);
+    }
+
+  vertex_id = gsk_shader_builder_compile_shader (builder, cache,
+                                                 GL_VERTEX_SHADER,
                                                  builder->vertex_preamble,
                                                  vertex_shader,
                                                  error);
   if (vertex_id < 0)
     return -1;
 
-  fragment_id = gsk_shader_builder_compile_shader (builder, GL_FRAGMENT_SHADER,
+  fragment_id = gsk_shader_builder_compile_shader (builder, cache,
+                                                   GL_FRAGMENT_SHADER,
                                                    builder->fragment_preamble,
                                                    fragment_shader,
                                                    error);
@@ -261,44 +238,8 @@ gsk_shader_builder_create_program (GskShaderBuilder *builder,
       return -1;
     }
 
-  program_id = glCreateProgram ();
-  glAttachShader (program_id, vertex_id);
-  glAttachShader (program_id, fragment_id);
-  glLinkProgram (program_id);
-
-  glGetProgramiv (program_id, GL_LINK_STATUS, &status);
-  if (status == GL_FALSE)
-    {
-      char *buffer = NULL;
-      int log_len = 0;
-
-      glGetProgramiv (program_id, GL_INFO_LOG_LENGTH, &log_len);
-
-      buffer = g_malloc0 (log_len + 1);
-      glGetProgramInfoLog (program_id, log_len, NULL, buffer);
-
-      g_set_error (error, GDK_GL_ERROR, GDK_GL_ERROR_LINK_FAILED,
-                   "Linking failure in shader:\n%s", buffer);
-      g_free (buffer);
-
-      glDeleteProgram (program_id);
-      program_id = -1;
-
-      goto out;
-    }
-
-out:
-  if (vertex_id > 0)
-    {
-      glDetachShader (program_id, vertex_id);
-      glDeleteShader (vertex_id);
-    }
-
-  if (fragment_id > 0)
-    {
-      glDetachShader (program_id, fragment_id);
-      glDeleteShader (fragment_id);
-    }
-
-  return program_id;
+  return gsk_gl_shader_cache_link_program (cache,
+                                           vertex_id,
+                                           fragment_id,
+                                           error);
 }
