@@ -288,10 +288,13 @@ render_fallback_node (GskGLRenderer       *self,
   cairo_restore (cr);
 
 #if HIGHLIGHT_FALLBACK
-  cairo_move_to (cr, 0, 0);
-  cairo_rectangle (cr, 0, 0, node->bounds.size.width, node->bounds.size.height);
-  cairo_set_source_rgba (cr, 1, 0, 0, 1);
-  cairo_stroke (cr);
+  if (gsk_render_node_get_node_type (node) != GSK_CAIRO_NODE)
+    {
+      cairo_move_to (cr, 0, 0);
+      cairo_rectangle (cr, 0, 0, node->bounds.size.width, node->bounds.size.height);
+      cairo_set_source_rgba (cr, 1, 0, 0, 1);
+      cairo_stroke (cr);
+    }
 #endif
   cairo_destroy (cr);
 
