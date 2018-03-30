@@ -194,6 +194,8 @@ void            _gdk_x11_surface_update_size         (GdkSurfaceImplX11 *impl);
 void            _gdk_x11_surface_set_surface_scale   (GdkSurface *window,
                                                       int        scale);
 
+void            gdk_x11_surface_pre_damage           (GdkSurface *surface);
+
 G_END_DECLS
 
 #endif /* __GDK_SURFACE_X11_H__ */

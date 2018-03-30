@@ -229,8 +229,8 @@ set_sync_counter(Display     *display,
     XSyncSetCounter (display, counter, sync_value);
 }
 
-static void
-surface_pre_damage (GdkSurface *surface)
+void
+gdk_x11_surface_pre_damage (GdkSurface *surface)
 {
   GdkSurface *toplevel_surface = gdk_surface_get_toplevel (surface);
   GdkSurfaceImplX11 *impl;
@@ -257,7 +257,7 @@ on_surface_changed (void *data)
   GdkSurfaceImplX11 *impl = GDK_SURFACE_IMPL_X11 (surface->impl);
 
   if (impl->tracking_damage)
-    surface_pre_damage (surface);
+    gdk_x11_surface_pre_damage (surface);
 }
 
 /* We want to know when cairo drawing causes damage to the window,
@@ -372,14 +372,14 @@ gdk_x11_surface_begin_frame (GdkSurface *surface,
 
       impl->toplevel->configure_counter_value = 0;
 
-      surface_pre_damage (surface);
+      gdk_x11_surface_pre_damage (surface);
     }
   else if (force_frame)
     {
       /* When mapping the surface, we really want to freeze the
          rendering of the surface by the compositor until we've
          actually painted something into the surface's buffer. */
-      surface_pre_damage (surface);
+      gdk_x11_surface_pre_damage (surface);
     }
   else
     {
@@ -1511,7 +1511,7 @@ surface_x11_resize (GdkSurface *surface,
   if (height < 1)
     height = 1;
 
-  surface_pre_damage (surface);
+  gdk_x11_surface_pre_damage (surface);
 
   XResizeWindow (GDK_SURFACE_XDISPLAY (surface),
                  GDK_SURFACE_XID (surface),
@@ -1547,7 +1547,7 @@ surface_x11_move_resize (GdkSurface *surface,
   if (height < 1)
     height = 1;
 
-  surface_pre_damage (surface);
+  gdk_x11_surface_pre_damage (surface);
 
   XMoveResizeWindow (GDK_SURFACE_XDISPLAY (surface),
                      GDK_SURFACE_XID (surface),

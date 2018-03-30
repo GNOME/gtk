@@ -182,6 +182,8 @@ gdk_x11_gl_context_end_frame (GdkDrawContext *draw_context,
         }
     }
 
+  gdk_x11_surface_pre_damage (surface);
+
   glXSwapBuffers (dpy, drawable);
 
   if (context_x11->do_frame_sync && info != NULL && display_x11->has_glx_video_sync)
