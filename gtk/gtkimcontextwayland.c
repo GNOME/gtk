@@ -84,6 +84,9 @@ static GtkIMContextWaylandGlobal *global = NULL;
 static void
 reset_preedit (GtkIMContextWayland *context)
 {
+  if (context->preedit.text == NULL)
+    return;
+
   g_clear_pointer (&context->preedit.text, g_free);
   context->preedit.cursor_idx = 0;
   g_signal_emit_by_name (context, "preedit-changed");
