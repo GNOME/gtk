@@ -106,6 +106,24 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
+   * GtkFontChooser:level:
+   *
+   * The level of granularity to offer for selecting fonts.
+   *
+   * Since: 3.22.30
+   */
+  g_object_interface_install_property
+     (iface,
+      g_param_spec_flags ("level",
+                          P_("Selection level"),
+                          P_("Whether to select family, face or font"),
+                          GTK_TYPE_FONT_CHOOSER_LEVEL,
+                          GTK_FONT_CHOOSER_LEVEL_FAMILY |
+                          GTK_FONT_CHOOSER_LEVEL_STYLE |
+                          GTK_FONT_CHOOSER_LEVEL_SIZE,
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
+  /**
    * GtkFontChooser::font-activated:
    * @self: the object which received the signal
    * @fontname: the font name
