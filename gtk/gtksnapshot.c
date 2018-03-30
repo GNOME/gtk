@@ -198,7 +198,6 @@ gtk_snapshot_new_internal (gboolean        record_names,
 /**
  * gtk_snapshot_new:
  * @record_names: whether to keep node names (for debugging purposes)
- * @clip: (nullable): the clip region to use, or %NULL
  * @name: a printf-style format string to create the node name
  * @...: arguments for @name
  *
@@ -207,9 +206,8 @@ gtk_snapshot_new_internal (gboolean        record_names,
  * Returns: a newly-allocated #GtkSnapshot
  */
 GtkSnapshot *
-gtk_snapshot_new (gboolean              record_names,
-                  const cairo_region_t *clip,
-                  const char           *name,
+gtk_snapshot_new (gboolean    record_names,
+                  const char *name,
                   ...)
 {
   char *str;
@@ -226,7 +224,7 @@ gtk_snapshot_new (gboolean              record_names,
     str = NULL;
 
   return gtk_snapshot_new_internal (record_names,
-                                    (cairo_region_t *) clip,
+                                    NULL,
                                     str);
 }
 

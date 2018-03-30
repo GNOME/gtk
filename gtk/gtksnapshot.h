@@ -53,9 +53,8 @@ GType           gtk_snapshot_get_type                   (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
 GtkSnapshot *   gtk_snapshot_new                        (gboolean                record_names,
-                                                         const cairo_region_t   *clip,
                                                          const char             *name,
-                                                         ...) G_GNUC_PRINTF (3, 4);
+                                                         ...) G_GNUC_PRINTF (2, 3);
 GDK_AVAILABLE_IN_ALL
 GskRenderNode * gtk_snapshot_free_to_node               (GtkSnapshot            *snapshot);
 GDK_AVAILABLE_IN_ALL

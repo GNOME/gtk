@@ -5320,15 +5320,9 @@ gtk_widget_draw_internal (GtkWidget *widget,
       if (mode == RENDER_SNAPSHOT)
         {
           GtkSnapshot *snapshot;
-          cairo_region_t *clip;
           GskRenderNode *node;
 
-          clip = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
-                                                widget->priv->clip.x - widget->priv->allocation.x,
-                                                widget->priv->clip.y - widget->priv->allocation.y,
-                                                widget->priv->clip.width,
-                                                widget->priv->clip.height});
-          snapshot = gtk_snapshot_new (FALSE, clip, "Fallback<%s>", G_OBJECT_TYPE_NAME (widget));
+          snapshot = gtk_snapshot_new (FALSE, "Fallback<%s>", G_OBJECT_TYPE_NAME (widget));
           gtk_widget_snapshot (widget, snapshot);
           node = gtk_snapshot_free_to_node (snapshot);
           if (node != NULL)
@@ -5336,8 +5330,6 @@ gtk_widget_draw_internal (GtkWidget *widget,
               gsk_render_node_draw (node, cr);
               gsk_render_node_unref (node);
             }
-
-          cairo_region_destroy (clip);
         }
       else
         {
@@ -13887,7 +13879,6 @@ gtk_widget_render (GtkWidget            *widget,
     return;
 
   snapshot = gtk_snapshot_new (should_record_names (widget, renderer),
-                               NULL,
                                "Render<%s>", G_OBJECT_TYPE_NAME (widget));
   gtk_widget_snapshot (widget, snapshot);
   root = gtk_snapshot_free_to_node (snapshot);

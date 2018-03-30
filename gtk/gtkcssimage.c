@@ -243,7 +243,6 @@ _gtk_css_image_draw (GtkCssImage        *image,
 {
   GtkSnapshot *snapshot;
   GskRenderNode *node;
-  cairo_region_t *clip;
 
   g_return_if_fail (GTK_IS_CSS_IMAGE (image));
   g_return_if_fail (cr != NULL);
@@ -252,8 +251,7 @@ _gtk_css_image_draw (GtkCssImage        *image,
 
   cairo_save (cr);
 
-  clip = cairo_region_create_rectangle (&(cairo_rectangle_int_t) { 0, 0, width, height });
-  snapshot = gtk_snapshot_new (FALSE, clip, "Fallback<%s>", G_OBJECT_TYPE_NAME (image));
+  snapshot = gtk_snapshot_new (FALSE, "Fallback<%s>", G_OBJECT_TYPE_NAME (image));
   gtk_css_image_snapshot (image, snapshot, width, height);
   node = gtk_snapshot_free_to_node (snapshot);
 
@@ -262,8 +260,6 @@ _gtk_css_image_draw (GtkCssImage        *image,
       gsk_render_node_draw (node, cr);
       gsk_render_node_unref (node);
     }
-
-  cairo_region_destroy (clip);
 
   cairo_restore (cr);
 }
