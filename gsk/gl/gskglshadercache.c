@@ -44,6 +44,24 @@ gsk_gl_shader_cache_new (void)
   return g_object_new (GSK_TYPE_GL_SHADER_CACHE, NULL);
 }
 
+static void
+delete_shader (gpointer data)
+{
+  int shader_id = GPOINTER_TO_INT (data);
+
+  if (shader_id > 0)
+    glDeleteShader (shader_id);
+}
+
+static void
+delete_program (gpointer data)
+{
+  int program_id = GPOINTER_TO_INT (data);
+
+  if (program_id > 0)
+    glDeleteProgram (program_id);
+}
+
 int
 gsk_gl_shader_cache_compile_shader (GskGLShaderCache  *cache,
                                     int                shader_type,
@@ -53,7 +71,7 @@ gsk_gl_shader_cache_compile_shader (GskGLShaderCache  *cache,
   if (cache->shader_cache == NULL)
     cache->shader_cache = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                  g_free,
-                                                 NULL);
+                                                 delete_shader);
 
   char *shasum = g_compute_checksum_for_string (G_CHECKSUM_SHA256, source, -1);
 
@@ -124,7 +142,7 @@ gsk_gl_shader_cache_link_program (GskGLShaderCache  *cache,
   if (cache->program_cache == NULL)
     cache->program_cache = g_hash_table_new_full (g_int64_hash, g_int64_equal,
                                                   g_free,
-                                                  NULL);
+                                                  delete_program);
 
   gint64 *key = g_new (gint64, 1);
 
