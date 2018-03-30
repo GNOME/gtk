@@ -6708,7 +6708,7 @@ gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
       
       if (index == item->index)
         {
-          snapshot = gtk_snapshot_new (FALSE, NULL, "IconView DragIcon");
+          snapshot = gtk_snapshot_new (FALSE, "IconView DragIcon");
           gtk_icon_view_snapshot_item (icon_view, snapshot, item,
                                        icon_view->priv->item_padding,
                                        icon_view->priv->item_padding,
