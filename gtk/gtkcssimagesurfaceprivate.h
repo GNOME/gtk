@@ -42,6 +42,7 @@ struct _GtkCssImageSurface
   cairo_surface_t *cache;               /* the scaled surface - to avoid scaling every time we need to draw */
   double width;                         /* original cache width */
   double height;                        /* original cache height */
+  int scale;                            /* the css provider scaling */
 };
 
 struct _GtkCssImageSurfaceClass

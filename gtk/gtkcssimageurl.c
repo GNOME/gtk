@@ -147,7 +147,7 @@ gtk_css_image_url_compute (GtkCssImage             *image,
       g_error_free (error);
     }
 
-  return g_object_ref (copy);
+  return _gtk_css_image_compute (copy, property_id, provider, style, parent_style);
 }
 
 static gboolean

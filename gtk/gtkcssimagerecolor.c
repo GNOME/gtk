@@ -156,7 +156,7 @@ gtk_css_image_recolor_compute (GtkCssImage             *image,
 {
   GtkCssImageRecolor *recolor = GTK_CSS_IMAGE_RECOLOR (image);
   GtkCssValue *palette;
-  GtkCssImage *img;
+  GtkCssImage *img, *computed_img;
   int scale;
   GError *error = NULL;
 
@@ -176,9 +176,12 @@ gtk_css_image_recolor_compute (GtkCssImage             *image,
       g_error_free (error);
     }
 
-  _gtk_css_value_unref (palette);
+  computed_img = _gtk_css_image_compute (img, property_id, provider, style, parent_style);
 
-  return img;
+  _gtk_css_value_unref (palette);
+  g_object_unref (img);
+
+  return computed_img;
 }
 
 static gboolean

@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include "gtkcssimagesurfaceprivate.h"
+#include "gtkstyleproviderprivate.h"
 #include <math.h>
 
 G_DEFINE_TYPE (GtkCssImageSurface, _gtk_css_image_surface, GTK_TYPE_CSS_IMAGE)
@@ -52,6 +53,8 @@ gtk_css_image_surface_draw (GtkCssImage *image,
   image_width = cairo_image_surface_get_width (surface->surface);
   image_height = cairo_image_surface_get_height (surface->surface);
 
+  g_assert (surface->scale != 0);
+
   if (image_width == 0 || image_height == 0 || width <= 0 || height <= 0)
     return;
 
@@ -60,14 +63,7 @@ gtk_css_image_surface_draw (GtkCssImage *image,
       ABS (width - surface->width) > 0.001 ||
       ABS (height - surface->height) > 0.001)
     {
-      double xscale, yscale;
       cairo_t *cache;
-
-      /* We need the device scale (HiDPI mode) to calculate the proper size in
-       * pixels for the image surface and set the cache device scale
-       */
-      cairo_surface_get_device_scale (cairo_get_target (cr), &xscale, &yscale);
-
       /* Save original size to preserve precision */
       surface->width = width;
       surface->height = height;
@@ -75,12 +71,15 @@ gtk_css_image_surface_draw (GtkCssImage *image,
       /* Destroy old cache if any */
       g_clear_pointer (&surface->cache, cairo_surface_destroy);
 
-      /* Image big enough to contain scaled image with subpixel precision */
+      /* Image big enough to contain scaled image with subpixel precision.
+       * We need the scale (HiDPI mode) to calculate the proper size in
+       * pixels for the image surface and set the cache device scale
+       */
       surface->cache = cairo_surface_create_similar_image (surface->surface,
                                                            CAIRO_FORMAT_ARGB32,
-                                                           ceil (width*xscale),
-                                                           ceil (height*yscale));
-      cairo_surface_set_device_scale (surface->cache, xscale, yscale);
+                                                           ceil (width * surface->scale),
+                                                           ceil (height * surface->scale));
+      cairo_surface_set_device_scale (surface->cache, surface->scale, surface->scale);
       cache = cairo_create (surface->cache);
       cairo_rectangle (cache, 0, 0, width, height);
       cairo_scale (cache, width / image_width, height / image_height);
@@ -129,6 +128,21 @@ gtk_css_image_surface_print (GtkCssImage *image,
 #endif
 }
 
+static GtkCssImage *
+_gtk_css_image_surface_compute (GtkCssImage             *image,
+                                guint                    property_id,
+                                GtkStyleProviderPrivate *provider,
+                                GtkCssStyle             *style,
+                                GtkCssStyle             *parent_style)
+{
+  GtkCssImageSurface *surface;
+
+  surface = GTK_CSS_IMAGE_SURFACE (image);
+  surface->scale = _gtk_style_provider_private_get_scale (provider);
+
+  return g_object_ref (image);
+}
+
 static void
 gtk_css_image_surface_dispose (GObject *object)
 {
@@ -151,6 +165,7 @@ _gtk_css_image_surface_class_init (GtkCssImageSurfaceClass *klass)
 
   image_class->get_width = gtk_css_image_surface_get_width;
   image_class->get_height = gtk_css_image_surface_get_height;
+  image_class->compute = _gtk_css_image_surface_compute;
   image_class->draw = gtk_css_image_surface_draw;
   image_class->print = gtk_css_image_surface_print;
 

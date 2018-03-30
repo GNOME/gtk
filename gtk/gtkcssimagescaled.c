@@ -106,6 +106,23 @@ gtk_css_image_scaled_compute (GtkCssImage             *image,
   scale = _gtk_style_provider_private_get_scale (provider);
   scale = MAX(MIN (scale, scaled->n_images), 1);
 
+  if (scaled->scale == -1)
+    {
+      scaled->scale = scale;
+      for (i = 0; i < scaled->n_images; i++)
+        {
+          GtkCssImage *computed;
+          computed = _gtk_css_image_compute (scaled->images[i],
+                                             property_id,
+                                             provider,
+                                             style,
+                                             parent_style);
+
+          g_object_unref (scaled->images[i]);
+          scaled->images[i] = computed;
+        }
+    }
+
   if (scaled->scale == scale)
     return GTK_CSS_IMAGE (g_object_ref (scaled));
   else
@@ -200,5 +217,5 @@ _gtk_css_image_scaled_class_init (GtkCssImageScaledClass *klass)
 static void
 _gtk_css_image_scaled_init (GtkCssImageScaled *image_scaled)
 {
-  image_scaled->scale = 1;
+  image_scaled->scale = -1;
 }
