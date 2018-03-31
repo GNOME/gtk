@@ -32,7 +32,7 @@
       </object>
     </child>
     <child type="action">
-      <object class="GtkButton" id="ok_button">
+      <object class="GtkButton" id="select_button">
         <property name="visible">1</property>
         <property name="label" translatable="yes">_Select</property>
         <property name="use-underline">1</property>
@@ -41,7 +41,7 @@
     </child>
     <action-widgets>
       <action-widget response="cancel">cancel_button</action-widget>
-      <action-widget response="ok" default="true">ok_button</action-widget>
+      <action-widget response="ok" default="true">select_button</action-widget>
     </action-widgets>
   </template>
 </interface>
