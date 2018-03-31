@@ -1594,6 +1594,23 @@ gtk_snapshot_append_color (GtkSnapshot           *snapshot,
   gsk_render_node_unref (node);
 }
 
+gboolean
+gtk_snapshot_get_clip (GtkSnapshot     *snapshot,
+                       graphene_rect_t *out_clip)
+{
+  const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
+
+  if (!current_state->has_clip)
+    return FALSE;
+
+  graphene_rect_offset_r (&current_state->clip,
+                          - current_state->translate_x,
+                          - current_state->translate_y,
+                          out_clip);
+
+  return TRUE;
+}
+
 /**
  * gtk_snapshot_clips_rect:
  * @snapshot: a #GtkSnapshot
