@@ -31,10 +31,41 @@
 #define XDL_K_HEUR 4
 #define MAXCOST 20
 
+struct _GskDiffSettings {
+  GCompareDataFunc        compare_func;
+  GskKeepFunc             keep_func;
+  GskDeleteFunc           delete_func;
+  GskInsertFunc           insert_func;
+};
+
 typedef struct _SplitResult {
   long i1, i2;
   int min_lo, min_hi;
 } SplitResult;
+
+GskDiffSettings *
+gsk_diff_settings_new (GCompareDataFunc compare_func,
+                       GskKeepFunc      keep_func,
+                       GskDeleteFunc    delete_func,
+                       GskInsertFunc    insert_func)
+{
+  GskDiffSettings *settings;
+
+  settings = g_slice_new0 (GskDiffSettings);
+
+  settings->compare_func = compare_func;
+  settings->keep_func = keep_func;
+  settings->delete_func = delete_func;
+  settings->insert_func = insert_func;
+
+  return settings;
+}
+
+void
+gsk_diff_settings_free (GskDiffSettings *settings)
+{
+  g_slice_free (GskDiffSettings, settings);
+}
 
 /*
  * See "An O(ND) Difference Algorithm and its Variations", by Eugene Myers.
@@ -46,18 +77,18 @@ typedef struct _SplitResult {
  * to cut the search and to return a suboptimal point.
  */
 static void
-split (gconstpointer    *elem1,
-       gssize            off1,
-       gssize            lim1,
-       gconstpointer    *elem2,
-       gssize            off2,
-       gssize            lim2,
-       gssize           *kvdf,
-       gssize           *kvdb,
-       gboolean          need_min,
-       GCompareDataFunc  compare_func,
-       gpointer          data,
-       SplitResult      *spl)
+split (gconstpointer         *elem1,
+       gssize                 off1,
+       gssize                 lim1,
+       gconstpointer         *elem2,
+       gssize                 off2,
+       gssize                 lim2,
+       gssize                *kvdf,
+       gssize                *kvdb,
+       gboolean               need_min,
+       const GskDiffSettings *settings,
+       gpointer               data,
+       SplitResult           *spl)
 {
   gssize dmin = off1 - lim2, dmax = lim1 - off2;
   gssize fmid = off1 - off2, bmid = lim1 - lim2;
@@ -102,7 +133,7 @@ split (gconstpointer    *elem1,
           i2 = i1 - d;
           for (; i1 < lim1 && i2 < lim2; i1++, i2++)
             {
-              if (compare_func (elem1[i1], elem2[i2], data) != 0)
+              if (settings->compare_func (elem1[i1], elem2[i2], data) != 0)
                 break;
             }
           if (i1 - prev1 > XDL_SNAKE_CNT)
@@ -143,7 +174,7 @@ split (gconstpointer    *elem1,
           i2 = i1 - d;
           for (; i1 > off1 && i2 > off2; i1--, i2--)
             {
-              if (compare_func (elem1[i1 - 1], elem2[i2 - 1], data) != 0)
+              if (settings->compare_func (elem1[i1 - 1], elem2[i2 - 1], data) != 0)
                 break;
             }
           if (prev1 - i1 > XDL_SNAKE_CNT)
@@ -186,7 +217,7 @@ split (gconstpointer    *elem1,
                 {
                   for (k = 1; ; k++)
                     {
-                      if (compare_func (elem1[i1 - k], elem2[i2 - k], data) != 0)
+                      if (settings->compare_func (elem1[i1 - k], elem2[i2 - k], data) != 0)
                         break;
                       if (k == XDL_SNAKE_CNT)
                         {
@@ -218,7 +249,7 @@ split (gconstpointer    *elem1,
                 {
                   for (k = 0; ; k++)
                     {
-                      if (compare_func (elem1[i1 + k], elem2[i2 + k], data) != 0)
+                      if (settings->compare_func (elem1[i1 + k], elem2[i2 + k], data) != 0)
                         break;
 
                       if (k == XDL_SNAKE_CNT - 1)
@@ -310,10 +341,7 @@ compare (gconstpointer             *elem1,
          gssize                    *kvdf,
          gssize                    *kvdb,
          gboolean                   need_min,
-         GCompareDataFunc           compare_func,
-         GskKeepFunc                keep_func,
-         GskDeleteFunc              delete_func,
-         GskInsertFunc              insert_func,
+         const GskDiffSettings     *settings,
          gpointer                   data)
 {
   /*
@@ -321,18 +349,18 @@ compare (gconstpointer             *elem1,
    */
   for (; off1 < lim1 && off2 < lim2; off1++, off2++)
     {
-      if (compare_func (elem1[off1], elem2[off2], data) != 0)
+      if (settings->compare_func (elem1[off1], elem2[off2], data) != 0)
         break;
 
-      keep_func (elem1[off1], elem2[off2], data);
+      settings->keep_func (elem1[off1], elem2[off2], data);
     }
 
   for (; off1 < lim1 && off2 < lim2; lim1--, lim2--)
     {
-      if (compare_func (elem1[lim1 - 1], elem2[lim2 - 1], data) != 0)
+      if (settings->compare_func (elem1[lim1 - 1], elem2[lim2 - 1], data) != 0)
         break;
 
-      keep_func (elem1[lim1 - 1], elem2[lim2 - 1], data);
+     settings-> keep_func (elem1[lim1 - 1], elem2[lim2 - 1], data);
     }
 
   /*
@@ -343,14 +371,14 @@ compare (gconstpointer             *elem1,
     {
       for (; off2 < lim2; off2++)
         {
-          insert_func (elem2[off2], off2, data);
+          settings->insert_func (elem2[off2], off2, data);
         }
     }
   else if (off2 == lim2)
     {
       for (; off1 < lim1; off1++)
         {
-          delete_func (elem1[off1], off1, data);
+          settings->delete_func (elem1[off1], off1, data);
         }
     }
   else
@@ -363,7 +391,7 @@ compare (gconstpointer             *elem1,
       split (elem1, off1, lim1,
              elem2, off2, lim2,
              kvdf, kvdb, need_min,
-             compare_func, data,
+             settings, data,
              &spl);
       /*
        * ... et Impera.
@@ -371,11 +399,11 @@ compare (gconstpointer             *elem1,
       compare (elem1, off1, spl.i1,
                elem2, off2, spl.i2,
                kvdf, kvdb, spl.min_lo,
-               compare_func, keep_func, delete_func, insert_func, data);
+               settings, data);
       compare (elem1, spl.i1, lim1,
                elem2, spl.i2, lim2,
                kvdf, kvdb, spl.min_hi,
-               compare_func, keep_func, delete_func, insert_func, data);
+               settings, data);
     }
 }
 
@@ -412,10 +440,7 @@ gsk_diff (gconstpointer             *elem1,
           gsize                      n1,
           gconstpointer             *elem2,
           gsize                      n2,
-          GCompareDataFunc           compare_func,
-          GskKeepFunc                keep_func,
-          GskDeleteFunc              delete_func,
-          GskInsertFunc              insert_func,
+          const GskDiffSettings     *settings,
           gpointer                   data)
 {
   gsize ndiags;
@@ -432,7 +457,7 @@ gsk_diff (gconstpointer             *elem1,
   compare (elem1, 0, n1,
            elem2, 0, n2,
            kvdf, kvdb, FALSE,
-           compare_func, keep_func, delete_func, insert_func, data);
+           settings, data);
 
   g_free (kvd);
 }
