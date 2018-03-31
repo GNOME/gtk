@@ -103,6 +103,16 @@ create_gears (void)
   return w;
 }
 
+static GtkWidget *
+create_switch (void)
+{
+  GtkWidget *w = gtk_switch_new ();
+
+  gtk_switch_set_state (GTK_SWITCH (w), TRUE);
+
+  return w;
+}
+
 static const struct {
   const char *name;
   GtkWidget * (*create_func) (void);
@@ -116,6 +126,7 @@ static const struct {
   { "Spinbutton", create_spinbutton     },
   { "Video",      create_video          },
   { "Gears",      create_gears          },
+  { "Switch",     create_switch         },
 };
 
 static int selected_widget_type = -1;
