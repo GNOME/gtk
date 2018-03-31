@@ -67,6 +67,7 @@
  * #GtkLockButton:tooltip-not-authorized properties.
  */
 
+typedef struct _GtkLockButtonPrivate GtkLockButtonPrivate;
 struct _GtkLockButtonPrivate
 {
   GPermission *permission;
@@ -109,7 +110,7 @@ static void
 gtk_lock_button_finalize (GObject *object)
 {
   GtkLockButton *button = GTK_LOCK_BUTTON (object);
-  GtkLockButtonPrivate *priv = button->priv;
+  GtkLockButtonPrivate *priv = gtk_lock_button_get_instance_private (button);
 
   g_free (priv->tooltip_lock);
   g_free (priv->tooltip_unlock);
@@ -142,7 +143,7 @@ gtk_lock_button_get_property (GObject    *object,
                               GParamSpec *pspec)
 {
   GtkLockButton *button = GTK_LOCK_BUTTON (object);
-  GtkLockButtonPrivate *priv = button->priv;
+  GtkLockButtonPrivate *priv = gtk_lock_button_get_instance_private (button);
 
   switch (property_id)
     {
@@ -183,7 +184,7 @@ gtk_lock_button_set_property (GObject      *object,
                               GParamSpec   *pspec)
 {
   GtkLockButton *button = GTK_LOCK_BUTTON (object);
-  GtkLockButtonPrivate *priv = button->priv;
+  GtkLockButtonPrivate *priv = gtk_lock_button_get_instance_private (button);
 
   switch (property_id)
     {
@@ -227,11 +228,9 @@ gtk_lock_button_set_property (GObject      *object,
 static void
 gtk_lock_button_init (GtkLockButton *button)
 {
-  GtkLockButtonPrivate *priv;
+  GtkLockButtonPrivate *priv = gtk_lock_button_get_instance_private (button);
   const char *names[3];
   GtkStyleContext *context;
-
-  button->priv = priv = gtk_lock_button_get_instance_private (button);
 
   gtk_widget_init_template (GTK_WIDGET (button));
 
@@ -333,7 +332,7 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
 static void
 update_state (GtkLockButton *button)
 {
-  GtkLockButtonPrivate *priv = button->priv;
+  GtkLockButtonPrivate *priv = gtk_lock_button_get_instance_private (button);
   gboolean allowed;
   gboolean can_acquire;
   gboolean can_release;
@@ -413,7 +412,7 @@ acquire_cb (GObject      *source,
             gpointer      user_data)
 {
   GtkLockButton *button = GTK_LOCK_BUTTON (user_data);
-  GtkLockButtonPrivate *priv = button->priv;
+  GtkLockButtonPrivate *priv = gtk_lock_button_get_instance_private (button);
   GError *error;
 
   error = NULL;
@@ -435,7 +434,7 @@ release_cb (GObject      *source,
             gpointer      user_data)
 {
   GtkLockButton *button = GTK_LOCK_BUTTON (user_data);
-  GtkLockButtonPrivate *priv = button->priv;
+  GtkLockButtonPrivate *priv = gtk_lock_button_get_instance_private (button);
   GError *error;
 
   error = NULL;
@@ -454,7 +453,7 @@ release_cb (GObject      *source,
 static void
 gtk_lock_button_clicked (GtkButton *button)
 {
-  GtkLockButtonPrivate *priv = GTK_LOCK_BUTTON (button)->priv;
+  GtkLockButtonPrivate *priv = gtk_lock_button_get_instance_private (GTK_LOCK_BUTTON (button));
 
   /* if we already have a pending interactive check or permission is not set,
    * then do nothing
@@ -515,9 +514,11 @@ gtk_lock_button_new (GPermission *permission)
 GPermission *
 gtk_lock_button_get_permission (GtkLockButton *button)
 {
+  GtkLockButtonPrivate *priv = gtk_lock_button_get_instance_private (button);
+
   g_return_val_if_fail (GTK_IS_LOCK_BUTTON (button), NULL);
 
-  return button->priv->permission;
+  return priv->permission;
 }
 
 /**
@@ -531,12 +532,10 @@ void
 gtk_lock_button_set_permission (GtkLockButton *button,
                                 GPermission   *permission)
 {
-  GtkLockButtonPrivate *priv;
+  GtkLockButtonPrivate *priv = gtk_lock_button_get_instance_private (button);
 
   g_return_if_fail (GTK_IS_LOCK_BUTTON (button));
   g_return_if_fail (permission == NULL || G_IS_PERMISSION (permission));
-
-  priv = button->priv;
 
   if (priv->permission != permission)
     {
@@ -566,11 +565,12 @@ gtk_lock_button_set_permission (GtkLockButton *button,
 const char *
 _gtk_lock_button_get_current_text (GtkLockButton *button)
 {
+  GtkLockButtonPrivate *priv = gtk_lock_button_get_instance_private (button);
   GtkWidget *label;
 
   g_return_val_if_fail (GTK_IS_LOCK_BUTTON (button), NULL);
 
-  label = gtk_stack_get_visible_child (GTK_STACK (button->priv->stack));
+  label = gtk_stack_get_visible_child (GTK_STACK (priv->stack));
 
   return gtk_label_get_text (GTK_LABEL (label));
 }

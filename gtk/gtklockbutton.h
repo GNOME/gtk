@@ -33,13 +33,10 @@ G_BEGIN_DECLS
 
 typedef struct _GtkLockButton        GtkLockButton;
 typedef struct _GtkLockButtonClass   GtkLockButtonClass;
-typedef struct _GtkLockButtonPrivate GtkLockButtonPrivate;
 
 struct _GtkLockButton
 {
-  GtkButton parent;
-
-  GtkLockButtonPrivate *priv;
+  GtkButton parent_instance;
 };
 
 /**
