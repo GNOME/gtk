@@ -3608,7 +3608,7 @@ create_row_context_menu (GtkPlacesSidebar *sidebar,
 #endif
 
   prefer_popover_menu = g_getenv ("XDG_CURRENT_DESKTOP") &&
-                        g_strstr_len (g_getenv ("XDG_CURRENT_DESKTOP"), -1, "GNOME") != NULL;
+                        strstr (g_getenv ("XDG_CURRENT_DESKTOP"), "GNOME") != NULL;
 
   if (prefer_popover_menu)
     {

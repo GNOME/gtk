@@ -350,7 +350,7 @@ do_popup (GtkColorSwatch *swatch)
   gboolean prefer_popover_menu;
 
   prefer_popover_menu = g_getenv ("XDG_CURRENT_DESKTOP") &&
-                        g_strstr_len (g_getenv ("XDG_CURRENT_DESKTOP"), -1, "GNOME") != NULL;
+                        strstr (g_getenv ("XDG_CURRENT_DESKTOP"), "GNOME") != NULL;
 
   if (swatch->priv->context_menu == NULL)
     {
@@ -378,7 +378,7 @@ do_popup (GtkColorSwatch *swatch)
         {
           swatch->priv->context_menu = gtk_menu_new ();
 
-          item = gtk_menu_item_new_with_mnemonic (_ ("C_ustomize"));
+          item = gtk_menu_item_new_with_mnemonic (_("C_ustomize"));
           g_signal_connect_swapped (item, "activate",
                                     G_CALLBACK (emit_customize), swatch);
           gtk_widget_set_visible (GTK_WIDGET (item), TRUE);
@@ -388,9 +388,9 @@ do_popup (GtkColorSwatch *swatch)
     }
 
   if (prefer_popover_menu)
-      gtk_popover_popup (GTK_POPOVER (swatch->priv->context_menu));
+    gtk_popover_popup (GTK_POPOVER (swatch->priv->context_menu));
   else
-      gtk_menu_popup_at_pointer (GTK_MENU (swatch->priv->context_menu), NULL);
+    gtk_menu_popup_at_pointer (GTK_MENU (swatch->priv->context_menu), NULL);
 }
 
 static gboolean

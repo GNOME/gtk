@@ -2248,7 +2248,7 @@ file_list_build_context_menu (GtkFileChooserWidget *impl)
   g_menu_append_section (context_menu_model, NULL, G_MENU_MODEL (settings_menu_items));
 
   prefer_popover_menu = g_getenv ("XDG_CURRENT_DESKTOP") &&
-                        g_strstr_len (g_getenv ("XDG_CURRENT_DESKTOP"), -1, "GNOME") != NULL;
+                        strstr (g_getenv ("XDG_CURRENT_DESKTOP"), "GNOME") != NULL;
 
   if (prefer_popover_menu)
     {
