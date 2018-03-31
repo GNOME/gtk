@@ -4021,6 +4021,7 @@ gtk_widget_queue_draw (GtkWidget *widget)
 
       priv->draw_needed = TRUE;
       g_clear_pointer (&priv->render_node, gsk_render_node_unref);
+      priv->render_node_has_clip = FALSE;
       gtk_widget_invalidate_paintable_contents (widget);
       if (_gtk_widget_get_has_surface (widget) &&
           _gtk_widget_get_realized (widget))
@@ -13816,6 +13817,8 @@ gtk_widget_snapshot (GtkWidget   *widget,
 {
   GtkWidgetPrivate *priv = widget->priv;
   graphene_rect_t offset_clip;
+  graphene_rect_t clip;
+  gboolean has_clip;
   double opacity;
 
   if (!_gtk_widget_is_drawable (widget))
@@ -13841,13 +13844,28 @@ gtk_widget_snapshot (GtkWidget   *widget,
   if (opacity <= 0.0)
     return;
 
-  if (priv->draw_needed)
+  has_clip = gtk_snapshot_get_clip (snapshot, &clip);
+
+  if (priv->draw_needed ||
+      (priv->render_node_has_clip && (!has_clip || !graphene_rect_contains_rect (&priv->render_node_clip, &clip))))
     {
       GskRenderNode *render_node;
+
       render_node = gtk_widget_create_render_node (widget, snapshot);
-      /* This can happen when nested drawing happens and a widget contains itself */
+      /* This can happen when nested drawing happens and a widget contains itself
+       * or when we replace a clipped area */
       g_clear_pointer (&priv->render_node, gsk_render_node_unref);
       priv->render_node = render_node;
+      if (has_clip)
+        {
+          priv->render_node_clip = clip;
+          priv->render_node_has_clip = TRUE;
+        }
+      else
+        {
+          priv->render_node_has_clip = FALSE;
+        }
+
       priv->draw_needed = FALSE;
     }
 
