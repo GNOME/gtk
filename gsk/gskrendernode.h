@@ -202,8 +202,8 @@ const graphene_matrix_t *
 
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_offset_node_new                     (GskRenderNode            *child,
-                                                                 double                    x,
-                                                                 double                    y);
+                                                                 double                    x_offset,
+                                                                 double                    y_offset);
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_offset_node_get_child               (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
