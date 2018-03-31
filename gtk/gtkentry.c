@@ -5137,7 +5137,7 @@ gtk_entry_state_flags_changed (GtkWidget     *widget,
       update_cursors (widget);
     }
 
-  if (!gtk_widget_is_sensitive (widget))
+  if (!gtk_widget_is_focus (widget))
     {
       /* Clear any selection */
       gtk_editable_select_region (GTK_EDITABLE (entry), priv->current_pos, priv->current_pos);
