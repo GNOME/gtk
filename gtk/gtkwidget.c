@@ -13816,7 +13816,6 @@ gtk_widget_snapshot (GtkWidget   *widget,
                      GtkSnapshot *snapshot)
 {
   GtkWidgetPrivate *priv = widget->priv;
-  graphene_rect_t offset_clip;
   graphene_rect_t clip;
   gboolean has_clip;
   double opacity;
@@ -13831,14 +13830,6 @@ gtk_widget_snapshot (GtkWidget   *widget,
     }
 
   priv = widget->priv;
-  graphene_rect_init (&offset_clip,
-                      priv->clip.x - priv->allocation.x,
-                      priv->clip.y - priv->allocation.y,
-                      priv->clip.width,
-                      priv->clip.height);
-
-  if (gtk_snapshot_clips_rect (snapshot, &offset_clip))
-    return;
 
   opacity = widget->priv->alpha / 255.0;
   if (opacity <= 0.0)
