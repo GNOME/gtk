@@ -4310,7 +4310,6 @@ gtk_widget_get_allocated_baseline
 gtk_widget_get_allocated_size
 gtk_widget_get_width
 gtk_widget_get_height
-gtk_widget_get_clip
 gtk_widget_contains
 gtk_widget_pick
 gtk_widget_get_can_default
