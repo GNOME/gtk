@@ -3633,6 +3633,7 @@ create_row_context_menu (GtkPlacesSidebar *sidebar,
       gchar *uri;
       GVolume *volume;
       GFile *file;
+      GMenu *additional_menu_items;
 
       g_object_get (row,
                     "uri", &uri,
@@ -3644,8 +3645,11 @@ create_row_context_menu (GtkPlacesSidebar *sidebar,
       else
         file = NULL;
 
+      additional_menu_items = g_menu_new ();
+      g_menu_append_section (context_menu_model, NULL, G_MENU_MODEL (additional_menu_items));
+
       g_signal_emit (sidebar, places_sidebar_signals[POPULATE_POPUP], 0,
-                     context_menu_model, file, volume);
+                     additional_menu_items, file, volume);
 
       if (file)
         g_object_unref (file);
