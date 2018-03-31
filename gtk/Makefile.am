@@ -23,6 +23,7 @@ AM_CPPFLAGS =						\
 	$(GTK_BASE_CFLAGS_DEFINES)			\
 	$(GTK_PLAT_CFLAGS_DEFINES)			\
 	-DX11_DATA_PREFIX=\"$(X11_PREFIX)\"		\
+	-DISO_CODES_PREFIX=\"$(ISO_CODES_PREFIX)\"	\
 	-I$(top_builddir)				\
 	-I$(top_builddir)/gtk				\
 	-I$(top_srcdir) 				\
@@ -957,7 +958,9 @@ gtk_base_c_sources = 		\
 	gtkwindowgroup.c	\
 	gtkwin32draw.c		\
 	gtkwin32theme.c		\
-	gdkpixbufutils.c
+	gdkpixbufutils.c	\
+	language-names.c	\
+	script-names.c
 
 if USE_QUARTZ
 gtk_base_c_sources += 		\

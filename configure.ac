@@ -1432,6 +1432,7 @@ GLIB_PREFIX="`$PKG_CONFIG --variable=prefix glib-2.0`"
 ATK_PREFIX="`$PKG_CONFIG --variable=prefix atk`"
 PANGO_PREFIX="`$PKG_CONFIG --variable=prefix pango`"
 CAIRO_PREFIX="`$PKG_CONFIG --variable=prefix cairo`"
+ISO_CODES_PREFIX="`$PKG_CONFIG --variable=prefix iso-codes`"
 
 AC_SUBST(GTK_PACKAGES)
 AC_SUBST(GTK_PRIVATE_PACKAGES)
@@ -1445,6 +1446,7 @@ AC_SUBST(GLIB_PREFIX)
 AC_SUBST(ATK_PREFIX)
 AC_SUBST(PANGO_PREFIX)
 AC_SUBST(CAIRO_PREFIX)
+AC_SUBST(ISO_CODES_PREFIX)
 
 AC_SUBST(GTK_DEBUG_FLAGS)
 AC_SUBST(GTK_XIM_FLAGS)
@@ -1740,6 +1742,10 @@ PKG_CHECK_MODULES(FONTDEMO, harfbuzz >= 0.9 pangoft2, build_font_demo=yes, build
 AC_SUBST(FONTDEMO_CFLAGS)
 AC_SUBST(FONTDEMO_LIBS)
 AM_CONDITIONAL(BUILD_FONT_DEMO, [ test "x$build_font_demo" = xyes ])
+if test "x$build_font_demo" = xyes; then
+  AC_DEFINE([HAVE_HARFBUZZ], 1, [defines whether we have HarfBuzz])
+  AC_DEFINE([HAVE_PANGOFT], 1, [defines whether we have pangoft2])
+fi
 
 ##################################################
 # Checks for gtk-doc and docbook-tools
