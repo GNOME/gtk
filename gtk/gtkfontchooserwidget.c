@@ -2241,8 +2241,10 @@ gtk_font_chooser_widget_merge_font_desc (GtkFontChooserWidget       *fontchooser
       gtk_font_chooser_widget_update_marks (fontchooser);
 
 #if defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT)
-      has_tweak = gtk_font_chooser_widget_update_font_variations (fontchooser) ||
-                  gtk_font_chooser_widget_update_font_features (fontchooser);
+      if (gtk_font_chooser_widget_update_font_features (fontchooser))
+        has_tweak = TRUE;
+      if (gtk_font_chooser_widget_update_font_variations (fontchooser))
+        has_tweak = TRUE;
 #endif
       g_simple_action_set_enabled (G_SIMPLE_ACTION (priv->tweak_action), has_tweak);
     }
