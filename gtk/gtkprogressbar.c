@@ -1530,7 +1530,7 @@ gtk_progress_bar_text_style_changed (GtkCssNode        *node,
 /**
  * gtk_progress_bar_set_show_text:
  * @pbar: a #GtkProgressBar
- * @show_text: whether to show superimposed text
+ * @show_text: whether to show text
  *
  * Sets whether the progress bar will show text next to the bar.
  * The shown text is either the value of the #GtkProgressBar:text
