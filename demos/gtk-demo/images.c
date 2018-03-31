@@ -325,6 +325,7 @@ do_images (GtkWidget *do_widget)
   GtkWidget *image;
   GtkWidget *label;
   GtkWidget *button;
+  GdkPaintable *paintable;
   GIcon *gicon;
 
   if (!window)
@@ -444,6 +445,22 @@ do_images (GtkWidget *do_widget)
       video = gtk_video_new_for_resource ("/images/gtk-logo.webm");
       gtk_media_stream_set_loop (gtk_video_get_media_stream (GTK_VIDEO (video)), TRUE);
       gtk_container_add (GTK_CONTAINER (frame), video);
+
+      /* Widget paintables */
+      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
+      gtk_container_add (GTK_CONTAINER (hbox), vbox);
+
+      label = gtk_label_new (NULL);
+      gtk_label_set_markup (GTK_LABEL (label),
+                            "<u>GtkWidgetPaintable</u>");
+      gtk_box_pack_start (GTK_BOX (vbox), label);
+
+      paintable = gtk_widget_paintable_new (do_widget);
+      image = gtk_image_new_from_paintable (paintable);
+      gtk_image_set_can_shrink (GTK_IMAGE (image), TRUE);
+      gtk_widget_set_size_request (image, 100, 100);
+      gtk_widget_set_valign (image, GTK_ALIGN_START);
+      gtk_container_add (GTK_CONTAINER (vbox), image);
 
       /* Sensitivity control */
       button = gtk_toggle_button_new_with_mnemonic ("_Insensitive");
