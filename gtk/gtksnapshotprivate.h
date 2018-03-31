@@ -35,9 +35,11 @@ struct _GtkSnapshotState {
   guint                  start_node_index;
   guint                  n_nodes;
 
-  cairo_region_t        *clip_region;
+  graphene_rect_t        clip;
   int                    translate_x;
   int                    translate_y;
+
+  guint                  has_clip : 1;
 
   GtkSnapshotCollectFunc collect_func;
   union {

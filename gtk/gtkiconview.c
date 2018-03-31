@@ -1684,12 +1684,13 @@ gtk_icon_view_snapshot (GtkWidget   *widget,
   for (icons = icon_view->priv->items; icons; icons = icons->next)
     {
       GtkIconViewItem *item = icons->data;
-      cairo_rectangle_int_t area;
+      graphene_rect_t area;
 
-      area.x = item->cell_area.x - icon_view->priv->item_padding;
-      area.y = item->cell_area.y      - icon_view->priv->item_padding;
-      area.width = item->cell_area.width  + icon_view->priv->item_padding * 2;
-      area.height = item->cell_area.height + icon_view->priv->item_padding * 2;
+      graphene_rect_init (&area,
+                          item->cell_area.x - icon_view->priv->item_padding,
+                          item->cell_area.y - icon_view->priv->item_padding,
+                          item->cell_area.width  + icon_view->priv->item_padding * 2,
+                          item->cell_area.height + icon_view->priv->item_padding * 2);
 
       if (!gtk_snapshot_clips_rect (snapshot, &area))
         {
