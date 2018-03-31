@@ -273,8 +273,7 @@ static void     gtk_calendar_measure        (GtkWidget        *widget,
                                              int            *natural_baseline);
 static void     gtk_calendar_size_allocate  (GtkWidget           *widget,
                                              const GtkAllocation *allocation,
-                                             int                  baseline,
-                                             GtkAllocation       *out_clip);
+                                             int                  baseline);
 static void     gtk_calendar_snapshot       (GtkWidget        *widget,
                                              GtkSnapshot      *snapshot);
 static void     gtk_calendar_button_press   (GtkGestureMultiPress *gesture,
@@ -1854,8 +1853,7 @@ gtk_calendar_measure (GtkWidget        *widget,
 static void
 gtk_calendar_size_allocate (GtkWidget           *widget,
                             const GtkAllocation *allocation,
-                            int                  baseline,
-                            GtkAllocation       *out_clip)
+                            int                  baseline)
 {
   GtkCalendar *calendar = GTK_CALENDAR (widget);
   GtkCalendarPrivate *priv = calendar->priv;

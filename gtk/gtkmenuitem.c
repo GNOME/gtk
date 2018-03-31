@@ -254,14 +254,11 @@ gtk_menu_item_actionable_interface_init (GtkActionableInterface *iface)
 static void
 gtk_menu_item_size_allocate (GtkWidget           *widget,
                              const GtkAllocation *allocation,
-                             int                  baseline,
-                             GtkAllocation       *out_clip)
+                             int                  baseline)
 {
   GtkMenuItem *menu_item = GTK_MENU_ITEM (widget);
   GtkMenuItemPrivate *priv = menu_item->priv;
   GtkAllocation child_allocation;
-  GtkAllocation arrow_clip = { 0 };
-  GtkAllocation child_clip = *allocation;
   GtkTextDirection direction;
   GtkPackDirection child_pack_dir;
   GtkWidget *child;
@@ -331,14 +328,12 @@ gtk_menu_item_size_allocate (GtkWidget           *widget,
           arrow_alloc.y = child_allocation.y +
             (child_allocation.height - arrow_alloc.height) / 2;
 
-          gtk_widget_size_allocate(priv->arrow_widget, &arrow_alloc, baseline, &arrow_clip);
-          gdk_rectangle_union (out_clip, &arrow_clip, out_clip);
+          gtk_widget_size_allocate(priv->arrow_widget, &arrow_alloc, baseline);
         }
 
       child_allocation.width = MAX (1, child_allocation.width);
 
-      gtk_widget_size_allocate (child, &child_allocation, baseline, &child_clip);
-      gdk_rectangle_union (out_clip, &child_clip, out_clip);
+      gtk_widget_size_allocate (child, &child_allocation, baseline);
     }
 
   if (priv->submenu)

@@ -424,8 +424,7 @@ static void gtk_window_realize            (GtkWidget         *widget);
 static void gtk_window_unrealize          (GtkWidget         *widget);
 static void gtk_window_size_allocate      (GtkWidget           *widget,
                                            const GtkAllocation *allocation,
-                                           int                  baseline,
-                                           GtkAllocation       *out_clip);
+                                           int                  baseline);
 static gboolean gtk_window_close_request  (GtkWindow         *window);
 static gboolean gtk_window_emit_close_request (GtkWindow *window);
 static gboolean gtk_window_configure_event (GtkWidget         *widget,
@@ -5427,8 +5426,7 @@ gtk_window_resize (GtkWindow *window,
  * static void
  * on_size_allocate (GtkWidget *widget,
  *                   const GtkAllocation *allocation,
- *                   int baseline,
- *                   GtkAllocation *out_clip)
+ *                   int baseline)
  * {
  *   int new_width, new_height;
  *
@@ -6811,7 +6809,6 @@ gtk_window_realize (GtkWidget *widget)
       allocation.height == 1)
     {
       GdkRectangle request;
-      GdkRectangle clip;
 
       gtk_window_compute_configure_request (window, &request, NULL, NULL);
 
@@ -6819,7 +6816,7 @@ gtk_window_realize (GtkWidget *widget)
       allocation.y = 0;
       allocation.width = request.width;
       allocation.height = request.height;
-      gtk_widget_size_allocate (widget, &allocation, -1, &clip);
+      gtk_widget_size_allocate (widget, &allocation, -1);
 
       gtk_widget_queue_resize (widget);
 
@@ -7070,13 +7067,12 @@ popover_size_allocate (GtkWindowPopover *popover,
                        GtkWindow        *window)
 {
   cairo_rectangle_int_t rect;
-  GtkAllocation clip;
 
   if (GTK_IS_POPOVER (popover->widget))
     gtk_popover_update_position (GTK_POPOVER (popover->widget));
 
   popover_get_rect (popover, window, &rect);
-  gtk_widget_size_allocate (popover->widget, &rect, -1, &clip);
+  gtk_widget_size_allocate (popover->widget, &rect, -1);
 }
 
 /* _gtk_window_set_allocation:
@@ -7131,7 +7127,6 @@ _gtk_window_set_allocation (GtkWindow           *window,
       !priv->fullscreen)
     {
       GtkAllocation title_allocation;
-      GtkAllocation title_clip;
 
       title_allocation.x = window_border.left;
       title_allocation.y = window_border.top;
@@ -7146,7 +7141,7 @@ _gtk_window_set_allocation (GtkWindow           *window,
 
       title_allocation.height = priv->title_height;
 
-      gtk_widget_size_allocate (priv->title_box, &title_allocation, -1, &title_clip);
+      gtk_widget_size_allocate (priv->title_box, &title_allocation, -1);
     }
 
   if (priv->decorated &&
@@ -7179,8 +7174,7 @@ _gtk_window_set_allocation (GtkWindow           *window,
 static void
 gtk_window_size_allocate (GtkWidget           *widget,
                           const GtkAllocation *allocation,
-                          int                  baseline,
-                          GtkAllocation       *out_clip)
+                          int                  baseline)
 {
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWidget *child;
@@ -7190,7 +7184,7 @@ gtk_window_size_allocate (GtkWidget           *widget,
 
   child = gtk_bin_get_child (GTK_BIN (window));
   if (child && gtk_widget_get_visible (child))
-    gtk_widget_size_allocate (child, &child_allocation, -1, out_clip);
+    gtk_widget_size_allocate (child, &child_allocation, -1);
 }
 
 static gboolean
@@ -8862,7 +8856,6 @@ gtk_window_move_resize (GtkWindow *window)
   if (priv->configure_notify_received)
     {
       GtkAllocation allocation;
-      GtkAllocation clip;
       int min;
 
       /* If we have received a configure event since
@@ -8888,7 +8881,7 @@ gtk_window_move_resize (GtkWindow *window)
                           &min, NULL, NULL, NULL);
       allocation.height = MAX (min, current_height);
 
-      gtk_widget_size_allocate (widget, &allocation, -1, &clip);
+      gtk_widget_size_allocate (widget, &allocation, -1);
 
       /* If the configure request changed, it means that
        * we either:
@@ -8964,7 +8957,6 @@ gtk_window_move_resize (GtkWindow *window)
       if (priv->type == GTK_WINDOW_POPUP)
         {
           GtkAllocation allocation;
-          GtkAllocation clip;
 
 	  /* Directly size allocate for override redirect (popup) windows. */
           allocation.x = 0;
@@ -8972,7 +8964,7 @@ gtk_window_move_resize (GtkWindow *window)
 	  allocation.width = new_request.width;
 	  allocation.height = new_request.height;
 
-          gtk_widget_size_allocate (widget, &allocation, -1, &clip);
+          gtk_widget_size_allocate (widget, &allocation, -1);
 	}
       else
         {
@@ -9000,7 +8992,7 @@ gtk_window_move_resize (GtkWindow *window)
     }
   else
     {
-      GtkAllocation allocation, clip;
+      GtkAllocation allocation;
       int min_width, min_height;
 
       /* Handle any position changes.
@@ -9024,7 +9016,7 @@ gtk_window_move_resize (GtkWindow *window)
       allocation.width = MAX (current_width, min_width);
       allocation.height = MAX (current_height, min_height);
 
-      gtk_widget_size_allocate (widget, &allocation, -1, &clip);
+      gtk_widget_size_allocate (widget, &allocation, -1);
     }
   
   /* We have now processed a move/resize since the last position

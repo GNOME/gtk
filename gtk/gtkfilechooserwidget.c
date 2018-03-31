@@ -7944,18 +7944,16 @@ gtk_file_chooser_widget_snapshot (GtkWidget   *widget,
 static void
 gtk_file_chooser_widget_size_allocate (GtkWidget           *widget,
                                        const GtkAllocation *allocation,
-                                       int                  baseline,
-                                       GtkAllocation       *out_clip)
+                                       int                  baseline)
 {
   GtkFileChooserWidget *self = GTK_FILE_CHOOSER_WIDGET (widget);
   GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (self);
 
   GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->size_allocate (widget,
                                                                           allocation,
-                                                                          baseline,
-                                                                          out_clip);
+                                                                          baseline);
 
-  gtk_widget_size_allocate (priv->box, allocation, -1, out_clip);
+  gtk_widget_size_allocate (priv->box, allocation, -1);
 }
 
 static void

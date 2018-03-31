@@ -149,12 +149,11 @@ gtk_statusbar_measure (GtkWidget      *widget,
 static void
 gtk_statusbar_size_allocate (GtkWidget           *widget,
                              const GtkAllocation *allocation,
-                             int                  baseline,
-                             GtkAllocation       *out_clip)
+                             int                  baseline)
 {
   GtkStatusbarPrivate *priv = gtk_statusbar_get_instance_private (GTK_STATUSBAR (widget));
 
-  gtk_widget_size_allocate (priv->frame, allocation, baseline, out_clip);
+  gtk_widget_size_allocate (priv->frame, allocation, baseline);
 }
 
 static void

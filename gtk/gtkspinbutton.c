@@ -262,8 +262,7 @@ static void gtk_spin_button_measure (GtkWidget      *widget,
                                      int            *natural_baseline);
 static void gtk_spin_button_size_allocate  (GtkWidget           *widget,
                                             const GtkAllocation *allocation,
-                                            int                  baseline,
-                                            GtkAllocation       *out_clip);
+                                            int                  baseline);
 static gboolean gtk_spin_button_event      (GtkWidget          *widget,
                                             GdkEvent           *event);
 static void gtk_spin_button_grab_notify    (GtkWidget          *widget,
@@ -1082,12 +1081,11 @@ gtk_spin_button_measure (GtkWidget      *widget,
 static void
 gtk_spin_button_size_allocate (GtkWidget           *widget,
                                const GtkAllocation *allocation,
-                               int                  baseline,
-                               GtkAllocation       *out_clip)
+                               int                  baseline)
 {
   GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (GTK_SPIN_BUTTON (widget));
 
-  gtk_widget_size_allocate (priv->box, allocation, baseline, out_clip);
+  gtk_widget_size_allocate (priv->box, allocation, baseline);
 }
 
 static gboolean

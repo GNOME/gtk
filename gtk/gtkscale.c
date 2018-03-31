@@ -323,8 +323,7 @@ gtk_scale_notify (GObject    *object,
 }
 
 static void
-gtk_scale_allocate_value (GtkScale      *scale,
-                          GtkAllocation *out_clip)
+gtk_scale_allocate_value (GtkScale *scale)
 {
   GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
   GtkWidget *widget = GTK_WIDGET (scale);
@@ -406,14 +405,13 @@ gtk_scale_allocate_value (GtkScale      *scale,
         }
     }
 
-  gtk_widget_size_allocate (priv->value_widget, &value_alloc, -1, out_clip);
+  gtk_widget_size_allocate (priv->value_widget, &value_alloc, -1);
 }
 
 static void
 gtk_scale_allocate_mark (GtkGizmo            *gizmo,
                          const GtkAllocation *allocation,
-                         int                  baseline,
-                         GtkAllocation       *out_clip)
+                         int                  baseline)
 {
   GtkWidget *widget = GTK_WIDGET (gizmo);
   GtkScale *scale = GTK_SCALE (gtk_widget_get_parent (gtk_widget_get_parent (widget)));
@@ -453,11 +451,11 @@ gtk_scale_allocate_mark (GtkGizmo            *gizmo,
       indicator_alloc.height = indicator_height;
     }
 
-  gtk_widget_size_allocate (mark->indicator_widget, &indicator_alloc, baseline, out_clip);
+  gtk_widget_size_allocate (mark->indicator_widget, &indicator_alloc, baseline);
 
   if (mark->label_widget)
     {
-      GtkAllocation label_alloc, label_clip;
+      GtkAllocation label_alloc;
 
       label_alloc = *allocation;
 
@@ -474,16 +472,14 @@ gtk_scale_allocate_mark (GtkGizmo            *gizmo,
             label_alloc.x = indicator_alloc.x + indicator_alloc.width;
         }
 
-      gtk_widget_size_allocate (mark->label_widget, &label_alloc, baseline, &label_clip);
-      gdk_rectangle_union (out_clip, &label_clip, out_clip);
+      gtk_widget_size_allocate (mark->label_widget, &label_alloc, baseline);
     }
 }
 
 static void
 gtk_scale_allocate_marks (GtkGizmo            *gizmo,
                           const GtkAllocation *allocation,
-                          int                  baseline,
-                          GtkAllocation       *out_clip)
+                          int                  baseline)
 {
   GtkWidget *widget = GTK_WIDGET (gizmo);
   GtkScale *scale = GTK_SCALE (gtk_widget_get_parent (widget));
@@ -499,7 +495,7 @@ gtk_scale_allocate_marks (GtkGizmo            *gizmo,
   for (m = priv->marks, i = 0; m; m = m->next, i++)
     {
       GtkScaleMark *mark = m->data;
-      GtkAllocation mark_alloc, mark_clip;
+      GtkAllocation mark_alloc;
       int mark_size;
 
       if ((mark->position == GTK_POS_TOP && widget == priv->bottom_marks_widget) ||
@@ -531,8 +527,7 @@ gtk_scale_allocate_marks (GtkGizmo            *gizmo,
           mark_alloc.y -= mark_size / 2;
         }
 
-      gtk_widget_size_allocate (mark->widget, &mark_alloc, baseline, &mark_clip);
-      gdk_rectangle_union (out_clip, &mark_clip, out_clip);
+      gtk_widget_size_allocate (mark->widget, &mark_alloc, baseline);
     }
 
   g_free (marks);
@@ -541,15 +536,14 @@ gtk_scale_allocate_marks (GtkGizmo            *gizmo,
 static void
 gtk_scale_size_allocate (GtkWidget           *widget,
                          const GtkAllocation *allocation,
-                         int                  baseline,
-                         GtkAllocation       *out_clip)
+                         int                  baseline)
 {
   GtkScale *scale = GTK_SCALE (widget);
   GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
-  GtkAllocation marks_clip, range_rect, marks_rect;
+  GtkAllocation range_rect, marks_rect;
   GtkOrientation orientation;
 
-  GTK_WIDGET_CLASS (gtk_scale_parent_class)->size_allocate (widget, allocation, baseline, out_clip);
+  GTK_WIDGET_CLASS (gtk_scale_parent_class)->size_allocate (widget, allocation, baseline);
 
   orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (widget));
   gtk_range_get_range_rect (GTK_RANGE (scale), &range_rect);
@@ -568,8 +562,7 @@ gtk_scale_size_allocate (GtkWidget           *widget,
           marks_rect.y = 0;
           marks_rect.width = range_rect.width;
           marks_rect.height = marks_height;
-          gtk_widget_size_allocate (priv->top_marks_widget, &marks_rect, -1, &marks_clip);
-          gdk_rectangle_union (out_clip, &marks_clip, out_clip);
+          gtk_widget_size_allocate (priv->top_marks_widget, &marks_rect, -1);
         }
 
       if (priv->bottom_marks_widget)
@@ -582,8 +575,7 @@ gtk_scale_size_allocate (GtkWidget           *widget,
           marks_rect.y = range_rect.y + range_rect.height;
           marks_rect.width = range_rect.width;
           marks_rect.height = marks_height;
-          gtk_widget_size_allocate (priv->bottom_marks_widget, &marks_rect, -1, &marks_clip);
-          gdk_rectangle_union (out_clip, &marks_clip, out_clip);
+          gtk_widget_size_allocate (priv->bottom_marks_widget, &marks_rect, -1);
         }
     }
   else
@@ -599,8 +591,7 @@ gtk_scale_size_allocate (GtkWidget           *widget,
           marks_rect.x = 0;
           marks_rect.y = 0;
           marks_rect.width = marks_width;
-          gtk_widget_size_allocate (priv->top_marks_widget, &marks_rect, -1, &marks_clip);
-          gdk_rectangle_union (out_clip, &marks_clip, out_clip);
+          gtk_widget_size_allocate (priv->top_marks_widget, &marks_rect, -1);
         }
 
       if (priv->bottom_marks_widget)
@@ -614,17 +605,13 @@ gtk_scale_size_allocate (GtkWidget           *widget,
           marks_rect.y = 0;
           marks_rect.width = marks_width;
           marks_rect.height = range_rect.height;
-          gtk_widget_size_allocate (priv->bottom_marks_widget, &marks_rect, -1, &marks_clip);
-          gdk_rectangle_union (out_clip, &marks_clip, out_clip);
+          gtk_widget_size_allocate (priv->bottom_marks_widget, &marks_rect, -1);
         }
     }
 
   if (priv->value_widget)
     {
-      GtkAllocation value_clip;
-
-      gtk_scale_allocate_value (scale, &value_clip);
-      gdk_rectangle_union (out_clip, &value_clip, out_clip);
+      gtk_scale_allocate_value (scale);
     }
 }
 

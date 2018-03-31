@@ -103,8 +103,7 @@ static void gtk_fixed_measure (GtkWidget      *widget,
 
 static void gtk_fixed_size_allocate (GtkWidget           *widget,
                                      const GtkAllocation *allocation,
-                                     int                  baseline,
-                                     GtkAllocation       *out_clip);
+                                     int                  baseline);
 static void gtk_fixed_add           (GtkContainer     *container,
                                      GtkWidget        *widget);
 static void gtk_fixed_remove        (GtkContainer     *container,
@@ -394,8 +393,7 @@ gtk_fixed_measure (GtkWidget      *widget,
 static void
 gtk_fixed_size_allocate (GtkWidget           *widget,
                          const GtkAllocation *allocation,
-                         int                  baseline,
-                         GtkAllocation       *out_clip)
+                         int                  baseline)
 {
   GtkFixed *fixed = GTK_FIXED (widget);
   GtkFixedPrivate *priv = fixed->priv;
@@ -417,7 +415,7 @@ gtk_fixed_size_allocate (GtkWidget           *widget,
 
       child_allocation.width = child_requisition.width;
       child_allocation.height = child_requisition.height;
-      gtk_widget_size_allocate (child->widget, &child_allocation, -1, out_clip);
+      gtk_widget_size_allocate (child->widget, &child_allocation, -1);
     }
 }
 

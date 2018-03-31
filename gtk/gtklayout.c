@@ -119,8 +119,7 @@ static void gtk_layout_measure (GtkWidget *widget,
                                 int            *natural_baseline);
 static void gtk_layout_size_allocate      (GtkWidget          *widget,
                                            const GtkAllocation *allocation,
-                                           int                 baseline,
-                                           GtkAllocation      *out_clip);
+                                           int                 baseline);
 static void gtk_layout_add                (GtkContainer   *container,
 					   GtkWidget      *widget);
 static void gtk_layout_remove             (GtkContainer   *container,
@@ -726,8 +725,7 @@ gtk_layout_measure (GtkWidget *widget,
 static void
 gtk_layout_size_allocate (GtkWidget           *widget,
                           const GtkAllocation *allocation,
-                          int                  baseline,
-                          GtkAllocation       *out_clip)
+                          int                  baseline)
 {
   GtkLayout *layout = GTK_LAYOUT (widget);
   GtkLayoutPrivate *priv = layout->priv;
@@ -748,7 +746,6 @@ gtk_layout_size_allocate (GtkWidget           *widget,
       GtkLayoutChild *child = tmp_list->data;
       GtkAllocation allocation;
       GtkRequisition requisition;
-      GtkAllocation child_clip;
 
       tmp_list = tmp_list->next;
 
@@ -759,7 +756,7 @@ gtk_layout_size_allocate (GtkWidget           *widget,
       allocation.width = requisition.width;
       allocation.height = requisition.height;
 
-      gtk_widget_size_allocate (child->widget, &allocation, -1, &child_clip);
+      gtk_widget_size_allocate (child->widget, &allocation, -1);
     }
 
   gtk_layout_set_hadjustment_values (layout);
