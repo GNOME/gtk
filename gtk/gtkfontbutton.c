@@ -84,6 +84,8 @@ struct _GtkFontButtonPrivate
   PangoFontFace        *font_face;
   PangoFontMap         *font_map;
   gint                  font_size;
+  char                 *font_features;
+  char                 *language;
   gchar                *preview_text;
   GtkFontFilterFunc     font_filter;
   gpointer              font_filter_data;
@@ -162,6 +164,12 @@ clear_font_data (GtkFontButton *font_button)
 
   g_free (priv->fontname);
   priv->fontname = NULL;
+
+  g_free (priv->font_features);
+  priv->font_features = NULL;
+
+  g_free (priv->language);
+  priv->language = NULL;
 }
 
 static void
@@ -721,6 +729,12 @@ gtk_font_button_get_property (GObject    *object,
     case GTK_FONT_CHOOSER_PROP_FONT_DESC:
       g_value_set_boxed (value, gtk_font_button_get_font_desc (font_button));
       break;
+    case GTK_FONT_CHOOSER_PROP_FONT_FEATURES:
+      g_value_set_string (value, priv->font_features);
+      break;
+    case GTK_FONT_CHOOSER_PROP_LANGUAGE:
+      g_value_set_string (value, priv->language);
+      break;
     case GTK_FONT_CHOOSER_PROP_LEVEL:
       g_value_set_flags (value, priv->level);
       break;
@@ -1170,6 +1184,10 @@ response_cb (GtkDialog *dialog,
   if (priv->font_face)
     g_object_ref (priv->font_face);
   priv->font_size = gtk_font_chooser_get_font_size (font_chooser);
+  g_free (priv->font_features);
+  g_object_get (font_chooser, "font-features", &priv->font_features, NULL);
+  g_free (priv->language);
+  g_object_get (font_chooser, "language", &priv->language, NULL);
 
   /* Set label font */
   gtk_font_button_update_font_info (font_button);
@@ -1177,6 +1195,7 @@ response_cb (GtkDialog *dialog,
   g_object_notify (G_OBJECT (font_button), "font");
   g_object_notify (G_OBJECT (font_button), "font-desc");
   g_object_notify (G_OBJECT (font_button), "font-name");
+  g_object_notify (G_OBJECT (font_button), "font-features");
 
   g_object_thaw_notify (object);
 
