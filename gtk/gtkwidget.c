@@ -693,7 +693,6 @@ static gboolean event_surface_is_still_viewable (const GdkEvent *event);
 static void gtk_widget_update_input_shape (GtkWidget *widget);
 
 static gboolean gtk_widget_class_get_visible_by_default (GtkWidgetClass *widget_class);
-static void gtk_widget_set_clip (GtkWidget *widget, const GtkAllocation *clip);
 static void _gtk_widget_propagate_hierarchy_changed (GtkWidget *widget,
                                                      GtkWidget *previous_toplevel);
 
@@ -2996,7 +2995,6 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   priv->allocation.y = -1;
   priv->allocation.width = 0;
   priv->allocation.height = 0;
-  priv->clip = priv->allocation;
   priv->user_alpha = 255;
   priv->alpha = 255;
   priv->surface = NULL;
@@ -4262,7 +4260,6 @@ gtk_widget_size_allocate (GtkWidget           *widget,
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GdkRectangle real_allocation;
-  GdkRectangle old_clip;
   GdkRectangle adjusted_allocation;
   gboolean alloc_needed;
   gboolean size_changed;
@@ -4330,7 +4327,6 @@ gtk_widget_size_allocate (GtkWidget           *widget,
   /* Preserve request/allocate ordering */
   priv->alloc_needed = FALSE;
 
-  old_clip = priv->clip;
   real_allocation = *allocation;
 
   priv->allocated_size = *allocation;
@@ -4441,9 +4437,6 @@ gtk_widget_size_allocate (GtkWidget           *widget,
 
   if (!alloc_needed && !size_changed && !baseline_changed)
     {
-      gtk_widget_set_clip (widget, &priv->reported_clip);
-      *out_clip = priv->clip;
-
       /* Still have to move the window... */
       if (_gtk_widget_get_realized (widget) &&
           _gtk_widget_get_has_surface (widget))
@@ -4489,20 +4482,11 @@ gtk_widget_size_allocate (GtkWidget           *widget,
     }
 #endif
 
-  priv->reported_clip = new_clip;
-  gtk_widget_set_clip (widget, &priv->reported_clip);
-  *out_clip = priv->clip;
-
   gtk_widget_ensure_resize (widget);
   priv->alloc_needed = FALSE;
   priv->alloc_needed_on_child = FALSE;
 
 check_clip:
-  size_changed |= (old_clip.width != priv->clip.width ||
-                   old_clip.height != priv->clip.height);
-  position_changed |= (old_clip.x != priv->clip.x ||
-                      old_clip.y != priv->clip.y);
-
   if (position_changed || size_changed || baseline_changed)
     gtk_widget_queue_draw (widget);
 
@@ -5294,10 +5278,9 @@ gtk_widget_draw_internal (GtkWidget *widget,
     return;
 
   cairo_rectangle (cr,
-                   widget->priv->clip.x - widget->priv->allocation.x,
-                   widget->priv->clip.y - widget->priv->allocation.y,
-                   widget->priv->clip.width,
-                   widget->priv->clip.height);
+                   0, 0,
+                   widget->priv->allocation.width,
+                   widget->priv->allocation.height);
   cairo_clip (cr);
 
   if (gdk_cairo_get_clip_rectangle (cr, NULL))
@@ -6782,7 +6765,6 @@ _gtk_widget_set_visible_flag (GtkWidget *widget,
       priv->allocation.y = -1;
       priv->allocation.width = 0;
       priv->allocation.height = 0;
-      memset (&priv->clip, 0, sizeof (priv->clip));
       memset (&priv->allocated_size, 0, sizeof (priv->allocated_size));
       priv->allocated_size_baseline = 0;
       gtk_widget_invalidate_paintable_size (widget);
@@ -11617,112 +11599,6 @@ gtk_widget_get_has_tooltip (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_get_clip:
- * @widget: a #GtkWidget
- * @clip: (out): a pointer to a #GtkAllocation to copy to
- *
- * Retrieves the widget’s clip area.
- *
- * The clip area is the area in which all of @widget's drawing will
- * happen. Other toolkits call it the bounding box.
- *
- * Historically, in GTK+ the clip area has been equal to the allocation
- * retrieved via gtk_widget_get_allocation().
- */
-void
-gtk_widget_get_clip (GtkWidget     *widget,
-                     GtkAllocation *clip)
-{
-  GtkWidgetPrivate *priv;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (clip != NULL);
-
-  priv = widget->priv;
-
-  *clip = priv->clip;
-}
-
-/**
- * gtk_widget_set_clip:
- * @widget: a #GtkWidget
- * @clip: a pointer to a #GtkAllocation to copy from
- *
- * Sets the widget’s clip.  This must not be used directly,
- * but from within a widget’s size_allocate method.
- *
- * The clip set should be the area that @widget draws on. If @widget is a
- * #GtkContainer, the area must contain all children's clips.
- *
- * If this function is not called by @widget during a ::size-allocate handler,
- * the clip will be set to @widget's allocation.
- */
-static void
-gtk_widget_set_clip (GtkWidget           *widget,
-                     const GtkAllocation *clip)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GtkBorder shadow;
-  GtkBorder margin;
-  GtkCssStyle *style;
-  GdkRectangle new_clip;
-  GtkAllocation allocation;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (_gtk_widget_get_visible (widget) || _gtk_widget_is_toplevel (widget));
-  g_return_if_fail (clip != NULL);
-
-  style = gtk_css_node_get_style (priv->cssnode);
-  get_box_margin (style, &margin);
-  _gtk_css_shadows_value_get_extents (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BOX_SHADOW), &shadow);
-
-  /* The given clip is in @widget's coordinates, but we need it to be in the parent's coordinates,
-   * just like priv->allocation is. So first we transform the clip, then union it with
-   * the allocation (minus css margins) and then we add the box shadow size. */
-  new_clip = *clip;
-  new_clip.x += priv->allocation.x + margin.left;
-  new_clip.y += priv->allocation.y + margin.top;
-
-  allocation = priv->allocation;
-  allocation.x += margin.left;
-  allocation.y += margin.top;
-  allocation.width -= margin.left + margin.right;
-  allocation.height -= margin.top + margin.bottom;
-
-  gdk_rectangle_union (&allocation, &new_clip, &priv->clip);
-  priv->clip.x -= shadow.left;
-  priv->clip.y -= shadow.top;
-  priv->clip.width += shadow.left + shadow.right;
-  priv->clip.height += shadow.top + shadow.bottom;
-
-#ifdef G_ENABLE_DEBUG
-  if (GTK_DISPLAY_DEBUG_CHECK (gtk_widget_get_display (widget), GEOMETRY))
-    {
-      gint depth;
-      GtkWidget *parent;
-      const gchar *name;
-      const char *cssname;
-
-      depth = 0;
-      parent = widget;
-      while (parent)
-        {
-          depth++;
-          parent = _gtk_widget_get_parent (parent);
-        }
-
-      name = g_type_name (G_OBJECT_TYPE (G_OBJECT (widget)));
-      cssname = gtk_css_node_get_name (priv->cssnode);
-      g_message ("gtk_widget_set_clip:      %s %s %d %d %d %d",
-                 name,
-                 cssname,
-                 priv->clip.x, priv->clip.y,
-                 priv->clip.width, priv->clip.height);
-    }
-#endif /* G_ENABLE_DEBUG */
-}
-
-/**
  * gtk_widget_get_allocated_size:
  * @widget: a #GtkWidget
  * @allocation: (out): a pointer to a #GtkAllocation to copy to
@@ -13651,37 +13527,6 @@ gtk_widget_maybe_add_debug_render_nodes (GtkWidget             *widget,
       priv->highlight_resize = FALSE;
       gtk_widget_queue_draw (widget);
     }
-  if (GTK_DISPLAY_DEBUG_CHECK (display, GEOMETRY))
-    {
-      GdkRGBA clip_color = {0, 0, 1, 0.7};
-      GtkAllocation offset_clip;
-      graphene_rect_t bounds;
-
-      offset_clip = priv->clip;
-      offset_clip.x -= priv->allocation.x;
-      offset_clip.y -= priv->allocation.y;
-
-      graphene_rect_init (&bounds,
-                          offset_clip.x, offset_clip.y,
-                          offset_clip.width, 1);
-      gtk_snapshot_append_color (snapshot, &clip_color, &bounds, "Clip Top");
-
-      graphene_rect_init (&bounds,
-                          offset_clip.x, offset_clip.y + offset_clip.height - 1,
-                          offset_clip.width, 1);
-      gtk_snapshot_append_color (snapshot, &clip_color, &bounds, "Clip bottom");
-
-      graphene_rect_init (&bounds,
-                          offset_clip.x, offset_clip.y + 1,
-                          1, offset_clip.height - 2);
-      gtk_snapshot_append_color (snapshot, &clip_color, &bounds, "Clip left");
-
-      graphene_rect_init (&bounds,
-                          offset_clip.x + offset_clip.width - 1, offset_clip.y + 1,
-                          1, offset_clip.height - 2);
-      gtk_snapshot_append_color (snapshot, &clip_color, &bounds, "Clip right");
-
-    }
 #endif
 }
 
@@ -13723,9 +13568,10 @@ gtk_widget_create_render_node (GtkWidget   *widget,
       graphene_rect_t bounds;
       cairo_rectangle_int_t offset_clip;
 
-      offset_clip = priv->clip;
-      offset_clip.x -= priv->allocation.x;
-      offset_clip.y -= priv->allocation.y;
+      offset_clip.x = 0;
+      offset_clip.y = 0;
+      offset_clip.width = priv->allocation.width;
+      offset_clip.height = priv->allocation.height;
 
       graphene_rect_init (&bounds,
                           offset_clip.x,
@@ -13774,9 +13620,10 @@ gtk_widget_create_render_node (GtkWidget   *widget,
           graphene_rect_t bounds;
           cairo_rectangle_int_t offset_clip;
 
-          offset_clip = priv->clip;
-          offset_clip.x -= priv->allocation.x;
-          offset_clip.y -= priv->allocation.y;
+          offset_clip.x = 0;
+          offset_clip.y = 0;
+          offset_clip.width = priv->allocation.width;
+          offset_clip.height = priv->allocation.height;
 
           graphene_rect_init (&bounds,
                               offset_clip.x,

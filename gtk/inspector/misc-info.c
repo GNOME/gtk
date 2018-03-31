@@ -57,8 +57,6 @@ struct _GtkInspectorMiscInfoPrivate {
   GtkWidget *allocated_size;
   GtkWidget *baseline_row;
   GtkWidget *baseline;
-  GtkWidget *clip_area_row;
-  GtkWidget *clip_area;
   GtkWidget *frame_clock_row;
   GtkWidget *frame_clock;
   GtkWidget *frame_clock_button;
@@ -142,7 +140,6 @@ allocation_changed (GtkWidget    *w,
                     GtkInspectorMiscInfo *sl)
 {
   GtkAllocation alloc;
-  GtkAllocation clip;
   gchar *size_label;
   GEnumClass *class;
   GEnumValue *value;
@@ -157,14 +154,6 @@ allocation_changed (GtkWidget    *w,
 
   size_label = g_strdup_printf ("%d", gtk_widget_get_allocated_baseline (w));
   gtk_label_set_label (GTK_LABEL (sl->priv->baseline), size_label);
-  g_free (size_label);
-
-  gtk_widget_get_clip (w, &clip);
-
-  size_label = g_strdup_printf ("%d × %d +%d +%d",
-                                clip.width, clip.height,
-                                clip.x, clip.y);
-  gtk_label_set_label (GTK_LABEL (sl->priv->clip_area), size_label);
   g_free (size_label);
 
   class = G_ENUM_CLASS (g_type_class_ref (GTK_TYPE_SIZE_REQUEST_MODE));
@@ -455,7 +444,6 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
       gtk_widget_show (sl->priv->request_mode_row);
       gtk_widget_show (sl->priv->allocated_size_row);
       gtk_widget_show (sl->priv->baseline_row);
-      gtk_widget_show (sl->priv->clip_area_row);
       gtk_widget_show (sl->priv->mnemonic_label_row);
       gtk_widget_show (sl->priv->tick_callback_row);
       gtk_widget_show (sl->priv->accessible_role_row);
@@ -480,7 +468,6 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
       gtk_widget_hide (sl->priv->mnemonic_label_row);
       gtk_widget_hide (sl->priv->allocated_size_row);
       gtk_widget_hide (sl->priv->baseline_row);
-      gtk_widget_hide (sl->priv->clip_area_row);
       gtk_widget_hide (sl->priv->tick_callback_row);
       gtk_widget_hide (sl->priv->accessible_role_row);
       gtk_widget_hide (sl->priv->accessible_name_row);
@@ -635,8 +622,6 @@ gtk_inspector_misc_info_class_init (GtkInspectorMiscInfoClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, allocated_size);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, baseline_row);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, baseline);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, clip_area_row);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, clip_area);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, frame_clock_row);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, frame_clock);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, frame_clock_button);

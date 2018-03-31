@@ -300,32 +300,6 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkListBoxRow" id="clip_area_row">
-                    <property name="activatable">0</property>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="margin">10</property>
-                        <property name="spacing">40</property>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="label" translatable="yes">Clip Area</property>
-                            <property name="halign">start</property>
-                            <property name="valign">baseline</property>
-                            <property name="xalign">0</property>
-                            <property name="hexpand">1</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="clip_area">
-                            <property name="halign">end</property>
-                            <property name="valign">baseline</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
                   <object class="GtkListBoxRow" id="frame_clock_row">
                     <property name="activatable">0</property>
                     <child>
