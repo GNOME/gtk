@@ -99,11 +99,13 @@ struct _GtkSnapshotClass {
   GObjectClass           parent_class; /* it's really GdkSnapshotClass, but don't tell anyone! */
 };
 
-GtkSnapshot *   gtk_snapshot_new_child                  (GtkSnapshot            *parent,
-                                                         const char             *name,
-                                                         ...) G_GNUC_PRINTF (2, 3);
-void            gtk_snapshot_append_node_internal       (GtkSnapshot            *snapshot,
-                                                         GskRenderNode          *node);
+GtkSnapshot *           gtk_snapshot_new_child                  (GtkSnapshot            *parent,
+                                                                 const char             *name,
+                                                                 ...) G_GNUC_PRINTF (2, 3);
+void                    gtk_snapshot_append_node_internal       (GtkSnapshot            *snapshot,
+                                                                 GskRenderNode          *node);
+gboolean                gtk_snapshot_get_clip                   (GtkSnapshot            *snapshot,
+                                                                 graphene_rect_t        *out_clip);
 
 G_END_DECLS
 
