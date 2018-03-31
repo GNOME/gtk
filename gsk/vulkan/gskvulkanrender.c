@@ -86,7 +86,12 @@ gsk_vulkan_render_setup (GskVulkanRender       *self,
     }
   if (clip)
     {
-      self->clip = cairo_region_reference ((cairo_region_t *) clip);
+      cairo_rectangle_int_t extents;
+      cairo_region_get_extents (clip, &extents);
+      self->clip = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
+                                                      extents.x, extents.y,
+                                                      extents.width, extents.height
+                                                  });
     }
   else
     {
