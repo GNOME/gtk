@@ -4592,7 +4592,7 @@ gtk_text_view_state_flags_changed (GtkWidget     *widget,
   GtkTextViewPrivate *priv = text_view->priv;
   GtkStateFlags state;
 
-  if (!gtk_widget_is_sensitive (widget))
+  if (!gtk_widget_is_focus (widget))
     {
       /* Clear any selection */
       gtk_text_view_unselect (text_view);
