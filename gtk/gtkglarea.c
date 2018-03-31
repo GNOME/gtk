@@ -632,13 +632,12 @@ gtk_gl_area_unrealize (GtkWidget *widget)
 static void
 gtk_gl_area_size_allocate (GtkWidget           *widget,
                            const GtkAllocation *allocation,
-                           int                  baseline,
-                           GtkAllocation       *out_clip)
+                           int                  baseline)
 {
   GtkGLArea *area = GTK_GL_AREA (widget);
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
 
-  GTK_WIDGET_CLASS (gtk_gl_area_parent_class)->size_allocate (widget, allocation, baseline, out_clip);
+  GTK_WIDGET_CLASS (gtk_gl_area_parent_class)->size_allocate (widget, allocation, baseline);
 
   if (gtk_widget_get_realized (widget))
     priv->needs_resize = TRUE;

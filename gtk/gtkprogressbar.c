@@ -144,8 +144,7 @@ static void gtk_progress_bar_get_property         (GObject        *object,
                                                    GParamSpec     *pspec);
 static void gtk_progress_bar_size_allocate        (GtkWidget           *widget,
                                                    const GtkAllocation *allocation,
-                                                   int                  baseline,
-                                                   GtkAllocation       *out_clip);
+                                                   int                  baseline);
 
 static void     gtk_progress_bar_act_mode_enter   (GtkProgressBar *progress);
 static void     gtk_progress_bar_act_mode_leave   (GtkProgressBar *progress);
@@ -373,8 +372,7 @@ update_node_classes (GtkProgressBar *pbar)
 static void
 allocate_trough (GtkGizmo            *gizmo,
                  const GtkAllocation *allocation,
-                 int                  baseline,
-                 GtkAllocation       *out_clip)
+                 int                  baseline)
 
 {
   GtkProgressBar *pbar = GTK_PROGRESS_BAR (gtk_widget_get_parent (GTK_WIDGET (gizmo)));
@@ -442,7 +440,7 @@ allocate_trough (GtkGizmo            *gizmo,
         }
     }
 
-  gtk_widget_size_allocate (priv->progress_widget, &alloc,-1, out_clip);
+  gtk_widget_size_allocate (priv->progress_widget, &alloc,-1);
 
 }
 
@@ -620,15 +618,12 @@ get_current_text (GtkProgressBar *pbar)
 static void
 gtk_progress_bar_size_allocate (GtkWidget           *widget,
                                 const GtkAllocation *allocation,
-                                int                  baseline,
-                                GtkAllocation       *out_clip)
+                                int                  baseline)
 {
-  GtkAllocation child_clip = *allocation;
   GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (GTK_PROGRESS_BAR (widget));
   gint bar_width, bar_height;
   gint text_width, text_height, text_min, text_nat;
   GtkAllocation alloc;
-  GtkAllocation text_clip;
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -650,8 +645,7 @@ gtk_progress_bar_size_allocate (GtkWidget           *widget,
   alloc.width = bar_width;
   alloc.height = bar_height;
 
-  gtk_widget_size_allocate (priv->trough_widget, &alloc, -1, &child_clip);
-  gdk_rectangle_union (out_clip, &child_clip, out_clip);
+  gtk_widget_size_allocate (priv->trough_widget, &alloc, -1);
 
   if (!priv->show_text)
     return;
@@ -680,8 +674,7 @@ gtk_progress_bar_size_allocate (GtkWidget           *widget,
       alloc.height = text_height;
     }
 
-  gtk_widget_size_allocate (priv->label, &alloc, -1, &text_clip);
-  gdk_rectangle_union (out_clip, &text_clip, out_clip);
+  gtk_widget_size_allocate (priv->label, &alloc, -1);
 }
 
 static void

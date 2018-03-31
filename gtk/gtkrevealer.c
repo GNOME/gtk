@@ -99,8 +99,7 @@ static void     gtk_revealer_real_add                            (GtkContainer  
                                                                   GtkWidget     *child);
 static void     gtk_revealer_real_size_allocate                  (GtkWidget           *widget,
                                                                   const GtkAllocation *allocation,
-                                                                  int                  baseline,
-                                                                  GtkAllocation       *out_clip);
+                                                                  int                  baseline);
 static void gtk_revealer_measure (GtkWidget      *widget,
                                   GtkOrientation  orientation,
                                   int             for_size,
@@ -366,8 +365,7 @@ gtk_revealer_real_add (GtkContainer *container,
 static void
 gtk_revealer_real_size_allocate (GtkWidget           *widget,
                                  const GtkAllocation *allocation,
-                                 int                  baseline,
-                                 GtkAllocation       *out_clip)
+                                 int                  baseline)
 {
   GtkRevealer *revealer = GTK_REVEALER (widget);
   GtkWidget *child;
@@ -378,7 +376,7 @@ gtk_revealer_real_size_allocate (GtkWidget           *widget,
       GtkAllocation child_allocation;
 
       gtk_revealer_get_child_allocation (revealer, allocation, &child_allocation);
-      gtk_widget_size_allocate (child, &child_allocation, -1, out_clip);
+      gtk_widget_size_allocate (child, &child_allocation, -1);
     }
 }
 

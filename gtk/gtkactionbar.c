@@ -271,11 +271,10 @@ gtk_action_bar_snapshot (GtkWidget   *widget,
 static void
 gtk_action_bar_size_allocate (GtkWidget           *widget,
                               const GtkAllocation *allocation,
-                              int                  baseline,
-                              GtkAllocation       *out_clip)
+                              int                  baseline)
 {
   GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (GTK_ACTION_BAR (widget));
-  gtk_widget_size_allocate (priv->revealer, allocation, baseline, out_clip);
+  gtk_widget_size_allocate (priv->revealer, allocation, baseline);
 }
 
 static void

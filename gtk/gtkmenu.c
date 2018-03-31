@@ -234,8 +234,7 @@ static void     gtk_menu_realize           (GtkWidget        *widget);
 static void     gtk_menu_unrealize         (GtkWidget        *widget);
 static void     gtk_menu_size_allocate     (GtkWidget           *widget,
                                             const GtkAllocation *allocation,
-                                            int                  baseline,
-                                            GtkAllocation       *out_clip);
+                                            int                  baseline);
 static void     gtk_menu_show              (GtkWidget        *widget);
 static void     gtk_menu_snapshot          (GtkWidget        *widget,
                                             GtkSnapshot      *snapshot);
@@ -2634,8 +2633,7 @@ calculate_line_heights (GtkMenu *menu,
 static void
 gtk_menu_size_allocate (GtkWidget           *widget,
                         const GtkAllocation *allocation,
-                        int                  baseline,
-                        GtkAllocation       *out_clip)
+                        int                  baseline)
 {
   GtkMenu *menu;
   GtkMenuPrivate *priv;
@@ -2681,13 +2679,13 @@ gtk_menu_size_allocate (GtkWidget           *widget,
   arrow_allocation.height = arrow_border.top;
 
   if (priv->upper_arrow_visible)
-    gtk_widget_size_allocate (priv->top_arrow_widget, &arrow_allocation, -1, out_clip);
+    gtk_widget_size_allocate (priv->top_arrow_widget, &arrow_allocation, -1);
 
   arrow_allocation.y = height - y - arrow_border.bottom;
   arrow_allocation.height = arrow_border.bottom;
 
   if (priv->lower_arrow_visible)
-    gtk_widget_size_allocate (priv->bottom_arrow_widget, &arrow_allocation, -1, out_clip);
+    gtk_widget_size_allocate (priv->bottom_arrow_widget, &arrow_allocation, -1);
 
   width = MAX (1, width);
   height = MAX (1, height);
@@ -2732,7 +2730,7 @@ gtk_menu_size_allocate (GtkWidget           *widget,
               gtk_menu_item_toggle_size_allocate (GTK_MENU_ITEM (child),
                                                   priv->toggle_size);
 
-              gtk_widget_size_allocate (child, &child_allocation, -1, out_clip);
+              gtk_widget_size_allocate (child, &child_allocation, -1);
             }
         }
     }

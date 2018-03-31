@@ -66,14 +66,13 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkBin, gtk_bin, GTK_TYPE_CONTAINER)
 static void
 gtk_bin_size_allocate (GtkWidget           *widget,
                        const GtkAllocation *allocation,
-                       int                  baseline,
-                       GtkAllocation       *out_clip)
+                       int                  baseline)
 {
   GtkBin *bin = GTK_BIN (widget);
   GtkBinPrivate *priv = gtk_bin_get_instance_private (bin);
 
   if (priv->child && gtk_widget_get_visible (priv->child))
-    gtk_widget_size_allocate (priv->child, allocation, baseline, out_clip);
+    gtk_widget_size_allocate (priv->child, allocation, baseline);
 }
 
 static void

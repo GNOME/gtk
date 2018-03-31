@@ -143,8 +143,7 @@ struct _GtkBoxChild
 
 static void gtk_box_size_allocate         (GtkWidget              *widget,
                                            const GtkAllocation    *allocation,
-                                           int                     baseline,
-                                           GtkAllocation          *out_clip);
+                                           int                     baseline);
 
 static void gtk_box_direction_changed  (GtkWidget        *widget,
                                         GtkTextDirection  previous_direction);
@@ -371,8 +370,7 @@ get_spacing (GtkBox *box)
 static void
 gtk_box_size_allocate (GtkWidget           *widget,
                        const GtkAllocation *allocation,
-                       int                  baseline,
-                       GdkRectangle        *out_clip)
+                       int                  baseline)
 {
   GtkBox *box = GTK_BOX (widget);
   GtkBoxPrivate *priv = gtk_box_get_instance_private (box);
@@ -398,7 +396,6 @@ gtk_box_size_allocate (GtkWidget           *widget,
   gint x = 0, y = 0, i;
   gint child_size;
   gint spacing;
-  GdkRectangle clip;
 
 
   count_expand_children (box, &nvis_children, &nexpand_children);
@@ -660,8 +657,7 @@ gtk_box_size_allocate (GtkWidget           *widget,
 		  child_allocation.y -= child_size;
 		}
 	    }
-	  gtk_widget_size_allocate (child->widget, &child_allocation, baseline, &clip);
-          gdk_rectangle_union (&clip, out_clip, out_clip);
+	  gtk_widget_size_allocate (child->widget, &child_allocation, baseline);
 
 	  i++;
 	}

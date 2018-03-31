@@ -98,8 +98,7 @@ static void gtk_viewport_snapshot                 (GtkWidget        *widget,
 						   GtkSnapshot      *snapshot);
 static void gtk_viewport_size_allocate            (GtkWidget           *widget,
                                                    const GtkAllocation *allocation,
-                                                   int                  baseline,
-                                                   GtkAllocation       *out_clip);
+                                                   int                  baseline);
 static void gtk_viewport_adjustment_value_changed (GtkAdjustment    *adjustment,
 						   gpointer          data);
 static void viewport_set_adjustment               (GtkViewport      *viewport,
@@ -525,8 +524,7 @@ gtk_viewport_snapshot (GtkWidget   *widget,
 static void
 gtk_viewport_size_allocate (GtkWidget           *widget,
                             const GtkAllocation *allocation,
-                            int                  baseline,
-                            GtkAllocation       *out_clip)
+                            int                  baseline)
 {
   GtkViewport *viewport = GTK_VIEWPORT (widget);
   GtkViewportPrivate *priv = gtk_viewport_get_instance_private (viewport);
@@ -543,7 +541,7 @@ gtk_viewport_size_allocate (GtkWidget           *widget,
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child && gtk_widget_get_visible (child))
     {
-      GtkAllocation child_allocation, child_clip;
+      GtkAllocation child_allocation;
 
       child_allocation.x = - gtk_adjustment_get_value (hadjustment);
       child_allocation.y = - gtk_adjustment_get_value (vadjustment);
@@ -551,7 +549,7 @@ gtk_viewport_size_allocate (GtkWidget           *widget,
       child_allocation.height = gtk_adjustment_get_upper (vadjustment);
 
       /* Explicitly ignore the child clip here. */
-      gtk_widget_size_allocate (child, &child_allocation, -1, &child_clip);
+      gtk_widget_size_allocate (child, &child_allocation, -1);
     }
 
   g_object_thaw_notify (G_OBJECT (hadjustment));
