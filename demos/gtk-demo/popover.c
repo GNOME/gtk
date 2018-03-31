@@ -58,8 +58,7 @@ static void
 entry_size_allocate_cb (GtkEntry            *entry,
                         const GtkAllocation *allocation,
                         int                  baseline,
-                        GtkAllocation       *out_clip,
-                        gpointer       user_data)
+                        gpointer             user_data)
 {
   GtkEntryIconPosition popover_pos;
   GtkPopover *popover = user_data;

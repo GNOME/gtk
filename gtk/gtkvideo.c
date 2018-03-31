@@ -87,12 +87,11 @@ gtk_video_measure (GtkWidget      *widget,
 static void
 gtk_video_size_allocate (GtkWidget           *widget,
                          const GtkAllocation *allocation,
-                         int                  baseline,
-                         GtkAllocation       *out_clip)
+                         int                  baseline)
 {
   GtkVideo *self = GTK_VIDEO (widget);
 
-  gtk_widget_size_allocate (self->box, allocation, baseline, out_clip);
+  gtk_widget_size_allocate (self->box, allocation, baseline);
 }
 
 static void

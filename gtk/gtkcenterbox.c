@@ -384,12 +384,10 @@ gtk_center_box_measure (GtkWidget      *widget,
 static void
 gtk_center_box_size_allocate (GtkWidget           *widget,
                               const GtkAllocation *allocation,
-                              int                  baseline,
-                              GtkAllocation       *out_clip)
+                              int                  baseline)
 {
   GtkCenterBox *self = GTK_CENTER_BOX (widget);
   GtkAllocation child_allocation;
-  GtkAllocation child_clip;
   GtkWidget *child[3];
   int child_size[3];
   int child_pos[3];
@@ -529,8 +527,7 @@ gtk_center_box_size_allocate (GtkWidget           *widget,
           child_allocation.height = child_size[i];
         }
 
-      gtk_widget_size_allocate (child[i], &child_allocation, allocation->y + baseline, &child_clip);
-      gdk_rectangle_union (out_clip, &child_clip, out_clip);
+      gtk_widget_size_allocate (child[i], &child_allocation, allocation->y + baseline);
     }
 }
 

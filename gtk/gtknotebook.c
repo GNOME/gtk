@@ -372,8 +372,7 @@ static void gtk_notebook_measure (GtkWidget      *widget,
                                   int            *natural_baseline);
 static void gtk_notebook_size_allocate       (GtkWidget           *widget,
                                               const GtkAllocation *allocation,
-                                              int                  baseline,
-                                              GtkAllocation       *out_clip);
+                                              int                  baseline);
 static void gtk_notebook_snapshot            (GtkWidget        *widget,
                                               GtkSnapshot      *snapshot);
 static gboolean gtk_notebook_popup_menu      (GtkWidget        *widget);
@@ -463,8 +462,7 @@ static void gtk_notebook_measure_tabs        (GtkGizmo         *gizmo,
                                               gint             *natural_baseline);
 static void gtk_notebook_allocate_tabs       (GtkGizmo            *gizmo,
                                               const GtkAllocation *allocation,
-                                              int               baseline,
-                                              GtkAllocation    *out_clip);
+                                              int               baseline);
 static gboolean gtk_notebook_snapshot_tabs   (GtkGizmo         *gizmo,
                                               GtkSnapshot      *snapshot);
 
@@ -2064,8 +2062,7 @@ gtk_notebook_measure (GtkWidget      *widget,
 static void
 gtk_notebook_allocate_tabs (GtkGizmo            *gizmo,
                             const GtkAllocation *allocation,
-                            int                  baseline,
-                            GtkAllocation       *out_clip)
+                            int                  baseline)
 {
   GtkWidget *widget = gtk_widget_get_parent (gtk_widget_get_parent (GTK_WIDGET (gizmo)));
   GtkNotebook *notebook = GTK_NOTEBOOK (gtk_widget_get_parent (widget));
@@ -2076,13 +2073,12 @@ gtk_notebook_allocate_tabs (GtkGizmo            *gizmo,
 static void
 gtk_notebook_size_allocate (GtkWidget           *widget,
                             const GtkAllocation *allocation,
-                            int                  baseline,
-                            GtkAllocation       *out_clip)
+                            int                  baseline)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
 
-  gtk_widget_size_allocate (priv->box, allocation, -1, out_clip);
+  gtk_widget_size_allocate (priv->box, allocation, -1);
 }
 
 static void
@@ -3929,8 +3925,7 @@ measure_tab (GtkGizmo       *gizmo,
 static void
 allocate_tab (GtkGizmo            *gizmo,
               const GtkAllocation *allocation,
-              int                  baseline,
-              GtkAllocation       *out_clip)
+              int                  baseline)
 {
   GtkNotebook *notebook = g_object_get_data (G_OBJECT (gizmo), "notebook");
   GtkNotebookPrivate *priv = notebook->priv;
@@ -3977,7 +3972,7 @@ allocate_tab (GtkGizmo            *gizmo,
         }
     }
 
-  gtk_widget_size_allocate (page->tab_label, &child_allocation, baseline, out_clip);
+  gtk_widget_size_allocate (page->tab_label, &child_allocation, baseline);
 }
 
 static gint
@@ -4525,7 +4520,7 @@ gtk_notebook_allocate_arrows (GtkNotebook   *notebook,
                               GtkAllocation *allocation)
 {
   GtkNotebookPrivate *priv = notebook->priv;
-  GtkAllocation arrow_allocation, arrow_clip;
+  GtkAllocation arrow_allocation;
   gint size1, size2, min, nat;
   guint i, ii;
 
@@ -4553,8 +4548,7 @@ gtk_notebook_allocate_arrows (GtkNotebook   *notebook,
               arrow_allocation.width = min;
               gtk_widget_size_allocate (priv->arrow_widget[ii],
                                         &arrow_allocation,
-                                        -1,
-                                        &arrow_clip);
+                                        -1);
               allocation->x += min;
               allocation->width -= min;
             }
@@ -4564,8 +4558,7 @@ gtk_notebook_allocate_arrows (GtkNotebook   *notebook,
               arrow_allocation.width = min;
               gtk_widget_size_allocate (priv->arrow_widget[ii],
                                         &arrow_allocation,
-                                        -1,
-                                        &arrow_clip);
+                                        -1);
               allocation->width -= min;
             }
         }
@@ -4587,11 +4580,11 @@ gtk_notebook_allocate_arrows (GtkNotebook   *notebook,
           arrow_allocation.width = size1;
           arrow_allocation.height = min;
           if (priv->arrow_widget[0])
-            gtk_widget_size_allocate (priv->arrow_widget[0], &arrow_allocation, -1, &arrow_clip);
+            gtk_widget_size_allocate (priv->arrow_widget[0], &arrow_allocation, -1);
           arrow_allocation.x += size1;
           arrow_allocation.width = size2;
           if (priv->arrow_widget[1])
-            gtk_widget_size_allocate (priv->arrow_widget[1], &arrow_allocation, -1, &arrow_clip);
+            gtk_widget_size_allocate (priv->arrow_widget[1], &arrow_allocation, -1);
           allocation->y += min;
           allocation->height -= min;
         }
@@ -4609,11 +4602,11 @@ gtk_notebook_allocate_arrows (GtkNotebook   *notebook,
           arrow_allocation.width = size1;
           arrow_allocation.height = min;
           if (priv->arrow_widget[2])
-            gtk_widget_size_allocate (priv->arrow_widget[2], &arrow_allocation, -1, &arrow_clip);
+            gtk_widget_size_allocate (priv->arrow_widget[2], &arrow_allocation, -1);
           arrow_allocation.x += size1;
           arrow_allocation.width = size2;
           if (priv->arrow_widget[3])
-            gtk_widget_size_allocate (priv->arrow_widget[3], &arrow_allocation, -1, &arrow_clip);
+            gtk_widget_size_allocate (priv->arrow_widget[3], &arrow_allocation, -1);
           allocation->height -= min;
         }
       break;
@@ -4959,7 +4952,7 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook          *notebook,
   GtkPositionType tab_pos;
   gint left_x, right_x, top_y, bottom_y, anchor;
   gboolean gap_left, packing_changed;
-  GtkAllocation child_allocation, drag_allocation, page_clip;
+  GtkAllocation child_allocation, drag_allocation;
   GtkOrientation tab_expand_orientation;
 
   g_assert (priv->cur_page != NULL);
@@ -5141,18 +5134,18 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook          *notebook,
         {
           GtkAllocation fixed_allocation = { priv->drag_surface_x, priv->drag_surface_y,
                                              child_allocation.width, child_allocation.height };
-          gtk_widget_size_allocate (page->tab_widget, &fixed_allocation, -1, &page_clip);
+          gtk_widget_size_allocate (page->tab_widget, &fixed_allocation, -1);
         }
       else if (page == priv->detached_tab && priv->operation == DRAG_OPERATION_DETACH)
         {
           /* needs to be allocated at 0,0
            * to be shown in the drag window */
           GtkAllocation fixed_allocation = { 0, 0, child_allocation.width, child_allocation.height };
-          gtk_widget_size_allocate (page->tab_widget, &fixed_allocation, -1, &page_clip);
+          gtk_widget_size_allocate (page->tab_widget, &fixed_allocation, -1);
         }
       else if (gtk_notebook_page_tab_label_is_visible (page))
         {
-          gtk_widget_size_allocate (page->tab_widget, &child_allocation, -1, &page_clip);
+          gtk_widget_size_allocate (page->tab_widget, &child_allocation, -1);
         }
 
       /* calculate whether to leave a gap based on reorder operation or not */

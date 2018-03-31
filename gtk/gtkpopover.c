@@ -245,14 +245,13 @@ measure_contents (GtkGizmo       *gizmo,
 static void
 allocate_contents (GtkGizmo            *gizmo,
                    const GtkAllocation *allocation,
-                   int                  baseline,
-                   GtkAllocation       *out_clip)
+                   int                  baseline)
 {
   GtkPopover *popover = GTK_POPOVER (gtk_widget_get_parent (GTK_WIDGET (gizmo)));
   GtkWidget *child = gtk_bin_get_child (GTK_BIN (popover));
 
   if (child)
-    gtk_widget_size_allocate (child, allocation, -1, out_clip);
+    gtk_widget_size_allocate (child, allocation, -1);
 }
 
 static void
@@ -1323,8 +1322,7 @@ gtk_popover_measure (GtkWidget      *widget,
 static void
 gtk_popover_size_allocate (GtkWidget           *widget,
                            const GtkAllocation *allocation,
-                           int                  baseline,
-                           GtkAllocation       *out_clip)
+                           int                  baseline)
 {
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
@@ -1357,7 +1355,7 @@ gtk_popover_size_allocate (GtkWidget           *widget,
       break;
     }
 
-  gtk_widget_size_allocate (priv->contents_widget, &child_alloc, -1, out_clip);
+  gtk_widget_size_allocate (priv->contents_widget, &child_alloc, -1);
 
   if (gtk_widget_get_realized (widget))
     {
@@ -1774,11 +1772,10 @@ _gtk_popover_parent_unmap (GtkWidget *widget,
 }
 
 static void
-_gtk_popover_parent_size_allocate (GtkWidget           *widget,
-                                   const GtkAllocation *allocation,
-                                   int                  baseline,
-                                   GtkAllocation       *out_clip,
-                                   GtkPopover          *popover)
+gtk_popover_parent_size_allocate (GtkWidget           *widget,
+                                  const GtkAllocation *allocation,
+                                  int                  baseline,
+                                  GtkPopover          *popover)
 {
   gtk_popover_update_position (popover);
 }
@@ -1968,7 +1965,7 @@ gtk_popover_update_relative_to (GtkPopover *popover,
                           popover);
       priv->size_allocate_id =
         g_signal_connect (priv->widget, "size-allocate",
-                          G_CALLBACK (_gtk_popover_parent_size_allocate),
+                          G_CALLBACK (gtk_popover_parent_size_allocate),
                           popover);
       priv->unmap_id =
         g_signal_connect (priv->widget, "unmap",

@@ -406,8 +406,7 @@ static void gtk_label_finalize          (GObject          *object);
 static void gtk_label_destroy           (GtkWidget        *widget);
 static void gtk_label_size_allocate     (GtkWidget           *widget,
                                          const GtkAllocation *allocation,
-                                         int                  baseline,
-                                         GtkAllocation       *out_clip);
+                                         int                  baseline);
 static void gtk_label_state_flags_changed   (GtkWidget        *widget,
                                              GtkStateFlags     prev_state);
 static void gtk_label_style_updated     (GtkWidget        *widget);
@@ -3654,32 +3653,9 @@ get_layout_location (GtkLabel  *label,
 }
 
 static void
-gtk_label_get_ink_rect (GtkLabel     *label,
-                        GdkRectangle *rect)
-{
-  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-  GtkStyleContext *context;
-  PangoRectangle ink_rect;
-  GtkBorder extents;
-  int x, y;
-
-  gtk_label_ensure_layout (label);
-  get_layout_location (label, &x, &y);
-  pango_layout_get_pixel_extents (priv->layout, &ink_rect, NULL);
-  context = gtk_widget_get_style_context (GTK_WIDGET (label));
-  _gtk_css_shadows_value_get_extents (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_TEXT_SHADOW), &extents);
-
-  rect->x = x + ink_rect.x - extents.left;
-  rect->width = ink_rect.width + extents.left + extents.right;
-  rect->y = y + ink_rect.y - extents.top;
-  rect->height = ink_rect.height + extents.top + extents.bottom;
-}
-
-static void
 gtk_label_size_allocate (GtkWidget           *widget,
                          const GtkAllocation *allocation,
-                         int                  baseline,
-                         GtkAllocation       *out_clip)
+                         int                  baseline)
 {
   GtkLabel *label = GTK_LABEL (widget);
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
@@ -3692,8 +3668,6 @@ gtk_label_size_allocate (GtkWidget           *widget,
       else
         pango_layout_set_width (priv->layout, -1);
     }
-
-  gtk_label_get_ink_rect (label, out_clip);
 }
 
 static void

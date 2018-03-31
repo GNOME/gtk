@@ -2012,7 +2012,6 @@ _gtk_tree_view_column_allocate (GtkTreeViewColumn *tree_column,
 {
   GtkTreeViewColumnPrivate *priv;
   GtkAllocation             allocation = { 0, 0, 0, 0 };
-  GtkAllocation clip;
 
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
 
@@ -2036,7 +2035,7 @@ _gtk_tree_view_column_allocate (GtkTreeViewColumn *tree_column,
       allocation.width  = width;
       allocation.height = height;
 
-      gtk_widget_size_allocate (priv->button, &allocation, -1, &clip);
+      gtk_widget_size_allocate (priv->button, &allocation, -1);
     }
 
   g_object_notify_by_pspec (G_OBJECT (tree_column), tree_column_props[PROP_X_OFFSET]);

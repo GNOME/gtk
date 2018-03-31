@@ -21,7 +21,6 @@ static void
 size_allocate_cb (GtkWidget     *widget,
                   GtkAllocation *alloc,
                   int            baseline,
-                  GdkRectangle  *clip,
                   gpointer       data)
 {
   if (surface)

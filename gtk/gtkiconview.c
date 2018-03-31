@@ -154,8 +154,7 @@ static void gtk_icon_view_measure (GtkWidget *widget,
                                    int            *natural_baseline);
 static void             gtk_icon_view_size_allocate             (GtkWidget           *widget,
                                                                  const GtkAllocation *allocation,
-                                                                 int                  baseline,
-                                                                 GtkAllocation       *out_clip);
+                                                                 int                  baseline);
 static void             gtk_icon_view_snapshot                  (GtkWidget          *widget,
                                                                  GtkSnapshot        *snapshot);
 static void             gtk_icon_view_motion                    (GtkEventController *controller,
@@ -1595,18 +1594,16 @@ gtk_icon_view_allocate_children (GtkIconView *icon_view)
   for (list = icon_view->priv->children; list; list = list->next)
     {
       GtkIconViewChild *child = list->data;
-      GtkAllocation clip;
 
       /* totally ignore our child's requisition */
-      gtk_widget_size_allocate (child->widget, &child->area, -1, &clip);
+      gtk_widget_size_allocate (child->widget, &child->area, -1);
     }
 }
 
 static void
 gtk_icon_view_size_allocate (GtkWidget           *widget,
                              const GtkAllocation *allocation,
-                             int                  baseline,
-                             GtkAllocation       *out_clip)
+                             int                  baseline)
 {
   GtkIconView *icon_view = GTK_ICON_VIEW (widget);
 

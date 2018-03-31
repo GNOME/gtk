@@ -363,13 +363,12 @@ gtk_combo_box_measure (GtkWidget      *widget,
 static void
 gtk_combo_box_size_allocate (GtkWidget           *widget,
                              const GtkAllocation *allocation,
-                             int                  baseline,
-                             GtkAllocation       *out_clip)
+                             int                  baseline)
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
   GtkComboBoxPrivate *priv = combo_box->priv;
 
-  gtk_widget_size_allocate (priv->box, allocation, baseline, out_clip);
+  gtk_widget_size_allocate (priv->box, allocation, baseline);
 
   if (gtk_widget_get_visible (priv->popup_widget))
     {
