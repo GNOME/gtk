@@ -13815,7 +13815,7 @@ gtk_widget_snapshot (GtkWidget   *widget,
                      GtkSnapshot *snapshot)
 {
   GtkWidgetPrivate *priv = widget->priv;
-  cairo_rectangle_int_t offset_clip;
+  graphene_rect_t offset_clip;
   double opacity;
 
   if (!_gtk_widget_is_drawable (widget))
@@ -13828,9 +13828,11 @@ gtk_widget_snapshot (GtkWidget   *widget,
     }
 
   priv = widget->priv;
-  offset_clip = priv->clip;
-  offset_clip.x -= priv->allocation.x;
-  offset_clip.y -= priv->allocation.y;
+  graphene_rect_init (&offset_clip,
+                      priv->clip.x - priv->allocation.x,
+                      priv->clip.y - priv->allocation.y,
+                      priv->clip.width,
+                      priv->clip.height);
 
   if (gtk_snapshot_clips_rect (snapshot, &offset_clip))
     return;

@@ -126,24 +126,17 @@ gsk_pango_renderer_show_text_glyphs (PangoRenderer        *renderer,
   if (ink_rect.width == 0 || ink_rect.height == 0)
     return;
 
-  gtk_snapshot_get_offset (crenderer->snapshot, &x_offset, &y_offset);
-
   graphene_rect_init (&node_bounds,
-                      x_offset + (float)x/PANGO_SCALE,
-                      y_offset + (float)y/PANGO_SCALE + ink_rect.y,
+                      (float)x/PANGO_SCALE,
+                      (float)y/PANGO_SCALE + ink_rect.y,
                       ink_rect.x + ink_rect.width,
                       ink_rect.height);
 
-  /* Remove the snapshot offset from the position here again since
-   * gtk_snapshot_clips_rect will apply it to the given rect. */
-  if (gtk_snapshot_clips_rect (crenderer->snapshot,
-                               &(cairo_rectangle_int_t){
-                                 node_bounds.origin.x - x_offset,
-                                 node_bounds.origin.y - y_offset,
-                                 ceil (node_bounds.size.width),
-                                 ceil (node_bounds.size.height)
-                               }))
+  if (gtk_snapshot_clips_rect (crenderer->snapshot, &node_bounds))
     return;
+
+  gtk_snapshot_get_offset (crenderer->snapshot, &x_offset, &y_offset);
+  graphene_rect_offset (&node_bounds, x_offset, y_offset);
 
   get_color (crenderer, PANGO_RENDER_PART_FOREGROUND, &color);
 
