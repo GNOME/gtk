@@ -2181,6 +2181,22 @@ gsk_container_node_change_func (gconstpointer elem, gsize idx, gpointer data)
   gsk_render_node_add_to_region ((GskRenderNode *) elem, data);
 }
 
+static GskDiffSettings *
+gsk_container_node_get_diff_settings (void)
+{
+  static GskDiffSettings *settings = NULL;
+
+  if (G_LIKELY (settings))
+    return settings;
+
+  settings = gsk_diff_settings_new (gsk_container_node_compare_func,
+                                    gsk_container_node_keep_func,
+                                    gsk_container_node_change_func,
+                                    gsk_container_node_change_func);
+
+  return settings;
+}
+
 static void
 gsk_container_node_diff (GskRenderNode  *node1,
                          GskRenderNode  *node2,
@@ -2193,10 +2209,7 @@ gsk_container_node_diff (GskRenderNode  *node1,
             self1->n_children,
             (gconstpointer *) self2->children,
             self2->n_children,
-            gsk_container_node_compare_func,
-            gsk_container_node_keep_func,
-            gsk_container_node_change_func,
-            gsk_container_node_change_func,
+            gsk_container_node_get_diff_settings (),
             region);
 }
 
