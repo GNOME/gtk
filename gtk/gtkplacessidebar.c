@@ -4432,7 +4432,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
    * #GtkBox. Since 3.22.30 @menu is always a #GMenu instance, to which you may 
    * add #GMenuItem instances; menu separator is added automatically if needed. 
    * If your application is able to append #GMenu items,
-   * you can set #GtkPlacesSidebar::populate-all to %TRUE to request
+   * you can set #GtkPlacesSidebar:populate-all to %TRUE to request
    * that this signal is emitted for populating context menu popups as well.
    *
    * Since: 3.10
