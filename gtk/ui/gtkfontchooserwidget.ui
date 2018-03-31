@@ -32,185 +32,279 @@
   </object>
   <template class="GtkFontChooserWidget" parent="GtkBox">
     <child>
-      <object class="GtkGrid" id="grid1">
+      <object class="GtkStack" id="stack">
         <property name="visible">1</property>
-        <property name="row-spacing">6</property>
-        <property name="column-spacing">6</property>
         <child>
-          <object class="GtkSearchEntry" id="search_entry">
+          <object class="GtkGrid" id="grid1">
             <property name="visible">1</property>
-            <property name="can-focus">1</property>
-            <property name="hexpand">1</property>
-            <property name="activates-default">1</property>
-            <property name="primary-icon-name">edit-find-symbolic</property>
-            <property name="primary-icon-activatable">0</property>
-            <property name="secondary-icon-activatable">0</property>
-            <property name="primary-icon-sensitive">0</property>
-            <property name="secondary-icon-sensitive">0</property>
-            <property name="placeholder-text" translatable="yes">Search font name</property>
-            <signal name="search-changed" handler="text_changed_cb" swapped="no"/>
-            <signal name="stop-search" handler="stop_search_cb" swapped="no"/>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">0</property>
-            <property name="width">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkStack" id="list_stack">
-            <property name="visible">1</property>
+            <property name="row-spacing">6</property>
+            <property name="column-spacing">6</property>
             <child>
-              <object class="GtkGrid">
+              <object class="GtkSearchEntry" id="search_entry">
                 <property name="visible">1</property>
-                <property name="row-spacing">6</property>
-                <property name="column-spacing">6</property>
+                <property name="can-focus">1</property>
+                <property name="hexpand">1</property>
+                <property name="activates-default">1</property>
+                <property name="primary-icon-name">edit-find-symbolic</property>
+                <property name="primary-icon-activatable">0</property>
+                <property name="secondary-icon-activatable">0</property>
+                <property name="primary-icon-sensitive">0</property>
+                <property name="secondary-icon-sensitive">0</property>
+                <property name="placeholder-text" translatable="yes">Search font name</property>
+                <signal name="search-changed" handler="text_changed_cb" swapped="no"/>
+                <signal name="stop-search" handler="stop_search_cb" swapped="no"/>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkStack" id="list_stack">
+                <property name="visible">1</property>
                 <child>
-                  <object class="GtkScrolledWindow" id="list_scrolled_window">
-                    <property name="width-request">400</property>
-                    <property name="height-request">300</property>
+                  <object class="GtkGrid">
                     <property name="visible">1</property>
-                    <property name="can-focus">1</property>
-                    <property name="hexpand">1</property>
-                    <property name="vexpand">1</property>
-                    <property name="hscrollbar-policy">never</property>
-                    <property name="shadow-type">etched-in</property>
+                    <property name="row-spacing">6</property>
+                    <property name="column-spacing">6</property>
                     <child>
-                      <object class="GtkTreeView" id="family_face_list">
+                      <object class="GtkScrolledWindow" id="list_scrolled_window">
+                        <property name="width-request">400</property>
+                        <property name="height-request">300</property>
                         <property name="visible">1</property>
                         <property name="can-focus">1</property>
-                        <property name="model">filter_model</property>
-                        <property name="headers-visible">0</property>
-                        <property name="enable-search">0</property>
-                        <property name="fixed-height-mode">1</property>
-                        <signal name="cursor-changed" handler="cursor_changed_cb" swapped="no"/>
-                        <signal name="row-activated" handler="row_activated_cb" swapped="no"/>
-                        <signal name="style-updated" handler="gtk_font_chooser_widget_set_cell_size" object="GtkFontChooserWidget" after="yes" swapped="yes"/>
-                        <child internal-child="selection">
-                          <object class="GtkTreeSelection" id="treeview-selection1">
-                            <property name="mode">browse</property>
-                            <signal name="changed" handler="selection_changed"/>
-                          </object>
-                        </child>
+                        <property name="hexpand">1</property>
+                        <property name="vexpand">1</property>
+                        <property name="hscrollbar-policy">never</property>
+                        <property name="shadow-type">etched-in</property>
                         <child>
-                          <object class="GtkTreeViewColumn" id="family_face_column">
-                            <property name="sizing">fixed</property>
-                            <property name="title" translatable="yes">Font Family</property>
+                          <object class="GtkTreeView" id="family_face_list">
+                            <property name="visible">1</property>
+                            <property name="can-focus">1</property>
+                            <property name="model">filter_model</property>
+                            <property name="headers-visible">0</property>
+                            <property name="enable-search">0</property>
+                            <property name="fixed-height-mode">1</property>
+                            <signal name="cursor-changed" handler="cursor_changed_cb" swapped="no"/>
+                            <signal name="row-activated" handler="row_activated_cb" swapped="no"/>
+                            <signal name="style-updated" handler="gtk_font_chooser_widget_set_cell_size" object="GtkFontChooserWidget" after="yes" swapped="yes"/>
+                            <child internal-child="selection">
+                              <object class="GtkTreeSelection" id="treeview-selection1">
+                                <property name="mode">browse</property>
+                                <signal name="changed" handler="selection_changed"/>
+                              </object>
+                            </child>
                             <child>
-                              <object class="GtkCellRendererText" id="family_face_cell">
-                                <property name="ellipsize">end</property>
+                              <object class="GtkTreeViewColumn" id="family_face_column">
+                                <property name="sizing">fixed</property>
+                                <property name="title" translatable="yes">Font Family</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="family_face_cell">
+                                    <property name="ellipsize">end</property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
                         </child>
                       </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
+                        <property name="width">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="preview">
+                        <property name="visible">1</property>
+                        <property name="can-focus">1</property>
+                        <property name="invisible-char">•</property>
+                        <property name="placeholder-text" translatable="yes">Preview text</property>
+                        <signal name="scroll-event" handler="resize_by_scroll_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">2</property>
+                        <property name="width">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkScale" id="size_slider">
+                        <property name="visible">1</property>
+                        <property name="can-focus">1</property>
+                        <property name="hexpand">1</property>
+                        <property name="adjustment">slider_adjustment</property>
+                        <property name="draw-value">0</property>
+                        <property name="round-digits">0</property>
+                        <property name="valign">baseline</property>
+                        <signal name="scroll-event" handler="resize_by_scroll_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="size_spin">
+                        <property name="visible">1</property>
+                        <property name="can-focus">1</property>
+                        <property name="invisible-char">•</property>
+                        <property name="valign">baseline</property>
+                        <property name="adjustment">spin_adjustment</property>
+                        <signal name="output" handler="output_cb"/>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">3</property>
+                      </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">1</property>
-                    <property name="width">2</property>
+                    <property name="name">list</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="preview">
+                  <object class="GtkGrid">
                     <property name="visible">1</property>
-                    <property name="can-focus">1</property>
-                    <property name="invisible-char">•</property>
-                    <property name="placeholder-text" translatable="yes">Preview text</property>
-                    <signal name="scroll-event" handler="resize_by_scroll_cb" swapped="no"/>
+                    <property name="row-spacing">12</property>
+                    <property name="hexpand">1</property>
+                    <property name="vexpand">1</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">1</property>
+                        <property name="gicon">fonticon</property>
+                        <property name="pixel-size">64</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">1</property>
+                        <property name="label" translatable="yes">No Fonts Found</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                          <attribute name="scale" value="1.2"/>
+                        </attributes>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">2</property>
-                    <property name="width">2</property>
+                    <property name="name">empty</property>
                   </packing>
                 </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="name">list</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">1</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">12</property>
+            <property name="margin">12</property>
+
+             <child>
+-              <object class="GtkLabel" id="font_name_label">
+                 <property name="visible">1</property>
+-                <property name="margin-top">6</property>
+-                <property name="margin-bottom">6</property>
+-                <property name="margin-start">12</property>
+-                <property name="margin-end">12</property>
+-                <property name="ellipsize">end</property>
+-                <property name="xalign">0</property>
+-              </object>
+-            </child>
+-            <child>
+-              <object class="GtkEntry" id="preview2">
+                 <property name="visible">1</property>
+-                <property name="can-focus">1</property>
+-                <property name="placeholder-text" translatable="yes">Preview text</property>
+-                <property name="text" bind-source="preview" bind-property="text" bind-flags="bidirectional"/>
+-                <property name="attributes" bind-source="preview" bind-property="attributes" bind-flags="bidirectional"/>
+               </object>
+             </child>
+`
+            <child>
+              <object class="GtkBox">
+                <property name="spacing">6</property>
+                <property name="visible">1</property>
                 <child>
-                  <object class="GtkScale" id="size_slider">
+                  <object class="GtkLabel" id="size_label2">
+                    <property name="visible">1</property>
+                    <property name="label" translatable="yes">Size</property>
+                    <property name="xalign">0</property>
+                    <property name="valign">baseline</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkScale" id="size_slider2">
                     <property name="visible">1</property>
                     <property name="can-focus">1</property>
                     <property name="hexpand">1</property>
                     <property name="adjustment">slider_adjustment</property>
                     <property name="draw-value">0</property>
                     <property name="round-digits">0</property>
+                    <property name="valign">baseline</property>
                     <signal name="scroll-event" handler="resize_by_scroll_cb" swapped="no"/>
                   </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">3</property>
-                  </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="size_spin">
+                  <object class="GtkSpinButton" id="size_spin2">
                     <property name="visible">1</property>
                     <property name="can-focus">1</property>
-                    <property name="invisible-char">•</property>
                     <property name="adjustment">spin_adjustment</property>
+                    <property name="valign">baseline</property>
                     <signal name="output" handler="output_cb"/>
                   </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">3</property>
-                  </packing>
                 </child>
               </object>
-              <packing>
-                <property name="name">list</property>
-              </packing>
             </child>
             <child>
-              <object class="GtkGrid">
+              <object class="GtkBox" id="feature_box">
                 <property name="visible">1</property>
-                <property name="row-spacing">12</property>
-                <property name="hexpand">1</property>
-                <property name="vexpand">1</property>
-                <property name="halign">center</property>
-                <property name="valign">center</property>
-                <style>
-                  <class name="dim-label"/>
-                </style>
+                <property name="orientation">vertical</property>
+                <property name="spacing">12</property>
                 <child>
-                  <object class="GtkImage">
-                    <property name="visible">1</property>
-                    <property name="gicon">fonticon</property>
-                    <property name="pixel-size">64</property>
+                  <object class="GtkComboBox" id="feature_language_combo">
+                    <property name="halign">start</property>
+                    <property name="margin-top">10</property>
+                    <child>
+                      <object class="GtkCellRendererText"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
                   </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="visible">1</property>
-                    <property name="label" translatable="yes">No Fonts Found</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"/>
-                      <attribute name="scale" value="1.2"/>
-                    </attributes>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">1</property>
-                  </packing>
                 </child>
               </object>
-              <packing>
-                <property name="name">empty</property>
-              </packing>
             </child>
           </object>
           <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">1</property>
-            <property name="width">2</property>
+            <property name="name">tweaks</property>
           </packing>
         </child>
       </object>
-      <packing>
-        <property name="expand">1</property>
-      </packing>
     </child>
   </template>
   <object class="GThemedIcon" id="fonticon">
