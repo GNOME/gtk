@@ -139,6 +139,21 @@ gtk_font_chooser_dialog_key_press_event (GtkWidget   *dialog,
 }
 
 static void
+update_tweak_button (GtkFontChooserDialog *dialog)
+{
+  GtkFontChooserLevel level;
+
+  if (!dialog->priv->tweak_button)
+    return;
+
+  g_object_get (dialog->priv->fontchooser, "level", &level, NULL);
+  if ((level & (GTK_FONT_CHOOSER_LEVEL_FEATURES | GTK_FONT_CHOOSER_LEVEL_VARIATIONS)) != 0)
+    gtk_widget_show (dialog->priv->tweak_button);
+  else
+    gtk_widget_hide (dialog->priv->tweak_button);
+}
+
+static void
 setup_tweak_button (GtkFontChooserDialog *dialog)
 {
   gboolean use_header;
@@ -238,6 +253,8 @@ gtk_font_chooser_dialog_init (GtkFontChooserDialog *fontchooserdiag)
   g_signal_connect_swapped (priv->fontchooser, "notify::font-desc",
                             G_CALLBACK (update_button), fontchooserdiag);
   update_button (fontchooserdiag);
+  g_signal_connect_swapped (priv->fontchooser, "notify::level",
+                            G_CALLBACK (update_tweak_button), fontchooserdiag);
 }
 
 /**
