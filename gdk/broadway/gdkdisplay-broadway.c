@@ -263,7 +263,7 @@ _gdk_broadway_display_open (const gchar *display_name)
   broadway_display->server = _gdk_broadway_server_new (display_name, &error);
   if (broadway_display->server == NULL)
     {
-      g_printerr ("Unable to init server: %s\n", error->message);
+      g_printerr ("Unable to init Broadway server: %s\n", error->message);
       g_error_free (error);
       return NULL;
     }
