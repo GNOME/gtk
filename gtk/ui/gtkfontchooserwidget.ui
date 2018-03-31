@@ -244,10 +244,10 @@
 -                <property name="attributes" bind-source="preview" bind-property="attributes" bind-flags="bidirectional"/>
                </object>
              </child>
-`
             <child>
-              <object class="GtkBox">
-                <property name="spacing">6</property>
+              <object class="GtkGrid" id="axis_grid">
+                <property name="row-spacing">6</property>
+                <property name="column-spacing">12</property>
                 <property name="visible">1</property>
                 <child>
                   <object class="GtkLabel" id="size_label2">
@@ -256,6 +256,10 @@
                     <property name="xalign">0</property>
                     <property name="valign">baseline</property>
                   </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
                 </child>
                 <child>
                   <object class="GtkScale" id="size_slider2">
@@ -268,6 +272,10 @@
                     <property name="valign">baseline</property>
                     <signal name="scroll-event" handler="resize_by_scroll_cb" swapped="no"/>
                   </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
+                  </packing>
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="size_spin2">
@@ -277,6 +285,10 @@
                     <property name="valign">baseline</property>
                     <signal name="output" handler="output_cb"/>
                   </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">0</property>
+                  </packing>
                 </child>
               </object>
             </child>
