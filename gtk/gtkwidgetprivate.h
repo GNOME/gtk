@@ -139,8 +139,6 @@ struct _GtkWidgetPrivate
   GtkAllocation allocated_size;
   gint allocated_size_baseline;
   GtkAllocation allocation;
-  GtkAllocation clip;
-  GtkAllocation reported_clip;
   gint allocated_baseline;
 
   /* The widget's requested sizes */

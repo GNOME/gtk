@@ -636,10 +636,6 @@ GDK_AVAILABLE_IN_ALL
 int                   gtk_widget_get_height             (GtkWidget     *widget);
 
 GDK_AVAILABLE_IN_ALL
-void                  gtk_widget_get_clip               (GtkWidget     *widget,
-                                                         GtkAllocation *clip);
-
-GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_child_focus         (GtkWidget           *widget,
                                            GtkDirectionType     direction);
 GDK_AVAILABLE_IN_ALL
