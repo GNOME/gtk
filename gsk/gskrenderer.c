@@ -448,7 +448,7 @@ gsk_renderer_unrealize (GskRenderer *renderer)
  * to a #GdkTexture.
  *
  * The @renderer will acquire a reference on the #GskRenderNode tree while
- * the rendering is in progress, and will make the tree immutable.
+ * the rendering is in progress.
  *
  * If you want to apply any transformations to @root, you should put it into a 
  * transform node and pass that node instead.
