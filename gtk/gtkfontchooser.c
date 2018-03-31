@@ -124,6 +124,39 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
+   * GtkFontChooser:font-features:
+   *
+   * The selected font features, in a format that is compatible with
+   * CSS and with Pango attributes.
+   *
+   * Since: 3.22.30
+   */
+  g_object_interface_install_property
+     (iface,
+      g_param_spec_string ("font-features",
+                          P_("Font features"),
+                          P_("Font features as a string"),
+                          "",
+                          GTK_PARAM_READABLE));
+
+  /**
+   * GtkFontChooser:language:
+   *
+   * The language for which the #GtkFontChooser:font-features were
+   * selected, in a format that is compatible with CSS and with Pango
+   * attributes.
+   *
+   * Since: 3.22.30
+   */
+  g_object_interface_install_property
+     (iface,
+      g_param_spec_string ("language",
+                          P_("Language"),
+                          P_("Language for which features have been selected"),
+                          "",
+                          GTK_PARAM_READABLE));
+
+  /**
    * GtkFontChooser::font-activated:
    * @self: the object which received the signal
    * @fontname: the font name

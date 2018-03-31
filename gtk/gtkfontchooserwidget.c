@@ -350,6 +350,12 @@ gtk_font_chooser_widget_get_property (GObject         *object,
     case GTK_FONT_CHOOSER_PROP_LEVEL:
       g_value_set_flags (value, gtk_font_chooser_widget_get_level (fontchooser));
       break;
+    case GTK_FONT_CHOOSER_PROP_FONT_FEATURES:
+      g_value_set_string (value, fontchooser->priv->font_features);
+      break;
+    case GTK_FONT_CHOOSER_PROP_LANGUAGE:
+      g_value_set_string (value, pango_language_to_string (fontchooser->priv->font_language));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1843,6 +1849,7 @@ update_font_features (GtkFontChooserWidget *fontchooser)
     {
       g_free (priv->font_features);
       priv->font_features = g_string_free (s, FALSE);
+      g_object_notify (G_OBJECT (fontchooser), "font-features");
     }
   else
     g_string_free (s, TRUE);
@@ -1870,6 +1877,7 @@ update_language (GtkFontChooserWidget *fontchooser)
       if (priv->font_language != lang)
         {
           priv->font_language = lang;
+          g_object_notify (G_OBJECT (fontchooser), "language");
         }
     }
 
