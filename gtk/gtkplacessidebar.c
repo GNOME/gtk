@@ -4402,7 +4402,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
   /**
    * GtkPlacesSidebar::populate-popup:
    * @sidebar: the object which received the signal.
-   * @container: (type Gtk.Widget): a #GtkMenu or another #GtkContainer
+   * @menu: (type Gio.Menu): a #GMenu section for additional menu items
    * @selected_item: (type Gio.File) (nullable): #GFile with the item to which
    *     the popup should refer, or %NULL in the case of a @selected_volume.
    * @selected_volume: (type Gio.Volume) (nullable): #GVolume if the selected
@@ -4422,17 +4422,18 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
    * the calling application will have to g_object_ref() the @selected_volume and
    * keep it around to use it in the callback.
    *
-   * The @container and all its contents are destroyed after the user
+   * The @menu and all its contents are destroyed after the user
    * dismisses the popup. The popup is re-created (and thus, this signal is
    * emitted) every time the user activates the contextual menu.
    *
-   * Before 3.18, the @container always was a #GtkMenu, and you were expected
-   * to add your items as #GtkMenuItems. Since 3.18, the popup may be implemented
-   * as a #GtkPopover, in which case @container will be something else, e.g. a
-   * #GtkBox, to which you may add #GtkModelButtons or other widgets, such as
-   * #GtkEntries, #GtkSpinButtons, etc. If your application can deal with this
-   * situation, you can set #GtkPlacesSidebar::populate-all to %TRUE to request
-   * that this signal is emitted for populating popovers as well.
+   * Before 3.18, the @menu always was a #GtkMenu, and you were expected
+   * to add your items as #GtkMenuItems. Before 3.22.30, the popup was implemented
+   * as a #GtkPopover, in which case @menu was something else, e.g. a
+   * #GtkBox. Since 3.22.30 @menu is always a #GMenu instance, to which you may 
+   * add #GMenuItem instances; menu separator is added automatically if needed. 
+   * If your application is able to append #GMenu items,
+   * you can set #GtkPlacesSidebar::populate-all to %TRUE to request
+   * that this signal is emitted for populating context menu popups as well.
    *
    * Since: 3.10
    */
