@@ -54,7 +54,7 @@ m4_define([glib_min_required_version], m4_join([_], [GLIB_VERSION], glib_require
 m4_define([glib_max_allowed_version], m4_join([_], [GLIB_VERSION], glib_required_major, glib_max_allowed_minor))
 GLIB_VERSION_CFLAGS="-DGLIB_MIN_REQUIRED_VERSION=glib_min_required_version -DGLIB_MAX_ALLOWED_VERSION=glib_max_allowed_version"
 
-m4_define([pango_required_version], [1.37.3])
+m4_define([pango_required_version], [1.41.0])
 m4_define([atk_required_version], [2.15.1])
 m4_define([cairo_required_version], [1.14.0])
 m4_define([gdk_pixbuf_required_version], [2.30.0])
