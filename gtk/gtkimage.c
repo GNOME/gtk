@@ -94,10 +94,6 @@ struct _GtkImagePrivate
 
 static void gtk_image_snapshot             (GtkWidget    *widget,
                                             GtkSnapshot  *snapshot);
-static void gtk_image_size_allocate        (GtkWidget           *widget,
-                                            const GtkAllocation *allocation,
-                                            int                  baseline,
-                                            GtkAllocation       *out_clip);
 static void gtk_image_unrealize            (GtkWidget    *widget);
 static void gtk_image_measure (GtkWidget      *widget,
                                GtkOrientation  orientation,
@@ -155,7 +151,6 @@ gtk_image_class_init (GtkImageClass *class)
   widget_class = GTK_WIDGET_CLASS (class);
   widget_class->snapshot = gtk_image_snapshot;
   widget_class->measure = gtk_image_measure;
-  widget_class->size_allocate = gtk_image_size_allocate;
   widget_class->unrealize = gtk_image_unrealize;
   widget_class->style_updated = gtk_image_style_updated;
 
@@ -1092,20 +1087,6 @@ GtkWidget*
 gtk_image_new (void)
 {
   return g_object_new (GTK_TYPE_IMAGE, NULL);
-}
-
-static void
-gtk_image_size_allocate (GtkWidget           *widget,
-                         const GtkAllocation *allocation,
-                         int                  baseline,
-                         GtkAllocation       *out_clip)
-{
-  _gtk_style_context_get_icon_extents (gtk_widget_get_style_context (widget),
-                                       out_clip,
-                                       allocation->x,
-                                       allocation->y,
-                                       allocation->width,
-                                       allocation->height);
 }
 
 static void

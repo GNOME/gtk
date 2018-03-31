@@ -669,15 +669,14 @@ gtk_font_chooser_widget_snapshot (GtkWidget   *widget,
 static void
 gtk_font_chooser_widget_size_allocate (GtkWidget           *widget,
                                        const GtkAllocation *allocation,
-                                       int                  baseline,
-                                       GtkAllocation       *out_clip)
+                                       int                  baseline)
 {
   GtkFontChooserWidget *self = GTK_FONT_CHOOSER_WIDGET (widget);
   GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (self);
 
-  GTK_WIDGET_CLASS (gtk_font_chooser_widget_parent_class)->size_allocate (widget, allocation, -1, out_clip);
+  GTK_WIDGET_CLASS (gtk_font_chooser_widget_parent_class)->size_allocate (widget, allocation, -1);
 
-  gtk_widget_size_allocate (priv->stack, allocation, -1, out_clip);
+  gtk_widget_size_allocate (priv->stack, allocation, -1);
 }
 
 static void

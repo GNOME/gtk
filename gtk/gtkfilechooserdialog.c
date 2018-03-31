@@ -232,8 +232,7 @@ static void     gtk_file_chooser_dialog_map          (GtkWidget             *wid
 static void     gtk_file_chooser_dialog_unmap        (GtkWidget             *widget);
 static void     gtk_file_chooser_dialog_size_allocate (GtkWidget             *widget,
                                                        const GtkAllocation   *allocation,
-                                                       int                    baseline,
-                                                       GtkAllocation         *out_clip);
+                                                       int                    baseline);
 static void     file_chooser_widget_file_activated   (GtkFileChooser        *chooser,
                                                       GtkFileChooserDialog  *dialog);
 static void     file_chooser_widget_default_size_changed (GtkWidget            *widget,
@@ -620,13 +619,11 @@ gtk_file_chooser_dialog_unmap (GtkWidget *widget)
 static void
 gtk_file_chooser_dialog_size_allocate (GtkWidget           *widget,
                                        const GtkAllocation *allocation,
-                                       int                  baseline,
-                                       GtkAllocation       *out_clip)
+                                       int                  baseline)
 {
   GTK_WIDGET_CLASS (gtk_file_chooser_dialog_parent_class)->size_allocate (widget,
                                                                           allocation,
-                                                                          baseline,
-                                                                          out_clip);
+                                                                          baseline);
   if (gtk_widget_is_drawable (widget))
     save_dialog_geometry (GTK_FILE_CHOOSER_DIALOG (widget));
 }

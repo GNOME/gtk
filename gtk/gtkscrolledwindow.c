@@ -334,8 +334,7 @@ static void     gtk_scrolled_window_snapshot           (GtkWidget         *widge
                                                         GtkSnapshot       *snapshot);
 static void     gtk_scrolled_window_size_allocate      (GtkWidget           *widget,
                                                         const GtkAllocation *allocation,
-                                                        int                  baseline,
-                                                        GtkAllocation        *out_clip);
+                                                        int                  baseline);
 static gboolean gtk_scrolled_window_focus              (GtkWidget         *widget,
                                                         GtkDirectionType   direction);
 static void     gtk_scrolled_window_add                (GtkContainer      *container,
@@ -1390,8 +1389,7 @@ scroll_controller_decelerate (GtkEventControllerScroll *scroll,
 static void
 gtk_scrolled_window_size_allocate (GtkWidget           *widget,
                                    const GtkAllocation *allocation,
-                                   int                  baseline,
-                                   GtkAllocation       *out_clip)
+                                   int                  baseline)
 {
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
@@ -1619,21 +1617,19 @@ gtk_scrolled_window_size_allocate (GtkWidget           *widget,
   gtk_widget_set_child_visible (priv->hscrollbar, priv->hscrollbar_visible);
   if (priv->hscrollbar_visible)
     {
-      GtkAllocation clip;
       gtk_scrolled_window_allocate_scrollbar (scrolled_window,
                                               priv->hscrollbar,
                                               &child_allocation);
-      gtk_widget_size_allocate (priv->hscrollbar, &child_allocation, -1, &clip);
+      gtk_widget_size_allocate (priv->hscrollbar, &child_allocation, -1);
     }
 
   gtk_widget_set_child_visible (priv->vscrollbar, priv->vscrollbar_visible);
   if (priv->vscrollbar_visible)
     {
-      GtkAllocation clip;
       gtk_scrolled_window_allocate_scrollbar (scrolled_window,
                                               priv->vscrollbar,
                                               &child_allocation);
-      gtk_widget_size_allocate (priv->vscrollbar, &child_allocation, -1, &clip);
+      gtk_widget_size_allocate (priv->vscrollbar, &child_allocation, -1);
     }
 
   gtk_scrolled_window_check_attach_pan_gesture (scrolled_window);
@@ -3048,7 +3044,6 @@ gtk_scrolled_window_allocate_child (GtkScrolledWindow   *swindow,
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (swindow);
   GtkWidget     *widget = GTK_WIDGET (swindow), *child;
   GtkAllocation  child_allocation;
-  GtkAllocation child_clip;
   int sb_width;
   int sb_height;
 
@@ -3090,7 +3085,7 @@ gtk_scrolled_window_allocate_child (GtkScrolledWindow   *swindow,
       child_allocation.height = MAX (1, child_allocation.height - sb_height);
     }
 
-  gtk_widget_size_allocate (child, &child_allocation, -1, &child_clip);
+  gtk_widget_size_allocate (child, &child_allocation, -1);
 }
 
 static void

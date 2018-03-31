@@ -186,12 +186,11 @@ gtk_media_controls_measure (GtkWidget      *widget,
 static void
 gtk_media_controls_size_allocate (GtkWidget           *widget,
                                   const GtkAllocation *allocation,
-                                  int                  baseline,
-                                  GtkAllocation       *out_clip)
+                                  int                  baseline)
 {
   GtkMediaControls *controls = GTK_MEDIA_CONTROLS (widget);
 
-  gtk_widget_size_allocate (controls->box, allocation, baseline, out_clip);
+  gtk_widget_size_allocate (controls->box, allocation, baseline);
 }
 
 static void

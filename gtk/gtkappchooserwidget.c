@@ -938,15 +938,14 @@ gtk_app_chooser_widget_snapshot (GtkWidget   *widget,
 static void
 gtk_app_chooser_widget_size_allocate (GtkWidget           *widget,
                                       const GtkAllocation *allocation,
-                                      int                  baseline,
-                                      GtkAllocation       *out_clip)
+                                      int                  baseline)
 {
   GtkAppChooserWidget *self = GTK_APP_CHOOSER_WIDGET (widget);
   GtkAppChooserWidgetPrivate *priv = gtk_app_chooser_widget_get_instance_private (self);
 
-  GTK_WIDGET_CLASS (gtk_app_chooser_widget_parent_class)->size_allocate (widget, allocation, baseline, out_clip);
+  GTK_WIDGET_CLASS (gtk_app_chooser_widget_parent_class)->size_allocate (widget, allocation, baseline);
 
-  gtk_widget_size_allocate (priv->overlay, allocation, baseline, out_clip);
+  gtk_widget_size_allocate (priv->overlay, allocation, baseline);
 }
 
 static void

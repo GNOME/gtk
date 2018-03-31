@@ -1,9 +1,10 @@
 #include <gtk/gtk.h>
 
 static void
-child_size_allocate (GtkWidget *child,
+child_size_allocate (GtkWidget    *child,
                      GdkRectangle *allocation,
-                     gpointer user_data)
+                     gint          baseline,
+                     gpointer      user_data)
 {
   GtkStyleContext *context;
   context = gtk_widget_get_style_context (child);

@@ -67,8 +67,7 @@ static void        gtk_cell_view_finalize                 (GObject          *obj
 static void        gtk_cell_view_dispose                  (GObject          *object);
 static void        gtk_cell_view_size_allocate            (GtkWidget           *widget,
                                                            const GtkAllocation *allocation,
-                                                           int                  baseline,
-                                                           GtkAllocation       *out_clip);
+                                                           int                  baseline);
 static void        gtk_cell_view_snapshot                 (GtkWidget        *widget,
                                                            GtkSnapshot      *snapshot);
 static void        gtk_cell_view_set_value                (GtkCellView     *cell_view,
@@ -461,8 +460,7 @@ gtk_cell_view_dispose (GObject *object)
 static void
 gtk_cell_view_size_allocate (GtkWidget           *widget,
                              const GtkAllocation *allocation,
-                             int                  baseline,
-                             GtkAllocation       *out_clip)
+                             int                  baseline)
 {
   GtkCellView *cellview;
   GtkCellViewPrivate *priv;

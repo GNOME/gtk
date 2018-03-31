@@ -99,8 +99,7 @@ static void gtk_button_box_measure           (GtkWidget         *widget,
                                               int               *natural_baseline);
 static void gtk_button_box_size_allocate      (GtkWidget           *widget,
                                                const GtkAllocation *allocation,
-                                               int                  baseline,
-                                               GtkAllocation       *out_clip);
+                                               int                  baseline);
 static void gtk_button_box_remove             (GtkContainer      *container,
                                                GtkWidget         *widget);
 static void gtk_button_box_set_child_property (GtkContainer      *container,
@@ -745,8 +744,7 @@ gtk_button_box_measure (GtkWidget      *widget,
 static void
 gtk_button_box_size_allocate (GtkWidget           *widget,
                               const GtkAllocation *allocation,
-                              int                  baseline,
-                              GtkAllocation       *out_clip)
+                              int                  baseline)
 {
   GtkButtonBox *bbox = GTK_BUTTON_BOX (widget);
   GtkButtonBoxPrivate *priv = bbox->priv;
@@ -774,14 +772,12 @@ gtk_button_box_size_allocate (GtkWidget           *widget,
   gint baseline_height;
   gint child_baseline;
   gint i;
-  GdkRectangle child_clip;
 
   if (priv->layout_style == GTK_BUTTONBOX_EXPAND)
     {
       GTK_WIDGET_CLASS (gtk_button_box_parent_class)->size_allocate (widget,
                                                                      allocation,
-                                                                     baseline,
-                                                                     out_clip);
+                                                                     baseline);
       return;
     }
 
@@ -1035,8 +1031,7 @@ gtk_button_box_size_allocate (GtkWidget           *widget,
                 }
             }
 
-          gtk_widget_size_allocate (child, &child_allocation, child_baseline, &child_clip);
-          gdk_rectangle_union (out_clip, &child_clip, out_clip);
+          gtk_widget_size_allocate (child, &child_allocation, child_baseline);
           i++;
         }
     }

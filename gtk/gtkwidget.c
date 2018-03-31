@@ -586,8 +586,7 @@ static void	gtk_widget_real_realize		 (GtkWidget	    *widget);
 static void	gtk_widget_real_unrealize	 (GtkWidget	    *widget);
 static void	gtk_widget_real_size_allocate    (GtkWidget               *widget,
                                                   const GtkAllocation     *allocation,
-                                                  int                      baseline,
-                                                  GtkAllocation           *out_clip);
+                                                  int                      baseline);
 static void	gtk_widget_real_direction_changed(GtkWidget         *widget,
                                                   GtkTextDirection   previous_direction);
 
@@ -1528,7 +1527,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * @allocation: (type Gtk.Allocation): the region which has been
    *   allocated to the widget.
    * @baseline: the baseline
-   * @out_clip: (out) (type Gtk.Allocation): Return address for the widget's clip
    */
   widget_signals[SIZE_ALLOCATE] =
     g_signal_new (I_("size-allocate"),
@@ -1537,10 +1535,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_STRUCT_OFFSET (GtkWidgetClass, size_allocate),
 		  NULL, NULL,
 		  NULL,
-		  G_TYPE_NONE, 3,
+		  G_TYPE_NONE, 2,
 		  GDK_TYPE_RECTANGLE | G_SIGNAL_TYPE_STATIC_SCOPE,
-                  G_TYPE_INT,
-                  GDK_TYPE_RECTANGLE | G_SIGNAL_TYPE_STATIC_SCOPE);
+                  G_TYPE_INT);
 
   /**
    * GtkWidget::state-flags-changed:
@@ -4242,8 +4239,6 @@ get_box_padding (GtkCssStyle *style,
  * @widget: a #GtkWidget
  * @allocation: position and size to be allocated to @widget
  * @baseline: The baseline of the child, or -1
- * @out_clip: (out): Return location for @widget's clip region. The returned clip
- *   will be in the coordinate system of @widget's parent, just like @allocation.
  *
  * This function is only used by #GtkWidget subclasses, to assign a size,
  * position and (optionally) baseline to their child widgets.
@@ -4255,8 +4250,7 @@ get_box_padding (GtkCssStyle *style,
 void
 gtk_widget_size_allocate (GtkWidget           *widget,
                           const GtkAllocation *allocation,
-                          int                  baseline,
-                          GtkAllocation       *out_clip)
+                          int                  baseline)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GdkRectangle real_allocation;
@@ -4269,21 +4263,16 @@ gtk_widget_size_allocate (GtkWidget           *widget,
   gint min_width, min_height;
   GtkCssStyle *style;
   GtkBorder margin, border, padding;
-  GtkAllocation new_clip;
   GdkDisplay *display;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (baseline >= -1);
-  g_return_if_fail (out_clip != NULL);
   g_return_if_fail (allocation != NULL);
 
   gtk_widget_push_verify_invariants (widget);
 
   if (!priv->visible && !_gtk_widget_is_toplevel (widget))
-    {
-      memset (out_clip, 0, sizeof (GdkRectangle));
-      goto out;
-    }
+    goto out;
 
 #ifdef G_ENABLE_DEBUG
   display = gtk_widget_get_display (widget);
@@ -4460,18 +4449,15 @@ gtk_widget_size_allocate (GtkWidget           *widget,
                            margin.right + border.right + padding.right;
   real_allocation.height -= margin.top + border.top + padding.top +
                             margin.bottom + border.bottom + padding.bottom;
-  new_clip = real_allocation;
 
   if (g_signal_has_handler_pending (widget, widget_signals[SIZE_ALLOCATE], 0, FALSE))
     g_signal_emit (widget, widget_signals[SIZE_ALLOCATE], 0,
                    &real_allocation,
-                   baseline,
-                   &new_clip);
+                   baseline);
   else
     GTK_WIDGET_GET_CLASS (widget)->size_allocate (widget,
                                                   &real_allocation,
-                                                  baseline,
-                                                  &new_clip);
+                                                  baseline);
 
   /* Size allocation is god... after consulting god, no further requests or allocations are needed */
 #ifdef G_ENABLE_DEBUG
@@ -4724,8 +4710,7 @@ gtk_widget_translate_coordinatesf (GtkWidget  *src_widget,
 static void
 gtk_widget_real_size_allocate (GtkWidget           *widget,
                                const GtkAllocation *allocation,
-                               int                  baseline,
-                               GtkAllocation       *out_clip)
+                               int                  baseline)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
@@ -12249,11 +12234,10 @@ gtk_widget_ensure_allocate (GtkWidget *widget)
   if (priv->alloc_needed)
     {
       GtkAllocation allocation;
-      GtkAllocation clip;
       int baseline;
 
       gtk_widget_get_allocated_size (widget, &allocation, &baseline);
-      gtk_widget_size_allocate (widget, &allocation, baseline, &clip);
+      gtk_widget_size_allocate (widget, &allocation, baseline);
     }
   else if (priv->alloc_needed_on_child)
     {

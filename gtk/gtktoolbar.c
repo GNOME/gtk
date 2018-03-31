@@ -194,8 +194,7 @@ static void       gtk_toolbar_snapshot             (GtkWidget           *widget,
                                                     GtkSnapshot         *snapshot);
 static void       gtk_toolbar_size_allocate        (GtkWidget           *widget,
                                                     const GtkAllocation *allocation,
-                                                    int                  baseline,
-                                                    GtkAllocation       *out_clip);
+                                                    int                  baseline);
 static void       gtk_toolbar_style_updated        (GtkWidget           *widget);
 static gboolean   gtk_toolbar_focus                (GtkWidget           *widget,
 						    GtkDirectionType     dir);
@@ -1206,8 +1205,7 @@ rebuild_menu (GtkToolbar *toolbar)
 static void
 gtk_toolbar_size_allocate (GtkWidget           *widget,
                            const GtkAllocation *allocation,
-                           int                  baseline,
-                           GtkAllocation       *out_clip)
+                           int                  baseline)
 {
   GtkToolbar *toolbar = GTK_TOOLBAR (widget);
   GtkToolbarPrivate *priv = toolbar->priv;
@@ -1512,7 +1510,7 @@ gtk_toolbar_size_allocate (GtkWidget           *widget,
 
   if (need_arrow)
     {
-      gtk_widget_size_allocate (GTK_WIDGET (priv->arrow_button), &arrow_allocation, -1, out_clip);
+      gtk_widget_size_allocate (GTK_WIDGET (priv->arrow_button), &arrow_allocation, -1);
       gtk_widget_show (GTK_WIDGET (priv->arrow_button));
     }
   else
@@ -2955,10 +2953,8 @@ static void
 toolbar_content_size_allocate (ToolbarContent *content,
 			       GtkAllocation  *allocation)
 {
-  GtkAllocation clip;
-
   content->allocation = *allocation;
-  gtk_widget_size_allocate (GTK_WIDGET (content->item), allocation, -1, &clip);
+  gtk_widget_size_allocate (GTK_WIDGET (content->item), allocation, -1);
 }
 
 static void

@@ -36,7 +36,6 @@ static void
 size_allocate (GtkWidget     *widget,
                GtkAllocation *allocation,
                int            baseline,
-               GdkRectangle  *clip,
                gpointer       data)
 {
   if (surface)
