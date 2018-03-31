@@ -2193,6 +2193,7 @@ gsk_container_node_get_diff_settings (void)
                                     gsk_container_node_keep_func,
                                     gsk_container_node_change_func,
                                     gsk_container_node_change_func);
+  gsk_diff_settings_set_allow_abort (settings, TRUE);
 
   return settings;
 }
@@ -2205,12 +2206,15 @@ gsk_container_node_diff (GskRenderNode  *node1,
   GskContainerNode *self1 = (GskContainerNode *) node1;
   GskContainerNode *self2 = (GskContainerNode *) node2;
 
-  gsk_diff ((gconstpointer *) self1->children,
-            self1->n_children,
-            (gconstpointer *) self2->children,
-            self2->n_children,
-            gsk_container_node_get_diff_settings (),
-            region);
+  if (gsk_diff ((gconstpointer *) self1->children,
+                self1->n_children,
+                (gconstpointer *) self2->children,
+                self2->n_children,
+                gsk_container_node_get_diff_settings (),
+                region) == GSK_DIFF_OK)
+    return;
+
+  gsk_render_node_diff_impossible (node1, node2, region);
 }
 
 static void

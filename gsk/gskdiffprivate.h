@@ -24,6 +24,11 @@
 
 G_BEGIN_DECLS
 
+typedef enum {
+  GSK_DIFF_OK = 0,
+  GSK_DIFF_ABORTED,
+} GskDiffResult;
+
 typedef void (* GskKeepFunc)   (gconstpointer elem1, gconstpointer elem2, gpointer data);
 typedef void (* GskDeleteFunc) (gconstpointer elem, gsize idx, gpointer data);
 typedef void (* GskInsertFunc) (gconstpointer elem, gsize idx, gpointer data);
@@ -35,8 +40,10 @@ GskDiffSettings *       gsk_diff_settings_new                   (GCompareDataFun
                                                                  GskDeleteFunc           delete_func,
                                                                  GskInsertFunc           insert_func);
 void                    gsk_diff_settings_free                  (GskDiffSettings        *settings);
+void                    gsk_diff_settings_set_allow_abort       (GskDiffSettings        *settings,
+                                                                 gboolean                allow_abort);
 
-void                    gsk_diff                                (gconstpointer          *elem1,
+GskDiffResult           gsk_diff                                (gconstpointer          *elem1,
                                                                  gsize                   n1,
                                                                  gconstpointer          *elem2,
                                                                  gsize                   n2,

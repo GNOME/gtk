@@ -36,6 +36,8 @@ struct _GskDiffSettings {
   GskKeepFunc             keep_func;
   GskDeleteFunc           delete_func;
   GskInsertFunc           insert_func;
+
+  guint allow_abort : 1;
 };
 
 typedef struct _SplitResult {
@@ -62,6 +64,13 @@ gsk_diff_settings_new (GCompareDataFunc compare_func,
 }
 
 void
+gsk_diff_settings_set_allow_abort (GskDiffSettings *settings,
+                                   gboolean         allow_abort)
+{
+  settings->allow_abort = allow_abort;
+}
+
+void
 gsk_diff_settings_free (GskDiffSettings *settings)
 {
   g_slice_free (GskDiffSettings, settings);
@@ -76,7 +85,7 @@ gsk_diff_settings_free (GskDiffSettings *settings)
  * cases using this algorithm is full, so a little bit of heuristic is needed
  * to cut the search and to return a suboptimal point.
  */
-static void
+static GskDiffResult
 split (gconstpointer         *elem1,
        gssize                 off1,
        gssize                 lim1,
@@ -144,7 +153,7 @@ split (gconstpointer         *elem1,
               spl->i1 = i1;
               spl->i2 = i2;
               spl->min_lo = spl->min_hi = 1;
-              return;
+              return GSK_DIFF_OK;
             }
         }
 
@@ -185,7 +194,7 @@ split (gconstpointer         *elem1,
               spl->i1 = i1;
               spl->i2 = i2;
               spl->min_lo = spl->min_hi = 1;
-              return;
+              return GSK_DIFF_OK;
             }
         }
 
@@ -195,7 +204,7 @@ split (gconstpointer         *elem1,
       /*
        * If the edit cost is above the heuristic trigger and if
        * we got a good snake, we sample current diagonals to see
-       * if some of the, have reached an "interesting" path. Our
+       * if some of them have reached an "interesting" path. Our
        * measure is a function of the distance from the diagonal
        * corner (i1 + i2) penalized with the distance from the
        * mid diagonal itself. If this value is above the current
@@ -233,7 +242,7 @@ split (gconstpointer         *elem1,
             {
               spl->min_lo = 1;
               spl->min_hi = 0;
-              return;
+              return GSK_DIFF_OK;
             }
 
           for (best = 0, d = bmax; d >= bmin; d -= 2)
@@ -266,7 +275,7 @@ split (gconstpointer         *elem1,
             {
               spl->min_lo = 0;
               spl->min_hi = 1;
-              return;
+              return GSK_DIFF_OK;
             }
         }
 
@@ -277,6 +286,9 @@ split (gconstpointer         *elem1,
       if (ec >= MAXCOST)
         {
           gssize fbest, fbest1, bbest, bbest1;
+
+          if (settings->allow_abort)
+            return GSK_DIFF_ABORTED;
 
           fbest = fbest1 = -1;
           for (d = fmax; d >= fmin; d -= 2)
@@ -321,7 +333,7 @@ split (gconstpointer         *elem1,
               spl->min_hi = 1;
             }
 
-          return;
+          return GSK_DIFF_OK;
         }
     }
 }
@@ -331,7 +343,7 @@ split (gconstpointer         *elem1,
  * the box splitting function. Note that the real job (marking changed lines)
  * is done in the two boundary reaching checks.
  */
-static void
+static GskDiffResult
 compare (gconstpointer             *elem1,
          gssize                     off1,
          gssize                     lim1,
@@ -384,27 +396,37 @@ compare (gconstpointer             *elem1,
   else
     {
       SplitResult spl = { 0, };
+      GskDiffResult res;
 
       /*
        * Divide ...
        */
-      split (elem1, off1, lim1,
-             elem2, off2, lim2,
-             kvdf, kvdb, need_min,
-             settings, data,
-             &spl);
+      res = split (elem1, off1, lim1,
+                   elem2, off2, lim2,
+                   kvdf, kvdb, need_min,
+                   settings, data,
+                   &spl);
+      if (res != GSK_DIFF_OK)
+        return res;
+
       /*
        * ... et Impera.
        */
-      compare (elem1, off1, spl.i1,
-               elem2, off2, spl.i2,
-               kvdf, kvdb, spl.min_lo,
-               settings, data);
-      compare (elem1, spl.i1, lim1,
-               elem2, spl.i2, lim2,
-               kvdf, kvdb, spl.min_hi,
-               settings, data);
+      res = compare (elem1, off1, spl.i1,
+                     elem2, off2, spl.i2,
+                     kvdf, kvdb, spl.min_lo,
+                     settings, data);
+      if (res != GSK_DIFF_OK)
+        return res;
+      res = compare (elem1, spl.i1, lim1,
+                     elem2, spl.i2, lim2,
+                     kvdf, kvdb, spl.min_hi,
+                     settings, data);
+      if (res != GSK_DIFF_OK)
+        return res;
     }
+
+  return GSK_DIFF_OK;
 }
 
 #if 0
@@ -435,7 +457,7 @@ compare (gconstpointer             *elem1,
   dd2.rindex = xe->xdf2.rindex;
 #endif
 
-void
+GskDiffResult
 gsk_diff (gconstpointer             *elem1,
           gsize                      n1,
           gconstpointer             *elem2,
@@ -445,6 +467,7 @@ gsk_diff (gconstpointer             *elem1,
 {
   gsize ndiags;
   gssize *kvd, *kvdf, *kvdb;
+  GskDiffResult res;
 
   ndiags = n1 + n2 + 3;
 
@@ -454,11 +477,13 @@ gsk_diff (gconstpointer             *elem1,
   kvdf += n2 + 1;
   kvdb += n2 + 1;
 
-  compare (elem1, 0, n1,
-           elem2, 0, n2,
-           kvdf, kvdb, FALSE,
-           settings, data);
+  res = compare (elem1, 0, n1,
+                 elem2, 0, n2,
+                 kvdf, kvdb, FALSE,
+                 settings, data);
 
   g_free (kvd);
+
+  return res;
 }
 
