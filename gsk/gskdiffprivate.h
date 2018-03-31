@@ -28,15 +28,20 @@ typedef void (* GskKeepFunc)   (gconstpointer elem1, gconstpointer elem2, gpoint
 typedef void (* GskDeleteFunc) (gconstpointer elem, gsize idx, gpointer data);
 typedef void (* GskInsertFunc) (gconstpointer elem, gsize idx, gpointer data);
 
-void            gsk_diff                         (gconstpointer             *elem1,
-                                                  gsize                      n1,
-                                                  gconstpointer             *elem2,
-                                                  gsize                      n2,
-                                                  GCompareDataFunc           compare_func,
-                                                  GskKeepFunc                keep_func,
-                                                  GskDeleteFunc              delete_func,
-                                                  GskInsertFunc              insert_func,
-                                                  gpointer                   data);
+typedef struct _GskDiffSettings GskDiffSettings;
+
+GskDiffSettings *       gsk_diff_settings_new                   (GCompareDataFunc        compare_func,
+                                                                 GskKeepFunc             keep_func,
+                                                                 GskDeleteFunc           delete_func,
+                                                                 GskInsertFunc           insert_func);
+void                    gsk_diff_settings_free                  (GskDiffSettings        *settings);
+
+void                    gsk_diff                                (gconstpointer          *elem1,
+                                                                 gsize                   n1,
+                                                                 gconstpointer          *elem2,
+                                                                 gsize                   n2,
+                                                                 const GskDiffSettings  *settings,
+                                                                 gpointer                data);
 
 G_END_DECLS
 
