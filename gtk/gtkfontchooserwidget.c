@@ -865,8 +865,7 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
   priv->font_desc = pango_font_description_new ();
   priv->level = GTK_FONT_CHOOSER_LEVEL_FAMILY |
                 GTK_FONT_CHOOSER_LEVEL_STYLE |
-                GTK_FONT_CHOOSER_LEVEL_SIZE |
-                GTK_FONT_CHOOSER_LEVEL_VARIATION;
+                GTK_FONT_CHOOSER_LEVEL_SIZE;
 
   /* Set default preview text */
   gtk_entry_set_text (GTK_ENTRY (priv->preview), priv->preview_text);
@@ -1643,7 +1642,7 @@ gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchoose
   g_hash_table_foreach (priv->axes, axis_remove, NULL);
   g_hash_table_remove_all (priv->axes);
 
-  if ((priv->level & GTK_FONT_CHOOSER_LEVEL_VARIATION) == 0)
+  if ((priv->level & GTK_FONT_CHOOSER_LEVEL_VARIATIONS) == 0)
     return FALSE;
 
   pango_font = pango_context_load_font (gtk_widget_get_pango_context (GTK_WIDGET (fontchooser)),
