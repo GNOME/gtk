@@ -3508,10 +3508,10 @@ add_actions (GtkPlacesSidebar *sidebar)
 }
 
 static GMenuItem *
-add_menu_item (GMenu       *menu,
-               const gchar *label,
-               const gchar *action,
-               gboolean     hide_when_disabled)
+add_menu_item (GMenu      *menu,
+               const char *label,
+               const char *action,
+               gboolean    hide_when_disabled)
 {
   GMenuItem *menu_item;
 
@@ -3524,9 +3524,9 @@ add_menu_item (GMenu       *menu,
 }
 
 static void
-add_open_menu_item (GMenu              *menu,
-                    const gchar        *label,
-                    GtkPlacesOpenFlags  flags)
+add_open_menu_item (GMenu             *menu,
+                    const char        *label,
+                    GtkPlacesOpenFlags flags)
 {
   GMenuItem *menu_item;
 
