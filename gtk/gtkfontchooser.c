@@ -118,8 +118,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
                           GTK_TYPE_FONT_CHOOSER_LEVEL,
                           GTK_FONT_CHOOSER_LEVEL_FAMILY |
                           GTK_FONT_CHOOSER_LEVEL_STYLE |
-                          GTK_FONT_CHOOSER_LEVEL_SIZE |
-                          GTK_FONT_CHOOSER_LEVEL_VARIATION,
+                          GTK_FONT_CHOOSER_LEVEL_SIZE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**

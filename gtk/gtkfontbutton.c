@@ -608,8 +608,7 @@ gtk_font_button_init (GtkFontButton *font_button)
   font_button->priv->title = g_strdup (_("Pick a Font"));
   font_button->priv->level = GTK_FONT_CHOOSER_LEVEL_FAMILY |
                              GTK_FONT_CHOOSER_LEVEL_STYLE |
-                             GTK_FONT_CHOOSER_LEVEL_SIZE |
-                             GTK_FONT_CHOOSER_LEVEL_VARIATION;
+                             GTK_FONT_CHOOSER_LEVEL_SIZE;
 
   gtk_font_button_take_font_desc (font_button, NULL);
 
@@ -1196,7 +1195,6 @@ pango_font_description_to_css (PangoFontDescription *desc,
           g_string_append (s, "font-stretch: expanded; ");
           break;
         case PANGO_STRETCH_EXTRA_EXPANDED:
-          g_string_append (s, "font-stretch: extra-expanded; ");
           break;
         case PANGO_STRETCH_ULTRA_EXPANDED:
           g_string_append (s, "font-stretch: ultra-expanded; ");
