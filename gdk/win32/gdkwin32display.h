@@ -57,10 +57,6 @@ void       gdk_win32_display_set_cursor_theme    (GdkDisplay  *display,
                                                   const gchar *name,
                                                   gint         size);
 
-GDK_AVAILABLE_IN_ALL
-HCURSOR    gdk_win32_display_get_hcursor         (GdkDisplay  *display,
-                                                  GdkCursor   *cursor);
-
 /**
  * GdkWin32MessageFilterReturn:
  * @GDK_WIN32_MESSAGE_FILTER_CONTINUE: event not handled, continue processing.

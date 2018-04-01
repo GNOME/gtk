@@ -23,6 +23,7 @@
 #define __GDK_DISPLAY__WIN32_H__
 
 #include "gdkwin32screen.h"
+#include "gdkwin32cursor.h"
 
 /* Define values used to set DPI-awareness */
 typedef enum _GdkWin32ProcessDpiAwareness {
@@ -98,9 +99,17 @@ struct _GdkWin32Display
   GdkWin32ShcoreFuncs shcore_funcs;
   GdkWin32User32DPIFuncs user32_dpi_funcs;
   
-  /* Cursor Items (GdkCursor->HCURSOR) */
+  /* Cursor Items (GdkCursor->GdkWin32HCursor) */
   GHashTable *cursors;
-  GdkCursor *grab_cursor;
+  /* The cursor that is used by current grab (if any) */
+  GdkWin32HCursor *grab_cursor;
+  /* HCURSOR -> GdkWin32HCursorTableEntry */
+  GHashTable *cursor_reftable;
+  /* ID of the idle callback scheduled to destroy cursors */
+  guint idle_cursor_destructor_id;
+
+  /* A list of cursor handles slated for destruction. */
+  GList *cursors_for_destruction;
 
   /* Message filters */
   GList *filters;
