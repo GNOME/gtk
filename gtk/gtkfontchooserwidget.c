@@ -1836,7 +1836,9 @@ update_language_combo (GtkFontChooserWidget *fontchooser,
 typedef struct {
   hb_tag_t tag;
   const char *name;
+  GtkWidget *top;
   GtkWidget *feat;
+  GtkWidget *example;
 } FeatureItem;
 
 static const char *
@@ -1889,6 +1891,180 @@ feat_pressed (GtkGesture *gesture,
   set_inconsistent (GTK_CHECK_BUTTON (feat), !inconsistent);
 }
 
+static char *
+find_affected_text (hb_tag_t   feature_tag,
+                    hb_face_t *hb_face,
+                    hb_tag_t   script_tag,
+                    hb_tag_t   lang_tag,
+                    int        max_chars)
+{
+  unsigned int script_index = 0;
+  unsigned int lang_index = 0;
+  unsigned int feature_index = 0;
+  GString *chars;
+
+  chars = g_string_new ("");
+
+  hb_ot_layout_table_find_script (hb_face, HB_OT_TAG_GSUB, script_tag, &script_index);
+  hb_ot_layout_script_find_language (hb_face, HB_OT_TAG_GSUB, script_index, lang_tag, &lang_index);
+  if (hb_ot_layout_language_find_feature (hb_face, HB_OT_TAG_GSUB, script_index, lang_index, feature_tag, &feature_index))
+    {
+      unsigned int lookup_indexes[32];
+      unsigned int lookup_count = 32;
+      int count;
+      int n_chars = 0;
+
+      count  = hb_ot_layout_feature_get_lookups (hb_face,
+                                                 HB_OT_TAG_GSUB,
+                                                 feature_index,
+                                                 0,
+                                                 &lookup_count,
+                                                 lookup_indexes);
+      if (count > 0)
+        {
+          hb_set_t* glyphs_before = NULL;
+          hb_set_t* glyphs_input  = NULL;
+          hb_set_t* glyphs_after  = NULL;
+          hb_set_t* glyphs_output = NULL;
+          hb_font_t *hb_font = NULL;
+          hb_codepoint_t gid;
+
+          glyphs_input  = hb_set_create ();
+
+          // XXX For now, just look at first index
+          hb_ot_layout_lookup_collect_glyphs (hb_face,
+                                              HB_OT_TAG_GSUB,
+                                              lookup_indexes[0],
+                                              glyphs_before,
+                                              glyphs_input,
+                                              glyphs_after,
+                                              glyphs_output);
+
+          hb_font = hb_font_create (hb_face);
+          hb_ft_font_set_funcs (hb_font);
+
+          gid = -1;
+          while (hb_set_next (glyphs_input, &gid)) {
+            hb_codepoint_t ch;
+            if (n_chars == max_chars)
+              {
+                g_string_append (chars, "…");
+                break;
+              }
+            for (ch = 0; ch < 0xffff; ch++) {
+              hb_codepoint_t glyph = 0;
+              hb_font_get_nominal_glyph (hb_font, ch, &glyph);
+              if (glyph == gid) {
+                g_string_append_unichar (chars, (gunichar)ch);
+                n_chars++;
+                break;
+              }
+            }
+          }
+          hb_set_destroy (glyphs_input);
+          hb_font_destroy (hb_font);
+        }
+    }
+
+  return g_string_free (chars, FALSE);
+}
+
+static void
+update_feature_example (FeatureItem          *item,
+                        hb_face_t            *hb_face,
+                        hb_tag_t              script_tag,
+                        hb_tag_t              lang_tag,
+                        PangoFontDescription *font_desc)
+{
+  const char *letter_case[] = { "smcp", "c2sc", "pcap", "c2pc", "unic", "cpsp", "case", NULL };
+  const char *number_case[] = { "xxxx", "lnum", "onum", NULL };
+  const char *number_spacing[] = { "xxxx", "pnum", "tnum", NULL };
+  const char *number_formatting[] = { "zero", "nalt", NULL };
+  const char *char_variants[] = {
+    "swsh", "cswh", "calt", "falt", "hist", "salt", "jalt", "titl", "rand",
+    "ss01", "ss02", "ss03", "ss04", "ss05", "ss06", "ss07", "ss08", "ss09", "ss10",
+    "ss11", "ss12", "ss13", "ss14", "ss15", "ss16", "ss17", "ss18", "ss19", "ss20",
+    NULL };
+
+  if (g_strv_contains (number_case, item->name) ||
+      g_strv_contains (number_spacing, item->name))
+    {
+      PangoAttrList *attrs;
+      PangoAttribute *attr;
+      PangoFontDescription *desc;
+      char *str;
+
+      attrs = pango_attr_list_new ();
+
+      desc = pango_font_description_copy (font_desc);
+      pango_font_description_unset_fields (desc, PANGO_FONT_MASK_SIZE);
+      pango_attr_list_insert (attrs, pango_attr_font_desc_new (desc));
+      pango_font_description_free (desc);
+      str = g_strconcat (item->name, " 1", NULL);
+      attr = pango_attr_font_features_new (str);
+      pango_attr_list_insert (attrs, attr);
+
+      gtk_label_set_text (GTK_LABEL (item->example), "0123456789");
+      gtk_label_set_attributes (GTK_LABEL (item->example), attrs);
+
+      pango_attr_list_unref (attrs);
+    }
+  else if (g_strv_contains (letter_case, item->name) ||
+           g_strv_contains (number_formatting, item->name) ||
+           g_strv_contains (char_variants, item->name))
+    {
+      char *input = NULL;
+      char *text;
+
+      if (strcmp (item->name, "case") == 0)
+        input = g_strdup ("A-B[Cq]");
+      else if (g_strv_contains (letter_case, item->name))
+        input = g_strdup ("AaBbCc…");
+      else if (strcmp (item->name, "zero") == 0)
+        input = g_strdup ("0");
+      else if (strcmp (item->name, "nalt") == 0)
+        input = find_affected_text (item->tag, hb_face, script_tag, lang_tag, 3);
+      else
+        input = find_affected_text (item->tag, hb_face, script_tag, lang_tag, 10);
+
+      if (input[0] != '\0')
+        {
+          PangoAttrList *attrs;
+          PangoAttribute *attr;
+          PangoFontDescription *desc;
+          char *str;
+
+          text = g_strconcat (input, " ⟶ ", input, NULL);
+
+          attrs = pango_attr_list_new ();
+
+          desc = pango_font_description_copy (font_desc);
+          pango_font_description_unset_fields (desc, PANGO_FONT_MASK_SIZE);
+          pango_attr_list_insert (attrs, pango_attr_font_desc_new (desc));
+          pango_font_description_free (desc);
+          str = g_strconcat (item->name, " 0", NULL);
+          attr = pango_attr_font_features_new (str);
+          attr->start_index = 0;
+          attr->end_index = strlen (input);
+          pango_attr_list_insert (attrs, attr);
+          str = g_strconcat (item->name, " 1", NULL);
+          attr = pango_attr_font_features_new (str);
+          attr->start_index = strlen (input) + strlen (" ⟶ ");
+          attr->end_index = attr->start_index + strlen (input);
+          pango_attr_list_insert (attrs, attr);
+
+          gtk_label_set_text (GTK_LABEL (item->example), text);
+          gtk_label_set_attributes (GTK_LABEL (item->example), attrs);
+
+          g_free (text);
+          pango_attr_list_unref (attrs);
+        }
+      else
+        gtk_label_set_markup (GTK_LABEL (item->example), "");
+      g_free (input);
+    }
+}
+
 static void
 add_check_group (GtkFontChooserWidget *fontchooser,
                  const char  *title,
@@ -1901,7 +2077,7 @@ add_check_group (GtkFontChooserWidget *fontchooser,
   int i;
 
   group = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_widget_set_halign (group, GTK_ALIGN_START);
+  gtk_widget_set_halign (group, GTK_ALIGN_FILL);
 
   label = gtk_label_new (title);
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
@@ -1919,12 +2095,13 @@ add_check_group (GtkFontChooserWidget *fontchooser,
       GtkWidget *feat;
       FeatureItem *item;
       GtkGesture *gesture;
+      GtkWidget *box;
+      GtkWidget *example;
 
       tag = hb_tag_from_string (tags[i], -1);
 
       feat = gtk_check_button_new_with_label (get_feature_display_name (tag));
       set_inconsistent (GTK_CHECK_BUTTON (feat), TRUE);
-
       g_signal_connect_swapped (feat, "notify::active", G_CALLBACK (update_font_features), fontchooser);
       g_signal_connect_swapped (feat, "notify::inconsistent", G_CALLBACK (update_font_features), fontchooser);
       g_signal_connect (feat, "clicked", G_CALLBACK (feat_clicked), NULL);
@@ -1935,12 +2112,22 @@ add_check_group (GtkFontChooserWidget *fontchooser,
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
       g_signal_connect (gesture, "pressed", G_CALLBACK (feat_pressed), feat);
 
-      gtk_container_add (GTK_CONTAINER (group), feat);
+      example = gtk_label_new ("");
+      gtk_label_set_selectable (GTK_LABEL (example), TRUE);
+      gtk_widget_set_halign (example, GTK_ALIGN_START);
+
+      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+      gtk_box_set_homogeneous (GTK_BOX (box), TRUE);
+      gtk_container_add (GTK_CONTAINER (box), feat);
+      gtk_container_add (GTK_CONTAINER (box), example);
+      gtk_container_add (GTK_CONTAINER (group), box);
 
       item = g_new (FeatureItem, 1);
       item->name = tags[i];
       item->tag = tag;
+      item->top = box;
       item->feat = feat;
+      item->example = example;
 
       priv->feature_items = g_list_prepend (priv->feature_items, item);
     }
@@ -1961,7 +2148,7 @@ add_radio_group (GtkFontChooserWidget *fontchooser,
   PangoAttrList *attrs;
 
   group = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_widget_set_halign (group, GTK_ALIGN_START);
+  gtk_widget_set_halign (group, GTK_ALIGN_FILL);
 
   label = gtk_label_new (title);
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
@@ -1979,6 +2166,8 @@ add_radio_group (GtkFontChooserWidget *fontchooser,
       GtkWidget *feat;
       FeatureItem *item;
       const char *name;
+      GtkWidget *box;
+      GtkWidget *example;
 
       tag = hb_tag_from_string (tags[i], -1);
       name = get_feature_display_name (tag);
@@ -1991,12 +2180,22 @@ add_radio_group (GtkFontChooserWidget *fontchooser,
       g_signal_connect_swapped (feat, "notify::active", G_CALLBACK (update_font_features), fontchooser);
       g_object_set_data (G_OBJECT (feat), "default", group_button);
 
-      gtk_container_add (GTK_CONTAINER (group), feat);
+      example = gtk_label_new ("");
+      gtk_label_set_selectable (GTK_LABEL (example), TRUE);
+      gtk_widget_set_halign (example, GTK_ALIGN_START);
+
+      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+      gtk_box_set_homogeneous (GTK_BOX (box), TRUE);
+      gtk_container_add (GTK_CONTAINER (box), feat);
+      gtk_container_add (GTK_CONTAINER (box), example);
+      gtk_container_add (GTK_CONTAINER (group), box);
 
       item = g_new (FeatureItem, 1);
       item->name = tags[i];
       item->tag = tag;
+      item->top = box;
       item->feat = feat;
+      item->example = example;
 
       priv->feature_items = g_list_prepend (priv->feature_items, item);
     }
@@ -2012,7 +2211,11 @@ gtk_font_chooser_widget_populate_features (GtkFontChooserWidget *fontchooser)
   const char *number_case[] = { "xxxx", "lnum", "onum", NULL };
   const char *number_spacing[] = { "xxxx", "pnum", "tnum", NULL };
   const char *number_formatting[] = { "zero", "nalt", NULL };
-  const char *char_variants[] = { "swsh", "cswh", "calt", "falt", "hist", "salt", "jalt", "titl", "rand", NULL };
+  const char *char_variants[] = {
+    "swsh", "cswh", "calt", "falt", "hist", "salt", "jalt", "titl", "rand",
+    "ss01", "ss02", "ss03", "ss04", "ss05", "ss06", "ss07", "ss08", "ss09", "ss10",
+    "ss11", "ss12", "ss13", "ss14", "ss15", "ss16", "ss17", "ss18", "ss19", "ss20",
+    NULL };
 
   add_check_group (fontchooser, _("Ligatures"), ligatures);
   add_check_group (fontchooser, _("Letter Case"), letter_case);
@@ -2044,8 +2247,8 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
   for (l = priv->feature_items; l; l = l->next)
     {
       FeatureItem *item = l->data;
-      gtk_widget_hide (item->feat);
-      gtk_widget_hide (gtk_widget_get_parent (item->feat));
+      gtk_widget_hide (item->top);
+      gtk_widget_hide (gtk_widget_get_parent (item->top));
     }
 
   if ((priv->level & GTK_FONT_CHOOSER_LEVEL_FEATURES) == 0)
@@ -2093,14 +2296,16 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
                 continue;
 
               has_feature = TRUE;
-              gtk_widget_show (item->feat);
-              gtk_widget_show (gtk_widget_get_parent (item->feat));
+              gtk_widget_show (item->top);
+              gtk_widget_show (gtk_widget_get_parent (item->top));
               gtk_widget_show (priv->feature_language_combo);
+
+              update_feature_example (item, hb_face, script_tag, lang_tag, priv->font_desc);
 
               if (GTK_IS_RADIO_BUTTON (item->feat))
                 {
                   GtkWidget *def = GTK_WIDGET (g_object_get_data (G_OBJECT (item->feat), "default"));
-                  gtk_widget_show (def);
+                  gtk_widget_show (gtk_widget_get_parent (def));
                 }
               else if (GTK_IS_CHECK_BUTTON (item->feat))
                 {
