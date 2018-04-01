@@ -64,7 +64,7 @@
 #include "gtktooltipprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkversion.h"
-#include "gtkwidgetpaintable.h"
+#include "gtkwidgetpaintableprivate.h"
 #include "gtkwidgetpathprivate.h"
 #include "gtkwindowgroup.h"
 #include "gtkwindowprivate.h"
@@ -3978,7 +3978,7 @@ gtk_widget_invalidate_paintable_contents (GtkWidget *widget)
     return;
 
   for (l = priv->paintables; l; l = l->next)
-    gdk_paintable_invalidate_contents (l->data);
+    gtk_widget_paintable_invalidate_contents (l->data);
 }
 
 static void
@@ -3988,7 +3988,7 @@ gtk_widget_invalidate_paintable_size (GtkWidget *widget)
   GSList *l;
 
   for (l = priv->paintables; l; l = l->next)
-    gdk_paintable_invalidate_size (l->data);
+    gtk_widget_paintable_invalidate_size (l->data);
 }
 
 /**
@@ -4471,6 +4471,8 @@ gtk_widget_size_allocate (GtkWidget           *widget,
   gtk_widget_ensure_resize (widget);
   priv->alloc_needed = FALSE;
   priv->alloc_needed_on_child = FALSE;
+
+  gtk_widget_invalidate_paintable_size (widget);
 
 check_clip:
   if (position_changed || size_changed || baseline_changed)
