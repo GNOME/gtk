@@ -296,28 +296,36 @@ testinc = include_directories('tests')
 
 # Dependencies
 glib_dep       = dependency('glib-2.0', version: glib_req,
-                            fallback : ['glib', 'libglib_dep'])
+                            fallback : ['glib', 'libglib_dep'],
+                            default_options : ['werror=false'])
 gobject_dep    = dependency('gobject-2.0', version: glib_req,
-                            fallback : ['glib', 'libgobject_dep'])
+                            fallback : ['glib', 'libgobject_dep'],
+                            default_options : ['werror=false'])
 if host_machine.system() == 'windows'
   giowin32_dep = dependency('gio-windows-2.0', version: glib_req, required: win32_enabled,
-                            fallback : ['glib', 'libgio_dep'])
+                            fallback : ['glib', 'libgio_dep'],
+                            default_options : ['werror=false'])
 else
   giounix_dep  = dependency('gio-unix-2.0', version: glib_req, required: false,
-                            fallback : ['glib', 'libgio_dep'])
+                            fallback : ['glib', 'libgio_dep'],
+                            default_options : ['werror=false'])
 endif
 gmodule_dep    = dependency('gmodule-2.0', version: glib_req,
-                            fallback : ['glib', 'libgmodule_dep'])
+                            fallback : ['glib', 'libgmodule_dep'],
+                            default_options : ['werror=false'])
 cairo_dep      = dependency('cairo', version: cairo_req, required : cc.get_id() != 'msvc')
 cairogobj_dep  = dependency('cairo-gobject', version: cairo_req, required : cc.get_id() != 'msvc')
 pango_dep      = dependency('pango', version: pango_req,
-                            fallback : ['pango', 'libpango_dep'])
+                            fallback : ['pango', 'libpango_dep'],
+                            default_options : ['werror=false'])
 
 # Require PangoFT2 if on X11 or wayland
 require_pangoft2 = wayland_enabled or x11_enabled
 
 if require_pangoft2
-  pangoft_dep  = dependency('pangoft2', fallback : ['pango', 'libpangoft2_dep'])
+  pangoft_dep  = dependency('pangoft2',
+                            fallback : ['pango', 'libpangoft2_dep'],
+                            default_options : ['werror=false'])
 else
   pangoft_dep  = dependency('pangoft2', required: false)
 endif
@@ -350,16 +358,20 @@ if pangoft_dep.found()
 endif
 
 pangocairo_dep = dependency('pangocairo', version: cairo_req,
-                            fallback : ['pango', 'libpangocairo_dep'])
+                            fallback : ['pango', 'libpangocairo_dep'],
+                            default_options : ['werror=false'])
 pixbuf_dep     = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req,
-                            fallback : ['gdk-pixbuf', 'gdkpixbuf_dep'])
+                            fallback : ['gdk-pixbuf', 'gdkpixbuf_dep'],
+                            default_options : ['werror=false'])
 epoxy_dep      = dependency('epoxy', version: epoxy_req,
-                            fallback: ['libepoxy', 'libepoxy_dep'])
+                            fallback: ['libepoxy', 'libepoxy_dep'],
+                            default_options : ['werror=false'])
 atk_dep        = dependency('atk', version: atk_req)
 harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9', required: false)
 xkbdep         = dependency('xkbcommon', version: xkbcommon_req, required: wayland_enabled)
 graphene_dep   = dependency('graphene-gobject-1.0', version: graphene_req,
-                            fallback: ['graphene', 'graphene_dep'])
+                            fallback: ['graphene', 'graphene_dep'],
+                            default_options : ['werror=false'])
 iso_codes_dep  = dependency('iso-codes', required: false)
 
 fontconfig_dep = [] # only used in x11 backend
