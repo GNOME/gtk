@@ -210,7 +210,7 @@ gtk_snapshot_new (gboolean              record_names,
  * Returns the node that was constructed by @snapshot
  * and frees @snapshot.
  *
- * Returns: a newly-created #GskRenderNode
+ * Returns: (transfer full): a newly-created #GskRenderNode
  */
 GskRenderNode *
 gtk_snapshot_free_to_node (GtkSnapshot *snapshot)
@@ -230,7 +230,7 @@ gtk_snapshot_free_to_node (GtkSnapshot *snapshot)
  * Returns a paintable for the node that was
  * constructed by @snapshot and frees @snapshot.
  *
- * Returns: a newly-created #GdkPaintable
+ * Returns: (transfer full): a newly-created #GdkPaintable
  */
 GdkPaintable *
 gtk_snapshot_free_to_paintable (GtkSnapshot *snapshot)
@@ -1293,7 +1293,7 @@ gtk_snapshot_to_node (GtkSnapshot *snapshot)
  * nodes to @snapshot. The only function that should be
  * called after this is gtk_snapshot_unref().
  *
- * Returns: a new #GdkPaintable
+ * Returns: (transfer full): a new #GdkPaintable
  */
 GdkPaintable *
 gtk_snapshot_to_paintable (GtkSnapshot *snapshot)
