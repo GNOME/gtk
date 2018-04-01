@@ -19,7 +19,7 @@
 
 #include "config.h"
 
-#include "gtkwidgetpaintable.h"
+#include "gtkwidgetpaintableprivate.h"
 
 #include "gtkintl.h"
 #include "gtksnapshot.h"
@@ -59,6 +59,9 @@ struct _GtkWidgetPaintable
 
   GtkWidget *widget;
   guint loop_tracker;
+
+  guint size_invalid : 1;
+  guint contents_invalid : 1;
 };
 
 struct _GtkWidgetPaintableClass
@@ -83,6 +86,8 @@ gtk_widget_paintable_paintable_snapshot (GdkPaintable *paintable,
 {
   GtkWidgetPaintable *self = GTK_WIDGET_PAINTABLE (paintable);
   graphene_matrix_t transform;
+
+  self->contents_invalid = FALSE;
 
   if (self->widget == NULL ||
       !_gtk_widget_is_drawable (self->widget) ||
@@ -119,6 +124,11 @@ gtk_widget_paintable_paintable_snapshot (GdkPaintable *paintable,
 static GdkPaintable *
 gtk_widget_paintable_paintable_get_current_image (GdkPaintable *paintable)
 {
+  GtkWidgetPaintable *self = GTK_WIDGET_PAINTABLE (paintable);
+
+  self->contents_invalid = FALSE;
+  self->size_invalid = FALSE;
+
   g_warning ("FIXME: Implement once we can create paintables from render nodes");
 
   return NULL;
@@ -128,6 +138,8 @@ static int
 gtk_widget_paintable_paintable_get_intrinsic_width (GdkPaintable *paintable)
 {
   GtkWidgetPaintable *self = GTK_WIDGET_PAINTABLE (paintable);
+
+  self->size_invalid = FALSE;
 
   if (self->widget == NULL)
     return 0;
@@ -139,6 +151,8 @@ static int
 gtk_widget_paintable_paintable_get_intrinsic_height (GdkPaintable *paintable)
 {
   GtkWidgetPaintable *self = GTK_WIDGET_PAINTABLE (paintable);
+
+  self->size_invalid = FALSE;
 
   if (self->widget == NULL)
     return 0;
@@ -314,4 +328,22 @@ gtk_widget_paintable_set_widget (GtkWidgetPaintable *self,
   gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
 }
 
+void
+gtk_widget_paintable_invalidate_size (GtkWidgetPaintable *self)
+{
+  if (self->size_invalid)
+    return;
 
+  self->size_invalid = TRUE;
+  gdk_paintable_invalidate_size (GDK_PAINTABLE (self));
+}
+
+void
+gtk_widget_paintable_invalidate_contents (GtkWidgetPaintable *self)
+{
+  if (self->contents_invalid)
+    return;
+
+  self->contents_invalid = TRUE;
+  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+}
