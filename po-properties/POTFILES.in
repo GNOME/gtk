@@ -24,6 +24,7 @@ gdk/wayland/gdkdnd-wayland.c
 gdk/wayland/gdkglcontext-wayland.c
 gdk/wayland/gdkprimary-wayland.c
 gdk/win32/gdkclipdrop-win32.c
+gdk/win32/gdkcursor-win32.c
 gdk/win32/gdkdrop-win32.c
 gdk/win32/gdkglcontext-win32.c
 gdk/win32/gdkhdataoutputstream-win32.c
