@@ -878,6 +878,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                           <object class="GtkFontButton" id="fontbutton1">
                             <property name="can-focus">1</property>
                             <property name="receives-default">1</property>
+                            <property name="level">family|style|size|features|variations</property>
                           </object>
                           <packing>
                             <property name="position">6</property>
