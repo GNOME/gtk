@@ -135,6 +135,9 @@ GDK_AVAILABLE_IN_ALL
 void            gdk_paintable_invalidate_contents       (GdkPaintable           *paintable);
 GDK_AVAILABLE_IN_ALL
 void            gdk_paintable_invalidate_size           (GdkPaintable           *paintable);
+GDK_AVAILABLE_IN_ALL
+GdkPaintable *  gdk_paintable_new_empty                 (int                     intrinsic_width,
+                                                         int                     intrinsic_height);
 
 
 G_END_DECLS
