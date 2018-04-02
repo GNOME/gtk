@@ -13944,7 +13944,7 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
   gtk_treeview_snapshot_border (snapshot,
                                 &GRAPHENE_RECT_INIT(0, 0, bin_window_width + 2, background_area.height + 2));
 
-  paintable = gtk_snapshot_free_to_paintable (snapshot);
+  paintable = gtk_snapshot_free_to_paintable (snapshot, NULL);
 
   return paintable;
 }

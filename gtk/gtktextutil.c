@@ -233,7 +233,7 @@ gtk_text_util_create_drag_icon (GtkWidget *widget,
                                &color);
   gtk_snapshot_append_layout (snapshot, layout, &color, "TextDragIcon");
 
-  paintable = gtk_snapshot_free_to_paintable (snapshot);
+  paintable = gtk_snapshot_free_to_paintable (snapshot, NULL);
   g_object_unref (layout);
 
   return paintable;
@@ -343,7 +343,7 @@ gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
   g_object_unref (layout);
   g_object_unref (new_buffer);
 
-  paintable = gtk_snapshot_free_to_paintable (snapshot);
+  paintable = gtk_snapshot_free_to_paintable (snapshot, &(graphene_size_t) { layout_width, layout_height });
 
   return paintable;
 }

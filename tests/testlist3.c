@@ -28,7 +28,7 @@ drag_begin (GtkWidget      *widget,
   gtk_style_context_remove_class (gtk_widget_get_style_context (row), "during-dnd");
 
   cairo_destroy (cr);
-  paintable = gtk_snapshot_free_to_paintable (snapshot);
+  paintable = gtk_snapshot_free_to_paintable (snapshot, NULL);
 
   gtk_widget_translate_coordinates (widget, row, 0, 0, &x, &y);
   gtk_drag_set_icon_paintable (context, paintable, -x, -y);
