@@ -19,7 +19,7 @@
  * SECTION:gtkcelleditable
  * @Short_description: Interface for widgets that can be used for editing cells
  * @Title: GtkCellEditable
- * @See_also: #GtkEntry, #GtkCellRenderer
+ * @See_also: #GtkCellRenderer
  *
  * The #GtkCellEditable interface must be implemented for widgets to be usable
  * to edit the contents of a #GtkTreeView cell. It provides a way to specify how
