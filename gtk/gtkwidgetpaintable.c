@@ -125,13 +125,22 @@ static GdkPaintable *
 gtk_widget_paintable_paintable_get_current_image (GdkPaintable *paintable)
 {
   GtkWidgetPaintable *self = GTK_WIDGET_PAINTABLE (paintable);
+  GtkSnapshot *snapshot;
+  int width, height;
 
   self->contents_invalid = FALSE;
   self->size_invalid = FALSE;
 
-  g_warning ("FIXME: Implement once we can create paintables from render nodes");
+  width = gdk_paintable_get_intrinsic_width (paintable);
+  height = gdk_paintable_get_intrinsic_width (paintable);
+  if (width == 0 || height == 0)
+    return gdk_paintable_new_empty (width, height);
 
-  return NULL;
+  snapshot = gtk_snapshot_new (FALSE, "WidgetPaintableCurrentImage");
+  gdk_paintable_snapshot (GDK_PAINTABLE (self), 
+                          snapshot,
+                          width, height);
+  return gtk_snapshot_free_to_paintable (snapshot, &(graphene_size_t) { width, height });
 }
 
 static int
