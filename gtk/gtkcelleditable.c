@@ -17,8 +17,7 @@
 
 /**
  * SECTION:gtkcelleditable
- * @Short_description: Interface for widgets which can are used for editing
- *  cells
+ * @Short_description: Interface for widgets that can be used for editing cells
  * @Title: GtkCellEditable
  * @See_also: #GtkEntry, #GtkCellRenderer
  *
