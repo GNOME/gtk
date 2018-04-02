@@ -154,6 +154,9 @@ GDK_AVAILABLE_IN_ALL
 char *           gtk_font_chooser_get_font_features        (GtkFontChooser   *fontchooser);
 GDK_AVAILABLE_IN_ALL
 char *           gtk_font_chooser_get_language             (GtkFontChooser   *fontchooser);
+GDK_AVAILABLE_IN_ALL
+void             gtk_font_chooser_set_language             (GtkFontChooser   *fontchooser,
+                                                            const char       *language);
 
 G_END_DECLS
 

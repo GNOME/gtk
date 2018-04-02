@@ -148,7 +148,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
                           P_("Language"),
                           P_("Language for which features have been selected"),
                           "",
-                          GTK_PARAM_READABLE));
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkFontChooser::font-activated:
@@ -559,7 +559,7 @@ gtk_font_chooser_get_font_features (GtkFontChooser *fontchooser)
  * gtk_font_chooser_get_language:
  * @fontchooser: a #GtkFontChooser
  *
- * Gets the currently-selected language for font features.
+ * Gets the language that is used for font features.
  *
  * Returns: the currently selected language
  */
@@ -573,4 +573,20 @@ gtk_font_chooser_get_language (GtkFontChooser *fontchooser)
   g_object_get (fontchooser, "language", &text, NULL);
 
   return text;
+}
+
+/**
+ * gtk_font_chooser_set_language:
+ * @fontchooser: a #GtkFontChooser
+ * @language: a language
+ *
+ * Sets the language to use for font features.
+ */
+void
+gtk_font_chooser_set_language (GtkFontChooser *fontchooser,
+                               const char     *language)
+{
+  g_return_if_fail (GTK_IS_FONT_CHOOSER (fontchooser));
+
+  g_object_set (fontchooser, "language", language, NULL);
 }

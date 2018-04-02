@@ -289,19 +289,6 @@
                       <object class="GtkBox" id="feature_box">
                         <property name="orientation">vertical</property>
                         <property name="spacing">12</property>
-                        <child>
-                          <object class="GtkComboBox" id="feature_language_combo">
-                            <property name="halign">start</property>
-                            <property name="margin-top">10</property>
-                            <signal name="changed" handler="update_language" swapped="yes"/>
-                            <child>
-                              <object class="GtkCellRendererText"/>
-                              <attributes>
-                                <attribute name="text">0</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                        </child>
                       </object>
                     </child>
                   </object>

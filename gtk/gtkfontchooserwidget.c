@@ -120,13 +120,12 @@ struct _GtkFontChooserWidgetPrivate
 
   GtkWidget       *axis_grid;
   GtkWidget       *feature_box;
-  GtkWidget       *feature_language_combo;
 
   PangoFontMap         *font_map;
 
   PangoFontDescription *font_desc;
   char                 *font_features;
-  PangoLanguage        *font_language;
+  PangoLanguage        *language;
   GtkTreeIter           font_iter;      /* invalid if font not available or pointer into model
                                            (not filter_model) to the row containing font */
   GtkFontFilterFunc filter_func;
@@ -211,10 +210,11 @@ static void     gtk_font_chooser_widget_cell_data_func         (GtkTreeViewColum
 static void                gtk_font_chooser_widget_set_level (GtkFontChooserWidget *fontchooser,
                                                               GtkFontChooserLevel   level);
 static GtkFontChooserLevel gtk_font_chooser_widget_get_level (GtkFontChooserWidget *fontchooser);
+static void                gtk_font_chooser_widget_set_language (GtkFontChooserWidget *fontchooser,
+                                                                 const char           *language);
 static void selection_changed (GtkTreeSelection *selection,
                                GtkFontChooserWidget *fontchooser);
 static void update_font_features (GtkFontChooserWidget *fontchooser);
-static void update_language (GtkFontChooserWidget *fontchooser);
 
 static void gtk_font_chooser_widget_iface_init (GtkFontChooserIface *iface);
 
@@ -307,6 +307,9 @@ gtk_font_chooser_widget_set_property (GObject         *object,
     case GTK_FONT_CHOOSER_PROP_LEVEL:
       gtk_font_chooser_widget_set_level (fontchooser, g_value_get_flags (value));
       break;
+    case GTK_FONT_CHOOSER_PROP_LANGUAGE:
+      gtk_font_chooser_widget_set_language (fontchooser, g_value_get_string (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -345,7 +348,7 @@ gtk_font_chooser_widget_get_property (GObject         *object,
       g_value_set_string (value, fontchooser->priv->font_features);
       break;
     case GTK_FONT_CHOOSER_PROP_LANGUAGE:
-      g_value_set_string (value, pango_language_to_string (fontchooser->priv->font_language));
+      g_value_set_string (value, pango_language_to_string (fontchooser->priv->language));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -590,8 +593,8 @@ gtk_font_chooser_widget_update_preview_attributes (GtkFontChooserWidget *fontcho
   pango_attr_list_insert (attrs, pango_attr_font_desc_new (priv->font_desc));
   if (priv->font_features)
     pango_attr_list_insert (attrs, pango_attr_font_features_new (priv->font_features));
-  if (priv->font_language)
-    pango_attr_list_insert (attrs, pango_attr_language_new (priv->font_language));
+  if (priv->language)
+    pango_attr_list_insert (attrs, pango_attr_language_new (priv->language));
 
   gtk_entry_set_attributes (GTK_ENTRY (priv->preview), attrs);
 
@@ -754,7 +757,6 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, grid);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, font_name_label);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, feature_box);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, feature_language_combo);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, axis_grid);
 
   gtk_widget_class_bind_template_callback (widget_class, text_changed_cb);
@@ -766,10 +768,6 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, size_change_cb);
   gtk_widget_class_bind_template_callback (widget_class, output_cb);
   gtk_widget_class_bind_template_callback (widget_class, selection_changed);
-
-#if defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT)
-  gtk_widget_class_bind_template_callback (widget_class, update_language);
-#endif
 
   gtk_widget_class_set_css_name (widget_class, I_("fontchooser"));
 }
@@ -869,6 +867,7 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
   priv->level = GTK_FONT_CHOOSER_LEVEL_FAMILY |
                 GTK_FONT_CHOOSER_LEVEL_STYLE |
                 GTK_FONT_CHOOSER_LEVEL_SIZE;
+  priv->language = pango_language_get_default ();
 
   /* Set default preview text */
   gtk_entry_set_text (GTK_ENTRY (priv->preview), priv->preview_text);
@@ -1694,102 +1693,28 @@ gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchoose
 
 /* OpenType features */
 
+/* look for a lang / script combination that matches the
+ * language property and is supported by the hb_face. If
+ * none is found, return the default lang / script tags.
+ */
 static void
-add_script (GtkListStore *store,
-            guint         script_index,
-            hb_tag_t      script,
-            guint         lang_index,
-            hb_tag_t      lang)
-{
-  char langbuf[5];
-  const char *langname;
-
-  if (lang == HB_OT_TAG_DEFAULT_LANGUAGE)
-    langname = C_("Language", "Default");
-  else
-    {
-      langname = get_language_name_for_tag (lang);
-      if (!langname)
-        {
-          hb_tag_to_string (lang, langbuf);
-          langbuf[4] = 0;
-          langname = langbuf;
-        }
-    }
-
-  gtk_list_store_insert_with_values (store, NULL, -1,
-                                     0, langname,
-                                     1, script_index,
-                                     2, lang_index,
-                                     3, lang,
-                                     -1);
-}
-
-static int
-feature_language_sort_func (GtkTreeModel *model,
-                            GtkTreeIter  *a,
-                            GtkTreeIter  *b,
-                            gpointer      user_data)
-{
-  char *sa, *sb;
-  int ret;
-
-  gtk_tree_model_get (model, a, 0, &sa, -1);
-  gtk_tree_model_get (model, b, 0, &sb, -1);
-
-  ret = strcmp (sa, sb);
-
-  g_free (sa);
-  g_free (sb);
-
-  return ret;
-}
-
-typedef struct {
-  hb_tag_t script_tag;
-  hb_tag_t lang_tag;
-  unsigned int script_index;
-  unsigned int lang_index;
-} TagPair;
-
-static guint
-tag_pair_hash (gconstpointer data)
-{
-  const TagPair *pair = data;
-
-  return pair->script_tag + pair->lang_tag;
-}
-
-static gboolean
-tag_pair_equal (gconstpointer a, gconstpointer b)
-{
-  const TagPair *pair_a = a;
-  const TagPair *pair_b = b;
-
-  return pair_a->script_tag == pair_b->script_tag && pair_a->lang_tag == pair_b->lang_tag;
-}
-
-static void
-update_language_combo (GtkFontChooserWidget *fontchooser,
-                       hb_face_t            *hb_face)
+find_language_and_script (GtkFontChooserWidget *fontchooser,
+                          hb_face_t            *hb_face,
+                          hb_tag_t             *lang_tag,
+                          hb_tag_t             *script_tag)
 {
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
-  GtkListStore *store;
   gint i, j, k;
   hb_tag_t scripts[80];
   unsigned int n_scripts;
   unsigned int count;
   hb_tag_t table[2] = { HB_OT_TAG_GSUB, HB_OT_TAG_GPOS };
-  GHashTable *tags;
-  GHashTableIter iter;
-  TagPair *pair;
+  hb_language_t lang;
+  const char *langname, *p;
 
-  tags = g_hash_table_new_full (tag_pair_hash, tag_pair_equal, g_free, NULL);
-
-  pair = g_new (TagPair, 1);
-  pair->script_tag = HB_OT_TAG_DEFAULT_SCRIPT;
-  pair->lang_tag = HB_OT_TAG_DEFAULT_LANGUAGE;
-  g_hash_table_add (tags, pair);
+  langname = pango_language_to_string (priv->language);
+  p = strchr (langname, '-');
+  lang = hb_language_from_string (langname, p ? p - langname : -1);
 
   n_scripts = 0;
   for (i = 0; i < 2; i++)
@@ -1814,30 +1739,22 @@ update_language_combo (GtkFontChooserWidget *fontchooser,
 
       for (k = 0; k < n_languages; k++)
         {
-          pair = g_new (TagPair, 1);
-          pair->script_tag = scripts[j];
-          pair->lang_tag = languages[k];
-          pair->script_index = j;
-          pair->lang_index = k;
-          g_hash_table_add (tags, pair);
+          hb_language_t *l;
+          char buf[5], buf2[5];
+          hb_tag_to_string (languages[k], buf); buf[4] = '\0';
+          hb_tag_to_string (scripts[j], buf2); buf2[4] = '\0';
+          l = hb_ot_tag_to_language (languages[k]);
+          if (l == lang)
+            {
+              *script_tag = scripts[j];
+              *lang_tag = languages[k];
+              return;
+            }
         }
     }
 
-  store = gtk_list_store_new (4, G_TYPE_STRING, G_TYPE_UINT, G_TYPE_UINT, G_TYPE_UINT);
-
-  g_hash_table_iter_init (&iter, tags);
-  while (g_hash_table_iter_next (&iter, (gpointer *)&pair, NULL))
-    add_script (store, pair->script_index, pair->script_tag, pair->lang_index, pair->lang_tag);
-
-  g_hash_table_unref (tags);
-
-  gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (store),
-                                           feature_language_sort_func, NULL, NULL);
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
-                                        GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID,
-                                        GTK_SORT_ASCENDING);
-  gtk_combo_box_set_model (GTK_COMBO_BOX (priv->feature_language_combo), GTK_TREE_MODEL (store));
-  gtk_combo_box_set_active (GTK_COMBO_BOX (priv->feature_language_combo), 0);
+  *lang_tag = HB_OT_TAG_DEFAULT_LANGUAGE;
+  *script_tag = HB_OT_TAG_DEFAULT_SCRIPT;
 }
 
 typedef struct {
@@ -2241,15 +2158,13 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
   PangoFont *pango_font;
   FT_Face ft_face;
   hb_font_t *hb_font;
-  hb_tag_t script_tag = FT_MAKE_TAG('l','a','t','n');
-  hb_tag_t lang_tag = FT_MAKE_TAG('D','E','U',' ');
+  hb_tag_t script_tag;
+  hb_tag_t lang_tag;
   guint script_index = 0;
   guint lang_index = 0;
   int i, j;
   GList *l;
   gboolean has_feature = FALSE;
-
-  gtk_widget_hide (priv->feature_language_combo);
 
   for (l = priv->feature_items; l; l = l->next)
     {
@@ -2276,7 +2191,7 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
 
       hb_face = hb_font_get_face (hb_font);
 
-      update_language_combo (fontchooser, hb_face);
+      find_language_and_script (fontchooser, hb_face, &lang_tag, &script_tag);
 
       n_features = 0;
       for (i = 0; i < 2; i++)
@@ -2305,7 +2220,6 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
               has_feature = TRUE;
               gtk_widget_show (item->top);
               gtk_widget_show (gtk_widget_get_parent (item->top));
-              gtk_widget_show (priv->feature_language_combo);
 
               update_feature_example (item, hb_face, script_tag, lang_tag, priv->font_desc);
 
@@ -2373,33 +2287,6 @@ update_font_features (GtkFontChooserWidget *fontchooser)
     }
   else
     g_string_free (s, TRUE);
-
-  gtk_font_chooser_widget_update_preview_attributes (fontchooser);
-}
-
-static void
-update_language (GtkFontChooserWidget *fontchooser)
-{
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
-  GtkTreeIter iter;
-
-  if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (priv->feature_language_combo), &iter))
-    {
-      GtkTreeModel *model;
-      PangoLanguage *lang;
-      hb_tag_t lang_tag;
-
-      model = gtk_combo_box_get_model (GTK_COMBO_BOX (priv->feature_language_combo));
-      gtk_tree_model_get (model, &iter,
-                          3, &lang_tag,
-                          -1);
-      lang = pango_language_from_string (hb_language_to_string (hb_ot_tag_to_language (lang_tag)));
-      if (priv->font_language != lang)
-        {
-          priv->font_language = lang;
-          g_object_notify (G_OBJECT (fontchooser), "language");
-        }
-    }
 
   gtk_font_chooser_widget_update_preview_attributes (fontchooser);
 }
@@ -2631,6 +2518,23 @@ gtk_font_chooser_widget_get_level (GtkFontChooserWidget *fontchooser)
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
 
   return priv->level;
+}
+
+static void
+gtk_font_chooser_widget_set_language (GtkFontChooserWidget *fontchooser,
+                                      const char           *language)
+{
+  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  PangoLanguage *lang;
+
+  lang = pango_language_from_string (language);
+  if (priv->language == lang)
+    return;
+
+  priv->language = lang;
+  g_object_notify (G_OBJECT (fontchooser), "language");
+
+  gtk_font_chooser_widget_update_preview_attributes (fontchooser);
 }
 
 static void

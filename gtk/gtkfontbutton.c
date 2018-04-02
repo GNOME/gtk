@@ -84,7 +84,7 @@ struct _GtkFontButtonPrivate
   PangoFontMap         *font_map;
   gint                  font_size;
   char                 *font_features;
-  char                 *language;
+  PangoLanguage        *language;
   gchar                *preview_text;
   GtkFontFilterFunc     font_filter;
   gpointer              font_filter_data;
@@ -139,6 +139,8 @@ static void        gtk_font_button_set_font_name (GtkFontButton *button,
 static const char *gtk_font_button_get_font_name (GtkFontButton *button);
 static void        gtk_font_button_set_level     (GtkFontButton       *font_button,
                                                   GtkFontChooserLevel  level);
+static void        gtk_font_button_set_language  (GtkFontButton *button,
+                                                  const char    *language);
 
 static guint font_button_signals[LAST_SIGNAL] = { 0 };
 
@@ -164,9 +166,6 @@ clear_font_data (GtkFontButton *font_button)
 
   g_free (priv->font_features);
   priv->font_features = NULL;
-
-  g_free (priv->language);
-  priv->language = NULL;
 }
 
 static void
@@ -609,6 +608,7 @@ gtk_font_button_init (GtkFontButton *font_button)
   font_button->priv->level = GTK_FONT_CHOOSER_LEVEL_FAMILY |
                              GTK_FONT_CHOOSER_LEVEL_STYLE |
                              GTK_FONT_CHOOSER_LEVEL_SIZE;
+  font_button->priv->language = pango_language_get_default ();
 
   gtk_font_button_take_font_desc (font_button, NULL);
 
@@ -661,6 +661,9 @@ gtk_font_button_set_property (GObject      *object,
     case GTK_FONT_CHOOSER_PROP_FONT_DESC:
       gtk_font_button_take_font_desc (font_button, g_value_dup_boxed (value));
       break;
+    case GTK_FONT_CHOOSER_PROP_LANGUAGE:
+      gtk_font_button_set_language (font_button, g_value_get_string (value));
+      break;
     case GTK_FONT_CHOOSER_PROP_LEVEL:
       gtk_font_button_set_level (font_button, g_value_get_flags (value));
       break;
@@ -706,7 +709,7 @@ gtk_font_button_get_property (GObject    *object,
       g_value_set_string (value, priv->font_features);
       break;
     case GTK_FONT_CHOOSER_PROP_LANGUAGE:
-      g_value_set_string (value, priv->language);
+      g_value_set_string (value, pango_language_to_string (priv->language));
       break;
     case GTK_FONT_CHOOSER_PROP_LEVEL:
       g_value_set_flags (value, priv->level);
@@ -919,6 +922,7 @@ gtk_font_button_clicked (GtkButton *button,
 
       gtk_font_chooser_set_show_preview_entry (font_dialog, priv->show_preview_entry);
       gtk_font_chooser_set_level (GTK_FONT_CHOOSER (font_dialog), priv->level);
+      gtk_font_chooser_set_language (GTK_FONT_CHOOSER (font_dialog), priv->language);
 
       if (priv->preview_text)
         {
@@ -1331,4 +1335,18 @@ gtk_font_button_set_level (GtkFontButton       *button,
   gtk_font_button_update_font_info (button);
 
   g_object_notify (G_OBJECT (button), "level");
+}
+
+static void
+gtk_font_button_set_language (GtkFontButton *button,
+                              const char    *language)
+{
+  GtkFontButtonPrivate *priv = button->priv;
+
+  priv->language = pango_language_from_string (language);
+
+  if (priv->font_dialog)
+    gtk_font_chooser_set_language (GTK_FONT_CHOOSER (priv->font_dialog), language);
+
+  g_object_notify (G_OBJECT (button), "language");
 }
