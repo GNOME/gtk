@@ -11,25 +11,13 @@ drag_begin (GtkWidget      *widget,
 {
   GtkWidget *row;
   GtkAllocation alloc;
-  GtkSnapshot *snapshot;
   GdkPaintable *paintable;
-  cairo_t *cr;
   int x, y;
 
   row = gtk_widget_get_ancestor (widget, GTK_TYPE_LIST_BOX_ROW);
   gtk_widget_get_allocation (row, &alloc);
-  snapshot = gtk_snapshot_new (FALSE, "DragIcon");
-  cr = gtk_snapshot_append_cairo (snapshot,
-                                  &GRAPHENE_RECT_INIT(0, 0, alloc.width, alloc.height),
-                                  "DragText");
 
-  gtk_style_context_add_class (gtk_widget_get_style_context (row), "during-dnd");
-  gtk_widget_draw (row, cr);
-  gtk_style_context_remove_class (gtk_widget_get_style_context (row), "during-dnd");
-
-  cairo_destroy (cr);
-  paintable = gtk_snapshot_free_to_paintable (snapshot, NULL);
-
+  paintable = gtk_widget_paintable_new (row);
   gtk_widget_translate_coordinates (widget, row, 0, 0, &x, &y);
   gtk_drag_set_icon_paintable (context, paintable, -x, -y);
 
