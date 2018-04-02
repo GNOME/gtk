@@ -172,7 +172,19 @@ snapshot_widget (GtkWidget *widget, SnapshotMode mode)
       snapshot_window_native (gtk_widget_get_surface (widget), cr);
       break;
     case SNAPSHOT_DRAW:
-      gtk_widget_draw (widget, cr);
+      {
+        GtkSnapshot *snapshot = gtk_snapshot_new (FALSE, "ReftestSnapshot");
+        GdkPaintable *paintable = gtk_widget_paintable_new (widget);
+        GskRenderNode *node;
+
+        gdk_paintable_snapshot (paintable,
+                                snapshot,
+                                gtk_widget_get_allocated_width (widget),
+                                gtk_widget_get_allocated_height (widget));
+        g_object_unref (paintable);
+        node = gtk_snapshot_free_to_node (snapshot);
+        gsk_render_node_draw (node, cr);
+      }
       break;
     default:
       g_assert_not_reached();
