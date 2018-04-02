@@ -892,9 +892,11 @@ gtk_cell_renderer_activate (GtkCellRenderer      *cell,
  * @cell_area: cell area as passed to gtk_cell_renderer_render()
  * @flags: render flags
  *
- * Passes an activate event to the cell renderer for possible processing.
+ * Starts editing the contents of this @cell, through a new #GtkCellEditable
+ * widget created by the #GtkCellRendererClass.start_editing virtual function.
  *
- * Returns: (nullable) (transfer none): A new #GtkCellEditable, or %NULL
+ * Returns: (nullable) (transfer none): A new #GtkCellEditable for editing this
+ *   @cell, or %NULL if editing is not possible
  **/
 GtkCellEditable *
 gtk_cell_renderer_start_editing (GtkCellRenderer      *cell,
