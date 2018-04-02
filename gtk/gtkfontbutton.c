@@ -1005,8 +1005,7 @@ response_cb (GtkDialog *dialog,
   priv->font_size = gtk_font_chooser_get_font_size (font_chooser);
   g_free (priv->font_features);
   priv->font_features = gtk_font_chooser_get_font_features (font_chooser);
-  g_free (priv->language);
-  priv->language = gtk_font_chooser_get_language (font_chooser);
+  priv->language = pango_language_from_string (gtk_font_chooser_get_language (font_chooser));
 
   /* Set label font */
   gtk_font_button_update_font_info (font_button);
