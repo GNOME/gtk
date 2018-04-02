@@ -408,9 +408,6 @@ void       gtk_widget_realize             (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_unrealize           (GtkWidget           *widget);
 
-GDK_AVAILABLE_IN_ALL
-void       gtk_widget_draw                (GtkWidget           *widget,
-                                           cairo_t             *cr);
 /* Queuing draws */
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_queue_draw          (GtkWidget           *widget);
