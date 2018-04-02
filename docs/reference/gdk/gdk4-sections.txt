@@ -717,6 +717,7 @@ gdk_paintable_get_intrinsic_aspect_ratio
 gdk_paintable_compute_concrete_size
 gdk_paintable_invalidate_contents
 gdk_paintable_invalidate_size
+gdk_paintable_new_empty
 <SECTION>
 
 <SECTION>

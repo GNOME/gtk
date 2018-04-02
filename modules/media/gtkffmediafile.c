@@ -114,6 +114,14 @@ gtk_ff_media_file_paintable_get_current_image (GdkPaintable *paintable)
 {
   GtkFfMediaFile *video = GTK_FF_MEDIA_FILE (paintable);
 
+  if (gtk_video_frame_ffmpeg_is_empty (&video->current_frame))
+    {
+      if (video->codec_ctx)
+        return gdk_paintable_new_empty (video->codec_ctx->width, video->codec_ctx->height);
+      else
+        return gdk_paintable_new_empty (0, 0);
+    }
+
   return GDK_PAINTABLE (g_object_ref (video->current_frame.texture));
 }
 

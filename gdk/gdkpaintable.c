@@ -544,3 +544,102 @@ gdk_paintable_compute_concrete_size (GdkPaintable *paintable,
     }
 }
 
+#define GDK_TYPE_EMPTY_PAINTABLE (gdk_empty_paintable_get_type())
+static
+G_DECLARE_FINAL_TYPE(GdkEmptyPaintable, gdk_empty_paintable, GDK, EMPTY_PAINTABLE, GObject)
+
+struct _GdkEmptyPaintable
+{
+  GObject parent_instance;
+
+  int width;
+  int height;
+};
+
+struct _GdkEmptyPaintableClass
+{
+  GObjectClass parent_class;
+};
+
+static void
+gdk_empty_paintable_snapshot (GdkPaintable *paintable,
+                              GdkSnapshot  *snapshot,
+                              double        width,
+                              double        height)
+{
+}
+
+static GdkPaintableFlags
+gdk_empty_paintable_get_flags (GdkPaintable *paintable)
+{
+  return GDK_PAINTABLE_STATIC_SIZE
+       | GDK_PAINTABLE_STATIC_CONTENTS;
+}
+
+static int
+gdk_empty_paintable_get_intrinsic_width (GdkPaintable *paintable)
+{
+  GdkEmptyPaintable *self = GDK_EMPTY_PAINTABLE (paintable);
+
+  return self->width;
+}
+
+static int
+gdk_empty_paintable_get_intrinsic_height (GdkPaintable *paintable)
+{
+  GdkEmptyPaintable *self = GDK_EMPTY_PAINTABLE (paintable);
+
+  return self->height;
+}
+
+static void
+gdk_empty_paintable_paintable_init (GdkPaintableInterface *iface)
+{
+  iface->snapshot = gdk_empty_paintable_snapshot;
+  iface->get_flags = gdk_empty_paintable_get_flags;
+  iface->get_intrinsic_width = gdk_empty_paintable_get_intrinsic_width;
+  iface->get_intrinsic_height = gdk_empty_paintable_get_intrinsic_height;
+}
+
+G_DEFINE_TYPE_WITH_CODE (GdkEmptyPaintable, gdk_empty_paintable, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (GDK_TYPE_PAINTABLE,
+                                                gdk_empty_paintable_paintable_init))
+
+static void
+gdk_empty_paintable_class_init (GdkEmptyPaintableClass *klass)
+{
+}
+
+static void
+gdk_empty_paintable_init (GdkEmptyPaintable *self)
+{
+}
+
+/**
+ * gdk_paintable_new_empty:
+ * @intrinsic_width: The intrinsic width to report. Can be 0 for no width.
+ * @intrinsic_height: The intrinsic height to report. Can be 0 for no height.
+ *
+ * Returns a paintable that has the given intrinsic size and draws nothing.
+ * This is often useful for implementing the GdkPaintableClass:get_current_image()
+ * virtual function when the paintable is in an incomplete state (like a
+ * #GtkMediaStream before receiving the first frame).
+ *
+ * Returns: (transfer full) a #GdkPaintable
+ **/
+GdkPaintable *
+gdk_paintable_new_empty (int intrinsic_width,
+                         int intrinsic_height)
+{
+  GdkEmptyPaintable *result;
+
+  g_return_val_if_fail (intrinsic_width < 0, NULL);
+  g_return_val_if_fail (intrinsic_height < 0, NULL);
+
+  result = g_object_new (GDK_TYPE_EMPTY_PAINTABLE, NULL);
+
+  result->width = intrinsic_width;
+  result->height = intrinsic_height;
+
+  return GDK_PAINTABLE (result);
+}
