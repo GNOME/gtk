@@ -113,55 +113,6 @@ build_option_menu (gchar           *items[],
 /*
  * Windows with an alpha channel
  */
-
-
-static gboolean
-on_alpha_window_draw (GtkWidget *widget,
-                      cairo_t   *cr)
-{
-  cairo_pattern_t *pattern;
-  int radius, width, height;
-  GdkDisplay *display;
-
-  width = gtk_widget_get_width (widget);
-  height = gtk_widget_get_height (widget);
-
-  /* avoid painting over the borders */
-  cairo_rectangle (cr, 0, 0, width, height);
-  cairo_clip (cr);
-
-  radius = MIN (width, height) / 2;
-  pattern = cairo_pattern_create_radial (width / 2,
-                                         height / 2,
-					 0.0,
-                                         width / 2,
-                                         height / 2,
-					 radius * 1.33);
-
-  display = gtk_widget_get_display (widget);
-  if (gdk_display_is_rgba (display) &&
-      gdk_display_is_composited (display))
-    cairo_set_source_rgba (cr, 1.0, 1.0, 1.0, 0.0); /* transparent */
-  else
-    cairo_set_source_rgb (cr, 1.0, 1.0, 1.0); /* opaque white */
-    
-  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-  cairo_paint (cr);
-  
-  cairo_pattern_add_color_stop_rgba (pattern, 0.0,
-				     1.0, 0.75, 0.0, 1.0); /* solid orange */
-  cairo_pattern_add_color_stop_rgba (pattern, 1.0,
-				     1.0, 0.75, 0.0, 0.0); /* transparent orange */
-
-  cairo_set_source (cr, pattern);
-  cairo_pattern_destroy (pattern);
-  
-  cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
-  cairo_paint (cr);
-
-  return FALSE;
-}
-
 static GtkWidget *
 build_alpha_widgets (void)
 {
@@ -238,14 +189,22 @@ create_alpha_window (GtkWidget *widget)
       GtkWidget *vbox;
       GtkWidget *label;
       GdkDisplay *display;
+      GtkCssProvider *provider;
       
       window = gtk_dialog_new_with_buttons ("Alpha Window",
 					    GTK_WINDOW (gtk_widget_get_toplevel (widget)), 0,
 					    "_Close", 0,
 					    NULL);
-
-      g_signal_connect (window, "draw",
-			G_CALLBACK (on_alpha_window_draw), NULL);
+      provider = gtk_css_provider_new ();
+      gtk_css_provider_load_from_data (provider,
+                                       "dialog {\n"
+                                       "  background: radial-gradient(ellipse at center, #FFBF00, #FFBF0000);\n"
+                                       "}\n",
+                                       -1);
+      gtk_style_context_add_provider (gtk_widget_get_style_context (window),
+                                      GTK_STYLE_PROVIDER (provider),
+                                      GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+      g_object_unref (provider);
 
       content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
 
@@ -7062,33 +7021,6 @@ create_mainloop (GtkWidget *widget)
     gtk_widget_destroy (window);
 }
 
-static gboolean
-layout_draw_handler (GtkWidget *widget, cairo_t *cr)
-{
-  GdkRectangle clip;
-  gint i,j;
-  gint imin, imax, jmin, jmax;
-
-  gdk_cairo_get_clip_rectangle (cr, &clip);
-
-  imin = (clip.x) / 10;
-  imax = (clip.x + clip.width + 9) / 10;
-
-  jmin = (clip.y) / 10;
-  jmax = (clip.y + clip.height + 9) / 10;
-
-  for (i=imin; i<imax; i++)
-    for (j=jmin; j<jmax; j++)
-      if ((i+j) % 2)
-	cairo_rectangle (cr,
-			 10*i, 10*j, 
-			 1+i%10, 1+j%10);
-  
-  cairo_fill (cr);
-
-  return FALSE;
-}
-
 void create_layout (GtkWidget *widget)
 {
   GtkAdjustment *hadjustment, *vadjustment;
@@ -7136,9 +7068,6 @@ void create_layout (GtkWidget *widget)
       gtk_adjustment_set_step_increment (vadjustment, 10.0);
       gtk_scrollable_set_hadjustment (GTK_SCROLLABLE (layout), hadjustment);
       gtk_scrollable_set_vadjustment (GTK_SCROLLABLE (layout), vadjustment);
-
-      g_signal_connect (layout, "draw",
-			G_CALLBACK (layout_draw_handler), NULL);
 
       gtk_layout_set_size (layout, 1600, 128000);
 
