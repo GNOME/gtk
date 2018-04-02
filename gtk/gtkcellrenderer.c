@@ -56,7 +56,8 @@
  * “activatable” like #GtkCellRendererToggle,
  * which toggles when it gets activated by a mouse click, or it can be
  * “editable” like #GtkCellRendererText, which
- * allows the user to edit the text using a #GtkEntry.
+ * allows the user to edit the text using a widget implementing the
+ * #GtkCellEditable interface, e.g. #GtkEntry.
  * To make a cell renderer activatable or editable, you have to
  * implement the #GtkCellRendererClass.activate or
  * #GtkCellRendererClass.start_editing virtual functions, respectively.
