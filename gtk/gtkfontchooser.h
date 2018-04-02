@@ -145,7 +145,19 @@ void             gtk_font_chooser_set_font_map             (GtkFontChooser   *fo
 GDK_AVAILABLE_IN_3_18
 PangoFontMap *   gtk_font_chooser_get_font_map             (GtkFontChooser   *fontchooser);
 
-
+GDK_AVAILABLE_IN_3_24
+void             gtk_font_chooser_set_level                (GtkFontChooser   *fontchooser,
+                                                            GtkFontChooserLevel level);
+GDK_AVAILABLE_IN_3_24
+GtkFontChooserLevel
+                 gtk_font_chooser_get_level                (GtkFontChooser   *fontchooser);
+GDK_AVAILABLE_IN_3_24
+char *           gtk_font_chooser_get_font_features        (GtkFontChooser   *fontchooser);
+GDK_AVAILABLE_IN_3_24
+char *           gtk_font_chooser_get_language             (GtkFontChooser   *fontchooser);
+GDK_AVAILABLE_IN_3_24
+void             gtk_font_chooser_set_language             (GtkFontChooser   *fontchooser,
+                                                            const char       *language);
 
 G_END_DECLS
 

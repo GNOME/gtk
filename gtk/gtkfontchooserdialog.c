@@ -222,7 +222,7 @@ gtk_font_chooser_dialog_class_init (GtkFontChooserDialogClass *klass)
   /* Bind class to template
    */
   gtk_widget_class_set_template_from_resource (widget_class,
-					       "/org/gtk/libgtk/ui/gtkfontchooserdialog.ui");
+                                               "/org/gtk/libgtk/ui/gtkfontchooserdialog.ui");
 
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserDialog, fontchooser);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserDialog, select_button);
