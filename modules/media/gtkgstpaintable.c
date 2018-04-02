@@ -57,8 +57,7 @@ gtk_gst_paintable_paintable_get_current_image (GdkPaintable *paintable)
   if (self->image)
     return GDK_PAINTABLE (g_object_ref (self->image));
 
-  g_warning ("FIXME: return empty something here");
-  return NULL;
+  return gdk_paintable_new_empty (0, 0);
 }
 
 static int
