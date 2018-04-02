@@ -1739,12 +1739,7 @@ find_language_and_script (GtkFontChooserWidget *fontchooser,
 
       for (k = 0; k < n_languages; k++)
         {
-          hb_language_t *l;
-          char buf[5], buf2[5];
-          hb_tag_to_string (languages[k], buf); buf[4] = '\0';
-          hb_tag_to_string (scripts[j], buf2); buf2[4] = '\0';
-          l = hb_ot_tag_to_language (languages[k]);
-          if (l == lang)
+          if (lang == hb_ot_tag_to_language (languages[k]))
             {
               *script_tag = scripts[j];
               *lang_tag = languages[k];
