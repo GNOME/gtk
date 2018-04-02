@@ -963,7 +963,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->direction_changed = gtk_widget_real_direction_changed;
   klass->grab_notify = NULL;
   klass->child_notify = NULL;
-  klass->draw = NULL;
   klass->snapshot = gtk_widget_real_snapshot;
   klass->mnemonic_activate = gtk_widget_real_mnemonic_activate;
   klass->grab_focus = gtk_widget_real_grab_focus;
@@ -1688,7 +1687,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
     g_signal_new (I_("draw"),
 		   G_TYPE_FROM_CLASS (gobject_class),
 		   G_SIGNAL_RUN_LAST,
-		   G_STRUCT_OFFSET (GtkWidgetClass, draw),
+                   0,
                    _gtk_boolean_handled_accumulator, NULL,
                    gtk_widget_draw_marshaller,
 		   G_TYPE_BOOLEAN, 1,
@@ -5230,153 +5229,6 @@ gtk_widget_get_renderer (GtkWidget *widget)
     return gtk_window_get_renderer (GTK_WINDOW (toplevel));
 
   return NULL;
-}
-
-typedef enum {
-  RENDER_SNAPSHOT,
-  RENDER_DRAW
-} RenderMode;
-
-static RenderMode
-get_render_mode (GtkWidgetClass *klass)
-{
-  GtkWidgetClass *parent_class;
-
-  for (parent_class = g_type_class_peek_parent (klass);
-       parent_class != gtk_widget_parent_class;
-       parent_class = g_type_class_peek_parent (klass))
-    {
-      if (klass->snapshot != parent_class->snapshot)
-        return RENDER_SNAPSHOT;
-      else if (klass->draw != parent_class->draw)
-        return RENDER_DRAW;
-
-      klass = parent_class;
-    }
-
-  return RENDER_SNAPSHOT;
-}
-
-static void
-gtk_widget_draw_internal (GtkWidget *widget,
-                          cairo_t   *cr)
-{
-  if (!_gtk_widget_is_drawable (widget))
-    return;
-
-  cairo_rectangle (cr,
-                   0, 0,
-                   widget->priv->allocation.width,
-                   widget->priv->allocation.height);
-  cairo_clip (cr);
-
-  if (gdk_cairo_get_clip_rectangle (cr, NULL))
-    {
-      GtkWidgetClass *widget_class = GTK_WIDGET_GET_CLASS (widget);
-      GdkSurface *event_surface = NULL;
-      gboolean result;
-      RenderMode mode;
-
-#ifdef G_ENABLE_CONSISTENCY_CHECKS
-      if (_gtk_widget_get_alloc_needed (widget))
-        g_warning ("%s %p is drawn without a current allocation. This should not happen.", G_OBJECT_TYPE_NAME (widget), widget);
-#endif
-
-      /* If the widget uses GSK render nodes then we need a fallback path to
-       * render on the Cairo context; otherwise we just go through the old
-       * GtkWidget::draw path
-       */
-      mode = get_render_mode (widget_class);
-
-      if (mode == RENDER_SNAPSHOT)
-        {
-          GtkSnapshot *snapshot;
-          GskRenderNode *node;
-
-          snapshot = gtk_snapshot_new (FALSE, "Fallback<%s>", G_OBJECT_TYPE_NAME (widget));
-          gtk_widget_snapshot (widget, snapshot);
-          node = gtk_snapshot_free_to_node (snapshot);
-          if (node != NULL)
-            {
-              gsk_render_node_draw (node, cr);
-              gsk_render_node_unref (node);
-            }
-        }
-      else
-        {
-          gboolean push_group = 
-            widget->priv->alpha != 255 && !_gtk_widget_is_toplevel (widget);
-
-          if (push_group)
-            cairo_push_group (cr);
-
-          if (g_signal_has_handler_pending (widget, widget_signals[DRAW], 0, FALSE))
-            {
-              g_signal_emit (widget, widget_signals[DRAW],
-                             0, cr,
-                             &result);
-            }
-          else if (GTK_WIDGET_GET_CLASS (widget)->draw)
-            {
-              cairo_save (cr);
-              GTK_WIDGET_GET_CLASS (widget)->draw (widget, cr);
-              cairo_restore (cr);
-            }
-
-          if (push_group)
-            {
-              cairo_pop_group_to_source (cr);
-              cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
-              cairo_paint_with_alpha (cr, widget->priv->alpha / 255.0);
-            }
-        }
-
-#ifdef G_ENABLE_DEBUG
-      if (GTK_DISPLAY_DEBUG_CHECK (gtk_widget_get_display (widget), BASELINES))
-	{
-	  gint baseline = gtk_widget_get_allocated_baseline (widget);
-	  gint width = gtk_widget_get_allocated_width (widget);
-
-	  if (baseline != -1)
-	    {
-	      cairo_save (cr);
-	      cairo_new_path (cr);
-	      cairo_move_to (cr, 0, baseline+0.5);
-	      cairo_line_to (cr, width, baseline+0.5);
-	      cairo_set_line_width (cr, 1.0);
-	      cairo_set_source_rgba (cr, 1.0, 0, 0, 0.25);
-	      cairo_stroke (cr);
-	      cairo_restore (cr);
-	    }
-	}
-      if (widget->priv->highlight_resize)
-        {
-          GtkAllocation alloc;
-          gtk_widget_get_allocation (widget, &alloc);
-
-          cairo_rectangle (cr, 0, 0, alloc.width, alloc.height);
-          cairo_set_source_rgba (cr, 1, 0, 0, 0.2);
-          cairo_fill (cr);
-
-          gtk_widget_queue_draw (widget);
-
-          widget->priv->highlight_resize = FALSE;
-        }
-#endif
-
-      if (cairo_status (cr) &&
-          event_surface != NULL)
-        {
-          /* We check the event so we only warn about internal GTK+ calls.
-           * Errors might come from PDF streams having write failures and
-           * we don't want to spam stderr in that case.
-           * We do want to catch errors from
-           */
-          g_warning ("drawing failure for widget '%s': %s",
-                     G_OBJECT_TYPE_NAME (widget),
-                     cairo_status_to_string (cairo_status (cr)));
-        }
-    }
 }
 
 static gboolean
@@ -13483,7 +13335,6 @@ gtk_widget_create_render_node (GtkWidget   *widget,
   GtkWidgetClass *klass = GTK_WIDGET_GET_CLASS (widget);
   GtkWidgetPrivate *priv = widget->priv;
   GtkCssValue *filter_value;
-  RenderMode mode;
   double opacity;
   GtkCssStyle *style;
   GtkAllocation allocation;
@@ -13491,11 +13342,6 @@ gtk_widget_create_render_node (GtkWidget   *widget,
   GtkSnapshot *snapshot;
 
   snapshot = gtk_snapshot_new_child (parent_snapshot, "%s<%p>", gtk_widget_get_name (widget), widget);
-
-  /* Compatibility mode: if the widget does not have a render node, we draw
-   * using gtk_widget_draw() on a temporary node
-   */
-  mode = get_render_mode (klass);
 
   filter_value = _gtk_style_context_peek_property (_gtk_widget_get_style_context (widget), GTK_CSS_PROPERTY_FILTER);
   gtk_css_filter_value_push_snapshot (filter_value, snapshot);
@@ -13508,8 +13354,35 @@ gtk_widget_create_render_node (GtkWidget   *widget,
 
   _gtk_widget_get_allocation (widget, &allocation);
 
-  if (mode == RENDER_DRAW)
+  if (opacity < 1.0)
+    gtk_snapshot_push_opacity (snapshot, opacity, "Opacity<%s,%f>", G_OBJECT_TYPE_NAME (widget), opacity);
+
+  if (!GTK_IS_WINDOW (widget))
     {
+      gtk_snapshot_offset (snapshot, margin.left, margin.top);
+      gtk_css_style_snapshot_background (style,
+                                         snapshot,
+                                         allocation.width - margin.left - margin.right,
+                                         allocation.height - margin.top - margin.bottom);
+      gtk_css_style_snapshot_border (style,
+                                     snapshot,
+                                     allocation.width - margin.left - margin.right,
+                                     allocation.height - margin.top - margin.bottom);
+      gtk_snapshot_offset (snapshot, - margin.left, - margin.top);
+    }
+
+  /* Offset to content allocation */
+  gtk_snapshot_offset (snapshot, margin.left + padding.left + border.left, margin.top + border.top + padding.top);
+  if (gtk_widget_get_width (widget) > 0 || gtk_widget_get_height (widget) > 0)
+    klass->snapshot (widget, snapshot);
+  gtk_snapshot_offset (snapshot, - (margin.left + padding.left + border.left), -(margin.top + border.top + padding.top));
+
+  if (g_signal_has_handler_pending (widget, widget_signals[DRAW], 0, FALSE))
+    {
+      /* Compatibility mode: if there's a ::draw signal handler, we add a
+       * child node with the contents of the handler
+       */
+      gboolean result;
       cairo_t *cr;
       graphene_rect_t bounds;
       cairo_rectangle_int_t offset_clip;
@@ -13526,74 +13399,21 @@ gtk_widget_create_render_node (GtkWidget   *widget,
                           offset_clip.height);
 
       cr = gtk_snapshot_append_cairo (snapshot,
-                                      &bounds, "Fallback<%s>",
-                                      G_OBJECT_TYPE_NAME (widget));
-      gtk_widget_draw_internal (widget, cr);
+                                      &bounds,
+                                      "DrawSignalContents<%s>", G_OBJECT_TYPE_NAME (widget));
+      g_signal_emit (widget, widget_signals[DRAW], 0, cr, &result);
       cairo_destroy (cr);
     }
-  else
-    {
-      if (opacity < 1.0)
-        gtk_snapshot_push_opacity (snapshot, opacity, "Opacity<%s,%f>", G_OBJECT_TYPE_NAME (widget), opacity);
 
-      if (!GTK_IS_WINDOW (widget))
-        {
-          gtk_snapshot_offset (snapshot, margin.left, margin.top);
-          gtk_css_style_snapshot_background (style,
-                                             snapshot,
-                                             allocation.width - margin.left - margin.right,
-                                             allocation.height - margin.top - margin.bottom);
-          gtk_css_style_snapshot_border (style,
-                                         snapshot,
-                                         allocation.width - margin.left - margin.right,
-                                         allocation.height - margin.top - margin.bottom);
-          gtk_snapshot_offset (snapshot, - margin.left, - margin.top);
-        }
+  gtk_snapshot_offset (snapshot, margin.left, margin.top);
+  gtk_css_style_snapshot_outline (style,
+                                  snapshot,
+                                  allocation.width - margin.left - margin.right,
+                                  allocation.height - margin.top - margin.bottom);
+  gtk_snapshot_offset (snapshot, - margin.left, - margin.top);
 
-      /* Offset to content allocation */
-      gtk_snapshot_offset (snapshot, margin.left + padding.left + border.left, margin.top + border.top + padding.top);
-      if (gtk_widget_get_width (widget) > 0 || gtk_widget_get_height (widget) > 0)
-        klass->snapshot (widget, snapshot);
-      gtk_snapshot_offset (snapshot, - (margin.left + padding.left + border.left), -(margin.top + border.top + padding.top));
-
-      if (g_signal_has_handler_pending (widget, widget_signals[DRAW], 0, FALSE))
-        {
-          /* Compatibility mode: if there's a ::draw signal handler, we add a
-           * child node with the contents of the handler
-           */
-          gboolean result;
-          cairo_t *cr;
-          graphene_rect_t bounds;
-          cairo_rectangle_int_t offset_clip;
-
-          offset_clip.x = 0;
-          offset_clip.y = 0;
-          offset_clip.width = priv->allocation.width;
-          offset_clip.height = priv->allocation.height;
-
-          graphene_rect_init (&bounds,
-                              offset_clip.x,
-                              offset_clip.y,
-                              offset_clip.width,
-                              offset_clip.height);
-
-          cr = gtk_snapshot_append_cairo (snapshot,
-                                          &bounds,
-                                          "DrawSignalContents<%s>", G_OBJECT_TYPE_NAME (widget));
-          g_signal_emit (widget, widget_signals[DRAW], 0, cr, &result);
-          cairo_destroy (cr);
-        }
-
-      gtk_snapshot_offset (snapshot, margin.left, margin.top);
-      gtk_css_style_snapshot_outline (style,
-                                      snapshot,
-                                      allocation.width - margin.left - margin.right,
-                                      allocation.height - margin.top - margin.bottom);
-      gtk_snapshot_offset (snapshot, - margin.left, - margin.top);
-
-      if (opacity < 1.0)
-        gtk_snapshot_pop (snapshot);
-    }
+  if (opacity < 1.0)
+    gtk_snapshot_pop (snapshot);
 
   gtk_css_filter_value_pop_snapshot (filter_value, snapshot);
 
