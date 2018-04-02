@@ -6795,29 +6795,14 @@ snapshot_widget_event (GtkWidget	       *widget,
 	res_widget = gtk_widget_get_toplevel (res_widget);
       if (res_widget)
 	{
-	  cairo_surface_t *surface;
 	  GtkWidget *window, *image;
-          GdkPixbuf *pixbuf;
-          int width, height;
-          cairo_t *cr;
+          GdkPaintable *paintable;
 
-          width = gtk_widget_get_allocated_width (res_widget);
-          height = gtk_widget_get_allocated_height (res_widget);
-
-          surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
-
-          cr = cairo_create (surface);
-          gtk_widget_draw (res_widget, cr);
-          cairo_destroy (cr);
-
-          pixbuf = gdk_pixbuf_get_from_surface (surface,
-                                                0, 0,
-                                                width, height);
-          cairo_surface_destroy (surface);
+          paintable = gtk_widget_paintable_new (res_widget);
 
 	  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-          image = gtk_image_new_from_pixbuf (pixbuf);
-          g_object_unref (pixbuf);
+          image = gtk_image_new_from_paintable (paintable);
+          g_object_unref (paintable);
 
 	  gtk_container_add (GTK_CONTAINER (window), image);
 	  gtk_widget_show (window);
