@@ -58,12 +58,14 @@ GtkSnapshot *   gtk_snapshot_new                        (gboolean               
 GDK_AVAILABLE_IN_ALL
 GskRenderNode * gtk_snapshot_free_to_node               (GtkSnapshot            *snapshot);
 GDK_AVAILABLE_IN_ALL
-GdkPaintable *  gtk_snapshot_free_to_paintable          (GtkSnapshot            *snapshot);
+GdkPaintable *  gtk_snapshot_free_to_paintable          (GtkSnapshot            *snapshot,
+                                                         const graphene_size_t  *size);
 
 GDK_AVAILABLE_IN_ALL
 GskRenderNode * gtk_snapshot_to_node                    (GtkSnapshot            *snapshot);
 GDK_AVAILABLE_IN_ALL
-GdkPaintable *  gtk_snapshot_to_paintable               (GtkSnapshot            *snapshot);
+GdkPaintable *  gtk_snapshot_to_paintable               (GtkSnapshot            *snapshot,
+                                                         const graphene_size_t  *size);
 
 GDK_AVAILABLE_IN_ALL
 gboolean        gtk_snapshot_get_record_names           (GtkSnapshot            *snapshot);

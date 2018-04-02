@@ -28,6 +28,7 @@ struct _GtkRenderNodePaintable
   GObject parent_instance;
 
   GskRenderNode *node;
+  graphene_rect_t bounds;
 };
 
 struct _GtkRenderNodePaintableClass
@@ -42,29 +43,34 @@ gtk_render_node_paintable_paintable_snapshot (GdkPaintable *paintable,
                                               double        height)
 {
   GtkRenderNodePaintable *self = GTK_RENDER_NODE_PAINTABLE (paintable);
-  graphene_rect_t node_bounds;
+  gboolean needs_transform;
 
-  gsk_render_node_get_bounds (self->node, &node_bounds);
+  needs_transform = self->bounds.size.width != width ||
+                    self->bounds.size.height != height;
 
-  if (node_bounds.origin.x + node_bounds.size.width != width ||
-      node_bounds.origin.y + node_bounds.size.height != height)
+  if (needs_transform)
     {
       graphene_matrix_t transform;
 
       graphene_matrix_init_scale (&transform,
-                                  width / (node_bounds.origin.x + node_bounds.size.width),
-                                  height / (node_bounds.origin.y + node_bounds.size.height),
+                                  width / (self->bounds.size.width),
+                                  height / (self->bounds.size.height),
                                   1.0);
       gtk_snapshot_push_transform (snapshot,
                                    &transform,
                                    "RenderNodeScaleToFit");
-      gtk_snapshot_append_node (snapshot, self->node);
-      gtk_snapshot_pop (snapshot);
     }
-  else
-    {
-      gtk_snapshot_append_node (snapshot, self->node);
-    }
+
+  gtk_snapshot_push_clip (snapshot, &self->bounds, "RenderNodePaintableClip");
+  gtk_snapshot_offset (snapshot, self->bounds.origin.x, self->bounds.origin.y);
+
+  gtk_snapshot_append_node (snapshot, self->node);
+
+  gtk_snapshot_offset (snapshot, -self->bounds.origin.x, -self->bounds.origin.y);
+  gtk_snapshot_pop (snapshot);
+
+  if (needs_transform)
+    gtk_snapshot_pop (snapshot);
 }
 
 static GdkPaintableFlags
@@ -77,22 +83,16 @@ static int
 gtk_render_node_paintable_paintable_get_intrinsic_width (GdkPaintable *paintable)
 {
   GtkRenderNodePaintable *self = GTK_RENDER_NODE_PAINTABLE (paintable);
-  graphene_rect_t node_bounds;
 
-  gsk_render_node_get_bounds (self->node, &node_bounds);
-
-  return node_bounds.origin.x + node_bounds.size.width;
+  return self->bounds.size.width;
 }
 
 static int
 gtk_render_node_paintable_paintable_get_intrinsic_height (GdkPaintable *paintable)
 {
   GtkRenderNodePaintable *self = GTK_RENDER_NODE_PAINTABLE (paintable);
-  graphene_rect_t node_bounds;
 
-  gsk_render_node_get_bounds (self->node, &node_bounds);
-
-  return node_bounds.origin.y + node_bounds.size.height;
+  return self->bounds.size.height;
 }
 
 static void
@@ -132,15 +132,18 @@ gtk_render_node_paintable_init (GtkRenderNodePaintable *self)
 }
 
 GdkPaintable *
-gtk_render_node_paintable_new (GskRenderNode *node)
+gtk_render_node_paintable_new (GskRenderNode         *node,
+                               const graphene_rect_t *bounds)
 {
   GtkRenderNodePaintable *self;
 
   g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
+  g_return_val_if_fail (bounds != NULL, NULL);
 
   self = g_object_new (GTK_TYPE_RENDER_NODE_PAINTABLE, NULL);
 
   self->node = gsk_render_node_ref (node);
+  self->bounds = *bounds;
 
   return GDK_PAINTABLE (self);
 }
