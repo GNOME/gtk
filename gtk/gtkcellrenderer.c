@@ -33,7 +33,7 @@
  * SECTION:gtkcellrenderer
  * @Short_description: An object for rendering a single cell
  * @Title: GtkCellRenderer
- * @See_also: #GtkCellRendererText, #GtkCellRendererPixbuf, #GtkCellRendererToggle
+ * @See_also: #GtkCellEditable
  *
  * The #GtkCellRenderer is a base class of a set of objects used for
  * rendering a cell to a #cairo_t.  These objects are used primarily by
