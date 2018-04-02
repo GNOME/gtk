@@ -6711,7 +6711,7 @@ gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
                                        icon_view->priv->item_padding,
                                        icon_view->priv->item_padding,
                                        FALSE);
-          paintable = gtk_snapshot_free_to_paintable (snapshot);
+          paintable = gtk_snapshot_free_to_paintable (snapshot, NULL);
 
           return paintable;
        }
