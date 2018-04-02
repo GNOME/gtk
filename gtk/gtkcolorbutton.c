@@ -330,7 +330,7 @@ set_color_icon (GdkDragContext *context,
                              rgba,
                              &GRAPHENE_RECT_INIT(0, 0, 48, 32),
                              "ColorDragColor");
-  paintable = gtk_snapshot_free_to_paintable (snapshot);
+  paintable = gtk_snapshot_free_to_paintable (snapshot, NULL);
 
   gtk_drag_set_icon_paintable (context, paintable, 0, 0);
   g_object_unref (paintable);

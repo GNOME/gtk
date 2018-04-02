@@ -277,6 +277,8 @@ gtk_snapshot_free_to_node (GtkSnapshot *snapshot)
 /**
  * gtk_snapshot_free_to_paintable: (skip)
  * @snapshot: (transfer full): a #GtkSnapshot
+ * @size: (allow-none): The size of the resulting paintable
+ *     or %NULL to use the bounds of the snapshot
  *
  * Returns a paintable for the node that was
  * constructed by @snapshot and frees @snapshot.
@@ -284,11 +286,12 @@ gtk_snapshot_free_to_node (GtkSnapshot *snapshot)
  * Returns: (transfer full): a newly-created #GdkPaintable
  */
 GdkPaintable *
-gtk_snapshot_free_to_paintable (GtkSnapshot *snapshot)
+gtk_snapshot_free_to_paintable (GtkSnapshot           *snapshot,
+                                const graphene_size_t *size)
 {
   GdkPaintable *result;
 
-  result = gtk_snapshot_to_paintable (snapshot);
+  result = gtk_snapshot_to_paintable (snapshot, size);
   g_object_unref (snapshot);
 
   return result;
@@ -1286,6 +1289,8 @@ gtk_snapshot_to_node (GtkSnapshot *snapshot)
 /**
  * gtk_snapshot_to_paintable:
  * @snapshot: a #GtkSnapshot
+ * @size: (allow-none): The size of the resulting paintable
+ *     or %NULL to use the bounds of the snapshot
  *
  * Returns a paintable encapsulating the render node
  * that was constructed by @snapshot. After calling
@@ -1296,13 +1301,18 @@ gtk_snapshot_to_node (GtkSnapshot *snapshot)
  * Returns: (transfer full): a new #GdkPaintable
  */
 GdkPaintable *
-gtk_snapshot_to_paintable (GtkSnapshot *snapshot)
+gtk_snapshot_to_paintable (GtkSnapshot           *snapshot,
+                           const graphene_size_t *size)
 {
   GskRenderNode *node;
   GdkPaintable *paintable;
+  graphene_rect_t bounds;
 
   node = gtk_snapshot_to_node (snapshot);
-  paintable = gtk_render_node_paintable_new (node);
+  gsk_render_node_get_bounds (node, &bounds);
+  bounds.origin.x = 0;
+  bounds.origin.y = 0;
+  paintable = gtk_render_node_paintable_new (node, &bounds);
   gsk_render_node_unref (node);
 
   return paintable;
