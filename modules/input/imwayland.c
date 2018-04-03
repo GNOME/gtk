@@ -35,6 +35,7 @@ struct _GtkIMContextWaylandGlobal
 {
   struct wl_display *display;
   struct wl_registry *registry;
+  uint32_t text_input_manager_wl_id;
   struct gtk_text_input_manager *text_input_manager;
   struct gtk_text_input *text_input;
   uint32_t enter_serial;
@@ -205,8 +206,9 @@ registry_handle_global (void               *data,
 
   if (strcmp (interface, "gtk_text_input_manager") == 0)
     {
+      global->text_input_manager_wl_id = id;
       global->text_input_manager =
-        wl_registry_bind (global->registry, id,
+        wl_registry_bind (global->registry, global->text_input_manager_wl_id,
                           &gtk_text_input_manager_interface, 1);
       global->text_input =
         gtk_text_input_manager_get_text_input (global->text_input_manager,
@@ -223,11 +225,11 @@ registry_handle_global_remove (void               *data,
 {
   GtkIMContextWaylandGlobal *global = data;
 
-  gtk_text_input_destroy (global->text_input);
-  global->text_input = NULL;
+  if (id != global->text_input_manager_wl_id)
+    return;
 
-  gtk_text_input_manager_destroy (global->text_input_manager);
-  global->text_input_manager = NULL;
+  g_clear_pointer(&global->text_input, gtk_text_input_destroy);
+  g_clear_pointer(&global->text_input_manager, gtk_text_input_manager_destroy);
 }
 
 static const struct wl_registry_listener registry_listener = {
