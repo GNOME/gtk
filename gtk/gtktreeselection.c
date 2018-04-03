@@ -1630,7 +1630,7 @@ gtk_tree_selection_real_select_node (GtkTreeSelection *selection,
           _gtk_tree_view_accessible_remove_state (priv->tree_view, tree, node, GTK_CELL_RENDERER_SELECTED);
         }
 
-      _gtk_tree_view_queue_draw_node (priv->tree_view, tree, node, NULL);
+      gtk_widget_queue_draw (GTK_WIDGET (priv->tree_view));
 
       return TRUE;
     }
