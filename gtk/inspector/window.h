@@ -102,16 +102,16 @@ void       gtk_inspector_stop_highlight     (GtkWidget          *widget);
 void       gtk_inspector_on_inspect         (GtkWidget          *widget,
                                              GtkInspectorWindow *iw);
 
-void       gtk_inspector_window_select_widget_under_pointer (GtkInspectorWindow *iw);
+void                    gtk_inspector_window_select_widget_under_pointer        (GtkInspectorWindow     *iw);
 
-void       gtk_inspector_window_rescan     (GtkWidget          *iw);
+void                    gtk_inspector_window_rescan                             (GtkWidget              *iw);
 
-gboolean   gtk_inspector_is_recording      (GtkWidget          *widget);
-void       gtk_inspector_record_render     (GtkWidget          *widget,
-                                            GskRenderer        *renderer,
-                                            GdkSurface         *surface,
-                                            const cairo_region_t *region,
-                                            GskRenderNode      *node);
+gboolean                gtk_inspector_is_recording                              (GtkWidget              *widget);
+GskRenderNode *         gtk_inspector_prepare_render                            (GtkWidget              *widget,
+                                                                                 GskRenderer            *renderer,
+                                                                                 GdkSurface             *surface,
+                                                                                 const cairo_region_t   *region,
+                                                                                 GskRenderNode          *node);
 
 G_END_DECLS
 

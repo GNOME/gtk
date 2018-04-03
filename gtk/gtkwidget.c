@@ -13509,11 +13509,11 @@ gtk_widget_render (GtkWidget            *widget,
 
   if (root != NULL)
     {
-      gtk_inspector_record_render (widget,
-                                   renderer,
-                                   surface,
-                                   region,
-                                   root);
+      root = gtk_inspector_prepare_render (widget,
+                                           renderer,
+                                           surface,
+                                           region,
+                                           root);
 
       gsk_renderer_render (renderer, root, region);
 

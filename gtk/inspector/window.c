@@ -369,22 +369,22 @@ gtk_inspector_window_get_for_display (GdkDisplay *display)
   return g_object_get_data (G_OBJECT (display), "-gtk-inspector");
 }
 
-void
-gtk_inspector_record_render (GtkWidget            *widget,
-                             GskRenderer          *renderer,
-                             GdkSurface           *surface,
-                             const cairo_region_t *region,
-                             GskRenderNode        *node)
+GskRenderNode *
+gtk_inspector_prepare_render (GtkWidget            *widget,
+                              GskRenderer          *renderer,
+                              GdkSurface           *surface,
+                              const cairo_region_t *region,
+                              GskRenderNode        *node)
 {
   GtkInspectorWindow *iw;
 
   iw = gtk_inspector_window_get_for_display (gtk_widget_get_display (widget));
   if (iw == NULL)
-    return;
+    return node;
 
   /* sanity check for single-display GDK backends */
   if (GTK_WIDGET (iw) == widget)
-    return;
+    return node;
 
   gtk_inspector_recorder_record_render (GTK_INSPECTOR_RECORDER (iw->widget_recorder),
                                         widget,
@@ -392,6 +392,8 @@ gtk_inspector_record_render (GtkWidget            *widget,
                                         surface,
                                         region,
                                         node);
+
+  return node;
 }
 
 gboolean
