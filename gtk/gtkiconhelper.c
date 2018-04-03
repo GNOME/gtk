@@ -470,6 +470,22 @@ gtk_icon_helper_new (GtkCssNode *css_node,
   return self;
 }
 
+GtkSizeRequestMode
+gtk_icon_helper_get_request_mode (GtkIconHelper *self)
+{
+  switch (gtk_image_definition_get_storage_type (self->def))
+    {
+    case GTK_IMAGE_PAINTABLE:
+      return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
+
+    case GTK_IMAGE_ICON_NAME:
+    case GTK_IMAGE_GICON:
+    case GTK_IMAGE_EMPTY:
+    default:
+      return GTK_SIZE_REQUEST_CONSTANT_SIZE;
+    }
+}
+
 void
 gtk_icon_helper_measure (GtkIconHelper *self,
                          GtkOrientation orientation,

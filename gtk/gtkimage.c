@@ -136,6 +136,15 @@ static GParamSpec *image_props[NUM_PROPERTIES] = { NULL, };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkImage, gtk_image, GTK_TYPE_WIDGET)
 
+static GtkSizeRequestMode
+gtk_image_get_request_mode (GtkWidget *widget)
+{
+  GtkImage *image = GTK_IMAGE (widget);
+  GtkImagePrivate *priv = gtk_image_get_instance_private (image);
+
+  return gtk_icon_helper_get_request_mode (priv->icon_helper);
+}
+
 static void
 gtk_image_class_init (GtkImageClass *class)
 {
@@ -150,6 +159,7 @@ gtk_image_class_init (GtkImageClass *class)
 
   widget_class = GTK_WIDGET_CLASS (class);
   widget_class->snapshot = gtk_image_snapshot;
+  widget_class->get_request_mode = gtk_image_get_request_mode;
   widget_class->measure = gtk_image_measure;
   widget_class->unrealize = gtk_image_unrealize;
   widget_class->style_updated = gtk_image_style_updated;
