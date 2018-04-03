@@ -246,6 +246,9 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
    * on @editable, e.g. adding a #GtkEntryCompletion or setting
    * up additional columns in a #GtkComboBox.
    *
+   * See gtk_cell_editable_start_editing() for information on the lifecycle of
+   * the @editable and a way to do setup that doesn’t depend on the @renderer.
+   *
    * Note that GTK+ doesn't guarantee that cell renderers will
    * continue to use the same kind of widget for editing in future
    * releases, therefore you should check the type of @editable
