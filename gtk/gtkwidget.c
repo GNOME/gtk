@@ -11575,6 +11575,54 @@ gtk_widget_get_own_allocation (GtkWidget    *widget,
 }
 
 /**
+ * gtk_widget_compute_bounds:
+ * @widget: the #GtkWidget to query
+ * @target: the #GtkWidget 
+ * @bounds: (out caller-allocates): the rectangle taking the bounds
+ *
+ * Computes the bounds for @widget in the coordinate space of @target.
+ * FIXME: Explain what "bounds" are.
+ *
+ * If the operation is successful, %TRUE is returned. If @widget has no
+ * bounds or the bounds cannot be expressed in @target's coordinate space
+ * (for example if both widgets are in different windows), %FALSE is
+ * returned and @bounds is set to the zero rectangle.
+ * 
+ * It is valid for @widget and @target to be the same widget.
+ *
+ * Returns: %TRUE if the bonuds could be computed
+ **/
+gboolean
+gtk_widget_compute_bounds (GtkWidget       *widget,
+                           GtkWidget       *target,
+                           graphene_rect_t *out_bounds)
+{
+  GtkAllocation alloc;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+  g_return_val_if_fail (GTK_IS_WIDGET (target), FALSE);
+  g_return_val_if_fail (out_bounds != NULL, FALSE);
+
+  gtk_widget_get_own_allocation (widget, &alloc);
+  if (!gtk_widget_translate_coordinates (widget,
+                                         target,
+                                         alloc.x, alloc.y,
+                                         &alloc.x, &alloc.y))
+    {
+      graphene_rect_init_from_rect (out_bounds, graphene_rect_zero ());
+      return FALSE;
+    }
+
+  graphene_rect_init (out_bounds, 
+                      alloc.x,
+                      alloc.y,
+                      alloc.width,
+                      alloc.height);
+
+  return TRUE;
+}
+
+/**
  * gtk_widget_get_allocated_width:
  * @widget: the widget to query
  *

@@ -623,6 +623,11 @@ GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_get_allocation         (GtkWidget     *widget,
                                                          GtkAllocation *allocation);
 GDK_AVAILABLE_IN_ALL
+gboolean              gtk_widget_compute_bounds         (GtkWidget     *widget,
+                                                         GtkWidget     *other,
+                                                         graphene_rect_t *out_bounds);
+
+GDK_AVAILABLE_IN_ALL
 int                   gtk_widget_get_width              (GtkWidget     *widget);
 GDK_AVAILABLE_IN_ALL
 int                   gtk_widget_get_height             (GtkWidget     *widget);
