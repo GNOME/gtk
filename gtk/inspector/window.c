@@ -356,6 +356,30 @@ gtk_inspector_window_new (void)
 }
 
 void
+gtk_inspector_window_add_overlay (GtkInspectorWindow  *iw,
+                                  GtkInspectorOverlay *overlay)
+{
+  iw->overlays = g_list_prepend (iw->overlays, g_object_ref (overlay));
+
+  gtk_inspector_overlay_queue_draw (overlay);
+}
+
+void
+gtk_inspector_window_remove_overlay (GtkInspectorWindow  *iw,
+                                     GtkInspectorOverlay *overlay)
+{
+  GList *item;
+
+  item = g_list_find (iw->overlays, overlay);
+  if (item == NULL)
+    return;
+
+  gtk_inspector_overlay_queue_draw (overlay);
+
+  iw->overlays = g_list_delete_link (iw->overlays, item);
+}
+
+void
 gtk_inspector_window_rescan (GtkWidget *widget)
 {
   GtkInspectorWindow *iw = GTK_INSPECTOR_WINDOW (widget);
@@ -392,6 +416,23 @@ gtk_inspector_prepare_render (GtkWidget            *widget,
                                         surface,
                                         region,
                                         node);
+
+  if (iw->overlays)
+    {
+      GtkSnapshot *snapshot;
+      GList *l;
+
+      snapshot = gtk_snapshot_new (FALSE, "Inspector Overlay");
+      gtk_snapshot_append_node (snapshot, node);
+
+      for (l = iw->overlays; l; l = l->next)
+        {
+          gtk_inspector_overlay_snapshot (l->data, snapshot, widget);
+        }
+
+      gsk_render_node_unref (node);
+      node = gtk_snapshot_free_to_node (snapshot);
+    }
 
   return node;
 }

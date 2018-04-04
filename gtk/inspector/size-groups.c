@@ -19,6 +19,8 @@
 #include <glib/gi18n-lib.h>
 
 #include "size-groups.h"
+
+#include "highlightoverlay.h"
 #include "window.h"
 
 #include "gtkcomboboxtext.h"
@@ -32,6 +34,7 @@
 
 typedef struct {
   GtkListBoxRow parent;
+  GtkInspectorOverlay *highlight;
   GtkWidget *widget;
 } SizeGroupRow;
 
@@ -139,10 +142,18 @@ size_group_state_flags_changed (GtkWidget     *widget,
   state = gtk_widget_get_state_flags (widget);
   if ((state & GTK_STATE_FLAG_PRELIGHT) != (old_state & GTK_STATE_FLAG_PRELIGHT))
     {
+      GtkInspectorWindow *iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_toplevel (widget));
+
       if (state & GTK_STATE_FLAG_PRELIGHT)
-        gtk_inspector_start_highlight (row->widget);
+        {
+          row->highlight = gtk_highlight_overlay_new (row->widget);
+          gtk_inspector_window_add_overlay (iw, row->highlight);
+        }
       else
-        gtk_inspector_stop_highlight (row->widget);
+        {
+          gtk_inspector_window_remove_overlay (iw, row->highlight);
+          g_clear_object (&row->highlight);
+        }
     }
 }
 
