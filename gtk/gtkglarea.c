@@ -992,7 +992,7 @@ gtk_gl_area_init (GtkGLArea *area)
  *
  * Creates a new #GtkGLArea widget.
  *
- * Returns: (transfer full): the newly created #GtkGLArea
+ * Returns: a new #GtkGLArea
  *
  * Since: 3.16
  */
