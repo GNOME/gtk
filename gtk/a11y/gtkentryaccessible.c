@@ -1426,7 +1426,7 @@ delete_text_cb (GtkEditable *editable,
   g_signal_emit_by_name (accessible,
                          "text-changed::delete",
                          start,
-                         end);
+                         end - start);
 }
 
 static gboolean
