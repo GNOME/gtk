@@ -20,6 +20,9 @@
 
 #include "visual.h"
 
+#include "updatesoverlay.h"
+#include "window.h"
+
 #include "gtkadjustment.h"
 #include "gtkbox.h"
 #include "gtkcomboboxtext.h"
@@ -65,6 +68,7 @@ struct _GtkInspectorVisualPrivate
 
   GtkWidget *debug_box;
   GtkWidget *rendering_mode_combo;
+  GtkWidget *updates_switch;
   GtkWidget *baselines_switch;
   GtkWidget *layout_switch;
   GtkWidget *touchscreen_switch;
@@ -75,6 +79,8 @@ struct _GtkInspectorVisualPrivate
   GtkWidget *texture_rectangle_switch;
 
   GtkAdjustment *focus_adjustment;
+
+  GtkInspectorOverlay *updates_overlay;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorVisual, gtk_inspector_visual, GTK_TYPE_SCROLLED_WINDOW)
@@ -218,6 +224,41 @@ font_scale_entry_activated (GtkEntry           *entry,
   factor = g_strtod (gtk_entry_get_text (entry), &err);
   if (err != NULL)
     update_font_scale (vis, factor, TRUE, FALSE);
+}
+
+static void
+updates_activate (GtkSwitch          *sw,
+                  GParamSpec         *pspec,
+                  GtkInspectorVisual *vis)
+{
+  GtkInspectorVisualPrivate *priv = vis->priv;
+  GtkInspectorWindow *iw;
+  gboolean updates;
+
+  updates = gtk_switch_get_active (sw);
+  iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (vis)));
+  if (iw == NULL)
+    return;
+
+  if (updates)
+    {
+      if (priv->updates_overlay == NULL)
+        {
+          priv->updates_overlay = gtk_updates_overlay_new ();
+          gtk_inspector_window_add_overlay (iw, priv->updates_overlay);
+          g_object_unref (priv->updates_overlay);
+        }
+    }
+  else
+    {
+      if (priv->updates_overlay != NULL)
+        {
+          gtk_inspector_window_remove_overlay (iw, priv->updates_overlay);
+          priv->updates_overlay = NULL;
+        }
+    }
+
+  redraw_everything ();
 }
 
 static void
@@ -860,6 +901,7 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/visual.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, rendering_mode_combo);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, updates_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, direction_combo);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, baselines_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, layout_switch);
@@ -885,6 +927,7 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, font_scale_entry);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, font_scale_adjustment);
 
+  gtk_widget_class_bind_template_callback (widget_class, updates_activate);
   gtk_widget_class_bind_template_callback (widget_class, direction_changed);
   gtk_widget_class_bind_template_callback (widget_class, rendering_mode_changed);
   gtk_widget_class_bind_template_callback (widget_class, baselines_activate);

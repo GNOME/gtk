@@ -427,7 +427,7 @@ gtk_inspector_prepare_render (GtkWidget            *widget,
 
       for (l = iw->overlays; l; l = l->next)
         {
-          gtk_inspector_overlay_snapshot (l->data, snapshot, widget);
+          gtk_inspector_overlay_snapshot (l->data, snapshot, node, widget);
         }
 
       gsk_render_node_unref (node);

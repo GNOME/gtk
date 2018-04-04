@@ -34,12 +34,14 @@ struct _GtkInspectorOverlayClass
 
   void                  (* snapshot)                            (GtkInspectorOverlay    *self,
                                                                  GtkSnapshot            *snapshot,
+                                                                 GskRenderNode          *node,
                                                                  GtkWidget              *widget);
   void                  (* queue_draw)                          (GtkInspectorOverlay    *self);
 };
 
 void                    gtk_inspector_overlay_snapshot          (GtkInspectorOverlay    *self,
                                                                  GtkSnapshot            *snapshot,
+                                                                 GskRenderNode          *node,
                                                                  GtkWidget              *widget);
 void                    gtk_inspector_overlay_queue_draw        (GtkInspectorOverlay    *self);
 

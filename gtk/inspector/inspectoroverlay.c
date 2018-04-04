@@ -34,6 +34,7 @@ G_DEFINE_ABSTRACT_TYPE (GtkInspectorOverlay, gtk_inspector_overlay, G_TYPE_OBJEC
 static void
 gtk_inspector_overlay_default_snapshot (GtkInspectorOverlay *self,
                                         GtkSnapshot         *snapshot,
+                                        GskRenderNode       *node,
                                         GtkWidget           *widget)
 {
 }
@@ -58,9 +59,10 @@ gtk_inspector_overlay_init (GtkInspectorOverlay *self)
 void
 gtk_inspector_overlay_snapshot (GtkInspectorOverlay *self,
                                 GtkSnapshot         *snapshot,
+                                GskRenderNode       *node,
                                 GtkWidget           *widget)
 {
-  GTK_INSPECTOR_OVERLAY_GET_CLASS (self)->snapshot (self, snapshot, widget);
+  GTK_INSPECTOR_OVERLAY_GET_CLASS (self)->snapshot (self, snapshot, node, widget);
 }
 
 void

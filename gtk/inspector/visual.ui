@@ -413,6 +413,33 @@
                         <property name="margin">10</property>
                         <property name="spacing">40</property>
                         <child>
+                          <object class="GtkLabel" id="updates_label">
+                            <property name="label" translatable="yes">Show Graphic Updates</property>
+                            <property name="halign">start</property>
+                            <property name="valign">baseline</property>
+                            <property name="xalign">0.0</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkSwitch" id="updates_switch">
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                            <property name="hexpand">1</property>
+                            <signal name="notify::active" handler="updates_activate"/>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkListBoxRow">
+                    <property name="activatable">0</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="margin">10</property>
+                        <property name="spacing">40</property>
+                        <child>
                           <object class="GtkLabel" id="baselines_label">
                             <property name="label" translatable="yes">Show Baselines</property>
                             <property name="halign">start</property>
@@ -625,6 +652,7 @@
       <widget name="hidpi_label"/>
       <widget name="animation_label"/>
       <widget name="rendering_mode_label"/>
+      <widget name="updates_label"/>
       <widget name="baselines_label"/>
       <widget name="layout_label"/>
       <widget name="touchscreen_label"/>

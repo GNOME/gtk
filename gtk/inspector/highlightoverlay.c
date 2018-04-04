@@ -42,6 +42,7 @@ G_DEFINE_TYPE (GtkHighlightOverlay, gtk_highlight_overlay, GTK_TYPE_INSPECTOR_OV
 static void
 gtk_highlight_overlay_snapshot (GtkInspectorOverlay *overlay,
                                 GtkSnapshot         *snapshot,
+                                GskRenderNode       *node,
                                 GtkWidget           *widget)
 {
   GtkHighlightOverlay *self = GTK_HIGHLIGHT_OVERLAY (overlay);
