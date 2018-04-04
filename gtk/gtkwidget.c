@@ -483,7 +483,6 @@ enum {
   DIRECTION_CHANGED,
   GRAB_NOTIFY,
   CHILD_NOTIFY,
-  DRAW,
   MNEMONIC_ACTIVATE,
   GRAB_FOCUS,
   FOCUS,
@@ -794,64 +793,6 @@ child_property_notify_dispatcher (GObject     *object,
 				  GParamSpec **pspecs)
 {
   GTK_WIDGET_GET_CLASS (object)->dispatch_child_properties_changed (GTK_WIDGET (object), n_pspecs, pspecs);
-}
-
-/* We guard against the draw signal callbacks modifying the state of the
- * cairo context by surrounding it with save/restore.
- * Maybe we should also cairo_new_path() just to be sure?
- */
-static void
-gtk_widget_draw_marshaller (GClosure     *closure,
-                            GValue       *return_value,
-                            guint         n_param_values,
-                            const GValue *param_values,
-                            gpointer      invocation_hint,
-                            gpointer      marshal_data)
-{
-  cairo_t *cr = g_value_get_boxed (&param_values[1]);
-
-  cairo_save (cr);
-
-  _gtk_marshal_BOOLEAN__BOXED (closure,
-                               return_value,
-                               n_param_values,
-                               param_values,
-                               invocation_hint,
-                               marshal_data);
-
-
-  cairo_restore (cr);
-}
-
-static void
-gtk_widget_draw_marshallerv (GClosure     *closure,
-			     GValue       *return_value,
-			     gpointer      instance,
-			     va_list       args,
-			     gpointer      marshal_data,
-			     int           n_params,
-			     GType        *param_types)
-{
-  cairo_t *cr;
-  va_list args_copy;
-
-  G_VA_COPY (args_copy, args);
-  cr = va_arg (args_copy, gpointer);
-
-  cairo_save (cr);
-
-  _gtk_marshal_BOOLEAN__BOXEDv (closure,
-				return_value,
-				instance,
-				args,
-				marshal_data,
-				n_params,
-				param_types);
-
-
-  cairo_restore (cr);
-
-  va_end (args_copy);
 }
 
 static void
@@ -1656,44 +1597,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		   g_cclosure_marshal_VOID__PARAM,
 		   G_TYPE_NONE, 1,
 		   G_TYPE_PARAM);
-
-  /**
-   * GtkWidget::draw:
-   * @widget: the object which received the signal
-   * @cr: the cairo context to draw to
-   *
-   * This signal is emitted when a widget is supposed to render itself.
-   * The @widget's top left corner must be painted at the origin of
-   * the passed in context and be sized to the values returned by
-   * gtk_widget_get_allocated_width() and
-   * gtk_widget_get_allocated_height().
-   *
-   * Signal handlers connected to this signal can modify the cairo
-   * context passed as @cr in any way they like and don't need to
-   * restore it. The signal emission takes care of calling cairo_save()
-   * before and cairo_restore() after invoking the handler.
-   *
-   * The signal handler will get a @cr with a clip region already set to the
-   * widget's dirty region, i.e. to the area that needs repainting.  Complicated
-   * widgets that want to avoid redrawing themselves completely can get the full
-   * extents of the clip region with gdk_cairo_get_clip_rectangle(), or they can
-   * get a finer-grained representation of the dirty region with
-   * cairo_copy_clip_rectangle_list().
-   *
-   * Returns: %TRUE to stop other handlers from being invoked for the event.
-   * %FALSE to propagate the event further.
-   */
-  widget_signals[DRAW] =
-    g_signal_new (I_("draw"),
-		   G_TYPE_FROM_CLASS (gobject_class),
-		   G_SIGNAL_RUN_LAST,
-                   0,
-                   _gtk_boolean_handled_accumulator, NULL,
-                   gtk_widget_draw_marshaller,
-		   G_TYPE_BOOLEAN, 1,
-		   CAIRO_GOBJECT_TYPE_CONTEXT);
-  g_signal_set_va_marshaller (widget_signals[DRAW], G_TYPE_FROM_CLASS (klass),
-                              gtk_widget_draw_marshallerv);
 
   /**
    * GtkWidget::mnemonic-activate:
@@ -13423,37 +13326,8 @@ gtk_widget_create_render_node (GtkWidget   *widget,
   gtk_snapshot_offset (snapshot, margin.left + padding.left + border.left, margin.top + border.top + padding.top);
   if (gtk_widget_get_width (widget) > 0 && gtk_widget_get_height (widget) > 0)
     klass->snapshot (widget, snapshot);
-  gtk_snapshot_offset (snapshot, - (margin.left + padding.left + border.left), -(margin.top + border.top + padding.top));
+  gtk_snapshot_offset (snapshot, - (padding.left + border.left), -(border.top + padding.top));
 
-  if (g_signal_has_handler_pending (widget, widget_signals[DRAW], 0, FALSE))
-    {
-      /* Compatibility mode: if there's a ::draw signal handler, we add a
-       * child node with the contents of the handler
-       */
-      gboolean result;
-      cairo_t *cr;
-      graphene_rect_t bounds;
-      cairo_rectangle_int_t offset_clip;
-
-      offset_clip.x = 0;
-      offset_clip.y = 0;
-      offset_clip.width = priv->allocation.width;
-      offset_clip.height = priv->allocation.height;
-
-      graphene_rect_init (&bounds,
-                          offset_clip.x,
-                          offset_clip.y,
-                          offset_clip.width,
-                          offset_clip.height);
-
-      cr = gtk_snapshot_append_cairo (snapshot,
-                                      &bounds,
-                                      "DrawSignalContents<%s>", G_OBJECT_TYPE_NAME (widget));
-      g_signal_emit (widget, widget_signals[DRAW], 0, cr, &result);
-      cairo_destroy (cr);
-    }
-
-  gtk_snapshot_offset (snapshot, margin.left, margin.top);
   gtk_css_style_snapshot_outline (style,
                                   snapshot,
                                   allocation.width - margin.left - margin.right,
