@@ -38,19 +38,23 @@ struct _GtkTextViewAccessiblePrivate
   gint selection_bound;
 };
 
-static void       insert_text_cb       (GtkTextBuffer    *buffer,
-                                                        GtkTextIter      *arg1,
-                                                        gchar            *arg2,
-                                                        gint             arg3,
-                                                        gpointer         user_data);
-static void       delete_range_cb      (GtkTextBuffer    *buffer,
-                                                        GtkTextIter      *arg1,
-                                                        GtkTextIter      *arg2,
-                                                        gpointer         user_data);
-static void       mark_set_cb          (GtkTextBuffer    *buffer,
-                                                        GtkTextIter      *arg1,
-                                                        GtkTextMark      *arg2,
-                                                        gpointer         user_data);
+static void       insert_text_cb        (GtkTextBuffer    *buffer,
+                                                         GtkTextIter      *arg1,
+                                                         gchar            *arg2,
+                                                         gint             arg3,
+                                                         gpointer         user_data);
+static void       delete_range_cb       (GtkTextBuffer    *buffer,
+                                                         GtkTextIter      *arg1,
+                                                         GtkTextIter      *arg2,
+                                                         gpointer         user_data);
+static void       delete_range_after_cb (GtkTextBuffer    *buffer,
+                                                         GtkTextIter      *arg1,
+                                                         GtkTextIter      *arg2,
+                                                         gpointer         user_data);
+static void       mark_set_cb           (GtkTextBuffer    *buffer,
+                                                         GtkTextIter      *arg1,
+                                                         GtkTextMark      *arg2,
+                                                         gpointer         user_data);
 
 
 static void atk_editable_text_interface_init      (AtkEditableTextIface      *iface);
@@ -133,6 +137,7 @@ gtk_text_view_accessible_change_buffer (GtkTextViewAccessible *accessible,
     {
       g_signal_connect_after (new_buffer, "insert-text", G_CALLBACK (insert_text_cb), accessible);
       g_signal_connect (new_buffer, "delete-range", G_CALLBACK (delete_range_cb), accessible);
+      g_signal_connect_after (new_buffer, "delete-range", G_CALLBACK (delete_range_after_cb), accessible);
       g_signal_connect_after (new_buffer, "mark-set", G_CALLBACK (mark_set_cb), accessible);
 
       g_signal_emit_by_name (accessible,
@@ -1799,6 +1804,15 @@ delete_range_cb (GtkTextBuffer *buffer,
                          "text-changed::delete",
                          offset,
                          length);
+}
+
+static void
+delete_range_after_cb (GtkTextBuffer *buffer,
+                       GtkTextIter   *start,
+                       GtkTextIter   *end,
+                       gpointer       data)
+{
+  GtkTextViewAccessible *accessible = data;
 
   gtk_text_view_accessible_update_cursor (accessible, buffer);
 }
