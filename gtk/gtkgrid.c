@@ -431,9 +431,9 @@ find_attach_position (GtkGrid         *grid,
 
   hit = FALSE;
 
-  for (child = gtk_widget_get_first_child (GTK_WIDGET (grid));
+  for (child = _gtk_widget_get_first_child (GTK_WIDGET (grid));
        child != NULL;
-       child = gtk_widget_get_next_sibling (child))
+       child = _gtk_widget_get_next_sibling (child))
     {
       const GtkGridChild *grid_child = get_grid_child (child);
       const GtkGridChildAttach *attach = &grid_child->attach[orientation];
