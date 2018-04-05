@@ -18,12 +18,13 @@
 
 #include "config.h"
 
-#include <gtk/gtk.h>
+#include "gtkwindowaccessibleprivate.h"
 
 #include "gtkaccessibility.h"
-#include "gtkwidgetaccessibleprivate.h"
-#include "gtkwindowaccessible.h"
 #include "gtktoplevelaccessible.h"
+#include "gtkwidgetaccessibleprivate.h"
+
+#include "gtklabel.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
 

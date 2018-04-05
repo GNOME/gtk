@@ -67,7 +67,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkwindowgroup.h"
 
-#include "a11y/gtkwindowaccessible.h"
+#include "a11y/gtkwindowaccessibleprivate.h"
 #include "a11y/gtkcontaineraccessibleprivate.h"
 #include "inspector/init.h"
 #include "inspector/window.h"
