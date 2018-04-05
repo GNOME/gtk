@@ -5,6 +5,7 @@ inspector_sources = files(
   'css-editor.c',
   'css-node-tree.c',
   'data-list.c',
+  'fpsoverlay.c',
   'general.c',
   'gestures.c',
   'graphdata.c',
