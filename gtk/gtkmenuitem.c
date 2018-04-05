@@ -1134,12 +1134,13 @@ gtk_menu_item_enter (GtkEventController *controller,
 
   event = gtk_get_current_event (); /* FIXME controller event */
 
-  gdk_event_get_crossing_mode ((GdkEvent *)event, &mode);
-
-  if (mode == GDK_CROSSING_GTK_GRAB ||
-      mode == GDK_CROSSING_GTK_UNGRAB ||
-      mode == GDK_CROSSING_STATE_CHANGED)
-    return;
+  if (gdk_event_get_crossing_mode ((GdkEvent *)event, &mode))
+    {
+      if (mode == GDK_CROSSING_GTK_GRAB ||
+          mode == GDK_CROSSING_GTK_UNGRAB ||
+          mode == GDK_CROSSING_STATE_CHANGED)
+        return;
+    }
 
   if (gdk_event_get_device ((GdkEvent*) event) ==
       gdk_event_get_source_device ((GdkEvent*) event))
