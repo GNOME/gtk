@@ -300,6 +300,7 @@ gtk/gtkvideo.c
 gtk/gtkviewport.c
 gtk/gtkvolumebutton.c
 gtk/gtkwidget.c
+gtk/gtkwidgetpaintable.c
 gtk/gtkwindow.c
 gtk/inspector/action-editor.c
 gtk/inspector/actions.ui
