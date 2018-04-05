@@ -284,7 +284,7 @@ gtk_grid_set_property (GObject      *object,
 static GtkGridChild *
 get_grid_child (GtkWidget *widget)
 {
-  return (GtkGridChild *) g_object_get_qdata (G_OBJECT (widget), child_data_quark);
+  return (GtkGridChild *) g_object_get_qdata ((GObject *)widget, child_data_quark);
 }
 
 static void
@@ -420,8 +420,6 @@ find_attach_position (GtkGrid         *grid,
                       gint             op_span,
                       gboolean         max)
 {
-  GtkGridChildAttach *attach;
-  GtkGridChildAttach *opposite;
   GtkWidget *child;
   gint pos;
   gboolean hit;
@@ -437,10 +435,9 @@ find_attach_position (GtkGrid         *grid,
        child != NULL;
        child = gtk_widget_get_next_sibling (child))
     {
-      GtkGridChild *grid_child = get_grid_child (child);
-
-      attach = &grid_child->attach[orientation];
-      opposite = &grid_child->attach[1 - orientation];
+      const GtkGridChild *grid_child = get_grid_child (child);
+      const GtkGridChildAttach *attach = &grid_child->attach[orientation];
+      const GtkGridChildAttach *opposite = &grid_child->attach[1 - orientation];
 
       /* check if the ranges overlap */
       if (opposite->pos <= op_pos + op_span && op_pos <= opposite->pos + opposite->span)
