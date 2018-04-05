@@ -532,7 +532,106 @@ fontify (GtkTextBuffer *source_buffer)
     }
 }
 
-static GtkWidget *create_text (GtkWidget **text_view, gboolean is_source);
+static GtkWidget *
+display_image (const char *resource)
+{
+  GtkWidget *sw, *image;
+
+  image = gtk_image_new_from_resource (resource);
+  gtk_widget_set_halign (image, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (image, GTK_ALIGN_CENTER);
+  sw = gtk_scrolled_window_new (NULL, NULL);
+  gtk_container_add (GTK_CONTAINER (sw), image);
+
+  return sw;
+}
+
+static GtkWidget *
+display_text (const char *resource)
+{
+  GtkTextBuffer *buffer;
+  GtkWidget *textview, *sw;
+  GBytes *bytes;
+
+  bytes = g_resources_lookup_data (resource, 0, NULL);
+  g_assert (bytes);
+
+  g_assert (g_utf8_validate (g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes), NULL));
+
+  textview = gtk_text_view_new ();
+  g_object_set (textview,
+                "left-margin", 20,
+                "right-margin", 20,
+                "top-margin", 20,
+                "bottom-margin", 20,
+                NULL);
+  gtk_text_view_set_editable (GTK_TEXT_VIEW (textview), FALSE);
+  gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (textview), FALSE);
+  /* Make it a bit nicer for text. */
+  gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (textview), GTK_WRAP_WORD);
+  gtk_text_view_set_pixels_above_lines (GTK_TEXT_VIEW (textview), 2);
+  gtk_text_view_set_pixels_below_lines (GTK_TEXT_VIEW (textview), 2);
+
+  buffer = gtk_text_buffer_new (NULL);
+  gtk_text_buffer_set_text (buffer, g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes));
+  if (g_str_has_suffix (resource, ".c"))
+    fontify (buffer);
+  gtk_text_view_set_buffer (GTK_TEXT_VIEW (textview), buffer);
+
+  g_bytes_unref (bytes);
+
+  sw = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
+                                  GTK_POLICY_AUTOMATIC,
+                                  GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw),
+                                       GTK_SHADOW_NONE);
+  gtk_container_add (GTK_CONTAINER (sw), textview);
+
+  return sw;
+}
+
+static GtkWidget *
+display_video (const char *resource)
+{
+  GtkWidget *video;
+
+  video = gtk_video_new_for_resource (resource);
+  gtk_video_set_loop (GTK_VIDEO (video), TRUE);
+
+  return video;
+}
+
+static GtkWidget *
+display_nothing (const char *resource)
+{
+  GtkWidget *widget;
+  char *str;
+
+  str = g_strdup_printf ("The lazy GTK developers forgot to add a way to display the resource '%s'", resource);
+  widget = gtk_label_new (str);
+  gtk_label_set_line_wrap (GTK_LABEL (widget), TRUE);
+
+  g_free (str);
+
+  return widget;
+}
+
+static struct {
+  const char *extension;
+  GtkWidget * (* display_func) (const char *resource);
+} display_funcs[] = {
+  { ".gif", display_image },
+  { ".jpg", display_image },
+  { ".png", display_image },
+  { ".c", display_text },
+  { ".css", display_text },
+  { ".glsl", display_text },
+  { ".h", display_text },
+  { ".txt", display_text },
+  { ".ui", display_text },
+  { ".webm", display_video }
+};
 
 static void
 add_data_tab (const gchar *demoname)
@@ -540,7 +639,7 @@ add_data_tab (const gchar *demoname)
   gchar *resource_dir, *resource_name;
   gchar **resources;
   GtkWidget *widget, *label;
-  guint i;
+  guint i, j;
 
   resource_dir = g_strconcat ("/", demoname, NULL);
   resources = g_resources_enumerate_children (resource_dir, 0, NULL);
@@ -554,58 +653,22 @@ add_data_tab (const gchar *demoname)
     {
       resource_name = g_strconcat (resource_dir, "/", resources[i], NULL);
 
-      widget = gtk_image_new_from_resource (resource_name);
-      if (gtk_image_get_paintable (GTK_IMAGE (widget)) == NULL)
+      for (j = 0; j < G_N_ELEMENTS(display_funcs); j++)
         {
-          GBytes *bytes;
-
-          /* So we've used the best API available to figure out it's
-           * not an image. Let's try something else then.
-           */
-          g_object_ref_sink (widget);
-          g_object_unref (widget);
-
-          bytes = g_resources_lookup_data (resource_name, 0, NULL);
-          g_assert (bytes);
-
-          if (g_utf8_validate (g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes), NULL))
-            {
-              /* Looks like it parses as text. Dump it into a textview then! */
-              GtkTextBuffer *buffer;
-              GtkWidget *textview;
-
-              widget = create_text (&textview, FALSE);
-              buffer = gtk_text_buffer_new (NULL);
-              gtk_text_buffer_set_text (buffer, g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes));
-              if (g_str_has_suffix (resource_name, ".c"))
-                fontify (buffer);
-              gtk_text_view_set_buffer (GTK_TEXT_VIEW (textview), buffer);
-            }
-          else
-            {
-              g_warning ("Don't know how to display resource '%s'", resource_name);
-              widget = NULL;
-            }
-
-          g_bytes_unref (bytes);
+          if (g_str_has_suffix (resource_name, display_funcs[j].extension))
+            break;
         }
 
-      if (GTK_IS_IMAGE (widget))
-        {
-          GtkWidget *sw;
-
-          gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
-          gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
-          sw = gtk_scrolled_window_new (NULL, NULL);
-          gtk_container_add (GTK_CONTAINER (sw), widget);
-          widget = sw;
-        }
+      if (j < G_N_ELEMENTS(display_funcs))
+        widget = display_funcs[j].display_func (resource_name);
+      else
+        widget = display_nothing (resource_name);
 
       label = gtk_label_new (resources[i]);
       gtk_widget_show (label);
       gtk_notebook_append_page (GTK_NOTEBOOK (notebook), widget, label);
       gtk_container_child_set (GTK_CONTAINER (notebook),
-                               GTK_WIDGET (widget),
+                               widget,
                                "tab-expand", TRUE,
                                NULL);
 
@@ -823,49 +886,6 @@ selection_cb (GtkTreeSelection *selection,
   g_free (name);
   g_free (title);
   g_free (filename);
-}
-
-static GtkWidget *
-create_text (GtkWidget **view,
-             gboolean    is_source)
-{
-  GtkWidget *scrolled_window;
-  GtkWidget *text_view;
-
-  scrolled_window = gtk_scrolled_window_new (NULL, NULL);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
-                                  GTK_POLICY_AUTOMATIC,
-                                  GTK_POLICY_AUTOMATIC);
-  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled_window),
-                                       GTK_SHADOW_NONE);
-
-  *view = text_view = gtk_text_view_new ();
-  g_object_set (text_view,
-                "left-margin", 20,
-                "right-margin", 20,
-                "top-margin", 20,
-                "bottom-margin", 20,
-                NULL);
-
-  gtk_text_view_set_editable (GTK_TEXT_VIEW (text_view), FALSE);
-  gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (text_view), FALSE);
-
-  gtk_container_add (GTK_CONTAINER (scrolled_window), text_view);
-
-  if (is_source)
-    {
-      gtk_text_view_set_monospace (GTK_TEXT_VIEW (text_view), TRUE);
-      gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (text_view), GTK_WRAP_NONE);
-    }
-  else
-    {
-      /* Make it a bit nicer for text. */
-      gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (text_view), GTK_WRAP_WORD);
-      gtk_text_view_set_pixels_above_lines (GTK_TEXT_VIEW (text_view), 2);
-      gtk_text_view_set_pixels_below_lines (GTK_TEXT_VIEW (text_view), 2);
-    }
-
-  return scrolled_window;
 }
 
 static void
