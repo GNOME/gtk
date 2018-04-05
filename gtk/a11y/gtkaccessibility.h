@@ -23,10 +23,13 @@
 
 G_BEGIN_DECLS
 
-void      _gtk_accessibility_init        (void);
+void      _gtk_accessibility_init              (void);
 
-gboolean  _gtk_accessibility_key_snooper (GtkWidget   *widget,
-                                          GdkEventKey *event);
+gboolean  _gtk_accessibility_key_snooper       (GtkWidget   *widget,
+                                                GdkEventKey *event);
+
+void      _gtk_window_accessible_set_is_active (GtkWindow   *window,
+                                                gboolean     is_active);
 
 G_END_DECLS
 
