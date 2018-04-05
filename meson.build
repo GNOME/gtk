@@ -645,6 +645,7 @@ subdir('gdk')
 subdir('gsk')
 subdir('gtk')
 subdir('modules')
+subdir('benchmarks')
 if get_option('demos')
   subdir('demos')
 endif
