@@ -51,12 +51,17 @@ struct _GtkVideo
   GtkWidget *controls_revealer;
   GtkWidget *controls;
   guint controls_hide_source;
+
+  guint autoplay : 1;
+  guint loop : 1;
 };
 
 enum
 {
   PROP_0,
+  PROP_AUTOPLAY,
   PROP_FILE,
+  PROP_LOOP,
   PROP_MEDIA_STREAM,
 
   N_PROPS
@@ -120,6 +125,17 @@ gtk_video_unrealize (GtkWidget *widget)
 }
 
 static void
+gtk_video_map (GtkWidget *widget)
+{
+  GtkVideo *self = GTK_VIDEO (widget);
+
+  GTK_WIDGET_CLASS (gtk_video_parent_class)->map (widget);
+
+  if (self->autoplay && self->media_stream)
+    gtk_media_stream_play (self->media_stream);
+}
+
+static void
 gtk_video_unmap (GtkWidget *widget)
 {
   GtkVideo *self = GTK_VIDEO (widget);
@@ -159,8 +175,16 @@ gtk_video_get_property (GObject    *object,
 
   switch (property_id)
     {
+    case PROP_AUTOPLAY:
+      g_value_set_boolean (value, self->autoplay);
+      break;
+
     case PROP_FILE:
       g_value_set_object (value, self->file);
+      break;
+
+    case PROP_LOOP:
+      g_value_set_boolean (value, self->loop);
       break;
 
     case PROP_MEDIA_STREAM:
@@ -183,8 +207,16 @@ gtk_video_set_property (GObject      *object,
 
   switch (property_id)
     {
+    case PROP_AUTOPLAY:
+      gtk_video_set_autoplay (self, g_value_get_boolean (value));
+      break;
+
     case PROP_FILE:
       gtk_video_set_file (self, g_value_get_object (value));
+      break;
+
+    case PROP_LOOP:
+      gtk_video_set_loop (self, g_value_get_boolean (value));
       break;
 
     case PROP_MEDIA_STREAM:
@@ -207,11 +239,24 @@ gtk_video_class_init (GtkVideoClass *klass)
   widget_class->size_allocate = gtk_video_size_allocate;
   widget_class->realize = gtk_video_realize;
   widget_class->unrealize = gtk_video_unrealize;
+  widget_class->map = gtk_video_map;
   widget_class->unmap = gtk_video_unmap;
 
   gobject_class->dispose = gtk_video_dispose;
   gobject_class->get_property = gtk_video_get_property;
   gobject_class->set_property = gtk_video_set_property;
+
+  /**
+   * GtkVideo:autoplay:
+   *
+   * If the video should automatically begin playing.
+   */
+  properties[PROP_AUTOPLAY] =
+    g_param_spec_boolean ("autoplay",
+                          P_("Autoplay"),
+                          P_("If playback should begin automatically"),
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
    * GtkVideo:file:
@@ -224,6 +269,18 @@ gtk_video_class_init (GtkVideoClass *klass)
                          P_("The video file played back"),
                          G_TYPE_FILE,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkVideo:loop:
+   *
+   * If new media files should be set to loop.
+   */
+  properties[PROP_LOOP] =
+    g_param_spec_boolean ("loop",
+                          P_("Loop"),
+                          P_("If new media streams should be set to loop"),
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
    * GtkVideo:media-stream:
@@ -525,12 +582,15 @@ gtk_video_set_media_stream (GtkVideo       *self,
   if (stream)
     {
       self->media_stream = g_object_ref (stream);
+      gtk_media_stream_set_loop (stream, self->loop);
       if (gtk_widget_get_realized (GTK_WIDGET (self)))
         gtk_media_stream_realize (stream, gtk_widget_get_surface (GTK_WIDGET (self)));
       g_signal_connect (self->media_stream,
                         "notify",
                         G_CALLBACK (gtk_video_notify_cb),
                         self);
+      if (self->autoplay)
+        gtk_media_stream_play (stream);
     }
 
   gtk_media_controls_set_media_stream (GTK_MEDIA_CONTROLS (self->controls), stream);
@@ -593,6 +653,8 @@ gtk_video_set_file (GtkVideo *self,
     {
       gtk_video_set_media_stream (self, NULL);
     }
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FILE]);
 
   g_object_thaw_notify (G_OBJECT (self));
 }
@@ -663,5 +725,80 @@ gtk_video_set_resource (GtkVideo   *self,
 
   if (file)
     g_object_unref (file);
+}
+
+/**
+ * gtk_video_get_autoplay:
+ * @self: a #GtkVideo
+ *
+ * Returns %TRUE if videos have been set to loop via gtk_video_set_loop().
+ *
+ * Returns: %TRUE if streams should autoplay
+ **/
+gboolean
+gtk_video_get_autoplay (GtkVideo *self)
+{
+  g_return_val_if_fail (GTK_IS_VIDEO (self), FALSE);
+
+  return self->autoplay;
+}
+
+/**
+ * gtk_video_set_autoplay:
+ * @self: a #GtkVideo
+ * @autoplay: whether media streams should autoplay
+ *
+ * Sets whether @self automatically starts playback when it becomes visible
+ * or when a new file gets loaded.
+ **/
+void
+gtk_video_set_autoplay (GtkVideo *self,
+                        gboolean  autoplay)
+{
+  g_return_if_fail (GTK_IS_VIDEO (self));
+
+  if (self->autoplay == autoplay)
+    return;
+
+  self->autoplay = autoplay;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_AUTOPLAY]);
+}
+
+/**
+ * gtk_video_get_loop:
+ * @self: a #GtkVideo
+ *
+ * Returns %TRUE if videos have been set to loop via gtk_video_set_loop().
+ *
+ * Returns: %TRUE if streams should loop
+ **/
+gboolean
+gtk_video_get_loop (GtkVideo *self)
+{
+  g_return_val_if_fail (GTK_IS_VIDEO (self), FALSE);
+
+  return self->loop;
+}
+
+/**
+ * gtk_video_set_loop:
+ * @self: a #GtkVideo
+ * @loop: whether media streams should loop
+ *
+ * Sets whether new files loaded by @self should be set to loop.
+ **/
+void
+gtk_video_set_loop (GtkVideo *self,
+                    gboolean  loop)
+{
+  g_return_if_fail (GTK_IS_VIDEO (self));
+
+  if (self->loop == loop)
+    return;
+
+  self->loop = loop;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_LOOP]);
 }
 

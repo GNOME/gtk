@@ -57,6 +57,16 @@ void            gtk_video_set_filename                  (GtkVideo               
 GDK_AVAILABLE_IN_ALL
 void            gtk_video_set_resource                  (GtkVideo               *self,
                                                          const char             *resource_path);
+GDK_AVAILABLE_IN_ALL
+gboolean        gtk_video_get_autoplay                  (GtkVideo               *self);
+GDK_AVAILABLE_IN_ALL
+void            gtk_video_set_autoplay                  (GtkVideo               *self,
+                                                         gboolean                autoplay);
+GDK_AVAILABLE_IN_ALL
+gboolean        gtk_video_get_loop                      (GtkVideo               *self);
+GDK_AVAILABLE_IN_ALL
+void            gtk_video_set_loop                      (GtkVideo               *self,
+                                                         gboolean                loop);
 
 
 G_END_DECLS
