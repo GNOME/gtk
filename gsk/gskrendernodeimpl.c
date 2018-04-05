@@ -4278,6 +4278,7 @@ gsk_cross_fade_node_diff (GskRenderNode  *node1,
     {
       gsk_render_node_diff (self1->start, self2->start, region);
       gsk_render_node_diff (self1->end, self2->end, region);
+      return;
     }
 
   gsk_render_node_diff_impossible (node1, node2, region);
