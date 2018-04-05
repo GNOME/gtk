@@ -116,24 +116,24 @@ gtk_snapshot_push_state (GtkSnapshot            *snapshot,
                          int                     translate_y,
                          GtkSnapshotCollectFunc  collect_func)
 {
-  GtkSnapshotState *state;
+  GtkSnapshotState state = { 0, };
 
-  g_array_set_size (snapshot->state_stack, snapshot->state_stack->len + 1);
-  state = &g_array_index (snapshot->state_stack, GtkSnapshotState, snapshot->state_stack->len - 1);
-
-  state->name = name;
+  state.name = name;
   if (clip)
     {
-      state->clip = *clip;
-      state->has_clip = TRUE;
+      state.clip = *clip;
+      state.has_clip = TRUE;
     }
-  state->translate_x = translate_x;
-  state->translate_y = translate_y;
-  state->collect_func = collect_func;
-  state->start_node_index = snapshot->nodes->len;
-  state->n_nodes = 0;
 
-  return state;
+  state.translate_x = translate_x;
+  state.translate_y = translate_y;
+  state.collect_func = collect_func;
+  state.start_node_index = snapshot->nodes->len;
+  state.n_nodes = 0;
+
+  g_array_append_val (snapshot->state_stack, state);
+
+  return &g_array_index (snapshot->state_stack, GtkSnapshotState, snapshot->state_stack->len - 1);
 }
 
 static GtkSnapshotState *
