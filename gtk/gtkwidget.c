@@ -11481,7 +11481,7 @@ gtk_widget_get_own_allocation (GtkWidget    *widget,
  * gtk_widget_compute_bounds:
  * @widget: the #GtkWidget to query
  * @target: the #GtkWidget 
- * @bounds: (out caller-allocates): the rectangle taking the bounds
+ * @out_bounds: (out caller-allocates): the rectangle taking the bounds
  *
  * Computes the bounds for @widget in the coordinate space of @target.
  * FIXME: Explain what "bounds" are.

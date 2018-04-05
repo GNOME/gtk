@@ -624,7 +624,7 @@ void                  gtk_widget_get_allocation         (GtkWidget     *widget,
                                                          GtkAllocation *allocation);
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_widget_compute_bounds         (GtkWidget     *widget,
-                                                         GtkWidget     *other,
+                                                         GtkWidget     *target,
                                                          graphene_rect_t *out_bounds);
 
 GDK_AVAILABLE_IN_ALL
