@@ -922,7 +922,7 @@ gtk_font_button_clicked (GtkButton *button,
 
       gtk_font_chooser_set_show_preview_entry (font_dialog, priv->show_preview_entry);
       gtk_font_chooser_set_level (GTK_FONT_CHOOSER (font_dialog), priv->level);
-      gtk_font_chooser_set_language (GTK_FONT_CHOOSER (font_dialog), priv->language);
+      gtk_font_chooser_set_language (GTK_FONT_CHOOSER (font_dialog), pango_language_to_string (priv->language));
 
       if (priv->preview_text)
         {
@@ -1264,7 +1264,9 @@ gtk_font_button_label_use_font (GtkFontButton *font_button)
       if (!priv->use_size)
         pango_font_description_unset_fields (desc, PANGO_FONT_MASK_SIZE);
 
-      data = pango_font_description_to_css (desc, priv->font_features, priv->language);
+      data = pango_font_description_to_css (desc,
+                                            priv->font_features,
+                                            pango_language_to_string (priv->language));
       gtk_css_provider_load_from_data (priv->provider, data, -1);
 
       g_free (data);
