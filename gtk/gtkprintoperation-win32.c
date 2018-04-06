@@ -1382,8 +1382,6 @@ pageDlgProc (HWND wnd, UINT message, WPARAM wparam, LPARAM lparam)
 
       SetWindowLongPtrW (wnd, GWLP_USERDATA, (LONG_PTR)op);
 
-      _gtk_widget_set_is_toplevel (plug, TRUE);
-
       gtk_window_set_modal (GTK_WINDOW (plug), TRUE);
       op_win32->embed_widget = plug;
       gtk_container_add (GTK_CONTAINER (plug), op->priv->custom_widget);
