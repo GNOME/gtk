@@ -61,6 +61,7 @@
 #include "gtkpointerfocusprivate.h"
 #include "gtkpopoverprivate.h"
 #include "gtkprivate.h"
+#include "gtkroot.h"
 #include "gtkseparatormenuitem.h"
 #include "gtksettings.h"
 #include "gtksnapshot.h"
@@ -567,6 +568,9 @@ static void gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
 						      const gchar   *tagname,
 						      gpointer       user_data);
 
+/* GtkRoot */
+static void             gtk_window_root_interface_init                  (GtkRootInterface       *iface);
+
 static void ensure_state_flag_backdrop (GtkWidget *widget);
 static void unset_titlebar (GtkWindow *window);
 static void on_titlebar_title_notify (GtkHeaderBar *titlebar,
@@ -581,7 +585,9 @@ static void gtk_window_update_debugging (void);
 G_DEFINE_TYPE_WITH_CODE (GtkWindow, gtk_window, GTK_TYPE_BIN,
                          G_ADD_PRIVATE (GtkWindow)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-						gtk_window_buildable_interface_init))
+						gtk_window_buildable_interface_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ROOT,
+						gtk_window_root_interface_init))
 
 static void
 add_tab_bindings (GtkBindingSet    *binding_set,
@@ -1877,7 +1883,6 @@ gtk_window_init (GtkWindow *window)
   widget = GTK_WIDGET (window);
 
   gtk_widget_set_has_surface (widget, TRUE);
-  _gtk_widget_set_is_toplevel (widget, TRUE);
   _gtk_widget_set_anchored (widget, TRUE);
 
   priv->title = NULL;
@@ -2513,6 +2518,11 @@ gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
 
       g_slice_free (NameSubParserData, data);
     }
+}
+
+static void
+gtk_window_root_interface_init (GtkRootInterface *iface)
+{
 }
 
 /**

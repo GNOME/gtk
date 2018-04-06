@@ -6438,20 +6438,9 @@ gtk_widget_get_has_surface (GtkWidget *widget)
 gboolean
 gtk_widget_is_toplevel (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  return priv->toplevel;
-}
-
-void
-_gtk_widget_set_is_toplevel (GtkWidget *widget,
-                             gboolean   is_toplevel)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  priv->toplevel = is_toplevel;
+  return GTK_IS_ROOT (widget);
 }
 
 /**
@@ -7013,7 +7002,7 @@ gtk_widget_verify_invariants (GtkWidget *widget)
         g_warning ("%s %p is mapped but not visible",
                    G_OBJECT_TYPE_NAME (widget), widget);
 
-      if (!priv->toplevel)
+      if (!GTK_IS_ROOT (widget))
         {
           if (!priv->child_visible)
             g_warning ("%s %p is mapped but not child_visible",
@@ -7061,7 +7050,7 @@ gtk_widget_verify_invariants (GtkWidget *widget)
                        G_OBJECT_TYPE_NAME (widget), widget);
 #endif
         }
-      else if (!priv->toplevel)
+      else if (!GTK_IS_ROOT (widget))
         {
           /* No parent or parent not realized on non-toplevel implies... */
 
@@ -7083,7 +7072,7 @@ gtk_widget_verify_invariants (GtkWidget *widget)
                        G_OBJECT_TYPE_NAME (parent), parent,
                        G_OBJECT_TYPE_NAME (widget), widget);
         }
-      else if (!widget->priv->toplevel)
+      else if (!GTK_IS_ROOT (widget))
         {
           /* No parent or parent not mapped on non-toplevel implies... */
 

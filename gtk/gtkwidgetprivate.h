@@ -31,6 +31,7 @@
 #include "gtkcontainer.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkeventcontroller.h"
+#include "gtkroot.h"
 #include "gtksizerequestcacheprivate.h"
 #include "gtkwindowprivate.h"
 #include "gtkinvisible.h"
@@ -54,7 +55,6 @@ struct _GtkWidgetPrivate
 #endif
 
   guint in_destruction        : 1;
-  guint toplevel              : 1;
   guint anchored              : 1;
   guint no_surface            : 1;
   guint no_surface_set        : 1;
@@ -215,8 +215,6 @@ void              _gtk_widget_set_has_default              (GtkWidget *widget,
                                                             gboolean   has_default);
 void              _gtk_widget_set_has_grab                 (GtkWidget *widget,
                                                             gboolean   has_grab);
-void              _gtk_widget_set_is_toplevel              (GtkWidget *widget,
-                                                            gboolean   is_toplevel);
 
 void              _gtk_widget_grab_notify                  (GtkWidget *widget,
                                                             gboolean   was_grabbed);
@@ -388,7 +386,7 @@ _gtk_widget_get_realized (GtkWidget *widget)
 static inline gboolean
 _gtk_widget_is_toplevel (GtkWidget *widget)
 {
-  return widget->priv->toplevel;
+  return GTK_IS_ROOT (widget);
 }
 
 static inline GtkStateFlags
