@@ -2,6 +2,7 @@
 # benchmark name, optional extra sources
 gtk_benchmarks = [
   ['containers'],
+  ['css'],
 ]
 
 foreach b : gtk_benchmarks
