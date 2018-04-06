@@ -1,6 +1,10 @@
 # Configure paths for GTK+
 # Owen Taylor     1997-2001
 
+# Version number used by aclocal, see `info automake Serials`.
+# Increment on every change.
+#serial 1
+
 dnl AM_PATH_GTK_2_0([MINIMUM-VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND [, MODULES]]]])
 dnl Test for GTK+, and define GTK_CFLAGS and GTK_LIBS, if gthread is specified in MODULES, 
 dnl pass to pkg-config
