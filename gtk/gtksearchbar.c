@@ -755,7 +755,7 @@ gtk_search_bar_set_key_capture_widget (GtkSearchBar *bar,
  *
  * Gets the widget that @bar is capturing key events from.
  *
- * Returns: The key capture widget.
+ * Returns: (transfer none): The key capture widget.
  *
  * Since: 3.94
  **/

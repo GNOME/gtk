@@ -479,7 +479,7 @@ capture_widget_key_handled (GtkEventControllerKey *controller,
 
 /**
  * gtk_search_entry_set_key_capture_widget:
- * @bar: a #GtkSearchEntry
+ * @entry: a #GtkSearchEntry
  * @widget: (nullable) (transfer none): a #GtkWidget
  *
  * Sets @widget as the widget that @entry will capture key events from.
@@ -532,7 +532,7 @@ gtk_search_entry_set_key_capture_widget (GtkSearchEntry *entry,
  *
  * Gets the widget that @entry is capturing key events from.
  *
- * Returns: The key capture widget.
+ * Returns: (transfer none): The key capture widget.
  *
  * Since: 3.94
  **/

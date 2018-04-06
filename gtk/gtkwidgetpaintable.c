@@ -268,7 +268,7 @@ gtk_widget_paintable_init (GtkWidgetPaintable *self)
  *
  * Creates a new widget paintable observing the given widget.
  *
- * Returns: a new #GtkWidgetPaintable
+ * Returns: (transfer full) (type GtkWidgetPaintable): a new #GtkWidgetPaintable
  **/
 GdkPaintable *
 gtk_widget_paintable_new (GtkWidget *widget)

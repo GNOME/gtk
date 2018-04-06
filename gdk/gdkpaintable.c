@@ -625,7 +625,7 @@ gdk_empty_paintable_init (GdkEmptyPaintable *self)
  * virtual function when the paintable is in an incomplete state (like a
  * #GtkMediaStream before receiving the first frame).
  *
- * Returns: (transfer full) a #GdkPaintable
+ * Returns: (transfer full): a #GdkPaintable
  **/
 GdkPaintable *
 gdk_paintable_new_empty (int intrinsic_width,
