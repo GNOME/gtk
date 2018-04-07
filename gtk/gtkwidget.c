@@ -11488,7 +11488,7 @@ gtk_widget_get_own_allocation (GtkWidget    *widget,
 /**
  * gtk_widget_compute_bounds:
  * @widget: the #GtkWidget to query
- * @target: the #GtkWidget 
+ * @target: the #GtkWidget
  * @out_bounds: (out caller-allocates): the rectangle taking the bounds
  *
  * Computes the bounds for @widget in the coordinate space of @target.
@@ -11498,10 +11498,10 @@ gtk_widget_get_own_allocation (GtkWidget    *widget,
  * bounds or the bounds cannot be expressed in @target's coordinate space
  * (for example if both widgets are in different windows), %FALSE is
  * returned and @bounds is set to the zero rectangle.
- * 
+ *
  * It is valid for @widget and @target to be the same widget.
  *
- * Returns: %TRUE if the bonuds could be computed
+ * Returns: %TRUE if the bounds could be computed
  **/
 gboolean
 gtk_widget_compute_bounds (GtkWidget       *widget,
