@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 09:42+0000\n"
-"PO-Revision-Date: 2018-03-04 21:20+0200\n"
+"POT-Creation-Date: 2018-04-04 13:25+0000\n"
+"PO-Revision-Date: 2018-04-07 18:55+0200\n"
 "Last-Translator: Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>\n"
 "Language-Team: Latvian <lata-l10n@googlegroups.com>\n"
 "Language: lv\n"
@@ -852,7 +852,7 @@ msgid "The size of the icon"
 msgstr "Ikonas izmērs"
 
 #: gtk/deprecated/gtkstatusicon.c:306 gtk/gtkinvisible.c:98
-#: gtk/gtkmountoperation.c:179 gtk/gtkstylecontext.c:228 gtk/gtkwindow.c:894
+#: gtk/gtkmountoperation.c:179 gtk/gtkstylecontext.c:232 gtk/gtkwindow.c:894
 msgid "Screen"
 msgstr "Ekrāns"
 
@@ -1413,51 +1413,51 @@ msgstr "GFile"
 msgid "The GFile used by the app chooser dialog"
 msgstr "GFile, ko izmanto lietotnes selektora dialoglodziņš"
 
-#: gtk/gtkappchooserwidget.c:963
+#: gtk/gtkappchooserwidget.c:930
 msgid "Show default app"
 msgstr "Rādīt noklusēto lietotni"
 
-#: gtk/gtkappchooserwidget.c:964
+#: gtk/gtkappchooserwidget.c:931
 msgid "Whether the widget should show the default application"
 msgstr "Vai logdaļai jārāda noklusētā lietotne"
 
-#: gtk/gtkappchooserwidget.c:978
+#: gtk/gtkappchooserwidget.c:945
 msgid "Show recommended apps"
 msgstr "Rādīt ieteicamās lietotnes"
 
-#: gtk/gtkappchooserwidget.c:979
+#: gtk/gtkappchooserwidget.c:946
 msgid "Whether the widget should show recommended applications"
 msgstr "Vai logdaļām vajadzētu rādīt ieteicamās lietotnes"
 
-#: gtk/gtkappchooserwidget.c:993
+#: gtk/gtkappchooserwidget.c:960
 msgid "Show fallback apps"
 msgstr "Rādīt atkāpšanās lietotnes"
 
-#: gtk/gtkappchooserwidget.c:994
+#: gtk/gtkappchooserwidget.c:961
 msgid "Whether the widget should show fallback applications"
 msgstr "Vai logdaļām vajadzētu rādīt atkāpšanās lietotnes"
 
-#: gtk/gtkappchooserwidget.c:1006
+#: gtk/gtkappchooserwidget.c:973
 msgid "Show other apps"
 msgstr "Rādīt citas lietotnes"
 
-#: gtk/gtkappchooserwidget.c:1007
+#: gtk/gtkappchooserwidget.c:974
 msgid "Whether the widget should show other applications"
 msgstr "Vai logdaļai vajadzētu rādīt citas lietotnes"
 
-#: gtk/gtkappchooserwidget.c:1020
+#: gtk/gtkappchooserwidget.c:987
 msgid "Show all apps"
 msgstr "Rādīt visas lietotnes"
 
-#: gtk/gtkappchooserwidget.c:1021
+#: gtk/gtkappchooserwidget.c:988
 msgid "Whether the widget should show all applications"
 msgstr "Vai logdaļai vajadzētu rādīt visas lietotnes"
 
-#: gtk/gtkappchooserwidget.c:1035
+#: gtk/gtkappchooserwidget.c:1002
 msgid "Widget's default text"
 msgstr "Logdaļas noklusētais teksts"
 
-#: gtk/gtkappchooserwidget.c:1036
+#: gtk/gtkappchooserwidget.c:1003
 msgid "The default text appearing when there are no applications"
 msgstr "Noklusētais teksts, kas parādās, kad nav lietotņu"
 
@@ -2772,7 +2772,7 @@ msgstr "Nekonsekvents stāvoklis"
 msgid "The inconsistent state of the button"
 msgstr "Nekonsekvents pogas stāvoklis"
 
-#: gtk/gtkcellrenderertoggle.c:154 gtk/gtklistbox.c:3896
+#: gtk/gtkcellrenderertoggle.c:154 gtk/gtklistbox.c:3906
 msgid "Activatable"
 msgstr "Aktivizējams"
 
@@ -2941,7 +2941,7 @@ msgstr "RGBA krāsa"
 msgid "Color as RGBA"
 msgstr "Krāsa kā RGBA"
 
-#: gtk/gtkcolorswatch.c:722 gtk/gtklabel.c:908 gtk/gtklistbox.c:3910
+#: gtk/gtkcolorswatch.c:722 gtk/gtklabel.c:908 gtk/gtklistbox.c:3920
 msgid "Selectable"
 msgstr "Izvēlams"
 
@@ -3206,7 +3206,7 @@ msgstr "Sākotnējā vērtība"
 msgid "The initial specified value used for this property"
 msgstr "Norādītā sākotnējā vērtība, ko izmantot šai īpašībai"
 
-#: gtk/gtkdialog.c:588 gtk/gtkinfobar.c:435
+#: gtk/gtkdialog.c:588 gtk/gtkinfobar.c:419
 msgid "Content area border"
 msgstr "Satura laukuma robeža"
 
@@ -3214,7 +3214,7 @@ msgstr "Satura laukuma robeža"
 msgid "Width of border around the main dialog area"
 msgstr "Robežas platums ap galveno dialoglodziņā laukumu"
 
-#: gtk/gtkdialog.c:606 gtk/gtkinfobar.c:453
+#: gtk/gtkdialog.c:606 gtk/gtkinfobar.c:437
 msgid "Content area spacing"
 msgstr "Satura apgabala atstatums"
 
@@ -3222,15 +3222,15 @@ msgstr "Satura apgabala atstatums"
 msgid "Spacing between elements of the main dialog area"
 msgstr "Atstarpe starp elementiem un galveno dialoglodziņā apgabalu"
 
-#: gtk/gtkdialog.c:614 gtk/gtkinfobar.c:470
+#: gtk/gtkdialog.c:614 gtk/gtkinfobar.c:454
 msgid "Button spacing"
 msgstr "Pogu atstarpe"
 
-#: gtk/gtkdialog.c:615 gtk/gtkinfobar.c:471
+#: gtk/gtkdialog.c:615 gtk/gtkinfobar.c:455
 msgid "Spacing between buttons"
 msgstr "Atstarpe starp pogām"
 
-#: gtk/gtkdialog.c:631 gtk/gtkinfobar.c:487
+#: gtk/gtkdialog.c:631 gtk/gtkinfobar.c:471
 msgid "Action area border"
 msgstr "Darbības laukuma robeža"
 
@@ -3935,11 +3935,11 @@ msgstr "Atcelšanas etiķete"
 msgid "The label on the cancel button"
 msgstr "Etiķete uz atcelšanas pogas"
 
-#: gtk/gtkfilechooserwidget.c:8396 gtk/gtkfilechooserwidget.c:8397
+#: gtk/gtkfilechooserwidget.c:8393 gtk/gtkfilechooserwidget.c:8394
 msgid "Search mode"
 msgstr "Meklēšanas režīms"
 
-#: gtk/gtkfilechooserwidget.c:8403 gtk/gtkfilechooserwidget.c:8404
+#: gtk/gtkfilechooserwidget.c:8400 gtk/gtkfilechooserwidget.c:8401
 #: gtk/gtkheaderbar.c:2034 gtk/gtkshortcutsshortcut.c:591
 msgid "Subtitle"
 msgstr "Apakšvirsraksts"
@@ -4466,31 +4466,40 @@ msgstr "Lietot atkāpšanos"
 msgid "Whether to use icon names fallback"
 msgstr "Vai izmantot ikonu nosaukumu atkāpšanos"
 
-#: gtk/gtkinfobar.c:364 gtk/gtkmessagedialog.c:189
+#: gtk/gtkinfobar.c:339 gtk/gtkmessagedialog.c:189
 msgid "Message Type"
 msgstr "Ziņojuma tips"
 
-#: gtk/gtkinfobar.c:365 gtk/gtkmessagedialog.c:190
+#: gtk/gtkinfobar.c:340 gtk/gtkmessagedialog.c:190
 msgid "The type of message"
 msgstr "Ziņojuma tips"
 
-#: gtk/gtkinfobar.c:380 gtk/gtksearchbar.c:425
+#: gtk/gtkinfobar.c:354 gtk/gtksearchbar.c:425
 msgid "Show Close Button"
 msgstr "Rādīt aizvēršanas pogu"
 
-#: gtk/gtkinfobar.c:381
+#: gtk/gtkinfobar.c:355
 msgid "Whether to include a standard close button"
 msgstr "Vai iekļaut standarta aizvēršanas pogu"
 
-#: gtk/gtkinfobar.c:436
+#: gtk/gtkinfobar.c:361
+#| msgid "Reveal Child"
+msgid "Reveal"
+msgstr "Atklāt"
+
+#: gtk/gtkinfobar.c:362
+msgid "Controls whether the action bar shows its contents or not"
+msgstr "Nosaka, vai darbības josla rāda tā saturu"
+
+#: gtk/gtkinfobar.c:420
 msgid "Width of border around the content area"
 msgstr "Robežas platums ap satura laukumu"
 
-#: gtk/gtkinfobar.c:454
+#: gtk/gtkinfobar.c:438
 msgid "Spacing between elements of the area"
 msgstr "Atstarpe starp elementiem laukumā"
 
-#: gtk/gtkinfobar.c:488
+#: gtk/gtkinfobar.c:472
 msgid "Width of border around the action area"
 msgstr "Robežas platums ap darbības laukumu"
 
@@ -4684,11 +4693,11 @@ msgstr "Apmeklēta"
 msgid "Whether this link has been visited."
 msgstr "Vai šī saite ir apmeklēta."
 
-#: gtk/gtklistbox.c:3897
+#: gtk/gtklistbox.c:3907
 msgid "Whether this row can be activated"
 msgstr "Vai var aktivizēt šo rindu"
 
-#: gtk/gtklistbox.c:3911
+#: gtk/gtklistbox.c:3921
 msgid "Whether this row can be selected"
 msgstr "Vai var izvēlēties šo rindu"
 
@@ -4810,7 +4819,7 @@ msgid "The parent widget which the menu should align with."
 msgstr "Vecāka logdaļa, gar kuru izvēlnei vajadzētu līdzināties."
 
 #: gtk/gtkmenubutton.c:534 gtk/gtkshortcutsshortcut.c:645
-#: gtk/gtkstylecontext.c:242
+#: gtk/gtkstylecontext.c:246
 msgid "Direction"
 msgstr "Virziens"
 
@@ -5171,7 +5180,7 @@ msgstr "Ikonisks"
 msgid "Whether to prefer the icon over text"
 msgstr "Vai dot priekšroku ikonai pār tekstu"
 
-#: gtk/gtkmountoperation.c:163 gtk/gtkstylecontext.c:258
+#: gtk/gtkmountoperation.c:163 gtk/gtkstylecontext.c:262
 msgid "Parent"
 msgstr "Vecāks"
 
@@ -5583,12 +5592,10 @@ msgid "Whether the sidebar includes an item to show external locations"
 msgstr "Vai sānu joslā jāiekļauj vienums, kas rāda ārējās atrašanās vietas"
 
 #: gtk/gtkplacessidebar.c:4821
-#| msgid "Show 'Enter Location'"
 msgid "Show “Starred Location”"
 msgstr "Rādīt “Izlases vieta”"
 
 #: gtk/gtkplacessidebar.c:4822
-#| msgid "Whether the sidebar includes an item to show external locations"
 msgid "Whether the sidebar includes an item to show starred files"
 msgstr "Vai sānu joslā jāiekļauj vienums, kas rāda izlases datnes"
 
@@ -7646,23 +7653,23 @@ msgstr "Simbolisks izmērs, ko lieto nosauktai ikonai"
 msgid "Style of bevel around the statusbar text"
 msgstr "Apmales stils ap statusa joslas tekstu"
 
-#: gtk/gtkstylecontext.c:229
+#: gtk/gtkstylecontext.c:233
 msgid "The associated GdkScreen"
 msgstr "Asociētais GdkScreen"
 
-#: gtk/gtkstylecontext.c:235
+#: gtk/gtkstylecontext.c:239
 msgid "FrameClock"
 msgstr "FrameClock"
 
-#: gtk/gtkstylecontext.c:236
+#: gtk/gtkstylecontext.c:240
 msgid "The associated GdkFrameClock"
 msgstr "Asociētais GdkFrameClock"
 
-#: gtk/gtkstylecontext.c:243 gtk/gtktexttag.c:299
+#: gtk/gtkstylecontext.c:247 gtk/gtktexttag.c:299
 msgid "Text direction"
 msgstr "Teksta virziens"
 
-#: gtk/gtkstylecontext.c:259
+#: gtk/gtkstylecontext.c:263
 msgid "The parent style context"
 msgstr "Vecāka stila konteksts"
 
