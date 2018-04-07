@@ -11464,25 +11464,6 @@ gtk_widget_get_outer_allocation (GtkWidget    *widget,
   allocation->height -= margin.top + margin.bottom;
 }
 
-void
-gtk_widget_get_own_allocation (GtkWidget    *widget,
-                               GdkRectangle *allocation)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GtkBorder margin, border, padding;
-  GtkCssStyle *style;
-
-  style = gtk_css_node_get_style (priv->cssnode);
-  get_box_margin (style, &margin);
-  get_box_border (style, &border);
-  get_box_padding (style, &padding);
-
-  allocation->x = -padding.left - border.left;
-  allocation->y = -padding.top - border.top;
-  allocation->width = priv->allocation.width - margin.left - margin.right;
-  allocation->height = priv->allocation.height -margin.top - margin.bottom;
-}
-
 /**
  * gtk_widget_compute_bounds:
  * @widget: the #GtkWidget to query
@@ -11506,13 +11487,25 @@ gtk_widget_compute_bounds (GtkWidget       *widget,
                            GtkWidget       *target,
                            graphene_rect_t *out_bounds)
 {
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GtkBorder margin, border, padding;
+  GtkCssStyle *style;
   GtkAllocation alloc;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
   g_return_val_if_fail (GTK_IS_WIDGET (target), FALSE);
   g_return_val_if_fail (out_bounds != NULL, FALSE);
 
-  gtk_widget_get_own_allocation (widget, &alloc);
+  style = gtk_css_node_get_style (priv->cssnode);
+  get_box_margin (style, &margin);
+  get_box_border (style, &border);
+  get_box_padding (style, &padding);
+
+  alloc.x = - (padding.left + border.left);
+  alloc.y = - (padding.top + border.top);
+  alloc.width = priv->allocation.width - margin.left - margin.right;
+  alloc.height = priv->allocation.height -margin.top - margin.bottom;
+
   if (!gtk_widget_translate_coordinates (widget,
                                          target,
                                          alloc.x, alloc.y,
@@ -11522,7 +11515,7 @@ gtk_widget_compute_bounds (GtkWidget       *widget,
       return FALSE;
     }
 
-  graphene_rect_init (out_bounds, 
+  graphene_rect_init (out_bounds,
                       alloc.x,
                       alloc.y,
                       alloc.width,
