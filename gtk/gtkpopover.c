@@ -2133,8 +2133,17 @@ gtk_popover_get_pointing_to (GtkPopover   *popover,
 
   if (priv->has_pointing_to)
     *rect = priv->pointing_to;
-   else if (priv->widget)
-    gtk_widget_get_own_allocation (priv->widget, rect);
+  else if (priv->widget)
+    {
+      graphene_rect_t r;
+
+      gtk_widget_compute_bounds (priv->widget, priv->widget, &r);
+
+      rect->x = floorf (r.origin.x);
+      rect->y = floorf (r.origin.y);
+      rect->width = ceilf (r.size.width);
+      rect->height = ceilf (r.size.height);
+    }
 
   return priv->has_pointing_to;
 }
