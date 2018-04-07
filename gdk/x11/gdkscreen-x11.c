@@ -774,7 +774,7 @@ _gdk_x11_screen_new (GdkDisplay *display,
     {
       x11_screen->fixed_surface_scale = TRUE;
       x11_screen->surface_scale = atol (scale_str);
-      if (x11_screen->surface_scale == 0)
+      if (x11_screen->surface_scale <= 0)
         x11_screen->surface_scale = 1;
     }
   else

@@ -912,7 +912,7 @@ gdk_win32_display_init (GdkWin32Display *display)
     {
       display->surface_scale = atol (scale_str);
 
-      if (display->surface_scale == 0)
+      if (display->surface_scale <= 0)
         display->surface_scale = 1;
 
       display->has_fixed_scale = TRUE;
