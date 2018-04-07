@@ -1005,7 +1005,10 @@ gtk_toolbar_begin_sliding (GtkToolbar *toolbar)
       g_source_set_name_by_id (priv->idle_id, "[gtk+] slide_idle_handler");
     }
 
-  gtk_widget_get_own_allocation (widget, &content_allocation);
+  content_allocation.x = 0;
+  content_allocation.y = 0;
+  content_allocation.width = gtk_widget_get_width (widget);
+  content_allocation.height = gtk_widget_get_height (widget);
 
   rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
   vertical = (priv->orientation == GTK_ORIENTATION_VERTICAL);
@@ -1020,9 +1023,6 @@ gtk_toolbar_begin_sliding (GtkToolbar *toolbar)
       cur_x = 0;
       cur_y = 0;
     }
-
-  cur_x += content_allocation.x;
-  cur_y += content_allocation.y;
 
   for (list = priv->content; list != NULL; list = list->next)
     {
