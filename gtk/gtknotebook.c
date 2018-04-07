@@ -1649,26 +1649,21 @@ gtk_notebook_direction_changed (GtkWidget        *widget,
 }
 
 static gboolean
-gtk_notebook_get_tab_area_position (GtkNotebook  *notebook,
-                                    GdkRectangle *rectangle)
+gtk_notebook_get_tab_area_position (GtkNotebook     *notebook,
+                                    graphene_rect_t *rectangle)
 {
   GtkNotebookPrivate *priv = notebook->priv;
 
   if (priv->show_tabs && gtk_notebook_has_current_page (notebook))
     {
-      gtk_widget_get_own_allocation (priv->header_widget, rectangle);
-
-      gtk_widget_translate_coordinates (priv->header_widget,
-                                        GTK_WIDGET (notebook),
-                                        rectangle->x, rectangle->y,
-                                        &rectangle->x, &rectangle->y);
-
+      gtk_widget_compute_bounds (priv->header_widget,
+                                 GTK_WIDGET (notebook),
+                                 rectangle);
       return TRUE;
     }
   else
     {
-      rectangle->x = rectangle->y = 0;
-      rectangle->width = rectangle->height = 10;
+      graphene_rect_init_from_rect (rectangle, graphene_rect_zero ());
     }
 
   return FALSE;
@@ -2120,23 +2115,23 @@ gtk_notebook_get_arrow (GtkNotebook *notebook,
                         gint         y)
 {
   GtkNotebookPrivate *priv = notebook->priv;
-  GdkRectangle arrow_rect;
   gint i;
 
   if (gtk_notebook_show_arrows (notebook))
     {
       for (i = 0; i < 4; i++)
         {
+          graphene_rect_t arrow_bounds;
+
           if (priv->arrow_widget[i] == NULL)
             continue;
 
-          gtk_widget_get_own_allocation (priv->arrow_widget[i], &arrow_rect);
-          gtk_widget_translate_coordinates (priv->arrow_widget[i],
-                                            GTK_WIDGET (notebook),
-                                            arrow_rect.x, arrow_rect.y,
-                                            &arrow_rect.x, &arrow_rect.y);
+          gtk_widget_compute_bounds (priv->arrow_widget[i],
+                                     GTK_WIDGET (notebook),
+                                     &arrow_bounds);
 
-          if (gdk_rectangle_contains_point (&arrow_rect, x, y))
+          if (graphene_rect_contains_point (&arrow_bounds,
+                                            &(graphene_point_t){x, y}))
             return i;
         }
     }
@@ -2219,12 +2214,12 @@ in_tabs (GtkNotebook *notebook,
          gdouble      y)
 {
   GtkNotebookPrivate *priv = notebook->priv;
-  GtkAllocation allocation;
+  graphene_rect_t tabs_bounds;
 
-  gtk_widget_get_own_allocation (priv->tabs_widget, &allocation);
-  gtk_widget_translate_coordinates (priv->tabs_widget, GTK_WIDGET (notebook),
-                                    allocation.x, allocation.y, &allocation.x, &allocation.y);
-  return gdk_rectangle_contains_point (&allocation, x, y);
+  gtk_widget_compute_bounds (priv->tabs_widget, GTK_WIDGET (notebook), &tabs_bounds);
+
+  return graphene_rect_contains_point (&tabs_bounds,
+                                       &(graphene_point_t){x, y});
 }
 
 static GList*
@@ -2234,21 +2229,21 @@ get_tab_at_pos (GtkNotebook *notebook,
 {
   GtkNotebookPrivate *priv = notebook->priv;
   GtkNotebookPage *page;
-  GtkAllocation allocation;
   GList *children;
 
   for (children = priv->children; children; children = children->next)
     {
+      graphene_rect_t bounds;
+
       page = children->data;
 
       if (!gtk_notebook_page_tab_label_is_visible (page))
         continue;
 
-      gtk_widget_get_own_allocation (page->tab_widget, &allocation);
-      gtk_widget_translate_coordinates (page->tab_widget, GTK_WIDGET (notebook),
-                                        allocation.x, allocation.y, &allocation.x, &allocation.y);
+      gtk_widget_compute_bounds (page->tab_widget, GTK_WIDGET (notebook), &bounds);
 
-      if (gdk_rectangle_contains_point (&allocation, x, y))
+
+      if (graphene_rect_contains_point (&bounds, &(graphene_point_t){x, y}))
         return children;
     }
 
@@ -2579,7 +2574,7 @@ get_pointer_position (GtkNotebook *notebook)
 {
   GtkNotebookPrivate *priv = notebook->priv;
   GtkWidget *widget = GTK_WIDGET (notebook);
-  GdkRectangle area;
+  graphene_rect_t area;
   gint width, height;
   gboolean is_rtl;
 
@@ -2587,8 +2582,8 @@ get_pointer_position (GtkNotebook *notebook)
     return POINTER_BETWEEN;
 
   gtk_notebook_get_tab_area_position (notebook, &area);
-  width = area.width;
-  height = area.height;
+  width = area.size.width;
+  height = area.size.height;
 
   if (priv->tab_pos == GTK_POS_TOP ||
       priv->tab_pos == GTK_POS_BOTTOM)
@@ -2648,7 +2643,7 @@ check_threshold (GtkNotebook *notebook,
                  gint         current_y)
 {
   gint dnd_threshold;
-  GdkRectangle rectangle = { 0, }; /* shut up gcc */
+  graphene_rect_t rectangle;
   GtkSettings *settings;
 
   settings = gtk_widget_get_settings (GTK_WIDGET (notebook));
@@ -2658,13 +2653,10 @@ check_threshold (GtkNotebook *notebook,
   dnd_threshold *= DND_THRESHOLD_MULTIPLIER;
 
   gtk_notebook_get_tab_area_position (notebook, &rectangle);
-  rectangle.x -= dnd_threshold;
-  rectangle.width += 2 * dnd_threshold;
-  rectangle.y -= dnd_threshold;
-  rectangle.height += 2 * dnd_threshold;
+  graphene_rect_inset (&rectangle, -dnd_threshold, -dnd_threshold);
 
   /* The negation here is important! */
-  return !gdk_rectangle_contains_point (&rectangle, current_x, current_y);
+  return !graphene_rect_contains_point (&rectangle, &(graphene_point_t){current_x, current_y});
 }
 
 static void
@@ -2919,7 +2911,7 @@ gtk_notebook_drag_begin (GtkWidget        *widget,
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
-  GtkAllocation allocation;
+  graphene_rect_t bounds;
   GtkWidget *tab_label;
 
   if (priv->dnd_timer)
@@ -2939,10 +2931,10 @@ gtk_notebook_drag_begin (GtkWidget        *widget,
   gtk_widget_unparent (tab_label);
 
   priv->dnd_child = tab_label;
-  gtk_widget_get_own_allocation (priv->dnd_child, &allocation);
+  gtk_widget_compute_bounds (priv->dnd_child, priv->dnd_child, &bounds);
   gtk_widget_set_size_request (priv->dnd_child,
-                               allocation.width,
-                               allocation.height);
+                               ceilf (bounds.size.width),
+                               ceilf (bounds.size.height));
 
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->dnd_child), "background");
 
@@ -3061,7 +3053,7 @@ gtk_notebook_drag_motion (GtkWidget      *widget,
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
-  GdkRectangle position;
+  graphene_rect_t position;
   GtkNotebookArrow arrow;
   GdkAtom target, tab_target;
   GList *tab;
@@ -3113,7 +3105,7 @@ gtk_notebook_drag_motion (GtkWidget      *widget,
     }
 
   if (gtk_notebook_get_tab_area_position (notebook, &position) &&
-      gdk_rectangle_contains_point (&position, x, y) &&
+      graphene_rect_contains_point (&position, &(graphene_point_t){x, y}) &&
       (tab = get_tab_at_pos (notebook, x, y)))
     {
       priv->mouse_x = x;
@@ -4952,8 +4944,9 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook          *notebook,
   GtkPositionType tab_pos;
   gint left_x, right_x, top_y, bottom_y, anchor;
   gboolean gap_left, packing_changed;
-  GtkAllocation child_allocation, drag_allocation;
+  GtkAllocation child_allocation;
   GtkOrientation tab_expand_orientation;
+  graphene_rect_t drag_bounds;
 
   g_assert (priv->cur_page != NULL);
 
@@ -4985,13 +4978,14 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook          *notebook,
       break;
     }
 
-  gtk_widget_get_own_allocation (priv->cur_page->tab_widget, &drag_allocation);
+  gtk_widget_compute_bounds (priv->cur_page->tab_widget, priv->cur_page->tab_widget, &drag_bounds);
+
   left_x   = CLAMP (priv->mouse_x - priv->drag_offset_x,
-                    allocation->x, allocation->x + allocation->width - drag_allocation.width);
+                    allocation->x, allocation->x + allocation->width - drag_bounds.size.width);
   top_y    = CLAMP (priv->mouse_y - priv->drag_offset_y,
-                    allocation->y, allocation->y + allocation->height - drag_allocation.height);
-  right_x  = left_x + drag_allocation.width;
-  bottom_y = top_y + drag_allocation.height;
+                    allocation->y, allocation->y + allocation->height - drag_bounds.size.height);
+  right_x  = left_x + drag_bounds.size.width;
+  bottom_y = top_y + drag_bounds.size.height;
   gap_left = packing_changed = FALSE;
 
   if (priv->tab_pos == GTK_POS_TOP || priv->tab_pos == GTK_POS_BOTTOM)
@@ -5037,14 +5031,14 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook          *notebook,
                   if (left_x >= anchor)
                     {
                       left_x = priv->drag_surface_x = anchor;
-                      anchor += drag_allocation.width;
+                      anchor += drag_bounds.size.width;
                     }
                 }
               else
                 {
                   if (right_x <= anchor)
                     {
-                      anchor -= drag_allocation.width;
+                      anchor -= drag_bounds.size.width;
                       left_x = priv->drag_surface_x = anchor;
                     }
                 }
@@ -5067,11 +5061,11 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook          *notebook,
                   if (!allocate_at_bottom &&
                       left_x >= anchor &&
                       left_x <= anchor + child_allocation.width / 2)
-                    anchor += drag_allocation.width;
+                    anchor += drag_bounds.size.width;
                   else if (allocate_at_bottom &&
                            right_x >= anchor + child_allocation.width / 2 &&
                            right_x <= anchor + child_allocation.width)
-                    anchor -= drag_allocation.width;
+                    anchor -= drag_bounds.size.width;
                 }
 
               child_allocation.x = anchor;
@@ -5089,7 +5083,7 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook          *notebook,
               if (!allocate_at_bottom && top_y >= anchor)
                 {
                   top_y = priv->drag_surface_y = anchor;
-                  anchor += drag_allocation.height;
+                  anchor += drag_bounds.size.height;
                 }
 
               gap_left = TRUE;
@@ -5110,11 +5104,11 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook          *notebook,
                   if (!allocate_at_bottom &&
                       top_y >= anchor &&
                       top_y <= anchor + child_allocation.height / 2)
-                    anchor += drag_allocation.height;
+                    anchor += drag_bounds.size.height;
                   else if (allocate_at_bottom &&
                            bottom_y >= anchor + child_allocation.height / 2 &&
                            bottom_y <= anchor + child_allocation.height)
-                    anchor -= drag_allocation.height;
+                    anchor -= drag_bounds.size.height;
                 }
 
               child_allocation.y = anchor;
@@ -5160,11 +5154,11 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook          *notebook,
                   if (!allocate_at_bottom &&
                       left_x >  anchor + child_allocation.width / 2 &&
                       left_x <= anchor + child_allocation.width)
-                    anchor += drag_allocation.width;
+                    anchor += drag_bounds.size.width;
                   else if (allocate_at_bottom &&
                            right_x >= anchor &&
                            right_x <= anchor + child_allocation.width / 2)
-                    anchor -= drag_allocation.width;
+                    anchor -= drag_bounds.size.width;
                 }
 
               if (!allocate_at_bottom)
@@ -5181,11 +5175,11 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook          *notebook,
                   if (!allocate_at_bottom &&
                       top_y >= anchor + child_allocation.height / 2 &&
                       top_y <= anchor + child_allocation.height)
-                    anchor += drag_allocation.height;
+                    anchor += drag_bounds.size.height;
                   else if (allocate_at_bottom &&
                            bottom_y >= anchor &&
                            bottom_y <= anchor + child_allocation.height / 2)
-                    anchor -= drag_allocation.height;
+                    anchor -= drag_bounds.size.height;
                 }
 
               if (!allocate_at_bottom)
@@ -5208,7 +5202,7 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook          *notebook,
         case GTK_POS_TOP:
         case GTK_POS_BOTTOM:
           if (allocate_at_bottom)
-            anchor -= drag_allocation.width;
+            anchor -= drag_bounds.size.width;
 
           if ((!allocate_at_bottom && priv->drag_surface_x > anchor) ||
               (allocate_at_bottom && priv->drag_surface_x < anchor))
@@ -5217,7 +5211,7 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook          *notebook,
         case GTK_POS_LEFT:
         case GTK_POS_RIGHT:
           if (allocate_at_bottom)
-            anchor -= drag_allocation.height;
+            anchor -= drag_bounds.size.height;
 
           if ((!allocate_at_bottom && priv->drag_surface_y > anchor) ||
               (allocate_at_bottom && priv->drag_surface_y < anchor))
