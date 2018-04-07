@@ -812,11 +812,9 @@ gtk_widget_real_contains (GtkWidget *widget,
                           gdouble    x,
                           gdouble    y)
 {
-  GtkAllocation own_alloc;
   graphene_rect_t widget_bounds;
 
-  gtk_widget_get_own_allocation (widget, &own_alloc);
-  graphene_rect_init (&widget_bounds, own_alloc.x, own_alloc.y, own_alloc.width, own_alloc.height);
+  gtk_widget_compute_bounds (widget, widget, &widget_bounds);
 
   /* XXX: This misses rounded rects */
   return graphene_rect_contains_point (&widget_bounds,
@@ -3852,7 +3850,7 @@ gtk_widget_get_surface_allocation (GtkWidget     *widget,
                                   GtkAllocation *allocation)
 {
   GtkWidget *parent;
-  GtkAllocation alloc;
+  graphene_rect_t bounds;
 
   /* Don't consider the parent == widget case here. */
   parent = _gtk_widget_get_parent (widget);
@@ -3861,13 +3859,13 @@ gtk_widget_get_surface_allocation (GtkWidget     *widget,
 
   g_assert (GTK_IS_WINDOW (parent) || GTK_IS_POPOVER (parent));
 
-  gtk_widget_get_own_allocation (widget, &alloc);
-  gtk_widget_translate_coordinates (widget,
-                                    parent,
-                                    alloc.x, alloc.y,
-                                    &alloc.x, &alloc.y);
-
-  *allocation = alloc;
+  gtk_widget_compute_bounds (widget, parent, &bounds);
+  *allocation = (GtkAllocation){
+    floorf (bounds.origin.x),
+    floorf (bounds.origin.y),
+    ceilf (bounds.size.width),
+    ceilf (bounds.size.height)
+  };
 }
 
 static void
