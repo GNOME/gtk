@@ -292,21 +292,18 @@ add_move_binding (GtkBindingSet   *binding_set,
 }
 
 static void
-get_handle_area (GtkPaned     *paned,
-                 GdkRectangle *area)
+get_handle_area (GtkPaned        *paned,
+                 graphene_rect_t *area)
 {
   GtkPanedPrivate *priv = gtk_paned_get_instance_private (paned);
   int extra = 0;
 
-  gtk_widget_get_outer_allocation (priv->handle_widget, area);
+  gtk_widget_compute_bounds (priv->handle_widget, GTK_WIDGET (paned), area);
 
   if (!gtk_paned_get_wide_handle (paned))
     extra = HANDLE_EXTRA_SIZE;
 
-  area->x -= extra;
-  area->y -= extra;
-  area->width += extra * 2;
-  area->height += extra * 2;
+  graphene_rect_inset (area, - extra, - extra);
 }
 
 static void
@@ -316,11 +313,12 @@ gtk_paned_motion (GtkEventControllerMotion *motion,
                   GtkPaned                 *paned)
 {
   GtkPanedPrivate *priv = gtk_paned_get_instance_private (paned);
-  GdkRectangle handle_area;
+  graphene_rect_t handle_area;
 
   get_handle_area (paned, &handle_area);
 
-  if (gdk_rectangle_contains_point (&handle_area, x, y) || priv->panning)
+  if (graphene_rect_contains_point (&handle_area, &(graphene_point_t){x, y}) ||
+      priv->panning)
     {
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
         gtk_widget_set_cursor_from_name (GTK_WIDGET (paned), "col-resize");
@@ -748,7 +746,7 @@ gesture_drag_begin_cb (GtkGestureDrag *gesture,
 {
   GtkPanedPrivate *priv = gtk_paned_get_instance_private (paned);
   GdkEventSequence *sequence;
-  GdkRectangle handle_area;
+  graphene_rect_t handle_area;
   const GdkEvent *event;
   GdkDevice *device;
   gboolean is_touch;
@@ -771,7 +769,7 @@ gesture_drag_begin_cb (GtkGestureDrag *gesture,
       return;
     }
 
-  if (gdk_rectangle_contains_point (&handle_area, (int)start_x, (int)start_y) ||
+  if (graphene_rect_contains_point (&handle_area, &(graphene_point_t){start_x, start_y}) ||
       (is_touch && initiates_touch_drag (paned, start_x, start_y)))
     {
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
@@ -1401,7 +1399,6 @@ gtk_paned_snapshot (GtkWidget   *widget,
                     GtkSnapshot *snapshot)
 {
   GtkPanedPrivate *priv = gtk_paned_get_instance_private (GTK_PANED (widget));
-  GtkAllocation child_allocation;
 
   gtk_snapshot_push_clip (snapshot,
                           &GRAPHENE_RECT_INIT (
@@ -1416,34 +1413,10 @@ gtk_paned_snapshot (GtkWidget   *widget,
     gtk_widget_snapshot_child (widget, priv->handle_widget, snapshot);
 
   if (priv->child1 && gtk_widget_get_visible (priv->child1))
-    {
-      gtk_widget_get_outer_allocation (priv->child1, &child_allocation);
-      gtk_snapshot_push_clip (snapshot,
-                              &GRAPHENE_RECT_INIT (
-                                  child_allocation.x,
-                                  child_allocation.y,
-                                  child_allocation.width,
-                                  child_allocation.height
-                              ),
-                              "GtkPanedChild1");
-      gtk_widget_snapshot_child (widget, priv->child1, snapshot);
-      gtk_snapshot_pop (snapshot);
-    }
+    gtk_widget_snapshot_child (widget, priv->child1, snapshot);
 
   if (priv->child2 && gtk_widget_get_visible (priv->child2))
-    {
-      gtk_widget_get_outer_allocation (priv->child2, &child_allocation);
-      gtk_snapshot_push_clip (snapshot,
-                              &GRAPHENE_RECT_INIT (
-                                  child_allocation.x,
-                                  child_allocation.y,
-                                  child_allocation.width,
-                                  child_allocation.height
-                              ),
-                              "GtkPanedChild2");
-      gtk_widget_snapshot_child (widget, priv->child2, snapshot);
-      gtk_snapshot_pop (snapshot);
-    }
+    gtk_widget_snapshot_child (widget, priv->child2, snapshot);
 
   gtk_snapshot_pop (snapshot);
 }

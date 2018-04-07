@@ -2292,7 +2292,6 @@ gtk_notebook_gesture_pressed (GtkGestureMultiPress *gesture,
 
   if ((tab = get_tab_at_pos (notebook, x, y)) != NULL)
     {
-      GtkAllocation allocation;
       gboolean page_changed, was_focus;
 
       page = tab->data;
@@ -2308,6 +2307,8 @@ gtk_notebook_gesture_pressed (GtkGestureMultiPress *gesture,
       /* save press to possibly begin a drag */
       if (page->reorderable || page->detachable)
         {
+          graphene_rect_t tab_bounds;
+
           priv->pressed_button = button;
 
           priv->mouse_x = x;
@@ -2316,10 +2317,10 @@ gtk_notebook_gesture_pressed (GtkGestureMultiPress *gesture,
           priv->drag_begin_x = priv->mouse_x;
           priv->drag_begin_y = priv->mouse_y;
 
-          gtk_widget_get_outer_allocation (page->tab_widget, &allocation);
+          gtk_widget_compute_bounds (page->tab_widget, GTK_WIDGET (notebook), &tab_bounds);
 
-          priv->drag_offset_x = priv->drag_begin_x - allocation.x;
-          priv->drag_offset_y = priv->drag_begin_y - allocation.y;
+          priv->drag_offset_x = priv->drag_begin_x - tab_bounds.origin.x;
+          priv->drag_offset_y = priv->drag_begin_y - tab_bounds.origin.y;
         }
     }
 }
@@ -2416,9 +2417,9 @@ get_drop_position (GtkNotebook *notebook)
           page->tab_label &&
           gtk_widget_get_mapped (page->tab_label))
         {
-          GtkAllocation allocation;
+          graphene_rect_t tab_bounds;
 
-          gtk_widget_get_outer_allocation (page->tab_widget, &allocation);
+          gtk_widget_compute_bounds (page->tab_widget, GTK_WIDGET (notebook), &tab_bounds);
 
           switch (priv->tab_pos)
             {
@@ -2426,19 +2427,19 @@ get_drop_position (GtkNotebook *notebook)
             case GTK_POS_BOTTOM:
               if (!is_rtl)
                 {
-                  if (allocation.x + allocation.width / 2 > x)
+                  if (tab_bounds.origin.x + tab_bounds.size.width / 2 > x)
                     return children;
                 }
               else
                 {
-                  if (allocation.x + allocation.width / 2 < x)
+                  if (tab_bounds.origin.x + tab_bounds.size.width / 2 < x)
                     return children;
                 }
               break;
 
             case GTK_POS_LEFT:
             case GTK_POS_RIGHT:
-              if (allocation.y + allocation.height / 2 > y)
+              if (tab_bounds.origin.y + tab_bounds.size.height / 2 > y)
                 return children;
               break;
 

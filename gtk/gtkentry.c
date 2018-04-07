@@ -3518,12 +3518,12 @@ gtk_entry_event (GtkWidget *widget,
 
   for (i = 0; i < MAX_ICONS; i++)
     {
-      GtkAllocation icon_alloc;
       if (priv->icons[i])
         {
-          gtk_widget_get_outer_allocation (priv->icons[i]->widget, &icon_alloc);
-
-          if (gdk_rectangle_contains_point (&icon_alloc, (int)x, (int)y))
+          int icon_x, icon_y;
+          gtk_widget_translate_coordinates (widget, priv->icons[i]->widget,
+                                            x, y, &icon_x, &icon_y);
+          if (gtk_widget_contains (priv->icons[i]->widget, icon_x, icon_y))
             {
               icon_info = priv->icons[i];
               break;
@@ -7739,8 +7739,8 @@ gtk_entry_get_icon_storage_type (GtkEntry             *entry,
 /**
  * gtk_entry_get_icon_at_pos:
  * @entry: a #GtkEntry
- * @x: the x coordinate of the position to find
- * @y: the y coordinate of the position to find
+ * @x: the x coordinate of the position to find, relative to @entry
+ * @y: the y coordinate of the position to find, relative to @entry
  *
  * Finds the icon at the given position and return its index. The
  * position’s coordinates are relative to the @entry’s top left corner.
@@ -7763,13 +7763,15 @@ gtk_entry_get_icon_at_pos (GtkEntry *entry,
   for (i = 0; i < MAX_ICONS; i++)
     {
       EntryIconInfo *icon_info = priv->icons[i];
-      GtkAllocation allocation;
+      int icon_x, icon_y;
 
       if (icon_info == NULL)
         continue;
 
-      gtk_widget_get_outer_allocation (icon_info->widget, &allocation);
-      if (gdk_rectangle_contains_point (&allocation, x, y))
+      gtk_widget_translate_coordinates (GTK_WIDGET (entry), icon_info->widget,
+                                        x, y, &icon_x, &icon_y);
+
+      if (gtk_widget_contains (icon_info->widget, icon_x, icon_y))
         return i;
     }
 
@@ -7868,8 +7870,6 @@ gtk_entry_get_current_icon_drag_source (GtkEntry *entry)
  * If the entry is not realized or has no icon at the given position,
  * @icon_area is filled with zeros. Otherwise, @icon_area will be filled
  * with the icon's allocation, relative to @entry's allocation.
- *
- * See also gtk_entry_get_text_area()
  */
 void
 gtk_entry_get_icon_area (GtkEntry             *entry,
@@ -7886,7 +7886,16 @@ gtk_entry_get_icon_area (GtkEntry             *entry,
 
   if (icon_info)
     {
-      gtk_widget_get_outer_allocation (icon_info->widget, icon_area);
+      graphene_rect_t r;
+
+      gtk_widget_compute_bounds (icon_info->widget, GTK_WIDGET (entry), &r);
+
+      *icon_area = (GdkRectangle){
+        floorf (r.origin.x),
+        floorf (r.origin.y),
+        ceilf (r.size.width),
+        ceilf (r.size.height),
+      };
     }
   else
     {

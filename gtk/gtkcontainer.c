@@ -1892,7 +1892,6 @@ gtk_container_real_set_focus_child (GtkContainer *container,
     {
       GtkAdjustment *hadj;
       GtkAdjustment *vadj;
-      GtkAllocation allocation;
       gint x, y;
 
       hadj = g_object_get_qdata (G_OBJECT (container), hadjustment_key_id);
@@ -1900,6 +1899,7 @@ gtk_container_real_set_focus_child (GtkContainer *container,
       if (hadj || vadj)
         {
           GtkWidget *child = focus_child;
+          graphene_rect_t child_bounds;
 
           while (gtk_widget_get_focus_child (child))
             child = gtk_widget_get_focus_child (child);
@@ -1908,13 +1908,13 @@ gtk_container_real_set_focus_child (GtkContainer *container,
                                                  0, 0, &x, &y))
             return;
 
-          gtk_widget_get_outer_allocation (child, &allocation);
+          gtk_widget_compute_bounds (child, child, &child_bounds);
 
           if (vadj)
-            gtk_adjustment_clamp_page (vadj, y, y + allocation.height);
+            gtk_adjustment_clamp_page (vadj, y, y + child_bounds.size.height);
 
           if (hadj)
-            gtk_adjustment_clamp_page (hadj, x, x + allocation.width);
+            gtk_adjustment_clamp_page (hadj, x, x + child_bounds.size.width);
         }
     }
 }

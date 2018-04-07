@@ -310,10 +310,7 @@ gtk_stack_switcher_drag_motion (GtkWidget      *widget,
   g_hash_table_iter_init (&iter, priv->buttons);
   while (g_hash_table_iter_next (&iter, NULL, &value))
     {
-      GdkRectangle allocation;
-
-      gtk_widget_get_outer_allocation (GTK_WIDGET (value), &allocation);
-      if (gdk_rectangle_contains_point (&allocation, (int)x, (int)y))
+      if (gtk_widget_contains (GTK_WIDGET (value), x, y))
         {
           button = GTK_WIDGET (value);
           retval = TRUE;

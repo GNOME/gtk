@@ -3056,16 +3056,17 @@ check_threshold (GtkWidget *widget,
 }
 
 static gboolean
-definitely_within_item (GtkWidget *widget,
+definitely_within_item (GtkMenu   *menu,
+                        GtkWidget *widget,
                         gint       x,
                         gint       y)
 {
-  GtkAllocation allocation;
   int w, h;
+  graphene_rect_t bounds;
 
-  gtk_widget_get_outer_allocation (widget, &allocation);
-  w = allocation.width;
-  h = allocation.height;
+  gtk_widget_compute_bounds (widget, GTK_WIDGET (menu), &bounds);
+  w = bounds.size.width;
+  h = bounds.size.height;
 
   return
     check_threshold (widget, 0, 0, x, y) &&
@@ -3128,7 +3129,7 @@ gtk_menu_motion (GtkEventController *controller,
   menu_shell = GTK_MENU_SHELL (parent);
   menu = GTK_MENU (menu_shell);
 
-  if (definitely_within_item (menu_item, event->x, event->y))
+  if (definitely_within_item (menu, menu_item, event->x, event->y))
     menu_shell->priv->activate_time = 0;
 
   /* Check to see if we are within an active submenu's navigation region

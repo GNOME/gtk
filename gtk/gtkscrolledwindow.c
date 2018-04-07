@@ -1063,13 +1063,13 @@ event_close_to_indicator (GtkScrolledWindow *sw,
                           GdkEvent          *event)
 {
   GtkScrolledWindowPrivate *priv;
-  GtkAllocation indicator_alloc;
+  graphene_rect_t indicator_bounds;
   gdouble x, y;
   gint distance;
 
   priv = sw->priv;
 
-  gtk_widget_get_outer_allocation (indicator->scrollbar, &indicator_alloc);
+  gtk_widget_compute_bounds (indicator->scrollbar, GTK_WIDGET (sw), &indicator_bounds);
   gdk_event_get_coords (event, &x, &y);
 
   if (indicator->over)
@@ -1077,16 +1077,18 @@ event_close_to_indicator (GtkScrolledWindow *sw,
   else
     distance = INDICATOR_CLOSE_DISTANCE;
 
+  graphene_rect_inset (&indicator_bounds, distance, distance);
+
   if (indicator == &priv->hindicator)
     {
-       if (y >= indicator_alloc.y - distance &&
-           y < indicator_alloc.y + indicator_alloc.height + distance)
+      if (y >= indicator_bounds.origin.y &&
+          y < indicator_bounds.origin.y + indicator_bounds.size.height)
          return TRUE;
     }
   else if (indicator == &priv->vindicator)
     {
-      if (x >= indicator_alloc.x - distance &&
-          x < indicator_alloc.x + indicator_alloc.width + distance)
+      if (x >= indicator_bounds.origin.x &&
+          x < indicator_bounds.origin.x + indicator_bounds.size.width)
         return TRUE;
     }
 

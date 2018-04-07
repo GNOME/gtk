@@ -42,7 +42,6 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkstylepropertyprivate.h"
 #include "gtktypebuiltins.h"
-#include "gtkwidgetprivate.h"
 
 #include "a11y/gtkscaleaccessible.h"
 
@@ -329,14 +328,15 @@ gtk_scale_allocate_value (GtkScale *scale)
   GtkWidget *widget = GTK_WIDGET (scale);
   GtkRange *range = GTK_RANGE (widget);
   GtkWidget *slider_widget;
-  GtkAllocation slider_alloc, value_alloc;
+  GtkAllocation value_alloc;
   int range_width, range_height;
+  graphene_rect_t slider_bounds;
 
   range_width = gtk_widget_get_width (widget);
   range_height = gtk_widget_get_height (widget);
 
   slider_widget = gtk_range_get_slider_widget (range);
-  gtk_widget_get_outer_allocation (slider_widget, &slider_alloc);
+  gtk_widget_compute_bounds (slider_widget, widget, &slider_bounds);
 
   gtk_widget_measure (priv->value_widget,
                       GTK_ORIENTATION_HORIZONTAL, -1,
@@ -362,12 +362,12 @@ gtk_scale_allocate_value (GtkScale *scale)
           break;
 
         case GTK_POS_TOP:
-          value_alloc.x = slider_alloc.x + (slider_alloc.width - value_alloc.width) / 2;
+          value_alloc.x = slider_bounds.origin.x + (slider_bounds.size.width - value_alloc.width) / 2;
           value_alloc.y = 0;
           break;
 
         case GTK_POS_BOTTOM:
-          value_alloc.x = slider_alloc.x + (slider_alloc.width - value_alloc.width) / 2;
+          value_alloc.x = slider_bounds.origin.x + (slider_bounds.size.width - value_alloc.width) / 2;
           value_alloc.y = range_height - value_alloc.height;
           break;
 
@@ -382,12 +382,12 @@ gtk_scale_allocate_value (GtkScale *scale)
         {
         case GTK_POS_LEFT:
           value_alloc.x = 0;
-          value_alloc.y = (slider_alloc.y + (slider_alloc.height / 2)) - value_alloc.height / 2;
+          value_alloc.y = (slider_bounds.origin.y + (slider_bounds.size.height / 2)) - value_alloc.height / 2;
           break;
 
         case GTK_POS_RIGHT:
           value_alloc.x = range_width - value_alloc.width;
-          value_alloc.y = (slider_alloc.y + (slider_alloc.height / 2)) - value_alloc.height / 2;
+          value_alloc.y = (slider_bounds.origin.y + (slider_bounds.size.height / 2)) - value_alloc.height / 2;
           break;
 
         case GTK_POS_TOP:
@@ -1514,7 +1514,7 @@ gtk_scale_real_get_layout_offsets (GtkScale *scale,
                                    gint     *y)
 {
   GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
-  GtkAllocation value_alloc;
+  graphene_rect_t value_bounds;
 
   if (!priv->value_widget)
     {
@@ -1524,10 +1524,10 @@ gtk_scale_real_get_layout_offsets (GtkScale *scale,
       return;
     }
 
-  gtk_widget_get_outer_allocation (priv->value_widget, &value_alloc);
+  gtk_widget_compute_bounds (priv->value_widget, GTK_WIDGET (scale), &value_bounds);
 
-  *x = value_alloc.x;
-  *y = value_alloc.y;
+  *x = value_bounds.origin.x;
+  *y = value_bounds.origin.y;
 }
 
 static gchar *

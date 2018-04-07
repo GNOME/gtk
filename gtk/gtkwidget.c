@@ -11445,25 +11445,6 @@ gtk_widget_pick (GtkWidget *widget,
   return GTK_WIDGET_GET_CLASS (widget)->pick (widget, x, y);
 }
 
-void
-gtk_widget_get_outer_allocation (GtkWidget    *widget,
-                                 GdkRectangle *allocation)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GtkBorder margin;
-  GtkCssStyle *style;
-
-  style = gtk_css_node_get_style (priv->cssnode);
-  get_box_margin (style, &margin);
-
-  *allocation = priv->allocation;
-
-  allocation->x += margin.left;
-  allocation->y += margin.top;
-  allocation->width -= margin.left + margin.right;
-  allocation->height -= margin.top + margin.bottom;
-}
-
 /**
  * gtk_widget_compute_bounds:
  * @widget: the #GtkWidget to query

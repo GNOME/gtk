@@ -3059,7 +3059,7 @@ _gtk_tree_view_column_coords_in_resize_rect (GtkTreeViewColumn *column,
                                              double             y)
 {
   GtkTreeViewColumnPrivate *priv = column->priv;
-  GtkAllocation button_allocation;
+  graphene_rect_t button_bounds;
 
   /* x and y are in treeview coordinates. */
 
@@ -3068,14 +3068,13 @@ _gtk_tree_view_column_coords_in_resize_rect (GtkTreeViewColumn *column,
       !priv->visible)
     return FALSE;
 
-  gtk_widget_get_outer_allocation (priv->button, &button_allocation);
-
-  /* No translation needed */
-  g_assert (gtk_widget_get_parent (priv->button) == priv->tree_view);
+  gtk_widget_compute_bounds (priv->button, priv->tree_view, &button_bounds);
 
   if (gtk_widget_get_direction (priv->tree_view) == GTK_TEXT_DIR_LTR)
-    button_allocation.x += button_allocation.width - TREE_VIEW_DRAG_WIDTH;
+    button_bounds.origin.x += button_bounds.size.width - TREE_VIEW_DRAG_WIDTH;
 
-  button_allocation.width = TREE_VIEW_DRAG_WIDTH;
-  return gdk_rectangle_contains_point (&button_allocation, (int)x, (int)y);
+  button_bounds.size.width = TREE_VIEW_DRAG_WIDTH;
+
+  return graphene_rect_contains_point (&button_bounds,
+                                       &(graphene_point_t){x, y});
 }

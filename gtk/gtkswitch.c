@@ -188,16 +188,16 @@ gtk_switch_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
                                        GtkSwitch            *sw)
 {
   GtkSwitchPrivate *priv = gtk_switch_get_instance_private (sw);
-  GtkAllocation allocation;
+  graphene_rect_t switch_bounds;
 
-  gtk_widget_get_outer_allocation (GTK_WIDGET (sw), &allocation);
+  gtk_widget_compute_bounds (GTK_WIDGET (sw), GTK_WIDGET (sw), &switch_bounds);
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
   /* If the press didn't happen in the draggable handle,
    * cancel the pan gesture right away
    */
-  if ((priv->is_active && x <= allocation.width / 2.0) ||
-      (!priv->is_active && x > allocation.width / 2.0))
+  if ((priv->is_active && x <= switch_bounds.size.width / 2.0) ||
+      (!priv->is_active && x > switch_bounds.size.width / 2.0))
     gtk_gesture_set_state (priv->pan_gesture, GTK_EVENT_SEQUENCE_DENIED);
 }
 

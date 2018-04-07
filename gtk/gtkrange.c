@@ -40,7 +40,6 @@
 #include "gtkprivate.h"
 #include "gtkscale.h"
 #include "gtktypebuiltins.h"
-#include "gtkwidgetprivate.h"
 #include "gtkwindow.h"
 #include "gtkeventcontrollerkey.h"
 
@@ -901,11 +900,19 @@ gtk_range_get_range_rect (GtkRange     *range,
                           GdkRectangle *range_rect)
 {
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
+  graphene_rect_t r;
 
   g_return_if_fail (GTK_IS_RANGE (range));
   g_return_if_fail (range_rect != NULL);
 
-  gtk_widget_get_outer_allocation (priv->trough_widget, range_rect);
+  gtk_widget_compute_bounds (priv->trough_widget, GTK_WIDGET (range), &r);
+
+  *range_rect = (GdkRectangle) {
+    floorf (r.origin.x),
+    floorf (r.origin.y),
+    ceilf (r.size.width),
+    ceilf (r.size.height),
+  };
 }
 
 /**
@@ -927,25 +934,25 @@ gtk_range_get_slider_range (GtkRange *range,
                             gint     *slider_end)
 {
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
-  GtkAllocation slider_alloc;
+  graphene_rect_t slider_bounds;
 
   g_return_if_fail (GTK_IS_RANGE (range));
 
-  gtk_widget_get_outer_allocation (priv->slider_widget, &slider_alloc);
+  gtk_widget_compute_bounds (priv->slider_widget, GTK_WIDGET (range), &slider_bounds);
 
   if (priv->orientation == GTK_ORIENTATION_VERTICAL)
     {
       if (slider_start)
-        *slider_start = slider_alloc.y;
+        *slider_start = slider_bounds.origin.y;
       if (slider_end)
-        *slider_end = slider_alloc.y + slider_alloc.height;
+        *slider_end = slider_bounds.origin.y + slider_bounds.size.height;
     }
   else
     {
       if (slider_start)
-        *slider_start = slider_alloc.x;
+        *slider_start = slider_bounds.origin.y;
       if (slider_end)
-        *slider_end = slider_alloc.x + slider_alloc.width;
+        *slider_end = slider_bounds.origin.x + slider_bounds.size.width;
     }
 }
 
@@ -1760,19 +1767,19 @@ coord_to_value (GtkRange *range,
   gdouble value;
   gint    trough_length;
   gint    slider_length;
-  GtkAllocation slider_alloc;
+  graphene_rect_t slider_bounds;
 
-  gtk_widget_get_outer_allocation (priv->slider_widget, &slider_alloc);
+  gtk_widget_compute_bounds (priv->slider_widget, priv->slider_widget, &slider_bounds);
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       trough_length = gtk_widget_get_width (priv->trough_widget);
-      slider_length = slider_alloc.width;
+      slider_length = slider_bounds.size.width;
     }
   else
     {
       trough_length = gtk_widget_get_height (priv->trough_widget);
-      slider_length = slider_alloc.height;
+      slider_length = slider_bounds.size.height;
     }
 
   if (trough_length == slider_length)
@@ -1819,14 +1826,14 @@ gtk_range_key_controller_key_pressed (GtkEventControllerKey *controller,
            (keyval == GDK_KEY_Shift_L ||
             keyval == GDK_KEY_Shift_R))
     {
-      GtkAllocation slider_alloc;
+      graphene_rect_t slider_bounds;
 
-      gtk_widget_get_outer_allocation (priv->slider_widget, &slider_alloc);
+      gtk_widget_compute_bounds (priv->slider_widget, priv->trough_widget, &slider_bounds);
 
       if (priv->orientation == GTK_ORIENTATION_VERTICAL)
-        priv->slide_initial_slider_position = slider_alloc.y;
+        priv->slide_initial_slider_position = slider_bounds.origin.y;
       else
-        priv->slide_initial_slider_position = slider_alloc.x;
+        priv->slide_initial_slider_position = slider_bounds.origin.x;
       update_zoom_state (range, !priv->zoom);
 
       return GDK_EVENT_STOP;
@@ -1893,8 +1900,8 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   gboolean shift_pressed;
   guint button;
   GdkModifierType state_mask;
-  GtkAllocation slider_alloc;
   GtkWidget *mouse_location;
+  graphene_rect_t slider_bounds;
 
   if (!gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
@@ -1908,7 +1915,7 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   source_device = gdk_event_get_source_device ((GdkEvent *) event);
   source = gdk_device_get_source (source_device);
 
-  gtk_widget_get_outer_allocation (priv->slider_widget, &slider_alloc);
+  gtk_widget_compute_bounds (priv->slider_widget, priv->slider_widget, &slider_bounds);
 
   g_object_get (gtk_widget_get_settings (widget),
                 "gtk-primary-button-warps-slider", &primary_warps,
@@ -1956,8 +1963,8 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
       /* If we aren't fixed, center on the slider. I.e. if this is not a scale... */
       if (!priv->slider_size_fixed)
         {
-          slider_range_x += (slider_alloc.width / 2);
-          slider_range_y += (slider_alloc.height / 2);
+          slider_range_x += (slider_bounds.size.width  / 2);
+          slider_range_y += (slider_bounds.size.height / 2);
         }
 
       update_initial_slider_position (range, slider_range_x, slider_range_y);
@@ -2044,12 +2051,12 @@ update_slider_position (GtkRange *range,
 
   if (priv->zoom)
     {
-      GtkAllocation trough_alloc;
+      graphene_rect_t trough_bounds;
 
-      gtk_widget_get_outer_allocation (priv->trough_widget, &trough_alloc);
+      gtk_widget_compute_bounds (priv->trough_widget, priv->trough_widget, &trough_bounds);
 
       zoom = MIN(1.0, (priv->orientation == GTK_ORIENTATION_VERTICAL ?
-                       trough_alloc.height : trough_alloc.width) /
+                       trough_bounds.size.height : trough_bounds.size.width) /
                        (gtk_adjustment_get_upper (priv->adjustment) -
                         gtk_adjustment_get_lower (priv->adjustment) -
                         gtk_adjustment_get_page_size (priv->adjustment)));
@@ -2063,14 +2070,14 @@ update_slider_position (GtkRange *range,
   /* recalculate the initial position from the current position */
   if (priv->slide_initial_slider_position == -1)
     {
-      GtkAllocation slider_alloc;
+      graphene_rect_t slider_bounds;
 
-      gtk_widget_get_outer_allocation (priv->slider_widget, &slider_alloc);
+      gtk_widget_compute_bounds (priv->slider_widget, GTK_WIDGET (range), &slider_bounds);
 
       if (priv->orientation == GTK_ORIENTATION_VERTICAL)
-        priv->slide_initial_slider_position = (zoom * (mouse_y - priv->slide_initial_coordinate_delta) - slider_alloc.y) / (zoom - 1.0);
+        priv->slide_initial_slider_position = (zoom * (mouse_y - priv->slide_initial_coordinate_delta) - slider_bounds.origin.y) / (zoom - 1.0);
       else
-        priv->slide_initial_slider_position = (zoom * (mouse_x - priv->slide_initial_coordinate_delta) - slider_alloc.x) / (zoom - 1.0);
+        priv->slide_initial_slider_position = (zoom * (mouse_x - priv->slide_initial_coordinate_delta) - slider_bounds.origin.x) / (zoom - 1.0);
     }
 
   if (priv->orientation == GTK_ORIENTATION_VERTICAL)
