@@ -23,6 +23,21 @@ on_application_activate (GApplication *gapplication,
   GtkWidget *model_button;
   GtkWidget *widget;
 
+  gtk_css_provider_load_from_data (css_provider,
+    "window > box { padding: 0.5em; }"
+    "window > box > * { margin: 0.5em; }"
+    /* :iconic == FALSE */
+    "modelbutton > check { background: red; }"
+    "modelbutton > radio { background: green; }"
+    "modelbutton > arrow { background: blue; }"
+    /* :iconic == TRUE */
+    "button.model { background: yellow; }"
+    , -1, NULL);
+  g_assert (GDK_IS_SCREEN (screen));
+  gtk_style_context_add_provider_for_screen (screen,
+                                             GTK_STYLE_PROVIDER (css_provider),
+                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
   action = g_simple_action_new ("beep", NULL);
   g_signal_connect (action, "activate", G_CALLBACK (on_action_beep), NULL);
   g_action_map_add_action (G_ACTION_MAP (application), G_ACTION (action));
@@ -55,19 +70,6 @@ on_application_activate (GApplication *gapplication,
   gtk_container_add (GTK_CONTAINER (box), widget);
 
   widget = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_css_provider_load_from_data (css_provider,
-    "window > box { padding: 0.5em; }"
-    "window > box > * { margin: 0.5em; }"
-    "modelbutton > check { background: red; }"
-    "modelbutton > radio { background: green; }"
-    "modelbutton > arrow { background: blue; }"
-    "button.model { background: yellow; }"
-    , -1, NULL);
-  g_assert (GDK_IS_SCREEN (screen));
-  gtk_style_context_add_provider_for_screen (screen,
-                                             GTK_STYLE_PROVIDER (css_provider),
-                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-
   gtk_container_add (GTK_CONTAINER (widget), box);
   gtk_widget_show_all (widget);
   gtk_application_add_window (GTK_APPLICATION (application), GTK_WINDOW (widget));
