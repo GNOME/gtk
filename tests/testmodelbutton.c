@@ -45,8 +45,8 @@ on_application_activate (GApplication *gapplication,
 
   model_button = g_object_new (GTK_TYPE_MODEL_BUTTON,
                                "action-name", "app.beep",
+                               "text", "It’s-a-me! ModelButton",
                                NULL);
-  gtk_button_set_label (GTK_BUTTON (model_button), "It’s-a-me! ModelButton");
   gtk_container_add (GTK_CONTAINER (box), model_button);
 
   widget = gtk_combo_box_text_new ();
