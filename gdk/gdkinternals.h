@@ -177,8 +177,6 @@ struct _GdkSurface
      started. It may be smaller than the expose area if we'e painting
      more than we have to, but it represents the "true" damage. */
   cairo_region_t *active_update_area;
-  /* We store the old expose areas to support buffer-age optimizations */
-  cairo_region_t *old_updated_area[2];
 
   GdkSurfaceState old_state;
   GdkSurfaceState state;

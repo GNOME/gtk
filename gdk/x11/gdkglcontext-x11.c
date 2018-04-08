@@ -196,7 +196,6 @@ gdk_x11_gl_context_get_damage (GdkGLContext *context)
   GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
   Display *dpy = gdk_x11_display_get_xdisplay (display);
-  GdkSurface *surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
   unsigned int buffer_age = 0;
 
   if (display_x11->has_glx_buffer_age)
@@ -215,16 +214,16 @@ gdk_x11_gl_context_get_damage (GdkGLContext *context)
 
       if (buffer_age == 2)
         {
-          if (surface->old_updated_area[0])
-            return cairo_region_copy (surface->old_updated_area[0]);
+          if (context->old_updated_area[0])
+            return cairo_region_copy (context->old_updated_area[0]);
         }
       else if (buffer_age == 3)
         {
-          if (surface->old_updated_area[0] &&
-              surface->old_updated_area[1])
+          if (context->old_updated_area[0] &&
+              context->old_updated_area[1])
             {
-              cairo_region_t *damage = cairo_region_copy (surface->old_updated_area[0]);
-              cairo_region_union (damage, surface->old_updated_area[1]);
+              cairo_region_t *damage = cairo_region_copy (context->old_updated_area[0]);
+              cairo_region_union (damage, context->old_updated_area[1]);
               return damage;
             }
         }

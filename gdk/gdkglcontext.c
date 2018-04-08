@@ -134,11 +134,24 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkGLContext, gdk_gl_context, GDK_TYPE_DRAW
 static GPrivate thread_current_context = G_PRIVATE_INIT (g_object_unref);
 
 static void
+gdk_gl_context_clear_old_updated_area (GdkGLContext *context)
+{
+  int i;
+
+  for (i = 0; i < 2; i++)
+    {
+      g_clear_pointer (&context->old_updated_area[i], cairo_region_destroy);
+    }
+}
+
+static void
 gdk_gl_context_dispose (GObject *gobject)
 {
   GdkGLContext *context = GDK_GL_CONTEXT (gobject);
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
   GdkGLContext *current;
+
+  gdk_gl_context_clear_old_updated_area (context);
 
   current = g_private_get (&thread_current_context);
   if (current == context)
@@ -325,6 +338,19 @@ gdk_gl_context_real_end_frame (GdkDrawContext *draw_context,
       gdk_draw_context_end_frame (GDK_DRAW_CONTEXT (shared), painted, damage);
       return;
     }
+
+  if (context->old_updated_area[1])
+    cairo_region_destroy (context->old_updated_area[1]);
+  context->old_updated_area[1] = context->old_updated_area[0];
+  context->old_updated_area[0] = cairo_region_reference (painted);
+}
+
+static void
+gdk_gl_context_surface_resized (GdkDrawContext *draw_context)
+{
+  GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
+
+  gdk_gl_context_clear_old_updated_area (context);
 }
 
 static void
@@ -338,6 +364,7 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
 
   draw_context_class->begin_frame = gdk_gl_context_real_begin_frame;
   draw_context_class->end_frame = gdk_gl_context_real_end_frame;
+  draw_context_class->surface_resized = gdk_gl_context_surface_resized;
 
   /**
    * GdkGLContext:shared-context:

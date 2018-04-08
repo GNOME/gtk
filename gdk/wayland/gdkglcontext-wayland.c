@@ -184,16 +184,16 @@ gdk_wayland_gl_context_get_damage (GdkGLContext *context)
 
       if (buffer_age == 2)
         {
-          if (surface->old_updated_area[0])
-            return cairo_region_copy (surface->old_updated_area[0]);
+          if (context->old_updated_area[0])
+            return cairo_region_copy (context->old_updated_area[0]);
         }
       else if (buffer_age == 3)
         {
-          if (surface->old_updated_area[0] &&
-              surface->old_updated_area[1])
+          if (context->old_updated_area[0] &&
+              context->old_updated_area[1])
             {
-              cairo_region_t *damage = cairo_region_copy (surface->old_updated_area[0]);
-              cairo_region_union (damage, surface->old_updated_area[1]);
+              cairo_region_t *damage = cairo_region_copy (context->old_updated_area[0]);
+              cairo_region_union (damage, context->old_updated_area[1]);
               return damage;
             }
         }

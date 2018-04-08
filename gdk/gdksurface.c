@@ -594,31 +594,6 @@ recompute_visible_regions (GdkSurface *private,
                                       recalculate_children);
 }
 
-static void
-gdk_surface_clear_old_updated_area (GdkSurface *surface)
-{
-  int i;
-
-  for (i = 0; i < 2; i++)
-    {
-      if (surface->old_updated_area[i])
-        {
-          cairo_region_destroy (surface->old_updated_area[i]);
-          surface->old_updated_area[i] = NULL;
-        }
-    }
-}
-
-static void
-gdk_surface_append_old_updated_area (GdkSurface *surface,
-                                     cairo_region_t *region)
-{
-  if (surface->old_updated_area[1])
-    cairo_region_destroy (surface->old_updated_area[1]);
-  surface->old_updated_area[1] = surface->old_updated_area[0];
-  surface->old_updated_area[0] = cairo_region_reference (region);
-}
-
 void
 _gdk_surface_update_size (GdkSurface *surface)
 {
@@ -627,7 +602,6 @@ _gdk_surface_update_size (GdkSurface *surface)
   for (l = surface->draw_contexts; l; l = l->next)
     gdk_draw_context_surface_resized (l->data);
 
-  gdk_surface_clear_old_updated_area (surface);
   recompute_visible_regions (surface, FALSE);
 }
 
@@ -2120,8 +2094,6 @@ gdk_surface_process_updates_internal (GdkSurface *surface)
 
           gdk_surface_process_updates_recurse (surface, expose_region);
 
-          gdk_surface_append_old_updated_area (surface, surface->active_update_area);
-
           cairo_region_destroy (expose_region);
         }
 
@@ -3035,7 +3007,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       impl_class->hide (surface);
     }
 
-  gdk_surface_clear_old_updated_area (surface);
   recompute_visible_regions (surface, FALSE);
 
   if (was_mapped && !gdk_surface_has_impl (surface))
@@ -3093,7 +3064,6 @@ gdk_surface_withdraw (GdkSurface *surface)
         gdk_gl_context_clear_current ();
 
       recompute_visible_regions (surface, FALSE);
-      gdk_surface_clear_old_updated_area (surface);
     }
 }
 
