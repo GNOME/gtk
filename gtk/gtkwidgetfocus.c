@@ -35,20 +35,20 @@ struct _CompareInfo
 };
 
 static inline void
-get_axis_info (const GdkRectangle *rect,
-               int                 axis,
-               int                *origin,
-               int                *bounds)
+get_axis_info (const graphene_rect_t *bounds,
+               int                    axis,
+               int                   *start,
+               int                   *end)
 {
   if (axis == HORIZONTAL)
     {
-      *origin = rect->x;
-      *bounds = rect->width;
+      *start = bounds->origin.x;
+      *end = bounds->size.width;
     }
   else if (axis == VERTICAL)
     {
-      *origin = rect->y;
-      *bounds = rect->height;
+      *start = bounds->origin.y;
+      *end = bounds->size.height;
     }
   else
     g_assert(FALSE);
@@ -70,41 +70,27 @@ reverse_ptr_array (GPtrArray *arr)
     }
 }
 
-/* Get coordinates of @widget's allocation with respect to
- * allocation of @container.
- */
-static gboolean
-get_allocation_coords (GtkWidget    *widget,
-                       GtkWidget    *child,
-                       GdkRectangle *allocation)
-{
-  gtk_widget_get_allocation (child, allocation);
-
-  return gtk_widget_translate_coordinates (child, widget,
-                                           0, 0, &allocation->x, &allocation->y);
-}
-
 static int
 tab_sort_func (gconstpointer a,
                gconstpointer b,
                gpointer      user_data)
 {
-  GtkAllocation child1_allocation, child2_allocation;
-  const GtkWidget *child1 = *((GtkWidget **)a);
-  const GtkWidget *child2 = *((GtkWidget **)b);
+  graphene_rect_t child_bounds1, child_bounds2;
+  GtkWidget *child1 = *((GtkWidget **)a);
+  GtkWidget *child2 = *((GtkWidget **)b);
   GtkTextDirection text_direction = GPOINTER_TO_INT (user_data);
-  int y1, y2;
+  float y1, y2;
 
-  _gtk_widget_get_allocation ((GtkWidget *) child1, &child1_allocation);
-  _gtk_widget_get_allocation ((GtkWidget *) child2, &child2_allocation);
+  gtk_widget_compute_bounds (child1, gtk_widget_get_parent (child1), &child_bounds1);
+  gtk_widget_compute_bounds (child2, gtk_widget_get_parent (child2), &child_bounds2);
 
-  y1 = child1_allocation.y + child1_allocation.height / 2;
-  y2 = child2_allocation.y + child2_allocation.height / 2;
+  y1 = child_bounds1.origin.y + (child_bounds1.size.height / 2.0f);
+  y2 = child_bounds2.origin.y + (child_bounds2.size.height / 2.0f);
 
   if (y1 == y2)
     {
-      int x1 = child1_allocation.x + child1_allocation.width / 2;
-      int x2 = child2_allocation.x + child2_allocation.width / 2;
+      const float x1 = child_bounds1.origin.y + (child_bounds1.size.width / 2.0f);
+      const float x2 = child_bounds2.origin.y + (child_bounds2.size.width / 2.0f);
 
       if (text_direction == GTK_TEXT_DIR_RTL)
         return (x1 < x2) ? 1 : ((x1 == x2) ? 0 : -1);
@@ -166,8 +152,8 @@ find_old_focus (GtkWidget *widget,
 }
 
 static gboolean
-old_focus_coords (GtkWidget *widget,
-                  GdkRectangle *old_focus_rect)
+old_focus_coords (GtkWidget       *widget,
+                  graphene_rect_t *old_focus_bounds)
 {
   GtkWidget *toplevel = _gtk_widget_get_toplevel (widget);
   GtkWidget *old_focus;
@@ -176,7 +162,7 @@ old_focus_coords (GtkWidget *widget,
     {
       old_focus = gtk_window_get_focus (GTK_WINDOW (toplevel));
       if (old_focus)
-        return get_allocation_coords (widget, old_focus, old_focus_rect);
+        return gtk_widget_compute_bounds (old_focus, widget, old_focus_bounds);
     }
 
   return FALSE;
@@ -187,29 +173,29 @@ axis_compare (gconstpointer a,
               gconstpointer b,
               gpointer      user_data)
 {
-  GdkRectangle allocation1;
-  GdkRectangle allocation2;
+  graphene_rect_t bounds1;
+  graphene_rect_t bounds2;
   CompareInfo *compare = user_data;
-  int origin1, origin2;
-  int bounds1, bounds2;
+  int start1, end1;
+  int start2, end2;
 
-  get_allocation_coords (compare->widget, *((GtkWidget **)a), &allocation1);
-  get_allocation_coords (compare->widget, *((GtkWidget **)b), &allocation2);
+  gtk_widget_compute_bounds (*((GtkWidget **)a), compare->widget, &bounds1);
+  gtk_widget_compute_bounds (*((GtkWidget **)b), compare->widget, &bounds2);
 
-  get_axis_info (&allocation1, compare->axis, &origin1, &bounds1);
-  get_axis_info (&allocation2, compare->axis, &origin2, &bounds2);
+  get_axis_info (&bounds1, compare->axis, &start1, &end1);
+  get_axis_info (&bounds2, compare->axis, &start2, &end2);
 
-  origin1 = origin1 + (bounds1 / 2);
-  origin2 = origin2 + (bounds2 / 2);
+  start1 = start1 + (end1 / 2);
+  start2 = start2 + (end2 / 2);
 
-  if (origin1 == origin2)
+  if (start1 == start2)
     {
       /* Now use origin/bounds to compare the 2 widgets on the other axis */
-      get_axis_info (&allocation1, 1 - compare->axis, &origin1, &bounds1);
-      get_axis_info (&allocation2, 1 - compare->axis, &origin2, &bounds2);
+      get_axis_info (&bounds1, 1 - compare->axis, &start1, &end1);
+      get_axis_info (&bounds2, 1 - compare->axis, &start2, &end2);
 
-      int x1 = abs (origin1 + (bounds2 / 2) - compare->x);
-      int x2 = abs (origin2 + (bounds2 / 2) - compare->x);
+      int x1 = abs (start1 + (end1 / 2) - compare->x);
+      int x2 = abs (start2 + (end2 / 2) - compare->x);
 
       if (compare->reverse)
         return (x1 < x2) ? 1 : ((x1 == x2) ? 0 : -1);
@@ -217,7 +203,7 @@ axis_compare (gconstpointer a,
         return (x1 < x2) ? -1 : ((x1 == x2) ? 0 : 1);
     }
   else
-    return (origin1 < origin2) ? -1 : 1;
+    return (start1 < start2) ? -1 : 1;
 }
 
 static void
@@ -226,8 +212,8 @@ focus_sort_left_right (GtkWidget        *widget,
                        GPtrArray        *focus_order)
 {
   CompareInfo compare_info;
-  GdkRectangle old_allocation;
   GtkWidget *old_focus = gtk_widget_get_focus_child (widget);
+  graphene_rect_t old_bounds;
 
   compare_info.widget = widget;
   compare_info.reverse = (direction == GTK_DIR_LEFT);
@@ -235,39 +221,39 @@ focus_sort_left_right (GtkWidget        *widget,
   if (!old_focus)
     old_focus = find_old_focus (widget, focus_order);
 
-  if (old_focus && get_allocation_coords (widget, old_focus, &old_allocation))
+  if (old_focus && gtk_widget_compute_bounds (old_focus, widget, &old_bounds))
     {
-      int compare_y1;
-      int compare_y2;
-      int compare_x;
+      float compare_y1;
+      float compare_y2;
+      float compare_x;
       int i;
 
       /* Delete widgets from list that don't match minimum criteria */
 
-      compare_y1 = old_allocation.y;
-      compare_y2 = old_allocation.y + old_allocation.height;
+      compare_y1 = old_bounds.origin.y;
+      compare_y2 = old_bounds.origin.y + old_bounds.size.height;
 
       if (direction == GTK_DIR_LEFT)
-        compare_x = old_allocation.x;
+        compare_x = old_bounds.origin.x;
       else
-        compare_x = old_allocation.x + old_allocation.width;
+        compare_x = old_bounds.origin.x + old_bounds.size.width;
 
       for (i = 0; i < focus_order->len; i ++)
         {
           GtkWidget *child = g_ptr_array_index (focus_order, i);
-          int child_y1, child_y2;
-          GdkRectangle child_allocation;
 
           if (child != old_focus)
             {
-              if (get_allocation_coords (widget, child, &child_allocation))
+              graphene_rect_t child_bounds;
+
+              if (gtk_widget_compute_bounds (child, widget, &child_bounds))
                 {
-                  child_y1 = child_allocation.y;
-                  child_y2 = child_allocation.y + child_allocation.height;
+                  const float child_y1 = child_bounds.origin.y;
+                  const float child_y2 = child_bounds.origin.y + child_bounds.size.height;
 
                   if ((child_y2 <= compare_y1 || child_y1 >= compare_y2) /* No vertical overlap */ ||
-                      (direction == GTK_DIR_RIGHT && child_allocation.x + child_allocation.width < compare_x) || /* Not to left */
-                      (direction == GTK_DIR_LEFT && child_allocation.x > compare_x)) /* Not to right */
+                      (direction == GTK_DIR_RIGHT && child_bounds.origin.x + child_bounds.size.width < compare_x) || /* Not to left */
+                      (direction == GTK_DIR_LEFT && child_bounds.origin.x > compare_x)) /* Not to right */
                     {
                       g_ptr_array_remove_index (focus_order, i);
                       i --;
@@ -282,33 +268,35 @@ focus_sort_left_right (GtkWidget        *widget,
         }
 
       compare_info.y = (compare_y1 + compare_y2) / 2;
-      compare_info.x = old_allocation.x + old_allocation.width / 2;
+      compare_info.x = old_bounds.origin.x + (old_bounds.size.width / 2.0f);
     }
   else
     {
       /* No old focus widget, need to figure out starting x,y some other way
        */
-      GtkAllocation allocation;
-      GdkRectangle old_focus_rect;
+      graphene_rect_t bounds;
+      GtkWidget *parent;
+      graphene_rect_t old_focus_bounds;
 
-      _gtk_widget_get_allocation (widget, &allocation);
+      parent = gtk_widget_get_parent (widget);
+      gtk_widget_compute_bounds (widget, parent ? parent : widget, &bounds);
 
-      if (old_focus_coords (widget, &old_focus_rect))
+      if (old_focus_coords (widget, &old_focus_bounds))
         {
-          compare_info.y = old_focus_rect.y + old_focus_rect.height / 2;
+          compare_info.y = old_focus_bounds.origin.y + (old_focus_bounds.size.height / 2.0f);
         }
       else
         {
           if (!_gtk_widget_get_has_surface (widget))
-            compare_info.y = allocation.y + allocation.height / 2;
+            compare_info.y = bounds.origin.y + bounds.size.height;
           else
-            compare_info.y = allocation.height / 2;
+            compare_info.y = bounds.size.height / 2.0f;
         }
 
       if (!_gtk_widget_get_has_surface (widget))
-        compare_info.x = (direction == GTK_DIR_RIGHT) ? allocation.x : allocation.x + allocation.width;
+        compare_info.x = (direction == GTK_DIR_RIGHT) ? bounds.origin.x : bounds.origin.x + bounds.size.width;
       else
-        compare_info.x = (direction == GTK_DIR_RIGHT) ? 0 : allocation.width;
+        compare_info.x = (direction == GTK_DIR_RIGHT) ? 0 : bounds.size.width;
     }
 
 
@@ -325,8 +313,8 @@ focus_sort_up_down (GtkWidget        *widget,
                     GPtrArray        *focus_order)
 {
   CompareInfo compare_info;
-  GdkRectangle old_allocation;
   GtkWidget *old_focus = gtk_widget_get_focus_child (widget);
+  graphene_rect_t old_bounds;
 
   compare_info.widget = widget;
   compare_info.reverse = (direction == GTK_DIR_UP);
@@ -334,39 +322,39 @@ focus_sort_up_down (GtkWidget        *widget,
   if (!old_focus)
     old_focus = find_old_focus (widget, focus_order);
 
-  if (old_focus && get_allocation_coords (widget, old_focus, &old_allocation))
+  if (old_focus && gtk_widget_compute_bounds (old_focus, widget, &old_bounds))
     {
-      int compare_x1;
-      int compare_x2;
-      int compare_y;
+      float compare_x1;
+      float compare_x2;
+      float compare_y;
       int i;
 
       /* Delete widgets from list that don't match minimum criteria */
 
-      compare_x1 = old_allocation.x;
-      compare_x2 = old_allocation.x + old_allocation.width;
+      compare_x1 = old_bounds.origin.x;
+      compare_x2 = old_bounds.origin.x + old_bounds.size.width;
 
       if (direction == GTK_DIR_UP)
-        compare_y = old_allocation.y;
+        compare_y = old_bounds.origin.y;
       else
-        compare_y = old_allocation.y + old_allocation.height;
+        compare_y = old_bounds.origin.y + old_bounds.size.height;
 
       for (i = 0; i < focus_order->len; i ++)
         {
           GtkWidget *child = g_ptr_array_index (focus_order, i);
-          int child_x1, child_x2;
-          GdkRectangle child_allocation;
 
           if (child != old_focus)
             {
-              if (get_allocation_coords (widget, child, &child_allocation))
+              graphene_rect_t child_bounds;
+
+              if (gtk_widget_compute_bounds (child, widget, &child_bounds))
                 {
-                  child_x1 = child_allocation.x;
-                  child_x2 = child_allocation.x + child_allocation.width;
+                  const float child_x1 = child_bounds.origin.x;
+                  const float child_x2 = child_bounds.origin.x + child_bounds.size.width;
 
                   if ((child_x2 <= compare_x1 || child_x1 >= compare_x2) /* No horizontal overlap */ ||
-                      (direction == GTK_DIR_DOWN && child_allocation.y + child_allocation.height < compare_y) || /* Not below */
-                      (direction == GTK_DIR_UP && child_allocation.y > compare_y)) /* Not above */
+                      (direction == GTK_DIR_DOWN && child_bounds.origin.y + child_bounds.size.height < compare_y) || /* Not below */
+                      (direction == GTK_DIR_UP && child_bounds.origin.y > compare_y)) /* Not above */
                     {
                       g_ptr_array_remove_index (focus_order, i);
                       i --;
@@ -381,33 +369,35 @@ focus_sort_up_down (GtkWidget        *widget,
         }
 
       compare_info.x = (compare_x1 + compare_x2) / 2;
-      compare_info.y = old_allocation.y + old_allocation.height / 2;
+      compare_info.y = old_bounds.origin.y + (old_bounds.size.height / 2.0f);
     }
   else
     {
       /* No old focus widget, need to figure out starting x,y some other way
        */
-      GtkAllocation allocation;
-      GdkRectangle old_focus_rect;
+      GtkWidget *parent;
+      graphene_rect_t bounds;
+      graphene_rect_t old_focus_bounds;
 
-      _gtk_widget_get_allocation (widget, &allocation);
+      parent = gtk_widget_get_parent (widget);
+      gtk_widget_compute_bounds (widget, parent ? parent : widget, &bounds);
 
-      if (old_focus_coords (widget, &old_focus_rect))
+      if (old_focus_coords (widget, &old_focus_bounds))
         {
-          compare_info.x = old_focus_rect.x + old_focus_rect.width / 2;
+          compare_info.x = old_focus_bounds.origin.x + (old_focus_bounds.size.width / 2.0f);
         }
       else
         {
           if (!_gtk_widget_get_has_surface (widget))
-            compare_info.x = allocation.x + allocation.width / 2;
+            compare_info.x = bounds.origin.x + (bounds.size.width / 2.0f);
           else
-            compare_info.x = allocation.width / 2;
+            compare_info.x = bounds.size.width / 2.0f;
         }
 
       if (!_gtk_widget_get_has_surface (widget))
-        compare_info.y = (direction == GTK_DIR_DOWN) ? allocation.y : allocation.y + allocation.height;
+        compare_info.y = (direction == GTK_DIR_DOWN) ? bounds.origin.y : bounds.origin.y + bounds.size.height;
       else
-        compare_info.y = (direction == GTK_DIR_DOWN) ? 0 : + allocation.height;
+        compare_info.y = (direction == GTK_DIR_DOWN) ? 0 : + bounds.size.height;
     }
 
   compare_info.axis = VERTICAL;
