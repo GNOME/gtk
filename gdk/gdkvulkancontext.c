@@ -58,7 +58,6 @@ struct _GdkVulkanContextPrivate {
   VkSurfaceKHR surface;
   VkSurfaceFormatKHR image_format;
 
-  int swapchain_width, swapchain_height;
   VkSwapchainKHR swapchain;
   VkSemaphore draw_semaphore;
 
@@ -258,10 +257,6 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
   VkDevice device;
   guint i;
 
-  if (gdk_surface_get_width (surface) * gdk_surface_get_scale_factor (surface) == priv->swapchain_width &&
-      gdk_surface_get_height (surface) * gdk_surface_get_scale_factor (surface) == priv->swapchain_height)
-    return TRUE;
-
   device = gdk_vulkan_context_get_device (context);
 
   res = GDK_VK_CHECK (vkGetPhysicalDeviceSurfaceCapabilitiesKHR, gdk_vulkan_context_get_physical_device (context),
@@ -343,8 +338,6 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
 
   if (res == VK_SUCCESS)
     {
-      priv->swapchain_width = capabilities.currentExtent.width;
-      priv->swapchain_height = capabilities.currentExtent.height;
       priv->swapchain = new_swapchain;
 
       GDK_VK_CHECK (vkGetSwapchainImagesKHR, device,
@@ -371,8 +364,6 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
       g_set_error (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_NOT_AVAILABLE,
                    "Could not create swapchain for this surface: %s", gdk_vulkan_strerror (res));
       priv->swapchain = VK_NULL_HANDLE;
-      priv->swapchain_width = 0;
-      priv->swapchain_height = 0;
       return FALSE;
     }
 
@@ -387,15 +378,7 @@ gdk_vulkan_context_begin_frame (GdkDrawContext *draw_context,
 {
   GdkVulkanContext *context = GDK_VULKAN_CONTEXT (draw_context);
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
-  GError *error = NULL;
   guint i;
-
-  if (!gdk_vulkan_context_check_swapchain (context, &error))
-    {
-      g_warning ("%s", error->message);
-      g_error_free (error);
-      return;
-    }
 
   for (i = 0; i < priv->n_images; i++)
     {
@@ -441,6 +424,20 @@ gdk_vulkan_context_end_frame (GdkDrawContext *draw_context,
 }
 
 static void
+gdk_vulkan_context_surface_resized (GdkDrawContext *draw_context)
+{
+  GdkVulkanContext *context = GDK_VULKAN_CONTEXT (draw_context);
+  GError *error = NULL;
+
+  if (!gdk_vulkan_context_check_swapchain (context, &error))
+    {
+      g_warning ("%s", error->message);
+      g_error_free (error);
+      return;
+    }
+}
+
+static void
 gdk_vulkan_context_class_init (GdkVulkanContextClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
@@ -450,6 +447,7 @@ gdk_vulkan_context_class_init (GdkVulkanContextClass *klass)
 
   draw_context_class->begin_frame = gdk_vulkan_context_begin_frame;
   draw_context_class->end_frame = gdk_vulkan_context_end_frame;
+  draw_context_class->surface_resized = gdk_vulkan_context_surface_resized;
 
   /**
    * GdkVulkanContext::images-updated:
