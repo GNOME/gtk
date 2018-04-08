@@ -13336,8 +13336,7 @@ gtk_widget_create_render_node (GtkWidget   *widget,
 
   /* Offset to content allocation */
   gtk_snapshot_offset (snapshot, margin.left + padding.left + border.left, margin.top + border.top + padding.top);
-  if (gtk_widget_get_width (widget) > 0 && gtk_widget_get_height (widget) > 0)
-    klass->snapshot (widget, snapshot);
+  klass->snapshot (widget, snapshot);
   gtk_snapshot_offset (snapshot, - (padding.left + border.left), -(border.top + padding.top));
 
   gtk_css_style_snapshot_outline (style,
