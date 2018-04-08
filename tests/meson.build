@@ -66,6 +66,7 @@ gtk_tests = [
   ['testlevelbar'],
   ['testlockbutton'],
   ['testmenubutton'],
+  ['testmodelbutton'],
   ['testmountoperation'],
   ['testnotebookdnd'],
   ['testnouiprint'],
