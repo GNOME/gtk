@@ -223,6 +223,7 @@ struct _GdkSurface
 
   GdkFrameClock *frame_clock; /* NULL to use from parent or default */
 
+  GSList *draw_contexts;
   GdkDrawingContext *drawing_context;
 
   cairo_region_t *opaque_region;

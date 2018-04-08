@@ -73,7 +73,11 @@ gdk_draw_context_dispose (GObject *gobject)
   GdkDrawContext *context = GDK_DRAW_CONTEXT (gobject);
   GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (context);
 
-  g_clear_object (&priv->surface);
+  if (priv->surface)
+    {
+      priv->surface->draw_contexts = g_slist_remove (priv->surface->draw_contexts, context);
+      g_clear_object (&priv->surface);
+    }
 
   G_OBJECT_CLASS (gdk_draw_context_parent_class)->dispose (gobject);
 }
@@ -92,6 +96,7 @@ gdk_draw_context_set_property (GObject      *gobject,
     case PROP_SURFACE:
       priv->surface = g_value_dup_object (value);
       g_assert (priv->surface != NULL);
+      priv->surface->draw_contexts = g_slist_prepend (priv->surface->draw_contexts, context);
       break;
 
     default:
