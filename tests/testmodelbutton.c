@@ -20,6 +20,7 @@ on_application_activate (GApplication *gapplication,
 
   GSimpleAction *action;
   GtkWidget *box;
+  GIcon *gicon;
   GtkWidget *model_button;
   GtkWidget *widget;
 
@@ -44,11 +45,16 @@ on_application_activate (GApplication *gapplication,
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
+  gicon = g_themed_icon_new ("face-smile");
+
   model_button = g_object_new (GTK_TYPE_MODEL_BUTTON,
                                "action-name", "app.beep",
                                "text", "It’s-a-me! ModelButton",
+                               "icon", gicon,
                                NULL);
   gtk_container_add (GTK_CONTAINER (box), model_button);
+
+  g_object_unref (gicon);
 
   widget = gtk_combo_box_text_new ();
   gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (widget),
@@ -63,9 +69,21 @@ on_application_activate (GApplication *gapplication,
                           G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
   gtk_container_add (GTK_CONTAINER (box), widget);
 
+  widget = gtk_toggle_button_new_with_label (":centered");
+  g_object_bind_property (widget, "active",
+                          model_button, "centered",
+                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
+  gtk_container_add (GTK_CONTAINER (box), widget);
+
   widget = gtk_toggle_button_new_with_label (":iconic");
   g_object_bind_property (widget, "active",
                           model_button, "iconic",
+                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
+  gtk_container_add (GTK_CONTAINER (box), widget);
+
+  widget = gtk_toggle_button_new_with_label (":inverted");
+  g_object_bind_property (widget, "active",
+                          model_button, "inverted",
                           G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
   gtk_container_add (GTK_CONTAINER (box), widget);
 
