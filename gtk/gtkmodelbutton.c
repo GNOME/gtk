@@ -393,6 +393,7 @@ static void
 gtk_model_button_set_active (GtkModelButton *button,
                              gboolean        active)
 {
+  active = !!active;
   if (button->active == active)
     return;
 
@@ -420,6 +421,7 @@ static void
 gtk_model_button_set_inverted (GtkModelButton *button,
                                gboolean        inverted)
 {
+  inverted = !!inverted;
   if (button->inverted == inverted)
     return;
 
@@ -434,6 +436,7 @@ static void
 gtk_model_button_set_centered (GtkModelButton *button,
                                gboolean        centered)
 {
+  centered = !!centered;
   if (button->centered == centered)
     return;
 
@@ -450,6 +453,7 @@ gtk_model_button_set_iconic (GtkModelButton *button,
   GtkCssNode *widget_node;
   GtkStyleContext *context;
 
+  iconic = !!iconic;
   if (button->iconic == iconic)
     return;
 
