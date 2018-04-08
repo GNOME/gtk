@@ -68,6 +68,11 @@ static GParamSpec *pspecs[LAST_PROP] = { NULL, };
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkDrawContext, gdk_draw_context, G_TYPE_OBJECT)
 
 static void
+gdk_draw_context_default_surface_resized (GdkDrawContext *context)
+{
+}
+
+static void
 gdk_draw_context_dispose (GObject *gobject)
 {
   GdkDrawContext *context = GDK_DRAW_CONTEXT (gobject);
@@ -136,6 +141,8 @@ gdk_draw_context_class_init (GdkDrawContextClass *klass)
   gobject_class->set_property = gdk_draw_context_set_property;
   gobject_class->get_property = gdk_draw_context_get_property;
   gobject_class->dispose = gdk_draw_context_dispose;
+
+  klass->surface_resized = gdk_draw_context_default_surface_resized;
 
   /**
    * GdkDrawContext:display:
@@ -245,6 +252,19 @@ gdk_draw_context_end_frame (GdkDrawContext *context,
 
   priv = gdk_draw_context_get_instance_private (context);
   priv->is_drawing = FALSE;
+}
+
+/*< private >
+ * gdk_draw_context_surface_resized:
+ * @context: a #GdkDrawContext
+ *
+ * Called by the #GdkSurface the @context belongs to when the size of the surface
+ * changes.
+ */
+void
+gdk_draw_context_surface_resized (GdkDrawContext *context)
+{
+  GDK_DRAW_CONTEXT_GET_CLASS (context)->surface_resized (context);
 }
 
 /**

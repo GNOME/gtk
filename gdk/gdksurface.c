@@ -622,6 +622,11 @@ gdk_surface_append_old_updated_area (GdkSurface *surface,
 void
 _gdk_surface_update_size (GdkSurface *surface)
 {
+  GSList *l;
+
+  for (l = surface->draw_contexts; l; l = l->next)
+    gdk_draw_context_surface_resized (l->data);
+
   gdk_surface_clear_old_updated_area (surface);
   recompute_visible_regions (surface, FALSE);
 }

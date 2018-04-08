@@ -45,6 +45,7 @@ struct _GdkDrawContextClass
   void                  (* end_frame)                           (GdkDrawContext         *context,
                                                                  cairo_region_t         *painted,
                                                                  cairo_region_t         *damage);
+  void                  (* surface_resized)                     (GdkDrawContext         *context);
 };
 
 gboolean                gdk_draw_context_is_drawing             (GdkDrawContext         *context);
@@ -53,6 +54,8 @@ void                    gdk_draw_context_begin_frame            (GdkDrawContext 
 void                    gdk_draw_context_end_frame              (GdkDrawContext         *context,
                                                                  cairo_region_t         *painted,
                                                                  cairo_region_t         *damage);
+
+void                    gdk_draw_context_surface_resized        (GdkDrawContext         *context);
 
 G_END_DECLS
 
