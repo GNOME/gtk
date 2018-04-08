@@ -539,7 +539,8 @@ gtk_model_button_get_property (GObject    *object,
       break;
 
     default:
-      g_assert_not_reached ();
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
     }
 }
 
@@ -586,7 +587,8 @@ gtk_model_button_set_property (GObject      *object,
       break;
 
     default:
-      g_assert_not_reached ();
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
     }
 }
 
