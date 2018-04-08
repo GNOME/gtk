@@ -55,7 +55,7 @@ struct _GtkListBox
  * @row_selected: Class handler for the #GtkListBox::row-selected signal
  * @row_activated: Class handler for the #GtkListBox::row-activated signal
  * @activate_cursor_row: Class handler for the #GtkListBox::activate-cursor-row signal
- * @toggle_cursor_row: Class handler for the #GtkListBox::activate-cursor-row signal
+ * @toggle_cursor_row: Class handler for the #GtkListBox::toggle-cursor-row signal
  * @move_cursor: Class handler for the #GtkListBox::move-cursor signal
  * @selected_rows_changed: Class handler for the #GtkListBox::selected-rows-changed signal
  * @select_all: Class handler for the #GtkListBox::select-all signal
