@@ -361,7 +361,7 @@ gtk_model_button_set_role (GtkModelButton *button,
   update_node_name (button);
 
   gtk_model_button_update_state (button);
-  gtk_widget_queue_resize (GTK_WIDGET (button));
+  gtk_widget_queue_draw (GTK_WIDGET (button));
   g_object_notify_by_pspec (G_OBJECT (button), properties[PROP_ROLE]);
 }
 
