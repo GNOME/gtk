@@ -100,6 +100,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testlevelbar			\
 	testlockbutton			\
 	testmenubutton			\
+	testmodelbutton	                \
 	testmountoperation		\
 	testmultidisplay		\
 	testnotebookdnd			\
