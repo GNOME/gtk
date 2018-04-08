@@ -997,7 +997,7 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   /**
    * GtkModelButton:centered:
    *
-   * Wether to render the button contents centered instead of left-aligned.
+   * Whether to render the button contents centered instead of left-aligned.
    * This property should be set for title-like items.
    */
   properties[PROP_CENTERED] =
