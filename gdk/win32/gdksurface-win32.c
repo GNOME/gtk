@@ -128,6 +128,8 @@ typedef struct _AeroSnapEdgeRegion AeroSnapEdgeRegion;
  */
 #define AEROSNAP_INDICATOR_ANIMATION_TICK (16)
 
+static void     gdk_win32_impl_frame_clock_after_paint (GdkFrameClock *clock,
+                                                        GdkSurface    *surface);
 static gboolean _gdk_surface_get_functions (GdkSurface         *window,
                                            GdkWMFunction     *functions);
 static HDC     _gdk_win32_impl_acquire_dc (GdkSurfaceImplWin32 *impl);
@@ -338,42 +340,11 @@ gdk_win32_surface_begin_paint (GdkSurface *window)
 {
   GdkSurfaceImplWin32 *impl;
   RECT window_rect;
-  DWM_TIMING_INFO timing_info;
-  LARGE_INTEGER tick_frequency;
-  GdkFrameTimings *timings = NULL;
-  GdkFrameClock *clock = NULL;
 
   if (window == NULL || GDK_SURFACE_DESTROYED (window))
     return TRUE;
 
   impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
-
-  clock = gdk_surface_get_frame_clock (window);
-
-  if (clock)
-    timings = gdk_frame_clock_get_timings (clock, gdk_frame_clock_get_frame_counter (clock));
-
-  if (timings)
-    {
-      timings->refresh_interval = 16667; /* default to 1/60th of a second */
-      timings->presentation_time = 0;
-
-      if (QueryPerformanceFrequency (&tick_frequency))
-        {
-          HRESULT hr;
-
-          timing_info.cbSize = sizeof (timing_info);
-          hr = DwmGetCompositionTimingInfo (NULL, &timing_info);
-
-          if (SUCCEEDED (hr))
-            {
-              timings->refresh_interval = timing_info.qpcRefreshPeriod * (gdouble)G_USEC_PER_SEC / tick_frequency.QuadPart;
-              timings->presentation_time = timing_info.qpcCompose * (gdouble)G_USEC_PER_SEC / tick_frequency.QuadPart;
-            }
-        }
-
-      timings->complete = TRUE;
-    }
 
   /* Layered windows are moved *after* repaint.
    * We supply our own surface, return FALSE to make GDK use it.
@@ -505,6 +476,39 @@ gdk_win32_surface_end_paint (GdkSurface *window)
                                   &window_position, &window_size,
                                   hdc, &source_point,
                                   0, &blender, ULW_ALPHA));
+}
+
+static void
+gdk_win32_impl_frame_clock_after_paint (GdkFrameClock *clock,
+                                        GdkSurface    *surface)
+{
+  DWM_TIMING_INFO timing_info;
+  LARGE_INTEGER tick_frequency;
+  GdkFrameTimings *timings;
+
+  timings = gdk_frame_clock_get_timings (clock, gdk_frame_clock_get_frame_counter (clock));
+
+  if (timings)
+    {
+      timings->refresh_interval = 16667; /* default to 1/60th of a second */
+      timings->presentation_time = 0;
+
+      if (QueryPerformanceFrequency (&tick_frequency))
+        {
+          HRESULT hr;
+
+          timing_info.cbSize = sizeof (timing_info);
+          hr = DwmGetCompositionTimingInfo (NULL, &timing_info);
+
+          if (SUCCEEDED (hr))
+            {
+              timings->refresh_interval = timing_info.qpcRefreshPeriod * (gdouble)G_USEC_PER_SEC / tick_frequency.QuadPart;
+              timings->presentation_time = timing_info.qpcCompose * (gdouble)G_USEC_PER_SEC / tick_frequency.QuadPart;
+            }
+        }
+
+      timings->complete = TRUE;
+    }
 }
 
 void
@@ -751,6 +755,7 @@ _gdk_win32_display_create_surface_impl (GdkDisplay    *display,
   gint window_width, window_height;
   gint offset_x = 0, offset_y = 0;
   gint x, y, real_x = 0, real_y = 0;
+  GdkFrameClock *frame_clock;
 
   g_return_if_fail (display == _gdk_display);
 
@@ -948,6 +953,12 @@ _gdk_win32_display_create_surface_impl (GdkDisplay    *display,
 //    gdk_surface_set_skip_taskbar_hint (window, TRUE);
 
   _gdk_win32_surface_enable_transparency (window);
+
+  frame_clock = gdk_surface_get_frame_clock (window);
+  g_signal_connect (frame_clock,
+                    "after-paint",
+                    G_CALLBACK (gdk_win32_impl_frame_clock_after_paint),
+                    window);
 }
 
 GdkSurface *
