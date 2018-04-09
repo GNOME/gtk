@@ -5771,12 +5771,8 @@ gtk_widget_real_style_updated (GtkWidget *widget)
             {
               gtk_widget_queue_resize (widget);
             }
-          else if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_CLIP) ||
-                   (has_text && gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT_CLIP)))
-            {
-              gtk_widget_queue_allocate (widget);
-            }
-          else if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_REDRAW))
+          else if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_REDRAW) ||
+                   (has_text && gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT_CONTENT)))
             {
               gtk_widget_queue_draw (widget);
             }

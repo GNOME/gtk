@@ -8268,7 +8268,7 @@ gtk_tree_view_style_updated (GtkWidget *widget)
   style_context = gtk_widget_get_style_context (widget);
   change = gtk_style_context_get_change (style_context);
 
-  if (change == NULL || gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_SIZE | GTK_CSS_AFFECTS_CLIP))
+  if (change == NULL || gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_SIZE))
     {
       for (list = tree_view->priv->columns; list; list = list->next)
 	{

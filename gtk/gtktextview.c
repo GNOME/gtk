@@ -8897,7 +8897,7 @@ node_style_changed_cb (GtkCssNode        *node,
                        GtkCssStyleChange *change,
                        GtkWidget         *widget)
 {
-  if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_SIZE | GTK_CSS_AFFECTS_CLIP))
+  if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_SIZE))
     gtk_widget_queue_resize (widget);
   else
     gtk_widget_queue_draw (widget);

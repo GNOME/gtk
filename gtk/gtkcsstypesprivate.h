@@ -103,7 +103,8 @@ typedef guint64 GtkCssChange;
  * @GTK_CSS_AFFECTS_ICON_SIZE: Icon size is affected.
  * @GTK_CSS_AFFECTS_TEXT_ATTRS: Text attributes are affected.
  * @GTK_CSS_AFFECTS_TEXT_SIZE: Text size is affected.
- * @GTK_CSS_AFFECTS_TEXT_CLIP: Text clipping is affected.
+ * @GTK_CSS_AFFECTS_TEXT_CONTENT: Text rendering is affected, but size or
+ *   attributes are not.
  * @GTK_CSS_AFFECTS_ICON: Fullcolor icons and their rendering is affected.
  * @GTK_CSS_AFFECTS_SYMBOLIC_ICON: Symbolic icons and their rendering is affected.
  * @GTK_CSS_AFFECTS_OUTLINE: The outline styling is affected. Outlines
@@ -130,7 +131,7 @@ typedef enum {
   GTK_CSS_AFFECTS_ICON_SIZE     = (1 << 3),
   GTK_CSS_AFFECTS_TEXT_ATTRS    = (1 << 4),
   GTK_CSS_AFFECTS_TEXT_SIZE     = (1 << 5),
-  GTK_CSS_AFFECTS_TEXT_CLIP     = (1 << 6),
+  GTK_CSS_AFFECTS_TEXT_CONTENT  = (1 << 6),
   GTK_CSS_AFFECTS_ICON          = (1 << 7),
   GTK_CSS_AFFECTS_SYMBOLIC_ICON = (1 << 8),
   GTK_CSS_AFFECTS_OUTLINE       = (1 << 9),
@@ -148,7 +149,7 @@ typedef enum {
                                 GTK_CSS_AFFECTS_POSTEFFECT)
 
 #define GTK_CSS_AFFECTS_TEXT (GTK_CSS_AFFECTS_TEXT_SIZE | \
-                              GTK_CSS_AFFECTS_TEXT_CLIP)
+                              GTK_CSS_AFFECTS_TEXT_CONTENT)
 
 
 enum { /*< skip >*/
