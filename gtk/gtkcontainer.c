@@ -1456,6 +1456,8 @@ gtk_container_destroy (GtkWidget *widget)
   if (priv->restyle_pending)
     priv->restyle_pending = FALSE;
 
+  _gtk_container_stop_idle_sizer (container);
+
   /* do this before walking child widgets, to avoid
    * removing children from focus chain one by one.
    */
