@@ -36,6 +36,7 @@
 #include "gdkenumtypes.h"
 #include "gdkwin32.h"
 #include "gdkdisplayprivate.h"
+#include "gdkframeclockprivate.h"
 #include "gdkmonitorprivate.h"
 #include "gdkwin32surface.h"
 #include "gdkwin32cursor.h"
@@ -337,11 +338,42 @@ gdk_win32_surface_begin_paint (GdkSurface *window)
 {
   GdkSurfaceImplWin32 *impl;
   RECT window_rect;
+  DWM_TIMING_INFO timing_info;
+  LARGE_INTEGER tick_frequency;
+  GdkFrameTimings *timings = NULL;
+  GdkFrameClock *clock = NULL;
 
   if (window == NULL || GDK_SURFACE_DESTROYED (window))
     return TRUE;
 
   impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
+
+  clock = gdk_surface_get_frame_clock (window);
+
+  if (clock)
+    timings = gdk_frame_clock_get_timings (clock, gdk_frame_clock_get_frame_counter (clock));
+
+  if (timings)
+    {
+      timings->refresh_interval = 16667; /* default to 1/60th of a second */
+      timings->presentation_time = 0;
+
+      if (QueryPerformanceFrequency (&tick_frequency))
+        {
+          HRESULT hr;
+
+          timing_info.cbSize = sizeof (timing_info);
+          hr = DwmGetCompositionTimingInfo (NULL, &timing_info);
+
+          if (SUCCEEDED (hr))
+            {
+              timings->refresh_interval = timing_info.qpcRefreshPeriod * (gdouble)G_USEC_PER_SEC / tick_frequency.QuadPart;
+              timings->presentation_time = timing_info.qpcCompose * (gdouble)G_USEC_PER_SEC / tick_frequency.QuadPart;
+            }
+        }
+
+      timings->complete = TRUE;
+    }
 
   /* Layered windows are moved *after* repaint.
    * We supply our own surface, return FALSE to make GDK use it.
