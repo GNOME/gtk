@@ -3122,7 +3122,7 @@ gdk_x11_display_get_monitor (GdkDisplay *display,
 {
   GdkX11Display *x11_display = GDK_X11_DISPLAY (display);
 
-  if (0 <= monitor_num || monitor_num < x11_display->monitors->len)
+  if (0 <= monitor_num && monitor_num < x11_display->monitors->len)
     return (GdkMonitor *)x11_display->monitors->pdata[monitor_num];
 
   return NULL;
