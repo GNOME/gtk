@@ -454,9 +454,9 @@ example_app_window_class_init (ExampleAppWindowClass *class)
       </informalexample>
 
       <para>You may have noticed that we used the <literal>_from_resource(<!-- -->)</literal> variant
-      of the function that sets a template. Now we need to use GLib's resource
-      functionality to include the ui file in the binary. This is commonly
-      done by listing all resources in a .gresource.xml file, such as this:
+      of the function that sets a template. Now we need to use <ulink url="https://developer.gnome.org/gio/stable/GResource.html">GLib's resource functionality</ulink>
+      to include the ui file in the binary. This is commonly done by listing
+      all resources in a .gresource.xml file, such as this:
       </para>
 
       <informalexample>
