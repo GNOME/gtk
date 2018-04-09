@@ -3628,7 +3628,7 @@ gdk_wayland_window_set_geometry_hints (GdkWindow         *window,
 {
   GdkWaylandDisplay *display_wayland;
   GdkWindowImplWayland *impl;
-  int width, height;
+  int min_width = 0, min_height = 0, max_width = 0, max_height = 0;
 
   if (GDK_WINDOW_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
@@ -3645,39 +3645,29 @@ gdk_wayland_window_set_geometry_hints (GdkWindow         *window,
 
   if (geom_mask & GDK_HINT_MIN_SIZE)
     {
-      width = MAX (0, geometry->min_width - (impl->margin_left + impl->margin_right));
-      height = MAX (0, geometry->min_height - (impl->margin_top + impl->margin_bottom));
-    }
-  else
-    {
-      width = 0;
-      height = 0;
+      min_width = MAX (0, geometry->min_width - (impl->margin_left + impl->margin_right));
+      min_height = MAX (0, geometry->min_height - (impl->margin_top + impl->margin_bottom));
     }
 
   if (geom_mask & GDK_HINT_MAX_SIZE)
     {
-      width = MAX (0, geometry->max_width - (impl->margin_left + impl->margin_right));
-      height = MAX (0, geometry->max_height - (impl->margin_top + impl->margin_bottom));
-    }
-  else
-    {
-      width = 0;
-      height = 0;
+      max_width = MAX (0, geometry->max_width - (impl->margin_left + impl->margin_right));
+      max_height = MAX (0, geometry->max_height - (impl->margin_top + impl->margin_bottom));
     }
 
   switch (display_wayland->shell_variant)
     {
     case GDK_WAYLAND_SHELL_VARIANT_XDG_SHELL:
       xdg_toplevel_set_min_size (impl->display_server.xdg_toplevel,
-                                 width, height);
+                                 min_width, min_height);
       xdg_toplevel_set_max_size (impl->display_server.xdg_toplevel,
-                                 width, height);
+                                 max_width, max_height);
       break;
     case GDK_WAYLAND_SHELL_VARIANT_ZXDG_SHELL_V6:
       zxdg_toplevel_v6_set_min_size (impl->display_server.zxdg_toplevel_v6,
-                                     width, height);
+                                     min_width, min_height);
       zxdg_toplevel_v6_set_max_size (impl->display_server.zxdg_toplevel_v6,
-                                     width, height);
+                                     max_width, max_height);
       break;
     }
 }
