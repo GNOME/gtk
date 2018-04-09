@@ -1448,11 +1448,6 @@ gtk_entry_class_init (GtkEntryClass *class)
    * The ::activate signal is emitted when the user hits
    * the Enter key.
    *
-   * While this signal is used as a
-   * [keybinding signal][GtkBindingSignal],
-   * it is also commonly used by applications to intercept
-   * activation of entries.
-   *
    * The default bindings for this signal are all forms of the Enter key.
    */
   signals[ACTIVATE] =
@@ -1463,7 +1458,6 @@ gtk_entry_class_init (GtkEntryClass *class)
 		  NULL, NULL,
 		  NULL,
 		  G_TYPE_NONE, 0);
-  widget_class->activate_signal = signals[ACTIVATE];
 
   /**
    * GtkEntry::move-cursor:
