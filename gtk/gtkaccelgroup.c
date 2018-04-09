@@ -39,8 +39,8 @@
  * @Short_description: Groups of global keyboard accelerators for an
  *     entire GtkWindow
  * @Title: Accelerator Groups
- * @See_also:gtk_window_add_accel_group(), gtk_accel_map_change_entry(),
- * gtk_item_factory_new(), gtk_label_new_with_mnemonic()
+ * @See_also: gtk_window_add_accel_group(), gtk_accel_map_change_entry(),
+ * gtk_label_new_with_mnemonic()
  *
  * A #GtkAccelGroup represents a group of keyboard accelerators,
  * typically attached to a toplevel #GtkWindow (with
