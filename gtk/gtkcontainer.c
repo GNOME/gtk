@@ -154,7 +154,6 @@
 
 struct _GtkContainerPrivate
 {
-  GdkFrameClock *resize_clock;
   guint resize_handler;
 
   guint has_focus_chain    : 1;
@@ -1613,7 +1612,6 @@ gtk_container_start_idle_sizer (GtkContainer *container)
   if (clock == NULL)
     return;
 
-  priv->resize_clock = clock;
   priv->resize_handler = g_signal_connect (clock, "layout",
                                            G_CALLBACK (gtk_container_idle_sizer), container);
   gdk_frame_clock_request_phase (clock,
@@ -1628,10 +1626,9 @@ _gtk_container_stop_idle_sizer (GtkContainer *container)
   if (priv->resize_handler == 0)
     return;
 
-  g_signal_handler_disconnect (priv->resize_clock,
+  g_signal_handler_disconnect (gtk_widget_get_frame_clock (GTK_WIDGET (container)),
                                priv->resize_handler);
   priv->resize_handler = 0;
-  priv->resize_clock = NULL;
 }
 
 void
