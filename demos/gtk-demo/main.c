@@ -998,6 +998,41 @@ scrollbar_popup (GtkWidget *scrollbar, GtkWidget *menu)
 }
 
 static void
+settings__notify_gtk_theme_name (GObject *gobject,
+                                 GParamSpec *pspec,
+                                 gpointer data)
+{
+  static GtkCssProvider *css_provider;
+
+  GtkWidget *window = data;
+  char *theme_name;
+
+  g_object_get (gobject, "gtk-theme-name", &theme_name, NULL);
+  if (g_strcmp0 (theme_name, "Adwaita") == 0)
+    {
+      if (css_provider == NULL)
+        {
+          css_provider = gtk_css_provider_new ();
+          gtk_css_provider_load_from_resource (css_provider, "/ui/theme.css");
+          gtk_style_context_add_provider_for_display (gtk_widget_get_display (window),
+                                                      GTK_STYLE_PROVIDER (css_provider),
+                                                      GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        }
+    }
+  else
+    {
+      if (css_provider != NULL)
+        {
+          gtk_style_context_remove_provider_for_display (gtk_widget_get_display (window),
+                                                         GTK_STYLE_PROVIDER (css_provider));
+          g_clear_object (&css_provider);
+        }
+    }
+
+  g_free (theme_name);
+}
+
+static void
 activate (GApplication *app)
 {
   GtkBuilder *builder;
@@ -1027,6 +1062,20 @@ activate (GApplication *app)
   gtk_application_add_window (GTK_APPLICATION (app), window);
   g_action_map_add_action_entries (G_ACTION_MAP (window),
                                    win_entries, G_N_ELEMENTS (win_entries),
+                                   window);
+
+  g_signal_connect (gtk_settings_get_default (), "notify::gtk-theme-name",
+                    G_CALLBACK (settings__notify_gtk_theme_name),
+                    window);
+
+  if (gtk_get_minor_version () % 2 != 0)
+    {
+      GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET (window));
+      gtk_style_context_add_class (context, "devel");
+    }
+
+  settings__notify_gtk_theme_name (G_OBJECT (gtk_widget_get_settings (GTK_WIDGET (window))),
+                                   NULL,
                                    window);
 
   notebook = (GtkWidget *)gtk_builder_get_object (builder, "notebook");

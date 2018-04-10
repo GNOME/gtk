@@ -1606,6 +1606,27 @@ adjustment3_value_changed (GtkAdjustment *adj, GtkProgressBar *pbar)
 }
 
 static void
+settings__notify_gtk_theme_name (GObject *gobject,
+                                 GParamSpec *pspec,
+                                 gpointer data)
+{
+  GtkWidget *window = data;
+  char *theme_name = NULL;
+
+  g_object_get (gobject, "gtk-theme-name", &theme_name, NULL);
+
+  if (g_strcmp0 (theme_name, "Adwaita") == 0)
+    {
+      if (gtk_get_minor_version () % 2 != 0)
+        gtk_style_context_add_class (gtk_widget_get_style_context (window), "devel");
+    }
+  else
+    gtk_style_context_remove_class (gtk_widget_get_style_context (window), "devel");
+
+  g_free (theme_name);
+}
+
+static void
 activate (GApplication *app)
 {
   GtkBuilder *builder;
@@ -1678,6 +1699,13 @@ activate (GApplication *app)
   gtk_application_add_window (GTK_APPLICATION (app), window);
   g_action_map_add_action_entries (G_ACTION_MAP (window),
                                    win_entries, G_N_ELEMENTS (win_entries),
+                                   window);
+
+  g_signal_connect (gtk_settings_get_default (), "notify::gtk-theme-name",
+                    G_CALLBACK (settings__notify_gtk_theme_name),
+                    window);
+  settings__notify_gtk_theme_name (G_OBJECT (gtk_settings_get_default ()),
+                                   NULL,
                                    window);
 
   for (i = 0; i < G_N_ELEMENTS (accels); i++)
