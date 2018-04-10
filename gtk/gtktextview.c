@@ -6987,17 +6987,20 @@ typedef struct
   SelectionGranularity granularity;
   GtkTextMark *orig_start;
   GtkTextMark *orig_end;
+  GtkTextBuffer *buffer;
 } SelectionData;
 
 static void
 selection_data_free (SelectionData *data)
 {
-  if (data->orig_start != NULL)
-    gtk_text_buffer_delete_mark (gtk_text_mark_get_buffer (data->orig_start),
-                                 data->orig_start);
-  if (data->orig_end != NULL)
-    gtk_text_buffer_delete_mark (gtk_text_mark_get_buffer (data->orig_end),
-                                 data->orig_end);
+  if (data->buffer != NULL)
+    {
+      if (data->orig_start != NULL)
+        gtk_text_buffer_delete_mark (data->buffer, data->orig_start);
+
+      if (data->orig_end != NULL)
+        gtk_text_buffer_delete_mark (data->buffer, data->orig_end);
+    }
   g_slice_free (SelectionData, data);
 }
 
@@ -7277,6 +7280,7 @@ gtk_text_view_start_selection_drag (GtkTextView          *text_view,
                                                   &orig_start, TRUE);
   data->orig_end = gtk_text_buffer_create_mark (buffer, NULL,
                                                 &orig_end, TRUE);
+  g_set_weak_pointer (&data->buffer, buffer);
   gtk_text_view_check_cursor_blink (text_view);
 
   g_object_set_qdata_full (G_OBJECT (priv->drag_gesture),
