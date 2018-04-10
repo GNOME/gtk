@@ -186,6 +186,10 @@ gdk_vulkan_strerror (VkResult result)
     case VK_ERROR_NOT_PERMITTED_EXT:
       return "The caller does not have sufficient privileges.";
 #endif
+#if VK_HEADER_VERSION >= 72
+    case VK_ERROR_FRAGMENTATION_EXT:
+      return "A descriptor pool creation has failed due to fragmentation";
+#endif
     case VK_RESULT_RANGE_SIZE:
     case VK_RESULT_MAX_ENUM:
     default:
