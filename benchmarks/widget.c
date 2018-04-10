@@ -100,6 +100,87 @@ get_size_benchmark (Benchmark *b,
   g_assert_cmpint (height, <=, button_height);
 }
 
+
+static void
+compute_bounds_benchmark (Benchmark *b,
+                          gsize      size,
+                          gpointer   user_data)
+{
+  guint i;
+  GtkWidget *w;
+  int width, height;
+  int button_width;
+  int button_height;
+
+  w = gtk_button_new ();
+
+  gtk_widget_measure (w, GTK_ORIENTATION_HORIZONTAL, -1, &width, NULL, NULL, NULL);
+  gtk_widget_measure (w, GTK_ORIENTATION_VERTICAL, width, &height, NULL, NULL, NULL);
+
+  button_width = 200 + width;
+  button_height = 300 + height;
+
+  gtk_widget_size_allocate (w,
+                            &(GtkAllocation){0, 0, button_width, button_height}, -1);
+
+  benchmark_start (b);
+  for (i = 0; i < size; i ++)
+    {
+      graphene_rect_t r;
+
+      gtk_widget_compute_bounds (w, w, &r);
+    }
+  benchmark_stop (b);
+}
+
+static void
+translate_coords_benchmark (Benchmark *b,
+                            gsize      size,
+                            gpointer   user_data)
+{
+  guint i;
+  GtkWidget *root;
+  GtkWidget *widget_a;
+  GtkWidget *widget_b;
+  GtkWidget *iter;
+  int x = 0;
+  int y = 0;
+
+  /* Create an unbalanced widget tree with depth @size on one side and
+   * depth 1 on the other. */
+
+  root = gtk_button_new ();
+  widget_a = gtk_button_new ();
+  widget_b = gtk_button_new ();
+
+  iter = root;
+  for (i = 0; i < size; i ++)
+    {
+      GtkWidget *w = gtk_button_new ();
+
+      gtk_widget_set_parent (w, iter);
+      iter = w;
+    }
+
+  gtk_widget_set_parent (widget_a, root);
+  gtk_widget_set_parent (widget_b, iter);
+
+  /* This will create all the CSS styles, which is the actual slow part... */
+  gtk_widget_translate_coordinates (widget_a, widget_b, x, y, &x, &y);
+
+  benchmark_start (b);
+  for (i = 0; i < size; i ++)
+    {
+      x = 0;
+      y = 0;
+
+      gtk_widget_translate_coordinates (widget_a, widget_b, x, y, &x, &y);
+    }
+  benchmark_stop (b);
+}
+
+
+
 int
 main (int argc, char **argv)
 {
@@ -121,6 +202,8 @@ main (int argc, char **argv)
   benchmark_suite_add (&suite, "set_parent", 10000, set_parent_benchmark, NULL);
   benchmark_suite_add (&suite, "reorder", 10000, reorder_benchmark, NULL);
   benchmark_suite_add (&suite, "get_size", 10000, get_size_benchmark, NULL);
+  benchmark_suite_add (&suite, "compute_bounds", 10000, compute_bounds_benchmark, NULL);
+  benchmark_suite_add (&suite, "translate_coords", 1000, translate_coords_benchmark, NULL);
 
   return benchmark_suite_run (&suite);
 }
