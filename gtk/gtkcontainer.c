@@ -1590,7 +1590,7 @@ gtk_container_idle_sizer (GdkFrameClock *clock,
 
   if (!gtk_container_needs_idle_sizer (container))
     {
-      _gtk_container_stop_idle_sizer (container);
+      gtk_container_stop_idle_sizer (container);
     }
   else
     {
@@ -1599,13 +1599,16 @@ gtk_container_idle_sizer (GdkFrameClock *clock,
     }
 }
 
-static void
+void
 gtk_container_start_idle_sizer (GtkContainer *container)
 {
   GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
   GdkFrameClock *clock;
 
   if (priv->resize_handler != 0)
+    return;
+
+  if (!gtk_container_needs_idle_sizer (container))
     return;
 
   clock = gtk_widget_get_frame_clock (GTK_WIDGET (container));
@@ -1619,7 +1622,7 @@ gtk_container_start_idle_sizer (GtkContainer *container)
 }
 
 void
-_gtk_container_stop_idle_sizer (GtkContainer *container)
+gtk_container_stop_idle_sizer (GtkContainer *container)
 {
   GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
 
@@ -1629,13 +1632,6 @@ _gtk_container_stop_idle_sizer (GtkContainer *container)
   g_signal_handler_disconnect (gtk_widget_get_frame_clock (GTK_WIDGET (container)),
                                priv->resize_handler);
   priv->resize_handler = 0;
-}
-
-void
-_gtk_container_maybe_start_idle_sizer (GtkContainer *container)
-{
-  if (gtk_container_needs_idle_sizer (container))
-    gtk_container_start_idle_sizer (container);
 }
 
 void
@@ -1649,7 +1645,7 @@ _gtk_container_queue_restyle (GtkContainer *container)
     return;
 
   priv->restyle_pending = TRUE;
-  _gtk_container_maybe_start_idle_sizer (container);
+  gtk_container_start_idle_sizer (container);
 }
 
 void

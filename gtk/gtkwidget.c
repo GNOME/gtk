@@ -3695,7 +3695,7 @@ gtk_widget_connect_frame_clock (GtkWidget     *widget,
   GtkWidgetPrivate *priv = widget->priv;
 
   if (GTK_IS_CONTAINER (widget))
-    _gtk_container_maybe_start_idle_sizer (GTK_CONTAINER (widget));
+    gtk_container_start_idle_sizer (GTK_CONTAINER (widget));
 
   if (priv->tick_callbacks != NULL && !priv->clock_tick_id)
     {
@@ -3718,7 +3718,7 @@ gtk_widget_disconnect_frame_clock (GtkWidget     *widget,
   GtkWidgetPrivate *priv = widget->priv;
 
   if (GTK_IS_CONTAINER (widget))
-    _gtk_container_stop_idle_sizer (GTK_CONTAINER (widget));
+    gtk_container_stop_idle_sizer (GTK_CONTAINER (widget));
 
   gtk_css_node_invalidate_frame_clock (priv->cssnode, FALSE);
 
@@ -11930,7 +11930,7 @@ gtk_widget_set_alloc_needed (GtkWidget *widget)
 
       if (_gtk_widget_is_toplevel (widget))
         {
-          _gtk_container_maybe_start_idle_sizer (GTK_CONTAINER (widget));
+          gtk_container_start_idle_sizer (GTK_CONTAINER (widget));
           break;
         }
 
