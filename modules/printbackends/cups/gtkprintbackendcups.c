@@ -5645,7 +5645,10 @@ cups_printer_get_options (GtkPrinter           *printer,
 	  ppd_name = gtk_paper_size_get_ppd_name (paper_size);
 
 	  if (ppd_name)
-	    strncpy (ppd_option->defchoice, ppd_name, PPD_MAX_NAME);
+            {
+              strncpy (ppd_option->defchoice, ppd_name, PPD_MAX_NAME - 1);
+              ppd_option->defchoice[PPD_MAX_NAME - 1] = '\0';
+            }
 	  else
 	    {
 	      gchar *custom_name;
@@ -5664,7 +5667,8 @@ cups_printer_get_options (GtkPrinter           *printer,
 	       * 230.4x142.9"
                */
 	      custom_name = g_strdup_printf (_("Custom %s×%s"), width, height);
-	      strncpy (ppd_option->defchoice, custom_name, PPD_MAX_NAME);
+              strncpy (ppd_option->defchoice, custom_name, PPD_MAX_NAME - 1);
+              ppd_option->defchoice[PPD_MAX_NAME - 1] = '\0';
 	      g_free (custom_name);
 	    }
 	}
