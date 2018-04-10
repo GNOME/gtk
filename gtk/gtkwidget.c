@@ -11930,7 +11930,7 @@ gtk_widget_set_alloc_needed (GtkWidget *widget)
 
       if (_gtk_widget_is_toplevel (widget))
         {
-          gtk_container_queue_resize_handler (GTK_CONTAINER (widget));
+          _gtk_container_maybe_start_idle_sizer (GTK_CONTAINER (widget));
           break;
         }
 

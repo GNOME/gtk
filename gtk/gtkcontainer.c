@@ -1632,21 +1632,6 @@ _gtk_container_stop_idle_sizer (GtkContainer *container)
 }
 
 void
-gtk_container_queue_resize_handler (GtkContainer *container)
-{
-  GtkWidget *widget;
-
-  widget = GTK_WIDGET (container);
-
-  if (_gtk_widget_get_visible (widget) &&
-      gtk_widget_needs_allocate (widget) &&
-      _gtk_widget_is_toplevel (widget))
-    {
-      gtk_container_start_idle_sizer (container);
-    }
-}
-
-void
 _gtk_container_maybe_start_idle_sizer (GtkContainer *container)
 {
   if (gtk_container_needs_idle_sizer (container))
