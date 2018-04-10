@@ -3985,11 +3985,7 @@ gtk_widget_queue_resize_internal (GtkWidget *widget)
 
   gtk_widget_invalidate_paintable_size (widget);
 
-  if (_gtk_widget_is_toplevel (widget) && GTK_IS_CONTAINER (widget))
-    {
-      gtk_container_queue_resize_handler (GTK_CONTAINER (widget));
-    }
-  else if (_gtk_widget_get_visible (widget))
+  if (_gtk_widget_get_visible (widget))
     {
       GtkWidget *parent = _gtk_widget_get_parent (widget);
       if (parent)
