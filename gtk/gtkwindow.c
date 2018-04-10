@@ -7244,7 +7244,6 @@ gtk_window_configure_event (GtkWidget *widget,
   priv->configure_notify_received = TRUE;
 
   gtk_widget_queue_allocate (widget);
-  gtk_container_queue_resize_handler (GTK_CONTAINER (widget));
   
   return TRUE;
 }
