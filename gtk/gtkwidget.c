@@ -11610,7 +11610,6 @@ void
 gtk_widget_register_surface (GtkWidget    *widget,
 			     GdkSurface    *surface)
 {
-  GtkWidgetPrivate *priv;
   gpointer user_data;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -11619,10 +11618,7 @@ gtk_widget_register_surface (GtkWidget    *widget,
   gdk_surface_get_user_data (surface, &user_data);
   g_assert (user_data == NULL);
 
-  priv = widget->priv;
-
   gdk_surface_set_user_data (surface, widget);
-  priv->registered_surfaces = g_list_prepend (priv->registered_surfaces, surface);
 }
 
 /**
@@ -11638,18 +11634,14 @@ void
 gtk_widget_unregister_surface (GtkWidget    *widget,
 			       GdkSurface    *surface)
 {
-  GtkWidgetPrivate *priv;
   gpointer user_data;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  priv = widget->priv;
-
   gdk_surface_get_user_data (surface, &user_data);
   g_assert (user_data == widget);
   gdk_surface_set_user_data (surface, NULL);
-  priv->registered_surfaces = g_list_remove (priv->registered_surfaces, surface);
 }
 
 /**

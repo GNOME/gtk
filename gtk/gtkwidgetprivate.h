@@ -157,7 +157,6 @@ struct _GtkWidgetPrivate
    * no_surface field being set).
    */
   GdkSurface *surface;
-  GList *registered_surfaces;
 
   GList *event_controllers;
 
