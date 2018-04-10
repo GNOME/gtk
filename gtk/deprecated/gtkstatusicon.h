@@ -71,10 +71,10 @@ struct _GtkStatusIconClass
                                      gboolean        keyboard_mode,
                                      GtkTooltip     *tooltip);
 
-  void (*__gtk_reserved1);
-  void (*__gtk_reserved2);
-  void (*__gtk_reserved3);
-  void (*__gtk_reserved4);
+  void (*__gtk_reserved1) (void);
+  void (*__gtk_reserved2) (void);
+  void (*__gtk_reserved3) (void);
+  void (*__gtk_reserved4) (void);
 };
 
 GDK_AVAILABLE_IN_ALL

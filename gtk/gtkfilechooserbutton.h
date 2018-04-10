@@ -63,10 +63,10 @@ struct _GtkFileChooserButtonClass
   /*< private >*/
 
   /* Padding for future expansion */
-  void (*__gtk_reserved1);
-  void (*__gtk_reserved2);
-  void (*__gtk_reserved3);
-  void (*__gtk_reserved4);
+  void (*__gtk_reserved1) (void);
+  void (*__gtk_reserved2) (void);
+  void (*__gtk_reserved3) (void);
+  void (*__gtk_reserved4) (void);
 };
 
 

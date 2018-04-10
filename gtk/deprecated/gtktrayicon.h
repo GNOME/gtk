@@ -45,10 +45,10 @@ struct _GtkTrayIconClass
   GtkPlugClass parent_class;
 
   /* Padding for future expansion */
-  void (*_gtk_reserved1);
-  void (*_gtk_reserved2);
-  void (*_gtk_reserved3);
-  void (*_gtk_reserved4);
+  void (*__gtk_reserved1) (void);
+  void (*__gtk_reserved2) (void);
+  void (*__gtk_reserved3) (void);
+  void (*__gtk_reserved4) (void);
 };
 
 GDK_AVAILABLE_IN_ALL
