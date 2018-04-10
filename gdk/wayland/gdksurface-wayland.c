@@ -513,12 +513,30 @@ on_frame_clock_before_paint (GdkFrameClock *clock,
     }
 }
 
+void
+gdk_wayland_surface_request_frame (GdkSurface *surface)
+{
+  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (surface->impl);
+  struct wl_callback *callback;
+  GdkFrameClock *clock;
+
+  if (impl->awaiting_frame)
+    return;
+
+  clock = gdk_surface_get_frame_clock (surface);
+
+  callback = wl_surface_frame (impl->display_server.wl_surface);
+  wl_callback_add_listener (callback, &frame_listener, surface);
+  _gdk_frame_clock_freeze (clock);
+  impl->pending_frame_counter = gdk_frame_clock_get_frame_counter (clock);
+  impl->awaiting_frame = TRUE;
+}
+
 static void
 on_frame_clock_after_paint (GdkFrameClock *clock,
                             GdkSurface     *surface)
 {
   GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (surface->impl);
-  struct wl_callback *callback;
 
   if (!impl->pending_commit)
     return;
@@ -526,9 +544,7 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
   if (surface->update_freeze_count > 0)
     return;
 
-  callback = wl_surface_frame (impl->display_server.wl_surface);
-  wl_callback_add_listener (callback, &frame_listener, surface);
-  _gdk_frame_clock_freeze (clock);
+  gdk_wayland_surface_request_frame (surface);
 
   /* Before we commit a new buffer, make sure we've backfilled
    * undrawn parts from any old committed buffer
@@ -551,8 +567,6 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
 
   impl->pending_buffer_attached = FALSE;
   impl->pending_commit = FALSE;
-  impl->pending_frame_counter = gdk_frame_clock_get_frame_counter (clock);
-  impl->awaiting_frame = TRUE;
 
   g_signal_emit (impl, signals[COMMITTED], 0);
 }

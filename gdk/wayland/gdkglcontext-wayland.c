@@ -224,6 +224,7 @@ gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
                                                     context_wayland->egl_config);
 
   gdk_wayland_surface_sync (surface);
+  gdk_wayland_surface_request_frame (surface);
 
   if (display_wayland->have_egl_swap_buffers_with_damage && damage != NULL)
     {

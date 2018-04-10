@@ -89,6 +89,7 @@ guint      _gdk_wayland_cursor_get_next_image_index (GdkWaylandDisplay *display,
                                                      guint             *next_image_delay);
 
 void       gdk_wayland_surface_sync (GdkSurface *surface);
+void       gdk_wayland_surface_request_frame (GdkSurface *surface);
 
 void            _gdk_wayland_surface_register_dnd          (GdkSurface *surface);
 GdkDragContext *_gdk_wayland_surface_drag_begin            (GdkSurface *surface,
