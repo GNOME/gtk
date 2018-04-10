@@ -3,6 +3,7 @@
 gtk_benchmarks = [
   ['containers'],
   ['css'],
+  ['widget'],
 ]
 
 foreach b : gtk_benchmarks
