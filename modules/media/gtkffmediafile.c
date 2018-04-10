@@ -176,7 +176,9 @@ g_io_module_load (GIOModule *module)
 {
   g_type_module_use (G_TYPE_MODULE (module));
 
+#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT (58, 9, 100)
   av_register_all ();
+#endif
 
   g_io_extension_point_implement (GTK_MEDIA_FILE_EXTENSION_POINT_NAME,
                                   GTK_TYPE_FF_MEDIA_FILE,
@@ -363,7 +365,7 @@ gtk_ff_media_file_decode_frame (GtkFfMediaFile      *video,
 
   gtk_video_frame_ffmpeg_init (result,
                                texture,
-                               av_rescale_q (av_frame_get_best_effort_timestamp (frame),
+                               av_rescale_q (frame->best_effort_timestamp,
                                              video->format_ctx->streams[video->stream_id]->time_base,
                                              (AVRational) { 1, G_USEC_PER_SEC }));
 
