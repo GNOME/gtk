@@ -1647,6 +1647,13 @@ gtk_container_queue_resize_handler (GtkContainer *container)
 }
 
 void
+_gtk_container_maybe_start_idle_sizer (GtkContainer *container)
+{
+  if (gtk_container_needs_idle_sizer (container))
+    gtk_container_start_idle_sizer (container);
+}
+
+void
 _gtk_container_queue_restyle (GtkContainer *container)
 {
   GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
@@ -1656,15 +1663,8 @@ _gtk_container_queue_restyle (GtkContainer *container)
   if (priv->restyle_pending)
     return;
 
-  gtk_container_start_idle_sizer (container);
   priv->restyle_pending = TRUE;
-}
-
-void
-_gtk_container_maybe_start_idle_sizer (GtkContainer *container)
-{
-  if (gtk_container_needs_idle_sizer (container))
-    gtk_container_start_idle_sizer (container);
+  _gtk_container_maybe_start_idle_sizer (container);
 }
 
 void
