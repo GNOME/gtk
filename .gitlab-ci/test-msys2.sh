@@ -16,6 +16,7 @@ pacman --noconfirm -S --needed \
     base-devel \
     git \
     mingw-w64-$MSYS2_ARCH-toolchain \
+    mingw-w64-$MSYS2_ARCH-ccache \
     mingw-w64-$MSYS2_ARCH-pkg-config \
     mingw-w64-$MSYS2_ARCH-gobject-introspection \
     mingw-w64-$MSYS2_ARCH-meson \
@@ -32,11 +33,20 @@ pacman --noconfirm -S --needed \
     mingw-w64-$MSYS2_ARCH-gst-plugins-bad \
     mingw-w64-$MSYS2_ARCH-shared-mime-info
 
+mkdir -p _ccache
+export CCACHE_BASEDIR="$(pwd)"
+export CCACHE_DIR="${CCACHE_BASEDIR}/_ccache"
+
 # Build
+ccache --zero-stats
+ccache --show-stats
+export CCACHE_DISABLE=true
 meson \
     -Denable-x11-backend=false \
     -Denable-wayland-backend=false \
     -Denable-win32-backend=true \
     _build
+unset CCACHE_DISABLE
 
 ninja -C _build
+ccache --show-stats
