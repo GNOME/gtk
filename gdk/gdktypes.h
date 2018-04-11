@@ -136,6 +136,7 @@ typedef struct _GdkSnapshot           GdkSnapshot;
 
 typedef struct _GdkDrawingContext     GdkDrawingContext;
 typedef struct _GdkDrawContext        GdkDrawContext;
+typedef struct _GdkCairoContext       GdkCairoContext;
 typedef struct _GdkGLContext          GdkGLContext;
 typedef struct _GdkVulkanContext      GdkVulkanContext;
 
