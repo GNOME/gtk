@@ -3694,7 +3694,7 @@ gtk_widget_connect_frame_clock (GtkWidget *widget)
   GtkWidgetPrivate *priv = widget->priv;
   GdkFrameClock *frame_clock;
 
-  if (_gtk_widget_is_toplevel (widget))
+  if (GTK_IS_CONTAINER (widget) && _gtk_widget_is_toplevel (widget))
     gtk_container_start_idle_sizer (GTK_CONTAINER (widget));
 
   frame_clock = gtk_widget_get_frame_clock (widget);
@@ -3718,7 +3718,7 @@ gtk_widget_disconnect_frame_clock (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = widget->priv;
 
-  if (_gtk_widget_is_toplevel (widget))
+  if (GTK_IS_CONTAINER (widget) && _gtk_widget_is_toplevel (widget))
     gtk_container_stop_idle_sizer (GTK_CONTAINER (widget));
 
   gtk_css_node_invalidate_frame_clock (priv->cssnode, FALSE);
