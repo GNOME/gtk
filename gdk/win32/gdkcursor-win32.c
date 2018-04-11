@@ -1534,6 +1534,7 @@ gdk_win32_display_get_win32hcursor (GdkWin32Display *display,
 
   if (win32hcursor != NULL)
     {
+      g_object_weak_ref (G_OBJECT (cursor), gdk_win32_cursor_remove_from_cache, display);
       g_hash_table_insert (win32_display->cursors, cursor, win32hcursor);
 
       return win32hcursor;
