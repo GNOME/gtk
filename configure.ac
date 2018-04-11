@@ -63,7 +63,7 @@ m4_define([wayland_required_version], [1.9.91])
 m4_define([wayland_protocols_required_version], [1.12])
 m4_define([mirclient_required_version], [0.22.0])
 m4_define([mircookie_required_version], [0.17.0])
-m4_define([epoxy_required_version], [1.0])
+m4_define([epoxy_required_version], [1.4])
 m4_define([cloudproviders_required_version], [0.2.5])
 GLIB_REQUIRED_VERSION=glib_required_version
 PANGO_REQUIRED_VERSION=pango_required_version
