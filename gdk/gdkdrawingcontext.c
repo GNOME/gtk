@@ -82,12 +82,6 @@ gdk_drawing_context_dispose (GObject *gobject)
   GdkDrawingContext *self = GDK_DRAWING_CONTEXT (gobject);
   GdkDrawingContextPrivate *priv = gdk_drawing_context_get_instance_private (self);
 
-  /* Unset the drawing context, in case somebody is holding
-   * onto the Cairo context
-   */
-  if (priv->cr != NULL)
-    gdk_cairo_set_drawing_context (priv->cr, NULL);
-
   g_clear_object (&priv->surface);
   g_clear_object (&priv->paint_context);
   g_clear_pointer (&priv->clip, cairo_region_destroy);
@@ -211,32 +205,6 @@ gdk_drawing_context_init (GdkDrawingContext *self)
 {
 }
 
-static const cairo_user_data_key_t draw_context_key;
-
-void
-gdk_cairo_set_drawing_context (cairo_t           *cr,
-                               GdkDrawingContext *context)
-{
-  cairo_set_user_data (cr, &draw_context_key, context, NULL);
-}
-
-/**
- * gdk_cairo_get_drawing_context:
- * @cr: a Cairo context
- *
- * Retrieves the #GdkDrawingContext that created the Cairo
- * context @cr.
- *
- * Returns: (transfer none) (nullable): a #GdkDrawingContext, if any is set
- */
-GdkDrawingContext *
-gdk_cairo_get_drawing_context (cairo_t *cr)
-{
-  g_return_val_if_fail (cr != NULL, NULL);
-
-  return cairo_get_user_data (cr, &draw_context_key);
-}
-
 /**
  * gdk_drawing_context_get_cairo_context:
  * @context: a #GdkDrawingContext created with a %NULL paint context
@@ -274,8 +242,6 @@ gdk_drawing_context_get_cairo_context (GdkDrawingContext *context)
 
       surface = _gdk_surface_ref_cairo_surface (priv->surface);
       priv->cr = cairo_create (surface);
-
-      gdk_cairo_set_drawing_context (priv->cr, context);
 
       region = gdk_surface_get_current_paint_region (priv->surface);
       cairo_region_union (region, priv->clip);
