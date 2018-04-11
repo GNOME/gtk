@@ -290,24 +290,6 @@ gdk_drawing_context_get_cairo_context (GdkDrawingContext *context)
 }
 
 /**
- * gdk_drawing_context_get_surface:
- * @context: a #GdkDrawingContext
- *
- * Retrieves the surface that created the drawing @context.
- *
- * Returns: (transfer none): a #GdkSurface
- */
-GdkSurface *
-gdk_drawing_context_get_surface (GdkDrawingContext *context)
-{
-  GdkDrawingContextPrivate *priv = gdk_drawing_context_get_instance_private (context);
-
-  g_return_val_if_fail (GDK_IS_DRAWING_CONTEXT (context), NULL);
-
-  return priv->surface;
-}
-
-/**
  * gdk_drawing_context_get_paint_context:
  * @context: a #GdkDrawingContext
  *
@@ -346,26 +328,3 @@ gdk_drawing_context_get_clip (GdkDrawingContext *context)
   return cairo_region_copy (priv->clip);
 }
 
-/**
- * gdk_drawing_context_is_valid:
- * @context: a #GdkDrawingContext
- *
- * Checks whether the given #GdkDrawingContext is valid.
- *
- * Returns: %TRUE if the context is valid
- */
-gboolean
-gdk_drawing_context_is_valid (GdkDrawingContext *context)
-{
-  GdkDrawingContextPrivate *priv = gdk_drawing_context_get_instance_private (context);
-
-  g_return_val_if_fail (GDK_IS_DRAWING_CONTEXT (context), FALSE);
-
-  if (priv->surface == NULL)
-    return FALSE;
-
-  if (gdk_surface_get_drawing_context (priv->surface) != context)
-    return FALSE;
-
-  return TRUE;
-}

@@ -1188,10 +1188,8 @@ GDK_IS_MONITOR
 <SECTION>
 <FILE>gdkdrawingcontext</FILE>
 GdkDrawingContext
-gdk_drawing_context_get_surface
 gdk_drawing_context_get_clip
 gdk_drawing_context_get_cairo_context
-gdk_drawing_context_is_valid
 gdk_drawing_context_get_paint_context
 
 <SUBSECTION Standard>
