@@ -1202,6 +1202,14 @@ GDK_IS_DRAWING_CONTEXT
 </SECTION>
 
 <SECTION>
+<FILE>gdkcairocontext</FILE>
+GdkCairoContext
+
+<SUBSECTION Standard>
+gdk_cairo_context_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gdkvulkancontext</FILE>
 GdkVulkanContext
 GdkVulkanError

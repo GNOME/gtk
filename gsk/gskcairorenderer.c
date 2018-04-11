@@ -18,6 +18,8 @@ struct _GskCairoRenderer
 {
   GskRenderer parent_instance;
 
+  GdkCairoContext *cairo_context;
+
 #ifdef G_ENABLE_DEBUG
   ProfileTimers profile_timers;
 #endif
@@ -32,16 +34,22 @@ G_DEFINE_TYPE (GskCairoRenderer, gsk_cairo_renderer, GSK_TYPE_RENDERER)
 
 static gboolean
 gsk_cairo_renderer_realize (GskRenderer  *renderer,
-                            GdkSurface    *surface,
+                            GdkSurface   *surface,
                             GError      **error)
 {
+  GskCairoRenderer *self = GSK_CAIRO_RENDERER (renderer);
+
+  self->cairo_context = gdk_surface_create_cairo_context (surface);
+
   return TRUE;
 }
 
 static void
 gsk_cairo_renderer_unrealize (GskRenderer *renderer)
 {
+  GskCairoRenderer *self = GSK_CAIRO_RENDERER (renderer);
 
+  g_clear_object (&self->cairo_context);
 }
 
 static void
@@ -99,11 +107,14 @@ gsk_cairo_renderer_render (GskRenderer          *renderer,
                            GskRenderNode        *root,
                            const cairo_region_t *region)
 {
+  GskCairoRenderer *self = GSK_CAIRO_RENDERER (renderer);
   GdkSurface *surface = gsk_renderer_get_surface (renderer);
   GdkDrawingContext *context;
   cairo_t *cr;
 
-  context = gdk_surface_begin_draw_frame (surface, NULL, region);
+  context = gdk_surface_begin_draw_frame (surface,
+                                          GDK_DRAW_CONTEXT (self->cairo_context),
+                                          region);
   cr = gdk_drawing_context_get_cairo_context (context);
 
   g_return_if_fail (cr != NULL);
