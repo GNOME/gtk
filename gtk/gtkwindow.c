@@ -6858,7 +6858,8 @@ gtk_window_realize (GtkWidget *widget)
   gtk_widget_set_surface (widget, surface);
   g_signal_connect_swapped (surface, "notify::state", G_CALLBACK (surface_state_changed), widget);
   gtk_widget_register_surface (widget, surface);
-  gtk_widget_set_realized (widget, TRUE);
+
+  GTK_WIDGET_CLASS (gtk_window_parent_class)->realize (widget);
 
   if (priv->renderer == NULL)
     priv->renderer = gsk_renderer_new_for_surface (surface);

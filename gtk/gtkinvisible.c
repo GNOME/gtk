@@ -222,11 +222,11 @@ gtk_invisible_realize (GtkWidget *widget)
 {
   GdkSurface *surface;
 
-  gtk_widget_set_realized (widget, TRUE);
-
   surface = gdk_surface_new_temp (gtk_widget_get_display (widget));
   gtk_widget_set_surface (widget, surface);
   gtk_widget_register_surface (widget, surface);
+
+  GTK_WIDGET_CLASS (gtk_invisible_parent_class)->realize (widget);
 }
 
 static void

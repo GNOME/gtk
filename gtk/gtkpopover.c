@@ -501,7 +501,8 @@ gtk_popover_realize (GtkWidget *widget)
 
   gtk_widget_set_surface (widget, surface);
   gtk_widget_register_surface (widget, surface);
-  gtk_widget_set_realized (widget, TRUE);
+
+  GTK_WIDGET_CLASS (gtk_popover_parent_class)->realize (widget);
 }
 
 static void
