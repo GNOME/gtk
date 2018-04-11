@@ -415,7 +415,6 @@ gdk_cairo_set_source_pixbuf
 gdk_cairo_rectangle
 gdk_cairo_region
 gdk_cairo_region_create_from_surface
-gdk_cairo_surface_create_from_pixbuf
 gdk_cairo_draw_from_gl
 gdk_cairo_surface_upload_to_gl
 </SECTION>

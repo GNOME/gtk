@@ -238,46 +238,6 @@ gdk_cairo_surface_paint_pixbuf (cairo_surface_t *surface,
 }
 
 /**
- * gdk_cairo_surface_create_from_pixbuf:
- * @pixbuf: a #GdkPixbuf
- * @scale: the scale of the new surface, or 0 to use same as @surface
- * @for_surface: (allow-none): The surface this will be drawn to, or %NULL
- *
- * Creates an image surface with the same contents as
- * the pixbuf.
- *
- * Returns: a new cairo surface, must be freed with cairo_surface_destroy()
- */
-cairo_surface_t *
-gdk_cairo_surface_create_from_pixbuf (const GdkPixbuf *pixbuf,
-                                      int              scale,
-                                      GdkSurface       *for_surface)
-{
-  cairo_format_t format;
-  cairo_surface_t *surface;
-
-  g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
-  g_return_val_if_fail (scale >= 0, NULL);
-  g_return_val_if_fail (for_surface == NULL || GDK_IS_SURFACE (for_surface), NULL);
-
-  if (gdk_pixbuf_get_n_channels (pixbuf) == 3)
-    format = CAIRO_FORMAT_RGB24;
-  else
-    format = CAIRO_FORMAT_ARGB32;
-
-  surface =
-     gdk_surface_create_similar_image_surface (for_surface,
-					      format,
-                                              gdk_pixbuf_get_width (pixbuf),
-                                              gdk_pixbuf_get_height (pixbuf),
-					      scale);
-
-  gdk_cairo_surface_paint_pixbuf (surface, pixbuf);
-
-  return surface;
-}
-
-/**
  * gdk_cairo_set_source_pixbuf:
  * @cr: a cairo context
  * @pixbuf: a #GdkPixbuf
