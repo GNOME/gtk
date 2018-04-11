@@ -3689,13 +3689,15 @@ gtk_widget_has_tick_callback (GtkWidget *widget)
 }
 
 static void
-gtk_widget_connect_frame_clock (GtkWidget     *widget,
-                                GdkFrameClock *frame_clock)
+gtk_widget_connect_frame_clock (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = widget->priv;
+  GdkFrameClock *frame_clock;
 
   if (GTK_IS_CONTAINER (widget))
     gtk_container_start_idle_sizer (GTK_CONTAINER (widget));
+
+  frame_clock = gtk_widget_get_frame_clock (widget);
 
   if (priv->tick_callbacks != NULL && !priv->clock_tick_id)
     {
@@ -3712,8 +3714,7 @@ gtk_widget_connect_frame_clock (GtkWidget     *widget,
 }
 
 static void
-gtk_widget_disconnect_frame_clock (GtkWidget     *widget,
-                                   GdkFrameClock *frame_clock)
+gtk_widget_disconnect_frame_clock (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = widget->priv;
 
@@ -3724,6 +3725,10 @@ gtk_widget_disconnect_frame_clock (GtkWidget     *widget,
 
   if (priv->clock_tick_id)
     {
+      GdkFrameClock *frame_clock;
+
+      frame_clock = gtk_widget_get_frame_clock (widget);
+
       g_signal_handler_disconnect (frame_clock, priv->clock_tick_id);
       priv->clock_tick_id = 0;
       gdk_frame_clock_end_updating (frame_clock);
@@ -3798,8 +3803,6 @@ gtk_widget_realize (GtkWidget *widget)
 
       if (priv->context)
 	gtk_style_context_set_scale (priv->context, gtk_widget_get_scale_factor (widget));
-      gtk_widget_connect_frame_clock (widget,
-                                      gtk_widget_get_frame_clock (widget));
 
       gtk_widget_pop_verify_invariants (widget);
     }
@@ -3828,9 +3831,6 @@ gtk_widget_unrealize (GtkWidget *widget)
     {
       if (widget->priv->mapped)
         gtk_widget_unmap (widget);
-
-      gtk_widget_disconnect_frame_clock (widget,
-                                         gtk_widget_get_frame_clock (widget));
 
       g_signal_emit (widget, widget_signals[UNREALIZE], 0);
       g_assert (!widget->priv->mapped);
@@ -8746,6 +8746,8 @@ gtk_widget_real_realize (GtkWidget *widget)
     }
 
   priv->realized = TRUE;
+
+  gtk_widget_connect_frame_clock (widget);
 }
 
 /*****************************************
@@ -8770,6 +8772,8 @@ gtk_widget_real_unrealize (GtkWidget *widget)
     */
 
   gtk_widget_forall (widget, (GtkCallback)gtk_widget_unrealize, NULL);
+
+  gtk_widget_disconnect_frame_clock (widget);
 
   priv->realized = FALSE;
 
